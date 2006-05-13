@@ -629,11 +629,8 @@ public class Servlets {
 				_extctx = getExtendedWebContext(ctx, ctxroot.substring(1));
 				if (_extctx == null) {
 					_svlctx = ctx.getContext(ctxroot);
-					if (_svlctx == null) {
-						if (D.ON && log.debugable()) log.debug("Context not found: "+ctxroot);
-						_svlctx = ctx;
-						_uri = uri;
-					}
+					if (_svlctx == null) 
+						throw new SystemException("Context not found or not visible to "+ctx+": "+ctxroot);
 				}
 			} else {
 				_svlctx = ctx;
@@ -691,7 +688,7 @@ public class Servlets {
 	 */
 	public static final String generateURI(String uri, Map params, int mode) {
 		if (uri.startsWith("~"))
-			throw new IllegalArgumentException("~ctx not supported here");
+			throw new IllegalArgumentException("~ctx not supported here: "+uri);
 
 		final int j = uri.indexOf('?');
 		String qstr = null;

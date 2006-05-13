@@ -34,6 +34,7 @@ import javax.portlet.RenderResponse;
 import javax.portlet.PortletException;
 
 import com.potix.lang.D;
+import com.potix.lang.SystemException;
 import com.potix.util.logging.Log;
 
 import com.potix.web.servlet.Servlets;
@@ -137,11 +138,8 @@ public class Portlets {
 				if (_extctx == null) {
 					_svlctx = svlctx;
 					_svlctx = _svlctx.getContext(ctxroot);
-					if (_svlctx == null) {
-						if (log.debugable()) log.debug("Context not found: "+ctxroot);
-						_prtctx = ctx;
-						_uri = uri;
-					}
+					if (_svlctx == null)
+						throw new SystemException("Context not found or not visible to "+ctx+": "+ctxroot);
 				}
 			} else {
 				_prtctx = ctx;
