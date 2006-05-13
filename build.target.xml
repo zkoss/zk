@@ -232,9 +232,9 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	<delete quiet="true">
 		<fileset dir="${dist.lib.dir}" includes="${xar.name}"/>
 		<fileset dir="${dist.deploy.dir}" includes="${xar.name}"/>
-		<fileset dir="${jboss.lib.dir}" includes="${xar.name}"/>
+		<!--fileset dir="${jboss.lib.dir}" includes="${xar.name}"/-->
 		<fileset dir="${jboss.deploy1.dir}" includes="${xar.name}"/>
-		<fileset dir="${tomcat.lib.dir}" includes="${xar.name}"/>
+		<!--fileset dir="${tomcat.lib.dir}" includes="${xar.name}"/-->
 		<fileset dir="${tomcat.webapps.dir}" includes="${xar.name}"/>
 	</delete>
 </target>

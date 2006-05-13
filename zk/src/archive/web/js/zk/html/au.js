@@ -875,18 +875,22 @@ zkau._onAutoZIndex = function (evt) {
 };
 /** Adjust z-index automatically. */
 zkau.autoZIndex = function (cmp) {
-	var zi = cmp.style.zIndex;
+	var zi = parseInt(cmp.style.zIndex || "0");
 	for (var j = 0; j < zkau._popups.length; ++j) {
 		var el = $(zkau._popups[j]);
-		if (el && cmp != el && el.style.zIndex >= zi)
-			zi = el.style.zIndex + 1;
+		if (el && cmp != el) {
+			elzi = parseInt(el.style.zIndex || "0");
+			if (elzi >= zi) zi = elzi + 1;
+		}
 	}
 	for (var j = 0; j < zkau._overlaps.length; ++j) {
 		var el = $(zkau._overlaps[j]);
-		if (el && cmp != el && el.style.zIndex >= zi)
-			zi = el.style.zIndex + 1;
+		if (el && cmp != el) {
+			elzi = parseInt(el.style.zIndex || "0");
+			if (elzi >= zi) zi = elzi + 1;
+		}
 	}
-	if (cmp.style.zIndex != zi) {
+	if (parseInt(cmp.style.zIndex || "0") != zi) {
 		cmp.style.zIndex = zi;
 		zkau.send({uuid: cmp.id, cmd: "onZIndex",
 			data: [zi]}, zkau.asapTimeout(cmp, "onZIndex"));

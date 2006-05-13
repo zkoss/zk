@@ -483,14 +483,14 @@ zk.Selectable.prototype = {
 			if (toSel) {
 				if (el) el.checked = true;
 				row.className = row.className + "sel";
-				zkSel.onout(row);
+				zkSel.onout(row, false);
 				row.setAttribute("zk_sel", "true");
 			} else {
 				if (el) el.checked = false;
 				var len = row.className.length;
 				if (len > 3)
 					row.className = row.className.substring(0, len - 3);
-				zkSel.onout(row);
+				zkSel.onout(row, false);
 				row.setAttribute("zk_sel", "false");
 			}
 		}
@@ -847,10 +847,10 @@ zkSel.onover = function (el) {
 	}
 };
 /** row's onmouseout. */
-zkSel.onout = function (el) {
+zkSel.onout = function (el, reset) {
 	if (!zk.dragging) {
 		el.style.backgroundColor = el.getAttribute("zk_bgcolor") || "";
-		el.removeAttribute("zk_bgcolor")
+		if (reset) el.removeAttribute("zk_bgcolor")
 	}
 };
 /** (!cm or !sel)'s onfocus. */
@@ -928,7 +928,7 @@ zkLit.init = function (cmp) { //listitem
 	Event.observe(cmp, "click", function (evt) {zkLibox.onclick(evt);});
 	Event.observe(cmp, "keydown", function (evt) {return zkLibox.onkeydown(evt);});
 	Event.observe(cmp, "mouseover", function () {return zkSel.onover(cmp);});
-	Event.observe(cmp, "mouseout", function () {return zkSel.onout(cmp);});
+	Event.observe(cmp, "mouseout", function () {return zkSel.onout(cmp, true);});
 };
 
 function zkLcfc() {}

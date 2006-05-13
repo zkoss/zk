@@ -233,7 +233,7 @@ public class UiEngineImpl implements UiEngine {
 				}
 
 				//Cycle 2a: processing resumed event processing
-				resumeAll(desktop, uv.isAborting());
+				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
 			//Cycle 3: Redraw the page (and responses)
@@ -408,7 +408,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 		final RequestQueue rque = ((DesktopCtrl)exec.getDesktop()).getRequestQueue();
 		try {
-			StringBuffer errsb = null;
+			final StringBuffer errsb = new StringBuffer(80);
 			final long tmexpired = System.currentTimeMillis() + 3000;
 				//Tom Yeh: 20060120
 				//Don't process all requests if this thread has processed
@@ -419,13 +419,13 @@ public class UiEngineImpl implements UiEngine {
 				//Don't process more such that requests will be queued
 				//adn we have the chance to optimize them
 				try {
-					process(exec, request, errsb != null);
+					process(exec, request, errsb.length() > 0);
 				} catch (ComponentNotFoundException ex) {
 					//possible because the previous might remove some comp
 					//so ignore it
 					if (log.debugable()) log.debug("Component not found: "+request);
 				} catch (Throwable ex) {
-					errsb = handleError(ex, uv, errsb);
+					handleError(ex, uv, errsb);
 				}
 
 				//Cycle 2: Process any pending events posted by components
@@ -435,18 +435,18 @@ public class UiEngineImpl implements UiEngine {
 						try {
 							process(event);
 						} catch (Throwable ex) {
-							errsb = handleError(ex, uv, errsb);
+							handleError(ex, uv, errsb);
 						}
 					}
 
 					//Cycle 2a: processing resumed event processing
-					resumeAll(desktop, uv.isAborting());
+					resumeAll(desktop, uv, errsb);
 				} while ((event = nextEvent(uv)) != null);
 			}
 
 			//Cycle 3: Generate output
 			if (!uv.isAborting()) {
-				if (errsb != null)
+				if (errsb.length() > 0)
 					uv.addResponse(null, new AuAlert(errsb.toString()));
 
 				final List responses = uv.getResponses();
@@ -476,7 +476,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 	private static final
-	StringBuffer handleError(Throwable ex, UiVisualizer uv, StringBuffer errsb) {
+	void handleError(Throwable ex, UiVisualizer uv, StringBuffer errsb) {
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
 			log.realCause(ex);
@@ -490,14 +490,12 @@ public class UiEngineImpl implements UiEngine {
 			final Component comp = ((WrongValueException)ex).getComponent();
 			if (comp != null) {
 				uv.addResponse("wrongValue", new AuAlert(comp, msg));
-				return errsb;
+				return;
 			}
 		}
 
-		if (errsb == null) errsb = new StringBuffer(80);
-		else errsb.append('\n');
+		if (errsb.length() > 0) errsb.append('\n');
 		errsb.append(msg);
-		return errsb;
 	}
 	/** Processing the request and stores result into UiVisualizer.
 	 * @param everError whether any error ever occured before processing this
@@ -635,7 +633,7 @@ public class UiEngineImpl implements UiEngine {
 	/** Does the real resume.
 	 * Note: {@link #resume} only puts a thread into a resume queue in execution.
 	 */
-	private void resumeAll(Desktop desktop, boolean aborting) {
+	private void resumeAll(Desktop desktop, UiVisualizer uv, StringBuffer errsb) {
 		//We have to loop because a resumed thread might resume others
 		for (;;) {
 			final List list;
@@ -649,7 +647,7 @@ public class UiEngineImpl implements UiEngine {
 					final EventProcessingThread evtthd =
 						(EventProcessingThread)it.next();
 					if (D.ON && log.finerable()) log.finer("Resume "+evtthd);
-					if (aborting) {
+					if (uv.isAborting()) {
 						evtthd.ceaseSilently();
 					} else {
 						try {
@@ -657,9 +655,11 @@ public class UiEngineImpl implements UiEngine {
 								recycleEventThread(evtthd); //completed
 						} catch (Throwable ex) {
 							recycleEventThread(evtthd);
-							addResponse(null, new AuAlert(
-								Messages.get(MZk.RESUME_FAILED, Exceptions.getMessage(ex))));
-							log.error("Unable to resume "+evtthd, ex);
+							if (errsb == null) {
+								log.error("Unable to resume "+evtthd, ex);
+								throw UiException.Aide.wrap(ex);
+							}
+							handleError(ex, uv, errsb);
 						}
 					}
 				}
