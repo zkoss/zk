@@ -1,0 +1,218 @@
+--------
+ZK 1.2.0
+
+* Features:
+  1428252, 1470240, 1455332, 1454636, 1455415, 1456664, 1456733, 1456647,
+  1459033, 1461806, 1462148, 1461209, 1464025, 1465967, 1459833, 1466246,
+  1467561, 1467642, 1468012, 1469144, 1470094, 1470492, 1467827, 1469672,
+  1471810, 1455828, 1472225, 1469672, 1472734, 1472744, 1454118, 1475647,
+  1475962, 1475665, 1475791, 1477821, 1478236, 1478213, 1479572, 1480154,
+  1480281, 1480035, 1467959, 1480525, 1480791, 1480866, 1481090, 1474217,
+  1482954, 1482236, 1484344, 1485460, 1483149.
+	+ Macro components are supported
+	+ Developers are allowed to define new components in a page
+	+ Three new components: calendar, imagemap and area.
+	+ The custom-attributes element is added to simplify the assignment
+	  of custom attributes.
+	+ Regular Expression constraints are supported.
+	+ Components could be created in any thread, not limited event listeners.
+	+ ZK Update Engine is optimized for pages with a lot of components
+	+ ZK is configurable by use of /WEB-INF/zk.xml.
+	+ More configuration options are supported.
+	+ <zk> can be used anywhere, not limited to be the root element
+
+* Bugs:
+  1455838, 1455899, 1456069, 1457629, 1458178, 1458621, 1460360, 1460339
+  1455584, 1461800, 1461931, 1462116, 1463668, 1464032, 1464844, 1467693,
+  1467927, 1469782, 1469887, 1467094, 1470235, 1465723, 1472390, 1472560,
+  1472825, 1472828, 1472818, 1472824, 1475255, 1474929, 1473326, 1474048,
+  1474091, 1475748, 1475540, 1475869, 1476620, 1476241, 1477416, 1476309,
+  1477777, 1477994, 1477775, 1473036, 1478153, 1474579, 1480890, 1480894,
+  1480892, 1481544, 1481676, 1481600, 1481839, 1477271, 1482231, 1482230,
+  1477271, 1482503, 1483647, 1485232, 1482229, 1486222, 1486314, 1484756,
+  1485400, 1486840, 1487095, 1487925, 1486617.
+	+ The alignment of header and body of grid, listbox and tree are improved
+	  to handle all known extremely cases.
+	+ Work with Oracle OC4J 10.1.3
+	+ Work with WebLogic 9.1
+
+* Upgrade Notes
+	+ The map component is renamed to imagemap (RC1).
+	+ Configurations that were specified in init-param of /WEB-INF/web.xml
+	  must be moved to /WEB-INF/zk.xml
+	+ Listbox.clear() is removed. Use Listbox.getItems().clear() instead.
+	+ Tree.clear() is removed. Use Tree.getTreechildren().clear() instead.
+	+ Combobox.clear() is removed. Use Combobox.getItems().clear() instead.
+	+ Radiogroup.clear() is removed. use Radiogroup.getChilren().clear() instead.
+	+ The close button of a window sends onClose instead of onShow.
+	  It detaches itself instead of hiding!
+	  Developers could override this behavior by overriding onClose.
+	+ Initiator is moved from com.potix.zk.ui.ext. to com.potix.zk.ui.util
+	  and the doInit method becomes 
+		  public void doInit(Page page, Object[] args);
+	+ IdSpace is moved from com.potix.zk.ui.ext to com.potix.zk.ui
+	+ Textbox.getText becomes protected. Use Textbox.getValue instead.
+	+ Inputable, Moveable, Openable,... are moved from com.potix.zk.ui.event
+	  to com.potix.zk.ui.ext.
+	+ Use zk-FCKeditor-2.2-2006-03-31.zip or later
+	+ Use Session.getNativeSession to retrieve HttpSession instead of
+	  Session.getAttribute("javax.servlet.http.HttpSession").
+	+ The sytle-class element of lang-addon.xml is no longer supported.
+	  Use the propety element instead.
+	+ LabellocatorHook is no longer required to declare in web.xml because
+	  DHtmlLayoutServlet always loads WEB-INF/i3-label*.properties
+	+ The signatures of Component.setVariable and getVariable are changed.
+	  An extra argument called local is added. To port your old codes,
+	  specify true to it.
+	+ The event invocation sequence is changed a bit:
+	  event listeners are invoked before component's member method.
+	+ When Initiator.doInit is called, page is not attached to a desktop yet.
+	  Developers have to access Executions.getCurrent().getDesktop() instead.
+	+ EventThreadInit.prepare is added so you have to implement it.
+	+ Language addons shall use extend instead of override.
+	+ Image's alt property is removed. Use tooltiptext instead.
+	+ DynamicAttributes are renamed to DynamicPropertied such that it is
+	  less confused with custom attributes.
+
+--------
+ZK 1.1.0
+
+* Request: 1442883, 1443536, 1443541, 1440869, 1447044, 1449724, 1449700,
+  1450219, 1449680, 1448925, 1447272, 1453874, 1454168
+	+ The forEach attribute to generate components repeatedly
+	+ Seamless integration with servlet by supporting the name attribute
+	  in textbox, radiogroup, checkbox, listbox, tree, combobox, datebox,
+	  intbox, and decimalbox.
+	+ Bandbox and bandpopup are added and used as a customizable combobox.
+	+ Components.getChildren() is live that developers could manipulate
+	  it directly
+	+ Listbox.getItems() is live that developers could manipulate it directly
+	+ EventThreadCleanup to clean up an event processing thread
+	+ Close desktop and free memory when an user browses to another page
+	+ Support the onFocus and onBlur event.
+	+ Window.setMode is added to change window mode easily
+
+* Bug: 1444670, 1444981, 1446385, 1446597, 1449396, 1448883, 1449824,
+	1450151, 1452049, 1451295, 1452087
+	+ Jar files could be placed in both shared/lib and WEB-INF/lib
+
+--------
+ZK 1.0.1
+
+* Request: 1441458, 1441483, 1441873, 1442422
+
+* Bug: 1440481, 1440777, 1441005
+
+--------
+ZK 1.0.0
+
+* Request: 1432007, 1432863, 1431913, 1436785, 1437175, 1437434, 1438092
+	+ Drag and drop
+	+ Configurable when to check whether a ZUML file is modified
+	+ Add getUserPrincipal to Execution.
+	+ EL could be used to specify page ID
+
+* Bug: 1433061, 1433398, 1433696, 1436657
+
+--------
+ZK 1.0.0 RC8
+
+* Generic way to specify browser and Locale dependent URI.
+	Refer to the Developer's Guide for details.
+
+------------
+ZK 1.0.0 RC7
+
+* Client Engine is re-designed to load JavaScript files only when needed.
+	+ It simplifies the component development.
+	+ It improves the performance for long-latency or slow conenctions
+		-- about 7x faster for the first page to show up.
+
+* BeanShell 2.0 is used instead of 1.3
+
+------------
+ZK 1.0.0 RC6
+
+* com.potix.zk.ui.Path is added to represent a component path.
+
+* Listbox supports listfoot and listfooter
+
+* Button supports the href attribute
+
+* DHtmlLayoutPortlet is added to work with Portal (JSR168).
+
+* com.potix.zul.html.Space is added to simplify the adding of vertical spacing.
+
+* Box, vbox, hbox, separator and space supports the spacing attribute
+	to let developer control the spacing.
+
+* getPages, getPage, getDesktopId are removed from Component, so you might
+	have to modify your codes to use getDesktop().getPage(...) insteaad.
+
+* Optimizes the performance by dropping redudant requests.
+
+* UiException derives from RuntimeException, so you don't need to declare
+	it as part of signature.
+
+------------
+ZK 1.0.0 RC5
+
+* Grid supports scrollable and headers. Refer to Developer's Guide.
+
+* Listbox and tree support the checkmark attribute. Refer to Developer's Guide.
+
+* Listcell and treecell are allowed to have textbox, button,
+	 and, in theory, any children. Refer to Developer's Guide.
+
+* The way to include style sheets is changed.
+	1. All style sheets is always included. Refer to Appendix A
+	in ZK Developer's GUide.
+
+	2. ${u:getThemeUri} is no longer supported, since they are always
+	included. Remove them.
+
+	3. Use "abc*.css" instead of "abc" for locale-dependence style sheet.
+	Refer to Locale-Dependent File in the Internationalization chapter.
+
+* OK to specify JavaScript codes directly in lang.xml and lang-addon.xml
+
+* OK to specify CSS files and style sheets in lang.xml and lang-addon.xml.
+
+* The directory structure of the distribution is changed a bit. Refer to
+	ZK-quickstart.pdf for details.
+
+------------
+ZK 1.0.0 RC4
+
+* iframe supports the setContent method for the dynamically generate contents
+
+* The setImageContent method is supported for all components that supports
+	images, such as button, checkbox, comboitem, listcell and many others.
+
+* Window supports the closable attribute
+
+------------
+ZK 1.0.0 RC3
+
+* Comobox and comboboxitem are added
+
+------------
+ZK 1.0.0 RC2
+
+* To be complaint with XUL, we have rename some components
+	+ toolbutton is renamed to toolbarbutton
+	+ listcols and listcol are renamed to listhead and listheader
+
+* DHtmlLayoutServlet support more configuration options, session-timeout
+  and desktop-timeout.
+
+* Desktop is moved to com.potix.zk.ui, since it is worth to let developers
+  know it
+
+* com.potix.zk.ui.WebApp is added to represent a Web application.
+  It wraps javax.servlet.ServletContext.
+
+* com.potix.zk.ui.InitAware is removed. Instead, com.potix.zk.ui.Initiator
+  is added. The later is simpler yet powerful.
+
+* Over 80 XHTML components are added.
