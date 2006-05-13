@@ -167,15 +167,6 @@ public class Radiogroup extends XulElement {
 		}
 	}
 
-	/** Clears all children.
-	 */
-	public void clear() {
-		for (Iterator it = new ArrayList(getChildren()).iterator();
-		it.hasNext();)
-			((Listitem)it.next()).detach(); //detach and remove
-	}
-
-
 	//-- Component --//
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (child instanceof Radio) {

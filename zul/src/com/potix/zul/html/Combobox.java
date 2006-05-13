@@ -129,12 +129,6 @@ public class Combobox extends Textbox {
 		return item;
 	}
 
-	/** Clears all child items.
-	 */
-	public void clear() {
-		getItems().clear();
-	}
-
 	//-- super --//
 	public void setMultiline(boolean multiline) {
 		if (multiline)
