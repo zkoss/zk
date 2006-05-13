@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:build.prop.xml">
+	<!ENTITY targets SYSTEM "file:build.target.xml">
+]>
+
+<!-- build.xml
+	$Id: build.xml,v 1.18 2006/01/06 02:51:04 tomyeh Exp $
+	Purpose:
+		The internal build file for ant.
+	Description:
+		It is invoked by the bash script, build, to do the proper
+		intialization.
+		This build file is used only internally. For SDK to build user's
+		projects, use another file
+	History:
+		March 29 15:11 2001, Created by henrichen@potix.com
+		August 21 14:27 2002, Created by tomyeh@potix.com
+
+Copyright (C) 2002 Potix Corporation. All Rights Reserved.
+-->
+
+<project name="potix.inside" default="build" basedir=".">
+	<description>The internal potix build file for ant.</description>
+<!-- ======= -->
+<!-- INITIAL -->
+<!-- ======= -->
+	&properties;
+
+<!-- ====== -->
+<!-- CONFIG -->
+<!-- ====== -->
+	<target name="verbose" if="verbose.required">
+	<!-- show the current environment -->
+		<echo message="${project.name}: ${project.version}"/>
+		<echo message=""/>
+
+		<echo message="java.class.path = ${java.class.path}"/>
+		<echo message=""/>
+		<echo message="java.home = ${java.home}"/>
+		<echo message="out.dir = ${out.dir}"/>
+		<echo message="debug = ${debug}"/>
+		<echo message="optimize = ${optimize}"/>
+	</target>
+
+	<target name="config" depends="verbose">
+		<!--tstamp/-->
+
+		<available file="${src.mesg.dir}" property="src.mesg.dir.exist"/>
+		<available file="${src.export.dir}" property="src.export.dir.exist"/>
+
+		<available file="${dist.test.dir}" property="dist.test.dir.exist"/>
+		<available file="${bin.dir}/CVS" property="bin.CVS.dir.exist"/>
+
+		<condition property="copy.web.jar.required">
+			<not>
+				<equals arg1="${import.libs}" arg2="nonexist"/>
+			</not>
+		</condition>
+
+		<!-- format -->
+		<condition property="build.ear.required">
+			<equals arg1="${format}" arg2="ear"/>
+		</condition>
+		<condition property="build.jar.required">
+			<equals arg1="${format}" arg2="jar"/>
+		</condition>
+		<condition property="build.war.required">
+			<equals arg1="${format}" arg2="war"/>
+		</condition>
+
+		<condition property="compile.required">
+			<or>
+				<equals arg1="${format}" arg2="jar"/>
+				<equals arg1="${format}" arg2="war"/>
+			</or>
+		</condition>
+
+		<!-- deploy -->
+		<condition property="deploy.lib.required">
+			<equals arg1="${deploy}" arg2="lib"/>
+		</condition>
+		<condition property="deploy.server.required">
+			<equals arg1="${deploy}" arg2="server"/>
+		</condition>
+
+		<!-- deploy jboss -->
+		<condition property="deploy.jboss.required">
+			<and>
+				<isset property="deploy.server.required"/>
+				<equals arg1="${format}" arg2="ear"/>
+			</and>
+		</condition>
+		<condition property="deploy.jboss.intact.required">
+			<and>
+				<isset property="deploy.jboss.required"/>
+				<not>
+					<isset property="deploy.unzip.list"/>
+				</not>
+			</and>
+		</condition>
+		<condition property="deploy.jboss.unzip.required">
+			<and>
+				<isset property="deploy.jboss.required"/>
+				<isset property="deploy.unzip.list"/>
+			</and>
+		</condition>
+
+		<!-- deploy tomcat -->
+		<condition property="deploy.tomcat.required">
+			<and>
+				<isset property="deploy.server.required"/>
+				<equals arg1="${format}" arg2="deploy"/>
+			</and>
+		</condition>
+		<condition property="deploy.tomcat.intact.required">
+			<and>
+				<isset property="deploy.tomcat.required"/>
+				<not>
+					<isset property="deploy.unzip.list"/>
+				</not>
+			</and>
+		</condition>
+		<condition property="deploy.tomcat.unzip.required">
+			<and>
+				<isset property="deploy.tomcat.required"/>
+				<isset property="deploy.unzip.list"/>
+			</and>
+		</condition>
+
+		<condition property="start.service.required">
+			<and>
+				<isset property="deploy.tomcat.required"/>
+				<not>
+					<equals arg1="${start.service}" arg2=""/>
+				</not>
+			</and>
+		</condition>
+
+		<!-- clean relevant -->
+		<condition property="clean.all.required">
+			<isset property="do.all"/>
+		</condition>
+		<condition property="clean.bin.required">
+			<and>
+				<isset property="do.all"/>
+				<not>
+					<isset property="bin.CVS.dir.exist"/>
+				</not>
+			</and>
+		</condition>
+	</target>
+	<target name="config.build" depends="config">
+		<mkdir dir="${codegen.dir}"/>
+		<mkdir dir="${dist.export.dir}"/>
+	</target>
+
+<!-- ======= -->
+<!-- TARGETS -->
+<!-- ======= -->
+	&targets;
+
+</project>
