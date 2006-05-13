@@ -1,0 +1,178 @@
+/* slider.js
+
+{{IS_NOTE
+	$Id: sld.js,v 1.7 2006/05/10 10:04:02 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 30 12:15:24     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+zk.load("zul.html.zul");
+
+zk.Slider = Class.create();
+zk.Slider.prototype = {
+	initialize: function (comp) {
+		this.id = comp.id;
+		zkau.setMeta(comp, this);
+		this.init();
+	},
+	cleanup: function ()  {
+		if (this.draggable) {
+			this.draggable.destroy();
+			this.draggable.slider = null;
+			this.draggable = null;
+		}
+	},
+	init: function() {
+		this.cleanup();
+
+		this.element = $(this.id);
+		if (!this.element) return; //removed
+
+		this.button = $(this.id+"!btn");
+
+		//calc the snap
+		var meta = this; //such that snap() could access it
+		var snap = function (x, y) {return meta._snap(x, y);};
+		this.draggable = new Draggable(this.button, {
+			constraint: "horizontal", snap: snap,
+			starteffect: zkSld._startDrag, change: zkSld._dragging,
+			endeffect: zkSld._endDrag});
+		this._fixPos();
+	},
+	/** (x, y) is in the style's coordination (use zkSld._toStylePos to convert).
+	 */
+	_snap: function (x, y) {
+		var ofs = Position.cumulativeOffset(this.element);
+		ofs = zkSld._toStylePos(this.button, ofs[0], ofs[1]);
+		if (x <= ofs[0]) {
+			x = ofs[0];
+		} else {
+			var max = ofs[0] + this._width();
+			if (x > max) x = max;
+		}
+		if (y <= ofs[1]) {
+			y = ofs[1];
+		} else {
+			var max = ofs[1] + this.element.clientHeight;
+			if (y > max) y = max;
+		}
+		return [x, y];
+	},
+	_fixPos: function () {
+		var wd = this._width();
+		var x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0;
+		var ofs = Position.cumulativeOffset(this.element);
+		ofs = zkSld._toStylePos(this.button, ofs[0], ofs[1]);
+		ofs = this._snap(ofs[0] + x, 0);
+		this.button.style.left = ofs[0] + "px";
+	},
+	_startDrag: function () {
+		this.button.title = ""; //to avoid annoying effect
+		this.slidepos = this._curpos();
+
+		document.body.insertAdjacentHTML("beforeend",
+			'<div id="zul_slidetip" style="position:absolute;display:none;z-index:60000;background-color:white;border: 1px outset">'
+			+this.slidepos+'</div>');
+
+		this.slidetip =  $("zul_slidetip");
+		if (this.slidetip) {
+			this.slidetip.style.display = "block";
+			zk.position(this.slidetip, this.element,"after-start");
+		}
+	},
+	_dragging: function () {
+		var pos = this._realpos();
+		if (pos != this.slidepos) {
+			this.slidepos = pos;
+			if (this.slidetip) this.slidetip.innerHTML = pos;
+			if (this.element.getAttribute("zk_onScrolling"))
+				zkau.send({uuid: this.element.id, 
+					cmd: "onScrolling", data: [pos], implicit: true}, 0);
+		}
+	},
+	_endDrag: function () {
+		var pos = this._realpos();
+		var curpos = this._curpos();
+		if (pos != curpos) {
+			this.element.setAttribute("zk_curpos", pos);
+			zkau.send({uuid: this.element.id, cmd: "onScroll", data: [pos]},
+				zkau.asapTimeout(this.element, "onScroll"));
+		}
+		this._fixPos();
+		this.button.title = pos;
+		if (this.slidetip) {
+			this.slidetip.parentNode.removeChild(this.slidetip);
+			this.slidetip = null;
+		}
+	},
+	_realpos: function () {
+		var btnofs = Position.cumulativeOffset(this.button);
+		var refofs = Position.cumulativeOffset(this.element);
+		var maxpos = this._maxpos();
+		var wd = this._width();
+		var pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd): 0;
+		return pos >= 0 ? pos: 0;
+	},
+	_curpos: function () {
+		return parseInt(this.element.getAttribute("zk_curpos"));
+	},
+	_maxpos: function () {
+		return parseInt(this.element.getAttribute("zk_maxpos"))
+	},
+	/** Returns the slider's real width. */
+	_width: function () {
+		return this.element.clientWidth - this.button.offsetWidth;
+			//button shall not exceed the right edge
+	}
+};
+
+/////////
+function zkSld() {}
+zkSld.init = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) meta.init();
+	else new zk.Slider(cmp);
+};
+
+/** Starts dragging. */
+zkSld._startDrag = function (button) {
+	var meta = zkSld._metaByBtn(button);
+	return meta ? meta._startDrag(): null;
+};
+/** Ends dragging. */
+zkSld._endDrag = function (button) {
+	var meta = zkSld._metaByBtn(button);
+	return meta ? meta._endDrag(): null;
+};
+/** Dragging. */
+zkSld._dragging = function (draggable) {
+	var meta = zkSld._metaByBtn(draggable.element);
+		//draggable is registered to the button
+	return meta ? meta._dragging(): null;
+};
+/** Returns meta by button. */
+zkSld._metaByBtn = function (button) {
+	var btnid = button.id;
+	return zkau.getMeta(btnid.substring(0, btnid.length-4));
+};
+/** Converts from absolute coordination to style's coordination.
+ * We cannot use zk.toParentCoord, because
+ * after calling Draggable, offsetParent becomes BODY but
+ * style.left/top is still relevant to original offsetParent
+ */
+zkSld._toStylePos = function (el, x, y) {
+	var ofs1 = Position.cumulativeOffset(el);
+	var ofs2 = zk.getStyleOffset(el);
+	return [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
+};

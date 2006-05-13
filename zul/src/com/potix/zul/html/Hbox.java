@@ -1,0 +1,32 @@
+/* Hbox.java
+
+{{IS_NOTE
+	$Id: Hbox.java,v 1.3 2006/04/17 06:39:56 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 20 22:16:42     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package com.potix.zul.html;
+
+/**
+ * A hbox.
+ *
+ * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @version $Revision: 1.3 $ $Date: 2006/04/17 06:39:56 $
+ */
+public class Hbox extends Box {
+	public Hbox() {
+		setMold("horizontal");
+	}
+}

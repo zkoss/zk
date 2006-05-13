@@ -1,0 +1,4 @@
+WEB-INF/tld/web/**
+WEB-INF/tld/zul/**
+js/i_zk.js
+js/i_zul.js
