@@ -173,22 +173,19 @@ zkCmbox.onbutton = function (cmp) {
 zkCmbox.onclickitem = function (item) {
 	zkCmbox._selback(item);
 	zkau.closeFloats();
+	zkCmbox.onout(item); //onmouseout might be sent (especiall we change parent)
 };
 /** onmouoseover(el). */
 zkCmbox.onover = function (el) {
 	if (!zk.dragging) {
-		if (!el.getAttribute("zk_bgcolor"))
-			el.setAttribute("zk_bgcolor", el.style.backgroundColor);
+		zk.backupStyle(el, "backgroundColor");
 		el.style.backgroundColor =
 			el.className.endsWith("sel") ? "#115588": "#DAE8FF";
 	}
 };
 /** onmouseout(el). */
 zkCmbox.onout = function (el) {
-	if (!zk.dragging) {
-		el.style.backgroundColor = el.getAttribute("zk_bgcolor") || "";
-		el.removeAttribute("zk_bgcolor")
-	}
+	if (!zk.dragging) zk.restoreStyle(el, "backgroundColor");
 };
 /** Marks an item as selected or un-selected. */
 zkCmbox._setsel = function (item, sel) {

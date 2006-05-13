@@ -483,14 +483,14 @@ zk.Selectable.prototype = {
 			if (toSel) {
 				if (el) el.checked = true;
 				row.className = row.className + "sel";
-				zkSel.onout(row, false);
+				zkSel.onout(row);
 				row.setAttribute("zk_sel", "true");
 			} else {
 				if (el) el.checked = false;
 				var len = row.className.length;
 				if (len > 3)
 					row.className = row.className.substring(0, len - 3);
-				zkSel.onout(row, false);
+				zkSel.onout(row);
 				row.setAttribute("zk_sel", "false");
 			}
 		}
@@ -840,18 +840,14 @@ zkSel._shallIgnoreEvent = function (el) {
 /** row's onmouseover. */
 zkSel.onover = function (el) {
 	if (!zk.dragging) {
-		if (!el.getAttribute("zk_bgcolor"))
-			el.setAttribute("zk_bgcolor", el.style.backgroundColor);
+		zk.backupStyle(el, "backgroundColor");
 		el.style.backgroundColor =
 			el.className.endsWith("sel") ? "#115588": "#DAE8FF";
 	}
 };
 /** row's onmouseout. */
-zkSel.onout = function (el, reset) {
-	if (!zk.dragging) {
-		el.style.backgroundColor = el.getAttribute("zk_bgcolor") || "";
-		if (reset) el.removeAttribute("zk_bgcolor")
-	}
+zkSel.onout = function (el) {
+	if (!zk.dragging) zk.restoreStyle(el, "backgroundColor");
 };
 /** (!cm or !sel)'s onfocus. */
 zkSel.cmonfocus = function (el) {
@@ -928,7 +924,7 @@ zkLit.init = function (cmp) { //listitem
 	Event.observe(cmp, "click", function (evt) {zkLibox.onclick(evt);});
 	Event.observe(cmp, "keydown", function (evt) {return zkLibox.onkeydown(evt);});
 	Event.observe(cmp, "mouseover", function () {return zkSel.onover(cmp);});
-	Event.observe(cmp, "mouseout", function () {return zkSel.onout(cmp, true);});
+	Event.observe(cmp, "mouseout", function () {return zkSel.onout(cmp);});
 };
 
 function zkLcfc() {}

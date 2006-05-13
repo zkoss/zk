@@ -877,6 +877,27 @@ zk.toJSStyleName = function (nm) {
 		+ nm.substring(j + 2);
 };
 
+/** Backup a style of the specified name.
+ * The second call to backupStyle is ignored until zk.restoreStyle is called.
+ * Usually used with onmouseover.
+ */
+zk.backupStyle = function (el, nm) {
+	var bknm = "zk_bk" + nm;
+	if (!el.getAttribute(bknm))
+		el.setAttribute(bknm, el.style[nm] || "_zk_none_");
+};
+/** Restore the style of the specified name.
+ * Usually used with onover.
+ */
+zk.restoreStyle = function (el, nm) {
+	var bknm = "zk_bk" + nm;
+	var val = el.getAttribute(bknm);
+	if (val) {
+		el.removeAttribute(bknm);
+		el.style[nm] = val == "_zk_none_" ? "": val;
+	}
+};
+
 /** Scroll inner into visible, assuming outer has a scrollbar. */
 zk.scrollIntoView = function (outer, inner) {
 	if (outer && inner) {
