@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	$Id: index.zul,v 1.8 2006/04/17 06:51:45 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript><![CDATA[
+		void doSelect(String s) {
+			Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+			Treeitem treeitem = tree.getSpaceOwner().getFellow(s);
+			tree.selectItem(treeitem);
+			java.util.Set items = new HashSet();
+			items.add(treeitem);
+			Events.postEvent(new SelectEvent("onSelect", tree, items));
+		}
+	]]></zscript>
+	
+	<html>
+		<attribute name="content"><![CDATA[
+			<h3>Miscellaneous Elements</h3>
+		]]></attribute>
+	</html>
+	<h:ul>
+		<h:li><toolbarbutton label="Drag and Drop" onClick="doSelect(&quot;mi0&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Timer" onClick="doSelect(&quot;mi1&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Macro Components" onClick="doSelect(&quot;mimacro&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Include" onClick="doSelect(&quot;mi2&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Iframe" onClick="doSelect(&quot;mi3&quot;)"/></h:li>
+		<h:li><toolbarbutton label="More iframe" onClick="doSelect(&quot;mi4&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Embedded HTML elements" onClick="doSelect(&quot;mi5&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Mixed with HTML elements" onClick="doSelect(&quot;mi6&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Style sheets" onClick="doSelect(&quot;mi7&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Localization" onClick="doSelect(&quot;mi8&quot;)"/></h:li>
+	</h:ul>
+</window>

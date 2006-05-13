@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+box.zul
+
+{{IS_NOTE
+	$Id: box.zul,v 1.6 2006/04/17 09:53:18 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>The box model</h4>
+				<p>The box model is the major layout method for components.</p>
+				<ul>
+					<li>hbox: components inside this element will orient themselves horizontally</li>
+					<li>vbox: components inside this element will orient themselves vertically</li>
+				</ul>
+				<p>With the combination of the hbox and vbox, basically we can layout the window into a series of boxes.</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
+			<textbox id="codes" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="box layout demo" border="normal">
+	<hbox spacing="0">
+		<window border="normal">0</window>
+		<vbox spacing="0">
+			<hbox spacing="0">
+				<window border="normal">1</window> <window border="normal">2</window>
+				<vbox spacing="0">
+					<window border="normal">3</window> 
+					<window border="normal">4</window>
+				</vbox>
+			</hbox>
+			<hbox spacing="0">
+				<vbox spacing="0">
+					<window border="normal">5</window> 
+					<window border="normal">6</window>
+				</vbox>
+				<window border="normal">7</window> <window border="normal">8</window> <window border="normal">9</window>
+			</hbox>
+		</vbox>
+	</hbox>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

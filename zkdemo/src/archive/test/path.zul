@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+path.zul
+
+{{IS_NOTE
+	$Id: path.zul,v 1.3 2006/03/02 04:49:31 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 19 18:38:48     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="wnd" title="Path Test">
+	<vbox id="box"/>
+	<zscript><![CDATA[
+void out(String txt) {
+	new Label(txt).setParent(box);
+}
+String[] ps = {"../../ab", "ab/cd/../ef", "ab/../cd", "/ab/../cd", "ab/..", "/ab/.."};
+for (int j = 0; j < ps.length; ++j)
+	out(ps[j]+" becomes "+new Path(ps[j]));
+	]]></zscript>
+</window>

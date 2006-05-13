@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+hello.zul
+
+{{IS_NOTE
+	$Id: fckeditor.zul,v 1.4 2006/04/17 09:53:22 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+	<h4>Demo of FCKeditor</h4>
+	<p><a href="http://www.fckeditor.net">FCKeditor</a> is a popular HTML on-line text edit developed by Frederico Caldeira Knabben.</p>
+	<p>In this demo, the first editor is a FCKeditor and the second one
+	is a textbox. Then, what you typed in the FCKeditor will be copied
+	to the textbox. Vice versa.</p>
+	<p>Notice: FCKeditor's onBlur event currently support only Internet Explorer,
+	so this demo works only under Internet Explorer.</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView();"/></caption>
+			<textbox id="codes" class="code" rows="10" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="FCKeditor">
+	<fckeditor id="ed" onChange="ta.value = self.value"/>
+	<textbox id="ta" rows="6" width="100%" onChange="ed.value = self.value"/>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

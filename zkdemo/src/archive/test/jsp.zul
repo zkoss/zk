@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+jsp.zul
+
+{{IS_NOTE
+	$Id: jsp.zul,v 1.1 2006/05/02 04:58:18 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May  1 13:48:05     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<include src="/test/test.jsp"/>
+</window>

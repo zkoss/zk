@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+map.zul
+
+{{IS_NOTE
+	$Id: map.zul,v 1.2 2006/04/12 16:25:01 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 28 15:49:35     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="map test">
+	<vbox>
+	No area:
+	<imagemap src="/img/sun.jpg" onClick="what(event)"/>
+	Three area:
+	<imagemap src="/img/sun.jpg" onClick="what(event)">
+		<area id="First" coords="0,0,50,50"/>
+		<area id="Second" coords="50,0,100,50"/>
+		<area id="Third" coords="100,0,150,50"/>
+	</imagemap>
+	</vbox>
+	<zscript>
+	void what(MouseEvent evt) {
+		if (evt.area != null)
+			alert("Click area "+evt.area);
+		else
+			alert("Click ("+evt.x+", "+evt.y+")");
+	}
+	</zscript>
+</window>

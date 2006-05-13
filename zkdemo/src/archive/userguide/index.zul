@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="userGuide" title="ZK Component Demo"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	$Id: index.zul,v 1.31 2006/04/18 07:23:24 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="root" xmlns:h="http://www.w3.org/1999/xhtml">
+	<hbox>
+	<window id="treelist">
+		<tree id="toc" width="280px">
+			<attribute name="onSelect">
+				Treeitem item = self.getSelectedItem();
+				if (item != null) {
+					Include inc = Path.getComponent(root, "contents/xcontents");
+					inc.setSrc(null); //to make it dirty (and invalidate)
+					inc.setSrc(item.getValue());
+				}
+			</attribute>
+			<treecols>
+				<treecol label="Demo: Version ${desktop.webApp.version}"/>
+			</treecols>
+			<treechildren>
+				<treeitem label="Simple Elements" value="/userguide/simple/index.zul">
+					<treechildren>
+						<treeitem id="s1" label="First Window: Hello World" value="/userguide/simple/hello.zul"/>
+						<treeitem id="s2" label="Overlapped and popup windows" value="/userguide/simple/overlap.zul"/>
+						<treeitem id="s3" label="Labels and images" value="/userguide/simple/label.zul"/>
+						<treeitem id="s4" label="Input" value="/userguide/simple/input.zul"/>
+						<treeitem id="s5" label="More input features" value="/userguide/simple/moreInput.zul"/>
+						<treeitem id="s6" label="The onChanging event" value="/userguide/simple/onChanging.zul"/>
+						<treeitem id="s7" label="Radio buttons" value="/userguide/simple/radio.zul"/>
+						<treeitem id="s8" label="Checkboxes" value="/userguide/simple/checkbox.zul"/>
+						<treeitem id="s9" label="Comboboxes" value="/userguide/simple/combobox.zul"/>
+						<treeitem id="s10" label="More comboboxes" value="/userguide/simple/moreCombobox.zul"/>
+						<treeitem id="s10a" label="Bandboxes" value="/userguide/simple/bandbox.zul"/>
+						<treeitem id="s11" label="Sliders" value="/userguide/simple/slider.zul"/>
+						<treeitem id="s12" label="The onScrolling event" value="/userguide/simple/onScrolling.zul"/>
+						<treeitem id="s13" label="More button features" value="/userguide/simple/moreButton.zul"/>
+						<treeitem id="s14" label="Audio" value="/userguide/simple/audio.zul"/>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Modal Dialogs" value="/userguide/modal/index.zul">
+					<treechildren>
+						<treeitem id="m1" label="Messagebox" value="/userguide/modal/messagebox.zul"/>
+						<treeitem id="m2" label="Fileupload" value="/userguide/modal/fileupload.zul"/>
+						<treeitem id="m3" label="Modal dialog" value="/userguide/modal/modalDialog.zul"/>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Layout Elements" value="/userguide/layout/index.zul">
+					<treechildren>
+						<treeitem id="l1" label="The box model" value="/userguide/layout/box.zul"/>
+						<treeitem id="l2" label="Tabboxes" value="/userguide/layout/tabbox.zul"/>
+						<treeitem id="l3" label="More tabboxes" value="/userguide/layout/moreTabbox.zul"/>
+						<treeitem id="l4" label="Groupbox" value="/userguide/layout/groupbox.zul"/>
+						<treeitem id="l5" label="More groupboxes" value="/userguide/layout/moreGroupbox.zul"/>
+						<treeitem id="l6" label="Grids" value="/userguide/layout/grid.zul"/>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Toolbar and Menus" value="/userguide/toolbar/index.zul">
+					<treechildren>
+						<treeitem id="t1" label="Toolbar and Toolbarbutton" value="/userguide/toolbar/toolbarbutton.zul"/>
+						<treeitem id="t2" label="Menu" value="/userguide/toolbar/menu.zul"/>
+						<treeitem id="t3" label="More Menu Features" value="/userguide/toolbar/moreMenu.zul"/>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Listboxes" value="/userguide/listbox/index.zul">
+					<treechildren>
+						<treeitem id="lb1" label="Listboxes" value="/userguide/listbox/listbox.zul"/>
+						<treeitem id="lb2" label="Live data" value="/userguide/listbox/livedata.zul"/>
+						<treeitem id="lb3" label="Multiple selections" value="/userguide/listbox/multiple.zul"/>
+						<treeitem id="lb4" label="Checkmarks" value="/userguide/listbox/checkmarks.zul"/>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Trees" value="/userguide/tree/index.zul">
+					<treechildren>
+						<treeitem id="tr1" label="Trees" value="/userguide/tree/tree.zul"/>
+						<treeitem id="tr2" label="Multiple selections" value="/userguide/tree/multiple.zul"/>
+						<treeitem id="tr3" label="Checkmarks" value="/userguide/tree/checkmarks.zul"/>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Miscellaneous elements" value="/userguide/misc/index.zul">
+					<treechildren>
+						<treeitem id="mi0" label="Drag and Drop" value="/userguide/misc/dragdrop.zul"/>
+						<treeitem id="mi1" label="Timer" value="/userguide/misc/timer.zul"/>
+						<treeitem id="mimacro" label="Macro Components" value="/userguide/misc/macro.zul"/>
+						<treeitem id="mi2" label="Include" value="/userguide/misc/include.zul"/>
+						<treeitem id="mi3" label="Iframe" value="/userguide/misc/iframe.zul"/>
+						<treeitem id="mi4" label="More iframe" value="/userguide/misc/moreIframe.zul"/>
+						<treeitem id="mi5" label="Embedded HTML elements" value="/userguide/misc/embedHtml.zul"/>
+						<treeitem id="mi6" label="Mixed with HTML elements" value="/userguide/misc/mixHtml.zul"/>
+						<treeitem id="mi7" label="Style sheets" value="/userguide/misc/styleSheet.zul"/>
+						<treeitem id="mi8" label="Localization" value="/userguide/misc/localization.zul"/>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Database connection" value="/userguide/dbconnect/index.zul">
+					<treechildren>
+						<treeitem id="d1" label="JDBC" value="/userguide/dbconnect/jdbc.zul"/>
+						<treeitem id="d2" label="Hibernate" value="/userguide/dbconnect/hibernate.zul"/>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Events and Scripts" value="/userguide/event/index.zul">
+					<treechildren>
+						<treeitem id="e1" label="Scripts" value="/userguide/event/zscript.zul"/>
+						<treeitem id="e2" label="Event listener" value="/userguide/event/listener.zul"/>
+						<treeitem id="e3" label="onOK, onCancel and onCtrlKey" value="/userguide/event/onOK.zul"/>
+						<treeitem id="e4" label="More event listener" value="/userguide/event/moreListener.zul"/>
+						<treeitem id="e5" label="Focus" value="/userguide/event/focus.zul"/>
+						<treeitem id="e6" label="Client side action" value="/userguide/event/action.zul"/>
+					</treechildren>
+				</treeitem>
+				<treeitem label="ZK.forge" value="/userguide/zkforge/index.zul">
+					<treechildren>
+						<treeitem id="zf1" label="FCKeditor" value="/userguide/zkforge/fckeditor.zul"/>
+						<treeitem id="zf2" label="Dojo Fisheye List" value="/userguide/zkforge/fisheyelist.zul"/>
+					</treechildren>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</window>
+	<window id="contents" border="normal" width="99%">
+		<include id="xcontents"/>
+	</window>
+	<zscript><![CDATA[
+		void doSelect(String s) {
+			Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+			Treeitem treeitem = tree.getSpaceOwner().getFellow(s);
+			tree.selectItem(treeitem);
+			java.util.Set items = new HashSet();
+			items.add(treeitem);
+			Events.postEvent(new SelectEvent("onSelect", tree, items));
+		}
+		final String id = Executions.getCurrent().getParameter("id");
+		doSelect(id != null ? id : "s1");
+	]]></zscript>
+	</hbox>
+<h:script type="text/javascript">
+_urchin = function() {
+	try {
+		_uacct = window.location.href.indexOf("potix.com") >= 0 ? "UA-121377-1": "UA-121377-3";
+		urchinTracker();
+	} catch (e) {}
+};
+setTimeout('zk.loadJS("http://www.google-analytics.com/urchin.js", _urchin)', 5000);
+</h:script>
+</window>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+overlap.zul
+
+{{IS_NOTE
+	$Id: overlap.zul,v 1.6 2006/04/17 09:53:21 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>Overlapped, popup, and embedded windows</h4>
+				<ul>
+					<li>Overlapped window: a draggable window which can not be closed by clicking outside the window.</li>
+					<li>Popup window: a draggable window which can be closed by clicking outside the window.</li>
+					<li>Embedded window: a non-draggable window which can not be closed by clicking outside the window.</li>
+				</ul>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView();"/></caption>
+			<textbox id="codes" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<zk>
+	<window id="win" border="normal" width="200px">
+		<caption image="/img/coffee.gif" label="Hi there!"/>
+		<checkbox label="Hello, Wolrd!"/>
+	</window>
+	
+	<button label="Overlap" onClick="win.doOverlapped();"/>
+	<button label="Popup" onClick="win.doPopup();"/>
+	<button label="Embed" onClick="win.doEmbedded();"/>
+</zk>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

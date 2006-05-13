@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+include2.zul
+
+{{IS_NOTE
+	$Id: include2.zul,v 1.1.1.1 2005/11/10 13:10:56 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 11 10:25:17     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+This includes another page
+	<include src="/test/slider.zul"/>
+</window>

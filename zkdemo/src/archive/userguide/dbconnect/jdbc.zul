@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+jdbc.zul
+
+{{IS_NOTE
+	$Id: jdbc.zul,v 1.5 2006/04/17 09:53:17 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>JDBC</h4>
+				<p>Presentation components do not assume any persistent technology. 
+				This example simply demostrate the possiblility to combine presentation component and database via JDBC.</p>
+				<p>Note that we comment out the script on purpose because it will not run on our web site.</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
+			<textbox id="codes" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="JDBC demo" border="normal">
+	<zscript>{
+		import java.sql.*;
+		void submit() {
+		/*
+			//load driver and get a database connetion
+			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+			String url = "jdbc:odbc:Fred";
+			Connection con = DriverManager.getConnection(url,"myLogin", "myPassword");
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO user values(?, ?)");
+			
+			//insert what end user entered into database table
+			stmt.set(1, name.value);
+			stmt.set(2, email.value);
+			
+			//execute the statement
+			stmt.executeUpdate();
+			
+			//close the jdbc connection
+			con.close();
+		*/
+		}
+	}</zscript>
+	<grid>
+	<rows>
+		<row>Name : <textbox id="name"/></row>
+		<row>Email: <textbox id="email"/></row>
+		<row><button label="submit" onClick="submit()"/></row>
+	</rows>
+	</grid>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

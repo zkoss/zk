@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+forward.zul
+
+{{IS_NOTE
+	$Id: forward.zul,v 1.1 2006/04/25 07:51:58 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 25 15:50:12     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zscript>
+Executions.forward("test.zul");
+</zscript>

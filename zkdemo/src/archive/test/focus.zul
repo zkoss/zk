@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+focus.zul
+
+{{IS_NOTE
+	$Id: focus.zul,v 1.1 2006/03/20 02:27:22 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 17 23:10:24     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<textbox id="_quickSearchText" value="" onCreate="self.focus()"/>

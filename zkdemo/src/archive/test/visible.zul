@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+visible.zul
+
+{{IS_NOTE
+	$Id: visible.zul,v 1.1 2005/11/17 17:27:25 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 17 10:26:02     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<checkbox id="ck" label="First"/>
+	<button label="Toggle visibility" onClick="ck.setVisible(!ck.isVisible())"/>
+</window>

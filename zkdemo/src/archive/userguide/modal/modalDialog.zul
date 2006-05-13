@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+modalDialog.zul
+
+{{IS_NOTE
+	$Id: modalDialog.zul,v 1.5 2006/04/17 09:53:20 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>Modal dialog</h4>
+				<p>Creating a modal dialog from a zul template file is easy.</p>
+				<p>Push the "Hello.doModal" button to allow system creating a modal dialog from a template file with following contents.</p>
+				<pre><code>
+&lt;window id=&quot;win&quot; title=&quot;1st window&quot; border=&quot;normal&quot; width=&quot;200px&quot;&gt;
+	Hello, World!
+	&lt;button label=&quot;OK&quot; onClick=&quot;win.detach()&quot;/&gt;
+&lt;/window&gt;
+				</code></pre>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
+			<textbox id="codes" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="Modal Dialog demo" border="normal" closable="true">
+	<button label="Hello.doModal">
+		<attribute name="onClick">{
+			final Window win = (Window) Executions.createComponents(
+					"/userguide/modal/hello-template.zul", null, null);
+			win.doModal();
+		}</attribute>
+	</button>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

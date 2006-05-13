@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	$Id: index.zul,v 1.3 2006/01/19 10:48:28 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript><![CDATA[
+		void doSelect(String s) {
+			Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+			Treeitem treeitem = tree.getSpaceOwner().getFellow(s);
+			tree.selectItem(treeitem);
+			java.util.Set items = new HashSet();
+			items.add(treeitem);
+			Events.postEvent(new SelectEvent("onSelect", tree, items));
+		}
+	]]></zscript>
+	
+	<html>
+		<attribute name="content"><![CDATA[
+	<h3>ZK.forge Components</h3>
+	<p>ZK.forge is a collection of components, themes and utilities
+	developed from community collaboration.</p>
+	<p>See also <a href="zkforge.sourceforge.net">ZK.forge at sourceforge.net</a></p>
+		]]></attribute>
+	</html> 
+	<h:ul>
+		<h:li><toolbarbutton label="FCKeditor" onClick="doSelect(&quot;zf1&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Dojo Fisheye List" onClick="doSelect(&quot;zf2&quot;)"/></h:li>
+	</h:ul>
+</window>
