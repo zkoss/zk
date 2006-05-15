@@ -1,7 +1,7 @@
 /* Datebox.java
 
 {{IS_NOTE
-	$Id: Datebox.java,v 1.18 2006/05/10 10:04:05 tomyeh Exp $
+	$Id: Datebox.java,v 1.19 2006/05/15 13:22:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -50,15 +50,17 @@ import com.potix.zul.html.impl.FormatInputElement;
  * format.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/05/10 10:04:05 $
+ * @version $Revision: 1.19 $ $Date: 2006/05/15 13:22:09 $
  */
 public class Datebox extends FormatInputElement {
 	private boolean _lenient = true;
+	private boolean _compact;
 
 	public Datebox() {
 		setFormat(getDefaultFormat());
 		setSclass("datebox");
 		setCols(11);
+		_compact = "zh".equals(Apps.getCurrentLocale().getLanguage());
 	}
 	public Datebox(Date date) throws WrongValueException {
 		this();
@@ -103,6 +105,20 @@ public class Datebox extends FormatInputElement {
 		if (_lenient != lenient) {
 			_lenient = lenient;
 			smartUpdate("zk_lenient", _lenient);
+		}
+	}
+	/** Returns whether to use a compact layout.
+	 * <p>Default: true if zh_TW or zh_CN; false otherwise.
+	 */
+	public boolean isCompact() {
+		return _compact;
+	}
+	/** Sets whether to use a compact layout.
+	 */
+	public void setCompact(boolean compact) {
+		if (_compact != compact) {
+			_compact = compact;
+			invalidate(OUTER);
 		}
 	}
 
@@ -177,6 +193,7 @@ public class Datebox extends FormatInputElement {
 			new StringBuffer(64).append(super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "zk_fmt", getFormat());
 		if (!_lenient) sb.append(" zk_lenient=\"false\"");
+		if (_compact) sb.append(" zk_compact=\"true\"");
 		return sb.toString();
 	}
 	public String getInnerAttrs() {

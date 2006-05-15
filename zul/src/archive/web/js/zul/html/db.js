@@ -1,7 +1,7 @@
 /* db.js
 
 {{IS_NOTE
-	$Id: db.js,v 1.28 2006/05/15 05:30:02 tomyeh Exp $
+	$Id: db.js,v 1.30 2006/05/15 13:22:07 tomyeh Exp $
 	Purpose:
 		datebox
 	Description:
@@ -35,23 +35,40 @@ zk.Cal.prototype = {
 		this.element = $(this.id);
 		if (!this.element) return;
 
+		var compact = this.element.getAttribute("zk_compact") == "true";
 		var html = this.popup ? '<table border="0" cellspacing="0" cellpadding="0" tabindex="-1">': '';
-		html += '<tr><td><table class="calyear" width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="15"></td><td align="right"><img src="'
+		html += '<tr><td><table class="calyear" width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="5"></td><td align="right"><img src="'
 			+zk.getUpdateURI('/web/zul/img/cal/arrowL.gif')
-			+'" style="cursor:pointer" onclick="zkCal.onyearclk(event,-1)" id="'
-			+this.id+'!ly"/></td><td id="'+this.id+'!year"></td><td align="left"><img src="'
-			+zk.getUpdateURI('/web/zul/img/cal/arrowR.gif')
-			+'" style="cursor:pointer" onclick="zkCal.onyearclk(event,1)" id="'
-			+this.id+'!ry"/></td><td width="15"></td></tr></table></td></tr>';
+			+'" style="cursor:pointer" onclick="zkCal.onyearofs(event,-1)" id="'
+			+this.id+'!ly"/></td>';
 
-		html += '<tr><td><table class="calmon" width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
-		for (var j = 0 ; j < 12; ++j) {
-			html += '<td id="'+this.id+'!m'+j
-				+'" onclick="zkCal.onmonclk(event)" onmouseover="zkCal.onover(event)" onmouseout="zkCal.onout(event)">'
-				+ zk.S2MON[j] + '</td>';
-			if (j == 5) html += '</tr><tr>';
+		if (compact)
+			html += '<td align="right"><img src="'+zk.getUpdateURI('/web/zul/img/cal/arrow2L.gif')
+				+'" style="cursor:pointer" onclick="zkCal.onmonofs(event,-1)" id="'
+				+this.id+'!lm"/></td>';
+
+		html += '<td width="5"></td><td id="'+this.id+'!title"></td><td width="5"></td>';
+
+		if (compact)
+			html += '<td align="left"><img src="'+zk.getUpdateURI('/web/zul/img/cal/arrow2R.gif')
+				+'" style="cursor:pointer" onclick="zkCal.onmonofs(event,1)" id="'
+				+this.id+'!rm"/></td>';
+
+		html += '<td align="left"><img src="'+zk.getUpdateURI('/web/zul/img/cal/arrowR.gif')
+			+'" style="cursor:pointer" onclick="zkCal.onyearofs(event,1)" id="'
+			+this.id+'!ry"/></td><td width="5"></td></tr></table></td></tr>';
+
+		if (!compact) {
+			html += '<tr><td><table class="calmon" width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
+			for (var j = 0 ; j < 12; ++j) {
+				html += '<td id="'+this.id+'!m'+j
+					+'" onclick="zkCal.onmonclk(event)" onmouseover="zkCal.onover(event)" onmouseout="zkCal.onout(event)">'
+					+ zk.S2MON[j] + '</td>';
+				if (j == 5) html += '</tr><tr>';
+			}
+			html += '</tr></table></td></tr>';
 		}
-		html += '</tr></table></td></tr>';
+		if (this.popup) html += '<tr><td height="3px"></td></tr>';
 
 		html += '<tr><td><table class="calday" width="100%" border="0" cellspacing="0" cellpadding="0"><tr class="caldow">';
 		var sun = (7 - zk.DOW_1ST) % 7, sat = (6 + sun) % 7;
@@ -93,14 +110,16 @@ zk.Cal.prototype = {
 		//year
 		var val = this.date, m = val.getMonth(), d = val.getDate();
 		var y = val.getFullYear();
-		var el = $(this.id + "!year");
-		zk.setInnerHTML(el, y);
+		var el = $(this.id + "!title");
+		zk.setInnerHTML(el, zk.SMON[m] + ', ' + y);
 
 		//month
 		for (var j = 0; j < 12; ++j) {
 			el = $(this.id + "!m" + j);
-			el.className = m == j ? "sel": "";
-			el.setAttribute("zk_mon", j);
+			if (el) { //omitted if compact
+				el.className = m == j ? "sel": "";
+				el.setAttribute("zk_mon", j);
+			}
 		}
 
 		var last = new Date(y, m + 1, 0).getDate(), //last date of this month
@@ -115,6 +134,7 @@ zk.Cal.prototype = {
 				else {
 					if (k == 0) el.style.display = "";
 					var cell = el.cells[k];
+					cell.style.textDecoration = "";
 					cell.setAttribute("zk_day", v);
 					cell.setAttribute("zk_monofs",
 						cur <= 0 ? -1: cur <= last ? 0: 1);
@@ -148,25 +168,29 @@ zk.Cal.prototype = {
 				}
 			}
 		}
-		if (this.popup) this.selback();
-		else this.onchange();
+		this._onupdate(true);
 	},
 	_onmonclk: function (cell) {
 		if (cell.className != "sel") { //!selected
 			var y = this.date.getFullYear(), d = this.date.getDate();
 			this.date = new Date(y, zk.getIntAttr(cell, "zk_mon"), d);
 			this._output();
-			if (!this.popup) this.onchange();
-			else if (this.input) zk.focusById(this.input.id);
+			this._onupdate(false);
 		}
 	},
-	_onyearclk: function (ofs) {
+	_onyearofs: function (ofs) {
 		var y = this.date.getFullYear(), m = this.date.getMonth(),
 			d = this.date.getDate();
 		this.date = new Date(y + ofs, m, d);
 		this._output();
-		if (!this.popup) this.onchange();
-		else if (this.input) zk.focusById(this.input.id);
+		this._onupdate(false);
+	},
+	_onmonofs: function (ofs) {
+		var y = this.date.getFullYear(), m = this.date.getMonth(),
+			d = this.date.getDate();
+		this.date = new Date(y, m + ofs, d);
+		this._output();
+		this._onupdate(false);
 	},
 	setDate: function (val) {
 		if (val != this.date) {
@@ -194,6 +218,18 @@ zk.Cal.prototype = {
 			}
 		}
 	},
+	/** Calls selback or onchange depending on this.popup. */
+	_onupdate: function (close) {
+		this._output();
+		if (this.popup) {
+			this.selback(close);
+			if (this.input) zk.focusById(this.input.id);
+		} else {
+			this.onchange();
+			if (zk.agtIe) setTimeout(function () {zk.focusDown(this.element);}, 5);
+			else zk.focusDown(this.element);
+		}
+	},
 	onchange: function () {
 		var y = this.date.getFullYear(),
 			m = this.date.getMonth(), d = this.date.getDate();
@@ -201,13 +237,13 @@ zk.Cal.prototype = {
 			data: [y+'/'+(m+1)+'/'+d]}, zkau.asapTimeout(this.element, "onChange"));
 		this._changed = false;
 	},
-	selback: function () {
+	selback: function (close) {
 		if (this.input) {
 			this.input.value = this.getDateString();
 			zk.focusById(this.input.id);
 			zk.selectById(this.input.id);
 		}
-		zkau.closeFloats();
+		if (close) zkau.closeFloats();
 	},
 	getDateString: function () {
 		return zk.formatDate(this.date, this.getFormat());
@@ -233,35 +269,24 @@ zkCal.setAttr = function (cmp, nm, val) {
 	return true;
 };
 
-zkCal.onyearclk = function (evt, ofs) {
+zkCal.onyearofs = function (evt, ofs) {
 	var meta = zkau.getMeta(zkau.uuidOf(Event.element(evt)));
-	if (meta) {
-		meta._onyearclk(ofs);
-		if (!meta.popup)
-			if (zk.agtIe) setTimeout(function () {zk.focusDown(meta.element);}, 5);
-			else zk.focusDown(meta.element);
-	}
+	if (meta) meta._onyearofs(ofs);
+};
+zkCal.onmonofs = function (evt, ofs) {
+	var meta = zkau.getMeta(zkau.uuidOf(Event.element(evt)));
+	if (meta) meta._onmonofs(ofs);
 };
 zkCal.onmonclk = function (evt) {
 	var el = Event.element(evt);
 	var meta = zkau.getMeta(zkau.uuidOf(el));
-	if (meta) {
-		meta._onmonclk(el);
-		if (!meta.popup)
-			if (zk.agtIe) setTimeout(function () {zk.focusDown(meta.element);}, 5);
-			else zk.focusDown(meta.element);
-	}
+	if (meta) meta._onmonclk(el);
 };
 zkCal.ondayclk = function (evt) {
 	var el = Event.element(evt);
 	if (zk.tagName(el) == "A") el = el.parentNode;
 	var meta = zkau.getMeta(zkau.uuidOf(el));
-	if (meta) {
-		meta._ondayclk(el);
-		if (!meta.popup)
-			if (zk.agtIe) setTimeout(function () {zk.focusDown(meta.element);}, 5);
-			else zk.focusDown(meta.element);
-	}
+	if (meta) meta._ondayclk(el);
 };
 zkCal.onup = function (evt) {
 	var meta = zkau.getMeta(zkau.uuidOf(Event.element(evt)));
@@ -435,12 +460,6 @@ zkDtbox.onbutton = function (cmp) {
 	}
 };
 
-/** When an item is clicked. */
-zkDtbox.onclickitem = function (item) {
-	zkau.closeFloats();
-	zkDtbox._selback(item);
-};
-
 zkDtbox.open = function (pp) {
 	pp = $(pp);
 	zkau.closeFloats(); //including popups
@@ -499,22 +518,6 @@ zkDtbox._repos = function (uuid) {
 	zk.position(pp, cb, "after-start");
 	zkau.hideCovered();
 	zk.focusById(inpId);
-};
-
-/** Selects back the specified item. */
-zkDtbox._selback = function (item) {
-	var txt = zkDtbox.getLabel(item); 
-
-	var cb = zkau.getParentByType(item, "Cmbox");
-	if (cb) {
-		var inpId = cb.id + "!real";
-		var inp = $(inpId);
-		if (inp) {
-			inp.value = txt;
-			zk.focusById(inpId);
-			zk.selectById(inpId);
-		}
-	}
 };
 
 zkDtbox.close = function (pp, focus) {

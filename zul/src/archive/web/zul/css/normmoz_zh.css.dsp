@@ -387,7 +387,8 @@ table.calday {
 	border: 1px solid #ddd;
 }
 .calyear td {
-	font-size: medium; font-weight: bold; text-align: center;
+	font-size: small; font-weight: bold; text-align: center;
+	white-space: nowrap;
 }
 .calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
 	font-size: small; color: #35254F; text-align: center;

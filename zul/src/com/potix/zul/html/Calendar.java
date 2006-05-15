@@ -1,7 +1,7 @@
 /* Calendar.java
 
 {{IS_NOTE
-	$Id: Calendar.java,v 1.3 2006/05/08 09:24:51 tomyeh Exp $
+	$Id: Calendar.java,v 1.4 2006/05/15 13:22:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -36,10 +36,11 @@ import com.potix.zul.html.impl.XulElement;
  * <p>Default {@link #getSclass}: calendar.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/08 09:24:51 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/15 13:22:09 $
  */
 public class Calendar extends XulElement implements Inputable {
 	private Date _value;
+	private boolean _compact;
 
 	/** Contructs a calendar whose value is default to today.
 	 */
@@ -49,6 +50,7 @@ public class Calendar extends XulElement implements Inputable {
 	public Calendar(Date value) {
 		setSclass("calendar");
 		_value = value != null ? value: Dates.today();
+		_compact = "zh".equals(Apps.getCurrentLocale().getLanguage());
 	}
 
 	/** Returns the value that is assigned to this component, never null.
@@ -71,6 +73,21 @@ public class Calendar extends XulElement implements Inputable {
 		return new SimpleDateFormat("yyyy/MM/dd", Apps.getCurrentLocale());
 	}
 
+	/** Returns whether to use a compact layout.
+	 * <p>Default: true if zh_TW or zh_CN; false otherwise.
+	 */
+	public boolean isCompact() {
+		return _compact;
+	}
+	/** Sets whether to use a compact layout.
+	 */
+	public void setCompact(boolean compact) {
+		if (_compact != compact) {
+			_compact = compact;
+			invalidate(OUTER);
+		}
+	}
+
 	//-- Inputable --//
 	public void setTextByClient(String value) throws WrongValueException {
 		try {
@@ -88,6 +105,7 @@ public class Calendar extends XulElement implements Inputable {
 		if (isAsapRequired("onChange"))
 			HTMLs.appendAttribute(sb, "zk_onChange", true);
 		HTMLs.appendAttribute(sb, "zk_value", getDateFormat().format(_value));
+		if (_compact) sb.append(" zk_compact=\"true\"");
 		return sb.toString();
 	}
 }
