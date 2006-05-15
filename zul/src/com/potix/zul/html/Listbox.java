@@ -1,7 +1,7 @@
 /* Listbox.java
 
 {{IS_NOTE
-	$Id: Listbox.java,v 1.34 2006/05/03 09:19:29 tomyeh Exp $
+	$Id: Listbox.java,v 1.35 2006/05/15 14:42:14 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -73,7 +73,7 @@ import com.potix.zk.au.AuInit;
  * <p>Default {@link #getSclass}: listbox.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.34 $ $Date: 2006/05/03 09:19:29 $
+ * @version $Revision: 1.35 $ $Date: 2006/05/15 14:42:14 $
  * @see ListModel
  * @see ListitemRenderer
  */
@@ -922,11 +922,16 @@ public class Listbox extends XulElement implements Selectable, Render {
 				_ctrled = true;
 			}
 
+			final Listcell cell = (Listcell)item.getChildren().get(0);
+			cell.detach();
 			try {
 				_renderer.render(item, _model.getElementAt(item.getIndex()));
 			} catch (Throwable ex) {
 				clearItemAsUnloaded(item); //recover it
 				throw ex;
+			} finally {
+				if (item.getChildren().isEmpty())
+					cell.setParent(item);
 			}
 
 			item.setLoaded(true);
