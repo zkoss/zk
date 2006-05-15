@@ -1,7 +1,7 @@
 /* InputElement.java
 
 {{IS_NOTE
-	$Id: InputElement.java,v 1.18 2006/05/15 09:11:26 tomyeh Exp $
+	$Id: InputElement.java,v 1.19 2006/05/15 09:56:44 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,7 +35,7 @@ import com.potix.zul.html.Constrainted;
 /**
  * A skeletal implementation of an input box.
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/05/15 09:11:26 $
+ * @version $Revision: 1.19 $ $Date: 2006/05/15 09:56:44 $
  */
 abstract public class InputElement extends XulElement
 implements Inputable, Errorable, Constrainted {
@@ -360,9 +360,16 @@ implements Inputable, Errorable, Constrainted {
 	/** Sets the row value directly. The caller must make sure the value
 	 * is correct, because there is no validation here.
 	 *
+	 * <p>If you feel confusing with setValue, such as {@link com.potix.zul.html.Textbox#setValue},
+	 * it is usually better to use setValue instead. After all, this method
+	 * doesn't do any validation.
+	 *
+	 * <p>In other words, it is possible to set an illegal value for
+	 * the input component, which might not be easy to debug.
+	 *
 	 * @return whether the new value differs from the previous one.
 	 */
-	protected boolean setRawValue(Object value) {
+	public boolean setRawValue(Object value) {
 		_errmsg = null;
 		if (!Objects.equals(_value, value)) {
 			_value = value;
