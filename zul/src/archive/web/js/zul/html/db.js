@@ -1,7 +1,7 @@
 /* db.js
 
 {{IS_NOTE
-	$Id: db.js,v 1.27 2006/05/12 10:20:36 tomyeh Exp $
+	$Id: db.js,v 1.28 2006/05/15 05:30:02 tomyeh Exp $
 	Purpose:
 		datebox
 	Description:
@@ -437,8 +437,8 @@ zkDtbox.onbutton = function (cmp) {
 
 /** When an item is clicked. */
 zkDtbox.onclickitem = function (item) {
-	zkDtbox._selback(item);
 	zkau.closeFloats();
+	zkDtbox._selback(item);
 };
 
 zkDtbox.open = function (pp) {
@@ -461,7 +461,10 @@ zkDtbox.open = function (pp) {
 	pp.style.zIndex = "80000";
 	zkau.onVisiChildren(pp);
 
-	if (zk.agtNav) document.body.appendChild(pp); //Bug 1486840
+	if (zk.agtNav) {
+		pp.setAttribute("zk_combo_parent", uuid); //used by zkTxbox._noonblur
+		document.body.appendChild(pp); //Bug 1486840
+	}
 
 	//fix size
 	if (pp.offsetHeight > 200) {
@@ -516,7 +519,10 @@ zkDtbox._selback = function (item) {
 
 zkDtbox.close = function (pp, focus) {
 	var uuid = zkau.uuidOf(pp.id);
-	if (zk.agtNav) $(uuid).appendChild(pp); //Bug 1486840
+	if (zk.agtNav) {
+		$(uuid).appendChild(pp); //Bug 1486840
+		pp.removeAttribute("zk_combo_parent");
+	}
 
 	pp = $(pp);
 	zkau._dtbox._popupId = null;

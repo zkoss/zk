@@ -1,5 +1,5 @@
 <!-- build.target.xml
-	$Id: build.target.xml,v 1.52 2006/05/11 11:06:29 tomyeh Exp $
+	$Id: build.target.xml,v 1.53 2006/05/15 02:13:37 tomyeh Exp $
 	Purpose:
 		The target definitions for build.xml
 	Description:

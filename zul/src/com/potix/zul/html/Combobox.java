@@ -1,7 +1,7 @@
 /* Combobox.java
 
 {{IS_NOTE
-	$Id: Combobox.java,v 1.18 2006/05/03 08:36:44 tomyeh Exp $
+	$Id: Combobox.java,v 1.19 2006/05/15 02:13:51 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -37,7 +37,7 @@ import com.potix.zk.ui.WrongValueException;
  * <p>Default {@link #getSclass}: combobox.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/05/03 08:36:44 $
+ * @version $Revision: 1.19 $ $Date: 2006/05/15 02:13:51 $
  * @see Comboitem
  */
 public class Combobox extends Textbox {

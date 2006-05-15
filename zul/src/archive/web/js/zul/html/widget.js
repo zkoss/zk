@@ -1,7 +1,7 @@
 /* widget.js
 
 {{IS_NOTE
-	$Id: widget.js,v 1.30 2006/05/10 10:04:03 tomyeh Exp $
+	$Id: widget.js,v 1.31 2006/05/15 05:30:03 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -72,13 +72,24 @@ zkTxbox._noonblur = function (inp) {
 	var cf = zkau.currentFocus;
 	if (inp && cf && inp != cf) {
 		var el = inp;
-		for (; el; el = el.parentNode)
+		for (;; el = el.parentNode) {
+			if (!el) return false;
 			if (el.getAttribute && el.getAttribute("zk_combo") == "true")
 				break;
+		}
 
-		if (el) {
-			for (; cf; cf = cf.parentNode)
-				if (cf == el) return true;
+		while (cf) {
+			if (cf == el) return true;
+
+			//To resolve Bug 1486840 (see db.js and cb.js)
+			if (zk.agtNav && cf.getAttribute) {
+				var n = $(cf.getAttribute("zk_combo_parent"));
+				if (n) {
+					cf = n;
+					continue;
+				}
+			}
+			cf = cf.parentNode;
 		}
 	}
 	return false;

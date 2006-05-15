@@ -1,7 +1,7 @@
 /* UiEngineImpl.java
 
 {{IS_NOTE
-	$Id: UiEngineImpl.java,v 1.10 2006/05/04 04:36:40 tomyeh Exp $
+	$Id: UiEngineImpl.java,v 1.11 2006/05/15 02:13:40 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -60,7 +60,7 @@ import com.potix.zk.au.*;
  * An implementation of {@link UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/04 04:36:40 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/15 02:13:40 $
  */
 public class UiEngineImpl implements UiEngine {
 	private static final Log log = Log.lookup(UiEngineImpl.class);

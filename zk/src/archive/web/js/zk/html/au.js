@@ -1,7 +1,7 @@
 /* au.js
 
 {{IS_NOTE
-	$Id: au.js,v 1.47 2006/05/10 10:03:50 tomyeh Exp $
+	$Id: au.js,v 1.49 2006/05/15 05:30:00 tomyeh Exp $
 	Purpose:
 		JavaScript for asynchronous updates
 	Description:
@@ -905,7 +905,7 @@ zkau.onWndMove = function (cmp) {
 };
 
 zkau.onfocus = function (el) {
-	zkau.currentFocus = el; //_docOnMouseDown doesn't take care all cases
+	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases
 	if (!zkau.focusInFloats(el))
 		setTimeout(zkau.closeFloats, 0);
 	if (zkau.valid) zkau.valid.uncover(el);

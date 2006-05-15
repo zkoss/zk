@@ -1,7 +1,7 @@
 /* common.js
 
 {{IS_NOTE
-	$Id: common.js,v 1.37 2006/05/10 10:03:51 tomyeh Exp $
+	$Id: common.js,v 1.38 2006/05/15 02:13:40 tomyeh Exp $
 	Purpose:
 		Common utiltiies.
 	Description:

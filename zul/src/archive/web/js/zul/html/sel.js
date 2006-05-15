@@ -1,7 +1,7 @@
 /* sel.js
 
 {{IS_NOTE
-	$Id: sel.js,v 1.25 2006/05/11 11:19:15 tomyeh Exp $
+	$Id: sel.js,v 1.26 2006/05/15 02:13:50 tomyeh Exp $
 	Purpose:
 		zk.Selectable
 	Description:

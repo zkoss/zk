@@ -1,7 +1,7 @@
 /* Radiogroup.java
 
 {{IS_NOTE
-	$Id: Radiogroup.java,v 1.6 2006/03/10 09:37:28 tomyeh Exp $
+	$Id: Radiogroup.java,v 1.7 2006/05/15 02:13:52 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -40,7 +40,7 @@ import com.potix.zul.html.impl.XulElement;
  * A radio group.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/03/10 09:37:28 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/15 02:13:52 $
  */
 public class Radiogroup extends XulElement {
 	private String _orient = "horizontal";

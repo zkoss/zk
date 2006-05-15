@@ -1,7 +1,7 @@
 /* cb.js
 
 {{IS_NOTE
-	$Id: cb.js,v 1.23 2006/05/12 10:20:36 tomyeh Exp $
+	$Id: cb.js,v 1.25 2006/05/15 05:30:02 tomyeh Exp $
 	Purpose:
 		combobox, bandbox
 	Description:
@@ -229,10 +229,13 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	pp.style.zIndex = "80000";
 	zkau.onVisiChildren(pp);
 
-	if (zk.agtNav) document.body.appendChild(pp); //Bug 1486840
+	if (zk.agtNav) {
+		pp.setAttribute("zk_combo_parent", uuid); //used by zkTxbox._noonblur
+		document.body.appendChild(pp); //Bug 1486840
 		//However, since the parent/child relation is changed, new listitem
 		//must be inserted into the popup (by use of uuid!child) rather
 		//than invalidate!!
+	}
 
 	//fix size
 	if (pp.offsetHeight > 200) {
@@ -396,7 +399,10 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 zkCmbox.close = function (pp, focus) {
 	pp = $(pp);
 	var uuid = zkau.uuidOf(pp.id);
-	if (zk.agtNav) $(uuid).appendChild(pp); //Bug 1486840
+	if (zk.agtNav) {
+		$(uuid).appendChild(pp); //Bug 1486840
+		pp.removeAttribute("zk_combo_parent");
+	}
 
 	zkau._cmbox._popupId = null;
 	pp.style.display = "none";

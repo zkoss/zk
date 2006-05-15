@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxweb/src/com/potix/web/servlet/Servlets.java,v 1.47 2006/04/27 13:58:09 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxweb/src/com/potix/web/servlet/Servlets.java,v 1.48 2006/05/15 02:13:38 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -71,7 +71,7 @@ import com.potix.web.util.resource.ServletContextLocator;
  * The servlet relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.47 $ $Date: 2006/04/27 13:58:09 $
+ * @version $Revision: 1.48 $ $Date: 2006/05/15 02:13:38 $
  * @see com.potix.web.servlet.http.Https
  * @see com.potix.web.servlet.Charsets
  */

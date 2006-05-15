@@ -1,7 +1,7 @@
 /* menu.js
 
 {{IS_NOTE
-	$Id: menu.js,v 1.13 2006/05/12 10:20:37 tomyeh Exp $
+	$Id: menu.js,v 1.14 2006/05/15 05:30:02 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -148,7 +148,7 @@ zkMenu.open = function (menu, toggle) {
 
 	/* not yet: we have to adjust CSS and some codes
 	if (zk.agtNav) { //Bug 1486840
-		pp.setAttribute("zk_parent", pp.parentNode);
+		pp.setAttribute("zk_combo_parent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp);
 	}*/
 
@@ -192,11 +192,8 @@ zkMenu._close = function (pp) {
 	pp = $(pp);
 	if (pp) {
 		/*if (zk.agtNav) { //Bug 1486840
-			var parent = pp.getAttribute("zk_parent");
-			if (parent) {
-				pp.removeAttribute("zk_parent");
-				parent.appendChild(pp);
-			}
+			$(uuid).appendChild(pp); //Bug 1486840
+			pp.removeAttribute("zk_combo_parent");
 		}*/
 		pp.style.display = "none";
 	}
