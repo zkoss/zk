@@ -4,7 +4,7 @@
 includer.zul
 
 {{IS_NOTE
-	$Id: include.zul,v 1.6 2006/03/10 04:08:57 tomyeh Exp $
+	$Id: include.zul,v 1.7 2006/05/15 17:08:02 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +30,7 @@ This includes another page.
 	</button>
 	<button label="Change to upload.zul">
 		<attribute name="onClick">
-		embed.getFellow("inc").setSrc("upload.zul?pageId=UpdDemo");
+		embed.getFellow("inc").setSrc("upload.zul?pageId=UpdDemo&amp;style=border:1px%20solid%20red");
 		</attribute>
 	</button>
 	<button label="Change to grid.zul">
