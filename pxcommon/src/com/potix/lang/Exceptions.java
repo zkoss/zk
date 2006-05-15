@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/lang/Exceptions.java,v 1.17 2006/02/27 03:41:58 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/lang/Exceptions.java,v 1.18 2006/05/15 08:54:32 tomyeh Exp $
 	Purpose: Utilities for Exceptions
 	Description: 
 	History:
@@ -34,7 +34,7 @@ import com.potix.util.logging.Log;
  * Utilities for Exceptions.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.17 $ $Date: 2006/02/27 03:41:58 $
+ * @version $Revision: 1.18 $ $Date: 2006/05/15 08:54:32 $
  */
 public class Exceptions {
 	private static final Log log = Log.lookup(Exceptions.class);
@@ -356,11 +356,7 @@ public class Exceptions {
 	 * appends an error code.
 	 */
 	public static final String getMessage(int code, Object[] fmtArgs) {
-		StringBuffer sb = new StringBuffer(Messages.get(code, fmtArgs));
-		if (sb.length() > 0)
-			sb.append(' ');
-		return sb.append("[#").append(Integer.toHexString(code))
-			.append(']').toString();
+		return Messages.get(code, fmtArgs);
 	}
 	/**
 	 * Gets the message for an exception with one format-argument.
