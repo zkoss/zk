@@ -1,7 +1,7 @@
 /* Window.java
 
 {{IS_NOTE
-	$Id: Window.java,v 1.18 2006/04/19 08:25:17 tomyeh Exp $
+	$Id: Window.java,v 1.19 2006/05/15 09:36:00 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -54,7 +54,7 @@ import com.potix.zul.au.*;
  * onMove, onShow, onOK, onCacnel and onCtrlKey.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/04/19 08:25:17 $
+ * @version $Revision: 1.19 $ $Date: 2006/05/15 09:36:00 $
  */
 public class Window extends XulElement implements IdSpace  {
 	private Caption _caption;
@@ -220,7 +220,6 @@ public class Window extends XulElement implements IdSpace  {
 
 		if (_mode != MODAL || !_moding) {
 			endModing();
-			setVisible(true);
 
 			if (_mode != MODAL) {
 				_mode = MODAL;
@@ -229,6 +228,7 @@ public class Window extends XulElement implements IdSpace  {
 
 			response("doModal", new AuDoModal(this));
 			_moding = true;
+			setVisible(true); //after _molding = true to avoid dead-loop
 
 			Executions.wait(this);
 		}
@@ -240,7 +240,6 @@ public class Window extends XulElement implements IdSpace  {
 
 		if (_mode != OVERLAPPED || !_moding) {
 			endModing();
-			setVisible(true);
 
 			if (_mode != OVERLAPPED) {
 				_mode = OVERLAPPED;
@@ -249,6 +248,7 @@ public class Window extends XulElement implements IdSpace  {
 
 			response("doOverlapped", new AuDoOverlapped(this));
 			_moding = true;
+			setVisible(true); //after _molding = true to avoid dead-loop
 		}
 	}
 	/** Makes this window as popup, which is overlapped with other component
@@ -259,7 +259,6 @@ public class Window extends XulElement implements IdSpace  {
 
 		if (_mode != POPUP || !_moding) {
 			endModing();
-			setVisible(true);
 
 			if (_mode != POPUP) {
 				_mode = POPUP;
@@ -268,6 +267,7 @@ public class Window extends XulElement implements IdSpace  {
 
 			response("doPopup", new AuDoPopup(this));
 			_moding = true;
+			setVisible(true); //after _molding = true to avoid dead-loop
 		}
 	}
 	/** Makes this window as embeded with other components (Default).
@@ -375,7 +375,24 @@ public class Window extends XulElement implements IdSpace  {
 	 */
 	public boolean setVisible(boolean visible) {
 		if (!visible) endModing();
-		return super.setVisible(visible);
+
+		final boolean ret = super.setVisible(visible);
+		if (!ret && visible && !_moding)
+			switch (_mode) {
+			case MODAL:
+				try {
+					doModal(); return false;
+				} catch (InterruptedException ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			case POPUP:
+				doPopup();
+				return false;
+			case OVERLAPPED:
+				doOverlapped();
+				return false;
+			}
+		return ret;
 	}
 
 	//-- super --//
