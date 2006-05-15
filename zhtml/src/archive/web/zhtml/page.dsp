@@ -2,7 +2,7 @@
 page.dsp
 
 {{IS_NOTE
-	$Id: page.dsp,v 1.19 2006/04/25 08:42:09 tomyeh Exp $
+	$Id: page.dsp,v 1.20 2006/05/15 16:43:54 tomyeh Exp $
 	Purpose:
 		Render a ZUL page if it is included
 	Description:
@@ -26,7 +26,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 ${u:outLangStyleSheets()}
 ${u:outLangJavaScripts(page, arg.action)}
 </c:if>
-<c:if test="${!complete_desktop}"><div id="${page.id}" style="${page.style?page.style:'width:100%'}"></c:if>
+<c:if test="${!complete_desktop}"><div id="${page.id}" style="${empty page.style ? 'width:100%': page.style}"></c:if>
 <c:forEach var="root" items="${page.roots}">
 ${u:redraw(root, null)}
 </c:forEach>
