@@ -8,7 +8,7 @@ ZK 1.2.0
   1471810, 1455828, 1472225, 1469672, 1472734, 1472744, 1454118, 1475647,
   1475962, 1475665, 1475791, 1477821, 1478236, 1478213, 1479572, 1480154,
   1480281, 1480035, 1467959, 1480525, 1480791, 1480866, 1481090, 1474217,
-  1482954, 1482236, 1484344, 1485460, 1483149, 1488664.
+  1482954, 1482236, 1484344, 1485460, 1483149, 1488664, 1486334, 1487144.
 	+ Macro components are supported
 	+ Developers are allowed to define new components in a page
 	+ Three new components: calendar, imagemap and area.
@@ -73,6 +73,8 @@ ZK 1.2.0
 	+ Image's alt property is removed. Use tooltiptext instead.
 	+ DynamicAttributes are renamed to DynamicPropertied such that it is
 	  less confused with custom attributes.
+	+ When ListitemRenderer.render() is called, the listitem has no child at
+	  all.
 
 --------
 ZK 1.1.0
