@@ -1,7 +1,7 @@
 /* InputElement.java
 
 {{IS_NOTE
-	$Id: InputElement.java,v 1.16 2006/05/11 13:32:50 tomyeh Exp $
+	$Id: InputElement.java,v 1.18 2006/05/15 09:11:26 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,12 +35,14 @@ import com.potix.zul.html.Constrainted;
 /**
  * A skeletal implementation of an input box.
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.16 $ $Date: 2006/05/11 13:32:50 $
+ * @version $Revision: 1.18 $ $Date: 2006/05/15 09:11:26 $
  */
 abstract public class InputElement extends XulElement
 implements Inputable, Errorable, Constrainted {
 	/** The value. */
 	private Object _value;
+	/** Used by {@link #setValueByClient} to disable sending back the value */
+	private String _valByClient;
 	/** The error message. Not null if users entered a wrong data (and
 	 * not correct it yet).
 	 */
@@ -168,7 +170,8 @@ implements Inputable, Errorable, Constrainted {
 			val = coerceFromString(value);
 			validate(val);
 		} catch (WrongValueException ex) {
-			smartUpdate("defaultValue", getTextNCUE()); //restore
+			smartUpdate("defaultValue", "zk_~1!wrong_~!.-.zk_pha!6");
+				//a value to enforce client to send back request
 			throw ex;
 		}
 
@@ -177,7 +180,15 @@ implements Inputable, Errorable, Constrainted {
 
 		if (!Objects.equals(_value, val)) {
 			_value = val;
-			smartUpdate("value", getTextNCUE());
+
+			final String fmtval = getTextNCUE();
+			if (_valByClient == null || !Objects.equals(_valByClient, fmtval))
+				smartUpdate("value", fmtval);
+				//Note: we have to disable the sending back of the value
+				//Otherwise, it cause Bug 1488579's problem 3.
+				//Reason: when user set a value to correct one and set
+				//to an illegal one, then click the button cause both events
+				//being sent back to the server.
 		}
 	}
 
@@ -377,6 +388,7 @@ implements Inputable, Errorable, Constrainted {
 
 	//-- Inputable --//
 	public void setTextByClient(String value) throws WrongValueException {
+		_valByClient = value;
 		try {
 			setText(value);
 		} catch (WrongValueException ex) {
@@ -384,6 +396,8 @@ implements Inputable, Errorable, Constrainted {
 				//we have to 'remember' the error, so next call to getValue
 				//will throw an exception with proper value.
 			throw ex;
+		} finally {
+			_valByClient = null;
 		}
 	}
 
