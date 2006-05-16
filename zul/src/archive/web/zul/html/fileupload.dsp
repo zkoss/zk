@@ -5,7 +5,7 @@
 fileupload.dsp
 
 {{IS_NOTE
-	$Id: fileupload.dsp,v 1.6 2006/03/30 03:40:08 tomyeh Exp $
+	$Id: fileupload.dsp,v 1.7 2006/05/16 07:24:17 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,13 +35,11 @@ function cancelUpload() {
 ${u:outLangStyleSheets()}
 </head>
 <body>
-	<form action="${param.action}" enctype="multipart/form-data" method="POST">
+	<form action="${param.action}?dtid=${param.dtid}&uuid=${param.uuid}" enctype="multipart/form-data" method="POST">
 	<%-- We have to encode dtid and uuid in action rather than hidden fields,
 		because we might fail to parse multi-part requests.
 		And, by encoding at action, we could get it back even if failed to parse
 	--%>
-	<input type="hidden" name="dtid" value="${param.dtid}"/>
-	<input type="hidden" name="uuid" value="${param.uuid}"/>
 	<%-- change the following if you want the return URI to be different from the default
 	<input type="hidden" name="nextURI" value="~./zul/html/fileupload-done.dsp"/>
 	--%>
