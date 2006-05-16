@@ -45,13 +45,15 @@ ZK 1.2.0
 	+ Listbox.clear() is removed. Use Listbox.getItems().clear() instead.
 	+ Tree.clear() is removed. Use Tree.getTreechildren().clear() instead.
 	+ Combobox.clear() is removed. Use Combobox.getItems().clear() instead.
-	+ Radiogroup.clear() is removed. use Radiogroup.getChilren().clear() instead.
+	+ Radiogroup.clear() is removed. Use Radiogroup.getChilren().clear() instead.
 	+ The close button of a window sends onClose instead of onShow.
 	  It detaches itself instead of hiding!
 	  Developers could override this behavior by overriding onClose.
 	+ Initiator is moved from com.potix.zk.ui.ext. to com.potix.zk.ui.util
 	  and the doInit method becomes 
 		  public void doInit(Page page, Object[] args);
+	+ When Initiator.doInit is called, page is not attached to a desktop yet.
+	  Developers have to access Executions.getCurrent().getDesktop() instead.
 	+ IdSpace is moved from com.potix.zk.ui.ext to com.potix.zk.ui
 	+ Textbox.getText becomes protected. Use Textbox.getValue instead.
 	+ Inputable, Moveable, Openable,... are moved from com.potix.zk.ui.event
@@ -67,9 +69,7 @@ ZK 1.2.0
 	  An extra argument called local is added. To port your old codes,
 	  specify true to it.
 	+ The event invocation sequence is changed a bit:
-	  event listeners are invoked before component's member method.
-	+ When Initiator.doInit is called, page is not attached to a desktop yet.
-	  Developers have to access Executions.getCurrent().getDesktop() instead.
+	  event listeners are invoked before component's onXxx method.
 	+ EventThreadInit.prepare is added so you have to implement it.
 	+ Language addons shall use extend instead of override.
 	+ Image's alt property is removed. Use tooltiptext instead.
