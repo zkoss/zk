@@ -1,7 +1,7 @@
 /* cb.js
 
 {{IS_NOTE
-	$Id: cb.js,v 1.25 2006/05/15 05:30:02 tomyeh Exp $
+	$Id: cb.js,v 1.26 2006/05/16 04:49:09 tomyeh Exp $
 	Purpose:
 		combobox, bandbox
 	Description:
@@ -149,7 +149,7 @@ zkCmbox.onkey = function (evt) {
 	else if (!bCombobox)
 		return true; //ignore
 	else if (!selback && opened)
-		zkCmbox._hilite(uuid);
+		setTimeout("zkCmbox._hilite('"+uuid+"')", 1); //IE: keydown
 
 	if (selback/* || cb.getAttribute("zk_aco") == "true"*/) {
 		//Note: zkCmbox.open won't repos immediately, so we have to delay it
