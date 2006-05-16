@@ -1,7 +1,7 @@
 /* widget.js
 
 {{IS_NOTE
-	$Id: widget.js,v 1.31 2006/05/15 05:30:03 tomyeh Exp $
+	$Id: widget.js,v 1.32 2006/05/16 04:21:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,9 +34,8 @@ zkTxbox.init = function (cmp) {
  * Note: we don't use onChange because it won't work if user uses IE' auto-fill
  */
 zkTxbox.onblur = function (inp) {
-	var noonblur = zkTxbox._noonblur(inp);
-	zkau.onblur(inp);
-	zkTxbox.updateChange(inp, noonblur);
+	zkTxbox.updateChange(inp, zkTxbox._noonblur(inp));
+	zkau.onblur(inp); //fire onBlur after onChange
 };
 /** check any change.
  * @return false if failed (wrong data).
