@@ -1,7 +1,7 @@
 /* zul.js
 
 {{IS_NOTE
-	$Id: zul.js,v 1.14 2006/05/10 10:04:03 tomyeh Exp $
+	$Id: zul.js,v 1.15 2006/05/16 04:29:25 tomyeh Exp $
 	Purpose:
 		Common utilities for zul.
 	Description:
@@ -107,6 +107,7 @@ zul.doModal = function (cmp) {
 
 	zkau.enableMoveable(cmp, zkau.autoZIndex, zkau.onWndMove);
 	zk.disableAll(cmp);
+	zk.restoreDisabled(cmp); //there might be two or more modal dlgs
 	zk.focusDownById(cmp.id);
 };
 
