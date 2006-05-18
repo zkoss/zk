@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/util/logging/LogService.java,v 1.30 2006/05/02 07:04:37 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/logging/LogService.java,v 1.30 2006/05/02 07:04:37 tomyeh Exp $
 	Purpose: The MBean-able log service
 	Description: 
 	History:

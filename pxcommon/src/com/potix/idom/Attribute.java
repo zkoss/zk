@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/idom/Attribute.java,v 1.8 2006/05/11 08:32:13 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Attribute.java,v 1.8 2006/05/11 08:32:13 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:

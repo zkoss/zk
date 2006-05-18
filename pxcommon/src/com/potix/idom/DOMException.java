@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/idom/DOMException.java,v 1.4 2006/02/27 03:41:54 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/DOMException.java,v 1.4 2006/02/27 03:41:54 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:

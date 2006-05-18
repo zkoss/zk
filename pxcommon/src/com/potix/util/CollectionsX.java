@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/util/CollectionsX.java,v 1.12 2006/05/11 04:53:35 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/CollectionsX.java,v 1.12 2006/05/11 04:53:35 tomyeh Exp $
 	Purpose:
 	Description:
 	History:

@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/lang/Classes.java,v 1.17 2006/02/27 03:41:58 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/Classes.java,v 1.17 2006/02/27 03:41:58 tomyeh Exp $
 	Purpose: Utilities to handle Class
 	Description:
 	History:

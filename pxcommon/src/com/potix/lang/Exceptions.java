@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/lang/Exceptions.java,v 1.18 2006/05/15 08:54:32 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/Exceptions.java,v 1.18 2006/05/15 08:54:32 tomyeh Exp $
 	Purpose: Utilities for Exceptions
 	Description: 
 	History:

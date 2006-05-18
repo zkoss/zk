@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/util/resource/Locators.java,v 1.10 2006/02/27 03:42:06 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/resource/Locators.java,v 1.10 2006/02/27 03:42:06 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:

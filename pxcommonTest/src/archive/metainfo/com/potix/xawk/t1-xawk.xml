@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xawk>
+
+<!-- t1-xawk.xml
+	$Id: t1-xawk.xml,v 1.1.1.1 2005/09/05 01:52:31 tomyeh Exp $
+	Purpose:
+		A xawk file to test t1.xml
+	Description:
+		
+	History:
+		Mon Sep  2 22:38:40  2002, Created by tomyeh@potix.com
+
+Copyright (C) 2002 Potix Corporation. All Rights Reserved.
+-->
+
+<xawk>
+	<rule>
+		<pattern>/t1/a</pattern>
+		<begin>result = new java.util.LinkedList();</begin>
+	</rule>
+	<rule>
+		<pattern>/t1/a/.*/c</pattern>
+		<pattern>/t1/a/c</pattern>
+		<end>result.add(the.text);</end>
+	</rule>
+</xawk>

@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/text/DateFormats.java,v 1.6 2006/02/27 03:42:01 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/text/DateFormats.java,v 1.6 2006/02/27 03:42:01 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:

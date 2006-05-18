@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/lang/Strings.java,v 1.20 2006/02/27 03:41:59 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/Strings.java,v 1.20 2006/02/27 03:41:59 tomyeh Exp $
 	Purpose: String utilities and constants
 	Description:
 	History:

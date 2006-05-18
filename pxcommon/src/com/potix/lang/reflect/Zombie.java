@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/lang/reflect/Zombie.java,v 1.3 2006/02/27 03:42:00 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/reflect/Zombie.java,v 1.3 2006/02/27 03:42:00 tomyeh Exp $
 	Purpose:
 	Description:
 	History:

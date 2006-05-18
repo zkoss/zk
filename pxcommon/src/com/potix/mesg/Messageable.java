@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/mesg/Messageable.java,v 1.2 2006/02/27 03:42:00 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/mesg/Messageable.java,v 1.2 2006/02/27 03:42:00 tomyeh Exp $
 	Purpose: Extended exception interface
 	Description: 
 	History:

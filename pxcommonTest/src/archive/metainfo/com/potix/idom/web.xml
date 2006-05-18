@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<!-- web.xml
+	$Id: web.xml,v 1.1.1.1 2005/09/05 01:52:31 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 18 15:23:01     2003, Created by tomyeh@potix.com
+
+Copyright (C) 2003 Potix Corporation. All Rights Reserved.
+-->
+
+<web-app>
+	<servlet>
+		<servlet-name>drop</servlet-name>
+		<servlet-class>com.potix.cc.sat.action.db.DropServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>drop</servlet-name>
+		<url-pattern>/cc/drop</url-pattern>
+	</servlet-mapping>
+</web-app>

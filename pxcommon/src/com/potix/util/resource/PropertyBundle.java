@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/util/resource/PropertyBundle.java,v 1.9 2006/02/27 03:42:07 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/resource/PropertyBundle.java,v 1.9 2006/02/27 03:42:07 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:

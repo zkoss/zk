@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: Potix Client Side Library Test Codes
+Specification-Version: 0.1
+Specification-Vendor: Potix Corporation
+Implementation-Title: com.potix
+Implementation-URL: http://www.potix.com/
+Implementation-Version: 0.1 (Build 1)
+Implementation-Vendor: Potix Corporation

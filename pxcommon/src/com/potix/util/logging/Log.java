@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/util/logging/Log.java,v 1.16 2006/02/27 03:42:04 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/logging/Log.java,v 1.16 2006/02/27 03:42:04 tomyeh Exp $
 	Purpose: The logging utilities
 	Description:
 	History:
