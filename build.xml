@@ -5,7 +5,7 @@
 ]>
 
 <!-- build.xml
-	$Id: build.xml,v 1.18 2006/01/06 02:51:04 tomyeh Exp $
+	$Id: build.xml,v 1.19 2006/05/18 13:17:12 tomyeh Exp $
 	Purpose:
 		The internal build file for ant.
 	Description:
@@ -50,7 +50,11 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<available file="${src.export.dir}" property="src.export.dir.exist"/>
 
 		<available file="${dist.test.dir}" property="dist.test.dir.exist"/>
+
 		<available file="${bin.dir}/CVS" property="bin.CVS.dir.exist"/>
+		<available file="${bin.dir}/.svn" property="bin.svn.dir.exist"/>
+		<available file="${dist.lib.ext.dir}/CVS" property="lib.ext.CVS.dir.exist"/>
+		<available file="${dist.lib.ext.dir}/.svn" property="lib.ext.svn.dir.exist"/>
 
 		<condition property="copy.web.jar.required">
 			<not>
@@ -145,7 +149,21 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 			<and>
 				<isset property="do.all"/>
 				<not>
-					<isset property="bin.CVS.dir.exist"/>
+					<or>
+						<isset property="bin.CVS.dir.exist"/>
+						<isset property="bin.svn.dir.exist"/>
+					</or>
+				</not>
+			</and>
+		</condition>
+		<condition property="clean.lib.ext.required">
+			<and>
+				<isset property="do.all"/>
+				<not>
+					<or>
+						<isset property="lib.ext.CVS.dir.exist"/>
+						<isset property="lib.ext.svn.dir.exist"/>
+					</or>
 				</not>
 			</and>
 		</condition>

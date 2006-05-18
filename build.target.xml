@@ -1,5 +1,5 @@
 <!-- build.target.xml
-	$Id: build.target.xml,v 1.53 2006/05/15 02:13:37 tomyeh Exp $
+	$Id: build.target.xml,v 1.54 2006/05/18 13:17:11 tomyeh Exp $
 	Purpose:
 		The target definitions for build.xml
 	Description:
@@ -217,15 +217,19 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	<delete quiet="true" includeEmptyDirs="true">
 		<fileset dir="${dist.export.dir}" includes="**"/>
 	</delete>
-	<delete quiet="true" dir="${dist.lib.dir}"/>
-	<delete quiet="true" dir="${dist.lib.ext.dir}"/>
+	<delete quiet="true">
+		<fileset dir="${dist.lib.dir}" includes="*.?ar"/>
+	</delete>
 </target>
 
 <target name="clean.bin" depends="config" if="clean.bin.required">
 	<delete quiet="true" dir="${bin.dir}"/>
 </target>
+<target name="clean.lib.ext" depends="config" if="clean.lib.ext.required">
+	<delete quiet="true" dir="${dist.lib.ext.dir}"/>
+</target>
 
-<target name="clean" depends="clean.all, clean.bin">
+<target name="clean" depends="clean.all, clean.bin, clean.lib.ext">
 	<delete quiet="true" dir="${out.dir}"/>
 	<delete quiet="true" dir="${tmp.dir}"/>
 	<delete quiet="true" dir="${codegen.dir}"/>
