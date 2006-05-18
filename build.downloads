@@ -4,5 +4,9 @@ zipjs
 deploy
 genprop
 genprop.awk
+deploy.unzip
+deploy.unzip.war
 
 pxcommon.jar
+fckez.jar
+dojoz.jar
