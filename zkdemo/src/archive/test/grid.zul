@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+grid.zul
+
+{{IS_NOTE
+	$Id: grid.zul,v 1.9 2006/03/28 13:36:28 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 25 17:49:05     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Grid Demo">
+	<grid id="grid" width="500px" height="100px">
+		<columns>
+			<column label="Head 1"/>
+			<column label="Head 2" align="center"/>
+			<column label="Head 3" align="right"/>
+		</columns>
+		<rows>
+			<row>
+				<listbox mold="select">
+					<listitem label="AB"/>
+					<listitem label="CD"/>
+				</listbox>
+				<datebox/>
+				<textbox rows="3"/>
+			</row>
+			<row>
+				<label value="A11"/>
+				<label value="A12"/>
+				<label value="A13"/>
+			</row>
+			<row>
+				<checkbox checked="true" label="Option 1"/>
+				<checkbox label="Option 2"/>
+				<radiogroup>
+					<radio label="Apple"/>
+					<radio label="Orange" checked="true"/>
+					<radio label="Lemon"/>
+				</radiogroup>
+			</row>
+			<row>
+				<checkbox checked="true" label="Option 1"/>
+				<checkbox label="Option 2"/>
+				<radiogroup orient="vertical">
+					<radio label="Apple"/>
+					<radio label="Orange" checked="true"/>
+					<radio label="Lemon"/>
+				</radiogroup>
+			</row>
+		</rows>
+	</grid>
+	<button label="Add row" onClick="addRow()"/>
+	<zscript>
+	void addRow() {
+		Row r = new Row();
+		new Label("A31").setParent(r);
+		new Label("A32").setParent(r);
+		grid.getRows().appendChild(r);
+	}
+	addRow();
+	</zscript>
+	<separator bar="true"/>
+	<grid class="grid-no-striped">
+		<rows>
+			<row>
+				Another with full width and no striping
+				<textbox cols="30" rows="5"/>
+			</row>
+			<row>
+				Second row
+				<label value="cell 2"/>
+			</row>
+		</rows>
+	</grid>
+	<separator bar="true"/>
+	<grid width="200px" height="100px">
+		<columns>
+			<column label="Head 1"/>
+			<column label="Head 2" align="center"/>
+			<column label="Head 3" align="right"/>
+		</columns>
+		<rows>
+			<row>
+				<listbox mold="select">
+					<listitem label="AB"/>
+					<listitem label="CD"/>
+				</listbox>
+				<datebox/>
+				<textbox rows="3"/>
+			</row>
+			<row>
+				<label value="A11"/>
+				<label value="A12"/>
+				<label value="A13"/>
+			</row>
+			<row>
+				<checkbox checked="true" label="Option 1"/>
+				<checkbox label="Option 2"/>
+				<radiogroup>
+					<radio label="Apple"/>
+					<radio label="Orange" checked="true"/>
+					<radio label="Lemon"/>
+				</radiogroup>
+			</row>
+			<row>
+				<checkbox checked="true" label="Option 1"/>
+				<checkbox label="Option 2"/>
+				<radiogroup orient="vertical">
+					<radio label="Apple"/>
+					<radio label="Orange" checked="true"/>
+					<radio label="Lemon"/>
+				</radiogroup>
+			</row>
+		</rows>
+	</grid>
+</window>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+list.zul
+
+{{IS_NOTE
+	$Id: list.zul,v 1.16 2006/05/15 16:27:02 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 27 21:18:02     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="List Demo">
+<hbox>
+<listbox id="src" multiple="true" width="200px">
+	<listhead>
+		<listheader label="Population"/>
+		<listheader align="right" label="%"/>
+	</listhead>
+	<listitem id="a" value="A">
+		<listcell label="A. Graduate"/>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem id="b" value="B">
+		<listcell label="B. College"/>
+		<listcell label="23%"/>
+	</listitem>
+	<listitem id="c" value="C">
+		<listcell label="C. High School"/>
+		<listcell label="40%"/>
+	</listitem>
+	<listfoot>
+		<listfooter label="More or less"/>
+		<listfooter label="100%"/>
+	</listfoot>
+	<listitem id="d" value="D">
+		<listcell label="D. Others"/>
+		<listcell><toolbarbutton label="Go Potix" href="http://www.potix.com"/></listcell>
+	</listitem>
+</listbox>
+<vbox>
+	<button label="=&gt;" onClick="move(src, dst)"/>
+	<button label="&lt;=" onClick="move(dst, src)"/>
+</vbox>
+<listbox id="dst" checkmark="true" multiple="true" width="250px">
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="%"/>
+	</listhead>
+	<listitem id="e" value="E">
+		<listcell label="E. Supermen"/>
+		<listcell label="21%"/>
+	</listitem>
+	<listitem id="f" value="F">
+		<listcell label="F. Junior High Scroll"/>
+		<listcell label="12%"/>
+	</listitem>
+</listbox>
+</hbox>
+
+<button label="Move c before b" onClick="move(c, b)"/>
+<button label="Move b before a" onClick="move(b, a)"/>
+<button label="Move a before d" onClick="move(a, d)"/>
+<zscript>
+void move(Listitem li, Listitem before) {
+	src.insertBefore(li, before);
+}
+void move(Listbox src, Listbox dst) {
+	Listitem s = src.getSelectedItem();
+	if (s == null)
+		Messagebox.show("Select an item first");
+	else
+		s.setParent(dst);
+}
+</zscript>
+<separator bar="true"/>
+<listbox checkmark="true" rows="3" width="400px">
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="Percentage"/>
+		<listheader label="Description"/>
+	</listhead>
+	<listitem value="A">
+		<listcell label="A. Graduate"/>
+		<listcell label="20%"/>
+		<listcell label="More or less"/>
+	</listitem>
+	<listitem value="B">
+		<listcell label="B. College"/>
+		<listcell label="23%"/>
+		<listcell label="More or less"/>
+	</listitem>
+	<listitem value="C" selected="true">
+		<listcell label="C. High School"/>
+		<listcell label="40%"/>
+		<listcell label="More or less"/>
+	</listitem>
+	<listitem value="D">
+		<listcell label="D. Junior High School"/>
+		<listcell label="10%"/>
+		<listcell label="More or less"/>
+	</listitem>
+	<listitem value="E">
+		<listcell label="F. Others"/>
+		<listcell label="17%"/>
+		<listcell label="More or less"/>
+	</listitem>
+</listbox>
+
+<separator bar="true"/>
+<listbox rows="4" width="300px">
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="Percentage"/>
+	</listhead>
+	<listitem value="A">
+		<listcell label="A. Graduate"/>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem value="B">
+		<listcell label="B. College"/>
+		<listcell label="23%"/>
+	</listitem>
+	<listitem value="C">
+		<listcell label="C. High School"/>
+		<listcell label="40%"/>
+	</listitem>
+	<listitem value="D">
+		<listcell label="D. Junior High School"/>
+		<listcell label="10%"/>
+	</listitem>
+	<listitem value="E">
+		<listcell label="F. Others"/>
+		<listcell label="17%"/>
+	</listitem>
+</listbox>
+
+<separator bar="true"/>
+<listbox rows="4" width="80px">
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="%"/>
+	</listhead>
+	<listitem value="A">
+		<listcell label="A. Graduate"/>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem value="B">
+		<listcell label="B. College"/>
+		<listcell label="23%"/>
+	</listitem>
+	<listitem value="C">
+		<listcell label="C. High School"/>
+		<listcell label="40%"/>
+	</listitem>
+	<listitem value="D">
+		<listcell label="D. Junior High School"/>
+		<listcell label="10%"/>
+	</listitem>
+	<listitem value="E">
+		<listcell label="F. Others"/>
+		<listcell label="17%"/>
+	</listitem>
+</listbox>
+
+<separator bar="true"/>
+<listbox>
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="%"/>
+	</listhead>
+	<listitem value="A">
+		<listcell><textbox value="A. Graduate"/></listcell>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem value="B">
+		<listcell><checkbox label="B. College"/></listcell>
+		<listcell><button label="23%"/></listcell>
+	</listitem>
+	<listitem value="C">
+		<listcell label="C. High School"/>
+		<listcell><textbox cols="8" value="40%"/></listcell>
+	</listitem>
+</listbox>
+<listbox>
+	<listhead>
+		<listheader/>
+		<listheader align="right"/>
+	</listhead>
+	<listitem value="X">
+		<listcell label="X. Graduate"/>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem value="Y">
+		<listcell label="Y. College"/>
+		<listcell label="23%"/>
+	</listitem>
+	<listitem value="Z">
+		<listcell label="Z. High School"/>
+		<listcell label="40%"/>
+	</listitem>
+</listbox>
+<radiogroup>
+<radio checked="true" label="a"/>
+<radio label="b"/>
+</radiogroup>
+</window>

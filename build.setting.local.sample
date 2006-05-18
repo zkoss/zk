@@ -1,0 +1,12 @@
+D.ON=true
+domain=my-host.my-domain.com
+share.remote=//time/potix/rd/java/share
+share.local=~/prj/share
+javadoc=//time/download/javadoc/i3
+unzip.enabled
+debug=true
+optimize=true
+version=1.0.0
+sub-version=rc5
+#jboss.deploy=potix/deploy
+#start.service=Apache Tomcat

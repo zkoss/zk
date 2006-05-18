@@ -1,0 +1,10 @@
+bsh.jar
+commons-el.jar
+commons-fileupload.jar
+commons-logging.jar
+javax.servlet.jar
+javax.servlet.jsp.jar
+portlet-api.jar
+jasper-compiler.jar
+pluto.jar
+custom_rhino.jar

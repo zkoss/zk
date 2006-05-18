@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" ?>
+<?page language="xul/html"?>
+<!--
+fileupload.zul
+
+{{IS_NOTE
+	$Id: fileupload.zul,v 1.6 2006/04/26 07:13:13 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 19 12:06:22     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+-->
+<window title="${arg.title}" border="normal" width="360px" closable="true"
+use="com.potix.zul.html.impl.FileuploadDlg">
+	<label value="${arg.message}"/>
+	<iframe width="100%" style="border: 1px solid #aaa"
+	src="~./zul/html/fileupload.dsp?dtid=${self.desktop.id}&amp;uuid=${self.parent.uuid}&amp;action=${arg.action}"/>
+		<!-- since arg.action might contain ;jsessionid=xx, so put it to the last one -->
+</window>

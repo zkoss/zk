@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+onOK.zul
+
+{{IS_NOTE
+	$Id: onOK.zul,v 1.6 2006/04/17 09:53:18 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>onOK, onCancel and onCtrlKey</h4>
+				<p>Special keypress event for ENTER, ESC, CTRL key are 
+				handled via three special event listeners, onOK, onCancel, and onCtrlKey respectivly. Note that function keys are deemed as CTRL keys.</p>
+				<p>Only window component is allowed to handle these events.</p>
+				<p>Try to press "ENTER", "ESC", "CTRL+A", "F2" and see what happened.(Note that the focus must be inside the demo widow when pressing the key.)</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
+			<textbox id="codes" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="onOK, onCancel, onCtrlKey demo" border="normal" onOK="doOk()" onCancel="doCancel()" ctrlKeys="A2" onCtrlKey="doCtrlKey()">
+	<checkbox id="winfocus" label="Hello, World!"/>
+	<zscript>{
+		void doOk() {
+			Messagebox.show("ENTER key is pressed", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
+			winfocus.focus();
+		}
+		void doCancel() {
+			Messagebox.show("ESC key is pressed", "CANCEL", Messagebox.OK, Messagebox.EXCLAMATION);
+			winfocus.focus();
+		}
+		void doCtrlKey() {
+			Messagebox.show(event.getKeyCode()+" is pressed", "CtrlKey", Messagebox.OK, Messagebox.EXCLAMATION);
+			winfocus.focus();
+		}
+		winfocus.focus();
+	}</zscript>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

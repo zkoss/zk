@@ -1,0 +1,156 @@
+/* LabelImageElement.java
+
+{{IS_NOTE
+	$Id: LabelImageElement.java,v 1.7 2006/03/23 07:21:05 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 12 12:09:00     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package com.potix.zul.html.impl;
+
+import com.potix.lang.Objects;
+import com.potix.lang.Strings;
+import com.potix.util.media.Media;
+import com.potix.image.Image;
+
+import com.potix.zk.ui.Execution;
+import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.ext.Viewable;
+
+/**
+ * A HTML element with a label ({@link #getLabel})and an image ({@link #getImage}).
+ * 
+ * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @version $Revision: 1.7 $ $Date: 2006/03/23 07:21:05 $
+ */
+public class LabelImageElement extends LabelElement implements Viewable {
+	private String _src = null;
+	/** The image. If not null, _src is generated automatically. */
+	private Image _image;
+	/** Count the version of {@link #_image}. */
+	private int _imgver;
+
+	/** Returns the image URI.
+	 * <p>Default: null.
+	 * <p>The same as {@link #getSrc}.
+	 */
+	public String getImage() {
+		return _src;
+	}
+	/** Sets the image URI.
+	 * <p>If src is changed, the component's inner is invalidate.
+	 * Thus, you want to smart-update, you have to override this method.
+	 * <p>The same as {@link #setSrc}.
+	 */
+	public void setImage(String src) {
+		if (src != null && src.length() == 0) src = null;
+		if (!Objects.equals(_src, src)) {
+			_src = src;
+			if (_image == null) invalidate(INNER);
+				//_src is meaningful only if _image is null
+			//NOTE: Tom Yeh: 20051222
+			//It is possible to use smartUpdate if we always generate
+			//an image (with an ID) in getImgTag.
+			//However, it is too costly by making HTML too big, so
+			//we prefer to invalidate (it happens rarely)
+		}
+	}
+
+	/** Returns the src (an image URI).
+	 * <p>Default: null.
+	 * <p>The same as {@link #getImage}.
+	 */
+	public String getSrc() {
+		return getImage();
+	}
+	/** Sets the src (the image URI).
+	 * <p>If src is changed, the component's inner is invalidate.
+	 * Thus, you want to smart-update, you have to override this method.
+	 * <p>The same as {@link #setImage}.
+	 */
+	public void setSrc(String src) {
+		setImage(src);
+	}
+
+	/** Sets the content directly.
+	 * Default: null.
+	 *
+	 * @param image the image to display. If not null, it has higher
+	 * priority than {@link #getSrc}.
+	 */
+	public void setImageContent(Image image) {
+		if (image != _image) {
+			_image = image;
+			if (_image != null) ++_imgver; //enforce browser to reload image
+			invalidate(INNER);
+		}
+	}
+	/** Returns the content set by {@link #setImageContent}.
+	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
+	 * It simply returns what is passed to {@link #setImageContent}.
+	 */
+	public Image getImageContent() {
+		return _image;
+	}
+
+	/** Returns whether the image is available.
+	 * In other words, it return true if {@link #setImage} or
+	 * {@link #setImageContent} is called with non-null.
+	 */
+	public boolean isImageAssigned() {
+		return _src != null || _image != null;
+	}
+	/** Returns the HTML IMG tag for the image part, or null
+	 * if no image is assigned ({@link #isImageAssigned})
+	 *
+	 * <p>Note: the component template shall use this method to
+	 * generate the HTML tag, instead of using {@link #getImage}.
+	 */
+	public String getImgTag() {
+		if (_src == null && _image == null)
+			return null;
+
+		return new StringBuffer(64).append("<img src=\"")
+			.append(_image != null ? getContentSrc(): //already encoded
+				getDesktop().getExecution().encodeURL(_src))
+			.append("\" align=\"middle\"/>").toString();
+	}
+	/** Returns the encoded URL for the current image content.
+	 * Don't call this method unless _image is not null;
+	 */
+	private String getContentSrc() {
+		final StringBuffer sb = new StringBuffer(64).append('/');
+		Strings.encode(sb, _imgver);
+		final String name = _image.getName();
+		final String format = _image.getFormat();
+		if (name != null || format != null) {
+			sb.append('/');
+			boolean bExtRequired = true;
+			if (name != null && name.length() != 0) {
+				sb.append(name);
+				bExtRequired = name.lastIndexOf('.') < 0;
+			} else {
+				sb.append(getId());
+			}
+			if (bExtRequired && format != null)
+				sb.append('.').append(format);
+		}
+		return getViewURI(sb.toString()); //already encoded
+	}
+
+	//-- Viewable --//
+	public Media getView(String pathInfo) {
+		return _image;
+	}
+}

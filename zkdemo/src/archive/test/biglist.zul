@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+biglist.zul
+
+{{IS_NOTE
+	$Id: biglist.zul,v 1.1 2006/03/24 10:06:06 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 23 17:44:56     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<zscript>
+List items = new java.util.AbstractList() {
+	public int size() {
+		return 5000;
+	}
+	public Object get(int j) {
+		return new Integer(j);
+		}
+};
+	</zscript>
+	<listbox id="l" rows="50">
+		<listitem forEach="${items}">
+		<listcell label="${each}"/>
+		<listcell label="${each}"/>
+		<listcell label="${each}"/>
+		<listcell label="${each}"/>
+		</listitem>
+	</listbox>
+</window>

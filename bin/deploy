@@ -1,0 +1,40 @@
+#!/bin/bash
+# deploy
+#
+#{{IS_NOTE
+#	$Id: deploy,v 1.2 2006/02/27 03:41:50 tomyeh Exp $
+#	Purpose:
+#		Deploy
+#	Description:
+#		It supports tomcat only.
+#	History:
+#		Thu Jan 26 09:47:39     2006, Created by tomyeh@potix.com
+#}}IS_NOTE
+#
+#Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 2.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+if [ ! -d /usr/tomcat ] ; then
+	echo "/usr/tomcat not found"
+	echo "Currently only tomcat is supported"
+	exit 1
+fi
+if [ $# == 0 ] ; then
+	echo "Usage:"
+	echo "  deploy prj1 prj2..."
+	exit 0
+fi
+
+net stop "Apache Tomcat"
+
+for f in $*; do
+	f=${f%/}
+	echo "cp dist/lib/$f.jar /usr/tomcat/shared/lib"
+	cp dist/lib/$f.jar /usr/tomcat/shared/lib
+done
+
+net start "Apache Tomcat"

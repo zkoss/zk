@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+checkbox.zul
+
+{{IS_NOTE
+	$Id: checkbox.zul,v 1.5 2006/04/17 09:53:20 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>Checkboxes</h4>
+				<p>Checkbox is used to turn on or turn off an option.</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView();"/></caption>
+			<textbox id="codes" class="code" rows="20" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="checkbox demo" border="normal">
+	<vbox>
+		What kinds of fruit do you want?
+		<checkbox id="apple" label="Apple" onCheck="doChecked()" />
+		<checkbox id="orange" label="Orange" onCheck="doChecked()" />
+		<checkbox id="banana" label="Banana" onCheck="doChecked()" />
+		<hbox>You have selected :<label id="fruit"/></hbox>
+		<zscript>
+			void doChecked() {
+				fruit.value = (apple.isChecked() ? apple.label+' ' : &quot;&quot;) 
+					+ (orange.isChecked() ? orange.label+' ' : &quot;&quot;) 
+					+ (banana.isChecked() ? banana.label+' ' : &quot;&quot;);
+			}
+		</zscript>
+	</vbox>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

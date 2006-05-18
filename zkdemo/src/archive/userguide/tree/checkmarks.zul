@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+checkmarks.zul
+
+{{IS_NOTE
+	$Id: checkmarks.zul,v 1.4 2006/04/17 09:53:22 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 11 12:37:27     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+	<h4>Tree controls with checkmarks</h4>
+	<p>The checkmark attribute controls whether to display a checkbox,
+	if multiple selection, or a radio button, if single selection,
+	in front of each tree items</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
+			<textbox id="codes" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="tree checkmark demo" border="normal">
+	<button label="Toggle checkmark" onClick="tree.checkmark = !tree.checkmark"/>
+	<separator bar="true"/>
+	<tree id="tree" width="450px" rows="5" multiple="true" checkmark="true">
+		<treecols>
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1"/>
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.2"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2"/>
+							<treecell label="Item 2.2 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3"/>
+		</treechildren>
+	</tree>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

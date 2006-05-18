@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="UpdDemo" title="Upload Audio"?>
+<!--
+audio.zul
+
+{{IS_NOTE
+	$Id: audio.zul,v 1.3 2005/11/18 08:18:57 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep  8 17:24:47     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window border="normal">
+	Post your audio.
+	<separator/>
+
+	<audio id="audio" height="20"/>
+	<separator/>
+	<button label="Upload">
+		<attribute name="onClick">{
+	Object media = Fileupload.get();
+	if (media instanceof com.potix.sound.Audio)
+		audio.setContent(media);
+	else if (media != null)
+		Messagebox.show("Not an audio: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+		}</attribute>
+	</button>
+	<button label="Play" onClick="audio.play()"/>
+	<button label="Stop" onClick="audio.stop()"/>
+</window>

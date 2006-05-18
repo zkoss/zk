@@ -1,0 +1,133 @@
+/* Components.java
+
+{{IS_NOTE
+	$Id: Components.java,v 1.9 2006/04/13 13:20:59 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 13 20:55:18     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package com.potix.zk.ui;
+
+import java.util.Iterator;
+import java.util.Collection;
+import java.util.AbstractCollection;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Utilities to access {@link Component}.
+ *
+ * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @version $Revision: 1.9 $ $Date: 2006/04/13 13:20:59 $
+ */
+public class Components {
+	protected Components() {}
+
+	/** Tests whether node1 is an ancessor of node 2.
+	 * If node1 and node2 is the same, true is returned.
+	 */
+	public static boolean isAncestor(Component node1, Component node2) {
+		for (; node2 != null; node2 = node2.getParent()) {
+			if (node1 == node2)
+				return true;
+		}
+		return false;
+	}
+
+	/** Removes all children of the specified component.
+	 */
+	public static void removeAllChildren(Component comp) {
+		final List children = comp.getChildren();
+		if (children.isEmpty()) return;
+
+		for (Iterator it = new ArrayList(children).iterator(); it.hasNext();)
+			((Component)it.next()).setParent(null); //detach
+	}
+
+	/** Returns whether this component is real visible (all its parents
+	 * are visible).
+	 * @see Component#isVisible
+	 */
+	public static boolean isRealVisible(Component comp) {
+		for (; comp != null; comp = comp.getParent())
+			if (!comp.isVisible())
+				return false;
+		return true;
+	}
+	/** Returns a collection of visible children.
+	 * <p>The performance of the returned collection's size() is NO GOOD.
+	 */
+	public static Collection getVisibleChildren(Component comp) {
+		final Collection children = comp.getChildren();
+		return new AbstractCollection() {
+			public int size() {
+				int size = 0;
+				for (Iterator it = children.iterator(); it.hasNext();) {
+					if (((Component)it.next()).isVisible())
+						++size;
+				}
+				return size;
+			}
+			public Iterator iterator() {
+				return new Iterator() {
+					final Iterator _it = children.iterator();
+					Component _next;
+					public boolean hasNext() {
+						if (_next != null) return true;
+						_next = getNextVisible(false);
+						return _next != null;
+					}
+					public Object next() {
+						if (_next != null) {
+							final Component c = _next;
+							_next = null;
+							return c;
+						}
+						return getNextVisible(true);
+					}
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+					private Component getNextVisible(boolean blind) {
+						while (blind || _it.hasNext()) {
+							final Component c = (Component)_it.next();
+							if (c.isVisible())
+								return c;
+						}
+						return null;
+					}
+				};
+			}
+		};
+	}
+
+	/** Converts a string to an integer that can be used to access
+	 * {@link Component#getAttribute(String, int)}
+	 */
+	public static final int getScope(String scope) {
+		if ("component".equals(scope)) return Component.COMPONENT_SCOPE;
+		if ("space".equals(scope)) return Component.SPACE_SCOPE;
+		if ("page".equals(scope)) return Component.PAGE_SCOPE;
+		if ("desktop".equals(scope)) return Component.DESKTOP_SCOPE;
+		if ("session".equals(scope)) return Component.SESSION_SCOPE;
+		if ("application".equals(scope)) return Component.APPLICATION_SCOPE;
+		throw new IllegalArgumentException("Unknown scope: "+scope);
+	}
+
+	/** Returns whether an ID is generated automatically.
+	 */
+	public static final boolean isAutoId(String id) {
+		return com.potix.zk.ui.sys.ComponentsCtrl.isAutoId(id);
+	}
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+menu.zul
+
+{{IS_NOTE
+	$Id: moreMenu.zul,v 1.4 2006/04/17 09:53:22 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>More Menu Features</h4>
+				<p>Menu supports special feature of autoCheck and autoPopup.</p>
+				<ul>
+					<li>autoCheck make the menu item as a checkbox.</li>
+					<li>autoPopup make the menu to pop up when the mouse roll over.</li>
+				</ul>
+				<p>Try to move mouse pointer over the menu. Click check1 and check2; then see what happened.</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
+			<textbox id="codes" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="more menu demo" border="normal">
+	<menubar id="menubar" autoPopup="true">
+		<menu label="menu">
+			<menupopup>
+				<menuitem label="check1" autoCheck="true"/>
+				<menuitem label="check2" autoCheck="true"/>
+			</menupopup>
+		</menu>
+	</menubar>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

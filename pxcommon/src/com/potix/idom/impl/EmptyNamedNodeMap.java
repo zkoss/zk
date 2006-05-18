@@ -1,0 +1,64 @@
+/* EmptyNamedNodeMap.java
+
+{{IS_NOTE
+
+	$Header: //time/potix/rd/cvs/m3/pxcommon/src/com/potix/idom/impl/EmptyNamedNodeMap.java,v 1.4 2006/02/27 03:41:56 tomyeh Exp $
+	Purpose: 
+	Description: 
+	History:
+	2001/09/28 11:39:53, Create, Tom M. Yeh.
+}}IS_NOTE
+
+Copyright (C) 2001 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package com.potix.idom.impl;
+
+import org.w3c.dom.*;
+
+import com.potix.idom.*;
+import com.potix.idom.DOMException;
+
+/**
+ * An empty NamedNodeMap.
+ *
+ * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @version $Revision: 1.4 $ $Date: 2006/02/27 03:41:56 $
+ */
+public class EmptyNamedNodeMap implements NamedNodeMap {
+	/** The ONLY instance of EmptyNamedNodeMap.
+	 */
+	public static final NamedNodeMap THE = new EmptyNamedNodeMap();
+
+	protected EmptyNamedNodeMap() {
+	}
+	
+	public int getLength() {
+		return 0;
+	}
+	public Node getNamedItem(String name) {
+		return null;
+	}
+	public Node getNamedItemNS(String namespaceURI, String localName) {
+		return null;
+	}
+	public Node item(int index) {
+		return null;
+	}
+	public Node removeNamedItem(String name) {
+		throw new DOMException(DOMException.NOT_FOUND_ERR);
+	}
+	public Node removeNamedItemNS(String namespaceURI, String localName) {
+		throw new DOMException(DOMException.NOT_FOUND_ERR);
+	}
+	public Node setNamedItem(Node arg) {
+		throw new DOMException(DOMException.INVALID_ACCESS_ERR);
+	}
+	public Node setNamedItemNS(Node arg) {
+		throw new DOMException(DOMException.INVALID_ACCESS_ERR);
+	}
+}

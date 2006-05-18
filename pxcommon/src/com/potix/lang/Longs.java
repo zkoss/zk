@@ -1,0 +1,48 @@
+/* Longs.java
+
+{{IS_NOTE
+	$Id: Longs.java,v 1.2 2006/02/27 03:41:59 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb 25 10:42:53     2004, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2004 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package com.potix.lang;
+
+/**
+ * Long relevant utilities.
+ *
+ * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @version $Revision: 1.2 $ $Date: 2006/02/27 03:41:59 $
+ */
+public class Longs {
+	/** The zero. */
+	public static final Long ZERO = Objects.ZERO_LONG;
+
+	/** urns a String object representing the specified integer, with
+	 * the (at-least) specified digits.
+	 *
+	 * <p>Example: toStringByScale(123, 5) returns "00123",
+	 * toStringByScale(123, 2) returns "123".
+	 */
+	public static final String toStringByScale(long val, int digits) {
+		String sval = Long.toString(val);
+		int df = digits - sval.length();
+		if (df <= 0)
+			return sval;
+
+		final StringBuffer sb = new StringBuffer(digits);
+		while (--df >= 0) sb.append('0');
+		return sb.append(sval).toString();
+	}
+}

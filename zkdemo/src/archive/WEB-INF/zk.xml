@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.xml
+	$Id: zk.xml,v 1.5 2006/04/18 07:04:41 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sun Mar 26 16:29:07     2006, Created by tomyeh@potix.com
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+-->
+
+<zk>
+	<!--
+	<log>
+		<description>[Optional] Monitor i3-log.conf and register a handler for the specified log-base</description>
+		<log-base></log-base>
+	</log>
+	-->
+
+	<!--
+	<language-config>
+		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
+	</language-config>
+	-->
+
+	<!-- Turn on the following if used with WebLogic 9.1
+	<system-config>
+		<cache-provider-class>com.potix.zk.ui.sys.GlobalDesktopCacheProvider</cache-provider-class>
+	</system-config>
+	-->
+
+	<listener>
+		<description>[Optional] Mointor the statistic</description>
+		<listener-class>com.potix.zk.ui.util.Statistic</listener-class>
+	</listener>
+</zk>

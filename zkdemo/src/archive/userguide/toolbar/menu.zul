@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+menu.zul
+
+{{IS_NOTE
+	$Id: menu.zul,v 1.4 2006/04/17 09:53:21 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>Menu</h4>
+				<p>Menu is the way for an end user to issue an application function.</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
+			<textbox id="codes" class="code" rows="20" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="menu demo" border="normal">
+	<menubar id="menubar">
+		<menu label="File">
+			<menupopup>
+				<menuitem label="New"/>
+				<menuitem label="Open"/>
+				<menuitem label="Save"/>
+				<menuseparator/>
+				<menuitem label="Exit"/>
+			</menupopup>
+		</menu>
+		<menu label="Help">
+			<menupopup>
+				<menuitem label="Index"/>
+				<menu label="About">
+					<menupopup>
+						<menuitem label="About ZK"/>
+						<menuitem label="About Potix"/>
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+	</menubar>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

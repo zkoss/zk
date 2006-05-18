@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+jdbc.zul
+
+{{IS_NOTE
+	$Id: hibernate.zul,v 1.5 2006/04/17 09:53:17 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>Hibernate</h4>
+				<p>Presentation components do not assume any persistent technology. 
+				This example simply demostrate the possiblility to combine presentation 
+				components and Hibernate persistent system.</p>
+				<p>Note that we comment out the script on purpose because it will not run on our web site.</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
+			<textbox id="codes" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="Hibernate demo" border="normal">
+	<zscript>{
+		void submit() {
+		/*
+			Session session = HibernateUtil.currentSession();
+			Transaction tx = session.beginTransaction();
+			
+			User aUser = new User();
+			
+			//assign what end user entered into the persistence object.
+			aUser.setName(name.value);
+			aUser.setEmail(email.value);
+			
+			session.save(aUser);
+			
+			tx.commit();
+			HibernateUtil.closeSession();
+		*/
+		}
+	}</zscript>
+	<grid>
+	<rows>
+		<row>Name : <textbox id="name"/></row>
+		<row>Email: <textbox id="email"/></row>
+		<row><button label="submit" onClick="submit()"/></row>
+	</rows>
+	</grid>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

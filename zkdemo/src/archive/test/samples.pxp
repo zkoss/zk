@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- samples.pxp
+	$Id: samples.pxp,v 1.2 2006/01/18 03:57:33 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 11 12:34:07     2005, Created by tomyeh@potix.com
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+-->
+<layout contentType="text/html">
+	<title>ZK Samples</title>
+	<header name="Cache-Control" value="no-cache"/>
+	<header name="Pragma" value="no-cache"/>
+
+	<vbox>
+		<hbox>
+			<servlet page="sample1.zul"/>
+			<servlet page="sample2.zul"/>
+		</hbox>
+		<hbox>
+			<servlet page="sample3.zul"/>
+			<servlet page="sample4.zul"/>
+		</hbox>
+		<hbox>
+			<servlet page="sample5.zul"/>
+		</hbox>
+	</vbox>
+
+	<molds uri="~./pxp/html/molds.xml"/>
+</layout>

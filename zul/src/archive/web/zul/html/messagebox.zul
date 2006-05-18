@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="ZK Test" language="xul/html"?>
+<!--
+test.zul
+
+{{IS_NOTE
+	$Id: messagebox.zul,v 1.7 2006/04/26 07:13:14 tomyeh Exp $
+	Purpose:
+		View the specified subject.
+	Description:
+		
+	History:
+		Mon May 30 19:13:47     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+-->
+<window title="${arg.title}" border="normal" width="250pt" closable="true"
+use="com.potix.zul.html.impl.MessageboxDlg">
+	<hbox>
+		<image src="${arg.icon}"/>
+		<label multiline="true">
+			<attribute name="value">${arg.message}</attribute>
+		</label>
+	</hbox>
+	<separator bar="true"/>
+	<hbox style="margin-left:auto; margin-right:auto">
+	<button label="${arg.OK}" width="45pt"
+		onClick="spaceOwner.endModal(spaceOwner.OK)" if="${!empty arg.OK}"/>
+	<button label="${arg.CANCEL}" width="45pt"
+		onClick="spaceOwner.endModal(spaceOwner.CANCEL)" if="${!empty arg.CANCEL}"/>
+	<button label="${arg.YES}" width="45pt"
+		onClick="spaceOwner.endModal(spaceOwner.YES)" if="${!empty arg.YES}"/>
+	<button label="${arg.NO}" width="45pt"
+		onClick="spaceOwner.endModal(spaceOwner.NO)" if="${!empty arg.NO}"/>
+	<button label="${arg.RETRY}" width="45pt"
+		onClick="spaceOwner.endModal(spaceOwner.RETRY)" if="${!empty arg.RETRY}"/>
+	<button label="${arg.ABORT}" width="45pt"
+		onClick="spaceOwner.endModal(spaceOwner.ABORT)" if="${!empty arg.ABORT}"/>
+	<button label="${arg.IGNORE}" width="45pt"
+		onClick="spaceOwner.endModal(spaceOwner.IGNORE)" if="${!empty arg.IGNORE}"/>
+	</hbox>
+</window>

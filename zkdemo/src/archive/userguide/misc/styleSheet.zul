@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+styleSheet.zul
+
+{{IS_NOTE
+	$Id: styleSheet.zul,v 1.4 2006/04/17 09:53:20 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>Style sheets</h4>
+				<p>CSS style sheet, class attribute, and style attribute is supported.</p>
+				<p>Developers specify the following line in the .zul page and the style sheet is set. 
+				By setting components' class attribute or style attribute, developers can
+				change a components' style.
+				</p>
+<pre><code>
+&lt;?xml-stylesheet href=&quot;...&quot; [type=&quot;text/css&quot;]?&gt;
+</code></pre>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
+			<textbox id="codes" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="1st window" border="normal" width="200px" style="background-color: lightyellow">
+	Hello, World!
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>

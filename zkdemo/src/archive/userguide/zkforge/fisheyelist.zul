@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+hello.zul
+
+{{IS_NOTE
+	$Id: fisheyelist.zul,v 1.4 2006/04/17 09:53:22 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 4 18:31:13     2005, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox>
+		<html>
+			<attribute name="content"><![CDATA[
+	<h4>Demo of Dojo Fisheye List</h4>
+	<p><a href="http://dojotoolkit.org/">Dojo</a> is a powerful JavavScript toolkit.</p>
+	<p>In this demo, we demostrate the use of its fisheye list.</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" onClick="reload()"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="_source" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView();"/></caption>
+			<textbox id="codes" class="code" rows="10" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="Dojo Fisheye List">
+	<fisheyelist id="fi" style="position:absolute;margin:20px" attachEdge="top">
+		<fisheyeitem image="/img/icon_browser.png" label="Web Browser" onClick="alert(self.label)"/>
+		<fisheyeitem image="/img/icon_calendar.png" label="Calendar" onClick="alert(self.label)"/>
+		<fisheyeitem image="/img/icon_email.png" label="Email" onClick="alert(self.label)"/>
+		<fisheyeitem image="/img/icon_texteditor.png" label="Text Editor" onClick="alert(self.label)"/>
+		<fisheyeitem image="/img/icon_update.png" label="Software Update" onClick="alert(self.label)"/>
+		<fisheyeitem image="/img/icon_users.png" label="Users" onClick="alert(self.label)"/>
+	</fisheyelist>
+	<div height="200px" width="100%" style="border:1px solid black;"/>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+	<zscript>
+	void reload() {
+		Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+		Treeitem treeitem = tree.getSelectedItem();
+		java.util.Set items = new HashSet();
+		items.add(treeitem);
+		Events.postEvent(new SelectEvent("onSelect", tree, items));
+	}
+	void updateView() {
+		Components.removeAllChildren(view);
+		Executions.createComponentsDirectly(codes.getValue(), "zul", view, null);
+	}
+	updateView();
+	</zscript>
+</window>
