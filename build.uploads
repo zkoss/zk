@@ -1,5 +1,13 @@
 export=zk1
 
+deploy
+deploy.unzip
+deploy.unzip.war
+genprop
+genprop.awk
+zipjs
+
+pxcommon.jar
 pxweb.jar
 zk.jar
 zul.jar
