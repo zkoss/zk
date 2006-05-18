@@ -5,7 +5,7 @@
 # Authors: Tom M. Yeh
 # Contributors:
 # Create Date: 2001/3/30 05:46PM
-# $Header: //time/potix/rd/cvs/m3/bin/genprop,v 1.4 2006/02/27 03:41:51 tomyeh Exp $
+# $Header: //time/potix/rd/cvs/zk1/bin/genprop,v 1.1.1.1 2006/05/18 12:40:54 tomyeh Exp $
 # Purpose: Generate Java classes from properties files
 # Description:
 #	Execute 'genprop -h' to know how to use.
