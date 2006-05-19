@@ -1,7 +1,7 @@
 /* AbstractTag.java
 
 {{IS_NOTE
-	$Id: AbstractTag.java,v 1.11 2006/05/08 05:56:32 tomyeh Exp $
+	$Id: AbstractTag.java,v 1.12 2006/05/19 10:05:53 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -48,7 +48,7 @@ import com.potix.zk.ui.ext.RawId;
  * only ASAP event listeners.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/08 05:56:32 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/19 10:05:53 $
  */
 public class AbstractTag extends AbstractComponent
 implements DynamicPropertied, RawId {
@@ -69,7 +69,7 @@ implements DynamicPropertied, RawId {
 	 * <p>Default: null (the default value depends on element).
 	 */
 	public String getSclass() {
-		return getDynamicProperty("class");
+		return (String)getDynamicProperty("class");
 	}
 	/** Sets the CSS class.
 	 */
@@ -80,17 +80,12 @@ implements DynamicPropertied, RawId {
 	 * <p>Default: null.
 	 */
 	public String getStyle() {
-		return getDynamicProperty("style");
+		return (String)getDynamicProperty("style");
 	}
 	/** Sets the CSS style.
 	 */
 	public void setStyle(String style) {
 		setDynamicProperty("style", style);
-	}
-
-	/** Returns an attribute. */
-	public String getDynamicProperty(String name) {
-		return _attrs != null ? (String)_attrs.get(name): null;
 	}
 
 	/** Returns the tag name.
@@ -103,6 +98,12 @@ implements DynamicPropertied, RawId {
 	public boolean hasDynamicProperty(String name) {
 		return name != null && !"use".equals(name) && !"if".equals(name)
 			&& !"unless".equals(name);
+	}
+	/** Returns the dynamic property, or null if not found.
+	 * Note: it must be a String object or null.
+	 */
+	public Object getDynamicProperty(String name) {
+		return _attrs != null ? _attrs.get(name): null;
 	}
 	/** Sets the dynamic property.
 	 * Note: it converts the value to a string object (by use of

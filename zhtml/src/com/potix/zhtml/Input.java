@@ -1,7 +1,7 @@
 /* Input.java
 
 {{IS_NOTE
-	$Id: Input.java,v 1.6 2006/05/08 05:56:31 tomyeh Exp $
+	$Id: Input.java,v 1.7 2006/05/19 10:05:52 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +27,7 @@ import com.potix.zhtml.impl.AbstractTag;
  * The input tag.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/08 05:56:31 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/19 10:05:52 $
  */
 public class Input extends AbstractTag implements Inputable {
 	public Input() {
@@ -40,7 +40,7 @@ public class Input extends AbstractTag implements Inputable {
 	/** Returns the value of this input.
 	 */
 	public String getValue() {
-		return getDynamicProperty("value");
+		return (String)getDynamicProperty("value");
 	}
 	/** Sets the vallue of this input.
 	 */
