@@ -1,7 +1,7 @@
 /* HtmlMacroComponent.java
 
 {{IS_NOTE
-	$Id: HtmlMacroComponent.java,v 1.3 2006/05/08 05:56:30 tomyeh Exp $
+	$Id: HtmlMacroComponent.java,v 1.4 2006/05/19 10:03:13 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,13 +33,14 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  * the correct class, and then invoke {@link #createChildren}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/08 05:56:30 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/19 10:03:13 $
  */
 public class HtmlMacroComponent extends HtmlBasedComponent
 implements Macro, DynamicPropertied {
-	private Map _attrs;
+	private final Map _attrs = new HashMap(7);
 
 	public HtmlMacroComponent() {
+		_attrs.put("includer", this);
 	}
 
 	//-- Macro --//
@@ -50,11 +51,13 @@ implements Macro, DynamicPropertied {
 
 	//-- DynamicPropertied --//
 	public boolean hasDynamicProperty(String name) {
-		return _attrs != null && _attrs.containsKey(name);
+		return _attrs.containsKey(name);
+	}
+	public Object getDynamicProperty(String name) {
+		return _attrs.get(name);
 	}
 	public void setDynamicProperty(String name, Object value)
 	throws WrongValueException {
-		if (_attrs == null) _attrs = new HashMap(7);
 		_attrs.put(name, value);
 	}
 }

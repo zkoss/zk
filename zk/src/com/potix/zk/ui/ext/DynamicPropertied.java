@@ -1,7 +1,7 @@
 /* DynamicPropertied.java
 
 {{IS_NOTE
-	$Id: DynamicPropertied.java,v 1.1 2006/05/08 05:56:30 tomyeh Exp $
+	$Id: DynamicPropertied.java,v 1.2 2006/05/19 10:03:14 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,12 +28,15 @@ import com.potix.zk.ui.WrongValueException;
  * for each property it supports.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/08 05:56:30 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/19 10:03:14 $
  */
 public interface DynamicPropertied {
 	/** Returns whether a dynamic attribute is allowed.
 	 */
 	public boolean hasDynamicProperty(String name);
+	/** Returns the property value of the specified name.
+	 */
+	public Object getDynamicProperty(String name);
 	/** Sets an attribute with a value.
 	 *
 	 * <p>If a component supports only String-type values, it could
