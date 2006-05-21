@@ -155,7 +155,7 @@ zkau._sendNow = function () {
 	if (zk.loading) {
 		if (!zkau._sendadded) {
 			zkau._sendadded = true;
-			zk.addInit(zkau._sendNow); //note: when callback, isLoading is false
+			zk.addInit(zkau._sendNow); //note: when callback, zk.loading is false
 		}
 		return; //wait
 	}
@@ -225,7 +225,7 @@ zkau._doQueResps = function () {
 		if (zk.loading) {
 			if (!zkau._procadded) {
 				zkau._procadded = true;
-				zk.addInit(zkau._doQueResps); //Note: when callback, isLoading is false
+				zk.addInit(zkau._doQueResps); //Note: when callback, zk.loading is false
 			}
 			return; //wait until the loading is done
 		}
