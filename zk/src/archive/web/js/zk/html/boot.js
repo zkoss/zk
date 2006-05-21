@@ -22,7 +22,7 @@ function zk() {}
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "11"; //increase this if we want the browser to reload JavaScript
+zk.build = "12"; //increase this if we want the browser to reload JavaScript
 zk.mods = {};
 
 /** Browser info. */
