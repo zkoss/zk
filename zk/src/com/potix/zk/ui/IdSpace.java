@@ -1,7 +1,7 @@
 /* IdSpace.java
 
 {{IS_NOTE
-	$Id: IdSpace.java,v 1.1 2006/03/31 03:20:39 tomyeh Exp $
+	$Id: IdSpace.java,v 1.2 2006/05/22 10:14:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -23,7 +23,8 @@ package com.potix.zk.ui;
  * Implemented by a component ({@link Component}) and a page
  * ({@link Page})
  * to denote that all its descendant and itself forms an independent ID space.
- * In an ID space, ID of each component ({@link Component#getId}) must be
+ *
+ * <p>In an ID space, ID of each component ({@link Component#getId}) must be
  * unique.
  * And, you could retrieve any component in the same ID space by calling
  * {@link #getFellow} upon any component of the same ID space.
@@ -51,8 +52,11 @@ package com.potix.zk.ui;
  * <p>If both C and D implements {@link IdSpace}, C and D belongs
  * to the D space while A, B and C belongs to the C space.
  *
+ * <p>Note: to make a component (deriving from {@link AbstractComponent})
+ * an ID space owner, all it needs to do is to implement this interface.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/03/31 03:20:39 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/22 10:14:56 $
  */
 public interface IdSpace {
 	/** Returns a component of the specified ID in the same ID space.

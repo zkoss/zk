@@ -1,7 +1,7 @@
 /* Macro.java
 
 {{IS_NOTE
-	$Id: Macro.java,v 1.1 2006/04/17 07:10:23 tomyeh Exp $
+	$Id: Macro.java,v 1.2 2006/05/22 10:14:10 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -22,11 +22,12 @@ package com.potix.zk.ui.ext;
  * create child components after setting the intialial properties.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/04/17 07:10:23 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/22 10:14:10 $
  * @see com.potix.zk.ui.Component#applyProperties
  */
 public interface Macro {
 	/** Called to generate child components based on the macro URI.
+	 * <p>Called only internally (by UiEngine).
 	 */
 	public void createChildren();
 }

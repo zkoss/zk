@@ -1,7 +1,7 @@
 /* HtmlMacroComponent.java
 
 {{IS_NOTE
-	$Id: HtmlMacroComponent.java,v 1.4 2006/05/19 10:03:13 tomyeh Exp $
+	$Id: HtmlMacroComponent.java,v 1.5 2006/05/22 10:14:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,10 +33,10 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  * the correct class, and then invoke {@link #createChildren}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/19 10:03:13 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/22 10:14:09 $
  */
 public class HtmlMacroComponent extends HtmlBasedComponent
-implements Macro, DynamicPropertied {
+implements Macro, IdSpace, DynamicPropertied {
 	private final Map _attrs = new HashMap(7);
 
 	public HtmlMacroComponent() {
