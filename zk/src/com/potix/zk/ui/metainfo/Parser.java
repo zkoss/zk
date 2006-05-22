@@ -1,7 +1,7 @@
 /* Parser.java
 
 {{IS_NOTE
-	$Id: Parser.java,v 1.7 2006/05/04 04:36:41 tomyeh Exp $
+	$Id: Parser.java,v 1.8 2006/05/22 16:13:22 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -57,7 +57,7 @@ import com.potix.zk.ui.util.impl.ConditionImpl;
 /**
  * Used to prase the ZUL file
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/04 04:36:41 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/22 16:13:22 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);
@@ -234,7 +234,7 @@ public class Parser {
 				clsnm.indexOf("${") >= 0 ? //class supports EL
 					new InitiatorDefinition(clsnm, args):
 					new InitiatorDefinition(locateClass(clsnm), args));
-		} else if ("component".equals(target)) {
+		} else if ("component".equals(target)) { //define a component
 			final String name = (String)params.remove("name");
 			if (isEmpty(name)) throw new UiException("name is required, "+pi.getLocator());
 			noEL("name", name, pi); //note: macro-uri supports EL
@@ -261,17 +261,17 @@ public class Parser {
 
 				compdef = (ComponentDefinition)ref.clone();
 				compdef.setLanguageDefinition(null);
-				final String clsnm = (String)params.remove("component-class");
+				final String clsnm = (String)params.remove("class");
 				if (!isEmpty(clsnm)) {
-					noEL("component-class", clsnm, pi);
+					noEL("class", clsnm, pi);
 					compdef.setImplementationClass(locateClass(clsnm));
 				}
 			} else {
 				if (log.finerable()) log.finer("Add component definition: name="+name);
 
-				final String clsnm = (String)params.remove("component-class");
-				if (isEmpty(clsnm)) throw new UiException("component-class is required");
-				noEL("component-class", clsnm, pi);
+				final String clsnm = (String)params.remove("class");
+				if (isEmpty(clsnm)) throw new UiException("class is required");
+				noEL("class", clsnm, pi);
 				compdef = new ComponentDefinition(null, name, locateClass(clsnm));
 			}
 
@@ -287,6 +287,8 @@ public class Parser {
 				compdef.addProperty(
 					(String)me.getKey(), (String)me.getValue(), null);
 			}
+		} else if ("macro-definition".equals(target)) { //
+			
 		} else {
 			log.warning("Unknown processing instruction: "+target);
 		}
