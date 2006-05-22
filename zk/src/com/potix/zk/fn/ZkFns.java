@@ -1,7 +1,7 @@
 /* ZkFns.java
 
 {{IS_NOTE
-	$Id: ZkFns.java,v 1.24 2006/05/10 10:03:52 tomyeh Exp $
+	$Id: ZkFns.java,v 1.25 2006/05/22 03:41:55 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -19,6 +19,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.fn;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.List;
@@ -56,7 +58,7 @@ import com.potix.zk.au.AuResponse;
  * Utilities for using EL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.24 $ $Date: 2006/05/10 10:03:52 $
+ * @version $Revision: 1.25 $ $Date: 2006/05/22 03:41:55 $
  */
 public class ZkFns {
 	private static final Log log = Log.lookup(ZkFns.class);
@@ -141,12 +143,12 @@ public class ZkFns {
 			.append("\";\nzk_desktopId=\"").append(page.getDesktop().getId())
 			.append("\";\n</script>\n");
 
+		final Set jses = new LinkedHashSet(37);
 		for (Iterator it = LanguageDefinition.getAll().iterator();
-		it.hasNext();) {
-			final LanguageDefinition langdef = (LanguageDefinition)it.next();
-			for (Iterator e = langdef.getJavaScripts().iterator(); e.hasNext();)
-				append(sb, (JavaScript)e.next());
-		}
+		it.hasNext();)
+			jses.addAll(((LanguageDefinition)it.next()).getJavaScripts());
+		for (Iterator it = jses.iterator(); it.hasNext();)
+			append(sb, (JavaScript)it.next());
 
 		for (Iterator it = LanguageDefinition.getAll().iterator();
 		it.hasNext();) {
