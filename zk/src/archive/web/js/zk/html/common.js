@@ -1,7 +1,7 @@
 /* common.js
 
 {{IS_NOTE
-	$Id: common.js,v 1.38 2006/05/15 02:13:40 tomyeh Exp $
+	$Id: common.js,v 1.39 2006/05/22 02:26:42 tomyeh Exp $
 	Purpose:
 		Common utiltiies.
 	Description:
@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-//////////////
+
 // Standard //
 String.prototype.startsWith = function (prefix) {
 	return this.substring(0,prefix.length) == prefix;
@@ -80,7 +80,7 @@ Array.prototype.contains = function (o) {
 	return false;
 };
 
-////////////
+//
 // More zk utilities (defined also in boot.js) //
 
 /** Center the specified element. */
@@ -1175,16 +1175,6 @@ zk.encodeXML = function (txt, multiline) {
 			}
 		}
 	return out
-};
-
-/** Pause milliseconds. */
-zk.pause = function (millis) {
-	if (millis) {
-		var d = new Date(), n;
-		do {
-			n = new Date();
-		} while (n - d < millis);
-	}
 };
 
 /** Returns an integer of the attribute of the specified element. */

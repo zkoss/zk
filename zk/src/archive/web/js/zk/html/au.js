@@ -1,7 +1,7 @@
 /* au.js
 
 {{IS_NOTE
-	$Id: au.js,v 1.50 2006/05/17 09:08:13 tomyeh Exp $
+	$Id: au.js,v 1.51 2006/05/22 02:26:41 tomyeh Exp $
 	Purpose:
 		JavaScript for asynchronous updates
 	Description:

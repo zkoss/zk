@@ -1,7 +1,7 @@
 /* boot.js
 
 {{IS_NOTE
-	$Id: boot.js,v 1.66 2006/05/17 08:43:15 tomyeh Exp $
+	$Id: boot.js,v 1.67 2006/05/22 02:26:42 tomyeh Exp $
 	Purpose:
 		Bootstrap JavaScript
 	Description:
@@ -17,8 +17,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
+//
+//
+//zk//
 function zk() {}
-
 /** Default version used for all modules that don't define their individual
  * version.
  */
@@ -52,19 +54,17 @@ zk.addInitCmps = function (cmps) {
  * <p>To load a JS file directly, use zk.loadJS
  * @param nm the module name if no / is specified, or filename if / is
  * specified.
- * @param fn the function to execute when JS is loaded.
  */
-zk.load = function (nm, fn, byFile) {
+zk.load = function (nm) {
 	if (!nm) {
 		zk.error("Module name must be specified");
 		return;
 	}
-	if (zk._modules[nm]) return; //loaded or loading
 
-	zk._modules[nm] = true;
-	zk._jsque.push({name: nm, fn: fn});
-
-	if (!zk.loading) zk._doLoad();
+	if (!zk._modules[nm]) {
+		zk._modules[nm] = true;
+		zk._load(nm);
+	}
 };
 /** Loads the required module for the specified component.
  * Note: it DOES NOT check any of its children.
@@ -81,117 +81,75 @@ zk.loadByType = function (n) {
 	}
 	return false;
 }
-		
-/** Loads one javascript file at a time.
- * Note: if we add all <script> elements at the same time, IE seems
- * to load them concurrently (FF has no such issue).
- */
-zk._doLoad = function () {
-	var mi = zk._jsque.shift();
-	if (!mi) { //done
-		zk._setLoading(false);
-		if (zk._ready) zk._evalInit(); //zk._loadAndInit mihgt not finish
-		return;
-	}
 
-	zk._setLoading(true);
+/** Loads the javascript. It invokes _beforeLoad before loading,
+ * and _afterLoad after loaded.
+ */
+zk._load = function (nm) {
+	zk._beforeLoad();
 
 	var e = document.createElement("script");
 	e.type = "text/javascript" ;
 	e.charset = "UTF-8";
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
-		//IE: we have to append child first before setting onreadystatechange
-	if (mi.fn) {
-		e.onload = e.onreadystatechange = function () {
-			if (!e.readyState || e.readyState == 'loaded') {
-				try {
-					mi.fn.apply();
-				} catch (ex) {
-					zk.error("Failed to invoke "+mi.fn+"\n"+ex.message);
-				}
-				zk._doLoad();
-			}
-		};
-	} else
-		e.onload = e.onreadystatechange = zk_onLoad;
 
-	var uri = mi.name;
+	//IE: we have to append child first before setting onreadystatechange
+	if (zk.agtIe) e.onreadystatechange = zk_onState;
+	else e.onload = zk._afterLoad;
+
+	var uri = nm;
 	if (uri.indexOf('/') >= 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		e.src = zk.getUpdateURI("/web/_zver" + zk.build + uri);
 	} else { //module name
 		uri = uri.replace(/\./g, '/') + ".js";
 		if (uri.charAt(0) != '/') uri = '/' + uri;
-		e.src = zk.getUpdateURI("/web/_zver" + zk.getBuild(mi.name) + "/js" + uri);
+		e.src = zk.getUpdateURI("/web/_zver" + zk.getBuild(nm) + "/js" + uri);
 	}
-}
-function zk_onLoad() {
-	if (!this.readyState || this.readyState == 'loaded') zk._doLoad();
-	//IE: use onreadystatechange and readyState; Non-IE: use onload
-}
 
-/** Loads the specified style sheet (CSS).
- * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
- * unless http:// or https:// is specified
- */
-zk.loadCSS = function (uri) {
-	var e = document.createElement("LINK");
-	e.rel = "stylesheet";
-	e.type = "text/css";
-	document.getElementsByTagName("HEAD")[0].appendChild(e);
-	if (uri.indexOf("://") < 0) {
-		if (uri.charAt(0) != '/') uri = '/' + uri;
-		uri = zk.getUpdateURI("/web/_zver" + zk.build + uri);
-	}
-	e.href = uri;
+	if (zk.agtIe && e.readyState == "loaded") e.setAttribute("zk_loaded", "true");
 };
-/** Loads the specified JavaScript file directly.
- * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
- * unless http:// or https:// is specified
- * @param fn the function to execute after loading. It is optional.
- */
-zk.loadJS = function (uri, fn) {
-	var e = document.createElement("script");
-	e.type	= "text/javascript" ;
-	e.charset = "UTF-8";
-	document.getElementsByTagName("HEAD")[0].appendChild(e);
-	if (fn)
-		e.onload = e.onreadystatechange = function() {
-			if (!e.readyState || e.readyState == 'loaded') fn.apply();
-		};
-
-	if (uri.indexOf("://") < 0) {
-		if (uri.charAt(0) != '/') uri = '/' + uri;
-		uri = zk.getUpdateURI("/web/_zver" + zk.build + uri);
+zk._beforeLoad = function () {
+	if (zk.loading ++) {
+		zk._updCnt();
+	} else {
+		setTimeout(function () {
+			if (zk.loading) {
+				var n = document.getElementById("zk_loadprog");
+				if (!n) zk._newProgDlg("zk_loadprog",
+					'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)', 20, 20);
+			}
+		}, 1500);
 	}
-	e.src = uri;
 };
-
-/** Returns the proper URI.
- * @param ignoreSessId whether not to append session ID.
- */
-zk.getUpdateURI = function (uri, ignoreSessId) {
-	if (!uri) return zk_action;
-
-	if (uri.charAt(0) != '/') uri = '/' + uri;
-	var j = zk_action.lastIndexOf(';'), k = zk_action.lastIndexOf('?');
-	if (j < 0 && k < 0) return zk_action + uri;
-
-	if (k >= 0 && (j < 0 || k < j)) j = k;
-	uri = zk_action.substring(0, j) + uri;
-	return ignoreSessId ? uri: uri + zk_action.substring(j);
-};
-
-/** Returns the type of a node without module. */
-zk.getCompType = function (n) {
-	if (n.getAttribute) {
-		var type = n.getAttribute("zk_type");
-		if (type) {
-			var j = type.lastIndexOf('.');
-			return j >= 0 ? type.substring(j + 1): type;
-		}
+function zk_onState () { //onreadystatechange (IE only)
+	var state = this.getAttribute("zk_loaded");
+	if (this.readyState == "loaded") {
+		if (state == "done") return;
+	} else if (this.readyState == "complete") {
+		if (state != "true") return;
+	} else {
+		return;
 	}
-	return null;
+
+	this.setAttribute("zk_loaded", "done");
+	zk._afterLoad();
+};
+zk._afterLoad = function () {
+	if (--zk.loading) {
+		zk._updCnt();
+	} else {
+		var n = document.getElementById("zk_loadprog");
+		if (n) n.parentNode.removeChild(n);
+		if (zk._ready) zk._evalInit(); //zk._loadAndInit mihgt not finish
+	}
+};
+zk._updCnt = function () {
+	var n = document.getElementById("zk_loadcnt");
+	if (n) {
+		n.removeChild(n.firstChild);
+		n.appendChild(document.createTextNode(zk.loading));
+	}
 };
 
 /** Initializes the dom tree.
@@ -316,33 +274,69 @@ zk.cleanupAt = function (n, cufn) {
 		zk.cleanupAt(n, cufn); //recursive for child component
 };
 
-/** Sets whether ZK is loading a javascript. */
-zk._setLoading = function (loading) {
-	if (loading) {
-		if (!zk.loading) {
-			zk.loading = true;
-			setTimeout(zk._loadProgress, 1500);
-		} else {
-			var n = document.getElementById("zk_loadcnt");
-			if (n) {
-				n.removeChild(n.firstChild);
-				n.appendChild(document.createTextNode(zk._jsque.length + 1));
-			}
-		}
-	} else {
-		zk.loading = false;
-		var n = document.getElementById("zk_loadprog");
-		if (n) n.parentNode.removeChild(n);
+/** Loads the specified style sheet (CSS).
+ * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
+ * unless http:// or https:// is specified
+ */
+zk.loadCSS = function (uri) {
+	var e = document.createElement("LINK");
+	e.rel = "stylesheet";
+	e.type = "text/css";
+	document.getElementsByTagName("HEAD")[0].appendChild(e);
+	if (uri.indexOf("://") < 0) {
+		if (uri.charAt(0) != '/') uri = '/' + uri;
+		uri = zk.getUpdateURI("/web/_zver" + zk.build + uri);
 	}
+	e.href = uri;
 };
-zk._loadProgress = function () {
-	if (zk.loading) {
-		var n = document.getElementById("zk_loadprog");
-		if (!n) //just in case
-			zk._newProgDlg("zk_loadprog",
-				'Loading (<span id="zk_loadcnt">1</span>)', 20, 20);
+/** Loads the specified JavaScript file directly.
+ * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
+ * unless http:// or https:// is specified
+ * @param fn the function to execute after loading. It is optional.
+ */
+zk.loadJS = function (uri, fn) {
+	var e = document.createElement("script");
+	e.type	= "text/javascript" ;
+	e.charset = "UTF-8";
+	document.getElementsByTagName("HEAD")[0].appendChild(e);
+	if (fn)
+		e.onload = e.onreadystatechange = function() {
+			if (!e.readyState || e.readyState == 'loaded') fn.apply();
+		};
+
+	if (uri.indexOf("://") < 0) {
+		if (uri.charAt(0) != '/') uri = '/' + uri;
+		uri = zk.getUpdateURI("/web/_zver" + zk.build + uri);
 	}
-}
+	e.src = uri;
+};
+
+/** Returns the proper URI.
+ * @param ignoreSessId whether not to append session ID.
+ */
+zk.getUpdateURI = function (uri, ignoreSessId) {
+	if (!uri) return zk_action;
+
+	if (uri.charAt(0) != '/') uri = '/' + uri;
+	var j = zk_action.lastIndexOf(';'), k = zk_action.lastIndexOf('?');
+	if (j < 0 && k < 0) return zk_action + uri;
+
+	if (k >= 0 && (j < 0 || k < j)) j = k;
+	uri = zk_action.substring(0, j) + uri;
+	return ignoreSessId ? uri: uri + zk_action.substring(j);
+};
+
+/** Returns the type of a node without module. */
+zk.getCompType = function (n) {
+	if (n.getAttribute) {
+		var type = n.getAttribute("zk_type");
+		if (type) {
+			var j = type.lastIndexOf('.');
+			return j >= 0 ? type.substring(j + 1): type;
+		}
+	}
+	return null;
+};
 
 //-- progress --//
 /** Turn on the progressing dialog after the specified timeout. */
@@ -462,22 +456,27 @@ zk.tagName = function (el) {
 	return el && el.tagName ? el.tagName.toUpperCase(): "";
 };
 
+/** Pause milliseconds. */
+zk.pause = function (millis) {
+	if (millis) {
+		var d = new Date(), n;
+		do {
+			n = new Date();
+		} while (n - d < millis);
+	}
+};
+
 //-- bootstrapping --//
 if (!zk._modules) {
+	zk.loading = 0;
 	zk._modules = {};
-	zk._jsque = new Array();
 	zk._initfns = new Array(); //used by addInit
 	zk._initcmps = new Array(); //an array of comp list to init
 
 	var oldol = window.onload;
 	window.onload = function () {
-		zk.load("ext.prototype.prototype");
-		zk.load("ext.aculo.effects");
-		zk.load("ext.aculo.dragdrop");
-		zk.load("zk.html.lang.mesg*");
-		zk.load("zk.html.common");
-		zk.load("zk.html.au");
-		zk.load("js/zk/datelabel.js.dsp");
+		//It is possible to move javascript defined in zul's language.xml
+		//However, IE has bug to order JavaScript properly if zk._load is used
 
 		zk.progress(600);
 		if (oldol && oldol.apply) zk.addInit(oldol);
@@ -486,3 +485,4 @@ if (!zk._modules) {
 		zk.initAt(document.body);
 	};
 }
+
