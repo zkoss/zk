@@ -1,6 +1,6 @@
 D.ON=true
 domain=my-host.my-domain.com
-share.remote=//time/potix/rd/java/share
+share.remote=//time/potix/rd/java/share/zk
 share.local=~/prj/share
 javadoc=//time/download/javadoc/i3
 unzip.enabled
