@@ -9,4 +9,4 @@ optimize=true
 jboss.deploy=potix/deploy1
 start.service=Apache Tomcat
 version=1.2.0
-sub-version=
+sub-version=Nightly
