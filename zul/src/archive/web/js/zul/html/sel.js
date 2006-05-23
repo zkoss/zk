@@ -1,7 +1,7 @@
 /* sel.js
 
 {{IS_NOTE
-	$Id: sel.js,v 1.27 2006/05/15 16:27:30 tomyeh Exp $
+	$Id: sel.js,v 1.28 2006/05/23 02:35:15 tomyeh Exp $
 	Purpose:
 		zk.Selectable
 	Description:
@@ -258,7 +258,7 @@ zk.Selectable.prototype = {
 	doclick: function (evt, target) {
 		if (zkSel._shallIgnoreEvent(target)
 		|| (zk.tagName(target) != "TR" && target.onclick)
-		|| zk.tagName(target) == "A")
+		|| (zk.tagName(target) == "A" && !target.id.endsWith("!sel")))
 			return;
 
 		var checkmark = target.id && target.id.endsWith("!cm");
