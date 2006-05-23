@@ -1,7 +1,7 @@
 /* LanguageDefinition.java
 
 {{IS_NOTE
-	$Id: LanguageDefinition.java,v 1.19 2006/04/17 07:10:24 tomyeh Exp $
+	$Id: LanguageDefinition.java,v 1.20 2006/05/23 11:05:51 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -50,7 +50,7 @@ import com.potix.zk.ui.ext.Macro;
  * A definition of a language, such as xul.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.19 $ $Date: 2006/04/17 07:10:24 $
+ * @version $Revision: 1.20 $ $Date: 2006/05/23 11:05:51 $
  */
 public class LanguageDefinition implements Evaluator {
 	private static final Log log = Log.lookup(LanguageDefinition.class);
@@ -400,6 +400,9 @@ public class LanguageDefinition implements Evaluator {
 	public void initMacroDefinition(ComponentDefinition compdef) {
 		if (_macrotmpl == null)
 			throw new UiException("No macro component is supported by "+this);
+		if (!compdef.isMacro())
+			throw new UiException("Not macro component: "+compdef);
+
 		compdef.addMold("default", _macrotmpl.moldURI);
 		compdef.setImplementationClass(_macrotmpl.klass);
 	}

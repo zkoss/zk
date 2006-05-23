@@ -1,7 +1,7 @@
 /* AbstractWebApp.java
 
 {{IS_NOTE
-	$Id: AbstractWebApp.java,v 1.2 2006/05/18 11:20:31 tomyeh Exp $
+	$Id: AbstractWebApp.java,v 1.3 2006/05/23 11:05:50 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -32,7 +32,7 @@ import com.potix.zk.ui.sys.DesktopCache;
  * A skeletal implementation of {@link WebApp}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/18 11:20:31 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/23 11:05:50 $
  */
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private final Configuration _config;
@@ -52,7 +52,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	public final String getVersion() {
-		return "1.2.0";
+		return "1.2.0 Nightly";
 	}
 
 	public final Configuration getConfiguration() {

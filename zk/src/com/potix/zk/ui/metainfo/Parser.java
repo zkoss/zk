@@ -1,7 +1,7 @@
 /* Parser.java
 
 {{IS_NOTE
-	$Id: Parser.java,v 1.8 2006/05/22 16:13:22 tomyeh Exp $
+	$Id: Parser.java,v 1.9 2006/05/23 11:05:52 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -57,7 +57,7 @@ import com.potix.zk.ui.util.impl.ConditionImpl;
 /**
  * Used to prase the ZUL file
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/22 16:13:22 $
+ * @version $Revision: 1.9 $ $Date: 2006/05/23 11:05:52 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);
@@ -234,21 +234,29 @@ public class Parser {
 				clsnm.indexOf("${") >= 0 ? //class supports EL
 					new InitiatorDefinition(clsnm, args):
 					new InitiatorDefinition(locateClass(clsnm), args));
-		} else if ("component".equals(target)) { //define a component
+		} else if ("component".equals(target)) { //declare a component
 			final String name = (String)params.remove("name");
 			if (isEmpty(name)) throw new UiException("name is required, "+pi.getLocator());
 			noEL("name", name, pi); //note: macro-uri supports EL
 
 			final String macroUri = (String)params.remove("macro-uri");
 			final String extend = (String)params.remove("extend");
+			final String clsnm = (String)params.remove("class");
 			final ComponentDefinition compdef;
 			if (macroUri != null) {
 				if (log.finerable()) log.finer("macro component definition: "+name);
-				if (name.indexOf("${") >= 0) throw new UiException("Macro name cannot be EL expression, "+pi.getLocator());
+
+				noEL("macro-uri", macroUri, pi);
+					//no EL because pagedef must be loaded to resolve
+					//the impl class before creating an instance of macro
 
 				compdef = new ComponentDefinition(null, name, macroUri);
 				pgdef.getLanguageDefinition().initMacroDefinition(compdef);
-			} else if (extend != null && !"false".equals(extend)) {
+				if (!isEmpty(clsnm)) {
+					noEL("class", clsnm, pi);
+					compdef.setImplementationClass(locateClass(clsnm));
+				}
+			} else if (extend != null && !"false".equals(extend)) { //extend
 				if (log.finerable()) log.finer("Override component definition: "+name);
 
 				noEL("extend", extend, pi);
@@ -261,7 +269,6 @@ public class Parser {
 
 				compdef = (ComponentDefinition)ref.clone();
 				compdef.setLanguageDefinition(null);
-				final String clsnm = (String)params.remove("class");
 				if (!isEmpty(clsnm)) {
 					noEL("class", clsnm, pi);
 					compdef.setImplementationClass(locateClass(clsnm));
@@ -269,7 +276,6 @@ public class Parser {
 			} else {
 				if (log.finerable()) log.finer("Add component definition: name="+name);
 
-				final String clsnm = (String)params.remove("class");
 				if (isEmpty(clsnm)) throw new UiException("class is required");
 				noEL("class", clsnm, pi);
 				compdef = new ComponentDefinition(null, name, locateClass(clsnm));
@@ -287,16 +293,14 @@ public class Parser {
 				compdef.addProperty(
 					(String)me.getKey(), (String)me.getValue(), null);
 			}
-		} else if ("macro-definition".equals(target)) { //
-			
 		} else {
 			log.warning("Unknown processing instruction: "+target);
 		}
 	}
-	private static void noEL(String nm, String val, ProcessingInstruction pi)
+	private static void noEL(String nm, String val, Item item)
 	throws UiException {
 		if (val != null && val.indexOf("${") >= 0)
-			throw new UiException(nm+" does not support EL expressions, "+pi.getLocator());
+			throw new UiException(nm+" does not support EL expressions, "+item.getLocator());
 	}
 
 	/** Parses the specified elements.
@@ -441,8 +445,10 @@ public class Parser {
 
 				//process use first because addProperty needs it
 				final String use = el.getAttribute("use");
-				if (!isEmpty(use))
+				if (!isEmpty(use)) {
+					noEL("use", use, el);
 					instdef.setImplementationClass(locateClass(use));
+				}
 			}
 
 			String ifc = null, unless = null, forEach = null;

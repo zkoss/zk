@@ -1,7 +1,7 @@
 /* DefinitionLoaders.java
 
 {{IS_NOTE
-	$Id: DefinitionLoaders.java,v 1.19 2006/04/17 07:10:24 tomyeh Exp $
+	$Id: DefinitionLoaders.java,v 1.20 2006/05/23 11:05:51 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -56,7 +56,7 @@ import com.potix.zk.ui.metainfo.ComponentDefinition;
  * Utilities to load language definitions.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.19 $ $Date: 2006/04/17 07:10:24 $
+ * @version $Revision: 1.20 $ $Date: 2006/05/23 11:05:51 $
  */
 public class DefinitionLoaders {
 	private static final Log log = Log.lookup(DefinitionLoaders.class);
@@ -226,12 +226,19 @@ public class DefinitionLoaders {
 			final Element el = (Element)it.next();
 			final String name =
 				IDOMs.getRequiredElementValue(el, "component-name");
+
 			final String macroUri = el.getElementValue("macro-uri", true);
 			final ComponentDefinition compdef;
 			if (macroUri != null && macroUri.length() != 0) {
 				if (log.finerable()) log.finer("macro component definition: "+name);
 
 				compdef = new ComponentDefinition(langdef, name, macroUri);
+				final String clsnm = el.getElementValue("component-class", true);
+				if (clsnm != null && clsnm.length() > 0) {
+					noEL("component-class", clsnm, el);
+					compdef.setImplementationClass(locateClass(clsnm));
+				}
+
 				langdef.initMacroDefinition(compdef);
 				langdef.addComponentDefinition(compdef);
 			} else if (el.getElement("extend") != null) { //override
@@ -242,13 +249,16 @@ public class DefinitionLoaders {
 					throw new UiException("Unable to extend from a macro component, "+el.getLocator());
 
 				final String clsnm = el.getElementValue("component-class", true);
-				if (clsnm != null && clsnm.length() > 0)
+				if (clsnm != null && clsnm.length() > 0) {
+					noEL("component-class", clsnm, el);
 					compdef.setImplementationClass(locateClass(clsnm));
+				}
 			} else {
 				if (log.finerable()) log.finer("Add component definition: name="+name);
 
 				final String clsnm =
 					IDOMs.getRequiredElementValue(el, "component-class");
+				noEL("component-class", clsnm, el);
 				compdef = new ComponentDefinition(
 					langdef, name, locateClass(clsnm));
 				langdef.addComponentDefinition(compdef);
@@ -280,6 +290,11 @@ public class DefinitionLoaders {
 		} catch (ClassNotFoundException ex) {
 			throw new ClassNotFoundException("Not found: "+clsnm, ex);
 		}
+	}
+	private static void noEL(String nm, String val, Element el)
+	throws UiException {
+		if (val != null && val.indexOf("${") >= 0)
+			throw new UiException(nm+" does not support EL expressions, "+el.getLocator());
 	}
 	/** Parse the processing instructions. */
 	private static void parsePI(LanguageDefinition langdef, Document doc)
