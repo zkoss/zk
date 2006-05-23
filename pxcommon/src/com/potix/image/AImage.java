@@ -1,7 +1,7 @@
 /* AImage.java
 
 {{IS_NOTE
-	$Id: AImage.java,v 1.9 2006/04/25 02:40:53 tomyeh Exp $
+	$Id: AImage.java,v 1.10 2006/05/23 01:49:26 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -48,7 +48,7 @@ import com.potix.util.media.ContentTypes;
  * as polymorphic thru the {@link com.potix.util.media.Media} interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/04/25 02:40:53 $
+ * @version $Revision: 1.10 $ $Date: 2006/05/23 01:49:26 $
  */
 public class AImage implements Image {
 	private static final Log log = Log.lookup(AImage.class);

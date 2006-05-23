@@ -1,7 +1,7 @@
 /* AAudio.java
 
 {{IS_NOTE
-	$Id: AAudio.java,v 1.5 2006/04/25 02:40:54 tomyeh Exp $
+	$Id: AAudio.java,v 1.6 2006/05/23 01:49:27 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -41,7 +41,7 @@ import com.potix.util.media.ContentTypes;
  * as polymorphic thru the {@link com.potix.util.media.Media} interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/04/25 02:40:54 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/23 01:49:27 $
  */
 public class AAudio implements Audio {
 	/** The raw data in byte array.

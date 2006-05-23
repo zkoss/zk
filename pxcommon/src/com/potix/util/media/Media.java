@@ -1,7 +1,7 @@
 /* Media.java
 
 {{IS_NOTE
-	$Id: Media.java,v 1.8 2006/04/25 02:40:54 tomyeh Exp $
+	$Id: Media.java,v 1.9 2006/05/23 01:49:27 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +30,7 @@ import java.io.InputStream;
  * by servlets and many other codes.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/04/25 02:40:54 $
+ * @version $Revision: 1.9 $ $Date: 2006/05/23 01:49:27 $
  */
 public interface Media {
 	/** Returns whether the format of tis content is binary or text-based.
