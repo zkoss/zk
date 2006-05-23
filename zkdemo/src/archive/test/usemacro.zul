@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?component name="username" macro-uri="macro.zul" class="Username"?>
+
+<!--
+usemacro.zul
+
+{{IS_NOTE
+	$Id: usemacro.zul,v 1.2 2006/05/23 11:05:52 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 22 18:02:40     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<username id="ua"/>
+	<username label="Account"/>
+	<button label="Add Row" onClick="ua.addRow(&quot;ID&quot;)"/>
+</window>

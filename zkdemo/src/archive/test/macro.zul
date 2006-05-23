@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+macro.zul
+
+{{IS_NOTE
+	$Id: macro.zul,v 1.2 2006/05/23 11:05:52 tomyeh Exp $
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 22 13:53:37     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<grid id="grid">
+	<rows>
+		<row>
+	${empty arg.label ? 'Username': arg.label}
+	<textbox/>
+		</row>
+	</rows>
+	</grid>
+
+	<!-- Notes:
+	 1) macro-method must be at the page level, so <zk> must be used
+	 2) self is the macro component when zscript is evaluated.
+	-->
+	<zscript>
+	public class Username extends HtmlMacroComponent {
+		void addRow(String label) {
+			Row row = new Row(grid.getRows());
+			new Label(label).setParent(row);
+			new Textbox().setParent(row);
+		}
+	};
+	</zscript>
+</zk>
