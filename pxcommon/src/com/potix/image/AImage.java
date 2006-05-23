@@ -157,17 +157,17 @@ public class AImage implements Image {
 	/** Always throws IllegalStateException.
 	 */
 	public final String getStringData() {
-		throw new IllegalStateException();
+		throw new IllegalStateException("Use getByteData() instead");
 	}
-	/** Always throws IllegalStateException.
+	/** An input stream on top of {@link #getByteData}.
 	 */
 	public final InputStream getStreamData() {
-		throw new IllegalStateException();
+		return new ByteArrayInputStream(_data);
 	}
 	/** Always throws IllegalStateException.
 	 */
 	public final Reader getReaderData() {
-		throw new IllegalStateException();
+		throw new IllegalStateException("Use getStreamData() instead");
 	}
 
 	public final String getName() {

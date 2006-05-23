@@ -21,6 +21,8 @@ package com.potix.util.media;
 
 import java.io.Reader;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.io.ByteArrayInputStream;
 
 /**
  * A media object holding content such PDF, HTML, DOC or XLS content.
@@ -150,20 +152,29 @@ public class AMedia implements Media {
 		return _bindata != null || _strdata != null;
 	}
 	public byte[] getByteData() {
-		if (_bindata == null) throw new IllegalStateException();
+		if (_bindata == null) throw newIllegalStateException();
 		return _bindata;
 	}
 	public String getStringData() {
-		if (_strdata == null) throw new IllegalStateException();
+		if (_strdata == null) throw newIllegalStateException();
 		return _strdata;
 	}
 	public InputStream getStreamData() {
-		if (_isdata == null) throw new IllegalStateException();
-		return _isdata;
+		if (_isdata != null) return _isdata;
+		if (_bindata != null) return new ByteArrayInputStream(_bindata);
+		throw newIllegalStateException();
 	}
 	public Reader getReaderData() {
-		if (_rddata == null) throw new IllegalStateException();
-		return _rddata;
+		if (_rddata != null) return _rddata;
+		if (_strdata != null) return new StringReader(_strdata);
+		throw newIllegalStateException();
+	}
+	private IllegalStateException newIllegalStateException() {
+		return new IllegalStateException(
+			"Use get"
+			+(_bindata != null ? "Byte": _strdata != null ? "String":
+				_isdata != null ? "Stream": "Reader")
+			+ "Data() instead");
 	}
 
 	public String getName() {

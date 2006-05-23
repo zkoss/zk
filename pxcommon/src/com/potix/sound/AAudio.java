@@ -181,25 +181,29 @@ public class AAudio implements Audio {
 	}
 	public byte[] getByteData() {
 		if (_data == null)
-			throw new IllegalStateException("Use getStreamData instead");
+			throw new IllegalStateException("Use getStreamData() instead");
 		return _data;
 	}
 	/** Always throws IllegalStateException.
 	 */
 	public final String getStringData() {
-		throw new IllegalStateException();
+		throw newIllegalStateException();
 	}
 	/** Always throws IllegalStateException.
 	 */
 	public InputStream getStreamData() {
-		if (_isdata == null)
-			throw new IllegalStateException("Use getBinaryData instead");
-		return _isdata;
+		if (_isdata != null) return _isdata;
+		return new ByteArrayInputStream(_data);
 	}
 	/** Always throws IllegalStateException.
 	 */
 	public final Reader getReaderData() {
-		throw new IllegalStateException();
+		throw newIllegalStateException();
+	}
+	private final IllegalStateException newIllegalStateException() {
+		return new IllegalStateException(
+			_isdata != null ? "Use getStreamData() instead":
+				"Use getByteData() instead");
 	}
 
 	public final String getName() {
