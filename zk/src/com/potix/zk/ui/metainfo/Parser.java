@@ -1,7 +1,7 @@
 /* Parser.java
 
 {{IS_NOTE
-	$Id: Parser.java,v 1.10 2006/05/24 13:47:18 tomyeh Exp $
+	$Id: Parser.java,v 1.12 2006/05/24 14:15:33 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -57,7 +57,7 @@ import com.potix.zk.ui.util.impl.ConditionImpl;
 /**
  * Used to prase the ZUL file
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/24 13:47:18 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/24 14:15:33 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);
@@ -240,7 +240,7 @@ public class Parser {
 			noEL("name", name, pi); //note: macro-uri supports EL
 
 			final String macroUri = (String)params.remove("macro-uri");
-			final String extend = (String)params.remove("extend");
+			final String extds = (String)params.remove("extends");
 			final String clsnm = (String)params.remove("class");
 			ComponentDefinition compdef;
 			if (macroUri != null) {
@@ -257,18 +257,16 @@ public class Parser {
 					compdef.setImplementationClass(clsnm);
 						//Resolve later since might defined in zscript
 				}
-			} else if (extend != null && !"false".equals(extend)) { //extend
+			} else if (extds != null) { //extends
 				if (log.finerable()) log.finer("Override component definition: "+name);
 
-				noEL("extend", extend, pi);
-				if (extend.length() != 0 && !"true".equals(extend))
-					throw new UiException("Unknown extend: "+extend+", "+pi.getLocator());
+				noEL("extends", extds, pi);
 				final ComponentDefinition ref = pgdef.getLanguageDefinition()
-					.getComponentDefinition(name);
+					.getComponentDefinition(extds);
 				if (ref.isMacro())
 					throw new UiException("Unable to extend from a macro component, "+pi.getLocator());
 
-				compdef = (ComponentDefinition)ref.clone();
+				compdef = (ComponentDefinition)ref.clone(name);
 				compdef.setLanguageDefinition(null);
 				if (!isEmpty(clsnm)) {
 					noEL("class", clsnm, pi);

@@ -1,7 +1,7 @@
 /* DefinitionLoaders.java
 
 {{IS_NOTE
-	$Id: DefinitionLoaders.java,v 1.20 2006/05/23 11:05:51 tomyeh Exp $
+	$Id: DefinitionLoaders.java,v 1.21 2006/05/24 14:14:41 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -56,7 +56,7 @@ import com.potix.zk.ui.metainfo.ComponentDefinition;
  * Utilities to load language definitions.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.20 $ $Date: 2006/05/23 11:05:51 $
+ * @version $Revision: 1.21 $ $Date: 2006/05/24 14:14:41 $
  */
 public class DefinitionLoaders {
 	private static final Log log = Log.lookup(DefinitionLoaders.class);
@@ -241,12 +241,21 @@ public class DefinitionLoaders {
 
 				langdef.initMacroDefinition(compdef);
 				langdef.addComponentDefinition(compdef);
-			} else if (el.getElement("extend") != null) { //override
+			} else if (el.getElement("extends") != null) { //override
 				if (log.finerable()) log.finer("Override component definition: "+name);
 
-				compdef = langdef.getComponentDefinition(name);
-				if (compdef.isMacro())
+				final String extnm = el.getElementValue("extends", true);
+				final ComponentDefinition ref =
+					langdef.getComponentDefinition(extnm);
+				if (ref.isMacro())
 					throw new UiException("Unable to extend from a macro component, "+el.getLocator());
+
+				if (extnm.equals(name)) {
+					compdef = ref;
+				} else {
+					compdef = ref.clone(name);
+					langdef.addComponentDefinition(compdef);
+				}
 
 				final String clsnm = el.getElementValue("component-class", true);
 				if (clsnm != null && clsnm.length() > 0) {

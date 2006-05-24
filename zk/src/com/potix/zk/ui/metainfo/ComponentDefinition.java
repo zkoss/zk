@@ -1,7 +1,7 @@
 /* ComponentDefinition.java
 
 {{IS_NOTE
-	$Id: ComponentDefinition.java,v 1.10 2006/05/24 13:47:18 tomyeh Exp $
+	$Id: ComponentDefinition.java,v 1.11 2006/05/24 14:14:40 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -45,11 +45,11 @@ import com.potix.zk.ui.sys.ComponentCtrl;
  * of a component.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/24 13:47:18 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/24 14:14:40 $
  * @see LanguageDefinition
  */
 public class ComponentDefinition implements Cloneable {
-	private final String _name;
+	private String _name;
 	private LanguageDefinition _langdef;
 	/** Either String or Class. */
 	private Object _cls;
@@ -320,6 +320,17 @@ public class ComponentDefinition implements Cloneable {
 	private Object evaluate(Component comp, String expr, Class expectedType) {
 		return _langdef != null ? _langdef.evaluate(comp, expr, expectedType):
 			Executions.evaluate(comp, expr, expectedType);
+	}
+
+	/** Clones this definition and assins with the specified name.
+	 */
+	public ComponentDefinition clone(String name) {
+		if (name == null || name.length() == 0)
+			throw new IllegalArgumentException("empty");
+
+		final ComponentDefinition cd = (ComponentDefinition)clone();
+		cd._name = name;
+		return cd;
 	}
 
 	//Object//
