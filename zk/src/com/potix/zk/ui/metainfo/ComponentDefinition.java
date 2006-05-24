@@ -1,7 +1,7 @@
 /* ComponentDefinition.java
 
 {{IS_NOTE
-	$Id: ComponentDefinition.java,v 1.9 2006/05/04 04:36:40 tomyeh Exp $
+	$Id: ComponentDefinition.java,v 1.10 2006/05/24 13:47:18 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,11 +28,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.LinkedList;
 
+import com.potix.lang.Classes;
+
+import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Condition;
 import com.potix.zk.ui.util.Evaluator;
+import com.potix.zk.ui.sys.PageCtrl;
 import com.potix.zk.ui.sys.ComponentCtrl;
 
 /**
@@ -41,13 +45,14 @@ import com.potix.zk.ui.sys.ComponentCtrl;
  * of a component.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/05/04 04:36:40 $
+ * @version $Revision: 1.10 $ $Date: 2006/05/24 13:47:18 $
  * @see LanguageDefinition
  */
 public class ComponentDefinition implements Cloneable {
 	private final String _name;
 	private LanguageDefinition _langdef;
-	private Class _cls;
+	/** Either String or Class. */
+	private Object _cls;
 	private Map _molds, _params;
 	private List _props;
 	private String _macroUri;
@@ -55,14 +60,6 @@ public class ComponentDefinition implements Cloneable {
 	/** A special definition representing the zk component. */
 	public final static ComponentDefinition ZK =
 		new ComponentDefinition(null, "zk", Component.class);;
-
-	/** Reserved words. */
-	/*private static final Set RESERVES = new HashSet(5);
-	static {
-		String[] resvs = new String[] {"zscript", "attribute", "zk"};
-		for (int j = 0; j < resvs.length; ++j)
-			RESERVES.add(resvs[j]);
-	}*/
 
 	/** Constructs a native component, i.e., a component implemented by
 	 * a Java class.
@@ -75,10 +72,9 @@ public class ComponentDefinition implements Cloneable {
 	Class cls) {
 		if (name == null)
 			throw new IllegalArgumentException("null name");
-		if (!Component.class.isAssignableFrom(cls))
+		if (cls != null && !Component.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException(cls+" must implement "+Component.class);
-		//if (RESERVES.contains(name))
-		//	throw new IllegalArgumentException("Reserved word cannot be used: "+name);
+			//cls might be assigned later
 
 		_langdef = langdef;
 		_name = name;
@@ -148,17 +144,55 @@ public class ComponentDefinition implements Cloneable {
 		return (String)evaluate(comp, _macroUri, String.class);
 	}
 
-	/** Returns the class that implements the component.
+	/** Resolves and returns the class that implements the component.
+	 *
+	 * <p>Unlike {@link #getImplementationClass}, this method will
+	 * resolve a class name (String) to a class (Class).
+	 *
+	 * @param page the page used to resolve the class name from its
+	 * namespace ({@link PageCtrl#getNamespace}).
+	 * @exception UiException if the class not found
 	 */
-	public Class getImplementationClass() {
+	public Class resolveImplementationClass(Page page) throws UiException {
+		if (_cls instanceof String) {
+			final String clsnm = (String)_cls;
+			try {
+				setImplementationClass(
+					((PageCtrl)page).getNamespace().getClass(clsnm));
+			} catch (ClassNotFoundException ex) {
+				throw new UiException("Class not found: "+clsnm, ex);
+			}
+		}
+		return (Class)_cls;
+	}
+	/** Returns the class (Class) or the class name (String) that
+	 * implements the component.
+	 */
+	public Object getImplementationClass() {
 		return _cls;
 	}
 	/** Sets the class to implements the component.
+	 *
+	 * <p>Note: currently, classes specified in lang.xml or lang-addon.xml
+	 * must be resolved when loading the files.
+	 * However, classes specified in a page (by use of class or use attributes)
+	 * might be resolved later because it might be defined by zscript.
 	 */
 	public void setImplementationClass(Class cls) {
 		if (!Component.class.isAssignableFrom(cls))
 			throw new UiException(Component.class.getName()+" must be implemented by "+cls);
 		_cls = cls;
+	}
+	/** Sets the class name to implements the component.
+	 * Unlike {@link #setImplementationClass(Class)}, the class won't
+	 * be resolved until {@link InstanceDefinition#newInstance} or {@link #getImplementationClass}
+	 * is used. In other words, the class can be provided later
+	 * (thru, usually, zscript).
+	 */
+	public void setImplementationClass(String clsnm) {
+		if (clsnm == null || clsnm.length() == 0)
+			throw new UiException("Non-empty class name is required");
+		_cls = clsnm;
 	}
 
 	/** Adds a mold.
@@ -204,8 +238,7 @@ public class ComponentDefinition implements Cloneable {
 	public void addProperty(String name, String value, Condition cond) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("name");
-		final Property prop =
-			new Property(getImplementationClass(), name, value, cond);
+		final Property prop = new Property(this, name, value, cond);
 		if (_props == null) {
 			synchronized (this) {
 				if (_props == null) {

@@ -1,7 +1,7 @@
 /* Parser.java
 
 {{IS_NOTE
-	$Id: Parser.java,v 1.9 2006/05/23 11:05:52 tomyeh Exp $
+	$Id: Parser.java,v 1.10 2006/05/24 13:47:18 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -57,7 +57,7 @@ import com.potix.zk.ui.util.impl.ConditionImpl;
 /**
  * Used to prase the ZUL file
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/05/23 11:05:52 $
+ * @version $Revision: 1.10 $ $Date: 2006/05/24 13:47:18 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);
@@ -177,7 +177,7 @@ public class Parser {
 		try {
 			return Classes.forNameByThread(clsnm);
 		} catch (ClassNotFoundException ex) {
-			throw new ClassNotFoundException("Not found: "+clsnm, ex);
+			throw new ClassNotFoundException("Class not found: "+clsnm, ex);
 		}
 	}
 
@@ -242,7 +242,7 @@ public class Parser {
 			final String macroUri = (String)params.remove("macro-uri");
 			final String extend = (String)params.remove("extend");
 			final String clsnm = (String)params.remove("class");
-			final ComponentDefinition compdef;
+			ComponentDefinition compdef;
 			if (macroUri != null) {
 				if (log.finerable()) log.finer("macro component definition: "+name);
 
@@ -254,7 +254,8 @@ public class Parser {
 				pgdef.getLanguageDefinition().initMacroDefinition(compdef);
 				if (!isEmpty(clsnm)) {
 					noEL("class", clsnm, pi);
-					compdef.setImplementationClass(locateClass(clsnm));
+					compdef.setImplementationClass(clsnm);
+						//Resolve later since might defined in zscript
 				}
 			} else if (extend != null && !"false".equals(extend)) { //extend
 				if (log.finerable()) log.finer("Override component definition: "+name);
@@ -271,14 +272,18 @@ public class Parser {
 				compdef.setLanguageDefinition(null);
 				if (!isEmpty(clsnm)) {
 					noEL("class", clsnm, pi);
-					compdef.setImplementationClass(locateClass(clsnm));
+					compdef.setImplementationClass(clsnm);
+						//Resolve later since might defined in zscript
 				}
 			} else {
 				if (log.finerable()) log.finer("Add component definition: name="+name);
 
 				if (isEmpty(clsnm)) throw new UiException("class is required");
 				noEL("class", clsnm, pi);
-				compdef = new ComponentDefinition(null, name, locateClass(clsnm));
+
+				compdef = new ComponentDefinition(null, name, (Class)null);
+				compdef.setImplementationClass(clsnm);
+					//Resolve later since might defined in zscript
 			}
 
 			pgdef.addComponentDefinition(compdef);
@@ -447,7 +452,8 @@ public class Parser {
 				final String use = el.getAttribute("use");
 				if (!isEmpty(use)) {
 					noEL("use", use, el);
-					instdef.setImplementationClass(locateClass(use));
+					instdef.setImplementationClass(use);
+						//Resolve later since might defined in zscript
 				}
 			}
 

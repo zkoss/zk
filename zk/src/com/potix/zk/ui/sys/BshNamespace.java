@@ -1,7 +1,7 @@
 /* BshNamespace.java
 
 {{IS_NOTE
-	$Id: BshNamespace.java,v 1.1 2006/04/10 09:19:40 tomyeh Exp $
+	$Id: BshNamespace.java,v 1.2 2006/05/24 13:47:19 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +28,7 @@ import com.potix.zk.ui.UiException;
  * An implementation of {@link Namespace} on top of BeanShell.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/04/10 09:19:40 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/24 13:47:19 $
  */
 public class BshNamespace implements Namespace {
 	private Namespace _parent;
@@ -47,6 +47,17 @@ public class BshNamespace implements Namespace {
 	}
  
  	//-- Namespace --//
+	public Class getClass(String clsnm) throws ClassNotFoundException {
+		try {
+			final Class cls = _ns.getClass(clsnm);
+			if (cls == null)
+				throw new ClassNotFoundException("Not found: "+clsnm);
+			return cls;
+		} catch (UtilEvalError ex) {
+			throw new ClassNotFoundException("Unable to load "+clsnm);
+		}
+			
+	}
  	public Object getVariable(String name, boolean local) {
 		final NameSpace oldp = local ? _ns.getParent(): null;
 		if (oldp != null) _ns.setParent(null); //to avoid recusrive

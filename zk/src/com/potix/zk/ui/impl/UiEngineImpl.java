@@ -1,7 +1,7 @@
 /* UiEngineImpl.java
 
 {{IS_NOTE
-	$Id: UiEngineImpl.java,v 1.11 2006/05/15 02:13:40 tomyeh Exp $
+	$Id: UiEngineImpl.java,v 1.12 2006/05/24 13:47:17 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -60,7 +60,7 @@ import com.potix.zk.au.*;
  * An implementation of {@link UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/15 02:13:40 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/24 13:47:17 $
  */
 public class UiEngineImpl implements UiEngine {
 	private static final Log log = Log.lookup(UiEngineImpl.class);
@@ -308,7 +308,7 @@ public class UiEngineImpl implements UiEngine {
 		if (ComponentDefinition.ZK == childdef.getComponentDefinition()) {
 			return execCreate(page, childdef, parent);
 		} else {
-			final Component child = childdef.newInstance();
+			final Component child = childdef.newInstance(page);
 
 			if (parent != null) child.setParent(parent);
 			else child.setPage(page);

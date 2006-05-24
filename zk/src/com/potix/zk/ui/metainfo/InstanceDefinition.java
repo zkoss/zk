@@ -1,7 +1,7 @@
 /* InstanceDefinition.java
 
 {{IS_NOTE
-	$Id: InstanceDefinition.java,v 1.16 2006/04/18 13:37:51 tomyeh Exp $
+	$Id: InstanceDefinition.java,v 1.17 2006/05/24 13:47:18 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -51,7 +51,7 @@ import com.potix.zk.ui.util.impl.ForEachImpl;
  * (such as thru another ZUL page).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.16 $ $Date: 2006/04/18 13:37:51 $
+ * @version $Revision: 1.17 $ $Date: 2006/05/24 13:47:18 $
  * @see PageDefinition
  */
 public class InstanceDefinition extends ComponentDefinition
@@ -229,10 +229,10 @@ implements Condition {
 	 * this method manually or create a component manually.
 	 * You could invoke it if really necessary.
 	 */
-	public Component newInstance() {
+	public Component newInstance(Page page) {
 		final Component comp;
 		try {
-			comp = (Component)getImplementationClass().newInstance();
+			comp = (Component)resolveImplementationClass(page).newInstance();
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -257,9 +257,13 @@ implements Condition {
 	}
 
 	//-- super --//
-	public Class getImplementationClass() {
-		final Class cls = super.getImplementationClass();
+	public Object getImplementationClass() {
+		final Object cls = super.getImplementationClass();
 		return cls != null ? cls: _compdef.getImplementationClass();
+	}
+	public Class resolveImplementationClass(Page page) {
+		final Class cls = super.resolveImplementationClass(page);
+		return cls != null ? cls: _compdef.resolveImplementationClass(page);
 	}
 	public boolean hasMold(String name) {
 		return _compdef != null && _compdef.hasMold(name);

@@ -1,7 +1,7 @@
 /* Property.java
 
 {{IS_NOTE
-	$Id: Property.java,v 1.4 2006/05/08 05:58:44 tomyeh Exp $
+	$Id: Property.java,v 1.5 2006/05/24 13:47:18 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -37,79 +37,86 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  * A property of a definition.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/08 05:58:44 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/24 13:47:18 $
  */
 public class Property implements Condition {
 	private static final Log log = Log.lookup(Property.class);
 
+	private final ComponentDefinition _compdef;
+	private final String _name;
+	private final String _value;
+	private final Condition _cond;
+	/** Used to optimize {@link #resolve}. */
+	private Class _lastcls;
+	/** Value after coerced; used only if !_bExpr */
+	private Object _coercedVal;
 	/** The method, or null if more than two methods are found
 	 * (and use {@link #_mtds} in this case).
 	 */
-	private final Method _mtd;
+	private Method _mtd;
 	/** Used more than two methods are found, or null if only one method
 	 * (and use {@link #_mtd} in this case).
 	 */
-	private final Method[] _mtds;
-	private final String _name;
-	private final Object _value;
-	private final Condition _cond;
+	private Method[] _mtds;
 	/** Whether expression is specified. */
 	private final boolean _bExpr;
 
-	/** A constructor
+	/** Constructs a property with a class that is known in advance.
 	 */
-	public Property(Class cls, String name, String value, Condition cond) {
+	public Property(ComponentDefinition compdef, String name,
+	String value, Condition cond) {
+		if (compdef == null || name == null)
+			throw new IllegalArgumentException();
+		_compdef = compdef;
 		_name = name;
 		_cond = cond;
+		_value = value;
 		_bExpr = value != null && value.indexOf("${") >= 0;
-
-		final String mtdnm = Classes.toMethodName(name, "set");
+	}
+	private final void resolve(Class cls) {
+		final String mtdnm = Classes.toMethodName(_name, "set");
 		if (_bExpr) {
-			final Method[] mtds =
-				Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
-			if (mtds.length == 0) {
+			_mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
+			if (_mtds.length == 0) {
 				if (!DynamicPropertied.class.isAssignableFrom(cls))
 					throw new UiException("Method "+mtdnm+" not found for "+cls); 
-				_mtd = null; _mtds = null;
-			} else {
-				if (mtds.length == 1) {
-					_mtd = mtds[0];
-					_mtds = null;
-				} else {
-					_mtd = null;
-					_mtds = mtds;
-				}
+				_mtds = null;
+			} else if (_mtds.length == 1) {
+				_mtd = _mtds[0];
+				_mtds = null;
 			}
-			_value = value;
 		} else {
 		//Note: String has higher priority
-			Object val;
-			Method mtd;
 			try {
-				mtd = Classes.getCloseMethod(
+				_mtd = Classes.getCloseMethod(
 					cls, mtdnm, new Class[] {String.class});
-				val = value;
+				_coercedVal = _value;
 			} catch (NoSuchMethodException ex) {
 				try {
-					mtd = Classes.getCloseMethod(
+					_mtd = Classes.getCloseMethod(
 						cls, mtdnm, new Class[] {null});
-					val = Classes.coerce(mtd.getParameterTypes()[0], value);
+					_coercedVal =
+						Classes.coerce(_mtd.getParameterTypes()[0], _value);
 				} catch (NoSuchMethodException e2) {
 					if (!DynamicPropertied.class.isAssignableFrom(cls))
 						throw new UiException("Method not found: "+mtdnm);
-					mtd = null;
-					val = value;
+					_mtd = null;
+					_coercedVal = _value;
 				}
 			}
-			_mtd = mtd;
-			_mtds = null;
-			_value = val;
 		}
 	}
 
 	/** Assigns the value of this memeber to the specified component.
 	 */
 	public void assign(Component comp, Evaluator eval) {
+		final Class cls =
+			_compdef.resolveImplementationClass(comp.getPage());
+		if (_lastcls != cls) {
+			resolve(cls);
+			_lastcls = cls;
+		}
+
 		try {
 			//Note: if _mtd and _mtds are both null, it must be dyna-attr
 			//However, if dyna-attr, _mtd or _mtds might not be null
@@ -118,9 +125,9 @@ public class Property implements Condition {
 
 			Object val;
 			if (_bExpr) {
-				val = eval.evaluate(comp, (String)_value, type);
+				val = eval.evaluate(comp, _value, type);
 			} else {
-				val = _value;
+				val = _coercedVal;
 			}
 
 			final Method mtd;

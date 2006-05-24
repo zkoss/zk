@@ -1,7 +1,7 @@
 /* Namespace.java
 
 {{IS_NOTE
-	$Id: Namespace.java,v 1.1 2006/04/10 09:19:41 tomyeh Exp $
+	$Id: Namespace.java,v 1.2 2006/05/24 13:47:19 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -31,9 +31,12 @@ package com.potix.zk.ui.sys;
  * interpreter).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/04/10 09:19:41 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/24 13:47:19 $
  */
 public interface Namespace {
+	/** Returns the class defined in the beanshell.
+	 */
+	public Class getClass(String clsnm) throws ClassNotFoundException;
 	/** Returns the variable of the specified name, or null if not
 	 * defined.
 	 * @param local whether not to search its ancestor.

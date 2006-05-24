@@ -1,7 +1,7 @@
 /* LanguageDefinition.java
 
 {{IS_NOTE
-	$Id: LanguageDefinition.java,v 1.20 2006/05/23 11:05:51 tomyeh Exp $
+	$Id: LanguageDefinition.java,v 1.21 2006/05/24 13:47:18 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -50,7 +50,7 @@ import com.potix.zk.ui.ext.Macro;
  * A definition of a language, such as xul.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.20 $ $Date: 2006/05/23 11:05:51 $
+ * @version $Revision: 1.21 $ $Date: 2006/05/24 13:47:18 $
  */
 public class LanguageDefinition implements Evaluator {
 	private static final Log log = Log.lookup(LanguageDefinition.class);
@@ -74,7 +74,7 @@ public class LanguageDefinition implements Evaluator {
 	private final String _ns;
 	/** A map of (String name, ComponentDefinition). */
 	private final Map _compdefs = new HashMap();
-	/** A map of (Class cls, ComponentDefinition). */
+	/** A map of (String clsnm, ComponentDefinition). */
 	private final Map _compdefsByClass = new HashMap();
 	/** The component name for dynamic tags. */
 	private String _dyntagnm;
@@ -279,7 +279,7 @@ public class LanguageDefinition implements Evaluator {
 		synchronized (_compdefsByClass) {
 			for (Class cls = klass; cls != null; cls = cls.getSuperclass()) {
 				final ComponentDefinition compdef =
-					(ComponentDefinition)_compdefsByClass.get(cls);
+					(ComponentDefinition)_compdefsByClass.get(cls.getName());
 				if (compdef != null) return compdef;
 			}
 		}
@@ -290,13 +290,15 @@ public class LanguageDefinition implements Evaluator {
 	 */
 	/*package*/
 	ComponentDefinition addComponentDefinition(ComponentDefinition compdef) {
+		final Object implcls = compdef.getImplementationClass();
 		ComponentDefinition old;
 		synchronized (_compdefsByClass) {
-			old = (ComponentDefinition)_compdefsByClass
-					.put(compdef.getImplementationClass(), compdef);
+			old = (ComponentDefinition)_compdefsByClass.put(
+				implcls instanceof Class ?
+					((Class)implcls).getName(): implcls, compdef);
 		}
 		if (old != null)
-			log.info(old+" is overwriten by "+compdef+" because they use the same class: "+compdef.getImplementationClass());
+			log.info(old+" is overwriten by "+compdef+" because they use the same class: "+implcls);
 
 		final String nm = compdef.getName();
 		synchronized (_compdefs) {

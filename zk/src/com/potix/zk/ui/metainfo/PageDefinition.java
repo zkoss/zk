@@ -1,7 +1,7 @@
 /* PageDefinition.java
 
 {{IS_NOTE
-	$Id: PageDefinition.java,v 1.18 2006/04/25 06:58:38 tomyeh Exp $
+	$Id: PageDefinition.java,v 1.19 2006/05/24 13:47:18 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -50,7 +50,7 @@ import com.potix.zk.ui.sys.RequestInfo;
  * It represents a ZUL page.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/04/25 06:58:38 $
+ * @version $Revision: 1.19 $ $Date: 2006/05/24 13:47:18 $
  * @see InstanceDefinition
  * @see ComponentDefinition
  */
@@ -65,6 +65,8 @@ public class PageDefinition extends InstanceDefinition {
 		_roInitdefs = Collections.unmodifiableList(_initdefs);
 	/** A map of component definition defined in this page. */
 	private Map _compdefs;
+	/** Map(String clsnm, ComponentDefinition compdef). */
+	private Map _compdefsByClass;
 
 	/**
 	 * @param langdef the default language which is used if no namespace
@@ -120,17 +122,30 @@ public class PageDefinition extends InstanceDefinition {
 		if (_compdefs == null) {
 			synchronized (this) {
 				if (_compdefs == null) {
-					final Map compdefs = new HashMap(5);
-					compdefs.put(compdef.getName(), compdef);
-					compdefs.put(compdef.getImplementationClass(), compdef);
-					_compdefs = compdefs;
+					final Map defs = new HashMap(5),
+						defsByClass = new HashMap(5);
+					defs.put(compdef.getName(), compdef);
+					_compdefs = defs;
+
+					final Object implcls = compdef.getImplementationClass();
+					if (implcls instanceof Class)
+						defsByClass.put(((Class)implcls).getName(), compdef);
+					else //String
+						defsByClass.put(implcls, compdef);
+					_compdefsByClass = defsByClass;
 					return; //done
 				}
 			}
 		}
 		synchronized (_compdefs) {
 			_compdefs.put(compdef.getName(), compdef);
-			_compdefs.put(compdef.getImplementationClass(), compdef);
+		}
+		synchronized (_compdefsByClass) {
+			final Object implcls = compdef.getImplementationClass();
+			if (implcls instanceof Class)
+				_compdefsByClass.put(((Class)implcls).getName(), compdef);
+			else //String
+				_compdefsByClass.put(implcls, compdef);
 		}
 	}
 	/** Returns the component defintion of the specified name, or null
@@ -146,12 +161,12 @@ public class PageDefinition extends InstanceDefinition {
 	 * if not found.
 	 */
 	public ComponentDefinition getComponentDefinition(Class cls) {
-		if (_compdefs == null) return null;
+		if (_compdefsByClass == null) return null;
 
-		synchronized (_compdefs) {
+		synchronized (_compdefsByClass) {
 			for (; cls != null; cls = cls.getSuperclass()) {
 				final ComponentDefinition compdef =
-					(ComponentDefinition)_compdefs.get(cls);
+					(ComponentDefinition)_compdefsByClass.get(cls.getName());
 				if (compdef != null) return compdef;
 			}
 		}
