@@ -1,7 +1,7 @@
-/* sayhi.bs
+/* sayhi.zs
 
 {{IS_NOTE
-	$Id: sayhi.bs,v 1.1 2006/04/18 07:04:42 tomyeh Exp $
+	$Id: sayhi.zs,v 1.1 2006/04/18 07:04:42 tomyeh Exp $
 	Purpose:
 		The script
 	Description:

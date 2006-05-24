@@ -5,7 +5,7 @@
 test.zul
 
 {{IS_NOTE
-	$Id: test.zul,v 1.31 2006/05/10 03:34:42 tomyeh Exp $
+	$Id: test.zul,v 1.32 2006/05/24 06:28:13 tomyeh Exp $
 	Purpose:
 		View the specified subject.
 	Description:
@@ -23,7 +23,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
   <zscript>
 import com.potix.lang.Objects;
   </zscript>
-  <zscript src="sayhi.bs"/>
+  <zscript src="sayhi.zs"/>
   <window id="test" border="normal" ctrlKeys="GQ2">
 	Desktop: ${self.page.desktop.id} <button label="hi" onClick="sayhi()"/>
 	<attribute name="onOK">
