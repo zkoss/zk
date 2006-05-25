@@ -1,7 +1,7 @@
 /* SimpleDesktopCache.java
 
 {{IS_NOTE
-	$Id: SimpleDesktopCache.java,v 1.2 2006/05/03 03:25:07 tomyeh Exp $
+	$Id: SimpleDesktopCache.java,v 1.3 2006/05/25 08:55:11 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -36,7 +36,7 @@ import com.potix.zk.ui.sys.WebAppCtrl;
  * all desktop in a {@link CacheMap} instance.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/03 03:25:07 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/25 08:55:11 $
  */
 public class SimpleDesktopCache implements DesktopCache {
 	private static final Log log = Log.lookup(SimpleDesktopCache.class);
@@ -122,7 +122,7 @@ public class SimpleDesktopCache implements DesktopCache {
 
 			final int v =
 				Apps.getInteger("com.potix.zk.ui.desktop.MaxInactiveInterval", 3600);
-			setLifetime(v > 0 ? v * 1000: Integer.MAX_VALUE);
+			setLifetime(v >= 0 ? v * 1000: Integer.MAX_VALUE);
 		}
 		/** To save memory, expunge whever necessary (not just when GC).
 		protected java.lang.ref.ReferenceQueue newQueue() {
