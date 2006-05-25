@@ -1,7 +1,7 @@
 /* Components.java
 
 {{IS_NOTE
-	$Id: Components.java,v 1.10 2006/05/25 10:26:30 tomyeh Exp $
+	$Id: Components.java,v 1.11 2006/05/25 14:09:46 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -20,10 +20,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package com.potix.zk.ui;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Collection;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import com.potix.zk.au.AuCloseErrorBox;
 
@@ -31,10 +35,40 @@ import com.potix.zk.au.AuCloseErrorBox;
  * Utilities to access {@link Component}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/25 10:26:30 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/25 14:09:46 $
  */
 public class Components {
 	protected Components() {}
+
+	/** Sorts the components in the list.
+	 * <p>Note: you cannot use Collections.sort to sort
+	 * {@link Component#getChildren} because Collections.sort might cause
+	 * some replicated item in the list.
+	 */
+	public static void sort(List comps, Comparator cpr) {
+		final Object ary[] = comps.toArray();
+		Arrays.sort(ary, cpr);
+
+		ListIterator it = comps.listIterator();
+		int j = 0;
+		for (; it.hasNext(); ++j) {
+			if (it.next() != ary[j]) {
+				it.remove();
+
+				if (it.hasNext()) {
+					if (it.next() == ary[j]) continue;
+					it.previous();
+				}
+				break;
+			}
+		}
+		while (it.hasNext()) {
+			it.next();
+			it.remove();
+		}
+		for (; j < ary.length; ++j)
+			comps.add(ary[j]);
+	}
 
 	/** Tests whether node1 is an ancessor of node 2.
 	 * If node1 and node2 is the same, true is returned.
