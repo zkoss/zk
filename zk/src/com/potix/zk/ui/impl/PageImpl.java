@@ -1,7 +1,7 @@
 /* PageImpl.java
 
 {{IS_NOTE
-	$Id: PageImpl.java,v 1.7 2006/05/25 05:07:07 tomyeh Exp $
+	$Id: PageImpl.java,v 1.8 2006/05/25 06:22:25 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -83,7 +83,7 @@ import com.potix.zk.au.AuSetTitle;
  * at most one thread can access a page and all its components at the same time.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/25 05:07:07 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/25 06:22:25 $
  */
 public class PageImpl implements Page, PageCtrl {
 	private static final Log log = Log.lookup(PageImpl.class);
@@ -140,7 +140,8 @@ public class PageImpl implements Page, PageCtrl {
 
 	//-- Page --//
 	private final Execution getExecution() {
-		return _desktop.getExecution();
+		return _desktop != null ? _desktop.getExecution():
+			Executions.getCurrent();
 	}
 	public final PageDefinition getDefinition() {
 		return _pagedef;

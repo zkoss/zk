@@ -1,7 +1,7 @@
 /* Script.java
 
 {{IS_NOTE
-	$Id: Script.java,v 1.7 2006/03/28 05:10:04 tomyeh Exp $
+	$Id: Script.java,v 1.9 2006/05/25 06:32:29 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -36,20 +36,12 @@ import com.potix.zk.ui.util.Condition;
 /**
  * Represents a BeanShell script
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/03/28 05:10:04 $
+ * @version $Revision: 1.9 $ $Date: 2006/05/25 06:32:29 $
  */
 public class Script implements Condition {
 	private final String _script;
 	private final URL _url;
 	private final Condition _cond;
-
-	private static final ResourceCache _cache;
-	static {
-		_cache = new ResourceCache(new ContentLoader());
-		_cache.setMaxSize(250).setLifetime(60*60000); //1hr
-		_cache.setCheckPeriod(
-			Apps.getInteger("com.potix.web.file.checkPeriod", 5) * 1000);
-	}
 
 	public Script(String script, Condition cond) {
 		if (script == null)
@@ -71,9 +63,9 @@ public class Script implements Condition {
 	public String getScript() throws IOException {
 		if (_script != null)
 			return _script;
-		final Object o = _cache.get(_url);
+		final Object o = getCache().get(_url);
 		if (o == null)
-			throw new FileNotFoundException("Not found: "+_url);
+			throw new FileNotFoundException("File not found: "+_url);
 		if (!(o instanceof String))
 			throw new IOException("Illegal file type: "+o.getClass());
 		return (String)o;
@@ -101,5 +93,22 @@ public class Script implements Condition {
 			}
 		}
 		return sb.append(']').toString();
+	}
+
+	private static ResourceCache _cache;
+	private static final ResourceCache getCache() {
+		if (_cache == null) {
+			synchronized (Script.class) {
+				if (_cache == null) {
+					final ResourceCache cache
+						= new ResourceCache(new ContentLoader());
+					cache.setCheckPeriod(Apps.getInteger(
+							"com.potix.web.file.checkPeriod", 5) * 1000)
+						.setMaxSize(250).setLifetime(60*60000); //1hr
+					_cache = cache;
+				}
+			}
+		}
+		return _cache;
 	}
 }
