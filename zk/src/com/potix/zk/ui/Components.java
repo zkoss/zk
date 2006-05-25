@@ -1,7 +1,7 @@
 /* Components.java
 
 {{IS_NOTE
-	$Id: Components.java,v 1.11 2006/05/25 14:09:46 tomyeh Exp $
+	$Id: Components.java,v 1.12 2006/05/25 14:12:14 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,21 +35,22 @@ import com.potix.zk.au.AuCloseErrorBox;
  * Utilities to access {@link Component}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/25 14:09:46 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/25 14:12:14 $
  */
 public class Components {
 	protected Components() {}
 
 	/** Sorts the components in the list.
+	 *
 	 * <p>Note: you cannot use Collections.sort to sort
 	 * {@link Component#getChildren} because Collections.sort might cause
 	 * some replicated item in the list.
 	 */
-	public static void sort(List comps, Comparator cpr) {
-		final Object ary[] = comps.toArray();
+	public static void sort(List list, Comparator cpr) {
+		final Object ary[] = list.toArray();
 		Arrays.sort(ary, cpr);
 
-		ListIterator it = comps.listIterator();
+		ListIterator it = list.listIterator();
 		int j = 0;
 		for (; it.hasNext(); ++j) {
 			if (it.next() != ary[j]) {
@@ -67,7 +68,7 @@ public class Components {
 			it.remove();
 		}
 		for (; j < ary.length; ++j)
-			comps.add(ary[j]);
+			list.add(ary[j]);
 	}
 
 	/** Tests whether node1 is an ancessor of node 2.
