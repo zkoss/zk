@@ -1,7 +1,7 @@
 /* Parser.java
 
 {{IS_NOTE
-	$Id: Parser.java,v 1.12 2006/05/24 14:15:33 tomyeh Exp $
+	$Id: Parser.java,v 1.13 2006/05/25 02:05:01 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -57,7 +57,7 @@ import com.potix.zk.ui.util.impl.ConditionImpl;
 /**
  * Used to prase the ZUL file
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/24 14:15:33 $
+ * @version $Revision: 1.13 $ $Date: 2006/05/25 02:05:01 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);
@@ -447,10 +447,11 @@ public class Parser {
 				}
 
 				//process use first because addProperty needs it
-				final String use = el.getAttribute("use");
-				if (!isEmpty(use)) {
-					noEL("use", use, el);
-					instdef.setImplementationClass(use);
+				String clsnm = el.getAttribute("class");
+				if (isEmpty(clsnm)) clsnm = el.getAttribute("use"); //BACKWARD COMPATIBLE: "use"
+				if (!isEmpty(clsnm)) {
+					noEL("class", clsnm, el);
+					instdef.setImplementationClass(clsnm);
 						//Resolve later since might defined in zscript
 				}
 			}
@@ -467,7 +468,7 @@ public class Parser {
 					unless = attval;
 				} else if ("forEach".equals(attnm)) {
 					forEach = attval;
-				} else if (!"use".equals(attnm)) {
+				} else if (!"class".equals(attnm) && !"use".equals(attnm)) { //BACKWARD COMPATIBLE: "use"
 					final Namespace attns = attr.getNamespace();
 					final String attpref = attns != null ? attns.getPrefix(): "";
 					if (!"xmlns".equals(attpref)
