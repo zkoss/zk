@@ -1,7 +1,7 @@
 /* Listbox.java
 
 {{IS_NOTE
-	$Id: Listbox.java,v 1.35 2006/05/15 14:42:14 tomyeh Exp $
+	$Id: Listbox.java,v 1.36 2006/05/25 14:09:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -73,7 +73,7 @@ import com.potix.zk.au.AuInit;
  * <p>Default {@link #getSclass}: listbox.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.35 $ $Date: 2006/05/15 14:42:14 $
+ * @version $Revision: 1.36 $ $Date: 2006/05/25 14:09:56 $
  * @see ListModel
  * @see ListitemRenderer
  */
@@ -1061,7 +1061,7 @@ public class Listbox extends XulElement implements Selectable, Render {
 			_j = index;
 		}
 		public void add(Object o) {
-			if (_it == null) throw new IllegalStateException();
+			prepare();
 			_it.add(o);
 			++_j;
 		}
