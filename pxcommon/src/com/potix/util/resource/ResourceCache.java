@@ -1,7 +1,7 @@
 /* ResourceCache.java
 
 {{IS_NOTE
-	$Id: ResourceCache.java,v 1.10 2006/02/27 03:42:07 tomyeh Exp $
+	$Id: ResourceCache.java,v 1.11 2006/05/25 06:22:23 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,7 +35,7 @@ import com.potix.util.sys.WaitLock;
  * <p>Unlike {@link CacheMap}, it is thread-safe.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/02/27 03:42:07 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/25 06:22:23 $
  */
 public class ResourceCache extends CacheMap {
 	private static final Log log = Log.lookup(ResourceCache.class);
@@ -43,7 +43,7 @@ public class ResourceCache extends CacheMap {
 	/** The loader. */
 	protected final Loader _loader;
 	/** unit=milliseconds. */
-	private int _checkPeriod = 300*1000;
+	private int _checkPeriod = 5*1000;
 
 	/** Constructor.
 	 * @param loader the loader to load resource
@@ -76,7 +76,7 @@ public class ResourceCache extends CacheMap {
 		return _checkPeriod;
 	}
 	/** Sets how often to check (unit=milliseconds).
-	 * @return this
+	 * @return this object
 	 */
 	public ResourceCache setCheckPeriod(int checkPeriod) {
 		_checkPeriod = checkPeriod;
