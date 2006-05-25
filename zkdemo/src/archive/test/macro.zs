@@ -20,7 +20,8 @@ import com.potix.zul.html.*;
 
 public class Username extends HtmlMacroComponent {
 	void addRow(String label) {
-		Row row = new Row(getFellow("mc_grid").getRows());
+		Row row = new Row();
+		row.setParent(getFellow("mc_grid").getRows());
 		new Label(label).setParent(row);
 		new Textbox().setParent(row);
 	}
