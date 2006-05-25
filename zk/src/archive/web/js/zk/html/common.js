@@ -1,7 +1,7 @@
 /* common.js
 
 {{IS_NOTE
-	$Id: common.js,v 1.39 2006/05/22 02:26:42 tomyeh Exp $
+	$Id: common.js,v 1.41 2006/05/25 07:18:08 tomyeh Exp $
 	Purpose:
 		Common utiltiies.
 	Description:
@@ -995,13 +995,16 @@ zk.cpCellWidth = function (dst, srcrows, times) {
 
 	var max = 0, src;
 	for (var j = 0; j < srcrows.length; ++j) {
-		var l = srcrows[j].cells.length;
-		if (l > max) {
-			max = l;
-			src = srcrows[j];
-			if (max >= dst.cells.length) {
-				max = dst.cells.length;
-				break; //done
+		var sr = srcrows[j];
+		if (sr.style.display != "none") {
+			var l = sr.cells.length;
+			if (l > max) {
+				max = l;
+				src = sr;
+				if (max >= dst.cells.length) {
+					max = dst.cells.length;
+					break; //done
+				}
 			}
 		}
 	}

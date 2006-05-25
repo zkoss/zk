@@ -1,7 +1,7 @@
 /* boot.js
 
 {{IS_NOTE
-	$Id: boot.js,v 1.67 2006/05/22 02:26:42 tomyeh Exp $
+	$Id: boot.js,v 1.68 2006/05/25 07:15:29 tomyeh Exp $
 	Purpose:
 		Bootstrap JavaScript
 	Description:
@@ -24,7 +24,7 @@ function zk() {}
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "12"; //increase this if we want the browser to reload JavaScript
+zk.build = "13"; //increase this if we want the browser to reload JavaScript
 zk.mods = {};
 
 /** Browser info. */
