@@ -4,7 +4,7 @@
 moreTabbox.zul
 
 {{IS_NOTE
-	$Id: moreTabbox.zul,v 1.4 2006/04/17 09:53:18 tomyeh Exp $
+	$Id: moreTabbox.zul,v 1.5 2006/05/25 10:35:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -43,9 +43,28 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<tab label="Tab 2"/>
 		</tabs>
 		<tabpanels>
-			<tabpanel>This is panel 1</tabpanel>
-			<tabpanel>This is panel 2
-The second panel</tabpanel>
+			<tabpanel>
+<tabbox width="400px" orient="vertical">
+<tabs>
+<tab label="A"/>
+<tab label="B"/>
+<tab label="C"/>
+<tab label="D"/>
+<tab label="E"/>
+</tabs>
+<tabpanels>
+<tabpanel>This is panel A</tabpanel>
+<tabpanel>This is panel B</tabpanel>
+<tabpanel>This is panel C</tabpanel>
+<tabpanel>This is panel D</tabpanel>
+<tabpanel>This is panel E</tabpanel>
+</tabpanels>
+</tabbox>
+			</tabpanel>
+			<tabpanel>
+This is panel 2
+The second panel
+			</tabpanel>
 		</tabpanels>
 	</tabbox>
 </window>
