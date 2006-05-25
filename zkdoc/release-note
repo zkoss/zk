@@ -39,6 +39,7 @@ ZK 1.2.0RC3
 	+ Work with WebLogic 9.1
 
 * Upgrade Notes
+	+ The use attribute is renamed to the class attribute.
 	+ The map component is renamed to imagemap (RC1).
 	+ Configurations that were specified in init-param of /WEB-INF/web.xml
 	  must be moved to /WEB-INF/zk.xml
