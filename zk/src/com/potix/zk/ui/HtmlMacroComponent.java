@@ -1,7 +1,7 @@
 /* HtmlMacroComponent.java
 
 {{IS_NOTE
-	$Id: HtmlMacroComponent.java,v 1.5 2006/05/22 10:14:09 tomyeh Exp $
+	$Id: HtmlMacroComponent.java,v 1.7 2006/05/25 04:17:40 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -22,7 +22,7 @@ package com.potix.zk.ui;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.potix.zk.ui.ext.Macro;
+import com.potix.zk.ui.ext.PostCreate;
 import com.potix.zk.ui.ext.DynamicPropertied;
 
 /**
@@ -33,18 +33,18 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  * the correct class, and then invoke {@link #createChildren}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/22 10:14:09 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/25 04:17:40 $
  */
 public class HtmlMacroComponent extends HtmlBasedComponent
-implements Macro, IdSpace, DynamicPropertied {
+implements PostCreate, IdSpace, DynamicPropertied {
 	private final Map _attrs = new HashMap(7);
 
 	public HtmlMacroComponent() {
 		_attrs.put("includer", this);
 	}
 
-	//-- Macro --//
-	public void createChildren() {
+	//-- PostCreate --//
+	public void postCreate() {
 		getDesktop().getExecution().createComponents(
 			getDefinition().getMacroURI(this), this, _attrs);
 	}

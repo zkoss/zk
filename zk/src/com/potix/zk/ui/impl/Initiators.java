@@ -1,7 +1,7 @@
 /* Initiators.java
 
 {{IS_NOTE
-	$Id: Initiators.java,v 1.5 2006/05/02 10:40:09 tomyeh Exp $
+	$Id: Initiators.java,v 1.6 2006/05/25 04:10:55 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +27,6 @@ import com.potix.lang.Classes;
 import com.potix.util.logging.Log;
 
 import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Initiator;
 import com.potix.zk.ui.metainfo.PageDefinition;
@@ -37,7 +36,7 @@ import com.potix.zk.ui.metainfo.InitiatorDefinition;
  * A helper class used with {@link com.potix.zk.ui.sys.UiEngine} to process
  * {@link Initiator}
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/02 10:40:09 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/25 04:10:55 $
  */
 /*package*/ class Initiators {
 	/*package(inner)*/ static final Log log = Log.lookup(Initiators.class);
@@ -54,28 +53,11 @@ import com.potix.zk.ui.metainfo.InitiatorDefinition;
 		for (Iterator it = initdefs.iterator(); it.hasNext();) {
 			final InitiatorDefinition def = (InitiatorDefinition)it.next();
 			try {
-				Class cls = def.klass;
-				if (cls == null) {
-					final String clsnm = (String)Executions.evaluate(
-						pagedef, page, def.className, String.class);
-					if (clsnm == null || clsnm.length() == 0) {
-						if (log.debugable()) log.debug("Ingore "+def.className+" due to empty");
-						continue; //ignore it!!
-					}
-					try {
-						cls = Classes.forNameByThread(clsnm);
-					} catch (ClassNotFoundException ex) {
-						throw new UiException("Class not found: "+clsnm+" ("+def.className+")", ex);
-					}
+				final Initiator init = def.newInitiator(pagedef, page);
+				if (init != null) {
+					init.doInit(page, def.getArguments(pagedef, page));
+					inits.add(init);
 				}
-
-				final Initiator init = (Initiator)cls.newInstance();
-				final Object[] args = new Object[def.arguments.length];
-				for (int j = 0; j < args.length; ++j)
-					args[j] = Executions.evaluate(pagedef, page,
-						def.arguments[j], Object.class);
-				init.doInit(page, args);
-				inits.add(init);
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
 			}

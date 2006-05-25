@@ -1,7 +1,7 @@
 /* AbstractComponent.java
 
 {{IS_NOTE
-	$Id: AbstractComponent.java,v 1.35 2006/04/27 13:58:10 tomyeh Exp $
+	$Id: AbstractComponent.java,v 1.38 2006/05/25 04:22:41 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -66,7 +66,7 @@ import com.potix.zk.au.AuRemove;
  * the chores.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.35 $ $Date: 2006/04/27 13:58:10 $
+ * @version $Revision: 1.38 $ $Date: 2006/05/25 04:22:41 $
  */
 public class AbstractComponent implements Component, ComponentCtrl {
 	private static final Log log = Log.lookup(AbstractComponent.class);
@@ -127,35 +127,36 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		_uuid = _id = idsb.toString();
 
 		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(_uuid): null;
+		_compdef = getDefinitionFromCurrentPage(getClass());
+			//we have to init it here because getCurrentPageDefinition
+			//might changed later
 
-		_compdef = initDefinition(getClass());
 		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
-
-	private static final ComponentDefinition initDefinition(Class cls) {
+	private static final
+	ComponentDefinition getDefinitionFromCurrentPage(Class cls) {
 		final PageDefinition pgdef =
 			ExecutionsCtrl.getCurrentCtrl().getCurrentPageDefinition(true);
-		LanguageDefinition langdef = null;
 		if (pgdef != null) {
 			ComponentDefinition compdef = pgdef.getComponentDefinition(cls);
 			if (compdef != null) return compdef;
 
-			langdef = pgdef.getLanguageDefinition();
+			final LanguageDefinition langdef = pgdef.getLanguageDefinition();
 			if (langdef != null)
 				try {
 					return langdef.getComponentDefinition(cls);
 				} catch (DefinitionNotFoundException ex) {
 				}
 		}
-
+		return null;
+	}
+	private static final ComponentDefinition getDefinitionFromAll(Class cls) {
 		for (Iterator it = LanguageDefinition.getAll().iterator();
 		it.hasNext();) {
-			final Object o = it.next();
-			if (langdef != o) {
-				try {
-					return ((LanguageDefinition)o).getComponentDefinition(cls);
-				} catch (DefinitionNotFoundException ex) {
-				}
+			try {
+				return ((LanguageDefinition)it.next())
+					.getComponentDefinition(cls);
+			} catch (DefinitionNotFoundException ex) {
 			}
 		}
 		return null;
@@ -507,7 +508,8 @@ public class AbstractComponent implements Component, ComponentCtrl {
 	}
 
 	public void applyProperties() {
-		if (_compdef != null) _compdef.applyProperties(this);
+		final ComponentDefinition compdef = getDefinition();
+		if (compdef != null) compdef.applyProperties(this);
 	}
 
 	public Map getAttributes(int scope) {
@@ -819,6 +821,8 @@ public class AbstractComponent implements Component, ComponentCtrl {
 	}
 
 	public ComponentDefinition getDefinition() {
+		if (_compdef == null)
+			_compdef = getDefinitionFromAll(getClass());
 		return _compdef;
 	}
 

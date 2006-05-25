@@ -1,7 +1,7 @@
 /* Parser.java
 
 {{IS_NOTE
-	$Id: Parser.java,v 1.13 2006/05/25 02:05:01 tomyeh Exp $
+	$Id: Parser.java,v 1.14 2006/05/25 04:10:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -51,13 +51,14 @@ import com.potix.web.servlet.StyleSheet;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
+import com.potix.zk.ui.impl.ZscriptInitiator;
 import com.potix.zk.ui.util.Condition;
 import com.potix.zk.ui.util.impl.ConditionImpl;
 
 /**
  * Used to prase the ZUL file
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/25 02:05:01 $
+ * @version $Revision: 1.14 $ $Date: 2006/05/25 04:10:56 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);
@@ -219,21 +220,31 @@ public class Parser {
 			noEL("uri", uri, pi); //not support EL (kind of chicken-egg issue)
 			pgdef.addTaglib(new Taglib(prefix, uri));
 		} else if ("init".equals(target)) {
-			final String clsnm = (String)params.remove("class");
 			final List args = new LinkedList();
 			for (int j = 0;; ++j) {
 				final String arg = (String)params.remove("arg" + j);
 				if (arg == null) break;
 				args.add(arg);
 			}
-			if (isEmpty(clsnm))
-				throw new UiException("The class attribute must be specified, "+pi.getLocator());
+
+			final String clsnm = (String)params.remove("class");
+			final String zscript = (String)params.remove("zscript");
+
 			if (!params.isEmpty())
 				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
-			pgdef.addInitiatorDefinition(
-				clsnm.indexOf("${") >= 0 ? //class supports EL
-					new InitiatorDefinition(clsnm, args):
-					new InitiatorDefinition(locateClass(clsnm), args));
+
+			if (isEmpty(clsnm)) {
+				if (isEmpty(zscript))
+					throw new UiException("The class or zscript attribute must be specified, "+pi.getLocator());
+				pgdef.addInitiatorDefinition(
+					new InitiatorDefinition(
+						new ZscriptInitiator(getLocator(), zscript), args));
+			} else {
+				pgdef.addInitiatorDefinition(
+					clsnm.indexOf("${") >= 0 ? //class supports EL
+						new InitiatorDefinition(clsnm, args):
+						new InitiatorDefinition(locateClass(clsnm), args));
+			}
 		} else if ("component".equals(target)) { //declare a component
 			final String name = (String)params.remove("name");
 			if (isEmpty(name)) throw new UiException("name is required, "+pi.getLocator());

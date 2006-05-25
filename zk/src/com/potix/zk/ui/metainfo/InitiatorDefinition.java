@@ -1,7 +1,7 @@
 /* InitiatorDefinition.java
 
 {{IS_NOTE
-	$Id: InitiatorDefinition.java,v 1.2 2006/05/02 09:54:39 tomyeh Exp $
+	$Id: InitiatorDefinition.java,v 1.3 2006/05/25 04:10:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -20,58 +20,132 @@ package com.potix.zk.ui.metainfo;
 import java.util.List;
 
 import com.potix.lang.Classes;
+import com.potix.util.logging.Log;
+
+import com.potix.zk.ui.Page;
+import com.potix.zk.ui.Executions;
+import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.util.Initiator;
 
 /**
  * A definition of the initiator.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/02 09:54:39 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/25 04:10:56 $
  */
 public class InitiatorDefinition {
-	/** The class of the initiator. If null, use {@link #className}. */
-	public final Class klass;
-	/** The class name of the initiator. If null, use {@link #klass}. */
-	public final String className;
-	/** The arguments, never null (might with zero length). */
-	public final String[] arguments;
+	private static final Log log = Log.lookup(InitiatorDefinition.class);
 
+	/** A class, a EL string or an Initiator. */
+	private final Object _init;
+	/** The arguments, never null (might with zero length). */
+	private final String[] _args;
+
+	/** Constructs with a class, and {@link #newInitiator} will
+	 * instantiate a new instance.
+	 */
 	public InitiatorDefinition(Class cls, String[] args) {
-		if (!Initiator.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException(Initiator.class+" must be implemented: "+cls);
-		this.klass = cls;
-		this.className = null;
-		this.arguments = args != null ? args: new String[0];
+		checkClass(cls);
+		_init = cls;
+		_args = args != null ? args: new String[0];
 	}
+	private static void checkClass(Class cls) {
+		if (!Initiator.class.isAssignableFrom(cls))
+			throw new UiException(Initiator.class+" must be implemented: "+cls);
+	}
+
+	/** Constructs with a class, and {@link #newInitiator} will
+	 * instantiate a new instance.
+	 */
 	public InitiatorDefinition(Class cls, List args) {
 		this(cls, args != null ?
 			(String[])args.toArray(new String[args.size()]): null);
 	}
-	/**
+	/** Constructs with a class name and {@link #newInitiator} will
+	 * instantiate a new instance.
+	 *
 	 * @param clsnm the class name; it could be an EL expression.
 	 */
 	public InitiatorDefinition(String clsnm, String[] args)
 	throws ClassNotFoundException {
-		if (clsnm == null) throw new IllegalArgumentException(clsnm);
+		if (clsnm == null || clsnm.length() == 0)
+			throw new IllegalArgumentException("empty");
+
 		if (clsnm.indexOf("${") < 0) {
 			try {
-				this.klass = Classes.forNameByThread(clsnm);
+				final Class cls = Classes.forNameByThread(clsnm);
+				checkClass(cls);
+				_init = cls;
 			} catch (ClassNotFoundException ex) {
-				throw new ClassNotFoundException("Not found: "+clsnm, ex);
+				throw new ClassNotFoundException("Class not found: "+clsnm, ex);
 			}
-			this.className = null;
 		} else {
-			this.klass = null;
-			this.className = clsnm;
+			_init = clsnm;
 		}
-		this.arguments = args != null ? args: new String[0];
+		_args = args != null ? args: new String[0];
 	}
-	/**
+	/** Constructs with a class name and {@link #newInitiator} will
+	 * instantiate a new instance.
+	 *
 	 * @param clsnm the class name; it could be an EL expression.
 	 */
 	public InitiatorDefinition(String clsnm, List args)
 	throws ClassNotFoundException {
 		this(clsnm, args != null ?
 			(String[])args.toArray(new String[args.size()]): null);
+	}
+	/** Constructs with an initiator that will be reuse each time
+	 * {@link #newInitiator} is called.
+	 */
+	public InitiatorDefinition(Initiator init, String[] args) {
+		if (init == null)
+			throw new IllegalArgumentException("null");
+		_init = init;
+		_args = args != null ? args: new String[0];
+	}
+	/** Constructs with an initiator that will be reuse each time
+	 * {@link #newInitiator} is called.
+	 */
+	public InitiatorDefinition(Initiator init, List args) {
+		this(init, args != null ?
+			(String[])args.toArray(new String[args.size()]): null);
+	}
+
+	/** Creaetes and returns the initiator.
+	 */
+	public Initiator newInitiator(PageDefinition pagedef, Page page)
+	throws Exception {
+		if (_init instanceof Initiator)
+			return (Initiator)_init;
+
+		final Class cls;
+		if (_init instanceof String) {
+			final String clsnm = (String)Executions.evaluate(
+				pagedef, page, (String)_init, String.class);
+			if (clsnm == null || clsnm.length() == 0) {
+				if (log.debugable()) log.debug("Ingore "+_init+" due to empty");
+				return null; //ignore it!!
+			}
+
+			try {
+				cls = Classes.forNameByThread(clsnm);
+				checkClass(cls);
+			} catch (ClassNotFoundException ex) {
+				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_init+")", ex);
+			}
+		} else {
+			cls = (Class)_init;
+		}
+		return (Initiator)cls.newInstance();
+	}
+	/** Returns the arguments array (by evaluating EL if necessary).
+	 */
+	public Object[] getArguments(PageDefinition pagedef, Page page) {
+		final Object[] args = new Object[_args.length];
+		for (int j = 0; j < args.length; ++j)
+			args[j] = Executions.evaluate(pagedef, page,
+				_args[j], Object.class);
+		return args;
 	}
 }

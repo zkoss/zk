@@ -1,7 +1,7 @@
 /* UiEngineImpl.java
 
 {{IS_NOTE
-	$Id: UiEngineImpl.java,v 1.12 2006/05/24 13:47:17 tomyeh Exp $
+	$Id: UiEngineImpl.java,v 1.14 2006/05/25 04:17:41 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -48,7 +48,7 @@ import com.potix.zk.ui.*;
 import com.potix.zk.ui.sys.*;
 import com.potix.zk.ui.event.*;
 import com.potix.zk.ui.metainfo.*;
-import com.potix.zk.ui.ext.Macro;
+import com.potix.zk.ui.ext.PostCreate;
 import com.potix.zk.ui.util.Initiator;
 import com.potix.zk.ui.util.Monitor;
 import com.potix.zk.ui.util.Condition;
@@ -60,7 +60,7 @@ import com.potix.zk.au.*;
  * An implementation of {@link UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/24 13:47:17 $
+ * @version $Revision: 1.14 $ $Date: 2006/05/25 04:17:41 $
  */
 public class UiEngineImpl implements UiEngine {
 	private static final Log log = Log.lookup(UiEngineImpl.class);
@@ -309,14 +309,14 @@ public class UiEngineImpl implements UiEngine {
 			return execCreate(page, childdef, parent);
 		} else {
 			final Component child = childdef.newInstance(page);
-
 			if (parent != null) child.setParent(parent);
 			else child.setPage(page);
 
 			childdef.applyProperties(child);
 			childdef.applyCustomAttributes(child);
 
-			if (childdef.isMacro()) ((Macro)child).createChildren();
+			if (child instanceof PostCreate)
+				((PostCreate)child).postCreate();
 
 			execCreate(page, childdef, child); //recursive
 

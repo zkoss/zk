@@ -1,7 +1,7 @@
 /* LanguageDefinition.java
 
 {{IS_NOTE
-	$Id: LanguageDefinition.java,v 1.21 2006/05/24 13:47:18 tomyeh Exp $
+	$Id: LanguageDefinition.java,v 1.22 2006/05/25 04:10:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -44,13 +44,12 @@ import com.potix.web.el.ELContext;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Evaluator;
-import com.potix.zk.ui.ext.Macro;
 
 /**
  * A definition of a language, such as xul.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.21 $ $Date: 2006/05/24 13:47:18 $
+ * @version $Revision: 1.22 $ $Date: 2006/05/25 04:10:56 $
  */
 public class LanguageDefinition implements Evaluator {
 	private static final Log log = Log.lookup(LanguageDefinition.class);
@@ -530,7 +529,6 @@ public class LanguageDefinition implements Evaluator {
 		private final String moldURI;
 		private MacroTemplate(Class klass, String moldURI) {
 			if (klass == null || !Component.class.isAssignableFrom(klass)
-			|| !Macro.class.isAssignableFrom(klass)
 			|| moldURI == null || moldURI.length() == 0)
 				throw new IllegalArgumentException("class="+klass+", mold="+moldURI);
 			this.klass = klass;
