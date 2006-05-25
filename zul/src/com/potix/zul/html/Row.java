@@ -1,7 +1,7 @@
 /* Row.java
 
 {{IS_NOTE
-	$Id: Row.java,v 1.6 2006/03/17 10:06:38 tomyeh Exp $
+	$Id: Row.java,v 1.7 2006/05/25 08:26:19 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -19,6 +19,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zul.html;
 
+import java.util.List;
+import java.util.Iterator;
+import java.io.IOException;
+
 import com.potix.lang.Objects;
 import com.potix.xml.HTMLs;
 
@@ -32,7 +36,7 @@ import com.potix.zul.html.impl.XulElement;
  * of the grid. The row with the most child elements determines the number
  * of columns in each row.
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/03/17 10:06:38 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/25 08:26:19 $
  */
 public class Row extends XulElement {
 	private String _align, _valign;
@@ -111,5 +115,28 @@ public class Row extends XulElement {
 		if (parent != null && !(parent instanceof Rows))
 			throw new UiException("Unsupported parent for row: "+parent);
 		super.setParent(parent);
+	}
+	public void onDrawNewChild(Component child, StringBuffer out)
+	throws IOException {
+		final StringBuffer sb = new StringBuffer(128)
+			.append("<td id=\"").append(child.getUuid())
+			.append("!chdextr\" class=\"gridev\"");
+
+		final Grid grid = getGrid();
+		if (grid != null) {
+			final Columns cols = grid.getColumns();
+			if (cols != null) {
+				int j = 0;
+				for (Iterator it = getChildren().iterator(); it.hasNext(); ++j)
+					if (child == it.next())
+						break;
+				final List colchds = cols.getChildren();
+				if (j < colchds.size())
+					sb.append(((Column)colchds.get(j)).getColAttrs());
+			}
+		}
+		sb.append('>');
+		out.insert(0, sb);
+		out.append("</td>");
 	}
 }
