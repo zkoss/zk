@@ -1,7 +1,7 @@
 /* HtmlBasedComponent.java
 
 {{IS_NOTE
-	$Id: HtmlBasedComponent.java,v 1.11 2006/05/03 08:35:38 tomyeh Exp $
+	$Id: HtmlBasedComponent.java,v 1.12 2006/05/25 05:43:50 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -47,7 +47,7 @@ import com.potix.zk.au.AuFocus;
  * </ul>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/03 08:35:38 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/25 05:43:50 $
  */
 abstract public class HtmlBasedComponent extends AbstractComponent
 implements Moveable, ZIndexed {
@@ -184,7 +184,7 @@ implements Moveable, ZIndexed {
 	 * but we provide it for XUL compatibility.
 	 * The same as {@link #setSclass}.
 	 */
-	public void setClass(String sclass) {
+	public final void setClass(String sclass) {
 		setSclass(sclass);
 	}
 
