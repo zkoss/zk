@@ -1,7 +1,7 @@
 /* Execution.java
 
 {{IS_NOTE
-	$Id: Execution.java,v 1.17 2006/05/02 04:56:30 tomyeh Exp $
+	$Id: Execution.java,v 1.18 2006/05/25 10:26:30 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,6 +35,7 @@ import com.potix.zk.ui.event.Event;
 import com.potix.zk.ui.util.Evaluator;
 import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
+import com.potix.zk.au.AuResponse;
 
 /**
  * An execution of a client request (e.g., ServletRequest).
@@ -52,7 +53,7 @@ import com.potix.zk.ui.metainfo.LanguageDefinition;
  * also serves as an isolation layer.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.17 $ $Date: 2006/05/02 04:56:30 $
+ * @version $Revision: 1.18 $ $Date: 2006/05/25 10:26:30 $
  * @see Page
  */
 public interface Execution extends Evaluator {
@@ -433,4 +434,17 @@ public interface Execution extends Evaluator {
 	 * @see #getArg
 	 */
 	public void popArg();
+
+	/** Adds an asynchronous response ({@link AuResponse}) which will be
+	 * sent to client at the end of the execution.
+	 *
+	 * <p>If {@link AuResponse#getDepends} is not null, the response
+	 * depends on the returned componet. In other words, the response
+	 * is removed if the component is removed.
+	 * If it is null, the response is component-independent.
+	 *
+	 * @param key could be anything. The second invocation of this method
+	 * in the same execution with the same key will override the previous one.
+	 */
+	public void addAuResponse(String key, AuResponse resposne);
 }

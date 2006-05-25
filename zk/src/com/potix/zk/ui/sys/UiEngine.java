@@ -1,7 +1,7 @@
 /* UiEngine.java
 
 {{IS_NOTE
-	$Id: UiEngine.java,v 1.11 2006/05/02 04:56:31 tomyeh Exp $
+	$Id: UiEngine.java,v 1.12 2006/05/25 10:26:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -46,7 +46,7 @@ import com.potix.zk.au.AuResponse;
  * UI Engine (Singleton per app).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/02 04:56:31 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/25 10:26:31 $
  */
 public interface UiEngine {
 	/** Starts the engine.
@@ -95,9 +95,12 @@ public interface UiEngine {
 	 * in the same execution with the same attr will override the previous one.
 	 */
 	public void addSmartUpdate(Component comp, String attr, String value);
-	/** Adds a response which will be sent to client at the end of the execution
-	 * unless the compoent is removed.
+	/** Adds a response which will be sent to client at the end
+	 * of the execution.
 	 * Called when {@link Component#response} is called.
+	 *
+	 * <p>Note: {@link Execution#addAuResponse} is a shortcut to this method,
+	 * and it is used by application developers.
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
 	 * depends on the returned componet. In other words, the response

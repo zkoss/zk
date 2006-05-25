@@ -1,7 +1,7 @@
 /* AbstractExecution.java
 
 {{IS_NOTE
-	$Id: AbstractExecution.java,v 1.3 2006/05/02 04:56:31 tomyeh Exp $
+	$Id: AbstractExecution.java,v 1.4 2006/05/25 10:26:30 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -48,12 +48,13 @@ import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.ExecutionCtrl;
 import com.potix.zk.ui.sys.Visualizer;
 import com.potix.zk.ui.sys.UiEngine;
+import com.potix.zk.au.AuResponse;
 
 /**
  * A skeletal implementation of {@link Execution}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/02 04:56:31 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/25 10:26:30 $
  */
 abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private final Desktop _desktop;
@@ -242,5 +243,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			else
 				_args.remove(0);
 		}
+	}
+	public void addAuResponse(String key, AuResponse response) {
+		getUiEngine().addResponse(key, response);
 	}
 }

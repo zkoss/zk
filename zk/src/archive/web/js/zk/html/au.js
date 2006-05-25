@@ -1,7 +1,7 @@
 /* au.js
 
 {{IS_NOTE
-	$Id: au.js,v 1.51 2006/05/22 02:26:41 tomyeh Exp $
+	$Id: au.js,v 1.52 2006/05/25 10:26:27 tomyeh Exp $
 	Purpose:
 		JavaScript for asynchronous updates
 	Description:
@@ -284,7 +284,7 @@ zkau._doResp = function (respXml) {
 /** Process a command.
  */
 zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
-	//I. process commands that don't need uuid
+	//I. process commands that dt0 is not UUID
 	if ("obsolete" == cmd) { //desktop timeout
 		if (dt0 == zk_desktopId) //just in case
 			zkau._cleanupOnFatal();
@@ -498,6 +498,11 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 	} else if ("meta" == cmd) {
 		var meta = zkau.getMeta(uuid);
 		if (meta) meta[dt1].call(meta, dt2, dt3, dt4);
+	} else if ("closeErrbox" == cmd) {
+		if (zkau.valid) {
+			zkau.valid.closeErrbox(uuid);
+			zkau.valid.closeErrbox(uuid + "!real");
+		}
 	} else {
 		alert(mesg.ILLEGAL_RESPONSE+"Unknown command: "+cmd);
 	}

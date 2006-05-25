@@ -1,7 +1,7 @@
 /* Components.java
 
 {{IS_NOTE
-	$Id: Components.java,v 1.9 2006/04/13 13:20:59 tomyeh Exp $
+	$Id: Components.java,v 1.10 2006/05/25 10:26:30 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,11 +25,13 @@ import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.potix.zk.au.AuCloseErrorBox;
+
 /**
  * Utilities to access {@link Component}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/04/13 13:20:59 $
+ * @version $Revision: 1.10 $ $Date: 2006/05/25 10:26:30 $
  */
 public class Components {
 	protected Components() {}
@@ -129,5 +131,13 @@ public class Components {
 	 */
 	public static final boolean isAutoId(String id) {
 		return com.potix.zk.ui.sys.ComponentsCtrl.isAutoId(id);
+	}
+
+	/** Closes the error box at the browser belonging to
+	 * the specified component, if any.
+	 */
+	public static final void closeErrorBox(Component owner) {
+		Executions.getCurrent()
+			.addAuResponse("closeErrbox", new AuCloseErrorBox(owner));
 	}
 }
