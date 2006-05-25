@@ -1,7 +1,7 @@
 /* UiEngineImpl.java
 
 {{IS_NOTE
-	$Id: UiEngineImpl.java,v 1.14 2006/05/25 04:17:41 tomyeh Exp $
+	$Id: UiEngineImpl.java,v 1.15 2006/05/25 05:07:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -60,7 +60,7 @@ import com.potix.zk.au.*;
  * An implementation of {@link UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/05/25 04:17:41 $
+ * @version $Revision: 1.15 $ $Date: 2006/05/25 05:07:07 $
  */
 public class UiEngineImpl implements UiEngine {
 	private static final Log log = Log.lookup(UiEngineImpl.class);
@@ -296,7 +296,7 @@ public class UiEngineImpl implements UiEngine {
 			} else if (obj instanceof Script) {
 				final Script script = (Script)obj;
 				if (isEffective(script, pagedef, page, parent))
-					((PageCtrl)page).interpret(parent, script.getScript());
+					page.interpret(parent, script.getScript());
 			} else {
 				throw new IllegalStateException("Unknown object: "+obj);
 			}

@@ -1,7 +1,7 @@
 /* HtmlMacroComponent.java
 
 {{IS_NOTE
-	$Id: HtmlMacroComponent.java,v 1.7 2006/05/25 04:17:40 tomyeh Exp $
+	$Id: HtmlMacroComponent.java,v 1.8 2006/05/25 05:07:06 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,10 +30,10 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  *
  * <p>Generally, a macro component is created automatically by ZK loader.
  * If a developer wants to create it manually, it has to instantiate from
- * the correct class, and then invoke {@link #createChildren}.
+ * the correct class, and then invoke {@link #postCreate}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/25 04:17:40 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/25 05:07:06 $
  */
 public class HtmlMacroComponent extends HtmlBasedComponent
 implements PostCreate, IdSpace, DynamicPropertied {

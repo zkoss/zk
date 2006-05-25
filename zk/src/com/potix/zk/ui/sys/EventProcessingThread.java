@@ -1,7 +1,7 @@
 /* EventProcessingThread.java
 
 {{IS_NOTE
-	$Id: EventProcessingThread.java,v 1.20 2006/05/02 16:23:36 tomyeh Exp $
+	$Id: EventProcessingThread.java,v 1.21 2006/05/25 05:07:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -48,7 +48,7 @@ import com.potix.zk.ui.metainfo.InstanceDefinition;
  * a modal dialog to complete.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.20 $ $Date: 2006/05/02 16:23:36 $
+ * @version $Revision: 1.21 $ $Date: 2006/05/25 05:07:09 $
  */
 public class EventProcessingThread extends Thread {
 	private static final Log log = Log.lookup(EventProcessingThread.class);
@@ -358,7 +358,6 @@ public class EventProcessingThread extends Thread {
 			throw new IllegalStateException("comp and event must be initialized");
 
 		final Page page = _comp.getPage();
-		final PageCtrl pageCtrl = (PageCtrl)page;
 		final String evtnm = _event.getName();
 
 		final ComponentDefinition compdef = _comp.getDefinition();
@@ -369,7 +368,7 @@ public class EventProcessingThread extends Thread {
 				page.setVariable("event", _event);
 
 				try {
-					pageCtrl.interpret(_comp, script);
+					page.interpret(_comp, script);
 				} finally {
 					page.setVariable("event", null);
 				}
@@ -378,8 +377,7 @@ public class EventProcessingThread extends Thread {
 			}
 		}
 
-		for (Iterator it = ((ComponentCtrl)_comp).getListenerIterator(evtnm);
-		it.hasNext();) {
+		for (Iterator it = _comp.getListenerIterator(evtnm); it.hasNext();) {
 			((EventListener)it.next()).onEvent(_event);
 			if (!_event.isPropagatable())
 				return; //done
@@ -399,7 +397,7 @@ public class EventProcessingThread extends Thread {
 				return; //done
 		}
 
-		for (Iterator it = pageCtrl.getListenerIterator(evtnm); it.hasNext();) {
+		for (Iterator it = page.getListenerIterator(evtnm); it.hasNext();) {
 			((EventListener)it.next()).onEvent(_event);
 			if (!_event.isPropagatable())
 				return; //done

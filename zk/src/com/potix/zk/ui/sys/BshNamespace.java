@@ -1,7 +1,7 @@
 /* BshNamespace.java
 
 {{IS_NOTE
-	$Id: BshNamespace.java,v 1.2 2006/05/24 13:47:19 tomyeh Exp $
+	$Id: BshNamespace.java,v 1.3 2006/05/25 05:07:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -23,12 +23,13 @@ import bsh.Primitive;
 
 import com.potix.lang.Objects;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.util.Namespace;
 
 /**
  * An implementation of {@link Namespace} on top of BeanShell.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/24 13:47:19 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/25 05:07:09 $
  */
 public class BshNamespace implements Namespace {
 	private Namespace _parent;

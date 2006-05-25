@@ -1,7 +1,7 @@
 /* PageDefinition.java
 
 {{IS_NOTE
-	$Id: PageDefinition.java,v 1.19 2006/05/24 13:47:18 tomyeh Exp $
+	$Id: PageDefinition.java,v 1.20 2006/05/25 05:07:08 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -50,7 +50,7 @@ import com.potix.zk.ui.sys.RequestInfo;
  * It represents a ZUL page.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.19 $ $Date: 2006/05/24 13:47:18 $
+ * @version $Revision: 1.20 $ $Date: 2006/05/25 05:07:08 $
  * @see InstanceDefinition
  * @see ComponentDefinition
  */
@@ -197,13 +197,12 @@ public class PageDefinition extends InstanceDefinition {
 	 * and then iInterpret all scripts unpon the page.
 	 */
 	public void init(Page page) {
-		final PageCtrl pageCtrl = (PageCtrl)page;
-		pageCtrl.init(_id, _title, _style);
+		((PageCtrl)page).init(_id, _title, _style);
 
 		for (Iterator it = getLanguageDefinition().getScripts().iterator();
 		it.hasNext();) {
 			final String script = (String)it.next();
-			pageCtrl.interpret(null, script);
+			page.interpret(null, script);
 		}
 	}
 

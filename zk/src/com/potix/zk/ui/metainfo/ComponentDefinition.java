@@ -1,7 +1,7 @@
 /* ComponentDefinition.java
 
 {{IS_NOTE
-	$Id: ComponentDefinition.java,v 1.11 2006/05/24 14:14:40 tomyeh Exp $
+	$Id: ComponentDefinition.java,v 1.12 2006/05/25 05:07:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -36,8 +36,6 @@ import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Condition;
 import com.potix.zk.ui.util.Evaluator;
-import com.potix.zk.ui.sys.PageCtrl;
-import com.potix.zk.ui.sys.ComponentCtrl;
 
 /**
  * A component definition.
@@ -45,7 +43,7 @@ import com.potix.zk.ui.sys.ComponentCtrl;
  * of a component.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/24 14:14:40 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/25 05:07:07 $
  * @see LanguageDefinition
  */
 public class ComponentDefinition implements Cloneable {
@@ -150,7 +148,7 @@ public class ComponentDefinition implements Cloneable {
 	 * resolve a class name (String) to a class (Class).
 	 *
 	 * @param page the page used to resolve the class name from its
-	 * namespace ({@link PageCtrl#getNamespace}).
+	 * namespace ({@link Page#getNamespace}).
 	 * @exception UiException if the class not found
 	 */
 	public Class resolveImplementationClass(Page page) throws UiException {
@@ -158,7 +156,7 @@ public class ComponentDefinition implements Cloneable {
 			final String clsnm = (String)_cls;
 			try {
 				setImplementationClass(
-					((PageCtrl)page).getNamespace().getClass(clsnm));
+					page.getNamespace().getClass(clsnm));
 			} catch (ClassNotFoundException ex) {
 				throw new UiException("Class not found: "+clsnm, ex);
 			}

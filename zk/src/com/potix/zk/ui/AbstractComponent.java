@@ -1,7 +1,7 @@
 /* AbstractComponent.java
 
 {{IS_NOTE
-	$Id: AbstractComponent.java,v 1.38 2006/05/25 04:22:41 tomyeh Exp $
+	$Id: AbstractComponent.java,v 1.39 2006/05/25 05:07:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -50,7 +50,7 @@ import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.ui.sys.SessionCtrl;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.ui.sys.Namespace;
+import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.sys.BshNamespace;
 import com.potix.zk.ui.sys.Variables;
 import com.potix.zk.ui.metainfo.ComponentDefinition;
@@ -66,7 +66,7 @@ import com.potix.zk.au.AuRemove;
  * the chores.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.38 $ $Date: 2006/05/25 04:22:41 $
+ * @version $Revision: 1.39 $ $Date: 2006/05/25 05:07:05 $
  */
 public class AbstractComponent implements Component, ComponentCtrl {
 	private static final Log log = Log.lookup(AbstractComponent.class);
@@ -430,11 +430,9 @@ public class AbstractComponent implements Component, ComponentCtrl {
 			if (bRoot) ((PageCtrl)_page).addRoot(this);
 			if (oldpage == null) dtctrl.addComponent(this);
 		}
-		if (_spaceInfo != null && _parent == null) {
-			final PageCtrl pgctrl = (PageCtrl)page;
+		if (_spaceInfo != null && _parent == null)
 			_spaceInfo.ns.setParent(
-				pgctrl != null ? pgctrl.getNamespace(): null);
-		}
+				page != null ? page.getNamespace(): null);
 
 		//process all children recursively
 		for (final Iterator it = _children.iterator(); it.hasNext();) {
@@ -632,8 +630,8 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		setPage0(newpg);
 
 		if (_spaceInfo != null) //ID space owner
-			_spaceInfo.ns.setParent(_parent != null ?
-				((ComponentCtrl)_parent).getNamespace(): null);
+			_spaceInfo.ns.setParent(
+				_parent != null ? _parent.getNamespace(): null);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
 	}
 
@@ -895,8 +893,8 @@ public class AbstractComponent implements Component, ComponentCtrl {
 			return _spaceInfo.ns;
 
 		final IdSpace idspace = getSpaceOwner();
-		return idspace instanceof Page ? ((PageCtrl)idspace).getNamespace():
-			idspace == null ? null: ((ComponentCtrl)idspace).getNamespace();
+		return idspace instanceof Page ? ((Page)idspace).getNamespace():
+			idspace == null ? null: ((Component)idspace).getNamespace();
 	}
 
 	public void setDefinition(ComponentDefinition compdef) {

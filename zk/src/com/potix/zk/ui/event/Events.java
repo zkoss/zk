@@ -1,7 +1,7 @@
 /* Events.java
 
 {{IS_NOTE
-	$Id: Events.java,v 1.4 2006/02/27 03:54:49 tomyeh Exp $
+	$Id: Events.java,v 1.5 2006/05/25 05:07:06 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,8 +30,6 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.metainfo.ComponentDefinition;
 import com.potix.zk.ui.metainfo.InstanceDefinition;
 import com.potix.zk.ui.sys.ExecutionsCtrl;
-import com.potix.zk.ui.sys.ComponentCtrl;
-import com.potix.zk.ui.sys.PageCtrl;
 import com.potix.zk.ui.sys.EventProcessingThread;
 import com.potix.zk.au.AuRequest;
 
@@ -39,7 +37,7 @@ import com.potix.zk.au.AuRequest;
  * Utilities to handle events.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:54:49 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/25 05:07:06 $
  */
 public class Events {
 	private Events() {}
@@ -77,12 +75,12 @@ public class Events {
 		}
 
 		if (ExecutionsCtrl.getEventMethod(comp.getClass(), evtnm) != null
-		|| ((ComponentCtrl)comp).isListenerAvailable(evtnm, asap))
+		|| comp.isListenerAvailable(evtnm, asap))
 			return true;
 
 		if (!asap) {
 			final Page page = comp.getPage();
-			return ((PageCtrl)page).isListenerAvailable(evtnm);
+			return page != null && page.isListenerAvailable(evtnm);
 		}
 		return false;
 	}

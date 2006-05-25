@@ -1,7 +1,7 @@
 /* PageCtrl.java
 
 {{IS_NOTE
-	$Id: PageCtrl.java,v 1.12 2006/05/02 04:56:31 tomyeh Exp $
+	$Id: PageCtrl.java,v 1.13 2006/05/25 05:07:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -20,7 +20,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package com.potix.zk.ui.sys;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -36,7 +35,7 @@ import com.potix.zk.ui.UiException;
  * <p>Application developers shall never access any of this methods.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/02 04:56:31 $
+ * @version $Revision: 1.13 $ $Date: 2006/05/25 05:07:09 $
  */
 public interface PageCtrl {
 	/** Initializes a page by assigning an identifier, a title, and adding it
@@ -64,19 +63,6 @@ public interface PageCtrl {
 	 * <p>Used only internally.
 	 */
 	public void setOwner(Component comp);
-
-	/** Returns the namespace used to store variables and functions
-	 * belonging to this page.
-	 * <p>Used only internally.
-	 * @see #interpret
-	 */
-	public Namespace getNamespace();
-	/** Interpret a BeanShell script against the specified componet.
-	 * <p>Used only internally.
-	 * @param comp the componet. If null, the evaluation takes place
-	 * at this page.
-	 */
-	public void interpret(Component comp, String script);
 
 	/** Redraws the whole page into the specified output.
 	 *
@@ -124,12 +110,4 @@ public interface PageCtrl {
  	 * @see #getDefaultParent
  	 */
  	public void setDefaultParent(Component comp);
-
-	//-- event utilities --//
-	/** Returns whether the event listener is available.
-	 */
-	public boolean isListenerAvailable(String evtnm);
-	/** Returns an iterator for iterating listener for the specified event.
-	 */
-	public Iterator getListenerIterator(String evtnm);
 }

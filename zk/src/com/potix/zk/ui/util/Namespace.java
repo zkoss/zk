@@ -1,7 +1,7 @@
 /* Namespace.java
 
 {{IS_NOTE
-	$Id: Namespace.java,v 1.2 2006/05/24 13:47:19 tomyeh Exp $
+	$Id: Namespace.java,v 1.1 2006/05/25 05:07:10 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package com.potix.zk.ui.util;
 
 /**
  * To represent the name space for storing variables and functions.
@@ -31,7 +31,7 @@ package com.potix.zk.ui.sys;
  * interpreter).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/24 13:47:19 $
+ * @version $Revision: 1.1 $ $Date: 2006/05/25 05:07:10 $
  */
 public interface Namespace {
 	/** Returns the class defined in the beanshell.

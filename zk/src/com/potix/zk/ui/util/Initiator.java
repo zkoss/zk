@@ -1,7 +1,7 @@
 /* Initiator.java
 
 {{IS_NOTE
-	$Id: Initiator.java,v 1.2 2006/04/25 04:46:47 tomyeh Exp $
+	$Id: Initiator.java,v 1.3 2006/05/25 05:07:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -38,7 +38,7 @@ import com.potix.zk.ui.UiException;
  * (if {@link #doCatch} is not called).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/04/25 04:46:47 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/25 05:07:09 $
  */
 public interface Initiator {
 	/** Does the initializes before the page is evaluated.
@@ -55,7 +55,7 @@ public interface Initiator {
 	 * the arg0, arg1, arg2 and arg3 attributes (of the init directive).
 	 * If no argument is specified, args is an array with zero length.
 	 */
-	public void doInit(Page page, Object[] args);
+	public void doInit(Page page, Object[] args) throws Exception;
 	/** Called when an exception occurs during the evaluation of the page.
 	 *
 	 * <p>This is only a notification for the happening of an exception.

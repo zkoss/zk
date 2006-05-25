@@ -1,7 +1,7 @@
 /* Page.java
 
 {{IS_NOTE
-	$Id: Page.java,v 1.12 2006/04/25 09:20:37 tomyeh Exp $
+	$Id: Page.java,v 1.13 2006/05/25 05:07:06 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -21,11 +21,9 @@ package com.potix.zk.ui;
 
 import java.util.Map;
 import java.util.Collection;
+import java.util.Iterator;
 
-import bsh.Interpreter;
-import bsh.NameSpace;
-import bsh.EvalError;
-
+import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.metainfo.PageDefinition;
 
@@ -83,7 +81,7 @@ import com.potix.zk.ui.metainfo.PageDefinition;
  * It cannot <b>create</b> component.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/04/25 09:20:37 $
+ * @version $Revision: 1.13 $ $Date: 2006/05/25 05:07:06 $
  */
 public interface Page extends IdSpace {
 	//-- proxy to Desktop --//
@@ -238,6 +236,12 @@ public interface Page extends IdSpace {
 	 * @return whether the listener is removed; false if it was never added.
 	 */
 	public boolean removeEventListener(String evtnm, EventListener listener);
+	/** Returns whether the event listener is available.
+	 */
+	public boolean isListenerAvailable(String evtnm);
+	/** Returns an iterator for iterating listener for the specified event.
+	 */
+	public Iterator getListenerIterator(String evtnm);
 
 	//-- special control --//
 	/** Removes all components in this page.
@@ -259,4 +263,17 @@ public interface Page extends IdSpace {
 	/** Invalidates this page to cause all components to redraw.
 	 */
 	public void invalidate();
+
+	/** Returns the namespace used to store variables and functions
+	 * belonging to this page.
+	 * <p>Used only internally.
+	 * @see #interpret
+	 */
+	public Namespace getNamespace();
+	/** Interpret a BeanShell script against the specified componet.
+	 * <p>Used only internally.
+	 * @param comp the componet. If null, the evaluation takes place
+	 * at this page.
+	 */
+	public void interpret(Component comp, String script);
 }

@@ -1,7 +1,7 @@
-/* ZscriptInitiator.java
+/* ScriptInitiator.java
 
 {{IS_NOTE
-	$Id: ZscriptInitiator.java,v 1.1 2006/05/25 04:10:56 tomyeh Exp $
+	$Id: ScriptInitiator.java,v 1.1 2006/05/25 05:07:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -19,20 +19,25 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.impl;
 
-import com.potix.util.resource.Locator;
 import com.potix.zk.ui.Page;
+import com.potix.zk.ui.metainfo.Script;
 import com.potix.zk.ui.util.Initiator;
 
 /**
  * An initiator used to evaluate a zscript file.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/25 04:10:56 $
+ * @version $Revision: 1.1 $ $Date: 2006/05/25 05:07:07 $
  */
-public class ZscriptInitiator implements Initiator {
-	public ZscriptInitiator(Locator locator, String zsfile) {
+public class ScriptInitiator implements Initiator {
+	private final Script _script;
+
+	public ScriptInitiator(Script script) {
+		if (script == null) throw new IllegalArgumentException("null");
+		_script = script;
 	}
-	public void doInit(Page page, Object[] args) {
+	public void doInit(Page page, Object[] args) throws Exception {
+		page.interpret(null, _script.getScript());
 	}
 	public void doCatch(Throwable ex) {
 	}

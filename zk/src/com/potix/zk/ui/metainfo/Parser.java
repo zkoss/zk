@@ -1,7 +1,7 @@
 /* Parser.java
 
 {{IS_NOTE
-	$Id: Parser.java,v 1.14 2006/05/25 04:10:56 tomyeh Exp $
+	$Id: Parser.java,v 1.15 2006/05/25 05:07:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -51,14 +51,14 @@ import com.potix.web.servlet.StyleSheet;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.impl.ZscriptInitiator;
+import com.potix.zk.ui.impl.ScriptInitiator;
 import com.potix.zk.ui.util.Condition;
 import com.potix.zk.ui.util.impl.ConditionImpl;
 
 /**
  * Used to prase the ZUL file
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/05/25 04:10:56 $
+ * @version $Revision: 1.15 $ $Date: 2006/05/25 05:07:09 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);
@@ -228,17 +228,19 @@ public class Parser {
 			}
 
 			final String clsnm = (String)params.remove("class");
-			final String zscript = (String)params.remove("zscript");
+			final String zsrc = (String)params.remove("zscript");
 
 			if (!params.isEmpty())
 				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 
 			if (isEmpty(clsnm)) {
-				if (isEmpty(zscript))
+				if (isEmpty(zsrc))
 					throw new UiException("The class or zscript attribute must be specified, "+pi.getLocator());
+				final URL url = getLocator().getResource(zsrc);
+				if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+pi.getLocator());
 				pgdef.addInitiatorDefinition(
 					new InitiatorDefinition(
-						new ZscriptInitiator(getLocator(), zscript), args));
+						new ScriptInitiator(new Script(url, null)), args));
 			} else {
 				pgdef.addInitiatorDefinition(
 					clsnm.indexOf("${") >= 0 ? //class supports EL
@@ -373,7 +375,7 @@ public class Parser {
 			final Condition cond = ConditionImpl.getInstance(ifc, unless);
 			if (!isEmpty(src)) {
 				final URL url = getLocator().getResource(src);
-				if (url == null) throw new FileNotFoundException(src);
+				if (url == null) throw new FileNotFoundException("File not found: "+src+", at "+el.getLocator());
 				parent.appendChild(new Script(url, cond));
 			}
 

@@ -1,7 +1,7 @@
 /* PageImpl.java
 
 {{IS_NOTE
-	$Id: PageImpl.java,v 1.6 2006/04/26 08:30:24 tomyeh Exp $
+	$Id: PageImpl.java,v 1.7 2006/05/25 05:07:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -61,12 +61,11 @@ import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.sys.Namespace;
+import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.sys.ExecutionCtrl;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.ui.sys.PageCtrl;
-import com.potix.zk.ui.sys.ComponentCtrl;
 import com.potix.zk.ui.sys.ComponentsCtrl;
 import com.potix.zk.ui.sys.BshNamespace;
 import com.potix.zk.ui.sys.Variables;
@@ -84,7 +83,7 @@ import com.potix.zk.au.AuSetTitle;
  * at most one thread can access a page and all its components at the same time.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/04/26 08:30:24 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/25 05:07:07 $
  */
 public class PageImpl implements Page, PageCtrl {
 	private static final Log log = Log.lookup(PageImpl.class);
@@ -471,7 +470,7 @@ public class PageImpl implements Page, PageCtrl {
 				_ip.set("spaceScope", comp.getAttributes(Component.SPACE_SCOPE));
 				_ip.set("componentScope", comp.getAttributes(Component.COMPONENT_SCOPE));
 				_ip.eval(script,
-					(NameSpace)((ComponentCtrl)comp).getNamespace().getNativeNamespace());
+					(NameSpace)(comp.getNamespace().getNativeNamespace()));
 			} else {
 				_ip.eval(script);
 			}

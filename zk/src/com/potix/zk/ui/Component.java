@@ -1,7 +1,7 @@
 /* Component.java
 
 {{IS_NOTE
-	$Id: Component.java,v 1.18 2006/04/25 09:20:37 tomyeh Exp $
+	$Id: Component.java,v 1.19 2006/05/25 05:07:06 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -21,11 +21,13 @@ package com.potix.zk.ui;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
 import com.potix.zk.ui.metainfo.ComponentDefinition;
 import com.potix.zk.ui.event.EventListener;
+import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.au.AuResponse;
 
 /**
@@ -79,7 +81,7 @@ import com.potix.zk.au.AuResponse;
  * background thread to handle long operations).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/04/25 09:20:37 $
+ * @version $Revision: 1.19 $ $Date: 2006/05/25 05:07:06 $
  */
 public interface Component {
 	/** Returns the component definition, or null if this component
@@ -478,6 +480,14 @@ public interface Component {
 	 * @return whether the listener is removed; false if it was never added.
 	 */
 	public boolean removeEventListener(String evtnm, EventListener listener);
+	/** Returns whether the event listener is available.
+	 * @param asap whether to check only ASAP listener.
+	 * See {@link Component#addEventListener} for more description.
+	 */
+	public boolean isListenerAvailable(String evtnm, boolean asap);
+	/** Returns an iterator for iterating listener for the specified event.
+	 */
+	public Iterator getListenerIterator(String evtnm);
 
 	//-- drawing --//
 	/** Invalidates this component by setting the dirty flag
@@ -600,6 +610,11 @@ public interface Component {
 	 * inserting.
 	 */
 	public boolean isTransparent();
+
+	/** Returns the namespace to store variables and functions belonging
+	 * to the ID space of this component.
+	 */
+	public Namespace getNamespace();
 
 	/** Used with {@link #invalidate(Component.Range)} to denote the inner elements
 	 * (excluding the enclosing tag).
