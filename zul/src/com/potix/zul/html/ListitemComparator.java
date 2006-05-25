@@ -29,6 +29,7 @@ import java.util.Comparator;
  * @version $Revision: 1.2 $ $Date: 2006/05/25 15:02:25 $
  */
 public class ListitemComparator implements Comparator {
+	/** Column index. */
 	private final int _index;
 	/** Ascending. */
 	private final boolean _asc;
@@ -46,9 +47,9 @@ public class ListitemComparator implements Comparator {
 	public ListitemComparator() {
 		this(-1, true, true);
 	}
-	/** Compares with the cell of the specified index.
+	/** Compares with the column of the specified index.
 	 *
-	 * <p>0 for the first cell, 1 for the second and so on
+	 * <p>0 for the first column, 1 for the second and so on
 	 *
 	 * <p>Note: -1 for {@link Listitem#getValue} and it assumes
 	 * the value implements Comparable.
@@ -60,9 +61,9 @@ public class ListitemComparator implements Comparator {
 	public ListitemComparator(int index) {
 		this(index, true, true);
 	}
-	/** Compares with the cell of the specified index.
+	/** Compares with the column of the specified index.
 	 *
-	 * <p>0 for the first cell, 1 for the second and so on
+	 * <p>0 for the first column, 1 for the second and so on
 	 *
 	 * <p>Note: -1 for {@link Listitem#getValue} and it assumes
 	 * the value implements Comparable.
