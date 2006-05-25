@@ -1,7 +1,7 @@
 /* sel.js
 
 {{IS_NOTE
-	$Id: sel.js,v 1.28 2006/05/23 02:35:15 tomyeh Exp $
+	$Id: sel.js,v 1.29 2006/05/25 08:38:32 tomyeh Exp $
 	Purpose:
 		zk.Selectable
 	Description:
@@ -794,7 +794,7 @@ zk.Selectable.prototype = {
 
 		for (var j = 0; j < this.form.elements.length; ++j){
 			var el = this.form.elements[j];
-			if (el.name == nm && el.type == "hidden") {
+			if (el.getAttribute("zk_hiddenBy") == this.id) {
 				el.parentNode.removeChild(el);
 				--j;
 			}
@@ -807,6 +807,7 @@ zk.Selectable.prototype = {
 				inp.type = "hidden";
 				inp.name = nm;
 				inp.value = r.getAttribute("zk_value");
+				inp.setAttribute("zk_hiddenBy", this.id);
 				this.form.appendChild(inp);
 			}
 		}
