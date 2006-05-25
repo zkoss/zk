@@ -1,7 +1,7 @@
 /* AbstractComponent.java
 
 {{IS_NOTE
-	$Id: AbstractComponent.java,v 1.39 2006/05/25 05:07:05 tomyeh Exp $
+	$Id: AbstractComponent.java,v 1.40 2006/05/25 09:50:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -66,7 +66,7 @@ import com.potix.zk.au.AuRemove;
  * the chores.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.39 $ $Date: 2006/05/25 05:07:05 $
+ * @version $Revision: 1.40 $ $Date: 2006/05/25 09:50:05 $
  */
 public class AbstractComponent implements Component, ComponentCtrl {
 	private static final Log log = Log.lookup(AbstractComponent.class);
@@ -611,14 +611,15 @@ public class AbstractComponent implements Component, ComponentCtrl {
 
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
 		if (_parent != null) {
-			_parent.removeChild(this);
-			_parent = null;
+			final Component oldp = _parent;
+			_parent = null; //update first to avoid loop back
+			oldp.removeChild(this); //spec: removeChild must be called
 		} else {
 			if (_page != null) ((PageCtrl)_page).removeRoot(this);
 		}
 
 		if (parent != null) {
-			_parent = parent;
+			_parent = parent; //update first to avoid loop back
 			//We could use _parent.getChildren().contains instead, but
 			//the following statement is much faster if a lot of children
 			if (!((AbstractComponent)_parent)._newChildren.contains(this))
