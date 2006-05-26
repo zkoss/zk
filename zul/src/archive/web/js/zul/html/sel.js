@@ -1,7 +1,7 @@
 /* sel.js
 
 {{IS_NOTE
-	$Id: sel.js,v 1.29 2006/05/25 08:38:32 tomyeh Exp $
+	$Id: sel.js,v 1.31 2006/05/26 10:08:18 tomyeh Exp $
 	Purpose:
 		zk.Selectable
 	Description:
@@ -869,7 +869,7 @@ zkSel.cmonblur = function (el) {
 
 ////
 // listbox //
-function zkLibox() {}
+function zkLibox() {} //listbox
 
 /** Called when the body got a key stroke. */
 zkLibox.bodyonkeydown = function (evt) {
@@ -921,18 +921,66 @@ zkLibox.onVisi = function (cmp) {
 	if (meta) meta.init();
 };
 
-function zkLit() {}
-zkLit.init = function (cmp) { //listitem
+function zkLit() {} //listitem
+zkLit.init = function (cmp) {
 	Event.observe(cmp, "click", function (evt) {zkLibox.onclick(evt);});
 	Event.observe(cmp, "keydown", function (evt) {return zkLibox.onkeydown(evt);});
 	Event.observe(cmp, "mouseover", function () {return zkSel.onover(cmp);});
 	Event.observe(cmp, "mouseout", function () {return zkSel.onout(cmp);});
 };
 
-function zkLcfc() {}
-zkLcfc.init = function (cmp) { //checkmark or the first hyperlink of listcell
+function zkLcfc() {} //checkmark or the first hyperlink of listcell
+zkLcfc.init = function (cmp) {
 	Event.observe(cmp, "focus", function () {return zkSel.cmonfocus(cmp);});
 	Event.observe(cmp, "blur", function () {return zkSel.cmonblur(cmp);});
+};
+function zkLhr() {} //listheader
+zkLhr.init = function (cmp) {
+	zkLhr._show(cmp);
+	Event.observe(cmp, "click", function (evt) {zkLhr.onclick(evt, cmp);});
+	Event.observe(cmp, "mouseover", function () {return zkLhr.onover(cmp);});
+	Event.observe(cmp, "mouseout", function () {return zkLhr.onout(cmp);});
+};
+zkLhr.onover = function (cmp) {
+	if (zkLhr._sortable(cmp))
+		zkLhr._show(cmp, "hint");
+};
+zkLhr.onout = function (cmp) {
+	zkLhr._show(cmp);
+};
+zkLhr.onclick = function (evt, cmp) {
+	if (zkLhr._sortable(cmp))
+		zkau.send({uuid: cmp.id, cmd: "onSort", data: null}, 10);
+};
+
+/** Tests whether it is sortable.
+ */
+zkLhr._sortable = function (cmp) {
+	return cmp.getAttribute("zk_asc") || cmp.getAttribute("zk_dsc");
+};
+/** Shows the hint, ascending or descending image.
+ */
+zkLhr._show = function (cmp, nm) {
+	var img = $(cmp.id + "!hint");
+	if (img) {
+		if (nm) {
+			var s = img.src;
+			var k = s.lastIndexOf('.'), j = s.lastIndexOf('/', k - 1);
+			img.src = s.substring(0, j + 1) + nm + s.substring(k);
+			img.style.display = "";
+			return; //done
+		}
+		switch (cmp.getAttribute("zk_sort")) {
+		case "ascending": zkLhr._show(cmp, "asc"); break;
+		case "descending": zkLhr._show(cmp, "dsc"); break;
+		default: img.style.display = "none";
+		}
+	}
+};
+zkLhr.setAttr = function (cmp, nm, val) {
+	zkau.setAttr(cmp, nm, val);
+	if (nm == "zk_sort") zkLhr._show(cmp);
+	return true;
 };
 
 ////

@@ -244,7 +244,7 @@ div.tree-head, div.listbox-head, div.grid-head { /* always used. */
 	background: threedface; border: 0; overflow: hidden; width: 100%;
 }
 div.tree-head td, div.listbox-head td, div.grid-head td {
-	overflow: hidden; border: 1px solid;
+	overflow: hidden; border: 1px solid; cursor: pointer;
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
 	text-overflow: ellipsis; white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;

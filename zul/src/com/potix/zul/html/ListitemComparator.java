@@ -1,7 +1,7 @@
 /* ListitemComparator.java
 
 {{IS_NOTE
-	$Id: ListitemComparator.java,v 1.3 2006/05/26 04:05:56 tomyeh Exp $
+	$Id: ListitemComparator.java,v 1.4 2006/05/26 10:27:40 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +26,7 @@ import java.util.Comparator;
  * A comparator used to compare {@link Listitem}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/26 04:05:56 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/26 10:27:40 $
  */
 public class ListitemComparator implements Comparator {
 	/** Column index. */
@@ -111,7 +111,15 @@ public class ListitemComparator implements Comparator {
 	}
 
 	public boolean equals(Object o) {
-		return o instanceof ListitemComparator &&
-			((ListitemComparator)o)._index == _index;
+		if (!(o instanceof ListitemComparator))
+			return false;
+		final ListitemComparator c = (ListitemComparator)o;
+		return c._index == _index && c._asc == _asc && c._igcase == _igcase;
+	}
+	public int hashCode() {
+		return _index ^ (_asc ? 1: 5) ^ (_igcase ? 9: 3);
+	}
+	public String toString() {
+		return "[Compare "+(_index < 0 ? "value": _index+"-th column")+']';
 	}
 }

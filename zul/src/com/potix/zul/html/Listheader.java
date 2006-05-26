@@ -1,7 +1,7 @@
 /* Listheader.java
 
 {{IS_NOTE
-	$Id: Listheader.java,v 1.8 2006/05/26 04:05:55 tomyeh Exp $
+	$Id: Listheader.java,v 1.9 2006/05/26 10:08:21 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -24,8 +24,10 @@ import java.util.List;
 import java.util.Comparator;
 
 import com.potix.lang.Objects;
+import com.potix.xml.HTMLs;
 
 import com.potix.zk.ui.Component;
+import com.potix.zk.ui.Components;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 
@@ -43,7 +45,7 @@ import com.potix.zul.html.impl.HeaderElement;
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/26 04:05:55 $
+ * @version $Revision: 1.9 $ $Date: 2006/05/26 10:08:21 $
  */
 public class Listheader extends HeaderElement {
 	private String _sortDir = "natural";
@@ -79,8 +81,13 @@ public class Listheader extends HeaderElement {
 		return _sortDir;
 	}
 	/** Sets the sort direction. This does not sort the data, it only serves
-	 * as an indicator as to how the list is sorted. You would set this
-	 * yourself after sorting the data.
+	 * as an indicator as to how the list is sorted.
+	 *
+	 * <p>If you use {@link #sort} to sort list items,
+	 * the sort direction is maintained automatically.
+	 * If you want to sort it in customized way, you have to set the
+	 * sort direction manaully.
+	 *
 	 * @param sortDir one of "ascending", "descending" and "natural"
 	 */
 	public void setSortDirection(String sortDir) throws WrongValueException {
@@ -89,6 +96,7 @@ public class Listheader extends HeaderElement {
 			throw new WrongValueException("Unknown sort direction: "+sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
+			smartUpdate("zk_sort", _sortDir); //don't use null because sel.js assumes it
 		}
 	}
 
@@ -192,11 +200,64 @@ public class Listheader extends HeaderElement {
 		}
 	}
 
+	/** Sorts the list items based on {@link #getSortAscending}
+	 * and {@link #getSortDescending}.
+	 *
+	 * <p>It checks {@link #setSortDirection} to see whether sorting
+	 * is required, and update {@link #setSortDirection} after sorted.
+	 *
+	 * <p>It sorts the listitem by use of {@link Components#sort}.
+	 *
+	 * @param ascending whether to use {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * @return whether the list items are sorted.
+	 */
+	public boolean sort(boolean ascending) {
+		final Listbox box = getListbox();
+		if (box == null) return false;
+
+		final String dir = getSortDirection();
+		if (ascending) {
+			if ("ascending".equals(dir)) return false;
+		} else {
+			if ("descending".equals(dir)) return false;
+		}
+
+		final Comparator cpr = ascending ? _sortAsc: _sortDsc;
+		if (cpr == null) return false;
+
+		Components.sort(box.getItems(), cpr);
+
+		//maintain
+		for (Iterator it = box.getListhead().getChildren().iterator();
+		it.hasNext();) {
+			final Listheader hd = (Listheader)it.next();
+			hd.setSortDirection(
+				hd != this ? "natural": ascending ? "ascending": "descending");
+		}
+		return true;
+	}
+
+	//-- event listener --//
+	/** It invokes {@link #sort} to sort list items and maintain
+	 * {@link #getSortDirection}.
+	 */
+	public void onSort() {
+		final String dir = getSortDirection();
+		if ("ascending".equals(dir)) sort(false);
+		else if ("descending".equals(dir)) sort(true);
+		else if (!sort(true)) sort(false);
+	}
+
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80);
 		if (_sortAsc != null) sb.append(" zk_asc=\"true\"");
 		if (_sortDsc != null) sb.append(" zk_dsc=\"true\"");
+
+		if (!"natural".equals(_sortDir))
+			HTMLs.appendAttribute(sb, "zk_sort", _sortDir);
 
 		final String attrs = super.getOuterAttrs();
 		if (sb.length() == 0) return attrs;
