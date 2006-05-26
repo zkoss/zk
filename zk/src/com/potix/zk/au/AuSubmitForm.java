@@ -1,7 +1,7 @@
 /* AuSubmitForm.java
 
 {{IS_NOTE
-	$Id: AuSubmitForm.java,v 1.1 2006/05/26 06:41:13 tomyeh Exp $
+	$Id: AuSubmitForm.java,v 1.2 2006/05/26 11:15:57 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -24,11 +24,11 @@ package com.potix.zk.au;
  * <p>data[0]: the form's UUID.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/26 06:41:13 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/26 11:15:57 $
  */
 public class AuSubmitForm extends AuResponse {
 	/**
-	 * @param formID the form's ID to submit, which is UUID if a component
+	 * @param formId the form's ID to submit, which is UUID if a component
 	 * is used.
 	 */
 	public AuSubmitForm(String formId) {
