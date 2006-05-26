@@ -1,7 +1,7 @@
 /* AuRequest.java
 
 {{IS_NOTE
-	$Id: AuRequest.java,v 1.16 2006/04/14 02:55:36 tomyeh Exp $
+	$Id: AuRequest.java,v 1.17 2006/05/26 10:08:15 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -39,7 +39,7 @@ import com.potix.zk.au.impl.*;
  * A request sent from the client to {@link com.potix.zk.ui.sys.UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.16 $ $Date: 2006/04/14 02:55:36 $
+ * @version $Revision: 1.17 $ $Date: 2006/05/26 10:08:15 $
  */
 public class AuRequest {
 	private final Desktop _desktop;
@@ -166,6 +166,9 @@ public class AuRequest {
 	 * let users add customized events.
 	 */
 	public static final Command ON_NOTIFY = new GenericCommand("onNotify", false);
+	/** The onSort event (used with {@link com.potix.zk.ui.event.Event}).
+	 */
+	public static final Command ON_SORT = new GenericCommand("onSort", true);
 
 	/** Constructor for a request sent from a component.
 	 * Since we cannot invoke {@link Desktop#getComponentByUuid} without

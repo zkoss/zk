@@ -1,7 +1,7 @@
 /* RequestQueueImpl.java
 
 {{IS_NOTE
-	$Id: RequestQueueImpl.java,v 1.1.1.1 2006/04/24 04:04:06 tomyeh Exp $
+	$Id: RequestQueueImpl.java,v 1.2 2006/05/26 10:08:16 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -39,7 +39,7 @@ import com.potix.zk.ui.sys.RequestQueue;
  * Unlike only of desktop members, this class must be thread-safe.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1.1.1 $ $Date: 2006/04/24 04:04:06 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/26 10:08:16 $
  */
 public class RequestQueueImpl implements RequestQueue {
 	private static final Log log = Log.lookup(RequestQueueImpl.class);
@@ -131,14 +131,15 @@ public class RequestQueueImpl implements RequestQueue {
 		} else if (cmd == AuRequest.ON_RENDER || cmd == AuRequest.ON_ERROR
 		|| cmd == AuRequest.ON_MOVE || cmd == AuRequest.ON_Z_INDEX
 		|| cmd == AuRequest.ON_TIMER || cmd == AuRequest.ON_DBL_CLICK
-		|| cmd == AuRequest.ON_FOCUS || cmd == AuRequest.ON_BLUR) {
+		|| cmd == AuRequest.ON_FOCUS || cmd == AuRequest.ON_BLUR
+		|| cmd == AuRequest.ON_SORT) {
 			final String uuid = request.getComponentUuid();
 			for (Iterator it = _requests.iterator(); it.hasNext();) {
 				final AuRequest req2 = (AuRequest)it.next();
 				if (req2.getCommand() == cmd
 				&& Objects.equals(req2.getComponentUuid(), uuid)) {
 					if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
-					it.remove(); //drop
+					it.remove(); //drop req2
 					break; //no need to iterate because impossible to have more
 				}
 			}
