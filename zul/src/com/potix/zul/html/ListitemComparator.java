@@ -1,7 +1,7 @@
 /* ListitemComparator.java
 
 {{IS_NOTE
-	$Id: ListitemComparator.java,v 1.2 2006/05/25 15:02:25 tomyeh Exp $
+	$Id: ListitemComparator.java,v 1.3 2006/05/26 04:05:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +26,7 @@ import java.util.Comparator;
  * A comparator used to compare {@link Listitem}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/25 15:02:25 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/26 04:05:56 $
  */
 public class ListitemComparator implements Comparator {
 	/** Column index. */
@@ -104,7 +104,8 @@ public class ListitemComparator implements Comparator {
 			if (c instanceof String)
 				return ((String)c).toUpperCase();
 			if (c instanceof Character)
-				return ((Character)c).toUpperCase();
+				return new Character(Character.toUpperCase(
+					((Character)c).charValue()));
 		}
 		return c;
 	}

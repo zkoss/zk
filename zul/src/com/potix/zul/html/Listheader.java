@@ -1,7 +1,7 @@
 /* Listheader.java
 
 {{IS_NOTE
-	$Id: Listheader.java,v 1.7 2006/02/27 03:55:13 tomyeh Exp $
+	$Id: Listheader.java,v 1.8 2006/05/26 04:05:55 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -21,6 +21,7 @@ package com.potix.zul.html;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Comparator;
 
 import com.potix.lang.Objects;
 
@@ -42,10 +43,11 @@ import com.potix.zul.html.impl.HeaderElement;
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/02/27 03:55:13 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/26 04:05:55 $
  */
 public class Listheader extends HeaderElement {
 	private String _sortDir = "natural";
+	private Comparator _sortAsc, _sortDsc;
 	private int _maxlength;
 
 	public Listheader() {
@@ -88,6 +90,63 @@ public class Listheader extends HeaderElement {
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
 		}
+	}
+
+	/** Returns the ascending sorter, or null if not available.
+	 */
+	public Comparator getSortAscending() {
+		return _sortAsc;
+	}
+	/** Sets the ascending sorter, or null for no ascending order.
+	 */
+	public void setSortAscending(Comparator sorter) {
+		if (!Objects.equals(_sortAsc, sorter)) {
+			if (sorter == null) smartUpdate("zk_asc", null);
+			else if (_sortAsc == null) smartUpdate("zk_asc", "true");
+			_sortAsc = sorter;
+		}
+	}
+	/** Sets the ascending sorter with the class name, or null for
+	 * no ascending order.
+	 */
+	public void setSortAscending(String clsnm)
+	throws ClassNotFoundException, InstantiationException,
+	IllegalAccessException {
+		setSortAscending(toComparator(clsnm));
+	}
+
+	/** Returns the descending sorter, or null if not available.
+	 */
+	public Comparator getSortDescending() {
+		return _sortDsc;
+	}
+	/** Sets the descending sorter, or null for no descending order.
+	 */
+	public void setSortDescending(Comparator sorter) {
+		if (!Objects.equals(_sortDsc, sorter)) {
+			if (sorter == null) smartUpdate("zk_dsc", null);
+			else if (_sortDsc == null) smartUpdate("zk_dsc", "true");
+			_sortDsc = sorter;
+		}
+	}
+	/** Sets the descending sorter with the class name, or null for
+	 * no descending order.
+	 */
+	public void setSortDescending(String clsnm)
+	throws ClassNotFoundException, InstantiationException,
+	IllegalAccessException {
+		setSortDescending(toComparator(clsnm));
+	}
+
+	private Comparator toComparator(String clsnm)
+	throws ClassNotFoundException, InstantiationException,
+	IllegalAccessException {
+		if (clsnm == null || clsnm.length() == 0) return null;
+
+		final Class cls = getClass(clsnm);
+		if (!Comparator.class.isAssignableFrom(cls))
+			throw new UiException("Comparator must be implemented: "+clsnm);
+		return (Comparator)cls.newInstance();
 	}
 
 	/** Returns the maximal length of each item's label.
@@ -134,6 +193,16 @@ public class Listheader extends HeaderElement {
 	}
 
 	//-- super --//
+	public String getOuterAttrs() {
+		final StringBuffer sb = new StringBuffer(80);
+		if (_sortAsc != null) sb.append(" zk_asc=\"true\"");
+		if (_sortDsc != null) sb.append(" zk_dsc=\"true\"");
+
+		final String attrs = super.getOuterAttrs();
+		if (sb.length() == 0) return attrs;
+		return sb.insert(0, attrs).toString();
+	}
+
 	/** Invalidates the whole box. */
 	protected void invalidateWhole() {
 		final Listbox box = getListbox();
