@@ -1,7 +1,7 @@
 /* AbstractTag.java
 
 {{IS_NOTE
-	$Id: AbstractTag.java,v 1.12 2006/05/19 10:05:53 tomyeh Exp $
+	$Id: AbstractTag.java,v 1.13 2006/05/26 06:41:12 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -48,7 +48,7 @@ import com.potix.zk.ui.ext.RawId;
  * only ASAP event listeners.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/19 10:05:53 $
+ * @version $Revision: 1.13 $ $Date: 2006/05/26 06:41:12 $
  */
 public class AbstractTag extends AbstractComponent
 implements DynamicPropertied, RawId {
@@ -187,7 +187,7 @@ implements DynamicPropertied, RawId {
 			}
 		}
 
-		if (evtDeclared || "form".equals(_tagnm.toLowerCase()))
+		if (evtDeclared)
 			out.write(" zk_type=\"zhtml.main.Raw\"");
 
 		if (evtDeclared || !shallHideId() || !Components.isAutoId(getUuid())) {
