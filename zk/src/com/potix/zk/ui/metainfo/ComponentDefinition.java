@@ -1,7 +1,7 @@
 /* ComponentDefinition.java
 
 {{IS_NOTE
-	$Id: ComponentDefinition.java,v 1.12 2006/05/25 05:07:07 tomyeh Exp $
+	$Id: ComponentDefinition.java,v 1.13 2006/05/26 03:11:35 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -43,7 +43,7 @@ import com.potix.zk.ui.util.Evaluator;
  * of a component.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/25 05:07:07 $
+ * @version $Revision: 1.13 $ $Date: 2006/05/26 03:11:35 $
  * @see LanguageDefinition
  */
 public class ComponentDefinition implements Cloneable {
@@ -155,8 +155,7 @@ public class ComponentDefinition implements Cloneable {
 		if (_cls instanceof String) {
 			final String clsnm = (String)_cls;
 			try {
-				setImplementationClass(
-					page.getNamespace().getClass(clsnm));
+				setImplementationClass(page.getClass(clsnm));
 			} catch (ClassNotFoundException ex) {
 				throw new UiException("Class not found: "+clsnm, ex);
 			}

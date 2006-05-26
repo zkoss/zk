@@ -1,7 +1,7 @@
 /* AbstractComponent.java
 
 {{IS_NOTE
-	$Id: AbstractComponent.java,v 1.40 2006/05/25 09:50:05 tomyeh Exp $
+	$Id: AbstractComponent.java,v 1.41 2006/05/26 03:11:32 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -66,7 +66,7 @@ import com.potix.zk.au.AuRemove;
  * the chores.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.40 $ $Date: 2006/05/25 09:50:05 $
+ * @version $Revision: 1.41 $ $Date: 2006/05/26 03:11:32 $
  */
 public class AbstractComponent implements Component, ComponentCtrl {
 	private static final Log log = Log.lookup(AbstractComponent.class);
@@ -888,7 +888,9 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		return false;
 	}
 
-	//-- ComponentCtrl --//
+	public Class getClass(String clsnm) throws ClassNotFoundException {
+		return getNamespace().getClass(clsnm);
+	}
 	public Namespace getNamespace() {
 		if (this instanceof IdSpace)
 			return _spaceInfo.ns;
@@ -896,11 +898,6 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		final IdSpace idspace = getSpaceOwner();
 		return idspace instanceof Page ? ((Page)idspace).getNamespace():
 			idspace == null ? null: ((Component)idspace).getNamespace();
-	}
-
-	public void setDefinition(ComponentDefinition compdef) {
-		if (compdef == null) throw new IllegalArgumentException("null");
-		_compdef = compdef;
 	}
 
 	public boolean isListenerAvailable(String evtnm, boolean asap) {
@@ -926,6 +923,12 @@ public class AbstractComponent implements Component, ComponentCtrl {
 				return l.iterator();
 		}
 		return CollectionsX.EMPTY_ITERATOR;
+	}
+
+	//-- ComponentCtrl --//
+	public void setDefinition(ComponentDefinition compdef) {
+		if (compdef == null) throw new IllegalArgumentException("null");
+		_compdef = compdef;
 	}
 
 	//-- Object --//

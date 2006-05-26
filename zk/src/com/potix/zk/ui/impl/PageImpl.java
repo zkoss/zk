@@ -1,7 +1,7 @@
 /* PageImpl.java
 
 {{IS_NOTE
-	$Id: PageImpl.java,v 1.8 2006/05/25 06:22:25 tomyeh Exp $
+	$Id: PageImpl.java,v 1.9 2006/05/26 03:11:34 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -83,7 +83,7 @@ import com.potix.zk.au.AuSetTitle;
  * at most one thread can access a page and all its components at the same time.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/25 06:22:25 $
+ * @version $Revision: 1.9 $ $Date: 2006/05/26 03:11:34 $
  */
 public class PageImpl implements Page, PageCtrl {
 	private static final Log log = Log.lookup(PageImpl.class);
@@ -457,6 +457,9 @@ public class PageImpl implements Page, PageCtrl {
 			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
 			//Don't use include. Otherwise, headers (set by JSP) will be eaten.
 		}
+	}
+	public Class getClass(String clsnm) throws ClassNotFoundException {
+		return _ns.getClass(clsnm);
 	}
 	public final Namespace getNamespace() {
 		return _ns;

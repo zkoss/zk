@@ -1,7 +1,7 @@
 /* Component.java
 
 {{IS_NOTE
-	$Id: Component.java,v 1.19 2006/05/25 05:07:06 tomyeh Exp $
+	$Id: Component.java,v 1.21 2006/05/26 03:13:42 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -81,7 +81,7 @@ import com.potix.zk.au.AuResponse;
  * background thread to handle long operations).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.19 $ $Date: 2006/05/25 05:07:06 $
+ * @version $Revision: 1.21 $ $Date: 2006/05/26 03:13:42 $
  */
 public interface Component {
 	/** Returns the component definition, or null if this component
@@ -611,8 +611,20 @@ public interface Component {
 	 */
 	public boolean isTransparent();
 
+	/** Returns the class of the specified name.
+	 * It's a shortcut to {@link Namespace#getClass} (of {@link #getNamespace}.
+	 * Before delegating to the thread class loader, it also looks for
+	 * the classes defined in the name space (part of the interpretor).
+	 *
+	 * <p>Note: a namespace per ID space.
+	 *
+	 * @exception ClassNotFoundException if not found.
+	 */
+	public Class getClass(String clsnm) throws ClassNotFoundException;
 	/** Returns the namespace to store variables and functions belonging
 	 * to the ID space of this component.
+	 *
+	 * <p>Note: a namespace per ID space.
 	 */
 	public Namespace getNamespace();
 

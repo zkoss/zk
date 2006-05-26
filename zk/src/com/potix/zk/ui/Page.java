@@ -1,7 +1,7 @@
 /* Page.java
 
 {{IS_NOTE
-	$Id: Page.java,v 1.13 2006/05/25 05:07:06 tomyeh Exp $
+	$Id: Page.java,v 1.15 2006/05/26 03:13:42 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -81,7 +81,7 @@ import com.potix.zk.ui.metainfo.PageDefinition;
  * It cannot <b>create</b> component.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/25 05:07:06 $
+ * @version $Revision: 1.15 $ $Date: 2006/05/26 03:13:42 $
  */
 public interface Page extends IdSpace {
 	//-- proxy to Desktop --//
@@ -263,6 +263,15 @@ public interface Page extends IdSpace {
 	/** Invalidates this page to cause all components to redraw.
 	 */
 	public void invalidate();
+
+	/** Returns the class of the specified name.
+	 * It's a shortcut to {@link Namespace#getClass} (of {@link #getNamespace}.
+	 * Before delegating to the thread class loader, it also looks for
+	 * the classes defined in the interpretor.
+	 *
+	 * @exception ClassNotFoundException if not found.
+	 */
+	public Class getClass(String clsnm) throws ClassNotFoundException;
 
 	/** Returns the namespace used to store variables and functions
 	 * belonging to this page.
