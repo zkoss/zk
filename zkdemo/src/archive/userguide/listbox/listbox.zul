@@ -4,7 +4,7 @@
 hello.zul
 
 {{IS_NOTE
-	$Id: listbox.zul,v 1.5 2006/04/17 09:53:19 tomyeh Exp $
+	$Id: listbox.zul,v 1.6 2006/05/26 10:27:29 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -44,11 +44,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</listbox>		
 
 		<separator bar="true"/>
+	<zscript>
+	Comparator sa0 = new ListitemComparator(0),
+		sa1 = new ListitemComparator(1),
+		sd0 = new ListitemComparator(0, false, true),
+		sd1 = new ListitemComparator(1, false, true);
+	</zscript>
 
 		<listbox width="200px">
 			<listhead>
-				<listheader label="name"/>
-				<listheader label="gender"/>
+				<listheader label="name" sortAscending="&#36;{sa0}" sortDescending="&#36;{sd0}"/>
+				<listheader label="gender" sortAscending="&#36;{sa1}" sortDescending="&#36;{sd1}"/>
 			</listhead>
 			<listitem>
 				<listcell label="Mary"/>

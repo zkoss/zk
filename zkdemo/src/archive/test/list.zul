@@ -4,7 +4,7 @@
 list.zul
 
 {{IS_NOTE
-	$Id: list.zul,v 1.16 2006/05/15 16:27:02 tomyeh Exp $
+	$Id: list.zul,v 1.17 2006/05/26 07:33:11 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -20,10 +20,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window title="List Demo">
 <hbox>
+<zscript>
+	Comparator sa0 = new ListitemComparator(0),
+		sa1 = new ListitemComparator(1),
+		sd0 = new ListitemComparator(0, false, true),
+		sd1 = new ListitemComparator(1, false, true);
+</zscript>
 <listbox id="src" multiple="true" width="200px">
 	<listhead>
-		<listheader label="Population"/>
-		<listheader align="right" label="%"/>
+		<listheader label="Population" sortAscending="${sa0}"/>
+		<listheader align="right" label="%" sortAscending="${sa1}" sortDescending="${sd1}"/>
 	</listhead>
 	<listitem id="a" value="A">
 		<listcell label="A. Graduate"/>
