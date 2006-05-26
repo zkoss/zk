@@ -1,7 +1,7 @@
 /* au.js
 
 {{IS_NOTE
-	$Id: au.js,v 1.52 2006/05/25 10:26:27 tomyeh Exp $
+	$Id: au.js,v 1.53 2006/05/26 06:41:12 tomyeh Exp $
 	Purpose:
 		JavaScript for asynchronous updates
 	Description:
@@ -503,6 +503,8 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 			zkau.valid.closeErrbox(uuid);
 			zkau.valid.closeErrbox(uuid + "!real");
 		}
+	} else if ("submit" == cmd) {
+		if (cmp && cmp.submit) cmp.submit();
 	} else {
 		alert(mesg.ILLEGAL_RESPONSE+"Unknown command: "+cmd);
 	}

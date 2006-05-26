@@ -1,7 +1,7 @@
 /* AuResponse.java
 
 {{IS_NOTE
-	$Id: AuResponse.java,v 1.3 2006/02/27 03:54:44 tomyeh Exp $
+	$Id: AuResponse.java,v 1.4 2006/05/26 06:41:13 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,8 +29,14 @@ import com.potix.zk.ui.Page;
  * A response sent from the server to the client via
  * {@link com.potix.zk.ui.sys.UiEngine}.
  *
+ * <p>Application developers rarely need access this class and its derived
+ * directly.
+ * Rather, use {@link com.potix.zk.ui.util.Clients} instead.
+ * If you prefer to use the derives directly, you can use them with
+ * {@link com.potix.zk.ui.Execution#addAuResponse}.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:54:44 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/26 06:41:13 $
  */
 public class AuResponse {
 	private final String _cmd;
