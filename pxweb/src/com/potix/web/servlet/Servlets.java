@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxweb/src/com/potix/web/servlet/Servlets.java,v 1.48 2006/05/15 02:13:38 tomyeh Exp $
+	$Header: //time/potix/rd/cvs/zk1/pxweb/src/com/potix/web/servlet/Servlets.java,v 1.49 2006/05/26 10:08:12 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -71,7 +71,7 @@ import com.potix.web.util.resource.ServletContextLocator;
  * The servlet relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.48 $ $Date: 2006/05/15 02:13:38 $
+ * @version $Revision: 1.49 $ $Date: 2006/05/26 10:08:12 $
  * @see com.potix.web.servlet.http.Https
  * @see com.potix.web.servlet.Charsets
  */
@@ -166,7 +166,8 @@ public class Servlets {
 		return map;
 	}
 
-	/** Returns whether a URL starts with xxx:// or mailto:
+	/** Returns whether a URL starts with xxx://, mailto:, about:,
+	 * javascript:
 	 */
 	public static final boolean isUniversalURL(String uri) {
 		if (uri == null || uri.length() == 0) return false;
@@ -174,7 +175,7 @@ public class Servlets {
 		final char cc = uri.charAt(0);
 		return cc >= 'a' && cc <= 'z'
 			&& (uri.indexOf("://") > 0 || uri.startsWith("mailto:")
-			|| uri.startsWith("javascript:"));
+			|| uri.startsWith("javascript:") || uri.startsWith("about:"));
 	}
 
 	//-- resource locator --//
