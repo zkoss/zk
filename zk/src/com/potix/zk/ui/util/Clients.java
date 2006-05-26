@@ -1,7 +1,7 @@
 /* Clients.java
 
 {{IS_NOTE
-	$Id: Clients.java,v 1.1 2006/05/26 06:41:15 tomyeh Exp $
+	$Id: Clients.java,v 1.2 2006/05/26 06:51:48 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -21,32 +21,36 @@ package com.potix.zk.ui.util;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Executions;
+import com.potix.zk.au.AuResponse;
 import com.potix.zk.au.AuCloseErrorBox;
 import com.potix.zk.au.AuSubmitForm;
 
 /**
- * 
+ * Utilities to send {@link AuResponse} to the client.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/26 06:41:15 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/26 06:51:48 $
  */
 public class Clients {
 	/** Closes the error box at the browser belonging to
 	 * the specified component, if any.
 	 */
 	public static final void closeErrorBox(Component owner) {
-		Executions.getCurrent()
-			.addAuResponse("closeErrbox", new AuCloseErrorBox(owner));
+		addAuResponse(new AuCloseErrorBox(owner));
 	}
 	/** Submits the form with the specified ID.
 	 */
 	public static final void submitForm(String formId) {
-		Executions.getCurrent()
-			.addAuResponse("submitForm", new AuSubmitForm(formId));
+		addAuResponse(new AuSubmitForm(formId));
 	}
 	/** Submits the form with the specified form.
 	 * It assumes the form component is a HTML form.
 	 */
 	public static final void submitForm(Component form) {
 		submitForm(form.getUuid());
+	}
+	private static final void addAuResponse(AuResponse response) {
+		Executions.getCurrent()
+			.addAuResponse(response.getCommand(), response);
 	}
 }
