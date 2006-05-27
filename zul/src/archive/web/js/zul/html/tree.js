@@ -80,7 +80,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	},
 	/** Opens an item */
 	_openItem: function (row, img, toOpen) {
-		img.src = zk.rename(img.src, toOpen ? "open": "close");
+		img.src = zk.renType(img.src, toOpen ? "open": "close");
 		row.setAttribute("zk_open", toOpen ? "true": "false"); //change it value
 
 		this._showChildren(row, toOpen);

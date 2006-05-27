@@ -110,11 +110,11 @@ zkTab._setTabSel = function (tab, toSel) {
 zkTab._changeBkgnd = function (node, toSel) {
 	//FUTURE: we mighit use style.backgroundImage = "url(...)" >> more standard
 	if (node.background && node.background.indexOf(toSel ? "-uns": "-sel") >= 0) { //IE
-		node.background = zk.rename(node.background, toSel ? "sel": "uns");
+		node.background = zk.renType(node.background, toSel ? "sel": "uns");
 	} else if (node.getAttribute) { //Mozilla
 		var img = node.getAttribute("background");
 		if (img && img.indexOf(toSel ? "-uns": "-sel") >= 0)
-			node.setAttribute("background", zk.rename(img, toSel ? "sel": "uns"));
+			node.setAttribute("background", zk.renType(img, toSel ? "sel": "uns"));
 	}
 
 	for (node = node.firstChild; node; node = node.nextSibling)

@@ -942,10 +942,18 @@ zkLhr.init = function (cmp) {
 	Event.observe(cmp, "mouseout", function () {return zkLhr.onout(cmp);});
 };
 zkLhr.onover = function (cmp) {
-	if (zkLhr._sortable(cmp))
-		zkLhr._show(cmp, "hint");
+	if (zkLhr._sortable(cmp)) {
+		zk.backupStyle(cmp, "textDecoration");
+		cmp.style.textDecoration = "underline";
+		zk.backupStyle(cmp, "cursor");
+		cmp.style.cursor = "pointer";
+
+		zkLhr._show(cmp, true);
+	}
 };
 zkLhr.onout = function (cmp) {
+	zk.restoreStyle(cmp, "textDecoration");
+	zk.restoreStyle(cmp, "cursor");
 	zkLhr._show(cmp);
 };
 zkLhr.onclick = function (evt, cmp) {
@@ -960,21 +968,22 @@ zkLhr._sortable = function (cmp) {
 };
 /** Shows the hint, ascending or descending image.
  */
-zkLhr._show = function (cmp, nm) {
+zkLhr._show = function (cmp, hint) {
 	var img = $(cmp.id + "!hint");
 	if (img) {
-		if (nm) {
-			var s = img.src;
-			var k = s.lastIndexOf('.'), j = s.lastIndexOf('/', k - 1);
-			img.src = s.substring(0, j + 1) + nm + s.substring(k);
-			img.style.display = "";
-			return; //done
-		}
+		var nm;
 		switch (cmp.getAttribute("zk_sort")) {
-		case "ascending": zkLhr._show(cmp, "asc"); break;
-		case "descending": zkLhr._show(cmp, "dsc"); break;
-		default: img.style.display = "none";
+		case "ascending": nm = "asc"; break;
+		case "descending": nm = "dsc"; break;
+		default:
+			if (!hint) {
+				img.style.display = "none";
+				return;
+			}
+			nm = "hint";
 		}
+		img.src = zk.rename(img.src, nm);
+		img.style.display = "";
 	}
 };
 zkLhr.setAttr = function (cmp, nm, val) {
