@@ -934,63 +934,8 @@ zkLcfc.init = function (cmp) {
 	Event.observe(cmp, "focus", function () {return zkSel.cmonfocus(cmp);});
 	Event.observe(cmp, "blur", function () {return zkSel.cmonblur(cmp);});
 };
-function zkLhr() {} //listheader
-zkLhr.init = function (cmp) {
-	zkLhr._show(cmp);
-	Event.observe(cmp, "click", function (evt) {zkLhr.onclick(evt, cmp);});
-	Event.observe(cmp, "mouseover", function () {return zkLhr.onover(cmp);});
-	Event.observe(cmp, "mouseout", function () {return zkLhr.onout(cmp);});
-};
-zkLhr.onover = function (cmp) {
-	if (zkLhr._sortable(cmp)) {
-		zk.backupStyle(cmp, "textDecoration");
-		cmp.style.textDecoration = "underline";
-		zk.backupStyle(cmp, "cursor");
-		cmp.style.cursor = "pointer";
 
-		zkLhr._show(cmp, true);
-	}
-};
-zkLhr.onout = function (cmp) {
-	zk.restoreStyle(cmp, "textDecoration");
-	zk.restoreStyle(cmp, "cursor");
-	zkLhr._show(cmp);
-};
-zkLhr.onclick = function (evt, cmp) {
-	if (zkLhr._sortable(cmp))
-		zkau.send({uuid: cmp.id, cmd: "onSort", data: null}, 10);
-};
-
-/** Tests whether it is sortable.
- */
-zkLhr._sortable = function (cmp) {
-	return cmp.getAttribute("zk_asc") || cmp.getAttribute("zk_dsc");
-};
-/** Shows the hint, ascending or descending image.
- */
-zkLhr._show = function (cmp, hint) {
-	var img = $(cmp.id + "!hint");
-	if (img) {
-		var nm;
-		switch (cmp.getAttribute("zk_sort")) {
-		case "ascending": nm = "asc"; break;
-		case "descending": nm = "dsc"; break;
-		default:
-			if (!hint) {
-				img.style.display = "none";
-				return;
-			}
-			nm = "hint";
-		}
-		img.src = zk.rename(img.src, nm);
-		img.style.display = "";
-	}
-};
-zkLhr.setAttr = function (cmp, nm, val) {
-	zkau.setAttr(cmp, nm, val);
-	if (nm == "zk_sort") zkLhr._show(cmp);
-	return true;
-};
+zkLhr = zulSHdr;
 
 ////
 // listbox mold=select //

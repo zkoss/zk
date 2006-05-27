@@ -198,3 +198,5 @@ zkGrid.setAttr = function (grid, name, value) {
 	}
 	return false;
 };
+
+zkCol = zulSHdr; //Column

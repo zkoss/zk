@@ -19,4 +19,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<td id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>${self.imgTag}<c:out value="${self.label}"/></td>
+<td id="${self.uuid}" zk_type="Col"${self.outerAttrs}${self.innerAttrs}>${self.imgTag}<c:out value="${self.label}"/><img id="${self.uuid}!hint" src="${c:encodeURL('~./zul/img/sort/hint.gif')}" style="display:none"/></td>

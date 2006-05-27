@@ -125,12 +125,14 @@ public class Listheader extends HeaderElement {
 			setSortDescending((Comparator)null);
 		}
 	}
+
 	/** Returns the ascending sorter, or null if not available.
 	 */
 	public Comparator getSortAscending() {
 		return _sortAsc;
 	}
-	/** Sets the ascending sorter, or null for no ascending order.
+	/** Sets the ascending sorter, or null for no sorter for
+	 * the ascending order.
 	 */
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
@@ -140,7 +142,7 @@ public class Listheader extends HeaderElement {
 		}
 	}
 	/** Sets the ascending sorter with the class name, or null for
-	 * no ascending order.
+	 * no sorter for the ascending order.
 	 */
 	public void setSortAscending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
@@ -153,7 +155,8 @@ public class Listheader extends HeaderElement {
 	public Comparator getSortDescending() {
 		return _sortDsc;
 	}
-	/** Sets the descending sorter, or null for no descending order.
+	/** Sets the descending sorter, or null for no sorter for the
+	 * descending order.
 	 */
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
@@ -163,7 +166,7 @@ public class Listheader extends HeaderElement {
 		}
 	}
 	/** Sets the descending sorter with the class name, or null for
-	 * no descending order.
+	 * no sorter for the descending order.
 	 */
 	public void setSortDescending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
@@ -239,9 +242,6 @@ public class Listheader extends HeaderElement {
 	 * @return whether the list items are sorted.
 	 */
 	public boolean sort(boolean ascending) {
-		final Listbox box = getListbox();
-		if (box == null) return false;
-
 		final String dir = getSortDirection();
 		if (ascending) {
 			if ("ascending".equals(dir)) return false;
@@ -252,6 +252,8 @@ public class Listheader extends HeaderElement {
 		final Comparator cpr = ascending ? _sortAsc: _sortDsc;
 		if (cpr == null) return false;
 
+		final Listbox box = getListbox();
+		if (box == null) return false;
 		Components.sort(box.getItems(), cpr);
 
 		//maintain

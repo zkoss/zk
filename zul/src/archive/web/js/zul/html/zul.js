@@ -168,3 +168,62 @@ zul.positionMask = function (mask) {
 	mask.style.width = zk.innerWidth() + "px";
 	mask.style.height = zk.innerHeight() + "px";
 };
+
+//For sortable header, e.g., Column and Listheader
+function zulSHdr() {} //listheader
+zulSHdr.init = function (cmp) {
+	zulSHdr._show(cmp);
+	Event.observe(cmp, "click", function (evt) {zulSHdr.onclick(evt, cmp);});
+	Event.observe(cmp, "mouseover", function () {return zulSHdr.onover(cmp);});
+	Event.observe(cmp, "mouseout", function () {return zulSHdr.onout(cmp);});
+};
+zulSHdr.onover = function (cmp) {
+	if (zulSHdr._sortable(cmp)) {
+		zk.backupStyle(cmp, "textDecoration");
+		cmp.style.textDecoration = "underline";
+		zk.backupStyle(cmp, "cursor");
+		cmp.style.cursor = "pointer";
+
+		zulSHdr._show(cmp, true);
+	}
+};
+zulSHdr.onout = function (cmp) {
+	zk.restoreStyle(cmp, "textDecoration");
+	zk.restoreStyle(cmp, "cursor");
+	zulSHdr._show(cmp);
+};
+zulSHdr.onclick = function (evt, cmp) {
+	if (zulSHdr._sortable(cmp))
+		zkau.send({uuid: cmp.id, cmd: "onSort", data: null}, 10);
+};
+
+/** Tests whether it is sortable.
+ */
+zulSHdr._sortable = function (cmp) {
+	return cmp.getAttribute("zk_asc") || cmp.getAttribute("zk_dsc");
+};
+/** Shows the hint, ascending or descending image.
+ */
+zulSHdr._show = function (cmp, hint) {
+	var img = $(cmp.id + "!hint");
+	if (img) {
+		var nm;
+		switch (cmp.getAttribute("zk_sort")) {
+		case "ascending": nm = "asc"; break;
+		case "descending": nm = "dsc"; break;
+		default:
+			if (!hint) {
+				img.style.display = "none";
+				return;
+			}
+			nm = "hint";
+		}
+		img.src = zk.rename(img.src, nm);
+		img.style.display = "";
+	}
+};
+zulSHdr.setAttr = function (cmp, nm, val) {
+	zkau.setAttr(cmp, nm, val);
+	if (nm == "zk_sort") zulSHdr._show(cmp);
+	return true;
+};
