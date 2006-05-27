@@ -100,6 +100,31 @@ public class Listheader extends HeaderElement {
 		}
 	}
 
+	/** Sets the type of the sorter.
+	 * You might specify either "auto" or "none".
+	 *
+	 * <p>If "auto" is specified, it will call
+	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
+	 * are called with {@link ListitemComparator}, if
+	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
+	 * If you assigned a comparator to them, it won't be affected.
+	 * The auto created comparator is case-insensitive.
+	 *
+	 * <p>If "none" is specified, both {@link #setSortAscending} and
+	 * {@link #setSortDescending} are called with null.
+	 * Therefore, no more sorting is available to users for this column.
+	 */
+	public void setSort(String type) {
+		if ("auto".equals(type)) {
+			if (getSortAscending() == null)
+				setSortAscending(new ListitemComparator(this, true, true));
+			if (getSortDescending() == null)
+				setSortDescending(new ListitemComparator(this, false, true));
+		} else if ("none".equals(type)) {
+			setSortAscending((Comparator)null);
+			setSortDescending((Comparator)null);
+		}
+	}
 	/** Returns the ascending sorter, or null if not available.
 	 */
 	public Comparator getSortAscending() {

@@ -29,8 +29,10 @@ import java.util.Comparator;
  * @version $Revision: 1.4 $ $Date: 2006/05/26 10:27:40 $
  */
 public class ListitemComparator implements Comparator {
+	/** The listheader (optinal). */
+	private final Listheader _header;
 	/** Column index. */
-	private final int _index;
+	private int _index;
 	/** Ascending. */
 	private final boolean _asc;
 	/** Ignore case. */
@@ -73,13 +75,26 @@ public class ListitemComparator implements Comparator {
 	 */
 	public ListitemComparator(int index, boolean ascending,
 	boolean ignoreCase) {
+		_header = null;
 		_index = index;
+		_asc = ascending;
+		_igcase = ignoreCase;
+	}
+	/** Compares with the column which the list header is at
+	 */
+	public ListitemComparator(Listheader header, boolean ascending,
+	boolean ignoreCase) {
+		_header = header;
+		_index = -1; //not decided yet
 		_asc = ascending;
 		_igcase = ignoreCase;
 	}
 
 	//Comparator//
 	public int compare(Object o1, Object o2) {
+		if (_index < 0 && _header != null) //decide the index
+			_index = _header.getColumnIndex();
+
 		final Listitem li1 = (Listitem)o1, li2 = (Listitem)o2;
 
 		Comparable v1, v2;
