@@ -937,11 +937,11 @@ zkau.onblur = function (el) {
 
 zkau.onimgover = function (el) {
 	if (el && el.src.indexOf("-off") >= 0)
-		el.src = zk.rename(el.src, "on");
+		el.src = zk.renType(el.src, "on");
 };
 zkau.onimgout = function (el) {
 	if (el && el.src.indexOf("-on") >= 0)
-		el.src = zk.rename(el.src, "off");
+		el.src = zk.renType(el.src, "off");
 };
 
 /** Handles document.unload. */

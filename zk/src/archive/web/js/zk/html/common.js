@@ -654,18 +654,27 @@ if (!zk.agtIe) {
 
 //-- Image utilities --//
 /* Rename by changing the type (after -)
-//name: the original name
+//url: the original URL
 //type: the type to rename to: open or closed
 //todo: support _zh_TW
 */
-zk.rename = function (name, type) {
-	var j = name.lastIndexOf('.');
-	var k = name.lastIndexOf('-');
-	var m = name.lastIndexOf('/');
-	var ext = j <= m ? "": name.substring(j);
-	var pref = k <= m ? j <= m ? name: name.substring(0, j): name.substring(0, k);
+zk.renType = function (url, type) {
+	var j = url.lastIndexOf('.'),
+		k = url.lastIndexOf('-'),
+		m = url.lastIndexOf('/');
+	var ext = j <= m ? "": url.substring(j);
+	var pref = k <= m ? j <= m ? url: url.substring(0, j): url.substring(0, k);
 	if (type) type = "-" + type;
+	else type = "";
 	return pref + type + ext;
+};
+/** Rename between / and .
+ */
+zk.rename = function (url, name) {
+	var j = url.lastIndexOf('.'),
+		k = url.lastIndexOf('/');
+	var ext = j <= k ? "": url.substring(j);
+	return url.substring(0, k + 1) + name + ext;
 };
 
 //-- special routines --//
