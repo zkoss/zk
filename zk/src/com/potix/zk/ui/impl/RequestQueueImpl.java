@@ -38,7 +38,7 @@ import com.potix.zk.ui.sys.RequestQueue;
  * Unlike only of desktop members, this class must be thread-safe.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:07 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 12:57:06 $
  */
 public class RequestQueueImpl implements RequestQueue {
 	private static final Log log = Log.lookup(RequestQueueImpl.class);
@@ -131,7 +131,7 @@ public class RequestQueueImpl implements RequestQueue {
 		|| cmd == AuRequest.ON_MOVE || cmd == AuRequest.ON_Z_INDEX
 		|| cmd == AuRequest.ON_TIMER || cmd == AuRequest.ON_DBL_CLICK
 		|| cmd == AuRequest.ON_FOCUS || cmd == AuRequest.ON_BLUR
-		|| cmd == AuRequest.ON_SORT) {
+		|| cmd == AuRequest.ON_SORT || cmd == AuRequest.ON_BOOKMARK_CHANGED) {
 			final String uuid = request.getComponentUuid();
 			for (Iterator it = _requests.iterator(); it.hasNext();) {
 				final AuRequest req2 = (AuRequest)it.next();

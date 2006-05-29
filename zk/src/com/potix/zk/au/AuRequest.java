@@ -38,7 +38,7 @@ import com.potix.zk.au.impl.*;
  * A request sent from the client to {@link com.potix.zk.ui.sys.UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/05/29 04:27:56 $
+ * @version $Revision: 1.19 $ $Date: 2006/05/29 12:57:04 $
  */
 public class AuRequest {
 	private final Desktop _desktop;
@@ -165,9 +165,17 @@ public class AuRequest {
 	 * let users add customized events.
 	 */
 	public static final Command ON_NOTIFY = new GenericCommand("onNotify", false);
-	/** The onSort event (used with {@link com.potix.zk.ui.event.Event}).
+	/** The onSort event (used with {@link com.potix.zk.ui.event.Event})
+	 * to notify a request for sorting.
 	 */
 	public static final Command ON_SORT = new GenericCommand("onSort", true);
+	/** The onBookmarkChanged event (used with {@link com.potix.zk.ui.event.Event})
+	 * to notify that user pressed BACK, FORWARD or specified URL directly
+	 * that causes the bookmark is changed (but still in the same desktop).
+	 * <p>All root components of all pages of the desktop will
+	 * recieves this event.
+	 */
+	public static final Command ON_BOOKMARK_CHANGED = new BookmarkChangedCommand("onBookmarkChanged", false);
 
 	/** Constructor for a request sent from a component.
 	 * Since we cannot invoke {@link Desktop#getComponentByUuid} without

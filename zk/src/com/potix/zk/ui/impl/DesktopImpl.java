@@ -44,12 +44,13 @@ import com.potix.zk.ui.sys.DesktopCache;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.au.AuPrint;
+import com.potix.zk.au.AuBookmark;
 
 /**
  * The implementation of {@link Desktop}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:06 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 12:57:06 $
  */
 public class DesktopImpl implements Desktop, DesktopCtrl {
 	private static final Log log = Log.lookup(DesktopImpl.class);
@@ -73,6 +74,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl {
 	private int _nextId = 0;
 	/** The request queue. */
 	private final RequestQueue _rque = new RequestQueueImpl();
+	private String _bookmark = "";
 
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
@@ -164,6 +166,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl {
 			throw new IllegalStateException("Not the current desktop: "+this);
 		((WebAppCtrl)_wapp).getUiEngine().addResponse("print", new AuPrint());
 	}
+	public String getBookmark() {
+		return _bookmark;
+	}
+	public void setBookmark(String name) {
+		if (_exec == null)
+			throw new IllegalStateException("Not the current desktop: "+this);
+		if (name.indexOf('#') >= 0 || name.indexOf('?') >= 0)
+			throw new IllegalArgumentException("Illegal character: # ?");
+		_bookmark = name;
+		((WebAppCtrl)_wapp).getUiEngine()
+			.addResponse("bookmark", new AuBookmark(name));
+	}
 
 	public Collection getComponents() {
 		return _comps.values();
@@ -249,6 +263,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl {
 			removeComponents(comp.getChildren()); //recursive
 			removeComponent(comp);
 		}
+	}
+
+	public void setBookmarkByClient(String name) {
+		_bookmark = name != null ? name: "";
 	}
 
 	//-- Object --//

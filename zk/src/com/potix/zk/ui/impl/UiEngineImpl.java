@@ -59,7 +59,7 @@ import com.potix.zk.au.*;
  * An implementation of {@link UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.16 $ $Date: 2006/05/29 04:28:07 $
+ * @version $Revision: 1.17 $ $Date: 2006/05/29 12:57:06 $
  */
 public class UiEngineImpl implements UiEngine {
 	private static final Log log = Log.lookup(UiEngineImpl.class);
@@ -227,7 +227,7 @@ public class UiEngineImpl implements UiEngine {
 			Event event = nextEvent(uv);
 			do {
 				for (; event != null; event = nextEvent(uv)) {
-					process(event);
+					process(desktop, event);
 					//Unlike execUpdate, we don't cache exception here
 				}
 
@@ -432,7 +432,7 @@ public class UiEngineImpl implements UiEngine {
 				do {
 					for (; event != null; event = nextEvent(uv)) {
 						try {
-							process(event);
+							process(desktop, event);
 						} catch (Throwable ex) {
 							handleError(ex, uv, errsb);
 						}
@@ -508,7 +508,7 @@ public class UiEngineImpl implements UiEngine {
 		request.getCommand().process(request, everError);
 	}
 	/** Processing the event and stores result into UiVisualizer. */
-	private void process(Event event) {
+	private void process(Desktop desktop, Event event) {
 		if (log.debugable()) log.debug("Processing event: "+event);
 		final Component comp = event.getTarget();
 		if (comp != null) {
@@ -516,7 +516,17 @@ public class UiEngineImpl implements UiEngine {
 			if (comp.getPage() != null)
 				processEvent(comp, event);
 		} else {
-			throw new UnsupportedOperationException("broadcast is not supported yet");
+			//since an event might change the page/desktop/component relation,
+			//we copy roots first
+			final List roots = new LinkedList();
+			for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
+				roots.addAll(((Page)it.next()).getRoots());
+			}
+			for (Iterator it = roots.iterator(); it.hasNext();) {
+				final Component c = (Component)it.next();
+				if (c.getPage() != null) //might be removed, so check first
+					processEvent(c, event);
+			}
 		}
 	}
 

@@ -861,7 +861,7 @@ zkau.focusInFloats = function (target) {
 
 zkau.close = function (uuid) {
 	el = $(uuid);
-	zkau.send({uuid: el.id, cmd: "onClose", data: null});
+	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
 };
 zkau.hide = function (uuid) {
 	var el = $(uuid);
@@ -1194,46 +1194,45 @@ zk.Float.prototype = {
 zk.History = Class.create();
 zk.History.prototype = {
 	initialize: function () {
+		this.curbk = "";
+		setInterval("zkau.history.checkBookmark()", zk.agtIe ? 320: 120);
+			//Though IE use history.html, timer is still required 
+			//because user might specify URL directly
 	},
 	/** Sets a bookmark that user can use forward and back buttons */
 	bookmark: function (nm) {
-		this.curbk = nm; //to avoid loop back the server
-		if (zk.agtIe) {
-			this.newIframe();
-			this.bkIframe(nm);
-		} else {
-			setInterval("zkau.history.checkBookmark()", 100);
+		if (this.curbk != nm) {
+			this.curbk = nm; //to avoid loop back the server
+			window.location.hash = '#' + nm;
+			if (zk.agtIe) this.bkIframe(nm);
 		}
-		window.location.hash = '#' + nm;
 	},
 	/** Checks whether the bookmark is changed. */
 	checkBookmark: function() {
-		var nm = window.location.hash;
-		var j = nm.indexOf('#');
-		if (j >= 0) nm = nm.substring(j + 1);
+		var nm = this.getBookmark();
 		if (nm != this.curbk) {
 			this.curbk = nm;
-			zkau.send({uuid: '', cmd: "onBookmarkChanged", data: [nm]});
+			zkau.send({uuid: '', cmd: "onBookmarkChanged", data: [nm]}, 25);
 		}
+	},
+	getBookmark: function () {
+		var nm = window.location.hash;
+		var j = nm.indexOf('#');
+		return j >= 0 ? nm.substring(j + 1): '';
 	}
 };
 if (zk.agtIe) {
-	/** create an iframe */
-	zk.History.prototype.newIframe = function () {
-		var ifr = $('zk_histy');
-		if (!ifr) {
-			document.body.insertAdjacentHTML("beforeEnd", 
-			'<iframe src="'+zk.getUpdateURI("/web/js/zk/html/history.html", true)
-			+'" id="zk_histy" style="display: none;" ></iframe>');
-		}
-	};
 	/** bookmark iframe */
 	zk.History.prototype.bkIframe = function (nm) {
+		var url = zk.getUpdateURI("/web/js/zk/html/history.html", true);
+		if (nm) url += '?' +nm;
+
 		var ifr = $('zk_histy');
 		if (ifr) {
-			var src = ifr.src;
-			var j = src.indexOf('?');
-			ifr.src = j >= 0 ? src.substring(0, j + 1) + nm: src + '?' + nm;
+			ifr.src = url;
+		} else {
+			document.body.insertAdjacentHTML("beforeEnd", 
+			'<iframe src="'+url+'" id="zk_histy" style="display: none;" ></iframe>');
 		}
 	};
 	/** called when history.html is loaded*/
@@ -1244,6 +1243,7 @@ if (zk.agtIe) {
 		this.checkBookmark();
 	};
 }
+
 zkau.history = new zk.History();
 
 //Commands//

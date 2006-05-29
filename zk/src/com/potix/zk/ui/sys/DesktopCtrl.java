@@ -30,7 +30,7 @@ import com.potix.zk.ui.UiException;
  * <p>Note: applications shall never access this interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:09 $
+ * @version $Revision: 1.9 $ $Date: 2006/05/29 12:57:06 $
  */
 public interface DesktopCtrl {
 	/** Returns the request queue.
@@ -72,4 +72,9 @@ public interface DesktopCtrl {
 	 * an execution).
 	 */
 	public void setExecution(Execution exec);
+
+	/** Sets the bookmark when receiving the onBookmarkChanged command
+	 * from the client.
+	 */
+	public void setBookmarkByClient(String name);
 }

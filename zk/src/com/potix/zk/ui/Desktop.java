@@ -33,7 +33,7 @@ import java.util.Collection;
  * contained in this desktop are free to access.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/29 04:28:00 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/29 12:57:05 $
  */
 public interface Desktop {
 	/** Returns ID of this desktop.
@@ -111,4 +111,15 @@ public interface Desktop {
 	 * In other words, you could use getCurrentDirectory() + relative_path.
 	 */
 	public String getCurrentDirectory();
+
+	/** Returns the current bookmark (never null).
+	 * The returned might be the same as the last call to {@link #setBookmark},
+	 * because user might use BACK, FORWARD or others to change the bookmark.
+	 */
+	public String getBookmark();
+	/** Sets a bookmark to this desktop. Then, when user press BACK, FORWARD
+	 * or specify an URL with this bookmark, the onBookmarkChanged event
+	 * is sent to all pages of the desktop.
+	 */
+	public void setBookmark(String name);
 }
