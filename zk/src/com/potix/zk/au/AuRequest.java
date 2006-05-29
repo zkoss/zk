@@ -38,7 +38,7 @@ import com.potix.zk.au.impl.*;
  * A request sent from the client to {@link com.potix.zk.ui.sys.UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.19 $ $Date: 2006/05/29 12:57:04 $
+ * @version $Revision: 1.20 $ $Date: 2006/05/29 15:00:33 $
  */
 public class AuRequest {
 	private final Desktop _desktop;
@@ -169,11 +169,11 @@ public class AuRequest {
 	 * to notify a request for sorting.
 	 */
 	public static final Command ON_SORT = new GenericCommand("onSort", true);
-	/** The onBookmarkChanged event (used with {@link com.potix.zk.ui.event.Event})
+	/** The onBookmarkChanged event (used with {@link com.potix.zk.ui.event.BookmarkEvent})
 	 * to notify that user pressed BACK, FORWARD or specified URL directly
 	 * that causes the bookmark is changed (but still in the same desktop).
 	 * <p>All root components of all pages of the desktop will
-	 * recieves this event.
+	 * recieve this event.
 	 */
 	public static final Command ON_BOOKMARK_CHANGED = new BookmarkChangedCommand("onBookmarkChanged", false);
 

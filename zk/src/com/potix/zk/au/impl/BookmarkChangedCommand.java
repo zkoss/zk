@@ -22,15 +22,15 @@ import com.potix.zk.mesg.MZk;
 import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.event.Event;
+import com.potix.zk.ui.event.BookmarkEvent;
 import com.potix.zk.au.AuRequest;
 
 /**
  * Used by {@link AuRequest} to implement generic command
- * that does nothing but posting an {@link Event}.
+ * that does nothing but posting an {@link BookmarkEvent}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/29 12:57:04 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 15:00:33 $
  */
 public class BookmarkChangedCommand extends AuRequest.Command {
 	public BookmarkChangedCommand(String evtnm, boolean skipIfEverError) {
@@ -45,6 +45,6 @@ public class BookmarkChangedCommand extends AuRequest.Command {
 				new Object[] {Objects.toString(data), this});
 		final String nm = data[0];
 		((DesktopCtrl)request.getDesktop()).setBookmarkByClient(nm);
-		Events.postEvent(new Event(getId(), null, nm));
+		Events.postEvent(new BookmarkEvent(getId(), nm));
 	}
 }
