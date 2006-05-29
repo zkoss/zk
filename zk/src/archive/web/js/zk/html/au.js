@@ -1402,3 +1402,59 @@ zk.Float.prototype = {
 		}
 	}
 };
+
+//Histroy//
+zk.History = Class.create();
+zk.History.prototype = {
+	initialize: function () {
+	},
+	/** Sets a bookmark that user can use forward and back buttons */
+	bookmark: function (nm) {
+		this.curbk = nm; //to avoid loop back the server
+		if (zk.agtIe) {
+			this.newIframe();
+			this.bkIframe(nm);
+		} else {
+			setInterval("zkau.history.checkBookmark()", 100);
+		}
+		window.location.hash = '#' + nm;
+	},
+	/** Checks whether the bookmark is changed. */
+	checkBookmark: function() {
+		var nm = window.location.hash;
+		var j = nm.indexOf('#');
+		if (j >= 0) nm = nm.substring(j + 1);
+		if (nm != this.curbk) {
+			this.curbk = nm;
+			zk.debug("new location="+nm);
+		}
+	}
+};
+if (zk.agtIe) {
+	/** create an iframe */
+	zk.History.prototype.newIframe = function () {
+		var ifr = $('zk_histy');
+		if (!ifr) {
+			document.body.insertAdjacentHTML("beforeEnd", 
+			'<iframe src="'+zk.getUpdateURI("/web/js/zk/html/history.html", true)
+			+'" id="zk_histy" style="display: none;" ></iframe>');
+		}
+	};
+	/** bookmark iframe */
+	zk.History.prototype.bkIframe = function (nm) {
+		var ifr = $('zk_histy');
+		if (ifr) {
+			var src = ifr.src;
+			var j = src.indexOf('?');
+			ifr.src = j >= 0 ? src.substring(0, j + 1) + nm: src + '?' + nm;
+		}
+	};
+	/** called when history.html is loaded*/
+	zk.History.prototype.onHistoryLoaded = function (src) {
+		var j = src.indexOf('?');
+		var nm = j >= 0 ? src.substring(j + 1): '';
+		window.location.hash = nm ? '#' + nm: '';
+		this.checkBookmark();
+	};
+}
+zkau.history = new zk.History();
