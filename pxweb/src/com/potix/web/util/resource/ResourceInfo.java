@@ -1,7 +1,6 @@
 /* ResourceInfo.java
 
 {{IS_NOTE
-	$Id: ResourceInfo.java,v 1.2 2006/02/27 03:54:34 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import java.net.URL;
  * so we pack them as one object.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:34 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:44 $
  */
 /*package*/ class ResourceInfo {
 	/*package*/ final String path;

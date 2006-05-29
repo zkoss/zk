@@ -1,7 +1,6 @@
 /* Tabs.java
 
 {{IS_NOTE
-	$Id: Tabs.java,v 1.5 2006/04/17 11:11:26 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.zul.html.impl.XulElement;
  * A collection of tabs ({@link Tab}).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/04/17 11:11:26 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Tabs extends XulElement {
 	/** Returns the tabbox owns this component.

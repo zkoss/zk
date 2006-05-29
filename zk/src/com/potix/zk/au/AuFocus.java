@@ -1,7 +1,6 @@
 /* AuFocus.java
 
 {{IS_NOTE
-	$Id: AuFocus.java,v 1.2 2006/02/27 03:54:43 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import com.potix.zk.ui.Component;
  * <p>data[0]: the uuid of the component to set focus
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:43 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:55 $
  */
 public class AuFocus extends AuResponse {
 	public AuFocus(Component comp) {

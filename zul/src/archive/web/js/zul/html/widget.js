@@ -1,7 +1,6 @@
 /* widget.js
 
 {{IS_NOTE
-	$Id: widget.js,v 1.32 2006/05/16 04:21:05 tomyeh Exp $
 	Purpose:
 		
 	Description:

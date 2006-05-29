@@ -2,7 +2,6 @@
 textbox.dsp
 
 {{IS_NOTE
-	$Id: textbox.dsp,v 1.6 2006/03/17 10:06:34 tomyeh Exp $
 	Purpose:
 		
 	Description:

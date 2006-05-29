@@ -1,7 +1,6 @@
 /* When.java
 
 {{IS_NOTE
-	$Id: When.java,v 1.4 2006/02/27 03:54:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.web.servlet.ServletException;
  * Represents an alternative within a {@link Choose} action.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:54:31 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:41 $
  */
 public class When extends AbstractAction {
 	private boolean _cond;

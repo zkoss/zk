@@ -1,7 +1,6 @@
 /* Address.java
 
 {{IS_NOTE
-	$Id: Address.java,v 1.2 2006/02/27 03:54:35 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,7 @@ import com.potix.zhtml.impl.AbstractTag;
  * The ADDRESS tag.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:35 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:46 $
  */
 public class Address extends AbstractTag {
 	public Address() {

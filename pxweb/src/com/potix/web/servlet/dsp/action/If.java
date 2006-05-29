@@ -1,7 +1,6 @@
 /* If.java
 
 {{IS_NOTE
-	$Id: If.java,v 1.5 2006/02/27 03:54:30 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.web.servlet.ServletException;
  * if the condition is true.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:54:30 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:40 $
  */
 public class If extends AbstractAction {
 	private boolean _cond, _trim = true;

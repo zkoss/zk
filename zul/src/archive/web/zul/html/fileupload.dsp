@@ -5,7 +5,6 @@
 fileupload.dsp
 
 {{IS_NOTE
-	$Id: fileupload.dsp,v 1.7 2006/05/16 07:24:17 tomyeh Exp $
 	Purpose:
 		
 	Description:

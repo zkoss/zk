@@ -2,7 +2,6 @@
 macro.dsp
 
 {{IS_NOTE
-	$Id: macro.dsp,v 1.2 2006/04/19 07:59:46 tomyeh Exp $
 	Purpose:
 		
 	Description:

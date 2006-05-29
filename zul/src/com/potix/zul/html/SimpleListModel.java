@@ -1,7 +1,6 @@
 /* SimpleListModel.java
 
 {{IS_NOTE
-	$Id: SimpleListModel.java,v 1.2 2006/02/27 03:55:15 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -23,7 +22,7 @@ package com.potix.zul.html;
  * A simple implementation of {@link ListModel}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:55:15 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:26 $
  */
 public class SimpleListModel extends AbstractListModel {
 	private final Object[] _data;

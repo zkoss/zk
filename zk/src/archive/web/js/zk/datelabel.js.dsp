@@ -2,7 +2,6 @@
 datelabel.js.dsp
 
 {{IS_NOTE
-	$Id: datelabel.js.dsp,v 1.1 2006/05/09 17:14:52 tomyeh Exp $
 	Purpose:
 		
 	Description:

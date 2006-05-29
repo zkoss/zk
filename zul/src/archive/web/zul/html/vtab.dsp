@@ -2,7 +2,6 @@
 vtab.dsp
 
 {{IS_NOTE
-	$Id: vtab.dsp,v 1.3 2006/05/04 15:03:35 tomyeh Exp $
 	Purpose:
 		
 	Description:

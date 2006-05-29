@@ -1,7 +1,6 @@
 /* Component.java
 
 {{IS_NOTE
-	$Id: Component.java,v 1.21 2006/05/26 03:13:42 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -81,7 +80,7 @@ import com.potix.zk.au.AuResponse;
  * background thread to handle long operations).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.21 $ $Date: 2006/05/26 03:13:42 $
+ * @version $Revision: 1.22 $ $Date: 2006/05/29 04:27:59 $
  */
 public interface Component {
 	/** Returns the component definition, or null if this component

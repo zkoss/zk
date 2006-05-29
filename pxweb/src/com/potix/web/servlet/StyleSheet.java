@@ -1,7 +1,6 @@
 /* StyleSheet.java
 
 {{IS_NOTE
-	$Id: StyleSheet.java,v 1.7 2006/02/27 03:54:29 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,7 @@ import com.potix.lang.Objects;
  * Represents a style sheet.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/02/27 03:54:29 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:38 $
  */
 public class StyleSheet {
 	private final String _href, _type, _content;

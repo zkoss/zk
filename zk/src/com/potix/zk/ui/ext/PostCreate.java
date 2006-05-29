@@ -1,7 +1,6 @@
 /* PostCreate.java
 
 {{IS_NOTE
-	$Id: PostCreate.java,v 1.1 2006/05/25 04:10:55 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,7 @@ package com.potix.zk.ui.ext;
  * <p>If it is created manually, it is caller's job to invoke postCreate.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/25 04:10:55 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:04 $
  */
 public interface PostCreate {
 	/** Invokes after ZK loader applies all properties.

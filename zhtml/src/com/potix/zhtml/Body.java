@@ -1,7 +1,6 @@
 /* Body.java
 
 {{IS_NOTE
-	$Id: Body.java,v 1.3 2006/04/26 08:30:24 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.zhtml.impl.AbstractTag;
  * The BODY tag.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/04/26 08:30:24 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:46 $
  */
 public class Body extends AbstractTag {
 	public Body() {

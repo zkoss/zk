@@ -1,7 +1,6 @@
 /* Path.java
 
 {{IS_NOTE
-	$Id: Path.java,v 1.6 2006/04/17 10:34:30 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import com.potix.zk.ui.sys.ExecutionsCtrl;
  * A representation of a component path.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/04/17 10:34:30 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:28:01 $
  */
 public class Path {
 	private final String _path;

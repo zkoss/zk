@@ -2,7 +2,6 @@
 listbox-select.dsp
 
 {{IS_NOTE
-	$Id: listbox-select.dsp,v 1.5 2006/03/17 10:06:32 tomyeh Exp $
 	Purpose:
 		
 	Description:

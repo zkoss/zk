@@ -2,7 +2,6 @@
 caption-legend.dsp
 
 {{IS_NOTE
-	$Id: caption-legend.dsp,v 1.4 2006/02/27 03:55:05 tomyeh Exp $
 	Purpose:
 		
 	Description:

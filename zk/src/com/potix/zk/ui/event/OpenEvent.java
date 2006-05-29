@@ -1,7 +1,6 @@
 /* OpenEvent.java
 
 {{IS_NOTE
-	$Id: OpenEvent.java,v 1.3 2006/03/31 03:20:42 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import com.potix.zk.ui.Component;
  * something at the client.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/03/31 03:20:42 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:02 $
  * @see com.potix.zk.ui.ext.Openable
  */
 public class OpenEvent extends Event {

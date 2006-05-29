@@ -1,7 +1,6 @@
 /* Tabpanels.java
 
 {{IS_NOTE
-	$Id: Tabpanels.java,v 1.5 2006/05/04 11:21:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.zul.html.impl.XulElement;
  * <p>Default {@link #getSclass}: tabpanels.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/04 11:21:07 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Tabpanels extends XulElement {
 	public Tabpanels() {

@@ -1,7 +1,6 @@
 /* Action.java
 
 {{IS_NOTE
-	$Id: Action.java,v 1.5 2006/03/09 08:40:17 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import javax.servlet.ServletException;
  * It is like a tag in JSP.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/03/09 08:40:17 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:40 $
  */
 public interface Action {
 	/** Processes the action and renders the output to

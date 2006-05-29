@@ -1,7 +1,6 @@
 /* FormatInputElement.java
 
 {{IS_NOTE
-	$Id: FormatInputElement.java,v 1.5 2006/04/25 06:31:21 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -31,7 +30,7 @@ import com.potix.zk.ui.WrongValueException;
  * An input box that supports format.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/04/25 06:31:21 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:29 $
  */
 abstract public class FormatInputElement extends InputElement {
 	private String _format;

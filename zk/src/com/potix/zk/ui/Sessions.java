@@ -1,7 +1,6 @@
 /* Sessions.java
 
 {{IS_NOTE
-	$Id: Sessions.java,v 1.2 2006/02/27 03:54:48 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -23,7 +22,7 @@ package com.potix.zk.ui;
  * Utilities to access {@link Session}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:48 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:01 $
  */
 public class Sessions {
 	/** Used to the store the session for the current thread. */

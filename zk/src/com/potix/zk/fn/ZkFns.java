@@ -1,7 +1,6 @@
 /* ZkFns.java
 
 {{IS_NOTE
-	$Id: ZkFns.java,v 1.25 2006/05/22 03:41:55 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -58,7 +57,7 @@ import com.potix.zk.au.AuResponse;
  * Utilities for using EL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.25 $ $Date: 2006/05/22 03:41:55 $
+ * @version $Revision: 1.26 $ $Date: 2006/05/29 04:27:59 $
  */
 public class ZkFns {
 	private static final Log log = Log.lookup(ZkFns.class);

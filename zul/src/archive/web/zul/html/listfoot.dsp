@@ -2,7 +2,6 @@
 listfoot.dsp
 
 {{IS_NOTE
-	$Id: listfoot.dsp,v 1.3 2006/03/17 10:06:32 tomyeh Exp $
 	Purpose:
 		
 	Description:

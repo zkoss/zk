@@ -1,7 +1,6 @@
 /* Authens.java
 
 {{IS_NOTE
-	$Id: Authens.java,v 1.6 2006/02/27 03:54:29 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import javax.servlet.http.Cookie;
  * Utilities for authentications.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:54:29 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:38 $
  */
 public class Authens {
 	/** The cookie's name used to store user info. */

@@ -1,7 +1,6 @@
 /* LabelLoaderImpl.java
 
 {{IS_NOTE
-	$Id: LabelLoaderImpl.java,v 1.7 2006/04/10 03:02:01 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -59,7 +58,7 @@ import com.potix.web.el.ELContext;
  * resource.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/04/10 03:02:01 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:45 $
  */
 public class LabelLoaderImpl
 extends com.potix.util.resource.impl.LabelLoaderImpl {

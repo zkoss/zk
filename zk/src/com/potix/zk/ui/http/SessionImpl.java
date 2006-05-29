@@ -1,7 +1,6 @@
 /* SessionImpl.java
 
 {{IS_NOTE
-	$Id: SessionImpl.java,v 1.15 2006/05/03 03:25:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,7 +34,7 @@ import com.potix.zk.ui.impl.AbstractSession;
 /** An implementation of {@link com.potix.zk.ui.Session}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.15 $ $Date: 2006/05/03 03:25:07 $
+ * @version $Revision: 1.16 $ $Date: 2006/05/29 04:28:05 $
  */
 public class SessionImpl extends AbstractSession {
 	private static final Log log = Log.lookup(SessionImpl.class);

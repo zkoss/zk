@@ -1,7 +1,6 @@
 /* Jaspers.java
 
 {{IS_NOTE
-	$Id: Jaspers.java,v 1.4 2006/02/27 03:54:33 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import org.apache.jasper.compiler.JspUtil;
  * Utilities to access Jasper (Tomcat's JSP engine).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:54:33 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:43 $
  */
 public class Jaspers {
 	/** Maps a JSP URI to a Java name.

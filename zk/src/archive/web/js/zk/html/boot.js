@@ -1,7 +1,6 @@
 /* boot.js
 
 {{IS_NOTE
-	$Id: boot.js,v 1.69 2006/05/26 06:41:13 tomyeh Exp $
 	Purpose:
 		Bootstrap JavaScript
 	Description:

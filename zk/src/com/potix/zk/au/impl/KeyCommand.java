@@ -1,7 +1,6 @@
 /* KeyCommand.java
 
 {{IS_NOTE
-	$Id: KeyCommand.java,v 1.3 2006/02/27 03:54:45 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.zk.au.AuRequest;
  * relevant command.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:54:45 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:58 $
  */
 public class KeyCommand extends AuRequest.Command {
 	public KeyCommand(String evtnm, boolean skipIfEverError) {

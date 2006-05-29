@@ -1,7 +1,6 @@
 /* Portlets.java
 
 {{IS_NOTE
-	$Id: Portlets.java,v 1.13 2006/05/15 02:13:38 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -44,7 +43,7 @@ import com.potix.web.util.resource.ExtendedWebContext;
  * Utilities to handle portlet.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/15 02:13:38 $
+ * @version $Revision: 1.14 $ $Date: 2006/05/29 04:27:37 $
  */
 public class Portlets {
 	private static final Log log = Log.lookup(Portlets.class);

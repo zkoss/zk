@@ -1,7 +1,6 @@
 /* Treecol.java
 
 {{IS_NOTE
-	$Id: Treecol.java,v 1.7 2006/02/27 03:55:16 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.zul.html.impl.HeaderElement;
  * A treecol.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/02/27 03:55:16 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Treecol extends HeaderElement {
 	private int _maxlength;

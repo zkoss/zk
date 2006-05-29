@@ -5,7 +5,6 @@
 fileupload.zul
 
 {{IS_NOTE
-	$Id: fileupload.zul,v 1.6 2006/04/26 07:13:13 tomyeh Exp $
 	Purpose:
 		
 	Description:

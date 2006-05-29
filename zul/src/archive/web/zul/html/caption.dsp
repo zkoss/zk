@@ -2,7 +2,6 @@
 caption.dsp
 
 {{IS_NOTE
-	$Id: caption.dsp,v 1.7 2006/03/17 10:06:30 tomyeh Exp $
 	Purpose:
 		Used with groupbox.
 	Description:

@@ -2,7 +2,6 @@
 listbox.dsp
 
 {{IS_NOTE
-	$Id: listbox.dsp,v 1.14 2006/03/27 15:33:01 tomyeh Exp $
 	Purpose:
 		
 	Description:

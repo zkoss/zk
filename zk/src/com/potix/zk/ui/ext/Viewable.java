@@ -1,7 +1,6 @@
 /* Viewable.java
 
 {{IS_NOTE
-	$Id: Viewable.java,v 1.4 2006/02/27 03:54:51 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -38,7 +37,7 @@ import com.potix.zk.ui.UiException;
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:54:51 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:04 $
  */
 public interface Viewable {
 	/** Retrieve the view in {@link Media} format.

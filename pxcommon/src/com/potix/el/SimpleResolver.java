@@ -1,7 +1,6 @@
 /* SimpleResolver.java
 
 {{IS_NOTE
-	$Id: SimpleResolver.java,v 1.7 2006/02/27 03:41:53 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,7 @@ import javax.servlet.jsp.el.ELException;
  * objects loaded from i3-el.xml.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/02/27 03:41:53 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:17 $
  */
 public class SimpleResolver implements VariableResolver {
 	/** The parent resolver. */

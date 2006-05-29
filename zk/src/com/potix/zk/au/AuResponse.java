@@ -1,7 +1,6 @@
 /* AuResponse.java
 
 {{IS_NOTE
-	$Id: AuResponse.java,v 1.4 2006/05/26 06:41:13 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -36,7 +35,7 @@ import com.potix.zk.ui.Page;
  * {@link com.potix.zk.ui.Execution#addAuResponse}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/26 06:41:13 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:56 $
  */
 public class AuResponse {
 	private final String _cmd;

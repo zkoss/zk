@@ -1,7 +1,6 @@
 /* Page.java
 
 {{IS_NOTE
-	$Id: Page.java,v 1.15 2006/05/26 03:13:42 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -81,7 +80,7 @@ import com.potix.zk.ui.metainfo.PageDefinition;
  * It cannot <b>create</b> component.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.15 $ $Date: 2006/05/26 03:13:42 $
+ * @version $Revision: 1.16 $ $Date: 2006/05/29 04:28:01 $
  */
 public interface Page extends IdSpace {
 	//-- proxy to Desktop --//

@@ -1,7 +1,6 @@
 /* Menubar.java
 
 {{IS_NOTE
-	$Id: Menubar.java,v 1.7 2006/04/17 06:39:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.zul.html.impl.XulElement;
  * <p>Default {@link #getSclass}: menubar.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/04/17 06:39:56 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:24 $
  */
 public class Menubar extends XulElement {
 	private boolean _autoPopup;

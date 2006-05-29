@@ -1,7 +1,6 @@
 /* ModificationException.java
 
 {{IS_NOTE
-	$Id: ModificationException.java,v 1.4 2006/02/27 03:42:02 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,7 +34,7 @@ import com.potix.lang.Expectable;
  * who derive from this class, might be thrown
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:42:02 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:23 $
  */
 public class ModificationException extends CommonException {
 	/** Utilities.

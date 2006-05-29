@@ -1,7 +1,6 @@
 /* LabelLocatorHook.java
 
 {{IS_NOTE
-	$Id: LabelLocatorHook.java,v 1.7 2006/04/10 03:02:01 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -45,7 +44,7 @@ import com.potix.web.util.resource.ServletLabelLocator;
 </code></pre>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/04/10 03:02:01 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:36 $
  */
 public class LabelLocatorHook implements ServletContextListener {
 	//private static final Log log = Log.lookup(LabelLocatorHook.class);

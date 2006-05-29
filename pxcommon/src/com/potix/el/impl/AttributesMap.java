@@ -1,7 +1,6 @@
 /* AttributesMap.java
 
 {{IS_NOTE
-	$Id: AttributesMap.java,v 1.2 2006/02/27 03:41:54 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -32,7 +31,7 @@ import java.util.Enumeration;
  * <p>It is mainly used to implement sessionScope and requestScope in EL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:41:54 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:18 $
  */
 public abstract class AttributesMap extends StringKeysMap {
 	private Set _entries;

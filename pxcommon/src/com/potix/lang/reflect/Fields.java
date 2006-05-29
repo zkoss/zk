@@ -1,7 +1,6 @@
 /* Fields.java
 
 {{IS_NOTE
-	$Id: Fields.java,v 1.6 2006/02/27 03:42:00 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.util.ModificationException;
  * Utilities to access fields.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:42:00 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:21 $
  */
 public class Fields {
 	/** Returnst the value of the specfied field of the object.

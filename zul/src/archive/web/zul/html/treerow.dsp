@@ -2,7 +2,6 @@
 treerow.dsp
 
 {{IS_NOTE
-	$Id: treerow.dsp,v 1.5 2006/03/17 10:06:35 tomyeh Exp $
 	Purpose:
 		
 	Description:

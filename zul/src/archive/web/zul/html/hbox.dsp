@@ -2,7 +2,6 @@
 hbox.dsp
 
 {{IS_NOTE
-	$Id: hbox.dsp,v 1.7 2006/04/18 02:25:07 tomyeh Exp $
 	Purpose:
 		
 	Description:

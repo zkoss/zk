@@ -2,7 +2,6 @@
 tabpanel.dsp
 
 {{IS_NOTE
-	$Id: tabpanel.dsp,v 1.5 2006/05/04 11:21:05 tomyeh Exp $
 	Purpose:
 		
 	Description:

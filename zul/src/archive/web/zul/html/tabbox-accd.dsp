@@ -2,7 +2,6 @@
 accordions.dsp
 
 {{IS_NOTE
-	$Id: tabbox-accd.dsp,v 1.3 2006/03/17 10:06:34 tomyeh Exp $
 	Purpose:
 		A accordion-type tabbox.
 	Description:

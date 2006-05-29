@@ -1,7 +1,6 @@
 /* Session.java
 
 {{IS_NOTE
-	$Id: Session.java,v 1.14 2006/04/18 07:38:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import java.util.Map;
  * a component belongs to exactly one page.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/04/18 07:38:31 $
+ * @version $Revision: 1.15 $ $Date: 2006/05/29 04:28:01 $
  */
 public interface Session {
 	/** Returns the value of the specified custom attribute.

@@ -1,7 +1,6 @@
 /* main.js
 
 {{IS_NOTE
-	$Id: main.js,v 1.8 2006/05/26 06:41:12 tomyeh Exp $
 	Purpose:
 		
 	Description:

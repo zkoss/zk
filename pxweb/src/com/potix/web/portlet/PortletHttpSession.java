@@ -1,7 +1,6 @@
 /* PortletHttpSession.java
 
 {{IS_NOTE
-	$Id: PortletHttpSession.java,v 1.4 2006/05/11 11:06:29 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import javax.portlet.PortletSession;
  * A facade of PortletSession for implementing HttpSession.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/11 11:06:29 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:36 $
  */
 public class PortletHttpSession implements HttpSession {
 	private final PortletSession _sess;

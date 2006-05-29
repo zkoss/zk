@@ -1,7 +1,6 @@
 /* ComponentManager.java
 
 {{IS_NOTE
-	$Id: ComponentManager.java,v 1.21 2006/05/18 04:06:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -43,7 +42,7 @@ import com.potix.idom.Element;
  * /metainfo/i3-comp.xml.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.21 $ $Date: 2006/05/18 04:06:31 $
+ * @version $Revision: 1.22 $ $Date: 2006/05/29 04:27:16 $
  */
 public class ComponentManager implements AutoStart {
 	private static final Log log = Log.lookup(ComponentManager.class);

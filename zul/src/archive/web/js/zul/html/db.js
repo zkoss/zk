@@ -1,7 +1,6 @@
 /* db.js
 
 {{IS_NOTE
-	$Id: db.js,v 1.30 2006/05/15 13:22:07 tomyeh Exp $
 	Purpose:
 		datebox
 	Description:

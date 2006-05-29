@@ -1,7 +1,6 @@
 /* cb.js
 
 {{IS_NOTE
-	$Id: cb.js,v 1.26 2006/05/16 04:49:09 tomyeh Exp $
 	Purpose:
 		combobox, bandbox
 	Description:

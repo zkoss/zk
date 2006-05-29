@@ -1,7 +1,6 @@
 /* EventThreadSuspend.java
 
 {{IS_NOTE
-	$Id: EventThreadSuspend.java,v 1.1 2006/05/02 16:23:35 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -38,7 +37,7 @@ import com.potix.zk.ui.UiException;
  * </ol>
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/02 16:23:35 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:02 $
  */
 public interface EventThreadSuspend {
 	/** Called before the event thread suspends.

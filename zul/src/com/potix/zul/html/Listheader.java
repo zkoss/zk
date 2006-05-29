@@ -1,7 +1,6 @@
 /* Listheader.java
 
 {{IS_NOTE
-	$Id: Listheader.java,v 1.9 2006/05/26 10:08:21 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -45,7 +44,7 @@ import com.potix.zul.html.impl.HeaderElement;
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/05/26 10:08:21 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/29 04:28:23 $
  */
 public class Listheader extends HeaderElement {
 	private String _sortDir = "natural";

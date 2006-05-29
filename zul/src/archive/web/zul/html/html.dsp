@@ -2,7 +2,6 @@
 html.dsp
 
 {{IS_NOTE
-	$Id: html.dsp,v 1.4 2006/03/17 10:06:32 tomyeh Exp $
 	Purpose:
 		Display any HTML tags
 	Description:

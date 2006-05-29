@@ -1,7 +1,6 @@
 /* ExecutionsCtrl.java
 
 {{IS_NOTE
-	$Id: ExecutionsCtrl.java,v 1.6 2006/05/25 04:17:41 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,7 +33,7 @@ import com.potix.zk.ui.event.Event;
  * Additional utilities for {@link Execution}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/25 04:17:41 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:28:09 $
  */
 public class ExecutionsCtrl extends Executions {
 	protected ExecutionsCtrl() {} //prevent from instantiation

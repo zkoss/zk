@@ -1,7 +1,6 @@
 /* Taglib.java
 
 {{IS_NOTE
-	$Id: Taglib.java,v 1.3 2006/02/27 03:41:53 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -23,7 +22,7 @@ package com.potix.el;
  * Represents a taglib.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:41:53 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:17 $
  */
 public class Taglib {
 	private final String _prefix, _uri;

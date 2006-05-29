@@ -1,7 +1,6 @@
 /* ExtendedWebContext.java
 
 {{IS_NOTE
-	$Id: ExtendedWebContext.java,v 1.6 2006/02/27 03:54:34 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -45,7 +44,7 @@ import javax.servlet.http.HttpServletResponse;
  * {@link com.potix.web.servlet.Servlets#addExtendedWebContext}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:54:34 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:44 $
  */
 public interface ExtendedWebContext {
 	/** Returns the encoded URL.

@@ -1,7 +1,6 @@
 /* Menu.java
 
 {{IS_NOTE
-	$Id: Menu.java,v 1.5 2006/03/17 10:06:37 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -37,7 +36,7 @@ import com.potix.zul.html.impl.LabelImageElement;
  * This element is also used to create submenus (of {@link Menupopup}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/03/17 10:06:37 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:24 $
  */
 public class Menu extends LabelImageElement {
 	private Menupopup _popup;

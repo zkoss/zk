@@ -1,7 +1,6 @@
 /* AuInsertAfter.java
 
 {{IS_NOTE
-	$Id: AuInsertAfter.java,v 1.2 2006/02/27 03:54:43 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.zk.ui.Component;
  * data[1]: the unparsed HTML (aka., content)
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:43 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:55 $
  */
 public class AuInsertAfter extends AuResponse {
 	public AuInsertAfter(Component comp, String content) {

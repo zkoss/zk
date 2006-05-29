@@ -2,7 +2,6 @@
 checkbox.dsp
 
 {{IS_NOTE
-	$Id: checkbox.dsp,v 1.8 2006/03/17 10:06:30 tomyeh Exp $
 	Purpose:
 		
 	Description:

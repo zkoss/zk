@@ -1,7 +1,6 @@
 /* PortletServletDispatcher.java
 
 {{IS_NOTE
-	$Id: PortletServletDispatcher.java,v 1.2 2006/02/27 03:54:27 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -32,7 +31,7 @@ import javax.servlet.ServletException;
  * A facade of a RequestDispatch for implementing PortletRequestDispatcher.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:27 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:37 $
  */
 public class PortletServletDispatcher implements PortletRequestDispatcher {
 	private final RequestDispatcher _rd;

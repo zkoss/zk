@@ -1,7 +1,6 @@
 /* BufferedResponse.java
 
 {{IS_NOTE
-	$Id: BufferedResponse.java,v 1.3 2006/02/27 03:54:28 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -40,7 +39,7 @@ import com.potix.web.servlet.http.HttpBufferedResponse;
  * the output.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:54:28 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:37 $
  */
 public class BufferedResponse extends ServletResponseWrapper {
 	private Writer _writer;

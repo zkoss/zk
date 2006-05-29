@@ -1,7 +1,6 @@
 /* AMedia.java
 
 {{IS_NOTE
-	$Id: AMedia.java,v 1.10 2006/05/23 01:49:27 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import java.io.ByteArrayInputStream;
  * A media object holding content such PDF, HTML, DOC or XLS content.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/23 01:49:27 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/29 04:27:23 $
  */
 public class AMedia implements Media {
 	/** The binary data, {@link #getByteData}. */

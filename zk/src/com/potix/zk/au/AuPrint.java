@@ -1,7 +1,6 @@
 /* AuPrint.java
 
 {{IS_NOTE
-	$Id: AuPrint.java,v 1.1 2006/04/10 03:02:02 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -24,7 +23,7 @@ package com.potix.zk.au;
  *  <p>no data.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/04/10 03:02:02 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:27:56 $
  */
 public class AuPrint extends AuResponse {
 	public AuPrint() {

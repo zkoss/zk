@@ -1,7 +1,6 @@
 /* ServletFns.java
 
 {{IS_NOTE
-	$Id: ServletFns.java,v 1.17 2006/03/09 08:40:16 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -43,7 +42,7 @@ import com.potix.web.el.ELContext;
  * Providing servlet relevant functions for EL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.17 $ $Date: 2006/03/09 08:40:16 $
+ * @version $Revision: 1.18 $ $Date: 2006/05/29 04:27:36 $
  */
 public class ServletFns {
 	protected ServletFns() {}

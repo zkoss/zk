@@ -1,7 +1,6 @@
 /* RequestInfoImpl.java
 
 {{IS_NOTE
-	$Id: RequestInfoImpl.java,v 1.2 2006/04/24 06:24:00 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.zk.ui.sys.RequestInfo;
  * An implementation of {@link RequestInfo}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/04/24 06:24:00 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:06 $
  */
 public class RequestInfoImpl implements RequestInfo {
 	private final WebApp _wapp;

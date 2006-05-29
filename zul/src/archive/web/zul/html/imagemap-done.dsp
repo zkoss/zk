@@ -2,7 +2,6 @@
 imagemap-done.dsp
 
 {{IS_NOTE
-	$Id: imagemap-done.dsp,v 1.1 2006/04/12 10:42:59 tomyeh Exp $
 	Purpose:
 		
 	Description:

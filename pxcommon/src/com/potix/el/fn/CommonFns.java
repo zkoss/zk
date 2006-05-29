@@ -1,7 +1,6 @@
 /* CommonFns.java
 
 {{IS_NOTE
-	$Id: CommonFns.java,v 1.14 2006/04/18 02:13:19 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.util.logging.Log;
  * Functions used with EL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/04/18 02:13:19 $
+ * @version $Revision: 1.15 $ $Date: 2006/05/29 04:27:18 $
  */
 public class CommonFns {
 	private static final Log log = Log.lookup(CommonFns.class);

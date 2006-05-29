@@ -1,7 +1,6 @@
 /* CustomAttributes.java
 
 {{IS_NOTE
-	$Id: CustomAttributes.java,v 1.1 2006/04/13 13:21:00 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,7 +34,7 @@ import com.potix.zk.ui.util.Condition;
  * It is equivalent to the custom-attributes element.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/04/13 13:21:00 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:07 $
  */
 public class CustomAttributes implements Condition {
 	private final Map _attrs;

@@ -1,7 +1,6 @@
 /* Style.java
 
 {{IS_NOTE
-	$Id: Style.java,v 1.2 2006/02/27 03:54:40 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,7 @@ import com.potix.zhtml.impl.AbstractTag;
  * The STYLE tag.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:40 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:51 $
  */
 public class Style extends AbstractTag {
 	public Style() {

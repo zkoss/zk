@@ -1,7 +1,6 @@
 /* RequestQueueImpl.java
 
 {{IS_NOTE
-	$Id: RequestQueueImpl.java,v 1.2 2006/05/26 10:08:16 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -39,7 +38,7 @@ import com.potix.zk.ui.sys.RequestQueue;
  * Unlike only of desktop members, this class must be thread-safe.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/26 10:08:16 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:07 $
  */
 public class RequestQueueImpl implements RequestQueue {
 	private static final Log log = Log.lookup(RequestQueueImpl.class);

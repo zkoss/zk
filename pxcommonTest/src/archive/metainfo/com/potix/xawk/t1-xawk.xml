@@ -2,7 +2,6 @@
 <!DOCTYPE xawk>
 
 <!-- t1-xawk.xml
-	$Id: t1-xawk.xml,v 1.1.1.1 2005/09/05 01:52:31 tomyeh Exp $
 	Purpose:
 		A xawk file to test t1.xml
 	Description:

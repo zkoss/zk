@@ -1,7 +1,6 @@
 /* tab.js
 
 {{IS_NOTE
-	$Id: tab.js,v 1.13 2006/05/10 10:04:02 tomyeh Exp $
 	Purpose:
 		
 	Description:

@@ -1,7 +1,6 @@
 /* Remove.java
 
 {{IS_NOTE
-	$Id: Remove.java,v 1.3 2006/02/27 03:54:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.web.servlet.ServletException;
  * The remove action used to remove an attribute.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:54:31 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:40 $
  */
 public class Remove extends AbstractAction {
 	private int _scope = ActionContext.PAGE_SCOPE;

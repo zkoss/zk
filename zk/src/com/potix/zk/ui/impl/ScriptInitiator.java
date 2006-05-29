@@ -1,7 +1,6 @@
 /* ScriptInitiator.java
 
 {{IS_NOTE
-	$Id: ScriptInitiator.java,v 1.1 2006/05/25 05:07:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import com.potix.zk.ui.util.Initiator;
  * An initiator used to evaluate a zscript file.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/25 05:07:07 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:07 $
  */
 public class ScriptInitiator implements Initiator {
 	private final Script _script;

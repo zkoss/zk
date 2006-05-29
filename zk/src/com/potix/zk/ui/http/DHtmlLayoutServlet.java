@@ -1,7 +1,6 @@
 /* DHtmlLayoutServlet.java
 
 {{IS_NOTE
-	$Id: DHtmlLayoutServlet.java,v 1.48 2006/05/03 03:25:06 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -88,7 +87,7 @@ import com.potix.zk.ui.impl.UiFactoryImpl;
  * Used to process the request for a ZUML page.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.48 $ $Date: 2006/05/03 03:25:06 $
+ * @version $Revision: 1.49 $ $Date: 2006/05/29 04:28:05 $
  */
 public class DHtmlLayoutServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlLayoutServlet.class);

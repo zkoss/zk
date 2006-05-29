@@ -1,7 +1,6 @@
 /* RootNode.java
 
 {{IS_NOTE
-	$Id: RootNode.java,v 1.6 2006/03/09 08:40:18 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.web.servlet.dsp.*;
  * The root node for the parsed result.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/03/09 08:40:18 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:42 $
  */
 class RootNode extends Node implements Interpretation {
 //	private static final Log log = Log.lookup(RootNode.class);

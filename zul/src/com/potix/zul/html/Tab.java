@@ -1,7 +1,6 @@
 /* Tab.java
 
 {{IS_NOTE
-	$Id: Tab.java,v 1.5 2006/04/19 08:47:23 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.zul.html.impl.LabelImageElement;
  * A tab.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/04/19 08:47:23 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Tab extends LabelImageElement {
 	private boolean _selected;

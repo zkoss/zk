@@ -1,7 +1,6 @@
 /* AbstractComponent.java
 
 {{IS_NOTE
-	$Id: AbstractComponent.java,v 1.41 2006/05/26 03:11:32 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -66,7 +65,7 @@ import com.potix.zk.au.AuRemove;
  * the chores.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.41 $ $Date: 2006/05/26 03:11:32 $
+ * @version $Revision: 1.42 $ $Date: 2006/05/29 04:27:59 $
  */
 public class AbstractComponent implements Component, ComponentCtrl {
 	private static final Log log = Log.lookup(AbstractComponent.class);

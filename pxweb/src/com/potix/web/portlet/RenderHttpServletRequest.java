@@ -1,7 +1,6 @@
 /* RenderHttpServletRequest.java
 
 {{IS_NOTE
-	$Id: RenderHttpServletRequest.java,v 1.3 2006/05/11 07:43:42 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.util.CollectionsX;
  * A facade of RenderRequest that implements HttpServletRespose.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/11 07:43:42 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:37 $
  */
 public class RenderHttpServletRequest implements HttpServletRequest {
 	private final RenderRequest _req;

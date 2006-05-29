@@ -1,7 +1,6 @@
 /* FunctionMappers.java
 
 {{IS_NOTE
-	$Id: FunctionMappers.java,v 1.15 2006/02/27 03:41:52 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -48,7 +47,7 @@ import com.potix.idom.util.IDOMs;
  * Utilities for handling FunctionMapper.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.15 $ $Date: 2006/02/27 03:41:52 $
+ * @version $Revision: 1.16 $ $Date: 2006/05/29 04:27:17 $
  */
 public class FunctionMappers {
 	private static final Log log = Log.lookup(FunctionMappers.class);

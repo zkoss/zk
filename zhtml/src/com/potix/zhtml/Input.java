@@ -1,7 +1,6 @@
 /* Input.java
 
 {{IS_NOTE
-	$Id: Input.java,v 1.7 2006/05/19 10:05:52 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import com.potix.zhtml.impl.AbstractTag;
  * The input tag.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/19 10:05:52 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:49 $
  */
 public class Input extends AbstractTag implements Inputable {
 	public Input() {

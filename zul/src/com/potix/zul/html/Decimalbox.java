@@ -1,7 +1,6 @@
 /* Decimalbox.java
 
 {{IS_NOTE
-	$Id: Decimalbox.java,v 1.6 2006/04/04 08:10:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -31,7 +30,7 @@ import com.potix.zul.html.impl.FormatInputElement;
  * An edit box for holding BigDecimal.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/04/04 08:10:09 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Decimalbox extends FormatInputElement {
 	/** Used with {@link #setScale} to denote that the scale is decided by

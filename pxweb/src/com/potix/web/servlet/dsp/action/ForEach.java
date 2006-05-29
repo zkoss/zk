@@ -1,7 +1,6 @@
 /* ForEach.java
 
 {{IS_NOTE
-	$Id: ForEach.java,v 1.7 2006/02/27 03:54:30 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.web.servlet.ServletException;
  * Iterators thru a collection/array of items.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/02/27 03:54:30 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:40 $
  */
 public class ForEach extends AbstractAction {
 	private String _var, _varStatus;

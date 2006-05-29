@@ -1,7 +1,6 @@
 /* PreferenceManager.java
 
 {{IS_NOTE
-	$Id: PreferenceManager.java,v 1.3 2006/02/27 03:42:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,7 @@ import java.util.TimeZone;
  * preference manager by use of {@link com.potix.util.prefs.Apps#setPreferenceManager}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:42:05 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:24 $
  */
 public interface PreferenceManager {
 	/** Returns the current locale; never null.

@@ -1,7 +1,6 @@
 /* GlobalDesktopCacheProvider.java
 
 {{IS_NOTE
-	$Id: GlobalDesktopCacheProvider.java,v 1.1.1.1 2006/04/24 04:04:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.zk.ui.sys.DesktopCache;
  * {@link WebApp}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1.1.1 $ $Date: 2006/04/24 04:04:05 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:06 $
  * @see SessionDesktopCacheProvider
  */
 public class GlobalDesktopCacheProvider implements DesktopCacheProvider {

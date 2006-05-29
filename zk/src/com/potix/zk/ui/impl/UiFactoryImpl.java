@@ -1,7 +1,6 @@
 /* UiFactoryImpl.java
 
 {{IS_NOTE
-	$Id: UiFactoryImpl.java,v 1.3 2006/04/24 16:36:37 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.zk.ui.http.PageDefinitions;
  * The default implementation of {@link UiFactory}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/04/24 16:36:37 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:07 $
  */
 public class UiFactoryImpl implements UiFactory {
 	//-- UiFactory --//

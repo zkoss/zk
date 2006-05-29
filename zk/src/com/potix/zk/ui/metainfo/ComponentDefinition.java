@@ -1,7 +1,6 @@
 /* ComponentDefinition.java
 
 {{IS_NOTE
-	$Id: ComponentDefinition.java,v 1.13 2006/05/26 03:11:35 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -43,7 +42,7 @@ import com.potix.zk.ui.util.Evaluator;
  * of a component.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/26 03:11:35 $
+ * @version $Revision: 1.14 $ $Date: 2006/05/29 04:28:07 $
  * @see LanguageDefinition
  */
 public class ComponentDefinition implements Cloneable {

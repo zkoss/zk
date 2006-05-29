@@ -1,7 +1,6 @@
 /* Groupbox.java
 
 {{IS_NOTE
-	$Id: Groupbox.java,v 1.8 2006/05/08 02:36:40 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.zul.html.impl.XulElement;
  * Groups a set of child elements to have a visual effect.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/08 02:36:40 $
+ * @version $Revision: 1.9 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Groupbox extends XulElement implements Openable {
 	private Caption _caption;

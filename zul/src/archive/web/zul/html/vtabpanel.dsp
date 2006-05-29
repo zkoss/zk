@@ -2,7 +2,6 @@
 vtabpanel.dsp
 
 {{IS_NOTE
-	$Id: vtabpanel.dsp,v 1.2 2006/05/04 11:21:06 tomyeh Exp $
 	Purpose:
 		
 	Description:

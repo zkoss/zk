@@ -1,7 +1,6 @@
 /* DesktopImpl.java
 
 {{IS_NOTE
-	$Id: DesktopImpl.java,v 1.2 2006/05/03 03:25:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -50,7 +49,7 @@ import com.potix.zk.au.AuPrint;
  * The implementation of {@link Desktop}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/03 03:25:07 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:06 $
  */
 public class DesktopImpl implements Desktop, DesktopCtrl {
 	private static final Log log = Log.lookup(DesktopImpl.class);

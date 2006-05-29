@@ -2,7 +2,6 @@
 vmenubar.dsp
 
 {{IS_NOTE
-	$Id: vmenubar.dsp,v 1.7 2006/03/17 10:06:35 tomyeh Exp $
 	Purpose:
 		
 	Description:

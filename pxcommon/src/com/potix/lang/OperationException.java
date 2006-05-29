@@ -1,7 +1,6 @@
 /* OperationException.java
 
 {{IS_NOTE
-	$Id: OperationException.java,v 1.2 2006/02/27 03:41:59 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -23,7 +22,7 @@ package com.potix.lang;
  * The expectable system exception denoting user's operation errors.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:41:59 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:20 $
  */
 public class OperationException extends SystemException implements Expectable {
 	public OperationException(String msg, Throwable cause) {

@@ -2,7 +2,6 @@
 label.dsp
 
 {{IS_NOTE
-	$Id: label.dsp,v 1.6 2006/03/31 01:48:59 tomyeh Exp $
 	Purpose:
 		
 	Description:

@@ -1,7 +1,6 @@
 /* RegexTest.java
 
 {{IS_NOTE
-	$Id: RegexTest.java,v 1.2 2006/02/27 03:42:10 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import junit.framework.*;
  * Test the performance of regex.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:10 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:26 $
  */
 public class RegexTest extends TestCase {
 	/**

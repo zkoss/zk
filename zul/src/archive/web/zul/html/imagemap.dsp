@@ -2,7 +2,6 @@
 imagemap.dsp
 
 {{IS_NOTE
-	$Id: imagemap.dsp,v 1.1 2006/04/12 10:43:09 tomyeh Exp $
 	Purpose:
 		
 	Description:

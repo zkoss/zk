@@ -1,7 +1,6 @@
 /* Raw.java
 
 {{IS_NOTE
-	$Id: Raw.java,v 1.6 2006/02/27 03:54:39 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.zhtml.impl.AbstractTag;
  * The raw component used to generate raw HTML elements.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:54:39 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:51 $
  */
 public class Raw extends AbstractTag implements DynamicTag {
 	public Raw(String tagname) {

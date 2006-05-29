@@ -1,7 +1,6 @@
 /* Variables.java
 
 {{IS_NOTE
-	$Id: Variables.java,v 1.6 2006/03/22 03:26:38 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import java.util.Collections;
  * variables utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/03/22 03:26:38 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:28:10 $
  */
 public class Variables {
 	private Variables() {}

@@ -1,7 +1,6 @@
 /* Include.java
 
 {{IS_NOTE
-	$Id: Include.java,v 1.7 2006/04/18 07:39:27 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -41,7 +40,7 @@ import com.potix.zul.html.impl.XulElement;
  * the current desktop.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/04/18 07:39:27 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:23 $
  */
 public class Include extends XulElement {
 	protected String _src;

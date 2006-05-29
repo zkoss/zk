@@ -1,7 +1,6 @@
 /* PageDefinitions.java
 
 {{IS_NOTE
-	$Id: PageDefinitions.java,v 1.1 2006/04/24 16:36:37 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -38,7 +37,7 @@ import com.potix.zk.ui.metainfo.PageDefinition;
  * Utilities to retrieve metainfos.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/04/24 16:36:37 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:05 $
  */
 public class PageDefinitions extends com.potix.zk.ui.metainfo.PageDefinitions {
 	private static final String ATTR_PAGE_CACHE = "com.potix.zk.ui.PageCache";

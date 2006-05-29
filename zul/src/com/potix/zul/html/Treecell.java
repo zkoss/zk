@@ -1,7 +1,6 @@
 /* Treecell.java
 
 {{IS_NOTE
-	$Id: Treecell.java,v 1.18 2006/03/17 10:06:38 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -38,7 +37,7 @@ import com.potix.zul.html.impl.LabelImageElement;
  * right after the image and label.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/03/17 10:06:38 $
+ * @version $Revision: 1.19 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Treecell extends LabelImageElement {
 	private static final String ROOT_OPEN = "/root-open.gif";

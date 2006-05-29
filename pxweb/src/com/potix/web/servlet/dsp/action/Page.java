@@ -1,7 +1,6 @@
 /* Page.java
 
 {{IS_NOTE
-	$Id: Page.java,v 1.5 2006/02/27 03:54:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.web.servlet.ServletException;
  * The page action used to set the page info, such as the content type.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:54:31 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:40 $
  */
 public class Page extends AbstractAction {
 	private String _ctype;

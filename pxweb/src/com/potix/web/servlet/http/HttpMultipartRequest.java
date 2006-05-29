@@ -1,7 +1,6 @@
 /* HttpMultipartRequest.java
 
 {{IS_NOTE
-	$Id: HttpMultipartRequest.java,v 1.7 2006/05/11 07:43:43 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -53,7 +52,7 @@ import com.potix.util.prefs.Apps;
  *
  * @author <a href="mailto:andrewho@potix.com">andrewho@potix.com</a>
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/11 07:43:43 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:43 $
  */
 public class HttpMultipartRequest extends HttpServletRequestWrapper {
 	private static final Log log = Log.lookup(HttpMultipartRequest.class);

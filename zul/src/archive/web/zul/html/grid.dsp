@@ -2,7 +2,6 @@
 grid.dsp
 
 {{IS_NOTE
-	$Id: grid.dsp,v 1.10 2006/03/27 10:59:57 tomyeh Exp $
 	Purpose:
 		
 	Description:

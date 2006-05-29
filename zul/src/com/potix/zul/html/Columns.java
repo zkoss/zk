@@ -1,7 +1,6 @@
 /* Columns.java
 
 {{IS_NOTE
-	$Id: Columns.java,v 1.4 2006/02/27 03:55:11 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.zul.html.impl.XulElement;
  * Each child of a columns element should be a {@link Column} element.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:55:11 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:21 $
  */
 public class Columns extends XulElement {
 	//-- Component --//

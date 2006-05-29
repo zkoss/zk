@@ -2,7 +2,6 @@
 div.dsp
 
 {{IS_NOTE
-	$Id: div.dsp,v 1.3 2006/03/17 10:06:31 tomyeh Exp $
 	Purpose:
 		
 	Description:

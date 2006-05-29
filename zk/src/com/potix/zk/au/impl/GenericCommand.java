@@ -1,7 +1,6 @@
 /* GenericCommand.java
 
 {{IS_NOTE
-	$Id: GenericCommand.java,v 1.4 2006/02/27 03:54:45 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.zk.au.AuRequest;
  * that does nothing but throwing an {@link Event}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:54:45 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:58 $
  */
 public class GenericCommand extends AuRequest.Command {
 	public GenericCommand(String evtnm, boolean skipIfEverError) {

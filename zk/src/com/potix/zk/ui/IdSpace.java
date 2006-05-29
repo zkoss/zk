@@ -1,7 +1,6 @@
 /* IdSpace.java
 
 {{IS_NOTE
-	$Id: IdSpace.java,v 1.2 2006/05/22 10:14:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -56,7 +55,7 @@ package com.potix.zk.ui;
  * an ID space owner, all it needs to do is to implement this interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/22 10:14:56 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:00 $
  */
 public interface IdSpace {
 	/** Returns a component of the specified ID in the same ID space.

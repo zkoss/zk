@@ -1,7 +1,6 @@
 /* Include.java
 
 {{IS_NOTE
-	$Id: Include.java,v 1.2 2006/02/27 03:54:30 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.web.servlet.ServletException;
  * Includes another URL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:30 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:40 $
  */
 public class Include extends AbstractAction {
 	private String _page;

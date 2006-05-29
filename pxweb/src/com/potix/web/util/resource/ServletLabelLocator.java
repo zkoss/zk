@@ -1,7 +1,6 @@
 /* ServletLabelLocator.java
 
 {{IS_NOTE
-	$Id: ServletLabelLocator.java,v 1.1 2006/04/10 03:02:01 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,7 @@ import com.potix.util.resource.LabelLocator;
 /**
  * The implementation of 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/04/10 03:02:01 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:27:45 $
  */
 public class ServletLabelLocator implements LabelLocator {
 	private final ServletContext _ctx;

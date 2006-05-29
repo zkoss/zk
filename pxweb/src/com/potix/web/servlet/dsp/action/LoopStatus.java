@@ -1,7 +1,6 @@
 /* LoopStatus.java
 
 {{IS_NOTE
-	$Id: LoopStatus.java,v 1.2 2006/02/27 03:54:30 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -24,7 +23,7 @@ package com.potix.web.servlet.dsp.action;
  * Used with {@link ForEach} if {@link ForEach#setVarStatus} is called.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:30 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:40 $
  */
 public interface LoopStatus {
 	/** Retrieves the index of the current round of the iteration (0-based).

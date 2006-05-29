@@ -2,7 +2,6 @@
 treecol.dsp
 
 {{IS_NOTE
-	$Id: treecol.dsp,v 1.7 2006/05/05 01:44:44 tomyeh Exp $
 	Purpose:
 		
 	Description:

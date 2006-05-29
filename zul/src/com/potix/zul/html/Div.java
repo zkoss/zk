@@ -1,7 +1,6 @@
 /* Div.java
 
 {{IS_NOTE
-	$Id: Div.java,v 1.4 2006/04/19 08:25:15 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.zul.html.impl.XulElement;
  * In other words, {@link Div} won't affect the uniqueness of identifiers.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/04/19 08:25:15 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Div extends XulElement {
 	private String _align;

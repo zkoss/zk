@@ -1,7 +1,6 @@
 /* SessionCtrl.java
 
 {{IS_NOTE
-	$Id: SessionCtrl.java,v 1.7 2006/04/18 07:38:33 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import com.potix.zk.ui.ComponentNotFoundException;
  * <p>Note: applications shall never access this interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/04/18 07:38:33 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:10 $
  */
 public interface SessionCtrl {
 	/** Called when the session is destroyed.

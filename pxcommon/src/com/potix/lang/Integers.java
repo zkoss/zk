@@ -1,7 +1,6 @@
 /* Integers.java
 
 {{IS_NOTE
-	$Id: Integers.java,v 1.6 2006/05/11 04:53:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import java.util.Locale;
  * Integer utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/11 04:53:31 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:20 $
  */
 public class Integers {
 	/** The zero. */

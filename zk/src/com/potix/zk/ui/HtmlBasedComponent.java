@@ -1,7 +1,6 @@
 /* HtmlBasedComponent.java
 
 {{IS_NOTE
-	$Id: HtmlBasedComponent.java,v 1.12 2006/05/25 05:43:50 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -47,7 +46,7 @@ import com.potix.zk.au.AuFocus;
  * </ul>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/25 05:43:50 $
+ * @version $Revision: 1.13 $ $Date: 2006/05/29 04:28:00 $
  */
 abstract public class HtmlBasedComponent extends AbstractComponent
 implements Moveable, ZIndexed {

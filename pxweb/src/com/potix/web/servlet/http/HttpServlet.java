@@ -1,7 +1,6 @@
 /* HttpServlet.java
 
 {{IS_NOTE
-	$Id: HttpServlet.java,v 1.5 2006/02/27 03:54:32 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,7 +33,7 @@ import com.potix.web.servlet.Servlets;
  * Extended javax.servlet.http.HttpServlet to provide extra utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:54:32 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:43 $
  */
 public class HttpServlet extends javax.servlet.http.HttpServlet {
 	/**

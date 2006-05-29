@@ -1,7 +1,6 @@
 /* ListitemRenderer.java
 
 {{IS_NOTE
-	$Id: ListitemRenderer.java,v 1.2 2006/02/27 03:55:13 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ package com.potix.zul.html;
  * and uses it to render all items for the same request.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:55:13 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:24 $
  * @see ListModel
  * @see Listbox
  */

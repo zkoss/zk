@@ -1,7 +1,6 @@
 /* Apps.java
 
 {{IS_NOTE
-	$Id: Apps.java,v 1.10 2006/04/17 05:56:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -43,7 +42,7 @@ import com.potix.comp.ComponentManager;
  * Utilities to access the application properties.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/04/17 05:56:05 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/29 04:27:24 $
  */
 public class Apps {
 	//private static final Log log = Log.lookup(Apps.class);

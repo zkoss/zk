@@ -1,7 +1,6 @@
 /* JavaScript.java
 
 {{IS_NOTE
-	$Id: JavaScript.java,v 1.10 2006/02/27 03:54:28 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,7 @@ import com.potix.lang.Objects;
  * Represents a javascript.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/02/27 03:54:28 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/29 04:27:37 $
  */
 public class JavaScript {
 	private final String _src, _charset, _content;

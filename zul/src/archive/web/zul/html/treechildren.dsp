@@ -2,7 +2,6 @@
 treechildren.dsp
 
 {{IS_NOTE
-	$Id: treechildren.dsp,v 1.4 2006/03/17 10:06:35 tomyeh Exp $
 	Purpose:
 		
 	Description:

@@ -1,7 +1,6 @@
 /* AbstractExecution.java
 
 {{IS_NOTE
-	$Id: AbstractExecution.java,v 1.4 2006/05/25 10:26:30 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -54,7 +53,7 @@ import com.potix.zk.au.AuResponse;
  * A skeletal implementation of {@link Execution}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/25 10:26:30 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:06 $
  */
 abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private final Desktop _desktop;

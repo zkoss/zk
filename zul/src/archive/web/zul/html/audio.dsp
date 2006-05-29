@@ -2,7 +2,6 @@
 audio.dsp
 
 {{IS_NOTE
-	$Id: audio.dsp,v 1.6 2006/03/17 10:06:30 tomyeh Exp $
 	Purpose:
 		
 	Description:

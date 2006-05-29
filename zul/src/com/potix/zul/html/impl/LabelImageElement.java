@@ -1,7 +1,6 @@
 /* LabelImageElement.java
 
 {{IS_NOTE
-	$Id: LabelImageElement.java,v 1.7 2006/03/23 07:21:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -32,7 +31,7 @@ import com.potix.zk.ui.ext.Viewable;
  * A HTML element with a label ({@link #getLabel})and an image ({@link #getImage}).
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/03/23 07:21:05 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:29 $
  */
 public class LabelImageElement extends LabelElement implements Viewable {
 	private String _src = null;

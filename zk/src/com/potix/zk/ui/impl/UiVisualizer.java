@@ -1,7 +1,6 @@
 /* UiVisualizer.java
 
 {{IS_NOTE
-	$Id: UiVisualizer.java,v 1.5 2006/05/02 04:56:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -56,7 +55,7 @@ import com.potix.zk.au.*;
  * {@link UiEngineImpl}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/02 04:56:31 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:07 $
  */
 /*package*/ class UiVisualizer implements Visualizer {
 	private static final Log log = Log.lookup(UiVisualizer.class);

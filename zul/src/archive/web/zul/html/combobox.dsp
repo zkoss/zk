@@ -2,7 +2,6 @@
 combobox.dsp
 
 {{IS_NOTE
-	$Id: combobox.dsp,v 1.17 2006/03/29 10:00:14 tomyeh Exp $
 	Purpose:
 		
 	Description:

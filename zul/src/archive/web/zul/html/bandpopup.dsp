@@ -2,7 +2,6 @@
 bandpopup.dsp
 
 {{IS_NOTE
-	$Id: bandpopup.dsp,v 1.1 2006/03/20 07:21:08 tomyeh Exp $
 	Purpose:
 		
 	Description:

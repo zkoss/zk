@@ -1,7 +1,6 @@
 /* timer.js
 
 {{IS_NOTE
-	$Id: timer.js,v 1.4 2006/05/10 10:04:03 tomyeh Exp $
 	Purpose:
 		
 	Description:

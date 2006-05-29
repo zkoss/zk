@@ -1,7 +1,6 @@
 /* MouseCommand.java
 
 {{IS_NOTE
-	$Id: MouseCommand.java,v 1.4 2006/03/28 06:43:18 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.zk.au.AuRequest;
  * relevant command.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/03/28 06:43:18 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:58 $
  */
 public class MouseCommand extends AuRequest.Command {
 	public MouseCommand(String evtnm, boolean skipIfEverError) {

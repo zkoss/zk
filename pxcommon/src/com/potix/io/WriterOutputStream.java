@@ -1,7 +1,6 @@
 /* WriterOutputStream.java
 
 {{IS_NOTE
-	$Id: WriterOutputStream.java,v 1.1 2006/05/02 04:50:30 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import java.io.IOException;
  * An output stream that is on top of a writer.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/02 04:50:30 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:27:19 $
  */
 public class WriterOutputStream extends OutputStream {
 	private final Writer _writer;

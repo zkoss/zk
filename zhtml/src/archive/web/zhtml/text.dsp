@@ -2,7 +2,6 @@
 text.jsp
 
 {{IS_NOTE
-	$Id: text.dsp,v 1.3 2006/02/27 03:54:34 tomyeh Exp $
 	Purpose:
 		
 	Description:

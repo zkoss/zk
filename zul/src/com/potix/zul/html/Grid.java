@@ -1,7 +1,6 @@
 /* Grid.java
 
 {{IS_NOTE
-	$Id: Grid.java,v 1.12 2006/04/17 06:39:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -38,7 +37,7 @@ import com.potix.zul.html.impl.XulElement;
  * <p>Default {@link #getSclass}: grid.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/04/17 06:39:56 $
+ * @version $Revision: 1.13 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Grid extends XulElement {
 	private Rows _rows;

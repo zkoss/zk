@@ -1,7 +1,6 @@
 /* AuMetaCommand.java
 
 {{IS_NOTE
-	$Id: AuMetaCommand.java,v 1.2 2006/02/27 03:54:43 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.zk.ui.Page;
  * data[2..n]: optional arguments
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:43 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:55 $
  */
 public class AuMetaCommand extends AuResponse {
 	/**

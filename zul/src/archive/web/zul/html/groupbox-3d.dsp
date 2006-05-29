@@ -2,7 +2,6 @@
 groupbox-3d.dsp
 
 {{IS_NOTE
-	$Id: groupbox-3d.dsp,v 1.8 2006/05/04 11:21:05 tomyeh Exp $
 	Purpose:
 		
 	Description:

@@ -2,7 +2,6 @@
 column.dsp
 
 {{IS_NOTE
-	$Id: column.dsp,v 1.7 2006/05/05 01:44:43 tomyeh Exp $
 	Purpose:
 		
 	Description:

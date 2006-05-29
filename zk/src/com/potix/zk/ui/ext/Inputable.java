@@ -1,7 +1,6 @@
 /* Inputable.java
 
 {{IS_NOTE
-	$Id: Inputable.java,v 1.1 2006/03/31 03:20:43 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -38,7 +37,7 @@ import com.potix.zk.ui.WrongValueException;
  * similar feature.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/03/31 03:20:43 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:04 $
  * @see com.potix.zk.ui.event.InputEvent
  */
 public interface Inputable {

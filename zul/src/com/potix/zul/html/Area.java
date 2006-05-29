@@ -1,7 +1,6 @@
 /* Area.java
 
 {{IS_NOTE
-	$Id: Area.java,v 1.3 2006/04/12 10:44:14 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -31,7 +30,7 @@ import com.potix.zk.ui.WrongValueException;
  * An area of a {@link Imagemap}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/04/12 10:44:14 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:20 $
  */
 public class Area extends AbstractComponent {
 	private String _shape;

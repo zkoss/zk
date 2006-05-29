@@ -2,7 +2,6 @@
 listfooter.dsp
 
 {{IS_NOTE
-	$Id: listfooter.dsp,v 1.5 2006/05/05 01:44:43 tomyeh Exp $
 	Purpose:
 		
 	Description:

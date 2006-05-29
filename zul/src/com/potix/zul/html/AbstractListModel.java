@@ -1,7 +1,6 @@
 /* AbstractListModel.java
 
 {{IS_NOTE
-	$Id: AbstractListModel.java,v 1.4 2006/02/27 05:14:11 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -32,7 +31,7 @@ import com.potix.zul.html.event.ListDataListener;
  * A skeletal implementation for {@link ListModel}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 05:14:11 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:20 $
  */
 abstract public class AbstractListModel implements ListModel {
 	private final List _listeners = new LinkedList();

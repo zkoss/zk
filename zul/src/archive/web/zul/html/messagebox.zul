@@ -4,7 +4,6 @@
 test.zul
 
 {{IS_NOTE
-	$Id: messagebox.zul,v 1.7 2006/04/26 07:13:14 tomyeh Exp $
 	Purpose:
 		View the specified subject.
 	Description:

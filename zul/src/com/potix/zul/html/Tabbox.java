@@ -1,7 +1,6 @@
 /* Tabbox.java
 
 {{IS_NOTE
-	$Id: Tabbox.java,v 1.13 2006/05/05 02:28:22 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -49,7 +48,7 @@ import com.potix.zul.html.impl.XulElement;
  * <dd>The accordion tabbox.</dd>
  * </dl>
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/05 02:28:22 $
+ * @version $Revision: 1.14 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Tabbox extends XulElement implements Selectable {
 	private Tabs _tabs;

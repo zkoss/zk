@@ -1,7 +1,6 @@
 /* Imagemap.java
 
 {{IS_NOTE
-	$Id: Imagemap.java,v 1.1 2006/04/12 10:44:38 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -38,7 +37,7 @@ import com.potix.zk.ui.UiException;
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/04/12 10:44:38 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Imagemap extends Image {
 	//-- super --//

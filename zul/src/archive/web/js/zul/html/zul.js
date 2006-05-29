@@ -1,7 +1,6 @@
 /* zul.js
 
 {{IS_NOTE
-	$Id: zul.js,v 1.15 2006/05/16 04:29:25 tomyeh Exp $
 	Purpose:
 		Common utilities for zul.
 	Description:

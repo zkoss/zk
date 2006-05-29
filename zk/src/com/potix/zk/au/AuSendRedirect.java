@@ -1,7 +1,6 @@
 /* AuSendRedirect.java
 
 {{IS_NOTE
-	$Id: AuSendRedirect.java,v 1.3 2006/05/02 04:56:28 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,7 @@ package com.potix.zk.au;
  * <p>data[0]: the URL to redirect to.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/02 04:56:28 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:56 $
  */
 public class AuSendRedirect extends AuResponse {
 	/**

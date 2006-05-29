@@ -1,7 +1,6 @@
 /* Node.java
 
 {{IS_NOTE
-	$Id: Node.java,v 1.5 2006/02/27 03:54:32 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import java.io.IOException;
  * Represents a node in an {@link com.potix.web.servlet.dsp.Interpretation}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:54:32 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:42 $
  */
 abstract class Node {
 	protected List _children;

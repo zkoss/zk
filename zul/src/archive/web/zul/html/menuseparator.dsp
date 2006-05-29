@@ -2,7 +2,6 @@
 menuseparator.dsp
 
 {{IS_NOTE
-	$Id: menuseparator.dsp,v 1.5 2006/03/17 10:06:33 tomyeh Exp $
 	Purpose:
 		
 	Description:

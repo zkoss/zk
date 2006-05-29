@@ -1,7 +1,6 @@
 /* Interpreter.java
 
 {{IS_NOTE
-	$Id: Interpreter.java,v 1.20 2006/05/18 07:48:16 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -42,7 +41,7 @@ import com.potix.web.servlet.dsp.impl.Parser;
  * Unlike JSP, we don't recognize \${ or \$\{.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.20 $ $Date: 2006/05/18 07:48:16 $
+ * @version $Revision: 1.21 $ $Date: 2006/05/29 04:27:38 $
  */
 public class Interpreter {
 //	private static final Log log = Log.lookup(Interpreter.class);

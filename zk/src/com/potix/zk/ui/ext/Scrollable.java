@@ -1,7 +1,6 @@
 /* Scrollable.java
 
 {{IS_NOTE
-	$Id: Scrollable.java,v 1.1 2006/03/31 03:20:44 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ package com.potix.zk.ui.ext;
  * that user is changing its content (changing is on progress and not finished).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/03/31 03:20:44 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:04 $
  */
 public interface Scrollable {
 	/** Sets the value in string (aka., text) by client.

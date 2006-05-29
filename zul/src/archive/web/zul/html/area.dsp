@@ -2,7 +2,6 @@
 area.dsp
 
 {{IS_NOTE
-	$Id: area.dsp,v 1.1 2006/03/28 11:30:02 tomyeh Exp $
 	Purpose:
 		
 	Description:

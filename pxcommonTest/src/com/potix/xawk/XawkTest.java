@@ -1,7 +1,6 @@
 /* XawTest.java
 
 {{IS_NOTE
-	$Id: XawkTest.java,v 1.3 2006/02/27 03:42:10 tomyeh Exp $
 	Purpose:
 		
 	Description:

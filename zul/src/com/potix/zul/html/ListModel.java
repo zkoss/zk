@@ -1,7 +1,6 @@
 /* ListModel.java
 
 {{IS_NOTE
-	$Id: ListModel.java,v 1.2 2006/02/27 03:55:12 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import com.potix.zul.html.event.ListDataListener;
  * use to get the value of each cell and the length of the list.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:55:12 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:23 $
  * @see Listbox
  * @see ListitemRenderer
  */

@@ -2,7 +2,6 @@
 listitem.dsp
 
 {{IS_NOTE
-	$Id: listitem.dsp,v 1.5 2006/03/17 10:06:33 tomyeh Exp $
 	Purpose:
 		
 	Description:

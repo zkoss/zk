@@ -2,7 +2,6 @@
 treeitem.dsp
 
 {{IS_NOTE
-	$Id: treeitem.dsp,v 1.3 2006/03/10 08:31:47 tomyeh Exp $
 	Purpose:
 		
 	Description:

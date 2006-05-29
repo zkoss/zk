@@ -1,7 +1,6 @@
 /* ServletDSPContext.java
 
 {{IS_NOTE
-	$Id: ServletDSPContext.java,v 1.7 2006/03/09 08:51:08 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -41,7 +40,7 @@ import com.potix.web.util.resource.ServletContextLocator;
  * A DSP context based on HTTP servlet request and response.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/03/09 08:51:08 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:38 $
  */
 public class ServletDSPContext implements DSPContext {
 	private final Locator _locator;

@@ -1,7 +1,6 @@
 /* XulElement.java
 
 {{IS_NOTE
-	$Id: XulElement.java,v 1.13 2006/03/17 10:06:39 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -36,7 +35,7 @@ import com.potix.zk.ui.ComponentNotFoundException;
  * The fundamental class for XUL elements.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/03/17 10:06:39 $
+ * @version $Revision: 1.14 $ $Date: 2006/05/29 04:28:29 $
  */
 abstract public class XulElement extends HtmlBasedComponent {
 	/** The action. */

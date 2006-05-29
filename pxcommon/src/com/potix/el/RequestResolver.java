@@ -1,7 +1,6 @@
 /* RequestResolver.java
 
 {{IS_NOTE
-	$Id: RequestResolver.java,v 1.12 2006/02/27 03:41:52 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -53,7 +52,7 @@ import com.potix.el.impl.AttributesMap;
  * Used to wrap a request to provide JSP-like evaluation.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/02/27 03:41:52 $
+ * @version $Revision: 1.13 $ $Date: 2006/05/29 04:27:17 $
  * @see ServletContextResolver
  */
 public class RequestResolver implements VariableResolver {

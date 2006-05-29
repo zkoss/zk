@@ -1,7 +1,6 @@
 /* DHtmlLayoutFilter.java
 
 {{IS_NOTE
-	$Id: DHtmlLayoutFilter.java,v 1.16 2006/04/25 04:46:45 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -60,7 +59,7 @@ import com.potix.zk.ui.impl.RequestInfoImpl;
  * </ul>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.16 $ $Date: 2006/04/25 04:46:45 $
+ * @version $Revision: 1.17 $ $Date: 2006/05/29 04:28:05 $
  */
 public class DHtmlLayoutFilter extends GenericFilter {
 	private static final Log log = Log.lookup(DHtmlLayoutFilter.class);

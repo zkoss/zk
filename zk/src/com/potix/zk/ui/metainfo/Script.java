@@ -1,7 +1,6 @@
 /* Script.java
 
 {{IS_NOTE
-	$Id: Script.java,v 1.9 2006/05/25 06:32:29 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -36,7 +35,7 @@ import com.potix.zk.ui.util.Condition;
 /**
  * Represents a BeanShell script
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/05/25 06:32:29 $
+ * @version $Revision: 1.10 $ $Date: 2006/05/29 04:28:08 $
  */
 public class Script implements Condition {
 	private final String _script;

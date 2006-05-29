@@ -1,7 +1,6 @@
 /* LabelLoader.java
 
 {{IS_NOTE
-	$Id: LabelLoader.java,v 1.3 2006/02/27 03:42:06 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import java.net.URL;
  * <p>There is one label manager per domain.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:42:06 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:24 $
  */
 public interface LabelLoader {
 	/** Returns the user readable label for a field based on the locale

@@ -1,7 +1,6 @@
 /* ExecutionCtrl.java
 
 {{IS_NOTE
-	$Id: ExecutionCtrl.java,v 1.9 2006/04/17 07:10:25 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -32,7 +31,7 @@ import com.potix.zk.ui.metainfo.PageDefinition;
  * <p>Application developers shall never access any of this methods.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/04/17 07:10:25 $
+ * @version $Revision: 1.10 $ $Date: 2006/05/29 04:28:09 $
  */
 public interface ExecutionCtrl {
 	/** Returns the current page.

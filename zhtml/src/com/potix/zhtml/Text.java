@@ -1,7 +1,6 @@
 /* Text.java
 
 {{IS_NOTE
-	$Id: Text.java,v 1.7 2006/05/04 15:02:43 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -37,7 +36,7 @@ import com.potix.zk.ui.metainfo.ComponentDefinition;
  * Represents a piece of text (of DOM).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/04 15:02:43 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:52 $
  */
 public class Text extends AbstractComponent implements RawId {
 	private String _value = "";

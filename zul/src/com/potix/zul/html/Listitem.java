@@ -1,7 +1,6 @@
 /* Listitem.java
 
 {{IS_NOTE
-	$Id: Listitem.java,v 1.15 2006/04/17 06:39:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -36,7 +35,7 @@ import com.potix.zul.html.impl.XulElement;
  * A list item.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.15 $ $Date: 2006/04/17 06:39:56 $
+ * @version $Revision: 1.16 $ $Date: 2006/05/29 04:28:24 $
  */
 public class Listitem extends XulElement {
 	private static final Log log = Log.lookup(Listitem.class);

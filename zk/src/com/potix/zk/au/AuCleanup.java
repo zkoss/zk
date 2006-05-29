@@ -1,7 +1,6 @@
 /* AuCleanup.java
 
 {{IS_NOTE
-	$Id: AuCleanup.java,v 1.2 2006/02/27 03:54:42 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import com.potix.zk.au.AuResponse;
  * <p>data[0]: component's UUID
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:42 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:54 $
  */
 public class AuCleanup extends AuResponse {
 	public AuCleanup(Component comp) {

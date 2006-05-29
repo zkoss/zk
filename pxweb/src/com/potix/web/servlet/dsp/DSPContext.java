@@ -1,7 +1,6 @@
 /* DSPContext.java
 
 {{IS_NOTE
-	$Id: DSPContext.java,v 1.9 2006/03/09 08:51:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.web.el.ELContext;
  * The context used with {@link Interpreter#interpret}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/03/09 08:51:07 $
+ * @version $Revision: 1.10 $ $Date: 2006/05/29 04:27:38 $
  * @see Interpreter
  */
 public interface DSPContext extends ELContext {

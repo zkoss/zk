@@ -1,7 +1,6 @@
 /* AbortingReason.java
 
 {{IS_NOTE
-	$Id: AbortingReason.java,v 1.1 2006/05/02 04:56:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,7 @@ import com.potix.zk.au.AuResponse;
  * The aborting reason used with {@link UiVisualizer#setAbortingReason}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/02 04:56:31 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:05 $
  */
 public interface AbortingReason {
 	/** Returns whether to abort the execution.

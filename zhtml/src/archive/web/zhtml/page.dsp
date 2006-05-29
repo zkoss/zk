@@ -2,7 +2,6 @@
 page.dsp
 
 {{IS_NOTE
-	$Id: page.dsp,v 1.20 2006/05/15 16:43:54 tomyeh Exp $
 	Purpose:
 		Render a ZUL page if it is included
 	Description:

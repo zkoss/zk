@@ -1,7 +1,6 @@
 /* Photo.java
 
 {{IS_NOTE
-	$Id: Photo.java,v 1.3 2006/02/27 03:42:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import com.potix.util.ModificationException;
  * Represents an object is associated with images.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:42:05 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:23 $
  */
 public interface Photo {
 	/** Returns the photo of this object.

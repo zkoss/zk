@@ -1,7 +1,6 @@
 /* tree.js
 
 {{IS_NOTE
-	$Id: tree.js,v 1.10 2006/05/10 10:04:03 tomyeh Exp $
 	Purpose:
 		
 	Description:

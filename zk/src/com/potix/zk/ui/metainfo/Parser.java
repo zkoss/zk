@@ -1,7 +1,6 @@
 /* Parser.java
 
 {{IS_NOTE
-	$Id: Parser.java,v 1.16 2006/05/25 05:43:51 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -58,7 +57,7 @@ import com.potix.zk.ui.util.impl.ConditionImpl;
 /**
  * Used to prase the ZUL file
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.16 $ $Date: 2006/05/25 05:43:51 $
+ * @version $Revision: 1.17 $ $Date: 2006/05/29 04:28:08 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);

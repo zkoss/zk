@@ -1,7 +1,6 @@
 /* InterpretResolver.java
 
 {{IS_NOTE
-	$Id: InterpretResolver.java,v 1.2 2006/02/27 03:54:32 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,7 +34,7 @@ import com.potix.web.servlet.dsp.action.ActionContext;
  * The resolver used to interpret an {@link Interpretation}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:32 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:41 $
  */
 class InterpretResolver implements VariableResolver {
 	private final VariableResolver _parent;

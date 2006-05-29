@@ -1,7 +1,6 @@
 /* grid.js
 
 {{IS_NOTE
-	$Id: grid.js,v 1.19 2006/05/10 10:04:02 tomyeh Exp $
 	Purpose:
 		
 	Description:

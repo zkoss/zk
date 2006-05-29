@@ -1,7 +1,6 @@
 /* vd.js
 
 {{IS_NOTE
-	$Id: vd.js,v 1.14 2006/05/10 10:04:03 tomyeh Exp $
 	Purpose:
 		
 	Description:

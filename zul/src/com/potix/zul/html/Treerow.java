@@ -1,7 +1,6 @@
 /* Treerow.java
 
 {{IS_NOTE
-	$Id: Treerow.java,v 1.11 2006/04/17 06:39:57 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -31,7 +30,7 @@ import com.potix.zul.html.impl.XulElement;
  * A treerow.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/04/17 06:39:57 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Treerow extends XulElement {
 	/** Returns the {@link Tree} instance containing this element.

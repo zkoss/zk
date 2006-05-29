@@ -2,7 +2,6 @@
 calendar.dsp
 
 {{IS_NOTE
-	$Id: calendar.dsp,v 1.3 2006/05/08 02:36:39 tomyeh Exp $
 	Purpose:
 		
 	Description:

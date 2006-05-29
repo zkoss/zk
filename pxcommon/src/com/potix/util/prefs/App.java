@@ -1,7 +1,6 @@
 /* App.java
 
 {{IS_NOTE
-	$Id: App.java,v 1.27 2006/02/27 03:42:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -23,7 +22,7 @@ package com.potix.util.prefs;
  * The application.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.27 $ $Date: 2006/02/27 03:42:05 $
+ * @version $Revision: 1.28 $ $Date: 2006/05/29 04:27:24 $
  */
 public interface App {
 	/** Returns the application name; never null. It retrieves the name in

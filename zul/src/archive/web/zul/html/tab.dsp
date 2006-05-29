@@ -2,7 +2,6 @@
 tab.dsp
 
 {{IS_NOTE
-	$Id: tab.dsp,v 1.10 2006/05/04 15:03:34 tomyeh Exp $
 	Purpose:
 		
 	Description:

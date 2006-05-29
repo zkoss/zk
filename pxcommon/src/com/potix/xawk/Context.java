@@ -1,7 +1,6 @@
 /* Context.java
 
 {{IS_NOTE
-	$Id: Context.java,v 1.2 2006/02/27 03:42:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.idom.Element;
  * The beanshell script could use it to get relevant information.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:07 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:25 $
  * @see Xawk
  */
 final public class Context {

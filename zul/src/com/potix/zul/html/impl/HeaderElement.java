@@ -1,7 +1,6 @@
 /* HeaderElement.java
 
 {{IS_NOTE
-	$Id: HeaderElement.java,v 1.8 2006/05/05 02:19:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import com.potix.zk.ui.UiException;
  * A skeletal implementation for headers.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/05 02:19:05 $
+ * @version $Revision: 1.9 $ $Date: 2006/05/29 04:28:29 $
  */
 abstract public class HeaderElement extends LabelImageElement {
 	private String _align, _valign;

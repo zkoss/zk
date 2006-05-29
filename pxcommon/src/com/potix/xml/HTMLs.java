@@ -1,7 +1,6 @@
 /* HTMLs.java
 
 {{IS_NOTE
-	$Id: HTMLs.java,v 1.6 2006/03/20 09:36:43 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import java.util.HashSet;
  * Utilities for HTML attributes and styles.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/03/20 09:36:43 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:26 $
  */
 public class HTMLs {
 	/** Appends an attribute to the string buffer for HTML/XML (name="val").

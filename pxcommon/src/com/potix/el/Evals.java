@@ -1,7 +1,6 @@
 /* Evals.java
 
 {{IS_NOTE
-	$Id: Evals.java,v 1.20 2006/02/27 03:41:52 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -43,7 +42,7 @@ import com.potix.text.DateFormats;
  * Utilities to wrap the real implementation of Expression Language evaluators.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.20 $ $Date: 2006/02/27 03:41:52 $
+ * @version $Revision: 1.21 $ $Date: 2006/05/29 04:27:17 $
  */
 public class Evals {
 	protected Evals() {}//prevent from instantiate

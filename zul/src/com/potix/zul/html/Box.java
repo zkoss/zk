@@ -1,7 +1,6 @@
 /* Box.java
 
 {{IS_NOTE
-	$Id: Box.java,v 1.7 2006/04/17 06:39:55 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,7 +33,7 @@ import com.potix.zul.html.impl.XulElement;
  * A box.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/04/17 06:39:55 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:20 $
  */
 public class Box extends XulElement {
 	private String _spacing;

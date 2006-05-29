@@ -2,7 +2,6 @@
 slider.dsp
 
 {{IS_NOTE
-	$Id: slider.dsp,v 1.7 2006/03/17 10:06:34 tomyeh Exp $
 	Purpose:
 		
 	Description:

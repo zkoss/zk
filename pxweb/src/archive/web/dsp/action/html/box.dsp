@@ -2,7 +2,6 @@
 normal.dsp
 
 {{IS_NOTE
-	$Id: box.dsp,v 1.3 2006/02/27 03:54:26 tomyeh Exp $
 	Purpose:
 		The head of each cell
 	Description:

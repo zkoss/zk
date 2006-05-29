@@ -1,7 +1,6 @@
 /* Parser.java
 
 {{IS_NOTE
-	$Id: Parser.java,v 1.14 2006/02/27 03:54:32 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -47,7 +46,7 @@ import com.potix.web.servlet.dsp.action.Action;
  * {@link Interpretation}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/02/27 03:54:32 $
+ * @version $Revision: 1.15 $ $Date: 2006/05/29 04:27:42 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);

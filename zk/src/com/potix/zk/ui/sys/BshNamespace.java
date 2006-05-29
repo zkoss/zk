@@ -1,7 +1,6 @@
 /* BshNamespace.java
 
 {{IS_NOTE
-	$Id: BshNamespace.java,v 1.4 2006/05/26 03:11:36 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,7 @@ import com.potix.zk.ui.util.Namespace;
  * An implementation of {@link Namespace} on top of BeanShell.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/26 03:11:36 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:09 $
  */
 public class BshNamespace implements Namespace {
 	private Namespace _parent;

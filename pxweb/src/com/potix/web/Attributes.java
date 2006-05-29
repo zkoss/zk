@@ -1,7 +1,6 @@
 /* Attributes.java
 
 {{IS_NOTE
-	$Id: Attributes.java,v 1.12 2006/02/27 03:54:26 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -24,7 +23,7 @@ package com.potix.web;
  * requests.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/02/27 03:54:26 $
+ * @version $Revision: 1.13 $ $Date: 2006/05/29 04:27:35 $
  */
 public class Attributes {
 	/** Don't construct it. All members are static. */

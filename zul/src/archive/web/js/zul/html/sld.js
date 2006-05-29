@@ -1,7 +1,6 @@
 /* slider.js
 
 {{IS_NOTE
-	$Id: sld.js,v 1.7 2006/05/10 10:04:02 tomyeh Exp $
 	Purpose:
 		
 	Description:

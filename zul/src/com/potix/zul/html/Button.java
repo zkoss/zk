@@ -1,7 +1,6 @@
 /* Button.java
 
 {{IS_NOTE
-	$Id: Button.java,v 1.10 2006/04/25 09:06:32 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -31,7 +30,7 @@ import com.potix.zul.html.impl.LabelImageElement;
  * A button.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/04/25 09:06:32 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/29 04:28:20 $
  */
 public class Button extends LabelImageElement {
 	private String _orient = "horizontal", _dir = "normal";

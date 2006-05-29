@@ -1,7 +1,6 @@
 /* UiFactory.java
 
 {{IS_NOTE
-	$Id: UiFactory.java,v 1.5 2006/04/24 06:32:52 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.zk.ui.metainfo.PageDefinition;
  * to {@link PageDefinition}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/04/24 06:32:52 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:10 $
  */
 public interface UiFactory {
 	/** Starts this factory.

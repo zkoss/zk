@@ -1,7 +1,6 @@
 /* Separator.java
 
 {{IS_NOTE
-	$Id: Separator.java,v 1.7 2006/04/17 06:39:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,7 @@ import com.potix.zul.html.impl.XulElement;
  * A separator.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/04/17 06:39:56 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:26 $
  */
 public class Separator extends XulElement {
 	private String _orient = "horizontal";

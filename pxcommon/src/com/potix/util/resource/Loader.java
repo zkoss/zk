@@ -1,7 +1,6 @@
 /* Loader.java
 
 {{IS_NOTE
-	$Id: Loader.java,v 1.6 2006/02/27 03:42:06 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -24,7 +23,7 @@ package com.potix.util.resource;
  * It is mainly designed to work with {@link ResourceCache}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:42:06 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:25 $
  */
 public interface Loader {
 	/** Returns the last modified time, or -1 if not exists.

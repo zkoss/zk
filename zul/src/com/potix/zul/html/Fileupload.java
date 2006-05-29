@@ -1,7 +1,6 @@
 /* Fileupload.java
 
 {{IS_NOTE
-	$Id: Fileupload.java,v 1.5 2006/02/27 03:55:12 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -41,7 +40,7 @@ import com.potix.zul.html.impl.FileuploadDlg;
  * <p>A non-XUL extension.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:55:12 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Fileupload {
 	/** Opens a modal dialog with the default message and title,

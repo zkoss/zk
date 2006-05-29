@@ -2,7 +2,6 @@
 toolbarbutton.dsp
 
 {{IS_NOTE
-	$Id: toolbarbutton.dsp,v 1.6 2006/03/17 10:06:35 tomyeh Exp $
 	Purpose:
 		
 	Description:

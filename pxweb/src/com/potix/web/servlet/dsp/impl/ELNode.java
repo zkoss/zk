@@ -1,7 +1,6 @@
 /* ELNode.java
 
 {{IS_NOTE
-	$Id: ELNode.java,v 1.6 2006/02/27 03:54:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.web.servlet.ServletException;
  * Represents an expression.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:54:31 $
+ * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:41 $
  */
 class ELNode extends Node {
 	private static final Log log = Log.lookup(ELNode.class);

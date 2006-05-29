@@ -1,7 +1,6 @@
 /* SessionDesktopCacheProvider.java
 
 {{IS_NOTE
-	$Id: SessionDesktopCacheProvider.java,v 1.1.1.1 2006/04/24 04:04:06 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ import com.potix.zk.ui.sys.DesktopCacheProvider;
  * from the same session in one desktop cache.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1.1.1 $ $Date: 2006/04/24 04:04:06 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:07 $
  * @see GlobalDesktopCacheProvider
  */
 public class SessionDesktopCacheProvider implements DesktopCacheProvider {

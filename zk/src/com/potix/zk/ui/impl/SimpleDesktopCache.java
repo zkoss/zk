@@ -1,7 +1,6 @@
 /* SimpleDesktopCache.java
 
 {{IS_NOTE
-	$Id: SimpleDesktopCache.java,v 1.3 2006/05/25 08:55:11 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -36,7 +35,7 @@ import com.potix.zk.ui.sys.WebAppCtrl;
  * all desktop in a {@link CacheMap} instance.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/25 08:55:11 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:07 $
  */
 public class SimpleDesktopCache implements DesktopCache {
 	private static final Log log = Log.lookup(SimpleDesktopCache.class);

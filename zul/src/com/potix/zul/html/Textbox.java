@@ -1,7 +1,6 @@
 /* Textbox.java
 
 {{IS_NOTE
-	$Id: Textbox.java,v 1.10 2006/03/31 03:37:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -32,7 +31,7 @@ import com.potix.zul.html.impl.InputElement;
  * <p>See <a href="package-summary.html">Specification</a>.</p>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/03/31 03:37:31 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Textbox extends InputElement {
 	private String _type = "text";

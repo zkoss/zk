@@ -1,7 +1,6 @@
 /* menu.js
 
 {{IS_NOTE
-	$Id: menu.js,v 1.14 2006/05/15 05:30:02 tomyeh Exp $
 	Purpose:
 		
 	Description:

@@ -1,7 +1,6 @@
 /* mesg_zh_TW.js
 
 {{IS_NOTE
-	$Id: mesg_zh_TW.js,v 1.3 2006/03/23 13:00:57 tomyeh Exp $
 	Purpose:
 		
 	Description:

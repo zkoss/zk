@@ -1,7 +1,6 @@
 /* ListitemComparator.java
 
 {{IS_NOTE
-	$Id: ListitemComparator.java,v 1.4 2006/05/26 10:27:40 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import java.util.Comparator;
  * A comparator used to compare {@link Listitem}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/26 10:27:40 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:24 $
  */
 public class ListitemComparator implements Comparator {
 	/** The listheader (optinal). */

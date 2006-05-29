@@ -1,7 +1,6 @@
 /* Desktop.java
 
 {{IS_NOTE
-	$Id: Desktop.java,v 1.9 2006/04/12 10:38:40 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,7 +33,7 @@ import java.util.Collection;
  * contained in this desktop are free to access.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/04/12 10:38:40 $
+ * @version $Revision: 1.10 $ $Date: 2006/05/29 04:28:00 $
  */
 public interface Desktop {
 	/** Returns ID of this desktop.

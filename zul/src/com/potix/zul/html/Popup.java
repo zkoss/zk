@@ -1,7 +1,6 @@
 /* Popup.java
 
 {{IS_NOTE
-	$Id: Popup.java,v 1.2 2006/02/27 03:55:14 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,7 @@ package com.potix.zul.html;
  * context or tooltip attribute of the element.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:55:14 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:25 $
  */
 public class Popup extends Menupopup {
 }

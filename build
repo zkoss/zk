@@ -1,7 +1,6 @@
 #!/bin/bash
 #
 #{{IS_NOTE
-#	$Id: build,v 1.32 2006/02/27 03:54:25 tomyeh Exp $
 #	Purpose:
 #		To build java projects
 #	Description:

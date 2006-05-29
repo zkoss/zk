@@ -1,7 +1,6 @@
 /* ComponentsCtrl.java
 
 {{IS_NOTE
-	$Id: ComponentsCtrl.java,v 1.2 2006/02/27 03:54:54 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,7 @@ import com.potix.zk.ui.Components;
  * Utilities for implementing components.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:54 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:09 $
  */
 public class ComponentsCtrl {
 	/** The prefix for auto generated ID. */

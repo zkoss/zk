@@ -2,7 +2,6 @@
 menuitem.dsp
 
 {{IS_NOTE
-	$Id: menuitem.dsp,v 1.8 2006/05/02 04:57:28 tomyeh Exp $
 	Purpose:
 		
 	Description:

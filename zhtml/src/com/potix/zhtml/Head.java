@@ -1,7 +1,6 @@
 /* Head.java
 
 {{IS_NOTE
-	$Id: Head.java,v 1.2 2006/02/27 03:54:37 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,7 @@ import com.potix.zhtml.impl.AbstractTag;
  * The HEAD tag.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:37 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:49 $
  */
 public class Head extends AbstractTag {
 	public Head() {

@@ -1,7 +1,6 @@
 /* ServletContextResolver.java
 
 {{IS_NOTE
-	$Id: ServletContextResolver.java,v 1.4 2006/02/27 03:41:53 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -47,7 +46,7 @@ import com.potix.el.impl.AttributesMap;
  * if variables that depend on request or session are accessed.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:41:53 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:17 $
  */
 public class ServletContextResolver implements VariableResolver {
 	private final ServletContext _ctx;

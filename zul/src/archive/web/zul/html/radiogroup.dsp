@@ -2,7 +2,6 @@
 radiogroup.dsp
 
 {{IS_NOTE
-	$Id: radiogroup.dsp,v 1.8 2006/03/17 10:06:33 tomyeh Exp $
 	Purpose:
 		
 	Description:

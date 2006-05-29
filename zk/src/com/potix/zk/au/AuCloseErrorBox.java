@@ -1,7 +1,6 @@
 /* AuCloseErrorBox.java
 
 {{IS_NOTE
-	$Id: AuCloseErrorBox.java,v 1.1 2006/05/25 10:26:28 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.zk.ui.Component;
  * <p>data[0]: the component's UUID.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/25 10:26:28 $
+ * @version $Revision: 1.2 $ $Date: 2006/05/29 04:27:55 $
  */
 public class AuCloseErrorBox extends AuResponse {
 	/**

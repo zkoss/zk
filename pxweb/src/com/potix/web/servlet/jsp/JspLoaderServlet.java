@@ -1,7 +1,6 @@
 /* JspLoaderServlet.java
 
 {{IS_NOTE
-	$Id: JspLoaderServlet.java,v 1.11 2006/02/27 03:54:33 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -41,7 +40,7 @@ import com.potix.web.servlet.http.Https;
 /**
  * JspLoaderServlet Load the compiled JSP pages.
  * @author <a href="mailto:andrewho@potix.com">andrewho@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/02/27 03:54:33 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/29 04:27:43 $
  */
 public final class JspLoaderServlet extends HttpServlet {
 	private static final Log log = Log.lookup(JspLoaderServlet.class);

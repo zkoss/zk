@@ -1,7 +1,6 @@
 /* Jsps.java
 
 {{IS_NOTE
-	$Id: Jsps.java,v 1.8 2006/02/27 03:54:33 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import com.potix.web.servlet.jsp.jasper.Jaspers;
  * JSP relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/02/27 03:54:33 $
+ * @version $Revision: 1.9 $ $Date: 2006/05/29 04:27:43 $
  */
 public class Jsps {
 	protected Jsps() {} //prevent from instantiated

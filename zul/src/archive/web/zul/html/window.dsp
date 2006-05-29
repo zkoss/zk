@@ -2,7 +2,6 @@
 window.dsp
 
 {{IS_NOTE
-	$Id: window.dsp,v 1.9 2006/03/17 10:06:35 tomyeh Exp $
 	Purpose:
 		
 	Description:

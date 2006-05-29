@@ -2,7 +2,6 @@
 listheader.dsp
 
 {{IS_NOTE
-	$Id: listheader.dsp,v 1.8 2006/05/26 10:08:19 tomyeh Exp $
 	Purpose:
 		
 	Description:

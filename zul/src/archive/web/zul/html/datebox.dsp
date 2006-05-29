@@ -2,7 +2,6 @@
 datebox.dsp
 
 {{IS_NOTE
-	$Id: datebox.dsp,v 1.14 2006/05/10 10:04:04 tomyeh Exp $
 	Purpose:
 		
 	Description:

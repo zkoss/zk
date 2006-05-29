@@ -1,7 +1,6 @@
 /* HtmlMacroComponent.java
 
 {{IS_NOTE
-	$Id: HtmlMacroComponent.java,v 1.8 2006/05/25 05:07:06 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  * the correct class, and then invoke {@link #postCreate}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/25 05:07:06 $
+ * @version $Revision: 1.9 $ $Date: 2006/05/29 04:28:00 $
  */
 public class HtmlMacroComponent extends HtmlBasedComponent
 implements PostCreate, IdSpace, DynamicPropertied {

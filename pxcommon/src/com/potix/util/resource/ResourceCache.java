@@ -1,7 +1,6 @@
 /* ResourceCache.java
 
 {{IS_NOTE
-	$Id: ResourceCache.java,v 1.11 2006/05/25 06:22:23 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,7 +34,7 @@ import com.potix.util.sys.WaitLock;
  * <p>Unlike {@link CacheMap}, it is thread-safe.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/25 06:22:23 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/29 04:27:25 $
  */
 public class ResourceCache extends CacheMap {
 	private static final Log log = Log.lookup(ResourceCache.class);

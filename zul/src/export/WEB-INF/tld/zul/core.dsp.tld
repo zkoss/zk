@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 
 <!--
-$Id: core.dsp.tld,v 1.11 2006/05/09 17:14:55 tomyeh Exp $
 Purpose:
 	Defines methods and actions for DSP
 Description:

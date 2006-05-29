@@ -1,7 +1,6 @@
 /* CheckCommand.java
 
 {{IS_NOTE
-	$Id: CheckCommand.java,v 1.4 2006/03/31 03:20:35 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,7 +33,7 @@ import com.potix.zk.au.AuRequest;
  * relevant command.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/03/31 03:20:35 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:57 $
  */
 public class CheckCommand extends AuRequest.Command {
 	public CheckCommand(String evtnm, boolean skipIfEverError) {

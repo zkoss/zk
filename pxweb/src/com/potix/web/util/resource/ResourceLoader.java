@@ -1,7 +1,6 @@
 /* ResourceLoader.java
 
 {{IS_NOTE
-	$Id: ResourceLoader.java,v 1.4 2006/04/17 14:34:13 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -33,7 +32,7 @@ import com.potix.util.logging.Log;
  * to retrieve servlet resources.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/04/17 14:34:13 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:44 $
  */
 abstract public class ResourceLoader implements Loader {
 	private static final Log log = Log.lookup(ResourceLoader.class);

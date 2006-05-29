@@ -1,7 +1,6 @@
 /* Treecols.java
 
 {{IS_NOTE
-	$Id: Treecols.java,v 1.4 2006/02/27 03:55:16 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.zul.html.impl.XulElement;
  * A treecols.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:55:16 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Treecols extends XulElement {
 	/** Returns the tree that it belongs to.

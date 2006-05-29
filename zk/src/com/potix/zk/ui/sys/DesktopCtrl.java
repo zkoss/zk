@@ -1,7 +1,6 @@
 /* DesktopCtrl.java
 
 {{IS_NOTE
-	$Id: DesktopCtrl.java,v 1.7 2006/04/18 07:38:33 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -31,7 +30,7 @@ import com.potix.zk.ui.UiException;
  * <p>Note: applications shall never access this interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/04/18 07:38:33 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:09 $
  */
 public interface DesktopCtrl {
 	/** Returns the request queue.

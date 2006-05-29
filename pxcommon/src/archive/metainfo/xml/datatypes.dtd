@@ -16,7 +16,6 @@ limitations under the License.
 -->
 <!--
         DTD for XML Schemas: Part 2: Datatypes
-        $Id: datatypes.dtd,v 1.1.1.1 2005/01/17 02:13:50 tomyeh Exp $
         Note this DTD is NOT normative, or even definitive. - - the
         prose copy in the datatypes REC is the definitive version
         (which shouldn't differ from this one except for this comment

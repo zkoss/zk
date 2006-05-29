@@ -1,7 +1,6 @@
 /* AuRequest.java
 
 {{IS_NOTE
-	$Id: AuRequest.java,v 1.17 2006/05/26 10:08:15 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -39,7 +38,7 @@ import com.potix.zk.au.impl.*;
  * A request sent from the client to {@link com.potix.zk.ui.sys.UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.17 $ $Date: 2006/05/26 10:08:15 $
+ * @version $Revision: 1.18 $ $Date: 2006/05/29 04:27:56 $
  */
 public class AuRequest {
 	private final Desktop _desktop;

@@ -1,7 +1,6 @@
 /* DynamicPropertied.java
 
 {{IS_NOTE
-	$Id: DynamicPropertied.java,v 1.2 2006/05/19 10:03:14 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.zk.ui.WrongValueException;
  * for each property it supports.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/19 10:03:14 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:03 $
  */
 public interface DynamicPropertied {
 	/** Returns whether a dynamic attribute is allowed.

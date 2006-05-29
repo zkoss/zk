@@ -1,7 +1,6 @@
 /* TextNode.java
 
 {{IS_NOTE
-	$Id: TextNode.java,v 1.4 2006/02/27 03:54:32 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import java.io.IOException;
  * Represents a node holding a plain text.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:54:32 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:42 $
  */
 class TextNode extends Node {
 	private final String _text;

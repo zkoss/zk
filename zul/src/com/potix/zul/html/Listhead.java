@@ -1,7 +1,6 @@
 /* Listhead.java
 
 {{IS_NOTE
-	$Id: Listhead.java,v 1.5 2006/02/27 03:55:13 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,7 +33,7 @@ import com.potix.zul.html.impl.XulElement;
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:55:13 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:23 $
  */
 public class Listhead extends XulElement {
 	/** Returns the list box that it belongs to.

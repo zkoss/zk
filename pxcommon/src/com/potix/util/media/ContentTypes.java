@@ -1,7 +1,6 @@
 /* ContentTypes.java
 
 {{IS_NOTE
-	$Id: ContentTypes.java,v 1.13 2006/02/27 03:42:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,7 +34,7 @@ import com.potix.util.logging.Log;
  * Utilities relevant to content types.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/02/27 03:42:05 $
+ * @version $Revision: 1.14 $ $Date: 2006/05/29 04:27:23 $
  */
 public class ContentTypes {
 	private static final Log log = Log.lookup(ContentTypes.class);

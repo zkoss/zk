@@ -1,7 +1,6 @@
 /* ZIndexCommand.java
 
 {{IS_NOTE
-	$Id: ZIndexCommand.java,v 1.4 2006/03/31 03:20:38 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,7 +33,7 @@ import com.potix.zk.au.AuRequest;
  * relevant command.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/03/31 03:20:38 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:59 $
  */
 public class ZIndexCommand extends AuRequest.Command {
 	public ZIndexCommand(String evtnm, boolean skipIfEverError) {

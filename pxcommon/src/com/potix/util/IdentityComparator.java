@@ -1,7 +1,6 @@
 /* IdentityComparator.java
 
 {{IS_NOTE
-	$Id: IdentityComparator.java,v 1.2 2006/02/27 03:42:02 tomyeh Exp $
 	Purpose:
 		The comparator uses == and System.identifyHashCode to do
 		the comparison.
@@ -35,7 +34,7 @@ import java.util.Comparator;
  * are preferred.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:02 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:23 $
  * @see IdentityHashSet
  */
 public class IdentityComparator implements Comparator {

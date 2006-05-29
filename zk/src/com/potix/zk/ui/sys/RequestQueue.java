@@ -1,7 +1,6 @@
 /* RequestQueue.java
 
 {{IS_NOTE
-	$Id: RequestQueue.java,v 1.7 2006/04/24 04:07:50 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,7 @@ import com.potix.zk.au.AuRequest;
  * Unlike only of desktop members, this class must be thread-safe.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/04/24 04:07:50 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:10 $
  */
 public interface RequestQueue {
 	/** Returns whether any request is available in the queue.

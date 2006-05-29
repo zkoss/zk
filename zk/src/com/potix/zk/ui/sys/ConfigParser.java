@@ -1,7 +1,6 @@
 /* ConfigParser.java
 
 {{IS_NOTE
-	$Id: ConfigParser.java,v 1.9 2006/04/19 05:10:38 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -42,7 +41,7 @@ import com.potix.zk.ui.metainfo.DefinitionLoaders;
  * Used to parse WEB-INF/zk.xml into {@link Configuration}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/04/19 05:10:38 $
+ * @version $Revision: 1.10 $ $Date: 2006/05/29 04:28:09 $
  */
 public class ConfigParser {
 	private static final Log log = Log.lookup(ConfigParser.class);

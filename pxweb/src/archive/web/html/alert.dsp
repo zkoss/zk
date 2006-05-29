@@ -2,7 +2,6 @@
 alert.dsp
 
 {{IS_NOTE
-	$Id: alert.dsp,v 1.4 2006/02/27 03:54:26 tomyeh Exp $
 	Purpose:
 		Shows the alert from the request's parameters
 		or from the arg attribute

@@ -1,7 +1,6 @@
 /* PotentialDeadLockException.java
 
 {{IS_NOTE
-	$Id: PotentialDeadLockException.java,v 1.3 2006/02/27 03:41:59 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -32,7 +31,7 @@ package com.potix.lang;
  * a transaction might trigger multiple syncBeans.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:41:59 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:20 $
  */
 public class PotentialDeadLockException extends OperationException {
 	public PotentialDeadLockException(String msg, Throwable cause) {

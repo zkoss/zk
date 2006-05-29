@@ -1,7 +1,6 @@
 /* Toolbarbutton.java
 
 {{IS_NOTE
-	$Id: Toolbarbutton.java,v 1.14 2006/04/25 09:06:33 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -35,7 +34,7 @@ import com.potix.zul.html.impl.LabelImageElement;
  * to HTML's A tag.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/04/25 09:06:33 $
+ * @version $Revision: 1.15 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Toolbarbutton extends LabelImageElement {
 	private String _orient = "horizontal", _dir = "normal";

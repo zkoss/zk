@@ -1,7 +1,6 @@
 /* AuReplace.java
 
 {{IS_NOTE
-	$Id: AuReplace.java,v 1.2 2006/02/27 03:54:44 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,7 @@ import com.potix.zk.ui.Component;
  * data[1]: the new content
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:44 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:56 $
  */
 public class AuReplace extends AuResponse {
 	public AuReplace(Component comp, String content) {

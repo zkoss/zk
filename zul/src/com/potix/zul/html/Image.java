@@ -1,7 +1,6 @@
 /* Image.java
 
 {{IS_NOTE
-	$Id: Image.java,v 1.16 2006/05/08 02:36:40 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,7 +33,7 @@ import com.potix.zul.html.impl.XulElement;
  * An image.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.16 $ $Date: 2006/05/08 02:36:40 $
+ * @version $Revision: 1.17 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Image extends XulElement implements Viewable {
 	private String _align, _border, _hspace, _vspace;

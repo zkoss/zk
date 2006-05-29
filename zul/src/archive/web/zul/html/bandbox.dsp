@@ -2,7 +2,6 @@
 bandbox.dsp
 
 {{IS_NOTE
-	$Id: bandbox.dsp,v 1.2 2006/03/29 10:00:14 tomyeh Exp $
 	Purpose:
 		
 	Description:

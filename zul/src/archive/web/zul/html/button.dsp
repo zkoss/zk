@@ -2,7 +2,6 @@
 button.dsp
 
 {{IS_NOTE
-	$Id: button.dsp,v 1.6 2006/03/17 10:06:30 tomyeh Exp $
 	Purpose:
 		
 	Description:

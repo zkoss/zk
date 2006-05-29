@@ -2,7 +2,6 @@
 fieldset.dsp
 
 {{IS_NOTE
-	$Id: groupbox.dsp,v 1.4 2006/03/17 10:06:31 tomyeh Exp $
 	Purpose:
 		
 	Description:

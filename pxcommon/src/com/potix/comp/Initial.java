@@ -1,7 +1,6 @@
 /* Initial.java
 
 {{IS_NOTE
-	$Id: Initial.java,v 1.2 2006/02/27 03:41:51 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -37,7 +36,7 @@ import java.util.Map;
  * {@link #init} is still executing).</li>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:41:51 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:16 $
  */
 public interface Initial {
 	/** Initializes the component implementing {@link Initial}.

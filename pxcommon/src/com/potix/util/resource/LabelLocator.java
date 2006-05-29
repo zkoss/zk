@@ -1,7 +1,6 @@
 /* LabelLocator.java
 
 {{IS_NOTE
-	$Id: LabelLocator.java,v 1.2 2006/02/27 03:42:06 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,7 @@ import java.net.URL;
  * If so, it will load labels from it.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:06 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:24 $
  */
 public interface LabelLocator {
 	/** Returns URL for the specified locale, or null if not available.

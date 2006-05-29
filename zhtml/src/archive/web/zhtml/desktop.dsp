@@ -4,7 +4,6 @@
 desktop.dsp
 
 {{IS_NOTE
-	$Id: desktop.dsp,v 1.7 2006/04/06 15:35:59 tomyeh Exp $
 	Purpose:
 		Used to render a ZUL page as a complete page (aka., desktop)
 		if it is not included

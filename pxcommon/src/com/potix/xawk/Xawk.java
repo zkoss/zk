@@ -1,7 +1,6 @@
 /* Xawk.java
 
 {{IS_NOTE
-	$Id: Xawk.java,v 1.11 2006/02/27 03:42:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -47,7 +46,7 @@ import com.potix.el.Evals;
  * An Awk-like even-driven XML parser.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/02/27 03:42:07 $
+ * @version $Revision: 1.12 $ $Date: 2006/05/29 04:27:25 $
  * @see Context
  */
 public class Xawk {

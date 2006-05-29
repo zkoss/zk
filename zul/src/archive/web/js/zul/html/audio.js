@@ -1,7 +1,6 @@
 /* audio.js
 
 {{IS_NOTE
-	$Id: audio.js,v 1.4 2006/03/31 08:09:50 tomyeh Exp $
 	Purpose:
 		
 	Description:

@@ -1,7 +1,6 @@
 /* Visualizer.java
 
 {{IS_NOTE
-	$Id: Visualizer.java,v 1.3 2006/04/25 08:42:10 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,7 @@ import com.potix.zk.ui.Execution;
  * <p>Its implementation highly depends on {@link UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/04/25 08:42:10 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:10 $
  */
 public interface Visualizer {
 	/** Returns the execution that this visualizer is associated with.

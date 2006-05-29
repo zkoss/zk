@@ -1,7 +1,6 @@
 /* Out.java
 
 {{IS_NOTE
-	$Id: Out.java,v 1.5 2006/02/27 03:54:31 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,7 @@ import com.potix.web.servlet.http.Encodes;
  * Generates the specified value into a string.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:54:31 $
+ * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:40 $
  */
 public class Out extends AbstractAction {
 	private String _value = null;

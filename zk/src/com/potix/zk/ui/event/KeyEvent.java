@@ -1,7 +1,6 @@
 /* KeyEvent.java
 
 {{IS_NOTE
-	$Id: KeyEvent.java,v 1.2 2006/02/27 03:54:50 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,7 @@ import com.potix.zk.ui.Component;
  * Represents a key pressed by the user.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:50 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:02 $
  */
 public class KeyEvent extends Event {
 	private final int _keyCode;

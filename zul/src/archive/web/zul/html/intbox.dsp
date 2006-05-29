@@ -2,7 +2,6 @@
 intbox.dsp
 
 {{IS_NOTE
-	$Id: intbox.dsp,v 1.6 2006/03/17 10:06:32 tomyeh Exp $
 	Purpose:
 		
 	Description:

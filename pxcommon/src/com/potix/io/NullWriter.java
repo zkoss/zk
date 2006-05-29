@@ -1,7 +1,6 @@
 /* NullWriter.java
 
 {{IS_NOTE
-	$Id: NullWriter.java,v 1.2 2006/02/27 03:41:57 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -26,7 +25,7 @@ import java.io.IOException;
  * A writer that drops all output. It hehaves like Unix /dev/null.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:41:57 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:19 $
  */
 public class NullWriter extends Writer {
 	public void write(char[] cbuf, int off, int len) throws IOException {

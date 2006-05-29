@@ -2,7 +2,6 @@
 listcell.dsp
 
 {{IS_NOTE
-	$Id: listcell.dsp,v 1.7 2006/03/17 10:06:32 tomyeh Exp $
 	Purpose:
 		
 	Description:

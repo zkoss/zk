@@ -1,7 +1,6 @@
 /* Calendar.java
 
 {{IS_NOTE
-	$Id: Calendar.java,v 1.4 2006/05/15 13:22:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -36,7 +35,7 @@ import com.potix.zul.html.impl.XulElement;
  * <p>Default {@link #getSclass}: calendar.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/15 13:22:09 $
+ * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:21 $
  */
 public class Calendar extends XulElement implements Inputable {
 	private Date _value;

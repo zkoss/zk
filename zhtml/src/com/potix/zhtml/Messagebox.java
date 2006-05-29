@@ -1,7 +1,6 @@
 /* Messagebox.java
 
 {{IS_NOTE
-	$Id: Messagebox.java,v 1.3 2006/02/27 03:54:38 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -31,7 +30,7 @@ import com.potix.zk.ui.UiException;
  * <p>A non-XHTML extension.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:54:38 $
+ * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:50 $
  */
 public class Messagebox {
 	/** A symbol consisting of a question mark in a circle. */
