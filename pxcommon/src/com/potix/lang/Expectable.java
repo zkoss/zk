@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/Expectable.java,v 1.2 2006/02/27 03:41:58 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -29,7 +28,6 @@ package com.potix.lang;
  * and only shows up a brief description about the exception, and so on.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:41:58 $
  */
 public interface Expectable {
 }

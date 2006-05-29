@@ -47,7 +47,6 @@ import com.potix.zk.ui.metainfo.InstanceDefinition;
  * a modal dialog to complete.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.22 $ $Date: 2006/05/29 04:28:09 $
  */
 public class EventProcessingThread extends Thread {
 	private static final Log log = Log.lookup(EventProcessingThread.class);

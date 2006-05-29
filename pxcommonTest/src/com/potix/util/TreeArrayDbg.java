@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommonTest/src/com/potix/util/TreeArrayDbg.java,v 1.2 2006/02/27 03:42:09 tomyeh Exp $
 	Purpose: Debug version of TreeArray
 	Description: 
 	History:
@@ -23,7 +22,6 @@ package com.potix.util;
  * Extends TreeArray to provide debug information.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:09 $
  */
 public class TreeArrayDbg extends TreeArray {
 	private final void dump(java.io.PrintStream out, RbEntry p, int level) {

@@ -46,7 +46,6 @@ import com.potix.zk.au.AuFocus;
  * </ul>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/29 04:28:00 $
  */
 abstract public class HtmlBasedComponent extends AbstractComponent
 implements Moveable, ZIndexed {

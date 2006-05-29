@@ -4,7 +4,6 @@
 combobox.zul
 
 {{IS_NOTE
-	$Id: moreCombobox.zul,v 1.5 2006/04/17 09:53:21 tomyeh Exp $
 	Purpose:
 		
 	Description:

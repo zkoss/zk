@@ -41,7 +41,6 @@ import com.potix.zul.html.impl.XulElement;
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Treeitem extends XulElement implements Openable {
 	private Treerow _treerow;

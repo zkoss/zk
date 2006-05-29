@@ -30,7 +30,6 @@ import com.potix.zul.html.impl.LabelImageElement;
  * A list cell.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.17 $ $Date: 2006/05/29 04:28:23 $
  */
 public class Listcell extends LabelImageElement {
 	public Listcell() {

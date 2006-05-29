@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/Classes.java,v 1.17 2006/02/27 03:41:58 tomyeh Exp $
 	Purpose: Utilities to handle Class
 	Description:
 	History:
@@ -49,7 +48,6 @@ import com.potix.util.logging.Log;
  * Utilities to handle java.lang.Class
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.17 $ $Date: 2006/02/27 03:41:58 $
  */
 public class Classes {
 	private static final Log log = Log.lookup(Classes.class);

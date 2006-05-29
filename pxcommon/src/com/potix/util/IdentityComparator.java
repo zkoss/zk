@@ -34,7 +34,6 @@ import java.util.Comparator;
  * are preferred.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:23 $
  * @see IdentityHashSet
  */
 public class IdentityComparator implements Comparator {

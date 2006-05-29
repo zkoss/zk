@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/text/DateFormats.java,v 1.6 2006/02/27 03:42:01 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -30,7 +29,6 @@ import com.potix.util.prefs.Apps;
  * DateFormat relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:42:01 $
  */
 public class DateFormats {
 	/**

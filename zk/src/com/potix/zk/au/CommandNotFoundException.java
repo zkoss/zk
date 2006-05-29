@@ -24,7 +24,6 @@ import com.potix.zk.ui.UiException;
  * Represents an update-relevant exception.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:57 $
  */
 public class CommandNotFoundException extends UiException {
 	public CommandNotFoundException(String msg, Throwable cause) {

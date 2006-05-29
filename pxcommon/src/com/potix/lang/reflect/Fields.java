@@ -32,7 +32,6 @@ import com.potix.util.ModificationException;
  * Utilities to access fields.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:21 $
  */
 public class Fields {
 	/** Returnst the value of the specfied field of the object.

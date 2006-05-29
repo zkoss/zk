@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Attribute.java,v 1.8 2006/05/11 08:32:13 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -36,7 +35,6 @@ import com.potix.idom.impl.*;
  * elements or attributes, so...
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/11 08:32:13 $
  * @see Element
  */
 public class Attribute extends AbstractItem implements Namespaceable, Attr {

@@ -4,7 +4,6 @@
 hello.zul
 
 {{IS_NOTE
-	$Id: listener.zul,v 1.4 2006/04/17 09:53:18 tomyeh Exp $
 	Purpose:
 		
 	Description:

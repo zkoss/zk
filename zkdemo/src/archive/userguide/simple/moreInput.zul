@@ -4,7 +4,6 @@
 moreInput.zul
 
 {{IS_NOTE
-	$Id: moreInput.zul,v 1.8 2006/04/25 06:37:21 tomyeh Exp $
 	Purpose:
 		
 	Description:

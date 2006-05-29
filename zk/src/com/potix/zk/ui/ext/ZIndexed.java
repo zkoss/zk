@@ -26,7 +26,6 @@ package com.potix.zk.ui.ext;
  * are called and {@link com.potix.zk.ui.event.ZIndexEvent} is sent to notify the component.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:05 $
  */
 public interface ZIndexed {
 	/** Sets the z-index of the component, caused by user's activity at

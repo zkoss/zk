@@ -24,7 +24,6 @@ import com.potix.zk.ui.Component;
  * Represents an event cause by user's check a state at the client.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:01 $
  */
 public class CheckEvent extends Event {
 	private final boolean _checked;

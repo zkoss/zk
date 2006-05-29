@@ -1,7 +1,6 @@
 /* WrongValueException.java
 
 {{IS_NOTE
-	$Id: WrongValueException.java,v 1.2 2006/02/27 03:54:48 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -24,7 +23,6 @@ package com.potix.zk.ui;
  * is wrong.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:48 $
  */
 public class WrongValueException extends OperationException {
 	private Component _comp;

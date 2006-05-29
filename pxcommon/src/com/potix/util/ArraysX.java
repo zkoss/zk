@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/ArraysX.java,v 1.4 2006/02/27 03:42:01 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -25,7 +24,6 @@ import java.lang.reflect.Array;
  * Utilities for handling arrays.
  *
  * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:42:01 $
  */
 public class ArraysX {
 	/** Converts an array to a readable string (for debugging purpose).

@@ -34,7 +34,6 @@ import com.potix.zk.ui.util.Condition;
  * It is equivalent to the custom-attributes element.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:07 $
  */
 public class CustomAttributes implements Condition {
 	private final Map _attrs;

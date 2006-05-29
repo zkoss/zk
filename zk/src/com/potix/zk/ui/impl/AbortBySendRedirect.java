@@ -26,7 +26,6 @@ import com.potix.zk.au.AuSendRedirect;
  * In other words, the client will redirect the specified URL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:05 $
  */
 public class AbortBySendRedirect implements AbortingReason {
 	private final String _url;

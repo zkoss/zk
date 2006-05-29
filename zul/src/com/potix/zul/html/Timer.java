@@ -32,7 +32,6 @@ import com.potix.zul.html.impl.XulElement;
  * <p>{@link Timer} is a special component that is invisible.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Timer extends XulElement {
 	private int _delay;

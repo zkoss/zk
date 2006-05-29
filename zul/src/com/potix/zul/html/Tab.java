@@ -29,7 +29,6 @@ import com.potix.zul.html.impl.LabelImageElement;
  * A tab.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Tab extends LabelImageElement {
 	private boolean _selected;

@@ -26,7 +26,6 @@ import com.potix.zk.ui.Component;
  * declares the onCreate handler (either as a method or as in instance definition).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:01 $
  */
 public class CreateEvent extends Event {
 	public CreateEvent(String name, Component target) {

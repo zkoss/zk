@@ -34,7 +34,6 @@ import com.potix.util.logging.Log;
  * Utilities relevant to content types.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/05/29 04:27:23 $
  */
 public class ContentTypes {
 	private static final Log log = Log.lookup(ContentTypes.class);

@@ -50,7 +50,6 @@ import com.potix.zk.au.AuInit;
  * <p>Default {@link #getSclass}: tree.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Tree extends XulElement implements Selectable {
 	private Treecols _treecols;

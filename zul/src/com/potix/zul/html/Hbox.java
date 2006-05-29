@@ -22,7 +22,6 @@ package com.potix.zul.html;
  * A hbox.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Hbox extends Box {
 	public Hbox() {

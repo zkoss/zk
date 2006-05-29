@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/CData.java,v 1.6 2006/05/11 07:16:22 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -25,7 +24,6 @@ import com.potix.idom.impl.*;
  * The iDOM CDATA.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/11 07:16:22 $
  * @see Text
  */
 public class CData extends AbstractTextual implements CDATASection {

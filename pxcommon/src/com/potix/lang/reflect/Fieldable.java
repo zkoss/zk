@@ -27,7 +27,6 @@ import com.potix.util.ModificationException;
  * this interface is used. If not, reflection is used.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:21 $
  */
 public interface Fieldable {
 	/** Returns the value of the specified field.

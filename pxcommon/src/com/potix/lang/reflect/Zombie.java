@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/reflect/Zombie.java,v 1.3 2006/02/27 03:42:00 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -27,7 +26,6 @@ package com.potix.lang.reflect;
  * programer can check wether the object implements this Zombie interface.
  *
  * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:42:00 $
  */
 public interface Zombie {
 	//no methods, it is used as a marker only.

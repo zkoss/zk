@@ -29,7 +29,6 @@ import com.potix.zk.ui.metainfo.PageDefinition;
  * to {@link PageDefinition}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:10 $
  */
 public interface UiFactory {
 	/** Starts this factory.

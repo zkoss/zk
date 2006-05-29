@@ -2,7 +2,6 @@
 test.psp
 
 {{IS_NOTE
-	$Id: test.dsp,v 1.2 2005/12/26 01:55:20 tomyeh Exp $
 	Purpose:
 		
 	Description:

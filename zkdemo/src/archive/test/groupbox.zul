@@ -4,7 +4,6 @@
 groupbox.zul
 
 {{IS_NOTE
-	$Id: groupbox.zul,v 1.2 2006/01/02 08:37:05 tomyeh Exp $
 	Purpose:
 		
 	Description:

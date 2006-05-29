@@ -35,7 +35,6 @@ import com.potix.zul.html.impl.XulElement;
  * A list item.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.16 $ $Date: 2006/05/29 04:28:24 $
  */
 public class Listitem extends XulElement {
 	private static final Log log = Log.lookup(Listitem.class);

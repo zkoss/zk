@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommonTest/src/com/potix/util/logging/LogTest.java,v 1.3 2006/04/11 01:58:18 tomyeh Exp $
 	Purpose: Test MultiValues
 	Description:
 	History:

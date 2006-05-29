@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/impl/AbstractItem.java,v 1.6 2006/05/11 07:16:25 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -64,7 +63,6 @@ import com.potix.idom.*;
  * </dl>
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/11 07:16:25 $
  * @see com.potix.idom.Item
  */
 public abstract class AbstractItem

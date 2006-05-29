@@ -30,7 +30,6 @@ import com.potix.util.resource.LabelLocator;
  * the class and field names.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:25 $
  */
 public class LabelLoaderImpl implements LabelLoader {
 	//-- LabelLoader --//

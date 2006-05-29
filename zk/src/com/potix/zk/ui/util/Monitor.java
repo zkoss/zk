@@ -1,7 +1,6 @@
 /* Monitor.java
 
 {{IS_NOTE
-	$Id: Monitor.java,v 1.2 2006/03/20 14:51:12 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,6 @@ import com.potix.zk.ui.Desktop;
  * It is usually used to accumulate the statistic data.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/03/20 14:51:12 $
  */
 public interface Monitor {
 	/** Called when a new session is created.

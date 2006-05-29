@@ -25,7 +25,6 @@ import javax.portlet.PortletSession;
  * A facade of PortletSession for implementing HttpSession.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:36 $
  */
 public class PortletHttpSession implements HttpSession {
 	private final PortletSession _sess;

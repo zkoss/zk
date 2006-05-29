@@ -60,7 +60,6 @@ import com.potix.util.prefs.Apps;
  * Note: the real class is usually retrieved from i3-prefs.xml.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/29 04:27:25 $
  * @see AutoStart
  * @see Singleton
  */

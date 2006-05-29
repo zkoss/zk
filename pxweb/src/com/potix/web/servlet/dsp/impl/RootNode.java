@@ -32,7 +32,6 @@ import com.potix.web.servlet.dsp.*;
  * The root node for the parsed result.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:42 $
  */
 class RootNode extends Node implements Interpretation {
 //	private static final Log log = Log.lookup(RootNode.class);

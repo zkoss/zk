@@ -27,7 +27,6 @@ import com.potix.zul.html.impl.XulElement;
  * A treecols.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Treecols extends XulElement {
 	/** Returns the tree that it belongs to.

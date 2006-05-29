@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/DOMException.java,v 1.4 2006/02/27 03:41:54 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -27,7 +26,6 @@ import com.potix.idom.util.SimpleLocator;
  * Denotes an operation is not supported.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:41:54 $
  */
 public class DOMException extends org.w3c.dom.DOMException {
 	protected Locator _loc;

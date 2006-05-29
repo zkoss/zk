@@ -1,7 +1,6 @@
 /* ForEachStatus.java
 
 {{IS_NOTE
-	$Id: ForEachStatus.java,v 1.2 2006/03/20 14:51:12 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,6 @@ package com.potix.zk.ui.util;
  * <code>forEachStatus.previous.each</code>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/03/20 14:51:12 $
  */
 public interface ForEachStatus {
 	/** Returns the status of the enclosing forEach statement.

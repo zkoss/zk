@@ -23,7 +23,6 @@ package com.potix.zk.au;
  * <p>data[0]: the form's UUID.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:57 $
  */
 public class AuSubmitForm extends AuResponse {
 	/**

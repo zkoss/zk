@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommonTest/src/com/potix/util/CollectionsXTest.java,v 1.2 2006/02/27 03:42:09 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -27,7 +26,6 @@ import java.util.*;
  * Test ExtCollection.
  *
  * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:09 $
  */
 /* rename $TEST to your test class name */
 public class CollectionsXTest extends TestCase {

@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/io/Files.java,v 1.13 2006/05/02 07:04:23 tomyeh Exp $
 	Purpose: File related utilities.
 	Description:
 	History:
@@ -30,7 +29,6 @@ import com.potix.util.prefs.Apps;
  * File related utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/02 07:04:23 $
  */
 public class Files {
 	protected Files() {}

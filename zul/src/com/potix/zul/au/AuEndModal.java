@@ -26,7 +26,6 @@ import com.potix.zk.au.AuResponse;
  * <p>data[0]: component's UUID
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:20 $
  */
 public class AuEndModal extends AuResponse {
 	public AuEndModal(Component comp) {

@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/util/IDOMs.java,v 1.20 2006/05/11 07:16:25 tomyeh Exp $
 Purpose:
 Description:
 History:
@@ -49,7 +48,6 @@ import com.potix.idom.transform.Transformer;
  * The iDOM relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.20 $ $Date: 2006/05/11 07:16:25 $
  * @see com.potix.idom.Item
  * @see com.potix.idom.Group
  */

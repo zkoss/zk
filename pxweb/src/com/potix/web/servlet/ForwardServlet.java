@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxweb/src/com/potix/web/servlet/ForwardServlet.java,v 1.5 2006/02/27 03:54:28 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -43,7 +42,6 @@ import com.potix.web.servlet.http.Https;
  * </dl>
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:54:28 $
  */
 public class ForwardServlet extends GenericServlet {
 	private static final Log log = Log.lookup(ForwardServlet.class);

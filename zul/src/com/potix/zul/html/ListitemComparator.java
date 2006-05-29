@@ -25,7 +25,6 @@ import java.util.Comparator;
  * A comparator used to compare {@link Listitem}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:24 $
  */
 public class ListitemComparator implements Comparator {
 	/** The listheader (optinal). */

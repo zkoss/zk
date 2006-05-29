@@ -28,7 +28,6 @@ import com.potix.zul.html.impl.XulElement;
  * of this component.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:20 $
  */
 public class Bandpopup extends XulElement {
 	public Bandpopup() {

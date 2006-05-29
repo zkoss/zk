@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommonTest/src/com/potix/el/ElTest.java,v 1.2 2006/02/27 03:42:08 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -26,7 +25,6 @@ import junit.framework.*;
  * Test EL.
  *
  * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:08 $
  */
 public class ElTest extends TestCase {
 	/**

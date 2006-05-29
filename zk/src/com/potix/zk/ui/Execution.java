@@ -52,7 +52,6 @@ import com.potix.zk.au.AuResponse;
  * also serves as an isolation layer.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.19 $ $Date: 2006/05/29 04:28:00 $
  * @see Page
  */
 public interface Execution extends Evaluator {

@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Item.java,v 1.5 2006/05/11 07:16:23 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -43,7 +42,6 @@ import com.potix.xml.Locator;
  * Refer to package.html.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/11 07:16:23 $
  * @see Attributable
  * @see Binable
  */

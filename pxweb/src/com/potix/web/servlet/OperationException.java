@@ -24,7 +24,6 @@ import com.potix.lang.Expectable;
  * The expectable servlet exception denoting user's operation errors.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:37 $
  */
 public class OperationException extends ServletException implements Expectable {
 	public OperationException(String msg, Throwable cause) {

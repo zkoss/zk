@@ -24,7 +24,6 @@ import com.potix.zhtml.impl.AbstractTag;
  * The HEAD tag.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:49 $
  */
 public class Head extends AbstractTag {
 	public Head() {

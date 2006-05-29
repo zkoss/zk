@@ -30,7 +30,6 @@ import com.potix.zk.ui.UiException;
  * <p>Note: applications shall never access this interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/05/29 12:57:06 $
  */
 public interface DesktopCtrl {
 	/** Returns the request queue.

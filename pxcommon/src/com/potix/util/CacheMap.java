@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/CacheMap.java,v 1.16 2006/02/27 03:42:01 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -75,7 +74,6 @@ import com.potix.util.logging.Log;
  * re-create the reference after enqueued.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.16 $ $Date: 2006/02/27 03:42:01 $
  */
 public class CacheMap implements Map {
 	//private static final Log log = Log.lookup(CacheMap.class);

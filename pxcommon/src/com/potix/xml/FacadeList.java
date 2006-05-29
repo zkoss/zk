@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/xml/FacadeList.java,v 1.2 2006/02/27 03:42:08 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -26,7 +25,6 @@ import org.w3c.dom.NodeList;
  * The java List which is a facade of a NodeList.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:08 $
  * @see FacadeNodeList
  */
 public class FacadeList extends AbstractList {

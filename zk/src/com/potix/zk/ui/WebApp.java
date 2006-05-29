@@ -1,7 +1,6 @@
 /* WebApp.java
 
 {{IS_NOTE
-	$Id: WebApp.java,v 1.12 2006/04/24 06:23:59 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -40,7 +39,6 @@ import com.potix.zk.ui.util.Configuration;
  * <p>To get the current Web application, use {@link Desktop#getWebApp}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/04/24 06:23:59 $
  */
 public interface WebApp extends Locator {
 	/** Returns the ZK version, such as "1.0.1" and "2.0.0".

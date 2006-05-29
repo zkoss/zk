@@ -29,7 +29,6 @@ import com.potix.zk.ui.Page;
  * data[1]: the unparsed HTML (aka., content)
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:54 $
  */
 public class AuAppendChild extends AuResponse {
 	public AuAppendChild(Component comp, String content) {

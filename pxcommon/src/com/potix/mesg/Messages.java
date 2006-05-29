@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/mesg/Messages.java,v 1.12 2006/04/17 05:56:04 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -37,7 +36,6 @@ import com.potix.text.MessageFormats;
  * are treated as an empty string rather than "null".
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.12 $ $Date: 2006/04/17 05:56:04 $
  */
 public class Messages implements MessageConst {
 	private static final Log log = Log.lookup(Messages.class);

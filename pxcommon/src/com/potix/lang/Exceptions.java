@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/Exceptions.java,v 1.18 2006/05/15 08:54:32 tomyeh Exp $
 	Purpose: Utilities for Exceptions
 	Description: 
 	History:
@@ -34,7 +33,6 @@ import com.potix.util.logging.Log;
  * Utilities for Exceptions.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.18 $ $Date: 2006/05/15 08:54:32 $
  */
 public class Exceptions {
 	private static final Log log = Log.lookup(Exceptions.class);

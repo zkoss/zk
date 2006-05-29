@@ -28,7 +28,6 @@ import com.potix.web.servlet.http.Encodes;
  * Generates the specified value into a string.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:40 $
  */
 public class Out extends AbstractAction {
 	private String _value = null;

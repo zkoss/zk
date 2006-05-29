@@ -35,7 +35,6 @@ import com.potix.zul.html.impl.XulElement;
  * of the grid. The row with the most child elements determines the number
  * of columns in each row.
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:26 $
  */
 public class Row extends XulElement {
 	private String _align, _valign;

@@ -34,7 +34,6 @@ import com.potix.util.sys.WaitLock;
  * <p>Unlike {@link CacheMap}, it is thread-safe.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/29 04:27:25 $
  */
 public class ResourceCache extends CacheMap {
 	private static final Log log = Log.lookup(ResourceCache.class);

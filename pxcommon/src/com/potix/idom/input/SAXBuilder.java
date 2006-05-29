@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/input/SAXBuilder.java,v 1.9 2006/02/27 03:41:56 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -43,7 +42,6 @@ import com.potix.idom.Document;
  * each time one of the build methods is called.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.9 $ $Date: 2006/02/27 03:41:56 $
  * @see SAXHandler
  */
 public class SAXBuilder {

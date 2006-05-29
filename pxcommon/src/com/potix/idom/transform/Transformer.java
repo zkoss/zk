@@ -1,7 +1,6 @@
 /* Transformer.java
 
 {{IS_NOTE
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/transform/Transformer.java,v 1.5 2006/02/27 03:41:57 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -48,7 +47,6 @@ import com.potix.util.logging.Log;
  *
  * @author <a href="mailto:andrewho@potix.com">andrewho@potix.com</a>
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:41:57 $
  */
 public class Transformer {
 	private static final Log log = Log.lookup(Transformer.class);

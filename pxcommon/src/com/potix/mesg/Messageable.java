@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/mesg/Messageable.java,v 1.2 2006/02/27 03:42:00 tomyeh Exp $
 	Purpose: Extended exception interface
 	Description: 
 	History:
@@ -24,7 +23,6 @@ package com.potix.mesg;
  * called code.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:00 $
  */
 public interface Messageable extends MessageConst {
 	/**

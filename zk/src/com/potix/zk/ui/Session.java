@@ -32,7 +32,6 @@ import java.util.Map;
  * a component belongs to exactly one page.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.15 $ $Date: 2006/05/29 04:28:01 $
  */
 public interface Session {
 	/** Returns the value of the specified custom attribute.

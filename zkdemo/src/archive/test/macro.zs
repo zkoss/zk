@@ -1,7 +1,6 @@
 /* macro.zs
 
 {{IS_NOTE
-	$Id: macro.zs,v 1.1 2006/05/25 07:09:37 tomyeh Exp $
 	Purpose:
 		zscript
 	Description:

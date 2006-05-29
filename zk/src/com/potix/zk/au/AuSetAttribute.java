@@ -27,7 +27,6 @@ import com.potix.zk.ui.Component;
  * data[2]: the attribute value
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:57 $
  */
 public class AuSetAttribute extends AuResponse {
 	public AuSetAttribute(Component comp, String attr, String val) {

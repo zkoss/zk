@@ -24,7 +24,6 @@ import junit.framework.*;
  * Test of {@link MessageFormats}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:26 $
  */
 public class MessageFormatsTest extends TestCase {
 	public MessageFormatsTest(String name) {

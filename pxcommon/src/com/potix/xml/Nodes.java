@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/xml/Nodes.java,v 1.4 2006/02/27 03:42:08 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -29,7 +28,6 @@ import com.potix.idom.Item;
  * It supports iDOM.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:42:08 $
  */
 public class Nodes {
 	/** The empty node list. */

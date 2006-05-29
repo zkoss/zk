@@ -1,7 +1,6 @@
 /* DesktopCleanup.java
 
 {{IS_NOTE
-	$Id: DesktopCleanup.java,v 1.1 2006/03/30 10:55:56 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,7 +33,6 @@ import com.potix.zk.ui.Desktop;
  * </ol>
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/03/30 10:55:56 $
  */
 public interface DesktopCleanup {
 	/** called when a desktop is about to be destroyed.

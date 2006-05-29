@@ -32,7 +32,6 @@ import com.potix.web.el.ELContext;
  * To intercept how a JSP page is rendered.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:43 $
  */
 /*package*/ class JspFactoryImpl extends JspFactory {
 	/** The factory to wrap. */

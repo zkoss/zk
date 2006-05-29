@@ -27,7 +27,6 @@ import com.potix.zk.ui.Component;
  * The component that received the dragged component is {@link #getTarget}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:01 $
  */
 public class DropEvent extends Event {
 	private final Component _dragged;

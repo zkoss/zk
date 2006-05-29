@@ -33,7 +33,6 @@ import com.potix.zul.html.impl.XulElement;
  * Includes an inline frame.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Iframe extends XulElement implements Viewable {
 	private String _align, _name;

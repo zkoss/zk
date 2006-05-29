@@ -27,7 +27,6 @@ import com.potix.web.servlet.ServletOutputStreamWrapper;
  * A facade of RenderResponse that implements HttpServletRespose.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:37 $
  */
 public class RenderHttpServletResponse implements HttpServletResponse {
 	private final RenderResponse _res;

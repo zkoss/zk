@@ -32,7 +32,6 @@ import com.potix.util.logging.Log;
  * Functions used with EL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.15 $ $Date: 2006/05/29 04:27:18 $
  */
 public class CommonFns {
 	private static final Log log = Log.lookup(CommonFns.class);

@@ -35,7 +35,6 @@ import com.potix.zk.ui.metainfo.InitiatorDefinition;
  * A helper class used with {@link com.potix.zk.ui.sys.UiEngine} to process
  * {@link Initiator}
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:28:06 $
  */
 /*package*/ class Initiators {
 	/*package(inner)*/ static final Log log = Log.lookup(Initiators.class);

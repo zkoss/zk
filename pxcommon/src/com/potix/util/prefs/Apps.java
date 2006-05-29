@@ -42,7 +42,6 @@ import com.potix.comp.ComponentManager;
  * Utilities to access the application properties.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/29 04:27:24 $
  */
 public class Apps {
 	//private static final Log log = Log.lookup(Apps.class);

@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/input/DefaultIDOMFactory.java,v 1.6 2006/02/27 03:41:56 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -24,7 +23,6 @@ import com.potix.idom.*;
  * The default iDOM factory.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:41:56 $
  */
 public class DefaultIDOMFactory implements IDOMFactory {
 	/** Constructor.

@@ -25,7 +25,6 @@ import com.potix.zk.ui.UiException;
  * {@link com.potix.zul.html.ListModel} is changed.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:29 $
  * @see com.potix.zul.html.ListModel
  * @see ListDataEvent
  */

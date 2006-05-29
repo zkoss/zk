@@ -1,8 +1,6 @@
 /* ServletException.java
 
 {{IS_NOTE
-
-	$Header: //time/potix/rd/cvs/zk1/pxweb/src/com/potix/web/servlet/ServletException.java,v 1.2 2006/02/27 03:54:28 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -27,7 +25,6 @@ import com.potix.mesg.Messageable;
  * javax.servlet.ServletException to provide error codes and other features.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:54:28 $
  */
 public class ServletException extends javax.servlet.ServletException
 implements Messageable {

@@ -4,7 +4,6 @@
 timer.zul
 
 {{IS_NOTE
-	$Id: timer.zul,v 1.1.1.1 2005/11/10 13:10:57 tomyeh Exp $
 	Purpose:
 		
 	Description:

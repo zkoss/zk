@@ -4,7 +4,6 @@
 jdbc.zul
 
 {{IS_NOTE
-	$Id: hibernate.zul,v 1.5 2006/04/17 09:53:17 tomyeh Exp $
 	Purpose:
 		
 	Description:

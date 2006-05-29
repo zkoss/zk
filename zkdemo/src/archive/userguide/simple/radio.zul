@@ -4,7 +4,6 @@
 input.zul
 
 {{IS_NOTE
-	$Id: radio.zul,v 1.4 2006/04/17 09:53:21 tomyeh Exp $
 	Purpose:
 		
 	Description:

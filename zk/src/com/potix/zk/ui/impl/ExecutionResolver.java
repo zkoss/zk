@@ -34,7 +34,6 @@ import com.potix.zk.ui.sys.Variables;
  * Represents a variable resolver.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:06 $
  */
 public class ExecutionResolver implements VariableResolver {
 	/** The parent resolver. */

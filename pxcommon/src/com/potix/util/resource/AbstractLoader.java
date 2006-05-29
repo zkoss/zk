@@ -26,7 +26,6 @@ import java.net.URL;
  * A skeletal implementation that assumes the source is either URL or File.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:24 $
  */
 abstract public class AbstractLoader implements Loader {
 	//-- Loader --//

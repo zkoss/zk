@@ -26,7 +26,6 @@ import com.potix.zk.ui.sys.DesktopCacheProvider;
  * from the same session in one desktop cache.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:07 $
  * @see GlobalDesktopCacheProvider
  */
 public class SessionDesktopCacheProvider implements DesktopCacheProvider {

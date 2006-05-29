@@ -26,7 +26,6 @@ import com.potix.util.media.Media;
  * Represents an image.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/05/29 04:27:18 $
  */
 public interface Image extends Media {
 	/** Returns the width.

@@ -38,7 +38,6 @@ import com.potix.zk.au.impl.*;
  * A request sent from the client to {@link com.potix.zk.ui.sys.UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.20 $ $Date: 2006/05/29 15:00:33 $
  */
 public class AuRequest {
 	private final Desktop _desktop;

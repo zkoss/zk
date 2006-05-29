@@ -31,7 +31,6 @@ import com.potix.zul.html.event.ListDataListener;
  * A skeletal implementation for {@link ListModel}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:20 $
  */
 abstract public class AbstractListModel implements ListModel {
 	private final List _listeners = new LinkedList();

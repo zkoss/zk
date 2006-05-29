@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Group.java,v 1.6 2006/02/27 03:41:55 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -33,7 +32,6 @@ import java.util.Collection;
  * getAttributeIndex.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:41:55 $
  * @see Item
  * @see Attributable
  * @see Namespaceable

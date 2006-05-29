@@ -25,7 +25,6 @@ import java.util.Locale;
  * Integer utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:20 $
  */
 public class Integers {
 	/** The zero. */

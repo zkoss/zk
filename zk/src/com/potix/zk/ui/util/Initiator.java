@@ -1,7 +1,6 @@
 /* Initiator.java
 
 {{IS_NOTE
-	$Id: Initiator.java,v 1.3 2006/05/25 05:07:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -38,7 +37,6 @@ import com.potix.zk.ui.UiException;
  * (if {@link #doCatch} is not called).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/25 05:07:09 $
  */
 public interface Initiator {
 	/** Does the initializes before the page is evaluated.

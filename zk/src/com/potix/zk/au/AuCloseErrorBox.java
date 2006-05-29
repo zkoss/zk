@@ -27,7 +27,6 @@ import com.potix.zk.ui.Component;
  * <p>data[0]: the component's UUID.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:27:55 $
  */
 public class AuCloseErrorBox extends AuResponse {
 	/**

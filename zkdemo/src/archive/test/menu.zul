@@ -4,7 +4,6 @@
 menu.zul
 
 {{IS_NOTE
-	$Id: menu.zul,v 1.3 2006/05/02 04:58:18 tomyeh Exp $
 	Purpose:
 		
 	Description:

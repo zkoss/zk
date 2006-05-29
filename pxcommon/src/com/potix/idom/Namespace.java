@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Namespace.java,v 1.6 2006/02/27 03:41:55 tomyeh Exp $
 	Purpose: Namespace
 	Description:
 	History:
@@ -30,7 +29,6 @@ import java.io.ObjectOutputStream;
  * A namespace is immutable, so you have to get a new one
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:41:55 $
  * @see Item
  */
 public final class Namespace implements Serializable {

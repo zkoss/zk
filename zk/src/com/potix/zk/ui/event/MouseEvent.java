@@ -28,7 +28,6 @@ import com.potix.zk.ui.Component;
  * The other is by a logical name, called area ({@link #getArea}).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:02 $
  */
 public class MouseEvent extends Event {
 	private final int _x, _y;

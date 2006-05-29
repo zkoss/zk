@@ -44,7 +44,6 @@ import com.potix.web.util.resource.ServletLabelLocator;
 </code></pre>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:36 $
  */
 public class LabelLocatorHook implements ServletContextListener {
 	//private static final Log log = Log.lookup(LabelLocatorHook.class);

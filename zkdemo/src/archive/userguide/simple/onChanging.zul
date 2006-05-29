@@ -4,7 +4,6 @@
 input.zul
 
 {{IS_NOTE
-	$Id: onChanging.zul,v 1.5 2006/04/17 09:53:21 tomyeh Exp $
 	Purpose:
 		
 	Description:

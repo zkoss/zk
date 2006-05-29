@@ -1,7 +1,6 @@
 /* Namespace.java
 
 {{IS_NOTE
-	$Id: Namespace.java,v 1.1 2006/05/25 05:07:10 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -31,7 +30,6 @@ package com.potix.zk.ui.util;
  * interpreter).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/05/25 05:07:10 $
  */
 public interface Namespace {
 	/** Returns the class defined in the beanshell.

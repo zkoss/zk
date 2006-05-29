@@ -34,7 +34,6 @@ import com.potix.zk.au.AuScript;
  * <p>Default {@link #getSclass}: bandbox.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:20 $
  */
 public class Bandbox extends Textbox { //note: it does NOT implement Openable to avoid redudant roundtrip
 	private Bandpopup _popup;

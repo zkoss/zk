@@ -42,7 +42,6 @@ import com.potix.zk.ui.util.Evaluator;
  * of a component.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/05/29 04:28:07 $
  * @see LanguageDefinition
  */
 public class ComponentDefinition implements Cloneable {

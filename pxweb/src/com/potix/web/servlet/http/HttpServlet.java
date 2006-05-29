@@ -33,7 +33,6 @@ import com.potix.web.servlet.Servlets;
  * Extended javax.servlet.http.HttpServlet to provide extra utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:43 $
  */
 public class HttpServlet extends javax.servlet.http.HttpServlet {
 	/**

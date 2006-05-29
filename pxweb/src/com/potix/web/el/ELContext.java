@@ -31,7 +31,6 @@ import javax.servlet.jsp.el.ExpressionEvaluator;
  * Used to wrap the context for evaluate EL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:35 $
  */
 public interface ELContext {
 	/** Returns the writer, never null.

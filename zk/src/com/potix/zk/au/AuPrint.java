@@ -24,7 +24,6 @@ package com.potix.zk.au;
  * <p>no data.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 12:57:04 $
  */
 public class AuPrint extends AuResponse {
 	public AuPrint() {

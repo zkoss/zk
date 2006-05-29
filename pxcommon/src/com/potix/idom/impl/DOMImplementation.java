@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/impl/DOMImplementation.java,v 1.6 2006/05/11 07:16:25 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -24,7 +23,6 @@ import com.potix.idom.*;
  * The iDOM's implementation of DOMImplementation.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/11 07:16:25 $
  */
 public class DOMImplementation implements org.w3c.dom.DOMImplementation {
 	/** DOM implementation singleton.

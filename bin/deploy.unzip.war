@@ -2,7 +2,6 @@
 # deploy.unzip
 #
 #{{IS_NOTE
-#	$Id: deploy.unzip,v 1.9 2005/07/06 08:10:45 tomyeh Exp $
 #	Purpose:
 #		Unzip and deploy a war into Tomcat or Jetty server
 #		For deploy ear, use deploy.unzip

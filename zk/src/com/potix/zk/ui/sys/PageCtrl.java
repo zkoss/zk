@@ -34,7 +34,6 @@ import com.potix.zk.ui.UiException;
  * <p>Application developers shall never access any of this methods.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/05/29 04:28:09 $
  */
 public interface PageCtrl {
 	/** Initializes a page by assigning an identifier, a title, and adding it

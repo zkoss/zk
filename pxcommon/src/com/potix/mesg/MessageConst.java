@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/mesg/MessageConst.java,v 1.6 2006/04/07 08:44:46 tomyeh Exp $
 	Purpose: Defines message types
 	Description:
 	History:
@@ -29,7 +28,6 @@ import com.potix.lang.Objects;
  * Defines the constants of message types.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.6 $ $Date: 2006/04/07 08:44:46 $
  * @see Messages
  */
 public interface MessageConst {

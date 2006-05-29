@@ -4,7 +4,6 @@
 hello.zul
 
 {{IS_NOTE
-	$Id: hello-template.zul,v 1.2 2006/01/19 10:47:56 tomyeh Exp $
 	Purpose:
 		
 	Description:

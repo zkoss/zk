@@ -35,7 +35,6 @@ import com.potix.zk.ui.Page;
  * {@link com.potix.zk.ui.Execution#addAuResponse}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:56 $
  */
 public class AuResponse {
 	private final String _cmd;

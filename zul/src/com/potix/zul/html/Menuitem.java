@@ -32,7 +32,6 @@ import com.potix.zul.html.impl.LabelImageElement;
  * It acts much like a button but it is rendered on a menu.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/05/29 04:28:24 $
  */
 public class Menuitem extends LabelImageElement implements Checkable {
 	private String _value = "";

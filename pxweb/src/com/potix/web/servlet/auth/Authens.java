@@ -29,7 +29,6 @@ import javax.servlet.http.Cookie;
  * Utilities for authentications.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:38 $
  */
 public class Authens {
 	/** The cookie's name used to store user info. */

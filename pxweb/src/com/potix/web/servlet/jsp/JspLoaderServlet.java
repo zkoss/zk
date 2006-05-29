@@ -40,7 +40,6 @@ import com.potix.web.servlet.http.Https;
 /**
  * JspLoaderServlet Load the compiled JSP pages.
  * @author <a href="mailto:andrewho@potix.com">andrewho@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/29 04:27:43 $
  */
 public final class JspLoaderServlet extends HttpServlet {
 	private static final Log log = Log.lookup(JspLoaderServlet.class);

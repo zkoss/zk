@@ -30,7 +30,6 @@ import com.potix.zul.html.impl.FormatInputElement;
  * An edit box for holding BigDecimal.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Decimalbox extends FormatInputElement {
 	/** Used with {@link #setScale} to denote that the scale is decided by

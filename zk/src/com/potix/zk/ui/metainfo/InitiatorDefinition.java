@@ -31,7 +31,6 @@ import com.potix.zk.ui.util.Initiator;
  * A definition of the initiator.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:08 $
  */
 public class InitiatorDefinition {
 	private static final Log log = Log.lookup(InitiatorDefinition.class);

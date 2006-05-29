@@ -26,7 +26,6 @@ import com.potix.zk.ui.Session;
  * The request information used with {@link com.potix.zk.ui.sys.UiFactory}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:09 $
  */
 public interface RequestInfo {
 	/** Returns the Web application; never null.

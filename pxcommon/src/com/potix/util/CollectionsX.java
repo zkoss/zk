@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/CollectionsX.java,v 1.12 2006/05/11 04:53:35 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -37,7 +36,6 @@ import com.potix.lang.Strings;
  * The collection related utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/11 04:53:35 $
  * @see java.util.Collections
  */
 public class CollectionsX {

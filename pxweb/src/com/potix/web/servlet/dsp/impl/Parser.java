@@ -46,7 +46,6 @@ import com.potix.web.servlet.dsp.action.Action;
  * {@link Interpretation}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.15 $ $Date: 2006/05/29 04:27:42 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);

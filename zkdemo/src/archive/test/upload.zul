@@ -4,7 +4,6 @@
 upload-demo.zul
 
 {{IS_NOTE
-	$Id: upload.zul,v 1.5 2006/05/15 17:08:02 tomyeh Exp $
 	Purpose:
 		
 	Description:

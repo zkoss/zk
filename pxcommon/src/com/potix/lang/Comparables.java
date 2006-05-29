@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/Comparables.java,v 1.2 2006/02/27 03:41:58 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -24,7 +23,6 @@ package com.potix.lang;
  * Utilities regarding Comparable type objects.
  *
  * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:41:58 $
  */
 public final class Comparables {
 	/**

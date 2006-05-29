@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/text/MessageFormats.java,v 1.8 2006/02/27 03:42:01 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -38,7 +37,6 @@ import com.potix.util.prefs.Apps;
  * <p>See also java.text.MessageFormat.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.8 $ $Date: 2006/02/27 03:42:01 $
  */
 public class MessageFormats {
 	/** Creates a MessageFormat with the given pattern and uses it to

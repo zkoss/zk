@@ -24,7 +24,6 @@ import com.potix.zhtml.impl.AbstractTag;
  * The LABEL tag.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:50 $
  */
 public class Label extends AbstractTag {
 	public Label() {

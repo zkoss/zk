@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/SystemException.java,v 1.3 2006/02/27 03:41:59 tomyeh Exp $
 	Purpose: Thrown if a caught exception is not in the exception list.
 	Description: 
 	History:
@@ -25,7 +24,6 @@ import com.potix.mesg.Messageable;
  * Indicates a system exception.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:41:59 $
  */
 public class SystemException extends RuntimeException implements Messageable {
 	/** Utilities.

@@ -24,7 +24,6 @@ import com.potix.zk.ui.Desktop;
  * The cache used to store desktops.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:09 $
  */
 public interface DesktopCache {
 	/** Returns the next available ID which is unique in the whole cache.

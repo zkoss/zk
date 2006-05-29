@@ -1,7 +1,6 @@
 /* Configuration.java
 
 {{IS_NOTE
-	$Id: Configuration.java,v 1.5 2006/05/03 03:25:07 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -45,7 +44,6 @@ import com.potix.zk.ui.util.SessionCleanup;
  * {@link com.potix.zk.ui.WebApp#getConfiguration}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/03 03:25:07 $
  */
 public class Configuration {
 	private static final Log log = Log.lookup(Configuration.class);

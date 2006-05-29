@@ -41,7 +41,6 @@ import com.potix.web.servlet.dsp.impl.Parser;
  * Unlike JSP, we don't recognize \${ or \$\{.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.21 $ $Date: 2006/05/29 04:27:38 $
  */
 public class Interpreter {
 //	private static final Log log = Log.lookup(Interpreter.class);

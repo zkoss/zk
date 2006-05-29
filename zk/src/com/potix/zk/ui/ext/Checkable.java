@@ -27,7 +27,6 @@ package com.potix.zk.ui.ext;
  * (rather than by codes).
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:03 $
  * @see com.potix.zk.ui.event.CheckEvent
  */
 public interface Checkable {

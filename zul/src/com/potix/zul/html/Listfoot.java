@@ -29,7 +29,6 @@ import com.potix.zul.html.impl.XulElement;
  * <p>Like {@link Listhead}, each listbox has at most one {@link Listfoot}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:23 $
  */
 public class Listfoot extends XulElement {
 	/** Returns the list box that it belongs to.

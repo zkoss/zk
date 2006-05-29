@@ -25,7 +25,6 @@ import com.potix.zk.ui.UiException;
  * registered to {@link com.potix.zk.ui.Component#addEventListener}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:02 $
  */
 public interface EventListener {
 	/** Notifies this listener that an event occurs.

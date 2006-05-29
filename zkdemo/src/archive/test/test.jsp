@@ -2,7 +2,6 @@
 test.jsp
 
 {{IS_NOTE
-	$Id: test.jsp,v 1.1 2006/05/02 04:58:19 tomyeh Exp $
 	Purpose:
 		
 	Description:

@@ -4,7 +4,6 @@
 dragdrop.zul
 
 {{IS_NOTE
-	$Id: dragdrop.zul,v 1.2 2006/04/17 09:53:19 tomyeh Exp $
 	Purpose:
 		
 	Description:

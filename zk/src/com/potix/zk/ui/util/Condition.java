@@ -1,7 +1,6 @@
 /* Condition.java
 
 {{IS_NOTE
-	$Id: Condition.java,v 1.1.1.1 2006/03/20 07:22:39 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -28,7 +27,6 @@ import com.potix.zk.ui.metainfo.PageDefinition;
  * we mainly use to denote wither an element in ZUL file is effective.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1.1.1 $ $Date: 2006/03/20 07:22:39 $
  */
 public interface Condition {
 	/** Used to evaluate whether it is effective.

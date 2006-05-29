@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/xml/XMLs.java,v 1.9 2006/02/27 03:42:08 tomyeh Exp $
 Purpose: 
 Description: 
 History:
@@ -24,7 +23,6 @@ import com.potix.idom.Verifier;
  * The XML relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.9 $ $Date: 2006/02/27 03:42:08 $
  * @see com.potix.idom.Element
  */
 public class XMLs {

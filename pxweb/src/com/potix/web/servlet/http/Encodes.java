@@ -1,7 +1,6 @@
 /* Encodes.java
 
 {{IS_NOTE
-	$Header: //time/potix/rd/cvs/zk1/pxweb/src/com/potix/web/servlet/http/Encodes.java,v 1.33 2006/04/27 13:58:09 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -49,7 +48,6 @@ import com.potix.web.util.resource.ExtendedWebContext;
  * Encoding utilities for servlets.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.33 $ $Date: 2006/04/27 13:58:09 $
  * @see Https
  */
 public class Encodes {

@@ -53,7 +53,6 @@ import com.potix.idom.input.SAXBuilder;
  * is provided to return an instance of this class,
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/29 04:27:24 $
  */
 public class ClassLocator implements Locator {
 	private static final Log log = Log.lookup(ClassLocator.class);

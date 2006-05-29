@@ -27,7 +27,6 @@ import java.io.ByteArrayInputStream;
  * A media object holding content such PDF, HTML, DOC or XLS content.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/29 04:27:23 $
  */
 public class AMedia implements Media {
 	/** The binary data, {@link #getByteData}. */

@@ -1,7 +1,6 @@
 /* UiException.java
 
 {{IS_NOTE
-	$Id: UiException.java,v 1.3 2006/02/27 03:54:48 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,6 @@ import com.potix.lang.Expectable;
  * Represents an UI-relevant runtime exception.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:54:48 $
  */
 public class UiException extends SystemException {
 	/** Utilities.

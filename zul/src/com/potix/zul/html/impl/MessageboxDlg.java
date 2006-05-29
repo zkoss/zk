@@ -27,7 +27,6 @@ import com.potix.zul.html.Messagebox;
  * Used with {@link Messagebox} to implement a message box.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:29 $
  */
 public class MessageboxDlg extends Window {
 	/** A OK button. */

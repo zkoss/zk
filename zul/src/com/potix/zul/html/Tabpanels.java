@@ -29,7 +29,6 @@ import com.potix.zul.html.impl.XulElement;
  * <p>Default {@link #getSclass}: tabpanels.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Tabpanels extends XulElement {
 	public Tabpanels() {

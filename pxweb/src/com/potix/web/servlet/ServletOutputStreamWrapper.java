@@ -31,7 +31,6 @@ import com.potix.io.WriterOutputStream;
  * A facade of OutputStream for implementing ServletOutputStream.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:37 $
  */
 public class ServletOutputStreamWrapper extends ServletOutputStream {
 	private final OutputStream _stream;

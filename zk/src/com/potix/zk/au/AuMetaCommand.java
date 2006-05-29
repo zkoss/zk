@@ -32,7 +32,6 @@ import com.potix.zk.ui.Page;
  * data[2..n]: optional arguments
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:55 $
  */
 public class AuMetaCommand extends AuResponse {
 	/**

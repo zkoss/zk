@@ -33,7 +33,6 @@ import com.potix.zul.html.impl.XulElement;
  * A box.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:20 $
  */
 public class Box extends XulElement {
 	private String _spacing;

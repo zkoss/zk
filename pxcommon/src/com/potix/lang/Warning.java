@@ -25,7 +25,6 @@ import com.potix.mesg.Messageable;
  * {@link #getCode} is the warnig code.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:21 $
  */
 public interface Warning extends Expectable, Messageable {
 }

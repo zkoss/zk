@@ -27,7 +27,6 @@ import javax.portlet.PortletMode;
  * Utilities to handles {@link PortletMode}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:36 $
  */
 public class PortletModes {
 	/** Returns the portlet mode of the specified name.

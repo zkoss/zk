@@ -38,7 +38,6 @@ import com.potix.zk.ui.sys.RequestQueue;
  * Unlike only of desktop members, this class must be thread-safe.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 12:57:06 $
  */
 public class RequestQueueImpl implements RequestQueue {
 	private static final Log log = Log.lookup(RequestQueueImpl.class);

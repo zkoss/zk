@@ -30,7 +30,6 @@ import com.potix.zul.html.impl.LabelImageElement;
  * <p>Default {@link #getSclass}: item.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.9 $ $Date: 2006/05/29 04:28:21 $
  * @see Combobox
  */
 public class Comboitem extends LabelImageElement {

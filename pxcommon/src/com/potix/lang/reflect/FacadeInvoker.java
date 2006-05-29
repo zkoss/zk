@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/reflect/FacadeInvoker.java,v 1.2 2006/02/27 03:41:59 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -47,7 +46,6 @@ import com.potix.lang.Classes;
  *<code>I i = (I)FacadeInvoker.newInstance(new A(), new Class[] {I});</code></pre>
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:41:59 $
  */
 public class FacadeInvoker implements InvocationHandler {
 	/** The target that really implements the interfaces. */

@@ -27,7 +27,6 @@ import java.net.URL;
  * <p>There is one label manager per domain.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:24 $
  */
 public interface LabelLoader {
 	/** Returns the user readable label for a field based on the locale

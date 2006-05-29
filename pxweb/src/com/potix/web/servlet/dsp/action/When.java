@@ -27,7 +27,6 @@ import com.potix.web.servlet.ServletException;
  * Represents an alternative within a {@link Choose} action.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:41 $
  */
 public class When extends AbstractAction {
 	private boolean _cond;

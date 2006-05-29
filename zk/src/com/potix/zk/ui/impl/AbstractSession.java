@@ -26,7 +26,6 @@ import com.potix.zk.ui.sys.SessionCtrl;
  * A skeletal implementation of {@link Session} and {@link SessionCtrl}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:06 $
  */
 abstract public class AbstractSession implements Session, SessionCtrl {
 	private final WebApp _webapp;

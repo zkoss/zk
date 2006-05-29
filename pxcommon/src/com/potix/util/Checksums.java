@@ -26,7 +26,6 @@ package com.potix.util;
  * Checksum relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:23 $
  */
 public class Checksums {
 	/** The default skips. */

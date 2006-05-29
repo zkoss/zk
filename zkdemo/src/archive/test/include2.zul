@@ -4,7 +4,6 @@
 include2.zul
 
 {{IS_NOTE
-	$Id: include2.zul,v 1.1.1.1 2005/11/10 13:10:56 tomyeh Exp $
 	Purpose:
 		
 	Description:

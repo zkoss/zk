@@ -24,7 +24,6 @@ package com.potix.zk.ui.event;
  * recieves this event.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision$ $Date$
  */
 public class BookmarkEvent extends Event {
 	/** The bookmark name. */

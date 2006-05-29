@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Element.java,v 1.13 2006/05/11 07:16:22 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -50,7 +49,6 @@ import com.potix.idom.impl.*;
  * The iDOM element.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/11 07:16:22 $
  * @see Attribute
  */
 public class Element extends AbstractGroup

@@ -55,7 +55,6 @@ import com.potix.zk.ui.metainfo.ComponentDefinition;
  * Utilities to load language definitions.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.22 $ $Date: 2006/05/29 04:28:07 $
  */
 public class DefinitionLoaders {
 	private static final Log log = Log.lookup(DefinitionLoaders.class);

@@ -27,7 +27,6 @@ import com.potix.web.servlet.ServletException;
  * Represents the last alternative within a {@link Choose} action.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:40 $
  */
 public class Otherwise extends AbstractAction {
 	//-- Action --//

@@ -1,7 +1,6 @@
 /* ConditionImpl.java
 
 {{IS_NOTE
-	$Id: ConditionImpl.java,v 1.1.1.1 2006/04/18 02:42:34 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -30,7 +29,6 @@ import com.potix.zk.ui.util.Condition;
  * An implementation of {@link Condition}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1.1.1 $ $Date: 2006/04/18 02:42:34 $
  */
 public class ConditionImpl implements Condition {
 	private String _if;

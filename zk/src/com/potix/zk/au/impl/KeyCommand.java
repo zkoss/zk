@@ -32,7 +32,6 @@ import com.potix.zk.au.AuRequest;
  * relevant command.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:58 $
  */
 public class KeyCommand extends AuRequest.Command {
 	public KeyCommand(String evtnm, boolean skipIfEverError) {

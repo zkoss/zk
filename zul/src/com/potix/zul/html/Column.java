@@ -40,7 +40,6 @@ import com.potix.zul.html.impl.HeaderElement;
  * in the grid.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/29 04:28:21 $
  */
 public class Column extends HeaderElement {
 	private String _sortDir = "natural";

@@ -25,7 +25,6 @@ import java.io.IOException;
  * It is a parsed result of a DSP page by use of {@link Interpreter#parse}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:38 $
  */
 public interface Interpretation {
 	/** Interprets this interpretation of a DSP page, and generates

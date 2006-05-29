@@ -5,7 +5,6 @@
 tabbox.zul
 
 {{IS_NOTE
-	$Id: tabbox.zul,v 1.2 2006/05/04 16:23:27 tomyeh Exp $
 	Purpose:
 		
 	Description:

@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommonTest/src/com/potix/util/ArraysXTest.java,v 1.2 2006/02/27 03:42:09 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -29,7 +28,6 @@ import com.potix.util.ArraysX;
  * Test ArraysX.
  *
  * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:09 $
  */
 public class ArraysXTest extends TestCase {
 	/**

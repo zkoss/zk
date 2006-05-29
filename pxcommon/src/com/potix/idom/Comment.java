@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Comment.java,v 1.4 2006/05/11 07:16:22 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -24,7 +23,6 @@ import com.potix.idom.impl.*;
  * The iDOM Comment.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/11 07:16:22 $
  */
 public class Comment extends AbstractTextual implements org.w3c.dom.Comment {
 	/** Constructor.

@@ -50,7 +50,6 @@ import com.potix.zk.au.AuBookmark;
  * The implementation of {@link Desktop}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 12:57:06 $
  */
 public class DesktopImpl implements Desktop, DesktopCtrl {
 	private static final Log log = Log.lookup(DesktopImpl.class);

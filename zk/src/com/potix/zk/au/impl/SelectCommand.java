@@ -35,7 +35,6 @@ import com.potix.zk.au.AuRequest;
  * relevant command.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:58 $
  */
 public class SelectCommand extends AuRequest.Command {
 	public SelectCommand(String evtnm, boolean skipIfEverError) {

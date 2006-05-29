@@ -25,7 +25,6 @@ import com.potix.zk.ui.Component;
  * <p>data[0]: the JavaScript codes
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:56 $
  */
 public class AuScript extends AuResponse {
 	/**

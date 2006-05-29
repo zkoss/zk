@@ -33,7 +33,6 @@ import com.potix.zk.ui.event.Event;
  * Additional utilities for {@link Execution}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:28:09 $
  */
 public class ExecutionsCtrl extends Executions {
 	protected ExecutionsCtrl() {} //prevent from instantiation

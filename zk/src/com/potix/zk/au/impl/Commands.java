@@ -31,7 +31,6 @@ import com.potix.zk.au.AuRequest;
  * Used only internally.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:57 $
  */
 class Commands {
 	/** Converts the data of the specified request to a set of Component.

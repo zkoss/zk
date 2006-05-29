@@ -29,7 +29,6 @@ import javax.servlet.ServletException;
  * as many times as needed.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/29 04:27:40 $
  */
 public interface ActionContext {
 	/** The page scope. */

@@ -38,7 +38,6 @@ import com.potix.web.Attributes;
  * Utilities to handle characters
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/29 04:27:37 $
  */
 public class Charsets {
 	private static final Log log = Log.lookup(Charsets.class);

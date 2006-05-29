@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/DocType.java,v 1.5 2006/05/11 07:16:22 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -28,7 +27,6 @@ import com.potix.idom.impl.*;
  * The iDOM DocType.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/11 07:16:22 $
  * @see Document
  */
 public class DocType extends AbstractItem implements DocumentType {

@@ -33,7 +33,6 @@ package com.potix.zk.ui.ext;
  * with the error message (set by {@link #setErrorByClient}).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:03 $
  */
 public interface Errorable {
 	/** Sets or clears the error by client.

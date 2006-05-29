@@ -34,7 +34,6 @@ import com.potix.util.logging.Log;
  * Utilities to access the JSP context.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:35 $
  */
 public class ELContexts {
 //	private static final Log log = Log.lookup(ELContexts.class);

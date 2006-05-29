@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Textual.java,v 1.4 2006/02/27 03:41:55 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -34,7 +33,6 @@ package com.potix.idom;
  * invoke it to create a new instance.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:41:55 $
  * @see Item
  */
 public interface Textual {

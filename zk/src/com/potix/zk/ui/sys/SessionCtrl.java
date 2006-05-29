@@ -26,7 +26,6 @@ import com.potix.zk.ui.ComponentNotFoundException;
  * <p>Note: applications shall never access this interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:10 $
  */
 public interface SessionCtrl {
 	/** Called when the session is destroyed.

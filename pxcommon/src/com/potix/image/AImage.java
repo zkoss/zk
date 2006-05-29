@@ -47,7 +47,6 @@ import com.potix.util.media.ContentTypes;
  * as polymorphic thru the {@link com.potix.util.media.Media} interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/29 04:27:18 $
  */
 public class AImage implements Image {
 	private static final Log log = Log.lookup(AImage.class);

@@ -42,7 +42,6 @@ import com.potix.util.prefs.Apps;
  * is assumed.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:17 $
  */
 public class EvaluatorImpl extends ExpressionEvaluator {
 	private final ExpressionEvaluator _eval;

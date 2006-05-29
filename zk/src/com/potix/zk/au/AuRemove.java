@@ -26,7 +26,6 @@ import com.potix.zk.ui.Page;
  * <p>data[0]: the uuid of the component being removed
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:56 $
  */
 public class AuRemove extends AuResponse {
 	public AuRemove(Component comp) {

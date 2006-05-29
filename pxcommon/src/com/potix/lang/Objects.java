@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/Objects.java,v 1.19 2006/02/27 03:41:59 tomyeh Exp $
 	Purpose: Utilities related to Object.
 	Description:
 	History:
@@ -35,7 +34,6 @@ import com.potix.text.DateFormats;
  * Utilities related to the Object class.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.19 $ $Date: 2006/02/27 03:41:59 $
  */
 public class Objects {
 	private static final Log log = Log.lookup(Objects.class);

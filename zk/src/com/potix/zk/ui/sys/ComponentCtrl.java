@@ -28,7 +28,6 @@ import com.potix.zk.ui.metainfo.ComponentDefinition;
  * <p>Application developers shall never access any of this methods.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:28:09 $
  */
 public interface ComponentCtrl {
 	/** Sets the component definition.

@@ -52,7 +52,6 @@ import com.potix.el.impl.AttributesMap;
  * Used to wrap a request to provide JSP-like evaluation.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/29 04:27:17 $
  * @see ServletContextResolver
  */
 public class RequestResolver implements VariableResolver {

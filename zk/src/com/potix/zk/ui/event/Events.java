@@ -36,7 +36,6 @@ import com.potix.zk.au.AuRequest;
  * Utilities to handle events.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:02 $
  */
 public class Events {
 	private Events() {}

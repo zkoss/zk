@@ -25,7 +25,6 @@ import java.util.HashSet;
  * Utilities for HTML attributes and styles.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:26 $
  */
 public class HTMLs {
 	/** Appends an attribute to the string buffer for HTML/XML (name="val").

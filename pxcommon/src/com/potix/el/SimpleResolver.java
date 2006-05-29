@@ -28,7 +28,6 @@ import javax.servlet.jsp.el.ELException;
  * objects loaded from i3-el.xml.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:17 $
  */
 public class SimpleResolver implements VariableResolver {
 	/** The parent resolver. */

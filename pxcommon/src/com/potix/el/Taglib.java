@@ -22,7 +22,6 @@ package com.potix.el;
  * Represents a taglib.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:17 $
  */
 public class Taglib {
 	private final String _prefix, _uri;

@@ -31,7 +31,6 @@ import com.potix.zk.ui.metainfo.PageDefinition;
  * <p>Application developers shall never access any of this methods.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/29 04:28:09 $
  */
 public interface ExecutionCtrl {
 	/** Returns the current page.

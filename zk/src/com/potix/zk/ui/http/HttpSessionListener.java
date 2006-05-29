@@ -24,7 +24,6 @@ import javax.servlet.http.HttpSessionEvent;
  * Used to clean up desktops that a session owns.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:05 $
  */
 public class HttpSessionListener
 implements javax.servlet.http.HttpSessionListener {

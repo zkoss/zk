@@ -28,7 +28,6 @@ import com.potix.util.resource.LabelLocator;
 /**
  * The implementation of 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:27:45 $
  */
 public class ServletLabelLocator implements LabelLocator {
 	private final ServletContext _ctx;

@@ -1,7 +1,6 @@
 /* DocumentTransformTest.java
 
 {{IS_NOTE
-	$Header: //time/potix/rd/cvs/zk1/pxcommonTest/src/com/potix/idom/DocumentTransformTest.java,v 1.4 2006/02/27 03:42:08 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -42,7 +41,6 @@ import junit.framework.*;
 /**
  * Test the iDOM Documet transform
  * @author <a href="mailto:andrewho@potix.com">andrewho@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/02/27 03:42:08 $
  */
 public class DocumentTransformTest extends TestCase {
 	public static final Log log = Log.lookup(DocumentTransformTest.class);

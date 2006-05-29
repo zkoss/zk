@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Binable.java,v 1.3 2006/02/27 03:41:54 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -24,7 +23,6 @@ package com.potix.idom;
  * Currently, only Binary implements it.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:41:54 $
  * @see Item
  * @see Group
  * @see Attributable

@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxweb/src/com/potix/web/servlet/GenericFilter.java,v 1.5 2006/02/27 03:54:28 tomyeh Exp $
 	Purpose: A generic class to help implementing servlet filter
 	Description: 
 	History:
@@ -37,7 +36,6 @@ import com.potix.web.servlet.http.Https;
  * Its role is like javax.servlet.GenericServlet to javax.servlet.Servlet.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:54:28 $
  */
 public abstract class GenericFilter implements Filter {
 	protected FilterConfig _config;

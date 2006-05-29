@@ -48,7 +48,6 @@ import com.potix.zul.html.impl.XulElement;
  * <dd>The accordion tabbox.</dd>
  * </dl>
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Tabbox extends XulElement implements Selectable {
 	private Tabs _tabs;

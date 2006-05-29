@@ -57,7 +57,6 @@ import com.potix.zk.ui.util.impl.ConditionImpl;
 /**
  * Used to prase the ZUL file
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.17 $ $Date: 2006/05/29 04:28:08 $
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);

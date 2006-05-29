@@ -25,7 +25,6 @@ import com.potix.util.logging.Log;
  * Thread relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.12 $ $Date: 2006/05/29 04:27:21 $
  */
 public class Threads {
 	private static final Log log = Log.lookup(Threads.class);

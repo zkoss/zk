@@ -29,7 +29,6 @@ import com.potix.web.servlet.ServletException;
  * Represents an expression.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:41 $
  */
 class ELNode extends Node {
 	private static final Log log = Log.lookup(ELNode.class);

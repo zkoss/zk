@@ -29,7 +29,6 @@ import com.potix.zul.html.impl.XulElement;
  * Each child of a rows element should be a {@link Row} element.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:28:26 $
  */
 public class Rows extends XulElement {
 	/** Returns the grid that contains this rows. */

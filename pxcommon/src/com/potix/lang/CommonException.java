@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/CommonException.java,v 1.3 2006/02/27 03:41:58 tomyeh Exp $
 	Purpose: The most fundamental non-runtime exception
 	Description: 
 	History:
@@ -30,7 +29,6 @@ import com.potix.mesg.Messageable;
  * CommonException indicates exceptinal cases.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:41:58 $
  * @see SystemException
  */
 public class CommonException extends Exception implements Messageable {

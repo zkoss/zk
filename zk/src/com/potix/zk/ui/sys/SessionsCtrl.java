@@ -25,7 +25,6 @@ import com.potix.zk.ui.Sessions;
  * An addition interface to {@link Sessions} for implementation.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:10 $
  */
 public class SessionsCtrl extends Sessions {
 	protected SessionsCtrl() {} //prevent from instantiation

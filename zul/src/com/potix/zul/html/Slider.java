@@ -29,7 +29,6 @@ import com.potix.zul.html.impl.XulElement;
  * A slider.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Slider extends XulElement implements Scrollable {
 	private int _curpos, _maxpos = 100, _pginc = 10;

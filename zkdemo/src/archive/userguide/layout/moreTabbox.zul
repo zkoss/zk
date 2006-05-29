@@ -4,7 +4,6 @@
 moreTabbox.zul
 
 {{IS_NOTE
-	$Id: moreTabbox.zul,v 1.5 2006/05/25 10:35:09 tomyeh Exp $
 	Purpose:
 		
 	Description:

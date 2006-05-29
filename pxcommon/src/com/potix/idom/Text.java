@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Text.java,v 1.5 2006/02/27 03:41:55 tomyeh Exp $
 Purpose: 
 Description: 
 History:
@@ -24,7 +23,6 @@ import com.potix.idom.impl.*;
  * The iDOM Text.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:41:55 $
  * @see CData
  */
 public class Text extends AbstractTextual implements org.w3c.dom.Text {

@@ -33,7 +33,6 @@ import javax.portlet.PortletContext;
  * A facade servlet context based on a given portlet context.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:36 $
  */
 public class PortletServletContext implements ServletContext {
 	private final PortletContext _ctx;

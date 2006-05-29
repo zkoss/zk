@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/InvalidValueException.java,v 1.3 2006/02/27 03:42:02 tomyeh Exp $
 	Purpose: Thrown by Validate to indicate an error
 	Description: 
 	History:
@@ -29,7 +28,6 @@ import com.potix.lang.Expectable;
  * not program's bug.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.3 $ $Date: 2006/02/27 03:42:02 $
  */
 public class InvalidValueException extends ModificationException
 implements Expectable {

@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/input/SAXHandler.java,v 1.18 2006/02/27 03:41:56 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -57,7 +56,6 @@ import com.potix.idom.*;
  * other place, e.g., javax.xml.transform.sax.SAXResult.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.18 $ $Date: 2006/02/27 03:41:56 $
  * @see SAXBuilder
  */
 public class SAXHandler extends DefaultHandler

@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/logging/LogService.java,v 1.30 2006/05/02 07:04:37 tomyeh Exp $
 	Purpose: The MBean-able log service
 	Description: 
 	History:
@@ -51,7 +50,6 @@ import com.potix.io.Files;
  * on iDom, which depends on log). Thus, we use Singleton instead.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.30 $ $Date: 2006/05/02 07:04:37 $
  */
 public class LogService {
 	private static final Log log = Log.lookup(LogService.class);

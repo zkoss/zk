@@ -31,7 +31,6 @@ import com.potix.zk.ui.sys.DesktopCache;
  * A skeletal implementation of {@link WebApp}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:06 $
  */
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private final Configuration _config;

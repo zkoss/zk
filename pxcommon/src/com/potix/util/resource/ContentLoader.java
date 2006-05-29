@@ -33,7 +33,6 @@ import com.potix.io.Files;
  * (and assumging UTF-8).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:24 $
  */
 public class ContentLoader extends AbstractLoader {
 	//-- Loader --//

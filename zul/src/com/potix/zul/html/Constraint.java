@@ -26,7 +26,6 @@ import com.potix.zk.ui.WrongValueException;
  * to simplify the task.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:21 $
  */
 public interface Constraint {
 	/** Verifies whether the value is acceptable.

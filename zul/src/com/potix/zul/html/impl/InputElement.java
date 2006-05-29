@@ -34,7 +34,6 @@ import com.potix.zul.html.Constrainted;
 /**
  * A skeletal implementation of an input box.
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.21 $ $Date: 2006/05/29 04:28:29 $
  */
 abstract public class InputElement extends XulElement
 implements Inputable, Errorable, Constrainted {

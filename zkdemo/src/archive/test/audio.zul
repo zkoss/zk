@@ -4,7 +4,6 @@
 audio.zul
 
 {{IS_NOTE
-	$Id: audio.zul,v 1.3 2005/11/18 08:18:57 tomyeh Exp $
 	Purpose:
 		
 	Description:

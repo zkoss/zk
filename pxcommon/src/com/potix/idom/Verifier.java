@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Verifier.java,v 1.6 2006/02/27 03:41:55 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -24,7 +23,6 @@ import org.xml.sax.Locator;
  * The verifier to verify W3C/DOM related constraints.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.6 $ $Date: 2006/02/27 03:41:55 $
  */
 public class Verifier {
 	private Verifier() {

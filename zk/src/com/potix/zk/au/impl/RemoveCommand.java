@@ -26,7 +26,6 @@ import com.potix.zk.au.AuRequest;
  * Used only by {@link AuRequest} to implement the remove command.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:58 $
  */
 public class RemoveCommand extends AuRequest.Command {
 	public RemoveCommand(String evtnm, boolean skipIfEverError) {

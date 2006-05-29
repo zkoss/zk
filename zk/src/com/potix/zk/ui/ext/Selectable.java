@@ -32,7 +32,6 @@ import com.potix.zk.ui.UiException;
  * (rather than by codes).
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:04 $
  * @see com.potix.zk.ui.event.SelectEvent
  */
 public interface Selectable {

@@ -34,7 +34,6 @@ import com.potix.idom.input.SAXBuilder;
  * It loads i3app.xml for application information.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:24 $
  */
 public class AppImpl implements App, Initial {
 	private String _name = "ZK Application", _codenm = "i3",

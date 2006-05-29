@@ -37,7 +37,6 @@ import com.potix.zk.ui.UiException;
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/29 04:28:26 $
  */
 public class Radio extends Checkbox {
 	private String _value = "";

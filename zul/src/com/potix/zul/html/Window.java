@@ -53,7 +53,6 @@ import com.potix.zul.au.*;
  * onMove, onShow, onOK, onCacnel and onCtrlKey.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.20 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Window extends XulElement implements IdSpace  {
 	private Caption _caption;

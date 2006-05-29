@@ -29,7 +29,6 @@ import java.io.InputStream;
  * by servlets and many other codes.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/29 04:27:23 $
  */
 public interface Media {
 	/** Returns whether the format of tis content is binary or text-based.

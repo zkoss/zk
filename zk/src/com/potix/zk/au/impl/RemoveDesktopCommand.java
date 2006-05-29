@@ -26,7 +26,6 @@ import com.potix.zk.au.AuRequest;
  * A command to remove the specified desktop.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:58 $
  */
 public class RemoveDesktopCommand extends AuRequest.Command {
 	public RemoveDesktopCommand(String evtnm, boolean skipIfEverError) {

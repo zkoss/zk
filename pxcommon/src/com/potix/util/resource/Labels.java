@@ -24,7 +24,6 @@ import com.potix.comp.ComponentManager;
  * Shortcuts to acces {@link LabelLoader}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:24 $
  */
 public class Labels {
 	/** Returns the {@link LabelLoader} component for this domain.

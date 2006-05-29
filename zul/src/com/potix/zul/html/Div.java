@@ -32,7 +32,6 @@ import com.potix.zul.html.impl.XulElement;
  * In other words, {@link Div} won't affect the uniqueness of identifiers.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:28:22 $
  */
 public class Div extends XulElement {
 	private String _align;

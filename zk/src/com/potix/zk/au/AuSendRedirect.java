@@ -24,7 +24,6 @@ package com.potix.zk.au;
  * <p>data[0]: the URL to redirect to.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:56 $
  */
 public class AuSendRedirect extends AuResponse {
 	/**

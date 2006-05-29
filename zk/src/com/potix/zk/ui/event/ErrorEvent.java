@@ -25,7 +25,6 @@ import com.potix.zk.ui.Component;
  * or clearing the last wrong data.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:01 $
  * @see com.potix.zk.ui.ext.Errorable
  */
 public class ErrorEvent extends InputEvent {

@@ -27,7 +27,6 @@ import com.potix.zhtml.impl.AbstractTag;
  * The raw component used to generate raw HTML elements.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:27:51 $
  */
 public class Raw extends AbstractTag implements DynamicTag {
 	public Raw(String tagname) {

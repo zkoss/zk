@@ -50,7 +50,6 @@ import com.potix.zk.ui.util.impl.ForEachImpl;
  * (such as thru another ZUL page).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/05/29 04:28:08 $
  * @see PageDefinition
  */
 public class InstanceDefinition extends ComponentDefinition

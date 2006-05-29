@@ -26,7 +26,6 @@ import com.potix.web.servlet.http.Encodes;
  * A skeletal implementation to simplify the implementation of actions.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:38 $
  */
 abstract public class AbstractAction implements Action {
 	/** A special integer to denote no attribute is assigned. */

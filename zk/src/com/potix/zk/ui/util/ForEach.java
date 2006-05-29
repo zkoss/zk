@@ -1,7 +1,6 @@
 /* ForEach.java
 
 {{IS_NOTE
-	$Id: ForEach.java,v 1.2 2006/03/20 14:51:11 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,6 @@ package com.potix.zk.ui.util;
  * uses it to represent the forEach attribute.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/03/20 14:51:11 $
  */
 public interface ForEach {
 	/** Advanced to the next element.

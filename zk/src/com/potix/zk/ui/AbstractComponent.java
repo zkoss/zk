@@ -65,7 +65,6 @@ import com.potix.zk.au.AuRemove;
  * the chores.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.42 $ $Date: 2006/05/29 04:27:59 $
  */
 public class AbstractComponent implements Component, ComponentCtrl {
 	private static final Log log = Log.lookup(AbstractComponent.class);

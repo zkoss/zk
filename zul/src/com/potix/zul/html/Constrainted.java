@@ -23,7 +23,6 @@ package com.potix.zul.html;
  * {@link Constraint}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:21 $
  */
 public interface Constrainted {
 	/** Sets the constraint.

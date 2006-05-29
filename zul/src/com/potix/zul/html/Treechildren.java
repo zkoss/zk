@@ -33,7 +33,6 @@ import com.potix.zul.html.impl.XulElement;
  * A treechildren.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Treechildren extends XulElement {
 	/** Returns the {@link Tree} instance containing this element.

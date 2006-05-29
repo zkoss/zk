@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/Maps.java,v 1.15 2006/02/27 03:42:02 tomyeh Exp $
 	Purpose: Utilities for Map
 	Description: 
 	History:
@@ -39,7 +38,6 @@ import com.potix.util.logging.Log;
  * Utilities for process Map.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.15 $ $Date: 2006/02/27 03:42:02 $
  */
 public class Maps {
 	private static final Log log = Log.lookup(Maps.class);

@@ -1,8 +1,6 @@
 /* Servlets.java
 
 {{IS_NOTE
-
-	$Header: //time/potix/rd/cvs/zk1/pxweb/src/com/potix/web/servlet/Servlets.java,v 1.49 2006/05/26 10:08:12 tomyeh Exp $
 	Purpose:
 	Description:
 	History:
@@ -71,7 +69,6 @@ import com.potix.web.util.resource.ServletContextLocator;
  * The servlet relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.49 $ $Date: 2006/05/26 10:08:12 $
  * @see com.potix.web.servlet.http.Https
  * @see com.potix.web.servlet.Charsets
  */

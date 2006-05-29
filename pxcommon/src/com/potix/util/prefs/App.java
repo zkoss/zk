@@ -22,7 +22,6 @@ package com.potix.util.prefs;
  * The application.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.28 $ $Date: 2006/05/29 04:27:24 $
  */
 public interface App {
 	/** Returns the application name; never null. It retrieves the name in

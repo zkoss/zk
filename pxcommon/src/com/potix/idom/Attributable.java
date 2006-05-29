@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/Attributable.java,v 1.5 2006/02/27 03:41:54 tomyeh Exp $
 Purpose: 
 Description: 
 History:
@@ -28,7 +27,6 @@ import java.util.List;
  * <p>Design consideration: Be as similar to Group as possible.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.5 $ $Date: 2006/02/27 03:41:54 $
  * @see Item
  * @see Attribute
  */

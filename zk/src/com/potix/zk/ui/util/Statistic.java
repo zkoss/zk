@@ -1,7 +1,6 @@
 /* Statistic.java
 
 {{IS_NOTE
-	$Id: Statistic.java,v 1.2 2006/03/20 14:51:12 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -31,7 +30,6 @@ import com.potix.zk.ui.Desktop;
  * <p>It has no effect until you specify it in web.xml.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/03/20 14:51:12 $
  */
 public class Statistic implements Monitor {
 	private final long _startTime;

@@ -27,7 +27,6 @@ import javax.servlet.ServletException;
  * It is like a tag in JSP.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:40 $
  */
 public interface Action {
 	/** Processes the action and renders the output to

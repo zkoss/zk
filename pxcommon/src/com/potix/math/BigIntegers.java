@@ -25,7 +25,6 @@ import com.potix.lang.Objects;
  * BigInteger utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:27:21 $
  */
 public class BigIntegers {
 	/** Represents 0 in big integer.

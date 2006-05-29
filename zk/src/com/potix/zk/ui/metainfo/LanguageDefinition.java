@@ -48,7 +48,6 @@ import com.potix.zk.ui.util.Evaluator;
  * A definition of a language, such as xul.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.23 $ $Date: 2006/05/29 04:28:08 $
  */
 public class LanguageDefinition implements Evaluator {
 	private static final Log log = Log.lookup(LanguageDefinition.class);

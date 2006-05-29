@@ -26,7 +26,6 @@ import com.potix.zk.ui.Component;
  * <p>A moveable component must implement {@link com.potix.zk.ui.ext.Moveable}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:02 $
  */
 public class MoveEvent extends Event {
 	private final String _left, _top;

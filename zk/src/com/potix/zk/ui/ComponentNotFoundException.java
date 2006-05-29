@@ -22,7 +22,6 @@ package com.potix.zk.ui;
  * Dentoes a component cannot be found.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:59 $
  */
 public class ComponentNotFoundException extends UiException {
 	public ComponentNotFoundException(String msg, Throwable cause) {

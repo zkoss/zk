@@ -2,7 +2,6 @@
 # zipjs
 #
 #{{IS_NOTE
-#	$Id: zipjs,v 1.1.1.1 2006/05/18 12:40:54 tomyeh Exp $
 #	Purpose:
 #		Copy and compress Javascript
 #	Description:

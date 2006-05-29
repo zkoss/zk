@@ -1,7 +1,6 @@
 /* WebAppCtrl.java
 
 {{IS_NOTE
-	$Id: WebAppCtrl.java,v 1.2 2006/04/19 05:10:40 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -27,7 +26,6 @@ import com.potix.zk.ui.sys.UiFactory;
  * <p>Note: applications shall never access this interface.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/04/19 05:10:40 $
  */
 public interface WebAppCtrl {
 	/** Returns the UI engine for this session.

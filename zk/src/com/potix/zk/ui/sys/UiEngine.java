@@ -45,7 +45,6 @@ import com.potix.zk.au.AuResponse;
  * UI Engine (Singleton per app).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/29 04:28:10 $
  */
 public interface UiEngine {
 	/** Starts the engine.

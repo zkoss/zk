@@ -24,7 +24,6 @@ import com.potix.zk.ui.Component;
  * Represents a key pressed by the user.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:02 $
  */
 public class KeyEvent extends Event {
 	private final int _keyCode;

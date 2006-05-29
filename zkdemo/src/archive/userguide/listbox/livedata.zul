@@ -4,7 +4,6 @@
 hello.zul
 
 {{IS_NOTE
-	$Id: livedata.zul,v 1.6 2006/04/17 09:53:19 tomyeh Exp $
 	Purpose:
 		
 	Description:

@@ -39,7 +39,6 @@ import com.potix.web.servlet.dsp.action.Action;
  * Represents an action node.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/29 04:27:41 $
  */
 class ActionNode extends Node {
 	private static final Log log = Log.lookup(ActionNode.class);

@@ -31,7 +31,6 @@ import com.potix.zk.ui.UiException;
  * <p>A non-XHTML extension.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:48 $
  */
 public class Fileupload {
 	/** Opens a modal dialog with the default message and title,

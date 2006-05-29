@@ -70,7 +70,6 @@ import com.potix.web.servlet.dsp.ServletDSPContext;
  * based on the current Locale (com.potix.util.prefs.App.getCurrentLocale).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.23 $ $Date: 2006/05/29 04:27:44 $
  */
 public class ClassWebResource {
 	private static final Log log = Log.lookup(ClassWebResource.class);

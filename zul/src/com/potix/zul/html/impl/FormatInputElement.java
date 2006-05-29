@@ -30,7 +30,6 @@ import com.potix.zk.ui.WrongValueException;
  * An input box that supports format.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:29 $
  */
 abstract public class FormatInputElement extends InputElement {
 	private String _format;

@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/resource/Locator.java,v 1.2 2006/02/27 03:42:06 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -25,7 +24,6 @@ import java.io.InputStream;
  * A locator that is able to locate a resource.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:06 $
  * @see Locators#getDefault
  */
 public interface Locator {

@@ -42,7 +42,6 @@ import com.potix.text.DateFormats;
  * Utilities to wrap the real implementation of Expression Language evaluators.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.21 $ $Date: 2006/05/29 04:27:17 $
  */
 public class Evals {
 	protected Evals() {}//prevent from instantiate

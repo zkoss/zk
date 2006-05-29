@@ -1,7 +1,6 @@
 /* Clients.java
 
 {{IS_NOTE
-	$Id: Clients.java,v 1.2 2006/05/26 06:51:48 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -29,7 +28,6 @@ import com.potix.zk.au.AuSubmitForm;
  * Utilities to send {@link AuResponse} to the client.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/26 06:51:48 $
  */
 public class Clients {
 	/** Closes the error box at the browser belonging to

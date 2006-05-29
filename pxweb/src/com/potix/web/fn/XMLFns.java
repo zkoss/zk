@@ -22,7 +22,6 @@ package com.potix.web.fn;
  * Utilities to manipulate XML/HTML for EL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:36 $
  */
 public class XMLFns {
 	/** Generates an attribute for HTML/XML.

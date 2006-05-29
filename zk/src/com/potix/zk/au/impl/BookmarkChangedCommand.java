@@ -30,7 +30,6 @@ import com.potix.zk.au.AuRequest;
  * that does nothing but posting an {@link BookmarkEvent}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 15:00:33 $
  */
 public class BookmarkChangedCommand extends AuRequest.Command {
 	public BookmarkChangedCommand(String evtnm, boolean skipIfEverError) {

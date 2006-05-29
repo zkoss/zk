@@ -25,7 +25,6 @@ import com.potix.util.ModificationException;
  * Represents an object is associated with images.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:23 $
  */
 public interface Photo {
 	/** Returns the photo of this object.

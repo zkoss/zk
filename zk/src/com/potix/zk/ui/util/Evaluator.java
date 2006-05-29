@@ -1,7 +1,6 @@
 /* Evaluator.java
 
 {{IS_NOTE
-	$Id: Evaluator.java,v 1.1 2006/04/17 07:10:05 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -25,7 +24,6 @@ import com.potix.zk.ui.Component;
  * An evaluator for evaluating EL expressions.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.1 $ $Date: 2006/04/17 07:10:05 $
  */
 public interface Evaluator {
 	/** Evaluates the specified expression against the specified component.

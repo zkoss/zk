@@ -32,7 +32,6 @@ import com.potix.zul.html.impl.HeaderElement;
  * A treecol.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/29 04:28:28 $
  */
 public class Treecol extends HeaderElement {
 	private int _maxlength;

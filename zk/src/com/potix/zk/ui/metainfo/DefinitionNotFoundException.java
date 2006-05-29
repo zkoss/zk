@@ -24,7 +24,6 @@ import com.potix.zk.ui.UiException;
  * Dentoes a definition cannot be found.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:08 $
  */
 public class DefinitionNotFoundException extends UiException {
 	public DefinitionNotFoundException(String msg, Throwable cause) {

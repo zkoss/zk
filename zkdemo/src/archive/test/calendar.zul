@@ -4,7 +4,6 @@
 calendar.zul
 
 {{IS_NOTE
-	$Id: calendar.zul,v 1.2 2006/05/10 10:25:57 tomyeh Exp $
 	Purpose:
 		
 	Description:

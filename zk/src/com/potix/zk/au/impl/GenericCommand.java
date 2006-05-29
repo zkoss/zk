@@ -30,7 +30,6 @@ import com.potix.zk.au.AuRequest;
  * that does nothing but posting an {@link Event}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 12:57:04 $
  */
 public class GenericCommand extends AuRequest.Command {
 	private final boolean _broadcast;

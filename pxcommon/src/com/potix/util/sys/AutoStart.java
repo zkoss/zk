@@ -38,7 +38,6 @@ package com.potix.util.sys;
  * is similar to {@link com.potix.comp.Initial} for components.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:25 $
  * @see Singleton
  */
 public interface AutoStart {

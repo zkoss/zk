@@ -27,7 +27,6 @@ import com.potix.zk.ui.Component;
  * data[1]: the alert message
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:27:54 $
  */
 public class AuAlert extends AuResponse {
 	public AuAlert(String message) {

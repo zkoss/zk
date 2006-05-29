@@ -25,7 +25,6 @@ import com.potix.lang.Expectable;
  * 'reasonably' -- usually caused by user rather than by programming error.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:01 $
  */
 public class OperationException extends UiException implements Expectable {
 	public OperationException(String msg, Throwable cause) {

@@ -43,7 +43,6 @@ import com.potix.zk.ui.UiException;
  * apply them in the event processing thread when {@link #init} is called.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.7 $ $Date: 2006/05/29 04:28:02 $
  */
 public interface EventThreadInit {
 	/** Prepares the initialization at the servlet thread.

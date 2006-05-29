@@ -29,7 +29,6 @@ import com.potix.web.servlet.dsp.action.ActionContext;
  * Generates the HTML &lt;img&gt; tag
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.8 $ $Date: 2006/05/29 04:27:41 $
  */
 public class Img extends AbstractAction {
 	private String _id, _onclick;

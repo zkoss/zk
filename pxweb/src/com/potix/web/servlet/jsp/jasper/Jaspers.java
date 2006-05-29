@@ -25,7 +25,6 @@ import org.apache.jasper.compiler.JspUtil;
  * Utilities to access Jasper (Tomcat's JSP engine).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:43 $
  */
 public class Jaspers {
 	/** Maps a JSP URI to a Java name.

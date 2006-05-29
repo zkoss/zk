@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/idom/impl/AbstractTextual.java,v 1.6 2006/05/11 07:16:25 tomyeh Exp $
 Purpose: 
 Description: 
 History:
@@ -35,7 +34,6 @@ import com.potix.idom.*;
  * whether a child's text shall be catenated.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/11 07:16:25 $
  * @see Element
  */
 public abstract class AbstractTextual extends AbstractItem

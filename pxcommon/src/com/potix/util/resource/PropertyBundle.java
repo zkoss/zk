@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/resource/PropertyBundle.java,v 1.9 2006/02/27 03:42:07 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -54,7 +53,6 @@ import com.potix.util.logging.Log;
  * <p>Thread safe.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.9 $ $Date: 2006/02/27 03:42:07 $
  */
 public class PropertyBundle {
 	private static final Log log = Log.lookup(PropertyBundle.class);

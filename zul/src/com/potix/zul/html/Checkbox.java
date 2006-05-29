@@ -37,7 +37,6 @@ import com.potix.zul.html.impl.LabelImageElement;
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.10 $ $Date: 2006/05/29 04:28:21 $
  */
 public class Checkbox extends LabelImageElement implements Checkable {
 	/** The name. */

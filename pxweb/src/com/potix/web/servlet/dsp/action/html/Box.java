@@ -32,7 +32,6 @@ import com.potix.web.servlet.dsp.action.ActionContext;
  * Generates a box that has a caption and a border enclosing other tags.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:27:41 $
  */
 public class Box extends AbstractAction {
 	private String _align;

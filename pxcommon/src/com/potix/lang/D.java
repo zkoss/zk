@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/lang/D.java,v 1.48 2006/05/02 07:04:28 tomyeh Exp $
 	Purpose: Debugging utilities
 	Description: 
 	History:
@@ -29,7 +28,6 @@ package com.potix.lang;
  * <p>if (D.ON) your_test_codes;
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.48 $ $Date: 2006/05/02 07:04:28 $
  */
 public class D {
 	/**

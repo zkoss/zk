@@ -36,7 +36,6 @@ import com.potix.zul.html.impl.XulElement;
  * A label.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.15 $ $Date: 2006/05/29 04:28:23 $
  */
 public class Label extends XulElement {
 	private String _value = "";

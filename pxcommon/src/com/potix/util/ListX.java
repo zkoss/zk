@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/ListX.java,v 1.2 2006/02/27 03:42:02 tomyeh Exp $
 	Purpose: The extended list interface.
 	Description: 
 	History:
@@ -28,7 +27,6 @@ package com.potix.util;
  * element never changes even after removed.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.2 $ $Date: 2006/02/27 03:42:02 $
  * @see TreeArray
  */
 public interface ListX {

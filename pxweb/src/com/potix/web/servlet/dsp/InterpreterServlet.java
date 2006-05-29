@@ -50,7 +50,6 @@ import com.potix.web.util.resource.ServletContextLocator;
  * The servlet used to interpret the DSP file (Potix Dynamic Script Page).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/29 04:27:38 $
  */
 public class InterpreterServlet extends HttpServlet {
 	private static final Log log = Log.lookup(InterpreterServlet.class);

@@ -2,7 +2,6 @@
 
 {{IS_NOTE
 
-	$Header: //time/potix/rd/cvs/zk1/pxcommon/src/com/potix/util/resource/Locators.java,v 1.10 2006/02/27 03:42:06 tomyeh Exp $
 	Purpose: 
 	Description: 
 	History:
@@ -34,7 +33,6 @@ import com.potix.lang.Exceptions;
  * Utilities to load and locate resources.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @version $Revision: 1.10 $ $Date: 2006/02/27 03:42:06 $
  * @see Locator
  */
 public class Locators {

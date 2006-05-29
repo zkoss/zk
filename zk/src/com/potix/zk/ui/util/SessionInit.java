@@ -1,7 +1,6 @@
 /* SessionInit.java
 
 {{IS_NOTE
-	$Id: SessionInit.java,v 1.3 2006/04/07 02:16:13 tomyeh Exp $
 	Purpose:
 		
 	Description:
@@ -34,7 +33,6 @@ import com.potix.zk.ui.Session;
  * </ol>
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/04/07 02:16:13 $
  */
 public interface SessionInit {
 	/** Called when a session is created and initialized.

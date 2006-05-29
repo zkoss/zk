@@ -36,7 +36,6 @@ import com.potix.zk.ui.UiException;
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.4 $ $Date: 2006/05/29 04:28:04 $
  */
 public interface Updatable {
 	/** Sets the result when it is updated from the client successfully.

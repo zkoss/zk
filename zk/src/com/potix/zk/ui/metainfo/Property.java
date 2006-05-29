@@ -36,7 +36,6 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  * A property of a definition.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.6 $ $Date: 2006/05/29 04:28:08 $
  */
 public class Property implements Condition {
 	private static final Log log = Log.lookup(Property.class);

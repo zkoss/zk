@@ -32,7 +32,6 @@ import com.potix.util.logging.Log;
  * to retrieve servlet resources.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:44 $
  */
 abstract public class ResourceLoader implements Loader {
 	private static final Log log = Log.lookup(ResourceLoader.class);

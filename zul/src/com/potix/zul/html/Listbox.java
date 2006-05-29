@@ -72,7 +72,6 @@ import com.potix.zk.au.AuInit;
  * <p>Default {@link #getSclass}: listbox.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.37 $ $Date: 2006/05/29 04:28:23 $
  * @see ListModel
  * @see ListitemRenderer
  */

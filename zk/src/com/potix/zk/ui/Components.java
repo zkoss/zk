@@ -32,7 +32,6 @@ import java.util.Comparator;
  * Utilities to access {@link Component}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.14 $ $Date: 2006/05/29 04:27:59 $
  */
 public class Components {
 	protected Components() {}

@@ -23,7 +23,6 @@ package com.potix.web;
  * requests.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.13 $ $Date: 2006/05/29 04:27:35 $
  */
 public class Attributes {
 	/** Don't construct it. All members are static. */

@@ -33,7 +33,6 @@ import java.util.Collection;
  * contained in this desktop are free to access.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.11 $ $Date: 2006/05/29 12:57:05 $
  */
 public interface Desktop {
 	/** Returns ID of this desktop.

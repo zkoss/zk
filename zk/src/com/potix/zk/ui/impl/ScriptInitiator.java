@@ -26,7 +26,6 @@ import com.potix.zk.ui.util.Initiator;
  * An initiator used to evaluate a zscript file.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.2 $ $Date: 2006/05/29 04:28:07 $
  */
 public class ScriptInitiator implements Initiator {
 	private final Script _script;

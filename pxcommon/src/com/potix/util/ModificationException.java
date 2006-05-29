@@ -34,7 +34,6 @@ import com.potix.lang.Expectable;
  * who derive from this class, might be thrown
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.5 $ $Date: 2006/05/29 04:27:23 $
  */
 public class ModificationException extends CommonException {
 	/** Utilities.

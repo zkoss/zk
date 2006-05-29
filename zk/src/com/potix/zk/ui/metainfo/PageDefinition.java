@@ -49,7 +49,6 @@ import com.potix.zk.ui.sys.RequestInfo;
  * It represents a ZUL page.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.21 $ $Date: 2006/05/29 04:28:08 $
  * @see InstanceDefinition
  * @see ComponentDefinition
  */

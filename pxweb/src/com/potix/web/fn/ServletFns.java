@@ -42,7 +42,6 @@ import com.potix.web.el.ELContext;
  * Providing servlet relevant functions for EL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.18 $ $Date: 2006/05/29 04:27:36 $
  */
 public class ServletFns {
 	protected ServletFns() {}

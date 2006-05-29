@@ -36,7 +36,6 @@ import com.potix.zk.ui.WrongValueException;
  * <p>Default {@link #getSclass}: combobox.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.20 $ $Date: 2006/05/29 04:28:21 $
  * @see Comboitem
  */
 public class Combobox extends Textbox {

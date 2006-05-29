@@ -26,7 +26,6 @@ import com.potix.zk.ui.WrongValueException;
  * <p>In other words, &lt;space&gt; is equivalent to &lt;separator orient="horizontal"&gt;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @version $Revision: 1.3 $ $Date: 2006/05/29 04:28:27 $
  */
 public class Space extends Separator {
 	public Space() {
