@@ -30,13 +30,9 @@ if (!zul._modalIds) {
  */
 zkau.processExt = function (cmd, uuid, cmp, datanum, data1, data2) {
 	if ("doModal" == cmd ) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 1, datanum))
-			return true;
 		zul.doModal(cmp);
 		return true;
 	} else if ("endModal" == cmd) {
-		if (!zkau._checkResponse(cmd, null, null, 1, datanum))
-			return true;
 		zul.endModal(uuid);
 		return true;
 	} else {
