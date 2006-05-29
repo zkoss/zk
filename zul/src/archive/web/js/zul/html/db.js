@@ -225,7 +225,7 @@ zk.Cal.prototype = {
 			if (this.input) zk.focusById(this.input.id);
 		} else {
 			this.onchange();
-			if (zk.agtIe) setTimeout(function () {zk.focusDown(this.element);}, 5);
+			if (zk.agtIe) zk.focusDownById(this.id, 50);
 			else zk.focusDown(this.element);
 		}
 	},
