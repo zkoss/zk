@@ -39,15 +39,25 @@ zk.getBuild = function (nm) {
 	return zk.mods[nm] || zk.build;
 };
 
+/** Adds a function for module initialization.
+ * Note: JS are loaded concurrently, so module initializations
+ * must take place after all modules are loaded.
+ */
+zk.addModuleInit = function (fn) {
+	zk._initmods.push(fn);
+};
+/** Adds an array of components that must be initialized after
+ * all modules are loaded and initialized.
+ */
+zk.addInitCmps = function (cmps) {
+	zk._initcmps.push(cmps);
+};
 /** Adds a function that will be invoked after the document is loaded.
  */
 zk.addInit = function (fn) {
 	zk._initfns.push(fn);
 };
-/** Adds an array of components. */
-zk.addInitCmps = function (cmps) {
-	zk._initcmps.push(cmps);
-};
+
 /** Loads the specified module (JS). If a feature is called "a.b.c", then
  * zk_action + "/web/js" + "a/b/c.js" is loaded.
  * <p>To load a JS file directly, use zk.loadJS
@@ -218,6 +228,9 @@ zk._loadAndInit = function (inf) {
 
 /** Initial components and init functions. */
 zk._evalInit = function () {
+	while (zk._initmods.length && !zk.loading)
+		(zk._initmods.shift()).apply();
+
 	//Note: if loading, zk._doLoad will execute zk._evalInit after finish
 	for (var j = 0; zk._initcmps.length && !zk.loading;) {
 		var cmps = zk._initcmps.pop(); //reverse-order
@@ -470,6 +483,7 @@ if (!zk._modules) {
 	zk.loading = 0;
 	zk._modules = {};
 	zk._initfns = new Array(); //used by addInit
+	zk._initmods = new Array(); //used by addModuleInit
 	zk._initcmps = new Array(); //an array of comp list to init
 
 	var oldol = window.onload;

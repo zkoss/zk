@@ -284,37 +284,9 @@ zkau._doResp = function (respXml) {
  */
 zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 	//I. process commands that dt0 is not UUID
-	if ("obsolete" == cmd) { //desktop timeout
-		if (dt0 == zk_desktopId) //just in case
-			zkau._cleanupOnFatal();
-		alert(dt1);
-		return;
-	} else if ("alert" == cmd) {
-		if (zkau._checkResponse(cmd, null, null, 2, datanum)) {
-			var cmp = dt0 ? $(dt0): null;
-			if (cmp) {
-				cmp = zkau.getReal(cmp); //refer to INPUT (e.g., datebox)
-				if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
-			} else {
-				alert(dt1);
-			}
-		}
-		return;
-	} else if ("redirect" == cmd) {
-		if (dt1) zk.go(dt0, false, dt1);
-		else document.location.href = dt0;
-		return;
-	} else if ("title" == cmd) {
-		document.title = dt0;
-		return;
-	} else if ("script" == cmd) {
-		eval(dt0);
-		return;
-	} else if ("echo" == cmd) {
-		zkau.send({uuid: "", cmd: "dummy", data: null});
-		return;
-	} else if ("print" == cmd) {
-		window.print();
+	var fn = zkau.cmd0[cmd];
+	if (fn) {
+		fn.call(zkau, dt0, dt1, dt2, dt3, dt4);
 		return;
 	}
 
@@ -330,184 +302,13 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 	&& zkau.processExt(cmd, uuid, cmp, datanum, dt1, dt2, dt3, dt4))
 		return;
 
-	if ("setAttr" == cmd) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 3, datanum))
-			return;
-
-		var done = false;
-		if ("zk_drag" == dt1) {
-			if (!cmp.getAttribute("zk_drag")) zkau.initdrag(cmp);
-			zkau.setAttr(cmp, dt1, dt2);
-			done = true;
-		} else if ("zk_drop" == dt1) {
-			if (!cmp.getAttribute("zk_drop")) zkau.initdrop(cmp);
-			zkau.setAttr(cmp, dt1, dt2);
-			done = true;
-		}
-
-		var type = zk.getCompType(cmp);
-		if (type) { //NOTE: cmp is NOT converted to real!
-			var fn = "zk"+type+".setAttr";
-			if (eval(fn+"&&"+fn+"(cmp, dt1, dt2)"))
-				return; //done
-		}
-
-		if (!done) {
-			if (dt1.startsWith("on")) cmp = zkau.getReal(cmp);
-				//Client-side-action must be done at the inner tag
-			zkau.setAttr(cmp, dt1, dt2);
-		}
-	} else if ("rmAttr" == cmd) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 2, datanum))
-			return;
-
-		var done = false;
-		if ("zk_drag" == dt1) {
-			zkau.cleandrag(cmp);
-			zkau.rmAttr(cmp, dt1);
-			done = true;
-		} else if ("zk_drop" == dt1) {
-			zkau.cleandrop(cmp);
-			zkau.rmAttr(cmp, dt1);
-			done = true;
-		}
-
-		var type = zk.getCompType(cmp);
-		if (type) { //NOTE: cmp is NOT converted to real!
-			var fn = "zk"+type+".rmAttr";
-			if (eval(fn+"&&"+fn+"(cmp, dt1)"))
-				return; //done
-		}
-
-		if (!done) {
-			if (dt1.startsWith("on")) cmp = zkau.getReal(cmp);
-				//Client-side-action must be done at the inner tag
-			zkau.rmAttr(cmp, dt1);
-		}
-	} else if ("init" == cmd) {
-		//Note: cmp might be null because it might be removed
-		if (!cmp || !zkau._checkResponse(cmd, uuid, cmp, 1, datanum))
-			return;
-
-		var type = zk.getCompType(cmp);
-		if (type) {
-			zk.loadByType(cmp);
-			if (zk.loading) {
-				var cmps = new Array();
-				cmps.push(cmp);
-				zk.addInitCmps(cmps);
-			} else {
-				eval("zk"+type+".init(cmp)");
-			}
-		}
-	} else if ("cleanup" == cmd) {
-		if (!zkau._checkResponse(cmd, null, null, 1, datanum))
-			return;
-		zkau.cleanupMeta(uuid);
-	} else if ("outer" == cmd) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 2, datanum))
-			return;
-
-		zk.cleanupAt(cmp, zkau.cleanupMeta);
-		zk.setOuterHTML(cmp, dt1);
-		zk.initAt($(uuid));
-		if (zkau.valid) zkau.valid.fixerrboxes();
-	} else if ("inner" == cmd) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 2, datanum))
-			return;
-
-		zkau._cleanupChildren(cmp);
-		zk.setInnerHTML(cmp, dt1);
-		zkau._initInner(cmp);
-		zkau._initChildren(cmp);
-		if (zkau.valid) zkau.valid.fixerrboxes();
-	} else if ("addAft" == cmd) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 2, datanum))
-			return;
-
-		var n = zkau._getChildExterior(cmp);
-		var to = n.nextSibling;
-		zk.insertHTMLAfter(n, dt1);
-		zkau._initSibs(n, to, true);
-	} else if ("addBfr" == cmd) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 2, datanum))
-			return;
-
-		var n = zkau._getChildExterior(cmp);
-		var to = n.previousSibling;
-		zk.insertHTMLBefore(n, dt1);
-		zkau._initSibs(n, to, false);
-	} else if ("addChd" == cmd){
-		if (!zkau._checkResponse(cmd, uuid, cmp, 2, datanum))
-			return;
-
-		var n = $(uuid + "!child");
-		if (n) {
-			var to = n.previousSibling;
-			zk.insertHTMLBefore(n, dt1);
-			zkau._initSibs(n, to, false);
-		} else {
-			cmp = zkau.getReal(cmp); //go into the real tag (e.g., tabpanel)
-			var n = cmp.lastChild;
-			zk.insertHTMLBeforeEnd(cmp, dt1);
-			if (n) zkau._initSibs(n, null, true);
-			else zkau._initChildren(cmp);
-		}
-	} else if ("rm" == cmd) {
-		if (!zkau._checkResponse(cmd, null, null, 1, datanum))
-			return;
-
-		//NOTE: it is possible the server asking removing a non-exist cmp
-		//so keep silent if not found
-		if (cmp) {
-			zk.cleanupAt(cmp, zkau.cleanupMeta);
-			cmp = zkau._getChildExterior(cmp);
-			cmp.parentNode.removeChild(cmp);
-		}
-		if (zkau.valid) zkau.valid.fixerrboxes();
-	} else if ("focus" == cmd) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 1, datanum))
-			return;
-		cmp = zkau.getReal(cmp); //focus goes to inner tag
-		if (cmp.focus && !cmp.disabled)
-			zk.focusById(cmp.id, 5);
-				//delay it because focusDownById might be called implicitly
-	} else if ("selAll" == cmd) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 1, datanum))
-			return;
-		cmp = zkau.getReal(cmp); //select goes to inner tag
-		if (cmp.select)
-			zk.selectById(cmp.id);
-	} else if ("doPop" == cmd ) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 1, datanum))
-			return;
-		zkau.doPopup(cmp);
-	} else if ("endPop" == cmd) {
-		if (!zkau._checkResponse(cmd, null, null, 1, datanum))
-			return;
-		zkau.endPopup(uuid);
-	} else if ("doOvl" == cmd ) {
-		if (!zkau._checkResponse(cmd, uuid, cmp, 1, datanum))
-			return;
-		zkau.doOverlapped(cmp);
-	} else if ("endOvl" == cmd) {
-		if (!zkau._checkResponse(cmd, null, null, 1, datanum))
-			return;
-		zkau.endOverlapped(uuid);
-	} else if ("meta" == cmd) {
-		var meta = zkau.getMeta(uuid);
-		if (meta) meta[dt1].call(meta, dt2, dt3, dt4);
-	} else if ("closeErrbox" == cmd) {
-		if (zkau.valid) {
-			zkau.valid.closeErrbox(uuid);
-			zkau.valid.closeErrbox(uuid + "!real");
-		}
-	} else if ("submit" == cmd) {
-		if (cmp)
-			setTimeout(function (){if (cmp.submit) cmp.submit();}, 50); //Just in case
-	} else {
-		alert(mesg.ILLEGAL_RESPONSE+"Unknown command: "+cmd);
+	fn = zkau.cmd1[cmd];
+	if (fn) {
+		fn.call(zkau, uuid, cmp, dt1, dt2, dt3, dt4);
+		return;
 	}
+
+	alert(mesg.ILLEGAL_RESPONSE+"Unknown command: "+cmd);
 };
 zk.process = zkau.process; //ZK assumes zk.process, so change it
 
@@ -751,20 +552,6 @@ zkau.getOuter = function (cmp) {
 zkau._getChildExterior = function (cmp) {
 	var n = $(cmp.id + "!chdextr");
 	return n ? n: cmp;
-};
-/** Checks whether a response is correct. */
-zkau._checkResponse = function (cmd, uuid, cmp, expectednum, datanum) {
-	if (uuid && !cmp) {
-		//alert(mesg.ILLEGAL_RESPONSE+"Component "+uuid+" not found");
-		//If timer is used, a response might be processed after the timer
-		//is removed. Thus, don't warn but silently ignore
-		return false;
-	}
-	if (datanum != expectednum) {
-		alert(mesg.ILLEGAL_RESPONSE+"Wrong number of arguments for "+cmd);
-		return false;
-	}
-	return true;
 };
 
 //-- popup --//
@@ -1426,7 +1213,7 @@ zk.History.prototype = {
 		if (j >= 0) nm = nm.substring(j + 1);
 		if (nm != this.curbk) {
 			this.curbk = nm;
-			zk.debug("new location="+nm);
+			zkau.send({uuid: '', cmd: "onBookmarkChanged", data: [nm]});
 		}
 	}
 };
@@ -1458,3 +1245,196 @@ if (zk.agtIe) {
 	};
 }
 zkau.history = new zk.History();
+
+//Commands//
+zkau.cmd0 = { //no uuid at all
+	bookmark: function (dt0) {
+		zkau.history.bookmark(dt0);
+	},
+	obsolete: function (dt0, dt1) { //desktop timeout
+		if (dt0 == zk_desktopId) //just in case
+			zkau._cleanupOnFatal();
+		alert(dt1);
+	},
+	alert: function (dt0, dt1) {
+		var cmp = dt0 ? $(dt0): null;
+		if (cmp) {
+			cmp = zkau.getReal(cmp); //refer to INPUT (e.g., datebox)
+			if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
+		} else {
+			alert(dt1);
+		}
+	},
+	redirect: function (dt0, dt1) {
+		if (dt1) zk.go(dt0, false, dt1);
+		else document.location.href = dt0;
+	},
+	title: function (dt0) {
+		document.title = dt0;
+	},
+	script: function (dt0) {
+		eval(dt0);
+	},
+	echo: function () {
+		zkau.send({uuid: "", cmd: "dummy", data: null});
+	},
+	print: function () {
+		window.print();
+	}
+};
+zkau.cmd1 = {
+	setAttr: function (uuid, cmp, dt1, dt2) {
+		var done = false;
+		if ("zk_drag" == dt1) {
+			if (!cmp.getAttribute("zk_drag")) zkau.initdrag(cmp);
+			zkau.setAttr(cmp, dt1, dt2);
+			done = true;
+		} else if ("zk_drop" == dt1) {
+			if (!cmp.getAttribute("zk_drop")) zkau.initdrop(cmp);
+			zkau.setAttr(cmp, dt1, dt2);
+			done = true;
+		}
+
+		var type = zk.getCompType(cmp);
+		if (type) { //NOTE: cmp is NOT converted to real!
+			var fn = "zk"+type+".setAttr";
+			if (eval(fn+"&&"+fn+"(cmp, dt1, dt2)"))
+				return; //done
+		}
+
+		if (!done) {
+			if (dt1.startsWith("on")) cmp = zkau.getReal(cmp);
+				//Client-side-action must be done at the inner tag
+			zkau.setAttr(cmp, dt1, dt2);
+		}
+	},
+	rmAttr: function (uuid, cmp, dt1) {
+		var done = false;
+		if ("zk_drag" == dt1) {
+			zkau.cleandrag(cmp);
+			zkau.rmAttr(cmp, dt1);
+			done = true;
+		} else if ("zk_drop" == dt1) {
+			zkau.cleandrop(cmp);
+			zkau.rmAttr(cmp, dt1);
+			done = true;
+		}
+
+		var type = zk.getCompType(cmp);
+		if (type) { //NOTE: cmp is NOT converted to real!
+			var fn = "zk"+type+".rmAttr";
+			if (eval(fn+"&&"+fn+"(cmp, dt1)"))
+				return; //done
+		}
+
+		if (!done) {
+			if (dt1.startsWith("on")) cmp = zkau.getReal(cmp);
+				//Client-side-action must be done at the inner tag
+			zkau.rmAttr(cmp, dt1);
+		}
+	},
+	init: function (uuid, cmp) {
+		//Note: cmp might be null because it might be removed
+		if (!cmp) return;
+
+		var type = zk.getCompType(cmp);
+		if (type) {
+			zk.loadByType(cmp);
+			if (zk.loading) {
+				var cmps = new Array();
+				cmps.push(cmp);
+				zk.addInitCmps(cmps);
+			} else {
+				eval("zk"+type+".init(cmp)");
+			}
+		}
+	},
+	cleanup: function (uuid, cmp) {
+		zkau.cleanupMeta(uuid);
+	},
+	outer: function (uuid, cmp, dt1) {
+		zk.cleanupAt(cmp, zkau.cleanupMeta);
+		zk.setOuterHTML(cmp, dt1);
+		zk.initAt($(uuid));
+		if (zkau.valid) zkau.valid.fixerrboxes();
+	},
+	inner: function (uuid, cmp, dt1) {
+		zkau._cleanupChildren(cmp);
+		zk.setInnerHTML(cmp, dt1);
+		zkau._initInner(cmp);
+		zkau._initChildren(cmp);
+		if (zkau.valid) zkau.valid.fixerrboxes();
+	},
+	addAft: function (uuid, cmp, dt1) {
+		var n = zkau._getChildExterior(cmp);
+		var to = n.nextSibling;
+		zk.insertHTMLAfter(n, dt1);
+		zkau._initSibs(n, to, true);
+	},
+	addBfr: function (uuid, cmp, dt1) {
+		var n = zkau._getChildExterior(cmp);
+		var to = n.previousSibling;
+		zk.insertHTMLBefore(n, dt1);
+		zkau._initSibs(n, to, false);
+	},
+	addChd: function (uuid, cmp, dt1) {
+		var n = $(uuid + "!child");
+		if (n) {
+			var to = n.previousSibling;
+			zk.insertHTMLBefore(n, dt1);
+			zkau._initSibs(n, to, false);
+		} else {
+			cmp = zkau.getReal(cmp); //go into the real tag (e.g., tabpanel)
+			var n = cmp.lastChild;
+			zk.insertHTMLBeforeEnd(cmp, dt1);
+			if (n) zkau._initSibs(n, null, true);
+			else zkau._initChildren(cmp);
+		}
+	},
+	rm: function (uuid, cmp) {
+		//NOTE: it is possible the server asking removing a non-exist cmp
+		//so keep silent if not found
+		if (cmp) {
+			zk.cleanupAt(cmp, zkau.cleanupMeta);
+			cmp = zkau._getChildExterior(cmp);
+			cmp.parentNode.removeChild(cmp);
+		}
+		if (zkau.valid) zkau.valid.fixerrboxes();
+	},
+	focus: function (uuid, cmp) {
+		cmp = zkau.getReal(cmp); //focus goes to inner tag
+		if (cmp.focus && !cmp.disabled)
+			zk.focusById(cmp.id, 5);
+				//delay it because focusDownById might be called implicitly
+	},
+	selAll: function (uuid, cmp) {
+		cmp = zkau.getReal(cmp); //select goes to inner tag
+		if (cmp.select)
+			zk.selectById(cmp.id);
+	},
+	doPop: function (cmp) {
+		zkau.doPopup(cmp);
+	},
+	endPop: function (uuid, cmp) {
+		zkau.endPopup(uuid);
+	},
+	doOvl: function (cmp) {
+		zkau.doOverlapped(cmp);
+	},
+	endOvl: function (uuid, cmp) {
+		zkau.endOverlapped(uuid);
+	},
+	meta: function (uuid, cmp, dt1, dt2, dt3, dt4) {
+		var meta = zkau.getMeta(uuid);
+		if (meta) meta[dt1].call(meta, dt2, dt3, dt4);
+	},
+	closeErrbox: function (uuid, cmp) {
+		if (zkau.valid) {
+			zkau.valid.closeErrbox(uuid);
+			zkau.valid.closeErrbox(uuid + "!real");
+		}
+	},
+	submit: function (uuid, cmp) {
+		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
+	}
+};
