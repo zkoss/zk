@@ -10,9 +10,10 @@ ZK 1.2.0
   1480281, 1480035, 1467959, 1480525, 1480791, 1480866, 1481090, 1474217,
   1482954, 1482236, 1484344, 1485460, 1483149, 1488664, 1486334, 1487144,
   1486616, 1492803, 1494217, 1488178, 1493604, 1494820, 1489942, 1397863,
-  1495630.
+  1495630, 1490672 .
 	+ Macro components are supported
-	+ Listbox supports sorting
+	+ Sorting of Listbox and grid are supported
+	+ Bookmarks are supported
 	+ Developers are allowed to define new components in a page
 	+ Three new components: calendar, imagemap and area.
 	+ The custom-attributes element is added to simplify the assignment
@@ -35,7 +36,7 @@ ZK 1.2.0
   1477271, 1482503, 1483647, 1485232, 1482229, 1486222, 1486314, 1484756,
   1485400, 1486840, 1487095, 1487925, 1486617, 1488662, 1488666, 1483779,
   1488938, 1489299, 1489347, 1491464, 1492530, 1492946, 1494029, 1491836,
-  1490365, 1494970, 1495427, 1495425.
+  1490365, 1494970, 1495427, 1495425, 1496769.
 	+ The alignment of header and body of grid, listbox and tree are improved
 	  to handle all known extremely cases.
 	+ Work with Oracle OC4J 10.1.3
