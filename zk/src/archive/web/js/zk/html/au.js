@@ -139,12 +139,8 @@ zkau.send = function (evt, timeout) {
 	else if (timeout > 0) setTimeout(zkau._sendNow, timeout);
 };
 zkau._sendNow = function () {
-	if (!zk_action) {
-		alert(mesg.NOT_FOUND+"zk_action");
-		return;
-	}
-	if (!zk_desktopId) {
-		alert(mesg.NOT_FOUND+"zk_desktopId");
+	if (!zk_action || !zk_desktopId) {
+		zk.error(mesg.NOT_FOUND+"zk_action or zk_desktopId");
 		return;
 	}
 
@@ -195,12 +191,12 @@ zkau._sendNow = function () {
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			req.send(content);
 			//zkau._lastSend = new Date();
-			if (!implicit) zk.progress(900); //wait a moment to avoid to annoying
+			if (!implicit) zk.progress(900); //wait a moment to avoid annoying
 		} catch (e) {
-			alert(mesg.FAILED_TO_SEND+zk_action+"\n"+content+"\n"+e.message);
+			zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+"\n"+e.message);
 		}
 	} else {
-		alert(mesg.FAILED_TO_SEND+zk_action+"\n"+content);
+		zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content);
 	}
 };
 
@@ -308,7 +304,7 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 		return;
 	}
 
-	alert(mesg.ILLEGAL_RESPONSE+"Unknown command: "+cmd);
+	zk.error(mesg.ILLEGAL_RESPONSE+"Unknown command: "+cmd);
 };
 zk.process = zkau.process; //ZK assumes zk.process, so change it
 
@@ -435,7 +431,7 @@ zkau.setAttr = function (cmp, name, value) {
 		var j = name.indexOf('.'); 
 		if (j >= 0) {
 			if ("style" != name.substring(0, j)) {
-				alert(mesg.UNSUPPORTED+name);
+				zk.error(mesg.UNSUPPORTED+name);
 				return;
 			}
 			name = name.substring(j + 1);
@@ -488,7 +484,7 @@ zkau.rmAttr = function (cmp, name) {
 		var j = name.indexOf('.'); 
 		if (j >= 0) {
 			if ("style" != name.substring(0, j)) {
-				alert(mesg.UNSUPPORTED+name);
+				zk.error(mesg.UNSUPPORTED+name);
 				return;
 			}
 			cmp.style[name.substring(j + 1)] = "";
@@ -927,7 +923,7 @@ zkau.getMeta = function (cmp) {
 zkau.setMeta = function (cmp, info) {
 	var id = typeof cmp == 'string' ? cmp: cmp ? cmp.id: null;
 	if (!id) {
-		alert(mesg.COMP_OR_UUID_REQUIRED);
+		zk.error(mesg.COMP_OR_UUID_REQUIRED);
 		return;
 	}
 	zkau._metas[zkau.uuidOf(id)] = info;
@@ -1254,7 +1250,7 @@ zkau.cmd0 = { //no uuid at all
 	obsolete: function (dt0, dt1) { //desktop timeout
 		if (dt0 == zk_desktopId) //just in case
 			zkau._cleanupOnFatal();
-		alert(dt1);
+		zk.error(dt1);
 	},
 	alert: function (dt0, dt1) {
 		var cmp = dt0 ? $(dt0): null;

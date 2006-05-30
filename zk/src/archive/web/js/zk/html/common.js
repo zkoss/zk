@@ -1166,28 +1166,6 @@ zk.formatDate = function (val, fmt) {
 	return txt;
 };
 
-//-- HTML/XML --//
-zk.encodeXML = function (txt, multiline) {
-	var out = "";
-	if (txt)
-		for (var j = 0; j < txt.length; ++j) {
-			var cc = txt.charAt(j);
-			switch (cc) {
-			case '<': out += "&lt;"; break;
-			case '>': out += "&gt;"; break;
-			case '&': out += "&amp;"; break;
-			case '\n':
-				if (multiline) {
-					out += "<br/>";
-					break;
-				}
-			default:
-				out += cc;
-			}
-		}
-	return out
-};
-
 /** Returns an integer of the attribute of the specified element. */
 zk.getIntAttr = function (el, nm) {
 	return parseInt(el.getAttribute(nm) || "0", 10);

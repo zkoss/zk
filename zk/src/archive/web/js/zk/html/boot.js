@@ -395,35 +395,6 @@ zk._newProgDlg = function (id, msg, x, y) {
 	return document.getElementById(id);
 };
 
-//-- debug --//
-/** Generates a message for debugging. */
-zk.message = function (msg) {
-	var console = document.getElementById("zk_console");
-	if (!console) {
-		console = document.createElement("DIV");
-		document.body.appendChild(console);
-		var html =
- '<div style="border:1px solid #77c">'
-+'<table cellpadding="0" cellspacing="0" width="100%"><tr><td width="20pt">'
-+'<button onclick="zk._dbgclose(this)">close</button><br/>'
-+'<button onclick="document.getElementById(\'zk_console\').value = \'\'">clear</button></td>'
-+'<td><textarea id="zk_console" style="width:100%" rows="3"></textarea></td></tr></table></div>';
-		zk._setOuterHTML(console, html);
-		console = document.getElementById("zk_console");
-	}
-	console.value = console.value + msg + '\n';
-};
-zk._dbgclose = function (n) {
-	while ((n = n.parentNode) != null)
-		if (zk.tagName(n) == "DIV") {
-			n.parentNode.removeChild(n);
-			return;
-		}
-};
-//FUTURE: developer could control whether to turn on/off
-zk.debug = zk.message;
-zk.error = zk.message;
-
 //-- utilities --//
 /** Returns the x coordination of the visible part. */
 zk.innerX = function () {
@@ -475,6 +446,83 @@ zk.pause = function (millis) {
 		do {
 			n = new Date();
 		} while (n - d < millis);
+	}
+};
+
+//-- HTML/XML --//
+zk.encodeXML = function (txt, multiline) {
+	var out = "";
+	if (txt)
+		for (var j = 0; j < txt.length; ++j) {
+			var cc = txt.charAt(j);
+			switch (cc) {
+			case '<': out += "&lt;"; break;
+			case '>': out += "&gt;"; break;
+			case '&': out += "&amp;"; break;
+			case '\n':
+				if (multiline) {
+					out += "<br/>";
+					break;
+				}
+			default:
+				out += cc;
+			}
+		}
+	return out
+};
+
+//-- debug --//
+/** Generates a message for debugging. */
+zk.message = function (msg) {
+	var console = document.getElementById("zk_msg");
+	if (!console) {
+		console = document.createElement("DIV");
+		document.body.appendChild(console);
+		var html =
+ '<div style="border:1px solid #77c">'
++'<table cellpadding="0" cellspacing="0" width="100%"><tr>'
++'<td width="20pt"><button onclick="zk._msgclose(this)">close</button><br/>'
++'<button onclick="document.getElementById(\'zk_msg\').value = \'\'">clear</button></td>'
++'<td><textarea id="zk_msg" style="width:100%" rows="3"></textarea></td></tr></table></div>';
+		zk._setOuterHTML(console, html);
+		console = document.getElementById("zk_msg");
+	}
+	console.value = console.value + msg + '\n';
+};
+zk._msgclose = function (n) {
+	while ((n = n.parentNode) != null)
+		if (zk.tagName(n) == "DIV") {
+			n.parentNode.removeChild(n);
+			return;
+		}
+};
+//FUTURE: developer could control whether to turn on/off
+zk.debug = zk.message;
+
+/** Error message must be a popup. */
+zk.error = function (msg) {
+	if (!zk._errcnt) zk._errcnt = 1;
+	var id = "zk_err_" + zk._errcnt++;
+	var box = document.createElement("DIV");
+	document.body.appendChild(box);
+	var html =
+ '<div style="position:absolute;z-index:99000;padding:3px;left:'
++(zk.innerX()+50)+'px;top:'+(zk.innerY()+20)
++'px;width:250px;border:1px solid #963;background-color:#fc9" id="'
++id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
++'<td width="20pt"><button onclick="zk._msgclose(this)">close</button></td>'
++'<td style="border:1px inset">'+zk.encodeXML(msg, true) //Bug 1463668: security
++'</td></tr></table></div>';
+	zk._setOuterHTML(box, html);
+	box = document.getElementById(id); //we have to retrieve back
+
+	try {
+		new Draggable(box, {
+			handle: box, zindex: box.style.zIndex,
+			starteffect: Prototype.emptyFunction,
+			starteffect: Prototype.emptyFunction,
+			endeffect: Prototype.emptyFunction});
+	} catch (e) {
 	}
 };
 
