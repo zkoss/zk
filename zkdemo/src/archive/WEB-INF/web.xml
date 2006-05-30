@@ -78,65 +78,6 @@ The servlet loads the DSP pages.
 	</servlet-mapping>
 	<!-- //// -->
 
-	<!-- /////////////// -->
-	<!-- Begin of Portal -->
-	<!-- DO NOT <load-on-startup>, because it has to wait other war
-		being deployed.
-	-->
-	<!-- Used only with Potix Portal
-	<servlet>
-		<description><![CDATA[
-The servlet loads the portal layout.
-		]]></description>
-		<servlet-name>pxpLoader</servlet-name>
-		<servlet-class>com.potix.pxp.PortalServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>pxpLoader</servlet-name>
-		<url-pattern>*.pxp</url-pattern>
-	</servlet-mapping>
-	-->
-	<!-- Invoker is required only if portlet is used
-		In this module, we use pxp only for layout tools
-	<servlet>
-		<description><![CDATA[
-The portlet invoker is an internal servlet that is not visible to user.
-Each war containing portlet.xml must have exactly one definition of it.
-		]]></description>
-		<servlet-name>portlet-invoker</servlet-name>
-		<servlet-class>com.potix.pxp.PortletInvokerServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>portlet-invoker</servlet-name>
-		<url-pattern>/portlet-invoker/*</url-pattern>
-	</servlet-mapping>
-	-->
-	<!-- End of Portal -->
-	<!-- ///////////// -->
-
-	<!-- /////////// -->
-	<!-- Error Pages -->
-	<!-- NOTE: the exception page must be linked in the bypass parameter
-		of the authenticator filter. Otherwise, a deadloop might occur.
-	<error-page>
-	  <exception-type>java.lang.Throwable</exception-type>
-	  <location>/error/exception.html.jsp</location>
-	</error-page>
-	-->
-	<!-- SC_NOT_FOUND
-	<error-page>
-	  <error-code>404</error-code>
-	  <location>/error/404.html.jsp</location>
-	</error-page>
-	-->
-	<!-- SC_SERVICE_UNAVAILABLE
-	<error-page>
-	  <error-code>503</error-code>
-	  <location>/error/503.html.jsp</location>
-	</error-page>
-	-->
-	<!-- /////////// -->
-
 	<!-- /////////// -->
 	<!-- Miscellaneous -->
 	<session-config>
