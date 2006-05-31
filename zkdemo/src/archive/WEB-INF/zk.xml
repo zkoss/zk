@@ -31,6 +31,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</system-config>
 	-->
 
+	<session-config>
+		<timeout-url>/timeout.zul</timeout-url>
+	</session-config>
 	<listener>
 		<description>[Optional] Mointor the statistic</description>
 		<listener-class>com.potix.zk.ui.util.Statistic</listener-class>
