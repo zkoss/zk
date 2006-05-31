@@ -86,14 +86,14 @@ public class ConfigParser {
 			//session-config
 			//	session-timeout
 			//	max-desktops-per-session
-			//	timeout-url
+			//	timeout-uri
 				parseIntProp("com.potix.zk.session.MaxInactiveInterval",
 					el, "session-timeout", false);
 				parseIntProp("com.potix.zk.ui.desktop.numPerSessions",
 					el, "max-desktops-per-session", true);
 
-				final String s = el.getElementValue("timeout-url", true);
-				if (s != null) config.setTimeoutURL(s);
+				final String s = el.getElementValue("timeout-uri", true);
+				if (s != null) config.setTimeoutURI(s);
 			} else if ("language-config".equals(elnm)) {
 			//language-config
 			//	addon-uri

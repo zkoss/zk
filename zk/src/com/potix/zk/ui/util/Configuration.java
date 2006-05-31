@@ -54,7 +54,7 @@ public class Configuration {
 		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
 		_dtInits = new LinkedList(), _dtCleans = new LinkedList();
 	private Monitor _monitor;
-	private String _timeoutUrl;
+	private String _timeoutUri;
 
 	/** Adds a listener class.
 	 */
@@ -383,26 +383,26 @@ public class Configuration {
 		}
 	}
 
-	/** Sets the URL that is used when the session timeout or
+	/** Sets the URI that is used when the session timeout or
 	 * desktop is no longer available.
 	 *
-	 * @param url the URL used if timeout, or null to show an error message
-	 * at the client only. If empty, it works as reloading the same URL again.
+	 * @param uri the URI used if timeout, or null to show an error message
+	 * at the client only. If empty, it works as reloading the same URI again.
 	 */
-	public void setTimeoutURL(String url) {
-		_timeoutUrl = url;
+	public void setTimeoutURI(String uri) {
+		_timeoutUri = uri;
 	}
-	/** Sets the URL that is used when the session timeout or
+	/** Sets the URI that is used when the session timeout or
 	 * desktop is no longer available, or null.
 	 *
 	 * <p>Default: null.
 	 *
 	 * <p>If null is returned, an message is shown up at the client.
-	 * If empty, it works as reloading the same URL again.
-	 * If non null, the browser will be redirected to the returned URL.
+	 * If empty, it works as reloading the same URI again.
+	 * If non null, the browser will be redirected to the returned URI.
 	 */
-	public String getTimeoutURL() {
-		return _timeoutUrl;
+	public String getTimeoutURI() {
+		return _timeoutUri;
 	}
 
 	/** Returns the monitor for this application, or null if not set.

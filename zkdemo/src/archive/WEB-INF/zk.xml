@@ -33,7 +33,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<!-- Optional -->
 	<session-config>
-		<timeout-url>/timeout.zul</timeout-url>
+		<timeout-uri>/timeout.zul</timeout-uri>
 		<!-- An empty URL can cause the browser to reload the same URL
 		<timeout-url></timeout-url>
 		-->

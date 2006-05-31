@@ -182,12 +182,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			final String scmd = request.getParameter("cmd.0");
 			if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
 			&& !"onTimer".equals(scmd)) {//possible in FF due to cache
-				String url = wapp.getConfiguration().getTimeoutURL();
+				String uri = wapp.getConfiguration().getTimeoutURI();
 				final AuResponse resp;
-				if (url != null) {
-					if (url.length() != 0)
-						url = Encodes.encodeURL(_ctx, request, response, url);
-					resp = new AuSendRedirect(url, null);
+				if (uri != null) {
+					if (uri.length() != 0)
+						uri = Encodes.encodeURL(_ctx, request, response, uri);
+					resp = new AuSendRedirect(uri, null);
 				} else {
 					resp = new AuObsolete(
 						dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
