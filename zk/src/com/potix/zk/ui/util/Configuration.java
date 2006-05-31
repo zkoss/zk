@@ -387,10 +387,10 @@ public class Configuration {
 	 * desktop is no longer available.
 	 *
 	 * @param url the URL used if timeout, or null to show an error message
-	 * at the client only.
+	 * at the client only. If empty, it works as reloading the same URL again.
 	 */
 	public void setTimeoutURL(String url) {
-		_timeoutUrl = url != null && url.length() != 0 ? url: null;
+		_timeoutUrl = url;
 	}
 	/** Sets the URL that is used when the session timeout or
 	 * desktop is no longer available, or null.
@@ -398,6 +398,7 @@ public class Configuration {
 	 * <p>Default: null.
 	 *
 	 * <p>If null is returned, an message is shown up at the client.
+	 * If empty, it works as reloading the same URL again.
 	 * If non null, the browser will be redirected to the returned URL.
 	 */
 	public String getTimeoutURL() {

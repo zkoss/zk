@@ -31,9 +31,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</system-config>
 	-->
 
+	<!-- Optional -->
 	<session-config>
 		<timeout-url>/timeout.zul</timeout-url>
+		<!-- An empty URL can cause the browser to reload the same URL
+		<timeout-url></timeout-url>
+		-->
 	</session-config>
+
+	<!-- Optional -->
 	<listener>
 		<description>[Optional] Mointor the statistic</description>
 		<listener-class>com.potix.zk.ui.util.Statistic</listener-class>

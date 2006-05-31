@@ -185,8 +185,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				String url = wapp.getConfiguration().getTimeoutURL();
 				final AuResponse resp;
 				if (url != null) {
-					if (".".equals(url)) url = "";
-					else url = Encodes.encodeURL(_ctx, request, response, url);
+					if (url.length() != 0)
+						url = Encodes.encodeURL(_ctx, request, response, url);
 					resp = new AuSendRedirect(url, null);
 				} else {
 					resp = new AuObsolete(
