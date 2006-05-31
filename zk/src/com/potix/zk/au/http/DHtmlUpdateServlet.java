@@ -50,12 +50,14 @@ import com.potix.sound.AAudio;
 import com.potix.web.servlet.Servlets;
 import com.potix.web.servlet.Charsets;
 import com.potix.web.servlet.http.Https;
+import com.potix.web.servlet.http.Encodes;
 import com.potix.web.servlet.http.HttpMultipartRequest;
 import com.potix.web.servlet.auth.Authens;
 import com.potix.web.util.resource.ClassWebResource;
 
 import com.potix.zk.mesg.MZk;
 import com.potix.zk.ui.Execution;
+import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Page;
@@ -71,8 +73,10 @@ import com.potix.zk.ui.sys.UiEngine;
 import com.potix.zk.ui.http.ExecutionImpl;
 import com.potix.zk.ui.http.DHtmlLayoutServlet;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.AuResponse;
 import com.potix.zk.au.AuObsolete;
 import com.potix.zk.au.AuAlert;
+import com.potix.zk.au.AuSendRedirect;
 import com.potix.zk.au.CommandNotFoundException;
 
 /**
@@ -156,7 +160,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	private void process(Session sess,
 	HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		final WebAppCtrl wappc = (WebAppCtrl)sess.getWebApp();
+		final WebApp wapp = sess.getWebApp();
+		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 		final UiEngine uieng = wappc.getUiEngine();
 		final List aureqs = new LinkedList();
 
@@ -176,9 +181,19 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 			final String scmd = request.getParameter("cmd.0");
 			if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
-			&& !"onTimer".equals(scmd)) //possible in FF due to cache
-				uieng.response(new AuObsolete(
-					dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid)), out);
+			&& !"onTimer".equals(scmd)) {//possible in FF due to cache
+				String url = wapp.getConfiguration().getTimeoutURL();
+				final AuResponse resp;
+				if (url != null) {
+					if (".".equals(url)) url = "";
+					else url = Encodes.encodeURL(_ctx, request, response, url);
+					resp = new AuSendRedirect(url, null);
+				} else {
+					resp = new AuObsolete(
+						dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
+				}
+				uieng.response(resp, out);
+			}
 
 			outResponsePostfix(out);
 			return;
