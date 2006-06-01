@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:choose>
 <c:when test="${self.multiline}"><%-- textarea doesn't support maxlength --%>
-<textarea id="${self.uuid}" zk_type="zul.html.widget.Txbox"${self.outerAttrs}${self.innerAttrs}><c:out value="${self.value}" multilineReplace=""/></textarea>
+<textarea id="${self.uuid}" zk_type="zul.html.widget.Txbox"${self.outerAttrs}${self.innerAttrs}><c:out value="${self.textNCUE}" multilineReplace=""/></textarea>
 </c:when>
 <c:otherwise>
 <input id="${self.uuid}" zk_type="zul.html.widget.Txbox"${self.outerAttrs}${self.innerAttrs}/>

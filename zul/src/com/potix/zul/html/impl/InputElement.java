@@ -149,8 +149,11 @@ implements Inputable, Errorable, Constrainted {
 		return getTextNCUE();
 	}
 	/** Returns the value in String w/o checking any user error (NCUE).
+	 *
+	 * <p>It is used only for component development. Don't call it
+	 * in applications.
 	 */
-	private String getTextNCUE() {
+	public final String getTextNCUE() {
 		return coerceToString(_value);
 	}
 
