@@ -31,7 +31,8 @@ import com.potix.zk.ui.util.VariableResolver;
  *
  * <p>Note: we resolve the class by use fo Classes.forNameByThread.
  * In other words, it doesn't support the class defined in zscript.
- * Why not? Better performance and constant with VariableResolver.
+ * Why not? Since there is no way to run zscript before the init directive
+ * (and better performance).
  * </p>
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>

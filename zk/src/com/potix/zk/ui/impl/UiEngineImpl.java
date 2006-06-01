@@ -208,6 +208,10 @@ public class UiEngineImpl implements UiEngine {
 			((ExecutionCtrl)exec).setCurrentPage(page);
 
 			final PageDefinition pagedef = page.getDefinition();
+			pagedef.addVariableResolvers(page);
+				//Note: we add variable resolvers before init
+				//because inti's zscirpt might depend on it.
+
 			final Initiators inits = Initiators.doInit(pagedef, page);
 			try {
 				if (pagedef != null) pagedef.init(page);
