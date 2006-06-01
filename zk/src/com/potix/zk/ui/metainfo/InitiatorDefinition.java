@@ -12,6 +12,8 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package com.potix.zk.ui.metainfo;
@@ -24,11 +26,16 @@ import com.potix.util.logging.Log;
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.util.Initiator;
 
 /**
  * A definition of the initiator.
+ *
+ * <p>Note: we resolve the class by use fo Classes.forNameByThread.
+ * In other words, it doesn't support the class defined in zscript.
+ * Why not? Since there is no way to run zscript before the init directive
+ * (and better performance).
+ * </p>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

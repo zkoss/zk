@@ -18,14 +18,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.impl.bsh;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
+import java.io.Reader;
 import java.io.StringReader;
 
 import bsh.BshClassManager;
 import bsh.NameSpace;
-import bsh.EvalError;
 import bsh.Primitive;
+import bsh.EvalError;
+import bsh.UtilEvalError;
 
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Interpreter;
@@ -109,7 +112,7 @@ public class BshInterpreter implements Interpreter {
 			//NameSpace later to support addVariableResolver.
 			//LiteNameSpace is used because its performance is better
 			//-- no loading packages
-			super(new StringReader(""),  System.out, System.err, false,
+			super(_in,  System.out, System.err, false,
 				new LiteNameSpace(null, "global"));
 			this.evalOnly = true;
 			try {
@@ -121,9 +124,28 @@ public class BshInterpreter implements Interpreter {
 			setClassLoader(Thread.currentThread().getContextClassLoader());
 		}
 	}
+	private static final Reader _in = new StringReader("");
+
+	/** Extends NameSpace to support _resolvers. */
 	private class MyNameSpace extends NameSpace {
 	    private MyNameSpace(BshClassManager classManager, String name) {
 	    	super(classManager, name);
 	    }
+
+		public Object getVariable( String name, boolean recurse ) 
+		throws UtilEvalError {
+			final Object o = super.getVariable(name, recurse);
+
+			if ((o == null || o == Primitive.VOID)
+			&& _resolvers != null) {
+				for (Iterator it = _resolvers.iterator(); it.hasNext();) {
+					final Object v =
+						((VariableResolver)it.next()).getVariable(name);
+					if (v != null) return v;
+				}
+			}
+
+			return o;
+		}
 	}
 }

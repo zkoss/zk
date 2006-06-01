@@ -244,7 +244,20 @@ public class Parser {
 					clsnm.indexOf("${") >= 0 ? //class supports EL
 						new InitiatorDefinition(clsnm, args):
 						new InitiatorDefinition(locateClass(clsnm), args));
+					//Note: we don't resolve the class name later because
+					//no zscript run before init (and better performance)
 			}
+		} else if ("variable-resolver".equals(target)) {
+			final String clsnm = (String)params.remove("class");
+			if (isEmpty(clsnm))
+				throw new UiException("The class attribute is required, "+pi.getLocator());
+			if (!params.isEmpty())
+				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
+
+			pgdef.addVariableResolverDefinition(
+				clsnm.indexOf("${") >= 0 ? //class supports EL
+					new VariableResolverDefinition(clsnm):
+					new VariableResolverDefinition(locateClass(clsnm)));
 		} else if ("component".equals(target)) { //declare a component
 			final String name = (String)params.remove("name");
 			if (isEmpty(name)) throw new UiException("name is required, "+pi.getLocator());
@@ -292,7 +305,7 @@ public class Parser {
 
 				compdef = new ComponentDefinition(null, name, (Class)null);
 				compdef.setImplementationClass(clsnm);
-					//Resolve later since might defined in zscript
+					//Resolve later since might be defined in zscript
 			}
 
 			pgdef.addComponentDefinition(compdef);

@@ -39,6 +39,8 @@ import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Condition;
+import com.potix.zk.ui.util.Initiator;
+import com.potix.zk.ui.util.VariableResolver;
 import com.potix.zk.ui.sys.ComponentCtrl;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.PageCtrl;
@@ -59,8 +61,8 @@ public class PageDefinition extends InstanceDefinition {
 	private FunctionMapper _mapper;
 	private final List _styleSheets = new LinkedList(),
 		_roStyleSheets = Collections.unmodifiableList(_styleSheets);
-	private final List _initdefs = new LinkedList(),
-		_roInitdefs = Collections.unmodifiableList(_initdefs);
+	private final List _initdefs = new LinkedList();
+	private final List _resolvdefs = new LinkedList();
 	/** A map of component definition defined in this page. */
 	private Map _compdefs;
 	/** Map(String clsnm, ComponentDefinition compdef). */
@@ -102,18 +104,63 @@ public class PageDefinition extends InstanceDefinition {
 	public List getStyleSheets() {
 		return _roStyleSheets;
 	}
+
 	/** Adds a defintion of {@link com.potix.zk.ui.util.Initiator}. */
 	public void addInitiatorDefinition(InitiatorDefinition init) {
 		synchronized (_initdefs) {
 			_initdefs.add(init);
 		}
 	}
-	/** Returns a readonly list of all initiator definitions,
-	 * {@link InitiatorDefinition}, never null.
+	/** Returns a list of all {@link Initiator} and invokes
+	 * its {@link Initiator#doInit} before returning.
+	 * It never returns null.
 	 */
-	public List getInitiatorDefinitions() {
-		return _roInitdefs;
+	public List doInit(Page page) {
+		if (_initdefs == null || _initdefs.isEmpty())
+			return Collections.EMPTY_LIST;
+
+		final List inits = new LinkedList();
+		for (Iterator it = _initdefs.iterator(); it.hasNext();) {
+			final InitiatorDefinition def = (InitiatorDefinition)it.next();
+			try {
+				final Initiator init = def.newInitiator(this, page);
+				if (init != null) {
+					init.doInit(page, def.getArguments(this, page));
+					inits.add(init);
+				}
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+			}
+		}
+		return inits;
 	}
+
+	/** Adds a defintion of {@link com.potix.zk.ui.util.VariableResolver}. */
+	public void addVariableResolverDefinition(VariableResolverDefinition resolver) {
+		synchronized (_resolvdefs) {
+			_resolvdefs.add(resolver);
+		}
+	}
+	/** Adds all variable resolvers to the specified page.
+	 */
+	public void addVariableResolvers(Page page) {
+		if (_resolvdefs == null || _resolvdefs.isEmpty())
+			return;
+
+		for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
+			final VariableResolverDefinition def =
+				(VariableResolverDefinition)it.next();
+			try {
+				final VariableResolver resolv =
+					def.newVariableResolver(this, page);
+				if (resolv != null)
+					page.addVariableResolver(resolv);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+			}
+		}
+	}
+
 	/** Adds a component definition belonging to this page definition only.
 	 */
 	public void addComponentDefinition(ComponentDefinition compdef) {

@@ -4,6 +4,7 @@ commons-fileupload.jar
 commons-logging.jar
 javax.servlet.jar
 javax.servlet.jsp.jar
+spring.jar
 portlet-api.jar
 jasper-compiler.jar
 pluto.jar

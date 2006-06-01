@@ -43,23 +43,8 @@ import com.potix.zk.ui.metainfo.InitiatorDefinition;
 	 * an instance of{@link Initiators}.
 	 */
 	public static final Initiators doInit(PageDefinition pagedef, Page page) {
-		final List initdefs =
-			pagedef != null ? pagedef.getInitiatorDefinitions(): null;
-		if (initdefs == null || initdefs.isEmpty()) return new Initiators();
-
-		final List inits = new LinkedList();
-		for (Iterator it = initdefs.iterator(); it.hasNext();) {
-			final InitiatorDefinition def = (InitiatorDefinition)it.next();
-			try {
-				final Initiator init = def.newInitiator(pagedef, page);
-				if (init != null) {
-					init.doInit(page, def.getArguments(pagedef, page));
-					inits.add(init);
-				}
-			} catch (Throwable ex) {
-				throw UiException.Aide.wrap(ex);
-			}
-		}
+		final List inits = pagedef.doInit(page);
+		if (inits.isEmpty()) return new Initiators();
 		return new RealInits(inits);
 	}
 	protected Initiators() {
