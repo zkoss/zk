@@ -15,6 +15,7 @@ ZK 1.2.0
 	+ Sorting of Listbox and grid are supported
 	+ Browser history management is supported
 	+ Developers are allowed to define new components in a page
+	+ Developers can store UI (ZUML pages) in database or any other repository.
 	+ Three new components: calendar, imagemap and area.
 	+ The custom-attributes element is added to simplify the assignment
 	  of custom attributes.
