@@ -41,14 +41,13 @@ import com.potix.zk.ui.util.VariableResolver;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class BshInterpreter implements Interpreter {
-	private final MyInterpreter _ip;
+	private final bsh.Interpreter _ip;
 	private final Namespace _ns;
 	/** A list of {@link VariableResolver}. */
 	private List _resolvers;
 
 	public BshInterpreter() {
-		_ip = new MyInterpreter();
-		_ip.setNameSpace(new MyNameSpace(_ip.getClassManager(), "global"));
+		_ip = newInterpreter();
 		_ns = new BshNamespace(_ip.getNameSpace());
 	}
 
@@ -105,29 +104,43 @@ public class BshInterpreter implements Interpreter {
 		}
 	}
 
-	//help classes//
+	//Creating a light-weigt interpreter//
+	/** Creates an interpreter instance. */
+	private MyInterpreter newInterpreter() {
+		//To speed up the performance, we creates LiteNameSpace since
+		//We will replace it later
+
+		final NameSpace nsTemp = new LiteNameSpace(null, "global");
+		try {
+			nsTemp.setVariable("bsh", new MyThis(), false);
+		} catch (UtilEvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+		final MyInterpreter ip = new MyInterpreter(nsTemp);
+		ip.setNameSpace(new MyNameSpace(ip.getClassManager(), "global"));
+		ip.setClassLoader(Thread.currentThread().getContextClassLoader());
+		try {
+			ip.set( "bsh.evalOnly", new Primitive(true) );
+		} catch (EvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+		return ip;
+	}
+
 	private static class MyInterpreter extends bsh.Interpreter {
-		private MyInterpreter() {
+		private MyInterpreter(NameSpace nsTemp) {
 			//We don't use Interpreter() since we will assign another
 			//NameSpace later to support addVariableResolver.
 			//LiteNameSpace is used because its performance is better
 			//-- no loading packages
-			super(_in,  System.out, System.err, false,
-				new LiteNameSpace(null, "global"));
+			super(_in,  System.out, System.err, false, nsTemp);
 			this.evalOnly = true;
-			try {
-				set( "bsh.evalOnly", new Primitive(true) );
-			} catch (EvalError ex) {
-				throw UiException.Aide.wrap(ex);
-			}
-
-			setClassLoader(Thread.currentThread().getContextClassLoader());
 		}
 	}
 	private static final Reader _in = new StringReader("");
 
-	/** Extends NameSpace to support _resolvers. */
 	private class MyNameSpace extends NameSpace {
+		/** Don't call this method. */
 	    private MyNameSpace(BshClassManager classManager, String name) {
 	    	super(classManager, name);
 	    }
@@ -146,6 +159,13 @@ public class BshInterpreter implements Interpreter {
 			}
 
 			return o;
+		}
+	}
+	/** Extends This to provide a fake NameSpace that will be removed soon.
+	 */
+	private static class MyThis extends bsh.This {
+		private MyThis() {
+			super(null, null);
 		}
 	}
 }

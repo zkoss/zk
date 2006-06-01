@@ -291,7 +291,7 @@ public class EventProcessingThread extends Thread {
 						ExecutionsCtrl.setCurrent(null);
 						SessionsCtrl.setCurrent(null);
 						Apps.setThreadLocale(_locale = null);
-//						if (D.ON && log.finerable()) log.finer("Real processing is done; "+_event);
+						if (D.ON && log.finerable()) log.finer("Real processing is done; "+_event);
 					}
 				}
 
