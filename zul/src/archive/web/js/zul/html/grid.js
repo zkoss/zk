@@ -58,15 +58,17 @@ zk.Grid.prototype = {
 			Event.observe(window, "resize", this.fnResize);
 		}
 
-		if (zk.agtNav && this.headtbl && this.headtbl.rows.length) {
+		if (zk.agtNav && this.headtbl && this.headtbl.rows.length == 1) {
 			var headrow = this.headtbl.rows[0];
 			var empty = true;
+			l_out:
 			for (var j = headrow.cells.length; --j>=0;)
-				if (headrow.cells[j].firstChild) {
-					empty = false;
-					break;
-				}
-			this.head.style.display = empty ? "none": "";
+				for (var n = headrow.cells[j].firstChild; n; n = n.nextSibling)
+					if (!n.id || !n.id.endsWith("!hint")) {
+						empty = false;
+						break l_out;
+					}
+			if (empty) this.head.style.display = "none";
 				//we have to hide if empty (otherwise, a small block is shown)
 		}
 
