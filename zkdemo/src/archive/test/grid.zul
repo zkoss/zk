@@ -122,4 +122,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			</row>
 		</rows>
 	</grid>
+	<grid>
+		<columns>
+			<column/>
+			<column align="center"/>
+			<column align="right"/>
+		</columns>
+		<rows>
+			<row>Testing whether header is visible</row>
+		</rows>
+	</grid>
 </window>
