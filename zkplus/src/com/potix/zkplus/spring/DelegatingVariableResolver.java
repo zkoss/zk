@@ -27,7 +27,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- * DelegatingVariableResolver, a spring bean variable resolver
+ * DelegatingVariableResolver, a spring bean variable resolver.
+ *
+ * <p>It defines a variable called <code>springContext</code> to represent
+ * the instance of <code>org.springframework.context.ApplicationContext</code>.
+ * It also looks variables for beans defined in <code>springContext</code>.
+ *
+ * <p>Usage:<br>
+ * <code>&lt;?variable-resolver class="com.potix.zkplus.spring.DelegatingVariableResolver"?&gt;</code>
+ *
  * @author <a href="mailto:andrewho@potix.com">andrewho@potix.com</a>
  */
 public class DelegatingVariableResolver implements VariableResolver {
@@ -48,7 +56,7 @@ public class DelegatingVariableResolver implements VariableResolver {
 	}
 	
 	/**
-	 * Get the spring bean by id name.
+	 * Get the spring bean by the specified name.
 	 */		
 	public Object getVariable(String name) {
 		Object o = _vars.get(name);
