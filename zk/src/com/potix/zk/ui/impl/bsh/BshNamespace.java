@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package com.potix.zk.ui.impl.bsh;
 
 import bsh.NameSpace;
 import bsh.UtilEvalError;
@@ -103,14 +103,5 @@ public class BshNamespace implements Namespace {
 	}
 	public boolean equals(Object o) {
 		return o instanceof BshNamespace && ((BshNamespace)o)._ns.equals(_ns);
-	}
-
-	//-- helper --//
-	private static class LiteNameSpace extends NameSpace {
-		private LiteNameSpace(NameSpace parent, String id) {
-			super(parent, id);
-		}
-	    public void loadDefaultImports() {
-	    }
 	}
 }

@@ -32,13 +32,6 @@ import java.util.Collections;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.VariableResolver;
-
-import bsh.Interpreter;
-import bsh.NameSpace;
-import bsh.EvalError;
-import bsh.Primitive;
-
 import com.potix.lang.D;
 import com.potix.lang.Objects;
 import com.potix.lang.Strings;
@@ -60,15 +53,17 @@ import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
+import com.potix.zk.ui.util.Interpreter;
 import com.potix.zk.ui.util.Namespace;
+import com.potix.zk.ui.util.VariableResolver;
 import com.potix.zk.ui.sys.ExecutionCtrl;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.ui.sys.PageCtrl;
 import com.potix.zk.ui.sys.ComponentsCtrl;
-import com.potix.zk.ui.sys.BshNamespace;
 import com.potix.zk.ui.sys.Variables;
 import com.potix.zk.ui.sys.UiEngine;
+import com.potix.zk.ui.impl.bsh.BshInterpreter;
 import com.potix.zk.au.AuSetTitle;
 
 /**
@@ -93,7 +88,6 @@ public class PageImpl implements Page, PageCtrl {
 	private Desktop _desktop;
 	private String _id;
 	private final Interpreter _ip;
-	private final Namespace _ns;
 	private String _title = "", _style = "";
 	/** A list of root components. */
 	private final List _roots = new LinkedList(),
@@ -125,9 +119,7 @@ public class PageImpl implements Page, PageCtrl {
 	public PageImpl(PageDefinition pagedef) {
 		_pagedef = pagedef;
 
-		_ip = new Interpreter();
-		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
-		_ns = new BshNamespace(_ip.getNameSpace());
+		_ip = new BshInterpreter();
 	}
 
 	/** Returns the UI engine.
@@ -245,30 +237,26 @@ public class PageImpl implements Page, PageCtrl {
 	}
 
 	public void setVariable(String name, Object val) {
-		try {
-			_ip.set(name, val);
-		} catch (EvalError ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+		_ip.setVariable(name, val);
 	}
 	public Object getVariable(String name) {
-		try {
-			return Primitive.unwrap(_ip.get(name));
-		} catch (EvalError ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+		return _ip.getVariable(name);
 	}
 	public void unsetVariable(String name) {
-		try {
-			_ip.unset(name);
-		} catch (EvalError ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+		_ip.unsetVariable(name);
+	}
+
+	public boolean addVariableResolver(VariableResolver resolver) {
+		return _ip.addVariableResolver(resolver);
+	}
+	public boolean removeVariableResolver(VariableResolver resolver) {
+		return _ip.removeVariableResolver(resolver);
 	}
 
 	public Object resolveElVariable(String name) {
 		try {
-			final VariableResolver resolv = getExecution().getVariableResolver();
+			final javax.servlet.jsp.el.VariableResolver resolv =
+				getExecution().getVariableResolver();
 			return resolv != null ? resolv.resolveVariable(name): null;
 		} catch (javax.servlet.jsp.el.ELException ex) {
 			throw UiException.Aide.wrap(ex);
@@ -356,19 +344,15 @@ public class PageImpl implements Page, PageCtrl {
 		evalStyle();
 		evalTitle();
 
-		try {
-			_ip.set("log", _zklog);
-			_ip.set("page", this);
-			_ip.set("desktop", _desktop);
-			_ip.set("pageScope", getAttributes());
-			_ip.set("desktopScope", _desktop.getAttributes());
-			final Session sess = _desktop.getSession();
-			_ip.set("session", sess);
-			_ip.set("sessionScope", sess.getAttributes());
-			_ip.set("applicationScope", _desktop.getWebApp().getAttributes());
-		} catch (EvalError ex) {
-			throw new UiException(ex);
-		}
+		_ip.setVariable("log", _zklog);
+		_ip.setVariable("page", this);
+		_ip.setVariable("desktop", _desktop);
+		_ip.setVariable("pageScope", getAttributes());
+		_ip.setVariable("desktopScope", _desktop.getAttributes());
+		final Session sess = _desktop.getSession();
+		_ip.setVariable("session", sess);
+		_ip.setVariable("sessionScope", sess.getAttributes());
+		_ip.setVariable("applicationScope", _desktop.getWebApp().getAttributes());
 
 		final String INVALID = ".&\\%";
 		if (Strings.anyOf(_id, INVALID, 0) < _id.length())
@@ -457,24 +441,23 @@ public class PageImpl implements Page, PageCtrl {
 		}
 	}
 	public Class getClass(String clsnm) throws ClassNotFoundException {
-		return _ns.getClass(clsnm);
+		return _ip.getNamespace().getClass(clsnm);
 	}
 	public final Namespace getNamespace() {
-		return _ns;
+		return _ip.getNamespace();
 	}
 	public void interpret(Component comp, String script) {
 		final Map arg = getExecution().getArg();
 		try {
-			if (arg != null) _ip.set("arg", arg);
+			if (arg != null) _ip.setVariable("arg", arg);
 			if (comp != null) {
-				_ip.set("self", comp);
-				_ip.set("spaceOwner", comp.getSpaceOwner());
-				_ip.set("spaceScope", comp.getAttributes(Component.SPACE_SCOPE));
-				_ip.set("componentScope", comp.getAttributes(Component.COMPONENT_SCOPE));
-				_ip.eval(script,
-					(NameSpace)(comp.getNamespace().getNativeNamespace()));
+				_ip.setVariable("self", comp);
+				_ip.setVariable("spaceOwner", comp.getSpaceOwner());
+				_ip.setVariable("spaceScope", comp.getAttributes(Component.SPACE_SCOPE));
+				_ip.setVariable("componentScope", comp.getAttributes(Component.COMPONENT_SCOPE));
+				_ip.eval(script, comp.getNamespace());
 			} else {
-				_ip.eval(script);
+				_ip.eval(script, null);
 			}
 		} catch (Exception ex) {
 			if (Exceptions.findCause(ex, InterruptedException.class) == null
@@ -482,14 +465,10 @@ public class PageImpl implements Page, PageCtrl {
 				log.realCauseBriefly(ex);
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			try {
-				if (arg != null) _ip.unset("arg");
-				_ip.unset("self");
-				_ip.unset("spaceOwner");
-				_ip.unset("componentScope");
-			} catch (EvalError ex) {
-				log.warning("Unable to reset the self variable");
-			}
+			if (arg != null) _ip.unsetVariable("arg");
+			_ip.unsetVariable("self");
+			_ip.unsetVariable("spaceOwner");
+			_ip.unsetVariable("componentScope");
 		}
 	}
 

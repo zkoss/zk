@@ -30,6 +30,7 @@ package com.potix.zk.ui.util;
  * interpreter).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @see Interpreter
  */
 public interface Namespace {
 	/** Returns the class defined in the beanshell.

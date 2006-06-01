@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import com.potix.zk.ui.util.Namespace;
+import com.potix.zk.ui.util.VariableResolver;
 import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.metainfo.PageDefinition;
 
@@ -205,6 +206,23 @@ public interface Page extends IdSpace {
 	 * @see #setVariable
 	 */
 	public void unsetVariable(String name);
+
+	/** Adds a name resolver that will be used to resolve a variable
+	 * by {@link #getVariable}.
+	 *
+	 * <p>Note: the variables resolved by the specified resolver are
+	 * accessible to both zscript and EL expressions.
+	 *
+	 * @return wether the resolver is added successfully.
+	 * Note: if the resolver was added before, it won't be added again
+	 * and this method returns false.
+	 */
+	public boolean addVariableResolver(VariableResolver resolver);
+	/** Removes a name resolve that was added by {@link #addVariableResolver}.
+	 *
+	 * @return false if resolved is not added before.
+	 */
+	public boolean removeVariableResolver(VariableResolver resolver);
 
 	/** Resolves the variable that EL has.
 	 *
