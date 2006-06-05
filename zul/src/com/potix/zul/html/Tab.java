@@ -103,6 +103,12 @@ public class Tab extends LabelImageElement {
 	}
 
 	//-- super --//
+	public String getOuterAttrs() {
+		final String attrs = super.getOuterAttrs();
+		final String clkattrs = getAllOnClickAttrs(true);
+			//no onClick which is handled by tab.js
+		return clkattrs == null ? attrs: attrs + clkattrs;
+	}
 	/** Returns the style class.
 	 * Note: 1) if not specified (or setSclass(null)), "tab" is assumed;
 	 * 2) if selected, it appends "sel" to super's getSclass().

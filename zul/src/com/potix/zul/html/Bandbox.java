@@ -36,7 +36,7 @@ import com.potix.zk.au.AuScript;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Bandbox extends Textbox { //note: it does NOT implement Openable to avoid redudant roundtrip
-	private Bandpopup _popup;
+	private Bandpopup _drop;
 	private String _img = "~./zul/img/bandbtn.gif";
 	private boolean _autodrop;
 
@@ -48,14 +48,14 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 		setValue(value);
 	}
 
-	/** Returns the popup window belonging to this band box.
+	/** Returns the dropdown window belonging to this band box.
 	 */
-	public Bandpopup getPopup() {
-		return _popup;
+	public Bandpopup getDropdown() {
+		return _drop;
 	}
-	/** Closes the popup ({@link #getPopup}).
+	/** Closes the popup ({@link #getDropdown}).
 	 */
-	public void closePopup() {
+	public void closeDropdown() {
 		response("close", new AuScript(this, 
 			"zkCmbox.close('" + getUuid() + "!pp',true)"));
 	}
@@ -148,11 +148,11 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (!(newChild instanceof Bandpopup))
 			throw new UiException("Unsupported child for Bandbox: "+newChild);
-		if (_popup != null)
+		if (_drop != null)
 			throw new UiException("At most one bandpopup is allowed, "+this);
 		if (super.insertBefore(newChild, refChild)) {
 			invalidate(INNER);
-			_popup = (Bandpopup)newChild;
+			_drop = (Bandpopup)newChild;
 			return true;
 		}
 		return false;
@@ -163,7 +163,6 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
-		if (child == _popup) //just in case
-			_popup = null;
+		if (child == _drop) _drop = null; //just in case
 	}
 }

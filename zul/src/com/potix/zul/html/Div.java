@@ -56,24 +56,14 @@ public class Div extends XulElement {
 
 	//-- super --//
 	public String getOuterAttrs() {
+		final String clkattrs = getAllOnClickAttrs(false);
 		final String attrs = super.getOuterAttrs();
-		final boolean bOnClick = isAsapRequired("onClick");
-		if (_align == null && !bOnClick)
+		if (_align == null && clkattrs == null)
 			return attrs;
 
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
+		final StringBuffer sb = new StringBuffer(80).append(attrs);
 		HTMLs.appendAttribute(sb, "align",  _align);
-		if (bOnClick)
-			sb.append(" zk_onClick=\"true\" zk_type=\"zul.html.widget.Div\"");
+		if (clkattrs != null) sb.append(clkattrs);
 		return sb.toString();
-	}
-
-	//-- Component --//
-	public void smartUpdate(String attr, String value) {
-		//We have to ask the client to re-initialize it (to observe onclick)
-		if ("zk_onClick".equals(attr) && "true".equals(value))
-			invalidate(OUTER);
-		else
-			super.smartUpdate(attr, value);
 	}
 }

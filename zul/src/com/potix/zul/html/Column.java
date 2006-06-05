@@ -196,6 +196,12 @@ public class Column extends HeaderElement {
 	}
 
 	//-- super --//
+	public String getOuterAttrs() {
+		final String attrs = super.getOuterAttrs();
+		final String clkattrs = getAllOnClickAttrs(false);
+		return clkattrs == null ? attrs: attrs + clkattrs;
+	}
+
 	/** Invalidates the whole grid. */
 	protected void invalidateWhole() {
 		final Grid grid = getGrid();

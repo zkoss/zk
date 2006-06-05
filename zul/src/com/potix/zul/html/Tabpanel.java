@@ -77,6 +77,11 @@ public class Tabpanel extends XulElement {
 	}
 
 	//-- super --//
+	public String getOuterAttrs() {
+		final String attrs = super.getOuterAttrs();
+		final String clkattrs = getAllOnClickAttrs(false);
+		return clkattrs == null ? attrs: attrs + clkattrs;
+	}
 
 	//-- Component --//
 	public boolean isVisible() {

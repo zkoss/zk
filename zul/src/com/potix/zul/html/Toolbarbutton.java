@@ -134,6 +134,12 @@ public class Toolbarbutton extends LabelImageElement {
 			HTMLs.appendAttribute(sb, "zk_onFocus", true);
 		if (isAsapRequired("onBlur"))
 			HTMLs.appendAttribute(sb, "zk_onBlur", true);
+
+		if (isAsapRequired("onRightClick"))
+			HTMLs.appendAttribute(sb, "zk_rtclk", true);
+			//no zk_dbclk to avoid confusing
+			//no zk_lfclk since it is handled by widget.js
+
 		if (_href == null) {
 			sb.append(" href=\"javascript:;\"");
 		} else {

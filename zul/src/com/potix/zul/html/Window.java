@@ -153,7 +153,7 @@ public class Window extends XulElement implements IdSpace  {
 			ctrlKeys = null;
 		if (!Objects.equals(_ctrlKeys, ctrlKeys)) {
 			_ctrlKeys = ctrlKeys != null ? ctrlKeys.toUpperCase(): null;
-			smartUpdate("zk_ctrlKeys", _ctrlKeys);
+			smartUpdate("zk_ctkeys", _ctrlKeys);
 		}
 	}
 
@@ -175,15 +175,15 @@ public class Window extends XulElement implements IdSpace  {
 	 * it is not recommended to use "modal" in any ZUL page.
 	 *
 	 * @param name the mode which could be one of
-	 * "modal", "embedded", "overlapped" and "popup".
-	 * @exception InterruptedException if name is modal and it is interrupted
+	 * "embedded", "overlapped" and "popup".
+	 * Note: it cannot be "modal". Use {@link #doModal} instead.
 	 */
 	public void setMode(String name) throws InterruptedException {
 		if ("popup".equals(name)) doPopup();
 		else if ("overlapped".equals(name)) doOverlapped();
 		else if ("embedded".equals(name)) doEmbedded();
 		else if ("modal".equals(name))
-			throw new WrongValueException("Use doModal instead");
+			throw new WrongValueException("setMode doesn't suport modal. Use doModal instead");
 		else throw new WrongValueException("Uknown mode: "+name);
 	}
 
@@ -415,9 +415,15 @@ public class Window extends XulElement implements IdSpace  {
 			HTMLs.appendAttribute(sb, "zk_onCancel", true);
 		if (isAsapRequired("onCtrlKey"))
 			HTMLs.appendAttribute(sb, "zk_onCtrlKey", true);
+
+		final String clkattrs = getAllOnClickAttrs(false);
+		if (clkattrs != null) sb.append(clkattrs);
+			//though widget.js handles onclick (if 3d), it is useful
+			//to support onClick for groupbox
+
 		if (_closable)
 			HTMLs.appendAttribute(sb, "zk_closable", true);
-		HTMLs.appendAttribute(sb, "zk_ctrlKeys", _ctrlKeys);
+		HTMLs.appendAttribute(sb, "zk_ctkeys", _ctrlKeys);
 		return sb.toString();
 	}
 }

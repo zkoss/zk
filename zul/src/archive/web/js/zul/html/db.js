@@ -242,7 +242,7 @@ zk.Cal.prototype = {
 			zk.focusById(this.input.id);
 			zk.selectById(this.input.id);
 		}
-		if (close) zkau.closeFloats();
+		if (close) zkau.closeFloats(this.element);
 	},
 	getDateString: function () {
 		return zk.formatDate(this.date, this.getFormat());
@@ -461,7 +461,7 @@ zkDtbox.onbutton = function (cmp) {
 
 zkDtbox.open = function (pp) {
 	pp = $(pp);
-	zkau.closeFloats(); //including popups
+	zkau.closeFloats(pp); //including popups
 	zkau._dtbox._popupId = pp.id;
 
 	var uuid = zkau.uuidOf(pp.id);
@@ -480,7 +480,7 @@ zkDtbox.open = function (pp) {
 	zkau.onVisiChildren(pp);
 
 	if (zk.agtNav) {
-		pp.setAttribute("zk_combo_parent", uuid); //used by zkTxbox._noonblur
+		pp.setAttribute("zk_vparent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp); //Bug 1486840
 	}
 
@@ -523,7 +523,7 @@ zkDtbox.close = function (pp, focus) {
 	var uuid = zkau.uuidOf(pp.id);
 	if (zk.agtNav) {
 		$(uuid).appendChild(pp); //Bug 1486840
-		pp.removeAttribute("zk_combo_parent");
+		pp.removeAttribute("zk_vparent");
 	}
 
 	pp = $(pp);

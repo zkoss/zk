@@ -315,20 +315,20 @@ td.tabpanels { /* vert */
 }
 
 /* ZK menu. */
-div.menubar, div.menupopup {
+div.menubar, div.menupopup, div.ctxpopup {
 	cursor: pointer; background: menu; padding: 1px;
 }
 div.menubar {
 	border: 1px solid black;
 }
-div.menupopup {
+div.menupopup, div.ctxpopup {
 	display: block; position: absolute; z-index: 88000;
 	border: 1px outset;
 }
-div.menubar td {
+div.menubar td, div.menupopup td {
 	white-space: nowrap;
 }
-div.menubar a, div.menubar a:visited, div.menubar a:hover {
+div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.menupopup a:visited, div.menupopup a:hover {
 	font-size: small; font-weight: normal;
 	border: 1px solid menu; background: menu; color: menutext;
 	text-decoration: none;

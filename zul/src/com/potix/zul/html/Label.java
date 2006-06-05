@@ -113,20 +113,11 @@ public class Label extends XulElement {
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		return isAsapRequired("onClick") ?
-			attrs+" zk_onClick=\"true\""
-				+" zk_type=\"zul.html.widget.Label\"":
-			attrs;
+		final String clkattrs = getAllOnClickAttrs(false);
+		return clkattrs == null ? attrs: attrs + clkattrs;
 	}
 
 	//-- Component --//
-	public void smartUpdate(String attr, String value) {
-		//We have to ask the client to re-initialize it (to observe onclick)
-		if ("zk_onClick".equals(attr) && "true".equals(value))
-			invalidate(OUTER);
-		else
-			super.smartUpdate(attr, value);
-	}
 	public void redraw(Writer out) throws IOException {
 		if (isIdRequired()) super.redraw(out);
 		else out.write(_value); //no processing; direct output if not ZUL

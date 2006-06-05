@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 zk.load("zul.html.zul");
 
+function zkMenu() {}
+
 zk.FloatMenu = Class.create();
 zk.FloatMenu.prototype = {
 	initialize: function () {
@@ -31,7 +33,7 @@ zk.FloatMenu.prototype = {
 		if (!el) return false;
 
 		if (el.parentNode && el.parentNode.getAttribute
-		&& el.parentNode.getAttribute("zk_popup") != null)
+		&& el.parentNode.getAttribute("zk_mpop") != null)
 			return true;
 
 		for (var j = 0; j < this._popupIds.length; ++j) {
@@ -77,21 +79,19 @@ zk.FloatMenu.prototype = {
 	}
 };
 
-if (!zkau._menu)
-	zkau.floats.push(zkau._menu = new zk.FloatMenu()); //hook to zkau.js
+if (!zkMenu._pop)
+	zkau.floats.push(zkMenu._pop = new zk.FloatMenu()); //hook to zkau.js
 
 ////
 // menu //
-function zkMenu() {}
-
 zkMenu.onover = function (target) {
 	var menubar = zkau.getParentByType(target, "Menubar");
-	var autoPopup = menubar && menubar.getAttribute("zk_autoPopup") == "true";
-	if (autoPopup) zkMenu._closeRequired = false;
+	var autodrop = !menubar || menubar.getAttribute("zk_autodrop") == "true";
+	if (autodrop) zkMenu._closeRequired = false;
 		//turn off pending auto-close
 
-	var popupIds = zkau._menu.getPopupIds();
-	if (!autoPopup && popupIds.length == 0) return;
+	var popupIds = zkMenu._pop.getPopupIds();
+	if (!autodrop && popupIds.length == 0) return;
 
 	//Close non-child menu
 	for (var j = popupIds.length; --j >= 0;) {
@@ -104,17 +104,17 @@ zkMenu.onover = function (target) {
 	zkMenu.open(target, false);
 };
 zkMenu.onout = function (target) {
-	if (zkau._menu.getPopupIds().length == 0) return; //nothing to do
+	if (zkMenu._pop.getPopupIds().length == 0) return; //nothing to do
 
 	var menubar = zkau.getParentByType(target, "Menubar");
-	if (menubar && menubar.getAttribute("zk_autoPopup") == "true") {
+	if (menubar && menubar.getAttribute("zk_autodrop") == "true") {
 		zkMenu._closeRequired = true;
-		setTimeout("if (zkMenu._closeRequired) zkau.closeFloats();", 500);
+		setTimeout("if (zkMenu._closeRequired) zkau.closeFloats('"+menubar.id+"');", 500);
 	}
 };
 zkMenu.onclick = function (target) {
-	if (!target.getAttribute("zk_popup")) { //menu item
-		zkau.closeFloats(); //including popups if visible
+	if (!target.getAttribute("zk_mpop")) { //menu item
+		zkau.closeFloats(target); //including popups if visible
 
 		var uuid = target.id;
 		if (target.getAttribute("zk_autock")) {
@@ -126,43 +126,52 @@ zkMenu.onclick = function (target) {
 		zkMenu.open(target, target.getAttribute("zk_top") == "true");
 	}
 };
-/** Opens a menu. If toggle, menus are closed first and then
- * toggle the specified menu.
+/** Opens a menupopup belong to the specified menu.
+ * @param toggle whether to close all menu first and then open the specified menu
  */
 zkMenu.open = function (menu, toggle) {
-	var popupId = menu.getAttribute("zk_popup");
+	if (toggle) zkau.closeFloats(menu); //including popups
+
+	var popupId = menu.getAttribute("zk_mpop");
 	if (!popupId) return; //menuitem
 
 	var pp = $(popupId);
 	if (!pp) {
-		alert(mesg.INVALID_STRUCTURE+"zk_popup not exists");
+		zk.error(mesg.INVALID_STRUCTURE+"zk_mpop not exists");
 		return;
 	}
 
+	var top = menu.getAttribute("zk_top") == "true"; //top-level menu
+	var ref = top || zk.tagName(menu) != "TD" ? menu: menu.parentNode; //use TR if not top
+	var pos = top && menu.getAttribute("zk_vert") == null ? "after-start": "end_before";
+	zkMenu._open(pp, top, ref, pos);
+};
+/** Opens the specified menupopup
+ * @param pp menupopup
+ * @param top whether it belongs to the top-level menu
+ * @param ref the reference element to position menu.
+ * @param pos how to position the menu
+ */
+zkMenu._open = function (pp, top, ref, pos) {
 	var visible = pp.style.display != "none";
-	if (toggle)
-		zkau.closeFloats(); //including popups
 	if (visible)
 		return; //nothing to do
 
 	/* not yet: we have to adjust CSS and some codes
 	if (zk.agtNav) { //Bug 1486840
-		pp.setAttribute("zk_combo_parent", uuid); //used by zkTxbox._noonblur
+		pp.setAttribute("zk_vparent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp);
 	}*/
 
-	var top = menu.getAttribute("zk_top") == "true"; //top-level menu
-	var ref = top || zk.tagName(menu) != "TD" ? menu: menu.parentNode;
-		//use TR if not top
+
 	pp.style.display = "block";
 	pp.style.position = "absolute"; //just in case
-	zk.position(pp, ref,
-		top && menu.getAttribute("zk_vert") == null ? "after-start": "end_before");
+	if (ref) zk.position(pp, ref, pos);
 
-	zkau._menu.addPopupId(pp.id);
+	zkMenu._pop.addPopupId(pp.id);
 	zkau.hideCovered();
 	if (zk.agtNav)
-		setTimeout("zkMenu._fixWidth('"+popupId+"')", 10);
+		setTimeout("zkMenu._fixWidth('"+pp.id+"')", 10);
 };
 /** Fixes a Mozilla bug that div's width might be smaller than
  * the table it contains.
@@ -183,7 +192,7 @@ zkMenu._fixWidth = function (popupId) {
 
 /** Closes the menu. */
 zkMenu.close = function (pp) {
-	zkau._menu.removePopupId(pp.id);
+	zkMenu._pop.removePopupId(pp.id);
 	zkMenu._close(pp);
 	zkau.hideCovered();
 };
@@ -192,7 +201,7 @@ zkMenu._close = function (pp) {
 	if (pp) {
 		/*if (zk.agtNav) { //Bug 1486840
 			$(uuid).appendChild(pp); //Bug 1486840
-			pp.removeAttribute("zk_combo_parent");
+			pp.removeAttribute("zk_vparent");
 		}*/
 		pp.style.display = "none";
 	}
@@ -225,7 +234,7 @@ zkMenuit.init = function (cmp) {
 	Event.observe(cmp, "click", function (evt) {
 		if ("javascript:;" == anc.href) zkMenu.onclick(cmp);
 		else {
-			zkau.closeFloats();
+			zkau.closeFloats(cmp);
 
 			var t = anc.getAttribute("target");
 			if (anc.href && !zk.isNewWindow(anc.href, t))
@@ -245,4 +254,12 @@ zkMenuit.init = function (cmp) {
 zkMenusp.init = function (cmp) {
 	Event.observe(cmp, "mouseover", function () {zkMenu.onover(cmp);});
 	Event.observe(cmp, "mouseout", function () {zkMenu.onout(cmp);});
+};
+
+//menupopup//
+function zkMpop() {}
+
+/** Called by au.js's context menu. */
+zkMpop.context = function (ctx, ref) {
+	zkMenu._open(ctx, true);
 };

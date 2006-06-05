@@ -22,12 +22,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:choose>
 <c:when test="${self.topmost}">
- <td id="${self.uuid}" align="left" zk_type="zul.html.menu.Menu"${self.outerAttrs}${self.innerAttrs}><a href="javascript:;" id="${self.uuid}!a">${self.imgTag} <c:out value="${self.label}"/></a>${u:redraw(self.popup, null)}</td>
+ <td id="${self.uuid}" align="left" zk_type="zul.html.menu.Menu"${self.outerAttrs}${self.innerAttrs}><a href="javascript:;" id="${self.uuid}!a">${self.imgTag} <c:out value="${self.label}"/></a>${u:redraw(self.menupopup, null)}</td>
 </c:when>
 <c:otherwise>
  <tr id="${self.uuid}" zk_type="zul.html.menu.Menu"${self.outerAttrs}${self.innerAttrs}>
  <td><h:img src="~./img/spacer.gif" width="11"/></td>
- <td align="left"><a href="javascript:;" id="${self.uuid}!a">${self.imgTag} <c:out value="${self.label}"/></a>${u:redraw(self.popup, null)}</td>
+ <td align="left"><a href="javascript:;" id="${self.uuid}!a">${self.imgTag} <c:out value="${self.label}"/></a>${u:redraw(self.menupopup, null)}</td>
  <td><h:img src="~./zul/img/menu/arrow.gif" width="9"/></td>
  </tr>
 </c:otherwise>

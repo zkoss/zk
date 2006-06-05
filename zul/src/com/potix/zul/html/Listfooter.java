@@ -85,9 +85,16 @@ public class Listfooter extends LabelImageElement {
 
 	//-- super --//
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
+		final StringBuffer sb =
+			new StringBuffer(80).append(super.getOuterAttrs());
+
+		final String clkattrs = getAllOnClickAttrs(false);
+		if (clkattrs != null) sb.append(clkattrs);
+
 		final Listheader header = getListheader();
-		return header != null ? attrs+header.getColAttrs(): attrs;
+		if (header != null) sb.append(header.getColAttrs());
+
+		return sb.toString();
 	}
 
 	//-- Component --//

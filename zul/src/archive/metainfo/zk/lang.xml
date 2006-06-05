@@ -289,6 +289,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>imagemap</component-name>
+		<component-class>com.potix.zul.html.Imagemap</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>intbox</component-name>
 		<component-class>com.potix.zul.html.Intbox</component-class>
 		<mold>
@@ -365,14 +373,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
-		<component-name>imagemap</component-name>
-		<component-class>com.potix.zul.html.Imagemap</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
-		</mold>
-	</component>
-	<component>
 		<component-name>menu</component-name>
 		<component-class>com.potix.zul.html.Menu</component-class>
 		<mold>
@@ -421,15 +421,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>com.potix.zul.html.Popup</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/menupopup.dsp</mold-uri><!-- same as menupopup -->
-		</mold>
-	</component>
-	<component>
-		<component-name>popupset</component-name>
-		<component-class>com.potix.zul.html.Popupset</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/popupset.dsp</mold-uri>
+			<mold-uri>~./zul/html/popup.dsp</mold-uri><!-- same as menupopup -->
 		</mold>
 	</component>
 	<component>

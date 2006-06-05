@@ -59,7 +59,7 @@ public class Menu extends LabelImageElement {
 
 	/** Returns the {@link Menupopup} it owns, or null if not available.
 	 */
-	public Menupopup getPopup() {
+	public Menupopup getMenupopup() {
 		return _popup;
 	}
 
@@ -68,7 +68,7 @@ public class Menu extends LabelImageElement {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
 		if (_popup != null)
-			HTMLs.appendAttribute(sb, "zk_popup", _popup.getUuid());
+			HTMLs.appendAttribute(sb, "zk_mpop", _popup.getUuid());
 		if (isTopmost()) {
 			sb.append(" zk_top=\"true\"");
 			final Component parent = getParent();

@@ -1,8 +1,8 @@
-/* slider.js
+/* sld.js
 
 {{IS_NOTE
 	Purpose:
-		
+		Slider's JavaScript
 	Description:
 		
 	History:

@@ -78,7 +78,7 @@ zk.Selectable.prototype = {
 				};
 
 				//To turn-off select, use "-moz-user-select: none" in CSS
-			} else { //non-FF
+			} else if (zk.agtIe) {
 				this.element.onselectstart = function () {return false;}
 				//Tom Yeh: 20060106: side effect: unable to select textbox
 			}
@@ -936,8 +936,9 @@ zkLcfc.init = function (cmp) {
 	Event.observe(cmp, "blur", function () {return zkSel.cmonblur(cmp);});
 };
 
-zk.addModuleInit(function () {zkLhr = zulSHdr});
-	//init it later because zul.js might not be loaded yet
+zk.addModuleInit(function () {
+	zkLhr = zulSHdr;
+});//init it later because zul.js might not be loaded yet
 
 ////
 // listbox mold=select //

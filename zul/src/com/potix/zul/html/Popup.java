@@ -18,14 +18,60 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zul.html;
 
+import com.potix.lang.Objects;
+import com.potix.xml.HTMLs;
+import com.potix.zk.ui.sys.ComponentsCtrl;
+import com.potix.zul.html.impl.XulElement;
+
 /**
- * A container that appears in a child window.
+ * A container that is displayed as a popup.
  * The popup window does not have any special frame.
  * Popups can be displayed when an element is clicked by assigning
- * the id of the popup to either the popup,
- * context or tooltip attribute of the element.
+ * the id of the popup to either the {@link #setPopup},
+ * {@link #setContext} or {@link #setTooltip} attribute of the element.
+ *
+ * <p>Default {@link #getSclass}: ctxpopup.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Popup extends Menupopup {
+public class Popup extends XulElement {
+	public Popup() {
+		super.setVisible(false);
+		if (!(this instanceof Menupopup)) setSclass("ctxpopup");
+	}
+
+	//super//
+	/** Not allowd. */
+	public boolean setVisible(boolean visible) {
+		throw new UnsupportedOperationException("You cannot make it visible manually");
+	}
+	public void setId(String id) {
+		if (zidRequired()) {
+			final String oldid = getId();
+			if (!Objects.equals(id, oldid)) {
+				super.setId(id);
+				smartUpdate("zid", id);
+			}
+		} else {
+			super.setId(id);
+		}
+	}
+	public String getOuterAttrs() {
+	//Note: don't generate zk_type here because Menupopup's zk_type diff
+
+		final String attrs = super.getOuterAttrs();
+		if (!zidRequired())
+			return attrs;
+
+		final String id = getId();
+ 		if (ComponentsCtrl.isAutoId(id))
+			return attrs;
+
+		final StringBuffer sb = new StringBuffer(80).append(attrs);
+		HTMLs.appendAttribute(sb, "zid", id);
+		return sb.toString();
+	}
+	private boolean zidRequired() {
+		return !(getParent() instanceof Menu);
+	}
 }

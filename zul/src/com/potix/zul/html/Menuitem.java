@@ -36,7 +36,7 @@ import com.potix.zul.html.impl.LabelImageElement;
 public class Menuitem extends LabelImageElement implements Checkable {
 	private String _value = "";
 	private String _href, _target;
-	private boolean _autoCheck, _checked;
+	private boolean _autocheck, _checked;
 
 	public Menuitem() {
 	}
@@ -83,15 +83,15 @@ public class Menuitem extends LabelImageElement implements Checkable {
 	 * the menu item is selected
 	 * <p>Default: false.
 	 */
-	public boolean isAutoCheck() {
-		return _autoCheck;
+	public boolean isAutocheck() {
+		return _autocheck;
 	}
 	/** Sets whether the menuitem check mark will update each time
 	 * the menu item is selected
 	 */
-	public void setAutoCheck(boolean autoCheck) {
-		if (_autoCheck != autoCheck) {
-			_autoCheck = autoCheck;
+	public void setAutocheck(boolean autocheck) {
+		if (_autocheck != autocheck) {
+			_autocheck = autocheck;
 			invalidate(INNER);
 		}
 	}
@@ -153,11 +153,11 @@ public class Menuitem extends LabelImageElement implements Checkable {
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 		boolean topmost = isTopmost();
-		if (!topmost && !_autoCheck) return attrs;
+		if (!topmost && !_autocheck) return attrs;
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		if (topmost) sb.append(" zk_top=\"true\"");
-		if (_autoCheck) {
+		if (_autocheck) {
 			sb.append(" zk_autock=\"true\"");
 			if (_checked) sb.append(" zk_checked=\"true\"");
 		}

@@ -171,7 +171,7 @@ zkCmbox.onbutton = function (cmp) {
 /** When an item is clicked. */
 zkCmbox.onclickitem = function (item) {
 	zkCmbox._selback(item);
-	zkau.closeFloats();
+	zkau.closeFloats(item);
 	zkCmbox.onout(item); //onmouseout might be sent (especiall we change parent)
 };
 /** onmouoseover(el). */
@@ -206,8 +206,8 @@ zkCmbox.getLabel = function (item) {
 
 zkCmbox.open = function (pp, hilite) {
 	pp = $(pp);
-	zkau.closeFloats(); //including popups
-	zkau._cmbox._popupId = pp.id;
+	zkau.closeFloats(pp); //including popups
+	zkCmbox._pop._popupId = pp.id;
 
 	var uuid = zkau.uuidOf(pp.id);
 	var cb = $(uuid);
@@ -229,7 +229,7 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	zkau.onVisiChildren(pp);
 
 	if (zk.agtNav) {
-		pp.setAttribute("zk_combo_parent", uuid); //used by zkTxbox._noonblur
+		pp.setAttribute("zk_vparent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp); //Bug 1486840
 		//However, since the parent/child relation is changed, new listitem
 		//must be inserted into the popup (by use of uuid!child) rather
@@ -400,10 +400,10 @@ zkCmbox.close = function (pp, focus) {
 	var uuid = zkau.uuidOf(pp.id);
 	if (zk.agtNav) {
 		$(uuid).appendChild(pp); //Bug 1486840
-		pp.removeAttribute("zk_combo_parent");
+		pp.removeAttribute("zk_vparent");
 	}
 
-	zkau._cmbox._popupId = null;
+	zkCmbox._pop._popupId = null;
 	pp.style.display = "none";
 	zkau.hideCovered();
 
@@ -417,8 +417,8 @@ Object.extend(Object.extend(zk.FloatCombo.prototype, zk.Float.prototype), {
 		zkCmbox.close(el);
 	}
 });
-if (!zkau._cmbox)
-	zkau.floats.push(zkau._cmbox = new zk.FloatCombo()); //hook to zkau.js
+if (!zkCmbox._pop)
+	zkau.floats.push(zkCmbox._pop = new zk.FloatCombo()); //hook to zkau.js
 
 //-- bandbox --//
 zkBdbox = zkCmbox;

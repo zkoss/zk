@@ -40,8 +40,17 @@ import com.potix.zk.ui.UiException;
  */
 public class Imagemap extends Image {
 	//-- super --//
-	protected boolean onClickAttrsRequired() {
-		return false;
+	public String getOuterAttrs() {
+		//Imagemap handles onclick by itself, so don't generate zk_lfclk
+		final String attrs = super.getOuterAttrs();
+		final String attrnm = " zk_lfclk=";
+		final int j = attrs.indexOf(attrnm);
+		if (j < 0) return attrs;
+		int k = attrs.indexOf('"', j + attrnm.length());
+		assert k > 0: attrs;
+		k = attrs.indexOf('"', k + 1);
+		assert k > 0: attrs;
+		return attrs.substring(0, j) + attrs.substring(k + 1);
 	}
 	public String getInnerAttrs() {
 		final String attrs = super.getInnerAttrs();

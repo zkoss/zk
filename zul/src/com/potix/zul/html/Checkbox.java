@@ -173,6 +173,12 @@ public class Checkbox extends LabelImageElement implements Checkable {
 			HTMLs.appendAttribute(sb, "zk_onBlur", true);
 		if (isAsapRequired("onCheck"))
 			HTMLs.appendAttribute(sb, "zk_onCheck", true);
+
+		if (isAsapRequired("onRightClick"))
+			HTMLs.appendAttribute(sb, "zk_rtclk", true);
+			//no zk_dbclk to avoid confusing
+			//no zk_lfclk since it is handled by widget.js
+
 		return sb.toString();
 	}
 }

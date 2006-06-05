@@ -34,7 +34,7 @@ import com.potix.zul.html.impl.XulElement;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Menubar extends XulElement {
-	private boolean _autoPopup;
+	private boolean _autodrop;
 	public Menubar() {
 		setSclass("menubar");
 		setMold("horizontal");
@@ -55,27 +55,27 @@ public class Menubar extends XulElement {
 		setMold(orient);
 	}
 
-	/** Returns whether to automatically popup menus if user moves mouse
+	/** Returns whether to automatically drop down menus if user moves mouse
 	 * over it.
 	 * <p>Default: false.
 	 */
-	public final boolean isAutoPopup() {
-		return _autoPopup;
+	public final boolean isAutodrop() {
+		return _autodrop;
 	}
-	/** Sets whether to automatically popup menus if user moves mouse
+	/** Sets whether to automatically drop down menus if user moves mouse
 	 * over it.
 	 */
-	public void setAutoPopup(boolean autoPopup) {
-		if (_autoPopup != autoPopup) {
-			_autoPopup = autoPopup;
-			smartUpdate("zk_autoPopup", autoPopup);
+	public void setAutodrop(boolean autodrop) {
+		if (_autodrop != autodrop) {
+			_autodrop = autodrop;
+			smartUpdate("zk_autodrop", autodrop);
 		}
 	}
 
 	//-- Component --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		return _autoPopup ?  attrs + " zk_autoPopup=\"true\"": attrs;
+		return _autodrop ?  attrs + " zk_autodrop=\"true\"": attrs;
 	}
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Menu) && !(child instanceof Menuitem))

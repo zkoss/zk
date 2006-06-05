@@ -114,6 +114,12 @@ public class Slider extends XulElement implements Scrollable {
 			HTMLs.appendAttribute(sb, "zk_onScroll", true);
 		if (isAsapRequired("onScrolling"))
 			HTMLs.appendAttribute(sb, "zk_onScrolling", true);
+
+		if (isAsapRequired("onRightClick"))
+			HTMLs.appendAttribute(sb, "zk_rtclk", true);
+			//no zk_dbclk to avoid confusion
+			//no zk_lfclk since it will be supported by sld.js
+
 		return sb.toString();
 	}
 

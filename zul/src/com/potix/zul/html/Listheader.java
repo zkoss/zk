@@ -284,6 +284,9 @@ public class Listheader extends HeaderElement {
 		if (!"natural".equals(_sortDir))
 			HTMLs.appendAttribute(sb, "zk_sort", _sortDir);
 
+		final String clkattrs = getAllOnClickAttrs(false);
+		if (clkattrs != null) sb.append(clkattrs);
+
 		final String attrs = super.getOuterAttrs();
 		if (sb.length() == 0) return attrs;
 		return sb.insert(0, attrs).toString();

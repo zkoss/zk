@@ -195,15 +195,6 @@ public class Image extends XulElement implements Viewable {
 		return getViewURI(sb.toString()); //already encoded
 	}
 
-	/** Returns whether to generate onClick relevant attributes.
-	 * <p>Default: true.
-	 * Used only by component developers to disable the onClick mechanism
-	 * of {@link Image}.
-	 */
-	protected boolean onClickAttrsRequired() {
-		return true;
-	}
-	
 	//-- Viewable --//
 	public Media getView(String pathInfo) {
 		return _image;
@@ -212,9 +203,8 @@ public class Image extends XulElement implements Viewable {
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		return onClickAttrsRequired() && isAsapRequired("onClick") ?
-			attrs + " zk_onClick=\"true\" zk_type=\"zul.html.widget.Image\"":
-			attrs;
+		final String clkattrs = getAllOnClickAttrs(false);
+		return clkattrs == null ? attrs: attrs + clkattrs;
 	}
 	public String getInnerAttrs() {
 		final StringBuffer sb =
@@ -228,13 +218,6 @@ public class Image extends XulElement implements Viewable {
 	}
 
 	//-- Component --//
-	public void smartUpdate(String attr, String value) {
-		//We have to ask the client to re-initialize it (to observe onclick)
-		if ("zk_onClick".equals(attr) && "true".equals(value))
-			invalidate(INNER);
-		else
-			super.smartUpdate(attr, value);
-	}
 	/** Default: not childable.
 	 */
 	public boolean isChildable() {

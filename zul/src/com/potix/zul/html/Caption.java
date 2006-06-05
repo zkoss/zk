@@ -65,6 +65,13 @@ public class Caption extends LabelImageElement {
 		return (p instanceof Groupbox) && "default".equals(p.getMold());
 	}
 
+	//-- super --//
+	public String getOuterAttrs() {
+		final String attrs = super.getOuterAttrs();
+		final String clkattrs = getAllOnClickAttrs(false);
+		return clkattrs == null ? attrs: attrs + clkattrs;
+	}
+
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Window)

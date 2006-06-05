@@ -20,6 +20,7 @@ package com.potix.zul.html.impl;
 
 import com.potix.lang.Objects;
 import com.potix.xml.HTMLs;
+import com.potix.xml.XMLs;
 
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
@@ -149,11 +150,8 @@ implements Inputable, Errorable, Constrainted {
 		return getTextNCUE();
 	}
 	/** Returns the value in String w/o checking any user error (NCUE).
-	 *
-	 * <p>It is used only for component development. Don't call it
-	 * in applications.
 	 */
-	public final String getTextNCUE() {
+	private final String getTextNCUE() {
 		return coerceToString(_value);
 	}
 
@@ -393,6 +391,14 @@ implements Inputable, Errorable, Constrainted {
 			throw new WrongValueException(this, _errmsg);
 		if (!_valided && _constr != null)
 			setText(getTextNCUE());
+	}
+
+	/** Returns the text for HTML AREA (Internal Use Only).
+	 *
+	 * <p>Used only for component generation. Not for applications.
+	 */
+	public final String getAreaText() {
+		return XMLs.encodeText(getTextNCUE());
 	}
 
 	//-- Inputable --//

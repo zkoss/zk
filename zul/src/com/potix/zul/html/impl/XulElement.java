@@ -37,10 +37,77 @@ import com.potix.zk.ui.ComponentNotFoundException;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 abstract public class XulElement extends HtmlBasedComponent {
+	/** The popup ID that will be shown when click. */
+	private String _popup;
+	/** The context ID that will be shown when right-click. */
+	private String _ctxmnu;
+	/** The tooltip ID that will be shown when mouse-over. */
+	private String _tooltip;
 	/** The action. */
 	private String _action;
 	/** The parsed actions. */
 	private Map _actmap;
+
+	/** Returns the ID of {@link com.potix.zul.html.Popup} that should appear
+	 * when the user right-clicks on the element (aka., context menu).
+	 *
+	 * <p>Default: null (no context menu).
+	 */
+	public String getContext() {
+		return _ctxmnu;
+	}
+	/** Sets the ID of {@link com.potix.zul.html.Popup} that should appear
+	 * when the user right-clicks on the element (aka., context menu).
+	 */
+	public void setContext(String context) {
+		if (!Objects.equals(_ctxmnu, context)) {
+			_ctxmnu = context;
+			smartUpdate("zk_ctx", _ctxmnu);
+		}
+	}
+	/** Returns the ID of {@link com.potix.zul.html.Popup} that should appear
+	 * when the user clicks on the element.
+	 *
+	 * <p>Default: null (no poppup).
+	 *
+	 * <p>Not supported yet.
+	 */
+	public String getPopup() {
+		return _popup;
+	}
+	/** Sets the ID of {@link com.potix.zul.html.Popup} that should appear
+	 * when the user clicks on the element.
+	 *
+	 * <p>Not supported yet.
+	 */
+	public void setPopup(String popup) {
+		if (!Objects.equals(_popup, popup)) {
+			_popup = popup;
+			smartUpdate("zk_pop", _popup);
+		}
+	}
+	/** Returns the ID of {@link com.potix.zul.html.Popup} that should be used
+	 * as a tooltip window when the mouse hovers over the element for a moment.
+	 * The tooltip will automatically disappear when the mouse is moved.
+	 *
+	 * <p>Default: null (no tooltip).
+	 *
+	 * <p>Not supported yet.
+	 */
+	public String getTooltip() {
+		return _tooltip;
+	}
+	/** Sets the ID of {@link com.potix.zul.html.Popup} that should be used
+	 * as a tooltip window when the mouse hovers over the element for a moment.
+	 *
+	 * <p>Not supported yet.
+	 */
+	public void setTooltip(String tooltip) {
+		if (!Objects.equals(_tooltip, tooltip)) {
+			_tooltip = tooltip;
+			smartUpdate("zk_tip", _tooltip);
+		}
+	}
 
 	/** Returns the client-side action (CSA).
 	 * <p>The format: <br>
@@ -169,7 +236,43 @@ abstract public class XulElement extends HtmlBasedComponent {
 		return sb != null ? sb.toString(): action;
 	}
 
+	/** Returns the attributes for onClick, onRightClick and onDoubleClick
+	 * by checking whether the corresponding listeners are added,
+	 * or null if none is added.
+	 *
+	 * @param ignoreOnClick whether to ignore onClick
+	 */
+	protected String getAllOnClickAttrs(boolean ignoreOnClick) {
+		StringBuffer sb = null;
+		if (!ignoreOnClick && isAsapRequired("onClick"))
+			sb = new StringBuffer(70).append(" zk_lfclk=\"true\"");
+
+		if (isAsapRequired("onDoubleClick")) {
+			if (sb == null) sb = new StringBuffer(50);
+			sb.append(" zk_dbclk=\"true\"");
+		}
+
+		if (isAsapRequired("onRightClick")) {
+			final String attr = " zk_rtclk=\"true\"";
+			if (sb == null) return attr;
+			sb.append(attr);
+		}
+		return sb != null ? sb.toString():  null;
+	}
+
 	//-- super --//
+	public String getOuterAttrs() {
+		final String attrs = super.getOuterAttrs();
+		if (_ctxmnu == null &&  _tooltip == null && _popup == null)
+			return attrs;
+
+		final StringBuffer sb = new StringBuffer(80).append(attrs);
+		HTMLs.appendAttribute(sb, "zk_ctx", _ctxmnu);
+		HTMLs.appendAttribute(sb, "zk_pop", _popup);
+		HTMLs.appendAttribute(sb, "zk_tip", _tooltip);
+		return sb.toString();
+	}
+
 	/** Generates the Client-Side-Action attributes to the interior tag.
 	 * Reason: onfocus is the main use.
 	 */

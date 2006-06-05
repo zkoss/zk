@@ -167,6 +167,12 @@ public class Button extends LabelImageElement {
 			HTMLs.appendAttribute(sb, "zk_onFocus", true);
 		if (isAsapRequired("onBlur"))
 			HTMLs.appendAttribute(sb, "zk_onBlur", true);
+
+		if (isAsapRequired("onRightClick"))
+			HTMLs.appendAttribute(sb, "zk_rtclk", true);
+			//no zk_dbclk to avoid confusing
+			//no zk_lfclk since it is handled by widget.js
+
 		if (isDisabled())
 			HTMLs.appendAttribute(sb, "disabled",  "disabled");
 		if (isReadonly())

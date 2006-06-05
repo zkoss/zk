@@ -105,6 +105,11 @@ public class Treecol extends HeaderElement {
 	}
 
 	//-- super --//
+	public String getOuterAttrs() {
+		final String attrs = super.getOuterAttrs();
+		final String clkattrs = getAllOnClickAttrs(false);
+		return clkattrs == null ? attrs: attrs + clkattrs;
+	}
 	/** Invalidates the whole tree. */
 	protected void invalidateWhole() {
 		final Tree tree = getTree();
