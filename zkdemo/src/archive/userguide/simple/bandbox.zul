@@ -44,7 +44,7 @@ Unlike combobox, the popup window could contain any kind of components.</p>
 <vbox>		
 		<hbox>Search <textbox/></hbox>
 		<listbox width="200px"
-		onSelect="bd.value=self.selectedItem.label; bd.closePopup();">
+		onSelect="bd.value=self.selectedItem.label; bd.closeDropdown();">
 			<listhead>
 				<listheader label="Name"/>
 				<listheader label="Description"/>

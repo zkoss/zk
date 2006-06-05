@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-menu.zul
+ctxmnu.zul
 
 {{IS_NOTE
 	Purpose:
@@ -9,10 +9,10 @@ menu.zul
 	Description:
 		
 	History:
-		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+		Fri Jun  2 15:55:12     2006, Created by tomyeh@potix.com
 }}IS_NOTE
 
-Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
@@ -21,13 +21,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<vbox>
 		<html>
 			<attribute name="content"><![CDATA[
-				<h4>More Menu Features</h4>
-				<p>Menu supports special feature of autocheck and autodrop.</p>
-				<ul>
-					<li>autocheck make the menu item as a checkbox.</li>
-					<li>autodrop make the menu to pop up when the mouse roll over.</li>
-				</ul>
-				<p>Try to move mouse pointer over the menu. Click check1 and check2; then see what happened.</p>
+<h4>Context Menu and Right Click</h4>
+<p>Demostrates how to use context menu and how to listen right click.</p>
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
@@ -39,15 +34,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
 			<textbox id="codes" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
-<window title="more menu demo" border="normal">
-	<menubar id="menubar" autodrop="true">
-		<menu label="menu">
+<window title="Context Menu and Right Click" border="normal" width="360px">
+	<label value="Right Click Me!" context="editPopup"/>
+	<separator bar="true"/>
+	<label value="Right Click Me!" onRightClick="alert(self.value)"/>
+
+	<menupopup id="editPopup">
+        <menuitem label="Undo"/>
+        <menuitem label="Redo"/>
+        <menu label="Sort">
 			<menupopup>
-				<menuitem label="check1" autocheck="true"/>
-				<menuitem label="check2" autocheck="true"/>
+		        <menuitem label="Sort by Name" autocheck="true"/>
+		        <menuitem label="Sort by Date" autocheck="true"/>
 			</menupopup>
-		</menu>
-	</menubar>
+        </menu>
+	</menupopup>
 </window>
 				]]></attribute>
 			</textbox>

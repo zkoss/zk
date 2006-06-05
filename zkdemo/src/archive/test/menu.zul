@@ -34,8 +34,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		        <menuitem label="Redo"/>
 		        <menu label="Sort">
 					<menupopup>
-				        <menuitem label="Sort by Name" autoCheck="true"/>
-				        <menuitem label="Sort by Date" autoCheck="true"/>
+				        <menuitem label="Sort by Name" autocheck="true"/>
+				        <menuitem label="Sort by Date" autocheck="true"/>
 					</menupopup>
 		        </menu>
 			</menupopup>
@@ -81,9 +81,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</attribute>
 	</button>
 
-	<button label="Change AutoPopup">
+	<button label="Change Autodrop">
 		<attribute name="onClick">
-	menubar.setAutoPopup(!menubar.isAutoPopup());
+	menubar.setAutodrop(!menubar.isAutodrop());
 		</attribute>
 	</button>
 	<datebox/>
