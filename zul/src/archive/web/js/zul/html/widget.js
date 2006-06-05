@@ -81,7 +81,7 @@ zkTxbox._noonblur = function (inp) {
 
 			//To resolve Bug 1486840 (see db.js and cb.js)
 			if (zk.agtNav && cf.getAttribute) {
-				var n = $(cf.getAttribute("zk_combo_parent"));
+				var n = $(cf.getAttribute("zk_vparent"));
 				if (n) {
 					cf = n;
 					continue;
@@ -157,20 +157,6 @@ zkTbtn.init = function (cmp) {
 };
 
 ////
-// label, image, div//
-function zkLabel() {}
-zkLabel.init = function (cmp) {
-	Event.observe(cmp, "click",
-		function (evt) {
-			if (!evt) evt = window.event;
-			var target = Event.element(evt);
-			if (target.getAttribute("zk_onClick") == "true")
-				zkau.onclick(evt);
-		});
-};
-zkDiv = zkImage = zkLabel;
-
-////
 // checkbox and radio //
 function zkCkbox() {}
 zkCkbox.init = function (cmp) {
@@ -239,7 +225,7 @@ zkWnd.initInner = function (cmp) {
 		var caption = $(cmp.id + "!caption");
 		if (caption && caption.style.cursor == "") caption.style.cursor = "pointer";
 		zkau.disableMoveable(cmp);
-		zkau.enableMoveable(cmp, zkau.autoZIndex, zkau.onWndMove);
+		zkau.enableMoveable(cmp, null, zkau.onWndMove);
 	}
 };
 
@@ -323,7 +309,8 @@ zkMap.onarea = function (id) {
 	if (cmp) {
 		var map = zkau.getParentByType(cmp, "Map");
 		if (map)
-			zkau.send({uuid: map.id, cmd: "onClick", data: [cmp.getAttribute("zk_id")]});
+			zkau.send({uuid: map.id, cmd: "onClick",
+				data: [cmp.getAttribute("zk_id")]});
 	}
 };
 /** Called by map-done.dsp */
@@ -344,3 +331,28 @@ zkMap.onclick = function (href) {
 	var y = href.substring(j + 1);
 	zkau.send({uuid: id, cmd: "onClick", data: [x, y]});
 };
+
+//popup//
+function zkPop() {}
+
+/** Called by au.js's context menu. */
+zkPop.context = function (ctx, ref) {
+	ctx.style.display = "";
+	zkau.onVisiChildren(ctx);
+	zkPop._pop._popupId = ctx.id;
+	zkau.hideCovered();
+};
+zkPop.close = function (ctx) {
+	zkPop._pop._popupId = null;
+	ctx.style.display = "none";
+	zkau.hideCovered();
+};
+
+zk.Popup = Class.create();
+Object.extend(Object.extend(zk.Popup.prototype, zk.Float.prototype), {
+	_close: function (el) {
+		zkPop.close(el);
+	}
+});
+if (!zkPop._pop)
+	zkau.floats.push(zkPop._pop = new zk.Popup()); //hook to zkau.js
