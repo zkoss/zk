@@ -1,4 +1,4 @@
---------
+	--------
 ZK 1.2.0
 
 * Features:
@@ -10,10 +10,12 @@ ZK 1.2.0
   1480281, 1480035, 1467959, 1480525, 1480791, 1480866, 1481090, 1474217,
   1482954, 1482236, 1484344, 1485460, 1483149, 1488664, 1486334, 1487144,
   1486616, 1492803, 1494217, 1488178, 1493604, 1494820, 1489942, 1397863,
-  1495630, 1490672, 1495814, 1498631.
+  1495630, 1490672, 1495814, 1498631, 1499269, 1499333, 1490477, 1500729,
+  1500728, 1409858, 1381453, 1483036.
 	+ Macro components are supported
 	+ Sorting of Listbox and grid are supported
 	+ Browser history management is supported
+	+ Context menu and right clicks are supported
 	+ Developers are allowed to define new components in a page
 	+ Developers can store UI (ZUML pages) in database or any other repository.
 	+ Three new components: calendar, imagemap and area.
@@ -37,7 +39,8 @@ ZK 1.2.0
   1477271, 1482503, 1483647, 1485232, 1482229, 1486222, 1486314, 1484756,
   1485400, 1486840, 1487095, 1487925, 1486617, 1488662, 1488666, 1483779,
   1488938, 1489299, 1489347, 1491464, 1492530, 1492946, 1494029, 1491836,
-  1490365, 1494970, 1495427, 1495425, 1496769, 1498798.
+  1490365, 1494970, 1495427, 1495425, 1496769, 1498798, 1499207, 1495382,
+  1494841, 1498895, 1499872, 1499923.
 	+ The alignment of header and body of grid, listbox and tree are improved
 	  to handle all known extremely cases.
 	+ Work with Oracle OC4J 10.1.3
@@ -84,6 +87,11 @@ ZK 1.2.0
 	  all.
 	+ Use <?component name="xx" extends="xx"?> instead of
 	  <?component name="xx" extend="true"?>.
+	+ The getPopup, isAutoCheck, setAutoCheck, isAutoPopup, and setAutoPopup
+	  methods of Menu are renamed to getMenupopup, isAutocheck, setAutocheck,
+	  isAutodrop and setAutodrop.
+	+ The getPopup and closePopup method of Bandbox are renamed to
+	  getDropdown and closeDropdown.
 
 --------
 ZK 1.1.0
