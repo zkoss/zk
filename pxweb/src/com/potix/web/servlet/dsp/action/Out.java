@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import com.potix.web.mesg.MWeb;
 import com.potix.web.servlet.ServletException;
-import com.potix.web.servlet.http.Encodes;
+import com.potix.xml.XMLs;
 
 /**
  * Generates the specified value into a string.
@@ -125,7 +125,7 @@ public class Out extends AbstractAction {
 				if (escNewLine && (cc == '\r' || cc == '\n')) {
 					replace = cc == '\n' ? _mlineReplace: "";
 				} else {
-					replace = _escapeXML ? Encodes.escapeXML(cc): null;
+					replace = _escapeXML ? XMLs.escapeXML(cc): null;
 				}
 
 				if (replace != null) {

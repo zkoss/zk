@@ -20,7 +20,7 @@ package com.potix.web.servlet.dsp.action;
 
 import java.util.Map;
 
-import com.potix.web.servlet.http.Encodes;
+import com.potix.xml.XMLs;
 
 /**
  * A skeletal implementation to simplify the implementation of actions.
@@ -128,7 +128,7 @@ abstract public class AbstractAction implements Action {
 	void append(StringBuffer sb, String attrName, String attrValue) {
 		if (attrValue != null)
 			sb.append(' ').append(attrName).append("=\"")
-			.append(Encodes.escapeXMLAttribute(attrValue)).append('"');
+			.append(XMLs.encodeAttribute(attrValue)).append('"');
 			//it might contain " or other special characters
 	}
 	/** Appends an attribute to the string buffer,

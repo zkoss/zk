@@ -53,61 +53,6 @@ import com.potix.web.util.resource.ExtendedWebContext;
 public class Encodes {
 	private static final Log log = Log.lookup(Encodes.class);
 
-	/** Encodes a string that special characters are quoted to be compatible
-	 * with HTML/XML.
-	 * For example, &lt; is translated to &amp;lt;.
-	 *
-	 * @param s the string to quote; null is OK
-	 * @return the escaped string, or an empty string if s is null
-	 * @see #encodeURIComponent
-	 */
-	public static final String escapeXML(String s) {
-		if (s == null) return "";
-
-		final StringBuffer sb = new StringBuffer(s.length() + 16);
-		for (int j = 0, len = s.length(); j < len; ++j) {
-			final char cc = s.charAt(j);
-			final String esc = escapeXML(cc);
-			if (esc != null) sb.append(esc);
-			else sb.append(cc);
-		}
-		return s.length() == sb.length() ? s: sb.toString();
-	}
-	/** Enscapes a character into a string if it is a special XML character,
-	 * returns null if not a special character.
-	 *
-     *    & -> &amp;
-     *    < -> &lt;
-     *    > -> &gt;
-     *    " -> &#034;
-     *    ' -> &#039;
-	 */
-	public static final String escapeXML(char cc) {
-		switch (cc) {
-		case '"': return "&#034;";
-		case '\'': return "&#039;";
-		case '>': return "&gt;";
-		case '<': return "&lt;";
-		case '&': return "&amp;";
-		}
-		return null;
-	}
-	/** Encodes a string that is used for XML attributes.
-	 * @return the escaped string, or an empty string if null
-	 */
-	public static final String escapeXMLAttribute(String s) {
-		if (s == null) return "";
-
-		StringBuffer sb = null;
-		int j = 0;
-		for (int k; (k = s.indexOf('"', j)) >= 0;) {
-			if (sb == null) sb = new StringBuffer(s.length() + 8);
-			sb.append(s.substring(j, k)).append("&quot;");
-			j = k + 1;
-		}
-		return sb != null ? sb.append(s.substring(j)).toString(): s;
-	}
-
 	/** Encodes a string to HTTP URI compliant by use of
 	 * {@link Charsets#getURICharset}.
 	 *
@@ -186,7 +131,6 @@ public class Encodes {
 	 * @param s the string to encode; null is OK
 	 * @return the encoded string or null if s is null
 	 * @see #addToQueryString(StringBuffer,String,Object)
-	 * @see #escapeXML
 	 * @see #encodeURI
 	 */
 	public static final String encodeURIComponent(String s)
