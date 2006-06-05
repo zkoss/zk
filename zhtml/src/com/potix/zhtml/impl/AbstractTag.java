@@ -143,27 +143,32 @@ implements DynamicPropertied, RawId {
 		//We can check ASAP only. Otherwise, if users add a page listener,
 		//all ZHTML will generate zk_onChange. Too complicate!
 
-		for (int j = 0;; ++j)
+		final EventInfo ei;
+		for (int j = 0;; ++j) {
 			if (j >= _evts.length)
 				throw new UiException("Not supported event: "+evtnm);
-			else if (_evts[j].equals(evtnm))
+			if (_evts[j].name.equals(evtnm)) { //found
+				ei = _evts[j];
 				break;
+			}
+		}
 
-		boolean evtDeclared = isEventDeclared();
+		final boolean bAddType = ei.typed && !isTypeDeclared();
 		final boolean ret = super.addEventListener(evtnm, listener);
 		if (ret) {
-			smartUpdate("zk_" + evtnm,
+			smartUpdate(ei.attr,
 				Events.isListenerAvailable(this, evtnm, true) ? "true": null); //asap only
-			if (!evtDeclared && isEventDeclared()) {
+			if (bAddType && isTypeDeclared()) {
 				smartUpdate("zk_type", "zhtml.main.Raw");
 				response("init", new AuInit(this));
 			}
 		}
 		return ret;
 	}
-	private boolean isEventDeclared() {
+	private boolean isTypeDeclared() {
 		for (int j = 0; j < _evts.length; ++j)
-			if (Events.isListenerAvailable(this, _evts[j], true)) //asap only
+			if (_evts[j].typed
+			&& Events.isListenerAvailable(this, _evts[j].name, true)) //asap only
 				return true;
 		return false;
 	}
@@ -175,20 +180,20 @@ implements DynamicPropertied, RawId {
 		out.write('<');
 		out.write(_tagnm);
 
-		boolean evtDeclared = false;
+		boolean typeDeclared = false;
 		for (int j = 0; j < _evts.length; ++j) {
-			if (Events.isListenerAvailable(this, _evts[j], true)) { //asap only
-				evtDeclared = true;
-				out.write(" zk_");
-				out.write(_evts[j]);
+			if (Events.isListenerAvailable(this, _evts[j].name, true)) { //asap only
+				if (_evts[j].typed) typeDeclared = true;
+				out.write(' ');
+				out.write(_evts[j].attr);
 				out.write("=\"true\"");
 			}
 		}
 
-		if (evtDeclared)
+		if (typeDeclared)
 			out.write(" zk_type=\"zhtml.main.Raw\"");
 
-		if (evtDeclared || !shallHideId() || !Components.isAutoId(getUuid())) {
+		if (typeDeclared || !shallHideId() || !Components.isAutoId(getUuid())) {
 			out.write(" id=\"");
 			out.write(getUuid());
 			out.write('"');
@@ -240,6 +245,25 @@ implements DynamicPropertied, RawId {
 		for (int j = childless.length; --j >= 0;)
 			_childless.add(childless[j]);
 	}
-	/** Events that are supported. */
-	private static final String _evts[] = {"onClick", "onChange"};
+
+	private static class EventInfo {
+		/** The event name.
+		 */
+		private final String name;
+		/** The attribute that will be generated to the client side.
+		 */
+		private final String attr;
+		/** Whether to generate zk_type
+		 */
+		private final boolean typed;
+		private EventInfo(String name, String attr, boolean typed) {
+			this.name = name;
+			this.attr = attr;
+			this.typed = typed;
+		}
+	}
+	private static final EventInfo[] _evts = {
+		new EventInfo("onClick", "zk_lfclk", false),
+		new EventInfo("onChange", "zk_onChange", true)
+	};
 }

@@ -19,14 +19,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 function zkRaw() {} //ZHTML components
 
 zkRaw.init = function (cmp) {
-	Event.observe(cmp, "click", function (evt) {zkRaw.onclick(evt, cmp);});
 	Event.observe(cmp, "change", function () {zkRaw.onchange(cmp);});
 };
 
-zkRaw.onclick = function (evt, cmp) {
-	if (cmp.getAttribute("zk_onClick"))
-		zkau.onclick(evt);
-};
 zkRaw.onchange = function (cmp) {
 	if (cmp.getAttribute("zk_onChange"))
 		zkau.send({uuid: cmp.id, cmd: "onChange", data: [cmp.value]}, 25);
