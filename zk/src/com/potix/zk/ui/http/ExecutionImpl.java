@@ -156,7 +156,7 @@ public class ExecutionImpl extends AbstractExecution {
 		return _request instanceof HttpServletRequest ?
 			((HttpServletRequest)_request).getRemoteUser(): null;
 	}
-	public String getContxtPath() {
+	public String getContextPath() {
 		return _request instanceof HttpServletRequest ?
 			((HttpServletRequest)_request).getContextPath(): null;
 	}

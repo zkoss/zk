@@ -285,6 +285,8 @@ Draggable.prototype = {
       
       Draggables.activate(this);
       Event.stop(event);
+//Tom M. Yeh, Potix: mousedown is eaten above
+zkau.autoZIndex(src, false, true);
     }
   },
   

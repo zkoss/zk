@@ -222,7 +222,7 @@ public interface Execution extends Evaluator {
 	 * this method returns "".
 	 * <p>If the client is not using HTTP to access, this method return "";
 	 */
-	public String getContxtPath();
+	public String getContextPath();
 
 	//-- page utilities --//
 	/** Returns the page definition from the page file specified by an URI.
@@ -420,6 +420,12 @@ public interface Execution extends Evaluator {
 	 * <p>Currently, {@link #createComponents(String,Component,Map)}
 	 * and similar methods use this mechanism to let caller customize a page
 	 * definition.
+	 *
+	 * <p>Notice that {@link #createComponents(String,Component,Map)}
+	 * pops arg after creating components, and before processing any event.
+	 * In other words, it is not aviable for event listener, including onCreate.
+	 * However, {@link com.potix.zk.ui.event.CreateEvent#getArg} preserves
+	 * the map for its event listeners.
 	 */
 	public Map getArg();
 	/** Pushes the params that EL could refer it by the arg variable.

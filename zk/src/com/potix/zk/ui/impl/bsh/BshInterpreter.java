@@ -47,7 +47,15 @@ public class BshInterpreter implements Interpreter {
 	private List _resolvers;
 
 	public BshInterpreter() {
-		_ip = newInterpreter();
+		_ip = new bsh.Interpreter();
+		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
+
+		final BshClassManager classManager = _ip.getClassManager();
+		//final NameSpace oldns = _ip.getNameSpace();
+		_ip.setNameSpace(new MyNameSpace(classManager, "global"));
+		//classManager.removeListener(oldns);
+			//ClassManagerImpl doesn't implement removeListener
+
 		_ns = new BshNamespace(_ip.getNameSpace());
 	}
 
@@ -104,41 +112,6 @@ public class BshInterpreter implements Interpreter {
 		}
 	}
 
-	//Creating a light-weigt interpreter//
-	/** Creates an interpreter instance. */
-	private MyInterpreter newInterpreter() {
-		//To speed up the performance, we creates LiteNameSpace since
-		//We will replace it later
-
-		final NameSpace nsTemp = new LiteNameSpace(null, "global");
-		try {
-			nsTemp.setVariable("bsh", new MyThis(), false);
-		} catch (UtilEvalError ex) {
-			throw UiException.Aide.wrap(ex);
-		}
-		final MyInterpreter ip = new MyInterpreter(nsTemp);
-		ip.setNameSpace(new MyNameSpace(ip.getClassManager(), "global"));
-		ip.setClassLoader(Thread.currentThread().getContextClassLoader());
-		try {
-			ip.set( "bsh.evalOnly", new Primitive(true) );
-		} catch (EvalError ex) {
-			throw UiException.Aide.wrap(ex);
-		}
-		return ip;
-	}
-
-	private static class MyInterpreter extends bsh.Interpreter {
-		private MyInterpreter(NameSpace nsTemp) {
-			//We don't use Interpreter() since we will assign another
-			//NameSpace later to support addVariableResolver.
-			//LiteNameSpace is used because its performance is better
-			//-- no loading packages
-			super(_in,  System.out, System.err, false, nsTemp);
-			this.evalOnly = true;
-		}
-	}
-	private static final Reader _in = new StringReader("");
-
 	private class MyNameSpace extends NameSpace {
 		/** Don't call this method. */
 	    private MyNameSpace(BshClassManager classManager, String name) {
@@ -159,13 +132,6 @@ public class BshInterpreter implements Interpreter {
 			}
 
 			return o;
-		}
-	}
-	/** Extends This to provide a fake NameSpace that will be removed soon.
-	 */
-	private static class MyThis extends bsh.This {
-		private MyThis() {
-			super(null, null);
 		}
 	}
 }

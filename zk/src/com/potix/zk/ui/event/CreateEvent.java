@@ -18,6 +18,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.event;
 
+import java.util.Map;
+import java.util.Collections;
+
 import com.potix.zk.ui.Component;
 
 /**
@@ -28,7 +31,17 @@ import com.potix.zk.ui.Component;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class CreateEvent extends Event {
-	public CreateEvent(String name, Component target) {
+	private final Map _args;
+	public CreateEvent(String name, Component target, Map args) {
 		super(name, target);
+		_args = args != null ? args: Collections.EMPTY_MAP;
+	}
+	/** Returns arg ({@link com.potix.zk.ui.Execution#getArg}) when the component is
+	 * created.
+	 * <p>Note: when onCreate listeners are called, {@link com.potix.zk.ui.Execution#getArg}
+	 * is no longer available, you have to use this method instead.
+	 */
+	public Map getArg() {
+		return _args;
 	}
 }

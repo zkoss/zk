@@ -20,18 +20,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 //
 //zk//
 function zk() {}
+
+if (!zk.build) {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "17"; //increase this if we want the browser to reload JavaScript
-zk.mods = {};
+	zk.build = "1A"; //increase this if we want the browser to reload JavaScript
+	zk.mods = {}; //ZkFns depends on it
 
-/** Browser info. */
-zk.agent = navigator.userAgent.toLowerCase();
-zk.agtIe = (zk.agent.indexOf("msie") != -1) && (zk.agent.indexOf("opera") == -1);
-zk.agtNav = (zk.agent.indexOf("mozilla") != -1) && (zk.agent.indexOf("spoofer") == -1)
-	&& (zk.agent.indexOf("compatible") == -1) && (zk.agent.indexOf("opera") == -1)
-	&& (zk.agent.indexOf("webtv") == -1) && (zk.agent.indexOf("hotjava") == -1);
+	/** Browser info. */
+	zk.agent = navigator.userAgent.toLowerCase();
+	zk.agtIe = (zk.agent.indexOf("msie") != -1) && (zk.agent.indexOf("opera") == -1);
+	zk.agtNav = (zk.agent.indexOf("mozilla") != -1) && (zk.agent.indexOf("spoofer") == -1)
+		&& (zk.agent.indexOf("compatible") == -1) && (zk.agent.indexOf("opera") == -1)
+		&& (zk.agent.indexOf("webtv") == -1) && (zk.agent.indexOf("hotjava") == -1);
+}
 
 /** Returns the version of the specified module name.
  */
@@ -63,8 +66,9 @@ zk.addInit = function (fn) {
  * <p>To load a JS file directly, use zk.loadJS
  * @param nm the module name if no / is specified, or filename if / is
  * specified.
+ * @param fn the function that will be added to zk.addModuleInit
  */
-zk.load = function (nm) {
+zk.load = function (nm, fn) {
 	if (!nm) {
 		zk.error("Module name must be specified");
 		return;
@@ -72,6 +76,7 @@ zk.load = function (nm) {
 
 	if (!zk._modules[nm]) {
 		zk._modules[nm] = true;
+		if (fn) zk.addModuleInit(fn);
 		zk._load(nm);
 	}
 };
@@ -212,7 +217,8 @@ zk._loadAndInit = function (inf) {
 
 		if (n.getAttribute
 		&& (zk.loadByType(n)
-		 || n.getAttribute("zk_drag") || n.getAttribute("zk_drop")))
+		 || n.getAttribute("zk_drag") || n.getAttribute("zk_drop")
+		 || n.getAttribute("zid")))
 			inf.cmps.push(n);
 
 		//if nosibling, don't process its sibling (only process children)
@@ -248,6 +254,7 @@ zk._evalInit = function () {
 				}
 			}
 
+			if (n.getAttribute("zid")) zkau.initzid(n);
 			if (n.getAttribute("zk_drag")) zkau.initdrag(n);
 			if (n.getAttribute("zk_drop")) zkau.initdrop(n);
 
@@ -271,6 +278,8 @@ zk._evalInit = function () {
  */
 zk.cleanupAt = function (n, cufn) {
 	if (n.getAttribute) {
+		if (n.getAttribute("zid")) zkau.cleanzid(n);
+		if (n.getAttribute("zk_idsp")) zkau.cleanidsp(n);
 		if (n.getAttribute("zk_drag")) zkau.cleandrag(n);
 		if (n.getAttribute("zk_drop")) zkau.cleandrop(n);
 	}
@@ -546,4 +555,3 @@ if (!zk._modules) {
 		zk.initAt(document.body);
 	};
 }
-

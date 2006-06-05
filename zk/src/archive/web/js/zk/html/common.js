@@ -353,15 +353,26 @@ zk.firstChild = function (el, tagName, descendant) {
 		}
 	}
 	return null;
-}
+};
 
 /** Returns whether a node is an ancestor of another (including itself). */
 zk.isAncestor = function(p, c) {
-	for (; c; c = c.parentNode)
+	while (c) {
 		if (p == c)
 			return true;
+
+		//To resolve Bug 1486840 (see db.js and cb.js)
+		if (zk.agtNav && c.getAttribute) { 
+			var n = $(c.getAttribute("zk_vparent"));
+			if (n) {
+				c = n;
+				continue;
+			}
+		}
+		c = c.parentNode;
+	}
 	return false;
-}
+};
 
 /** Appends an unparsed HTML immediately after the last child.
  * @param el the parent
@@ -732,7 +743,7 @@ zk.disableAll = function (parent) {
  */
 zk.restoreDisabled = function (n) {
 	var skipped = new Array();
-	for (;;) {
+	for (var bug1498895 = zk.agtIe;;) {
 		var info = zk._disTags.shift();
 		if (!info) break;
 
@@ -753,6 +764,25 @@ zk.restoreDisabled = function (n) {
 					el.href = what.substring(j + 1);
 			} else 
 				el.style.visibility = what;
+
+			//Workaround IE: Bug 1498895
+			if (bug1498895) {
+				var tn = zk.tagName(el);
+				if ((tn == "INPUT" && (el.type == "text" || el.type == "password"))
+				||  tn == "TEXTAREA"){
+				//focus only visible (to prevent scroll)
+					try {
+						var ofs = Position.cumulativeOffset(el);
+						if (ofs[0] >= zk.innerX() && ofs[1] >= zk.innerY()
+						&& (ofs[0]+20) <= (zk.innerX()+zk.innerWidth())
+						&& (ofs[1]+20) <= (zk.innerY()+zk.innerHeight())) {
+							el.focus();
+							bug1498895 = false;
+						}
+					} catch (e) {
+					}
+				}
+			}
 		}
 	}
 	zk._disTags = skipped;

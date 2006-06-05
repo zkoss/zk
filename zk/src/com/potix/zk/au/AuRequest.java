@@ -73,9 +73,12 @@ public class AuRequest {
 	/** The onClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
 	 */
 	public static final Command ON_CLICK = new MouseCommand("onClick", true);
-	/** The onDblClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
+	/** The onRightClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
 	 */
-	public static final Command ON_DBL_CLICK = new MouseCommand("onDblClick", true);
+	public static final Command ON_RIGHT_CLICK = new MouseCommand("onRightClick", true);
+	/** The onDoubleClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
+	 */
+	public static final Command ON_DOUBLE_CLICK = new MouseCommand("onDoubleClick", true);
 	/** The onOK event (used with {@link com.potix.zk.ui.event.Event}).
 	 */
 	public static final Command ON_OK = new KeyCommand("onOK", true);

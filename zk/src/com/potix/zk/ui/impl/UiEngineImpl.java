@@ -217,7 +217,7 @@ public class UiEngineImpl implements UiEngine {
 				if (pagedef != null) pagedef.init(page);
 				else ((PageCtrl)page).init(null, null, null);
 
-				execCreate(page, pagedef, null);
+				execCreate(exec, page, pagedef, null);
 			} catch(Throwable ex) {
 				inits.doCatch(ex);
 				throw UiException.Aide.wrap(ex);
@@ -268,7 +268,7 @@ public class UiEngineImpl implements UiEngine {
 	 * Creates all child components defined in the specified definition.
 	 * @return the first component being created.
 	 */
-	private static final Component execCreate(Page page,
+	private static final Component execCreate(Execution exec, Page page,
 	InstanceDefinition instdef, Component parent)
 	throws IOException {
 		Component firstCreated = null;
@@ -283,14 +283,14 @@ public class UiEngineImpl implements UiEngine {
 				if (forEach == null) {
 					if (isEffective(childdef, pagedef, page, parent)) {
 						final Component child =
-							execCreateChild(page, parent, childdef);
+							execCreateChild(exec, page, parent, childdef);
 						if (firstCreated == null) firstCreated = child;
 					}
 				} else {
 					while (forEach.next()) {
 						if (isEffective(childdef, pagedef, page, parent)) {
 							final Component child =
-								execCreateChild(page, parent, childdef);
+								execCreateChild(exec, page, parent, childdef);
 							if (firstCreated == null) firstCreated = child;
 						}
 					}
@@ -305,10 +305,10 @@ public class UiEngineImpl implements UiEngine {
 		}
 		return firstCreated;
 	}
-	private static Component execCreateChild(Page page, Component parent,
+	private static Component execCreateChild(Execution exec, Page page, Component parent,
 	InstanceDefinition childdef) throws IOException {
 		if (ComponentDefinition.ZK == childdef.getComponentDefinition()) {
-			return execCreate(page, childdef, parent);
+			return execCreate(exec, page, childdef, parent);
 		} else {
 			final Component child = childdef.newInstance(page);
 			if (parent != null) child.setParent(parent);
@@ -320,10 +320,11 @@ public class UiEngineImpl implements UiEngine {
 			if (child instanceof PostCreate)
 				((PostCreate)child).postCreate();
 
-			execCreate(page, childdef, child); //recursive
+			execCreate(exec, page, childdef, child); //recursive
 
 			if (Events.isListenerAvailable(child, "onCreate", false))
-				Events.postEvent(new CreateEvent("onCreate", child));
+				Events.postEvent(
+					new CreateEvent("onCreate", child, exec.getArg()));
 
 			return child;
 		}
@@ -369,7 +370,7 @@ public class UiEngineImpl implements UiEngine {
 		exec.pushArg(params != null ? params: Collections.EMPTY_MAP);
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
-			return execCreate(page, pagedef, parent);
+			return execCreate(exec, page, pagedef, parent);
 		} catch (Throwable ex) {
 			inits.doCatch(ex);
 			throw UiException.Aide.wrap(ex);

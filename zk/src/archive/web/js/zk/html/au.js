@@ -27,17 +27,35 @@ if (!zkau._reqs) {
 	zkau._movs = {}; //(id, Draggable): moveables
 	zkau._drags = {}; //(id, Draggable): draggables
 	zkau._drops = new Array(); //dropables
+	zkau._idsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
 	zkau._stamp = 0; //used to make a time stamp
+	zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
 	zkau.floats = new Array(); //popup of combobox, bandbox, datebox...
 
 	zk.addInit(function () {
-		Event.observe(document, "mousedown", zkau._onDocMousedown);
 		Event.observe(document, "keydown", zkau._onDocKeydown);
+		Event.observe(document, "mousedown", zkau._onDocMousedown);
+
+		if (zk.agtIe) {
+			document.oncontextmenu = function () {
+				var b = zkau._eRClick == null;
+				zkau._eRClick = null; //free memory
+				return b;
+			}
+			Event.observe(document, "mouseup", zkau._onDocRClick);
+			Event.observe(document, "click", zkau._onDocLClick);
+		} else { //non-IE
+			Event.observe(document, "click", zkau._onDocClick);
+		}
+		Event.observe(document, "dblclick", zkau._onDocDClick);
+
+		zkau._oldDocUnload = window.onunload;
 		window.onunload = zkau._onDocUnload; //unable to use Event.observe
 	});
 }
 
-/** Handles onclick. */
+/** Handles onclick for button-type.
+ */
 zkau.onclick = function (evt) {
 	if (typeof evt == 'string') {
 		zkau.send({uuid: zkau.uuidOf(evt), cmd: "onClick", data: null});
@@ -550,22 +568,56 @@ zkau._getChildExterior = function (cmp) {
 	return n ? n: cmp;
 };
 
+/** Corrects zIndex of the specified component, which must be absolute.
+ * @param autoz whether it is called by
+ * @param silent whether to send onZIndex
+ */
+zkau.fixZIndex = function (cmp, silent, autoz) {
+	if (!zkau._popups.length && !zkau._overlaps.length && !zkau._modals.length)
+		zkau.topZIndex = 0; //reset it!
+
+	var zi = parseInt(cmp.style.zIndex || "0");
+	if (zi > zkau.topZIndex) {
+		zkau.topZIndex = zi;
+	} else if (!autoz || zi < zkau.topZIndex) {
+		cmp.style.zIndex = ++zkau.topZIndex;
+		if (!silent && cmp.id) {
+			cmp = zkau.getOuter(cmp);
+			zkau.send({uuid: cmp.id, cmd: "onZIndex",
+				data: [zi]}, zkau.asapTimeout(cmp, "onZIndex"));
+		}
+	}
+};
+/** Automatically adjust z-index if node is part of popup/overalp/...
+ */
+zkau.autoZIndex = function (node) {
+	for (; node; node = node.parentNode) {
+		if (node.style && node.style.position == "absolute") {
+			if (node.getAttribute("zk_autoz"))
+				zkau.fixZIndex(node, false, true); //don't inc if equals
+			break;
+		}
+	}
+};
+
 //-- popup --//
 if (!zkau._popups) {
 	zkau._popups = new Array(); //uuid
 	zkau._overlaps = new Array(); //uuid
+	zkau._modals = new Array(); //uuid (used zul.js or other modal)
 	zkau._intervals = {};
 }
 /** Makes the component as popup. */
 zkau.doPopup = function (cmp) {
-	zkau.closeFloats();
+	zkau.closeFloats(cmp);
 
 	cmp.setAttribute("mode", "popup");
 
 	var caption = $(cmp.id + "!caption");
 	if (caption && caption.style.cursor == "") caption.style.cursor = "pointer";
 
-	zkau.enableMoveable(cmp, zkau.autoZIndex, zkau.onWndMove);
+	zkau.fixZIndex(cmp);
+	zkau.enableMoveable(cmp, null, zkau.onWndMove);
 	zkau._popups.push(cmp.id); //store ID because it might cease before endPopup
 	zkau.hideCovered();
 	zk.focusDownById(cmp.id, 0);
@@ -585,15 +637,15 @@ zkau.endPopup = function (uuid) {
 };
 /** Makes the component as overlapped. */
 zkau.doOverlapped = function (cmp) {
-	zkau.closeFloats();
+	zkau.closeFloats(cmp);
 
 	cmp.setAttribute("mode", "overlapped");
 
 	var caption = $(cmp.id + "!caption");
 	if (caption && caption.style.cursor == "") caption.style.cursor = "pointer";
 
-	zkau.enableMoveable(cmp, zkau.autoZIndex, zkau.onWndMove);
-	zkau.enableAutoZIndex(cmp);
+	zkau.fixZIndex(cmp);
+	zkau.enableMoveable(cmp, null, zkau.onWndMove);
 	zkau._overlaps.push(cmp.id); //store ID because it might cease before endPopup
 	zkau.hideCovered();
 	zk.focusDownById(cmp.id, 0);
@@ -610,7 +662,6 @@ zkau.endOverlapped = function (uuid) {
 	if (cmp) {
 		cmp.removeAttribute("mode");
 		zkau.disableMoveable(cmp);
-		zkau.disableAutoZIndex(cmp);
 	}
 }
 /** Makes a window moveable. */
@@ -622,14 +673,15 @@ zkau.enableMoveable = function (cmp, starteffect, endeffect) {
 		if (handle) {
 			cmp.style.position = "absolute"; //just in case
 			zkau.initMoveable(cmp, {
-				handle: handle, zindex: cmp.style.zIndex,
-				starteffect: Prototype.emptyFunction,
+				handle: handle,
 				starteffect: starteffect || Prototype.emptyFunction,
+				change: zkau.hideCovered,
 				endeffect: endeffect || Prototype.emptyFunction});
 			//we don't use change because it is called too frequently
 		}
 	}
 };
+
 /** Makes a window un-moveable. */
 zkau.disableMoveable = function (cmp) {
 	if (cmp) zkau.cleanMoveable(cmp.id);
@@ -646,49 +698,6 @@ zkau.cleanMoveable = function (id) {
 		zkau._movs[id] = null;
 	}
 }
-
-/** Enable a window to adjust z-index automatically. */
-zkau.enableAutoZIndex = function (cmp) {
-	if (cmp) Event.observe(cmp, "mousedown", zkau._onAutoZIndex);
-};
-/** Disable a window to adjust z-index automatically. */
-zkau.disableAutoZIndex = function (cmp) {
-	if (cmp) Event.stopObserving(cmp, "mousedown", zkau._onAutoZIndex);
-};
-/** The event handler for adjusting z-index. */
-zkau._onAutoZIndex = function (evt) {
-	if (!evt) evt = window.event;
-	var node = Event.element(evt);
-	for (;; node = node.parentNode) {
-		if (!node) return;
-		if (node.style && node.style.position == "absolute")
-			break;
-	}
-	zkau.autoZIndex(node);
-};
-/** Adjust z-index automatically. */
-zkau.autoZIndex = function (cmp) {
-	var zi = parseInt(cmp.style.zIndex || "0");
-	for (var j = 0; j < zkau._popups.length; ++j) {
-		var el = $(zkau._popups[j]);
-		if (el && cmp != el) {
-			elzi = parseInt(el.style.zIndex || "0");
-			if (elzi >= zi) zi = elzi + 1;
-		}
-	}
-	for (var j = 0; j < zkau._overlaps.length; ++j) {
-		var el = $(zkau._overlaps[j]);
-		if (el && cmp != el) {
-			elzi = parseInt(el.style.zIndex || "0");
-			if (elzi >= zi) zi = elzi + 1;
-		}
-	}
-	if (parseInt(cmp.style.zIndex || "0") != zi) {
-		cmp.style.zIndex = zi;
-		zkau.send({uuid: cmp.id, cmd: "onZIndex",
-			data: [zi]}, zkau.asapTimeout(cmp, "onZIndex"));
-	}
-};
 
 /** Called back when overlapped and popup is moved. */
 zkau.onWndMove = function (cmp) {
@@ -728,6 +737,8 @@ zkau.onimgout = function (el) {
 
 /** Handles document.unload. */
 zkau._onDocUnload = function () {
+	if (zk.agtNav) zk.restoreDisabled(); //Workaround Nav: Bug 1495382
+
 	var content = "dtid="+zk_desktopId+"&cmd.0=rmDesktop";
 	var req;
 	if (window.ActiveXObject) { //IE
@@ -744,15 +755,98 @@ zkau._onDocUnload = function () {
 		} catch (e) { //silent
 		}
 	}
+
+	if (zkau._oldDocUnload) zkau._oldDocUnload.apply();
 };
 /** Handle document.onmousedown. */
 zkau._onDocMousedown = function (evt) {
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-	zkau.currentFocus = target;
-	if (!zkau.focusInFloats(target))
+
+	var node = Event.element(evt);
+	zkau.currentFocus = node;
+	if (!zkau.focusInFloats(node))
 		setTimeout(zkau.closeFloats, 0);
+
+	zkau.autoZIndex(node);
 };
+zkau._onDocClick = function (evt) {
+	return zkau._onDocLClick(evt) && zkau._onDocRClick(evt);
+};
+/** Handles the left click. */
+zkau._onDocLClick = function (evt) {
+	if (!evt) evt = window.event;
+
+	if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
+		var target = Event.element(evt);
+		target = zkau._getClkTarget(target, "zk_lfclk");
+		if (target) {
+			zkau.send({uuid: zkau.uuidOf(target), cmd: "onClick", data: null});
+			Event.stop(evt);
+			return false;
+		}
+	}
+	return true;
+};
+/** Handles the double click. */
+zkau._onDocDClick = function (evt) {
+	if (!evt) evt = window.event;
+
+	var target = Event.element(evt);
+	target = zkau._getClkTarget(target, "zk_dbclk");
+	if (target) {
+		zkau.send({uuid: zkau.uuidOf(target), cmd: "onDoubleClick", data: null});
+		Event.stop(evt);
+		return false;
+	}
+	return true;
+};
+/** Handles the right click. */
+zkau._onDocRClick = function (evt) {
+	if (!evt) evt = window.event;
+
+	if (evt.which == 3 || evt.button == 2) {
+		var cmp = Event.element(evt);
+		cmp = zkau._getClkTarget(cmp, "zk_ctx", "zk_rtclk");
+		if (zk.agtIe) zkau._eRClick = cmp; //used only by oncontextmenu
+
+		if (cmp) {
+			var ctx = cmp.getAttribute("zk_ctx");
+			if (ctx) {
+				ctx = zkau.getByZid(cmp, ctx);
+				if (ctx) {
+					var type = zk.getCompType(ctx);
+					if (type) {
+						zkau.closeFloats(ctx);
+
+						ctx.style.left = Event.pointerX(evt) + "px";
+						ctx.style.top = Event.pointerY(evt) + "px";
+						var fn = "zk"+type+".context";
+						eval(fn+"&&"+fn+"(ctx, cmp)");
+					}
+				}
+			}
+
+			if (cmp.getAttribute("zk_rtclk"))
+				zkau.send(
+					{uuid: zkau.uuidOf(cmp), cmd: "onRightClick", data: null});
+
+			Event.stop(evt);
+			return false;
+		}
+	}
+	return true;
+};
+/** Returns the target of right-click, or null if not found. */
+zkau._getClkTarget = function (n, attr1, attr2) {
+	for (; n; n = n.parentNode) {
+		if (n.getAttribute) {
+			if (attr1 && n.getAttribute(attr1)) return n;
+			if (attr2 && n.getAttribute(attr2)) return n;
+		}
+	}
+	return null;
+};
+
 /** Handles document.onkeydown. */
 zkau._onDocKeydown = function (evt) {
 	if (!evt) evt = window.event;
@@ -761,7 +855,7 @@ zkau._onDocKeydown = function (evt) {
 	switch (evt.keyCode) {
 	case 13: //ENTER
 	case 27: //ESC
-		if (zkau.closeFloats()) {
+		if (zkau.closeFloats(target)) {
 			Event.stop(evt);
 			return false; //eat
 		}
@@ -788,7 +882,7 @@ zkau._onDocKeydown = function (evt) {
 		if (n.id && n.getAttribute) {
 			if (n.getAttribute("zk_" + evtnm) == "true"
 			&& (evtnm != "onCtrlKey"
-			|| zkau._isInCtrlKeys(evt.keyCode, n.getAttribute("zk_ctrlKeys")))) {
+			|| zkau._isInCtrlKeys(evt.keyCode, n.getAttribute("zk_ctkeys")))) {
 				var bSend = true;
 				if (zkau.currentFocus) {
 					var inp = zkau.currentFocus;
@@ -867,27 +961,30 @@ zkau.hide = function (uuid) {
 };
 
 /** Closes popups and floats. Return false if nothing changed. */
-zkau.closeFloats = function() {
-	var closed;
+zkau.closeFloats = function (owner) {
+	owner = $(owner);
+	var closed, popups = new Array();
 	for (;;) {
 		//reverse order is important if popup contains another
 		//otherwise, IE might have bug to handle them correctly
 		var uuid = zkau._popups.pop();
 		if (!uuid) break;
 
-		closed = true;
-		zkau.hide(uuid);
+		if (zk.isAncestor($(uuid), owner)) {
+			popups.push(uuid);
+		} else {
+			closed = true;
+			zkau.hide(uuid);
+		}
 	}
+	zkau._popups = popups;
 
 	for (var j = 0; j < zkau.floats.length; ++j)
 		if (zkau.floats[j].closeFloats()) //combobox popup
 			closed = true;
 
-	if (zkau.calclose && zkau.calclose()) //calendar's popup
-		closed = true;
 	if (closed)
 		zkau.hideCovered();
-
 	return closed;
 };
 zkau.hideCovered = function() {
@@ -951,6 +1048,48 @@ zkau.getParentByType = function (el, type) {
 		if (zk.getCompType(el) == type)
 			return el;
 	return null;
+};
+
+////
+//ID Space//
+/** Returns element of the specified zid. */
+zkau.getByZid = function (n, zid) {
+	while (n) {
+		n = zkau.getIdOwner(n);
+		var v = zkau._idsp[n ? n.id: "zk_dksp"];
+		if (v) {
+			v = v[zid];
+			if (v) return $(v);
+		}
+		if (n) n = n.parentNode;
+	}
+	return null;
+};
+/** Returns the space owner that n belongs to, or null if not found. */
+zkau.getIdOwner = function (n) {
+	for (; n; n = n.parentNode) {
+		if (n.getAttribute && n.getAttribute("zk_idsp"))
+			return n;
+	}
+	return null;
+};
+zkau.initzid = function (n, zid) {
+	var o = zkau.getIdOwner(n);
+	o = o ? o.id: "zk_dksp";
+	var ary = zkau._idsp[o];
+	if (!ary) ary = zkau._idsp[o] = {};
+	if (!zid) zid = n.getAttribute("zid");
+	ary[zid] = n.id;
+};
+zkau.cleanzid = function (n) {
+	var o = zkau.getIdOwner(n);
+	o = o ? o.id: "zk_dksp";
+	var ary = zkau._idsp[o];
+	if (ary) ary[n.getAttribute("zid")] = null;
+};
+/** Clean an ID space. */
+zkau.cleanidsp = function (n) {
+	zkau._idsp[n.id] = null;
 };
 
 ///////////////
@@ -1289,6 +1428,9 @@ zkau.cmd1 = {
 			if (!cmp.getAttribute("zk_drop")) zkau.initdrop(cmp);
 			zkau.setAttr(cmp, dt1, dt2);
 			done = true;
+		} else if ("zid" == dt1) {
+			zkau.cleanzid(cmp);
+			if (dt2) zkau.initzid(cmp, dt2);
 		}
 
 		var type = zk.getCompType(cmp);
@@ -1301,6 +1443,7 @@ zkau.cmd1 = {
 		if (!done) {
 			if (dt1.startsWith("on")) cmp = zkau.getReal(cmp);
 				//Client-side-action must be done at the inner tag
+
 			zkau.setAttr(cmp, dt1, dt2);
 		}
 	},
@@ -1408,13 +1551,13 @@ zkau.cmd1 = {
 		if (cmp.select)
 			zk.selectById(cmp.id);
 	},
-	doPop: function (cmp) {
+	doPop: function (uuid, cmp) {
 		zkau.doPopup(cmp);
 	},
 	endPop: function (uuid, cmp) {
 		zkau.endPopup(uuid);
 	},
-	doOvl: function (cmp) {
+	doOvl: function (uuid, cmp) {
 		zkau.doOverlapped(cmp);
 	},
 	endOvl: function (uuid, cmp) {

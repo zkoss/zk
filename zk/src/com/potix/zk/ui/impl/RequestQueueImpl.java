@@ -100,9 +100,10 @@ public class RequestQueueImpl implements RequestQueue {
 
 		//Case 2: drop new request if similar already exists
 		final AuRequest.Command cmd = request.getCommand();
-		if (cmd == AuRequest.ON_CLICK
+		if (cmd == AuRequest.ON_CLICK || cmd == AuRequest.ON_RIGHT_CLICK
 		|| cmd == AuRequest.ON_OK || cmd == AuRequest.ON_CANCEL
-		|| cmd == AuRequest.ON_CTRL_KEY) {
+		|| cmd == AuRequest.ON_CTRL_KEY
+		|| cmd == AuRequest.ON_DOUBLE_CLICK) {
 			for (Iterator it = _requests.iterator(); it.hasNext();) {
 				final AuRequest req2 = (AuRequest)it.next();
 				final AuRequest.Command cmd2 = req2.getCommand();
@@ -128,7 +129,7 @@ public class RequestQueueImpl implements RequestQueue {
 		//ON_FOCUS, ON_BLUR
 		} else if (cmd == AuRequest.ON_RENDER || cmd == AuRequest.ON_ERROR
 		|| cmd == AuRequest.ON_MOVE || cmd == AuRequest.ON_Z_INDEX
-		|| cmd == AuRequest.ON_TIMER || cmd == AuRequest.ON_DBL_CLICK
+		|| cmd == AuRequest.ON_TIMER
 		|| cmd == AuRequest.ON_FOCUS || cmd == AuRequest.ON_BLUR
 		|| cmd == AuRequest.ON_SORT || cmd == AuRequest.ON_BOOKMARK_CHANGED) {
 			final String uuid = request.getComponentUuid();
