@@ -124,4 +124,47 @@ public class XMLs {
 		}
 		return sb;
 	}
-}
+
+	/** Encodes a string that special characters are quoted to be compatible
+	 * with HTML/XML.
+	 * For example, &lt; is translated to &amp;lt;.
+	 *
+     *    &amp; -> &amp;amp;<br/>
+     *    &lt; -> &amp;lt;<br/>
+     *    &gt; -> &amp;gt;<br/>
+     *    " -> &amp;#034;<br/>
+     *    ' -> &amp;#039;<br/>
+	 *
+	 * @param s the string to quote; null is OK
+	 * @return the escaped string, or an empty string if s is null
+	 */
+	public static final String escapeXML(String s) {
+		if (s == null) return "";
+		final StringBuffer sb = new StringBuffer(s.length() + 16);
+		for (int j = 0, len = s.length(); j < len; ++j) {
+			final char cc = s.charAt(j);
+			final String esc = escapeXML(cc);
+			if (esc != null) sb.append(esc);
+			else sb.append(cc);
+		}
+		return s.length() == sb.length() ? s: sb.toString();
+	}
+	/** Enscapes a character into a string if it is a special XML character,
+	 * returns null if not a special character.
+	 *
+     *    &amp; -> &amp;amp;<br/>
+     *    &lt; -> &amp;lt;<br/>
+     *    &gt; -> &amp;gt;<br/>
+     *    " -> &amp;#034;<br/>
+     *    ' -> &amp;#039;<br/>
+	 */
+	public static final String escapeXML(char cc) {
+		switch (cc) {
+		case '"': return "&#034;";
+		case '\'': return "&#039;";
+		case '>': return "&gt;";
+		case '<': return "&lt;";
+		case '&': return "&amp;";
+		}
+		return null;
+	}}
