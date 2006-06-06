@@ -26,8 +26,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<p>In this demo, the first editor is a FCKeditor and the second one
 	is a textbox. Then, what you typed in the FCKeditor will be copied
 	to the textbox. Vice versa.</p>
-	<p>Notice: FCKeditor's onBlur event currently support only Internet Explorer,
-	so this demo works only under Internet Explorer.</p>
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
