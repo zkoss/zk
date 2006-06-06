@@ -59,7 +59,7 @@ public class BshNamespace implements Namespace {
 	}
  	public Object getVariable(String name, boolean local) {
 		final NameSpace oldp = local ? _ns.getParent(): null;
-		if (oldp != null) _ns.setParent(null); //to avoid recusrive
+		if (oldp != null) _ns.setParent(null); //to avoid calling parent's getVariable
  		try {
 	 		return Primitive.unwrap(_ns.getVariable(name));
 		} catch (UtilEvalError ex) {
@@ -70,7 +70,7 @@ public class BshNamespace implements Namespace {
  	}
 	public void setVariable(String name, Object value, boolean local) {
 		final NameSpace oldp = local ? _ns.getParent(): null;
-		if (oldp != null) _ns.setParent(null); //to avoid recusrive
+		if (oldp != null) _ns.setParent(null); //to avoid calling parent's setVariable
 		try {
 			_ns.setVariable(name, value, false);
 		} catch (UtilEvalError ex) {
