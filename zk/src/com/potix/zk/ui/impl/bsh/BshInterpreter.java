@@ -26,8 +26,10 @@ import java.io.StringReader;
 
 import bsh.BshClassManager;
 import bsh.NameSpace;
+import bsh.Variable;
 import bsh.Primitive;
 import bsh.EvalError;
+import bsh.UtilEvalError;
 
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Interpreter;
@@ -51,18 +53,11 @@ public class BshInterpreter implements Interpreter {
 
 		final BshClassManager classManager = _ip.getClassManager();
 		//final NameSpace oldns = _ip.getNameSpace();
-		_ip.setNameSpace(new PageNameSpace(this, classManager, "global"));
+		_ip.setNameSpace(new MyNameSpace(classManager, "global"));
 		//classManager.removeListener(oldns);
 			//ClassManagerImpl doesn't implement removeListener
 
 		_ns = new BshNamespace(_ip.getNameSpace());
-	}
-
-	/** Returns the list of {@link VariableResolver} that was added
-	 * by {@link #addVariableResolver}, or null if no resolver at all.
-	 */
-	/*package*/ List getVariableResolvers() {
-		return _resolvers;
 	}
 
 	//-- Interpreter --//
@@ -115,6 +110,48 @@ public class BshInterpreter implements Interpreter {
 				_ip.eval(script);
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
+		}
+	}
+
+	private class MyNameSpace extends NameSpace {
+		private boolean _inGet;
+
+		/** Don't call this method. */
+	    private MyNameSpace(BshClassManager classManager, String name) {
+	    	super(classManager, name);
+	    }
+
+		////
+		protected Variable getVariableImpl(String name, boolean recurse)
+		throws UtilEvalError {
+			//Tom M Yeh: 20060606:
+			//We cannot override getVariable because BeanShell use
+			//getVariableImpl to resolve a variable recusrivly
+			//
+			//However, Variable has no public/protected contructor, so
+			//we have to store the value back
+			//
+			//Limitation: here we assume the binding of the variable
+			//is immutable. (due to Variable.getValue is not accessible)
+			Variable var = super.getVariableImpl(name, recurse);
+			if (!_inGet && var == null && _resolvers != null) {
+				for (Iterator it = _resolvers.iterator(); it.hasNext();) {
+					final Object v =
+						((VariableResolver)it.next()).getVariable(name);
+					if (v != null) {
+						_inGet = true;
+						try {
+							this.setVariable(name, v, false);
+						} finally {
+							_inGet = false;
+						}
+
+						var = super.getVariableImpl(name, recurse);
+						break;
+					}
+				}
+			}
+			return var;
 		}
 	}
 }
