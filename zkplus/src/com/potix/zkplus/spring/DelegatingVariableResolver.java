@@ -23,6 +23,7 @@ import javax.servlet.ServletContext;
 import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.util.VariableResolver;
 
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -61,7 +62,11 @@ public class DelegatingVariableResolver implements VariableResolver {
 	public Object getVariable(String name) {
 		Object o = _vars.get(name);
 		if (o == null) {
-			o = getApplicationContext().getBean(name);
+			try {
+				o = getApplicationContext().getBean(name);
+			} catch (NoSuchBeanDefinitionException ex) {
+				o = null;
+			}
 			if (o != null)
 				_vars.put(name, o);
 		}
