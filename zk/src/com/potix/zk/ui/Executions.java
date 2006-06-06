@@ -287,7 +287,7 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * @see #notifyAll(Page, Object)
 	 */
 	public static final void notify(Page page, Object obj) {
-		getUiEngine().notify(page, obj);
+		getUiEngine(page).notify(page, obj);
 	}
 	/** Wakes up all event processing theads for the specified page
 	 * that are waiting on the specified object.
@@ -308,10 +308,19 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * @see #notifyAll(Page, Object)
 	 */
 	public static final  void notifyAll(Page page, Object obj) {
-		getUiEngine().notifyAll(page, obj);
+		getUiEngine(page).notifyAll(page, obj);
 	}
 
+	private static final UiEngine getUiEngine(Page page) {
+		final Desktop desktop = page.getDesktop();
+		if (desktop == null)
+			throw new IllegalArgumentException("Page isn't associated with any desktop: "+page);
+		return ((WebAppCtrl)desktop.getWebApp()).getUiEngine();
+	}
 	private static final UiEngine getUiEngine() {
-		return ((WebAppCtrl)getCurrent().getDesktop().getWebApp()).getUiEngine();
+		final Execution exec = getCurrent();
+		if (exec == null)
+			throw new IllegalStateException("This method can be called only under an event listener");
+		return ((WebAppCtrl)exec.getDesktop().getWebApp()).getUiEngine();
 	}
 }
