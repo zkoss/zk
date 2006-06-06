@@ -19,6 +19,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package com.potix.zk.ui.impl.bsh;
 
 import bsh.NameSpace;
+import bsh.Primitive;
+import bsh.UtilEvalError;
 
 /**
  * A light-weight namespace that never imports the default packages.
@@ -29,7 +31,23 @@ import bsh.NameSpace;
 	/*package*/ LiteNameSpace(NameSpace parent, String id) {
 		super(parent, id);
 	}
+
+	//super//
     public void loadDefaultImports() {
     	 //to speed up the formance
     }
+
+	public Object getVariable( String name, boolean recurse ) 
+	throws UtilEvalError {
+		final Object o = super.getVariable(name, recurse);
+		if (Primitive.unwrap(o) == null) {
+			for (NameSpace ns = this; ns != null;ns = ns.getParent())
+				if (ns instanceof PageNameSpace) {
+					return ((PageNameSpace)ns).resolve(name);
+				} else if (!recurse) {
+					break;
+				}
+		}
+		return o;
+	}
 }
