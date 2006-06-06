@@ -28,7 +28,6 @@ import bsh.BshClassManager;
 import bsh.NameSpace;
 import bsh.Primitive;
 import bsh.EvalError;
-import bsh.UtilEvalError;
 
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Interpreter;
@@ -52,11 +51,18 @@ public class BshInterpreter implements Interpreter {
 
 		final BshClassManager classManager = _ip.getClassManager();
 		//final NameSpace oldns = _ip.getNameSpace();
-		_ip.setNameSpace(new MyNameSpace(classManager, "global"));
+		_ip.setNameSpace(new PageNameSpace(this, classManager, "global"));
 		//classManager.removeListener(oldns);
 			//ClassManagerImpl doesn't implement removeListener
 
 		_ns = new BshNamespace(_ip.getNameSpace());
+	}
+
+	/** Returns the list of {@link VariableResolver} that was added
+	 * by {@link #addVariableResolver}, or null if no resolver at all.
+	 */
+	/*package*/ List getVariableResolvers() {
+		return _resolvers;
 	}
 
 	//-- Interpreter --//
@@ -109,29 +115,6 @@ public class BshInterpreter implements Interpreter {
 				_ip.eval(script);
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
-		}
-	}
-
-	private class MyNameSpace extends NameSpace {
-		/** Don't call this method. */
-	    private MyNameSpace(BshClassManager classManager, String name) {
-	    	super(classManager, name);
-	    }
-
-		public Object getVariable( String name, boolean recurse ) 
-		throws UtilEvalError {
-			final Object o = super.getVariable(name, recurse);
-
-			if ((o == null || o == Primitive.VOID)
-			&& _resolvers != null) {
-				for (Iterator it = _resolvers.iterator(); it.hasNext();) {
-					final Object v =
-						((VariableResolver)it.next()).getVariable(name);
-					if (v != null) return v;
-				}
-			}
-
-			return o;
 		}
 	}
 }
