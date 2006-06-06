@@ -570,11 +570,7 @@ public class UiEngineImpl implements UiEngine {
 	public void notify(Object obj) {
 		if (obj == null)
 			throw new IllegalArgumentException("obj cannot be null");
-
-		final Execution exec = Executions.getCurrent();
-		if (exec == null)
-			throw new UiException("resume can be called only in processing a request");
-		notify(exec.getDesktop(), obj);
+		notify(Executions.getCurrent().getDesktop(), obj);
 	}
 	public void notify(Page page, Object obj) {
 		if (page == null || obj == null)

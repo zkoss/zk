@@ -234,7 +234,11 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * specified object.
 	 *
 	 * <p>Unlike {@link #notify(Page, Object)}, this method can be invoked only
-	 * if the same desktop is locked for processing requests.
+	 * in the event listener that processing the same desktop.
+	 * In addition, this method can be called under the event listener.
+	 *
+	 * <p>Use {@link #notify(Page, Object)} if you want to notify in other
+	 * thread, such as a working thread.
 	 *
 	 * @param obj any non-null object to identify what to notify. It must be
 	 * same object passed to {@link #wait}.
@@ -249,7 +253,11 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * specified object.
 	 *
 	 * <p>Unlike {@link #notify(Page, Object)}, this method can be invoked only
-	 * if the same desktop is locked for processing requests.
+	 * in the event listener that processing the same desktop.
+	 * In addition, this method can be called under the event listener.
+	 *
+	 * <p>Use {@link #notifyAll(Page, Object)} if you want to notify in other
+	 * thread, such as a working thread.
 	 *
 	 * @param obj any non-null object to identify what to notify. It must be
 	 * same object passed to {@link #wait}.
