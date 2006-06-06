@@ -139,6 +139,8 @@ public class BshInterpreter implements Interpreter {
 					final Object v =
 						((VariableResolver)it.next()).getVariable(name);
 					if (v != null) {
+						//setVariable will callback this method,
+						//so use _inGet to prevent dead loop
 						_inGet = true;
 						try {
 							this.setVariable(name, v, false);
