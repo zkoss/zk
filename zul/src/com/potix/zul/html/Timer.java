@@ -90,6 +90,13 @@ public class Timer extends XulElement {
 	public boolean isRunning() {
 		return _running;
 	}
+	/** Start or stops the timer.
+	 */
+	public void setRunning(boolean running) {
+		if (running) start();
+		else stop();
+	}
+
 	/** Stops the timer.
 	 */
 	public void stop() {
