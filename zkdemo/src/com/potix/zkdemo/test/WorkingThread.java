@@ -27,9 +27,11 @@ import com.potix.zul.html.Label;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class WorkingThread extends Thread {
-	private int _cnt;
+	private static int _cnt;
+
 	private Desktop _desktop;
 	private Label _label;
+	private final Object _mutex = new Integer(0);
 
 	/** Called by thread.zul to create a label asynchronously.
 	 * To create a label, it start a thread, and wait for its completion.
@@ -37,9 +39,9 @@ public class WorkingThread extends Thread {
 	public static final Label asyncCreate(Desktop desktop)
 	throws InterruptedException {
 		final WorkingThread worker = new WorkingThread(desktop);
-		synchronized (worker) {
+		synchronized (worker._mutex) {
 			worker.start();
-			Executions.wait(worker);
+			Executions.wait(worker._mutex);
 			return worker.getLabel();
 		}
 	}
@@ -52,11 +54,9 @@ public class WorkingThread extends Thread {
 		return _label;
 	}
 	public void run() {
-System.out.println("wt started");
 		_label = new Label("Execute "+ ++_cnt);
-		synchronized (this) {
-			Executions.notify(_desktop, this);
+		synchronized (_mutex) {
+			Executions.notify(_desktop, _mutex);
 		}
-System.out.println("wt done");
 	}
 }

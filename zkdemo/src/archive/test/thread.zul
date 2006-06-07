@@ -24,4 +24,5 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	main.appendChild(label);
 		</attribute>
 	</button>
+	<timer id="timer" delay="1000" repeats="true"/>
 </window>
