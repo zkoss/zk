@@ -777,10 +777,29 @@ zkau._onDocLClick = function (evt) {
 	if (!evt) evt = window.event;
 
 	if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
-		var target = Event.element(evt);
-		target = zkau._getClkTarget(target, "zk_lfclk");
-		if (target) {
-			zkau.send({uuid: zkau.uuidOf(target), cmd: "onClick", data: null});
+		var cmp = Event.element(evt);
+		cmp = zkau._getClkTarget(cmp, "zk_lfclk", "zk_pop");
+		if (cmp) {
+			var ctx = cmp.getAttribute("zk_pop");
+			if (ctx) {
+				ctx = zkau.getByZid(cmp, ctx);
+				if (ctx) {
+					var type = zk.getCompType(ctx);
+					if (type) {
+						zkau.closeFloats(ctx);
+
+						ctx.style.left = Event.pointerX(evt) + "px";
+						ctx.style.top = Event.pointerY(evt) + "px";
+						var fn = "zk"+type+".context";
+						eval(fn+"&&"+fn+"(ctx, cmp)");
+					}
+				}
+			}
+
+			if (cmp.getAttribute("zk_lfclk"))
+				zkau.send(
+					{uuid: zkau.uuidOf(cmp), cmd: "onClick", data: null});
+
 			Event.stop(evt);
 			return false;
 		}
