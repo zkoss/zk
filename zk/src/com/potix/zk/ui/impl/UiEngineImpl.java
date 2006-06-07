@@ -66,7 +66,7 @@ public class UiEngineImpl implements UiEngine {
 	/** A pool of idle EventProcessingThread. */
 	private final List _evtthds = new LinkedList();
 	/** A map of suspended processing:
-	 * (Desktop desktop, Map(Object obj, List(EventProcessingThread)).
+	 * (Desktop desktop, Map(Object mutex, List(EventProcessingThread)).
 	 */
 	private final Map _suspended = new HashMap();
 	/** A map of resumed processing
@@ -534,14 +534,14 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 
-	public void wait(Object obj) throws InterruptedException {
-		if (obj == null)
-			throw new IllegalArgumentException("obj cannot be null");
+	public void wait(Object mutex) throws InterruptedException {
+		if (mutex == null)
+			throw new IllegalArgumentException("null mutex");
 
 		final Thread thd = Thread.currentThread();
 		if (!(thd instanceof EventProcessingThread))
 			throw new UiException("suspend can be called only in processing an event");
-		if (D.ON && log.finerable()) log.finer("Suspend "+thd+" on "+obj);
+		if (D.ON && log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
 
 		final Execution exec = Executions.getCurrent();
 		final Desktop desktop = exec.getDesktop();
@@ -549,7 +549,7 @@ public class UiEngineImpl implements UiEngine {
 		final EventProcessingThread evtthd = (EventProcessingThread)thd;
 		desktop.getWebApp().getConfiguration()
 			.invokeEventThreadSuspends(
-				evtthd.getComponent(), evtthd.getEvent(), obj);
+				evtthd.getComponent(), evtthd.getEvent(), mutex);
 			//it might throw an exception, so process it before updating
 			//_suspended
 
@@ -560,39 +560,34 @@ public class UiEngineImpl implements UiEngine {
 				_suspended.put(desktop, map = new HashMap(3));
 		}
 		synchronized (map) {
-			List list = (List)map.get(obj);
+			List list = (List)map.get(mutex);
 			if (list == null)
-				map.put(obj, list = new LinkedList());
+				map.put(mutex, list = new LinkedList());
 			list.add(evtthd);
 		}
-		EventProcessingThread.doSuspend();
+		try {
+			EventProcessingThread.doSuspend(mutex);
+		} catch (Throwable ex) {
+			//error recover
+			synchronized (map) {
+				final List list = (List)map.get(mutex);
+				if (list != null) {
+					list.remove(evtthd);
+					if (list.isEmpty()) map.remove(mutex);
+				}
+			}
+			if (ex instanceof InterruptedException)
+				throw (InterruptedException)ex;
+			throw UiException.Aide.wrap(ex, "Unable to suspend "+evtthd);
+		}
 	}
-	public void notify(Object obj) {
-		if (obj == null)
-			throw new IllegalArgumentException("obj cannot be null");
-		notify(Executions.getCurrent().getDesktop(), obj);
+	public void notify(Object mutex) {
+		notify(Executions.getCurrent().getDesktop(), mutex);
 	}
-	public void notify(Page page, Object obj) {
-		if (page == null || obj == null)
-			throw new IllegalArgumentException("page and obj cannot be null");
-		notify(page.getDesktop(), obj);
-	}
-	public void notifyAll(Object obj) {
-		if (obj == null)
-			throw new IllegalArgumentException("obj cannot be null");
+	public void notify(Desktop desktop, Object mutex) {
+		if (desktop == null || mutex == null)
+			throw new IllegalArgumentException("desktop and mutex cannot be null");
 
-		final Execution exec = Executions.getCurrent();
-		if (exec == null)
-			throw new UiException("resume can be called only in processing a request");
-		notifyAll(exec.getDesktop(), obj);
-	}
-	public void notifyAll(Page page, Object obj) {
-		if (page == null || obj == null)
-			throw new IllegalArgumentException("page and obj cannot be null");
-		notifyAll(page.getDesktop(), obj);
-	}
-
-	private void notify(Desktop desktop, Object obj) {
 		final Map map;
 		synchronized (_suspended) {
 			map = (Map)_suspended.get(desktop);
@@ -601,16 +596,25 @@ public class UiEngineImpl implements UiEngine {
 
 		final EventProcessingThread evtthd;
 		synchronized (map) {
-			final List list = (List)map.get(obj);
+			final List list = (List)map.get(mutex);
 			if (list == null) return; //nothing to notify
 
 			//Note: list is never empty
 			evtthd = (EventProcessingThread)list.remove(0);
-			if (list.isEmpty()) map.remove(obj); //clean up
+			if (list.isEmpty()) map.remove(mutex); //clean up
 		}
 		addResumed(desktop, evtthd);
 	}
-	private void notifyAll(Desktop desktop, Object obj) {
+	public void notifyAll(Object mutex) {
+		final Execution exec = Executions.getCurrent();
+		if (exec == null)
+			throw new UiException("resume can be called only in processing a request");
+		notifyAll(exec.getDesktop(), mutex);
+	}
+	public void notifyAll(Desktop desktop, Object mutex) {
+		if (desktop == null || mutex == null)
+			throw new IllegalArgumentException("desktop and mutex cannot be null");
+
 		final Map map;
 		synchronized (_suspended) {
 			map = (Map)_suspended.get(desktop);
@@ -619,7 +623,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final List list;
 		synchronized (map) {
-			list = (List)map.remove(obj);
+			list = (List)map.remove(mutex);
 			if (list == null) return; //nothing to notify
 		}
 		for (Iterator it = list.iterator(); it.hasNext();)

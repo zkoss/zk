@@ -133,8 +133,11 @@ public class AbstractComponent implements Component, ComponentCtrl {
 	}
 	private static final
 	ComponentDefinition getDefinitionFromCurrentPage(Class cls) {
-		final PageDefinition pgdef =
-			ExecutionsCtrl.getCurrentCtrl().getCurrentPageDefinition(true);
+		final ExecutionCtrl execCtrl = ExecutionsCtrl.getCurrentCtrl();
+		if (execCtrl == null)
+			return null;
+
+		final PageDefinition pgdef = execCtrl.getCurrentPageDefinition(true);
 		if (pgdef != null) {
 			ComponentDefinition compdef = pgdef.getComponentDefinition(cls);
 			if (compdef != null) return compdef;

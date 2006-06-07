@@ -69,7 +69,7 @@ public class EventProcessingThread extends Thread {
 	 */
 	private final Object _evtmutex = new Integer(0);
 	/** The mutex use to suspend an event processing. */
-	private final Object _suspmutex = new Integer(2);
+	private Object _suspmutex;
 	private boolean _ceased;
 	/** Whether not to show message when stopping. */
 	private boolean _silent;
@@ -119,8 +119,10 @@ public class EventProcessingThread extends Thread {
 			_ceased = true;
 			_evtmutex.notifyAll();
 		}
-		synchronized (_suspmutex) {
-			_suspmutex.notifyAll();
+		if (_suspmutex != null) {
+			synchronized (_suspmutex) {
+				_suspmutex.notifyAll();
+			}
 		}
 	}
 	/** Stops the thread silently. Called by UiEngine to stop abnormal
@@ -138,25 +140,34 @@ public class EventProcessingThread extends Thread {
 	 * <li>It is a static method.
 	 * </ul>
 	 */
-	public static void doSuspend() throws InterruptedException {
-		((EventProcessingThread)Thread.currentThread()).doSuspend0();
+	public static void doSuspend(Object mutex) throws InterruptedException {
+		((EventProcessingThread)Thread.currentThread()).doSuspend0(mutex);
 	}
-	private void doSuspend0() throws InterruptedException {
-		if (D.ON && log.finerable()) log.finer("Suspend event processing; "+_event);
+	private void doSuspend0(Object mutex) throws InterruptedException {
+		if (log.finerable()) log.finer("Suspend event processing; "+_event);
+		if (mutex == null)
+			throw new IllegalArgumentException("null mutex");
 		if (isIdle())
 			throw new InternalError("Called without processing event?");
+		if (_suspmutex != null)
+			throw new InternalError("Suspend twice?");
 
-		//we have to lock _suspmutex first. Otherwise, after _evtmutex.notify
-		//doResume might be called and _suspmutex.notify before wait
-		//----
-		//NOTE: potential dead lock if doSuspend and doResume are called
-		//at the same time. However, it shall not happen because we can only
-		//resume suspended processing.
-		synchronized (_suspmutex) {
-			synchronized (_evtmutex) {
-				_evtmutex.notify(); //let the main thread continue
+		//let the main thread continue
+		synchronized (_evtmutex) {
+			_evtmutex.notify();
+		}
+
+		//Spec: locking mutex is optional for app developers
+		//so we have to lock it first
+		if (!_ceased) {
+			_suspmutex = mutex;
+			try {
+				synchronized (_suspmutex) {
+					_suspmutex.wait();
+				}
+			} finally {
+				_suspmutex = null;
 			}
-			if (!_ceased) _suspmutex.wait();
 		}
 
 		_comp.getDesktop().getWebApp().getConfiguration()
@@ -175,15 +186,20 @@ public class EventProcessingThread extends Thread {
 		if (D.ON && log.finerable()) log.finer("Resume event processing; "+_event);
 		if (isIdle())
 			throw new InternalError("Called without processing event?");
+		if (_suspmutex == null)
+			throw new InternalError("Resume non-suspended thread?");
 
-		//we have to lock _evtmutex first. Otherwise, after _suspmutex.notify
-		//evtthd might complete or suspend again before wait
-		synchronized (_evtmutex) {
-			synchronized (_suspmutex) {
-				_suspmutex.notify(); //wake the suspended event thread
+		//Spec: locking mutex is optional for app developers
+		//so we have to lock it first
+		synchronized (_suspmutex) {
+			_suspmutex.notify(); //wake the suspended event thread
+		}
+
+		//wait until the event thread completes or suspends again
+		if (!_ceased) {
+			synchronized (_evtmutex) {
+				_evtmutex.wait();
 			}
-			if (!_ceased) _evtmutex.wait();
-				//wait until the event thread completes or suspend again
 		}
 
 		checkError();
@@ -300,7 +316,7 @@ public class EventProcessingThread extends Thread {
 						_evtmutex.notify();
 						//wake the main thread OR the resuming thread
 					if (!_ceased) _evtmutex.wait();
-						//wait the main thread to issue request
+						//wait the main thread to issue another request
 				}
 			}
 

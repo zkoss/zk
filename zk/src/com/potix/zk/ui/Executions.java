@@ -211,7 +211,7 @@ s	 * @param parent the parent component, or null if you want it to be
 	//-- wait/notify --//
 	/** Suspends the current processing of an event and wait until the
 	 * other thread invokes {@link #notify(Object)}, {@link #notifyAll(Object)},
-	 * {@link #notify(Page, Object)} or {@link #notifyAll(Page, Object)}
+	 * {@link #notify(Desktop, Object)} or {@link #notifyAll(Desktop, Object)}
 	 * for the specified object.
 	 *
 	 * <p>It can only be called when the current thread is processing an event.
@@ -222,7 +222,7 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * until the modal dialog ends.
 	 *
 	 * @param obj any non-null object to identify what to wait, such that
-	 * {@link #notify(Object)} and {@link #notify(Page, Object)} knows
+	 * {@link #notify(Object)} and {@link #notify(Desktop, Object)} knows
 	 * which object to notify.
 	 * @exception UiException if it is called not during event processing.
 	 */
@@ -233,16 +233,16 @@ s	 * @param parent the parent component, or null if you want it to be
 	/** Wakes up a single event processing thread that is waiting on the
 	 * specified object.
 	 *
-	 * <p>Unlike {@link #notify(Page, Object)}, this method can be invoked only
+	 * <p>Unlike {@link #notify(Desktop, Object)}, this method can be invoked only
 	 * in the event listener that processing the same desktop.
 	 * In addition, this method can be called under the event listener.
 	 *
-	 * <p>Use {@link #notify(Page, Object)} if you want to notify in other
+	 * <p>Use {@link #notify(Desktop, Object)} if you want to notify in other
 	 * thread, such as a working thread.
 	 *
 	 * @param obj any non-null object to identify what to notify. It must be
 	 * same object passed to {@link #wait}.
-	 * @see #notify(Page, Object)
+	 * @see #notify(Desktop, Object)
 	 * @see #notifyAll(Object)
 	 * @exception UiException if it is called not during event processing.
 	 */
@@ -252,23 +252,23 @@ s	 * @param parent the parent component, or null if you want it to be
 	/** Wakes up all event processing thread that are waiting on the
 	 * specified object.
 	 *
-	 * <p>Unlike {@link #notify(Page, Object)}, this method can be invoked only
+	 * <p>Unlike {@link #notify(Desktop, Object)}, this method can be invoked only
 	 * in the event listener that processing the same desktop.
 	 * In addition, this method can be called under the event listener.
 	 *
-	 * <p>Use {@link #notifyAll(Page, Object)} if you want to notify in other
+	 * <p>Use {@link #notifyAll(Desktop, Object)} if you want to notify in other
 	 * thread, such as a working thread.
 	 *
 	 * @param obj any non-null object to identify what to notify. It must be
 	 * same object passed to {@link #wait}.
-	 * @see #notify(Page, Object)
+	 * @see #notify(Desktop, Object)
 	 * @see #notifyAll(Object)
 	 * @exception UiException if it is called not during event processing.
 	 */
 	public static final void notifyAll(Object obj) {
 		getUiEngine().notifyAll(obj);
 	}
-	/** Wakes up a single event processing thread for the specified page
+	/** Wakes up a single event processing thread for the specified desktop
 	 * that is waiting on the specified object.
 	 *
 	 * <p>Unlike {@link #notify(Object)}, this method can be called any time.
@@ -279,17 +279,17 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * the resumed thread won't execute until the next request is received.
 	 * To enforce it happen, you might use the timer component (found in ZUL).
 	 *
-	 * @param page the page which the suspended thread is processing.
-	 * It could be any page of the same desktop of the suspended thread.
+	 * @param desktop the desktop which the suspended thread is processing.
+	 * It must be the same desktop of the suspended thread.
 	 * @param obj any non-null object to identify what to notify. It must be
 	 * same object passed to {@link #wait}.
 	 * @see #notify(Object)
-	 * @see #notifyAll(Page, Object)
+	 * @see #notifyAll(Desktop, Object)
 	 */
-	public static final void notify(Page page, Object obj) {
-		getUiEngine(page).notify(page, obj);
+	public static final void notify(Desktop desktop, Object obj) {
+		getUiEngine(desktop).notify(desktop, obj);
 	}
-	/** Wakes up all event processing theads for the specified page
+	/** Wakes up all event processing theads for the specified desktop
 	 * that are waiting on the specified object.
 	 *
 	 * <p>Unlike {@link #notifyAll(Object)}, this method can be called any time.
@@ -300,21 +300,21 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * the resumed thread won't execute until the next request is received.
 	 * To enforce it happen, you might use the timer component (found in ZUL).
 	 *
-	 * @param page the page which the suspended thread is processing.
-	 * It could be any page of the same desktop of the suspended thread.
-	 * @param obj any non-null object to identify what to notify. It must be
-	 * same object passed to {@link #wait}.
+	 * @param desktop the desktop which the suspended thread is processing.
+	 * It must be the same desktop of the suspended thread.
+	 * @param mutex any non-null object as the mutex, which must be locked
+	 * by the synchronized statement befor calling this method.
+	 * It must be same object passed to {@link #wait}.
 	 * @see #notify(Object)
-	 * @see #notifyAll(Page, Object)
+	 * @see #notifyAll(Desktop, Object)
 	 */
-	public static final  void notifyAll(Page page, Object obj) {
-		getUiEngine(page).notifyAll(page, obj);
+	public static final void notifyAll(Desktop desktop, Object obj) {
+		getUiEngine(desktop).notifyAll(desktop, obj);
 	}
 
-	private static final UiEngine getUiEngine(Page page) {
-		final Desktop desktop = page.getDesktop();
+	private static final UiEngine getUiEngine(Desktop desktop) {
 		if (desktop == null)
-			throw new IllegalArgumentException("Page isn't associated with any desktop: "+page);
+			throw new IllegalArgumentException("desktop cannot be null");
 		return ((WebAppCtrl)desktop.getWebApp()).getUiEngine();
 	}
 	private static final UiEngine getUiEngine() {
