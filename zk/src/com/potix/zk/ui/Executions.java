@@ -221,14 +221,15 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * <p>It is typical use to implement a modal dialog where it won't return
 	 * until the modal dialog ends.
 	 *
-	 * @param obj any non-null object to identify what to wait, such that
-	 * {@link #notify(Object)} and {@link #notify(Desktop, Object)} knows
-	 * which object to notify.
+	 * @param mutex any non-null object to identify what to notify.
+	 * It must be same object passed to {@link #notify(Desktop, Object)}.
+	 * If there is racing issue, you have to enclose it with
+	 * <code>synchronized</code> (though it is optional).
 	 * @exception UiException if it is called not during event processing.
 	 */
-	public static final void wait(Object obj)
+	public static final void wait(Object mutex)
 	throws InterruptedException {
-		getUiEngine().wait(obj);
+		getUiEngine().wait(mutex);
 	}
 	/** Wakes up a single event processing thread that is waiting on the
 	 * specified object.
@@ -240,14 +241,16 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * <p>Use {@link #notify(Desktop, Object)} if you want to notify in other
 	 * thread, such as a working thread.
 	 *
-	 * @param obj any non-null object to identify what to notify. It must be
-	 * same object passed to {@link #wait}.
+	 * @param mutex any non-null object to identify what to notify.
+	 * It must be same object passed to {@link #wait}.
+	 * If there is racing issue, you have to enclose it with
+	 * <code>synchronized</code> (though it is optional).
 	 * @see #notify(Desktop, Object)
 	 * @see #notifyAll(Object)
 	 * @exception UiException if it is called not during event processing.
 	 */
-	public static final void notify(Object obj) {
-		getUiEngine().notify(obj);
+	public static final void notify(Object mutex) {
+		getUiEngine().notify(mutex);
 	}
 	/** Wakes up all event processing thread that are waiting on the
 	 * specified object.
@@ -259,14 +262,16 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * <p>Use {@link #notifyAll(Desktop, Object)} if you want to notify in other
 	 * thread, such as a working thread.
 	 *
-	 * @param obj any non-null object to identify what to notify. It must be
-	 * same object passed to {@link #wait}.
+	 * @param mutex any non-null object to identify what to notify.
+	 * It must be same object passed to {@link #wait}.
+	 * If there is racing issue, you have to enclose it with
+	 * <code>synchronized</code> (though it is optional).
 	 * @see #notify(Desktop, Object)
 	 * @see #notifyAll(Object)
 	 * @exception UiException if it is called not during event processing.
 	 */
-	public static final void notifyAll(Object obj) {
-		getUiEngine().notifyAll(obj);
+	public static final void notifyAll(Object mutex) {
+		getUiEngine().notifyAll(mutex);
 	}
 	/** Wakes up a single event processing thread for the specified desktop
 	 * that is waiting on the specified object.
@@ -275,19 +280,42 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * It is designed to let working threads resume an event processing
 	 * thread.
 	 *
-	 * <p>If this method is NOT called in an event processing thread,
+	 * <p>Notice: if this method is NOT called in an event processing thread,
 	 * the resumed thread won't execute until the next request is received.
 	 * To enforce it happen, you might use the timer component (found in ZUL).
 	 *
+	 * <p>Notice: to resolve racing issue, you usually need to follow
+	 * this pattern.
+	 * <pre><code>
+//Event Handling Thread
+synchronized (mutex) {
+	final WorkingThread worker = new WorkingThread(desktop);
+	synchronized (mutex) {
+		worker.start();
+		Executions.wait(mutex);
+	}
+	....
+}
+//Working Thread
+public void run() {
+	....
+	synchronized (mutex) {
+		Executions.notify(desktop, mutex);
+	}
+}
+	 </code></pre>
+	 *
 	 * @param desktop the desktop which the suspended thread is processing.
 	 * It must be the same desktop of the suspended thread.
-	 * @param obj any non-null object to identify what to notify. It must be
-	 * same object passed to {@link #wait}.
+	 * @param mutex any non-null object to identify what to notify.
+	 * It must be same object passed to {@link #wait}.
+	 * If there is racing issue, you have to enclose it with
+	 * <code>synchronized</code> (though it is optional).
 	 * @see #notify(Object)
 	 * @see #notifyAll(Desktop, Object)
 	 */
-	public static final void notify(Desktop desktop, Object obj) {
-		getUiEngine(desktop).notify(desktop, obj);
+	public static final void notify(Desktop desktop, Object mutex) {
+		getUiEngine(desktop).notify(desktop, mutex);
 	}
 	/** Wakes up all event processing theads for the specified desktop
 	 * that are waiting on the specified object.
@@ -296,20 +324,42 @@ s	 * @param parent the parent component, or null if you want it to be
 	 * It is designed to let working threads resume an event processing
 	 * thread.
 	 *
-	 * <p>If this method is NOT called in an event processing thread,
+	 * <p>Notice: if this method is NOT called in an event processing thread,
 	 * the resumed thread won't execute until the next request is received.
 	 * To enforce it happen, you might use the timer component (found in ZUL).
 	 *
+	 * <p>Notice: to resolve racing issue, you usually need to follow
+	 * this pattern.
+	 * <pre><code>
+//Event Handling Thread
+synchronized (mutex) {
+	final WorkingThread worker = new WorkingThread(desktop);
+	synchronized (mutex) {
+		worker.start();
+		Executions.wait(mutex);
+	}
+	....
+}
+//Working Thread
+public void run() {
+	....
+	synchronized (mutex) {
+		Executions.notifyAll(desktop, mutex);
+	}
+}
+	 </code></pre>
+	 *
 	 * @param desktop the desktop which the suspended thread is processing.
 	 * It must be the same desktop of the suspended thread.
-	 * @param mutex any non-null object as the mutex, which must be locked
-	 * by the synchronized statement befor calling this method.
+	 * @param mutex any non-null object to identify what to notify.
 	 * It must be same object passed to {@link #wait}.
+	 * If there is racing issue, you have to enclose it with
+	 * <code>synchronized</code> (though it is optional).
 	 * @see #notify(Object)
 	 * @see #notifyAll(Desktop, Object)
 	 */
-	public static final void notifyAll(Desktop desktop, Object obj) {
-		getUiEngine(desktop).notifyAll(desktop, obj);
+	public static final void notifyAll(Desktop desktop, Object mutex) {
+		getUiEngine(desktop).notifyAll(desktop, mutex);
 	}
 
 	private static final UiEngine getUiEngine(Desktop desktop) {

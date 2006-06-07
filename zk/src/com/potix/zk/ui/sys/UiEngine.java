@@ -228,7 +228,7 @@ public interface UiEngine {
 	 * It is designed to let working threads resume an event processing
 	 * thread.
 	 *
-	 * <p>If this method is NOT called in an event processing thread,
+	 * <p>Notice: if this method is NOT called in an event processing thread,
 	 * the resumed thread won't execute until the next request is received.
 	 * To enforce it happen, you might use the timer component (found in ZUL).
 	 *
