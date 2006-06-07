@@ -69,16 +69,12 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * when the user clicks on the element.
 	 *
 	 * <p>Default: null (no poppup).
-	 *
-	 * <p>Not supported yet.
 	 */
 	public String getPopup() {
 		return _popup;
 	}
 	/** Sets the ID of {@link com.potix.zul.html.Popup} that should appear
 	 * when the user clicks on the element.
-	 *
-	 * <p>Not supported yet.
 	 */
 	public void setPopup(String popup) {
 		if (!Objects.equals(_popup, popup)) {
