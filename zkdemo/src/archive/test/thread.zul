@@ -20,9 +20,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <window id="main" title="Working Thread">
 	<button label="Start Working Thread">
 		<attribute name="onClick">
+	timer.start();
 	Label label = com.potix.zkdemo.test.WorkingThread.asyncCreate(desktop);
 	main.appendChild(label);
+	timer.stop()
 		</attribute>
 	</button>
-	<timer id="timer" delay="1000" repeats="true"/>
+	<timer id="timer" running="false" delay="1000" repeats="true"/>
 </window>
