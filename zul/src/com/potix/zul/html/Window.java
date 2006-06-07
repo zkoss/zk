@@ -63,6 +63,8 @@ public class Window extends XulElement implements IdSpace  {
 	private String _ctrlKeys;
 	/** One of MODAL, EMBEDDED, OVERLAPPED. */
 	private int _mode = EMBEDDED;
+	/** Used for doModal. */
+	private final Object _mutex = new Integer(0);
 	/** Whether this window is in a special mode that need to be ended. */
 	private boolean _moding;
 	/** Whether to show a close button. */
@@ -228,7 +230,8 @@ public class Window extends XulElement implements IdSpace  {
 			_moding = true;
 			setVisible(true); //after _molding = true to avoid dead-loop
 
-			Executions.wait(this);
+			//no need to synchronized (_mutex) because no racing is possible
+			Executions.wait(_mutex);
 		}
 	}
 	/** Makes this window as overlapped with other components.
@@ -313,7 +316,7 @@ public class Window extends XulElement implements IdSpace  {
 			assert D.OFF || _mode != EMBEDDED;
 
 			if (_mode == MODAL)
-				Executions.notifyAll(this);
+				Executions.notifyAll(_mutex);
 
 			if (_mode == MODAL)
 				response(null, new AuEndModal(this));
