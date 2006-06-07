@@ -42,16 +42,12 @@ public class WorkingThread extends Thread {
 		synchronized (worker._mutex) {
 			worker.start();
 			Executions.wait(worker._mutex);
-			return worker.getLabel();
+			return worker._label;
 		}
 	}
+
 	public WorkingThread(Desktop desktop) {
 		_desktop = desktop;
-	}
-	/** Return the generated label.
-	 */
-	public Label getLabel() {
-		return _label;
 	}
 	public void run() {
 		_label = new Label("Execute "+ ++_cnt);
