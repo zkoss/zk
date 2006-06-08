@@ -394,7 +394,7 @@ public class UiEngineImpl implements UiEngine {
 		if (requests == null)
 			throw new IllegalArgumentException("null requests");
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
-			"Impossible to re-activate for update";
+			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec+", reqs="+requests;
 
 		final UiVisualizer uv = doActivate(exec, requests);
 		if (uv == null)
@@ -782,7 +782,7 @@ public class UiEngineImpl implements UiEngine {
 
 	public void activate(Execution exec) {
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
-			"Impossible to re-activate for update";
+			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
 		doActivate(exec, null);
 	}
 	public void deactivate(Execution exec) {
@@ -853,23 +853,25 @@ public class UiEngineImpl implements UiEngine {
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		try {
-			execCtrl.onDeactivate();
-		} catch (Throwable ex) {
-			log.warning("Ignored: failed to deactivate "+desktop, ex);
-		}
+			try {
+				execCtrl.onDeactivate();
+			} catch (Throwable ex) {
+				log.warning("Ignored: failed to deactivate "+desktop, ex);
+			}
 
-		//Unlock desktop
-		final Map eis = getVisualizers(sess);
-		synchronized (eis) {
-			final Object o = eis.remove(desktop);
-			assert D.OFF || o != null;
-			((DesktopCtrl)desktop).setExecution(null);
-			eis.notify(); //wakeup doActivate's wait
+			//Unlock desktop
+			final Map eis = getVisualizers(sess);
+			synchronized (eis) {
+				final Object o = eis.remove(desktop);
+				assert D.OFF || o != null;
+				((DesktopCtrl)desktop).setExecution(null);
+				eis.notify(); //wakeup doActivate's wait
+			}
+		} finally {
+			execCtrl.setCurrentPage(null);
+			execCtrl.setVisualizer(null);
+			ExecutionsCtrl.setCurrent(null);
 		}
-
-		execCtrl.setCurrentPage(null);
-		execCtrl.setVisualizer(null);
-		ExecutionsCtrl.setCurrent(null);
 
 		final SessionCtrl sessCtrl = (SessionCtrl)sess;
 		if (sessCtrl.isInvalidated()) sessCtrl.invalidateNow();
@@ -893,7 +895,6 @@ public class UiEngineImpl implements UiEngine {
 			final Object o = eis.put(desktop, uv);
 			if (o != olduv)
 				throw new InternalError(); //wrong olduv
-
 			((DesktopCtrl)desktop).setExecution(curExec);
 		}
 
@@ -925,7 +926,7 @@ public class UiEngineImpl implements UiEngine {
 			log.warning("Ignored: failed to deactivate "+desktop, ex);
 		}
 		curCtrl.setCurrentPage(null);
-		curCtrl.setVisualizer(null);
+		curCtrl.setVisualizer(null); //free memory
 
 		final Execution oldexec = olduv.getExecution();
 		final Map eis = getVisualizers(sess);
