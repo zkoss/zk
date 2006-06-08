@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-ctxmnu.zul
+tooltip.zul
 
 {{IS_NOTE
 	Purpose:
@@ -9,7 +9,7 @@ ctxmnu.zul
 	Description:
 		
 	History:
-		Fri Jun  2 15:55:12     2006, Created by tomyeh@potix.com
+		Thu Jun  8 10:53:43     2006, Created by tomyeh@potix.com
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -21,11 +21,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<vbox>
 		<html>
 			<attribute name="content"><![CDATA[
-<h4>Context Menu and Right Click</h4>
-<p>Demostrates how to use context menu and how to listen right click.</p>
-<p>A conext menu can be any popup or menupopup component. To enable
-a context menu, just assign the id of the popup component to the context
-attribute</p>
+<h4>Tooltip and Popup Menu</h4>
+<p>Demostrates how to use customized tooltip and popup menu.</p>
+<p>Tooltips and popup menus can be any popup or menupopup components.</p>
+<ul>
+<li>A tooltip is shown when an user moves the mouse over a component with
+the tooltip attribute.</li>
+<li>A popup is shown when an user clicks on a component with
+the tooltip attribute.</li>
+</ul>
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
@@ -38,11 +42,11 @@ attribute</p>
 			<textbox id="codes" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
 <window title="Context Menu and Right Click" border="normal" width="360px">
-	<label value="Right Click Me!" context="editPopup"/>
+	<label value="Move Mouse Over Me!" tooltip="editPopup"/>
 	<separator bar="true"/>
-	<label value="Right Click for Another Popup" context="any"/>
+	<label value="Tooptip for Another Popup" tooltip="any"/>
 	<separator bar="true"/>
-	<label value="Right Click Me!" onRightClick="alert(self.value)"/>
+	<label value="Click Me!" popup="editPopup"/>
 
 	<menupopup id="editPopup">
         <menuitem label="Undo"/>

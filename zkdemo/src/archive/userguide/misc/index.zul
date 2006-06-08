@@ -38,6 +38,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="Drag and Drop" onClick="doSelect(&quot;mi0&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Macro Components" onClick="doSelect(&quot;mimacro&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Context Menus" onClick="doSelect(&quot;mictxmnu&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Tooltips and Popups" onClick="doSelect(&quot;mictooltip&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Timer" onClick="doSelect(&quot;mi1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Include" onClick="doSelect(&quot;mi2&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Iframe" onClick="doSelect(&quot;mi3&quot;)"/></h:li>
