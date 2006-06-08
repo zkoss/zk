@@ -87,7 +87,7 @@ if (!zkMenu._pop)
 zkMenu.onover = function (target) {
 	var menubar = zkau.getParentByType(target, "Menubar");
 	var autodrop = !menubar || menubar.getAttribute("zk_autodrop") == "true";
-	if (autodrop) zkMenu._closeRequired = false;
+	if (autodrop) zkMenu._shallClose = false;
 		//turn off pending auto-close
 
 	var popupIds = zkMenu._pop.getPopupIds();
@@ -108,8 +108,8 @@ zkMenu.onout = function (target) {
 
 	var menubar = zkau.getParentByType(target, "Menubar");
 	if (menubar && menubar.getAttribute("zk_autodrop") == "true") {
-		zkMenu._closeRequired = true;
-		setTimeout("if (zkMenu._closeRequired) zkau.closeFloats('"+menubar.id+"');", 500);
+		zkMenu._shallClose = true;
+		setTimeout("if (zkMenu._shallClose) zkau.closeFloats('"+menubar.id+"');", 500);
 	}
 };
 zkMenu.onclick = function (target) {

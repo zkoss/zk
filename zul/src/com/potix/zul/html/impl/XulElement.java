@@ -87,16 +87,12 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * The tooltip will automatically disappear when the mouse is moved.
 	 *
 	 * <p>Default: null (no tooltip).
-	 *
-	 * <p>Not supported yet.
 	 */
 	public String getTooltip() {
 		return _tooltip;
 	}
 	/** Sets the ID of {@link com.potix.zul.html.Popup} that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
-	 *
-	 * <p>Not supported yet.
 	 */
 	public void setTooltip(String tooltip) {
 		if (!Objects.equals(_tooltip, tooltip)) {
