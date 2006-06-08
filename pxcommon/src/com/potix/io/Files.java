@@ -51,15 +51,19 @@ public class Files {
 	 *
 	 * <p>The configure directory is assumed to be specified by
 	 * the system property called "com.potix.io.conf.dir".
-	 * If property not found, it assumes the conf directory under
+	 * If property not found, it assumes the conf or config directory under
 	 * the directory specified by the system property called "user.dir".
 	 * If property not found, it assumes the conf directory under
 	 * the current directory.
 	 */
 	public final static File getConfigDirectory() {
 		final String confdir = System.getProperty("com.potix.io.conf.dir", null);
-		return confdir != null ? new File(confdir):
-			new File(System.getProperty("user.dir", "."), "conf");
+		if (confdir != null) return new File(confdir);
+
+		final File fl = new File(System.getProperty("user.dir", "."), "conf");
+		if (fl.exists()) return fl;
+		final File fl2 = new File(System.getProperty("user.dir", "."), "config");
+		return fl2.exists() ? fl2: fl;
 	}
 
 	/** Returns all bytes in the input stream, never null
