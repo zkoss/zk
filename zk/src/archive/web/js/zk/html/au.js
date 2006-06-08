@@ -35,6 +35,8 @@ if (!zkau._reqs) {
 	zk.addInit(function () {
 		Event.observe(document, "keydown", zkau._onDocKeydown);
 		Event.observe(document, "mousedown", zkau._onDocMousedown);
+		Event.observe(document, "mouseover", zkau._onDocMouseover);
+		Event.observe(document, "mouseout", zkau._onDocMouseout);
 
 		if (zk.agtIe) {
 			document.oncontextmenu = function () {
@@ -800,8 +802,7 @@ zkau._onDocLClick = function (evt) {
 				zkau.send(
 					{uuid: zkau.uuidOf(cmp), cmd: "onClick", data: null});
 
-			Event.stop(evt);
-			return false;
+			//no need to Event.stop
 		}
 	}
 	return true;
@@ -810,12 +811,11 @@ zkau._onDocLClick = function (evt) {
 zkau._onDocDClick = function (evt) {
 	if (!evt) evt = window.event;
 
-	var target = Event.element(evt);
-	target = zkau._getClkTarget(target, "zk_dbclk");
-	if (target) {
-		zkau.send({uuid: zkau.uuidOf(target), cmd: "onDoubleClick", data: null});
-		Event.stop(evt);
-		return false;
+	var cmp = Event.element(evt);
+	cmp = zkau._getClkTarget(cmp, "zk_dbclk");
+	if (cmp) {
+		zkau.send({uuid: zkau.uuidOf(cmp), cmd: "onDoubleClick", data: null});
+		//no need to Event.stop
 	}
 	return true;
 };
@@ -855,6 +855,69 @@ zkau._onDocRClick = function (evt) {
 	}
 	return true;
 };
+zkau._onDocMouseover = function (evt) {
+	if (!evt) evt = window.event;
+
+	var cmp = Event.element(evt);
+	cmp = zkau._getClkTarget(cmp, "zk_tip");
+	if (cmp) {
+		var tip = cmp.getAttribute("zk_tip");
+		if (tip) {
+			tip = zkau.getByZid(cmp, tip);
+			if (tip) {
+				zkau._tipInfo = {
+					tipId: tip.id, cmpId: cmp.id, open: false,
+					x: Event.pointerX(evt) + "px",
+					y: Event.pointerY(evt) + "px"
+				};
+				zkau._shallCloseTip = false;
+				setTimeout("zkau._openTip('"+cmp.id+"')", 800);
+			}
+		}
+		//no need to Event.stop
+	} else if (zkau._tipInfo && zkau._tipInfo.open) {
+		var tip = $(zkau._tipInfo.tipId);
+		if (tip && zk.isAncestor(tip, Event.element(evt)))
+			zkau._shallCloseTip = false; //don't close it
+	}
+	return true;
+};
+zkau._onDocMouseout = function (evt) {
+	if (!evt) evt = window.event;
+
+	if (zkau._tipInfo) {
+		zkau._shallCloseTip = true;
+		setTimeout(zkau._tryCloseTip, 200);
+	}
+};
+zkau._openTip = function (cmpId) {
+	//We have to filter out non-matched cmpId because user might move
+	//from one component to another
+	if (zkau._tipInfo && !zkau._tipInfo.open
+	 && (!cmpId || cmpId == zkau._tipInfo.cmpId)) {
+		var tip = $(zkau._tipInfo.tipId);
+		var cmp = $(cmpId);
+		if (tip && cmp) {
+			zkau.closeFloats(tip);
+
+			zkau._tipInfo.open = true;
+			tip.style.left = zkau._tipInfo.x;
+			tip.style.top = zkau._tipInfo.y;
+			var fn = "zk"+zk.getCompType(tip)+".context";
+			eval(fn+"&&"+fn+"(tip, cmp)");
+		} else {
+			zkau._tipInfo = null;
+		}
+	}
+};
+/** Closes tooltip if _shallCloseTip is set. */
+zkau._tryCloseTip = function () {
+	if (zkau._tipInfo && zkau._shallCloseTip) {
+		if (zkau._tipInfo.open) zkau.closeFloats();
+		zkau._tipInfo = null;
+	}
+};
+
 /** Returns the target of right-click, or null if not found. */
 zkau._getClkTarget = function (n, attr1, attr2) {
 	for (; n; n = n.parentNode) {
