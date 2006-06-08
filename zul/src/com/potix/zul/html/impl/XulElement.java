@@ -58,6 +58,11 @@ abstract public class XulElement extends HtmlBasedComponent {
 	}
 	/** Sets the ID of {@link com.potix.zul.html.Popup} that should appear
 	 * when the user right-clicks on the element (aka., context menu).
+	 *
+	 * <p>An onOpen event is sent to the context menu if it is going to
+	 * appear. Therefore, developers can manipulate it dynamically
+	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
+	 * event.
 	 */
 	public void setContext(String context) {
 		if (!Objects.equals(_ctxmnu, context)) {
@@ -75,6 +80,11 @@ abstract public class XulElement extends HtmlBasedComponent {
 	}
 	/** Sets the ID of {@link com.potix.zul.html.Popup} that should appear
 	 * when the user clicks on the element.
+	 *
+	 * <p>An onOpen event is sent to the popup menu if it is going to
+	 * appear. Therefore, developers can manipulate it dynamically
+	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
+	 * event.
 	 */
 	public void setPopup(String popup) {
 		if (!Objects.equals(_popup, popup)) {
@@ -93,6 +103,11 @@ abstract public class XulElement extends HtmlBasedComponent {
 	}
 	/** Sets the ID of {@link com.potix.zul.html.Popup} that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
+	 *
+	 * <p>An onOpen event is sent to the tooltip if it is going to
+	 * appear. Therefore, developers can manipulate it dynamically
+	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
+	 * event.
 	 */
 	public void setTooltip(String tooltip) {
 		if (!Objects.equals(_tooltip, tooltip)) {
