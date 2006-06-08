@@ -28,8 +28,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <title>${page.title}</title>
 ${u:outLangStyleSheets()}
 <meta http-equiv="Cache-Control" content="no-cache"/>
-</head>
-<body>
+<c:set var="zk_htmlHeadRequired" value="true" scope="request"/><%-- ask page.dsp to generate </head><body> --%>
 <c:include page="~./zul/html/page.dsp"/><%-- OC4J cannot handle relative page correctly --%>
 </body>
 </html>

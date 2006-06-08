@@ -5,7 +5,8 @@ page.dsp
 	Purpose:
 		Render a ZUL page if it is included
 	Description:
-		
+		zk_htmlHeadRequired
+			It is set by desktop.dsp to ask this page to render </head><body>
 	History:
 		Wed Jun  8 17:15:18     2005, Created by tomyeh@potix.com
 }}IS_NOTE
@@ -23,6 +24,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:if test="${!arg.asyncUpdate}">
 ${u:outLangStyleSheets()}
 ${u:outLangJavaScripts(page, arg.action)}
+</c:if>
+<c:if test="${!empty zk_htmlHeadRequired}">
+<c:set var="zk_htmlHeadRequired" value="" scope="request"/>
+</head>
+<body${c:attr('style', page.style)}>
 </c:if>
 <div id="${page.id}" style="${empty page.style ? 'width:100%': page.style}">
 <c:forEach var="root" items="${page.roots}">
