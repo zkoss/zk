@@ -245,4 +245,9 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public void addAuResponse(String key, AuResponse response) {
 		getUiEngine().addResponse(key, response);
 	}
+
+	//Object//
+	public String toString() {
+		return "[Exec"+System.identityHashCode(this)+": "+_desktop+']';
+	}
 }
