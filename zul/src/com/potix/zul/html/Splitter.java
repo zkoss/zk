@@ -97,11 +97,12 @@ public class Splitter extends XulElement {
 
 	//super//
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		if ("none".equals(_collapse)) return attrs;
-
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		HTMLs.appendAttribute(sb, "zk_colps", _collapse);
+		final StringBuffer sb =
+			new StringBuffer(80).append(super.getOuterAttrs());
+		if ("vertical".equals(getOrient()))
+			HTMLs.appendAttribute(sb, "zk_vert", "true");
+		if ("none".equals(_collapse))
+			HTMLs.appendAttribute(sb, "zk_colps", _collapse);
 		return sb.toString();
 	}
 	public void setParent(Component parent) {

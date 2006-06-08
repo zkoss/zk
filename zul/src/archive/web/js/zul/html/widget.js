@@ -333,7 +333,37 @@ zkMap.onclick = function (href) {
 };
 
 //splitter//
-function zkSplitter() {}
+function zkSplt() {}
+
+zkSplt._drags = {};
+zkSplt.init = function (cmp) {
+	var exc = "zkSplt._resize('" + cmp.id + "')";
+	Event.observe(window, "resize", function () {setTimeout(exc, 250);});
+	setTimeout(exc, 250);
+
+	zkSplt._drags[cmp.id] = new Draggable(cmp, {});
+
+	var vert = cmp.getAttribute("zk_vert");
+	cmp.style.backgroundImage = "url(" +zk.getUpdateURI(
+		"/web/zul/img/splt/"+(vert?"v":"h")+"splt.gif") + ")";
+};
+zkSplt.cleanup = function (cmp) {
+	var drag = zkSplt._drags[cmp.id];
+	if (drag) {
+		zkSplt._drags[cmp.id] = null;
+		drag.destroy();
+	}
+};
+zkSplt._resize = function (cmp) {
+	cmp = $(cmp);
+	if (cmp) {
+		var parent = cmp.parentNode;
+		if (parent) {
+			cmp.style.width = parent.clientWidth + "px";
+			cmp.style.height = parent.clientHeight + "px";
+		}
+	}
+};
 
 //popup//
 function zkPop() {}

@@ -93,12 +93,10 @@ public class Box extends XulElement {
 	 * Used only by component development to generate HTML tags.
 	 */
 	public String getSplitterExteriorAttrs() {
-		final StringBuffer sb = new StringBuffer(80);
+		final StringBuffer sb = new StringBuffer(60);
 		final boolean vert = "vertical".equals(getOrient());
+		sb.append(vert ? "align=\"center\"": "valign=\"middle\"");
 		HTMLs.appendAttribute(sb, vert ? "height": "width", "8px");
-		HTMLs.appendAttribute(sb, "background",
-			getDesktop().getExecution().encodeURL(
-				vert ? "~./zul/img/splt/vsplt.gif": "~./zul/img/splt/hsplt.gif"));
 		return sb.toString();
 	}
 	 
