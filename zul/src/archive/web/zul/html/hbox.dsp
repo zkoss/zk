@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
 <tr valign="top">
 	<c:forEach var="child" items="${self.children}">
- <td id="${child.uuid}!chdextr"${c:attr('width',c:isInstance('com.potix.zk.ui.HtmlBasedComponent', child) ? child.width: null)}${self.childExteriorAttrs}>${u:redraw(child, null)}</td>
+ <td id="${child.uuid}!chdextr"${c:attr('width',c:isInstance('com.potix.zk.ui.HtmlBasedComponent', child) ? child.width: null)}${c:isInstance('com.potix.zul.html.Splitter',child)?self.splitterExteriorAttrs:self.childExteriorAttrs}>${u:redraw(child, null)}</td>
 	</c:forEach>
  <td style="display:none" id="${self.uuid}!child"></td><%-- bookmark for adding child (when insertHTMLBeforeEnd not appliable) --%>
 </tr>

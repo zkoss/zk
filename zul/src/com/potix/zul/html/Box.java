@@ -74,8 +74,8 @@ public class Box extends XulElement {
 		}
 	}
 
-	/** Returns the style used to wrap the children (never null).
-	 * Used only by component development to generate HTML style.
+	/** Returns the attributes used to wrap the children (never null).
+	 * Used only by component development to generate HTML tags.
 	 */
 	public String getChildExteriorAttrs() {
 		final StringBuffer sb = new StringBuffer(32);
@@ -89,11 +89,25 @@ public class Box extends XulElement {
 		}
 		return sb.toString();
 	}
+	/** Returns the attributes used to wrap splitter (never null).
+	 * Used only by component development to generate HTML tags.
+	 */
+	public String getSplitterExteriorAttrs() {
+		final StringBuffer sb = new StringBuffer(80);
+		final boolean vert = "vertical".equals(getOrient());
+		HTMLs.appendAttribute(sb, vert ? "height": "width", "8px");
+		HTMLs.appendAttribute(sb, "background",
+			getDesktop().getExecution().encodeURL(
+				vert ? "~./zul/img/splt/vsplt.gif": "~./zul/img/splt/hsplt.gif"));
+		return sb.toString();
+	}
+	 
 
 	//-- Component --//
 	public void onDrawNewChild(Component child, StringBuffer out)
 	throws IOException {
-		final String chdattrs = getChildExteriorAttrs();
+		final String chdattrs = child instanceof Splitter ?
+			getSplitterExteriorAttrs(): getChildExteriorAttrs();
 		if ("vertical".equals(getOrient())) {
 			final StringBuffer sb = new StringBuffer(16)
 				.append("<div id=\"").append(child.getUuid())

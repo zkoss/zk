@@ -332,6 +332,9 @@ zkMap.onclick = function (href) {
 	zkau.send({uuid: id, cmd: "onClick", data: [x, y]});
 };
 
+//splitter//
+function zkSplitter() {}
+
 //popup//
 function zkPop() {}
 

@@ -493,6 +493,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>splitter</component-name>
+		<component-class>com.potix.zul.html.Splitter</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>${orient == 'vertical' ? '~./zul/html/vsplitter.dsp':'~./zul/html/hsplitter.dsp'}</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>tab</component-name>
 		<component-class>com.potix.zul.html.Tab</component-class>
 		<mold>
