@@ -370,6 +370,8 @@ function zkPop() {}
 
 /** Called by au.js's context menu. */
 zkPop.context = function (ctx, ref) {
+	if (ctx.getAttribute("zk_onOpen"))
+		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
 	ctx.style.display = "";
 	zkau.onVisiChildren(ctx);
 	zkPop._pop._popupId = ctx.id;

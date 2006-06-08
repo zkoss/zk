@@ -261,5 +261,7 @@ function zkMpop() {}
 
 /** Called by au.js's context menu. */
 zkMpop.context = function (ctx, ref) {
+	if (ctx.getAttribute("zk_onOpen"))
+		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
 	zkMenu._open(ctx, true);
 };

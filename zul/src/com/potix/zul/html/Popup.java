@@ -59,16 +59,17 @@ public class Popup extends XulElement {
 	public String getOuterAttrs() {
 	//Note: don't generate zk_type here because Menupopup's zk_type diff
 
-		final String attrs = super.getOuterAttrs();
-		if (!zidRequired())
-			return attrs;
+		final StringBuffer sb =
+			new StringBuffer(80).append(super.getOuterAttrs());
 
-		final String id = getId();
- 		if (ComponentsCtrl.isAutoId(id))
-			return attrs;
+		if (isAsapRequired("onOpen"))
+			HTMLs.appendAttribute(sb, "zk_onOpen", true);
 
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		HTMLs.appendAttribute(sb, "zid", id);
+		if (zidRequired()) {
+			final String id = getId();
+	 		if (!ComponentsCtrl.isAutoId(id))
+				HTMLs.appendAttribute(sb, "zid", id);
+		}
 		return sb.toString();
 	}
 	private boolean zidRequired() {
