@@ -189,6 +189,12 @@ implements Inputable, Errorable, Constrainted {
 				//Reason: when user set a value to correct one and set
 				//to an illegal one, then click the button cause both events
 				//being sent back to the server.
+		} else if (_valByClient != null) {
+			//value equals but formatted result might differ because
+			//our parse is more fault tolerant
+			final String fmtval = getTextNCUE();
+			if (!Objects.equals(_valByClient, fmtval))
+				smartUpdate("value", fmtval);
 		}
 	}
 

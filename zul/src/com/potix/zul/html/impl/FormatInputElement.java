@@ -57,7 +57,7 @@ abstract public class FormatInputElement extends InputElement {
 	/** Formats a number (Integer, BigDecimal...) into a string.
 	 * If null, an empty string is returned.
 	 * A utility to assist the handling of numeric data.
-	 * @see #ignoreCommas
+	 * @see #toNumberOnly
 	 */
 	protected String formatNumber(Object value) {
 		if (value == null) return "";
@@ -72,21 +72,23 @@ abstract public class FormatInputElement extends InputElement {
 			return df.format(value);
 		}
 	}
-	/** Filters out comma and space from the specified value.
+	/** Filters out non digit characters, such comma and whitespace,
+	 * from the specified value.
 	 * It is used to parse a string to numeric data.
 	 * @see #formatNumber
 	 */
-	protected String ignoreCommas(String val) {
+	protected String toNumberOnly(String val) {
 		if (val == null) return val;
 
 		StringBuffer sb = null;
 		for (int j = 0, len = val.length(); j < len; ++j) {
 			final char cc = val.charAt(j);
-			if (cc == ',' || Character.isWhitespace(cc)) {
+			if ((cc >= '0' && cc <= '9') || cc == '.'
+			|| cc == '-' || cc == '+'){
+				if (sb != null) sb.append(cc);
+			} else {
 				if (sb == null)
 					sb = new StringBuffer(len).append(val.substring(0, j));
-			} else {
-				if (sb != null) sb.append(cc);
 			}
 		}
 		return sb != null ? sb.toString(): val;

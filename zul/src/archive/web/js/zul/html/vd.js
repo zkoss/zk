@@ -67,7 +67,7 @@ zkVld.onlyInt = function (id) {
 };
 zkVld.onlyNum = function (id, noDot) {
 	var inp = $(id);
-	if (!inp) return true;
+	if (!inp) return null;
 
 	inp = zkau.getReal(inp);
 	val = inp.value.trim();
@@ -82,14 +82,14 @@ zkVld.onlyNum = function (id, noDot) {
 			if (doted || numed || dashed || perted) break; //err
 			dashed = true;
 			continue; //ok
-		case ',': case '.':
+		case '.':
 			if (doted || perted) break; //err
 			doted = cc == '.';
 			if (doted && noDot) return mesg.INTEGER_REQUIRED+val;
 			continue;
 		case '%':
 			perted = true;
-		case ' ': //silently ignore ' ' (so is in Java) (for simplicity)
+		default: //silently ignore , $ ...
 			continue;
 		}
 		return mesg.NUMBER_REQUIRED+val;

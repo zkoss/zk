@@ -63,7 +63,7 @@ public class Intbox extends FormatInputElement {
 
 	//-- super --//
 	protected Object coerceFromString(String value) throws WrongValueException {
-		final String val = ignoreCommas(value);
+		final String val = toNumberOnly(value);
 		if (val == null || val.length() == 0)
 			return null;
 
