@@ -45,15 +45,17 @@ public class OpenCommand extends AuRequest.Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data == null || data.length != 1)
+		if (data == null || (data.length != 1 && data.length != 2))
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
 		final boolean open = "true".equals(data[0]);
+		final Component ref = data.length == 2 && data[1] != null ?
+			request.getDesktop().getComponentByUuidIfAny(data[1]): null;
 		if (comp instanceof Openable)
 			((Openable)comp).setOpenByClient(open);
 		else if (!open)
 			throw new UiException("If Openable not implemented, open must be true");
-		Events.postEvent(new OpenEvent(getId(), comp, open));
+		Events.postEvent(new OpenEvent(getId(), comp, open, ref));
 	}
 }
