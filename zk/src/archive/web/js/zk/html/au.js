@@ -373,12 +373,7 @@ zkau.onHideChildren = function (n) {
  */
 zkau._initInner = function (n) {
 	if (!n || (n.style && n.style.display == "none")) return; //done
-
-	var type = zk.getCompType(n);
-	if (type) {
-		var fn = "zk"+type+".initInner";
-		eval(fn+"&&"+fn+"(n)");
-	}
+	zk.eval(n, "initInner");
 }
 
 /** To notify a component that it becomes visible because one its ancestors
@@ -387,11 +382,7 @@ zkau._initInner = function (n) {
 zkau.onVisiAt = function (n) {
 	if (!n || (n.style && n.style.display == "none")) return; //done
 
-	var type = zk.getCompType(n);
-	if (type) {
-		var fn = "zk"+type+".onVisi";
-		eval(fn+"&&"+fn+"(n)");
-	}
+	zk.eval(n, "onVisi");
 	zkau.onVisiChildren(n);
 };
 /** To notify a component that it becomes invisible because one its ancestors
@@ -407,8 +398,7 @@ zkau.onHideAt = function (n) {
 			zkau.valid.closeErrbox(n.id + "!real");
 		}
 
-		var fn = "zk"+type+".onHide";
-		eval(fn+"&&"+fn+"(n)");
+		zk.eval(n, "onHide", type);
 	}
 	zkau.onHideChildren(n);
 };
@@ -780,7 +770,7 @@ zkau._onDocLClick = function (evt) {
 
 	if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
 		var cmp = Event.element(evt);
-		cmp = zkau._getClkTarget(cmp, "zk_lfclk", "zk_pop");
+		cmp = zkau._getParentByAttr(cmp, "zk_lfclk", "zk_pop");
 		if (cmp) {
 			var ctx = cmp.getAttribute("zk_pop");
 			if (ctx) {
@@ -792,8 +782,7 @@ zkau._onDocLClick = function (evt) {
 
 						ctx.style.left = Event.pointerX(evt) + "px";
 						ctx.style.top = Event.pointerY(evt) + "px";
-						var fn = "zk"+type+".context";
-						eval(fn+"&&"+fn+"(ctx, cmp)");
+						zk.eval(ctx, "context", type, cmp);
 					}
 				}
 			}
@@ -812,7 +801,7 @@ zkau._onDocDClick = function (evt) {
 	if (!evt) evt = window.event;
 
 	var cmp = Event.element(evt);
-	cmp = zkau._getClkTarget(cmp, "zk_dbclk");
+	cmp = zkau._getParentByAttr(cmp, "zk_dbclk");
 	if (cmp) {
 		zkau.send({uuid: zkau.uuidOf(cmp), cmd: "onDoubleClick", data: null});
 		//no need to Event.stop
@@ -825,7 +814,7 @@ zkau._onDocRClick = function (evt) {
 
 	if (evt.which == 3 || evt.button == 2) {
 		var cmp = Event.element(evt);
-		cmp = zkau._getClkTarget(cmp, "zk_ctx", "zk_rtclk");
+		cmp = zkau._getParentByAttr(cmp, "zk_ctx", "zk_rtclk");
 		if (zk.agtIe) zkau._eRClick = cmp; //used only by oncontextmenu
 
 		if (cmp) {
@@ -839,8 +828,7 @@ zkau._onDocRClick = function (evt) {
 
 						ctx.style.left = Event.pointerX(evt) + "px";
 						ctx.style.top = Event.pointerY(evt) + "px";
-						var fn = "zk"+type+".context";
-						eval(fn+"&&"+fn+"(ctx, cmp)");
+						zk.eval(ctx, "context", type, cmp);
 					}
 				}
 			}
@@ -859,26 +847,30 @@ zkau._onDocMouseover = function (evt) {
 	if (!evt) evt = window.event;
 
 	var cmp = Event.element(evt);
-	cmp = zkau._getClkTarget(cmp, "zk_tip");
+	cmp = zkau._getParentByAttr(cmp, "zk_tip");
 	if (cmp) {
 		var tip = cmp.getAttribute("zk_tip");
+		tip = zkau.getByZid(cmp, tip);
 		if (tip) {
-			tip = zkau.getByZid(cmp, tip);
-			if (tip) {
-				zkau._tipInfo = {
-					tipId: tip.id, cmpId: cmp.id, open: false,
-					x: Event.pointerX(evt) + "px",
-					y: Event.pointerY(evt) + "px"
-				};
-				zkau._shallCloseTip = false;
-				setTimeout("zkau._openTip('"+cmp.id+"')", 800);
-			}
+			zkau._tipInfo = {
+				tipId: tip.id, cmpId: cmp.id, open: false,
+				x: Event.pointerX(evt) + "px",
+				y: Event.pointerY(evt) + "px"
+			};
+			zkau._shallCloseTip = false;
+			setTimeout("zkau._openTip('"+cmp.id+"')", 800);
 		}
 		//no need to Event.stop
-	} else if (zkau._tipInfo && zkau._tipInfo.open) {
-		var tip = $(zkau._tipInfo.tipId);
-		if (tip && zk.isAncestor(tip, Event.element(evt)))
-			zkau._shallCloseTip = false; //don't close it
+	} else if (zkau._tipInfo) {
+		if (zkau._tipInfo.open) {
+			var tip = $(zkau._tipInfo.tipId);
+			if (tip && zk.isAncestor(tip, Event.element(evt))) {
+				zkau._shallCloseTip = false; //don't close it
+				return true;
+			}
+		}
+		zkau._shallCloseTip = true;
+		setTimeout(zkau._tryCloseTip, 300);
 	}
 	return true;
 };
@@ -887,7 +879,7 @@ zkau._onDocMouseout = function (evt) {
 
 	if (zkau._tipInfo) {
 		zkau._shallCloseTip = true;
-		setTimeout(zkau._tryCloseTip, 200);
+		setTimeout(zkau._tryCloseTip, 300);
 	}
 };
 zkau._openTip = function (cmpId) {
@@ -903,8 +895,7 @@ zkau._openTip = function (cmpId) {
 			zkau._tipInfo.open = true;
 			tip.style.left = zkau._tipInfo.x;
 			tip.style.top = zkau._tipInfo.y;
-			var fn = "zk"+zk.getCompType(tip)+".context";
-			eval(fn+"&&"+fn+"(tip, cmp)");
+			zk.eval(tip, "context", null, cmp);
 		} else {
 			zkau._tipInfo = null;
 		}
@@ -919,7 +910,7 @@ zkau._tryCloseTip = function () {
 };
 
 /** Returns the target of right-click, or null if not found. */
-zkau._getClkTarget = function (n, attr1, attr2) {
+zkau._getParentByAttr = function (n, attr1, attr2) {
 	for (; n; n = n.parentNode) {
 		if (n.getAttribute) {
 			if (attr1 && n.getAttribute(attr1)) return n;
@@ -1515,12 +1506,8 @@ zkau.cmd1 = {
 			if (dt2) zkau.initzid(cmp, dt2);
 		}
 
-		var type = zk.getCompType(cmp);
-		if (type) { //NOTE: cmp is NOT converted to real!
-			var fn = "zk"+type+".setAttr";
-			if (eval(fn+"&&"+fn+"(cmp, dt1, dt2)"))
-				return; //done
-		}
+		if (zk.eval(cmp, "setAttr", null, dt1, dt2)) //NOTE: cmp is NOT converted to real!
+			return; //done
 
 		if (!done) {
 			if (dt1.startsWith("on")) cmp = zkau.getReal(cmp);
@@ -1541,12 +1528,8 @@ zkau.cmd1 = {
 			done = true;
 		}
 
-		var type = zk.getCompType(cmp);
-		if (type) { //NOTE: cmp is NOT converted to real!
-			var fn = "zk"+type+".rmAttr";
-			if (eval(fn+"&&"+fn+"(cmp, dt1)"))
-				return; //done
-		}
+		if (zk.eval(cmp, "rmAttr", null, dt1)) //NOTE: cmp is NOT converted to real!
+			return; //done
 
 		if (!done) {
 			if (dt1.startsWith("on")) cmp = zkau.getReal(cmp);
@@ -1566,7 +1549,7 @@ zkau.cmd1 = {
 				cmps.push(cmp);
 				zk.addInitCmps(cmps);
 			} else {
-				eval("zk"+type+".init(cmp)");
+				zk.eval(cmp, "init", type);
 			}
 		}
 	},

@@ -244,15 +244,7 @@ zk._evalInit = function () {
 			var n = cmps.pop(); //reverse-order: child first
 			if (!n) break;
 
-			var type = zk.getCompType(n);
-			if (type) {
-				var fn = "zk" + type + ".init";
-				try {
-					eval(fn+"&&"+fn+"(n)"); //to avoid being optimized, use short name
-				} catch (ex) {
-					zk.error("Failed to invoke "+fn+"\n"+ex.message);
-				}
-			}
+			zk.eval(n, "init");
 
 			if (n.getAttribute("zid")) zkau.initzid(n);
 			if (n.getAttribute("zk_drag")) zkau.initdrag(n);
@@ -270,6 +262,33 @@ zk._evalInit = function () {
 	while (zk._initfns.length && !zk.loading)
 		(zk._initfns.shift()).apply();
 };
+/** Evaluate a method of the specified component.
+ *
+ * It assumes fn is a method name of a object called "zk" + type
+ * (in window).
+ * Nothing happens if no such object or no such method.
+ *
+ * @param n the component
+ * @param fn the method name, e.g., "init"
+ * @param type the component type. If omitted, zk.getCompType(n)
+ * is assumed.
+ * @param a0 the first of extra arguments; null to omitted
+ * @return the result
+ */
+zk.eval = function (n, fn, type, a0, a1, a2) {
+	if (!type) type = zk.getCompType(n);
+	if (type) {
+		var cnm = "zk" + type;
+		fn = cnm + "." + fn;
+		try {
+			return eval("window."+cnm+"&&"+fn+"&&"+fn+"(n,a0,a1,a2)"); //to avoid being optimized, use short name
+		} catch (ex) {
+			zk.error("Failed to invoke "+fn+"\n"+ex.message);
+		}
+	}
+	return false;
+};
+
 /** Check zk_type and invoke zkxxx.cleanup if declared.
  * @param cufn an optional function. If specified,
  * cufn.apply(n, new Array(n)) is called
@@ -286,8 +305,7 @@ zk.cleanupAt = function (n, cufn) {
 
 	var type = zk.getCompType(n);
 	if (type) {
-		var fn = "zk"+type+".cleanup";
-		eval(fn+"&&"+fn+"(n)");
+		zk.eval(n, "cleanup", type);
 		if (cufn) cufn.apply(n, new Array(n));
 	}
 
