@@ -145,6 +145,16 @@ zk.toParentOffset = function (el, x, y) {
 zk.getStyleOffset = function (el) {
 	return [parseInt(el.style.left || '0'), parseInt(el.style.top || '0')];
 };
+/** Converts from absolute coordination to style's coordination.
+ * We cannot use zk.toParentCoord, because
+ * after calling Draggable, offsetParent becomes BODY but
+ * style.left/top is still relevant to original offsetParent
+ */
+zk.toStylePos = function (el, x, y) {
+	var ofs1 = Position.cumulativeOffset(el);
+	var ofs2 = zk.getStyleOffset(el);
+	return [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
+};
 
 /** Whether el1 and el2 are overlapped. */
 zk.isOverlapped = function (el1, el2) {
