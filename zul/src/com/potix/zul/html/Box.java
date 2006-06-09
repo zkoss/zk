@@ -95,7 +95,7 @@ public class Box extends XulElement {
 	public String getSplitterExteriorAttrs() {
 		final StringBuffer sb = new StringBuffer(60);
 		final boolean vert = "vertical".equals(getOrient());
-		sb.append(vert ? "align=\"center\"": "valign=\"middle\"");
+		sb.append(vert ? " align=\"center\"": " valign=\"middle\"");
 		HTMLs.appendAttribute(sb, vert ? "height": "width", "8px");
 		return sb.toString();
 	}

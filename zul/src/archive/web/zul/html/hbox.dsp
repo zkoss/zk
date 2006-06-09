@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zul/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
+<table id="${self.uuid}" zk_type="Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
 <tr valign="top">
 	<c:forEach var="child" items="${self.children}">
  <td id="${child.uuid}!chdextr"${c:attr('width',c:isInstance('com.potix.zk.ui.HtmlBasedComponent', child) ? child.width: null)}${c:isInstance('com.potix.zul.html.Splitter',child)?self.splitterExteriorAttrs:self.childExteriorAttrs}>${u:redraw(child, null)}</td>

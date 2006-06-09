@@ -49,11 +49,11 @@ zk.Slider.prototype = {
 			endeffect: zkSld._endDrag});
 		this._fixPos();
 	},
-	/** (x, y) is in the style's coordination (use zkSld._toStylePos to convert).
+	/** (x, y) is in the style's coordination (use zk.toStylePos to convert).
 	 */
 	_snap: function (x, y) {
 		var ofs = Position.cumulativeOffset(this.element);
-		ofs = zkSld._toStylePos(this.button, ofs[0], ofs[1]);
+		ofs = zk.toStylePos(this.button, ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
 			x = ofs[0];
 		} else {
@@ -72,7 +72,7 @@ zk.Slider.prototype = {
 		var wd = this._width();
 		var x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0;
 		var ofs = Position.cumulativeOffset(this.element);
-		ofs = zkSld._toStylePos(this.button, ofs[0], ofs[1]);
+		ofs = zk.toStylePos(this.button, ofs[0], ofs[1]);
 		ofs = this._snap(ofs[0] + x, 0);
 		this.button.style.left = ofs[0] + "px";
 	},
@@ -164,14 +164,4 @@ zkSld._dragging = function (draggable) {
 zkSld._metaByBtn = function (button) {
 	var btnid = button.id;
 	return zkau.getMeta(btnid.substring(0, btnid.length-4));
-};
-/** Converts from absolute coordination to style's coordination.
- * We cannot use zk.toParentCoord, because
- * after calling Draggable, offsetParent becomes BODY but
- * style.left/top is still relevant to original offsetParent
- */
-zkSld._toStylePos = function (el, x, y) {
-	var ofs1 = Position.cumulativeOffset(el);
-	var ofs2 = zk.getStyleOffset(el);
-	return [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
 };
