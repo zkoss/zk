@@ -852,60 +852,66 @@ zkau._onDocMouseover = function (evt) {
 		var tip = cmp.getAttribute("zk_tip");
 		tip = zkau.getByZid(cmp, tip);
 		if (tip) {
-			zkau._tipInfo = {
-				tipId: tip.id, cmpId: cmp.id, open: false,
-				x: Event.pointerX(evt) + "px",
-				y: Event.pointerY(evt) + "px"
-			};
-			zkau._shallCloseTip = false;
-			setTimeout("zkau._openTip('"+cmp.id+"')", 800);
-		}
-		//no need to Event.stop
-	} else if (zkau._tipInfo) {
-		if (zkau._tipInfo.open) {
-			var tip = $(zkau._tipInfo.tipId);
-			if (tip && zk.isAncestor(tip, Event.element(evt))) {
-				zkau._shallCloseTip = false; //don't close it
-				return true;
+			if (!zkau._tipz || zkau._tipz.cmdId != cmp.id) {
+				var open = zkau._tipz && zkau._tipz.open;
+				zkau._tipz = {
+					tipId: tip.id, cmpId: cmp.id,
+					x: Event.pointerX(evt) + "px",
+					y: Event.pointerY(evt) + "px"
+				};
+				if (open) zkau._openTip(cmp.id);
+				else setTimeout("zkau._openTip('"+cmp.id+"')", 800);
 			}
+			return true; //done
 		}
-		zkau._shallCloseTip = true;
-		setTimeout(zkau._tryCloseTip, 300);
+	}
+	if (zkau._tipz) {
+		if (zkau._tipz.open) {
+			var tip = $(zkau._tipz.tipId);
+			if (tip && zk.isAncestor(tip, Event.element(evt))) {
+				zkau._tipz.shallClose = false; //don't close it
+			} else {
+				zkau._tipz.shallClose = true;
+				setTimeout(zkau._tryCloseTip, 300);
+			}
+		} else
+			zkau._tipz = null;
 	}
 	return true;
 };
 zkau._onDocMouseout = function (evt) {
 	if (!evt) evt = window.event;
 
-	if (zkau._tipInfo) {
-		zkau._shallCloseTip = true;
-		setTimeout(zkau._tryCloseTip, 300);
-	}
+	if (zkau._tipz)
+		if (zkau._tipz.open) {
+			zkau._tipz.shallClose = true;
+			setTimeout(zkau._tryCloseTip, 300);
+		} else
+			zkau._tipz = null;
 };
 zkau._openTip = function (cmpId) {
 	//We have to filter out non-matched cmpId because user might move
 	//from one component to another
-	if (zkau._tipInfo && !zkau._tipInfo.open
-	 && (!cmpId || cmpId == zkau._tipInfo.cmpId)) {
-		var tip = $(zkau._tipInfo.tipId);
-		var cmp = $(cmpId);
-		if (tip && cmp) {
-			zkau.closeFloats(tip);
-
-			zkau._tipInfo.open = true;
-			tip.style.left = zkau._tipInfo.x;
-			tip.style.top = zkau._tipInfo.y;
+	if (zkau._tipz && !zkau._tipz.open
+	 && (!cmpId || cmpId == zkau._tipz.cmpId)) {
+		var tip = $(zkau._tipz.tipId);
+		zkau.closeFloats(tip);
+		if (tip) {
+			var cmp = $(cmpId);
+			zkau._tipz.open = true;
+			tip.style.left = zkau._tipz.x;
+			tip.style.top = zkau._tipz.y;
 			zk.eval(tip, "context", null, cmp);
 		} else {
-			zkau._tipInfo = null;
+			zkau._tipz = null;
 		}
 	}
 };
-/** Closes tooltip if _shallCloseTip is set. */
+/** Closes tooltip if _tipz.shallClose is set. */
 zkau._tryCloseTip = function () {
-	if (zkau._tipInfo && zkau._shallCloseTip) {
-		if (zkau._tipInfo.open) zkau.closeFloats();
-		zkau._tipInfo = null;
+	if (zkau._tipz && zkau._tipz.shallClose) {
+		if (zkau._tipz.open) zkau.closeFloats();
+		zkau._tipz = null;
 	}
 };
 
