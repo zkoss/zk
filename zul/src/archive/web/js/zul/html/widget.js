@@ -348,7 +348,7 @@ zkSplt.init = function (cmp) {
 			constraint: vert ? "vertical": "horizontal",
 			snap: snap,
 			starteffect: zkSplt._startDrag, change: zkSplt._dragging,
-			endeffect: Prototype.emptyFunction})
+			endeffect: zkSplt._endDrag})
 	};
 
 	cmp.style.backgroundImage = "url(" +zk.getUpdateURI(
@@ -418,6 +418,10 @@ zkSplt._startDrag = function (cmp) {
 
 		drag.box = zkau.getParentByType(ext, "Box");
 	}
+};
+zkSplt._endDrag = function (cmp) {
+	cmp.style.left = cmp.style.top = "";
+		//reset since table might adjust width later
 };
 zkSplt._snap = function (cmp, x, y) {
 	var drag = zkSplt._drags[cmp.id];
