@@ -348,7 +348,7 @@ zkSplt.init = function (cmp) {
 			constraint: vert ? "vertical": "horizontal",
 			snap: snap,
 			starteffect: zkSplt._startDrag, change: zkSplt._dragging,
-			endeffect: zkSplt._endDrag})
+			endeffect: Prototype.emptyFunction})
 	};
 
 	cmp.style.backgroundImage = "url(" +zk.getUpdateURI(
@@ -369,7 +369,6 @@ zkSplt._resize = function (cmp) {
 	cmp = $(cmp);
 	if (cmp) {
 		zkSplt._fixWidth(cmp);
-		cmp.style.left = cmp.style.top = "";
 
 		var vert = cmp.getAttribute("zk_vert");
 		var ext = $(cmp.id + "!chdextr");
@@ -389,8 +388,16 @@ zkSplt._resize = function (cmp) {
 zkSplt._fixWidth = function (cmp) {
 	var parent = cmp.parentNode;
 	if (parent) {
-		cmp.style.width = parent.clientWidth + "px";
-		cmp.style.height = parent.clientHeight + "px";
+		//Note: when window resize, it might adjust splitter's wd (hgh)
+		//if box's width is nn%. So we have to reset it to 8px
+		var vert = cmp.getAttribute("zk_vert");
+		if (vert) {
+			cmp.style.height = parent.style.height = "8px";
+			cmp.style.width = parent.clientWidth + "px";
+		} else {
+			cmp.style.width = parent.style.width = "8px";
+			cmp.style.height = parent.clientHeight + "px";
+		}
 	}
 };
 zkSplt._startDrag = function (cmp) {
@@ -411,8 +418,6 @@ zkSplt._startDrag = function (cmp) {
 
 		drag.box = zkau.getParentByType(ext, "Box");
 	}
-};
-zkSplt._endDrag = function (cmp) {
 };
 zkSplt._snap = function (cmp, x, y) {
 	var drag = zkSplt._drags[cmp.id];
@@ -441,12 +446,12 @@ zkSplt._dragging = function (drag) {
 		var ofs = Position.cumulativeOffset(cmp);
 		if (drag.vert) {
 			var diff = ofs[1] - drag.org[1];
-			if (drag.prev) zkSplt._adj(drag.prev, "height", diff);
 			if (drag.next) zkSplt._adj(drag.next, "height", -diff);
+			if (drag.prev) zkSplt._adj(drag.prev, "height", diff);
 		} else {
 			var diff = ofs[0] - drag.org[0];
-			if (drag.prev) zkSplt._adj(drag.prev, "width", diff);
 			if (drag.next) zkSplt._adj(drag.next, "width", -diff);
+			if (drag.prev) zkSplt._adj(drag.prev, "width", diff);
 		}
 		drag.org = ofs;
 		zkSplt._fixWidth(cmp);
