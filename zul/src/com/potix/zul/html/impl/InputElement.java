@@ -143,15 +143,14 @@ implements Inputable, Errorable, Constrainted {
 	 *
 	 * <p>It invokes {@link #coerceToString} to convert the stored value
 	 * into a string.
+	 *
+	 * <p>It cannot be overriden. Rather, override {@link #checkUserError}
+	 * or {@link #coerceToString}.
+	 *
 	 * @exception WrongValueException if user entered a wrong value
 	 */
-	protected String getText() throws WrongValueException {
+	protected final String getText() throws WrongValueException {
 		checkUserError();
-		return getTextNCUE();
-	}
-	/** Returns the value in String w/o checking any user error (NCUE).
-	 */
-	private final String getTextNCUE() {
 		return coerceToString(_value);
 	}
 
@@ -181,7 +180,7 @@ implements Inputable, Errorable, Constrainted {
 		if (!Objects.equals(_value, val)) {
 			_value = val;
 
-			final String fmtval = getTextNCUE();
+			final String fmtval = coerceToString(_value);
 			if (_valByClient == null || !Objects.equals(_valByClient, fmtval))
 				smartUpdate("value", fmtval);
 				//Note: we have to disable the sending back of the value
@@ -192,7 +191,7 @@ implements Inputable, Errorable, Constrainted {
 		} else if (_valByClient != null) {
 			//value equals but formatted result might differ because
 			//our parse is more fault tolerant
-			final String fmtval = getTextNCUE();
+			final String fmtval = coerceToString(_value);
 			if (!Objects.equals(_valByClient, fmtval))
 				smartUpdate("value", fmtval);
 		}
@@ -317,7 +316,7 @@ implements Inputable, Errorable, Constrainted {
 			if (_cols > 0)
 				HTMLs.appendAttribute(sb, "cols",  _cols);
 		} else {
-			HTMLs.appendAttribute(sb, "value",  getTextNCUE());
+			HTMLs.appendAttribute(sb, "value",  coerceToString(_value));
 			if (_cols > 0)
 				HTMLs.appendAttribute(sb, "size",  _cols);
 			if (_maxlength > 0)
@@ -364,24 +363,23 @@ implements Inputable, Errorable, Constrainted {
 		return _value;
 	}
 	/** Sets the row value directly. The caller must make sure the value
-	 * is correct, because there is no validation here.
-	 *
-	 * <p>If you feel confusing with setValue, such as {@link com.potix.zul.html.Textbox#setValue},
-	 * it is usually better to use setValue instead. After all, this method
+	 * is correct (or intend to be incorrect), because this method
 	 * doesn't do any validation.
 	 *
-	 * <p>In other words, it is possible to set an illegal value for
-	 * the input component, which might not be easy to debug.
+	 * <p>If you feel confusing with setValue, such as {@link com.potix.zul.html.Textbox#setValue},
+	 * it is usually better to use setValue instead. This method
+	 * is reserved for developer that really want to set an 'illegal'
+	 * value (such as an empty string to a textbox with no-empty contraint).
 	 *
-	 * @return whether the new value differs from the previous one.
+	 * <p>Like setValue, the result is returned back to the server
+	 * by calling {@link #getText}
 	 */
-	public boolean setRawValue(Object value) {
+	public void setRawValue(Object value) {
 		_errmsg = null;
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			return true;
+			smartUpdate("value", coerceToString(_value));
 		}
-		return false;
 	}
 
 	/** Checks whether user entered a wrong value (and not correct it yet).
@@ -396,7 +394,7 @@ implements Inputable, Errorable, Constrainted {
 		if (_errmsg != null)
 			throw new WrongValueException(this, _errmsg);
 		if (!_valided && _constr != null)
-			setText(getTextNCUE());
+			setText(coerceToString(_value));
 	}
 
 	/** Returns the text for HTML AREA (Internal Use Only).
@@ -404,7 +402,7 @@ implements Inputable, Errorable, Constrainted {
 	 * <p>Used only for component generation. Not for applications.
 	 */
 	public final String getAreaText() {
-		return XMLs.encodeText(getTextNCUE());
+		return XMLs.encodeText(coerceToString(_value));
 	}
 
 	//-- Inputable --//

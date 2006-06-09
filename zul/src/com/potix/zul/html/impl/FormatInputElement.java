@@ -45,6 +45,8 @@ abstract public class FormatInputElement extends InputElement {
 		if (!Objects.equals(_format, format)) {
 			final String old = _format;
 			_format = format;
+			smartUpdate("zk_fmt", getFormat());
+
 			try {
 				smartUpdate("value", getText());
 				//Yes, the value attribute is changed! (no format attr in client)
@@ -80,21 +82,33 @@ abstract public class FormatInputElement extends InputElement {
 	protected String toNumberOnly(String val) {
 		if (val == null) return val;
 
+		final String fmt = getFormat();
 		StringBuffer sb = null;
 		for (int j = 0, len = val.length(); j < len; ++j) {
 			final char cc = val.charAt(j);
-			if ((cc >= '0' && cc <= '9') || cc == '.'
-			|| cc == '-' || cc == '+'){
-				if (sb != null) sb.append(cc);
-			} else {
+
+			//We don't add if cc shall be ignored (not alphanum but in fmt)
+			final boolean ignore = (cc < '0' || cc > '9')
+				&& cc != '.' && cc != '-' && cc != '+' && cc != '%'
+				&& (Character.isWhitespace(cc) || cc == ','
+					|| (fmt != null && fmt.indexOf(cc) >= 0));
+			if (ignore) {
 				if (sb == null)
 					sb = new StringBuffer(len).append(val.substring(0, j));
+			} else {
+				if (sb != null) sb.append(cc);
 			}
 		}
 		return sb != null ? sb.toString(): val;
 	}
 
 	//-- super --//
+	public String getOuterAttrs() {
+		final String attrs = super.getOuterAttrs();
+		final String fmt = getFormat();
+		return fmt != null && fmt.length() != 0 ?
+			attrs + " zk_fmt=\""+fmt+'"': attrs;
+	}
 	protected boolean isAsapRequired(String evtnm) {
 		return ("onChange".equals(evtnm) && getFormat() != null)
 			|| super.isAsapRequired(evtnm);

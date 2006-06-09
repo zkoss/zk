@@ -40,12 +40,8 @@ zkVld.validate = function (id) {
 				if (msg) return msg;
 			}
 
-			var type = zk.getCompType(cm);
-			if (type) {
-				var fn = "zk"+type+".validate";
-				var msg = eval(fn+"&&"+fn+"(cm)");
-				if (msg) return msg;
-			}
+			var msg = zk.eval(cm, "validate");
+			if (msg) return msg;
 		}
 
 		//2. define a method called validate in the metainfo
@@ -69,6 +65,8 @@ zkVld.onlyNum = function (id, noDot) {
 	var inp = $(id);
 	if (!inp) return null;
 
+	var fmt = zkau.getOuter(inp);
+	if (fmt) fmt = fmt.getAttribute("zk_fmt");
 	inp = zkau.getReal(inp);
 	val = inp.value.trim();
 	for (var j=0,doted,numed,dashed,perted; j < val.length; ++j) {
@@ -89,8 +87,15 @@ zkVld.onlyNum = function (id, noDot) {
 			continue;
 		case '%':
 			perted = true;
-		default: //silently ignore , $ ...
+			//fall thru
+		case ',':
+		case ' ':
+		case '\t':
 			continue;
+		default:
+			if (fmt && fmt.indexOf(cc) >= 0) //recognize only in zk_fmt
+				continue;
+			//error
 		}
 		return mesg.NUMBER_REQUIRED+val;
 	}

@@ -57,8 +57,7 @@ public class Intbox extends FormatInputElement {
 	 */
 	public void setValue(Integer value) throws WrongValueException {
 		validate(value);
-		if (setRawValue(value))
-			smartUpdate("value", getText());
+		setRawValue(value);
 	}
 
 	//-- super --//

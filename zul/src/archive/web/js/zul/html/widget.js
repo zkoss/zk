@@ -341,9 +341,16 @@ zkSplt.init = function (cmp) {
 	Event.observe(window, "resize", function () {setTimeout(exc, 250);});
 	setTimeout(exc, 250);
 
-	zkSplt._drags[cmp.id] = new Draggable(cmp, {});
-
 	var vert = cmp.getAttribute("zk_vert");
+	zkSplt._drags[cmp.id] = {
+		vert: vert,
+		drag: new Draggable(cmp, {
+			constraint: vert ? "vertical": "horizontal",
+			snap: zkSplt._snap,
+			starteffect: zkSplt._startDrag, change: zkSplt._dragging,
+			endeffect: zkSplt._endDrag})
+	};
+
 	cmp.style.backgroundImage = "url(" +zk.getUpdateURI(
 		"/web/zul/img/splt/"+(vert?"v":"h")+"splt.gif") + ")";
 };
@@ -351,7 +358,7 @@ zkSplt.cleanup = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
 		zkSplt._drags[cmp.id] = null;
-		drag.destroy();
+		drag.drag.destroy();
 	}
 };
 zkSplt._resize = function (cmp) {
@@ -363,6 +370,15 @@ zkSplt._resize = function (cmp) {
 			cmp.style.height = parent.clientHeight + "px";
 		}
 	}
+};
+zkSplt._startDrag = function () {
+};
+zkSplt._endDrag = function () {
+};
+zkSplt._snap = function (x, y) {
+	return [x, y];
+};
+zkSplt._dragging = function () {
 };
 
 //popup//

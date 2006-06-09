@@ -58,8 +58,7 @@ public class Decimalbox extends FormatInputElement {
 	 */
 	public void setValue(BigDecimal value) throws WrongValueException {
 		validate(value);
-		if (setRawValue(value))
-			smartUpdate("value", getText());
+		setRawValue(value);
 	}
 
 	/** Returns the scale for the decimal number storing in this component,

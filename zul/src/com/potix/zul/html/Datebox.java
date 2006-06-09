@@ -132,18 +132,13 @@ public class Datebox extends FormatInputElement {
 	 */
 	public void setValue(Date value) throws WrongValueException {
 		validate(value);
-		if (setRawValue(value))
-			smartUpdate("value", getText());
+		setRawValue(value);
 	}
 
 	public void setFormat(String format) throws WrongValueException {
 		if (format == null || format.length() == 0)
 			format = getDefaultFormat();
-
-		if (!Objects.equals(getFormat(), format)) {
-			super.setFormat(format);
-			smartUpdate("zk_fmt", getFormat());
-		}
+		super.setFormat(format);
 	}
 
 	//-- super --//
@@ -187,9 +182,10 @@ public class Datebox extends FormatInputElement {
 	}
 
 	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "zk_fmt", getFormat());
+		final String attrs = super.getOuterAttrs();
+		if (_lenient && !_compact) return attrs;
+
+		final StringBuffer sb = new StringBuffer(80).append(attrs);
 		if (!_lenient) sb.append(" zk_lenient=\"false\"");
 		if (_compact) sb.append(" zk_compact=\"true\"");
 		return sb.toString();
