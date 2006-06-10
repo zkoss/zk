@@ -52,7 +52,7 @@ public class Splitter extends XulElement implements Openable {
 	/** Returns which side of the splitter is collapsed when its grippy
 	 * is clicked. If this attribute is not specified, the splitter will
 	 * not cause a collapse.
-	 * If it is collapsed, {@link #getOpen} returns false.
+	 * If it is collapsed, {@link #isOpen} returns false.
 	 *
 	 * <p>Default: none.
 	 *
