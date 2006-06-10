@@ -146,6 +146,7 @@ zk.getStyleOffset = function (el) {
 	return [parseInt(el.style.left || '0'), parseInt(el.style.top || '0')];
 };
 /** Converts from absolute coordination to style's coordination.
+ * It is only useful for table's cell.
  * We cannot use zk.toParentCoord, because
  * after calling Draggable, offsetParent becomes BODY but
  * style.left/top is still relevant to original offsetParent
