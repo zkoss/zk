@@ -123,6 +123,8 @@ public class Splitter extends XulElement implements Openable {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
+		if (isAsapRequired("onOpen"))
+			sb.append(" zk_onOpen=\"true\"");
 		if ("vertical".equals(getOrient()))
 			HTMLs.appendAttribute(sb, "zk_vert", "true");
 		if (!"none".equals(_collapse))
