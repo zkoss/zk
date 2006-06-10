@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-grid.zul
+splitter.zul
 
 {{IS_NOTE
 	Purpose:
@@ -9,10 +9,10 @@ grid.zul
 	Description:
 		
 	History:
-		Tue Oct  4 11:31:13     2005, Created by henrichen@potix.com
+		Sun Jun 11 04:08:23     2006, Created by tomyeh@potix.com
 }}IS_NOTE
 
-Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
@@ -21,8 +21,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<vbox width="100%">
 		<html>
 			<attribute name="content"><![CDATA[
-				<h4>Grids</h4>
-				<p>grid is used to layout components into a tabular style.</p>
+<h4>Splitters</h4>
+<p>A splitter appears before or after an element inside a hbox or vbox.
+When the splitter is dragged, the sibling elements of the splitter are resized.</p>
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
@@ -34,30 +35,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView();"/></caption>
 			<textbox id="codes" class="code" rows="20" width="100%">
 				<attribute name="value"><![CDATA[
-<window title="Grid Demo" border="normal" width="360px">
-	<grid>
-		<columns>
-			<column label="Type"/>
-			<column label="Content"/>
-		</columns>
-		<rows>
-			<row>
-				<label value="File:"/>
-				<textbox width="99%"/>
-			</row>
-			<row>
-				<label value="Type:"/>
-				<hbox>
-					<listbox rows="1" mold="select">
-						<listitem label="Java Files,(*.java)"/>
-						<listitem label="All Files,(*.*)"/>
-					</listbox>
-					<button label="Browse..."/>
-				</hbox>
-			</row>
-		</rows>
-	</grid>
-</window>
+<hbox spacing="0" width="100%">
+	<vbox height="200px">
+		Column 1-1: The left-top box. To know whether a splitter
+		is collapsed, you can listen to the onOpen event.
+		<splitter collapse="after"/>
+		Column 1-2: You can enforce to open or collapse programming
+		by calling setOpen method.
+	</vbox>
+	<splitter collapse="before"/>
+	Column 2: Whether a splitter allows users to open or collapse
+	depending on the collapse attribue.
+</hbox>
 				]]></attribute>
 			</textbox>
 		</groupbox>
