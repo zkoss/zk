@@ -22,6 +22,7 @@ import com.potix.xml.HTMLs;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
+import com.potix.zk.ui.ext.Openable;
 
 import com.potix.zul.html.impl.XulElement;
 
@@ -36,8 +37,9 @@ import com.potix.zul.html.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Splitter extends XulElement {
+public class Splitter extends XulElement implements Openable {
 	private String _collapse = "none";
+	private boolean _open = true;
 
 	/** Returns the orientation of the splitter.
 	 * It is the same as the parent's orientation ({@link Box#getOrient}.
@@ -50,6 +52,7 @@ public class Splitter extends XulElement {
 	/** Returns which side of the splitter is collapsed when its grippy
 	 * is clicked. If this attribute is not specified, the splitter will
 	 * not cause a collapse.
+	 * If it is collapsed, {@link #getOpen} returns false.
 	 *
 	 * <p>Default: none.
 	 *
@@ -95,14 +98,36 @@ public class Splitter extends XulElement {
 		}
 	}
 
+	/** Returns whether it is opne (i.e., not collapsed.
+	 * Meaningful only if {@link #getCollapse} is not "none".
+	 */
+	public boolean isOpen() {
+		return _open;
+	}
+	/** Opens or collapses the splitter.
+	 * Meaningful only if {@link #getCollapse} is not "none".
+	 */
+	public void setOpen(boolean open) {
+		if (_open != open) {
+			_open = open;
+			smartUpdate("zk_open", open);
+		}
+	}
+
+	//-- Openable --//
+	public void setOpenByClient(boolean open) {
+		_open = open;
+	}
+
 	//super//
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
 		if ("vertical".equals(getOrient()))
 			HTMLs.appendAttribute(sb, "zk_vert", "true");
-		if ("none".equals(_collapse))
+		if (!"none".equals(_collapse))
 			HTMLs.appendAttribute(sb, "zk_colps", _collapse);
+		if (!_open) sb.append(" zk_open=\"false\"");
 		return sb.toString();
 	}
 	public void setParent(Component parent) {

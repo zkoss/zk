@@ -20,7 +20,6 @@ package com.potix.zul.html;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
-import com.potix.zk.au.AuScript;
 import com.potix.zk.ui.ext.Openable;
 
 import com.potix.zul.html.impl.XulElement;
@@ -50,13 +49,12 @@ public class Groupbox extends XulElement implements Openable {
 	public boolean isOpen() {
 		return _open;
 	}
-	/** Sets whether this groupbox is open.
+	/** Opens or closes this groupbox.
 	 */
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			response("open",
-				new AuScript(this, "zkGrbox.open('"+getUuid()+"',"+_open+')'));
+			smartUpdate("zk_open", _open);
 		}
 	}
 
