@@ -18,8 +18,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <hbox height="300px" width="100%" style="border:1px solid blue">
-	Column 1: a lot of test here, try to split over multiple lines.
+	<vbox height="100%">
+	Column 1-1: a lot of text here, try to split over multiple lines.
 	Then we can see the effect.
+		<splitter collapse="after"/>
+		<hbox width="100%">
+	Column 1-2-1: more an more from one to another.
+	Also, simply rich. The simplest wayt to make web rich.
+			<splitter/>
+	Column 1-2-2: one two two.
+		</hbox>
+	</vbox>
 	<splitter collapse="before"/>
 	<div>
 	Column 2: it has a textbox: <textbox/>
