@@ -19,8 +19,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zul/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" zk_type="Box"${self.outerAttrs}${self.innerAttrs}>
+<table id="${self.uuid}" zk_type="Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
 	<c:forEach var="child" items="${self.children}">
-	<div width="100%" id="${child.uuid}!chdextr"${self.childExteriorAttrs}>${u:redraw(child, null)}</div>
+	<tr id="${child.uuid}!chdextr" valign="top"><td ${self.childExteriorAttrs}>${u:redraw(child, null)}</td></tr>
 	</c:forEach>
-</div>
+</table>

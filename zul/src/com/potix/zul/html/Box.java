@@ -83,7 +83,7 @@ public class Box extends XulElement {
 		HTMLs.appendAttribute(sb, "class", vert ? "vbox": "hbox");
 		if (_spacing != null) {
 			sb.append("style=\"");
-			if (vert) sb.append("margin:").append(_spacing).append(" 0");
+			if (vert) sb.append("padding-bottom:").append(_spacing);
 			else sb.append("padding-right:").append(_spacing);
 			sb.append('"');
 		}
@@ -108,10 +108,10 @@ public class Box extends XulElement {
 			getSplitterExteriorAttrs(): getChildExteriorAttrs();
 		if ("vertical".equals(getOrient())) {
 			final StringBuffer sb = new StringBuffer(16)
-				.append("<div id=\"").append(child.getUuid())
-				.append("!chdextr\"").append(chdattrs).append('>');
+				.append("<tr id=\"").append(child.getUuid())
+				.append("!chdextr\"><td ").append(chdattrs).append('>');
 			out.insert(0, sb);
-			out.append("</div");
+			out.append("</td></tr>");
 		} else {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<td id=\"").append(child.getUuid())

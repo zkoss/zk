@@ -58,21 +58,13 @@ zkSplt._resize = function (cmp) {
 
 		//we have to convert auto-adjust to fix-width, or table
 		//will affect the sliding
-		var ext = $(cmp.id + "!chdextr");
-		var tn = zk.tagName(ext);
-		if (tn == "TD" || tn == "TH") {
-			var vert = cmp.getAttribute("zk_vert");
-			var n = ext;
-			for (;;) {
-				var p = n.previousSibling;
-				if (!p) break;
-				n = p;
-			}
-			for (; n; n = n.nextSibling)
-				if (tn == zk.tagName(n))
-					if (vert) n.style.height = n.offsetHeight + "px";
-					else n.style.width = n.offsetWidth + "px";
-		}
+		var nd = $(cmp.id + "!chdextr");
+		var tn = zk.tagName(nd);
+		var vert = cmp.getAttribute("zk_vert");
+		for (nd = nd.parentNode.firstChild; nd; nd = nd.nextSibling)
+			if (tn == zk.tagName(nd))
+				if (vert) nd.style.height = nd.offsetHeight + "px";
+				else nd.style.width = nd.offsetWidth + "px";
 	}
 };
 zkSplt._fixbtn = function (cmp) {
@@ -89,41 +81,24 @@ zkSplt._fixbtn = function (cmp) {
 		btn.style.display = "";
 	}
 };
-zkSplt._fixsz = function (cmp) {
-	var parent = cmp.parentNode;
-	if (parent) {
-		//Note: when window resize, it might adjust splitter's wd (hgh)
-		//if box's width is nn%. So we have to reset it to 8px
-		var vert = cmp.getAttribute("zk_vert");
-		if (vert) {
-			cmp.style.height = parent.style.height = "8px";
-			cmp.style.width = parent.clientWidth + "px";
-		} else {
-			cmp.style.width = parent.style.width = "8px";
-			cmp.style.height = parent.clientHeight + "px";
-		}
-	}
-
-	var btn = $(cmp.id + "!btn");
-	btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
-};
 zkSplt._startDrag = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
 		drag.org = Position.cumulativeOffset(cmp);
-		var ext = $(cmp.id + "!chdextr");
-		for (drag.prev = ext;;) {
+		var nd = $(cmp.id + "!chdextr");
+		var tn = zk.tagName(nd);
+		for (drag.prev = nd;;) {
 			drag.prev = drag.prev.previousSibling;
 			if (!drag.prev) return;
-			if (zk.tagName(drag.prev) == zk.tagName(ext)) break; //found
+			if (zk.tagName(drag.prev) == tn) break; //found
 		}
-		for (drag.next = ext;;) {
+		for (drag.next = nd;;) {
 			drag.next = drag.next.nextSibling;
 			if (!drag.next) return;
-			if (zk.tagName(drag.next) == zk.tagName(ext)) break; //found
+			if (zk.tagName(drag.next) == tn) break; //found
 		}
 
-		drag.box = zkau.getParentByType(ext, "Box");
+		drag.box = zkau.getParentByType(nd, "Box");
 	}
 };
 zkSplt._endDrag = function (cmp) {
@@ -135,17 +110,20 @@ zkSplt._snap = function (cmp, x, y) {
 	if (drag) {
 		var ofs = Position.cumulativeOffset(drag.box);
 		ofs = zk.toStylePos(cmp, ofs[0], ofs[1]);
-		if (x <= ofs[0]) {
-			x = ofs[0];
+		if (drag.vert) {
+			if (y <= ofs[1]) {
+				y = ofs[1];
+			} else {
+				var max = ofs[1] + drag.box.clientHeight - cmp.offsetHeight;
+				if (y > max) y = max;
+			}
 		} else {
-			var max = ofs[0] + drag.box.clientWidth - cmp.offsetWidth;
-			if (x > max) x = max;
-		}
-		if (y <= ofs[1]) {
-			y = ofs[1];
-		} else {
-			var max = ofs[1] + drag.box.clientHeight - cmp.offsetHeight;
-			if (y > max) y = max;
+			if (x <= ofs[0]) {
+				x = ofs[0];
+			} else {
+				var max = ofs[0] + drag.box.clientWidth - cmp.offsetWidth;
+				if (x > max) x = max;
+			}
 		}
 	}
 	return [x, y];
@@ -165,15 +143,57 @@ zkSplt._dragging = function (drag) {
 			if (drag.prev) zkSplt._adj(drag.prev, "width", diff);
 		}
 		drag.org = ofs;
-		zkSplt._fixsz(cmp);
+		zkSplt._fixszDesc(document.body); //a lot of cell must be adjusted
 	}
 };
 zkSplt._adj = function (n, fd, diff) {
+	zkSplt._adjSplt(n, fd, diff);
 	if (n) {
 		var val = parseInt(n.style[fd] || "0") + diff;
 		n.style[fd] = (val > 0 ? val: 0) + "px";
 	}
 };
+/** Adjusts the width of the splitter in the opposite dir. */
+zkSplt._adjSplt = function (n, fd, diff) {
+	if (zk.getCompType(n) == "Splt") {
+		var vert = n.getAttribute("zk_vert") != null;
+		if (vert != (fd == "height")) {
+			var val = parseInt(n.style[fd] || "0") + diff;
+			n.style[fd] = (val > 0 ? val: 0) + "px";
+		}
+	}
+	for (n = n.firstChild; n; n = n.nextSibling)
+		zkSplt._adjSplt(n, fd, diff);
+};
+/** Fixes the height (wd) of any descendant splitters. */
+zkSplt._fixszDesc = function (n) {
+	if (zk.getCompType(n) == "Splt") zkSplt._fixsz(n);
+	for (n = n.firstChild; n; n = n.nextSibling)
+		zkSplt._fixszDesc(n);
+};
+/** Fixes the height (wd) of the specified splitter. */
+zkSplt._fixsz = function (cmp) {
+	var vert = cmp.getAttribute("zk_vert");
+	var parent = cmp.parentNode;
+	if (parent) {
+		//Note: when window resize, it might adjust splitter's wd (hgh)
+		//if box's width is nn%. So we have to reset it to 8px
+		if (vert) {
+			parent = parent.parentNode; //TR
+			cmp.style.height = parent.style.height = "8px";
+			cmp.style.width = parent.clientWidth + "px";
+		} else {
+			cmp.style.width = parent.style.width = "8px";
+			cmp.style.height = parent.clientHeight + "px";
+		}
+	}
+
+	var btn = $(cmp.id + "!btn");
+	if (vert) btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
+	else btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
+};
+
+
 /** Collapse. */
 zkSplt._colps = function (cmp, btn) {
 };

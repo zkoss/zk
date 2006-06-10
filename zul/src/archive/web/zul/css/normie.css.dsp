@@ -200,8 +200,8 @@ div.vsep-bar {
 	border-left: 1px solid #666; margin-left: 2pt;
 }
 
-div.vbox {
-	margin: 0.4em 0; padding: 0;
+td.vbox {
+	margin: 0; padding-bottom: 0.4em;
 }
 td.hbox {
 	margin: 0; padding-right: 0.6em;

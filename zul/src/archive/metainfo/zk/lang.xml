@@ -497,7 +497,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>com.potix.zul.html.Splitter</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${orient == 'vertical' ? '~./zul/html/vsplitter.dsp':'~./zul/html/hsplitter.dsp'}</mold-uri>
+			<mold-uri>~./zul/html/splitter.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
