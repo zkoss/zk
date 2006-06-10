@@ -84,8 +84,11 @@ if (!zkMenu._pop)
 
 ////
 // menu //
-zkMenu.onover = function (target) {
-	var menubar = zkau.getParentByType(target, "Menubar");
+zkMenu.onover = function (evt) {
+	if (!evt) evt = window.event;
+	var cmp = zkau.getOuter(Event.element(evt));
+
+	var menubar = zkau.getParentByType(cmp, "Menubar");
 	var autodrop = !menubar || menubar.getAttribute("zk_autodrop") == "true";
 	if (autodrop) zkMenu._shallClose = false;
 		//turn off pending auto-close
@@ -96,36 +99,32 @@ zkMenu.onover = function (target) {
 	//Close non-child menu
 	for (var j = popupIds.length; --j >= 0;) {
 		var pp = $(popupIds[j]);
-		if (!zk.isAncestor(target, pp)
-		&& !zk.isAncestor(pp, target))
+		if (!zk.isAncestor(cmp, pp) && !zk.isAncestor(pp, cmp))
 			zkMenu.close(pp);
 	}
 
-	zkMenu.open(target, false);
+	zkMenu.open(cmp, false);
 };
-zkMenu.onout = function (target) {
+zkMenu.onout = function (evt) {
 	if (zkMenu._pop.getPopupIds().length == 0) return; //nothing to do
 
-	var menubar = zkau.getParentByType(target, "Menubar");
+	if (!evt) evt = window.event;
+	var cmp = zkau.getOuter(Event.element(evt));
+
+	var menubar = zkau.getParentByType(cmp, "Menubar");
 	if (menubar && menubar.getAttribute("zk_autodrop") == "true") {
 		zkMenu._shallClose = true;
 		setTimeout("if (zkMenu._shallClose) zkau.closeFloats('"+menubar.id+"');", 500);
 	}
 };
-zkMenu.onclick = function (target) {
-	if (!target.getAttribute("zk_mpop")) { //menu item
-		zkau.closeFloats(target); //including popups if visible
-
-		var uuid = target.id;
-		if (target.getAttribute("zk_autock")) {
-			var newval = target.getAttribute("zk_checked") != "true";
-			zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]}, -1);
-		}
-		zkau.send({uuid: uuid, cmd: "onClick", data: null}, 0);
-	} else {
-		zkMenu.open(target, target.getAttribute("zk_top") == "true");
-	}
+zkMenu.onclick = function (evt) {
+	if (!evt) evt = window.event;
+	var cmp = zkau.getOuter(Event.element(evt));
+	var type = zk.getCompType(cmp);
+	if ("Menu" == type) //note: Menuit also go thru this method
+		zkMenu.open(cmp, cmp.getAttribute("zk_top") == "true");
 };
+
 /** Opens a menupopup belong to the specified menu.
  * @param toggle whether to close all menu first and then open the specified menu
  */
@@ -210,13 +209,13 @@ zkMenu._close = function (pp) {
 zkMenu.init = function (cmp) {
 	var anc = $(cmp.id + "!a");
 	if (cmp.getAttribute("zk_top") == "true") {
-		Event.observe(anc, "click", function () {zkMenu.onclick(cmp);});
-		Event.observe(anc, "mouseover", function () {zkMenu.onover(cmp);});
-		Event.observe(anc, "mouseout", function () {zkMenu.onout(cmp);});
+		Event.observe(anc, "click", zkMenu.onclick);
+		Event.observe(anc, "mouseover", zkMenu.onover);
+		Event.observe(anc, "mouseout", zkMenu.onout);
 	} else {
-		Event.observe(cmp, "click", function () {zkMenu.onclick(cmp);});
-		Event.observe(cmp, "mouseover", function () {zkMenu.onover(cmp);});
-		Event.observe(cmp, "mouseout", function () {zkMenu.onout(cmp);});
+		Event.observe(cmp, "click", zkMenu.onclick);
+		Event.observe(cmp, "mouseover", zkMenu.onover);
+		Event.observe(cmp, "mouseout", zkMenu.onout);
 
 		Event.observe(anc, "focus", function () {zkau.onfocus(anc);});
 		Event.observe(anc, "blur", function () {zkau.onblur(anc);});
@@ -231,29 +230,38 @@ function zkMenusp() {} //menuseparator
 
 zkMenuit.init = function (cmp) {
 	var anc = $(cmp.id + "!a");
-	Event.observe(cmp, "click", function (evt) {
-		if ("javascript:;" == anc.href) zkMenu.onclick(cmp);
-		else {
-			zkau.closeFloats(cmp);
-
-			var t = anc.getAttribute("target");
-			if (anc.href && !zk.isNewWindow(anc.href, t))
-				zk.progress();
-		}
-		Event.stop(evt); //otherwise, zkMenu's onclick will be called, too
-	});
-	Event.observe(cmp, "mouseover", function () {zkMenu.onover(cmp);});
-	Event.observe(cmp, "mouseout", function () {zkMenu.onout(cmp);});
+	Event.observe(anc, "click", zkMenuit.onclick);
+	Event.observe(cmp, "mouseover", zkMenu.onover);
+	Event.observe(cmp, "mouseout", zkMenu.onout);
 
 	if (cmp.getAttribute("zk_top") != "true") { //non-topmost
 		Event.observe(anc, "focus", function () {zkau.onfocus(anc);});
 		Event.observe(anc, "blur", function () {zkau.onblur(anc);});
 	}
 };
+zkMenuit.onclick = function (evt) {
+	if (!evt) evt = window.event;
+	var anc = Event.element(evt);
+	zkau.closeFloats(anc);//including popups if visible
+	if ("javascript:;" == anc.href) {
+		var cmp = zkau.getOuter(anc);
+		var uuid = cmp.id;
+		if (cmp.getAttribute("zk_autock")) {
+			var newval = cmp.getAttribute("zk_checked") != "true";
+			zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]}, -1);
+		}
+		zkau.send({uuid: uuid, cmd: "onClick", data: null}, 0);
+	} else {
+		var t = anc.getAttribute("target");
+		if (anc.href && !zk.isNewWindow(anc.href, t))
+			zk.progress();
+		//Note: we cannot eat onclick. or, <a> won't work
+	}
+};
 
 zkMenusp.init = function (cmp) {
-	Event.observe(cmp, "mouseover", function () {zkMenu.onover(cmp);});
-	Event.observe(cmp, "mouseout", function () {zkMenu.onout(cmp);});
+	Event.observe(cmp, "mouseover", zkMenu.onover);
+	Event.observe(cmp, "mouseout", zkMenu.onout);
 };
 
 //menupopup//
