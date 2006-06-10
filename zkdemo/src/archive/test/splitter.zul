@@ -17,10 +17,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<hbox height="100%" width="100%" style="border:1px solid blue">
+<hbox height="300px" width="100%" style="border:1px solid blue">
 	Column 1: a lot of test here, try to split over multiple lines.
 	Then we can see the effect.
-	<splitter/>
+	<splitter collapse="before"/>
 	<div>
 	Column 2: it has a textbox: <textbox/>
 	And more text to it multiple lines.
