@@ -606,7 +606,7 @@ zkau.doPopup = function (cmp) {
 	cmp.setAttribute("mode", "popup");
 
 	var caption = $(cmp.id + "!caption");
-	if (caption && caption.style.cursor == "") caption.style.cursor = "pointer";
+	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 
 	zkau.fixZIndex(cmp);
 	zkau.enableMoveable(cmp, null, zkau.onWndMove);
@@ -617,7 +617,7 @@ zkau.doPopup = function (cmp) {
 /** Makes the popup component as normal. */
 zkau.endPopup = function (uuid) {
 	var caption = $(uuid + "!caption");
-	if (caption && caption.style.cursor == "pointer") caption.style.cursor = "";
+	if (caption && caption.style.cursor == "move") caption.style.cursor = "";
 
 	zkau._popups.remove(uuid);
 	zkau.hideCovered();
@@ -634,7 +634,7 @@ zkau.doOverlapped = function (cmp) {
 	cmp.setAttribute("mode", "overlapped");
 
 	var caption = $(cmp.id + "!caption");
-	if (caption && caption.style.cursor == "") caption.style.cursor = "pointer";
+	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 
 	zkau.fixZIndex(cmp);
 	zkau.enableMoveable(cmp, null, zkau.onWndMove);
@@ -645,7 +645,7 @@ zkau.doOverlapped = function (cmp) {
 /** Makes the popup component as normal. */
 zkau.endOverlapped = function (uuid) {
 	var caption = $(uuid + "!caption");
-	if (caption && caption.style.cursor == "pointer") caption.style.cursor = "";
+	if (caption && caption.style.cursor == "move") caption.style.cursor = "";
 
 	zkau._overlaps.remove(uuid);
 	zkau.hideCovered();
