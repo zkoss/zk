@@ -89,7 +89,7 @@ zul.doModal = function (cmp) {
 	}
 
 	var caption = $(cmp.id + "!caption");
-	if (caption && caption.style.cursor == "") caption.style.cursor = "pointer";
+	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 
 	zkau._modals.push(cmp.id);
 	if (nModals == 0) {
@@ -106,7 +106,7 @@ zul.doModal = function (cmp) {
 /** Makes the modal component as normal. */
 zul.endModal = function (uuid) {
 	var caption = $(uuid + "!caption");
-	if (caption && caption.style.cursor == "pointer") caption.style.cursor = "";
+	if (caption && caption.style.cursor == "move") caption.style.cursor = "";
 
 	var maskId = uuid + ".mask";
 	var mask = $(maskId);

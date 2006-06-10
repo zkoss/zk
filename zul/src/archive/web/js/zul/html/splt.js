@@ -33,7 +33,9 @@ zkSplt.init = function (cmp) {
 	};
 
 	var btn = $(cmp.id + "!btn");
-	Event.observe(btn, "click", function () {zkSplt._colps(cmp, btn);});
+	Event.observe(btn, "click", function () {
+		zkSplt.open(cmp, cmp.getAttribute("zk_open") == "false");
+	});
 
 	cmp.style.backgroundImage = "url(" +zk.getUpdateURI(
 		"/web/zul/img/splt/"+(vert?"v":"h")+"splt.gif") + ")";
@@ -43,6 +45,9 @@ zkSplt.init = function (cmp) {
 	var exc = "zkSplt._resize('" + cmp.id + "')";
 	Event.observe(window, "resize", function () {setTimeout(exc, 120);});
 	setTimeout(exc, 120);
+
+	cmp.style.cursor = "move";
+	btn.style.cursor = "default";
 };
 zkSplt.cleanup = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
@@ -51,6 +56,14 @@ zkSplt.cleanup = function (cmp) {
 		drag.drag.destroy();
 	}
 };
+zkSplt.setAttr = function (cmp, nm, val) {
+	if ("zk_open" == nm) {
+		zkSplt.open(cmp, val == "true", true);
+		return true; //no need to store the zk_open attribute
+	}
+	return false;
+};
+
 zkSplt._resize = function (cmp) {
 	cmp = $(cmp);
 	if (cmp) {
@@ -84,44 +97,40 @@ zkSplt._fixbtn = function (cmp) {
 zkSplt._startDrag = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
-		drag.org = Position.cumulativeOffset(cmp);
+		var run = drag.run = {};
+		run.org = Position.cumulativeOffset(cmp);
 		var nd = $(cmp.id + "!chdextr");
 		var tn = zk.tagName(nd);
-		for (drag.prev = nd;;) {
-			drag.prev = drag.prev.previousSibling;
-			if (!drag.prev) return;
-			if (zk.tagName(drag.prev) == tn) break; //found
-		}
-		for (drag.next = nd;;) {
-			drag.next = drag.next.nextSibling;
-			if (!drag.next) return;
-			if (zk.tagName(drag.next) == tn) break; //found
-		}
-
-		drag.box = zkau.getParentByType(nd, "Box");
+		run.prev = zk.previousSibling(nd, tn);
+		run.next = zk.nextSibling(nd, tn);
+		run.box = zkau.getParentByType(nd, "Box");
 	}
 };
 zkSplt._endDrag = function (cmp) {
 	cmp.style.left = cmp.style.top = "";
 		//reset since table might adjust width later
+
+	var drag = zkSplt._drags[cmp.id];
+	if (drag) drag.run = null; //free memory
 };
 zkSplt._snap = function (cmp, x, y) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
-		var ofs = Position.cumulativeOffset(drag.box);
+		var run = drag.run;
+		var ofs = Position.cumulativeOffset(run.box);
 		ofs = zk.toStylePos(cmp, ofs[0], ofs[1]);
 		if (drag.vert) {
 			if (y <= ofs[1]) {
 				y = ofs[1];
 			} else {
-				var max = ofs[1] + drag.box.clientHeight - cmp.offsetHeight;
+				var max = ofs[1] + run.box.clientHeight - cmp.offsetHeight;
 				if (y > max) y = max;
 			}
 		} else {
 			if (x <= ofs[0]) {
 				x = ofs[0];
 			} else {
-				var max = ofs[0] + drag.box.clientWidth - cmp.offsetWidth;
+				var max = ofs[0] + run.box.clientWidth - cmp.offsetWidth;
 				if (x > max) x = max;
 			}
 		}
@@ -132,18 +141,21 @@ zkSplt._dragging = function (drag) {
 	var cmp = drag.element;
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
+		var run = drag.run;
 		var ofs = Position.cumulativeOffset(cmp);
 		if (drag.vert) {
-			var diff = ofs[1] - drag.org[1];
-			if (drag.next) zkSplt._adj(drag.next, "height", -diff);
-			if (drag.prev) zkSplt._adj(drag.prev, "height", diff);
+			var diff = ofs[1] - run.org[1];
+			if (run.next) zkSplt._adj(run.next, "height", -diff);
+			if (run.prev) zkSplt._adj(run.prev, "height", diff);
 		} else {
-			var diff = ofs[0] - drag.org[0];
-			if (drag.next) zkSplt._adj(drag.next, "width", -diff);
-			if (drag.prev) zkSplt._adj(drag.prev, "width", diff);
+			var diff = ofs[0] - run.org[0];
+			if (run.next) zkSplt._adj(run.next, "width", -diff);
+			if (run.prev) zkSplt._adj(run.prev, "width", diff);
 		}
-		drag.org = ofs;
-		zkSplt._fixszDesc(document.body); //a lot of cell must be adjusted
+		run.org = ofs;
+
+		zkSplt._fixszAll();
+			//fix all splitter's size because table might be with %
 	}
 };
 zkSplt._adj = function (n, fd, diff) {
@@ -164,12 +176,6 @@ zkSplt._adjSplt = function (n, fd, diff) {
 	}
 	for (n = n.firstChild; n; n = n.nextSibling)
 		zkSplt._adjSplt(n, fd, diff);
-};
-/** Fixes the height (wd) of any descendant splitters. */
-zkSplt._fixszDesc = function (n) {
-	if (zk.getCompType(n) == "Splt") zkSplt._fixsz(n);
-	for (n = n.firstChild; n; n = n.nextSibling)
-		zkSplt._fixszDesc(n);
 };
 /** Fixes the height (wd) of the specified splitter. */
 zkSplt._fixsz = function (cmp) {
@@ -192,8 +198,31 @@ zkSplt._fixsz = function (cmp) {
 	if (vert) btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
 	else btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
 };
+zkSplt._fixszAll = function () {
+	for (var id in zkSplt._drags) {
+		var cmp = $(id);
+		if (cmp) zkSplt._fixsz(cmp);
+	}
+};
 
+zkSplt.open = function (cmp, open, silent) {
+	var nd = $(cmp.id + "!chdextr");
+	var tn = zk.tagName(nd);
+	if ((cmp.getAttribute("zk_open") != "false") == open) return; //nothing changed
 
-/** Collapse. */
-zkSplt._colps = function (cmp, btn) {
+	var colps = cmp.getAttribute("zk_colps")
+	if (!colps || "none" == colps) return; //nothing to do
+
+	var vert = cmp.getAttribute("zk_vert");
+	var sib = colps == "before" ?
+		zk.previousSibling(nd, tn): zk.nextSibling(nd, tn);
+	if (sib) sib.style.display = open ? "": "none";
+	cmp.setAttribute("zk_open", open ? "true": "false");
+
+	zkSplt._fixbtn(cmp);
+	zkSplt._fixszAll();
+
+	if (!silent)
+		zkau.send({uuid: cmp.id, cmd: "onOpen", data: [open]},
+			zkau.asapTimeout(cmp, "onOpen"));
 };
