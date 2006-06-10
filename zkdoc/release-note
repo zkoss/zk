@@ -17,6 +17,7 @@ ZK 1.2.0
 	+ Browser history management is supported
 	+ Context menu and right clicks are supported
 	+ Customizable tooltip is supported.
+	+ Splitter is supported.
 	+ Popup menu (shown when user clicks a component) is supported
 	+ Developers are allowed to define new components in a page
 	+ Developers can store UI (ZUML pages) in database or any other repository.
@@ -42,7 +43,8 @@ ZK 1.2.0
   1485400, 1486840, 1487095, 1487925, 1486617, 1488662, 1488666, 1483779,
   1488938, 1489299, 1489347, 1491464, 1492530, 1492946, 1494029, 1491836,
   1490365, 1494970, 1495427, 1495425, 1496769, 1498798, 1499207, 1495382,
-  1494841, 1498895, 1499872, 1499923, 1501444, 1501464, 1502884.
+  1494841, 1498895, 1499872, 1499923, 1501444, 1501464, 1502884, 1503282,
+  1503906.
 	+ The alignment of header and body of grid, listbox and tree are improved
 	  to handle all known extremely cases.
 	+ Work with Oracle OC4J 10.1.3
