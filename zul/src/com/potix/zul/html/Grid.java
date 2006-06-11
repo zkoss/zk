@@ -24,7 +24,6 @@ import com.potix.lang.Objects;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
-import com.potix.zk.au.AuInit;
 
 import com.potix.zul.html.impl.XulElement;
 
@@ -92,7 +91,7 @@ public class Grid extends XulElement {
 	/** Re-init the grid at the client.
 	 */
 	/*package*/ void initAtClient() {
-		response("init", new AuInit(this));
+		smartUpdate("zk_init", true);
 	}
 
 	//-- super --//

@@ -20,7 +20,6 @@ package com.potix.zul.html;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
-import com.potix.zk.au.AuScript;
 
 import com.potix.zul.html.impl.XulElement;
 
@@ -53,20 +52,12 @@ public class Rows extends XulElement {
 		super.onChildAdded(child);
 
 		final Component p = getParent();
-		if (p != null) {
-			((Grid)p).initAtClient();
-			response("stripe",
-				new AuScript(this, "zkGrid.stripe('"+p.getUuid()+"')"));
-		}
+		if (p != null) ((Grid)p).initAtClient();
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 
 		final Component p = getParent();
-		if (p != null) {
-			((Grid)p).initAtClient();
-			response("stripe",
-				new AuScript(this, "zkGrid.stripe('"+p.getUuid()+"')"));
-		}
+		if (p != null) ((Grid)p).initAtClient();
     }
 }

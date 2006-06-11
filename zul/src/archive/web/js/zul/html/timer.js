@@ -61,10 +61,21 @@ zk.Timer.prototype = {
 };
 
 /** Init (and re-init) a timer. */
-zkTimer.init = function (timer) {
-	var meta = zkau.getMeta(timer);
+zkTimer.init = function (cmp) {
+	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
-	else new zk.Timer(timer);
+	else new zk.Timer(cmp);
+};
+zkTimer.setAttr = function (cmp, nm, val) {
+	if (nm == "zk_running") {
+		if (val == "true") zkTimer.init(cmp);
+		else {
+			var meta = zkau.getMeta(cmp);
+			if (meta) meta.cleanup();
+		}
+		return true;
+	}
+	return false;
 };
 
 /** Fires an onTimer event. */

@@ -46,7 +46,6 @@ import com.potix.zk.ui.event.Events;
 import com.potix.zul.html.impl.XulElement;
 import com.potix.zul.html.event.ListDataEvent;
 import com.potix.zul.html.event.ListDataListener;
-import com.potix.zk.au.AuInit;
 
 /**
  * A listbox.
@@ -512,7 +511,7 @@ public class Listbox extends XulElement implements Selectable, Render {
 	/** Re-init the listbox at the client.
 	 */
 	/*package*/ void initAtClient() {
-		response("init", new AuInit(this));
+		smartUpdate("zk_init", true);
 	}
 
 	//-- Selectable --//
@@ -948,7 +947,7 @@ public class Listbox extends XulElement implements Selectable, Render {
 		}
 		private void doFinally() {
 			if (_rendered)
-				response("init", new AuInit(Listbox.this));
+				initAtClient();
 					//reason: after rendering, the column width might change
 					//Also: Mozilla remembers scrollTop when user's pressing
 					//RELOAD, it makes init more desirable.

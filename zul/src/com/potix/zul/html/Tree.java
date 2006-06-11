@@ -35,7 +35,6 @@ import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.ext.Selectable;
 
 import com.potix.zul.html.impl.XulElement;
-import com.potix.zk.au.AuInit;
 
 /**
  *  A container which can be used to hold a tabular
@@ -370,7 +369,7 @@ public class Tree extends XulElement implements Selectable {
 	/** Re-init the tree at the client.
 	 */
 	/*package*/ void initAtClient() {
-		response("init", new AuInit(this));
+		smartUpdate("zk_init", true);
 	}
 
 	//-- Selectable --//

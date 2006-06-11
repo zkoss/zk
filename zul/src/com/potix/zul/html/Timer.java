@@ -21,8 +21,6 @@ package com.potix.zul.html;
 import com.potix.xml.HTMLs;
 
 import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.au.AuInit;
-import com.potix.zk.au.AuCleanup;
 import com.potix.zul.html.impl.XulElement;
 
 /**
@@ -63,7 +61,7 @@ public class Timer extends XulElement {
 			_delay = delay;
 			smartUpdate("zk_deplay", Integer.toString(_delay));
 			if (_running)
-				response("init", new AuInit(this));
+				smartUpdate("zk_init", true); //init
 		}
 	}
 	/** Returns whether the timer shall send Event repeatly.
@@ -79,7 +77,7 @@ public class Timer extends XulElement {
 			_repeats = repeats;
 			smartUpdate("zk_repeats", Boolean.toString(_repeats));
 			if (_running)
-				response("init", new AuInit(this));
+				smartUpdate("zk_init", true); //init
 		}
 	}
 	/** Returns whether this timer is running.
@@ -102,7 +100,7 @@ public class Timer extends XulElement {
 	public void stop() {
 		if (_running) {
 			_running = false;
-			response(null, new AuCleanup(this));
+			smartUpdate("zk_running", false);
 		}
 	}
 	/** Starts the timer.
@@ -110,7 +108,7 @@ public class Timer extends XulElement {
 	public void start() {
 		if (!_running) {
 			_running = true;
-			response("init", new AuInit(this));
+			smartUpdate("zk_running", true);
 		}
 	}
 
