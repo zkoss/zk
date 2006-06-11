@@ -670,11 +670,11 @@ zk.Selectable.prototype = {
 	/** Calculates the size, part 2. */
 	_calcSize2: function () {
 		var tblwd = this.body.clientWidth;
-		if (tblwd && zk.agtIe && this.body.offsetWidth - tblwd > 11) {
-		//By experimental: see zk-blog.txt
-			if (--tblwd < 0) tblwd = 0;
-			this.bodytbl.style.width = tblwd + "px";
-		}
+		if (zk.agtIe) //By experimental: see zk-blog.txt
+			if (tblwd && this.body.offsetWidth - tblwd > 11) {
+				if (--tblwd < 0) tblwd = 0;
+				this.bodytbl.style.width = tblwd + "px";
+			} else this.bodytbl.style.width = "";
 
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
