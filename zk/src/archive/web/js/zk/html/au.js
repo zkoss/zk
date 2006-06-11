@@ -1498,6 +1498,24 @@ zkau.cmd0 = { //no uuid at all
 };
 zkau.cmd1 = {
 	setAttr: function (uuid, cmp, dt1, dt2) {
+		if (dt1 == "zk_init") { //initialize
+			//Note: cmp might be null because it might be removed
+			if (cmp) {
+				var type = zk.getCompType(cmp);
+				if (type) {
+					zk.loadByType(cmp);
+					if (zk.loading) {
+						var cmps = new Array();
+						cmps.push(cmp);
+						zk.addInitCmps(cmps);
+					} else {
+						zk.eval(cmp, "init", type);
+					}
+				}
+			}
+			return; //done
+		}
+
 		var done = false;
 		if ("zk_drag" == dt1) {
 			if (!cmp.getAttribute("zk_drag")) zkau.initdrag(cmp);
@@ -1542,25 +1560,6 @@ zkau.cmd1 = {
 				//Client-side-action must be done at the inner tag
 			zkau.rmAttr(cmp, dt1);
 		}
-	},
-	init: function (uuid, cmp) {
-		//Note: cmp might be null because it might be removed
-		if (!cmp) return;
-
-		var type = zk.getCompType(cmp);
-		if (type) {
-			zk.loadByType(cmp);
-			if (zk.loading) {
-				var cmps = new Array();
-				cmps.push(cmp);
-				zk.addInitCmps(cmps);
-			} else {
-				zk.eval(cmp, "init", type);
-			}
-		}
-	},
-	cleanup: function (uuid, cmp) {
-		zkau.cleanupMeta(uuid);
 	},
 	outer: function (uuid, cmp, dt1) {
 		zk.cleanupAt(cmp, zkau.cleanupMeta);

@@ -171,6 +171,7 @@ import com.potix.zk.au.*;
 		Map respmap = (Map)_smartUpdated.get(comp);
 		if (respmap == null)
 			_smartUpdated.put(comp, respmap = new LinkedHashMap());
+		respmap.remove(attr); //so zk_init will be the last to execute
 		respmap.put(attr, value);
 	}
 	/** Called to update (redraw) a component, when a component is moved.
