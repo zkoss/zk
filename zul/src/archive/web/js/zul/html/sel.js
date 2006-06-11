@@ -297,9 +297,6 @@ zk.Selectable.prototype = {
 
 	/** Returns # of rows allowed. */
 	size: function () {
-		var hgh = this.element.style.height;
-		if (hgh && hgh != "auto") return 0;
-
 		var sz = this.element.getAttribute("zk_size");
 		return sz ? parseInt(sz): 0;
 	},
