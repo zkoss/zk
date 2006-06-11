@@ -40,9 +40,7 @@ zk.Grid.prototype = {
 		if (!zk.isRealVisible(this.element)) return;
 
 		var meta = this; //the nested function only see local var
-		if (this._inited) {
-			this._cleansz();
-		} else {
+		if (!this._inited) {
 			this._inited = true;
 
 			this.fnResize = function () {
