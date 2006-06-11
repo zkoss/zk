@@ -47,9 +47,7 @@ zk.Selectable.prototype = {
 		if (!zk.isRealVisible(this.element)) return;
 
 		var meta = this; //the nested function only see local var
-		if (this._inited) {
-			this._cleansz();
-		} else {
+		if (!this._inited) {
 			this._inited = true;
 
 			//If Mozilla, we have to eat keystrokes, or the page
@@ -299,6 +297,9 @@ zk.Selectable.prototype = {
 
 	/** Returns # of rows allowed. */
 	size: function () {
+		var hgh = this.element.style.height;
+		if (hgh && hgh != "auto") return 0;
+
 		var sz = this.element.getAttribute("zk_size");
 		return sz ? parseInt(sz): 0;
 	},
