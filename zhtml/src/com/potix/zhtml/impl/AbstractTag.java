@@ -34,7 +34,6 @@ import com.potix.zk.ui.Components;
 import com.potix.zk.ui.AbstractComponent;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.au.AuInit;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.ext.DynamicPropertied;
@@ -160,7 +159,7 @@ implements DynamicPropertied, RawId {
 				Events.isListenerAvailable(this, evtnm, true) ? "true": null); //asap only
 			if (bAddType && isTypeDeclared()) {
 				smartUpdate("zk_type", "zhtml.main.Raw");
-				response("init", new AuInit(this));
+				smartUpdate("zk_init", true);
 			}
 		}
 		return ret;
