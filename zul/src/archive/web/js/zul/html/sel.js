@@ -47,7 +47,9 @@ zk.Selectable.prototype = {
 		if (!zk.isRealVisible(this.element)) return;
 
 		var meta = this; //the nested function only see local var
-		if (!this._inited) {
+		if (this._inited) {
+			this._cleansz();
+		} else {
 			this._inited = true;
 
 			//If Mozilla, we have to eat keystrokes, or the page
@@ -658,8 +660,9 @@ zk.Selectable.prototype = {
 	/** Calculates the size, part 2. */
 	_calcSize2: function () {
 		var tblwd = this.body.clientWidth;
-		if (tblwd) { //IE: if no rows
-			if (zk.agtIe && --tblwd < 0) tblwd = 0; //By experimental
+		if (tblwd && zk.agtIe && this.body.offsetWidth - tblwd > 11) {
+		//By experimental: see zk-blog.txt
+			if (--tblwd < 0) tblwd = 0;
 			this.bodytbl.style.width = tblwd + "px";
 		}
 
@@ -676,6 +679,10 @@ zk.Selectable.prototype = {
 	},
 	/** Recalculate the size. */
 	_recalcSize: function () {
+		this._cleansz();
+		setTimeout("zkSel._calcSize('"+this.id+"')", 20);
+	},
+	_cleansz: function () {
 		this.bodytbl.style.width = "";
 		if (this.headtbl) {
 			this.head.style.width = this.body.style.height = "";
@@ -693,8 +700,6 @@ zk.Selectable.prototype = {
 					footrow.cells[j].style.width = "";
 			}
 		}
-
-		setTimeout("zkSel._calcSize('"+this.id+"')", 20);
 	},
 
 	/** Sels the selected item by an index (don't notify server). */

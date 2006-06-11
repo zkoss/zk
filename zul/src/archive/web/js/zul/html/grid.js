@@ -36,12 +36,13 @@ zk.Grid.prototype = {
 		if (this.bodytbl.tBodies && this.bodytbl.tBodies[0])
 			this.bodyrows = this.bodytbl.tBodies[0].rows;
 			//Note: bodyrows is null in FF if no rows, so no err msg
-		this._setSize();
 
 		if (!zk.isRealVisible(this.element)) return;
 
 		var meta = this; //the nested function only see local var
-		if (!this._inited) {
+		if (this._inited) {
+			this._cleansz();
+		} else {
 			this._inited = true;
 
 			this.fnResize = function () {
@@ -57,6 +58,8 @@ zk.Grid.prototype = {
 			};
 			Event.observe(window, "resize", this.fnResize);
 		}
+
+		this._setSize();
 
 		if (zk.agtNav && this.headtbl && this.headtbl.rows.length == 1) {
 			var headrow = this.headtbl.rows[0];
@@ -131,8 +134,9 @@ zk.Grid.prototype = {
 	/** Calculates the size. */
 	_calcSize: function () {
 		var tblwd = this.body.clientWidth;
-		if (tblwd) { //IE: if no rows
-			if (zk.agtIe && --tblwd < 0) tblwd = 0; //By experimental
+		if (tblwd && zk.agtIe && this.body.offsetWidth - tblwd > 11) {
+		//By experimental: see zk-blog.txt
+			if (--tblwd < 0) tblwd = 0;
 			this.bodytbl.style.width = tblwd + "px";
 		}
 
@@ -144,6 +148,11 @@ zk.Grid.prototype = {
 	},
 	/** Recalculate the size. */
 	_recalcSize: function (timeout) {
+		this._cleansz();
+		setTimeout("zkGrid._calcSize('"+this.id+"')", 20);
+	},
+	/* cleanup size */
+	_cleansz : function () {
 		this.bodytbl.style.width = "";
 		if (this.headtbl) {
 			this.head.style.width = "";
@@ -153,7 +162,6 @@ zk.Grid.prototype = {
 					headrow.cells[j].style.width = "";
 			}
 		}
-		setTimeout("zkGrid._calcSize('"+this.id+"')", 20);
 	}
 };
 
