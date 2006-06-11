@@ -191,6 +191,8 @@ public class Listbox extends XulElement implements Selectable, Render {
 		return _rows;
 	}
 	/** Sets the rows.
+	 * <p>Note: if both {@link #setHeight} is specified with non-empty,
+	 * {@link #setRows} is ignored
 	 */
 	public void setRows(int rows) throws WrongValueException {
 		if (rows < 0)
@@ -1014,7 +1016,10 @@ public class Listbox extends XulElement implements Selectable, Render {
 		}
 	}
 	public void setHeight(String height) {
-		throw new UnsupportedOperationException("Use setRows instead");
+		if (!Objects.equals(height, getHeight())) {
+			super.setHeight(height);
+			if (!isHtmlSelect()) initAtClient();
+		}
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

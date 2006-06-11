@@ -592,35 +592,10 @@ zk.Selectable.prototype = {
 	_calcSize: function () {
 		var headrow = this.headtbl && this.headtbl.rows.length ? this.headtbl.rows[0]: null;
 		var bodyrow = this.bodyrows.length ? this.bodyrows[0]: null;
-
-		var headhgh = this.head ? this.head.offsetHeight: 0;
 		var rowhgh = bodyrow && bodyrow.offsetHeight ? bodyrow.offsetHeight:
 			headrow && headrow.offsetHeight ? headrow.offsetHeight: 20;
 
-		var diff = 2/*experiment*/, size = this.size(), height;
-		if (!size) {
-			var gap = this._getFitGap();
-			if (gap > 0) { //not enough space
-				height = this.body.offsetHeight - gap;
-				if (height < 25) height = 25;
-				size = Math.round((height - diff)/ rowhgh);
-				if (size < 3) { //minimal 3 rows if auto-size
-					size = 3;
-					height = rowhgh * 3 + diff;
-				}
-				this.realsize(size);
-			} else {
-				this.realsize(0); //no limit at all
-			}
-		}
-
-		if (size) {
-			if (height) {
-				this.body.style.height = height + "px";
-			} else {
-				this.body.style.height = (rowhgh * size + diff) + "px";
-			}
-		}
+		this._calcHgh(rowhgh);
 
 		var wd = this.element.style.width;
 		if (wd && wd != "auto") {
@@ -632,6 +607,43 @@ zk.Selectable.prototype = {
 
 		setTimeout("zkSel._calcSize2('"+this.id+"')", 0);
 			//IE cannot calculate the size immediately after setting overflow to auto
+	},
+	_calcHgh: function (rowhgh) {
+		var hgh = this.element.style.height;
+		if (hgh && hgh != "auto") {
+			hgh = parseInt(hgh);
+			if (hgh) {
+				this.realsize(Math.ceil(hgh / rowhgh));
+				this.body.style.height = hgh + "px";
+				return; //done
+			}
+		}
+
+		hgh = 0;
+		var diff = 2/*experiment*/, sz = this.size();
+		if (!sz) {
+			var gap = this._getFitGap();
+			if (gap > 0) { //not enough space
+				hgh = this.body.offsetHeight - gap;
+				if (hgh < 25) hgh = 25;
+				sz = Math.round((hgh - diff)/ rowhgh);
+				if (sz < 3) { //minimal 3 rows if auto-size
+					sz = 3;
+					hgh = rowhgh * 3 + diff;
+				}
+				this.realsize(sz);
+			} else {
+				this.realsize(0); //no limit at all
+			}
+		}
+
+		if (sz) {
+			if (hgh) {
+				this.body.style.height = hgh + "px";
+			} else {
+				this.body.style.height = (rowhgh * sz + diff) + "px";
+			}
+		}
 	},
 	/** Cacluates the gap to make overflow to fit-in.
 	 * @return nonpositive means it already fit

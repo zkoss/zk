@@ -90,6 +90,8 @@ public class Tree extends XulElement implements Selectable {
 		return _rows;
 	}
 	/** Sets the rows.
+	 * <p>Note: if both {@link #setHeight} is specified with non-empty,
+	 * {@link #setRows} is ignored
 	 */
 	public void setRows(int rows) throws WrongValueException {
 		if (rows < 0)
@@ -395,6 +397,12 @@ public class Tree extends XulElement implements Selectable {
 	}
 
 	//-- Component --//
+	public void setHeight(String height) {
+		if (!Objects.equals(height, getHeight())) {
+			super.setHeight(height);
+			initAtClient();
+		}
+	}
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
