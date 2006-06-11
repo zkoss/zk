@@ -51,9 +51,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute name="value"><![CDATA[
 <window title="textbox with constraints" border="normal">
 	<grid>
-	<columns>
-		<column width="100px"/>
-	</columns>
 	<rows>
 		<row>int box:<intbox/></row>
 		<row>decimal box:<decimalbox format="#,##0.##"/></row>
