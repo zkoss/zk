@@ -1,4 +1,11 @@
 export=
 
+pxcommon.jar
+pxweb.jar
+zk.jar
+zul.jar
+zhtml.jar
+zkplus.jar
+
 fckez.jar
 dojoz.jar
