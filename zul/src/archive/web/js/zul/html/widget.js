@@ -213,6 +213,7 @@ zkWnd.init = function (cmp) {
 		Event.observe(img, "click", function () {zkau.close(cmp);});
 		Event.observe(img, "mouseover", function () {zkau.onimgover(img);});
 		Event.observe(img, "mouseout", function () {zkau.onimgout(img);});
+		if (!img.style.cursor) img.style.cursor = "default";
 	}
 };
 zkWnd.cleanup = function (cmp) {
