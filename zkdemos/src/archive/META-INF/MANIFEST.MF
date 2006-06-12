@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Specification-Title: ZK Demo
-Specification-Version: 1.2.0
+Specification-Version: 2.0.0
 Specification-Vendor: Potix Corporation
 Implementation-Title: com.potix.zkdemo
 Implementation-URL: http://www.potix.com/
-Implementation-Version: 1.2.0 (Build 1)
+Implementation-Version: 2.0.0
 Implementation-Vendor: Potix Corporation
