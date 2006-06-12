@@ -23,7 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
-import com.potix.util.prefs.Apps;
+import com.potix.util.Locales;
 
 /**
  * DateFormat relevant utilities.
@@ -35,11 +35,11 @@ public class DateFormats {
 	 * Parses a string to a date.
 	 * It is smart enough to know whether to use DateFormat.getDateInstance
 	 * and DateFormat.getDateTimeInstance.
-	 * It also uses {@link Apps#getCurrentLocale}.
+	 * It also uses {@link Locales#getCurrent}.
 	 */
 	public static final Date parse(String s)
 	throws ParseException {
-		final Locale locale = Apps.getCurrentLocale();
+		final Locale locale = Locales.getCurrent();
 		
 		if (s.indexOf(':') < 0) { //date only
 			final DateFormat df =
@@ -71,7 +71,7 @@ public class DateFormats {
 	 * both date and time
 	 */
 	public static final String format(Date d, boolean dateOnly) {
-		Locale locale = Apps.getCurrentLocale();
+		Locale locale = Locales.getCurrent();
 
 		if (dateOnly) {
 			DateFormat df =

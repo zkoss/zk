@@ -29,7 +29,7 @@ import java.text.MessageFormat;
 
 import com.potix.lang.D;
 import com.potix.lang.Strings;
-import com.potix.util.prefs.Apps;
+import com.potix.util.Locales;
 
 /**
  * The message formatting relevant utilities.
@@ -45,8 +45,7 @@ public class MessageFormats {
 	 * <p>An extension to java.text.MessageFormat.format by allowing
 	 * to specify a Locale.
 	 *
-	 * @param locale the locale; null for {@link Apps#getCurrentLocale}
-	 * @see #trimEmpty
+	 * @param locale the locale; null for {@link Locales#getCurrent}
 	 */
 	public static final String
 	format(String pattern, Object[] args, Locale locale) {
@@ -60,16 +59,14 @@ public class MessageFormats {
 			new MessageFormat(pattern): new MessageFormat(pattern, locale);
 	}
 	private static final Locale getLocale() {
-		return Apps.getCurrentLocale();
+		return Locales.getCurrent();
 	}
 	/** Creates a MessageFormat with the given pattern and uses it to
 	 * format the given arguments, by use of
-	 * {@link Apps#getCurrentLocale}.
+	 * {@link Locales#getCurrent}.
 	 *
 	 * <p>Note: java.text.MessageFormat.format uses Locale.getDefault,
 	 * which might not be corrent in a multi-user environment.
-	 *
-	 * @see #trimEmpty
 	 */
 	public static final String format(String pattern, Object[] args) {
 		return format(pattern, args, null);
@@ -79,8 +76,6 @@ public class MessageFormats {
 	 *
 	 * <p>If you want to catenate a sequence of formated string, use
 	 * this method.
-	 *
-	 * @see #trimEmpty
 	 */
 	public static final StringBuffer format(
 	StringBuffer result, String pattern, Object[] args, Locale locale) {
@@ -88,9 +83,7 @@ public class MessageFormats {
 	}
 	/** Creates a MessageFormat with the given pattern and uses it to
 	 * format the given arguments, by use of StringBuffer and
-	 * {@link Apps#getCurrentLocale}.
-	 *
-	 * @see #trimEmpty
+	 * {@link Locales#getCurrent}.
 	 */
 	public static final StringBuffer format(
 	StringBuffer result, String pattern, Object[] args) {
@@ -177,10 +170,9 @@ public class MessageFormats {
 	 * and then passes to java.text.MessageFormat.
 	 *
 	 * @param locale the locale; null for
-	 * {@link Apps#getCurrentLocale}
+	 * {@link Locales#getCurrent}
 	 * @exception IllegalArgumentException if the pattern is invalid
 	 * @see #parseByName
-	 * @see #trimEmpty
 	 */
 	public static final String
 	formatByName(String pattern, Map mapping, Locale locale) {
@@ -192,79 +184,11 @@ public class MessageFormats {
 	}
 	/** Formats a pattern by substituting names with values found in
 	 * the giving map, by use of
-	 * {@link Apps#getCurrentLocale}.
+	 * {@link Locales#getCurrent}.
 	 *
 	 * @see #parseByName
-	 * @see #trimEmpty
 	 */
 	public static final String formatByName(String pattern, Map mapping) {
 		return formatByName(pattern, mapping, null);
-	}
-
-	/** Specifies whether to include {user} and {domain}
-	 * in {@link #formatByStatus}.
-	 */
-	public static final int INCLUDE_USER_INFO = 0x0001;
-	/** Formats a pattern to a real name by substiting {app},
-	 * {host}, {user} and {domain}.
-	 *
-	 * @param mode a combination of INCLUDE_xxx or 0. For better performance,
-	 * don't specify unnecessary flags.
-	 *
-	 * @see #trimEmpty
-	 */
-	public static final String
-	formatByStatus(String pattern, int mode) {
-		if (_statusMap.size() == 0) {
-			_statusMap.put("app", Apps.getApp().getCodeName());
-			try {
-				_statusMap.put("host", InetAddress.getLocalHost().getHostName());
-			}catch(Exception ex) {
-				_statusMap.put("host", null);
-			}
-		}
-		if ((mode & INCLUDE_USER_INFO) != 0) {
-			_statusMap.put("user", Apps.getCurrentUsername());
-			_statusMap.put("domain", Apps.getCurrentDomain());
-		}
-		return formatByName(pattern, _statusMap);
-	}
-	private static final Map _statusMap = new HashMap(7);
-
-	/** Trims the format to remove whitespaces and other non-letter, non-digits
-	 * surrounding a null or empty argument.
-	 *
-	 * <p>Example: {0}, {1}; {2}<br>
-	 * generates<br>
-	 * abc<br>
-	 * if args[0] and args[1] are null or empty and args[2] is "abc".
-	 */
-	public static final String trimEmpty(String fmt, Object[] args) {
-		for (int j = 0; j < args.length; ++j) {
-			final Object arg = args[j];
-			if (arg == null
-			|| ((arg instanceof String) && ((String)arg).length() == 0)) {
-				final String p = "{" + j;
-				final int b = fmt.indexOf(p);
-				if (b < 0) {
-					if (D.ON) throw new IllegalArgumentException(p+"} not found in "+fmt);
-					continue;
-				}
-				int e = fmt.indexOf('}', b + 2);
-				if (e < 0) {
-					if (D.ON) throw new IllegalArgumentException("Enclosing '}' not found: "+fmt);
-					continue;
-				}
-
-				final int len = fmt.length();
-				while (++e < len) {
-					final char c = fmt.charAt(e);
-					if (c == '{' || Character.isUnicodeIdentifierPart(c))
-						break;
-				}
-				fmt = fmt.substring(0, b) + fmt.substring(e);
-			}
-		}
-		return fmt;
 	}
 }

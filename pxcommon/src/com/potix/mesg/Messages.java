@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.potix.lang.Objects;
-import com.potix.util.prefs.Apps;
+import com.potix.util.Locales;
 import com.potix.util.logging.Log;
 import com.potix.util.resource.PropertyBundle;
 import com.potix.text.MessageFormats;
@@ -69,7 +69,7 @@ public class Messages implements MessageConst {
 	}
 
 	private static final Locale getLocale() {
-		return Apps.getCurrentLocale();
+		return Locales.getCurrent();
 	}
 
 	/**

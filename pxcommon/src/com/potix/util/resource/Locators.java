@@ -24,7 +24,6 @@ import java.util.Locale;
 
 import com.potix.util.Locales;
 import com.potix.util.logging.Log;
-import com.potix.util.prefs.Apps;
 import com.potix.lang.D;
 import com.potix.lang.Classes;
 import com.potix.lang.Exceptions;
@@ -114,7 +113,7 @@ public class Locators {
 	private static final Object
 	myLocate(String file, Locale locale, Locator locator, boolean asStream) {
 		if (locale == null)
-			locale = Apps.getCurrentLocale();
+			locale = Locales.getCurrent();
 
 		final int jslash = file.lastIndexOf('/'); //>= -1
 		final int jdot = 

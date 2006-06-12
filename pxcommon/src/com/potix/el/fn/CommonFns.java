@@ -86,28 +86,15 @@ public class CommonFns {
 
 	/** Returns the label or message of the specified key.
 	 * <ul>
-	 * <li>If key is "class:x", Labels.getClassLabel("x") is called</li>
-	 * <li>If key is "class:x:y", Labels.getFieldLabel("x", "y") is called</li>
 	 * <li>If key is "mesg:class:MMM", Messages.get(class.MMM) is called</li>
-	 * <li>Otherwise, Labels.getProperty is called.
+	 * <li>Otherwise, {@link Labels#getLabel} is called.
 	 * </ul>
 	 */
 	public static final String getLabel(String key) {
 		if (key == null)
 			return "";
 
-		if (key.startsWith("class:")) {
-			final int j = key.indexOf(':', 6);
-			final String clsnm = j >= 0 ? key.substring(6, j): key.substring(6);
-			try {
-				final Class cls = Classes.forNameByThread(clsnm);
-				return j >= 0 ?
-					Labels.getFieldLabel(cls, key.substring(j + 1)):
-					Labels.getClassLabel(cls);
-			} catch (ClassNotFoundException ex) {
-				log.warning("Class not found: "+clsnm, ex);
-			}
-		} else if (key.startsWith("mesg:")) {
+		if (key.startsWith("mesg:")) {
 			final int j = key.lastIndexOf(':');
 			if (j > 5) {
 				final String clsnm = key.substring(5, j);
@@ -127,7 +114,7 @@ public class CommonFns {
 				log.debug("Not a valid format: "+key);
 			}
 		}
-		return Labels.getProperty(key);
+		return Labels.getLabel(key);
 	}
 	/** Returns the length of an array, string, collection or map.
 	 */

@@ -22,8 +22,6 @@ import java.io.*;
 
 import com.potix.lang.D;
 import com.potix.util.ArraysX;
-import com.potix.util.prefs.App;
-import com.potix.util.prefs.Apps;
 
 /**
  * File related utilities.
@@ -261,8 +259,6 @@ public class Files {
 				strm.close();
 			} catch (IOException ex) { //ignore it
 				System.out.println("Unable to close an input stream");
-				//Don't use Log here because it might be called by Apps's
-				//init codes
 			}
 		}
 	}
@@ -274,8 +270,6 @@ public class Files {
 				reader.close();
 			} catch (IOException ex) { //ignore it
 				System.out.println("Unable to close a reader");
-				//Don't use Log here because it might be called by Apps's
-				//init codes
 			}
 		}
 	}

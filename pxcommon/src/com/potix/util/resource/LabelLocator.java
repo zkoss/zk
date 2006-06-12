@@ -22,8 +22,8 @@ import java.util.Locale;
 import java.net.URL;
 
 /**
- * A locater used to locate extra resource for {@link LabelLoader}.
- * Once registered (by {@link LabelLoader#register}), the label loader
+ * A locater used to locate extra resource for {@link Labels}.
+ * Once registered (by {@link Labels#register}), the label loader
  * will invoke {@link #locate} to locate any extra resource.
  * If so, it will load labels from it.
  *

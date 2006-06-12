@@ -25,7 +25,6 @@ import java.util.TimeZone;
 import java.util.Locale;
 
 import com.potix.lang.SystemException;
-import com.potix.util.prefs.Apps;
 
 /**
  * Utilities for java.util.Date
@@ -121,7 +120,7 @@ public class Dates {
 	 */
 	final public static Date beginOfMonth(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 
@@ -145,7 +144,7 @@ public class Dates {
 	 */
 	final public static Date endOfMonth(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 
@@ -164,7 +163,7 @@ public class Dates {
 	 */
 	final public static boolean isEndOfMonth(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 
@@ -180,7 +179,7 @@ public class Dates {
 	 */
 	final public static boolean isBeginOfMonth(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 
@@ -194,7 +193,7 @@ public class Dates {
 	 */
 	final public static Date beginOfDate(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime());//don't call cal.setTime(Date) which will reset the TimeZone.
@@ -214,7 +213,7 @@ public class Dates {
 	 */
 	final public static Date endOfDate(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime());//don't call cal.setTime(Date) which will reset the TimeZone.
@@ -241,7 +240,7 @@ public class Dates {
 	 */
 	final public static Date beginOfYear(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 
@@ -263,7 +262,7 @@ public class Dates {
 	 */
 	final public static Date endOfYear(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 
@@ -286,7 +285,7 @@ public class Dates {
 	 */
 	final public static short twoMonthShort(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 
@@ -302,7 +301,7 @@ public class Dates {
 	 */
 	public static final int yearOfDate(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 		
@@ -324,7 +323,7 @@ public class Dates {
 	public static final int
 	localizedYearOfDate(Date when, Locale locale, TimeZone tz) {
 		if (locale == null)
-			locale = Apps.getCurrentLocale();
+			locale = Locales.getCurrent();
 
 		final int year = yearOfDate(when, tz);
 		if (locale.equals(Locale.TAIWAN))
@@ -339,7 +338,7 @@ public class Dates {
 	 */
 	public static final int monthOfDate(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 		
@@ -353,7 +352,7 @@ public class Dates {
 	 */
 	public static final int monthOfDatePlus1(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 		
@@ -367,7 +366,7 @@ public class Dates {
 	 */
 	public static final int dayMonthOfDate(Date when, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime()); //don't call cal.setTime(Date) which will reset the TimeZone.
 		
@@ -384,7 +383,7 @@ public class Dates {
 	 */
 	public static final Date add(Date when, TimeZone tz, int field, int amount) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 
 		final Calendar cal = Calendar.getInstance(tz);
 		cal.setTimeInMillis(when.getTime());//don't call cal.setTime(Date) which will reset the TimeZone.
@@ -407,7 +406,7 @@ public class Dates {
 	public static final long
 	subtract(Date date2, TimeZone tz, int field, Date date1) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 
 		boolean negative = false;
 		if (date1.after(date2)) {
@@ -519,7 +518,7 @@ public class Dates {
 	 */
 	public static final Date merge(Date datePart, Date timePart, TimeZone tz) {
 		if (tz == null)
-			tz = Apps.getCurrentTimeZone();
+			tz = TimeZones.getCurrent();
 
 		final Calendar dateCal = Calendar.getInstance(tz);
 		dateCal.setTimeInMillis(datePart.getTime());//don't call cal.setTime(Date) which will reset the TimeZone.

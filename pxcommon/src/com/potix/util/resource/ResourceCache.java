@@ -23,7 +23,7 @@ import com.potix.lang.PotentialDeadLockException;
 import com.potix.lang.SystemException;
 import com.potix.util.CacheMap;
 import com.potix.util.logging.Log;
-import com.potix.util.sys.WaitLock;
+import com.potix.util.WaitLock;
 
 /**
  * Used to cache resouces.
@@ -33,6 +33,10 @@ import com.potix.util.sys.WaitLock;
  *
  * <p>Unlike {@link CacheMap}, it is thread-safe.
  *
+ * <p>The default check period depends on the system propety called
+ * com.potix.util.resource.checkPeriod (unit: second).
+ * If not specified, 5 seconds are assumed
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class ResourceCache extends CacheMap {
@@ -41,7 +45,7 @@ public class ResourceCache extends CacheMap {
 	/** The loader. */
 	protected final Loader _loader;
 	/** unit=milliseconds. */
-	private int _checkPeriod = 5*1000;
+	private int _checkPeriod;
 
 	/** Constructor.
 	 * @param loader the loader to load resource
@@ -50,6 +54,7 @@ public class ResourceCache extends CacheMap {
 		if (loader == null)
 			throw new NullPointerException();
 		_loader = loader;
+		_checkPeriod = getInitCheckPeriod();
 	}
 	/** Constructor.
 	 * @param loader the loader to load resource
@@ -60,6 +65,16 @@ public class ResourceCache extends CacheMap {
 		if (loader == null)
 			throw new NullPointerException();
 		_loader = loader;
+		_checkPeriod = getInitCheckPeriod();
+	}
+	private static int getInitCheckPeriod() {
+		final Integer v =
+			Integer.getInteger("com.potix.util.resource.checkPeriod");
+		if (v != null) {
+			final int i = v.intValue();
+			if (i > 0) return i * 1000;
+		}
+		return 5000; //5 secs
 	}
 
 	/** Returns the loader.

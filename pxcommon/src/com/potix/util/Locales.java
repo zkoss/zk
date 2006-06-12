@@ -33,6 +33,44 @@ import com.potix.lang.Objects;
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
  */
 public class Locales {
+	private final static
+		InheritableThreadLocal _thdLocale = new InheritableThreadLocal();
+	/** Returns the current locale; never null.
+	 * This is the locale that every other objects shall use,
+	 * unless they have special consideration.
+	 *
+	 * <p>Default: If {@link #setThreadLocal} was called with non-null,
+	 * the value is returned. Otherwise, Locale.getDefault() is returned,
+	 */
+	public static final Locale getCurrent() {
+		final Locale l = (Locale)_thdLocale.get();
+		return l != null ? l: Locale.getDefault();
+	}
+	/**
+	 * Sets the locale for the current thread only.
+	 *
+	 * <p>Each thread could have an independent locale, called
+	 * the thread locale.
+	 *
+	 * <p>When Invoking this method under a thread that serves requests,
+	 * remember to clean up the setting upon completing each request.
+	 *
+	 * <pre><code>Locale old = Locales.setThreadLocal(newValue);
+	 *try { 
+	 *  ...
+	 *} finally {
+	 *  Locales.setThreadLocal(old);
+	 *}</code></pre>
+	 *
+	 * @param locale the thread locale; null to denote no thread locale
+	 * @return the previous thread locale
+	 */
+	public static final Locale setThreadLocal(Locale locale) {
+		final Locale old = (Locale)_thdLocale.get();
+		_thdLocale.set(locale);
+		return old;
+	}
+
 	/** Converts a string that consists of language, country and variant
 	 * to a locale.
 	 *

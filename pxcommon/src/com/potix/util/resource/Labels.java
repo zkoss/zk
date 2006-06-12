@@ -18,73 +18,49 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package com.potix.util.resource;
 
-import com.potix.comp.ComponentManager;
+import javax.servlet.jsp.el.VariableResolver;
+import com.potix.util.resource.impl.LabelLoader;
 
 /**
- * Shortcuts to acces {@link LabelLoader}.
+ * Utilities to access labels. A label is a Locale-dependent string
+ * that is stored in i3-label*properties.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Labels {
-	/** Returns the {@link LabelLoader} component for this domain.
-	 */
-	public static final LabelLoader the() {
-		return (LabelLoader)ComponentManager.the().get(LabelLoader.class.getName());
-	}
-	/** Returns the user readable label for a field based on the locale
-	 * of the current user.
-	 *
-	 * <p>Shortcut to {@link LabelLoader#getFieldLabel}.
-	 *
-	 * @param klass the class
-	 * @param field the field name
-	 */
-	public static final String getFieldLabel(Class klass, String field) {
-		return the().getFieldLabel(klass, field);
-	}
-	/** Returns the user readable label for a class based on the locale
-	 * of the current user.
-	 *
-	 * <p>Shortcut to {@link LabelLoader#getClassLabel}.
-	 *
-	 * @param klass the class
-	 */
-	public static final String getClassLabel(Class klass) {
-		return the().getClassLabel(klass);
-	}
-	/** Returns the user readable label for a class based on the locale
-	 * of the current user, or empty if null.
-	 *
-	 * <p>Shortcut to {@link LabelLoader#getClassLabel}.
-	 *
-	 * @param obj the object
-	 */
-	public static final String getClassLabel(Object obj) {
-		return obj != null ? the().getClassLabel(obj.getClass()): "";
-	}
-	/** Returns the user readable compoud label for a field based on the
-	 * locale of the current user.
-	 *
-	 * <p>Shortcut to {@link LabelLoader#getCompoundLabel}.
-	 *
-	 * @param klass the class
-	 * @param field the field name
-	 */
-	public static final String getCompoundLabel(Class klass, String field) {
-		return the().getCompoundLabel(klass, field);
-	}
-	/** Returns the user readable label for a object.
-	 *
-	 * <p>Shortcut to {@link LabelLoader#getObjectLabel}.
-	 */
-	public static final String getObjectLabel(Object o) {
-		return the().getObjectLabel(o);
-	}
+	private Labels() {} //prevent form misuse
 
-	/** Returns the property of the specified key based on the current user's
-	 * Locale.
+	private static final LabelLoader _loader = new LabelLoader();
+
+	/** Returns the label of the specified key based
+	 * on the current Locale, or null if no found.
+	 *
+	 * <p>The current locale is given by {@link com.potix.util.Locales#getCurrent}.
 	 */
-	public static final String getProperty(String key) {
-		return the().getProperty(key);
+	public static final String getLabel(String key) {
+		return _loader.getLabel(key);
+	}
+	/** Resets all cached labels and next call to {@link #getLabel}
+	 * will cause re-loading i3-label*.proerties.
+	 */
+	public static final void reset() {
+		_loader.reset();
+	}
+	/** Sets the variable resolver, which is used if an EL expression
+	 * is specified.
+	 *
+	 * <p>Default: no resolver at all.
+	 *
+	 * @return the previous resolver, or null if no resolver.
+	 */
+	public static final
+	VariableResolver setVariableResolver(VariableResolver resolv) {
+		return _loader.setVariableResolver(resolv);
+	}
+	/** Registers a locator which is used to load i3-label*.properties
+	 * from other resource, such as servlet contexts.
+	 */
+	public static final void register(LabelLocator locator) {
+		_loader.register(locator);
 	}
 }
