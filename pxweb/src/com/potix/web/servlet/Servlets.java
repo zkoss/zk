@@ -51,7 +51,7 @@ import com.potix.lang.SystemException;
 import com.potix.util.Checksums;
 import com.potix.util.CacheMap;
 import com.potix.util.CollectionsX;
-import com.potix.util.prefs.Apps;
+import com.potix.util.Locales;
 import com.potix.util.logging.Log;
 import com.potix.util.resource.Locator;
 import com.potix.util.resource.Locators;
@@ -253,7 +253,7 @@ public class Servlets {
 			ctx.setAttribute(PGPATH_CACHE, map);
 		}
 
-		final Locale locale = Apps.getCurrentLocale();
+		final Locale locale = Locales.getCurrent();
 		final URIIndex index = new URIIndex(pgpath, locale);
 
 		String uri = (String)map.get(index);

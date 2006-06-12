@@ -30,7 +30,6 @@ import com.potix.lang.Objects;
 import com.potix.lang.SystemException;
 import com.potix.util.Locales;
 import com.potix.util.logging.Log;
-import com.potix.util.prefs.Apps;
 
 import com.potix.web.Attributes;
 
@@ -45,11 +44,11 @@ public class Charsets {
 	private static final String _uriCharset, _respCharset;
 	static {
 		_uriCharset = //Default: UTF-8
-			Apps.getProperty("com.potix.web.uri.charset", "UTF-8");
+			System.getProperty("com.potix.web.uri.charset", "UTF-8");
 		if (_uriCharset.length() == 0)
 			throw new SystemException("com.potix.web.uri.charset cannot be empty");
 		final String cs  //Default: UTF-8
-			= Apps.getProperty("com.potix.web.response.charset", "UTF-8");
+			= System.getProperty("com.potix.web.response.charset", "UTF-8");
 		_respCharset = cs.length() > 0 ? cs: null;
 	}
 
@@ -123,7 +122,7 @@ public class Charsets {
 		}
 
 		request.setAttribute(ATTR, Boolean.TRUE); //mark as processed
-		return Apps.setThreadLocale(locale);
+		return Locales.setThreadLocal(locale);
 	}
 	/** Cleans up what has been set in {@link #setup}.
 	 * Some invocation are not undo-able, so this method only does the basic
@@ -134,7 +133,7 @@ public class Charsets {
 	 */
 	public static final void cleanup(Object old) {
 		if (old != Objects.UNKNOWN)
-			Apps.setThreadLocale((Locale)old);
+			Locales.setThreadLocal((Locale)old);
 	}
 
 	/** Returns the preferred locale of the specified request.

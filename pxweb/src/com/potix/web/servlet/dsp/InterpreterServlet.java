@@ -37,7 +37,6 @@ import com.potix.lang.Exceptions;
 import com.potix.util.logging.Log;
 import com.potix.util.resource.ResourceCache;
 import com.potix.util.resource.Locator;
-import com.potix.util.prefs.Apps;
 import com.potix.io.Files;
 
 import com.potix.web.servlet.Charsets;
@@ -103,9 +102,6 @@ public class InterpreterServlet extends HttpServlet {
 				if (cache == null) {
 					cache = new ResourceCache(new MyLoader(ctx), 29);
 					cache.setMaxSize(500).setLifetime(60*60*1000); //1hr
-					cache.setCheckPeriod(
-						Apps.getInteger("com.potix.web.file.checkPeriod", 5)
-						* 1000);
 					ctx.setAttribute(ATTR_PAGE_CACHE, cache);
 				}
 			}

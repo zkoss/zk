@@ -26,6 +26,7 @@ import javax.servlet.ServletContext;
 //import com.potix.util.logging.Log;
 import com.potix.util.resource.Labels;
 import com.potix.web.util.resource.ServletLabelLocator;
+import com.potix.web.util.resource.ServletLabelResovler;
 
 /**
  * Used to hook a label locator to locate resources from the servlet context.
@@ -54,6 +55,7 @@ public class LabelLocatorHook implements ServletContextListener {
 		final ServletContext ctx = sce.getServletContext();
 		//if (log.debugable()) log.debug("Hook label locator for "+ctx);
 
-		Labels.the().register(new ServletLabelLocator(ctx));
+		Labels.register(new ServletLabelLocator(ctx));
+		Labels.setVariableResolver(new ServletLabelResovler());
 	}
 }

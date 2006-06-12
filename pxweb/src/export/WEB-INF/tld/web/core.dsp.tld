@@ -91,18 +91,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<tag-class>com.potix.web.servlet.dsp.action.When</tag-class>
 	</tag>
 
-	<!--                  -->
-	<!-- Common Utilities -->
-	<!--                  -->
-	<function>
-		<name>getAppProperty</name>
-		<function-class>com.potix.util.prefs.Apps</function-class>
-		<function-signature>java.lang.String getProperty(java.lang.String,java.lang.String)</function-signature>
-		<description>
-		Returns the application property of the specified key.
-		</description>
-	</function>
-
 	<!--                 -->
 	<!-- Class Utilities -->
 	<!--                 -->
@@ -340,9 +328,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>getCurrentLocale</name>
-		<function-class>com.potix.util.prefs.Apps</function-class>
+		<function-class>com.potix.util.Locales</function-class>
 		<function-signature>
-	java.util.Locale getCurrentLocale()
+	java.util.Locale getCurrent()
 		</function-signature>
 		<description>
 	Returns the locale for the current request.

@@ -45,7 +45,6 @@ import com.potix.lang.Strings;
 import com.potix.util.ArraysX;
 import com.potix.util.CollectionsX;
 import com.potix.util.logging.Log;
-import com.potix.util.prefs.Apps;
 
 /**
  * HttpMultipartRequest Multipart HTTP request for enctye="multipart/form"
@@ -216,7 +215,7 @@ public class HttpMultipartRequest extends HttpServletRequestWrapper {
 		//No synchronization is required because it is OK to be temporay 'wrong'
 		if (_maxUpdSize == 0) {
 			_maxUpdSize = 5*1024*1024;
-			final String s = Apps.getProperty(
+			final String s = System.getProperty(
 				"com.potix.web.servlet.http.MaxUploadSize", null);
 			if (s != null) {
 				try {

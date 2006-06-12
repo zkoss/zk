@@ -26,7 +26,8 @@ import javax.servlet.ServletContext;
 import com.potix.util.resource.LabelLocator;
 
 /**
- * The implementation of 
+ * Used by Lables to load labels from a servlet context.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class ServletLabelLocator implements LabelLocator {

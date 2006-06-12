@@ -29,8 +29,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
 
-import com.potix.util.prefs.Apps;
-
 import com.potix.web.servlet.Servlets;
 import com.potix.web.servlet.http.Encodes;
 import com.potix.web.servlet.dsp.action.ActionContext;

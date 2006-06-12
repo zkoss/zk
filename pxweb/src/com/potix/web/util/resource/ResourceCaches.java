@@ -28,7 +28,6 @@ import javax.servlet.ServletContext;
 
 import com.potix.lang.D;
 import com.potix.lang.Exceptions;
-import com.potix.util.prefs.Apps;
 import com.potix.util.resource.ResourceCache;
 import com.potix.util.logging.Log;
 import com.potix.io.Files;
@@ -155,9 +154,6 @@ public class ResourceCaches {
 				if (cache == null) {
 					cache = new ResourceCache(new ContentLoader(ctx), 29);
 					cache.setMaxSize(500).setLifetime(60*60*1000); //1hr
-					cache.setCheckPeriod(
-						Apps.getInteger("com.potix.web.file.checkPeriod", 5)
-						* 1000);
 					ctx.setAttribute(ATTR_PAGE_CACHE, cache);
 				}
 			}

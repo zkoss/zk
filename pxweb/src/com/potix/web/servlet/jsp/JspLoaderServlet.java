@@ -33,7 +33,7 @@ import com.potix.lang.D;
 import com.potix.lang.Classes;
 import com.potix.util.CacheMap;
 import com.potix.util.logging.Log;
-import com.potix.util.sys.WaitLock;
+import com.potix.util.WaitLock;
 
 import com.potix.web.servlet.http.Https;
 
