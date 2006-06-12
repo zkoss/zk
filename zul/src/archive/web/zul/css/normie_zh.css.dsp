@@ -350,10 +350,7 @@ div.menupopup hr {
 
 /** Combobox and Datebox */
 span.combobox, span.datebox, span.bandbox {
-	border: 1px solid #7F9DB9; margin: 1px; white-space: nowrap;
-}
-input.combobox, input.datebox, input.bandbox { /*hardcoded in DSP*/
-	border: 0; padding: 2px;
+	border: 0; padding: 0; margin: 0; white-space: nowrap;
 }
 div.comboboxpp, div.bandboxpp { /*hardcoded in DSP*/
 	display: block; position: absolute; z-index: 80000; overflow: auto;
@@ -373,7 +370,7 @@ div.errbox {
 	background: #E8E0D8; position: absolute; z-index: 70000;
 }
 
-/*ZK datebox and calendar*/
+/* ZK datebox and calendar*/
 div.dateboxpp { /*hardcoded in DSP*/
 	display: block; position: absolute; z-index: 80000;
 	background: white; border: 1px solid black; padding: 2px;

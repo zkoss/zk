@@ -346,11 +346,7 @@ div.menupopup hr {
 
 /** Combobox and Datebox */
 span.combobox, span.datebox, span.bandbox {
-	border: 1px solid #7F9DB9; padding: 1px 0 1px 2px;
-	margin-top: 1px; margin-bottom: 1px; white-space: nowrap;
-}
-input.combobox, input.datebox, input.bandbox { /*hardcoded in DSP*/
-	border: 0; padding: 0; margin: 0;
+	border: 0; padding: 0; margin: 0; white-space: nowrap;
 }
 div.comboboxpp, div.bandboxpp { /*hardcoded in DSP*/
 	display: block; position: absolute; z-index: 80000; overflow: auto;
