@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package com.potix.zhtml;
 
 import com.potix.mesg.Messages;
-import com.potix.util.prefs.App;
+import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.UiException;
 
 /**
@@ -63,7 +63,7 @@ public class Messagebox {
 
 	/** Shows a message box and returns what button is pressed.
 	 *
-	 * @param title the title. If null, {@link App#getName} is used.
+	 * @param title the title. If null, {@link WebApp#getAppName} is used.
 	 * @param buttons a combination of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}. If zero, {@link #OK} is assumed
