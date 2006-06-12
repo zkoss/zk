@@ -191,23 +191,23 @@ public class Window extends XulElement implements IdSpace  {
 
 	/** Returns whether this is a modal dialog.
 	 */
-	public boolean isModal() {
+	public boolean inModal() {
 		return _mode == MODAL;
 	}
 	/** Returns whether this is embedded with other components (Default).
 	 * @see #doEmbedded
 	 */
-	public boolean isEmbedded() {
+	public boolean inEmbedded() {
 		return _mode == EMBEDDED;
 	}
 	/** Returns whether this is a overlapped window.
 	 */
-	public boolean isOverlapped() {
+	public boolean inOverlapped() {
 		return _mode == OVERLAPPED;
 	}
 	/** Returns whether this is a popup window.
 	 */
-	public boolean isPopup() {
+	public boolean inPopup() {
 		return _mode == POPUP;
 	}
 
