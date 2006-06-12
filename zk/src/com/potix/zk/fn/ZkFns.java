@@ -224,8 +224,8 @@ public class ZkFns {
 			.getStyleSheets().iterator(); e.hasNext();)
 				append(sb, (StyleSheet)e.next(), exec, null);
 
-		final String href = exec.getDesktop()
-			.getWebApp().getConfiguration().getThemeURI();
+		final String href = exec != null ? exec.getDesktop()
+			.getWebApp().getConfiguration().getThemeURI(): null;
 		if (href != null && href.length() > 0)
 			append(sb, new StyleSheet(href, "text/css"), exec, null);
 
