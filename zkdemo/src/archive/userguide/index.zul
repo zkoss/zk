@@ -40,7 +40,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="s2" label="Overlapped and popup windows" value="/userguide/simple/overlap.zul"/>
 						<treeitem id="s3" label="Labels and images" value="/userguide/simple/label.zul"/>
 						<treeitem id="s4" label="Input" value="/userguide/simple/input.zul"/>
-						<treeitem id="s5" label="More input features" value="/userguide/simple/moreInput.zul"/>
 						<treeitem id="s6" label="The onChanging event" value="/userguide/simple/onChanging.zul"/>
 						<treeitem id="s7" label="Radio buttons" value="/userguide/simple/radio.zul"/>
 						<treeitem id="s8" label="Checkboxes" value="/userguide/simple/checkbox.zul"/>

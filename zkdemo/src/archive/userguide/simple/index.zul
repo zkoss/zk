@@ -38,7 +38,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="Overlapped and popup windows" onClick="doSelect(&quot;s2&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Labels and images" onClick="doSelect(&quot;s3&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Input" onClick="doSelect(&quot;s4&quot;)"/></h:li>
-		<h:li><toolbarbutton label="More input features" onClick="doSelect(&quot;s5&quot;)"/></h:li>
 		<h:li><toolbarbutton label="The onChanging event" onClick="doSelect(&quot;s6&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Radio buttons" onClick="doSelect(&quot;s7&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Checkboxes" onClick="doSelect(&quot;s8&quot;)"/></h:li>

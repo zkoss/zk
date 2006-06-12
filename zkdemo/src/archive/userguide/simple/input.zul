@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-input.zul
+moreInput.zul
 
 {{IS_NOTE
 	Purpose:
@@ -21,8 +21,23 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<vbox width="100%">
 		<html>
 			<attribute name="content"><![CDATA[
-				<h4>Input</h4>
-				<p>textbox is used for text entry; single line or multiple lines.</p>
+				<h4>More input features</h4>
+				<p>text entry with constraints are supported.
+				<ul>
+					<li>intbox: textbox which accepts only integers.</li>
+					<li>decimalbox: textbox which accepts only decimal numbers.</li>
+					<li>datebox: textbox which accepts only date format.</li>
+					<li>constraint: constraint can be used to futher contraint the input control.(e.g. intbox and decimalbox can accept only positive numbers, zero, or negative numbers, etc..)</li>
+				</ul>
+				</p>
+				<p>Let us do some small test:
+				<ul>
+					<li>Try to enter some non-integer into "int box" and tab away.</li>
+					<li>Try to enter some non-decimal into "decimal box" and tab away.</li>
+					<li>Also try to enter some non-date format string into the "date box" and tab away.</li>
+					<li>Try to enter some negative integer or zero into "positive box" and tab away.</li>
+				</ul>
+				</p>
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
@@ -34,7 +49,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView();"/></caption>
 			<textbox id="codes" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
-<window title="textbox demo" border="normal">
+<window title="textbox with constraints" border="normal">
 	<grid>
 	<rows>
 		<row>
@@ -49,6 +64,20 @@ text line2...
  				</attribute>
  			</textbox>
 		</row>
+		<row>int box:<intbox/></row>
+		<row>decimal box:<decimalbox format="#,##0.##"/></row>
+		<row>date box:
+			<hbox>
+			<datebox id="db"/>
+			<listbox onSelect="db.setFormat(self.selectedItem.value)" mold="select" rows="1">
+				<listitem label="Default" value=""/>
+				<listitem label="yyyy/MM/dd" value="yyyy/MM/dd"/>
+				<listitem label="MM-dd-yy" value="MM-dd-yy"/>
+			</listbox>
+			</hbox>
+		</row>
+		<row>positive box:<intbox constraint="no negative,no zero"/></row>
+		<row>e-mail:<textbox constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"/></row>
 	</rows>
 	</grid>
 </window>
