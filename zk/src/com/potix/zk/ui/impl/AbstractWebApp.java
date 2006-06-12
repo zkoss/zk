@@ -50,7 +50,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	public final String getVersion() {
-		return "1.2.0 Nightly";
+		return "2.0.0";
 	}
 
 	public final Configuration getConfiguration() {
