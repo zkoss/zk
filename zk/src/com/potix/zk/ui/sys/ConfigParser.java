@@ -20,10 +20,10 @@ package com.potix.zk.ui.sys;
 
 import java.util.Iterator;
 import java.net.URL;
+
 import javax.servlet.jsp.el.ExpressionEvaluator;
 
 import com.potix.lang.Classes;
-import com.potix.util.prefs.Apps;
 import com.potix.util.resource.Locator;
 import com.potix.util.logging.Log;
 import com.potix.idom.Element;
@@ -75,22 +75,24 @@ public class ConfigParser {
 			//	desktop-timeout
 			//	file-check-period
 				String s = el.getElementValue("theme-uri", true);
-				if (s != null && s.length() > 0)
-					Apps.setProperty("com.potix.web.theme.defaultURI", s);
+				if (s != null && s.length() > 0) config.setThemeURI(s);
 
-				parseIntProp("com.potix.zk.ui.desktop.MaxInactiveInterval",
-					el, "desktop-timeout", false);
-				parseIntProp("com.potix.web.file.checkPeriod", 
-					el, "file-check-period", true);
+				Integer v = parseInteger(el, "desktop-timeout", false);
+				if (v != null) config.setDesktopMaxInactiveInterval(v);
+
+				v = parseInteger(el, "file-check-period", true);
+				if (v != null) System.setProperty("com.potix.util.resource.checkPeriod", v.toString());
+					//System-wide property
 			} else if ("session-config".equals(elnm)) {
 			//session-config
 			//	session-timeout
 			//	max-desktops-per-session
 			//	timeout-uri
-				parseIntProp("com.potix.zk.session.MaxInactiveInterval",
-					el, "session-timeout", false);
-				parseIntProp("com.potix.zk.ui.desktop.numPerSessions",
-					el, "max-desktops-per-session", true);
+				Integer v = parseInteger(el, "session-timeout", false);
+				if (v != null) config.setSessionMaxInactiveInterval(v);
+
+				v = parseInteger(el, "max-desktops-per-session", true);
+				if (v != null) config.setMaxDesktops(v);
 
 				final String s = el.getElementValue("timeout-uri", true);
 				if (s != null) config.setTimeoutURI(s);
@@ -105,21 +107,28 @@ public class ConfigParser {
 			//  cache-provider-class
 			//  ui-factory-class
 			//	engine-class
-				parseIntProp("com.potix.zk.ui.event.numThreads",
-					el, "max-event-threads", true);
-				parseIntProp("com.potix.web.servlet.http.MaxUploadSize",
-					el, "max-upload-size", true);
-				parseClassProp("com.potix.zk.ui.cache-provider.class",
-					el, "cache-provider-class", DesktopCacheProvider.class, null);
-				parseClassProp("com.potix.zk.ui.ui-factory.class",
-					el, "ui-factory-class", UiFactory.class, null);
-				parseClassProp("com.potix.zk.ui.engine.class",
-					el, "engine-class", UiEngine.class, null);
+				Integer v = parseInteger(el, "max-event-threads", true);
+				if (v != null) config.setMaxEventThreads(v);
+				
+				v = parseInteger(el, "max-upload-size", true);
+				if (v != null) System.setProperty("com.potix.web.servlet.http.MaxUploadSize", v.toString());
+					//System-wide property
+
+				Class cls = parseClass(el, "cache-provider-class",
+					DesktopCacheProvider.class);
+				if (cls != null) config.setDesktopCacheProviderClass(cls);
+
+				cls = parseClass(el, "ui-factory-class", UiFactory.class);
+				if (cls != null) config.setUiFactoryClass(cls);
+
+				cls = parseClass(el, "engine-class", UiEngine.class);
+				if (cls != null) config.setUiEngineClass(cls);
 			} else if ("el-config".equals(elnm)) {
 			//el-config
 			//	evaluator-class
-				parseClassProp("com.potix.el.ExpressionEvaluator.class",
-					el, "evaluator-class", ExpressionEvaluator.class, null);
+				Class cls = parseClass(el, "evaluator-class", ExpressionEvaluator.class);
+				if (cls != null) System.setProperty("com.potix.el.ExpressionEvaluator.class", cls.getName());
+					//System-wide property; reason: used in pxcommon.jar
 			} else if ("log".equals(elnm)) {
 				final String base = el.getElementValue("log-base", true);
 				if (base != null)
@@ -144,39 +153,38 @@ public class ConfigParser {
 				DefinitionLoaders.addLanguage(locator, url);
 		}
 	}
-	/** Parse a class, if specified, whether it implements cls1 and cls2.
+	/** Parse a class, if specified, whether it implements cls.
 	 */
-	private static void parseClassProp(String propnm,
-	Element el, String elnm, Class cls1, Class cls2) {
+	private static Class parseClass(Element el, String elnm, Class cls) {
 		final String clsnm = el.getElementValue(elnm, true);
 		if (clsnm != null && clsnm.length() != 0) {
 			try {
 				final Class klass = Classes.forNameByThread(clsnm);
-				if (cls1 != null && !cls1.isAssignableFrom(klass))
-					throw new UiException(clsnm+" must implement "+cls1.getName()+", "+el.getLocator());
-				if (cls2 != null && !cls2.isAssignableFrom(klass))
-					throw new UiException(clsnm+" must implement "+cls2.getName()+", "+el.getLocator());
+				if (cls != null && !cls.isAssignableFrom(klass))
+					throw new UiException(clsnm+" must implement "+cls.getName()+", "+el.getLocator());
+				log.info("Using "+clsnm+" for "+cls);
+				return klass;
 			} catch (ClassNotFoundException ex) {
 				throw new UiException("Class not found: "+clsnm+", "+el.getLocator());
 			}
-			log.info("Using "+clsnm+" for "+cls1);
-			Apps.setProperty(propnm, clsnm);
 		}
+		return null;
 	}
 
-	/** Configures an integer-typed application property. */
-	private static void parseIntProp(String propnm,
-	Element el, String subnm, boolean positiveOnly) throws UiException {
+	/** Configures an integer. */
+	private static Integer parseInteger(Element el, String subnm,
+	boolean positiveOnly) throws UiException {
 		String val = el.getElementValue(subnm, true);
 		if (val != null && val.length() > 0) {
 			try { 
 				final int v = Integer.parseInt(val);
 				if (positiveOnly && v <= 0)
 					throw new UiException("The "+subnm+" element must be a positive number, not "+val+", at "+el.getLocator());
-				Apps.setProperty(propnm, val);
+				return new Integer(v);
 			} catch (NumberFormatException ex) { //eat
 				throw new UiException("The "+subnm+" element must be a number, not "+val+", at "+el.getLocator());
 			}
 		}
+		return null;
 	}
 }

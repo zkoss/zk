@@ -39,7 +39,6 @@ import com.potix.lang.Threads;
 import com.potix.lang.Exceptions;
 import com.potix.lang.Expectable;
 import com.potix.mesg.Messages;
-import com.potix.util.prefs.Apps;
 import com.potix.util.logging.Log;
 
 import com.potix.zk.mesg.MZk;
@@ -74,14 +73,16 @@ public class UiEngineImpl implements UiEngine {
 	 */
 	private final Map _resumed = new HashMap();
 	/** The maximal allowed # of event handling threads.*/
-	private final int _maxEvtThds;
+	private int _maxEvtThds;
 
 	public UiEngineImpl() {
-		_maxEvtThds = Apps.getInteger("com.potix.zk.ui.event.numThreads", 100);
 	}
 
 	//-- UiEngine --//
 	public void start(WebApp wapp) {
+		final Integer v = wapp.getConfiguration().getMaxEventThreads();
+		final int i = v != null ? v.intValue(): 100;
+		_maxEvtThds = i > 0 ? i: 100;
 	}
 	public void stop(WebApp wapp) {
 		synchronized (_evtthds) {

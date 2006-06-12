@@ -20,12 +20,12 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 import com.potix.util.CacheMap;
-import com.potix.util.prefs.Apps;
 import com.potix.util.logging.Log;
 
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.ComponentNotFoundException;
+import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.util.Monitor;
 import com.potix.zk.ui.sys.DesktopCache;
 import com.potix.zk.ui.sys.WebAppCtrl;
@@ -40,13 +40,14 @@ public class SimpleDesktopCache implements DesktopCache {
 	private static final Log log = Log.lookup(SimpleDesktopCache.class);
 
 	/** Used to purge obsolete desktops. */
-	private final Cache _desktops = new Cache();
+	private final Cache _desktops;
 	/** The next available ID. */
 	private int _nextId = ((int)System.currentTimeMillis()) & 0xffff;
 		//to reduce the chance that two browsers with the same desktop ID
 		//it is possible if we re-boot the server
 
-	public SimpleDesktopCache() {
+	public SimpleDesktopCache(Configuration config) {
+		_desktops = new Cache(config);
 	}
 
 	//-- DesktopCache --//
@@ -113,14 +114,17 @@ public class SimpleDesktopCache implements DesktopCache {
 
 	/** Holds desktops. */
 	private static class Cache extends CacheMap {
-		private Cache() {
+		private Cache(Configuration config) {
 			super(5);
-			setMaxSize(
-				Apps.getInteger("com.potix.zk.ui.desktop.numPerSessions", 10));
 
-			final int v =
-				Apps.getInteger("com.potix.zk.ui.desktop.MaxInactiveInterval", 3600);
-			setLifetime(v >= 0 ? v * 1000: Integer.MAX_VALUE);
+			Integer v = config.getMaxDesktops();
+			int i = v != null ? v.intValue(): 10;
+			if (i <= 0) i = 10;
+			setMaxSize(i);
+
+			v = config.getDesktopMaxInactiveInterval();
+			i = v != null ? v.intValue(): 3600;
+			setLifetime(i >= 0 ? i * 1000: Integer.MAX_VALUE);
 		}
 		/** To save memory, expunge whever necessary (not just when GC).
 		protected java.lang.ref.ReferenceQueue newQueue() {

@@ -43,7 +43,6 @@ import com.potix.lang.D;
 import com.potix.lang.Classes;
 import com.potix.lang.Exceptions;
 import com.potix.util.CollectionsX;
-import com.potix.util.prefs.Apps;
 import com.potix.util.logging.Log;
 import com.potix.util.resource.Labels;
 import com.potix.el.impl.AttributesMap;
@@ -55,6 +54,7 @@ import com.potix.web.servlet.http.Https;
 import com.potix.web.servlet.http.Encodes;
 import com.potix.web.util.resource.ServletContextLocator;
 import com.potix.web.util.resource.ServletLabelLocator;
+import com.potix.web.util.resource.ServletLabelResovler;
 import com.potix.web.util.resource.ClassWebResource;
 
 import com.potix.zk.mesg.MZk;
@@ -120,7 +120,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			throw new ServletException("Only one layout servlet is allowed in one context: "+_ctx);
 		_ctx.setAttribute(ATTR_LAYOUT_SERVLET, this);
 
-		Labels.the().register(new ServletLabelLocator(_ctx));
+		Labels.register(new ServletLabelLocator(_ctx));
+		Labels.setVariableResolver(new ServletLabelResovler());
 
 		_updateURI = config.getInitParameter("update-uri");
 		if (_updateURI == null
@@ -150,42 +151,42 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
 
-		String clsnm = Apps.getProperty("com.potix.zk.ui.engine.class", null);
+		Class cls = cfg.getUiEngineClass();
 		final UiEngine engine;
-		if (clsnm == null) {
+		if (cls == null) {
 			engine = new UiEngineImpl();
 		} else {
 			try {
-				engine = (UiEngine)Classes.newInstanceByThread(clsnm);
+				engine = (UiEngine)cls.newInstance();
 			} catch (Exception ex) {
 				throw (ServletException)
-					Exceptions.wrap(ex, ServletException.class, "Unable to construct "+clsnm);
+					Exceptions.wrap(ex, ServletException.class, "Unable to construct "+cls);
 			}
 		}
 
-		clsnm = Apps.getProperty("com.potix.zk.ui.cache-provider.class", null);
+		cls = cfg.getDesktopCacheProviderClass();
 		final DesktopCacheProvider provider;
-		if (clsnm == null) {
+		if (cls == null) {
 			provider = new SessionDesktopCacheProvider();
 		} else {
 			try {
-				provider = (DesktopCacheProvider)Classes.newInstanceByThread(clsnm);
+				provider = (DesktopCacheProvider)cls.newInstance();
 			} catch (Exception ex) {
 				throw (ServletException)
-					Exceptions.wrap(ex, ServletException.class, "Unable to construct "+clsnm);
+					Exceptions.wrap(ex, ServletException.class, "Unable to construct "+cls);
 			}
 		}
 
-		clsnm = Apps.getProperty("com.potix.zk.ui.ui-factory.class", null);
+		cls = cfg.getUiFactoryClass();
 		final UiFactory factory;
-		if (clsnm == null) {
+		if (cls == null) {
 			factory = new UiFactoryImpl();
 		} else {
 			try {
-				factory = (UiFactory)Classes.newInstanceByThread(clsnm);
+				factory = (UiFactory)cls.newInstance();
 			} catch (Exception ex) {
 				throw (ServletException)
-					Exceptions.wrap(ex, ServletException.class, "Unable to construct "+clsnm);
+					Exceptions.wrap(ex, ServletException.class, "Unable to construct "+cls);
 			}
 		}
 
@@ -245,18 +246,18 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 		if (D.ON && log.debugable()) log.debug("Creating a new sess for "+hsess);
 		final DHtmlLayoutServlet loader = getLayoutServlet(ctx);
+		final WebApp webapp = loader.getWebApp();
 		sess = new SessionImpl(
-			hsess, loader.getWebApp(),
+			hsess, webapp,
 			request.getRemoteAddr(), request.getRemoteHost());
 		hsess.setAttribute(ATTR_SESS, sess);
 
 		//Note: we set timeout here, because HttpSession might have been created
 		//by other servlet or filter
-		final int NOT_FOUND = -1356;
-		final int v = Apps.getInteger(
-			"com.potix.zk.session.MaxInactiveInterval", NOT_FOUND);
-		if (v != NOT_FOUND)
-			hsess.setMaxInactiveInterval(v);
+		final Integer v =
+			webapp.getConfiguration().getSessionMaxInactiveInterval();
+		if (v != null)
+			hsess.setMaxInactiveInterval(v.intValue());
 		return sess;
 	}
 	/** Returns the session of the specified HTTP session, or null if n/a. */

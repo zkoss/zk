@@ -42,7 +42,8 @@ public class GlobalDesktopCacheProvider implements DesktopCacheProvider {
 			synchronized (this) {
 				dc = (DesktopCache)wapp.getAttribute(ATTR_CACHE);
 				if (dc == null) {
-					dc = new SimpleDesktopCache();
+					dc = new SimpleDesktopCache(
+						sess.getWebApp().getConfiguration());
 					wapp.setAttribute(ATTR_CACHE, dc);
 				}
 			}

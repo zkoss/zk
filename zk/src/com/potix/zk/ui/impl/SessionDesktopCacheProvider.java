@@ -30,6 +30,7 @@ import com.potix.zk.ui.sys.DesktopCacheProvider;
  */
 public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 	private static final String ATTR_CACHE = "javax.potix.zk.desktop-cache";
+	private WebApp _wapp;
 
 	//-- DesktopCacheProvider --//
 	public DesktopCache getCache(Session sess) {
@@ -38,7 +39,7 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 			synchronized (this) {
 				dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
 				if (dc == null) {
-					dc = new SimpleDesktopCache();
+					dc = new SimpleDesktopCache(_wapp.getConfiguration());
 					sess.setAttribute(ATTR_CACHE, dc);
 				}
 			}
@@ -54,9 +55,9 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 	}
 
 	public void start(WebApp wapp) {
-		//ignore it
+		_wapp = wapp;
 	}
 	public void stop(WebApp wapp) {
-		//ignore it
+		_wapp = null;
 	}
 }

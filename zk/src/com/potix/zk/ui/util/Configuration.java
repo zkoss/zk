@@ -36,6 +36,9 @@ import com.potix.zk.ui.event.EventThreadSuspend;
 import com.potix.zk.ui.event.EventThreadResume;
 import com.potix.zk.ui.util.SessionInit;
 import com.potix.zk.ui.util.SessionCleanup;
+import com.potix.zk.ui.sys.UiEngine;
+import com.potix.zk.ui.sys.DesktopCacheProvider;
+import com.potix.zk.ui.sys.UiFactory;
 
 /**
  * The ZK configuration.
@@ -55,6 +58,9 @@ public class Configuration {
 		_dtInits = new LinkedList(), _dtCleans = new LinkedList();
 	private Monitor _monitor;
 	private String _timeoutUri;
+	private String _themeUri;
+	private Class _uiengcls, _dcpcls, _uiftycls;
+	private Integer _dtTimeout, _dtMax, _sessTimeout, _evtThdMax;
 
 	/** Adds a listener class.
 	 */
@@ -383,6 +389,18 @@ public class Configuration {
 		}
 	}
 
+	/** Sets the URI of CSS that will be generated for each ZUML desktop.
+	 */
+	public void setThemeURI(String uri) {
+		_themeUri = uri;
+	}
+	/** Returns the URI of CSS that will be generated for each ZUML desktop.
+	 * <p>Default: null
+	 */
+	public String getThemeURI() {
+		return _themeUri;
+	}
+
 	/** Sets the URI that is used when the session timeout or
 	 * desktop is no longer available.
 	 *
@@ -403,6 +421,100 @@ public class Configuration {
 	 */
 	public String getTimeoutURI() {
 		return _timeoutUri;
+	}
+
+	/** Sets the class for implementing {@link UiEngine}, or null to
+	 * use the default.
+	 */
+	public void setUiEngineClass(Class cls) {
+		if (cls != null && !UiEngine.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("UiEngine not implemented: "+cls);
+		_uiengcls = cls;
+	}
+	/** Returns the class for implementing the UI engine, or null for default.
+	 */
+	public Class getUiEngineClass() {
+		return _uiengcls;
+	}
+
+	/** Sets the class for implementing {@link DesktopCacheProvider}, or null to
+	 * use the default.
+	 */
+	public void setDesktopCacheProviderClass(Class cls) {
+		if (cls != null && !DesktopCacheProvider.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("DesktopCacheProvider not implemented: "+cls);
+		_dcpcls = cls;
+	}
+	/** Returns the class for implementing the UI engine, or null for default.
+	 */
+	public Class getDesktopCacheProviderClass() {
+		return _dcpcls;
+	}
+
+	/** Sets the class for implementing {@link UiFactory}, or null to
+	 * use the default.
+	 */
+	public void setUiFactoryClass(Class cls) {
+		if (cls != null && !UiFactory.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("UiFactory not implemented: "+cls);
+		_uiftycls = cls;
+	}
+	/** Returns the class for implementing the UI engine, or null for default.
+	 */
+	public Class getUiFactoryClass() {
+		return _uiftycls;
+	}
+
+	/** Specifies the time, in seconds, between client requests
+	 * before ZK will invalidate the desktop, or null for default (1 hour).
+	 */
+	public void setDesktopMaxInactiveInterval(Integer secs) {
+		_dtTimeout = secs;
+	}
+	/** Returns the time, in seconds, between client requests
+	 * before ZK will invalidate the desktop, or null for default.
+	 */
+	public Integer getDesktopMaxInactiveInterval() {
+		return _dtTimeout;
+	}
+
+	/**  Specifies the time, in seconds, between client requests
+	 * before ZK will invalidate the session, or null for default.
+	 */
+	public void setSessionMaxInactiveInterval(Integer secs) {
+		_sessTimeout = secs;
+	}
+	/** Returns the time, in seconds, between client requests
+	 * before ZK will invalidate the session, or null for default.
+	 */
+	public Integer getSessionMaxInactiveInterval() {
+		return _sessTimeout;
+	}
+
+	/** Specifies the maximal allowed number of desktop
+	 * per session, or null for default (10).
+	 */
+	public void setMaxDesktops(Integer max) {
+		_dtMax = max;
+	}
+	/** Returns the maximal allowed number of desktop
+	 * per session, or null for default (10).
+	 */
+	public Integer getMaxDesktops() {
+		return _dtMax;
+	}
+
+	/** Specifies the maximal allowed number of event processing threads
+	 * per Web application, or null for default (100).
+	 */
+	public void setMaxEventThreads(Integer max) {
+		_evtThdMax = max;
+	}
+	/** Returns the maximal allowed number of event processing threads
+	 * per Web application, or null for default (100).
+	 */
+	public Integer getMaxEventThreads() {
+		return _evtThdMax;
 	}
 
 	/** Returns the monitor for this application, or null if not set.

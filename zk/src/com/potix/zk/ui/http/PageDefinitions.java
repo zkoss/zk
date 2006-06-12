@@ -20,7 +20,6 @@ import java.io.File;
 import java.net.URL;
 import javax.servlet.ServletContext;
 
-import com.potix.util.prefs.Apps;
 import com.potix.util.resource.Locator;
 import com.potix.util.resource.ResourceCache;
 
@@ -76,8 +75,6 @@ public class PageDefinitions extends com.potix.zk.ui.metainfo.PageDefinitions {
 				if (cache == null) {
 					cache = new ResourceCache(new MyLoader(ctx), 29);
 					cache.setMaxSize(1000).setLifetime(60*60000); //1hr
-					cache.setCheckPeriod(
-						Apps.getInteger("com.potix.web.file.checkPeriod", 5) * 1000);
 					ctx.setAttribute(ATTR_PAGE_CACHE, cache);
 				}
 			}

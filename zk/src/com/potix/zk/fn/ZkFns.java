@@ -37,7 +37,7 @@ import javax.servlet.ServletRequest;
 import com.potix.lang.Strings;
 import com.potix.lang.Objects;
 import com.potix.util.CacheMap;
-import com.potix.util.prefs.Apps;
+import com.potix.util.Locales;
 import com.potix.util.logging.Log;
 import com.potix.web.fn.ServletFns;
 import com.potix.web.servlet.JavaScript;
@@ -224,7 +224,8 @@ public class ZkFns {
 			.getStyleSheets().iterator(); e.hasNext();)
 				append(sb, (StyleSheet)e.next(), exec, null);
 
-		final String href = Apps.getProperty("com.potix.web.theme.defaultURI");
+		final String href = exec.getDesktop()
+			.getWebApp().getConfiguration().getThemeURI();
 		if (href != null && href.length() > 0)
 			append(sb, new StyleSheet(href, "text/css"), exec, null);
 
@@ -279,7 +280,7 @@ public class ZkFns {
 	/** Generates date labels in JavaScript.
 	 */
 	public final static String outDateJavaScript() {
-		final Locale locale = Apps.getCurrentLocale();
+		final Locale locale = Locales.getCurrent();
 		synchronized (_datejs) {
 			final String djs = (String)_datejs.get(locale);
 			if (djs != null) return djs;

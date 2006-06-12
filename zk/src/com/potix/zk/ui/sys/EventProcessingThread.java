@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 import com.potix.lang.D;
 import com.potix.lang.Threads;
 import com.potix.lang.Exceptions;
-import com.potix.util.prefs.Apps;
+import com.potix.util.Locales;
 import com.potix.util.logging.Log;
 
 import com.potix.zk.ui.Execution;
@@ -252,7 +252,7 @@ public class EventProcessingThread extends Thread {
 		_comp = comp;
 		_event = event;
 		_evtThdInits = evtThdInits;
-		_locale = Apps.getCurrentLocale();
+		_locale = Locales.getCurrent();
 		_ex = null;
 	}
 	/** Setup for execution. */
@@ -296,7 +296,7 @@ public class EventProcessingThread extends Thread {
 							.invokeEventThreadInits(_evtThdInits, _comp, _event);
 						_evtThdInits = null;
 
-						Apps.setThreadLocale(_locale);
+						Locales.setThreadLocal(_locale);
 						setup();
 						process0();
 					} catch (Throwable ex) {
@@ -306,7 +306,7 @@ public class EventProcessingThread extends Thread {
 						cleanup();
 						ExecutionsCtrl.setCurrent(null);
 						SessionsCtrl.setCurrent(null);
-						Apps.setThreadLocale(_locale = null);
+						Locales.setThreadLocal(_locale = null);
 						if (D.ON && log.finerable()) log.finer("Real processing is done; "+_event);
 					}
 				}

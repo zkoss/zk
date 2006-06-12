@@ -25,7 +25,6 @@ import java.io.FileNotFoundException;
 import com.potix.lang.D;
 import com.potix.util.resource.ResourceCache;
 import com.potix.util.resource.ContentLoader;
-import com.potix.util.prefs.Apps;
 
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Component;
@@ -100,9 +99,7 @@ public class Script implements Condition {
 				if (_cache == null) {
 					final ResourceCache cache
 						= new ResourceCache(new ContentLoader());
-					cache.setCheckPeriod(Apps.getInteger(
-							"com.potix.web.file.checkPeriod", 5) * 1000)
-						.setMaxSize(250).setLifetime(60*60000); //1hr
+					cache.setMaxSize(250).setLifetime(60*60000); //1hr
 					_cache = cache;
 				}
 			}

@@ -33,6 +33,7 @@ import com.potix.zk.ui.sys.DesktopCache;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
+	private String _appnm = "ZK";
 	private final Configuration _config;
 	private final UiEngine _engine;
 	private final DesktopCacheProvider _provider;
@@ -47,6 +48,13 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_engine = engine;
 		_provider = provider;
 		_factory = factory;
+	}
+
+	public String getAppName() {
+		return _appnm;
+	}
+	public void setAppName(String name) {
+		_appnm = name != null ? name: "";
 	}
 
 	public final String getVersion() {

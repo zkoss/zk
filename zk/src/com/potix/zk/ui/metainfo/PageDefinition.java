@@ -29,7 +29,6 @@ import javax.servlet.jsp.el.FunctionMapper;
 
 import com.potix.lang.Classes;
 import com.potix.util.resource.Locator;
-import com.potix.util.prefs.Apps;
 import com.potix.el.FunctionMappers;
 import com.potix.el.Taglib;
 import com.potix.web.servlet.StyleSheet;

@@ -41,6 +41,16 @@ import com.potix.zk.ui.util.Configuration;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface WebApp extends Locator {
+	/** Returns the application name, never null.
+	 * Developer can set it to any name that describes his application.
+	 * <p>Default: ZK
+	 */
+	public String getAppName();
+	/** Sets the applicationname.
+	 * Developer can set it to any name that describes his application.
+	 */
+	public void setAppName(String name); 
+
 	/** Returns the ZK version, such as "1.0.1" and "2.0.0".
 	 */
 	public String getVersion();
