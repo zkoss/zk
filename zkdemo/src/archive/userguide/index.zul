@@ -41,15 +41,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="s3" label="Labels and images" value="/userguide/simple/label.zul"/>
 						<treeitem id="s4" label="Input" value="/userguide/simple/input.zul"/>
 						<treeitem id="s6" label="The onChanging event" value="/userguide/simple/onChanging.zul"/>
-						<treeitem id="s7" label="Radio buttons" value="/userguide/simple/radio.zul"/>
-						<treeitem id="s8" label="Checkboxes" value="/userguide/simple/checkbox.zul"/>
+						<treeitem id="s7" label="Radio and Checkboxes" value="/userguide/simple/radiocheckbox.zul"/>
 						<treeitem id="s9" label="Comboboxes" value="/userguide/simple/combobox.zul"/>
 						<treeitem id="s10" label="More comboboxes" value="/userguide/simple/moreCombobox.zul"/>
 						<treeitem id="s10a" label="Bandboxes" value="/userguide/simple/bandbox.zul"/>
 						<treeitem id="s11" label="Sliders" value="/userguide/simple/slider.zul"/>
 						<treeitem id="s12" label="The onScrolling event" value="/userguide/simple/onScrolling.zul"/>
-						<treeitem id="s13" label="More button features" value="/userguide/simple/moreButton.zul"/>
-						<treeitem id="s14" label="Audio" value="/userguide/simple/audio.zul"/>
 					</treechildren>
 				</treeitem>
 				<treeitem label="Modal Dialogs" value="/userguide/modal/index.zul">
@@ -62,12 +59,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<treeitem label="Layout Elements" value="/userguide/layout/index.zul">
 					<treechildren>
 						<treeitem id="l1" label="The box model" value="/userguide/layout/box.zul"/>
+						<treeitem id="lsplt" label="Splitters" value="/userguide/layout/splitter.zul"/>
 						<treeitem id="l2" label="Tabboxes" value="/userguide/layout/tabbox.zul"/>
 						<treeitem id="l3" label="More tabboxes" value="/userguide/layout/moreTabbox.zul"/>
 						<treeitem id="l4" label="Groupbox" value="/userguide/layout/groupbox.zul"/>
 						<treeitem id="l5" label="More groupboxes" value="/userguide/layout/moreGroupbox.zul"/>
 						<treeitem id="l6" label="Grids" value="/userguide/layout/grid.zul"/>
-						<treeitem id="lsplt" label="Splitters" value="/userguide/layout/splitter.zul"/>
 					</treechildren>
 				</treeitem>
 				<treeitem label="Toolbar and Menus" value="/userguide/toolbar/index.zul">
@@ -99,6 +96,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="mictxmnu" label="Context Menus" value="/userguide/misc/ctxmnu.zul"/>
 						<treeitem id="mitooltip" label="Tooltips and Popups" value="/userguide/misc/tooltip.zul"/>
 						<treeitem id="mi1" label="Timer" value="/userguide/misc/timer.zul"/>
+						<treeitem id="miaudio" label="Audio" value="/userguide/misc/audio.zul"/>
+						<treeitem id="mimorebtn" label="More button features" value="/userguide/misc/moreButton.zul"/>
 						<treeitem id="mi2" label="Include" value="/userguide/misc/include.zul"/>
 						<treeitem id="mi3" label="Iframe" value="/userguide/misc/iframe.zul"/>
 						<treeitem id="mi4" label="More iframe" value="/userguide/misc/moreIframe.zul"/>

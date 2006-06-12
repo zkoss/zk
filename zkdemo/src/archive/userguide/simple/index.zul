@@ -39,14 +39,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="Labels and images" onClick="doSelect(&quot;s3&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Input" onClick="doSelect(&quot;s4&quot;)"/></h:li>
 		<h:li><toolbarbutton label="The onChanging event" onClick="doSelect(&quot;s6&quot;)"/></h:li>
-		<h:li><toolbarbutton label="Radio buttons" onClick="doSelect(&quot;s7&quot;)"/></h:li>
-		<h:li><toolbarbutton label="Checkboxes" onClick="doSelect(&quot;s8&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Radio and Checkboxes" onClick="doSelect(&quot;s7&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Comboboxes" onClick="doSelect(&quot;s9&quot;)"/></h:li>
 		<h:li><toolbarbutton label="More comboboxes" onClick="doSelect(&quot;s10&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Bandboxes" onClick="doSelect(&quot;s10a&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Sliders" onClick="doSelect(&quot;s11&quot;)"/></h:li>
 		<h:li><toolbarbutton label="The onScrolling event" onClick="doSelect(&quot;s12&quot;)"/></h:li>
-		<h:li><toolbarbutton label="More button features" onClick="doSelect(&quot;s13&quot;)"/></h:li>
-		<h:li><toolbarbutton label="Audio" onClick="doSelect(&quot;s14&quot;)"/></h:li>
 	</h:ul>
 </window>

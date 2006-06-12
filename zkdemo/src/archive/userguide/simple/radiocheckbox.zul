@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-checkbox.zul
+input.zul
 
 {{IS_NOTE
 	Purpose:
@@ -21,8 +21,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<vbox width="100%">
 		<html>
 			<attribute name="content"><![CDATA[
-				<h4>Checkboxes</h4>
-				<p>Checkbox is used to turn on or turn off an option.</p>
+				<h4>Radio buttons</h4>
+				<p>radiogroup and radio are used to select one option among a group of options.</p>
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
@@ -32,18 +32,26 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</groupbox>
 		<groupbox id="_source" mold="3d" open="false" width="100%">
 			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView();"/></caption>
-			<textbox id="codes" class="code" rows="20" width="100%">
+			<textbox id="codes" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
-<window title="checkbox demo" border="normal">
+<window title="radiogroup and radio demo" border="normal">
 	<vbox>
-		What kinds of fruit do you want?
+		Which kind of fruit do you want?
+		<radiogroup onCheck="fruit.value = self.selectedItem.label">
+			<radio label="Apple"/>
+			<radio label="Orange"/>
+			<radio label="Banana"/>
+		</radiogroup>
+		<hbox>You have selected :<label id="fruit"/></hbox>
+
+		<separator bar="true"/>
 		<checkbox id="apple" label="Apple" onCheck="doChecked()" />
 		<checkbox id="orange" label="Orange" onCheck="doChecked()" />
 		<checkbox id="banana" label="Banana" onCheck="doChecked()" />
-		<hbox>You have selected :<label id="fruit"/></hbox>
+		<hbox>You have selected :<label id="fruit2"/></hbox>
 		<zscript>
 			void doChecked() {
-				fruit.value = (apple.isChecked() ? apple.label+' ' : &quot;&quot;) 
+				fruit2.value = (apple.isChecked() ? apple.label+' ' : &quot;&quot;) 
 					+ (orange.isChecked() ? orange.label+' ' : &quot;&quot;) 
 					+ (banana.isChecked() ? banana.label+' ' : &quot;&quot;);
 			}
