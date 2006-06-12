@@ -12,7 +12,7 @@ ZK 2.0.0
   1486616, 1492803, 1494217, 1488178, 1493604, 1494820, 1489942, 1397863,
   1495630, 1490672, 1495814, 1498631, 1499269, 1499333, 1490477, 1500729,
   1500728, 1409858, 1381453, 1483036, 1502138, 1500301, 1500300, 1502743,
-  1496439, 1482232.
+  1496439, 1482232, 1504858.
 	+ Macro components are supported
 	+ Sorting of Listbox and grid are supported
 	+ Browser history management is supported
@@ -45,7 +45,7 @@ ZK 2.0.0
   1488938, 1489299, 1489347, 1491464, 1492530, 1492946, 1494029, 1491836,
   1490365, 1494970, 1495427, 1495425, 1496769, 1498798, 1499207, 1495382,
   1494841, 1498895, 1499872, 1499923, 1501444, 1501464, 1502884, 1503282,
-  1503906, 1504378, 1499430.
+  1503906, 1504378, 1499430, 1468918.
 	+ The alignment of header and body of grid, listbox and tree are improved
 	  to handle all known extremely cases.
 	+ Work with Oracle OC4J 10.1.3
@@ -99,6 +99,8 @@ ZK 2.0.0
 	  getDropdown and closeDropdown.
 	+ Executions.notify(Page,Object) is changed to
 	  Executions.notify(Desktop,Object)
+	+ The isPopup, isOverlapped, isEmbedded and isModal methods of Window
+	  are renamed to inPopup, inOverlapped, inEmbedded and inModal.
 
 --------
 ZK 1.1.0
