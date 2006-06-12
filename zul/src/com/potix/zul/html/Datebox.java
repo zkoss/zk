@@ -28,7 +28,8 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 import com.potix.lang.Objects;
-import com.potix.util.prefs.Apps;
+import com.potix.util.Locales;
+import com.potix.util.TimeZones;
 import com.potix.xml.HTMLs;
 
 import com.potix.zk.ui.UiException;
@@ -44,7 +45,7 @@ import com.potix.zul.html.impl.FormatInputElement;
  *
  * <p>The default format ({@link #getFormat}) depends on JVM's setting
  * and the current user's locale. That is,
- * <code>DateFormat.getDateInstance(DateFormat,DEFAULT, Apps.getCurrentLocale).</code>
+ * <code>DateFormat.getDateInstance(DateFormat,DEFAULT, Locales.getCurrent).</code>
  * You might override {@link #getDefaultFormat} to provide your own default
  * format.
  *
@@ -58,7 +59,7 @@ public class Datebox extends FormatInputElement {
 		setFormat(getDefaultFormat());
 		setSclass("datebox");
 		setCols(11);
-		_compact = "zh".equals(Apps.getCurrentLocale().getLanguage());
+		_compact = "zh".equals(Locales.getCurrent().getLanguage());
 	}
 	public Datebox(Date date) throws WrongValueException {
 		this();
@@ -68,13 +69,13 @@ public class Datebox extends FormatInputElement {
 	 * a datebox.
 	 * <p>The default format ({@link #getFormat}) depends on JVM's setting
 	 * and the current user's locale. That is,
-	 * <code>DateFormat.getDateInstance(DateFormat,DEFAULT, Apps.getCurrentLocale).</code>
+	 * <code>DateFormat.getDateInstance(DateFormat,DEFAULT, Locales.getCurrent).</code>
 	 *
 	 * <p>You might override this method to provide your own default format.
 	 */
 	protected String getDefaultFormat() {
 		final DateFormat df = DateFormat.getDateInstance(
-			DateFormat.DEFAULT, Apps.getCurrentLocale());
+			DateFormat.DEFAULT, Locales.getCurrent());
 		if (df instanceof SimpleDateFormat) {
 			final String fmt = ((SimpleDateFormat)df).toPattern();
 			if (fmt != null && !"M/d/yy h:mm a".equals(fmt))
@@ -175,8 +176,8 @@ public class Datebox extends FormatInputElement {
 	 * @param fmt the pattern.
 	 */
 	protected DateFormat getDateFormat(String fmt) {
-		final DateFormat df = new SimpleDateFormat(fmt, Apps.getCurrentLocale());
-		final TimeZone tz = Apps.getCurrentTimeZone();
+		final DateFormat df = new SimpleDateFormat(fmt, Locales.getCurrent());
+		final TimeZone tz = TimeZones.getCurrent();
 		df.setTimeZone(tz);
 		return df;
 	}

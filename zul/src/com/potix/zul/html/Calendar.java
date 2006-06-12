@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 import com.potix.util.Dates;
-import com.potix.util.prefs.Apps;
+import com.potix.util.Locales;
 import com.potix.xml.HTMLs;
 
 import com.potix.zk.ui.ext.Inputable;
@@ -48,7 +48,7 @@ public class Calendar extends XulElement implements Inputable {
 	public Calendar(Date value) {
 		setSclass("calendar");
 		_value = value != null ? value: Dates.today();
-		_compact = "zh".equals(Apps.getCurrentLocale().getLanguage());
+		_compact = "zh".equals(Locales.getCurrent().getLanguage());
 	}
 
 	/** Returns the value that is assigned to this component, never null.
@@ -68,7 +68,7 @@ public class Calendar extends XulElement implements Inputable {
 	}
 
 	private static final DateFormat getDateFormat() {
-		return new SimpleDateFormat("yyyy/MM/dd", Apps.getCurrentLocale());
+		return new SimpleDateFormat("yyyy/MM/dd", Locales.getCurrent());
 	}
 
 	/** Returns whether to use a compact layout.

@@ -22,7 +22,7 @@ import java.text.NumberFormat;
 import java.text.DecimalFormat;
 
 import com.potix.lang.Objects;
-import com.potix.util.prefs.Apps;
+import com.potix.util.Locales;
 
 import com.potix.zk.ui.WrongValueException;
 
@@ -69,7 +69,7 @@ abstract public class FormatInputElement extends InputElement {
 			return value.toString();
 		} else {
 			final DecimalFormat df = (DecimalFormat)
-				NumberFormat.getInstance(Apps.getCurrentLocale());
+				NumberFormat.getInstance(Locales.getCurrent());
 			df.applyPattern(fmt);
 			return df.format(value);
 		}

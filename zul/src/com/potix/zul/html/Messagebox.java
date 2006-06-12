@@ -23,8 +23,8 @@ import java.util.HashMap;
 
 import com.potix.mesg.Messages;
 import com.potix.zul.mesg.MZul;
-import com.potix.util.prefs.Apps;
 
+import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Executions;
 
 import com.potix.zul.html.impl.MessageboxDlg;
@@ -70,7 +70,7 @@ public class Messagebox {
 
 	/** Shows a message box and returns what button is pressed.
 	 *
-	 * @param title the title. If null, {@link com.potix.util.prefs.App#getName} is used.
+	 * @param title the title. If null, {@link WebApp#getAppName} is used.
 	 * @param buttons a combination of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}. If zero, {@link #OK} is assumed
@@ -86,7 +86,8 @@ public class Messagebox {
 	throws InterruptedException {
 		final Map params = new HashMap();
 		params.put("message", message);
-		params.put("title", title != null ? title: Apps.getApp().getName());
+		params.put("title", title != null ? title:
+			Executions.getCurrent().getDesktop().getWebApp().getAppName());
 		params.put("icon", icon);
 		params.put("buttons", new Integer(
 			(buttons & (OK|CANCEL|YES|NO|ABORT|RETRY|IGNORE)) != 0 ? buttons: OK));
