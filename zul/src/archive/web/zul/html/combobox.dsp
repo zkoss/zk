@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
 <%@ taglib uri="/WEB-INF/tld/zul/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/><%-- zk_combo means an input with addition buttons --%>
-<span id="${self.uuid}"${self.outerAttrs} zk_type="zul.html.cb.Cmbox" zk_combo="true"><input id="${self.uuid}!real"${self.innerAttrs}/><h:img id="${self.uuid}!btn" align="top" src="~./zul/img/combobtn.gif"/><div id="${self.uuid}!pp" class="comboboxpp" style="display:none" tabindex="-1">
+<span id="${self.uuid}"${self.outerAttrs} zk_type="zul.html.cb.Cmbox" zk_combo="true"><input id="${self.uuid}!real"${self.innerAttrs}/><h:img id="${self.uuid}!btn" src="~./zul/img/combobtn.gif"/><div id="${self.uuid}!pp" class="comboboxpp" style="display:none" tabindex="-1">
  <table id="${self.uuid}!pp2" cellpadding="0" cellspacing="0">
 	<c:forEach var="child" items="${self.children}">
   ${u:redraw(child, null)}

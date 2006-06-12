@@ -333,6 +333,7 @@ zkDtbox.init = function (cmp) {
 
 	var btn = $(cmp.id + "!btn");
 	if (btn) Event.observe(btn, "click", function () {zkDtbox.onbutton(cmp);});
+	btn.align = "absmiddle";
 };
 zkDtbox.validate = function (cmp) {
 	var inp = $(cmp.id+"!real");

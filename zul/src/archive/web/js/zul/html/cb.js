@@ -29,6 +29,7 @@ zkCmbox.init = function (cmp) {
 
 	var btn = $(cmp.id + "!btn");
 	if (btn) Event.observe(btn, "click", function () {zkCmbox.onbutton(cmp);});
+	btn.align = "absmiddle";
 };
 
 function zkCmit() {}
