@@ -55,8 +55,9 @@ public class LabelImageElement extends LabelElement implements Viewable {
 		if (src != null && src.length() == 0) src = null;
 		if (!Objects.equals(_src, src)) {
 			_src = src;
-			if (_image == null) invalidate(INNER);
-				//_src is meaningful only if _image is null
+			if (_image == null) invalidate(OUTER);
+				//Bug 1504378: the container might have to init again
+			//_src is meaningful only if _image is null
 			//NOTE: Tom Yeh: 20051222
 			//It is possible to use smartUpdate if we always generate
 			//an image (with an ID) in getImgTag.

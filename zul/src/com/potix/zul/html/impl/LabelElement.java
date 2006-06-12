@@ -43,7 +43,8 @@ abstract public class LabelElement extends XulElement {
 		if (label == null) label = "";
 		if (!Objects.equals(_label, label)) {
 			_label = label;
-			invalidate(INNER);
+			invalidate(OUTER);
+				//Bug 1504378: the container might have to init again
 		}
 	}
 }
