@@ -349,14 +349,15 @@ function zkPop() {}
 zkPop.context = function (ctx, ref) {
 	if (ctx.getAttribute("zk_onOpen"))
 		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
-	ctx.style.display = "";
+
+	action.show(ctx);
 	zkau.onVisiChildren(ctx);
 	zkPop._pop._popupId = ctx.id;
 	zkau.hideCovered();
 };
 zkPop.close = function (ctx) {
 	zkPop._pop._popupId = null;
-	ctx.style.display = "none";
+	action.hide(ctx);
 	zkau.hideCovered();
 };
 
