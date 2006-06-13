@@ -1,4 +1,4 @@
-export=
+export=zk1
 
 pxcommon.jar
 pxweb.jar
@@ -9,3 +9,5 @@ zkplus.jar
 
 fckez.jar
 dojoz.jar
+zk.jar
+zul.jar
