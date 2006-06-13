@@ -14,7 +14,7 @@ ZK 2.0.0
   1500728, 1409858, 1381453, 1483036, 1502138, 1500301, 1500300, 1502743,
   1496439, 1482232, 1504858.
 	+ Macro components are supported
-	+ Sorting of Listbox and grid are supported
+	+ Sorting of listboxes and grids are supported
 	+ Browser history management is supported
 	+ Context menu and right clicks are supported
 	+ Customizable tooltip is supported.
@@ -50,6 +50,7 @@ ZK 2.0.0
 	  to handle all known extremely cases.
 	+ Work with Oracle OC4J 10.1.3
 	+ Work with WebLogic 9.1
+	+ Work with WebSphere 6.0
 
 * Upgrade Notes
 	+ The map component is renamed to imagemap (RC1).
