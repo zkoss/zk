@@ -139,6 +139,9 @@ zkSplt._snap = function (cmp, x, y) {
 };
 zkSplt._dragging = function (drag) {
 	var cmp = drag.element;
+	if (cmp.getAttribute("zk_open") == "false") return;
+		//not draggable (or, user won't see the effect)
+
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
 		var run = drag.run;
