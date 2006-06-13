@@ -37,7 +37,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<textbox id="codes" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
 <window title="listbox multiple selection demo" border="normal">
-	<listbox multiple="true" width="200px">
+	<listbox multiple="true" width="250px">
 		<listhead>
 			<listheader label="name"/>
 			<listheader label="gender"/>

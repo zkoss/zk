@@ -39,7 +39,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <window title="tree checkmark demo" border="normal">
 	<button label="Toggle checkmark" onClick="tree.checkmark = !tree.checkmark"/>
 	<separator bar="true"/>
-	<tree id="tree" width="450px" rows="5" multiple="true" checkmark="true">
+	<tree id="tree" width="100%" rows="5" multiple="true" checkmark="true">
 		<treecols>
 			<treecol label="Name"/>
 			<treecol label="Description"/>

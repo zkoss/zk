@@ -40,7 +40,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<button label="Toggle checkmark" onClick="box.checkmark = !box.checkmark"/>
 	<button label="Toggle multiple" onClick="box.multiple = !box.multiple"/>
 	<separator bar="true"/>
-	<listbox id="box" width="450px" multiple="true" checkmark="true">
+	<listbox id="box" width="460px" multiple="true" checkmark="true">
 		<listhead>
 			<listheader label="Name"/>
 			<listheader label="Gender"/>
