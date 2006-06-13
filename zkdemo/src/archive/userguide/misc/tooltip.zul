@@ -28,7 +28,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <li>A tooltip is shown when an user moves the mouse over a component with
 the tooltip attribute.</li>
 <li>A popup is shown when an user clicks on a component with
-the tooltip attribute.</li>
+the popup attribute.</li>
 </ul>
 			]]></attribute>
 		</html>
