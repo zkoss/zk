@@ -24,8 +24,7 @@ import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ELException;
 
 /**
- * A simple resolver that retrieve variable from a map, plus the built-in
- * objects loaded from i3-el.xml.
+ * A simple resolver that retrieve variable from a map.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

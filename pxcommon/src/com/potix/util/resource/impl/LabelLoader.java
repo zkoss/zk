@@ -38,7 +38,6 @@ import com.potix.util.resource.ClassLocator;
 import com.potix.util.logging.Log;
 import com.potix.util.WaitLock;
 import com.potix.el.EvaluatorImpl;
-import com.potix.el.FunctionMappers;
 
 /**
  * The label loader (implementation only).
@@ -69,8 +68,7 @@ public class LabelLoader {
 		//Interpret it
 		try {
 	    	return (String)new EvaluatorImpl()
-	    		.evaluate(label, String.class,
-	    			_resolv, FunctionMappers.getDefault());
+	    		.evaluate(label, String.class, _resolv, null);
 	    } catch (Throwable ex) {
 	    	log.error("Illegal label: key="+key+" value="+label, ex);
 	    	return label; //recover it

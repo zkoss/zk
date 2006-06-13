@@ -54,17 +54,6 @@ public class FunctionMappers {
 	private FunctionMappers() {}
 
 	private static final ResourceCache _reces;
-	private static final FunctionMapper _default;
-
-	/** Returns the default function mapper provided by i3-el.xml.
-	 *
-	 * <p>Note: the prefix is assumed to be empty.
-	 *
-	 * <p>The default function mapper is used only in QL.
-	 */
-	public static final FunctionMapper getDefault() {
-		return _default;
-	}
 
 	/** Retursn the function mapper representing a list of {@link Taglib},
 	 * or null if taglibs is null or empty.
@@ -151,20 +140,6 @@ public class FunctionMappers {
 
 	static {
 		try {
-			final Init init = new Init();
-			init.loadFromAllModules();
-			if (init.methods.isEmpty()) {
-				_default = null;
-			} else {
-				final Map mtds = init.methods;
-				_default = new FunctionMapper() {
-					public Method resolveFunction(String prefix, String name) {
-						return prefix == null || prefix.length() == 0 ?
-							(Method)mtds.get(name): null;
-					}
-				};
-			}
-
  			_reces = new ResourceCache(new TaglibLoader());
  			_reces.setCheckPeriod(30*60*1000);
  		} catch (Exception ex) {
@@ -178,22 +153,4 @@ public class FunctionMappers {
 			return loadMethods((URL)src);
 		}
 	}
-	/** Used to initilizes the builtin objects and methods. */
-	private static class Init {
-		final Map methods = new HashMap();
-
-		/** Initializes the builtin objects and methods from
-		 * /metainfo/module/i3-el.xml of all modules.
-		 */
-		private final void loadFromAllModules() throws Exception {
-			final ClassLocator locator = new ClassLocator();
-			for (Iterator it = locator.getDependentXmlResources(
-			"metainfo/i3-el.xml", "module-name", "depends").iterator();
-			it.hasNext();) {
-				final Document doc = (Document)it.next();
-				methods.putAll(loadMethods(doc.getRootElement()));
-				
-			}
-		}
-	} //Init
 }
