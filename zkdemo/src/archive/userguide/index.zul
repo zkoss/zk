@@ -18,7 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="root" xmlns:h="http://www.w3.org/1999/xhtml">
+<window id="root" xmlns:h="http://www.w3.org/1999/xhtml"
+onBookmarkChanged="onBookmark(event.bookmark)">
 	<hbox>
 	<window id="treelist">
 		<tree id="toc" width="320px">
@@ -27,7 +28,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				if (item != null) {
 					Include inc = Path.getComponent(root, "contents/xcontents");
 					inc.setSrc(null); //to make it dirty (and invalidate)
-					inc.setSrc(item.getValue());
+					inc.setSrc(item.value);
+					desktop.bookmark = item.id;
 				}
 			</attribute>
 			<treecols>
@@ -137,15 +139,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</window>
 	<zscript><![CDATA[
 		void doSelect(String s) {
-			Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
-			Treeitem treeitem = tree.getSpaceOwner().getFellow(s);
-			tree.selectItem(treeitem);
-			java.util.Set items = new HashSet();
-			items.add(treeitem);
-			Events.postEvent(new SelectEvent("onSelect", tree, items));
+			try {
+				Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+				Treeitem treeitem = tree.getSpaceOwner().getFellow(s);
+				tree.selectItem(treeitem);
+				Set items = new HashSet();
+				items.add(treeitem);
+				Events.postEvent(new SelectEvent("onSelect", tree, items));
+			} catch (ComponentNotFoundException ex) { //ignore
+			}
 		}
 		final String id = Executions.getCurrent().getParameter("id");
 		doSelect(id != null ? id : "s1");
+
+		void onBookmark(String bk) {
+			doSelect(bk);
+		}
 	]]></zscript>
 	</hbox>
 <h:script type="text/javascript">
