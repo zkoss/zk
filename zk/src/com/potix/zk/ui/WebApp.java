@@ -51,7 +51,7 @@ public interface WebApp extends Locator {
 	 */
 	public void setAppName(String name); 
 
-	/** Returns the ZK version, such as "1.0.1" and "2.0.0".
+	/** Returns the ZK version, such as "1.1.0" and "2.0.0".
 	 */
 	public String getVersion();
 
