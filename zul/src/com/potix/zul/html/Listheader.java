@@ -276,6 +276,20 @@ public class Listheader extends HeaderElement {
 	}
 
 	//-- super --//
+	/** Returns the style class.
+	 * If the style class is not defined ({@link #setSclass} is not called
+	 * or called with null or empty), it returns "sort" if sortable,
+	 * or null if not sortable.
+	 * <p>By sortable we mean that {@link #setSortAscending}
+	 * or {@link #setSortDescending}
+	 * was called with a non-null comparator
+	 */
+	public String getSclass() {
+		final String scls = super.getSclass();
+		if (scls != null) return scls;
+		return _sortAsc != null || _sortDsc != null ? "sort": null;
+	}
+
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80);
 		if (_sortAsc != null) sb.append(" zk_asc=\"true\"");

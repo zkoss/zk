@@ -168,23 +168,6 @@ function zulSHdr() {} //listheader
 zulSHdr.init = function (cmp) {
 	zulSHdr._show(cmp);
 	Event.observe(cmp, "click", function (evt) {zulSHdr.onclick(evt, cmp);});
-	Event.observe(cmp, "mouseover", function () {return zulSHdr.onover(cmp);});
-	Event.observe(cmp, "mouseout", function () {return zulSHdr.onout(cmp);});
-};
-zulSHdr.onover = function (cmp) {
-	if (zulSHdr._sortable(cmp)) {
-		zk.backupStyle(cmp, "textDecoration");
-		cmp.style.textDecoration = "underline";
-		zk.backupStyle(cmp, "cursor");
-		cmp.style.cursor = "pointer";
-
-		zulSHdr._show(cmp, true);
-	}
-};
-zulSHdr.onout = function (cmp) {
-	zk.restoreStyle(cmp, "textDecoration");
-	zk.restoreStyle(cmp, "cursor");
-	zulSHdr._show(cmp);
 };
 zulSHdr.onclick = function (evt, cmp) {
 	if (zulSHdr._sortable(cmp))
@@ -198,23 +181,19 @@ zulSHdr._sortable = function (cmp) {
 };
 /** Shows the hint, ascending or descending image.
  */
-zulSHdr._show = function (cmp, hint) {
-	var img = $(cmp.id + "!hint");
-	if (img) {
-		var nm;
-		switch (cmp.getAttribute("zk_sort")) {
-		case "ascending": nm = "asc"; break;
-		case "descending": nm = "dsc"; break;
-		default:
-			if (!hint) {
-				img.style.display = "none";
-				return;
-			}
-			nm = "hint";
-		}
-		img.src = zk.rename(img.src, nm);
-		img.style.display = "";
+zulSHdr._show = function (cmp) {
+	switch (cmp.getAttribute("zk_sort")) {
+	case "ascending": zulSHdr._renCls(cmp, "asc"); break;
+	case "descending": zulSHdr._renCls(cmp, "dsc"); break;
+	case "natural": zulSHdr._renCls(cmp); break;
 	}
+};
+zulSHdr._renCls = function (cmp, ext) {
+	var clsnm = cmp.className || "";
+	if (clsnm.endsWith("-asc") || clsnm.endsWith("-dsc"))
+		clsnm = clsnm.substring(0, clsnm.length - 4);
+	if (ext) clsnm += '-' + ext;
+	if (clsnm != cmp.className) cmp.className = clsnm;
 };
 zulSHdr.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);

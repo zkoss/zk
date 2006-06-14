@@ -249,6 +249,24 @@ div.tree-head td, div.listbox-head td, div.grid-head td {
 	text-overflow: ellipsis; white-space: nowrap; padding: 2px;
 	font-size: x-small; font-weight: normal;
 }
+div.listbox-head td.sort, div.grid-head td.sort {
+	cursor: default;
+	background-image: url(${c:encodeURL('~./zul/img/sort/hint.png')});
+	background-position: right;
+	background-repeat: no-repeat;
+}
+div.listbox-head td.sort-asc, div.grid-head td.sort-asc {
+	cursor: default;
+	background-image: url(${c:encodeURL('~./zul/img/sort/asc.png')});
+	background-position: right;
+	background-repeat: no-repeat;
+}
+div.listbox-head td.sort-dsc, div.grid-head td.sort-dsc {
+	cursor: default;
+	background-image: url(${c:encodeURL('~./zul/img/sort/dsc.png')});
+	background-position: right;
+	background-repeat: no-repeat;
+}
 
 div.tree-body, div.listbox-body, div.grid-body { /* always used. */
 	background: window; border: 0; overflow: auto; width: 100%;
