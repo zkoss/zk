@@ -84,16 +84,22 @@ public class Listitem extends XulElement {
 
 	/** Returns the value.
 	 * <p>Default: null.
-	 * <p>Note: the value is not sent to the browser, so it is OK to be
-	 * anything.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 * <p>If you are using listitem with HTML Form (and with
+	 * the name attribute), it is better to specify a String-typed
+	 * value.
 	 */
 	public Object getValue() {
 		return _value;
 	}
 	/** Sets the value.
 	 * @param value the value.
-	 * Note: the value is not sent to the browser, so it is OK to be
-	 * anything.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 * <p>If you are using listitem with HTML Form (and with
+	 * the name attribute), it is better to specify a String-typed
+	 * value.
 	 */
 	public void setValue(Object value) {
 		if (!Objects.equals(_value, value)) {
@@ -104,7 +110,7 @@ public class Listitem extends XulElement {
 				if (listbox.isHtmlSelect())
 					smartUpdate("value", Objects.toString(_value));
 				else if (listbox.getName() != null)
-					smartUpdate("z_value", Objects.toString(_value));
+					smartUpdate("zk_value", Objects.toString(_value));
 		}
 	}
 

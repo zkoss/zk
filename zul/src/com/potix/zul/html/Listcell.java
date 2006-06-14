@@ -32,6 +32,8 @@ import com.potix.zul.html.impl.LabelImageElement;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Listcell extends LabelImageElement {
+	private Object _value;
+
 	public Listcell() {
 	}
 	public Listcell(String label) {
@@ -99,6 +101,23 @@ public class Listcell extends LabelImageElement {
 			return listbox.getMaxlength();
 		final Listheader lc = getListheader();
 		return lc != null ? lc.getMaxlength(): 0;
+	}
+
+	/** Returns the value.
+	 * <p>Default: null.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 */
+	public Object getValue() {
+		return _value;
+	}
+	/** Sets the value.
+	 * @param value the value.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 */
+	public void setValue(Object value) {
+		_value = value;
 	}
 
 	//-- super --//

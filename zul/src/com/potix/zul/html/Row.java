@@ -37,6 +37,7 @@ import com.potix.zul.html.impl.XulElement;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Row extends XulElement {
+	private Object _value;
 	private String _align, _valign;
 	private boolean _nowrap;
 
@@ -87,6 +88,23 @@ public class Row extends XulElement {
 			_valign = valign;
 			smartUpdate("valign", _valign);
 		}
+	}
+
+	/** Returns the value.
+	 * <p>Default: null.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 */
+	public Object getValue() {
+		return _value;
+	}
+	/** Sets the value.
+	 * @param value the value.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 */
+	public void setValue(Object value) {
+		_value = value;
 	}
 
 	//-- super --//
