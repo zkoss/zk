@@ -253,7 +253,6 @@ div.tree-body td, div.listbox-body td {
 	border: 0; cursor: pointer; padding: 0 2px;
 	font-size: small; font-weight: normal;
 }
-
 div.listbox-head td.sort, div.grid-head td.sort {
 	cursor: default;
 	background-image: url(${c:encodeURL('~./zul/img/sort/hint.png')});
