@@ -85,6 +85,12 @@ elementFormDefault="qualified">
 			<xs:enumeration value="password"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="collapseAttrType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="after"/>
+			<xs:enumeration value="before"/>
+		</xs:restriction>
+	</xs:simpleType>
 <!--
   ATTRIBUTEGROUP
 -->
@@ -99,6 +105,7 @@ elementFormDefault="qualified">
 		<xs:attribute name="id" type="xs:string" use="optional"/>
 		<xs:attribute name="visible" type="xs:boolean" use="optional"/>
 		<xs:attribute name="mold" type="xs:string" use="optional"/>
+		<xs:attribute name="use" type="javaClassType" use="optional"/>
 	</xs:attributeGroup>
 	<xs:attributeGroup name="htmlBasedComponentAttrGroup">
 		<xs:attributeGroup ref="abstractComponentAttrGroup"/>
@@ -235,7 +242,7 @@ elementFormDefault="qualified">
 	<xs:complexType name="bandboxType">
 		<xs:choice>
 			<xs:group ref="baseGroup"/>
-			<xs:element ref="bandpopup" minOccurs="0" maxOccurs="0"/>
+			<xs:element ref="bandpopup" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attributeGroup ref="inputElementAttrGroup"/>
 		<xs:attribute name="autodrop" type="xs:boolean" use="optional"/>
@@ -258,7 +265,10 @@ elementFormDefault="qualified">
 	<!-- box -->
 	<xs:element name="box" type="boxType"/>
 	<xs:complexType name="boxType" mixed="true">
-		<xs:group ref="anyGroup"/>
+		<xs:choice>
+			<xs:group ref="anyGroup"/>
+			<xs:element ref="splitter" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="orient" type="orientAttrType" use="optional"/>
 		<xs:attribute name="spacing" type="xs:string" use="optional"/>
@@ -435,7 +445,10 @@ elementFormDefault="qualified">
 	<!-- hbox -->
 	<xs:element name="hbox" type="hboxType"/>
 	<xs:complexType name="hboxType" mixed="true">
-		<xs:group ref="anyGroup"/>
+		<xs:choice>
+			<xs:group ref="anyGroup"/>
+			<xs:element ref="splitter" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="spacing" type="xs:string" use="optional"/>
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional"/>
@@ -648,6 +661,7 @@ elementFormDefault="qualified">
 			<xs:element ref="menuseparator" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
+		<xs:attribute name="onOpen" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<!-- menuseparator -->
 	<xs:element name="menuseparator" type="menuseparatorType"/>
@@ -665,6 +679,7 @@ elementFormDefault="qualified">
 			<xs:element ref="menuseparator" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
+		<xs:attribute name="onOpen" type="xs:string" use="optional"/>
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<!-- radio -->
@@ -744,6 +759,15 @@ elementFormDefault="qualified">
 		<xs:attribute name="orient" type="orientAttrType" use="optional"/>
 		<xs:attribute name="bar" type="xs:boolean" use="optional"/>
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<!-- splitter -->
+	<xs:element name="splitter" type="splitterType"/>
+	<xs:complexType name="splitterType">
+		<xs:group ref="baseGroup"/>
+		<xs:attributeGroup ref="xulElementAttrGroup"/>
+		<xs:attribute name="collapse" type="collapseAttrType" use="optional"/>
+		<xs:attribute name="open" type="xs:boolean" use="optional"/>
+		<xs:attribute name="onOpen" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<!-- tab -->
 	<xs:element name="tab" type="tabType"/>
@@ -931,7 +955,10 @@ elementFormDefault="qualified">
 	<!-- vbox -->
 	<xs:element name="vbox" type="vboxType"/>
 	<xs:complexType name="vboxType" mixed="true">
-		<xs:group ref="anyGroup"/>
+		<xs:choice>
+			<xs:group ref="anyGroup"/>
+			<xs:element ref="splitter" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="spacing" type="xs:string" use="optional"/>
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional"/>
