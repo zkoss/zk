@@ -494,8 +494,10 @@ public class Parser {
 				} else if (!"use".equals(attnm)) {
 					final Namespace attns = attr.getNamespace();
 					final String attpref = attns != null ? attns.getPrefix(): "";
+					final String attruri = attns != null ? attns.getURI(): "";
 					if (!"xmlns".equals(attpref)
-					&& !("xmlns".equals(attnm) && "".equals(attpref)))
+					&& !("xmlns".equals(attnm) && "".equals(attpref))
+					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attruri))
 						addAttribute(instdef, attns, attnm, attval, null);
 				}
 			}
