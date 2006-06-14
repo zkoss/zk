@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.Comparator;
 
 import com.potix.lang.Objects;
+import com.potix.xml.HTMLs;
+
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Components;
 import com.potix.zk.ui.UiException;
@@ -197,9 +199,19 @@ public class Column extends HeaderElement {
 
 	//-- super --//
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
+		final StringBuffer sb = new StringBuffer(80);
+		if (_sortAsc != null) sb.append(" zk_asc=\"true\"");
+		if (_sortDsc != null) sb.append(" zk_dsc=\"true\"");
+
+		if (!"natural".equals(_sortDir))
+			HTMLs.appendAttribute(sb, "zk_sort", _sortDir);
+
 		final String clkattrs = getAllOnClickAttrs(false);
-		return clkattrs == null ? attrs: attrs + clkattrs;
+		if (clkattrs != null) sb.append(clkattrs);
+
+		final String attrs = super.getOuterAttrs();
+		if (sb.length() == 0) return attrs;
+		return sb.insert(0, attrs).toString();
 	}
 
 	/** Invalidates the whole grid. */
