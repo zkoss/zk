@@ -18,14 +18,31 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Grid Demo">
+	<zscript>
+	class Comp implements Comparator {
+		private boolean _asc;
+		public Comp(boolean asc) {
+			_asc = asc;
+		}
+		public int compare(Object o1, Object o2) {
+			String s1 = o1.getChildren().get(0).getValue(),
+				s2 = o2.getChildren().get(0).getValue();
+			int v = s1.compareTo(s2);
+			return _asc ? v: -v;
+		}
+	}
+	Comp asc = new Comp(true), dsc = new Comp(false);
+	</zscript>
 	<grid id="grid" width="500px" height="100px">
 		<columns>
+			<column label="Order"  sortAscending="${asc}" sortDescending="${dsc}"/>
 			<column label="Head 1"/>
 			<column label="Head 2" align="center"/>
 			<column label="Head 3" align="right"/>
 		</columns>
 		<rows>
 			<row>
+				Orange
 				<listbox mold="select">
 					<listitem label="AB"/>
 					<listitem label="CD"/>
@@ -34,11 +51,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<textbox rows="3"/>
 			</row>
 			<row>
+				Apple
 				<label value="A11"/>
 				<label value="A12"/>
 				<label value="A13"/>
 			</row>
 			<row>
+				Lemon
 				<checkbox checked="true" label="Option 1"/>
 				<checkbox label="Option 2"/>
 				<radiogroup>
@@ -48,6 +67,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				</radiogroup>
 			</row>
 			<row>
+				Tomato
 				<checkbox checked="true" label="Option 1"/>
 				<checkbox label="Option 2"/>
 				<radiogroup orient="vertical">
