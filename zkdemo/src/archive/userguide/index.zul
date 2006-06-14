@@ -18,8 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="root" xmlns:h="http://www.w3.org/1999/xhtml"
-onBookmarkChanged="onBookmark(event.bookmark)">
+<window id="root" xmlns:h="http://www.w3.org/1999/xhtml">
 	<hbox>
 	<window id="treelist">
 		<tree id="toc" width="320px">
@@ -29,7 +28,6 @@ onBookmarkChanged="onBookmark(event.bookmark)">
 					Include inc = Path.getComponent(root, "contents/xcontents");
 					inc.setSrc(null); //to make it dirty (and invalidate)
 					inc.setSrc(item.value);
-					desktop.bookmark = item.id;
 				}
 			</attribute>
 			<treecols>
@@ -151,10 +149,6 @@ onBookmarkChanged="onBookmark(event.bookmark)">
 		}
 		final String id = Executions.getCurrent().getParameter("id");
 		doSelect(id != null ? id : "s1");
-
-		void onBookmark(String bk) {
-			doSelect(bk);
-		}
 	]]></zscript>
 	</hbox>
 <h:script type="text/javascript">
