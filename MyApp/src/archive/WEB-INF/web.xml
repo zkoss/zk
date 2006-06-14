@@ -24,21 +24,6 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</icon>
 	-->
 
-	<!-- /// -->
-	<!-- DSP -->
-	<servlet>
-		<description><![CDATA[
-The servlet loads the DSP pages.
-		]]></description>
-		<servlet-name>dspLoader</servlet-name>
-		<servlet-class>com.potix.web.servlet.dsp.InterpreterServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>dspLoader</servlet-name>
-		<url-pattern>*.dsp</url-pattern>
-	</servlet-mapping>
-	<!-- /// -->
-
 	<!-- //// -->
 	<!-- ZK -->
 	<listener>
