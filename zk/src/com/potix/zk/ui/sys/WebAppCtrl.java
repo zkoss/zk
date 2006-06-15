@@ -33,7 +33,7 @@ public interface WebAppCtrl {
 	public UiEngine getUiEngine();
 	/** Returns the desktop cache.
 	 * A shortcut of {@link #getDesktopCacheProvider}'s
-	 * {@link DesktopCacheProvider#getCache}.
+	 * {@link DesktopCacheProvider#getDesktopCache}.
 	 */
 	public DesktopCache getDesktopCache(Session sess);
 	/** Returns the desktop cache provider.

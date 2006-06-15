@@ -38,7 +38,7 @@ Serializable {
 	private static final String ATTR_CACHE = "javax.potix.zk.desktop-cache";
 
 	//-- DesktopCacheProvider --//
-	public DesktopCache getCache(Session sess) {
+	public DesktopCache getDesktopCache(Session sess) {
 		final WebApp wapp = sess.getWebApp();
 		DesktopCache dc = (DesktopCache)wapp.getAttribute(ATTR_CACHE);
 		if (dc == null) {
@@ -57,10 +57,17 @@ Serializable {
 		//ignore it
 	}
 
+	/** Invokes {@link #getDesktopCache}'s {@link DesktopCache#sessionWillPassivate}.
+	 */
 	public void sessionWillPassivate(Session sess) {
+		DesktopCache dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
+		if (dc != null) dc.sessionWillPassivate(sess);
 	}
+	/** Invokes {@link #getDesktopCache}'s {@link DesktopCache#sessionDidActivate}.
+	 */
 	public void sessionDidActivate(Session sess) {
-		//TODO
+		DesktopCache dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
+		if (dc != null) dc.sessionDidActivate(sess);
 	}
 
 	public void start(WebApp wapp) {

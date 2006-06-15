@@ -39,6 +39,13 @@ import com.potix.zk.ui.impl.AbstractSession;
 
 /** An implementation of {@link com.potix.zk.ui.Session}.
  * 
+ * <p>Note:<br/>
+ * Though this class is serializable, it is meaningless to serialize
+ * it directly. Reason: it doesn't serialize any session attributes.
+ * Rather, it is serialized when Web server serialized HttpSession.
+ * Also, notice that {@link SessionImpl} is stored as an attribute
+ * HttpSession.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class SessionImpl extends AbstractSession
@@ -49,6 +56,8 @@ implements HttpSessionActivationListener, Serializable {
 		//Not to serialize since it is recalled by sessionDidActivate
 	private transient Map _attrs;
 		//No need to serialize attributes since it is done by Session
+		//Side effect: it is meaning to serialize a session manually
+		//Rather, caller has to serialize HttpSession
 	private final String _clientAddr, _clientName;
 
 	public SessionImpl(HttpSession hsess, WebApp webapp,

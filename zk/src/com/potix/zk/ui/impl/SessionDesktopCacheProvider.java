@@ -33,7 +33,7 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 	private WebApp _wapp;
 
 	//-- DesktopCacheProvider --//
-	public DesktopCache getCache(Session sess) {
+	public DesktopCache getDesktopCache(Session sess) {
 		DesktopCache dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
 		if (dc == null) {
 			synchronized (this) {
@@ -54,10 +54,17 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 		}
 	}
 
+	/** Invokes {@link #getDesktopCache}'s {@link DesktopCache#sessionWillPassivate}.
+	 */
 	public void sessionWillPassivate(Session sess) {
+		DesktopCache dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
+		if (dc != null) dc.sessionWillPassivate(sess);
 	}
+	/** Invokes {@link #getDesktopCache}'s {@link DesktopCache#sessionDidActivate}.
+	 */
 	public void sessionDidActivate(Session sess) {
-		//TODO
+		DesktopCache dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
+		if (dc != null) dc.sessionDidActivate(sess);
 	}
 
 	public void start(WebApp wapp) {

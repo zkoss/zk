@@ -81,7 +81,7 @@ import com.potix.zk.au.AuResponse;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public interface Component {
+public interface Component extends java.io.Serializable {
 	/** Returns the component definition, or null if this component
 	 * doesn't belong to any definition.
 	 */

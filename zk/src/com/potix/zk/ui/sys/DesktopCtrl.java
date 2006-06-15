@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.sys;
 
+import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Execution;
@@ -76,4 +77,13 @@ public interface DesktopCtrl {
 	 * from the client.
 	 */
 	public void setBookmarkByClient(String name);
+
+	/** Notification that the session, which owns this desktop,
+	 * is about to be passivated (aka., serialized).
+	 */
+	public void sessionWillPassivate(Session sess);
+	/** Notification that the session, which owns this desktop,
+	 * has just been activated (aka., deserialized).
+	 */
+	public void sessionDidActivate(Session sess);
 }

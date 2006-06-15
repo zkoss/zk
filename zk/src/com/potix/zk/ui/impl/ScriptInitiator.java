@@ -21,6 +21,8 @@ package com.potix.zk.ui.impl;
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.metainfo.Script;
 import com.potix.zk.ui.util.Initiator;
+import com.potix.zk.ui.util.Namespace;
+import com.potix.zk.ui.util.Namespaces;
 
 /**
  * An initiator used to evaluate a zscript file.
@@ -35,7 +37,12 @@ public class ScriptInitiator implements Initiator {
 		_script = script;
 	}
 	public void doInit(Page page, Object[] args) throws Exception {
-		page.interpret(null, _script.getScript());
+		final Namespace ns = Namespaces.beforeInterpret(null, page);
+		try {
+			page.interpret(_script.getScript(), ns);
+		} finally {
+			Namespaces.afterInterpret(ns);
+		}
 	}
 	public void doCatch(Throwable ex) {
 	}

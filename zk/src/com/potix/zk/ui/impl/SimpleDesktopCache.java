@@ -24,11 +24,13 @@ import com.potix.util.CacheMap;
 import com.potix.util.logging.Log;
 
 import com.potix.zk.ui.WebApp;
+import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.ComponentNotFoundException;
 import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.util.Monitor;
 import com.potix.zk.ui.sys.DesktopCache;
+import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.ui.sys.WebAppCtrl;
 
 /**
@@ -100,6 +102,21 @@ public class SimpleDesktopCache implements DesktopCache, Serializable {
 				log.error(ex);
 			}
 		}
+	}
+
+	/** Invokes {@link DesktopCtrl#sessionWillPassivate} for each
+	 * desktops it cached.
+	 */
+	public void sessionWillPassivate(Session sess) {
+		for (Iterator it = _desktops.values().iterator(); it.hasNext();)
+			((DesktopCtrl)it.next()).sessionWillPassivate(sess);
+	}
+	/** Invokes {@link DesktopCtrl#sessionDidActivate} for each
+	 * desktops it cached.
+	 */
+	public void sessionDidActivate(Session sess) {
+		for (Iterator it = _desktops.values().iterator(); it.hasNext();)
+			((DesktopCtrl)it.next()).sessionDidActivate(sess);
 	}
 
 	public void stop() {

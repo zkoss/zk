@@ -66,5 +66,5 @@ public interface Interpreter {
 	 *
 	 * @param ns the namespace, or null to use {@link #getNamespace}.
 	 */
-	public void eval(String script, Namespace ns);
+	public void interpret(String script, Namespace ns);
 }

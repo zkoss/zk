@@ -102,7 +102,7 @@ public class BshInterpreter implements Interpreter {
 		return _resolvers != null && _resolvers.remove(resolver);
 	}
 
-	public void eval(String script, Namespace ns) {
+	public void interpret(String script, Namespace ns) {
 		try {
 			if (ns != null)
 				_ip.eval(script, (NameSpace)ns.getNativeNamespace());

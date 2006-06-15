@@ -68,7 +68,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		return _engine;
 	}
 	public DesktopCache getDesktopCache(Session sess) {
-		return _provider.getCache(sess);
+		return _provider.getDesktopCache(sess);
 	}
 	public DesktopCacheProvider getDesktopCacheProvider() {
 		return _provider;
@@ -77,9 +77,15 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		return _factory;
 	}
 
+	/** Invokes {@link #getDesktopCacheProvider}'s
+	 * {@link DesktopCacheProvider#sessionWillPassivate}.
+	 */
 	public void sessionWillPassivate(Session sess) {
 		_provider.sessionWillPassivate(sess);
 	}
+	/** Invokes {@link #getDesktopCacheProvider}'s
+	 * {@link DesktopCacheProvider#sessionDidActivate}.
+	 */
 	public void sessionDidActivate(Session sess) {
 		_provider.sessionDidActivate(sess);
 	}

@@ -47,11 +47,7 @@ import com.potix.zk.ui.sys.*;
 import com.potix.zk.ui.event.*;
 import com.potix.zk.ui.metainfo.*;
 import com.potix.zk.ui.ext.PostCreate;
-import com.potix.zk.ui.util.Initiator;
-import com.potix.zk.ui.util.Monitor;
-import com.potix.zk.ui.util.Condition;
-import com.potix.zk.ui.util.ForEach;
-import com.potix.zk.ui.util.Configuration;
+import com.potix.zk.ui.util.*;
 import com.potix.zk.au.*;
 
 /**
@@ -298,8 +294,16 @@ public class UiEngineImpl implements UiEngine {
 				}
 			} else if (obj instanceof Script) {
 				final Script script = (Script)obj;
-				if (isEffective(script, pagedef, page, parent))
-					page.interpret(parent, script.getScript());
+				if (isEffective(script, pagedef, page, parent)) {
+					final Namespace ns = parent != null ?
+						Namespaces.beforeInterpret(exec, parent):
+						Namespaces.beforeInterpret(exec, page);
+					try {
+						page.interpret(script.getScript(), ns);
+					} finally {
+						Namespaces.afterInterpret(ns);
+					}
+				}
 			} else {
 				throw new IllegalStateException("Unknown object: "+obj);
 			}

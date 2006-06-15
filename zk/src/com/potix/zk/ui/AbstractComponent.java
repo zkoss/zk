@@ -74,11 +74,11 @@ public class AbstractComponent implements Component, ComponentCtrl {
 	}
 
 	/* Note: if _page != null, then _desktop != null. */
-	private Desktop _desktop;
+	private transient Desktop _desktop;
 	private /*final*/ Page _page;
 	private String _id;
 	private String _uuid;
-	private ComponentDefinition _compdef;
+	private transient ComponentDefinition _compdef;
 	private Component _parent;
 	/** The mold (default: "default"). */
 	private String _mold = "default";
@@ -124,7 +124,7 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		}
 		_uuid = _id = idsb.toString();
 
-		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(_uuid): null;
+		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(this, _uuid): null;
 		_compdef = getDefinitionFromCurrentPage(getClass());
 			//we have to init it here because getCurrentPageDefinition
 			//might changed later
@@ -290,7 +290,9 @@ public class AbstractComponent implements Component, ComponentCtrl {
 				checkIdSpacesDown((Component)it.next(), pageCtrl); //recursive
 	}
 
-	/** Bind this ID space. Called only if IdSpace is implemented. */
+	/** Bind comp to this ID space (owned by this component).
+	 * Called only if IdSpace is implemented.
+	 */
 	private void bindToIdSpace(Component comp) {
 		final String compId = comp.getId();
 		assert D.OFF || !ComponentsCtrl.isAutoId(compId): "Auto ID shall be ignored: "+compId;
@@ -298,7 +300,9 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		if (Variables.isValid(compId))
 			_spaceInfo.ns.setVariable(compId, comp, true);
 	}
-	/** Unbind this ID space. Called only if IdSpace is implemented. */
+	/** Unbind comp from this ID space (owned by this component).
+	 * Called only if IdSpace is implemented.
+	 */
 	private void unbindFromIdSpace(String compId) {
 		_spaceInfo.fellows.remove(compId);
 		if (Variables.isValid(compId))
@@ -949,9 +953,10 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		private final Namespace ns;
 		/** A map of ((String id, Component fellow). */
 		private final Map fellows = new HashMap(23);
-		private SpaceInfo(String id) {
+		private SpaceInfo(Component owner, String id) {
 			ns = new BshNamespace(id);
 			ns.setVariable("spaceScope", attrs, true);
+			ns.setVariable("spaceOwner", owner, true);
 		}
 	}
 	private class ChildIter implements ListIterator  {

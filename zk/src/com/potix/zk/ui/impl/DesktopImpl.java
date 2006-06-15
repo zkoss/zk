@@ -53,6 +53,14 @@ import com.potix.zk.au.AuBookmark;
 /**
  * The implementation of {@link Desktop}.
  *
+ * <p>Note: though {@link DesktopImpl} is serializable but it is designed
+ * to work with Web container's session serialization.
+ * It is not suggested to serialize and desrialize it directly since
+ * many fields might be lost.
+ *
+ * <p>On the other hand, it is OK to serialize and deserialize
+ * {@link Component}.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class DesktopImpl implements Desktop, DesktopCtrl, Serializable {
@@ -280,6 +288,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, Serializable {
 	//-- Object --//
 	public String toString() {
 		return "[Desktop "+_id+']';
+	}
+
+	public void sessionWillPassivate(Session sess) {
+		//nothing to do
+	}
+	public void sessionDidActivate(Session sess) {
+		_sess = sess;
+		_wapp = sess.getWebApp();
 	}
 
 	//-- Serializable --//

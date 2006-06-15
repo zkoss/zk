@@ -39,6 +39,8 @@ import com.potix.zk.ui.Page;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Condition;
 import com.potix.zk.ui.util.Initiator;
+import com.potix.zk.ui.util.Namespace;
+import com.potix.zk.ui.util.Namespaces;
 import com.potix.zk.ui.util.VariableResolver;
 import com.potix.zk.ui.sys.ComponentCtrl;
 import com.potix.zk.ui.sys.WebAppCtrl;
@@ -243,10 +245,15 @@ public class PageDefinition extends InstanceDefinition {
 	public void init(Page page) {
 		((PageCtrl)page).init(_id, _title, _style);
 
-		for (Iterator it = getLanguageDefinition().getScripts().iterator();
-		it.hasNext();) {
-			final String script = (String)it.next();
-			page.interpret(null, script);
+		final List scripts = getLanguageDefinition().getScripts();
+		if (!scripts.isEmpty()) {
+			final Namespace ns = Namespaces.beforeInterpret(null, page);
+			try {
+				for (Iterator it = scripts.iterator(); it.hasNext();)
+					page.interpret((String)it.next(), ns);
+			} finally {
+				Namespaces.afterInterpret(ns);
+			}
 		}
 	}
 

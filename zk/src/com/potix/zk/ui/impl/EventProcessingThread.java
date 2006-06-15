@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package com.potix.zk.ui.impl;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -40,10 +40,15 @@ import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.metainfo.ComponentDefinition;
 import com.potix.zk.ui.metainfo.InstanceDefinition;
+import com.potix.zk.ui.util.Namespace;
+import com.potix.zk.ui.util.Namespaces;
+import com.potix.zk.ui.sys.SessionsCtrl;
+import com.potix.zk.ui.sys.ExecutionCtrl;
+import com.potix.zk.ui.sys.ExecutionsCtrl;
 
 /** Thread to handle events.
  * We need to handle events in a separate thread, because it might
- * suspend (by calling {@link UiEngine#wait}), such as waiting
+ * suspend (by calling {@link com.potix.zk.ui.sys.UiEngine#wait}), such as waiting
  * a modal dialog to complete.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
@@ -371,6 +376,18 @@ public class EventProcessingThread extends Thread {
 		if (_comp == null || _event == null)
 			throw new IllegalStateException("comp and event must be initialized");
 
+		//Bug 1506712: event listeners might be zscript, so we have to
+		//keep built-in variables as long as possible
+		final Namespace ns = Namespaces.beforeInterpret(null, _comp);
+		ns.setVariable("event", _event, true);
+		try {
+			process1(ns);
+		} finally {
+			Namespaces.afterInterpret(ns);
+			ns.unsetVariable("event");
+		}
+	}
+	private void process1(Namespace ns) throws Exception {
 		final Page page = _comp.getPage();
 		final String evtnm = _event.getName();
 
@@ -379,13 +396,7 @@ public class EventProcessingThread extends Thread {
 			final String script =
 				((InstanceDefinition)compdef).getEventHandler(_comp, evtnm);
 			if (script != null) {
-				page.setVariable("event", _event);
-
-				try {
-					page.interpret(_comp, script);
-				} finally {
-					page.setVariable("event", null);
-				}
+				page.interpret(script, ns);
 				if (!_event.isPropagatable())
 					return; //done
 			}

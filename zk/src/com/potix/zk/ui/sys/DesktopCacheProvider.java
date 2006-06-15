@@ -32,7 +32,7 @@ public interface DesktopCacheProvider {
 	 * <p>The implementation might ignore session and use a global cache
 	 * instead. Moreover, it might implement a cache supporting clustering.
 	 */
-	public DesktopCache getCache(Session session);
+	public DesktopCache getDesktopCache(Session session);
 	/** Called when a session is destroyed.
 	 * If the provider is session-based, it has to remove relevant desktops.
 	 * If not, it might ignore this method.

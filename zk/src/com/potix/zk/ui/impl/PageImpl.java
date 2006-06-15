@@ -353,6 +353,7 @@ public class PageImpl implements Page, PageCtrl {
 		_ip.setVariable("session", sess);
 		_ip.setVariable("sessionScope", sess.getAttributes());
 		_ip.setVariable("applicationScope", _desktop.getWebApp().getAttributes());
+		_ip.setVariable("spaceOwner", this);
 
 		final String INVALID = ".&\\%";
 		if (Strings.anyOf(_id, INVALID, 0) < _id.length())
@@ -446,30 +447,8 @@ public class PageImpl implements Page, PageCtrl {
 	public final Namespace getNamespace() {
 		return _ip.getNamespace();
 	}
-	public void interpret(Component comp, String script) {
-		final Map arg = getExecution().getArg();
-		try {
-			if (arg != null) _ip.setVariable("arg", arg);
-			if (comp != null) {
-				_ip.setVariable("self", comp);
-				_ip.setVariable("spaceOwner", comp.getSpaceOwner());
-				_ip.setVariable("spaceScope", comp.getAttributes(Component.SPACE_SCOPE));
-				_ip.setVariable("componentScope", comp.getAttributes(Component.COMPONENT_SCOPE));
-				_ip.eval(script, comp.getNamespace());
-			} else {
-				_ip.eval(script, null);
-			}
-		} catch (Exception ex) {
-			if (Exceptions.findCause(ex, InterruptedException.class) == null
-			&& Exceptions.findCause(ex, Expectable.class) == null)
-				log.realCauseBriefly(ex);
-			throw UiException.Aide.wrap(ex);
-		} finally {
-			if (arg != null) _ip.unsetVariable("arg");
-			_ip.unsetVariable("self");
-			_ip.unsetVariable("spaceOwner");
-			_ip.unsetVariable("componentScope");
-		}
+	public void interpret(String script, Namespace ns) {
+		_ip.interpret(script, ns);
 	}
 
 	public boolean isListenerAvailable(String evtnm) {

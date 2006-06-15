@@ -18,6 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.sys;
 
+import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Desktop;
 
 /**
@@ -48,6 +49,15 @@ public interface DesktopCache {
 	 * <p>Application shall never access this method.
 	 */
 	public void removeDesktop(Desktop desktop);
+
+	/** Notification that the session is about to be passivated
+	 * (aka., serialized).
+	 */
+	public void sessionWillPassivate(Session sess);
+	/** Notification that the session has just been activated
+	 * (aka., deserialized).
+	 */
+	public void sessionDidActivate(Session sess);
 
 	/** Called when to stop and cleanup this cache.
 	 * Once stopped, the caller shall not access it any more.

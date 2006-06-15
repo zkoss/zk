@@ -29,7 +29,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.metainfo.ComponentDefinition;
 import com.potix.zk.ui.metainfo.InstanceDefinition;
 import com.potix.zk.ui.sys.ExecutionsCtrl;
-import com.potix.zk.ui.sys.EventProcessingThread;
+import com.potix.zk.ui.impl.EventProcessingThread;
 import com.potix.zk.au.AuRequest;
 
 /**

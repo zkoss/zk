@@ -291,14 +291,13 @@ public interface Page extends IdSpace {
 
 	/** Returns the namespace used to store variables and functions
 	 * belonging to this page.
-	 * <p>Used only internally.
+	 *
 	 * @see #interpret
 	 */
 	public Namespace getNamespace();
-	/** Interpret a BeanShell script against the specified componet.
-	 * <p>Used only internally.
-	 * @param comp the componet. If null, the evaluation takes place
-	 * at this page.
+	/** Interpret a BeanShell script against the specified namespace.
+	 *
+	 * @param ns the namspace. If null, the page's namespace is assumed.
 	 */
-	public void interpret(Component comp, String script);
+	public void interpret(String script, Namespace ns);
 }
