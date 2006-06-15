@@ -4,7 +4,7 @@ ZK 2.0.1
   1505319, 1505760, 1505410, 1505883
 
 * Bugs:
-  1505769, 1505833
+  1505769, 1505833, 1506652, 1506712, 1506712
 
 * Upgrade Notes:
   + The namespace of XUL component set is renamed to
