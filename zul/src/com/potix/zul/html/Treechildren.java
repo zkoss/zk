@@ -62,15 +62,14 @@ public class Treechildren extends XulElement {
 			|| ((Treechildren)comp).isVisible(); //recursive
 	}
 
-	/** Returns a readonly list of all child {@link Treeitem}
-	 * including all descendants.
+	/** Returns a readonly list of all descending {@link Treeitem}
+	 * (children's children and so on).
+	 *
 	 * <p>Note: the performance of the size method of returned collection
 	 * is no good.
 	 */
 	public Collection getItems() {
 		return new AbstractCollection() {
-			private final Iterator _it = getChildren().iterator();
-			private Iterator _sub;
 			public int size() {
 				return getItemCount();
 			}
@@ -79,6 +78,8 @@ public class Treechildren extends XulElement {
 			}
 			public Iterator iterator() {
 				return new Iterator() {
+					private final Iterator _it = getChildren().iterator();
+					private Iterator _sub;
 					public boolean hasNext() {
 						return (_sub != null && _sub.hasNext()) || _it.hasNext();
 					}

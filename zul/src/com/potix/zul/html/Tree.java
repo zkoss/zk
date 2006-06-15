@@ -199,11 +199,14 @@ public class Tree extends XulElement implements Selectable {
 		return _sel != null ? _sel.getTreerow().getUuid(): "zk_n_a";
 	}
 
-	/** Returns a readonly list of all {@link Treeitem} including
-	 * all descendants.
+	/** Returns a readonly list of all descending {@link Treeitem}
+	 * (children's children and so on).
+	 *
+	 * <p>Note: the performance of the size method of returned collection
+	 * is no good.
 	 */
 	public Collection getItems() {
-		return _treechildren != null ? _treechildren.getChildren(): Collections.EMPTY_LIST;
+		return _treechildren != null ? _treechildren.getItems(): Collections.EMPTY_LIST;
 	}
 	/** Returns the number of child {@link Treeitem}.
 	 * The same as {@link #getItems}.size().
