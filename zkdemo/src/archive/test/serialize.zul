@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+serialize.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 15 18:52:11     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of Serialization">
+<vbox>
+	<listbox id="src" multiple="true" width="200px">
+		<listhead>
+			<listheader label="Population"/>
+			<listheader align="right" label="%"/>
+		</listhead>
+		<listitem id="a" value="A">
+			<listcell label="A. Graduate"/>
+			<listcell label="20%"/>
+		</listitem>
+		<listitem id="b" value="B">
+			<listcell label="B. College"/>
+			<listcell label="23%"/>
+		</listitem>
+		<listitem id="c" value="C">
+			<listcell label="C. High School"/>
+			<listcell label="40%"/>
+		</listitem>
+	</listbox>
+
+	<button label="Serialize Current Desktop">
+		<attribute name="onClick">
+	import java.io.*;
+	new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(desktop);
+		</attribute>
+	</button>
+	<button label="Serialize All Desktops">
+		<attribute name="onClick">
+	import java.io.*;
+	new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(desktop.webApp.desktopCacheProvider.getDesktopCache(session));
+		</attribute>
+	</button>
+</vbox>
+</window>
