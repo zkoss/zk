@@ -24,6 +24,10 @@ import java.util.AbstractSet;
 import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
+import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.lang.ref.ReferenceQueue;
@@ -75,7 +79,7 @@ import com.potix.util.logging.Log;
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
  */
-public class CacheMap implements Map {
+public class CacheMap implements Map, Serializable {
 	//private static final Log log = Log.lookup(CacheMap.class);
 
 	/** The default minimal lifetime, unit=milliseconds. It is 30 minutes. */
@@ -84,23 +88,23 @@ public class CacheMap implements Map {
 	public static final int DEFAULT_MAXSIZE = 1024;
 
 	/** The map to store the mappings. */
-	private final Map _map;
+	private final Map _map; //it is OK to serialized
 	/** The minimal lifetime. */
 	private int _lifetime = DEFAULT_LIFETIME;
 	/** The maximal allowed size. */
 	private int _maxsize = DEFAULT_MAXSIZE;
 	/** The reference queue. */
-	private final ReferenceQueue _que;
+	private transient ReferenceQueue _que;
 	/** The reference. */
-	private WeakReference _ref;
+	private transient WeakReference _ref;
 	/** A flag used for debug purpose. */
-	private boolean _inExpunge;
+	private transient boolean _inExpunge;
 
 	/** The class to be hold in the reference (to know GC is demanding). */
 	private static class X {
 	}
 	/** The class to hold key/value. */
-	protected static final class Value {
+	protected static final class Value implements Serializable {
 		private Object value;
 		private long access; //when the mapping is accessed
 
@@ -255,20 +259,21 @@ public class CacheMap implements Map {
 	 */
 	public CacheMap() {
 		_map = new LinkedHashMap(16, 0.75f, true);
-		_que = newQueue();
-		newRef();
+		init();
 	}
 	/** Constructs a cachemap by using LinkedHashMap internally.
 	 */
 	public CacheMap(int cap) {
 		_map = new LinkedHashMap(cap, 0.75f, true);
-		_que = newQueue();
-		newRef();
+		init();
 	}
 	/** Constructs a cachemap by using LinkedHashMap internally.
 	 */
 	public CacheMap(int cap, float load) {
 		_map = new LinkedHashMap(cap, load, true);
+		init();
+	}
+	private void init() {
 		_que = newQueue();
 		newRef();
 	}
@@ -561,4 +566,13 @@ public class CacheMap implements Map {
 			last = v.access;
 		}
 	}*/
+
+	//-- Serializable --//
+	//NOTE: they must be declared as private
+	private synchronized void readObject(ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		init();
+	}
 }
