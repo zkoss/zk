@@ -273,6 +273,7 @@ public class CacheMap implements Map, Serializable {
 		_map = new LinkedHashMap(cap, load, true);
 		init();
 	}
+	/** Initialization for contructor and de-serialized. */
 	private void init() {
 		_que = newQueue();
 		newRef();
