@@ -130,7 +130,7 @@ font.gamma { color: #000000; font-family: "Verdana", Tahoma, Arial; font-weight:
 .gamma-pos-alert { color: #007F00; }
 
 /* The hyperlink's style class. */
-.link {cursor: pointer;}
+.link {cursor: pointer; cursor: hand;} /* IE 5.5: hand */
 
 /* ZK */
 div.embedded { /* must consistent with lang.xml */
@@ -250,19 +250,19 @@ div.tree-head td, div.listbox-head td, div.grid-head td {
 	font-size: x-small; font-weight: normal;
 }
 div.listbox-head td.sort, div.grid-head td.sort {
-	cursor: default;
+	cursor: pointer; cursor: hand;
 	background-image: url(${c:encodeURL('~./zul/img/sort/hint.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
 div.listbox-head td.sort-asc, div.grid-head td.sort-asc {
-	cursor: default;
+	cursor: pointer; cursor: hand;
 	background-image: url(${c:encodeURL('~./zul/img/sort/asc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
 div.listbox-head td.sort-dsc, div.grid-head td.sort-dsc {
-	cursor: default;
+	cursor: pointer; cursor: hand;
 	background-image: url(${c:encodeURL('~./zul/img/sort/dsc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
@@ -272,7 +272,7 @@ div.tree-body, div.listbox-body, div.grid-body { /* always used. */
 	background: window; border: 0; overflow: auto; width: 100%;
 }
 div.tree-body td, div.listbox-body td {
-	border: 0; cursor: pointer; padding: 0 2px;
+	border: 0; cursor: pointer; cursor: hand; padding: 0 2px;
 	font-size: x-small; font-weight: normal;
 }
 
@@ -338,7 +338,7 @@ td.tabpanels { /* vert */
 
 /* ZK menu. */
 div.menubar, div.menupopup, div.ctxpopup {
-	cursor: pointer; background: menu; padding: 1px;
+	cursor: pointer; cursor: hand; background: menu; padding: 1px;
 }
 div.menubar {
 	border: 1px solid black;
@@ -384,7 +384,7 @@ div.comboboxpp, div.bandboxpp { /*hardcoded in DSP*/
 
 /* ZK error message box */
 div.errbox {
-	margin: 0; padding: 1px; border: 1px outset; cursor: pointer;
+	margin: 0; padding: 1px; border: 1px outset; cursor: pointer; cursor: hand;
 	background: #E8E0D8; position: absolute; z-index: 70000;
 }
 
@@ -410,7 +410,7 @@ table.calday {
 }
 .calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
 	font-size: xx-small; color: #35254F; text-align: center;
-	cursor: pointer; text-decoration: none;
+	cursor: pointer; cursor: hand; text-decoration: none;
 }
 tr.calday td {
 	padding: 1px 3px;

@@ -254,19 +254,19 @@ div.tree-body td, div.listbox-body td {
 	font-size: small; font-weight: normal;
 }
 div.listbox-head td.sort, div.grid-head td.sort {
-	cursor: default;
+	cursor: pointer;
 	background-image: url(${c:encodeURL('~./zul/img/sort/hint.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
 div.listbox-head td.sort-asc, div.grid-head td.sort-asc {
-	cursor: default;
+	cursor: pointer;
 	background-image: url(${c:encodeURL('~./zul/img/sort/asc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
 div.listbox-head td.sort-dsc, div.grid-head td.sort-dsc {
-	cursor: default;
+	cursor: pointer;
 	background-image: url(${c:encodeURL('~./zul/img/sort/dsc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
