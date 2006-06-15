@@ -42,4 +42,13 @@ public interface WebAppCtrl {
 	/** Returns the UI factory.
 	 */
 	public UiFactory getUiFactory();
+
+	/** Notification that the session is about to be passivated
+	 * (aka., serialized).
+	 */
+	public void sessionWillPassivate(Session sess);
+	/** Notification that the session has just been activated
+	 * (aka., deserialized).
+	 */
+	public void sessionDidActivate(Session sess);
 }

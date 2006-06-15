@@ -27,6 +27,10 @@ import java.util.LinkedHashMap;
 import com.potix.lang.D;
 import com.potix.lang.Strings;
 import com.potix.util.logging.Log;
+import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Desktop;
@@ -51,11 +55,11 @@ import com.potix.zk.au.AuBookmark;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class DesktopImpl implements Desktop, DesktopCtrl {
+public class DesktopImpl implements Desktop, DesktopCtrl, Serializable {
 	private static final Log log = Log.lookup(DesktopImpl.class);
 
-	private final WebApp _wapp;
-	private final Session _sess;
+	private transient WebApp _wapp;
+	private transient Session _sess;
 	private final String _id;
 	/** The current directory of this desktop. */
 	private final String _dir;
@@ -68,11 +72,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl {
 	/** A map of attributes. */
 	private final Map _attrs = new HashMap();
 		//don't create it dynamically because PageImp._ip bind it at constructor
-	private Execution _exec;
+	private transient Execution _exec;
 	/** Next available ID. */
 	private int _nextId = 0;
 	/** The request queue. */
-	private final RequestQueue _rque = new RequestQueueImpl();
+	private transient RequestQueue _rque = new RequestQueueImpl();
 	private String _bookmark = "";
 
 	/**
@@ -98,6 +102,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl {
 		}
 		_dir = dir;
 
+		init();
+
 		_sess = Sessions.getCurrent(); //must be the current session
 		final DesktopCache dc = ((WebAppCtrl)wapp).getDesktopCache(_sess);
 		_id = Strings.encode(
@@ -116,7 +122,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl {
 				log.error(ex);
 			}
 		}
-
+	}
+	/** Initialization for contructor and de-serialized. */
+	private void init() {
+		RequestQueue _rque = new RequestQueueImpl();
 	}
 	public String getId() {
 		return _id;
@@ -271,5 +280,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl {
 	//-- Object --//
 	public String toString() {
 		return "[Desktop "+_id+']';
+	}
+
+	//-- Serializable --//
+	//NOTE: they must be declared as private
+	private synchronized void readObject(ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		init();
 	}
 }

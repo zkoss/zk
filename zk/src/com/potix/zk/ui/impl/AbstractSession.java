@@ -21,6 +21,7 @@ package com.potix.zk.ui.impl;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.sys.SessionCtrl;
+import com.potix.zk.ui.sys.WebAppCtrl;
 
 /**
  * A skeletal implementation of {@link Session} and {@link SessionCtrl}.
@@ -53,12 +54,19 @@ implements Session, SessionCtrl {
 	public void onDestroyed() {
 	}
 
-	/** Derived must invoke this method to assign back {@link WebApp},
-	 * if it implements java.io.Serializable.
+	/** Notification that the session is about to be passivated
+	 * (aka., serialized).
 	 */
-	protected void recallStatus(WebApp wapp) {
+	protected void sessionWillPassivate() {
+		((WebAppCtrl)_wapp).sessionWillPassivate(this);
+	}
+	/** Notification that the session has just been activated
+	 * (aka., deserialized).
+	 */
+	protected void sessionDidActivate(WebApp wapp) {
 		if (wapp == null) throw new IllegalArgumentException("null");
 		//if (_wapp != null) throw new IllegalStateException("recall to existent instance?");
 		_wapp = wapp;
+		((WebAppCtrl)_wapp).sessionDidActivate(this);
 	}
 }

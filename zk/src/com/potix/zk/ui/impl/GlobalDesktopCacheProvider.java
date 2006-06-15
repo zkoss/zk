@@ -16,6 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.impl;
 
+import java.io.Serializable;
+
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.sys.DesktopCacheProvider;
@@ -31,7 +33,8 @@ import com.potix.zk.ui.sys.DesktopCache;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  * @see SessionDesktopCacheProvider
  */
-public class GlobalDesktopCacheProvider implements DesktopCacheProvider {
+public class GlobalDesktopCacheProvider implements DesktopCacheProvider,
+Serializable {
 	private static final String ATTR_CACHE = "javax.potix.zk.desktop-cache";
 
 	//-- DesktopCacheProvider --//
@@ -52,6 +55,12 @@ public class GlobalDesktopCacheProvider implements DesktopCacheProvider {
 	}
 	public void sessionDestroyed(Session sess) {
 		//ignore it
+	}
+
+	public void sessionWillPassivate(Session sess) {
+	}
+	public void sessionDidActivate(Session sess) {
+		//TODO
 	}
 
 	public void start(WebApp wapp) {

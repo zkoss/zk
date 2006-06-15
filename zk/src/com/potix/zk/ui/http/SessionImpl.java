@@ -20,10 +20,8 @@ package com.potix.zk.ui.http;
 
 import java.util.Map;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.io.Serializable;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -34,6 +32,7 @@ import com.potix.util.logging.Log;
 import com.potix.el.impl.AttributesMap;
 
 import com.potix.zk.ui.WebApp;
+import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Monitor;
 import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.impl.AbstractSession;
@@ -47,7 +46,9 @@ implements HttpSessionActivationListener, Serializable {
 	private static final Log log = Log.lookup(SessionImpl.class);
 
 	private transient HttpSession _hsess;
+		//Not to serialize since it is recalled by sessionDidActivate
 	private transient Map _attrs;
+		//No need to serialize attributes since it is done by Session
 	private final String _clientAddr, _clientName;
 
 	public SessionImpl(HttpSession hsess, WebApp webapp,
@@ -131,22 +132,14 @@ implements HttpSessionActivationListener, Serializable {
 
 	//-- HttpSessionActivationListener --//
 	public void sessionWillPassivate(HttpSessionEvent se) {
+		sessionWillPassivate();
 	}
 	public void sessionDidActivate(HttpSessionEvent se) {
 		_hsess = se.getSession();
 		final ServletContext ctx = _hsess.getServletContext();
-		recallStatus(WebManager.getWebManager(ctx).getWebApp());
-	}
-
-	//-- Serializable --//
-	//NOTE: they must be declared as private
-	private synchronized void writeObject(ObjectOutputStream s)
-	throws IOException {
-		s.defaultWriteObject();
-	}
-
-	private synchronized void readObject(ObjectInputStream s)
-	throws IOException, ClassNotFoundException {
-		s.defaultReadObject();
+		final WebManager webman = WebManager.getWebManager(ctx);
+		if (webman == null)
+			throw new UiException("Unable to activate "+_hsess+" for "+ctx);
+		sessionDidActivate(webman.getWebApp());
 	}
 }

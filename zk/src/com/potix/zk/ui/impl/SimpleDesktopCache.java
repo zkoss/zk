@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.impl;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ import com.potix.zk.ui.sys.WebAppCtrl;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class SimpleDesktopCache implements DesktopCache {
+public class SimpleDesktopCache implements DesktopCache, Serializable {
 	private static final Log log = Log.lookup(SimpleDesktopCache.class);
 
 	/** Used to purge obsolete desktops. */
@@ -113,7 +114,7 @@ public class SimpleDesktopCache implements DesktopCache {
 	}
 
 	/** Holds desktops. */
-	private static class Cache extends CacheMap {
+	private static class Cache extends CacheMap { //serializable
 		private Cache(Configuration config) {
 			super(5);
 

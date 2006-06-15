@@ -54,6 +54,12 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 		}
 	}
 
+	public void sessionWillPassivate(Session sess) {
+	}
+	public void sessionDidActivate(Session sess) {
+		//TODO
+	}
+
 	public void start(WebApp wapp) {
 		_wapp = wapp;
 	}

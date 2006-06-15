@@ -208,8 +208,7 @@ public class WebManager {
 
 		final WebApp webapp = getWebManager(ctx).getWebApp();
 		sess = new SessionImpl(
-			hsess, webapp,
-			request.getRemoteAddr(), request.getRemoteHost());
+			hsess, webapp, request.getRemoteAddr(), request.getRemoteHost());
 		hsess.setAttribute(ATTR_SESS, sess);
 
 		//Note: we set timeout here, because HttpSession might have been created

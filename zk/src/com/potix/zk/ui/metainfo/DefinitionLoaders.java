@@ -111,7 +111,7 @@ public class DefinitionLoaders {
 			//keep running
 		}
 
-		//3. process other addon (from DHtmlLayoutServlet)
+		//3. process other addon (from ConfigParser)
 		for (Iterator it = _addons.iterator(); it.hasNext();) {
 			final Pair p = (Pair)it.next();
 			try {

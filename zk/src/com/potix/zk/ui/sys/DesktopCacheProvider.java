@@ -41,6 +41,15 @@ public interface DesktopCacheProvider {
 	 */
 	public void sessionDestroyed(Session session);
 
+	/** Notification that the session is about to be passivated
+	 * (aka., serialized).
+	 */
+	public void sessionWillPassivate(Session sess);
+	/** Notification that the session has just been activated
+	 * (aka., deserialized).
+	 */
+	public void sessionDidActivate(Session sess);
+
 	/** Starts the provider.
 	 */
 	public void start(WebApp wapp);

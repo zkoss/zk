@@ -76,4 +76,11 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	public UiFactory getUiFactory() {
 		return _factory;
 	}
+
+	public void sessionWillPassivate(Session sess) {
+		_provider.sessionWillPassivate(sess);
+	}
+	public void sessionDidActivate(Session sess) {
+		_provider.sessionDidActivate(sess);
+	}
 }
