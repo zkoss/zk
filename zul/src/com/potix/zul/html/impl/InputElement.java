@@ -40,8 +40,8 @@ abstract public class InputElement extends XulElement
 implements Inputable, Errorable, Constrainted {
 	/** The value. */
 	private Object _value;
-	/** Used by {@link #setValueByClient} to disable sending back the value */
-	private String _valByClient;
+	/** Used by {@link #setTextByClient} to disable sending back the value */
+	private String _txtByClient;
 	/** The error message. Not null if users entered a wrong data (and
 	 * not correct it yet).
 	 */
@@ -181,18 +181,18 @@ implements Inputable, Errorable, Constrainted {
 			_value = val;
 
 			final String fmtval = coerceToString(_value);
-			if (_valByClient == null || !Objects.equals(_valByClient, fmtval))
+			if (_txtByClient == null || !Objects.equals(_txtByClient, fmtval))
 				smartUpdate("value", fmtval);
 				//Note: we have to disable the sending back of the value
 				//Otherwise, it cause Bug 1488579's problem 3.
 				//Reason: when user set a value to correct one and set
 				//to an illegal one, then click the button cause both events
 				//being sent back to the server.
-		} else if (_valByClient != null) {
+		} else if (_txtByClient != null) {
 			//value equals but formatted result might differ because
 			//our parse is more fault tolerant
 			final String fmtval = coerceToString(_value);
-			if (!Objects.equals(_valByClient, fmtval))
+			if (!Objects.equals(_txtByClient, fmtval))
 				smartUpdate("value", fmtval);
 		}
 	}
@@ -407,7 +407,7 @@ implements Inputable, Errorable, Constrainted {
 
 	//-- Inputable --//
 	public void setTextByClient(String value) throws WrongValueException {
-		_valByClient = value;
+		_txtByClient = value;
 		try {
 			setText(value);
 		} catch (WrongValueException ex) {
@@ -416,7 +416,7 @@ implements Inputable, Errorable, Constrainted {
 				//will throw an exception with proper value.
 			throw ex;
 		} finally {
-			_valByClient = null;
+			_txtByClient = null;
 		}
 	}
 

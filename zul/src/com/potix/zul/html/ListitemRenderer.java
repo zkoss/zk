@@ -31,13 +31,13 @@ package com.potix.zul.html;
  * @see Listbox
  */
 public interface ListitemRenderer {
-	/** Renders the data to the list item.
+	/** Renders the data to the specified list item.
 	 *
 	 * @param item the listitem to render the result.
-	 * Note: when this method is called, the listitem has exactly one
-	 * {@link Listcell} (with an empty label).
-	 * If you want to render to multiple column, you have to create
-	 * the second and following {@link Listcell}.
+	 * Note: when this method is called, the listitem has no child
+	 * at all. You can invoke {@link Listitem#setLabel} to create
+	 * {@link Listcell} implicitly, or create one or multiple
+	 * {@link Listcell} explicitly.
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 * if this method is called by {@link Listbox}.
 	 */

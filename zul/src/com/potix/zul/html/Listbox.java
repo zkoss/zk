@@ -310,7 +310,9 @@ public class Listbox extends XulElement implements Selectable, Render {
 	}
 
 	/** Returns a live list of all {@link Listitem}.
-	 * You could add or remove an item by manipulating the returned list directly.
+	 * By live we mean you can add or remove them directly with
+	 * the List interface. In other words, you could add or remove
+	 * an item by manipulating the returned list directly.
 	 */
 	public List getItems() {
 		return _items;

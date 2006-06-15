@@ -93,7 +93,10 @@ public class Combobox extends Textbox {
 		}
 	}
 
-	/** Returns a readonly list of all {@link Comboitem}.
+	/** Returns a 'live' list of all {@link Comboitem}.
+	 * By live we mean you can add or remove them directly with
+	 * the List interface.
+	 *
 	 * <p>Currently, it is the same as {@link #getChildren}. However,
 	 * we might add other kind of children in the future.
 	 */
