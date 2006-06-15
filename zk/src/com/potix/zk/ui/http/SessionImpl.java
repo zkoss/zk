@@ -20,8 +20,15 @@ package com.potix.zk.ui.http;
 
 import java.util.Map;
 import java.util.Enumeration;
+import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionActivationListener;
+import javax.servlet.http.HttpSessionEvent;
 
 import com.potix.util.logging.Log;
 import com.potix.el.impl.AttributesMap;
@@ -35,11 +42,12 @@ import com.potix.zk.ui.impl.AbstractSession;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class SessionImpl extends AbstractSession {
+public class SessionImpl extends AbstractSession
+implements HttpSessionActivationListener, Serializable {
 	private static final Log log = Log.lookup(SessionImpl.class);
 
-	private final HttpSession _hsess;
-	private final Map _attrs;
+	private transient HttpSession _hsess;
+	private transient Map _attrs;
 	private final String _clientAddr, _clientName;
 
 	public SessionImpl(HttpSession hsess, WebApp webapp,
@@ -119,5 +127,26 @@ public class SessionImpl extends AbstractSession {
 	}
 	public Object getNativeSession() {
 		return _hsess;
+	}
+
+	//-- HttpSessionActivationListener --//
+	public void sessionWillPassivate(HttpSessionEvent se) {
+	}
+	public void sessionDidActivate(HttpSessionEvent se) {
+		_hsess = se.getSession();
+		final ServletContext ctx = _hsess.getServletContext();
+		recallStatus(WebManager.getWebManager(ctx).getWebApp());
+	}
+
+	//-- Serializable --//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(ObjectOutputStream s)
+	throws IOException {
+		s.defaultWriteObject();
+	}
+
+	private synchronized void readObject(ObjectInputStream s)
+	throws IOException, ClassNotFoundException {
+		s.defaultReadObject();
 	}
 }

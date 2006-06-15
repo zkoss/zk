@@ -78,13 +78,13 @@ public class DHtmlLayoutFilter extends GenericFilter {
 		if (log.debugable()) log.debug("Content to filter:\n"+content);
 
 		final ServletContext ctx = getServletContext();
-		final DHtmlLayoutServlet loader = DHtmlLayoutServlet.getLayoutServlet(ctx);
-		final WebApp wapp = loader.getWebApp();
+		final WebManager webman = WebManager.getWebManager(ctx);
+		final WebApp wapp = webman.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
-		final Session sess = loader.getSession(ctx, request);
+		final Session sess = webman.getSession(ctx, request);
 		SessionsCtrl.setCurrent(sess);
 		try {
-			final Desktop desktop = loader.getDesktop(sess, request, null);
+			final Desktop desktop = webman.getDesktop(sess, request, null);
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request, wapp);
 			final UiFactory uf = wappc.getUiFactory();

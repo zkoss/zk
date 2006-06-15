@@ -30,6 +30,6 @@ implements javax.servlet.http.HttpSessionListener {
 	public void sessionCreated(HttpSessionEvent se) {
 	}
 	public void sessionDestroyed(HttpSessionEvent se) {
-		DHtmlLayoutServlet.onSessionDestroyed(se.getSession());
+		WebManager.onSessionDestroyed(se.getSession());
 	}
 }

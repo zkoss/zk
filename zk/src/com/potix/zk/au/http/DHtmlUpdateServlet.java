@@ -71,7 +71,7 @@ import com.potix.zk.ui.sys.SessionsCtrl;
 import com.potix.zk.ui.sys.ComponentsCtrl;
 import com.potix.zk.ui.sys.UiEngine;
 import com.potix.zk.ui.http.ExecutionImpl;
-import com.potix.zk.ui.http.DHtmlLayoutServlet;
+import com.potix.zk.ui.http.WebManager;
 import com.potix.zk.au.AuRequest;
 import com.potix.zk.au.AuResponse;
 import com.potix.zk.au.AuObsolete;
@@ -122,14 +122,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//CONSIDER: we might use login="required" to define pages
 
 		final Object old = Charsets.setup(request, response);
-		final Session sess = DHtmlLayoutServlet.getSession(_ctx, request);
+		final Session sess = WebManager.getSession(_ctx, request);
 		SessionsCtrl.setCurrent(sess);
 		try {
 			final String pi = Https.getThisPathInfo(request);
 			if (D.ON && log.finerable()) log.finer("Path info: "+pi);
 			if (pi != null) {
 				if (pi.startsWith(ClassWebResource.PATH_PREFIX)) {
-					DHtmlLayoutServlet.getLayoutServlet(_ctx).
+					WebManager.getWebManager(_ctx).
 						getClassWebResource().doGet(request, response);
 					return;
 				}
@@ -174,7 +174,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final Desktop desktop;
 		try {
 			desktop = wappc.getDesktopCache(sess).getDesktop(dtid);
-			DHtmlLayoutServlet.setDesktop(request, desktop);
+			WebManager.setDesktop(request, desktop);
 				//reason: a new page might be created (such as include)
 		} catch (ComponentNotFoundException ex) {
 			final PrintWriter out = outResponsePrefix(response);

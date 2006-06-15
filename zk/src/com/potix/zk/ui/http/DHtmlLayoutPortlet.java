@@ -105,7 +105,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 	/** Returns the session. */
 	private Session getSession(RenderRequest request) {
-		return DHtmlLayoutServlet.getSession(
+		return WebManager.getSession(
 			PortletHttpSession.getInstance(request.getPortletSession()));
 	}
 	/** Process a portlet request.
@@ -116,7 +116,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	RenderResponse response, String path)
 	throws PortletException, IOException {
 		if (D.ON && log.debugable()) log.debug("Creates from "+path);
-		final WebApp wapp = getLayoutServlet().getWebApp();
+		final WebApp wapp = getWebManager().getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 
 		final Desktop desktop = getDesktop(sess, request, path);
@@ -154,21 +154,20 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	 */
 	private Desktop getDesktop(Session sess, RenderRequest request, String path)
 	throws PortletException {
-		Desktop desktop =
-			(Desktop)request.getAttribute(DHtmlLayoutServlet.DESKTOP);
+		Desktop desktop = (Desktop)request.getAttribute(WebManager.DESKTOP);
 		if (desktop == null)
-			request.setAttribute(DHtmlLayoutServlet.DESKTOP,
-				desktop = getLayoutServlet().newDesktop(sess, request, path));
+			request.setAttribute(WebManager.DESKTOP,
+				desktop = getWebManager().newDesktop(sess, request, path));
 		return desktop;
 	}
 	/** Returns the layout servlet.
 	 */
-	private final DHtmlLayoutServlet getLayoutServlet()
+	private final WebManager getWebManager()
 	throws PortletException {
-		final DHtmlLayoutServlet svl =
-			(DHtmlLayoutServlet)_ctx.getAttribute(DHtmlLayoutServlet.ATTR_LAYOUT_SERVLET);
-		if (svl == null)
+		final WebManager webman =
+			(WebManager)_ctx.getAttribute(WebManager.ATTR_WEB_MANAGER);
+		if (webman == null)
 			throw new PortletException("The Layout Servlet not found. Make sure <load-on-startup> is specified for "+DHtmlLayoutServlet.class.getName());
-		return svl;
+		return webman;
 	}
 }

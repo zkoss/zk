@@ -27,18 +27,19 @@ import com.potix.zk.ui.sys.SessionCtrl;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-abstract public class AbstractSession implements Session, SessionCtrl {
-	private final WebApp _webapp;
+abstract public class AbstractSession
+implements Session, SessionCtrl {
+	private transient WebApp _wapp;
 	private boolean _invalid;
 
-	protected AbstractSession(WebApp webapp) {
-		if (webapp == null)
+	protected AbstractSession(WebApp wapp) {
+		if (wapp == null)
 			throw new IllegalArgumentException("null");
-		_webapp = webapp;
+		_wapp = wapp;
 	}
 
 	public final WebApp getWebApp() {
-		return _webapp;
+		return _wapp;
 	}
 
 	public final void invalidate() {
@@ -50,5 +51,14 @@ abstract public class AbstractSession implements Session, SessionCtrl {
 
 	/** Default: does nothing. */
 	public void onDestroyed() {
+	}
+
+	/** Derived must invoke this method to assign back {@link WebApp},
+	 * if it implements java.io.Serializable.
+	 */
+	protected void recallStatus(WebApp wapp) {
+		if (wapp == null) throw new IllegalArgumentException("null");
+		//if (_wapp != null) throw new IllegalStateException("recall to existent instance?");
+		_wapp = wapp;
 	}
 }
