@@ -28,7 +28,7 @@ import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Components;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.metainfo.ComponentDefinition;
+import com.potix.zk.ui.sys.ComponentCtrl;
 
 import com.potix.zul.html.impl.XulElement;
 
@@ -90,9 +90,8 @@ public class Label extends XulElement {
 			|| !isRawLabel(p) || isAsapRequired("onClick");
 	}
 	private static boolean isRawLabel(Component comp) {
-		final ComponentDefinition compdef = comp.getDefinition();
-		if (compdef == null) return false;
-		final LanguageDefinition langdef = compdef.getLanguageDefinition();
+		final LanguageDefinition langdef =
+			((ComponentCtrl)comp).getMillieu().getLanguageDefinition();
 		return langdef != null && langdef.isRawLabel();
 	}
 
