@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.net.URL;
+import java.io.Serializable;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
@@ -58,6 +59,8 @@ public class FunctionMappers {
 	/** Retursn the function mapper representing a list of {@link Taglib},
 	 * or null if taglibs is null or empty.
 	 *
+	 * <p>The returned mapper is serializable.
+	 *
 	 * @param loc the locator used to load taglib
 	 */
 	public static final
@@ -77,12 +80,7 @@ public class FunctionMappers {
 			if (!mtds.isEmpty())
 				mappers.put(taglib.getPrefix(), mtds);
 		}
-		return new FunctionMapper() {
-			public Method resolveFunction(String prefix, String name) {
-				final Map mtds = (Map)mappers.get(prefix);
-				return mtds != null ? (Method)mtds.get(name): null;
-			}
-		};
+		return new MyFuncMapper(mappers);
 	}
 
 	/** Loads functions defined in the specified URL.
@@ -147,6 +145,18 @@ public class FunctionMappers {
 		}
 	}
 
+	private static class MyFuncMapper implements FunctionMapper, Serializable {
+		/** Map(String prefix, Map(name, Method)). */
+		private final Map _mappers;
+		private MyFuncMapper(Map mappers) {
+			_mappers = mappers;
+		}
+		//-- FunctionMapper --//
+		public Method resolveFunction(String prefix, String name) {
+			final Map mtds = (Map)_mappers.get(prefix);
+			return mtds != null ? (Method)mtds.get(name): null;
+		}
+	}
 	private static class TaglibLoader extends AbstractLoader {
 		//-- Loader --//
 		public Object load(Object src) throws Exception {
