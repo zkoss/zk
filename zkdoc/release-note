@@ -10,7 +10,12 @@ ZK 2.0.1
   + The namespace of XUL component set is renamed to
 	http://www.potix.com/2005/zul
 	(instead of http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul)
-
+  + Page.getDefinition is removed, so it can be serialized.
+  + Page.recreate is removed, since we don't store PageDefinition in page
+    any more (for serialization).
+  + Component.getDefintion is removed, so it can be serialized.
+  + Component.getInitParam due to overkill
+ 
 	--------
 ZK 2.0.0
 
