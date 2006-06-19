@@ -30,7 +30,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.ext.RawId;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.metainfo.ComponentDefinition;
+import com.potix.zk.ui.sys.ComponentCtrl;
 
 /**
  * Represents a piece of text (of DOM).
@@ -71,9 +71,8 @@ public class Text extends AbstractComponent implements RawId {
 			|| !Components.isAutoId(getId()) || !isRawLabel(p);
 	}
 	private static boolean isRawLabel(Component comp) {
-		final ComponentDefinition compdef = comp.getDefinition();
-		if (compdef == null) return false;
-		final LanguageDefinition langdef = compdef.getLanguageDefinition();
+		final LanguageDefinition langdef =
+			((ComponentCtrl)comp).getMillieu().getLanguageDefinition();
 		return langdef != null && langdef.isRawLabel();
 	}
 
