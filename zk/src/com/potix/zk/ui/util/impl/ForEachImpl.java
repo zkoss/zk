@@ -28,7 +28,6 @@ import com.potix.util.CollectionsX;
 import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Page;
-import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.util.ForEach;
 import com.potix.zk.ui.util.ForEachStatus;
 
@@ -44,7 +43,6 @@ import com.potix.zk.ui.util.ForEachStatus;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class ForEachImpl implements ForEach {
-	private final PageDefinition _pagedef;
 	private final Page _page;
 	private final Component _comp;
 	private final String _expr;
@@ -68,11 +66,10 @@ public class ForEachImpl implements ForEach {
 	 *
 	 * @param expr an EL expression that shall return a collection of objects.
 	 */
-	public static ForEach getInstance(
-	PageDefinition pagedef, Page page, String expr) {
+	public static ForEach getInstance(Page page, String expr) {
 		if (expr == null || expr.length() == 0)
 			return null;
-		return new ForEachImpl(pagedef, page, expr);
+		return new ForEachImpl(page, expr);
 	}
 
 	/** Constructor.
@@ -83,7 +80,6 @@ public class ForEachImpl implements ForEach {
 		if (comp == null)
 			throw new IllegalArgumentException("comp");
 
-		_pagedef = null;
 		_page = null;
 		_comp = comp;
 		_expr = expr;
@@ -92,11 +88,10 @@ public class ForEachImpl implements ForEach {
 	 * In most cases, use {@link #getInstance(Component, String)}
 	 * instead of this constructor.
 	 */
-	public ForEachImpl(PageDefinition pagedef, Page page, String expr) {
+	public ForEachImpl(Page page, String expr) {
 		if (page == null)
 			throw new IllegalArgumentException("page");
 
-		_pagedef = pagedef;
 		_page = page;
 		_comp = null;
 		_expr = expr;
@@ -110,7 +105,7 @@ public class ForEachImpl implements ForEach {
 		if (_status == null) {
 			final Object o = _comp != null ?
 				Executions.evaluate(_comp, _expr, Object.class):
-				Executions.evaluate(_pagedef, _page, _expr, Object.class);
+				Executions.evaluate(_page, _expr, Object.class);
 			if (o == null) {
 				_done = true;
 				return false;

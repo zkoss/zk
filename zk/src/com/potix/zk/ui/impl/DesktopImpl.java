@@ -43,6 +43,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ComponentNotFoundException;
 import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.util.Monitor;
+import com.potix.zk.ui.sys.PageCtrl;
 import com.potix.zk.ui.sys.RequestQueue;
 import com.potix.zk.ui.sys.DesktopCache;
 import com.potix.zk.ui.sys.WebAppCtrl;
@@ -76,7 +77,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, Serializable {
 	/** Map(String id, Page page). */
 	private final Map _pages = new LinkedHashMap(3);
 	/** Map (String uuid, Component comp). */
-	private final Map _comps = new HashMap(41);
+	private transient Map _comps = new HashMap(41);
 	/** A map of attributes. */
 	private final Map _attrs = new HashMap();
 		//don't create it dynamically because PageImp._ip bind it at constructor
@@ -291,19 +292,35 @@ public class DesktopImpl implements Desktop, DesktopCtrl, Serializable {
 	}
 
 	public void sessionWillPassivate(Session sess) {
-		//nothing to do
+		for (Iterator it = _pages.values().iterator(); it.hasNext();)
+			((PageCtrl)it.next()).sessionWillPassivate(this);
 	}
 	public void sessionDidActivate(Session sess) {
 		_sess = sess;
 		_wapp = sess.getWebApp();
+
+		for (Iterator it = _pages.values().iterator(); it.hasNext();)
+			((PageCtrl)it.next()).sessionDidActivate(this);
 	}
 
 	//-- Serializable --//
 	//NOTE: they must be declared as private
 	private synchronized void readObject(ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	throws IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		init();
+
+		//get back _comps from _pages
+		_comps = new HashMap(41);
+		for (Iterator it = _pages.values().iterator(); it.hasNext();)
+			for (Iterator e = ((Page)it.next()).getRoots().iterator();
+			e.hasNext();)
+				addAllComponents((Component)e.next());
+	}
+	private void addAllComponents(Component comp) {
+		addComponent(comp);
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
+			addAllComponents((Component)it.next());
 	}
 }

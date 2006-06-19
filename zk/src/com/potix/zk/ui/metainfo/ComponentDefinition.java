@@ -21,9 +21,6 @@ package com.potix.zk.ui.metainfo;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Collections;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -46,6 +43,7 @@ import com.potix.zk.ui.util.Evaluator;
  */
 public class ComponentDefinition implements Cloneable {
 	private String _name;
+	private Millieu _mill;
 	private LanguageDefinition _langdef;
 	/** Either String or Class. */
 	private Object _cls;
@@ -61,7 +59,8 @@ public class ComponentDefinition implements Cloneable {
 	 * a Java class.
 	 *
 	 * @param langdef the language definition, or null if this is a temporary
-	 * definition doesn't belong to any language.
+	 * definition, such as components defined in a page,
+	 * doesn't belong to any language.
 	 * @param cls the implementation class.
 	 */
 	public ComponentDefinition(LanguageDefinition langdef, String name,
@@ -127,39 +126,28 @@ public class ComponentDefinition implements Cloneable {
 	public String getName() {
 		return _name;
 	}
+
+	/** Returns the millieu representing this definition.
+	 */
+	public Millieu getMillieu() {
+		if (_mill == null) //no need to synchronized since harmless
+			_mill = new Millieu(this);
+		return _mill;
+	}
+
 	/** Returns whether this is a macro component.
 	 * @see #getMacroURI
 	 */
 	public boolean isMacro() {
 		return _macroUri != null;
 	}
-	/** Returns the macro URI, or null if not a macro.
-	 * @see #isMacro
+	/** Returns the macro URI (might be an EL expression),
+	 * or null if not a macro.
 	 */
-	public String getMacroURI(Component comp) {
-		return (String)evaluate(comp, _macroUri, String.class);
+	/*package*/ String getMacroURI() {
+		return _macroUri;
 	}
 
-	/** Resolves and returns the class that implements the component.
-	 *
-	 * <p>Unlike {@link #getImplementationClass}, this method will
-	 * resolve a class name (String) to a class (Class).
-	 *
-	 * @param page the page used to resolve the class name from its
-	 * namespace ({@link Page#getNamespace}).
-	 * @exception UiException if the class not found
-	 */
-	public Class resolveImplementationClass(Page page) throws UiException {
-		if (_cls instanceof String) {
-			final String clsnm = (String)_cls;
-			try {
-				setImplementationClass(page.getClass(clsnm));
-			} catch (ClassNotFoundException ex) {
-				throw new UiException("Class not found: "+clsnm, ex);
-			}
-		}
-		return (Class)_cls;
-	}
 	/** Returns the class (Class) or the class name (String) that
 	 * implements the component.
 	 */
@@ -211,6 +199,16 @@ public class ComponentDefinition implements Cloneable {
 			_molds.put(name, moldUri);
 		}
 	}
+	/** Returns a map of molds, or null if no one is defined.
+	 *
+	 * <p>Note: to access the returned, you have to use synchronized to
+	 * synchronized the returned list (if not null).
+	 * Also, a mold might be an EL expression
+	 */
+	/*package*/ Map getMolds() {
+		return _molds;
+	}
+
 	/** Adds a parameter.
 	 * It is not public because we don't synchronize the access
 	 * (so it is called when booting).
@@ -223,6 +221,15 @@ public class ComponentDefinition implements Cloneable {
 		if (_params == null) _params = new HashMap(5);
 		_params.put(name, value);
 	}
+	/** Returns the list of parameters, or null if not available.
+	 *
+	 * <p>Note: to access the returned, you have to use synchronized to
+	 * synchronized the returned list (if not null).
+	 * Also, a pamater might be an EL expression
+	 */
+	/*package*/ Map getParams() {
+		return _params;
+	}
 
 	/** Adds a property initializer.
 	 * It will initialize a component when created with is definition.
@@ -233,7 +240,7 @@ public class ComponentDefinition implements Cloneable {
 	public void addProperty(String name, String value, Condition cond) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("name");
-		final Property prop = new Property(this, name, value, cond);
+		final Property prop = new Property(name, value, cond);
 		if (_props == null) {
 			synchronized (this) {
 				if (_props == null) {
@@ -248,73 +255,15 @@ public class ComponentDefinition implements Cloneable {
 			_props.add(prop);
 		}
 	}
-	/** Applies the property initializers to the component when the component
-	 * is constructed.
+	/** Returns the list of properties, or null if no properties at all.
 	 *
-	 * <p>It uses {@link #getLanguageDefinition}, if not null, to evaluate
-	 * the EL expressions.
+	 * <p>Note: to access the returned, you have to use synchronized to
+	 * synchronized the returned list (if not null).
 	 */
-	public void applyProperties(Component comp) {
-		applyProperties(comp, _langdef);
-	}
-	/** Applies the property initializers to the component by use of
-	 * the specified evaluator.
-	 *
-	 * @param eval the evaluator to evaluate the property value.
-	 * If null, Executions.getCurrent() is assumed.
-	 */
-	public void applyProperties(Component comp, Evaluator eval) {
-		if (_props == null) return;
-		if (eval == null) eval = Executions.getCurrent();
-
-		//apply members
-		synchronized (_props) {
-			for (Iterator it = _props.iterator(); it.hasNext();) {
-				final Property prop = (Property)it.next();
-				prop.assign(comp, eval);
-			}
-		}
-	}
-
-	/** Returns whether the specified mold exists.
-	 */
-	public boolean hasMold(String name) {
-		return _molds != null && _molds.containsKey(name);
-	}
-	/** Returns a collection of mold names supported by this definition.
-	 */
-	public Set getMoldNames() {
-		return _molds != null ? _molds.keySet(): Collections.EMPTY_SET;
-	}
-	/** Returns the URI of the mold, or null if no such mold available.
-	 * If mold contains an expression, it will be evaluated first
-	 * before returning.
-	 *
-	 * @param name the mold
-	 */
-	public String getMoldURI(Component comp, String name) {
-		if (_molds == null)
-			throw new IllegalStateException("No mold is defined for "+this);
-		return (String)evaluate(comp, (String)_molds.get(name), String.class);
-	}
-	/** Returns the value of the specified parameter.
-	 * If the parameter contains an expression, it will be evaluated first
-	 * before returning.
-	 */
-	public Object getParameter(Component comp, String name) {
-		return _params != null ?
-			evaluate(comp, (String)_params.get(name), Object.class):
-			null;
-	}
-
-	/** Evluates the specified expression.
-	 * Note: if {@link #getLanguageDefinition} is not return,
-	 * {@link LanguageDefinition#evaluate} is used because it is defined
-	 * in the scope of a language.
-	 */
-	private Object evaluate(Component comp, String expr, Class expectedType) {
-		return _langdef != null ? _langdef.evaluate(comp, expr, expectedType):
-			Executions.evaluate(comp, expr, expectedType);
+	/*package*/ final List getProperties() {
+	//Note: we don't allow InstanceDefinition to override it!!
+	//Reason: there are two set of properties and it's Millieu's job to handle
+		return _props;
 	}
 
 	/** Clones this definition and assins with the specified name.

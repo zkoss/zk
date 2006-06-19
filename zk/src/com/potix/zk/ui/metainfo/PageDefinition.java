@@ -124,9 +124,9 @@ public class PageDefinition extends InstanceDefinition {
 		for (Iterator it = _initdefs.iterator(); it.hasNext();) {
 			final InitiatorDefinition def = (InitiatorDefinition)it.next();
 			try {
-				final Initiator init = def.newInitiator(this, page);
+				final Initiator init = def.newInitiator(page);
 				if (init != null) {
-					init.doInit(page, def.getArguments(this, page));
+					init.doInit(page, def.getArguments(page));
 					inits.add(init);
 				}
 			} catch (Throwable ex) {
@@ -142,24 +142,25 @@ public class PageDefinition extends InstanceDefinition {
 			_resolvdefs.add(resolver);
 		}
 	}
-	/** Adds all variable resolvers to the specified page.
+	/** Retrieves a list of variable resolvers defined for this page
+	 * definition.
 	 */
-	public void addVariableResolvers(Page page) {
+	public List newVariableResolvers(Page page) {
 		if (_resolvdefs == null || _resolvdefs.isEmpty())
-			return;
+			return Collections.EMPTY_LIST;
 
+		final List resolvs = new LinkedList();
 		for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
 			final VariableResolverDefinition def =
 				(VariableResolverDefinition)it.next();
 			try {
-				final VariableResolver resolv =
-					def.newVariableResolver(this, page);
-				if (resolv != null)
-					page.addVariableResolver(resolv);
+				final VariableResolver resolv = def.newVariableResolver(page);
+				if (resolv != null) resolvs.add(resolv);
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
+		return resolvs;
 	}
 
 	/** Adds a component definition belonging to this page definition only.
@@ -259,21 +260,22 @@ public class PageDefinition extends InstanceDefinition {
 
 	//-- super --//
 	public void addCustomAttributes(CustomAttributes custAttrs) {
-		throw new UnsupportedOperationException("No custom attributes supported by page definition");
+		throw new UnsupportedOperationException();
 	}
 	public void addProperty(String name, String value, Condition cond) {
-		throw new UnsupportedOperationException("No property initialization allowed");
-	}
-	public void applyProperties(Component comp) {
+		throw new UnsupportedOperationException();
 	}
 	public void addEventHandler(String name, String script) {
-		throw new UnsupportedOperationException("No event handler allowed");
+		throw new UnsupportedOperationException();
 	}
-	public Component newInstance() {
-		throw new UnsupportedOperationException("You create component from page definition");
+	public Component newInstance(Page page) {
+		throw new UnsupportedOperationException();
 	}
 	public String getMoldURI(String name) {
-		return null;
+		throw new UnsupportedOperationException();
+	}
+	public Millieu getMillieu() {
+		throw new UnsupportedOperationException();
 	}
 
 	//Object//

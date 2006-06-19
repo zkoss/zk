@@ -89,32 +89,24 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public Desktop getDesktop() {
 		return _desktop;
 	}
-	public Object evaluate(Component comp, String expr,
-	Class expectedType) {
-		PageDefinition pagedef = null;
-		final ComponentDefinition compdef = comp.getDefinition();
-		if (compdef instanceof InstanceDefinition)
-			pagedef = ((InstanceDefinition)compdef).getPageDefinition();
-		return evaluate0(pagedef, comp, expr, expectedType);
+	public Object evaluate(Component comp, String expr, Class expectedType) {
+		return evaluate0(comp, expr, expectedType,
+			comp != null ? comp.getPage(): null);
 	}
-	public Object evaluate(PageDefinition pagedef, Page page, String expr,
-	Class expectedType) {
-		return evaluate0(
-			pagedef != null ? pagedef: page != null ? page.getDefinition(): null,
-			page, expr, expectedType);
+	public Object evaluate(Page page, String expr, Class expectedType) {
+		return evaluate0(page, expr, expectedType, page);
 	}
-	private Object evaluate0(PageDefinition pagedef, Object self, String expr,
-	Class expectedType) {
+	private Object evaluate0(Object self, String expr,
+	Class expectedType, Page page) {
 		if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0)
 			return expr;
 
-		if (pagedef == null && _curpage != null)
-			pagedef = _curpage.getDefinition();
 		try {
+			if (page == null) page = _curpage;
 			_exresolv.setSelf(self);
 			return getELContext().getExpressionEvaluator().evaluate(
 				expr, expectedType, _exresolv,
-				pagedef != null ? pagedef.getFunctionMapper(): null);
+				page != null ? page.getFunctionMapper(): null);
 		} catch (ELException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -142,9 +134,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			throw new IllegalStateException("Change current page to another desktop? "+curpage);
 		_curpage = curpage;
 	}
-	public PageDefinition getCurrentPageDefinition(boolean fallback) {
-		return !fallback || _curpgdef != null ? _curpgdef:
-			_curpage != null ? _curpage.getDefinition(): null;
+	public PageDefinition getCurrentPageDefinition() {
+		return _curpgdef;
 	}
 	public void setCurrentPageDefinition(PageDefinition pgdef) {
 		_curpgdef = pgdef;

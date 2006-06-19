@@ -86,17 +86,17 @@ public class VariableResolverDefinition {
 		_resolver = resolver;
 	}
 
-	/** Creaetes and returns the initiator.
+	/** Creaetes and returns the variable resolver for the specified page.
 	 */
-	public VariableResolver newVariableResolver(PageDefinition pagedef,
-	Page page) throws Exception {
+	public VariableResolver newVariableResolver(Page page)
+	throws Exception {
 		if (_resolver instanceof VariableResolver)
 			return (VariableResolver)_resolver;
 
 		final Class cls;
 		if (_resolver instanceof String) {
 			final String clsnm = (String)Executions.evaluate(
-				pagedef, page, (String)_resolver, String.class);
+				page, (String)_resolver, String.class);
 			if (clsnm == null || clsnm.length() == 0) {
 				if (log.debugable()) log.debug("Ingore "+_resolver+" due to empty");
 				return null; //ignore it!!

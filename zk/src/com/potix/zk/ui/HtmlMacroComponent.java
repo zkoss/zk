@@ -44,7 +44,7 @@ implements PostCreate, IdSpace, DynamicPropertied {
 	//-- PostCreate --//
 	public void postCreate() {
 		getDesktop().getExecution().createComponents(
-			getDefinition().getMacroURI(this), this, _attrs);
+			getMillieu().getMacroURI(this), this, _attrs);
 	}
 
 	//-- DynamicPropertied --//

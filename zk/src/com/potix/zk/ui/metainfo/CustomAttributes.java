@@ -30,12 +30,13 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Condition;
 
 /**
- * Represents a map of custom attributes to set.
+ * Represents a map of custom attributes of an instance definition
+ * ({@link InstanceDefinition}).
  * It is equivalent to the custom-attributes element.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class CustomAttributes implements Condition {
+public class CustomAttributes implements Condition, java.io.Serializable {
 	private final Map _attrs;
 	private final Condition _cond;
 	private final int _scope;
@@ -70,8 +71,8 @@ public class CustomAttributes implements Condition {
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(comp);
 	}
-	public boolean isEffective(PageDefinition pagedef, Page page) {
-		return _cond == null || _cond.isEffective(pagedef, page);
+	public boolean isEffective(Page page) {
+		return _cond == null || _cond.isEffective(page);
 	}
 
 	//Object//

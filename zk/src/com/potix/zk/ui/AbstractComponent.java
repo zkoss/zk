@@ -27,6 +27,9 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Writer;
+import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import java.io.IOException;
 
 import com.potix.lang.D;
@@ -52,6 +55,7 @@ import com.potix.zk.ui.sys.UiEngine;
 import com.potix.zk.ui.sys.Variables;
 import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.impl.bsh.BshNamespace;
+import com.potix.zk.ui.metainfo.Millieu;
 import com.potix.zk.ui.metainfo.ComponentDefinition;
 import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
@@ -66,7 +70,8 @@ import com.potix.zk.au.AuRemove;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class AbstractComponent implements Component, ComponentCtrl {
+public class AbstractComponent
+implements Component, ComponentCtrl, Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
 	private static int _globalId;
 	private static synchronized int getNextGlobalId() {
@@ -75,22 +80,15 @@ public class AbstractComponent implements Component, ComponentCtrl {
 
 	/* Note: if _page != null, then _desktop != null. */
 	private transient Desktop _desktop;
-	private /*final*/ Page _page;
+	private transient Page _page;
 	private String _id;
 	private String _uuid;
-	private transient ComponentDefinition _compdef;
-	private Component _parent;
+	private Millieu _mill;
+	private transient Component _parent;
 	/** The mold (default: "default"). */
 	private String _mold = "default";
 	private final List _children = new LinkedList();
-	private final List _modChildren = new AbstractSequentialList() {
-		public int size() {
-			return _children.size();
-		}
-		public ListIterator listIterator(int index) {
-			return new ChildIter(index);
-		}
-	};
+	private transient List _modChildren;
 	/** The info of the ID space, or null if IdSpace is NOT implemented. */
 	private final SpaceInfo _spaceInfo;
 	private final Map _attrs = new HashMap(3);
@@ -113,6 +111,17 @@ public class AbstractComponent implements Component, ComponentCtrl {
 	 */
 	protected AbstractComponent() {
 		final Execution exec = Executions.getCurrent();
+
+		_mill = Millieu.getCurrent();
+		if (_mill != null) Millieu.setCurrent(null); //to avoid mis-use
+		else {
+			final ComponentDefinition compdef = getDefinition(exec, getClass());
+			if (compdef != null) _mill = compdef.getMillieu();
+			else _mill = Millieu.DUMMY;
+		}
+
+		init();
+
 		final StringBuffer idsb = new StringBuffer(10)
 			.append(ComponentsCtrl.AUTO_ID_PREFIX);
 		if (exec != null) {
@@ -125,33 +134,27 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		_uuid = _id = idsb.toString();
 
 		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(this, _uuid): null;
-		_compdef = getDefinitionFromCurrentPage(getClass());
-			//we have to init it here because getCurrentPageDefinition
-			//might changed later
 
 		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
 	private static final
-	ComponentDefinition getDefinitionFromCurrentPage(Class cls) {
-		final ExecutionCtrl execCtrl = ExecutionsCtrl.getCurrentCtrl();
-		if (execCtrl == null)
-			return null;
+	ComponentDefinition getDefinition(Execution exec, Class cls) {
+		if (exec != null) {
+			final PageDefinition pgdef =
+				((ExecutionCtrl)exec).getCurrentPageDefinition();
+			if (pgdef != null) {
+				ComponentDefinition compdef = pgdef.getComponentDefinition(cls);
+				if (compdef != null) return compdef;
 
-		final PageDefinition pgdef = execCtrl.getCurrentPageDefinition(true);
-		if (pgdef != null) {
-			ComponentDefinition compdef = pgdef.getComponentDefinition(cls);
-			if (compdef != null) return compdef;
-
-			final LanguageDefinition langdef = pgdef.getLanguageDefinition();
-			if (langdef != null)
-				try {
-					return langdef.getComponentDefinition(cls);
-				} catch (DefinitionNotFoundException ex) {
-				}
+				final LanguageDefinition langdef = pgdef.getLanguageDefinition();
+				if (langdef != null)
+					try {
+						return langdef.getComponentDefinition(cls);
+					} catch (DefinitionNotFoundException ex) {
+					}
+			}
 		}
-		return null;
-	}
-	private static final ComponentDefinition getDefinitionFromAll(Class cls) {
+
 		for (Iterator it = LanguageDefinition.getAll().iterator();
 		it.hasNext();) {
 			try {
@@ -161,6 +164,17 @@ public class AbstractComponent implements Component, ComponentCtrl {
 			}
 		}
 		return null;
+	}
+	/** Initialize for contructor and serialization. */
+	private void init() {
+		_modChildren = new AbstractSequentialList() {
+			public int size() {
+				return _children.size();
+			}
+			public ListIterator listIterator(int index) {
+				return new ChildIter(index);
+			}
+		};
 	}
 
 	/** Adds to the ID spaces, if any, when ID is changed.
@@ -311,18 +325,20 @@ public class AbstractComponent implements Component, ComponentCtrl {
 
 	//-- Extra utlities --//
 	/** Returns the mold URI based on {@link #getMold}
-	 * and {@link ComponentDefinition#getMoldURI}.
+	 * and the molds defined in the component definition
+	 * ({@link ComponentDefinition}).
 	 */
 	protected String getMoldURI() {
-		return getDefinition().getMoldURI(this, getMold());
+		return _mill.getMoldURI(this, getMold());
 	}
 	/** Returns the initial parameter in int, or 0 if not found.
-	 * In fact, it invokes {@link ComponentDefinition#getParameter},
-	 * which evaluates the returned object if it is an EL expression.
+	 * An initial parameter is a parameter defined with the
+	 * component's definition {@link ComponentDefinition}.
+	 * <p>It evaluates before returning, if it is an EL expression.
 	 */
 	protected int getIntInitParam(String name) {
 		final Integer v;
-		final Object o = getDefinition().getParameter(this, name);
+		final Object o = _mill.getParameter(this, name);
 		if (o instanceof Integer) {
 			v = (Integer)o;
 		} else if (o != null) {
@@ -333,11 +349,12 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		return v.intValue();
 	}
 	/** Returns the initial parameter, or null if not found.
-	 * In fact, it invokes {@link ComponentDefinition#getParameter},
-	 * which evaluates the returned object if it is an EL expression.
+	 * An initial parameter is a parameter defined with the
+	 * component's definition {@link ComponentDefinition}.
+	 * <p>It evaluates before returning, if it is an EL expression.
 	 */
 	protected String getInitParam(String name) {
-		return Objects.toString(getDefinition().getParameter(this, name));
+		return Objects.toString(_mill.getParameter(this, name));
 	}
 	/** Returns URI that {@link com.potix.zk.au.http.DHtmlUpdateServlet}
 	 * understands. Then, when DHtmlUpdateServlet serves the URI, it will
@@ -510,11 +527,6 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		return idspace.getFellow(compId);
 	}
 
-	public void applyProperties() {
-		final ComponentDefinition compdef = getDefinition();
-		if (compdef != null) compdef.applyProperties(this);
-	}
-
 	public Map getAttributes(int scope) {
 		switch (scope) {
 		case SPACE_SCOPE:
@@ -594,9 +606,6 @@ public class AbstractComponent implements Component, ComponentCtrl {
 
 		final boolean idSpaceChanged;
 		if (parent != null) {
-			if (!(parent instanceof ComponentCtrl))
-				throw new UnsupportedOperationException("Unknown parent: "+parent);
-				//We don't support other type of parent yet
 			if (Components.isAncestor(this, parent))
 				throw new UiException("A child cannot be a parent of its ancestor: "+this);
 			if (!parent.isChildable())
@@ -816,18 +825,12 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		if (mold == null || mold.length() == 0)
 			mold = "default";
 		if (!Objects.equals(_mold, mold)) {
-			if (!getDefinition().hasMold(mold))
+			if (!_mill.hasMold(mold))
 				throw new UiException("Unknown mold: "+mold
-					+", while allowed include "+getDefinition().getMoldNames());
+					+", while allowed include "+_mill.getMoldNames());
 			_mold = mold;
 			invalidate(OUTER);
 		}
-	}
-
-	public ComponentDefinition getDefinition() {
-		if (_compdef == null)
-			_compdef = getDefinitionFromAll(getClass());
-		return _compdef;
 	}
 
 	//-- in the redrawing phase --//
@@ -930,10 +933,22 @@ public class AbstractComponent implements Component, ComponentCtrl {
 		return CollectionsX.EMPTY_ITERATOR;
 	}
 
+	public void applyProperties() {
+		_mill.applyProperties(this);
+	}
+
 	//-- ComponentCtrl --//
-	public void setDefinition(ComponentDefinition compdef) {
-		if (compdef == null) throw new IllegalArgumentException("null");
-		_compdef = compdef;
+	public Millieu getMillieu() {
+		return _mill;
+	}
+	public void sessionWillPassivate(Page page) {
+		//nothing to do
+	}
+	public void sessionDidActivate(Page page) {
+		_page = page;
+		_desktop = page.getDesktop();
+		for (Iterator it = getChildren().iterator(); it.hasNext();)
+			((AbstractComponent)it.next()).sessionDidActivate(page); //recursive
 	}
 
 	//-- Object --//
@@ -947,7 +962,7 @@ public class AbstractComponent implements Component, ComponentCtrl {
 	}
 
 	/** Holds info shared of the same ID space. */
-	private static class SpaceInfo {
+	private static class SpaceInfo implements Serializable {
 		private final Map attrs = new HashMap(7);
 			//don't create it dynamically because _ip bind it at constructor
 		private final Namespace ns;
@@ -1031,5 +1046,20 @@ public class AbstractComponent implements Component, ComponentCtrl {
 				//Possible to implement this but confusing to developers
 				//if o has the same parent (since we have to move)
 		}
+	}
+
+	//Serializable//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws IOException {
+		s.defaultWriteObject();
+	}
+	private synchronized void readObject(ObjectInputStream s)
+	throws IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		init();
+
+		//TODO: restore children's parent
 	}
 }

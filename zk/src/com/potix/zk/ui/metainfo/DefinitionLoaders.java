@@ -235,6 +235,7 @@ public class DefinitionLoaders {
 				if (clsnm != null && clsnm.length() > 0) {
 					noEL("component-class", clsnm, el);
 					compdef.setImplementationClass(locateClass(clsnm));
+						//resolve it now because it is part of lang-addon
 				}
 
 				langdef.initMacroDefinition(compdef);

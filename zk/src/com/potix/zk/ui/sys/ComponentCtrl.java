@@ -18,19 +18,28 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.sys;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.metainfo.ComponentDefinition;
+import com.potix.zk.ui.Page;
+import com.potix.zk.ui.metainfo.Millieu;
 
 /**
- * An addition interface to {@link Component} that is used for
- * implementation.
+ * An addition interface to {@link com.potix.zk.ui.Component}
+ * that is used for implementation.
  *
  * <p>Application developers shall never access any of this methods.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface ComponentCtrl {
-	/** Sets the component definition.
+	/** Returns the millieu of this component (never null).
 	 */
-	public void setDefinition(ComponentDefinition compdef);
+	public Millieu getMillieu();
+
+	/** Notification that the session, which owns this component,
+	 * is about to be passivated (aka., serialized).
+	 */
+	public void sessionWillPassivate(Page page);
+	/** Notification that the session, which owns this component,
+	 * has just been activated (aka., deserialized).
+	 */
+	public void sessionDidActivate(Page page);
 }

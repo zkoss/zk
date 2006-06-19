@@ -21,14 +21,18 @@ package com.potix.zk.ui;
 import java.util.Map;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
+import javax.servlet.jsp.el.FunctionMapper;
+
+import com.potix.web.servlet.StyleSheet;
 import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.util.VariableResolver;
 import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.metainfo.PageDefinition;
 
 /**
- * A runtime instance of {@link PageDefinition}.
+ * A page. A desktop consists of a set of pages.
 
  * <p>When a ZK request is asking to render a new page, a new page is
  * created and components that are created duing this request all belong to
@@ -83,12 +87,6 @@ import com.potix.zk.ui.metainfo.PageDefinition;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface Page extends IdSpace {
-	//-- proxy to Desktop --//
-	/** Returns the definition, or null if this page is not associated with
-	 * any {@link PageDefinition}.
-	 */
-	public PageDefinition getDefinition();
-
 	/** Returns ID which is unique in the request (never null).
 	 *
 	 * <p>Note: it returns null when
@@ -261,20 +259,10 @@ public interface Page extends IdSpace {
 
 	//-- special control --//
 	/** Removes all components in this page.
-	 * @see #recreate
+	 *
 	 * @see Execution#createComponents(String,Component,Map)
 	 */
 	public void removeComponents();
-	/** Recreates the current page by removing all components first
-	 * (thru {@link #removeComponents}) and then invoke
-	 * {@link Execution#createComponents(PageDefinition, Component, Map)} with null.
-	 * @param params a map of parameters that is accessible by the arg variable
-	 * in EL, or by {@link Execution#getArg}.
-	 * Ignored if null.
-	 * @return the first component being created.
-	 * @see Execution#createComponents(String,Component,Map)
-	 */
-	public Component recreate(Map params);
 
 	/** Invalidates this page to cause all components to redraw.
 	 */
@@ -300,4 +288,26 @@ public interface Page extends IdSpace {
 	 * @param ns the namspace. If null, the page's namespace is assumed.
 	 */
 	public void interpret(String script, Namespace ns);
+
+	//metainfo//
+	/** Returns the function mapper for resolving EL functions, or null if
+	 * not available.
+	 */
+	public FunctionMapper getFunctionMapper();
+	/** Returns the readonly list of stylesheets
+	 *({@link StyleSheet}) belonging to this page.
+	 */
+	public List getStyleSheets();
+
+	/** Adds the function mapper in addition to the current one.
+	 *
+	 * <p>The new added function mapper has the higher priority.
+	 * {@link #getFunctionMapper} will return the new
+	 *
+	 * @param funmap the new function mapper (null to ignore).
+	 */
+	public void addFunctionMapper(FunctionMapper funmap);
+	/** Adds the specified style sheet ({@link StyleSheet}).
+	 */
+	public void addStyleSheet(StyleSheet ss);
 }

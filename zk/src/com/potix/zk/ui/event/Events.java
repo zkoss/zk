@@ -26,8 +26,7 @@ import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.metainfo.ComponentDefinition;
-import com.potix.zk.ui.metainfo.InstanceDefinition;
+import com.potix.zk.ui.sys.ComponentCtrl;
 import com.potix.zk.ui.sys.ExecutionsCtrl;
 import com.potix.zk.ui.impl.EventProcessingThread;
 import com.potix.zk.au.AuRequest;
@@ -64,13 +63,10 @@ public class Events {
 	 */
 	public static
 	boolean isListenerAvailable(Component comp, String evtnm, boolean asap) {
-		final ComponentDefinition compdef = comp.getDefinition();
-		if (compdef instanceof InstanceDefinition) {
-			final String script =
-				((InstanceDefinition)compdef).getEventHandler(comp, evtnm);
-			if (script != null)
-				return true;
-		}
+		final String script =
+			((ComponentCtrl)comp).getMillieu().getEventHandler(comp, evtnm);
+		if (script != null)
+			return true;
 
 		if (ExecutionsCtrl.getEventMethod(comp.getClass(), evtnm) != null
 		|| comp.isListenerAvailable(evtnm, asap))

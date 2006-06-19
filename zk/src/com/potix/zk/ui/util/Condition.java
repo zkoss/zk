@@ -20,7 +20,6 @@ package com.potix.zk.ui.util;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Page;
-import com.potix.zk.ui.metainfo.PageDefinition;
 
 /**
  * A condition to test with. It could be used in any situation, but
@@ -31,17 +30,14 @@ import com.potix.zk.ui.metainfo.PageDefinition;
 public interface Condition {
 	/** Used to evaluate whether it is effective.
 	 *
-	 * @param comp used as the self variable and to retrieve the page definition.
-	 * Ignored if null.
+	 * @param comp used as the self variable and to retrieve the
+	 * function mapper. Ignored if null.
 	 */
 	public boolean isEffective(Component comp);
 	/** Used to evaluate whether it is effective.
 	 *
-	 * @param page used as the self variable and to retrieve the page definition
-	 * if pagedef is not defined. Ignored if null.
-	 * @param pagedef the page definition used to retrieve the function mapper.
-	 * If null and page is not null, page's definition is used.
-	 * If both null, the current page's definition is used.
+	 * @param page used as the self variable and to retrieve the function
+	 * mapper.
 	 */
-	public boolean isEffective(PageDefinition pagedef, Page page);
+	public boolean isEffective(Page page);
 }

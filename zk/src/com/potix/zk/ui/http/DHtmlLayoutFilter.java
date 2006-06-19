@@ -93,7 +93,8 @@ public class DHtmlLayoutFilter extends GenericFilter {
 			final Page page = uf.newPage(ri, pagedef, null);
 			final Execution exec =
 				new ExecutionImpl(ctx, request, response, desktop, page);
-			wappc.getUiEngine().execNewPage(exec, page, response.getWriter());
+			wappc.getUiEngine()
+				.execNewPage(exec, pagedef, page, response.getWriter());
 		} finally {
 			SessionsCtrl.setCurrent(null);
 		}

@@ -19,6 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package com.potix.zk.ui.metainfo;
 
 import java.lang.reflect.Method;
+import java.io.Serializable;
 
 import com.potix.lang.Classes;
 import com.potix.lang.Exceptions;
@@ -26,7 +27,6 @@ import com.potix.util.logging.Log;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Condition;
 import com.potix.zk.ui.util.Evaluator;
@@ -37,40 +37,38 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Property implements Condition {
+public class Property implements Condition, Serializable {
 	private static final Log log = Log.lookup(Property.class);
 
-	private final ComponentDefinition _compdef;
 	private final String _name;
 	private final String _value;
 	private final Condition _cond;
 	/** Used to optimize {@link #resolve}. */
-	private Class _lastcls;
+	private transient Class _lastcls;
 	/** Value after coerced; used only if !_bExpr */
-	private Object _coercedVal;
+	private transient Object _coercedVal;
 	/** The method, or null if more than two methods are found
 	 * (and use {@link #_mtds} in this case).
 	 */
-	private Method _mtd;
+	private transient Method _mtd;
 	/** Used more than two methods are found, or null if only one method
 	 * (and use {@link #_mtd} in this case).
 	 */
-	private Method[] _mtds;
+	private transient Method[] _mtds;
 	/** Whether expression is specified. */
 	private final boolean _bExpr;
 
 	/** Constructs a property with a class that is known in advance.
 	 */
-	public Property(ComponentDefinition compdef, String name,
-	String value, Condition cond) {
-		if (compdef == null || name == null)
+	public Property(String name, String value, Condition cond) {
+		if (name == null)
 			throw new IllegalArgumentException();
-		_compdef = compdef;
 		_name = name;
 		_cond = cond;
 		_value = value;
 		_bExpr = value != null && value.indexOf("${") >= 0;
 	}
+
 	private final void resolve(Class cls) {
 		final String mtdnm = Classes.toMethodName(_name, "set");
 		if (_bExpr) {
@@ -107,9 +105,8 @@ public class Property implements Condition {
 
 	/** Assigns the value of this memeber to the specified component.
 	 */
-	public void assign(Component comp, Evaluator eval) {
-		final Class cls =
-			_compdef.resolveImplementationClass(comp.getPage());
+	public void assign(Millieu mill, Component comp, Evaluator eval) {
+		final Class cls = mill.resolveImplementationClass(comp.getPage());
 		if (_lastcls != cls) {
 			resolve(cls);
 			_lastcls = cls;
@@ -162,8 +159,8 @@ public class Property implements Condition {
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(comp);
 	}
-	public boolean isEffective(PageDefinition pagedef, Page page) {
-		return _cond == null || _cond.isEffective(pagedef, page);
+	public boolean isEffective(Page page) {
+		return _cond == null || _cond.isEffective(page);
 	}
 	public String toString() {
 		return "["+_name+"="+_value+']';

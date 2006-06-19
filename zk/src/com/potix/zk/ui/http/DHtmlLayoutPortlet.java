@@ -147,7 +147,8 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 				RenderHttpServletRequest.getInstance(request),
 				RenderHttpServletResponse.getInstance(response),
 				desktop, page);
-		wappc.getUiEngine().execNewPage(exec, page, response.getWriter());
+		wappc.getUiEngine()
+			.execNewPage(exec, pagedef, page, response.getWriter());
 	}
 
 	/** Returns the desktop of the specified request.

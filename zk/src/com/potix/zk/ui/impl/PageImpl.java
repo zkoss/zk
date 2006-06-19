@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.impl;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
@@ -30,7 +31,12 @@ import java.util.HashSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.io.Writer;
+import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import java.io.IOException;
+
+import javax.servlet.jsp.el.FunctionMapper;
 
 import com.potix.lang.D;
 import com.potix.lang.Objects;
@@ -39,6 +45,7 @@ import com.potix.lang.Exceptions;
 import com.potix.lang.Expectable;
 import com.potix.util.CollectionsX;
 import com.potix.util.logging.Log;
+import com.potix.web.servlet.StyleSheet;
 
 import com.potix.zk.mesg.MZk;
 import com.potix.zk.ui.Desktop;
@@ -60,6 +67,7 @@ import com.potix.zk.ui.sys.ExecutionCtrl;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.ui.sys.PageCtrl;
+import com.potix.zk.ui.sys.ComponentCtrl;
 import com.potix.zk.ui.sys.ComponentsCtrl;
 import com.potix.zk.ui.sys.Variables;
 import com.potix.zk.ui.sys.UiEngine;
@@ -67,10 +75,16 @@ import com.potix.zk.ui.impl.bsh.BshInterpreter;
 import com.potix.zk.au.AuSetTitle;
 
 /**
- * A runtime instance of {@link PageDefinition}.
-
- * <p>An implmentation of {@link Page} and {@link PageCtrl}.
+ * An implmentation of {@link Page} and {@link PageCtrl}.
  * Refer to them for more details.
+ *
+ * <p>Note: though {@link DesktopImpl} is serializable but it is designed
+ * to work with Web container's session serialization.
+ * It is not suggested to serialize and desrialize it directly since
+ * many fields might be lost.
+ *
+ * <p>On the other hand, it is OK to serialize and deserialize
+ * {@link Component}.
  *
  * <p>Implementation Notes:<br>
  * It is not thread-safe because it is protected by the spec:
@@ -78,29 +92,32 @@ import com.potix.zk.au.AuSetTitle;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class PageImpl implements Page, PageCtrl {
+public class PageImpl implements Page, PageCtrl, Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);
 	private static final Log _zklog = Log.lookup("com.potix.zk.log");
 
-	private final PageDefinition _pagedef;
+	/** URI for redrawing as a desktop or part of another desktop. */
+	private final String _dkUri, _pgUri;
 	/** The component that includes this page, or null if not included. */
-	private Component _owner;
-	private Desktop _desktop;
+	private transient Component _owner;
+	private transient Desktop _desktop;
 	private String _id;
-	private final Interpreter _ip;
+	private transient Interpreter _ip;
 	private String _title = "", _style = "";
 	/** A list of root components. */
-	private final List _roots = new LinkedList(),
-		_roRoots = Collections.unmodifiableList(_roots);
+	private final List _roots = new LinkedList();
+	private transient List _roRoots;
 	/** A map of fellows. */
-	private final Map _fellows = new HashMap();
+	private transient Map _fellows = new HashMap();
 	/** A map of attributes. */
-	private final Map _attrs = new HashMap();
+	private transient Map _attrs = new HashMap();
 		//don't create it dynamically because _ip bind it at constructor
 	/** A map of event listener: Map(evtnm, List(EventListener)). */
-	private Map _listeners;
+	private transient Map _listeners;
 	/** The default parent. */
-	private Component _defparent;
+	private transient Component _defparent;
+	private FunctionMapper _funmap;
+	private List _stylesheets;
 
 	/** Constructs a page.
 	 *
@@ -112,14 +129,24 @@ public class PageImpl implements Page, PageCtrl {
 	 *
 	 * <p>Also note that {@link #getId} and {@link #getTitle}
 	 * are not ready until {@link #init} is called.
-	 *
-	 * @param pagedef the page definition. If null, it means it doesn't
-	 * associated with any page definition.
 	 */
-	public PageImpl(PageDefinition pagedef) {
-		_pagedef = pagedef;
+	public PageImpl(PageDefinition pgdef) {
+		_funmap = pgdef.getFunctionMapper();
 
+		final List ss = pgdef.getStyleSheets();
+		_stylesheets = ss != null ? ss: Collections.EMPTY_LIST;
+
+		final LanguageDefinition langdef = pgdef.getLanguageDefinition();
+		_dkUri = langdef.getDesktopURI();
+		_pgUri = langdef.getPageURI();
+
+		init();
+	}
+	/** Initialized the page when contructed or deserialized.
+	 */
+	protected void init() {
 		_ip = new BshInterpreter();
+		_roRoots = Collections.unmodifiableList(_roots);
 	}
 
 	/** Returns the UI engine.
@@ -133,9 +160,27 @@ public class PageImpl implements Page, PageCtrl {
 		return _desktop != null ? _desktop.getExecution():
 			Executions.getCurrent();
 	}
-	public final PageDefinition getDefinition() {
-		return _pagedef;
+	public final FunctionMapper getFunctionMapper() {
+		return _funmap;
 	}
+	public final List getStyleSheets() {
+		return _stylesheets;
+	}
+	public void addFunctionMapper(FunctionMapper funmap) {
+		if (funmap != null)
+			if (_funmap != null)
+				_funmap = new DualFuncMapper(funmap, _funmap);
+			else
+				_funmap = funmap;
+	}
+	public void addStyleSheet(StyleSheet ss) {
+		if (ss != null) {
+			if (!(_stylesheets instanceof LinkedList))
+				_stylesheets = new LinkedList(_stylesheets);
+			_stylesheets.add(ss);
+		}
+	}
+
 	public final String getId() {
 		return _id;
 	}
@@ -154,15 +199,15 @@ public class PageImpl implements Page, PageCtrl {
 	}
 	private void evalTitle() {
 		if (_title.length() > 0) {
-			_title = (String)getExecution()
-				.evaluate(_pagedef, this, _title, String.class);
+			_title = (String)
+				getExecution().evaluate(this, _title, String.class);
 			if (_title == null) _title = "";
 		}
 	}
 	private void evalStyle() {
 		if (_style.length() > 0) {
-			_style = (String)getExecution()
-				.evaluate(_pagedef, this, _style, String.class);
+			_style = (String)
+				getExecution().evaluate(this, _style, String.class);
 			if (_style == null) _style = "";
 		}
 	}
@@ -228,12 +273,6 @@ public class PageImpl implements Page, PageCtrl {
 		for (Iterator it = new ArrayList(getRoots()).iterator();
 		it.hasNext();)
 			((Component)it.next()).detach();
-	}
-	public Component recreate(Map params) {
-		invalidate();
-		removeComponents();
-		return getUiEngine().createComponents(
-			getExecution(), (PageDefinition)null, this, null, params);
 	}
 
 	public void setVariable(String name, Object val) {
@@ -334,8 +373,7 @@ public class PageImpl implements Page, PageCtrl {
 
 		final DesktopCtrl dtctrl = (DesktopCtrl)_desktop;
 		if (_id != null)
-			_id = (String)getExecution()
-				.evaluate(_pagedef, this, _id, String.class);
+			_id = (String)getExecution().evaluate(this, _id, String.class);
 		if (_id == null || _id.length() == 0)
 			_id = Strings.encode(new StringBuffer(12).append("_pp"),
 				dtctrl.getNextId()).toString();
@@ -417,14 +455,12 @@ public class PageImpl implements Page, PageCtrl {
 	public void redraw(Collection responses, Writer out) throws IOException {
 		if (log.debugable()) log.debug("Redrawing page: "+this+", roots="+_roots);
 
-		final LanguageDefinition langdef =
-			getDefinition().getLanguageDefinition();
 		final Execution exec = getExecution();
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final boolean asyncUpdate = execCtrl.getVisualizer().isEverAsyncUpdate();
 		final boolean bIncluded = asyncUpdate || exec.isIncluded();
-		String uri = bIncluded ? langdef.getPageURI(): langdef.getDesktopURI();
-		uri = (String)exec.evaluate(_pagedef, this, uri, String.class);
+		String uri = bIncluded ? _pgUri: _dkUri;
+		uri = (String)exec.evaluate(this, uri, String.class);
 
 		final Map attrs = new HashMap(6);
 		attrs.put("page", this);
@@ -483,8 +519,53 @@ public class PageImpl implements Page, PageCtrl {
  		_defparent = comp;
  	}
 
+	public void sessionWillPassivate(Desktop desktop) {
+		for (Iterator it = _roots.iterator(); it.hasNext();)
+			((ComponentCtrl)it.next()).sessionWillPassivate(this);
+	}
+	public void sessionDidActivate(Desktop desktop) {
+		_desktop = desktop;
+
+		for (Iterator it = _roots.iterator(); it.hasNext();)
+			((ComponentCtrl)it.next()).sessionDidActivate(this);
+	}
+
+	//-- Serializable --//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		//TODO		
+	}
+
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		//TODO
+
+		init();
+	}
+
 	//-- Object --//
 	public String toString() {
 		return "[Page "+_id+']';
+	}
+
+	private static class DualFuncMapper implements FunctionMapper {
+		private FunctionMapper newm, oldm;
+		private DualFuncMapper(FunctionMapper newm, FunctionMapper oldm) {
+			this.newm = newm;
+			this.oldm = oldm;
+		}
+
+		//-- FunctionMapper --//
+		public Method resolveFunction(String prefix, String name) {
+			Method m = this.newm.resolveFunction(prefix, name);
+			if (m == null)
+				m = this.oldm.resolveFunction(prefix, name);
+			return m;
+		}
 	}
 }

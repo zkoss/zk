@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.io.Writer;
 import java.io.IOException;
 
+import javax.servlet.jsp.el.FunctionMapper;
+
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Execution;
@@ -108,4 +110,13 @@ public interface PageCtrl {
  	 * @see #getDefaultParent
  	 */
  	public void setDefaultParent(Component comp);
+
+	/** Notification that the session, which owns this page,
+	 * is about to be passivated (aka., serialized).
+	 */
+	public void sessionWillPassivate(Desktop desktop);
+	/** Notification that the session, which owns this page,
+	 * has just been activated (aka., deserialized).
+	 */
+	public void sessionDidActivate(Desktop desktop);
 }

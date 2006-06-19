@@ -72,8 +72,8 @@ public class Script implements Condition {
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(comp);
 	}
-	public boolean isEffective(PageDefinition pagedef, Page page) {
-		return _cond == null || _cond.isEffective(pagedef, page);
+	public boolean isEffective(Page page) {
+		return _cond == null || _cond.isEffective(page);
 	}
 
 	//Object//

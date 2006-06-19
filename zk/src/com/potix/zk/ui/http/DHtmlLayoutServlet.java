@@ -147,6 +147,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final Page page = uf.newPage(ri, pagedef, path);
 		final Execution exec = new ExecutionImpl(
 			_ctx, request, response, desktop, page);
-		wappc.getUiEngine().execNewPage(exec, page, response.getWriter());
+		wappc.getUiEngine()
+			.execNewPage(exec, pagedef, page, response.getWriter());
 	}
 }

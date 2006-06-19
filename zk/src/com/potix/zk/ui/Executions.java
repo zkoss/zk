@@ -46,6 +46,12 @@ public class Executions {
 
 	/** Evluates the specified expression by use of the current context
 	 * ({@link #getCurrent}).
+	 *
+	 * <p>The function mapper is retrieved from component's page's function
+	 * mapper ({@link Page#getFunctionMapper}).
+	 * If null, the current page, if any, is used to retrieve
+	 * the mapper.
+	 *
 	 * @param comp as the self variable (ignored if null)
 	 */
 	public static final Object evaluate(Component comp,
@@ -55,16 +61,19 @@ public class Executions {
 	/** Evluates the specified expression with the resolver of the current
 	 * execution ({@link #getCurrent}).
 	 *
-	 * @param page used as the self variable and to retrieve the page definition
-	 * if pagedef is not defined. Ignored if null.
-	 * @param pagedef the page definition used to retrieve the function mapper.
-	 * If null and page is not null, page's definition is used.
-	 * If both null, the current page's definition is used.
+	 * <p>The function mapper is retrieved from page's function
+	 * mapper ({@link Page#getFunctionMapper}).
+	 * If null, the current page, if any, is used to retrieve
+	 * the mapper.
+	 *
+	 * @param page used as the self variable and to retrieve the function
+	 * mapper if funmap is not defined. Ignored if null.
 	 */
-	public static final Object evaluate(PageDefinition pagedef, Page page,
+	public static final Object evaluate(Page page,
 	String expr, Class expectedType) {
-		return getCurrent().evaluate(pagedef, page, expr, expectedType);
+		return getCurrent().evaluate(page, expr, expectedType);
 	}
+	
 
 	/** Creates components from a page file specified by an URI.
 	 * Shortcut to {@link Execution#createComponents(String, Component, Map)}.
@@ -131,7 +140,7 @@ public class Executions {
 	 * an language. Ignored if null.
 	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
 	 * is called.
-s	 * @param parent the parent component, or null if you want it to be
+	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
 	 * @param params a map of parameters that is accessible by the arg variable

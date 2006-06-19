@@ -50,19 +50,10 @@ public interface ExecutionCtrl {
 	 */
 	public void setCurrentPage(Page page);
 
-	/** Returns the current page definition.
-	 *
-	 * <p>Note: it might not be the same as getCurrentPage().getDefinition(),
-	 * because developer might use createComponents to load different
-	 * page definitions and create components into the same page.
-	 *
-	 * @param fallback whether to retrieve {@link #getCurrentPage}'s
-	 * {@link Page#getDefinition} if {@link #setCurrentPageDefinition} is set
-	 * with null.
-	 * In other words, specify false ONLY IF you want to store the old value
-	 * and restore it later by {@link #setCurrentPageDefinition}.
+	/** Returns the current page definition, which is pushed when
+	 * evaluating a page (from a page definition).
 	 */
-	public PageDefinition getCurrentPageDefinition(boolean fallback);
+	public PageDefinition getCurrentPageDefinition();
 	/** Sets the current page definition.
 	 * @param pgdef the page definition. If null, it means it is the same
 	 * as getCurrentPage().getPageDefinition().

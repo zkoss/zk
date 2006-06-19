@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
-import com.potix.zk.ui.metainfo.ComponentDefinition;
 import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.au.AuResponse;
@@ -82,24 +81,6 @@ import com.potix.zk.au.AuResponse;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface Component extends java.io.Serializable {
-	/** Returns the component definition, or null if this component
-	 * doesn't belong to any definition.
-	 */
-	public ComponentDefinition getDefinition();
-	/** Initializes the properties (aka. members) based on what are
-	 * defined in the component definition ({@link #getDefinition}).
-	 *
-	 * <p>This method is invoked automatically if a component is created
-	 * by ZUML, i.e., if it is specified as an elemnt of a ZUML page.
-	 *
-	 * <p>On the other hand, if it is created manually (by program),
-	 * developer might choose to invoke this method or not,
-	 * depending whether he wants to
-	 * initializes the component with the properties defined in
-	 * {@link com.potix.zk.ui.metainfo.LanguageDefinition}.
-	 */
-	public void applyProperties();
-
 	/** Returns the owner of the ID space that this component belongs to.
 	 * It is either a component, a page or null.
 	 * If it has an ancestor that implements {@link IdSpace}, it is returned.
@@ -452,13 +433,16 @@ public interface Component extends java.io.Serializable {
 	 */
 	 public void onChildRemoved(Component child);
 
-	/** Returns the mold used to access {@link ComponentDefinition#getMoldURI}.
-	 * Default: "default"
+	/** Returns the mold for this component.
+	 * <p>Default: "default"
+	 *
+	 * @see com.potix.zk.ui.metainfo.ComponentDefinition
 	 */
 	public String getMold();
-	/** Sets the mold used to access {@link ComponentDefinition#getMoldURI}.
+	/** Sets the mold for this component.
 	 *
 	 * @param mold the mold. If null or empty, "default" is assumed.
+	 * @see com.potix.zk.ui.metainfo.ComponentDefinition
 	 */
 	public void setMold(String mold);
 
@@ -625,6 +609,21 @@ public interface Component extends java.io.Serializable {
 	 * <p>Note: a namespace per ID space.
 	 */
 	public Namespace getNamespace();
+
+	/** Initializes the properties (aka. members) based on what are
+	 * defined in the component definition.
+	 *
+	 * <p>This method is invoked automatically if a component is created
+	 * by evaluating a ZUML page, i.e., if it is specified as an elemnt
+	 * of a ZUML page.
+	 *
+	 * <p>On the other hand, if it is created manually (by program),
+	 * developer might choose to invoke this method or not,
+	 * depending whether he wants to
+	 * initializes the component with the properties defined in
+	 * {@link com.potix.zk.ui.metainfo.LanguageDefinition}.
+	 */
+	public void applyProperties();
 
 	/** Used with {@link #invalidate(Component.Range)} to denote the inner elements
 	 * (excluding the enclosing tag).

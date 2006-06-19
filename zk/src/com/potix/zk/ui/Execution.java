@@ -84,26 +84,34 @@ public interface Execution extends Evaluator {
 	public Map getParameterMap();
 
 	/** Evluates the specified expression with ${link #getVariableResolver}
-	 * and {@link PageDefinition#getFunctionMapper} of the specified
+	 * and {@link Page#getFunctionMapper} of the page of the specified
 	 * component.
-	 * @param comp used as the self variable and to retrieve the page definition.
-	 * Ignored if null.
+	 *
+	 * <p>The function mapper is retrieved from component's page's function
+	 * mapper ({@link Page#getFunctionMapper}).
+	 * If null, the current page, if any, is used to retrieve
+	 * the mapper.
+	 *
+	 * @param comp used as the self variable and to retrieve the function
+	 * mapper. Ignored if null.
 	 * @see #getVariableResolver
 	 */
 	public Object evaluate(Component comp, String expr, Class expectedType);
 	/** Evluates the specified expression with ${link #getVariableResolver}
-	 * and {@link PageDefinition#getFunctionMapper} of the specified
-	 * page definition.
+	 * and {@link Page#getFunctionMapper} of the specified
+	 * page.
 	 *
-	 * @param page used as the self variable and to retrieve the page definition
-	 * if pagedef is not defined. Ignored if null.
-	 * @param pagedef the page definition used to retrieve the function mapper.
-	 * If null and page is not null, page's definition is used.
-	 * If both null, the current page's definition is used.
+	 * <p>The function mapper is retrieved from component's page's function
+	 * mapper ({@link Page#getFunctionMapper}).
+	 * If null, the current page, if any, is used to retrieve
+	 * the mapper.
+	 *
+	 * @param page used as the self variable and to retrieve the function
+	 * mapper. Ignored if null.
 	 * @see #getVariableResolver
 	 */
-	public Object evaluate(PageDefinition pagedef, Page page,
-	String expr, Class expectedType);
+	public Object evaluate(Page page, String expr, Class expectedType);
+
 	/** Returns the variable resolver for this execution, or null if not
 	 * available.
 	 *

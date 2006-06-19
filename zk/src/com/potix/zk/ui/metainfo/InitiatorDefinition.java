@@ -119,15 +119,14 @@ public class InitiatorDefinition {
 
 	/** Creaetes and returns the initiator.
 	 */
-	public Initiator newInitiator(PageDefinition pagedef, Page page)
-	throws Exception {
+	public Initiator newInitiator(Page page) throws Exception {
 		if (_init instanceof Initiator)
 			return (Initiator)_init;
 
 		final Class cls;
 		if (_init instanceof String) {
 			final String clsnm = (String)Executions.evaluate(
-				pagedef, page, (String)_init, String.class);
+				page, (String)_init, String.class);
 			if (clsnm == null || clsnm.length() == 0) {
 				if (log.debugable()) log.debug("Ingore "+_init+" due to empty");
 				return null; //ignore it!!
@@ -146,11 +145,10 @@ public class InitiatorDefinition {
 	}
 	/** Returns the arguments array (by evaluating EL if necessary).
 	 */
-	public Object[] getArguments(PageDefinition pagedef, Page page) {
+	public Object[] getArguments(Page page) {
 		final Object[] args = new Object[_args.length];
 		for (int j = 0; j < args.length; ++j)
-			args[j] = Executions.evaluate(pagedef, page,
-				_args[j], Object.class);
+			args[j] = Executions.evaluate(page, _args[j], Object.class);
 		return args;
 	}
 }

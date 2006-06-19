@@ -30,7 +30,7 @@ import com.potix.zk.ui.util.Condition;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class ConditionImpl implements Condition {
+public class ConditionImpl implements Condition, java.io.Serializable {
 	private String _if;
 	private String _unless;
 
@@ -80,12 +80,12 @@ public class ConditionImpl implements Condition {
 			throw new UiException("An boolean expression is required: "+ex.getMessage(), ex);
 		}
 	}
-	public boolean isEffective(PageDefinition pagedef, Page page) {
+	public boolean isEffective(Page page) {
 		try {
 			return (_if == null
-				|| ((Boolean)Executions.evaluate(pagedef, page, _if, Boolean.class)).booleanValue())
+				|| ((Boolean)Executions.evaluate(page, _if, Boolean.class)).booleanValue())
 			&& (_unless == null
-				|| !((Boolean)Executions.evaluate(pagedef, page, _unless, Boolean.class)).booleanValue());
+				|| !((Boolean)Executions.evaluate(page, _unless, Boolean.class)).booleanValue());
 		} catch (ClassCastException ex) {
 			throw new UiException("An boolean expression is required: "+ex.getMessage(), ex);
 		}

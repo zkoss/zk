@@ -37,14 +37,12 @@ import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Event;
 import com.potix.zk.ui.event.EventListener;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.metainfo.ComponentDefinition;
-import com.potix.zk.ui.metainfo.InstanceDefinition;
 import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.util.Namespaces;
 import com.potix.zk.ui.sys.SessionsCtrl;
 import com.potix.zk.ui.sys.ExecutionCtrl;
 import com.potix.zk.ui.sys.ExecutionsCtrl;
+import com.potix.zk.ui.sys.ComponentCtrl;
 
 /** Thread to handle events.
  * We need to handle events in a separate thread, because it might
@@ -391,15 +389,12 @@ public class EventProcessingThread extends Thread {
 		final Page page = _comp.getPage();
 		final String evtnm = _event.getName();
 
-		final ComponentDefinition compdef = _comp.getDefinition();
-		if (compdef instanceof InstanceDefinition) {
-			final String script =
-				((InstanceDefinition)compdef).getEventHandler(_comp, evtnm);
-			if (script != null) {
-				page.interpret(script, ns);
-				if (!_event.isPropagatable())
-					return; //done
-			}
+		final String script =
+			((ComponentCtrl)_comp).getMillieu().getEventHandler(_comp, evtnm);
+		if (script != null) {
+			page.interpret(script, ns);
+			if (!_event.isPropagatable())
+				return; //done
 		}
 
 		for (Iterator it = _comp.getListenerIterator(evtnm); it.hasNext();) {

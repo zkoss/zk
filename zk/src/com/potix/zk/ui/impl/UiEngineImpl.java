@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.VariableResolver;
+import javax.servlet.jsp.el.FunctionMapper;
 
 import com.potix.lang.D;
 import com.potix.lang.Classes;
@@ -40,6 +40,7 @@ import com.potix.lang.Exceptions;
 import com.potix.lang.Expectable;
 import com.potix.mesg.Messages;
 import com.potix.util.logging.Log;
+import com.potix.web.servlet.StyleSheet;
 
 import com.potix.zk.mesg.MZk;
 import com.potix.zk.ui.*;
@@ -189,8 +190,8 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Creating a new page --//
-	public void execNewPage(Execution exec, Page page, Writer out)
-	throws IOException {
+	public void execNewPage(Execution exec, PageDefinition pagedef,
+	Page page, Writer out) throws IOException {
 		//It is possible this method is invoked when processing other exec
 		final ExecutionCtrl oldexc = ExecutionsCtrl.getCurrentCtrl();
 		final UiVisualizer olduv =
@@ -198,22 +199,26 @@ public class UiEngineImpl implements UiEngine {
 		final UiVisualizer uv;
 		if (olduv != null) uv = doReactivate(exec, olduv);
 		else uv = doActivate(exec, null);
+
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		final Page old = execCtrl.getCurrentPage();
+		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
+		execCtrl.setCurrentPage(page);
+		execCtrl.setCurrentPageDefinition(pagedef);
 		try {
 			if (olduv != null) olduv.setOwner(page);
 
 			//Cycle 1: Creates all components
-			((ExecutionCtrl)exec).setCurrentPage(page);
 
-			final PageDefinition pagedef = page.getDefinition();
-			pagedef.addVariableResolvers(page);
-				//Note: we add variable resolvers before init
-				//because inti's zscirpt might depend on it.
+			//Note:
+			//1) stylesheet, tablib are inited in Page's contructor
+			//2) we add variable resolvers before init because
+			//init's zscirpt might depend on it.
+			initVariableResolvers(pagedef, page);
 
 			final Initiators inits = Initiators.doInit(pagedef, page);
 			try {
-				if (pagedef != null) pagedef.init(page);
-				else ((PageCtrl)page).init(null, null, null);
-
+				pagedef.init(page);
 				execCreate(exec, page, pagedef, null);
 			} catch(Throwable ex) {
 				inits.doCatch(ex);
@@ -253,10 +258,14 @@ public class UiEngineImpl implements UiEngine {
 		} catch (IOException ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
+			execCtrl.setCurrentPage(old); //restore it
+			execCtrl.setCurrentPageDefinition(olddef); //restore it
+
 			if (olduv != null) doDereactivate(exec, olduv);
 			else doDeactivate(exec);
 		}
 	}
+
 	private static final Event nextEvent(UiVisualizer uv) {
 		final Event evt = ((ExecutionCtrl)uv.getExecution()).getNextEvent();
 		return evt != null && !uv.isAborting() ? evt: null;
@@ -266,26 +275,26 @@ public class UiEngineImpl implements UiEngine {
 	 * @return the first component being created.
 	 */
 	private static final Component execCreate(Execution exec, Page page,
-	InstanceDefinition instdef, Component parent)
+	InstanceDefinition parentdef, Component parent)
 	throws IOException {
 		Component firstCreated = null;
-		final PageDefinition pagedef = instdef.getPageDefinition();
+		final PageDefinition pagedef = parentdef.getPageDefinition();
 			//note: don't use page.getDefinition because createComponents
 			//might be called from a page other than instance's
-		for (Iterator it = instdef.getChildren().iterator(); it.hasNext();) {
+		for (Iterator it = parentdef.getChildren().iterator(); it.hasNext();) {
 			final Object obj = it.next();
 			if (obj instanceof InstanceDefinition) {
 				final InstanceDefinition childdef = (InstanceDefinition)obj;
-				final ForEach forEach = childdef.getForEach(pagedef, page, parent);
+				final ForEach forEach = childdef.getForEach(page, parent);
 				if (forEach == null) {
-					if (isEffective(childdef, pagedef, page, parent)) {
+					if (isEffective(childdef, page, parent)) {
 						final Component child =
 							execCreateChild(exec, page, parent, childdef);
 						if (firstCreated == null) firstCreated = child;
 					}
 				} else {
 					while (forEach.next()) {
-						if (isEffective(childdef, pagedef, page, parent)) {
+						if (isEffective(childdef, page, parent)) {
 							final Component child =
 								execCreateChild(exec, page, parent, childdef);
 							if (firstCreated == null) firstCreated = child;
@@ -294,7 +303,7 @@ public class UiEngineImpl implements UiEngine {
 				}
 			} else if (obj instanceof Script) {
 				final Script script = (Script)obj;
-				if (isEffective(script, pagedef, page, parent)) {
+				if (isEffective(script, page, parent)) {
 					final Namespace ns = parent != null ?
 						Namespaces.beforeInterpret(exec, parent):
 						Namespaces.beforeInterpret(exec, page);
@@ -319,8 +328,9 @@ public class UiEngineImpl implements UiEngine {
 			if (parent != null) child.setParent(parent);
 			else child.setPage(page);
 
-			childdef.applyProperties(child);
-			childdef.applyCustomAttributes(child);
+			final Millieu mill = ((ComponentCtrl)child).getMillieu();
+			mill.applyProperties(child);
+			mill.applyCustomAttributes(child);
 
 			if (child instanceof PostCreate)
 				((PostCreate)child).postCreate();
@@ -335,33 +345,17 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 	private static final boolean isEffective(Condition cond,
-	PageDefinition pagedef, Page page, Component comp) {
-		return comp != null ? cond.isEffective(comp):
-			cond.isEffective(pagedef, page);
+	Page page, Component comp) {
+		return comp != null ? cond.isEffective(comp): cond.isEffective(page);
 	}
 
-	//-- might be called either from execNewPage or execUpdate --//
 	public Component createComponents(Execution exec,
 	PageDefinition pagedef, Page page, Component parent, Map params) {
-		if (page == null) {
-			if (parent != null)
-				page = parent.getPage();
-			if (page == null) {
-				page = ((ExecutionCtrl)exec).getCurrentPage();
-				if (page == null)
-					throw new IllegalStateException("No current page");
-			}
-		} else if (parent != null) {
+		if (pagedef == null)
+			throw new IllegalArgumentException("pagedef");
+		if (parent != null)
 			page = parent.getPage();
-		}
-
-		if (pagedef == null) {
-			pagedef = page.getDefinition();
-			if (pagedef == null)
-				return null;
-		}
-
-		if (parent == null)
+		else if (page != null)
 			parent = ((PageCtrl)page).getDefaultParent();
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
@@ -369,10 +363,18 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalStateException("Not activated yet");
 
 		final Page old = execCtrl.getCurrentPage();
-		final PageDefinition olddef = execCtrl.getCurrentPageDefinition(false);
+		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
 		execCtrl.setCurrentPage(page);
 		execCtrl.setCurrentPageDefinition(pagedef);
 		exec.pushArg(params != null ? params: Collections.EMPTY_MAP);
+
+		//Note: we add taglib, stylesheets and var-resolvers to the page
+		//it might cause name pollution but we got no choice since they
+		//are used as long as components created by this method are alive
+		page.addFunctionMapper(pagedef.getFunctionMapper());
+		initStyleSheets(pagedef, page);
+		initVariableResolvers(pagedef, page);
+
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
 			return execCreate(exec, page, pagedef, parent);
@@ -383,8 +385,23 @@ public class UiEngineImpl implements UiEngine {
 			exec.popArg();
 			execCtrl.setCurrentPage(old); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
+
 			inits.doFinally();
 		}
+	}
+	private static final void initVariableResolvers(PageDefinition pagedef,
+	Page page) {
+		final List resolvs = pagedef.newVariableResolvers(page);
+		if (!resolvs.isEmpty())
+			for (Iterator it = resolvs.iterator(); it.hasNext();)
+				page.addVariableResolver((VariableResolver)it.next());
+	}
+	private static final void initStyleSheets(PageDefinition pagedef,
+	Page page) {
+		final List ss = pagedef.getStyleSheets();
+		if (!ss.isEmpty())
+			for (Iterator it = ss.iterator(); it.hasNext();)
+				page.addStyleSheet((StyleSheet)it.next());
 	}
 
 	public void sendRedirect(String uri, String target) {

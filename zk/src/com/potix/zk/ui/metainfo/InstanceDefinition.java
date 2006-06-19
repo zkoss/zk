@@ -61,9 +61,9 @@ implements Condition {
 	private final List _children = new LinkedList(),
 		_roChildren = Collections.unmodifiableList(_children);
 	/** A list of {@link CustomAttributes}. */
-	private final List _custAttrs = new LinkedList();
+	private List _custAttrs;
 	/** A Map of event handler (String name, EventHandler) to handle events. */
-	private final Map _evthds = new HashMap();
+	private Map _evthds;
 	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
 	private final String _tagnm;
 	/** The effectiveness condition (see {@link #isEffective}).
@@ -154,43 +154,63 @@ implements Condition {
 		//	throw new IllegalArgumentException("Invalid event name: "+name);
 			//AbstractParser has checked it, so no need to check again
 
+		final EventHandler evthd = new EventHandler(script, cond);
+
+		if (_evthds == null) {
+			synchronized (this) {
+				if (_evthds == null) {
+					final Map evthds = new HashMap(5);
+					evthds.put(name, evthd);
+					_evthds = evthds;
+					return;
+				}
+			}
+		}
+
 		synchronized (_evthds) {
-			final Object o = _evthds.put(name, new EventHandler(script, cond));
+			final Object o = _evthds.put(name, evthd);
 			if (o != null) {
 				_evthds.put(name, o); //recover
 				throw new UiException("Replicate event handler: "+name);
 			}
 		}
 	}
-	/** Returns the script of the event handler.
+	/** Returns a map of event handler ({@link EventHandler}),
+	 * or null if no handler at all.
 	 */
-	public String getEventHandler(Component comp, String name) {
-		final EventHandler ehi;
-		synchronized (_evthds) {
-			ehi = (EventHandler)_evthds.get(name);
-		}
-		if (ehi != null && ehi.isEffective(comp))
-			return ehi.getScript();
-		return null;
+	/*package*/ Map getEventHandlers() {
+		return _evthds;
 	}
 
 	/** Adds a map of custom attributes.
 	 */
-	public void addCustomAttributes(CustomAttributes custAttrs) {
-		if (custAttrs == null)
+	public void addCustomAttributes(CustomAttributes cattr) {
+		if (cattr == null)
 			throw new IllegalArgumentException("null");
+
+		if (_custAttrs == null) {
+			synchronized (this) {
+				if (_custAttrs == null) {
+					final List custAttrs = new LinkedList();
+					custAttrs.add(cattr);
+					_custAttrs = custAttrs;
+					return;
+				}
+			}
+		}
+
 		synchronized (_custAttrs) {
-			_custAttrs.add(custAttrs);
+			_custAttrs.add(cattr);
 		}
 	}
-	/** Applies the custom attributes.
+	/** Returns the list of custom attributes ({@link CustomAttributes}),
+	 * or null if no custom attributes at all.
+	 *
+	 * <p>Note: to access the returned, you have to use synchronized to
+	 * synchronized the returned list (if not null).
 	 */
-	public void applyCustomAttributes(Component comp) {
-		if (!_custAttrs.isEmpty()) //optimize it is rare to have cust. attrs
-			synchronized (_custAttrs) {
-				for (Iterator it = _custAttrs.iterator(); it.hasNext();)
-					((CustomAttributes)it.next()).apply(comp);
-			}
+	/*package*/ List getCustomAttributes() {
+		return _custAttrs;
 	}
 
 	/** Sets the effectiveness condition.
@@ -208,10 +228,10 @@ implements Condition {
 	 * @return the forEach object to iterate this definition multiple times,
 	 * or null if this definition shall be interpreted only once.
 	 */
-	public ForEach getForEach(PageDefinition pagedef, Page page, Component comp) {
+	public ForEach getForEach(Page page, Component comp) {
 		return comp != null ?
 			ForEachImpl.getInstance(comp, _forEach):
-			ForEachImpl.getInstance(pagedef, page, _forEach);
+			ForEachImpl.getInstance(page, _forEach);
 	}
 	/** Sets the forEach attribute, which is usually an expression.
 	 * @param expr the expression to return a collection of objects, or
@@ -223,18 +243,22 @@ implements Condition {
 
 	/** Returns an component of this definition (never null).
 	 *
-	 * <p>Note: {@link #applyProperties} will NOT be invoked, if you call
-	 * this method manually or create a component manually.
-	 * You could invoke it if really necessary.
+	 * <p>Note: {@link Millieu#applyProperties} will NOT be invoked,
+	 * if you call this method manually or create a component manually.
 	 */
 	public Component newInstance(Page page) {
+		final Millieu mill = getMillieu();
+		Millieu.setCurrent(mill);
 		final Component comp;
 		try {
-			comp = (Component)resolveImplementationClass(page).newInstance();
+			comp = (Component)
+				mill.resolveImplementationClass(page).newInstance();
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
+		} finally {
+			//theorectically, it shall be reset by AbstractComponent, but..
+			Millieu.setCurrent(null);
 		}
-		((ComponentCtrl)comp).setDefinition(this);
 		if (_tagnm != null) ((DynamicTag)comp).setTag(_tagnm);
 		return comp;
 	}
@@ -250,8 +274,8 @@ implements Condition {
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(comp);
 	}
-	public boolean isEffective(PageDefinition pagedef, Page page) {
-		return _cond == null || _cond.isEffective(pagedef, page);
+	public boolean isEffective(Page page) {
+		return _cond == null || _cond.isEffective(page);
 	}
 
 	//-- super --//
@@ -259,62 +283,29 @@ implements Condition {
 		final Object cls = super.getImplementationClass();
 		return cls != null ? cls: _compdef.getImplementationClass();
 	}
-	public Class resolveImplementationClass(Page page) {
-		final Class cls = super.resolveImplementationClass(page);
-		return cls != null ? cls: _compdef.resolveImplementationClass(page);
-	}
-	public boolean hasMold(String name) {
-		return _compdef != null && _compdef.hasMold(name);
-	}
-	public Set getMoldNames() {
-		return _compdef != null ? _compdef.getMoldNames(): Collections.EMPTY_SET;
-	}
-	public String getMoldURI(Component comp, String name) {
-		if (name == null)
-			throw new IllegalArgumentException("null");
-		if (_compdef == null)
-			throw new IllegalStateException("No component definition");
-		return _compdef.getMoldURI(comp, name);
-	}
-	public Object getParameter(Component comp, String name) {
-		final Object o = super.getParameter(comp, name);
-		return o != null || _compdef == null ? o: _compdef.getParameter(comp, name);
-	}
 	public boolean isMacro() {
-		return _compdef != null && _compdef.isMacro();
+		return _compdef.isMacro();
 	}
-	public String getMacroURI(Component comp) {
-		return _compdef != null ? _compdef.getMacroURI(comp): null;
+	/*package*/ String getMacroURI() {
+		return _compdef.getMacroURI();
+	}	
+	public void addMold(String name, String moldUri) {
+		throw new UnsupportedOperationException();
+		//if we want to allow this, we have to modify Millieu
 	}
-
-	/** Applies the member initials to the component when a component
-	 * is created by a ZUML page (instead of by program).
-	 */
-	public void applyProperties(Component comp) {
-		_compdef.applyProperties(comp);
-		applyProperties(comp, Executions.getCurrent());
+	/*package*/ Map getMolds() {
+		return _compdef.getMolds();
+	}
+	/*package*/ void addParam(String name, String value) {
+		throw new UnsupportedOperationException();
+		//if we want to allow this, we have to modify Millieu
+	}
+	/*package*/ Map getParams() {
+		return _compdef.getParams();
 	}
 
 	//Object//
 	public String toString() {
 		return "[InstanceDefinition:"+_compdef.getName()+'/'+getName()+']';
-	}
-
-	private static class EventHandler implements Condition {
-		private final String _script;
-		private final Condition _cond;
-		private EventHandler(String script, Condition cond) {
-			_script = script;
-			_cond = cond;
-		}
-		public String getScript() {
-			return _script;
-		}
-		public boolean isEffective(Component comp) {
-			return _cond == null || _cond.isEffective(comp);
-		}
-		public boolean isEffective(PageDefinition pagedef, Page page) {
-			return _cond == null || _cond.isEffective(pagedef, page);
-		}
 	}
 }

@@ -128,8 +128,8 @@ public interface UiEngine {
 	 * <li>Renders all visible components.</li>
 	 * </ol>
 	 */
-	public void execNewPage(Execution exec, Page page, Writer out)
-	throws IOException;
+	public void execNewPage(Execution exec, PageDefinition pagedef, Page page,
+	Writer out) throws IOException;
 
 	/** Executs an asynchronous update to a component (or page).
 	 * <p>Note: the output must be XML and UTF-8.
@@ -153,8 +153,9 @@ public interface UiEngine {
 	 * It assumes the execution is already locked to this desktop.
 	 *
 	 * @param exec the execution (never null).
-	 * @param page the page. If null, it is determined based on
-	 * parent and the current page.
+	 * @param pagedef the page definition (never null).
+	 * @param page the page. Ignored if parent is specified (and
+	 * parent's page is used).
 	 * @param parent the parent component, or null if no parent compoent.
 	 * If both parent and page are specified, page is ignored.
 	 * @param params a map of parameters that is accessible by the arg variable

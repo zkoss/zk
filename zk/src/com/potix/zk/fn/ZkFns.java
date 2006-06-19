@@ -50,7 +50,6 @@ import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.sys.ExecutionsCtrl;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.au.AuResponse;
 
 /**
@@ -200,8 +199,7 @@ public class ZkFns {
 	 * <p>In addition to style sheets defined in lang.xml and lang-addon.xml,
 	 * it also include:
 	 * <ol>
-	 * <li>The style sheet specified in the theme-uri parameter (init-param)
-	 * of {@link com.potix.zk.ui.http.DHtmlLayoutServlet}.</li>
+	 * <li>The style sheet specified in the theme-uri parameter.</li>
 	 * <li>All style sheets, if any, of pages belonging to the
 	 * current desktop.</li>
 	 * </ol>
@@ -235,10 +233,7 @@ public class ZkFns {
 			for (Iterator it = exec.getDesktop()
 			.getPages().iterator(); it.hasNext();) {
 				final Page page = (Page)it.next();
-				final PageDefinition pgdef = page.getDefinition();
-				if (pgdef == null) continue;
-
-				for (Iterator e = pgdef.getStyleSheets().iterator();
+				for (Iterator e = page.getStyleSheets().iterator();
 				e.hasNext();)
 					append(sb, (StyleSheet)e.next(), exec, page);
 			}
@@ -251,8 +246,7 @@ public class ZkFns {
 		if (href != null) {
 			try {
 				if (exec != null)
-					href = (String)exec.evaluate(
-						null, page, href, String.class);
+					href = (String)exec.evaluate(page, href, String.class);
 
 				if (href != null && href.length() > 0)
 					sb.append("\n<link rel=\"stylesheet\" type=\"")
