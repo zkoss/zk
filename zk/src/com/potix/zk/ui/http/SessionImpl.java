@@ -22,6 +22,9 @@ import java.util.Map;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -67,6 +70,21 @@ implements HttpSessionActivationListener, Serializable {
 		_hsess = hsess;
 		_clientAddr = clientAddr;
 		_clientName = clientName;
+		init();
+
+		final Configuration config = getWebApp().getConfiguration();
+		config.invokeSessionInits(this); //it might throw exception
+
+		final Monitor monitor = config.getMonitor();
+		if (monitor != null) {
+			try {
+				monitor.sessionCreated(this);
+			} catch (Throwable ex) {
+				log.error(ex);
+			}
+		}
+	}
+	private void init() {
 		_attrs = new AttributesMap() {
 			protected Enumeration getKeys() {
 				return _hsess.getAttributeNames();
@@ -81,18 +99,6 @@ implements HttpSessionActivationListener, Serializable {
 				_hsess.removeAttribute(key);
 			}
 		};
-
-		final Configuration config = getWebApp().getConfiguration();
-		config.invokeSessionInits(this); //it might throw exception
-
-		final Monitor monitor = config.getMonitor();
-		if (monitor != null) {
-			try {
-				monitor.sessionCreated(this);
-			} catch (Throwable ex) {
-				log.error(ex);
-			}
-		}
 	}
 	public void onDestroyed() {
 		super.onDestroyed();
@@ -150,5 +156,14 @@ implements HttpSessionActivationListener, Serializable {
 		if (webman == null)
 			throw new UiException("Unable to activate "+_hsess+" for "+ctx);
 		sessionDidActivate(webman.getWebApp());
+	}
+
+	//Serializable//
+	//NOTE: they must be declared as private
+	private synchronized void readObject(ObjectInputStream s)
+	throws IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		init();
 	}
 }

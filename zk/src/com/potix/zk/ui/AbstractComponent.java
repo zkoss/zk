@@ -61,7 +61,6 @@ import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
 import com.potix.zk.ui.metainfo.DefinitionNotFoundException;
 import com.potix.zk.au.AuResponse;
-import com.potix.zk.au.AuRemove;
 
 /**
  * A skeletal implementation of {@link Component}. Though it is OK
@@ -73,12 +72,8 @@ import com.potix.zk.au.AuRemove;
 public class AbstractComponent
 implements Component, ComponentCtrl, Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
-	private static int _globalId;
-	private static synchronized int getNextGlobalId() {
-		return _globalId++;
-	}
 
-	/* Note: if _page != null, then _desktop != null. */
+	/* Note: if _page != null, then _desktop != null, vice versa. */
 	private transient Desktop _desktop;
 	private transient Page _page;
 	private String _id;
@@ -100,7 +95,7 @@ implements Component, ComponentCtrl, Serializable {
 	 * <p>To save footprint, we don't use Set (since it is rare to contain
 	 * more than one)
 	 */
-	private transient final List _newChildren = new LinkedList();
+	private transient List _newChildren;
 	/** Used when user is modifying the children by Iterator.
 	 */
 	private transient boolean _modChildByIter;
@@ -122,20 +117,22 @@ implements Component, ComponentCtrl, Serializable {
 
 		init();
 
-		final StringBuffer idsb = new StringBuffer(10)
-			.append(ComponentsCtrl.AUTO_ID_PREFIX);
-		if (exec != null) {
-			_desktop = exec.getDesktop();
-			Strings.encode(idsb, ((DesktopCtrl)_desktop).getNextId());
-		} else {
-			idsb.append('_');
-			Strings.encode(idsb, getNextGlobalId());
-		}
-		_uuid = _id = idsb.toString();
+		_uuid = _id = exec != null ?
+			nextUuid(exec.getDesktop()): ComponentsCtrl.AUTO_ID_PREFIX;
+			//though it doesn't belong to any desktop yet, we autogen uuid
+			//it is optional but it is slightly better (of course, subjective)
 
 		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(this, _uuid): null;
 
 		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
+	}
+	/** Generates the next UUID for the specified desktop.
+	 */
+	private static final String nextUuid(Desktop desktop) {
+		final StringBuffer sb = new StringBuffer(12)
+			.append(ComponentsCtrl.AUTO_ID_PREFIX);
+		Strings.encode(sb, ((DesktopCtrl)desktop).getNextId());
+		return sb.toString();
 	}
 	private static final
 	ComponentDefinition getDefinition(Execution exec, Class cls) {
@@ -175,6 +172,7 @@ implements Component, ComponentCtrl, Serializable {
 				return new ChildIter(index);
 			}
 		};
+		_newChildren = new LinkedList();
 	}
 
 	/** Adds to the ID spaces, if any, when ID is changed.
@@ -309,7 +307,7 @@ implements Component, ComponentCtrl, Serializable {
 	 */
 	private void bindToIdSpace(Component comp) {
 		final String compId = comp.getId();
-		assert D.OFF || !ComponentsCtrl.isAutoId(compId): "Auto ID shall be ignored: "+compId;
+		//assert D.OFF || !ComponentsCtrl.isAutoId(compId): "Auto ID shall be ignored: "+compId;
 		_spaceInfo.fellows.put(compId, comp);
 		if (Variables.isValid(compId))
 			_spaceInfo.ns.setVariable(compId, comp, true);
@@ -379,11 +377,19 @@ implements Component, ComponentCtrl, Serializable {
 		return _desktop.getUpdateURI(sb.toString());
 	}
 
-	/** Returns the UI engine.
+	/** Returns the UI engine based on {@link #_desktop}.
 	 * Don't call this method when _desktop is null.
 	 */
-	private final UiEngine getUiEngine() {
+	private final UiEngine getThisUiEngine() {
 		return ((WebAppCtrl)_desktop.getWebApp()).getUiEngine();
+	}
+	/** Returns the UI engine of the current execution, or null if no current
+	 * execution.
+	 */
+	private static final UiEngine getCurrentUiEngine() {
+		final Execution exec = Executions.getCurrent();
+		return exec != null ?
+			((WebAppCtrl)exec.getDesktop().getWebApp()).getUiEngine(): null;
 	}
 
 	//-- Component --//
@@ -403,13 +409,14 @@ implements Component, ComponentCtrl, Serializable {
 		if (page != null) {
 			if (page.getDesktop() != _desktop && _desktop != null)
 				throw new UiException("The new page must be in the same desktop: "+page);
+				//Not allow developers to access two desktops simutaneously
 			checkIdSpacesDown(this, (PageCtrl)page);
 		}
 
 		if (_page != null) removeFromIdSpacesDown(this);
 
-		addMoved(this, _page, page);
-		setPage0(page);
+		addMoved(this, _page, page); //Not depends on UUID
+		setPage0(page); //UUID might be changed here
 
 		if (_page != null) addToIdSpacesDown(this);
 	}
@@ -432,16 +439,16 @@ implements Component, ComponentCtrl, Serializable {
 		if (page == _page)
 			return; //nothing changed
 
-		assert D.OFF || _parent == null || _parent.getPage() == page;
-
-		if (_desktop == null && page != null) _desktop = page.getDesktop();
+		//assert D.OFF || _parent == null || _parent.getPage() == page;
 
 		//detach
-		final DesktopCtrl dtctrl = (DesktopCtrl)_desktop;
 		final boolean bRoot = _parent == null;
 		if (_page != null) {
 			if (bRoot) ((PageCtrl)_page).removeRoot(this);
-			if (page == null) dtctrl.removeComponent(this);
+			if (page == null) {
+				((DesktopCtrl)_desktop).removeComponent(this);
+				_desktop = null;
+			}
 		}
 
 		final Page oldpage = _page;
@@ -449,8 +456,28 @@ implements Component, ComponentCtrl, Serializable {
 
 		//attach
 		if (_page != null) {
-			if (bRoot) ((PageCtrl)_page).addRoot(this);
-			if (oldpage == null) dtctrl.addComponent(this);
+			if (bRoot) ((PageCtrl)_page).addRoot(this); //Not depends on uuid
+			if (oldpage == null) {
+				_desktop = _page.getDesktop();
+
+				final boolean anonymous =
+					ComponentsCtrl.AUTO_ID_PREFIX.equals(_uuid);
+				if (anonymous || _desktop.getComponentByUuidIfAny(_uuid) != null) {
+					if (!anonymous)
+						getThisUiEngine().addUuidChanged(this, true);
+						//called before uuid is changed
+
+					//stupid but no better way to find a correct UUID yet
+					//also, it is rare so performance not an issue
+					do {
+						_uuid = nextUuid(_desktop);
+					} while (_desktop.getComponentByUuidIfAny(_uuid) != null);
+
+					if (D.ON && log.finerable()) log.finer("Uuid changed: "+this);
+				}
+
+				((DesktopCtrl)_desktop).addComponent(this); //depends on uuid
+			}
 		}
 		if (_spaceInfo != null && _parent == null)
 			_spaceInfo.ns.setParent(
@@ -473,24 +500,31 @@ implements Component, ComponentCtrl, Serializable {
 		if (!_id.equals(id)) {
 			if (Variables.isReserved(id) || ComponentsCtrl.isAutoId(id))
 				throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Variables.getReservedNames());
+
 			final boolean rawId = this instanceof RawId;
-			if (rawId && _desktop.getComponentByUuidIfAny(id) != null)
+			if (rawId && _desktop != null
+			&& _desktop.getComponentByUuidIfAny(id) != null)
 				throw new UiException("Replicated ID is not allowed for "+getClass()+": "+id+"\nNote: HTML/WML tags, ID must be unique");
+
 			checkIdSpaces(this, id);
 
 			removeFromIdSpaces(this);
 			if (rawId) { //we have to change UUID
-				final DesktopCtrl dtctrl = (DesktopCtrl)_desktop;
-				if (_page != null) {
-					response(null, new AuRemove(_uuid));
-					dtctrl.removeComponent(this);
+				if (_desktop != null) {
+					getThisUiEngine().addUuidChanged(this, false);
+						//called before uuid is changed
+					((DesktopCtrl)_desktop).removeComponent(this);
+				} else {
+					final UiEngine eng = getCurrentUiEngine();
+					if (eng != null) eng.addUuidChanged(this, true);
 				}
 
 				_uuid = _id = id;
-				if (_page != null) {
-					dtctrl.addComponent(this);
+
+				if (_desktop != null) {
+					((DesktopCtrl)_desktop).addComponent(this);
 					if (_parent != null && isTransparent()) _parent.invalidate(INNER);
-					getUiEngine().addMoved(this, false);
+					getThisUiEngine().addMoved(this, false);
 				}
 			} else {
 				_id = id;
@@ -561,7 +595,8 @@ implements Component, ComponentCtrl, Serializable {
 		if (value != null) {
 			final Map attrs = getAttributes(scope);
 			if (attrs == Collections.EMPTY_MAP)
-				throw new IllegalStateException("This component doesn't belong to any ID space: "+this);
+				throw new IllegalStateException("This component, "+this
+					+", doesn't belong to the "+Components.scopeToString(scope)+" scope");
 			return attrs.put(name, value);
 		} else {
 			return removeAttribute(name, scope);
@@ -613,6 +648,7 @@ implements Component, ComponentCtrl, Serializable {
 			final Page newpage = parent.getPage();
 			if (newpage != null && newpage.getDesktop() != _desktop && _desktop != null)
 				throw new UiException("The new parent must be in the same desktop: "+parent);
+				//Not allow developers to access two desktops simutaneously
 
 			idSpaceChanged = _parent == null
 				|| parent.getSpaceOwner() != _parent.getSpaceOwner();
@@ -622,14 +658,14 @@ implements Component, ComponentCtrl, Serializable {
 		}
 
 		if (_parent != null && isTransparent()) _parent.invalidate(INNER);
-
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
 		if (_parent != null) {
 			final Component oldp = _parent;
 			_parent = null; //update first to avoid loop back
 			oldp.removeChild(this); //spec: removeChild must be called
 		} else {
-			if (_page != null) ((PageCtrl)_page).removeRoot(this);
+			if (_page != null)
+				((PageCtrl)_page).removeRoot(this); //Not depends on uuid
 		}
 
 		if (parent != null) {
@@ -641,8 +677,8 @@ implements Component, ComponentCtrl, Serializable {
 		} //if parent == null, assume no page at all (so no addRoot)
 
 		final Page newpg = _parent != null ? _parent.getPage(): null;
-		addMoved(this, _page, newpg);
-		setPage0(newpg);
+		addMoved(this, _page, newpg); //Not depends on UUID
+		setPage0(newpg); //UUID might be changed here
 
 		if (_spaceInfo != null) //ID space owner
 			_spaceInfo.ns.setParent(
@@ -700,7 +736,7 @@ implements Component, ComponentCtrl, Serializable {
 			if (newChild.getParent() != this) { //avoid loop back
 				_newChildren.add(newChild); //used by setParent to avoid loop back
 				try {
-					newChild.setParent(this); //call addMoved...
+					newChild.setParent(this); //call addMoved, setPage0...
 				} finally {
 					_newChildren.remove(newChild);
 				}
@@ -767,22 +803,24 @@ implements Component, ComponentCtrl, Serializable {
 		invalidate(OUTER);
 	}
 	public void invalidate(Range range) {
-		if (_page != null) getUiEngine().addInvalidate(this, range);
-		if (_parent != null && isTransparent()) _parent.invalidate(INNER);
+		if (_page != null) {
+			getThisUiEngine().addInvalidate(this, range);
+			if (_parent != null && isTransparent()) _parent.invalidate(INNER);
 			//Note: UiEngine will handle transparent, but we still
 			//handle it here to simplify codes that handles transparent
 			//in AbstractComponent
+		}
 	}
 	public void response(String key, AuResponse response) {
 		//if response depends on nothing, it must be generated
 		if (_page != null
 		|| (_desktop != null && response.getDepends() == null))
-			 getUiEngine().addResponse(key, response);
+			 getThisUiEngine().addResponse(key, response);
 	}
 	public void smartUpdate(String attr, String value) {
 		if (_parent != null && isTransparent())
 			throw new IllegalStateException("A transparent component cannot use smartUpdate");
-		if (_page != null) getUiEngine().addSmartUpdate(this, attr, value);
+		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
 	/** A special smart-update that update a value in int.
 	 */
@@ -1050,10 +1088,6 @@ implements Component, ComponentCtrl, Serializable {
 
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws IOException {
-		s.defaultWriteObject();
-	}
 	private synchronized void readObject(ObjectInputStream s)
 	throws IOException, ClassNotFoundException {
 		s.defaultReadObject();

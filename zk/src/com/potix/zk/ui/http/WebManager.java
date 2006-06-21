@@ -47,6 +47,8 @@ import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Configuration;
+import com.potix.zk.ui.util.ApplicationInit;
+import com.potix.zk.ui.util.ApplicationCleanup;
 import com.potix.zk.ui.sys.DesktopCacheProvider;
 import com.potix.zk.ui.sys.UiFactory;
 import com.potix.zk.ui.sys.SessionCtrl;
@@ -155,9 +157,13 @@ public class WebManager {
 		factory.start(_wapp);
 
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
+
+		cfg.invokeApplicationInits(_wapp);
 	}
 
 	public void destroy() {
+		_wapp.getConfiguration().invokeApplicationCleanups(_wapp);
+
 		final WebAppCtrl wappc = (WebAppCtrl)_wapp;
 		wappc.getUiFactory().stop(_wapp);
 		wappc.getDesktopCacheProvider().stop(_wapp);

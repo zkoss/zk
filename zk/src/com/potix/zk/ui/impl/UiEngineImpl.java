@@ -167,17 +167,17 @@ public class UiEngineImpl implements UiEngine {
 	}
 	public void addInvalidate(Page page) {
 		if (page == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 		getCurrentVisualizer().addInvalidate(page);
 	}
 	public void addInvalidate(Component comp, Component.Range range) {
 		if (comp == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 		getCurrentVisualizer().addInvalidate(comp, range);
 	}
 	public void addSmartUpdate(Component comp, String attr, String value) {
 		if (comp == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
 	}
 	public void addResponse(String key, AuResponse response) {
@@ -185,8 +185,18 @@ public class UiEngineImpl implements UiEngine {
 	}
 	public void addMoved(Component comp, boolean newAttached) {
 		if (comp == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 		getCurrentVisualizer().addMoved(comp, newAttached);
+	}
+	/** Called before changing the component's UUID.
+	 *
+	 * @param addOnlyMoved if true, it is added only if it was moved
+	 * before (see {@link #addMoved}).
+	 */
+	public void addUuidChanged(Component comp, boolean addOnlyMoved) {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		getCurrentVisualizer().addUuidChanged(comp, addOnlyMoved);
 	}
 
 	//-- Creating a new page --//

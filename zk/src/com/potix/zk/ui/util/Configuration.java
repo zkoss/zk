@@ -26,6 +26,7 @@ import java.util.Collections;
 import com.potix.util.logging.Log;
 
 import com.potix.zk.ui.Component;
+import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.UiException;
@@ -54,6 +55,7 @@ public class Configuration {
 	private final List
 		_evtInits = new LinkedList(), _evtCleans = new LinkedList(),
 		_evtSusps = new LinkedList(), _evtResus = new LinkedList(),
+		_appInits = new LinkedList(), _appCleans = new LinkedList(),
 		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
 		_dtInits = new LinkedList(), _dtCleans = new LinkedList();
 	private Monitor _monitor;
@@ -89,6 +91,17 @@ public class Configuration {
 		if (EventThreadResume.class.isAssignableFrom(klass)) {
 			synchronized (_evtResus) {
 				_evtResus.add(klass);
+			}
+		}
+
+		if (ApplicationInit.class.isAssignableFrom(klass)) {
+			synchronized (_appInits) {
+				_appInits.add(klass);
+			}
+		}
+		if (ApplicationCleanup.class.isAssignableFrom(klass)) {
+			synchronized (_appCleans) {
+				_appCleans.add(klass);
 			}
 		}
 
@@ -130,6 +143,12 @@ public class Configuration {
 			_evtResus.remove(klass);
 		}
 
+		synchronized (_appInits) {
+			_appInits.remove(klass);
+		}
+		synchronized (_appCleans) {
+			_appCleans.remove(klass);
+		}
 		synchronized (_sessInits) {
 			_sessInits.remove(klass);
 		}
@@ -278,6 +297,59 @@ public class Configuration {
 				try {
 					((EventThreadResume)klass.newInstance())
 						.afterResume(comp, evt, aborted);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+klass, ex);
+				}
+			}
+		}
+	}
+
+	/** Invokes {@link ApplicationInit#init} for each relevant
+	 * listener registered by {@link #addListener}.
+	 *
+	 * <p>An instance of {@link ApplicationInit} is constructed first,
+	 * and then invoke {@link ApplicationInit#init}.
+	 *
+	 * <p>Unlike {@link #invokeApplicationInits}, it doesn't throw any exceptions.
+	 * Rather, it only logs them.
+	 *
+	 * @param wapp the Web application that is created
+	 */
+	public void invokeApplicationInits(WebApp wapp)
+	throws UiException {
+		if (_appInits.isEmpty()) return;
+			//it is OK to test LinkedList.isEmpty without synchronized
+
+		synchronized (_appInits) {
+			for (Iterator it = _appInits.iterator(); it.hasNext();) {
+				final Class klass = (Class)it.next();
+				try {
+					((ApplicationInit)klass.newInstance()).init(wapp);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+klass, ex);
+				}
+			}
+		}
+	}
+	/** Invokes {@link ApplicationCleanup#cleanup} for each relevant
+	 * listener registered by {@link #addListener}.
+	 *
+	 * <p>An instance of {@link ApplicationCleanup} is constructed first,
+	 * and then invoke {@link ApplicationCleanup#cleanup}.
+	 *
+	 * <p>It never throws an exception.
+	 *
+	 * @param wapp the Web application that is being destroyed
+	 */
+	public void invokeApplicationCleanups(WebApp wapp) {
+		if (_appCleans.isEmpty()) return;
+			//it is OK to test LinkedList.isEmpty without synchronized
+
+		synchronized (_appCleans) {
+			for (Iterator it = _appCleans.iterator(); it.hasNext();) {
+				final Class klass = (Class)it.next();
+				try {
+					((ApplicationCleanup)klass.newInstance()).cleanup(wapp);
 				} catch (Throwable ex) {
 					log.error("Failed to invoke "+klass, ex);
 				}

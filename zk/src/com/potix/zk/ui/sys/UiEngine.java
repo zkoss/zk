@@ -117,6 +117,12 @@ public interface UiEngine {
 	 * first time.
 	 */
 	public void addMoved(Component comp, boolean newAttached);
+	/** Called before changing the component's UUID.
+	 *
+	 * @param addOnlyMoved if true, it is added only if it was moved
+	 * before (see {@link #addMoved}).
+	 */
+	public void addUuidChanged(Component comp, boolean addOnlyMoved);
 
 	//-- execution --//
 	/** Executes when a new page is creates.

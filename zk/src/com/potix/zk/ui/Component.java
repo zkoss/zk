@@ -35,41 +35,15 @@ import com.potix.zk.au.AuResponse;
  * is asynchronous updates.
  *
  * <h3>The Page Creation</h3>
- * <p>The page creation occurs when a page is about to render and it involves
- * the following phases.
- * <ol>
- * <li>The component creation phase. It interprets the ZUL or other format
- * file one XML element by element as follows:
- *	<ul>
- *   <li>Constructs the component based on the XML element name or
- * the class specified in the use attribute, if any.</li>
- *   <li>Invokes the corresponding setter methods for each attribute specified
- * in the XML element</li>
- *   <li>Recursively create child components by interpret child XML elements.</li>
- *   <li>Post the onCreate event after all child components are created</li>
- *  </ul>
- * </li>
- * <li>The event processing phase. Starts an indepedent thread to
- * interpret each posted event.</li>
- * <li>The rendering phase. Generates a response to represent the appearence
- * of all components created.</li>
- *</ol>
+ * <p>The page creation occurs when a page is about to render at the first
+ * time. The detailed phases can be found in the devloper's guide.
  *
  * <h3>The Asynchronous Update</h3>
  * <p>The asynchronous update occurs when users does something on the browser,
  * such as changing the content of input, clicking buttons and so on.
  * Such behaviors are packed as requests, queue in the browser, and then
- * send to the server at the proper time. When server receives the requests,
- * it does as follows:
- * <ol>
- * <li>The request processing phase. The server processes all requests
- * one-by-one in this phase. Depending on the requests, it might update
- * the component (on the server) to make it the same as what user changed
- * on the browser. It also posts event to notify event listeners.</li>
- * <li>The event processing phase.</li>
- * <li>The rendering phase. Sends responses to the client to correct
- * the appearence of components on the browser.</li>
- * </ol>
+ * send to the server at the proper time. The detailed phases
+ * can be found in the developer's guide.
  *
  * <h3>No Synchronization Required</h3>
  * <p>To simplify the development of components and applications,
@@ -77,6 +51,9 @@ import com.potix.zk.au.AuResponse;
  * In other words, application and component developers need not worry
  * synchronization and other thread issues (unless you are developing
  * background thread to handle long operations).
+ *
+ * <p>It also implies a limitation that you cannot access components
+ * belonging to other desktops when processing an event.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

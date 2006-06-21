@@ -77,6 +77,8 @@ import com.potix.zk.au.*;
 	private Set _attached = new LinkedHashSet();
 	/** A set of moved components (parent changed or page changed). */
 	private Set _moved = new LinkedHashSet();
+	/** A map of components whose UUID is changed (Component, UUID). */
+	private Map _idChgd;
 	/** A map of responses being added(Component/Page, Map(key, AuResponse)). */
 	private Map _responses;
 	/** A stack of components that are including new pages (and then
@@ -189,6 +191,19 @@ import com.potix.zk.au.*;
 			_attached.remove(comp);
 		}
 	}
+	/** Called before changing the component's UUID.
+	 *
+	 * @param addOnlyMoved if true, it is added only if it was moved
+	 * before (see {@link #addMoved}).
+	 */
+	public void addUuidChanged(Component comp, boolean addOnlyMoved) {
+		if ((!addOnlyMoved || _moved.contains(comp))
+		&& (_idChgd == null || !_idChgd.containsKey(comp))) {
+			if (_idChgd == null) _idChgd = new LinkedHashMap();
+			_idChgd.put(comp, comp.getUuid());
+		}
+System.out.println("add "+addOnlyMoved+", "+_idChgd);
+	}
 
 	/** Adds a response directly (which will be returned when
 	 * {@link #getResponses} is called).
@@ -297,7 +312,8 @@ import com.potix.zk.au.*;
 	public List getResponses() throws IOException {
 		if (D.ON && log.debugable())
 			log.debug("ei: "+this+"\nInvalidated: "+_invalidated+"\nSmart Upd: "+_smartUpdated
-				+"\nAttached: "+_attached+"\nMoved:"+_moved+"\nResponses:"+_responses+"\npgInvalid: "+_pgInvalid);
+				+"\nAttached: "+_attached+"\nMoved:"+_moved+"\nResponses:"+_responses+"\npgInvalid: "+_pgInvalid
+				+"\nUuidChanged: "+_idChgd);
 
 		//0. prepare removed pages and optimize for invalidate or removed pages
 		checkPageRemoved(); //maintain _pgRemoved for pages being removed
@@ -309,6 +325,7 @@ import com.potix.zk.au.*;
 			clearForInvalidPage(_attached);
 			clearForInvalidPage(_moved);
 			clearForInvalidPage(_smartUpdated.keySet());
+			if (_idChgd != null) clearForInvalidPage(_idChgd.keySet());
 		}
 
 		//0a. remove pages. Note: we don't need to generate rm, becausee they
@@ -329,7 +346,15 @@ import com.potix.zk.au.*;
 			}
 		}
 
-		//1. Retrieves components to remove from the client
+		//1. Remove components who is moved and its UUID is changed
+		if (_idChgd != null) {
+			for (Iterator it = _idChgd.values().iterator(); it.hasNext();)
+				responses.add(new AuRemove((String)it.next()));
+			_idChgd = null; //just in case
+		}
+
+		//2. Removes dead components
+		//2a. Retrieves components to remove from the client
 		final Set removed = new LinkedHashSet();
 		for (Iterator it = _moved.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
@@ -340,7 +365,6 @@ import com.potix.zk.au.*;
 		}
 		if (D.ON && log.finerable()) log.finer("Removed: "+removed);
 
-		//2. Removes dead components
 		//The reason to remove first: some insertion might fail if the old
 		//componetns are not removed yet
 		//Also, we have to remove both parent and child because, at

@@ -58,6 +58,8 @@ public class EventProcessingThread extends Thread {
 	private Component _comp;
 	/** Part of the command: event to process. */
 	private Event _event;
+	/** The desktop that the component belongs to. */
+	private Desktop _desktop;
 	/** Part of the command: a list of EventThreadInit instances. */
 	private List _evtThdInits;
 	/** Part of the command: locale. */
@@ -173,7 +175,7 @@ public class EventProcessingThread extends Thread {
 			}
 		}
 
-		_comp.getDesktop().getWebApp().getConfiguration()
+		_desktop.getWebApp().getConfiguration()
 			.invokeEventThreadResumes(_comp, _event, false);
 
 		if (_ceased) throw new InterruptedException("Ceased");
@@ -209,11 +211,6 @@ public class EventProcessingThread extends Thread {
 		return isIdle();
 	}
 
-	/** Returns the desktop, or null if it is not processing an event.
-	 */
-	synchronized public Desktop getDesktop() {
-		return _comp != null ? _comp.getDesktop(): null;
-	}
 	/** Ask this event thread to process the specified event.
 	 *
 	 * <p>Note: it cannot be called from another event thread.
@@ -254,15 +251,15 @@ public class EventProcessingThread extends Thread {
 			throw new NullPointerException();
 		_comp = comp;
 		_event = event;
+		_desktop = _comp.getDesktop();
 		_evtThdInits = evtThdInits;
 		_locale = Locales.getCurrent();
 		_ex = null;
 	}
 	/** Setup for execution. */
 	synchronized private void setup() {
-		final Desktop desktop = _comp.getDesktop();
-		SessionsCtrl.setCurrent(desktop.getSession());
-		final Execution exec = desktop.getExecution();
+		SessionsCtrl.setCurrent(_desktop.getSession());
+		final Execution exec = _desktop.getExecution();
 		ExecutionsCtrl.setCurrent(exec);
 		((ExecutionCtrl)exec).setCurrentPage(_comp.getPage());
 			//Note: _com.getPage might return null because this method
@@ -270,10 +267,11 @@ public class EventProcessingThread extends Thread {
 	}
 	/** Cleanup for executionl. */
 	synchronized private void cleanup() {
-		_comp.getDesktop().getWebApp()
+		_desktop.getWebApp()
 			.getConfiguration().invokeEventThreadCleanups(_comp, _event);
 		_comp = null;
 		_event = null;
+		_desktop = null;
 	}
 	private void checkError() {
 		if (_ex != null) { //failed to process
@@ -295,7 +293,7 @@ public class EventProcessingThread extends Thread {
 					try {
 						if (D.ON && log.finerable()) log.finer("Processing event: "+_event);
 
-						_comp.getDesktop().getWebApp().getConfiguration()
+						_desktop.getWebApp().getConfiguration()
 							.invokeEventThreadInits(_evtThdInits, _comp, _event);
 						_evtThdInits = null;
 
@@ -353,7 +351,7 @@ public class EventProcessingThread extends Thread {
 			throw new IllegalArgumentException("Both comp and event must be specified");
 		if (!(Thread.currentThread() instanceof EventProcessingThread))
 			throw new IllegalStateException("Only callable when processing an event");
-		if (_comp.getDesktop() != comp.getDesktop())
+		if (_desktop != comp.getDesktop())
 			throw new IllegalStateException("Must in the same desktop");
 		final Component oldComp = _comp;
 		final Event oldEvent = _event;
