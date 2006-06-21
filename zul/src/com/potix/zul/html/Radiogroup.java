@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.io.Writer;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import com.potix.lang.Strings;
 import com.potix.lang.Objects;
@@ -55,14 +56,7 @@ public class Radiogroup extends XulElement {
 	};
 
 	public Radiogroup() {
-		_name = nextRadioName();
-	}
-	private String nextRadioName() {
-		final String attr = "com.potix.zul.html.radio.name";
-		final Integer v = (Integer)getAttribute(attr, DESKTOP_SCOPE);
-		final int i = v != null ? v.intValue(): 0;
-		setAttribute(attr, new Integer(i + 1), DESKTOP_SCOPE);
-		return Strings.encode(new StringBuffer(12).append("_pg"), i).toString();
+		_name = genGroupName();
 	}
 
 	/** Returns the orient.
@@ -208,6 +202,24 @@ public class Radiogroup extends XulElement {
 				_jsel = j;
 				return;
 			}
+		}
+	}
+
+	/** Generates the group name for child radio buttons.
+	 */
+	private String genGroupName() {
+		return Strings.encode(new StringBuffer(16).append("_pg"),
+			System.identityHashCode(this)).toString();
+	}
+
+	//Serializable//
+	private synchronized void readObject(ObjectInputStream s)
+	throws IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		if (_name.startsWith("_pg")) {
+			_name = genGroupName();
+			invalidate(OUTER); //redraw is required
 		}
 	}
 }
