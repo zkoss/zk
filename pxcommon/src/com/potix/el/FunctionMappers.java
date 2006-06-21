@@ -154,14 +154,25 @@ public class FunctionMappers {
 		 */
 		private MyFuncMapper(Map mappers) {
 			_mappers = mappers;
-			for (Iterator it = mappers.values().iterator(); it.hasNext();)
-				for (Iterator e = ((Map)it.next()).entrySet().iterator();
-				e.hasNext();) {
-					final Map.Entry me = (Map.Entry)e.next();
-					final Method mtd = (Method)me.getValue();
-					if (mtd != null) me.setValue(new SerializableMethod(mtd));
-				}
+			for (Iterator it = mappers.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final Map mtds = new HashMap((Map)me.getValue());
+					//Note: we have to make a copy since loadMethods shares
+					//the same cache
+				toSerializableMethod(mtds);
+				me.setValue(mtds);
+			}
 		}
+		/** Converts a map of (any, Method) to (any, {@link SerializableMethod}).
+		 */
+		private static void toSerializableMethod(Map mtds) {
+			for (Iterator it = mtds.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final Method mtd = (Method)me.getValue();
+				if (mtd != null) me.setValue(new SerializableMethod(mtd));
+			}
+		}
+
 		//-- FunctionMapper --//
 		public Method resolveFunction(String prefix, String name) {
 			final Map mtds = (Map)_mappers.get(prefix);
