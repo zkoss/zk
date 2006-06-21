@@ -29,9 +29,9 @@ import com.potix.zk.ui.util.Namespace;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class BshNamespace implements Namespace {
-	private Namespace _parent;
-	private final NameSpace _ns;
+public class BshNamespace implements Namespace, java.io.Serializable {
+	private transient Namespace _parent;
+	private transient NameSpace _ns;
 	/** Constructs a name space of a component (ID space owner).
 	 */
 	public BshNamespace(String id) {
@@ -95,6 +95,13 @@ public class BshNamespace implements Namespace {
 
 	public Object getNativeNamespace() {
 		return _ns;
+	}
+
+	//Serializable//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		//TODO: restore _parent
 	}
 
 	//-- Object --//

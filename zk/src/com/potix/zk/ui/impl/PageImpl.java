@@ -31,9 +31,6 @@ import java.util.HashSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.io.Writer;
-import java.io.Serializable;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
 import java.io.IOException;
 
 import javax.servlet.jsp.el.FunctionMapper;
@@ -92,7 +89,7 @@ import com.potix.zk.au.AuSetTitle;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class PageImpl implements Page, PageCtrl, Serializable {
+public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);
 	private static final Log _zklog = Log.lookup("com.potix.zk.log");
 
@@ -102,7 +99,7 @@ public class PageImpl implements Page, PageCtrl, Serializable {
 	private transient Component _owner;
 	private transient Desktop _desktop;
 	private String _id;
-	private final Interpreter _ip;
+	private transient Interpreter _ip;
 	private String _title = "", _style = "";
 	/** A list of root components. */
 	private final List _roots = new LinkedList();
@@ -131,7 +128,6 @@ public class PageImpl implements Page, PageCtrl, Serializable {
 	 * are not ready until {@link #init} is called.
 	 */
 	public PageImpl(PageDefinition pgdef) {
-		_ip = new BshInterpreter();
 		_funmap = pgdef.getFunctionMapper();
 
 		final List ss = pgdef.getStyleSheets();
@@ -146,6 +142,7 @@ public class PageImpl implements Page, PageCtrl, Serializable {
 	/** Initialized the page when contructed or deserialized.
 	 */
 	protected void init() {
+		_ip = new BshInterpreter();
 		_roRoots = Collections.unmodifiableList(_roots);
 	}
 
@@ -537,16 +534,16 @@ public class PageImpl implements Page, PageCtrl, Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
-		//TODO		
+		//TODO: save namespace
 	}
 
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		//TODO
-
 		init();
+
+		//TODO: restore namespace
 	}
 
 	//-- Object --//

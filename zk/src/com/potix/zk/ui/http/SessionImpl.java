@@ -53,6 +53,7 @@ import com.potix.zk.ui.util.Configuration;
 public class SessionImpl implements Session, SessionCtrl,
 HttpSessionActivationListener, java.io.Serializable {
 	private static final Log log = Log.lookup(SessionImpl.class);
+    private static final long serialVersionUID = 201L;
 
 	transient private WebApp _wapp;
 	transient private HttpSession _hsess;
@@ -185,10 +186,6 @@ HttpSessionActivationListener, java.io.Serializable {
 	}
 
 	//Serializable//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException{
-		s.defaultWriteObject();
-	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();

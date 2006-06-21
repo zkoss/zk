@@ -27,10 +27,6 @@ import java.util.LinkedHashMap;
 import com.potix.lang.D;
 import com.potix.lang.Strings;
 import com.potix.util.logging.Log;
-import java.io.Serializable;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Desktop;
@@ -64,7 +60,7 @@ import com.potix.zk.au.AuBookmark;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class DesktopImpl implements Desktop, DesktopCtrl, Serializable {
+public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(DesktopImpl.class);
 
 	private transient WebApp _wapp;
@@ -305,8 +301,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, Serializable {
 
 	//-- Serializable --//
 	//NOTE: they must be declared as private
-	private synchronized void readObject(ObjectInputStream s)
-	throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		init();
