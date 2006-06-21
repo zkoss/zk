@@ -39,7 +39,7 @@ import com.potix.zul.mesg.MZul;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class SimpleConstraint implements Constraint {
+public class SimpleConstraint implements Constraint, java.io.Serializable {
 	/** Postive numbers are not allowed. */
 	public static final int NO_POSITIVE = 0x0001;
 	/** Negative numbers are not allowed. */

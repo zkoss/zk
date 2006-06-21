@@ -74,26 +74,17 @@ import com.potix.zul.html.event.ListDataListener;
  * @see ListModel
  * @see ListitemRenderer
  */
-public class Listbox extends XulElement implements Selectable, Render {
+public class Listbox extends XulElement
+implements Selectable, Render, java.io.Serializable {
 	private static final Log log = Log.lookup(Listbox.class);
 
-	private final List _items = new AbstractSequentialList () {
-		public ListIterator listIterator(int index) {
-			return new ItemIter(index);
-		}
-		public int size() {
-			int sz = getChildren().size();
-			if (_listhead != null) --sz;
-			if (_listfoot != null) --sz;
-			return sz;
-		}
-	};
+	private transient List _items;
 	/** A list of selected items. */
-	private final Set _selItems = new LinkedHashSet(5);
+	private transient Set _selItems = new LinkedHashSet(5);
 	private int _maxlength;
 	private int _rows, _jsel = -1;
-	private Listhead _listhead;
-	private Listfoot _listfoot;
+	private transient Listhead _listhead;
+	private transient Listfoot _listfoot;
 	private ListModel _model;
 	private ListitemRenderer _renderer;
 	private ListDataListener _dataListener;
@@ -106,6 +97,20 @@ public class Listbox extends XulElement implements Selectable, Render {
 
 	public Listbox() {
 		setSclass("listbox");
+		init();
+	}
+	private void init() {
+		_items = new AbstractSequentialList () {
+			public ListIterator listIterator(int index) {
+				return new ItemIter(index);
+			}
+			public int size() {
+				int sz = getChildren().size();
+				if (_listhead != null) --sz;
+				if (_listfoot != null) --sz;
+				return sz;
+			}
+		};
 	}
 
 	/** Returns {@link Listhead} belonging to this listbox, or null
@@ -906,7 +911,7 @@ public class Listbox extends XulElement implements Selectable, Render {
 	};
 
 	/** Used to render listitem if _model is specified. */
-	private class Renderer {
+	private class Renderer implements java.io.Serializable {
 		private final ListitemRenderer _renderer;
 		private boolean _rendered, _ctrled;
 
@@ -1057,7 +1062,7 @@ public class Listbox extends XulElement implements Selectable, Render {
 		return sb.toString();
 	}
 
-	private class ItemIter implements ListIterator  {
+	private class ItemIter implements ListIterator, java.io.Serializable {
 		private ListIterator _it;
 		private int _j;
 		private boolean _bNxt;
@@ -1115,5 +1120,23 @@ public class Listbox extends XulElement implements Selectable, Render {
 				_it = getChildren()
 					.listIterator(_listhead != null ? _j + 1: _j);
 		}
+	}
+
+	//-- Serializable --//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		//TODO
+	}
+
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		init();
+
+		//TODO
 	}
 }
