@@ -31,6 +31,7 @@ import javax.servlet.jsp.el.FunctionMapper;
 
 import com.potix.lang.D;
 import com.potix.lang.Classes;
+import com.potix.lang.reflect.SerializableMethod;
 import com.potix.mesg.MCommon;
 import com.potix.lang.SystemException;
 import com.potix.util.IllegalSyntaxException;
@@ -146,15 +147,29 @@ public class FunctionMappers {
 	}
 
 	private static class MyFuncMapper implements FunctionMapper, Serializable {
-		/** Map(String prefix, Map(name, Method)). */
+		/** Map(String prefix, Map(name, SerializableMethod)). */
 		private final Map _mappers;
+
+		/** @param mappers Map(String prefix, Map(String name, Method method))
+		 */
 		private MyFuncMapper(Map mappers) {
 			_mappers = mappers;
+			for (Iterator it = mappers.values().iterator(); it.hasNext();)
+				for (Iterator e = ((Map)it.next()).entrySet().iterator();
+				e.hasNext();) {
+					final Map.Entry me = (Map.Entry)e.next();
+					final Method mtd = (Method)me.getValue();
+					if (mtd != null) me.setValue(new SerializableMethod(mtd));
+				}
 		}
 		//-- FunctionMapper --//
 		public Method resolveFunction(String prefix, String name) {
 			final Map mtds = (Map)_mappers.get(prefix);
-			return mtds != null ? (Method)mtds.get(name): null;
+			if (mtds != null) {
+				SerializableMethod mtd = (SerializableMethod)mtds.get(name);
+				if (mtd != null) return mtd.getMethod();
+			}
+			return null;
 		}
 	}
 	private static class TaglibLoader extends AbstractLoader {
