@@ -102,7 +102,7 @@ public class PageImpl implements Page, PageCtrl, Serializable {
 	private transient Component _owner;
 	private transient Desktop _desktop;
 	private String _id;
-	private transient Interpreter _ip;
+	private final Interpreter _ip;
 	private String _title = "", _style = "";
 	/** A list of root components. */
 	private final List _roots = new LinkedList();
@@ -131,6 +131,7 @@ public class PageImpl implements Page, PageCtrl, Serializable {
 	 * are not ready until {@link #init} is called.
 	 */
 	public PageImpl(PageDefinition pgdef) {
+		_ip = new BshInterpreter();
 		_funmap = pgdef.getFunctionMapper();
 
 		final List ss = pgdef.getStyleSheets();
@@ -145,7 +146,6 @@ public class PageImpl implements Page, PageCtrl, Serializable {
 	/** Initialized the page when contructed or deserialized.
 	 */
 	protected void init() {
-		_ip = new BshInterpreter();
 		_roRoots = Collections.unmodifiableList(_roots);
 	}
 
@@ -178,6 +178,7 @@ public class PageImpl implements Page, PageCtrl, Serializable {
 			if (!(_stylesheets instanceof LinkedList))
 				_stylesheets = new LinkedList(_stylesheets);
 			_stylesheets.add(ss);
+			//TODO: update the client dynamically (thru Visualizer)
 		}
 	}
 
