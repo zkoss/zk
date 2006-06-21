@@ -1,7 +1,9 @@
 	--------
 ZK 2.0.1
 * Features:
-  1505319, 1505760, 1505410, 1505883
+  1505319, 1505760, 1505410, 1505883, 1509204, 1509878
+  + Components can be detached from one desktop in an event listener, and then
+    attached to another desktop in another event listener.
 
 * Bugs:
   1505769, 1505833, 1506652, 1506712, 1506712
@@ -14,7 +16,9 @@ ZK 2.0.1
   + Page.recreate is removed, since we don't store PageDefinition in page
     any more (for serialization).
   + Component.getDefintion is removed, so it can be serialized.
-  + Component.getInitParam due to overkill
+  + Component.getDesktop() returns null until it is added to a desktop.
+    In other words, it is null in the contructor. It also implies you cannot
+    set the attribute to the desktop scope in the contructor.
  
 	--------
 ZK 2.0.0
