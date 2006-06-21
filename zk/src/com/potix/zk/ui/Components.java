@@ -159,7 +159,7 @@ public class Components {
 	}
 	/** Converts an integer to the string representing the scope.
 	 * @param scope one of {@link Component#COMPONENT_SCOPE},
-	 * {@link Component#SPACE_SCOPE, {@link Component#PAGE_SCOPE}, 
+	 * {@link Component#SPACE_SCOPE}, {@link Component#PAGE_SCOPE}, 
 	 * {@link Component#DESKTOP_SCOPE}, {@link Component#SESSION_SCOPE},
 	 * and {@link Component#APPLICATION_SCOPE}.
 	 */
