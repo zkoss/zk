@@ -38,6 +38,8 @@ implements Session, SessionCtrl {
 			throw new IllegalArgumentException("null");
 		_wapp = wapp;
 	}
+	/** Used if the derived implements Serializable. */
+	protected AbstractSession() {}
 
 	public final WebApp getWebApp() {
 		return _wapp;

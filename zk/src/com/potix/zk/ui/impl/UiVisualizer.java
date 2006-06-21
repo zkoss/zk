@@ -202,7 +202,6 @@ import com.potix.zk.au.*;
 			if (_idChgd == null) _idChgd = new LinkedHashMap();
 			_idChgd.put(comp, comp.getUuid());
 		}
-System.out.println("add "+addOnlyMoved+", "+_idChgd);
 	}
 
 	/** Adds a response directly (which will be returned when

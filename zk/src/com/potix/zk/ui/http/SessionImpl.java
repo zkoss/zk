@@ -61,7 +61,7 @@ implements HttpSessionActivationListener, Serializable {
 		//No need to serialize attributes since it is done by Session
 		//Side effect: it is meaning to serialize a session manually
 		//Rather, caller has to serialize HttpSession
-	private final String _clientAddr, _clientName;
+	private String _clientAddr, _clientName;
 
 	public SessionImpl(HttpSession hsess, WebApp webapp,
 	String clientAddr, String clientName) {
@@ -83,6 +83,8 @@ implements HttpSessionActivationListener, Serializable {
 				log.error(ex);
 			}
 		}
+	}
+	private SessionImpl() { //Use for Serializable
 	}
 	private void init() {
 		_attrs = new AttributesMap() {
@@ -159,7 +161,6 @@ implements HttpSessionActivationListener, Serializable {
 	}
 
 	//Serializable//
-	//NOTE: they must be declared as private
 	private synchronized void readObject(ObjectInputStream s)
 	throws IOException, ClassNotFoundException {
 		s.defaultReadObject();
