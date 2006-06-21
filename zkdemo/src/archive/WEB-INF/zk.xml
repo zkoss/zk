@@ -44,4 +44,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<description>[Optional] Mointor the statistic</description>
 		<listener-class>com.potix.zk.ui.util.Statistic</listener-class>
 	</listener>
+
+	<!-- Used for test desktop.zul
+	<listener>
+		<listener-class>com.potix.zkdemo.test.ComponentPools$Init</listener-class>
+	</listener>
+	-->
 </zk>
