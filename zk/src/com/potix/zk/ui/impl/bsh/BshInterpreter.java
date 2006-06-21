@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.Serializable;
 
 import bsh.BshClassManager;
 import bsh.NameSpace;
@@ -41,7 +42,7 @@ import com.potix.zk.ui.util.VariableResolver;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class BshInterpreter implements Interpreter {
+public class BshInterpreter implements Interpreter, Serializable {
 	private final bsh.Interpreter _ip;
 	private final Namespace _ns;
 	/** A list of {@link VariableResolver}. */
