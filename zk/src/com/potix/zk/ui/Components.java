@@ -157,6 +157,23 @@ public class Components {
 		if ("application".equals(scope)) return Component.APPLICATION_SCOPE;
 		throw new IllegalArgumentException("Unknown scope: "+scope);
 	}
+	/** Converts an integer to the string representing the scope.
+	 * @param scope one of {@link Component#COMPONENT_SCOPE},
+	 * {@link Component#SPACE_SCOPE, {@link Component#PAGE_SCOPE}, 
+	 * {@link Component#DESKTOP_SCOPE}, {@link Component#SESSION_SCOPE},
+	 * and {@link Component#APPLICATION_SCOPE}.
+	 */
+	public static final String scopeToString(int scope) {
+		switch (scope) {
+		case Component.COMPONENT_SCOPE: return "component";
+		case Component.SPACE_SCOPE: return "space";
+		case Component.PAGE_SCOPE: return "page";
+		case Component.DESKTOP_SCOPE: return "desktop";
+		case Component.SESSION_SCOPE: return "session";
+		case Component.APPLICATION_SCOPE: return "application";
+		}
+		throw new IllegalArgumentException("Unknown scope: "+scope);
+	}
 
 	/** Returns whether an ID is generated automatically.
 	 */
