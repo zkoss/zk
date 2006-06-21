@@ -18,13 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.http;
 
+
 import java.util.Map;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.io.Serializable;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -36,9 +33,11 @@ import com.potix.el.impl.AttributesMap;
 
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.Session;
+import com.potix.zk.ui.sys.SessionCtrl;
+import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.util.Monitor;
 import com.potix.zk.ui.util.Configuration;
-import com.potix.zk.ui.impl.AbstractSession;
 
 /** An implementation of {@link com.potix.zk.ui.Session}.
  * 
@@ -51,22 +50,26 @@ import com.potix.zk.ui.impl.AbstractSession;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class SessionImpl extends AbstractSession
-implements HttpSessionActivationListener, Serializable {
+public class SessionImpl implements Session, SessionCtrl,
+HttpSessionActivationListener, java.io.Serializable {
 	private static final Log log = Log.lookup(SessionImpl.class);
 
-	private transient HttpSession _hsess;
+	transient private WebApp _wapp;
+	transient private HttpSession _hsess;
 		//Not to serialize since it is recalled by sessionDidActivate
-	private transient Map _attrs;
+	transient private Map _attrs;
 		//No need to serialize attributes since it is done by Session
 		//Side effect: it is meaning to serialize a session manually
 		//Rather, caller has to serialize HttpSession
 	private String _clientAddr, _clientName;
+	private boolean _invalid;
 
-	public SessionImpl(HttpSession hsess, WebApp webapp,
+	public SessionImpl(HttpSession hsess, WebApp wapp,
 	String clientAddr, String clientName) {
-		super(webapp);
+		if (wapp == null || hsess == null)
+			throw new IllegalArgumentException();
 
+		_wapp = wapp;
 		_hsess = hsess;
 		_clientAddr = clientAddr;
 		_clientName = clientName;
@@ -100,21 +103,7 @@ implements HttpSessionActivationListener, Serializable {
 			}
 		};
 	}
-	public void onDestroyed() {
-		super.onDestroyed();
 
-		final Configuration config = getWebApp().getConfiguration();
-		config.invokeSessionCleanups(this);
-
-		final Monitor monitor = config.getMonitor();
-		if (monitor != null) {
-			try {
-				monitor.sessionDestroyed(this);
-			} catch (Throwable ex) {
-				log.error(ex);
-			}
-		}
-	}
 	public Object getAttribute(String name) {
 		return _hsess.getAttribute(name);
 	}
@@ -145,9 +134,45 @@ implements HttpSessionActivationListener, Serializable {
 		return _hsess;
 	}
 
+	public final WebApp getWebApp() {
+		return _wapp;
+	}
+
+	public final void invalidate() {
+		_invalid = true;
+	}
+	public final boolean isInvalidated() {
+		return _invalid;
+	}
+
+	public void onDestroyed() {
+		final Configuration config = getWebApp().getConfiguration();
+		config.invokeSessionCleanups(this);
+
+		final Monitor monitor = config.getMonitor();
+		if (monitor != null) {
+			try {
+				monitor.sessionDestroyed(this);
+			} catch (Throwable ex) {
+				log.error(ex);
+			}
+		}
+	}
+
+	/** Notification that the session is about to be passivated
+	 * (aka., serialized).
+	 */
+	protected void sessionWillPassivate() {
+	}
+	/** Notification that the session has just been activated
+	 * (aka., deserialized).
+	 */
+	protected void sessionDidActivate(WebApp wapp) {
+	}
+
 	//-- HttpSessionActivationListener --//
 	public void sessionWillPassivate(HttpSessionEvent se) {
-		sessionWillPassivate();
+		((WebAppCtrl)_wapp).sessionWillPassivate(this);
 	}
 	public void sessionDidActivate(HttpSessionEvent se) {
 		_hsess = se.getSession();
@@ -155,12 +180,17 @@ implements HttpSessionActivationListener, Serializable {
 		final WebManager webman = WebManager.getWebManager(ctx);
 		if (webman == null)
 			throw new UiException("Unable to activate "+_hsess+" for "+ctx);
-		sessionDidActivate(webman.getWebApp());
+		_wapp = webman.getWebApp();
+		((WebAppCtrl)_wapp).sessionDidActivate(this);
 	}
 
 	//Serializable//
-	private synchronized void readObject(ObjectInputStream s)
-	throws IOException, ClassNotFoundException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException{
+		s.defaultWriteObject();
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		init();
