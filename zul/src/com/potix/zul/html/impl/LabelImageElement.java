@@ -129,6 +129,8 @@ public class LabelImageElement extends LabelElement implements Viewable {
 	 * Don't call this method unless _image is not null;
 	 */
 	private String getContentSrc() {
+		if (getDesktop() == null) return ""; //no avail at client
+
 		final StringBuffer sb = new StringBuffer(64).append('/');
 		Strings.encode(sb, _imgver);
 		final String name = _image.getName();

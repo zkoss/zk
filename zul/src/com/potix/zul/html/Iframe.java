@@ -139,6 +139,8 @@ public class Iframe extends XulElement implements Viewable {
 	 * Don't call this method unless _media is not null;
 	 */
 	private String getMediaSrc() {
+		if (getDesktop() == null) return ""; //no avail at client
+
 		final StringBuffer sb = new StringBuffer(64).append('/');
 		Strings.encode(sb, _medver);
 		final String name = _media.getName();

@@ -181,6 +181,8 @@ public class Audio extends XulElement implements Viewable {
 	 * Don't call this method unless _audio is not null;
 	 */
 	private String getAudioSrc() {
+		if (getDesktop() == null) return ""; //no avail at client
+
 		final StringBuffer sb = new StringBuffer(64).append('/');
 		Strings.encode(sb, _audver);
 		final String name = _audio.getName();
