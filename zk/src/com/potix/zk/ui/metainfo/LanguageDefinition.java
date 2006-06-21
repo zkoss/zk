@@ -105,9 +105,8 @@ public class LanguageDefinition implements Evaluator {
 	/** Returns whether the specified language exists.
 	 */
 	public static boolean exists(String name) {
+		init();
 		synchronized (_ldefByName) {
-			if (_ldefByName.isEmpty())
-				DefinitionLoaders.load();
 			return _ldefByName.containsKey(name);
 		}
 	}
@@ -121,12 +120,11 @@ public class LanguageDefinition implements Evaluator {
 	 * is not found
 	 */
 	public static final LanguageDefinition lookup(String name) {
+		init();
 		if (name == null || name.length() == 0)
 			name = "xul/html";
 		final LanguageDefinition langdef;
 		synchronized (_ldefByName) {
-			if (_ldefByName.isEmpty())
-				DefinitionLoaders.load();
 			langdef = (LanguageDefinition)_ldefByName.get(name);
 		}
 		if (langdef == null)
@@ -141,12 +139,11 @@ public class LanguageDefinition implements Evaluator {
 	 * is not found
 	 */
 	public static final LanguageDefinition lookupByExtension(String ext) {
+		init();
 		if (ext == null || ext.length() == 0)
 			ext = "zul";
 		final LanguageDefinition langdef;
 		synchronized (_ldefsByExt) {
-			if (_ldefsByExt.isEmpty())
-				DefinitionLoaders.load();
 			langdef = (LanguageDefinition)_ldefsByExt.get(ext);
 		}
 		if (langdef == null)
@@ -156,7 +153,16 @@ public class LanguageDefinition implements Evaluator {
 	/** Returns all language definitions.
 	 */
 	public static final List getAll() {
+		init();
 		return _rolangdefs;
+	}
+	private static void init() {
+		if (_langdefs.isEmpty()) {//OK not to syn because LinkedList
+			synchronized (_langdefs) {
+				if (_langdefs.isEmpty())
+					DefinitionLoaders.load();
+			}
+		}
 	}
 
 	/** Constructs a language defintion.

@@ -222,7 +222,7 @@ public class Millieu implements Serializable {
 	 */
 	public String getMoldURI(Component comp, String name) {
 		if (_molds == null)
-			throw new IllegalStateException("No mold is defined for "+this);
+			throw new IllegalStateException("No mold is defined for "+comp);
 
 		final String mold;
 		synchronized (_molds) {
