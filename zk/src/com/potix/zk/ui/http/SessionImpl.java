@@ -84,8 +84,6 @@ implements HttpSessionActivationListener, Serializable {
 			}
 		}
 	}
-	private SessionImpl() { //Use for Serializable
-	}
 	private void init() {
 		_attrs = new AttributesMap() {
 			protected Enumeration getKeys() {

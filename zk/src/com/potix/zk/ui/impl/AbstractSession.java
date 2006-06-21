@@ -33,13 +33,14 @@ implements Session, SessionCtrl {
 	private transient WebApp _wapp;
 	private boolean _invalid;
 
+	/** Constructor used to implement container-dependent session.
+	 */
 	protected AbstractSession(WebApp wapp) {
 		if (wapp == null)
 			throw new IllegalArgumentException("null");
 		_wapp = wapp;
 	}
-	/** Used if the derived implements Serializable. */
-	protected AbstractSession() {}
+	private AbstractSession() {} //required since derived might implement Serializable
 
 	public final WebApp getWebApp() {
 		return _wapp;
