@@ -50,5 +50,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(desktop.webApp.desktopCacheProvider.getDesktopCache(session));
 		</attribute>
 	</button>
+	<button label="Serialize Current Session">
+		<attribute name="onClick">
+	import java.io.*;
+	new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(session);
+		</attribute>
+	</button>
 </vbox>
 </window>
