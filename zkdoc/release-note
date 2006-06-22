@@ -6,7 +6,8 @@ ZK 2.0.1
     attached to another desktop in another event listener.
 
 * Bugs:
-  1505769, 1505833, 1506652, 1506712, 1506712, 1509898, 1510317, 1510279
+  1505769, 1505833, 1506652, 1506712, 1506712, 1509898, 1510317, 1510279,
+  1510374, 1507142
 
 * Upgrade Notes:
   + The namespace of XUL component set is renamed to
