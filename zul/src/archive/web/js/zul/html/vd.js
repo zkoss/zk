@@ -23,32 +23,33 @@ zkau.valid = zkVld; //zkau depends on it
 /** Validates the specified component and returns the error msg. */
 zkVld.validate = function (id) {
 	//There are two ways to validate a component.
-	//1. specify the function in zk_validate or zk_validate2
+	//1. specify the function in zk_valid or zk_valid2
 	id = zkau.uuidOf(id);
 	var cm = $(id);
 	zkVld.validating = true; //to avoid deadloop (when both fields are invalid)
 	try {
 		if (cm) {
-			var fn = cm.getAttribute("zk_validate");
+			var ermg = cm.getAttribute("zk_ermg"); //custom message
+			var fn = cm.getAttribute("zk_valid");
 			if (fn) {
 				var msg = zk.resolve(fn).call(cm, id);
-				if (msg) return msg;
+				if (msg) return ermg ? ermg: msg;
 			}
-			fn = cm.getAttribute("zk_validate2");
+			fn = cm.getAttribute("zk_valid2");
 			if (fn) {
 				var msg = zk.resolve(fn).call(cm, id);
-				if (msg) return msg;
+				if (msg) return ermg ? ermg: msg;
 			}
 
 			var msg = zk.eval(cm, "validate");
-			if (msg) return msg;
+			if (msg) return ermg ? ermg: msg;
 		}
 
 		//2. define a method called validate in the metainfo
 		var meta = zkau.getMeta(id);
 		if (meta && meta.validate) {
 			var msg = meta.validate();
-			if (msg) return msg;
+			if (msg) return ermg ? ermg: msg;
 		}
 
 		zkVld.validating = false; //OK to check another field

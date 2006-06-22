@@ -18,4 +18,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<input id="${self.uuid}" zk_validate="zkVld.onlyInt" zk_type="zul.html.widget.Inbox"${self.outerAttrs}${self.innerAttrs}/>
+<input id="${self.uuid}" zk_type="zul.html.widget.Inbox"${self.outerAttrs}${self.innerAttrs}/>

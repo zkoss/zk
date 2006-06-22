@@ -40,6 +40,8 @@ import com.potix.zul.mesg.MZul;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class SimpleConstraint implements Constraint, java.io.Serializable {
+    private static final long serialVersionUID = 20060622L;
+
 	/** Postive numbers are not allowed. */
 	public static final int NO_POSITIVE = 0x0001;
 	/** Negative numbers are not allowed. */
@@ -259,8 +261,10 @@ public class SimpleConstraint implements Constraint, java.io.Serializable {
 		return (_flags & NO_EMPTY) != 0 ? "zkVld.noEmpty": null;
 			//FUTURE: support more validation in client
 	}
+	public String getErrorMessage() {
+		return _errmsg;
+	}
 	public boolean isClientComplete() {
-		return (_flags == 0 || _flags == NO_EMPTY)
-			&& _regex == null && _errmsg == null;
+		return (_flags == 0 || _flags == NO_EMPTY) && _regex == null;
 	}
 }

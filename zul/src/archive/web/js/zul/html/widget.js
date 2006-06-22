@@ -131,8 +131,22 @@ zkTxbox._scanChanging = function (id) {
 }
 
 ////
-//intbox, decimalbox //
-zkInbox = zkDcbox = zkTxbox;
+//intbox//
+function zkInbox() {}
+
+zkInbox.init = zkTxbox.init;
+zkInbox.validate = function (cmp) {
+	return zkVld.onlyInt(cmp.id);
+};
+
+////
+//decimalbox//
+function zkDcbox() {}
+
+zkDcbox.init = zkTxbox.init;
+zkDcbox.validate = function (cmp) {
+	return zkVld.onlyNum(cmp.id);
+};
 
 ////
 // button //

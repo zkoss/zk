@@ -346,10 +346,8 @@ implements Inputable, Errorable, Constrainted {
 			HTMLs.appendAttribute(sb, "zk_onBlur", true);
 
 		if (_constr != null) {
-			final String script = _constr.getValidationScript();
-			if (script != null)
-				HTMLs.appendAttribute(sb, "zk_validate2", script);
-				//Note: zk_validate is reserved for DSP
+			HTMLs.appendAttribute(sb, "zk_valid", _constr.getValidationScript());
+			HTMLs.appendAttribute(sb, "zk_ermg", _constr.getErrorMessage());
 		}
 		return sb.toString();
 	}

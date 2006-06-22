@@ -47,4 +47,8 @@ public interface Constraint {
 	 * return null or not.
 	 */
 	public boolean isClientComplete();
+	/** Returns the error message, or null if not specified (and default
+	 * message shall be used).
+	 */
+	public String getErrorMessage();
 }
