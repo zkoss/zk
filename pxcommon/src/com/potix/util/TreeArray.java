@@ -47,6 +47,8 @@ import java.util.*;
  */
 public class TreeArray extends AbstractList
 implements ListX, Cloneable, java.io.Serializable {
+    private static final long serialVersionUID = 20060622L;
+
     protected static final boolean RED   = false;
     protected static final boolean BLACK = true;
 

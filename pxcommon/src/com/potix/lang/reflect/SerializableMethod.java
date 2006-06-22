@@ -30,6 +30,7 @@ import com.potix.lang.SystemException;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class SerializableMethod implements Serializable {
+    private static final long serialVersionUID = 20060622L;
 	private transient Method _m;
 
 	public SerializableMethod(Method method) {

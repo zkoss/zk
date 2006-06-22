@@ -67,6 +67,8 @@ import com.potix.idom.*;
  */
 public abstract class AbstractItem
 implements Item, Node, Serializable, Cloneable {
+    private static final long serialVersionUID = 20060622L;
+
 	/** The parent. */
 	private Group _parent;
 	/** The locator. */

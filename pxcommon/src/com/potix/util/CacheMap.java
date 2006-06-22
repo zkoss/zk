@@ -80,6 +80,7 @@ import com.potix.util.logging.Log;
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
  */
 public class CacheMap implements Map, Serializable {
+    private static final long serialVersionUID = 20060622L;
 	//private static final Log log = Log.lookup(CacheMap.class);
 
 	/** The default minimal lifetime, unit=milliseconds. It is 30 minutes. */

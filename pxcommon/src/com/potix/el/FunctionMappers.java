@@ -147,6 +147,8 @@ public class FunctionMappers {
 	}
 
 	private static class MyFuncMapper implements FunctionMapper, Serializable {
+	    private static final long serialVersionUID = 20060622L;
+
 		/** Map(String prefix, Map(name, SerializableMethod)). */
 		private final Map _mappers;
 

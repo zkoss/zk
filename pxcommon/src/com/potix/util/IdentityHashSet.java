@@ -35,6 +35,8 @@ import com.potix.lang.Objects;
  */
 public class IdentityHashSet extends AbstractSet
 implements Set, Cloneable, java.io.Serializable {
+    private static final long serialVersionUID = 20060622L;
+
     private transient IdentityHashMap map;
 
     /**

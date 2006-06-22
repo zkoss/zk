@@ -29,6 +29,8 @@ import com.potix.xml.Locator;
  * @see com.potix.idom.Item
  */
 public class SimpleLocator implements Locator, Serializable {
+    private static final long serialVersionUID = 20060622L;
+
 	protected int _colno, _lnno;
 	protected String _pubId, _sysId;
 

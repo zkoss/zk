@@ -32,6 +32,8 @@ import java.io.ObjectOutputStream;
  * @see Item
  */
 public final class Namespace implements Serializable {
+    private static final long serialVersionUID = 20060622L;
+
 	/** The <code>Namespace</code> for when <i>not</i> in a namespace
 	 */
 	public static final Namespace NO_NAMESPACE = newSpecialNamespace("", "");
