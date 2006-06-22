@@ -73,10 +73,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 
 	<function>
-		<name>outDateJavaScript</name>
+		<name>outLocaleJavaScript</name>
 		<function-class>com.potix.zk.fn.ZkFns</function-class>
 		<function-signature>
-	java.lang.String outDateJavaScript()
+	java.lang.String outLocaleJavaScript()
 		</function-signature>
 		<description>
 	Returns date relevant labels in JavaScript.

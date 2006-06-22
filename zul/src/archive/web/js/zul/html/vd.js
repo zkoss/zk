@@ -77,19 +77,19 @@ zkVld.onlyNum = function (id, noDot) {
 			continue
 		}
 		switch (cc) {
-		case '+': case '-':
+		case '+': case zk.MINUS:
 			if (doted || numed || dashed || perted) break; //err
 			dashed = true;
 			continue; //ok
-		case '.':
+		case zk.DECIMAL:
 			if (doted || perted) break; //err
-			doted = cc == '.';
+			doted = cc == zk.DECIMAL;
 			if (doted && noDot) return mesg.INTEGER_REQUIRED+val;
 			continue;
-		case '%':
+		case zk.PERCENT:
 			perted = true;
 			//fall thru
-		case ',':
+		case zk.GROUPING:
 		case ' ':
 		case '\t':
 			continue;

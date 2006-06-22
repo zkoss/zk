@@ -67,7 +67,7 @@ public class Intbox extends FormatInputElement {
 			return null;
 
 		try {
-			int j = val.indexOf('%');
+			int j = val.indexOf('%'); //toNumberOnly translates Locale-dependent
 			if (j <= 0)
 				return j == 0 ? new Integer(0): Integer.valueOf(val);
 

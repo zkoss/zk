@@ -20,6 +20,7 @@ package com.potix.zul.html.impl;
 
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 import com.potix.lang.Objects;
 import com.potix.util.Locales;
@@ -82,6 +83,12 @@ abstract public class FormatInputElement extends InputElement {
 	protected String toNumberOnly(String val) {
 		if (val == null) return val;
 
+		final DecimalFormatSymbols symbols =
+			new DecimalFormatSymbols(Locales.getCurrent());
+		final char GROUPING = symbols.getGroupingSeparator(),
+			DECIMAL = symbols.getDecimalSeparator(),
+			PERCENT = symbols.getPercent(),
+			MINUS = symbols.getMinusSign();
 		final String fmt = getFormat();
 		StringBuffer sb = null;
 		for (int j = 0, len = val.length(); j < len; ++j) {
@@ -89,14 +96,21 @@ abstract public class FormatInputElement extends InputElement {
 
 			//We don't add if cc shall be ignored (not alphanum but in fmt)
 			final boolean ignore = (cc < '0' || cc > '9')
-				&& cc != '.' && cc != '-' && cc != '+' && cc != '%'
-				&& (Character.isWhitespace(cc) || cc == ','
+				&& cc != DECIMAL && cc != MINUS && cc != '+' && cc != PERCENT
+				&& (Character.isWhitespace(cc) || cc == GROUPING
 					|| (fmt != null && fmt.indexOf(cc) >= 0));
 			if (ignore) {
 				if (sb == null)
 					sb = new StringBuffer(len).append(val.substring(0, j));
 			} else {
-				if (sb != null) sb.append(cc);
+				final char c2 = cc == MINUS ? '-':
+					cc == DECIMAL ? '.': cc == PERCENT ? '%': cc;
+				if (cc != c2) {
+					if (sb == null) sb = new StringBuffer(len);
+					sb.append(c2);
+				} else if (sb != null) {
+					sb.append(c2);
+				}
 			}
 		}
 		return sb != null ? sb.toString(): val;

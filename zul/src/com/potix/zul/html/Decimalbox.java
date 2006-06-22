@@ -87,7 +87,7 @@ public class Decimalbox extends FormatInputElement {
 			return null;
 
 		try {
-			int j = val.indexOf('%');
+			int j = val.indexOf('%'); //toNumberOnly translates Locale-dependent
 			BigDecimal bd = j == 0 ? BigDecimals.ZERO:
 				new BigDecimal(j < 0 ? val: val.substring(0, j));
 			if (_scale != AUTO) bd = bd.setScale(_scale);
