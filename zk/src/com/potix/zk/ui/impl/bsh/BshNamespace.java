@@ -29,9 +29,9 @@ import com.potix.zk.ui.util.Namespace;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class BshNamespace implements Namespace, java.io.Serializable {
-	private transient Namespace _parent;
-	private transient NameSpace _ns;
+public class BshNamespace implements Namespace {//not a good idea to serialize it
+	private Namespace _parent;
+	private NameSpace _ns;
 	/** Constructs a name space of a component (ID space owner).
 	 */
 	public BshNamespace(String id) {

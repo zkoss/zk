@@ -44,6 +44,8 @@ import com.potix.zk.ui.util.Evaluator;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Millieu implements Serializable {
+    private static final long serialVersionUID = 20060622L;
+
 	/** The language definition. */
 	private transient LanguageDefinition _langdef;
 	/** either String or Class as the implementation class. */

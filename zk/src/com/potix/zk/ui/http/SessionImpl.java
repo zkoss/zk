@@ -51,9 +51,9 @@ import com.potix.zk.ui.util.Configuration;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class SessionImpl implements Session, SessionCtrl,
-HttpSessionActivationListener, java.io.Serializable {
+HttpSessionActivationListener/*not ready yet, java.io.Serializable*/ {
 	private static final Log log = Log.lookup(SessionImpl.class);
-    private static final long serialVersionUID = 201L;
+    private static final long serialVersionUID = 20060622L;
 
 	transient private WebApp _wapp;
 	transient private HttpSession _hsess;

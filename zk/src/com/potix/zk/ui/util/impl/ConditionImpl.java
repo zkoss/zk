@@ -31,6 +31,8 @@ import com.potix.zk.ui.util.Condition;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class ConditionImpl implements Condition, java.io.Serializable {
+    private static final long serialVersionUID = 20060622L;
+
 	private String _if;
 	private String _unless;
 

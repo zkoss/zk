@@ -72,6 +72,7 @@ import com.potix.zk.au.AuResponse;
 public class AbstractComponent
 implements Component, ComponentCtrl, Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
+    private static final long serialVersionUID = 20060622L;
 
 	/* Note: if _page != null, then _desktop != null, vice versa. */
 	private transient Desktop _desktop;
@@ -1001,16 +1002,20 @@ implements Component, ComponentCtrl, Serializable {
 
 	/** Holds info shared of the same ID space. */
 	private static class SpaceInfo implements Serializable {
-		private final Map attrs = new HashMap(7);
+	    private static final long serialVersionUID = 20060622L;
+
+		private transient Map attrs = new HashMap(7);
 			//don't create it dynamically because _ip bind it at constructor
-		private final Namespace ns;
+		private transient Namespace ns;
 		/** A map of ((String id, Component fellow). */
-		private final Map fellows = new HashMap(23);
+		private transient Map fellows = new HashMap(23);
+
 		private SpaceInfo(Component owner, String id) {
 			ns = new BshNamespace(id);
 			ns.setVariable("spaceScope", attrs, true);
 			ns.setVariable("spaceOwner", owner, true);
 		}
+		//TODO: handle attrs, ns and fellows
 	}
 	private class ChildIter implements ListIterator  {
 		private final ListIterator _it;

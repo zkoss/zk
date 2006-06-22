@@ -37,6 +37,8 @@ import com.potix.zk.ui.util.Condition;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class CustomAttributes implements Condition, java.io.Serializable {
+    private static final long serialVersionUID = 20060622L;
+
 	private final Map _attrs;
 	private final Condition _cond;
 	private final int _scope;

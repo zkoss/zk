@@ -62,6 +62,7 @@ import com.potix.zk.au.AuBookmark;
  */
 public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(DesktopImpl.class);
+    private static final long serialVersionUID = 20060622L;
 
 	private transient WebApp _wapp;
 	private transient Session _sess;

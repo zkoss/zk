@@ -39,6 +39,7 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  */
 public class Property implements Condition, Serializable {
 	private static final Log log = Log.lookup(Property.class);
+    private static final long serialVersionUID = 20060622L;
 
 	private final String _name;
 	private final String _value;

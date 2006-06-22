@@ -92,6 +92,7 @@ import com.potix.zk.au.AuSetTitle;
 public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);
 	private static final Log _zklog = Log.lookup("com.potix.zk.log");
+    private static final long serialVersionUID = 20060622L;
 
 	/** URI for redrawing as a desktop or part of another desktop. */
 	private final String _dkUri, _pgUri;
