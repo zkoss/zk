@@ -330,6 +330,8 @@ if (!zkMap._inflds)
 
 /** Called when an area is clicked. */
 zkMap.onarea = function (id) {
+	if (zkMap._toofast()) return;
+
 	var cmp = $(id);
 	if (cmp) {
 		var map = zkau.getParentByType(cmp, "Map");
@@ -340,6 +342,8 @@ zkMap.onarea = function (id) {
 };
 /** Called by map-done.dsp */
 zkMap.onclick = function (href) {
+	if (zkMap._toofast()) return;
+
 	var j = href.indexOf('?');
 	if (j < 0) return;
 
@@ -356,6 +360,15 @@ zkMap.onclick = function (href) {
 	var y = href.substring(j + 1);
 	zkau.send({uuid: id, cmd: "onClick", data: [x, y]});
 };
+zkMap._toofast = function () {
+	if (zk.agtNav) { //bug 1510374
+		var now = new Date().getTime();
+		if (zkMap._stamp && now - zkMap._stamp < 800)
+			return true;
+		zkMap._stamp = now;
+	}
+	return false
+}
 
 //popup//
 function zkPop() {}
