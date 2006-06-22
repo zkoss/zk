@@ -72,7 +72,7 @@ public class EventProcessingThread extends Thread {
 	/** The mutex use to notify an event is ready for processing, or
 	 * has been processed.
 	 */
-	private final Object _evtmutex = new Integer(0);
+	private final Object _evtmutex = new Character('a');
 	/** The mutex use to suspend an event processing. */
 	private Object _suspmutex;
 	private boolean _ceased;
@@ -164,15 +164,13 @@ public class EventProcessingThread extends Thread {
 
 		//Spec: locking mutex is optional for app developers
 		//so we have to lock it first
-		if (!_ceased) {
-			_suspmutex = mutex;
-			try {
-				synchronized (_suspmutex) {
-					_suspmutex.wait();
-				}
-			} finally {
-				_suspmutex = null;
+		_suspmutex = mutex;
+		try {
+			synchronized (_suspmutex) {
+				if (!_ceased) _suspmutex.wait();
 			}
+		} finally {
+			_suspmutex = null;
 		}
 
 		_desktop.getWebApp().getConfiguration()
@@ -201,10 +199,8 @@ public class EventProcessingThread extends Thread {
 		}
 
 		//wait until the event thread completes or suspends again
-		if (!_ceased) {
-			synchronized (_evtmutex) {
-				_evtmutex.wait();
-			}
+		synchronized (_evtmutex) {
+			if (!_ceased) _evtmutex.wait();
 		}
 
 		checkError();
