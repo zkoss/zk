@@ -26,6 +26,8 @@ import com.potix.lang.Objects;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class StyleSheet implements java.io.Serializable {
+    private static final long serialVersionUID = 20060622L;
+
 	private final String _href, _type, _content;
 	/** Creates by specifying the file to contain the style sheets.
 	 *
