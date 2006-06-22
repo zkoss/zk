@@ -155,9 +155,10 @@ import com.potix.zk.au.*;
 		if (!_exec.isAsyncUpdate(comp.getPage()))
 			return; //nothing to do
 
-		if (range == null) throw new NullPointerException();
+		if (range == null) throw new IllegalArgumentException();
+
 		final Object old = _invalidated.put(comp, range);
-		if (old == Component.OUTER && range == Component.INNER)
+		if (old == Component.OUTER && range != old)
 			_invalidated.put(comp, old); //restore
 		if (range == Component.OUTER)
 			_smartUpdated.remove(comp);
@@ -167,7 +168,8 @@ import com.potix.zk.au.*;
 	 * execution
 	 */
 	public void addSmartUpdate(Component comp, String attr, String value) {
-		if (!_exec.isAsyncUpdate(comp.getPage()) || _invalidated.containsKey(comp))
+		if (!_exec.isAsyncUpdate(comp.getPage())
+		|| _invalidated.get(comp) == Component.OUTER)
 			return; //nothing to do
 
 		Map respmap = (Map)_smartUpdated.get(comp);
@@ -216,7 +218,7 @@ import com.potix.zk.au.*;
 	 */
 	public void addResponse(String key, AuResponse response) {
 		if (response == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 
 		final TimedResponse respInfo = new TimedResponse(++_resptime, response);
 		if (_responses == null)
