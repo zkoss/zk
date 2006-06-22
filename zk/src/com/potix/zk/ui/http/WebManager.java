@@ -78,7 +78,7 @@ public class WebManager {
 
 	/** A context attribute for storing an instance of this class. */
 	/*package*/ static final String ATTR_WEB_MANAGER
-		= "com.potix.zk.ui.WebManager";
+		= "javax.potix.zk.ui.WebManager";
 	/** A request attribute to store the current desktop.
 	 * Because we store this portlet request, we have to name it
 	 * with javax such that it is visible to other servlets and portlets.
@@ -206,21 +206,25 @@ public class WebManager {
 	public static final
 	Session getSession(ServletContext ctx, HttpServletRequest request) {
 		final HttpSession hsess = request.getSession();
-		Session sess = getSession(hsess);
-		if (sess != null)
-			return sess;
-
+		final Session sess = getSession(hsess);
+		return sess != null ? sess:
+			newSession(getWebManager(ctx).getWebApp(),
+				hsess, request.getRemoteAddr(), request.getRemoteHost());
+	}
+	/** Returns the session.
+	 */
+	/*package*/ static final Session newSession(WebApp wapp,
+	HttpSession hsess, String remoteAddr, String remoteHost) {
 		if (D.ON && log.debugable()) log.debug("Creating a new sess for "+hsess);
 
-		final WebApp webapp = getWebManager(ctx).getWebApp();
-		sess = new SessionImpl(
-			hsess, webapp, request.getRemoteAddr(), request.getRemoteHost());
+		final Session sess =
+			new SessionImpl(hsess, wapp, remoteAddr, remoteHost);
 		hsess.setAttribute(ATTR_SESS, sess);
 
 		//Note: we set timeout here, because HttpSession might have been created
 		//by other servlet or filter
 		final Integer v =
-			webapp.getConfiguration().getSessionMaxInactiveInterval();
+			wapp.getConfiguration().getSessionMaxInactiveInterval();
 		if (v != null)
 			hsess.setMaxInactiveInterval(v.intValue());
 		return sess;
