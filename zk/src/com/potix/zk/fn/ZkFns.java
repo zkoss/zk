@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.Locale;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.text.DecimalFormatSymbols;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -271,10 +272,34 @@ public class ZkFns {
 		return Executions.getCurrent().toAbsoluteURI(uri);
 	}
 
-	/** Generates date labels in JavaScript.
+	/** Generates Locale-dependent strings in JavaScript syntax.
 	 */
-	public final static String outDateJavaScript() {
+	public final static String outLocaleJavaScript() {
 		final Locale locale = Locales.getCurrent();
+		return outNumberJavaScript(locale) + outDateJavaScript(locale);
+	}
+	/** Output number relevant texts.
+	 */
+	private final static String outNumberJavaScript(Locale locale) {
+		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
+		final StringBuffer sb = new StringBuffer(128);
+		appendAssignJavaScript(
+			sb, "zk.GROUPING", symbols.getGroupingSeparator());
+		appendAssignJavaScript(
+			sb, "zk.DECIMAL", symbols.getDecimalSeparator());
+		appendAssignJavaScript(
+			sb, "zk.PERCENT", symbols.getPercent());
+		appendAssignJavaScript(
+			sb, "zk.MINUS", symbols.getMinusSign());
+		return sb.toString();
+	}
+	private final static
+	void appendAssignJavaScript(StringBuffer sb, String nm, char val) {
+		sb.append(nm).append("='").append(val).append("';\n");
+	}
+	/** Output date/calendar relevant labels.
+	 */
+	private final static String outDateJavaScript(Locale locale) {
 		synchronized (_datejs) {
 			final String djs = (String)_datejs.get(locale);
 			if (djs != null) return djs;
