@@ -78,6 +78,8 @@ public class EventProcessingThread extends Thread {
 	private boolean _ceased;
 	/** Whether not to show message when stopping. */
 	private boolean _silent;
+	/** Whether it is suspended. */
+	private transient boolean _suspended;
 
 	public EventProcessingThread() {
 		if (log.debugable()) log.debug("Starting an event processing thread");
@@ -157,20 +159,23 @@ public class EventProcessingThread extends Thread {
 		if (_suspmutex != null)
 			throw new InternalError("Suspend twice?");
 
-		//let the main thread continue
-		synchronized (_evtmutex) {
-			_evtmutex.notify();
-		}
-
 		//Spec: locking mutex is optional for app developers
 		//so we have to lock it first
 		_suspmutex = mutex;
 		try {
 			synchronized (_suspmutex) {
+				_suspended = true;
+
+				//let the main thread continue
+				synchronized (_evtmutex) {
+					_evtmutex.notify();
+				}
+
 				if (!_ceased) _suspmutex.wait();
 			}
 		} finally {
 			_suspmutex = null;
+			_suspended = false; //just in case (such as _ceased)
 		}
 
 		_desktop.getWebApp().getConfiguration()
@@ -195,12 +200,16 @@ public class EventProcessingThread extends Thread {
 		//Spec: locking mutex is optional for app developers
 		//so we have to lock it first
 		synchronized (_suspmutex) {
+			_suspended = false;
 			_suspmutex.notify(); //wake the suspended event thread
 		}
 
 		//wait until the event thread completes or suspends again
+		//If complete: isIdle() is true
+		//If suspend again: _suspended is true
 		synchronized (_evtmutex) {
-			if (!_ceased) _evtmutex.wait();
+			if (!_ceased && !isIdle() && !_suspended)
+				_evtmutex.wait();
 		}
 
 		checkError();
