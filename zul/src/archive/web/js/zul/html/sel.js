@@ -590,12 +590,7 @@ zk.Selectable.prototype = {
 
 	/** Calculates the size. */
 	_calcSize: function () {
-		var headrow = this.headtbl && this.headtbl.rows.length ? this.headtbl.rows[0]: null;
-		var bodyrow = this.bodyrows.length ? this.bodyrows[0]: null;
-		var rowhgh = bodyrow && bodyrow.offsetHeight ? bodyrow.offsetHeight:
-			headrow && headrow.offsetHeight ? headrow.offsetHeight: 20;
-
-		this._calcHgh(rowhgh);
+		this._calcHgh();
 
 		var wd = this.element.style.width;
 		if (wd && wd != "auto") {
@@ -608,12 +603,32 @@ zk.Selectable.prototype = {
 		setTimeout("zkSel._calcSize2('"+this.id+"')", 0);
 			//IE cannot calculate the size immediately after setting overflow to auto
 	},
-	_calcHgh: function (rowhgh) {
+	_calcHgh: function () {
+		var rows = this.bodyrows;
+		var len = rows.length;
+		if (len > 0 && rows[len - 1].style.display == "none") --len;
+			//the last row is invisible (as an insertion point)
+
 		var hgh = this.element.style.height;
 		if (hgh && hgh != "auto") {
 			hgh = parseInt(hgh);
 			if (hgh) {
-				this.realsize(Math.ceil(hgh / rowhgh));
+				hgh -= this._headHgh(0);
+				if (hgh < 20) hgh = 20;
+				var sz = 0;
+				for (var h;; ++sz) {
+					if (sz == len) {
+						sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
+						break;
+					}
+					h = rows[sz].offsetTop + rows[sz].offsetHeight;
+					if (h >= hgh) {
+						if (h > hgh + 2) ++sz; //experimental
+						break;
+					}
+				}
+
+				this.realsize(sz);
 				this.body.style.height = hgh + "px";
 				return; //done
 			}
@@ -626,6 +641,10 @@ zk.Selectable.prototype = {
 			if (gap > 0) { //not enough space
 				hgh = this.body.offsetHeight - gap;
 				if (hgh < 25) hgh = 25;
+
+				var rowhgh = len ? rows[0].offsetHeight: 0;
+				if (!rowhgh) rowhgh = this._headHgh(20);
+
 				sz = Math.round((hgh - diff)/ rowhgh);
 				if (sz < 3) { //minimal 3 rows if auto-size
 					sz = 3;
@@ -638,12 +657,25 @@ zk.Selectable.prototype = {
 		}
 
 		if (sz) {
-			if (hgh) {
-				this.body.style.height = hgh + "px";
-			} else {
-				this.body.style.height = (rowhgh * sz + diff) + "px";
+			if (!hgh) {
+				if (!len) hgh = this._headHgh(20) * sz;
+				else if (sz <= len) {
+					var r = rows[sz - 1];
+					hgh = r.offsetTop + r.offsetHeight;
+				} else {
+					hgh = Math.ceil((sz * rows.offsetHeight) / len);
+				}
+				if (zk.agtIe) hgh += diff; //strange in IE (or scrollbar shown)
 			}
+				
+			this.body.style.height = hgh + "px";
 		}
+	},
+	/* Height of the head row. If now header, defval is returned. */
+	_headHgh: function (defVal) {
+		var n = this.headtbl;
+		n = n && n.rows.length ? n.rows[0]: null;
+		return n && n.offsetHeight ? n.offsetHeight: defVal;
 	},
 	/** Cacluates the gap to make overflow to fit-in.
 	 * @return nonpositive means it already fit
