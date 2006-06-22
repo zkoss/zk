@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
@@ -36,7 +37,6 @@ import com.potix.util.logging.Log;
 
 import com.potix.web.Attributes;
 import com.potix.web.portlet.Portlets;
-import com.potix.web.portlet.PortletServletContext;
 import com.potix.web.portlet.PortletHttpSession;
 import com.potix.web.portlet.RenderHttpServletRequest;
 import com.potix.web.portlet.RenderHttpServletResponse;
@@ -104,9 +104,14 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	}
 
 	/** Returns the session. */
-	private Session getSession(RenderRequest request) {
-		return WebManager.getSession(
-			PortletHttpSession.getInstance(request.getPortletSession()));
+	private Session getSession(RenderRequest request)
+	throws PortletException {
+		final HttpSession hsess =
+			PortletHttpSession.getInstance(request.getPortletSession());
+		final Session sess = WebManager.getSession(hsess);
+		return sess != null ? sess:
+			WebManager.newSession(
+				getWebManager().getWebApp(), hsess, null, null);
 	}
 	/** Process a portlet request.
 	 * @param path the path of the ZUML page to render. If null or not found,
