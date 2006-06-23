@@ -24,10 +24,6 @@ import java.util.AbstractSet;
 import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
-import java.io.Serializable;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.lang.ref.ReferenceQueue;
@@ -79,7 +75,7 @@ import com.potix.util.logging.Log;
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
  */
-public class CacheMap implements Map, Serializable {
+public class CacheMap implements Map, java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20060622L;
 	//private static final Log log = Log.lookup(CacheMap.class);
 
@@ -89,7 +85,7 @@ public class CacheMap implements Map, Serializable {
 	public static final int DEFAULT_MAXSIZE = 1024;
 
 	/** The map to store the mappings. */
-	private final Map _map; //it is OK to serialized
+	private Map _map; //it is OK to serialized
 	/** The minimal lifetime. */
 	private int _lifetime = DEFAULT_LIFETIME;
 	/** The maximal allowed size. */
@@ -105,7 +101,7 @@ public class CacheMap implements Map, Serializable {
 	private static class X {
 	}
 	/** The class to hold key/value. */
-	protected static final class Value implements Serializable {
+	protected static final class Value implements java.io.Serializable, Cloneable {
 		private Object value;
 		private long access; //when the mapping is accessed
 
@@ -129,6 +125,14 @@ public class CacheMap implements Map, Serializable {
 			return this.access;
 		}
 
+		//-- cloneable --//
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
 		//-- Object --//
 		public final String toString() {
 			return "(" + this.value + '@' + this.access + ')';
@@ -569,9 +573,32 @@ public class CacheMap implements Map, Serializable {
 		}
 	}*/
 
-	//-- Serializable --//
+	//Cloneable//
+	public Object clone() {
+		final CacheMap clone;
+		try {
+			clone = (CacheMap)super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+
+		clone._map = new LinkedHashMap(clone._map);
+		for (Iterator it = clone._map.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			me.setValue(((Value)me.getValue()).clone());
+		}
+
+		clone.init();
+		return clone;
+	}
+
+	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void readObject(ObjectInputStream s)
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

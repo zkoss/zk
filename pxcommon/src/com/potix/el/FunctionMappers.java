@@ -81,7 +81,7 @@ public class FunctionMappers {
 			if (!mtds.isEmpty())
 				mappers.put(taglib.getPrefix(), mtds);
 		}
-		return new MyFuncMapper(mappers);
+		return new MyMapper(mappers);
 	}
 
 	/** Loads functions defined in the specified URL.
@@ -146,15 +146,16 @@ public class FunctionMappers {
 		}
 	}
 
-	private static class MyFuncMapper implements FunctionMapper, Serializable {
+	private static class MyMapper
+	implements FunctionMapper, Serializable, Cloneable {
 	    private static final long serialVersionUID = 20060622L;
 
 		/** Map(String prefix, Map(name, SerializableMethod)). */
-		private final Map _mappers;
+		private Map _mappers;
 
 		/** @param mappers Map(String prefix, Map(String name, Method method))
 		 */
-		private MyFuncMapper(Map mappers) {
+		private MyMapper(Map mappers) {
 			_mappers = mappers;
 			for (Iterator it = mappers.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
@@ -183,6 +184,30 @@ public class FunctionMappers {
 				if (mtd != null) return mtd.getMethod();
 			}
 			return null;
+		}
+		//-- cloneable --//
+		public Object clone() {
+			final MyMapper clone;
+			try {
+				clone = (MyMapper)super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+
+			clone._mappers = new HashMap(clone._mappers);
+			for (Iterator it = clone._mappers.entrySet().iterator();
+			it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				me.setValue(new HashMap((Map)me.getValue()));
+			}
+			return clone;
+		}
+		//Object//
+		public int hashCode() {
+			return _mappers.hashCode();
+		}
+		public boolean equals(Object o) {
+			return o instanceof MyMapper && _mappers.equals(((MyMapper)o)._mappers);
 		}
 	}
 	private static class TaglibLoader extends AbstractLoader {

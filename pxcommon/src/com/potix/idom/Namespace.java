@@ -31,7 +31,7 @@ import java.io.ObjectOutputStream;
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
  * @see Item
  */
-public final class Namespace implements Serializable {
+public final class Namespace implements Serializable, Cloneable {
     private static final long serialVersionUID = 20060622L;
 
 	/** The <code>Namespace</code> for when <i>not</i> in a namespace
@@ -131,6 +131,15 @@ public final class Namespace implements Serializable {
 				throw new DOMException(DOMException.NAMESPACE_ERR,
 					"The same prefix, " + _prefix + ", cannot have different URI: "+_uri+" vs "+ns._uri);
 		return false;
+	}
+
+	//-- cloneable --//
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
 	}
 
 	//-- Object --//

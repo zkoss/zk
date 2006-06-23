@@ -29,7 +29,7 @@ import com.potix.lang.SystemException;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class SerializableMethod implements Serializable {
+public class SerializableMethod implements Serializable, Cloneable {
     private static final long serialVersionUID = 20060622L;
 	private transient Method _m;
 
@@ -77,6 +77,15 @@ public class SerializableMethod implements Serializable {
 			} catch (NoSuchMethodException ex) {
 				throw new SystemException("Method not found: "+nm+" with "+Objects.toString(argTypes));
 			}
+		}
+	}
+
+	//-- cloneable --//
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
 		}
 	}
 
