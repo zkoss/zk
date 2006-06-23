@@ -25,7 +25,7 @@ import com.potix.lang.Objects;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class StyleSheet implements java.io.Serializable {
+public class StyleSheet implements java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20060622L;
 
 	private final String _href, _type, _content;
@@ -69,6 +69,15 @@ public class StyleSheet implements java.io.Serializable {
 	 */
 	public String getContent() {
 		return _content;
+	}
+
+	//-- cloneable --//
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
 	}
 
 	//-- Object --//
