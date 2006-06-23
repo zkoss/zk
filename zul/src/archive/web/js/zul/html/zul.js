@@ -72,8 +72,9 @@ zul.doModal = function (cmp) {
 			}
 		}
 		if (bMask) {
-			document.body.insertAdjacentHTML(
-				"afterbegin", '<div id="'+maskId+'" class="modal_mask"></div>');
+			//bug 1510218: we have to make it as a sibling to cmp
+			cmp.insertAdjacentHTML(
+				"beforebegin", '<div id="'+maskId+'" class="modal_mask"></div>');
 			mask =  $(maskId);
 			if (!mask) zk.debug(msgzul.FAILED_TO_CREATE_MASK);
 		}

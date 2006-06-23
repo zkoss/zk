@@ -118,6 +118,8 @@ public class Timer extends XulElement {
 			new StringBuffer(64).append(super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "zk_delay", _delay);
 		HTMLs.appendAttribute(sb, "zk_repeats", _repeats);
+		if (!_running)
+			sb.append(" zk_running=\"false\"");
 		return sb.toString();
 	}
 
