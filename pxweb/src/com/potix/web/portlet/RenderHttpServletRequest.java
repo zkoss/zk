@@ -160,7 +160,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return 0;
 	}
 	public String getMethod() {
-		return null;
+		return "GET";
 	}
 	public String getPathInfo() {
 		return (String)getAttribute("javax.servlet.include.path_info");
