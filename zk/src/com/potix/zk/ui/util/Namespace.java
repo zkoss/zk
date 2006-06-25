@@ -69,4 +69,9 @@ public interface Namespace {
 	/** Returns the native name space.
 	 */
 	public Object getNativeNamespace();
+
+	/** Copies the variables and methods from the specified
+	 * the name space.
+	 */
+	public void copy(Namespace from);
 }

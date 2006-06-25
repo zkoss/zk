@@ -35,7 +35,7 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  */
 public class HtmlMacroComponent extends HtmlBasedComponent
 implements PostCreate, IdSpace, DynamicPropertied {
-	private final Map _attrs = new HashMap(7);
+	private Map _attrs = new HashMap(7);
 
 	public HtmlMacroComponent() {
 		_attrs.put("includer", this);
@@ -45,6 +45,13 @@ implements PostCreate, IdSpace, DynamicPropertied {
 	public void postCreate() {
 		getDesktop().getExecution().createComponents(
 			getMillieu().getMacroURI(this), this, _attrs);
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final HtmlMacroComponent clone = (HtmlMacroComponent)super.clone();
+		clone._attrs = new HashMap(clone._attrs);
+		return clone;
 	}
 
 	//-- DynamicPropertied --//

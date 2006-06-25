@@ -19,6 +19,7 @@ package com.potix.zk.ui.impl.bsh;
 import bsh.NameSpace;
 import bsh.UtilEvalError;
 import bsh.Primitive;
+import bsh.BshMethod;
 
 import com.potix.lang.Objects;
 import com.potix.zk.ui.UiException;
@@ -95,6 +96,30 @@ public class BshNamespace implements Namespace {//not a good idea to serialize i
 
 	public Object getNativeNamespace() {
 		return _ns;
+	}
+
+	public void copy(Namespace nsfrom) {
+		if (!(nsfrom instanceof BshNamespace))
+			throw new UnsupportedOperationException("BshNamespace to BshNamespace only: "+nsfrom);
+
+		final NameSpace from = ((BshNamespace)nsfrom)._ns;
+
+		//variables
+		try {
+			final String[] vars = from.getVariableNames();
+			for (int j = vars != null ? vars.length: 0; --j >= 0;) {
+				if (_ns.getVariable(vars[j], false) == null)
+					_ns.setVariable(vars[j],
+						from.getVariable(vars[j], false), false);
+			}
+
+			//methods
+			final BshMethod[] mtds = from.getMethods();
+			for (int j = mtds != null ? mtds.length: 0; --j >= 0;)
+				_ns.setMethod(mtds[j].getName(), mtds[j]);
+		} catch (UtilEvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
 	}
 
 	//Serializable//

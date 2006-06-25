@@ -27,9 +27,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Writer;
-import java.io.Serializable;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
 import java.io.IOException;
 
 import com.potix.lang.D;
@@ -70,7 +67,7 @@ import com.potix.zk.au.AuResponse;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class AbstractComponent
-implements Component, ComponentCtrl, Serializable {
+implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
     private static final long serialVersionUID = 20060622L;
 
@@ -83,11 +80,11 @@ implements Component, ComponentCtrl, Serializable {
 	private transient Component _parent;
 	/** The mold (default: "default"). */
 	private String _mold = "default";
-	private final List _children = new LinkedList();
+	private List _children = new LinkedList();
 	private transient List _modChildren;
 	/** The info of the ID space, or null if IdSpace is NOT implemented. */
-	private final SpaceInfo _spaceInfo;
-	private final Map _attrs = new HashMap(3);
+	private transient SpaceInfo _spaceInfo;
+	private Map _attrs = new HashMap(3);
 		//don't create it dynamically because _ip bind it at constructor
 	/** A map of event listener: Map(evtnm, EventListener)). */
 	private Map _listeners;
@@ -1001,9 +998,7 @@ implements Component, ComponentCtrl, Serializable {
 	}
 
 	/** Holds info shared of the same ID space. */
-	private static class SpaceInfo implements Serializable {
-	    private static final long serialVersionUID = 20060622L;
-
+	private static class SpaceInfo {
 		private transient Map attrs = new HashMap(7);
 			//don't create it dynamically because _ip bind it at constructor
 		private transient Namespace ns;
@@ -1015,7 +1010,6 @@ implements Component, ComponentCtrl, Serializable {
 			ns.setVariable("spaceScope", attrs, true);
 			ns.setVariable("spaceOwner", owner, true);
 		}
-		//TODO: handle attrs, ns and fellows
 	}
 	private class ChildIter implements ListIterator  {
 		private final ListIterator _it;
@@ -1091,10 +1085,62 @@ implements Component, ComponentCtrl, Serializable {
 		}
 	}
 
+	//Cloneable//
+	public Object clone() {
+		return clone0(null);
+	}
+	private AbstractComponent clone0(Namespace nsparent) {
+		final AbstractComponent clone;
+		try {
+			clone = (AbstractComponent)super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+
+		//1. make it not belonging to any page
+		clone._desktop = null;
+		clone._page = null;
+		clone._parent = null;
+		clone._attrs = new HashMap(clone._attrs);
+		if (_listeners != null)
+			_listeners = new HashMap(_listeners);
+		cloneChildren(clone);
+		clone.init();
+
+		//2. spaceinfo
+		if (clone._spaceInfo != null) {
+			clone._spaceInfo = new SpaceInfo(clone, clone._uuid);
+			clone._spaceInfo.ns.setParent(nsparent);
+			cloneSpaceInfo(clone, this._spaceInfo);
+		}
+		return clone;
+	}
+	private static void cloneSpaceInfo(AbstractComponent clone, SpaceInfo from) {
+		final SpaceInfo to = clone._spaceInfo;
+		to.attrs.putAll(from.attrs);
+		to.ns.copy(from.ns);
+
+		//rebuild fellow and ns by binding itself and all children
+		clone.bindToIdSpace(clone);
+		for (Iterator it = clone.getChildren().iterator(); it.hasNext();)
+			addToIdSpacesDown((Component)it.next(), clone);
+	}
+	private static void cloneChildren(AbstractComponent comp) {
+		final Namespace ns = comp._spaceInfo != null ? comp._spaceInfo.ns: null;
+
+		comp._children = new LinkedList(comp._children);
+		for (ListIterator it = comp._children.listIterator(); it.hasNext();) {
+			AbstractComponent ch = (AbstractComponent)it.next();
+			ch = (AbstractComponent)ch.clone0(ns); //recursive
+			ch._parent = comp; //correct it
+			it.set(ch);
+		}
+	}
+
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void readObject(ObjectInputStream s)
-	throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		init();

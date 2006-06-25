@@ -57,7 +57,7 @@ import com.potix.zk.au.AuResponse;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public interface Component extends java.io.Serializable {
+public interface Component extends java.io.Serializable, Cloneable {
 	/** Returns the owner of the ID space that this component belongs to.
 	 * It is either a component, a page or null.
 	 * If it has an ancestor that implements {@link IdSpace}, it is returned.
@@ -601,6 +601,13 @@ public interface Component extends java.io.Serializable {
 	 * {@link com.potix.zk.ui.metainfo.LanguageDefinition}.
 	 */
 	public void applyProperties();
+
+	/** Clones the component.
+	 * All of its children is cloned.
+	 * Notice that the cloned component doesn't belong to any page, nor
+	 * desktop. It doesn't have parent, either.
+	 */
+	public Object clone();
 
 	/** Used with {@link #invalidate(Component.Range)} to denote the inner elements
 	 * (excluding the enclosing tag).
