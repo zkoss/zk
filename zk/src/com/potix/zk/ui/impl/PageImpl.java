@@ -108,7 +108,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	/** A map of fellows. */
 	private transient Map _fellows = new HashMap();
 	/** A map of attributes. */
-	private transient Map _attrs = new HashMap();
+	private transient final Map _attrs = new HashMap();
 		//don't create it dynamically because _ip bind it at constructor
 	/** A map of event listener: Map(evtnm, List(EventListener)). */
 	private transient Map _listeners;
@@ -535,7 +535,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
-		//TODO: save namespace
+		Serializables.writeAttributes(s, _attrs);
+
+		//TODO: save ID space (only variables that are not fellows)
 	}
 
 	private synchronized void readObject(java.io.ObjectInputStream s)
@@ -544,7 +546,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 		init();
 
-		//TODO: restore namespace
+		Serializables.readAttributes(s, _attrs);
+
+		//TODO: restore ID space
 	}
 
 	//-- Object --//

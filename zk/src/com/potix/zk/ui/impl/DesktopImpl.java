@@ -76,7 +76,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** Map (String uuid, Component comp). */
 	private transient Map _comps = new HashMap(41);
 	/** A map of attributes. */
-	private final Map _attrs = new HashMap();
+	private transient final Map _attrs = new HashMap();
 		//don't create it dynamically because PageImp._ip bind it at constructor
 	private transient Execution _exec;
 	/** Next available ID. */
@@ -302,6 +302,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	//-- Serializable --//
 	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		Serializables.writeAttributes(s, _attrs);
+	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
@@ -314,6 +320,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			for (Iterator e = ((Page)it.next()).getRoots().iterator();
 			e.hasNext();)
 				addAllComponents((Component)e.next());
+
+		Serializables.readAttributes(s, _attrs);
 	}
 	private void addAllComponents(Component comp) {
 		addComponent(comp);

@@ -51,6 +51,7 @@ import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.UiEngine;
 import com.potix.zk.ui.sys.Variables;
 import com.potix.zk.ui.util.Namespace;
+import com.potix.zk.ui.impl.Serializables;
 import com.potix.zk.ui.impl.bsh.BshNamespace;
 import com.potix.zk.ui.metainfo.Millieu;
 import com.potix.zk.ui.metainfo.ComponentDefinition;
@@ -1169,32 +1170,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//store _spaceInfo
 		if (this instanceof IdSpace) {
-			//Count # of serializable _spaceInfo.attrs
-			int cnt = 0;
-			for (Iterator it = _spaceInfo.attrs.values().iterator();
-			it.hasNext();) {
-				final Object o = it.next();
-				if ((o instanceof java.io.Serializable)
-				||  (o instanceof java.io.Externalizable))
-					++cnt;
-			}
+			//write _spaceInfo.attrs
+			Serializables.writeAttributes(s, _spaceInfo.attrs);
 
-			//Write serializable _spaceInfo.attrs
-			s.writeInt(cnt);
-			if (cnt > 0) {
-				for (Iterator it = _spaceInfo.attrs.entrySet().iterator();
-				it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final Object val = me.getValue();
-					if ((val instanceof java.io.Serializable)
-					||  (val instanceof java.io.Externalizable)) {
-						s.writeObject(me.getKey());
-						s.writeObject(val);
-					}
-				}
-			}
-
-			//_spaceInfo.ns (only variables that are not fellows)
+			//write _spaceInfo.ns (only variables that are not fellows)
 			s.writeInt(0); //TODO
 		}
 	}
@@ -1228,12 +1207,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 
 			//read _spaceInfo.attrs
-			int cnt = s.readInt();
-			while (--cnt >= 0)
-				_spaceInfo.attrs.put(s.readObject(), s.readObject());
+			Serializables.readAttributes(s, _spaceInfo.attrs);
 
 			//_spaceInfo.ns
-			cnt = s.readInt();
+			int cnt = s.readInt();
 			while (--cnt >= 0)
 				_spaceInfo.ns.setVariable(
 					(String)s.readObject(), s.readObject(), true);
