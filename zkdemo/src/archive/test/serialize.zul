@@ -18,26 +18,36 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Test of Serialization">
-<vbox>
+<vbox id="vb">
 	<listbox id="src" multiple="true" width="200px">
 		<listhead>
 			<listheader label="Population"/>
 			<listheader align="right" label="%"/>
 		</listhead>
-		<listitem id="a" value="A">
+		<listitem value="A">
 			<listcell label="A. Graduate"/>
 			<listcell label="20%"/>
 		</listitem>
-		<listitem id="b" value="B">
+		<listitem value="B">
 			<listcell label="B. College"/>
 			<listcell label="23%"/>
 		</listitem>
-		<listitem id="c" value="C">
+		<listitem value="C">
 			<listcell label="C. High School"/>
 			<listcell label="40%"/>
 		</listitem>
 	</listbox>
 
+	<zscript>
+	int cnt = 0;
+	</zscript>
+	<button label="Clone">
+		<attribute name="onClick">
+	Listbox l = src.clone();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+		</attribute>
+	</button>
 	<button label="Serialize Current Desktop">
 		<attribute name="onClick">
 	import java.io.*;
