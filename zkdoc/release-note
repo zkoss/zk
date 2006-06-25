@@ -1,7 +1,8 @@
 	--------
 ZK 2.0.1
 * Features:
-  1505319, 1505760, 1505410, 1505883, 1509204, 1509878.
+  1505319, 1505760, 1505410, 1505883, 1509204, 1509878, 1508629.
+  + Components are cloneable.
   + Components can be detached from one desktop in an event listener, and then
     attached to another desktop in another event listener.
 
