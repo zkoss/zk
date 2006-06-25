@@ -981,10 +981,28 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//nothing to do
 	}
 	public void sessionDidActivate(Page page) {
-		_page = page;
-		_desktop = page.getDesktop();
-		for (Iterator it = getChildren().iterator(); it.hasNext();)
-			((AbstractComponent)it.next()).sessionDidActivate(page); //recursive
+		sessionDidActivate0(page, this, true);
+	}
+	/** 
+	 * @param pageLevelIdSpace whether this component's ID space is
+	 * at the page level.
+	 */
+	private static void sessionDidActivate0(Page page,
+	AbstractComponent comp, boolean pageLevelIdSpace) {
+		comp._page = page;
+		comp._desktop = page.getDesktop();
+
+		//Note: we need only to fix the first-level spaceInfo.
+		//Others are handled by readObject
+		if (pageLevelIdSpace && comp._spaceInfo != null) {
+			pageLevelIdSpace = false;
+			comp._spaceInfo.ns.setParent(page.getNamespace());
+		}
+
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
+			final AbstractComponent child = (AbstractComponent)it.next();
+			sessionDidActivate0(page, child, pageLevelIdSpace); //recursive
+		}
 	}
 
 	//-- Object --//
@@ -999,11 +1017,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Holds info shared of the same ID space. */
 	private static class SpaceInfo {
-		private transient Map attrs = new HashMap(7);
+		private Map attrs = new HashMap(7);
 			//don't create it dynamically because _ip bind it at constructor
-		private transient Namespace ns;
+		private Namespace ns;
 		/** A map of ((String id, Component fellow). */
-		private transient Map fellows = new HashMap(23);
+		private Map fellows = new HashMap(23);
 
 		private SpaceInfo(Component owner, String id) {
 			ns = new BshNamespace(id);
@@ -1123,7 +1141,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		to.attrs.putAll(from.attrs);
 		to.ns.copy(from.ns);
 
-		//rebuild fellow and ns by binding itself and all children
+		//rebuild ID space by binding itself and all children
 		clone.bindToIdSpace(clone);
 		for (Iterator it = clone.getChildren().iterator(); it.hasNext();)
 			addToIdSpacesDown((Component)it.next(), clone);
@@ -1145,12 +1163,85 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	//Serializable//
 	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		//store _spaceInfo
+		if (this instanceof IdSpace) {
+			//Count # of serializable _spaceInfo.attrs
+			int cnt = 0;
+			for (Iterator it = _spaceInfo.attrs.values().iterator();
+			it.hasNext();) {
+				final Object o = it.next();
+				if ((o instanceof java.io.Serializable)
+				||  (o instanceof java.io.Externalizable))
+					++cnt;
+			}
+
+			//Write serializable _spaceInfo.attrs
+			s.writeInt(cnt);
+			if (cnt > 0) {
+				for (Iterator it = _spaceInfo.attrs.entrySet().iterator();
+				it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					final Object val = me.getValue();
+					if ((val instanceof java.io.Serializable)
+					||  (val instanceof java.io.Externalizable)) {
+						s.writeObject(me.getKey());
+						s.writeObject(val);
+					}
+				}
+			}
+
+			//_spaceInfo.ns (only variables that are not fellows)
+			s.writeInt(0); //TODO
+		}
+	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		init();
 
-		//TODO: restore children's parent
+		//restore child's _parent
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			final AbstractComponent child = (AbstractComponent)it.next();
+			child._parent = this;
+		}
+
+		//restore _spaceInfo
+		if (this instanceof IdSpace) {
+			_spaceInfo = new SpaceInfo(this, _uuid);
+
+			//fix _spaceInfo's parent
+			for (AbstractComponent p = this;;) {
+				final AbstractComponent q = (AbstractComponent)p.getParent();
+				if (q instanceof IdSpace) {
+					_spaceInfo.ns.setParent(q._spaceInfo.ns);
+					break;
+				} else if (q != null) {
+					p = q;
+				} else {
+					break;
+				}
+			}
+
+			//read _spaceInfo.attrs
+			int cnt = s.readInt();
+			while (--cnt >= 0)
+				_spaceInfo.attrs.put(s.readObject(), s.readObject());
+
+			//_spaceInfo.ns
+			cnt = s.readInt();
+			while (--cnt >= 0)
+				_spaceInfo.ns.setVariable(
+					(String)s.readObject(), s.readObject(), true);
+
+			//restore ID space by binding itself and all children
+			bindToIdSpace(this);
+			for (Iterator it = getChildren().iterator(); it.hasNext();)
+				addToIdSpacesDown((Component)it.next(), this);
+		}
 	}
 }

@@ -36,10 +36,14 @@ public interface ComponentCtrl {
 
 	/** Notification that the session, which owns this component,
 	 * is about to be passivated (aka., serialized).
+	 *
+	 * <p>Note: only root components are notified by this method.
 	 */
 	public void sessionWillPassivate(Page page);
 	/** Notification that the session, which owns this component,
 	 * has just been activated (aka., deserialized).
+	 *
+	 * <p>Note: only root components are notified by this method.
 	 */
 	public void sessionDidActivate(Page page);
 }

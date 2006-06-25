@@ -122,13 +122,6 @@ public class BshNamespace implements Namespace {//not a good idea to serialize i
 		}
 	}
 
-	//Serializable//
-	private synchronized void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		s.defaultReadObject();
-		//TODO: restore _parent
-	}
-
 	//-- Object --//
 	public int hashCode() {
 		return _ns.hashCode();
