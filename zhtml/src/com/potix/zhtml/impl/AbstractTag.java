@@ -228,6 +228,14 @@ implements DynamicPropertied, RawId {
 		return !_childless.contains(_tagnm);
 	}
 
+	//Cloneable//
+	public Object clone() {
+		final AbstractTag clone = (AbstractTag)super.clone();
+		clone._attrs = new HashMap(clone._attrs);
+		return clone;
+	}
+
+	//Object//
 	public String toString() {
 		return "["+_tagnm+' '+getId()+']';
 	}
