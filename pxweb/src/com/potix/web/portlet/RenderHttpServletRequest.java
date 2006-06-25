@@ -51,19 +51,19 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getAttributeNames();
 	}
 	public String getCharacterEncoding() {
-		return null;
+		return "UTF-8";
 	}
 	public int getContentLength() {
 		return 0;
 	}
 	public String getContentType() {
-		return null;
+		return "html";
 	}
 	public javax.servlet.ServletInputStream getInputStream() {
 		throw new UnsupportedOperationException();
 	}
 	public String getLocalAddr() {
-		return null;
+		return "";
 	}
 	public java.util.Locale getLocale() {
 		return _req.getLocale();
@@ -72,7 +72,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getLocales();
 	}
 	public String getLocalName() {
-		return null;
+		return "";
 	}
 	public int getLocalPort() {
 		return 80;
@@ -90,7 +90,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getParameterValues(name);
 	}
 	public String getProtocol() {
-		return null;
+		return "HTTP/1.1";
 	}
 	public java.io.BufferedReader getReader() {
 		throw new UnsupportedOperationException();
@@ -102,10 +102,10 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return null;
 	}
 	public String getRemoteAddr() {
-		return null;
+		return "";
 	}
 	public String getRemoteHost() {
-		return null;
+		return "";
 	}
 	public int getRemotePort() {
 		return 0;
@@ -135,7 +135,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 	}
 
 	//-- HttpServletRequest --//
-	public String 	getAuthType() {
+	public String getAuthType() {
 		return _req.getAuthType();
 	}
 	public String getContextPath() {
@@ -181,7 +181,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return (String)getAttribute("javax.servlet.include.request_uri");
 	}
 	public StringBuffer getRequestURL() {
-		return null;
+		return new StringBuffer();
 	}
 	public String getServletPath() {
 		return (String)getAttribute("javax.servlet.include.servlet_path");
