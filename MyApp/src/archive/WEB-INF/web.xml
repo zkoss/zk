@@ -75,10 +75,6 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<mime-type>application/vnd.ms-word</mime-type>
 	</mime-mapping>
 	<mime-mapping>
-		<extension>dsp</extension>
-		<mime-type>text/html</mime-type>
-	</mime-mapping>
-	<mime-mapping>
 		<extension>gif</extension>
 		<mime-type>image/gif</mime-type>
 	</mime-mapping>
@@ -148,6 +144,5 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<welcome-file>index.zhtml</welcome-file>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.dsp</welcome-file>
 	</welcome-file-list>
 </web-app>
