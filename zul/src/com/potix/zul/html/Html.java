@@ -34,6 +34,10 @@ import com.potix.zul.html.impl.XulElement;
  */
 public class Html extends XulElement {
 	private String _content = "";
+
+	public Html() {
+	}
+
 	/** Returns the HTML tags being embedded.
 	 * <p>Default: empty.
 	 */

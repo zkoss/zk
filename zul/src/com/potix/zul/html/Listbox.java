@@ -1139,4 +1139,37 @@ implements Selectable, Render, java.io.Serializable {
 
 		//TODO
 	}
+
+	//Cloneable//
+	public Object clone() {
+		final Listbox clone = (Listbox)super.clone();
+		fixClone(clone);
+		return clone;
+	}
+	private static void fixClone(Listbox clone) {
+		clone.init();
+
+		int cnt = clone._selItems.size();
+		if (clone._listhead != null) ++cnt;
+		if (clone._listfoot != null) ++cnt;
+		if (cnt == 0) return; //nothing to do
+
+		clone._selItems = new LinkedHashSet(5);
+		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Listitem) {
+				final Listitem li = (Listitem)child;
+				if (li.isSelected()) {
+					clone._selItems.add(li);
+					if (--cnt == 0) break;
+				}
+			} else if (child instanceof Listhead) {
+				clone._listhead = (Listhead)child;
+				if (--cnt == 0) break;
+			} else if (child instanceof Listfoot) {
+				clone._listfoot = (Listfoot)child;
+				if (--cnt == 0) break;
+			}
+		}
+	}
 }

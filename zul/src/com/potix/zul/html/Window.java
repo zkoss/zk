@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zul.html;
 
+import java.util.Iterator;
 import java.util.Set;
 import java.util.LinkedHashSet;
 
@@ -428,5 +429,23 @@ public class Window extends XulElement implements IdSpace  {
 			HTMLs.appendAttribute(sb, "zk_closable", true);
 		HTMLs.appendAttribute(sb, "zk_ctkeys", _ctrlKeys);
 		return sb.toString();
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final Window clone = (Window)super.clone();
+		fixClone(clone);
+		return clone;
+	}
+	private static void fixClone(Window clone) {
+		if (clone._caption != null) {
+			for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+				final Object child = it.next();
+				if (child instanceof Caption) {
+					clone._caption = (Caption)child;
+					break;
+				}
+			}
+		}
 	}
 }

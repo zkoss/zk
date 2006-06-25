@@ -352,4 +352,28 @@ public class Treeitem extends XulElement implements Openable {
 		}
 		super.onChildRemoved(child);
 	}
+
+	//Cloneable//
+	public Object clone() {
+		final Treeitem clone = (Treeitem)super.clone();
+		fixClone(clone);
+		return clone;
+	}
+	private static void fixClone(Treeitem clone) {
+		int cnt = 0;
+		if (clone._treerow != null) ++cnt;
+		if (clone._treechildren != null) ++cnt;
+		if (cnt == 0) return;
+
+		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Treerow) {
+				clone._treerow = (Treerow)child;
+				if (--cnt == 0) break;
+			} else if (child instanceof Treechildren) {
+				clone._treechildren = (Treechildren)child;
+				if (--cnt == 0) break;
+			}
+		}
+	}
 }

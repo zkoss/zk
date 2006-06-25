@@ -267,6 +267,14 @@ abstract public class XulElement extends HtmlBasedComponent {
 		return sb != null ? sb.toString():  null;
 	}
 
+	//Cloneable//
+	public Object clone() {
+		final XulElement clone = (XulElement)super.clone();
+		if (clone._actmap != null)
+			clone._actmap = new HashMap(clone._actmap);
+		return clone;
+	}
+
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();

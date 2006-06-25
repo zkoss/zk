@@ -165,4 +165,15 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 		super.onChildRemoved(child);
 		if (child == _drop) _drop = null; //just in case
 	}
+
+	//Cloneable//
+	public Object clone() {
+		final Bandbox clone = (Bandbox)super.clone();
+		fixClone(clone);
+		return clone;
+	}
+	private static void fixClone(Bandbox clone) {
+		if (clone._drop != null)
+			clone._drop = (Bandpopup)clone.getChildren().get(0);
+	}
 }

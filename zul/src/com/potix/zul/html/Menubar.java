@@ -35,6 +35,7 @@ import com.potix.zul.html.impl.XulElement;
  */
 public class Menubar extends XulElement {
 	private boolean _autodrop;
+
 	public Menubar() {
 		setSclass("menubar");
 		setMold("horizontal");

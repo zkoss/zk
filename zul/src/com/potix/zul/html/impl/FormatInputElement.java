@@ -34,6 +34,7 @@ import com.potix.zk.ui.WrongValueException;
  */
 abstract public class FormatInputElement extends InputElement {
 	private String _format;
+
 	/** Returns the format.
 	 * <p>Default: null (used what is defined in the format sheet).
 	 */

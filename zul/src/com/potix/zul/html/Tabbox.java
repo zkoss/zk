@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zul.html;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import com.potix.lang.Objects;
@@ -234,5 +235,37 @@ public class Tabbox extends XulElement implements Selectable {
 
 		//HTMLs.appendAttribute(sb, "zk_orient", _orient);
 		return sb.toString();
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final Tabbox clone = (Tabbox)super.clone();
+		fixClone(clone);
+		return clone;
+	}
+	private static void fixClone(Tabbox clone) {
+		int cnt = 0;
+		if (clone._tabs != null) ++cnt;
+		if (clone._tabpanels != null) ++cnt;
+		if (cnt == 0) return;
+
+		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Tabs) {
+				clone._tabs = (Tabs)child;
+				for (Iterator e = clone._tabs.getChildren().iterator();
+				e.hasNext();) {
+					final Tab tab = (Tab)e.next();
+					if (tab.isSelected()) {
+						clone._seltab = tab;
+						break;
+					}
+				}
+				if (--cnt == 0) break;
+			} else if (child instanceof Tabpanels) {
+				clone._tabpanels = (Tabpanels)child;
+				if (--cnt == 0) break;
+			}
+		}
 	}
 }

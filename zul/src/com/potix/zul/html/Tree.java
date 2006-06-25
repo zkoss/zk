@@ -54,7 +54,7 @@ public class Tree extends XulElement implements Selectable {
 	private Treecols _treecols;
 	private Treechildren _treechildren;
 	/** A list of selected items. */
-	private final Set _selItems = new LinkedHashSet(5);
+	private Set _selItems = new LinkedHashSet(5);
 	/** The first selected item. */
 	private Treeitem _sel;
 	private int _rows = 0;
@@ -62,7 +62,7 @@ public class Tree extends XulElement implements Selectable {
 	private String _name;
 	private boolean _multiple, _checkmark;
 	/** disable smartUpdate; usually caused by the client. */
-	private boolean _noSmartUpdate;
+	private transient boolean _noSmartUpdate;
 
 	public Tree() {
 		setSclass("tree");
@@ -575,5 +575,43 @@ public class Tree extends XulElement implements Selectable {
 		if (isAsapRequired("onSelect"))
 			HTMLs.appendAttribute(sb, "zk_onSelect", true);
 		return sb.toString();
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final Tree clone = (Tree)super.clone();
+		fixClone(clone);
+		return clone;
+	}
+	private static void fixClone(Tree clone) {
+		int cnt = 0;
+		if (clone._treecols != null) ++cnt;
+		if (clone._treechildren != null) ++cnt;
+		if (cnt != 0) {
+			for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+				final Object child = it.next();
+				if (child instanceof Treecols) {
+					clone._treecols = (Treecols)child;
+					if (--cnt == 0) break;
+				} else if (child instanceof Treechildren) {
+					clone._treechildren = (Treechildren)child;
+					if (--cnt == 0) break;
+				}
+			}
+		}
+
+		cnt = clone._selItems.size();
+		clone._selItems = new LinkedHashSet(5);
+		clone._sel = null;
+		if (cnt != 0) {
+			for (Iterator it = clone.getItems().iterator(); it.hasNext();) {
+				final Treeitem ti = (Treeitem)it.next();
+				if (ti.isSelected()) {
+					if (clone._sel == null) clone._sel = ti;
+					clone._selItems.add(ti);
+					if (--cnt == 0) break;
+				}
+			}
+		}
 	}
 }

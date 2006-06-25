@@ -100,4 +100,15 @@ public class Menu extends LabelImageElement {
 		}
 		return super.insertBefore(child, insertBefore);
 	}
+
+	//Cloneable//
+	public Object clone() {
+		final Menu clone = (Menu)super.clone();
+		fixClone(clone);
+		return clone;
+	}
+	private static void fixClone(Menu clone) {
+		if (clone._popup != null)
+			clone._popup = (Menupopup)clone.getChildren().get(0);
+	}
 }

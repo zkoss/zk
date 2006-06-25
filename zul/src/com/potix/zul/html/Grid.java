@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package com.potix.zul.html;
 
 import java.util.List;
+import java.util.Iterator;
 
 import com.potix.lang.Objects;
 
@@ -134,5 +135,29 @@ public class Grid extends XulElement {
 		else if (_cols == child) _cols = null;
 		invalidate(INNER);
 		return true;
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final Grid clone = (Grid)super.clone();
+		fixClone(clone);
+		return clone;
+	}
+	private static void fixClone(Grid clone) {
+		int cnt = 0;
+		if (clone._rows != null) ++cnt;
+		if (clone._cols != null) ++cnt;
+		if (cnt == 0) return;
+
+		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Rows) {
+				clone._rows = (Rows)child;
+				if (--cnt == 0) break;
+			} else if (child instanceof Columns) {
+				clone._cols = (Columns)child;
+				if (--cnt == 0) break;
+			}
+		}
 	}
 }

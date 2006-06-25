@@ -46,17 +46,21 @@ public class Radiogroup extends XulElement {
 	/** The name of all child radio buttons. */
 	private String _name;
 	private int _jsel = -1;
-	private final EventListener _listener = new EventListener() {
-		public void onEvent(Event event) {
-			Events.sendEvent(Radiogroup.this, event);
-		}
-		public boolean isAsap() {
-			return Events.isListenerAvailable(Radiogroup.this, "onCheck", true);
-		}
-	};
+	private EventListener _listener;
 
 	public Radiogroup() {
 		_name = genGroupName();
+		init();
+	}
+	private void init() {
+		_listener = new EventListener() {
+			public void onEvent(Event event) {
+				Events.sendEvent(Radiogroup.this, event);
+			}
+			public boolean isAsap() {
+				return Events.isListenerAvailable(Radiogroup.this, "onCheck", true);
+			}
+		};
 	}
 
 	/** Returns the orient.
@@ -220,6 +224,33 @@ public class Radiogroup extends XulElement {
 		if (_name.startsWith("_pg")) {
 			_name = genGroupName();
 			invalidate(OUTER); //redraw is required
+		}
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final Radiogroup clone = (Radiogroup)super.clone();
+		fixClone(clone);
+		return clone;
+	}
+	private static void fixClone(Radiogroup clone) {
+		//re-gen name if auto
+		if (clone._name.startsWith("_pg"))
+			clone._name = clone.genGroupName();
+
+		//remove listener from children first
+		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+			final Radio child = (Radio)it.next();
+			child.removeEventListener("onCheck", clone._listener);
+		}
+
+		//create right listener
+		clone.init();
+
+		//add listener to children
+		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+			final Radio child = (Radio)it.next();
+			child.addEventListener("onClick", clone._listener);
 		}
 	}
 }
