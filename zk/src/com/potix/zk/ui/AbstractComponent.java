@@ -1139,7 +1139,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			final AbstractComponent child = (AbstractComponent)
 				((AbstractComponent)it.next()).clone0(nsparent); //recursive
 			child._parent = comp; //correct it
-			comp._children.add(ch);
+			comp._children.add(child);
 		}
 	}
 
