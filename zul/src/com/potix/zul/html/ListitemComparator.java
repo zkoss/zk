@@ -88,6 +88,12 @@ public class ListitemComparator implements Comparator {
 		_igcase = ignoreCase;
 	}
 
+	/** Returns whether to ignore case.
+	 */
+	public boolean shallIgnoreCase() {
+		return _igcase;
+	}
+
 	//Comparator//
 	public int compare(Object o1, Object o2) {
 		if (_index < 0 && _header != null) //decide the index

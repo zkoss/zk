@@ -326,4 +326,19 @@ public class Listheader extends HeaderElement {
 		final Listbox box = getListbox();
 		if (box != null) box.initAtClient();
 	}
+
+	//Cloneable//
+	public Object clone() {
+		final Listheader clone = (Listheader)super.clone();
+		fixClone(clone);
+		return clone;
+	}
+	private static void fixClone(Listheader clone) {
+		if (clone._sortAsc instanceof ListitemComparator)
+			clone._sortAsc = new ListitemComparator(clone, true,
+				((ListitemComparator)clone._sortAsc).shallIgnoreCase());
+		if (clone._sortDsc instanceof ListitemComparator)
+			clone._sortDsc = new ListitemComparator(clone, false,
+				((ListitemComparator)clone._sortDsc).shallIgnoreCase());
+	}
 }
