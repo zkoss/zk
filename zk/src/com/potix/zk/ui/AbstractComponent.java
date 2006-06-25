@@ -1104,10 +1104,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		clone._attrs = new HashMap(clone._attrs);
 		if (_listeners != null)
 			_listeners = new HashMap(_listeners);
-		cloneChildren(clone);
+
+		//2. clone children (deep cloning)
+		cloneChildren(clone, nsparent);
 		clone.init();
 
-		//2. spaceinfo
+		//3. spaceinfo
 		if (clone._spaceInfo != null) {
 			clone._spaceInfo = new SpaceInfo(clone, clone._uuid);
 			clone._spaceInfo.ns.setParent(nsparent);
@@ -1115,7 +1117,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return clone;
 	}
-	private static void cloneSpaceInfo(AbstractComponent clone, SpaceInfo from) {
+	private static final
+	void cloneSpaceInfo(AbstractComponent clone, SpaceInfo from) {
 		final SpaceInfo to = clone._spaceInfo;
 		to.attrs.putAll(from.attrs);
 		to.ns.copy(from.ns);
@@ -1125,15 +1128,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		for (Iterator it = clone.getChildren().iterator(); it.hasNext();)
 			addToIdSpacesDown((Component)it.next(), clone);
 	}
-	private static void cloneChildren(AbstractComponent comp) {
-		final Namespace ns = comp._spaceInfo != null ? comp._spaceInfo.ns: null;
+	private static final
+	void cloneChildren(AbstractComponent comp, Namespace nsparent) {
+		if (comp._spaceInfo != null)
+			nsparent = comp._spaceInfo.ns;
 
-		comp._children = new LinkedList(comp._children);
-		for (ListIterator it = comp._children.listIterator(); it.hasNext();) {
-			AbstractComponent ch = (AbstractComponent)it.next();
-			ch = (AbstractComponent)ch.clone0(ns); //recursive
-			ch._parent = comp; //correct it
-			it.set(ch);
+		final Iterator it = comp._children.iterator();
+		comp._children = new LinkedList();
+		while (it.hasNext()) {
+			final AbstractComponent child = (AbstractComponent)
+				((AbstractComponent)it.next()).clone0(nsparent); //recursive
+			child._parent = comp; //correct it
+			comp._children.add(ch);
 		}
 	}
 
