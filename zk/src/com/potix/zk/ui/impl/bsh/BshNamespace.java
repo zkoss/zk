@@ -132,7 +132,7 @@ public class BshNamespace implements Namespace {//not a good idea to serialize i
 		final String[] vars = _ns.getVariableNames();
 		for (int j = vars != null ? vars.length: 0; --j >= 0;) {
 			final String nm = vars[j];
-			if (!"bsh".equals(nm)) {
+			if (nm != null && !"bsh".equals(nm)) {
 				final Object val = getVariable(nm, true);
 				if (((val instanceof java.io.Serializable)
 					|| (val instanceof java.io.Externalizable))
