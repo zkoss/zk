@@ -35,35 +35,28 @@ public class Serializables {
 	 */
 	public static void writeAttributes(ObjectOutputStream s, Map attrs)
 	throws IOException {
-		//Count # of serializable attrs
-		int cnt = 0;
-		for (Iterator it = attrs.values().iterator(); it.hasNext();) {
-			final Object o = it.next();
-			if ((o instanceof java.io.Serializable)
-			||  (o instanceof java.io.Externalizable))
-				++cnt;
-		}
-
 		//Write serializable attrs
-		s.writeInt(cnt);
-		if (cnt > 0) {
-			for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final Object val = me.getValue();
-				if ((val instanceof java.io.Serializable)
-				||  (val instanceof java.io.Externalizable)) {
-					s.writeObject(me.getKey());
-					s.writeObject(val);
-				}
+		for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final Object nm = me.getKey();
+			final Object val = me.getValue();
+			if (nm != null && ((val instanceof java.io.Serializable)
+			|| (val instanceof java.io.Externalizable))) {
+				s.writeObject(nm);
+				s.writeObject(val);
 			}
 		}
+		s.writeObject(null); //denote end-of-attrs
 	}
 	/** Reads seriazlable attributes back.
 	 */
 	public static void readAttributes(ObjectInputStream s, Map attrs)
 	throws IOException, ClassNotFoundException {
-		int cnt = s.readInt();
-		while (--cnt >= 0)
-			attrs.put(s.readObject(), s.readObject());
+		for (;;) {
+			final Object nm = s.readObject();
+			if (nm == null) break; //no more
+
+			attrs.put(nm, s.readObject());
+		}
 	}
 }

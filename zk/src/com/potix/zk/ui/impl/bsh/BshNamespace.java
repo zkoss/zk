@@ -98,27 +98,59 @@ public class BshNamespace implements Namespace {//not a good idea to serialize i
 		return _ns;
 	}
 
-	public void copy(Namespace nsfrom) {
-		if (!(nsfrom instanceof BshNamespace))
-			throw new UnsupportedOperationException("BshNamespace to BshNamespace only: "+nsfrom);
+	public void copy(Namespace from, Filter filter) {
+		if (!(from instanceof BshNamespace))
+			throw new UnsupportedOperationException("BshNamespace to BshNamespace only: "+from);
 
-		final NameSpace from = ((BshNamespace)nsfrom)._ns;
+		final NameSpace bshfrom = ((BshNamespace)from)._ns;
 
 		//variables
 		try {
-			final String[] vars = from.getVariableNames();
+			final String[] vars = bshfrom.getVariableNames();
 			for (int j = vars != null ? vars.length: 0; --j >= 0;) {
-				if (_ns.getVariable(vars[j], false) == null)
-					_ns.setVariable(vars[j],
-						from.getVariable(vars[j], false), false);
+				final String nm = vars[j];
+				if (!"bsh".equals(nm)) {
+					final Object val = from.getVariable(nm, true);
+					if (filter == null || filter.accept(nm, val))
+						setVariable(nm, val, true);
+				}
 			}
 
 			//methods
-			final BshMethod[] mtds = from.getMethods();
-			for (int j = mtds != null ? mtds.length: 0; --j >= 0;)
-				_ns.setMethod(mtds[j].getName(), mtds[j]);
+			final BshMethod[] mtds = bshfrom.getMethods();
+			for (int j = mtds != null ? mtds.length: 0; --j >= 0;) {
+				final String nm = mtds[j].getName();
+				if (filter == null || filter.accept(nm, mtds[j]))
+					_ns.setMethod(nm, mtds[j]);
+			}
 		} catch (UtilEvalError ex) {
 			throw UiException.Aide.wrap(ex);
+		}
+	}
+	public void write(java.io.ObjectOutputStream s, Filter filter)
+	throws java.io.IOException {
+		final String[] vars = _ns.getVariableNames();
+		for (int j = vars != null ? vars.length: 0; --j >= 0;) {
+			final String nm = vars[j];
+			if (!"bsh".equals(nm)) {
+				final Object val = getVariable(nm, true);
+				if (((val instanceof java.io.Serializable)
+					|| (val instanceof java.io.Externalizable))
+				&& (filter == null || filter.accept(nm, val))) {
+					s.writeObject(nm);
+					s.writeObject(val);
+				}
+			}
+		}
+		s.writeObject(null); //denote end-of-ns
+	}
+	public void read(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		for (;;) {
+			final String nm = (String)s.readObject();
+			if (nm == null) break; //no more
+
+			setVariable(nm, s.readObject(), true);
 		}
 	}
 

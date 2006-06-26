@@ -1140,7 +1140,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	void cloneSpaceInfo(AbstractComponent clone, SpaceInfo from) {
 		final SpaceInfo to = clone._spaceInfo;
 		to.attrs.putAll(from.attrs);
-		to.ns.copy(from.ns);
+		to.ns.copy(from.ns, null);
 
 		//rebuild ID space by binding itself and all children
 		clone.bindToIdSpace(clone);
@@ -1174,7 +1174,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			Serializables.writeAttributes(s, _spaceInfo.attrs);
 
 			//write _spaceInfo.ns (only variables that are not fellows)
-			s.writeInt(0); //TODO
+			_spaceInfo.ns.write(s, new Namespace.Filter() {
+				public boolean accept(String name, Object value) {
+					return !(value instanceof Component);
+				}
+			});
 		}
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
@@ -1210,10 +1214,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			Serializables.readAttributes(s, _spaceInfo.attrs);
 
 			//_spaceInfo.ns
-			int cnt = s.readInt();
-			while (--cnt >= 0)
-				_spaceInfo.ns.setVariable(
-					(String)s.readObject(), s.readObject(), true);
+			_spaceInfo.ns.read(s);
 
 			//restore ID space by binding itself and all children
 			bindToIdSpace(this);
