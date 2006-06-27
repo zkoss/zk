@@ -157,7 +157,7 @@ zkMenu._open = function (pp, top, ref, pos) {
 		return; //nothing to do
 
 	/* not yet: we have to adjust CSS and some codes
-	if (zk.agtNav) { //Bug 1486840
+	if (zk.gecko) { //Bug 1486840
 		pp.setAttribute("zk_vparent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp);
 	}*/
@@ -169,7 +169,7 @@ zkMenu._open = function (pp, top, ref, pos) {
 
 	zkMenu._pop.addPopupId(pp.id);
 	zkau.hideCovered();
-	if (zk.agtNav)
+	if (zk.gecko)
 		setTimeout("zkMenu._fixWidth('"+pp.id+"')", 10);
 };
 /** Fixes a Mozilla bug that div's width might be smaller than
@@ -198,7 +198,7 @@ zkMenu.close = function (pp) {
 zkMenu._close = function (pp) {
 	pp = $(pp);
 	if (pp) {
-		/*if (zk.agtNav) { //Bug 1486840
+		/*if (zk.gecko) { //Bug 1486840
 			$(uuid).appendChild(pp); //Bug 1486840
 			pp.removeAttribute("zk_vparent");
 		}*/

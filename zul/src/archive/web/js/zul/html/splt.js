@@ -18,8 +18,8 @@ function zkSplt() {}
 
 zkSplt._drags = {};
 zkSplt.init = function (cmp) {
-	if (zk.agtIe) cmp.onselectstart = function () {return false;}
-	else if (zk.agtNav) cmp.style["-moz-user-select"] = "none";
+	if (zk.ie) cmp.onselectstart = function () {return false;}
+	else if (zk.gecko) cmp.style["-moz-user-select"] = "none";
 
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
 	var vert = cmp.getAttribute("zk_vert");

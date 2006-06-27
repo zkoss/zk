@@ -59,7 +59,7 @@ zk.Grid.prototype = {
 
 		this._setSize();
 
-		if (zk.agtNav && this.headtbl && this.headtbl.rows.length == 1) {
+		if (zk.gecko && this.headtbl && this.headtbl.rows.length == 1) {
 			var headrow = this.headtbl.rows[0];
 			var empty = true;
 			l_out:
@@ -132,7 +132,7 @@ zk.Grid.prototype = {
 	/** Calculates the size. */
 	_calcSize: function () {
 		var tblwd = this.body.clientWidth;
-		if (zk.agtIe) //By experimental: see zk-blog.txt
+		if (zk.ie) //By experimental: see zk-blog.txt
 			if (tblwd && this.body.offsetWidth - tblwd > 11) {
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";

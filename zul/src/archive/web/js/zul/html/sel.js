@@ -52,7 +52,7 @@ zk.Selectable.prototype = {
 
 			//If Mozilla, we have to eat keystrokes, or the page
 			//will scroll when UP/DOWN is pressed
-			if (zk.agtNav) {
+			if (zk.gecko) {
 				this.element.onkeydown = this.element.onkeyup
 				= this.element.onkeypress = function (evt) {
 					var target = Event.element(evt);
@@ -78,7 +78,7 @@ zk.Selectable.prototype = {
 				};
 
 				//To turn-off select, use "-moz-user-select: none" in CSS
-			} else if (zk.agtIe) {
+			} else if (zk.ie) {
 				this.element.onselectstart = function () {return false;}
 				//Tom Yeh: 20060106: side effect: unable to select textbox
 			}
@@ -108,7 +108,7 @@ zk.Selectable.prototype = {
 			}
 		}
 
-		if (zk.agtNav && this.headtbl && this.headtbl.rows.length == 1) {
+		if (zk.gecko && this.headtbl && this.headtbl.rows.length == 1) {
 			var headrow = this.headtbl.rows[0];
 			var empty = true;
 			l_out:
@@ -125,7 +125,7 @@ zk.Selectable.prototype = {
 		this.body.onscroll = function () {
 			if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
 			if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
-			meta._render(zk.agtNav ? 200: 0);
+			meta._render(zk.gecko ? 200: 0);
 				//Moz has a bug to send the request out if we don't wait long enough
 				//How long is enough is unknown, but 200 seems fine
 		};
@@ -522,7 +522,7 @@ zk.Selectable.prototype = {
 				row.setAttribute("zk_focus", "true");
 				zkSel.cmonfocus(row);
 
-				if (zk.agtNav) this._render(5);
+				if (zk.gecko) this._render(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
 			} else {
 				var el = $(row.id + "!sel");
@@ -665,7 +665,7 @@ zk.Selectable.prototype = {
 				} else {
 					hgh = Math.ceil((sz * rows.offsetHeight) / len);
 				}
-				if (zk.agtIe) hgh += diff; //strange in IE (or scrollbar shown)
+				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
 			}
 				
 			this.body.style.height = hgh + "px";
@@ -686,7 +686,7 @@ zk.Selectable.prototype = {
 				+ parseInt(zk.getCurrentStyle(document.body, "margin-bottom"))
 				+ parseInt(zk.getCurrentStyle(document.body, "padding-top"))
 				+ parseInt(zk.getCurrentStyle(document.body, "padding-bottom"));
-		if (zk.agtIe) ++gap; //strange, but...
+		if (zk.ie) ++gap; //strange, but...
 		if (gap <= 0) return 0; //already fit
 
 		//this overflow might be caused by another element
@@ -702,7 +702,7 @@ zk.Selectable.prototype = {
 	/** Calculates the size, part 2. */
 	_calcSize2: function () {
 		var tblwd = this.body.clientWidth;
-		if (zk.agtIe) //By experimental: see zk-blog.txt
+		if (zk.ie) //By experimental: see zk-blog.txt
 			if (tblwd && this.body.offsetWidth - tblwd > 11) {
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
@@ -903,7 +903,7 @@ zkSel.onout = function (el) {
 zkSel.cmonfocus = function (el) {
 	var row = $(zkau.uuidOf(el.id));
 	if (row) 
-		if (!zk.agtNav) row.style.textDecoration = "underline";
+		if (!zk.gecko) row.style.textDecoration = "underline";
 		else if (row.cells.length) row.cells[0].style.textDecoration = "underline";
 	
 };
@@ -911,7 +911,7 @@ zkSel.cmonfocus = function (el) {
 zkSel.cmonblur = function (el) {
 	var row = $(zkau.uuidOf(el.id));
 	if (row) 
-		if (!zk.agtNav) row.style.textDecoration = "";
+		if (!zk.gecko) row.style.textDecoration = "";
 		else if (row.cells.length) row.cells[0].style.textDecoration = "";
 };
 

@@ -116,7 +116,7 @@ zkVld.errbox = function (id, html) {
 	var inp = $(id);
 	if (!zk.isRealVisible(inp)) return; //don't do it
 
-	if (zk.agtNav && inp && inp.focus && zkVld.focusonerror) {
+	if (zk.gecko && inp && inp.focus && zkVld.focusonerror) {
 		zkVld._errbox(id, html);
 		setTimeout(function() {
 			try {

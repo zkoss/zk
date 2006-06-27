@@ -149,7 +149,7 @@ zk.Cal.prototype = {
 		zk.setInnerHTML(cell,
 			!sel || this.popup ? d:
 			'<a href="javascript:;" onkeyup="zkCal.onup(event)" on'
-				+(zk.agtIe ? "keydown": "keypress")
+				+(zk.ie ? "keydown": "keypress")
 				+'="zkCal.onkey(event)" onblur="zkCal.onblur(event)">'+d+'</a>');
 			//IE: use keydown. otherwise, it causes the window to scroll
 	},
@@ -225,7 +225,7 @@ zk.Cal.prototype = {
 			if (this.input) zk.focusById(this.input.id);
 		} else {
 			this.onchange();
-			if (zk.agtIe) zk.focusDownById(this.id, 50);
+			if (zk.ie) zk.focusDownById(this.id, 50);
 			else zk.focusDown(this.element);
 		}
 	},
@@ -327,7 +327,7 @@ function zkDtbox() {}
 zkDtbox.init = function (cmp) {
 	var real = zkau.getReal(cmp);
 	zkTxbox.init(real);
-	Event.observe(real, zk.agtIe ? "keydown": "keypress",
+	Event.observe(real, zk.ie ? "keydown": "keypress",
 		function (evt) {return zkDtbox.onkey(evt);});
 		//IE: use keydown. otherwise, it causes the window to scroll
 
@@ -421,7 +421,7 @@ zkDtbox.onkey = function (evt) {
 				if (!opened) zkDtbox.open(pp);
 			}
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
-			if (zk.agtIe) {
+			if (zk.ie) {
 				Event.stop(evt);
 				return false;
 			}
@@ -480,7 +480,7 @@ zkDtbox.open = function (pp) {
 	pp.style.zIndex = "80000";
 	zkau.onVisiChildren(pp);
 
-	if (zk.agtNav) {
+	if (zk.gecko) {
 		pp.setAttribute("zk_vparent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp); //Bug 1486840
 	}
@@ -522,7 +522,7 @@ zkDtbox._repos = function (uuid) {
 
 zkDtbox.close = function (pp, focus) {
 	var uuid = zkau.uuidOf(pp.id);
-	if (zk.agtNav) {
+	if (zk.gecko) {
 		$(uuid).appendChild(pp); //Bug 1486840
 		pp.removeAttribute("zk_vparent");
 	}

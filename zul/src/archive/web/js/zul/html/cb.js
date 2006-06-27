@@ -23,7 +23,7 @@ function zkCmbox() {}
 zkCmbox.init = function (cmp) {
 	var real = zkau.getReal(cmp);
 	zkTxbox.init(real);
-	Event.observe(real, zk.agtIe ? "keydown": "keypress",
+	Event.observe(real, zk.ie ? "keydown": "keypress",
 		function (evt) {return zkCmbox.onkey(evt);});
 		//IE: use keydown. otherwise, it causes the window to scroll
 
@@ -131,7 +131,7 @@ zkCmbox.onkey = function (evt) {
 			if (!opened) zkCmbox.open(pp, true);
 		}
 		//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
-		if (zk.agtIe) {
+		if (zk.ie) {
 			Event.stop(evt);
 			return false;
 		}
@@ -229,7 +229,7 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	pp.style.zIndex = "80000";
 	zkau.onVisiChildren(pp);
 
-	if (zk.agtNav) {
+	if (zk.gecko) {
 		pp.setAttribute("zk_vparent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp); //Bug 1486840
 		//However, since the parent/child relation is changed, new listitem
@@ -298,7 +298,7 @@ zkCmbox._selback = function (item) {
 	var txt = zkCmbox.getLabel(item); 
 
 	//var cb = zkau.getParentByType(item, "Cmbox");
-	//we cannot use getParentByType because parentNode is changed in agtNav
+	//we cannot use getParentByType because parentNode is changed in gecko
 
 	var uuid = zkau.uuidOf(item.parentNode);
 	if (uuid) {
@@ -399,7 +399,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 zkCmbox.close = function (pp, focus) {
 	pp = $(pp);
 	var uuid = zkau.uuidOf(pp.id);
-	if (zk.agtNav) {
+	if (zk.gecko) {
 		$(uuid).appendChild(pp); //Bug 1486840
 		pp.removeAttribute("zk_vparent");
 	}

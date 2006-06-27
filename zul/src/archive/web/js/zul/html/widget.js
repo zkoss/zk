@@ -80,7 +80,7 @@ zkTxbox._noonblur = function (inp) {
 			if (cf == el) return true;
 
 			//To resolve Bug 1486840 (see db.js and cb.js)
-			if (zk.agtNav && cf.getAttribute) {
+			if (zk.gecko && cf.getAttribute) {
 				var n = $(cf.getAttribute("zk_vparent"));
 				if (n) {
 					cf = n;
@@ -361,7 +361,7 @@ zkMap.onclick = function (href) {
 	zkau.send({uuid: id, cmd: "onClick", data: [x, y]});
 };
 zkMap._toofast = function () {
-	if (zk.agtNav) { //bug 1510374
+	if (zk.gecko) { //bug 1510374
 		var now = new Date().getTime();
 		if (zkMap._stamp && now - zkMap._stamp < 800)
 			return true;
