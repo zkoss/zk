@@ -573,8 +573,8 @@ if (!zk._modules) {
 
 	//Source: http://dean.edwards.name/weblog/2006/06/again/
 	if (zk.ie) {
-		document.write('<script id="_ie_onload" defer src="javascript:void(0)"><\/script>');
-		var e = document.getElementById("_ie_onload");
+		document.write('<script id="_zie_load" defer src="javascript:void(0)"><\/script>');
+		var e = document.getElementById("_zie_load");
 		e.onreadystatechange = function() {
 			if (/loaded|complete/.test(this.readyState)) {
 		        if (myload) myload(); // call the onload handler
