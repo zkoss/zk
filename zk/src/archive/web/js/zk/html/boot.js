@@ -25,15 +25,16 @@ if (!zk.build) {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-	zk.build = "1H"; //increase this if we want the browser to reload JavaScript
+	zk.build = "1I"; //increase this if we want the browser to reload JavaScript
 	zk.mods = {}; //ZkFns depends on it
 
 	/** Browser info. */
 	zk.agent = navigator.userAgent.toLowerCase();
-	zk.agtIe = (zk.agent.indexOf("msie") != -1) && (zk.agent.indexOf("opera") == -1);
-	zk.agtNav = (zk.agent.indexOf("mozilla") != -1) && (zk.agent.indexOf("spoofer") == -1)
-		&& (zk.agent.indexOf("compatible") == -1) && (zk.agent.indexOf("opera") == -1)
-		&& (zk.agent.indexOf("webtv") == -1) && (zk.agent.indexOf("hotjava") == -1);
+	zk.safari = zk.agent.indexOf("safari") != -1;
+	zk.opera = zk.agent.indexOf("opera") != -1;
+	zk.ie = (zk.agent.indexOf("msie") != -1) && !zk.opera;
+	zk.ie7 = zk.agent.indexOf("msie 7") != -1
+	zk.gecko = (zk.agent.indexOf("gecko/") != -1) && !zk.safari && !zk.opera;
 }
 
 /** Returns the version of the specified module name.
@@ -105,10 +106,8 @@ zk._load = function (nm) {
 	var e = document.createElement("script");
 	e.type = "text/javascript" ;
 	e.charset = "UTF-8";
-	document.getElementsByTagName("HEAD")[0].appendChild(e);
 
-	//IE: we have to append child first before setting onreadystatechange
-	if (zk.agtIe) e.onreadystatechange = zk_onState;
+	if (zk.ie) e.onreadystatechange = zk_onState;
 	else e.onload = zk._afterLoad;
 
 	var uri = nm;
@@ -121,7 +120,9 @@ zk._load = function (nm) {
 		e.src = zk.getUpdateURI("/web/_zver" + zk.getBuild(nm) + "/js" + uri);
 	}
 
-	if (zk.agtIe && e.readyState == "loaded") e.setAttribute("zk_loaded", "true");
+	if (zk.ie && e.readyState == "loaded") e.setAttribute("zk_loaded", "true");
+		//IE: reporting loaded|complete quite randomly
+	document.getElementsByTagName("HEAD")[0].appendChild(e);
 };
 zk._beforeLoad = function () {
 	if (zk.loading ++) {
@@ -136,19 +137,21 @@ zk._beforeLoad = function () {
 		}, 1500);
 	}
 };
-function zk_onState () { //onreadystatechange (IE only)
-	var state = this.getAttribute("zk_loaded");
-	if (this.readyState == "loaded") {
-		if (state == "done") return;
-	} else if (this.readyState == "complete") {
-		if (state != "true") return;
-	} else {
-		return;
+if (zk.ie) {
+	function zk_onState () { //onreadystatechange (IE only)
+		var state = this.getAttribute("zk_loaded");
+		if (this.readyState == "loaded") {
+			if (state == "done") return;
+		} else if (this.readyState == "complete") {
+			if (state != "true") return;
+		} else {
+			return;
+		}
+	
+		this.setAttribute("zk_loaded", "done");
+		zk._afterLoad();
 	}
-
-	this.setAttribute("zk_loaded", "done");
-	zk._afterLoad();
-};
+}
 zk._afterLoad = function () {
 	if (--zk.loading) {
 		zk._updCnt();
@@ -193,7 +196,7 @@ zk._loadAndInit = function (inf) {
 
 	//FF remembers the previous value that user entered when reload
 	//We have to reset them because the server doesn't know any of them
-		if (zk.agtNav) {
+		if (zk.gecko) {
 			switch (zk.tagName(n)) {
 			case "INPUT":
 				if (n.type == "checkbox" || n.type == "radio") {
@@ -321,12 +324,12 @@ zk.loadCSS = function (uri) {
 	var e = document.createElement("LINK");
 	e.rel = "stylesheet";
 	e.type = "text/css";
-	document.getElementsByTagName("HEAD")[0].appendChild(e);
 	if (uri.indexOf("://") < 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		uri = zk.getUpdateURI("/web/_zver" + zk.build + uri);
 	}
 	e.href = uri;
+	document.getElementsByTagName("HEAD")[0].appendChild(e);
 };
 /** Loads the specified JavaScript file directly.
  * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
@@ -337,7 +340,6 @@ zk.loadJS = function (uri, fn) {
 	var e = document.createElement("script");
 	e.type	= "text/javascript" ;
 	e.charset = "UTF-8";
-	document.getElementsByTagName("HEAD")[0].appendChild(e);
 	if (fn)
 		e.onload = e.onreadystatechange = function() {
 			if (!e.readyState || e.readyState == 'loaded') fn.apply();
@@ -348,6 +350,7 @@ zk.loadJS = function (uri, fn) {
 		uri = zk.getUpdateURI("/web/_zver" + zk.build + uri);
 	}
 	e.src = uri;
+	document.getElementsByTagName("HEAD")[0].appendChild(e);
 };
 
 /** Returns the proper URI.
@@ -401,7 +404,7 @@ zk._progress = function () {
 			n = zk._newProgDlg("zk_prog", msg, 0, zk.innerY());
 			if (n) {
 				var left = zk.innerWidth() - n.offsetWidth
-					- (zk.agtNav ? 18: 2); //FF shall subtract scrollbar
+					- (zk.gecko ? 18: 2); //FF shall subtract scrollbar
 				if (left < 0) left = 0;
 				n.style.left = left + "px";
 			}
@@ -552,7 +555,6 @@ zk.error = function (msg) {
 	} catch (e) {
 	}
 };
-
 //-- bootstrapping --//
 if (!zk._modules) {
 	zk.loading = 0;
@@ -561,15 +563,39 @@ if (!zk._modules) {
 	zk._initmods = new Array(); //used by addModuleInit
 	zk._initcmps = new Array(); //an array of comp list to init
 
-	var oldol = window.onload;
-	window.onload = function () {
+	var myload =  function () {
 		//It is possible to move javascript defined in zul's language.xml
 		//However, IE has bug to order JavaScript properly if zk._load is used
-
 		zk.progress(600);
-		if (oldol && oldol.apply) zk.addInit(oldol);
 		zk.addInit(zk.progressDone);
-
 		zk.initAt(document.body);
 	};
+
+	//Source: http://dean.edwards.name/weblog/2006/06/again/
+	if (zk.ie) {
+		document.write('<script id="_ie_onload" defer src="javascript:void(0)"><\/script>');
+		var e = document.getElementById("_ie_onload");
+		e.onreadystatechange = function() {
+			if (/loaded|complete/.test(this.readyState)) {
+		        if (myload) myload(); // call the onload handler
+		        myload = null;
+		    }
+		};
+		e.onreadystatechange();
+	} else if (zk.gecko && document.addEventListener) { //FF
+		document.addEventListener("DOMContentLoaded", myload, false)
+			//Fire onload earlier than all content are loaded
+	} else if (zk.safari) {
+	    var timer = setInterval(function() {
+			if (/loaded|complete/.test(document.readyState)) {
+				clearInterval(timer);
+				delete timer;
+				myload();
+				myload = null;
+			}
+		}, 10);
+	} else {
+		if (window.onload) zk.addInit(window.onload);
+		window.onload = myload;
+	}
 }

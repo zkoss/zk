@@ -104,7 +104,7 @@ zk.position = function (el, ref, type) {
 		x = refofs[0] + ref.offsetWidth;
 		y = refofs[1];
 
-		if (zk.agtIe) {
+		if (zk.ie) {
 			var diff = parseInt(zk.getCurrentStyle(ref, "margin-top")||"0", 10);
 			if (!isNaN(diff)) y += diff;
 			diff = parseInt(zk.getCurrentStyle(ref, "margin-right")||"0", 10);
@@ -116,7 +116,7 @@ zk.position = function (el, ref, type) {
 		if (x > max) x = max;
 		y = refofs[1] + ref.offsetHeight;
 
-		if (zk.agtIe) {
+		if (zk.ie) {
 			var diff = parseInt(zk.getCurrentStyle(ref, "margin-bottom")||"0", 10);
 			if (!isNaN(diff)) y += diff;
 			diff = parseInt(zk.getCurrentStyle(ref, "margin-left")||"0", 10);
@@ -254,7 +254,7 @@ zk._doTwice = function (script, timeout) {
  * @param el the sibling before which to insert
  */
 zk.insertHTMLBefore = function (el, html) {
-	if (zk.agtIe) {
+	if (zk.ie) {
 		switch (zk.tagName(el)) { //exclude TABLE
 		case "TD": case "TH": case "TR": case "CAPTION":
 		case "TBODY": case "THEAD": case "TFOOT":
@@ -269,7 +269,7 @@ zk.insertHTMLBefore = function (el, html) {
 /** Inserts an unparsed HTML immediately before the ending element.
  */
 zk.insertHTMLBeforeEnd = function (el, html) {
-	if (zk.agtIe) {
+	if (zk.ie) {
 		switch (zk.tagName(el)) {
 		case "TABLE": case "TR":
 		case "TBODY": case "THEAD": case "TFOOT":
@@ -286,7 +286,7 @@ zk.insertHTMLBeforeEnd = function (el, html) {
  * @param el the sibling after which to insert
  */
 zk.insertHTMLAfter = function (el, html) {
-	if (zk.agtIe) {
+	if (zk.ie) {
 		switch (zk.tagName(el)) { //exclude TABLE
 		case "TD": case "TH": case "TR": case "CAPTION":
 		case "TBODY": case "THEAD": case "TFOOT":
@@ -307,7 +307,7 @@ zk.insertHTMLAfter = function (el, html) {
 /** Sets the inner HTML.
  */
 zk.setInnerHTML = function (el, html) {
-	if (zk.agtIe) {
+	if (zk.ie) {
 		zk._agtIeReplaceInnerHTML(el, html);
 	} else {
 		el.innerHTML = html;
@@ -316,7 +316,8 @@ zk.setInnerHTML = function (el, html) {
 /** Sets the outer HTML.
  */
 zk.setOuterHTML = function (el, html) {
-	if (zk.agtIe) {
+	//NOTE: Safari doesn't support __defineSetter__
+	if (zk.ie) {
 		var tn = zk.tagName(el);
 		if (tn == "TD" || tn == "TH" || tn == "TABLE" || tn == "TR"
 		|| tn == "CAPTION" || tn == "TBODY" || tn == "THEAD"
@@ -324,8 +325,13 @@ zk.setOuterHTML = function (el, html) {
 			zk._agtIeReplaceOuterHTML(el, html);
 			return;
 		}
+		el.outerHTML = html;
+	} else {
+		var range = this.ownerDocument.createRange();
+		range.setStartBefore(this);
+		var df = range.createContextualFragment(html);
+		this.parentNode.replaceChild(df, this);
 	}
-	el.outerHTML = html;
 };
 
 /** Returns the next sibling with the specified tag name, or null if not found.
@@ -373,7 +379,7 @@ zk.isAncestor = function(p, c) {
 			return true;
 
 		//To resolve Bug 1486840 (see db.js and cb.js)
-		if (zk.agtNav && c.getAttribute) { 
+		if (zk.gecko && c.getAttribute) { 
 			var n = $(c.getAttribute("zk_vparent"));
 			if (n) {
 				c = n;
@@ -391,7 +397,7 @@ zk.isAncestor = function(p, c) {
 //zk.appendHTMLChild = function (el, html) {
 //	el.insertAdjacentHTML('beforeEnd', html);
 //};
-if (zk.agtIe) {
+if (zk.ie) {
 	/** Returns the enclosing tag for the specified HTML codes.
 	 */
 	zk._agtIeTagOfHtml = function (html) {
@@ -621,21 +627,8 @@ zk.getElementValue = function (el) {
 
 /** Extends javascript for Non-IE
  */
-if (!zk.agtIe) {
-	//1. outerHTML
-	var setOuterHTML = function (html) {
-		var range = this.ownerDocument.createRange();
-		range.setStartBefore(this);
-		var df = range.createContextualFragment(html);
-		this.parentNode.replaceChild(df, this);
-	};
-
-	if(window.HTMLElement)
-		HTMLElement.prototype.__defineSetter__("outerHTML", setOuterHTML);
-	else
-		alert(mesg.UNSUPPORTED_BROWSER+zk.agent);
-
-	//2. insertAdjacentHTML
+if (!zk.ie) {
+	//insertAdjacentHTML
 	HTMLElement.prototype.insertAdjacentHTML = function (sWhere, sHTML) {
 		var df;   // : DocumentFragment
 		var r = this.ownerDocument.createRange();
@@ -704,7 +697,7 @@ if (!zk.activeTagnames) {
 		new Array("A","BUTTON","TEXTAREA","INPUT","SELECT","IFRAME","APPLET");
 	zk._disTags = new Array(); //A list of {element: xx, what: xx}
 
-	if (zk.agtIe) {
+	if (zk.ie) {
 		zk._hidCvred = new Array(); //A list of {element: xx, visibility: xx}
 		zk.coveredTagnames = new Array("SELECT"/*,"IFRAME","APPLET"*/);
 			//though IFRAME might include SELECT (but prefer not to surprise user)
@@ -733,11 +726,11 @@ zk.disableAll = function (parent) {
 
 			var what;
 			var tn = zk.tagName(el);
-			if (tn == "IFRAME" || tn == "APPLET" || (zk.agtIe && tn == "SELECT")) {
+			if (tn == "IFRAME" || tn == "APPLET" || (zk.ie && tn == "SELECT")) {
 	//Note: we don't check isOverlapped because mask always covers it
 				what = el.style.visibility;
 				el.style.visibility = "hidden";
-			} else if (!zk.agtIe && tn == "A") {
+			} else if (!zk.ie && tn == "A") {
 	//Firefox doesn't support the disable of A
 				what = "h:" + zkau.getStamp(el, "href") + ":" + el.href;
 				el.href = "";
@@ -754,7 +747,7 @@ zk.disableAll = function (parent) {
  */
 zk.restoreDisabled = function (n) {
 	var skipped = new Array();
-	for (var bug1498895 = zk.agtIe;;) {
+	for (var bug1498895 = zk.ie;;) {
 		var info = zk._disTags.shift();
 		if (!info) break;
 
@@ -804,7 +797,7 @@ zk.restoreDisabled = function (n) {
  * to this method.
  */
 zk.hideCovered = function (ary) {
-	if (!zk.agtIe) return; //nothing to do
+	if (!zk.ie) return; //nothing to do
 
 	if (!ary || ary.length == 0) {
 		for (;;) {

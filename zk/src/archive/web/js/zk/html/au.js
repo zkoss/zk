@@ -38,7 +38,7 @@ if (!zkau._reqs) {
 		Event.observe(document, "mouseover", zkau._onDocMouseover);
 		Event.observe(document, "mouseout", zkau._onDocMouseout);
 
-		if (zk.agtIe) {
+		if (zk.ie) {
 			document.oncontextmenu = function () {
 				var b = zkau._eRClick == null;
 				zkau._eRClick = null; //free memory
@@ -729,7 +729,7 @@ zkau.onimgout = function (el) {
 
 /** Handles document.unload. */
 zkau._onDocUnload = function () {
-	if (zk.agtNav) zk.restoreDisabled(); //Workaround Nav: Bug 1495382
+	if (zk.gecko) zk.restoreDisabled(); //Workaround Nav: Bug 1495382
 
 	var content = "dtid="+zk_desktopId+"&cmd.0=rmDesktop";
 	var req;
@@ -815,7 +815,7 @@ zkau._onDocRClick = function (evt) {
 	if (evt.which == 3 || evt.button == 2) {
 		var cmp = Event.element(evt);
 		cmp = zkau._getParentByAttr(cmp, "zk_ctx", "zk_rtclk");
-		if (zk.agtIe) zkau._eRClick = cmp; //used only by oncontextmenu
+		if (zk.ie) zkau._eRClick = cmp; //used only by oncontextmenu
 
 		if (cmp) {
 			var ctx = cmp.getAttribute("zk_ctx");
@@ -1067,7 +1067,7 @@ zkau.closeFloats = function (owner) {
 	return closed;
 };
 zkau.hideCovered = function() {
-	if (!zk.agtIe) return; //nothing to do
+	if (!zk.ie) return; //nothing to do
 
 	var ary = new Array();
 	for (var j = 0; j < zkau._popups.length; ++j) {
@@ -1205,7 +1205,7 @@ zkau._dragging = function (dg, pointer) {
 	}
 };
 zkau._revertdrag = function (n, pointer) {
-	if (zk.agtNav || zkau._getDrop(n, pointer) == null)
+	if (zk.gecko || zkau._getDrop(n, pointer) == null)
 		return true;
 
 	var dg = zkau._drags[n.id];
@@ -1260,7 +1260,7 @@ zkau._cleanLastDrop = function (dg) {
 //across two listboxes, so we use a fake DIV instead.
 //On the other hand, IE handles selection improperly if transparent DIV is used
 //so we use the standard ghosting
-if (zk.agtNav) {
+if (zk.gecko) {
 	zkau._ghostdrag = function (dg, ghosting) {
 		if (ghosting) {
 			zk.dragging = true;
@@ -1409,7 +1409,7 @@ zk.History = Class.create();
 zk.History.prototype = {
 	initialize: function () {
 		this.curbk = "";
-		setInterval("zkau.history.checkBookmark()", zk.agtIe ? 320: 120);
+		setInterval("zkau.history.checkBookmark()", zk.ie ? 320: 120);
 			//Though IE use history.html, timer is still required 
 			//because user might specify URL directly
 	},
@@ -1418,7 +1418,7 @@ zk.History.prototype = {
 		if (this.curbk != nm) {
 			this.curbk = nm; //to avoid loop back the server
 			window.location.hash = '#' + nm;
-			if (zk.agtIe) this.bkIframe(nm);
+			if (zk.ie) this.bkIframe(nm);
 		}
 	},
 	/** Checks whether the bookmark is changed. */
@@ -1435,7 +1435,7 @@ zk.History.prototype = {
 		return j >= 0 ? nm.substring(j + 1): '';
 	}
 };
-if (zk.agtIe) {
+if (zk.ie) {
 	/** bookmark iframe */
 	zk.History.prototype.bkIframe = function (nm) {
 		var url = zk.getUpdateURI("/web/js/zk/html/history.html", true);
