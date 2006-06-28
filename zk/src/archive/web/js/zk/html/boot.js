@@ -97,34 +97,31 @@ zk.loadByType = function (n) {
 	return false;
 }
 
-/** Loads the javascript. It invokes _beforeLoad before loading,
- * and _afterLoad after loaded.
+/** Loads the javascript. It invokes _bld before loading,
+ * and _ald after loaded.
  */
 zk._load = function (nm) {
-	zk._beforeLoad();
+	zk._bld();
 
 	var e = document.createElement("script");
 	e.type = "text/javascript" ;
 	e.charset = "UTF-8";
 
-	if (zk.ie) e.onreadystatechange = zk_onState;
-	else e.onload = zk._afterLoad;
-
+	var zcb = "/_zcbzk._ald";
+		//Note: we use /_zcb to enforce callback
 	var uri = nm;
 	if (uri.indexOf('/') >= 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
-		e.src = zk.getUpdateURI("/web/_zver" + zk.build + uri);
+		e.src = zk.getUpdateURI("/web/_zver" + zk.build + zcb + uri);
 	} else { //module name
 		uri = uri.replace(/\./g, '/') + ".js";
 		if (uri.charAt(0) != '/') uri = '/' + uri;
-		e.src = zk.getUpdateURI("/web/_zver" + zk.getBuild(nm) + "/js" + uri);
+		e.src = zk.getUpdateURI("/web/_zver" + zk.getBuild(nm) + zcb + "/js" + uri);
 	}
-
-	if (zk.ie && e.readyState == "loaded") e.setAttribute("zk_loaded", "true");
-		//IE: reporting loaded|complete quite randomly
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
 };
-zk._beforeLoad = function () {
+/** before load. */
+zk._bld = function () {
 	if (zk.loading ++) {
 		zk._updCnt();
 	} else {
@@ -137,22 +134,8 @@ zk._beforeLoad = function () {
 		}, 1500);
 	}
 };
-if (zk.ie) {
-	function zk_onState () { //onreadystatechange (IE only)
-		var state = this.getAttribute("zk_loaded");
-		if (this.readyState == "loaded") {
-			if (state == "done") return;
-		} else if (this.readyState == "complete") {
-			if (state != "true") return;
-		} else {
-			return;
-		}
-	
-		this.setAttribute("zk_loaded", "done");
-		zk._afterLoad();
-	}
-}
-zk._afterLoad = function () {
+/** after load. */
+zk._ald = function (modnm) {
 	if (--zk.loading) {
 		zk._updCnt();
 	} else {
@@ -576,7 +559,7 @@ if (!zk._modules) {
 		document.write('<script id="_zie_load" defer src="javascript:void(0)"><\/script>');
 		var e = document.getElementById("_zie_load");
 		e.onreadystatechange = function() {
-			if (/loaded|complete/.test(this.readyState)) {
+			if ("complete" == this.readyState) { //don't check loaded!
 		        if (myload) myload(); // call the onload handler
 		        myload = null;
 		    }
