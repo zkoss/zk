@@ -892,6 +892,8 @@ zkSel.onover = function (el) {
 	if (!zk.dragging) {
 		zk.backupStyle(el, "backgroundColor");
 		el.style.backgroundColor =
+			zk.safari ?
+			el.className.endsWith("sel") ? "#667FAA": "#EAEFFF":
 			el.className.endsWith("sel") ? "#115588": "#DAE8FF";
 	}
 };
