@@ -32,9 +32,9 @@ if (!zk.build) {
 	zk.agent = navigator.userAgent.toLowerCase();
 	zk.safari = zk.agent.indexOf("safari") != -1;
 	zk.opera = zk.agent.indexOf("opera") != -1;
-	zk.ie = (zk.agent.indexOf("msie") != -1) && !zk.opera;
-	zk.ie7 = zk.agent.indexOf("msie 7") != -1
-	zk.gecko = (zk.agent.indexOf("gecko/") != -1) && !zk.safari && !zk.opera;
+	zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
+	zk.ie7 = zk.agent.indexOf("msie 7") != -1;
+	zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
 }
 
 /** Returns the version of the specified module name.

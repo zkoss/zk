@@ -327,10 +327,10 @@ zk.setOuterHTML = function (el, html) {
 		}
 		el.outerHTML = html;
 	} else {
-		var range = this.ownerDocument.createRange();
-		range.setStartBefore(this);
-		var df = range.createContextualFragment(html);
-		this.parentNode.replaceChild(df, this);
+		var r = el.ownerDocument.createRange();
+		r.setStartBefore(el);
+		var df = r.createContextualFragment(html);
+		el.parentNode.replaceChild(df, el);
 	}
 };
 

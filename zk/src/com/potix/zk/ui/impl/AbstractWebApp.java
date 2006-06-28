@@ -58,7 +58,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	public final String getVersion() {
-		return "2.0.1";
+		return "2.1.0 Alpha";
 	}
 
 	public final Configuration getConfiguration() {
