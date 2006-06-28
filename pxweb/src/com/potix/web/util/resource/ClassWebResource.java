@@ -136,9 +136,35 @@ public class ClassWebResource {
 		//How it work: client engine prefix URI with /_zver123, where
 		//123 is the build version that changes once reload is required
 		//Then, the server eliminate such prefix before locating resource
-		if (pi.startsWith("/_zver")) {
-			final int j = pi.indexOf('/', 6);
-			if (j > 0) pi = pi.substring(j);
+		final String ZVER = "/_zver";
+		if (pi.startsWith(ZVER)) {
+			final int j = pi.indexOf('/', ZVER.length());
+			if (j >= 0) pi = pi.substring(j);
+			else log.warning("Unknown path info: "+pi);
+		}
+
+		//Notify the browser by calling back the code specified with /_zcb
+		String jsextra = null;
+		final String ZCB = "/_zcb"; //denote callback is required
+		if (pi.startsWith(ZCB)) {
+			final int j = pi.indexOf('/', ZCB.length());
+			if (j >= 0) {
+				jsextra = pi.substring(ZCB.length(), j);
+				pi = pi.substring(j);
+			} else {
+				jsextra = pi.substring(ZCB.length());
+				log.warning("Unknown path info: "+pi);
+			}
+
+			final int len = jsextra.length();
+			if (len == 0) jsextra = null;
+			else {
+				final char cc = jsextra.charAt(len - 1);
+				if (cc != ';') {
+					if (cc != ')') jsextra += "()";
+					jsextra += ';';
+				}
+			}
 		}
 
 		final String ext = getExtension(pi);
@@ -154,6 +180,7 @@ public class ClassWebResource {
 				}
 				cnt.interpret(new ServletDSPContext(
 					_ctx, request, response, _cwc.getLocator()));
+				if (jsextra != null) response.getWriter().write(jsextra);
 				return; //done
 			}
 
@@ -183,9 +210,15 @@ public class ClassWebResource {
 			data = Files.readAll(is);
 			//since what is embedded in the jar is not big, so load at once
 		}
-		response.setContentLength(data.length);
+
+		int len = data.length;
+		final byte[] extra = jsextra != null ? jsextra.getBytes("UTF-8"): null;
+		if (extra != null) len += extra.length;
+		response.setContentLength(len);
+
 		final ServletOutputStream out = response.getOutputStream();
 		out.write(data);
+		if (extra != null) out.write(extra);
 		out.flush();
 	}
 	/** Returns the file extension of the specified path info. */
@@ -233,7 +266,8 @@ public class ClassWebResource {
 			final String content =
 				Files.readAll(new InputStreamReader(is, "UTF-8"))
 				.toString();
-			return new Interpreter().parse(content, ctype, null, _cwc.getLocator());
+			return new Interpreter()
+				.parse(content, ctype, null, _cwc.getLocator());
 		}
 	}
 
