@@ -191,8 +191,8 @@ public class Servlets {
 	 * a browser code and the second with a proper locale.
 	 * The browser code depends on what browser
 	 * the user are used to visit the web site.
-	 * Currently, the code for Internet Explorer is "ie", and all others
-	 * are "moz".
+	 * Currently, the code for Internet Explorer is "ie", Safari is "saf",
+	 * and all others are "moz".
 	 * Thus, in the above example, if the resource is named "ab**.cd"
 	 * and Firefox is used, then it searches "abmoz_zh_TW.cd", "abmoz_zh.cd"
 	 * and then "abmoz.cd", until any of them is found.
@@ -233,7 +233,8 @@ public class Servlets {
 		//by browser?
 		int l = pgpath.lastIndexOf('*');
 		if (l > f) { //two '*'
-			final String bc = Servlets.isExplorer(request) ? "ie": "moz";
+			final String bc = Servlets.isExplorer(request) ? "ie":
+				Servlets.isSafari(request) ? "saf": "moz";
 			l += bc.length() - 1;
 			pgpath = pgpath.substring(0, f) + bc + pgpath.substring(f + 1);
 		}
@@ -299,7 +300,7 @@ public class Servlets {
 			pgpath, null);
 	}
 
-	/** Returns whether the browser is explorer.
+	/** Returns whether the browser is Internet Explorer.
 	 */
 	public static final boolean isExplorer(ServletRequest req) {
 		String agt = req instanceof HttpServletRequest ?
@@ -308,9 +309,9 @@ public class Servlets {
 			return false;
 
 		agt = agt.toLowerCase();
-		return (agt.indexOf("msie") != -1) && (agt.indexOf("opera") == -1);
+		return agt.indexOf("msie") != -1 && agt.indexOf("opera") == -1;
 	}
-	/** Returns whether the browser is mozilla.
+	/** Returns whether the browser is Mozilla/Firefox/Gecko.
 	 */
 	public static final boolean isMozilla(ServletRequest req) {
 		String agt = req instanceof HttpServletRequest ?
@@ -319,9 +320,18 @@ public class Servlets {
 			return false;
 
 		agt = agt.toLowerCase();
-		return (agt.indexOf("mozilla") != -1) && (agt.indexOf("spoofer") == -1)
-		&& (agt.indexOf("compatible") == -1) && (agt.indexOf("opera") == -1)
-		&& (agt.indexOf("webtv") == -1) && (agt.indexOf("hotjava") == -1);
+		return agt.indexOf("gecko/") != -1 && agt.indexOf("safari") == -1;
+	}
+	/** Returns whether the browser is Safari.
+	 */
+	public static final boolean isSafari(ServletRequest req) {
+		String agt = req instanceof HttpServletRequest ?
+			((HttpServletRequest)req).getHeader("user-agent"): null;
+		if (agt == null)
+			return false;
+
+		agt = agt.toLowerCase();
+		return agt.indexOf("safari") != -1;
 	}
 
 	//-- interface to access profile --//

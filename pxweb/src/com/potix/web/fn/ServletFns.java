@@ -59,8 +59,8 @@ public class ServletFns {
 	 * a browser code and the second with a proper locale.
 	 * The browser code depends on what browser
 	 * the user are used to visit the web site.
-	 * Currently, the code for Internet Explorer is "ie", and all others
-	 * are "moz".
+	 * Currently, the code for Internet Explorer is "ie", Safari is "saf",
+	 * and all others are "moz".
 	 * Thus, in the above example, if the resource is named "ab**.cd"
 	 * and Firefox is used, then it searches "abmoz_zh_TW.cd", "abmoz_zh.cd"
 	 * and then "abmoz.cd", until any of them is found.
@@ -77,15 +77,20 @@ public class ServletFns {
 		return Authens.isAuthenticated(getCurrentRequest());
 	}
 
-	/** Returns whether the browser of the current request is explorer.
+	/** Returns whether the browser of the current request is Explorer.
 	 */
 	public static boolean isExplorer() {
 		return Servlets.isExplorer(getCurrentRequest());
 	}
-	/** Returns whether the browser of the current request is mozilla.
+	/** Returns whether the browser of the current request is Mozilla.
 	 */
 	public static boolean isMozilla() {
 		return Servlets.isMozilla(getCurrentRequest());
+	}
+	/** Returns whether the browser of the current request is Safari.
+	 */
+	public static boolean isSafari() {
+		return Servlets.isSafari(getCurrentRequest());
 	}
 
 	/** Returns the current EL context. */
