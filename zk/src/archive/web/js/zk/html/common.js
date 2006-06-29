@@ -667,10 +667,11 @@ if (!zk.ie) {
 };
 
 //-- Image utilities --//
-/* Rename by changing the type (after -)
-//url: the original URL
-//type: the type to rename to: open or closed
-//todo: support _zh_TW
+/** Rename by changing the type (after -).
+ * It works with url(/x/y.gif), too
+ *url: the original URL
+ *type: the type to rename to: open or closed
+ *todo: support _zh_TW
 */
 zk.renType = function (url, type) {
 	var j = url.lastIndexOf('.'),
