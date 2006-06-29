@@ -68,7 +68,9 @@ public class Include extends XulElement {
 
 		if (!Objects.equals(_src, src)) {
 			_src = src;
-			invalidate(INNER);
+			invalidate(OUTER);
+			//Safari has problem to handle complex content if INNER
+			//Eg: click Tabbox in zkdemo/userguide
 		}
 	}
 
@@ -86,7 +88,7 @@ public class Include extends XulElement {
 	public final void setLocalized(boolean localized) {
 		if (_localized != localized) {
 			_localized = localized;
-			invalidate(INNER);
+			invalidate(OUTER);
 		}
 	}
 
