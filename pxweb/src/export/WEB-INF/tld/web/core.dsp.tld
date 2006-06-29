@@ -311,7 +311,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	boolean isMozilla()
 		</function-signature>
 		<description>
-	Whether the current request is coming from Mozilla or like.
+	Whether the current request is coming from Mozilla, Firefox or other
+	Gecko browsers.
+		</description>
+	</function>
+	<function>
+		<name>isSafari</name>
+		<function-class>com.potix.web.fn.ServletFns</function-class>
+		<function-signature>
+	boolean isSafari()
+		</function-signature>
+		<description>
+	Whether the current request is coming from Safari.
 		</description>
 	</function>
 
