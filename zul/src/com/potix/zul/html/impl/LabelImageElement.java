@@ -56,7 +56,10 @@ public class LabelImageElement extends LabelElement implements Viewable {
 		if (!Objects.equals(_src, src)) {
 			_src = src;
 			if (_image == null) invalidate(OUTER);
-				//Bug 1504378: the container might have to init again
+			//why OUTER?
+			//1. Bug 1504378: the container might have to init again
+			//2. to have better shape in Safari, we use <input> if possible
+
 			//_src is meaningful only if _image is null
 			//NOTE: Tom Yeh: 20051222
 			//It is possible to use smartUpdate if we always generate

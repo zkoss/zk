@@ -145,7 +145,7 @@ div.popup {
 }
 
 .caption input, .caption td { /*groupbox caption*/
-	font-size: small;
+	font-size: x-small;
 }
 .caption button {
 	font-size: xx-small; font-weight: normal;

@@ -44,7 +44,9 @@ abstract public class LabelElement extends XulElement {
 		if (!Objects.equals(_label, label)) {
 			_label = label;
 			invalidate(OUTER);
-				//Bug 1504378: the container might have to init again
+			//why OUTER?
+			//1. Bug 1504378: the container might have to init again
+			//2. to have better shape in Safari, we use <input> if possible
 		}
 	}
 }
