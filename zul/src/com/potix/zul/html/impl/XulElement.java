@@ -132,9 +132,9 @@ abstract public class XulElement extends HtmlBasedComponent {
 		if (action != null && action.length() == 0) action = null;
 		if (!Objects.equals(_action, action)) {
 			final Map old = _actmap;
-			_actmap = parseAction(action);
-				//do it first because parseAction might fail
 
+			_actmap = action != null ? parseAction(action): null;
+				//do it first because parseAction might fail
 			_action = action;
 
 			if (_actmap != null)
@@ -142,7 +142,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 					final Map.Entry me = (Map.Entry)it.next();
 					final String actnm = (String)me.getKey();
 					final String actval = (String)me.getValue();
-					if (old == null || !actval.equals(old.get(actnm)))
+					if (old == null || !Objects.equals(actval, old.get(actnm)))
 						smartUpdate(actnm, toJavaScript(actval));
 				}
 			if (old != null)
