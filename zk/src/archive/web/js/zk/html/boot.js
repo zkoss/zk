@@ -25,7 +25,7 @@ if (!zk.build) {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-	zk.build = "1I"; //increase this if we want the browser to reload JavaScript
+	zk.build = "1j"; //increase this if we want the browser to reload JavaScript
 	zk.mods = {}; //ZkFns depends on it
 
 	/** Browser info. */
@@ -487,20 +487,29 @@ zk.encodeXML = function (txt, multiline) {
 //-- debug --//
 /** Generates a message for debugging. */
 zk.message = function (msg) {
-	var console = document.getElementById("zk_msg");
-	if (!console) {
-		console = document.createElement("DIV");
-		document.body.appendChild(console);
-		var html =
+	zk._msg = zk._msg ? zk._msg + msg: msg;
+	zk._msg +=  '\n';
+	setTimeout(zk._domsg, 600);
+		//for better performance and less side effect, execute later
+};
+zk._domsg = function () {
+	if (zk._msg) {
+		var console = document.getElementById("zk_msg");
+		if (!console) {
+			console = document.createElement("DIV");
+			document.body.appendChild(console);
+			var html =
  '<div style="border:1px solid #77c">'
 +'<table cellpadding="0" cellspacing="0" width="100%"><tr>'
 +'<td width="20pt"><button onclick="zk._msgclose(this)">close</button><br/>'
 +'<button onclick="document.getElementById(\'zk_msg\').value = \'\'">clear</button></td>'
 +'<td><textarea id="zk_msg" style="width:100%" rows="3"></textarea></td></tr></table></div>';
-		zk._setOuterHTML(console, html);
-		console = document.getElementById("zk_msg");
+			zk._setOuterHTML(console, html);
+			console = document.getElementById("zk_msg");
+		}
+		console.value = console.value + zk._msg + '\n';
+		zk._msg = null;
 	}
-	console.value = console.value + msg + '\n';
 };
 zk._msgclose = function (n) {
 	while ((n = n.parentNode) != null)
