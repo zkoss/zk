@@ -34,19 +34,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
 			<textbox id="codes" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
-<window title="tabbox demo" border="normal">
-	<tabbox width="400px">
-		<tabs>
-			<tab label="Tab 1"/>
-			<tab label="Tab 2"/>
-		</tabs>
-		<tabpanels>
-			<tabpanel>This is panel 1</tabpanel>
-			<tabpanel>This is panel 2
+<tabbox width="400px">
+	<tabs>
+		<tab label="Tab 1"/>
+		<tab label="Tab 2"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel>This is panel 1</tabpanel>
+		<tabpanel>This is panel 2
 The second panel</tabpanel>
-		</tabpanels>
-	</tabbox>
-</window>
+	</tabpanels>
+</tabbox>
 				]]></attribute>
 			</textbox>
 		</groupbox>
