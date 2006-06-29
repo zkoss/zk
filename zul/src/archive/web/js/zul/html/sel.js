@@ -891,9 +891,10 @@ zkSel._shallIgnoreEvent = function (el) {
 zkSel.onover = function (el) {
 	if (!zk.dragging) {
 		zk.backupStyle(el, "backgroundColor");
+		var clr = zk.getCurrentStyle(el, "color");
 		el.style.backgroundColor =
-			zk.safari ?
-			el.className.endsWith("sel") ? "#667FAA": "#EAEFFF":
+			clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
+			el.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
 			el.className.endsWith("sel") ? "#115588": "#DAE8FF";
 	}
 };

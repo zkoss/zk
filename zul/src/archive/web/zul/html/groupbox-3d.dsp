@@ -26,19 +26,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:if test="${! empty self.caption}">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="5" height="5" background="${c:encodeURL('~./zul/img/tab/3d-tl-uns.gif')}"></td>
-	<td height="5" colspan="3" background="${c:encodeURL('~./zul/img/tab/3d-tm-uns.gif')}"></td>
-	<td width="5" height="5" background="${c:encodeURL('~./zul/img/tab/3d-tr-uns.gif')}"></td>
+	<td width="5" height="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-tl-uns.gif')})"></td>
+	<td height="5" colspan="3" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-tm-uns.gif')})"></td>
+	<td width="5" height="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-tr-uns.gif')})"></td>
 </tr>
 <tr height="22">
-	<td width="5" background="${c:encodeURL('~./zul/img/tab/3d-ml-uns.gif')}"></td>
-	<td width="3" background="${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')}"></td>
-	<td background="${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')}">${u:redraw(self.caption, null)}</td>
-	<td width="3" background="${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')}"></td>
-	<td width="5" background="${c:encodeURL('~./zul/img/tab/3d-mr-uns.gif')}"></td>
+	<td width="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-ml-uns.gif')})"></td>
+	<td width="3" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')})"></td>
+	<td style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')})">${u:redraw(self.caption, null)}</td>
+	<td width="3" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')})"></td>
+	<td width="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mr-uns.gif')})"></td>
 </tr>
 <tr height="1">
-	<td colspan="5" background="${c:encodeURL('~./zul/img/tab/3d-b.gif')}"></td>
+	<td colspan="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-b.gif')})"></td>
 </tr>
 </table>
 </c:if>
@@ -52,7 +52,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
  <td width="6"><h:img width="6" height="6" src="~./img/shdlf.gif"/></td>
- <td background="${c:encodeURL('~./img/shdmd.gif')}"><h:img width="1" height="1" src="~./img/spacer.gif"/></td>
+ <td style="background-image:url(${c:encodeURL('~./img/shdmd.gif')})"><h:img width="1" height="1" src="~./img/spacer.gif"/></td>
  <td width="6"><h:img width="6" height="6" src="~./img/shdrg.gif"/></td>
 </tr>
 </table>

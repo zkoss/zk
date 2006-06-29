@@ -107,13 +107,10 @@ zkTab._setTabSel = function (tab, toSel) {
 };
 /** Changes the images in the background. */
 zkTab._changeBkgnd = function (node, toSel) {
-	//FUTURE: we mighit use style.backgroundImage = "url(...)" >> more standard
-	if (node.background && node.background.indexOf(toSel ? "-uns": "-sel") >= 0) { //IE
-		node.background = zk.renType(node.background, toSel ? "sel": "uns");
-	} else if (node.getAttribute) { //Mozilla
-		var img = node.getAttribute("background");
-		if (img && img.indexOf(toSel ? "-uns": "-sel") >= 0)
-			node.setAttribute("background", zk.renType(img, toSel ? "sel": "uns"));
+	if (node.style) {
+		var url = node.style.backgroundImage;
+		if (url && url.indexOf(toSel ? "-uns": "-sel") >= 0)
+			node.style.backgroundImage = zk.renType(url, toSel ? "sel": "uns");
 	}
 
 	for (node = node.firstChild; node; node = node.nextSibling)
