@@ -123,16 +123,15 @@ zkTab.fixWidth = function (uuid) {
 	if (!n) return;
 
 	var tbl = zk.parentNode(zk.parentNode(n, "TABLE"), "TABLE");
-	if ("TD" == zk.tagName(n)) { //horizontal
-		var tabs = zk.parentNode(tbl, "THEAD");
-		if (tabs) {
+	var tabs = zk.parentNode(tbl, "TABLE");
+		//Safari: THEAD's width and TD/TR's height is 0, so use TABLE instead
+	if (tabs) {
+		if ("TD" == zk.tagName(n)) { //horizontal
 			var v = tabs.offsetWidth - tbl.offsetWidth + n.offsetWidth;
 			if (v < 0) v = 0;
 			n.style.width = v + "px";
-		}
-	} else { //vertical
-		var tabs = zk.parentNode(tbl, "TD");
-		if (tabs) {
+		} else { //vertical
+			if (n.cells && n.cells.length) n = n.cells[0];
 			var v = tabs.offsetHeight - tbl.offsetHeight + n.offsetHeight;
 			if (v < 0) v = 0;
 			n.style.height = v + "px";
