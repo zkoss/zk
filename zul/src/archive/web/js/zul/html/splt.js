@@ -188,12 +188,19 @@ zkSplt._fixsz = function (cmp) {
 		//Note: when window resize, it might adjust splitter's wd (hgh)
 		//if box's width is nn%. So we have to reset it to 8px
 		if (vert) {
-			parent = parent.parentNode; //TR
-			cmp.style.height = parent.style.height = "8px";
-			cmp.style.width = parent.clientWidth + "px";
+			var tr = parent.parentNode; //TR
+			cmp.style.height = tr.style.height = "8px";
+			cmp.style.width = parent.clientWidth + "px"; //all wd the same
 		} else {
 			cmp.style.width = parent.style.width = "8px";
-			cmp.style.height = parent.clientHeight + "px";
+			var hgh = parent.clientHeight;
+			if (zk.safari) { //safari: each cell has diff height and tr's hgh is 0
+				for (var cells = parent.parentNode.cells, j = 0; j < cells.length; ++j) {
+					var h = cells[j].clientHeight;
+					if (h > hgh) hgh = h;
+				}
+			}
+			cmp.style.height = hgh + "px";
 		}
 	}
 
