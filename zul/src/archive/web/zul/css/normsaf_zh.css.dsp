@@ -344,7 +344,7 @@ div.menubar td, div.menupopup td {
 }
 div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.menupopup a:visited, div.menupopup a:hover {
 	font-size: small; font-weight: normal;
-	border: 1px solid menu; background: menu; color: menutext;
+	border: 1px solid menu; background: menu; color: black;
 	text-decoration: none;
 }
 div.menubar a:hover {
