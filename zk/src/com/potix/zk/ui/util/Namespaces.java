@@ -16,10 +16,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.util;
 
+import java.util.Map;
+
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Execution;
+import com.potix.zk.ui.Executions;
 
 /**
  * {@link Namespace} relevant utilities.
@@ -51,8 +54,7 @@ public class Namespaces {
 		ns.setVariable("componentScope",
 			comp.getAttributes(Component.COMPONENT_SCOPE), true);
 
-		final Object arg =
-			(exec != null ? exec: comp.getDesktop().getExecution()).getArg();
+		final Object arg = getArg(exec, comp);
 		if (arg != null) ns.setVariable("arg", arg, true);
 		return ns;
 	}
@@ -67,8 +69,7 @@ public class Namespaces {
 	 */
 	public static final Namespace beforeInterpret(Execution exec, Page page) {
 		final Namespace ns = page.getNamespace();
-		final Object arg =
-			(exec != null ? exec: page.getDesktop().getExecution()).getArg();
+		final Object arg = getArg(exec, page);
 		if (arg != null) ns.setVariable("arg", arg, true);
 		return ns;
 	}
@@ -79,5 +80,28 @@ public class Namespaces {
 		ns.unsetVariable("arg");
 		ns.unsetVariable("self");
 		ns.unsetVariable("componentScope");
+	}
+
+	private static Map getArg(Execution exec, Component comp) {
+		if (exec == null) {
+			exec = Executions.getCurrent();
+			if (exec == null && comp != null) {
+				final Desktop dt = comp.getDesktop();
+				if (dt != null) exec = dt.getExecution();
+			}
+			if (exec == null) return null;
+		}
+		return exec.getArg();
+	}
+	private static Map getArg(Execution exec, Page page) {
+		if (exec == null) {
+			exec = Executions.getCurrent();
+			if (exec == null && page != null) {
+				final Desktop dt = page.getDesktop();
+				if (dt != null) exec = dt.getExecution();
+			}
+			if (exec == null) return null;
+		}
+		return exec.getArg();
 	}
 }
