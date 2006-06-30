@@ -82,10 +82,33 @@ Array.prototype.contains = function (o) {
 //
 // More zk utilities (defined also in boot.js) //
 
+/** Return tr.offsetWidth, while solving Safari's bug. */
+zk.offsetWidth = function (el) {
+	if (!el) return 0;
+	if (!zk.safari || zk.tagName(el) != "TR") return el.offsetWidth;
+
+	var wd = 0;
+	for (var j = el.cells.length; --j >= 0;)
+		wd += el.cells[j].offsetWidth;
+	return wd;
+};
+/** Return tr.offsetHeight, while solving Safari's bug. */
+zk.offsetHeight = function (el) {
+	if (!el) return 0;
+	if (!zk.safari || zk.tagName(el) != "TR") return el.offsetHeight;
+
+	var hgh = 0;
+	for (var j = el.cells.length; --j >= 0;) {
+		var h = el.cells[j].offsetHeight;
+		if (h > hgh) hgh = h;
+	}
+	return hgh;
+};
+
 /** Center the specified element. */
 zk.center = function (el) {
-	var elwd = el.offsetWidth;
-	var elhgh = el.offsetHeight;
+	var elwd = zk.offsetWidth(el);
+	var elhgh = zk.offsetHeight(el);
 
 	var height = zk.innerHeight();
 	var width = zk.innerWidth();
@@ -98,10 +121,17 @@ zk.center = function (el) {
 };
 /** Position a component being releted to another. */
 zk.position = function (el, ref, type) {
-	var refofs = Position.cumulativeOffset(ref);
+	//Safari: TR's offsetTop, offsetWidth are all 0
+	var tr;
+	if (zk.safari && zk.tagName(ref) == "TR" && ref.cells.length) {
+		tr = ref;
+		ref = ref.cells[0];
+	}
+
+	var refofs = Position.positionedOffset(ref);
 	var x, y;
 	if (type == "end_before") { //el's upper-left = ref's upper-right
-		x = refofs[0] + ref.offsetWidth;
+		x = refofs[0] + zk.offsetWidth(tr || ref);
 		y = refofs[1];
 
 		if (zk.ie) {
@@ -112,9 +142,9 @@ zk.position = function (el, ref, type) {
 		}
 	} else { //after-start: el's upper-left = ref's lower-left
 		x = refofs[0];
-		var max = zk.innerWidth() - el.offsetWidth;
+		var max = zk.innerWidth() - zk.offsetWidth(el);
 		if (x > max) x = max;
-		y = refofs[1] + ref.offsetHeight;
+		y = refofs[1] + zk.offsetHeight(tr || ref);
 
 		if (zk.ie) {
 			var diff = parseInt(zk.getCurrentStyle(ref, "margin-bottom")||"0", 10);
@@ -123,21 +153,19 @@ zk.position = function (el, ref, type) {
 			if (!isNaN(diff)) x += diff;
 		}
 	}
-
-	refofs = zk.toParentOffset(el, x, y);
-	el.style.left = refofs[0] + "px"; el.style.top = refofs[1] + "px";
+	el.style.left = x + "px"; el.style.top = y + "px";
 };
 
 /** Converts to coordination related to the containing element.
  * This is useful if you need to specify el.style.left or top.
  */
 zk.toParentOffset = function (el, x, y) {
-      var p = el.offsetParent;
-      if (p) {
-          var refofs = Position.cumulativeOffset(p);
-          x -= refofs[0]; y -= refofs[1];
-      }
-      return [x, y];
+	var p = Position.offsetParent(el);
+	if (p) {
+		var refofs = Position.positionedOffset(p);
+		x -= refofs[0]; y -= refofs[1];
+	}
+	return [x, y];
 };
 /** Returns the style's coordination in [integer, integer].
  * Note: it ignores the unit and assumes px (so pt or others will be wrong)
