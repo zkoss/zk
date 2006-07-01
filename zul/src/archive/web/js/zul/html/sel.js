@@ -576,8 +576,9 @@ zk.Selectable.prototype = {
 		for (var j = 0; j < rows.length; ++j) {
 			var r = rows[j];
 			if (zk.isVisible(r)) {
-				if (r.offsetTop + r.offsetHeight < min) continue;
-				if (r.offsetTop >= max) break;
+				var top = zk.offsetTop(r);
+				if (top + zk.offsetHeight(r) < min) continue;
+				if (top >= max) break;
 				if (r.getAttribute("zk_loaded") != "true")
 					data += "," + this.getItemUuid(r);
 			}
@@ -621,7 +622,7 @@ zk.Selectable.prototype = {
 						sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
 						break;
 					}
-					h = rows[sz].offsetTop + rows[sz].offsetHeight;
+					h = zk.offsetTop(rows[sz]) + zk.offsetHeight(rows[sz]);
 					if (h >= hgh) {
 						if (h > hgh + 2) ++sz; //experimental
 						break;
@@ -642,7 +643,7 @@ zk.Selectable.prototype = {
 				hgh = this.body.offsetHeight - gap;
 				if (hgh < 25) hgh = 25;
 
-				var rowhgh = len ? rows[0].offsetHeight: 0;
+				var rowhgh = len ? zk.offsetHeight(rows[0]): 0;
 				if (!rowhgh) rowhgh = this._headHgh(20);
 
 				sz = Math.round((hgh - diff)/ rowhgh);
@@ -661,9 +662,9 @@ zk.Selectable.prototype = {
 				if (!len) hgh = this._headHgh(20) * sz;
 				else if (sz <= len) {
 					var r = rows[sz - 1];
-					hgh = r.offsetTop + r.offsetHeight;
+					hgh = zk.offsetTop(r) + zk.offsetHeight(r);
 				} else {
-					hgh = Math.ceil((sz * rows.offsetHeight) / len);
+					hgh = Math.ceil((sz * zk.offsetHeight(rows[len-1])) / len);
 				}
 				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
 			}
@@ -675,7 +676,8 @@ zk.Selectable.prototype = {
 	_headHgh: function (defVal) {
 		var n = this.headtbl;
 		n = n && n.rows.length ? n.rows[0]: null;
-		return n && n.offsetHeight ? n.offsetHeight: defVal;
+		var hgh = n ? zk.offsetHeight(n): 0;
+		return hgh ? hgh: defVal;
 	},
 	/** Cacluates the gap to make overflow to fit-in.
 	 * @return nonpositive means it already fit
