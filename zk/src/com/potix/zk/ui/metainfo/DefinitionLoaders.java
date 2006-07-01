@@ -231,6 +231,8 @@ public class DefinitionLoaders {
 				if (log.finerable()) log.finer("macro component definition: "+name);
 
 				compdef = new ComponentDefinition(langdef, name, macroUri);
+				langdef.initMacroDefinition(compdef);
+
 				final String clsnm = el.getElementValue("component-class", true);
 				if (clsnm != null && clsnm.length() > 0) {
 					noEL("component-class", clsnm, el);
@@ -238,7 +240,6 @@ public class DefinitionLoaders {
 						//resolve it now because it is part of lang-addon
 				}
 
-				langdef.initMacroDefinition(compdef);
 				langdef.addComponentDefinition(compdef);
 			} else if (el.getElement("extends") != null) { //override
 				if (log.finerable()) log.finer("Override component definition: "+name);
