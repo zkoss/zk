@@ -65,7 +65,7 @@ public class Window extends XulElement implements IdSpace  {
 	/** One of MODAL, EMBEDDED, OVERLAPPED. */
 	private int _mode = EMBEDDED;
 	/** Used for doModal. */
-	private final Object _mutex = new Integer(0);
+	private final Object _mutex = new Object();
 	/** Whether this window is in a special mode that need to be ended. */
 	private boolean _moding;
 	/** Whether to show a close button. */
