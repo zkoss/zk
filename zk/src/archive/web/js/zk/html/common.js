@@ -82,7 +82,7 @@ Array.prototype.contains = function (o) {
 //
 // More zk utilities (defined also in boot.js) //
 
-/** Return tr.offsetWidth, while solving Safari's bug. */
+/** Return el.offsetWidth, while solving Safari's bug. */
 zk.offsetWidth = function (el) {
 	if (!el) return 0;
 	if (!zk.safari || zk.tagName(el) != "TR") return el.offsetWidth;
@@ -92,7 +92,7 @@ zk.offsetWidth = function (el) {
 		wd += el.cells[j].offsetWidth;
 	return wd;
 };
-/** Return tr.offsetHeight, while solving Safari's bug. */
+/** Return el.offsetHeight, while solving Safari's bug. */
 zk.offsetHeight = function (el) {
 	if (!el) return 0;
 	if (!zk.safari || zk.tagName(el) != "TR") return el.offsetHeight;
@@ -103,6 +103,20 @@ zk.offsetHeight = function (el) {
 		if (h > hgh) hgh = h;
 	}
 	return hgh;
+};
+/** Returns el.offsetTop, while solving Safari's bug. */
+zk.offsetTop = function (el) {
+	if (!el) return 0;
+	if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
+		el = el.cells[0];
+	return el.offsetTop;
+};
+/** Returns el.offsetLeft, while solving Safari's bug. */
+zk.offsetLeft = function (el) {
+	if (!el) return 0;
+	if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
+		el = el.cells[0];
+	return el.offsetLeft;
 };
 
 /** Center the specified element. */
