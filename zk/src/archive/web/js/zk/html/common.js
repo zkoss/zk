@@ -82,7 +82,7 @@ Array.prototype.contains = function (o) {
 //
 // More zk utilities (defined also in boot.js) //
 
-/** Return el.offsetWidth, while solving Safari's bug. */
+/** Return el.offsetWidth, which solving Safari's bug. */
 zk.offsetWidth = function (el) {
 	if (!el) return 0;
 	if (!zk.safari || zk.tagName(el) != "TR") return el.offsetWidth;
@@ -92,7 +92,7 @@ zk.offsetWidth = function (el) {
 		wd += el.cells[j].offsetWidth;
 	return wd;
 };
-/** Return el.offsetHeight, while solving Safari's bug. */
+/** Return el.offsetHeight, which solving Safari's bug. */
 zk.offsetHeight = function (el) {
 	if (!el) return 0;
 	if (!zk.safari || zk.tagName(el) != "TR") return el.offsetHeight;
@@ -104,19 +104,31 @@ zk.offsetHeight = function (el) {
 	}
 	return hgh;
 };
-/** Returns el.offsetTop, while solving Safari's bug. */
+/** Returns el.offsetTop, which solving Safari's bug. */
 zk.offsetTop = function (el) {
 	if (!el) return 0;
 	if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
 		el = el.cells[0];
 	return el.offsetTop;
 };
-/** Returns el.offsetLeft, while solving Safari's bug. */
+/** Returns el.offsetLeft, which solving Safari's bug. */
 zk.offsetLeft = function (el) {
 	if (!el) return 0;
 	if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
 		el = el.cells[0];
 	return el.offsetLeft;
+};
+/** Returns Position.positionedOffset, which solving Safari's bug. */
+zk.positionedOffset = function (el) {
+	if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
+		el = el.cells[0];
+	return Position.positionedOffset(el);
+};
+/** Returns Position.cumulativeOffset, which solving Safari's bug. */
+zk.cumulativeOffset = function (el) {
+	if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
+		el = el.cells[0];
+	return Position.cumulativeOffset(el);
 };
 
 /** Center the specified element. */
@@ -135,17 +147,10 @@ zk.center = function (el) {
 };
 /** Position a component being releted to another. */
 zk.position = function (el, ref, type) {
-	//Safari: TR's offsetTop, offsetWidth are all 0
-	var tr;
-	if (zk.safari && zk.tagName(ref) == "TR" && ref.cells.length) {
-		tr = ref;
-		ref = ref.cells[0];
-	}
-
-	var refofs = Position.positionedOffset(ref);
+	var refofs = zk.positionedOffset(ref);
 	var x, y;
 	if (type == "end_before") { //el's upper-left = ref's upper-right
-		x = refofs[0] + zk.offsetWidth(tr || ref);
+		x = refofs[0] + zk.offsetWidth(ref);
 		y = refofs[1];
 
 		if (zk.ie) {
@@ -158,7 +163,7 @@ zk.position = function (el, ref, type) {
 		x = refofs[0];
 		var max = zk.innerWidth() - zk.offsetWidth(el);
 		if (x > max) x = max;
-		y = refofs[1] + zk.offsetHeight(tr || ref);
+		y = refofs[1] + zk.offsetHeight(ref);
 
 		if (zk.ie) {
 			var diff = parseInt(zk.getCurrentStyle(ref, "margin-bottom")||"0", 10);
@@ -176,7 +181,7 @@ zk.position = function (el, ref, type) {
 zk.toParentOffset = function (el, x, y) {
 	var p = Position.offsetParent(el);
 	if (p) {
-		var refofs = Position.positionedOffset(p);
+		var refofs = zk.positionedOffset(p);
 		x -= refofs[0]; y -= refofs[1];
 	}
 	return [x, y];
@@ -194,7 +199,7 @@ zk.getStyleOffset = function (el) {
  * style.left/top is still relevant to original offsetParent
  */
 zk.toStylePos = function (el, x, y) {
-	var ofs1 = Position.cumulativeOffset(el);
+	var ofs1 = zk.cumulativeOffset(el);
 	var ofs2 = zk.getStyleOffset(el);
 	return [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
 };
@@ -202,8 +207,8 @@ zk.toStylePos = function (el, x, y) {
 /** Whether el1 and el2 are overlapped. */
 zk.isOverlapped = function (el1, el2) {
 	return zk.isOffsetOverlapped(
-		Position.cumulativeOffset(el1), [el1.offsetWidth, el1.offsetHeight],
-		Position.cumulativeOffset(el2), [el2.offsetWidth, el2.offsetHeight]);
+		zk.cumulativeOffset(el1), [el1.offsetWidth, el1.offsetHeight],
+		zk.cumulativeOffset(el2), [el2.offsetWidth, el2.offsetHeight]);
 };
 /** Whether ofs1/dim1 is overlapped with ofs2/dim2. */
 zk.isOffsetOverlapped = function (ofs1, dim1, ofs2, dim2) {
@@ -819,7 +824,7 @@ zk.restoreDisabled = function (n) {
 				||  tn == "TEXTAREA"){
 				//focus only visible (to prevent scroll)
 					try {
-						var ofs = Position.cumulativeOffset(el);
+						var ofs = zk.cumulativeOffset(el);
 						if (ofs[0] >= zk.innerX() && ofs[1] >= zk.innerY()
 						&& (ofs[0]+20) <= (zk.innerX()+zk.innerWidth())
 						&& (ofs[1]+20) <= (zk.innerY()+zk.innerHeight())) {

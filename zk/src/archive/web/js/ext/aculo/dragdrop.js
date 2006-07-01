@@ -299,6 +299,8 @@ zkau.autoZIndex(src, false, true);
 		if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, true);
 		if (ghosting) {
       this._clone = this.element.cloneNode(true);
+this._orgabs = this.element.style.position == 'absolute'; //Tom M. Yeh, Potix: Bug 1514789
+if (!this._orgabs)
       Position.absolutize(this.element);
       this.element.parentNode.insertBefore(this._clone, this.element);
 		}
@@ -367,7 +369,8 @@ zkau.autoZIndex(src, false, true);
     	var ghosting = true;
 		if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, false);
 		if (ghosting) {
-      Position.relativize(this.element);
+if (!this._orgabs) //Tom M. Yeh, Potix: Bug 1514789
+      Position.relativize(this.element); 
       Element.remove(this._clone);
       this._clone = null;
 		}

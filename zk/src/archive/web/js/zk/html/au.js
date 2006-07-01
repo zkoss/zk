@@ -78,7 +78,7 @@ zkau.onclick = function (evt) {
 		return; //done
 	}
 
-	var ofs = Position.cumulativeOffset(target);
+	var ofs = zk.cumulativeOffset(target);
 	var x = Event.pointerX(evt) - ofs[0];
 	var y = Event.pointerY(evt) - ofs[1];
 	zkau.send({uuid: zkau.uuidOf(target.id), cmd: "onClick", data: [x, y]});
@@ -1260,16 +1260,16 @@ zkau._cleanLastDrop = function (dg) {
 //across two listboxes, so we use a fake DIV instead.
 //On the other hand, IE handles selection improperly if transparent DIV is used
 //so we use the standard ghosting
-if (zk.gecko) {
+if (zk.gecko || zk.safari) {
 	zkau._ghostdrag = function (dg, ghosting) {
 		if (ghosting) {
 			zk.dragging = true;
 			Position.prepare();
-			var ofs = Position.positionedOffset(dg.element);
+			var ofs = zk.positionedOffset(dg.element);
 			document.body.insertAdjacentHTML("afterbegin",
 				'<div id="zk_ddghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-				+dg.element.offsetWidth+'px;height:'+dg.element.offsetHeight
+				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 				+'px;border:1px dotted black">&nbsp;</div>');
 	
 			dg.zk_old = dg.element;
