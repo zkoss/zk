@@ -21,9 +21,9 @@ package com.potix.zk.ui.impl;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
@@ -62,7 +62,7 @@ public class UiEngineImpl implements UiEngine {
 	/** A pool of idle EventProcessingThread. */
 	private final List _evtthds = new LinkedList();
 	/** A map of suspended processing:
-	 * (Desktop desktop, Map(Object mutex, List(EventProcessingThread)).
+	 * (Desktop desktop, IdentityHashMap(Object mutex, List(EventProcessingThread)).
 	 */
 	private final Map _suspended = new HashMap();
 	/** A map of resumed processing
@@ -589,7 +589,9 @@ public class UiEngineImpl implements UiEngine {
 		synchronized (_suspended) {
 			map = (Map)_suspended.get(desktop);
 			if (map == null)
-				_suspended.put(desktop, map = new HashMap(3));
+				_suspended.put(desktop, map = new IdentityHashMap(3));
+					//note: we have to use IdentityHashMap because user might
+					//use Integer or so as mutex
 		}
 		synchronized (map) {
 			List list = (List)map.get(mutex);

@@ -72,7 +72,7 @@ public class EventProcessingThread extends Thread {
 	/** The mutex use to notify an event is ready for processing, or
 	 * has been processed.
 	 */
-	private final Object _evtmutex = new Character('a');
+	private final Object _evtmutex = new Object();
 	/** The mutex use to suspend an event processing. */
 	private Object _suspmutex;
 	private boolean _ceased;
