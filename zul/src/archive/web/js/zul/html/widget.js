@@ -311,7 +311,9 @@ zkCapt._parentGrbox = function (p) {
 function zkMap() {}
 
 zkMap.init = function (cmp) {
-	zk.newFrame("zk_hfr_"); //creates a hidden frame
+	zk.newFrame("zk_hfr_", zk.safari ? "width:0;height:0": "display:none");
+		//creates a hidden frame. However, in safari, we cannot use invisible frame
+		//otherwise, safari will open a new window
 };
 zkMap.setAttr = function (cmp, nm, val) {
 	if (zkMap._inflds.contains(nm))
