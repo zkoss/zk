@@ -925,7 +925,7 @@ Element.findChildren = function(element, only, recursive, tagName) {
 
 Element.offsetSize = function (element, type) {
   if (type == 'vertical' || type == 'height')
-    return element.offsetHeight;
+    return zk.offsetHeight(element); //Tom M. Yeh, Potix: safari bug
   else
-    return element.offsetWidth;
+    return zk.offsetWidth(element); //Tom M. Yeh, Potix: safari bug
 }

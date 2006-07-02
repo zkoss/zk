@@ -966,7 +966,7 @@ Element.Methods = {
 
   getHeight: function(element) {
     element = $(element);
-    return element.offsetHeight;
+    return zk.offsetHeight(element); //Tom M. Yeh, Potix: safari bug
   },
 
   classNames: function(element) {
@@ -1043,7 +1043,7 @@ Element.Methods = {
   getDimensions: function(element) {
     element = $(element);
     if (Element.getStyle(element, 'display') != 'none')
-      return {width: element.offsetWidth, height: element.offsetHeight};
+      return {width: zk.offsetWidth(element), height: zk.offsetHeight(element)}; //Tom M. Yeh, Potix: safari bug
 
     // All *Width and *Height properties give 0 on elements with display none,
     // so enable the element temporarily
@@ -1845,9 +1845,9 @@ var Position = {
     this.offset = this.cumulativeOffset(element);
 
     return (y >= this.offset[1] &&
-            y <  this.offset[1] + element.offsetHeight &&
+            y <  this.offset[1] + zk.offsetHeight(element) && //Tom M. Yeh, Potix: safari bug
             x >= this.offset[0] &&
-            x <  this.offset[0] + element.offsetWidth);
+            x <  this.offset[0] + zk.offsetWidth(element)); //Tom M. Yeh, Potix: safari bug
   },
 
   withinIncludingScrolloffsets: function(element, x, y) {
@@ -1858,20 +1858,20 @@ var Position = {
     this.offset = this.cumulativeOffset(element);
 
     return (this.ycomp >= this.offset[1] &&
-            this.ycomp <  this.offset[1] + element.offsetHeight &&
+            this.ycomp <  this.offset[1] + zk.offsetHeight(element) && //Tom M. Yeh, Potix: safari bug
             this.xcomp >= this.offset[0] &&
-            this.xcomp <  this.offset[0] + element.offsetWidth);
+            this.xcomp <  this.offset[0] + zk.offsetWidth(element)); //Tom M. Yeh, Potix: safari bug
   },
 
   // within must be called directly before
   overlap: function(mode, element) {
     if (!mode) return 0;
     if (mode == 'vertical')
-      return ((this.offset[1] + element.offsetHeight) - this.ycomp) /
-        element.offsetHeight;
+      return ((this.offset[1] + zk.offsetHeight(element)) - this.ycomp) / //Tom M. Yeh, Potix: safari bug
+        zk.offsetHeight(element);
     if (mode == 'horizontal')
-      return ((this.offset[0] + element.offsetWidth) - this.xcomp) /
-        element.offsetWidth;
+      return ((this.offset[0] + zk.offsetWidth(element)) - this.xcomp) / //Tom M. Yeh, Potix: safari bug
+        zk.offsetWidth(element);
   },
 
   clone: function(source, target) {
@@ -1881,8 +1881,8 @@ var Position = {
     var offsets = this.cumulativeOffset(source);
     target.style.top    = offsets[1] + 'px';
     target.style.left   = offsets[0] + 'px';
-    target.style.width  = source.offsetWidth + 'px';
-    target.style.height = source.offsetHeight + 'px';
+    target.style.width  = zk.offsetWidth(source) + 'px'; //Tom M. Yeh, Potix: safari bug
+    target.style.height = zk.offsetHeight(source) + 'px'; //Tom M. Yeh, Potix: safari bug
   },
 
   page: function(forElement) {
@@ -1942,8 +1942,8 @@ var Position = {
     // set position
     if(options.setLeft)   target.style.left  = (p[0] - delta[0] + options.offsetLeft) + 'px';
     if(options.setTop)    target.style.top   = (p[1] - delta[1] + options.offsetTop) + 'px';
-    if(options.setWidth)  target.style.width = source.offsetWidth + 'px';
-    if(options.setHeight) target.style.height = source.offsetHeight + 'px';
+    if(options.setWidth)  target.style.width = zk.offsetWidth(source) + 'px'; //Tom M. Yeh, Potix: safari bug
+    if(options.setHeight) target.style.height = zk.offsetHeight(source) + 'px'; //Tom M. Yeh, Potix: safari bug
   },
 
   absolutize: function(element) {

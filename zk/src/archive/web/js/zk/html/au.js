@@ -78,7 +78,7 @@ zkau.onclick = function (evt) {
 		return; //done
 	}
 
-	var ofs = zk.cumulativeOffset(target);
+	var ofs = Position.cumulativeOffset(target);
 	var x = Event.pointerX(evt) - ofs[0];
 	var y = Event.pointerY(evt) - ofs[1];
 	zkau.send({uuid: zkau.uuidOf(target.id), cmd: "onClick", data: [x, y]});
@@ -1265,7 +1265,7 @@ if (zk.gecko || zk.safari) {
 		if (ghosting) {
 			zk.dragging = true;
 			Position.prepare();
-			var ofs = zk.positionedOffset(dg.element);
+			var ofs = Position.positionedOffset(dg.element);
 			document.body.insertAdjacentHTML("afterbegin",
 				'<div id="zk_ddghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;width:'

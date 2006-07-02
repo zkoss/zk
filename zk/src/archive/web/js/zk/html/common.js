@@ -118,18 +118,21 @@ zk.offsetLeft = function (el) {
 		el = el.cells[0];
 	return el.offsetLeft;
 };
-/** Returns Position.positionedOffset, which solving Safari's bug. */
-zk.positionedOffset = function (el) {
-	if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
-		el = el.cells[0];
-	return Position.positionedOffset(el);
-};
-/** Returns Position.cumulativeOffset, which solving Safari's bug. */
-zk.cumulativeOffset = function (el) {
-	if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
-		el = el.cells[0];
-	return Position.cumulativeOffset(el);
-};
+if (zk.safari) {
+	//fix safari's bug
+	zk._oldposofs = Position.positionedOffset;
+	Position.positionedOffset = function (el) {
+		if (zk.tagName(el) === "TR" && el.cells.length)
+			el = el.cells[0];
+		return zk._oldposofs(el);
+	};
+	zk._oldcumofs = Position.cumulativeOffset;
+	Position.cumulativeOffset = function (el) {
+		if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
+			el = el.cells[0];
+		return zk._oldcumofs(el);
+	};
+}
 
 /** Center the specified element. */
 zk.center = function (el) {
@@ -147,7 +150,7 @@ zk.center = function (el) {
 };
 /** Position a component being releted to another. */
 zk.position = function (el, ref, type) {
-	var refofs = zk.positionedOffset(ref);
+	var refofs = Position.positionedOffset(ref);
 	var x, y;
 	if (type == "end_before") { //el's upper-left = ref's upper-right
 		x = refofs[0] + zk.offsetWidth(ref);
@@ -181,7 +184,7 @@ zk.position = function (el, ref, type) {
 zk.toParentOffset = function (el, x, y) {
 	var p = Position.offsetParent(el);
 	if (p) {
-		var refofs = zk.positionedOffset(p);
+		var refofs = Position.positionedOffset(p);
 		x -= refofs[0]; y -= refofs[1];
 	}
 	return [x, y];
@@ -199,7 +202,7 @@ zk.getStyleOffset = function (el) {
  * style.left/top is still relevant to original offsetParent
  */
 zk.toStylePos = function (el, x, y) {
-	var ofs1 = zk.cumulativeOffset(el);
+	var ofs1 = Position.cumulativeOffset(el);
 	var ofs2 = zk.getStyleOffset(el);
 	return [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
 };
@@ -207,8 +210,8 @@ zk.toStylePos = function (el, x, y) {
 /** Whether el1 and el2 are overlapped. */
 zk.isOverlapped = function (el1, el2) {
 	return zk.isOffsetOverlapped(
-		zk.cumulativeOffset(el1), [el1.offsetWidth, el1.offsetHeight],
-		zk.cumulativeOffset(el2), [el2.offsetWidth, el2.offsetHeight]);
+		Position.cumulativeOffset(el1), [el1.offsetWidth, el1.offsetHeight],
+		Position.cumulativeOffset(el2), [el2.offsetWidth, el2.offsetHeight]);
 };
 /** Whether ofs1/dim1 is overlapped with ofs2/dim2. */
 zk.isOffsetOverlapped = function (ofs1, dim1, ofs2, dim2) {
@@ -824,7 +827,7 @@ zk.restoreDisabled = function (n) {
 				||  tn == "TEXTAREA"){
 				//focus only visible (to prevent scroll)
 					try {
-						var ofs = zk.cumulativeOffset(el);
+						var ofs = Position.cumulativeOffset(el);
 						if (ofs[0] >= zk.innerX() && ofs[1] >= zk.innerY()
 						&& (ofs[0]+20) <= (zk.innerX()+zk.innerWidth())
 						&& (ofs[1]+20) <= (zk.innerY()+zk.innerHeight())) {
