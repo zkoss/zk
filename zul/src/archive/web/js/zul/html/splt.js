@@ -98,7 +98,7 @@ zkSplt._startDrag = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
 		var run = drag.run = {};
-		run.org = zk.cumulativeOffset(cmp);
+		run.org = Position.cumulativeOffset(cmp);
 		var nd = $(cmp.id + "!chdextr");
 		var tn = zk.tagName(nd);
 		run.prev = zk.previousSibling(nd, tn);
@@ -117,7 +117,7 @@ zkSplt._snap = function (cmp, x, y) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
 		var run = drag.run;
-		var ofs = zk.cumulativeOffset(run.box);
+		var ofs = Position.cumulativeOffset(run.box);
 		ofs = zk.toStylePos(cmp, ofs[0], ofs[1]);
 		if (drag.vert) {
 			if (y <= ofs[1]) {
@@ -145,7 +145,7 @@ zkSplt._dragging = function (drag) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
 		var run = drag.run;
-		var ofs = zk.cumulativeOffset(cmp);
+		var ofs = Position.cumulativeOffset(cmp);
 		if (drag.vert) {
 			var diff = ofs[1] - run.org[1];
 			if (run.next) zkSplt._adj(run.next, "height", -diff);

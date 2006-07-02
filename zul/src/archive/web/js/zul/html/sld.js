@@ -53,7 +53,7 @@ zk.Slider.prototype = {
 	/** (x, y) is in the style's coordination (use zk.toStylePos to convert).
 	 */
 	_snap: function (x, y) {
-		var ofs = zk.cumulativeOffset(this.element);
+		var ofs = Position.cumulativeOffset(this.element);
 		ofs = zk.toStylePos(this.button, ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
 			x = ofs[0];
@@ -72,7 +72,7 @@ zk.Slider.prototype = {
 	_fixPos: function () {
 		var wd = this._width();
 		var x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0;
-		var ofs = zk.cumulativeOffset(this.element);
+		var ofs = Position.cumulativeOffset(this.element);
 		ofs = zk.toStylePos(this.button, ofs[0], ofs[1]);
 		ofs = this._snap(ofs[0] + x, 0);
 		this.button.style.left = ofs[0] + "px";
@@ -117,8 +117,8 @@ zk.Slider.prototype = {
 		}
 	},
 	_realpos: function () {
-		var btnofs = zk.cumulativeOffset(this.button);
-		var refofs = zk.cumulativeOffset(this.element);
+		var btnofs = Position.cumulativeOffset(this.button);
+		var refofs = Position.cumulativeOffset(this.element);
 		var maxpos = this._maxpos();
 		var wd = this._width();
 		var pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd): 0;

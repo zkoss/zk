@@ -169,7 +169,7 @@ zkVld._errbox = function (id, html) {
 	if (inp) {
 		var ref = $(zkau.uuidOf(id));
 		if (!ref) ref = inp;
-		var ofs = zk.cumulativeOffset(ref);
+		var ofs = Position.cumulativeOffset(ref);
 		ofs = zk.toParentOffset(box, ofs[0], ofs[1] + ref.offsetHeight);
 		box.style.left = ofs[0] + "px"; box.style.top = ofs[1] + "px";
 		//we don't consider zkau.currentFocus here because onblur
@@ -232,8 +232,8 @@ zkVld._fiximg = function (box) {
 	var inp = $(id);
 	var img = $(id + "!img");
 	if (inp && img) {
-		var inpofs = zk.cumulativeOffset(inp);
-		var imgofs = zk.cumulativeOffset(img);
+		var inpofs = Position.cumulativeOffset(inp);
+		var imgofs = Position.cumulativeOffset(img);
 		var dx = inpofs[0] - imgofs[0], dy = inpofs[1] - imgofs[1],
 			hgh = inp.offsetHeight;
 		var dir;
@@ -271,8 +271,8 @@ zkVld.uncover = function (el) {
 	}
 };
 zkVld._uncover = function (box, el, ctag) {
-	var elofs = zk.cumulativeOffset(el);
-	var boxofs = zk.cumulativeOffset(box);
+	var elofs = Position.cumulativeOffset(el);
+	var boxofs = Position.cumulativeOffset(box);
 
 	if (zk.isOffsetOverlapped(
 	elofs, [el.offsetWidth, el.offsetHeight],
@@ -280,7 +280,7 @@ zkVld._uncover = function (box, el, ctag) {
 		var inp = $(box.id.substring(0, box.id.length - 5));
 		var y;
 		if (inp) {
-			var inpofs = zk.cumulativeOffset(inp);
+			var inpofs = Position.cumulativeOffset(inp);
 			if (ctag) {
 				y = inpofs[1] < elofs[1] ? elofs[1] + el.offsetHeight:
 					elofs[1] - box.offsetHeight;
