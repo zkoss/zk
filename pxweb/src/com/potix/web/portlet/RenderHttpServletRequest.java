@@ -32,6 +32,7 @@ import com.potix.util.CollectionsX;
  */
 public class RenderHttpServletRequest implements HttpServletRequest {
 	private final RenderRequest _req;
+	private String _enc = "UTF-8";
 	public static HttpServletRequest getInstance(RenderRequest req) {
 		if (req instanceof HttpServletRequest)
 			return (HttpServletRequest)req;
@@ -51,10 +52,10 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getAttributeNames();
 	}
 	public String getCharacterEncoding() {
-		return "UTF-8";
+		return _enc;
 	}
 	public int getContentLength() {
-		return 0;
+		return -1;
 	}
 	public String getContentType() {
 		return "html";
@@ -75,7 +76,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return "";
 	}
 	public int getLocalPort() {
-		return 80;
+		return -1;
 	}
 	public String getParameter(String name) {
 		return _req.getParameter(name);
@@ -90,7 +91,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getParameterValues(name);
 	}
 	public String getProtocol() {
-		return "HTTP/1.1";
+		return "HTTP/1.0";
 	}
 	public java.io.BufferedReader getReader() {
 		throw new UnsupportedOperationException();
@@ -108,7 +109,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return "";
 	}
 	public int getRemotePort() {
-		return 0;
+		return -1;
 	}
 	public javax.servlet.RequestDispatcher getRequestDispatcher(String path) {
 		return null; //implies we don't support relative URI
@@ -131,7 +132,14 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 	public void setAttribute(String name, Object o) {
 		_req.setAttribute(name, o);
 	}
-	public void setCharacterEncoding(String env) {
+	public void setCharacterEncoding(String enc)
+	throws java.io.UnsupportedEncodingException {
+		//Ensure the specified encoding is valid
+		byte buffer[] = new byte[1];
+		buffer[0] = (byte) 'a';
+		String dummy = new String(buffer, enc);
+
+		_enc = enc;
 	}
 
 	//-- HttpServletRequest --//
@@ -145,7 +153,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return new javax.servlet.http.Cookie[0];
 	}
 	public long getDateHeader(String name) {
-		return 0;
+		return -1; //not available
 	}
 	public String getHeader(String name) {
 		return null;
@@ -157,7 +165,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return CollectionsX.EMPTY_ENUMERATION;
 	}
 	public int getIntHeader(String name) {
-		return 0;
+		return -1; //not available
 	}
 	public String getMethod() {
 		return "GET";
@@ -178,13 +186,17 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getRequestedSessionId();
 	}
 	public String getRequestURI() {
-		return (String)getAttribute("javax.servlet.include.request_uri");
+		final String s = (String)
+			getAttribute("javax.servlet.include.request_uri");
+		return s != null ? s: "";
 	}
 	public StringBuffer getRequestURL() {
 		return new StringBuffer();
 	}
 	public String getServletPath() {
-		return (String)getAttribute("javax.servlet.include.servlet_path");
+		final String s = (String)
+			getAttribute("javax.servlet.include.servlet_path");
+		return s != null ? s: "";
 	}
 	public HttpSession getSession() {
 		return PortletHttpSession.getInstance(_req.getPortletSession());
