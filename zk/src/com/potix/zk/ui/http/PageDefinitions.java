@@ -42,6 +42,11 @@ public class PageDefinitions extends com.potix.zk.ui.metainfo.PageDefinitions {
 
 	/** Returns the page definition of the specified path, or null if not
 	 * found or failed to parse.
+	 *
+	 * <p>This is the lowest method that other getPageDefinition depends.
+	 *
+	 * <p>Dependency: Execution.createComponents -&amp; Execution.getPageDefinition
+	 * -&amp; UiFactory.getPageDefiition -&amp; PageDefintions.getPageDefinition
 	 */
 	public static final
 	PageDefinition getPageDefinition(ServletContext ctx, String path) {

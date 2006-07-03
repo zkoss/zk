@@ -1065,12 +1065,14 @@ zk.queryToHiddens = function (frm, qs) {
 }
 
 /** Creates a frame if it is not created yet. */
-zk.newFrame = function (name, style) {
+zk.newFrame = function (name, src, style) {
 	var frm = $(name);
 	if (frm) return frm;
 
 	var html = '<iframe id="'+name+'" name="'+name+'"';
-	if (style) html += ' style="'+style+'"></iframe>';
+	if (src) html += ' src="'+src+'"';
+	if (style) html += ' style="'+style+'"';
+	html += '></iframe>';
 	zk.insertHTMLBeforeEnd(document.body, html);
 	return $(name);
 };

@@ -61,6 +61,9 @@ public class Script implements Condition {
 		if (_script != null)
 			return _script;
 		final Object o = getCache().get(_url);
+			//It is OK to use cache here even if script might be located, say,
+			//at a database. Reason: it is Locator's job to implement
+			//the relevant function for URL (including lastModified).
 		if (o == null)
 			throw new FileNotFoundException("File not found: "+_url);
 		if (!(o instanceof String))

@@ -18,8 +18,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.sys;
 
+import java.io.Reader;
+import java.io.IOException;
+
+import com.potix.idom.Document;
+
 import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.metainfo.PageDefinition;
@@ -79,6 +83,10 @@ public interface UiFactory {
 	 * to be loaded from the database too, you must invoke 
 	 * {@link RequestInfo#setLocator} to change the default locator.
 	 *
+	 * <p>Implementation NOTE: DO NOT invoke
+	 * {@link com.potix.zk.ui.Execution#getPageDefinition(String)}.
+	 * Otherwise, an endless loop occurs.
+	 *
 	 * @param ri the additional request information.
 	 * @param path the path to request this page.
 	 * @see #getPageDefinitionDirectly
@@ -86,15 +94,51 @@ public interface UiFactory {
 	public PageDefinition getPageDefinition(RequestInfo ri, String path);
 	/** Returns the page definition of the specified content; never null.
 	 *
-	 * <p>It is called when a filter is going to generate a page definition
-	 * for the content it intercepts.
+	 * <p>It is called when a filter or {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(String, String)}
+	 * is going to generate a page definition for the content it intercepts.
 	 *
-	 * @param content the raw content of the page. It must be a XML and
-	 * compliant to the page format (such as ZUL).
+	 * <p>Implementation NOTE: DO NOT invoke
+	 * {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(String, String)}.
+	 * Otherwise, an endless loop occurs.
+	 *
+	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if doc doesn't specify
 	 * an language. Ignored if null.
 	 * @see #getPageDefinition
 	 */
 	public PageDefinition getPageDefinitionDirectly(
 	RequestInfo ri, String content, String extension);
+
+	/** Returns the page definition of the specified content; never null.
+	 *
+	 * <p>It is called when {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(Document, String)}
+	 * is going to generate a page definition for the content it intercepts.
+	 *
+	 * <p>Implementation NOTE: DO NOT invoke
+	 * {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(Document, String)}.
+	 * Otherwise, an endless loop occurs.
+	 *
+	 * @param content the raw content of the page in DOM.
+	 * @param extension the default extension if doc doesn't specify
+	 * an language. Ignored if null.
+	 * @see #getPageDefinition
+	 */
+	public PageDefinition getPageDefinitionDirectly(
+	RequestInfo ri, Document content, String extension);
+	/** Returns the page definition of the specified reader; never null.
+	 *
+	 * <p>It is called when {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(Reader, String)}
+	 * is going to generate a page definition for the content it intercepts.
+	 *
+	 * <p>Implementation NOTE: DO NOT invoke
+	 * {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(Reader, String)}.
+	 * Otherwise, an endless loop occurs.
+	 *
+	 * @param reader the reader to retrieve the raw content in ZUML.
+	 * @param extension the default extension if doc doesn't specify
+	 * an language. Ignored if null.
+	 * @see #getPageDefinition
+	 */
+	public PageDefinition getPageDefinitionDirectly(
+	RequestInfo ri, Reader reader, String extension) throws IOException;
 }

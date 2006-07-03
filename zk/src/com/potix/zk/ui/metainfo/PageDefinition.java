@@ -232,8 +232,7 @@ public class PageDefinition extends InstanceDefinition {
 		if (_mapper == null) {
 			synchronized (this) {
 				if (_mapper == null)
-					_mapper = FunctionMappers
-						.getFunctionMapper(_taglibs, _locator);
+					_mapper = FunctionMappers.getFunctionMapper(_taglibs, _locator);
 			}
 		}
 		return _mapper;

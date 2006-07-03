@@ -44,8 +44,12 @@ import com.potix.web.el.PageELContext;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Desktop;
+import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.impl.AbstractExecution;
 import com.potix.zk.ui.metainfo.PageDefinition;
+import com.potix.zk.ui.sys.WebAppCtrl;
+import com.potix.zk.ui.sys.RequestInfo;
+import com.potix.zk.ui.impl.RequestInfoImpl;
 
 /**
  * An {@link com.potix.zk.ui.Execution} implementation for HTTP request
@@ -162,24 +166,36 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	public PageDefinition getPageDefinition(String uri) {
-		final PageDefinition pagedef = 	PageDefinitions.getPageDefinition(
-			_ctx, toAbsoluteURI(uri));
+		//Note: we have to go thru UiFactory (so user can override it)
+		uri = toAbsoluteURI(uri);
+		final PageDefinition pagedef =
+			((WebAppCtrl)getDesktop().getWebApp()).getUiFactory()
+			.getPageDefinition(newRequestInfo(uri), uri);
 		if (pagedef == null)
 			throw new UiException("Page not found: "+uri);
 		return pagedef;
 	}
 	public PageDefinition getPageDefinitionDirectly(String content, String ext) {
-		return PageDefinitions.getPageDefinitionDirectly(
-			getDesktop().getWebApp(), content, ext);
+		//Note: we have to go thru UiFactory (so user can override it)
+		return ((WebAppCtrl)getDesktop().getWebApp()).getUiFactory()
+			.getPageDefinitionDirectly(newRequestInfo(null), content, ext);
 	}
 	public PageDefinition getPageDefinitionDirectly(Document content, String ext) {
-		return PageDefinitions.getPageDefinitionDirectly(
-			getDesktop().getWebApp(), content, ext);
+		//Note: we have to go thru UiFactory (so user can override it)
+		return ((WebAppCtrl)getDesktop().getWebApp()).getUiFactory()
+			.getPageDefinitionDirectly(newRequestInfo(null), content, ext);
 	}
 	public PageDefinition getPageDefinitionDirectly(Reader reader, String ext)
 	throws IOException {
-		return PageDefinitions.getPageDefinitionDirectly(
-			getDesktop().getWebApp(), reader, ext);
+		//Note: we have to go thru UiFactory (so user can override it)
+		return ((WebAppCtrl)getDesktop().getWebApp()).getUiFactory()
+			.getPageDefinitionDirectly(newRequestInfo(null), reader, ext);
+	}
+	private RequestInfo newRequestInfo(String uri) {
+		final Desktop dt = getDesktop();
+		return new RequestInfoImpl(
+			dt.getWebApp(), dt.getSession(), dt, _request,
+			PageDefinitions.getLocator(_ctx, uri));
 	}
 
 	public void setHeader(String name, String value) {

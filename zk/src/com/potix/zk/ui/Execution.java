@@ -234,6 +234,10 @@ public interface Execution extends Evaluator {
 
 	//-- page utilities --//
 	/** Returns the page definition from the page file specified by an URI.
+	 *
+	 * <p>Implemetation Notes: this method must invoke
+	 * {@link com.potix.zk.ui.sys.UiFactory#getPageDefinition(com.potix.zk.ui.sys.RequestInfo, String)}
+	 *
 	 * @param uri the URI of the page file.
 	 *
 	 * @see #getPageDefinitionDirectly(String, String)
@@ -243,8 +247,10 @@ public interface Execution extends Evaluator {
 	public PageDefinition getPageDefinition(String uri);
 	/** Converts the specified page content to a page definition.
 	 *
-	 * @param content the raw content of the page. It must be a XML and
-	 * compliant to the page format (such as ZUL).
+	 * <p>Implemetation Notes: this method must invoke
+	 * {@link com.potix.zk.ui.sys.UiFactory#getPageDefinitionDirectly(com.potix.zk.ui.sys.RequestInfo, String, String)}
+	 *
+	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. Ignored if null.
 	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
@@ -269,6 +275,7 @@ public interface Execution extends Evaluator {
 	/** Reads the raw content from a reader and converts it into
 	 * a page definition.
 	 *
+	 * @param reader used to input the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content of reader doesn't specify
 	 * an language. Ignored if null.
 	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
@@ -321,8 +328,7 @@ public interface Execution extends Evaluator {
 	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
 	 * to create components.
 	 *
-	 * @param content the raw content of the page. It must be a XML and
-	 * compliant to the page format (such as ZUL).
+	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. Ignored if null.
 	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
@@ -372,7 +378,7 @@ public interface Execution extends Evaluator {
 	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
 	 * to create components.
 	 *
-	 * @param reader the reader to retrieve the raw content.
+	 * @param reader the reader to retrieve the raw content in ZUML.
 	 * @param extension the default extension if the content of reader doesn't specify
 	 * an language. Ignored if null.
 	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}

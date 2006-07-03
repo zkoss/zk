@@ -39,6 +39,11 @@ import com.potix.zk.ui.UiException;
 public class PageDefinitions {
 	/** Returns the page definition of the specified raw content; never null.
 	 *
+	 * <p>This is the lowest method that other getPageDefinitionDirectly depends.
+	 *
+	 * <p>Dependency: Execution.createComponentsDirectly -&amp; Execution.getPageDefinitionDirectly
+	 * -&amp; UiFactory.getPageDefiitionDirectly -&amp; PageDefintions.getPageDefinitionDirectly
+	 *
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. Ignored if null.
 	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}

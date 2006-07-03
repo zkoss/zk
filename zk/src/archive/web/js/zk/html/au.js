@@ -1245,7 +1245,7 @@ zkau._cleanLastDrop = function (dg) {
 //across two listboxes, so we use a fake DIV instead.
 //On the other hand, IE handles selection improperly if transparent DIV is used
 //so we use the standard ghosting
-if (zk.gecko || zk.safari) {
+if (zk.gecko) {
 	zkau._ghostdrag = function (dg, ghosting) {
 		if (ghosting) {
 			zk.dragging = true;
@@ -1402,8 +1402,8 @@ zk.History.prototype = {
 	bookmark: function (nm) {
 		if (this.curbk != nm) {
 			this.curbk = nm; //to avoid loop back the server
-			window.location.hash = '#' + nm;
-			if (zk.ie) this.bkIframe(nm);
+			window.location.hash = zk.safari ? nm: '#' + nm;
+			if (zk.ie /*|| zk.safari*/) this.bkIframe(nm);
 		}
 	},
 	/** Checks whether the bookmark is changed. */
@@ -1420,7 +1420,7 @@ zk.History.prototype = {
 		return j >= 0 ? nm.substring(j + 1): '';
 	}
 };
-if (zk.ie) {
+if (zk.ie /*|| zk.safari*/) {
 	/** bookmark iframe */
 	zk.History.prototype.bkIframe = function (nm) {
 		var url = zk.getUpdateURI("/web/js/zk/html/history.html", true);
@@ -1430,15 +1430,15 @@ if (zk.ie) {
 		if (ifr) {
 			ifr.src = url;
 		} else {
-			document.body.insertAdjacentHTML("beforeEnd", 
-			'<iframe src="'+url+'" id="zk_histy" style="display: none;" ></iframe>');
+			zk.newFrame('zk_histy', url,
+				/*zk.safari ? "width:0;height:0;display:inline":*/ "display:none");
 		}
 	};
 	/** called when history.html is loaded*/
 	zk.History.prototype.onHistoryLoaded = function (src) {
 		var j = src.indexOf('?');
 		var nm = j >= 0 ? src.substring(j + 1): '';
-		window.location.hash = nm ? '#' + nm: '';
+		window.location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm: '';
 		this.checkBookmark();
 	};
 }
