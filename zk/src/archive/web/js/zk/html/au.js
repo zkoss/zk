@@ -38,17 +38,8 @@ if (!zkau._reqs) {
 		Event.observe(document, "mouseover", zkau._onDocMouseover);
 		Event.observe(document, "mouseout", zkau._onDocMouseout);
 
-		if (zk.ie) {
-			document.oncontextmenu = function () {
-				var b = zkau._eRClick == null;
-				zkau._eRClick = null; //free memory
-				return b;
-			}
-			Event.observe(document, "mouseup", zkau._onDocRClick);
-			Event.observe(document, "click", zkau._onDocLClick);
-		} else { //non-IE
-			Event.observe(document, "click", zkau._onDocClick);
-		}
+		Event.observe(document, "contextmenu", zkau._onDocCtxMnu);
+		Event.observe(document, "click", zkau._onDocLClick);
 		Event.observe(document, "dblclick", zkau._onDocDClick);
 
 		zkau._oldDocUnload = window.onunload;
@@ -761,9 +752,6 @@ zkau._onDocMousedown = function (evt) {
 
 	zkau.autoZIndex(node);
 };
-zkau._onDocClick = function (evt) {
-	return zkau._onDocLClick(evt) && zkau._onDocRClick(evt);
-};
 /** Handles the left click. */
 zkau._onDocLClick = function (evt) {
 	if (!evt) evt = window.event;
@@ -808,38 +796,35 @@ zkau._onDocDClick = function (evt) {
 	}
 	return true;
 };
-/** Handles the right click. */
-zkau._onDocRClick = function (evt) {
+/** Handles the right click (context menu). */
+zkau._onDocCtxMnu = function (evt) {
 	if (!evt) evt = window.event;
 
-	if (evt.which == 3 || evt.button == 2) {
-		var cmp = Event.element(evt);
-		cmp = zkau._getParentByAttr(cmp, "zk_ctx", "zk_rtclk");
-		if (zk.ie) zkau._eRClick = cmp; //used only by oncontextmenu
+	var cmp = Event.element(evt);
+	cmp = zkau._getParentByAttr(cmp, "zk_ctx", "zk_rtclk");
 
-		if (cmp) {
-			var ctx = cmp.getAttribute("zk_ctx");
+	if (cmp) {
+		var ctx = cmp.getAttribute("zk_ctx");
+		if (ctx) {
+			ctx = zkau.getByZid(cmp, ctx);
 			if (ctx) {
-				ctx = zkau.getByZid(cmp, ctx);
-				if (ctx) {
-					var type = zk.getCompType(ctx);
-					if (type) {
-						zkau.closeFloats(ctx);
+				var type = zk.getCompType(ctx);
+				if (type) {
+					zkau.closeFloats(ctx);
 
-						ctx.style.left = Event.pointerX(evt) + "px";
-						ctx.style.top = Event.pointerY(evt) + "px";
-						zk.eval(ctx, "context", type, cmp);
-					}
+					ctx.style.left = Event.pointerX(evt) + "px";
+					ctx.style.top = Event.pointerY(evt) + "px";
+					zk.eval(ctx, "context", type, cmp);
 				}
 			}
-
-			if (cmp.getAttribute("zk_rtclk"))
-				zkau.send(
-					{uuid: zkau.uuidOf(cmp), cmd: "onRightClick", data: null});
-
-			Event.stop(evt);
-			return false;
 		}
+
+		if (cmp.getAttribute("zk_rtclk"))
+			zkau.send(
+				{uuid: zkau.uuidOf(cmp), cmd: "onRightClick", data: null});
+
+		Event.stop(evt);
+		return false;
 	}
 	return true;
 };
