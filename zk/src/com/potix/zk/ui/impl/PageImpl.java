@@ -535,7 +535,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
-		Serializables.writeAttributes(s, _attrs);
+		Serializables.smartWrite(s, _attrs);
 
 		//TODO: save ID space (only variables that are not fellows)
 	}
@@ -546,7 +546,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 		init();
 
-		Serializables.readAttributes(s, _attrs);
+		Serializables.smartRead(s, _attrs);
 
 		//TODO: restore ID space
 	}

@@ -306,7 +306,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
-		Serializables.writeAttributes(s, _attrs);
+		Serializables.smartWrite(s, _attrs);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -321,7 +321,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			e.hasNext();)
 				addAllComponents((Component)e.next());
 
-		Serializables.readAttributes(s, _attrs);
+		Serializables.smartRead(s, _attrs);
 	}
 	private void addAllComponents(Component comp) {
 		addComponent(comp);

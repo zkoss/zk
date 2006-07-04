@@ -35,34 +35,34 @@ import com.potix.zk.ui.ext.DynamicPropertied;
  */
 public class HtmlMacroComponent extends HtmlBasedComponent
 implements PostCreate, IdSpace, DynamicPropertied {
-	private Map _attrs = new HashMap(7);
+	private Map _props = new HashMap(7);
 
 	public HtmlMacroComponent() {
-		_attrs.put("includer", this);
+		_props.put("includer", this);
 	}
 
 	//-- PostCreate --//
 	public void postCreate() {
 		getDesktop().getExecution().createComponents(
-			getMillieu().getMacroURI(this), this, _attrs);
+			getMillieu().getMacroURI(this), this, _props);
 	}
 
 	//Cloneable//
 	public Object clone() {
 		final HtmlMacroComponent clone = (HtmlMacroComponent)super.clone();
-		clone._attrs = new HashMap(clone._attrs);
+		clone._props = new HashMap(clone._props);
 		return clone;
 	}
 
 	//-- DynamicPropertied --//
 	public boolean hasDynamicProperty(String name) {
-		return _attrs.containsKey(name);
+		return _props.containsKey(name);
 	}
 	public Object getDynamicProperty(String name) {
-		return _attrs.get(name);
+		return _props.get(name);
 	}
 	public void setDynamicProperty(String name, Object value)
 	throws WrongValueException {
-		_attrs.put(name, value);
+		_props.put(name, value);
 	}
 }

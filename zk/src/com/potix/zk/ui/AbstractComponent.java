@@ -85,10 +85,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient List _modChildren;
 	/** The info of the ID space, or null if IdSpace is NOT implemented. */
 	private transient SpaceInfo _spaceInfo;
-	private Map _attrs = new HashMap(3);
+	private transient Map _attrs = new HashMap(3);
 		//don't create it dynamically because _ip bind it at constructor
 	/** A map of event listener: Map(evtnm, EventListener)). */
-	private Map _listeners;
+	private transient Map _listeners;
 	/** A set of children being added. It is used only to speed up
 	 * the performance when adding a new child. And, cleared after added.
 	 * <p>To save footprint, we don't use Set (since it is rare to contain
@@ -1168,10 +1168,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
+		Serializables.smartWrite(s, _attrs);
+		Serializables.smartWrite(s, _listeners);
+
 		//store _spaceInfo
 		if (this instanceof IdSpace) {
 			//write _spaceInfo.attrs
-			Serializables.writeAttributes(s, _spaceInfo.attrs);
+			Serializables.smartWrite(s, _spaceInfo.attrs);
 
 			//write _spaceInfo.ns (only variables that are not fellows)
 			_spaceInfo.ns.write(s, new Namespace.Filter() {
@@ -1186,6 +1189,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		s.defaultReadObject();
 
 		init();
+
+		Serializables.smartRead(s, _attrs);
+		Serializables.smartRead(s, _listeners);
 
 		//restore child's _parent
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
@@ -1211,7 +1217,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 
 			//read _spaceInfo.attrs
-			Serializables.readAttributes(s, _spaceInfo.attrs);
+			Serializables.smartRead(s, _spaceInfo.attrs);
 
 			//_spaceInfo.ns
 			_spaceInfo.ns.read(s);

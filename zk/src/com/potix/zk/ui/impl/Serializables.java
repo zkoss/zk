@@ -20,6 +20,8 @@ package com.potix.zk.ui.impl;
 
 import java.util.Map;
 import java.util.Iterator;
+import java.io.Serializable;
+import java.io.Externalizable;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
@@ -30,33 +32,35 @@ import java.io.IOException;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Serializables {
-	/** Writes serializable attributes.
+	/** Writes only serializable entries of the specified map.
 	 * Non-serializable attributes are ignored.
 	 */
-	public static void writeAttributes(ObjectOutputStream s, Map attrs)
+	public static void smartWrite(ObjectOutputStream s, Map map)
 	throws IOException {
-		//Write serializable attrs
-		for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final Object nm = me.getKey();
-			final Object val = me.getValue();
-			if (nm != null && ((val instanceof java.io.Serializable)
-			|| (val instanceof java.io.Externalizable))) {
-				s.writeObject(nm);
-				s.writeObject(val);
+		//Write serializable entries
+		if (map != null) {
+			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final Object nm = me.getKey();
+				final Object val = me.getValue();
+				if (((nm instanceof Serializable) || (nm instanceof Externalizable))
+				&& ((val instanceof Serializable) || (val instanceof Externalizable))) {
+					s.writeObject(nm);
+					s.writeObject(val);
+				}
 			}
 		}
-		s.writeObject(null); //denote end-of-attrs
+		s.writeObject(null); //denote end-of-map
 	}
-	/** Reads seriazlable attributes back.
+	/** Reads seriazlable entries back (serialized by {@link #smartWrite}).
 	 */
-	public static void readAttributes(ObjectInputStream s, Map attrs)
+	public static void smartRead(ObjectInputStream s, Map map)
 	throws IOException, ClassNotFoundException {
 		for (;;) {
 			final Object nm = s.readObject();
 			if (nm == null) break; //no more
 
-			attrs.put(nm, s.readObject());
+			map.put(nm, s.readObject());
 		}
 	}
 }
