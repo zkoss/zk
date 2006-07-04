@@ -48,6 +48,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	vb.insertBefore(l, self);
 		</attribute>
 	</button>
+	<button label="Clone by Serialization">
+		<attribute name="onClick">
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(src);
+	Listbox l = new ObjectInputStream(new ByteArrayInputStream(boa.toByteArray())).readObject();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+		</attribute>
+	</button>
 	<button label="Serialize Current Desktop">
 		<attribute name="onClick">
 	import java.io.*;
