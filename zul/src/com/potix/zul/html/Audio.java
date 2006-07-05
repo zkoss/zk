@@ -131,7 +131,7 @@ public class Audio extends XulElement implements Viewable {
 		}
 	}
 	private String getEncodedSrc() {
-		final Destkop dt = getDesktop();
+		final Desktop dt = getDesktop();
 		return _audio != null ? getAudioSrc(): //already encoded
 			dt != null ? dt.getExecution().encodeURL(
 				_src != null ? _src: "~./aud/mute.mid"): "";
