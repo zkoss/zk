@@ -23,6 +23,7 @@ import com.potix.lang.Strings;
 import com.potix.util.media.Media;
 import com.potix.xml.HTMLs;
 
+import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ext.Viewable;
@@ -109,9 +110,10 @@ public class Iframe extends XulElement implements Viewable {
 	/** Returns the encoded src ({@link #getSrc}).
 	 */
 	private String getEncodedSrc() {
+		final Desktop dt = getDesktop();
 		return _media != null ? getMediaSrc(): //already encoded
-			getDesktop().getExecution().encodeURL(
-				_src != null ? _src: "~./img/spacer.gif");
+			dt != null ? dt.getExecution().encodeURL(
+				_src != null ? _src: "~./img/spacer.gif"):  "";
 	}
 
 	/** Sets the content directly.

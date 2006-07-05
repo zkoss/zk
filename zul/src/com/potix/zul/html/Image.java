@@ -23,6 +23,7 @@ import com.potix.lang.Strings;
 import com.potix.util.media.Media;
 import com.potix.xml.HTMLs;
 
+import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ext.Viewable;
@@ -146,9 +147,10 @@ public class Image extends XulElement implements Viewable {
 	/** Returns the encoded src ({@link #getSrc}).
 	 */
 	private String getEncodedSrc() {
+		final Desktop dt = getDesktop(); //it might not belong to any desktop
 		return _image != null ? getContentSrc(): //already encoded
-			getDesktop().getExecution().encodeURL(
-				_src != null ? _src: "~./img/spacer.gif");
+			dt != null ? dt.getExecution().encodeURL(
+				_src != null ? _src: "~./img/spacer.gif"): "";
 	}
 
 	/** Sets the content directly.
@@ -174,6 +176,8 @@ public class Image extends XulElement implements Viewable {
 
 	/** Returns the encoded URL for the current image content.
 	 * Don't call this method unless _image is not null;
+	 *
+	 * <p>Used only for component template, not for application developers.
 	 */
 	private String getContentSrc() {
 		if (getDesktop() == null) return ""; //no avail at client
