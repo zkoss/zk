@@ -47,7 +47,7 @@ import com.potix.zul.html.impl.HeaderElement;
  */
 public class Listheader extends HeaderElement {
 	private String _sortDir = "natural";
-	private Comparator _sortAsc, _sortDsc;
+	private transient Comparator _sortAsc, _sortDsc;
 	private int _maxlength;
 
 	public Listheader() {
@@ -330,15 +330,76 @@ public class Listheader extends HeaderElement {
 	//Cloneable//
 	public Object clone() {
 		final Listheader clone = (Listheader)super.clone();
-		fixClone(clone);
+		clone.fixClone();
 		return clone;
 	}
-	private static void fixClone(Listheader clone) {
-		if (clone._sortAsc instanceof ListitemComparator)
-			clone._sortAsc = new ListitemComparator(clone, true,
-				((ListitemComparator)clone._sortAsc).shallIgnoreCase());
-		if (clone._sortDsc instanceof ListitemComparator)
-			clone._sortDsc = new ListitemComparator(clone, false,
-				((ListitemComparator)clone._sortDsc).shallIgnoreCase());
+	private void fixClone() {
+		if (_sortAsc instanceof ListitemComparator) {
+			final ListitemComparator c = (ListitemComparator)_sortAsc;
+			if (c.getListheader() == this && c.isAscending())
+				_sortAsc =
+					new ListitemComparator(this, true, c.shallIgnoreCase());
+		}
+		if (_sortDsc instanceof ListitemComparator) {
+			final ListitemComparator c = (ListitemComparator)_sortDsc;
+			if (c.getListheader() == this && !c.isAscending())
+				_sortDsc =
+					new ListitemComparator(this, false, c.shallIgnoreCase());
+		}
+	}
+
+	//Serializable//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		boolean written = false;
+		if (_sortAsc instanceof ListitemComparator) {
+			final ListitemComparator c = (ListitemComparator)_sortAsc;
+			if (c.getListheader() == this && c.isAscending()) {
+				s.writeBoolean(true);
+				s.writeBoolean(c.shallIgnoreCase());
+				written = true;
+			}
+		}
+		if (!written) {
+			s.writeBoolean(false);
+			s.writeObject(_sortAsc);
+		}
+
+		written = false;
+		if (_sortDsc instanceof ListitemComparator) {
+			final ListitemComparator c = (ListitemComparator)_sortDsc;
+			if (c.getListheader() == this && !c.isAscending()) {
+				s.writeBoolean(true);
+				s.writeBoolean(c.shallIgnoreCase());
+				written = true;
+			}
+		}
+		if (!written) {
+			s.writeBoolean(false);
+			s.writeObject(_sortDsc);
+		}
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		boolean b = s.readBoolean();
+		if (b) {
+			final boolean igcs = s.readBoolean();
+			_sortAsc = new ListitemComparator(this, true, igcs);
+		} else {
+			_sortAsc = (ListitemComparator)s.readObject();
+		}
+
+		b = s.readBoolean();
+		if (b) {
+			final boolean igcs = s.readBoolean();
+			_sortDsc = new ListitemComparator(this, false, igcs);
+		} else {
+			_sortDsc = (ListitemComparator)s.readObject();
+		}
 	}
 }
