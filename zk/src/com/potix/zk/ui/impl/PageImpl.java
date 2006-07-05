@@ -48,6 +48,7 @@ import com.potix.zk.mesg.MZk;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Session;
+import com.potix.zk.ui.IdSpace;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.Execution;
@@ -75,8 +76,8 @@ import com.potix.zk.au.AuSetTitle;
  * An implmentation of {@link Page} and {@link PageCtrl}.
  * Refer to them for more details.
  *
- * <p>Note: though {@link DesktopImpl} is serializable but it is designed
- * to work with Web container's session serialization.
+ * <p>Note: though {@link PageImpl} is serializable, it is designed
+ * to work with Web container to enable the serialization of sessions.
  * It is not suggested to serialize and desrialize it directly since
  * many fields might be lost.
  *
@@ -98,6 +99,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private final String _dkUri, _pgUri;
 	/** The component that includes this page, or null if not included. */
 	private transient Component _owner;
+	/** Used to retore _owner. */
+	private transient String _ownerUuid;
 	private transient Desktop _desktop;
 	private String _id;
 	private transient Interpreter _ip;
@@ -106,9 +109,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private final List _roots = new LinkedList();
 	private transient List _roRoots;
 	/** A map of fellows. */
-	private transient Map _fellows = new HashMap();
+	private transient Map _fellows;
 	/** A map of attributes. */
-	private transient final Map _attrs = new HashMap();
+	private transient Map _attrs;
 		//don't create it dynamically because _ip bind it at constructor
 	/** A map of event listener: Map(evtnm, List(EventListener)). */
 	private transient Map _listeners;
@@ -145,6 +148,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	protected void init() {
 		_ip = new BshInterpreter();
 		_roRoots = Collections.unmodifiableList(_roots);
+		_attrs = new HashMap();
+		_fellows = new HashMap();
 	}
 
 	/** Returns the UI engine.
@@ -525,6 +530,11 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public void sessionDidActivate(Desktop desktop) {
 		_desktop = desktop;
 
+		if (_ownerUuid != null) {
+			_owner = _desktop.getComponentByUuid(_ownerUuid);
+			_ownerUuid = null;
+		}
+
 		for (Iterator it = _roots.iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).sessionDidActivate(this);
 	}
@@ -535,9 +545,17 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
-		Serializables.smartWrite(s, _attrs);
+		s.writeObject(_owner != null ? _owner.getUuid(): null);
+		s.writeObject(_defparent != null ? _defparent.getUuid(): null);
 
-		//TODO: save ID space (only variables that are not fellows)
+		Serializables.smartWrite(s, _attrs);
+		Serializables.smartWrite(s, _listeners);
+
+		_ip.getNamespace().write(s, new Namespace.Filter() {
+			public boolean accept(String name, Object value) {
+				return !(value instanceof Component);
+			}
+		});
 	}
 
 	private synchronized void readObject(java.io.ObjectInputStream s)
@@ -546,9 +564,40 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 		init();
 
-		Serializables.smartRead(s, _attrs);
+		_ownerUuid = (String)s.readObject();
+			//_owner is restored later when sessionDidActivate is called
 
-		//TODO: restore ID space
+		final String pid = (String)s.readObject();
+		if (pid != null)
+			_defparent = fixDefaultParent(_roots, pid);
+
+		Serializables.smartRead(s, _attrs);
+		_listeners = Serializables.smartRead(s, _listeners); //might be null
+
+		_ip.getNamespace().read(s);
+		fixFellows(_roots);
+	}
+	private final void fixFellows(Collection c) {
+		for (Iterator it = c.iterator(); it.hasNext();) {
+			final Component comp = (Component)it.next();
+			final String compId = comp.getId();
+			if (!ComponentsCtrl.isAutoId(compId))
+				addFellow(comp);
+			if (!(comp instanceof IdSpace))
+				fixFellows(comp.getChildren()); //recursive
+		}
+	}
+	private static final
+	Component fixDefaultParent(Collection c, String uuid) {
+		for (Iterator it = c.iterator(); it.hasNext();) {
+			Component comp = (Component)it.next();
+			if (uuid.equals(comp.getUuid()))
+				return comp; //found
+
+			comp = fixDefaultParent(comp.getChildren(), uuid);
+			if (comp != null) return comp;
+		}
+		return null;
 	}
 
 	//-- Object --//
