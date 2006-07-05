@@ -36,7 +36,7 @@ import com.potix.zk.au.AuScript;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Bandbox extends Textbox { //note: it does NOT implement Openable to avoid redudant roundtrip
-	private Bandpopup _drop;
+	private transient Bandpopup _drop;
 	private String _img = "~./zul/img/bandbtn.gif";
 	private boolean _autodrop;
 
@@ -169,11 +169,18 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 	//Cloneable//
 	public Object clone() {
 		final Bandbox clone = (Bandbox)super.clone();
-		fixClone(clone);
+		if (clone._drop != null) clone.afterUnmarshal();
 		return clone;
 	}
-	private static void fixClone(Bandbox clone) {
-		if (clone._drop != null)
-			clone._drop = (Bandpopup)clone.getChildren().get(0);
+	private void afterUnmarshal() {
+		_drop = (Bandpopup)getChildren().get(0);
+	}
+
+	//Serializable//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		if (!getChildren().isEmpty()) afterUnmarshal();
 	}
 }
