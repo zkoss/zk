@@ -38,8 +38,7 @@ import com.potix.zk.ui.sys.WebAppCtrl;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class SimpleDesktopCache
-implements DesktopCache/*not ready yet, java.io.Serializable*/ {
+public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	private static final Log log = Log.lookup(SimpleDesktopCache.class);
     private static final long serialVersionUID = 20060622L;
 

@@ -50,8 +50,8 @@ import com.potix.zk.au.AuBookmark;
 /**
  * The implementation of {@link Desktop}.
  *
- * <p>Note: though {@link DesktopImpl} is serializable but it is designed
- * to work with Web container's session serialization.
+ * <p>Note: though {@link DesktopImpl} is serializable, it is designed
+ * to work with Web container to enable the serialization of sessions.
  * It is not suggested to serialize and desrialize it directly since
  * many fields might be lost.
  *
@@ -74,7 +74,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** Map(String id, Page page). */
 	private final Map _pages = new LinkedHashMap(3);
 	/** Map (String uuid, Component comp). */
-	private transient Map _comps = new HashMap(41);
+	private transient Map _comps;
 	/** A map of attributes. */
 	private transient final Map _attrs = new HashMap();
 		//don't create it dynamically because PageImp._ip bind it at constructor
@@ -82,7 +82,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** Next available ID. */
 	private int _nextId = 0;
 	/** The request queue. */
-	private transient RequestQueue _rque = new RequestQueueImpl();
+	private transient RequestQueue _rque;
 	private String _bookmark = "";
 
 	/**
@@ -131,7 +131,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	/** Initialization for contructor and de-serialized. */
 	private void init() {
-		RequestQueue _rque = new RequestQueueImpl();
+		_rque = new RequestQueueImpl();
+		_comps = new HashMap(41);
 	}
 	public String getId() {
 		return _id;
@@ -315,7 +316,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		init();
 
 		//get back _comps from _pages
-		_comps = new HashMap(41);
 		for (Iterator it = _pages.values().iterator(); it.hasNext();)
 			for (Iterator e = ((Page)it.next()).getRoots().iterator();
 			e.hasNext();)

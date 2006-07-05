@@ -45,7 +45,7 @@ public class Serializables {
 				final Object nm = me.getKey();
 				final Object val = me.getValue();
 				if (((nm instanceof Serializable) || (nm instanceof Externalizable))
-				&& ((val instanceof Serializable) || (val instanceof Externalizable))) {
+				&& (val == null || (val instanceof Serializable) || (val instanceof Externalizable))) {
 					s.writeObject(nm);
 					s.writeObject(val);
 				}
