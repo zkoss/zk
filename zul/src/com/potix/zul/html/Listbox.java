@@ -80,14 +80,14 @@ implements Selectable, Render, java.io.Serializable {
 
 	private transient List _items;
 	/** A list of selected items. */
-	private transient Set _selItems = new LinkedHashSet(5);
+	private transient Set _selItems;
 	private int _maxlength;
 	private int _rows, _jsel = -1;
 	private transient Listhead _listhead;
 	private transient Listfoot _listfoot;
 	private ListModel _model;
 	private ListitemRenderer _renderer;
-	private ListDataListener _dataListener;
+	private transient ListDataListener _dataListener;
 	/** The name. */
 	private String _name;
 	private boolean _multiple;
@@ -111,6 +111,15 @@ implements Selectable, Render, java.io.Serializable {
 				return sz;
 			}
 		};
+		_selItems = new LinkedHashSet(5);
+	}
+	private void initDataListener() {
+		if (_dataListener == null)
+			_dataListener = new ListDataListener() {
+				public void onChange(ListDataEvent event) {
+					onListDataChange(event);
+				}
+			};
 	}
 
 	/** Returns {@link Listhead} belonging to this listbox, or null
@@ -734,15 +743,8 @@ implements Selectable, Render, java.io.Serializable {
 					smartUpdate("zk_model", "true");
 				}
 
+				initDataListener();
 				_model = model;
-
-				if (_dataListener == null) {
-					_dataListener = new ListDataListener() {
-						public void onChange(ListDataEvent event) {
-							onListDataChange(event);
-						}
-					};
-				}
 				_model.addListDataListener(_dataListener);
 			}
 
@@ -762,6 +764,7 @@ implements Selectable, Render, java.io.Serializable {
 			smartUpdate("zk_model", null);
 		}
 	}
+
 	/** Returns the renderer to render each item, or null if the default
 	 * renderer is used.
 	 */
@@ -1122,54 +1125,50 @@ implements Selectable, Render, java.io.Serializable {
 		}
 	}
 
-	//-- Serializable --//
-	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
-		s.defaultWriteObject();
+	//Cloneable//
+	public Object clone() {
+		final Listbox clone = (Listbox)super.clone();
+		int cnt = clone._selItems.size();
 
-		//TODO
+		clone.init();
+
+		if (clone._listhead != null) ++cnt;
+		if (clone._listfoot != null) ++cnt;
+		if (cnt > 0) clone.afterUnmarshal(cnt);
+
+		return clone;
+	}
+	/** @param cnt # of children that need special handling (used for optimization).
+	 * -1 means process all of them
+	 */
+	private void afterUnmarshal(int cnt) {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Listitem) {
+				final Listitem li = (Listitem)child;
+				if (li.isSelected()) {
+					_selItems.add(li);
+					if (--cnt == 0) break;
+				}
+			} else if (child instanceof Listhead) {
+				_listhead = (Listhead)child;
+				if (--cnt == 0) break;
+			} else if (child instanceof Listfoot) {
+				_listfoot = (Listfoot)child;
+				if (--cnt == 0) break;
+			}
+		}
 	}
 
+	//-- Serializable --//
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		init();
 
-		//TODO
-	}
+		afterUnmarshal(-1);
 
-	//Cloneable//
-	public Object clone() {
-		final Listbox clone = (Listbox)super.clone();
-		fixClone(clone);
-		return clone;
-	}
-	private static void fixClone(Listbox clone) {
-		clone.init();
-
-		int cnt = clone._selItems.size();
-		if (clone._listhead != null) ++cnt;
-		if (clone._listfoot != null) ++cnt;
-		if (cnt == 0) return; //nothing to do
-
-		clone._selItems = new LinkedHashSet(5);
-		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
-			final Object child = it.next();
-			if (child instanceof Listitem) {
-				final Listitem li = (Listitem)child;
-				if (li.isSelected()) {
-					clone._selItems.add(li);
-					if (--cnt == 0) break;
-				}
-			} else if (child instanceof Listhead) {
-				clone._listhead = (Listhead)child;
-				if (--cnt == 0) break;
-			} else if (child instanceof Listfoot) {
-				clone._listfoot = (Listfoot)child;
-				if (--cnt == 0) break;
-			}
-		}
+		if (_model != null) initDataListener();
 	}
 }
