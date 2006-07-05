@@ -118,6 +118,8 @@ public class Treecell extends LabelImageElement {
 	//-- Internal use only --//
 	/** Returns the prefix of the first column (in HTML tags), null if this
 	 * is not first column. Called only by treecell.jsp.
+	 *
+	 * <p>Used only for component template, not for application developers.
 	 */
 	public String getColumnHtmlPrefix() {
 		if (isFirstColumn()) {

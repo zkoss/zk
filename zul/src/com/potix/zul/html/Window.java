@@ -56,7 +56,7 @@ import com.potix.zul.au.*;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Window extends XulElement implements IdSpace  {
-	private Caption _caption;
+	private transient Caption _caption;
 
 	private String _border = "none";
 	private String _title = "";
@@ -434,18 +434,24 @@ public class Window extends XulElement implements IdSpace  {
 	//Cloneable//
 	public Object clone() {
 		final Window clone = (Window)super.clone();
-		fixClone(clone);
+		if (clone._caption != null) clone.afterUnmarshal();
 		return clone;
 	}
-	private static void fixClone(Window clone) {
-		if (clone._caption != null) {
-			for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
-				final Object child = it.next();
-				if (child instanceof Caption) {
-					clone._caption = (Caption)child;
-					break;
-				}
+	private void afterUnmarshal() {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Caption) {
+				_caption = (Caption)child;
+				break;
 			}
 		}
+	}
+
+	//Serializable//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		afterUnmarshal();
 	}
 }

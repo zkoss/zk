@@ -51,9 +51,9 @@ import com.potix.zul.html.impl.XulElement;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Tabbox extends XulElement implements Selectable {
-	private Tabs _tabs;
-	private Tabpanels _tabpanels;
-	private Tab _seltab;
+	private transient Tabs _tabs;
+	private transient Tabpanels _tabpanels;
+	private transient Tab _seltab;
 	private String _panelSpacing;
 	private String _orient = "horizontal";
 
@@ -240,32 +240,40 @@ public class Tabbox extends XulElement implements Selectable {
 	//Cloneable//
 	public Object clone() {
 		final Tabbox clone = (Tabbox)super.clone();
-		fixClone(clone);
-		return clone;
-	}
-	private static void fixClone(Tabbox clone) {
+
 		int cnt = 0;
 		if (clone._tabs != null) ++cnt;
 		if (clone._tabpanels != null) ++cnt;
-		if (cnt == 0) return;
+		if (cnt > 0) clone.afterUnmarshal(cnt);
 
-		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+		return clone;
+	}
+	private void afterUnmarshal(int cnt) {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Tabs) {
-				clone._tabs = (Tabs)child;
-				for (Iterator e = clone._tabs.getChildren().iterator();
+				_tabs = (Tabs)child;
+				for (Iterator e = _tabs.getChildren().iterator();
 				e.hasNext();) {
 					final Tab tab = (Tab)e.next();
 					if (tab.isSelected()) {
-						clone._seltab = tab;
+						_seltab = tab;
 						break;
 					}
 				}
 				if (--cnt == 0) break;
 			} else if (child instanceof Tabpanels) {
-				clone._tabpanels = (Tabpanels)child;
+				_tabpanels = (Tabpanels)child;
 				if (--cnt == 0) break;
 			}
 		}
+	}
+
+	//-- Serializable --//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		afterUnmarshal(-1);
 	}
 }

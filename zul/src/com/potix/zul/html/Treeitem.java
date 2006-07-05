@@ -43,8 +43,8 @@ import com.potix.zul.html.impl.XulElement;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Treeitem extends XulElement implements Openable {
-	private Treerow _treerow;
-	private Treechildren _treechildren;
+	private transient Treerow _treerow;
+	private transient Treechildren _treechildren;
 	private Object _value;
 	private boolean _open = true;
 	private boolean _selected = false;
@@ -356,24 +356,32 @@ public class Treeitem extends XulElement implements Openable {
 	//Cloneable//
 	public Object clone() {
 		final Treeitem clone = (Treeitem)super.clone();
-		fixClone(clone);
-		return clone;
-	}
-	private static void fixClone(Treeitem clone) {
+
 		int cnt = 0;
 		if (clone._treerow != null) ++cnt;
 		if (clone._treechildren != null) ++cnt;
-		if (cnt == 0) return;
+		if (cnt > 0) clone.afterUnmarshal(cnt);
 
-		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+		return clone;
+	}
+	private void afterUnmarshal(int cnt) {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Treerow) {
-				clone._treerow = (Treerow)child;
+				_treerow = (Treerow)child;
 				if (--cnt == 0) break;
 			} else if (child instanceof Treechildren) {
-				clone._treechildren = (Treechildren)child;
+				_treechildren = (Treechildren)child;
 				if (--cnt == 0) break;
 			}
 		}
+	}
+
+	//-- Serializable --//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		afterUnmarshal(-1);
 	}
 }

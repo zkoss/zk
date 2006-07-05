@@ -104,11 +104,18 @@ public class Menu extends LabelImageElement {
 	//Cloneable//
 	public Object clone() {
 		final Menu clone = (Menu)super.clone();
-		fixClone(clone);
+		if (clone._popup != null) clone.afterUnmarshal();
 		return clone;
 	}
-	private static void fixClone(Menu clone) {
-		if (clone._popup != null)
-			clone._popup = (Menupopup)clone.getChildren().get(0);
+	private void afterUnmarshal() {
+		_popup = (Menupopup)getChildren().get(0);
+	}
+
+	//Serializable//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		if (!getChildren().isEmpty()) afterUnmarshal();
 	}
 }

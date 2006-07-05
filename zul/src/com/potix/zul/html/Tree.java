@@ -51,12 +51,12 @@ import com.potix.zul.html.impl.XulElement;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Tree extends XulElement implements Selectable {
-	private Treecols _treecols;
-	private Treechildren _treechildren;
+	private transient Treecols _treecols;
+	private transient Treechildren _treechildren;
 	/** A list of selected items. */
-	private Set _selItems = new LinkedHashSet(5);
+	private transient Set _selItems;
 	/** The first selected item. */
-	private Treeitem _sel;
+	private transient Treeitem _sel;
 	private int _rows = 0;
 	/** The name. */
 	private String _name;
@@ -65,7 +65,11 @@ public class Tree extends XulElement implements Selectable {
 	private transient boolean _noSmartUpdate;
 
 	public Tree() {
+		init();
 		setSclass("tree");
+	}
+	private void init() {
+		_selItems = new LinkedHashSet(5);
 	}
 
 	/** Returns the treecols that this tree owns (might null).
@@ -580,38 +584,55 @@ public class Tree extends XulElement implements Selectable {
 	//Cloneable//
 	public Object clone() {
 		final Tree clone = (Tree)super.clone();
-		fixClone(clone);
-		return clone;
-	}
-	private static void fixClone(Tree clone) {
+		int cntSel = clone._selItems.size();
+
+		clone.init();
+
 		int cnt = 0;
 		if (clone._treecols != null) ++cnt;
 		if (clone._treechildren != null) ++cnt;
+		if (cnt > 0 || cntSel > 0) clone.afterUnmarshal(cnt, cntSel);
+
+		return clone;
+	}
+	/** @param cnt # of children that need special handling (used for optimization).
+	 * -1 means process all of them
+	 * @param cntSel # of selected items
+	 */
+	private void afterUnmarshal(int cnt, int cntSel) {
 		if (cnt != 0) {
-			for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+			for (Iterator it = getChildren().iterator(); it.hasNext();) {
 				final Object child = it.next();
 				if (child instanceof Treecols) {
-					clone._treecols = (Treecols)child;
+					_treecols = (Treecols)child;
 					if (--cnt == 0) break;
 				} else if (child instanceof Treechildren) {
-					clone._treechildren = (Treechildren)child;
+					_treechildren = (Treechildren)child;
 					if (--cnt == 0) break;
 				}
 			}
 		}
 
-		cnt = clone._selItems.size();
-		clone._selItems = new LinkedHashSet(5);
-		clone._sel = null;
-		if (cnt != 0) {
-			for (Iterator it = clone.getItems().iterator(); it.hasNext();) {
+		_sel = null;
+		if (cntSel != 0) {
+			for (Iterator it = getItems().iterator(); it.hasNext();) {
 				final Treeitem ti = (Treeitem)it.next();
 				if (ti.isSelected()) {
-					if (clone._sel == null) clone._sel = ti;
-					clone._selItems.add(ti);
-					if (--cnt == 0) break;
+					if (_sel == null) _sel = ti;
+					_selItems.add(ti);
+					if (--cntSel == 0) break;
 				}
 			}
 		}
+	}
+
+	//-- Serializable --//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		init();
+
+		afterUnmarshal(-1, -1);
 	}
 }

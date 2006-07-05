@@ -216,17 +216,6 @@ public class Radiogroup extends XulElement {
 			System.identityHashCode(this)).toString();
 	}
 
-	//Serializable//
-	private synchronized void readObject(ObjectInputStream s)
-	throws IOException, ClassNotFoundException {
-		s.defaultReadObject();
-
-		if (_name.startsWith("_pg")) {
-			_name = genGroupName();
-			invalidate(OUTER); //redraw is required
-		}
-	}
-
 	//Cloneable//
 	public Object clone() {
 		final Radiogroup clone = (Radiogroup)super.clone();
@@ -234,9 +223,7 @@ public class Radiogroup extends XulElement {
 		return clone;
 	}
 	private static void fixClone(Radiogroup clone) {
-		//re-gen name if auto
-		if (clone._name.startsWith("_pg"))
-			clone._name = clone.genGroupName();
+		if (clone._name.startsWith("_pg")) clone._name = clone.genGroupName();
 
 		//remove listener from children first
 		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
@@ -244,13 +231,29 @@ public class Radiogroup extends XulElement {
 			child.removeEventListener("onCheck", clone._listener);
 		}
 
-		//create right listener
+		//create and add back listener
 		clone.init();
+		clone.afterUnmarshal();
+	}
 
-		//add listener to children
-		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
+	private void afterUnmarshal() {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Radio child = (Radio)it.next();
-			child.addEventListener("onClick", clone._listener);
+			child.addEventListener("onClick", _listener);
 		}
+	}
+
+	//Serializable//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		init();
+		afterUnmarshal();
+		//Issue:
+		//if we re-generate the group name, client will mismatch with
+		//the server when the component is deserialized by Web Container.
+		//If we don't, the group name might be conflict when developer
+		//deserializes explicitly and add back the same desktop
 	}
 }
