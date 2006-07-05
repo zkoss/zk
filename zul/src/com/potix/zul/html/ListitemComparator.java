@@ -88,6 +88,17 @@ public class ListitemComparator implements Comparator {
 		_igcase = ignoreCase;
 	}
 
+	/** Returns the listheader that this comparator is associated with, or null
+	 * if not available.
+	 */
+	public Listheader getListheader() {
+		return _header;
+	}
+	/** Returns whether the order is ascending.
+	 */
+	public boolean isAscending() {
+		return _asc;
+	}
 	/** Returns whether to ignore case.
 	 */
 	public boolean shallIgnoreCase() {
