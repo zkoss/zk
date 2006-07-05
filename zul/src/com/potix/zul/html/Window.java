@@ -18,6 +18,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zul.html;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.LinkedHashSet;
@@ -65,7 +68,7 @@ public class Window extends XulElement implements IdSpace  {
 	/** One of MODAL, EMBEDDED, OVERLAPPED. */
 	private int _mode = EMBEDDED;
 	/** Used for doModal. */
-	private final Object _mutex = new Object();
+	private transient Object _mutex;
 	/** Whether this window is in a special mode that need to be ended. */
 	private boolean _moding;
 	/** Whether to show a close button. */
@@ -83,6 +86,13 @@ public class Window extends XulElement implements IdSpace  {
 	 * when user clicks outside of the window.
 	 */
 	private static final int POPUP = 3;
+
+	public Window() {
+		init();
+	}
+	private void init() {
+		_mutex = new Object();
+	}
 
 	/** Returns the caption of this window.
 	 */
@@ -434,6 +444,7 @@ public class Window extends XulElement implements IdSpace  {
 	//Cloneable//
 	public Object clone() {
 		final Window clone = (Window)super.clone();
+		clone.init();
 		if (clone._caption != null) clone.afterUnmarshal();
 		return clone;
 	}
@@ -451,7 +462,7 @@ public class Window extends XulElement implements IdSpace  {
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-
+		init();
 		afterUnmarshal();
 	}
 }
