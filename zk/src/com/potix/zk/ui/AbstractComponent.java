@@ -85,7 +85,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient List _modChildren;
 	/** The info of the ID space, or null if IdSpace is NOT implemented. */
 	private transient SpaceInfo _spaceInfo;
-	private transient Map _attrs = new HashMap(3);
+	private transient Map _attrs;
 		//don't create it dynamically because _ip bind it at constructor
 	/** A map of event listener: Map(evtnm, EventListener)). */
 	private transient Map _listeners;
@@ -172,6 +172,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		};
 		_newChildren = new LinkedList();
+		_attrs = new HashMap(3);
 	}
 
 	/** Adds to the ID spaces, if any, when ID is changed.
@@ -1122,7 +1123,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		clone._parent = null;
 		clone._attrs = new HashMap(clone._attrs);
 		if (_listeners != null)
-			_listeners = new HashMap(_listeners);
+			_listeners = new HashMap(clone._listeners);
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone, nsparent);
@@ -1191,7 +1192,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		init();
 
 		Serializables.smartRead(s, _attrs);
-		Serializables.smartRead(s, _listeners);
+		_listeners = Serializables.smartRead(s, _listeners); //might be null
 
 		//restore child's _parent
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {

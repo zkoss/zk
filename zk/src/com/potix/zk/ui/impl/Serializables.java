@@ -19,6 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package com.potix.zk.ui.impl;
 
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.io.Serializable;
 import java.io.Externalizable;
@@ -53,14 +54,20 @@ public class Serializables {
 		s.writeObject(null); //denote end-of-map
 	}
 	/** Reads seriazlable entries back (serialized by {@link #smartWrite}).
+	 *
+	 * @param map the map to hold the data being read. If null and any data
+	 * is read, a new map is created.
+	 * @return the map being read
 	 */
-	public static void smartRead(ObjectInputStream s, Map map)
+	public static Map smartRead(ObjectInputStream s, Map map)
 	throws IOException, ClassNotFoundException {
 		for (;;) {
 			final Object nm = s.readObject();
 			if (nm == null) break; //no more
 
+			if (map == null) map = new HashMap();
 			map.put(nm, s.readObject());
 		}
+		return map;
 	}
 }
