@@ -51,7 +51,7 @@ public class AbstractTag extends AbstractComponent
 implements DynamicPropertied, RawId {
 	/** The tag name. */
 	protected String _tagnm;
-	private Map _attrs;
+	private Map _props;
 
 	protected AbstractTag(String tagname) {
 		if (tagname == null || tagname.length() == 0)
@@ -100,7 +100,7 @@ implements DynamicPropertied, RawId {
 	 * Note: it must be a String object or null.
 	 */
 	public Object getDynamicProperty(String name) {
-		return _attrs != null ? _attrs.get(name): null;
+		return _props != null ? _props.get(name): null;
 	}
 	/** Sets the dynamic property.
 	 * Note: it converts the value to a string object (by use of
@@ -115,11 +115,11 @@ implements DynamicPropertied, RawId {
 
 		final String sval = Objects.toString(value);
 		if (sval == null) {
-			if (_attrs != null) _attrs.remove(name);
+			if (_props != null) _props.remove(name);
 		} else {
-			if (_attrs == null)
-				_attrs = new HashMap();
-			_attrs.put(name, sval);
+			if (_props == null)
+				_props = new HashMap();
+			_props.put(name, sval);
 		}
 		smartUpdate(name, sval);
 	}
@@ -198,8 +198,8 @@ implements DynamicPropertied, RawId {
 			out.write('"');
 		}
 
-		if (_attrs != null) {
-			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
+		if (_props != null) {
+			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String key = (String)me.getKey();
 				final String val = (String)me.getValue();
@@ -231,7 +231,7 @@ implements DynamicPropertied, RawId {
 	//Cloneable//
 	public Object clone() {
 		final AbstractTag clone = (AbstractTag)super.clone();
-		clone._attrs = new HashMap(clone._attrs);
+		clone._props = new HashMap(clone._props);
 		return clone;
 	}
 
