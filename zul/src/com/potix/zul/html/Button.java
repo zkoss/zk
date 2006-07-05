@@ -21,6 +21,7 @@ package com.potix.zul.html;
 import com.potix.lang.Objects;
 import com.potix.xml.HTMLs;
 
+import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 
@@ -155,7 +156,9 @@ public class Button extends LabelImageElement {
 	}
 
 	private String getEncodedHref() {
-		return _href != null ? getDesktop().getExecution().encodeURL(_href): null;
+		final Desktop dt = getDesktop();
+		return _href != null && dt != null ? dt.getExecution().encodeURL(_href): null;
+			//if desktop is null, it doesn't belong to any execution
 	}
 	//-- super --//
 	public String getOuterAttrs() {

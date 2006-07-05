@@ -23,6 +23,7 @@ import com.potix.lang.Strings;
 import com.potix.util.media.Media;
 import com.potix.xml.HTMLs;
 
+import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
@@ -130,9 +131,10 @@ public class Audio extends XulElement implements Viewable {
 		}
 	}
 	private String getEncodedSrc() {
+		final Destkop dt = getDesktop();
 		return _audio != null ? getAudioSrc(): //already encoded
-			getDesktop().getExecution().encodeURL(
-				_src != null ? _src: "~./aud/mute.mid");
+			dt != null ? dt.getExecution().encodeURL(
+				_src != null ? _src: "~./aud/mute.mid"): "";
 	}
 
 	/** Returns whether to auto start playing the audio.

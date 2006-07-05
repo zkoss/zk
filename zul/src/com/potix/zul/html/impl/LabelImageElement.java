@@ -116,6 +116,8 @@ public class LabelImageElement extends LabelElement implements Viewable {
 	/** Returns the HTML IMG tag for the image part, or null
 	 * if no image is assigned ({@link #isImageAssigned})
 	 *
+	 * <p>Used only for component template, not for application developers.
+	 *
 	 * <p>Note: the component template shall use this method to
 	 * generate the HTML tag, instead of using {@link #getImage}.
 	 */
@@ -130,6 +132,8 @@ public class LabelImageElement extends LabelElement implements Viewable {
 	}
 	/** Returns the encoded URL for the current image content.
 	 * Don't call this method unless _image is not null;
+	 *
+	 * <p>Used only for component template, not for application developers.
 	 */
 	private String getContentSrc() {
 		if (getDesktop() == null) return ""; //no avail at client
