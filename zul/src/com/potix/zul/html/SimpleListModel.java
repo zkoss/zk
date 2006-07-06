@@ -23,7 +23,10 @@ package com.potix.zul.html;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class SimpleListModel extends AbstractListModel {
+public class SimpleListModel extends AbstractListModel
+implements java.io.Serializable {
+    private static final long serialVersionUID = 20060707L;
+
 	private final Object[] _data;
 
 	public SimpleListModel(Object[] data) {
