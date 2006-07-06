@@ -46,7 +46,7 @@ public class Radiogroup extends XulElement {
 	/** The name of all child radio buttons. */
 	private String _name;
 	private int _jsel = -1;
-	private EventListener _listener;
+	private transient EventListener _listener;
 
 	public Radiogroup() {
 		_name = genGroupName();
