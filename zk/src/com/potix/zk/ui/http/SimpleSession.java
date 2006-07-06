@@ -34,6 +34,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.sys.SessionCtrl;
 import com.potix.zk.ui.sys.WebAppCtrl;
+import com.potix.zk.ui.sys.DesktopCache;
 import com.potix.zk.ui.util.Monitor;
 import com.potix.zk.ui.util.Configuration;
 
@@ -61,6 +62,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		//Side effect: it is meaning to serialize a session manually
 		//Rather, caller has to serialize HttpSession
 	private String _clientAddr, _clientHost;
+	private DesktopCache _cache;
 	private boolean _invalid;
 
 	public SimpleSession(WebApp wapp, HttpSession hsess, String clientAddr,
@@ -72,7 +74,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		_hsess = hsess;
 		_clientAddr = clientAddr;
 		_clientHost = clientHost;
-		initAttributes();
+		initAttrs();
 
 		final Configuration config = getWebApp().getConfiguration();
 		config.invokeSessionInits(this); //it might throw exception
@@ -90,7 +92,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * <p>In other words, it is called by the derived class if it implements
 	 * java.io.Serializable.
 	 */
-	protected final void initAttributes() {
+	protected final void initAttrs() {
 		_attrs = new AttributesMap() {
 			protected Enumeration getKeys() {
 				return _hsess.getAttributeNames();
@@ -146,6 +148,13 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 	public final boolean isInvalidated() {
 		return _invalid;
+	}
+
+	public DesktopCache getDesktopCache() {
+		return _cache;
+	}
+	public void setDesktopCache(DesktopCache cache) {
+		_cache = cache;
 	}
 
 	public void onDestroyed() {

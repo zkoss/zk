@@ -64,6 +64,6 @@ implements HttpSessionActivationListener, java.io.Serializable {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		initAttributes();
+		initAttrs();
 	}
 }

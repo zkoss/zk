@@ -18,6 +18,7 @@ package com.potix.zk.ui.impl;
 
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Session;
+import com.potix.zk.ui.sys.SessionCtrl;
 import com.potix.zk.ui.sys.DesktopCache;
 import com.potix.zk.ui.sys.DesktopCacheProvider;
 
@@ -25,31 +26,35 @@ import com.potix.zk.ui.sys.DesktopCacheProvider;
  * A implementation of {@link DesktopCacheProvider} that stores all desktops
  * from the same session in one desktop cache.
  *
+ * <p>Implementation Note: we don't store the desktop cache in the session's
+ * attribute (rather, we use {@link SessionCtrl#setDesktopCache}. Reason:
+ * the desktop cache is serialized only if the session is serializable.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  * @see GlobalDesktopCacheProvider
  */
 public class SessionDesktopCacheProvider implements DesktopCacheProvider {
-	private static final String ATTR_CACHE = "javax.potix.zk.desktop-cache";
 	private WebApp _wapp;
 
 	//-- DesktopCacheProvider --//
 	public DesktopCache getDesktopCache(Session sess) {
-		DesktopCache dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
+		final SessionCtrl sessCtrl = (SessionCtrl)sess;
+		DesktopCache dc = sessCtrl.getDesktopCache();
 		if (dc == null) {
 			synchronized (this) {
-				dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
-				if (dc == null) {
+				if (sessCtrl.getDesktopCache() == null) {
 					dc = new SimpleDesktopCache(_wapp.getConfiguration());
-					sess.setAttribute(ATTR_CACHE, dc);
+					sessCtrl.setDesktopCache(dc);
 				}
 			}
 		}
 		return dc;
 	}
 	public void sessionDestroyed(Session sess) {
-		DesktopCache dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
+		final SessionCtrl sessCtrl = (SessionCtrl)sess;
+		final DesktopCache dc = sessCtrl.getDesktopCache();
 		if (dc != null) {
-			sess.removeAttribute(ATTR_CACHE);
+			sessCtrl.setDesktopCache(null);
 			dc.stop();
 		}
 	}
@@ -57,13 +62,13 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 	/** Invokes {@link #getDesktopCache}'s {@link DesktopCache#sessionWillPassivate}.
 	 */
 	public void sessionWillPassivate(Session sess) {
-		DesktopCache dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
+		final DesktopCache dc = ((SessionCtrl)sess).getDesktopCache();
 		if (dc != null) dc.sessionWillPassivate(sess);
 	}
 	/** Invokes {@link #getDesktopCache}'s {@link DesktopCache#sessionDidActivate}.
 	 */
 	public void sessionDidActivate(Session sess) {
-		DesktopCache dc = (DesktopCache)sess.getAttribute(ATTR_CACHE);
+		final DesktopCache dc = ((SessionCtrl)sess).getDesktopCache();
 		if (dc != null) dc.sessionDidActivate(sess);
 	}
 
