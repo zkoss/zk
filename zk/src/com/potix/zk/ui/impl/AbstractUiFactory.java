@@ -1,4 +1,4 @@
-/* UiFactoryImpl.java
+/* AbstractUiFactory.java
 
 {{IS_NOTE
 	Purpose:
@@ -34,11 +34,14 @@ import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.http.PageDefinitions;
 
 /**
- * The default implementation of {@link UiFactory}.
+ * The sketetal implementation of {@link UiFactory}.
+ *
+ * <p>Derived class must immplement {@link UiFactory#newSession}, which
+ * depends on the Web container.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class UiFactoryImpl implements UiFactory {
+abstract public class AbstractUiFactory implements UiFactory {
 	//-- UiFactory --//
 	public void start(WebApp wapp) {
 	}
