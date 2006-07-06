@@ -53,15 +53,18 @@ public class SimpleSession implements Session, SessionCtrl {
 	private static final Log log = Log.lookup(SimpleSession.class);
 
 	/** The Web application that this session belongs to. */
-	protected transient WebApp _wapp;
+	private WebApp _wapp;
 	/** The HTTP session that this session is associated with. */
-	protected transient HttpSession _hsess;
-		//Not to serialize since it is recalled by sessionDidActivate
-	private transient Map _attrs;
-		//No need to serialize attributes since it is done by Session
-		//Side effect: it is meaning to serialize a session manually
-		//Rather, caller has to serialize HttpSession
-	private String _clientAddr, _clientHost;
+	private HttpSession _hsess;
+	/** The attributes belonging to this session.
+	 * Note: it is the same map of HttpSession's attributes.
+	 * Note: No need to serialize attributes since it is done by Web server.
+	 */
+	private Map _attrs;
+	/** The client's IP addression. */
+	private String _clientAddr;
+	/** The client's host name. */
+	private String _clientHost;
 	private DesktopCache _cache;
 	private boolean _invalid;
 
@@ -74,7 +77,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		_hsess = hsess;
 		_clientAddr = clientAddr;
 		_clientHost = clientHost;
-		initAttrs();
+		init();
 
 		final Configuration config = getWebApp().getConfiguration();
 		config.invokeSessionInits(this); //it might throw exception
@@ -89,10 +92,10 @@ public class SimpleSession implements Session, SessionCtrl {
 		}
 	}
 	/** Called to initialize some members after this object is deserialized.
-	 * <p>In other words, it is called by the derived class if it implements
+	 * <p>In other words, it is called by the deriving class if it implements
 	 * java.io.Serializable.
 	 */
-	protected final void initAttrs() {
+	private final void init() {
 		_attrs = new AttributesMap() {
 			protected Enumeration getKeys() {
 				return _hsess.getAttributeNames();
@@ -169,5 +172,58 @@ public class SimpleSession implements Session, SessionCtrl {
 				log.error(ex);
 			}
 		}
+	}
+
+	//--Serializable for deriving classes--//
+	/** Used by the deriving class,
+	 * only if the deriving class implements java.io.Serializable.
+	 */
+	protected SimpleSession() {}
+	/** Used by the deriving class to write this object,
+	 * only if the deriving class implements java.io.Serializable.
+	 * <p>Refer to {@link SerializableSession} for how to use this method.
+	 */
+	protected void writeThis(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.writeObject(_clientAddr);
+		s.writeObject(_clientHost);
+		s.writeObject(_cache);
+	}
+	/** Used by the deriving class to read back this object,
+	 * only if the deriving class implements java.io.Serializable.
+	 * <p>Refer to {@link SerializableSession} for how to use this method.
+	 */
+	protected void readThis(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		init();
+
+		_clientAddr = (String)s.readObject();
+		_clientHost = (String)s.readObject();
+		_cache = (DesktopCache)s.readObject();
+	}
+	/** Used by the deriving class to pre-process a session before writing
+	 * the session
+	 */
+	protected void sessionWillPassivate() {
+		((WebAppCtrl)_wapp).sessionWillPassivate(this);
+	}
+	/** Used by the deriving class to post-process a session after
+	 * it is read back.
+	 * <p>Refer to {@link SerializableSession} for how to use this method.
+	 */
+	protected void sessionDidActivate(HttpSession hsess) {
+		//Note: in Tomcat, servlet is activated later, so we have to
+		//add listener to WebManager instead of process now
+
+		_hsess = hsess;
+		WebManager.addListener(
+			_hsess.getServletContext(),
+			new ActivationListener() {
+				public void onActivated(WebManager webman) {
+					_wapp = webman.getWebApp();
+					((WebAppCtrl)_wapp)
+						.sessionDidActivate(SimpleSession.this);
+				}
+			});
 	}
 }

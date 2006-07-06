@@ -41,29 +41,21 @@ implements HttpSessionActivationListener, java.io.Serializable {
 
 	//-- HttpSessionActivationListener --//
 	public void sessionWillPassivate(HttpSessionEvent se) {
-		((WebAppCtrl)_wapp).sessionWillPassivate(this);
+		sessionWillPassivate();
 	}
 	public void sessionDidActivate(HttpSessionEvent se) {
-		//Note: in Tomcat, servlet is activated later, so we have to
-		//add listener to WebManager instead of process now
-		_hsess = se.getSession();
-
-		WebManager.addListener(
-			_hsess.getServletContext(),
-			new ActivationListener() {
-				public void onActivated(WebManager webman) {
-					_wapp = webman.getWebApp();
-					((WebAppCtrl)_wapp)
-						.sessionDidActivate(SerializableSession.this);
-				}
-			});
+		sessionDidActivate(se.getSession());
 	}
 
 	//Serializable//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+		writeThis(s);
+	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-
-		initAttrs();
+		readThis(s);
 	}
 }

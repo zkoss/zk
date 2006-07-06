@@ -31,7 +31,7 @@ import com.potix.zk.ui.impl.AbstractUiFactory;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class SerializableUiFactory {
+public class SerializableUiFactory extends AbstractUiFactory {
 	public Session newSession(WebApp wapp, Object nativeSess,
 	String clientAddr, String clientHost) {
 		return new SerializableSession(
