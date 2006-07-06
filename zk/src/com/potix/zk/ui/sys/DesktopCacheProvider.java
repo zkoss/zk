@@ -43,10 +43,14 @@ public interface DesktopCacheProvider {
 
 	/** Notification that the session is about to be passivated
 	 * (aka., serialized).
+	 *
+	 * <p>It is called when {@link com.potix.zk.ui.sys.WebAppCtrl#sessionWillPassivate} is called.
 	 */
 	public void sessionWillPassivate(Session sess);
 	/** Notification that the session has just been activated
 	 * (aka., deserialized).
+	 *
+	 * <p>It is called when {@link com.potix.zk.ui.sys.WebAppCtrl#sessionDidActivate} is called.
 	 */
 	public void sessionDidActivate(Session sess);
 

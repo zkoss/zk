@@ -28,6 +28,23 @@ import com.potix.zk.ui.ComponentNotFoundException;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface SessionCtrl {
+	/** Returns the desktop cache, or null if not available.
+	 *
+	 * <p>Note: this is an utility to implement {@link DesktopCacheProvider},
+	 * which might or might not use this method. Other part of ZK shall not
+	 * access this method.
+	 */
+	public DesktopCache getDesktopCache();
+	/** Sets the desktop cache.
+	 *
+	 * <p>Note: this is an utility to implement {@link DesktopCacheProvider},
+	 * which might or might not use this method. Other part of ZK shall not
+	 * access this method.
+	 *
+	 * @param cache the desktop cache; null to denote no cache available.
+	 */
+	public void setDesktopCache(DesktopCache cache);
+	
 	/** Called when the session is destroyed.
 	 * <p>Application shall never access this method.
 	 */
