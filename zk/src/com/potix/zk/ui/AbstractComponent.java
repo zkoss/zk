@@ -1204,18 +1204,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (this instanceof IdSpace) {
 			_spaceInfo = new SpaceInfo(this, _uuid);
 
-			//fix _spaceInfo's parent
-			for (AbstractComponent p = this;;) {
-				final AbstractComponent q = (AbstractComponent)p.getParent();
-				if (q instanceof IdSpace) {
-					_spaceInfo.ns.setParent(q._spaceInfo.ns);
-					break;
-				} else if (q != null) {
-					p = q;
-				} else {
-					break;
-				}
-			}
+			//fix child's _spaceInfo's parent
+			fixSpaceParentOneLevelDown(this, _spaceInfo.ns);
 
 			//read _spaceInfo.attrs
 			Serializables.smartRead(s, _spaceInfo.attrs);
@@ -1227,6 +1217,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			bindToIdSpace(this);
 			for (Iterator it = getChildren().iterator(); it.hasNext();)
 				addToIdSpacesDown((Component)it.next(), this);
+		}
+	}
+	/** Fixed Namespace's parent of children only one level.
+	 */
+	private static final
+	void fixSpaceParentOneLevelDown(Component comp, Namespace nsparent) {
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
+			final AbstractComponent child = (AbstractComponent)it.next();
+			//Others are handled by readObject
+			if (child._spaceInfo != null)
+				child._spaceInfo.ns.setParent(nsparent);
+			else
+				fixSpaceParentOneLevelDown(child, nsparent); //recursive
 		}
 	}
 }
