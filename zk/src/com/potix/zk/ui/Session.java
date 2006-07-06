@@ -60,7 +60,7 @@ public interface Session {
 	 * this session. If the engine cannot or chooses not to resolve the
 	 * hostname, this method returns the dotted-string form of the IP address.
 	 */
-	public String getClientName();
+	public String getClientHost();
 
 	/** Invalidates this session then unbinds any objects bound to it.
 	 *

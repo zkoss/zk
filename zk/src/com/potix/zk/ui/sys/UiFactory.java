@@ -26,6 +26,7 @@ import com.potix.idom.Document;
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Page;
+import com.potix.zk.ui.Session;
 import com.potix.zk.ui.metainfo.PageDefinition;
 
 /**
@@ -41,6 +42,17 @@ public interface UiFactory {
 	/** Stops this factory.
 	 */
 	public void stop(WebApp wapp);
+
+	/** Creates an instance of {@link Session}.
+	 *
+	 * @param nativeSess the native session depending on the Web server.
+	 * If HTTP is used, it is javax.servlet.http.HttpSession.
+	 * @param wapp the web application
+	 * @param clientAddr the client's IP address, or null if not available.
+	 * @param clientHost the client's host name, or null if not available.
+	 */
+	public Session newSession(WebApp wapp, Object nativeSess,
+	String clientAddr, String clientHost);
 
 	/** Creates an instance of {@link Desktop}.
 	 *

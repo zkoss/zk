@@ -20,6 +20,9 @@ package com.potix.zk.ui.http;
 
 import java.util.Set;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Enumeration;
 import java.net.URL;
@@ -59,7 +62,6 @@ import com.potix.zk.ui.impl.AbstractWebApp;
 import com.potix.zk.ui.impl.RequestInfoImpl;
 import com.potix.zk.ui.impl.SessionDesktopCacheProvider;
 import com.potix.zk.ui.impl.UiEngineImpl;
-import com.potix.zk.ui.impl.UiFactoryImpl;
 
 /**
  * A bridge bewteen Web server and ZK.
@@ -84,6 +86,9 @@ public class WebManager {
 	 * with javax such that it is visible to other servlets and portlets.
 	 */
 	/*package*/ static final String DESKTOP = "javax.potix.zk.ui.desktop";
+
+	/** Map(ServletContext, List(ActivationListener)). */
+	private static final Map _actListeners = new HashMap();
 
 	private final ServletContext _ctx;
 	private final WebApp _wapp;
@@ -142,7 +147,7 @@ public class WebManager {
 		cls = cfg.getUiFactoryClass();
 		final UiFactory factory;
 		if (cls == null) {
-			factory = new UiFactoryImpl();
+			factory = new SimpleUiFactory();
 		} else {
 			try {
 				factory = (UiFactory)cls.newInstance();
@@ -159,6 +164,19 @@ public class WebManager {
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
 		cfg.invokeApplicationInits(_wapp);
+
+		final List listeners = (List)_actListeners.remove(_ctx); //called and drop
+		if (listeners != null) {
+			for (Iterator it = listeners.iterator(); it.hasNext();) {
+				try {
+					((ActivationListener)it.next()).onActivated(this);
+				} catch (java.util.ConcurrentModificationException ex) {
+					throw ex;
+				} catch (Throwable ex) {
+					log.realCause(ex);
+				}
+			}
+		}
 	}
 
 	public void destroy() {
@@ -185,6 +203,29 @@ public class WebManager {
 	}
 
 	//-- static --//
+
+	/** Register a listener to the specified context such that
+	 * it will be invoked if the corresponding {@link WebManager} is created.
+	 *
+	 * <p>Note: if the Web manager is created already, {@link ActivationListener#onActivated}
+	 * will be invoked immediately before this method returns.
+	 */
+	public static final
+	void addListener(ServletContext ctx, ActivationListener listener) {
+		if (ctx == null || listener == null)
+			throw new IllegalArgumentException("null");
+
+		final WebManager webman = getWebManagerIfAny(ctx);
+		if (webman != null) {
+			listener.onActivated(webman);
+		} else {
+			synchronized (WebManager.class) {
+				List l = (List)_actListeners.get(ctx);
+				if (l == null) _actListeners.put(ctx, l = new LinkedList());
+				l.add(listener);
+			}
+		}
+	}
 
 	/** Returns the Web manager of the specified context.
 	 * @exception UiException if not found (i.e., not initialized
@@ -217,14 +258,13 @@ public class WebManager {
 	HttpSession hsess, String remoteAddr, String remoteHost) {
 		if (D.ON && log.debugable()) log.debug("Creating a new sess for "+hsess);
 
-		final Session sess =
-			new SessionImpl(hsess, wapp, remoteAddr, remoteHost);
+		final Session sess = ((WebAppCtrl)wapp).getUiFactory()
+			.newSession(wapp, hsess, remoteAddr, remoteHost);
 		hsess.setAttribute(ATTR_SESS, sess);
 
 		//Note: we set timeout here, because HttpSession might have been created
 		//by other servlet or filter
-		final Integer v =
-			wapp.getConfiguration().getSessionMaxInactiveInterval();
+		final Integer v = wapp.getConfiguration().getSessionMaxInactiveInterval();
 		if (v != null)
 			hsess.setMaxInactiveInterval(v.intValue());
 		return sess;

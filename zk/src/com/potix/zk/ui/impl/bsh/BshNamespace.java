@@ -134,7 +134,8 @@ public class BshNamespace implements Namespace {//not a good idea to serialize i
 			final String nm = vars[j];
 			if (nm != null && !"bsh".equals(nm)) {
 				final Object val = getVariable(nm, true);
-				if (((val instanceof java.io.Serializable)
+				if ((val == null
+					|| (val instanceof java.io.Serializable)
 					|| (val instanceof java.io.Externalizable))
 				&& (filter == null || filter.accept(nm, val))) {
 					s.writeObject(nm);
