@@ -993,13 +993,14 @@ public class Classes {
 	 */
 	public static final Field getAnyField(Class cls, String name)
 	throws NoSuchFieldException {
-		try {
-			return cls.getDeclaredField(name);
-		} catch (NoSuchFieldException ex) {
-			cls = cls.getSuperclass();
-			if (cls == null)
-				throw ex;
-			return getAnyField(cls, name);
+		for (;;) {
+			try {
+				return cls.getDeclaredField(name);
+			} catch (NoSuchFieldException ex) {
+				cls = cls.getSuperclass();
+				if (cls == null)
+					throw ex;
+			}
 		}
 	}
 
