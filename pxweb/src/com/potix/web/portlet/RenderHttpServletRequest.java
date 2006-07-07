@@ -58,7 +58,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return -1;
 	}
 	public String getContentType() {
-		return "html";
+		return "text/html";
 	}
 	public javax.servlet.ServletInputStream getInputStream() {
 		throw new UnsupportedOperationException();
