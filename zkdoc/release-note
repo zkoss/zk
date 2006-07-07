@@ -8,7 +8,8 @@ ZK 2.1.0
     desktop even after the Web server is re-booted.
 
 * Bugs
-  1513895, 1514932, 1515175, 1515311, 1514789, 1493440, 1517037, 1436397.
+  1513895, 1514932, 1515175, 1515311, 1514789, 1493440, 1517037, 1436397,
+  1453157, 1510701.
 
 * Upgrade Notes
   + The getClientName method of com.potix.zk.ui.Session is renamed to getClientHost.
