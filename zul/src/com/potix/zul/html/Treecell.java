@@ -170,7 +170,9 @@ public class Treecell extends LabelImageElement {
 	 */
 	public String getColumnHtmlPostfix() {
 		final Treeitem item = getTreeitem();
-		if (isFirstColumn() && item.isFocusRequired()) {
+		final Tree tree = getTree();
+		if (tree != null && !tree.isCheckmark() && isFirstColumn()
+		&& item.isFocusRequired()) {
 			final StringBuffer sb = new StringBuffer(64)
 				.append("<a href=\"javascript:;\" id=\"")
 				.append(getParent().getUuid()).append("!sel\"")
