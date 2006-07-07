@@ -19,10 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package com.potix.zul.html;
 
 import java.util.Iterator;
-import java.util.ArrayList;
-import java.io.Writer;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 
 import com.potix.lang.Strings;
 import com.potix.lang.Objects;
