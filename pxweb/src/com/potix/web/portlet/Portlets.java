@@ -155,7 +155,7 @@ public class Portlets {
 			final RequestDispatcher rd =
 				_svlctx != null ? _svlctx.getRequestDispatcher(uri):
 					_extctx.getRequestDispatcher(uri);
-			return PortletServletDispatcher.getInstance(rd);
+			return ServletPortletDispatcher.getInstance(rd);
 		}
 		private URL getResource() throws MalformedURLException {
 			return _prtctx != null ? _prtctx.getResource(_uri):

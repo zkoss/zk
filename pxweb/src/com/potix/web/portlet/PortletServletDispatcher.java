@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jan 17 00:44:46     2006, Created by tomyeh@potix.com
+		Fri Jul  7 12:35:32     2006, Created by tomyeh@potix.com
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -18,47 +18,41 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.web.portlet;
 
-import java.io.IOException;
 import javax.portlet.PortletRequestDispatcher;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.PortletException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 /**
- * A facade of a RequestDispatch for implementing PortletRequestDispatcher.
- *
+ * A facade of a PortletRequestDispatch for implementing RequestDispatcher.
+ * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class PortletServletDispatcher implements PortletRequestDispatcher {
-	private final RequestDispatcher _rd;
+public class PortletServletDispatcher implements RequestDispatcher {
+	private final PortletRequestDispatcher _rd;
 
 	/** Returns a facade instance for the specified dispatcher. */
 	public static final
-	PortletRequestDispatcher getInstance(RequestDispatcher rd) {
-		if (rd instanceof PortletRequestDispatcher)
-			return (PortletRequestDispatcher)rd;
+	RequestDispatcher getInstance(PortletRequestDispatcher rd) {
+		if (rd instanceof RequestDispatcher)
+			return (RequestDispatcher)rd;
 		return new PortletServletDispatcher(rd);
 	}
-	private PortletServletDispatcher(RequestDispatcher rd) {
+	private PortletServletDispatcher(PortletRequestDispatcher rd) {
 		if (rd == null)
 			throw new IllegalArgumentException("null");
 		_rd = rd;
 	}
 
-	public void include(RenderRequest request, RenderResponse response)
-	throws PortletException, IOException {
-		try {
-			_rd.include(RenderHttpServletRequest.getInstance(request), 
-				RenderHttpServletResponse.getInstance(response));
-		} catch (ServletException ex) {
-			if (ex.getRootCause() != null) {
-			    throw new PortletException(ex.getRootCause());
-			} else {
-			    throw new PortletException(ex);
-			}
-		}
+	//RequestDispatcher//
+	public void forward(ServletRequest request, ServletResponse response)
+	throws ServletException, java.io.IOException {
+		throw new UnsupportedOperationException();
+	}
+	public void include(ServletRequest request, ServletResponse response)
+	throws ServletException, java.io.IOException {
+		throw new UnsupportedOperationException(); //TODO
 	}
 }

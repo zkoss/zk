@@ -28,6 +28,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.portlet.PortletContext;
+import javax.portlet.PortletRequestDispatcher;
 
 /**
  * A facade servlet context based on a given portlet context.
@@ -59,7 +60,7 @@ public class PortletServletContext implements ServletContext {
 		return _ctx.getAttributeNames();
 	}
 	public ServletContext getContext(String path) {
-		throw new UnsupportedOperationException(path);
+		return null;
 	}
 	public String getInitParameter(String name) {
 		return _ctx.getInitParameter(name);
@@ -77,13 +78,15 @@ public class PortletServletContext implements ServletContext {
 		return _ctx.getMinorVersion();
 	}
 	public RequestDispatcher getNamedDispatcher(String name) {
-		throw new UnsupportedOperationException(name);
+		final PortletRequestDispatcher prd = _ctx.getNamedDispatcher(name);
+		return prd != null ? PortletServletDispatcher.getInstance(prd): null;
 	}
 	public String getRealPath(String path) {
 		return _ctx.getRealPath(path);
 	}
 	public RequestDispatcher getRequestDispatcher(String path) {
-		throw new UnsupportedOperationException(path);
+		final PortletRequestDispatcher prd = _ctx.getRequestDispatcher(path);
+		return prd != null ? PortletServletDispatcher.getInstance(prd): null;
 	}
 	public URL getResource(String path) throws MalformedURLException {
 		return _ctx.getResource(path);
@@ -101,19 +104,19 @@ public class PortletServletContext implements ServletContext {
 	 * @deprecated
 	 */
 	public Servlet getServlet(String name) {
-		throw new UnsupportedOperationException("deprecated");
+		return null;
 	}
 	/**
 	 * @deprecated
 	 */
 	public Enumeration getServletNames() {
-		throw new UnsupportedOperationException("deprecated");
+		return null;
 	}
 	/**
 	 * @deprecated
 	 */
 	public Enumeration getServlets() {
-		throw new UnsupportedOperationException("deprecated");
+		return null;
 	}
 	public String getServletContextName() {
 		return _ctx.getPortletContextName();
