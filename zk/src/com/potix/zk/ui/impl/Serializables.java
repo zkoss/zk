@@ -20,6 +20,8 @@ package com.potix.zk.ui.impl;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.io.Serializable;
 import java.io.Externalizable;
@@ -38,7 +40,6 @@ public class Serializables {
 	 */
 	public static void smartWrite(ObjectOutputStream s, Map map)
 	throws IOException {
-		//Write serializable entries
 		if (map != null) {
 			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
@@ -53,10 +54,10 @@ public class Serializables {
 		}
 		s.writeObject(null); //denote end-of-map
 	}
-	/** Reads seriazlable entries back (serialized by {@link #smartWrite}).
+	/** Reads serializable entries back (serialized by {@link #smartWrite(ObjectOutputStream,Map)}).
 	 *
 	 * @param map the map to hold the data being read. If null and any data
-	 * is read, a new map is created.
+	 * is read, a new map (HashMap) is created and returned.
 	 * @return the map being read
 	 */
 	public static Map smartRead(ObjectInputStream s, Map map)
@@ -69,5 +70,36 @@ public class Serializables {
 			map.put(nm, s.readObject());
 		}
 		return map;
+	}
+	/** Writes only serializable elements of the specified collection.
+	 */
+	public static void smartWrite(ObjectOutputStream s, Collection col)
+	throws IOException {
+		if (col != null) {
+			for (Iterator it = col.iterator(); it.hasNext();) {
+				final Object val = it.next();
+				if ((val instanceof Serializable) || (val instanceof Externalizable)) {
+					s.writeObject(val);
+				}
+			}
+		}
+		s.writeObject(null);
+	}
+	/** Reads serializable elements back (serialized by {@link #smartWrite(ObjectOutputStream,Collection)})
+	 *
+	 * @param col the collection to hold the data beinig read. If null and
+	 * and data is read, a new collection (LinkedList) is created and returned.
+	 * @return the collection being read
+	 */
+	public static Collection smartRead(ObjectInputStream s, Collection col)
+	throws IOException, ClassNotFoundException {
+		for (;;) {
+			final Object val = s.readObject();
+			if (val == null) break; //no more
+
+			if (col == null) col = new LinkedList();
+			col.add(val);
+		}
+		return col;
 	}
 }

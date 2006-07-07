@@ -23,6 +23,7 @@ import java.util.ListIterator;
 import java.util.List;
 import java.util.AbstractSequentialList;
 import java.util.LinkedList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
@@ -896,8 +897,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (!Events.isValid(evtnm))
 			throw new IllegalArgumentException("Invalid event name: "+evtnm);
 
-		if (_listeners == null)
-			_listeners = new HashMap(3);
+		if (_listeners == null) _listeners = new HashMap(3);
 
 		List l = (List)_listeners.get(evtnm);
 		if (l != null) {
@@ -1170,7 +1170,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		s.defaultWriteObject();
 
 		Serializables.smartWrite(s, _attrs);
-		Serializables.smartWrite(s, _listeners);
+
+		if (_listeners != null)
+			for (Iterator it = _listeners.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				s.writeObject(me.getKey());
+				Serializables.smartWrite(s, (Collection)me.getValue());
+			}
+		s.writeObject(null);
 
 		//store _spaceInfo
 		if (this instanceof IdSpace) {
@@ -1192,7 +1199,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		init();
 
 		Serializables.smartRead(s, _attrs);
-		_listeners = Serializables.smartRead(s, _listeners); //might be null
+
+		for (;;) {
+			final String evtnm = (String)s.readObject();
+			if (evtnm == null) break; //no more
+
+			if (_listeners == null) _listeners = new HashMap(3);
+			_listeners.put(evtnm, Serializables.smartRead(s, (Collection)null));
+		}
 
 		//restore child's _parent
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
