@@ -58,10 +58,13 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return -1;
 	}
 	public String getContentType() {
-		return "text/html";
+		final String ct = _req.getResponseContentType();
+		return ct != null ? ct: "text/html";
 	}
 	public javax.servlet.ServletInputStream getInputStream() {
-		throw new UnsupportedOperationException();
+		return new javax.servlet.ServletInputStream() {
+			public int read() {return -1;}
+		};
 	}
 	public String getLocalAddr() {
 		return "";
@@ -94,7 +97,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return "HTTP/1.0";
 	}
 	public java.io.BufferedReader getReader() {
-		throw new UnsupportedOperationException();
+		return new java.io.BufferedReader(new java.io.StringReader(""));
 	}
 	/**
 	 * @deprecated

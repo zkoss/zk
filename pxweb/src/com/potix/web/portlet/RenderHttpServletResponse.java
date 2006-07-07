@@ -88,16 +88,12 @@ public class RenderHttpServletResponse implements HttpServletResponse {
 
 	//-- HttpServletResponse --//
 	public void addCookie(javax.servlet.http.Cookie cookie) {
-		throw new UnsupportedOperationException();
 	}
 	public void addDateHeader(String name, long date) {
-		throw new UnsupportedOperationException();
 	}
 	public void addHeader(String name, String value) {
-		throw new UnsupportedOperationException();
 	}
 	public void addIntHeader(String name, int value) {
-		throw new UnsupportedOperationException();
 	}
 	public boolean containsHeader(String name) {
 		return false;
@@ -109,7 +105,7 @@ public class RenderHttpServletResponse implements HttpServletResponse {
 		return encodeRedirectURL(url);
 	}
 	public String encodeRedirectURL(String url) {
-		throw new UnsupportedOperationException();
+		return encodeURL(url); //try our best
 	}
 	/**
 	 * @deprecated
@@ -121,30 +117,22 @@ public class RenderHttpServletResponse implements HttpServletResponse {
 		return _res.encodeURL(url);
 	}
 	public void sendError(int sc) {
-		throw new UnsupportedOperationException();
 	}
 	public void sendError(int sc, String msg) {
-		throw new UnsupportedOperationException();
 	}
 	public void sendRedirect(String location) {
-		throw new UnsupportedOperationException(); //use ActionResponse instead
 	}
 	public void setDateHeader(String name, long date) {
-		throw new UnsupportedOperationException();
 	}
 	public void setHeader(String name, String value) {
-		throw new UnsupportedOperationException();
 	}
 	public void setIntHeader(String name, int value) {
-		throw new UnsupportedOperationException();
 	}
 	public void setStatus(int sc) {
-		throw new UnsupportedOperationException();
 	}
 	/**
 	 * @deprecated
 	 */
 	public void setStatus(int sc, String sm)  {
-		throw new UnsupportedOperationException("deprecated");
 	}
 }
