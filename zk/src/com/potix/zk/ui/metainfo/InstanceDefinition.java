@@ -241,28 +241,6 @@ implements Condition {
 		_forEach = expr != null && expr.length() > 0 ? expr: null;
 	}
 
-	/** Returns an component of this definition (never null).
-	 *
-	 * <p>Note: {@link Millieu#applyProperties} will NOT be invoked,
-	 * if you call this method manually or create a component manually.
-	 */
-	public Component newInstance(Page page) {
-		final Millieu mill = getMillieu();
-		Millieu.setCurrent(mill);
-		final Component comp;
-		try {
-			comp = (Component)
-				mill.resolveImplementationClass(page).newInstance();
-		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex);
-		} finally {
-			//theorectically, it shall be reset by AbstractComponent, but..
-			Millieu.setCurrent(null);
-		}
-		if (_tagnm != null) ((DynamicTag)comp).setTag(_tagnm);
-		return comp;
-	}
-
 	/** Returns a readonly list of children.
 	 * Children includes another {@link InstanceDefinition} or {@link Script}.
 	 */
@@ -279,6 +257,17 @@ implements Condition {
 	}
 
 	//-- super --//
+	/** Returns an component of this definition (never null).
+	 *
+	 * <p>Note: {@link Millieu#applyProperties} will NOT be invoked,
+	 * if you call this method manually or create a component manually.
+	 */
+	public Component newInstance(Page page) {
+		final Component comp = super.newInstance(page);
+		if (_tagnm != null) ((DynamicTag)comp).setTag(_tagnm);
+		return comp;
+	}
+
 	public Object getImplementationClass() {
 		final Object cls = super.getImplementationClass();
 		return cls != null ? cls: _compdef.getImplementationClass();

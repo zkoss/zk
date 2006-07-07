@@ -178,6 +178,27 @@ public class ComponentDefinition implements Cloneable {
 		_cls = clsnm;
 	}
 
+	/** Returns an component of this definition (never null).
+	 *
+	 * <p>Note: {@link Millieu#applyProperties} will NOT be invoked,
+	 * if you call this method manually or create a component manually.
+	 */
+	public Component newInstance(Page page) {
+		final Millieu mill = getMillieu();
+		Millieu.setCurrent(mill);
+		final Component comp;
+		try {
+			comp = (Component)
+				mill.resolveImplementationClass(page).newInstance();
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
+		} finally {
+			//theorectically, it shall be reset by AbstractComponent, but..
+			Millieu.setCurrent(null);
+		}
+		return comp;
+	}
+
 	/** Adds a mold.
 	 */
 	public void addMold(String name, String moldUri) {
