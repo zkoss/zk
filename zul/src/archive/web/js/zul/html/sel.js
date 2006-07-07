@@ -424,8 +424,8 @@ zk.Selectable.prototype = {
 	_focusToAnc: function (row) {
 		if (!row) return;
 		var uuid = typeof row == 'string' ? row: row.id;
-		var el = $(uuid + "!sel");
-		if (!el) el = $(uuid + "!cm");
+		var el = $(uuid + "!cm");
+		if (!el) el = $(uuid + "!sel");
 		if (el) zk.focusById(el.id);
 	},
 
@@ -455,7 +455,9 @@ zk.Selectable.prototype = {
 				var sel = $(selId);
 				if (sel) {
 					this._changeSelect(sel, false);
-					if (row && toFocus) this._setFocus(sel, false);
+					if (row)
+						if(toFocus) this._setFocus(sel, false);
+						else this._fixAnc(sel, false); //Bug 1505786 (called by setAttr with "selected")
 				}
 			} else {
 				if (row && toFocus) this._unsetFocusExcept(row);
@@ -466,6 +468,7 @@ zk.Selectable.prototype = {
 		if (row) {
 			this._changeSelect(row, true);
 			if (toFocus) this._setFocus(row, true);
+			else this._fixAnc(row, true); //Bug 1505786
 			this._setSelectedId(row.id);
 		} else {
 			this._setSelectedId(null);
@@ -504,20 +507,10 @@ zk.Selectable.prototype = {
 
 		var changed = this._isFocus(row) != toFocus;
 		if (changed) {
+			this._fixAnc(row, toFocus);
 			if (toFocus) {
 				var el = $(row.id + "!cm");
-				if (!el) {
-					el = $(row.id + "!sel"); //just in case
-					if (!el && row.cells.length > 0) {
-						el = document.createElement("A");
-						el.href = "javascript:;";
-						el.id = row.id + "!sel";
-						el.innerHTML = " ";
-						el.onfocus = new Function("zkSel.cmonfocus(this)");
-						el.onblur = new Function("zkSel.cmonblur(this)");
-						row.cells[0].appendChild(el);
-					}
-				}
+				if (!el) el = $(row.id + "!sel");
 				if (el) zk.focusById(el.id);
 				row.setAttribute("zk_focus", "true");
 				zkSel.cmonfocus(row);
@@ -525,13 +518,27 @@ zk.Selectable.prototype = {
 				if (zk.gecko) this._render(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
 			} else {
-				var el = $(row.id + "!sel");
-				if (el) row.cells[0].removeChild(el);
 				row.removeAttribute("zk_focus");
 				zkSel.cmonblur(row);
 			}
 		}
 		return changed;
+	},
+	_fixAnc: function (row, toAnc) {
+		var el = $(row.id + "!sel");
+		if (toAnc) {
+			if (!el && !$(row.id + "!cm") && row.cells.length > 0) {
+				el = document.createElement("A");
+				el.href = "javascript:;";
+				el.id = row.id + "!sel";
+				el.innerHTML = " ";
+				el.onfocus = new Function("zkSel.cmonfocus(this)");
+				el.onblur = new Function("zkSel.cmonblur(this)");
+				row.cells[0].appendChild(el);
+			}
+		} else {
+			if (el) el.parentNode.removeChild(el);
+		}
 	},
 	/** Cleans selected except the specified one, and returns any selected status
 	 * is changed.
