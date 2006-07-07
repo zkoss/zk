@@ -200,7 +200,8 @@ public class Tree extends XulElement implements Selectable {
 	 */
 	private String getSelectedId() {
 		//NOTE: Treerow's uuid; not Treeitem's
-		return _sel != null ? _sel.getTreerow().getUuid(): "zk_n_a";
+		final Treerow tr = _sel != null ? _sel.getTreerow(false): null;
+		return tr != null ? tr.getUuid(): "zk_n_a";
 	}
 
 	/** Returns a readonly list of all descending {@link Treeitem}
@@ -244,8 +245,9 @@ public class Tree extends XulElement implements Selectable {
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 
-				smartUpdate("select", item.getTreerow().getUuid());
-				//No need to use response because such info is carried on tags
+				final Treerow tr = item.getTreerow(false);
+				if (tr != null)
+					smartUpdate("select", tr.getUuid());
 			}
 		}
 	}
@@ -262,10 +264,11 @@ public class Tree extends XulElement implements Selectable {
 			} else {
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
-				smartUpdate("addSel", item.getTreerow().getUuid());
+				final Treerow tr = item.getTreerow(false);
+				if (tr != null)
+					smartUpdate("addSel", tr.getUuid());
 				if (fixSelected())
 					smartUpdate("zk_selId", getSelectedId());
-				//No need to use response because such info is carried on tags
 			}
 		}
 	}
@@ -281,7 +284,9 @@ public class Tree extends XulElement implements Selectable {
 			} else {
 				item.setSelectedDirectly(false);
 				_selItems.remove(item);
-				smartUpdate("rmSel", item.getTreerow().getUuid());
+				final Treerow tr = item.getTreerow(false);
+				if (tr != null)
+					smartUpdate("rmSel", tr.getUuid());
 				if (fixSelected())
 					smartUpdate("zk_selId", getSelectedId());
 				//No need to use response because such info is carried on tags

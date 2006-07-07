@@ -60,6 +60,11 @@ public class Treeitem extends XulElement implements Openable {
 			new Treerow().setParent(this); //to make caller easy to handle
 		return _treerow;
 	}
+	/** Returns the treerow without auto-create.
+	 */
+	/*package*/ Treerow getTreerow(boolean autoCreate) {
+		return autoCreate ? getTreerow(): _treerow;
+	}
 	/** Returns the treechildren that this tree item owns, or null if
 	 * doesn't have any child.
 	 */
