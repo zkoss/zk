@@ -1,7 +1,7 @@
 	--------
 ZK 2.1.0
 * Features
-  1513892, 1475475, 1517902, 1517384.
+  1513892, 1475475, 1517902, 1517384, 1518636.
   + Safari is supported.
   + Components are serializable.
   + Session, Desktop and Page are serializable. Use can keep using the same
