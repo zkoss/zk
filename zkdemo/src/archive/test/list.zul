@@ -87,18 +87,18 @@ void move(Listbox src, Listbox dst) {
 }
 </zscript>
 <separator bar="true"/>
-<listbox checkmark="true" rows="3" width="400px">
+<listbox rows="3" width="400px">
 	<listhead>
 		<listheader label="Population"/>
 		<listheader label="Percentage"/>
 		<listheader label="Description"/>
 	</listhead>
-	<listitem value="A">
+	<listitem id="li0" value="A">
 		<listcell label="A. Graduate"/>
 		<listcell label="20%"/>
 		<listcell label="More or less"/>
 	</listitem>
-	<listitem value="B">
+	<listitem id="li1" value="B">
 		<listcell label="B. College"/>
 		<listcell label="23%"/>
 		<listcell label="More or less"/>
@@ -119,9 +119,10 @@ void move(Listbox src, Listbox dst) {
 		<listcell label="More or less"/>
 	</listitem>
 </listbox>
+<button label="Select 2nd" onClick="li1.selected = true"/>
 
 <separator bar="true"/>
-<listbox rows="4" width="300px">
+<listbox checkmark="true" rows="4" width="300px">
 	<listhead>
 		<listheader label="Population"/>
 		<listheader label="Percentage"/>

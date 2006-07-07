@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 tree.zul
 
@@ -17,22 +16,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<hbox height="100%">
-<tree id="tree" checkmark="true" width="400px" height="100%">
+<zk>
+<tree id="tree" width="400px">
 	<treecols>
 		<treecol label="Subject"/>
 		<treecol label="From"/>
 		<treecol label="Received"/>
 	</treecols>
 	<treechildren>
-		<treeitem>
+		<treeitem id="ti0" selected="true">
 			<treerow>
 				<treecell label="Intel Snares XML"/>
 				<treecell label="David Needle"/>
 				<treecell label="7-12-2005"/>
 			</treerow>
 			<treechildren>
-				<treeitem>
+				<treeitem id="ti01">
 					<treerow>
 						<treecell label="Intel Snares XML"/>
 						<treecell label="Ria Coen"/>
@@ -243,8 +242,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</treechildren>
 </tree>
 <vbox>
-	More info...
-	<button label="Toggle Item 4" onClick="item4.setOpen(!item4.isOpen())"/>
+<button label="Toggle checkmark" onClick="tree.checkmark = !tree.checkmark"/>
+<button label="Select 2nd" onClick="ti01.selected = true"/>
+<button label="Toggle Item 4" onClick="item4.setOpen(!item4.isOpen())"/>
 <button label="getItems" onClick="alert(&quot;&quot;+tree.getItems())"/>
 </vbox>
-</hbox>
+</zk>
