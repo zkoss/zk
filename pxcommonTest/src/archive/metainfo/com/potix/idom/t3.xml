@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<?pi-cmd pi-data?>
-
-<t1:book xmlns:t1="http://www.potix.com/client/t1" nsless="yes" t1:ns="no">
-	<t1:title t1:cat="novel">A few good men</t1:title>
-	<author>Tom</author>
-	<?inner-pi?>
-</t1:book>
