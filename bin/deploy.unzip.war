@@ -71,12 +71,18 @@ for f in $fls; do
 		if [ "$dstfn" = "$oldnm" ] ; then
 			dstfn="$newnm"
 		fi
-		if [ ! -f "$dstdir/$dstfn/WEB-INF/web.xml" ] || [ "$srcdir/$f" -nt "$dstdir/$dstfn/WEB-INF/web.xml" ] ; then
-			echo "Unzip $srcdir/$f to $dstfn"
+		srcfl=$srcdir/$f
+		if [ ! -f "$dstdir/$dstfn/WEB-INF/web.xml" ] || [ "$srcfl" -nt "$dstdir/$dstfn/WEB-INF/web.xml" ] ; then
+			echo "Unzip $srcfl to $dstfn"
 			(
 				mkdir -p "$dstdir/$dstfn"
 				cd "$dstdir/$dstfn"
-				jar xf "$srcdir/$f"
+				
+				#convert srcfl to window format
+				if [ "$TERM" = "cygwin" ] ; then
+					srcfl=$(cygpath -wa $srcfl)
+				fi
+				jar xf "$srcfl"
 			)
 		else
 			echo "Skip $srcdir/$f because it is not newer"
