@@ -48,14 +48,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO user values(?, ?)");
 			
 			//insert what end user entered into database table
-			stmt.set(1, name.value);
-			stmt.set(2, email.value);
+			stmt.setString(1, name.value);
+			stmt.setString(2, email.value);
 			
 			//execute the statement
 			stmt.executeUpdate();
 			
+			//commit
+			con.commit();
+			
 			//close the jdbc connection
 			con.close();
+			
 		*/
 		}
 	}</zscript>
