@@ -44,6 +44,11 @@ if [ ! -f "$jarfl" ] ; then
 	exit 1
 fi
 
+#convert jarfl to window format
+if [ "$TERM" = "cygwin" ] ; then
+	jarfl=$(cygpath -wa $jarfl)
+fi
+
 failed=false
 
 function zips
