@@ -25,7 +25,7 @@ if (!zk.build) {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-	zk.build = "1l"; //increase this if we want the browser to reload JavaScript
+	zk.build = "1m"; //increase this if we want the browser to reload JavaScript
 	zk.mods = {}; //ZkFns depends on it
 
 	/** Browser info. */
@@ -292,7 +292,7 @@ zk.cleanupAt = function (n, cufn) {
 	var type = zk.getCompType(n);
 	if (type) {
 		zk.eval(n, "cleanup", type);
-		if (cufn) cufn.apply(n, new Array(n));
+		if (cufn) cufn.apply(n, new Array(n)); //cleanup meta later
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)

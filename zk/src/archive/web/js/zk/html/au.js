@@ -31,6 +31,7 @@ if (!zkau._reqs) {
 	zkau._stamp = 0; //used to make a time stamp
 	zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
 	zkau.floats = new Array(); //popup of combobox, bandbox, datebox...
+	zkau._onsends = new Array(); //JS called before zkau._sendNow
 
 	zk.addInit(function () {
 		Event.observe(document, "keydown", zkau._onDocKeydown);
@@ -136,9 +137,16 @@ zkau.asapTimeout = function (cmp, evtnm) {
 	return cmp && cmp.getAttribute("zk_" + evtnm) == "true" ? 25: -1;
 };
 
-/** Processes the response.
+/** Adds a callback to be called before sending ZK request.
+ * @param func the function call
  */
-/** Sens a request to the client and queue it to zkau._reqs.
+zkau.addOnSend = function (func) {
+	zkau._onsends.push(func);
+};
+zkau.removeOnSend = function (func) {
+	zkau._onsends.remove(func);
+};
+/** Sends a request to the client and queue it to zkau._reqs.
  * @param timout milliseconds.
  * If negative, it won't be sent until next non-negative event
  * If zero, it is sent immediately.
@@ -148,6 +156,13 @@ zkau.send = function (evt, timeout) {
 	zkau._evts.push(evt);
 	if (!timeout) zkau._sendNow();
 	else if (timeout > 0) setTimeout(zkau._sendNow, timeout);
+};
+/** Sends a request before any pending events.
+ * Note: it doesn't cause any pending events (including evt) to be sent.
+ * It is designed to be called in zkau.onSend
+ */
+zkau.sendAhead = function (evt) {
+	zkau._evts.unshift(evt);
 };
 zkau._sendNow = function () {
 	if (!zk_action || !zk_desktopId) {
@@ -165,6 +180,16 @@ zkau._sendNow = function () {
 		}
 		return; //wait
 	}
+
+	//callback
+	for (var j = 0; j < zkau._onsends.length; ++j) {
+		try {
+			zkau._onsends[j].call(zkau._onsends[j]);
+		} catch (e) {
+			zk.error(e.message);
+		}
+	}
+
 	zkau._sendadded = false;
 
 	//FUTURE: Consider XML (Pros: ?, Cons: larger packet)
@@ -739,7 +764,7 @@ zkau._onDocUnload = function () {
 		}
 	}
 
-	if (zkau._oldDocUnload) zkau._oldDocUnload.apply();
+	if (zkau._oldDocUnload) zkau._oldDocUnload.apply(document);
 };
 /** Handle document.onmousedown. */
 zkau._onDocMousedown = function (evt) {
