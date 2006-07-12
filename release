@@ -1,0 +1,187 @@
+#!/bin/bash
+# release
+#
+#{{IS_NOTE
+#	Purpose:
+#		
+#	Description:
+#		
+#	History:
+#		Mon Nov 14 14:29:09     2005, Created by tomyeh@potix.com
+#}}IS_NOTE
+#
+#Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#}}IS_RIGHT
+#
+stamp=$(date +%Y-%m-%d)
+
+target=$1
+
+javadocdir=$(grep '^javadoc' build.setting.local)
+javadocdir=${javadocdir#javadoc=}
+if [ "$javadocdir" = "" ] ; then
+	echo javadoc must be specified in $setting
+	exit 1
+fi
+javadocdir=${javadocdir/\~/$HOME}
+
+#jar
+if [ "$target" == "official" ] ; then
+	majorver=$(grep '^version=' build.setting.local)
+	majorver=${majorver#version=}
+	subver=$(grep '^sub-version=' build.setting.local)
+	subver=${subver#sub-version=}
+	if [ "$subver" = "" ] ; then
+		ver=${majorver}
+	else
+		ver=${majorver}-${subver}
+	fi
+
+	prjnm=zk-$ver
+	demonm=zk-demo-$ver
+	javadocnm=zk-javadoc-$ver
+	srcnm=zk-src-$ver
+	echo "Release $prjnm..."
+elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
+	target=daily
+	majorver=$(grep '^version=' build.setting.local)
+	majorver=${majorver#version=}
+	ver=$majorver
+
+	prjnm=zk-$ver-$stamp
+	javadocnm=zk-javadoc-$ver-$stamp
+	srcnm=zk-src-$ver-$stamp
+	echo "Release $prjnm..."
+else
+	echo "Usage: release [ official | daily ]"
+	echo Default: daily
+	exit 1
+fi
+
+rm -rf /tmp/zk
+
+#build *-all.war *-all.ear
+if [ "$target" == "official" ]  ; then
+	rm -rf dist/lib/zkdemo*.war dist/lib/zkdemos*.ear
+	cp -f zkdemo/war.libs.all zkdemo/war.libs
+	./build clean zkdemo zkdemos
+	./build zkdemo zkdemos
+
+	mv dist/lib/zkdemo.war dist/lib/zkdemo-all.war
+	mv dist/lib/zkdemos.ear dist/lib/zkdemos-all.ear
+
+	cp -f zkdemo/war.libs.minimal zkdemo/war.libs
+	./build clean zkdemo zkdemos
+	./build zkdemo zkdemos
+fi
+
+#Prepare the binary release
+if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+	mkdir -p /tmp/zk/$prjnm/dist/lib/ext
+	mkdir -p /tmp/zk/$prjnm/dist/lib/zkforge
+	mkdir -p /tmp/zk/$prjnm/dist/WEB-INF
+	mkdir -p /tmp/zk/$prjnm/doc
+	mkdir -p /tmp/zk/$prjnm/demo/bin
+	mkdir -p /tmp/zk/$prjnm/demo/src/zkdemo/WebContent
+	mkdir -p /tmp/zk/$prjnm/demo/src/zkdemo/src/com
+	mkdir -p /tmp/zk/$prjnm/demo/src/MyApp/WebContent
+
+	cd $HOME/prj/zk1
+	cp dist/lib/ext/bsh.jar /tmp/zk/$prjnm/dist/lib/ext
+	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-el.jar /tmp/zk/$prjnm/dist/lib/ext
+
+	cp dist/lib/pxcommon.jar dist/lib/pxweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$prjnm/dist/lib/
+	cp dist/lib/fckez.jar dist/lib/dojoz.jar /tmp/zk/$prjnm/dist/lib/zkforge
+
+	cp -rp dist/export/WEB-INF/* /tmp/zk/$prjnm/dist/WEB-INF
+	cp zkdoc/ZK-dev*.pdf zkdoc/ZK-quickstart.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$prjnm/doc
+
+	cp -rp zkdemo/src/archive/* /tmp/zk/$prjnm/demo/src/zkdemo/WebContent
+	cp -rp zkdemo/src/com/* /tmp/zk/$prjnm/demo/src/zkdemo/src/com
+	cp -rp MyApp/src/archive/* /tmp/zk/$prjnm/demo/src/MyApp/WebContent
+
+	cp -rp dist/lib/zkdemos.ear dist/lib/zkdemo.war /tmp/zk/$prjnm/demo/bin
+
+	cd /tmp/zk
+	rm -rf /tmp/zk/$prjnm/demo/src/*/codegen /tmp/zk/$prjnm/demo/src/*/debug
+	find -name CVS | xargs rm -rf
+	find -name .svn | xargs rm -rf
+
+	echo Output ${prjnm}.tar.gz
+	tar zcf ${prjnm}.tar.gz $prjnm
+
+	echo Output ${prjnm}.zip
+	zip -qr9 ${prjnm}.zip $prjnm
+	rm -rf $prjnm
+
+	#Prepare the java doc
+	cd $javadocdir
+
+	echo Output ${javadocnm}.zip
+	zip -qr9 ${javadocnm}.zip pxcommon pxweb zk zul zhtml zkplus
+	mv ${javadocnm}.zip /tmp/zk
+fi
+if [ "$target" == "official" ] ; then
+	mkdir -p /tmp/zk/$demonm
+
+	cd $HOME/prj/zk1
+	mv dist/lib/zkdemos-all.ear dist/lib/zkdemo-all.war /tmp/zk/$demonm
+	cp -rp dist/lib/zkdemos.ear dist/lib/zkdemo.war /tmp/zk/$demonm
+	cd /tmp/zk
+	echo Ouput ${demonm}.zip
+	zip -qr9 ${demonm}.zip $demonm
+	rm -rf $demonm
+fi
+
+#Prepare the source codes
+if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+	mkdir -p /tmp/zk/$srcnm/dist/lib/ext
+	mkdir -p /tmp/zk/$srcnm/bin
+	mkdir -p /tmp/zk/$srcnm/doc
+
+	cd $HOME/prj/zk1
+	cp bin/* /tmp/zk/$srcnm/bin
+	cp build* /tmp/zk/$srcnm
+	cp -rp bin /tmp/zk/$srcnm
+	cp -rp pxcommon /tmp/zk/$srcnm
+	cp -rp pxweb /tmp/zk/$srcnm
+	cp -rp zk /tmp/zk/$srcnm
+	cp -rp zul /tmp/zk/$srcnm
+	cp -rp zhtml /tmp/zk/$srcnm
+	cp -rp zkplus /tmp/zk/$srcnm
+	cp zkdoc/COPYING zkdoc/release-note /tmp/zk/$srcnm/doc
+	cp dist/lib/pxcommon.jar dist/lib/pxweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
+	cp dist/lib/ext/* /tmp/zk/$srcnm/dist/lib/ext
+	rm -f /tmp/zk/$srcnm/dist/lib/ext/pluto.jar
+
+	cd /tmp/zk/$srcnm
+	rm -rf pxcommon/debug pxweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
+	find -name CVS | xargs rm -rf
+	find -name .svn | xargs rm -rf
+
+	cd /tmp/zk
+	echo Output ${srcnm}.tar.gz
+	tar zcf ${srcnm}.tar.gz $srcnm
+	rm -rf $srcnm
+fi
+
+#Prepare the doc
+if [ "$target" == "official" ]; then
+	mkdir -p /tmp/zk/doc
+
+	cd $HOME/prj/zk1/zkdoc
+	for f in *.pdf ; do 
+		cp $f /tmp/zk/doc/${f%.pdf}-$ver.pdf
+	done
+fi
+
+#if [ "$target" == "official" ] ; then
+#	echo "Add the tag, $prjnm, to cvs..."
+#	tagnm=${prjnm//./_}
+#	tagnm=${tagnm//:/_}
+#	tagnm=${tagnm//@/_}
+#	cd $HOME/prj/zk1
+#	xc rtag "$tagnm" pxcommon pxweb zk zhtml zul zkplus
+#fi
