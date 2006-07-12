@@ -1,13 +1,20 @@
 	--------
 ZK 2.1.0
-* Features
+* Features:
+
+* Bugs:
+  1520737, 1510539
+
+	--------
+ZK 2.1.0 RC
+* Features:
   1513892, 1475475, 1517902, 1517384, 1518636.
   + Safari supported.
   + Components are serializable.
   + Session, Desktop and Page are serializable. Use can keep using the same
     desktop even after the Web server is re-booted.
 
-* Bugs
+* Bugs:
   1513895, 1514932, 1515175, 1515311, 1514789, 1493440, 1517037, 1436397,
   1505786, 1518540, 1453157, 1510701.
 
