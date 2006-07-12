@@ -26,8 +26,8 @@ import java.util.TimeZone;
 public class TimeZones {
 	private static final
 		InheritableThreadLocal _thdTZone = new InheritableThreadLocal();
-	/** Returns the current locale; never null.
-	 * This is the locale that every other objects shall use,
+	/** Returns the current time zone; never null.
+	 * This is the time zone that every other objects shall use,
 	 * unless they have special consideration.
 	 *
 	 * <p>Default: If {@link #setThreadLocal} was called with non-null,
@@ -40,8 +40,8 @@ public class TimeZones {
 	/**
 	 * Sets the time-zone for the current thread only.
 	 *
-	 * <p>Each thread could have an independent locale, called
-	 * the thread locale.
+	 * <p>Each thread could have an independent time zone, called
+	 * the thread time zone.
 	 *
 	 * <p>When Invoking this method under a thread that serves requests,
 	 * remember to clean up the setting upon completing each request.
@@ -53,12 +53,13 @@ public class TimeZones {
 	 *  TimeZones.setThreadLocal(old);
 	 *}</code></pre>
 	 *
-	 * @param locale the thread locale; null to denote no thread locale
-	 * @return the previous thread locale
+	 * @param timezone the thread time zone; null to denote no thread time zone
+	 * (and the system's timezone will be used instead)
+	 * @return the previous thread time zone, or null if no previous time zone
 	 */
-	public static final TimeZone setThreadLocal(TimeZone locale) {
+	public static final TimeZone setThreadLocal(TimeZone timezone) {
 		final TimeZone old = (TimeZone)_thdTZone.get();
-		_thdTZone.set(locale);
+		_thdTZone.set(timezone);
 		return old;
 	}
 }
