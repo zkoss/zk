@@ -21,6 +21,7 @@ package com.potix.zul.html;
 import java.io.IOException;
 
 import com.potix.zk.ui.Component;
+import com.potix.zk.ui.HtmlBasedComponent;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 
@@ -89,9 +90,11 @@ public class Menubar extends XulElement {
 		if ("vertical".equals(getOrient())) {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<tr id=\"").append(child.getUuid()).append("!chdextr\"");
-			final String height = ((XulElement)child).getHeight();
-			if (height != null)
-				sb.append(" height=\"").append(height).append('"');
+			if (child instanceof HtmlBasedComponent) {
+				final String height = ((HtmlBasedComponent)child).getHeight();
+				if (height != null)
+					sb.append(" height=\"").append(height).append('"');
+			}
 			sb.append('>');
 			out.insert(0, sb);
 			out.append("</tr>");

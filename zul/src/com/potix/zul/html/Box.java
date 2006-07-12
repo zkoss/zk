@@ -24,6 +24,7 @@ import com.potix.lang.Objects;
 import com.potix.xml.HTMLs;
 
 import com.potix.zk.ui.Component;
+import com.potix.zk.ui.HtmlBasedComponent;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 
@@ -113,9 +114,11 @@ public class Box extends XulElement {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<td id=\"").append(child.getUuid())
 				.append("!chdextr\"");
-			final String width = ((XulElement)child).getWidth();
-			if (width != null)
-				sb.append(" width=\"").append(width).append('"');
+			if (child instanceof HtmlBasedComponent) {
+				final String width = ((HtmlBasedComponent)child).getWidth();
+				if (width != null)
+					sb.append(" width=\"").append(width).append('"');
+			}
 			sb.append(chdattrs).append('>');
 			out.insert(0, sb);
 			out.append("</td>");
