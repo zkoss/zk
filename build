@@ -393,6 +393,18 @@ function invoke_ant
 		zipjs=_na_dir_
 	fi
 
+	prjver="$(head -1 version)"
+	srcver=$(grep '^source=' version)
+	srcver=${srcver#source=}
+	if [ "$srcver" = "" ] ; then
+		srcver=1.4
+	fi
+	tgtver=$(grep '^target=' version)
+	tgtver=${srcver#target=}
+	if [ "$tgtver" = "" ] ; then
+		tgtver=1.4
+	fi
+
 	format="$(head -1 format)"
 	if [ "$format" = "cpp" ] ; then
 		if [ ! -d $outdir ] ; then
@@ -413,7 +425,8 @@ function invoke_ant
 		-Ddomain="$domain" -Djs.trim=$jstrim -Dzipjs=$zipjs\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
 		-Dear.libs="$ear_libs" -Dimport.libs="$import_libs" \
-		-Dproject.name="$2" -Dproject.version="$(head -1 version)" \
+		-Dproject.name="$2" -Dproject.version="$prjver" \
+		-Dsource.version="$srcver" -Dtarget.version="$tgtver" \
 		-Dhaltonerror=$haltonerror -Dout.dir=$outdir \
 		-Ddebug=$dflag -Doptimize=$oflag ${nojc} \
 		-Dshare.javadoc.dir="$javadocdir" \

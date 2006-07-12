@@ -31,7 +31,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 	<mkdir dir="${out.dir}"/>
 	<javac srcdir="${src.dir}:${codegen.dir}" destdir="${out.dir}"
 	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
-	 target="${target}" deprecation="${deprecation}" source="${source.version}"/>
+	 target="${target.version}" deprecation="${deprecation}" source="${source.version}"/>
 </target>
 
 <!-- ====== -->
