@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.potix.util.logging.Log;
+import com.potix.web.servlet.Charsets;
 import com.potix.web.servlet.GenericFilter;
 import com.potix.web.servlet.BufferedResponse;
 
@@ -81,6 +82,7 @@ public class DHtmlLayoutFilter extends GenericFilter {
 		final WebManager webman = WebManager.getWebManager(ctx);
 		final WebApp wapp = webman.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+		final Object old = Charsets.setup(request, response);
 		final Session sess = webman.getSession(ctx, request);
 		SessionsCtrl.setCurrent(sess);
 		try {
@@ -97,6 +99,7 @@ public class DHtmlLayoutFilter extends GenericFilter {
 				.execNewPage(exec, pagedef, page, response.getWriter());
 		} finally {
 			SessionsCtrl.setCurrent(null);
+			Charsets.cleanup(old);
 		}
 	}
 
