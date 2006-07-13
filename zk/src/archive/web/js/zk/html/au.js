@@ -184,7 +184,7 @@ zkau._sendNow = function () {
 	//callback
 	for (var j = 0; j < zkau._onsends.length; ++j) {
 		try {
-			zkau._onsends[j].call(zkau._onsends[j]);
+			zkau._onsends[j]();
 		} catch (e) {
 			zk.error(e.message);
 		}
@@ -208,8 +208,9 @@ zkau._sendNow = function () {
 			}
 	}
 
-	content += "&dtid="+zk_desktopId;
-	content = content.substring(1);
+	if (!content) return; //nothing to do
+
+	content = "dtid="+zk_desktopId + content;
 	var req;
 	if (window.ActiveXObject) { //IE
 		req = new ActiveXObject("Microsoft.XMLHTTP");
@@ -229,6 +230,10 @@ zkau._sendNow = function () {
 			//zkau._lastSend = new Date();
 			if (!implicit) zk.progress(900); //wait a moment to avoid annoying
 		} catch (e) {
+			try {
+				if(typeof req.abort == "function") req.abort();
+			} catch (e2) {
+			}
 			zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+"\n"+e.message);
 		}
 	} else {

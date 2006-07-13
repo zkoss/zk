@@ -25,7 +25,7 @@ if (!zk.build) {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-	zk.build = "1m"; //increase this if we want the browser to reload JavaScript
+	zk.build = "1n"; //increase this if we want the browser to reload JavaScript
 	zk.mods = {}; //ZkFns depends on it
 
 	/** Browser info. */
@@ -221,7 +221,7 @@ zk._loadAndInit = function (inf) {
 /** Initial components and init functions. */
 zk._evalInit = function () {
 	while (zk._initmods.length && !zk.loading)
-		(zk._initmods.shift()).apply();
+		(zk._initmods.shift())();
 
 	//Note: if loading, zk._doLoad will execute zk._evalInit after finish
 	for (var j = 0; zk._initcmps.length && !zk.loading;) {
@@ -246,7 +246,7 @@ zk._evalInit = function () {
 	}
 
 	while (zk._initfns.length && !zk.loading)
-		(zk._initfns.shift()).apply();
+		(zk._initfns.shift())();
 };
 /** Evaluate a method of the specified component.
  *
@@ -325,7 +325,7 @@ zk.loadJS = function (uri, fn) {
 	e.charset = "UTF-8";
 	if (fn)
 		e.onload = e.onreadystatechange = function() {
-			if (!e.readyState || e.readyState == 'loaded') fn.apply();
+			if (!e.readyState || e.readyState == 'loaded') fn();
 		};
 
 	if (uri.indexOf("://") < 0) {
