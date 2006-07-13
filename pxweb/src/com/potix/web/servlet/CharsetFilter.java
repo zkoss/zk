@@ -45,7 +45,7 @@ public class CharsetFilter extends GenericFilter {
 		try {
 			chain.doFilter(request, response);
 		} finally {
-			Charsets.cleanup(old);
+			Charsets.cleanup(request, old);
 		}
 	}
 }

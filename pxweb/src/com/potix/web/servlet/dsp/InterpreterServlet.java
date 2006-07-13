@@ -84,7 +84,7 @@ public class InterpreterServlet extends HttpServlet {
 			cnt.interpret(
 				new ServletDSPContext(_ctx, request, response, null));
 		} finally {
-			Charsets.cleanup(old);
+			Charsets.cleanup(request, old);
 		}
 	}
 	protected

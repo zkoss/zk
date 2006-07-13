@@ -122,7 +122,7 @@ public class ClassWebResource {
 			if (pi != null)
 				web(request, response, pi.substring(PATH_PREFIX.length()));
 		} finally {
-			Charsets.cleanup(old);
+			Charsets.cleanup(request, old);
 		}
 	}
 	//-- Work with ClassWebContext --//

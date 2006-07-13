@@ -40,6 +40,7 @@ import com.potix.web.Attributes;
  */
 public class Charsets {
 	private static final Log log = Log.lookup(Charsets.class);
+	private static final String ATTR_SETUP = "com.potix.web.charset.setup";
 
 	private static final String _uriCharset, _respCharset;
 	static {
@@ -102,8 +103,7 @@ public class Charsets {
 		//because Realm.authenticate is called before any filter
 		//Authens.isAuthenticated(request);
 
-		final String ATTR = "com.potix.web.charset.setup";
-		if (request.getAttribute(ATTR) != null) //processed before?
+		if (hasSetup(request)) //processed before?
 			return Objects.UNKNOWN;
 
 		final Locale locale = getPreferredLocale(request);
@@ -121,7 +121,7 @@ public class Charsets {
 			}
 		}
 
-		request.setAttribute(ATTR, Boolean.TRUE); //mark as processed
+		markSetup(request, true);
 		return Locales.setThreadLocal(locale);
 	}
 	/** Cleans up what has been set in {@link #setup}.
@@ -131,9 +131,30 @@ public class Charsets {
 	 * @param old the value must be the one returned by the last call to
 	 * {@link #setup}.
 	 */
-	public static final void cleanup(Object old) {
-		if (old != Objects.UNKNOWN)
+	public static final void cleanup(ServletRequest request, Object old) {
+		if (old != Objects.UNKNOWN) {
 			Locales.setThreadLocal((Locale)old);
+			markSetup(request, false);
+		}
+	}
+	/** Returns whether the specified request has been set up, i.e.,
+	 * {@link #setup} is called
+	 *
+	 * <p>It is rarely needed to call this method, because it is called
+	 * automatically by {@link #setup}.
+	 */
+	public static final boolean hasSetup(ServletRequest request) {
+		return request.getAttribute(ATTR_SETUP) != null; //processed before?
+	}
+	/** Marks the specified request whether it has been set up, i.e.,
+	 * {@link #setup} is called.
+	 *
+	 * <p>It is rarely needed to call this method, because it is called
+	 * automatically by {@link #setup}.
+	 */
+	public static final void markSetup(ServletRequest request, boolean setup) {
+		if (setup) request.setAttribute(ATTR_SETUP, Boolean.TRUE);
+		else request.removeAttribute(ATTR_SETUP);
 	}
 
 	/** Returns the preferred locale of the specified request.
