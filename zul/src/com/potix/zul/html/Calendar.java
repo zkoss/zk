@@ -17,12 +17,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package com.potix.zul.html;
 
 import java.util.Date;
+import java.util.TimeZone;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 import com.potix.util.Dates;
 import com.potix.util.Locales;
+import com.potix.util.TimeZones;
 import com.potix.xml.HTMLs;
 
 import com.potix.zk.ui.ext.Inputable;
@@ -37,6 +39,7 @@ import com.potix.zul.html.impl.XulElement;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Calendar extends XulElement implements Inputable {
+	private TimeZone _tzone;
 	private Date _value;
 	private boolean _compact;
 
@@ -49,6 +52,21 @@ public class Calendar extends XulElement implements Inputable {
 		setSclass("calendar");
 		_value = value != null ? value: Dates.today();
 		_compact = "zh".equals(Locales.getCurrent().getLanguage());
+	}
+
+	/** Returns the time zone that this date box belongs to, or null if
+	 * the default time zone is used.
+	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 */
+	public TimeZone getTimeZone() {
+		return _tzone;
+	}
+	/** Sets the time zone that this date box belongs to, or null if
+	 * the default time zone is used.
+	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 */
+	public void setTimeZone(TimeZone tzone) {
+		_tzone = tzone;
 	}
 
 	/** Returns the value that is assigned to this component, never null.
@@ -67,8 +85,12 @@ public class Calendar extends XulElement implements Inputable {
 		}
 	}
 
-	private static final DateFormat getDateFormat() {
-		return new SimpleDateFormat("yyyy/MM/dd", Locales.getCurrent());
+	private final DateFormat getDateFormat() {
+		final DateFormat df =
+			new SimpleDateFormat("yyyy/MM/dd", Locales.getCurrent());
+		final TimeZone tz = _tzone != null ? _tzone: TimeZones.getCurrent();
+		df.setTimeZone(tz);
+		return df;
 	}
 
 	/** Returns whether to use a compact layout.

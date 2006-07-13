@@ -52,6 +52,7 @@ import com.potix.zul.html.impl.FormatInputElement;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Datebox extends FormatInputElement {
+	private TimeZone _tzone;
 	private boolean _lenient = true;
 	private boolean _compact;
 
@@ -142,6 +143,21 @@ public class Datebox extends FormatInputElement {
 		super.setFormat(format);
 	}
 
+	/** Returns the time zone that this date box belongs to, or null if
+	 * the default time zone is used.
+	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 */
+	public TimeZone getTimeZone() {
+		return _tzone;
+	}
+	/** Sets the time zone that this date box belongs to, or null if
+	 * the default time zone is used.
+	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 */
+	public void setTimeZone(TimeZone tzone) {
+		_tzone = tzone;
+	}
+
 	//-- super --//
 	protected Object coerceFromString(String value) throws WrongValueException {
 		if (value == null || value.length() == 0)
@@ -177,7 +193,7 @@ public class Datebox extends FormatInputElement {
 	 */
 	protected DateFormat getDateFormat(String fmt) {
 		final DateFormat df = new SimpleDateFormat(fmt, Locales.getCurrent());
-		final TimeZone tz = TimeZones.getCurrent();
+		final TimeZone tz = _tzone != null ? _tzone: TimeZones.getCurrent();
 		df.setTimeZone(tz);
 		return df;
 	}
