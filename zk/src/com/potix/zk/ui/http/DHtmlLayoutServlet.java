@@ -35,7 +35,6 @@ import com.potix.lang.D;
 import com.potix.util.logging.Log;
 
 import com.potix.web.Attributes;
-import com.potix.web.servlet.Charsets;
 import com.potix.web.servlet.Servlets;
 import com.potix.web.servlet.http.Https;
 
@@ -47,7 +46,6 @@ import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.sys.UiFactory;
 import com.potix.zk.ui.sys.RequestInfo;
-import com.potix.zk.ui.sys.SessionsCtrl;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.impl.RequestInfoImpl;
 
@@ -98,14 +96,12 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	protected
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		final Object old = Charsets.setup(request, response);
 		final Session sess = WebManager.getSession(getServletContext(), request);
-		SessionsCtrl.setCurrent(sess);
+		final Object old = I18Ns.setup(sess, request, response);
 		try {
 			process(sess, request, response);
 		} finally {
-			SessionsCtrl.setCurrent(null);
-			Charsets.cleanup(old);
+			I18Ns.cleanup(request, old);
 		}
 	}
 	protected
