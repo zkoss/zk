@@ -24,7 +24,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <input type="button" id="${self.uuid}" zk_type="zul.html.widget.Button" value="${self.label}"${self.outerAttrs}${self.innerAttrs}/>
 </c:when>
 <c:otherwise>
-<button id="${self.uuid}" zk_type="zul.html.widget.Button"${self.outerAttrs}${self.innerAttrs}>
+<button type="button" id="${self.uuid}" zk_type="zul.html.widget.Button"${self.outerAttrs}${self.innerAttrs}>
 <c:choose>
 <c:when test="${self.dir == 'reverse'}">
 	<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}
