@@ -22,12 +22,14 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.lang.reflect.Method;
 
 import com.potix.lang.D;
 import com.potix.lang.Threads;
 import com.potix.lang.Exceptions;
 import com.potix.util.Locales;
+import com.potix.util.TimeZones;
 import com.potix.util.logging.Log;
 
 import com.potix.zk.ui.Execution;
@@ -64,6 +66,8 @@ public class EventProcessingThread extends Thread {
 	private List _evtThdInits;
 	/** Part of the command: locale. */
 	private Locale _locale;
+	/** Part of the command: time zone. */
+	private TimeZone _timeZone;
 	/** Result of the command. */
 	private Throwable _ex;
 
@@ -259,6 +263,7 @@ public class EventProcessingThread extends Thread {
 		_desktop = _comp.getDesktop();
 		_evtThdInits = evtThdInits;
 		_locale = Locales.getCurrent();
+		_timeZone = TimeZones.getCurrent();
 		_ex = null;
 	}
 	/** Setup for execution. */
@@ -303,6 +308,7 @@ public class EventProcessingThread extends Thread {
 						_evtThdInits = null;
 
 						Locales.setThreadLocal(_locale);
+						TimeZones.setThreadLocal(_timeZone);
 						setup();
 						process0();
 					} catch (Throwable ex) {
@@ -313,6 +319,7 @@ public class EventProcessingThread extends Thread {
 						ExecutionsCtrl.setCurrent(null);
 						SessionsCtrl.setCurrent(null);
 						Locales.setThreadLocal(_locale = null);
+						TimeZones.setThreadLocal(_timeZone = null);
 						if (D.ON && log.finerable()) log.finer("Real processing is done; "+_event);
 					}
 				}

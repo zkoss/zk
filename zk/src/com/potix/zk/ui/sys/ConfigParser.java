@@ -33,6 +33,8 @@ import com.potix.idom.util.IDOMs;
 import com.potix.zk.ui.sys.UiEngine;
 import com.potix.zk.ui.sys.DesktopCacheProvider;
 import com.potix.zk.ui.sys.UiFactory;
+import com.potix.zk.ui.sys.LocaleProvider;
+import com.potix.zk.ui.sys.TimeZoneProvider;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.metainfo.DefinitionLoaders;
@@ -123,6 +125,12 @@ public class ConfigParser {
 
 				cls = parseClass(el, "engine-class", UiEngine.class);
 				if (cls != null) config.setUiEngineClass(cls);
+
+				cls = parseClass(el, "locale-provider-class", LocaleProvider.class);
+				if (cls != null) config.setLocaleProviderClass(cls);
+
+				cls = parseClass(el, "timeZone-provider-class", TimeZoneProvider.class);
+				if (cls != null) config.setTimeZoneProviderClass(cls);
 			} else if ("el-config".equals(elnm)) {
 			//el-config
 			//	evaluator-class

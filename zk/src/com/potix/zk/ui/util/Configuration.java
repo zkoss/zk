@@ -39,6 +39,8 @@ import com.potix.zk.ui.util.SessionInit;
 import com.potix.zk.ui.util.SessionCleanup;
 import com.potix.zk.ui.sys.UiEngine;
 import com.potix.zk.ui.sys.DesktopCacheProvider;
+import com.potix.zk.ui.sys.LocaleProvider;
+import com.potix.zk.ui.sys.TimeZoneProvider;
 import com.potix.zk.ui.sys.UiFactory;
 
 /**
@@ -61,7 +63,7 @@ public class Configuration {
 	private Monitor _monitor;
 	private String _timeoutUri;
 	private String _themeUri;
-	private Class _uiengcls, _dcpcls, _uiftycls;
+	private Class _uiengcls, _dcpcls, _uiftycls, _tzpcls, _lpcls;
 	private Integer _dtTimeout, _dtMax, _sessTimeout, _evtThdMax;
 
 	/** Adds a listener class.
@@ -495,6 +497,33 @@ public class Configuration {
 		return _timeoutUri;
 	}
 
+	/** Sets the class for implementing {@link LocaleProvider}, or null to
+	 * use the default.
+	 */
+	public void setLocaleProviderClass(Class cls) {
+		if (cls != null && !LocaleProvider.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("LocaleProvider not implemented: "+cls);
+		_lpcls = cls;
+	}
+	/** Returns the class for implementing {@link LocaleProvider}, or null for default.
+	 */
+	public Class getLocaleProviderClass() {
+		return _lpcls;
+	}
+	/** Sets the class for implementing {@link TimeZoneProvider}, or null to
+	 * use the default.
+	 */
+	public void setTimeZoneProviderClass(Class cls) {
+		if (cls != null && !TimeZoneProvider.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("TimeZoneProvider not implemented: "+cls);
+		_tzpcls = cls;
+	}
+	/** Returns the class for implementing {@link TimeZoneProvider}, or null for default.
+	 */
+	public Class getTimeZoneProviderClass() {
+		return _tzpcls;
+	}
+
 	/** Sets the class for implementing {@link UiEngine}, or null to
 	 * use the default.
 	 */
@@ -503,7 +532,7 @@ public class Configuration {
 			throw new IllegalArgumentException("UiEngine not implemented: "+cls);
 		_uiengcls = cls;
 	}
-	/** Returns the class for implementing the UI engine, or null for default.
+	/** Returns the class for implementing {@link UiEngine}, or null for default.
 	 */
 	public Class getUiEngineClass() {
 		return _uiengcls;
