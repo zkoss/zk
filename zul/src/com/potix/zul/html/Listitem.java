@@ -272,6 +272,9 @@ public class Listitem extends XulElement {
 			}
 			if (isSelected())
 				HTMLs.appendAttribute(sb, "zk_sel", "true");
+
+			final String clkattrs = getAllOnClickAttrs(false);
+			if (clkattrs != null) sb.append(clkattrs);
 		}
 		return sb.toString();
 	}
