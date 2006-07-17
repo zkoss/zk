@@ -9,3 +9,5 @@ portlet-api.jar
 jasper-compiler.jar
 pluto.jar
 custom_rhino.jar
+jfreechart.jar
+jcommon.jar
