@@ -42,9 +42,29 @@ implements PostCreate, IdSpace, DynamicPropertied {
 	}
 
 	//-- PostCreate --//
+	/** Creates the child components after apply dynamic properties
+	 * {@link #setDynamicProperty}.
+	 *
+	 * <p>If a macro component is created by ZK loader, this method is invoked
+	 * automatically. Developers need to invoke this method only if they create
+	 * a macro component manually.
+	 */
 	public void postCreate() {
 		getDesktop().getExecution().createComponents(
 			getMillieu().getMacroURI(this), this, _props);
+	}
+	/** Detaches all child components and then recreate them by use of 
+	 * {@link #postCreate}.
+	 *
+	 * <p>It is used if you have assigned new values to dynamical properties
+	 * and want to re-create child components to reflect the new values.
+	 * Note: it is convenient but the performance is better if you can manipulate
+	 * only the child components that need to be changed.
+	 * Refer to the Developer's Guide for details.
+	 */
+	public void recreate() {
+		getChildren().clear();
+		postCreate();
 	}
 
 	//Cloneable//

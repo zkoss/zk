@@ -465,4 +465,20 @@ public interface Execution extends Evaluator {
 	 * in the same execution with the same key will override the previous one.
 	 */
 	public void addAuResponse(String key, AuResponse resposne);
+
+	/** Returns whether the client is a browser.
+	 */
+	public boolean isBrowser();
+	/** Returns whether the client is Internet Explorer.
+	 */
+	public boolean isExplorer();
+	/** Returns whether the client is Internet Explorer 7 or later.
+	 */
+	public boolean isExplorer7();
+	/** Returns whether the client is Gecko based, such as Mozilla, Firefox and Camino.
+	 */
+	public boolean isGecko();
+	/** Returns whether the client is Safari.
+	 */
+	public boolean isSafari();
 }

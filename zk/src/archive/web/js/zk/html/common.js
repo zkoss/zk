@@ -602,7 +602,7 @@ if (zk.ie) {
 			|| html.indexOf('<') >= 0) {
 				el.innerHTML = html;
 			} else {
-			//20060331: IE bug: innerHTML ignores \n (even white-space:pre)
+			//Bug 1455584: IE bug: innerHTML ignores \n (even white-space:pre)
 			//To workaround, we have to use innerText but innerText
 			//won't handle &xx;, so...
 				var j = html.indexOf('&');

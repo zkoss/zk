@@ -79,13 +79,13 @@ public class AuRequest {
 	/** The onDoubleClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
 	 */
 	public static final Command ON_DOUBLE_CLICK = new MouseCommand("onDoubleClick", true);
-	/** The onOK event (used with {@link com.potix.zk.ui.event.Event}).
+	/** The onOK event (used with {@link com.potix.zk.ui.event.KeyEvent}).
 	 */
 	public static final Command ON_OK = new KeyCommand("onOK", true);
-	/** The onCancel event (used with {@link com.potix.zk.ui.event.Event}).
+	/** The onCancel event (used with {@link com.potix.zk.ui.event.KeyEvent}).
 	 */
 	public static final Command ON_CANCEL = new KeyCommand("onCancel", true);
-	/** The onCtrlKey event (used with {@link com.potix.zk.ui.event.Event}).
+	/** The onCtrlKey event (used with {@link com.potix.zk.ui.event.KeyEvent}).
 	 */
 	public static final Command ON_CTRL_KEY = new KeyCommand("onCtrlKey", true);
 	/** The onChange event (used with {@link com.potix.zk.ui.event.InputEvent}).

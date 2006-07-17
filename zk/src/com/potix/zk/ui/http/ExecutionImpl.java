@@ -209,4 +209,20 @@ public class ExecutionImpl extends AbstractExecution {
 	public void setRequestAttribute(String name, Object value) {
 		_request.setAttribute(name, value);
 	}
+
+	public boolean isBrowser() {
+		return true;
+	}
+	public boolean isExplorer() {
+		return Servlets.isExplorer(_request);
+	}
+	public boolean isExplorer7() {
+		return Servlets.isExplorer7(_request);
+	}
+	public boolean isGecko() {
+		return Servlets.isGecko(_request);
+	}
+	public boolean isSafari() {
+		return Servlets.isSafari(_request);
+	}
 }

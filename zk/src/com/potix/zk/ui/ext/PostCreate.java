@@ -31,6 +31,11 @@ package com.potix.zk.ui.ext;
  */
 public interface PostCreate {
 	/** Invokes after ZK loader applies all properties.
+	 * Its meaning depends on the implementation class.
 	 */
 	public void postCreate();
+	/** Clean and invoke {@link #postCreate} again.
+	 * Its meaning depends on the implementation class.
+	 */
+	public void recreate();
 }

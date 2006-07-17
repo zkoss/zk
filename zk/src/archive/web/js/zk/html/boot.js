@@ -25,7 +25,7 @@ if (!zk.build) {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-	zk.build = "1n"; //increase this if we want the browser to reload JavaScript
+	zk.build = "1p"; //increase this if we want the browser to reload JavaScript
 	zk.mods = {}; //ZkFns depends on it
 
 	/** Browser info. */
@@ -230,7 +230,8 @@ zk._evalInit = function () {
 			var n = cmps.pop(); //reverse-order: child first
 			if (!n) break;
 
-			zk.eval(n, "init");
+			var m = zk.eval(n, "init");
+			if (m) n = m; //it might be transformed
 
 			if (n.getAttribute("zid")) zkau.initzid(n);
 			if (n.getAttribute("zk_drag")) zkau.initdrag(n);

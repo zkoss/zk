@@ -519,7 +519,7 @@ zkau.rmAttr = function (cmp, name) {
 				return;
 			}
 			cmp.style[name.substring(j + 1)] = "";
-		} else if (cmp.hasAttribute(name)) {
+		} else if (!cmp.hasAttriute || cmp.hasAttribute(name)) {
 			cmp.setAttribute(name, "");
 		}
 	}
@@ -1194,9 +1194,21 @@ zkau.initdrag = function (n) {
 		endeffect: zkau._enddrag, change: zkau._dragging,
 		ghosting: zkau._ghostdrag
 	});
+	if (zk.ie) {
+		var tn = zk.tagName(n);
+		var nosel;
+		if (tn == "INPUT") {
+			var t = n.type.toLowerCase();
+			nosel = t != "text" && t != "password";
+		} else {
+			nosel = tn != "TEXTAREA";
+		}
+		if (nosel) n.onselectstart = function () {return false;}
+	}
 };
 zkau.cleandrag = function (n) {
 	if (zkau._drags[n.id]) {
+		n.onselectstart = null;
 		zkau._drags[n.id].destroy();
 		zkau._drags[n.id] = null;
 	}
