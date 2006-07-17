@@ -40,7 +40,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	/** The popup ID that will be shown when click. */
 	private String _popup;
 	/** The context ID that will be shown when right-click. */
-	private String _ctxmnu;
+	private String _ctx;
 	/** The tooltip ID that will be shown when mouse-over. */
 	private String _tooltip;
 	/** The action. */
@@ -54,7 +54,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * <p>Default: null (no context menu).
 	 */
 	public String getContext() {
-		return _ctxmnu;
+		return _ctx;
 	}
 	/** Sets the ID of {@link com.potix.zul.html.Popup} that should appear
 	 * when the user right-clicks on the element (aka., context menu).
@@ -65,9 +65,9 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * event.
 	 */
 	public void setContext(String context) {
-		if (!Objects.equals(_ctxmnu, context)) {
-			_ctxmnu = context;
-			smartUpdate("zk_ctx", _ctxmnu);
+		if (!Objects.equals(_ctx, context)) {
+			_ctx = context;
+			smartUpdate("zk_ctx", _ctx);
 		}
 	}
 	/** Returns the ID of {@link com.potix.zul.html.Popup} that should appear
@@ -278,13 +278,15 @@ abstract public class XulElement extends HtmlBasedComponent {
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		if (_ctxmnu == null &&  _tooltip == null && _popup == null)
+		final String ctx = getContext(), popup = getPopup(), tip = getTooltip();
+			//Let derives (e.g., treerow has a chance to override it)
+		if (ctx == null &&  tip == null && popup == null)
 			return attrs;
 
 		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		HTMLs.appendAttribute(sb, "zk_ctx", _ctxmnu);
-		HTMLs.appendAttribute(sb, "zk_pop", _popup);
-		HTMLs.appendAttribute(sb, "zk_tip", _tooltip);
+		HTMLs.appendAttribute(sb, "zk_ctx", ctx);
+		HTMLs.appendAttribute(sb, "zk_pop", popup);
+		HTMLs.appendAttribute(sb, "zk_tip", tip);
 		return sb.toString();
 	}
 

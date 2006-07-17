@@ -67,6 +67,43 @@ public class Treerow extends XulElement {
 		return ti != null && ti.isSelected() ? scls + "sel": scls;
 	}
 
+	/** Alwasys throws UnsupportedOperationException since developers shall
+	 * use {@link Treeitem#setContext} instead.
+	 */
+	public void setContext(String context) {
+		throw new UnsupportedOperationException("Use treeitem instead");
+	}
+	/** Alwasys throws UnsupportedOperationException since developers shall
+	 * use {@link Treeitem#setPopup} instead.
+	 */
+	public void setPopup(String popup) {
+		throw new UnsupportedOperationException("Use treeitem instead");
+	}
+	/** Alwasys throws UnsupportedOperationException since developers shall
+	 * use {@link Treeitem#setTooltip} instead.
+	 */
+	public void setTooltip(String tooltip) {
+		throw new UnsupportedOperationException("Use treeitem instead");
+	}
+	/** Returns the same as {@link Treeitem#getContext}.
+	 */
+	public String getContext() {
+		final Treeitem ti = getTreeitem();
+		return ti != null ? ti.getContext(): null;
+	}
+	/** Returns the same as {@link Treeitem#getPopup}.
+	 */
+	public String getPopup() {
+		final Treeitem ti = getTreeitem();
+		return ti != null ? ti.getPopup(): null;
+	}
+	/** Returns the same as {@link Treeitem#getTooltip}.
+	 */
+	public String getTooltip() {
+		final Treeitem ti = getTreeitem();
+		return ti != null ? ti.getTooltip(): null;
+	}
+
 	protected boolean isAsapRequired(String evtnm) {
 		if (!"onOpen".equals(evtnm))
 			return super.isAsapRequired(evtnm);
@@ -77,12 +114,11 @@ public class Treerow extends XulElement {
 	 * (name="val"); Used only by component developers.
 	 */
 	public String getOuterAttrs() {
+		final String attrs = super.getOuterAttrs();
 		final Treeitem item = getTreeitem();
-		if (item == null)
-			return super.getOuterAttrs();
+		if (item == null) return attrs;
 
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
+		final StringBuffer sb = new StringBuffer(80).append(attrs);
 		final Treeitem ptitem = item.getTreeitem();
 
 		final Tree tree = getTree();
@@ -100,6 +136,9 @@ public class Treerow extends XulElement {
 			sb.append(" zk_focus=\"true\"");
 		if (isAsapRequired("onOpen"))
 			sb.append(" zk_onOpen=\"true\"");
+
+		final String clkattrs = item.getAllOnClickAttrs(false);
+		if (clkattrs != null) sb.append(clkattrs);
 		return sb.toString();
 	}
 

@@ -36,8 +36,9 @@ import com.potix.zul.html.impl.XulElement;
  *
  * <p>Event:
  * <ol>
- * <li>com.potix.zk.ui.event.OpenEvent is sent when a tree item is
- * opened or closed by user.</li>
+ * <li>onOpen is sent when a tree item is opened or closed by user.</li>
+ * <li>onDoubleClick is sent when user double-clicks the treeitem.</li>
+ * <li>onRightClick is sent when user right-clicks the treeitem.</li>
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
@@ -253,6 +254,20 @@ public class Treeitem extends XulElement implements Openable {
 	}
 
 	//-- super --//
+
+	/** Returns the attributes for onClick, onRightClick and onDoubleClick
+	 * by checking whether the corresponding listeners are added,
+	 * or null if none is added.
+	 *
+	 * <p>Implementation Note: it is declared here to make it accessible by
+	 * {@link Treerow}.
+	 *
+	 * @param ignoreOnClick whether to ignore onClick
+	 */
+	protected String getAllOnClickAttrs(boolean ignoreOnClick) {
+		return super.getAllOnClickAttrs(ignoreOnClick);
+	}
+
 	//this is declared to make it accessible to Treeitem 
 	protected boolean isAsapRequired(String evtnm) {
 		return super.isAsapRequired(evtnm);
@@ -274,6 +289,14 @@ public class Treeitem extends XulElement implements Openable {
 		if (ret && asap && !isAsapRequired(evtnm))
 			_treerow.smartUpdate("zk_" + evtnm, null);
 		return ret;
+	}
+
+	public void smartUpdate(String attr, String value) {
+		if ("zk_ctx".equals(attr) || "zk_pop".equals(attr) || "zk_tip".equals(attr)) {
+			if (_treerow != null) _treerow.smartUpdate(attr, value);
+		} else {
+			super.smartUpdate(attr, value); //cause IllegalStateException
+		}
 	}
 
 	//-- Openable --//
