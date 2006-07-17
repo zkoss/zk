@@ -305,14 +305,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</description>
 	</function>
 	<function>
-		<name>isMozilla</name>
+		<name>isExplorer7</name>
 		<function-class>com.potix.web.fn.ServletFns</function-class>
 		<function-signature>
-	boolean isMozilla()
+	boolean isExplorer7()
 		</function-signature>
 		<description>
-	Whether the current request is coming from Mozilla, Firefox or other
-	Gecko browsers.
+	Whether the current request is coming from Internet Explorer 7 or later.
+		</description>
+	</function>
+	<function>
+		<name>isGecko</name>
+		<function-class>com.potix.web.fn.ServletFns</function-class>
+		<function-signature>
+	boolean isGecko()
+		</function-signature>
+		<description>
+	Whether the current request is coming from a Gecko-based browser,
+	such as Mozilla, Firefox and Camino.
 		</description>
 	</function>
 	<function>

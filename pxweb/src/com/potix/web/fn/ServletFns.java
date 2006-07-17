@@ -82,10 +82,16 @@ public class ServletFns {
 	public static boolean isExplorer() {
 		return Servlets.isExplorer(getCurrentRequest());
 	}
-	/** Returns whether the browser of the current request is Mozilla.
+	/** Returns whether the browser of the current request is Explorer 7 or later.
 	 */
-	public static boolean isMozilla() {
-		return Servlets.isMozilla(getCurrentRequest());
+	public static boolean isExplorer7() {
+		return Servlets.isExplorer7(getCurrentRequest());
+	}
+	/** Returns whether the browser of the current request is Gecko based,
+	 * such as Mozilla, Firefox and Camino.
+	 */
+	public static boolean isGecko() {
+		return Servlets.isGecko(getCurrentRequest());
 	}
 	/** Returns whether the browser of the current request is Safari.
 	 */

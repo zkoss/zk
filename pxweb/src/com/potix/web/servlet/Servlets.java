@@ -311,9 +311,20 @@ public class Servlets {
 		agt = agt.toLowerCase();
 		return agt.indexOf("msie") != -1 && agt.indexOf("opera") == -1;
 	}
-	/** Returns whether the browser is Mozilla/Firefox/Gecko.
+	/** Returns whether the browser is Explorer 7 or later.
 	 */
-	public static final boolean isMozilla(ServletRequest req) {
+	public static final boolean isExplorer7(ServletRequest req) {
+		String agt = req instanceof HttpServletRequest ?
+			((HttpServletRequest)req).getHeader("user-agent"): null;
+		if (agt == null)
+			return false;
+
+		agt = agt.toLowerCase();
+		return agt.indexOf("msie 7") != -1;
+	}
+	/** Returns whether the browser is Gecko based, such as Mozilla, Firefox and Camino
+	 */
+	public static final boolean isGecko(ServletRequest req) {
 		String agt = req instanceof HttpServletRequest ?
 			((HttpServletRequest)req).getHeader("user-agent"): null;
 		if (agt == null)
