@@ -1,10 +1,12 @@
 	--------
 ZK 2.1.0 Freshly
 * Features:
-  1521070, 1521058.
+  1521070, 1521058, 1522329, 1522677.
+  + LocaleProvider and TimeZoneProvider are added
+  + Datebox and Calendar supports the timeZone property
 
 * Bugs:
-  1520737, 1510539, 1521847.
+  1520737, 1510539, 1521847, 1522843.
 
 	--------
 ZK 2.1.0 RC
