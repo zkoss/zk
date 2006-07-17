@@ -24,6 +24,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <h4>Drag and Drop</h4>
 <p>Demostrates drag-and-drop by allowing user to reorder the list
 by dragging list items around.</p>
+<p>All ZK components can be draggable and/or droppable</p>
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
@@ -104,9 +105,13 @@ by dragging list items around.</p>
 			<listfooter label="100.00%"/>
 		</listfoot>
 	</listbox>
+	<image src="/img/circle.png" draggable="true" mold="alphafix"/>
 	<zscript>
 	void move(Component dragged) {
-		self.parent.insertBefore(dragged, self);
+		if (dragged instanceof Listitem)
+			self.parent.insertBefore(dragged, self);
+		else
+			alert("Sorry, no food here");
 	}
 	</zscript>
 </window>
