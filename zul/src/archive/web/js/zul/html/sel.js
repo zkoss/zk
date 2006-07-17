@@ -601,7 +601,7 @@ zk.Selectable.prototype = {
 		this._calcHgh();
 
 		var wd = this.element.style.width;
-		if (wd && wd != "auto") {
+		if (wd && wd != "auto" && wd.indexOf('%') < 0) {
 			//IE: otherwise, element's width will be extended to fit body
 			this.body.style.width = wd;
 			if (this.head) this.head.style.width = wd;
@@ -618,7 +618,7 @@ zk.Selectable.prototype = {
 			//the last row is invisible (as an insertion point)
 
 		var hgh = this.element.style.height;
-		if (hgh && hgh != "auto") {
+		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
 			hgh = parseInt(hgh);
 			if (hgh) {
 				hgh -= this._headHgh(0);

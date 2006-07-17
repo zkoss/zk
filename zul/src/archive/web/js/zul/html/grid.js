@@ -95,7 +95,7 @@ zk.Grid.prototype = {
 		this.element.style.height = "";	
 
 		var wd = this.element.style.width;
-		if (wd && wd != "auto") {
+		if (wd && wd != "auto" && wd.indexOf('%') < 0) {
 			//IE: otherwise, element's width will be extended to fit body
 			this.body.style.width = wd;
 			if (this.head) this.head.style.width = wd;
