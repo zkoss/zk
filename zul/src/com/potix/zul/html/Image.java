@@ -33,6 +33,11 @@ import com.potix.zul.html.impl.XulElement;
 /**
  * An image.
  *
+ * <p>Note: IE 5.5/6 (not 7) has a bug that failed to render PNG with
+ * alpha transparency. See http://homepage.ntlworld.com/bobosola/index.htm for details.
+ * Thus, if you want to display such image, you have to use the alphafix mold.
+ * <code>&lt;image mold="alphafix"/&gt;</code>
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Image extends XulElement implements Viewable {
@@ -210,7 +215,27 @@ public class Image extends XulElement implements Viewable {
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 		final String clkattrs = getAllOnClickAttrs(false);
-		return clkattrs == null ? attrs: attrs + clkattrs;
+		if (!alphafix())
+			return clkattrs == null ? attrs: attrs + clkattrs;
+
+		//Request 1522329
+		final StringBuffer sb = new StringBuffer(64).append(attrs);
+		if (clkattrs != null) sb.append(clkattrs);
+		sb.append(" zk_alpha=\"true\"");
+		return sb.toString();
+	}
+	/** Tests whether to apply Request 1522329.
+	 * To limit the side effect, enable it only if mold is alphafix (and IE6).
+	 */
+	private boolean alphafix() {
+		if ("alphafix".equals(getMold())) {
+			final Desktop dt = getDesktop();
+			if (dt != null) {
+				final Execution exec = dt.getExecution();
+				return exec != null && exec.isExplorer() && !exec.isExplorer7();
+			}
+		}
+		return false;		
 	}
 	public String getInnerAttrs() {
 		final StringBuffer sb =
@@ -228,5 +253,10 @@ public class Image extends XulElement implements Viewable {
 	 */
 	public boolean isChildable() {
 		return false;
+	}
+	public void smartUpdate(String attr, String value) {
+		//Request 1522329: to simplify the client, we always invalidate if alphafix
+		if (alphafix()) invalidate();
+		else super.smartUpdate(attr, value);
 	}
 }

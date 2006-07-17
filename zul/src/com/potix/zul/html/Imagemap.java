@@ -36,6 +36,11 @@ import com.potix.zk.ui.UiException;
  * which area is clicked.</li>
  * </ol>
  *
+ * <p>Note: IE 5.5/6 (not 7) has a bug that failed to render PNG with
+ * alpha transparency. See http://homepage.ntlworld.com/bobosola/index.htm for details.
+ * Thus, if you want to display such image, you have to use the alphafix mold.
+ * <code>&lt;imagemap mold="alphafix"/&gt;</code>
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Imagemap extends Image {

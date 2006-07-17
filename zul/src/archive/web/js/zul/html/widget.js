@@ -307,7 +307,62 @@ zkCapt._parentGrbox = function (p) {
 };
 
 ////
-// Map //
+// Image//
+function zkImg() {}
+
+if (zk.ie && !zk.ie7) {
+	//Request 1522329: PNG with alpha color in IE
+	//To simplify the implementation, Image.java invalidates instead of smartUpdate
+	zkImg.init = function (cmp) {
+		return zkImg._fixpng(cmp);
+	};
+	zkImg._fixpng = function (img) {
+		if (img.getAttribute("zk_alpha") && img.src
+		&& img.src.toLowerCase().endsWith(".png")) {
+			var id = img.id;
+			var wd = img.width, hgh = img.height;
+			if (!wd) wd = img.offsetWidth;
+			if (!hgh) hgh = img.offsetHeight;
+
+			var commonStyle = "width:"+wd+"px;height:"+hgh+"px;";
+			if (img.hspace) commonStyle +="margin-left:"+img.hspace+"px;margin-right:"+img.hspace+"px;";
+			if (img.vspace) commonStyle +="margin-top:"+img.vspace+"px;margin-bottom:"+img.vspace+"px;";
+			commonStyle += img.style.cssText;
+
+			var html = '<span id="'+id
+				+'" style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''
+				+img.src+"', sizingMethod='scale');display:inline-block;";
+			if (img.align == "left") html += "float:left;";
+			else if (img.align == "right") html += "float:right;";
+			if (zk.tagName(img.parentNode) == "A") html += "cursor:hand;";
+			html += commonStyle+'"';
+			if (img.className) html += ' class="'+img.className+'"';
+			if (img.title) html += ' title="'+img.title+'"';
+
+			//process zk_xxx
+			for (var attrs = img.attributes, j = 0; j < attrs.length; ++j) {
+				var attr = attrs.item(j);
+				if (attr.name.startsWith("zk_"))
+					html += ' '+attr.name+'="'+attr.value+'"';
+			}
+
+			html += '></span>';
+
+			if (img.isMap) {
+				html += '<img style="position:relative;left:-'+wd+'px;'+commonStyle
+					+'" src="'+zk.getUpdateURI('/web/img/spacer.gif')
+					+'" ismap="ismap"';
+				if (img.useMap) html += ' usemap="'+img.useMap+'"';
+				html += '/>';
+			}
+			img.outerHTML = html;
+			return $(id); //transformed
+		}
+	}
+}
+
+////
+// Imagemap //
 function zkMap() {}
 
 zkMap.init = function (cmp) {
@@ -315,6 +370,10 @@ zkMap.init = function (cmp) {
 		null, zk.safari ? "width:0;height:0;display:inline": "display:none");
 		//creates a hidden frame. However, in safari, we cannot use invisible frame
 		//otherwise, safari will open a new window
+	if (zk.ie && !zk.ie7) {
+		var img = zkau.getReal(cmp);
+		return zkImg._fixpng(img);
+	}
 };
 zkMap.setAttr = function (cmp, nm, val) {
 	if (zkMap._inflds.contains(nm))

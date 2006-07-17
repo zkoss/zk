@@ -287,12 +287,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/image.dsp</mold-uri>
 		</mold>
+		<mold>
+			<mold-name>alphafix</mold-name>
+			<mold-uri>~./zul/html/image.dsp</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>imagemap</component-name>
 		<component-class>com.potix.zul.html.Imagemap</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>alphafix</mold-name>
 			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
 		</mold>
 	</component>
