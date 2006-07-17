@@ -35,7 +35,6 @@ ${u:redraw(item, null)}
 	<tr style="display:none" id="${self.uuid}!child"></tr><%-- bookmark for adding children --%>
 	</table>
 	</div>
-
 	<div id="${self.uuid}!foot" class="listbox-foot">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 ${u:redraw(self.listfoot, null)}
