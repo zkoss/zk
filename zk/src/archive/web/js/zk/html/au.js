@@ -821,7 +821,9 @@ zkau._onDocDClick = function (evt) {
 	var cmp = Event.element(evt);
 	cmp = zkau._getParentByAttr(cmp, "zk_dbclk");
 	if (cmp) {
-		zkau.send({uuid: zkau.uuidOf(cmp), cmd: "onDoubleClick", data: null});
+		var uuid = cmp.getAttribute("zk_item"); //treerow (and other transparent)
+		if (!uuid) uuid = zkau.uuidOf(cmp);
+		zkau.send({uuid: uuid, cmd: "onDoubleClick", data: null});
 		//no need to Event.stop
 	}
 	return true;
@@ -849,9 +851,11 @@ zkau._onDocCtxMnu = function (evt) {
 			}
 		}
 
-		if (cmp.getAttribute("zk_rtclk"))
-			zkau.send(
-				{uuid: zkau.uuidOf(cmp), cmd: "onRightClick", data: null});
+		if (cmp.getAttribute("zk_rtclk")) {
+			var uuid = cmp.getAttribute("zk_item"); //treerow (and other transparent)
+			if (!uuid) uuid = zkau.uuidOf(cmp);
+			zkau.send({uuid: uuid, cmd: "onRightClick", data: null});
+		}
 
 		Event.stop(evt);
 		return false;
