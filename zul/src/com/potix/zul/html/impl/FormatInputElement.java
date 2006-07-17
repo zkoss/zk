@@ -107,7 +107,8 @@ abstract public class FormatInputElement extends InputElement {
 				final char c2 = cc == MINUS ? '-':
 					cc == DECIMAL ? '.': cc == PERCENT ? '%': cc;
 				if (cc != c2) {
-					if (sb == null) sb = new StringBuffer(len);
+					if (sb == null)
+						sb = new StringBuffer(len).append(val.substring(0, j));
 					sb.append(c2);
 				} else if (sb != null) {
 					sb.append(c2);
