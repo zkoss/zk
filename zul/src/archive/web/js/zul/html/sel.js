@@ -671,7 +671,9 @@ zk.Selectable.prototype = {
 					var r = rows[sz - 1];
 					hgh = zk.offsetTop(r) + zk.offsetHeight(r);
 				} else {
-					hgh = Math.ceil((sz * zk.offsetHeight(rows[len-1])) / len);
+					var r = rows[len - 1];
+					hgh = zk.offsetTop(r) + zk.offsetHeight(r);
+					hgh = Math.ceil((sz * hgh) / len);
 				}
 				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
 			}
