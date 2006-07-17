@@ -178,6 +178,33 @@ void move(Listbox src, Listbox dst) {
 </listbox>
 
 <separator bar="true"/>
+<listbox rows="4" width="100%">
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="%"/>
+	</listhead>
+	<listitem value="A">
+		<listcell label="A. Graduate"/>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem value="B">
+		<listcell label="B. College"/>
+		<listcell label="23%"/>
+	</listitem>
+	<listitem value="C">
+		<listcell label="C. High School"/>
+		<listcell label="40%"/>
+	</listitem>
+	<listitem value="D">
+		<listcell label="D. Junior High School"/>
+		<listcell label="10%"/>
+	</listitem>
+	<listitem value="E">
+		<listcell label="F. Others"/>
+		<listcell label="17%"/>
+	</listitem>
+</listbox>
+<separator bar="true"/>
 <listbox>
 	<listhead>
 		<listheader label="Population"/>
