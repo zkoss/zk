@@ -123,6 +123,8 @@ implements Inputable, Errorable, Constrainted {
 	 * <p>If the error message is set, we say this input is in the error mode.
 	 * Any following invocation to {@link #getText} or getValue will throw
 	 * any exception.
+	 * Example, {@link com.potix.zul.html.Textbox#getValue} and
+	 * {@link com.potix.zul.html.Intbox#getValue}.
 	 */
 	public String getErrorMessage() {
 		return _errmsg;
@@ -137,7 +139,10 @@ implements Inputable, Errorable, Constrainted {
 		_errmsg = null;
 	}*/
 
-	/** Returns the value in String.
+	/** Returns the value in the String format.
+	 * In most case, you shall use the setValue method instead, e.g.,
+	 * {@link com.potix.zul.html.Textbox#getValue} and
+	 * {@link com.potix.zul.html.Intbox#getValue}.
 	 *
 	 * <p>It invokes {@link #checkUserError} to ensure no user error.
 	 *
@@ -149,12 +154,15 @@ implements Inputable, Errorable, Constrainted {
 	 *
 	 * @exception WrongValueException if user entered a wrong value
 	 */
-	protected final String getText() throws WrongValueException {
+	public final String getText() throws WrongValueException {
 		checkUserError();
 		return coerceToString(_value);
 	}
 
-	/** Sets the value.
+	/** Sets the value in the String format.
+	 * In most case, you shall use the setValue method instead, e.g.,
+	 * {@link com.potix.zul.html.Textbox#setValue} and
+	 * {@link com.potix.zul.html.Intbox#setValue}.
 	 *
 	 * <p>It invokes {@link #coerceFromString} fisrt and then {@link #validate}.
 	 * Derives might override them for type conversion and special
@@ -162,7 +170,7 @@ implements Inputable, Errorable, Constrainted {
 	 *
 	 * @param value the value; If null, it is considered as empty.
 	 */
-	protected void setText(String value) throws WrongValueException {
+	public void setText(String value) throws WrongValueException {
 		Object val;
 		try {
 			val = coerceFromString(value);
