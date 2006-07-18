@@ -101,29 +101,28 @@ public class ResourceCache extends CacheMap {
 	 */
 	public Object get(Object src) {
 		WaitLock lock = null;
-		for (;;) {
+		for (boolean skipCached = false;;) {
+			ResourceInfo ri = null;
 			synchronized (this) {
 				Object o = super.get(src);
-				if (o instanceof ResourceInfo) { //was loaded
-					final ResourceInfo ri = (ResourceInfo)o;
-					if (ri.isValid()) { //quick check
-						final Object resource = ri.getResource();
-						if (resource == null) //removed
-							remove(src);
-						return resource;
-					}
-					o = null; //reload
-				}
-
-				if (o == null) {
+				if (!skipCached && (o instanceof ResourceInfo)) { //was loaded
+					ri = (ResourceInfo)o;
+				} else if (o instanceof WaitLock) {
+					lock = (WaitLock)o;
+				} else {
 					put(src, lock = new WaitLock());
 					break; //then, load it
-				} else {
-					lock = (WaitLock)o;
 				}
 			} //sync(this)
 
-			if (!lock.waitUntilUnlock(300*1000)) { //5 minute
+			//check whether cached is valid
+			if (ri != null) {
+				synchronized (ri) {
+					if (ri.isValid())
+						return ri.getResource(); //reuse cached
+				}
+				skipCached = true;
+			} else if (!lock.waitUntilUnlock(300*1000)) { //5 minute
 				final PotentialDeadLockException ex =
 					new PotentialDeadLockException(
 					"Unable to load from "+src+"\nCause: conflict too long.");
@@ -208,11 +207,9 @@ public class ResourceCache extends CacheMap {
 			if (now < _nextCheck)
 				return true;
 			final long lastmod = _loader.getLastModified(_src);
-			if (lastmod == -1) {
-				log.info("Source is removed: "+_src);
-				_resource = null;
-				return true; //yes (but with null _resource)
-			}
+			if (lastmod == -1) //removed or not support last-modified
+				return false; //reload is required
+
 			final boolean valid = lastmod == _lastModified;
 			if (!valid)
 				log.info("Source is changed: "+_src);
@@ -223,8 +220,10 @@ public class ResourceCache extends CacheMap {
 		/** Loads the file. */
 		protected void load() throws Exception {
 			_resource = _loader.load(_src);
-			_lastModified = _loader.getLastModified(_src);
-			_nextCheck = System.currentTimeMillis() + _checkPeriod;
+			if (_resource != null) {
+				_lastModified = _loader.getLastModified(_src);
+				_nextCheck = System.currentTimeMillis() + _checkPeriod;
+			}
 		}
 	}
 }
