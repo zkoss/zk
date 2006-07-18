@@ -25,6 +25,13 @@ package com.potix.util.resource;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface Loader {
+	/** Returns whether to call {@link #getLastModified}.
+	 * If false, it assumes the current cached content is up-to-date.
+	 *
+	 * @param expiredMillis how many milli-seconds are expired after the last
+	 * check. In most cases, just return true if expiredMillis > 0
+	 */
+	public boolean shallCheck(Object src, long expiredMillis);
 	/** Returns the last modified time, or -1 if reload is required or not exists.
 	 */
 	public long getLastModified(Object src);

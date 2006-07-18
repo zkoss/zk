@@ -29,6 +29,10 @@ import java.net.URL;
  */
 abstract public class AbstractLoader implements Loader {
 	//-- Loader --//
+	public boolean shallCheck(Object src, long expiredMillis) {
+		return expiredMillis > 0;
+		//FUTURE: prolong if src.url's protocol is http, https or ftp
+	}
 	public long getLastModified(Object src) {
 		if (src instanceof URL) {
 		//Due to round-trip, we don't retrieve last-modified

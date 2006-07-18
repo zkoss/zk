@@ -204,8 +204,9 @@ public class ResourceCache extends CacheMap {
 		/** Quick check whether the page is still valid. */
 		public boolean isValid() {
 			final long now = System.currentTimeMillis();
-			if (now < _nextCheck)
+			if (!_loader.shallCheck(_src, now - _nextCheck))
 				return true;
+
 			final long lastmod = _loader.getLastModified(_src);
 			if (lastmod == -1) //removed or not support last-modified
 				return false; //reload is required
