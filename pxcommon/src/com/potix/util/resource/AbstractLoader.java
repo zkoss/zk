@@ -31,11 +31,18 @@ abstract public class AbstractLoader implements Loader {
 	//-- Loader --//
 	public long getLastModified(Object src) {
 		if (src instanceof URL) {
-			try {
-				return ((URL)src).openConnection().getLastModified();
-			} catch (IOException ex) {
-				return -1;
+		//Due to round-trip, we don't retrieve last-modified
+			final URL url = (URL)src;
+			final String protocol = url.getProtocol().toLowerCase();
+			if (!"http".equals(protocol) && !"https".equals(protocol)
+			&& !"ftp".equals(protocol)) {
+				try {
+					return url.openConnection().getLastModified();
+				} catch (IOException ex) {
+					return -1; //reload
+				}
 			}
+			return -1; //reload
 		} else if (src instanceof File) {
 			return ((File)src).lastModified();
 		} else if (src == null) {
