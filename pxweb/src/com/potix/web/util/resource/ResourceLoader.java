@@ -52,14 +52,24 @@ abstract public class ResourceLoader implements Loader {
 	 */
 	abstract protected Object parse(String path, URL url) throws Exception;
 
+	public boolean shallCheck(Object src, long expiredMillis) {
+		return expiredMillis > 0;
+		//FUTURE: prolong if src.url's protocol is http, https or ftp
+	}
 	public long getLastModified(Object src) {
 		final ResourceInfo si =(ResourceInfo)src;
 		if (si.url != null) {
-			try {
-				return si.url.openConnection().getLastModified();
-			} catch (IOException ex) {
-				return -1;
+		//Due to round-trip, we don't retrieve last-modified
+			final String protocol = si.url.getProtocol().toLowerCase();
+			if (!"http".equals(protocol) && !"https".equals(protocol)
+			&& !"ftp".equals(protocol)) {
+				try {
+					return si.url.openConnection().getLastModified();
+				} catch (IOException ex) {
+					return -1; //reload
+				}
 			}
+			return -1; //reload
 		}
 
 		return si.file.lastModified();

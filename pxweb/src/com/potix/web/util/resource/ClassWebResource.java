@@ -237,6 +237,9 @@ public class ClassWebResource {
 		}
 
 		//-- super --//
+		public boolean shallCheck(Object src, long expiredMillis) {
+			return expiredMillis > 0;
+		}
 		/** Returns the last modified time.
 		 */
 		public long getLastModified(Object src) {

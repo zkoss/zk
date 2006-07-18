@@ -23,11 +23,13 @@ import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.MalformedURLException;
 
 import javax.servlet.ServletContext;
 
 import com.potix.lang.D;
 import com.potix.lang.Exceptions;
+import com.potix.lang.SystemException;
 import com.potix.util.resource.ResourceCache;
 import com.potix.util.logging.Log;
 import com.potix.io.Files;
@@ -80,49 +82,61 @@ public class ResourceCaches {
 	//because it is handled by the container directlys
 	//And, web  developer has to specify <welcome-file> in web.xml
 		if (D.ON && log.finerable()) log.finer("Servlet path: "+path);
+		URL url = null;
 		if (path == null || path.length() == 0) path = "/";
-		else if (path.charAt(0) != '/') path = '/' + path;
-
-		if (path.startsWith("/~")) {
-			final ServletContext ctx0 = ctx;
-			final String path0 = path;
-			final int j = path.indexOf('/', 2);
-			final String ctxpath;
-			if (j >= 0) {
-				ctxpath = "/" + path.substring(2, j);
-				path = path.substring(j);
-			} else {
-				ctxpath = "/" + path.substring(2);
-				path = "/";
-			}
-
-			final ExtendedWebContext extctx =
-				Servlets.getExtendedWebContext(ctx, ctxpath.substring(1));
-			if (extctx != null) {
-				URL url = extctx.getResource(path);
-				if (log.debugable()) log.debug("Resolving "+path0+" to "+url);
-				if (url == null)
-					return null;
-				return cache.get(new ResourceInfo(path, url));
-			}
-
-			ctx = ctx.getContext(ctxpath);
-			if (ctx == null) { //failed
-				if (D.ON && log.debugable()) log.debug("Context not found: "+ctxpath);
-				ctx = ctx0; path = path0;//restore
-			}
+		else if (path.charAt(0) != '/') {
+			if (path.indexOf("://") > 0) {
+				try {
+					url = new URL(path);
+				} catch (java.net.MalformedURLException ex) {
+					throw new SystemException(ex);
+				}
+			}else path = '/' + path;
 		}
 
-		final String flnm = ctx.getRealPath(path);
-		if (flnm != null) {
-			final File file = new File(flnm);
-			if (file.exists())
-				return cache.get(new ResourceInfo(path, file));
+		if (url == null) {
+			if (path.startsWith("/~")) {
+				final ServletContext ctx0 = ctx;
+				final String path0 = path;
+				final int j = path.indexOf('/', 2);
+				final String ctxpath;
+				if (j >= 0) {
+					ctxpath = "/" + path.substring(2, j);
+					path = path.substring(j);
+				} else {
+					ctxpath = "/" + path.substring(2);
+					path = "/";
+				}
+
+				final ExtendedWebContext extctx =
+					Servlets.getExtendedWebContext(ctx, ctxpath.substring(1));
+				if (extctx != null) {
+					url = extctx.getResource(path);
+					if (log.debugable()) log.debug("Resolving "+path0+" to "+url);
+					if (url == null)
+						return null;
+					return cache.get(new ResourceInfo(path, url));
+				}
+
+				ctx = ctx.getContext(ctxpath);
+				if (ctx == null) { //failed
+					if (D.ON && log.debugable()) log.debug("Context not found: "+ctxpath);
+					ctx = ctx0; path = path0;//restore
+				}
+			}
+
+			final String flnm = ctx.getRealPath(path);
+			if (flnm != null) {
+				final File file = new File(flnm);
+				if (file.exists())
+					return cache.get(new ResourceInfo(path, file));
+			}
 		}
 
 		//try url because some server uses JAR format
 		try {
-			final URL url = ctx.getResource(path);
+			if (url == null)
+				url = ctx.getResource(path);
 			if (url != null)
 				return cache.get(new ResourceInfo(path, url));
 		} catch (Throwable ex) {
@@ -165,6 +179,7 @@ public class ResourceCaches {
 		private ContentLoader(ServletContext ctx) {
 			_ctx = ctx;
 		}
+
 		//-- super --//
 		protected Object parse(String path, File file) throws Exception {
 			return readAll(new FileInputStream(file));
