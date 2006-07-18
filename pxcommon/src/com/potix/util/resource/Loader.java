@@ -25,7 +25,7 @@ package com.potix.util.resource;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface Loader {
-	/** Returns the last modified time, or -1 if not exists.
+	/** Returns the last modified time, or -1 if reload is required or not exists.
 	 */
 	public long getLastModified(Object src);
 	/** Loads the resource.
