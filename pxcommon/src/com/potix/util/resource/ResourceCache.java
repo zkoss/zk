@@ -102,11 +102,11 @@ public class ResourceCache extends CacheMap {
 	public Object get(Object src) {
 		WaitLock lock = null;
 		for (boolean skipCached = false;;) {
-			ResourceInfo ri = null;
+			Info ri = null;
 			synchronized (this) {
 				Object o = super.get(src);
-				if (!skipCached && (o instanceof ResourceInfo)) { //was loaded
-					ri = (ResourceInfo)o;
+				if (!skipCached && (o instanceof Info)) { //was loaded
+					ri = (Info)o;
 				} else if (o instanceof WaitLock) {
 					lock = (WaitLock)o;
 				} else {
@@ -133,7 +133,7 @@ public class ResourceCache extends CacheMap {
 
 		//load it
 		try {
-			final ResourceInfo ri = new ResourceInfo(src);
+			final Info ri = new Info(src);
 			final Object resource = ri.getResource();
 			synchronized (this) {
 				if (resource != null) {
@@ -156,7 +156,7 @@ public class ResourceCache extends CacheMap {
 	/** Used only internally.
 	 */
 	public Object put(Object src, Object val) {
-		if (!(val instanceof ResourceInfo) && !(val instanceof WaitLock))
+		if (!(val instanceof Info) && !(val instanceof WaitLock))
 			throw new UnsupportedOperationException("Don't put content directly.");
 		return super.put(src, val);
 	}
@@ -179,7 +179,7 @@ public class ResourceCache extends CacheMap {
 
 	//-- private --//
 	/** Providing info about a resource. */
-	private class ResourceInfo {
+	private class Info {
 		/** The source. */
 		private final Object _src;
 		/** The result resource. */
@@ -191,7 +191,7 @@ public class ResourceCache extends CacheMap {
 		/**
 		 * @param src the source
 		 */
-		public ResourceInfo(Object src) throws Exception {
+		public Info(Object src) throws Exception {
 			if (D.ON && log.debugable()) log.debug("Loading from "+src);
 			_src = src;
 			load();
