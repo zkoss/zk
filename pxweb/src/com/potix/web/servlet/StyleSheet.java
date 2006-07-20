@@ -35,24 +35,27 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 	 * @param type the type. If null, "text/css" is assumed.
 	 */
 	public StyleSheet(String href, String type) {
-		if (href == null)
-			throw new NullPointerException();
-		if (type == null || type.length() == 0)
-			type = "text/css";
-		_href = href;
-		_type = type;
-		_content = null;
+		this(href, type, false);
 	}
 	/** Creates by assigning the content (style sheets).
 	 *
-	 * @param content style sheets.
+	 * @param content the style content or an URI to an external file.
+	 * @param type the type. If null, "text/css" is assumed.
+	 * @param byContent the content argument is the style content, or
+	 * an URI to an external content
 	 */
-	public StyleSheet(String content) {
+	public StyleSheet(String content, String type, boolean byContent) {
 		if (content == null)
 			throw new IllegalArgumentException("null content");
-		_href = null;
-		_type = "text/css";
-		_content = content;
+
+		if (byContent) {
+			_href = null;
+			_content = content;
+		} else {
+			_href = content;
+			_content = null;
+		}
+		_type = type != null && type.length() != 0 ? type: "text/css";
 	}
 
 	/** Returns the href that contains the style sheets, or null if
