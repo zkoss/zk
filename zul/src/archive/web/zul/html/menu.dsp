@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
-<%@ taglib uri="/WEB-INF/tld/zul/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:choose>
 <c:when test="${self.topmost}">

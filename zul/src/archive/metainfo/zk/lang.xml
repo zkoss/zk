@@ -509,6 +509,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>style</component-name>
+		<component-class>com.potix.zul.html.Style</component-class>
+	</component>
+	<component>
 		<component-name>tab</component-name>
 		<component-class>com.potix.zul.html.Tab</component-class>
 		<mold>

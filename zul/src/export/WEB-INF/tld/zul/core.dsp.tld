@@ -13,73 +13,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 <taglib>
 	<description>
-	Methods and actions for ZUL in DSP
+	Methods and actions for ZUL in DSP/ZUML
 	</description>
 
-	<function>
-		<name>redraw</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
-		<function-signature>
-	void redraw(com.potix.zk.ui.Component, java.io.Writer)
-		</function-signature>
-		<description>
-	Redraw the specified component.
-		</description>
-	</function>
-
-	<function>
-		<name>outResponseJavaScripts</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outResponseJavaScripts(java.util.Collection);
-		</function-signature>
-		<description>
-	Returns javascript to handle the specified responses.
-		</description>
-	</function>
-
-	<function>
-		<name>outLangJavaScripts</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outLangJavaScripts(com.potix.zk.ui.Page,java.lang.String)
-		</function-signature>
-		<description>
-	Returns HTML tags to include all JavaScripts used by all languages.
-	The first argument is the page being rendering and the second argument
-	the action.
-		</description>
-	</function>
-	<function>
-		<name>outLangStyleSheets</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outLangStyleSheets()
-		</function-signature>
-		<description>
-	Returns HTML tags to include all style sheets used by all languages.
-		</description>
-	</function>
-
-	<function>
-		<name>toAbsoluteURI</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String toAbsoluteURI(java.lang.String)
-		</function-signature>
-		<description>
-	Converts the specified URI to abolute if necessary.
-		</description>
-	</function>
-
-	<function>
-		<name>outLocaleJavaScript</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outLocaleJavaScript()
-		</function-signature>
-		<description>
-	Returns date relevant labels in JavaScript.
-		</description>
-	</function>
 </taglib>

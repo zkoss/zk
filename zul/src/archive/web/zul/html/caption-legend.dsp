@@ -17,6 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/zul/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <legend>${self.imgTag} <c:out value="${self.label}"/><c:forEach var="child" items="${self.children}"> ${u:redraw(child, null)}</c:forEach></legend>

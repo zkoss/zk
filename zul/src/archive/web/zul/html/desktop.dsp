@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/zul/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="page" value="${arg.page}"/>
 <html xmlns="http://www.w3.org/1999/xhtml">

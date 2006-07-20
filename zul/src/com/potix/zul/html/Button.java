@@ -113,7 +113,8 @@ public class Button extends LabelImageElement {
 		}
 	}
 
-	/** Returns the href.
+	/** Returns the href that the browser shall jump to, if an user clicks
+	 * this button.
 	 * <p>Default: null. If null, the button has no function unless you
 	 * specify the onClick event listener.
 	 * <p>If it is not null, the onClick event won't be sent.
