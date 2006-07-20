@@ -45,7 +45,6 @@ import com.potix.idom.ProcessingInstruction;
 import com.potix.idom.util.IDOMs;
 import com.potix.idom.input.SAXBuilder;
 import com.potix.el.Taglib;
-import com.potix.web.servlet.StyleSheet;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
@@ -196,25 +195,6 @@ public class Parser {
 		final Map params = pi.parseData();
 		if ("page".equals(target)) {
 			log.warning("Ignored page directive at "+pi.getLocator());
-		} else if ("xml-stylesheet".equals(target)) {
-			final String href = (String)params.remove("href");
-			final String type = (String)params.remove("type");
-			final String content = (String)params.remove("content");
-			if (!params.isEmpty())
-				log.warning("Ignored unknown attributes: "+params+", "+pi.getLocator());
-
-			final boolean byContent = content != null;
-			if (href == null) {
-				if (content == null)
-					throw new UiException("One of the href and content attributes must be specified, "+pi.getLocator());
-			} else if (content != null) {
-				throw new UiException("You can specify both the href and content attributes, "+pi.getLocator());
-			}
-
-			if (D.ON && log.debugable()) log.debug("stylesheet: href="+href+" type="+type+" content="+content);
-			noEL("type", type, pi); //Note: href supports EL
-			pgdef.addStyleSheet(
-				new StyleSheet(href != null ? href: content, type, href == null));
 		} else if ("taglib".equals(target)) {
 			final String uri = (String)params.remove("uri");
 			final String prefix = (String)params.remove("prefix");

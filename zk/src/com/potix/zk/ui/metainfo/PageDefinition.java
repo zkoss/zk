@@ -31,7 +31,6 @@ import com.potix.lang.Classes;
 import com.potix.util.resource.Locator;
 import com.potix.el.FunctionMappers;
 import com.potix.el.Taglib;
-import com.potix.web.servlet.StyleSheet;
 
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Component;
@@ -60,8 +59,6 @@ public class PageDefinition extends InstanceDefinition {
 	private final String _id, _title, _style;
 	private final List _taglibs = new LinkedList();
 	private FunctionMapper _mapper;
-	private final List _styleSheets = new LinkedList(),
-		_roStyleSheets = Collections.unmodifiableList(_styleSheets);
 	private final List _initdefs = new LinkedList();
 	private final List _resolvdefs = new LinkedList();
 	/** A map of component definition defined in this page. */
@@ -90,20 +87,6 @@ public class PageDefinition extends InstanceDefinition {
 		_id = id != null && id.length() > 0 ? id: null;
 		_style = style != null && style.length() > 0 ? style: null;
 		_locator = locator;
-	}
-
-	/** Adds a style sheet. */
-	public void addStyleSheet(StyleSheet ss) {
-		if (ss == null)
-			throw new IllegalArgumentException("null");
-		synchronized (_styleSheets) {
-			_styleSheets.add(ss);
-		}
-	}
-	/** Returns a readonly list of all style sheets, {@link StyleSheet}.
-	 */
-	public List getStyleSheets() {
-		return _roStyleSheets;
 	}
 
 	/** Adds a defintion of {@link com.potix.zk.ui.util.Initiator}. */

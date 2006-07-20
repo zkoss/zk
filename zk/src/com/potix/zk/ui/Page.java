@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.web.servlet.StyleSheet;
 import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.util.VariableResolver;
 import com.potix.zk.ui.event.EventListener;
@@ -294,10 +293,6 @@ public interface Page extends IdSpace {
 	 * not available.
 	 */
 	public FunctionMapper getFunctionMapper();
-	/** Returns the readonly list of stylesheets
-	 *({@link StyleSheet}) belonging to this page.
-	 */
-	public List getStyleSheets();
 
 	/** Adds the function mapper in addition to the current one.
 	 *
@@ -307,7 +302,4 @@ public interface Page extends IdSpace {
 	 * @param funmap the new function mapper (null to ignore).
 	 */
 	public void addFunctionMapper(FunctionMapper funmap);
-	/** Adds the specified style sheet ({@link StyleSheet}).
-	 */
-	public void addStyleSheet(StyleSheet ss);
 }

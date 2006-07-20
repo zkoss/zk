@@ -42,7 +42,6 @@ import com.potix.lang.Exceptions;
 import com.potix.lang.Expectable;
 import com.potix.util.CollectionsX;
 import com.potix.util.logging.Log;
-import com.potix.web.servlet.StyleSheet;
 
 import com.potix.zk.mesg.MZk;
 import com.potix.zk.ui.Desktop;
@@ -118,7 +117,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	/** The default parent. */
 	private transient Component _defparent;
 	private FunctionMapper _funmap;
-	private List _stylesheets;
 
 	/** Constructs a page.
 	 *
@@ -133,9 +131,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 */
 	public PageImpl(PageDefinition pgdef) {
 		_funmap = pgdef.getFunctionMapper();
-
-		final List ss = pgdef.getStyleSheets();
-		_stylesheets = ss != null ? ss: Collections.EMPTY_LIST;
 
 		final LanguageDefinition langdef = pgdef.getLanguageDefinition();
 		_dkUri = langdef.getDesktopURI();
@@ -166,23 +161,12 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public final FunctionMapper getFunctionMapper() {
 		return _funmap;
 	}
-	public final List getStyleSheets() {
-		return _stylesheets;
-	}
 	public void addFunctionMapper(FunctionMapper funmap) {
 		if (funmap != null)
 			if (_funmap != null)
 				_funmap = new DualFuncMapper(funmap, _funmap);
 			else
 				_funmap = funmap;
-	}
-	public void addStyleSheet(StyleSheet ss) {
-		if (ss != null) {
-			if (!(_stylesheets instanceof LinkedList))
-				_stylesheets = new LinkedList(_stylesheets);
-			_stylesheets.add(ss);
-			//TODO: update the client dynamically (thru Visualizer)
-		}
 	}
 
 	public final String getId() {

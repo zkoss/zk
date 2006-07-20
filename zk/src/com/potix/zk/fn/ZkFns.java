@@ -195,14 +195,12 @@ public class ZkFns {
 		sb.append("\n</script>");
 	}
 	/** Returns HTML tags to include all style sheets that are
-	 * required when loading a ZUML page.
+	 * defined in all languages.
 	 *
 	 * <p>In addition to style sheets defined in lang.xml and lang-addon.xml,
 	 * it also include:
 	 * <ol>
 	 * <li>The style sheet specified in the theme-uri parameter.</li>
-	 * <li>All style sheets, if any, of pages belonging to the
-	 * current desktop.</li>
 	 * </ol>
 	 *
 	 * <p>FUTURE CONSIDERATION: we might generate the inclusion on demand
@@ -228,17 +226,6 @@ public class ZkFns {
 		if (href != null && href.length() > 0)
 			append(sb, new StyleSheet(href, "text/css"), exec, null);
 
-		//Process all page definitions in the current desktop
-		if (exec != null) {
-			//possible to be null because it might called by non ZUML page
-			for (Iterator it = exec.getDesktop()
-			.getPages().iterator(); it.hasNext();) {
-				final Page page = (Page)it.next();
-				for (Iterator e = page.getStyleSheets().iterator();
-				e.hasNext();)
-					append(sb, (StyleSheet)e.next(), exec, page);
-			}
-		}
 		return sb.toString();
 	}
 	private static void append(StringBuffer sb, StyleSheet ss,

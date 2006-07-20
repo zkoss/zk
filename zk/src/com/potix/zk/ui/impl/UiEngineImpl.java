@@ -40,7 +40,6 @@ import com.potix.lang.Exceptions;
 import com.potix.lang.Expectable;
 import com.potix.mesg.Messages;
 import com.potix.util.logging.Log;
-import com.potix.web.servlet.StyleSheet;
 
 import com.potix.zk.mesg.MZk;
 import com.potix.zk.ui.*;
@@ -383,7 +382,6 @@ public class UiEngineImpl implements UiEngine {
 		//it might cause name pollution but we got no choice since they
 		//are used as long as components created by this method are alive
 		page.addFunctionMapper(pagedef.getFunctionMapper());
-		initStyleSheets(pagedef, page);
 		initVariableResolvers(pagedef, page);
 
 		final Initiators inits = Initiators.doInit(pagedef, page);
@@ -406,13 +404,6 @@ public class UiEngineImpl implements UiEngine {
 		if (!resolvs.isEmpty())
 			for (Iterator it = resolvs.iterator(); it.hasNext();)
 				page.addVariableResolver((VariableResolver)it.next());
-	}
-	private static final void initStyleSheets(PageDefinition pagedef,
-	Page page) {
-		final List ss = pagedef.getStyleSheets();
-		if (!ss.isEmpty())
-			for (Iterator it = ss.iterator(); it.hasNext();)
-				page.addStyleSheet((StyleSheet)it.next());
 	}
 
 	public void sendRedirect(String uri, String target) {
