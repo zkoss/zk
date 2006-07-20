@@ -414,8 +414,7 @@ implements Selectable, Render, java.io.Serializable {
 				if (isHtmlSelect()) {
 					item.smartUpdate("selected", true);
 				} else {
-					smartUpdate("addSel", item.getUuid());
-					//No need to use response because such info is carried on tags
+					smartUpdateSelection();
 				}
 			}
 		}
@@ -437,13 +436,23 @@ implements Selectable, Render, java.io.Serializable {
 				if (isHtmlSelect()) {
 					item.smartUpdate("selected", false);
 				} else {
-					smartUpdate("rmSel", item.getUuid());
+					smartUpdateSelection();
 					if (oldSel != _jsel)
 						smartUpdate("zk_selId", getSelectedId());
-					//No need to use response because such info is carried on tags
 				}
 			}
 		}
+	}
+	/** Note: we have to update all selection at once, since addItemToSelection
+	 * and removeItemFromSelection might be called interchangeably.
+	 */
+	private void smartUpdateSelection() {
+		final StringBuffer sb = new StringBuffer(80);
+		for (Iterator it = _selItems.iterator(); it.hasNext();) {
+			if (sb.length() > 0) sb.append(',');
+			sb.append(((Listitem)it.next()).getUuid());
+		}
+		smartUpdate("chgSel", sb.toString());
 	}
 	/** If the specified item is selected, it is deselected.
 	 * If it is not selected, it is selected. Other items in the list box

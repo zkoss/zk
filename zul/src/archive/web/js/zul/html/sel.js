@@ -335,15 +335,19 @@ zk.Selectable.prototype = {
 		case "zk_multiple": //whether to support multiple
 			this._setMultiple("true" == value);
 			return true;
-		case "addSel": //add a row into selection
-			var row = $(value);
-			if (row) this._changeSelect(row, true);
-			//no need to maintain other attr because it's server's job
-			return true;
-		case "rmSel": //remove a row from selection
-			var row = $(value);
-			if (row) this._changeSelect(row, false);
-			//no need to maintain other attr because it's server's job
+		case "chgSel": //value: a list of uuid to select
+			var sels = {};
+			for (var j = 0;;) {
+				var k = value.indexOf(',', j);
+				var s = (k >= 0 ? value.substring(j, k): value.substring(j)).trim();
+				if (s) sels[s] = true;
+				if (k < 0) break;
+				j = k + 1;
+			}
+
+			var rows = this.bodyrows;
+			for (var j = 0; j < rows.length; ++j)
+				this._changeSelect(rows[j], sels[rows[j].id] == true);
 			return true;
 		}
 		return false;

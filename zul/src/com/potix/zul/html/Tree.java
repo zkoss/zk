@@ -264,9 +264,7 @@ public class Tree extends XulElement implements Selectable {
 			} else {
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
-				final Treerow tr = item.getTreerow(false);
-				if (tr != null)
-					smartUpdate("addSel", tr.getUuid());
+				smartUpdateSelection();
 				if (fixSelected())
 					smartUpdate("zk_selId", getSelectedId());
 			}
@@ -284,14 +282,27 @@ public class Tree extends XulElement implements Selectable {
 			} else {
 				item.setSelectedDirectly(false);
 				_selItems.remove(item);
-				final Treerow tr = item.getTreerow(false);
-				if (tr != null)
-					smartUpdate("rmSel", tr.getUuid());
+				smartUpdateSelection();
 				if (fixSelected())
 					smartUpdate("zk_selId", getSelectedId());
 				//No need to use response because such info is carried on tags
 			}
 		}
+	}
+	/** Note: we have to update all selection at once, since addItemToSelection
+	 * and removeItemFromSelection might be called interchangeably.
+	 */
+	private void smartUpdateSelection() {
+		final StringBuffer sb = new StringBuffer(80);
+		for (Iterator it = _selItems.iterator(); it.hasNext();) {
+			final Treeitem item = (Treeitem)it.next();
+			final Treerow tr = item.getTreerow(false);
+			if (tr != null) {
+				if (sb.length() > 0) sb.append(',');
+				sb.append(tr.getUuid());
+			}			
+		}
+		smartUpdate("chgSel", sb.toString());
 	}
 	/** If the specified item is selected, it is deselected.
 	 * If it is not selected, it is selected. Other items in the tree

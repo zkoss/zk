@@ -82,9 +82,13 @@ public class Style extends AbstractComponent {
 		if (_src != null) {
 			out.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"");
 			out.write(getDesktop().getExecution().encodeURL(_src));
+			out.write("\" id=\"");
+			out.write(getUuid());
 			out.write("\"/>");
 		} else {
-			out.write("<style type=\"text/css\">");
+			out.write("<style type=\"text/css\" id=\"");
+			out.write(getUuid());
+			out.write("\">");
 			for (final Iterator it = getChildren().iterator(); it.hasNext();)
 				out.write(((Label)it.next()).getValue());
 			out.write("</style>");
