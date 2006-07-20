@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?xml-stylesheet content="
+div.grid td.gridod {
+	background: red;
+	}
+"?>
 <!--
 grid.zul
 
@@ -18,6 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Grid Demo">
+	Note: the odd row's color shall be red (controlled by xml-stylesheet).
 	<zscript>
 	class Comp implements Comparator {
 		private boolean _asc;
