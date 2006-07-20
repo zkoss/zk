@@ -40,10 +40,11 @@ public class Tabs extends XulElement {
 		if (parent != null && !(parent instanceof Tabbox))
 			throw new UiException("Wrong parent: "+parent);
 
-		if (parent != getParent()) invalidateIfAccordion((Tabbox)parent);
-			//note: Visualizer cannot handle accordion's layout, so redraw
-
+		final Tabbox oldp = (Tabbox)getParent();
 		super.setParent(parent);
+
+		invalidateIfAccordion(oldp);
+		invalidateIfAccordion((Tabbox)parent);
 	}
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Tab))
