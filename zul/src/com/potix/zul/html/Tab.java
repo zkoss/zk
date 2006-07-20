@@ -125,7 +125,7 @@ public class Tab extends LabelImageElement {
 		if (tabbox != null && "accordion".equals(tabbox.getMold()))
 			tabbox.invalidate(INNER);
 		else
-			super.invalidate(INNER);
+			super.invalidate(range);
 	}
 	public boolean isChildable() {
 		return false;
