@@ -22,13 +22,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<html>
 			<attribute name="content"><![CDATA[
 				<h4>Style sheets</h4>
-				<p>CSS style sheet, class attribute, and style attribute is supported.</p>
-				<p>Developers specify the following line in the .zul page and the style sheet is set. 
-				By setting components' class attribute or style attribute, developers can
-				change a components' style.
+				<p>CSS style sheet, class attribute, and style attribute are supported.</p>
+				<p>Developers use the style components as follows to specify what style sheet
+				to load, or specify the styles directly.  Like HTML, it affects all
+				components in the same desktop.
+				By setting components' sclass attribute or style attribute, developers can
+				change the style of a particular component.
 				</p>
 <pre><code>
-&lt;?xml-stylesheet href=&quot;...&quot; [type=&quot;text/css&quot;]?&gt;
+&lt;style href=&quot;...&quot; [type=&quot;text/css&quot;]&gt;
+&lt;style&gt;
+td.mine {
+  background: red;
+}
+&lt;/style&gt;
 </code></pre>
 			]]></attribute>
 		</html>
