@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
-import java.io.Writer;
-import java.io.IOException;
 
 import com.potix.lang.Objects;
 import com.potix.xml.XMLs;
@@ -172,7 +170,7 @@ implements DynamicPropertied, RawId {
 		return false;
 	}
 
-	public void redraw(Writer out) throws IOException {
+	public void redraw(java.io.Writer out) throws java.io.IOException {
 		if (_tagnm == null)
 			throw new UiException("The tag name is not initialized yet");
 
