@@ -249,11 +249,14 @@ public class PageDefinition extends InstanceDefinition {
 	public FunctionMapper getFunctionMapper(Imports imports) {
 		if (_funmap == null) {
 			synchronized (this) {
-				if (_funmap == null)
+				if (_funmap == null) {
 					_funmap = FunctionMappers.getFunctionMapper(_taglibs, _locator);
+					if (_funmap == null)
+						_funmap = FunctionMappers.EMPTY_MAPPER;
+				}
 			}
 		}
-		return _funmap;
+		return _funmap != FunctionMappers.EMPTY_MAPPER ? _funmap: null;
 	}
 
 	/** Initializes a page after execution is activated.
