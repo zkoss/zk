@@ -136,14 +136,7 @@ public class LabelLoader {
 			if (label != null)
 				return label;
 		}
-		if (!locale.equals(Locale.getDefault())) {
-			label = (String)getLabels(Locale.getDefault()).get(key);
-			if (label != null)
-				return label;
-		}
-		return "en".equals(lang)
-			|| "en".equals(Locale.getDefault().getLanguage()) ? 
-				null: (String)getLabels(Locale.ENGLISH).get(key);
+		return "en".equals(lang) ? null: (String)getLabels(Locale.ENGLISH).get(key);
 	}
 
 	//-- private utilities --//

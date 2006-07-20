@@ -55,8 +55,7 @@ public class MessageFormats {
 	private static MessageFormat getFormat(String pattern, Locale locale) {
 		if (locale == null)
 			locale = getLocale();
-		return locale.equals(Locale.getDefault()) ?
-			new MessageFormat(pattern): new MessageFormat(pattern, locale);
+		return new MessageFormat(pattern, locale);
 	}
 	private static final Locale getLocale() {
 		return Locales.getCurrent();
