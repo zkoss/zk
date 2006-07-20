@@ -57,6 +57,10 @@ public class FunctionMappers {
 
 	private static final ResourceCache _reces;
 
+	/** An empty function mapper, i.e., it has no function defined at all.
+	 */
+	public static final FunctionMapper EMPTY_MAPPER = new EmptyMapper();
+
 	/** Retursn the function mapper representing a list of {@link Taglib},
 	 * or null if taglibs is null or empty.
 	 *
@@ -185,7 +189,8 @@ public class FunctionMappers {
 			}
 			return null;
 		}
-		//-- cloneable --//
+
+		//-- Cloneable --//
 		public Object clone() {
 			final MyMapper clone;
 			try {
@@ -202,6 +207,7 @@ public class FunctionMappers {
 			}
 			return clone;
 		}
+
 		//Object//
 		public int hashCode() {
 			return _mappers.hashCode();
@@ -210,6 +216,15 @@ public class FunctionMappers {
 			return o instanceof MyMapper && _mappers.equals(((MyMapper)o)._mappers);
 		}
 	}
+	private static class EmptyMapper
+	implements FunctionMapper, Serializable {
+	    private static final long serialVersionUID = 20060622L;
+		//-- FunctionMapper --//
+		public Method resolveFunction(String prefix, String name) {
+			return null;
+		}
+	}
+
 	private static class TaglibLoader extends AbstractLoader {
 		//-- Loader --//
 		public Object load(Object src) throws Exception {
