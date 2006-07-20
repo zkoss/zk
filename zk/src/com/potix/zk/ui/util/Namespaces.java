@@ -42,6 +42,12 @@ public class Namespaces {
 	 * }
 	 * </code></pre>
 	 *
+	 * <p>Note: beforeInterpret() actually use {@link Namespace#backupVariable}
+	 * to maintain what was modified, and then {@link #afterInterpret}
+	 * restore them by use of {@link Namespace#restoreVariables}.
+	 * Thus, you can back up more variables after calling this method
+	 * with {@link Namespace#backupVariable} (by specifying newBlock as false).
+	 *
 	 * @param exec the current execution.
 	 * If null, {@link Desktop#getExecution} is used.
 	 * @param comp the component, never null.
@@ -50,12 +56,17 @@ public class Namespaces {
 	public static final
 	Namespace beforeInterpret(Execution exec, Component comp) {
 		final Namespace ns = comp.getNamespace();
+		ns.backupVariable("self", true);
+		ns.backupVariable("componentScope", false);
 		ns.setVariable("self", comp, true);
 		ns.setVariable("componentScope",
 			comp.getAttributes(Component.COMPONENT_SCOPE), true);
 
 		final Object arg = getArg(exec, comp);
-		if (arg != null) ns.setVariable("arg", arg, true);
+		if (arg != null) {
+			ns.backupVariable("arg", false);
+			ns.setVariable("arg", arg, true);
+		}
 		return ns;
 	}
 	/** Prepares builtin variable before calling
@@ -69,17 +80,19 @@ public class Namespaces {
 	 */
 	public static final Namespace beforeInterpret(Execution exec, Page page) {
 		final Namespace ns = page.getNamespace();
+		ns.backupVariable(null, true);
 		final Object arg = getArg(exec, page);
-		if (arg != null) ns.setVariable("arg", arg, true);
+		if (arg != null) {
+			ns.backupVariable("arg", false);
+			ns.setVariable("arg", arg, true);
+		}
 		return ns;
 	}
 	/** Used with {@link #beforeInterpret(Execution,Component)} to clean up builtin
 	 * variables.
 	 */
 	public static final void afterInterpret(Namespace ns) {
-		ns.unsetVariable("arg");
-		ns.unsetVariable("self");
-		ns.unsetVariable("componentScope");
+		ns.restoreVariables();
 	}
 
 	private static Map getArg(Execution exec, Component comp) {
