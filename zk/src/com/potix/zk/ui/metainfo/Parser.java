@@ -309,6 +309,13 @@ public class Parser {
 				compdef.addProperty(
 					(String)me.getKey(), (String)me.getValue(), null);
 			}
+		} else if ("import".equals(target)) { //import
+			final String src = (String)params.remove("src");
+			if (isEmpty(src))
+				throw new UiException("The src attribute is required, "+pi.getLocator());
+			if (!params.isEmpty())
+				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
+			pgdef.addImport(src);
 		} else {
 			log.warning("Unknown processing instruction: "+target);
 		}

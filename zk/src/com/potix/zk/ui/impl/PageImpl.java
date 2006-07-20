@@ -130,8 +130,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 * are not ready until {@link #init} is called.
 	 */
 	public PageImpl(PageDefinition pgdef) {
-		_funmap = pgdef.getFunctionMapper();
-
 		final LanguageDefinition langdef = pgdef.getLanguageDefinition();
 		_dkUri = langdef.getDesktopURI();
 		_pgUri = langdef.getPageURI();

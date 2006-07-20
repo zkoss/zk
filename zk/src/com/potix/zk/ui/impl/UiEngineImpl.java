@@ -223,9 +223,11 @@ public class UiEngineImpl implements UiEngine {
 			//1) stylesheet, tablib are inited in Page's contructor
 			//2) we add variable resolvers before init because
 			//init's zscirpt might depend on it.
-			initVariableResolvers(pagedef, page);
+			final PageDefinition.Imports imports = pagedef.getImports(page);
+			page.addFunctionMapper(pagedef.getFunctionMapper(imports));
+			initVariableResolvers(pagedef, page, imports);
 
-			final Initiators inits = Initiators.doInit(pagedef, page);
+			final Initiators inits = Initiators.doInit(pagedef, page, imports);
 			try {
 				pagedef.init(page);
 				execCreate(exec, page, pagedef, null);
@@ -381,10 +383,11 @@ public class UiEngineImpl implements UiEngine {
 		//Note: we add taglib, stylesheets and var-resolvers to the page
 		//it might cause name pollution but we got no choice since they
 		//are used as long as components created by this method are alive
-		page.addFunctionMapper(pagedef.getFunctionMapper());
-		initVariableResolvers(pagedef, page);
+		final PageDefinition.Imports imports = pagedef.getImports(page);
+		page.addFunctionMapper(pagedef.getFunctionMapper(imports));
+		initVariableResolvers(pagedef, page, imports);
 
-		final Initiators inits = Initiators.doInit(pagedef, page);
+		final Initiators inits = Initiators.doInit(pagedef, page, imports);
 		try {
 			return execCreate(exec, page, pagedef, parent);
 		} catch (Throwable ex) {
@@ -399,8 +402,8 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 	private static final void initVariableResolvers(PageDefinition pagedef,
-	Page page) {
-		final List resolvs = pagedef.newVariableResolvers(page);
+	Page page, PageDefinition.Imports imports) {
+		final List resolvs = pagedef.newVariableResolvers(page, imports);
 		if (!resolvs.isEmpty())
 			for (Iterator it = resolvs.iterator(); it.hasNext();)
 				page.addVariableResolver((VariableResolver)it.next());

@@ -42,8 +42,9 @@ import com.potix.zk.ui.metainfo.InitiatorDefinition;
 	/** Invokes {@link Initiator#doInit}, if any, and returns
 	 * an instance of{@link Initiators}.
 	 */
-	public static final Initiators doInit(PageDefinition pagedef, Page page) {
-		final List inits = pagedef.doInit(page);
+	public static final Initiators doInit(PageDefinition pagedef, Page page,
+	PageDefinition.Imports imports) {
+		final List inits = pagedef.doInit(page, imports);
 		if (inits.isEmpty()) return new Initiators();
 		return new RealInits(inits);
 	}

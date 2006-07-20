@@ -58,9 +58,13 @@ public class PageDefinition extends InstanceDefinition {
 	private final Locator _locator;
 	private final String _id, _title, _style;
 	private final List _taglibs = new LinkedList();
-	private FunctionMapper _mapper;
+	private FunctionMapper _funmap;
+	/* List(InitiatorDefinition). */
 	private final List _initdefs = new LinkedList();
+	/** List(VariableResolverDefinition). */
 	private final List _resolvdefs = new LinkedList();
+	/** List(String src). */
+	private final List _imports = new LinkedList();
 	/** A map of component definition defined in this page. */
 	private Map _compdefs;
 	/** Map(String clsnm, ComponentDefinition compdef). */
@@ -89,8 +93,28 @@ public class PageDefinition extends InstanceDefinition {
 		_locator = locator;
 	}
 
+	/** Adds a src (URI) of a ZUML page to import. */
+	public void addImport(String src) {
+		if (src == null || src.length() == 0)
+			throw new IllegalArgumentException("empty");
+		synchronized (_imports) {
+			_imports.add(src);
+		}
+	}
+	/** Returns the imported content (added by {@link #addImport}), or null
+	 * no import at all.
+	 */
+	public Imports getImports(Page page) {
+		if (_imports.isEmpty()) return null;
+
+		final Imports imports = new Imports();
+		return imports;
+	}
+
 	/** Adds a defintion of {@link com.potix.zk.ui.util.Initiator}. */
 	public void addInitiatorDefinition(InitiatorDefinition init) {
+		if (init == null)
+			throw new IllegalArgumentException("null");
 		synchronized (_initdefs) {
 			_initdefs.add(init);
 		}
@@ -98,9 +122,11 @@ public class PageDefinition extends InstanceDefinition {
 	/** Returns a list of all {@link Initiator} and invokes
 	 * its {@link Initiator#doInit} before returning.
 	 * It never returns null.
+	 *
+	 * @param imports the import info returned by {@link #getImports}.
 	 */
-	public List doInit(Page page) {
-		if (_initdefs == null || _initdefs.isEmpty())
+	public List doInit(Page page, Imports imports) {
+		if (_initdefs.isEmpty())
 			return Collections.EMPTY_LIST;
 
 		final List inits = new LinkedList();
@@ -121,15 +147,19 @@ public class PageDefinition extends InstanceDefinition {
 
 	/** Adds a defintion of {@link com.potix.zk.ui.util.VariableResolver}. */
 	public void addVariableResolverDefinition(VariableResolverDefinition resolver) {
+		if (resolver == null)
+			throw new IllegalArgumentException("null");
 		synchronized (_resolvdefs) {
 			_resolvdefs.add(resolver);
 		}
 	}
 	/** Retrieves a list of variable resolvers defined for this page
 	 * definition.
+	 *
+	 * @param imports the import info returned by {@link #getImports}.
 	 */
-	public List newVariableResolvers(Page page) {
-		if (_resolvdefs == null || _resolvdefs.isEmpty())
+	public List newVariableResolvers(Page page, Imports imports) {
+		if (_resolvdefs.isEmpty())
 			return Collections.EMPTY_LIST;
 
 		final List resolvs = new LinkedList();
@@ -149,6 +179,9 @@ public class PageDefinition extends InstanceDefinition {
 	/** Adds a component definition belonging to this page definition only.
 	 */
 	public void addComponentDefinition(ComponentDefinition compdef) {
+		if (compdef == null)
+			throw new IllegalArgumentException("null");
+
 		if (_compdefs == null) {
 			synchronized (this) {
 				if (_compdefs == null) {
@@ -205,20 +238,22 @@ public class PageDefinition extends InstanceDefinition {
 
 	/** Adds a tag lib. */
 	public void addTaglib(Taglib taglib) {
+		if (taglib == null)
+			throw new IllegalArgumentException("null");
 		synchronized (_taglibs) {
 			_taglibs.add(taglib);
-			_mapper = null; //ask for re-parse
+			_funmap = null; //ask for re-parse
 		}
 	}
 	/** Returns the function mapper. */
-	public FunctionMapper getFunctionMapper() {
-		if (_mapper == null) {
+	public FunctionMapper getFunctionMapper(Imports imports) {
+		if (_funmap == null) {
 			synchronized (this) {
-				if (_mapper == null)
-					_mapper = FunctionMappers.getFunctionMapper(_taglibs, _locator);
+				if (_funmap == null)
+					_funmap = FunctionMappers.getFunctionMapper(_taglibs, _locator);
 			}
 		}
-		return _mapper;
+		return _funmap;
 	}
 
 	/** Initializes a page after execution is activated.
@@ -258,6 +293,13 @@ public class PageDefinition extends InstanceDefinition {
 	}
 	public Millieu getMillieu() {
 		throw new UnsupportedOperationException();
+	}
+
+	/** The infomation returned by {@link PageDefinition#getImports}.
+	 */
+	public static class Imports {
+		private Imports() {
+		}
 	}
 
 	//Object//
