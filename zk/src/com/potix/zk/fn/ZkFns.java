@@ -261,7 +261,7 @@ public class ZkFns {
 			sb.append("\n<style");
 			if (ss.getType() != null)
 				sb.append(" type=\"").append(ss.getType()).append('"');
-			sb.append(">\n").append(ss.getContent()).append("\n</type>");
+			sb.append(">\n").append(ss.getContent()).append("\n</style>");
 		}
 	}
 
