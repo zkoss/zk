@@ -202,10 +202,9 @@ public class DefinitionLoaders {
 			if (href != null && href.length() > 0) {
 				if (ctn != null && ctn.length() > 0)
 					throw new UiException("You cannot specify the content if the href attribute is specified, "+el.getLocator());
-				final String type = el.getAttributeValue("type");
-				ss = new StyleSheet(href, type);
+				ss = new StyleSheet(href, el.getAttributeValue("type"));
 			} else if (ctn != null && ctn.length() > 0) {
-				ss = new StyleSheet(ctn);
+				ss = new StyleSheet(ctn, el.getAttributeValue("type"), true);
 			} else {
 				throw new UiException("You must specify either the href attribute or the content, "+el.getLocator());
 			}

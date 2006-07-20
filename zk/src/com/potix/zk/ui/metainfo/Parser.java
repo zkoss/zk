@@ -199,13 +199,22 @@ public class Parser {
 		} else if ("xml-stylesheet".equals(target)) {
 			final String href = (String)params.remove("href");
 			final String type = (String)params.remove("type");
+			final String content = (String)params.remove("content");
 			if (!params.isEmpty())
 				log.warning("Ignored unknown attributes: "+params+", "+pi.getLocator());
-			if (href == null)
-				throw new UiException("The href attribute is required, "+pi.getLocator());
-			if (D.ON && log.debugable()) log.debug("stylesheet: href="+href+" type="+type);
+
+			final boolean byContent = content != null;
+			if (href == null) {
+				if (content == null)
+					throw new UiException("One of the href and content attributes must be specified, "+pi.getLocator());
+			} else if (content != null) {
+				throw new UiException("You can specify both the href and content attributes, "+pi.getLocator());
+			}
+
+			if (D.ON && log.debugable()) log.debug("stylesheet: href="+href+" type="+type+" content="+content);
 			noEL("type", type, pi); //Note: href supports EL
-			pgdef.addStyleSheet(new StyleSheet(href, type));
+			pgdef.addStyleSheet(
+				new StyleSheet(href != null ? href: content, type, href == null));
 		} else if ("taglib".equals(target)) {
 			final String uri = (String)params.remove("uri");
 			final String prefix = (String)params.remove("prefix");

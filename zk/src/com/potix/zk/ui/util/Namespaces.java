@@ -81,6 +81,7 @@ public class Namespaces {
 	public static final Namespace beforeInterpret(Execution exec, Page page) {
 		final Namespace ns = page.getNamespace();
 		ns.backupVariable(null, true);
+
 		final Object arg = getArg(exec, page);
 		if (arg != null) {
 			ns.backupVariable("arg", false);
