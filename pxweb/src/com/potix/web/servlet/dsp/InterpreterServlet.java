@@ -74,7 +74,7 @@ public class InterpreterServlet extends HttpServlet {
 		final Object old = Charsets.setup(request, response);
 		try {
 			final Interpretation cnt = (Interpretation)
-				ResourceCaches.get(getCache(_ctx), _ctx, path);
+				ResourceCaches.get(getCache(_ctx), _ctx, path, null);
 			if (cnt == null) {
 				if (Https.isIncluded(request)) log.error("Not found: "+path);
 					//It might be eaten, so log the error
@@ -114,7 +114,8 @@ public class InterpreterServlet extends HttpServlet {
 			_locator = new ServletContextLocator(ctx);
 		}
 		//-- super --//
-		protected Object parse(String path, File file) throws Exception {
+		protected Object parse(String path, File file, Object extra)
+		throws Exception {
 			try {
 				return parse0(new FileInputStream(file),
 					Interpreter.getContentType(file.getName()));
@@ -127,7 +128,8 @@ public class InterpreterServlet extends HttpServlet {
 				return null; //as non-existent
 			}
 		}
-		protected Object parse(String path, URL url) throws Exception {
+		protected Object parse(String path, URL url, Object extra)
+		throws Exception {
 			try {
 				return parse0(url.openStream(),
 					Interpreter.getContentType(url.getPath()));
