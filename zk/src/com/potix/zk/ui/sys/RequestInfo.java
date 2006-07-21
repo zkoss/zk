@@ -31,11 +31,12 @@ public interface RequestInfo {
 	/** Returns the Web application; never null.
 	 */
 	public WebApp getWebApp();
-	/** Returns the session; never null.
+	/** Returns the session, or null if not available.
 	 */
 	public Session getSession();
-	/** Returns the desktop, or null if {@link com.potix.zk.ui.sys.UiFactory#newDesktop}
-	 * is called.
+	/** Returns the desktop, or null if not created yet.
+	 * In other words, it returns null if
+	 * {@link com.potix.zk.ui.sys.UiFactory#newDesktop} is called.
 	 */
 	public Desktop getDesktop();
 	/** Returns the native request. For HTTP, it is
@@ -45,15 +46,15 @@ public interface RequestInfo {
 	public Object getNativeRequest();
 
 	/** Returns the locator used to retrieve resources, such as
-	 * taglib and zscript files.
-	 *
-	 * <p>The default locator is based on the servlet context. If
-	 * you want a different locator, use {@link #setLocator} to change
-	 * the default value.
+	 * taglib and zscript files, or null if {@link #getWebApp} will be used
+	 * as the locator.
 	 */
 	public Locator getLocator();
 	/** Sets the locator used to retrieve resources, such as
 	 * taglib and zscript files.
+	 *
+	 * @param locator the locator used to locate taglib and other resources.
+	 * If null, {@link #getWebApp} is used.
 	 */
 	public void setLocator(Locator locator);
 }
