@@ -74,9 +74,12 @@ public class ResourceCaches {
 	 * @param cache the resource cache.
 	 * Note: its loader must extend from {@link ResourceLoader}.
 	 * @param path the URI path
+	 * @param extra the extra parameter that will be passed to
+	 * {@link ResourceLoader#parse(String,File,Object)} and
+	 * {@link ResourceLoader#parse(String,URL,Object)}
 	 */
 	public static final
-	Object get(ResourceCache cache, ServletContext ctx, String path) {
+	Object get(ResourceCache cache, ServletContext ctx, String path, Object extra) {
 	//20050905: Tom Yeh
 	//We don't need to handle the default name if user specifies only a dir
 	//because it is handled by the container directlys
@@ -115,7 +118,7 @@ public class ResourceCaches {
 					if (log.debugable()) log.debug("Resolving "+path0+" to "+url);
 					if (url == null)
 						return null;
-					return cache.get(new ResourceInfo(path, url));
+					return cache.get(new ResourceInfo(path, url, extra));
 				}
 
 				ctx = ctx.getContext(ctxpath);
@@ -129,7 +132,7 @@ public class ResourceCaches {
 			if (flnm != null) {
 				final File file = new File(flnm);
 				if (file.exists())
-					return cache.get(new ResourceInfo(path, file));
+					return cache.get(new ResourceInfo(path, file, extra));
 			}
 		}
 
@@ -138,7 +141,7 @@ public class ResourceCaches {
 			if (url == null)
 				url = ctx.getResource(path);
 			if (url != null)
-				return cache.get(new ResourceInfo(path, url));
+				return cache.get(new ResourceInfo(path, url, extra));
 		} catch (Throwable ex) {
 			log.warning("Unable to load "+path+"\n"+Exceptions.getMessage(ex));
 		}
@@ -158,7 +161,7 @@ public class ResourceCaches {
 	 */
 	public static final
 	String getContent(ServletContext ctx, String path) {
-		return (String)get(getCache(ctx), ctx, path);
+		return (String)get(getCache(ctx), ctx, path, null);
 	}
 	private static final ResourceCache getCache(ServletContext ctx) {
 		ResourceCache cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
@@ -181,10 +184,12 @@ public class ResourceCaches {
 		}
 
 		//-- super --//
-		protected Object parse(String path, File file) throws Exception {
+		protected Object parse(String path, File file, Object extra)
+		throws Exception {
 			return readAll(new FileInputStream(file));
 		}
-		protected Object parse(String path, URL url) throws Exception {
+		protected Object parse(String path, URL url, Object extra)
+		throws Exception {
 			return readAll(url.openStream());
 		}
 		private String readAll(InputStream is) throws Exception {

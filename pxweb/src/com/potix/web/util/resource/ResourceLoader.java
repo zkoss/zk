@@ -43,14 +43,20 @@ abstract public class ResourceLoader implements Loader {
 	 * will be stored into the cache ({@link ResourceCaches#get}).
 	 *
 	 * <p>Deriving must override this method.
+	 *
+	 * @param extra the extra paramter passed from {@link ResourceCaches#get}.
 	 */
-	abstract protected Object parse(String path, File file) throws Exception;
+	abstract protected Object parse(String path, File file, Object extra)
+	throws Exception;
 	/** Parses the specified URL and returns the result which
 	 * will be stored into the cache ({@link ResourceCaches#get}).
 	 *
 	 * <p>Deriving must override this method.
+	 *
+	 * @param extra the extra paramter passed from {@link ResourceCaches#get}.
 	 */
-	abstract protected Object parse(String path, URL url) throws Exception;
+	abstract protected Object parse(String path, URL url, Object extra)
+	throws Exception;
 
 	public boolean shallCheck(Object src, long expiredMillis) {
 		return expiredMillis > 0;
@@ -77,7 +83,7 @@ abstract public class ResourceLoader implements Loader {
 	public Object load(Object src) throws Exception {
 		final ResourceInfo si =(ResourceInfo)src;
 		if (si.url != null)
-			return parse(si.path, si.url);
+			return parse(si.path, si.url, si.extra);
 
 		if (!si.file.exists()) {
 			if (D.ON && log.debugable()) log.debug("Not found: "+si.file);
@@ -85,7 +91,7 @@ abstract public class ResourceLoader implements Loader {
 		}
 		if (D.ON && log.debugable()) log.debug("Loading "+si.file);
 		try {
-			return parse(si.path, si.file);
+			return parse(si.path, si.file, si.extra);
 		} catch (FileNotFoundException ex) {
 			return null;
 		}

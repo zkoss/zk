@@ -31,18 +31,25 @@ import java.net.URL;
 	/*package*/ final String path;
 	/*package*/ final File file;
 	/*package*/ final URL url;
-	/*package*/ ResourceInfo(String path, File file) {
+	/*package*/ final Object extra;
+	/**
+	 * @param extra the extra paramter passed from {@link ResourceCaches#get}.
+	 */
+	/*package*/ ResourceInfo(String path, File file, Object extra) {
 		if (file == null) throw new IllegalArgumentException("null");
 		this.path = path;
 		this.file = file;
 		this.url = null;
+		this.extra = extra;
 	}
-	/*package*/ ResourceInfo(String path, URL url) {
+	/*package*/ ResourceInfo(String path, URL url, Object extra) {
 		if (url == null) throw new IllegalArgumentException("url");
 		this.path = path;
 		this.file = null;
 		this.url = url;
+		this.extra = extra;
 	}
+
 	//-- Object --//
 	public boolean equals(Object o) {
 		return (o instanceof ResourceInfo) && path.equals(((ResourceInfo)o).path);
