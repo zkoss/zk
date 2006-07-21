@@ -1,7 +1,8 @@
 	--------
 ZK 2.1.0 Freshly
 * Features:
-  1521070, 1521058, 1522329, 1522677, 1507204, 1523732, 1518548, 1525722.
+  1521070, 1521058, 1522329, 1522677, 1507204, 1523732, 1518548, 1525722,
+  1526249.
   + LocaleProvider and TimeZoneProvider are added
   + Datebox and Calendar supports the timeZone property
   + The style component is added to simplify the specification of CSS styles.
