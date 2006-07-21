@@ -223,7 +223,7 @@ public class UiEngineImpl implements UiEngine {
 			//1) stylesheet, tablib are inited in Page's contructor
 			//2) we add variable resolvers before init because
 			//init's zscirpt might depend on it.
-			final PageDefinition.Imports imports = pagedef.getImports(page);
+			final PageDefinition.Imports imports = pagedef.getImports(exec);
 			page.addFunctionMapper(pagedef.getFunctionMapper(imports));
 			initVariableResolvers(pagedef, page, imports);
 
@@ -383,7 +383,7 @@ public class UiEngineImpl implements UiEngine {
 		//Note: we add taglib, stylesheets and var-resolvers to the page
 		//it might cause name pollution but we got no choice since they
 		//are used as long as components created by this method are alive
-		final PageDefinition.Imports imports = pagedef.getImports(page);
+		final PageDefinition.Imports imports = pagedef.getImports(exec);
 		page.addFunctionMapper(pagedef.getFunctionMapper(imports));
 		initVariableResolvers(pagedef, page, imports);
 
