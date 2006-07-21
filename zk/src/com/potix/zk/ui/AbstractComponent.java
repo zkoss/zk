@@ -136,6 +136,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	private static final
 	ComponentDefinition getDefinition(Execution exec, Class cls) {
+		LanguageDefinition langdef = null;
 		if (exec != null) {
 			final PageDefinition pgdef =
 				((ExecutionCtrl)exec).getCurrentPageDefinition();
@@ -143,7 +144,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				ComponentDefinition compdef = pgdef.getComponentDefinition(cls);
 				if (compdef != null) return compdef;
 
-				final LanguageDefinition langdef = pgdef.getLanguageDefinition();
+				langdef = pgdef.getLanguageDefinition();
 				if (langdef != null)
 					try {
 						return langdef.getComponentDefinition(cls);
@@ -154,10 +155,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		for (Iterator it = LanguageDefinition.getAll().iterator();
 		it.hasNext();) {
-			try {
-				return ((LanguageDefinition)it.next())
-					.getComponentDefinition(cls);
-			} catch (DefinitionNotFoundException ex) {
+			final LanguageDefinition ld = (LanguageDefinition)it.next();
+			if (ld != langdef) {
+				try {
+					return ld.getComponentDefinition(cls);
+				} catch (DefinitionNotFoundException ex) {
+				}
 			}
 		}
 		return null;
