@@ -21,8 +21,6 @@ package com.potix.zk.ui.impl;
 import java.io.Reader;
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
-
 import com.potix.idom.Document;
 
 import com.potix.zk.ui.WebApp;
@@ -57,20 +55,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 	public Page newPage(RequestInfo ri, PageDefinition pagedef, String path) {
 		return new PageImpl(pagedef);
 	}
-	/** Returns the page definition of the specified path, or null if not found.
-	 *
-	 * <p>Dependency: Execution.createComponents -&amp; Execution.getPageDefinition
-	 * -&amp; UiFactory.getPageDefiition -&amp; PageDefintions.getPageDefinition
-	 */
-	public PageDefinition getPageDefinition(RequestInfo ri, String path) {
-		//FUTURE: better isolation of PageDefinitions
-		final Object ctx = ri.getWebApp().getNativeContext();
-		if (ctx instanceof ServletContext) {
-			return PageDefinitions.getPageDefinition((ServletContext)ctx, path);
-		} else {
-			throw new UnsupportedOperationException("Unknown context: "+ctx);
-		}
-	}
+
 	/** Returns the page definition of the specified content; never null.
 	 *
 	 * <p>Dependency: Execution.createComponentsDirectly -&amp; Execution.getPageDefinitionDirectly

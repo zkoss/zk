@@ -315,6 +315,7 @@ public class Parser {
 				throw new UiException("The src attribute is required, "+pi.getLocator());
 			if (!params.isEmpty())
 				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
+			noEL("src", src, pi);
 			pgdef.addImport(src);
 		} else {
 			log.warning("Unknown processing instruction: "+target);

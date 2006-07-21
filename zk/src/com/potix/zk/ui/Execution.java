@@ -481,4 +481,19 @@ public interface Execution extends Evaluator {
 	/** Returns whether the client is Safari.
 	 */
 	public boolean isSafari();
+
+	/** Returns the native request, or null if not available.
+	 *
+	 * <p>The returned object depends on the Web container.
+	 * If it is based Java servlet container, an instance of
+	 * javax.servlet.ServletRequest is returned.
+	 */
+	public Object getNativeRequest();
+	/** Returns the native response, or null if not available.
+	 *
+	 * <p>The returned object depends on the Web container.
+	 * If it is based Java servlet container, an instance of
+	 * javax.servlet.ServletResponse is returned.
+	 */
+	public Object getNativeResponse();
 }

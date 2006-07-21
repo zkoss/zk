@@ -194,8 +194,7 @@ public class ExecutionImpl extends AbstractExecution {
 	private RequestInfo newRequestInfo(String uri) {
 		final Desktop dt = getDesktop();
 		return new RequestInfoImpl(
-			dt.getWebApp(), dt.getSession(), dt, _request,
-			PageDefinitions.getLocator(_ctx, uri));
+			dt, _request, PageDefinitions.getLocator(_ctx, uri));
 	}
 
 	public void setHeader(String name, String value) {
@@ -224,5 +223,12 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	public boolean isSafari() {
 		return Servlets.isSafari(_request);
+	}
+
+	public Object getNativeRequest() {
+		return _request;
+	}
+	public Object getNativeResponse() {
+		return _response;
 	}
 }

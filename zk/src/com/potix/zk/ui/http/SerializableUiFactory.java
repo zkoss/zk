@@ -18,11 +18,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.http;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Session;
+import com.potix.zk.ui.sys.RequestInfo;
 import com.potix.zk.ui.impl.AbstractUiFactory;
+import com.potix.zk.ui.metainfo.PageDefinition;
+import com.potix.zk.ui.http.PageDefinitions;
 
 /**
  * The serializable implementation of {@link com.potix.zk.ui.sys.UiFactory}.
@@ -36,5 +40,15 @@ public class SerializableUiFactory extends AbstractUiFactory {
 	String clientAddr, String clientHost) {
 		return new SerializableSession(
 			wapp, (HttpSession)nativeSess, clientAddr, clientHost);
+	}
+
+	/** Returns the page definition of the specified path, or null if not found.
+	 *
+	 * <p>Dependency: Execution.createComponents -&amp; Execution.getPageDefinition
+	 * -&amp; UiFactory.getPageDefiition -&amp; PageDefintions.getPageDefinition
+	 */
+	public PageDefinition getPageDefinition(RequestInfo ri, String path) {
+		return PageDefinitions.getPageDefinition(
+			(ServletContext)ri.getWebApp().getNativeContext(), path);
 	}
 }

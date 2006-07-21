@@ -32,6 +32,7 @@ import com.potix.util.resource.Locator;
 import com.potix.el.FunctionMappers;
 import com.potix.el.Taglib;
 
+import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Page;
@@ -45,6 +46,8 @@ import com.potix.zk.ui.sys.ComponentCtrl;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.PageCtrl;
 import com.potix.zk.ui.sys.RequestInfo;
+import com.potix.zk.ui.sys.RequestInfo;
+import com.potix.zk.ui.impl.RequestInfoImpl;
 
 /**
  * A page definition.
@@ -104,10 +107,10 @@ public class PageDefinition extends InstanceDefinition {
 	/** Returns the imported content (added by {@link #addImport}), or null
 	 * no import at all.
 	 */
-	public Imports getImports(Page page) {
+	public Imports getImports(Execution exec) {
 		if (_imports.isEmpty()) return null;
 
-		final Imports imports = new Imports();
+		final Imports imports = new Imports(exec, _imports);
 		return imports;
 	}
 
@@ -301,7 +304,12 @@ public class PageDefinition extends InstanceDefinition {
 	/** The infomation returned by {@link PageDefinition#getImports}.
 	 */
 	public static class Imports {
-		private Imports() {
+		private Imports(Execution exec, List srcs) {
+			final List pgdefs = new LinkedList();
+			for (Iterator it = srcs.iterator(); it.hasNext();) {
+				final String path = (String)it.next();
+				final RequestInfo ri = new RequestInfoImpl(exec, path);
+			}
 		}
 	}
 
