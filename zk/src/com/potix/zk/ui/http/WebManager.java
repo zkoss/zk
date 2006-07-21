@@ -52,6 +52,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.util.ApplicationInit;
 import com.potix.zk.ui.util.ApplicationCleanup;
+import com.potix.zk.ui.metainfo.PageDefinitions;
 import com.potix.zk.ui.sys.DesktopCacheProvider;
 import com.potix.zk.ui.sys.UiFactory;
 import com.potix.zk.ui.sys.SessionCtrl;
@@ -315,7 +316,7 @@ public class WebManager {
 	/*package*/ Desktop newDesktop(Session sess, Object request, String path) {
 		return ((WebAppCtrl)_wapp).getUiFactory().newDesktop(
 			new RequestInfoImpl(_wapp, sess, null, request,
-				PageDefinitions.getLocator(_ctx, path)),
+				PageDefinitions.getLocator(_wapp, path)),
 			_updateURI, path);
 	}
 	/** Sets the desktop to the specified request.

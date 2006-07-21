@@ -47,6 +47,7 @@ import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.impl.AbstractExecution;
 import com.potix.zk.ui.metainfo.PageDefinition;
+import com.potix.zk.ui.metainfo.PageDefinitions;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.RequestInfo;
 import com.potix.zk.ui.impl.RequestInfoImpl;
@@ -194,7 +195,7 @@ public class ExecutionImpl extends AbstractExecution {
 	private RequestInfo newRequestInfo(String uri) {
 		final Desktop dt = getDesktop();
 		return new RequestInfoImpl(
-			dt, _request, PageDefinitions.getLocator(_ctx, uri));
+			dt, _request, PageDefinitions.getLocator(getDesktop().getWebApp(), uri));
 	}
 
 	public void setHeader(String name, String value) {

@@ -85,7 +85,7 @@ public class DHtmlLayoutFilter extends GenericFilter {
 		try {
 			final Desktop desktop = webman.getDesktop(sess, request, null);
 			final RequestInfo ri = new RequestInfoImpl(
-				wapp, sess, desktop, request, wapp);
+				wapp, sess, desktop, request, null);
 			final UiFactory uf = wappc.getUiFactory();
 			final PageDefinition pagedef =
 				uf.getPageDefinitionDirectly(ri, content, _ext);

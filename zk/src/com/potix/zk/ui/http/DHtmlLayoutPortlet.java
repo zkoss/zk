@@ -54,6 +54,7 @@ import com.potix.zk.ui.sys.SessionsCtrl;
 import com.potix.zk.ui.sys.RequestInfo;
 import com.potix.zk.ui.impl.RequestInfoImpl;
 import com.potix.zk.ui.metainfo.PageDefinition;
+import com.potix.zk.ui.metainfo.PageDefinitions;
 
 /**
  * The portlet used to process the request for a ZUML page.
@@ -125,10 +126,9 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 
 		final Desktop desktop = getDesktop(sess, request, path);
-		final ServletContext sctx = (ServletContext)wapp.getNativeContext();
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
-			PageDefinitions.getLocator(sctx, path));
+			PageDefinitions.getLocator(wapp, path));
 		final UiFactory uf = wappc.getUiFactory();
 		final PageDefinition pagedef = path != null ?
 			uf.getPageDefinition(ri, path): null;
@@ -148,7 +148,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 		final Page page = uf.newPage(ri, pagedef, path);
 		final Execution exec =
-			new ExecutionImpl(sctx,
+			new ExecutionImpl((ServletContext)wapp.getNativeContext(),
 				RenderHttpServletRequest.getInstance(request),
 				RenderHttpServletResponse.getInstance(response),
 				desktop, page);

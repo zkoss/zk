@@ -45,6 +45,7 @@ import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.metainfo.PageDefinition;
+import com.potix.zk.ui.metainfo.PageDefinitions;
 import com.potix.zk.ui.sys.UiFactory;
 import com.potix.zk.ui.sys.RequestInfo;
 import com.potix.zk.ui.sys.WebAppCtrl;
@@ -123,7 +124,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final Desktop desktop = _webman.getDesktop(sess, request, path);
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
-			PageDefinitions.getLocator(_ctx, path));
+			PageDefinitions.getLocator(wapp, path));
 		final UiFactory uf = wappc.getUiFactory();
 		final PageDefinition pagedef = uf.getPageDefinition(ri, path);
 		if (pagedef == null) {
