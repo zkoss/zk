@@ -29,7 +29,7 @@ import com.potix.zk.ui.Page;
 import com.potix.zk.ui.sys.UiFactory;
 import com.potix.zk.ui.sys.RequestInfo;
 import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.http.PageDefinitions;
+import com.potix.zk.ui.metainfo.PageDefinitions;
 
 /**
  * The sketetal implementation of {@link UiFactory}.
@@ -56,6 +56,15 @@ abstract public class AbstractUiFactory implements UiFactory {
 		return new PageImpl(pagedef);
 	}
 
+	/** Returns the page definition of the specified path, or null if not found.
+	 *
+	 * <p>Dependency: Execution.createComponents -&amp; Execution.getPageDefinition
+	 * -&amp; UiFactory.getPageDefiition -&amp; PageDefinitions.getPageDefinition
+	 */
+	public PageDefinition getPageDefinition(RequestInfo ri, String path) {
+		return PageDefinitions.getPageDefinition(
+			ri.getWebApp(), ri.getLocator(), path);
+	}
 	/** Returns the page definition of the specified content; never null.
 	 *
 	 * <p>Dependency: Execution.createComponentsDirectly -&amp; Execution.getPageDefinitionDirectly
@@ -64,17 +73,17 @@ abstract public class AbstractUiFactory implements UiFactory {
 	public PageDefinition getPageDefinitionDirectly(
 	RequestInfo ri, String content, String extension) {
 		return PageDefinitions.getPageDefinitionDirectly(
-			ri.getLocator(), content, extension);
+			ri.getWebApp(), ri.getLocator(), content, extension);
 	}
 
 	public PageDefinition getPageDefinitionDirectly(
 	RequestInfo ri, Document content, String extension) {
 		return PageDefinitions.getPageDefinitionDirectly(
-			ri.getLocator(), content, extension);
+			ri.getWebApp(), ri.getLocator(), content, extension);
 	}
 	public PageDefinition getPageDefinitionDirectly(
 	RequestInfo ri, Reader reader, String extension) throws IOException {
 		return PageDefinitions.getPageDefinitionDirectly(
-			ri.getLocator(), reader, extension);
+			ri.getWebApp(), ri.getLocator(), reader, extension);
 	}
 }

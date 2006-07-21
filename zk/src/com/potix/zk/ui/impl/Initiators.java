@@ -29,7 +29,6 @@ import com.potix.zk.ui.Page;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Initiator;
 import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.metainfo.InitiatorDefinition;
 
 /**
  * A helper class used with {@link com.potix.zk.ui.sys.UiEngine} to process
@@ -42,9 +41,8 @@ import com.potix.zk.ui.metainfo.InitiatorDefinition;
 	/** Invokes {@link Initiator#doInit}, if any, and returns
 	 * an instance of{@link Initiators}.
 	 */
-	public static final Initiators doInit(PageDefinition pagedef, Page page,
-	PageDefinition.Imports imports) {
-		final List inits = pagedef.doInit(page, imports);
+	public static final Initiators doInit(PageDefinition pagedef, Page page) {
+		final List inits = pagedef.doInit(page);
 		if (inits.isEmpty()) return new Initiators();
 		return new RealInits(inits);
 	}

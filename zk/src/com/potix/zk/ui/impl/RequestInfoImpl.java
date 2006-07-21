@@ -18,8 +18,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.impl;
 
-import javax.servlet.ServletContext;
-
 import com.potix.util.resource.Locator;
 
 import com.potix.zk.ui.Execution;
@@ -27,7 +25,6 @@ import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.sys.RequestInfo;
-import com.potix.zk.ui.http.PageDefinitions;
 
 /**
  * An implementation of {@link RequestInfo}.
@@ -44,15 +41,15 @@ public class RequestInfoImpl implements RequestInfo {
 	/** Constructor
 	 *
 	 * @param wapp the Web application, never null.
-	 * @param sess the session, never null.
+	 * @param sess the session, or null if not available.
 	 * @param desktop the desktop, or null if not created yet.
 	 * @param request the request, or null if not available.
-	 * @param locator the locator used to locate taglib and other resources,
-	 * never null.
+	 * @param locator the locator used to locate taglib and other resources.
+	 * If null, wapp is used.
 	 */
 	public RequestInfoImpl(WebApp wapp, Session sess,
 	Desktop desktop, Object request, Locator locator) {
-		if (wapp == null || sess == null || locator == null)
+		if (wapp == null)
 			throw new IllegalArgumentException("null");
 		_wapp = wapp;
 		_sess = sess;
@@ -64,8 +61,8 @@ public class RequestInfoImpl implements RequestInfo {
 	 *
 	 * @param desktop the desktop, never null.
 	 * @param request the request, or null if not available.
-	 * @param locator the locator used to locate taglib and other resources,
-	 * never null.
+	 * @param locator the locator used to locate taglib and other resources.
+	 * If null, wapp is used.
 	 */
 	public RequestInfoImpl(Desktop desktop, Object request, Locator locator) {
 		this(desktop.getWebApp(), desktop.getSession(), desktop, request, locator);
@@ -74,15 +71,11 @@ public class RequestInfoImpl implements RequestInfo {
 	 *
 	 * @param exec the current execution, never null
 	 * @param path the related path used to get the locator, or null.
+	 * @param locator the locator used to locate taglib and other resources.
+	 * If null, {@link #getWebApp} is used.
 	 */
-	public RequestInfoImpl(Execution exec, String path) {
-		this(exec.getDesktop(), exec.getNativeRequest(), getLocator(exec, path));
-	}
-	private static Locator getLocator(Execution exec, String path) {
-		final Object ctx = exec.getDesktop().getWebApp().getNativeContext();
-		if (ctx instanceof ServletContext)
-			return PageDefinitions.getLocator((ServletContext)ctx, path);
-		throw new UnsupportedOperationException("Unknown context: "+ctx);
+	public RequestInfoImpl(Execution exec, Locator locator) {
+		this(exec.getDesktop(), exec.getNativeRequest(), locator);
 	}
 
 	public final WebApp getWebApp() {
@@ -101,7 +94,6 @@ public class RequestInfoImpl implements RequestInfo {
 		return _locator;
 	}
 	public final void setLocator(Locator locator) {
-		if (locator == null) throw new IllegalArgumentException("null");
 		_locator = locator;
 	}
 }
