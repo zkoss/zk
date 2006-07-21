@@ -43,11 +43,7 @@ import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.util.Namespaces;
 import com.potix.zk.ui.util.VariableResolver;
 import com.potix.zk.ui.sys.ComponentCtrl;
-import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.PageCtrl;
-import com.potix.zk.ui.sys.RequestInfo;
-import com.potix.zk.ui.sys.RequestInfo;
-import com.potix.zk.ui.impl.RequestInfoImpl;
 
 /**
  * A page definition.
@@ -66,8 +62,6 @@ public class PageDefinition extends InstanceDefinition {
 	private final List _initdefs = new LinkedList();
 	/** List(VariableResolverDefinition). */
 	private final List _resolvdefs = new LinkedList();
-	/** List(String src). */
-	private final List _imports = new LinkedList();
 	/** A map of component definition defined in this page. */
 	private Map _compdefs;
 	/** Map(String clsnm, ComponentDefinition compdef). */
@@ -96,22 +90,13 @@ public class PageDefinition extends InstanceDefinition {
 		_locator = locator;
 	}
 
-	/** Adds a src (URI) of a ZUML page to import. */
-	public void addImport(String src) {
-		if (src == null || src.length() == 0)
-			throw new IllegalArgumentException("empty");
-		synchronized (_imports) {
-			_imports.add(src);
-		}
-	}
-	/** Returns the imported content (added by {@link #addImport}), or null
-	 * no import at all.
+	/** Imports the component definitions from the specified definition.
 	 */
-	public Imports getImports(Execution exec) {
-		if (_imports.isEmpty()) return null;
-
-		final Imports imports = new Imports(exec, _imports);
-		return imports;
+	public void imports(PageDefinition pgdef) {
+		if (pgdef._compdefs != null) {
+			for (Iterator it = pgdef._compdefs.values().iterator(); it.hasNext();)
+				addComponentDefinition((ComponentDefinition)it.next());
+		}
 	}
 
 	/** Adds a defintion of {@link com.potix.zk.ui.util.Initiator}. */
@@ -125,10 +110,8 @@ public class PageDefinition extends InstanceDefinition {
 	/** Returns a list of all {@link Initiator} and invokes
 	 * its {@link Initiator#doInit} before returning.
 	 * It never returns null.
-	 *
-	 * @param imports the import info returned by {@link #getImports}.
 	 */
-	public List doInit(Page page, Imports imports) {
+	public List doInit(Page page) {
 		if (_initdefs.isEmpty())
 			return Collections.EMPTY_LIST;
 
@@ -158,10 +141,8 @@ public class PageDefinition extends InstanceDefinition {
 	}
 	/** Retrieves a list of variable resolvers defined for this page
 	 * definition.
-	 *
-	 * @param imports the import info returned by {@link #getImports}.
 	 */
-	public List newVariableResolvers(Page page, Imports imports) {
+	public List newVariableResolvers(Page page) {
 		if (_resolvdefs.isEmpty())
 			return Collections.EMPTY_LIST;
 
@@ -216,15 +197,24 @@ public class PageDefinition extends InstanceDefinition {
 	}
 	/** Returns the component defintion of the specified name, or null
 	 * if not found.
+	 *
+	 * <p>Note: unlike {@link LanguageDefinition#getComponentDefinition},
+	 * this method doesn't throw ComponentNotFoundException if not found.
+	 * It just returns null.
 	 */
 	public ComponentDefinition getComponentDefinition(String name) {
 		if (_compdefs == null) return null;
+
 		synchronized (_compdefs) {
 			return (ComponentDefinition)_compdefs.get(name);
 		}
 	}
 	/** Returns the component defintion of the specified name, or null
 	 * if not found.
+	 *
+	 * <p>Note: unlike {@link LanguageDefinition#getComponentDefinition},
+	 * this method doesn't throw ComponentNotFoundException if not found.
+	 * It just returns null.
 	 */
 	public ComponentDefinition getComponentDefinition(Class cls) {
 		if (_compdefsByClass == null) return null;
@@ -249,7 +239,7 @@ public class PageDefinition extends InstanceDefinition {
 		}
 	}
 	/** Returns the function mapper. */
-	public FunctionMapper getFunctionMapper(Imports imports) {
+	public FunctionMapper getFunctionMapper() {
 		if (_funmap == null) {
 			synchronized (this) {
 				if (_funmap == null) {
@@ -299,18 +289,6 @@ public class PageDefinition extends InstanceDefinition {
 	}
 	public Millieu getMillieu() {
 		throw new UnsupportedOperationException();
-	}
-
-	/** The infomation returned by {@link PageDefinition#getImports}.
-	 */
-	public static class Imports {
-		private Imports(Execution exec, List srcs) {
-			final List pgdefs = new LinkedList();
-			for (Iterator it = srcs.iterator(); it.hasNext();) {
-				final String path = (String)it.next();
-				final RequestInfo ri = new RequestInfoImpl(exec, path);
-			}
-		}
 	}
 
 	//Object//

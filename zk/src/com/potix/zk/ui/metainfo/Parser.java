@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.LinkedHashSet;
 import java.io.File;
 import java.io.Reader;
 import java.io.FileNotFoundException;
@@ -46,12 +48,17 @@ import com.potix.idom.util.IDOMs;
 import com.potix.idom.input.SAXBuilder;
 import com.potix.el.Taglib;
 
+import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.impl.ScriptInitiator;
 import com.potix.zk.ui.util.Condition;
 import com.potix.zk.ui.util.impl.ConditionImpl;
+import com.potix.zk.ui.sys.WebAppCtrl;
+import com.potix.zk.ui.sys.RequestInfo;
+import com.potix.zk.ui.sys.UiFactory;
+import com.potix.zk.ui.impl.RequestInfoImpl;
 
 /**
  * Used to prase the ZUL file
@@ -60,27 +67,61 @@ import com.potix.zk.ui.util.impl.ConditionImpl;
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);
 
+	/** Set(URL | File), used to avoid dead-loop (caused by import). */
+	private static final ThreadLocal _parsing = new ThreadLocal();
+
+	private final WebApp _wapp;
 	private final Locator _locator;
 
-	public Parser(Locator locator) {
-		if (locator == null) throw new IllegalArgumentException("null");
-		_locator = locator;
+	/** Constructor.
+	 *
+	 * @param locator the locator used to locate taglib and other resources.
+	 * If null, wapp is assumed ({@link WebApp} is also assumed).
+	 */	
+	public Parser(WebApp wapp, Locator locator) {
+		if (wapp == null)
+			throw new IllegalArgumentException("null");
+		_wapp = wapp;
+		_locator = locator != null ? locator: (Locator)wapp;
 	}
 
 	/** Parses the specified file.
 	 */
 	public PageDefinition parse(File file) throws Exception {
 		if (log.debugable()) log.debug("Parsing "+file);
-		return parse(new SAXBuilder(true, false, true).build(file),
-			getExtension(file.getName()));
+		pushParsing(file);
+		try {
+			return parse(new SAXBuilder(true, false, true).build(file),
+				getExtension(file.getName()));
+		} finally {
+			popParsing(file);
+		}
 	}
 	/** Parses the specified URL.
 	 */
 	public PageDefinition parse(URL url) throws Exception {
 		if (log.debugable()) log.debug("Parsing "+url);
-		return parse(new SAXBuilder(true, false, true).build(url),
-			getExtension(url.toExternalForm()));
+		pushParsing(url);
+		try {
+			return parse(new SAXBuilder(true, false, true).build(url),
+				getExtension(url.toExternalForm()));
+		} finally {
+			popParsing(url);
+		}
 	}
+	private static final void pushParsing(Object src) {
+		Set parsing = (Set)_parsing.get();
+		if (parsing == null)
+			_parsing.set(parsing = new LinkedHashSet());
+		else if (parsing.contains(src))
+			throw new UiException("Recursive import "+src+", stack: "+parsing);
+		parsing.add(src);
+		
+	}
+	private static final void popParsing(Object src) {
+		((Set)_parsing.get()).remove(src);
+	}
+
 	private static final String getExtension(String nm) {
 		int j = nm == null ? -1: nm.lastIndexOf('.');
 		if (j < 0 || j < nm.lastIndexOf('/'))
@@ -117,7 +158,9 @@ public class Parser {
 	 */
 	public PageDefinition parse(Document doc, String extension)
 	throws Exception {
-		//1. parse the page directive if any
+		//1. parse the page and import directive if any
+		final List pis = new LinkedList();
+		final List imports = new LinkedList();
 		String lang = null, title = null, id = null, style = null;
 		for (Iterator it = doc.getChildren().iterator(); it.hasNext();) {
 			final Object o = it.next();
@@ -125,26 +168,36 @@ public class Parser {
 
 			final ProcessingInstruction pi = (ProcessingInstruction)o;
 			final String target = pi.getTarget();
-			if (!"page".equals(target)) continue;
-
-			for (Iterator i2 = pi.parseData().entrySet().iterator(); i2.hasNext();) {
-				final Map.Entry me = (Map.Entry)i2.next();
-				final String nm = (String)me.getKey();
-				final String val = (String)me.getValue();
-				if ("language".equals(nm)) {
-					lang = val;
-					noEL("language", lang, pi);
-				} else if ("title".equals(nm)) {
-					title = val;
-				} else if ("style".equals(nm)) {
-					style = val;
-				} else if ("id".equals(nm)) {
-					id = val;
-				} else {
-					log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
+			if ("page".equals(target)) {
+				for (Iterator i2 = pi.parseData().entrySet().iterator(); i2.hasNext();) {
+					final Map.Entry me = (Map.Entry)i2.next();
+					final String nm = (String)me.getKey();
+					final String val = (String)me.getValue();
+					if ("language".equals(nm)) {
+						lang = val;
+						noEL("language", lang, pi);
+					} else if ("title".equals(nm)) {
+						title = val;
+					} else if ("style".equals(nm)) {
+						style = val;
+					} else if ("id".equals(nm)) {
+						id = val;
+					} else {
+						log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
+					}
 				}
+			} else if ("import".equals(target)) { //import
+				final Map params = pi.parseData();
+				final String src = (String)params.remove("src");
+				if (isEmpty(src))
+					throw new UiException("The src attribute is required, "+pi.getLocator());
+				if (!params.isEmpty())
+					log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
+				noEL("src", src, pi);
+				imports.add(src);
+			} else {
+				pis.add(pi);
 			}
-			break; //process only one page directive
 		}
 
 		//2. Create PageDefinition
@@ -155,18 +208,25 @@ public class Parser {
 		final PageDefinition pgdef =
 			new PageDefinition(langdef, id, title, style, getLocator());
 
-		//3. Processing processing instructions
-		boolean pgfnd = false; //we have to ignore the first page directive
-		for (Iterator it = doc.getChildren().iterator(); it.hasNext();) {
-			final Object o = it.next();
-			if ((o instanceof ProcessingInstruction)) {
-				final ProcessingInstruction pi = (ProcessingInstruction)o;
-				if (!pgfnd && "page".equals(pi.getTarget())) pgfnd = true;
-				else parse(pgdef, pi);
+		//3. resolve imports
+		if (!imports.isEmpty()) {
+			final RequestInfo ri =
+				new RequestInfoImpl(_wapp, null, null, null, _locator);
+			final UiFactory uf = ((WebAppCtrl)_wapp).getUiFactory();
+			for (Iterator it = imports.iterator(); it.hasNext();) {
+				final String path = (String)it.next();
+				final PageDefinition pd = uf.getPageDefinition(ri, path);
+				if (pd == null)
+					throw new UiException("Import page not found: "+path);
+				pgdef.imports(pd);
 			}
 		}
 
-		//4. Processing from the root element
+		//4. Processing the rest of processing instructions at the top level
+		for (Iterator it = pis.iterator(); it.hasNext();)
+			parse(pgdef, (ProcessingInstruction)it.next());
+
+		//5. Processing from the root element
 		final Element root = doc.getRootElement();
 		if (root != null) parse(pgdef, pgdef, root);
 		return pgdef;
@@ -186,16 +246,12 @@ public class Parser {
 	}
 
 	/** Parse processing instruction.
-	 *
-	 * @param ignorePage whether to ignore the page directive.
 	 */
 	private void parse(PageDefinition pgdef, ProcessingInstruction pi)
 	throws Exception {
 		final String target = pi.getTarget();
 		final Map params = pi.parseData();
-		if ("page".equals(target)) {
-			log.warning("Ignored page directive at "+pi.getLocator());
-		} else if ("taglib".equals(target)) {
+		if ("taglib".equals(target)) {
 			final String uri = (String)params.remove("uri");
 			final String prefix = (String)params.remove("prefix");
 			if (!params.isEmpty())
@@ -309,14 +365,10 @@ public class Parser {
 				compdef.addProperty(
 					(String)me.getKey(), (String)me.getValue(), null);
 			}
+		} else if ("page".equals(target)) {
+			log.warning("Ignored page directive at "+pi.getLocator());
 		} else if ("import".equals(target)) { //import
-			final String src = (String)params.remove("src");
-			if (isEmpty(src))
-				throw new UiException("The src attribute is required, "+pi.getLocator());
-			if (!params.isEmpty())
-				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
-			noEL("src", src, pi);
-			pgdef.addImport(src);
+			throw new UiException("The import directive can be used only at the top level, "+pi);
 		} else {
 			log.warning("Unknown processing instruction: "+target);
 		}
