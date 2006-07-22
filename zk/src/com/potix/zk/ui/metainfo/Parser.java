@@ -34,6 +34,7 @@ import java.net.URL;
 
 import com.potix.lang.D;
 import com.potix.lang.Classes;
+import com.potix.lang.PotentialDeadLockException;
 import com.potix.util.logging.Log;
 import com.potix.util.resource.Locator;
 import com.potix.idom.Namespace;
@@ -67,9 +68,6 @@ import com.potix.zk.ui.impl.RequestInfoImpl;
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);
 
-	/** Set(URL | File), used to avoid dead-loop (caused by import). */
-	private static final ThreadLocal _parsing = new ThreadLocal();
-
 	private final WebApp _wapp;
 	private final Locator _locator;
 
@@ -89,37 +87,15 @@ public class Parser {
 	 */
 	public PageDefinition parse(File file) throws Exception {
 		if (log.debugable()) log.debug("Parsing "+file);
-		pushParsing(file);
-		try {
-			return parse(new SAXBuilder(true, false, true).build(file),
-				getExtension(file.getName()));
-		} finally {
-			popParsing(file);
-		}
+		return parse(new SAXBuilder(true, false, true).build(file),
+			getExtension(file.getName()));
 	}
 	/** Parses the specified URL.
 	 */
 	public PageDefinition parse(URL url) throws Exception {
 		if (log.debugable()) log.debug("Parsing "+url);
-		pushParsing(url);
-		try {
-			return parse(new SAXBuilder(true, false, true).build(url),
-				getExtension(url.toExternalForm()));
-		} finally {
-			popParsing(url);
-		}
-	}
-	private static final void pushParsing(Object src) {
-		Set parsing = (Set)_parsing.get();
-		if (parsing == null)
-			_parsing.set(parsing = new LinkedHashSet());
-		else if (parsing.contains(src))
-			throw new UiException("Recursive import "+src+", stack: "+parsing);
-		parsing.add(src);
-		
-	}
-	private static final void popParsing(Object src) {
-		((Set)_parsing.get()).remove(src);
+		return parse(new SAXBuilder(true, false, true).build(url),
+			getExtension(url.toExternalForm()));
 	}
 
 	private static final String getExtension(String nm) {
@@ -215,10 +191,14 @@ public class Parser {
 			final UiFactory uf = ((WebAppCtrl)_wapp).getUiFactory();
 			for (Iterator it = imports.iterator(); it.hasNext();) {
 				final String path = (String)it.next();
-				final PageDefinition pd = uf.getPageDefinition(ri, path);
-				if (pd == null)
-					throw new UiException("Import page not found: "+path);
-				pgdef.imports(pd);
+				try {
+					final PageDefinition pd = uf.getPageDefinition(ri, path);
+					if (pd == null)
+						throw new UiException("Import page not found: "+path);
+					pgdef.imports(pd);
+				} catch (PotentialDeadLockException ex) {
+					throw new UiException("Recursive import: "+path, ex);
+				}
 			}
 		}
 
