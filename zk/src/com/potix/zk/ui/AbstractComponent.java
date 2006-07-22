@@ -1014,7 +1014,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public String toString() {
 		final String clsnm = getClass().getName();
 		final int j = clsnm.lastIndexOf('.');
-		return "["+clsnm.substring(j+1)+' '+_id+']';
+		return "<"+clsnm.substring(j+1)+' '+_id+'>';
 	}
 	public final boolean equals(Object o) { //no more override
 		return this == o;
