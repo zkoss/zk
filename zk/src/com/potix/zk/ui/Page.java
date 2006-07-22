@@ -116,31 +116,45 @@ public interface Page extends IdSpace {
 
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes shared by the same page.
+	 * <p>It is also known as the page attributes.
+	 * <p>It is the same as {@link Page#getAttributes}.
 	 */
 	public static final int PAGE_SCOPE = Component.PAGE_SCOPE;
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes shared by the same desktop.
+	 * <p>It is also known as the desktop attributes.
+	 * <p>It is the same as {@link Desktop#getAttributes}.
 	 */
 	public static final int DESKTOP_SCOPE = Component.DESKTOP_SCOPE;
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes shared by the same session.
+	 * <p>It is also known as the session attributes.
+	 * <p>It is the same as {@link Session#getAttributes}.
 	 */
 	public static final int SESSION_SCOPE = Component.SESSION_SCOPE;
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes shared by the whole application.
+	 * <p>It is also known as the application attributes.
+	 * <p>It is the same as {@link WebApp#getAttributes}.
 	 */
 	public static final int APPLICATION_SCOPE = Component.APPLICATION_SCOPE;
+	/** Used with {@link #getAttribute} and relevants to denote
+	 * custom attributes shared by the same request.
+	 * <p>It is also known as the request attributes.
+	 * <p>It is the same as {@link Execution#getAttributes}.
+	 */
+	public static final int REQUEST_SCOPE = Component.REQUEST_SCOPE;
 
 	/** Returns all custom attributes of the specified scope.
-	 * You could reference them thru componentScope, spaceScope, pageScope
-	 * and desktopScope in BSH and EL.
+	 * You could reference them thru componentScope, spaceScope, pageScope,
+	 * requestScope and desktopScope in BSH and EL.
 	 *
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
 	 * by components from the same desktopas this one's.
 	 * @param scope {@link #APPLICATION_SCOPE}, {@link #SESSION_SCOPE},
-	 * {@link #PAGE_SCOPE} or {@link #DESKTOP_SCOPE}.
+	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
 	public Map getAttributes(int scope);
 	/** Returns the value of the specified custom attribute in the specified scope.
@@ -150,7 +164,7 @@ public interface Page extends IdSpace {
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
 	 * by components from the same desktopas this one's.
 	 * @param scope {@link #APPLICATION_SCOPE}, {@link #SESSION_SCOPE},
-	 * {@link #PAGE_SCOPE} or {@link #DESKTOP_SCOPE}.
+	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
 	public Object getAttribute(String name, int scope);
 	/** Sets the value of the specified custom attribute in the specified scope.
@@ -160,7 +174,7 @@ public interface Page extends IdSpace {
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
 	 * by components from the same desktopas this one's.
 	 * @param scope {@link #APPLICATION_SCOPE}, {@link #SESSION_SCOPE},
-	 * {@link #PAGE_SCOPE} or {@link #DESKTOP_SCOPE}.
+	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
 	public Object setAttribute(String name, Object value, int scope);
 	/** Removes the specified custom attribute in the specified scope.
@@ -170,7 +184,7 @@ public interface Page extends IdSpace {
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
 	 * by components from the same desktopas this one's.
 	 * @param scope {@link #APPLICATION_SCOPE}, {@link #SESSION_SCOPE},
-	 * {@link #PAGE_SCOPE} or {@link #DESKTOP_SCOPE}.
+	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
 	public Object removeAttribute(String name, int scope);
 

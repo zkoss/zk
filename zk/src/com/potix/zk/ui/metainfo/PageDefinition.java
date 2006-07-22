@@ -93,6 +93,8 @@ public class PageDefinition extends InstanceDefinition {
 	/** Imports the component definitions from the specified definition.
 	 */
 	public void imports(PageDefinition pgdef) {
+		for (Iterator it = pgdef._initdefs.iterator(); it.hasNext();)
+			addInitiatorDefinition((InitiatorDefinition)it.next());
 		if (pgdef._compdefs != null) {
 			for (Iterator it = pgdef._compdefs.values().iterator(); it.hasNext();)
 				addComponentDefinition((ComponentDefinition)it.next());

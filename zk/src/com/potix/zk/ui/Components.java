@@ -155,13 +155,14 @@ public class Components {
 		if ("desktop".equals(scope)) return Component.DESKTOP_SCOPE;
 		if ("session".equals(scope)) return Component.SESSION_SCOPE;
 		if ("application".equals(scope)) return Component.APPLICATION_SCOPE;
+		if ("request".equals(scope)) return Component.REQUEST_SCOPE;
 		throw new IllegalArgumentException("Unknown scope: "+scope);
 	}
 	/** Converts an integer to the string representing the scope.
 	 * @param scope one of {@link Component#COMPONENT_SCOPE},
 	 * {@link Component#SPACE_SCOPE}, {@link Component#PAGE_SCOPE}, 
 	 * {@link Component#DESKTOP_SCOPE}, {@link Component#SESSION_SCOPE},
-	 * and {@link Component#APPLICATION_SCOPE}.
+	 * {@link Component#REQUEST_SCOPE}, and {@link Component#APPLICATION_SCOPE}.
 	 */
 	public static final String scopeToString(int scope) {
 		switch (scope) {
@@ -171,6 +172,7 @@ public class Components {
 		case Component.DESKTOP_SCOPE: return "desktop";
 		case Component.SESSION_SCOPE: return "session";
 		case Component.APPLICATION_SCOPE: return "application";
+		case Component.REQUEST_SCOPE: return "request";
 		}
 		throw new IllegalArgumentException("Unknown scope: "+scope);
 	}

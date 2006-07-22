@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package com.potix.zk.ui.http;
 
 import java.util.Map;
+import java.util.Enumeration;
 import java.io.Writer;
 import java.io.Reader;
 import java.io.IOException;
@@ -34,6 +35,7 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.el.ELException;
 
 import com.potix.el.RequestResolver;
+import com.potix.el.impl.AttributesMap;
 import com.potix.idom.Document;
 import com.potix.web.servlet.Servlets;
 import com.potix.web.servlet.BufferedResponse;
@@ -63,6 +65,7 @@ public class ExecutionImpl extends AbstractExecution {
 	private final ServletRequest _request;
 	private final ServletResponse _response;
 	private final ELContext _elctx;
+	private final Map _attrs;
 
 	/** Constructs an execution for HTTP request.
 	 * @param creating which page is being creating for this execution, or
@@ -86,6 +89,21 @@ public class ExecutionImpl extends AbstractExecution {
 		if (pgctx == null)
 			throw new UiException("Unable to resolve pageContext");
 		_elctx = new PageELContext(pgctx);
+
+		_attrs = new AttributesMap() {
+			protected Enumeration getKeys() {
+				return _request.getAttributeNames();
+			}
+			protected Object getValue(String key) {
+				return _request.getAttribute(key);
+			}
+			protected void setValue(String key, Object val) {
+				_request.setAttribute(key, val);
+			}
+			protected void removeValue(String key) {
+				_request.removeAttribute(key);
+			}
+		};
 	}
 
 	//-- super --//
@@ -231,5 +249,19 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	public Object getNativeResponse() {
 		return _response;
+	}
+
+	public Object getAttribute(String name) {
+		return _request.getAttribute(name);
+	}
+	public void setAttribute(String name, Object value) {
+		_request.setAttribute(name, value);
+	}
+	public void removeAttribute(String name) {
+		_request.removeAttribute(name);
+	}
+
+	public Map getAttributes() {
+		return _attrs;
 	}
 }

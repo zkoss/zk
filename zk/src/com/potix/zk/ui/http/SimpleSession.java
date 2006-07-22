@@ -18,7 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.http;
 
-
 import java.util.Map;
 import java.util.Enumeration;
 import java.util.Iterator;

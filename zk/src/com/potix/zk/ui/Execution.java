@@ -496,4 +496,17 @@ public interface Execution extends Evaluator {
 	 * javax.servlet.ServletResponse is returned.
 	 */
 	public Object getNativeResponse();
+
+	/** Returns the value of the specified request attribute.
+	 */
+	public Object getAttribute(String name);
+	/** Sets the value of the specified request attribute.
+	 */
+	public void setAttribute(String name, Object value);
+	/** Removes the specified request attribute.
+	 */
+	public void removeAttribute(String name);
+	/** Returns a map of request attributes associated with this session.
+	 */
+	public Map getAttributes();
 }

@@ -588,9 +588,17 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_desktop.getWebApp().getAttributes(): Collections.EMPTY_MAP;
 		case COMPONENT_SCOPE:
 			return _attrs;
+		case REQUEST_SCOPE:
+			final Execution exec = getExecution();
+			if (exec != null) return exec.getAttributes();
+			//fall thru
 		default:
 			return Collections.EMPTY_MAP;
 		}
+	}
+	private final Execution getExecution() {
+		return _desktop != null ? _desktop.getExecution():
+			Executions.getCurrent();
 	}
 	public Object getAttribute(String name, int scope) {
 		return getAttributes(scope).get(name);

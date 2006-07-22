@@ -70,7 +70,6 @@ public class RequestInfoImpl implements RequestInfo {
 	/** Construcotr.
 	 *
 	 * @param exec the current execution, never null
-	 * @param path the related path used to get the locator, or null.
 	 * @param locator the locator used to locate taglib and other resources.
 	 * If null, {@link #getWebApp} is used.
 	 */

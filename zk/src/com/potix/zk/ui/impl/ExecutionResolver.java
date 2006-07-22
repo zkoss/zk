@@ -100,6 +100,8 @@ public class ExecutionResolver implements VariableResolver {
 				return ((Component)_self).getAttributes(Component.COMPONENT_SCOPE);
 			return Collections.EMPTY_MAP;
 		}
+		if ("requestScope".equals(name))
+			return _exec.getAttributes();
 		if ("arg".equals(name))
 			return _exec.getArg();
 

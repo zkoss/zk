@@ -179,32 +179,49 @@ public interface Component extends java.io.Serializable, Cloneable {
 
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes private to a component is searched.
+	 * <p>It is also known as the component attributes.
+	 * <p>It is the same as {@link Component#getAttributes}.
 	 */
 	public static final int COMPONENT_SCOPE = 0;
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes shared by the same ID space.
+	 * <p>It is also known as the ID space attributes.
 	 */
 	public static final int SPACE_SCOPE = 1;
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes shared by the same page.
+	 * <p>It is also known as the page attributes.
+	 * <p>It is the same as {@link Page#getAttributes}.
 	 */
 	public static final int PAGE_SCOPE = 2;
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes shared by the same desktop.
+	 * <p>It is also known as the desktop attributes.
+	 * <p>It is the same as {@link Desktop#getAttributes}.
 	 */
 	public static final int DESKTOP_SCOPE = 3;
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes shared by the same session.
+	 * <p>It is also known as the session attributes.
+	 * <p>It is the same as {@link Session#getAttributes}.
 	 */
 	public static final int SESSION_SCOPE = 4;
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes shared by the whole application.
+	 * <p>It is also known as the application attributes.
+	 * <p>It is the same as {@link WebApp#getAttributes}.
 	 */
 	public static final int APPLICATION_SCOPE = 5;
+	/** Used with {@link #getAttribute} and relevants to denote
+	 * custom attributes shared by the same request.
+	 * <p>It is also known as the request attributes.
+	 * <p>It is the same as {@link Execution#getAttributes}.
+	 */
+	public static final int REQUEST_SCOPE = 6;
 
 	/** Returns all custom attributes of the specified scope.
-	 * You could reference them thru componentScope, spaceScope, pageScope
-	 * and desktopScope in BSH and EL.
+	 * You could reference them thru componentScope, spaceScope, pageScope,
+	 * requestScope and desktopScope in BSH and EL.
 	 *
 	 * <p>If scope is {@link #COMPONENT_SCOPE}, it means custom attributes private
 	 * to this component.
@@ -216,8 +233,8 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * by components from the same desktopas this one's.
 	 *
 	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
-	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE}
-	 * or {@link #APPLICATION_SCOPE}, 
+	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
+	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
 	public Map getAttributes(int scope);
 	/** Returns the value of the specified custom attribute in the specified scope.
@@ -231,8 +248,8 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * by components from the same desktopas this one's.
 	 *
 	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
-	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE}
-	 * or {@link #APPLICATION_SCOPE}, 
+	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
+	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
 	public Object getAttribute(String name, int scope);
 	/** Sets the value of the specified custom attribute in the specified scope.
@@ -246,8 +263,8 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * by components from the same desktopas this one's.
 	 *
 	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
-	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE}
-	 * or {@link #APPLICATION_SCOPE}, 
+	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
+	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
 	public Object setAttribute(String name, Object value, int scope);
 	/** Removes the specified custom attribute in the specified scope.
@@ -261,8 +278,8 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * by components from the same desktopas this one's.
 	 *
 	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
-	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE}
-	 * or {@link #APPLICATION_SCOPE}, 
+	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
+	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
 	public Object removeAttribute(String name, int scope);
 

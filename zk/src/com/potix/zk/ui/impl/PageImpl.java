@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.AbstractMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
@@ -215,6 +216,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				_desktop.getWebApp().getAttributes(): Collections.EMPTY_MAP;
 		case PAGE_SCOPE:
 			return _attrs;
+		case REQUEST_SCOPE:
+			final Execution exec = getExecution();
+			if (exec != null) return exec.getAttributes();
+			//fall thru
 		default:
 			return Collections.EMPTY_MAP;
 		}
@@ -377,12 +382,39 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_ip.setVariable("session", sess);
 		_ip.setVariable("sessionScope", sess.getAttributes());
 		_ip.setVariable("applicationScope", _desktop.getWebApp().getAttributes());
+		_ip.setVariable("requestScope", new AbstractMap() {
+			public Set entrySet() {
+				final Execution exec = Executions.getCurrent();
+				if (exec == null) return Collections.EMPTY_SET;
+				return exec.getAttributes().entrySet();
+			}
+			public Object put(Object name, Object value) {
+				final Execution exec = Executions.getCurrent();
+				if (exec == null) throw new IllegalStateException("No execution at all");
+				return exec.getAttributes().put(name, value);
+			}
+			public boolean containsKey(Object name) {
+				final Execution exec = Executions.getCurrent();
+				return exec != null && exec.getAttributes().containsKey(name);
+			}
+			public Object get(Object name) {
+				final Execution exec = Executions.getCurrent();
+				if (exec == null) return null;
+				return exec.getAttributes().get(name);
+			}
+			public Object remove(Object name) {
+				final Execution exec = Executions.getCurrent();
+				if (exec == null) return null;
+				return exec.getAttributes().remove(name);
+			}
+		});
 		_ip.setVariable("spaceOwner", this);
 
 		final String INVALID = ".&\\%";
 		if (Strings.anyOf(_id, INVALID, 0) < _id.length())
 			throw new IllegalArgumentException("Invalid page ID: "+_id+"\nCharacters not allowed: "+INVALID);
 	}
+
 	public String getStyle() {
 		return _style;
 	}
