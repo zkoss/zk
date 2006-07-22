@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package com.potix.util;
 
 import com.potix.lang.SystemException;
+import com.potix.lang.PotentialDeadLockException;
 
 /**
  * A simple lock used to implement load-on-deman mechanism.
@@ -64,14 +65,27 @@ try {
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class WaitLock {
+	private final Thread _locker = Thread.currentThread();
 	private boolean _unlocked;
+
+	/** Once created, it is default to be locked.
+	 * In other words, other thread's invocation of {@link #waitUntilUnlock}
+	 * won't return until {@link #unlock} is called.
+	 */
+	public WaitLock() {
+	}
+
 	/** Waits this lock to unlock.
 	 *
 	 * @return whether it is unlocked successfully
 	 * @exception SystemException if this thread is interrupted
+	 * @exception PotentialDeadLockException if the thread itself creates
+	 * this lock. In other words, it tried to wait for itself to complete.
 	 */
 	synchronized public boolean waitUntilUnlock(int timeout) {
 		if (!_unlocked) {
+			if (Thread.currentThread().equals(_locker))
+				throw new PotentialDeadLockException("Wait for itself?");
 			try {
 				this.wait(timeout);
 			} catch (InterruptedException ex) {
