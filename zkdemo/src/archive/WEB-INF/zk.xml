@@ -55,4 +55,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<listener-class>com.potix.zkdemo.test.ComponentPools$Init</listener-class>
 	</listener>
 	-->
+
+	<!-- Configure the error page
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/WEB-INF/sys/error.zul</location>
+	</error-page>
+	-->
 </zk>
