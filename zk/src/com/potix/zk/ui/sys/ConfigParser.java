@@ -141,6 +141,18 @@ public class ConfigParser {
 				final String base = el.getElementValue("log-base", true);
 				if (base != null)
 					com.potix.util.logging.LogService.init(base, null); //start the log service
+			} else if ("error-page".equals(elnm)) {
+				final String clsnm =
+					IDOMs.getRequiredElementValue(el, "exception-type");
+				final String loc =
+					IDOMs.getRequiredElementValue(el, "location");
+				final Class cls;
+				try {
+					cls = Classes.forNameByThread(clsnm);
+				} catch (Throwable ex) {
+					throw new UiException("Unable to load "+clsnm, ex);
+				}
+				config.addErrorPage(cls, loc);
 			} else {
 				throw new UiException("Unknown element: "+elnm+", "+el.getLocator());
 			}

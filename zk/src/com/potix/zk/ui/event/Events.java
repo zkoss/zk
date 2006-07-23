@@ -102,6 +102,8 @@ public class Events {
 	/** Posts a generic event (aka, an instance of {@link Event}).
 	 */
 	public static final void postEvent(String name, Component target, Object data) {
+		if (name == null || name.length() == 0 || target == null)
+			throw new IllegalArgumentException("null");
 		postEvent(new Event(name, target, data));
 	}
 }

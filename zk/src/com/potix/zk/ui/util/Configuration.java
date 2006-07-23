@@ -60,6 +60,8 @@ public class Configuration {
 		_appInits = new LinkedList(), _appCleans = new LinkedList(),
 		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
 		_dtInits = new LinkedList(), _dtCleans = new LinkedList();
+	/** List(ErrorPage). */
+	private final List _errpgs = new LinkedList();
 	private Monitor _monitor;
 	private String _timeoutUri;
 	private String _themeUri;
@@ -631,4 +633,41 @@ public class Configuration {
 	public void setMonitor(Monitor monitor) {
 		_monitor = monitor;
 	}
+
+	/** Adds an error page.
+	 *
+	 * @param type what type of errors the error page is associated with.
+	 * @param location where is the error page.
+	 */
+	public void addErrorPage(Class type, String location) {
+		if (!Throwable.class.isAssignableFrom(type))
+			throw new IllegalArgumentException("Throwable or derived is required: "+type);
+		if (location == null)
+			throw new IllegalArgumentException("location required");
+		synchronized (_errpgs) {
+			_errpgs.add(new ErrorPage(type, location));
+		}
+	}
+	/** Returns the error page that matches the specified error, or null if not found.
+	 */
+	public String getErrorPage(Throwable error) {
+		if (!_errpgs.isEmpty()) {
+			synchronized (_errpgs) {
+				for (Iterator it = _errpgs.iterator(); it.hasNext();) {
+					final ErrorPage errpg = (ErrorPage)it.next();
+					if (errpg.type.isInstance(error))
+						return errpg.location;
+				}
+			}
+		}
+		return null;
+	}
+	private static class ErrorPage {
+		private final Class type;
+		private final String location;
+		private ErrorPage(Class type, String location) {
+			this.type = type;
+			this.location = location;
+		}
+	};
 }

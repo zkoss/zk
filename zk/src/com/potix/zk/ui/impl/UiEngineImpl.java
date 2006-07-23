@@ -408,9 +408,12 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	public void sendRedirect(String uri, String target) {
+		if (uri != null && uri.length() == 0)
+			uri = null;
 		final UiVisualizer uv = getCurrentVisualizer();
 		uv.setAbortingReason(
-			new AbortBySendRedirect(uv.getExecution().encodeURL(uri), target));
+			new AbortBySendRedirect(
+				uri != null ? uv.getExecution().encodeURL(uri): "", target));
 	}
 
 	//-- Asynchronous updates --//
@@ -436,7 +439,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 		final RequestQueue rque = ((DesktopCtrl)exec.getDesktop()).getRequestQueue();
 		try {
-			final StringBuffer errsb = new StringBuffer(80);
+			final List errs = new LinkedList();
 			final long tmexpired = System.currentTimeMillis() + 3000;
 				//Tom Yeh: 20060120
 				//Don't process all requests if this thread has processed
@@ -447,13 +450,14 @@ public class UiEngineImpl implements UiEngine {
 				//Don't process more such that requests will be queued
 				//adn we have the chance to optimize them
 				try {
-					process(exec, request, errsb.length() > 0);
+					process(exec, request, !errs.isEmpty());
 				} catch (ComponentNotFoundException ex) {
 					//possible because the previous might remove some comp
 					//so ignore it
 					if (log.debugable()) log.debug("Component not found: "+request);
 				} catch (Throwable ex) {
-					handleError(ex, uv, errsb);
+					handleError(ex, uv, errs);
+					//we don't skip request to avoid mis-match between c/s
 				}
 
 				//Cycle 2: Process any pending events posted by components
@@ -463,19 +467,20 @@ public class UiEngineImpl implements UiEngine {
 						try {
 							process(desktop, event);
 						} catch (Throwable ex) {
-							handleError(ex, uv, errsb);
+							handleError(ex, uv, errs);
+							break; //skip the rest of events! 
 						}
 					}
 
 					//Cycle 2a: processing resumed event processing
-					resumeAll(desktop, uv, errsb);
+					resumeAll(desktop, uv, errs);
 				} while ((event = nextEvent(uv)) != null);
 			}
 
 			//Cycle 3: Generate output
 			if (!uv.isAborting()) {
-				if (errsb.length() > 0)
-					uv.addResponse(null, new AuAlert(errsb.toString()));
+				if (!errs.isEmpty())
+					visualizeErrors(exec, uv, errs);
 
 				final List responses = uv.getResponses();
 				if (rque.hasRequest())
@@ -503,8 +508,12 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 	}
+	/** Handles each error. The erros will be queued to the errs list
+	 * and processed later by {@link #visualizeErrors}.
+	 */
 	private static final
-	void handleError(Throwable ex, UiVisualizer uv, StringBuffer errsb) {
+	void handleError(Throwable ex, UiVisualizer uv, List errs) {
+		final Throwable err = ex;
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
 			log.realCause(ex);
@@ -522,9 +531,44 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 
-		if (errsb.length() > 0) errsb.append('\n');
-		errsb.append(msg);
+		errs.add(err);
 	}
+	/** Post-process the errors to represent them to the user.
+	 */
+	private final
+	void visualizeErrors(Execution exec, UiVisualizer uv, List errs) {
+		final StringBuffer sb = new StringBuffer(128);
+		for (Iterator it = errs.iterator(); it.hasNext();) {
+			final Throwable t = (Throwable)it.next();
+			if (sb.length() > 0) sb.append('\n');
+			sb.append(Exceptions.getMessage(t));
+		}
+		final String msg = sb.toString();
+
+		final Throwable err = (Throwable)errs.get(0);
+		final String location =
+			exec.getDesktop().getWebApp().getConfiguration().getErrorPage(err);
+		if (location != null) {
+			try {
+				exec.setAttribute("javax.servlet.error.message", msg);
+				exec.setAttribute("javax.servlet.error.exception", err);
+				exec.setAttribute("javax.servlet.error.exception_type", err.getClass());
+				exec.setAttribute("javax.servlet.error.status_code", new Integer(500));
+				final Component c = exec.createComponents(location, null, null);
+				if (c == null) {
+					log.error("No component in "+location);
+				} else {
+					process(exec.getDesktop(), new Event("onModal", c, null));
+					return;
+				}
+			} catch (Throwable ex) {
+				log.realCause("Unable to generate custom error page, "+location, ex);
+			}
+		}
+
+		uv.addResponse(null, new AuAlert(msg));
+	}
+
 	/** Processing the request and stores result into UiVisualizer.
 	 * @param everError whether any error ever occured before processing this
 	 * request.
@@ -673,7 +717,7 @@ public class UiEngineImpl implements UiEngine {
 	/** Does the real resume.
 	 * Note: {@link #resume} only puts a thread into a resume queue in execution.
 	 */
-	private void resumeAll(Desktop desktop, UiVisualizer uv, StringBuffer errsb) {
+	private void resumeAll(Desktop desktop, UiVisualizer uv, List errs) {
 		//We have to loop because a resumed thread might resume others
 		for (;;) {
 			final List list;
@@ -695,11 +739,11 @@ public class UiEngineImpl implements UiEngine {
 								recycleEventThread(evtthd); //completed
 						} catch (Throwable ex) {
 							recycleEventThread(evtthd);
-							if (errsb == null) {
+							if (errs == null) {
 								log.error("Unable to resume "+evtthd, ex);
 								throw UiException.Aide.wrap(ex);
 							}
-							handleError(ex, uv, errsb);
+							handleError(ex, uv, errs);
 						}
 					}
 				}

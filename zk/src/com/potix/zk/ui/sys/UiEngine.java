@@ -179,6 +179,7 @@ public interface UiEngine {
 	 * immediately (by returning). All pending requests and events will
 	 * be dropped.
 	 *
+	 * @param uri the URI to redirect to, or null to reload the same page
 	 * @param target the new target, or null to denote the same browser window
 	 */
 	public void sendRedirect(String uri, String target);

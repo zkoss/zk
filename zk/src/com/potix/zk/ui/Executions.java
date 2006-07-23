@@ -192,6 +192,8 @@ public class Executions {
 	 * <p>After calling this method, the caller shall end the processing
 	 * immediately (by returning). All pending requests and events will
 	 * be dropped.
+	 *
+	 * @param uri the URI to redirect to, or null to reload the same page
 	 * @see Execution#sendRedirect
 	 */
 	public static void sendRedirect(String uri) {

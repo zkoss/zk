@@ -405,6 +405,8 @@ public interface Execution extends Evaluator {
 	 * <p>After calling this method, the caller shall end the processing
 	 * immediately (by returning). All pending requests and events will
 	 * be dropped.
+	 *
+	 * @param uri the URI to redirect to, or null to reload the same page
 	 */
 	public void sendRedirect(String uri);
 	/** Sends a temporary redirect response to the client using the specified
@@ -417,6 +419,7 @@ public interface Execution extends Evaluator {
 	 * <p>Note: if you specify target other than null and "_self", it'll
 	 * fail if the browser prevent the server to popup a window.
 	 *
+	 * @param uri the URI to redirect to, or null to reload the same page
 	 * @param target the name of the browser window that send-redirect will
 	 * load the sepcified URI, or null if the current browser window
 	 * is used.
