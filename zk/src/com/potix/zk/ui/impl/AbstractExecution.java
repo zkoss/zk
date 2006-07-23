@@ -114,7 +114,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 
 	public void postEvent(Event evt) {
 		if (evt == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException("null");
 		if (_events == null)
 			_events = new LinkedList();
 		_events.add(evt);
