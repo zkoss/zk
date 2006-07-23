@@ -183,9 +183,19 @@ public class Window extends XulElement implements IdSpace  {
 	}
 	/** Sets the mode.
 	 *
-	 * <p>Notice that window is not created completely, if you specify
-	 * "modal" to the mode attribute in a ZUML page. In other words,
-	 * it is not recommended to use "modal" in any ZUL page.
+	 * <p>Notice that you cannot specify "modal" to this method.
+	 * Rather, you can use {@link #doModal} if it is called in an event listener.
+	 * Or, you can use {@link com.potix.zk.ui.event.Events#postEvent} to
+	 * post the onModal event. For example, in a ZUML page, you can put a window
+	 * into modal immediately after rendered as follows.
+	 *
+	 * <pre><code>
+	 *&lt;window title="..."&gt;
+	 *...
+	 *  &lt;zscript&gt;
+	 *    Events.postEvent("onModal", spaceOwner, null);
+	 *  &lt;/zscript&gt;
+	 *...
 	 *
 	 * @param name the mode which could be one of
 	 * "embedded", "overlapped" and "popup".
@@ -196,7 +206,7 @@ public class Window extends XulElement implements IdSpace  {
 		else if ("overlapped".equals(name)) doOverlapped();
 		else if ("embedded".equals(name)) doEmbedded();
 		else if ("modal".equals(name))
-			throw new WrongValueException("setMode doesn't suport modal. Use doModal instead");
+			throw new WrongValueException("setMode() doesn't suport modal. Use doModal(), or post the onModal event, instead.");
 		else throw new WrongValueException("Uknown mode: "+name);
 	}
 
@@ -319,6 +329,11 @@ public class Window extends XulElement implements IdSpace  {
 	 */
 	public void onClose() {
 		detach();
+	}
+	/** Process the onModal event by making itself a modal window.
+	 */
+	public void onModal() throws InterruptedException {
+		doModal();
 	}
 
 	/** Ends the modal mode. */
