@@ -559,14 +559,14 @@ public class UiEngineImpl implements UiEngine {
 					log.error("No component in "+location);
 				} else {
 					process(exec.getDesktop(), new Event("onModal", c, null));
-					return;
+					return; //done
 				}
 			} catch (Throwable ex) {
 				log.realCause("Unable to generate custom error page, "+location, ex);
 			}
 		}
 
-		uv.addResponse(null, new AuAlert(msg));
+		uv.addResponse(null, new AuAlert(msg)); //default handling
 	}
 
 	/** Processing the request and stores result into UiVisualizer.
