@@ -11,7 +11,7 @@ ZK 2.1.0 Freshly
 
 * Bugs:
   1520737, 1510539, 1521847, 1522843, 1521311, 1522339, 1521868, 1523751,
-  1523875, 1525710, 1525712.
+  1523875, 1525710, 1525712, 1527527, 1527535.
 
 * Upgrade Notes
   + <?xml-stylesheet?> is obsolete. Use the style component instead.
