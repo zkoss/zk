@@ -141,7 +141,7 @@ zk.Grid.prototype = {
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + "px";
 			var headrow = this.headtbl.rows.length ? this.headtbl.rows[0]: null;
-			zk.cpCellWidth(headrow, this.bodyrows, 3);
+			zk.cpCellWidth(headrow, this.bodyrows);
 		}
 	},
 	/** Recalculate the size. */
