@@ -727,12 +727,14 @@ zk.Selectable.prototype = {
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
 			var headrow = this.headtbl.rows.length ? this.headtbl.rows[0]: null;
-			zk.cpCellWidth(headrow, this.bodyrows); //assign head's col width
+			zk.cpCellWidth(headrow, this.bodyrows, 2); //assign head's col width
+				//FF: we have to copy twice if width contains %
 		}
 		if (this.foottbl) {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			var footrow = this.foottbl.rows.length ? this.foottbl.rows[0]: null;
-			zk.cpCellWidth(footrow, this.bodyrows); //assign foot's col width
+			zk.cpCellWidth(footrow, this.bodyrows, 2); //assign foot's col width
+				//FF: we have to copy twice if width contains %
 		}
 	},
 	/** Recalculate the size. */
