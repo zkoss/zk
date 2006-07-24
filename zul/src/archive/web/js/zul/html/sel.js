@@ -259,7 +259,8 @@ zk.Selectable.prototype = {
 	doclick: function (evt, target) {
 		if (zkSel._shallIgnoreEvent(target)
 		|| (zk.tagName(target) != "TR" && target.onclick)
-		|| (zk.tagName(target) == "A" && !target.id.endsWith("!sel")))
+		|| (zk.tagName(target) == "A" && !target.id.endsWith("!sel"))
+		|| (target.getAttribute && (target.getAttribute("zk_lfclk") || target.getAttribute("zk_dbclk"))))
 			return;
 
 		var checkmark = target.id && target.id.endsWith("!cm");
