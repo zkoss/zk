@@ -73,7 +73,6 @@ abstract public class HeaderElement extends LabelImageElement {
 		final StringBuffer sb = new StringBuffer(32);
 		HTMLs.appendAttribute(sb, "align", _align);
 		HTMLs.appendAttribute(sb, "valign", _valign);
-		HTMLs.appendAttribute(sb, "width", getWidth());
 		return sb.toString();
 	}
 
