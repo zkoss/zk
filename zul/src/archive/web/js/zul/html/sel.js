@@ -613,8 +613,23 @@ zk.Selectable.prototype = {
 			if (this.foot) this.foot.style.width = wd;
 		}
 
-		setTimeout("zkSel._calcSize2('"+this.id+"')", 0);
-			//IE cannot calculate the size immediately after setting overflow to auto
+		var tblwd = this.body.clientWidth;
+		if (zk.ie) //By experimental: see zk-blog.txt
+			if (tblwd && this.body.offsetWidth - tblwd > 11) {
+				if (--tblwd < 0) tblwd = 0;
+				this.bodytbl.style.width = tblwd + "px";
+			} else this.bodytbl.style.width = "";
+
+		if (this.headtbl) {
+			if (tblwd) this.head.style.width = tblwd + 'px';
+			if (this.headtbl.rows.length)
+				zk.cpCellWidth(this.headtbl.rows[0], this.bodyrows); //assign head's col width
+		}
+		if (this.foottbl) {
+			if (tblwd) this.foot.style.width = tblwd + 'px';
+			if (this.foottbl.rows.length)
+				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows); //assign foot's col width
+		}
 	},
 	_calcHgh: function () {
 		var rows = this.bodyrows;
@@ -715,26 +730,6 @@ zk.Selectable.prototype = {
 		}
 	},
 
-	/** Calculates the size, part 2. */
-	_calcSize2: function () {
-		var tblwd = this.body.clientWidth;
-		if (zk.ie) //By experimental: see zk-blog.txt
-			if (tblwd && this.body.offsetWidth - tblwd > 11) {
-				if (--tblwd < 0) tblwd = 0;
-				this.bodytbl.style.width = tblwd + "px";
-			} else this.bodytbl.style.width = "";
-
-		if (this.headtbl) {
-			if (tblwd) this.head.style.width = tblwd + 'px';
-			var headrow = this.headtbl.rows.length ? this.headtbl.rows[0]: null;
-			zk.cpCellWidth(headrow, this.bodyrows); //assign head's col width
-		}
-		if (this.foottbl) {
-			if (tblwd) this.foot.style.width = tblwd + 'px';
-			var footrow = this.foottbl.rows.length ? this.foottbl.rows[0]: null;
-			zk.cpCellWidth(footrow, this.bodyrows); //assign foot's col width
-		}
-	},
 	/** Recalculate the size. */
 	_recalcSize: function () {
 		this._cleansz();
@@ -889,10 +884,6 @@ zkSel._init = function (uuid) {
 zkSel._calcSize = function (uuid) {
 	var meta = zkau.getMeta(uuid);
 	if (meta) meta._calcSize();
-};
-zkSel._calcSize2 = function (uuid) {
-	var meta = zkau.getMeta(uuid);
-	if (meta) meta._calcSize2();
 };
 zkSel._renderNow = function (uuid) {
 	var meta = zkau.getMeta(uuid);
