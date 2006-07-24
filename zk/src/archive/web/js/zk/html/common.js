@@ -1106,6 +1106,11 @@ zk.cpCellWidth = function (dst, srcrows, times) {
 	}
 	if (!src) return; //no visible cells
 
+	//we have to clean up first, since, in FF, if dst contains %
+	//the copy might not be correct
+	for (var j = 0; j < max; ++j)
+		dst.cells[j].style.width = "";
+
 	for (var j = 0; j < max; ++j) {
 		var d = dst.cells[j], s = src.cells[j];
 		d.style.width = s.offsetWidth + "px";
