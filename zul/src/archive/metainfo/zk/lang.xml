@@ -25,6 +25,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<extension>xul</extension>
 	<extension>zul</extension>
 
+	<version>
+		<version-class>com.potix.zul.html.Version</version-class>
+		<version-uid>2.1.0-RC2</version-uid>
+	</version>
+
 	<!-- Note: JavaScript that are listed here will be loaded no matter
 		what language is used.
 		Use zk.load("x.y") if x.y is required only for certain language
