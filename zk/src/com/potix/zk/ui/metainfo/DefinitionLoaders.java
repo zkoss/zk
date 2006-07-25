@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zk.ui.metainfo;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.List;
@@ -88,7 +89,9 @@ public class DefinitionLoaders {
 			en.hasMoreElements();) {
 				final URL url = (URL)en.nextElement();
 				if (log.debugable()) log.debug("Loading "+url);
-				parse(new SAXBuilder(false, false, true).build(url), locator, false);
+				final Document doc = new SAXBuilder(false, false, true).build(url);
+				if (checkVersion(url, doc))
+					parse(doc, locator, false);
 			}
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex); //abort
@@ -99,11 +102,14 @@ public class DefinitionLoaders {
 			final List xmls = locator.getDependentXmlResources(
 				"metainfo/zk/lang-addon.xml", "addon-name", "depends");
 			for (Iterator it = xmls.iterator(); it.hasNext();) {
-				try {
-					parse((Document)it.next(), locator, true);
-				} catch (Exception ex) {
-					log.error("Failed to load addon", ex);
-					//keep running
+				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
+				if (checkVersion(res.url, res.document)) {
+					try {
+						parse(res.document, locator, true);
+					} catch (Exception ex) {
+						log.error("Failed to load addon", ex);
+						//keep running
+					}
 				}
 			}
 		} catch (Exception ex) {
@@ -123,6 +129,28 @@ public class DefinitionLoaders {
 			}
 		}
 		_addons = null; //prevent addLanguage being called again
+	}
+
+	/** Checks and returns whether the loaded document's version is correct.
+	 */
+	private static boolean checkVersion(URL url, Document doc) throws Exception {
+		final Element el = doc.getRootElement().getElement("version");
+		if (el != null) {
+			final String clsnm = IDOMs.getRequiredElementValue(el, "version-class");
+			final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
+			final Class cls = Classes.forNameByThread(clsnm);
+			final Field fld = cls.getField("UID");
+			final String uidInClass = (String)fld.get(null);
+			if (uid.equals(uidInClass)) {
+				return true;
+			} else {
+				log.info("Ignore "+url+"\nCause: version not matched; expected="+uidInClass+", xml="+uid);
+				return false;
+			}
+		} else {
+			log.info("Ignore "+url+"\nCause: version not specified");
+			return false; //backward compatible
+		}
 	}
 
 	private static void parse(Document doc, Locator locator, boolean addon)
