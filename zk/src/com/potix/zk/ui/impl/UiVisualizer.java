@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.io.StringWriter;
 import java.io.IOException;
 
@@ -71,22 +70,22 @@ import com.potix.zk.au.*;
 	private Set _pgRemoved;
 	/** A set of invalidated components  (Component, Range). */
 	private Map _invalidated = new LinkedHashMap();
-	/** A map of smart updates (Component comp, Map(String attr, String value)). */
-	private Map _smartUpdated = new LinkedHashMap();
+	/** A map of smart updates (Component comp, Map(String name, TimedValue(comp,name,value))). */
+	private Map _smartUpdated = new HashMap(); //we use TimedValue for better sequence control
 	/** A set of new attached components. */
 	private Set _attached = new LinkedHashSet();
 	/** A set of moved components (parent changed or page changed). */
 	private Set _moved = new LinkedHashSet();
 	/** A map of components whose UUID is changed (Component, UUID). */
 	private Map _idChgd;
-	/** A map of responses being added(Component/Page, Map(key, AuResponse)). */
+	/** A map of responses being added(Component/Page, Map(key, List/TimedValue(AuResponse))). */
 	private Map _responses;
 	/** A stack of components that are including new pages (and then
 	 * become the owner of the new page, if any).
 	 */
 	private final List _owners;
-	/** Used to time the response added thru {@link #addResponse}. */
-	private int _resptime = 0;
+	/** Time stamp for smart update and responses (see {@link TimedValue}). */
+	private int _timed;
 	/** if not null, it means the current executing is aborting
 	 * and the content is reason to aborting. Its interpretation depends
 	 * on {@link com.potix.zk.ui.sys.UiEngine}.
@@ -174,9 +173,8 @@ import com.potix.zk.au.*;
 
 		Map respmap = (Map)_smartUpdated.get(comp);
 		if (respmap == null)
-			_smartUpdated.put(comp, respmap = new LinkedHashMap());
-		respmap.remove(attr); //so zk_init will be the last to execute
-		respmap.put(attr, value);
+			_smartUpdated.put(comp, respmap = new HashMap());
+		respmap.put(attr, new TimedValue(_timed++, comp, attr, value));
 	}
 	/** Called to update (redraw) a component, when a component is moved.
 	 * If a component's page or parent is changed, this method need to be
@@ -220,22 +218,22 @@ import com.potix.zk.au.*;
 		if (response == null)
 			throw new IllegalArgumentException();
 
-		final TimedResponse respInfo = new TimedResponse(++_resptime, response);
 		if (_responses == null)
 			_responses = new HashMap();
 
 		final Object depends = response.getDepends(); //Page or Component
 		Map respmap = (Map)_responses.get(depends);
 		if (respmap == null)
-			_responses.put(depends, respmap = new LinkedHashMap());
+			_responses.put(depends, respmap = new HashMap());
 
+		final TimedValue tval = new TimedValue(_timed++, response);
 		if (key != null) {
-			respmap.put(key, respInfo);
+			respmap.put(key, tval);
 		} else {
 			List resps = (List)respmap.get(null);
 			if (resps == null)
 				respmap.put(null, resps = new LinkedList());
-			resps.add(respInfo); //don't override
+			resps.add(tval); //don't overwrite
 		}
 	}
 
@@ -453,20 +451,25 @@ import com.potix.zk.au.*;
 			addResponsesForCreatedPerSiblings(responses, newsibs);
 		}
 
-		//7. execute smart updates		
-		for (Iterator it = _smartUpdated.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final Component comp = (Component)me.getKey();
-			final Map attrs = (Map)me.getValue();
-			for (Iterator it2 = attrs.entrySet().iterator(); it2.hasNext();) {
-				final Map.Entry me2 = (Map.Entry)it2.next();
-				final String attr = (String)me2.getKey();
-				final String val = (String)me2.getValue();
-				if (val != null)
-					responses.add(new AuSetAttribute(comp, attr, val));
-				else
-					responses.add(new AuRemoveAttribute(comp, attr));
+		//7. Adds smart updates and response at once based on their time stamp
+		final List tvals = new LinkedList();
+		for (Iterator it = _smartUpdated.values().iterator(); it.hasNext();) {
+			final Map attrs = (Map)it.next();
+			tvals.addAll(attrs.values());
+		}
+		if (_responses != null) {
+			for (Iterator it = _responses.values().iterator(); it.hasNext();) {
+				final Map resps = (Map)it.next();
+				final List keyless = (List)resps.remove(null); //key == null
+				if (keyless != null) tvals.addAll(keyless);
+				tvals.addAll(resps.values()); //key != null
 			}
+		}
+		if (!tvals.isEmpty()) {
+			final TimedValue[] tvs = (TimedValue[])tvals.toArray(new TimedValue[tvals.size()]);
+			Arrays.sort(tvs);
+			for (int j = 0; j < tvs.length; ++j)
+				responses.add(tvs[j].getResponse());
 		}
 
 		//just in case
@@ -474,39 +477,10 @@ import com.potix.zk.au.*;
 		_smartUpdated = null;
 		_attached = null;
 		_pgInvalid = _pgRemoved = null;
-
-		//8. Adds component-dependent responses
-		addAddedResponses(responses); //process _responses
+		_responses = null;
 
 		if (D.ON && log.debugable()) log.debug("Return responses: "+responses);
 		return responses;
-	}
-	/** Adds responses from _responses. */
-	private void addAddedResponses(List responses) {
-		if (_responses == null)
-			return; //nothing to do
-
-		final LinkedList respInfos = new LinkedList(); //a list of TimedResponse
-		for (Iterator it = _responses.values().iterator(); it.hasNext();) {
-			final Map resps = (Map)it.next();
-			final List keyless = (List)resps.remove(null); //key == null
-			respInfos.addAll(resps.values());
-			if (keyless != null)
-				respInfos.addAll(keyless);
-		}
-
-		final TimedResponse[] ris = (TimedResponse[])
-			respInfos.toArray(new TimedResponse[respInfos.size()]);
-		Arrays.sort(ris, new Comparator() {
-			public int compare(Object a, Object b) {
-				final int x = ((TimedResponse)a).time, y = ((TimedResponse)b).time;
-				return x > y ? 1: x == y ? 0: -1;
-			}
-		});
-
-		for (int j = 0; j < ris.length; ++j)
-			responses.add(ris[j].response);
-		_responses = null;
 	}
 
 	/** Adds responses for a set of siblings which is new attached (or
@@ -803,21 +777,34 @@ import com.potix.zk.au.*;
 		}
 	}
 
-	/** Used to time a response that addAddedResponses could generate
-	 * responses in the correct order.
+	/** Used to hold smart update and response with a time stamp.
 	 */
-	private static class TimedResponse {
-		private final int time;
-		private final AuResponse response;
-		private TimedResponse(int time, AuResponse response) {
-			this.time = time;
-			this.response = response;
+	private static class TimedValue implements Comparable {
+		private final int _timed;
+		private final AuResponse _response;
+		private TimedValue(int timed, AuResponse response) {
+			_timed = timed;
+			_response = response;
+		}
+		private TimedValue(int timed, Component comp, String name, String value) {
+			_timed = timed;
+			if (value != null)
+				_response = new AuSetAttribute(comp, name, value);
+			else
+				_response = new AuRemoveAttribute(comp, name);
 		}
 		public String toString() {
-			return time + ":" + response;
+			return '(' + _timed + ":" + _response + ')';
 		}
-	}
-
+		public int compareTo(Object o) {
+			final int t = ((TimedValue)o)._timed;
+			return _timed > t  ? 1: _timed == t ? 0: -1;
+		}
+		/** Returns the response representing this object. */
+		private AuResponse getResponse() {
+			return _response;
+		}
+	};
 
 	/** Sets the reason to aborting.
 	/** if not null, it means the current execution is aborting
