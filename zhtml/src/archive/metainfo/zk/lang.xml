@@ -19,6 +19,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<extension>xhtml</extension>
 	<extension>zhtml</extension>
 
+	<version>
+		<version-class>com.potix.zhtml.Version</version-class>
+		<version-uid>2.1.0-RC2</version-uid>
+	</version>
+
 	<case-insensitive/>
 
 	<javascript src="~./js/ext/prototype/prototype.js" charset="UTF-8"/>
