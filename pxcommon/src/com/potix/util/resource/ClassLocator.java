@@ -77,9 +77,9 @@ public class ClassLocator implements Locator {
 		}
 		return ClassLoader.getSystemResources(name);
 	}
-	/** Returns a set of resources after resolving the dependence.
-	 * The resource is returned in the format of {@link Document}
-	 * In other words, the returned value is a set of {@link Document}.
+	/** Returns a list of resources ({@link Resource}) after resolving
+	 * the dependence.
+	 * The resource is returned in the format of {@link Resource}
 	 *
 	 * <p>To resolve the dependence, it assumes each resource has two
 	 * element whose name is identified by elName and elDepends.
@@ -91,6 +91,7 @@ public class ClassLocator implements Locator {
 	 * @param name the resouce name, such as "metainfo/i3-comp.xml".
 	 * @param elName the element used to specify the name.
 	 * @param elDepends the element used to specify the dependence.
+	 * @return a list of {@link Resource} of the specified name.
 	 */
 	public List getDependentXmlResources(String name, String elName,
 	String elDepends) throws IOException {
@@ -133,7 +134,7 @@ public class ClassLocator implements Locator {
 				resolveDependency(dep, rcs, rcmap, resolving); //recusrively
 		}
 
-		rcs.add(xr.document);
+		rcs.add(new Resource(xr.url, xr.document));
 		resolving.remove(xr.name);
 
 		if (D.ON && log.debugable()) log.debug("Adding resolved resource: "+xr.name);
@@ -173,6 +174,19 @@ public class ClassLocator implements Locator {
 			return "["+name+": "+url+" depends on "+depends+']';
 		}
 	};
+
+	/** An item of the list returned by {@link ClassLocator#getDependentXmlResources}.
+	 */
+	public static class Resource {
+		/** The URL of the resource. */
+		public final URL url;
+		/** The content of the resource. */
+		public final Document document;
+		private Resource(URL url, Document document) {
+			this.url = url;
+			this.document = document;
+		}
+	}
 
 	//-- Locator --//
 	public URL getResource(String name) {
