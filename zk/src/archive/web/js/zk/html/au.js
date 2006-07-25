@@ -412,6 +412,15 @@ zkau.onVisiAt = function (n) {
 zkau.onHideAt = function (n) {
 	if (!n) return; //done
 
+	//Bug 1526542: we have to blur if we want to hide a focused control in gecko
+	if (zk.gecko) {
+		var f = zkau.currentFocus;
+		if (f && zk.isAncestor(n, f)) {
+			zkau.currentFocus = null;
+			try {f.blur();} catch (e) {}
+		}
+	}
+
 	var type = zk.getCompType(n);
 	if (type) {
 		if (zkau.valid) {
@@ -1339,9 +1348,10 @@ action.show = function (id, bShow) {
 	if (bShow == false) action.hide(id);
 	else {
 		var n = $(id);
-		if (n) n.style.display = "";
-		if (n && n.id) id = n.id;
-		zkau.onVisiAt(n);
+		if (n) {
+			n.style.display = "";
+			zkau.onVisiAt(n); //callback later
+		}
 	}
 };
 
@@ -1352,9 +1362,10 @@ action.hide = function (id, bHide) {
 	if (bHide == false) action.show(id);
 	else {
 		var n = $(id);
-		if (n) n.style.display = "none";
-		if (n && n.id) id = n.id;
-		zkau.onHideAt(n);
+		if (n) {
+			zkau.onHideAt(n); //callback first
+			n.style.display = "none";
+		}
 	}
 };
 
@@ -1365,7 +1376,7 @@ action.slideDown = function (id, down) {
 	if (down == false) action.slideUp(id);
 	else {
 		var n = $(id);
-		if (!n.getAttribute || !n.getAttribute("zk_visible")) {
+		if (n && (!n.getAttribute || !n.getAttribute("zk_visible"))) {
 			if (n.setAttribute) n.setAttribute("zk_visible", "showing");
 			Effect.SlideDown(n, {duration:0.4, afterFinish: action._afterDown});
 		}
@@ -1373,8 +1384,10 @@ action.slideDown = function (id, down) {
 };
 action._afterDown = function (ef) {
 	var n = ef.element;
-	if (n.setAttribute) n.removeAttribute("zk_visible");
-	zkau.onVisiAt(n);
+	if (n) {
+		if (n.setAttribute) n.removeAttribute("zk_visible");
+		zkau.onVisiAt(n);
+	}
 };
 
 /** Slides down a component.
@@ -1384,16 +1397,16 @@ action.slideUp = function (id, up) {
 	if (up == false) action.slideDown(id);
 	else {
 		var n = $(id);
-		if (!n.getAttribute || !n.getAttribute("zk_visible")) {
+		if (n && (!n.getAttribute || !n.getAttribute("zk_visible"))) {
 			if (n.setAttribute) n.setAttribute("zk_visible", "hiding");
+			zkau.onHideAt(n); //callback first
 			Effect.SlideUp(n, {duration:0.4, afterFinish: action._afterUp});
 		}
 	}
 };
 action._afterUp = function (ef) {
 	var n = ef.element;
-	if (n.setAttribute) n.removeAttribute("zk_visible");
-	zkau.onHideAt(n);
+	if (n && n.setAttribute) n.removeAttribute("zk_visible");
 };
 
 /*Float: used to be added to zkau.floats
