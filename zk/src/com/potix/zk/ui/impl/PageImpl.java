@@ -382,38 +382,39 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_ip.setVariable("session", sess);
 		_ip.setVariable("sessionScope", sess.getAttributes());
 		_ip.setVariable("applicationScope", _desktop.getWebApp().getAttributes());
-		_ip.setVariable("requestScope", new AbstractMap() {
-			public Set entrySet() {
-				final Execution exec = Executions.getCurrent();
-				if (exec == null) return Collections.EMPTY_SET;
-				return exec.getAttributes().entrySet();
-			}
-			public Object put(Object name, Object value) {
-				final Execution exec = Executions.getCurrent();
-				if (exec == null) throw new IllegalStateException("No execution at all");
-				return exec.getAttributes().put(name, value);
-			}
-			public boolean containsKey(Object name) {
-				final Execution exec = Executions.getCurrent();
-				return exec != null && exec.getAttributes().containsKey(name);
-			}
-			public Object get(Object name) {
-				final Execution exec = Executions.getCurrent();
-				if (exec == null) return null;
-				return exec.getAttributes().get(name);
-			}
-			public Object remove(Object name) {
-				final Execution exec = Executions.getCurrent();
-				if (exec == null) return null;
-				return exec.getAttributes().remove(name);
-			}
-		});
+		_ip.setVariable("requestScope", REQUEST_ATTRS);
 		_ip.setVariable("spaceOwner", this);
 
 		final String INVALID = ".&\\%";
 		if (Strings.anyOf(_id, INVALID, 0) < _id.length())
 			throw new IllegalArgumentException("Invalid page ID: "+_id+"\nCharacters not allowed: "+INVALID);
 	}
+	private static final Map REQUEST_ATTRS = new AbstractMap() {
+		public Set entrySet() {
+			final Execution exec = Executions.getCurrent();
+			if (exec == null) return Collections.EMPTY_SET;
+			return exec.getAttributes().entrySet();
+		}
+		public Object put(Object name, Object value) {
+			final Execution exec = Executions.getCurrent();
+			if (exec == null) throw new IllegalStateException("No execution at all");
+			return exec.getAttributes().put(name, value);
+		}
+		public boolean containsKey(Object name) {
+			final Execution exec = Executions.getCurrent();
+			return exec != null && exec.getAttributes().containsKey(name);
+		}
+		public Object get(Object name) {
+			final Execution exec = Executions.getCurrent();
+			if (exec == null) return null;
+			return exec.getAttributes().get(name);
+		}
+		public Object remove(Object name) {
+			final Execution exec = Executions.getCurrent();
+			if (exec == null) return null;
+			return exec.getAttributes().remove(name);
+		}
+	};
 
 	public String getStyle() {
 		return _style;
