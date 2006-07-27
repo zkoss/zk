@@ -29,7 +29,7 @@ public class CheckEvent extends Event {
 	private final boolean _checked;
 
 	/** Constructs a check-relevant event.
-	 * @param checked whether
+	 * @param checked whether it is checked.
 	 */
 	public CheckEvent(String name, Component target, boolean checked) {
 		super(name, target);
