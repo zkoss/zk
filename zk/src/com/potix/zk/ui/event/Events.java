@@ -39,97 +39,97 @@ import com.potix.zk.au.AuRequest;
 public class Events {
 	private Events() {}
 
-	/** The onClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
+	/** The onClick event (used with {@link MouseEvent}).
 	 */
 	public static final String ON_CLICK = "onClick";
-	/** The onRightClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
+	/** The onRightClick event (used with {@link MouseEvent}).
 	 */
 	public static final String ON_RIGHT_CLICK = "onRightClick";
-	/** The onDoubleClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
+	/** The onDoubleClick event (used with {@link MouseEvent}).
 	 */
 	public static final String ON_DOUBLE_CLICK = "onDoubleClick";
-	/** The onOK event (used with {@link com.potix.zk.ui.event.KeyEvent}).
+	/** The onOK event (used with {@link KeyEvent}).
 	 */
 	public static final String ON_OK = "onOK";
-	/** The onCancel event (used with {@link com.potix.zk.ui.event.KeyEvent}).
+	/** The onCancel event (used with {@link KeyEvent}).
 	 */
 	public static final String ON_CANCEL = "onCancel";
-	/** The onCtrlKey event (used with {@link com.potix.zk.ui.event.KeyEvent}).
+	/** The onCtrlKey event (used with {@link KeyEvent}).
 	 */
 	public static final String ON_CTRL_KEY = "onCtrlKey";
-	/** The onChange event (used with {@link com.potix.zk.ui.event.InputEvent}).
+	/** The onChange event (used with {@link InputEvent}).
 	 */
 	public static final String ON_CHANGE = "onChange";
-	/** The onChanging event (used with {@link com.potix.zk.ui.event.InputEvent}).
+	/** The onChanging event (used with {@link InputEvent}).
 	 */
 	public static final String ON_CHANGING = "onChanging";
-	/** The onError event (used with {@link com.potix.zk.ui.event.ErrorEvent}).
+	/** The onError event (used with {@link ErrorEvent}).
 	 */
 	public static final String ON_ERROR = "onError";
-	/** The onScroll event (used with {@link com.potix.zk.ui.event.ScrollEvent}).
+	/** The onScroll event (used with {@link ScrollEvent}).
 	 */
 	public static final String ON_SCROLL = "onScroll";
-	/** The onScrolling event (used with {@link com.potix.zk.ui.event.ScrollEvent}).
+	/** The onScrolling event (used with {@link ScrollEvent}).
 	 */
 	public static final String ON_SCROLLING = "onScrolling";
-	/** The onSelect event (used with {@link com.potix.zk.ui.event.SelectEvent}).
+	/** The onSelect event (used with {@link SelectEvent}).
 	 */
 	public static final String ON_SELECT = "onSelect";
-	/** The onCheck event (used with {@link com.potix.zk.ui.event.CheckEvent}).
+	/** The onCheck event (used with {@link CheckEvent}).
 	 */
 	public static final String ON_CHECK = "onCheck";
-	/** The onMove event (used with {@link com.potix.zk.ui.event.MoveEvent}).
+	/** The onMove event (used with {@link MoveEvent}).
 	 */
 	public static final String ON_MOVE = "onMove";
-	/** The onZIndex event (used with {@link com.potix.zk.ui.event.ZIndexEvent}).
+	/** The onZIndex event (used with {@link ZIndexEvent}).
 	 */
 	public static final String ON_Z_INDEX = "onZIndex";
-	/** The onOpen event (used with {@link com.potix.zk.ui.event.OpenEvent}).
+	/** The onOpen event (used with {@link OpenEvent}).
 	 */
 	public static final String ON_OPEN = "onOpen";
-	/** The onShow event (used with {@link com.potix.zk.ui.event.ShowEvent}).
+	/** The onShow event (used with {@link ShowEvent}).
 	 */
 	public static final String ON_SHOW = "onShow";
-	/** The onClose event (used with {@link com.potix.zk.ui.event.Event})
+	/** The onClose event (used with {@link Event})
 	 * used to denote the close button is pressed.
 	 */
 	public static final String ON_CLOSE = "onClose";
 	/** The onRender event (used with {@link com.potix.zk.ui.ext.Render}).
 	 */
 	public static final String ON_RENDER = "onRender";
-	/** The onTimer event (used with {@link com.potix.zk.ui.event.Event}).
+	/** The onTimer event (used with {@link Event}).
 	 * Sent when a timer is up.
 	 */
 	public static final String ON_TIMER = "onTimer";
-	/** The onFocus event (used with {@link com.potix.zk.ui.event.Event}).
+	/** The onFocus event (used with {@link Event}).
 	 * Sent when a component gets a focus.
 	 */
 	public static final String ON_FOCUS = "onFocus";
-	/** The onBlur event (used with {@link com.potix.zk.ui.event.Event}).
+	/** The onBlur event (used with {@link Event}).
 	 * Sent when a component loses a focus.
 	 */
 	public static final String ON_BLUR = "onBlur";
-	/** The onDrop event (used with {@link com.potix.zk.ui.event.DropEvent}).
+	/** The onDrop event (used with {@link DropEvent}).
 	 * Sent when a component is dragged and drop to another.
 	 */
 	public static final String ON_DROP = "onDrop";
-	/** The onNotify event (used with {@link com.potix.zk.ui.event.Event}).
+	/** The onNotify event (used with {@link Event}).
 	 * It is not used by any component, but it is, rather, designed to
 	 * let users add customized events.
 	 */
 	public static final String ON_NOTIFY = "onNotify";
-	/** The onSort event (used with {@link com.potix.zk.ui.event.Event})
+	/** The onSort event (used with {@link Event})
 	 * to notify a request for sorting.
 	 */
 	public static final String ON_SORT = "onSort";
-	/** The onBookmarkChanged event (used with {@link com.potix.zk.ui.event.BookmarkEvent})
+	/** The onBookmarkChanged event (used with {@link BookmarkEvent})
 	 * to notify that user pressed BACK, FORWARD or specified URL directly
 	 * that causes the bookmark is changed (but still in the same desktop).
 	 * <p>All root components of all pages of the desktop will
 	 * recieve this event.
 	 */
 	public static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
-	/** The onClientInfo event (used with {@link com.potix.zk.ui.event.ClientInfoEvent}).
+	/** The onClientInfo event (used with {@link ClientInfoEvent}).
 	 */
 	public static final String ON_CLIENT_INFO = "onClientInfo";
 
