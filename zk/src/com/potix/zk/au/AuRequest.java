@@ -30,6 +30,7 @@ import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ComponentNotFoundException;
+import com.potix.zk.ui.event.*;
 import com.potix.zk.ui.sys.PageCtrl;
 import com.potix.zk.ui.sys.ComponentsCtrl;
 import com.potix.zk.au.impl.*;
@@ -70,80 +71,80 @@ public class AuRequest {
 		return cmd;
 	}
 
-	/** The onClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
+	/** The onClick event (used with {@link MouseEvent}).
 	 */
-	public static final Command ON_CLICK = new MouseCommand("onClick", true);
-	/** The onRightClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
+	public static final Command ON_CLICK = new MouseCommand(Events.ON_CLICK, true);
+	/** The onRightClick event (used with {@link MouseEvent}).
 	 */
-	public static final Command ON_RIGHT_CLICK = new MouseCommand("onRightClick", true);
-	/** The onDoubleClick event (used with {@link com.potix.zk.ui.event.MouseEvent}).
+	public static final Command ON_RIGHT_CLICK = new MouseCommand(Events.ON_RIGHT_CLICK, true);
+	/** The onDoubleClick event (used with {@link MouseEvent}).
 	 */
-	public static final Command ON_DOUBLE_CLICK = new MouseCommand("onDoubleClick", true);
-	/** The onOK event (used with {@link com.potix.zk.ui.event.KeyEvent}).
+	public static final Command ON_DOUBLE_CLICK = new MouseCommand(Events.ON_DOUBLE_CLICK, true);
+	/** The onOK event (used with {@link KeyEvent}).
 	 */
-	public static final Command ON_OK = new KeyCommand("onOK", true);
-	/** The onCancel event (used with {@link com.potix.zk.ui.event.KeyEvent}).
+	public static final Command ON_OK = new KeyCommand(Events.ON_OK, true);
+	/** The onCancel event (used with {@link KeyEvent}).
 	 */
-	public static final Command ON_CANCEL = new KeyCommand("onCancel", true);
-	/** The onCtrlKey event (used with {@link com.potix.zk.ui.event.KeyEvent}).
+	public static final Command ON_CANCEL = new KeyCommand(Events.ON_CANCEL, true);
+	/** The onCtrlKey event (used with {@link KeyEvent}).
 	 */
-	public static final Command ON_CTRL_KEY = new KeyCommand("onCtrlKey", true);
-	/** The onChange event (used with {@link com.potix.zk.ui.event.InputEvent}).
+	public static final Command ON_CTRL_KEY = new KeyCommand(Events.ON_CTRL_KEY, true);
+	/** The onChange event (used with {@link InputEvent}).
 	 */
-	public static final Command ON_CHANGE = new InputCommand("onChange", false);
-	/** The onChanging event (used with {@link com.potix.zk.ui.event.InputEvent}).
+	public static final Command ON_CHANGE = new InputCommand(Events.ON_CHANGE, false);
+	/** The onChanging event (used with {@link InputEvent}).
 	 */
-	public static final Command ON_CHANGING = new InputCommand("onChanging", true);
-	/** The onError event (used with {@link com.potix.zk.ui.event.ErrorEvent}).
+	public static final Command ON_CHANGING = new InputCommand(Events.ON_CHANGING, true);
+	/** The onError event (used with {@link ErrorEvent}).
 	 */
-	public static final Command ON_ERROR = new ErrorCommand("onError", false);
-	/** The onScroll event (used with {@link com.potix.zk.ui.event.ScrollEvent}).
+	public static final Command ON_ERROR = new ErrorCommand(Events.ON_ERROR, false);
+	/** The onScroll event (used with {@link ScrollEvent}).
 	 */
-	public static final Command ON_SCROLL = new ScrollCommand("onScroll", false);
-	/** The onScrolling event (used with {@link com.potix.zk.ui.event.ScrollEvent}).
+	public static final Command ON_SCROLL = new ScrollCommand(Events.ON_SCROLL, false);
+	/** The onScrolling event (used with {@link ScrollEvent}).
 	 */
-	public static final Command ON_SCROLLING = new ScrollCommand("onScrolling", true);
-	/** The onSelect event (used with {@link com.potix.zk.ui.event.SelectEvent}).
+	public static final Command ON_SCROLLING = new ScrollCommand(Events.ON_SCROLLING, true);
+	/** The onSelect event (used with {@link SelectEvent}).
 	 */
-	public static final Command ON_SELECT = new SelectCommand("onSelect", false);
-	/** The onCheck event (used with {@link com.potix.zk.ui.event.CheckEvent}).
+	public static final Command ON_SELECT = new SelectCommand(Events.ON_SELECT, false);
+	/** The onCheck event (used with {@link CheckEvent}).
 	 */
-	public static final Command ON_CHECK = new CheckCommand("onCheck", false);
-	/** The onMove event (used with {@link com.potix.zk.ui.event.MoveEvent}).
+	public static final Command ON_CHECK = new CheckCommand(Events.ON_CHECK, false);
+	/** The onMove event (used with {@link MoveEvent}).
 	 */
-	public static final Command ON_MOVE = new MoveCommand("onMove", false);
-	/** The onZIndex event (used with {@link com.potix.zk.ui.event.ZIndexEvent}).
+	public static final Command ON_MOVE = new MoveCommand(Events.ON_MOVE, false);
+	/** The onZIndex event (used with {@link ZIndexEvent}).
 	 */
-	public static final Command ON_Z_INDEX = new ZIndexCommand("onZIndex", false);
-	/** The onOpen event (used with {@link com.potix.zk.ui.event.OpenEvent}).
+	public static final Command ON_Z_INDEX = new ZIndexCommand(Events.ON_Z_INDEX, false);
+	/** The onOpen event (used with {@link OpenEvent}).
 	 */
-	public static final Command ON_OPEN = new OpenCommand("onOpen", false);
-	/** The onShow event (used with {@link com.potix.zk.ui.event.ShowEvent}).
+	public static final Command ON_OPEN = new OpenCommand(Events.ON_OPEN, false);
+	/** The onShow event (used with {@link ShowEvent}).
 	 */
-	public static final Command ON_SHOW = new ShowCommand("onShow", false);
-	/** The onClose event (used with {@link com.potix.zk.ui.event.Event})
+	public static final Command ON_SHOW = new ShowCommand(Events.ON_SHOW, false);
+	/** The onClose event (used with {@link Event})
 	 * used to denote the close button is pressed.
 	 */
-	public static final Command ON_CLOSE = new GenericCommand("onClose", false);
+	public static final Command ON_CLOSE = new GenericCommand(Events.ON_CLOSE, false);
 	/** The onRender event (used with {@link com.potix.zk.ui.ext.Render}).
 	 */
-	public static final Command ON_RENDER = new RenderCommand("onRender", false);
-	/** The onTimer event (used with {@link com.potix.zk.ui.event.Event}).
+	public static final Command ON_RENDER = new RenderCommand(Events.ON_RENDER, false);
+	/** The onTimer event (used with {@link Event}).
 	 * Sent when a timer is up.
 	 */
-	public static final Command ON_TIMER = new GenericCommand("onTimer", false);
-	/** The onFocus event (used with {@link com.potix.zk.ui.event.Event}).
+	public static final Command ON_TIMER = new GenericCommand(Events.ON_TIMER, false);
+	/** The onFocus event (used with {@link Event}).
 	 * Sent when a component gets a focus.
 	 */
-	public static final Command ON_FOCUS = new GenericCommand("onFocus", false);
-	/** The onBlur event (used with {@link com.potix.zk.ui.event.Event}).
+	public static final Command ON_FOCUS = new GenericCommand(Events.ON_FOCUS, false);
+	/** The onBlur event (used with {@link Event}).
 	 * Sent when a component loses a focus.
 	 */
-	public static final Command ON_BLUR = new GenericCommand("onBlur", false);
-	/** The onDrop event (used with {@link com.potix.zk.ui.event.DropEvent}).
+	public static final Command ON_BLUR = new GenericCommand(Events.ON_BLUR, false);
+	/** The onDrop event (used with {@link DropEvent}).
 	 * Sent when a component is dragged and drop to another.
 	 */
-	public static final Command ON_DROP = new DropCommand("onDrop", false);
+	public static final Command ON_DROP = new DropCommand(Events.ON_DROP, false);
 	/** A request for removing the specified desktop.
 	 */
 	public static final Command REMOVE_DESKTOP = new RemoveDesktopCommand("rmDesktop", false);
@@ -162,22 +163,22 @@ public class AuRequest {
 	 */
 	public static final Command DO_UPDATABLE = new DoUpdatableCommand("doUpdatable", false);
 
-	/** The onNotify event (used with {@link com.potix.zk.ui.event.Event}).
+	/** The onNotify event (used with {@link Event}).
 	 * It is not used by any component, but it is, rather, designed to
 	 * let users add customized events.
 	 */
-	public static final Command ON_NOTIFY = new GenericCommand("onNotify", false);
-	/** The onSort event (used with {@link com.potix.zk.ui.event.Event})
+	public static final Command ON_NOTIFY = new GenericCommand(Events.ON_NOTIFY, false);
+	/** The onSort event (used with {@link Event})
 	 * to notify a request for sorting.
 	 */
-	public static final Command ON_SORT = new GenericCommand("onSort", true);
-	/** The onBookmarkChanged event (used with {@link com.potix.zk.ui.event.BookmarkEvent})
+	public static final Command ON_SORT = new GenericCommand(Events.ON_SORT, true);
+	/** The onBookmarkChanged event (used with {@link BookmarkEvent})
 	 * to notify that user pressed BACK, FORWARD or specified URL directly
 	 * that causes the bookmark is changed (but still in the same desktop).
 	 * <p>All root components of all pages of the desktop will
 	 * recieve this event.
 	 */
-	public static final Command ON_BOOKMARK_CHANGED = new BookmarkChangedCommand("onBookmarkChanged", false);
+	public static final Command ON_BOOKMARK_CHANGED = new BookmarkChangedCommand(Events.ON_BOOKMARK_CHANGED, false);
 
 	/** Constructor for a request sent from a component.
 	 * Since we cannot invoke {@link Desktop#getComponentByUuid} without
