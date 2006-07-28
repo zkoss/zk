@@ -6,10 +6,10 @@
   Description:
 
   History:
-    Fri Jul  8 14:25:41     2005, Created by tomyeh@potix.com
+    Jul 27, 2006, H.-Dirk Schmitt
 }}IS_NOTE
 
-Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
   This program is distributed under GPL Version 2.0 in the hope that
