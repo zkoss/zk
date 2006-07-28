@@ -133,6 +133,15 @@ public class Events {
 	 */
 	public static final String ON_CLIENT_INFO = "onClientInfo";
 
+	/** The onCreate event (used with {@link CreateEvent}) to notify a compoent
+	 * that it (and its children) has been created by ZK's evaluating a ZUML page.
+	 */
+	public static final String ON_CREATE = "onCreate";
+	/** The onModal event (used with {@link Event}) to notify a component
+	 * shall become modal. Currently, only ZUL's window components support it.
+	 */
+	public static final String ON_MODAL = "onModal";
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character

@@ -348,9 +348,9 @@ public class UiEngineImpl implements UiEngine {
 
 			execCreate(exec, page, childdef, child); //recursive
 
-			if (Events.isListenerAvailable(child, "onCreate", false))
+			if (Events.isListenerAvailable(child, Events.ON_CREATE, false))
 				Events.postEvent(
-					new CreateEvent("onCreate", child, exec.getArg()));
+					new CreateEvent(Events.ON_CREATE, child, exec.getArg()));
 
 			return child;
 		}
@@ -558,7 +558,7 @@ public class UiEngineImpl implements UiEngine {
 				if (c == null) {
 					log.error("No component in "+location);
 				} else {
-					process(exec.getDesktop(), new Event("onModal", c, null));
+					process(exec.getDesktop(), new Event(Events.ON_MODAL, c, null));
 					return; //done
 				}
 			} catch (Throwable ex) {

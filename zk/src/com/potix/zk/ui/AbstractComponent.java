@@ -921,6 +921,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_listeners.put(evtnm, l = new LinkedList());
 		}
 		l.add(listener);
+
+		if (_desktop != null && Events.ON_CLIENT_INFO.equals(evtnm)) {
+			//TODO
+		}
 		return true;
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {

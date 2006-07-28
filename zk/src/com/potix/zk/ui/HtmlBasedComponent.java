@@ -302,10 +302,14 @@ implements Moveable, ZIndexed {
 	 * &lt;yy id="${self.uuid}!real"${self.innerAttrs}&gt;...
 	 *</code></pre>
 	 *
-	 * <p>Note: To handling an event, you do something similar as follows.
-	 * <pre><code>
-	 *	if (isAsapRequired("onCheck"))
-	 *		HTMLs.appendAttribute(sb, "zk_onCheck", true);</code></pre>
+	 * <p>Note: This class handles ASAP event listeners (i.e., event listeners
+	 * whose {@link EventListener#isAsap} return true) automatically.
+	 * However, you have to invoke {@link #appendAsapAttr} for each event
+	 * the component handles in {@link #getOuterAttrs} as follows.
+	 *<pre><code>
+	 *	appendAsapAttr(sb, Events.ON_OPEN);
+	 *  appendAsapAttr(sb, Events.ON_CHANGE);
+	 *</code></pre>
 	 *
 	 * <p>Theorectically, you could put any attributes in either
 	 * {@link #getInnerAttrs} or {@link #getOuterAttrs}.
@@ -393,6 +397,19 @@ implements Moveable, ZIndexed {
 	protected boolean isAsapRequired(String evtnm) {
 		return Events.isListenerAvailable(this, evtnm, true);
 	}
+	/** Appends the HTML attribute for the specified event name, say, onChange.
+	 * It is called by derived's {@link #getOuterAttrs}.
+	 */
+	protected void appendAsapAttr(StringBuffer sb, String evtnm) {
+		if (isAsapRequired(evtnm))
+			HTMLs.appendAttribute(sb, getAttrOfEvent(evtnm), true);
+	}
+	private static String getAttrOfEvent(String evtnm) {
+		return Events.ON_CLICK.equals(evtnm) ? "zk_lfclk":
+			Events.ON_RIGHT_CLICK.equals(evtnm) ? "zk_rtclk":
+			Events.ON_DOUBLE_CLICK.equals(evtnm) ? "zk_dbclk":
+				"zk_" + evtnm;
+	}
 
 	//-- Component --//
 	public boolean addEventListener(String evtnm, EventListener listener) {
@@ -403,7 +420,7 @@ implements Moveable, ZIndexed {
 		final boolean asap = isAsapRequired(evtnm);
 		final boolean ret = super.addEventListener(evtnm, listener);
 		if (ret && !asap && isAsapRequired(evtnm))
-			smartUpdate("zk_" + evtnm, "true");
+			smartUpdate(getAttrOfEvent(evtnm), "true");
 		return ret;
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
@@ -413,7 +430,7 @@ implements Moveable, ZIndexed {
 		final boolean asap = isAsapRequired(evtnm);
 		final boolean ret = super.removeEventListener(evtnm, listener);
 		if (ret && asap && !isAsapRequired(evtnm))
-			smartUpdate("zk_" + evtnm, null);
+			smartUpdate(getAttrOfEvent(evtnm), null);
 		return ret;
 	}
 
