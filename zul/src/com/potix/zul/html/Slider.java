@@ -21,6 +21,7 @@ package com.potix.zul.html;
 import com.potix.xml.HTMLs;
 
 import com.potix.zk.ui.WrongValueException;
+import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.ext.Scrollable;
 
 import com.potix.zul.html.impl.XulElement;
@@ -110,13 +111,10 @@ public class Slider extends XulElement implements Scrollable {
 		HTMLs.appendAttribute(sb, "zk_curpos", _curpos);
 		HTMLs.appendAttribute(sb, "zk_maxpos", _maxpos);
 		HTMLs.appendAttribute(sb, "zk_pginc", _pginc);
-		if (isAsapRequired("onScroll"))
-			HTMLs.appendAttribute(sb, "zk_onScroll", true);
-		if (isAsapRequired("onScrolling"))
-			HTMLs.appendAttribute(sb, "zk_onScrolling", true);
 
-		if (isAsapRequired("onRightClick"))
-			HTMLs.appendAttribute(sb, "zk_rtclk", true);
+		appendAsapAttr(sb, Events.ON_SCROLL);
+		appendAsapAttr(sb, Events.ON_SCROLLING);
+		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
 			//no zk_dbclk to avoid confusion
 			//no zk_lfclk since it will be supported by sld.js
 

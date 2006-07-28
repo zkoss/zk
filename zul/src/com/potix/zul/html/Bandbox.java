@@ -22,6 +22,7 @@ import com.potix.xml.HTMLs;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
+import com.potix.zk.ui.event.Events;
 import com.potix.zk.au.AuScript;
 
 /**
@@ -115,15 +116,13 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		final boolean asapOpen = isAsapRequired("onOpen"), adr = isAutodrop();
-		if (!asapOpen && !adr)
+		final boolean adr = isAutodrop();
+		if (!isAsapRequired(Events.ON_OPEN) && !adr)
 			return attrs;
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
-		if (asapOpen)
-			sb.append(" zk_onOpen=\"true\"");
-		if (adr)
-			HTMLs.appendAttribute(sb, "zk_adr", "true");
+		appendAsapAttr(sb, Events.ON_OPEN);
+		if (adr) HTMLs.appendAttribute(sb, "zk_adr", "true");
 		return sb.toString();
 	}
 	public String getInnerAttrs() {

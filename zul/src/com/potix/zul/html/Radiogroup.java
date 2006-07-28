@@ -54,7 +54,7 @@ public class Radiogroup extends XulElement {
 				Events.sendEvent(Radiogroup.this, event);
 			}
 			public boolean isAsap() {
-				return Events.isListenerAvailable(Radiogroup.this, "onCheck", true);
+				return Events.isListenerAvailable(Radiogroup.this, Events.ON_CHECK, true);
 			}
 		};
 	}
@@ -169,7 +169,7 @@ public class Radiogroup extends XulElement {
 				} else {
 					fixSelectedIndex();
 				}
-				child.addEventListener("onCheck", _listener);
+				child.addEventListener(Events.ON_CHECK, _listener);
 				return true;
 			}
 			return false;
@@ -186,7 +186,7 @@ public class Radiogroup extends XulElement {
 			} else if (_jsel > 0) { //excluding 0
 				fixSelectedIndex();
 			}
-			child.removeEventListener("onCheck", _listener);
+			child.removeEventListener(Events.ON_CHECK, _listener);
 		}
 		return ret;
 	}
@@ -224,7 +224,7 @@ public class Radiogroup extends XulElement {
 		//remove listener from children first
 		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
 			final Radio child = (Radio)it.next();
-			child.removeEventListener("onCheck", clone._listener);
+			child.removeEventListener(Events.ON_CHECK, clone._listener);
 		}
 
 		//create and add back listener
@@ -235,7 +235,7 @@ public class Radiogroup extends XulElement {
 	private void afterUnmarshal() {
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Radio child = (Radio)it.next();
-			child.addEventListener("onClick", _listener);
+			child.addEventListener(Events.ON_CHECK, _listener);
 		}
 	}
 

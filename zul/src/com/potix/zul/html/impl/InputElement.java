@@ -26,6 +26,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.ext.Inputable;
 import com.potix.zk.ui.ext.Errorable;
+import com.potix.zk.ui.event.Events;
 import com.potix.zk.au.AuSelectAll;
 
 import com.potix.zul.html.Constraint;
@@ -307,11 +308,11 @@ implements Inputable, Errorable, Constrainted {
 	 * to process the event immediately.
 	 *
 	 * <p>Default: Besides super.isAsapRequired(evtnm), it also returns true
-	 * if evtnm is "onChange", {@link #getConstraint} is not null,
+	 * if evtnm is Events.ON_CHANGE, {@link #getConstraint} is not null,
 	 * and {@link Constraint#getValidationScript} is null.
 	 */
 	protected boolean isAsapRequired(String evtnm) {
-		return ("onChange".equals(evtnm) 
+		return (Events.ON_CHANGE.equals(evtnm) 
 			&& _constr != null && !_constr.isClientComplete())
 			|| super.isAsapRequired(evtnm);
 	}
@@ -344,14 +345,10 @@ implements Inputable, Errorable, Constrainted {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
 
-		if (isAsapRequired("onChange"))
-			HTMLs.appendAttribute(sb, "zk_onChange", true);
-		if (isAsapRequired("onChanging"))
-			HTMLs.appendAttribute(sb, "zk_onChanging", true);
-		if (isAsapRequired("onFocus"))
-			HTMLs.appendAttribute(sb, "zk_onFocus", true);
-		if (isAsapRequired("onBlur"))
-			HTMLs.appendAttribute(sb, "zk_onBlur", true);
+		appendAsapAttr(sb, Events.ON_CHANGE);
+		appendAsapAttr(sb, Events.ON_CHANGING);
+		appendAsapAttr(sb, Events.ON_FOCUS);
+		appendAsapAttr(sb, Events.ON_BLUR);
 
 		if (_constr != null) {
 			HTMLs.appendAttribute(sb, "zk_valid", _constr.getValidationScript());

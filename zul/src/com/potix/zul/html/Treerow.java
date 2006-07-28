@@ -23,6 +23,7 @@ import com.potix.xml.HTMLs;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.event.Events;
 
 import com.potix.zul.html.impl.XulElement;
 
@@ -105,7 +106,7 @@ public class Treerow extends XulElement {
 	}
 
 	protected boolean isAsapRequired(String evtnm) {
-		if (!"onOpen".equals(evtnm))
+		if (!Events.ON_OPEN.equals(evtnm))
 			return super.isAsapRequired(evtnm);
 		final Treeitem ti = getTreeitem();
 		return ti != null && ti.isAsapRequired(evtnm);
@@ -134,8 +135,7 @@ public class Treerow extends XulElement {
 
 		if (item.isFocusRequired())
 			sb.append(" zk_focus=\"true\"");
-		if (isAsapRequired("onOpen"))
-			sb.append(" zk_onOpen=\"true\"");
+		appendAsapAttr(sb, Events.ON_OPEN);
 
 		final String clkattrs = item.getAllOnClickAttrs(false);
 		if (clkattrs != null) sb.append(clkattrs);

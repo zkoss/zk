@@ -1069,8 +1069,7 @@ implements Selectable, Render, java.io.Serializable {
 				HTMLs.appendAttribute(sb, "zk_model", true);
 		}
 
-		if (isAsapRequired("onSelect"))
-			HTMLs.appendAttribute(sb, "zk_onSelect", true);
+		appendAsapAttr(sb, Events.ON_SELECT);
 		return sb.toString();
 	}
 

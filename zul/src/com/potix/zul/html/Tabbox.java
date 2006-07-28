@@ -27,6 +27,7 @@ import com.potix.xml.HTMLs;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
+import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.ext.Selectable;
 import com.potix.zk.au.AuScript;
 
@@ -226,11 +227,8 @@ public class Tabbox extends XulElement implements Selectable {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
-		if (isAsapRequired("onSelect"))
-			HTMLs.appendAttribute(sb, "zk_onSelect", true);
-
-		if (isAsapRequired("onRightClick"))
-			HTMLs.appendAttribute(sb, "zk_rtclk", true);
+		appendAsapAttr(sb, Events.ON_SELECT);
+		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
 			//no zk_dbclk/zk_lfclk since it is covered by both Tab and Tabpanel
 
 		//HTMLs.appendAttribute(sb, "zk_orient", _orient);

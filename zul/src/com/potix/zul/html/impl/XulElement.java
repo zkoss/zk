@@ -30,6 +30,7 @@ import com.potix.zk.ui.Component;
 import com.potix.zk.ui.HtmlBasedComponent;
 import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.ComponentNotFoundException;
+import com.potix.zk.ui.event.Events;
 
 /**
  * The fundamental class for XUL elements.
@@ -251,19 +252,9 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 */
 	protected String getAllOnClickAttrs(boolean ignoreOnClick) {
 		StringBuffer sb = null;
-		if (!ignoreOnClick && isAsapRequired("onClick"))
-			sb = new StringBuffer(70).append(" zk_lfclk=\"true\"");
-
-		if (isAsapRequired("onDoubleClick")) {
-			if (sb == null) sb = new StringBuffer(50);
-			sb.append(" zk_dbclk=\"true\"");
-		}
-
-		if (isAsapRequired("onRightClick")) {
-			final String attr = " zk_rtclk=\"true\"";
-			if (sb == null) return attr;
-			sb.append(attr);
-		}
+		if (!ignoreOnClick) sb = appendAsapAttr(sb, Events.ON_CLICK);
+		sb = appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
+		sb = appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
 		return sb != null ? sb.toString():  null;
 	}
 

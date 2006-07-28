@@ -29,6 +29,8 @@ import com.potix.xml.HTMLs;
 
 import com.potix.zk.ui.ext.Inputable;
 import com.potix.zk.ui.WrongValueException;
+import com.potix.zk.ui.event.Events;
+
 import com.potix.zul.html.impl.XulElement;
 
 /**
@@ -122,8 +124,8 @@ public class Calendar extends XulElement implements Inputable {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
 
-		if (isAsapRequired("onChange"))
-			HTMLs.appendAttribute(sb, "zk_onChange", true);
+		appendAsapAttr(sb, Events.ON_CHANGE);
+
 		HTMLs.appendAttribute(sb, "zk_value", getDateFormat().format(_value));
 		if (_compact) sb.append(" zk_compact=\"true\"");
 		return sb.toString();

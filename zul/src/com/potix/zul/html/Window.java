@@ -35,6 +35,7 @@ import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.IdSpace;
+import com.potix.zk.ui.event.Events;
 import com.potix.zk.au.*;
 
 import com.potix.zul.html.impl.XulElement;
@@ -193,7 +194,7 @@ public class Window extends XulElement implements IdSpace  {
 	 *&lt;window title="..."&gt;
 	 *...
 	 *  &lt;zscript&gt;
-	 *    Events.postEvent("onModal", spaceOwner, null);
+	 *    Events.postEvent(Events.ON_MODAL, spaceOwner, null);
 	 *  &lt;/zscript&gt;
 	 *...
 	 *
@@ -434,16 +435,11 @@ public class Window extends XulElement implements IdSpace  {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
-		if (isAsapRequired("onMove"))
-			HTMLs.appendAttribute(sb, "zk_onMove", true);
-		if (isAsapRequired("onZIndex"))
-			HTMLs.appendAttribute(sb, "zk_onZIndex", true);
-		if (isAsapRequired("onOK"))
-			HTMLs.appendAttribute(sb, "zk_onOK", true);
-		if (isAsapRequired("onCancel"))
-			HTMLs.appendAttribute(sb, "zk_onCancel", true);
-		if (isAsapRequired("onCtrlKey"))
-			HTMLs.appendAttribute(sb, "zk_onCtrlKey", true);
+		appendAsapAttr(sb, Events.ON_MOVE);
+		appendAsapAttr(sb, Events.ON_Z_INDEX);
+		appendAsapAttr(sb, Events.ON_OK);
+		appendAsapAttr(sb, Events.ON_CANCEL);
+		appendAsapAttr(sb, Events.ON_CTRL_KEY);
 
 		final String clkattrs = getAllOnClickAttrs(false);
 		if (clkattrs != null) sb.append(clkattrs);

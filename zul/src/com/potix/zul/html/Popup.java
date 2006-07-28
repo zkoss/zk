@@ -20,6 +20,7 @@ package com.potix.zul.html;
 
 import com.potix.lang.Objects;
 import com.potix.xml.HTMLs;
+import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.sys.ComponentsCtrl;
 import com.potix.zul.html.impl.XulElement;
 
@@ -62,8 +63,7 @@ public class Popup extends XulElement {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
 
-		if (isAsapRequired("onOpen"))
-			HTMLs.appendAttribute(sb, "zk_onOpen", true);
+		appendAsapAttr(sb, Events.ON_OPEN);
 
 		if (zidRequired()) {
 			final String id = getId();

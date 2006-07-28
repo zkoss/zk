@@ -22,6 +22,7 @@ import com.potix.xml.HTMLs;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
+import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.ext.Openable;
 
 import com.potix.zul.html.impl.XulElement;
@@ -123,8 +124,8 @@ public class Splitter extends XulElement implements Openable {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
-		if (isAsapRequired("onOpen"))
-			sb.append(" zk_onOpen=\"true\"");
+		appendAsapAttr(sb, Events.ON_OPEN);
+
 		if ("vertical".equals(getOrient()))
 			HTMLs.appendAttribute(sb, "zk_vert", "true");
 		if (!"none".equals(_collapse))

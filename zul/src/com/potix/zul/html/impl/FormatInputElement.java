@@ -26,6 +26,7 @@ import com.potix.lang.Objects;
 import com.potix.util.Locales;
 
 import com.potix.zk.ui.WrongValueException;
+import com.potix.zk.ui.event.Events;
 
 /**
  * An input box that supports format.
@@ -126,7 +127,7 @@ abstract public class FormatInputElement extends InputElement {
 			attrs + " zk_fmt=\""+fmt+'"': attrs;
 	}
 	protected boolean isAsapRequired(String evtnm) {
-		return ("onChange".equals(evtnm) && getFormat() != null)
+		return (Events.ON_CHANGE.equals(evtnm) && getFormat() != null)
 			|| super.isAsapRequired(evtnm);
 	}
 }

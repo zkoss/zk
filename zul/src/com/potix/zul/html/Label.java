@@ -27,6 +27,7 @@ import com.potix.xml.HTMLs;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Components;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
 import com.potix.zk.ui.sys.ComponentCtrl;
 
@@ -87,7 +88,7 @@ public class Label extends XulElement {
 	private boolean isIdRequired() {
 		final Component p = getParent();
 		return p == null || !isVisible() || !Components.isAutoId(getId())
-			|| !isRawLabel(p) || isAsapRequired("onClick");
+			|| !isRawLabel(p) || isAsapRequired(Events.ON_CLICK);
 	}
 	private static boolean isRawLabel(Component comp) {
 		final LanguageDefinition langdef =

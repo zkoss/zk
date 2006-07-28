@@ -25,6 +25,7 @@ import com.potix.xml.HTMLs;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
+import com.potix.zk.ui.event.Events;
 
 /**
  * A combo box.
@@ -142,18 +143,14 @@ public class Combobox extends Textbox {
 
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		final boolean asapOpen = isAsapRequired("onOpen"),
-			aco = isAutocomplete(), adr = isAutodrop();
-		if (!asapOpen && !aco && !adr)
+		final boolean aco = isAutocomplete(), adr = isAutodrop();
+		if (!isAsapRequired(Events.ON_OPEN) && !aco && !adr)
 			return attrs;
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
-		if (asapOpen)
-			sb.append(" zk_onOpen=\"true\"");
-		if (aco)
-			HTMLs.appendAttribute(sb, "zk_aco", "true");
-		if (adr)
-			HTMLs.appendAttribute(sb, "zk_adr", "true");
+		appendAsapAttr(sb, Events.ON_OPEN);
+		if (aco) HTMLs.appendAttribute(sb, "zk_aco", "true");
+		if (adr) HTMLs.appendAttribute(sb, "zk_adr", "true");
 		return sb.toString();
 	}
 	public String getInnerAttrs() {

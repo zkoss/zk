@@ -20,6 +20,7 @@ package com.potix.zul.html;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.ext.Openable;
 
 import com.potix.zul.html.impl.XulElement;
@@ -83,19 +84,14 @@ public class Groupbox extends XulElement implements Openable {
 
 	//-- super --//
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final boolean onOpen = isAsapRequired("onOpen");
-		if (!onOpen && _closable) return attrs;
+		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
 
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
-
+		appendAsapAttr(sb, Events.ON_OPEN);
 		final String clkattrs = getAllOnClickAttrs(false);
 		if (clkattrs != null) sb.append(clkattrs);
 			//though widget.js handles onclick (if 3d), it is useful
 			//to support onClick for groupbox
 
-		if (onOpen)
-			sb.append(" zk_onOpen=\"true\"");
 		if (!_closable)
 			sb.append(" zk_closable=\"false\"");
 		return sb.toString();

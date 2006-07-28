@@ -33,6 +33,7 @@ import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.ext.Selectable;
+import com.potix.zk.ui.event.Events;
 
 import com.potix.zul.html.impl.XulElement;
 
@@ -592,8 +593,7 @@ public class Tree extends XulElement implements Selectable {
 			HTMLs.appendAttribute(sb, "zk_multiple", _multiple);
 		//if (_checkmark)
 		//	HTMLs.appendAttribute(sb, "zk_checkmark",  _checkmark);
-		if (isAsapRequired("onSelect"))
-			HTMLs.appendAttribute(sb, "zk_onSelect", true);
+		appendAsapAttr(sb, Events.ON_SELECT);
 		return sb.toString();
 	}
 

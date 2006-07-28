@@ -24,6 +24,7 @@ import com.potix.xml.HTMLs;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.ext.Checkable;
+import com.potix.zk.ui.event.Events;
 
 import com.potix.zul.html.impl.LabelImageElement;
 
@@ -167,15 +168,11 @@ public class Checkbox extends LabelImageElement implements Checkable {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
-		if (isAsapRequired("onFocus"))
-			HTMLs.appendAttribute(sb, "zk_onFocus", true);
-		if (isAsapRequired("onBlur"))
-			HTMLs.appendAttribute(sb, "zk_onBlur", true);
-		if (isAsapRequired("onCheck"))
-			HTMLs.appendAttribute(sb, "zk_onCheck", true);
 
-		if (isAsapRequired("onRightClick"))
-			HTMLs.appendAttribute(sb, "zk_rtclk", true);
+		appendAsapAttr(sb, Events.ON_FOCUS);
+		appendAsapAttr(sb, Events.ON_BLUR);
+		appendAsapAttr(sb, Events.ON_CHECK);
+		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
 			//no zk_dbclk to avoid confusing
 			//no zk_lfclk since it is handled by widget.js
 
