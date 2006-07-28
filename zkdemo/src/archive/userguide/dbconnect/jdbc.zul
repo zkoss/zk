@@ -41,7 +41,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		import java.sql.*;
 		void submit() {
 		/*
-			//load driver and get a database connetion
+		//load driver and get a database connetion
+		//Note: It is usually better to use connection pool. Please consult
+		//the manual of your Web server. Or, refer to the Developer's Guide
 			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
 			String url = "jdbc:odbc:Fred";
 			Connection con = DriverManager.getConnection(url,"myLogin", "myPassword");
