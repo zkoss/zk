@@ -33,9 +33,12 @@ public class Attributes {
 	 */
 	public static final String TITLE = "px_title";
 
-	/** Te attribute used to store the preferred locale (Locale) in a session.
+	/** The attribute used to store the preferred locale (Locale) in a session.
 	 */
 	public static final String PREFERRED_LOCALE = "px_preferred_locale";
+	/** The attribute used to store the preferred time zone (TimeZone) in a session.
+	 */
+	public static final String PREFERRED_TIME_ZONE = "px_preferred_time_zone";
 
 	/** The attribute name that contains the alert passed from
 	 * another request {@link com.potix.web.servlet.http.Https#sendRedirect}.
