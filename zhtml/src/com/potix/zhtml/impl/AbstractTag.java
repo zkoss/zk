@@ -268,7 +268,7 @@ implements DynamicPropertied, RawId {
 		}
 	}
 	private static final EventInfo[] _evts = {
-		new EventInfo("onClick", "zk_lfclk", false),
-		new EventInfo("onChange", "zk_onChange", true)
+		new EventInfo(Events.ON_CLICK, "zk_lfclk", false),
+		new EventInfo(Events.ON_CHANGE, "zk_onChange", true)
 	};
 }
