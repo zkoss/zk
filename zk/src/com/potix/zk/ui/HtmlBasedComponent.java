@@ -399,10 +399,20 @@ implements Moveable, ZIndexed {
 	}
 	/** Appends the HTML attribute for the specified event name, say, onChange.
 	 * It is called by derived's {@link #getOuterAttrs}.
+	 *
+	 * @param sb the string buffer to hold the HTML attribute. If null and
+	 * {@link #isAsapRequired} is true, a string buffer is created and returned.
+	 * @return the string buffer. If sb is null and {@link #isAsapRequired}
+	 * returns false, null is returned.
+	 * If the caller passed non-null sb, the returned value must be the same
+	 * as sb (so it usually ignores the returned value).
 	 */
-	protected void appendAsapAttr(StringBuffer sb, String evtnm) {
-		if (isAsapRequired(evtnm))
+	protected StringBuffer appendAsapAttr(StringBuffer sb, String evtnm) {
+		if (isAsapRequired(evtnm)) {
+			if (sb == null) sb = new StringBuffer(80);
 			HTMLs.appendAttribute(sb, getAttrOfEvent(evtnm), true);
+		}
+		return sb;
 	}
 	private static String getAttrOfEvent(String evtnm) {
 		return Events.ON_CLICK.equals(evtnm) ? "zk_lfclk":
