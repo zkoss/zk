@@ -158,7 +158,7 @@ public class Locators {
 						if (k > 0) sb.append('_');
 						sb.append(secs[k]);
 					}
-				 	l = Locales.toLocale(sb.toString(), '_');
+				 	l = Locales.getLocale(sb.toString(), '_');
 				} else {
 					l = Locale.ENGLISH;
 				}

@@ -78,14 +78,14 @@ public class Locales {
 	 * is customizable, and whitespaces are ignored, e.g.,
 	 * "zh_TW" and "zh, TW".
 	 *
-	 * <p>Thus, locale.equals(Locales.toLocale(locale.toString(), '_')).
+	 * <p>Thus, locale.equals(Locales.getLocale(locale.toString(), '_')).
 	 *
 	 * @param localeString the locale in string; null is OK
 	 * @param separator the separator; ((char)0) means to decide automatically
 	 * (either ',' or '_')
 	 * @return the locale or null if locale is null or empty
 	 */
-	public static final Locale toLocale(String localeString, char separator) {
+	public static final Locale getLocale(String localeString, char separator) {
 		if (localeString == null)
 			return null;
 
@@ -114,26 +114,26 @@ public class Locales {
 				throw new IllegalArgumentException("Not a valid language: "+localeString);
 		}
 
-		return toLocale(new Locale(lang, cnt, var));
+		return getLocale(new Locale(lang, cnt, var));
 
 	}
 	/** Converts a string that consists of language, country and variant
 	 * to a locale.
 	 *
-	 * <p>A shortcut: toLocale(localeString, (char)0).
+	 * <p>A shortcut: getLocale(localeString, (char)0).
 	 */
-	public static final Locale toLocale(String localeString) {
-		return toLocale(localeString, (char)0);
+	public static final Locale getLocale(String localeString) {
+		return getLocale(localeString, (char)0);
 	}
 
 	/** Converts a Locale to one of them being used before.
 	 * To save memory (since locale is used frequently), it is suggested
 	 * to pass thru this method after creating a new instance of Locale.<br>
-	 * Example, toLocale(new Locale(...)).
+	 * Example, getLocale(new Locale(...)).
 	 *
 	 * <p>This method first look for any locale
 	 */
-	synchronized public static final Locale toLocale(Locale locale) {
+	synchronized public static final Locale getLocale(Locale locale) {
 		final Locale l = (Locale)_founds.get(locale);
 		if (l != null)
 			return l;

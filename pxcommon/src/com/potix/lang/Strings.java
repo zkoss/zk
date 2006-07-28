@@ -795,7 +795,7 @@ public class Strings {
 		} else if (BigInteger.class == type) {
 			return new BigInteger(trimForDigits(str));
 		} else if (Locale.class == type) {
-			return Locales.toLocale(str, (char)0);
+			return Locales.getLocale(str, (char)0);
 		} else if (TimeZone.class == type) {
 			return TimeZone.getTimeZone(str);
  		} else {
