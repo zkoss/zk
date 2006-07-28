@@ -86,6 +86,8 @@ public class I18Ns {
 					log.warning("Ignored: unable to invoke the locale provider: "+cls, ex);
 				}
 			}
+			if (tzone == null)
+				tzone = (TimeZone)sess.getAttribute(Attributes.PREFERRED_TIME_ZONE);
 			final Object otz = TimeZones.setThreadLocal(tzone);
 			old = new Pair(ol, otz);
 		}
