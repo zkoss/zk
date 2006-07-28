@@ -60,6 +60,7 @@ import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
 import com.potix.zk.ui.metainfo.DefinitionNotFoundException;
 import com.potix.zk.au.AuResponse;
+import com.potix.zk.au.AuClientInfo;
 
 /**
  * A skeletal implementation of {@link Component}. Though it is OK
@@ -423,6 +424,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		setPage0(page); //UUID might be changed here
 
 		if (_page != null) addToIdSpacesDown(this);
+
+		checkRootEvents(null);
 	}
 	/** Calling getUiEngine().addMoved().
 	 */
@@ -696,6 +699,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_spaceInfo.ns.setParent(
 				_parent != null ? _parent.getNamespace(): null);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
+
+		checkRootEvents(null);
 	}
 
 	/** Default: return true (allows to have children).
@@ -922,10 +927,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		l.add(listener);
 
-		if (_desktop != null && Events.ON_CLIENT_INFO.equals(evtnm)) {
-			//TODO
-		}
+		checkRootEvents(evtnm);
 		return true;
+	}
+	/** Checks special events for root components.
+	 *
+	 * @param evtnm which event is changed. If null, it means all have to check.
+	 */
+	private void checkRootEvents(String evtnm) {
+		if (_desktop != null && _parent == null) {
+			if ((evtnm == null || Events.ON_CLIENT_INFO.equals(evtnm))
+			&& Events.isListenerAvailable(this, Events.ON_CLIENT_INFO, true))
+				response("clientInfo", new AuClientInfo());
+		}
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
 		if (evtnm == null || listener == null)

@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package com.potix.zk.ui.event;
 
 import java.util.TimeZone;
-import com.potix.zk.ui.Component;
+import com.potix.util.TimeZones;
 
 /**
  * The onClientInfo event is used to notify the client's information, such
@@ -30,16 +30,24 @@ import com.potix.zk.ui.Component;
  */
 public class ClientInfoEvent extends Event {
 	private final TimeZone _timeZone;
-	private int _width, _height;
+	private final int _width, _height, _colorDepth;
 
-	/** Constructs a event to hold the client-info.
+	/** Constructs an event to hold the client-info.
+	 *
+	 * <p>Note: {@link #getTarget} will return null. It means it is a broadcast
+	 * event.
 	 */
-	public ClientInfoEvent(String name, Component target, int width, int height,
-	int timeZoneOfs) {
-		super(name, target);
+	public ClientInfoEvent(String name, int timeZoneOfs,
+	int width, int height, int colorDepth) {
+		super(name, null);
 		_width = width;
 		_height = height;
-		_timeZone = null; //TODO
+		_colorDepth = colorDepth;
+
+		final StringBuffer sb = new StringBuffer(8).append("GMT");
+		//Note: we have to revert the sign
+		//see http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Date:getTimezoneOffset
+		_timeZone = TimeZones.getTimeZone(-timeZoneOfs);
 	}
 	/** Returns the time zone of the client.
 	 */
@@ -55,5 +63,10 @@ public class ClientInfoEvent extends Event {
 	 */
 	public int getHeight() {
 		return _height;
+	}
+	/** Returns the maximum number of colors the client's screen supports.
+	 */
+	public int getColorDepth() {
+		return _colorDepth;
 	}
 }

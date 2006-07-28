@@ -1538,6 +1538,12 @@ zkau.cmd0 = { //no uuid at all
 	},
 	print: function () {
 		window.print();
+	},
+	clientInfo: function () {
+		zkau.send({uuid: "", cmd: "onClientInfo", data: [
+			new Date().getTimezoneOffset(), screen.width, screen.height,
+			screen.colorDepth
+		]});
 	}
 };
 zkau.cmd1 = {

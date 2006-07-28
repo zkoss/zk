@@ -179,6 +179,13 @@ public class AuRequest {
 	 * recieve this event.
 	 */
 	public static final Command ON_BOOKMARK_CHANGED = new BookmarkChangedCommand(Events.ON_BOOKMARK_CHANGED, false);
+	/** The onClientInfo event (used with {@link ClientInfoEvent})
+	 * to notify the server about the client's information, such as timezone
+	 * and screen width.
+	 * <p>To receive this command, a developer has to register an event listener
+	 * to one of root components for the onClientInfo event.
+	 */
+	public static final Command ON_CLIENT_INFO = new ClientInfoCommand(Events.ON_CLIENT_INFO, false);
 
 	/** Constructor for a request sent from a component.
 	 * Since we cannot invoke {@link Desktop#getComponentByUuid} without
