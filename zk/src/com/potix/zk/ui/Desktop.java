@@ -65,10 +65,6 @@ public interface Desktop {
 	 */
 	public boolean hasPage(String id);
 
-	/** Prints the desktop to the client the printer.
-	 */
-	public void print();
-
 	/** Returns all custom attributes associated with this desktop.
 	 */
 	public Map getAttributes();

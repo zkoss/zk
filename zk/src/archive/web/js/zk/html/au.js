@@ -1536,14 +1536,33 @@ zkau.cmd0 = { //no uuid at all
 	echo: function () {
 		zkau.send({uuid: "", cmd: "dummy", data: null});
 	},
+	clientInfo: function () {
+		zkau.send({uuid: "", cmd: "onClientInfo", data: [
+			new Date().getTimezoneOffset(),
+			screen.width, screen.height, screen.colorDepth,
+			zk.innerWidth(), zk.innerHeight(), zk.innerX(), zk.innerY()
+		]});
+	},
 	print: function () {
 		window.print();
 	},
-	clientInfo: function () {
-		zkau.send({uuid: "", cmd: "onClientInfo", data: [
-			new Date().getTimezoneOffset(), screen.width, screen.height,
-			screen.colorDepth
-		]});
+	scrollBy: function (x, y) {
+		window.scrollBy(x, y);
+	},
+	scrollTo: function (x, y) {
+		window.scrollTo(x, y);
+	},
+	resizeBy: function (x, y) {
+		window.resizeBy(x, y);
+	},
+	resizeTo: function (x, y) {
+		window.resizeTo(x, y);
+	},
+	moveBy: function (x, y) {
+		window.moveBy(x, y);
+	},
+	moveTo: function (x, y) {
+		window.moveTo(x, y);
 	}
 };
 zkau.cmd1 = {

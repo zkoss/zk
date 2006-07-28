@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package com.potix.zk.au;
 
 /**
- * A response to ask the client to print the desktop.
+ * A response to ask the client to bookmark the desktop.
  *
  * <p>data[0]: the name of the bookmark.
  * 

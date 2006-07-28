@@ -44,7 +44,6 @@ import com.potix.zk.ui.sys.RequestQueue;
 import com.potix.zk.ui.sys.DesktopCache;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.DesktopCtrl;
-import com.potix.zk.au.AuPrint;
 import com.potix.zk.au.AuBookmark;
 
 /**
@@ -176,11 +175,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return _pages.values();
 	}
 
-	public void print() {
-		if (_exec == null)
-			throw new IllegalStateException("Not the current desktop: "+this);
-		((WebAppCtrl)_wapp).getUiEngine().addResponse("print", new AuPrint());
-	}
 	public String getBookmark() {
 		return _bookmark;
 	}

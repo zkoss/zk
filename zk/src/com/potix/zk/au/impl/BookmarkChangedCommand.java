@@ -34,7 +34,7 @@ import com.potix.zk.au.AuRequest;
 public class BookmarkChangedCommand extends AuRequest.Command {
 	/** Contruct an event to denote that the bookmark is changed.
 	 *
-	 * <p>Note: {@link #getTarget} will return null. It means it is a broadcast
+	 * <p>Note: {@link com.potix.zk.ui.event.Event#getTarget} will return null. It means it is a broadcast
 	 * event.
 	 */
 	public BookmarkChangedCommand(String evtnm, boolean skipIfEverError) {

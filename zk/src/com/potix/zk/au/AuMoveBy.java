@@ -1,4 +1,4 @@
-/* AuPrint.java
+/* AuMoveBy.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Apr  8 21:08:05     2006, Created by tomyeh@potix.com
+		Fri Jul 28 16:12:12     2006, Created by tomyeh@potix.com
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -19,14 +19,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package com.potix.zk.au;
 
 /**
- * A response to ask the client to print the desktop (aka., the browser window).
+ * A response to ask the client to move the desktop (aka., the browser window)
+ * relatively (in pixels).
  *
- * <p>no data.
+ * <p>data[0]: x<br/>
+ * data[1]: y
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class AuPrint extends AuResponse {
-	public AuPrint() {
-		super("print");
+public class AuMoveBy extends AuResponse {
+	public AuMoveBy(int x, int y) {
+		super("moveBy", new String[] {Integer.toString(x), Integer.toString(y)});
 	}
 }
