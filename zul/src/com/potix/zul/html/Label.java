@@ -88,7 +88,9 @@ public class Label extends XulElement {
 	private boolean isIdRequired() {
 		final Component p = getParent();
 		return p == null || !isVisible() || !Components.isAutoId(getId())
-			|| !isRawLabel(p) || isAsapRequired(Events.ON_CLICK);
+			|| !isRawLabel(p) || isAsapRequired(Events.ON_CLICK)
+			|| isAsapRequired(Events.ON_RIGHT_CLICK)
+			|| isAsapRequired(Events.ON_DOUBLE_CLICK);
 	}
 	private static boolean isRawLabel(Component comp) {
 		final LanguageDefinition langdef =
