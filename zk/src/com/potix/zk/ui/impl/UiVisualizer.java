@@ -69,13 +69,13 @@ import com.potix.zk.au.*;
 	/** A set of removed pages. */
 	private Set _pgRemoved;
 	/** A set of invalidated components  (Component, Range). */
-	private Map _invalidated = new LinkedHashMap();
+	private final Map _invalidated = new LinkedHashMap();
 	/** A map of smart updates (Component comp, Map(String name, TimedValue(comp,name,value))). */
-	private Map _smartUpdated = new HashMap(); //we use TimedValue for better sequence control
+	private final Map _smartUpdated = new HashMap(); //we use TimedValue for better sequence control
 	/** A set of new attached components. */
-	private Set _attached = new LinkedHashSet();
+	private final Set _attached = new LinkedHashSet();
 	/** A set of moved components (parent changed or page changed). */
-	private Set _moved = new LinkedHashSet();
+	private final Set _moved = new LinkedHashSet();
 	/** A map of components whose UUID is changed (Component, UUID). */
 	private Map _idChgd;
 	/** A map of responses being added(Component/Page, Map(key, List/TimedValue(AuResponse))). */
@@ -396,7 +396,8 @@ import com.potix.zk.au.*;
 
 		//4. reduntant: invalidate is parent of attached; vice-versa
 		//   reduntant: invalidate or create is parent of smartUpdate
-		_attached.addAll(_moved); _moved = null;
+		_attached.addAll(_moved);
+		_moved.clear(); //free memory
 			//_moved is a kind of attached except we remove them first
 		removeRedundant(_invalidated.keySet());
 		removeRedundant(_attached);
@@ -472,10 +473,10 @@ import com.potix.zk.au.*;
 				responses.add(tvs[j].getResponse());
 		}
 
-		//just in case
-		_invalidated =  null;
-		_smartUpdated = null;
-		_attached = null;
+		//free memory
+		_invalidated.clear();
+		_smartUpdated.clear();
+		_attached.clear();
 		_pgInvalid = _pgRemoved = null;
 		_responses = null;
 
