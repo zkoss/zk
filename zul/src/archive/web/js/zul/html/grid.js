@@ -112,19 +112,21 @@ zk.Grid.prototype = {
 	/** Stripes the rows. */
 	stripe: function () {
 		if (!this.bodyrows) return;
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, even = true; j < this.bodyrows.length; ++j) {
 			var row = this.bodyrows[j];
-			var even = (j & 1) == 0;
-			for (var k = 0; k < row.cells.length; ++k) {
-				var cell = row.cells[k];
-				var cs = cell.className;
-				if (even) { //even
-					if (cs.endsWith("od"))
-						cell.className = cs.substring(0, cs.length - 2) + "ev";
-				} else {
-					if (cs.endsWith("ev"))
-						cell.className = cs.substring(0, cs.length - 2) + "od";
+			if (row.style.display != "none") {
+				for (var k = 0; k < row.cells.length; ++k) {
+					var cell = row.cells[k];
+					var cs = cell.className;
+					if (even) { //even
+						if (cs.endsWith("od"))
+							cell.className = cs.substring(0, cs.length - 2) + "ev";
+					} else {
+						if (cs.endsWith("ev"))
+							cell.className = cs.substring(0, cs.length - 2) + "od";
+					}
 				}
+				even = !even;
 			}
 		}
 	},

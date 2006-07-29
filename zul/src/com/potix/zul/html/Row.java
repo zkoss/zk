@@ -119,6 +119,12 @@ public class Row extends XulElement {
 	}
 
 	//-- Component --//
+	public boolean setVisible(boolean visible) {
+		final boolean b = super.setVisible(visible);
+		if (b != visible)
+			initAtClient();
+		return b;
+	}
 	public void invalidate(Range range) {
 		super.invalidate(range);
 		initAtClient();
