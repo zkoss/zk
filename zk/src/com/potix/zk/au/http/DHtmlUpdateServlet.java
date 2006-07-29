@@ -175,7 +175,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			WebManager.setDesktop(request, desktop);
 				//reason: a new page might be created (such as include)
 		} catch (ComponentNotFoundException ex) {
-			final StringWriter out = getXmlWriter(true);
+			final StringWriter out = getXmlWriter();
 
 			final String scmd = request.getParameter("cmd.0");
 			if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
@@ -193,7 +193,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				uieng.response(resp, out);
 			}
 
-			flushXmlWriter(response, out, true);
+			flushXmlWriter(response, out);
 			return;
 		}
 
@@ -228,22 +228,21 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		if (D.ON && log.debugable()) log.debug("AU request: "+aureqs);
-		final StringWriter out = getXmlWriter(true);
+		final StringWriter out = getXmlWriter();
 
 		final Execution exec = new ExecutionImpl(
 			_ctx, request, response, desktop, null);
 		uieng.execUpdate(exec, aureqs, out);
 
-		flushXmlWriter(response, out, true);
+		flushXmlWriter(response, out);
 	}
 
 	/** Returns the writer for output XML.
 	 * @param withrs whether to output <rs> first.
 	 */
-	private static StringWriter getXmlWriter(boolean withrs) {
+	private static StringWriter getXmlWriter() {
 		final StringWriter out = new StringWriter();
-		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		if (withrs) out.write("<rs>\n");
+		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rs>\n");
 		return out;
 	}
 	/** Flushes all content in out to the response.
@@ -251,9 +250,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @param withrs whether to output </rs> first.
 	 */
 	private static final
-	void flushXmlWriter(HttpServletResponse response, StringWriter out,
-	boolean withrs) throws IOException {
-		if (withrs) out.write("\n</rs>");
+	void flushXmlWriter(HttpServletResponse response, StringWriter out)
+	throws IOException {
+		out.write("\n</rs>");
 
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
 		final byte[] bs = out.toString().getBytes("UTF-8");
@@ -271,9 +270,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		log.debug(errmsg);
 
 		//Don't use sendError because Browser cannot handle UTF-8
-		final StringWriter out = getXmlWriter(false);
+		final StringWriter out = getXmlWriter();
 		uieng.response(new AuAlert(errmsg), out);
-		flushXmlWriter(response, out, false);
+		flushXmlWriter(response, out);
 	}
 
 	//-- UPLOAD --//
