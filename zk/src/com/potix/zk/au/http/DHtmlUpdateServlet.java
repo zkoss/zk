@@ -246,10 +246,17 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	void outResponsePostfix(HttpServletResponse response, Writer out)
 	throws IOException {
 		out.write("\n</rs>");
-
-		final byte[] bs = ((StringWriter)out).toString().getBytes("UTF-8");
+		flush(response, (StringWriter)out);
+	}
+	/** Flushes all content in out to the response.
+	 * Don't write the response thereafter.
+	 */
+	private static void flush(HttpServletResponse response, StringWriter out)
+	throws IOException {
+		//Use OutputStream due to Bug 1528592 (Jetty 6)
+		final byte[] bs = out.toString().getBytes("UTF-8");
 		response.setContentType("text/xml;charset=UTF-8");
-		response.setContentLength(bs.length); //Strange but required for Jetty 6: Bug 1528592
+		response.setContentLength(bs.length);
 		response.getOutputStream().write(bs);
 		response.flushBuffer();
 	}
@@ -261,8 +268,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	String errmsg) throws IOException {
 		log.debug(errmsg);
 		//Don't use sendError because Browser cannot handle UTF-8
-		response.setContentType("text/xml;charset=UTF-8");
-		uieng.response(new AuAlert(errmsg), response.getWriter());
+
+		final StringWriter out = new StringWriter();
+		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		uieng.response(new AuAlert(errmsg), out);
+		flush(response, out);
 	}
 
 	//-- UPLOAD --//
