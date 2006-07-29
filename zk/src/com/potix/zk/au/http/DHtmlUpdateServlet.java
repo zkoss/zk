@@ -23,7 +23,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Date;
-import java.io.PrintWriter;
+import java.io.Writer;
+import java.io.StringWriter;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -174,7 +175,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			WebManager.setDesktop(request, desktop);
 				//reason: a new page might be created (such as include)
 		} catch (ComponentNotFoundException ex) {
-			final PrintWriter out = outResponsePrefix(response);
+			final Writer out = outResponsePrefix();
 
 			final String scmd = request.getParameter("cmd.0");
 			if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
@@ -192,7 +193,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				uieng.response(resp, out);
 			}
 
-			outResponsePostfix(out);
+			outResponsePostfix(response, out);
 			return;
 		}
 
@@ -227,25 +228,30 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		if (D.ON && log.debugable()) log.debug("AU request: "+aureqs);
-		final PrintWriter out = outResponsePrefix(response);
+		final Writer out = outResponsePrefix();
 
 		final Execution exec = new ExecutionImpl(
 			_ctx, request, response, desktop, null);
 		uieng.execUpdate(exec, aureqs, out);
 
-		outResponsePostfix(out);
+		outResponsePostfix(response, out);
 	}
-	private static final
-	PrintWriter outResponsePrefix(HttpServletResponse response)
+	private static final Writer outResponsePrefix()
 	throws IOException {
-		response.setContentType("text/xml;charset=UTF-8");
-		final PrintWriter out = response.getWriter();
+		final StringWriter out = new StringWriter();
 		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rs>\n");
 		return out;
 	}
-	private static final void outResponsePostfix(PrintWriter out)
+	private static final
+	void outResponsePostfix(HttpServletResponse response, Writer out)
 	throws IOException {
 		out.write("\n</rs>");
+
+		final byte[] bs = ((StringWriter)out).toString().getBytes("UTF-8");
+		response.setContentType("text/xml;charset=UTF-8");
+		response.setContentLength(bs.length); //Strange but required for Jetty 6: Bug 1528592
+		response.getOutputStream().write(bs);
+		response.flushBuffer();
 	}
 
 	/** Generates a response for an error message.
@@ -442,25 +448,25 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (ctype != null)
 			response.setContentType(ctype);
 
-		if (media.isBinary()) {
-			final ServletOutputStream out = response.getOutputStream();
-			if (media.inMemory()) {
-				final byte[] data = media.getByteData();
-				response.setContentLength(data.length);
-				out.write(data);
-			} else {
+		if (!media.inMemory()) {
+			if (media.isBinary()) {
+				final ServletOutputStream out = response.getOutputStream();
 				Files.copy(out, media.getStreamData());
-			}
-			out.flush();
-		} else {
-			final PrintWriter out = response.getWriter();
-			if (media.inMemory()) {
-				out.write(media.getStringData());
+				out.flush();
 			} else {
+				final Writer out = response.getWriter();
 				Files.copy(out, media.getReaderData());
+				out.flush();
 			}
-			out.flush();
+			return; //done;
 		}
+
+		final ServletOutputStream out = response.getOutputStream();
+		final byte[] data = media.isBinary() ? media.getByteData():
+			media.getStringData().getBytes("UTF-8");
+		response.setContentLength(data.length);
+		out.write(data);
+		out.flush();
 		//FUTURE: support last-modified
 	}
 }
