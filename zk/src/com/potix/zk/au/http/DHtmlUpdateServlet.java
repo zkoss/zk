@@ -267,8 +267,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	void responseError(UiEngine uieng, HttpServletResponse response,
 	String errmsg) throws IOException {
 		log.debug(errmsg);
-		//Don't use sendError because Browser cannot handle UTF-8
 
+		//Don't use sendError because Browser cannot handle UTF-8
 		final StringWriter out = new StringWriter();
 		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		uieng.response(new AuAlert(errmsg), out);
