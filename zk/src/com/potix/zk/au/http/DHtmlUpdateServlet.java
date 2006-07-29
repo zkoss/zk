@@ -175,7 +175,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			WebManager.setDesktop(request, desktop);
 				//reason: a new page might be created (such as include)
 		} catch (ComponentNotFoundException ex) {
-			final Writer out = outResponsePrefix();
+			final StringWriter out = getXmlWriter(true);
 
 			final String scmd = request.getParameter("cmd.0");
 			if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
@@ -193,7 +193,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				uieng.response(resp, out);
 			}
 
-			outResponsePostfix(response, out);
+			flushXmlWriter(response, out, true);
 			return;
 		}
 
@@ -228,31 +228,33 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		if (D.ON && log.debugable()) log.debug("AU request: "+aureqs);
-		final Writer out = outResponsePrefix();
+		final StringWriter out = getXmlWriter(true);
 
 		final Execution exec = new ExecutionImpl(
 			_ctx, request, response, desktop, null);
 		uieng.execUpdate(exec, aureqs, out);
 
-		outResponsePostfix(response, out);
+		flushXmlWriter(response, out, true);
 	}
-	private static final Writer outResponsePrefix()
-	throws IOException {
+
+	/** Returns the writer for output XML.
+	 * @param withrs whether to output <rs> first.
+	 */
+	private static StringWriter getXmlWriter(boolean withrs) {
 		final StringWriter out = new StringWriter();
-		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rs>\n");
+		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		if (withrs) out.write("<rs>\n");
 		return out;
-	}
-	private static final
-	void outResponsePostfix(HttpServletResponse response, Writer out)
-	throws IOException {
-		out.write("\n</rs>");
-		flush(response, (StringWriter)out);
 	}
 	/** Flushes all content in out to the response.
 	 * Don't write the response thereafter.
+	 * @param withrs whether to output </rs> first.
 	 */
-	private static void flush(HttpServletResponse response, StringWriter out)
-	throws IOException {
+	private static final
+	void flushXmlWriter(HttpServletResponse response, StringWriter out,
+	boolean withrs) throws IOException {
+		if (withrs) out.write("\n</rs>");
+
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
 		final byte[] bs = out.toString().getBytes("UTF-8");
 		response.setContentType("text/xml;charset=UTF-8");
@@ -269,10 +271,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		log.debug(errmsg);
 
 		//Don't use sendError because Browser cannot handle UTF-8
-		final StringWriter out = new StringWriter();
-		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		final StringWriter out = getXmlWriter(false);
 		uieng.response(new AuAlert(errmsg), out);
-		flush(response, out);
+		flushXmlWriter(response, out, false);
 	}
 
 	//-- UPLOAD --//
