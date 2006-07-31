@@ -8,5 +8,6 @@ fckez.jar
 dojoz.jar
 bsh.jar
 commons-fileupload.jar
+commons-io.jar
 jfreechart.jar
 jcommon.jar
