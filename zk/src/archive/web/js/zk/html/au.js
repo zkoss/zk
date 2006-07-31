@@ -70,10 +70,20 @@ zkau.onclick = function (evt) {
 		return; //done
 	}
 
+	zkau.send({uuid: zkau.uuidOf(target.id),
+		cmd: "onClick", data: zkau._getMouseData(evt, target)});
+};
+/** Returns the data for onClick. */
+zkau._getMouseData = function (evt, target) {
+	var extra = "";
+	if (evt.altKey) extra += "a";
+	if (evt.ctrlKey) extra += "c";
+	if (evt.shiftKey) extra += "s";
+
 	var ofs = Position.cumulativeOffset(target);
 	var x = Event.pointerX(evt) - ofs[0];
 	var y = Event.pointerY(evt) - ofs[1];
-	zkau.send({uuid: zkau.uuidOf(target.id), cmd: "onClick", data: [x, y]});
+	return [x, y, extra];
 };
 
 /** Asks the server to update a component. */
@@ -815,8 +825,8 @@ zkau._onDocLClick = function (evt) {
 			}
 
 			if (cmp.getAttribute("zk_lfclk"))
-				zkau.send(
-					{uuid: zkau.uuidOf(cmp), cmd: "onClick", data: null});
+				zkau.send({uuid: zkau.uuidOf(cmp),
+					cmd: "onClick", data: zkau._getMouseData(evt, cmp)});
 
 			//no need to Event.stop
 		}
@@ -832,7 +842,8 @@ zkau._onDocDClick = function (evt) {
 	if (cmp) {
 		var uuid = cmp.getAttribute("zk_item"); //treerow (and other transparent)
 		if (!uuid) uuid = zkau.uuidOf(cmp);
-		zkau.send({uuid: uuid, cmd: "onDoubleClick", data: null});
+		zkau.send({uuid: uuid,
+			cmd: "onDoubleClick", data: zkau._getMouseData(evt, cmp)});
 		//no need to Event.stop
 	}
 	return true;
@@ -863,7 +874,8 @@ zkau._onDocCtxMnu = function (evt) {
 		if (cmp.getAttribute("zk_rtclk")) {
 			var uuid = cmp.getAttribute("zk_item"); //treerow (and other transparent)
 			if (!uuid) uuid = zkau.uuidOf(cmp);
-			zkau.send({uuid: uuid, cmd: "onRightClick", data: null});
+			zkau.send({uuid: uuid,
+				cmd: "onRightClick", data: zkau._getMouseData(evt, cmp)});
 		}
 
 		Event.stop(evt);
