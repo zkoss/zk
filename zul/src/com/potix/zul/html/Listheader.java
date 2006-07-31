@@ -46,6 +46,8 @@ import com.potix.zul.html.impl.HeaderElement;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Listheader extends HeaderElement {
+    private static final long serialVersionUID = 20060731L;
+
 	private String _sortDir = "natural";
 	private transient Comparator _sortAsc, _sortDsc;
 	private int _maxlength;
@@ -360,6 +362,7 @@ public class Listheader extends HeaderElement {
 			if (c.getListheader() == this && c.isAscending()) {
 				s.writeBoolean(true);
 				s.writeBoolean(c.shallIgnoreCase());
+				s.writeBoolean(c.byValue());
 				written = true;
 			}
 		}
@@ -374,6 +377,7 @@ public class Listheader extends HeaderElement {
 			if (c.getListheader() == this && !c.isAscending()) {
 				s.writeBoolean(true);
 				s.writeBoolean(c.shallIgnoreCase());
+				s.writeBoolean(c.byValue());
 				written = true;
 			}
 		}
@@ -389,7 +393,8 @@ public class Listheader extends HeaderElement {
 		boolean b = s.readBoolean();
 		if (b) {
 			final boolean igcs = s.readBoolean();
-			_sortAsc = new ListitemComparator(this, true, igcs);
+			final boolean byval = s.readBoolean();
+			_sortAsc = new ListitemComparator(this, true, igcs, byval);
 		} else {
 			_sortAsc = (ListitemComparator)s.readObject();
 		}
@@ -397,7 +402,8 @@ public class Listheader extends HeaderElement {
 		b = s.readBoolean();
 		if (b) {
 			final boolean igcs = s.readBoolean();
-			_sortDsc = new ListitemComparator(this, false, igcs);
+			final boolean byval = s.readBoolean();
+			_sortDsc = new ListitemComparator(this, false, igcs, byval);
 		} else {
 			_sortDsc = (ListitemComparator)s.readObject();
 		}
