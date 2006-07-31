@@ -398,8 +398,8 @@ zkMap.onarea = function (id) {
 	if (cmp) {
 		var map = zkau.getParentByType(cmp, "Map");
 		if (map)
-			zkau.send({uuid: map.id, cmd: "onClick",
-				data: [cmp.getAttribute("zk_id")]});
+			zkau.send({uuid: map.id,
+				cmd: "onClick", data: [cmp.getAttribute("zk_id")]});
 	}
 };
 /** Called by map-done.dsp */
