@@ -166,6 +166,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//parse desktop ID
 		final String dtid = request.getParameter("dtid");
 		if (dtid == null) {
+			log.error("dtid not found: QS="+request.getQueryString()+", params="+request.getParameterMap().keySet());
 			responseError(uieng, response, "Illegal request: dtid is required");
 			return;
 		}
