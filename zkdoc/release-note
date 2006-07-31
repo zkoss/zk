@@ -3,7 +3,7 @@ ZK 2.1.0 Freshly
 * Features:
   1521070, 1521058, 1522329, 1522677, 1507204, 1523732, 1518548, 1525722,
   1526249, 1520170, 1526869, 1527198, 1526335, 1529424, 1529754, 1525221,
-  1530200, 1530202.
+  1530200, 1530202, 1487286, 1526355.
   + The import directive is added to import component definitions from other pages.
   + Customizable error pages.
   + LocaleProvider and TimeZoneProvider are added
@@ -17,7 +17,8 @@ ZK 2.1.0 Freshly
 
 * Bugs:
   1520737, 1510539, 1521847, 1522843, 1521311, 1522339, 1521868, 1523751,
-  1523875, 1525710, 1525712, 1527527, 1527535, 1527895, 1526542.
+  1523875, 1525710, 1525712, 1527527, 1527535, 1527895, 1526542, 1528592,
+  1529735.
 
 * Upgrade Notes
   + <?xml-stylesheet?> is obsolete. Use the style component instead.
