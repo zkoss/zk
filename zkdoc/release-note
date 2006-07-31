@@ -4,16 +4,14 @@ ZK 2.1.0 Freshly
   1521070, 1521058, 1522329, 1522677, 1507204, 1523732, 1518548, 1525722,
   1526249, 1520170, 1526869, 1527198, 1526335, 1529424, 1529754, 1525221,
   1530200, 1530202, 1487286, 1526355.
-  + The import directive is added to import component definitions from other pages.
+  + The import directive to import component definitions from other pages.
   + Customizable error pages.
   + LocaleProvider and TimeZoneProvider are added
-  + Datebox and Calendar supports the timeZone property
+  + Datebox and Calendar support the timeZone property
   + The style component is added to simplify the specification of CSS styles.
   + German messages are supported. Thank H.-Dirk Schmitt for his contribution.
   + The onClientInfo event is added to report the client' information to
     the server, such as time zone and screen resolutions.
-  + The print method is moved from com.potix.zk.ui.Desktop
-    to com.potx.zk.ui.util.Clients.
 
 * Bugs:
   1520737, 1510539, 1521847, 1522843, 1521311, 1522339, 1521868, 1523751,
@@ -23,6 +21,8 @@ ZK 2.1.0 Freshly
 * Upgrade Notes
   + <?xml-stylesheet?> is obsolete. Use the style component instead.
   + lang-addon.xml (in JAR) must specify <version>.
+  + The print method is moved from com.potix.zk.ui.Desktop
+    to com.potx.zk.ui.util.Clients.
 
 	--------
 ZK 2.1.0 RC
