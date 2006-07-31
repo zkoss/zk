@@ -8,4 +8,5 @@ fckez.jar
 dojoz.jar
 bsh.jar
 commons-fileupload.jar
+commons-io.jar
 commons-el.jar

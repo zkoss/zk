@@ -237,7 +237,6 @@ zkau._sendNow = function () {
 			req.open("POST", zk_action, true);
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			req.send(content);
-			//zkau._lastSend = new Date();
 			if (!implicit) zk.progress(900); //wait a moment to avoid annoying
 		} catch (e) {
 			try {
