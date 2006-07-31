@@ -198,6 +198,16 @@ public class Column extends HeaderElement {
 	}
 
 	//-- super --//
+	public String getColAttrs() {
+		final String style = getRealStyle();
+		final String attrs = super.getColAttrs();
+		if (style.length() == 0) return attrs;
+
+		final StringBuffer sb = new StringBuffer(100).append(attrs);
+		HTMLs.appendAttribute(sb, "style", getRealStyle());
+		return sb.toString();
+	}
+
 	/** Returns the style class.
 	 * If the style class is not defined ({@link #setSclass} is not called
 	 * or called with null or empty), it returns "sort" if sortable,
