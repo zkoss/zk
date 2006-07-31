@@ -44,7 +44,7 @@ public class MouseCommand extends AuRequest.Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data != null && data.length != 1 && data.length != 2)
+		if (data != null && data.length != 1 && data.length != 2 && data.length != 3)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
@@ -54,7 +54,15 @@ public class MouseCommand extends AuRequest.Command {
 		data.length == 1 ?
 			new MouseEvent(getId(), comp, data[0]):	//by area
 			new MouseEvent(getId(), comp,			//by coord
-				Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+				Integer.parseInt(data[0]), Integer.parseInt(data[1]),
+				data.length == 2 ? 0: parseKeys(data[2]));
 		Events.postEvent(event);
+	}
+	private static int parseKeys(String flags) {
+		int keys = 0;
+		if (flags.indexOf("a") >= 0) keys |= MouseEvent.ALT_KEY;
+		if (flags.indexOf("c") >= 0) keys |= MouseEvent.CTRL_KEY;
+		if (flags.indexOf("s") >= 0) keys |= MouseEvent.SHIFT_KEY;
+		return keys;
 	}
 }
