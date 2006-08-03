@@ -20,10 +20,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" zk_type="zul.html.menu.Menubar"${self.outerAttrs}${self.innerAttrs}>
-<table cellpadding="0" cellspacing="0">
+<table cellpadding="0" cellspacing="0" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
  <tr id="${child.uuid}!chdextr"${c:attr('height',child.height)}>${u:redraw(child, null)}</tr>
 	</c:forEach>
- <tr style="display:none" id="${self.uuid}!child"><td></td></tr><%-- bookmark for adding child (when insertHTMLBeforeEnd not appliable) --%>
 </table>
 </div>

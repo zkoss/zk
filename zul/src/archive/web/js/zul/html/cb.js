@@ -220,7 +220,7 @@ zkCmbox.open = function (pp, hilite) {
 		zkau.asapTimeout(cb, "onOpen"));
 };
 zkCmbox._open = function (cb, uuid, pp, hilite) {
-	var pp2 = $(uuid + "!pp2");
+	var pp2 = $(uuid + "!cave");
 	pp.style.width = pp.style.height = "auto";
 	if (pp2) pp2.style.width = pp2.style.height = "auto";
 	pp.style.position = "absolute"; //just in case
@@ -267,7 +267,7 @@ zkCmbox._repos = function (uuid, hilite) {
 	if (!cb) return;
 
 	var pp = $(uuid + "!pp");
-	var pp2 = $(uuid + "!pp2");
+	var pp2 = $(uuid + "!cave");
 	var inpId = cb.id + "!real";
 	var inp = $(inpId);
 
@@ -323,7 +323,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 //	var aco = $(uuid).getAttribute("zk_aco") == "true";
 	var pp = $(uuid + "!pp");
 	if (!pp || (!selback && /*!aco &&*/ !zk.isVisible(pp))) return;
-	var pp2 = $(uuid + "!pp2");
+	var pp2 = $(uuid + "!cave");
 	if (!pp2) return;
 	var rows = pp2.rows;
 	if (!rows) return;

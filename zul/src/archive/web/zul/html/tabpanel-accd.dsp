@@ -42,11 +42,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<td colspan="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-b.gif')})"></td>
 </tr>
 </table>
-	<div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}><div class="tabpanel-ac">
+	<div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}><div class="tabpanel-ac" id="${self.uuid}!cave">
 <c:forEach var="child" items="${self.children}">
 	${u:redraw(child, null)}
 </c:forEach>
-	<span style="display:none" id="${self.uuid}!child"></span><%-- bookmark for adding child (when insertHTMLBeforeEnd not appliable) --%>
 	</div></div>
 </td>
 </tr>
