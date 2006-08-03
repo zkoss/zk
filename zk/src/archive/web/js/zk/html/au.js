@@ -1669,17 +1669,19 @@ zkau.cmd1 = {
 	addChd: function (uuid, cmp, dt1) {
 		/* To add the first child properly, it checks as follows.
 		//1) a function called addFirstChild
-		2) an attribute called zk_cave to hold id (as parent)
-		3) uuid + "!cave" (as parent)
+		2) uuid + "!cave" (as parent)
+		3) an attribute called zk_cave to hold id (as parent)
 		4) uuid + "!child" (as next sibling)
 		5) uuid + "!real" (as parent)
 		 */
 		//if (zk.eval(cmp, "addFirstChild", dt1))
 		//	return;
 
-		var n = cmp.getAttribute("zk_cave");
-		if (n) n = $(n);
-		if (!n) n = $(uuid + "!cave");
+		var n = $(uuid + "!cave");
+		if (!n) {
+			n = cmp.getAttribute("zk_cave");
+			if (n) n = $(n);
+		}
 		if (n) { //as last child of n
 			var lc = n.lastChild;
 			zk.insertHTMLBeforeEnd(n, dt1);
