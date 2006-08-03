@@ -28,11 +28,10 @@ ${u:redraw(self.listhead, null)}
 	</div>
 	</c:if>
 	<div id="${self.uuid}!body" class="listbox-body">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave">
 	<c:forEach var="item" items="${self.items}">
 ${u:redraw(item, null)}
 	</c:forEach>
-	<tr style="display:none" id="${self.uuid}!child"></tr><%-- bookmark for adding children --%>
 	</table>
 	</div>
 	<div id="${self.uuid}!foot" class="listbox-foot">

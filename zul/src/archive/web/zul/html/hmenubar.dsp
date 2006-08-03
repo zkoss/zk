@@ -21,11 +21,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" zk_type="zul.html.menu.Menubar"${self.outerAttrs}${self.innerAttrs}>
 <table cellpadding="0" cellspacing="0">
-<tr valign="bottom">
+<tr valign="bottom" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
 	${u:redraw(child, null)}
 	</c:forEach>
- <td style="display:none" id="${self.uuid}!child"></td><%-- bookmark for adding children. --%>
 </tr>
 </table>
 </div>
