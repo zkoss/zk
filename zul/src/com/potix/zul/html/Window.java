@@ -452,6 +452,11 @@ public class Window extends XulElement implements IdSpace  {
 		return sb.toString();
 	}
 
+	//--ComponentCtrl--//
+	public boolean inDifferentBranch(Component child) {
+		return child instanceof Caption; //in different branch
+	}
+
 	//Cloneable//
 	public Object clone() {
 		final Window clone = (Window)super.clone();

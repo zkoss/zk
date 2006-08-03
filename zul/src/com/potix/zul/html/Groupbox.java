@@ -119,4 +119,9 @@ public class Groupbox extends XulElement implements Openable {
 		}
 		super.onChildRemoved(child);
 	}
+
+	//--ComponentCtrl--//
+	public boolean inDifferentBranch(Component child) {
+		return child instanceof Caption; //in different branch
+	}
 }
