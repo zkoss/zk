@@ -21,10 +21,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
- <table cellpadding="0" cellspacing="0">
+ <table cellpadding="0" cellspacing="0" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
   ${u:redraw(child, null)}
 	</c:forEach>
- <tr id="${self.uuid}!child" style="display:none"><td colspan="3"></td></tr><%-- bookmark for adding children --%>
  </table>
 </div>
