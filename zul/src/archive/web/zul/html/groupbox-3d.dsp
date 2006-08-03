@@ -42,11 +42,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </tr>
 </table>
 </c:if>
-	<div id="${self.uuid}!slide"${self.open?'':' style="display:none"'} class="groupbox-3d"><div<c:if test="${empty self.caption}"> style="border: 1px solid #5C6C7C"</c:if>>
+	<div id="${self.uuid}!slide"${self.open?'':' style="display:none"'} class="groupbox-3d"><div id="${self.uuid}!cave"<c:if test="${empty self.caption}"> style="border: 1px solid #5C6C7C"</c:if>>
 	<c:forEach var="child" items="${self.children}">
 	<c:if test="${self.caption != child}">${u:redraw(child, null)}</c:if>
 	</c:forEach>
-	<span style="display:none" id="${self.uuid}!child"></span><%-- bookmark for adding child (when insertHTMLBeforeEnd not appliable) --%>
 	</div></div>
 <%-- shadow --%>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
