@@ -47,6 +47,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.sys.Visualizer;
 import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.ui.sys.PageCtrl;
+import com.potix.zk.ui.sys.ComponentCtrl;
 import com.potix.zk.au.*;
 
 /**
@@ -490,16 +491,16 @@ import com.potix.zk.au.*;
 	private static
 	void addResponsesForCreatedPerSiblings(List responses, Set newsibs)
 	throws IOException {
-		final Component parent;
+		final Component ntparent;
 		final Page page;
 		{
 			final Component comp = (Component)newsibs.iterator().next();
-			parent = getNonTransparentParent(comp);
+			ntparent = getNonTransparentParent(comp);
 			page = comp.getPage();
 		}
 		final Collection sibs;
-		if (parent != null) {
-			sibs = resolveTransparent(parent.getChildren());
+		if (ntparent != null) {
+			sibs = resolveTransparent(ntparent.getChildren());
 		} else {
 			sibs = page.getRoots();
 		}
@@ -514,8 +515,12 @@ import com.potix.zk.au.*;
 		*/
 		final List before = new LinkedList();
 		Component anchor = null;
+		final ComponentCtrl ntparentCtrl = (ComponentCtrl)ntparent;
 		for (Iterator it = sibs.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
+			if (ntparentCtrl != null && ntparentCtrl.inDifferentBranch(comp))
+				continue;
+
 			if (anchor != null) {
 				if (newsibs.remove(comp)) {
 					responses.add(new AuInsertAfter(anchor, drawNew(comp)));
@@ -548,8 +553,8 @@ import com.potix.zk.au.*;
 		final Iterator it = before.iterator();
 		anchor = (Component)it.next();
 		responses.add(
-			parent != null ?
-			new AuAppendChild(parent, drawNew(anchor)):
+			ntparent != null ?
+			new AuAppendChild(ntparent, drawNew(anchor)):
 			new AuAppendChild(page, drawNew(anchor)));
 
 		while (it.hasNext()) {
