@@ -53,7 +53,7 @@ public class Listitem extends XulElement {
 	public Listitem(String label) {
 		setLabel(label);
 	}
-	public Listitem(String label, String value) {
+	public Listitem(String label, Object value) {
 		setLabel(label);
 		setValue(value);
 	}
@@ -172,6 +172,47 @@ public class Listitem extends XulElement {
 		} else {
 			((Listcell)cells.get(0)).setLabel(label);
 		}
+	}
+
+	/** Returns the src of the {@link Listcell} it contains, or null
+	 * if no such cell.
+	 */
+	public String getSrc() {
+		final List cells = getChildren();
+		return cells.isEmpty() ? null: ((Listcell)cells.get(0)).getSrc();
+	}
+	/** Sets the src of the {@link Listcell} it contains.
+	 *
+	 * <p>If it is not created, we automatically create it.
+	 *
+	 * <p>The same as {@link #setImage}.
+	 */
+	public void setSrc(String src) {
+		final List cells = getChildren();
+		if (cells.isEmpty()) {
+			final Listcell cell = new Listcell();
+			cell.applyProperties();
+			cell.setParent(this);
+			cell.setSrc(src);
+		} else {
+			((Listcell)cells.get(0)).setSrc(src);
+		}
+	}
+	/** Returns the image of the {@link Listcell} it contains.
+	 *
+	 * <p>The same as {@link #getImage}.
+	 */
+	public String getImage() {
+		return getSrc();
+	}
+	/** Sets the image of the {@link Listcell} it contains.
+	 *
+	 * <p>If it is not created, we automatically create it.
+	 *
+	 * <p>The same as {@link #setSrc}.
+	 */
+	public void setImage(String image) {
+		setSrc(image);
 	}
 
 	/** Returns the index of this item (aka., the order in the listbox).
