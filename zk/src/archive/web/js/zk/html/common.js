@@ -328,7 +328,7 @@ zk.insertHTMLBeforeEnd = function (el, html) {
 			var tn2 = zk._agtIeTagOfHtml(html);
 			if (tn == "TABLE" && tn2 == "TR") {
 				var bd = el.tBodies;
-				if (!bd || bd.length == 0) {
+				if (!bd || !bd.length) {
 					bd = document.createElement("TBODY");
 					el.appendChild(bd);
 					el = bd;
