@@ -364,6 +364,7 @@ if (zk.ie && !zk.ie7) {
 ////
 // Imagemap //
 function zkMap() {}
+function zkArea() {}
 
 zkMap.init = function (cmp) {
 	zk.newFrame("zk_hfr_",
@@ -375,6 +376,21 @@ zkMap.init = function (cmp) {
 		return zkImg._fixpng(img);
 	}
 };
+zkArea.init = function (cmp) {
+	var map = zkau.getParentByType(cmp, "Map");
+	var img = zkau.getReal(map);
+	if (img && !img.useMap)
+		img.useMap = "#" + map.id + "_map";
+};
+zkArea.cleanup = function (cmp) {
+	if (cmp.parentNode.areas.length <= 1) { //removing the last area
+		var img = zkau.getReal(zkau.getParentByType(cmp, "Map"));
+		if (img) img.useMap = "";
+			//Safari bug not solved yet: once useMap is cleaned up, ismap won't
+			//fall back to no-useMap
+	}
+};
+
 zkMap.setAttr = function (cmp, nm, val) {
 	if (zkMap._inflds.contains(nm))
 		cmp = zkau.getReal(cmp);
@@ -391,7 +407,7 @@ if (!zkMap._inflds)
 	zkMap._inflds = ["align", "alt", "border", "hspace", "vspace", "src"];
 
 /** Called when an area is clicked. */
-zkMap.onarea = function (id) {
+zkArea.onclick = function (id) {
 	if (zkMap._toofast()) return;
 
 	var cmp = $(id);
