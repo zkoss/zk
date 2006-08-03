@@ -320,11 +320,23 @@ zk.insertHTMLBefore = function (el, html) {
  */
 zk.insertHTMLBeforeEnd = function (el, html) {
 	if (zk.ie) {
-		switch (zk.tagName(el)) {
+		var tn = zk.tagName(el);
+		switch (tn) {
 		case "TABLE": case "TR":
 		case "TBODY": case "THEAD": case "TFOOT":
 		/*case "TH": case "TD": case "CAPTION":*/ //no need to handle them
-			var n = document.createElement(zk._agtIeTagOfHtml(html));
+			var tn2 = zk._agtIeTagOfHtml(html);
+			if (tn == "TABLE" && tn2 == "TR") {
+				var bd = el.tBodies;
+				if (!bd || bd.length == 0) {
+					bd = document.createElement("TBODY");
+					el.appendChild(bd);
+					el = bd;
+				} else {
+					el = bd[0];
+				}
+			}
+			var n = document.createElement(tn2);
 			el.appendChild(n);
 			zk._agtIeReplaceOuterHTML(n, html);
 			return;
