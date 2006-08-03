@@ -1667,18 +1667,39 @@ zkau.cmd1 = {
 		zkau._initSibs(n, to, false);
 	},
 	addChd: function (uuid, cmp, dt1) {
-		var n = $(uuid + "!child");
-		if (n) {
+		/* To add the first child properly, it checks as follows.
+		//1) a function called addFirstChild
+		2) an attribute called zk_child1 to hold id (as parent)
+		3) uuid + "!inner" (as parent)
+		4) uuid + "!child" (as next sibling)
+		 */
+		//if (zk.eval(cmp, "addFirstChild", dt1))
+		//	return;
+
+		var n = cmp.getAttribute("zk_child1");
+		if (n) n = $(n);
+		if (!n) n = $(uuid + "!inner");
+		if (n) { //as last child of n
+			var lc = n.lastChild;
+			zk.insertHTMLBeforeEnd(n, dt1);
+			if (lc) zkau._initSibs(lc, null, true);
+			else zkau._initChildren(n);
+			return;
+		}
+
+		n = $(uuid + "!child");
+		if (n) { //as previous sibling of n
 			var to = n.previousSibling;
 			zk.insertHTMLBefore(n, dt1);
 			zkau._initSibs(n, to, false);
-		} else {
-			cmp = zkau.getReal(cmp); //go into the real tag (e.g., tabpanel)
-			var n = cmp.lastChild;
-			zk.insertHTMLBeforeEnd(cmp, dt1);
-			if (n) zkau._initSibs(n, null, true);
-			else zkau._initChildren(cmp);
+			return;
 		}
+
+		cmp = zkau.getReal(cmp); //go into the real tag (e.g., tabpanel)
+		var lc = cmp.lastChild;
+		zk.insertHTMLBeforeEnd(cmp, dt1);
+		if (lc) zkau._initSibs(lc, null, true);
+		else zkau._initChildren(cmp);
 	},
 	rm: function (uuid, cmp) {
 		//NOTE: it is possible the server asking removing a non-exist cmp
