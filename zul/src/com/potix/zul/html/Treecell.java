@@ -57,7 +57,7 @@ public class Treecell extends LabelImageElement {
 	}
 	public Treecell(String label, String src) {
 		setLabel(label);
-		setSrc(src);
+		setImage(src);
 	}
 
 	/** Return the tree that owns this cell.

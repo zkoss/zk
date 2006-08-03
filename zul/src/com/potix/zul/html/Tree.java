@@ -78,12 +78,9 @@ public class Tree extends XulElement implements Selectable {
 	public Treecols getTreecols() {
 		return _treecols;
 	}
-	/** Returns the treechildren that this tree owns; never null.
+	/** Returns the treechildren that this tree owns (might null).
 	 */
 	public Treechildren getTreechildren() {
-		if (_treechildren == null) {
-			new Treechildren().setParent(this); //to make caller easy to handle
-		}
 		return _treechildren;
 	}
 
@@ -201,7 +198,7 @@ public class Tree extends XulElement implements Selectable {
 	 */
 	private String getSelectedId() {
 		//NOTE: Treerow's uuid; not Treeitem's
-		final Treerow tr = _sel != null ? _sel.getTreerow(false): null;
+		final Treerow tr = _sel != null ? _sel.getTreerow(): null;
 		return tr != null ? tr.getUuid(): "zk_n_a";
 	}
 
@@ -246,7 +243,7 @@ public class Tree extends XulElement implements Selectable {
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 
-				final Treerow tr = item.getTreerow(false);
+				final Treerow tr = item.getTreerow();
 				if (tr != null)
 					smartUpdate("select", tr.getUuid());
 			}
@@ -297,7 +294,7 @@ public class Tree extends XulElement implements Selectable {
 		final StringBuffer sb = new StringBuffer(80);
 		for (Iterator it = _selItems.iterator(); it.hasNext();) {
 			final Treeitem item = (Treeitem)it.next();
-			final Treerow tr = item.getTreerow(false);
+			final Treerow tr = item.getTreerow();
 			if (tr != null) {
 				if (sb.length() > 0) sb.append(',');
 				sb.append(tr.getUuid());

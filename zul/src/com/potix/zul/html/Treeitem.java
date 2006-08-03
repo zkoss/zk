@@ -52,19 +52,19 @@ public class Treeitem extends XulElement implements Openable {
 
 	public Treeitem() {
 	}
+	public Treeitem(String label) {
+		setLabel(label);
+	}
+	public Treeitem(String label, Object value) {
+		setLabel(label);
+		setValue(value);
+	}
 
-	/** Returns the treerow that this tree item owns; never null.
+	/** Returns the treerow that this tree item owns (might null).
 	 * Each tree items has exactly one tree row.
 	 */
 	public Treerow getTreerow() {
-		if (_treerow == null)
-			new Treerow().setParent(this); //to make caller easy to handle
 		return _treerow;
-	}
-	/** Returns the treerow without auto-create.
-	 */
-	/*package*/ Treerow getTreerow(boolean autoCreate) {
-		return autoCreate ? getTreerow(): _treerow;
 	}
 	/** Returns the treechildren that this tree item owns, or null if
 	 * doesn't have any child.
@@ -211,6 +211,13 @@ public class Treeitem extends XulElement implements Openable {
 		if (cells.isEmpty())
 			new Treecell().setParent(_treerow);
 		((Treecell)cells.get(0)).setSrc(src);
+	}
+	/** Returns the image of the {@link Treecell} it contains.
+	 *
+	 * <p>The same as {@link #getImage}.
+	 */
+	public String getImage() {
+		return getSrc();
 	}
 	/** Sets the image of the {@link Treecell} it contains.
 	 *
