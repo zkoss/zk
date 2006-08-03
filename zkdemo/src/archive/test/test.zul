@@ -350,10 +350,8 @@ import com.potix.lang.Objects;
 	<zscript>
 	int nTreeitems2 = 0;
 	void addTreeitem2() {
-		if (item2.getTreechildren() == null) {
-			Treechildren tc = new Treechildren();
-			tc.setParent(item2);
-		}
+		if (item2.getTreechildren() == null)
+			item2.appendChild(new Treechildren());
 		Treeitem ti = new Treeitem();
 		Treerow tr = new Treerow();
 		Treecell tc = new Treecell();

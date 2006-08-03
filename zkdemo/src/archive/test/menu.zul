@@ -58,18 +58,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	onClick="new Menuitem(&quot;More&quot;).setParent(editPopup)"/>
 	<button label="Add submenu to Edit">
 		<attribute name="onClick">{
-	var menu = new Menu("Submenu");
+	Object menu = new Menu("Submenu");
 	menu.setParent(editPopup);
-	var popup = new Menupopup();
+	Object popup = new Menupopup();
 	popup.setParent(menu);
 	new Menuitem("Subitem").setParent(popup);
 		}</attribute>
 	</button>
 	<button label="Add Window menu">
 		<attribute name="onClick">{
-	var menu = new Menu("Window");
+	Object menu = new Menu("Window");
 	menu.setParent(menubar);
-	var popup = new Menupopup();
+	Object popup = new Menupopup();
 	popup.setParent(menu);
 	new Menuitem("Cascade").setParent(popup);
 		}</attribute>
