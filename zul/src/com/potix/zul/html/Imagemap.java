@@ -57,11 +57,6 @@ public class Imagemap extends Image {
 		assert k > 0: attrs;
 		return attrs.substring(0, j) + attrs.substring(k + 1);
 	}
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		return getChildren().isEmpty() ? attrs:
-			attrs + " usemap=\"#" + getUuid() + "_map\"";
-	}
 
 	/** Default: childable.
 	 */
@@ -70,9 +65,7 @@ public class Imagemap extends Image {
 	}
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (!(newChild instanceof Area))
-			throw new UiException("Unsupported child for Imagemap: "+newChild);
-		if (getChildren().isEmpty())
-			invalidate(INNER);
+			throw new UiException("Unsupported child for imagemap: "+newChild);
 		return super.insertBefore(newChild, refChild);
 	}
 }

@@ -36,6 +36,12 @@ public class Area extends AbstractComponent {
 	private String _coords;
 	private String _tooltiptext;
 
+	public Area() {
+	}
+	public Area(String coords) {
+		setCoords(coords);
+	}
+
 	/** Returns the shape of this area.
 	 * <p>Default: null (means rectangle).
 	 */
@@ -110,7 +116,7 @@ public class Area extends AbstractComponent {
 	 */
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64)
-			.append("href=\"javascript:zkMap.onarea('")
+			.append(" href=\"javascript:zkArea.onclick('")
 			.append(getUuid()).append("')\"");
 		HTMLs.appendAttribute(sb, "shape", _shape);
 		HTMLs.appendAttribute(sb, "coords", _coords);
@@ -129,7 +135,7 @@ public class Area extends AbstractComponent {
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Imagemap))
-			throw new UiException("Area's parent must be Imagemap, not "+parent);
+			throw new UiException("Area's parent must be imagemap, not "+parent);
 		super.setParent(parent);
 	}
 }

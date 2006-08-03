@@ -211,7 +211,11 @@ public class Tabbox extends XulElement implements Selectable {
 		} else {
 			throw new UiException("Unsupported child for tabbox: "+child);
 		}
-		return super.insertBefore(child, insertBefore);
+		if (super.insertBefore(child, insertBefore)) {
+			invalidate(INNER); //due to DSP might implemented diff for children order
+			return true;
+		}
+		return false;
 	}
 	public void onChildRemoved(Component child) {
 		if (child instanceof Tabs) {
