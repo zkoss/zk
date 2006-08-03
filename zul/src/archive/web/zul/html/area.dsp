@@ -16,4 +16,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
---%><area id="${requestScope.arg.self.uuid}"${requestScope.arg.self.outerAttrs}/>
+--%><area id="${requestScope.arg.self.uuid}" zk_type="Area"${requestScope.arg.self.outerAttrs}/>
