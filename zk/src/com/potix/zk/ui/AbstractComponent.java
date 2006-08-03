@@ -1035,6 +1035,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			sessionDidActivate0(page, child, pageLevelIdSpace); //recursive
 		}
 	}
+	/** Default: false.
+	 * <p>Derived class might override it to return true for
+	 * components that are put in a different branch.
+	 * @see ComponentCtrl#inDifferentBranch
+	 */
+	public boolean inDifferentBranch(Component child) {
+		return false;
+	}
 
 	//-- Object --//
 	public String toString() {

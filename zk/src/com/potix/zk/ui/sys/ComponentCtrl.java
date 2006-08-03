@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package com.potix.zk.ui.sys;
 
 import com.potix.zk.ui.Page;
+import com.potix.zk.ui.Component;
 import com.potix.zk.ui.metainfo.Millieu;
 
 /**
@@ -46,4 +47,18 @@ public interface ComponentCtrl {
 	 * <p>Note: only root components are notified by this method.
 	 */
 	public void sessionDidActivate(Page page);
+
+	/** Whether the specified child is placed in different branch
+	 * of the DOM tree. For example, you might put caption at a branch
+	 * and the rest at another branch. Then, you shall return false
+	 * for the caption. Thus, {@link Visualizer} knows how to
+	 * handle them correctly. Note: for components, say caption,
+	 * in different branch,
+	 * you have to invalidate the parent when they are added or removed.
+	 * Only children causing this method to return true are handled
+	 * by {@link Visualizer}.
+	 *
+	 * <p>Called only by {@link Visualizer}.
+	 */
+	public boolean inDifferentBranch(Component child);
 }
