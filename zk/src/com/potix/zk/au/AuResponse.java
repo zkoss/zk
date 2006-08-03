@@ -126,12 +126,17 @@ public class AuResponse {
 			new StringBuffer(60).append("[cmd=").append(_cmd);
 		if (_data != null && _data.length > 0) {
 			sb.append(", data0=").append(_data[0]);
-			if (_data.length > 1 && (_data[1] == null || _data[1].length() < 20)) {
-				sb.append(", data1=").append(_data[1]);
-				if (_data.length > 2 && (_data[2] == null || _data[2].length() < 20))
-					sb.append(", data2=").append(_data[2]);
+			if (_data.length > 1) {
+				sb.append(", data1=").append(trimOutput(_data[1]));
+				if (_data.length > 2)
+					sb.append(", data2=").append(trimOutput(_data[2]));
 			}
 		}
 		return sb.append(']').toString();
+	}
+	private static String trimOutput(String s) {
+		if (s == null) return null;
+		s = s.trim();
+		return s.length() <= 20 ?  s: s.substring(0, 20) + "...";
 	}
 }
