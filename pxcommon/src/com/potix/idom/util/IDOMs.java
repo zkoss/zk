@@ -279,8 +279,7 @@ public class IDOMs {
 					String url = e.getAttributeValue("url");
 					if (url == null || url.length() == 0)
 						throw new IllegalSyntaxException(
-							MCommon.EMPTY_ATTR_NOT_ALLOWED,
-							new Object[] {"url", "import"});
+							MCommon.XML_ATTRIBUTE_REQUIRED, new Object[] {"url", e.getLocator()});
 
 					if (refUrl != null
 					&& url.charAt(0) != '/' && url.indexOf("://") < 0) {
@@ -331,8 +330,7 @@ public class IDOMs {
 					String url = e.getAttributeValue("url");
 					if (url == null || url.length() == 0)
 						throw new IllegalSyntaxException(
-							MCommon.EMPTY_ATTR_NOT_ALLOWED,
-							new Object[] {"url", "import"});
+							MCommon.XML_ATTRIBUTE_REQUIRED, new Object[] {"url", e.getLocator()});
 
 					imports0(it,
 						url.charAt(0) != '/' && url.indexOf("://") < 0 ?
