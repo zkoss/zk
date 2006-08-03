@@ -36,7 +36,12 @@ zk.Selectable.prototype = {
 		if (this.head) this.headtbl = zk.firstChild(this.head, "TABLE", true);
 		this.body = $(this.id + "!body");
 		if (this.body) this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-		this.bodyrows = this.bodytbl.tBodies[0].rows;
+		if (this.bodytbl) {
+			var bds = this.bodytbl.tBodies;
+			if (!bds || !bds.length)
+				this.bodytbl.appendChild(document.createElement("TBODY"));
+			this.bodyrows = bds[0].rows;
+		}
 		if (!this.bodyrows) {
 			alert(mesg.INVALID_STRUCTURE + this.id);
 			return;
@@ -634,9 +639,6 @@ zk.Selectable.prototype = {
 	_calcHgh: function () {
 		var rows = this.bodyrows;
 		var len = rows.length;
-		if (len > 0 && rows[len - 1].style.display == "none") --len;
-			//the last row is invisible (as an insertion point)
-
 		var hgh = this.element.style.height;
 		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
 			hgh = parseInt(hgh);
@@ -964,9 +966,9 @@ zkLibox.init = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 	else {
-		var bdy = $(cmp.id + "!body");
-		if (bdy)
-			Event.observe(bdy, "keydown",
+		var bd = $(cmp.id + "!body");
+		if (bd)
+			Event.observe(bd, "keydown",
 				function (evt) {return zkLibox.bodyonkeydown(evt);});
 
 		new zk.Selectable(cmp);
