@@ -192,6 +192,7 @@ elementFormDefault="qualified">
 			<xs:element ref="separator" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="slider" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="space" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="style" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="tabbox" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="textbox" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="timer" minOccurs="0" maxOccurs="unbounded"/>
@@ -298,6 +299,7 @@ elementFormDefault="qualified">
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="value" type="xs:dateTime" use="optional"/>
 		<xs:attribute name="compact" type="xs:boolean" use="optional"/>
+		<xs:attribute name="onChange" type="xs:string" use="optional"/>
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<!-- caption -->
@@ -768,6 +770,13 @@ elementFormDefault="qualified">
 		<xs:attribute name="collapse" type="collapseAttrType" use="optional"/>
 		<xs:attribute name="open" type="xs:boolean" use="optional"/>
 		<xs:attribute name="onOpen" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<!-- style -->
+	<xs:element name="style" type="styleType"/>
+	<xs:complexType name="styleType">
+		<xs:group ref="baseGroup"/>
+		<xs:attributeGroup ref="abstractComponentAttrGroup"/>
+		<xs:attribute name="src" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<!-- tab -->
 	<xs:element name="tab" type="tabType"/>

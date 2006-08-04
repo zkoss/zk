@@ -3,3 +3,5 @@
 ../dist/lib/zk.jar
 ../dist/lib/ext/javax.servlet.jar
 ../dist/lib/ext/javax.servlet.jsp.jar
+../dist/lib/ext/jcommon-1.0.0.jar
+../dist/lib/ext/jfreechart-1.0.1.jar

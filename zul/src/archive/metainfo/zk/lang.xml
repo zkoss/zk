@@ -430,6 +430,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>piechart</component-name>
+		<component-class>com.potix.zul.html.Piechart</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>piechart3d</component-name>
+		<component-class>com.potix.zul.html.Piechart3d</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>popup</component-name>
 		<component-class>com.potix.zul.html.Popup</component-class>
 		<mold>
@@ -451,6 +467,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/radiogroup.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>ringchart</component-name>
+		<component-class>com.potix.zul.html.Ringchart</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
