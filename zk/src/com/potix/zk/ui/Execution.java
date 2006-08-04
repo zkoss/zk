@@ -162,6 +162,10 @@ public interface Execution extends Evaluator {
 	throws IOException;
 	/** Forwards to another page.
 	 *
+	 * <p>Note: this method can be called only when loading a page.
+	 * Use {@link #sendRedirect(String)} instead if you want to change
+	 * to another desktop when processing a request from the client.
+	 *
 	 * @param writer the output to write. If null, the response's default
 	 * writer is used.
 	 * @param page the page's uri; null to denote the same request

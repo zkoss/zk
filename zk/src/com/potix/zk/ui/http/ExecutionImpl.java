@@ -140,6 +140,9 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	public void forward(Writer out, String page, Map params, int mode)
 	throws IOException {
+		if (getVisualizer().isEverAsyncUpdate())
+			throw new IllegalStateException("Use sendRedirect instead when processing user's request");
+
 		try {
 			Servlets.forward(_ctx, _request,
 				BufferedResponse.getInstance(_response, out),

@@ -200,7 +200,7 @@ public class Executions {
 		getCurrent().sendRedirect(uri);
 	}
 
-	/** A shortcut of Executions.getCurrent.include(page).
+	/** A shortcut of Executions.getCurrent().include(page).
 	 *
 	 * @see Execution#include(Writer,String,Map,int)
 	 * @see Execution#include(String)
@@ -209,7 +209,7 @@ public class Executions {
 	throws IOException {
 		getCurrent().include(page);
 	}
-	/** A shortcut of Executions.getCurrent.forward(page).
+	/** A shortcut of Executions.getCurrent().forward(page).
 	 *
 	 * @see Execution#forward(Writer,String,Map,int)
 	 * @see Execution#forward(String)
