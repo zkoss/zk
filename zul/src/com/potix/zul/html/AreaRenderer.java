@@ -35,5 +35,5 @@ public interface AreaRenderer {
 	 * @param data the data passed in from {@link Chart#drawChart()}. In JfreeChart
 	 * implementation, the data is the ChartEntity associated with the area.
 	 */
-	public void render(Area item, Object data) throws Exception;
+	public void render(Area area, Object data) throws Exception;
 }

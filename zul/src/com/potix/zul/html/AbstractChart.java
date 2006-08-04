@@ -124,7 +124,7 @@ public abstract class AbstractChart extends Imagemap {
 	
 	/**
 	 * whether show the chart's legend.
-	 * @param showLegent true if want to show the legend (default to true).
+	 * @param showLegend true if want to show the legend (default to true).
 	 */
 	public void setShowLegend(boolean showLegend) {
 		if (_showLegend == showLegend) {
