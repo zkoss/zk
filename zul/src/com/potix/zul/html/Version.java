@@ -25,5 +25,5 @@ package com.potix.zul.html;
 public class Version {
 	/** Returns the version UID.
 	 */
-	public static final String UID = "2.1.0-RC2";
+	public static final String UID = "2.1.0-FL";
 }
