@@ -1,11 +1,11 @@
 	--------
 ZK 2.1.0 Freshly
 * Features:
-  1534285
+  1534285.
   + Support piechart,piechart3d,ringchart.
   
 * Bugs
-  1533736, 1533840, 1533989.
+  1533736, 1533840, 1533989, 1533480.
 
 	--------
 ZK 2.1.0 RC2

@@ -45,6 +45,8 @@ public class Caption extends LabelImageElement {
 	 * parent's title, if the parent is {@link Window}, and {@link #getLabel}.
 	 * <p>Note: this is designed to used for component templating.
 	 * Application developers rarely need to access this method.
+	 *
+	 * <p>It is mainly used for component implementation.
 	 */
 	public String getCompoundLabel() {
 		final String label = getLabel();
@@ -59,13 +61,34 @@ public class Caption extends LabelImageElement {
 	/** Returns whether the legend mold shall be used.
 	 * <p>Note: this is designed to used for component templating.
 	 * Application developers rarely need to access this method.
+	 *
+	 * <p>It is mainly used for component implementation.
 	 */
 	public boolean isLegend() {
 		final Component p = getParent();
 		return (p instanceof Groupbox) && "default".equals(p.getMold());
 	}
+	/** Returns whether to display the closable button.
+	 * <p>Default: it returns true if the parent is window and {@link Window#isClosable}
+	 * is true.
+	 *
+	 * <p>It is mainly used for component implementation.
+	 */
+	public boolean isClosableVisible() {
+		final Component p = getParent();
+		return (p instanceof Window) && ((Window)p).isClosable();
+	}
 
 	//-- super --//
+	/** Returns the style class.
+	 * <p>Default: return caption if the parent is groupbox,
+	 * or title otherwise (say, the parent is window)
+	 */
+	public String getSclass() {
+		final String scls = super.getSclass();
+		if (scls != null) return scls;
+		return getParent() instanceof Groupbox ? "caption": "title";
+	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 		final String clkattrs = getAllOnClickAttrs(false);

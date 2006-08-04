@@ -20,8 +20,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}" zk_type="zul.html.widget.Capt"${self.outerAttrs}${self.innerAttrs} width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr class="caption" valign="middle">
+<tr valign="middle">
 	<td align="left">${self.imgTag}<c:out value="${self.compoundLabel}"/></td>
 	<td align="right" id="${self.uuid}!cave"><c:forEach var="child" items="${self.children}">${u:redraw(child, null)}</c:forEach></td>
+<c:if test="${self.closableVisible}">
+	<td width="16"><img id="${self.parent.uuid}!img" src="${c:encodeURL('~./zul/img/close-off.gif')}"/></td>
+</c:if>
 </tr>
 </table>

@@ -144,7 +144,8 @@ div.popup {
 	border: 1px solid black;
 }
 
-.caption input, .caption td { /*groupbox caption*/
+/* groupbox caption */
+.caption input, .caption td {
 	font-size: x-small;
 }
 .caption button {
@@ -156,12 +157,13 @@ div.popup {
 	text-decoration: none;
 }
 
-.title td, .title .caption td { /*window title*/
+/* window title/caption */
+.title td {
 	font-size: x-small; font-weight: bold;
 	padding-top: 2px; padding-bottom: 3px; margin-bottom: 2px;
 	background: #669; color: white;
 }
-.title a, .title a:visited, .title .caption a, .title .caption a:visited { /*window title*/
+.title a, .title a:visited {
 	color: white;
 }
 .caption a:hover, .title a:hover {
@@ -224,8 +226,11 @@ td.hbox {
 .caption .toolbar a:hover {
 	text-decoration: underline;
 }
-.title .caption .toolbar a, .title .caption .toolbar a:visited, .title .caption .toolbar a:hover {
+.title .toolbar a, .title .toolbar a:visited, .title .toolbar a:hover {
 	background: none; border: 0; color: white;
+}
+.title a:hover {
+	text-decoration: underline;
 }
 
 /* ZK tree, listbox, grid */
