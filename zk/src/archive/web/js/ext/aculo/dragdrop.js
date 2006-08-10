@@ -34,7 +34,8 @@ var Droppables = {
     
     if(options.accept) options.accept = [options.accept].flatten();
 
-    Element.makePositioned(element); // fix IE
+//Tom M. Yeh, Potix: Bug 1534426, 1535787
+//    Element.makePositioned(element); // fix IE
     options.element = element;
 
     this.drops.push(options);
@@ -240,7 +241,8 @@ Draggable.prototype = {
     if(options.scroll && !options.scroll.scrollTo && !options.scroll.outerHTML)
       options.scroll = $(options.scroll);
 
-    Element.makePositioned(this.element); // fix IE    
+//Tom M. Yeh, Potix: Bug 1534426, 1535787
+//    Element.makePositioned(this.element); // fix IE    
 
     this.delta    = this.currentDelta();
     this.options  = options;
@@ -299,8 +301,8 @@ zkau.autoZIndex(src, false, true);
 		if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, true);
 		if (ghosting) {
       this._clone = this.element.cloneNode(true);
-this._orgabs = this.element.style.position == 'absolute'; //Tom M. Yeh, Potix: Bug 1514789
-if (!this._orgabs)
+this.z_orgpos = this.element.style.position; //Tom M. Yeh, Potix: Bug 1514789
+if (this.z_orgpos != 'absolute')
       Position.absolutize(this.element);
       this.element.parentNode.insertBefore(this._clone, this.element);
 		}
@@ -369,8 +371,10 @@ if (!this._orgabs)
     	var ghosting = true;
 		if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, false);
 		if (ghosting) {
-if (!this._orgabs) //Tom M. Yeh, Potix: Bug 1514789
+if (this.z_orgpos != "absolute") { //Tom M. Yeh, Potix: Bug 1514789
       Position.relativize(this.element); 
+this.element.style.position = this.z_orgpos;
+}
       Element.remove(this._clone);
       this._clone = null;
 		}
@@ -441,6 +445,11 @@ if (!this._orgabs) //Tom M. Yeh, Potix: Bug 1514789
       }
     }}
     
+//Tom M. Yeh, Potix: resolve scrolling offset
+var scrl = this.z_scrl; //set if DIV is used
+if (!scrl) scrl = Position.realOffset(this.element);
+p[0] -= scrl[0]; p[1] -= scrl[1];
+
     var style = this.element.style;
     if((!this.options.constraint) || (this.options.constraint=='horizontal'))
       style.left = p[0] + "px";
