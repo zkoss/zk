@@ -342,7 +342,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public final Component getFellow(String compId) {
 		final Component comp = (Component)_fellows.get(compId);
 		if (comp == null)
-			if (ComponentsCtrl.isAutoId(compId))
+			if (compId != null && ComponentsCtrl.isAutoId(compId))
 				throw new ComponentNotFoundException(MZk.AUTO_ID_NOT_LOCATABLE, compId);
 			else
 				throw new ComponentNotFoundException("Fellow component not found: "+compId);
