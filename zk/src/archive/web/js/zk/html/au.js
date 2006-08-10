@@ -497,12 +497,12 @@ zkau.setAttr = function (cmp, name, value) {
 			"selectedIndex" == name ? cmp.selectedIndex:
 			"defaultValue" == name ? cmp.defaultValue: //Moz has problem to use getAttribute with this
 			"disabled" == name ? cmp.disabled:
-			"readonly" == name ? cmp.readonly:
+			"readOnly" == name ? cmp.readOnly:
 				cmp.getAttribute(name);
 		//Note: "true" != true (but "123" = 123)
 		//so we have take care of boolean
 		if (typeof(old) == "boolean")
-			value = "true" == value || name == value; //e.g, reaonly="readonly"
+			value = "true" == value || name == value; //e.g, reaonly="readOnly"
 
 		if (old != value) {
 			if ("selectedIndex" == name) cmp.selectedIndex = value;
@@ -512,7 +512,7 @@ zkau.setAttr = function (cmp, name, value) {
 				cmp.defaultValue = value;
 				if (old != cmp.value) cmp.value = old; //Bug 1490079 (happen in FF only)
 			} else if ("disabled" == name) cmp.disabled = value;
-			else if ("readonly" == name) cmp.readonly = value;
+			else if ("readOnly" == name) cmp.readOnly = value;
 			else cmp.setAttribute(name, value);
 		}
 	}
