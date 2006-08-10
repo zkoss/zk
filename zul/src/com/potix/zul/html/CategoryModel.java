@@ -58,8 +58,8 @@ implements java.io.Serializable {
 		((DefaultCategoryDataset)_dataset).setValue(value, series, category);
 	}
 	
-	/** Given category and return associated dataIndex. If not exists, return -1;
-	 * @param category the specified category
+	/** Given series and return associated dataIndex. If not exists, return -1;
+	 * @param series the specified series
 	 */
 	public int indexOfSeries(Comparable series) {
 		return ((DefaultCategoryDataset)_dataset).getRowIndex(series);

@@ -32,8 +32,7 @@ public interface AreaRenderer {
 	 * @param area the area to render the result.
 	 * Note: when this method is called, the area has been initiated with
 	 * its default value already.
-	 * @param data the data passed in from {@link Chart#drawChart()}. In JfreeChart
-	 * implementation, the data is the ChartEntity associated with the area.
+	 * @param data generic data used to pass data from {@link ChartEngine}.
 	 */
 	public void render(Area area, Object data) throws Exception;
 }
