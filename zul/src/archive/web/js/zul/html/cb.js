@@ -279,7 +279,7 @@ zkCmbox._repos = function (uuid, hilite) {
 		var gap = pp.offsetHeight - pp.clientHeight;
 		if (gap > 10 && pp.offsetHeight < 150) { //scrollbar
 			var hgh = 0;
-			for (var j = rows.length - 1; --j >= 0;) //last row invisible
+			for (var j = rows.length; --j >= 0;)
 				hgh += rows[j].offsetHeight;
 			pp.style.height = (hgh + 20) + "px";
 				//add the height of scrollbar (18 is an experimental number)
@@ -335,7 +335,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 
 	//Identify the best matched item
 	var jfnd = -1, exact = !inpval, old;
-	for (var j = 0, len = rows.length - 1; j < len; ++j) { //last row invisible
+	for (var j = 0; j < rows.length; ++j) {
 		var item = rows[j];
 		if (!exact) {
 			var txt = zkCmbox.getLabel(item).toLowerCase();
@@ -359,7 +359,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 	var found;
 	if (selback) {
 		if (jfnd < 0) {
-			if (rows.length > 1) found = rows[0]; //last row invisible
+			if (rows.length) found = rows[0];
 		} else {
 			if (exact) {
 				var b = document.selection;
@@ -369,7 +369,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 					if (bUp) {
 						if (jfnd > 0) --jfnd;
 					} else {
-						if (jfnd + 2 < rows.length) ++jfnd; //last row invisible
+						if (jfnd + 1 < rows.length) ++jfnd;
 					}
 				}
 			}
