@@ -476,7 +476,6 @@ zkau.setAttr = function (cmp, name, value) {
 			//--
 			//Better to call setStamp always but, to save memory,...
 
-		//Firefox return null for cmp.getAttribute("selectedIndex"), so...
 		var j = name.indexOf('.'); 
 		if (j >= 0) {
 			if ("style" != name.substring(0, j)) {
@@ -493,6 +492,7 @@ zkau.setAttr = function (cmp, name, value) {
 			return;
 		}
 
+		//Firefox return null for cmp.getAttribute("selectedIndex"...), so...
 		var old = "class" == name ? cmp.className:
 			"selectedIndex" == name ? cmp.selectedIndex:
 			"defaultValue" == name ? cmp.defaultValue: //Moz has problem to use getAttribute with this
@@ -1296,7 +1296,7 @@ zkau._getDrop = function (n, pointer) {
 				k = l + 1;
 			}
 		}
-		if (Position.within(e, pointer[0], pointer[1]))
+		if (Position.withinIncludingScrolloffsets(e, pointer[0], pointer[1]))
 			return e;
 	}
 	return null;
@@ -1315,11 +1315,16 @@ if (zk.gecko) {
 	zkau._ghostdrag = function (dg, ghosting) {
 		if (ghosting) {
 			zk.dragging = true;
-			Position.prepare();
-			var ofs = Position.positionedOffset(dg.element);
+			dg.delta = dg.currentDelta();
+
+			//we have to store scrolling offset first since Draggable.draw cannot
+			//calculate from the DIV
+			dg.z_scrl = Position.realOffset(dg.element);
+			var pos = Position.cumulativeOffset(dg.element);
+			pos[0] -= dg.z_scrl[0]; pos[1] -= dg.z_scrl[1];
 			document.body.insertAdjacentHTML("afterbegin",
 				'<div id="zk_ddghost" style="position:absolute;top:'
-				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
+				+pos[1]+'px;left:'+pos[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 				+'px;border:1px dotted black">&nbsp;</div>');
 	
