@@ -174,6 +174,10 @@ zkCmbox.onclickitem = function (item) {
 	zkCmbox._selback(item);
 	zkau.closeFloats(item);
 	zkCmbox.onout(item); //onmouseout might be sent (especiall we change parent)
+
+	//Request 1537962: better responsive
+	var inp = zkCmbox.getInputByItem(item);
+	if (inp) zkTxbox.updateChange(inp, false);
 };
 /** onmouoseover(el). */
 zkCmbox.onover = function (el) {
@@ -297,20 +301,22 @@ zkCmbox._repos = function (uuid, hilite) {
 zkCmbox._selback = function (item) {
 	var txt = zkCmbox.getLabel(item); 
 
-	//var cb = zkau.getParentByType(item, "Cmbox");
-	//we cannot use getParentByType because parentNode is changed in gecko
-
-	var uuid = zkau.uuidOf(item.parentNode);
-	if (uuid) {
-		var inpId = uuid + "!real";
-		var inp = $(inpId);
-		if (inp) {
-			inp.value = txt;
-			zk.focusById(inpId);
-			zk.selectById(inpId);
-		}
+	var inp = zkCmbox.getInputByItem(item);
+	if (inp) {
+		inp.value = txt;
+		zk.focusById(inp.id);
+		zk.selectById(inp.id);
 	}
 };
+/** Returns the input by specifying an item. */
+zkCmbox.getInputByItem = function (item) {
+	//we cannot use getParentByType because parentNode is changed in gecko
+	var uuid = zkau.uuidOf(item.parentNode);
+	if (!uuid) return null;
+
+	var inpId = uuid + "!real";
+	return $(inpId);
+}
 
 /** Auto-hilite the most matched item.
  * @param selback whether to select back (either UP or DN is pressed)
