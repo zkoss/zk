@@ -89,7 +89,8 @@ public class Grid extends XulElement {
 		}
 	}
 
-	/** Re-init the grid at the client.
+	/** Re-initialize the listbox at the client (actually, re-calculate
+	 * the column width at the client).
 	 */
 	/*package*/ void initAtClient() {
 		smartUpdate("zk_init", true);

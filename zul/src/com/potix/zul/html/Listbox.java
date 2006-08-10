@@ -533,7 +533,8 @@ implements Selectable, Render, java.io.Serializable {
 		return item;
 	}
 
-	/** Re-init the listbox at the client.
+	/** Re-initialize the listbox at the client (actually, re-calculate
+	 * the column width at the client).
 	 */
 	/*package*/ void initAtClient() {
 		smartUpdate("zk_init", true);
