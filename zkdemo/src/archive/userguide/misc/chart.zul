@@ -22,7 +22,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<html>
 			<attribute name="content"><![CDATA[
 				<h4>Chart</h4>
-				<p>Chart is used to show a set of data as a graph.</p>
+				<p>Chart is used to show a set of data as a graph. 
+				In this demo, change the value of the grid and the chart 
+				will be redrawn accordingly. Also, the chart can be drill down with a click 
+				on the pie. </p>
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
@@ -34,20 +37,40 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<caption label="Source"><button label="Try me!" onClick="_source.open=true;updateView()"/></caption>
 			<textbox id="codes" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
-<piechart3d id="chart" width="500" height="250" fgAlpha="128">
+<vbox>
+<grid>
+<columns>
+  <column label="category" width="150px"/>
+  <column label="value"/>
+</columns>
+<rows>
+  <row><label id="c0" value="C/C++"/><decimalbox id="v0" value="21.2" constraint="no empty" onChange="update(0)"/></row>
+  <row><label id="c1" value="VB"/><decimalbox id="v1" value="10.2" constraint="no empty" onChange="update(1)"/></row>
+  <row><label id="c2" value="Java"/><decimalbox id="v2" value="40.4" constraint="no empty" onChange="update(2)"/></row>
+  <row><label id="c3" value="PHP"/><decimalbox id="v3" value="28.2" constraint="no empty" onChange="update(3)"/></row>
+</rows>
+</grid>
+<checkbox label="3D Chart" checked="true" onCheck="mychart.setThreeD(self.isChecked())"/>
+<chart id="mychart" title="Pie Chart Demo" width="500" height="250" type="pie" threeD="true" fgAlpha="128">
 <attribute name="onClick">
   Area area = self.getFellow(event.getArea());
-  alert(area.getAttribute("category"));
+  alert(area.getAttribute("entity"));
 </attribute>
 <zscript>
-  PiechartModel model = new PiechartModel();
-  model.setValue("C/C++", new Double(21.2));
-  model.setValue("VB", new Double(10.2));
-  model.setValue("Jave", new Double(40.4));
-  model.setValue("PHP", new Double(28.2));
-  chart.setModel(model);
+  void update(int rowIndex) {
+    Label lb = (Label) self.getFellow("c"+rowIndex);
+    Decimalbox db = (Decimalbox) self.getFellow("v"+rowIndex);
+    model.setValue(lb.value, new Double(db.getValue().doubleValue()));
+  }
+  
+  PieModel model = new PieModel();
+  for(int j=0; j &lt; 4; ++j) {
+  	update(j);
+  }
+  mychart.setModel(model);
 </zscript>
-</piechart3d>
+</chart>
+</vbox>
 				]]></attribute>
 			</textbox>
 		</groupbox>
