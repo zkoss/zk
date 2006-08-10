@@ -1,0 +1,31 @@
+<!-- Bug 1514789 -->
+<zk>
+<zscript>
+index = 0;
+exchange() {
+Div div1 = event.getDragged();
+String left = div1.getLeft();
+String top = div1.getTop();
+div1.setLeft(self.getLeft());
+div1.setTop(self.getTop());
+self.setLeft(left);
+self.setTop(top);
+}
+</zscript>
+<div style="position:absolute;" top="0px" left="0px"
+draggable="true" droppable="true" onDrop="exchange()">
+div 1
+</div>
+<div style="position:absolute;" top="0px" left="90px"
+draggable="true" droppable="true" onDrop="exchange()">
+div 2
+</div>
+<div style="position:absolute;" top="90px" left="0px"
+draggable="true" droppable="true" onDrop="exchange()">
+div 3
+</div>
+<div style="position:absolute;" top="90px" left="90px"
+draggable="true" droppable="true" onDrop="exchange()">
+div 4
+</div>
+</zk>
