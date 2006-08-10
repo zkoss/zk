@@ -229,20 +229,21 @@ function zkMenuit() {} //menuitem
 function zkMenusp() {} //menuseparator
 
 zkMenuit.init = function (cmp) {
-	var anc = $(cmp.id + "!a");
-	Event.observe(anc, "click", zkMenuit.onclick);
+	Event.observe(cmp, "click", zkMenuit.onclick);
 	Event.observe(cmp, "mouseover", zkMenu.onover);
 	Event.observe(cmp, "mouseout", zkMenu.onout);
 
 	if (cmp.getAttribute("zk_top") != "true") { //non-topmost
+		var anc = $(cmp.id + "!a");
 		Event.observe(anc, "focus", function () {zkau.onfocus(anc);});
 		Event.observe(anc, "blur", function () {zkau.onblur(anc);});
 	}
 };
 zkMenuit.onclick = function (evt) {
 	if (!evt) evt = window.event;
-	var anc = Event.element(evt);
-	zkau.closeFloats(anc);//including popups if visible
+	var cmp = zkau.getParentByType(Event.element(evt), "Menuit");
+	zkau.closeFloats(cmp);//including popups if visible
+	var anc = $(cmp.id + "!a");
 	if ("javascript:;" == anc.href) {
 		var cmp = zkau.getOuter(anc);
 		var uuid = cmp.id;

@@ -87,4 +87,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</attribute>
 	</button>
 	<datebox/>
+
+	<menubar>
+	<menu label="Modifier la couleur de fond">
+	<menupopup>
+	<menuitem src="/img/coffee.gif"
+	onClick="alert(&quot;ok&quot;)"/>
+	</menupopup>
+	</menu>
+	</menubar>
 </window>
