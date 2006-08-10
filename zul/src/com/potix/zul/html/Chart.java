@@ -37,11 +37,24 @@ import java.awt.Paint;
 
 
 /**
- * The generic chart class.
+ * The generic chart component. Developers set proper chart type, data model,
+ * and the threeD (3D) attribute to draw proper chart. The model and type must
+ * match to each other; or the result is unpredictable. The 3D chart is not supported
+ * on all chart type.
  *
- * <p>This is the base chart class. All specific chart is derived from this class.</p>
+ * <table>
+ *   <tr><th>type</th><th>model</th><th>3D</th></tr>
+ *   <tr><td>pie</td><td>{@link PieModel}</td><td>o</td></tr>
+ *   <tr><td>ring</td><td>{@link PieModel}</td><td>x</td></tr>
+ *   <tr><td>bar</td><td>{@link CategoryModel}</td><td>o</td></tr>
+ *   <tr><td>line</td><td>{@link CategoryModel}</td><td>o</td></tr>
+ *   <tr><td>area</td><td>{@link CategoryModel}</td><td>x</td></tr>
+ *   <tr><td>stacked_bar</td><td>{@link CategoryModel}</td><td>o</td></tr>
+ *   <tr><td>stacked_area</td><td>{@link CategoryModel}</td><td>x</td></tr>
+ *   <tr><td>waterfall</td><td>{@link CategoryModel}</td><td>x</td></tr>
+ * </table>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
  */
 public class Chart extends Imagemap {
 	public static final String PIE = "pie";
@@ -379,6 +392,17 @@ public class Chart extends Imagemap {
 		
 		//Always redraw
 		smartDrawChart();
+	}
+
+	/** Sets the model by use of a class name.
+	 * It creates an instance automatically.
+	 */
+	public void setModel(String clsnm)
+	throws ClassNotFoundException, NoSuchMethodException,
+	InstantiationException, java.lang.reflect.InvocationTargetException {
+		if (clsnm != null) {
+			setModel((ChartModel)Classes.newInstanceByThread(clsnm));
+		}
 	}
 	
 	/** Returns the implemetation chart engine.

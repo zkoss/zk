@@ -91,6 +91,18 @@ elementFormDefault="qualified">
 			<xs:enumeration value="before"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="chartTypeAttrType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="area"/>
+			<xs:enumeration value="bar"/>
+			<xs:enumeration value="line"/>
+			<xs:enumeration value="pie"/>
+			<xs:enumeration value="ring"/>
+			<xs:enumeration value="stacked_area"/>
+			<xs:enumeration value="stacked_bar"/>
+			<xs:enumeration value="waterfall"/>
+		</xs:restriction>
+	</xs:simpleType>
 <!--
   ATTRIBUTEGROUP
 -->
@@ -310,6 +322,32 @@ elementFormDefault="qualified">
 		<xs:attribute name="onClick" type="xs:string" use="optional"/>
 		<xs:attribute name="onRightClick" type="xs:string" use="optional"/>
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<!-- chart -->
+	<xs:element name="chart" type="chartType"/>
+	<xs:complexType name="chartType">
+		<xs:group ref="baseGroup"/>
+		<xs:attributeGroup ref="xulElementAttrGroup"/>
+		<xs:attribute name="border" type="xs:string" use="optional"/>
+		<xs:attribute name="align" type="alignAttrType" use="optional"/>
+		<xs:attribute name="hspace" type="xs:string" use="optional"/>
+		<xs:attribute name="vspace" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="chartTypeAttrType" use="optional"/>
+		<xs:attribute name="model" type="xs:string" use="optional"/>
+		<xs:attribute name="title" type="xs:string" use="optional"/>
+		<xs:attribute name="xAxis" type="xs:string" use="optional"/>
+		<xs:attribute name="yAxis" type="xs:string" use="optional"/>
+		<xs:attribute name="threeD" type="xs:boolean" use="optional"/>
+		<xs:attribute name="showLegend" type="xs:boolean" use="optional"/>
+		<xs:attribute name="showTooltiptext" type="xs:boolean" use="optional"/>
+		<xs:attribute name="fgAlpha" type="xs:integer" use="optional"/>
+		<xs:attribute name="bgAlpha" type="xs:integer" use="optional"/>
+		<xs:attribute name="bgColor" type="xs:string" use="optional"/>
+		<xs:attribute name="orient" type="orientAttrType" use="optional"/>
+		<xs:attribute name="areaRenderer" type="xs:string" use="optional"/>
+		<xs:attribute name="onClick" type="xs:string" use="optional"/>
+		<xs:attribute name="onRightClick" type="xs:string" use="optional"/>
+		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<!-- checkbox -->
 	<xs:element name="checkbox" type="checkboxType"/>

@@ -30,6 +30,7 @@ import org.jfree.chart.plot.*;
 import org.jfree.chart.entity.*;
 import org.jfree.data.general.*;
 import org.jfree.data.category.*;
+import org.jfree.util.TableOrder;
 
 import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
@@ -224,9 +225,18 @@ public class SimpleChartEngine implements ChartEngine {
 		}
 		
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			PieDataset dataset = null;
+			if (model instanceof CategoryModel) {
+				dataset = new CategoryToPieDataset((CategoryDataset) model.getNativeModel(), TableOrder.BY_ROW, 0);
+			} else if (model instanceof PieModel) {
+				dataset = (PieDataset) model.getNativeModel();
+			} else {
+				throw new UiException("model must be a com.potix.zul.html.PieModel");
+			}
 			return ChartFactory.createPieChart(
 				chart.getTitle(), 
-				(PieDataset) chart.getModel().getNativeModel(), 
+				(PieDataset) dataset, 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
 		}
@@ -235,9 +245,18 @@ public class SimpleChartEngine implements ChartEngine {
 	/** pie3d chart */
 	private class Pie3d extends Pie {
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			PieDataset dataset = null;
+			if (model instanceof CategoryModel) {
+				dataset = new CategoryToPieDataset((CategoryDataset) model.getNativeModel(), TableOrder.BY_ROW, 0);
+			} else if (model instanceof PieModel) {
+				dataset = (PieDataset) model.getNativeModel();
+			} else {
+				throw new UiException("model must be a com.potix.zul.html.PieModel");
+			}
 			return ChartFactory.createPieChart3D(
 				chart.getTitle(), 
-				(PieDataset) chart.getModel().getNativeModel(), 
+				(PieDataset) dataset, 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
 		}
@@ -246,9 +265,18 @@ public class SimpleChartEngine implements ChartEngine {
 	/** ring chart */
 	private class Ring extends Pie {
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			PieDataset dataset = null;
+			if (model instanceof CategoryModel) {
+				dataset = new CategoryToPieDataset((CategoryDataset) model.getNativeModel(), TableOrder.BY_ROW, 0);
+			} else if (model instanceof PieModel) {
+				dataset = (PieDataset) model.getNativeModel();
+			} else {
+				throw new UiException("model must be a com.potix.zul.html.PieModel");
+			}
 			return ChartFactory.createRingChart(
 				chart.getTitle(), 
-				(PieDataset) chart.getModel().getNativeModel(), 
+				(PieDataset) dataset, 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
 		}
@@ -272,11 +300,15 @@ public class SimpleChartEngine implements ChartEngine {
 		}
 
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof CategoryModel)) {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			}
 			return ChartFactory.createBarChart(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) chart.getModel().getNativeModel(),
+				(CategoryDataset) model.getNativeModel(),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -286,11 +318,15 @@ public class SimpleChartEngine implements ChartEngine {
 	/** bar3d chart */
 	private class Bar3d extends Bar {
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof CategoryModel)) {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			}
 			return ChartFactory.createBarChart3D(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) chart.getModel().getNativeModel(), 
+				(CategoryDataset) model.getNativeModel(), 
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -314,11 +350,15 @@ public class SimpleChartEngine implements ChartEngine {
 			}
 		}
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof CategoryModel)) {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			}
 			return ChartFactory.createAreaChart(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) chart.getModel().getNativeModel(),
+				(CategoryDataset) model.getNativeModel(),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -342,11 +382,15 @@ public class SimpleChartEngine implements ChartEngine {
 			}
 		}
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof CategoryModel)) {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			}
 			return ChartFactory.createLineChart(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) chart.getModel().getNativeModel(),
+				(CategoryDataset) model.getNativeModel(),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -356,11 +400,15 @@ public class SimpleChartEngine implements ChartEngine {
 	/** line3d chart */
 	private class Line3d extends Line {
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof CategoryModel)) {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			}
 			return ChartFactory.createLineChart3D(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) chart.getModel().getNativeModel(), 
+				(CategoryDataset) model.getNativeModel(), 
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -384,11 +432,15 @@ public class SimpleChartEngine implements ChartEngine {
 			}
 		}
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof CategoryModel)) {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			}
 			return ChartFactory.createStackedBarChart(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) chart.getModel().getNativeModel(),
+				(CategoryDataset) model.getNativeModel(),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -398,11 +450,15 @@ public class SimpleChartEngine implements ChartEngine {
 	/** stackedbar3d chart */
 	private class StackedBar3d extends StackedBar {
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof CategoryModel)) {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			}
 			return ChartFactory.createStackedBarChart3D(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) chart.getModel().getNativeModel(), 
+				(CategoryDataset) model.getNativeModel(), 
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -427,11 +483,15 @@ public class SimpleChartEngine implements ChartEngine {
 			}
 		}
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof CategoryModel)) {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			}
 			return ChartFactory.createStackedAreaChart(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) chart.getModel().getNativeModel(),
+				(CategoryDataset) model.getNativeModel(),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -456,11 +516,15 @@ public class SimpleChartEngine implements ChartEngine {
 			}
 		}
 		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof CategoryModel)) {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			}
 			return ChartFactory.createWaterfallChart(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) chart.getModel().getNativeModel(),
+				(CategoryDataset) model.getNativeModel(),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
