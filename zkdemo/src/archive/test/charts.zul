@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+charts.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug  10 12:37:06     2006, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<vbox>
+<zscript>
+  void drilldown() {
+  	String areaid = event.getArea();
+  	if (areaid != null) {
+	  	Area area = self.getFellow(areaid);
+	  	alert(area.getAttribute("entity"));
+	}
+  }
+</zscript>
+<zscript>
+  PieModel piemodel = new PieModel();
+  piemodel.setValue("C/C++", new Double(12.5));
+  piemodel.setValue("Java", new Double(50.2));
+  piemodel.setValue("VB", new Double(20.5));
+  piemodel.setValue("PHP", new Double(15.5));
+</zscript>
+<label value="pie"/>
+<chart id="piechart" width="500" height="250" type="pie" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  piechart.setModel(piemodel);
+</zscript>
+
+<label value="pie+3d"/>
+<chart id="piechart3d" width="500" height="250" type="pie" threeD="true" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  piechart3d.setModel(piemodel);
+</zscript>
+
+<label value="ring"/>
+<chart id="ringchart" width="500" height="250" type="ring" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  ringchart.setModel(piemodel);
+</zscript>
+
+<zscript>
+CategoryModel catmodel = new CategoryModel();
+catmodel.setValue("2001", "Q1", new Integer(20));
+catmodel.setValue("2001", "Q2", new Integer(35));
+catmodel.setValue("2002", "Q1", new Integer(40));
+catmodel.setValue("2002", "Q2", new Integer(60));
+</zscript>
+
+<label value="bar"/>
+<chart id="barchart" width="500" height="250" type="bar" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  barchart.setModel(catmodel);
+</zscript>
+
+<label value="bar+3d"/>
+<chart id="barchart3d" width="500" height="250" type="bar" threeD="true" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  barchart3d.setModel(catmodel);
+</zscript>
+
+<label value="stacked_bar"/>
+<chart id="sbarchart" width="500" height="250" type="stacked_bar" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  sbarchart.setModel(catmodel);
+</zscript>
+
+<label value="stacked_bar+3d"/>
+<chart id="sbarchart3d" width="500" height="250" type="stacked_bar" threeD="true" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  sbarchart3d.setModel(catmodel);
+</zscript>
+
+<label value="line"/>
+<chart id="linechart" width="500" height="250" type="line" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  linechart.setModel(catmodel);
+</zscript>
+
+<label value="line+3d"/>
+<chart id="linechart3d" width="500" height="250" type="line" threeD="true" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  linechart3d.setModel(catmodel);
+</zscript>
+
+<label value="area"/>
+<chart id="areachart" width="500" height="250" type="area" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  areachart.setModel(catmodel);
+</zscript>
+
+<label value="stacked_area"/>
+<chart id="sareachart" width="500" height="250" type="stacked_area" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  sareachart.setModel(catmodel);
+</zscript>
+
+<label value="waterfall"/>
+<chart id="waterfall" width="500" height="250" type="waterfall" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  waterfall.setModel(catmodel);
+</zscript>
+
+</vbox>
