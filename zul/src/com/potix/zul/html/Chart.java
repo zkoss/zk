@@ -1,4 +1,4 @@
-/* Chart.java
+/* AbstractChart.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Aug 1 10:30:48     2006, Created by henrichen@potix.com
+		Mon Jul 10 16:57:48     2006, Created by henrichen@potix.com
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -19,197 +19,512 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package com.potix.zul.html;
 
 import com.potix.zk.ui.Component;
+import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.event.Event;
+import com.potix.zk.ui.event.Events;
+import com.potix.zk.ui.event.EventListener;
+import com.potix.zul.html.event.ChartDataEvent;
+import com.potix.zul.html.event.ChartDataListener;
 import com.potix.image.AImage;
+import com.potix.lang.Classes;
+import com.potix.lang.Objects;
 import com.potix.lang.Strings;
 
-import org.jfree.chart.*;
-import org.jfree.chart.encoders.*;
-import org.jfree.chart.plot.*;
-import org.jfree.chart.entity.*;
-import org.jfree.data.general.*;
 import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
 import java.awt.Paint;
-import java.awt.Color;
-import java.util.Iterator;
 
 
 /**
- * A base chart class written with JFreeChart engine.
+ * The generic chart class.
  *
- * <p>This is the JFreeChart base chart class implementation. All specific chart 
- * is derived from this class. All chart would support drilldown by 
- * providing Area hot spots. Each Area would callback to 
- * {@link com.potix.zul.html.AreaRenderer} class that application developers
- * can do preprocessing on each area.</p>
+ * <p>This is the base chart class. All specific chart is derived from this class.</p>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public abstract class Chart extends AbstractChart {
-	private DatasetChangeListener _changeListener;
-	private AreaRenderer _preRenderer;
-	private Dataset _dataset;
+public class Chart extends Imagemap {
+	public static final String PIE = "pie";
+	public static final String RING = "ring";
+	public static final String BAR = "bar";
+	public static final String LINE = "line";
+	public static final String AREA = "area";
+	public static final String STACKED_BAR = "stacked_bar";
+	public static final String STACKED_AREA = "stacked_area";
+	public static final String WATERFALL = "waterfall";
 	
-	/**
-	 * Set the renderer which is used to pre-rendering the area in chart.
-	 * It is genereally used to assoicate dataset information in the
-	 * Area's componentScope.
-	 */
-	protected void setPreRenderer(AreaRenderer renderer) {
-		if (_preRenderer != renderer) {
-			_preRenderer = renderer;
-		}
-	}
-	
-	/**
-	 * Get the renderer which is used to pre-rendering the area in chart.
-	 * It is genereally used to assoicate dataset information in the
-	 * Area's componentScope.
-	 */
-	protected AreaRenderer getPreRenderer() {
-		return _preRenderer;
-	}
+	//control variable
+	private boolean _smartDrawChart; //whether post the smartDraw event already?
+	private transient ChartDataListener _dataListener;
+	private transient EventListener _smartDrawChartListener; //the smartDrawListner
 
-	/** JFreeChart native interface.
-	 */
-	protected Dataset getInnerDataset() {
-		return _dataset;
-	}
+	private String _type; //chart type (pie, ring, bar, line, xy, etc)
+	private boolean _threeD; //whether a 3D chart
 	
-	/** JFreechart native interface.
+	//chart related attributes
+	private String _title; //chart title
+	private int _intWidth = 400; //default to 400
+	private int _intHeight = 200; //default to 200
+	private String _xAxis;
+	private String _yAxis;
+	private boolean _showLegend = true; // wether show legend
+	private boolean _showTooltiptext = true; //wether show tooltiptext
+	private String _orient = "vertical"; //orient
+	private AreaRenderer _renderer;
+	
+	//plot related attributes
+	private int _fgAlpha = 255; //foreground alpha transparency (0 ~ 255, default to 255)
+	private String _bgColor;
+	private int[] _bgRGB; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+	private int _bgAlpha = 255; //background alpha transparency (0 ~ 255, default to 255)
+	
+	//chart data model
+	private ChartModel _model; //chart data model
+	
+	//chart engine
+	private ChartEngine _engine; //chart engine. model and engine is related
+
+	/**
+	 * Set the chart's type (Chart.PIE, Chart.BAR, Chart.LINE, etc.).
 	 */
-	protected void setInnerDataset(Dataset dataset) {
-		if (_dataset != dataset) {
-			initChangeListener();
-			if (_dataset != null) {
-				_dataset.removeChangeListener(_changeListener);
-			}
-			if (dataset != null) {
-				dataset.addChangeListener(_changeListener);
-			}
-			_dataset = dataset;
+	public void setType(String type) {
+		if (Objects.equals(_type, type)) {
+			return;
 		}
-		
-		//always redraw
+		_type = type;
 		smartDrawChart();
 	}
-	private void initChangeListener() {
-		if (_changeListener == null) {
-			_changeListener = new DatasetChangeListener() {
-				public void datasetChanged(DatasetChangeEvent event) {
+	
+	/**
+	 * Get the chart's type.
+	 */
+	public String getType() {
+		return _type;
+	}
+
+	/**
+	 * Set true to show three dimensional graph (If a type of chart got no 3d peer, this is ignored).
+	 */
+	public void setThreeD(boolean b) {
+		if (_threeD == b) {
+			return;
+		}
+		_threeD = b;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Whether a 3d chart.
+	 */
+	public boolean isThreeD() {
+		return _threeD;
+	}
+
+	/**
+	 * Set the chart's title.
+	 * @param title the chart's title.
+	 *
+	 */
+	public void setTitle(String title) {
+		if (Objects.equals(_title, title)) {
+			return;
+		}
+		_title = title;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Get the chart's title.
+	 */
+	public String getTitle() {
+		return _title;
+	}
+	
+	/**
+	 * Override super class to prepare the int width.
+	 */
+	public void setWidth(String w) {
+		if (Objects.equals(w, getWidth())) {
+			return;
+		}
+		_intWidth = stringToInt(w);
+		super.setWidth(w);
+	}
+	
+	/**
+	 * Get the chart int width in pixel; to be used by the derived subclass.
+	 */
+	public int getIntWidth() {
+		return _intWidth;
+	}
+	
+	/**
+	 * Override super class to prepare the int height.
+	 */
+	public void setHeight(String h) {
+		if (Objects.equals(h, getHeight())) {
+			return;
+		}
+		_intHeight = stringToInt(h);
+		super.setHeight(h);
+	}
+	
+	/**
+	 * Get the chart int width in pixel; to be used by the derived subclass.
+	 */
+	public int getIntHeight() {
+		return _intHeight;
+	}
+	
+	/**
+	 * Set the label in xAxis.
+	 * @param label label in xAxis.
+	 */
+	public void setXAxis(String label) {
+		if (Objects.equals(_xAxis, label)) {
+			return;
+		}
+		_xAxis = label;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Get the label in xAxis.
+	 */
+	public String getXAxis() {
+		return _xAxis;
+	}
+	
+	/**
+	 * Set the label in yAxis.
+	 * @param label label in yAxis.
+	 */
+	public void setYAxis(String label) {
+		if (Objects.equals(_yAxis, label)) {
+			return;
+		}
+		_yAxis = label;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Get the label in yAxis.
+	 */
+	public String getYAxis() {
+		return _yAxis;
+	}
+
+	/**
+	 * whether show the chart's legend.
+	 * @param showLegend true if want to show the legend (default to true).
+	 */
+	public void setShowLegend(boolean showLegend) {
+		if (_showLegend == showLegend) {
+			return;
+		}
+		_showLegend = showLegend;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Check whether show the legend of the chart.
+	 */
+	public boolean isShowLegend() {
+		return _showLegend;
+	}
+		
+	/**
+	 * whether show the chart's tooltip.
+	 * @param showTooltiptext true if want to pop the tooltiptext (default to true).
+	 */
+	public void setShowTooltiptext(boolean showTooltiptext) {
+		if (_showTooltiptext == showTooltiptext) {
+			return;
+		}
+		_showTooltiptext = showTooltiptext;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Check whether show the tooltiptext.
+	 */
+	public boolean isShowTooltiptext() {
+		return _showTooltiptext;
+	}
+	
+	/**
+	 * Set the foreground alpha (transparency, 0 ~ 255).
+	 * @param alpha the transparency of foreground color (0 ~ 255, default to 255 opaque).
+	 */
+	public void setFgAlpha(int alpha) {
+		if (alpha == _fgAlpha) {
+			return;
+		}
+		
+		if (alpha > 255 || alpha < 0) {
+			alpha = 255;
+		}
+		_fgAlpha = alpha;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Get the foreground alpha (transparency, 0 ~ 255, opacue).
+	 */
+	public int getFgAlpha() {
+		return _fgAlpha;
+	}
+
+	/**
+	 * Set the background alpha (transparency, 0 ~ 255).
+	 * @param alpha the transparency of background color (0 ~ 255, default to 255 opaque).
+	 */
+	public void setBgAlpha(int alpha) {
+		if (alpha == _bgAlpha) {
+			return;
+		}
+		if (alpha > 255 || alpha < 0) {
+			alpha = 255;
+		}
+		_bgAlpha = alpha;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Get the background alpha (transparency, 0 ~ 255, opacue).
+	 */
+	public int getBgAlpha() {
+		return _bgAlpha;
+	}
+
+	/**
+	 * Set the background color of the chart.
+	 * @param color in #RRGGBB format (hexdecimal).
+	 */
+	public void setBgColor(String color) {
+		if (Objects.equals(color, _bgColor)) {
+			return;
+		}
+		_bgColor = color;
+		if (_bgColor == null) {
+			_bgRGB = null;
+		} else {
+			_bgRGB = new int[3];
+			decode(_bgColor, _bgRGB);
+		}
+		smartDrawChart();
+	}
+	
+	/**
+	 * Get the background color of the chart (in string as #RRGGBB).
+	 * null means default.
+	 */
+	public String getBgColor() {
+		return _bgColor;
+	}
+	
+	/**
+	 * Get the background color in int array (0: red, 1: green, 2:blue).
+	 * null means default.
+	 */
+	public int[] getBgRGB() {
+		return _bgRGB;
+	}
+	
+	/**
+	 * Set the chart orientation.
+	 * @param orient vertical or horizontal (default to vertical)
+	 */
+	public void setOrient(String orient) {
+		if (Objects.equals(orient, _orient)) {
+			return;
+		}
+		_orient = orient;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Get the chart orientation (vertical or horizontal)
+	 */
+	public String getOrient() {
+		return _orient;
+	}
+	
+	/** Returns the chart model associated with this chart, or null
+	 * if this chart is not associated with any chart data model.
+	 */
+	public ChartModel getModel() {
+		return _model;
+	}
+
+	/** Sets the chart model associated with this chart.
+	 * If a non-null model is assigned, no matter whether it is the same as
+	 * the previous, it will always cause re-render.
+	 *
+	 * @param model the chart model to associate, or null to dis-associate
+	 * any previous model.
+	 * @exception UiException if failed to initialize with the model
+	 */
+	public void setModel(ChartModel model) {
+		if (_model != model) {
+			initDataListener();
+			if (_model != null) {
+				_model.removeChartDataListener(_dataListener);
+			}
+			if (model != null) {
+				model.addChartDataListener(_dataListener);
+			}
+			_model = model;
+		}
+		
+		//Always redraw
+		smartDrawChart();
+	}
+	
+	/** Returns the implemetation chart engine.
+	 */
+	public ChartEngine getEngine() {
+		return _engine;
+	}
+	
+	/** Sets the chart engine.
+	 */
+	public void setEngine(ChartEngine engine) {
+		if (_engine != engine) {
+			_engine = engine;
+		}
+		
+		//Always redraw
+		smartDrawChart();
+	}
+
+	/** Sets the chart engine by use of a class name.
+	 * It creates an instance automatically.
+	 */
+	public void setEngine(String clsnm)
+	throws ClassNotFoundException, NoSuchMethodException,
+	InstantiationException, java.lang.reflect.InvocationTargetException {
+		if (clsnm != null) {
+			setEngine((ChartEngine)Classes.newInstanceByThread(clsnm));
+		}
+	}
+				
+	private void initDataListener() {
+		if (_dataListener == null) {
+			_dataListener = new ChartDataListener() {
+				public void onChange(ChartDataEvent event) {
 					smartDrawChart();
 				}
 			};
 		}
 	}
-	
-	/**
-	 * The methods to be derived by subclass to create specific type of chart.
-	 * This implementation use JFreeChart engine.
+
+	/** Returns the renderer to render each area, or null if the default
+	 * renderer is used.
 	 */
-	abstract protected JFreeChart createChart();
-
-	protected byte[] drawChart() {
-		if (Strings.isBlank(getWidth()))
-			throw new UiException("must specify width");
-			
-		if (Strings.isBlank(getHeight()))
-			throw new UiException("must specify height");
-			
-		JFreeChart chart = createChart();
-		
-		Plot plot = (Plot) chart.getPlot();
-		float alpha = (float)(((float)getFgAlpha()) / 255);
-		plot.setForegroundAlpha(alpha);
-		
-		alpha = (float)(((float)getBgAlpha()) / 255);
-		plot.setBackgroundAlpha(alpha);
-		
-		int[] bgRGB = getBgRGB();
-		if (bgRGB != null) {
-			plot.setBackgroundPaint(new Color(bgRGB[0], bgRGB[1], bgRGB[2], getBgAlpha()));
-		}
-
-		//callbacks for each area
-		ChartRenderingInfo info = new ChartRenderingInfo();
-		BufferedImage bi = chart.createBufferedImage(getIntWidth(), getIntHeight(), BufferedImage.TRANSLUCENT, info);
-		
-		//remove old areas 	
-		getChildren().clear();
-		
-		int j = 0;
-		for(Iterator it=info.getEntityCollection().getEntities().iterator();it.hasNext();) {
-			ChartEntity ce = ( ChartEntity ) it.next();
-			Area area = new Area();
-			if (getPreRenderer() != null) {
-				try {
-					getPreRenderer().render(area, ce);
-				} catch(Exception ex) {
-					throw UiException.Aide.wrap(ex);
-				}
-			}
-			area.setParent(this);
-		 	area.setCoords(ce.getShapeCoords());
-		 	area.setShape(ce.getShapeType());
-		    area.setId(getId()+'_'+(j++));
-		    if (isShowTooltiptext() && ce.getToolTipText() != null) {
-		    	area.setTooltiptext(ce.getToolTipText());
-		    }
-		    area.setAttribute("url", ce.getURLText());
-			if (getAreaRenderer() != null) {
-				try {
-					getAreaRenderer().render(area, ce);
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex);
-				}
-			}
-		}
-
-		try {		
-			//encode into png image format byte array
-			return EncoderUtil.encode(bi, ImageFormat.PNG, true);
-		} catch(java.io.IOException ex) {
-			throw UiException.Aide.wrap(ex);
+	public AreaRenderer getAreaRenderer() {
+		return _renderer;
+	}
+	/** Sets the renderer which is used to render each area.
+	 *
+	 * <p>Note: changing a render will not cause the chart to re-render.
+	 * If you want it to re-render, you could call smartDraw.
+	 *
+	 * @param renderer the renderer, or null to use the default.
+	 * @exception UiException if failed to initialize.
+	 */
+	public void setAreaRenderer(AreaRenderer renderer) {
+		if (_renderer != renderer) {
+			_renderer = renderer;
 		}
 	}
-	
+	/** Sets the renderer by use of a class name.
+	 * It creates an instance automatically.
+	 */
+	public void setAreaRenderer(String clsnm)
+	throws ClassNotFoundException, NoSuchMethodException,
+	InstantiationException, java.lang.reflect.InvocationTargetException {
+		if (clsnm != null) {
+			setAreaRenderer((AreaRenderer)Classes.newInstanceByThread(clsnm));
+		}
+	}
+
+	/**
+	 * mark a draw flag to inform that this Chart needs update.
+	 */
+	protected void smartDrawChart() {
+		if (_smartDrawChart) { //already mark smart draw
+			return;
+		}
+		_smartDrawChart = true;
+		if (_smartDrawChartListener == null) {
+			_smartDrawChartListener = new EventListener() {
+				public boolean isAsap() {
+					return true;
+				}
+				public void onEvent(Event event) {
+					if (Strings.isBlank(getType()))
+						throw new UiException("chart must specify type (pie, bar, line, ...)");
+
+					if (_model == null)
+						throw new UiException("chart must specify a data model");
+
+					if (Strings.isBlank(getWidth()))
+						throw new UiException("chart must specify width");
+						
+					if (Strings.isBlank(getHeight()))
+						throw new UiException("chart must specify height");
+						
+					if (_engine == null)
+						_engine = new SimpleChartEngine();
+							
+					try {
+						final String title = getTitle();
+						final AImage image = new AImage(title == null ? "Chart" : title, _engine.drawChart(Chart.this));
+						setContent(image);
+					} catch(java.io.IOException ex) {
+						throw UiException.Aide.wrap(ex);
+					} finally {
+						_smartDrawChart = false;
+					}
+				}
+			};
+			addEventListener("onSmartDrawChart", _smartDrawChartListener);
+		}
+		Events.postEvent("onSmartDrawChart", this, null);
+	}
+		
 	//-- utilities --//
-	/**
-	 * decode url requests into key-value pair of Area's componentScope.
-	 * @param area the Area where the final attribute is set
-	 * @param url the url to be decoded.
-	 */
-	protected void decodeURL(Area area, String url) {
-		if (url == null) {
+	private void decode(String color, int[] rgb) {
+		if (color == null) {
 			return;
 		}
-		int j = url.indexOf("?");
-		if (j < 0) {
-			return;
+		if (color.length() != 7 || !color.startsWith("#")) {
+			throw new UiException("Incorrect color format (#RRGGBB) : "+color);
 		}
-		url = url.substring(j+1);
-		
-		do {
-			j = url.indexOf("&amp;");
-			if (j < 0) {
-				storePair(area, url);
-				break;
-			} else {
-				String pair = url.substring(0, j);
-				storePair(area, pair);
-				if ((j+5) >= url.length()) {
-					break; //no more
-				}
-				url = url.substring(j+5);
-			}
-		} while(true);
+		rgb[0] = Integer.parseInt(color.substring(1, 3), 16);
+		rgb[1] = Integer.parseInt(color.substring(3, 5), 16);
+		rgb[2] = Integer.parseInt(color.substring(5, 7), 16);
 	}
 	
-	private void storePair(Area area, String url) {
-		int j = url.indexOf("=");
+	private int stringToInt(String str) {
+		int j = str.lastIndexOf("px");
 		if (j > 0) {
-			area.setAttribute(url.substring(0, j), url.substring(j+1));
+			final String num = str.substring(0, j);
+			return Integer.parseInt(num);
 		}
+		
+		j = str.lastIndexOf("pt");
+		if (j > 0) {
+			final String num = str.substring(0, j);
+			return (int) (Integer.parseInt(num) * 1.3333);
+		}
+
+		j = str.lastIndexOf("em");
+		if (j > 0) {
+			final String num = str.substring(0, j);
+			return (int) (Integer.parseInt(num) * 13.3333);
+		}
+		return Integer.parseInt(str);
 	}
 }

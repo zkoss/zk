@@ -55,4 +55,7 @@ public interface ChartModel {
      * a change to the data model occurs. 
      */
 	public void removeChartDataListener(ChartDataListener l) ;
+	
+	/** Gets the original data model used by the real chart engine. */
+	public Object getNativeModel();
 }
