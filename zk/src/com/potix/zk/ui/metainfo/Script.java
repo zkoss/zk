@@ -56,6 +56,8 @@ public class Script implements Condition {
 	}
 		
 	/** Returns the script.
+	 * <p>Note: before evaluating the returned script, you have to invoke
+	 * {@link #isEffective(Component)} or {@link #isEffective(Page)} first.
 	 */
 	public String getScript() throws IOException {
 		if (_script != null)

@@ -72,7 +72,7 @@ public class Column extends HeaderElement {
 	/** Sets the sort direction. This does not sort the data, it only serves
 	 * as an indicator as to how the grid is sorted.
 	 *
-	 * <p>If you use {@link #sort} to sort rows ({@link Row}),
+	 * <p>If you use {@link #sort(boolean)} to sort rows ({@link Row}),
 	 * the sort direction is maintained automatically.
 	 * If you want to sort it in customized way, you have to set the
 	 * sort direction manaully.
@@ -149,10 +149,16 @@ public class Column extends HeaderElement {
 	}
 
 	/** Sorts the rows ({@link Row}) based on {@link #getSortAscending}
-	 * and {@link #getSortDescending}.
+	 * and {@link #getSortDescending}, if {@link #getSortDirection} doesn't
+	 * matches the ascending argument.
 	 *
-	 * <p>It checks {@link #setSortDirection} to see whether sorting
+	 * <p>It checks {@link #getSortDirection} to see whether sorting
 	 * is required, and update {@link #setSortDirection} after sorted.
+	 * For example, if {@link #getSortDirection} returns "ascending" and
+	 * the ascending argument is false, nothing happens.
+	 * To enforce the sorting, you can invoke {@link #setSortDirection}
+	 * with "natural" before invoking this method.
+	 * Alternatively, you can invoke {@link #sort(boolean, boolean)} instead.
 	 *
 	 * <p>It sorts the rows by use of {@link Components#sort}.
 	 *
@@ -185,9 +191,24 @@ public class Column extends HeaderElement {
 		}
 		return true;
 	}
+	/** Sorts the rows ({@link Row}) based on {@link #getSortAscending}
+	 * and {@link #getSortDescending}.
+	 *
+	 * @param ascending whether to use {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * @param force whether to enforce the sorting no matter what the sort
+	 * direction ({@link #getSortDirection}) is.
+	 * If false, this method is the same as {@link #sort(boolean)}.
+	 * @return whether the rows are sorted.
+	 */
+	public boolean sort(boolean ascending, boolean force) {
+		if (force) setSortDirection("natural");
+		return sort(ascending);
+	}
 
 	//-- event listener --//
-	/** It invokes {@link #sort} to sort list items and maintain
+	/** It invokes {@link #sort(boolean)} to sort list items and maintain
 	 * {@link #getSortDirection}.
 	 */
 	public void onSort() {
