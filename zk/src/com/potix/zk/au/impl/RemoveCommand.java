@@ -19,7 +19,6 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 package com.potix.zk.au.impl;
 
 import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
 import com.potix.zk.au.AuRequest;
 
 /**

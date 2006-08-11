@@ -206,6 +206,7 @@ var Draggables = {
 var Draggable = Class.create();
 Draggable.prototype = {
   initialize: function(element) {
+ var zdd = zk.ie && arguments[1] && arguments[1].z_dragdrop; //Tom M. Yeh, Potix: Bug 1538506
     var options = Object.extend({
       handle: false,
       starteffect: function(element) {
@@ -213,8 +214,24 @@ Draggable.prototype = {
         new Effect.Opacity(element, {duration:0.2, from:element._opacity, to:0.7}); 
       },
       reverteffect: function(element, top_offset, left_offset) {
+var orgpos = element.style.position; //Tom M. Yeh, Potix: Bug 1538506
+
         var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
         element._revert = new Effect.Move(element, { x: -left_offset, y: -top_offset, duration: dur});
+
+//Tom M. Yeh, Potix: Bug 1538506
+//In IE, we have to detach and attach. We cannot simply restore position!!
+//Otherwise, a strange bar appear
+if (zdd && orgpos != 'absolute' && orgpos != 'relative') {
+	setTimeout( function () {
+		var p = element.parentNode;
+		var n = element.nextSibling;
+		Element.remove(element);
+		element.style.position = orgpos;
+		if (n) p.insertBefore(element, n);
+		else p.appendChild(element);
+	}, dur * 1000 + 10);
+}
       },
       endeffect: function(element) {
         var toOpacity = typeof element._opacity == 'number' ? element._opacity : 1.0

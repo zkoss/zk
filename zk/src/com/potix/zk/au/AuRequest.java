@@ -157,6 +157,10 @@ public class AuRequest {
 	 * <p>data: null
 	 */
 	public static final Command REMOVE = new RemoveCommand("remove", false);
+	/** Ask to redraw (aka., invalidate) the specified component.
+	 * <p>data: null
+	 */
+	public static final Command REDRAW = new RedrawCommand("redraw", false);
 	/** Asks to invoke {@link com.potix.zk.ui.ext.Updatable#setResult}.
 	 * <p>data[0]: the content ID used to retreive the result from
 	 * the desktop's attribute.
