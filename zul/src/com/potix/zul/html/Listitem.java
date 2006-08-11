@@ -270,15 +270,13 @@ public class Listitem extends XulElement {
 		return super.insertBefore(child, insertBefore);
 	}
 	public void invalidate(Range range) {
-		if (range == OUTER && isVisible()) {
-			final Component parent = getParent();
-			if (parent != null) {
-				parent.invalidate(OUTER);
-					//See Listbox's onChildAdded for why
-				return;
-			}
+		if (range == OUTER && isHtmlSelect() && isVisible()) {
+			//Both IE and Mozilla are buggy if we update options by outerHTML
+			getParent().invalidate(OUTER);
+			return;
 		}
 		super.invalidate(range);
+		initAtClient();
 	}
 	public void onChildAdded(Component child) {
 		if (isHtmlSelect()) invalidate(INNER); //if HTML-select, Listcell has no client part
