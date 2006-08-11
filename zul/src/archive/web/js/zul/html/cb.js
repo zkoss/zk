@@ -21,11 +21,13 @@ zk.load("zul.html.widget");
 function zkCmbox() {}
 
 zkCmbox.init = function (cmp) {
-	var real = zkau.getReal(cmp);
-	zkTxbox.init(real);
-	Event.observe(real, zk.ie ? "keydown": "keypress",
+	var inp = zkau.getReal(cmp);
+	zkTxbox.init(inp);
+	Event.observe(inp, zk.ie ? "keydown": "keypress",
 		function (evt) {return zkCmbox.onkey(evt);});
 		//IE: use keydown. otherwise, it causes the window to scroll
+	Event.observe(inp, "click", function () {if (inp.readOnly) zkCmbox.onbutton(cmp);});
+		//To mimic SELECT, it drops down if readOnly
 
 	var btn = $(cmp.id + "!btn");
 	if (btn) Event.observe(btn, "click", function () {zkCmbox.onbutton(cmp);});
@@ -138,8 +140,12 @@ zkCmbox.onkey = function (evt) {
 		return true;
 	}
 
-	if (evt.keyCode == 18 || evt.keyCode == 27 || evt.keyCode == 13
-	|| (evt.keyCode >= 112 && evt.keyCode <= 123)) //ALT, ESC and ENTER, Fn
+	if (evt.keyCode == 13) { //ENTER
+		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
+		return true;
+	}
+	if (evt.keyCode == 18 || evt.keyCode == 27
+	|| (evt.keyCode >= 112 && evt.keyCode <= 123)) //ALT and ESC, Fn
 		return true; //ignore it (doc will handle it)
 
 	var bCombobox = zk.getCompType(cb) == "Cmbox";
@@ -177,7 +183,7 @@ zkCmbox.onclickitem = function (item) {
 
 	//Request 1537962: better responsive
 	var inp = zkCmbox.getInputByItem(item);
-	if (inp) zkTxbox.updateChange(inp, false);
+	if (inp) zkTxbox.updateChange(inp, false); //fire onChange
 };
 /** onmouoseover(el). */
 zkCmbox.onover = function (el) {
