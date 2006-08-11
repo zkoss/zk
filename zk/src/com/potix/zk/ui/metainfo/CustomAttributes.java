@@ -58,6 +58,7 @@ public class CustomAttributes implements Condition, java.io.Serializable {
 	}
 
 	/** Applies the custom attributes.
+	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
 	 */
 	public void apply(Component comp) {
 		if (isEffective(comp))
