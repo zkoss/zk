@@ -1098,9 +1098,10 @@ Element.Methods = {
 
   undoClipping: function(element) {
     element = $(element);
-    if (element._overflow) return;
+    if (element._overflow) { //Tom M. Yeh, Potix: bug fix
     element.style.overflow = element._overflow;
     element._overflow = undefined;
+	}
   }
 }
 

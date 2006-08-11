@@ -1214,11 +1214,13 @@ zkau.cleanidsp = function (n) {
 //Drag & Drop//
 zkau.initdrag = function (n) {
 	zkau._drags[n.id] = new Draggable(n, {
-		revert: zkau._revertdrag, starteffect: Prototype.emptyFunction,
+		revert: zkau._revertdrag,
+		starteffect: Prototype.emptyFunction,
 		endeffect: zkau._enddrag, change: zkau._dragging,
-		ghosting: zkau._ghostdrag
+		ghosting: zkau._ghostdrag, z_dragdrop: true
 	});
 	if (zk.ie) {
+		//disable onselect
 		var tn = zk.tagName(n);
 		var nosel;
 		if (tn == "INPUT") {
