@@ -53,7 +53,7 @@ import com.potix.zk.ui.http.ExecutionImpl;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Views {
+/*package*/ class Views {
 //	private static final Log log = Log.lookup(Views.class);
 
 	private Views() {}

@@ -35,7 +35,6 @@ import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import com.potix.lang.D;
 import com.potix.lang.Strings;
@@ -64,10 +63,8 @@ import com.potix.zk.ui.sys.DesktopCtrl;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Uploads {
+/*package*/ class Uploads {
 	private static final Log log = Log.lookup(Uploads.class);
-
-	private Uploads() {}
 
 	/** Processes a file uploaded from the client.
 	 */
@@ -81,30 +78,27 @@ public class Uploads {
 			if (!isMultipartContent(request)) {
 				alert = "enctype must be multipart/form-data";
 			} else {
-				final WebApp wapp = sess.getWebApp();
-				final Map params = parseRequest(request, wapp.getConfiguration());
-				uuid = (String)params.get("uuid");
+				uuid = request.getParameter("uuid");
 				if (uuid == null || uuid.length() == 0) {
 					alert = "uuid is required";
 				} else {
 					attrs.put("uuid", uuid);
-				}
 
-				final String uri = (String)params.get("nextURI");
-				if (uri != null && uri.length() != 0)
-					nextURI = uri;
+					final String dtid = (String)request.getParameter("dtid");
+					if (dtid == null || dtid.length() == 0) {
+						alert = "dtid is required";
+					} else {
+						final Desktop desktop = ((WebAppCtrl)sess.getWebApp())
+							.getDesktopCache(sess).getDesktop(dtid);
+						final Map params = parseRequest(request, desktop, false);
 
-				if (alert == null) {
-					final FileItem fi = (FileItem)params.get("file");
-					if (fi != null) {
-						final String dtid = (String)params.get("dtid");
-						if (dtid == null || dtid.length() == 0) {
-							alert = "dtid is required";
-						} else {
-							final Desktop dt = ((WebAppCtrl)wapp)
-								.getDesktopCache(sess).getDesktop(dtid);
-							process0(sess, dt, fi, attrs);
-						}
+						final String uri = (String)params.get("nextURI");
+						if (uri != null && uri.length() != 0)
+							nextURI = uri;
+
+						final FileItem fi = (FileItem)params.get("file");
+						if (fi != null)
+							process0(sess, desktop, fi, attrs);
 					}
 				}
 			}
@@ -133,7 +127,7 @@ public class Uploads {
 	/** Returns the error message, or null if success.
 	 */
 	private static final
-	String process0(Session sess, Desktop dt, FileItem fi, Map attrs)
+	String process0(Session sess, Desktop desktop, FileItem fi, Map attrs)
 	throws IOException {
 		Media media = null;
 		String name = getBaseName(fi);
@@ -173,8 +167,8 @@ public class Uploads {
 
 		final String contentId = Strings.encode(
 			new StringBuffer(12).append("_pctt"),
-			((DesktopCtrl)dt).getNextId()).toString();
-		dt.setAttribute(contentId, media);
+			((DesktopCtrl)desktop).getNextId()).toString();
+		desktop.setAttribute(contentId, media);
 		attrs.put("contentId", contentId);
 
 		//Note: we don't invoke Updatable.setResult() here because it might
@@ -185,26 +179,34 @@ public class Uploads {
 
 	/** Parses the multipart request into a map of
 	 * (String nm, FileItem/String/List(FileItem/String)).
+	 *
+	 * @param incPramMap whether to include request.getParameterMap in
+	 * the returned map
 	 */
 	private static Map parseRequest(HttpServletRequest request,
-	Configuration cfg) throws FileUploadException {
+	Desktop desktop, boolean incParamMap)
+	throws FileUploadException {
 		final Map params = new HashMap();
-		for (Iterator it = request.getParameterMap().entrySet().iterator();
-		it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String nm = (String)me.getKey();
-			final String[] vals = (String[])me.getValue();
-			if (vals.length == 0) params.put(nm, "");
-			else if (vals.length == 1) params.put(nm, vals[0]);
-			else {
-				final List l = new LinkedList();
-				CollectionsX.addAll(l, vals);
-				params.put(nm, l);
+
+		if (incParamMap) {
+			for (Iterator it = request.getParameterMap().entrySet().iterator();
+			it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final String nm = (String)me.getKey();
+				final String[] vals = (String[])me.getValue();
+				if (vals.length == 0) params.put(nm, "");
+				else if (vals.length == 1) params.put(nm, vals[0]);
+				else {
+					final List l = new LinkedList();
+					CollectionsX.addAll(l, vals);
+					params.put(nm, l);
+				}
 			}
 		}
 
-		final DiskFileItemFactory fty = new DiskFileItemFactory();
-		final ServletFileUpload sfu = new ServletFileUpload(fty);
+		final ServletFileUpload sfu =
+			new ServletFileUpload(new ZkFileItemFactory(desktop, request));
+		final Configuration cfg = desktop.getWebApp().getConfiguration();
 		final Integer maxsz = cfg.getMaxUploadSize();
 		sfu.setSizeMax(maxsz != null ? 1024L*maxsz.intValue(): -1);
 		for (Iterator it = sfu.parseRequest(request).iterator(); it.hasNext();) {

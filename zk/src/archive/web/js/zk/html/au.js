@@ -1334,7 +1334,7 @@ if (zk.gecko) {
 			dg.element = $("zk_ddghost");
 		} else if (dg.zk_old) {
 			zk.dragging = false;
-			dg.element.parentNode.removeChild(dg.element);
+			Element.remove(dg.element);
 			dg.element = dg.zk_old;
 			dg.zk_old = null;
 		}
@@ -1521,6 +1521,42 @@ if (zk.ie /*|| zk.safari*/) {
 }
 
 zkau.history = new zk.History();
+
+//Upload//
+zkau.beginUpload = function () {
+	zkau._tmupload = setInterval(function () {
+		parent.zkau.send({uuid: '', cmd: "getUploadInfo", data: null});
+	}, 660);
+};
+zkau.updateUploadInfo = function (p, cb) {
+	if (!cb) zkau.endUpload();
+	else if (zkau._tmupload) {
+		var img = $("zk_upload!img");
+		if (!img) {
+			var html = '<div id="zk_upload" style="position:absolute;border:1px solid #77a;padding:9px;background-color:#fec;z-index:79000">'
+				+'<div style="width:102px;border:1px inset"><img id="zk_upload!img" src="'+zk.getUpdateURI('/web/zk/img/prgmeter.gif')
+				+'"/></div><br/>'+mesg.FILE_SIZE+Math.round(cb/1024)+mesg.KBYTES+'</div>';
+			document.body.insertAdjacentHTML("afterbegin", html);
+			zk.center($("zk_upload"));
+			img = $("zk_upload!img");
+		}
+		if (p >= 0 && p <= 100) {
+			var hgh = img.offsetHeight;
+			if (!hgh) hgh = 10;
+			img.style.height = hgh + "px"; //avoid being scaled when setting width
+
+			img.style.width = p + "px";
+		}
+	}
+};
+zkau.endUpload = function () {
+	var div = $("zk_upload");
+	if (div) Element.remove(div);
+	if (zkau._tmupload) {
+		clearInterval(zkau._tmupload);
+		zkau._tmupload = null;
+	}
+};
 
 //Commands//
 zkau.cmd0 = { //no uuid at all
@@ -1717,7 +1753,7 @@ zkau.cmd1 = {
 		if (cmp) {
 			zk.cleanupAt(cmp, zkau.cleanupMeta);
 			cmp = zkau._getChildExterior(cmp);
-			cmp.parentNode.removeChild(cmp);
+			Element.remove(cmp);
 		}
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},

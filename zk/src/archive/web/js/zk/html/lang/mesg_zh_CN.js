@@ -22,7 +22,7 @@ mesg.NOT_FOUND = "找不到：";
 mesg.UNSUPPORTED = "尚未支援："
 mesg.FAILED_TO_SEND = "无法传送资料到伺服器：";
 mesg.FAILED_TO_RESPONSE = "伺服器无法处理你的请求：";
-mesg.UNSUPPORTED_BROWSER = "尚未支援你使用的浏览器，请用 Internet Explorer 或 Mozilla：";
+mesg.UNSUPPORTED_BROWSER = "尚未支援你使用的浏览器，请用 Internet Explorer, Firefox 或 Mozilla：";
 mesg.ILLEGAL_RESPONSE = "无法辨识伺服器传回的资料。请按重新载入，再试试。\n";
 mesg.FAILED_TO_PROCESS = "无法处理：";
 mesg.UUID_REQUIRED = "必须指定 UUID";
@@ -33,3 +33,6 @@ mesg.INTEGER_REQUIRED = "只能输入整数，而不是 ";
 mesg.EMPTY_NOT_ALLOWED = "不能空白，也不能只含空白字元";
 mesg.GOTO_ERROR_FIELD = "回错误栏";
 mesg.PLEASE_WAIT = "处理中，请稍候…";
+
+mesg.FILE_SIZE = "档案大小：";
+mesg.KBYTES = "KB";

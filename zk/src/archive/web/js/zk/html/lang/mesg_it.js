@@ -33,3 +33,6 @@ mesg.INTEGER_REQUIRED = "Devi inserire un intero al posto di ";
 mesg.EMPTY_NOT_ALLOWED = "Non è permesso il campo vuoto.\nNon puoi neanche inserire solamente spazi.";
 mesg.GOTO_ERROR_FIELD = "Arrivato al campo sbagliato";
 mesg.PLEASE_WAIT = "Attendere...";
+
+mesg.FILE_SIZE = "File size: ";
+mesg.KBYTES = "KB";

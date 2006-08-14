@@ -161,11 +161,17 @@ public class AuRequest {
 	 * <p>data: null
 	 */
 	public static final Command REDRAW = new RedrawCommand("redraw", false);
+
 	/** Asks to invoke {@link com.potix.zk.ui.ext.Updatable#setResult}.
 	 * <p>data[0]: the content ID used to retreive the result from
 	 * the desktop's attribute.
+	 * <p>Currently, used only to implement the file upload
 	 */
 	public static final Command DO_UPDATABLE = new DoUpdatableCommand("doUpdatable", false);
+	/** Asks to return the progress status (0~99) of the current upload.
+	 * <p>data: null
+	 */
+	public static final Command GET_UPLOAD_INFO = new GetUploadInfoCommand("getUploadInfo", false);	 
 
 	/** The onNotify event (used with {@link Event}).
 	 * It is not used by any component, but it is, rather, designed to
