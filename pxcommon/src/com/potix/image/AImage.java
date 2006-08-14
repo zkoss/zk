@@ -101,17 +101,17 @@ public class AImage implements Image {
 		}
 		_ctype = getContentType(_format);
 	}
+	public AImage(String name, InputStream is) throws IOException {
+		this(name, Files.readAll(is));
+	}
 	public AImage(String filename) throws IOException {
-		this(filename, Files.readAll(new FileInputStream(filename)));
+		this(filename, new FileInputStream(filename));
 	}
 	public AImage(File file) throws IOException {
-		this(file.getName(), Files.readAll(new FileInputStream(file)));
-	}
-	public AImage(InputStream is) throws IOException {
-		this(null, Files.readAll(is));
+		this(file.getName(), new FileInputStream(file));
 	}
 	public AImage(URL url) throws IOException {
-		this(getName(url), Files.readAll(url.openStream()));
+		this(getName(url), url.openStream());
 	}
 
 	private static String getName(URL url) {

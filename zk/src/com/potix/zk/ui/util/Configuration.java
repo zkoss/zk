@@ -570,6 +570,7 @@ public class Configuration {
 	}
 
 	/** Specifies the maximal allowed upload size, in kilobytes.
+	 * <p>Default: 5120.
 	 * @param sz the maximal allowed upload size. If null, there is no
 	 * limitation.
 	 */

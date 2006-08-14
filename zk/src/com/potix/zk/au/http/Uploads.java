@@ -152,20 +152,24 @@ public class Uploads {
 		if (ctype != null)
 			if (ctype.startsWith("image/")) {
 				try {
-					media = new AImage(name, fi.get());
+					media = fi.isInMemory() ? new AImage(name, fi.get()):
+						new AImage(name, fi.getInputStream());
 				} catch (Throwable ex) {
 					if (log.debugable()) log.debug("Unknown file format: "+ctype);
 				}
 			} else if (ctype.startsWith("audio/")) {
 				try {
-					media = new AAudio(name, fi.get());
+					media = fi.isInMemory() ? new AAudio(name, fi.get()):
+						new AAudio(name, fi.getInputStream());
 				} catch (Throwable ex) {
 					if (log.debugable()) log.debug("Unknown file format: "+ctype);
 				}
 			}
 
 		if (media == null)
-			media = new AMedia(name, null, ctype, fi.getInputStream());
+			media = fi.isInMemory() ?
+				new AMedia(name, null, ctype, fi.get()):
+				new AMedia(name, null, ctype, fi.getInputStream());
 
 		final String contentId = Strings.encode(
 			new StringBuffer(12).append("_pctt"),
