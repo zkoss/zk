@@ -448,6 +448,24 @@ zkMap._toofast = function () {
 	return false
 }
 
+//progressmeter//
+function zkPMeter() {}
+
+zkPMeter.init = function (cmp) {
+	var img = $(cmp.id + "!img");
+	if (img) {
+		var val = parseInt(cmp.getAttribute("zk_val") || "0");
+		img.style.height = img.offsetHeight + "px"; //avoid being scaled when setting width
+		img.style.width = Math.round((cmp.clientWidth * val) / 100) + "px";
+	}
+};
+zkPMeter.setAttr = function (cmp, nm, val) {
+	zkau.setAttr(cmp, nm, val);
+	if ("zk_val" == nm)
+		zkPMeter.init(cmp);
+	return true;
+}
+
 //popup//
 function zkPop() {}
 

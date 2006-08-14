@@ -722,6 +722,13 @@ elementFormDefault="qualified">
 		<xs:attribute name="onOpen" type="xs:string" use="optional"/>
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional"/>
 	</xs:complexType>
+	<!-- progressmeter -->
+	<xs:element name="progressmeter" type="progressmeterType"/>
+	<xs:complexType name="progressmeterType">
+		<xs:group ref="baseGroup"/>
+		<xs:attributeGroup ref="xulElementAttrGroup"/>
+		<xs:attribute name="value" type="xs:integer" use="optional"/>
+	</xs:complexType>
 	<!-- radio -->
 	<xs:element name="radio" type="radioType"/>
 	<xs:complexType name="radioType">

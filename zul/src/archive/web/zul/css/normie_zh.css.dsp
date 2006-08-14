@@ -211,7 +211,7 @@ td.hbox {
 
 /* ZK toolbar and toolbarbutton */
 .toolbar {
-	padding: 1px; background: threedface; border: 1px solid threedface;
+	padding: 1px; background: threedface; border: 1px solid;
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
 }
 .caption .toolbar, .caption .toolbarbutton {
@@ -391,6 +391,10 @@ div.comboboxpp, div.bandboxpp { /*hardcoded in DSP*/
 div.errbox {
 	margin: 0; padding: 1px; border: 1px outset; cursor: pointer; cursor: hand;
 	background: #E8E0D8; position: absolute; z-index: 70000;
+}
+
+div.progressmeter {
+	border: 1px inset;
 }
 
 /* ZK datebox and calendar*/
