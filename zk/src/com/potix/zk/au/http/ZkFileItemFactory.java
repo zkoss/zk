@@ -69,8 +69,8 @@ import com.potix.zk.ui.impl.Attributes;
 	/*packageg*/ void onProgress(int diff) {
 		int percent = -1;
 		if (_cbtotal > 0) {
-			_cbrcv += diff;
-			percent = (int)((_cbrcv * 100) / _cbtotal);
+			_cbrcv += diff * 100;
+			percent = (int)(_cbrcv / _cbtotal);
 		}
 
 		_desktop.setAttribute(Attributes.UPLOAD_PERCENT, new Integer(percent));
