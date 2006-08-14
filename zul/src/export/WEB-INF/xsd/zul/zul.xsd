@@ -95,11 +95,17 @@ elementFormDefault="qualified">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="area"/>
 			<xs:enumeration value="bar"/>
+			<xs:enumeration value="histogram"/>
 			<xs:enumeration value="line"/>
 			<xs:enumeration value="pie"/>
+			<xs:enumeration value="polar"/>
 			<xs:enumeration value="ring"/>
+			<xs:enumeration value="scatter"/>
 			<xs:enumeration value="stacked_area"/>
 			<xs:enumeration value="stacked_bar"/>
+			<xs:enumeration value="step"/>
+			<xs:enumeration value="step_area"/>
+			<xs:enumeration value="time_series"/>
 			<xs:enumeration value="waterfall"/>
 		</xs:restriction>
 	</xs:simpleType>
@@ -344,7 +350,7 @@ elementFormDefault="qualified">
 		<xs:attribute name="bgAlpha" type="xs:integer" use="optional"/>
 		<xs:attribute name="bgColor" type="xs:string" use="optional"/>
 		<xs:attribute name="orient" type="orientAttrType" use="optional"/>
-		<xs:attribute name="areaRenderer" type="xs:string" use="optional"/>
+		<xs:attribute name="areaListener" type="xs:string" use="optional"/>
 		<xs:attribute name="onClick" type="xs:string" use="optional"/>
 		<xs:attribute name="onRightClick" type="xs:string" use="optional"/>
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional"/>
