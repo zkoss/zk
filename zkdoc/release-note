@@ -1,9 +1,10 @@
 	--------
 ZK 2.1.0 Freshly
 * Features:
-  1534285, 1537838, 1537962, 1538400, 1538407.
+  1534285, 1537838, 1537962, 1538400, 1538407, 1480527.
   + Add new chart component. (Support pie, pie3d, ring, bar, bar3d, stacked_bar,
     stacked_bar3d, line, line3d, area, stacked_area, waterfall)
+  + Add new progressmeter component.
   
 * Bugs
   1533736, 1533840, 1533989, 1533480, 1537672, 1534426, 1535787, 1537884,
