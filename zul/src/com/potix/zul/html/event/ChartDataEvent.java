@@ -36,15 +36,15 @@ public class ChartDataEvent {
 	/** Identifies one or more changes in the charts contents. */
 	private final ChartModel _model;
 	private final int _type;
-	private final String _seriesName;
+	private final Comparable _series;
 	private final Object _data;
 
-	public ChartDataEvent(ChartModel model, int type, String seriesName, Object data) {
+	public ChartDataEvent(ChartModel model, int type, Comparable series, Object data) {
 		if (model == null)
 			throw new NullPointerException();
 		_model = model;
 		_type = type;
-		_seriesName = seriesName;
+		_series = series;
 		_data = data;
 	}
 	/** Returns the chart model that fires this event.
@@ -59,8 +59,8 @@ public class ChartDataEvent {
 	}
 	/** Returns the series index of the chart data model.
 	 */
-	public String getSeriesName() {
-		return _seriesName;
+	public Comparable getSeries() {
+		return _series;
 	}
 	/** Returns customed data. Depends on the implementation.
 	 */
