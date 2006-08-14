@@ -67,6 +67,7 @@ public class Configuration {
 	private String _themeUri;
 	private Class _uiengcls, _dcpcls, _uiftycls, _tzpcls, _lpcls;
 	private Integer _dtTimeout, _dtMax, _sessTimeout, _evtThdMax;
+	private Integer _maxUploadSize = new Integer(5120);
 
 	/** Adds a listener class.
 	 */
@@ -566,6 +567,20 @@ public class Configuration {
 	 */
 	public Class getUiFactoryClass() {
 		return _uiftycls;
+	}
+
+	/** Specifies the maximal allowed upload size, in kilobytes.
+	 * @param sz the maximal allowed upload size. If null, there is no
+	 * limitation.
+	 */
+	public void setMaxUploadSize(Integer sz) {
+		_maxUploadSize = sz;
+	}
+	/** Returns the maximal allowed upload size, in kilobytes, or null
+	 * if no limiatation.
+	 */
+	public Integer getMaxUploadSize() {
+		return _maxUploadSize;
 	}
 
 	/** Specifies the time, in seconds, between client requests

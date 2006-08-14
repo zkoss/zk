@@ -51,9 +51,11 @@ import com.potix.sound.AAudio;
 import com.potix.web.servlet.Servlets;
 
 import com.potix.zk.mesg.MZk;
+import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.ComponentNotFoundException;
+import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.DesktopCtrl;
 
@@ -79,7 +81,8 @@ public class Uploads {
 			if (!isMultipartContent(request)) {
 				alert = "enctype must be multipart/form-data";
 			} else {
-				final Map params = parseRequest(request);
+				final WebApp wapp = sess.getWebApp();
+				final Map params = parseRequest(request, wapp.getConfiguration());
 				uuid = (String)params.get("uuid");
 				if (uuid == null || uuid.length() == 0) {
 					alert = "uuid is required";
@@ -98,7 +101,7 @@ public class Uploads {
 						if (dtid == null || dtid.length() == 0) {
 							alert = "dtid is required";
 						} else {
-							final Desktop dt = ((WebAppCtrl)sess.getWebApp())
+							final Desktop dt = ((WebAppCtrl)wapp)
 								.getDesktopCache(sess).getDesktop(dtid);
 							process0(sess, dt, fi, attrs);
 						}
@@ -179,8 +182,8 @@ public class Uploads {
 	/** Parses the multipart request into a map of
 	 * (String nm, FileItem/String/List(FileItem/String)).
 	 */
-	private static Map parseRequest(HttpServletRequest request)
-	throws FileUploadException {
+	private static Map parseRequest(HttpServletRequest request,
+	Configuration cfg) throws FileUploadException {
 		final Map params = new HashMap();
 		for (Iterator it = request.getParameterMap().entrySet().iterator();
 		it.hasNext();) {
@@ -197,8 +200,10 @@ public class Uploads {
 		}
 
 		final DiskFileItemFactory fty = new DiskFileItemFactory();
-		final List fis = new ServletFileUpload(fty).parseRequest(request);
-		for (Iterator it = fis.iterator(); it.hasNext();) {
+		final ServletFileUpload sfu = new ServletFileUpload(fty);
+		final Integer maxsz = cfg.getMaxUploadSize();
+		sfu.setSizeMax(maxsz != null ? 1024L*maxsz.intValue(): -1);
+		for (Iterator it = sfu.parseRequest(request).iterator(); it.hasNext();) {
 			final FileItem fi = (FileItem)it.next();
 			final String nm = fi.getFieldName();
 			final Object val;

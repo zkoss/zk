@@ -113,8 +113,7 @@ public class ConfigParser {
 				if (v != null) config.setMaxEventThreads(v);
 				
 				v = parseInteger(el, "max-upload-size", true);
-				if (v != null) System.setProperty("com.potix.web.servlet.http.MaxUploadSize", v.toString());
-					//System-wide property
+				if (v != null) config.setMaxUploadSize(v);
 
 				Class cls = parseClass(el, "cache-provider-class",
 					DesktopCacheProvider.class);
