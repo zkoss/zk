@@ -1525,11 +1525,11 @@ zkau.history = new zk.History();
 //Upload//
 zkau.beginUpload = function () {
 	zkau._tmupload = setInterval(function () {
-		parent.zkau.send({uuid: '', cmd: "getUploadInfo", data: null});
+		zkau.send({uuid: '', cmd: "getUploadInfo", data: null});
 	}, 660);
 };
 zkau.updateUploadInfo = function (p, cb) {
-	if (!cb) zkau.endUpload();
+	if (cb <= 0) zkau.endUpload();
 	else if (zkau._tmupload) {
 		var img = $("zk_upload!img");
 		if (!img) {
@@ -1541,10 +1541,7 @@ zkau.updateUploadInfo = function (p, cb) {
 			img = $("zk_upload!img");
 		}
 		if (p >= 0 && p <= 100) {
-			var hgh = img.offsetHeight;
-			if (!hgh) hgh = 10;
-			img.style.height = hgh + "px"; //avoid being scaled when setting width
-
+			img.style.height = "10px"; //avoid being scaled when setting width
 			img.style.width = p + "px";
 		}
 	}
