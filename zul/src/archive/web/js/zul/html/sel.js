@@ -547,7 +547,7 @@ zk.Selectable.prototype = {
 				row.cells[0].appendChild(el);
 			}
 		} else {
-			if (el) el.parentNode.removeChild(el);
+			if (el) Element.remove(el);
 		}
 	},
 	/** Cleans selected except the specified one, and returns any selected status
@@ -856,7 +856,7 @@ zk.Selectable.prototype = {
 		for (var j = 0; j < this.form.elements.length; ++j){
 			var el = this.form.elements[j];
 			if (el.getAttribute("zk_hiddenBy") == this.id) {
-				el.parentNode.removeChild(el);
+				Element.remove(el);
 				--j;
 			}
 		}

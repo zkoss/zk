@@ -114,7 +114,7 @@ zul.endModal = function (uuid) {
 	var prevfocusId;
 	if (mask) {
 		prevfocusId = mask.getAttribute("zk_prevfocus");
-		mask.parentNode.removeChild(mask);
+		Element.remove(mask);
 	}
 
 	zkau._modals.remove(uuid);

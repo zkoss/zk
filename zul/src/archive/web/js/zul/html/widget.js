@@ -454,8 +454,10 @@ function zkPMeter() {}
 zkPMeter.init = function (cmp) {
 	var img = $(cmp.id + "!img");
 	if (img) {
+		var hgh = img.offsetHeight;
+		if (!hgh) hgh = 10;
+		img.style.height = hgh + "px"; //avoid being scaled when setting width
 		var val = parseInt(cmp.getAttribute("zk_val") || "0");
-		img.style.height = img.offsetHeight + "px"; //avoid being scaled when setting width
 		img.style.width = Math.round((cmp.clientWidth * val) / 100) + "px";
 	}
 };

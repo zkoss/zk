@@ -28,16 +28,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <!--
 function cancelUpload() {
 	parent.zkau.remove('${param.uuid}');
+	parent.zkau.endUpload();
 }
 // -->
 </script>
 ${u:outLangStyleSheets()}
 </head>
 <body>
-	<form action="${param.action}?dtid=${param.dtid}&uuid=${param.uuid}" enctype="multipart/form-data" method="POST">
+	<form action="${param.action}?dtid=${param.dtid}&uuid=${param.uuid}" enctype="multipart/form-data" method="POST" onsubmit="parent.zkau.beginUpload()">
 	<%-- We have to encode dtid and uuid in action rather than hidden fields,
-		because we might fail to parse multi-part requests.
-		And, by encoding at action, we could get it back even if failed to parse
+		because 1) dtid must be ready before parsing multi-part requests.
+		2) parsing multi-part might fail
 	--%>
 	<%-- change the following if you want the return URI to be different from the default
 	<input type="hidden" name="nextURI" value="~./zul/html/fileupload-done.dsp"/>

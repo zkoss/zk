@@ -112,7 +112,7 @@ zk.Slider.prototype = {
 		this._fixPos();
 		this.button.title = pos;
 		if (this.slidetip) {
-			this.slidetip.parentNode.removeChild(this.slidetip);
+			Element.remove(this.slidetip);
 			this.slidetip = null;
 		}
 	},

@@ -38,6 +38,8 @@ ${u:outLangStyleSheets()}
 </body>
 <script type="text/javascript">
 <!--
+	parent.zkau.endUpload();
+
 <%-- NOTE: we cannot execute doUpdatable in this frame when using Firefox,
 	because this frame will be removed and it will cause the following error
 	if we try to insert some elements (some kind of NullPointerException
