@@ -62,7 +62,7 @@ import com.potix.zk.ui.impl.Attributes;
 			}
 		_cbtotal = cbtotal;
 
-		_desktop.setAttribute(Attributes.UPLOAD_PERCENT, setInteger(0));
+		_desktop.setAttribute(Attributes.UPLOAD_PERCENT, new Integer(0));
 		_desktop.setAttribute(Attributes.UPLOAD_SIZE, new Long(_cbtotal));
 	}
 
