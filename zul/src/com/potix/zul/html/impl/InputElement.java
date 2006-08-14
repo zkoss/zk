@@ -31,7 +31,7 @@ import com.potix.zk.au.AuSelectAll;
 
 import com.potix.zul.html.Constraint;
 import com.potix.zul.html.SimpleConstraint;
-import com.potix.zul.html.Constrainted;
+import com.potix.zul.html.ext.Constrainted;
 
 /**
  * A skeletal implementation of an input box.

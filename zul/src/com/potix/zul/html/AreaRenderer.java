@@ -21,7 +21,7 @@ package com.potix.zul.html;
 /**
  * Identifies area inside a chart that can be customized.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author <a href="mailto:henri@potix.com">henri@potix.com</a>
  * @see Chart
  */
 public interface AreaRenderer {
