@@ -47,11 +47,17 @@ import java.awt.Paint;
  *   <tr><td>pie</td><td>{@link PieModel}</td><td>o</td></tr>
  *   <tr><td>ring</td><td>{@link PieModel}</td><td>x</td></tr>
  *   <tr><td>bar</td><td>{@link CategoryModel}</td><td>o</td></tr>
- *   <tr><td>line</td><td>{@link CategoryModel}</td><td>o</td></tr>
- *   <tr><td>area</td><td>{@link CategoryModel}</td><td>x</td></tr>
+ *   <tr><td>line</td><td>{@link CategoryModel} or {@link XYModel}</td><td>o</td></tr>
+ *   <tr><td>area</td><td>{@link CategoryModel} or {@link XYMOdel}</td><td>x</td></tr>
  *   <tr><td>stacked_bar</td><td>{@link CategoryModel}</td><td>o</td></tr>
- *   <tr><td>stacked_area</td><td>{@link CategoryModel}</td><td>x</td></tr>
+ *   <tr><td>stacked_area</td><td>{@link CategoryModel} or {@link XYModel}</td><td>x</td></tr>
  *   <tr><td>waterfall</td><td>{@link CategoryModel}</td><td>x</td></tr>
+ *   <tr><td>polar</td><td>{@link XYModel}</td><td>x</td></tr>
+ *   <tr><td>scatter</td><td>{@link XYModel}</td><td>x</td></tr>
+ *   <tr><td>time_series</td><td>{@link XYModel}</td><td>x</td></tr>
+ *   <tr><td>polar</td><td>{@link XYModel}</td><td>x</td></tr>
+ *   <tr><td>step_area</td><td>{@link XYModel}</td><td>x</td></tr>
+ *   <tr><td>step</td><td>{@link XYModel}</td><td>x</td></tr>
  * </table>
  *
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
@@ -65,6 +71,12 @@ public class Chart extends Imagemap {
 	public static final String STACKED_BAR = "stacked_bar";
 	public static final String STACKED_AREA = "stacked_area";
 	public static final String WATERFALL = "waterfall";
+	public static final String POLAR = "polar";
+	public static final String SCATTER = "scatter";
+	public static final String TIME_SERIES = "time_series";
+	public static final String STEP = "step";
+	public static final String STEP_AREA = "step_area";
+	public static final String HISTOGRAM = "histogram";
 	
 	//control variable
 	private boolean _smartDrawChart; //whether post the smartDraw event already?

@@ -30,6 +30,7 @@ import org.jfree.chart.plot.*;
 import org.jfree.chart.entity.*;
 import org.jfree.data.general.*;
 import org.jfree.data.category.*;
+import org.jfree.data.xy.*;
 import org.jfree.util.TableOrder;
 
 import java.io.ByteArrayOutputStream;
@@ -88,6 +89,24 @@ public class SimpleChartEngine implements ChartEngine {
 		else if (Chart.WATERFALL.equals(chart.getType()))
 			_chartImpl = new Waterfall();
 					
+		else if (Chart.POLAR.equals(chart.getType()))
+			_chartImpl = new Polar();
+
+		else if (Chart.SCATTER.equals(chart.getType()))
+			_chartImpl = new Scatter();
+
+		else if (Chart.TIME_SERIES.equals(chart.getType()))
+			_chartImpl = new TimeSeries();
+
+		else if (Chart.STEP_AREA.equals(chart.getType()))
+			_chartImpl = new StepArea();
+
+		else if (Chart.STEP.equals(chart.getType()))
+			_chartImpl = new Step();
+			
+		else if (Chart.HISTOGRAM.equals(chart.getType()))			
+			_chartImpl = new Histogram();
+
 		else 
 			throw new UiException("Unsupported chart type yet: "+chart.getType());
 
@@ -166,41 +185,158 @@ public class SimpleChartEngine implements ChartEngine {
 	
 	//-- utilities --//
 	/**
-	 * decode url requests into key-value pair of Area's componentScope.
-	 * @param area the Area where the final attribute is set
-	 * @param url the url to be decoded.
+	 * transfer a PieModel into JFreeChart PieDataset.
 	 */
-	private void decodeURL(Area area, String url) {
-		if (url == null) {
-			return;
-		}
-		int j = url.indexOf("?");
-		if (j < 0) {
-			return;
-		}
-		url = url.substring(j+1);
-		
-		do {
-			j = url.indexOf("&amp;");
-			if (j < 0) {
-				storePair(area, url);
-				break;
-			} else {
-				String pair = url.substring(0, j);
-				storePair(area, pair);
-				if ((j+5) >= url.length()) {
-					break; //no more
-				}
-				url = url.substring(j+5);
+	private PieDataset PieModelToPieDataset(PieModel model) {
+		if (model.getNativeModel() == null) {
+			DefaultPieDataset dataset = new DefaultPieDataset();
+			for (final Iterator it = model.getCategories().iterator(); it.hasNext();) {
+				Comparable category = (Comparable) it.next();
+				Number value = model.getValue(category);
+				dataset.setValue(category, value);
 			}
-		} while(true);
+			return dataset;
+		} else {
+			return (PieDataset) model.getNativeModel();
+		}
+	}
+
+	/**
+	 * transfer a CategoryModel into JFreeChart PieDataset.
+	 */
+	private PieDataset CategoryModelToPieDataset(CategoryModel model) {
+		if (model.getNativeModel() == null) {
+			DefaultPieDataset dataset = new DefaultPieDataset();
+			for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
+				final Comparable series = (Comparable) it.next();
+				for(final Iterator itc = model.getCategories(series).iterator(); itc.hasNext();) {
+					Comparable category = (Comparable) itc.next();
+					Number value = model.getValue(series, category);
+					dataset.setValue(category, value);
+				}
+				break; //first series only
+			}
+			return dataset;
+		} else {
+			return new CategoryToPieDataset((CategoryDataset) model.getNativeModel(), TableOrder.BY_ROW, 0);
+		}
+	}
+
+	/**
+	 * transfer a CategoryModel into JFreeChart CategoryDataset.
+	 */
+	private CategoryDataset CategoryModelToCategoryDataset(CategoryModel model) {
+		if (model.getNativeModel() == null) {
+			DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+			for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
+				final Comparable series = (Comparable) it.next();
+				for(final Iterator itc = model.getCategories(series).iterator(); itc.hasNext();) {
+					Comparable category = (Comparable) itc.next();
+					Number value = model.getValue(series, category);
+					dataset.setValue(value, series, category);
+				}
+			}
+			return dataset;
+		} else {
+			return (CategoryDataset) model.getNativeModel();
+		}
+	}
+
+	/**
+	 * transfer a XYModel into JFreeChart XYSeriesCollection.
+	 */
+	private XYDataset XYModelToXYDataset(XYModel model) {
+		if (model.getNativeModel() == null) {
+			XYSeriesCollection dataset = new XYSeriesCollection();
+			for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
+				final Comparable series = (Comparable) it.next();
+				XYSeries xyser = new XYSeries(series);
+				final int size = model.getDataCount(series);
+				for(int j = 0; j < size; ++j) {
+					xyser.add(model.getX(series, j), model.getY(series, j), false);
+				}
+				dataset.addSeries(xyser);
+			}
+			return dataset;
+		} else {
+			return (XYDataset) model.getNativeModel();
+		}
+	}
+
+	/**
+	 * transfer a XYModel into JFreeChart DefaultTableXYDataset.
+	 */
+	private TableXYDataset XYModelToTableXYDataset(XYModel model) {
+		if (model.getNativeModel() == null) {
+			DefaultTableXYDataset dataset = new DefaultTableXYDataset();
+			for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
+				final Comparable series = (Comparable) it.next();
+				XYSeries xyser = new XYSeries(series, false, false);
+				final int size = model.getDataCount(series);
+				for(int j = 0; j < size; ++j) {
+					xyser.add(model.getX(series, j), model.getY(series, j), false);
+				}
+				dataset.addSeries(xyser);
+			}
+			return dataset;
+		} else {
+			return (TableXYDataset) model.getNativeModel();
+		}
+	}
+
+	/**
+	 * decode PieSectionEntity into key-value pair of Area's componentScope.
+	 * @param area the Area where the final attribute is set
+	 * @param info the PieSectionEntity to be decoded.
+	 */
+	private void decodePieInfo(Area area, PieSectionEntity info) {
+		if (info == null) {
+			return;
+		}
+		
+		PieDataset dataset = info.getDataset();
+		Comparable category = info.getSectionKey();
+		area.setAttribute("category", category);
+		area.setAttribute("value", dataset.getValue(category));
 	}
 	
-	private void storePair(Area area, String url) {
-		int j = url.indexOf("=");
-		if (j > 0) {
-			area.setAttribute(url.substring(0, j), url.substring(j+1));
+	/**
+	 * decode CategoryItemEntity into key-value pair of Area's componentScope.
+	 * @param area the Area where the final attribute is set
+	 * @param info the CategoryItemEntity to be decoded.
+	 */
+	private void decodeCategoryInfo(Area area, CategoryItemEntity info) {
+		if (info == null) {
+			return;
 		}
+		
+		CategoryDataset dataset = info.getDataset();
+		int si = info.getSeries();
+		Comparable category = (Comparable) info.getCategory();
+		Comparable series = (Comparable) dataset.getRowKey(si);
+		
+		area.setAttribute("series", series);
+		area.setAttribute("category", category);
+		area.setAttribute("value", dataset.getValue(series, category));
+	}
+
+	/**
+	 * decode XYItemEntity into key-value pair of Area's componentScope.
+	 * @param area the Area where the final attribute is set
+	 * @param info the XYItemEntity to be decoded.
+	 */
+	private void decodeXYInfo(Area area, XYItemEntity info) {
+		if (info == null) {
+			return;
+		}
+		
+		XYDataset dataset = info.getDataset();
+		int si = info.getSeriesIndex();
+		int ii = info.getItem();
+		
+		area.setAttribute("series", dataset.getSeriesKey(si));
+		area.setAttribute("x", dataset.getX(si, ii));
+		area.setAttribute("y", dataset.getY(si, ii));
 	}
 	
 	//-- Chart specific implementation --//
@@ -215,7 +351,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof PieSectionEntity) {
 				area.setAttribute("entity", "PIE");
-				decodeURL(area, info.getURLText());
+				decodePieInfo(area, (PieSectionEntity)info);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -224,19 +360,21 @@ public class SimpleChartEngine implements ChartEngine {
 			}
 		}
 		
+		protected PieDataset getDataset(ChartModel model) {
+			if (model instanceof CategoryModel) {
+				return CategoryModelToPieDataset((CategoryModel)model);
+			} else if (model instanceof PieModel) {
+				return PieModelToPieDataset((PieModel) model);
+			} else {
+				throw new UiException("model must be a com.potix.zul.html.PieModel or a com.potix.zul.html.CategoryModel");
+			}
+		}			
+		
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
-			PieDataset dataset = null;
-			if (model instanceof CategoryModel) {
-				dataset = new CategoryToPieDataset((CategoryDataset) model.getNativeModel(), TableOrder.BY_ROW, 0);
-			} else if (model instanceof PieModel) {
-				dataset = (PieDataset) model.getNativeModel();
-			} else {
-				throw new UiException("model must be a com.potix.zul.html.PieModel");
-			}
 			return ChartFactory.createPieChart(
 				chart.getTitle(), 
-				(PieDataset) dataset, 
+				getDataset(model), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
 		}
@@ -246,17 +384,9 @@ public class SimpleChartEngine implements ChartEngine {
 	private class Pie3d extends Pie {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
-			PieDataset dataset = null;
-			if (model instanceof CategoryModel) {
-				dataset = new CategoryToPieDataset((CategoryDataset) model.getNativeModel(), TableOrder.BY_ROW, 0);
-			} else if (model instanceof PieModel) {
-				dataset = (PieDataset) model.getNativeModel();
-			} else {
-				throw new UiException("model must be a com.potix.zul.html.PieModel");
-			}
 			return ChartFactory.createPieChart3D(
 				chart.getTitle(), 
-				(PieDataset) dataset, 
+				getDataset(model), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
 		}
@@ -266,17 +396,9 @@ public class SimpleChartEngine implements ChartEngine {
 	private class Ring extends Pie {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
-			PieDataset dataset = null;
-			if (model instanceof CategoryModel) {
-				dataset = new CategoryToPieDataset((CategoryDataset) model.getNativeModel(), TableOrder.BY_ROW, 0);
-			} else if (model instanceof PieModel) {
-				dataset = (PieDataset) model.getNativeModel();
-			} else {
-				throw new UiException("model must be a com.potix.zul.html.PieModel");
-			}
 			return ChartFactory.createRingChart(
 				chart.getTitle(), 
-				(PieDataset) dataset, 
+				getDataset(model), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
 		}
@@ -287,10 +409,12 @@ public class SimpleChartEngine implements ChartEngine {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "BAR");
-				decodeURL(area, info.getURLText());
+				decodeCategoryInfo(area, (CategoryItemEntity)info);
+			} else if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "BAR");
+				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
-				decodeURL(area, info.getURLText());
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -298,20 +422,31 @@ public class SimpleChartEngine implements ChartEngine {
 				}
 			}
 		}
-
+		
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
-			if (!(model instanceof CategoryModel)) {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			if (model instanceof CategoryModel) {
+				return ChartFactory.createBarChart(
+					chart.getTitle(),
+					chart.getXAxis(),
+					chart.getYAxis(),
+					CategoryModelToCategoryDataset((CategoryModel)model),
+					getOrientation(chart.getOrient()), 
+					chart.isShowLegend(), 
+					chart.isShowTooltiptext(), true);
+			} else if (model instanceof XYModel) {
+				return ChartFactory.createXYBarChart(
+					chart.getTitle(),
+					chart.getXAxis(),
+					false,
+					chart.getYAxis(),
+					(IntervalXYDataset) XYModelToXYDataset((XYModel)model),
+					getOrientation(chart.getOrient()), 
+					chart.isShowLegend(), 
+					chart.isShowTooltiptext(), true);
+			} else {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel or a com.potix.zul.html.XYModel");
 			}
-			return ChartFactory.createBarChart(
-				chart.getTitle(),
-				chart.getXAxis(),
-				chart.getYAxis(),
-				(CategoryDataset) model.getNativeModel(),
-				getOrientation(chart.getOrient()), 
-				chart.isShowLegend(), 
-				chart.isShowTooltiptext(), true);
 		}
 	}
 
@@ -326,7 +461,7 @@ public class SimpleChartEngine implements ChartEngine {
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) model.getNativeModel(), 
+				CategoryModelToCategoryDataset((CategoryModel)model),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -338,10 +473,12 @@ public class SimpleChartEngine implements ChartEngine {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "AREA");
-				decodeURL(area, info.getURLText());
+				decodeCategoryInfo(area, (CategoryItemEntity)info);
+			} else if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "AREA");
+				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
-				decodeURL(area, info.getURLText());
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -351,17 +488,28 @@ public class SimpleChartEngine implements ChartEngine {
 		}
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
-			if (!(model instanceof CategoryModel)) {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			if (model instanceof CategoryModel) {
+				return ChartFactory.createAreaChart(
+					chart.getTitle(),
+					chart.getXAxis(),
+					chart.getYAxis(),
+					CategoryModelToCategoryDataset((CategoryModel)model),
+					getOrientation(chart.getOrient()), 
+					chart.isShowLegend(), 
+					chart.isShowTooltiptext(), true);
+			} else if (model instanceof XYModel) {
+				return ChartFactory.createXYAreaChart(
+					chart.getTitle(),
+					chart.getXAxis(),
+					chart.getYAxis(),
+					XYModelToXYDataset((XYModel)model),
+					getOrientation(chart.getOrient()), 
+					chart.isShowLegend(), 
+					chart.isShowTooltiptext(), true);
+			} else {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel or a com.potix.zul.html.XYModel");
 			}
-			return ChartFactory.createAreaChart(
-				chart.getTitle(),
-				chart.getXAxis(),
-				chart.getYAxis(),
-				(CategoryDataset) model.getNativeModel(),
-				getOrientation(chart.getOrient()), 
-				chart.isShowLegend(), 
-				chart.isShowTooltiptext(), true);
+				
 		}
 	}
 
@@ -370,10 +518,12 @@ public class SimpleChartEngine implements ChartEngine {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "POINT");
-				decodeURL(area, info.getURLText());
+				decodeCategoryInfo(area, (CategoryItemEntity)info);
+			} else if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "POINT");
+				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
-				decodeURL(area, info.getURLText());
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -383,17 +533,27 @@ public class SimpleChartEngine implements ChartEngine {
 		}
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
-			if (!(model instanceof CategoryModel)) {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			if (model instanceof CategoryModel) {
+				return ChartFactory.createLineChart(
+					chart.getTitle(),
+					chart.getXAxis(),
+					chart.getYAxis(),
+					CategoryModelToCategoryDataset((CategoryModel) model),
+					getOrientation(chart.getOrient()), 
+					chart.isShowLegend(), 
+					chart.isShowTooltiptext(), true);
+			} else if (model instanceof XYModel) {
+				return ChartFactory.createXYLineChart(
+					chart.getTitle(),
+					chart.getXAxis(),
+					chart.getYAxis(),
+					XYModelToXYDataset((XYModel) model),
+					getOrientation(chart.getOrient()), 
+					chart.isShowLegend(), 
+					chart.isShowTooltiptext(), true);
+			} else {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel or a com.potix.zul.html.XYModel");
 			}
-			return ChartFactory.createLineChart(
-				chart.getTitle(),
-				chart.getXAxis(),
-				chart.getYAxis(),
-				(CategoryDataset) model.getNativeModel(),
-				getOrientation(chart.getOrient()), 
-				chart.isShowLegend(), 
-				chart.isShowTooltiptext(), true);
 		}
 	}
 
@@ -408,7 +568,7 @@ public class SimpleChartEngine implements ChartEngine {
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) model.getNativeModel(), 
+				CategoryModelToCategoryDataset((CategoryModel) model),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -420,10 +580,9 @@ public class SimpleChartEngine implements ChartEngine {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "BAR");
-				decodeURL(area, info.getURLText());
+				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
-				decodeURL(area, info.getURLText());
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -440,7 +599,7 @@ public class SimpleChartEngine implements ChartEngine {
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) model.getNativeModel(),
+				CategoryModelToCategoryDataset((CategoryModel)model),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -458,7 +617,7 @@ public class SimpleChartEngine implements ChartEngine {
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) model.getNativeModel(), 
+				CategoryModelToCategoryDataset((CategoryModel)model),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
@@ -471,10 +630,12 @@ public class SimpleChartEngine implements ChartEngine {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "POINT");
-				decodeURL(area, info.getURLText());
+				decodeCategoryInfo(area, (CategoryItemEntity)info);
+			} else if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "POINT");
+				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
-				decodeURL(area, info.getURLText());
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -482,19 +643,30 @@ public class SimpleChartEngine implements ChartEngine {
 				}
 			}
 		}
+
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
-			if (!(model instanceof CategoryModel)) {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+			if (model instanceof CategoryModel) {
+				return ChartFactory.createStackedAreaChart(
+					chart.getTitle(),
+					chart.getXAxis(),
+					chart.getYAxis(),
+					CategoryModelToCategoryDataset((CategoryModel)model),
+					getOrientation(chart.getOrient()), 
+					chart.isShowLegend(), 
+					chart.isShowTooltiptext(), true);
+			} else if (model instanceof XYModel) {
+				return ChartFactory.createStackedXYAreaChart(
+					chart.getTitle(),
+					chart.getXAxis(),
+					chart.getYAxis(),
+					XYModelToTableXYDataset((XYModel) model),
+					getOrientation(chart.getOrient()), 
+					chart.isShowLegend(), 
+					chart.isShowTooltiptext(), true);
+			} else {
+				throw new UiException("model must be a com.potix.zul.html.CategoryModel or a com.potix.zul.html.XYModel");
 			}
-			return ChartFactory.createStackedAreaChart(
-				chart.getTitle(),
-				chart.getXAxis(),
-				chart.getYAxis(),
-				(CategoryDataset) model.getNativeModel(),
-				getOrientation(chart.getOrient()), 
-				chart.isShowLegend(), 
-				chart.isShowTooltiptext(), true);
 		}
 	}
 
@@ -504,10 +676,9 @@ public class SimpleChartEngine implements ChartEngine {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "BAR");
-				decodeURL(area, info.getURLText());
+				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
-				decodeURL(area, info.getURLText());
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -524,7 +695,172 @@ public class SimpleChartEngine implements ChartEngine {
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				(CategoryDataset) model.getNativeModel(),
+				CategoryModelToCategoryDataset((CategoryModel)model),
+				getOrientation(chart.getOrient()), 
+				chart.isShowLegend(), 
+				chart.isShowTooltiptext(), true);
+		}
+	}
+
+	/** polar chart */
+	private class Polar extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+			area.setAttribute("entity", "TITLE");
+			if (chart.isShowTooltiptext()) {
+				area.setTooltiptext(chart.getTitle());
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof XYModel)) {
+				throw new UiException("model must be a com.potix.zul.html.XYModel");
+			}
+			return ChartFactory.createPolarChart(
+				chart.getTitle(),
+				XYModelToXYDataset((XYModel)model),
+				chart.isShowLegend(), 
+				chart.isShowTooltiptext(), true);
+		}
+	}
+
+	/** scatter chart */
+	private class Scatter extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+			if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "POINT");
+				decodeXYInfo(area, (XYItemEntity)info);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof XYModel)) {
+				throw new UiException("model must be a com.potix.zul.html.XYModel");
+			}
+			return ChartFactory.createScatterPlot(
+				chart.getTitle(),
+				chart.getXAxis(),
+				chart.getYAxis(),
+				XYModelToXYDataset((XYModel)model),
+				getOrientation(chart.getOrient()), 
+				chart.isShowLegend(), 
+				chart.isShowTooltiptext(), true);
+		}
+	}
+
+	/** timeseries chart */
+	private class TimeSeries extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+			if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "POINT");
+				decodeXYInfo(area, (XYItemEntity) info);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof XYModel)) {
+				throw new UiException("model must be a com.potix.zul.html.XYModel");
+			}
+			return ChartFactory.createTimeSeriesChart(
+				chart.getTitle(),
+				chart.getXAxis(),
+				chart.getYAxis(),
+				XYModelToXYDataset((XYModel)model),
+				chart.isShowLegend(), 
+				chart.isShowTooltiptext(), true);
+		}
+	}
+
+	/** steparea chart */
+	private class StepArea extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+			if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "POINT");
+				decodeXYInfo(area, (XYItemEntity)info);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof XYModel)) {
+				throw new UiException("model must be a com.potix.zul.html.XYModel");
+			}
+			return ChartFactory.createXYStepAreaChart(
+				chart.getTitle(),
+				chart.getXAxis(),
+				chart.getYAxis(),
+				XYModelToXYDataset((XYModel)model),
+				getOrientation(chart.getOrient()), 
+				chart.isShowLegend(), 
+				chart.isShowTooltiptext(), true);
+		}
+	}
+
+	/** step chart */
+	private class Step extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+			if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "POINT");
+				decodeXYInfo(area, (XYItemEntity)info);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof XYModel)) {
+				throw new UiException("model must be a com.potix.zul.html.XYModel");
+			}
+			return ChartFactory.createXYStepChart(
+				chart.getTitle(),
+				chart.getXAxis(),
+				chart.getYAxis(),
+				XYModelToXYDataset((XYModel)model),
+				getOrientation(chart.getOrient()), 
+				chart.isShowLegend(), 
+				chart.isShowTooltiptext(), true);
+		}
+	}
+	
+	/** histogram */
+	private class Histogram extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+			if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "BAR");
+				decodeXYInfo(area, (XYItemEntity)info);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof XYModel)) {
+				throw new UiException("model must be a com.potix.zul.html.XYModel");
+			}
+			return ChartFactory.createHistogram(
+				chart.getTitle(),
+				chart.getXAxis(),
+				chart.getYAxis(),
+				(IntervalXYDataset)XYModelToXYDataset((XYModel)model),
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);

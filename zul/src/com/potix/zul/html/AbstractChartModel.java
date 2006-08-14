@@ -40,8 +40,8 @@ abstract public class AbstractChartModel implements ChartModel {
 	 *
 	 * <p>Note: you can invoke this method only in an event listener.
 	 */
-	protected void fireEvent(int type, String seriesName, Object data) {
-		final ChartDataEvent evt = new ChartDataEvent(this, type, seriesName, data);
+	protected void fireEvent(int type, Comparable series, Object data) {
+		final ChartDataEvent evt = new ChartDataEvent(this, type, series, data);
 		for (Iterator it = _listeners.iterator(); it.hasNext();)
 			((ChartDataListener)it.next()).onChange(evt);
 	}
