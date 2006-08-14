@@ -43,7 +43,7 @@ import com.potix.zk.ui.impl.Attributes;
 	private final Desktop _desktop;
 	/** The total length (content length). */
 	private final long _cbtotal;
-	/** # of bytes being received. */
+	/** # of bytes being received x 100. */
 	private long _cbrcv;
 
 	/*package*/ ZkFileItemFactory(Desktop desktop, HttpServletRequest request) {
