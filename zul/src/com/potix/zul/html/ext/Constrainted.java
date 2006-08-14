@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zul.html.ext;
 
+import com.potix.zul.html.Constraint;
+
 /**
  * Decorates a component that its value is constrainted by
  * {@link Constraint}.

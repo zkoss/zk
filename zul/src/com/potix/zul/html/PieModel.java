@@ -25,7 +25,7 @@ import java.util.Collection;
  *
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
  * @see Chart
- * @see SimpleChartEngine
+ * @see SimplePieModel
  */
 public interface PieModel extends ChartModel {
 	/**

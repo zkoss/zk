@@ -38,9 +38,8 @@ import java.util.Collection;
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
  * @see PieModel
  * @see Chart
- * @see SimpleChartEngine
  */
-public class SimplePieModel extends BaseChartModel implements PieModel {
+public class SimplePieModel extends AbstractChartModel implements PieModel {
 	private Map _categoryMap = new LinkedHashMap(13);
 	
 	//-- PieModel --//

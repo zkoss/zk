@@ -39,10 +39,8 @@ import java.util.Collection;
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
  * @see CategoryModel
  * @see Chart
- * @see SimpleChartEngine
- * @see SimplePieModel
  */
-public class SimpleCategoryModel extends BaseChartModel implements CategoryModel {
+public class SimpleCategoryModel extends AbstractChartModel implements CategoryModel {
 	private Map _seriesMap = new LinkedHashMap(13); //(series, SimplePieModel)
 	
 	//-- CategoryModel --//

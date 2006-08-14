@@ -25,7 +25,7 @@ import java.util.Collection;
  *
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
  * @see Chart
- * @see SimpleChartEngine
+ * @see SimpleXYModel
  */	
 public interface XYModel extends ChartModel {
 
@@ -42,14 +42,14 @@ public interface XYModel extends ChartModel {
 
 	/**
 	 * Get X value of a specified series and data index.
-	 * @param seires the series.
+	 * @param series the series.
 	 * @param index the data index.
 	 */
 	public Number getX(Comparable series, int index);
 
 	/**
 	 * Get Y value of a specified series and data index.
-	 * @param seires the series.
+	 * @param series the series.
 	 * @param index the data index.
 	 */
 	public Number getY(Comparable series, int index);
@@ -70,7 +70,7 @@ public interface XYModel extends ChartModel {
 
 	/**
 	 * Remove (x,Y) value of a specified series and data index.
-	 * @param seires the series.
+	 * @param series the series.
 	 * @param index the data index.
 	 */	
 	public void removeValue(Comparable series, int index);

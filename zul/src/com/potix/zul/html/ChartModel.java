@@ -36,7 +36,7 @@ import com.potix.zul.html.event.ChartDataListener;
  * @see PieModel
  * @see CategoryModel
  * @see XYModel
- * @see AreaRenderer
+ * @see com.potix.zul.html.event.ChartAreaListener
  */
 public interface ChartModel {
 	/** Adds a listener to the chart that's notified each time a change
@@ -47,10 +47,4 @@ public interface ChartModel {
      * a change to the data model occurs. 
      */
 	public void removeChartDataListener(ChartDataListener l) ;
-	
-	/** Sets the original data model used by the real chart engine. */
-	public void setNativeModel(Object model);
-
-	/** Gets the original data model used by the real chart engine. */
-	public Object getNativeModel();
 }

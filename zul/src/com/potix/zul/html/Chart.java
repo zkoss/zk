@@ -1,4 +1,4 @@
-/* AbstractChart.java
+/* Chart.java
 
 {{IS_NOTE
 	Purpose:
@@ -24,8 +24,10 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Event;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.EventListener;
+import com.potix.zul.html.impl.ChartEngine;
 import com.potix.zul.html.event.ChartDataEvent;
 import com.potix.zul.html.event.ChartDataListener;
+import com.potix.zul.html.event.ChartAreaListener;
 import com.potix.image.AImage;
 import com.potix.lang.Classes;
 import com.potix.lang.Objects;
@@ -48,7 +50,7 @@ import java.awt.Paint;
  *   <tr><td>ring</td><td>{@link PieModel}</td><td>x</td></tr>
  *   <tr><td>bar</td><td>{@link CategoryModel}</td><td>o</td></tr>
  *   <tr><td>line</td><td>{@link CategoryModel} or {@link XYModel}</td><td>o</td></tr>
- *   <tr><td>area</td><td>{@link CategoryModel} or {@link XYMOdel}</td><td>x</td></tr>
+ *   <tr><td>area</td><td>{@link CategoryModel} or {@link XYModel}</td><td>x</td></tr>
  *   <tr><td>stacked_bar</td><td>{@link CategoryModel}</td><td>o</td></tr>
  *   <tr><td>stacked_area</td><td>{@link CategoryModel} or {@link XYModel}</td><td>x</td></tr>
  *   <tr><td>waterfall</td><td>{@link CategoryModel}</td><td>x</td></tr>
@@ -95,7 +97,7 @@ public class Chart extends Imagemap {
 	private boolean _showLegend = true; // wether show legend
 	private boolean _showTooltiptext = true; //wether show tooltiptext
 	private String _orient = "vertical"; //orient
-	private AreaRenderer _renderer;
+	private ChartAreaListener _areaListener; //callback function when chart area changed
 	
 	//plot related attributes
 	private int _fgAlpha = 255; //foreground alpha transparency (0 ~ 255, default to 255)
@@ -458,30 +460,30 @@ public class Chart extends Imagemap {
 	/** Returns the renderer to render each area, or null if the default
 	 * renderer is used.
 	 */
-	public AreaRenderer getAreaRenderer() {
-		return _renderer;
+	public ChartAreaListener getAreaListener() {
+		return _areaListener;
 	}
 	/** Sets the renderer which is used to render each area.
 	 *
 	 * <p>Note: changing a render will not cause the chart to re-render.
 	 * If you want it to re-render, you could call smartDraw.
 	 *
-	 * @param renderer the renderer, or null to use the default.
+	 * @param listener the area listener, or null to ignore it.
 	 * @exception UiException if failed to initialize.
 	 */
-	public void setAreaRenderer(AreaRenderer renderer) {
-		if (_renderer != renderer) {
-			_renderer = renderer;
+	public void setAreaListener(ChartAreaListener listener) {
+		if (_areaListener != listener) {
+			_areaListener = listener;
 		}
 	}
 	/** Sets the renderer by use of a class name.
 	 * It creates an instance automatically.
 	 */
-	public void setAreaRenderer(String clsnm)
+	public void setAreaListener(String clsnm)
 	throws ClassNotFoundException, NoSuchMethodException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
-			setAreaRenderer((AreaRenderer)Classes.newInstanceByThread(clsnm));
+			setAreaListener((ChartAreaListener)Classes.newInstanceByThread(clsnm));
 		}
 	}
 
@@ -512,7 +514,7 @@ public class Chart extends Imagemap {
 						throw new UiException("chart must specify height");
 						
 					if (_engine == null)
-						_engine = new SimpleChartEngine();
+						_engine = new com.potix.zul.html.impl.SimpleChartEngine();
 							
 					try {
 						final String title = getTitle();

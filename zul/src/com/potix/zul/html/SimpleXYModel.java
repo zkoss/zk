@@ -38,9 +38,8 @@ import java.util.Collection;
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
  * @see XYModel
  * @see Chart
- * @see SimpleChartEngine
  */
-public class SimpleXYModel extends BaseChartModel implements XYModel {
+public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	private Map _seriesMap = new LinkedHashMap(13); //(series, SimplePieModel)
 	
 	//-- XYModel --//
