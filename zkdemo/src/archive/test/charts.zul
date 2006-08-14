@@ -28,7 +28,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   }
 </zscript>
 <zscript>
-  PieModel piemodel = new PieModel();
+  PieModel piemodel = new SimplePieModel();
   piemodel.setValue("C/C++", new Double(12.5));
   piemodel.setValue("Java", new Double(50.2));
   piemodel.setValue("VB", new Double(20.5));
@@ -53,11 +53,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 </zscript>
 
 <zscript>
-CategoryModel catmodel = new CategoryModel();
+CategoryModel catmodel = new SimpleCategoryModel();
 catmodel.setValue("2001", "Q1", new Integer(20));
 catmodel.setValue("2001", "Q2", new Integer(35));
+catmodel.setValue("2001", "Q3", new Integer(40));
+catmodel.setValue("2001", "Q4", new Integer(55));
 catmodel.setValue("2002", "Q1", new Integer(40));
 catmodel.setValue("2002", "Q2", new Integer(60));
+catmodel.setValue("2002", "Q3", new Integer(70));
+catmodel.setValue("2002", "Q4", new Integer(90));
 </zscript>
 
 <label value="bar"/>
@@ -112,6 +116,80 @@ catmodel.setValue("2002", "Q2", new Integer(60));
 <chart id="waterfall" title="Waterfall Chart" width="500" height="250" type="waterfall" threeD="false" fgAlpha="128" onClick="drilldown()"/>
 <zscript>
   waterfall.setModel(catmodel);
+</zscript>
+
+<zscript>
+XYModel xymodel = new SimpleXYModel();
+xymodel.addValue("2001", new Integer(20), new Integer(120));
+xymodel.addValue("2001", new Integer(40), new Integer(135));
+xymodel.addValue("2001", new Integer(60), new Integer(140));
+xymodel.addValue("2001", new Integer(80), new Integer(160));
+
+xymodel.addValue("2002", new Integer(30), new Integer(120));
+xymodel.addValue("2002", new Integer(50), new Integer(135));
+xymodel.addValue("2002", new Integer(70), new Integer(140));
+xymodel.addValue("2002", new Integer(90), new Integer(160));
+</zscript>
+
+
+<label value="polar"/>
+<chart id="polar" title="Polar Chart" width="500" height="250" type="polar" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  polar.setModel(xymodel);
+</zscript>
+
+<label value="scatter"/>
+<chart id="scatter" title="Scatter Chart" width="500" height="250" type="scatter" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  scatter.setModel(xymodel);
+</zscript>
+
+<label value="time_series"/>
+<chart id="timeseries" title="Time Series Chart" width="500" height="250" type="time_series" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  timeseries.setModel(xymodel);
+</zscript>
+
+<label value="area"/>
+<chart id="xyarea" title="XY Area Chart" width="500" height="250" type="area" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  xyarea.setModel(xymodel);
+</zscript>
+
+<label value="line"/>
+<chart id="xyline" title="XY Line Chart" width="500" height="250" type="line" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  xyline.setModel(xymodel);
+</zscript>
+
+<label value="step_area"/>
+<chart id="steparea" title="Step Area Chart" width="500" height="250" type="step_area" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  steparea.setModel(xymodel);
+</zscript>
+
+<label value="step"/>
+<chart id="step" title="Step Chart" width="500" height="250" type="step" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  step.setModel(xymodel);
+</zscript>
+
+<label value="stacked_area"/>
+<chart id="xystackedarea" title="XY Stacked Area Chart" width="500" height="250" type="stacked_area" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  xystackedarea.setModel(xymodel);
+</zscript>
+
+<label value="bar"/>
+<chart id="xybar" title="XY Bar Chart" width="500" height="250" type="bar" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  xybar.setModel(xymodel);
+</zscript>
+
+<label value="histogram"/>
+<chart id="histogram" title="Histogram Chart" width="500" height="250" type="histogram" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  histogram.setModel(xymodel);
 </zscript>
 
 </vbox>
