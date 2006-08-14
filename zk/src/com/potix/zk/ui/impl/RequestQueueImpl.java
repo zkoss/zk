@@ -88,7 +88,8 @@ public class RequestQueueImpl implements RequestQueue {
 
 			final AuRequest req2 = (AuRequest)_requests.get(last);
 			final AuRequest.Command cmd2 = req2.getCommand();
-			if (cmd2 == AuRequest.ON_CHANGING || cmd2 == AuRequest.ON_SCROLLING) {
+			if (cmd2 == AuRequest.ON_CHANGING || cmd2 == AuRequest.ON_SCROLLING
+			|| cmd2 == AuRequest.GET_UPLOAD_INFO) {
 				if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
 				_requests.remove(last); //drop it
 				if (last == 0) {
