@@ -24,4 +24,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<label value="${arg.first}"/>
 	<label value="${arg.second}"/>
+	<label id="l"/>
+	<zscript>
+	l.setValue("Exec:"+Executions.getCurrent().getArg().get("first"));
+	</zscript>
 </vbox>
