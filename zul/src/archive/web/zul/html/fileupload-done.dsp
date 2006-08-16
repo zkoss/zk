@@ -46,7 +46,7 @@ ${u:outLangStyleSheets()}
 	"Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIXMLHttpRequest.open]"
 --%>
 	function closeUpload() {
-		parent.setTimeout("parent.zkau.remove('${arg.uuid}')", 0);
+		parent.setTimeout("zkau.remove('${arg.uuid}')", 0);
 	}
 	function doUpdate() {
 		parent.setTimeout("zkau.doUpdatable('${arg.uuid}', '${arg.contentId}')", 0);

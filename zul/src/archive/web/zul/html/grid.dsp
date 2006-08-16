@@ -28,7 +28,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</div>
 </c:if>
 	<div id="${self.uuid}!body" class="grid-body">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="grid-btable">
 	${u:redraw(self.rows, null)}
 	</table>
 	</div>
