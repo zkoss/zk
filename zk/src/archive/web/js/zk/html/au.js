@@ -830,7 +830,7 @@ zkau._onDocLClick = function (evt) {
 			//no need to Event.stop
 		}
 	}
-	//don't return anything. Otherwise, it replace event.returnValue in IE.
+	//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 };
 /** Handles the double click. */
 zkau._onDocDClick = function (evt) {
