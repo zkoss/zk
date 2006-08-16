@@ -1524,6 +1524,7 @@ zkau.history = new zk.History();
 
 //Upload//
 zkau.beginUpload = function () {
+	zkau.endUpload();
 	zkau._tmupload = setInterval(function () {
 		zkau.send({uuid: '', cmd: "getUploadInfo", data: null});
 	}, 660);
