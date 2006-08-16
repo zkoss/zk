@@ -28,12 +28,55 @@ if [ $# == 0 ] ; then
 	exit 0
 fi
 
-net stop "Apache Tomcat"
-
+jar_found=false
 for f in $*; do
 	f=${f%/}
-	echo "cp dist/lib/$f.jar /usr/tomcat/shared/lib"
-	cp dist/lib/$f.jar /usr/tomcat/shared/lib
+	if [ -f dist/lib/$f.war ] ; then
+		dst=$(grep '^root' $f/deploy)
+		if [ "$dst" = "root" ] ; then
+			dst=ROOT
+		else
+			dst=$f
+		fi
+		echo "cp dist/lib/$f /usr/tomcat/webapps/$dst"
+
+function cpweb
+{
+	(
+		cd $1
+		for sub in * ; do
+			if [ -f "$sub" ] ; then
+				#echo cp -u -p "$sub" $2
+				cp -u -p -v "$sub" $2
+			elif [ "$sub" != CVS ] && [ -d "$sub" ] ; then
+				local dstsub=$2/$sub
+				if [ ! -d "$dstsub" ] ; then
+					mkdir -p "$dstsub"
+				fi
+				#echo cpweb $(pwd)/$sub $dstsub
+				cpweb $sub $dstsub
+			fi
+		done
+	)
+}
+		cpweb $f/src/archive /usr/tomcat/webapps/$dst
+	fi
+
+	if [ -f dist/lib/$f.jar ] ; then
+		jar_found=true
+	fi
 done
 
-net start "Apache Tomcat"
+if [ "$jar_found" = "true" ] ; then
+	net stop "Apache Tomcat"
+
+	for f in $*; do
+		f=${f%/}
+		if [ -f dist/lib/$f.jar ] ; then
+			#echo "cp dist/lib/$f.jar /usr/tomcat/shared/lib"
+			cp -p -u -v -f dist/lib/$f.jar /usr/tomcat/shared/lib
+		fi
+	done
+
+	net start "Apache Tomcat"
+fi
