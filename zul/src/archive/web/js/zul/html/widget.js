@@ -72,8 +72,12 @@ zkTxbox._noonblur = function (inp) {
 		var el = inp;
 		for (;; el = el.parentNode) {
 			if (!el) return false;
-			if (el.getAttribute && el.getAttribute("zk_combo") == "true")
-				break;
+			if (el.getAttribute) {
+				if (el.getAttribute("zk_combo") == "true")
+					break;
+				if (el.getAttribute("zk_type"))
+					return false;
+			}
 		}
 
 		while (cf) {
