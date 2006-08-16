@@ -297,6 +297,9 @@ public class Exceptions {
 					if (ex instanceof bsh.TargetError) {
 						final Throwable t = ((bsh.TargetError)ex).getTarget();
 						if (t != null) ex = t;
+					} else if (ex instanceof bsh.UtilTargetError) {
+						final Throwable t = ((bsh.UtilTargetError)ex).t;
+						if (t != null) ex = t;
 					}
 				} catch (Throwable e2) {
 					if (log.debugable()) log.debug("Ignored: unable to resolve " + ex.getClass());
