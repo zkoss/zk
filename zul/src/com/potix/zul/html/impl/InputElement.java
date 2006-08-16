@@ -22,6 +22,8 @@ import com.potix.lang.Objects;
 import com.potix.xml.HTMLs;
 import com.potix.xml.XMLs;
 
+import com.potix.lang.Exceptions;
+
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.ext.Inputable;
@@ -176,11 +178,20 @@ implements Inputable, Errorable, Constrainted {
 		try {
 			val = coerceFromString(value);
 			validate(val);
-		} catch (WrongValueException ex) {
-			smartUpdate("defaultValue", "zk_wrong!~-.zk_pha!6");
+		} catch (Throwable ex) {
+			//Note: a constraint might be a BeanShell class, so we have to
+			//dig for the real cause
+			if (!(ex instanceof WrongValueException)) {
+				Throwable t = Exceptions.findCause(ex, WrongValueException.class);
+				if (t != null)
+					ex = t;
+			}
+
+			if (ex instanceof WrongValueException)
+				smartUpdate("defaultValue", "zk_wrong!~-.zk_pha!6");
 				//a value to enforce client to send back request
 				//If you changed it, remember to correct boot.js
-			throw ex;
+			throw UiException.Aide.wrap(ex);
 		}
 
 		_errmsg = null; //no error at all
