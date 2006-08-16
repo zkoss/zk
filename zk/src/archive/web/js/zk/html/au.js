@@ -830,7 +830,7 @@ zkau._onDocLClick = function (evt) {
 			//no need to Event.stop
 		}
 	}
-	return true;
+	//don't return anything. Otherwise, it replace event.returnValue in IE.
 };
 /** Handles the double click. */
 zkau._onDocDClick = function (evt) {
@@ -845,7 +845,6 @@ zkau._onDocDClick = function (evt) {
 			cmd: "onDoubleClick", data: zkau._getMouseData(evt, cmp)});
 		//no need to Event.stop
 	}
-	return true;
 };
 /** Handles the right click (context menu). */
 zkau._onDocCtxMnu = function (evt) {
@@ -880,7 +879,7 @@ zkau._onDocCtxMnu = function (evt) {
 		Event.stop(evt);
 		return false;
 	}
-	return true;
+	return !zk.ie || evt.returnValue;
 };
 zkau._onDocMouseover = function (evt) {
 	if (!evt) evt = window.event;
@@ -901,7 +900,7 @@ zkau._onDocMouseover = function (evt) {
 				if (open) zkau._openTip(cmp.id);
 				else setTimeout("zkau._openTip('"+cmp.id+"')", 800);
 			}
-			return true; //done
+			return; //done
 		}
 	}
 	if (zkau._tipz) {
@@ -916,7 +915,6 @@ zkau._onDocMouseover = function (evt) {
 		} else
 			zkau._tipz = null;
 	}
-	return true;
 };
 zkau._onDocMouseout = function (evt) {
 	if (!evt) evt = window.event;
