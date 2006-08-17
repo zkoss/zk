@@ -57,6 +57,7 @@ import com.potix.zk.au.AuResponse;
 import com.potix.zk.au.AuObsolete;
 import com.potix.zk.au.AuAlert;
 import com.potix.zk.au.AuSendRedirect;
+import com.potix.zk.au.Command;
 import com.potix.zk.au.CommandNotFoundException;
 
 /**
@@ -185,7 +186,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				if (scmd == null)
 					break;
 
-				final AuRequest.Command cmd = AuRequest.getCommand(scmd);
+				final Command cmd = AuRequest.getCommand(scmd);
 				final String uuid = request.getParameter("uuid."+j);
 				final String[] data = request.getParameterValues("data."+j);
 				if (data != null) {
