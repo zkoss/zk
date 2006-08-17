@@ -469,6 +469,12 @@ zkPMeter.setAttr = function (cmp, nm, val) {
 	return true;
 }
 
+//Paging//
+function zkPg() {}
+
+zkPg.go = function (pg) {
+};
+
 //popup//
 function zkPop() {}
 

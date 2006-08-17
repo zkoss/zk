@@ -715,6 +715,14 @@ elementFormDefault="qualified">
 		<xs:group ref="baseGroup"/>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 	</xs:complexType>
+	<!-- paging -->
+	<xs:element name="paging" type="pagingType"/>
+	<xs:complexType name="pagingType">
+		<xs:group ref="baseGroup"/>
+		<xs:attributeGroup ref="xulElementAttrGroup"/>
+		<xs:attribute name="pageSize" type="xs:integer" use="optional"/>
+		<xs:attribute name="totalSize" type="xs:integer" use="optional"/>
+	</xs:complexType>
 	<!-- popup -->
 	<xs:element name="popup" type="popupType"/>
 	<xs:complexType name="popupType">

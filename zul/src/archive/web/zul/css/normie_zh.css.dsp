@@ -397,6 +397,16 @@ div.progressmeter {
 	border: 1px inset;
 }
 
+div.paging, div.paging a {
+	color: #00a; font-size: x-small; background: window; padding: 2px;
+}
+div.paging a, div.paging a:visited {
+	text-decoration: underline; border: 1px solid window; padding: 2px;
+}
+div.paging a:hover {
+	text-decoration: underline; border: 1px solid blue;
+}
+
 /* ZK datebox and calendar*/
 div.dateboxpp { /*hardcoded in DSP*/
 	display: block; position: absolute; z-index: 80000;
