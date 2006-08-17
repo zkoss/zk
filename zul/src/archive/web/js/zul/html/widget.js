@@ -472,7 +472,10 @@ zkPMeter.setAttr = function (cmp, nm, val) {
 //Paging//
 function zkPg() {}
 
-zkPg.go = function (pg) {
+zkPg.go = function (anc, pgno) {
+	var cmp = zkau.getParentByType(anc, "Pg");
+	if (cmp)
+		zkau.send({uuid: cmp.id, cmd: "onPaging", data: [pgno]});
 };
 
 //popup//

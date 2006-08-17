@@ -159,7 +159,7 @@ public class Paging extends XulElement implements Paginal {
 	}
 	private static final
 	void appendAnchor(StringBuffer sb, String label, int val, boolean spacing) {
-		sb.append("<a href=\"javascript:;\" onClick=\"zkPg.go(")
+		sb.append("<a href=\"javascript:;\" onclick=\"zkPg.go(this,")
 			.append(val).append(")\">").append(label).append("</a>");
 		if (spacing)
 			sb.append("&nbsp;");
