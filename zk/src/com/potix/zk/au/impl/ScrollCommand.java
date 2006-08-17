@@ -51,7 +51,7 @@ public class ScrollCommand extends Command {
 				new Object[] {Objects.toString(data), this});
 
 		final int newpos = Integer.parseInt(data[0]);
-		if (this == AuRequest.ON_SCROLL)
+		if (getId().equals(Events.ON_SCROLL))
 			((Scrollable)comp).setCurposByClient(newpos);
 		Events.postEvent(new ScrollEvent(getId(), comp, newpos));
 	}

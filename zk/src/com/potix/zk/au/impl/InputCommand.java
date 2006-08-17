@@ -51,7 +51,7 @@ public class InputCommand extends Command {
 				new Object[] {Objects.toString(data), this});
 
 		final String newval = data[0];
-		if (this == AuRequest.ON_CHANGE && (comp instanceof Inputable))
+		if (getId().equals(Events.ON_CHANGE) && (comp instanceof Inputable))
 			((Inputable)comp).setTextByClient(newval);
 		Events.postEvent(new InputEvent(getId(), comp, newval));
 	}

@@ -30,7 +30,7 @@ import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ComponentNotFoundException;
-import com.potix.zk.ui.event.*;
+import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.sys.PageCtrl;
 import com.potix.zk.ui.sys.ComponentsCtrl;
 import com.potix.zk.au.impl.*;
@@ -56,7 +56,7 @@ public class AuRequest {
 	 * A request is a  event that are sent from the browser.
 	 *
 	 * <p>An request name is the ID of a command
-	 * ({@link AuRequest.Command#getId}) which starts with "on".
+	 * ({@link Command#getId}) which starts with "on".
 	 */
 	public static final boolean hasRequest(String cmdnm) {
 		return _cmds.containsKey(cmdnm);
@@ -70,132 +70,11 @@ public class AuRequest {
 			throw new CommandNotFoundException("Unknown command: "+name);
 		return cmd;
 	}
-
-	/** The onClick event (used with {@link MouseEvent}).
-	 */
-	public static final Command ON_CLICK = new MouseCommand(Events.ON_CLICK, true);
-	/** The onRightClick event (used with {@link MouseEvent}).
-	 */
-	public static final Command ON_RIGHT_CLICK = new MouseCommand(Events.ON_RIGHT_CLICK, true);
-	/** The onDoubleClick event (used with {@link MouseEvent}).
-	 */
-	public static final Command ON_DOUBLE_CLICK = new MouseCommand(Events.ON_DOUBLE_CLICK, true);
-	/** The onOK event (used with {@link KeyEvent}).
-	 */
-	public static final Command ON_OK = new KeyCommand(Events.ON_OK, true);
-	/** The onCancel event (used with {@link KeyEvent}).
-	 */
-	public static final Command ON_CANCEL = new KeyCommand(Events.ON_CANCEL, true);
-	/** The onCtrlKey event (used with {@link KeyEvent}).
-	 */
-	public static final Command ON_CTRL_KEY = new KeyCommand(Events.ON_CTRL_KEY, true);
-	/** The onChange event (used with {@link InputEvent}).
-	 */
-	public static final Command ON_CHANGE = new InputCommand(Events.ON_CHANGE, false);
-	/** The onChanging event (used with {@link InputEvent}).
-	 */
-	public static final Command ON_CHANGING = new InputCommand(Events.ON_CHANGING, true);
-	/** The onError event (used with {@link ErrorEvent}).
-	 */
-	public static final Command ON_ERROR = new ErrorCommand(Events.ON_ERROR, false);
-	/** The onScroll event (used with {@link ScrollEvent}).
-	 */
-	public static final Command ON_SCROLL = new ScrollCommand(Events.ON_SCROLL, false);
-	/** The onScrolling event (used with {@link ScrollEvent}).
-	 */
-	public static final Command ON_SCROLLING = new ScrollCommand(Events.ON_SCROLLING, true);
-	/** The onSelect event (used with {@link SelectEvent}).
-	 */
-	public static final Command ON_SELECT = new SelectCommand(Events.ON_SELECT, false);
-	/** The onCheck event (used with {@link CheckEvent}).
-	 */
-	public static final Command ON_CHECK = new CheckCommand(Events.ON_CHECK, false);
-	/** The onMove event (used with {@link MoveEvent}).
-	 */
-	public static final Command ON_MOVE = new MoveCommand(Events.ON_MOVE, false);
-	/** The onZIndex event (used with {@link ZIndexEvent}).
-	 */
-	public static final Command ON_Z_INDEX = new ZIndexCommand(Events.ON_Z_INDEX, false);
-	/** The onOpen event (used with {@link OpenEvent}).
-	 */
-	public static final Command ON_OPEN = new OpenCommand(Events.ON_OPEN, false);
-	/** The onShow event (used with {@link ShowEvent}).
-	 */
-	public static final Command ON_SHOW = new ShowCommand(Events.ON_SHOW, false);
-	/** The onClose event (used with {@link Event})
-	 * used to denote the close button is pressed.
-	 */
-	public static final Command ON_CLOSE = new GenericCommand(Events.ON_CLOSE, false);
-	/** The onRender event (used with {@link com.potix.zk.ui.ext.Render}).
-	 */
-	public static final Command ON_RENDER = new RenderCommand(Events.ON_RENDER, false);
-	/** The onTimer event (used with {@link Event}).
-	 * Sent when a timer is up.
-	 */
-	public static final Command ON_TIMER = new GenericCommand(Events.ON_TIMER, false);
-	/** The onFocus event (used with {@link Event}).
-	 * Sent when a component gets a focus.
-	 */
-	public static final Command ON_FOCUS = new GenericCommand(Events.ON_FOCUS, false);
-	/** The onBlur event (used with {@link Event}).
-	 * Sent when a component loses a focus.
-	 */
-	public static final Command ON_BLUR = new GenericCommand(Events.ON_BLUR, false);
-	/** The onDrop event (used with {@link DropEvent}).
-	 * Sent when a component is dragged and drop to another.
-	 */
-	public static final Command ON_DROP = new DropCommand(Events.ON_DROP, false);
-	/** A request for removing the specified desktop.
-	 */
-	public static final Command REMOVE_DESKTOP = new RemoveDesktopCommand("rmDesktop", false);
-	/** A dummy request.
-	 * It does nothing but triggers an execution to process pending
-	 * requests, if any.
-	 */
-	public static final Command DUMMY = new DummyCommand("dummy", true);
-	/** Ask to remove the specified component.
-	 * <p>data: null
-	 */
-	public static final Command REMOVE = new RemoveCommand("remove", false);
-	/** Ask to redraw (aka., invalidate) the specified component.
-	 * <p>data: null
-	 */
-	public static final Command REDRAW = new RedrawCommand("redraw", false);
-
-	/** Asks to invoke {@link com.potix.zk.ui.ext.Updatable#setResult}.
-	 * <p>data[0]: the content ID used to retreive the result from
-	 * the desktop's attribute.
-	 * <p>Currently, used only to implement the file upload
-	 */
-	public static final Command DO_UPDATABLE = new DoUpdatableCommand("doUpdatable", false);
-	/** Asks to return the progress status (0~99) of the current upload.
-	 * <p>data: null
-	 */
-	public static final Command GET_UPLOAD_INFO = new GetUploadInfoCommand("getUploadInfo", false);	 
-
-	/** The onNotify event (used with {@link Event}).
-	 * It is not used by any component, but it is, rather, designed to
-	 * let users add customized events.
-	 */
-	public static final Command ON_NOTIFY = new GenericCommand(Events.ON_NOTIFY, false);
-	/** The onSort event (used with {@link Event})
-	 * to notify a request for sorting.
-	 */
-	public static final Command ON_SORT = new GenericCommand(Events.ON_SORT, true);
-	/** The onBookmarkChanged event (used with {@link BookmarkEvent})
-	 * to notify that user pressed BACK, FORWARD or specified URL directly
-	 * that causes the bookmark is changed (but still in the same desktop).
-	 * <p>All root components of all pages of the desktop will
-	 * recieve this event.
-	 */
-	public static final Command ON_BOOKMARK_CHANGED = new BookmarkChangedCommand(Events.ON_BOOKMARK_CHANGED, false);
-	/** The onClientInfo event (used with {@link ClientInfoEvent})
-	 * to notify the server about the client's information, such as timezone
-	 * and screen width.
-	 * <p>To receive this command, a developer has to register an event listener
-	 * to one of root components for the onClientInfo event.
-	 */
-	public static final Command ON_CLIENT_INFO = new ClientInfoCommand(Events.ON_CLIENT_INFO, false);
+	/** Adds a new command. Called only by Command's contructor. */
+	/*package*/ static final void addCommand(Command cmd) {
+		if (_cmds.put(cmd.getId(), cmd) != null)
+			throw new InternalError("Replicated command: "+cmd);
+	}
 
 	/** Constructor for a request sent from a component.
 	 * Since we cannot invoke {@link Desktop#getComponentByUuid} without
@@ -292,56 +171,62 @@ public class AuRequest {
 			return "[page="+_page+", cmd="+_cmd+']';
 	}
 
-	/** Represents a command of a request.
-	 * Each command is unique no matter {@link #getId} is the same or not.
-	 * All commands must be declared as static members of {@link AuRequest}
-	 * such that they will be initialized sequentially at begining.
-	 * Also, if a command will generate an event, it shall register the
-	 * event in its constructor.
-	 */
-	abstract public static class Command {
-		private final String _id;
-		private final boolean _skipIfEverError;
-		/**
-		 * @param skipIfEverError whether to skip this command if
-		 * previous commands ever caused an error. In other words,
-		 * whether to skip this command when {@link #process(AuRequest,boolean)} is called
-		 * with errorEver = true;
-		 * This argument is used to control the behavior of {@link #process(AuRequest,boolean)}.
-		 */
-		protected Command(String id, boolean skipIfEverError) {
-			_id = id;
-			_skipIfEverError = skipIfEverError;
+	//-- predefined commands --//
+	static {
+		new BookmarkChangedCommand(Events.ON_BOOKMARK_CHANGED,
+			Command.IGNORE_OLD_EQUIV);
+		new CheckCommand(Events.ON_CHECK, 0);
+		new ClientInfoCommand(Events.ON_CLIENT_INFO, 0);
+		new DoUpdatableCommand("doUpdatable", 0);
+		new DropCommand(Events.ON_DROP, 0);
+		new DummyCommand("dummy", Command.SKIP_IF_EVER_ERROR);
+		new ErrorCommand(Events.ON_ERROR, Command.IGNORE_OLD_EQUIV);
 
-			if (_cmds.put(id, this) != null)
-				throw new InternalError("Replicated command: "+id);
-		}
-		/** Returns ID of this command. */
-		public final String getId() {
-			return _id;
-		}
-		public final String toString() {
-			return _id;
-		}
-		public final boolean equals(Object o) { //prevent override
-			return this == o;
-		}
+		new GenericCommand(Events.ON_BLUR, Command.IGNORE_OLD_EQUIV);
+		new GenericCommand(Events.ON_CLOSE, 0);
+		new GenericCommand(Events.ON_FOCUS, Command.IGNORE_OLD_EQUIV);
+		new GenericCommand(Events.ON_NOTIFY, 0);
+		new GenericCommand(Events.ON_SORT,
+			Command.SKIP_IF_EVER_ERROR|Command.IGNORE_OLD_EQUIV);
+		new GenericCommand(Events.ON_TIMER, Command.IGNORE_OLD_EQUIV);
 
-		/** Derived must override this method to process this command.
-		 */
-		abstract protected void process(AuRequest request);
-		/** Called to process the specified request.
-		 * You don't override this method directly.
-		 * Rather, override {@link #process(AuRequest)}.
-		 *
-		 * @param everError whether any error ever occured before
-		 * processing this command.
-		 * Notice that multiple commands might be processed in one
-		 * execution.
-		 */
-		public final void process(AuRequest request, boolean everError) {
-			if (!_skipIfEverError || !everError)
-				process(request);
-		}
+		new GetUploadInfoCommand("getUploadInfo", Command.IGNORABLE);
+
+		new InputCommand(Events.ON_CHANGE, Command.IGNORE_IMMEDIATE_OLD_EQUIV);
+		new InputCommand(Events.ON_CHANGING,
+			Command.SKIP_IF_EVER_ERROR|Command.IGNORABLE);
+
+		new KeyCommand(Events.ON_CANCEL,
+			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
+		new KeyCommand(Events.ON_CTRL_KEY,
+			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
+		new KeyCommand(Events.ON_OK,
+			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
+
+		new MoveCommand(Events.ON_MOVE, Command.IGNORE_OLD_EQUIV);
+
+		new MouseCommand(Events.ON_CLICK,
+			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
+		new MouseCommand(Events.ON_DOUBLE_CLICK,
+			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
+		new MouseCommand(Events.ON_RIGHT_CLICK,
+			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
+
+		new OpenCommand(Events.ON_OPEN, 0);
+		new RemoveCommand("remove", 0);
+		new RedrawCommand("redraw", 0);
+		new RemoveDesktopCommand("rmDesktop", 0);
+		new RenderCommand(Events.ON_RENDER, Command.IGNORE_OLD_EQUIV);
+			//zk_loaded is set only if replied from server, so it is OK
+			//to drop if any follows -- which means users are scrolling fast
+
+		new ScrollCommand(Events.ON_SCROLLING,
+			Command.SKIP_IF_EVER_ERROR|Command.IGNORABLE);
+		new ScrollCommand(Events.ON_SCROLL, Command.IGNORE_IMMEDIATE_OLD_EQUIV);
+
+		new SelectCommand(Events.ON_SELECT, Command.IGNORE_IMMEDIATE_OLD_EQUIV);
+		new ShowCommand(Events.ON_SHOW, 0);
+
+		new ZIndexCommand(Events.ON_Z_INDEX, Command.IGNORE_OLD_EQUIV);
 	}
 }
