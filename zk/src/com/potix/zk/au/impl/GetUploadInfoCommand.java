@@ -25,6 +25,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.impl.Attributes;
 import com.potix.zk.au.AuRequest;
 import com.potix.zk.au.AuScript;
+import com.potix.zk.au.Command;
 
 /**
  * Used with {@link AuRequest} to return the ratio (aka., the progress)
@@ -32,9 +33,9 @@ import com.potix.zk.au.AuScript;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class GetUploadInfoCommand extends AuRequest.Command {
-	public GetUploadInfoCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class GetUploadInfoCommand extends Command {
+	public GetUploadInfoCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

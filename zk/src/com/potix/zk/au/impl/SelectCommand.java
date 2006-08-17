@@ -29,6 +29,7 @@ import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.SelectEvent;
 import com.potix.zk.ui.ext.Selectable;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link SelectEvent}
@@ -36,9 +37,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class SelectCommand extends AuRequest.Command {
-	public SelectCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class SelectCommand extends Command {
+	public SelectCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

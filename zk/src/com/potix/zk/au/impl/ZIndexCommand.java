@@ -27,6 +27,7 @@ import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.ZIndexEvent;
 import com.potix.zk.ui.ext.ZIndexed;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link ZIndexEvent}
@@ -34,9 +35,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class ZIndexCommand extends AuRequest.Command {
-	public ZIndexCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class ZIndexCommand extends Command {
+	public ZIndexCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

@@ -19,6 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package com.potix.zk.au.impl;
 
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * A dummy command that does nothing but triggers an execution
@@ -26,9 +27,9 @@ import com.potix.zk.au.AuRequest;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class DummyCommand extends AuRequest.Command {
-	public DummyCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class DummyCommand extends Command {
+	public DummyCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 	protected void process(AuRequest request) {
 	}

@@ -21,15 +21,16 @@ package com.potix.zk.au.impl;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * A command to remove the specified desktop.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class RemoveDesktopCommand extends AuRequest.Command {
-	public RemoveDesktopCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class RemoveDesktopCommand extends Command {
+	public RemoveDesktopCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 	protected void process(AuRequest request) {
 		final Desktop dt = request.getDesktop();

@@ -27,6 +27,7 @@ import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.ScrollEvent;
 import com.potix.zk.ui.ext.Scrollable;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link ScrollEvent}
@@ -34,9 +35,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class ScrollCommand extends AuRequest.Command {
-	public ScrollCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class ScrollCommand extends Command {
+	public ScrollCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

@@ -25,6 +25,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.ClientInfoEvent;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used by {@link AuRequest} to implement a command to broadcast
@@ -32,9 +33,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class ClientInfoCommand extends AuRequest.Command {
-	public ClientInfoCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class ClientInfoCommand extends Command {
+	public ClientInfoCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

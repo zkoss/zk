@@ -27,7 +27,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.au.AuRequest;
 
 /**
- * Utilities to implement {@link com.potix.zk.au.AuRequest.Command}.
+ * Utilities to implement {@link com.potix.zk.au.Command}.
  * Used only internally.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>

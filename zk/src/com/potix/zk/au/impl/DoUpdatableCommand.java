@@ -25,15 +25,16 @@ import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ext.Updatable;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the doUpdatable command.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class DoUpdatableCommand extends AuRequest.Command {
-	public DoUpdatableCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class DoUpdatableCommand extends Command {
+	public DoUpdatableCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

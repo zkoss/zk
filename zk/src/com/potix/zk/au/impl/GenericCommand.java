@@ -24,6 +24,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.Event;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used by {@link AuRequest} to implement generic command
@@ -31,18 +32,18 @@ import com.potix.zk.au.AuRequest;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class GenericCommand extends AuRequest.Command {
+public class GenericCommand extends Command {
 	private final boolean _broadcast;
-	public GenericCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+	public GenericCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 		_broadcast = false;
 	}
 	/**
 	 * @param broadcast whether to broadcast the event to all root components
 	 * of all pages in the same desktop, if component is null.
 	 */
-	public GenericCommand(String evtnm, boolean skipIfEverError, boolean broadcast) {
-		super(evtnm, skipIfEverError);
+	public GenericCommand(String evtnm, int flags, boolean broadcast) {
+		super(evtnm, flags);
 		_broadcast = broadcast;
 	}
 

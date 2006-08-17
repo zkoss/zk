@@ -20,15 +20,16 @@ package com.potix.zk.au.impl;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the remove command.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class RemoveCommand extends AuRequest.Command {
-	public RemoveCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class RemoveCommand extends Command {
+	public RemoveCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

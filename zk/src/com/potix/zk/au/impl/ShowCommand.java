@@ -26,6 +26,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.ShowEvent;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link ShowEvent}
@@ -33,9 +34,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class ShowCommand extends AuRequest.Command {
-	public ShowCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class ShowCommand extends Command {
+	public ShowCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

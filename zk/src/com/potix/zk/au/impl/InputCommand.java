@@ -27,6 +27,7 @@ import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.InputEvent;
 import com.potix.zk.ui.ext.Inputable;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link InputEvent}
@@ -34,9 +35,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class InputCommand extends AuRequest.Command {
-	public InputCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class InputCommand extends Command {
+	public InputCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

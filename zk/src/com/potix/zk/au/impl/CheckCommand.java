@@ -27,6 +27,7 @@ import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.CheckEvent;
 import com.potix.zk.ui.ext.Checkable;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link CheckEvent}
@@ -34,9 +35,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class CheckCommand extends AuRequest.Command {
-	public CheckCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class CheckCommand extends Command {
+	public CheckCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

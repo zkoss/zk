@@ -25,6 +25,7 @@ import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ext.Render;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the render
@@ -32,9 +33,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class RenderCommand extends AuRequest.Command {
-	public RenderCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class RenderCommand extends Command {
+	public RenderCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

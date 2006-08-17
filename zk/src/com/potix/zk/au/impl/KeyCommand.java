@@ -26,6 +26,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.KeyEvent;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link KeyEvent}
@@ -33,9 +34,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class KeyCommand extends AuRequest.Command {
-	public KeyCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class KeyCommand extends Command {
+	public KeyCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

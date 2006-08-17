@@ -27,6 +27,7 @@ import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.MoveEvent;
 import com.potix.zk.ui.ext.Moveable;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link MoveEvent}
@@ -34,9 +35,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class MoveCommand extends AuRequest.Command {
-	public MoveCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class MoveCommand extends Command {
+	public MoveCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

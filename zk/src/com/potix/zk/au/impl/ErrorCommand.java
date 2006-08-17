@@ -27,6 +27,7 @@ import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.ErrorEvent;
 import com.potix.zk.ui.ext.Errorable;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link ErrorEvent}
@@ -34,9 +35,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class ErrorCommand extends AuRequest.Command {
-	public ErrorCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class ErrorCommand extends Command {
+	public ErrorCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

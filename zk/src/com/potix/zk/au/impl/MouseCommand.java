@@ -26,6 +26,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.MouseEvent;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link MouseEvent}
@@ -33,9 +34,9 @@ import com.potix.zk.au.AuRequest;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class MouseCommand extends AuRequest.Command {
-	public MouseCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class MouseCommand extends Command {
+	public MouseCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

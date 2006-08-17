@@ -26,6 +26,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.DropEvent;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link DropEvent}
@@ -33,9 +34,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class DropCommand extends AuRequest.Command {
-	public DropCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class DropCommand extends Command {
+	public DropCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

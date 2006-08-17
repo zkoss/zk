@@ -27,6 +27,7 @@ import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.OpenEvent;
 import com.potix.zk.ui.ext.Openable;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link OpenEvent}
@@ -34,9 +35,9 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class OpenCommand extends AuRequest.Command {
-	public OpenCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class OpenCommand extends Command {
+	public OpenCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

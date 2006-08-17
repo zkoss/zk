@@ -18,15 +18,16 @@ package com.potix.zk.au.impl;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the redraw command.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class RedrawCommand extends AuRequest.Command {
-	public RedrawCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+public class RedrawCommand extends Command {
+	public RedrawCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//

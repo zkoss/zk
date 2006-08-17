@@ -24,6 +24,7 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.BookmarkEvent;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 
 /**
  * Used by {@link AuRequest} to implement a command to broadcast
@@ -31,14 +32,14 @@ import com.potix.zk.au.AuRequest;
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class BookmarkChangedCommand extends AuRequest.Command {
+public class BookmarkChangedCommand extends Command {
 	/** Contruct an event to denote that the bookmark is changed.
 	 *
 	 * <p>Note: {@link com.potix.zk.ui.event.Event#getTarget} will return null. It means it is a broadcast
 	 * event.
 	 */
-	public BookmarkChangedCommand(String evtnm, boolean skipIfEverError) {
-		super(evtnm, skipIfEverError);
+	public BookmarkChangedCommand(String evtnm, int flags) {
+		super(evtnm, flags);
 	}
 
 	//-- super --//
