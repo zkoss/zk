@@ -27,6 +27,7 @@ import com.potix.lang.D;
 import com.potix.lang.Objects;
 import com.potix.util.logging.Log;
 import com.potix.zk.au.AuRequest;
+import com.potix.zk.au.Command;
 import com.potix.zk.ui.sys.RequestQueue;
 
 /**
@@ -76,7 +77,7 @@ public class RequestQueueImpl implements RequestQueue {
 	private void addRequest(AuRequest request) {
 		//if (D.ON && log.finerable()) log.finer("Arrive "+request+". Current "+_requests);
 
-		//case 1. Drop any existent temporaty requests
+		//case 1, IGNORABLE: Drop any existent ignorable requests
 		//We don't need to iterate all because requests is added one-by-one
 		//In other words, if any temporty request, it must be the last
 		{
@@ -87,9 +88,8 @@ public class RequestQueueImpl implements RequestQueue {
 			}
 
 			final AuRequest req2 = (AuRequest)_requests.get(last);
-			final AuRequest.Command cmd2 = req2.getCommand();
-			if (cmd2 == AuRequest.ON_CHANGING || cmd2 == AuRequest.ON_SCROLLING
-			|| cmd2 == AuRequest.GET_UPLOAD_INFO) {
+			final Command cmd2 = req2.getCommand();
+			if ((cmd2.getFlags() & Command.IGNORABLE) != 0) {
 				if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
 				_requests.remove(last); //drop it
 				if (last == 0) {
@@ -99,40 +99,22 @@ public class RequestQueueImpl implements RequestQueue {
 			}
 		}
 
-		//Case 2: drop new request if similar already exists
-		final AuRequest.Command cmd = request.getCommand();
-		if (cmd == AuRequest.ON_CLICK || cmd == AuRequest.ON_RIGHT_CLICK
-		|| cmd == AuRequest.ON_OK || cmd == AuRequest.ON_CANCEL
-		|| cmd == AuRequest.ON_CTRL_KEY
-		|| cmd == AuRequest.ON_DOUBLE_CLICK) {
+		//Case 2, CTRL_GROUP: drop new request if similar already exists
+		final Command cmd = request.getCommand();
+		final int flags = cmd.getFlags();
+		if ((flags & Command.CTRL_GROUP) != 0) {
 			for (Iterator it = _requests.iterator(); it.hasNext();) {
 				final AuRequest req2 = (AuRequest)it.next();
-				final AuRequest.Command cmd2 = req2.getCommand();
-				if (cmd2 == AuRequest.ON_CLICK
-				|| cmd2 == AuRequest.ON_OK || cmd2 == AuRequest.ON_CANCEL
-				|| cmd2 == AuRequest.ON_CTRL_KEY) {
+				final Command cmd2 = req2.getCommand();
+				if ((cmd2.getFlags() & Command.CTRL_GROUP) != 0) {
 					if (D.ON && log.debugable()) log.debug("Eat request: "+request);
 					return; //eat new
 				}
 			}
 
-		//case 3: drop existent request if they are the same
-		//ON_MOVE, ON_Z_INDEX: somehow it is similar to ON_CHANGE,
-		//but, for better performance, we optimizes it out
-		//--
-		//ON_RENDER: zk_loaded is set only if replied from server, so
-		//it is OK to drop if any follows -- which means users are
-		//scrolling fast
-		//--
-		//ON_TIMER: it is easy to pipe a lot of pending requests,
-		// if the listener spends too much time
-		//--
-		//ON_FOCUS, ON_BLUR
-		} else if (cmd == AuRequest.ON_RENDER || cmd == AuRequest.ON_ERROR
-		|| cmd == AuRequest.ON_MOVE || cmd == AuRequest.ON_Z_INDEX
-		|| cmd == AuRequest.ON_TIMER
-		|| cmd == AuRequest.ON_FOCUS || cmd == AuRequest.ON_BLUR
-		|| cmd == AuRequest.ON_SORT || cmd == AuRequest.ON_BOOKMARK_CHANGED) {
+		//case 3, IGNORE_OLD_EQUIV: drop existent request if they are the same
+		//as the arrival.
+		} else if ((flags & Command.IGNORE_OLD_EQUIV) != 0) {
 			final String uuid = request.getComponentUuid();
 			for (Iterator it = _requests.iterator(); it.hasNext();) {
 				final AuRequest req2 = (AuRequest)it.next();
@@ -144,9 +126,9 @@ public class RequestQueueImpl implements RequestQueue {
 				}
 			}
 
-		//Case 4. drop existent if the immediate following is the same
-		} else if (cmd == AuRequest.ON_SELECT || cmd == AuRequest.ON_CHANGE
-		|| cmd == AuRequest.ON_CHECK) {
+		//Case 4, IGNORE_IMMEDIATE_OLD_EQUIV: drop existent if the immediate
+		//following is the same
+		} else if ((flags & Command.IGNORE_IMMEDIATE_OLD_EQUIV) != 0) {
 			final int last = _requests.size() - 1;
 			final AuRequest req2 = (AuRequest)_requests.get(last);
 			if (req2.getCommand() == cmd
