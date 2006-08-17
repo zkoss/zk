@@ -1,4 +1,4 @@
-/* mesg_zh_TW.js
+/* mesg_zh_TW.js "charset=utf-8"
 
 {{IS_NOTE
 	Purpose:
