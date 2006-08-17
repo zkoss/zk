@@ -16,6 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zul.html;
 
+import com.potix.mesg.Messages;
+import com.potix.zk.ui.WrongValueException;
+
+import com.potix.zul.mesg.MZul;
 import com.potix.zul.html.impl.XulElement;
 import com.potix.zul.html.ext.Paginal;
 
@@ -35,6 +39,8 @@ public class Paging extends XulElement implements Paginal {
 	private int _npg = 1;
 	/** the active page. */
 	private int _actpg = 0;
+	/** # of page anchors are visible */
+	private int _pginc = 10;
 
 	public Paging() {
 		setSclass("paging");
@@ -54,9 +60,9 @@ public class Paging extends XulElement implements Paginal {
 	public int getPageSize() {
 		return _pgsz;
 	}
-	public void setPageSize(int size) {
+	public void setPageSize(int size) throws WrongValueException {
 		if (size <= 0)
-			throw new IllegalArgumentException("positive only");
+			throw new WrongValueException("positive only");
 
 		if (_pgsz != size) {
 			_pgsz = size;
@@ -66,9 +72,9 @@ public class Paging extends XulElement implements Paginal {
 	public int getTotalSize() {
 		return _ttsz;
 	}
-	public void setTotalSize(int size) {
+	public void setTotalSize(int size) throws WrongValueException {
 		if (size < 0)
-			throw new IllegalArgumentException("non-negative only");
+			throw new WrongValueException("non-negative only");
 
 		if (_ttsz != size) {
 			_ttsz = size;
@@ -80,6 +86,25 @@ public class Paging extends XulElement implements Paginal {
 	}
 	public int getActivePage() {
 		return _actpg;
+	}
+
+	/** Returns the number of page anchors shall appear at the client. 
+	 *
+	 * <p>Default: 10.
+	 */
+	public final int getPageIncrement() {
+		return _pginc;
+	}
+	/** Sets the number of page anchors shall appear at the client.
+	 */
+	public final void setPageIncrement(int pginc)
+	throws WrongValueException {
+		if (pginc <= 0)
+			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
+		if (_pginc != pginc) {
+			_pginc = pginc;
+			invalidate(INNER);
+		}
 	}
 
 	private void updatePageNum() {
@@ -99,14 +124,45 @@ public class Paging extends XulElement implements Paginal {
 	 * application developers.
 	 */
 	public String getInnerTags() {
-		final StringBuffer sb = new StringBuffer(128);
-		sb.append("<a href=\"javascript:;\">First</a>&nbsp;<a href=\"javascript:;\">1</a>");
+		final StringBuffer sb = new StringBuffer(512);
+
+		int diff = (_pginc - 1) / 2;
+		int end = _actpg + diff;
+		if (end >= _npg) end = _npg - 1;
+		int begin = _actpg - (_pginc - 1 - diff);
+		if (begin < 0) begin = 0;
+
+		if (_actpg > 0) {
+			if (begin > 0) //show first
+				appendAnchor(sb, Messages.get(MZul.FIRST), 0, true);
+			appendAnchor(sb, Messages.get(MZul.PREV), _actpg - 1, true);
+		}
+
+		boolean bNext = _actpg < _npg - 1;
+		for (; begin <= end; ++begin) {
+			boolean spacing = bNext || begin < end;
+			if (begin == _actpg) {
+				sb.append(begin);
+				if (spacing) sb.append("&nbsp;");
+			} else {
+				appendAnchor(sb, Integer.toString(begin), begin, spacing);
+			}
+		}
+
+		if (bNext) {
+			boolean bLast = end < _npg - 1;
+			appendAnchor(sb, Messages.get(MZul.NEXT), _actpg + 1, bLast);
+			if (bLast)
+				appendAnchor(sb, Messages.get(MZul.LAST), _npg - 1, false);
+		}
 		return sb.toString();
 	}
-	private static void appendAnchor(StringBuffer sb, String label, int val) {
+	private static final
+	void appendAnchor(StringBuffer sb, String label, int val, boolean spacing) {
 		sb.append("<a href=\"javascript:;\" onClick=\"zkPg.go(")
-			.append(val).append(")\">").append(label)
-			.append("</a>");
+			.append(val).append(")\">").append(label).append("</a>");
+		if (spacing)
+			sb.append("&nbsp;");
 	}
 
 	//-- Component --//
