@@ -54,7 +54,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <chart id="mychart" title="Pie Chart Demo" width="500" height="250" type="pie" threeD="true" fgAlpha="128">
 <attribute name="onClick">
   Area area = self.getFellow(event.getArea());
-  alert(area.getAttribute("entity"));
+  alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
 </attribute>
 <zscript>
   void update(int rowIndex) {
