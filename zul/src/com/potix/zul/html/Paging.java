@@ -48,6 +48,8 @@ public class Paging extends XulElement implements Paginal {
 	private int _actpg = 0;
 	/** # of page anchors are visible */
 	private int _pginc = 10;
+	/** Whether to show detailed info. */
+	private boolean _detailed;
 
 	public Paging() {
 		setSclass("paging");
@@ -88,40 +90,6 @@ public class Paging extends XulElement implements Paginal {
 			updatePageNum();
 		}
 	}
-	public int getPageCount() {
-		return _npg;
-	}
-	public int getActivePage() {
-		return _actpg;
-	}
-	public void setActivePage(int pg) {
-		if (pg >= _npg || pg < 0)
-			throw new WrongValueException("Unable to set active page to "+pg+" since only "+_npg+" pages");
-		if (_actpg != pg) {
-			_actpg = pg;
-			invalidate(INNER);
-		}
-	}
-
-	/** Returns the number of page anchors shall appear at the client. 
-	 *
-	 * <p>Default: 10.
-	 */
-	public final int getPageIncrement() {
-		return _pginc;
-	}
-	/** Sets the number of page anchors shall appear at the client.
-	 */
-	public final void setPageIncrement(int pginc)
-	throws WrongValueException {
-		if (pginc <= 0)
-			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
-		if (_pginc != pginc) {
-			_pginc = pginc;
-			invalidate(INNER);
-		}
-	}
-
 	private void updatePageNum() {
 		int v = (_ttsz - 1) / _pgsz + 1;
 		if (v == 0) v = 1;
@@ -130,6 +98,43 @@ public class Paging extends XulElement implements Paginal {
 			if (_actpg >= _npg)
 				_actpg = _npg - 1;
 
+			invalidate(INNER);
+		}
+	}
+
+	public int getPageCount() {
+		return _npg;
+	}
+	public int getActivePage() {
+		return _actpg;
+	}
+	public void setActivePage(int pg) throws WrongValueException {
+		if (pg >= _npg || pg < 0)
+			throw new WrongValueException("Unable to set active page to "+pg+" since only "+_npg+" pages");
+		if (_actpg != pg) {
+			_actpg = pg;
+			invalidate(INNER);
+		}
+	}
+
+	public int getPageIncrement() {
+		return _pginc;
+	}
+	public void setPageIncrement(int pginc) throws WrongValueException {
+		if (pginc <= 0)
+			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
+		if (_pginc != pginc) {
+			_pginc = pginc;
+			invalidate(INNER);
+		}
+	}
+
+	public boolean isDetailed() {
+		return _detailed;
+	}
+	public void setDetailed(boolean detailed) {
+		if (_detailed != detailed) {
+			_detailed = detailed;
 			invalidate(INNER);
 		}
 	}
@@ -174,6 +179,9 @@ public class Paging extends XulElement implements Paginal {
 			if (end < _npg - 1) //show last
 				appendAnchor(sb, Messages.get(MZul.LAST), _npg - 1);
 		}
+		if (_detailed)
+			sb.append("<span>[").append(_actpg * _pgsz + 1).append('/')
+				.append(_ttsz).append("]</span>");
 		return sb.toString();
 	}
 	private static final

@@ -720,8 +720,11 @@ elementFormDefault="qualified">
 	<xs:complexType name="pagingType">
 		<xs:group ref="baseGroup"/>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
-		<xs:attribute name="pageSize" type="xs:integer" use="optional"/>
-		<xs:attribute name="totalSize" type="xs:integer" use="optional"/>
+		<xs:attribute name="pageSize" type="xs:positiveInteger" use="optional"/>
+		<xs:attribute name="totalSize" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="activePage" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="pageIncrement" type="xs:positiveInteger" use="optional"/>
+		<xs:attribute name="detailed" type="xs:boolean" use="optional"/>
 	</xs:complexType>
 	<!-- popup -->
 	<xs:element name="popup" type="popupType"/>

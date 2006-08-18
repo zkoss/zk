@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zul.html.ext;
 
+import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.event.EventListener;
 
 /**
@@ -39,13 +40,13 @@ public interface Paginal {
 	public int getPageSize();
 	/** Sets the number of items per page.
 	 */
-	public void setPageSize(int size);
+	public void setPageSize(int size) throws WrongValueException;
 	/** Returns the total number of items.
 	 */
 	public int getTotalSize();
 	/** Sets the total number of items.
 	 */
-	public void setTotalSize(int size);
+	public void setTotalSize(int size) throws WrongValueException;
 	/** Returns the number of pages.
 	 * Note: there is at least one page even no item at all.
 	 */
@@ -56,7 +57,23 @@ public interface Paginal {
 	public int getActivePage();
 	/** Sets the active page (starting from 0).
 	 */
-	public void setActivePage(int pg);
+	public void setActivePage(int pg) throws WrongValueException;
+
+	/** Returns the number of page anchors shall appear at the client. 
+	 *
+	 * <p>Default: 10.
+	 */
+	public int getPageIncrement();
+	/** Sets the number of page anchors shall appear at the client.
+	 */
+	public void setPageIncrement(int pginc) throws WrongValueException;
+
+	/** Returns whether to show the detailed info, such as {@link #getTotalSize}.
+	 */
+	public boolean isDetailed();
+	/** Sets whether to show the detailed info, such as {@link #getTotalSize}.
+	 */
+	public void setDetailed(boolean detailed);
 
 	/** Adds an event listener to specified event for this component.
 	 * The second registration is ignored and false is returned.

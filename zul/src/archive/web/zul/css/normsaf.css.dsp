@@ -393,6 +393,9 @@ div.paging, div.paging a {
 	font-size: x-small; color: #a30; font-weight: bold;
 	background: window; padding: 2px;
 }
+div.paging span {
+	font-size: x-small; color: #555; font-weight: normal;
+}
 div.paging a, div.paging a:visited {
 	color: #00a; font-weight: normal; text-decoration: underline;
 	border: 1px solid window;
