@@ -6,7 +6,7 @@ ZK 2.1.0 Freshly
   + Add new chart component. (Support pie, pie3d, ring, bar, bar3d, stacked_bar,
     stacked_bar3d, line, line3d, area, stacked_area, waterfall, histogram, polar,
     scatter, time_series, step_chart, step, xy area, xy stacked_area, xy bar, 
-    xy line)
+    xy line, candlestick, highlow)
   + Add new progressmeter component.
   + Add new paging component.
   
