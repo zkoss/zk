@@ -34,6 +34,7 @@ import org.jfree.data.category.*;
 import org.jfree.data.xy.*;
 import org.jfree.util.TableOrder;
 
+import java.util.Date;
 import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
 import java.awt.Paint;
@@ -107,6 +108,12 @@ public class SimpleChartEngine implements ChartEngine {
 			
 		else if (Chart.HISTOGRAM.equals(chart.getType()))			
 			_chartImpl = new Histogram();
+
+		else if (Chart.CANDLESTICK.equals(chart.getType()))			
+			_chartImpl = new Candlestick();
+
+		else if (Chart.HIGHLOW.equals(chart.getType()))			
+			_chartImpl = new Highlow();
 
 		else 
 			throw new UiException("Unsupported chart type yet: "+chart.getType());
@@ -266,6 +273,35 @@ public class SimpleChartEngine implements ChartEngine {
 	}
 
 	/**
+	 * transfer a HiLoModel into JFreeChart DefaultOHLCDataset
+	 */
+	private OHLCDataset HiLoModelToOHLCDataset(HiLoModel model) {
+		final int size = model.getDataCount();
+		final OHLCDataItem[] items = new OHLCDataItem[size];
+		
+		for(int j = 0; j < size; ++j) {
+			Date date = model.getDate(j);
+			Number open = model.getOpen(j);
+			Number high = model.getHigh(j);
+			Number low = model.getLow(j);
+			Number close = model.getClose(j);
+			Number volume = model.getVolume(j);
+			
+			OHLCDataItem item = new OHLCDataItem(date, 
+				doubleValue(open), doubleValue(high), 
+				doubleValue(low), doubleValue(close), 
+				doubleValue(volume));
+			items[j] = item;
+		}
+		
+		return new DefaultOHLCDataset("High Low Data", items);
+	}
+	
+	private double doubleValue(Number n) {
+		return n == null ? 0.0 : n.doubleValue();
+	}
+
+	/**
 	 * decode PieSectionEntity into key-value pair of Area's componentScope.
 	 * @param area the Area where the final attribute is set
 	 * @param info the PieSectionEntity to be decoded.
@@ -314,10 +350,22 @@ public class SimpleChartEngine implements ChartEngine {
 		XYDataset dataset = info.getDataset();
 		int si = info.getSeriesIndex();
 		int ii = info.getItem();
-		
+
 		area.setAttribute("series", dataset.getSeriesKey(si));
-		area.setAttribute("x", dataset.getX(si, ii));
-		area.setAttribute("y", dataset.getY(si, ii));
+		
+		if (dataset instanceof OHLCDataset) {
+			OHLCDataset ds = (OHLCDataset) dataset;
+			area.setAttribute("date", new Date(ds.getX(si, ii).longValue()));
+			area.setAttribute("open", ds.getOpen(si, ii));
+			area.setAttribute("high", ds.getHigh(si, ii));
+			area.setAttribute("low", ds.getLow(si, ii));
+			area.setAttribute("close", ds.getClose(si, ii));
+			area.setAttribute("volume", ds.getVolume(si, ii));
+		} else {
+			area.setAttribute("x", dataset.getX(si, ii));
+			area.setAttribute("y", dataset.getY(si, ii));
+		}
+		
 	}
 	
 	//-- Chart specific implementation --//
@@ -331,7 +379,7 @@ public class SimpleChartEngine implements ChartEngine {
 	private class Pie extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof PieSectionEntity) {
-				area.setAttribute("entity", "PIE");
+				area.setAttribute("entity", "DATA");
 				decodePieInfo(area, (PieSectionEntity)info);
 			} else {
 				area.setAttribute("entity", "TITLE");
@@ -389,10 +437,10 @@ public class SimpleChartEngine implements ChartEngine {
 	private class Bar extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
-				area.setAttribute("entity", "BAR");
+				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
-				area.setAttribute("entity", "BAR");
+				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
@@ -453,10 +501,10 @@ public class SimpleChartEngine implements ChartEngine {
 	private class AreaImpl extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
-				area.setAttribute("entity", "AREA");
+				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
-				area.setAttribute("entity", "AREA");
+				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
@@ -498,10 +546,10 @@ public class SimpleChartEngine implements ChartEngine {
 	private class Line extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
-				area.setAttribute("entity", "POINT");
+				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
-				area.setAttribute("entity", "POINT");
+				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
@@ -560,7 +608,7 @@ public class SimpleChartEngine implements ChartEngine {
 	private class StackedBar extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
-				area.setAttribute("entity", "BAR");
+				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
@@ -610,10 +658,10 @@ public class SimpleChartEngine implements ChartEngine {
 	private class StackedArea extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
-				area.setAttribute("entity", "POINT");
+				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
-				area.setAttribute("entity", "POINT");
+				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
@@ -656,7 +704,7 @@ public class SimpleChartEngine implements ChartEngine {
 	private class Waterfall extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof CategoryItemEntity) {
-				area.setAttribute("entity", "BAR");
+				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
@@ -708,7 +756,7 @@ public class SimpleChartEngine implements ChartEngine {
 	private class Scatter extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof XYItemEntity) {
-				area.setAttribute("entity", "POINT");
+				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity)info);
 			} else {
 				area.setAttribute("entity", "TITLE");
@@ -737,7 +785,7 @@ public class SimpleChartEngine implements ChartEngine {
 	private class TimeSeries extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof XYItemEntity) {
-				area.setAttribute("entity", "POINT");
+				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity) info);
 			} else {
 				area.setAttribute("entity", "TITLE");
@@ -765,7 +813,7 @@ public class SimpleChartEngine implements ChartEngine {
 	private class StepArea extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof XYItemEntity) {
-				area.setAttribute("entity", "POINT");
+				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity)info);
 			} else {
 				area.setAttribute("entity", "TITLE");
@@ -794,7 +842,7 @@ public class SimpleChartEngine implements ChartEngine {
 	private class Step extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof XYItemEntity) {
-				area.setAttribute("entity", "POINT");
+				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity)info);
 			} else {
 				area.setAttribute("entity", "TITLE");
@@ -823,7 +871,7 @@ public class SimpleChartEngine implements ChartEngine {
 	private class Histogram extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
 			if (info instanceof XYItemEntity) {
-				area.setAttribute("entity", "BAR");
+				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity)info);
 			} else {
 				area.setAttribute("entity", "TITLE");
@@ -845,6 +893,60 @@ public class SimpleChartEngine implements ChartEngine {
 				getOrientation(chart.getOrient()), 
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
+		}
+	}
+
+	/** candlestick */
+	private class Candlestick extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+			if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "DATA");
+				decodeXYInfo(area, (XYItemEntity)info);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof HiLoModel)) {
+				throw new UiException("model must be a com.potix.zul.html.HiLoModel");
+			}
+			return ChartFactory.createCandlestickChart(
+				chart.getTitle(),
+				chart.getXAxis(),
+				chart.getYAxis(),
+				HiLoModelToOHLCDataset((HiLoModel)model),
+				chart.isShowLegend());
+		}
+	}
+
+	/** highlow */
+	private class Highlow extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+			if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "DATA");
+				decodeXYInfo(area, (XYItemEntity)info);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof HiLoModel)) {
+				throw new UiException("model must be a com.potix.zul.html.HiLoModel");
+			}
+			return ChartFactory.createHighLowChart(
+				chart.getTitle(),
+				chart.getXAxis(),
+				chart.getYAxis(),
+				HiLoModelToOHLCDataset((HiLoModel)model),
+				chart.isShowLegend());
 		}
 	}
 

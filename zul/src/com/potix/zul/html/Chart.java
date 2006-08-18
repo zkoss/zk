@@ -79,6 +79,8 @@ public class Chart extends Imagemap {
 	public static final String STEP = "step";
 	public static final String STEP_AREA = "step_area";
 	public static final String HISTOGRAM = "histogram";
+	public static final String CANDLESTICK = "candlestick";
+	public static final String HIGHLOW = "highlow";
 	
 	//control variable
 	private boolean _smartDrawChart; //whether post the smartDraw event already?
