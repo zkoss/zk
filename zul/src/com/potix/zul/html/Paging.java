@@ -168,9 +168,9 @@ public class Paging extends XulElement implements Paginal {
 		boolean bNext = _actpg < _npg - 1;
 		for (; begin <= end; ++begin) {
 			if (begin == _actpg) {
-				sb.append(begin);
+				sb.append(begin + 1);
 			} else {
-				appendAnchor(sb, Integer.toString(begin), begin);
+				appendAnchor(sb, Integer.toString(begin + 1), begin);
 			}
 		}
 
