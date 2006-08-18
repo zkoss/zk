@@ -394,13 +394,15 @@ div.progressmeter {
 }
 
 div.paging, div.paging a {
-	color: #00a; font-size: small; background: window; padding: 2px;
+	font-size: small; color: #a30; font-weight: bold;
+	background: window; padding: 2px;
 }
 div.paging a, div.paging a:visited {
-	text-decoration: underline; border: 1px solid window; padding: 2px;
+	color: #00a; font-weight: normal; text-decoration: underline;
+	border: 1px solid window;
 }
 div.paging a:hover {
-	text-decoration: underline; border: 1px solid blue;
+	border: 1px solid blue;
 }
 
 /* ZK datebox and calendar */

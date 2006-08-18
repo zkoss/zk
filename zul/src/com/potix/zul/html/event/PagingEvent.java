@@ -30,19 +30,19 @@ import com.potix.zul.html.ext.Paginal;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class PagingEvent extends Event {
-	private final int _ofs;
+	private final int _actpg;
 
 	/** Construct a paging relevant event with coordination or area.
 	 *
 	 * @param target the target must be a paginal component, i.e.,
 	 * implements {@link Paginal}.
-	 * @param ofs the starting offset of the page.
+	 * @param actpg the active page
 	 */
-	public PagingEvent(String name, Component target, int ofs) {
+	public PagingEvent(String name, Component target, int actpg) {
 		super(name, target);
 		if (!(target instanceof Paginal))
 			throw new IllegalArgumentException("Not implement "+Paginal.class.getName()+": "+target);
-		_ofs = ofs;
+		_actpg = actpg;
 	}
 
 	/** Returns the paginal controller.
@@ -50,10 +50,13 @@ public class PagingEvent extends Event {
 	public Paginal getPaginal() {
 		return (Paginal)getTarget();
 	}
-	/** Returns the index of the first visible item (starting from 0).
-	 * <p>It is the same as {@link Paginal#getActivePage} * {@link Paginal#getPageSize}.
+	/** Returns the active page (starting from 0).
+	 * <p>It is the same as {@link #getPaginal}'s {@link Paginal#getActivePage}.
+	 *
+	 * <p>To get the index of the first visible item, use<br/>
+	 * <code>{@link #getActivePage} * {@link Paginal#getPageSize}</code>.
 	 */
-	public int getOffset() {
-		return _ofs;
+	public int getActivePage() {
+		return _actpg;
 	}
 }

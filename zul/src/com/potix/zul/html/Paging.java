@@ -18,10 +18,12 @@ package com.potix.zul.html;
 
 import com.potix.mesg.Messages;
 import com.potix.zk.ui.WrongValueException;
+import com.potix.zk.au.Command;
 
 import com.potix.zul.mesg.MZul;
 import com.potix.zul.html.impl.XulElement;
 import com.potix.zul.html.ext.Paginal;
+import com.potix.zul.au.impl.PagingCommand;
 
 /**
  * Paging of long content.
@@ -31,6 +33,11 @@ import com.potix.zul.html.ext.Paginal;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Paging extends XulElement implements Paginal {
+	static {
+		//register commands
+		new PagingCommand("onPaging", Command.SKIP_IF_EVER_ERROR);
+	}
+
 	/** # of items per page. */
 	private int _pgsz = 20;
 	/** total # of items. */
@@ -87,6 +94,14 @@ public class Paging extends XulElement implements Paginal {
 	public int getActivePage() {
 		return _actpg;
 	}
+	public void setActivePage(int pg) {
+		if (pg >= _npg || pg < 0)
+			throw new WrongValueException("Unable to set active page to "+pg+" since only "+_npg+" pages");
+		if (_actpg != pg) {
+			_actpg = pg;
+			invalidate(INNER);
+		}
+	}
 
 	/** Returns the number of page anchors shall appear at the client. 
 	 *
@@ -126,43 +141,45 @@ public class Paging extends XulElement implements Paginal {
 	public String getInnerTags() {
 		final StringBuffer sb = new StringBuffer(512);
 
-		int diff = (_pginc - 1) / 2;
-		int end = _actpg + diff;
-		if (end >= _npg) end = _npg - 1;
-		int begin = _actpg - (_pginc - 1 - diff);
-		if (begin < 0) begin = 0;
+		int half = _pginc / 2;
+		int begin, end = _actpg + half - 1;
+		if (end >= _npg) {
+			end = _npg - 1;
+			begin = end - _pginc + 1;
+			if (begin < 0) begin = 0;
+		} else {
+			begin = _actpg - half;
+			if (begin < 0) begin = 0;
+			end = begin + _pginc - 1;
+			if (end >= _npg) end = _npg - 1;
+		}
 
 		if (_actpg > 0) {
 			if (begin > 0) //show first
-				appendAnchor(sb, Messages.get(MZul.FIRST), 0, true);
-			appendAnchor(sb, Messages.get(MZul.PREV), _actpg - 1, true);
+				appendAnchor(sb, Messages.get(MZul.FIRST), 0);
+			appendAnchor(sb, Messages.get(MZul.PREV), _actpg - 1);
 		}
 
 		boolean bNext = _actpg < _npg - 1;
 		for (; begin <= end; ++begin) {
-			boolean spacing = bNext || begin < end;
 			if (begin == _actpg) {
 				sb.append(begin);
-				if (spacing) sb.append("&nbsp;");
 			} else {
-				appendAnchor(sb, Integer.toString(begin), begin, spacing);
+				appendAnchor(sb, Integer.toString(begin), begin);
 			}
 		}
 
 		if (bNext) {
-			boolean bLast = end < _npg - 1;
-			appendAnchor(sb, Messages.get(MZul.NEXT), _actpg + 1, bLast);
-			if (bLast)
-				appendAnchor(sb, Messages.get(MZul.LAST), _npg - 1, false);
+			appendAnchor(sb, Messages.get(MZul.NEXT), _actpg + 1);
+			if (end < _npg - 1) //show last
+				appendAnchor(sb, Messages.get(MZul.LAST), _npg - 1);
 		}
 		return sb.toString();
 	}
 	private static final
-	void appendAnchor(StringBuffer sb, String label, int val, boolean spacing) {
+	void appendAnchor(StringBuffer sb, String label, int val) {
 		sb.append("<a href=\"javascript:;\" onclick=\"zkPg.go(this,")
 			.append(val).append(")\">").append(label).append("</a>");
-		if (spacing)
-			sb.append("&nbsp;");
 	}
 
 	//-- Component --//

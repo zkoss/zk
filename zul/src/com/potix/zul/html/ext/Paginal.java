@@ -50,9 +50,13 @@ public interface Paginal {
 	 * Note: there is at least one page even no item at all.
 	 */
 	public int getPageCount();
+
 	/** Returns the active page (starting from 0).
 	 */
 	public int getActivePage();
+	/** Sets the active page (starting from 0).
+	 */
+	public void setActivePage(int pg);
 
 	/** Adds an event listener to specified event for this component.
 	 * The second registration is ignored and false is returned.
