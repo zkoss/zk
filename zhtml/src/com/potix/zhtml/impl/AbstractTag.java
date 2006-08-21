@@ -244,7 +244,7 @@ implements DynamicPropertied, RawId {
 		final String[] childless = {
 			"area", "base", "basefont", "bgsound", "br",
 			"col", "colgroup", "embed", "hr", "img", "input",
-			"isindex", "keygen", "link", "meta", "object", "plaintext",
+			"isindex", "keygen", "link", "meta", "plaintext",
 			"spacer", "wbr"
 		};
 		for (int j = childless.length; --j >= 0;)
