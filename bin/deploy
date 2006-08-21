@@ -31,7 +31,7 @@ fi
 jar_found=false
 for f in $*; do
 	f=${f%/}
-	if [ -f dist/lib/$f.war ] ; then
+	if [ -f dist/lib/$f.war ] || [ "$(head -1 $f/format)" = "war" ] ; then
 		dst=$(grep '^root' $f/deploy)
 		if [ "$dst" = "root" ] ; then
 			dst=ROOT
