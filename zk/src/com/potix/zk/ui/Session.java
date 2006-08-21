@@ -64,6 +64,9 @@ public interface Session {
 
 	/** Invalidates this session then unbinds any objects bound to it.
 	 *
+	 * <p>Note: you usually have to ask the client to redirect to another page
+	 * (or reload the same page) by use of {@link Executions#sendRedirect}.
+	 *
 	 * <p>The session is not invalidated immediately. Rather, it is
 	 * invalidated after processing the current request.
 	 */
