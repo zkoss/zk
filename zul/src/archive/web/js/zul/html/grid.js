@@ -83,6 +83,28 @@ zk.Grid.prototype = {
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
 	},
+	/* set the height. */
+	setHgh: function (hgh) {
+		//note: we have to clean element.style.height. Otherwise, FF will
+		//overlap element with other elements
+		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
+			this.body.style.height = hgh;
+			this.element.style.height = "";	
+			this.element.setAttribute("zk_hgh", hgh);
+		} else {
+			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
+			//To fix the bug, we extend the height
+			if (zk.ie && (!hgh || hgh == "auto")
+			&& this.body.offsetWidth - this.body.clientWidth > 11) {
+				this.body.style.height =
+					(this.body.offsetHeight * 2 - this.body.clientHeight) + "px";
+			} else {
+				this.body.style.height = "";
+			}
+			this.element.style.height = hgh;
+			this.element.removeAttribute("zk_hgh");
+		}
+	},
 	/* set the size*/
 	_setSize: function () {
 		var hgh = this.element.style.height;
@@ -90,16 +112,7 @@ zk.Grid.prototype = {
 			hgh = this.element.getAttribute("zk_hgh");
 			if (!hgh) hgh = ""; //it might not be defined yet
 		}
-		this.body.style.height = hgh;
-		if (hgh) this.element.setAttribute("zk_hgh", hgh);
-		this.element.style.height = "";	
-
-		var wd = this.element.style.width;
-		if (wd && wd != "auto" && wd.indexOf('%') < 0) {
-			//IE: otherwise, element's width will be extended to fit body
-			this.body.style.width = wd;
-			if (this.head) this.head.style.width = wd;
-		}
+		this.setHgh(hgh);
 	},
 	cleanup: function ()  {
 		if (this.fnResize)
@@ -198,12 +211,11 @@ zkGrid.stripe = function (uuid) {
 /** Handles setAttr. */
 zkGrid.setAttr = function (grid, name, value) {
 	if (name == "style.height") {
-		var body = $(grid.id + "!body");
-		if (body) body.style.height = value;
-				//FF: height is the body's height only
-		var el = $(grid.id);
-		if (el) el.setAttribute("zk_hgh", value);
-		return true;
+		var meta = zkau.getMeta(grid);
+		if (meta) {
+			meta.setHgh(value);
+			return true;
+		}
 	}
 	return false;
 };

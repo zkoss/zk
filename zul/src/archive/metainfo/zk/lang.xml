@@ -252,6 +252,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/grid.dsp</mold-uri>
 		</mold>
+		<mold>
+			<mold-name>paging</mold-name>
+			<mold-uri>~./zul/html/gridpg.dsp</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>groupbox</component-name>

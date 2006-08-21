@@ -610,14 +610,6 @@ zk.Selectable.prototype = {
 	_calcSize: function () {
 		this._calcHgh();
 
-		var wd = this.element.style.width;
-		if (wd && wd != "auto" && wd.indexOf('%') < 0) {
-			//IE: otherwise, element's width will be extended to fit body
-			this.body.style.width = wd;
-			if (this.head) this.head.style.width = wd;
-			if (this.foot) this.foot.style.width = wd;
-		}
-
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
 			if (tblwd && this.body.offsetWidth - tblwd > 11) {
@@ -701,6 +693,17 @@ zk.Selectable.prototype = {
 			}
 				
 			this.body.style.height = hgh + "px";
+		} else {
+			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
+			//To fix the bug, we extend the height
+			hgh = this.element.style.height;
+			if (zk.ie && (!hgh || hgh == "auto")
+			&& this.body.offsetWidth - this.body.clientWidth > 11) {
+				this.body.style.height =
+					(this.body.offsetHeight * 2 - this.body.clientHeight) + "px";
+			} else {
+				this.body.style.height = "";
+			}
 		}
 	},
 	/* Height of the head row. If now header, defval is returned. */
@@ -748,7 +751,7 @@ zk.Selectable.prototype = {
 			}
 		}
 		if (this.foottbl) {
-			this.foottbl.style.width = this.body.style.height = "";
+			this.foot.style.width = this.body.style.height = "";
 			if (this.foottbl.rows.length) {
 				var footrow = this.foottbl.rows[0];
 				for (var j = footrow.cells.length; --j >=0;)

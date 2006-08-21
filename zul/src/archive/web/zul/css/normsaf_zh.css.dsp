@@ -240,25 +240,25 @@ div.listbox, div.tree, div.grid, div.grid-no-striped { /* depends sclass. */
 div.tree-head, div.listbox-head, div.grid-head { /* always used. */
 	background: threedface; border: 0; overflow: hidden; width: 100%;
 }
-div.tree-head td, div.listbox-head td, div.grid-head td {
+div.tree-head th, div.listbox-head th, div.grid-head th {
 	overflow: hidden; border: 1px solid;
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
 	white-space: nowrap; padding: 2px;
 	font-size: medium; font-weight: normal;
 }
-div.listbox-head td.sort, div.grid-head td.sort {
+div.listbox-head th.sort, div.grid-head th.sort {
 	cursor: pointer;
 	background-image: url(${c:encodeURL('~./zul/img/sort/hint.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
-div.listbox-head td.sort-asc, div.grid-head td.sort-asc {
+div.listbox-head th.sort-asc, div.grid-head th.sort-asc {
 	cursor: pointer;
 	background-image: url(${c:encodeURL('~./zul/img/sort/asc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
-div.listbox-head td.sort-dsc, div.grid-head td.sort-dsc {
+div.listbox-head th.sort-dsc, div.grid-head th.sort-dsc {
 	cursor: pointer;
 	background-image: url(${c:encodeURL('~./zul/img/sort/dsc.png')});
 	background-position: right;
