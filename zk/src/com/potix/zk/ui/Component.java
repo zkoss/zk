@@ -366,7 +366,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public boolean isVisible();
 	/** Sets whether this component is visible.
-	 * If this component is transaprent ({@link #isTransparent}), no
+	 * If this component is transaprent ({@link com.potix.zk.ui.ext.Transparent#isTransparent}), no
 	* {@link #smartUpdate} is caleld, so transparent compoents usually have
 	* to override this method for detail control.
 	 *
@@ -574,18 +574,6 @@ public interface Component extends java.io.Serializable, Cloneable {
 	/** Returns whether this component allows to have any child.
 	 */
 	public boolean isChildable();
-	/** Returns whether this component is transparent.
-	 * By transparent we mean this component doesn't have any counterpart
-	 * in the client.
-	 * In other words, it doesn't generate any element in the client.
-	 * In this case, invalidate this component implies invalidate all
-	 * its children, and {@link #smartUpdate} is meaningless
-	 * (and causes exception).
-	 *
-	 * <p>All its children are considered as children of its parent when
-	 * inserting.
-	 */
-	public boolean isTransparent();
 
 	/** Returns the class of the specified name.
 	 * It's a shortcut to {@link Namespace#getClass} (of {@link #getNamespace}.

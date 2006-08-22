@@ -44,6 +44,7 @@ import com.potix.zk.ui.Component.Range;
 import com.potix.zk.ui.Components;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.ext.Transparent;
 import com.potix.zk.ui.sys.Visualizer;
 import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.ui.sys.PageCtrl;
@@ -432,7 +433,7 @@ import com.potix.zk.au.*;
 			//Note: attached comp might change from another page to
 			//the one being created. In this case, no need to add
 			if (comp != null && _exec.isAsyncUpdate(comp.getPage())) {
-				assert D.OFF || !comp.isTransparent(): "not resolved?" +comp;
+				assert D.OFF || !isTransparent(comp): "not resolved?" +comp;
 
 				final Component parent = getNonTransparentParent(comp);
 				final Set newsibs = new LinkedHashSet();
@@ -483,6 +484,9 @@ import com.potix.zk.au.*;
 
 		if (D.ON && log.debugable()) log.debug("Return responses: "+responses);
 		return responses;
+	}
+	private static boolean isTransparent(Component comp) {
+		return (comp instanceof Transparent) && ((Transparent)comp).isTransparent();
 	}
 
 	/** Adds responses for a set of siblings which is new attached (or
@@ -601,7 +605,7 @@ import com.potix.zk.au.*;
 		for (Iterator j = smartUpdated.keySet().iterator(); j.hasNext();) {
 			final Component cj = (Component)j.next();
 
-			if (cj.isTransparent()) {
+			if (isTransparent(cj)) {
 				j.remove();
 				continue;
 			}
@@ -630,7 +634,7 @@ import com.potix.zk.au.*;
 		List comps = null;
 		for (Iterator it = invalidated.keySet().iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
-			if (comp.isTransparent()) {
+			if (isTransparent(comp)) {
 				if (comps == null) comps = new LinkedList();
 				comps.add(comp);
 				it.remove();
@@ -646,7 +650,7 @@ import com.potix.zk.au.*;
 		}
 		for (Iterator it = attached.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
-			if (comp.isTransparent()) {
+			if (isTransparent(comp)) {
 				if (comps == null) comps = new LinkedList();
 				comps.add(comp);
 				it.remove();
@@ -665,7 +669,7 @@ import com.potix.zk.au.*;
 		if (comps.isEmpty()) return;
 		for (Iterator it = comps.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
-			if (comp.isTransparent()) {
+			if (isTransparent(comp)) {
 				resolveTransparent(comp.getChildren(), invalidated); //recursive
 			} else {
 				invalidated.put(comp, Component.OUTER);
@@ -679,7 +683,7 @@ import com.potix.zk.au.*;
 		if (comps.isEmpty()) return;
 		for (Iterator it = comps.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
-			if (comp.isTransparent()) {
+			if (isTransparent(comp)) {
 				resolveTransparent(comp.getChildren(), result); //recursive
 			} else {
 				result.add(comp);
@@ -695,7 +699,7 @@ import com.potix.zk.au.*;
 		final List cloned = new LinkedList(comps);
 		for (ListIterator it = cloned.listIterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
-			if (comp.isTransparent()) {
+			if (isTransparent(comp)) {
 				it.remove();
 				for (Iterator it2 = resolveTransparent(comp.getChildren())
 				.iterator(); it2.hasNext();)
@@ -707,7 +711,7 @@ import com.potix.zk.au.*;
 	private static Component getNonTransparentParent(Component comp) {
 		for (;;) {
 			comp = comp.getParent();
-			if (comp == null || !comp.isTransparent())
+			if (comp == null || !isTransparent(comp))
 				return comp;
 		}
 	}

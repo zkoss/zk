@@ -29,6 +29,7 @@ import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.ext.Moveable;
 import com.potix.zk.ui.ext.ZIndexed;
+import com.potix.zk.ui.ext.Transparent;
 import com.potix.zk.au.AuFocus;
 
 /**
@@ -423,7 +424,7 @@ implements Moveable, ZIndexed {
 
 	//-- Component --//
 	public boolean addEventListener(String evtnm, EventListener listener) {
-		if (isTransparent())
+		if (isTransparent(this))
 			return super.addEventListener(evtnm, listener);
 			//Deriver has to handle it
 
@@ -434,7 +435,7 @@ implements Moveable, ZIndexed {
 		return ret;
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
-		if (isTransparent())
+		if (isTransparent(this))
 			return super.removeEventListener(evtnm, listener);
 
 		final boolean asap = isAsapRequired(evtnm);
@@ -442,6 +443,9 @@ implements Moveable, ZIndexed {
 		if (ret && asap && !isAsapRequired(evtnm))
 			smartUpdate(getAttrOfEvent(evtnm), null);
 		return ret;
+	}
+	private static boolean isTransparent(Component comp) {
+		return (comp instanceof Transparent) && ((Transparent)comp).isTransparent();
 	}
 
 	//-- Moveable --//

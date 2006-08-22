@@ -41,6 +41,7 @@ import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.ext.RawId;
 import com.potix.zk.ui.ext.Viewable;
+import com.potix.zk.ui.ext.Transparent;
 import com.potix.zk.ui.sys.ExecutionCtrl;
 import com.potix.zk.ui.sys.ExecutionsCtrl;
 import com.potix.zk.ui.sys.ComponentCtrl;
@@ -530,7 +531,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 				if (_desktop != null) {
 					((DesktopCtrl)_desktop).addComponent(this);
-					if (_parent != null && isTransparent()) _parent.invalidate(INNER);
+					if (_parent != null && isTransparent(this)) _parent.invalidate(INNER);
 					getThisUiEngine().addMoved(this, false);
 				}
 			} else {
@@ -539,6 +540,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			addToIdSpaces(this);
 		}
 	}
+	private static boolean isTransparent(Component comp) {
+		return (comp instanceof Transparent) && ((Transparent)comp).isTransparent();
+	}
+
 	public final String getUuid() {
 		return _uuid;
 	}
@@ -672,7 +677,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			idSpaceChanged = true;
 		}
 
-		if (_parent != null && isTransparent()) _parent.invalidate(INNER);
+		if (_parent != null && isTransparent(this)) _parent.invalidate(INNER);
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
 		if (_parent != null) {
 			final Component oldp = _parent;
@@ -708,11 +713,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public boolean isChildable() {
 		return true;
 	}
-	/** Default: false.
-	 */
-	public boolean isTransparent() {
-		return false;
-	}
 
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild == null)
@@ -747,7 +747,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		if (found) { //re-order
-			if (newChild.isTransparent()) invalidate(INNER);
+			if (isTransparent(newChild)) invalidate(INNER);
 			addMoved(newChild, newChild.getPage(), _page);
 		} else { //new added
 			if (newChild.getParent() != this) { //avoid loop back
@@ -810,7 +810,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final boolean old = _visible;
 		if (old != visible) {
 			_visible = visible;
-			if (!isTransparent())
+			if (!isTransparent(this))
 				smartUpdate("visibility", _visible);
 		}
 		return old;
@@ -822,7 +822,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void invalidate(Range range) {
 		if (_page != null) {
 			getThisUiEngine().addInvalidate(this, range);
-			if (_parent != null && isTransparent()) _parent.invalidate(INNER);
+			if (_parent != null && isTransparent(this)) _parent.invalidate(INNER);
 			//Note: UiEngine will handle transparent, but we still
 			//handle it here to simplify codes that handles transparent
 			//in AbstractComponent
@@ -835,7 +835,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			 getThisUiEngine().addResponse(key, response);
 	}
 	public void smartUpdate(String attr, String value) {
-		if (_parent != null && isTransparent())
+		if (_parent != null && isTransparent(this))
 			throw new IllegalStateException("A transparent component cannot use smartUpdate");
 		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
