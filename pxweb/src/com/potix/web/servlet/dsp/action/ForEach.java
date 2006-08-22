@@ -18,8 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.web.servlet.dsp.action;
 
+import java.util.List;
 import java.util.Collection;
 import java.util.Map;
+import java.util.ListIterator;
 import java.util.Iterator;
 import java.util.Enumeration;
 import java.io.StringWriter;
@@ -36,6 +38,7 @@ import com.potix.web.servlet.ServletException;
 public class ForEach extends AbstractAction {
 	private String _var, _varStatus;
 	private Object _items;
+	private int _beg = 0, _end = Integer.MAX_VALUE;
 	private boolean _trim = true;
 
 	/** Returns the variable name used to iterate thru items. */
@@ -64,6 +67,31 @@ public class ForEach extends AbstractAction {
 	/** Sets the attribute items. */
 	public void setItems(Object items) {
 		_items = items;
+	}
+
+	/** Returns the index of the item at which the iteration begins.
+	 */
+	public int getBegin() {
+		return _beg;
+	}
+	/** Sets the index of the item at which the iteration begins.
+	 * <p>Default: 0.
+	 */
+	public void setBegin(int beg) {
+		if (beg < 0)
+			throw new IllegalArgumentException("Non-negative only");
+		_beg = beg;
+	}
+	/** Returns the index of the item at which the iteration ends (inclusive).
+	 */
+	public int getEnd() {
+		return _end;
+	}
+	/** Sets the index of the item at which the iteration ends (inclusive).
+	 * <p>Default: Integer.MAX_VALUE.
+	 */
+	public void setEnd(int end) {
+		_end = end;
 	}
 
 	/** Returns whether to trim the result. */
@@ -114,6 +142,10 @@ public class ForEach extends AbstractAction {
 				renderWith(ac, st, (float[])_items);
 			else
 				throw new InternalError("Unknown "+_items.getClass());
+		} else if (_beg > 0 && (_items instanceof List)) {
+			final List l = (List)_items;
+			final int size = l.size();
+			renderWith(ac, st, l.listIterator(_beg > size ? size: _beg));
 		} else if (_items instanceof Collection) {
 			renderWith(ac, st, ((Collection)_items).iterator());
 		} else if (_items instanceof Map) {
@@ -133,10 +165,26 @@ public class ForEach extends AbstractAction {
 		if (_varStatus != null) ac.setAttribute(_varStatus, old2, ac.PAGE_SCOPE);
 	}
 
+	private void renderWith(ActionContext ac, Status st, ListIterator it)
+	throws javax.servlet.ServletException, IOException {
+		final StringWriter out = _trim ? new StringWriter(): null;
+		for (int j = 0, cnt = _end - _beg + 1; it.hasNext() && --cnt >= 0; ++j) {
+			final Object val = it.next();
+			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
+			if (st != null) st.update(j, val);
+			ac.renderFragment(out);
+		}
+		if (out != null)
+			ac.getOut().write(out.toString().trim());
+	}
 	private void renderWith(ActionContext ac, Status st, Iterator it)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0; it.hasNext(); ++j) {
+
+		for (int j = 0; ++j <= _beg && it.hasNext();) //skip
+			it.next();
+
+		for (int j = 0, cnt = _end - _beg + 1; it.hasNext() && --cnt >= 0; ++j) {
 			final Object val = it.next();
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
@@ -148,7 +196,11 @@ public class ForEach extends AbstractAction {
 	private void renderWith(ActionContext ac, Status st, Enumeration enm)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0; enm.hasMoreElements(); ++j) {
+
+		for (int j = 0; ++j <= _beg && enm.hasMoreElements();) //skip
+			enm.nextElement();
+
+		for (int j = 0, cnt = _end - _beg + 1; enm.hasMoreElements() && --cnt >= 0; ++j) {
 			final Object val = enm.nextElement();
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
@@ -160,7 +212,7 @@ public class ForEach extends AbstractAction {
 	private void renderWith(ActionContext ac, Status st, Object[] ary)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0; j < ary.length; ++j) {
+		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = ary[j];
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
@@ -172,7 +224,7 @@ public class ForEach extends AbstractAction {
 	private void renderWith(ActionContext ac, Status st, int[] ary)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0; j < ary.length; ++j) {
+		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Integer(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
@@ -184,7 +236,7 @@ public class ForEach extends AbstractAction {
 	private void renderWith(ActionContext ac, Status st, short[] ary)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0; j < ary.length; ++j) {
+		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Short(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
@@ -196,7 +248,7 @@ public class ForEach extends AbstractAction {
 	private void renderWith(ActionContext ac, Status st, long[] ary)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0; j < ary.length; ++j) {
+		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Long(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
@@ -208,7 +260,7 @@ public class ForEach extends AbstractAction {
 	private void renderWith(ActionContext ac, Status st, char[] ary)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0; j < ary.length; ++j) {
+		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Character(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
@@ -220,7 +272,7 @@ public class ForEach extends AbstractAction {
 	private void renderWith(ActionContext ac, Status st, byte[] ary)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0; j < ary.length; ++j) {
+		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Byte(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
@@ -232,7 +284,7 @@ public class ForEach extends AbstractAction {
 	private void renderWith(ActionContext ac, Status st, float[] ary)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0; j < ary.length; ++j) {
+		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Float(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
@@ -244,7 +296,7 @@ public class ForEach extends AbstractAction {
 	private void renderWith(ActionContext ac, Status st, double[] ary)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0; j < ary.length; ++j) {
+		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Double(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
@@ -258,7 +310,7 @@ public class ForEach extends AbstractAction {
 		final StringBuffer sb = new StringBuffer();
 		int idx = 0;
 		final StringWriter out = _trim ? new StringWriter(): null;
-		for (int j = 0, len = txt.length(); j < len; ++j) {
+		for (int j = _beg, len = txt.length(); j < len && j <= _end; ++j) {
 			char cc = txt.charAt(j);
 			if (cc == ',') {
 				final Object val = sb.toString();
