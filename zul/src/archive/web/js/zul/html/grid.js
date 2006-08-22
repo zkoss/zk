@@ -32,15 +32,22 @@ zk.Grid.prototype = {
 		this.head = $(this.id + "!head");
 		if (this.head) this.headtbl = zk.firstChild(this.head, "TABLE", true);
 		this.body = $(this.id + "!body");
-		this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-		if (this.bodytbl.tBodies && this.bodytbl.tBodies[0])
-			this.bodyrows = this.bodytbl.tBodies[0].rows;
-			//Note: bodyrows is null in FF if no rows, so no err msg
+		if (this.body) {
+			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
+			if (this.bodytbl.tBodies && this.bodytbl.tBodies[0])
+				this.bodyrows = this.bodytbl.tBodies[0].rows;
+				//Note: bodyrows is null in FF if no rows, so no err msg
+		} else {
+			this.paging = true;
+			this.body = $(this.id + "!paging");
+			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
+			this.bodyrows = this.bodytbl.tBodies[1].rows;
+		}
 
 		if (!zk.isRealVisible(this.element)) return;
 
 		var meta = this; //the nested function only see local var
-		if (!this._inited) {
+		if (!this.paging && !this._inited) {
 			this._inited = true;
 
 			this.fnResize = function () {
@@ -59,27 +66,30 @@ zk.Grid.prototype = {
 
 		this._setSize();
 
-		if (zk.gecko && this.headtbl && this.headtbl.rows.length == 1) {
-			var headrow = this.headtbl.rows[0];
-			var empty = true;
-			l_out:
-			for (var j = headrow.cells.length; --j>=0;)
-				for (var n = headrow.cells[j].firstChild; n; n = n.nextSibling)
-					if (!n.id || !n.id.endsWith("!hint")) {
-						empty = false;
-						break l_out;
-					}
-			if (empty) this.head.style.display = "none";
-				//we have to hide if empty (otherwise, a small block is shown)
-		}
+		if (!this.paging) {
+			if (zk.gecko && this.headtbl && this.headtbl.rows.length == 1) {
+				var headrow = this.headtbl.rows[0];
+				var empty = true;
+				l_out:
+				for (var j = headrow.cells.length; --j>=0;)
+					for (var n = headrow.cells[j].firstChild; n; n = n.nextSibling)
+						if (!n.id || !n.id.endsWith("!hint")) {
+							empty = false;
+							break l_out;
+						}
+				if (empty) this.head.style.display = "none";
+					//we have to hide if empty (otherwise, a small block is shown)
+			}
 
-		this.body.onscroll = function () {
-			if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
-		};
+			this.body.onscroll = function () {
+				if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
+			};
+		}
 
 		this.stripe();
 
-		setTimeout("zkGrid._calcSize('"+this.id+"')", 5);
+		if (!this.paging)
+			setTimeout("zkGrid._calcSize('"+this.id+"')", 5);
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
 	},

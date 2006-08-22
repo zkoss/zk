@@ -20,7 +20,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <div id="${self.uuid}" zk_type="zul.html.grid.Grid"${self.outerAttrs}${self.innerAttrs}>
 	<div id="${self.uuid}!paging" class="grid-paging">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="grid-btable">
+	<tbody>
 	${u:redraw(self.columns, null)}
+	</tbody>
 	${u:redraw(self.rows, null)}
 	</table>
 	</div>

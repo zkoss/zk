@@ -157,6 +157,8 @@ public class Grid extends XulElement {
 				if (_paging != null) _pgi = _paging;
 				else {
 					 final Paging paging = new Paging();
+					 paging.setAutohide(true);
+					 paging.setDetailed(true);
 					 final int sz = _rows != null ? _rows.getChildren().size(): 0;
 					 paging.setTotalSize(sz);
 					 paging.setParent(this);

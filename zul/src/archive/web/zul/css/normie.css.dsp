@@ -248,6 +248,9 @@ div.listbox, div.tree, div.grid, div.grid-no-striped { /* depends sclass. */
 div.tree-head, div.listbox-head, div.grid-head { /* always used. */
 	background: threedface; border: 0; overflow: hidden; width: 100%;
 }
+div.grid-paging th {
+	background: threedface;
+}
 div.tree-head th, div.listbox-head th, div.grid-head th, div.grid-paging th {
 	overflow: hidden; border: 1px solid;
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
@@ -255,29 +258,29 @@ div.tree-head th, div.listbox-head th, div.grid-head th, div.grid-paging th {
 	font-size: x-small; font-weight: normal;
 }
 div.listbox-head th.sort, div.grid-head th.sort, div.grid-paging th.sort {
-	cursor: pointer; cursor: hand;
+	cursor: pointer; cursor: hand; padding-right: 9px;
 	background-image: url(${c:encodeURL('~./zul/img/sort/hint.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
 div.listbox-head th.sort-asc, div.grid-head th.sort-asc, div.grid-paging th.sort-asc {
-	cursor: pointer; cursor: hand;
+	cursor: pointer; cursor: hand; padding-right: 9px;
 	background-image: url(${c:encodeURL('~./zul/img/sort/asc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
 div.listbox-head th.sort-dsc, div.grid-head th.sort-dsc, div.grid-paging th.sort-dsc {
-	cursor: pointer; cursor: hand;
+	cursor: pointer; cursor: hand; padding-right: 9px;
 	background-image: url(${c:encodeURL('~./zul/img/sort/dsc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
 
-div.tree-body, div.listbox-body, div.grid-body { /* always used. */
+div.tree-body, div.listbox-body, div.grid-body, div.grid-paging { /* always used. */
 	background: window; border: 0; overflow: auto; width: 100%;
 }
-div.tree-body td, div.listbox-body td {
-	border: 0; cursor: pointer; cursor: hand; padding: 0 2px;
+div.tree-body td, div.listbox-body td, div.grid-paging td {
+	cursor: pointer; cursor: hand; padding: 0 2px;
 	font-size: x-small; font-weight: normal;
 }
 

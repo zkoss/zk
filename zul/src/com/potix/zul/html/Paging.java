@@ -48,6 +48,8 @@ public class Paging extends XulElement implements Paginal {
 	private int _actpg = 0;
 	/** # of page anchors are visible */
 	private int _pginc = 10;
+	/** Whether to hide automatically if only one page is available. */
+	private boolean _autohide;
 	/** Whether to show detailed info. */
 	private boolean _detailed;
 
@@ -98,7 +100,7 @@ public class Paging extends XulElement implements Paginal {
 			if (_actpg >= _npg)
 				_actpg = _npg - 1;
 
-			invalidate(INNER);
+			invalidate(_autohide ? OUTER: INNER);
 		}
 	}
 
@@ -136,6 +138,24 @@ public class Paging extends XulElement implements Paginal {
 		if (_detailed != detailed) {
 			_detailed = detailed;
 			invalidate(INNER);
+		}
+	}
+
+	//extra//
+	/** Returns whether to automatically hide this component if
+	 * there is only one page available.
+	 * <p>Default: false.
+	 */
+	public boolean isAutohide() {
+		return _autohide;
+	}
+	/** Sets whether to automatically hide this component if
+	 * there is only one page available.
+	 */
+	public void setAutohide(boolean autohide) {
+		if (_autohide != autohide) {
+			_autohide = autohide;
+			if (_npg == 1) invalidate(OUTER);
 		}
 	}
 
@@ -191,6 +211,9 @@ public class Paging extends XulElement implements Paginal {
 	}
 
 	//-- Component --//
+	public boolean isVisible() {
+		return super.isVisible() && (_npg > 1 || !_autohide);
+	}
 	public boolean isChildable() {
 		return false;
 	}
