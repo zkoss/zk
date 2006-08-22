@@ -27,6 +27,7 @@ import com.potix.lang.Strings;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ext.Openable;
+import com.potix.zk.ui.ext.Transparent;
 import com.potix.zk.ui.event.EventListener;
 
 import com.potix.zul.html.impl.XulElement;
@@ -43,7 +44,7 @@ import com.potix.zul.html.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Treeitem extends XulElement implements Openable {
+public class Treeitem extends XulElement implements Openable, Transparent {
 	private transient Treerow _treerow;
 	private transient Treechildren _treechildren;
 	private Object _value;
@@ -311,11 +312,13 @@ public class Treeitem extends XulElement implements Openable {
 		_open = open;
 	}
 
-	//-- Component --//
+	//-- Transparent --//
 	/** Always returns true. */
 	public boolean isTransparent() {
 		return true;
 	}
+
+	//-- Component --//
 	public void setParent(Component parent) {
 		final Component oldp = getParent();
 		if (oldp == parent)

@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <tbody id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-	<c:forEach var="child" items="${self.children}">
+	<c:forEach var="child" items="${self.children}" begin="${self.visibleBegin}" end="${self.visibleEnd}">
 	${u:redraw(child, null)}
 	</c:forEach>
 </tbody>

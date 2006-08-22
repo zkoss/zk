@@ -22,6 +22,7 @@ import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 
 import com.potix.zul.html.impl.XulElement;
+import com.potix.zul.html.ext.Paginal;
 
 /**
  * Defines the rows of a grid.
@@ -33,6 +34,27 @@ public class Rows extends XulElement {
 	/** Returns the grid that contains this rows. */
 	public Grid getGrid() {
 		return (Grid)getParent();
+	}
+
+	/** Returns the index of the first visible child.
+	 * <p>Used only for component development, not for application developers.
+	 */
+	public int getVisibleBegin() {
+		final Grid grid = getGrid();
+		if (grid == null || !grid.inPagingMold())
+			return 0;
+		final Paginal pgi = grid.getPaginal();
+		return pgi.getActivePage() * pgi.getPageSize();
+	}
+	/** Returns the index of the last visible child.
+	 * <p>Used only for component development, not for application developers.
+	 */
+	public int getVisibleEnd() {
+		final Grid grid = getGrid();
+		if (grid == null || !grid.inPagingMold())
+			return Integer.MAX_VALUE;
+		final Paginal pgi = grid.getPaginal();
+		return (pgi.getActivePage() + 1) * pgi.getPageSize() - 1; //inclusive
 	}
 
 	//-- Component --//
@@ -51,13 +73,21 @@ public class Rows extends XulElement {
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
 
-		final Component p = getParent();
-		if (p != null) ((Grid)p).initAtClient();
+		final Grid grid = getGrid();
+		if (grid != null) {
+			grid.initAtClient();
+			if (grid.inPagingMold())
+				grid.getPaginal().setTotalSize(getChildren().size());
+		}
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 
-		final Component p = getParent();
-		if (p != null) ((Grid)p).initAtClient();
+		final Grid grid = getGrid();
+		if (grid != null) {
+			grid.initAtClient();
+			if (grid.inPagingMold())
+				grid.getPaginal().setTotalSize(getChildren().size());
+		}
     }
 }

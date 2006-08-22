@@ -26,6 +26,7 @@ import com.potix.lang.Objects;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.ext.Transparent;
 
 import com.potix.zul.html.impl.XulElement;
 
@@ -34,7 +35,7 @@ import com.potix.zul.html.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Treechildren extends XulElement {
+public class Treechildren extends XulElement implements Transparent {
 	/** Returns the {@link Tree} instance containing this element.
 	 */
 	public Tree getTree() {
@@ -114,12 +115,14 @@ public class Treechildren extends XulElement {
 		return sz;
 	}
 
-	//-- Component --//
+	//Transparent//
 	/** It is transparent if its parent is {@link Treeitem}.
 	 */
 	public boolean isTransparent() {
 		return getParent() instanceof Treeitem;
 	}
+
+	//-- Component --//
 	public void setParent(Component parent) {
 		final Component oldp = getParent();
 		if (oldp == parent)

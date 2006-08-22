@@ -25,9 +25,12 @@ import com.potix.lang.Objects;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.event.Event;
+import com.potix.zk.ui.event.EventListener;
 
 import com.potix.zul.html.impl.XulElement;
 import com.potix.zul.html.ext.Paginal;
+import com.potix.zul.html.event.Events;
 
 /**
  * A grid is an element that contains both rows and columns elements.
@@ -63,6 +66,7 @@ public class Grid extends XulElement {
 	 * doesn't assign a controller via {@link #setPaginal}.
 	 */
 	private transient Paging _paging;
+	private transient EventListener _pgListener;
 
 	public Grid() {
 		setSclass("grid");
@@ -145,6 +149,7 @@ public class Grid extends XulElement {
 	 */
 	public void setPaginal(Paginal pgi) {
 		if (!Objects.equals(pgi, _pgi)) {
+			if (_pgi != null && inPagingMold()) removePagingListener(_pgi);
 			_pgi = pgi;
 			updateChildPaging();
 		}
@@ -152,7 +157,7 @@ public class Grid extends XulElement {
 	/** Creates or detaches the child paging controller automatically.
 	 */
 	private void updateChildPaging() {
-		if ("paging".equals(getMold())) {
+		if (inPagingMold()) {
 			if (_pgi == null) {
 				if (_paging != null) _pgi = _paging;
 				else {
@@ -162,13 +167,42 @@ public class Grid extends XulElement {
 					 final int sz = _rows != null ? _rows.getChildren().size(): 0;
 					 paging.setTotalSize(sz);
 					 paging.setParent(this);
+					 addPagingListener(_pgi);
+				}
+			} else { //_pgi != null
+				if (_pgi != _paging) {
+					if (_paging != null)
+						_paging.detach();
+					addPagingListener(_pgi);
 				}
 			}
 		} else {
-			if (_pgi != null && _pgi == _paging)
+			if (_paging != null) {
+				removePagingListener(_paging);
 				_paging.detach();
+			} else if (_pgi != null) {
+				removePagingListener(_pgi);
+			}
 		}
 	}
+	/** Adds the event listener for the onPaging event. */
+	private void addPagingListener(Paginal pgi) {
+		if (_pgListener == null)
+			_pgListener = new EventListener() {
+				public boolean isAsap() {
+					return true;
+				}
+				public void onEvent(Event event) {
+					if (_rows != null) _rows.invalidate(INNER);
+				}
+			};
+		pgi.addEventListener(Events.ON_PAGING, _pgListener);
+	}
+	/** Removes the event listener for the onPaging event. */
+	private void removePagingListener(Paginal pgi) {
+		pgi.removeEventListener(Events.ON_PAGING, _pgListener);
+	}
+
 	/** Returns the child paging controller that is created automatically,
 	 * or null if mold is not "paging", or the controller is specified externally
 	 * by {@link #setPaginal}.
@@ -193,6 +227,12 @@ public class Grid extends XulElement {
 		if (_pgi == null)
 			throw new IllegalStateException("Available only the paging mold");
 		_pgi.setPageSize(pgsz);
+	}
+
+	/** Returns whether this grid is in the paging mold.
+	 */
+	/*package*/ boolean inPagingMold() {
+		return "paging".equals(getMold());
 	}
 
 	//-- super --//
@@ -226,6 +266,8 @@ public class Grid extends XulElement {
 				throw new UiException("External paging cannot coexist with child paging");
 			if (_paging != null && _paging != child)
 				throw new UiException("Only one paging is allowed: "+this);
+			if (!inPagingMold())
+				throw new UiException("The child paging is allowed only in the paging mold");
 			_pgi = _paging = (Paging)child;
 			if (!getChildren().isEmpty())
 				insertBefore = (Component)getChildren().get(0); //as the first child
@@ -290,5 +332,6 @@ public class Grid extends XulElement {
 		s.defaultReadObject();
 		afterUnmarshal(-1);
 		//TODO: how to marshal _pgi if _pgi != _paging
+		//TODO: re-register event listener for onPaging
 	}
 }
