@@ -140,7 +140,8 @@ class ActionNode extends Node {
 			} catch (Exception ex) {
 				if (log.debugable()) log.debug(ex);
 				throw new ServletException("Failed to invoke "+_method+" with "+(_bExpr ? _value: args[0])
-					+". Cause: "+Exceptions.getMessage(ex)+"\n"+Exceptions.getFirstStackTrace(ex));
+					+". Cause: "+ex.getClass().getName()+", "+Exceptions.getMessage(ex)
+					+"\n"+Exceptions.getFirstStackTrace(ex));
 			}
 		}
 	}
