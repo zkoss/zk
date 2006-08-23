@@ -106,6 +106,7 @@ public class ConfigParser {
 			//system-config
 			//	max-event-threads
 			//  max-upload-size
+			//	response-charset
 			//  cache-provider-class
 			//  ui-factory-class
 			//	engine-class
@@ -114,6 +115,9 @@ public class ConfigParser {
 				
 				v = parseInteger(el, "max-upload-size", true);
 				if (v != null) config.setMaxUploadSize(v);
+
+				final String s = el.getElementValue("response-charset", true);
+				if (s != null) config.setCharset(s);
 
 				Class cls = parseClass(el, "cache-provider-class",
 					DesktopCacheProvider.class);

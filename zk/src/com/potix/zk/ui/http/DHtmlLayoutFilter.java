@@ -25,12 +25,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.FilterChain;
+import javax.servlet.Filter;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.potix.util.logging.Log;
-import com.potix.web.servlet.GenericFilter;
 import com.potix.web.servlet.BufferedResponse;
 
 import com.potix.zk.ui.WebApp;
@@ -59,29 +60,23 @@ import com.potix.zk.ui.impl.RequestInfoImpl;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class DHtmlLayoutFilter extends GenericFilter {
+public class DHtmlLayoutFilter implements Filter {
 	private static final Log log = Log.lookup(DHtmlLayoutFilter.class);
 
+	private ServletContext _ctx;
 	private String _ext = "html";
-
-	public void init() throws ServletException {
-		super.init();
-
-		String ext = getInitParameter("extension");
-		if (ext != null && ext.length() > 0) _ext = ext;
-	}
+	private String _charset = "UTF-8";
 
 	private void process(HttpServletRequest request,
 	HttpServletResponse response, String content)
 	throws ServletException, IOException {
 		if (log.debugable()) log.debug("Content to filter:\n"+content);
 
-		final ServletContext ctx = getServletContext();
-		final WebManager webman = WebManager.getWebManager(ctx);
+		final WebManager webman = WebManager.getWebManager(_ctx);
 		final WebApp wapp = webman.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
-		final Session sess = webman.getSession(ctx, request);
-		final Object old = I18Ns.setup(sess, request, response);
+		final Session sess = webman.getSession(_ctx, request);
+		final Object old = I18Ns.setup(sess, request, response, _charset);
 		try {
 			final Desktop desktop = webman.getDesktop(sess, request, null);
 			final RequestInfo ri = new RequestInfoImpl(
@@ -91,7 +86,7 @@ public class DHtmlLayoutFilter extends GenericFilter {
 				uf.getPageDefinitionDirectly(ri, content, _ext);
 			final Page page = uf.newPage(ri, pagedef, null);
 			final Execution exec =
-				new ExecutionImpl(ctx, request, response, desktop, page);
+				new ExecutionImpl(_ctx, request, response, desktop, page);
 			wappc.getUiEngine()
 				.execNewPage(exec, pagedef, page, response.getWriter());
 		} finally {
@@ -108,5 +103,18 @@ public class DHtmlLayoutFilter extends GenericFilter {
 
 		process((HttpServletRequest)request,
 			(HttpServletResponse)response, sw.toString());
+	}
+	public void destroy() {
+	}
+	public final void init(FilterConfig config) throws ServletException {
+		_ctx = config.getServletContext();
+
+		final String ext = config.getInitParameter("extension");
+		if (ext != null && ext.length() > 0)
+			_ext = ext;
+
+		final String cs = config.getInitParameter("charset");
+		if (cs != null)
+			_charset = cs.length() > 0 ? cs: null;
 	}
 }

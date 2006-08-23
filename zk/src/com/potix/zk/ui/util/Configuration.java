@@ -68,6 +68,7 @@ public class Configuration {
 	private Class _uiengcls, _dcpcls, _uiftycls, _tzpcls, _lpcls;
 	private Integer _dtTimeout, _dtMax, _sessTimeout, _evtThdMax;
 	private Integer _maxUploadSize = new Integer(5120);
+	private String _charset = "UTF-8";
 
 	/** Adds a listener class.
 	 */
@@ -650,6 +651,22 @@ public class Configuration {
 		_monitor = monitor;
 	}
 
+	/** Returns the charset used by {@link com.potix.zk.ui.http.DHtmlLayoutServlet},
+	 * or null to use the container's default.
+	 * <p>Default: UTF-8.
+	 */
+	public String getCharset() {
+		return _charset;
+	}
+	/** Sets the charset used by {@link com.potix.zk.ui.http.DHtmlLayoutServlet}.
+	 *
+	 * @param charset the charset to use. If null or empty, the container's default
+	 * is used.
+	 */
+	public void setCharset(String charset) {
+		_charset = charset != null && charset.length() > 0 ? charset: null;
+	}
+	
 	/** Adds an error page.
 	 *
 	 * @param type what type of errors the error page is associated with.

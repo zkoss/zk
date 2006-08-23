@@ -53,9 +53,12 @@ public class I18Ns {
 
 	/** Sets up the internationalization attributes, inclluding locale
 	 * and time zone.
+	 * @param charset the response's charset. If null or empty,
+	 * response.setCharacterEncoding won't be called, i.e., the container's
+	 * default is used.
 	 */
 	public static final Object setup(Session sess,
-	ServletRequest request, ServletResponse response) {
+	ServletRequest request, ServletResponse response, String charset) {
 		final Pair old;
 		if (Charsets.hasSetup(request)) {
 			old = null;
@@ -74,7 +77,7 @@ public class I18Ns {
 					log.warning("Ignored: unable to invoke the locale provider: "+cls, ex);
 				}
 			}
-			final Object ol = Charsets.setup(request, response);
+			final Object ol = Charsets.setup(request, response, charset);
 
 			//2. setup time zone
 			TimeZone tzone = null;

@@ -102,7 +102,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//CONSIDER: we might use login="required" to define pages
 
 		final Session sess = WebManager.getSession(_ctx, request);
-		final Object old = I18Ns.setup(sess, request, response);
+		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
 			final String pi = Https.getThisPathInfo(request);
 			if (log.finerable()) log.finer("Path info: "+pi);

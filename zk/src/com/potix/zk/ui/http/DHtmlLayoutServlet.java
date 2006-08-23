@@ -99,7 +99,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		final Session sess = WebManager.getSession(getServletContext(), request);
-		final Object old = I18Ns.setup(sess, request, response);
+		final Object old = I18Ns.setup(sess, request, response,
+			sess.getWebApp().getConfiguration().getCharset());
 		try {
 			process(sess, request, response);
 		} finally {
