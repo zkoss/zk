@@ -25,7 +25,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	Three area:
 	<button label="change" onClick="changeImage(img2)"/>
 	<imagemap id="img2" src="/img/sun.jpg" onClick="what(event)">
-		<area id="First" coords="0,0,50,50"/>
+		<area id="First" coords="0,0,50,50" tooltiptext="First"/>
 		<area id="Second" coords="50,0,100,50"/>
 		<area id="Third" coords="100,0,150,50"/>
 	</imagemap>
