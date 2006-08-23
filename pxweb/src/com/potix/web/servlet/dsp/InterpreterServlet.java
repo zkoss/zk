@@ -48,17 +48,29 @@ import com.potix.web.util.resource.ServletContextLocator;
 /**
  * The servlet used to interpret the DSP file (Potix Dynamic Script Page).
  *
+ * <p>Initial parameters:
+ * <dl>
+ * <dt>charset</dt>
+ * <dd>The default character set if not specified in the DSP page.
+ * Default: UTF-8.</dd>
+ * </dl>
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class InterpreterServlet extends HttpServlet {
 	private static final Log log = Log.lookup(InterpreterServlet.class);
 	private ServletContext _ctx;
+	private String _charset = "UTF-8";
 
 	public void init(ServletConfig config) throws ServletException {
 		//super.init(config);
 			//Note callback super to avoid saving config
 
 		_ctx = config.getServletContext();
+
+		final String cs = config.getInitParameter("charset");
+		if (cs != null)
+			_charset = cs.length() > 0 ? cs: null;
 	}
 	public ServletContext getServletContext() {
 		return _ctx;
@@ -71,7 +83,7 @@ public class InterpreterServlet extends HttpServlet {
 		final String path = Https.getThisServletPath(request);
 		if (D.ON && log.debugable()) log.debug("Get "+path);
 
-		final Object old = Charsets.setup(request, response);
+		final Object old = Charsets.setup(request, response, _charset);
 		try {
 			final Interpretation cnt = (Interpretation)
 				ResourceCaches.get(getCache(_ctx), _ctx, path, null);

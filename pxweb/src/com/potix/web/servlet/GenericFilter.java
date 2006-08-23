@@ -162,8 +162,7 @@ public abstract class GenericFilter implements Filter {
 	 * However, deriving class usually doesn't override this method
 	 * but overriding {@link #init()}.
 	 */
-	public final void init(FilterConfig config)
-	throws ServletException {
+	public final void init(FilterConfig config) throws ServletException {
 		_config = config;
 		init();
 	}

@@ -115,7 +115,7 @@ public class ClassWebResource {
 	/** Process the request. */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		final Object old = Charsets.setup(request, response);
+		final Object old = Charsets.setup(request, response, "UTF-8");
 		try {
 			final String pi = Https.getThisPathInfo(request);
 			if (D.ON && log.debugable()) log.debug("Path info: "+pi);

@@ -42,29 +42,18 @@ public class Charsets {
 	private static final Log log = Log.lookup(Charsets.class);
 	private static final String ATTR_SETUP = "com.potix.web.charset.setup";
 
-	private static final String _uriCharset, _respCharset;
+	private static final String _uriCharset;
 	static {
-		_uriCharset = //Default: UTF-8
-			System.getProperty("com.potix.web.uri.charset", "UTF-8");
-		if (_uriCharset.length() == 0)
-			throw new SystemException("com.potix.web.uri.charset cannot be empty");
-		final String cs  //Default: UTF-8
-			= System.getProperty("com.potix.web.response.charset", "UTF-8");
-		_respCharset = cs.length() > 0 ? cs: null;
+		String cs = System.getProperty("com.potix.web.uri.charset", null);
+		if (cs == null || cs.length() == 0)
+			cs = "UTF-8"; //Default: UTF-8
+		_uriCharset = cs;
 	}
 
 	/** Returns the charset used to encode URI and query string.
 	 */
 	public static final String getURICharset() {
 		return _uriCharset;
-	}
-	/** Returns the default charset used for the HTTP response, or null
-	 * if not specified.
-	 * In this case, the caller shall assume the charset defined in
-	 * web.xml is used.
-	 */
-	public static final String getResponseCharset() {
-		return _respCharset;
 	}
 
 	/** Sets up the charset for the request and response based on
@@ -87,10 +76,13 @@ public class Charsets {
 	 * However, if you are writing libraries to be as independent of
 	 * web.xml as possible, you might choose to invoke this method directly.
 	 *
+	 * @param charset the response's charset. If null or empty,
+	 * response.setCharacterEncoding won't be called, i.e., the container's
+	 * default is used.
 	 * @return an object that must be passed to {@link #cleanup}
 	 */
 	public static final
-	Object setup(ServletRequest request, ServletResponse response) {
+	Object setup(ServletRequest request, ServletResponse response, String charset) {
 		//20050420: Tom Yeh:
 		//Since we store the preferred locale in HttpSession rather than
 		//com.potix.ext.security.Session,
@@ -108,8 +100,7 @@ public class Charsets {
 
 		final Locale locale = getPreferredLocale(request);
 		response.setLocale(locale);
-		final String charset = getResponseCharset();
-		if (charset != null) {
+		if (charset != null && charset.length() > 0) {
 			try {
 				response.setCharacterEncoding(charset);
 				//if null, the mapping defined in web.xml is used
@@ -121,13 +112,13 @@ public class Charsets {
 		}
 
 		if (request.getCharacterEncoding() == null) {
-			final String cs = response.getCharacterEncoding();
+			charset = response.getCharacterEncoding();
 			try {
-				request.setCharacterEncoding(cs);
+				request.setCharacterEncoding(charset);
 			} catch (Throwable ex) {
 				final String v = request.getCharacterEncoding();
-				if (!Objects.equals(v, cs))
-					log.warning("Unable to set request's charset: "+cs+" (current="+v+')', ex);
+				if (!Objects.equals(v, charset))
+					log.warning("Unable to set request's charset: "+charset+" (current="+v+')', ex);
 			}
 		}
 
