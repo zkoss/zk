@@ -109,15 +109,25 @@ public class Charsets {
 		final Locale locale = getPreferredLocale(request);
 		response.setLocale(locale);
 		final String charset = getResponseCharset();
-		if (charset != null)
-			response.setCharacterEncoding(charset);
-			//if null, the mapping defined in web.xml is used
+		if (charset != null) {
+			try {
+				response.setCharacterEncoding(charset);
+				//if null, the mapping defined in web.xml is used
+			} catch (Throwable ex) {
+				final String v = response.getCharacterEncoding();
+				if (!Objects.equals(v, charset))
+					log.warning("Unable to set response's charset: "+charset+" (current="+v+')', ex);
+			}
+		}
 
 		if (request.getCharacterEncoding() == null) {
+			final String cs = response.getCharacterEncoding();
 			try {
-				request.setCharacterEncoding(response.getCharacterEncoding());
-			} catch (java.io.UnsupportedEncodingException ex) {
-				log.warning("Unable to set request's charset: "+response.getCharacterEncoding());
+				request.setCharacterEncoding(cs);
+			} catch (Throwable ex) {
+				final String v = request.getCharacterEncoding();
+				if (!Objects.equals(v, cs))
+					log.warning("Unable to set request's charset: "+cs+" (current="+v+')', ex);
 			}
 		}
 
