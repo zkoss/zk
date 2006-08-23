@@ -31,6 +31,7 @@ import com.potix.zk.ui.event.EventListener;
 import com.potix.zul.html.impl.XulElement;
 import com.potix.zul.html.ext.Paginal;
 import com.potix.zul.html.event.Events;
+import com.potix.zul.html.event.PagingEvent;
 
 /**
  * A grid is an element that contains both rows and columns elements.
@@ -193,7 +194,10 @@ public class Grid extends XulElement {
 					return true;
 				}
 				public void onEvent(Event event) {
-					if (_rows != null) _rows.invalidate(INNER);
+					final PagingEvent evt = (PagingEvent)event;
+					Events.postEvent(
+						new PagingEvent(evt.getName(),
+							Grid.this, evt.getPaginal(), evt.getActivePage()));
 				}
 			};
 		pgi.addEventListener(Events.ON_PAGING, _pgListener);
@@ -201,6 +205,14 @@ public class Grid extends XulElement {
 	/** Removes the event listener for the onPaging event. */
 	private void removePagingListener(Paginal pgi) {
 		pgi.removeEventListener(Events.ON_PAGING, _pgListener);
+	}
+
+	/** Called when the onPaging event is received (from {@link #getPaginal}).
+	 *
+	 * <p>Default: getRows().invalidate(INNER).
+	 */
+	public void onPaging() {
+		if (_rows != null) _rows.invalidate(INNER);
 	}
 
 	/** Returns the child paging controller that is created automatically,

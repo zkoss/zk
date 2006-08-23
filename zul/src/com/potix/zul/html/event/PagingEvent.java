@@ -30,9 +30,10 @@ import com.potix.zul.html.ext.Paginal;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class PagingEvent extends Event {
+	private final Paginal _pgi;
 	private final int _actpg;
 
-	/** Construct a paging relevant event with coordination or area.
+	/** Construct a paging event.
 	 *
 	 * @param target the target must be a paginal component, i.e.,
 	 * implements {@link Paginal}.
@@ -42,13 +43,21 @@ public class PagingEvent extends Event {
 		super(name, target);
 		if (!(target instanceof Paginal))
 			throw new IllegalArgumentException("Not implement "+Paginal.class.getName()+": "+target);
+		_pgi = (Paginal)target;
+		_actpg = actpg;
+	}
+	/** Construct a paging event.
+	 */
+	public PagingEvent(String name, Component target, Paginal paginal, int actpg) {
+		super(name, target);
+		_pgi = paginal;
 		_actpg = actpg;
 	}
 
 	/** Returns the paginal controller.
 	 */
 	public Paginal getPaginal() {
-		return (Paginal)getTarget();
+		return _pgi;
 	}
 	/** Returns the active page (starting from 0).
 	 * <p>It is the same as {@link #getPaginal}'s {@link Paginal#getActivePage}.
