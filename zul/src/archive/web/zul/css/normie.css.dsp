@@ -130,7 +130,7 @@ font.gamma { color: #000000; font-family: "Verdana", Tahoma, Arial; font-weight:
 .gamma-pos-alert { color: #007F00; }
 
 /* The hyperlink's style class. */
-.link {cursor: pointer; cursor: hand;} /* IE 5.5: hand */
+.link {cursor: hand; cursor: pointer;} /* IE 5.5: hand */
 
 /* ZK */
 div.embedded { /* must consistent with lang.xml */
@@ -258,19 +258,19 @@ div.tree-head th, div.listbox-head th, div.grid-head th, div.grid-paging th {
 	font-size: x-small; font-weight: normal;
 }
 div.listbox-head th.sort, div.grid-head th.sort, div.grid-paging th.sort {
-	cursor: pointer; cursor: hand; padding-right: 9px;
+	cursor: hand; cursor: pointer; padding-right: 9px;
 	background-image: url(${c:encodeURL('~./zul/img/sort/hint.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
 div.listbox-head th.sort-asc, div.grid-head th.sort-asc, div.grid-paging th.sort-asc {
-	cursor: pointer; cursor: hand; padding-right: 9px;
+	cursor: hand; cursor: pointer; padding-right: 9px;
 	background-image: url(${c:encodeURL('~./zul/img/sort/asc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
 div.listbox-head th.sort-dsc, div.grid-head th.sort-dsc, div.grid-paging th.sort-dsc {
-	cursor: pointer; cursor: hand; padding-right: 9px;
+	cursor: hand; cursor: pointer; padding-right: 9px;
 	background-image: url(${c:encodeURL('~./zul/img/sort/dsc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
@@ -283,7 +283,7 @@ div.grid-paging {
 	border-bottom: 1px solid #AAB;
 }
 div.tree-body td, div.listbox-body td, div.grid-paging td {
-	cursor: pointer; cursor: hand; padding: 0 2px;
+	cursor: hand; cursor: pointer; padding: 0 2px;
 	font-size: x-small; font-weight: normal;
 }
 
@@ -349,7 +349,7 @@ td.tabpanels { /* vert */
 
 /* ZK menu. */
 div.menubar, div.menupopup, div.ctxpopup {
-	cursor: pointer; cursor: hand; background: menu; padding: 1px;
+	cursor: hand; cursor: pointer; background: menu; padding: 1px;
 }
 div.menubar {
 	border: 1px solid black;
@@ -387,7 +387,7 @@ div.comboboxpp, div.bandboxpp { /*hardcoded in DSP*/
 	font-size: xx-small;
 }
 .comboboxpp td { /*label*/
-	white-space: nowrap; font-size: xx-small;
+	white-space: nowrap; font-size: xx-small; cursor: hand; cursor: pointer; 
 }
 .comboboxpp td span { /*description*/
 	color: #888; font-size: xx-small; padding-left: 5px;
@@ -395,7 +395,7 @@ div.comboboxpp, div.bandboxpp { /*hardcoded in DSP*/
 
 /* ZK error message box */
 div.errbox {
-	margin: 0; padding: 1px; border: 1px outset; cursor: pointer; cursor: hand;
+	margin: 0; padding: 1px; border: 1px outset; cursor: hand; cursor: pointer;
 	background: #E8E0D8; position: absolute; z-index: 70000;
 }
 
@@ -439,7 +439,7 @@ table.calday {
 }
 .calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
 	font-size: xx-small; color: #35254F; text-align: center;
-	cursor: pointer; cursor: hand; text-decoration: none;
+	cursor: hand; cursor: pointer; text-decoration: none;
 }
 tr.calday td {
 	padding: 1px 3px;

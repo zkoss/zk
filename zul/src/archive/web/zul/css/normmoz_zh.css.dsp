@@ -384,7 +384,7 @@ div.comboboxpp, div.bandboxpp { /*hardcoded in DSP*/
 	font-size: small;
 }
 .comboboxpp td { /*label*/
-	white-space: nowrap; font-size: small;
+	white-space: nowrap; font-size: small; cursor: pointer;
 }
 .comboboxpp td span { /*description*/
 	color: #888; font-size: x-small; padding-left: 10px;

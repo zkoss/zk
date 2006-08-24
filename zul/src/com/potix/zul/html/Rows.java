@@ -18,8 +18,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zul.html;
 
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Iterator;
+
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.ext.Cropper;
 
 import com.potix.zul.html.impl.XulElement;
 import com.potix.zul.html.ext.Paginal;
@@ -30,7 +35,7 @@ import com.potix.zul.html.ext.Paginal;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Rows extends XulElement {
+public class Rows extends XulElement implements Cropper {
 	/** Returns the grid that contains this rows. */
 	public Grid getGrid() {
 		return (Grid)getParent();
@@ -90,4 +95,20 @@ public class Rows extends XulElement {
 				grid.getPaginal().setTotalSize(getChildren().size());
 		}
     }
+
+	//--Cropper--//
+	public Set getAvailableAtClient() {
+		final Grid grid = getGrid();
+		if (grid == null || !grid.inPagingMold())
+			return null;
+
+		final Set avail = new HashSet(37);
+		final Paginal pgi = grid.getPaginal();
+		int pgsz = pgi.getPageSize();
+		final int ofs = pgi.getActivePage() * pgsz;
+		for (final Iterator it = getChildren().listIterator(ofs);
+		--pgsz >= 0 && it.hasNext();)
+			avail.add(it.next());
+		return avail;
+	}
 }
