@@ -38,11 +38,13 @@ import com.potix.util.media.Media;
 import com.potix.util.logging.Log;
 
 import com.potix.zk.mesg.MZk;
+import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.ComponentNotFoundException;
+import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.ext.Viewable;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.UiEngine;
@@ -77,12 +79,15 @@ import com.potix.zk.ui.http.ExecutionImpl;
 
 		final Media media;
 		try {
-			final WebAppCtrl wappc = (WebAppCtrl)sess.getWebApp();
+			final WebApp wapp = sess.getWebApp();
+			final WebAppCtrl wappc = (WebAppCtrl)wapp;
 			final UiEngine uieng = wappc.getUiEngine();
 			final Desktop desktop = wappc.getDesktopCache(sess).getDesktop(dtid);
 
 			final Execution exec = new ExecutionImpl(
 				ctx, request, response, desktop, null);
+			final Configuration config = wapp.getConfiguration();
+			config.invokeExecutionInits(exec);
 			uieng.activate(exec);
 			try {
 				final Component comp = desktop.getComponentByUuid(uuid);
@@ -95,6 +100,7 @@ import com.potix.zk.ui.http.ExecutionImpl;
 				}
 			} finally {
 				uieng.deactivate(exec);
+				config.invokeExecutionCleanups(exec);
 			}
 		} catch (ComponentNotFoundException ex) {
 			//possible because view might be as late as origin comp is gone

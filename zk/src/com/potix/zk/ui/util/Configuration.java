@@ -29,6 +29,8 @@ import com.potix.zk.ui.Component;
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Desktop;
+import com.potix.zk.ui.Execution;
+import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Event;
 import com.potix.zk.ui.event.EventThreadInit;
@@ -59,7 +61,8 @@ public class Configuration {
 		_evtSusps = new LinkedList(), _evtResus = new LinkedList(),
 		_appInits = new LinkedList(), _appCleans = new LinkedList(),
 		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
-		_dtInits = new LinkedList(), _dtCleans = new LinkedList();
+		_dtInits = new LinkedList(), _dtCleans = new LinkedList(),
+		_execInits = new LinkedList(), _execCleans = new LinkedList();
 	/** List(ErrorPage). */
 	private final List _errpgs = new LinkedList();
 	private Monitor _monitor;
@@ -132,6 +135,17 @@ public class Configuration {
 				_dtCleans.add(klass);
 			}
 		}
+
+		if (ExecutionInit.class.isAssignableFrom(klass)) {
+			synchronized (_execInits) {
+				_execInits.add(klass);
+			}
+		}
+		if (ExecutionCleanup.class.isAssignableFrom(klass)) {
+			synchronized (_execCleans) {
+				_execCleans.add(klass);
+			}
+		}
 	}
 	/** Removes a listener class.
 	 */
@@ -166,6 +180,12 @@ public class Configuration {
 		}
 		synchronized (_dtCleans) {
 			_dtCleans.remove(klass);
+		}
+		synchronized (_execInits) {
+			_execInits.remove(klass);
+		}
+		synchronized (_execCleans) {
+			_execCleans.remove(klass);
 		}
 	}
 
@@ -257,7 +277,7 @@ public class Configuration {
 	 *
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
-	 * @param obj which object that {@link com.potix.zk.ui.Executions#wait}
+	 * @param obj which object that {@link Executions#wait}
 	 * is called with.
 	 * @exception UiException to prevent a thread from suspending
 	 */
@@ -467,6 +487,58 @@ public class Configuration {
 		}
 	}
 
+	/** Invokes {@link ExecutionInit#init} for each relevant
+	 * listener registered by {@link #addListener}.
+	 *
+	 * <p>An instance of {@link ExecutionInit} is constructed first,
+	 * and then invoke {@link ExecutionInit#init}.
+	 *
+	 * @param exec the execution that is created
+	 * @exception UiException to prevent an execution from being created
+	 */
+	public void invokeExecutionInits(Execution exec)
+	throws UiException {
+		if (_execInits.isEmpty()) return;
+			//it is OK to test LinkedList.isEmpty without synchronized
+
+		final Execution parent = Executions.getCurrent();
+		synchronized (_execInits) {
+			for (Iterator it = _execInits.iterator(); it.hasNext();) {
+				final Class klass = (Class)it.next();
+				try {
+					((ExecutionInit)klass.newInstance()).init(exec, parent);
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
+					//Don't intercept; to prevent the creation of a session
+				}
+			}
+		}
+	}
+	/** Invokes {@link ExecutionCleanup#cleanup} for each relevant
+	 * listener registered by {@link #addListener}.
+	 *
+	 * <p>An instance of {@link ExecutionCleanup} is constructed first,
+	 * and then invoke {@link ExecutionCleanup#cleanup}.
+	 *
+	 * <p>It never throws an exception.
+	 *
+	 * @param exec the execution that is being destroyed
+	 */
+	public void invokeExecutionCleanups(Execution exec) {
+		if (_execCleans.isEmpty()) return;
+			//it is OK to test LinkedList.isEmpty without synchronized
+
+		synchronized (_execCleans) {
+			for (Iterator it = _execCleans.iterator(); it.hasNext();) {
+				final Class klass = (Class)it.next();
+				try {
+					((ExecutionCleanup)klass.newInstance()).cleanup(exec);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+klass, ex);
+				}
+			}
+		}
+	}
 	/** Sets the URI of CSS that will be generated for each ZUML desktop.
 	 */
 	public void setThemeURI(String uri) {
