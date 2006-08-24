@@ -142,6 +142,11 @@ public class Events {
 	 */
 	public static final String ON_MODAL = "onModal";
 
+	/** The onUser event. It is a generic event that an application developer
+	 * might send from the client. ZK doesn't use this event.
+	 */
+	public static final String ON_USER = "onUser";
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character
