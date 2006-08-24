@@ -21,6 +21,7 @@ package com.potix.zk.ui.impl;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
@@ -45,6 +46,7 @@ import com.potix.zk.ui.Components;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ext.Transparent;
+import com.potix.zk.ui.ext.Cropper;
 import com.potix.zk.ui.sys.Visualizer;
 import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.ui.sys.PageCtrl;
@@ -188,6 +190,8 @@ import com.potix.zk.au.*;
 	public void addMoved(Component comp, boolean newAttached) {
 		if (newAttached && !_moved.contains(comp)) {
 			_attached.add(comp);
+				//note: we cannot examine _exec.isAsyncUpdate here because
+				//comp.getPage might be ready when this method is called
 		} else {
 			_moved.add(comp);
 			_attached.remove(comp);
@@ -239,10 +243,65 @@ import com.potix.zk.au.*;
 		}
 	}
 
+	/** Process {@link Cropper}.
+	 */
+	private void crop() {
+		final Map cropping = new HashMap();
+		crop(_attached, cropping, true, false);
+		crop(_invalidated.keySet(), cropping, false, false);
+		crop(_smartUpdated.keySet(), cropping, false, true);
+	}
+	/** Crop attached and moved.
+	 */
+	private void
+	crop(Set coll, Map cropping, boolean bAttached, boolean bSmartUpdate) {
+		l_out:
+		for (Iterator it = coll.iterator(); it.hasNext();) {
+			final Component comp = (Component)it.next();
+			if (!_exec.isAsyncUpdate(comp.getPage())) {
+				it.remove();
+				continue;
+			}
+
+			if (isAncestor(_invalidated.keySet(), comp, bSmartUpdate)
+			|| isAncestor(_attached, comp, bSmartUpdate)) {
+				it.remove();
+				continue;
+			}
+
+			for (Component p, c = comp; (p = c.getParent()) != null; c = p) {
+				final Set avail = getAvailableAtClient(p, cropping);
+				if (avail != null) {
+					if (bAttached)  {
+						if (_moved.contains(c) || avail.contains(c))
+							_invalidated.put(p, Component.OUTER);
+						it.remove();
+						continue l_out;
+					} else if (!avail.contains(c)) {
+						it.remove();
+						continue l_out;
+					}
+				}
+			}
+		}
+	}
+	private static Set getAvailableAtClient(Component comp, Map cropping) {
+		if (comp instanceof Cropper) {
+			Set set = (Set)cropping.get(comp);
+			if (set != null)
+				return set != Collections.EMPTY_SET ? set: null;
+
+			set = ((Cropper)comp).getAvailableAtClient();
+			cropping.put(comp, set != null ? set: Collections.EMPTY_SET);
+			return set;
+		}
+		return null;
+	}
+
 	/** Prepares {@link #_pgRemoved} to contain set of pages that will
 	 * be removed.
 	 */
-	private void checkPageRemoved() {
+	private void checkPageRemoved(Set removed) {
 		//1. scan once
 		final Desktop desktop = _exec.getDesktop();
 		Set pages = null;
@@ -253,9 +312,9 @@ import com.potix.zk.au.*;
 				final Page ownerPage = owner.getPage();
 				if (ownerPage == null //detached
 				|| (_pgInvalid != null && _pgInvalid.contains(ownerPage))
-				|| isAncestor(_invalidated.keySet(), owner)
-				|| isAncestor(_moved, owner)
-				/*|| isAncestor(_attached, owner)*/) {
+				|| isAncestor(_invalidated.keySet(), owner, true)
+				|| isAncestor(_attached, owner, true)
+				|| isAncestor(removed, owner, true)) {
 					addPageRemoved(page);
 				} else {
 					if (pages == null) pages = new HashSet();
@@ -289,7 +348,7 @@ import com.potix.zk.au.*;
 		if (D.ON && log.debugable()) log.debug("Page removed: "+page);
 	}
 	/** Clears components if it belongs to invalidated or removed page. */
-	private void clearForInvalidPage(Collection coll) {
+	private void clearInInvalidPage(Collection coll) {
 		for (Iterator it = coll.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			final Page page = comp.getPage();
@@ -299,11 +358,16 @@ import com.potix.zk.au.*;
 				it.remove();
 		}
 	}
-	/** Returns whether any component in coll is an ancestor of comp. */
-	private boolean isAncestor(Collection coll, Component comp) {
-		for (Iterator it = coll.iterator(); it.hasNext();)
-			if (Components.isAncestor((Component)it.next(), comp))
+	/** Returns whether any component in coll is an ancestor of comp.
+	 * @param includingEquals whether to return true if a equals B
+	 */
+	private
+	boolean isAncestor(Collection coll, Component comp, boolean includingEquals) {
+		for (Iterator it = coll.iterator(); it.hasNext();) {
+			final Component c = (Component)it.next();
+			if ((includingEquals || c != comp) && Components.isAncestor(c, comp))
 				return true;
+		}
 		return false;
 	}
 
@@ -313,23 +377,37 @@ import com.potix.zk.au.*;
 	public List getResponses() throws IOException {
 		if (D.ON && log.debugable())
 			log.debug("ei: "+this+"\nInvalidated: "+_invalidated+"\nSmart Upd: "+_smartUpdated
-				+"\nAttached: "+_attached+"\nMoved:"+_moved+"\nResponses:"+_responses+"\npgInvalid: "+_pgInvalid
-				+"\nUuidChanged: "+_idChgd);
+				+"\nAttached: "+_attached+"\nMoved:"+_moved+"\nResponses:"+_responses
+				+"\npgInvalid: "+_pgInvalid	+"\nUuidChanged: "+_idChgd);
 
-		//0. prepare removed pages and optimize for invalidate or removed pages
-		checkPageRemoved(); //maintain _pgRemoved for pages being removed
+		final List responses = new LinkedList();
 
+		//1. process dead comonents, cropping and the removed page
+		{
+			//The reason to remove first: some insertion might fail if the old
+			//componetns are not removed yet
+			//Also, we have to remove both parent and child because, at
+			//the client, they might not be parent-child relationship
+			Set removed = doMoved(responses); //process _attached and _moved
+
+			crop(); //process Cropper
+
+			//1a. prepare removed pages and optimize for invalidate or removed pages
+			checkPageRemoved(removed); //maintain _pgRemoved for pages being removed
+		}
+
+		//2. Process removed and invalid pages
+		//2a. clean up _invalidated and others belonging to invalid pages
 		if (_pgInvalid != null && _pgInvalid.isEmpty()) _pgInvalid = null;
 		if (_pgRemoved != null && _pgRemoved.isEmpty()) _pgRemoved = null;
 		if (_pgInvalid != null || _pgRemoved != null) {
-			clearForInvalidPage(_invalidated.keySet());
-			clearForInvalidPage(_attached);
-			clearForInvalidPage(_moved);
-			clearForInvalidPage(_smartUpdated.keySet());
-			if (_idChgd != null) clearForInvalidPage(_idChgd.keySet());
+			clearInInvalidPage(_invalidated.keySet());
+			clearInInvalidPage(_attached);
+			clearInInvalidPage(_smartUpdated.keySet());
+			if (_idChgd != null) clearInInvalidPage(_idChgd.keySet());
 		}
 
-		//0a. remove pages. Note: we don't need to generate rm, becausee they
+		//2b. remove pages. Note: we don't need to generate rm, becausee they
 		//are included pages.
 		if (_pgRemoved != null) {
 			final DesktopCtrl dtctl = (DesktopCtrl)_exec.getDesktop();
@@ -337,8 +415,7 @@ import com.potix.zk.au.*;
 				dtctl.removePage((Page)it.next());
 		}
 
-		//0b. generate response for invalidated pages
-		final List responses = new LinkedList();
+		//2c. generate response for invalidated pages
 		if (_pgInvalid != null) {
 			for (final Iterator it = _pgInvalid.iterator(); it.hasNext();) {
 				final Page page = (Page)it.next();
@@ -347,62 +424,17 @@ import com.potix.zk.au.*;
 			}
 		}
 
-		//1. Remove components who is moved and its UUID is changed
+		//3. Remove components who is moved and its UUID is changed
 		if (_idChgd != null) {
 			for (Iterator it = _idChgd.values().iterator(); it.hasNext();)
 				responses.add(new AuRemove((String)it.next()));
 			_idChgd = null; //just in case
 		}
 
-		//2. Removes dead components
-		//2a. Retrieves components to remove from the client
-		final Set removed = new LinkedHashSet();
-		for (Iterator it = _moved.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			if (comp.getPage() == null) {
-				it.remove();
-				removed.add(comp);
-			}
-		}
-		if (D.ON && log.finerable()) log.finer("Removed: "+removed);
-
-		//The reason to remove first: some insertion might fail if the old
-		//componetns are not removed yet
-		//Also, we have to remove both parent and child because, at
-		//the client, they might not be parent-child relationship
-		for (Iterator it = removed.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			_invalidated.remove(comp);
-			_smartUpdated.remove(comp);
-			if (_responses != null) _responses.remove(comp);
-
-			responses.add(new AuRemove(comp));
-				//Note: it is too late to handle isTransparent here
-				//because it is detached and we don't know it is ex-parent
-		}
-		removed.clear(); //just in case
-
-		//3. remove moved components first (because setParent use it)
-		//Note: it has to be done before removing redudant, because
-		//its new parent might be invalidated
-		for (Iterator it = _moved.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			//comp in _moved might be created by execNewPage or by update
-			//We have to remove those caused by update since setParent
-			//implies remove-and-add
-			if (_exec.isAsyncUpdate(comp.getPage()))
-				responses.add(new AuRemove(comp));
-				//Note: it is too late to handle isTransparent here
-				//because it is detached and we don't know it is ex-parent
-		}
-
 		//4. reduntant: invalidate is parent of attached; vice-versa
 		//   reduntant: invalidate or create is parent of smartUpdate
-		_attached.addAll(_moved);
-		_moved.clear(); //free memory
-			//_moved is a kind of attached except we remove them first
 		removeRedundant(_invalidated.keySet());
-		removeRedundant(_attached);
+			//note: removeRedundant(_attached) are called before (in doMoved)
 		removeRedundant(responses, _invalidated, _smartUpdated, _attached);
 			//it also handle isTransparent!!
 
@@ -479,6 +511,7 @@ import com.potix.zk.au.*;
 		_invalidated.clear();
 		_smartUpdated.clear();
 		_attached.clear();
+		_moved.clear(); //free memory
 		_pgInvalid = _pgRemoved = null;
 		_responses = null;
 
@@ -487,6 +520,40 @@ import com.potix.zk.au.*;
 	}
 	private static boolean isTransparent(Component comp) {
 		return (comp instanceof Transparent) && ((Transparent)comp).isTransparent();
+	}
+
+	/** provess moved components.
+	 * @return the dead components (i.e., not belong to any page)
+	 */
+	private Set doMoved(List responses) {
+		//Remove components that have to removed from the client
+		final Set removed = new HashSet();
+		for (Iterator it = _moved.iterator(); it.hasNext();) {
+			final Component comp = (Component)it.next();
+			final Page pg = comp.getPage();
+			if (pg == null) {
+				removed.add(comp);
+				it.remove();
+				_invalidated.remove(comp);
+				_smartUpdated.remove(comp);
+
+				responses.add(new AuRemove(comp));
+				//Note: it is too late to handle isTransparent here
+				//because it is detached and we don't know it is ex-parent
+			} else {
+				if (_exec.isAsyncUpdate(pg))
+					responses.add(new AuRemove(comp));
+				_attached.add(comp);
+			}
+		}
+
+		removeRedundant(_attached);
+			//we can not remove the redudant invalidated yet since they
+			//might be added later
+
+		//Note: we don't clear _moved since we have to use it to test whether
+		//it is new attached
+		return removed;
 	}
 
 	/** Adds responses for a set of siblings which is new attached (or
