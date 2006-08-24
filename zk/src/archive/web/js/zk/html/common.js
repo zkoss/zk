@@ -308,7 +308,7 @@ zk.insertHTMLBefore = function (el, html) {
 		switch (zk.tagName(el)) { //exclude TABLE
 		case "TD": case "TH": case "TR": case "CAPTION":
 		case "TBODY": case "THEAD": case "TFOOT":
-			var n = document.createElement(zk._agtIeTagOfHtml(html));
+			var n = document.createElement(zk.tagOfHtml(html));
 			el.parentNode.insertBefore(n, el);
 			zk._agtIeReplaceOuterHTML(n, html);
 			return;
@@ -325,7 +325,7 @@ zk.insertHTMLBeforeEnd = function (el, html) {
 		case "TABLE": case "TR":
 		case "TBODY": case "THEAD": case "TFOOT":
 		/*case "TH": case "TD": case "CAPTION":*/ //no need to handle them
-			var tn2 = zk._agtIeTagOfHtml(html);
+			var tn2 = zk.tagOfHtml(html);
 			if (tn == "TABLE" && tn2 == "TR") {
 				var bd = el.tBodies;
 				if (!bd || !bd.length) {
@@ -356,7 +356,7 @@ zk.insertHTMLAfter = function (el, html) {
 			if (sib != null) {
 				zk.insertHTMLBefore(sib, html);
 			} else {
-				var n = document.createElement(zk._agtIeTagOfHtml(html));
+				var n = document.createElement(zk.tagOfHtml(html));
 				el.parentNode.appendChild(n);
 				zk._agtIeReplaceOuterHTML(n, html);
 			}
@@ -453,6 +453,23 @@ zk.isAncestor = function(p, c) {
 	return false;
 };
 
+/** Returns the enclosing tag for the specified HTML codes.
+ */
+zk.tagOfHtml = function (html) {
+	if (!html) return "";
+
+	var j = html.indexOf('>'), k = html.lastIndexOf('<');
+	if (j < 0 || k < 0) {
+		alert("Unknown tag: "+html);
+		return "";
+	}
+	var head = html.substring(0, j);
+	j = head.indexOf('<') + 1;
+	j = head.skipWhitespaces(j);
+	k = head.nextWhitespace(j);
+	return head.substring(j, k).toUpperCase();
+};
+
 /** Appends an unparsed HTML immediately after the last child.
  * @param el the parent
  */
@@ -460,20 +477,6 @@ zk.isAncestor = function(p, c) {
 //	el.insertAdjacentHTML('beforeEnd', html);
 //};
 if (zk.ie) {
-	/** Returns the enclosing tag for the specified HTML codes.
-	 */
-	zk._agtIeTagOfHtml = function (html) {
-		var j = html.indexOf('>'), k = html.lastIndexOf('<');
-		if (j < 0 || k < 0) {
-			alert("Unknown tag: "+html);
-			return "";
-		}
-		var head = html.substring(0, j);
-		j = head.indexOf('<') + 1;
-		j = head.skipWhitespaces(j);
-		k = head.nextWhitespace(j);
-		return head.substring(j, k).toUpperCase();
-	}
 	/** Replace HTML for TR, TD and others; the same as outerHTML, used
 	 * since IE don't support non-SPAN/DIV well.
 	 */

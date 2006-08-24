@@ -380,6 +380,24 @@ zkau._initChildren = function (n) {
 	for (n = n.firstChild; n; n = n.nextSibling)
 		zk.initAt(n);
 };
+/** Invoke inserHTMLBeforeEnd and then zk.initAt.
+ */
+zkau._insertAndInitBeforeEnd = function (n, html) {
+	if (zk.tagName(n) == "TABLE" && zk.tagOfHtml(html) == "TR") {
+		if (!n.tBodies || !n.tBodies.length) {
+			var m = document.createElement("TBODY");
+			n.appendChild(m);
+			n = m;
+		} else {
+			n = n.tBodies[0];
+		}
+	}
+
+	var lc = n.lastChild;
+	zk.insertHTMLBeforeEnd(n, html);		
+	if (lc) zkau._initSibs(lc, null, true);
+	else zkau._initChildren(n);
+};
 /** Invoke zk.cleanupAt for all children. */
 zkau._cleanupChildren = function (n) {
 	for (n = n.firstChild; n; n = n.nextSibling)
@@ -1722,10 +1740,7 @@ zkau.cmd1 = {
 			if (n) n = $(n);
 		}
 		if (n) { //as last child of n
-			var lc = n.lastChild;
-			zk.insertHTMLBeforeEnd(n, dt1);
-			if (lc) zkau._initSibs(lc, null, true);
-			else zkau._initChildren(n);
+			zkau._insertAndInitBeforeEnd(n, dt1);
 			return;
 		}
 
@@ -1738,10 +1753,7 @@ zkau.cmd1 = {
 		}
 
 		cmp = zkau.getReal(cmp); //go into the real tag (e.g., tabpanel)
-		var lc = cmp.lastChild;
-		zk.insertHTMLBeforeEnd(cmp, dt1);
-		if (lc) zkau._initSibs(lc, null, true);
-		else zkau._initChildren(cmp);
+		zkau._insertAndInitBeforeEnd(cmp, dt1);
 	},
 	rm: function (uuid, cmp) {
 		//NOTE: it is possible the server asking removing a non-exist cmp
