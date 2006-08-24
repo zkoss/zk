@@ -189,6 +189,7 @@ public class AuRequest {
 		new GenericCommand(Events.ON_SORT,
 			Command.SKIP_IF_EVER_ERROR|Command.IGNORE_OLD_EQUIV);
 		new GenericCommand(Events.ON_TIMER, Command.IGNORE_OLD_EQUIV);
+		new GenericCommand(Events.ON_USER, 0);
 
 		new GetUploadInfoCommand("getUploadInfo", Command.IGNORABLE);
 
