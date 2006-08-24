@@ -2,13 +2,14 @@
 ZK 2.1.0 Freshly
 * Features:
   1534285, 1537838, 1537962, 1538400, 1538407, 1480527, 1539887, 1540100,
-  1532548, 1460368, 1545169.
+  1532548, 1460368, 1545169, 1537234, 1545998.
   + Add new chart component. (Support pie, pie3d, ring, bar, bar3d, stacked_bar,
     stacked_bar3d, line, line3d, area, stacked_area, waterfall, histogram, polar,
     scatter, time_series, step_chart, step, xy area, xy stacked_area, xy bar, 
     xy line, candlestick, highlow)
   + Add new progressmeter component.
   + Add new paging component.
+  + Grid supports pagination.
   
 * Bugs
   1533736, 1533840, 1533989, 1533480, 1537672, 1534426, 1535787, 1537884,
