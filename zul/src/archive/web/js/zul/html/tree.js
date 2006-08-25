@@ -97,26 +97,24 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	/** Shows or hides all children
 	 * @param toOpen whether to toOpen
 	 */
-	_showChildren: function (row, toOpen) {
+	_showChildren: function (row, toOpen, silent) {
 		var uuid = row.getAttribute("zk_item");
-		for (var row = row, last = null; (row = row.nextSibling) != null;) {
-			if (zk.tagName(row) == "TR") {
-				var pid = row.getAttribute("zk_ptitem");
-				if (uuid == pid) {
-					row.style.display = toOpen ? "": "none";
-					last = row;
-				} else if (!last) {
-					break;
-				} else if (last.getAttribute("zk_item") == pid //child of last
-				&& (!toOpen || last.getAttribute("zk_open") == "true")) { //hide or last is open
-					this._showChildren(last, toOpen);
-				}
+		do {
+			var r = row.nextSibling;
+			if (zk.tagName(r) == "TR") {
+				var pid = r.getAttribute("zk_ptitem");
+				if (uuid != pid) return row; //not my child
+
+				if (!silent)
+					r.style.display = toOpen ? "": "none";
+				r = this._showChildren(r, toOpen,
+					toOpen && (silent || r.getAttribute("zk_open") != "true"));
 			}
-		}
+			row = r;
+		} while (row);
 	}
 });
 }
-
 
 ////
 // tree //
