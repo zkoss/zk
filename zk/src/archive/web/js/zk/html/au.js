@@ -487,20 +487,13 @@ zkau.setAttr = function (cmp, name, value) {
 		for (var j = 0; j < cmp.options.length; ++j)
 			cmp.options[j].selected = value;
 	} else {
-		if (name == "disabled" || name == "href")
-			zkau.setStamp(cmp, name);
-			//mark when this attribute is set (change or not), so
-			//modal dialog and other know how to process it
-			//--
-			//Better to call setStamp always but, to save memory,...
-
 		var j = name.indexOf('.'); 
 		if (j >= 0) {
 			if ("style" != name.substring(0, j)) {
 				zk.error(mesg.UNSUPPORTED+name);
 				return;
 			}
-			name = name.substring(j + 1);
+			name = zk.toJSStyleName(name.substring(j + 1));
 			if (typeof(cmp.style[name]) == "boolean") //just in case
 				value = "true" == value || name == value;
 			cmp.style[name] = value;
@@ -509,6 +502,13 @@ zkau.setAttr = function (cmp, name, value) {
 			zk.setStyle(cmp, value);
 			return;
 		}
+
+		if (name == "disabled" || name == "href")
+			zkau.setStamp(cmp, name);
+			//mark when this attribute is set (change or not), so
+			//modal dialog and other know how to process it
+			//--
+			//Better to call setStamp always but, to save memory,...
 
 		//Firefox return null for cmp.getAttribute("selectedIndex"...), so...
 		var old = "class" == name ? cmp.className:

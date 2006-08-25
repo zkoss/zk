@@ -930,7 +930,7 @@ zk.resolve = function (fullnm) {
 
 /** Sets the style. */
 zk.setStyle = function (el, style) {
-	for (var j = 0, k = 0; k >=0; j = k + 1) {
+	for (var j = 0, k = 0; k >= 0; j = k + 1) {
 		k = style.indexOf(';', j);
 		var s = k >= 0 ? style.substring(j, k): style.substring(j);
 		var l = s.indexOf(':');
@@ -938,9 +938,10 @@ zk.setStyle = function (el, style) {
 		if (l < 0) {
 			nm = s.trim(); val = "";
 		} else {
-			nm = s.substring(j, l).trim();
+			nm = s.substring(0, l).trim();
 			val = s.substring(l + 1).trim();
 		}
+
 		if (nm) el.style[zk.toJSStyleName(nm)] = val;
 	}
 };
@@ -950,20 +951,19 @@ zk.setStyle = function (el, style) {
  * @param inchgh whether to include height
  */
 zk.getTextStyle = function (style, incwd, inchgh) {
-	var s = "";
-	for (var j = 0, l = 0, k; l >= 0; j = l + 1) {
-		k = style.indexOf(':', j);
-		l = k >= 0 ? style.indexOf(';', k + 1): -1;
-
-		var nm = k >= 0 ? style.substring(j, k): style.substring(j);
-		nm = nm.trim();
+	var ts = "";
+	for (var j = 0, k = 0; k >= 0; j = k + 1) {
+		k = style.indexOf(';', j);
+		var s = k >= 0 ? style.substring(j, k): style.substring(j);
+		var l = s.indexOf(':');
+		var nm = l < 0 ? s.trim(): s.substring(0, l).trim();
 
 		if (nm.startsWith("font")  || nm.startsWith("text")
 		|| zk._txtstyles.contains(nm)
 		|| (incwd && nm == "width") || (inchgh && nm == "height"))
-			s += l >= 0 ? style.substring(j, l + 1): style.substring(j);
+			ts += s + ';';
 	}
-	return s;
+	return ts;
 };
 if (!zk._txtstyles)
 	zk._txtstyles = ["color", "background-color", "background",
