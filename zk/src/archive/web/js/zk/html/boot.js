@@ -387,8 +387,7 @@ zk._progress = function () {
 
 			n = zk._newProgDlg("zk_prog", msg, 0, zk.innerY());
 			if (n) {
-				var left = zk.innerWidth() - n.offsetWidth
-					- (zk.gecko ? 18: 2); //FF shall subtract scrollbar
+				var left = zk.innerWidth() - n.offsetWidth - 20;
 				if (left < 0) left = 0;
 				n.style.left = left + "px";
 			}
@@ -424,18 +423,14 @@ zk.innerY = function () {
 };
 
 zk.innerWidth = function () {
-	//1. If window.innerWidth is ever supported, its meaning is the same
-	//2. IE use document.body.clientWidth since document.documentElement.clientWidth is 0
-	//3. Moz uses document.documentElement.clientWidth which excludes the scrollbar
-	//while Moz document.body.clientWidth includes the scrollbar
-	return window.innerWidth ? window.innerWidth:
-		document.documentElement && document.documentElement.clientWidth ?
-		document.documentElement.clientWidth: document.body.clientWidth;
+	return typeof window.innerWidth == "number" ? window.innerWidth:
+		document.compatMode == "CSS1Compat" ?
+			document.documentElement.clientWidth: document.body.clientWidth;
 };
 zk.innerHeight = function () {
-	return window.innerHeight ? window.innerHeight:
-		document.documentElement && document.documentElement.clientHeight ?
-		document.documentElement.clientHeight: document.body.clientHeight;
+	return typeof window.innerHeight == "number" ? window.innerHeight:
+		document.compatMode == "CSS1Compat" ?
+			document.documentElement.clientHeight: document.body.clientHeight;
 };
 
 zk._setOuterHTML = function (n, html) {

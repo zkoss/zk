@@ -834,8 +834,7 @@ zkau._onDocLClick = function (evt) {
 					if (type) {
 						zkau.closeFloats(ctx);
 
-						ctx.style.left = Event.pointerX(evt) + "px";
-						ctx.style.top = Event.pointerY(evt) + "px";
+						zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
 						zk.eval(ctx, "context", type, cmp);
 					}
 				}
@@ -850,6 +849,33 @@ zkau._onDocLClick = function (evt) {
 	}
 	//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 };
+/** Autoposition by the specified (x, y). */
+zkau._autopos = function (el, x, y) {
+	//the dimension might not be available at the begining
+	var wd = zk.offsetWidth(el), hgh = zk.offsetHeight(el);
+	if (el.style.display == "none" && !wd) {
+		el.style.display = "";
+		wd = zk.offsetWidth(el);
+		hgh = zk.offsetHeight(el);
+		el.style.display = "none";
+	}
+
+	el.style.left = x + "px";
+	el.style.top = y + "px";
+	var scx = zk.innerX(), scy = zk.innerY(),
+		scwd = zk.innerWidth(), schgh = zk.innerHeight();
+	if (x + wd > scwd) {
+		x = scwd - wd;
+		if (x < scx) x = scx;
+	}
+	if (y + hgh > schgh) {
+		y = schgh - hgh;
+		if (y < scy) y = scy;
+	}
+	el.style.left = x + "px";
+	el.style.top = y + "px";
+};
+
 /** Handles the double click. */
 zkau._onDocDClick = function (evt) {
 	if (!evt) evt = window.event;
@@ -880,8 +906,7 @@ zkau._onDocCtxMnu = function (evt) {
 				if (type) {
 					zkau.closeFloats(ctx);
 
-					ctx.style.left = Event.pointerX(evt) + "px";
-					ctx.style.top = Event.pointerY(evt) + "px";
+					zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
 					zk.eval(ctx, "context", type, cmp);
 				}
 			}
@@ -912,8 +937,8 @@ zkau._onDocMouseover = function (evt) {
 				var open = zkau._tipz && zkau._tipz.open;
 				zkau._tipz = {
 					tipId: tip.id, cmpId: cmp.id,
-					x: Event.pointerX(evt) + "px",
-					y: Event.pointerY(evt) + "px"
+					x: Event.pointerX(evt),
+					y: Event.pointerY(evt)
 				};
 				if (open) zkau._openTip(cmp.id);
 				else setTimeout("zkau._openTip('"+cmp.id+"')", 800);
@@ -954,8 +979,7 @@ zkau._openTip = function (cmpId) {
 		if (tip) {
 			var cmp = $(cmpId);
 			zkau._tipz.open = true;
-			tip.style.left = zkau._tipz.x;
-			tip.style.top = zkau._tipz.y;
+			zkau._autopos(tip, zkau._tipz.x, zkau._tipz.y);
 			zk.eval(tip, "context", null, cmp);
 		} else {
 			zkau._tipz = null;

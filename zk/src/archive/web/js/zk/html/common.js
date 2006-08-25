@@ -150,8 +150,16 @@ zk.center = function (el) {
 };
 /** Position a component being releted to another. */
 zk.position = function (el, ref, type) {
-	var refofs = Position.positionedOffset(ref);
+	var refofs = Position.positionedOffset(el);
+	var cumofs = Position.cumulativeOffset(el);
+	cumofs[0] -= refofs[0]; cumofs[1] -= refofs[1];
+	refofs = Position.positionedOffset(ref);
+
 	var x, y;
+	var scx = zk.innerX(), scy = zk.innerY(),
+		scwd = zk.innerWidth(), schgh = zk.innerHeight(),
+		wd = zk.offsetWidth(el), hgh = zk.offsetHeight(el);
+
 	if (type == "end_before") { //el's upper-left = ref's upper-right
 		x = refofs[0] + zk.offsetWidth(ref);
 		y = refofs[1];
@@ -162,10 +170,13 @@ zk.position = function (el, ref, type) {
 			diff = parseInt(zk.getCurrentStyle(ref, "margin-right")||"0", 10);
 			if (!isNaN(diff)) x += diff;
 		}
+
+		if (x + cumofs[0] + wd > scwd)
+			x = refofs[0] - wd;
+		if (y + cumofs[1] + hgh > schgh)
+			y = schgh - cumofs[1] - hgh;
 	} else { //after-start: el's upper-left = ref's lower-left
 		x = refofs[0];
-		var max = zk.innerWidth() - zk.offsetWidth(el);
-		if (x > max) x = max;
 		y = refofs[1] + zk.offsetHeight(ref);
 
 		if (zk.ie) {
@@ -174,7 +185,15 @@ zk.position = function (el, ref, type) {
 			diff = parseInt(zk.getCurrentStyle(ref, "margin-left")||"0", 10);
 			if (!isNaN(diff)) x += diff;
 		}
+
+		if (y + cumofs[1] + hgh > schgh)
+			y = refofs[1] - hgh;
+		if (x + cumofs[0] + wd > scwd)
+			x = scwd - cumofs[0] - wd;
 	}
+
+	if (x + cumofs[0] < scx) x = scx - cumofs[0];
+	if (y + cumofs[1] < scy) y = scy - cumofs[1];
 	el.style.left = x + "px"; el.style.top = y + "px";
 };
 
