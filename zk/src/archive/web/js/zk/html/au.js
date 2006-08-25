@@ -1511,7 +1511,7 @@ zk.History = Class.create();
 zk.History.prototype = {
 	initialize: function () {
 		this.curbk = "";
-		setInterval("zkau.history.checkBookmark()", zk.ie ? 320: 120);
+		setInterval("zkau.history.checkBookmark()", 520);
 			//Though IE use history.html, timer is still required 
 			//because user might specify URL directly
 	},
@@ -1519,7 +1519,8 @@ zk.History.prototype = {
 	bookmark: function (nm) {
 		if (this.curbk != nm) {
 			this.curbk = nm; //to avoid loop back the server
-			window.location.hash = zk.safari ? nm: '#' + nm;
+			var encnm = encodeURIComponent(nm);
+			window.location.hash = zk.safari ? encnm: '#' + encnm;
 			if (zk.ie /*|| zk.safari*/) this.bkIframe(nm);
 		}
 	},
@@ -1534,14 +1535,14 @@ zk.History.prototype = {
 	getBookmark: function () {
 		var nm = window.location.hash;
 		var j = nm.indexOf('#');
-		return j >= 0 ? nm.substring(j + 1): '';
+		return j >= 0 ? decodeURIComponent(nm.substring(j + 1)): '';
 	}
 };
 if (zk.ie /*|| zk.safari*/) {
 	/** bookmark iframe */
 	zk.History.prototype.bkIframe = function (nm) {
 		var url = zk.getUpdateURI("/web/js/zk/html/history.html", true);
-		if (nm) url += '?' +nm;
+		if (nm) url += '?' +encodeURIComponent(nm);
 
 		var ifr = $('zk_histy');
 		if (ifr) {
