@@ -247,26 +247,34 @@ import com.potix.zk.au.*;
 	 */
 	private void crop() {
 		final Map cropping = new HashMap();
-		crop(_attached, cropping, true, false);
-		crop(_invalidated.keySet(), cropping, false, false);
-		crop(_smartUpdated.keySet(), cropping, false, true);
+		crop(_attached, cropping, true, false, false);
+		crop(_invalidated.keySet(), cropping, false, false, false);
+		crop(_smartUpdated.keySet(), cropping, false, true, false);
+		if (_responses != null)
+			crop(_responses.keySet(), cropping, false, false, true);
 	}
 	/** Crop attached and moved.
 	 */
-	private void
-	crop(Set coll, Map cropping, boolean bAttached, boolean bSmartUpdate) {
+	private void crop(Set coll, Map cropping, boolean bAttached,
+	boolean bSmartUpdate, boolean bResponse) {
 		l_out:
 		for (Iterator it = coll.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			if (!_exec.isAsyncUpdate(comp.getPage())) {
-				it.remove();
+			final Object o = it.next();
+			if (!(o instanceof Component))
 				continue;
-			}
 
-			if (isAncestor(_invalidated.keySet(), comp, bSmartUpdate)
-			|| isAncestor(_attached, comp, bSmartUpdate)) {
-				it.remove();
-				continue;
+			final Component comp = (Component)o;
+			if (!bResponse) {
+				if (!_exec.isAsyncUpdate(comp.getPage())) {
+					it.remove();
+					continue;
+				}
+
+				if (isAncestor(_invalidated.keySet(), comp, bSmartUpdate)
+				|| isAncestor(_attached, comp, bSmartUpdate)) {
+					it.remove();
+					continue;
+				}
 			}
 
 			for (Component p, c = comp; (p = c.getParent()) != null; c = p) {
@@ -534,6 +542,8 @@ import com.potix.zk.au.*;
 			if (pg == null) {
 				removed.add(comp);
 				it.remove();
+
+				if (_responses != null) _responses.remove(comp);
 				_invalidated.remove(comp);
 				_smartUpdated.remove(comp);
 
