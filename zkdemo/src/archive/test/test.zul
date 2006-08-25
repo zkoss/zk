@@ -444,6 +444,7 @@ Line 1
 Line 2
 		]]></attribute>
 	</textbox>
-	<checkbox style="font-size: 20px" label="BIG FONT"/>
+	<checkbox id="cbs" style="font-size: 20px" label="BIG FONT"/>
+	<button label="change style" onClick="cbs.setStyle(&quot;font-size:28px;background-color:blue&quot;)"/>
   </window>
 </zk>
