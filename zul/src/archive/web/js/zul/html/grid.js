@@ -206,6 +206,7 @@ zkGrid.init = function (cmp) {
 	if (meta) meta.init();
 	else new zk.Grid(cmp);
 };
+zkGrid.childchg = zkGrid.init;
 
 /** Called when a grid becomes visible because of its parent. */
 zkGrid.onVisi = function (cmp) {

@@ -25,6 +25,7 @@ import com.potix.lang.Objects;
 
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
+import com.potix.zk.ui.ext.ChildChangedAware;
 import com.potix.zk.ui.event.Event;
 import com.potix.zk.ui.event.EventListener;
 
@@ -57,7 +58,7 @@ import com.potix.zul.html.event.PagingEvent;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Grid extends XulElement {
+public class Grid extends XulElement implements ChildChangedAware {
 	private transient Rows _rows;
 	private transient Columns _cols;
 	private String _align;
@@ -305,6 +306,11 @@ public class Grid extends XulElement {
 		}
 		invalidate(INNER);
 		return true;
+	}
+
+	//ChildChangedAware//
+	public boolean isChildChangedAware() {
+		return !inPagingMold();
 	}
 
 	//Cloneable//
