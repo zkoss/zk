@@ -47,6 +47,7 @@ import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ext.Transparent;
 import com.potix.zk.ui.ext.Cropper;
+import com.potix.zk.ui.ext.ChildChangedAware;
 import com.potix.zk.ui.sys.Visualizer;
 import com.potix.zk.ui.sys.DesktopCtrl;
 import com.potix.zk.ui.sys.PageCtrl;
@@ -245,7 +246,7 @@ import com.potix.zk.au.*;
 
 	/** Process {@link Cropper}.
 	 */
-	private void crop() {
+	private void doCrop() {
 		final Map cropping = new HashMap();
 		crop(_attached, cropping, true, false, false);
 		crop(_invalidated.keySet(), cropping, false, false, false);
@@ -304,6 +305,33 @@ import com.potix.zk.au.*;
 			return set;
 		}
 		return null;
+	}
+
+	/** Process {@link ChildChangedAware}
+	 */
+	private void doChildChanged() {
+		final List ccawares = new LinkedList();
+		doChildChanged(_invalidated.keySet(), ccawares);
+		doChildChanged(_attached, ccawares);
+		doChildChanged(_smartUpdated.keySet(), ccawares);
+
+		if (!ccawares.isEmpty())
+			for (Iterator it = ccawares.iterator(); it.hasNext();)
+				addSmartUpdate((Component)it.next(), "zk_chchg", "true");
+	}
+	private void doChildChanged(Collection col, List ccawares) {
+		for (Iterator it = col.iterator(); it.hasNext();) {
+			Component comp = (Component)it.next();
+			if (!_exec.isAsyncUpdate(comp.getPage()))
+				continue;
+
+			while ((comp = comp.getParent()) != null) {
+				if ((comp instanceof ChildChangedAware)
+				&& !_invalidated.containsKey(comp) && !_attached.contains(comp)
+				&& ((ChildChangedAware)comp).isChildChangedAware())
+					ccawares.add(comp);
+			}
+		}
 	}
 
 	/** Prepares {@link #_pgRemoved} to contain set of pages that will
@@ -398,7 +426,7 @@ import com.potix.zk.au.*;
 			//the client, they might not be parent-child relationship
 			Set removed = doMoved(responses); //process _attached and _moved
 
-			crop(); //process Cropper
+			doCrop(); //process Cropper
 
 			//1a. prepare removed pages and optimize for invalidate or removed pages
 			checkPageRemoved(removed); //maintain _pgRemoved for pages being removed
@@ -450,7 +478,10 @@ import com.potix.zk.au.*;
 			log.finer("After removing redudant: invalidated: "+_invalidated
 			+"\nAttached: "+_attached+"\nSmartUpd:"+_smartUpdated);
 
-		//5. generate replace for invalidated
+		//5. process special interfaces
+		doChildChanged(); //ChildChangedAware
+
+		//6. generate replace for invalidated
 		for (Iterator it = _invalidated.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final Component comp = (Component)me.getKey();
@@ -462,7 +493,7 @@ import com.potix.zk.au.*;
 				responses.add(new AuReplace(comp, content));
 		}
 
-		//6. add attached components (including setParent)
+		//7. add attached components (including setParent)
 		//Due to cyclic references, we have to process all siblings
 		//at the same time
 		final List desktops = new LinkedList();

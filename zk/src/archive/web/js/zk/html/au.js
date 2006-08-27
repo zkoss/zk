@@ -1660,7 +1660,7 @@ zkau.cmd0 = { //no uuid at all
 };
 zkau.cmd1 = {
 	setAttr: function (uuid, cmp, dt1, dt2) {
-		if (dt1 == "zk_init") { //initialize
+		if (dt1 == "zk_init" || dt1 == "zk_chchg") { //initialize
 			//Note: cmp might be null because it might be removed
 			if (cmp) {
 				var type = zk.getCompType(cmp);
@@ -1671,7 +1671,7 @@ zkau.cmd1 = {
 						cmps.push(cmp);
 						zk.addInitCmps(cmps);
 					} else {
-						zk.eval(cmp, "init", type);
+						zk.eval(cmp, dt1 == "zk_init" ? "init": "childchg", type);
 					}
 				}
 			}
