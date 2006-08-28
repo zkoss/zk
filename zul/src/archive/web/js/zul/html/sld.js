@@ -75,7 +75,6 @@ zk.Slider.prototype = {
 		var wd = this._width();
 		var x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0;
 		var ofs = Position.cumulativeOffset(this.element);
-zk.debug("fo:"+ofs);
 		ofs = zk.toStylePos(this.button, ofs[0], ofs[1]);
 		ofs = this._snap(ofs[0] + x, 0);
 		this.button.style.left = ofs[0] + "px";
