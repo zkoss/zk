@@ -1,61 +1,47 @@
 	--------
-ZK 2.1.0 Freshly
+ZK 2.1.0
 * Features:
-  1534285, 1537838, 1537962, 1538400, 1538407, 1480527, 1539887, 1540100,
-  1532548, 1460368, 1545169, 1537234, 1545998, 1545163.
+  1513892, 1475475, 1517902, 1517384, 1518636, 1521070, 1521058, 1522329,
+  1522677, 1507204, 1523732, 1518548, 1525722, 1526249, 1520170, 1526869,
+  1527198, 1526335, 1529424, 1529754, 1525221, 1530200, 1530202, 1487286,
+  1526355, 1534285, 1537838, 1537962, 1538400, 1538407, 1480527, 1539887,
+  1540100, 1532548, 1460368, 1545169, 1537234, 1545998, 1545163.
   + Add new chart component. (Support pie, pie3d, ring, bar, bar3d, stacked_bar,
     stacked_bar3d, line, line3d, area, stacked_area, waterfall, histogram, polar,
     scatter, time_series, step_chart, step, xy area, xy stacked_area, xy bar, 
     xy line, candlestick, highlow)
   + Add new progressmeter component.
   + Add new paging component.
+  + Add the new style component to simplify the specification of CSS styles.
+  + German messages are supported. Thank H.-Dirk Schmitt for his contribution.
+  + Spain messages are supported. Thank Daniel Octavio Ruiz Rodriguez for his contribution.
+  + Italic messages are supported. Thank Matteo Barbieri for his contribution.
   + Grid and listbox support paging.
-  
-* Bugs
-  1533736, 1533840, 1533989, 1533480, 1537672, 1534426, 1535787, 1537884,
-  1538506, 1538250, 1541132, 1540491, 1540491, 1541143, 1543872, 1543934,
-  1544067, 1546019, 1542571, 1542511, 1544023, 1531557, 1545183, 1533421.
-
-	--------
-ZK 2.1.0 RC2
-* Features:
-  1521070, 1521058, 1522329, 1522677, 1507204, 1523732, 1518548, 1525722,
-  1526249, 1520170, 1526869, 1527198, 1526335, 1529424, 1529754, 1525221,
-  1530200, 1530202, 1487286, 1526355.
   + The import directive to import component definitions from other pages.
   + Customizable error pages.
   + LocaleProvider and TimeZoneProvider are added
   + Datebox and Calendar support the timeZone property
-  + The style component is added to simplify the specification of CSS styles.
-  + German messages are supported. Thank H.-Dirk Schmitt for his contribution.
   + The onClientInfo event is added to report the client' information to
     the server, such as time zone and screen resolutions.
-
-* Bugs:
-  1520737, 1510539, 1521847, 1522843, 1521311, 1522339, 1521868, 1523751,
-  1523875, 1525710, 1525712, 1527527, 1527535, 1527895, 1526542, 1528592,
-  1529735.
+  + Safari supported.
+  + Components are serializable.
+  + Session, Desktop and Page are serializable. Use can keep using the same
+    desktop even after the Web server is re-booted.
+  
+* Bugs
+  1513895, 1514932, 1515175, 1515311, 1514789, 1493440, 1517037, 1436397,
+  1505786, 1518540, 1453157, 1510701, 1520737, 1510539, 1521847, 1522843,
+  1521311, 1522339, 1521868, 1523751, 1523875, 1525710, 1525712, 1527527,
+  1527535, 1527895, 1526542, 1528592, 1529735, 1533736, 1533840, 1533989,
+  1533480, 1537672, 1534426, 1535787, 1537884, 1538506, 1538250, 1541132,
+  1540491, 1540491, 1541143, 1543872, 1543934, 1544067, 1546019, 1542571,
+  1542511, 1544023, 1531557, 1545183, 1533421.
 
 * Upgrade Notes
   + <?xml-stylesheet?> is obsolete. Use the style component instead.
   + lang-addon.xml (in JAR) must specify <version>.
   + The print method is moved from com.potix.zk.ui.Desktop
     to com.potx.zk.ui.util.Clients.
-
-	--------
-ZK 2.1.0 RC
-* Features:
-  1513892, 1475475, 1517902, 1517384, 1518636.
-  + Safari supported.
-  + Components are serializable.
-  + Session, Desktop and Page are serializable. Use can keep using the same
-    desktop even after the Web server is re-booted.
-
-* Bugs:
-  1513895, 1514932, 1515175, 1515311, 1514789, 1493440, 1517037, 1436397,
-  1505786, 1518540, 1453157, 1510701.
-
-* Upgrade Notes
   + The getClientName method of com.potix.zk.ui.Session is renamed to getClientHost.
 
 	--------
