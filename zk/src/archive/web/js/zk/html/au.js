@@ -872,15 +872,9 @@ zkau._autopos = function (el, x, y) {
 		if (y < scy) y = scy;
 	}
 
-	//Position.cumulativeOffset not correct if el is not visible in Gecko
-	var bShow = zk.gecko && el.style.display == "none";
-	if (bShow) el.style.display = "";
-
 	var ofs = zk.toStylePos(el, x, y);
 	el.style.left = ofs[0] + "px";
 	el.style.top = ofs[1] + "px";
-
-	if (bShow) el.style.display = "none";
 };
 
 /** Handles the double click. */

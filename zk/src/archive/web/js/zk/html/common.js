@@ -221,8 +221,15 @@ zk.getStyleOffset = function (el) {
  * style.left/top is still relevant to original offsetParent
  */
 zk.toStylePos = function (el, x, y) {
+	//Position.cumulativeOffset not correct if el is not visible in Gecko
+	var bShow = zk.gecko && el.style.display == "none";
+	if (bShow) el.style.display = "";
+
 	var ofs1 = Position.cumulativeOffset(el);
 	var ofs2 = zk.getStyleOffset(el);
+
+	if (bShow) el.style.display = "none";
+
 	return [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
 };
 
