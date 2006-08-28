@@ -51,4 +51,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		}
 	}
 	]]></zscript>
+
+	<zscript>
+		String[] data = new String[30];
+		for(int j=0; j &lt; data.length; ++j) {
+			data[j] = "option "+j;
+		}
+		ListModel strset = new SimpleListModel(data);
+	</zscript>
+	<listbox width="200px" mold="paging" pageSize="5" model="${strset}">
+		<listhead>
+			<listheader label="Load on Demend"/>
+		</listhead>
+	</listbox>
 </window>
