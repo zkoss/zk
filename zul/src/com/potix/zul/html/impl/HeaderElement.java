@@ -77,6 +77,13 @@ abstract public class HeaderElement extends LabelImageElement {
 	}
 
 	//-- super --//
+	public void setWidth(String width) {
+		if (!Objects.equals(width, getWidth())) {
+			super.setWidth(width);
+			invalidateWhole();
+		}
+	}
+
 	public String getOuterAttrs() {
 		return super.getOuterAttrs() + getColAttrs();
 	}

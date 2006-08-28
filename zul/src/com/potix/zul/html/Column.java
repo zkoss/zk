@@ -262,7 +262,7 @@ public class Column extends HeaderElement {
 	/** Invalidates the whole grid. */
 	protected void invalidateWhole() {
 		final Grid grid = getGrid();
-		if (grid != null) grid.invalidate(INNER);
+		if (grid != null) grid.invalidate(OUTER);
 	}
 
 	//-- Component --//

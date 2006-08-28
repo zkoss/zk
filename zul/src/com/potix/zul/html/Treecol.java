@@ -113,7 +113,7 @@ public class Treecol extends HeaderElement {
 	/** Invalidates the whole tree. */
 	protected void invalidateWhole() {
 		final Tree tree = getTree();
-		if (tree != null) tree.invalidate(INNER);
+		if (tree != null) tree.invalidate(OUTER);
 	}
 
 	//-- Component --//

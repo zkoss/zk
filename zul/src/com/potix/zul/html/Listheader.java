@@ -332,7 +332,7 @@ public class Listheader extends HeaderElement {
 	/** Invalidates the whole box. */
 	protected void invalidateWhole() {
 		final Listbox box = getListbox();
-		if (box != null) box.invalidate(INNER);
+		if (box != null) box.invalidate(OUTER);
 	}
 
 	//-- Component --//
