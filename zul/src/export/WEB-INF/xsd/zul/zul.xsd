@@ -470,6 +470,9 @@ elementFormDefault="qualified">
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="align" type="gridAlignAttrType" use="optional"/>
+		<xs:attribute name="pageSize" type="xs:positiveInteger" use="optional"/>
+		<xs:attribute name="paginal" type="xs:string" use="optional"/>
+		<xs:attribute name="onPaging" type="xs:string" use="optional"/>
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<!-- groupbox -->
@@ -595,6 +598,9 @@ elementFormDefault="qualified">
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="checkmark" type="xs:boolean" use="optional"/>
 		<xs:attribute name="disabled" type="xs:boolean" use="optional"/>
+		<xs:attribute name="pageSize" type="xs:positiveInteger" use="optional"/>
+		<xs:attribute name="paginal" type="xs:string" use="optional"/>
+		<xs:attribute name="onPaging" type="xs:string" use="optional"/>
 		<xs:attribute name="readonly" type="xs:boolean" use="optional"/>
 		<xs:attribute name="multiple" type="xs:boolean" use="optional"/>
 		<xs:attribute name="rows" type="xs:nonNegativeInteger" use="optional"/>
