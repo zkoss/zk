@@ -48,9 +48,13 @@ zk.Slider.prototype = {
 			starteffect: zkSld._startDrag, change: zkSld._dragging,
 			endeffect: zkSld._endDrag});
 		this._fixPos();
-		if (zk.gecko)
-			setTimeout(function() {if ($(meta.id)) meta._fixPos();}, 60);
-			//fix gecko's mis-position bug
+
+		if (zk.gecko) {
+			//fix gecko bug: mis-position if img is not ready yet
+			var fn = function() {if ($(meta.id)) meta._fixPos();};
+			setTimeout(fn, 30);
+			setTimeout(fn, 1200);
+		}
 	},
 	/** (x, y) is in the style's coordination (use zk.toStylePos to convert).
 	 */
