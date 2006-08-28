@@ -392,10 +392,26 @@ public class Window extends XulElement implements IdSpace  {
 	}
 
 	public void setPage(Page page) {
+		final Page old = getPage();
 		super.setPage(page);
-		if (page == null) {
+		if (old != page && (old == null || page == null))
+			fixMode(page != null);
+	}
+	public void setParent(Component parent) {
+		final Component old = getParent();
+		super.setParent(parent);
+		if (old != parent && (old == null || parent == null))
+			fixMode(parent != null);
+	}
+	private void fixMode(boolean attached) {
+		if (attached) {
+			switch (_mode) {
+			case OVERLAPPED: doOverlapped();
+			case POPUP: doPopup();
+			}
+		} else {
 			endModing();
-			_mode = EMBEDDED;
+			if (_mode == MODAL) _mode = EMBEDDED;
 		}
 	}
 
