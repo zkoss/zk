@@ -291,7 +291,7 @@ public class Grid extends XulElement implements ChildChangedAware {
 		}
  
 		if (super.insertBefore(newChild, refChild)) {
-			invalidate(INNER);
+			invalidate(OUTER);
 			return true;
 		}
 		return false;
@@ -306,7 +306,7 @@ public class Grid extends XulElement implements ChildChangedAware {
 			_paging = null;
 			if (_pgi == child) _pgi = null;
 		}
-		invalidate(INNER);
+		invalidate(OUTER);
 		return true;
 	}
 

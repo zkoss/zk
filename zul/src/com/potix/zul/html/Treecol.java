@@ -66,7 +66,7 @@ public class Treecol extends HeaderElement {
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			invalidateCells(INNER);
+			invalidateCells();
 		}
 	}
 
@@ -82,12 +82,12 @@ public class Treecol extends HeaderElement {
 	}
 
 	/** Invalidates the relevant cells. */
-	private void invalidateCells(Range range) {
+	private void invalidateCells() {
 		final Tree tree = getTree();
 		if (tree != null)
-			invalidateCells(tree.getTreechildren(), getColumnIndex(), range);
+			invalidateCells(tree.getTreechildren(), getColumnIndex());
 	}
-	private static void invalidateCells(Treechildren tch, int jcol, Range range) {
+	private static void invalidateCells(Treechildren tch, int jcol) {
 		if (tch == null)
 			return;
 
@@ -97,10 +97,10 @@ public class Treecol extends HeaderElement {
 			if (tr != null) {
 				final List chs = tr.getChildren();
 				if (jcol < chs.size())
-					((Component)chs.get(jcol)).invalidate(range);
+					((Component)chs.get(jcol)).invalidate(OUTER);
 			}
 
-			invalidateCells(ti.getTreechildren(), jcol, range); //recursive
+			invalidateCells(ti.getTreechildren(), jcol); //recursive
 		}
 	}
 

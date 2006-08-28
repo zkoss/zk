@@ -194,7 +194,7 @@ ChildChangedAware, Cropper {
 	public void setCheckmark(boolean checkmark) {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
-			if (!inSelectMold()) invalidate(INNER);
+			if (!inSelectMold()) invalidate(OUTER);
 		}
 	}
 
@@ -296,7 +296,7 @@ ChildChangedAware, Cropper {
 			}
 
 			if (inSelectMold()) smartUpdate("multiple", _multiple);
-			else if (isCheckmark()) invalidate(INNER); //change check mark
+			else if (isCheckmark()) invalidate(OUTER); //change check mark
 			else smartUpdate("zk_multiple", _multiple);
 				//No need to use response because such info is carried on tags
 		}
@@ -823,7 +823,7 @@ ChildChangedAware, Cropper {
 			if (super.insertBefore(newChild, refChild)) {
 				final List children = getChildren();
 				if (_listhead != null && children.get(1) == newChild)
-					invalidate(INNER);
+					invalidate(OUTER);
 				//we place listhead and treeitem at different div, so
 				//this case requires invalidate (because we use insert-after)
 
@@ -875,7 +875,7 @@ ChildChangedAware, Cropper {
 
 			if (inSelectMold())
 				log.warning("Mold select ignores listhead");
-			invalidate(INNER);
+			invalidate(OUTER);
 				//we place listhead and treeitem at different div, so...
 			_listhead = (Listhead)newChild;
 			return super.insertBefore(newChild, refChild);
@@ -885,7 +885,7 @@ ChildChangedAware, Cropper {
 
 			if (inSelectMold())
 				log.warning("Mold select ignores listfoot");
-			invalidate(INNER);
+			invalidate(OUTER);
 				//we place listfoot and treeitem at different div, so...
 			_listfoot = (Listfoot)newChild;
 			refChild = _paging; //the last two: listfoot and paging
@@ -898,7 +898,7 @@ ChildChangedAware, Cropper {
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
 
-			invalidate(INNER);
+			invalidate(OUTER);
 			_pgi = _paging = (Paging)newChild;
 			refChild = null; //the last: paging
 			return super.insertBefore(newChild, refChild);
@@ -940,7 +940,7 @@ ChildChangedAware, Cropper {
 			_paging = null;
 			if (_pgi == child) _pgi = null;
 		}
-		invalidate(INNER);
+		invalidate(OUTER);
 		return true;
 	}
 	/** Fix the selected index, _jsel, assuming there are no selected one

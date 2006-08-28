@@ -198,7 +198,7 @@ public class Listheader extends HeaderElement {
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			invalidateCells(INNER);
+			invalidateCells();
 		}
 	}
 
@@ -214,7 +214,7 @@ public class Listheader extends HeaderElement {
 	}
 
 	/** Invalidates the relevant cells. */
-	private void invalidateCells(Range range) {
+	private void invalidateCells() {
 		final Listbox listbox = getListbox();
 		if (listbox == null || listbox.inSelectMold())
 			return;
@@ -224,7 +224,7 @@ public class Listheader extends HeaderElement {
 			final Listitem li = (Listitem)it.next();
 			final List chs = li.getChildren();
 			if (jcol < chs.size())
-				((Component)chs.get(jcol)).invalidate(range);
+				((Component)chs.get(jcol)).invalidate(OUTER);
 		}
 	}
 

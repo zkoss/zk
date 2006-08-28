@@ -154,7 +154,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 	public void setCheckmark(boolean checkmark) {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
-			invalidate(INNER);
+			invalidate(OUTER);
 		}
 	}
 
@@ -190,7 +190,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 					_selItems.add(item);
 				//No need to update zk_selId because zk_multiple will do the job
 			}
-			if (isCheckmark()) invalidate(INNER); //change check mark
+			if (isCheckmark()) invalidate(OUTER); //change check mark
 			else smartUpdate("zk_multiple", _multiple);
 		}
 	}
@@ -440,14 +440,14 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 				insertBefore = (Component)getChildren().get(0);
 				//always makes treecols as the first child
 			_treecols = (Treecols)child;
-			invalidate(INNER);
+			invalidate(OUTER);
 		} else if (child instanceof Treechildren) {
 			if (_treechildren != null && _treechildren != child)
 				throw new UiException("Only one treechildren is allowed: "+this);
 			if (insertBefore instanceof Treecols)
 				throw new UiException("treecols must be the first child");
 			_treechildren = (Treechildren)child;
-			invalidate(INNER);
+			invalidate(OUTER);
 
 			fixSelectedSet();
 		} else {
