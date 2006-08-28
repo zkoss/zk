@@ -134,6 +134,13 @@ ChildChangedAware, Cropper {
 			public ListIterator listIterator(int index) {
 				return new ItemIter(index);
 			}
+			public Object get(int j) {
+				final Object o =
+					Listbox.this.getChildren().get(_listhead != null ? j + 1: j);
+				if (!(o instanceof Listitem))
+					throw new IndexOutOfBoundsException("Wrong index: "+j);
+				return o;
+			}
 			public int size() {
 				int sz = getChildren().size();
 				if (_listhead != null) --sz;
@@ -686,6 +693,22 @@ ChildChangedAware, Cropper {
 	 * <p>Default: getRows().invalidate(INNER).
 	 */
 	public void onPaging() {
+		if (_model != null && inPagingMold()) {
+			final Renderer renderer = new Renderer();
+			try {
+				final Paginal pgi = getPaginal();
+				int pgsz = pgi.getPageSize();
+				final int ofs = pgi.getActivePage() * pgsz;
+				for (final Iterator it = getItems().listIterator(ofs);
+				--pgsz >= 0 && it.hasNext();)
+					renderer.render((Listitem)it.next());
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
+			}
+		}
+
 		invalidate(INNER);
 	}
 
@@ -1077,8 +1100,10 @@ ChildChangedAware, Cropper {
 	public void onInitRender() {
 		final Renderer renderer = new Renderer();
 		try {
-			for (int j = 0, sz = getItemCount(); j < _rows && j < sz; ++j)
-				renderer.render(getItemAtIndex(j));
+			final int pgsz = inPagingMold() ? _pgi.getPageSize(): _rows;
+			int j = 0;
+			for (Iterator it = getItems().iterator(); j < pgsz && it.hasNext(); ++j)
+				renderer.render((Listitem)it.next());
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {

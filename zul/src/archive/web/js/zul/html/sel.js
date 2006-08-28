@@ -95,18 +95,21 @@ zk.Selectable.prototype = {
 				this.element.onselectstart = function () {return false;}
 				//Tom Yeh: 20060106: side effect: unable to select textbox
 			}
-			this.fnResize = function () {
-				//Tom Yeh: 20051230:
-				//In certain case, IE will keep sending resize (because
-				//our listbox might adjust size and cause resize again)
-				//To avoid this endless loop, we resize once in a few seconds
-				var time = new Date().getTime();
-				if (!meta.nextTime || time > meta.nextTime) {
-					meta.nextTime = time + 3000;
-					meta._recalcSize();
-				}
-			};
-			Event.observe(window, "resize", this.fnResize);
+
+			if (!this.paging) {
+				this.fnResize = function () {
+					//Tom Yeh: 20051230:
+					//In certain case, IE will keep sending resize (because
+					//our listbox might adjust size and cause resize again)
+					//To avoid this endless loop, we resize once in a few seconds
+					var time = new Date().getTime();
+					if (!meta.nextTime || time > meta.nextTime) {
+						meta.nextTime = time + 3000;
+						meta._recalcSize();
+					}
+				};
+				Event.observe(window, "resize", this.fnResize);
+			}
 
 			for (var n = this.element; (n = n.parentNode) != null;)
 				if (zk.tagName(n) == "FORM") {
@@ -121,32 +124,34 @@ zk.Selectable.prototype = {
 			}
 		}
 
-		if (zk.gecko && this.headtbl && this.headtbl.rows.length == 1) {
-			var headrow = this.headtbl.rows[0];
-			var empty = true;
-			l_out:
-			for (var j = headrow.cells.length; --j>=0;)
-				for (var n = headrow.cells[j].firstChild; n; n = n.nextSibling)
-					if (!n.id || !n.id.endsWith("!hint")) {
-						empty = false;
-						break l_out;
-					}
-			if (empty) this.head.style.display = "none";
-				//we have to hide if empty (otherwise, a small block is shown)
+		if (!this.paging) {
+			if (zk.gecko && this.headtbl && this.headtbl.rows.length == 1) {
+				var headrow = this.headtbl.rows[0];
+				var empty = true;
+				l_out:
+				for (var j = headrow.cells.length; --j>=0;)
+					for (var n = headrow.cells[j].firstChild; n; n = n.nextSibling)
+						if (!n.id || !n.id.endsWith("!hint")) {
+							empty = false;
+							break l_out;
+						}
+				if (empty) this.head.style.display = "none";
+					//we have to hide if empty (otherwise, a small block is shown)
+			}
+
+			this.body.onscroll = function () {
+				if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
+				if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
+				meta._render(zk.gecko ? 200: 0);
+					//Moz has a bug to send the request out if we don't wait long enough
+					//How long is enough is unknown, but 200 seems fine
+			};
+			this._render(20);
+
+			setTimeout("zkSel._calcSize('"+this.id+"')", 5);
+				//don't calc now because browser might size them later
+				//after the whole HTML page is processed
 		}
-
-		this.body.onscroll = function () {
-			if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
-			if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
-			meta._render(zk.gecko ? 200: 0);
-				//Moz has a bug to send the request out if we don't wait long enough
-				//How long is enough is unknown, but 200 seems fine
-		};
-		this._render(20);
-
-		setTimeout("zkSel._calcSize('"+this.id+"')", 5);
-			//don't calc now because browser might size them later
-			//after the whole HTML page is processed
 	},
 	cleanup: function ()  {
 		if (this.fnResize)
@@ -533,7 +538,7 @@ zk.Selectable.prototype = {
 				row.setAttribute("zk_focus", "true");
 				zkSel.cmonfocus(row);
 
-				if (zk.gecko) this._render(5);
+				if (!this.paging && zk.gecko) this._render(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
 			} else {
 				row.removeAttribute("zk_focus");
