@@ -977,6 +977,7 @@ zkLibox.init = function (cmp) {
 		new zk.Selectable(cmp);
 	}
 };
+zkLibox.childchg = zkLibox.init;
 
 /** Called when a listbox becomes visible because of its parent. */
 zkLibox.onVisi = function (cmp) {
