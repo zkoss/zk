@@ -48,7 +48,7 @@ zk.Slider.prototype = {
 			starteffect: zkSld._startDrag, change: zkSld._dragging,
 			endeffect: zkSld._endDrag});
 		this._fixPos();
-		if (zk.gecko) setTimeout(function() {meta._fixPos();}, 5);
+		if (zk.gecko) setTimeout(function() {meta._fixPos();}, 25);
 	},
 	/** (x, y) is in the style's coordination (use zk.toStylePos to convert).
 	 */
