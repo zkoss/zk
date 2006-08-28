@@ -90,6 +90,7 @@ public class Paging extends XulElement implements Paginal {
 		if (_ttsz != size) {
 			_ttsz = size;
 			updatePageNum();
+			if (_detailed) invalidate(INNER);
 		}
 	}
 	private void updatePageNum() {
@@ -188,7 +189,7 @@ public class Paging extends XulElement implements Paginal {
 		boolean bNext = _actpg < _npg - 1;
 		for (; begin <= end; ++begin) {
 			if (begin == _actpg) {
-				sb.append(begin + 1);
+				sb.append(begin + 1).append("&nbsp;");
 			} else {
 				appendAnchor(sb, Integer.toString(begin + 1), begin);
 			}
@@ -207,7 +208,7 @@ public class Paging extends XulElement implements Paginal {
 	private static final
 	void appendAnchor(StringBuffer sb, String label, int val) {
 		sb.append("<a href=\"javascript:;\" onclick=\"zkPg.go(this,")
-			.append(val).append(")\">").append(label).append("</a>");
+			.append(val).append(")\">").append(label).append("</a>&nbsp;");
 	}
 
 	//-- Component --//

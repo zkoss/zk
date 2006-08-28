@@ -241,41 +241,41 @@ div.listbox, div.tree, div.grid, div.grid-no-striped { /* depends sclass. */
 div.tree-head, div.listbox-head, div.grid-head { /* always used. */
 	background: threedface; border: 0; overflow: hidden; width: 100%;
 }
-div.grid-paging th {
+div.listbox-paging th, div.grid-paging th {
 	background: threedface;
 }
-div.tree-head th, div.listbox-head th, div.grid-head th, div.grid-paging th {
+div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
 	overflow: hidden; border: 1px solid;
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
 	white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;
 }
-div.listbox-head th.sort, div.grid-head th.sort, div.grid-paging th.sort {
+div.listbox-head th.sort, div.grid-head th.sort, div.listbox-paging th.sort, div.grid-paging th.sort {
 	cursor: pointer; padding-right: 9px;
 	background-image: url(${c:encodeURL('~./zul/img/sort/hint.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
-div.listbox-head th.sort-asc, div.grid-head th.sort-asc, div.grid-paging th.sort-asc {
+div.listbox-head th.sort-asc, div.grid-head th.sort-asc, div.listbox-paging th.sort-asc, div.grid-paging th.sort-asc {
 	cursor: pointer; padding-right: 9px;
 	background-image: url(${c:encodeURL('~./zul/img/sort/asc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
-div.listbox-head th.sort-dsc, div.grid-head th.sort-dsc, div.grid-paging th.sort-dsc {
+div.listbox-head th.sort-dsc, div.grid-head th.sort-dsc, div.listbox-paging th.sort-dsc, div.grid-paging th.sort-dsc {
 	cursor: pointer; padding-right: 9px;
 	background-image: url(${c:encodeURL('~./zul/img/sort/dsc.png')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
 
-div.tree-body, div.listbox-body, div.grid-body, div.grid-paging { /* always used. */
+div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging { /* always used. */
 	background: window; border: 0; overflow: auto; width: 100%;
 }
-div.grid-paging {
+div.listbox-paging, div.grid-paging {
 	border-bottom: 1px solid #AAB;
 }
-div.tree-body td, div.listbox-body td, div.grid-paging td {
+div.tree-body td, div.listbox-body td, div.grid-body td, div.listbox-paging td, div.grid-paging td {
 	cursor: pointer; padding: 0 2px;
 	font-size: small; font-weight: normal;
 }
@@ -401,8 +401,7 @@ div.progressmeter {
 }
 
 div.paging, div.paging a {
-	font-size: x-small; color: #a30; font-weight: bold;
-	background: window; padding-right: 2px;
+	font-size: x-small; color: #a30; font-weight: bold; background: window;
 }
 div.paging span {
 	font-size: x-small; color: #555; font-weight: normal;

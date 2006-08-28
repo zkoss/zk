@@ -41,6 +41,7 @@ public class Rows extends XulElement implements Cropper {
 		return (Grid)getParent();
 	}
 
+	//Paging//
 	/** Returns the index of the first visible child.
 	 * <p>Used only for component development, not for application developers.
 	 */

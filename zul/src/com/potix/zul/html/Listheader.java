@@ -216,7 +216,7 @@ public class Listheader extends HeaderElement {
 	/** Invalidates the relevant cells. */
 	private void invalidateCells(Range range) {
 		final Listbox listbox = getListbox();
-		if (listbox == null || listbox.isHtmlSelect())
+		if (listbox == null || listbox.inSelectMold())
 			return;
 
 		final int jcol = getColumnIndex();

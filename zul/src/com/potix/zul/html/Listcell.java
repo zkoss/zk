@@ -97,7 +97,7 @@ public class Listcell extends LabelImageElement {
 		final Listbox listbox = getListbox();
 		if (listbox == null)
 			return 0;
-		if (listbox.isHtmlSelect())
+		if (listbox.inSelectMold())
 			return listbox.getMaxlength();
 		final Listheader lc = getListheader();
 		return lc != null ? lc.getMaxlength(): 0;
@@ -198,7 +198,7 @@ public class Listcell extends LabelImageElement {
 	}
 	public void invalidate(Range range) {
 		final Listbox listbox = getListbox();
-		if (listbox != null && listbox.isHtmlSelect()) {
+		if (listbox != null && listbox.inSelectMold()) {
 			getParent().invalidate(INNER);
 			//if HTML select, the cell doesn't exists in client
 		} else {

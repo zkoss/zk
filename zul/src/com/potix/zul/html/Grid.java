@@ -66,6 +66,7 @@ public class Grid extends XulElement implements ChildChangedAware {
 	private transient Paginal _pgi;
 	/** The paging controller, used only if mold = "paging" and user
 	 * doesn't assign a controller via {@link #setPaginal}.
+	 * If exists, it is the last child.
 	 */
 	private transient Paging _paging;
 	private transient EventListener _pgListener;
@@ -265,30 +266,31 @@ public class Grid extends XulElement implements ChildChangedAware {
 			//We have to re-init because inner tags are changed
 			//If OUTER, init is invoked automatically by client
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
-		if (child instanceof Rows) {
-			if (_rows != null && _rows != child)
+	public boolean insertBefore(Component newChild, Component refChild) {
+		if (newChild instanceof Rows) {
+			if (_rows != null && _rows != newChild)
 				throw new UiException("Only one rows child is allowed: "+this);
-			_rows = (Rows)child;
-		} else if (child instanceof Columns) {
-			if (_cols != null && _cols != child)
+			_rows = (Rows)newChild;
+			if (_paging != null && refChild == null) refChild = _paging; //paging as last
+		} else if (newChild instanceof Columns) {
+			if (_cols != null && _cols != newChild)
 				throw new UiException("Only one columns child is allowed: "+this);
-			_cols = (Columns)child;
-		} else if (child instanceof Paging) {
+			_cols = (Columns)newChild;
+			if (_paging != null && refChild == null) refChild = _paging; //paging as last
+		} else if (newChild instanceof Paging) {
 			if (_pgi != null)
 				throw new UiException("External paging cannot coexist with child paging");
-			if (_paging != null && _paging != child)
+			if (_paging != null && _paging != newChild)
 				throw new UiException("Only one paging is allowed: "+this);
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
-			_pgi = _paging = (Paging)child;
-			if (!getChildren().isEmpty())
-				insertBefore = (Component)getChildren().get(0); //as the first child
+			_pgi = _paging = (Paging)newChild;
+			refChild = null; //as the last child
 		} else {
-			throw new UiException("Unsupported child for grid: "+child);
+			throw new UiException("Unsupported child for grid: "+newChild);
 		}
  
-		if (super.insertBefore(child, insertBefore)) {
+		if (super.insertBefore(newChild, refChild)) {
 			invalidate(INNER);
 			return true;
 		}

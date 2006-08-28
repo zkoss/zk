@@ -65,9 +65,9 @@ public class Listitem extends XulElement {
 	}
 	/** Returns whether the HTML's select tag is used.
 	 */
-	private final boolean isHtmlSelect() {
+	private final boolean inSelectMold() {
 		final Listbox listbox = getListbox();
-		return listbox != null && listbox.isHtmlSelect();
+		return listbox != null && listbox.inSelectMold();
 	}
 
 	/** Returns the maximal length of each item's label.
@@ -107,7 +107,7 @@ public class Listitem extends XulElement {
 
 			final Listbox listbox = getListbox();
 			if (listbox != null)
-				if (listbox.isHtmlSelect())
+				if (listbox.inSelectMold())
 					smartUpdate("value", Objects.toString(_value));
 				else if (listbox.getName() != null)
 					smartUpdate("zk_value", Objects.toString(_value));
@@ -124,7 +124,7 @@ public class Listitem extends XulElement {
 	 */
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
-			if (disabled && !isHtmlSelect())
+			if (disabled && !inSelectMold())
 				throw new UnsupportedOperationException();
 
 			_disabled = disabled;
@@ -270,7 +270,7 @@ public class Listitem extends XulElement {
 		return super.insertBefore(child, insertBefore);
 	}
 	public void invalidate(Range range) {
-		if (range == OUTER && isHtmlSelect() && isVisible()) {
+		if (range == OUTER && inSelectMold() && isVisible()) {
 			//Both IE and Mozilla are buggy if we update options by outerHTML
 			getParent().invalidate(OUTER);
 			return;
@@ -279,12 +279,12 @@ public class Listitem extends XulElement {
 		initAtClient();
 	}
 	public void onChildAdded(Component child) {
-		if (isHtmlSelect()) invalidate(INNER); //if HTML-select, Listcell has no client part
+		if (inSelectMold()) invalidate(INNER); //if HTML-select, Listcell has no client part
 		else initAtClient();
 		super.onChildAdded(child);
 	}
 	public void onChildRemoved(Component child) {
-		if (isHtmlSelect()) invalidate(INNER); //if HTML-select, Listcell has no client part
+		if (inSelectMold()) invalidate(INNER); //if HTML-select, Listcell has no client part
 		else initAtClient();
 		super.onChildRemoved(child);
 	}
@@ -292,7 +292,7 @@ public class Listitem extends XulElement {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
 
-		if (isHtmlSelect()) {
+		if (inSelectMold()) {
 			HTMLs.appendAttribute(sb, "value",  Objects.toString(_value));
 			if (isDisabled())
 				HTMLs.appendAttribute(sb, "disabled",  "disabled");

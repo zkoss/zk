@@ -32,22 +32,30 @@ zk.Selectable.prototype = {
 		if (!this.element) return;
 
 		//_headtbl might be null, while other must be NOT null
-		this.head = $(this.id + "!head");
-		if (this.head) this.headtbl = zk.firstChild(this.head, "TABLE", true);
 		this.body = $(this.id + "!body");
-		if (this.body) this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-		if (this.bodytbl) {
-			var bds = this.bodytbl.tBodies;
-			if (!bds || !bds.length)
-				this.bodytbl.appendChild(document.createElement("TBODY"));
-			this.bodyrows = bds[0].rows;
+		if (this.body) {
+			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
+			if (this.bodytbl) {
+				var bds = this.bodytbl.tBodies;
+				if (!bds || !bds.length)
+					this.bodytbl.appendChild(document.createElement("TBODY"));
+				this.bodyrows = bds[0].rows;
+			}
+
+			this.head = $(this.id + "!head");
+			if (this.head) this.headtbl = zk.firstChild(this.head, "TABLE", true);
+			this.foot = $(this.id + "!foot");
+			if (this.foot) this.foottbl = zk.firstChild(this.foot, "TABLE", true);
+		} else {
+			this.paging = true;
+			this.body = $(this.id + "!paging");
+			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
+			this.bodyrows = this.bodytbl.tBodies[1].rows;
 		}
 		if (!this.bodyrows) {
 			alert(mesg.INVALID_STRUCTURE + this.id);
 			return;
 		}
-		this.foot = $(this.id + "!foot");
-		if (this.foot) this.foottbl = zk.firstChild(this.foot, "TABLE", true);
 
 		if (!zk.isRealVisible(this.element)) return;
 

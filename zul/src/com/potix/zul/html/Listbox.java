@@ -23,6 +23,7 @@ import java.util.AbstractSequentialList;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -41,11 +42,17 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.ext.Selectable;
 import com.potix.zk.ui.ext.Render;
-import com.potix.zk.ui.event.Events;
+import com.potix.zk.ui.ext.ChildChangedAware;
+import com.potix.zk.ui.ext.Cropper;
+import com.potix.zk.ui.event.Event;
+import com.potix.zk.ui.event.EventListener;
 
 import com.potix.zul.html.impl.XulElement;
 import com.potix.zul.html.event.ListDataEvent;
 import com.potix.zul.html.event.ListDataListener;
+import com.potix.zul.html.ext.Paginal;
+import com.potix.zul.html.event.Events;
+import com.potix.zul.html.event.PagingEvent;
 
 /**
  * A listbox.
@@ -68,6 +75,20 @@ import com.potix.zul.html.event.ListDataListener;
  * (a {@link ListitemRenderer} instance) to a listbox, and then it will use this
  * renderer to render the data returned by {@link ListModel#getElementAt}.
  * 
+ * <p>There are two ways to handle long content: scrolling and paging.
+ * If {@link #getMold} is "default", scrolling is used if {@link #setHeight}
+ * is called and too much content to display.
+ * If {@link #getMold} is "paging", paging is used if two or more pages are
+ * required. To control the number of items to display in a page, use
+ * {@link #setPageSize}.
+ *
+ * <p>If paging is used, the page controller is either created automatically
+ * or assigned explicity by {@link #setPaginal}.
+ * The paging controller specified explicitly by {@link #setPaginal} is called
+ * the external page controller. It is useful if you want to put the paging
+ * controller at different location (other than as a child component), or
+ * you want to use the same controller to control multiple listboxes.
+ *
  * <p>Default {@link #getSclass}: listbox.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
@@ -75,7 +96,8 @@ import com.potix.zul.html.event.ListDataListener;
  * @see ListitemRenderer
  */
 public class Listbox extends XulElement
-implements Selectable, Render, java.io.Serializable {
+implements Selectable, Render, java.io.Serializable,
+ChildChangedAware, Cropper {
 	private static final Log log = Log.lookup(Listbox.class);
 
 	private transient List _items;
@@ -90,6 +112,14 @@ implements Selectable, Render, java.io.Serializable {
 	private transient ListDataListener _dataListener;
 	/** The name. */
 	private String _name;
+	/** The paging controller, used only if mold = "paging". */
+	private transient Paginal _pgi;
+	/** The paging controller, used only if mold = "paging" and user
+	 * doesn't assign a controller via {@link #setPaginal}.
+	 * If exists, it is the last child
+	 */
+	private transient Paging _paging;
+	private transient EventListener _pgListener;
 	private boolean _multiple;
 	private boolean _disabled, _readonly, _checkmark;
 	/** disable smartUpdate; usually caused by the client. */
@@ -108,6 +138,7 @@ implements Selectable, Render, java.io.Serializable {
 				int sz = getChildren().size();
 				if (_listhead != null) --sz;
 				if (_listfoot != null) --sz;
+				if (_paging != null) --sz;
 				return sz;
 			}
 		};
@@ -137,7 +168,7 @@ implements Selectable, Render, java.io.Serializable {
 
 	/** Returns whether the HTML's select tag is used.
 	 */
-	/*package*/ final boolean isHtmlSelect() {
+	/*package*/ final boolean inSelectMold() {
 		return "select".equals(getMold());
 	}
 
@@ -156,7 +187,7 @@ implements Selectable, Render, java.io.Serializable {
 	public void setCheckmark(boolean checkmark) {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
-			if (!isHtmlSelect()) invalidate(INNER);
+			if (!inSelectMold()) invalidate(INNER);
 		}
 	}
 
@@ -171,7 +202,7 @@ implements Selectable, Render, java.io.Serializable {
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			if (isHtmlSelect()) {
+			if (inSelectMold()) {
 				smartUpdate("disabled", _disabled);
 			} else {
 				smartUpdate("zk_disabled", _disabled);
@@ -189,7 +220,7 @@ implements Selectable, Render, java.io.Serializable {
 	public void setReadonly(boolean readonly) {
 		if (_readonly != readonly) {
 			_readonly = readonly;
-			if (isHtmlSelect()) {
+			if (inSelectMold()) {
 				smartUpdate("readonly", _readonly);
 			} else {
 				smartUpdate("zk_readonly", _readonly);
@@ -214,7 +245,7 @@ implements Selectable, Render, java.io.Serializable {
 		if (_rows != rows) {
 			_rows = rows;
 
-			if (isHtmlSelect()) {
+			if (inSelectMold()) {
 				smartUpdate("size", _rows > 0 ? Integer.toString(_rows): null);
 			} else {
 				smartUpdate("zk_size", Integer.toString(_rows));
@@ -257,7 +288,7 @@ implements Selectable, Render, java.io.Serializable {
 				//No need to update zk_selId because zk_multiple will do the job
 			}
 
-			if (isHtmlSelect()) smartUpdate("multiple", _multiple);
+			if (inSelectMold()) smartUpdate("multiple", _multiple);
 			else if (isCheckmark()) invalidate(INNER); //change check mark
 			else smartUpdate("zk_multiple", _multiple);
 				//No need to use response because such info is carried on tags
@@ -284,7 +315,7 @@ implements Selectable, Render, java.io.Serializable {
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			if (isHtmlSelect()) //affects only the HTML-select listbox
+			if (inSelectMold()) //affects only the HTML-select listbox
 				invalidate(OUTER);
 				//Both IE and Mozilla are buggy if we insert options by innerHTML
 		}
@@ -315,7 +346,7 @@ implements Selectable, Render, java.io.Serializable {
 	public void setName(String name) {
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
-			if (isHtmlSelect()) smartUpdate("name", _name);
+			if (inSelectMold()) smartUpdate("name", _name);
 			else if (_name != null) smartUpdate("zk_name", _name);
 			else invalidate(OUTER); //1) generate _value; 2) add submit listener
 
@@ -407,11 +438,11 @@ implements Selectable, Render, java.io.Serializable {
 			} else {
 				if (item.getIndex() < _jsel || _jsel < 0) {
 					_jsel = item.getIndex();
-					if (!isHtmlSelect()) smartUpdate("zk_selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
 				}
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
-				if (isHtmlSelect()) {
+				if (inSelectMold()) {
 					item.smartUpdate("selected", true);
 				} else {
 					smartUpdateSelection();
@@ -433,7 +464,7 @@ implements Selectable, Render, java.io.Serializable {
 				item.setSelectedDirectly(false);
 				_selItems.remove(item);
 				fixSelectedIndex(0);
-				if (isHtmlSelect()) {
+				if (inSelectMold()) {
 					item.smartUpdate("selected", false);
 				} else {
 					smartUpdateSelection();
@@ -537,7 +568,8 @@ implements Selectable, Render, java.io.Serializable {
 	 * the column width at the client).
 	 */
 	/*package*/ void initAtClient() {
-		smartUpdate("zk_init", true);
+		if (!inSelectMold() && !inPagingMold())
+			smartUpdate("zk_init", true);
 	}
 
 	//-- Selectable --//
@@ -565,6 +597,168 @@ implements Selectable, Render, java.io.Serializable {
 		}
 	}
 
+	//--Paging--//
+	/** Returns the paging controller, or null if not available.
+	 * Note: the paging controller is used only if {@link #getMold} is "paging".
+	 *
+	 * <p>If mold is "paging", this method never returns null, because
+	 * a child paging controller is created automcatically (if not specified
+	 * by developers with {@link #setPaginal}).
+	 *
+	 * <p>If a paging controller is specified (either by {@link #setPaginal},
+	 * or by {@link #setMold} with "paging"),
+	 * the listbox will rely on the paging controller to handle long-content
+	 * instead of scrolling.
+	 */
+	public Paginal getPaginal() {
+		return _pgi;
+	}
+	/* Specifies the paging controller.
+	 * Note: the paging controller is used only if {@link #getMold} is "paging".
+	 *
+	 * <p>It is OK, though without any effect, to specify a paging controller
+	 * even if mold is not "paging".
+	 *
+	 * @param pgi the paging controller. If null and {@link #getMold} is "paging",
+	 * a paging controller is created automatically as a child component
+	 * (see {@link #getPaging}).
+	 */
+	public void setPaginal(Paginal pgi) {
+		if (!Objects.equals(pgi, _pgi)) {
+			if (_pgi != null && inPagingMold()) removePagingListener(_pgi);
+			_pgi = pgi;
+			updateChildPaging();
+		}
+	}
+	/** Creates or detaches the child paging controller automatically.
+	 */
+	private void updateChildPaging() {
+		if (inPagingMold()) {
+			if (_pgi == null) {
+				if (_paging != null) _pgi = _paging;
+				else {
+					 final Paging paging = new Paging();
+					 paging.setAutohide(true);
+					 paging.setDetailed(true);
+					 paging.setTotalSize(getItemCount());
+					 paging.setParent(this);
+					 addPagingListener(_pgi);
+				}
+			} else { //_pgi != null
+				if (_pgi != _paging) {
+					if (_paging != null)
+						_paging.detach();
+					addPagingListener(_pgi);
+				}
+			}
+		} else {
+			if (_paging != null) {
+				removePagingListener(_paging);
+				_paging.detach();
+			} else if (_pgi != null) {
+				removePagingListener(_pgi);
+			}
+		}
+	}
+	/** Adds the event listener for the onPaging event. */
+	private void addPagingListener(Paginal pgi) {
+		if (_pgListener == null)
+			_pgListener = new EventListener() {
+				public boolean isAsap() {
+					return true;
+				}
+				public void onEvent(Event event) {
+					final PagingEvent evt = (PagingEvent)event;
+					Events.postEvent(
+						new PagingEvent(evt.getName(),
+							Listbox.this, evt.getPaginal(), evt.getActivePage()));
+				}
+			};
+		pgi.addEventListener(Events.ON_PAGING, _pgListener);
+	}
+	/** Removes the event listener for the onPaging event. */
+	private void removePagingListener(Paginal pgi) {
+		pgi.removeEventListener(Events.ON_PAGING, _pgListener);
+	}
+
+	/** Called when the onPaging event is received (from {@link #getPaginal}).
+	 *
+	 * <p>Default: getRows().invalidate(INNER).
+	 */
+	public void onPaging() {
+		invalidate(INNER);
+	}
+
+	/** Returns the child paging controller that is created automatically,
+	 * or null if mold is not "paging", or the controller is specified externally
+	 * by {@link #setPaginal}.
+	 */
+	public Paging getPaging() {
+		return _paging;
+	}
+	/** Returns the page size, aka., the number items per page.
+	 * @exception IllegalStateException if {@link #getPaginal} returns null,
+	 * i.e., mold is not "paging" and no external controller is specified.
+	 */
+	public int getPageSize() {
+		if (_pgi == null)
+			throw new IllegalStateException("Available only the paging mold");
+		return _pgi.getPageSize();
+	}
+	/** Sets the page size, aka., the number items per page.
+	 * @exception IllegalStateException if {@link #getPaginal} returns null,
+	 * i.e., mold is not "paging" and no external controller is specified.
+	 */
+	public void setPageSize(int pgsz) {
+		if (_pgi == null)
+			throw new IllegalStateException("Available only the paging mold");
+		_pgi.setPageSize(pgsz);
+	}
+
+	/** Returns whether this listbox is in the paging mold.
+	 */
+	/*package*/ boolean inPagingMold() {
+		return "paging".equals(getMold());
+	}
+
+	/** Returns the index of the first visible child.
+	 * <p>Used only for component development, not for application developers.
+	 */
+	public int getVisibleBegin() {
+		if (!inPagingMold())
+			return 0;
+		final Paginal pgi = getPaginal();
+		return pgi.getActivePage() * pgi.getPageSize();
+	}
+	/** Returns the index of the last visible child.
+	 * <p>Used only for component development, not for application developers.
+	 */
+	public int getVisibleEnd() {
+		if (!inPagingMold())
+			return Integer.MAX_VALUE;
+		final Paginal pgi = getPaginal();
+		return (pgi.getActivePage() + 1) * pgi.getPageSize() - 1; //inclusive
+	}
+
+	//--Cropper--//
+	public Set getAvailableAtClient() {
+		if (!inPagingMold())
+			return null;
+
+		final Set avail = new HashSet(37);
+		if (_listhead != null) avail.add(_listhead);
+		if (_listfoot != null) avail.add(_listfoot);
+		if (_paging != null) avail.add(_paging);
+
+		final Paginal pgi = getPaginal();
+		int pgsz = pgi.getPageSize();
+		final int ofs = pgi.getActivePage() * pgsz;
+		for (final Iterator it = getItems().listIterator(ofs);
+		--pgsz >= 0 && it.hasNext();)
+			avail.add(it.next());
+		return avail;
+	}
+
 	//-- Component --//
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
@@ -581,24 +775,26 @@ implements Selectable, Render, java.io.Serializable {
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
-		if (isHtmlSelect()) invalidate(OUTER);
+		if (inSelectMold()) invalidate(OUTER);
 			//Both IE and Mozilla are buggy if we insert options by innerHTML
+		else if(inPagingMold()) _pgi.setTotalSize(getItemCount());
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
-		if (isHtmlSelect()) invalidate(OUTER);
+		if (inSelectMold()) invalidate(OUTER);
 			//Both IE and Mozilla are buggy if we remove options by outerHTML
 			//CONSIDER: use special command to remove items
 			//Cons: if user remove a lot of items it is slower
+		else if(inPagingMold()) _pgi.setTotalSize(getItemCount());
 	}
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
-			if (refChild instanceof Listhead)
-				throw new UiException("listhead must be the first child");
 			if (refChild == null) {
-				if (_listfoot != null) refChild = _listfoot; //listfoot must be the last one
-			} else if (refChild == _listhead)
+				if (_listfoot != null) refChild = _listfoot; //listfoot as last
+				else if (_paging != null) refChild = _paging; //_paging as last
+			} else if (refChild == _listhead) {
 				throw new UiException("Unable to insert before listhead: "+newChild);
+			}
 
 			final boolean existChild = newChild.getParent() == this;
 			if (super.insertBefore(newChild, refChild)) {
@@ -612,6 +808,7 @@ implements Selectable, Render, java.io.Serializable {
 				final Listitem childItem = (Listitem)newChild;
 				int fixFrom = childItem.getIndex();
 				if (refChild != null && refChild != _listfoot
+				&& refChild != _paging
 				&& refChild.getParent() == this) {
 					final int k = ((Listitem)refChild).getIndex();
 					if (fixFrom < 0 || k < fixFrom) fixFrom = k;
@@ -624,12 +821,12 @@ implements Selectable, Render, java.io.Serializable {
 				if (childItem.isSelected()) {
 					if (_jsel < 0) {
 						_jsel = childIndex;
-						if (!isHtmlSelect()) smartUpdate("zk_selId", getSelectedId());
+						if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
 						_selItems.add(childItem);
 					} else if (_multiple) {
 						if (_jsel > childIndex) {
 							_jsel = childIndex;
-							if (!isHtmlSelect()) smartUpdate("zk_selId", getSelectedId());
+							if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
 						}
 						_selItems.add(childItem);
 					} else { //deselect
@@ -639,7 +836,7 @@ implements Selectable, Render, java.io.Serializable {
 				} else {
 					if (_jsel >= childIndex) {
 						++_jsel;
-						if (!isHtmlSelect()) smartUpdate("zk_selId", getSelectedId());
+						if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
 					}
 				}
 				initAtClient();
@@ -653,7 +850,7 @@ implements Selectable, Render, java.io.Serializable {
 				refChild = (Component)getChildren().get(0);
 				//always makes listhead as the first child
 
-			if (isHtmlSelect())
+			if (inSelectMold())
 				log.warning("Mold select ignores listhead");
 			invalidate(INNER);
 				//we place listhead and treeitem at different div, so...
@@ -662,13 +859,25 @@ implements Selectable, Render, java.io.Serializable {
 		} else if (newChild instanceof Listfoot) {
 			if (_listfoot != null && _listfoot != newChild)
 				throw new UiException("Only one listfoot is allowed: "+this);
-			refChild = null; //always makes listfoot as the last child
 
-			if (isHtmlSelect())
+			if (inSelectMold())
 				log.warning("Mold select ignores listfoot");
 			invalidate(INNER);
 				//we place listfoot and treeitem at different div, so...
 			_listfoot = (Listfoot)newChild;
+			refChild = _paging; //the last two: listfoot and paging
+			return super.insertBefore(newChild, refChild);
+		} else if (newChild instanceof Paging) {
+			if (_pgi != null)
+				throw new UiException("External paging cannot coexist with child paging");
+			if (_paging != null && _paging != newChild)
+				throw new UiException("Only one paging is allowed: "+this);
+			if (!inPagingMold())
+				throw new UiException("The child paging is allowed only in the paging mold");
+
+			invalidate(INNER);
+			_pgi = _paging = (Paging)newChild;
+			refChild = null; //the last: paging
 			return super.insertBefore(newChild, refChild);
 		} else {
 			throw new UiException("Unsupported child for Listbox: "+newChild);
@@ -694,16 +903,21 @@ implements Selectable, Render, java.io.Serializable {
 				_selItems.remove(childItem);
 				if (_jsel == childIndex) {
 					fixSelectedIndex(childIndex);
-					if (!isHtmlSelect()) smartUpdate("zk_selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
 				}
 			} else {
 				if (_jsel >= childIndex) {
 					--_jsel;
-					if (!isHtmlSelect()) smartUpdate("zk_selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
 				}
 			}
+			initAtClient();
+			return true;
+		} else if (_paging == child) {
+			_paging = null;
+			if (_pgi == child) _pgi = null;
 		}
-		initAtClient();
+		invalidate(INNER);
 		return true;
 	}
 	/** Fix the selected index, _jsel, assuming there are no selected one
@@ -748,7 +962,7 @@ implements Selectable, Render, java.io.Serializable {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
 				} else {
-					if (isHtmlSelect())
+					if (inSelectMold())
 						throw new UnsupportedOperationException("Mold select doesn't support ListModel");
 					smartUpdate("zk_model", "true");
 				}
@@ -1024,9 +1238,10 @@ implements Selectable, Render, java.io.Serializable {
 		if (_model != null && "select".equals(mold))
 			throw new UnsupportedOperationException("Mold select doesn't support ListModel");
 		super.setMold(mold);
+		updateChildPaging();
 	}
 	public void invalidate(Range range) {
-		if (isHtmlSelect()) {
+		if (inSelectMold()) {
 			super.invalidate(range);
 		} else {
 			super.invalidate(OUTER);
@@ -1037,14 +1252,14 @@ implements Selectable, Render, java.io.Serializable {
 	public void setHeight(String height) {
 		if (!Objects.equals(height, getHeight())) {
 			super.setHeight(height);
-			if (!isHtmlSelect()) initAtClient();
+			if (!inSelectMold()) initAtClient();
 		}
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
 
-		if (isHtmlSelect()) {
+		if (inSelectMold()) {
 			HTMLs.appendAttribute(sb, "name", _name);
 			HTMLs.appendAttribute(sb, "size",  getRows());
 
@@ -1128,10 +1343,17 @@ implements Selectable, Render, java.io.Serializable {
 			_it.set(o);
 		}
 		private void prepare() {
-			if (_it == null)
-				_it = getChildren()
-					.listIterator(_listhead != null ? _j + 1: _j);
+			if (_it == null) {
+				int v = _j;
+				if (_listhead != null) ++v;
+				_it = getChildren().listIterator(v);
+			}
 		}
+	}
+
+	//ChildChangedAware//
+	public boolean isChildChangedAware() {
+		return !inPagingMold() && !inSelectMold();
 	}
 
 	//Cloneable//
@@ -1165,6 +1387,9 @@ implements Selectable, Render, java.io.Serializable {
 			} else if (child instanceof Listfoot) {
 				_listfoot = (Listfoot)child;
 				if (--cnt == 0) break;
+			} else if (child instanceof Paging) {
+				_pgi = _paging = (Paging)child;
+				if (--cnt == 0) break;
 			}
 		}
 	}
@@ -1177,6 +1402,8 @@ implements Selectable, Render, java.io.Serializable {
 		init();
 
 		afterUnmarshal(-1);
+		//TODO: how to marshal _pgi if _pgi != _paging
+		//TODO: re-register event listener for onPaging
 
 		if (_model != null) initDataListener();
 	}

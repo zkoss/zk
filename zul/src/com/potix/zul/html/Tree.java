@@ -33,6 +33,7 @@ import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.ui.ext.Selectable;
+import com.potix.zk.ui.ext.ChildChangedAware;
 import com.potix.zk.ui.event.Events;
 
 import com.potix.zul.html.impl.XulElement;
@@ -51,7 +52,7 @@ import com.potix.zul.html.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Tree extends XulElement implements Selectable {
+public class Tree extends XulElement implements Selectable, ChildChangedAware {
 	private transient Treecols _treecols;
 	private transient Treechildren _treechildren;
 	/** A list of selected items. */
@@ -592,6 +593,11 @@ public class Tree extends XulElement implements Selectable {
 		//	HTMLs.appendAttribute(sb, "zk_checkmark",  _checkmark);
 		appendAsapAttr(sb, Events.ON_SELECT);
 		return sb.toString();
+	}
+
+	//ChildChangedAware//
+	public boolean isChildChangedAware() {
+		return true;
 	}
 
 	//Cloneable//
