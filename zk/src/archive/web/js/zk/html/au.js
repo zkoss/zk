@@ -854,14 +854,13 @@ zkau._autopos = function (el, x, y) {
 	//the dimension might not be available at the begining
 	var wd = zk.offsetWidth(el), hgh = zk.offsetHeight(el);
 	if (el.style.display == "none" && !wd) {
+		el.style.left = el.style.top = "0px"; //Must! (IE6)
 		el.style.display = "";
 		wd = zk.offsetWidth(el);
 		hgh = zk.offsetHeight(el);
 		el.style.display = "none";
 	}
 
-	el.style.left = x + "px";
-	el.style.top = y + "px";
 	var scx = zk.innerX(), scy = zk.innerY(),
 		scwd = zk.innerWidth(), schgh = zk.innerHeight();
 	if (x + wd > scwd) {
@@ -872,8 +871,16 @@ zkau._autopos = function (el, x, y) {
 		y = schgh - hgh;
 		if (y < scy) y = scy;
 	}
-	el.style.left = x + "px";
-	el.style.top = y + "px";
+
+	//Position.cumulativeOffset not correct if el is not visible in Gecko
+	var bShow = zk.gecko && el.style.display == "none";
+	if (bShow) el.style.display = "";
+
+	var ofs = zk.toStylePos(el, x, y);
+	el.style.left = ofs[0] + "px";
+	el.style.top = ofs[1] + "px";
+
+	if (bShow) el.style.display = "none";
 };
 
 /** Handles the double click. */
