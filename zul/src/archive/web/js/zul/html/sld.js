@@ -48,7 +48,9 @@ zk.Slider.prototype = {
 			starteffect: zkSld._startDrag, change: zkSld._dragging,
 			endeffect: zkSld._endDrag});
 		this._fixPos();
-		if (zk.gecko) setTimeout(function() {meta._fixPos();}, 25);
+		if (zk.gecko)
+			setTimeout(function() {if ($(meta.id)) meta._fixPos();}, 60);
+			//fix gecko's mis-position bug
 	},
 	/** (x, y) is in the style's coordination (use zk.toStylePos to convert).
 	 */
@@ -73,6 +75,7 @@ zk.Slider.prototype = {
 		var wd = this._width();
 		var x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0;
 		var ofs = Position.cumulativeOffset(this.element);
+zk.debug("fo:"+ofs);
 		ofs = zk.toStylePos(this.button, ofs[0], ofs[1]);
 		ofs = this._snap(ofs[0] + x, 0);
 		this.button.style.left = ofs[0] + "px";
