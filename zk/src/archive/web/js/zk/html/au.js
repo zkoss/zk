@@ -1350,12 +1350,21 @@ zkau._cleanLastDrop = function (dg) {
 		dg.zk_lastDrop = null;
 	}
 };
-//Tom Yeh: 20060227: FF cannot handle z-index well if listitem is dragged
-//across two listboxes, so we use a fake DIV instead.
-//On the other hand, IE handles selection improperly if transparent DIV is used
-//so we use the standard ghosting
-if (zk.gecko) {
-	zkau._ghostdrag = function (dg, ghosting) {
+zkau._ghostdrag = function (dg, ghosting) {
+//Tom Yeh: 20060227: Use a 'fake' DIV if
+//1) FF cannot handle z-index well if listitem is dragged across two listboxes
+//2) Safari's ghosting position is wrong
+	var special;
+	if (zk.gecko || zk.safari) {
+		if (ghosting) {
+			var tn = zk.tagName(dg.element);
+			zk.zk_special = special = "TR" == tn || "TD" == tn || "TH" == tn;
+		} else {
+			special = zk.zk_special;
+		}
+	}
+
+	if (special) {
 		if (ghosting) {
 			zk.dragging = true;
 			dg.delta = dg.currentDelta();
@@ -1364,13 +1373,14 @@ if (zk.gecko) {
 			//calculate from the DIV
 			dg.z_scrl = Position.realOffset(dg.element);
 			var pos = Position.cumulativeOffset(dg.element);
+
 			pos[0] -= dg.z_scrl[0]; pos[1] -= dg.z_scrl[1];
 			document.body.insertAdjacentHTML("afterbegin",
 				'<div id="zk_ddghost" style="position:absolute;top:'
 				+pos[1]+'px;left:'+pos[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 				+'px;border:1px dotted black">&nbsp;</div>');
-	
+
 			dg.zk_old = dg.element;
 			dg.element = $("zk_ddghost");
 		} else if (dg.zk_old) {
@@ -1380,21 +1390,19 @@ if (zk.gecko) {
 			dg.zk_old = null;
 		}
 		return false
-	};
-} else {
-	zkau._ghostdrag = function (dg, ghosting) {
-		if (ghosting) {
-			zk.dragging = true;
-			dg.delta = dg.currentDelta();
-				//dragdrop.js cache left/top, but we might change it in other way
-			dg.z_x = dg.element.style.left; dg.z_y = dg.element.style.top;
-			zkau._revertpending = null;
-		} else {
-			zk.dragging = false;
-		}
-		return true;
-	};
-}
+	}
+
+	if (ghosting) {
+		zk.dragging = true;
+		dg.delta = dg.currentDelta();
+			//dragdrop.js cache left/top, but we might change it in other way
+		dg.z_x = dg.element.style.left; dg.z_y = dg.element.style.top;
+		zkau._revertpending = null;
+	} else {
+		zk.dragging = false;
+	}
+	return true;
+};
 
 //////////////
 /// ACTION ///

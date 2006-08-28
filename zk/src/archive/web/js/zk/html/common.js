@@ -222,7 +222,7 @@ zk.getStyleOffset = function (el) {
  */
 zk.toStylePos = function (el, x, y) {
 	//Position.cumulativeOffset not correct if el is not visible in Gecko
-	var bShow = zk.gecko && el.style.display == "none";
+	var bShow = (zk.gecko || zk.safari) && el.style.display == "none";
 	if (bShow) el.style.display = "";
 
 	var ofs1 = Position.cumulativeOffset(el);
