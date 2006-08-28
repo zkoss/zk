@@ -327,7 +327,8 @@ import com.potix.zk.au.*;
 
 			while ((comp = comp.getParent()) != null) {
 				if ((comp instanceof ChildChangedAware)
-				&& !_invalidated.containsKey(comp) && !_attached.contains(comp)
+				//&& !_invalidated.containsKey(comp) && !_attached.contains(comp)
+					//No need to check _invalidated... since they are optimized
 				&& ((ChildChangedAware)comp).isChildChangedAware())
 					ccawares.add(comp);
 			}
