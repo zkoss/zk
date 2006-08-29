@@ -126,11 +126,24 @@ if (zk.safari) {
 			el = el.cells[0];
 		return zk._oldposofs(el);
 	};
+}
+if (zk.gecko || zk.safari) {
 	zk._oldcumofs = Position.cumulativeOffset;
 	Position.cumulativeOffset = function (el) {
+		//fix safari's bug: TR has no offsetXxx
 		if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
 			el = el.cells[0];
-		return zk._oldcumofs(el);
+
+		//fix gecko and safari's bug: if not visible before, offset is wrong
+		var ofs;
+		if (el.style.display == "none") {
+			el.style.display = "";
+			ofs = zk._oldcumofs(el);
+			el.style.display = "none";
+		} else {
+			ofs = zk._oldcumofs(el);
+		}
+		return ofs;
 	};
 }
 
@@ -148,17 +161,31 @@ zk.center = function (el) {
 		left + (width - elwd) / 2, top + (height - elhgh) / 2);
 	el.style.left = ofs[0] + "px"; el.style.top =  ofs[1] + "px";
 };
+/** Returns the width and height.
+ * In additions, it fixes brwoser's bugs, so call it as soon as possible.
+ */
+zk.getDimension = function (el) {
+	var wd = zk.offsetWidth(el), hgh;
+	if (el.style.display == "none" && !wd) {
+		el.style.left = el.style.top = "0"; //IE6/gecko: otherwise, offset is wrong
+		el.style.display = "";
+		wd = zk.offsetWidth(el);
+		hgh = zk.offsetHeight(el);
+		el.style.display = "none";
+	} else {
+		hgh = zk.offsetHeight(el);
+	}
+	return [wd, hgh];
+};
 /** Position a component being releted to another. */
 zk.position = function (el, ref, type) {
-	var refofs = Position.positionedOffset(el);
-	var cumofs = Position.cumulativeOffset(el);
-	cumofs[0] -= refofs[0]; cumofs[1] -= refofs[1];
-	refofs = Position.positionedOffset(ref);
+	var refofs = zk.getDimension(el);
+	var wd = refofs[0], hgh = refofs[1];
 
+	refofs = Position.cumulativeOffset(ref);
 	var x, y;
 	var scx = zk.innerX(), scy = zk.innerY(),
-		scwd = zk.innerWidth(), schgh = zk.innerHeight(),
-		wd = zk.offsetWidth(el), hgh = zk.offsetHeight(el);
+		scwd = zk.innerWidth(), schgh = zk.innerHeight();
 
 	if (type == "end_before") { //el's upper-left = ref's upper-right
 		x = refofs[0] + zk.offsetWidth(ref);
@@ -171,10 +198,10 @@ zk.position = function (el, ref, type) {
 			if (!isNaN(diff)) x += diff;
 		}
 
-		if (x + cumofs[0] + wd > scwd)
+		if (x + wd > scwd)
 			x = refofs[0] - wd;
-		if (y + cumofs[1] + hgh > schgh)
-			y = schgh - cumofs[1] - hgh;
+		if (y + hgh > schgh)
+			y = schgh - hgh;
 	} else { //after-start: el's upper-left = ref's lower-left
 		x = refofs[0];
 		y = refofs[1] + zk.offsetHeight(ref);
@@ -186,15 +213,16 @@ zk.position = function (el, ref, type) {
 			if (!isNaN(diff)) x += diff;
 		}
 
-		if (y + cumofs[1] + hgh > schgh)
+		if (y + hgh > schgh)
 			y = refofs[1] - hgh;
-		if (x + cumofs[0] + wd > scwd)
-			x = scwd - cumofs[0] - wd;
+		if (x + wd > scwd)
+			x = scwd - wd;
 	}
 
-	if (x + cumofs[0] < scx) x = scx - cumofs[0];
-	if (y + cumofs[1] < scy) y = scy - cumofs[1];
-	el.style.left = x + "px"; el.style.top = y + "px";
+	if (x < scx) x = scx;
+	if (y < scy) y = scy;
+	refofs = zk.toStylePos(el, x, y);
+	el.style.left = refofs[0] + "px"; el.style.top = refofs[1] + "px";
 };
 
 /** Converts to coordination related to the containing element.
@@ -221,16 +249,19 @@ zk.getStyleOffset = function (el) {
  * style.left/top is still relevant to original offsetParent
  */
 zk.toStylePos = function (el, x, y) {
-	//Position.cumulativeOffset not correct if el is not visible in Gecko
-	var bShow = (zk.gecko || zk.safari) && el.style.display == "none";
-	if (bShow) el.style.display = "";
+	//IE/gecko fix: otherwise, toStylePos won't correct
+	var fixleft = el.style.left == "" || el.style.left == "auto";
+	if (fixleft) el.style.left = "0";
+	var fixtop = el.style.top == "" || el.style.top == "auto";
+	if (fixtop) el.style.top = "0";
 
 	var ofs1 = Position.cumulativeOffset(el);
 	var ofs2 = zk.getStyleOffset(el);
+	ofs1 = [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
 
-	if (bShow) el.style.display = "none";
-
-	return [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
+	if (fixleft) el.style.left = "";
+	if (fixtop) el.style.top = "";
+	return ofs1;
 };
 
 /** Whether el1 and el2 are overlapped. */

@@ -851,15 +851,8 @@ zkau._onDocLClick = function (evt) {
 };
 /** Autoposition by the specified (x, y). */
 zkau._autopos = function (el, x, y) {
-	//the dimension might not be available at the begining
-	var wd = zk.offsetWidth(el), hgh = zk.offsetHeight(el);
-	if (el.style.display == "none" && !wd) {
-		el.style.left = el.style.top = "0px"; //Must! (IE6)
-		el.style.display = "";
-		wd = zk.offsetWidth(el);
-		hgh = zk.offsetHeight(el);
-		el.style.display = "none";
-	}
+	var ofs = zk.getDimension(el);
+	var wd = ofs[0], hgh = ofs[1];
 
 	var scx = zk.innerX(), scy = zk.innerY(),
 		scwd = zk.innerWidth(), schgh = zk.innerHeight();
@@ -872,7 +865,7 @@ zkau._autopos = function (el, x, y) {
 		if (y < scy) y = scy;
 	}
 
-	var ofs = zk.toStylePos(el, x, y);
+	ofs = zk.toStylePos(el, x, y);
 	el.style.left = ofs[0] + "px";
 	el.style.top = ofs[1] + "px";
 };
