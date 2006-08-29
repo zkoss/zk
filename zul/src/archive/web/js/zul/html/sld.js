@@ -50,7 +50,7 @@ zk.Slider.prototype = {
 		this._fixPos();
 
 		if (zk.gecko && !this.button.complete) {
-			this.button.onload = function () {meta._fixPos();}
+			this.button.onload = function () {meta._fixPos();};
 				//fix gecko bug: mis-position if img is not ready yet
 		}
 	},
