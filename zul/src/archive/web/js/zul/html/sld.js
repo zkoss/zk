@@ -49,11 +49,9 @@ zk.Slider.prototype = {
 			endeffect: zkSld._endDrag});
 		this._fixPos();
 
-		if (zk.gecko) {
-			//fix gecko bug: mis-position if img is not ready yet
-			var fn = function() {if ($(meta.id)) meta._fixPos();};
-			setTimeout(fn, 100);
-			setTimeout(fn, 1200);
+		if (zk.gecko && !this.button.complete) {
+			this.button.onload = function () {meta._fixPos();}
+				//fix gecko bug: mis-position if img is not ready yet
 		}
 	},
 	/** (x, y) is in the style's coordination (use zk.toStylePos to convert).
