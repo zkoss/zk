@@ -19,6 +19,7 @@
     <comboitem label="combo2"/>
     <comboitem label="combo3"/>
   </combobox>
+  <datebox/>
 </window>
 
 <window id="win2" title="Welcome" mode="overlapped" left="30%" top="40%" width="400px" border="3d" context="menuService">
@@ -40,6 +41,7 @@
     <comboitem label="combo2"/>
     <comboitem label="combo3"/>
   </combobox>
+  <datebox/>
 </window>
 
 <window id="win3" title="Welcome" mode="overlapped" left="60%" top="80%" width="400px" border="3d" context="menuService">
