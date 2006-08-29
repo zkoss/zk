@@ -47,12 +47,12 @@ zk.Slider.prototype = {
 			constraint: "horizontal", snap: snap,
 			starteffect: zkSld._startDrag, change: zkSld._dragging,
 			endeffect: zkSld._endDrag});
-		this._fixPos();
 
 		if (zk.gecko && !this.button.complete) {
 			this.button.onload = function () {meta._fixPos();};
 				//fix gecko bug: mis-position if img is not ready yet
 		}
+		this._fixPos();
 	},
 	/** (x, y) is in the style's coordination (use zk.toStylePos to convert).
 	 */
