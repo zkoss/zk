@@ -52,7 +52,8 @@ zk.Slider.prototype = {
 		if (zk.gecko) {
 			//fix gecko bug: mis-position if img is not ready yet
 			var fn = function() {if ($(meta.id)) meta._fixPos();};
-			setTimeout(fn, 30);
+			setTimeout(fn, 100);
+			setTimeout(fn, 1200);
 		}
 	},
 	/** (x, y) is in the style's coordination (use zk.toStylePos to convert).
