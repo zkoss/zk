@@ -167,7 +167,9 @@ zk.center = function (el) {
 zk.getDimension = function (el) {
 	var wd = zk.offsetWidth(el), hgh;
 	if (el.style.display == "none" && !wd) {
-		el.style.left = el.style.top = "0"; //IE6/gecko: otherwise, offset is wrong
+		if (el.style.left == "" || el.style.left == "auto") el.style.left = "0";
+		if (el.style.top == "" || el.style.top == "auto") el.style.top = "0";
+			//IE6/gecko: otherwise, cumulativeOffset is wrong
 		el.style.display = "";
 		wd = zk.offsetWidth(el);
 		hgh = zk.offsetHeight(el);
