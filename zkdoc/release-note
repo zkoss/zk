@@ -1,3 +1,9 @@
+ZK 2.1.1 Freshly
+* Features:
+
+* Bugs:
+  1548797, 1548478.
+
 	--------
 ZK 2.1.0
 * Features:
@@ -28,7 +34,7 @@ ZK 2.1.0
   + Session, Desktop and Page are serializable. Use can keep using the same
     desktop even after the Web server is re-booted.
   
-* Bugs
+* Bugs:
   1513895, 1514932, 1515175, 1515311, 1514789, 1493440, 1517037, 1436397,
   1505786, 1518540, 1453157, 1510701, 1520737, 1510539, 1521847, 1522843,
   1521311, 1522339, 1521868, 1523751, 1523875, 1525710, 1525712, 1527527,
