@@ -1,4 +1,4 @@
-<%--
+<%@ page contentType="text/html;charset=UTF-8" %><%--
 alert.dsp
 
 {{IS_NOTE
