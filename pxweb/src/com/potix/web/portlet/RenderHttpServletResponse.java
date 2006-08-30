@@ -62,6 +62,9 @@ public class RenderHttpServletResponse implements HttpServletResponse {
 		return ServletOutputStreamWrapper.getInstance(_res.getPortletOutputStream());
 	}
 	public java.io.PrintWriter getWriter() throws java.io.IOException {
+		//Bug 1548478: content-type is required
+		if (_res.getContentType() == null)
+			_res.setContentType("text/html;charset=UTF-8");
 		return _res.getWriter();
 	}
 	public boolean isCommitted() {
