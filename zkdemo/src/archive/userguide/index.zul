@@ -152,10 +152,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		doSelect(id != null ? id : "s1");
 	]]></zscript>
 	</hbox>
+<!-- Use UA-121377-1 instead of UA-121377-3 (historical reason) -->
 <h:script type="text/javascript">
 _urchin = function() {
 	try {
-		_uacct = window.location.href.indexOf("potix.com") >= 0 ? "UA-121377-1": "UA-121377-3";
+		_uacct = "UA-121377-1";
 		urchinTracker();
 	} catch (e) {}
 };
