@@ -170,3 +170,12 @@ zkSld._metaByBtn = function (button) {
 	var btnid = button.id;
 	return zkau.getMeta(btnid.substring(0, btnid.length-4));
 };
+zkSld.setAttr = function (cmp, nm, val) {
+	if ("zk_curpos" == nm) {
+		cmp.setAttribute("zk_curpos", val);
+		var meta = zkau.getMeta(cmp);
+		if (meta) meta._fixPos();
+		return true;
+	}
+	return false;
+};
