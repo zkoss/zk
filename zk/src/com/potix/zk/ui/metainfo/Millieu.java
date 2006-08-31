@@ -273,4 +273,20 @@ public class Millieu implements Serializable {
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
 	}
+
+	//Object//
+	public String toString() {
+		final StringBuffer sb  = new StringBuffer(64).append("[millieu: ");
+		if (_implcls != null) {
+			if (_implcls instanceof Class)
+				sb.append(((Class)_implcls).getName());
+			else
+				sb.append(_implcls);
+			if (_macroUri != null)
+				sb.append(", ").append(_macroUri);
+		} else {
+			sb.append("dummy");
+		}
+		return sb.append(']').toString();
+	}
 }
