@@ -26,7 +26,7 @@ import org.jfree.data.xy.*;
 
 import java.util.Map;
 import java.util.List;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,11 +40,16 @@ import java.util.Collection;
  * @see Chart
  */
 public class SimpleXYModel extends AbstractChartModel implements XYModel {
-	private Map _seriesMap = new LinkedHashMap(13); //(series, SimplePieModel)
+	private Map _seriesMap = new HashMap(13); //(series, SimplePieModel)
+	private List _seriesList = new ArrayList(13);
 	
 	//-- XYModel --//
+	public Comparable getSeries(int index) {
+		return (Comparable)_seriesList.get(index);
+	}
+	
 	public Collection getSeries() {
-		return _seriesMap.keySet();
+		return _seriesList;
 	}
 	
 	public int getDataCount(Comparable series) {
@@ -75,6 +80,7 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 		if (xyPairs == null) {
 			xyPairs = new ArrayList(13);
 			_seriesMap.put(series, xyPairs);
+			_seriesList.add(series);
 		}
 		xyPairs.add(new XYPair(x, y));
 		fireEvent(ChartDataEvent.CHANGED, series, null);
@@ -82,6 +88,7 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	
 	public void removeSeries(Comparable series) {
 		_seriesMap.remove(series);
+		_seriesList.remove(series);
 		fireEvent(ChartDataEvent.REMOVED, (String)series, null);
 	}
 	
@@ -96,6 +103,7 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	
 	public void clear() {
 		_seriesMap.clear();
+		_seriesList.clear();
 		fireEvent(ChartDataEvent.REMOVED, null, null);
 	}
 	

@@ -42,9 +42,18 @@ import java.util.Collection;
  * @see Chart
  */
 public class SimpleHiLoModel extends AbstractChartModel implements HiLoModel {
+	private Comparable _series; //the only series
 	private List _hlTuples = new ArrayList(31);
 	
 	//-- HiLoModel --//
+	public Comparable getSeries() {
+		return _series;
+	}
+	
+	public void setSeries(Comparable series) {
+		_series = series;
+	}
+	
 	public int getDataCount() {
 		return _hlTuples.size();
 	}

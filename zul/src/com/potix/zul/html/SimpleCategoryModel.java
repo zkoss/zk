@@ -25,8 +25,11 @@ import com.potix.zul.html.event.ChartDataListener;
 import org.jfree.data.general.*;
 import org.jfree.data.category.*;
 
+import java.util.Set;
 import java.util.Map;
 import java.util.List;
+import java.util.HashSet;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -41,62 +44,111 @@ import java.util.Collection;
  * @see Chart
  */
 public class SimpleCategoryModel extends AbstractChartModel implements CategoryModel {
-	private Map _seriesMap = new LinkedHashMap(13); //(series, SimplePieModel)
+	private Map _seriesMap = new HashMap(13); // (series, usecount)
+	private List _seriesList = new ArrayList(13);
+
+	private Map _categoryMap = new HashMap(13); // (category, usecount)
+	private List _categoryList = new ArrayList(13);
+	
+	private Map _valueMap = new LinkedHashMap(79);
 	
 	//-- CategoryModel --//
-	public Collection getSeries() {
-		return _seriesMap.keySet();
+	public Comparable getSeries(int index) {
+		return (Comparable)_seriesList.get(index);
 	}
 
-	public Collection getCategories(Comparable series) {
-		SimplePieModel pmodel = (SimplePieModel) _seriesMap.get(series);
-		if (pmodel != null) {
-			return pmodel.getCategories();
-		}
-		return new ArrayList(0);
+	public Comparable getCategory(int index) {
+		return (Comparable)_categoryList.get(index);
 	}
-		
+	
+	public Collection getSeries() {
+		return _seriesList;
+	}
+
+	public Collection getCategories() {
+		return _categoryList;
+	}
+	
+	public Collection getKeys() {
+		return _valueMap.keySet();
+	}
 	
 	public Number getValue(Comparable series, Comparable category) {
-		SimplePieModel pmodel = (SimplePieModel) _seriesMap.get(series);
-		if (pmodel != null) {
-			return (Number) pmodel.getValue(category);
-		}
-		return null;
+		List key = new ArrayList(2);
+		key.add(series);
+		key.add(category);
+		Number num = (Number) _valueMap.get(key);
+		return num;
 	}
 
 	public void setValue(Comparable series, Comparable category, Number value) {
-		SimplePieModel pmodel = (SimplePieModel) _seriesMap.get(series);
-		if (pmodel == null) {
-			pmodel = new SimplePieModel();
-			_seriesMap.put(series, pmodel);
+		List key = new ArrayList(2);
+		key.add(series);
+		key.add(category);
+		
+		if (!_valueMap.containsKey(key)) {
+			if (!_categoryMap.containsKey(category)) {
+				_categoryMap.put(category, new Integer(1));
+				_categoryList.add(category);
+			} else {
+				Integer count = (Integer) _categoryMap.get(category);
+				_categoryMap.put(category, new Integer(count.intValue()+1));
+			}
+			
+			if (!_seriesMap.containsKey(series)) {
+				_seriesMap.put(series, new Integer(1));
+				_seriesList.add(series);
+			} else {
+				Integer count = (Integer) _seriesMap.get(series);
+				_seriesMap.put(series, new Integer(count.intValue()+1));
+
+			}
 		} else {
-			Number ovalue = pmodel.getValue(category);
+			Number ovalue = (Number) _valueMap.get(key);
 			if (Objects.equals(ovalue, value)) {
 				return;
 			}
 		}
-		pmodel.setValue(category, value);
+		
+		_valueMap.put(key, value);
 		fireEvent(ChartDataEvent.CHANGED, (String) series, category);
 	}
 	
-	public void removeSeries(Comparable series) {
-		_seriesMap.remove(series);
-		fireEvent(ChartDataEvent.CHANGED, (String) series, null);
-	}
-	
 	public void removeValue(Comparable series, Comparable category) {
-		SimplePieModel pmodel = (SimplePieModel) _seriesMap.get(series);
-		if (pmodel == null) {
+		List key = new ArrayList(2);
+		key.add(series);
+		key.add(category);
+		if (!_valueMap.containsKey(key)) {
 			return;
 		}
-		pmodel.removeValue(category);
+				
+		_valueMap.remove(key);
+		
+		int ccount = ((Integer) _categoryMap.get(category)).intValue();
+		if (ccount > 1) {
+			_categoryMap.put(category, new Integer(ccount-1));
+		} else {
+			_categoryMap.remove(category);
+			_categoryList.remove(category);
+		}
+		
+		int scount = ((Integer) _seriesMap.get(series)).intValue();
+		if (scount > 1) {
+			_seriesMap.put(series, new Integer(scount-1));
+		} else {
+			_seriesMap.remove(series);
+			_seriesList.remove(series);
+		}
+		
 		fireEvent(ChartDataEvent.REMOVED, (String)series, category);
 	}
 	
 	public void clear() {
 		_seriesMap.clear();
+		_seriesList.clear();
+		_categoryMap.clear();
+		_categoryList.clear();
+		_valueMap.clear();
 		fireEvent(ChartDataEvent.REMOVED, null, null);
 	}
 }
-

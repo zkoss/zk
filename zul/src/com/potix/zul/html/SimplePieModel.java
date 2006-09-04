@@ -26,7 +26,7 @@ import org.jfree.data.general.*;
 
 import java.util.Map;
 import java.util.List;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,11 +40,16 @@ import java.util.Collection;
  * @see Chart
  */
 public class SimplePieModel extends AbstractChartModel implements PieModel {
-	private Map _categoryMap = new LinkedHashMap(13);
+	private List _categoryList = new ArrayList(13);
+	private Map _categoryMap = new HashMap(13);
 	
 	//-- PieModel --//
+	public Comparable getCategory(int index) {
+		return (Comparable) _categoryList.get(index);
+	}
+
 	public Collection getCategories() {
-		return _categoryMap.keySet();
+		return _categoryList;
 	}
 	
 	public Number getValue(Comparable category) {
@@ -52,9 +57,13 @@ public class SimplePieModel extends AbstractChartModel implements PieModel {
 	}
 
 	public void setValue(Comparable category, Number value) {
-		Number ovalue = (Number)_categoryMap.get(category);
-		if (Objects.equals(ovalue, value)) {
-			return;
+		if (!_categoryMap.containsKey(category)) {
+			_categoryList.add(category);
+		} else {
+			Number ovalue = (Number)_categoryMap.get(category);
+			if (Objects.equals(ovalue, value)) {
+				return;
+			}
 		}
 		_categoryMap.put(category, value);
 		fireEvent(ChartDataEvent.CHANGED, null, category);
@@ -62,11 +71,13 @@ public class SimplePieModel extends AbstractChartModel implements PieModel {
 	
 	public void removeValue(Comparable category) {
 		_categoryMap.remove(category);
+		_categoryList.remove(category);
 		fireEvent(ChartDataEvent.REMOVED, null, category);
 	}
 	
 	public void clear() {
 		_categoryMap.clear();
+		_categoryList.clear();
 		fireEvent(ChartDataEvent.REMOVED, null, null);
 	}
 }

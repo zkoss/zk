@@ -29,6 +29,16 @@ import java.util.Collection;
  */
 public interface CategoryModel extends ChartModel {
 	/**
+	 * Get a series of the specified index;
+	 */
+	public Comparable getSeries(int index);
+	
+	/**
+	 * Get a category of the specified index;
+	 */
+	public Comparable getCategory(int index);
+
+	/**
 	 * Get all series as a collection.
 	 */
 	public Collection getSeries();
@@ -36,7 +46,15 @@ public interface CategoryModel extends ChartModel {
 	/**
 	 * Get categories of a specified series as a collection.
 	 */
-	public Collection getCategories(Comparable series);
+	public Collection getCategories();
+
+	/**
+	 * Get (series, category) pairs of this chart data model. The returned 
+	 * value is a collection of List where list.get(0) is the 
+	 * series, list.get(1) is the category, in the order the {@link #setValue} is 
+	 * called.
+	 */
+	public Collection getKeys();
 	
 	/**
 	 * Get value of the specified series and category.
@@ -44,12 +62,6 @@ public interface CategoryModel extends ChartModel {
 	 * @param category the category.
 	 */
 	public Number getValue(Comparable series, Comparable category);
-
-	/**
-	 * remove the whole specified series.
-	 * @param series the series
-	 */	
-	public void removeSeries(Comparable series);
 
 	/**
 	 * add or update the value of a specified series and category.

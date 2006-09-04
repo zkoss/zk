@@ -34,6 +34,7 @@ import org.jfree.data.category.*;
 import org.jfree.data.xy.*;
 import org.jfree.util.TableOrder;
 
+import java.util.List;
 import java.util.Date;
 import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
@@ -53,6 +54,9 @@ import java.util.Iterator;
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
  */
 public class SimpleChartEngine implements ChartEngine {
+	//as long as the series name is not set
+	private static final String DEFAULT_HI_LO_SERIES = "High Low Data";
+	
 	//caching chartImpl if type and 3d are the same
 	private boolean _threeD;
 	private String _type; 
@@ -182,6 +186,12 @@ public class SimpleChartEngine implements ChartEngine {
 				}
 			}
 		}
+		
+		//clean up the "LEGEND_SEQ"
+		//used for workaround LegendItemEntity.getSeries() always return 0
+		//used for workaround TickLabelEntity no information
+	    chart.removeAttribute("LEGEND_SEQ"); 
+	    chart.removeAttribute("TICK_SEQ"); 
 
 		try {		
 			//encode into png image format byte array
@@ -210,14 +220,23 @@ public class SimpleChartEngine implements ChartEngine {
 	 */
 	private PieDataset CategoryModelToPieDataset(CategoryModel model) {
 		DefaultPieDataset dataset = new DefaultPieDataset();
-		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
-			final Comparable series = (Comparable) it.next();
-			for(final Iterator itc = model.getCategories(series).iterator(); itc.hasNext();) {
-				Comparable category = (Comparable) itc.next();
-				Number value = model.getValue(series, category);
-				dataset.setValue(category, value);
+		Comparable defaultSeries = null;
+		int max = 0;
+		for (final Iterator it = model.getKeys().iterator(); it.hasNext();) {
+			final List key = (List) it.next();
+			Comparable series = (Comparable) key.get(0);
+			if (defaultSeries == null) {
+				defaultSeries = series;
+				max = model.getCategories().size();
 			}
-			break; //first series only
+			if (!Objects.equals(defaultSeries, series)) {
+				continue;
+			}
+			Comparable category = (Comparable) key.get(1);
+			Number value = (Number) model.getValue(series, category);
+			dataset.setValue(category, value);
+
+			if (--max == 0) break; //no more in this series
 		}
 		return dataset;
 	}
@@ -227,13 +246,12 @@ public class SimpleChartEngine implements ChartEngine {
 	 */
 	private CategoryDataset CategoryModelToCategoryDataset(CategoryModel model) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
-			final Comparable series = (Comparable) it.next();
-			for(final Iterator itc = model.getCategories(series).iterator(); itc.hasNext();) {
-				Comparable category = (Comparable) itc.next();
-				Number value = model.getValue(series, category);
-				dataset.setValue(value, series, category);
-			}
+		for (final Iterator it = model.getKeys().iterator(); it.hasNext();) {
+			final List key = (List) it.next();
+			Comparable series = (Comparable) key.get(0);
+			Comparable category = (Comparable) key.get(1);
+			Number value = (Number) model.getValue(series, category);
+			dataset.setValue(value, series, category);
 		}
 		return dataset;
 	}
@@ -294,11 +312,79 @@ public class SimpleChartEngine implements ChartEngine {
 			items[j] = item;
 		}
 		
-		return new DefaultOHLCDataset("High Low Data", items);
+		Comparable series = model.getSeries();
+		if (series == null) {
+			series = DEFAULT_HI_LO_SERIES;
+		}
+		return new DefaultOHLCDataset(series, items);
 	}
 	
 	private double doubleValue(Number n) {
 		return n == null ? 0.0 : n.doubleValue();
+	}
+
+	/**
+	 * decode LegendItemEntity into key-value pair of Area's componentScope.
+	 * @param area the Area where the final attribute is set
+	 * @param info the LegendItemEntity to be decoded.
+	 */
+	private void decodeLegendInfo(Area area, LegendItemEntity info, Chart chart) {
+		if (info == null) {
+			return;
+		}
+		final ChartModel model = chart.getModel(); 
+		final int seq = ((Integer)chart.getAttribute("LEGEND_SEQ")).intValue();
+		
+		if (model instanceof PieModel) {
+			Comparable category = ((PieModel)model).getCategory(seq);
+			area.setAttribute("category", category);
+			area.setAttribute("value", ((PieModel)model).getValue(category));
+		    if (chart.isShowTooltiptext() && info.getToolTipText() == null) {
+		    	area.setTooltiptext(category.toString());
+		    }
+		} else if (model instanceof CategoryModel) {
+			Comparable series = ((CategoryModel)model).getSeries(seq);
+			area.setAttribute("series", series);
+		    if (chart.isShowTooltiptext() && info.getToolTipText() == null) {
+		    	area.setTooltiptext(series.toString());
+		    }
+		} else if (model instanceof XYModel) {
+			Comparable series = ((XYModel)model).getSeries(seq);
+			area.setAttribute("series", series);
+		    if (chart.isShowTooltiptext() && info.getToolTipText() == null) {
+		    	area.setTooltiptext(series.toString());
+		    }
+		} else if (model instanceof HiLoModel) {
+			Comparable series = ((HiLoModel)model).getSeries();
+			if (series == null) {
+				series = DEFAULT_HI_LO_SERIES;
+			}
+			area.setAttribute("series", series);
+		    if (chart.isShowTooltiptext() && info.getToolTipText() == null) {
+		    	area.setTooltiptext(series.toString());
+		    }
+		}
+	}
+
+	/**
+	 * decode TickLabelEntity into key-value pair of Area's componentScope.
+	 * @param area the Area where the final attribute is set
+	 * @param info the TickLabelEntity to be decoded.
+	 */
+	private void decodeTickLabelInfo(Area area, TickLabelEntity info, Chart chart) {
+		if (info == null) {
+			return;
+		}
+		final ChartModel model = chart.getModel(); 
+		final int seq = ((Integer)chart.getAttribute("TICK_SEQ")).intValue();
+		
+		if (model instanceof CategoryModel) {
+			Comparable category = ((CategoryModel)model).getCategory(seq);
+			area.setAttribute("category", category);
+		    if (chart.isShowTooltiptext() && info.getToolTipText() == null) {
+		    	area.setTooltiptext(category.toString());
+		    }
+		}
 	}
 
 	/**
@@ -378,7 +464,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** pie chart */
 	private class Pie extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof PieSectionEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof PieSectionEntity) {
 				area.setAttribute("entity", "DATA");
 				decodePieInfo(area, (PieSectionEntity)info);
 			} else {
@@ -436,7 +528,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** bar chart */
 	private class Bar extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof CategoryItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
@@ -444,6 +542,10 @@ public class SimpleChartEngine implements ChartEngine {
 				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
+				Integer seq = (Integer)chart.getAttribute("TICK_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("TICK_SEQ", seq);
+				decodeTickLabelInfo(area, (TickLabelEntity) info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -500,7 +602,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** area chart */
 	private class AreaImpl extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof CategoryItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
@@ -508,6 +616,10 @@ public class SimpleChartEngine implements ChartEngine {
 				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
+				Integer seq = (Integer)chart.getAttribute("TICK_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("TICK_SEQ", seq);
+				decodeTickLabelInfo(area, (TickLabelEntity) info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -545,7 +657,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** line chart */
 	private class Line extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof CategoryItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
@@ -553,6 +671,10 @@ public class SimpleChartEngine implements ChartEngine {
 				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
+				Integer seq = (Integer)chart.getAttribute("TICK_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("TICK_SEQ", seq);
+				decodeTickLabelInfo(area, (TickLabelEntity) info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -607,11 +729,21 @@ public class SimpleChartEngine implements ChartEngine {
 	/** stackedbar chart */
 	private class StackedBar extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof CategoryItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
+				Integer seq = (Integer)chart.getAttribute("TICK_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("TICK_SEQ", seq);
+				decodeTickLabelInfo(area, (TickLabelEntity) info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -657,7 +789,13 @@ public class SimpleChartEngine implements ChartEngine {
 	//note: cutting area coordinate is not correct.
 	private class StackedArea extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof CategoryItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
@@ -665,6 +803,10 @@ public class SimpleChartEngine implements ChartEngine {
 				decodeXYInfo(area, (XYItemEntity) info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
+				Integer seq = (Integer)chart.getAttribute("TICK_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("TICK_SEQ", seq);
+				decodeTickLabelInfo(area, (TickLabelEntity) info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -703,11 +845,21 @@ public class SimpleChartEngine implements ChartEngine {
 	//note: cuttin area corrdinate is not correct.
 	private class Waterfall extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof CategoryItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof CategoryItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
+				Integer seq = (Integer)chart.getAttribute("TICK_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("TICK_SEQ", seq);
+				decodeTickLabelInfo(area, (TickLabelEntity) info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -734,9 +886,17 @@ public class SimpleChartEngine implements ChartEngine {
 	/** polar chart */
 	private class Polar extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			area.setAttribute("entity", "TITLE");
-			if (chart.isShowTooltiptext()) {
-				area.setTooltiptext(chart.getTitle());
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
 			}
 		}
 		public JFreeChart createChart(Chart chart) {
@@ -755,7 +915,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** scatter chart */
 	private class Scatter extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof XYItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity)info);
 			} else {
@@ -784,7 +950,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** timeseries chart */
 	private class TimeSeries extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof XYItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity) info);
 			} else {
@@ -812,7 +984,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** steparea chart */
 	private class StepArea extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof XYItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity)info);
 			} else {
@@ -841,7 +1019,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** step chart */
 	private class Step extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof XYItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity)info);
 			} else {
@@ -870,7 +1054,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** histogram */
 	private class Histogram extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof XYItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity)info);
 			} else {
@@ -899,7 +1089,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** candlestick */
 	private class Candlestick extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof XYItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity)info);
 			} else {
@@ -926,7 +1122,13 @@ public class SimpleChartEngine implements ChartEngine {
 	/** highlow */
 	private class Highlow extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-			if (info instanceof XYItemEntity) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
 				decodeXYInfo(area, (XYItemEntity)info);
 			} else {

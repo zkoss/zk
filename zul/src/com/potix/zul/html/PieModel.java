@@ -29,6 +29,12 @@ import java.util.Collection;
  */
 public interface PieModel extends ChartModel {
 	/**
+	 * Get category of the specified index (0 based).
+	 * @param index the index of the category.
+	 */
+	public Comparable getCategory(int index);
+		
+	/**
 	 * Get categories as a collection.
 	 */
 	public Collection getCategories();

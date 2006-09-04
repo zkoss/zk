@@ -30,6 +30,11 @@ import java.util.Collection;
 public interface XYModel extends ChartModel {
 
 	/**
+	 * Get a series of the specified index;
+	 */
+	public Comparable getSeries(int index);
+	
+	/**
 	 * Get all series as a collection.
 	 */
 	public Collection getSeries();
