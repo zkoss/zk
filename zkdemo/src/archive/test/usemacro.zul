@@ -19,8 +19,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window>
+<window id="wnd">
 	<username id="ua"/>
 	<username label="Account"/>
 	<button label="Add Row" onClick="ua.addRow(&quot;ID&quot;)"/>
+	<button label="Create Manullay">
+	<attribute name="onClick">
+	Username ua = new Username();
+	ua.setParent(wnd);
+	ua.postCreate();
+	</attribute>
+	</button>	
 </window>

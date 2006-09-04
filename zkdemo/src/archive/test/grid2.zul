@@ -126,5 +126,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</rows>
 	</grid>
 </hbox>
+	Empty grid:
+	<grid id="gd" mold="paging"/>
+	<button label="add rows" onClick="new Rows().setParent(gd)"/>
 </vbox>
 </window>
