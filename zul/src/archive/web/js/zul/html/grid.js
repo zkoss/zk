@@ -42,7 +42,8 @@ zk.Grid.prototype = {
 			this.paging = true;
 			this.body = $(this.id + "!paging");
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-			this.bodyrows = this.bodytbl.tBodies[1].rows;
+			if (this.bodytbl.tBodies.length >= 2)
+				this.bodyrows = this.bodytbl.tBodies[1].rows;
 		}
 
 		if (!zk.isRealVisible(this.element)) return;
