@@ -21,6 +21,7 @@ package com.potix.zul.html;
 import java.util.List;
 import java.util.Iterator;
 
+import com.potix.lang.D;
 import com.potix.lang.Objects;
 
 import com.potix.zk.ui.Component;
@@ -152,41 +153,36 @@ public class Grid extends XulElement implements ChildChangedAware {
 	 */
 	public void setPaginal(Paginal pgi) {
 		if (!Objects.equals(pgi, _pgi)) {
-			if (_pgi != null && inPagingMold()) removePagingListener(_pgi);
+			final Paginal old = _pgi;
 			_pgi = pgi;
-			updateChildPaging();
+
+			if (inPagingMold()) {
+				if (old != null) removePagingListener(old);
+				if (_pgi == null) {
+					if (_paging != null) _pgi = _paging;
+					else newInternalPaging();
+				} else { //_pgi != null
+					if (_pgi != _paging) {
+						if (_paging != null) _paging.detach();
+						addPagingListener(_pgi);
+					}
+				}
+			}
 		}
 	}
-	/** Creates or detaches the child paging controller automatically.
+	/** Creates the internal paging component.
 	 */
-	private void updateChildPaging() {
-		if (inPagingMold()) {
-			if (_pgi == null) {
-				if (_paging != null) _pgi = _paging;
-				else {
-					 final Paging paging = new Paging();
-					 paging.setAutohide(true);
-					 paging.setDetailed(true);
-					 final int sz = _rows != null ? _rows.getChildren().size(): 0;
-					 paging.setTotalSize(sz);
-					 paging.setParent(this);
-					 addPagingListener(_pgi);
-				}
-			} else { //_pgi != null
-				if (_pgi != _paging) {
-					if (_paging != null)
-						_paging.detach();
-					addPagingListener(_pgi);
-				}
-			}
-		} else {
-			if (_paging != null) {
-				removePagingListener(_paging);
-				_paging.detach();
-			} else if (_pgi != null) {
-				removePagingListener(_pgi);
-			}
-		}
+	private void newInternalPaging() {
+		assert D.OFF || inPagingMold(): "paging mold only";
+		assert D.OFF || (_paging == null && _pgi == null);
+
+		final Paging paging = new Paging();
+		paging.setAutohide(true);
+		paging.setDetailed(true);
+		final int sz = _rows != null ? _rows.getChildren().size(): 0;
+		paging.setTotalSize(sz);
+		paging.setParent(this);
+		addPagingListener(_pgi);
 	}
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
@@ -251,8 +247,22 @@ public class Grid extends XulElement implements ChildChangedAware {
 
 	//-- super --//
 	public void setMold(String mold) {
-		super.setMold(mold);
-		updateChildPaging();
+		final String old = getMold();
+		if (!Objects.equals(old, mold)) {
+			super.setMold(mold);
+
+			if ("paging".equals(old)) { //change from paging
+				if (_paging != null) {
+					removePagingListener(_paging);
+					_paging.detach();
+				} else if (_pgi != null) {
+					removePagingListener(_pgi);
+				}
+			} else if (inPagingMold()) { //change to paging
+				if (_pgi != null) addPagingListener(_pgi);
+				else newInternalPaging();
+			}
+		}
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
