@@ -41,10 +41,10 @@ import com.potix.zk.ui.util.Evaluator;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  * @see LanguageDefinition
  */
-public class ComponentDefinition implements Cloneable {
+public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	private String _name;
 	private Millieu _mill;
-	private LanguageDefinition _langdef;
+	private transient LanguageDefinition _langdef;
 	/** Either String or Class. */
 	private Object _cls;
 	private Map _molds, _params;
@@ -296,6 +296,23 @@ public class ComponentDefinition implements Cloneable {
 		final ComponentDefinition cd = (ComponentDefinition)clone();
 		cd._name = name;
 		return cd;
+	}
+
+	//Serializable//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		s.writeObject(_langdef != null ? _langdef.getName(): null);
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		final String langnm = (String)s.readObject();
+		if (langnm != null)
+			_langdef = LanguageDefinition.lookup(langnm);
 	}
 
 	//Object//

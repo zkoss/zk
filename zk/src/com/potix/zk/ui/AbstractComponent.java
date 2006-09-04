@@ -943,7 +943,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
 		if (evtnm == null || listener == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException("null");
 
 		if (_listeners != null) {
 			final List l = (List)_listeners.get(evtnm);

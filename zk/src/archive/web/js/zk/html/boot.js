@@ -25,7 +25,7 @@ if (!zk.build) {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-	zk.build = "26"; //increase this if we want the browser to reload JavaScript
+	zk.build = "27"; //increase this if we want the browser to reload JavaScript
 	zk.mods = {}; //ZkFns depends on it
 
 	/** Browser info. */

@@ -49,6 +49,9 @@ import com.potix.zk.ui.util.impl.ForEachImpl;
  * define a new component by aggregating other components
  * (such as thru another ZUL page).
  *
+ * <p>Note: InstanceDefinition is not Serializable, though it is derived
+ * from {@link ComponentDefinition}.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  * @see PageDefinition
  */
@@ -291,6 +294,11 @@ implements Condition {
 	}
 	/*package*/ Map getParams() {
 		return _compdef.getParams();
+	}
+
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		throw new java.io.IOException("InstanceDefinition not serializable");
 	}
 
 	//Object//
