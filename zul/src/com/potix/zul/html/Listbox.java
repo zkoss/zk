@@ -30,6 +30,7 @@ import java.util.ListIterator;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
+import com.potix.lang.D;
 import com.potix.lang.Classes;
 import com.potix.lang.Objects;
 import com.potix.lang.Strings;
@@ -632,40 +633,35 @@ ChildChangedAware, Cropper {
 	 */
 	public void setPaginal(Paginal pgi) {
 		if (!Objects.equals(pgi, _pgi)) {
-			if (_pgi != null && inPagingMold()) removePagingListener(_pgi);
+			final Paginal old = _pgi;
 			_pgi = pgi;
-			updateChildPaging();
+
+			if (inPagingMold()) {
+				if (old != null) removePagingListener(old);
+				if (_pgi == null) {
+					if (_paging != null) _pgi = _paging;
+					else newInternalPaging();
+				} else { //_pgi != null
+					if (_pgi != _paging) {
+						if (_paging != null) _paging.detach();
+						addPagingListener(_pgi);
+					}
+				}
+			}
 		}
 	}
-	/** Creates or detaches the child paging controller automatically.
+	/** Creates the internal paging component.
 	 */
-	private void updateChildPaging() {
-		if (inPagingMold()) {
-			if (_pgi == null) {
-				if (_paging != null) _pgi = _paging;
-				else {
-					 final Paging paging = new Paging();
-					 paging.setAutohide(true);
-					 paging.setDetailed(true);
-					 paging.setTotalSize(getItemCount());
-					 paging.setParent(this);
-					 addPagingListener(_pgi);
-				}
-			} else { //_pgi != null
-				if (_pgi != _paging) {
-					if (_paging != null)
-						_paging.detach();
-					addPagingListener(_pgi);
-				}
-			}
-		} else {
-			if (_paging != null) {
-				removePagingListener(_paging);
-				_paging.detach();
-			} else if (_pgi != null) {
-				removePagingListener(_pgi);
-			}
-		}
+	private void newInternalPaging() {
+		assert D.OFF || inPagingMold(): "paging mold only";
+		assert D.OFF || (_paging == null && _pgi == null);
+
+		final Paging paging = new Paging();
+		paging.setAutohide(true);
+		paging.setDetailed(true);
+		paging.setTotalSize(getItemCount());
+		paging.setParent(this);
+		addPagingListener(_pgi);
 	}
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
@@ -800,7 +796,8 @@ ChildChangedAware, Cropper {
 		super.onChildAdded(child);
 		if (inSelectMold()) invalidate(OUTER);
 			//Both IE and Mozilla are buggy if we insert options by innerHTML
-		else if(inPagingMold()) _pgi.setTotalSize(getItemCount());
+		else if(inPagingMold() && (child instanceof Listitem))
+			_pgi.setTotalSize(getItemCount());
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
@@ -808,7 +805,8 @@ ChildChangedAware, Cropper {
 			//Both IE and Mozilla are buggy if we remove options by outerHTML
 			//CONSIDER: use special command to remove items
 			//Cons: if user remove a lot of items it is slower
-		else if(inPagingMold()) _pgi.setTotalSize(getItemCount());
+		else if(inPagingMold() && (child instanceof Listitem))
+			_pgi.setTotalSize(getItemCount());
 	}
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
@@ -891,10 +889,10 @@ ChildChangedAware, Cropper {
 			refChild = _paging; //the last two: listfoot and paging
 			return super.insertBefore(newChild, refChild);
 		} else if (newChild instanceof Paging) {
-			if (_pgi != null)
-				throw new UiException("External paging cannot coexist with child paging");
 			if (_paging != null && _paging != newChild)
 				throw new UiException("Only one paging is allowed: "+this);
+			if (_pgi != null)
+				throw new UiException("External paging cannot coexist with child paging");
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
 
@@ -1260,10 +1258,25 @@ ChildChangedAware, Cropper {
 
 	//-- super --//
 	public void setMold(String mold) {
-		if (_model != null && "select".equals(mold))
-			throw new UnsupportedOperationException("Mold select doesn't support ListModel");
-		super.setMold(mold);
-		updateChildPaging();
+		final String old = getMold();
+		if (!Objects.equals(old, mold)) {
+			if (_model != null && "select".equals(mold))
+				throw new UnsupportedOperationException("Mold select doesn't support ListModel");
+
+			super.setMold(mold);
+
+			if ("paging".equals(old)) { //change from paging
+				if (_paging != null) {
+					removePagingListener(_paging);
+					_paging.detach();
+				} else if (_pgi != null) {
+					removePagingListener(_pgi);
+				}
+			} else if (inPagingMold()) { //change to paging
+				if (_pgi != null) addPagingListener(_pgi);
+				else newInternalPaging();
+			}
+		}
 	}
 	public void invalidate(Range range) {
 		if (inSelectMold()) {
