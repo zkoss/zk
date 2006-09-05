@@ -580,6 +580,17 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 		return null;
 	}
+	public ComponentDefinition getComponentDefinition(Class cls, boolean recur) {
+		final ComponentDefinition compdef = _compdefs.get(cls);
+		if (!recur || compdef != null)
+			return compdef;
+
+		try {
+			return _langdef.getComponentDefinition(cls);
+		} catch (DefinitionNotFoundException ex) {
+		}
+		return null;
+	}
 
 	//-- Serializable --//
 	//NOTE: they must be declared as private

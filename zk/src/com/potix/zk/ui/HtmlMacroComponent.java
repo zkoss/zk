@@ -50,8 +50,10 @@ implements PostCreate, IdSpace, DynamicPropertied {
 	 * a macro component manually.
 	 */
 	public void postCreate() {
-		getDesktop().getExecution().createComponents(
-			getMillieu().getMacroURI(this), this, _props);
+		final Execution exec = Executions.getCurrent();
+		if (exec == null)
+			throw new IllegalStateException("No execution available.");
+		exec.createComponents(getMillieu().getMacroURI(this), this, _props);
 	}
 	/** Detaches all child components and then recreate them by use of 
 	 * {@link #postCreate}.

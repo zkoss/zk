@@ -59,6 +59,7 @@ import com.potix.zk.ui.metainfo.Millieu;
 import com.potix.zk.ui.metainfo.ComponentDefinition;
 import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
+import com.potix.zk.ui.metainfo.ComponentDefinitionMap;
 import com.potix.zk.ui.metainfo.DefinitionNotFoundException;
 import com.potix.zk.au.AuResponse;
 import com.potix.zk.au.AuClientInfo;
@@ -140,19 +141,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	ComponentDefinition getDefinition(Execution exec, Class cls) {
 		LanguageDefinition langdef = null;
 		if (exec != null) {
-			final PageDefinition pgdef =
-				((ExecutionCtrl)exec).getCurrentPageDefinition();
-			if (pgdef != null) {
-				ComponentDefinition compdef = pgdef.getComponentDefinition(cls);
-				if (compdef != null) return compdef;
+			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+			final PageDefinition pgdef = execCtrl.getCurrentPageDefinition();
+			final Page page = execCtrl.getCurrentPage();
 
-				langdef = pgdef.getLanguageDefinition();
-				if (langdef != null)
-					try {
-						return langdef.getComponentDefinition(cls);
-					} catch (DefinitionNotFoundException ex) {
-					}
-			}
+			final ComponentDefinition compdef =
+				pgdef != null ? pgdef.getComponentDefinition(cls, true):
+					page.getComponentDefinition(cls, true);
+			if (compdef != null) return compdef;
 		}
 
 		for (Iterator it = LanguageDefinition.getAll().iterator();

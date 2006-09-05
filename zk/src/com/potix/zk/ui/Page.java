@@ -330,7 +330,7 @@ public interface Page extends IdSpace {
 	 * Thus, it is NOT a good idea to change its content.
 	 */
 	public ComponentDefinitionMap getComponentDefinitionMap();
-	/** Returns the component defintion of the specified name, or null
+	/** Returns the component definition of the specified name, or null
 	 * if not found.
 	 *
 	 * <p>Note: unlike {@link LanguageDefinition#getComponentDefinition},
@@ -340,4 +340,14 @@ public interface Page extends IdSpace {
 	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
 	 */
 	public ComponentDefinition getComponentDefinition(String name, boolean recur);
+	/** Returns the component definition of the specified class, or null
+	 * if not found.
+	 *
+	 * <p>Note: unlike {@link LanguageDefinition#getComponentDefinition},
+	 * this method doesn't throw ComponentNotFoundException if not found.
+	 * It just returns null.
+	 *
+	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
+	 */
+	public ComponentDefinition getComponentDefinition(Class cls, boolean recur);
 }

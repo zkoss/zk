@@ -62,11 +62,7 @@ public class PageDefinition extends InstanceDefinition {
 	private final List _initdefs = new LinkedList();
 	/** List(VariableResolverDefinition). */
 	private final List _resolvdefs = new LinkedList();
-	/** A map of component definition defined in this page. */
-	private Map _compdefs;
-	/** Map(String clsnm, ComponentDefinition compdef). */
-	private Map _compdefsByClass;
-
+	private final ComponentDefinitionMap _compdefs = new ComponentDefinitionMap();
 	/**
 	 * @param langdef the default language which is used if no namespace
 	 * is specified. Note: a page might have components from different
@@ -95,10 +91,8 @@ public class PageDefinition extends InstanceDefinition {
 	public void imports(PageDefinition pgdef) {
 		for (Iterator it = pgdef._initdefs.iterator(); it.hasNext();)
 			addInitiatorDefinition((InitiatorDefinition)it.next());
-		if (pgdef._compdefs != null) {
-			for (Iterator it = pgdef._compdefs.values().iterator(); it.hasNext();)
-				addComponentDefinition((ComponentDefinition)it.next());
-		}
+		for (Iterator it = pgdef._compdefs.getAll().iterator(); it.hasNext();)
+			addComponentDefinition((ComponentDefinition)it.next());
 	}
 
 	/** Adds a defintion of {@link com.potix.zk.ui.util.Initiator}. */
@@ -162,71 +156,56 @@ public class PageDefinition extends InstanceDefinition {
 		return resolvs;
 	}
 
+	/** Returns the map of component definition (never null).
+	 */
+	public ComponentDefinitionMap getComponentDefinitionMap() {
+		return _compdefs;
+	}
 	/** Adds a component definition belonging to this page definition only.
+	 *
+	 * <p>It is the same as calling {@link ComponentDefinitionMap#add} 
+	 * against {@link #getComponentDefinitionMap}
 	 */
 	public void addComponentDefinition(ComponentDefinition compdef) {
-		if (compdef == null)
-			throw new IllegalArgumentException("null");
-
-		if (_compdefs == null) {
-			synchronized (this) {
-				if (_compdefs == null) {
-					final Map defs = new HashMap(5),
-						defsByClass = new HashMap(5);
-					defs.put(compdef.getName(), compdef);
-					_compdefs = defs;
-
-					final Object implcls = compdef.getImplementationClass();
-					if (implcls instanceof Class)
-						defsByClass.put(((Class)implcls).getName(), compdef);
-					else //String
-						defsByClass.put(implcls, compdef);
-					_compdefsByClass = defsByClass;
-					return; //done
-				}
-			}
-		}
-		synchronized (_compdefs) {
-			_compdefs.put(compdef.getName(), compdef);
-		}
-		synchronized (_compdefsByClass) {
-			final Object implcls = compdef.getImplementationClass();
-			if (implcls instanceof Class)
-				_compdefsByClass.put(((Class)implcls).getName(), compdef);
-			else //String
-				_compdefsByClass.put(implcls, compdef);
-		}
+		_compdefs.add(compdef);
 	}
-	/** Returns the component defintion of the specified name, or null
+	/** Returns the component definition of the specified name, or null
 	 * if not found.
 	 *
 	 * <p>Note: unlike {@link LanguageDefinition#getComponentDefinition},
 	 * this method doesn't throw ComponentNotFoundException if not found.
 	 * It just returns null.
+	 *
+	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(String name) {
-		if (_compdefs == null) return null;
+	public ComponentDefinition getComponentDefinition(String name, boolean recur) {
+		final ComponentDefinition compdef = _compdefs.get(name);
+		if (!recur || compdef != null)
+			return compdef;
 
-		synchronized (_compdefs) {
-			return (ComponentDefinition)_compdefs.get(name);
+		try {
+			return getLanguageDefinition().getComponentDefinition(name);
+		} catch (DefinitionNotFoundException ex) {
 		}
+		return null;
 	}
-	/** Returns the component defintion of the specified name, or null
+	/** Returns the component definition of the specified class, or null
 	 * if not found.
 	 *
 	 * <p>Note: unlike {@link LanguageDefinition#getComponentDefinition},
 	 * this method doesn't throw ComponentNotFoundException if not found.
 	 * It just returns null.
+	 *
+	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(Class cls) {
-		if (_compdefsByClass == null) return null;
+	public ComponentDefinition getComponentDefinition(Class cls, boolean recur) {
+		final ComponentDefinition compdef = _compdefs.get(cls);
+		if (!recur || compdef != null)
+			return compdef;
 
-		synchronized (_compdefsByClass) {
-			for (; cls != null; cls = cls.getSuperclass()) {
-				final ComponentDefinition compdef =
-					(ComponentDefinition)_compdefsByClass.get(cls.getName());
-				if (compdef != null) return compdef;
-			}
+		try {
+			return getLanguageDefinition().getComponentDefinition(cls);
+		} catch (DefinitionNotFoundException ex) {
 		}
 		return null;
 	}

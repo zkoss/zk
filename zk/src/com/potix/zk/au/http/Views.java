@@ -106,13 +106,13 @@ import com.potix.zk.ui.http.ExecutionImpl;
 				}
 			} catch (Throwable ex) {
 				err = true;
-				config.invokeExecutionCleanups(exec, ex);
+				config.invokeExecutionCleanups(exec, oldexec, ex);
 
 				if (ex instanceof ServletException) throw (ServletException)ex;
 				if (ex instanceof IOException) throw (IOException)ex;
 				throw UiException.Aide.wrap(ex);
 			} finally {
-				if (!err) config.invokeExecutionCleanups(exec, null);
+				if (!err) config.invokeExecutionCleanups(exec, oldexec, null);
 				uieng.deactivate(exec);
 			}
 		} catch (ComponentNotFoundException ex) {
