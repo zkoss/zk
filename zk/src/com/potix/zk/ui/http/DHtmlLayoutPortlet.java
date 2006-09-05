@@ -30,6 +30,7 @@ import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.PortletPreferences;
 
 import com.potix.lang.D;
 import com.potix.mesg.Messages;
@@ -61,8 +62,13 @@ import com.potix.zk.ui.metainfo.PageDefinitions;
  *
  * <h3>Notes:</h3>
  * <ul>
- * <li>The path of the ZUML page is specified as an parameter
- * called zk_path.</li>
+ * <li>The portlet looks for the path of the ZUML page from the following locations:
+ * <ol>
+ *  <li>From the request parameter called zk_page.</li>
+ *  <li>From the request attribute called zk_page.</li>
+ *  <li>From the portlet preference called zk_page.</li>
+ * </ol>
+ * </li>
  * <li>It is based {@link DHtmlLayoutServlet}, so you have to declare
  * {@link DHtmlLayoutServlet} even if you want every ZUML pages being
  * processed by this portlet.</li>
@@ -76,9 +82,12 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	/** The parameter or attribute to specify the path of the ZUML page. */
 	private static final String ATTR_PAGE = "zk_page";
 	private PortletContext _ctx;
+	/** The default page. */
+	private String _defpage;
 
 	public void init(PortletConfig conf) throws PortletException {
 		_ctx = conf.getPortletContext();
+		_defpage = conf.getInitParameter(ATTR_PAGE);
 	}
 
 	public PortletContext getPortletContext() {
@@ -93,7 +102,14 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	throws PortletException, IOException {
 		//try parameter first and then attribute
 		String path = request.getParameter(ATTR_PAGE);
-		if (path == null) path = (String)request.getAttribute(ATTR_PAGE);
+		if (path == null) {
+			path = (String)request.getAttribute(ATTR_PAGE);
+			if (path == null) {
+				PortletPreferences prefs = request.getPreferences();
+				path = prefs.getValue(ATTR_PAGE, null);
+				if (path == null) path = _defpage;
+			}
+		}
 
 		final Session sess = getSession(request);
 		SessionsCtrl.setCurrent(sess);
