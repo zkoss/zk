@@ -494,14 +494,14 @@ public class Configuration {
 	 * and then invoke {@link ExecutionInit#init}.
 	 *
 	 * @param exec the execution that is created
+	 * @param parent the previous execution, or null if no previous at all
 	 * @exception UiException to prevent an execution from being created
 	 */
-	public void invokeExecutionInits(Execution exec)
+	public void invokeExecutionInits(Execution exec, Execution parent)
 	throws UiException {
 		if (_execInits.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
-		final Execution parent = Executions.getCurrent();
 		synchronized (_execInits) {
 			for (Iterator it = _execInits.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
@@ -523,8 +523,12 @@ public class Configuration {
 	 * <p>It never throws an exception.
 	 *
 	 * @param exec the execution that is being destroyed
+	 * @param parent the previous execution, or null if no previous at all
+	 * @param ex the exception being thrown (and not handled) during the execution,
+	 * or null it is executed successfully.
 	 */
-	public void invokeExecutionCleanups(Execution exec) {
+	public
+	void invokeExecutionCleanups(Execution exec, Execution parent, Throwable ex) {
 		if (_execCleans.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
@@ -532,9 +536,9 @@ public class Configuration {
 			for (Iterator it = _execCleans.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((ExecutionCleanup)klass.newInstance()).cleanup(exec);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
+					((ExecutionCleanup)klass.newInstance()).cleanup(exec, parent, ex);
+				} catch (Throwable t) {
+					log.error("Failed to invoke "+klass, t);
 				}
 			}
 		}

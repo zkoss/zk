@@ -36,6 +36,11 @@ import com.potix.zk.ui.Execution;
  */
 public interface ExecutionCleanup {
 	/** called when an execution is about to be destroyed.
+	 *
+	 * @param exec the exection to clean up.
+	 * @param parent the previous execution, or null if no previous at all
+	 * @param ex the exception being thrown (and not handled) during the execution,
+	 * or null it is executed successfully.
 	 */
-	public void cleanup(Execution exec);
+	public void cleanup(Execution exec, Execution parent, Throwable ex);
 }

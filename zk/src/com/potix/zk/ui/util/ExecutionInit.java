@@ -37,9 +37,9 @@ import com.potix.zk.ui.Execution;
 public interface ExecutionInit {
 	/** Called when an exection is created and initialized.
 	 *
-	 * <p>Note: exec is not activated. In other words,
-	 * {@link com.potix.zk.ui.Executions#getCurrent} returns the previous execution
-	 * if any.
+	 * <p>Note: this method is called after exec is activated. In other words,
+	 * {@link com.potix.zk.ui.Executions#getCurrent} is the same as
+	 * the exec argument.
 	 *
 	 * @param exec the execution being created.
 	 * @param parent the previous execution in the same (Servlet) request, or
