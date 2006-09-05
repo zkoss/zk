@@ -41,8 +41,10 @@ import com.potix.zk.mesg.MZk;
 import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Execution;
+import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Component;
+import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.ComponentNotFoundException;
 import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.ext.Viewable;
@@ -84,12 +86,16 @@ import com.potix.zk.ui.http.ExecutionImpl;
 			final UiEngine uieng = wappc.getUiEngine();
 			final Desktop desktop = wappc.getDesktopCache(sess).getDesktop(dtid);
 
+			final Execution oldexec = Executions.getCurrent();
 			final Execution exec = new ExecutionImpl(
 				ctx, request, response, desktop, null);
-			final Configuration config = wapp.getConfiguration();
-			config.invokeExecutionInits(exec);
 			uieng.activate(exec);
+
+			final Configuration config = wapp.getConfiguration();
+			boolean err = false;
 			try {
+				config.invokeExecutionInits(exec, oldexec);
+
 				final Component comp = desktop.getComponentByUuid(uuid);
 				if (!(comp instanceof Viewable))
 					throw new ServletException(Viewable.class+" must be implemented: "+comp.getClass());
@@ -98,9 +104,16 @@ import com.potix.zk.ui.http.ExecutionImpl;
 					response.sendError(response.SC_GONE, "Media not found in "+comp);
 					return;
 				}
+			} catch (Throwable ex) {
+				err = true;
+				config.invokeExecutionCleanups(exec, ex);
+
+				if (ex instanceof ServletException) throw (ServletException)ex;
+				if (ex instanceof IOException) throw (IOException)ex;
+				throw UiException.Aide.wrap(ex);
 			} finally {
+				if (!err) config.invokeExecutionCleanups(exec, null);
 				uieng.deactivate(exec);
-				config.invokeExecutionCleanups(exec);
 			}
 		} catch (ComponentNotFoundException ex) {
 			//possible because view might be as late as origin comp is gone

@@ -47,7 +47,6 @@ import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.ComponentNotFoundException;
-import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.UiEngine;
 import com.potix.zk.ui.http.ExecutionImpl;
@@ -215,13 +214,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		final Execution exec = new ExecutionImpl(
 			_ctx, request, response, desktop, null);
-		final Configuration config = wapp.getConfiguration();
-		config.invokeExecutionInits(exec);
-		try {
-			uieng.execUpdate(exec, aureqs, out);
-		} finally {
-			config.invokeExecutionCleanups(exec);
-		}
+		uieng.execUpdate(exec, aureqs, out);
 
 		flushXmlWriter(response, out);
 	}
