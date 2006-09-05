@@ -48,7 +48,6 @@ import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.sys.UiFactory;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.SessionsCtrl;
@@ -153,14 +152,8 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 				RenderHttpServletRequest.getInstance(request),
 				RenderHttpServletResponse.getInstance(response),
 				desktop, page);
-		final Configuration config = wapp.getConfiguration();
-		config.invokeExecutionInits(exec);
-		try {
-			wappc.getUiEngine()
-				.execNewPage(exec, pagedef, page, response.getWriter());
-		} finally {
-			config.invokeExecutionCleanups(exec);
-		}
+		wappc.getUiEngine()
+			.execNewPage(exec, pagedef, page, response.getWriter());
 	}
 
 	/** Returns the desktop of the specified request.

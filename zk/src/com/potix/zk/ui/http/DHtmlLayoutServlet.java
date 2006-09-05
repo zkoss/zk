@@ -46,7 +46,6 @@ import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.metainfo.PageDefinitions;
-import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.sys.UiFactory;
 import com.potix.zk.ui.sys.RequestInfo;
 import com.potix.zk.ui.sys.WebAppCtrl;
@@ -147,13 +146,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final Page page = uf.newPage(ri, pagedef, path);
 		final Execution exec = new ExecutionImpl(
 			_ctx, request, response, desktop, page);
-		final Configuration config = wapp.getConfiguration();
-		config.invokeExecutionInits(exec);
-		try {
-			wappc.getUiEngine()
-				.execNewPage(exec, pagedef, page, response.getWriter());
-		} finally {
-			config.invokeExecutionCleanups(exec);
-		}
+		wappc.getUiEngine()
+			.execNewPage(exec, pagedef, page, response.getWriter());
 	}
 }

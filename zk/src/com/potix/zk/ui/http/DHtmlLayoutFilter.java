@@ -41,7 +41,6 @@ import com.potix.zk.ui.Session;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.sys.UiFactory;
 import com.potix.zk.ui.sys.WebAppCtrl;
 import com.potix.zk.ui.sys.RequestInfo;
@@ -89,14 +88,8 @@ public class DHtmlLayoutFilter implements Filter {
 			final Page page = uf.newPage(ri, pagedef, null);
 			final Execution exec =
 				new ExecutionImpl(_ctx, request, response, desktop, page);
-			final Configuration config = wapp.getConfiguration();
-			config.invokeExecutionInits(exec);
-			try {
-				wappc.getUiEngine()
+			wappc.getUiEngine()
 				.execNewPage(exec, pagedef, page, response.getWriter());
-			} finally {
-				config.invokeExecutionCleanups(exec);
-			}
 		} finally {
 			I18Ns.cleanup(request, old);
 		}
