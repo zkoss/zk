@@ -757,8 +757,7 @@ zkau.onWndMove = function (cmp) {
 
 zkau.onfocus = function (el) {
 	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases
-	if (!zkau.focusInFloats(el))
-		setTimeout(zkau.closeFloats, 0);
+	if (!zkau.focusInFloats(el)) zkau.closeFloats(el);
 	if (zkau.valid) zkau.valid.uncover(el);
 
 	var cmp = zkau.getOuter(el);
@@ -813,8 +812,8 @@ zkau._onDocMousedown = function (evt) {
 
 	var node = Event.element(evt);
 	zkau.currentFocus = node;
-	if (!zkau.focusInFloats(node))
-		setTimeout(zkau.closeFloats, 0);
+
+	if (!zkau.focusInFloats(node)) zkau.closeFloats(node);
 
 	zkau.autoZIndex(node);
 };
