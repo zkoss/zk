@@ -202,9 +202,11 @@ public class UiEngineImpl implements UiEngine {
 	public void execNewPage(Execution exec, PageDefinition pagedef,
 	Page page, Writer out) throws IOException {
 		//It is possible this method is invoked when processing other exec
-		final ExecutionCtrl oldexc = ExecutionsCtrl.getCurrentCtrl();
+		final Execution oldexec = Executions.getCurrent();
+		final ExecutionCtrl oldexecCtrl = (ExecutionCtrl)oldexec;
 		final UiVisualizer olduv =
-			oldexc != null ? (UiVisualizer)oldexc.getVisualizer(): null;
+			oldexecCtrl != null ? (UiVisualizer)oldexecCtrl.getVisualizer(): null;
+
 		final UiVisualizer uv;
 		if (olduv != null) uv = doReactivate(exec, olduv);
 		else uv = doActivate(exec, null);
@@ -214,7 +216,13 @@ public class UiEngineImpl implements UiEngine {
 		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
 		execCtrl.setCurrentPage(page);
 		execCtrl.setCurrentPageDefinition(pagedef);
+
+		final Desktop desktop = exec.getDesktop();
+		final Configuration config = desktop.getWebApp().getConfiguration();
+		boolean err = false;
 		try {
+			config.invokeExecutionInits(exec, oldexec);
+
 			if (olduv != null) olduv.setOwner(page);
 
 			//Cycle 1: Creates all components
@@ -238,7 +246,6 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			//Cycle 2: process pending events
-			final Desktop desktop = exec.getDesktop();
 			Event event = nextEvent(uv);
 			do {
 				for (; event != null; event = nextEvent(uv)) {
@@ -265,9 +272,15 @@ public class UiEngineImpl implements UiEngine {
 				//Rather, we shall add them to the async update.
 
 			((PageCtrl)page).redraw(responses, out);
-		} catch (IOException ex) {
+		} catch (Throwable ex) {
+			err = true;
+			config.invokeExecutionCleanups(exec, ex);
+
+			if (ex instanceof IOException) throw (IOException)ex;
 			throw UiException.Aide.wrap(ex);
 		} finally {
+			if (!err) config.invokeExecutionCleanups(exec, null);
+
 			execCtrl.setCurrentPage(old); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
 
@@ -424,12 +437,14 @@ public class UiEngineImpl implements UiEngine {
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
 			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec+", reqs="+requests;
 
+		final Execution oldexec = Executions.getCurrent();
 		final UiVisualizer uv = doActivate(exec, requests);
 		if (uv == null)
 			return; //done (request is added to the exec currently activated)
 
 		final Desktop desktop = exec.getDesktop();
-		final Monitor monitor = desktop.getWebApp().getConfiguration().getMonitor();
+		final Configuration config = desktop.getWebApp().getConfiguration();
+		final Monitor monitor = config.getMonitor();
 		if (monitor != null) {
 			try {
 				monitor.beforeUpdate(desktop, requests);
@@ -437,8 +452,11 @@ public class UiEngineImpl implements UiEngine {
 				log.error(ex);
 			}
 		}
-		final RequestQueue rque = ((DesktopCtrl)exec.getDesktop()).getRequestQueue();
+
+		boolean err = false;
 		try {
+			config.invokeExecutionInits(exec, oldexec);
+			final RequestQueue rque = ((DesktopCtrl)exec.getDesktop()).getRequestQueue();
 			final List errs = new LinkedList();
 			final long tmexpired = System.currentTimeMillis() + 3000;
 				//Tom Yeh: 20060120
@@ -496,7 +514,15 @@ public class UiEngineImpl implements UiEngine {
 
 			out.flush();
 				//flush before deactivating to make sure it has been sent
+		} catch (Throwable ex) {
+			err = true;
+			config.invokeExecutionCleanups(exec, ex);
+
+			if (ex instanceof IOException) throw (IOException)ex;
+			throw UiException.Aide.wrap(ex);
 		} finally {
+			if (!err) config.invokeExecutionCleanups(exec, null);
+
 			doDeactivate(exec);
 
 			if (monitor != null) {
