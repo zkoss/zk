@@ -21,6 +21,8 @@ import com.potix.zk.ui.WrongValueException;
 import com.potix.zk.au.Command;
 
 import com.potix.zul.mesg.MZul;
+import com.potix.zul.html.event.Events;
+import com.potix.zul.html.event.PagingEvent;
 import com.potix.zul.html.impl.XulElement;
 import com.potix.zul.html.ext.Paginal;
 import com.potix.zul.au.impl.PagingCommand;
@@ -78,6 +80,7 @@ public class Paging extends XulElement implements Paginal {
 		if (_pgsz != size) {
 			_pgsz = size;
 			updatePageNum();
+			Events.postEvent(new PagingEvent(Events.ON_PAGING, this, _actpg));
 		}
 	}
 	public int getTotalSize() {

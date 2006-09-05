@@ -31,6 +31,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<button label="Change the first label" onClick="changeLabel(0)"/>
 	<button label="Change the last label" onClick="changeLabel(-1)"/>
 	<button label="redraw" onClick="grid.invalidate()"/>
+	<button label="set page size" onClick="grid.paginal.pageSize = 10"/>
 	<zscript><![CDATA[
 	void add(int cnt) {
 		for (int j = 0; ++j <= cnt;) {
