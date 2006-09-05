@@ -486,7 +486,8 @@ public class Parser {
 					complangdef = LanguageDefinition.lookup(uri);
 				}
 
-				ComponentDefinition compdef = pgdef.getComponentDefinition(nm);
+				ComponentDefinition compdef =
+					pgdef.getComponentDefinitionMap().get(nm);
 				if (compdef != null) {
 					instdef = new InstanceDefinition(parent, compdef);
 				} else if (complangdef.hasComponentDefinition(nm)) {
