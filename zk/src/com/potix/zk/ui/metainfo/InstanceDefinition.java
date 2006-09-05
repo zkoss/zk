@@ -60,7 +60,7 @@ implements Condition {
 	private final PageDefinition _pagedef;
 	private final InstanceDefinition _parent;
 	private final ComponentDefinition _compdef;
-	/** A list of {@link InstanceDefiniton} and {@link Script}. */
+	/** A list of {@link InstanceDefinition} and {@link Script}. */
 	private final List _children = new LinkedList(),
 		_roChildren = Collections.unmodifiableList(_children);
 	/** A list of {@link CustomAttributes}. */
