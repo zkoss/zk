@@ -28,7 +28,9 @@ import javax.servlet.jsp.el.FunctionMapper;
 import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.util.VariableResolver;
 import com.potix.zk.ui.event.EventListener;
-import com.potix.zk.ui.metainfo.PageDefinition;
+import com.potix.zk.ui.metainfo.LanguageDefinition;
+import com.potix.zk.ui.metainfo.ComponentDefinition;
+import com.potix.zk.ui.metainfo.ComponentDefinitionMap;
 
 /**
  * A page. A desktop consists of a set of pages.
@@ -316,4 +318,26 @@ public interface Page extends IdSpace {
 	 * @param funmap the new function mapper (null to ignore).
 	 */
 	public void addFunctionMapper(FunctionMapper funmap);
+
+	/** Returns the language definition that this page belongs to (never null).
+	 */
+	public LanguageDefinition getLanguageDefinition();
+	/** Returns the map of component definitions (never null).
+	 *
+	 * <p>Note: the map is shared among all instance of the same page definition.
+	 * Any component definition added (by {@link ComponentDefinitionMap#add})
+	 * are visible to all other instances of the same page definition.
+	 * Thus, it is NOT a good idea to change its content.
+	 */
+	public ComponentDefinitionMap getComponentDefinitionMap();
+	/** Returns the component defintion of the specified name, or null
+	 * if not found.
+	 *
+	 * <p>Note: unlike {@link LanguageDefinition#getComponentDefinition},
+	 * this method doesn't throw ComponentNotFoundException if not found.
+	 * It just returns null.
+	 *
+	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
+	 */
+	public ComponentDefinition getComponentDefinition(String name, boolean recur);
 }
