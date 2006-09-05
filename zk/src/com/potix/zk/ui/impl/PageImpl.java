@@ -58,6 +58,9 @@ import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.event.Events;
 import com.potix.zk.ui.metainfo.PageDefinition;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
+import com.potix.zk.ui.metainfo.ComponentDefinition;
+import com.potix.zk.ui.metainfo.ComponentDefinitionMap;
+import com.potix.zk.ui.metainfo.DefinitionNotFoundException;
 import com.potix.zk.ui.util.Interpreter;
 import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.util.VariableResolver;
@@ -117,7 +120,12 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private transient Map _listeners;
 	/** The default parent. */
 	private transient Component _defparent;
+	/** The reason to store it is PageDefinition is not serializable. */
 	private FunctionMapper _funmap;
+	/** The reason to store it is PageDefinition is not serializable. */
+	private ComponentDefinitionMap _compdefs;
+	/** The reason to store it is PageDefinition is not serializable. */
+	private transient LanguageDefinition _langdef;
 
 	/** Constructs a page.
 	 *
@@ -131,9 +139,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 * are not ready until {@link #init} is called.
 	 */
 	public PageImpl(PageDefinition pgdef) {
-		final LanguageDefinition langdef = pgdef.getLanguageDefinition();
-		_dkUri = langdef.getDesktopURI();
-		_pgUri = langdef.getPageURI();
+		_langdef = pgdef.getLanguageDefinition();
+		_dkUri = _langdef.getDesktopURI();
+		_pgUri = _langdef.getPageURI();
+		_compdefs = pgdef.getComponentDefinitionMap();
 
 		init();
 	}
@@ -554,12 +563,31 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			((ComponentCtrl)it.next()).sessionDidActivate(this);
 	}
 
+	public LanguageDefinition getLanguageDefinition() {
+		return _langdef;
+	}
+	public ComponentDefinitionMap getComponentDefinitionMap() {
+		return _compdefs;
+	}
+	public ComponentDefinition getComponentDefinition(String name, boolean recur) {
+		final ComponentDefinition compdef = _compdefs.get(name);
+		if (!recur || compdef != null)
+			return compdef;
+
+		try {
+			return _langdef.getComponentDefinition(name);
+		} catch (DefinitionNotFoundException ex) {
+		}
+		return null;
+	}
+
 	//-- Serializable --//
 	//NOTE: they must be declared as private
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
+		s.writeObject(_langdef != null ? _langdef.getName(): null);
 		s.writeObject(_owner != null ? _owner.getUuid(): null);
 		s.writeObject(_defparent != null ? _defparent.getUuid(): null);
 
@@ -578,6 +606,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		s.defaultReadObject();
 
 		init();
+
+		final String langnm = (String)s.readObject();
+		if (langnm != null)
+			_langdef = LanguageDefinition.lookup(langnm);
 
 		_ownerUuid = (String)s.readObject();
 			//_owner is restored later when sessionDidActivate is called

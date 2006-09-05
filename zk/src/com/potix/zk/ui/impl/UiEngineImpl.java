@@ -274,12 +274,12 @@ public class UiEngineImpl implements UiEngine {
 			((PageCtrl)page).redraw(responses, out);
 		} catch (Throwable ex) {
 			err = true;
-			config.invokeExecutionCleanups(exec, ex);
+			config.invokeExecutionCleanups(exec, oldexec, ex);
 
 			if (ex instanceof IOException) throw (IOException)ex;
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (!err) config.invokeExecutionCleanups(exec, null);
+			if (!err) config.invokeExecutionCleanups(exec, oldexec, null);
 
 			execCtrl.setCurrentPage(old); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
@@ -395,7 +395,7 @@ public class UiEngineImpl implements UiEngine {
 		//Note: we add taglib, stylesheets and var-resolvers to the page
 		//it might cause name pollution but we got no choice since they
 		//are used as long as components created by this method are alive
-		page.addFunctionMapper(pagedef.getFunctionMapper());
+		if (page != null) page.addFunctionMapper(pagedef.getFunctionMapper());
 		initVariableResolvers(pagedef, page);
 
 		final Initiators inits = Initiators.doInit(pagedef, page);
@@ -516,12 +516,12 @@ public class UiEngineImpl implements UiEngine {
 				//flush before deactivating to make sure it has been sent
 		} catch (Throwable ex) {
 			err = true;
-			config.invokeExecutionCleanups(exec, ex);
+			config.invokeExecutionCleanups(exec, oldexec, ex);
 
 			if (ex instanceof IOException) throw (IOException)ex;
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (!err) config.invokeExecutionCleanups(exec, null);
+			if (!err) config.invokeExecutionCleanups(exec, oldexec, null);
 
 			doDeactivate(exec);
 
