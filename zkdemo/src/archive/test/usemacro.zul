@@ -24,10 +24,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<username label="Account"/>
 	<button label="Add Row" onClick="ua.addRow(&quot;ID&quot;)"/>
 	<button label="Create Manullay">
-	<attribute name="onClick">
+	<attribute name="onClick">{
 	Username ua = new Username();
 	ua.setParent(wnd);
 	ua.postCreate();
-	</attribute>
+	}</attribute>
+	</button>
+
+	<button label="Create Manullay by Definition">
+	<attribute name="onClick">{
+	Component ua = page.getComponentDefinition("username", false).newInstance(page);
+	ua.setParent(wnd);
+	ua.postCreate();
+	}</attribute>
 	</button>	
 </window>
