@@ -284,10 +284,6 @@ div.listbox-foot { /* always used */
 	background: #EEE; border-top: 1px solid #BBB;
 }
 
-div.tree-body, div.listbox-body { /* always used. */
-	-moz-user-select: none; /*side effect: unable to select textbox */
-}
-
 tr.item, tr.item a, tr.item a:visited {
 	font-size: medium; font-weight: normal; color: black;
 	text-decoration: none;

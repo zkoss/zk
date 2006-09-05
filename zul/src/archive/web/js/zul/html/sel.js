@@ -91,9 +91,9 @@ zk.Selectable.prototype = {
 				};
 
 				//To turn-off select, use "-moz-user-select: none" in CSS
-			} else if (zk.ie) {
-				this.element.onselectstart = function () {return false;}
-				//Tom Yeh: 20060106: side effect: unable to select textbox
+//			} else if (zk.ie) {
+//				this.element.onselectstart = function () {return false;}
+//Tom Yeh: 20060106: side effect: unable to select textbox if turned on
 			}
 
 			if (!this.paging) {
