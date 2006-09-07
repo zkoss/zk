@@ -34,7 +34,7 @@ import org.hibernate.SessionFactory;
  * <p>In WEB-INF/zk.xml, add following lines:
  * <pre><code>
  * 	&lt;listener>
- *		&lt;description>Hibernate "Open Session In View" SessionFactory lifecycle&lt;/description>
+ *		&lt;description>Hibernate SessionFactory Lifecycle&lt;/description>
  *		&lt;listener-class>com.potix.zkplus.hibernate.HibernateSessionWebAppListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>

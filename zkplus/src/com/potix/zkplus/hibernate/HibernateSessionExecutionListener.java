@@ -36,7 +36,7 @@ import org.hibernate.StaleObjectStateException;
  * <p>In WEB-INF/zk.xml, add following lines:
  * <pre><code>
  * 	&lt;listener>
- *		&lt;description>Hibernate "Open Session In View" Session lifecycle&lt;/description>
+ *		&lt;description>Hibernate "Open Session In View" Session Lifecycle&lt;/description>
  *		&lt;listener-class>com.potix.zkplus.hibernate.HibernateSessionExecutionListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>
