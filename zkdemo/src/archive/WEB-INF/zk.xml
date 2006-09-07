@@ -62,4 +62,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<location>/WEB-INF/sys/error.zul</location>
 	</error-page>
 	-->
+
+	<!-- Any number of preferences. 
+	<preference>
+		<name></name>
+		<value></value>
+	</preference>
+	-->
 </zk>
