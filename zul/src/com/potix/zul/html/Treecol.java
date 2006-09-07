@@ -97,7 +97,7 @@ public class Treecol extends HeaderElement {
 			if (tr != null) {
 				final List chs = tr.getChildren();
 				if (jcol < chs.size())
-					((Component)chs.get(jcol)).invalidate(OUTER);
+					((Component)chs.get(jcol)).invalidate();
 			}
 
 			invalidateCells(ti.getTreechildren(), jcol); //recursive
@@ -113,7 +113,7 @@ public class Treecol extends HeaderElement {
 	/** Invalidates the whole tree. */
 	protected void invalidateWhole() {
 		final Tree tree = getTree();
-		if (tree != null) tree.invalidate(OUTER);
+		if (tree != null) tree.invalidate();
 	}
 
 	//-- Component --//
@@ -121,13 +121,5 @@ public class Treecol extends HeaderElement {
 		if (parent != null && !(parent instanceof Treecols))
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
-	}
-	public void invalidate(Range range) {
-		super.invalidate(range);
-		initAtClient();
-	}
-	private void initAtClient() {
-		final Tree tree = getTree();
-		if (tree != null) tree.initAtClient();
 	}
 }

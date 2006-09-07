@@ -74,7 +74,7 @@ public class Radiogroup extends XulElement {
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 

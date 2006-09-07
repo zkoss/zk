@@ -106,7 +106,7 @@ public class Groupbox extends XulElement implements Openable {
 				insertBefore = (Component)getChildren().get(0);
 				//always makes caption as the first child
 			_caption = (Caption)child;
-			invalidate(INNER);
+			invalidate();
 		} else if (insertBefore instanceof Caption) {
 			throw new UiException("caption must be the first child");
 		}
@@ -115,7 +115,7 @@ public class Groupbox extends XulElement implements Openable {
 	public void onChildRemoved(Component child) {
 		if (child instanceof Caption) {
 			_caption = null;
-			invalidate(INNER);
+			invalidate();
 		}
 		super.onChildRemoved(child);
 	}

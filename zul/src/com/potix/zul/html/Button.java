@@ -92,7 +92,7 @@ public class Button extends LabelImageElement {
 
 		if (!Objects.equals(_dir, dir)) {
 			_dir = dir;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 	/** Returns the orient.
@@ -110,7 +110,7 @@ public class Button extends LabelImageElement {
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 

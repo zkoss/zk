@@ -262,7 +262,7 @@ implements Inputable, Errorable, Constrainted {
 	public void setMaxlength(int maxlength) {
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			invalidate(OUTER); //Browser doesn't support it
+			invalidate();
 		}
 	}
 	/** Returns the cols.

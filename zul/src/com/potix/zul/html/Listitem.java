@@ -269,23 +269,20 @@ public class Listitem extends XulElement {
 			throw new UiException("Unsupported child for listitem: "+child);
 		return super.insertBefore(child, insertBefore);
 	}
-	public void invalidate(Range range) {
-		if (range == OUTER && inSelectMold() && isVisible()) {
+	public void invalidate() {
+		if (inSelectMold()) {
 			//Both IE and Mozilla are buggy if we update options by outerHTML
-			getParent().invalidate(OUTER);
+			getParent().invalidate();
 			return;
 		}
-		super.invalidate(range);
-		initAtClient();
+		super.invalidate();
 	}
 	public void onChildAdded(Component child) {
-		if (inSelectMold()) invalidate(INNER); //if HTML-select, Listcell has no client part
-		else initAtClient();
+		if (inSelectMold()) invalidate(); //if HTML-select, Listcell has no client part
 		super.onChildAdded(child);
 	}
 	public void onChildRemoved(Component child) {
-		if (inSelectMold()) invalidate(INNER); //if HTML-select, Listcell has no client part
-		else initAtClient();
+		if (inSelectMold()) invalidate(); //if HTML-select, Listcell has no client part
 		super.onChildRemoved(child);
 	}
 	public String getOuterAttrs() {
@@ -316,10 +313,5 @@ public class Listitem extends XulElement {
 			if (clkattrs != null) sb.append(clkattrs);
 		}
 		return sb.toString();
-	}
-
-	private void initAtClient() {
-		final Listbox box = getListbox();
-		if (box != null) box.initAtClient();
 	}
 }

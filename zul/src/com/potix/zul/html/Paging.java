@@ -93,7 +93,7 @@ public class Paging extends XulElement implements Paginal {
 		if (_ttsz != size) {
 			_ttsz = size;
 			updatePageNum();
-			if (_detailed) invalidate(INNER);
+			if (_detailed) invalidate();
 		}
 	}
 	private void updatePageNum() {
@@ -104,7 +104,7 @@ public class Paging extends XulElement implements Paginal {
 			if (_actpg >= _npg)
 				_actpg = _npg - 1;
 
-			invalidate(_autohide ? OUTER: INNER);
+			invalidate();
 		}
 	}
 
@@ -119,7 +119,7 @@ public class Paging extends XulElement implements Paginal {
 			throw new WrongValueException("Unable to set active page to "+pg+" since only "+_npg+" pages");
 		if (_actpg != pg) {
 			_actpg = pg;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 
@@ -131,7 +131,7 @@ public class Paging extends XulElement implements Paginal {
 			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
 		if (_pginc != pginc) {
 			_pginc = pginc;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 
@@ -141,7 +141,7 @@ public class Paging extends XulElement implements Paginal {
 	public void setDetailed(boolean detailed) {
 		if (_detailed != detailed) {
 			_detailed = detailed;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 
@@ -159,7 +159,7 @@ public class Paging extends XulElement implements Paginal {
 	public void setAutohide(boolean autohide) {
 		if (_autohide != autohide) {
 			_autohide = autohide;
-			if (_npg == 1) invalidate(OUTER);
+			if (_npg == 1) invalidate();
 		}
 	}
 

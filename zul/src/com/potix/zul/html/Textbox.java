@@ -93,7 +93,7 @@ public class Textbox extends InputElement {
 
 		if (!_type.equals(type)) {
 			_type = type;
-			invalidate(OUTER);
+			invalidate();
 		}
 	}
 
@@ -128,7 +128,7 @@ public class Textbox extends InputElement {
 	public void setMultiline(boolean multiline) {
 		if (_multiline != multiline) {
 			_multiline = multiline;
-			invalidate(OUTER); //different element
+			invalidate(); //different element
 		}
 	}
 

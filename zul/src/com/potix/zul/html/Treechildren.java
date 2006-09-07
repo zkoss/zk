@@ -149,20 +149,4 @@ public class Treechildren extends XulElement implements Transparent {
 			throw new UiException("Unsupported child for treechildren: "+child);
 		return super.insertBefore(child, insertBefore);
 	}
-	public void invalidate(Range range) {
-		super.invalidate(range);
-		initAtClient();
-	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		initAtClient();
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		initAtClient();
-	}
-	private void initAtClient() {
-		final Tree tree = getTree();
-		if (tree != null) tree.initAtClient();
-	}
 }

@@ -142,8 +142,8 @@ public class Window extends XulElement implements IdSpace  {
 			title = "";
 		if (!Objects.equals(_title, title)) {
 			_title = title;
-			if (_caption != null) _caption.invalidate(INNER);
-			else invalidate(INNER);
+			if (_caption != null) _caption.invalidate();
+			else invalidate();
 		}
 	}
 
@@ -245,7 +245,7 @@ public class Window extends XulElement implements IdSpace  {
 
 			if (_mode != MODAL) {
 				_mode = MODAL;
-				invalidate(OUTER);
+				invalidate();
 			}
 
 			response("doModal", new AuDoModal(this));
@@ -266,7 +266,7 @@ public class Window extends XulElement implements IdSpace  {
 
 			if (_mode != OVERLAPPED) {
 				_mode = OVERLAPPED;
-				invalidate(OUTER);
+				invalidate();
 			}
 
 			response("doOverlapped", new AuDoOverlapped(this));
@@ -285,7 +285,7 @@ public class Window extends XulElement implements IdSpace  {
 
 			if (_mode != POPUP) {
 				_mode = POPUP;
-				invalidate(OUTER);
+				invalidate();
 			}
 
 			response("doPopup", new AuDoPopup(this));
@@ -299,7 +299,7 @@ public class Window extends XulElement implements IdSpace  {
 		if (_mode != EMBEDDED) {
 			endModing();
 			_mode = EMBEDDED;
-			invalidate(OUTER);
+			invalidate();
 		}
 		setVisible(true);
 	}
@@ -321,7 +321,7 @@ public class Window extends XulElement implements IdSpace  {
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			invalidate(OUTER); //re-init is required
+			invalidate(); //re-init is required
 		}
 	}
 
@@ -377,7 +377,7 @@ public class Window extends XulElement implements IdSpace  {
 				insertBefore = (Component)getChildren().get(0);
 				//always makes caption as the first child
 			_caption = (Caption)child;
-			invalidate(INNER);
+			invalidate();
 		} else if (insertBefore instanceof Caption) {
 			throw new UiException("caption must be the first child");
 		}
@@ -386,7 +386,7 @@ public class Window extends XulElement implements IdSpace  {
 	public void onChildRemoved(Component child) {
 		if (child instanceof Caption) {
 			_caption = null;
-			invalidate(INNER);
+			invalidate();
 		}
 		super.onChildRemoved(child);
 	}

@@ -262,21 +262,13 @@ public class Column extends HeaderElement {
 	/** Invalidates the whole grid. */
 	protected void invalidateWhole() {
 		final Grid grid = getGrid();
-		if (grid != null) grid.invalidate(OUTER);
+		if (grid != null) grid.invalidate();
 	}
 
 	//-- Component --//
-	public void invalidate(Range range) {
-		super.invalidate(range);
-		initAtClient();
-	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Columns))
 			throw new UiException("Unsupported parent for column: "+parent);
 		super.setParent(parent);
-	}
-	private void initAtClient() {
-		final Grid grid = getGrid();
-		if (grid != null) grid.initAtClient(); //because width might change
 	}
 }

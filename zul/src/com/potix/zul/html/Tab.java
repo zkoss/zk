@@ -79,7 +79,7 @@ public class Tab extends LabelImageElement {
 				tabbox.setSelectedTab(this);
 			} else {
 				_selected = selected;
-				invalidate(INNER);
+				invalidate();
 			}
 		}
 	}
@@ -120,12 +120,12 @@ public class Tab extends LabelImageElement {
 	}
 
 	//-- Component --//
-	public void invalidate(Range range) {
+	public void invalidate() {
 		final Tabbox tabbox = getTabbox();
 		if (tabbox != null && "accordion".equals(tabbox.getMold()))
-			tabbox.invalidate(INNER);
+			tabbox.invalidate();
 		else
-			super.invalidate(range);
+			super.invalidate();
 	}
 	public boolean isChildable() {
 		return false;

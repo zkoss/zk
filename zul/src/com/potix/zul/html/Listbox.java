@@ -195,7 +195,7 @@ ChildChangedAware, Cropper {
 	public void setCheckmark(boolean checkmark) {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
-			if (!inSelectMold()) invalidate(OUTER);
+			if (!inSelectMold()) invalidate();
 		}
 	}
 
@@ -297,7 +297,7 @@ ChildChangedAware, Cropper {
 			}
 
 			if (inSelectMold()) smartUpdate("multiple", _multiple);
-			else if (isCheckmark()) invalidate(OUTER); //change check mark
+			else if (isCheckmark()) invalidate(); //change check mark
 			else smartUpdate("zk_multiple", _multiple);
 				//No need to use response because such info is carried on tags
 		}
@@ -324,7 +324,7 @@ ChildChangedAware, Cropper {
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
 			if (inSelectMold()) //affects only the HTML-select listbox
-				invalidate(OUTER);
+				invalidate();
 				//Both IE and Mozilla are buggy if we insert options by innerHTML
 		}
 	}
@@ -356,7 +356,7 @@ ChildChangedAware, Cropper {
 		if (!Objects.equals(_name, name)) {
 			if (inSelectMold()) smartUpdate("name", _name);
 			else if (_name != null) smartUpdate("zk_name", _name);
-			else invalidate(OUTER); //1) generate _value; 2) add submit listener
+			else invalidate(); //1) generate _value; 2) add submit listener
 
 			_name = name;
 		}
@@ -686,7 +686,7 @@ ChildChangedAware, Cropper {
 
 	/** Called when the onPaging event is received (from {@link #getPaginal}).
 	 *
-	 * <p>Default: getRows().invalidate(INNER).
+	 * <p>Default: re-render, if live data, and invalidate().
 	 */
 	public void onPaging() {
 		if (_model != null && inPagingMold()) {
@@ -705,7 +705,7 @@ ChildChangedAware, Cropper {
 			}
 		}
 
-		invalidate(INNER);
+		invalidate();
 	}
 
 	/** Returns the child paging controller that is created automatically,
@@ -794,14 +794,14 @@ ChildChangedAware, Cropper {
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
-		if (inSelectMold()) invalidate(OUTER);
+		if (inSelectMold()) invalidate();
 			//Both IE and Mozilla are buggy if we insert options by innerHTML
 		else if(inPagingMold() && (child instanceof Listitem))
 			_pgi.setTotalSize(getItemCount());
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
-		if (inSelectMold()) invalidate(OUTER);
+		if (inSelectMold()) invalidate();
 			//Both IE and Mozilla are buggy if we remove options by outerHTML
 			//CONSIDER: use special command to remove items
 			//Cons: if user remove a lot of items it is slower
@@ -821,7 +821,7 @@ ChildChangedAware, Cropper {
 			if (super.insertBefore(newChild, refChild)) {
 				final List children = getChildren();
 				if (_listhead != null && children.get(1) == newChild)
-					invalidate(OUTER);
+					invalidate();
 				//we place listhead and treeitem at different div, so
 				//this case requires invalidate (because we use insert-after)
 
@@ -852,7 +852,7 @@ ChildChangedAware, Cropper {
 						_selItems.add(childItem);
 					} else { //deselect
 						childItem.setSelectedDirectly(false);
-						childItem.invalidate(OUTER);
+						childItem.invalidate();
 					}
 				} else {
 					if (_jsel >= childIndex) {
@@ -873,7 +873,7 @@ ChildChangedAware, Cropper {
 
 			if (inSelectMold())
 				log.warning("Mold select ignores listhead");
-			invalidate(OUTER);
+			invalidate();
 				//we place listhead and treeitem at different div, so...
 			_listhead = (Listhead)newChild;
 			return super.insertBefore(newChild, refChild);
@@ -883,7 +883,7 @@ ChildChangedAware, Cropper {
 
 			if (inSelectMold())
 				log.warning("Mold select ignores listfoot");
-			invalidate(OUTER);
+			invalidate();
 				//we place listfoot and treeitem at different div, so...
 			_listfoot = (Listfoot)newChild;
 			refChild = _paging; //the last two: listfoot and paging
@@ -896,7 +896,7 @@ ChildChangedAware, Cropper {
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
 
-			invalidate(OUTER);
+			invalidate();
 			_pgi = _paging = (Paging)newChild;
 			refChild = null; //the last: paging
 			return super.insertBefore(newChild, refChild);
@@ -938,7 +938,7 @@ ChildChangedAware, Cropper {
 			_paging = null;
 			if (_pgi == child) _pgi = null;
 		}
-		invalidate(OUTER);
+		invalidate();
 		return true;
 	}
 	/** Fix the selected index, _jsel, assuming there are no selected one
@@ -1278,15 +1278,6 @@ ChildChangedAware, Cropper {
 			}
 		}
 	}
-	public void invalidate(Range range) {
-		if (inSelectMold()) {
-			super.invalidate(range);
-		} else {
-			super.invalidate(OUTER);
-				//OUTER is required because zk_selId might be overwrite by INNER
-				//If OUTER, cleanup is invoked automatically
-		}
-	}
 	public void setHeight(String height) {
 		if (!Objects.equals(height, getHeight())) {
 			super.setHeight(height);
@@ -1391,7 +1382,7 @@ ChildChangedAware, Cropper {
 
 	//ChildChangedAware//
 	public boolean isChildChangedAware() {
-		return !inPagingMold() && !inSelectMold();
+		return !inSelectMold();
 	}
 
 	//Cloneable//

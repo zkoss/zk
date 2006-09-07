@@ -66,7 +66,7 @@ public class Toolbarbutton extends LabelImageElement {
 
 		if (!Objects.equals(_dir, dir)) {
 			_dir = dir;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 	/** Returns the href.
@@ -83,7 +83,7 @@ public class Toolbarbutton extends LabelImageElement {
 			href = null;
 		if (!Objects.equals(_href, href)) {
 			_href = href;
-			invalidate(OUTER);
+			invalidate();
 		}
 	}
 	/** Returns the orient.
@@ -101,7 +101,7 @@ public class Toolbarbutton extends LabelImageElement {
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 

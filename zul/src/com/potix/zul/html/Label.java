@@ -62,8 +62,7 @@ public class Label extends XulElement {
 			value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			if (isIdRequired()) invalidate(INNER);
-			else getParent().invalidate(INNER);
+			invalidate();
 		}
 	}
 
@@ -80,8 +79,7 @@ public class Label extends XulElement {
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			if (isIdRequired()) invalidate(OUTER);
-			else getParent().invalidate(INNER);
+			invalidate();
 		}
 	}
 	/** Whether to generate the value directly without ID. */
@@ -108,7 +106,7 @@ public class Label extends XulElement {
 	public void setMultiline(boolean multiline) {
 		if (multiline != _multiline) {
 			_multiline = multiline;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 
@@ -120,6 +118,10 @@ public class Label extends XulElement {
 	}
 
 	//-- Component --//
+	public void invalidate() {
+		if (isIdRequired()) super.invalidate();
+		else getParent().invalidate();
+	}
 	public void redraw(Writer out) throws IOException {
 		if (isIdRequired()) super.redraw(out);
 		else out.write(_value); //no processing; direct output if not ZUL

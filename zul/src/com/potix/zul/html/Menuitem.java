@@ -75,7 +75,7 @@ public class Menuitem extends LabelImageElement implements Checkable {
 
 			final Component parent = getParent();
 			if (parent instanceof Menupopup)
-				parent.invalidate(INNER);
+				parent.invalidate();
 			//FUTURE: to support checked for top-level menuitems
 		}
 	}
@@ -92,7 +92,7 @@ public class Menuitem extends LabelImageElement implements Checkable {
 	public void setAutocheck(boolean autocheck) {
 		if (_autocheck != autocheck) {
 			_autocheck = autocheck;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 
@@ -110,7 +110,7 @@ public class Menuitem extends LabelImageElement implements Checkable {
 			href = null;
 		if (!Objects.equals(_href, href)) {
 			_href = href;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 

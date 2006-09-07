@@ -119,20 +119,6 @@ public class Row extends XulElement {
 	}
 
 	//-- Component --//
-	public boolean setVisible(boolean visible) {
-		final boolean b = super.setVisible(visible);
-		if (b != visible)
-			initAtClient();
-		return b;
-	}
-	public void invalidate(Range range) {
-		super.invalidate(range);
-		initAtClient();
-	}
-	private void initAtClient() {
-		final Grid grid = getGrid();
-		if (grid != null) grid.initAtClient(); //because width might change
-	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Rows))
 			throw new UiException("Unsupported parent for row: "+parent);

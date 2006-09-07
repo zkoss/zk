@@ -50,7 +50,7 @@ public class Html extends XulElement {
 		if (content == null) content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 

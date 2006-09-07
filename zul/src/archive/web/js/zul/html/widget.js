@@ -233,18 +233,28 @@ zkWnd.init = function (cmp) {
 		Event.observe(img, "mouseout", function () {zkau.onimgout(img);});
 		if (!img.style.cursor) img.style.cursor = "default";
 	}
-};
-zkWnd.cleanup = function (cmp) {
-	if (cmp.getAttribute("mode") == "modal")
-		zul.endModal(cmp.id);
-};
-zkWnd.initInner = function (cmp) {
-	zkWnd.init(cmp);
-	if (cmp.getAttribute("mode")) {
+
+	//Bug 1469887: re-init since it might be caused by invalidate
+	if (zkau.wndmode[cmp.id]) {
 		var caption = $(cmp.id + "!caption");
-		if (caption && caption.style.cursor == "") caption.style.cursor = "pointer";
+		if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 		zkau.disableMoveable(cmp);
 		zkau.enableMoveable(cmp, null, zkau.onWndMove);
+	}
+};
+zkWnd.cleanup = function (cmp) {
+	if (zkau.wndmode[cmp.id] == "modal")
+		zul.endModal(cmp.id); //it also clear wndmode[cmp.id]
+};
+zkWnd.beforeOuter = function (cmp) {
+	if (zkau.wndmode[cmp.id] == "modal")
+		zkau.wndmode[cmp.id + "!modal"] = true; //so afterOuter know to doModal
+};
+zkWnd.afterOuter = function (cmp) {
+	var nm = cmp.id + "!modal";
+	if (zkau.wndmode[nm]) {
+		zkau.wndmode[nm] = null;
+		zul.doModal(cmp);
 	}
 };
 

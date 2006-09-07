@@ -106,7 +106,7 @@ public class Calendar extends XulElement implements Inputable {
 	public void setCompact(boolean compact) {
 		if (_compact != compact) {
 			_compact = compact;
-			invalidate(OUTER);
+			invalidate();
 		}
 	}
 

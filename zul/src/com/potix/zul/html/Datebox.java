@@ -118,7 +118,7 @@ public class Datebox extends FormatInputElement {
 	public void setCompact(boolean compact) {
 		if (_compact != compact) {
 			_compact = compact;
-			invalidate(OUTER);
+			invalidate();
 		}
 	}
 

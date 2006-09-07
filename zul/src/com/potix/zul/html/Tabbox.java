@@ -85,7 +85,7 @@ public class Tabbox extends XulElement implements Selectable {
 
 		if (!Objects.equals(_panelSpacing, panelSpacing)) {
 			_panelSpacing = panelSpacing;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 
@@ -163,7 +163,7 @@ public class Tabbox extends XulElement implements Selectable {
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate(OUTER);
+			invalidate();
 		}
 	}
 	private static void checkOrient(String mold, String orient)
@@ -212,7 +212,7 @@ public class Tabbox extends XulElement implements Selectable {
 			throw new UiException("Unsupported child for tabbox: "+child);
 		}
 		if (super.insertBefore(child, insertBefore)) {
-			invalidate(INNER); //due to DSP might implemented diff for children order
+			invalidate(); //due to DSP might implemented diff for children order
 			return true;
 		}
 		return false;

@@ -71,7 +71,7 @@ public class Box extends XulElement {
 		if (spacing != null && spacing.length() == 0) spacing = null;
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 

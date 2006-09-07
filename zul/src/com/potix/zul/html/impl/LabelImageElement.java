@@ -55,10 +55,7 @@ public class LabelImageElement extends LabelElement implements Viewable {
 		if (src != null && src.length() == 0) src = null;
 		if (!Objects.equals(_src, src)) {
 			_src = src;
-			if (_image == null) invalidate(OUTER);
-			//why OUTER?
-			//1. Bug 1504378: the container might have to init again
-			//2. to have better shape in Safari, we use <input> if possible
+			if (_image == null) invalidate();
 
 			//_src is meaningful only if _image is null
 			//NOTE: Tom Yeh: 20051222
@@ -95,7 +92,7 @@ public class LabelImageElement extends LabelElement implements Viewable {
 		if (image != _image) {
 			_image = image;
 			if (_image != null) ++_imgver; //enforce browser to reload image
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 	/** Returns the content set by {@link #setImageContent}.

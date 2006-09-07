@@ -134,7 +134,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
 			if (_name != null) smartUpdate("zk_name", _name);
-			else invalidate(OUTER); //1) generate _value; 2) add submit listener
+			else invalidate(); //1) generate _value; 2) add submit listener
 			_name = name;
 		}
 	}
@@ -154,7 +154,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 	public void setCheckmark(boolean checkmark) {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
-			invalidate(OUTER);
+			invalidate();
 		}
 	}
 
@@ -190,7 +190,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 					_selItems.add(item);
 				//No need to update zk_selId because zk_multiple will do the job
 			}
-			if (isCheckmark()) invalidate(OUTER); //change check mark
+			if (isCheckmark()) invalidate(); //change check mark
 			else smartUpdate("zk_multiple", _multiple);
 		}
 	}
@@ -427,11 +427,6 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
-	public void invalidate(Range range) {
-		super.invalidate(OUTER);
-			//OUTER is required because zk_selId might be overwritten by INNER
-			//If OUTER, init is invoked automatically by client
-	}
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (child instanceof Treecols) {
 			if (_treecols != null && _treecols != child)
@@ -440,14 +435,14 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 				insertBefore = (Component)getChildren().get(0);
 				//always makes treecols as the first child
 			_treecols = (Treecols)child;
-			invalidate(OUTER);
+			invalidate();
 		} else if (child instanceof Treechildren) {
 			if (_treechildren != null && _treechildren != child)
 				throw new UiException("Only one treechildren is allowed: "+this);
 			if (insertBefore instanceof Treecols)
 				throw new UiException("treecols must be the first child");
 			_treechildren = (Treechildren)child;
-			invalidate(OUTER);
+			invalidate();
 
 			fixSelectedSet();
 		} else {
@@ -489,7 +484,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 		if (item.isSelected()) {
 			if (_sel != null && !_multiple) {
 				item.setSelectedDirectly(false);
-				item.invalidate(OUTER);
+				item.invalidate();
 			} else {
 				if (_sel == null)
 					_sel = item;
@@ -525,7 +520,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
-		invalidate(OUTER);
+		invalidate();
 	}
 	public void onChildRemoved(Component child) {
 		if (child instanceof Treecols) {
@@ -536,7 +531,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 			_sel = null;
 		}
 		super.onChildRemoved(child);
-		invalidate(OUTER);
+		invalidate();
 	}
 
 	/** Fixes all info about the selected status. */

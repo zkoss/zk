@@ -55,7 +55,7 @@ zul.doModal = function (cmp) {
 	var zi = ++zkau.topZIndex; //mask also need another index
 	zul._center(cmp, zi);
 		//show dialog first to have better response.
-	cmp.setAttribute("mode", "modal");
+	zkau.wndmode[cmp.id] = "modal";
 
 	zkau.closeFloats(cmp);
 
@@ -139,8 +139,8 @@ zul.endModal = function (uuid) {
 
 	var cmp = $(uuid);
 	if (cmp) {
+		zkau.wndmode[cmp.id] = null;
 		zkau.disableMoveable(cmp);
-		cmp.removeAttribute("mode");
 	}
 
 	if (prevfocusId) zk.focusById(prevfocusId, 10);

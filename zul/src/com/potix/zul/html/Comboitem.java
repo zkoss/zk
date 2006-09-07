@@ -62,7 +62,7 @@ public class Comboitem extends LabelImageElement {
 		if (desc == null) desc = "";
 		if (!_desc.equals(desc)) {
 			_desc = desc;
-			invalidate(INNER);
+			invalidate();
 		}
 	}
 

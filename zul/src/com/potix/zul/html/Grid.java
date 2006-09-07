@@ -207,10 +207,10 @@ public class Grid extends XulElement implements ChildChangedAware {
 
 	/** Called when the onPaging event is received (from {@link #getPaginal}).
 	 *
-	 * <p>Default: getRows().invalidate(INNER).
+	 * <p>Default: getRows().invalidate().
 	 */
 	public void onPaging() {
-		if (_rows != null) _rows.invalidate(INNER);
+		if (_rows != null) _rows.invalidate();
 	}
 
 	/** Returns the child paging controller that is created automatically,
@@ -270,12 +270,6 @@ public class Grid extends XulElement implements ChildChangedAware {
 	}
 
 	//-- Component --//
-	public void invalidate(Range range) {
-		super.invalidate(range);
-		if (range != OUTER) initAtClient();
-			//We have to re-init because inner tags are changed
-			//If OUTER, init is invoked automatically by client
-	}
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Rows) {
 			if (_rows != null && _rows != newChild)
@@ -301,7 +295,7 @@ public class Grid extends XulElement implements ChildChangedAware {
 		}
  
 		if (super.insertBefore(newChild, refChild)) {
-			invalidate(OUTER);
+			invalidate();
 			return true;
 		}
 		return false;
@@ -316,13 +310,13 @@ public class Grid extends XulElement implements ChildChangedAware {
 			_paging = null;
 			if (_pgi == child) _pgi = null;
 		}
-		invalidate(OUTER);
+		invalidate();
 		return true;
 	}
 
 	//ChildChangedAware//
 	public boolean isChildChangedAware() {
-		return !inPagingMold();
+		return true;
 	}
 
 	//Cloneable//

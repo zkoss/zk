@@ -95,7 +95,7 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 		if (img != null && img.length() == 0) img = "~./zul/img/bandbtn.gif";
 		if (!Objects.equals(_img, img)) {
 			_img = img;
-			invalidate(INNER);
+			invalidate();
 			//NOTE: Tom Yeh: 20051222
 			//It is possible to use smartUpdate if we always generate
 			//an image (with an ID) in getImgTag.
@@ -150,7 +150,7 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 		if (_drop != null)
 			throw new UiException("At most one bandpopup is allowed, "+this);
 		if (super.insertBefore(newChild, refChild)) {
-			invalidate(INNER);
+			invalidate();
 			_drop = (Bandpopup)newChild;
 			return true;
 		}

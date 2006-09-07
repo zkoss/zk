@@ -48,20 +48,4 @@ public class Listfoot extends XulElement {
 			throw new UiException("Unsupported child for listfoot: "+child);
 		return super.insertBefore(child, insertBefore);
 	}
-	public void invalidate(Range range) {
-		super.invalidate(range);
-		initAtClient();
-	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		initAtClient();
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		initAtClient();
-	}
-	private void initAtClient() {
-		final Listbox box = getListbox();
-		if (box != null) box.initAtClient();
-	}
 }

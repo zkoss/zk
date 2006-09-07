@@ -69,6 +69,6 @@ public class Tabs extends XulElement {
 	 */
 	private static void invalidateIfAccordion(Tabbox tabbox) {
 		if (tabbox != null && "accordion".equals(tabbox.getMold()))
-			tabbox.invalidate(INNER);
+			tabbox.invalidate();
 	}
 }

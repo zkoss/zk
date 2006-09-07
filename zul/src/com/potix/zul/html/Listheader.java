@@ -224,7 +224,7 @@ public class Listheader extends HeaderElement {
 			final Listitem li = (Listitem)it.next();
 			final List chs = li.getChildren();
 			if (jcol < chs.size())
-				((Component)chs.get(jcol)).invalidate(OUTER);
+				((Component)chs.get(jcol)).invalidate();
 		}
 	}
 
@@ -332,7 +332,7 @@ public class Listheader extends HeaderElement {
 	/** Invalidates the whole box. */
 	protected void invalidateWhole() {
 		final Listbox box = getListbox();
-		if (box != null) box.invalidate(OUTER);
+		if (box != null) box.invalidate();
 	}
 
 	//-- Component --//
@@ -340,14 +340,6 @@ public class Listheader extends HeaderElement {
 		if (parent != null && !(parent instanceof Listhead))
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
-	}
-	public void invalidate(Range range) {
-		super.invalidate(range);
-		initAtClient();
-	}
-	private void initAtClient() {
-		final Listbox box = getListbox();
-		if (box != null) box.initAtClient();
 	}
 
 	//Cloneable//

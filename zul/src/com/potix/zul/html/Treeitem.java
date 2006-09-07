@@ -341,9 +341,9 @@ public class Treeitem extends XulElement implements Openable, Transparent {
 
 		if (affected != null) {
 			if (affected._treerow != null)
-				affected._treerow.invalidate(INNER); //only the first Treecell
+				affected._treerow.invalidate(); //only the first Treecell
 			if (affected._treechildren != null)
-				affected._treechildren.invalidate(INNER);
+				affected._treechildren.invalidate();
 		}
 
 		if (parent != null) {
@@ -352,9 +352,9 @@ public class Treeitem extends XulElement implements Openable, Transparent {
 			if (sz > 1 && sibs.get(sz - 1) == this) {
 				affected = (Treeitem)sibs.get(sz - 2);
 				if (affected._treerow != null)
-					affected._treerow.invalidate(INNER); //only the first Treecell
+					affected._treerow.invalidate(); //only the first Treecell
 				if (affected._treechildren != null)
-					affected._treechildren.invalidate(INNER);
+					affected._treechildren.invalidate();
 			}
 		}
 
@@ -376,7 +376,7 @@ public class Treeitem extends XulElement implements Openable, Transparent {
 				throw new UiException("Only one treechildren is allowed: "+this);
 			_treechildren = (Treechildren)child;
 			if (_treerow != null)
-				_treerow.invalidate(OUTER);
+				_treerow.invalidate();
 		} else {
 			throw new UiException("Unsupported child for tree item: "+child);
 		}

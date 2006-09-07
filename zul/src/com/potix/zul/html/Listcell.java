@@ -196,26 +196,13 @@ public class Listcell extends LabelImageElement {
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
 	}
-	public void invalidate(Range range) {
+	public void invalidate() {
 		final Listbox listbox = getListbox();
 		if (listbox != null && listbox.inSelectMold()) {
-			getParent().invalidate(INNER);
+			getParent().invalidate();
 			//if HTML select, the cell doesn't exists in client
 		} else {
-			super.invalidate(range);
-			initAtClient(); //setLabel and setImage will invoke invalidate
+			super.invalidate();
 		}
-	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		initAtClient();
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		initAtClient();
-	}
-	private void initAtClient() {
-		final Listbox box = getListbox();
-		if (box != null) box.initAtClient();
 	}
 }

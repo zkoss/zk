@@ -103,12 +103,4 @@ public class Listfooter extends LabelImageElement {
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
 	}
-	public void invalidate(Range range) {
-		super.invalidate(range);
-		initAtClient();
-	}
-	private void initAtClient() {
-		final Listbox box = getListbox();
-		if (box != null) box.initAtClient();
-	}
 }

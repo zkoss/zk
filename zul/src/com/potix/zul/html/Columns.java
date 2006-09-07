@@ -42,7 +42,7 @@ public class Columns extends XulElement {
 			throw new UiException("Unsupported child for columns: "+child);
 		if (super.insertBefore(child, insertBefore)) {
 			final Component parent = getParent();
-			if (parent != null) parent.invalidate(OUTER);
+			if (parent != null) parent.invalidate();
 				//FUTURE: optimize the invalidation to attributes of
 				//certain cells
 				//It implies initAtClient
@@ -53,7 +53,7 @@ public class Columns extends XulElement {
 	public boolean removeChild(Component child) {
 		if (super.removeChild(child)) {
 			final Component parent = getParent();
-			if (parent != null) parent.invalidate(OUTER);
+			if (parent != null) parent.invalidate();
 				//FUTURE: optimize the invalidation to attributes of
 				//certain cells
 				//It implies initAtClient

@@ -167,7 +167,7 @@ public class Audio extends XulElement implements Viewable {
 		}
 	}
 	private void updateSrc() {
-		invalidate(OUTER);
+		invalidate();
 		//IE won't work if we only change the src attribute
 		//smartUpdate("src", getEncodedSrc());
 	}
