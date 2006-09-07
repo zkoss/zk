@@ -156,6 +156,10 @@ public class ConfigParser {
 					throw new UiException("Unable to load "+clsnm, ex);
 				}
 				config.addErrorPage(cls, loc);
+			} else if ("preference".equals(elnm)) {
+				final String nm = IDOMs.getRequiredElementValue(el, "name");
+				final String val = IDOMs.getRequiredElementValue(el, "value");
+				config.setPreference(nm, val);
 			} else {
 				throw new UiException("Unknown element: "+elnm+", "+el.getLocator());
 			}

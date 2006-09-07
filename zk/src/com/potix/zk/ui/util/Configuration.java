@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.potix.util.logging.Log;
 
@@ -63,6 +65,7 @@ public class Configuration {
 		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
 		_dtInits = new LinkedList(), _dtCleans = new LinkedList(),
 		_execInits = new LinkedList(), _execCleans = new LinkedList();
+	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
 	/** List(ErrorPage). */
 	private final List _errpgs = new LinkedList();
 	private Monitor _monitor;
@@ -742,7 +745,28 @@ public class Configuration {
 	public void setCharset(String charset) {
 		_charset = charset != null && charset.length() > 0 ? charset: null;
 	}
-	
+
+	/** Returns the value of the preference defined in zk.xml, or by
+	 * {@link #setPreference}.
+	 *
+	 * <p>Preference is application specific. You can specify whatever you want
+	 * as you specifying context-param for a Web application.
+	 *
+	 * @param defaultValue the default value that is used if the specified
+	 * preference is not found.
+	 */
+	public String getPreference(String name, String defaultValue) {
+		final String value = (String)_prefs.get(name);
+		return value != null ? value: defaultValue;
+	}
+	/** Sets the value of the preference.
+	 */
+	public void setPreference(String name, String value) {
+		if (name == null || value == null)
+			throw new IllegalArgumentException("null");
+		_prefs.put(name, value);
+	}
+
 	/** Adds an error page.
 	 *
 	 * @param type what type of errors the error page is associated with.
