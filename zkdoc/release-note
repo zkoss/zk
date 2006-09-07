@@ -1,6 +1,6 @@
 ZK 2.1.1 Freshly
 * Features:
-  1553828, 1553839, 1553829, 1553920, 1553918.
+  1553828, 1553839, 1553829, 1553920, 1553918, 1553858, 1553952, 1553954
 
 * Bugs:
   1548797, 1548478, 1551737, 1551736, 1550598, 1551751, 1550257, 1550326,
@@ -10,6 +10,8 @@ ZK 2.1.1 Freshly
   + ApplicationInit and ApplicationCleanup are renamed to WebAppInit and WebAppCleanup
   + ExecutionCleanup.cleanup's signature is changed.
   + EventThreadCleanup.cleanup's signature is changed.
+  + Support Hibernate SessionContext for ZK.
+  + Support Hibernate "Open Session In View" for ZK.
 
 	--------
 ZK 2.1.0
