@@ -152,10 +152,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zul /tmp/zk/$srcnm
 	cp -rp zhtml /tmp/zk/$srcnm
 	cp -rp zkplus /tmp/zk/$srcnm
-	cp zkdoc/COPYING zkdoc/release-note /tmp/zk/$srcnm/doc
-	cp dist/lib/pxcommon.jar dist/lib/pxweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
-	cp dist/lib/ext/* /tmp/zk/$srcnm/dist/lib/ext
-	rm -f /tmp/zk/$srcnm/dist/lib/ext/pluto.jar /tmp/zk/$srcnm/dist/lib/ext/commons-logging.jar
+	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
+	#cp dist/lib/pxcommon.jar dist/lib/pxweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
+	#cp dist/lib/ext/* /tmp/zk/$srcnm/dist/lib/ext
+	#rm -f /tmp/zk/$srcnm/dist/lib/ext/pluto.jar /tmp/zk/$srcnm/dist/lib/ext/commons-logging.jar
 
 	cd /tmp/zk/$srcnm
 	rm -rf pxcommon/debug pxweb/debug zk/debug zul/debug zhtml/debug zkplus/debug

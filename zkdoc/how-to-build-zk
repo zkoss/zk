@@ -1,0 +1,15 @@
+How to Build ZK
+
+* First you have to install Ant 1.6.2 or above.
+
+* If you are using Windows, you have to install Cygwin.
+
+* The required jar files are not shipped with this distribution. However,
+  you can download them from the Subversion server at the following URL.
+
+  http://svn.sourceforge.net/viewvc/zk1/trunk/dist/lib/ext/
+
+* Alernatively, you retrieve any particular version of source codes from
+  the Subversion sever at the following URL.
+
+  http://svn.sourceforge.net/viewvc/zk1/releases
