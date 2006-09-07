@@ -74,7 +74,7 @@ import java.io.ObjectInputStream;
  * the whole class has to be reimplmented and the sessionMap changed to be stored
  * in Execution's attribute of ZK.</p>
  *
- * <p>This implementation is to be used with {@link org.hibernate.transaction.JDBCTransactionFactory}
+ * <p>This implementation is to be used with org.hibernate.transaction.JDBCTransactionFactory
  * but avoid the single thread limitation of the ThreadLocalSessionContext and thus 
  * workable with ZK's threading model. You should set the hibernate configuration
  * as dipicted below:

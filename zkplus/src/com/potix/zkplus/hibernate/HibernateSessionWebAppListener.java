@@ -28,7 +28,7 @@ import org.hibernate.SessionFactory;
 /**
  * Listener to init and cleanup the hibernate session factory automatically, 
  * implement the Hibernate "Open Session In View" pattern without JTA support. 
- * This listener is used with {@link HibernatSessionExecutionListener} , 
+ * This listener is used with {@link HibernateSessionExecutionListener} , 
  * {@link HibernateUtil}, and {@link ExecutionSessionContext}, or it will not work.
  *
  * <p>In WEB-INF/zk.xml, add following lines:
