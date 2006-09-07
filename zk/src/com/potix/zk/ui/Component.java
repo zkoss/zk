@@ -473,22 +473,13 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * phases; excluding the redrawing phase.
 	 *
 	 * <p>There are two ways to draw a component, one is to invoke
-	 * {@link #invalidate(Component.Range)}, and the other is {@link #smartUpdate}.
-	 * While {@link #invalidate(Component.Range)} causes the whole content to redraw,
+	 * {@link #invalidate()}, and the other is {@link #smartUpdate}.
+	 * While {@link #invalidate()} causes the whole content to redraw,
 	 * {@link #smartUpdate} let component developer control which part
 	 * to redraw.
 	 *
 	 * <p>Once this method is called, all invocations to {@link #smartUpdate}
 	 * will then be ignored, and {@link Component#redraw} will be invoked later.
-	 *
-	 * @param range {@link #INNER} or {@link #OUTER} (never null, nor other value).
-	 * It controls whether only the inner elements or the whole component
-	 * to redraw.
-	 */
-	public void invalidate(Component.Range range);
-	/** Invalidate the whole component.
-	 * A shortcut of invalidate(OUTER).
-	 * @see #invalidate(Component.Range)
 	 */
 	public void invalidate();
 	/** Smart-updates a property with the specified value.
@@ -498,15 +489,15 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * call. In other words, the same property will be set only once in
 	 * each execution.
 	 *
-	 * <p>This method has no effect if {@link #invalidate(Component.Range)} is ever invoked
+	 * <p>This method has no effect if {@link #invalidate()} is ever invoked
 	 * (during this execution).
 	 *
 	 * <p>It can be called only in the request-processing and event-processing
 	 * phases; excluding the redrawing phase.
 	 *
 	 * <p>There are two ways to draw a component, one is to invoke
-	 * {@link #invalidate(Component.Range)}, and the other is {@link #smartUpdate}.
-	 * While {@link #invalidate(Component.Range)} causes the whole content to redraw,
+	 * {@link #invalidate()}, and the other is {@link #smartUpdate}.
+	 * While {@link #invalidate()} causes the whole content to redraw,
 	 * {@link #smartUpdate} let component developer control which part
 	 * to redraw.
 	 *
@@ -523,7 +514,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 *
 	 * <p>Unlike {@link #smartUpdate}, responses are sent to client if
 	 * it is component independent or it is not removed.
-	 * In other words, it is sent even if {@link #invalidate(Component.Range)} was called.
+	 * In other words, it is sent even if {@link #invalidate()} was called.
 	 * Typical examples include setting the focus, selecting the text and so on.
 	 *
 	 * <p>It can be called only in the request-processing and event-processing
@@ -541,7 +532,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * and its children.
 	 *
 	 * <p>It is called in the redrawing phase by the kernel, so it is too late
-	 * to call {@link #invalidate(Component.Range)} or {@link #smartUpdate} in this method.
+	 * to call {@link #invalidate()} or {@link #smartUpdate} in this method.
 	 */
 	public void redraw(Writer out) throws IOException;
 
@@ -549,7 +540,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * a chance to fine-tune the output.
 	 *
 	 * <p>It is called in the redrawing phase by the kernel, so it is too late
-	 * to call {@link #invalidate(Component.Range)} or {@link #smartUpdate} in this method.
+	 * to call {@link #invalidate()} or {@link #smartUpdate} in this method.
 	 *
 	 * <p>Note: {@link #onChildAdded} is called in the request-processing
 	 * phase, while {@link #onDrawNewChild} is called in the redrawing phase.
@@ -562,7 +553,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * Morever, if you shall add id="${child.uuid}!chdextr" to the added
 	 * exterior.</li>
 	 * <li>Redraw the parent, if it is too complicated.
-	 * How: overwrite {@link #onChildAdded} and calls {@link #invalidate(Component.Range)}</li>
+	 * How: overwrite {@link #onChildAdded} and calls {@link #invalidate()}</li>
 	 * </ul>
 	 *
 	 * @param child the child being rendered
@@ -613,26 +604,4 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * desktop. It doesn't have parent, either.
 	 */
 	public Object clone();
-
-	/** Used with {@link #invalidate(Component.Range)} to denote the inner elements
-	 * (excluding the enclosing tag).
-	 */
-	public static final Range INNER = new Range("INNER");
-	/** Used with {@link #invalidate(Component.Range)} to denote the whole elemnt
-	 * including the enclosing tag and the inner.
-	 */
-	public static final Range OUTER = new Range("OUTER");
-	/** Used with {@link #invalidate(Component.Range)}.
-	 * @see #INNER
-	 * @see #OUTER
-	 */
-	public static class Range {
-		private String _name;
-		private Range(String name) {
-			_name = name;
-		}
-		public String toString() {
-			return _name;
-		}
-	}	
 }

@@ -25,7 +25,7 @@ if (!zk.build) {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-	zk.build = "27"; //increase this if we want the browser to reload JavaScript
+	zk.build = "28"; //increase this if we want the browser to reload JavaScript
 	zk.mods = {}; //ZkFns depends on it
 
 	/** Browser info. */
@@ -560,7 +560,8 @@ if (!zk._modules) {
 	};
 
 	//Source: http://dean.edwards.name/weblog/2006/06/again/
-	if (zk.ie) {
+	if (zk.ie && "https:" != location.protocol.toLowerCase()) {
+		//IE consider the following <script> insecure, so skip is https
 		document.write('<script id="_zie_load" defer src="javascript:void(0)"><\/script>');
 		var e = document.getElementById("_zie_load");
 		e.onreadystatechange = function() {

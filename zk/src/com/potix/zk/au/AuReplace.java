@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package com.potix.zk.au;
 
 import com.potix.zk.ui.Component;
+import com.potix.zk.ui.Page;
 
 /**
  * A response to ask client to replaces the content of the specified
@@ -31,5 +32,8 @@ import com.potix.zk.ui.Component;
 public class AuReplace extends AuResponse {
 	public AuReplace(Component comp, String content) {
 		super("outer", comp, new String[] {comp.getUuid(), content});
+	}
+	public AuReplace(Page page, String content) {
+		super("outer", page, new String[] {page.getId(), content});
 	}
 }

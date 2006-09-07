@@ -79,13 +79,8 @@ public interface UiEngine {
 	public void addInvalidate(Page page);
 	/** Invalidates a component to cause redrawing.
 	 * Called when {@link Component#invalidate} is called.
-	 *
-	 * @param range {@link Component#INNER} or {@link Component#OUTER}
-	 * (never null, nor other value).
-	 * It controls whether only the inner elements or the whole component
-	 * to redraw.
 	 */
-	public void addInvalidate(Component comp, Component.Range range);
+	public void addInvalidate(Component comp);
 	/** Smart updates an attribute of a component.
 	 * Called when {@link Component#smartUpdate(String,String)} is called.
 	 *

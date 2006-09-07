@@ -415,15 +415,6 @@ zkau.onHideChildren = function (n) {
 		zkau.onHideAt(n);
 };
 
-/** To notify a component that its inner (not outer) is assigned.
- * If outer is assigned, init will be executed. In some case, you have
- * to monitor inner because no init is called in this case.
- */
-zkau._initInner = function (n) {
-	if (!n || (n.style && n.style.display == "none")) return; //done
-	zk.eval(n, "initInner");
-}
-
 /** To notify a component that it becomes visible because one its ancestors
  * becomes visible. It recursively invokes its descendants.
  */
@@ -654,13 +645,14 @@ if (!zkau._popups) {
 	zkau._popups = new Array(); //uuid
 	zkau._overlaps = new Array(); //uuid
 	zkau._modals = new Array(); //uuid (used zul.js or other modal)
+	zkau.wndmode = {}; //uuid of wnd that is draggable
 	zkau._intervals = {};
 }
 /** Makes the component as popup. */
 zkau.doPopup = function (cmp) {
 	zkau.closeFloats(cmp);
 
-	cmp.setAttribute("mode", "popup");
+	zkau.wndmode[cmp.id] = "popup";
 
 	var caption = $(cmp.id + "!caption");
 	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
@@ -680,15 +672,15 @@ zkau.endPopup = function (uuid) {
 	zkau.hideCovered();
 	var cmp = $(uuid);
 	if (cmp) {
+		zkau.wndmode[cmp.id] = null;
 		zkau.disableMoveable(cmp);
-		cmp.removeAttribute("mode");
 	}
 };
 /** Makes the component as overlapped. */
 zkau.doOverlapped = function (cmp) {
 	zkau.closeFloats(cmp);
 
-	cmp.setAttribute("mode", "overlapped");
+	zkau.wndmode[cmp.id] = "overlapped";
 
 	var caption = $(cmp.id + "!caption");
 	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
@@ -709,7 +701,7 @@ zkau.endOverlapped = function (uuid) {
 
 	var cmp = $(uuid);
 	if (cmp) {
-		cmp.removeAttribute("mode");
+		zkau.wndmode[cmp.id] = null;
 		zkau.disableMoveable(cmp);
 	}
 }
@@ -1725,18 +1717,23 @@ zkau.cmd1 = {
 		}
 	},
 	outer: function (uuid, cmp, dt1) {
+		zk.eval(cmp, "beforeOuter");
 		zk.cleanupAt(cmp, zkau.cleanupMeta);
 		zk.setOuterHTML(cmp, dt1);
-		zk.initAt($(uuid));
+		cmp = $(uuid);
+		zk.initAt(cmp);
+		zk.eval(cmp, "afterOuter");
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
+/* 20060907: Tom M. Yeh: abandon inner to reduce the complexity
 	inner: function (uuid, cmp, dt1) {
 		zkau._cleanupChildren(cmp);
 		zk.setInnerHTML(cmp, dt1);
-		zkau._initInner(cmp);
+		zk.eval(cmp, "initInner");
 		zkau._initChildren(cmp);
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
+*/
 	addAft: function (uuid, cmp, dt1) {
 		var n = zkau._getChildExterior(cmp);
 		var to = n.nextSibling;

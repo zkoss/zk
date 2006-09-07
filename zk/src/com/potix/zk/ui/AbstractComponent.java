@@ -527,7 +527,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 				if (_desktop != null) {
 					((DesktopCtrl)_desktop).addComponent(this);
-					if (_parent != null && isTransparent(this)) _parent.invalidate(INNER);
+					if (_parent != null && isTransparent(this)) _parent.invalidate();
 					getThisUiEngine().addMoved(this, false);
 				}
 			} else {
@@ -673,7 +673,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			idSpaceChanged = true;
 		}
 
-		if (_parent != null && isTransparent(this)) _parent.invalidate(INNER);
+		if (_parent != null && isTransparent(this)) _parent.invalidate();
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
 		if (_parent != null) {
 			final Component oldp = _parent;
@@ -743,7 +743,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		if (found) { //re-order
-			if (isTransparent(newChild)) invalidate(INNER);
+			if (isTransparent(newChild)) invalidate();
 			addMoved(newChild, newChild.getPage(), _page);
 		} else { //new added
 			if (newChild.getParent() != this) { //avoid loop back
@@ -812,13 +812,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return old;
 	}
 
-	public final void invalidate() {
-		invalidate(OUTER);
-	}
-	public void invalidate(Range range) {
+	public void invalidate() {
 		if (_page != null) {
-			getThisUiEngine().addInvalidate(this, range);
-			if (_parent != null && isTransparent(this)) _parent.invalidate(INNER);
+			getThisUiEngine().addInvalidate(this);
+				//always add even though _parent.invalidate might be called
+				//reason: Transparent relationship might be changed
+
+			if (_parent != null && isTransparent(this)) _parent.invalidate();
 			//Note: UiEngine will handle transparent, but we still
 			//handle it here to simplify codes that handles transparent
 			//in AbstractComponent
@@ -880,7 +880,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				throw new UiException("Unknown mold: "+mold
 					+", while allowed include "+_mill.getMoldNames());
 			_mold = mold;
-			invalidate(OUTER);
+			invalidate();
 		}
 	}
 

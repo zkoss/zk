@@ -169,10 +169,10 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addInvalidate(page);
 	}
-	public void addInvalidate(Component comp, Component.Range range) {
+	public void addInvalidate(Component comp) {
 		if (comp == null)
 			throw new IllegalArgumentException();
-		getCurrentVisualizer().addInvalidate(comp, range);
+		getCurrentVisualizer().addInvalidate(comp);
 	}
 	public void addSmartUpdate(Component comp, String attr, String value) {
 		if (comp == null)

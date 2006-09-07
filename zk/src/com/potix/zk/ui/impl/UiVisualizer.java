@@ -41,7 +41,6 @@ import com.potix.util.logging.Log;
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Component.Range;
 import com.potix.zk.ui.Components;
 import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.UiException;
@@ -73,8 +72,8 @@ import com.potix.zk.au.*;
 	private Set _pgInvalid;
 	/** A set of removed pages. */
 	private Set _pgRemoved;
-	/** A set of invalidated components  (Component, Range). */
-	private final Map _invalidated = new LinkedHashMap();
+	/** A set of invalidated components  (Component). */
+	private final Set _invalidated = new LinkedHashSet();
 	/** A map of smart updates (Component comp, Map(String name, TimedValue(comp,name,value))). */
 	private final Map _smartUpdated = new HashMap(); //we use TimedValue for better sequence control
 	/** A set of new attached components. */
@@ -152,28 +151,20 @@ import com.potix.zk.au.*;
 	}
 	/** Adds an invalidated component. Once invalidated, all invocations
 	 * to {@link #addSmartUpdate} are ignored in this execution.
-	 *
-	 * @param range either {@link Component#INNER} or {@link Component#OUTER}
 	 */
-	public void addInvalidate(Component comp, Range range) {
+	public void addInvalidate(Component comp) {
 		if (!_exec.isAsyncUpdate(comp.getPage()))
 			return; //nothing to do
 
-		if (range == null) throw new IllegalArgumentException();
-
-		final Object old = _invalidated.put(comp, range);
-		if (old == Component.OUTER && range != old)
-			_invalidated.put(comp, old); //restore
-		if (range == Component.OUTER)
+		if (_invalidated.add(comp))
 			_smartUpdated.remove(comp);
 	}
 	/** Smart updates a component's attribute.
-	 * Meaningful only if {@link #addInvalidate(Component, Component.Range)} is not called in this
+	 * Meaningful only if {@link #addInvalidate(Component)} is not called in this
 	 * execution
 	 */
 	public void addSmartUpdate(Component comp, String attr, String value) {
-		if (!_exec.isAsyncUpdate(comp.getPage())
-		|| _invalidated.get(comp) == Component.OUTER)
+		if (!_exec.isAsyncUpdate(comp.getPage()) || _invalidated.contains(comp))
 			return; //nothing to do
 
 		Map respmap = (Map)_smartUpdated.get(comp);
@@ -249,7 +240,7 @@ import com.potix.zk.au.*;
 	private void doCrop() {
 		final Map cropping = new HashMap();
 		crop(_attached, cropping, true, false, false);
-		crop(_invalidated.keySet(), cropping, false, false, false);
+		crop(_invalidated, cropping, false, false, false);
 		crop(_smartUpdated.keySet(), cropping, false, true, false);
 		if (_responses != null)
 			crop(_responses.keySet(), cropping, false, false, true);
@@ -271,7 +262,7 @@ import com.potix.zk.au.*;
 					continue;
 				}
 
-				if (isAncestor(_invalidated.keySet(), comp, bSmartUpdate)
+				if (isAncestor(_invalidated, comp, bSmartUpdate)
 				|| isAncestor(_attached, comp, bSmartUpdate)) {
 					it.remove();
 					continue;
@@ -283,7 +274,7 @@ import com.potix.zk.au.*;
 				if (avail != null) {
 					if (bAttached)  {
 						if (_moved.contains(c) || avail.contains(c))
-							_invalidated.put(p, Component.OUTER);
+							_invalidated.add(p);
 						it.remove();
 						continue l_out;
 					} else if (!avail.contains(c)) {
@@ -311,7 +302,7 @@ import com.potix.zk.au.*;
 	 */
 	private void doChildChanged() {
 		final List ccawares = new LinkedList();
-		doChildChanged(_invalidated.keySet(), ccawares);
+		doChildChanged(_invalidated, ccawares);
 		doChildChanged(_attached, ccawares);
 		doChildChanged(_smartUpdated.keySet(), ccawares);
 
@@ -327,7 +318,7 @@ import com.potix.zk.au.*;
 
 			while ((comp = comp.getParent()) != null) {
 				if ((comp instanceof ChildChangedAware)
-				//&& !_invalidated.containsKey(comp) && !_attached.contains(comp)
+				//&& !_invalidated.contains(comp) && !_attached.contains(comp)
 					//No need to check _invalidated... since they are optimized
 				&& ((ChildChangedAware)comp).isChildChangedAware())
 					ccawares.add(comp);
@@ -349,7 +340,7 @@ import com.potix.zk.au.*;
 				final Page ownerPage = owner.getPage();
 				if (ownerPage == null //detached
 				|| (_pgInvalid != null && _pgInvalid.contains(ownerPage))
-				|| isAncestor(_invalidated.keySet(), owner, true)
+				|| isAncestor(_invalidated, owner, true)
 				|| isAncestor(_attached, owner, true)
 				|| isAncestor(removed, owner, true)) {
 					addPageRemoved(page);
@@ -438,7 +429,7 @@ import com.potix.zk.au.*;
 		if (_pgInvalid != null && _pgInvalid.isEmpty()) _pgInvalid = null;
 		if (_pgRemoved != null && _pgRemoved.isEmpty()) _pgRemoved = null;
 		if (_pgInvalid != null || _pgRemoved != null) {
-			clearInInvalidPage(_invalidated.keySet());
+			clearInInvalidPage(_invalidated);
 			clearInInvalidPage(_attached);
 			clearInInvalidPage(_smartUpdated.keySet());
 			if (_idChgd != null) clearInInvalidPage(_idChgd.keySet());
@@ -456,8 +447,7 @@ import com.potix.zk.au.*;
 		if (_pgInvalid != null) {
 			for (final Iterator it = _pgInvalid.iterator(); it.hasNext();) {
 				final Page page = (Page)it.next();
-				responses.add(
-					new AuReplaceInner(page, redraw(page, Component.INNER)));
+				responses.add(new AuReplace(page, redraw(page)));
 			}
 		}
 
@@ -470,7 +460,7 @@ import com.potix.zk.au.*;
 
 		//4. reduntant: invalidate is parent of attached; vice-versa
 		//   reduntant: invalidate or create is parent of smartUpdate
-		removeRedundant(_invalidated.keySet());
+		removeRedundant(_invalidated);
 			//note: removeRedundant(_attached) are called before (in doMoved)
 		removeRedundant(responses, _invalidated, _smartUpdated, _attached);
 			//it also handle isTransparent!!
@@ -483,15 +473,9 @@ import com.potix.zk.au.*;
 		doChildChanged(); //ChildChangedAware
 
 		//6. generate replace for invalidated
-		for (Iterator it = _invalidated.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final Component comp = (Component)me.getKey();
-			final Range range = (Range)me.getValue();
-			final String content = redraw(comp, range);
-			if (range == Component.INNER)
-				responses.add(new AuReplaceInner(comp, content));
-			else
-				responses.add(new AuReplace(comp, content));
+		for (Iterator it = _invalidated.iterator(); it.hasNext();) {
+			final Component comp = (Component)it.next();
+			responses.add(new AuReplace(comp, redraw(comp)));
 		}
 
 		//7. add attached components (including setParent)
@@ -693,11 +677,10 @@ import com.potix.zk.au.*;
 	}
 	/** Removes redundant components (i.e., an descendant of another).
 	 */
-	private static
-	void removeRedundant(List responses, Map invalidated,
+	private static void removeRedundant(List responses, Set invalidated,
 	Map smartUpdated, Set attached) {
 		invLoop:
-		for (Iterator j = invalidated.keySet().iterator(); j.hasNext();) {
+		for (Iterator j = invalidated.iterator(); j.hasNext();) {
 			final Component cj = (Component)j.next();
 
 			for (Iterator k = attached.iterator(); k.hasNext();) {
@@ -719,13 +702,12 @@ import com.potix.zk.au.*;
 				continue;
 			}
 
-			for (Iterator k = invalidated.entrySet().iterator(); k.hasNext();) {
+			for (Iterator k = invalidated.iterator(); k.hasNext();) {
 				final Map.Entry me = (Map.Entry)k.next();
 				final Component ck = (Component)me.getKey();
 
-				//INNER doesn't removes smartUpdate
-				if ((ck != cj || Component.OUTER == me.getValue())
-				&& Components.isAncestor(ck, cj)) {
+
+				if (Components.isAncestor(ck, cj)) {
 					j.remove();
 					continue suLoop;
 				}
@@ -741,7 +723,7 @@ import com.potix.zk.au.*;
 
 		//resolves transprent components.
 		List comps = null;
-		for (Iterator it = invalidated.keySet().iterator(); it.hasNext();) {
+		for (Iterator it = invalidated.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			if (isTransparent(comp)) {
 				if (comps == null) comps = new LinkedList();
@@ -774,14 +756,14 @@ import com.potix.zk.au.*;
 	/** Adds comps to invalidated, and resolves comps by replacing transparent
 	 * components with their non-transparent children.
 	 */
-	private static void resolveTransparent(List comps, Map invalidated) {
+	private static void resolveTransparent(List comps, Set invalidated) {
 		if (comps.isEmpty()) return;
 		for (Iterator it = comps.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			if (isTransparent(comp)) {
 				resolveTransparent(comp.getChildren(), invalidated); //recursive
 			} else {
-				invalidated.put(comp, Component.OUTER);
+				invalidated.add(comp);
 			}
 		} 
 	}
@@ -840,35 +822,16 @@ import com.potix.zk.au.*;
 	}
 	/** Redraw the specified component into a string.
 	 */
-	private static String redraw(Component comp, Range range)
-	throws IOException {
+	private static String redraw(Component comp) throws IOException {
 		final StringWriter out = new StringWriter(1024*8);
 		comp.redraw(out);
-
-		final StringBuffer buf = out.getBuffer();
-		return range == Component.INNER ? retrieveInner(buf): buf.toString();
+		return out.toString();
 	}
 	/** Redraws the whole page. */
-	private static String redraw(Page page, Range range)
-	throws IOException {
+	private static String redraw(Page page) throws IOException {
 		final StringWriter out = new StringWriter(1024*8);
 		((PageCtrl)page).redraw(null, out);
-
-		final StringBuffer buf = out.getBuffer();
-		return range == Component.INNER ? retrieveInner(buf): buf.toString();
-	}
-	/** Retrieves the inner content. */
-	private static String retrieveInner(StringBuffer sb){
-		final int len = sb.length();
-		for (int j = 0; j < len; ++j)
-			if (sb.charAt(j) == '>') {
-				for (int k = len; --k > j;)
-					if (sb.charAt(k) == '<')
-						return sb.substring(j + 1, k);
-			}
-
-		if (D.ON) log.warning("Not containing any tag: "+sb);
-		return sb.toString();
+		return out.toString();
 	}
 
 	/** Called before a component redraws itself if the component might
