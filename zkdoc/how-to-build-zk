@@ -1,8 +1,8 @@
 How to Build ZK
 
-* First you have to install Ant 1.6.2 or above.
+* Install Ant 1.6.2 or above.
 
-* If you are using Windows, you have to install Cygwin.
+* Install Cygwin 1.90 or above, if Windows is used.
 
 * The required jar files are not shipped with this distribution. However,
   you can download them from the Subversion server at the following URL.
