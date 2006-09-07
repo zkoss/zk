@@ -255,22 +255,32 @@ public class Configuration {
 	 *
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
+	 * @param ex the exception being thrown (and not handled) during
+	 * the processing of the event, or null it is executed successfully.
+	 * @return a list of exceptions thrown by {@link EventThreadCleanup#cleanup},
+	 * or null if none of them threw an exception (i.e., execute successfully).
 	 */
-	public void invokeEventThreadCleanups(Component comp, Event evt) {
-		if (_evtCleans.isEmpty()) return;
+	public List invokeEventThreadCleanups(Component comp, Event evt,
+	Throwable ex) {
+		if (_evtCleans.isEmpty()) return null;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
+		List errs = null;
 		synchronized (_evtCleans) {
 			for (Iterator it = _evtCleans.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
 					((EventThreadCleanup)klass.newInstance())
-						.cleanup(comp, evt);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
+						.cleanup(comp, evt, ex);
+				} catch (Throwable t) {
+					if (errs == null) errs = new LinkedList();
+					errs.add(t);
+
+					log.error("Failed to invoke "+klass, t);
 				}
 			}
 		}
+		return errs;
 	}
 
 	/** Invokes {@link EventThreadSuspend#beforeSuspend} for each relevant
@@ -530,29 +540,29 @@ public class Configuration {
 	 * @param parent the previous execution, or null if no previous at all
 	 * @param ex the first exception being thrown (and not handled) during the
 	 * execution, or null it is executed successfully.
-	 * @return the error message if any exception is caught, or null if successful.
+	 * @return a list of exceptions thrown by {@link ExecutionCleanup#cleanup},
+	 * or null if none of them threw an exception (i.e., execute successfully).
 	 */
-	public String invokeExecutionCleanups(Execution exec, Execution parent,
+	public List invokeExecutionCleanups(Execution exec, Execution parent,
 	Throwable ex) {
 		if (_execCleans.isEmpty()) return null;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
-		StringBuffer sb = null;
+		List errs = null;
 		synchronized (_execCleans) {
 			for (Iterator it = _execCleans.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
 					((ExecutionCleanup)klass.newInstance()).cleanup(exec, parent, ex);
 				} catch (Throwable t) {
-					if (sb != null) sb.append('\n');
-					else sb = new StringBuffer(80);
-					sb.append(Exceptions.getMessage(t));
+					if (errs == null) errs = new LinkedList();
+					errs.add(t);
 
 					log.error("Failed to invoke "+klass, t);
 				}
 			}
 		}
-		return sb != null ? sb.toString(): null;
+		return errs;
 	}
 
 	/** Sets the URI of CSS that will be generated for each ZUML desktop.

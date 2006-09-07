@@ -36,6 +36,9 @@ import com.potix.zk.ui.Session;
  */
 public interface SessionCleanup {
 	/** called when a session is about to be destroyed.
+	 *
+	 * <p>If this method throws an exception, the error message is
+	 * only logged (user won't see it).
 	 */
 	public void cleanup(Session sess);
 }

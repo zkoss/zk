@@ -37,9 +37,8 @@ import com.potix.zk.ui.Execution;
 public interface ExecutionCleanup {
 	/** called when an execution is about to be destroyed.
 	 *
-	 * <p>Unlike other cleanup (say, {@link DesktopCleanup}),
-	 * the error message will be displayed at the client if this method
-	 * threw an exception.
+	 * <p>If this method throws an exception, the error message will be displayed
+	 * at the client.
 	 *
 	 * @param exec the exection to clean up.
 	 * @param parent the previous execution, or null if no previous at all

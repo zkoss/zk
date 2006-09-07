@@ -41,6 +41,7 @@ import com.potix.zk.ui.event.Event;
 import com.potix.zk.ui.event.EventListener;
 import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.util.Namespaces;
+import com.potix.zk.ui.util.Configuration;
 import com.potix.zk.ui.sys.SessionsCtrl;
 import com.potix.zk.ui.sys.ExecutionCtrl;
 import com.potix.zk.ui.sys.ExecutionsCtrl;
@@ -277,8 +278,6 @@ public class EventProcessingThread extends Thread {
 	}
 	/** Cleanup for executionl. */
 	synchronized private void cleanup() {
-		_desktop.getWebApp()
-			.getConfiguration().invokeEventThreadCleanups(_comp, _event);
 		_comp = null;
 		_event = null;
 		_desktop = null;
@@ -299,12 +298,14 @@ public class EventProcessingThread extends Thread {
 			while (!_ceased) {
 				final boolean evtAvail = !isIdle();
 				if (evtAvail) {
+					Configuration config = _desktop.getWebApp().getConfiguration();
+					boolean cleaned = false;
 					++_nBusyThd;
 					try {
 						if (D.ON && log.finerable()) log.finer("Processing event: "+_event);
 
-						_desktop.getWebApp().getConfiguration()
-							.invokeEventThreadInits(_evtThdInits, _comp, _event);
+						
+						config.invokeEventThreadInits(_evtThdInits, _comp, _event);
 						_evtThdInits = null;
 
 						Locales.setThreadLocal(_locale);
@@ -313,8 +314,19 @@ public class EventProcessingThread extends Thread {
 						process0();
 					} catch (Throwable ex) {
 						_ex = ex;
+						cleaned = true;
+						config.invokeEventThreadCleanups(_comp, _event, ex);
 					} finally {
 						--_nBusyThd;
+
+						if (!cleaned) {
+							final List errs =
+								config.invokeEventThreadCleanups(_comp, _event, null);
+							if (_ex == null && errs != null)
+								_ex = (Throwable)errs.get(0);
+									//propogate back the first exception
+						}
+
 						cleanup();
 						ExecutionsCtrl.setCurrent(null);
 						SessionsCtrl.setCurrent(null);

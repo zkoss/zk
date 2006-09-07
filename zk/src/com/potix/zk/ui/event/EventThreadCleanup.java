@@ -40,6 +40,12 @@ import com.potix.zk.ui.Component;
 public interface EventThreadCleanup {
 	/** Cleans up the event processing thread.
 	 * It is called, after a event processing thread has processed an event.
+	 *
+	 * <p>If this method threw an exception, it will be propagated back to
+	 * the servlet thread and then reported to the user.
+	 *
+	 * @param ex the exception being thrown (and not handled) during
+	 * the processing of the event, or null it is executed successfully.
 	 */
-	public void cleanup(Component comp, Event evt);
+	public void cleanup(Component comp, Event evt, Throwable ex);
 }

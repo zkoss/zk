@@ -515,10 +515,17 @@ public class UiEngineImpl implements UiEngine {
 				}
 
 				cleaned = true;
-				final String errmsg = config.invokeExecutionCleanups(
+				final List cleanerrs = config.invokeExecutionCleanups(
 					exec, oldexec, errs.isEmpty() ? null: (Throwable)errs.get(0));
-				if (errmsg != null)
-					responses.add(new AuAlert(errmsg));
+				if (cleanerrs != null) {
+					final StringBuffer errmsg = new StringBuffer(100);
+					for (Iterator it = cleanerrs.iterator(); it.hasNext();) {
+						final Throwable t = (Throwable)it.next();
+						if (errmsg.length() > 0) errmsg.append('\n');
+						errmsg.append(Exceptions.getMessage(t));
+					}
+					responses.add(new AuAlert(errmsg.toString()));
+				}
 
 				if (rque.hasRequest())
 					responses.add(new AuEcho());

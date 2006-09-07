@@ -36,6 +36,9 @@ import com.potix.zk.ui.WebApp;
  */
 public interface WebAppCleanup {
 	/** called when a ZK application is about to be destroyed.
+	 *
+	 * <p>If this method throws an exception, the error message is
+	 * only logged (user won't see it).
 	 */
 	public void cleanup(WebApp wapp);
 }
