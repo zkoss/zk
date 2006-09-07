@@ -42,21 +42,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	int cnt = 0;
 	</zscript>
 	<button label="Clone">
-		<attribute name="onClick">
+		<attribute name="onClick">{
 	Listbox l = src.clone();
 	l.setId("dst" + ++cnt);
 	vb.insertBefore(l, self);
-		</attribute>
+		}</attribute>
 	</button>
 	<button label="Clone by Serialization">
-		<attribute name="onClick">
+		<attribute name="onClick">{
 	import java.io.*;
 	ByteArrayOutputStream boa = new ByteArrayOutputStream();
 	new ObjectOutputStream(boa).writeObject(src);
 	Listbox l = new ObjectInputStream(new ByteArrayInputStream(boa.toByteArray())).readObject();
 	l.setId("dst" + ++cnt);
 	vb.insertBefore(l, self);
-		</attribute>
+		}</attribute>
 	</button>
 	<button label="Serialize Current Desktop">
 		<attribute name="onClick">
@@ -75,6 +75,58 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	import java.io.*;
 	new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(session);
 		</attribute>
+	</button>
+
+	Tree
+	<tree id="tree" rows="4" width="400px">
+		<treecols>
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+				</treerow>
+				<treechildren/>
+			</treeitem>
+			<treeitem label="Item 2"/>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 3"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 3.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 3.1.1"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 3.2"/>
+							<treecell label="3.2 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 4">
+				<treechildren/>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<button label="Clone">
+		<attribute name="onClick">{
+	Tree t = tree.clone();
+	t.setId("dst" + ++cnt);
+	vb.insertBefore(t, self);
+		}</attribute>
 	</button>
 </vbox>
 </window>
