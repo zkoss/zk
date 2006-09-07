@@ -219,7 +219,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final Desktop desktop = exec.getDesktop();
 		final Configuration config = desktop.getWebApp().getConfiguration();
-		boolean err = false;
+		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
 
@@ -273,13 +273,14 @@ public class UiEngineImpl implements UiEngine {
 
 			((PageCtrl)page).redraw(responses, out);
 		} catch (Throwable ex) {
-			err = true;
+			cleaned = true;
 			config.invokeExecutionCleanups(exec, oldexec, ex);
+				//TODO: find a way to send back the error message, if any, returned
 
 			if (ex instanceof IOException) throw (IOException)ex;
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (!err) config.invokeExecutionCleanups(exec, oldexec, null);
+			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
 
 			execCtrl.setCurrentPage(old); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
@@ -453,7 +454,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 
-		boolean err = false;
+		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
 			final RequestQueue rque = ((DesktopCtrl)exec.getDesktop()).getRequestQueue();
@@ -497,13 +498,33 @@ public class UiEngineImpl implements UiEngine {
 
 			//Cycle 3: Generate output
 			if (!uv.isAborting()) {
-				if (!errs.isEmpty())
-					visualizeErrors(exec, uv, errs);
+				List responses;
+				try {
+					//Note: we have to call visualizeErrors before uv.getResponses,
+					//since it might create/update components
+					if (!errs.isEmpty())
+						visualizeErrors(exec, uv, errs);
 
-				final List responses = uv.getResponses();
+					responses = uv.getResponses();
+				} catch (Throwable ex) {
+					responses = new LinkedList();
+					responses.add(new AuAlert(Exceptions.getMessage(ex)));
+
+					log.error(ex);
+					errs.add(ex); //so invokeExecutionCleanups knows it
+				}
+
+				cleaned = true;
+				final String errmsg = config.invokeExecutionCleanups(
+					exec, oldexec, errs.isEmpty() ? null: (Throwable)errs.get(0));
+				if (errmsg != null)
+					responses.add(new AuAlert(errmsg));
+
 				if (rque.hasRequest())
 					responses.add(new AuEcho());
+
 				response(responses, out);
+
 				if (log.debugable())
 					if (responses.size() < 5 || log.finerable()) log.debug("Responses: "+responses);
 					else log.debug("Responses: "+responses.subList(0, 5)+"...");
@@ -515,13 +536,15 @@ public class UiEngineImpl implements UiEngine {
 			out.flush();
 				//flush before deactivating to make sure it has been sent
 		} catch (Throwable ex) {
-			err = true;
-			config.invokeExecutionCleanups(exec, oldexec, ex);
+			if (!cleaned) {
+				cleaned = true;
+				config.invokeExecutionCleanups(exec, oldexec, ex);
+			}
 
 			if (ex instanceof IOException) throw (IOException)ex;
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (!err) config.invokeExecutionCleanups(exec, oldexec, null);
+			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
 
 			doDeactivate(exec);
 

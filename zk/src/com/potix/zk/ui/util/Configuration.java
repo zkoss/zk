@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.potix.lang.Exceptions;
 import com.potix.util.logging.Log;
 
 import com.potix.zk.ui.Component;
@@ -527,25 +528,33 @@ public class Configuration {
 	 *
 	 * @param exec the execution that is being destroyed
 	 * @param parent the previous execution, or null if no previous at all
-	 * @param ex the exception being thrown (and not handled) during the execution,
-	 * or null it is executed successfully.
+	 * @param ex the first exception being thrown (and not handled) during the
+	 * execution, or null it is executed successfully.
+	 * @return the error message if any exception is caught, or null if successful.
 	 */
-	public
-	void invokeExecutionCleanups(Execution exec, Execution parent, Throwable ex) {
-		if (_execCleans.isEmpty()) return;
+	public String invokeExecutionCleanups(Execution exec, Execution parent,
+	Throwable ex) {
+		if (_execCleans.isEmpty()) return null;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
+		StringBuffer sb = null;
 		synchronized (_execCleans) {
 			for (Iterator it = _execCleans.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
 					((ExecutionCleanup)klass.newInstance()).cleanup(exec, parent, ex);
 				} catch (Throwable t) {
+					if (sb != null) sb.append('\n');
+					else sb = new StringBuffer(80);
+					sb.append(Exceptions.getMessage(t));
+
 					log.error("Failed to invoke "+klass, t);
 				}
 			}
 		}
+		return sb != null ? sb.toString(): null;
 	}
+
 	/** Sets the URI of CSS that will be generated for each ZUML desktop.
 	 */
 	public void setThemeURI(String uri) {
