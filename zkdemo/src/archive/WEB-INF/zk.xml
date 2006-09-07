@@ -69,4 +69,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value></value>
 	</preference>
 	-->
+	
+	<!-- Configure the Hibernate "Open Session In View" Session Lifecycle
+		<listener>
+		<description>Hibernate "Open Session In View" Session Lifecycle</description>
+		<listener-class>com.potix.zkplus.hibernate.HibernateSessionExecutionListener</listener-class>
+	</listener>
+	-->
+	
+	<!-- Configure the Hibernate SessionFactory Lifecycle.
+	<listener>
+		<description>Hibernate "Open Session In View" SessionFactory Lifecycle</description>
+		<listener-class>com.potix.zkplus.hibernate.HibernateSessionWebAppListener</listener-class>
+	</listener>
+	-->
 </zk>
