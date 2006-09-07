@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.potix.lang.Exceptions;
 import com.potix.util.logging.Log;
@@ -784,6 +785,11 @@ public class Configuration {
 		if (name == null || value == null)
 			throw new IllegalArgumentException("null");
 		_prefs.put(name, value);
+	}
+	/** Returns a set of all preference names.
+	 */
+	public Set getPreferenceNames() {
+		return _prefs.keySet();
 	}
 
 	/** Adds an error page.
