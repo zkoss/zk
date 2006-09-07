@@ -602,14 +602,14 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 
 	//Cloneable//
 	public Object clone() {
-		final Tree clone = (Tree)super.clone();
-		int cntSel = clone._selItems.size();
+		int cntSel = _selItems.size();
 
+		final Tree clone = (Tree)super.clone();
 		clone.init();
 
 		int cnt = 0;
-		if (clone._treecols != null) ++cnt;
-		if (clone._treechildren != null) ++cnt;
+		if (_treecols != null) ++cnt;
+		if (_treechildren != null) ++cnt;
 		if (cnt > 0 || cntSel > 0) clone.afterUnmarshal(cnt, cntSel);
 
 		return clone;
@@ -633,6 +633,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 		}
 
 		_sel = null;
+		_selItems.clear();
 		if (cntSel != 0) {
 			for (Iterator it = getItems().iterator(); it.hasNext();) {
 				final Treeitem ti = (Treeitem)it.next();
