@@ -12,3 +12,5 @@ pluto.jar
 custom_rhino.jar
 jfreechart.jar
 jcommon.jar
+hibernate3.jar
+jta.jar
