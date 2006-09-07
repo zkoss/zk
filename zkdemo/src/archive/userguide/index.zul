@@ -153,13 +153,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	]]></zscript>
 	</hbox>
 <!-- Use UA-121377-1 instead of UA-121377-3 (historical reason) -->
-<h:script type="text/javascript">
-_urchin = function() {
-	try {
-		_uacct = "UA-121377-1";
-		urchinTracker();
-	} catch (e) {}
-};
-setTimeout('zk.loadJS("http://www.google-analytics.com/urchin.js", _urchin)', 5000);
-</h:script>
+<h:script type="text/javascript"><![CDATA[
+if ("https:" != location.protocol.toLowerCase()) {
+	_urchin = function() {
+		try {
+			_uacct = "UA-121377-1";
+			urchinTracker();
+		} catch (e) {}
+	};
+	setTimeout('zk.loadJS("http://www.google-analytics.com/urchin.js", _urchin)', 5000);
+}
+]]></h:script>
 </window>
