@@ -59,8 +59,7 @@ public class Text extends AbstractComponent implements RawId {
 			value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			if (isIdRequired()) invalidate(INNER);
-			else getParent().invalidate(INNER);
+			invalidate();
 		}
 	}
 
@@ -77,6 +76,10 @@ public class Text extends AbstractComponent implements RawId {
 	}
 
 	//-- Component --//
+	public void invalidate() {
+		if (isIdRequired()) super.invalidate();
+		else getParent().invalidate();
+	}
 	public void redraw(Writer out) throws IOException {
 		if (isIdRequired()) super.redraw(out);
 		else out.write(_value); //no processing; direct output if not ZUL
