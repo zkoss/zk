@@ -103,12 +103,12 @@ public class Configuration {
 			}
 		}
 
-		if (ApplicationInit.class.isAssignableFrom(klass)) {
+		if (WebAppInit.class.isAssignableFrom(klass)) {
 			synchronized (_appInits) {
 				_appInits.add(klass);
 			}
 		}
-		if (ApplicationCleanup.class.isAssignableFrom(klass)) {
+		if (WebAppCleanup.class.isAssignableFrom(klass)) {
 			synchronized (_appCleans) {
 				_appCleans.add(klass);
 			}
@@ -330,18 +330,18 @@ public class Configuration {
 		}
 	}
 
-	/** Invokes {@link ApplicationInit#init} for each relevant
+	/** Invokes {@link WebAppInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
-	 * <p>An instance of {@link ApplicationInit} is constructed first,
-	 * and then invoke {@link ApplicationInit#init}.
+	 * <p>An instance of {@link WebAppInit} is constructed first,
+	 * and then invoke {@link WebAppInit#init}.
 	 *
-	 * <p>Unlike {@link #invokeApplicationInits}, it doesn't throw any exceptions.
+	 * <p>Unlike {@link #invokeWebAppInits}, it doesn't throw any exceptions.
 	 * Rather, it only logs them.
 	 *
 	 * @param wapp the Web application that is created
 	 */
-	public void invokeApplicationInits(WebApp wapp)
+	public void invokeWebAppInits(WebApp wapp)
 	throws UiException {
 		if (_appInits.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
@@ -350,24 +350,24 @@ public class Configuration {
 			for (Iterator it = _appInits.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((ApplicationInit)klass.newInstance()).init(wapp);
+					((WebAppInit)klass.newInstance()).init(wapp);
 				} catch (Throwable ex) {
 					log.error("Failed to invoke "+klass, ex);
 				}
 			}
 		}
 	}
-	/** Invokes {@link ApplicationCleanup#cleanup} for each relevant
+	/** Invokes {@link WebAppCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
-	 * <p>An instance of {@link ApplicationCleanup} is constructed first,
-	 * and then invoke {@link ApplicationCleanup#cleanup}.
+	 * <p>An instance of {@link WebAppCleanup} is constructed first,
+	 * and then invoke {@link WebAppCleanup#cleanup}.
 	 *
 	 * <p>It never throws an exception.
 	 *
 	 * @param wapp the Web application that is being destroyed
 	 */
-	public void invokeApplicationCleanups(WebApp wapp) {
+	public void invokeWebAppCleanups(WebApp wapp) {
 		if (_appCleans.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
@@ -375,7 +375,7 @@ public class Configuration {
 			for (Iterator it = _appCleans.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((ApplicationCleanup)klass.newInstance()).cleanup(wapp);
+					((WebAppCleanup)klass.newInstance()).cleanup(wapp);
 				} catch (Throwable ex) {
 					log.error("Failed to invoke "+klass, ex);
 				}
