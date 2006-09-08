@@ -17,7 +17,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-<tree id="tree" width="400px">
+Tree with rows more than need:
+<tree id="tree" width="400px" rows="10">
 	<treecols>
 		<treecol label="Subject"/>
 		<treecol label="From"/>
@@ -248,50 +249,79 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <button label="getItems" onClick="alert(&quot;&quot;+tree.getItems())"/>
 </vbox>
 
-	<tree width="90%" rows="5">
-		<treecols>
-			<treecol label="Name"/>
-			<treecol label="Description"/>
-		</treecols>
-		<treechildren>
-			<treeitem>
-				<treerow>
-					<treecell label="Item 1"/>
-					<treecell label="Item 1 description"/>
-				</treerow>
-			</treeitem>
-			<treeitem>
-				<treerow>
-					<treecell label="Item 2"/>
-					<treecell label="Item 2 description"/>
-				</treerow>
-				<treechildren>
-					<treeitem>
-						<treerow>
-							<treecell label="Item 2.1"/>
-						</treerow>
-						<treechildren>
-							<treeitem>
-								<treerow>
-									<treecell label="Item 2.1.1"/>
-								</treerow>
-							</treeitem>
-							<treeitem>
-								<treerow>
-									<treecell label="Item 2.1.2"/>
-								</treerow>
-							</treeitem>
-						</treechildren>
-					</treeitem>
-					<treeitem>
-						<treerow>
-							<treecell label="Item 2.2"/>
-							<treecell label="Item 2.2 is something who cares"/>
-						</treerow>
-					</treeitem>
-				</treechildren>
-			</treeitem>
-			<treeitem label="Item 3"/>
-		</treechildren>
-	</tree>
+Tree with rows
+<tree width="90%" rows="5">
+	<treecols>
+		<treecol label="Name"/>
+		<treecol label="Description"/>
+	</treecols>
+	<treechildren>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 1"/>
+				<treecell label="Item 1 description"/>
+			</treerow>
+		</treeitem>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 2"/>
+				<treecell label="Item 2 description"/>
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.1"/>
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.1"/>
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.2"/>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.2"/>
+						<treecell label="Item 2.2 is something who cares"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Item 3"/>
+	</treechildren>
+</tree>
+
+Tree with vflex to grow:
+<tree width="400px" vflex="true">
+	<treecols>
+		<treecol label="Subject"/>
+		<treecol label="From"/>
+		<treecol label="Received"/>
+	</treecols>
+	<treechildren>
+		<treeitem>
+			<treerow>
+				<treecell label="Intel Snares XML"/>
+				<treecell label="David Needle"/>
+				<treecell label="7-12-2005"/>
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Intel Snares XML"/>
+						<treecell label="Ria Coen"/>
+						<treecell label="7-12-2005"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Unknown chaos" selected="true"/>
+	</treechildren>
+</tree>
 </zk>
