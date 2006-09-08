@@ -368,6 +368,11 @@ zk.Selectable.prototype = {
 			for (var j = 0; j < rows.length; ++j)
 				this._changeSelect(rows[j], sels[rows[j].id] == true);
 			return true;
+		case "zk_vflex":
+		case "zk_size":
+			zkau.setAttr(this.element, name, value);
+			this._recalcSize();
+			return true;
 		}
 		return false;
 	},
@@ -641,9 +646,35 @@ zk.Selectable.prototype = {
 				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows); //assign foot's col width
 		}
 	},
+	/** Returns the visible row at the specified index. */
+	_visiRowAt: function (index) {
+		if (index >= 0) {
+			var rows = this.bodyrows;
+			for (var j = 0; j < rows.length; ++j) {
+				var r = rows[j];
+				if (zk.isVisible(r) && --index < 0)
+					return r;
+			}
+		}
+		return null;
+	},
+	/** Returns the last visible row. */
+	_lastVisiRow: function () {
+		var rows = this.bodyrows;
+		for (var j = rows.length; --j >= 0;) {
+			var r = rows[j];
+			if (zk.isVisible(r))
+				return r;
+		}
+		return null;
+	},
 	_calcHgh: function () {
 		var rows = this.bodyrows;
-		var len = rows.length;
+		var len = 0;
+		for (var j = 0; j < rows.length; ++j) //tree might collapse some items
+			if (zk.isVisible(rows[j]))
+				++len;
+
 		var hgh = this.element.style.height;
 		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
 			hgh = parseInt(hgh);
@@ -651,12 +682,20 @@ zk.Selectable.prototype = {
 				hgh -= this._headHgh(0);
 				if (hgh < 20) hgh = 20;
 				var sz = 0;
-				for (var h;; ++sz) {
+				for (var h, j = 0;; ++sz, ++j) {
 					if (sz == len) {
 						sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
 						break;
 					}
-					h = zk.offsetTop(rows[sz]) + zk.offsetHeight(rows[sz]);
+
+					//next visible row
+					var r;
+					for (;; ++j) {//no need to check length again
+						r = rows[j];
+						if (zk.isVisible(r)) break;
+					}
+
+					h = zk.offsetTop(r) + zk.offsetHeight(r);
 					if (h >= hgh) {
 						if (h > hgh + 2) ++sz; //experimental
 						break;
@@ -672,33 +711,33 @@ zk.Selectable.prototype = {
 		hgh = 0;
 		var diff = 2/*experiment*/, sz = this.size();
 		if (!sz) {
-			var gap = this._getFitGap();
-			if (gap > 0) { //not enough space
-				hgh = this.body.offsetHeight - gap;
-				if (hgh < 25) hgh = 25;
+			if (this.element.getAttribute("zk_vflex") == "true") {
+				var gap = this._getFitGap();
+				if (gap > 0) { //not enough space
+					hgh = this.body.offsetHeight - gap;
+					if (hgh < 25) hgh = 25;
 
-				var rowhgh = len ? zk.offsetHeight(rows[0]): 0;
-				if (!rowhgh) rowhgh = this._headHgh(20);
+					var rowhgh = len ? zk.offsetHeight(this._visiRowAt(0)): 0;
+					if (!rowhgh) rowhgh = this._headHgh(20);
 
-				sz = Math.round((hgh - diff)/ rowhgh);
-				if (sz < 3) { //minimal 3 rows if auto-size
-					sz = 3;
-					hgh = rowhgh * 3 + diff;
+					sz = Math.round((hgh - diff)/ rowhgh);
+					if (sz < 3) { //minimal 3 rows if auto-size
+						sz = 3;
+						hgh = rowhgh * 3 + diff;
+					}
 				}
-				this.realsize(sz);
-			} else {
-				this.realsize(0); //no limit at all
 			}
+			this.realsize(sz);
 		}
 
 		if (sz) {
 			if (!hgh) {
 				if (!len) hgh = this._headHgh(20) * sz;
 				else if (sz <= len) {
-					var r = rows[sz - 1];
+					var r = this._visiRowAt(sz - 1);
 					hgh = zk.offsetTop(r) + zk.offsetHeight(r);
 				} else {
-					var r = rows[len - 1];
+					var r = this._lastVisiRow();
 					hgh = zk.offsetTop(r) + zk.offsetHeight(r);
 					hgh = Math.ceil((sz * hgh) / len);
 				}
@@ -974,7 +1013,7 @@ zkLibox.onclick = function (evt) {
  */
 zkLibox.setAttr = function (cmp, name, value) {
 	var meta = zkau.getMeta(cmp);
-	if (meta) meta.setAttr(name, value);
+	return meta && meta.setAttr(name, value);
 };
 
 /** Init (and re-init) a listbox. */

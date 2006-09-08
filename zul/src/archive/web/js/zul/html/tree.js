@@ -169,7 +169,7 @@ zkTree.onclick = function (evt) {
  */
 zkTree.setAttr = function (tree, name, value) {
 	var meta = zkau.getMeta(tree);
-	if (meta) meta.setAttr2(name, value);
+	return meta && meta.setAttr2(name, value);
 };
 
 /** Called when the +/- button is clicked. */

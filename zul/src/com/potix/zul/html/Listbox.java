@@ -123,6 +123,7 @@ ChildChangedAware, Cropper {
 	private transient EventListener _pgListener;
 	private boolean _multiple;
 	private boolean _disabled, _readonly, _checkmark;
+	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
 
@@ -196,6 +197,28 @@ ChildChangedAware, Cropper {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
 			if (!inSelectMold()) invalidate();
+		}
+	}
+
+	/** Returns whether to grow and shrink vertical to fit their given space,
+	 * so called vertial flexibility.
+	 *
+	 * <p>Note: this attribute is ignored if {@link #setRows} is specified
+	 *
+	 * <p>Default: false.
+	 */
+	public final boolean isVflex() {
+		return _vflex;
+	}
+	/** Sets whether to grow and shrink vertical to fit their given space,
+	 * so called vertial flexibility.
+	 *
+	 * <p>Note: this attribute is ignored if {@link #setRows} is specified
+	 */
+	public void setVflex(boolean vflex) {
+		if (_vflex != vflex) {
+			_vflex = vflex;
+			if (!inSelectMold()) smartUpdate("zk_flex", _vflex);
 		}
 	}
 
@@ -1302,14 +1325,16 @@ ChildChangedAware, Cropper {
 			HTMLs.appendAttribute(sb, "zk_name", _name);
 			HTMLs.appendAttribute(sb, "zk_size",  _rows);
 			if (_disabled)
-				HTMLs.appendAttribute(sb, "zk_disabled",  _disabled);
+				HTMLs.appendAttribute(sb, "zk_disabled",  true);
 			if (_readonly)
-				HTMLs.appendAttribute(sb, "zk_readonly", _readonly);
+				HTMLs.appendAttribute(sb, "zk_readonly", true);
 			if (_multiple)
-				HTMLs.appendAttribute(sb, "zk_multiple", _multiple);
+				HTMLs.appendAttribute(sb, "zk_multiple", true);
 			HTMLs.appendAttribute(sb, "zk_selId", getSelectedId());
 			//if (_checkmark)
-			//	HTMLs.appendAttribute(sb, "zk_checkmark",  _checkmark);
+			//	HTMLs.appendAttribute(sb, "zk_checkmark",  true);
+			if (_vflex)
+				HTMLs.appendAttribute(sb, "zk_vflex", true);
 			if (_model != null)
 				HTMLs.appendAttribute(sb, "zk_model", true);
 		}

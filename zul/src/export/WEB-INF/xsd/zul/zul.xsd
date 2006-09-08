@@ -603,6 +603,7 @@ elementFormDefault="qualified">
 		<xs:attribute name="onPaging" type="xs:string" use="optional"/>
 		<xs:attribute name="readonly" type="xs:boolean" use="optional"/>
 		<xs:attribute name="multiple" type="xs:boolean" use="optional"/>
+		<xs:attribute name="vflex" type="xs:boolean" use="optional"/>
 		<xs:attribute name="rows" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="maxlength" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
@@ -968,6 +969,7 @@ elementFormDefault="qualified">
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="checkmark" type="xs:boolean" use="optional"/>
 		<xs:attribute name="multiple" type="xs:boolean" use="optional"/>
+		<xs:attribute name="vflex" type="xs:boolean" use="optional"/>
 		<xs:attribute name="onSelect" type="xs:string" use="optional"/>
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional"/>
 	</xs:complexType>

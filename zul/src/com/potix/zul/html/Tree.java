@@ -63,6 +63,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 	/** The name. */
 	private String _name;
 	private boolean _multiple, _checkmark;
+	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private transient boolean _noSmartUpdate;
 
@@ -155,6 +156,28 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
 			invalidate();
+		}
+	}
+
+	/** Returns whether to grow and shrink vertical to fit their given space,
+	 * so called vertial flexibility.
+	 *
+	 * <p>Note: this attribute is ignored if {@link #setRows} is specified
+	 *
+	 * <p>Default: false.
+	 */
+	public final boolean isVflex() {
+		return _vflex;
+	}
+	/** Sets whether to grow and shrink vertical to fit their given space,
+	 * so called vertial flexibility.
+	 *
+	 * <p>Note: this attribute is ignored if {@link #setRows} is specified
+	 */
+	public void setVflex(boolean vflex) {
+		if (_vflex != vflex) {
+			_vflex = vflex;
+			smartUpdate("zk_flex", _vflex);
 		}
 	}
 
@@ -583,9 +606,11 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 		HTMLs.appendAttribute(sb, "zk_size",  getRows());
 		HTMLs.appendAttribute(sb, "zk_selId", getSelectedId());
 		if (_multiple)
-			HTMLs.appendAttribute(sb, "zk_multiple", _multiple);
+			HTMLs.appendAttribute(sb, "zk_multiple", true);
 		//if (_checkmark)
 		//	HTMLs.appendAttribute(sb, "zk_checkmark",  _checkmark);
+		if (_vflex)
+			HTMLs.appendAttribute(sb, "zk_vflex", true);
 		appendAsapAttr(sb, Events.ON_SELECT);
 		return sb.toString();
 	}
