@@ -42,6 +42,7 @@ import java.util.Collection;
 public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	private Map _seriesMap = new HashMap(13); //(series, SimplePieModel)
 	private List _seriesList = new ArrayList(13);
+	private boolean _autoSort = true;
 	
 	//-- XYModel --//
 	public Comparable getSeries(int index) {
@@ -84,6 +85,14 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 		}
 		xyPairs.add(new XYPair(x, y));
 		fireEvent(ChartDataEvent.CHANGED, series, null);
+	}
+
+	public void setAutoSort(boolean auto) {
+		_autoSort = auto;
+	}
+
+	public boolean isAutoSort() {
+		return _autoSort;
 	}
 	
 	public void removeSeries(Comparable series) {

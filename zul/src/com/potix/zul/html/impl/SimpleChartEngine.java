@@ -263,7 +263,7 @@ public class SimpleChartEngine implements ChartEngine {
 		XYSeriesCollection dataset = new XYSeriesCollection();
 		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
 			final Comparable series = (Comparable) it.next();
-			XYSeries xyser = new XYSeries(series);
+			XYSeries xyser = new XYSeries(series, model.isAutoSort());
 			final int size = model.getDataCount(series);
 			for(int j = 0; j < size; ++j) {
 				xyser.add(model.getX(series, j), model.getY(series, j), false);

@@ -520,7 +520,7 @@ public class Chart extends Imagemap {
 							
 					try {
 						final String title = getTitle();
-						final AImage image = new AImage(title == null ? "Chart" : title, _engine.drawChart(Chart.this));
+						final AImage image = new AImage("chart"+new Date().getTime(), _engine.drawChart(Chart.this));
 						setContent(image);
 					} catch(java.io.IOException ex) {
 						throw UiException.Aide.wrap(ex);

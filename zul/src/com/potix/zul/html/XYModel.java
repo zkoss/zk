@@ -68,6 +68,17 @@ public interface XYModel extends ChartModel {
 	public void addValue(Comparable series, Number x, Number y);
 
 	/**
+	 * Set model to autosort on x value for each series.
+	 */
+	public void setAutoSort(boolean auto);
+
+	/**
+	 * check whether to autosort on x value for each series; default is true.
+	 */
+	public boolean isAutoSort();
+	
+	/**
+	/**
 	 * Remove data of a specified series.
 	 * @param series the series
 	 */
