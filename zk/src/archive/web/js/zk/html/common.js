@@ -1143,8 +1143,10 @@ zk.newFrame = function (name, src, style) {
 	var frm = $(name);
 	if (frm) return frm;
 
-	var html = '<iframe id="'+name+'" name="'+name+'"';
-	if (src) html += ' src="'+src+'"';
+	if (!src) src = zk.getUpdateURI('/web/img/spacer.gif');
+		//IE with HTTPS: we must specify the src
+
+	var html = '<iframe id="'+name+'" name="'+name+'" src="'+src+'"';
 	if (style) html += ' style="'+style+'"';
 	html += '></iframe>';
 	zk.insertHTMLBeforeEnd(document.body, html);
