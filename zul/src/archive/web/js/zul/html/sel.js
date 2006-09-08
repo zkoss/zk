@@ -708,18 +708,16 @@ zk.Selectable.prototype = {
 		if (!sz) {
 			if (this.element.getAttribute("zk_vflex") == "true") {
 				var gap = this._getFitGap();
-				if (gap > 0) { //not enough space
-					hgh = this.body.offsetHeight - gap;
-					if (hgh < 25) hgh = 25;
+				hgh = this.body.offsetHeight - gap;
+				if (hgh < 25) hgh = 25;
 
-					var rowhgh = zk.offsetHeight(firstVisiRow);
-					if (!rowhgh) rowhgh = this._headHgh(20);
+				var rowhgh = zk.offsetHeight(firstVisiRow);
+				if (!rowhgh) rowhgh = this._headHgh(20);
 
-					sz = Math.round((hgh - diff)/ rowhgh);
-					if (sz < 3) { //minimal 3 rows if auto-size
-						sz = 3;
-						hgh = rowhgh * 3 + diff;
-					}
+				sz = Math.round((hgh - diff)/ rowhgh);
+				if (sz < 3) { //minimal 3 rows if auto-size
+					sz = 3;
+					hgh = rowhgh * 3 + diff;
 				}
 			}
 			this.realsize(sz);
@@ -769,7 +767,7 @@ zk.Selectable.prototype = {
 				+ parseInt(zk.getCurrentStyle(document.body, "padding-top"))
 				+ parseInt(zk.getCurrentStyle(document.body, "padding-bottom"));
 		if (zk.ie) ++gap; //strange, but...
-		if (gap <= 0) return 0; //already fit
+		if (gap <= 0) return gap; //already fit
 
 		//this overflow might be caused by another element
 		for (var el = this.element;;) {
