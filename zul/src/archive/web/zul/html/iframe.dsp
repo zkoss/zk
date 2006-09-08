@@ -17,6 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%>
-<iframe id="${requestScope.arg.self.uuid}"${requestScope.arg.self.outerAttrs}${requestScope.arg.self.innerAttrs}>
+<iframe id="${requestScope.arg.self.uuid}" frameborder="0"${requestScope.arg.self.outerAttrs}${requestScope.arg.self.innerAttrs}>
 Your browser doesn't support inline frames.
 </iframe>
