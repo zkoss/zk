@@ -4,8 +4,11 @@ How to Build ZK
 
 * Install Cygwin 1.90 or above, if Windows is used.
 
-* The required jar files are not shipped with this distribution. However,
-  you can download them from the Subversion server at the following URL.
+* The required jar files are shipped only with the official releases (under the
+  dist/lib/ext directory).
+ 
+  For freshly distributions, you have to download them from the Subversion server
+  at the following URL.
 
   http://svn.sourceforge.net/viewvc/zk1/trunk/dist/lib/ext/
 
