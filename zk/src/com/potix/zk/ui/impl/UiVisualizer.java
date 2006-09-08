@@ -703,8 +703,7 @@ import com.potix.zk.au.*;
 			}
 
 			for (Iterator k = invalidated.iterator(); k.hasNext();) {
-				final Map.Entry me = (Map.Entry)k.next();
-				final Component ck = (Component)me.getKey();
+				final Component ck = (Component)k.next();
 
 
 				if (Components.isAncestor(ck, cj)) {
