@@ -33,6 +33,7 @@ import com.potix.lang.Classes;
 import com.potix.lang.Objects;
 import com.potix.lang.Strings;
 
+import java.util.Date;
 import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
 import java.awt.Paint;
