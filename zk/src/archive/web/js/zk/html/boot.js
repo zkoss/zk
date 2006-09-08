@@ -409,6 +409,10 @@ zk._newProgDlg = function (id, msg, x, y) {
 };
 
 //-- utilities --//
+zk.https = function () {
+	var p = location.protocol;
+	return p && "https:" == p.toLowerCase();
+};
 /** Returns the x coordination of the visible part. */
 zk.innerX = function () {
     return window.pageXOffset
@@ -560,7 +564,7 @@ if (!zk._modules) {
 	};
 
 	//Source: http://dean.edwards.name/weblog/2006/06/again/
-	if (zk.ie && "https:" != location.protocol.toLowerCase()) {
+	if (zk.ie && !zk.https()) {
 		//IE consider the following <script> insecure, so skip is https
 		document.write('<script id="_zie_load" defer src="javascript:void(0)"><\/script>');
 		var e = document.getElementById("_zie_load");
