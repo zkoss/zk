@@ -628,6 +628,17 @@ zk.Selectable.prototype = {
 	_calcSize: function () {
 		this._calcHgh();
 
+		//Bug 1553937: wrong sibling location
+		//IE: otherwise, element's width will be extended to fit body
+		if (zk.ie && !this.paging) { //note: we don't solve this bug for paging yet
+			var wd = this.element.style.width;
+			if (wd && wd != "auto" && wd.indexOf('%') < 0) {
+				this.body.style.width = wd;
+				if (this.head) this.head.style.width = wd;
+				if (this.foot) this.foot.style.width = wd;
+			}
+		}
+
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
 			if (tblwd && this.body.offsetWidth - tblwd > 11) {
@@ -785,7 +796,7 @@ zk.Selectable.prototype = {
 		setTimeout("zkSel._calcSize('"+this.id+"')", 20);
 	},
 	_cleansz: function () {
-		this.bodytbl.style.width = "";
+		this.body.style.width = this.bodytbl.style.width = "";
 		if (this.headtbl) {
 			this.head.style.width = this.body.style.height = "";
 			if (this.headtbl.rows.length) {
