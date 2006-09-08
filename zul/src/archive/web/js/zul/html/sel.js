@@ -658,22 +658,17 @@ zk.Selectable.prototype = {
 		}
 		return null;
 	},
-	/** Returns the last visible row. */
-	_lastVisiRow: function () {
-		var rows = this.bodyrows;
-		for (var j = rows.length; --j >= 0;) {
-			var r = rows[j];
-			if (zk.isVisible(r))
-				return r;
-		}
-		return null;
-	},
 	_calcHgh: function () {
 		var rows = this.bodyrows;
-		var len = 0;
-		for (var j = 0; j < rows.length; ++j) //tree might collapse some items
-			if (zk.isVisible(rows[j]))
+		var len = 0, lastVisiRow, firstVisiRow;
+		for (var j = 0; j < rows.length; ++j) { //tree might collapse some items
+			var r = rows[j];
+			if (zk.isVisible(r)) {
+				if (!firstVisiRow) firstVisiRow = r;
+				lastVisiRow = r;
 				++len;
+			}
+		}
 
 		var hgh = this.element.style.height;
 		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
@@ -717,7 +712,7 @@ zk.Selectable.prototype = {
 					hgh = this.body.offsetHeight - gap;
 					if (hgh < 25) hgh = 25;
 
-					var rowhgh = len ? zk.offsetHeight(this._visiRowAt(0)): 0;
+					var rowhgh = zk.offsetHeight(firstVisiRow);
 					if (!rowhgh) rowhgh = this._headHgh(20);
 
 					sz = Math.round((hgh - diff)/ rowhgh);
@@ -737,8 +732,7 @@ zk.Selectable.prototype = {
 					var r = this._visiRowAt(sz - 1);
 					hgh = zk.offsetTop(r) + zk.offsetHeight(r);
 				} else {
-					var r = this._lastVisiRow();
-					hgh = zk.offsetTop(r) + zk.offsetHeight(r);
+					hgh = zk.offsetTop(lastVisiRow) + zk.offsetHeight(lastVisiRow);
 					hgh = Math.ceil((sz * hgh) / len);
 				}
 				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
