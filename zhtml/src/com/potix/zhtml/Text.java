@@ -76,6 +76,16 @@ public class Text extends AbstractComponent implements RawId {
 	}
 
 	//-- Component --//
+	public void setParent(Component parent) {
+		if (!isIdRequired()) {
+			final Component old = getParent();
+			if (old != parent) {
+				if (old != null) old.invalidate();
+				if (parent != null) parent.invalidate();
+			}
+		}
+		super.setParent(parent);
+	}
 	public void invalidate() {
 		if (isIdRequired()) super.invalidate();
 		else getParent().invalidate();
