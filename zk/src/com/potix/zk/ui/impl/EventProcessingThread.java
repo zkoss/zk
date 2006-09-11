@@ -69,7 +69,9 @@ public class EventProcessingThread extends Thread {
 	private Locale _locale;
 	/** Part of the command: time zone. */
 	private TimeZone _timeZone;
-	/** Result of the command. */
+	/** Part of the result: a list of EventThreadCleanup instances. */
+	private List _evtThdCleanups;
+	/** Result of the result. */
 	private Throwable _ex;
 
 	private static int _nThd, _nBusyThd;
@@ -124,7 +126,8 @@ public class EventProcessingThread extends Thread {
 		return _comp;
 	}
 
-	/** Stops the thread. Called only by UiEngine when it is stopping.
+	/** Stops the thread. Called only by {@link com.potix.zk.ui.sys.UiEngine}
+	 * when it is stopping.
 	 */
 	public void cease() {
 		synchronized (_evtmutex) {
@@ -137,7 +140,8 @@ public class EventProcessingThread extends Thread {
 			}
 		}
 	}
-	/** Stops the thread silently. Called by UiEngine to stop abnormal
+	/** Stops the thread silently. Called by {@link com.potix.zk.ui.sys.UiEngine}
+	 * to stop abnormal
 	 * page.
 	 */
 	public void ceaseSilently() {
@@ -223,20 +227,35 @@ public class EventProcessingThread extends Thread {
 
 	/** Ask this event thread to process the specified event.
 	 *
-	 * <p>Note: it cannot be called from another event thread.
-	 * Reason: to prevent deadlock.
+	 * <p>Used internally to implement {@link com.potix.zk.ui.sys.UiEngine}.
+	 * Application developers
+	 * shall use {@link com.potix.zk.ui.event.Events#sendEvent} instead.
 	 *
 	 * @return whether the event has been processed completely or just be suspended.
 	 * Recycle it only if true is returned.
 	 */
-	public
-	boolean processEvent(Component comp, Event event, List evtThdInits) {
+	public boolean processEvent(Component comp, Event event) {
 		if (Thread.currentThread() instanceof EventProcessingThread)
 			throw new IllegalStateException("processEvent cannot be called in an event thread");
+		if (comp == null || event == null)
+			throw new IllegalArgumentException("null");
 		if (_ceased)
 			throw new InternalError("The event thread has beeing stopped");
+		if (_comp != null)
+			throw new InternalError("reentering processEvent not allowed");
 
-		request(comp, event, evtThdInits);
+		_desktop = comp.getDesktop();
+		if (_desktop == null)
+			throw new InternalError("Not belonging to any desktop? "+comp);
+
+		_comp = comp;
+		_event = event;
+		_locale = Locales.getCurrent();
+		_timeZone = TimeZones.getCurrent();
+		_ex = null;
+
+		final Configuration config = _desktop.getWebApp().getConfiguration();
+		_evtThdInits = config.newEventThreadInits(comp, event);
 
 		try {
 			synchronized (_evtmutex) {
@@ -246,26 +265,16 @@ public class EventProcessingThread extends Thread {
 			}
 		} catch (InterruptedException ex) {
 			throw new UiException(ex);
+		} finally {
+			final List errs = _ex != null ? null: new LinkedList();
+			config.invokeEventThreadCompletes(_evtThdCleanups, comp, event, errs);
+			_evtThdCleanups = null;
+			if (errs != null && !errs.isEmpty())
+				throw UiException.Aide.wrap((Throwable)errs.get(0));
 		}
 
 		checkError(); //check any error occurs
 		return isIdle();
-	}
-	/** AuRequest the event processing thread to process an event.
-	 */
-	synchronized private
-	void request(Component comp, Event event, List evtThdInits) {
-		if (_comp != null)
-			throw new InternalError("reentering processEvent not allowed");
-		if (comp == null || event == null)
-			throw new NullPointerException();
-		_comp = comp;
-		_event = event;
-		_desktop = _comp.getDesktop();
-		_evtThdInits = evtThdInits;
-		_locale = Locales.getCurrent();
-		_timeZone = TimeZones.getCurrent();
-		_ex = null;
 	}
 	/** Setup for execution. */
 	synchronized private void setup() {
@@ -315,14 +324,16 @@ public class EventProcessingThread extends Thread {
 					} catch (Throwable ex) {
 						_ex = ex;
 						cleaned = true;
-						config.invokeEventThreadCleanups(_comp, _event, ex);
+						_evtThdCleanups =
+							config.newEventThreadCleanups(_comp, _event, ex, null);
 					} finally {
 						--_nBusyThd;
 
 						if (!cleaned) {
-							final List errs =
-								config.invokeEventThreadCleanups(_comp, _event, null);
-							if (_ex == null && errs != null)
+							final List errs = new LinkedList();
+							_evtThdCleanups =
+								config.newEventThreadCleanups(_comp, _event, null, errs);
+							if (_ex == null && !errs.isEmpty())
 								_ex = (Throwable)errs.get(0);
 									//propogate back the first exception
 						}

@@ -274,13 +274,13 @@ public class UiEngineImpl implements UiEngine {
 			((PageCtrl)page).redraw(responses, out);
 		} catch (Throwable ex) {
 			cleaned = true;
-			config.invokeExecutionCleanups(exec, oldexec, ex);
+			config.invokeExecutionCleanups(exec, oldexec, ex, null);
 				//TODO: find a way to send back the error message, if any, returned
 
 			if (ex instanceof IOException) throw (IOException)ex;
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
+			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null, null);
 
 			execCtrl.setCurrentPage(old); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
@@ -515,9 +515,11 @@ public class UiEngineImpl implements UiEngine {
 				}
 
 				cleaned = true;
-				final List cleanerrs = config.invokeExecutionCleanups(
-					exec, oldexec, errs.isEmpty() ? null: (Throwable)errs.get(0));
-				if (cleanerrs != null) {
+				final List cleanerrs = new LinkedList();
+				config.invokeExecutionCleanups(
+					exec, oldexec, errs.isEmpty() ? null: (Throwable)errs.get(0),
+					cleanerrs);
+				if (!cleanerrs.isEmpty()) {
 					final StringBuffer errmsg = new StringBuffer(100);
 					for (Iterator it = cleanerrs.iterator(); it.hasNext();) {
 						final Throwable t = (Throwable)it.next();
@@ -545,13 +547,13 @@ public class UiEngineImpl implements UiEngine {
 		} catch (Throwable ex) {
 			if (!cleaned) {
 				cleaned = true;
-				config.invokeExecutionCleanups(exec, oldexec, ex);
+				config.invokeExecutionCleanups(exec, oldexec, ex, null);
 			}
 
 			if (ex instanceof IOException) throw (IOException)ex;
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
+			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null, null);
 
 			doDeactivate(exec);
 
@@ -813,9 +815,6 @@ public class UiEngineImpl implements UiEngine {
 			return; //nothing to do
 		}
 
-		final List inits = comp.getDesktop().getWebApp()
-			.getConfiguration().newEventThreadInits(comp, event);
-
 		EventProcessingThread evtthd = null;
 		synchronized (_evtthds) {
 			if (!_evtthds.isEmpty())
@@ -826,7 +825,7 @@ public class UiEngineImpl implements UiEngine {
 			evtthd = new EventProcessingThread();
 
 		try {
-			if (evtthd.processEvent(comp, event, inits))
+			if (evtthd.processEvent(comp, event))
 				recycleEventThread(evtthd);
 		} catch (Throwable ex) {
 			recycleEventThread(evtthd);

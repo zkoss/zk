@@ -201,6 +201,10 @@ public class Configuration {
 	 * thread.
 	 *
 	 * @exception UiException to prevent a thread from being processed
+	 * if {@link EventThreadInit#prepare} throws an exception
+	 * @return a list of {@link EventThreadInit} instances that is
+	 * constructed in this method (and their {@link EventThreadInit#prepare}
+	 * are called).
 	 */
 	public List newEventThreadInits(Component comp, Event evt)
 	throws UiException {
@@ -227,22 +231,24 @@ public class Configuration {
 	/** Invokes {@link EventThreadInit#init} for each instance returned
 	 * by {@link #newEventThreadInits}.
 	 *
-	 * <p>It never throws an exception.
-	 *
 	 * @param inits a list of {@link EventThreadInit} instances returned from
-	 * {@link #newEventThreadInits}.
+	 * {@link #newEventThreadInits}, or null if no instance at all.
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
+	 * @exception UiException to prevent a thread from being processed
+	 * if {@link EventThreadInit#prepare} throws an exception
 	 */
-	public void invokeEventThreadInits(List inits, Component comp, Event evt) {
-		if (inits.isEmpty()) return;
+	public void invokeEventThreadInits(List inits, Component comp, Event evt) 
+	throws UiException {
+		if (inits == null || inits.isEmpty()) return;
 
 		for (Iterator it = inits.iterator(); it.hasNext();) {
 			final EventThreadInit fn = (EventThreadInit)it.next();
 			try {
 				fn.init(comp, evt);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+fn, ex);
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the event being processed
 			}
 		}
 	}
@@ -252,36 +258,67 @@ public class Configuration {
 	 * <p>An instance of {@link EventThreadCleanup} is constructed first,
 	 * and then invoke {@link EventThreadCleanup#cleanup}.
 	 *
-	 * <p>It never throws an exception.
+	 * <p>It never throws an exception but logs and adds it to the errs argument,
+	 * if not null.
 	 *
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
 	 * @param ex the exception being thrown (and not handled) during
 	 * the processing of the event, or null it is executed successfully.
-	 * @return a list of exceptions thrown by {@link EventThreadCleanup#cleanup},
-	 * or null if none of them threw an exception (i.e., execute successfully).
+	 * @param errs used to hold the exceptions that are thrown by
+	 * {@link EventThreadCleanup#cleanup}.
+	 * If null, all exceptions are ignored (but logged)
+	 * @return a list of {@link EventThreadCleanup} instances that is
+	 * constructed in this method (and their {@link EventThreadCleanup#cleanup}
+	 * are called successfully -- without throwing any exception).
 	 */
-	public List invokeEventThreadCleanups(Component comp, Event evt,
-	Throwable ex) {
-		if (_evtCleans.isEmpty()) return null;
+	public List newEventThreadCleanups(Component comp, Event evt,
+	Throwable ex, List errs) {
+		if (_evtCleans.isEmpty()) return Collections.EMPTY_LIST;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
-		List errs = null;
+		final List cleanups = new LinkedList();
 		synchronized (_evtCleans) {
 			for (Iterator it = _evtCleans.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((EventThreadCleanup)klass.newInstance())
-						.cleanup(comp, evt, ex);
+					final EventThreadCleanup cleanup =
+						(EventThreadCleanup)klass.newInstance();
+					cleanup.cleanup(comp, evt, ex);
+					cleanups.add(cleanup);
 				} catch (Throwable t) {
-					if (errs == null) errs = new LinkedList();
-					errs.add(t);
-
+					if (errs != null) errs.add(t);
 					log.error("Failed to invoke "+klass, t);
 				}
 			}
 		}
-		return errs;
+		return cleanups;
+	}
+	/** Invoke {@link EventThreadCleanup#complete} for each instance returned by
+	 * {@link #newEventThreadCleanups}.
+	 *
+	 * <p>It never throws an exception but logs and adds it to the errs argument,
+	 * if not null.
+	 *
+	 * @param cleanups a list of {@link EventThreadCleanup} instances returned from
+	 * {@link #newEventThreadCleanups}, or null if no instance at all.
+	 * @param errs used to hold the exceptions that are thrown by
+	 * {@link EventThreadCleanup#cleanup}.
+	 * If null, all exceptions are ignored (but logged).
+	 */
+	public void invokeEventThreadCompletes(List cleanups, Component comp, Event evt,
+	List errs) {
+		if (cleanups == null || cleanups.isEmpty()) return;
+
+		for (Iterator it = cleanups.iterator(); it.hasNext();) {
+			final EventThreadCleanup fn = (EventThreadCleanup)it.next();
+			try {
+				fn.complete(comp, evt);
+			} catch (Throwable ex) {
+				if (errs != null) errs.add(ex);
+				log.error("Failed to invoke "+fn, ex);
+			}
+		}
 	}
 
 	/** Invokes {@link EventThreadSuspend#beforeSuspend} for each relevant
@@ -535,35 +572,33 @@ public class Configuration {
 	 * <p>An instance of {@link ExecutionCleanup} is constructed first,
 	 * and then invoke {@link ExecutionCleanup#cleanup}.
 	 *
-	 * <p>It never throws an exception.
+	 * <p>It never throws an exception but logs and adds it to the errs argument,
+	 * if not null.
 	 *
 	 * @param exec the execution that is being destroyed
 	 * @param parent the previous execution, or null if no previous at all
 	 * @param ex the first exception being thrown (and not handled) during the
 	 * execution, or null it is executed successfully.
-	 * @return a list of exceptions thrown by {@link ExecutionCleanup#cleanup},
-	 * or null if none of them threw an exception (i.e., execute successfully).
+	 * @param errs used to hold the exceptions that are thrown by
+	 * {@link ExecutionCleanup#cleanup}.
+	 * If null, all exceptions are ignored (but logged)
 	 */
-	public List invokeExecutionCleanups(Execution exec, Execution parent,
-	Throwable ex) {
-		if (_execCleans.isEmpty()) return null;
+	public void invokeExecutionCleanups(Execution exec, Execution parent,
+	Throwable ex, List errs) {
+		if (_execCleans.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
-		List errs = null;
 		synchronized (_execCleans) {
 			for (Iterator it = _execCleans.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
 					((ExecutionCleanup)klass.newInstance()).cleanup(exec, parent, ex);
 				} catch (Throwable t) {
-					if (errs == null) errs = new LinkedList();
-					errs.add(t);
-
+					if (errs != null) errs.add(t);
 					log.error("Failed to invoke "+klass, t);
 				}
 			}
 		}
-		return errs;
 	}
 
 	/** Sets the URI of CSS that will be generated for each ZUML desktop.
