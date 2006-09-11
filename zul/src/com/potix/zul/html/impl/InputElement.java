@@ -26,6 +26,7 @@ import com.potix.lang.Exceptions;
 
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.WrongValueException;
+import com.potix.zk.ui.util.Clients;
 import com.potix.zk.ui.ext.Inputable;
 import com.potix.zk.ui.ext.Errorable;
 import com.potix.zk.ui.event.Events;
@@ -133,14 +134,15 @@ implements Inputable, Errorable, Constrainted {
 		return _errmsg;
 	}
 	/** Resets the error message.
-	 * You rarely need to invoke this method because it is cleared
-	 * automatically once a correct value is entered by the user
-	 * or set by {@link #setText}.
+	 * Used only internally since we have to maintain value and errmsg at the same
+	 * time to avoid inconsistency between client and server.
 	 */
-	/* deprecated: if used, client's data might be inconsistent with server
-	public void clearErrorMessage() {
-		_errmsg = null;
-	}*/
+	private void clearErrorMessage() {
+		if (_errmsg != null) {
+			_errmsg = null;
+			Clients.closeErrorBox(this);
+		}
+	}
 
 	/** Returns the value in the String format.
 	 * In most case, you shall use the setValue method instead, e.g.,
@@ -194,7 +196,7 @@ implements Inputable, Errorable, Constrainted {
 			throw UiException.Aide.wrap(ex);
 		}
 
-		_errmsg = null; //no error at all
+		clearErrorMessage(); //no error at all
 		_valided = true;
 
 		if (!Objects.equals(_value, val)) {
@@ -389,8 +391,8 @@ implements Inputable, Errorable, Constrainted {
 	 * by calling {@link #getText}
 	 */
 	public void setRawValue(Object value) {
-		_errmsg = null;
-		if (!Objects.equals(_value, value)) {
+		if (_errmsg != null || !Objects.equals(_value, value)) {
+			clearErrorMessage();
 			_value = value;
 			smartUpdate("value", coerceToString(_value));
 		}
