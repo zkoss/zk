@@ -150,8 +150,13 @@ public class EventProcessingThread extends Thread {
 	}
 	/** Suspends the current thread and Waits until {@link #doResume}
 	 * is called.
+	 *
 	 * <p>Note:
 	 * <ul>
+	 * <li>It is used internally only for implementing {@link com.potix.zk.ui.sys.UiEngine}
+	 * <li>Caller must invoke {@link Configuration#invokeEventThreadSuspends}
+	 * before calling this method. (Reason: UiEngine might have to store some info
+	 * after {!link Configuration#invokeEventThreadSuspends} is called.
 	 * <li>The current thread must be {@link EventProcessingThread}.
 	 * <li>It is a static method.
 	 * </ul>
@@ -206,19 +211,30 @@ public class EventProcessingThread extends Thread {
 		if (_suspmutex == null)
 			throw new InternalError("Resume non-suspended thread?");
 
-		//Spec: locking mutex is optional for app developers
-		//so we have to lock it first
-		synchronized (_suspmutex) {
-			_suspended = false;
-			_suspmutex.notify(); //wake the suspended event thread
-		}
+		//First, copy since _comp and _event since event thread clean up them
+		//when completed
+		final Component comp = _comp;
+		final Event event = _event;
+		try {
+			//Spec: locking mutex is optional for app developers
+			//so we have to lock it first
+			synchronized (_suspmutex) {
+				_suspended = false;
+				_suspmutex.notify(); //wake the suspended event thread
+			}
 
-		//wait until the event thread completes or suspends again
-		//If complete: isIdle() is true
-		//If suspend again: _suspended is true
-		synchronized (_evtmutex) {
-			if (!_ceased && !isIdle() && !_suspended)
-				_evtmutex.wait();
+			//wait until the event thread completes or suspends again
+			//If complete: isIdle() is true
+			//If suspend again: _suspended is true
+			synchronized (_evtmutex) {
+				if (!_ceased && !isIdle() && !_suspended)
+					_evtmutex.wait();
+			}
+		} finally {
+			//_evtThdCleanups is null if //1) no listener;
+			//2) the event thread is suspended again (handled by another doResume)
+			if (_evtThdCleanups != null)
+				invokeEventThreadCompletes(comp, event);
 		}
 
 		checkError();
@@ -254,9 +270,8 @@ public class EventProcessingThread extends Thread {
 		_timeZone = TimeZones.getCurrent();
 		_ex = null;
 
-		final Configuration config = _desktop.getWebApp().getConfiguration();
-		_evtThdInits = config.newEventThreadInits(comp, event);
-
+		_evtThdInits = _desktop.getWebApp()
+			.getConfiguration().newEventThreadInits(comp, event);
 		try {
 			synchronized (_evtmutex) {
 				_evtmutex.notify(); //ask the event thread to handle it
@@ -266,15 +281,25 @@ public class EventProcessingThread extends Thread {
 		} catch (InterruptedException ex) {
 			throw new UiException(ex);
 		} finally {
-			final List errs = _ex != null ? null: new LinkedList();
-			config.invokeEventThreadCompletes(_evtThdCleanups, comp, event, errs);
-			_evtThdCleanups = null;
-			if (errs != null && !errs.isEmpty())
-				throw UiException.Aide.wrap((Throwable)errs.get(0));
+			//_evtThdCleanups is null if //1) no listener;
+			//2) the event thread is suspended (then handled by doResume).
+			if (_evtThdCleanups != null)
+				invokeEventThreadCompletes(comp, event);
 		}
 
 		checkError(); //check any error occurs
 		return isIdle();
+	}
+	private void invokeEventThreadCompletes(Component comp, Event event)
+	throws UiException {
+		final List errs = _ex != null ? null: new LinkedList();
+
+		_desktop.getWebApp().getConfiguration()
+			.invokeEventThreadCompletes(_evtThdCleanups, comp, event, errs);
+		_evtThdCleanups = null;
+
+		if (errs != null && !errs.isEmpty())
+			throw UiException.Aide.wrap((Throwable)errs.get(0));
 	}
 	/** Setup for execution. */
 	synchronized private void setup() {
