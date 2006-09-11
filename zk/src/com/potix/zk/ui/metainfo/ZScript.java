@@ -96,10 +96,12 @@ public class ZScript implements Condition {
 
 		final URL url;
 		if (_locator != null) {
+			final String expr = (String)_url;
 			final String s =
+				expr.indexOf("${") < 0 ? expr:
 				comp != null ?
-					(String)Executions.evaluate(comp, (String)_url, String.class):
-					(String)Executions.evaluate(page, (String)_url, String.class);
+					(String)Executions.evaluate(comp, expr, String.class):
+					(String)Executions.evaluate(page, expr, String.class);
 			if (s == null || s.length() == 0)
 				throw new UiException("The zscript URL, "+_url+", is evaluated to \""+s+'"');
 			url = _locator.getResource(s);
