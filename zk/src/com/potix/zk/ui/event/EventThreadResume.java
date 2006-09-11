@@ -50,6 +50,10 @@ public interface EventThreadResume {
 	 * true, and {@link #afterResume} is NOT called in the resumed thread.</li>
 	 * </ul>
 	 *
+	 * <p>Note: if aborted, neither {@link EventThreadCleanup#cleanup} nor
+	 * {@link EventThreadCleanup#complete} will be called. Thus, you have to
+	 * do necessary cleanup if aborted is true.
+	 *
 	 * @param aborted whether it is caused by aborting (i.e., the thread
 	 * will be destroyed). If false, it is resumed normally.
 	 */
