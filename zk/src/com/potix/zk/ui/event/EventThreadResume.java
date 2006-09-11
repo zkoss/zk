@@ -50,8 +50,8 @@ public interface EventThreadResume {
 	 * true, and {@link #afterResume} is NOT called in the resumed thread.</li>
 	 * </ul>
 	 *
-	 * @param aborted whether it is caused by aborting. If false, it is
-	 * resumed normally.
+	 * @param aborted whether it is caused by aborting (i.e., the thread
+	 * will be destroyed). If false, it is resumed normally.
 	 */
 	public void afterResume(Component comp, Event evt, boolean aborted);
 }
