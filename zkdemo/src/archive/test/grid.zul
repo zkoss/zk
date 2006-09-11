@@ -247,4 +247,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			</row>
 		</rows>
 	</grid>
+
+	<grid width="400px">
+		<rows>
+			<row height="100px">1</row>
+			<row height="100px">2</row>
+			<row>3</row>
+			<row>4</row>
+			<row>5</row>
+			<row>6</row>
+			<row>7</row>
+			<row>8</row>
+			<row>9</row>
+			<row>10</row>
+		</rows>
+	</grid>
 </window>
