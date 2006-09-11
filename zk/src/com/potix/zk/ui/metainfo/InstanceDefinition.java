@@ -60,7 +60,7 @@ implements Condition {
 	private final PageDefinition _pagedef;
 	private final InstanceDefinition _parent;
 	private final ComponentDefinition _compdef;
-	/** A list of {@link InstanceDefinition} and {@link Script}. */
+	/** A list of {@link InstanceDefinition} and {@link ZScript}. */
 	private final List _children = new LinkedList(),
 		_roChildren = Collections.unmodifiableList(_children);
 	/** A list of {@link CustomAttributes}. */
@@ -130,7 +130,7 @@ implements Condition {
 	}
 
 	/** Adds a script child. */
-	public void appendChild(Script script) {
+	public void appendChild(ZScript script) {
 		if (script == null)
 			throw new NullPointerException();
 		synchronized (_children) {
@@ -245,7 +245,7 @@ implements Condition {
 	}
 
 	/** Returns a readonly list of children.
-	 * Children includes another {@link InstanceDefinition} or {@link Script}.
+	 * Children includes another {@link InstanceDefinition} or {@link ZScript}.
 	 */
 	public List getChildren() {
 		return _roChildren;

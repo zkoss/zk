@@ -1,4 +1,4 @@
-/* Script.java
+/* ZScript.java
 
 {{IS_NOTE
 	Purpose:
@@ -32,29 +32,43 @@ import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Condition;
 
 /**
- * Represents a BeanShell script
+ * Represents a zscript.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Script implements Condition {
+public class ZScript implements Condition {
 	private final String _script;
-	private final URL _url;
+	private final Object _url;
 	private final Condition _cond;
 
-	public Script(String script, Condition cond) {
-		if (script == null)
-			throw new NullPointerException();
-		_script = script;
-		_url = null;
-		_cond = cond;
+	public ZScript(String script, Condition cond) {
+		this(script, cond, false);
 	}
-	public Script(URL url, Condition cond) {
+	public ZScript(URL url, Condition cond) {
 		if (url == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException("null");
 		_url = url;
 		_script = null;
 		_cond = cond;
 	}
-		
+	/**
+	 * @param byURL whether urlOrScript is an URL to a zscript file, or the zscript content
+	 * In other words, if byURL is false, it is the same as {@link ZScript(String,Condition)}.
+	 */
+	public ZScript(String urlOrScript, Condition cond, boolean byURL) {
+		if (urlOrScript == null)
+			throw new IllegalArgumentException("null");
+
+		if (byURL) {
+			_url = urlOrScript;
+			_script = null;
+		} else {
+			_script = urlOrScript;
+			_url = null;
+		}
+		_cond = cond;
+	}
+
 	/** Returns the script.
 	 * <p>Note: before evaluating the returned script, you have to invoke
 	 * {@link #isEffective(Component)} or {@link #isEffective(Page)} first.
@@ -62,7 +76,8 @@ public class Script implements Condition {
 	public String getScript() throws IOException {
 		if (_script != null)
 			return _script;
-		final Object o = getCache().get(_url);
+
+		final Object o = getCache().get((URL)_url);
 			//It is OK to use cache here even if script might be located, say,
 			//at a database. Reason: it is Locator's job to implement
 			//the relevant function for URL (including lastModified).
@@ -83,7 +98,7 @@ public class Script implements Condition {
 
 	//Object//
 	public String toString() {
-		final StringBuffer sb = new StringBuffer(40).append("[Script: ");
+		final StringBuffer sb = new StringBuffer(40).append("[ZScript: ");
 		if (_url != null) {
 			sb.append(_url);
 		} else {
@@ -100,7 +115,7 @@ public class Script implements Condition {
 	private static ResourceCache _cache;
 	private static final ResourceCache getCache() {
 		if (_cache == null) {
-			synchronized (Script.class) {
+			synchronized (ZScript.class) {
 				if (_cache == null) {
 					final ResourceCache cache
 						= new ResourceCache(new ContentLoader());

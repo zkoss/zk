@@ -1,4 +1,4 @@
-/* ScriptInitiator.java
+/* ZScriptInitiator.java
 
 {{IS_NOTE
 	Purpose:
@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package com.potix.zk.ui.impl;
 
 import com.potix.zk.ui.Page;
-import com.potix.zk.ui.metainfo.Script;
+import com.potix.zk.ui.metainfo.ZScript;
 import com.potix.zk.ui.util.Initiator;
 import com.potix.zk.ui.util.Namespace;
 import com.potix.zk.ui.util.Namespaces;
@@ -29,17 +29,17 @@ import com.potix.zk.ui.util.Namespaces;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class ScriptInitiator implements Initiator {
-	private final Script _script;
+public class ZScriptInitiator implements Initiator {
+	private final ZScript _zscript;
 
-	public ScriptInitiator(Script script) {
+	public ZScriptInitiator(ZScript script) {
 		if (script == null) throw new IllegalArgumentException("null");
-		_script = script;
+		_zscript = script;
 	}
 	public void doInit(Page page, Object[] args) throws Exception {
 		final Namespace ns = Namespaces.beforeInterpret(null, page);
 		try {
-			page.interpret(_script.getScript(), ns);
+			page.interpret(_zscript.getScript(), ns);
 		} finally {
 			Namespaces.afterInterpret(ns);
 		}

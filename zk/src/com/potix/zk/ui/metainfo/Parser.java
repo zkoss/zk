@@ -53,7 +53,7 @@ import com.potix.zk.ui.WebApp;
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.impl.ScriptInitiator;
+import com.potix.zk.ui.impl.ZScriptInitiator;
 import com.potix.zk.ui.util.Condition;
 import com.potix.zk.ui.util.impl.ConditionImpl;
 import com.potix.zk.ui.sys.WebAppCtrl;
@@ -259,11 +259,12 @@ public class Parser {
 			if (isEmpty(clsnm)) {
 				if (isEmpty(zsrc))
 					throw new UiException("The class or zscript attribute must be specified, "+pi.getLocator());
+
 				final URL url = getLocator().getResource(zsrc);
 				if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+pi.getLocator());
 				pgdef.addInitiatorDefinition(
 					new InitiatorDefinition(
-						new ScriptInitiator(new Script(url, null)), args));
+						new ZScriptInitiator(new ZScript(url, null)), args));
 			} else {
 				pgdef.addInitiatorDefinition(
 					clsnm.indexOf("${") >= 0 ? //class supports EL
@@ -416,12 +417,12 @@ public class Parser {
 			if (!isEmpty(src)) {
 				final URL url = getLocator().getResource(src);
 				if (url == null) throw new FileNotFoundException("File not found: "+src+", at "+el.getLocator());
-				parent.appendChild(new Script(url, cond));
+				parent.appendChild(new ZScript(url, cond));
 			}
 
 			final String script = el.getText(true);
 			if (!isEmpty(script))
-				parent.appendChild(new Script(script, cond));
+				parent.appendChild(new ZScript(script, cond));
 		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, ns)) {
 			//if (!el.getElements().isEmpty())
 			//	throw new UiException("Child elements are not allowed for the attribute element, "+el.getLocator());

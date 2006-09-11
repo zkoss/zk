@@ -325,8 +325,8 @@ public class UiEngineImpl implements UiEngine {
 						}
 					}
 				}
-			} else if (obj instanceof Script) {
-				final Script script = (Script)obj;
+			} else if (obj instanceof ZScript) {
+				final ZScript script = (ZScript)obj;
 				if (isEffective(script, page, parent)) {
 					final Namespace ns = parent != null ?
 						Namespaces.beforeInterpret(exec, parent):
