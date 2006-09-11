@@ -22,9 +22,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
   <zscript>
 import com.potix.lang.Objects;
   </zscript>
-  <zscript src="sayhi.zs"/>
   <window id="test" border="normal" ctrlKeys="GQ2">
-	Desktop: ${self.page.desktop.id} <button label="hi" onClick="sayhi()"/>
+	Desktop: ${self.page.desktop.id}
 	<attribute name="onOK">
 	Messagebox.show("OK is pressed", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
 	</attribute>
