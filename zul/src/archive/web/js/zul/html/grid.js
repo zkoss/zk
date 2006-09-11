@@ -104,15 +104,10 @@ zk.Grid.prototype = {
 			this.element.style.height = "";	
 			this.element.setAttribute("zk_hgh", hgh);
 		} else {
-			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
-			//To fix the bug, we extend the height
-			if (zk.ie && (!hgh || hgh == "auto")
-			&& this.body.offsetWidth - this.body.clientWidth > 11) {
-				this.body.style.height =
-					(this.body.offsetHeight * 2 - this.body.clientHeight) + "px";
-			} else {
-				this.body.style.height = "";
-			}
+			//Bug 1556099: it is strange if we ever check the value of
+			//body.offsetWidth. The grid's body's height is 0 if init called
+			//after grid become visible (due to opening an accordion tab)
+			this.body.style.height = "";
 			this.element.style.height = hgh;
 			this.element.removeAttribute("zk_hgh");
 		}
