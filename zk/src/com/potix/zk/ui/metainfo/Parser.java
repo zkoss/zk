@@ -258,14 +258,23 @@ public class Parser {
 
 			if (isEmpty(clsnm)) {
 				if (isEmpty(zsrc))
-					throw new UiException("The class or zscript attribute must be specified, "+pi.getLocator());
+					throw new UiException("Either the class or zscript attribute must be specified, "+pi.getLocator());
 
-				final URL url = getLocator().getResource(zsrc);
-				if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+pi.getLocator());
+				final ZScript zs;
+				if (zsrc.indexOf("${") >= 0) {
+					zs = new ZScript(zsrc, null, getLocator());
+				} else {
+					final URL url = getLocator().getResource(zsrc);
+					if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+pi.getLocator());
+					zs = new ZScript(url, null);
+				}
+
 				pgdef.addInitiatorDefinition(
-					new InitiatorDefinition(
-						new ZScriptInitiator(new ZScript(url, null)), args));
+					new InitiatorDefinition(new ZScriptInitiator(zs), args));
 			} else {
+				if (!isEmpty(zsrc))
+					throw new UiException("You cannot specify both class and zscript, "+pi.getLocator());
+
 				pgdef.addInitiatorDefinition(
 					clsnm.indexOf("${") >= 0 ? //class supports EL
 						new InitiatorDefinition(clsnm, args):
@@ -411,13 +420,20 @@ public class Parser {
 
 			final String ifc = el.getAttribute("if"),
 				unless = el.getAttribute("unless"),
-				src = el.getAttribute("src");
+				zsrc = el.getAttribute("src");
 
 			final Condition cond = ConditionImpl.getInstance(ifc, unless);
-			if (!isEmpty(src)) {
-				final URL url = getLocator().getResource(src);
-				if (url == null) throw new FileNotFoundException("File not found: "+src+", at "+el.getLocator());
-				parent.appendChild(new ZScript(url, cond));
+			if (!isEmpty(zsrc)) {
+				final ZScript zs;
+				if (zsrc.indexOf("${") >= 0) {
+					zs = new ZScript(zsrc, cond, getLocator());
+				} else {
+					final URL url = getLocator().getResource(zsrc);
+					if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+el.getLocator());
+					zs = new ZScript(url, cond);
+				}
+
+				parent.appendChild(zs);
 			}
 
 			final String script = el.getText(true);

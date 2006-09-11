@@ -332,7 +332,7 @@ public class UiEngineImpl implements UiEngine {
 						Namespaces.beforeInterpret(exec, parent):
 						Namespaces.beforeInterpret(exec, page);
 					try {
-						page.interpret(script.getScript(), ns);
+						page.interpret(script.getContent(page, parent), ns);
 					} finally {
 						Namespaces.afterInterpret(ns);
 					}

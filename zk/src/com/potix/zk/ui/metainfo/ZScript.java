@@ -25,9 +25,11 @@ import java.io.FileNotFoundException;
 import com.potix.lang.D;
 import com.potix.util.resource.ResourceCache;
 import com.potix.util.resource.ContentLoader;
+import com.potix.util.resource.Locator;
 
 import com.potix.zk.ui.Page;
 import com.potix.zk.ui.Component;
+import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.util.Condition;
 
@@ -37,47 +39,77 @@ import com.potix.zk.ui.util.Condition;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class ZScript implements Condition {
-	private final String _script;
+	private final String _cnt;
 	private final Object _url;
+	private final Locator _locator;
 	private final Condition _cond;
 
-	public ZScript(String script, Condition cond) {
-		this(script, cond, false);
+	/** Creates a zscript object with the content directly.
+	 *
+	 * @param content the zscript content
+	 */
+	public ZScript(String content, Condition cond) {
+		_cnt = content;
+		_url = null;
+		_locator = null;
+		_cond = cond;
 	}
+	/** Create a zscript object with an URL that is used to load the content.
+	 *
+	 * @param url the URL to load the content of zscript.
+	 */
 	public ZScript(URL url, Condition cond) {
 		if (url == null)
 			throw new IllegalArgumentException("null");
 		_url = url;
-		_script = null;
+		_cnt = null;
+		_locator = null;
 		_cond = cond;
 	}
-	/**
-	 * @param byURL whether urlOrScript is an URL to a zscript file, or the zscript content
-	 * In other words, if byURL is false, it is the same as {@link ZScript(String,Condition)}.
+	/** Constructs a {@link ZScript} with an URL, which might contain an EL
+	 * expression.
+	 *
+	 * @param locator the locator used to locate the zscript file
 	 */
-	public ZScript(String urlOrScript, Condition cond, boolean byURL) {
-		if (urlOrScript == null)
+	public ZScript(String url, Condition cond, Locator locator) {
+		if (url == null || locator == null)
 			throw new IllegalArgumentException("null");
 
-		if (byURL) {
-			_url = urlOrScript;
-			_script = null;
-		} else {
-			_script = urlOrScript;
-			_url = null;
-		}
+		_url = url;
+		_cnt = null;
+		_locator = locator;
 		_cond = cond;
 	}
 
 	/** Returns the script.
 	 * <p>Note: before evaluating the returned script, you have to invoke
 	 * {@link #isEffective(Component)} or {@link #isEffective(Page)} first.
+	 *
+	 * @param page the page when this zscript is interpreted.
+	 * Used only if this object is contructed with {@link #ZScript(String, Condition, Locator)}.
+	 * @param comp the component when this zscript is interpreted.
+	 * Used only if this object is contructed with {@link #ZScript(String, Condition, Locator)}.
 	 */
-	public String getScript() throws IOException {
-		if (_script != null)
-			return _script;
+	public String getContent(Page page, Component comp) throws IOException {
+		if (_cnt != null)
+			return _cnt;
 
-		final Object o = getCache().get((URL)_url);
+		final URL url;
+		if (_locator != null) {
+			final String s =
+				comp != null ?
+					(String)Executions.evaluate(comp, (String)_url, String.class):
+					(String)Executions.evaluate(page, (String)_url, String.class);
+			if (s == null || s.length() == 0)
+				throw new UiException("The zscript URL, "+_url+", is evaluated to \""+s+'"');
+			url = _locator.getResource(s);
+			if (url == null)
+				throw new FileNotFoundException("File not found: "+s+" (evaluated from "+_url+')');
+		} else {
+			url = (URL)_url;
+		}
+
+		final Object o = getCache().get(url);
 			//It is OK to use cache here even if script might be located, say,
 			//at a database. Reason: it is Locator's job to implement
 			//the relevant function for URL (including lastModified).
@@ -102,11 +134,11 @@ public class ZScript implements Condition {
 		if (_url != null) {
 			sb.append(_url);
 		} else {
-			final int len = _script.length();
+			final int len = _cnt.length();
 			if (len > 20) {
-				sb.append(_script.substring(0, 16)).append("...");
+				sb.append(_cnt.substring(0, 16)).append("...");
 			} else {
-				sb.append(_script);
+				sb.append(_cnt);
 			}
 		}
 		return sb.append(']').toString();

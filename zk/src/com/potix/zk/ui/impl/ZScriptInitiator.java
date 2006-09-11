@@ -39,7 +39,7 @@ public class ZScriptInitiator implements Initiator {
 	public void doInit(Page page, Object[] args) throws Exception {
 		final Namespace ns = Namespaces.beforeInterpret(null, page);
 		try {
-			page.interpret(_zscript.getScript(), ns);
+			page.interpret(_zscript.getContent(page, null), ns);
 		} finally {
 			Namespaces.afterInterpret(ns);
 		}
