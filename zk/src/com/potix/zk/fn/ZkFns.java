@@ -70,6 +70,8 @@ public class ZkFns {
 		= "javax.potix.zk.lang.js.generated";
 		//Naming with javax to be able to shared among portlets
 
+	protected ZkFns() {}
+
 	/** Redraw the specified component into the specified out.
 	 *
 	 * @param comp the component. If null, nothing happens
