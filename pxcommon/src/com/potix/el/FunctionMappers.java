@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package com.potix.el;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -119,9 +120,13 @@ public class FunctionMappers {
 				excp = ex;
 				continue; //to report as many errors as possible
 			}
+
 			try {
 				final Method mtd = Classes.getMethodBySignature(cls, sig, null);
-				mtds.put(name, mtd);
+				if ((mtd.getModifiers() & Modifier.STATIC) != 0)
+					mtds.put(name, mtd);
+				else
+					log.error("Not a static method: "+mtd);
 			} catch (ClassNotFoundException ex) {
 				log.error("Class not found: "+clsName+", "+e.getLocator());
 				excp = ex;
