@@ -128,8 +128,8 @@ public class UiEngineImpl implements UiEngine {
 						final EventProcessingThread evtthd =
 							(EventProcessingThread)i2.next();
 						evtthd.ceaseSilently();
-						conf.invokeEventThreadResumes(
-							evtthd.getComponent(), evtthd.getEvent(), true);
+						conf.invokeEventThreadResumeAborts(
+							evtthd.getComponent(), evtthd.getEvent());
 					}
 				}
 			}
@@ -145,8 +145,8 @@ public class UiEngineImpl implements UiEngine {
 					final EventProcessingThread evtthd =
 						(EventProcessingThread)it.next();
 					evtthd.ceaseSilently();
-					conf.invokeEventThreadResumes(
-						evtthd.getComponent(), evtthd.getEvent(), true);
+					conf.invokeEventThreadResumeAborts(
+						evtthd.getComponent(), evtthd.getEvent());
 				}
 			}
 		}

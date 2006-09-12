@@ -63,12 +63,14 @@ public class EventProcessingThread extends Thread {
 	private Event _event;
 	/** The desktop that the component belongs to. */
 	private Desktop _desktop;
-	/** Part of the command: a list of EventThreadInit instances. */
-	private List _evtThdInits;
 	/** Part of the command: locale. */
 	private Locale _locale;
 	/** Part of the command: time zone. */
 	private TimeZone _timeZone;
+	/** Part of the result: a list of EventThreadInit instances. */
+	private List _evtThdInits;
+	/** Part of the result: a list of EventThreadResume instances. */
+	private List _evtThdResumes;
 	/** Part of the result: a list of EventThreadCleanup instances. */
 	private List _evtThdCleanups;
 	/** Result of the result. */
@@ -192,14 +194,21 @@ public class EventProcessingThread extends Thread {
 			_suspended = false; //just in case (such as _ceased)
 		}
 
-		_desktop.getWebApp().getConfiguration()
-			.invokeEventThreadResumes(_comp, _event, false);
+		if (_evtThdResumes != null && !_evtThdResumes.isEmpty()) {
+			_desktop.getWebApp().getConfiguration()
+				.invokeEventThreadResumes(_evtThdResumes, _comp, _event, null);
+				//FUTURE: how to propogate errors to the client
+			_evtThdResumes = null;
+		}
 
 		if (_ceased) throw new InterruptedException("Ceased");
 		setup();
 	}
 	/** Resumes this thread and returns only if the execution (being suspended
 	 * by {@link #doSuspend}) completes.
+	 *
+	 * <p>It executes in the main thread (i.e., the servlet thread).
+	 *
 	 * @return whether the event has been processed completely or just be suspended
 	 */
 	public boolean doResume() throws InterruptedException {
@@ -216,6 +225,8 @@ public class EventProcessingThread extends Thread {
 		final Component comp = _comp;
 		final Event event = _event;
 		try {
+			_evtThdResumes = config.newEventThreadResumes(comp, event);
+
 			//Spec: locking mutex is optional for app developers
 			//so we have to lock it first
 			synchronized (_suspmutex) {
@@ -337,13 +348,13 @@ public class EventProcessingThread extends Thread {
 					try {
 						if (D.ON && log.finerable()) log.finer("Processing event: "+_event);
 
-						
-						config.invokeEventThreadInits(_evtThdInits, _comp, _event);
-						_evtThdInits = null;
-
 						Locales.setThreadLocal(_locale);
 						TimeZones.setThreadLocal(_timeZone);
 						setup();
+
+						config.invokeEventThreadInits(_evtThdInits, _comp, _event);
+						_evtThdInits = null;
+
 						process0();
 					} catch (Throwable ex) {
 						_ex = ex;

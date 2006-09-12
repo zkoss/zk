@@ -194,17 +194,18 @@ public class Configuration {
 		}
 	}
 
-	/** Contructs a list of {@link EventThreadInit} instances for
+	/** Contructs a list of {@link EventThreadInit} instances and invokes
+	 * {@link EventThreadInit#prepare} for
 	 * each relevant listener registered by {@link #addListener}.
 	 *
-	 * <p>It is called by ZK Engine before starting an event processing
+	 * <p>It is called by UiEngine before starting an event processing
 	 * thread.
 	 *
 	 * @exception UiException to prevent a thread from being processed
 	 * if {@link EventThreadInit#prepare} throws an exception
-	 * @return a list of {@link EventThreadInit} instances that is
+	 * @return a list of {@link EventThreadInit} instances that are
 	 * constructed in this method (and their {@link EventThreadInit#prepare}
-	 * are called).
+	 * are called successfully).
 	 */
 	public List newEventThreadInits(Component comp, Event evt)
 	throws UiException {
@@ -303,7 +304,7 @@ public class Configuration {
 	 * @param cleanups a list of {@link EventThreadCleanup} instances returned from
 	 * {@link #newEventThreadCleanups}, or null if no instance at all.
 	 * @param errs used to hold the exceptions that are thrown by
-	 * {@link EventThreadCleanup#cleanup}.
+	 * {@link EventThreadCleanup#complete}.
 	 * If null, all exceptions are ignored (but logged).
 	 */
 	public void invokeEventThreadCompletes(List cleanups, Component comp, Event evt,
@@ -351,21 +352,84 @@ public class Configuration {
 			}
 		}
 	}
-	/** Invokes {@link EventThreadResume#afterResume} for each relevant
+
+	/** Contructs a list of {@link EventThreadResume} instances and invokes
+	 * {@link EventThreadResume#beforeResume} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
-	 * <p>An instance of {@link EventThreadResume} is constructed first,
-	 * and then invoke {@link EventThreadResume#afterResume}.
-	 *
-	 * <p>It never throws an exception.
+	 * <p>It is called by UiEngine when resuming a suspended event thread.
+	 * Notice: it executes in the main thread (i.e., the servlet thread).
 	 *
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
-	 * @param aborted whether it is caused by aborting. If false, it is
-	 * resumed normally.
+	 * @exception UiException to prevent a thread from being resumed
+	 * if {@link EventThreadResume#beforeResume} throws an exception
+	 * @return a list of {@link EventThreadResume} instances that are constructed
+	 * in this method (and their {@link EventThreadResume#beforeResume}
+	 * are called successfully).
 	 */
-	public
-	void invokeEventThreadResumes(Component comp, Event evt, boolean aborted) {
+	public List newEventThreadResumes(Component comp, Event evt)
+	throws UiException {
+		if (_evtResus.isEmpty()) return Collections.EMPTY_LIST;
+			//it is OK to test LinkedList.isEmpty without synchronized
+
+		final List resumes = new LinkedList();
+		synchronized (_evtResus) {
+			for (Iterator it = _evtResus.iterator(); it.hasNext();) {
+				final Class klass = (Class)it.next();
+				try {
+					final EventThreadResume resume =
+						(EventThreadResume)klass.newInstance();
+					resume.beforeResume(comp, evt);
+					resumes.add(resume);
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
+					//Don't intercept; to prevent the event being resumed
+				}
+			}
+		}
+		return resumes;
+	}
+	/** Invokes {@link EventThreadResume#afterResume} for each instance returned
+	 * by {@link #newEventThreadResumes}.
+	 *
+	 * <p>It never throws an exception but logs and adds it to the errs argument,
+	 * if not null.
+	 *
+s	 * @param resumes a list of {@link EventThreadResume} instances returned from
+	 * {@link #newEventThreadResumes}, or null if no instance at all.
+	 * @param comp the component which the event is targeting
+	 * @param evt the event to process
+	 * @param errs used to hold the exceptions that are thrown by
+	 * {@link EventThreadResume#afterResume}.
+	 * If null, all exceptions are ignored (but logged)
+	 */
+	public void invokeEventThreadResumes(List resumes, Component comp, Event evt,
+	List errs) {
+		if (resumes == null || resumes.isEmpty()) return;
+
+		for (Iterator it = resumes.iterator(); it.hasNext();) {
+			final EventThreadResume fn = (EventThreadResume)it.next();
+			try {
+				fn.afterResume(comp, evt);
+			} catch (Throwable ex) {
+				if (errs != null) errs.add(ex);
+				log.error("Failed to invoke "+fn+" after resumed", ex);
+			}
+		}
+	}
+	/** Invokes {@link EventThreadResume#abortResume} for each relevant
+	 * listener registered by {@link #addListener}.
+	 *
+	 * <p>An instance of {@link EventThreadResume} is constructed first,
+	 * and then invoke {@link EventThreadResume#abortResume}.
+	 *
+	 * <p>It never throws an exception but logging.
+	 *
+	 * @param comp the component which the event is targeting
+	 * @param evt the event to process
+	 */
+	public void invokeEventThreadResumeAborts(Component comp, Event evt) {
 		if (_evtResus.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
@@ -374,9 +438,9 @@ public class Configuration {
 				final Class klass = (Class)it.next();
 				try {
 					((EventThreadResume)klass.newInstance())
-						.afterResume(comp, evt, aborted);
+						.abortResume(comp, evt);
 				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
+					log.error("Failed to invoke "+klass+" for aborting", ex);
 				}
 			}
 		}
