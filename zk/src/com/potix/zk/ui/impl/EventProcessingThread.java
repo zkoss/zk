@@ -233,8 +233,7 @@ public class EventProcessingThread extends Thread {
 		} finally {
 			//_evtThdCleanups is null if //1) no listener;
 			//2) the event thread is suspended again (handled by another doResume)
-			if (_evtThdCleanups != null)
-				invokeEventThreadCompletes(config, comp, event);
+			invokeEventThreadCompletes(config, comp, event);
 		}
 
 		checkError();
@@ -283,8 +282,7 @@ public class EventProcessingThread extends Thread {
 		} finally {
 			//_evtThdCleanups is null if //1) no listener;
 			//2) the event thread is suspended (then handled by doResume).
-			if (_evtThdCleanups != null)
-				invokeEventThreadCompletes(config, comp, event);
+			invokeEventThreadCompletes(config, comp, event);
 		}
 
 		checkError(); //check any error occurs
@@ -292,13 +290,15 @@ public class EventProcessingThread extends Thread {
 	}
 	private void invokeEventThreadCompletes(Configuration config,
 	Component comp, Event event) throws UiException {
-		final List errs = _ex != null ? null: new LinkedList();
+		if (_evtThdCleanups != null && !_evtThdCleanups.isEmpty()) {
+			final List errs = _ex != null ? null: new LinkedList();
 
-		config.invokeEventThreadCompletes(_evtThdCleanups, comp, event, errs);
-		_evtThdCleanups = null;
+			config.invokeEventThreadCompletes(_evtThdCleanups, comp, event, errs);
+			_evtThdCleanups = null;
 
-		if (errs != null && !errs.isEmpty())
-			throw UiException.Aide.wrap((Throwable)errs.get(0));
+			if (errs != null && !errs.isEmpty())
+				throw UiException.Aide.wrap((Throwable)errs.get(0));
+		}
 	}
 	/** Setup for execution. */
 	synchronized private void setup() {
