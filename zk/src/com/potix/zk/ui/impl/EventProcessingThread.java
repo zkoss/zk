@@ -194,15 +194,15 @@ public class EventProcessingThread extends Thread {
 			_suspended = false; //just in case (such as _ceased)
 		}
 
+		if (_ceased) throw new InterruptedException("Ceased");
+		setup();
+
 		if (_evtThdResumes != null && !_evtThdResumes.isEmpty()) {
 			_desktop.getWebApp().getConfiguration()
 				.invokeEventThreadResumes(_evtThdResumes, _comp, _event, null);
 				//FUTURE: how to propogate errors to the client
 			_evtThdResumes = null;
 		}
-
-		if (_ceased) throw new InterruptedException("Ceased");
-		setup();
 	}
 	/** Resumes this thread and returns only if the execution (being suspended
 	 * by {@link #doSuspend}) completes.
