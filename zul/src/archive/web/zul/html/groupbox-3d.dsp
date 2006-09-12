@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}" zk_type="zul.html.widget.Grbox"${self.outerAttrs}${self.innerAttrs}>
 <tr>
@@ -33,7 +33,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <tr height="22">
 	<td width="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-ml-uns.gif')})"></td>
 	<td width="3" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')})"></td>
-	<td style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')})">${u:redraw(self.caption, null)}</td>
+	<td style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')})">${z:redraw(self.caption, null)}</td>
 	<td width="3" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')})"></td>
 	<td width="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mr-uns.gif')})"></td>
 </tr>
@@ -44,7 +44,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </c:if>
 	<div id="${self.uuid}!slide"${self.open?'':' style="display:none"'} class="groupbox-3d"><div id="${self.uuid}!cave"<c:if test="${empty self.caption}"> style="border: 1px solid #5C6C7C"</c:if>>
 	<c:forEach var="child" items="${self.children}">
-	<c:if test="${self.caption != child}">${u:redraw(child, null)}</c:if>
+	<c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if>
 	</c:forEach>
 	</div></div>
 <%-- shadow --%>

@@ -21,5 +21,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <select id="${self.uuid}" zk_type="zul.html.sel.Lisel"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="item" items="${self.items}">
 	<option id="${item.uuid}"${item.outerAttrs}${item.innerAttrs}><c:out value="${item.label}" maxlength="${self.maxlength}"/></option>
-	</c:forEach><%-- for better performance, we don't use u:redraw --%>
+	</c:forEach><%-- for better performance, we don't use z:redraw --%>
 </select>

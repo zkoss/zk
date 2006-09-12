@@ -18,12 +18,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="page" value="${arg.page}"/>
 <c:if test="${!arg.asyncUpdate}">
-${u:outLangStyleSheets()}
-${u:outLangJavaScripts(page, arg.action)}
+${z:outLangStyleSheets()}
+${z:outLangJavaScripts(page, arg.action)}
 </c:if>
 <c:if test="${!empty zk_htmlHeadRequired}">
 <c:set var="zk_htmlHeadRequired" value="" scope="request"/>
@@ -32,11 +32,11 @@ ${u:outLangJavaScripts(page, arg.action)}
 </c:if>
 <div id="${page.id}" style="${empty page.style ? 'width:100%': page.style}">
 <c:forEach var="root" items="${page.roots}">
-${u:redraw(root, null)}
+${z:redraw(root, null)}
 </c:forEach>
 </div>
 <c:if test="${!empty arg.responses}">
 <script type="text/javascript">
-${u:outResponseJavaScripts(arg.responses)}
+${z:outResponseJavaScripts(arg.responses)}
 </script>
 </c:if>

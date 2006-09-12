@@ -20,13 +20,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="page" value="${arg.page}"/>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>${page.title}</title>
-${u:outLangStyleSheets()}
+${z:outLangStyleSheets()}
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate,max-age=0"/>
 <c:set var="zk_htmlHeadRequired" value="true" scope="request"/><%-- ask page.dsp to generate </head><body> --%>
 <c:include page="~./zul/html/page.dsp"/><%-- OC4J cannot handle relative page correctly --%>

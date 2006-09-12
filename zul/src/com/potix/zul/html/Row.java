@@ -34,6 +34,7 @@ import com.potix.zul.html.impl.XulElement;
  * Each child of the {@link Row} element is placed in each successive cell
  * of the grid. The row with the most child elements determines the number
  * of columns in each row.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Row extends XulElement {
@@ -47,13 +48,13 @@ public class Row extends XulElement {
 		return parent != null ? (Grid)parent.getParent(): null;
 	}
 
-	/** Returns the horizontal alignment of the whole cell.
+	/** Returns the horizontal alignment of the whole row.
 	 * <p>Default: null (system default: left unless CSS specified).
 	 */
 	public String getAlign() {
 		return _align;
 	}
-	/** Sets the horizontal alignment of the whole cell.
+	/** Sets the horizontal alignment of the whole row.
 	 */
 	public void setAlign(String align) {
 		if (!Objects.equals(_align, align)) {
@@ -75,13 +76,13 @@ public class Row extends XulElement {
 			smartUpdate("nowrap", _nowrap);
 		}
 	}
-	/** Returns the vertical alignment of the whole cell.
+	/** Returns the vertical alignment of the whole row.
 	 * <p>Default: null (system default: top).
 	 */
 	public String getValign() {
 		return _valign;
 	}
-	/** Sets the vertical alignment of the whole cell.
+	/** Sets the vertical alignment of the whole row.
 	 */
 	public void setValign(String valign) {
 		if (!Objects.equals(_valign, valign)) {
@@ -107,6 +108,32 @@ public class Row extends XulElement {
 		_value = value;
 	}
 
+	/** Returns the HTML attributes for the child of the specified index.
+	 */
+	public String getChildAttrs(int index) {
+		String colattrs = null;
+		final Grid grid = getGrid();
+		if (grid != null) {
+			final Columns cols = grid.getColumns();
+			if (cols != null) {
+				final List colchds = cols.getChildren();
+				if (index < colchds.size())
+					colattrs = ((Column)colchds.get(index)).getColAttrs();
+			}
+		}
+
+		final String style = getRealStyle();
+		final String sclass = getSclass();
+		if (colattrs == null && sclass == null && style.length() == 0)
+			return "";
+
+		final StringBuffer sb = new StringBuffer(100);
+		if (colattrs != null) sb.append(colattrs);
+		HTMLs.appendAttribute(sb, "class", sclass);
+		HTMLs.appendAttribute(sb, "style", style);
+		return sb.toString();
+	}
+
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =
@@ -116,6 +143,24 @@ public class Row extends XulElement {
 		if (_nowrap)
 			HTMLs.appendAttribute(sb, "nowrap", "nowrap");
 		return sb.toString();
+	}
+	public void setStyle(String style) {
+		if (style != null && style.length() == 0) style = null;
+
+		final String s = getStyle();
+		if (!Objects.equals(s, style)) {
+			super.setStyle(style);
+			invalidate();
+		}
+	}
+	public void setSclass(String sclass) {
+		if (sclass != null && sclass.length() == 0) sclass = null;
+
+		final String s = getSclass();
+		if (!Objects.equals(s, sclass)) {
+			super.setSclass(sclass);
+			invalidate();
+		}
 	}
 
 	//-- Component --//
@@ -138,9 +183,7 @@ public class Row extends XulElement {
 				for (Iterator it = getChildren().iterator(); it.hasNext(); ++j)
 					if (child == it.next())
 						break;
-				final List colchds = cols.getChildren();
-				if (j < colchds.size())
-					sb.append(((Column)colchds.get(j)).getColAttrs());
+				sb.append(getChildAttrs(j));
 			}
 		}
 		sb.append('>');

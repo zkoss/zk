@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="tab" value="${self.linkedTab}"/>
 <c:set var="suffix" value="-sel.gif" if="${tab.selected}"/>
@@ -44,7 +44,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </table>
 	<div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}><div class="tabpanel-ac" id="${self.uuid}!cave">
 <c:forEach var="child" items="${self.children}">
-	${u:redraw(child, null)}
+	${z:redraw(child, null)}
 </c:forEach>
 	</div></div>
 </td>

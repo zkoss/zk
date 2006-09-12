@@ -18,12 +18,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
  <table cellpadding="0" cellspacing="0" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
-  ${u:redraw(child, null)}
+  ${z:redraw(child, null)}
 	</c:forEach>
  </table>
 </div>

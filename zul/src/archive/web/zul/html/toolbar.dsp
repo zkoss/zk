@@ -17,13 +17,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="break" value=""/>
 <c:set var="verticalBreak" value="${self.orient == 'vertical' ? '<br/>': ''}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="child" items="${self.children}">
-	${break}${u:redraw(child, null)}
+	${break}${z:redraw(child, null)}
 	<c:set var="break" value="${verticalBreak}"/>
 	</c:forEach>
 </div>

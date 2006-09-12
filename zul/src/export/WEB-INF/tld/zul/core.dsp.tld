@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!--
+Purpose:
+	Defines methods and actions for DSP
+Description:
+	
+Histroy:
+	Tue Sep 12 15:14:51     2006, Created by tomyeh@potix.com
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+-->
+
+<taglib>
+	<description>
+	Methods and actions for ZUL in DSP/ZUML
+	</description>
+
+	<function>
+		<name>getColAttrs</name>
+		<function-class>com.potix.zul.html.fn.ZulFns</function-class>
+		<function-signature>
+	java.lang.String getColAttrs(com.potix.zul.html.Row, int)
+		</function-signature>
+		<description>
+	Returns the attribute used for the cell of the specified row and index.
+		</description>
+	</function>
+</taglib>

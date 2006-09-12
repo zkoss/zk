@@ -21,12 +21,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Upload Result</title>
-${u:outLangStyleSheets()}
+${z:outLangStyleSheets()}
 </head>
 <body>
  <c:if test="${!empty arg.alert}">

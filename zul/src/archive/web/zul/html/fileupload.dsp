@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Upload</title>
@@ -32,7 +32,7 @@ function cancelUpload() {
 }
 // -->
 </script>
-${u:outLangStyleSheets()}
+${z:outLangStyleSheets()}
 </head>
 <body>
 	<form action="${param.action}?dtid=${param.dtid}&uuid=${param.uuid}" enctype="multipart/form-data" method="POST" onsubmit="parent.zkau.beginUpload()">

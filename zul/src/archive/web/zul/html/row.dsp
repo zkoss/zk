@@ -17,10 +17,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="u" %>
+<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
+<%@ taglib uri="/WEB-INF/tld/zul/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <tr id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="child" varStatus="status" items="${self.children}">
-	<td id="${child.uuid}!chdextr"${self.grid.columns.children[status.index].colAttrs} class="gridev">${u:redraw(child, null)}</td>
+	<td id="${child.uuid}!chdextr" ${u:getColAttrs(self, status.index)} class="gridev">${z:redraw(child, null)}</td>
 	</c:forEach>
 </tr>
