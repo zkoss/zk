@@ -107,6 +107,6 @@ public class Decimalbox extends FormatInputElement {
 		}
 	}
 	protected String coerceToString(Object value) {
-		return formatNumber(value);
+		return formatNumber(value, "0.##########");
 	}
 }

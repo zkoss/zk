@@ -61,21 +61,23 @@ abstract public class FormatInputElement extends InputElement {
 
 	/** Formats a number (Integer, BigDecimal...) into a string.
 	 * If null, an empty string is returned.
-	 * A utility to assist the handling of numeric data.
+	 *
+	 * <p>A utility to assist the handling of numeric data.
+	 *
 	 * @see #toNumberOnly
+	 * @param defaultFormat used if {@link #getFormat} returns null.
+	 * If defaultFormat and {@link #getFormat} are both null,
+	 * the system's default format is used.
 	 */
-	protected String formatNumber(Object value) {
+	protected String formatNumber(Object value, String defaultFormat) {
 		if (value == null) return "";
 
-		final String fmt = getFormat();
-		if (fmt == null) {
-			return value.toString();
-		} else {
-			final DecimalFormat df = (DecimalFormat)
-				NumberFormat.getInstance(Locales.getCurrent());
-			df.applyPattern(fmt);
-			return df.format(value);
-		}
+		final DecimalFormat df = (DecimalFormat)
+			NumberFormat.getInstance(Locales.getCurrent());
+		String fmt = getFormat();
+		if (fmt == null) fmt = defaultFormat;
+		if (fmt != null) df.applyPattern(fmt);
+		return df.format(value);
 	}
 	/** Filters out non digit characters, such comma and whitespace,
 	 * from the specified value.

@@ -81,6 +81,7 @@ public class Intbox extends FormatInputElement {
 		}
 	}
 	protected String coerceToString(Object value) {
-		return formatNumber(value);
+		return value != null && getFormat() == null ?
+			value.toString(): formatNumber(value, null);
 	}
 }
