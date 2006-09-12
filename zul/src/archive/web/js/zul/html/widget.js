@@ -42,7 +42,7 @@ zkTxbox.onblur = function (inp) {
 zkTxbox.updateChange = function (inp, noonblur) {
 	if (zkVld.validating) return true; //to avoid deadloop (when both fields are invalid)
 
-	if (inp.id) {
+	if (inp && inp.id) {
 		var msg = !noonblur ? zkVld.validate(inp.id): null;
 			//It is too annoying (especial when checking non-empty)
 			//if we alert user for something he doesn't input yet

@@ -140,10 +140,12 @@ zkCmbox.onkey = function (evt) {
 		return true;
 	}
 
-	if (evt.keyCode == 13) { //ENTER
-		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
+	//Request 1537962: better responsive
+	if (opened && evt.keyCode == 13) { //ENTER
+		zkTxbox.updateChange(inp, false); //fire onChange
 		return true;
 	}
+
 	if (evt.keyCode == 18 || evt.keyCode == 27
 	|| (evt.keyCode >= 112 && evt.keyCode <= 123)) //ALT and ESC, Fn
 		return true; //ignore it (doc will handle it)

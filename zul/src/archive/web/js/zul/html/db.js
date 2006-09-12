@@ -222,7 +222,11 @@ zk.Cal.prototype = {
 		this._output();
 		if (this.popup) {
 			this.selback(close);
-			if (this.input) zk.focusById(this.input.id);
+			if (this.input) {
+				//Request 1551019: better responsive
+				this.onchange();
+				zk.focusById(this.input.id);
+			}
 		} else {
 			this.onchange();
 			if (zk.ie) zk.focusDownById(this.id, 50);
@@ -230,11 +234,15 @@ zk.Cal.prototype = {
 		}
 	},
 	onchange: function () {
-		var y = this.date.getFullYear(),
-			m = this.date.getMonth(), d = this.date.getDate();
-		zkau.send({uuid: this.id, cmd: "onChange",
-			data: [y+'/'+(m+1)+'/'+d]}, zkau.asapTimeout(this.element, "onChange"));
-		this._changed = false;
+		if (this.popup) {
+			zkTxbox.updateChange(this.input, false);
+		} else {
+			var y = this.date.getFullYear(),
+				m = this.date.getMonth(), d = this.date.getDate();
+			zkau.send({uuid: this.id, cmd: "onChange",
+				data: [y+'/'+(m+1)+'/'+d]}, zkau.asapTimeout(this.element, "onChange"));
+			this._changed = false;
+		}
 	},
 	selback: function (close) {
 		if (this.input) {
@@ -437,6 +445,12 @@ zkDtbox.onkey = function (evt) {
 	if (opened) {
 		var meta = zkau.getMeta(uuid);
 		if (meta) {
+			//Request 1551019: better responsive
+			if (evt.keyCode == 27) { //ENTER
+				meta.onchange();
+				return true;
+			}
+
 			var ofs = evt.keyCode == 37 ? -1: evt.keyCode == 39 ? 1:
 				evt.keyCode == 38 ? -7: evt.keyCode == 40 ? 7: 0;
 			if (ofs) {
