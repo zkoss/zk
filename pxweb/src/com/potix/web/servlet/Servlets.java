@@ -300,7 +300,23 @@ public class Servlets {
 			pgpath, null);
 	}
 
+	/** Returns whether the client is a robot (such as Web crawlers).
+	 *
+	 * <p>Because there are too many robots, it returns true if the user-agent
+	 * is not recognized.
+	 */
+	public static final boolean isRobot(ServletRequest req) {
+		String agt = req instanceof HttpServletRequest ?
+			((HttpServletRequest)req).getHeader("user-agent"): null;
+		if (agt == null)
+			return false;
+
+		agt = agt.toLowerCase();
+		return agt.indexOf("msie") < 0 && agt.indexOf("opera") < 0
+			&& agt.indexOf("gecko/") < 0 && agt.indexOf("safari") < 0;
+	}
 	/** Returns whether the browser is Internet Explorer.
+	 * If true, it also implies {@link isExplorer7} is true.
 	 */
 	public static final boolean isExplorer(ServletRequest req) {
 		String agt = req instanceof HttpServletRequest ?
@@ -309,7 +325,7 @@ public class Servlets {
 			return false;
 
 		agt = agt.toLowerCase();
-		return agt.indexOf("msie") != -1 && agt.indexOf("opera") == -1;
+		return agt.indexOf("msie") >= 0 && agt.indexOf("opera") < 0;
 	}
 	/** Returns whether the browser is Explorer 7 or later.
 	 */
@@ -320,7 +336,7 @@ public class Servlets {
 			return false;
 
 		agt = agt.toLowerCase();
-		return agt.indexOf("msie 7") != -1;
+		return agt.indexOf("msie 7") >= 0;
 	}
 	/** Returns whether the browser is Gecko based, such as Mozilla, Firefox and Camino
 	 */
@@ -331,7 +347,7 @@ public class Servlets {
 			return false;
 
 		agt = agt.toLowerCase();
-		return agt.indexOf("gecko/") != -1 && agt.indexOf("safari") == -1;
+		return agt.indexOf("gecko/") >= 0 && agt.indexOf("safari") < 0;
 	}
 	/** Returns whether the browser is Safari.
 	 */
@@ -342,7 +358,7 @@ public class Servlets {
 			return false;
 
 		agt = agt.toLowerCase();
-		return agt.indexOf("safari") != -1;
+		return agt.indexOf("safari") >= 0;
 	}
 
 	//-- interface to access profile --//
