@@ -316,7 +316,7 @@ public class Servlets {
 			&& agt.indexOf("gecko/") < 0 && agt.indexOf("safari") < 0;
 	}
 	/** Returns whether the browser is Internet Explorer.
-	 * If true, it also implies {@link isExplorer7} is true.
+	 * If true, it also implies {@link #isExplorer7} is true.
 	 */
 	public static final boolean isExplorer(ServletRequest req) {
 		String agt = req instanceof HttpServletRequest ?

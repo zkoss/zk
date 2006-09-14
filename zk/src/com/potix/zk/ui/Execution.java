@@ -483,7 +483,7 @@ public interface Execution extends Evaluator {
 	 */
 	public boolean isRobot();
 	/** Returns whether the client is Internet Explorer.
-	 * If true, it also implies {@link isExplorer7} is true.
+	 * If true, it also implies {@link #isExplorer7} is true.
 	 */
 	public boolean isExplorer();
 	/** Returns whether the client is Internet Explorer 7 or later.
