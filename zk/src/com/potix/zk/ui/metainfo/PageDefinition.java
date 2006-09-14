@@ -236,18 +236,23 @@ public class PageDefinition extends InstanceDefinition {
 	/** Initializes a page after execution is activated.
 	 * It setup the identifier and title, adds it to desktop,
 	 * and then iInterpret all scripts unpon the page.
+	 *
+	 * @param evalTopZscripts whether to evaluate the zscript declared at
+	 * the top level
 	 */
-	public void init(Page page) {
+	public void init(Page page, boolean evalTopZscripts) {
 		((PageCtrl)page).init(_id, _title, _style);
 
-		final List scripts = getLanguageDefinition().getScripts();
-		if (!scripts.isEmpty()) {
-			final Namespace ns = Namespaces.beforeInterpret(null, page);
-			try {
-				for (Iterator it = scripts.iterator(); it.hasNext();)
-					page.interpret((String)it.next(), ns);
-			} finally {
-				Namespaces.afterInterpret(ns);
+		if (evalTopZscripts) {
+			final List scripts = getLanguageDefinition().getScripts();
+			if (!scripts.isEmpty()) {
+				final Namespace ns = Namespaces.beforeInterpret(null, page);
+				try {
+					for (Iterator it = scripts.iterator(); it.hasNext();)
+						page.interpret((String)it.next(), ns);
+				} finally {
+					Namespaces.afterInterpret(ns);
+				}
 			}
 		}
 	}

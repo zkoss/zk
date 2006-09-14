@@ -236,8 +236,11 @@ public class UiEngineImpl implements UiEngine {
 
 			final Initiators inits = Initiators.doInit(pagedef, page);
 			try {
-				pagedef.init(page);
-				execCreate(exec, page, pagedef, null);
+				//Request 1472813: handle sendRedirect in init
+				//Test code: sendRedirectNow.zul)
+				pagedef.init(page, !uv.isAborting());
+				if (!uv.isAborting())
+					execCreate(exec, page, pagedef, null);
 			} catch(Throwable ex) {
 				inits.doCatch(ex);
 				throw UiException.Aide.wrap(ex);
