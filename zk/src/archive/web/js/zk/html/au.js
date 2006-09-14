@@ -998,9 +998,9 @@ zkau._onDocKeydown = function (evt) {
 	switch (evt.keyCode) {
 	case 13: //ENTER
 		var tn = zk.tagName(target);
-		if (tn == "BUTTON"
+		if (tn == "TEXTAREA" || tn == "BUTTON"
 		|| (tn == "INPUT" && target.type.toLowerCase() == "button"))
-			return true; //don't change button's behavior
+			return true; //don't change button's behavior (Bug 1556836)
 	case 27: //ESC
 		if (zkau.closeFloats(target)) {
 			Event.stop(evt);
