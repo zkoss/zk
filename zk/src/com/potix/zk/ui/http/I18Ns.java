@@ -22,7 +22,6 @@ import java.util.TimeZone;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import com.potix.util.Pair;
 import com.potix.util.TimeZones;
 import com.potix.util.logging.Log;
 import com.potix.web.Attributes;
@@ -59,7 +58,7 @@ public class I18Ns {
 	 */
 	public static final Object setup(Session sess,
 	ServletRequest request, ServletResponse response, String charset) {
-		final Pair old;
+		final Object[] old;
 		if (Charsets.hasSetup(request)) {
 			old = null;
 		} else {
@@ -92,7 +91,7 @@ public class I18Ns {
 			if (tzone == null)
 				tzone = (TimeZone)sess.getAttribute(Attributes.PREFERRED_TIME_ZONE);
 			final Object otz = TimeZones.setThreadLocal(tzone);
-			old = new Pair(ol, otz);
+			old = new Object[] {ol, otz};
 		}
 
 		SessionsCtrl.setCurrent(sess);
@@ -106,9 +105,9 @@ public class I18Ns {
 		SessionsCtrl.setCurrent(null);
 
 		if (old != null) {
-			final Pair op = (Pair)old;
-			TimeZones.setThreadLocal((TimeZone)op.y);
-			Charsets.cleanup(request, op.x);
+			final Object[] op = (Object[])old;
+			TimeZones.setThreadLocal((TimeZone)op[1]);
+			Charsets.cleanup(request, op[0]);
 		}
 	}
 }

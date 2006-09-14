@@ -34,7 +34,6 @@ import java.io.IOException;
 
 import com.potix.lang.D;
 import com.potix.lang.Classes;
-import com.potix.util.Pair;
 import com.potix.util.IllegalSyntaxException;
 import com.potix.util.logging.Log;
 import com.potix.util.resource.Locator;
@@ -76,7 +75,7 @@ public class DefinitionLoaders {
 			throw new IllegalStateException("Definition has been loaded. You cannot add more.");
 		if (_addons == Collections.EMPTY_LIST)
 			_addons = new LinkedList();
-		_addons.add(new Pair(locator, url));
+		_addons.add(new Object[] {locator, url});
 	}
 
 	/** Loads all lang.xml found in /metainfo/zk. */
@@ -119,12 +118,14 @@ public class DefinitionLoaders {
 
 		//3. process other addon (from ConfigParser)
 		for (Iterator it = _addons.iterator(); it.hasNext();) {
-			final Pair p = (Pair)it.next();
+			final Object[] p = (Object[])it.next();
+			final Locator loc = (Locator)p[0];
+			final URL url = (URL)p[1];
 			try {
-				parse(new SAXBuilder(false, false, true).build((URL)p.y),
-					(Locator)p.x, true);
+				parse(new SAXBuilder(false, false, true).build(url),
+					loc, true);
 			} catch (Exception ex) {
-				log.error("Failed to load addon: "+p.y, ex);
+				log.error("Failed to load addon: "+url, ex);
 				//keep running
 			}
 		}

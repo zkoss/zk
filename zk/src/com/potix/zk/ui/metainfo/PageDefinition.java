@@ -62,6 +62,8 @@ public class PageDefinition extends InstanceDefinition {
 	private final List _initdefs = new LinkedList();
 	/** List(VariableResolverDefinition). */
 	private final List _resolvdefs = new LinkedList();
+	/** List(Header). */
+	private final List _headerdefs = new LinkedList();
 	private final ComponentDefinitionMap _compdefs = new ComponentDefinitionMap();
 	/**
 	 * @param langdef the default language which is used if no namespace
@@ -112,16 +114,18 @@ public class PageDefinition extends InstanceDefinition {
 			return Collections.EMPTY_LIST;
 
 		final List inits = new LinkedList();
-		for (Iterator it = _initdefs.iterator(); it.hasNext();) {
-			final InitiatorDefinition def = (InitiatorDefinition)it.next();
-			try {
-				final Initiator init = def.newInitiator(page);
-				if (init != null) {
-					init.doInit(page, def.getArguments(page));
-					inits.add(init);
+		synchronized (_initdefs) {
+			for (Iterator it = _initdefs.iterator(); it.hasNext();) {
+				final InitiatorDefinition def = (InitiatorDefinition)it.next();
+				try {
+					final Initiator init = def.newInitiator(page);
+					if (init != null) {
+						init.doInit(page, def.getArguments(page));
+						inits.add(init);
+					}
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
 				}
-			} catch (Throwable ex) {
-				throw UiException.Aide.wrap(ex);
 			}
 		}
 		return inits;
@@ -143,17 +147,43 @@ public class PageDefinition extends InstanceDefinition {
 			return Collections.EMPTY_LIST;
 
 		final List resolvs = new LinkedList();
-		for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
-			final VariableResolverDefinition def =
-				(VariableResolverDefinition)it.next();
-			try {
-				final VariableResolver resolv = def.newVariableResolver(page);
-				if (resolv != null) resolvs.add(resolv);
-			} catch (Throwable ex) {
-				throw UiException.Aide.wrap(ex);
+		synchronized (_resolvdefs) {
+			for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
+				final VariableResolverDefinition def =
+					(VariableResolverDefinition)it.next();
+				try {
+					final VariableResolver resolv = def.newVariableResolver(page);
+					if (resolv != null) resolvs.add(resolv);
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
+				}
 			}
 		}
 		return resolvs;
+	}
+
+	/** Adds a header definition ({@link Header}.
+	 */
+	public void addHeader(Header header) {
+		if (header == null)
+			throw new IllegalArgumentException("null");
+		synchronized (_headerdefs) {
+			_headerdefs.add(header);
+		}
+	}
+	/** Converts the header definitions (added by {@link #addHeader} to
+	 * HTML tags.
+	 */
+	public String getHTMLHeaders(Page page) {
+		if (_headerdefs.isEmpty())
+			return "";
+
+		final StringBuffer sb = new StringBuffer(256);
+		synchronized (_headerdefs) {
+			for (Iterator it = _headerdefs.iterator(); it.hasNext();)
+				sb.append(((Header)it.next()).toHTML(page));
+		}
+		return sb.toString();
 	}
 
 	/** Returns the map of component definition (never null).

@@ -74,6 +74,16 @@ public class Executions {
 		return getCurrent().evaluate(page, expr, expectedType);
 	}
 	
+	/** Encodes an URL.
+	 *
+	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
+	 * and the browser code.
+	 * Refer to {@link Servlets#locate(ServletContext, ServletRequest, String, Locator)}
+	 * for details. 
+	 */
+	public static final String encodeURL(String uri) {
+		return getCurrent().encodeURL(uri);
+	}
 
 	/** Creates components from a page file specified by an URI.
 	 * Shortcut to {@link Execution#createComponents(String, Component, Map)}.
