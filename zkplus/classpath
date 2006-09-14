@@ -11,3 +11,4 @@
 ../dist/lib/ext/spring.jar
 ../dist/lib/ext/hibernate3.jar
 ../dist/lib/ext/jta.jar
+../dist/lib/ext/acegi-security.jar
