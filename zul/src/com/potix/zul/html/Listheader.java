@@ -242,6 +242,10 @@ public class Listheader extends HeaderElement {
 	 *
 	 * <p>It sorts the listitem by use of {@link Components#sort}.
 	 *
+	 * <p>Note: it invokes {@link Listbox#renderAll} to load all list items.
+	 * If you want to use different way (such as issuing SQL with different ORDER BY)
+	 * you have to override this method or listen to the onSort event.
+	 *
 	 * @param ascending whether to use {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
@@ -260,6 +264,8 @@ public class Listheader extends HeaderElement {
 
 		final Listbox box = getListbox();
 		if (box == null) return false;
+
+		box.renderAll(); //make sure all items are loaded before sorting
 		Components.sort(box.getItems(), cpr);
 
 		//maintain

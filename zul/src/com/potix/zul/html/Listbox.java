@@ -1236,21 +1236,34 @@ ChildChangedAware, Cropper {
 		}
 	}
 
-	/** Renders the specified listitem if not not loaded yet,
+	/** Renders the specified {@link Listitem} if not loaded yet,
 	 * with {@link #getItemRenderer}.
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
 	 * In other words, it is meaningful only if live data model is used.
 	 */
 	public void renderItem(Listitem li) {
-		if (_model == null) { //just in case that app dev might change it
-			if (log.debugable()) log.debug("No model no render");
-			return;
-		}
+		if (_model == null) return;
 
 		final Renderer renderer = new Renderer();
 		try {
 			renderer.render(li);
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}
+	}
+	/** Renders all {@link Listitem} if not loaded yet,
+	 * with {@link #getItemRenderer}.
+	 */
+	public void renderAll() {
+		if (_model == null) return;
+
+		final Renderer renderer = new Renderer();
+		try {
+			for (Iterator it = getItems().iterator(); it.hasNext();)
+				renderer.render((Listitem)it.next());
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
