@@ -348,7 +348,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return false;
 	}
 
-	public final Component getFellow(String compId) {
+	public Component getFellow(String compId) {
 		final Component comp = (Component)_fellows.get(compId);
 		if (comp == null)
 			if (compId != null && ComponentsCtrl.isAutoId(compId))
@@ -356,6 +356,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			else
 				throw new ComponentNotFoundException("Fellow component not found: "+compId);
 		return comp;
+	}
+	public Component getFellowIfAny(String compId) {
+		return (Component)_fellows.get(compId);
 	}
 
 	//-- PageCtrl --//

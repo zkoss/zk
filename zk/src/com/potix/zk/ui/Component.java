@@ -173,9 +173,16 @@ public interface Component extends java.io.Serializable, Cloneable {
 	/** Returns a component of the specified ID in the same ID space.
 	 * Components in the same ID space are called fellows.
 	 *
+	 * <p>Unlike {@link #getFellowIfAny}, it throws an exception if not found.
+	 *
 	 * @exception ComponentNotFoundException is thrown if fellow not found
 	 */
 	public Component getFellow(String id);
+	/** Returns a component of the specified ID in the same ID space, or null
+	 * if not found.
+	 * <p>Unlike {@link #getFellow}, it returns null if not found.
+	 */
+	public Component getFellowIfAny(String id);
 
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes private to a component is searched.

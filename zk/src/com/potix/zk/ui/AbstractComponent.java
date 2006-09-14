@@ -552,7 +552,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		} while ((p = p.getParent()) != null);
 		return _page;
 	}
-	public final Component getFellow(String compId) {
+	public Component getFellow(String compId) {
 		if (this instanceof IdSpace) {
 			final Component comp = (Component)_spaceInfo.fellows.get(compId);
 			if (comp == null)
@@ -567,6 +567,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (idspace == null)
 			throw new ComponentNotFoundException("This component doesn't belong to any ID space: "+this);
 		return idspace.getFellow(compId);
+	}
+	public Component getFellowIfAny(String compId) {
+		if (this instanceof IdSpace)
+			return (Component)_spaceInfo.fellows.get(compId);
+
+		final IdSpace idspace = getSpaceOwner();
+		return idspace == null ? null: idspace.getFellowIfAny(compId);
 	}
 
 	public Map getAttributes(int scope) {
