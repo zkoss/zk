@@ -234,6 +234,9 @@ public class ExecutionImpl extends AbstractExecution {
 	public boolean isBrowser() {
 		return true;
 	}
+	public boolean isRobot() {
+		return Servlets.isRobot(_request);
+	}
 	public boolean isExplorer() {
 		return Servlets.isExplorer(_request);
 	}

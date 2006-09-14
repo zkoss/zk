@@ -476,7 +476,14 @@ public interface Execution extends Evaluator {
 	/** Returns whether the client is a browser.
 	 */
 	public boolean isBrowser();
+	/** Returns whether the client is a robot (such as Web crawlers).
+	 *
+	 * <p>Because there are too many robots, it returns true if the user-agent
+	 * is not recognized.
+	 */
+	public boolean isRobot();
 	/** Returns whether the client is Internet Explorer.
+	 * If true, it also implies {@link isExplorer7} is true.
 	 */
 	public boolean isExplorer();
 	/** Returns whether the client is Internet Explorer 7 or later.
