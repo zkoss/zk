@@ -16,8 +16,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zkplus.hibernate;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Executions;
 import com.potix.util.logging.Log;
 
 import org.hibernate.Session;
@@ -70,7 +68,7 @@ public class HibernateUtil {
 	}
 	
 	/**
-	 * Used in {@link HibernateSessionWebAppListener} to init
+	 * Used in {@link HibernateSessionFactoryListener} to init
 	 * Hibernate SessionFactory.
 	 */
 	/* package */ static SessionFactory initSessionFactory() {
@@ -89,7 +87,7 @@ public class HibernateUtil {
 	}
 	
 	/**
-	 * Used in {@link HibernateSessionWebAppListener} to init
+	 * Used in {@link HibernateSessionFactoryListener} to init
 	 * Hibernate SessionFactory.
 	 */
 	/* package */ static void cleanupSessionFactory() {
