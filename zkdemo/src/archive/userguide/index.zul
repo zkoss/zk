@@ -31,7 +31,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				}
 			</attribute>
 			<treecols>
-				<treecol label="Demo: Version ${desktop.webApp.version}"/>
+				<treecol label="Demo: Version ${desktop.webApp.version}"
+				onClick="Executions.sendRedirect(&quot;http://www.potix.com&quot;)"/>
 			</treecols>
 			<treechildren>
 				<treeitem label="Simple Elements" value="/userguide/simple/index.zul">
