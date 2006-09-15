@@ -42,12 +42,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<name>outLangJavaScripts</name>
 		<function-class>com.potix.zk.fn.ZkFns</function-class>
 		<function-signature>
-	java.lang.String outLangJavaScripts(com.potix.zk.ui.Page,java.lang.String)
+	java.lang.String outLangJavaScripts(java.lang.String)
 		</function-signature>
 		<description>
 	Returns HTML tags to include all JavaScripts used by all languages.
-	The first argument is the page being rendering and the second argument
-	the action.
+	The argument is the action.
 		</description>
 	</function>
 	<function>
@@ -58,6 +57,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</function-signature>
 		<description>
 	Returns HTML tags to include all style sheets used by all languages.
+		</description>
+	</function>
+
+	<function>
+		<name>outPageHeaders</name>
+		<function-class>com.potix.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outPageHeaders(com.potix.zk.ui.Page)
+		</function-signature>
+		<description>
+	Returns HTML header tags defined in the specified page.
 		</description>
 	</function>
 

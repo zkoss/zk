@@ -50,6 +50,7 @@ import com.potix.zk.ui.Execution;
 import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.UiException;
 import com.potix.zk.ui.sys.ExecutionsCtrl;
+import com.potix.zk.ui.sys.PageCtrl;
 import com.potix.zk.ui.metainfo.LanguageDefinition;
 import com.potix.zk.au.AuResponse;
 
@@ -128,7 +129,7 @@ public class ZkFns {
 	 * <p>FUTURE CONSIDERATION: we might generate the inclusion on demand
 	 * instead of all at once.
 	 */
-	public static final String outLangJavaScripts(Page page, String action) {
+	public static final String outLangJavaScripts(String action) {
 		final ServletRequest request = ServletFns.getCurrentRequest();
 		if (request.getAttribute(ATTR_LANG_JS_GENED) != null)
 			return ""; //nothing to generate
@@ -140,7 +141,8 @@ public class ZkFns {
 		final StringBuffer sb = new StringBuffer(512);
 		sb.append("<script type=\"text/javascript\">\n")
 			.append("zk_action=\"").append(action)
-			.append("\";\nzk_desktopId=\"").append(page.getDesktop().getId())
+			.append("\";\nzk_desktopId=\"")
+			.append(Executions.getCurrent().getDesktop().getId())
 			.append("\";\n</script>\n");
 
 		final Set jses = new LinkedHashSet(37);
@@ -259,6 +261,12 @@ public class ZkFns {
 	 */
 	public static String toAbsoluteURI(String uri) {
 		return Executions.getCurrent().toAbsoluteURI(uri);
+	}
+
+	/** Returns HTML header elements of the specified page.
+	 */
+	public static final String outPageHeaders(Page page) {
+		return ((PageCtrl)page).getHeaders();
 	}
 
 	/** Generates Locale-dependent strings in JavaScript syntax.

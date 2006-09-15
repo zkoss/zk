@@ -126,6 +126,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private ComponentDefinitionMap _compdefs;
 	/** The reason to store it is PageDefinition is not serializable. */
 	private transient LanguageDefinition _langdef;
+	/** The header tags. */
+	private String _headers = "";
 
 	/** Constructs a page.
 	 *
@@ -362,13 +364,14 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	//-- PageCtrl --//
-	public void init(String id, String title, String style) {
+	public void init(String id, String title, String style, String headers) {
 		if (_desktop != null)
 			throw new IllegalStateException("Don't init twice");
 
-		if (id != null && id.length() > 0) _id = id;
-		if (title != null && title.length() > 0) _title = title;
-		if (style != null && style.length() > 0) _style = style;
+		if (id != null) _id = id;
+		if (title != null) _title = title;
+		if (style != null) _style = style;
+		if (headers != null) _headers = headers;
 
 		_desktop = Executions.getCurrent().getDesktop();
 		if (_desktop == null)
@@ -430,6 +433,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 	public String getStyle() {
 		return _style;
+	}
+	public String getHeaders() {
+		return _headers;
 	}
 
 	public final Desktop getDesktop() {

@@ -174,14 +174,14 @@ public class PageDefinition extends InstanceDefinition {
 	/** Converts the header definitions (added by {@link #addHeader} to
 	 * HTML tags.
 	 */
-	public String getHTMLHeaders(Page page) {
+	public String getHeaders(Page page) {
 		if (_headerdefs.isEmpty())
 			return "";
 
 		final StringBuffer sb = new StringBuffer(256);
 		synchronized (_headerdefs) {
 			for (Iterator it = _headerdefs.iterator(); it.hasNext();)
-				sb.append(((Header)it.next()).toHTML(page));
+				sb.append(((Header)it.next()).toHTML(page)).append('\n');
 		}
 		return sb.toString();
 	}
@@ -270,8 +270,9 @@ public class PageDefinition extends InstanceDefinition {
 	 * @param evalTopZscripts whether to evaluate the zscript declared at
 	 * the top level
 	 */
-	public void init(Page page, boolean evalTopZscripts) {
-		((PageCtrl)page).init(_id, _title, _style);
+	public void init(Page page, boolean evalHeaders, boolean evalTopZscripts) {
+		((PageCtrl)page).init(_id, _title, _style,
+			evalHeaders ? getHeaders(page): "");
 
 		if (evalTopZscripts) {
 			final List scripts = getLanguageDefinition().getScripts();
