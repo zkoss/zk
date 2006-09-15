@@ -76,7 +76,7 @@ public class Body extends AbstractTag {
 			if (j < 0) j = buf.length();
 			buf.insert(j, "\n</script>\n")
 			   .insert(j, ZkFns.outResponseJavaScripts(responses))
-			   .insert(j, "<script type=\"text/javascript\">\n");
+			   .insert(j, "\n<script type=\"text/javascript\">\n");
 
 			exec.removeAttribute(ATTR_RESPONSES); //turn off page.dsp's generation
 		}
