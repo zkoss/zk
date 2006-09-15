@@ -57,7 +57,8 @@ public class Head extends AbstractTag {
 			buf.insert(j, '\n')
 				.insert(j, ZkFns.outLangJavaScripts(action))
 				.insert(j, '\n')
-				.insert(j, ZkFns.outLangStyleSheets());
+				.insert(j, ZkFns.outLangStyleSheets())
+				.insert(j, '\n');
 
 			exec.removeAttribute(ATTR_ACTION); //turn off page.dsp's generation
 		}
