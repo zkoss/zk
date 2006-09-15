@@ -175,13 +175,13 @@ elementFormDefault="qualified">
   ELEMENTGROUP
 -->
 	<xs:group name="baseGroup">
-		<xs:choice>
+		<xs:choice  minOccurs="0" maxOccurs="unbounded">
 			<xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="custom-attributes" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 	</xs:group>
 	<xs:group name="anyGroup">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="audio" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="bandbox" minOccurs="0" maxOccurs="unbounded"/>
@@ -259,7 +259,7 @@ elementFormDefault="qualified">
 	<!-- bandbox -->
 	<xs:element name="bandbox" type="bandboxType"/>
 	<xs:complexType name="bandboxType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="bandpopup" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -284,7 +284,7 @@ elementFormDefault="qualified">
 	<!-- box -->
 	<xs:element name="box" type="boxType"/>
 	<xs:complexType name="boxType" mixed="true">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="anyGroup"/>
 			<xs:element ref="splitter" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -386,7 +386,7 @@ elementFormDefault="qualified">
 	<!-- columns -->
 	<xs:element name="columns" type="columnsType"/>
 	<xs:complexType name="columnsType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="column" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -395,7 +395,7 @@ elementFormDefault="qualified">
 	<!-- combobox -->
 	<xs:element name="combobox" type="comboboxType"/>
 	<xs:complexType name="comboboxType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="comboitem" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -463,10 +463,10 @@ elementFormDefault="qualified">
 	<!-- grid -->
 	<xs:element name="grid" type="gridType"/>
 	<xs:complexType name="gridType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
-			<xs:element ref="columns" minOccurs="0"/>
-			<xs:element ref="rows" minOccurs="0"/>
+			<xs:element ref="columns" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="rows" minOccurs="0" maxOccurs="1"/>
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="align" type="gridAlignAttrType" use="optional"/>
@@ -478,9 +478,9 @@ elementFormDefault="qualified">
 	<!-- groupbox -->
 	<xs:element name="groupbox" type="groupboxType"/>
 	<xs:complexType name="groupboxType" mixed="true">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="anyGroup"/>
-			<xs:element ref="caption" minOccurs="0"/>
+			<xs:element ref="caption" minOccurs="0" maxOccurs="1"/>
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="open" type="xs:boolean" use="optional"/>
@@ -494,7 +494,7 @@ elementFormDefault="qualified">
 	<!-- hbox -->
 	<xs:element name="hbox" type="hboxType"/>
 	<xs:complexType name="hboxType" mixed="true">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="anyGroup"/>
 			<xs:element ref="splitter" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -538,7 +538,7 @@ elementFormDefault="qualified">
 	<!-- imagemap -->
 	<xs:element name="imagemap" type="imagemapType"/>
 	<xs:complexType name="imagemapType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="area" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -589,7 +589,7 @@ elementFormDefault="qualified">
 	<!-- listbox -->
 	<xs:element name="listbox" type="listboxType"/>
 	<xs:complexType name="listboxType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="listhead" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="listitem" minOccurs="0" maxOccurs="unbounded"/>
@@ -619,7 +619,7 @@ elementFormDefault="qualified">
 	<!-- listfoot -->
 	<xs:element name="listfoot" type="listfootType"/>
 	<xs:complexType name="listfootType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="listfooter" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -637,7 +637,7 @@ elementFormDefault="qualified">
 	<!-- listhead -->
 	<xs:element name="listhead" type="listheadType"/>
 	<xs:complexType name="listheadType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="listheader" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -661,7 +661,7 @@ elementFormDefault="qualified">
 	<!-- listitem -->
 	<xs:element name="listitem" type="listitemType"/>
 	<xs:complexType name="listitemType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="listcell" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -674,16 +674,16 @@ elementFormDefault="qualified">
 	<!-- menu -->
 	<xs:element name="menu" type="menuType"/>
 	<xs:complexType name="menuType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
-			<xs:element ref="menupopup" minOccurs="0"/>
+			<xs:element ref="menupopup" minOccurs="0" maxOccurs="1"/>
 		</xs:choice>
 		<xs:attributeGroup ref="labelImageElementAttrGroup"/>
 	</xs:complexType>
 	<!-- menubar -->
 	<xs:element name="menubar" type="menubarType"/>
 	<xs:complexType name="menubarType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="menu" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -707,7 +707,7 @@ elementFormDefault="qualified">
 	<!-- menupopup -->
 	<xs:element name="menupopup" type="menupopupType"/>
 	<xs:complexType name="menupopupType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="menu" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="menuitem" minOccurs="0" maxOccurs="unbounded"/>
@@ -736,7 +736,7 @@ elementFormDefault="qualified">
 	<!-- popup -->
 	<xs:element name="popup" type="popupType"/>
 	<xs:complexType name="popupType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="menu" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="menuitem" minOccurs="0" maxOccurs="unbounded"/>
@@ -770,7 +770,7 @@ elementFormDefault="qualified">
 	<!-- radiogroup -->
 	<xs:element name="radiogroup" type="radiogroupType"/>
 	<xs:complexType name="radiogroupType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="radio" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -792,7 +792,7 @@ elementFormDefault="qualified">
 	<!-- rows -->
 	<xs:element name="rows" type="rowsType"/>
 	<xs:complexType name="rowsType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="row" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -859,7 +859,7 @@ elementFormDefault="qualified">
 	<!-- tabbox -->
 	<xs:element name="tabbox" type="tabboxType"/>
 	<xs:complexType name="tabboxType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="tabs" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="tabpanels" minOccurs="0" maxOccurs="unbounded"/>
@@ -884,7 +884,7 @@ elementFormDefault="qualified">
 	<!-- tabpanels -->
 	<xs:element name="tabpanels" type="tabpanelsType"/>
 	<xs:complexType name="tabpanelsType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="tabpanel" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -893,7 +893,7 @@ elementFormDefault="qualified">
 	<!-- tabs -->
 	<xs:element name="tabs" type="tabsType"/>
 	<xs:complexType name="tabsType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="tab" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -928,7 +928,7 @@ elementFormDefault="qualified">
 	<!-- toolbar -->
 	<xs:element name="toolbar" type="toolbarType"/>
 	<xs:complexType name="toolbarType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="toolbarbutton" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="button" minOccurs="0" maxOccurs="unbounded"/>
@@ -959,10 +959,10 @@ elementFormDefault="qualified">
 	<!-- tree -->
 	<xs:element name="tree" type="treeType"/>
 	<xs:complexType name="treeType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
-			<xs:element ref="treecols" minOccurs="0"/>
-			<xs:element ref="treechildren" minOccurs="0"/>
+			<xs:element ref="treecols" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="treechildren" minOccurs="0" maxOccurs="1"/>
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="rows" type="xs:nonNegativeInteger" use="optional"/>
@@ -982,7 +982,7 @@ elementFormDefault="qualified">
 	<!-- treechildren -->
 	<xs:element name="treechildren" type="treechildrenType"/>
 	<xs:complexType name="treechildrenType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="treeitem" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -1001,7 +1001,7 @@ elementFormDefault="qualified">
 	<!-- treecols -->
 	<xs:element name="treecols" type="treecolsType"/>
 	<xs:complexType name="treecolsType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="treecol" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -1010,10 +1010,10 @@ elementFormDefault="qualified">
 	<!-- treeitem -->
 	<xs:element name="treeitem" type="treeitemType"/>
 	<xs:complexType name="treeitemType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
-			<xs:element ref="treerow" minOccurs="0"/>
-			<xs:element ref="treechildren" minOccurs="0"/>
+			<xs:element ref="treerow" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="treechildren" minOccurs="0" maxOccurs="1"/>
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
@@ -1025,7 +1025,7 @@ elementFormDefault="qualified">
 	<!-- treerow -->
 	<xs:element name="treerow" type="treerowType"/>
 	<xs:complexType name="treerowType">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup"/>
 			<xs:element ref="treecell" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -1034,7 +1034,7 @@ elementFormDefault="qualified">
 	<!-- vbox -->
 	<xs:element name="vbox" type="vboxType"/>
 	<xs:complexType name="vboxType" mixed="true">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="anyGroup"/>
 			<xs:element ref="splitter" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -1045,9 +1045,9 @@ elementFormDefault="qualified">
 	<!-- window -->
 	<xs:element name="window" type="windowType"/>
 	<xs:complexType name="windowType" mixed="true">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="anyGroup"/>
-			<xs:element ref="caption" minOccurs="0"/>
+			<xs:element ref="caption" minOccurs="0" maxOccurs="1"/>
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup"/>
 		<xs:attribute name="border" type="xs:string" use="optional"/>
