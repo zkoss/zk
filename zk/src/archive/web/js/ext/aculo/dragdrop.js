@@ -1,9 +1,14 @@
+// script.aculo.us dragdrop.js v1.6.4, Wed Sep 06 11:30:58 CEST 2006
+
 // Copyright (c) 2005 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 //           (c) 2005 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)
 // 
 // See scriptaculous.js for full license.
 
 /*--------------------------------------------------------------------------*/
+
+if(typeof Effect == 'undefined')
+  throw("dragdrop.js requires including script.aculo.us' effects.js library");
 
 var Droppables = {
   drops: [],
@@ -145,8 +150,16 @@ var Draggables = {
   },
   
   activate: function(draggable) {
-    window.focus(); // allows keypress events if window isn't currently focused, fails for Safari
-    this.activeDraggable = draggable;
+    if(draggable.options.delay) { 
+      this._timeout = setTimeout(function() { 
+        Draggables._timeout = null; 
+        window.focus(); 
+        Draggables.activeDraggable = draggable; 
+      }.bind(this), draggable.options.delay); 
+    } else {
+      window.focus(); // allows keypress events if window isn't currently focused, fails for Safari
+      this.activeDraggable = draggable;
+    }
   },
   
   deactivate: function() {
@@ -160,10 +173,15 @@ var Draggables = {
     // the same coordinates, prevent needless redrawing (moz bug?)
     if(this._lastPointer && (this._lastPointer.inspect() == pointer.inspect())) return;
     this._lastPointer = pointer;
+    
     this.activeDraggable.updateDrag(event, pointer);
   },
   
   endDrag: function(event) {
+    if(this._timeout) { 
+      clearTimeout(this._timeout); 
+      this._timeout = null; 
+    }
     if(!this.activeDraggable) return;
     this._lastPointer = null;
     this.activeDraggable.endDrag(event);
@@ -190,6 +208,7 @@ var Draggables = {
       this.observers.each( function(o) {
         if(o[eventName]) o[eventName](eventName, draggable, event);
       });
+    if(draggable.options[eventName]) draggable.options[eventName](draggable, event);
   },
   
   _cacheObserverCallbacks: function() {
@@ -204,21 +223,19 @@ var Draggables = {
 /*--------------------------------------------------------------------------*/
 
 var Draggable = Class.create();
+Draggable._dragging    = {};
+
 Draggable.prototype = {
   initialize: function(element) {
  var zdd = zk.ie && arguments[1] && arguments[1].z_dragdrop; //Tom M. Yeh, Potix: Bug 1538506
-    var options = Object.extend({
+    var defaults = {
       handle: false,
-      starteffect: function(element) {
-        element._opacity = Element.getOpacity(element); 
-        new Effect.Opacity(element, {duration:0.2, from:element._opacity, to:0.7}); 
-      },
       reverteffect: function(element, top_offset, left_offset) {
 var orgpos = element.style.position; //Tom M. Yeh, Potix: Bug 1538506
-
         var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
-        element._revert = new Effect.Move(element, { x: -left_offset, y: -top_offset, duration: dur});
-
+        new Effect.Move(element, { x: -left_offset, y: -top_offset, duration: dur,
+          queue: {scope:'_draggable', position:'end'}
+        });
 //Tom M. Yeh, Potix: Bug 1538506
 //In IE, we have to detach and attach. We cannot simply restore position!!
 //Otherwise, a strange bar appear
@@ -234,16 +251,33 @@ if (zdd && orgpos != 'absolute' && orgpos != 'relative') {
 }
       },
       endeffect: function(element) {
-        var toOpacity = typeof element._opacity == 'number' ? element._opacity : 1.0
-        new Effect.Opacity(element, {duration:0.2, from:0.7, to:toOpacity}); 
+        var toOpacity = typeof element._opacity == 'number' ? element._opacity : 1.0;
+        new Effect.Opacity(element, {duration:0.2, from:0.7, to:toOpacity, 
+          queue: {scope:'_draggable', position:'end'},
+          afterFinish: function(){ 
+            Draggable._dragging[element] = false 
+          }
+        }); 
       },
       zindex: 1000,
       revert: false,
       scroll: false,
       scrollSensitivity: 20,
       scrollSpeed: 15,
-      snap: false   // false, or xy or [x,y] or function(x,y){ return [x,y] }
-    }, arguments[1] || {});
+      snap: false,  // false, or xy or [x,y] or function(x,y){ return [x,y] }
+      delay: 0
+    };
+    
+    if(arguments[1] && typeof arguments[1].endeffect == 'undefined')
+      Object.extend(defaults, {
+        starteffect: function(element) {
+          element._opacity = Element.getOpacity(element);
+          Draggable._dragging[element] = true;
+          new Effect.Opacity(element, {duration:0.2, from:element._opacity, to:0.7}); 
+        }
+      });
+    
+    var options = Object.extend(defaults, arguments[1] || {});
 
     this.element = $(element);
     
@@ -254,8 +288,10 @@ if (zdd && orgpos != 'absolute' && orgpos != 'relative') {
     if(!this.handle) this.handle = $(options.handle);
     if(!this.handle) this.handle = this.element;
     
-    if(options.scroll && !options.scroll.scrollTo && !options.scroll.outerHTML)
+    if(options.scroll && !options.scroll.scrollTo && !options.scroll.outerHTML) {
       options.scroll = $(options.scroll);
+      this._isScrollChild = Element.childOf(this.element, options.scroll);
+    }
 
 	if (!options.z_dragdrop) //Tom M. Yeh, Potix: Bug 1534426, 1535787
     Element.makePositioned(this.element); // fix IE    
@@ -282,6 +318,8 @@ if (zdd && orgpos != 'absolute' && orgpos != 'relative') {
   },
   
   initDrag: function(event) {
+    if(typeof Draggable._dragging[this.element] != 'undefined' &&
+      Draggable._dragging[this.element]) return;
     if(Event.isLeftClick(event)) {    
       // abort on form elements, fixes a Firefox issue
       var src = Event.element(event);
@@ -292,11 +330,6 @@ if (zdd && orgpos != 'absolute' && orgpos != 'relative') {
         src.tagName=='BUTTON' ||
         src.tagName=='TEXTAREA')) return;
         
-      if(this.element._revert) {
-        this.element._revert.cancel();
-        this.element._revert = null;
-      }
-      
       var pointer = [Event.pointerX(event), Event.pointerY(event)];
       var pos     = Position.cumulativeOffset(this.element);
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
@@ -341,6 +374,7 @@ if (this.z_orgpos != 'absolute')
     }
     
     Draggables.notify('onStart', this, event);
+        
     if(this.options.starteffect) this.options.starteffect(this.element);
   },
   
@@ -349,6 +383,7 @@ if (this.z_orgpos != 'absolute')
     Position.prepare();
     Droppables.show(pointer, this.element);
     Draggables.notify('onDrag', this, event);
+    
     this.draw(pointer);
     if(this.options.change) this.options.change(this, pointer); //Tom M Yeh, Potix: add pointer
     
@@ -362,6 +397,10 @@ if (this.z_orgpos != 'absolute')
         p = Position.page(this.options.scroll);
         p[0] += this.options.scroll.scrollLeft;
         p[1] += this.options.scroll.scrollTop;
+        
+        p[0] += (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0);
+        p[1] += (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0);
+        
         p.push(p[0]+this.options.scroll.offsetWidth);
         p.push(p[1]+this.options.scroll.offsetHeight);
       }
@@ -388,7 +427,7 @@ if (this.z_orgpos != 'absolute')
 		if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, false);
 		if (ghosting) {
 if (this.z_orgpos != "absolute") { //Tom M. Yeh, Potix: Bug 1514789
-      Position.relativize(this.element); 
+      Position.relativize(this.element);
 this.element.style.position = this.z_orgpos;
 }
       Element.remove(this._clone);
@@ -416,7 +455,7 @@ this.element.style.position = this.z_orgpos;
 
     if(this.options.endeffect) 
       this.options.endeffect(this.element, pointer); //Tom M. Yeh, Potix: add pointer
-
+      
     Draggables.deactivate(this);
     Droppables.reset();
   },
@@ -436,10 +475,16 @@ this.element.style.position = this.z_orgpos;
   
   draw: function(point) {
     var pos = Position.cumulativeOffset(this.element);
+    if(this.options.ghosting) {
+      var r   = Position.realOffset(this.element);
+      window.status = r.inspect();
+      pos[0] += r[0] - Position.deltaX; pos[1] += r[1] - Position.deltaY;
+    }
+    
     var d = this.currentDelta();
     pos[0] -= d[0]; pos[1] -= d[1];
     
-    if(this.options.scroll && (this.options.scroll != window)) {
+    if(this.options.scroll && (this.options.scroll != window && this._isScrollChild)) {
       pos[0] -= this.options.scroll.scrollLeft-this.originalScrollLeft;
       pos[1] -= this.options.scroll.scrollTop-this.originalScrollTop;
     }
@@ -461,16 +506,16 @@ this.element.style.position = this.z_orgpos;
       }
     }}
     
-//Tom M. Yeh, Potix: resolve scrolling offset
-var scrl = this.z_scrl; //set if DIV is used
-if (!scrl) scrl = Position.realOffset(this.element);
-p[0] -= scrl[0]; p[1] -= scrl[1];
-
+//Tom M. Yeh, Potix: resolve scrolling offset when DIV is used
+if (this.z_scrl) {
+	p[0] -= this.z_scrl[0]; p[1] -= this.z_scrl[1];
+}
     var style = this.element.style;
     if((!this.options.constraint) || (this.options.constraint=='horizontal'))
       style.left = p[0] + "px";
     if((!this.options.constraint) || (this.options.constraint=='vertical'))
       style.top  = p[1] + "px";
+    
     if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering
   },
   
@@ -483,6 +528,7 @@ p[0] -= scrl[0]; p[1] -= scrl[1];
   },
   
   startScrolling: function(speed) {
+    if(!(speed[0] || speed[1])) return;
     this.scrollSpeed = [speed[0]*this.options.scrollSpeed,speed[1]*this.options.scrollSpeed];
     this.lastScrolled = new Date();
     this.scrollInterval = setInterval(this.scroll.bind(this), 10);
@@ -507,14 +553,16 @@ p[0] -= scrl[0]; p[1] -= scrl[1];
     Position.prepare();
     Droppables.show(Draggables._lastPointer, this.element);
     Draggables.notify('onDrag', this);
-    Draggables._lastScrollPointer = Draggables._lastScrollPointer || $A(Draggables._lastPointer);
-    Draggables._lastScrollPointer[0] += this.scrollSpeed[0] * delta / 1000;
-    Draggables._lastScrollPointer[1] += this.scrollSpeed[1] * delta / 1000;
-    if (Draggables._lastScrollPointer[0] < 0)
-      Draggables._lastScrollPointer[0] = 0;
-    if (Draggables._lastScrollPointer[1] < 0)
-      Draggables._lastScrollPointer[1] = 0;
-    this.draw(Draggables._lastScrollPointer);
+    if (this._isScrollChild) {
+      Draggables._lastScrollPointer = Draggables._lastScrollPointer || $A(Draggables._lastPointer);
+      Draggables._lastScrollPointer[0] += this.scrollSpeed[0] * delta / 1000;
+      Draggables._lastScrollPointer[1] += this.scrollSpeed[1] * delta / 1000;
+      if (Draggables._lastScrollPointer[0] < 0)
+        Draggables._lastScrollPointer[0] = 0;
+      if (Draggables._lastScrollPointer[1] < 0)
+        Draggables._lastScrollPointer[1] = 0;
+      this.draw(Draggables._lastScrollPointer);
+    }
     
     if(this.options.change) this.options.change(this);
   },

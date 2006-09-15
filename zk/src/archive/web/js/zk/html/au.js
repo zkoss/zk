@@ -1287,9 +1287,11 @@ zkau._dragging = function (dg, pointer) {
 	}
 };
 zkau._revertdrag = function (n, pointer) {
-	if (zk.gecko || zkau._getDrop(n, pointer) == null)
+	if (zkau._getDrop(n, pointer) == null)
 		return true;
 
+	//Note: we hve to revert when zkau._onRespReady called, since app might
+	//change n's position
 	var dg = zkau._drags[n.id];
 	zkau._revertpending = function() {
 		n.style.left = dg.z_x;
@@ -1357,11 +1359,10 @@ zkau._ghostdrag = function (dg, ghosting) {
 			zk.dragging = true;
 			dg.delta = dg.currentDelta();
 
-			//we have to store scrolling offset first since Draggable.draw cannot
-			//calculate from the DIV
+			//Store scrolling offset first since Draggable.draw not handle DIV well
+			//after we transfer TR to DIV
 			dg.z_scrl = Position.realOffset(dg.element);
 			var pos = Position.cumulativeOffset(dg.element);
-
 			pos[0] -= dg.z_scrl[0]; pos[1] -= dg.z_scrl[1];
 			document.body.insertAdjacentHTML("afterbegin",
 				'<div id="zk_ddghost" style="position:absolute;top:'
