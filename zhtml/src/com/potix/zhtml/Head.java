@@ -18,6 +18,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zhtml;
 
+import java.io.StringWriter;
+
+import com.potix.zk.ui.Execution;
+import com.potix.zk.ui.Executions;
+import com.potix.zk.fn.ZkFns;
 import com.potix.zhtml.impl.AbstractTag;
 
 /**
@@ -35,5 +40,29 @@ public class Head extends AbstractTag {
 	 */
 	protected boolean shallHideId() {
 		return true;
+	}
+
+	//--Component-//
+	public void redraw(java.io.Writer out) throws java.io.IOException {
+		final StringWriter bufout = new StringWriter();
+		super.redraw(bufout);
+		final StringBuffer buf = bufout.getBuffer();
+
+		final Execution exec = Executions.getCurrent();
+		final String ATTR_ACTION = "zk_argAction";
+		final String action = (String)exec.getAttribute(ATTR_ACTION);
+		if (action != null) {
+			final String s1 = ZkFns.outLangStyleSheets();
+			final String s2 = ZkFns.outLangJavaScripts(action);
+			final int j = buf.indexOf("</head>");
+			if (j >= 0) {
+				buf.insert(j, '\n').insert(j, s2).insert(j, s1);
+			} else {
+				buf.append(s1).append(s2);
+			}
+			exec.removeAttribute(ATTR_ACTION); //turn off page.dsp's generation
+		}
+
+		out.write(buf.toString());
 	}
 }

@@ -21,5 +21,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <c:set var="page" value="${requestScope.page}"/>
-<c:set var="complete_desktop" value="true" scope="request"/><%-- control how page.dsp shall do --%>
+<c:set var="zk_completeDesktop" value="true" scope="request"/><%-- control how page.dsp shall do --%>
 <c:include page="~./zhtml/page.dsp"/>

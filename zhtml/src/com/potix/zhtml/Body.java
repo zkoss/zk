@@ -18,9 +18,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package com.potix.zhtml;
 
+import java.util.Collection;
+import java.io.StringWriter;
+
 import com.potix.zk.ui.Component;
 import com.potix.zk.ui.Page;
+import com.potix.zk.ui.Execution;
+import com.potix.zk.ui.Executions;
 import com.potix.zk.ui.sys.PageCtrl;
+import com.potix.zk.fn.ZkFns;
 import com.potix.zhtml.impl.AbstractTag;
 
 /**
@@ -54,5 +60,32 @@ public class Body extends AbstractTag {
 			if (page != null)
 				((PageCtrl)page).setDefaultParent(this);
 		}
+	}
+
+	//--Component-//
+	public void redraw(java.io.Writer out) throws java.io.IOException {
+		final StringWriter bufout = new StringWriter();
+		super.redraw(bufout);
+		final StringBuffer buf = bufout.getBuffer();
+
+		final Execution exec = Executions.getCurrent();
+		final String ATTR_RESPONSES = "zk_argResponses";
+		final Collection responses = (Collection)exec.getAttribute(ATTR_RESPONSES);
+		if (responses != null) {
+			final String s = ZkFns.outResponseJavaScripts(responses);
+			final int j = buf.indexOf("</body>");
+			if (j >= 0) {
+				buf.insert(j, "\n</script>\n")
+				   .insert(j, s)
+				   .insert(j, "<script type=\"text/javascript\">\n");
+			} else {
+				buf.append("<script type=\"text/javascript\">\n")
+				   .append(s)
+				   .append("\n</script>\n");
+			}
+			exec.removeAttribute(ATTR_RESPONSES); //turn off page.dsp's generation
+		}
+
+		out.write(buf.toString());
 	}
 }
