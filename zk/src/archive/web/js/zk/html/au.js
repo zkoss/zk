@@ -1793,10 +1793,12 @@ zkau.cmd1 = {
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
 	focus: function (uuid, cmp) {
-		cmp = zkau.getReal(cmp); //focus goes to inner tag
-		if (cmp.focus && !cmp.disabled)
-			zk.focusById(cmp.id, 5);
-				//delay it because focusDownById might be called implicitly
+		if (!zk.eval(cmp, "focus")) {
+			cmp = zkau.getReal(cmp); //focus goes to inner tag
+			if (cmp.focus && !cmp.disabled)
+				zk.focusById(cmp.id, 5);
+					//delay it because focusDownById might be called implicitly
+		}
 	},
 	selAll: function (uuid, cmp) {
 		cmp = zkau.getReal(cmp); //select goes to inner tag
