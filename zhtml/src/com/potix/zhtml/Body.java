@@ -72,17 +72,12 @@ public class Body extends AbstractTag {
 		final String ATTR_RESPONSES = "zk_argResponses";
 		final Collection responses = (Collection)exec.getAttribute(ATTR_RESPONSES);
 		if (responses != null) {
-			final String s = ZkFns.outResponseJavaScripts(responses);
-			final int j = buf.indexOf("</body>");
-			if (j >= 0) {
-				buf.insert(j, "\n</script>\n")
-				   .insert(j, s)
-				   .insert(j, "<script type=\"text/javascript\">\n");
-			} else {
-				buf.append("<script type=\"text/javascript\">\n")
-				   .append(s)
-				   .append("\n</script>\n");
-			}
+			int j = buf.indexOf("</body>");
+			if (j < 0) j = buf.length();
+			buf.insert(j, "\n</script>\n")
+			   .insert(j, ZkFns.outResponseJavaScripts(responses))
+			   .insert(j, "<script type=\"text/javascript\">\n");
+
 			exec.removeAttribute(ATTR_RESPONSES); //turn off page.dsp's generation
 		}
 

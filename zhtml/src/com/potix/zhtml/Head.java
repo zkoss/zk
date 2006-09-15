@@ -52,14 +52,13 @@ public class Head extends AbstractTag {
 		final String ATTR_ACTION = "zk_argAction";
 		final String action = (String)exec.getAttribute(ATTR_ACTION);
 		if (action != null) {
-			final String s1 = ZkFns.outLangStyleSheets();
-			final String s2 = ZkFns.outLangJavaScripts(action);
-			final int j = buf.indexOf("</head>");
-			if (j >= 0) {
-				buf.insert(j, '\n').insert(j, s2).insert(j, s1);
-			} else {
-				buf.append(s1).append(s2);
-			}
+			int j = buf.indexOf("</head>");
+			if (j < 0) j = buf.length();
+			buf.insert(j, '\n')
+				.insert(j, ZkFns.outLangJavaScripts(action))
+				.insert(j, '\n')
+				.insert(j, ZkFns.outLangStyleSheets());
+
 			exec.removeAttribute(ATTR_ACTION); //turn off page.dsp's generation
 		}
 
