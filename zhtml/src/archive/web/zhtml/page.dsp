@@ -23,7 +23,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="page" value="${arg.page}"/>
 <c:if test="${!arg.asyncUpdate}">
 ${u:outLangStyleSheets()}
-${u:outLangJavaScripts(page, arg.action)}
+${u:outLangJavaScripts(arg.action)}
 </c:if>
 <c:if test="${!complete_desktop}"><div id="${page.id}" style="${empty page.style ? 'width:100%': page.style}"></c:if>
 <c:forEach var="root" items="${page.roots}">
