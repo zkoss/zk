@@ -164,6 +164,12 @@ zkTree.onclick = function (evt) {
 	if (meta) meta.doclick(evt, target);
 };
 
+/** Called when focus command is received. */
+zkTree.focus = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) meta._refocus();
+	return true;
+};
 /** Process the setAttr cmd sent from the server, and returns whether to
  * continue the processing of this cmd
  */
