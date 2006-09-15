@@ -355,10 +355,8 @@ public class Parser {
 				compdef.addProperty(
 					(String)me.getKey(), (String)me.getValue(), null);
 			}
-		} else if ("link".equals(target)) { //declare a link
-			pgdef.addHeader(new Link(params));
-		} else if ("meta".equals(target)) { //declare a meta
-			pgdef.addHeader(new Meta(params));
+		} else if ("link".equals(target) || "meta".equals(target)) { //declare a header element
+			pgdef.addHeader(new Header(target, params));
 		} else if ("page".equals(target)) {
 			log.warning("Ignored page directive at "+pi.getLocator());
 		} else if ("import".equals(target)) { //import

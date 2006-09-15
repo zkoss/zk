@@ -78,7 +78,7 @@ public class Executions {
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
 	 * and the browser code.
-	 * Refer to {@link Servlets#locate(ServletContext, ServletRequest, String, Locator)}
+	 * Refer to {@link com.potix.web.servlet.Servlets#locate(ServletContext, ServletRequest, String, Locator)}
 	 * for details. 
 	 */
 	public static final String encodeURL(String uri) {
