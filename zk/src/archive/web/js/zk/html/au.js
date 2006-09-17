@@ -802,6 +802,8 @@ zkau._onDocUnload = function () {
 zkau._onDocMousedown = function (evt) {
 	if (!evt) evt = window.event;
 
+	zkau._savepos(evt);
+
 	var node = Event.element(evt);
 	zkau.currentFocus = node;
 
@@ -831,7 +833,7 @@ zkau._onDocLClick = function (evt) {
 				}
 			}
 
-			if (cmp.getAttribute("zk_lfclk"))
+			if (cmp.getAttribute("zk_lfclk") && zkau.insamepos(evt))
 				zkau.send({uuid: zkau.uuidOf(cmp),
 					cmd: "onClick", data: zkau._getMouseData(evt, cmp)});
 
@@ -839,6 +841,24 @@ zkau._onDocLClick = function (evt) {
 		}
 	}
 	//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
+};
+/** Saves the mouse position to be used with insamepos. */
+zkau._savepos = function (evt) {
+	if (evt)
+		zkau._mspos = [Event.pointerX(evt), Event.pointerY(evt), Event.element(evt)];
+};
+/** Checks whether the position of the specified event is the same the one
+ * stored with zkau._savepos.
+ * Note: if the target element is different, it is considered as IN THE SAME POSITION.
+ */
+zkau.insamepos = function (evt) {
+	if (!evt || !zkau._mspos) return true; //yes, true
+
+	if (Event.element(evt) != zkau._mspos[2]) return true; //yes, true
+
+	var x = Event.pointerX(evt) - zkau._mspos[0];
+	var y = Event.pointerY(evt) - zkau._mspos[1];
+	return x > -3 && x < 3 && y > -3 && y < 3;
 };
 /** Autoposition by the specified (x, y). */
 zkau._autopos = function (el, x, y) {
@@ -867,7 +887,7 @@ zkau._onDocDClick = function (evt) {
 
 	var cmp = Event.element(evt);
 	cmp = zkau._getParentByAttr(cmp, "zk_dbclk");
-	if (cmp) {
+	if (cmp/* no need since browser handles it: && zkau.insamepos(evt)*/) {
 		var uuid = cmp.getAttribute("zk_item"); //treerow (and other transparent)
 		if (!uuid) uuid = zkau.uuidOf(cmp);
 		zkau.send({uuid: uuid,
@@ -897,7 +917,7 @@ zkau._onDocCtxMnu = function (evt) {
 			}
 		}
 
-		if (cmp.getAttribute("zk_rtclk")) {
+		if (cmp.getAttribute("zk_rtclk")/*no need since oncontextmenu: && zkau.insamepos(evt)*/) {
 			var uuid = cmp.getAttribute("zk_item"); //treerow (and other transparent)
 			if (!uuid) uuid = zkau.uuidOf(cmp);
 			zkau.send({uuid: uuid,
