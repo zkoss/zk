@@ -408,7 +408,7 @@ implements Inputable, Errorable, Constrainted {
 
 		if (!_valided && _constr != null) {
 			try {
-				setText(coerceToString(_value));
+				validate(_value);
 			} catch (Throwable ex) {
 				return false;
 			}
