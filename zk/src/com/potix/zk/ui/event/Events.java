@@ -158,6 +158,12 @@ public class Events {
 			&& Character.isUpperCase(name.charAt(2));
 	}
 
+	/** Returns whether the current thread is an event listener.
+	 */
+	public static final boolean inEventListener() {
+		return Thread.currentThread() instanceof EventProcessingThread;
+	}
+
 	/** Returns whether an event handler or listener is available for
 	 * the specified component and event.
 	 *

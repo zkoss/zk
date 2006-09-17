@@ -670,7 +670,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final Thread thd = Thread.currentThread();
 		if (!(thd instanceof EventProcessingThread))
-			throw new UiException("suspend can be called only in processing an event");
+			throw new UiException("This method can be called only in an event listener, not in paging loading.");
 		if (D.ON && log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
 
 		final Execution exec = Executions.getCurrent();
