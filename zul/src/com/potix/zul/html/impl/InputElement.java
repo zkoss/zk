@@ -398,6 +398,23 @@ implements Inputable, Errorable, Constrainted {
 		}
 	}
 
+	/** Returns the current content of this input is correct.
+	 * If the content is not correct, next call to the getvalue method will
+	 * throws WrongValueException.
+	 */
+	public boolean isValid() {
+		if (_errmsg != null)
+			return false;
+
+		if (!_valided && _constr != null) {
+			try {
+				setText(coerceToString(_value));
+			} catch (Throwable ex) {
+				return false;
+			}
+		}
+		return true;
+	}
 	/** Checks whether user entered a wrong value (and not correct it yet).
 	 * Since user might enter a wrong value and moves on to other components,
 	 * this methid is called when {@link #getText} or {@link #getRawValue} is
