@@ -184,9 +184,9 @@ public class Window extends XulElement implements IdSpace  {
 	}
 	/** Sets the mode.
 	 *
-	 * <p>Notice that you cannot specify "modal" to this method.
-	 * Rather, you can use {@link #doModal} if it is called in an event listener.
-	 * Or, you can use {@link com.potix.zk.ui.event.Events#postEvent} to
+	 * <p>Notice that you can specify "modal" to this method only in an event
+	 * listener ({@link Events#inEventListener}).
+	 * Rather, you shall use {@link com.potix.zk.ui.event.Events#postEvent} to
 	 * post the onModal event. For example, in a ZUML page, you can put a window
 	 * into modal immediately after rendered as follows.
 	 *
@@ -194,9 +194,9 @@ public class Window extends XulElement implements IdSpace  {
 	 *&lt;window title="..."&gt;
 	 *...
 	 *  &lt;zscript&gt;
-	 *    Events.postEvent(Events.ON_MODAL, spaceOwner, null);
+	 *    Events.postEvent(Events.ON_MODAL, self, null);
 	 *  &lt;/zscript&gt;
-	 *...
+	 *&lt;/window&gt;
 	 *
 	 * @param name the mode which could be one of
 	 * "embedded", "overlapped" and "popup".
@@ -206,12 +206,8 @@ public class Window extends XulElement implements IdSpace  {
 		if ("popup".equals(name)) doPopup();
 		else if ("overlapped".equals(name)) doOverlapped();
 		else if ("embedded".equals(name)) doEmbedded();
-		else if ("modal".equals(name)) {
-			if (Events.inEventListener())
-				doModal();
-			else
-				throw new WrongValueException("setMode(\"modal\") can only be called in an event listener, not in page loading");
-		} else throw new WrongValueException("Uknown mode: "+name);
+		else if ("modal".equals(name)) 	doModal();
+		else throw new WrongValueException("Uknown mode: "+name);
 	}
 
 	/** Returns whether this is a modal dialog.
@@ -239,9 +235,18 @@ public class Window extends XulElement implements IdSpace  {
 	/** Makes this window as a modal dialog.
 	 * It will automatically center the window (ignoring {@link #getLeft} and
 	 * {@link #getTop}).
+	 *
+	 * <p>Notice that this method can be called only in an event listener
+	 * ({@link Events#inEventListener}).
+	 * Rather, you shall use {@link com.potix.zk.ui.event.Events#postEvent} to
+	 * post the onModal event.
+	 * Refer to {@link #setMode} for more description.
 	 */
 	public void doModal() throws InterruptedException {
 		checkOverlappable();
+
+		if (!Events.inEventListener())
+			throw new WrongValueException("doModal() and setMode(\"modal\") can only be called in an event listener, not in page loading");
 
 		if (_mode != MODAL || !_moding) {
 			endModing();
