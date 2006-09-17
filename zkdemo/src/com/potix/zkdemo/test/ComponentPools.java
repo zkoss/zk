@@ -19,7 +19,7 @@ package com.potix.zkdemo.test;
 import java.util.*;
 
 import com.potix.zk.ui.*;
-import com.potix.zk.ui.util.ApplicationInit;
+import com.potix.zk.ui.util.WebAppInit;
 import com.potix.zul.html.*;
 
 /**
@@ -38,7 +38,7 @@ public class ComponentPools {
 			return _comps.isEmpty() ? null: (Component)_comps.remove(0);
 		}
 	}
-	public static class Init implements ApplicationInit {
+	public static class Init implements WebAppInit {
 		public void init(WebApp wapp) {
 			for (int j = 0; j < 20; ++j)
 				_comps.add(new Label("Pool "+j));
