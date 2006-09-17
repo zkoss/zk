@@ -171,7 +171,7 @@ zulSHdr.init = function (cmp) {
 	Event.observe(cmp, "click", function (evt) {zulSHdr.onclick(evt, cmp);});
 };
 zulSHdr.onclick = function (evt, cmp) {
-	if (zulSHdr._sortable(cmp))
+	if (zulSHdr._sortable(cmp) && zkau.insamepos(evt))
 		zkau.send({uuid: cmp.id, cmd: "onSort", data: null}, 10);
 };
 
