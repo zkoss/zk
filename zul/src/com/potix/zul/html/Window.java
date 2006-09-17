@@ -206,9 +206,12 @@ public class Window extends XulElement implements IdSpace  {
 		if ("popup".equals(name)) doPopup();
 		else if ("overlapped".equals(name)) doOverlapped();
 		else if ("embedded".equals(name)) doEmbedded();
-		else if ("modal".equals(name))
-			throw new WrongValueException("setMode() doesn't suport modal. Use doModal(), or post the onModal event, instead.");
-		else throw new WrongValueException("Uknown mode: "+name);
+		else if ("modal".equals(name)) {
+			if (Events.inEventListener())
+				doModal();
+			else
+				throw new WrongValueException("setMode(\"modal\") can only be called in an event listener, not in page loading");
+		} else throw new WrongValueException("Uknown mode: "+name);
 	}
 
 	/** Returns whether this is a modal dialog.
