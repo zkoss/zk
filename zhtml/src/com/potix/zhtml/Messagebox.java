@@ -33,33 +33,33 @@ import com.potix.zk.ui.UiException;
  */
 public class Messagebox {
 	/** A symbol consisting of a question mark in a circle. */
-	public static final String QUESTION = com.potix.zul.html.Messagebox.QUESTION;
+	public static final String QUESTION = org.zkoss.zul.Messagebox.QUESTION;
 	/** A symbol consisting of an exclamation point in a triangle with
 	 * a yellow background.
 	 */
-	public static final String EXCLAMATION  = com.potix.zul.html.Messagebox.EXCLAMATION;
+	public static final String EXCLAMATION  = org.zkoss.zul.Messagebox.EXCLAMATION;
 	/** The same as {@link #EXCLAMATION}.
 	 */
 	public static final String INFORMATION = EXCLAMATION;
 	/** A symbol consisting of a white X in a circle with a red background. */
-	public static final String ERROR = com.potix.zul.html.Messagebox.ERROR;
+	public static final String ERROR = org.zkoss.zul.Messagebox.ERROR;
 	/** Contains no symbols. */
 	public static final String NONE = null;
 
 	/** A OK button. */
-	public static final int OK = com.potix.zul.html.Messagebox.OK;
+	public static final int OK = org.zkoss.zul.Messagebox.OK;
 	/** A Cancel button. */
-	public static final int CANCEL = com.potix.zul.html.Messagebox.CANCEL;
+	public static final int CANCEL = org.zkoss.zul.Messagebox.CANCEL;
 	/** A Yes button. */
-	public static final int YES = com.potix.zul.html.Messagebox.YES;
+	public static final int YES = org.zkoss.zul.Messagebox.YES;
 	/** A No button. */
-	public static final int NO = com.potix.zul.html.Messagebox.NO;
+	public static final int NO = org.zkoss.zul.Messagebox.NO;
 	/** A Abort button. */
-	public static final int ABORT = com.potix.zul.html.Messagebox.ABORT;
+	public static final int ABORT = org.zkoss.zul.Messagebox.ABORT;
 	/** A Retry button. */
-	public static final int RETRY = com.potix.zul.html.Messagebox.RETRY;
+	public static final int RETRY = org.zkoss.zul.Messagebox.RETRY;
 	/** A IGNORE button. */
-	public static final int IGNORE = com.potix.zul.html.Messagebox.IGNORE;
+	public static final int IGNORE = org.zkoss.zul.Messagebox.IGNORE;
 
 	/** Shows a message box and returns what button is pressed.
 	 *
@@ -77,7 +77,7 @@ public class Messagebox {
 	public static final
 	int show(String message, String title, int buttons, String icon)
 	throws InterruptedException {
-		return com.potix.zul.html.Messagebox.show(message, title, buttons, icon);
+		return org.zkoss.zul.Messagebox.show(message, title, buttons, icon);
 	}
 	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, null, OK, INFORMATION).

@@ -49,6 +49,6 @@ public class Fileupload {
 	 */
 	public static Media get(String message, String title)
 	throws InterruptedException {
-		return com.potix.zul.html.Fileupload.get(message, title);
+		return org.zkoss.zul.Fileupload.get(message, title);
 	}
 }
