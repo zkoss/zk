@@ -1,4 +1,4 @@
-pxweb: Potix Web Library
+zweb: Potix Web Library
 ------------------------
 
 Libraries to develop Web applications.
