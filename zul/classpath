@@ -1,5 +1,5 @@
-../dist/lib/pxcommon.jar
-../dist/lib/pxweb.jar
+../dist/lib/zcommon.jar
+../dist/lib/zweb.jar
 ../dist/lib/zk.jar
 ../dist/lib/ext/javax.servlet.jar
 ../dist/lib/ext/javax.servlet.jsp.jar
