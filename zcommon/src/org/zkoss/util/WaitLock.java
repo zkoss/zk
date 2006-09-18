@@ -60,7 +60,7 @@ try {
 }
 </code></pre>
  *
- * Refer to i3sys's SketchPostImpl, pxweb's JspLoaderServlet for examples.
+ * Refer to i3sys's SketchPostImpl, zweb's JspLoaderServlet for examples.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
