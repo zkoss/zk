@@ -93,7 +93,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$prjnm/dist/lib/ext
 	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar dist/lib/ext/commons-el.jar /tmp/zk/$prjnm/dist/lib/ext
 
-	cp dist/lib/pxcommon.jar dist/lib/pxweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$prjnm/dist/lib/
+	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$prjnm/dist/lib/
 	cp dist/lib/fckez.jar dist/lib/dojoz.jar /tmp/zk/$prjnm/dist/lib/zkforge
 
 	cp -rp dist/export/WEB-INF/* /tmp/zk/$prjnm/dist/WEB-INF
@@ -121,7 +121,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cd $javadocdir
 
 	echo Output ${javadocnm}.zip
-	zip -qr9 ${javadocnm}.zip pxcommon pxweb zk zul zhtml zkplus
+	zip -qr9 ${javadocnm}.zip zcommon zweb zk zul zhtml zkplus
 	mv ${javadocnm}.zip /tmp/zk
 fi
 if [ "$target" == "official" ] ; then
@@ -146,8 +146,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp bin/* /tmp/zk/$srcnm/bin
 	cp build* /tmp/zk/$srcnm
 	cp -rp bin /tmp/zk/$srcnm
-	cp -rp pxcommon /tmp/zk/$srcnm
-	cp -rp pxweb /tmp/zk/$srcnm
+	cp -rp zcommon /tmp/zk/$srcnm
+	cp -rp zweb /tmp/zk/$srcnm
 	cp -rp zk /tmp/zk/$srcnm
 	cp -rp zul /tmp/zk/$srcnm
 	cp -rp zhtml /tmp/zk/$srcnm
@@ -155,13 +155,13 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
 
 	if [ "$target" == "official" ] ; then
-	cp dist/lib/pxcommon.jar dist/lib/pxweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
+	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
 	cp dist/lib/ext/* /tmp/zk/$srcnm/dist/lib/ext
 	rm -f /tmp/zk/$srcnm/dist/lib/ext/pluto.jar /tmp/zk/$srcnm/dist/lib/ext/commons-logging.jar
 	fi
 
 	cd /tmp/zk/$srcnm
-	rm -rf pxcommon/debug pxweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
+	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
 	find -name CVS | xargs rm -rf
 	find -name .svn | xargs rm -rf
 
@@ -180,12 +180,3 @@ if [ "$target" == "official" ]; then
 		cp $f /tmp/zk/doc/${f%.pdf}-$ver.pdf
 	done
 fi
-
-#if [ "$target" == "official" ] ; then
-#	echo "Add the tag, $prjnm, to cvs..."
-#	tagnm=${prjnm//./_}
-#	tagnm=${tagnm//:/_}
-#	tagnm=${tagnm//@/_}
-#	cd $HOME/prj/zk1
-#	xc rtag "$tagnm" pxcommon pxweb zk zhtml zul zkplus
-#fi

@@ -271,7 +271,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <!-- MISCELLANEOUS -->
 <!-- ============= -->
 <target name="javadoc" depends="config.build">
-	<javadoc packagenames="com.potix.*"
+	<javadoc packagenames="org.zkoss.*"
 	 destdir="${working.javadoc.dir}"
 	 author="true" package="true" version="true" use="true"
 	 windowtitle="${project.name} ${project.version} API"
@@ -282,10 +282,10 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 			<pathelement path="${javadoc.class.path}"/>
 		</classpath>
 		<packageset dir="${src.dir}">
-			<include name="com/potix/**"/>
+			<include name="org/zkoss/**"/>
 		</packageset>
 		<fileset dir="${codegen.dir}">
-			<include name="com/potix/**"/>
+			<include name="org/zkoss/**"/>
 			<exclude name="**/*$$*"/>
 		</fileset>
 	</javadoc>
@@ -300,7 +300,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		by package.html -->
 	<copy todir="${dist.javadoc.dir}" preservelastmodified="yes">
 		<fileset dir="${src.dir}"
-		 includes="com/potix/**/*.xml, com/potix/**/*.html"
+		 includes="org/zkoss/**/*.xml, org/zkoss/**/*.html"
 		 excludes="**/package.html" />
 	</copy>
 </target>

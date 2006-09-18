@@ -7,7 +7,7 @@ genprop
 genprop.awk
 zipjs
 
-pxcommon.jar
+zcommon.jar
 pxweb.jar
 zk.jar
 zul.jar

@@ -1,6 +1,6 @@
 export=zk1
 
-pxcommon.jar
+zcommon.jar
 pxweb.jar
 zk.jar
 zul.jar
