@@ -36,5 +36,14 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 			<short-title>ZK</short-title>
 			<keywords>ZK,ZUML</keywords>
 		</portlet-info>
+
+		<!-- An example to specify zk_page
+		<portlet-preferences>
+			<preference>
+				<name>zk_page</name>
+				<value>/test.zul</value
+			</preference>
+		</portlet-preferences>
+		-->
 	</portlet>
 </portlet-app>
