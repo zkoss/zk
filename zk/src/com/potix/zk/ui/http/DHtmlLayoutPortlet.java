@@ -168,6 +168,11 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 				RenderHttpServletRequest.getInstance(request),
 				RenderHttpServletResponse.getInstance(response),
 				desktop, page);
+
+		//Bug 1548478: content-type is required for some implementation (JBoss Portal)
+		if (response.getContentType() == null)
+			response.setContentType("text/html;charset=UTF-8");
+
 		wappc.getUiEngine()
 			.execNewPage(exec, pagedef, page, response.getWriter());
 	}
