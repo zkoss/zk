@@ -1,7 +1,7 @@
 export=zk1
 
 zcommon.jar
-pxweb.jar
+zweb.jar
 zk.jar
 zul.jar
 zhtml.jar
