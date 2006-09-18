@@ -1,0 +1,1078 @@
+/* UiEngineImpl.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun  9 13:05:28     2005, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package com.potix.zk.ui.impl;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Collections;
+import java.io.Writer;
+import java.io.IOException;
+
+import javax.servlet.jsp.el.FunctionMapper;
+
+import com.potix.lang.D;
+import com.potix.lang.Classes;
+import com.potix.lang.Objects;
+import com.potix.lang.Threads;
+import com.potix.lang.Exceptions;
+import com.potix.lang.Expectable;
+import com.potix.mesg.Messages;
+import com.potix.util.logging.Log;
+
+import com.potix.zk.mesg.MZk;
+import com.potix.zk.ui.*;
+import com.potix.zk.ui.sys.*;
+import com.potix.zk.ui.event.*;
+import com.potix.zk.ui.metainfo.*;
+import com.potix.zk.ui.ext.PostCreate;
+import com.potix.zk.ui.util.*;
+import com.potix.zk.au.*;
+
+/**
+ * An implementation of {@link UiEngine}.
+ *
+ * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ */
+public class UiEngineImpl implements UiEngine {
+	private static final Log log = Log.lookup(UiEngineImpl.class);
+
+	/** A pool of idle EventProcessingThread. */
+	private final List _evtthds = new LinkedList();
+	/** A map of suspended processing:
+	 * (Desktop desktop, IdentityHashMap(Object mutex, List(EventProcessingThread)).
+	 */
+	private final Map _suspended = new HashMap();
+	/** A map of resumed processing
+	 * (Desktop desktop, List(EventProcessingThread)).
+	 */
+	private final Map _resumed = new HashMap();
+	/** The maximal allowed # of event handling threads.*/
+	private int _maxEvtThds;
+
+	public UiEngineImpl() {
+	}
+
+	//-- UiEngine --//
+	public void start(WebApp wapp) {
+		final Integer v = wapp.getConfiguration().getMaxEventThreads();
+		final int i = v != null ? v.intValue(): 100;
+		_maxEvtThds = i > 0 ? i: 100;
+	}
+	public void stop(WebApp wapp) {
+		synchronized (_evtthds) {
+			for (Iterator it = _evtthds.iterator(); it.hasNext();)
+				((EventProcessingThread)it.next()).cease();
+			_evtthds.clear();
+		}
+
+		synchronized (_suspended) {
+			for (Iterator it = _suspended.values().iterator(); it.hasNext();) {
+				final Map map = (Map)it.next();
+				synchronized (map) {
+					for (Iterator i2 = map.values().iterator(); i2.hasNext();) {
+						final List list = (List)i2.next();
+						for (Iterator i3 = list.iterator(); i3.hasNext();)
+							((EventProcessingThread)i3.next()).cease();
+					}
+				}
+			}
+			_suspended.clear();
+		}
+		synchronized (_resumed) {
+			for (Iterator it = _resumed.values().iterator(); it.hasNext();) {
+				final List list = (List)it.next();
+				synchronized (list) {
+					for (Iterator i2 = list.iterator(); i2.hasNext();)
+						((EventProcessingThread)i2.next()).cease();
+				}
+			}
+			_resumed.clear();
+		}
+	}
+
+	public void cleanup(Desktop desktop) {
+		if (log.debugable()) log.debug("Cleanup "+desktop);
+
+		final Configuration conf = desktop.getWebApp().getConfiguration();
+		final Map map;
+		synchronized (_suspended) {
+			map = (Map)_suspended.remove(desktop);
+		}
+		if (map != null) {
+			synchronized (map) {
+				for (Iterator it = map.values().iterator(); it.hasNext();) {
+					final List list = (List)it.next();
+					for (Iterator i2 = list.iterator(); i2.hasNext();) {
+						final EventProcessingThread evtthd =
+							(EventProcessingThread)i2.next();
+						evtthd.ceaseSilently();
+						conf.invokeEventThreadResumeAborts(
+							evtthd.getComponent(), evtthd.getEvent());
+					}
+				}
+			}
+		}
+
+		final List list;
+		synchronized (_resumed) {
+			list = (List)_resumed.remove(desktop);
+		}
+		if (list != null) {
+			synchronized (list) {
+				for (Iterator it = list.iterator(); it.hasNext();) {
+					final EventProcessingThread evtthd =
+						(EventProcessingThread)it.next();
+					evtthd.ceaseSilently();
+					conf.invokeEventThreadResumeAborts(
+						evtthd.getComponent(), evtthd.getEvent());
+				}
+			}
+		}
+	}
+
+	private static UiVisualizer getCurrentVisualizer() {
+		final ExecutionCtrl execCtrl = ExecutionsCtrl.getCurrentCtrl();
+		if (execCtrl == null)
+			throw new IllegalStateException("Components can be accessed only in event listeners");
+		return (UiVisualizer)execCtrl.getVisualizer();
+	}
+	public void pushOwner(Component comp) {
+		getCurrentVisualizer().pushOwner(comp);
+	}
+	public void popOwner() {
+		getCurrentVisualizer().popOwner();
+	}
+	public void addInvalidate(Page page) {
+		if (page == null)
+			throw new IllegalArgumentException();
+		getCurrentVisualizer().addInvalidate(page);
+	}
+	public void addInvalidate(Component comp) {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		getCurrentVisualizer().addInvalidate(comp);
+	}
+	public void addSmartUpdate(Component comp, String attr, String value) {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
+	}
+	public void addResponse(String key, AuResponse response) {
+		getCurrentVisualizer().addResponse(key, response);
+	}
+	public void addMoved(Component comp, boolean newAttached) {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		getCurrentVisualizer().addMoved(comp, newAttached);
+	}
+	/** Called before changing the component's UUID.
+	 *
+	 * @param addOnlyMoved if true, it is added only if it was moved
+	 * before (see {@link #addMoved}).
+	 */
+	public void addUuidChanged(Component comp, boolean addOnlyMoved) {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		getCurrentVisualizer().addUuidChanged(comp, addOnlyMoved);
+	}
+
+	//-- Creating a new page --//
+	public void execNewPage(Execution exec, PageDefinition pagedef,
+	Page page, Writer out) throws IOException {
+		//It is possible this method is invoked when processing other exec
+		final Execution oldexec = Executions.getCurrent();
+		final ExecutionCtrl oldexecCtrl = (ExecutionCtrl)oldexec;
+		final UiVisualizer olduv =
+			oldexecCtrl != null ? (UiVisualizer)oldexecCtrl.getVisualizer(): null;
+
+		final UiVisualizer uv;
+		if (olduv != null) uv = doReactivate(exec, olduv);
+		else uv = doActivate(exec, null);
+
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		final Page old = execCtrl.getCurrentPage();
+		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
+		execCtrl.setCurrentPage(page);
+		execCtrl.setCurrentPageDefinition(pagedef);
+
+		final Desktop desktop = exec.getDesktop();
+		final Configuration config = desktop.getWebApp().getConfiguration();
+		boolean cleaned = false;
+		try {
+			config.invokeExecutionInits(exec, oldexec);
+
+			if (olduv != null) olduv.setOwner(page);
+
+			//Cycle 1: Creates all components
+
+			//Note:
+			//1) stylesheet, tablib are inited in Page's contructor
+			//2) we add variable resolvers before init because
+			//init's zscirpt might depend on it.
+			page.addFunctionMapper(pagedef.getFunctionMapper());
+			initVariableResolvers(pagedef, page);
+
+			final Initiators inits = Initiators.doInit(pagedef, page);
+			try {
+				//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
+				pagedef.init(page,
+					!uv.isEverAsyncUpdate() && !uv.isAborting(), !uv.isAborting());
+				if (!uv.isAborting())
+					execCreate(exec, page, pagedef, null);
+			} catch(Throwable ex) {
+				inits.doCatch(ex);
+				throw UiException.Aide.wrap(ex);
+			} finally {
+				inits.doFinally();
+			}
+
+			//Cycle 2: process pending events
+			Event event = nextEvent(uv);
+			do {
+				for (; event != null; event = nextEvent(uv)) {
+					process(desktop, event);
+					//Unlike execUpdate, we don't cache exception here
+				}
+
+				//Cycle 2a: processing resumed event processing
+				resumeAll(desktop, uv, null);
+			} while ((event = nextEvent(uv)) != null);
+
+			//Cycle 3: Redraw the page (and responses)
+			List responses = uv.getResponses();
+
+			final AbortingReason aborting = uv.getAbortingReason();
+			if (aborting != null)
+				responses.add(0, aborting.getResponse());
+
+			if (olduv != null && olduv.addToFirstAsyncUpdate(responses))
+				responses = null;
+				//A new ZK page might be included by an async update
+				//(example: ZUL's include).
+				//If so, we cannot generate the responses in the page.
+				//Rather, we shall add them to the async update.
+
+			((PageCtrl)page).redraw(responses, out);
+		} catch (Throwable ex) {
+			cleaned = true;
+			config.invokeExecutionCleanups(exec, oldexec, ex, null);
+				//TODO: find a way to send back the error message, if any, returned
+
+			if (ex instanceof IOException) throw (IOException)ex;
+			throw UiException.Aide.wrap(ex);
+		} finally {
+			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null, null);
+
+			execCtrl.setCurrentPage(old); //restore it
+			execCtrl.setCurrentPageDefinition(olddef); //restore it
+
+			if (olduv != null) doDereactivate(exec, olduv);
+			else doDeactivate(exec);
+		}
+	}
+
+	private static final Event nextEvent(UiVisualizer uv) {
+		final Event evt = ((ExecutionCtrl)uv.getExecution()).getNextEvent();
+		return evt != null && !uv.isAborting() ? evt: null;
+	}
+	/** Cycle 1:
+	 * Creates all child components defined in the specified definition.
+	 * @return the first component being created.
+	 */
+	private static final Component execCreate(Execution exec, Page page,
+	InstanceDefinition parentdef, Component parent)
+	throws IOException {
+		Component firstCreated = null;
+		final PageDefinition pagedef = parentdef.getPageDefinition();
+			//note: don't use page.getDefinition because createComponents
+			//might be called from a page other than instance's
+		for (Iterator it = parentdef.getChildren().iterator(); it.hasNext();) {
+			final Object obj = it.next();
+			if (obj instanceof InstanceDefinition) {
+				final InstanceDefinition childdef = (InstanceDefinition)obj;
+				final ForEach forEach = childdef.getForEach(page, parent);
+				if (forEach == null) {
+					if (isEffective(childdef, page, parent)) {
+						final Component child =
+							execCreateChild(exec, page, parent, childdef);
+						if (firstCreated == null) firstCreated = child;
+					}
+				} else {
+					while (forEach.next()) {
+						if (isEffective(childdef, page, parent)) {
+							final Component child =
+								execCreateChild(exec, page, parent, childdef);
+							if (firstCreated == null) firstCreated = child;
+						}
+					}
+				}
+			} else if (obj instanceof ZScript) {
+				final ZScript script = (ZScript)obj;
+				if (isEffective(script, page, parent)) {
+					final Namespace ns = parent != null ?
+						Namespaces.beforeInterpret(exec, parent):
+						Namespaces.beforeInterpret(exec, page);
+					try {
+						page.interpret(script.getContent(page, parent), ns);
+					} finally {
+						Namespaces.afterInterpret(ns);
+					}
+				}
+			} else {
+				throw new IllegalStateException("Unknown object: "+obj);
+			}
+		}
+		return firstCreated;
+	}
+	private static
+	Component execCreateChild(Execution exec, Page page, Component parent,
+	InstanceDefinition childdef) throws IOException {
+		if (ComponentDefinition.ZK == childdef.getComponentDefinition()) {
+			return execCreate(exec, page, childdef, parent);
+		} else {
+			final Component child = childdef.newInstance(page);
+			if (parent != null) child.setParent(parent);
+			else child.setPage(page);
+
+			final Millieu mill = ((ComponentCtrl)child).getMillieu();
+			mill.applyProperties(child);
+			mill.applyCustomAttributes(child);
+
+			if (child instanceof PostCreate)
+				((PostCreate)child).postCreate();
+
+			execCreate(exec, page, childdef, child); //recursive
+
+			if (Events.isListenerAvailable(child, Events.ON_CREATE, false))
+				Events.postEvent(
+					new CreateEvent(Events.ON_CREATE, child, exec.getArg()));
+
+			return child;
+		}
+	}
+	private static final boolean isEffective(Condition cond,
+	Page page, Component comp) {
+		return comp != null ? cond.isEffective(comp): cond.isEffective(page);
+	}
+
+	public Component createComponents(Execution exec,
+	PageDefinition pagedef, Page page, Component parent, Map params) {
+		if (pagedef == null)
+			throw new IllegalArgumentException("pagedef");
+		if (parent != null)
+			page = parent.getPage();
+		else if (page != null)
+			parent = ((PageCtrl)page).getDefaultParent();
+
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		if (!execCtrl.isActivated())
+			throw new IllegalStateException("Not activated yet");
+
+		final Page old = execCtrl.getCurrentPage();
+		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
+		execCtrl.setCurrentPage(page);
+		execCtrl.setCurrentPageDefinition(pagedef);
+		exec.pushArg(params != null ? params: Collections.EMPTY_MAP);
+
+		//Note: we add taglib, stylesheets and var-resolvers to the page
+		//it might cause name pollution but we got no choice since they
+		//are used as long as components created by this method are alive
+		if (page != null) page.addFunctionMapper(pagedef.getFunctionMapper());
+		initVariableResolvers(pagedef, page);
+
+		final Initiators inits = Initiators.doInit(pagedef, page);
+		try {
+			return execCreate(exec, page, pagedef, parent);
+		} catch (Throwable ex) {
+			inits.doCatch(ex);
+			throw UiException.Aide.wrap(ex);
+		} finally {
+			exec.popArg();
+			execCtrl.setCurrentPage(old); //restore it
+			execCtrl.setCurrentPageDefinition(olddef); //restore it
+
+			inits.doFinally();
+		}
+	}
+	private static final void initVariableResolvers(PageDefinition pagedef,
+	Page page) {
+		final List resolvs = pagedef.newVariableResolvers(page);
+		if (!resolvs.isEmpty())
+			for (Iterator it = resolvs.iterator(); it.hasNext();)
+				page.addVariableResolver((VariableResolver)it.next());
+	}
+
+	public void sendRedirect(String uri, String target) {
+		if (uri != null && uri.length() == 0)
+			uri = null;
+		final UiVisualizer uv = getCurrentVisualizer();
+		uv.setAbortingReason(
+			new AbortBySendRedirect(
+				uri != null ? uv.getExecution().encodeURL(uri): "", target));
+	}
+
+	//-- Asynchronous updates --//
+	public void execUpdate(Execution exec, List requests, Writer out)
+	throws IOException {
+		if (requests == null)
+			throw new IllegalArgumentException("null requests");
+		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
+			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec+", reqs="+requests;
+
+		final Execution oldexec = Executions.getCurrent();
+		final UiVisualizer uv = doActivate(exec, requests);
+		if (uv == null)
+			return; //done (request is added to the exec currently activated)
+
+		final Desktop desktop = exec.getDesktop();
+		final Configuration config = desktop.getWebApp().getConfiguration();
+		final Monitor monitor = config.getMonitor();
+		if (monitor != null) {
+			try {
+				monitor.beforeUpdate(desktop, requests);
+			} catch (Throwable ex) {
+				log.error(ex);
+			}
+		}
+
+		boolean cleaned = false;
+		try {
+			config.invokeExecutionInits(exec, oldexec);
+			final RequestQueue rque = ((DesktopCtrl)exec.getDesktop()).getRequestQueue();
+			final List errs = new LinkedList();
+			final long tmexpired = System.currentTimeMillis() + 3000;
+				//Tom Yeh: 20060120
+				//Don't process all requests if this thread has processed
+				//a while. Thus, user could see the response sooner.
+			for (AuRequest request; System.currentTimeMillis() < tmexpired
+			&& (request = rque.nextRequest()) != null;) {
+				//Cycle 1: Process one request
+				//Don't process more such that requests will be queued
+				//adn we have the chance to optimize them
+				try {
+					process(exec, request, !errs.isEmpty());
+				} catch (ComponentNotFoundException ex) {
+					//possible because the previous might remove some comp
+					//so ignore it
+					if (log.debugable()) log.debug("Component not found: "+request);
+				} catch (Throwable ex) {
+					handleError(ex, uv, errs);
+					//we don't skip request to avoid mis-match between c/s
+				}
+
+				//Cycle 2: Process any pending events posted by components
+				Event event = nextEvent(uv);
+				do {
+					for (; event != null; event = nextEvent(uv)) {
+						try {
+							process(desktop, event);
+						} catch (Throwable ex) {
+							handleError(ex, uv, errs);
+							break; //skip the rest of events! 
+						}
+					}
+
+					//Cycle 2a: processing resumed event processing
+					resumeAll(desktop, uv, errs);
+				} while ((event = nextEvent(uv)) != null);
+			}
+
+			//Cycle 3: Generate output
+			if (!uv.isAborting()) {
+				List responses;
+				try {
+					//Note: we have to call visualizeErrors before uv.getResponses,
+					//since it might create/update components
+					if (!errs.isEmpty())
+						visualizeErrors(exec, uv, errs);
+
+					responses = uv.getResponses();
+				} catch (Throwable ex) {
+					responses = new LinkedList();
+					responses.add(new AuAlert(Exceptions.getMessage(ex)));
+
+					log.error(ex);
+					errs.add(ex); //so invokeExecutionCleanups knows it
+				}
+
+				cleaned = true;
+				final List cleanerrs = new LinkedList();
+				config.invokeExecutionCleanups(
+					exec, oldexec, errs.isEmpty() ? null: (Throwable)errs.get(0),
+					cleanerrs);
+				if (!cleanerrs.isEmpty()) {
+					final StringBuffer errmsg = new StringBuffer(100);
+					for (Iterator it = cleanerrs.iterator(); it.hasNext();) {
+						final Throwable t = (Throwable)it.next();
+						if (errmsg.length() > 0) errmsg.append('\n');
+						errmsg.append(Exceptions.getMessage(t));
+					}
+					responses.add(new AuAlert(errmsg.toString()));
+				}
+
+				if (rque.hasRequest())
+					responses.add(new AuEcho());
+
+				response(responses, out);
+
+				if (log.debugable())
+					if (responses.size() < 5 || log.finerable()) log.debug("Responses: "+responses);
+					else log.debug("Responses: "+responses.subList(0, 5)+"...");
+			}
+
+			final AbortingReason aborting = uv.getAbortingReason();
+			if (aborting != null) response(aborting.getResponse(), out);
+
+			out.flush();
+				//flush before deactivating to make sure it has been sent
+		} catch (Throwable ex) {
+			if (!cleaned) {
+				cleaned = true;
+				config.invokeExecutionCleanups(exec, oldexec, ex, null);
+			}
+
+			if (ex instanceof IOException) throw (IOException)ex;
+			throw UiException.Aide.wrap(ex);
+		} finally {
+			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null, null);
+
+			doDeactivate(exec);
+
+			if (monitor != null) {
+				try {
+					monitor.afterUpdate(desktop);
+				} catch (Throwable ex) {
+					log.error(ex);
+				}
+			}
+		}
+	}
+	/** Handles each error. The erros will be queued to the errs list
+	 * and processed later by {@link #visualizeErrors}.
+	 */
+	private static final
+	void handleError(Throwable ex, UiVisualizer uv, List errs) {
+		final Throwable err = ex;
+		final Throwable t = Exceptions.findCause(ex, Expectable.class);
+		if (t == null) {
+			log.realCause(ex);
+		} else {
+			ex = t;
+			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));
+		}
+
+		final String msg = Exceptions.getMessage(ex);
+		if (ex instanceof WrongValueException) {
+			final Component comp = ((WrongValueException)ex).getComponent();
+			if (comp != null) {
+				uv.addResponse("wrongValue", new AuAlert(comp, msg));
+				return;
+			}
+		}
+
+		errs.add(err);
+	}
+	/** Post-process the errors to represent them to the user.
+	 */
+	private final
+	void visualizeErrors(Execution exec, UiVisualizer uv, List errs) {
+		final StringBuffer sb = new StringBuffer(128);
+		for (Iterator it = errs.iterator(); it.hasNext();) {
+			final Throwable t = (Throwable)it.next();
+			if (sb.length() > 0) sb.append('\n');
+			sb.append(Exceptions.getMessage(t));
+		}
+		final String msg = sb.toString();
+
+		final Throwable err = (Throwable)errs.get(0);
+		final String location =
+			exec.getDesktop().getWebApp().getConfiguration().getErrorPage(err);
+		if (location != null) {
+			try {
+				exec.setAttribute("javax.servlet.error.message", msg);
+				exec.setAttribute("javax.servlet.error.exception", err);
+				exec.setAttribute("javax.servlet.error.exception_type", err.getClass());
+				exec.setAttribute("javax.servlet.error.status_code", new Integer(500));
+				final Component c = exec.createComponents(location, null, null);
+				if (c == null) {
+					log.error("No component in "+location);
+				} else {
+					process(exec.getDesktop(), new Event(Events.ON_MODAL, c, null));
+					return; //done
+				}
+			} catch (Throwable ex) {
+				log.realCause("Unable to generate custom error page, "+location, ex);
+			}
+		}
+
+		uv.addResponse(null, new AuAlert(msg)); //default handling
+	}
+
+	/** Processing the request and stores result into UiVisualizer.
+	 * @param everError whether any error ever occured before processing this
+	 * request.
+	 */
+	private void process(Execution exec, AuRequest request, boolean everError) {
+		if (log.debugable()) log.debug("Processing request: "+request);
+
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		execCtrl.setCurrentPage(request.getPage());
+		request.getCommand().process(request, everError);
+	}
+	/** Processing the event and stores result into UiVisualizer. */
+	private void process(Desktop desktop, Event event) {
+		if (log.debugable()) log.debug("Processing event: "+event);
+		final Component comp = event.getTarget();
+		if (comp != null) {
+			//Note: a component might be removed before event being processed
+			if (comp.getPage() != null)
+				processEvent(comp, event);
+		} else {
+			//since an event might change the page/desktop/component relation,
+			//we copy roots first
+			final List roots = new LinkedList();
+			for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
+				roots.addAll(((Page)it.next()).getRoots());
+			}
+			for (Iterator it = roots.iterator(); it.hasNext();) {
+				final Component c = (Component)it.next();
+				if (c.getPage() != null) //might be removed, so check first
+					processEvent(c, event);
+			}
+		}
+	}
+
+	public void wait(Object mutex) throws InterruptedException {
+		if (mutex == null)
+			throw new IllegalArgumentException("null mutex");
+
+		final Thread thd = Thread.currentThread();
+		if (!(thd instanceof EventProcessingThread))
+			throw new UiException("This method can be called only in an event listener, not in paging loading.");
+		if (D.ON && log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
+
+		final Execution exec = Executions.getCurrent();
+		final Desktop desktop = exec.getDesktop();
+
+		final EventProcessingThread evtthd = (EventProcessingThread)thd;
+		desktop.getWebApp().getConfiguration()
+			.invokeEventThreadSuspends(
+				evtthd.getComponent(), evtthd.getEvent(), mutex);
+			//it might throw an exception, so process it before updating
+			//_suspended
+
+		Map map;
+		synchronized (_suspended) {
+			map = (Map)_suspended.get(desktop);
+			if (map == null)
+				_suspended.put(desktop, map = new IdentityHashMap(3));
+					//note: we have to use IdentityHashMap because user might
+					//use Integer or so as mutex
+		}
+		synchronized (map) {
+			List list = (List)map.get(mutex);
+			if (list == null)
+				map.put(mutex, list = new LinkedList());
+			list.add(evtthd);
+		}
+		try {
+			EventProcessingThread.doSuspend(mutex);
+		} catch (Throwable ex) {
+			//error recover
+			synchronized (map) {
+				final List list = (List)map.get(mutex);
+				if (list != null) {
+					list.remove(evtthd);
+					if (list.isEmpty()) map.remove(mutex);
+				}
+			}
+			if (ex instanceof InterruptedException)
+				throw (InterruptedException)ex;
+			throw UiException.Aide.wrap(ex, "Unable to suspend "+evtthd);
+		}
+	}
+	public void notify(Object mutex) {
+		notify(Executions.getCurrent().getDesktop(), mutex);
+	}
+	public void notify(Desktop desktop, Object mutex) {
+		if (desktop == null || mutex == null)
+			throw new IllegalArgumentException("desktop and mutex cannot be null");
+
+		final Map map;
+		synchronized (_suspended) {
+			map = (Map)_suspended.get(desktop);
+			if (map == null) return; //nothing to notify
+		}
+
+		final EventProcessingThread evtthd;
+		synchronized (map) {
+			final List list = (List)map.get(mutex);
+			if (list == null) return; //nothing to notify
+
+			//Note: list is never empty
+			evtthd = (EventProcessingThread)list.remove(0);
+			if (list.isEmpty()) map.remove(mutex); //clean up
+		}
+		addResumed(desktop, evtthd);
+	}
+	public void notifyAll(Object mutex) {
+		final Execution exec = Executions.getCurrent();
+		if (exec == null)
+			throw new UiException("resume can be called only in processing a request");
+		notifyAll(exec.getDesktop(), mutex);
+	}
+	public void notifyAll(Desktop desktop, Object mutex) {
+		if (desktop == null || mutex == null)
+			throw new IllegalArgumentException("desktop and mutex cannot be null");
+
+		final Map map;
+		synchronized (_suspended) {
+			map = (Map)_suspended.get(desktop);
+			if (map == null) return; //nothing to notify
+		}
+
+		final List list;
+		synchronized (map) {
+			list = (List)map.remove(mutex);
+			if (list == null) return; //nothing to notify
+		}
+		for (Iterator it = list.iterator(); it.hasNext();)
+			addResumed(desktop, (EventProcessingThread)it.next());
+	}
+	/** Adds to _resumed */
+	private void addResumed(Desktop desktop, EventProcessingThread evtthd) {
+		if (D.ON && log.finerable()) log.finer("Ready to resume "+evtthd);
+		List list;
+		synchronized (_resumed) {
+			list = (List)_resumed.get(desktop);
+			if (list == null)
+				_resumed.put(desktop, list = new LinkedList());
+		}
+		synchronized (list) {
+			list.add(evtthd);
+		}
+	}
+
+	/** Does the real resume.
+	 * Note: {@link #resume} only puts a thread into a resume queue in execution.
+	 */
+	private void resumeAll(Desktop desktop, UiVisualizer uv, List errs) {
+		//We have to loop because a resumed thread might resume others
+		for (;;) {
+			final List list;
+			synchronized (_resumed) {
+				list = (List)_resumed.remove(desktop);
+				if (list == null) return; //nothing to resume; done
+			}
+
+			synchronized (list) {
+				for (Iterator it = list.iterator(); it.hasNext();) {
+					final EventProcessingThread evtthd =
+						(EventProcessingThread)it.next();
+					if (D.ON && log.finerable()) log.finer("Resume "+evtthd);
+					if (uv.isAborting()) {
+						evtthd.ceaseSilently();
+					} else {
+						try {
+							if (evtthd.doResume()) //wait it complete or suspend again
+								recycleEventThread(evtthd); //completed
+						} catch (Throwable ex) {
+							recycleEventThread(evtthd);
+							if (errs == null) {
+								log.error("Unable to resume "+evtthd, ex);
+								throw UiException.Aide.wrap(ex);
+							}
+							handleError(ex, uv, errs);
+						}
+					}
+				}
+			}
+		}
+	}
+	/** Process an event. */
+	private void processEvent(Component comp, Event event) {
+		if (comp.getPage() == null) {
+			if (D.ON && log.debugable()) log.debug("Event is ignored due to dead");
+			return; //nothing to do
+		}
+
+		EventProcessingThread evtthd = null;
+		synchronized (_evtthds) {
+			if (!_evtthds.isEmpty())
+				evtthd = (EventProcessingThread)_evtthds.remove(0);
+		}
+
+		if (evtthd == null)
+			evtthd = new EventProcessingThread();
+
+		try {
+			if (evtthd.processEvent(comp, event))
+				recycleEventThread(evtthd);
+		} catch (Throwable ex) {
+			recycleEventThread(evtthd);
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+	private void recycleEventThread(EventProcessingThread evtthd) {
+		if (!evtthd.isCeased()) {
+			if (evtthd.isIdle()) {
+				synchronized (_evtthds) {
+					if (_evtthds.size() < _maxEvtThds) {
+						_evtthds.add(evtthd); //return to pool
+						return; //done
+					}
+				}
+			}
+			evtthd.ceaseSilently();
+		}
+	}
+
+	//-- Generate output from a response --//
+	public void response(AuResponse response, Writer out)
+	throws IOException {
+		final StringBuffer outsb = new StringBuffer(1024*4);
+		output(response, outsb);
+		out.write(outsb.toString());
+	}
+	public void response(List responses, Writer out)
+	throws IOException {
+		final StringBuffer outsb = new StringBuffer(1024*8);
+		for (Iterator it = responses.iterator(); it.hasNext();) {
+			final AuResponse response = (AuResponse)it.next();
+			output(response, outsb);
+		}
+		if (D.ON && log.finerable()) log.finer(outsb);
+		out.write(outsb.toString());
+	}
+	private static void output(AuResponse response, StringBuffer outsb) {
+		outsb.append("\n<r><c>")
+			.append(response.getCommand())
+			.append("</c>");
+		final String[] data = response.getData();
+		if (data != null) {
+			for (int j = 0; j < data.length; ++j) {
+				outsb.append("\n<d>");
+				encodeXML(outsb, data[j]);
+				outsb.append("</d>");
+			}
+		}
+		outsb.append("\n</r>");
+	}
+	private static void encodeXML(StringBuffer outsb, String data) {
+		if (data == null || data.length() == 0)
+			return;
+
+		//20051208: Tom Yeh
+		//The following codes are tricky.
+		//Reason:
+		//1. nested CDATA is not allowed
+		//2. Firefox (1.0.7)'s XML parser cannot handle over 4096 chars
+		//	if CDATA is not used
+		int j = 0;
+		for (int k; (k = data.indexOf("]]>", j)) >= 0;) {
+			encodeByCData(outsb, data.substring(j, k));
+			outsb.append("]]&gt;");
+			j = k + 3;
+		}
+		encodeByCData(outsb, data.substring(j));
+	}
+	private static void encodeByCData(StringBuffer outsb, String data) {
+		for (int j = data.length(); --j >= 0;) {
+			final char cc = data.charAt(j);
+			if (cc == '<' || cc == '>' || cc == '&') {
+				outsb.append("<![CDATA[").append(data).append("]]>");
+				return;
+			}
+		}
+		outsb.append(data);
+	}
+
+	public void activate(Execution exec) {
+		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
+			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
+		doActivate(exec, null);
+	}
+	public void deactivate(Execution exec) {
+		doDeactivate(exec);
+	}
+
+	//-- Common private utilities --//
+	/** Activates the specified execution for processing.
+	 *
+	 * @param requests a list of requests to process.
+	 * Activation assumes it is asynchronous update if it is not null.
+	 * @return the exec info if the execution is granted;
+	 * null if request has been added to the exec currently activated
+	 */
+	private static UiVisualizer doActivate(Execution exec, List requests) {
+		final Desktop desktop = exec.getDesktop();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+		final Session sess = desktop.getSession();
+		final boolean asyncupd = requests != null;
+		if (log.finerable()) log.finer("Activating "+desktop);
+
+		assert D.OFF || Executions.getCurrent() == null: "Use doReactivate instead";
+
+		final boolean inProcess = asyncupd
+			&& desktopCtrl.getRequestQueue().addRequests(requests);
+
+		//lock desktop
+		final UiVisualizer uv;
+		final Map eis = getVisualizers(sess);
+		synchronized (eis) {
+			for (;;) {
+				final UiVisualizer old = (UiVisualizer)eis.get(desktop);
+				if (old == null) break; //grantable
+
+				if (inProcess) return null;
+
+				try {
+					eis.wait(120*1000);
+				} catch (InterruptedException ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+
+			//grant
+			if (asyncupd) desktopCtrl.getRequestQueue().setInProcess();
+				//set the flag asap to free more following executions
+			eis.put(desktop, uv = new UiVisualizer(exec, asyncupd));
+			desktopCtrl.setExecution(exec);
+		}
+
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		execCtrl.setVisualizer(uv);
+		ExecutionsCtrl.setCurrent(exec);
+
+		try {
+			execCtrl.onActivate();
+		} catch (Throwable ex) {
+			doDeactivate(exec);
+			throw UiException.Aide.wrap(ex);
+		}
+		return uv;
+	}
+	/** Deactivates the execution. */
+	private static final void doDeactivate(Execution exec) {
+		final Desktop desktop = exec.getDesktop();
+		final Session sess = desktop.getSession();
+		if (log.finerable()) log.finer("Deactivating "+desktop);
+
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		try {
+			try {
+				execCtrl.onDeactivate();
+			} catch (Throwable ex) {
+				log.warning("Ignored: failed to deactivate "+desktop, ex);
+			}
+
+			//Unlock desktop
+			final Map eis = getVisualizers(sess);
+			synchronized (eis) {
+				final Object o = eis.remove(desktop);
+				assert D.OFF || o != null;
+				((DesktopCtrl)desktop).setExecution(null);
+				eis.notify(); //wakeup doActivate's wait
+			}
+		} finally {
+			execCtrl.setCurrentPage(null);
+			execCtrl.setVisualizer(null);
+			ExecutionsCtrl.setCurrent(null);
+		}
+
+		final SessionCtrl sessCtrl = (SessionCtrl)sess;
+		if (sessCtrl.isInvalidated()) sessCtrl.invalidateNow();
+	}
+	/** Re-activates for another execution. It is callable only for
+	 * creating new page (execNewPage). It is not allowed for async-update.
+	 * <p>Note: doActivate cannot handle reactivation. In other words,
+	 * the caller has to detect which method to use.
+	 */
+	private static UiVisualizer doReactivate(Execution curExec, UiVisualizer olduv) {
+		final Desktop desktop = curExec.getDesktop();
+		final Session sess = desktop.getSession();
+		if (log.finerable()) log.finer("Re-activating "+desktop);
+
+		assert D.OFF || olduv.getExecution().getDesktop() == desktop:
+			"old dt: "+olduv.getExecution().getDesktop()+", new:"+desktop;
+
+		final UiVisualizer uv = new UiVisualizer(olduv, curExec);
+		final Map eis = getVisualizers(sess);
+		synchronized (eis) {
+			final Object o = eis.put(desktop, uv);
+			if (o != olduv)
+				throw new InternalError(); //wrong olduv
+			((DesktopCtrl)desktop).setExecution(curExec);
+		}
+
+		final ExecutionCtrl curCtrl = (ExecutionCtrl)curExec;
+		curCtrl.setVisualizer(uv);
+		ExecutionsCtrl.setCurrent(curExec);
+
+		try {
+			curCtrl.onActivate();
+		} catch (Throwable ex) {
+			doDereactivate(curExec, olduv);
+			throw UiException.Aide.wrap(ex);
+		}
+		return uv;
+	}
+	/** De-reactivated exec. Work with {@link #doReactivate}.
+	 */
+	private static void doDereactivate(Execution curExec, UiVisualizer olduv) {
+		if (olduv == null) throw new IllegalArgumentException("null");
+
+		final Desktop desktop = curExec.getDesktop();
+		final Session sess = desktop.getSession();
+		if (log.finerable()) log.finer("Deactivating "+desktop);
+
+		final ExecutionCtrl curCtrl = (ExecutionCtrl)curExec;
+		try {
+			curCtrl.onDeactivate();
+		} catch (Throwable ex) {
+			log.warning("Ignored: failed to deactivate "+desktop, ex);
+		}
+		curCtrl.setCurrentPage(null);
+		curCtrl.setVisualizer(null); //free memory
+
+		final Execution oldexec = olduv.getExecution();
+		final Map eis = getVisualizers(sess);
+		synchronized (eis) {
+			eis.put(desktop, olduv);
+			((DesktopCtrl)desktop).setExecution(oldexec);
+		}
+		ExecutionsCtrl.setCurrent(oldexec);
+	}
+	/** Returns a map of (Page, UiVisualizer). */
+	private static Map getVisualizers(Session sess) {
+		synchronized (sess) {
+			final String attr = "com.potix.zk.ui.Visualizers";
+			Map eis = (Map)sess.getAttribute(attr);
+			if (eis == null)
+				sess.setAttribute(attr, eis = new HashMap());
+			return eis;
+		}
+	}
+}
