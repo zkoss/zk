@@ -14,7 +14,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet;
+package org.zkoss.web.servlet;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -42,35 +42,35 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
 
-import com.potix.mesg.MCommon;
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.lang.Classes;
-import com.potix.lang.Exceptions;
-import com.potix.lang.SystemException;
-import com.potix.util.Checksums;
-import com.potix.util.CacheMap;
-import com.potix.util.CollectionsX;
-import com.potix.util.Locales;
-import com.potix.util.logging.Log;
-import com.potix.util.resource.Locator;
-import com.potix.util.resource.Locators;
-import com.potix.util.resource.PropertyBundle;
-import com.potix.idom.Element;
-import com.potix.idom.input.SAXBuilder;
-import com.potix.el.Evals;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.Checksums;
+import org.zkoss.util.CacheMap;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.Locales;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.Locators;
+import org.zkoss.util.resource.PropertyBundle;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.el.Evals;
 
-import com.potix.web.Attributes;
-import com.potix.web.servlet.http.Encodes;
-import com.potix.web.util.resource.ExtendedWebContext;
-import com.potix.web.util.resource.ServletContextLocator;
+import org.zkoss.web.Attributes;
+import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.util.resource.ExtendedWebContext;
+import org.zkoss.web.util.resource.ServletContextLocator;
 
 /**
  * The servlet relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @see com.potix.web.servlet.http.Https
- * @see com.potix.web.servlet.Charsets
+ * @see org.zkoss.web.servlet.http.Https
+ * @see org.zkoss.web.servlet.Charsets
  */
 public class Servlets {
 	private static final Log log = Log.lookup(Servlets.class);
@@ -80,61 +80,61 @@ public class Servlets {
 
 	//-- Standard constants --//
 	/** The included context path; set by the servlet container.
-	 * @see com.potix.web.servlet.http.Https#getThisServletPath
-	 * @see com.potix.web.servlet.http.Https#getOriginServletPath
+	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
+	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
 	 */
 	protected static final String ATTR_INCLUDE_CONTEXT_PATH
 		= "javax.servlet.include.context_path";
 	/** The included servlet path; set by the servlet container.
-	 * @see com.potix.web.servlet.http.Https#getThisServletPath
-	 * @see com.potix.web.servlet.http.Https#getOriginServletPath
+	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
+	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
 	 */
 	protected static final String ATTR_INCLUDE_SERVLET_PATH
 		= "javax.servlet.include.servlet_path";
 	/** The included request URI; set by the servlet container.
-	 * @see com.potix.web.servlet.http.Https#getThisRequestURI
+	 * @see org.zkoss.web.servlet.http.Https#getThisRequestURI
 	 */
 	protected static final String ATTR_INCLUDE_REQUEST_URI
 		= "javax.servlet.include.request_uri";
 	/** The included servlet path; set by the servlet container.
-	 * @see com.potix.web.servlet.http.Https#getThisPathInfo
-	 * @see com.potix.web.servlet.http.Https#getOriginPathInfo
+	 * @see org.zkoss.web.servlet.http.Https#getThisPathInfo
+	 * @see org.zkoss.web.servlet.http.Https#getOriginPathInfo
 	 */
 	protected static final String ATTR_INCLUDE_PATH_INFO
 		= "javax.servlet.include.path_info";
 	/** The included servlet path; set by the servlet container.
-	 * @see com.potix.web.servlet.http.Https#getThisQueryString
-	 * @see com.potix.web.servlet.http.Https#getOriginQueryString
+	 * @see org.zkoss.web.servlet.http.Https#getThisQueryString
+	 * @see org.zkoss.web.servlet.http.Https#getOriginQueryString
 	 */
 	protected static final String ATTR_INCLUDE_QUERY_STRING
 		= "javax.servlet.include.query_string";
 
 	/** The original context path that forwards this page; set by the servlet container.
-	 * @see com.potix.web.servlet.http.Https#getThisServletPath
-	 * @see com.potix.web.servlet.http.Https#getOriginServletPath
+	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
+	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
 	 */
 	protected static final String ATTR_FORWARD_CONTEXT_PATH
 		= "javax.servlet.forward.context_path";
 	/** The original servlet path that forwards this page; set by the servlet container.
-	 * @see com.potix.web.servlet.http.Https#getThisServletPath
-	 * @see com.potix.web.servlet.http.Https#getOriginServletPath
+	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
+	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
 	 */
 	protected static final String ATTR_FORWARD_SERVLET_PATH
 		= "javax.servlet.forward.servlet_path";
 	/** The original request URI that forwards this page; set by the servlet container.
-	 * @see com.potix.web.servlet.http.Https#getThisRequestURI
+	 * @see org.zkoss.web.servlet.http.Https#getThisRequestURI
 	 */
 	protected static final String ATTR_FORWARD_REQUEST_URI
 		= "javax.servlet.forward.request_uri";
 	/** The original servlet path that forwards this page; set by the servlet container.
-	 * @see com.potix.web.servlet.http.Https#getThisPathInfo
-	 * @see com.potix.web.servlet.http.Https#getOriginPathInfo
+	 * @see org.zkoss.web.servlet.http.Https#getThisPathInfo
+	 * @see org.zkoss.web.servlet.http.Https#getOriginPathInfo
 	 */
 	protected static final String ATTR_FORWARD_PATH_INFO
 		= "javax.servlet.forward.path_info";
 	/** The original servlet path that forwards this page; set by the servlet container.
-	 * @see com.potix.web.servlet.http.Https#getThisQueryString
-	 * @see com.potix.web.servlet.http.Https#getOriginQueryString
+	 * @see org.zkoss.web.servlet.http.Https#getThisQueryString
+	 * @see org.zkoss.web.servlet.http.Https#getOriginQueryString
 	 */
 	protected static final String ATTR_FORWARD_QUERY_STRING
 		= "javax.servlet.forward.query_string";

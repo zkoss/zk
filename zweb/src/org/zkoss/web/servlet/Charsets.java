@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet;
+package org.zkoss.web.servlet;
 
 import java.util.Locale;
 
@@ -26,12 +26,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.potix.lang.Objects;
-import com.potix.lang.SystemException;
-import com.potix.util.Locales;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.Locales;
+import org.zkoss.util.logging.Log;
 
-import com.potix.web.Attributes;
+import org.zkoss.web.Attributes;
 
 /**
  * Utilities to handle characters
@@ -40,11 +40,11 @@ import com.potix.web.Attributes;
  */
 public class Charsets {
 	private static final Log log = Log.lookup(Charsets.class);
-	private static final String ATTR_SETUP = "com.potix.web.charset.setup";
+	private static final String ATTR_SETUP = "org.zkoss.web.charset.setup";
 
 	private static final String _uriCharset;
 	static {
-		String cs = System.getProperty("com.potix.web.uri.charset", null);
+		String cs = System.getProperty("org.zkoss.web.uri.charset", null);
 		if (cs == null || cs.length() == 0)
 			cs = "UTF-8"; //Default: UTF-8
 		_uriCharset = cs;
@@ -85,7 +85,7 @@ public class Charsets {
 	Object setup(ServletRequest request, ServletResponse response, String charset) {
 		//20050420: Tom Yeh:
 		//Since we store the preferred locale in HttpSession rather than
-		//com.potix.ext.security.Session,
+		//org.zkoss.ext.security.Session,
 		//we don't need to invoke Authens.isAuthenticated() to re-authen.
 		//
 		//Side effect: if remember-me is ON and a page invokes getRemoteUser

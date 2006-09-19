@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet;
+package org.zkoss.web.servlet;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
 /**
  * Represents a javascript.

@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp;
+package org.zkoss.web.servlet.dsp;
 
 import java.io.Writer;
 import java.io.IOException;
@@ -30,11 +30,11 @@ import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.FunctionMapper;
 import javax.servlet.jsp.el.ExpressionEvaluator;
 
-import com.potix.util.resource.Locator;
-import com.potix.el.RequestResolver;
-import com.potix.el.EvaluatorImpl;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.el.RequestResolver;
+import org.zkoss.el.EvaluatorImpl;
 
-import com.potix.web.util.resource.ServletContextLocator;
+import org.zkoss.web.util.resource.ServletContextLocator;
 
 /**
  * A DSP context based on HTTP servlet request and response.

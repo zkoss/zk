@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.portlet;
+package org.zkoss.web.portlet;
 
 import java.util.Map;
 import java.util.HashMap;

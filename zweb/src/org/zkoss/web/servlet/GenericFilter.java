@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet;
+package org.zkoss.web.servlet;
 
 import java.util.Map;
 import java.util.Enumeration;
@@ -29,7 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.potix.web.servlet.http.Https;
+import org.zkoss.web.servlet.http.Https;
 
 /**
  * A generic class to help implementing servlet filter.

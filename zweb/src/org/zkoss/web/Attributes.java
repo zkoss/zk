@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web;
+package org.zkoss.web;
 
 /**
  * Definition of contstants used as attributes and parameters acrossing
@@ -41,7 +41,7 @@ public class Attributes {
 	public static final String PREFERRED_TIME_ZONE = "px_preferred_time_zone";
 
 	/** The attribute name that contains the alert passed from
-	 * another request {@link com.potix.web.servlet.http.Https#sendRedirect}.
+	 * another request {@link org.zkoss.web.servlet.http.Https#sendRedirect}.
 	 * It is automatically reset after the next request is responsed.
 	 * In JSP, web authors use
 	 * &lt;c:object name="i.alert" scope="request"&gt; to access it.
@@ -62,7 +62,7 @@ public class Attributes {
 
 	/** The attribute used to pass parameters from the caller that invokes
 	 * Servlets.include() or Servlets.forward()
-	 * with {@link com.potix.web.servlet.Servlets#PASS_THRU_ATTR}.
+	 * with {@link org.zkoss.web.servlet.Servlets#PASS_THRU_ATTR}.
 	 */
 	public static final String ARG = "arg";
 }

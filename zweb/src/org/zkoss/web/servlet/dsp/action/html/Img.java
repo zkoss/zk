@@ -16,14 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.action.html;
+package org.zkoss.web.servlet.dsp.action.html;
 
 import java.io.IOException;
 
-import com.potix.web.mesg.MWeb;
-import com.potix.web.servlet.ServletException;
-import com.potix.web.servlet.dsp.action.AbstractAction;
-import com.potix.web.servlet.dsp.action.ActionContext;
+import org.zkoss.web.mesg.MWeb;
+import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.action.AbstractAction;
+import org.zkoss.web.servlet.dsp.action.ActionContext;
 
 /**
  * Generates the HTML &lt;img&gt; tag

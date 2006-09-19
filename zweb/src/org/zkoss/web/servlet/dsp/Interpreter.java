@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp;
+package org.zkoss.web.servlet.dsp;
 
 import java.io.IOException;
 
@@ -27,12 +27,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.lang.D;
-import com.potix.util.media.ContentTypes;
-import com.potix.util.resource.Locator;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.util.media.ContentTypes;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.logging.Log;
 
-import com.potix.web.servlet.dsp.impl.Parser;
+import org.zkoss.web.servlet.dsp.impl.Parser;
 
 /**
  * The interpreter of the DSP file.
@@ -105,7 +105,7 @@ public class Interpreter {
 	 *
 	 * @param locator used to locate resources, such as taglib.
 	 * If null is specified, the locator for the specified servlet context is
-	 * used. (In other words, we use {@link com.potix.web.util.resource.ServletContextLocator}
+	 * used. (In other words, we use {@link org.zkoss.web.util.resource.ServletContextLocator}
 	 * if locator is null).
 	 * @param ctype the content type. Optional. It is used only if
 	 * no page action at all. If it is not specified and not page

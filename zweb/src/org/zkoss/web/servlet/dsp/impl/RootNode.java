@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.impl;
+package org.zkoss.web.servlet.dsp.impl;
 
 import java.util.Iterator;
 import java.io.Writer;
@@ -24,9 +24,9 @@ import java.io.IOException;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.util.logging.Log;
-import com.potix.web.el.ELContexts;
-import com.potix.web.servlet.dsp.*;
+import org.zkoss.util.logging.Log;
+import org.zkoss.web.el.ELContexts;
+import org.zkoss.web.servlet.dsp.*;
 
 /**
  * The root node for the parsed result.

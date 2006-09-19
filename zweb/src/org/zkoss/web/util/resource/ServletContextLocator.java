@@ -16,15 +16,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.util.resource;
+package org.zkoss.web.util.resource;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.net.MalformedURLException;
 import javax.servlet.ServletContext;
 
-import com.potix.lang.SystemException;
-import com.potix.util.resource.Locator;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.resource.Locator;
 
 /**
  * Locator based on ServletContext.

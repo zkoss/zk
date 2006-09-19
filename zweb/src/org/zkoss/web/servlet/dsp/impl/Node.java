@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.impl;
+package org.zkoss.web.servlet.dsp.impl;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -24,7 +24,7 @@ import java.io.Writer;
 import java.io.IOException;
 
 /**
- * Represents a node in an {@link com.potix.web.servlet.dsp.Interpretation}.
+ * Represents a node in an {@link org.zkoss.web.servlet.dsp.Interpretation}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

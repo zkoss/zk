@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.http;
+package org.zkoss.web.servlet.http;
 
 import java.io.Writer;
 import java.io.PrintWriter;
@@ -30,7 +30,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import com.potix.web.servlet.ServletOutputStreamWrapper;
+import org.zkoss.web.servlet.ServletOutputStreamWrapper;
 
 /**
  * A servlet response that uses another writer or stream as

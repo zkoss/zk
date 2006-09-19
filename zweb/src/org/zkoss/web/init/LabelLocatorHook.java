@@ -16,23 +16,23 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.init;
+package org.zkoss.web.init;
 
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
 
-//import com.potix.util.logging.Log;
-import com.potix.util.resource.Labels;
-import com.potix.web.util.resource.ServletLabelLocator;
-import com.potix.web.util.resource.ServletLabelResovler;
+//import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.Labels;
+import org.zkoss.web.util.resource.ServletLabelLocator;
+import org.zkoss.web.util.resource.ServletLabelResovler;
 
 /**
  * Used to hook a label locator to locate resources from the servlet context.
  *
  * <p>Note: you don't need to specify this in web.xml if you use ZK
- * because com.potix.zk.ui.DHtmlLayoutServlet will register the label locator
+ * because org.zkoss.zk.ui.DHtmlLayoutServlet will register the label locator
  * automatically.
  *
  * <p>If you don't use ZK, you could declare
@@ -40,7 +40,7 @@ import com.potix.web.util.resource.ServletLabelResovler;
 &lt;listener&gt;
 	&lt;description&gt;Load i3-label.properties from this Web app&lt;/description&gt;
 	&lt;display-name&gt;Locating i3-label.properties&lt;/display-name&gt;
-	&lt;listener-class&gt;com.potix.web.init.LabelLocatorHook&lt;/listener-class&gt;
+	&lt;listener-class&gt;org.zkoss.web.init.LabelLocatorHook&lt;/listener-class&gt;
 &lt;/listener&gt;
 </code></pre>
  *

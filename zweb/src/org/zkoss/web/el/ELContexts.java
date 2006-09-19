@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.el;
+package org.zkoss.web.el;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -27,8 +27,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.jsp.PageContext;
 
-import com.potix.lang.D;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.util.logging.Log;
 
 /**
  * Utilities to access the JSP context.
@@ -53,14 +53,14 @@ public class ELContexts {
 
 	/** Pushes the context as the current context, such that it will
 	 * be returned by {@link #getCurrent}. The reason this method exists is
-	 * many functions ({@link com.potix.web.fn.ServletFns}) counts on it.
+	 * many functions ({@link org.zkoss.web.fn.ServletFns}) counts on it.
 	 *
 	 * <p>However, you rarely need to invoke this method directly.
 	 * <ol>
 	 * <li>If go thru JSP, it is done automatically
-	 * (by {@link com.potix.web.servlet.jsp.JspFactoryImpl}</li>
+	 * (by {@link org.zkoss.web.servlet.jsp.JspFactoryImpl}</li>
 	 * <li>If go thru DSP, it is done automatically
-	 * (by {@link com.potix.web.servlet.dsp.Interpreter}</li>
+	 * (by {@link org.zkoss.web.servlet.dsp.Interpreter}</li>
 	 * </ol>
 	 *
 	 * <p>Note: you must use try/finally as follows:
@@ -88,7 +88,7 @@ public class ELContexts {
 	/** Pops the context out and use the previous one as the current context.
 	 *
 	 * <p>In most cases, you don't need to invoke this method, which is
-	 * done automatically (by {@link com.potix.web.servlet.jsp.JspFactoryImpl} if go thru JSP)
+	 * done automatically (by {@link org.zkoss.web.servlet.jsp.JspFactoryImpl} if go thru JSP)
 	 *
 	 * @see #push
 	 */

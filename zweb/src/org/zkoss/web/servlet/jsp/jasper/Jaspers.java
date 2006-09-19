@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.jsp.jasper;
+package org.zkoss.web.servlet.jsp.jasper;
 
 import javax.servlet.jsp.PageContext;
 import org.apache.jasper.compiler.JspUtil;
@@ -28,7 +28,7 @@ import org.apache.jasper.compiler.JspUtil;
  */
 public class Jaspers {
 	/** Maps a JSP URI to a Java name.
-	 * @param pkg the package name (such ash "com.potix.jsp")
+	 * @param pkg the package name (such ash "org.zkoss.jsp")
 	 */
 	public static String mapJspToJavaName(String pkg, String jspURI) {
 		final StringBuffer javaName =

@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp;
+package org.zkoss.web.servlet.dsp;
 
 import java.io.File;
 import java.io.InputStream;
@@ -32,18 +32,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
 
-import com.potix.lang.D;
-import com.potix.lang.Exceptions;
-import com.potix.util.logging.Log;
-import com.potix.util.resource.ResourceCache;
-import com.potix.util.resource.Locator;
-import com.potix.io.Files;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.ResourceCache;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.io.Files;
 
-import com.potix.web.servlet.Charsets;
-import com.potix.web.servlet.http.Https;
-import com.potix.web.util.resource.ResourceCaches;
-import com.potix.web.util.resource.ResourceLoader;
-import com.potix.web.util.resource.ServletContextLocator;
+import org.zkoss.web.servlet.Charsets;
+import org.zkoss.web.servlet.http.Https;
+import org.zkoss.web.util.resource.ResourceCaches;
+import org.zkoss.web.util.resource.ResourceLoader;
+import org.zkoss.web.util.resource.ServletContextLocator;
 
 /**
  * The servlet used to interpret the DSP file (Potix Dynamic Script Page).
@@ -105,7 +105,7 @@ public class InterpreterServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
-	private static final String ATTR_PAGE_CACHE = "com.potix.web.servlet.dsp.PageCache";
+	private static final String ATTR_PAGE_CACHE = "org.zkoss.web.servlet.dsp.PageCache";
 	private static final ResourceCache getCache(ServletContext ctx) {
 		ResourceCache cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
 		if (cache == null) {

@@ -16,9 +16,9 @@ Copyright (C) 2003 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.jsp;
+package org.zkoss.web.servlet.jsp;
 
-import com.potix.lang.Expectable;
+import org.zkoss.lang.Expectable;
 
 /**
  * The expectable jsp tag exception denoting user's operation errors.

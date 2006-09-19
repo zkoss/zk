@@ -16,14 +16,14 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.impl;
+package org.zkoss.web.servlet.dsp.impl;
 
 import java.io.Writer;
 import java.io.IOException;
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.util.logging.Log;
-import com.potix.web.servlet.ServletException;
+import org.zkoss.util.logging.Log;
+import org.zkoss.web.servlet.ServletException;
 
 /**
  * Represents an expression.

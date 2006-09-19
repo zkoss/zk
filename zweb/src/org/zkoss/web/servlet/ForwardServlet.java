@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet;
+package org.zkoss.web.servlet;
 
 import java.io.IOException;
 
@@ -24,10 +24,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
 
-import com.potix.lang.D;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.util.logging.Log;
 
-import com.potix.web.servlet.http.Https;
+import org.zkoss.web.servlet.http.Https;
 
 /**
  * The servlet used to forward a request to another URL.

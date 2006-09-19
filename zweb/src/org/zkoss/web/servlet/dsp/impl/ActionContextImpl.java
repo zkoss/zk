@@ -16,18 +16,18 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.impl;
+package org.zkoss.web.servlet.dsp.impl;
 
 import java.util.Map;
 import java.io.Writer;
 import java.io.IOException;
 
-import com.potix.web.servlet.Servlets;
-import com.potix.web.servlet.BufferedResponse;
-import com.potix.web.servlet.http.Encodes;
-import com.potix.web.servlet.dsp.*;
-import com.potix.web.servlet.dsp.action.Action;
-import com.potix.web.servlet.dsp.action.ActionContext;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.BufferedResponse;
+import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.servlet.dsp.*;
+import org.zkoss.web.servlet.dsp.action.Action;
+import org.zkoss.web.servlet.dsp.action.ActionContext;
 
 /**
  * An implementation of {@link ActionContext}.

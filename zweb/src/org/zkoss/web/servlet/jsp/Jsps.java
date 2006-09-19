@@ -16,10 +16,10 @@ Copyright (C) 2003 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.jsp;
+package org.zkoss.web.servlet.jsp;
 
 import javax.servlet.jsp.JspFactory;
-import com.potix.web.servlet.jsp.jasper.Jaspers;
+import org.zkoss.web.servlet.jsp.jasper.Jaspers;
 
 /**
  * JSP relevant utilities.
@@ -30,7 +30,7 @@ public class Jsps {
 	protected Jsps() {} //prevent from instantiated
 	/** Maps a JSP URI to a Java name. */
 	public static String mapJspToJavaName(String jspURI) {
-		return Jaspers.mapJspToJavaName("com.potix.jsp", jspURI);
+		return Jaspers.mapJspToJavaName("org.zkoss.jsp", jspURI);
 			//FUTURE: We might support other JSP engine
 	}
 

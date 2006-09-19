@@ -16,17 +16,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.action.html;
+package org.zkoss.web.servlet.dsp.action.html;
 
 import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
 
-import com.potix.web.mesg.MWeb;
-import com.potix.web.servlet.ServletException;
-import com.potix.web.servlet.http.Encodes;
-import com.potix.web.servlet.dsp.action.AbstractAction;
-import com.potix.web.servlet.dsp.action.ActionContext;
+import org.zkoss.web.mesg.MWeb;
+import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.servlet.dsp.action.AbstractAction;
+import org.zkoss.web.servlet.dsp.action.ActionContext;
 
 /**
  * Generates a box that has a caption and a border enclosing other tags.

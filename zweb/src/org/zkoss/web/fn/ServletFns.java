@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.fn;
+package org.zkoss.web.fn;
 
 import java.io.Writer;
 import java.io.IOException;
@@ -29,12 +29,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
 
-import com.potix.web.servlet.Servlets;
-import com.potix.web.servlet.http.Encodes;
-import com.potix.web.servlet.dsp.action.ActionContext;
-import com.potix.web.servlet.auth.Authens;
-import com.potix.web.el.ELContexts;
-import com.potix.web.el.ELContext;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.servlet.dsp.action.ActionContext;
+import org.zkoss.web.servlet.auth.Authens;
+import org.zkoss.web.el.ELContexts;
+import org.zkoss.web.el.ELContext;
 
 /**
  * Providing servlet relevant functions for EL.

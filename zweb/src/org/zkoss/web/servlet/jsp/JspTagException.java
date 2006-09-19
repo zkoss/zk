@@ -14,13 +14,13 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.jsp;
+package org.zkoss.web.servlet.jsp;
 
 import javax.servlet.jsp.JspException;
 
-import com.potix.lang.Expectable;
-import com.potix.lang.Exceptions;
-import com.potix.mesg.Messageable;
+import org.zkoss.lang.Expectable;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.mesg.Messageable;
 
 /**
  * The I3 version of JspTagException.

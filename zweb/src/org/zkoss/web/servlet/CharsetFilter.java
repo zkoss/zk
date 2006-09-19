@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet;
+package org.zkoss.web.servlet;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 
-import com.potix.util.logging.Log;
+import org.zkoss.util.logging.Log;
 
 /**
  * The filter to correct character encoding and to prepare Locale for

@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.util.resource;
+package org.zkoss.web.util.resource;
 
 import java.util.Map;
 import java.io.InputStream;
@@ -32,16 +32,16 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * This interface defines an extended context that
- * {@link com.potix.web.servlet.Servlets#getRequestDispatcher} will try to
+ * {@link org.zkoss.web.servlet.Servlets#getRequestDispatcher} will try to
  * resolve.
- * When {@link com.potix.web.servlet.Servlets#getRequestDispatcher} is
+ * When {@link org.zkoss.web.servlet.Servlets#getRequestDispatcher} is
  * called, it detects whether ~xxx/ is specified.
  * If specified, it looks up any extended context
  * is registered as xxx. If found, the extend context is used.
  * If not found, it looks up any servlet context called xxx.
  *
  * <p>To registers an extended context, use 
- * {@link com.potix.web.servlet.Servlets#addExtendedWebContext}.
+ * {@link org.zkoss.web.servlet.Servlets#addExtendedWebContext}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
@@ -51,7 +51,7 @@ public interface ExtendedWebContext {
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
 	 * and the browser code.
-	 * Refer to {@link com.potix.web.servlet.Servlets#locate(javax.servlet.ServletContext, ServletRequest, String, com.potix.util.resource.Locator)}
+	 * Refer to {@link org.zkoss.web.servlet.Servlets#locate(javax.servlet.ServletContext, ServletRequest, String, org.zkoss.util.resource.Locator)}
 	 * for details. 
 	 *
 	 * @param uri it must be empty or starts with "/". It might contain

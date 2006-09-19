@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.auth;
+package org.zkoss.web.servlet.auth;
 
 import javax.servlet.ServletRequest;
 
@@ -37,7 +37,7 @@ public class Authens {
 	public static final String COOKIE_REMEMBER_ME = "pxrmc";
 	/** Used to disable the remember-me on certain situation. */
 	private static final String ATTR_REMEMBER_ME_DISABLED =
-		"com.potix.web.servlet.auth.rememberMe.disabled";
+		"org.zkoss.web.servlet.auth.rememberMe.disabled";
 
 	/** Returns whether this request has been authenticated.
 	 * Note: calling request.getRemoteUser() will auto-login if remember-me

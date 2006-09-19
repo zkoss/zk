@@ -16,13 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.action;
+package org.zkoss.web.servlet.dsp.action;
 
 import java.io.IOException;
 
-import com.potix.web.mesg.MWeb;
-import com.potix.web.servlet.ServletException;
-import com.potix.xml.XMLs;
+import org.zkoss.web.mesg.MWeb;
+import org.zkoss.web.servlet.ServletException;
+import org.zkoss.xml.XMLs;
 
 /**
  * Generates the specified value into a string.

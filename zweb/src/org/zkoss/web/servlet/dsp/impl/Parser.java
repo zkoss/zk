@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.impl;
+package org.zkoss.web.servlet.dsp.impl;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -26,20 +26,20 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.util.logging.Log;
-import com.potix.util.resource.Locator;
-import com.potix.el.SimpleMapper;
-import com.potix.idom.input.SAXBuilder;
-import com.potix.idom.Element;
-import com.potix.idom.util.IDOMs;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.el.SimpleMapper;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.util.IDOMs;
 
-import com.potix.web.mesg.MWeb;
-import com.potix.web.servlet.ServletException;
-import com.potix.web.servlet.dsp.*;
-import com.potix.web.servlet.dsp.action.Page;
-import com.potix.web.servlet.dsp.action.Action;
+import org.zkoss.web.mesg.MWeb;
+import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.*;
+import org.zkoss.web.servlet.dsp.action.Page;
+import org.zkoss.web.servlet.dsp.action.Action;
 
 /**
  * Used to parse a DSP page into a meta format called

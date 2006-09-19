@@ -17,7 +17,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.jsp;
+package org.zkoss.web.servlet.jsp;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -29,13 +29,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.util.CacheMap;
-import com.potix.util.logging.Log;
-import com.potix.util.WaitLock;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.CacheMap;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.WaitLock;
 
-import com.potix.web.servlet.http.Https;
+import org.zkoss.web.servlet.http.Https;
 
 /**
  * JspLoaderServlet Load the compiled JSP pages.

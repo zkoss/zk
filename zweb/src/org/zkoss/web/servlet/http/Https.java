@@ -14,7 +14,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.http;
+package org.zkoss.web.servlet.http;
 
 import java.io.IOException;
 import java.util.Date;
@@ -32,12 +32,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
 
-import com.potix.lang.D;
-import com.potix.lang.SystemException;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.logging.Log;
 
-import com.potix.web.servlet.Servlets;
-import com.potix.web.util.resource.ExtendedWebContext;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.util.resource.ExtendedWebContext;
 
 /**
  * The utilities relevant to servlets.

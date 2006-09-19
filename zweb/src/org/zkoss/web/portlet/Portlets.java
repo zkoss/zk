@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.portlet;
+package org.zkoss.web.portlet;
 
 import java.util.Map;
 import java.io.InputStream;
@@ -32,12 +32,12 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletException;
 
-import com.potix.lang.D;
-import com.potix.lang.SystemException;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.logging.Log;
 
-import com.potix.web.servlet.Servlets;
-import com.potix.web.util.resource.ExtendedWebContext;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.util.resource.ExtendedWebContext;
 
 /**
  * Utilities to handle portlet.

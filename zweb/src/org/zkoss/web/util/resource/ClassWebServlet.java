@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.util.resource;
+package org.zkoss.web.util.resource;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
 
-import com.potix.lang.D;
+import org.zkoss.lang.D;
 
 /**
  * Loads the resource from the class path starting with "/web".

@@ -14,17 +14,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.web.util.resource;
+package org.zkoss.web.util.resource;
 
 import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.util.resource.Labels;
-import com.potix.web.el.ELContexts;
-import com.potix.web.el.ELContext;
+import org.zkoss.util.resource.Labels;
+import org.zkoss.web.el.ELContexts;
+import org.zkoss.web.el.ELContext;
 
 /**
- * Used with {@link com.potix.util.resource.Labels} to resolve
+ * Used with {@link org.zkoss.util.resource.Labels} to resolve
  * EL expressions in labels.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>

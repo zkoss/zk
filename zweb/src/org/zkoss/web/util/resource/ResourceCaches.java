@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.util.resource;
+package org.zkoss.web.util.resource;
 
 import java.io.File;
 import java.io.InputStream;
@@ -27,17 +27,17 @@ import java.net.MalformedURLException;
 
 import javax.servlet.ServletContext;
 
-import com.potix.lang.D;
-import com.potix.lang.Exceptions;
-import com.potix.lang.SystemException;
-import com.potix.util.resource.ResourceCache;
-import com.potix.util.logging.Log;
-import com.potix.io.Files;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.resource.ResourceCache;
+import org.zkoss.util.logging.Log;
+import org.zkoss.io.Files;
 
-import com.potix.web.servlet.Servlets;
-import com.potix.web.el.ELContext;
-import com.potix.web.el.ELContexts;
-import com.potix.web.servlet.http.Https;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.el.ELContext;
+import org.zkoss.web.el.ELContexts;
+import org.zkoss.web.servlet.http.Https;
 
 /**
  * Utilities to load (and parse) the servlet resource.
@@ -50,7 +50,7 @@ import com.potix.web.servlet.http.Https;
  * <p>Usage 2:
  * <ol>
  * <li>Implements a loader by extending from {@link ResourceLoader}.</li>
- * <li>Creates a resource cache (com.potix.utl.resource.ResourceCache}
+ * <li>Creates a resource cache (org.zkoss.utl.resource.ResourceCache}
  * by use of the loader in the previous step.</li>
  * <li>Invoke {@link #get} to load the resource.</li>
  * </ol>
@@ -149,7 +149,7 @@ public class ResourceCaches {
 	}
 
 	//-- direct content without parser. --//
-	private static final String ATTR_PAGE_CACHE = "com.potix.web.util.resource.PageCache";
+	private static final String ATTR_PAGE_CACHE = "org.zkoss.web.util.resource.PageCache";
 
 	/** Returns the content of the specified path, or null if not found.
 	 *

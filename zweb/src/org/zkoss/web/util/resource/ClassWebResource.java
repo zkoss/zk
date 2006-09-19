@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.util.resource;
+package org.zkoss.web.util.resource;
 
 import java.util.Map;
 import java.net.URL;
@@ -34,23 +34,23 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.potix.lang.D;
-import com.potix.lang.Exceptions;
-import com.potix.io.Files;
-import com.potix.util.logging.Log;
-import com.potix.util.media.ContentTypes;
-import com.potix.util.resource.Locator;
-import com.potix.util.resource.Locators;
-import com.potix.util.resource.ResourceCache;
-import com.potix.util.resource.Loader;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.io.Files;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.media.ContentTypes;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.Locators;
+import org.zkoss.util.resource.ResourceCache;
+import org.zkoss.util.resource.Loader;
 
-import com.potix.web.servlet.Servlets;
-import com.potix.web.servlet.Charsets;
-import com.potix.web.servlet.http.Https;
-import com.potix.web.servlet.http.Encodes;
-import com.potix.web.servlet.dsp.Interpreter;
-import com.potix.web.servlet.dsp.Interpretation;
-import com.potix.web.servlet.dsp.ServletDSPContext;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.Charsets;
+import org.zkoss.web.servlet.http.Https;
+import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.servlet.dsp.Interpreter;
+import org.zkoss.web.servlet.dsp.Interpretation;
+import org.zkoss.web.servlet.dsp.ServletDSPContext;
 
 /**
  * Used to access resouces located in class path and under /web.
@@ -67,7 +67,7 @@ import com.potix.web.servlet.dsp.ServletDSPContext;
  * </ol>
  *
  * <p>Note: if a file is named with name-*.ext, it locates the proper file
- * based on the current Locale (com.potix.util.prefs.App.getCurrentLocale).
+ * based on the current Locale (org.zkoss.util.prefs.App.getCurrentLocale).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

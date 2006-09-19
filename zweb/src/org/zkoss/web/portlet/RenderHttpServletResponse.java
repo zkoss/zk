@@ -16,12 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.portlet;
+package org.zkoss.web.portlet;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.portlet.RenderResponse;
 
-import com.potix.web.servlet.ServletOutputStreamWrapper;
+import org.zkoss.web.servlet.ServletOutputStreamWrapper;
 
 /**
  * A facade of RenderResponse that implements HttpServletRespose.

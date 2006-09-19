@@ -14,11 +14,11 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet;
+package org.zkoss.web.servlet;
 
-import com.potix.lang.Expectable;
-import com.potix.lang.Exceptions;
-import com.potix.mesg.Messageable;
+import org.zkoss.lang.Expectable;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.mesg.Messageable;
 
 /**
  * Potix version of ServletException. It extends

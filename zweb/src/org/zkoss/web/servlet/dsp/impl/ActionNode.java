@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.impl;
+package org.zkoss.web.servlet.dsp.impl;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -27,13 +27,13 @@ import java.io.IOException;
 
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.lang.Exceptions;
-import com.potix.util.logging.Log;
-import com.potix.web.servlet.ServletException;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
+import org.zkoss.web.servlet.ServletException;
 
-import com.potix.web.servlet.dsp.action.Action;
+import org.zkoss.web.servlet.dsp.action.Action;
 
 /**
  * Represents an action node.

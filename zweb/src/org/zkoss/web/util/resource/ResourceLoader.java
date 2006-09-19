@@ -16,16 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.util.resource;
+package org.zkoss.web.util.resource;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.net.URL;
 
-import com.potix.lang.D;
-import com.potix.util.resource.Loader;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.util.resource.Loader;
+import org.zkoss.util.logging.Log;
 
 /**
  * A semi-implemented loader to used with {@link ResourceCaches#get}

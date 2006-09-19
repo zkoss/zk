@@ -16,14 +16,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.util.resource;
+package org.zkoss.web.util.resource;
 
 import java.util.Locale;
 import java.io.IOException;
 import java.net.URL;
 import javax.servlet.ServletContext;
 
-import com.potix.util.resource.LabelLocator;
+import org.zkoss.util.resource.LabelLocator;
 
 /**
  * Used by Lables to load labels from a servlet context.

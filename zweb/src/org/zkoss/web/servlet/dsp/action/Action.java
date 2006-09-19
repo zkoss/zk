@@ -16,14 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.action;
+package org.zkoss.web.servlet.dsp.action;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
 
 /**
  * An action that could be used with
- * {@link com.potix.web.servlet.dsp.InterpreterServlet}.
+ * {@link org.zkoss.web.servlet.dsp.InterpreterServlet}.
  * It is like a tag in JSP.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>

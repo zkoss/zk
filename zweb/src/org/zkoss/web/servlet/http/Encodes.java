@@ -16,7 +16,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.http;
+package org.zkoss.web.servlet.http;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -35,14 +35,14 @@ import javax.servlet.ServletContext;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspException;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
 
-import com.potix.web.Attributes;
-import com.potix.web.servlet.Servlets;
-import com.potix.web.servlet.Charsets;
-import com.potix.web.util.resource.ExtendedWebContext;
+import org.zkoss.web.Attributes;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.Charsets;
+import org.zkoss.web.util.resource.ExtendedWebContext;
 
 /**
  * Encoding utilities for servlets.
@@ -379,8 +379,8 @@ public class Encodes {
 	 * @param ctx the servlet context; used only if "*" is contained in uri
 	 * @exception IndexOutOfBoundException if uri is empty
 	 * @see #encodeURL(PageContext, String)
-	 * @see com.potix.web.servlet.Servlets#locate
-	 * @see com.potix.web.servlet.Servlets#generateURI
+	 * @see org.zkoss.web.servlet.Servlets#locate
+	 * @see org.zkoss.web.servlet.Servlets#generateURI
 	 */
 	public static final String encodeURL(ServletContext ctx,
 	ServletRequest request, ServletResponse response, String uri)

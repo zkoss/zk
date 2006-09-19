@@ -24,13 +24,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Display a box that has a caption and a border enclosing other tags.
 		</description>
 		<name>box</name>
-		<tag-class>com.potix.web.servlet.dsp.action.html.Box</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.html.Box</tag-class>
 	</tag>
 	<tag>
 		<description>
 	Generates the HTML's img tag.
 		</description>
 		<name>img</name>
-		<tag-class>com.potix.web.servlet.dsp.action.html.Img</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.html.Img</tag-class>
 	</tag>
 </taglib>

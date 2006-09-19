@@ -16,14 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp;
+package org.zkoss.web.servlet.dsp;
 
 import java.io.Writer;
 import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.util.resource.Locator;
-import com.potix.web.el.ELContext;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.web.el.ELContext;
 
 /**
  * The context used with {@link Interpreter#interpret}.
@@ -36,9 +36,9 @@ public interface DSPContext extends ELContext {
 	 * You might return null if the page not referencing external resources.
 	 *
 	 * <p>To load the resource from a web application, use
-	 * {@link com.potix.web.util.resource.ServletContextLocator}
+	 * {@link org.zkoss.web.util.resource.ServletContextLocator}
 	 * To load the resource from class path, use
-	 * com.potix.util.resource.Resources.getDefault().
+	 * org.zkoss.util.resource.Resources.getDefault().
 	 */
 	public Locator getLocator();
 

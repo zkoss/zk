@@ -16,11 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.action;
+package org.zkoss.web.servlet.dsp.action;
 
 import java.util.Map;
 
-import com.potix.xml.XMLs;
+import org.zkoss.xml.XMLs;
 
 /**
  * A skeletal implementation to simplify the implementation of actions.

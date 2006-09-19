@@ -24,14 +24,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Provides the context for mutually exclusive conditional execution.
 		</description>
 		<name>choose</name>
-		<tag-class>com.potix.web.servlet.dsp.action.Choose</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.Choose</tag-class>
 	</tag>
 	<tag>
 		<description>
 	Iterators thru a collection/array of items.
 		</description>
 		<name>forEach</name>
-		<tag-class>com.potix.web.servlet.dsp.action.ForEach</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.ForEach</tag-class>
 	</tag>
 	<tag>
 		<description>
@@ -39,56 +39,56 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	if the condition is true.
 		</description>
 		<name>if</name>
-		<tag-class>com.potix.web.servlet.dsp.action.If</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.If</tag-class>
 	</tag>
 	<tag>
 		<description>
 	Includes the specified page.
 		</description>
 		<name>include</name>
-		<tag-class>com.potix.web.servlet.dsp.action.Include</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.Include</tag-class>
 	</tag>
 	<tag>
 		<description>
 	Represents the last alternative within a choose action.
 		</description>
 		<name>otherwise</name>
-		<tag-class>com.potix.web.servlet.dsp.action.Otherwise</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.Otherwise</tag-class>
 	</tag>
 	<tag>
 		<description>
 	Generates the specified value into a string.
 		</description>
 		<name>out</name>
-		<tag-class>com.potix.web.servlet.dsp.action.Out</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.Out</tag-class>
 	</tag>
 	<tag>
 		<description>
 	Sets the page info, such as the content type.
 		</description>
 		<name>page</name>
-		<tag-class>com.potix.web.servlet.dsp.action.Page</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.Page</tag-class>
 	</tag>
 	<tag>
 		<description>
 	Remove an attribute.
 		</description>
 		<name>remove</name>
-		<tag-class>com.potix.web.servlet.dsp.action.Remove</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.Remove</tag-class>
 	</tag>
 	<tag>
 		<description>
 	Sets an attribute.
 		</description>
 		<name>set</name>
-		<tag-class>com.potix.web.servlet.dsp.action.Set</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.Set</tag-class>
 	</tag>
 	<tag>
 		<description>
 	Represents an alternative within a {@link Choose} action.
 		</description>
 		<name>when</name>
-		<tag-class>com.potix.web.servlet.dsp.action.When</tag-class>
+		<tag-class>org.zkoss.web.servlet.dsp.action.When</tag-class>
 	</tag>
 
 	<!--                 -->
@@ -96,7 +96,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!--                 -->
 	<function>
 		<name>boolean</name>
-		<function-class>com.potix.el.fn.CommonFns</function-class>
+		<function-class>org.zkoss.el.fn.CommonFns</function-class>
 		<function-signature>boolean toBoolean(java.lang.Object)</function-signature>
 		<description>
 		Converts the specified object to a boolean.
@@ -104,7 +104,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>number</name>
-		<function-class>com.potix.el.fn.CommonFns</function-class>
+		<function-class>org.zkoss.el.fn.CommonFns</function-class>
 		<function-signature>java.lang.Number toNumber(java.lang.Object)</function-signature>
 		<description>
 		Converts the specified object to a number.
@@ -112,7 +112,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>int</name>
-		<function-class>com.potix.el.fn.CommonFns</function-class>
+		<function-class>org.zkoss.el.fn.CommonFns</function-class>
 		<function-signature>int toInt(java.lang.Object)</function-signature>
 		<description>
 		Converts the specified object to an integer.
@@ -120,7 +120,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>decimal</name>
-		<function-class>com.potix.el.fn.CommonFns</function-class>
+		<function-class>org.zkoss.el.fn.CommonFns</function-class>
 		<function-signature>java.math.BigDecimal toDecimal(java.lang.Object)</function-signature>
 		<description>
 		Converts the specified object to a (big) decimal.
@@ -128,7 +128,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>string</name>
-		<function-class>com.potix.el.fn.CommonFns</function-class>
+		<function-class>org.zkoss.el.fn.CommonFns</function-class>
 		<function-signature>java.lang.String toString(java.lang.Object)</function-signature>
 		<description>
 		Converts the specified object to a string.
@@ -136,7 +136,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>char</name>
-		<function-class>com.potix.el.fn.CommonFns</function-class>
+		<function-class>org.zkoss.el.fn.CommonFns</function-class>
 		<function-signature>char toChar(java.lang.Object)</function-signature>
 		<description>
 	Converts the specified object to a character.
@@ -144,7 +144,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>class</name>
-		<function-class>com.potix.lang.Classes</function-class>
+		<function-class>org.zkoss.lang.Classes</function-class>
 		<function-signature>java.lang.Class forNameByThread(java.lang.String)</function-signature>
 		<description>
 	Returns the class of the specified class name.
@@ -152,7 +152,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>isInstance</name>
-		<function-class>com.potix.el.fn.CommonFns</function-class>
+		<function-class>org.zkoss.el.fn.CommonFns</function-class>
 		<function-signature>boolean isInstance(java.lang.Object, java.lang.Object)</function-signature>
 		<description>
 	Tests whether an object (the second argument) is an instance of a class (the first argument).
@@ -161,7 +161,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>length</name>
-		<function-class>com.potix.el.fn.CommonFns</function-class>
+		<function-class>org.zkoss.el.fn.CommonFns</function-class>
 		<function-signature>int length(java.lang.Object)</function-signature>
 		<description>
 	Returns the length of a string, array, collection or map.
@@ -169,7 +169,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>new</name>
-		<function-class>com.potix.el.fn.CommonFns</function-class>
+		<function-class>org.zkoss.el.fn.CommonFns</function-class>
 		<function-signature>java.lang.Object new_(java.lang.Object)</function-signature>
 		<description>
 	Instantiates the specified class.
@@ -182,7 +182,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!--                  -->
 	<function>
 		<name>cat</name>
-		<function-class>com.potix.el.fn.StringFns</function-class>
+		<function-class>org.zkoss.el.fn.StringFns</function-class>
 		<function-signature>
 	java.lang.String cat(java.lang.String, java.lang.String)
 		</function-signature>
@@ -192,7 +192,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>cat3</name>
-		<function-class>com.potix.el.fn.StringFns</function-class>
+		<function-class>org.zkoss.el.fn.StringFns</function-class>
 		<function-signature>
 	java.lang.String cat3(java.lang.String, java.lang.String, java.lang.String)
 		</function-signature>
@@ -202,7 +202,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>cat4</name>
-		<function-class>com.potix.el.fn.StringFns</function-class>
+		<function-class>org.zkoss.el.fn.StringFns</function-class>
 		<function-signature>
 	java.lang.String cat4(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 		</function-signature>
@@ -212,7 +212,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>cat5</name>
-		<function-class>com.potix.el.fn.StringFns</function-class>
+		<function-class>org.zkoss.el.fn.StringFns</function-class>
 		<function-signature>
 	java.lang.String cat5(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 		</function-signature>
@@ -222,7 +222,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>replace</name>
-		<function-class>com.potix.el.fn.StringFns</function-class>
+		<function-class>org.zkoss.el.fn.StringFns</function-class>
 		<function-signature>
 	java.lang.String replace(java.lang.String, java.lang.String, java.lang.String)
 		</function-signature>
@@ -233,7 +233,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>l</name>
-		<function-class>com.potix.el.fn.CommonFns</function-class>
+		<function-class>org.zkoss.el.fn.CommonFns</function-class>
 		<function-signature>java.lang.String getLabel(java.lang.String)</function-signature>
 		<description>
 		Returns the label of the specified key.
@@ -245,7 +245,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!--                    -->
 	<function>
 		<name>attr</name>
-		<function-class>com.potix.web.fn.XMLFns</function-class>
+		<function-class>org.zkoss.web.fn.XMLFns</function-class>
 		<function-signature>
 	java.lang.String attr(java.lang.String, java.lang.Object)
 		</function-signature>
@@ -260,7 +260,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!--                -->
 	<function>
 		<name>encodeURL</name>
-		<function-class>com.potix.web.fn.ServletFns</function-class>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
 		<function-signature>
 	java.lang.String encodeURL(java.lang.String)
 		</function-signature>
@@ -273,7 +273,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>encodeURIComponent</name>
-		<function-class>com.potix.web.servlet.http.Encodes</function-class>
+		<function-class>org.zkoss.web.servlet.http.Encodes</function-class>
 		<function-signature>
 	java.lang.String encodeURIComponent(java.lang.String)
 		</function-signature>
@@ -284,7 +284,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>escapeXML</name>
-		<function-class>com.potix.xml.XMLs</function-class>
+		<function-class>org.zkoss.xml.XMLs</function-class>
 		<function-signature>
 	java.lang.String escapeXML(java.lang.String)
 		</function-signature>
@@ -296,7 +296,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>isExplorer</name>
-		<function-class>com.potix.web.fn.ServletFns</function-class>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
 		<function-signature>
 	boolean isExplorer()
 		</function-signature>
@@ -306,7 +306,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>isExplorer7</name>
-		<function-class>com.potix.web.fn.ServletFns</function-class>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
 		<function-signature>
 	boolean isExplorer7()
 		</function-signature>
@@ -316,7 +316,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>isGecko</name>
-		<function-class>com.potix.web.fn.ServletFns</function-class>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
 		<function-signature>
 	boolean isGecko()
 		</function-signature>
@@ -327,7 +327,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>isSafari</name>
-		<function-class>com.potix.web.fn.ServletFns</function-class>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
 		<function-signature>
 	boolean isSafari()
 		</function-signature>
@@ -338,9 +338,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>render</name>
-		<function-class>com.potix.web.fn.ServletFns</function-class>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
 		<function-signature>
-	void render(com.potix.web.servlet.dsp.action.ActionContext)
+	void render(org.zkoss.web.servlet.dsp.action.ActionContext)
 		</function-signature>
 		<description>
 	Renders a DSP fragment.
@@ -349,7 +349,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>getCurrentLocale</name>
-		<function-class>com.potix.util.Locales</function-class>
+		<function-class>org.zkoss.util.Locales</function-class>
 		<function-signature>
 	java.util.Locale getCurrent()
 		</function-signature>
@@ -360,7 +360,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>isAuthenticated</name>
-		<function-class>com.potix.web.fn.ServletFns</function-class>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
 		<function-signature>
 	boolean isAuthenticated()
 		</function-signature>

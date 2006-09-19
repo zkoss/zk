@@ -16,13 +16,13 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.impl;
+package org.zkoss.web.servlet.dsp.impl;
 
 import java.io.Writer;
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.web.servlet.dsp.*;
-import com.potix.web.servlet.dsp.action.Action;
+import org.zkoss.web.servlet.dsp.*;
+import org.zkoss.web.servlet.dsp.action.Action;
 
 /**
  * Holds the context for interpreting an {@link Interpretation}.

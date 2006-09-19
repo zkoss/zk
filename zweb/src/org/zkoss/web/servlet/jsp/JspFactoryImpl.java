@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.jsp;
+package org.zkoss.web.servlet.jsp;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletRequest;
@@ -25,8 +25,8 @@ import javax.servlet.jsp.JspFactory;
 import javax.servlet.jsp.JspEngineInfo;
 import javax.servlet.jsp.PageContext;
 
-import com.potix.web.el.ELContexts;
-import com.potix.web.el.ELContext;
+import org.zkoss.web.el.ELContexts;
+import org.zkoss.web.el.ELContext;
 
 /**
  * To intercept how a JSP page is rendered.

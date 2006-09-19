@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.web.servlet.dsp.impl;
+package org.zkoss.web.servlet.dsp.impl;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -25,10 +25,10 @@ import java.util.Collections;
 import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.lang.D;
-import com.potix.lang.SystemException;
-import com.potix.web.servlet.dsp.*;
-import com.potix.web.servlet.dsp.action.ActionContext;
+import org.zkoss.lang.D;
+import org.zkoss.lang.SystemException;
+import org.zkoss.web.servlet.dsp.*;
+import org.zkoss.web.servlet.dsp.action.ActionContext;
 
 /**
  * The resolver used to interpret an {@link Interpretation}.
