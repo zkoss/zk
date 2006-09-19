@@ -85,7 +85,7 @@ zkTxbox._noonblur = function (inp) {
 
 			//To resolve Bug 1486840 (see db.js and cb.js)
 			if (zk.gecko && cf.getAttribute) {
-				var n = $(cf.getAttribute("zk_vparent"));
+				var n = $e(cf.getAttribute("zk_vparent"));
 				if (n) {
 					cf = n;
 					continue;
@@ -125,7 +125,7 @@ zkTxbox.onfocus = function (inp) {
 };
 /** Scans whether any changes. */
 zkTxbox._scanChanging = function (id) {
-	var inp = $(id);
+	var inp = $e(id);
 	if (inp && zkau.getOuter(inp).getAttribute("zk_onChanging")
 	&& inp.getAttribute("zk_last_changing") != inp.value) {
 		inp.setAttribute("zk_last_changing", inp.value);
@@ -226,7 +226,7 @@ zkCkbox.onclick = function (cmp) {
 // window //
 function zkWnd() {}
 zkWnd.init = function (cmp) {
-	var img = $(cmp.id + "!img");
+	var img = $e(cmp.id + "!img");
 	if (img) {
 		Event.observe(img, "click", function () {zkau.close(cmp);});
 		Event.observe(img, "mouseover", function () {zkau.onimgover(img);});
@@ -236,7 +236,7 @@ zkWnd.init = function (cmp) {
 
 	//Bug 1469887: re-init since it might be caused by invalidate
 	if (zkau.wndmode[cmp.id]) {
-		var caption = $(cmp.id + "!caption");
+		var caption = $e(cmp.id + "!caption");
 		if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 		zkau.disableMoveable(cmp);
 		zkau.enableMoveable(cmp, null, zkau.onWndMove);
@@ -280,19 +280,19 @@ zkGrbox.onclick = function (evt, uuid) {
 		return;
 
 	if (uuid) {
-		var cmp = $(uuid);
+		var cmp = $e(uuid);
 		if (cmp && cmp.getAttribute("zk_closable") == "false")
 			return;
 
-		cmp = $(uuid + "!slide");
+		cmp = $e(uuid + "!slide");
 		if (cmp)
 			zkGrbox.open(uuid, cmp.style.display == "none");
 	}
 };
 zkGrbox.open = function (gb, open, silent) {
-	var gb = $(gb);
+	var gb = $e(gb);
 	if (gb) {
-		var panel = $(gb.id + "!slide");
+		var panel = $e(gb.id + "!slide");
 		if (panel && open != (panel.style.display != "none")
 		&& !panel.getAttribute("zk_visible")) {
 			action.slideDown(panel, open);
@@ -370,7 +370,7 @@ if (zk.ie && !zk.ie7) {
 				html += '/>';
 			}
 			img.outerHTML = html;
-			return $(id); //transformed
+			return $e(id); //transformed
 		}
 	}
 }
@@ -424,7 +424,7 @@ if (!zkMap._inflds)
 zkArea.onclick = function (id) {
 	if (zkMap._toofast()) return;
 
-	var cmp = $(id);
+	var cmp = $e(id);
 	if (cmp) {
 		var map = zkau.getParentByType(cmp, "Map");
 		if (map)
@@ -443,7 +443,7 @@ zkMap.onclick = function (href) {
 	if (k < 0 ) return;
 
 	var id = href.substring(j, k);
-	if (!$(id)) return; //component might be removed
+	if (!$e(id)) return; //component might be removed
 
 	j = href.indexOf(',', ++k);
 	if (j < 0) return;
@@ -466,7 +466,7 @@ zkMap._toofast = function () {
 function zkPMeter() {}
 
 zkPMeter.init = function (cmp) {
-	var img = $(cmp.id + "!img");
+	var img = $e(cmp.id + "!img");
 	if (img) {
 		var val = parseInt(cmp.getAttribute("zk_val") || "0");
 		img.style.width = Math.round((cmp.clientWidth * val) / 100) + "px";

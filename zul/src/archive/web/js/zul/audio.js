@@ -21,7 +21,7 @@ zk.load("zul.zul");
 function zkAudio() {};
 
 zkAudio.play = function (id) {
-	var cmp = $(id);
+	var cmp = $e(id);
 	if (cmp) {
 		try { //Note: we cannot do "if (cmp.play)" in IE
 			cmp.play();
@@ -32,7 +32,7 @@ zkAudio.play = function (id) {
 };
 
 zkAudio.stop = function (id) {
-	var cmp = $(id);
+	var cmp = $e(id);
 	if (cmp) {
 		try { //Note: we cannot do "if (cmp.stop)" in IE
 			cmp.stop();
@@ -43,7 +43,7 @@ zkAudio.stop = function (id) {
 };
 
 zkAudio.pause = function (id) {
-	var cmp = $(id);
+	var cmp = $e(id);
 	if (cmp) {
 		try { //Note: we cannot do "if (cmp.pause)" in IE
 			cmp.pause();

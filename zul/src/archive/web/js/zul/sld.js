@@ -35,10 +35,10 @@ zk.Slider.prototype = {
 	init: function() {
 		this.cleanup();
 
-		this.element = $(this.id);
+		this.element = $e(this.id);
 		if (!this.element) return; //removed
 
-		this.button = $(this.id+"!btn");
+		this.button = $e(this.id+"!btn");
 
 		//calc the snap
 		var meta = this; //such that snap() could access it
@@ -89,7 +89,7 @@ zk.Slider.prototype = {
 			'<div id="zul_slidetip" style="position:absolute;display:none;z-index:60000;background-color:white;border: 1px outset">'
 			+this.slidepos+'</div>');
 
-		this.slidetip =  $("zul_slidetip");
+		this.slidetip =  $e("zul_slidetip");
 		if (this.slidetip) {
 			this.slidetip.style.display = "block";
 			zk.position(this.slidetip, this.element,"after-start");

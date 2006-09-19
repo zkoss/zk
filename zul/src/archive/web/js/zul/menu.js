@@ -37,7 +37,7 @@ zk.FloatMenu.prototype = {
 			return true;
 
 		for (var j = 0; j < this._popupIds.length; ++j) {
-			var pp = $(this._popupIds[j]);
+			var pp = $e(this._popupIds[j]);
 			if (pp != null && zk.isAncestor(pp, el))
 				return true;
 		}
@@ -63,7 +63,7 @@ zk.FloatMenu.prototype = {
 	 */
 	addHideCovered: function (ary) {
 		for (var j = 0; j < this._popupIds.length; ++j) {
-			var el = $(this._popupIds[j]);
+			var el = $e(this._popupIds[j]);
 			if (el) ary.push(el);
 		}
 	},
@@ -98,7 +98,7 @@ zkMenu.onover = function (evt) {
 
 	//Close non-child menu
 	for (var j = popupIds.length; --j >= 0;) {
-		var pp = $(popupIds[j]);
+		var pp = $e(popupIds[j]);
 		if (!zk.isAncestor(cmp, pp) && !zk.isAncestor(pp, cmp))
 			zkMenu.close(pp);
 	}
@@ -134,7 +134,7 @@ zkMenu.open = function (menu, toggle) {
 	var popupId = menu.getAttribute("zk_mpop");
 	if (!popupId) return; //menuitem
 
-	var pp = $(popupId);
+	var pp = $e(popupId);
 	if (!pp) {
 		zk.error(mesg.INVALID_STRUCTURE+"zk_mpop not exists");
 		return;
@@ -176,7 +176,7 @@ zkMenu._open = function (pp, top, ref, pos) {
  * the table it contains.
  */
 zkMenu._fixWidth = function (popupId) {
-	var pp = $(popupId);
+	var pp = $e(popupId);
 	if (pp) {
 		var tbl = pp.firstChild;
 		for (;; tbl = tbl.nextSibling) {
@@ -196,10 +196,10 @@ zkMenu.close = function (pp) {
 	zkau.hideCovered();
 };
 zkMenu._close = function (pp) {
-	pp = $(pp);
+	pp = $e(pp);
 	if (pp) {
 		/*if (zk.gecko) { //Bug 1486840
-			$(uuid).appendChild(pp); //Bug 1486840
+			$e(uuid).appendChild(pp); //Bug 1486840
 			pp.removeAttribute("zk_vparent");
 		}*/
 		pp.style.display = "none";
@@ -207,7 +207,7 @@ zkMenu._close = function (pp) {
 };
 
 zkMenu.init = function (cmp) {
-	var anc = $(cmp.id + "!a");
+	var anc = $e(cmp.id + "!a");
 	if (cmp.getAttribute("zk_top") == "true") {
 		Event.observe(anc, "click", zkMenu.onclick);
 		Event.observe(anc, "mouseover", zkMenu.onover);
@@ -234,7 +234,7 @@ zkMenuit.init = function (cmp) {
 	Event.observe(cmp, "mouseout", zkMenu.onout);
 
 	if (cmp.getAttribute("zk_top") != "true") { //non-topmost
-		var anc = $(cmp.id + "!a");
+		var anc = $e(cmp.id + "!a");
 		Event.observe(anc, "focus", function () {zkau.onfocus(anc);});
 		Event.observe(anc, "blur", function () {zkau.onblur(anc);});
 	}
@@ -243,7 +243,7 @@ zkMenuit.onclick = function (evt) {
 	if (!evt) evt = window.event;
 	var cmp = zkau.getParentByType(Event.element(evt), "Menuit");
 	zkau.closeFloats(cmp);//including popups if visible
-	var anc = $(cmp.id + "!a");
+	var anc = $e(cmp.id + "!a");
 	if ("javascript:;" == anc.href) {
 		var cmp = zkau.getOuter(anc);
 		var uuid = cmp.id;

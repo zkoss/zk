@@ -28,7 +28,7 @@ zk.Timer.prototype = {
 		this.init();
 	},
 	init: function () {
-		var el = $(this.id);
+		var el = $e(this.id);
 		if (!el) return;
 
 		this.cleanup(); //stop pending timer/interval

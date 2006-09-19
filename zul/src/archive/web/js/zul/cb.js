@@ -29,7 +29,7 @@ zkCmbox.init = function (cmp) {
 	Event.observe(inp, "click", function () {if (inp.readOnly) zkCmbox.onbutton(cmp);});
 		//To mimic SELECT, it drops down if readOnly
 
-	var btn = $(cmp.id + "!btn");
+	var btn = $e(cmp.id + "!btn");
 	if (btn) Event.observe(btn, "click", function () {zkCmbox.onbutton(cmp);});
 	btn.align = "absmiddle";
 };
@@ -45,7 +45,7 @@ zkCmit.init = function (cmp) {
 /** Handles setAttr. */
 zkCmbox.setAttr = function (cmp, nm, val) {
 	if (nm == "repos") { //hilite the most matched item
-		var pp = $(cmp.id + "!pp");
+		var pp = $e(cmp.id + "!pp");
 		if (pp) {
 			pp.removeAttribute("zk_ckval"); //re-check is required
 			if (pp.style.display != "none")
@@ -105,7 +105,7 @@ zkCmbox.ondown = function (evt) {
 		var inp = Event.element(evt);
 		if (inp) {
 			var uuid = zkau.uuidOf(inp.id);
-			var pp = $(uuid + "!pp");
+			var pp = $e(uuid + "!pp");
 			if (pp && pp.style.display != "none") zkCmbox.close(pp);
 		}
 	}
@@ -116,8 +116,8 @@ zkCmbox.onkey = function (evt) {
 	if (!inp) return true;
 
 	var uuid = zkau.uuidOf(inp.id);
-	var cb = $(uuid);
-	var pp = $(uuid + "!pp");
+	var cb = $e(uuid);
+	var pp = $e(uuid + "!pp");
 	if (!pp) return true;
 
 	var opened = pp.style.display != "none";
@@ -170,7 +170,7 @@ zkCmbox.onkey = function (evt) {
 
 /* Whn the button is clicked on button. */
 zkCmbox.onbutton = function (cmp) {
-	var pp = $(cmp.id + "!pp");
+	var pp = $e(cmp.id + "!pp");
 	if (pp) {
 		if (pp.style.display == "none") zkCmbox.open(pp, true);
 		else zkCmbox.close(pp, true);
@@ -218,12 +218,12 @@ zkCmbox.getLabel = function (item) {
 };
 
 zkCmbox.open = function (pp, hilite) {
-	pp = $(pp);
+	pp = $e(pp);
 	zkau.closeFloats(pp); //including popups
 	zkCmbox._pop._popupId = pp.id;
 
 	var uuid = zkau.uuidOf(pp.id);
-	var cb = $(uuid);
+	var cb = $e(uuid);
 	if (!cb) return;
 
 	zkCmbox._open(cb, uuid, pp, hilite);
@@ -232,7 +232,7 @@ zkCmbox.open = function (pp, hilite) {
 		zkau.asapTimeout(cb, "onOpen"));
 };
 zkCmbox._open = function (cb, uuid, pp, hilite) {
-	var pp2 = $(uuid + "!cave");
+	var pp2 = $e(uuid + "!cave");
 	pp.style.width = pp.style.height = "auto";
 	if (pp2) pp2.style.width = pp2.style.height = "auto";
 	pp.style.position = "absolute"; //just in case
@@ -275,13 +275,13 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 };
 /** Re-position the popup. */
 zkCmbox._repos = function (uuid, hilite) {
-	var cb = $(uuid);
+	var cb = $e(uuid);
 	if (!cb) return;
 
-	var pp = $(uuid + "!pp");
-	var pp2 = $(uuid + "!cave");
+	var pp = $e(uuid + "!pp");
+	var pp2 = $e(uuid + "!cave");
 	var inpId = cb.id + "!real";
-	var inp = $(inpId);
+	var inp = $e(inpId);
 
 	//FF issue:
 	//If both horz and vert scrollbar are visible:
@@ -323,7 +323,7 @@ zkCmbox.getInputByItem = function (item) {
 	if (!uuid) return null;
 
 	var inpId = uuid + "!real";
-	return $(inpId);
+	return $e(inpId);
 }
 
 /** Auto-hilite the most matched item.
@@ -331,13 +331,13 @@ zkCmbox.getInputByItem = function (item) {
  * @param bUp whether UP is pressed
  */
 zkCmbox._hilite = function (uuid, selback, bUp) {
-	var inp = $(uuid + "!real");
+	var inp = $e(uuid + "!real");
 	if (!inp) return;
 
-//	var aco = $(uuid).getAttribute("zk_aco") == "true";
-	var pp = $(uuid + "!pp");
+//	var aco = $e(uuid).getAttribute("zk_aco") == "true";
+	var pp = $e(uuid + "!pp");
 	if (!pp || (!selback && /*!aco &&*/ !zk.isVisible(pp))) return;
-	var pp2 = $(uuid + "!cave");
+	var pp2 = $e(uuid + "!cave");
 	if (!pp2) return;
 	var rows = pp2.rows;
 	if (!rows) return;
@@ -411,10 +411,10 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 };
 
 zkCmbox.close = function (pp, focus) {
-	pp = $(pp);
+	pp = $e(pp);
 	var uuid = zkau.uuidOf(pp.id);
 	if (zk.gecko) {
-		$(uuid).appendChild(pp); //Bug 1486840
+		$e(uuid).appendChild(pp); //Bug 1486840
 		pp.removeAttribute("zk_vparent");
 	}
 

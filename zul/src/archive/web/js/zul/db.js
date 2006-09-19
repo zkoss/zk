@@ -26,12 +26,12 @@ zk.Cal.prototype = {
 	initialize: function (cmp, popup) {
 		this.id = cmp.id;
 		this.popup = popup;
-		this.input = $(cmp.id + "!real");
+		this.input = $e(cmp.id + "!real");
 		this._newCal();
 		this.init();
 	},
 	_newCal: function() {
-		this.element = $(this.id);
+		this.element = $e(this.id);
 		if (!this.element) return;
 
 		var compact = this.element.getAttribute("zk_compact") == "true";
@@ -89,7 +89,7 @@ zk.Cal.prototype = {
 		zk.setInnerHTML(this.popup || this.element, html);
 	},
 	init: function () {
-		this.element = $(this.id);
+		this.element = $e(this.id);
 		if (!this.element) return;
 
 		var val = this.input ? this.input.value: this.element.getAttribute("zk_value");
@@ -109,12 +109,12 @@ zk.Cal.prototype = {
 		//year
 		var val = this.date, m = val.getMonth(), d = val.getDate();
 		var y = val.getFullYear();
-		var el = $(this.id + "!title");
+		var el = $e(this.id + "!title");
 		zk.setInnerHTML(el, zk.SMON[m] + ', ' + y);
 
 		//month
 		for (var j = 0; j < 12; ++j) {
-			el = $(this.id + "!m" + j);
+			el = $e(this.id + "!m" + j);
 			if (el) { //omitted if compact
 				el.className = m == j ? "sel": "";
 				el.setAttribute("zk_mon", j);
@@ -126,7 +126,7 @@ zk.Cal.prototype = {
 		var v = new Date(y, m, 1).getDay()- zk.DOW_1ST;
 		if (v < 0) v += 7;
 		for (var j = 0, cur = -v + 1; j < 6; ++j) {
-			el = $(this.id + "!w" +j);
+			el = $e(this.id + "!w" +j);
 			for (var k = 0; k < 7; ++k, ++cur) {
 				v = cur <= 0 ? prev + cur: cur <= last ? cur: cur - last;
 				if (k == 0 && cur > last) el.style.display = "none";
@@ -204,7 +204,7 @@ zk.Cal.prototype = {
 	
 				var d = val.getDate();
 				for (var j = 0; j < 6; ++j) {
-					el = $(this.id + "!w" +j);
+					el = $e(this.id + "!w" +j);
 					for (var k = 0; k < 7; ++k) {
 						var cell = el.cells[k];
 						if (zk.getIntAttr(cell, "zk_monofs") == 0
@@ -339,12 +339,12 @@ zkDtbox.init = function (cmp) {
 		function (evt) {return zkDtbox.onkey(evt);});
 		//IE: use keydown. otherwise, it causes the window to scroll
 
-	var btn = $(cmp.id + "!btn");
+	var btn = $e(cmp.id + "!btn");
 	if (btn) Event.observe(btn, "click", function () {zkDtbox.onbutton(cmp);});
 	btn.align = "absmiddle";
 };
 zkDtbox.validate = function (cmp) {
-	var inp = $(cmp.id+"!real");
+	var inp = $e(cmp.id+"!real");
 	if (inp.value) {
 		var fmt = cmp.getAttribute("zk_fmt");
 		var d = zk.parseDate(inp.value, fmt,
@@ -412,7 +412,7 @@ zkDtbox.onkey = function (evt) {
 	if (!inp) return true;
 
 	var uuid = zkau.uuidOf(inp.id);
-	var pp = $(uuid + "!pp");
+	var pp = $e(uuid + "!pp");
 	if (!pp) return true;
 
 	var opened = pp.style.display != "none";
@@ -467,7 +467,7 @@ zkDtbox.onkey = function (evt) {
 
 /* Whn the button is clicked on button. */
 zkDtbox.onbutton = function (cmp) {
-	var pp = $(cmp.id + "!pp");
+	var pp = $e(cmp.id + "!pp");
 	if (pp) {
 		if (pp.style.display == "none") zkDtbox.open(pp);
 		else zkDtbox.close(pp, true);
@@ -475,12 +475,12 @@ zkDtbox.onbutton = function (cmp) {
 };
 
 zkDtbox.open = function (pp) {
-	pp = $(pp);
+	pp = $e(pp);
 	zkau.closeFloats(pp); //including popups
 	zkau._dtbox._popupId = pp.id;
 
 	var uuid = zkau.uuidOf(pp.id);
-	var cb = $(uuid);
+	var cb = $e(uuid);
 	if (!cb) return;
 
 	var meta = zkau.getMeta(cb);
@@ -522,12 +522,12 @@ zkDtbox.open = function (pp) {
 };
 /** Re-position the popup. */
 zkDtbox._repos = function (uuid) {
-	var cb = $(uuid);
+	var cb = $e(uuid);
 	if (!cb) return;
 
-	var pp = $(uuid + "!pp");
+	var pp = $e(uuid + "!pp");
 	var inpId = cb.id + "!real";
-	var inp = $(inpId);
+	var inp = $e(inpId);
 
 	zk.position(pp, cb, "after-start");
 	zkau.hideCovered();
@@ -537,11 +537,11 @@ zkDtbox._repos = function (uuid) {
 zkDtbox.close = function (pp, focus) {
 	var uuid = zkau.uuidOf(pp.id);
 	if (zk.gecko) {
-		$(uuid).appendChild(pp); //Bug 1486840
+		$e(uuid).appendChild(pp); //Bug 1486840
 		pp.removeAttribute("zk_vparent");
 	}
 
-	pp = $(pp);
+	pp = $e(pp);
 	zkau._dtbox._popupId = null;
 	pp.style.display = "none";
 	zkau.hideCovered();

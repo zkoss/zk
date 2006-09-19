@@ -34,7 +34,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 		switch (name) {
 		case "open":
 			var j = value.indexOf(':'), row;
-			if (j > 0) row = $(value.substring(0, j));
+			if (j > 0) row = $e(value.substring(0, j));
 			if (!row) {
 				alert(mesg.ILLEGAL_RESPONSE+"Illegal tree open: "+value);
 				return true;
@@ -42,7 +42,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 			var toOpen = value.substring(j + 1) == "true";
 			var open = row.getAttribute("zk_open") == "true";
 			if (toOpen != open) {
-				var img = $(row.id + "!open");
+				var img = $e(row.id + "!open");
 				if (img) this._openItem(row, img, toOpen);
 			}
 			return true; //no more processing
@@ -52,14 +52,14 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	/** Overrides what is defined in zk.Selectable. */
 	_doLeft: function (row) {
 		if (row.getAttribute("zk_open") == "true") {
-			var img = $(row.id + "!open");
+			var img = $e(row.id + "!open");
 			if (img) this._openItem(row, img, false);
 		}
 	},
 	/** Overrides what is defined in zk.Selectable. */
 	_doRight: function (row) {
 		if (row.getAttribute("zk_open") != "true") {
-			var img = $(row.id + "!open");
+			var img = $e(row.id + "!open");
 			if (img) this._openItem(row, img, true);
 		}
 	},
@@ -71,8 +71,8 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 		var toOpen = row.getAttribute("zk_open") != "true"; //toggle
 		this._openItem(row, target, toOpen);
 
-		var el = $(row.id + "!sel");
-		if (!el) el = $(el + "!cm");
+		var el = $e(row.id + "!sel");
+		if (!el) el = $e(el + "!cm");
 		if (el) zk.focusById(el.id);
 
 		Event.stop(evt);
@@ -126,7 +126,7 @@ zkTree.init = function (cmp) {
 	else {
 		zkTreeNewClass();
 
-		var bdy = $(cmp.id + "!body");
+		var bdy = $e(cmp.id + "!body");
 		if (bdy)
 			Event.observe(bdy, "keydown",
 				function (evt) {return zkTree.bodyonkeydown(evt);});

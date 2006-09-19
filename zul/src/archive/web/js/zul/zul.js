@@ -60,12 +60,12 @@ zul.doModal = function (cmp) {
 	zkau.closeFloats(cmp);
 
 	var maskId = cmp.id + ".mask";
-	var mask = $(maskId);
+	var mask = $e(maskId);
 	if (!mask) {
 		//Note: a modal window might be a child of another
 		var bMask = true;
 		for (var j = 0; j < nModals; ++j) {
-			var n = $(zkau._modals[j]);
+			var n = $e(zkau._modals[j]);
 			if (n && zk.isAncestor(n, cmp)) {
 				bMask = false;
 				break;
@@ -75,7 +75,7 @@ zul.doModal = function (cmp) {
 			//bug 1510218: we have to make it as a sibling to cmp
 			cmp.insertAdjacentHTML(
 				"beforebegin", '<div id="'+maskId+'" class="modal_mask"></div>');
-			mask =  $(maskId);
+			mask =  $e(maskId);
 			if (!mask) zk.debug(msgzul.FAILED_TO_CREATE_MASK);
 		}
 	}
@@ -89,7 +89,7 @@ zul.doModal = function (cmp) {
 			mask.setAttribute("zk_prevfocus", zkau.currentFocus.id);
 	}
 
-	var caption = $(cmp.id + "!caption");
+	var caption = $e(cmp.id + "!caption");
 	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 
 	zkau._modals.push(cmp.id);
@@ -106,11 +106,11 @@ zul.doModal = function (cmp) {
 
 /** Makes the modal component as normal. */
 zul.endModal = function (uuid) {
-	var caption = $(uuid + "!caption");
+	var caption = $e(uuid + "!caption");
 	if (caption && caption.style.cursor == "move") caption.style.cursor = "";
 
 	var maskId = uuid + ".mask";
-	var mask = $(maskId);
+	var mask = $e(maskId);
 	var prevfocusId;
 	if (mask) {
 		prevfocusId = mask.getAttribute("zk_prevfocus");
@@ -128,7 +128,7 @@ zul.endModal = function (uuid) {
 		}
 
 		var lastid = zkau._modals[zkau._modals.length - 1];
-		var last = $(lastid);
+		var last = $e(lastid);
 		if (last) {
 			zk.restoreDisabled(last);
 			if (!prevfocusId) zk.focusDownById(lastid, 10);
@@ -137,7 +137,7 @@ zul.endModal = function (uuid) {
 		}
 	}
 
-	var cmp = $(uuid);
+	var cmp = $e(uuid);
 	if (cmp) {
 		zkau.wndmode[cmp.id] = null;
 		zkau.disableMoveable(cmp);
@@ -149,7 +149,7 @@ zul.endModal = function (uuid) {
 /** Handles onsize to re-position mask. */
 zul.doMoveMask = function (evt) {
 	for (var j = zkau._modals.length; --j >= 0;) {
-		var mask = $(zkau._modals[j] + ".mask");
+		var mask = $e(zkau._modals[j] + ".mask");
 		if (mask) {
 			zul.positionMask(mask);
 			return;

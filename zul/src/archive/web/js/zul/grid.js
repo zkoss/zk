@@ -26,21 +26,21 @@ zk.Grid.prototype = {
 		this.init();
 	},
 	init: function () {
-		this.element = $(this.id);
+		this.element = $e(this.id);
 		if (!this.element) return;
 
-		this.body = $(this.id + "!body");
+		this.body = $e(this.id + "!body");
 		if (this.body) {
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 			if (this.bodytbl.tBodies && this.bodytbl.tBodies[0])
 				this.bodyrows = this.bodytbl.tBodies[0].rows;
 				//Note: bodyrows is null in FF if no rows, so no err msg
 
-			this.head = $(this.id + "!head");
+			this.head = $e(this.id + "!head");
 			if (this.head) this.headtbl = zk.firstChild(this.head, "TABLE", true);
 		} else {
 			this.paging = true;
-			this.body = $(this.id + "!paging");
+			this.body = $e(this.id + "!paging");
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 			if (this.bodytbl.tBodies.length >= 2)
 				this.bodyrows = this.bodytbl.tBodies[1].rows;

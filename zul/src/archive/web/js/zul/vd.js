@@ -25,7 +25,7 @@ zkVld.validate = function (id) {
 	//There are two ways to validate a component.
 	//1. specify the function in zk_valid or zk_valid2
 	id = zkau.uuidOf(id);
-	var cm = $(id);
+	var cm = $e(id);
 	zkVld.validating = true; //to avoid deadloop (when both fields are invalid)
 	try {
 		if (cm) {
@@ -63,7 +63,7 @@ zkVld.onlyInt = function (id) {
 	return zkVld.onlyNum(id, true);
 };
 zkVld.onlyNum = function (id, noDot) {
-	var inp = $(id);
+	var inp = $e(id);
 	if (!inp) return null;
 
 	var fmt = zkau.getOuter(inp);
@@ -103,7 +103,7 @@ zkVld.onlyNum = function (id, noDot) {
 	return null;
 };
 zkVld.noEmpty = function (id) {
-	var inp = $(id);
+	var inp = $e(id);
 	if (!inp) return true;
 	inp = zkau.getReal(inp);
 	if (!inp.value.trim())
@@ -113,7 +113,7 @@ zkVld.noEmpty = function (id) {
 
 /** creates an error message box. */
 zkVld.errbox = function (id, html) {
-	var inp = $(id);
+	var inp = $e(id);
 	if (!zk.isRealVisible(inp)) return; //don't do it
 
 	if (zk.gecko && inp && inp.focus && zkVld.focusonerror) {
@@ -140,7 +140,7 @@ zkVld.errbox = function (id, html) {
 };
 zkVld._errbox = function (id, html) {
 	var boxid = id + "!errb";
-	zkVld.closeErrbox($(boxid));
+	zkVld.closeErrbox($e(boxid));
 
 	html = '<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
 		+boxid+'" style="display:none" class="errbox"><div>'
@@ -153,7 +153,7 @@ zkVld._errbox = function (id, html) {
 		+'" onclick="zkVld._ebclose(this)" onmouseover="zkau.onimgover(this)" onmouseout="zkau.onimgout(this)"/>'
 		+'</td></tr></table></div></div>';
 	document.body.insertAdjacentHTML("afterbegin", html);
-	var box = $(boxid);
+	var box = $e(boxid);
 	if (!box) {
 		alert(html);
 		return;
@@ -165,9 +165,9 @@ zkVld._errbox = function (id, html) {
 	box.style.zIndex = 70000 + zkVld._cnt++;
 	box.style.position = "absolute";
 	box.style.display = "block"; //we need to calculate the size
-	var inp = $(id);
+	var inp = $e(id);
 	if (inp) {
-		var ref = $(zkau.uuidOf(id));
+		var ref = $e(zkau.uuidOf(id));
 		if (!ref) ref = inp;
 		var ofs = Position.cumulativeOffset(ref);
 		ofs = zk.toParentOffset(box, ofs[0], ofs[1] + ref.offsetHeight);
@@ -189,7 +189,7 @@ zkVld.closeErrbox = function (box) {
 	var boxid;
 	if (typeof box == "string") {
 		boxid = box;
-		box = $(box + "!errb");
+		box = $e(box + "!errb");
 	}
 
 	if (box) {
@@ -205,7 +205,7 @@ zkVld._ebclose = function (el) {
 		if (el.id && el.id.endsWith("!errb")) {
 			var id = el.id.substring(0, el.id.length - 5);
 			zkVld.closeErrbox(id);
-			//zkVld.focus($(id));
+			//zkVld.focus($e(id));
 			//It is a bit annoying if user want to fix error later
 			return;
 		}
@@ -214,7 +214,7 @@ zkVld._eblocate = function (el) {
 	for (; el; el = el.parentNode)
 		if (el.id && el.id.endsWith("!errb")) {
 			var id = el.id.substring(0, el.id.length - 5);
-			zkVld.focus($(id));
+			zkVld.focus($e(id));
 			return;
 		}
 };
@@ -229,8 +229,8 @@ zkVld._ebmup = function () {zkVld.validating = false;};
 
 zkVld._fiximg = function (box) {
 	var id = box.id.substring(0, box.id.length - 5);
-	var inp = $(id);
-	var img = $(id + "!img");
+	var inp = $e(id);
+	var img = $e(id + "!img");
 	if (inp && img) {
 		var inpofs = Position.cumulativeOffset(inp);
 		var imgofs = Position.cumulativeOffset(img);
@@ -253,7 +253,7 @@ zkVld.uncover = function (el) {
 	var ctags = zk.coveredTagnames;
 	for (var i = zkVld._ebs.length; --i >= 0;) {
 		var boxid = zkVld._ebs[i];
-		var box = $(boxid);
+		var box = $e(boxid);
 		if (!box) {
 			zkVld._ebs.splice(i, 1);
 			continue;
@@ -277,7 +277,7 @@ zkVld._uncover = function (box, el, ctag) {
 	if (zk.isOffsetOverlapped(
 	elofs, [el.offsetWidth, el.offsetHeight],
 	boxofs, [box.offsetWidth, box.offsetHeight])) {
-		var inp = $(box.id.substring(0, box.id.length - 5));
+		var inp = $e(box.id.substring(0, box.id.length - 5));
 		var y;
 		if (inp) {
 			var inpofs = Position.cumulativeOffset(inp);
@@ -305,10 +305,10 @@ zkVld._uncover = function (box, el, ctag) {
 zkVld.fixerrboxes = function () {
 	for (var j = zkVld._ebs.length; --j >= 0;) {
 		var boxid = zkVld._ebs[j];
-		var box = $(boxid);
+		var box = $e(boxid);
 		if (box) {
 			var id = boxid.substring(0, boxid.length - 5);
-			var inp = $(id);
+			var inp = $e(id);
 			if (!inp) zkVld.closeErrbox(box); //dead
 		} else {
 			zkVld._ebs.splice(j, 1);
@@ -319,7 +319,7 @@ zkVld.fixerrboxes = function () {
 /** Add what will cover dropdown list. */
 zkVld.addHideCovered = function (ary) {
 	for (var j = zkVld._ebs.length; --j >= 0;) {
-		var el = $(zkVld._ebs[j]);
+		var el = $e(zkVld._ebs[j]);
 		if (el) ary.push(el);
 	}
 }

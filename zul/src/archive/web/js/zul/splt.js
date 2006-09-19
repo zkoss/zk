@@ -32,7 +32,7 @@ zkSplt.init = function (cmp) {
 			endeffect: zkSplt._endDrag})
 	};
 
-	var btn = $(cmp.id + "!btn");
+	var btn = $e(cmp.id + "!btn");
 	Event.observe(btn, "click", function () {
 		zkSplt.open(cmp, cmp.getAttribute("zk_open") == "false");
 	});
@@ -65,13 +65,13 @@ zkSplt.setAttr = function (cmp, nm, val) {
 };
 
 zkSplt._resize = function (cmp) {
-	cmp = $(cmp);
+	cmp = $e(cmp);
 	if (cmp) {
 		zkSplt._fixsz(cmp);
 
 		//we have to convert auto-adjust to fix-width, or table
 		//will affect the sliding
-		var nd = $(cmp.id + "!chdextr");
+		var nd = $e(cmp.id + "!chdextr");
 		var tn = zk.tagName(nd);
 		var vert = cmp.getAttribute("zk_vert");
 		for (nd = nd.parentNode.firstChild; nd; nd = nd.nextSibling)
@@ -81,7 +81,7 @@ zkSplt._resize = function (cmp) {
 	}
 };
 zkSplt._fixbtn = function (cmp) {
-	var btn = $(cmp.id + "!btn");
+	var btn = $e(cmp.id + "!btn");
 	var colps = cmp.getAttribute("zk_colps")
 	if (!colps || "none" == colps) {
 		btn.style.display = "none";
@@ -99,7 +99,7 @@ zkSplt._startDrag = function (cmp) {
 	if (drag) {
 		var run = drag.run = {};
 		run.org = Position.cumulativeOffset(cmp);
-		var nd = $(cmp.id + "!chdextr");
+		var nd = $e(cmp.id + "!chdextr");
 		var tn = zk.tagName(nd);
 		run.prev = zk.previousSibling(nd, tn);
 		run.next = zk.nextSibling(nd, tn);
@@ -204,19 +204,19 @@ zkSplt._fixsz = function (cmp) {
 		}
 	}
 
-	var btn = $(cmp.id + "!btn");
+	var btn = $e(cmp.id + "!btn");
 	if (vert) btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
 	else btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
 };
 zkSplt._fixszAll = function () {
 	for (var id in zkSplt._drags) {
-		var cmp = $(id);
+		var cmp = $e(id);
 		if (cmp) zkSplt._fixsz(cmp);
 	}
 };
 
 zkSplt.open = function (cmp, open, silent) {
-	var nd = $(cmp.id + "!chdextr");
+	var nd = $e(cmp.id + "!chdextr");
 	var tn = zk.tagName(nd);
 	if ((cmp.getAttribute("zk_open") != "false") == open) return; //nothing changed
 

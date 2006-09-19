@@ -28,11 +28,11 @@ zk.Selectable.prototype = {
 		this.init();
 	},
 	init: function () {
-		this.element = $(this.id);
+		this.element = $e(this.id);
 		if (!this.element) return;
 
 		//_headtbl might be null, while other must be NOT null
-		this.body = $(this.id + "!body");
+		this.body = $e(this.id + "!body");
 		if (this.body) {
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 			if (this.bodytbl) {
@@ -42,13 +42,13 @@ zk.Selectable.prototype = {
 				this.bodyrows = bds[0].rows;
 			}
 
-			this.head = $(this.id + "!head");
+			this.head = $e(this.id + "!head");
 			if (this.head) this.headtbl = zk.firstChild(this.head, "TABLE", true);
-			this.foot = $(this.id + "!foot");
+			this.foot = $e(this.id + "!foot");
 			if (this.foot) this.foottbl = zk.firstChild(this.foot, "TABLE", true);
 		} else {
 			this.paging = true;
-			this.body = $(this.id + "!paging");
+			this.body = $e(this.id + "!paging");
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 			this.bodyrows = this.bodytbl.tBodies[1].rows;
 		}
@@ -300,7 +300,7 @@ zk.Selectable.prototype = {
 				} else {
 	//Note: onclick means toggle if checkmark is enabled
 	//Otherwise, we mimic Windows if checkmark is disabled
-					var el = $(row.id + "!cm");
+					var el = $e(row.id + "!cm");
 					if (el) this.toggleSelect(row, !el.checked);
 					else this.select(row);
 				}
@@ -345,7 +345,7 @@ zk.Selectable.prototype = {
 			this._setSelectedIndex(value);
 			return true; //no more processing
 		case "select": //select by uuid
-			var row = $(value);
+			var row = $e(value);
 			this._selectOne(row, false);
 			return true;
 		case "selectAll":
@@ -400,7 +400,7 @@ zk.Selectable.prototype = {
 			if (row.id == selId)
 				this._fixSelelectedId();
 		} else if (selId) {
-			var sel = $(selId);
+			var sel = $e(selId);
 			if (sel) this._changeSelect(sel, false);
 		}
 
@@ -452,8 +452,8 @@ zk.Selectable.prototype = {
 	_focusToAnc: function (row) {
 		if (!row) return;
 		var uuid = typeof row == 'string' ? row: row.id;
-		var el = $(uuid + "!cm");
-		if (!el) el = $(uuid + "!sel");
+		var el = $e(uuid + "!cm");
+		if (!el) el = $e(uuid + "!sel");
 		if (el) zk.focusById(el.id);
 	},
 
@@ -463,7 +463,7 @@ zk.Selectable.prototype = {
 	 * @param toFocus whether to change focus
 	 */
 	_selectOne: function (row, toFocus) {
-		row = $(row);
+		row = $e(row);
 		var selId = this._getSelectedId();
 
 		if (this._isMultiple()) {
@@ -480,7 +480,7 @@ zk.Selectable.prototype = {
 					return false; //not changed
 				}
 
-				var sel = $(selId);
+				var sel = $e(selId);
 				if (sel) {
 					this._changeSelect(sel, false);
 					if (row)
@@ -512,7 +512,7 @@ zk.Selectable.prototype = {
 
 		var changed = this._isSelected(row) != toSel;
 		if (changed) {
-			var el = $(row.id + "!cm");
+			var el = $e(row.id + "!cm");
 			if (toSel) {
 				if (el) el.checked = true;
 				row.className = row.className + "sel";
@@ -537,8 +537,8 @@ zk.Selectable.prototype = {
 		if (changed) {
 			this._fixAnc(row, toFocus);
 			if (toFocus) {
-				var el = $(row.id + "!cm");
-				if (!el) el = $(row.id + "!sel");
+				var el = $e(row.id + "!cm");
+				if (!el) el = $e(row.id + "!sel");
 				if (el) zk.focusById(el.id);
 				row.setAttribute("zk_focus", "true");
 				zkSel.cmonfocus(row);
@@ -553,9 +553,9 @@ zk.Selectable.prototype = {
 		return changed;
 	},
 	_fixAnc: function (row, toAnc) {
-		var el = $(row.id + "!sel");
+		var el = $e(row.id + "!sel");
 		if (toAnc) {
-			if (!el && !$(row.id + "!cm") && row.cells.length > 0) {
+			if (!el && !$e(row.id + "!cm") && row.cells.length > 0) {
 				el = document.createElement("A");
 				el.href = "javascript:;";
 				el.id = row.id + "!sel";
@@ -896,7 +896,7 @@ zk.Selectable.prototype = {
 	_setMultiple: function (multiple) {
 		this.element.setAttribute("zk_multiple", multiple ? "true": "false");
 		if (!multiple) {
-			var row = $(this._getSelectedId());
+			var row = $e(this._getSelectedId());
 			this._unsetSelectAllExcept(row);
 				//no need to unfocus because we don't want to change focus
 		}
@@ -971,7 +971,7 @@ zkSel.onout = function (el) {
 };
 /** (!cm or !sel)'s onfocus. */
 zkSel.cmonfocus = function (el) {
-	var row = $(zkau.uuidOf(el.id));
+	var row = $e(zkau.uuidOf(el.id));
 	if (row) 
 		if (!zk.gecko) row.style.textDecoration = "underline";
 		else if (row.cells.length) row.cells[0].style.textDecoration = "underline";
@@ -979,7 +979,7 @@ zkSel.cmonfocus = function (el) {
 };
 /** (!cm or !sel)'s onblur. */
 zkSel.cmonblur = function (el) {
-	var row = $(zkau.uuidOf(el.id));
+	var row = $e(zkau.uuidOf(el.id));
 	if (row) 
 		if (!zk.gecko) row.style.textDecoration = "";
 		else if (row.cells.length) row.cells[0].style.textDecoration = "";
@@ -1030,7 +1030,7 @@ zkLibox.init = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 	else {
-		var bd = $(cmp.id + "!body");
+		var bd = $e(cmp.id + "!body");
 		if (bd)
 			Event.observe(bd, "keydown",
 				function (evt) {return zkLibox.bodyonkeydown(evt);});

@@ -31,7 +31,7 @@ zkTab.onclick = function (evt) {
 zkTab._getSelTab = function (tab) {
 	var tabboxId = tab.getAttribute("zk_box");
 	if (tabboxId) {
-		var tabbox = $(tabboxId);
+		var tabbox = $e(tabboxId);
 		if (tabbox.getAttribute("zk_accd") == "true")
 			return zkTab._getSelTabFromTop(tabbox, tabboxId);
 	}
@@ -59,7 +59,7 @@ zkTab._getSelTabFromTop = function (node, tabboxId) {
 /** Selects the specified tab (and unselect the current tab). */
 zkTab.selTab = function (tab) {
 	if (!tab) return;
-	tab = $(tab);
+	tab = $e(tab);
 
 	var old = zkTab._getSelTab(tab);
 	if (old != tab) {
@@ -74,7 +74,7 @@ zkTab._setTabSel = function (tab, toSel) {
 		return; //nothing changed
 
 	tab.setAttribute("zk_sel", toSel ? "true": "false");
-	var tabreal = $(tab.id + "!real");
+	var tabreal = $e(tab.id + "!real");
 	if (tabreal) {
 		if (toSel) {
 			tabreal.className = tabreal.className + "sel";
@@ -88,11 +88,11 @@ zkTab._setTabSel = function (tab, toSel) {
 	zkTab._changeBkgnd(tab, toSel);
 
 	var tabbox = tab.getAttribute("zk_box");
-	if (tabbox) tabbox = $(tabbox);
+	if (tabbox) tabbox = $e(tabbox);
 	var accd = tabbox && tabbox.getAttribute("zk_accd") == "true";
-	var panel = $(tab.getAttribute("zk_panel"));
+	var panel = $e(tab.getAttribute("zk_panel"));
 	if (panel)
-		if (accd) action.slideDown($(panel.id + "!real"), toSel);
+		if (accd) action.slideDown($e(panel.id + "!real"), toSel);
 		else action.show(panel, toSel);
 
 	if (!accd) {
@@ -119,7 +119,7 @@ zkTab._changeBkgnd = function (node, toSel) {
 
 /** Fix the width of the last column in tabs. */
 zkTab.fixWidth = function (uuid) {
-	var n = $(uuid);
+	var n = $e(uuid);
 	if (!n) return;
 
 	var tbl = zk.parentNode(zk.parentNode(n, "TABLE"), "TABLE");
@@ -142,7 +142,7 @@ zkTab.fixWidth = function (uuid) {
 zkTab.init = function (cmp) {
 	Event.observe(cmp, "click", function (evt) {zkTab.onclick(evt);});
 
-	var anc = $(cmp.id + "!a");
+	var anc = $e(cmp.id + "!a");
 	if (anc) {
 		Event.observe(anc, "focus", function () {zkau.onfocus(anc);});
 		Event.observe(anc, "blur", function () {zkau.onblur(anc);});
