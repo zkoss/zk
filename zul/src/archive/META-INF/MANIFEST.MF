@@ -3,6 +3,6 @@ Specification-Title: Potix ZUL Components
 Specification-Version: 1.0
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zul
-Implementation-URL: http://www.potix.com/zul
+Implementation-URL: http://www.zkoss.org/zul
 Implementation-Version: 1.0
 Implementation-Vendor: Potix Corporation

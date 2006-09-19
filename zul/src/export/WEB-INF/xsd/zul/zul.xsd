@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-xmlns="http://www.potix.com/2005/zul" 
-targetNamespace="http://www.potix.com/2005/zul" 
+xmlns="http://www.zkoss.org/2005/zul" 
+targetNamespace="http://www.zkoss.org/2005/zul" 
 elementFormDefault="qualified">
 <!--
   SIMPLETYPE
