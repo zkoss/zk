@@ -47,8 +47,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 					<menupopup>
 				        <menuitem label="About Componany"/>
 				        <menuitem label="About Product"/>
-				        <menuitem label="Go Potix with target" href="http://www.potix.com" target="new"/>
-				        <menuitem label="Go Potix" href="http://www.potix.com"/>
+				        <menuitem label="Go Potix with target" href="http://www.zkoss.org" target="new"/>
+				        <menuitem label="Go Potix" href="http://www.zkoss.org"/>
 					</menupopup>
 		        </menu>
 			</menupopup>

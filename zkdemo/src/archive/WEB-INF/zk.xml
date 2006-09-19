@@ -27,12 +27,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<!-- Turn on the following if you want to keep session after Web server restarts
 	<system-config>
-		<ui-factory-class>com.potix.zk.ui.http.SerializableUiFactory</ui-factory-class>
+		<ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
 	</system-config>
 	-->
 	<!-- Turn on the following if used with WebLogic 9.1
 	<system-config>
-		<cache-provider-class>com.potix.zk.ui.sys.GlobalDesktopCacheProvider</cache-provider-class>
+		<cache-provider-class>org.zkoss.zk.ui.sys.GlobalDesktopCacheProvider</cache-provider-class>
 	</system-config>
 	-->
 
@@ -47,12 +47,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!-- Optional -->
 	<listener>
 		<description>[Optional] Mointor the statistic</description>
-		<listener-class>com.potix.zk.ui.util.Statistic</listener-class>
+		<listener-class>org.zkoss.zk.ui.util.Statistic</listener-class>
 	</listener>
 
 	<!-- Used for test desktop.zul
 	<listener>
-		<listener-class>com.potix.zkdemo.test.ComponentPools$Init</listener-class>
+		<listener-class>org.zkoss.zkdemo.test.ComponentPools$Init</listener-class>
 	</listener>
 	-->
 
@@ -73,14 +73,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!-- Configure the Hibernate "Open Session In View" Session Lifecycle
 	<listener>
 		<description>Hibernate "Open Session In View" Session Lifecycle</description>
-		<listener-class>com.potix.zkplus.hibernate.HibernateSessionExecutionListener</listener-class>
+		<listener-class>org.zkoss.zkplus.hibernate.HibernateSessionExecutionListener</listener-class>
 	</listener>
 	-->
 	
 	<!-- Configure the Hibernate SessionFactory Lifecycle.
 	<listener>
 		<description>Hibernate "Open Session In View" SessionFactory Lifecycle</description>
-		<listener-class>com.potix.zkplus.hibernate.HibernateSessionWebAppListener</listener-class>
+		<listener-class>org.zkoss.zkplus.hibernate.HibernateSessionWebAppListener</listener-class>
 	</listener>
 	-->
 </zk>

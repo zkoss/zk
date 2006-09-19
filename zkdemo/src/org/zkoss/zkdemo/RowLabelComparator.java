@@ -14,11 +14,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zkdemo;
+package org.zkoss.zkdemo;
 
 import java.util.Comparator;
 
-import com.potix.zk.ui.Component;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Label;
 
 /**

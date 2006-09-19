@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-import com.potix.zk.ui.*;
+import org.zkoss.zk.ui.*;
 import org.zkoss.zul.*;
 
 public class Username extends HtmlMacroComponent {

@@ -16,13 +16,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zkplus.hibernate;
+package org.zkoss.zkplus.hibernate;
 
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.ExecutionInit;
-import com.potix.zk.ui.util.ExecutionCleanup;
-import com.potix.util.logging.Log;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.ExecutionInit;
+import org.zkoss.zk.ui.util.ExecutionCleanup;
+import org.zkoss.util.logging.Log;
 
 import org.hibernate.StaleObjectStateException;
 
@@ -35,7 +35,7 @@ import org.hibernate.StaleObjectStateException;
  * <pre><code>
  * 	&lt;listener>
  *		&lt;description>Hibernate "OpenSessionInView" Listener&lt;/description>
- *		&lt;listener-class>com.potix.zkplus.hibernate.OpenSessionInViewListener&lt;/listener-class>
+ *		&lt;listener-class>org.zkoss.zkplus.hibernate.OpenSessionInViewListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>
  * </p>

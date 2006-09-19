@@ -29,12 +29,12 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	<listener>
 		<description>Used to cleanup when a session is destroyed</description>
 		<display-name>ZK Session Cleaner</display-name>
-		<listener-class>com.potix.zk.ui.http.HttpSessionListener</listener-class>
+		<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
 	</listener>
 	<servlet>
 		<description>ZK loader for ZUML pages</description>
 		<servlet-name>zkLoader</servlet-name>
-		<servlet-class>com.potix.zk.ui.http.DHtmlLayoutServlet</servlet-class>
+		<servlet-class>org.zkoss.zk.ui.http.DHtmlLayoutServlet</servlet-class>
 		<!-- Must. Specifies URI of the update engine (DHtmlUpdateServlet).
 		It must be the same as <url-pattern> for the update engine.
 		-->
@@ -55,7 +55,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	<servlet>
 		<description>The asynchronous update engine for ZK</description>
 		<servlet-name>auEngine</servlet-name>
-		<servlet-class>com.potix.zk.au.http.DHtmlUpdateServlet</servlet-class>
+		<servlet-class>org.zkoss.zk.au.http.DHtmlUpdateServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>auEngine</servlet-name>

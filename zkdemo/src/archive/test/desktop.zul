@@ -20,7 +20,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <window id="main" title="Test Desktop Issues">
 	<button label="Attach from pool">
 		<attribute name="onClick">
-	import com.potix.zkdemo.test.ComponentPools;
+	import org.zkoss.zkdemo.test.ComponentPools;
 	Component c = ComponentPools.next();
 	if (c != null) main.appendChild(c);
 	else alert("No more component");

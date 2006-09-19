@@ -14,11 +14,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zkplus.hibernate;
+package org.zkoss.zkplus.hibernate;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Executions;
-import com.potix.util.logging.Log;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.util.logging.Log;
 
 import org.hibernate.context.CurrentSessionContext;
 import org.hibernate.engine.SessionFactoryImplementor;
@@ -42,7 +42,7 @@ import java.io.ObjectInputStream;
 
 /**
  * A {@link org.hibernate.context.CurrentSessionContext} impl which scopes the 
- * notion of current session by the current ZK {@link com.potix.zk.ui.Execution}.
+ * notion of current session by the current ZK {@link org.zkoss.zk.ui.Execution}.
  * Like the hibernate {@link org.hibernate.context.ThreadLocalSessionContext}
  * counterpart, Execution do not give us a nice hook to perform any type of 
  * cleanup making it questionable for this impl to actually generate Session 
@@ -80,7 +80,7 @@ import java.io.ObjectInputStream;
  * as dipicted below:
  * <pre><code>
  * hibernate.transaction.factory_class = org.hibernate.transaction.JDBCTransactionFactory
- * hibernate.current_session_context_class = com.potix.zkplus.hibernate.ExecutionSessionContext
+ * hibernate.current_session_context_class = org.zkoss.zkplus.hibernate.ExecutionSessionContext
  * </code><pre>
  * </p>
  *

@@ -16,12 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zkplus.hibernate;
+package org.zkoss.zkplus.hibernate;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.WebAppInit;
-import com.potix.zk.ui.util.WebAppCleanup;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.WebAppInit;
+import org.zkoss.zk.ui.util.WebAppCleanup;
 
 import org.hibernate.SessionFactory;
 
@@ -34,7 +34,7 @@ import org.hibernate.SessionFactory;
  * <pre><code>
  * 	&lt;listener>
  *		&lt;description>Hibernate SessionFactory Lifecycle&lt;/description>
- *		&lt;listener-class>com.potix.zkplus.hibernate.HibernateSessionFactoryListener&lt;/listener-class>
+ *		&lt;listener-class>org.zkoss.zkplus.hibernate.HibernateSessionFactoryListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>
  * </p>

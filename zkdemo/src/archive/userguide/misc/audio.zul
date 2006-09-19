@@ -40,7 +40,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<button label="Upload">
 		<attribute name="onClick">{
 	Object media = Fileupload.get();
-	if (media instanceof com.potix.sound.Audio)
+	if (media instanceof org.zkoss.sound.Audio)
 		audio.setContent(media);
 	else if (media != null)
 		Messagebox.show("Not an audio: "+media, "Error", Messagebox.OK, Messagebox.ERROR);

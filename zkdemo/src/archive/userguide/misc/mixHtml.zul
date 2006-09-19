@@ -35,7 +35,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<textbox id="codes" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
 <window title="mix HTML demo" xmlns:h="http://www.w3.org/1999/xhtml"
-xmlns:zk="http://www.potix.com/2005/zk">
+xmlns:zk="http://www.zkoss.org/2005/zk">
 	<h:table border="1">
 		<h:tr>
 			<h:td>column 1</h:td>
@@ -52,8 +52,8 @@ xmlns:zk="http://www.potix.com/2005/zk">
 	</h:ul>
 	<h:input type="button" value="Add Item" zk:onClick="addItem()"/>
 	<zscript>
-	import com.potix.zhtml.Li;
-	import com.potix.zhtml.Text;
+	import org.zkoss.zhtml.Li;
+	import org.zkoss.zhtml.Text;
 	void addItem() {
 		Li li = new Li();
 		li.setParent(ul);

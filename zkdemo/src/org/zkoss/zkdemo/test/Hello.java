@@ -14,9 +14,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zkdemo.test;
+package org.zkoss.zkdemo.test;
 
-import com.potix.zk.ui.HtmlMacroComponent;
+import org.zkoss.zk.ui.HtmlMacroComponent;
 
 /**
  * Used to test with lang-addon.xml.

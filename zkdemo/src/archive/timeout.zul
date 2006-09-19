@@ -23,6 +23,6 @@ The page or component you request is no longer available.
 This is normally caused by timeout, opening too many Web pages, or rebooting
 the server.
 	<div style="margin-top: 10px">Continue cruising <toolbarbutton href="userguide/index.zul" label="ZK Demo"/>
-	or <toolbarbutton href="http://www.potix.com" label="ZK Home"/>.</div>
+	or <toolbarbutton href="http://www.zkoss.org" label="ZK Home"/>.</div>
 	</vbox>
 </window>

@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <zk>
   <zscript>
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
   </zscript>
   <window id="test" border="normal" ctrlKeys="GQ2">
 	Desktop: ${self.page.desktop.id}
@@ -93,7 +93,7 @@ import com.potix.lang.Objects;
 	new Button().setParent(test);
 	</zscript>
 
-	<button label="Test Progress" onClick="com.potix.lang.Threads.pause(1500)"/>
+	<button label="Test Progress" onClick="org.zkoss.lang.Threads.pause(1500)"/>
 
 	<window border="normal">
 	<textbox id="inp0" onChange="add()"/>+<textbox id="inp1" onChange="add()"/>
@@ -419,7 +419,7 @@ import com.potix.lang.Objects;
 	<button label="Upload">
 		<attribute name="onClick">{
 	Object media = Fileupload.get();
-	if (media instanceof com.potix.image.Image)
+	if (media instanceof org.zkoss.image.Image)
 		image.setContent(media);
 	else if (media != null)
 		Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);

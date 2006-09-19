@@ -27,7 +27,7 @@ KillerApp encounters a fatal error, ${requestScope['javax.servlet.error.message'
 		</hbox>
 	</vbox>
 	<zscript>
-	com.potix.util.logging.Log.lookup("Fatal").error(
+	org.zkoss.util.logging.Log.lookup("Fatal").error(
 		requestScope.get("javax.servlet.error.exception"));
 	</zscript>
 </window>

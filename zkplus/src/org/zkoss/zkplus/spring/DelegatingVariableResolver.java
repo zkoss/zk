@@ -14,14 +14,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zkplus.spring;
+package org.zkoss.zkplus.spring;
 
 import java.util.Map;
 import java.util.HashMap;
 import javax.servlet.ServletContext;
 
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.util.VariableResolver;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.util.VariableResolver;
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -35,7 +35,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * It also looks variables for beans defined in <code>springContext</code>.
  *
  * <p>Usage:<br>
- * <code>&lt;?variable-resolver class="com.potix.zkplus.spring.DelegatingVariableResolver"?&gt;</code>
+ * <code>&lt;?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?&gt;</code>
  *
  * @author <a href="mailto:andrewho@potix.com">andrewho@potix.com</a>
  */

@@ -14,9 +14,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zkplus.hibernate;
+package org.zkoss.zkplus.hibernate;
 
-import com.potix.util.logging.Log;
+import org.zkoss.util.logging.Log;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

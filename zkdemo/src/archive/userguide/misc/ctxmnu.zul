@@ -57,7 +57,7 @@ attribute</p>
 	<popup id="any" width="300px">
 		<vbox>
 			ZK simply rich.
-			<toolbarbutton label="ZK your killer Web application now!" href="http://www.potix.com"/>
+			<toolbarbutton label="ZK your killer Web application now!" href="http://www.zkoss.org"/>
 		</vbox>
 	</popup>
 </window>

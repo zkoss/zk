@@ -16,18 +16,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zkplus.hibernate;
+package org.zkoss.zkplus.hibernate;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.util.ExecutionInit;
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.event.EventThreadInit;
-import com.potix.zk.ui.event.EventThreadResume;
-import com.potix.lang.Classes;
-import com.potix.util.logging.Log;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.util.ExecutionInit;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventThreadInit;
+import org.zkoss.zk.ui.event.EventThreadResume;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.logging.Log;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -49,7 +49,7 @@ import java.lang.reflect.Field;
  * <pre><code>
  * 	&lt;listener>
  *		&lt;description>Hibernate Session Management&lt;/description>
- *		&lt;listener-class>com.potix.zkplus.hibernate.HibernateSessionContextListener&lt;/listener-class>
+ *		&lt;listener-class>org.zkoss.zkplus.hibernate.HibernateSessionContextListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>
  * </p>
@@ -58,7 +58,7 @@ import java.lang.reflect.Field;
  */
 public class HibernateSessionContextListener implements ExecutionInit, EventThreadInit, EventThreadResume {
 	private static final Log log = Log.lookup(HibernateSessionContextListener.class);
-	private static final String HIBERNATE_SESSION_MAP = "com.potix.zkplus.hibernate.SessionMap";
+	private static final String HIBERNATE_SESSION_MAP = "org.zkoss.zkplus.hibernate.SessionMap";
 
 	//-- ExecutionInit --//
 	public void init(Execution exec, Execution parent) {

@@ -14,6 +14,9 @@ ZK 2.1.1
   1531580.
 
 * Upgrade Notes
+  + The package of com.potix is renamed to org.zkoss
+  + The namespace of XUL component set is renamed to
+	http://www.zkoss.org/2005/zul
   + Component.invalidate(Range) is removed.
   + ApplicationInit and ApplicationCleanup are renamed to WebAppInit and WebAppCleanup
   + The signature of ExecutionCleanup.cleanup() is changed.
@@ -260,7 +263,7 @@ ZK 1.0.0 RC6
 
 * DHtmlLayoutPortlet is added to work with Portal (JSR168).
 
-* org.zkoss.zul.Space is added to simplify the adding of vertical spacing.
+* com.potix.zul.Space is added to simplify the adding of vertical spacing.
 
 * Box, vbox, hbox, separator and space supports the spacing attribute
 	to let developer control the spacing.
