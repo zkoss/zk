@@ -16,16 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.impl;
+package org.zkoss.zul.impl;
 
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
-import com.potix.util.media.Media;
-import com.potix.image.Image;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.media.Media;
+import org.zkoss.image.Image;
 
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.ext.Viewable;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Viewable;
 
 /**
  * A HTML element with a label ({@link #getLabel})and an image ({@link #getImage}).

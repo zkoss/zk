@@ -16,10 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * An image map.
@@ -28,11 +28,11 @@ import com.potix.zk.ui.UiException;
  *
  * <ol>
  * <li>Listen to the onClick event, which is an instance of
- * {@link com.potix.zk.ui.event.MouseEvent}. Then, you could call
+ * {@link org.zkoss.zk.ui.event.MouseEvent}. Then, you could call
  * getX() and getY() to retrieve where user has clicked.</li>
  * <li>Assign one or multiple of {@link Area} as its children.
  * Then, listen to the onClick event, and use
- * {@link com.potix.zk.ui.event.MouseEvent#getArea} to retrieve
+ * {@link org.zkoss.zk.ui.event.MouseEvent#getArea} to retrieve
  * which area is clicked.</li>
  * </ol>
  *

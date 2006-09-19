@@ -16,16 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.event;
+package org.zkoss.zul.event;
 
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Defines the methods used to listener when the content of
- * {@link com.potix.zul.html.ListModel} is changed.
+ * {@link org.zkoss.zul.ListModel} is changed.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see com.potix.zul.html.ListModel
+ * @see org.zkoss.zul.ListModel
  * @see ListDataEvent
  */
 public interface ListDataListener {

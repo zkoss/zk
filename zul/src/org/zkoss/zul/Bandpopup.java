@@ -14,11 +14,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zul.html.impl.XulElement;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * The popup that belongs to a {@link Bandbox} instance.

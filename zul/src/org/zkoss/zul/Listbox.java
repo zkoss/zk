@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.List;
 import java.util.AbstractSequentialList;
@@ -30,37 +30,37 @@ import java.util.ListIterator;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
-import com.potix.util.logging.Log;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.logging.Log;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.ext.Selectable;
-import com.potix.zk.ui.ext.Render;
-import com.potix.zk.ui.ext.ChildChangedAware;
-import com.potix.zk.ui.ext.Cropper;
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ext.Selectable;
+import org.zkoss.zk.ui.ext.Render;
+import org.zkoss.zk.ui.ext.ChildChangedAware;
+import org.zkoss.zk.ui.ext.Cropper;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 
-import com.potix.zul.html.impl.XulElement;
-import com.potix.zul.html.event.ListDataEvent;
-import com.potix.zul.html.event.ListDataListener;
-import com.potix.zul.html.ext.Paginal;
-import com.potix.zul.html.event.Events;
-import com.potix.zul.html.event.PagingEvent;
+import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.event.Events;
+import org.zkoss.zul.event.PagingEvent;
 
 /**
  * A listbox.
  *
  * <p>Event:
  * <ol>
- * <li>com.potix.zk.ui.event.SelectEvent is sent when user changes
+ * <li>org.zkoss.zk.ui.event.SelectEvent is sent when user changes
  * the selection.</li>
  * </ol>
  *

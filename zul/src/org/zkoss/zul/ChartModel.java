@@ -16,9 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.zul.html.event.ChartDataListener;
+import org.zkoss.zul.event.ChartDataListener;
 
 /**
  * Chart Model is used to hold the data model for the chart.
@@ -36,7 +36,7 @@ import com.potix.zul.html.event.ChartDataListener;
  * @see PieModel
  * @see CategoryModel
  * @see XYModel
- * @see com.potix.zul.html.event.ChartAreaListener
+ * @see org.zkoss.zul.event.ChartAreaListener
  */
 public interface ChartModel {
 	/** Adds a listener to the chart that's notified each time a change

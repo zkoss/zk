@@ -16,15 +16,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.xml.HTMLs;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zul.html.impl.XulElement;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.impl.XulElement;
 
 /**
- * Fires one or more {@link com.potix.zk.ui.event.Event} after
+ * Fires one or more {@link org.zkoss.zk.ui.event.Event} after
  * a specified delay.
  *
  * <p>{@link Timer} is a special component that is invisible.

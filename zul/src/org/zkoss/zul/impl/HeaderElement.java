@@ -16,11 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.impl;
+package org.zkoss.zul.impl;
 
-import com.potix.lang.Objects;
-import com.potix.xml.HTMLs;
-import com.potix.zk.ui.UiException;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * A skeletal implementation for headers.
@@ -66,7 +66,7 @@ abstract public class HeaderElement extends LabelImageElement {
 
 	/** Returns the attributes used to generate HTML TD tag for each
 	 * cell of the rows contained in the parent control,
-	 * e.g., {@link com.potix.zul.html.Listcell}.
+	 * e.g., {@link org.zkoss.zul.Listcell}.
 	 * <p>Used by component developers.
 	 */
 	public String getColAttrs() {

@@ -16,17 +16,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.impl;
+package org.zkoss.zul.impl;
 
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
-import com.potix.lang.Objects;
-import com.potix.util.Locales;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.Locales;
 
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.event.Events;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * An input box that supports format.

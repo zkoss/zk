@@ -16,25 +16,25 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.impl;
+package org.zkoss.zul.impl;
 
-import com.potix.lang.Objects;
-import com.potix.xml.HTMLs;
-import com.potix.xml.XMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
+import org.zkoss.xml.XMLs;
 
-import com.potix.lang.Exceptions;
+import org.zkoss.lang.Exceptions;
 
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.util.Clients;
-import com.potix.zk.ui.ext.Inputable;
-import com.potix.zk.ui.ext.Errorable;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.au.AuSelectAll;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zk.ui.ext.Inputable;
+import org.zkoss.zk.ui.ext.Errorable;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.au.AuSelectAll;
 
-import com.potix.zul.html.Constraint;
-import com.potix.zul.html.SimpleConstraint;
-import com.potix.zul.html.ext.Constrainted;
+import org.zkoss.zul.Constraint;
+import org.zkoss.zul.SimpleConstraint;
+import org.zkoss.zul.ext.Constrainted;
 
 /**
  * A skeletal implementation of an input box.
@@ -127,8 +127,8 @@ implements Inputable, Errorable, Constrainted {
 	 * <p>If the error message is set, we say this input is in the error mode.
 	 * Any following invocation to {@link #getText} or getValue will throw
 	 * any exception.
-	 * Example, {@link com.potix.zul.html.Textbox#getValue} and
-	 * {@link com.potix.zul.html.Intbox#getValue}.
+	 * Example, {@link org.zkoss.zul.Textbox#getValue} and
+	 * {@link org.zkoss.zul.Intbox#getValue}.
 	 */
 	public String getErrorMessage() {
 		return _errmsg;
@@ -146,8 +146,8 @@ implements Inputable, Errorable, Constrainted {
 
 	/** Returns the value in the String format.
 	 * In most case, you shall use the setValue method instead, e.g.,
-	 * {@link com.potix.zul.html.Textbox#getValue} and
-	 * {@link com.potix.zul.html.Intbox#getValue}.
+	 * {@link org.zkoss.zul.Textbox#getValue} and
+	 * {@link org.zkoss.zul.Intbox#getValue}.
 	 *
 	 * <p>It invokes {@link #checkUserError} to ensure no user error.
 	 *
@@ -166,8 +166,8 @@ implements Inputable, Errorable, Constrainted {
 
 	/** Sets the value in the String format.
 	 * In most case, you shall use the setValue method instead, e.g.,
-	 * {@link com.potix.zul.html.Textbox#setValue} and
-	 * {@link com.potix.zul.html.Intbox#setValue}.
+	 * {@link org.zkoss.zul.Textbox#setValue} and
+	 * {@link org.zkoss.zul.Intbox#setValue}.
 	 *
 	 * <p>It invokes {@link #coerceFromString} fisrt and then {@link #validate}.
 	 * Derives might override them for type conversion and special
@@ -226,7 +226,7 @@ implements Inputable, Errorable, Constrainted {
 	 * you have to override {@link #coerceToString} and {@link #coerceFromString}
 	 * to convert between a string and your targeting type.
 	 *
-	 * <p>Moreover, when {@link com.potix.zul.html.Textbox} is called, it calls this method
+	 * <p>Moreover, when {@link org.zkoss.zul.Textbox} is called, it calls this method
 	 * with value = null. Derives shall handle this case properly.
 	 */
 	abstract protected
@@ -382,7 +382,7 @@ implements Inputable, Errorable, Constrainted {
 	 * is correct (or intend to be incorrect), because this method
 	 * doesn't do any validation.
 	 *
-	 * <p>If you feel confusing with setValue, such as {@link com.potix.zul.html.Textbox#setValue},
+	 * <p>If you feel confusing with setValue, such as {@link org.zkoss.zul.Textbox#setValue},
 	 * it is usually better to use setValue instead. This method
 	 * is reserved for developer that really want to set an 'illegal'
 	 * value (such as an empty string to a textbox with no-empty contraint).

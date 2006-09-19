@@ -16,13 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.lang.Objects;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * A radio button.
@@ -32,7 +32,7 @@ import com.potix.zk.ui.UiException;
  * 
  * <p>Event:
  * <ol>
- * <li>com.potix.zk.ui.event.CheckEvent is sent when a checkbox
+ * <li>org.zkoss.zk.ui.event.CheckEvent is sent when a checkbox
  * is checked or unchecked by user.</li>
  * </ol>
  *

@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.event;
+package org.zkoss.zul.event;
 
-import com.potix.zul.html.ListModel;
+import org.zkoss.zul.ListModel;
 
 /**
  * Defines an event that encapsulates changes to a list. 

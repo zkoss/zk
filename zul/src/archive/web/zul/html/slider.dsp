@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} zk_type="zul.html.sld.Sld" cellpadding="0" cellspacing="0">
+<table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} zk_type="zul.sld.Sld" cellpadding="0" cellspacing="0">
 <tr height="17">
  <td width="4" style="background-image:url(${c:encodeURL('~./zul/img/slider/bkl.gif')})"></td>
  <td style="background-image:url(${c:encodeURL('~./zul/img/slider/bk.gif')})"><h:img id="${self.uuid}!btn" src="~./zul/img/slider/btn.gif" title="${c:string(self.curpos)}"/></td>

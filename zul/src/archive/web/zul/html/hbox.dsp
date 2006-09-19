@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <table id="${self.uuid}" zk_type="Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
 <tr valign="top" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
- <td id="${child.uuid}!chdextr"${c:attr('width',c:isInstance('com.potix.zk.ui.HtmlBasedComponent', child) ? child.width: null)}${c:isInstance('com.potix.zul.html.Splitter',child)?self.splitterExteriorAttrs:self.childExteriorAttrs}>${z:redraw(child, null)}</td>
+ <td id="${child.uuid}!chdextr"${c:attr('width',c:isInstance('org.zkoss.zk.ui.HtmlBasedComponent', child) ? child.width: null)}${c:isInstance('org.zkoss.zul.Splitter',child)?self.splitterExteriorAttrs:self.childExteriorAttrs}>${z:redraw(child, null)}</td>
 	</c:forEach>
 </tr>
 </table>

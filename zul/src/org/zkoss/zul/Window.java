@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.Collections;
 import java.util.Map;
@@ -25,21 +25,21 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.LinkedHashSet;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.IdSpace;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.au.*;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.au.*;
 
-import com.potix.zul.html.impl.XulElement;
-import com.potix.zul.au.*;
+import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.au.*;
 
 /**
  * A generic window.
@@ -186,7 +186,7 @@ public class Window extends XulElement implements IdSpace  {
 	 *
 	 * <p>Notice that you can specify "modal" to this method only in an event
 	 * listener ({@link Events#inEventListener}).
-	 * Rather, you shall use {@link com.potix.zk.ui.event.Events#postEvent} to
+	 * Rather, you shall use {@link org.zkoss.zk.ui.event.Events#postEvent} to
 	 * post the onModal event. For example, in a ZUML page, you can put a window
 	 * into modal immediately after rendered as follows.
 	 *
@@ -238,7 +238,7 @@ public class Window extends XulElement implements IdSpace  {
 	 *
 	 * <p>Notice that this method can be called only in an event listener
 	 * ({@link Events#inEventListener}).
-	 * Rather, you shall use {@link com.potix.zk.ui.event.Events#postEvent} to
+	 * Rather, you shall use {@link org.zkoss.zk.ui.event.Events#postEvent} to
 	 * post the onModal event.
 	 * Refer to {@link #setMode} for more description.
 	 */

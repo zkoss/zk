@@ -16,9 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * Space is a {@link Separator} with the orient default to "horizontal".

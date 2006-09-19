@@ -16,21 +16,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.Iterator;
 
-import com.potix.lang.Strings;
-import com.potix.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.lang.Objects;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.EventListener;
 
-import com.potix.zul.html.impl.XulElement;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A radio group.

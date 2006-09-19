@@ -16,21 +16,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.List;
 import java.util.Iterator;
 
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.ext.Openable;
-import com.potix.zk.ui.ext.Transparent;
-import com.potix.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Openable;
+import org.zkoss.zk.ui.ext.Transparent;
+import org.zkoss.zk.ui.event.EventListener;
 
-import com.potix.zul.html.impl.XulElement;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A treeitem.

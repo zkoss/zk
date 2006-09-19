@@ -16,16 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.io.IOException;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * A container used to display menus. It should be placed inside a
@@ -46,7 +46,7 @@ public class Menupopup extends Popup {
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		return typeRequired() ? attrs + " zk_type=\"zul.html.menu.Mpop\"": attrs;
+		return typeRequired() ? attrs + " zk_type=\"zul.menu.Mpop\"": attrs;
 			//to minimize HTML's size, generate zk_type only if necessary
 	}
 	private boolean typeRequired() {

@@ -16,20 +16,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.Map;
 import java.util.HashMap;
 
-import com.potix.mesg.Messages;
-import com.potix.zul.mesg.MZul;
-import com.potix.util.media.Media;
+import org.zkoss.mesg.Messages;
+import org.zkoss.zul.mesg.MZul;
+import org.zkoss.util.media.Media;
 
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 
-import com.potix.zul.html.impl.FileuploadDlg;
+import org.zkoss.zul.impl.FileuploadDlg;
 
 /**
  * A fileupload dialog used to let user upload a file.

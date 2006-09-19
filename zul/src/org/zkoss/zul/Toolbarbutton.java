@@ -16,15 +16,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.lang.Objects;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.event.Events;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
 
-import com.potix.zul.html.impl.LabelImageElement;
+import org.zkoss.zul.impl.LabelImageElement;
 
 /**
  * A tool button.

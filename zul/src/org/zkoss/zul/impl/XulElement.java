@@ -16,21 +16,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.impl;
+package org.zkoss.zul.impl;
 
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.HtmlBasedComponent;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.ComponentNotFoundException;
-import com.potix.zk.ui.event.Events;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * The fundamental class for XUL elements.
@@ -49,7 +49,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	/** The parsed actions. */
 	private Map _actmap;
 
-	/** Returns the ID of {@link com.potix.zul.html.Popup} that should appear
+	/** Returns the ID of {@link org.zkoss.zul.Popup} that should appear
 	 * when the user right-clicks on the element (aka., context menu).
 	 *
 	 * <p>Default: null (no context menu).
@@ -57,7 +57,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public String getContext() {
 		return _ctx;
 	}
-	/** Sets the ID of {@link com.potix.zul.html.Popup} that should appear
+	/** Sets the ID of {@link org.zkoss.zul.Popup} that should appear
 	 * when the user right-clicks on the element (aka., context menu).
 	 *
 	 * <p>An onOpen event is sent to the context menu if it is going to
@@ -71,7 +71,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 			smartUpdate("zk_ctx", _ctx);
 		}
 	}
-	/** Returns the ID of {@link com.potix.zul.html.Popup} that should appear
+	/** Returns the ID of {@link org.zkoss.zul.Popup} that should appear
 	 * when the user clicks on the element.
 	 *
 	 * <p>Default: null (no poppup).
@@ -79,7 +79,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public String getPopup() {
 		return _popup;
 	}
-	/** Sets the ID of {@link com.potix.zul.html.Popup} that should appear
+	/** Sets the ID of {@link org.zkoss.zul.Popup} that should appear
 	 * when the user clicks on the element.
 	 *
 	 * <p>An onOpen event is sent to the popup menu if it is going to
@@ -93,7 +93,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 			smartUpdate("zk_pop", _popup);
 		}
 	}
-	/** Returns the ID of {@link com.potix.zul.html.Popup} that should be used
+	/** Returns the ID of {@link org.zkoss.zul.Popup} that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 * The tooltip will automatically disappear when the mouse is moved.
 	 *
@@ -102,7 +102,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public String getTooltip() {
 		return _tooltip;
 	}
-	/** Sets the ID of {@link com.potix.zul.html.Popup} that should be used
+	/** Sets the ID of {@link org.zkoss.zul.Popup} that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 *
 	 * <p>An onOpen event is sent to the tooltip if it is going to

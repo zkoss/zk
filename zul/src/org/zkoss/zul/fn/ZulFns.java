@@ -14,9 +14,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zul.html.fn;
+package org.zkoss.zul.fn;
 
-import com.potix.zul.html.Row;
+import org.zkoss.zul.Row;
 
 /**
  * Utilities for using EL.

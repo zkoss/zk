@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.ext;
+package org.zkoss.zul.ext;
 
-import com.potix.zul.html.Constraint;
+import org.zkoss.zul.Constraint;
 
 /**
  * Decorates a component that its value is constrainted by

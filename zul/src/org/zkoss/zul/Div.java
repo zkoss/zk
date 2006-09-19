@@ -16,11 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.lang.Objects;
-import com.potix.xml.HTMLs;
-import com.potix.zul.html.impl.XulElement;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * The same as HTML DIV tag.

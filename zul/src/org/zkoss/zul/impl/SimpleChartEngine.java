@@ -16,14 +16,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.impl;
+package org.zkoss.zul.impl;
 
-import com.potix.zul.html.*;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.image.AImage;
-import com.potix.lang.Strings;
-import com.potix.lang.Objects;
+import org.zkoss.zul.*;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.image.AImage;
+import org.zkoss.lang.Strings;
+import org.zkoss.lang.Objects;
 
 import org.jfree.chart.*;
 import org.jfree.chart.encoders.*;
@@ -48,7 +48,7 @@ import java.util.Iterator;
  *
  * <p>This is the JFreeChart base chart engine implementation. All chart would 
  * support drilldown by providing Area hot spots. Each Area would callback to 
- * {@link com.potix.zul.html.event.ChartAreaListener} class that application developers
+ * {@link org.zkoss.zul.event.ChartAreaListener} class that application developers
  * can do processing on each area.</p>
  *
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
@@ -487,7 +487,7 @@ public class SimpleChartEngine implements ChartEngine {
 			} else if (model instanceof PieModel) {
 				return PieModelToPieDataset((PieModel) model);
 			} else {
-				throw new UiException("model must be a com.potix.zul.html.PieModel or a com.potix.zul.html.CategoryModel");
+				throw new UiException("model must be a org.zkoss.zul.PieModel or a org.zkoss.zul.CategoryModel");
 			}
 		}			
 		
@@ -576,7 +576,7 @@ public class SimpleChartEngine implements ChartEngine {
 					chart.isShowLegend(), 
 					chart.isShowTooltiptext(), true);
 			} else {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel or a com.potix.zul.html.XYModel");
+				throw new UiException("model must be a org.zkoss.zul.CategoryModel or a org.zkoss.zul.XYModel");
 			}
 		}
 	}
@@ -586,7 +586,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof CategoryModel)) {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+				throw new UiException("model must be a org.zkoss.zul.CategoryModel");
 			}
 			return ChartFactory.createBarChart3D(
 				chart.getTitle(),
@@ -648,7 +648,7 @@ public class SimpleChartEngine implements ChartEngine {
 					chart.isShowLegend(), 
 					chart.isShowTooltiptext(), true);
 			} else {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel or a com.potix.zul.html.XYModel");
+				throw new UiException("model must be a org.zkoss.zul.CategoryModel or a org.zkoss.zul.XYModel");
 			}
 				
 		}
@@ -703,7 +703,7 @@ public class SimpleChartEngine implements ChartEngine {
 					chart.isShowLegend(), 
 					chart.isShowTooltiptext(), true);
 			} else {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel or a com.potix.zul.html.XYModel");
+				throw new UiException("model must be a org.zkoss.zul.CategoryModel or a org.zkoss.zul.XYModel");
 			}
 		}
 	}
@@ -713,7 +713,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof CategoryModel)) {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+				throw new UiException("model must be a org.zkoss.zul.CategoryModel");
 			}
 			return ChartFactory.createLineChart3D(
 				chart.getTitle(),
@@ -754,7 +754,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof CategoryModel)) {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+				throw new UiException("model must be a org.zkoss.zul.CategoryModel");
 			}
 			return ChartFactory.createStackedBarChart(
 				chart.getTitle(),
@@ -772,7 +772,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof CategoryModel)) {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+				throw new UiException("model must be a org.zkoss.zul.CategoryModel");
 			}
 			return ChartFactory.createStackedBarChart3D(
 				chart.getTitle(),
@@ -836,7 +836,7 @@ public class SimpleChartEngine implements ChartEngine {
 					chart.isShowLegend(), 
 					chart.isShowTooltiptext(), true);
 			} else {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel or a com.potix.zul.html.XYModel");
+				throw new UiException("model must be a org.zkoss.zul.CategoryModel or a org.zkoss.zul.XYModel");
 			}
 		}
 	}
@@ -870,7 +870,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof CategoryModel)) {
-				throw new UiException("model must be a com.potix.zul.html.CategoryModel");
+				throw new UiException("model must be a org.zkoss.zul.CategoryModel");
 			}
 			return ChartFactory.createWaterfallChart(
 				chart.getTitle(),
@@ -902,7 +902,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof XYModel)) {
-				throw new UiException("model must be a com.potix.zul.html.XYModel");
+				throw new UiException("model must be a org.zkoss.zul.XYModel");
 			}
 			return ChartFactory.createPolarChart(
 				chart.getTitle(),
@@ -934,7 +934,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof XYModel)) {
-				throw new UiException("model must be a com.potix.zul.html.XYModel");
+				throw new UiException("model must be a org.zkoss.zul.XYModel");
 			}
 			return ChartFactory.createScatterPlot(
 				chart.getTitle(),
@@ -969,7 +969,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof XYModel)) {
-				throw new UiException("model must be a com.potix.zul.html.XYModel");
+				throw new UiException("model must be a org.zkoss.zul.XYModel");
 			}
 			return ChartFactory.createTimeSeriesChart(
 				chart.getTitle(),
@@ -1003,7 +1003,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof XYModel)) {
-				throw new UiException("model must be a com.potix.zul.html.XYModel");
+				throw new UiException("model must be a org.zkoss.zul.XYModel");
 			}
 			return ChartFactory.createXYStepAreaChart(
 				chart.getTitle(),
@@ -1038,7 +1038,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof XYModel)) {
-				throw new UiException("model must be a com.potix.zul.html.XYModel");
+				throw new UiException("model must be a org.zkoss.zul.XYModel");
 			}
 			return ChartFactory.createXYStepChart(
 				chart.getTitle(),
@@ -1073,7 +1073,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof XYModel)) {
-				throw new UiException("model must be a com.potix.zul.html.XYModel");
+				throw new UiException("model must be a org.zkoss.zul.XYModel");
 			}
 			return ChartFactory.createHistogram(
 				chart.getTitle(),
@@ -1108,7 +1108,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof HiLoModel)) {
-				throw new UiException("model must be a com.potix.zul.html.HiLoModel");
+				throw new UiException("model must be a org.zkoss.zul.HiLoModel");
 			}
 			return ChartFactory.createCandlestickChart(
 				chart.getTitle(),
@@ -1141,7 +1141,7 @@ public class SimpleChartEngine implements ChartEngine {
 		public JFreeChart createChart(Chart chart) {
 			ChartModel model = (ChartModel) chart.getModel();
 			if (!(model instanceof HiLoModel)) {
-				throw new UiException("model must be a com.potix.zul.html.HiLoModel");
+				throw new UiException("model must be a org.zkoss.zul.HiLoModel");
 			}
 			return ChartFactory.createHighLowChart(
 				chart.getTitle(),

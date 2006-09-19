@@ -16,9 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.event;
+package org.zkoss.zul.event;
 
-import com.potix.zul.html.ChartModel;
+import org.zkoss.zul.ChartModel;
 
 /**
  * Defines an event that encapsulates changes to a chart's data model. 

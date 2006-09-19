@@ -16,24 +16,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.List;
 import java.util.Iterator;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.ext.ChildChangedAware;
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.ChildChangedAware;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 
-import com.potix.zul.html.impl.XulElement;
-import com.potix.zul.html.ext.Paginal;
-import com.potix.zul.html.event.Events;
-import com.potix.zul.html.event.PagingEvent;
+import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.event.Events;
+import org.zkoss.zul.event.PagingEvent;
 
 /**
  * A grid is an element that contains both rows and columns elements.

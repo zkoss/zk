@@ -16,19 +16,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.Date;
 import java.util.regex.Pattern;
 
-import com.potix.lang.Classes;
-import com.potix.util.Dates;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.Dates;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 
-import com.potix.zul.mesg.MZul;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * A simple constraint that you could build based the predefined constants.

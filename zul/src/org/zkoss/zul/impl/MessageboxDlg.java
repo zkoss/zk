@@ -16,12 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.impl;
+package org.zkoss.zul.impl;
 
-import com.potix.zul.html.Window;
-import com.potix.zk.ui.UiException;
+import org.zkoss.zul.Window;
+import org.zkoss.zk.ui.UiException;
 
-import com.potix.zul.html.Messagebox;
+import org.zkoss.zul.Messagebox;
 
 /**
  * Used with {@link Messagebox} to implement a message box.

@@ -14,22 +14,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zul.html.ext;
+package org.zkoss.zul.ext;
 
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.EventListener;
 
 /**
  * Represents a component that provides the paging for long content.
  * It is used to provide an abstract contract between controller and controllee.
- * For example, {@link com.potix.zul.html.Paging} is a paging controller
- * while {@link com.potix.zul.html.Grid} is a paging controllee.
- * In other words, {@link com.potix.zul.html.Grid} (contains long content)
- * can be controlled by {@link com.potix.zul.html.Paging}.
+ * For example, {@link org.zkoss.zul.Paging} is a paging controller
+ * while {@link org.zkoss.zul.Grid} is a paging controllee.
+ * In other words, {@link org.zkoss.zul.Grid} (contains long content)
+ * can be controlled by {@link org.zkoss.zul.Paging}.
  *
  * <p>The paging controller must implement this interface, while
  * the paging controllee shall access only this interface (rather than
- * {@link com.potix.zul.html.Paging} or so).
+ * {@link org.zkoss.zul.Paging} or so).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
@@ -79,12 +79,12 @@ public interface Paginal {
 	 * The second registration is ignored and false is returned.
 	 *
 	 * <p>The onPaging event is sent with an instance of
-	 * {@link com.potix.zul.html.event.PagingEvent} to notify which page
+	 * {@link org.zkoss.zul.event.PagingEvent} to notify which page
 	 * is selected.
 	 *
 	 * @param evtnm what event to listen (never null)
 	 * @return whether the listener is added; false if it was added before
-	 * @see com.potix.zul.html.event.PagingEvent
+	 * @see org.zkoss.zul.event.PagingEvent
 	 */
 	public boolean addEventListener(String evtnm, EventListener listener);
 	/** Removes an event listener.

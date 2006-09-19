@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zk.load("zul.html.zul");
+zk.load("zul.zul");
 
 zk.Grid = Class.create();
 zk.Grid.prototype = {

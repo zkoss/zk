@@ -16,18 +16,18 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.Map;
 import java.util.HashMap;
 
-import com.potix.mesg.Messages;
-import com.potix.zul.mesg.MZul;
+import org.zkoss.mesg.Messages;
+import org.zkoss.zul.mesg.MZul;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Executions;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Executions;
 
-import com.potix.zul.html.impl.MessageboxDlg;
+import org.zkoss.zul.impl.MessageboxDlg;
 
 /**
  * Represents the message box.

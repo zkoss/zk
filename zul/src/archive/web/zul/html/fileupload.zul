@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="${arg.title}" border="normal" width="360px" closable="true"
-use="com.potix.zul.html.impl.FileuploadDlg">
+use="org.zkoss.zul.impl.FileuploadDlg">
 	<label value="${arg.message}"/>
 	<iframe width="100%" style="border: 1px solid #aaa"
 	src="~./zul/html/fileupload.dsp?dtid=${self.desktop.id}&amp;uuid=${self.parent.uuid}&amp;action=${arg.action}"/>

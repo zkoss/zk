@@ -16,22 +16,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.io.Writer;
 import java.io.IOException;
 
-import com.potix.lang.Objects;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Components;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
-import com.potix.zul.html.impl.XulElement;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A label.

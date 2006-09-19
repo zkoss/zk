@@ -18,9 +18,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>getColAttrs</name>
-		<function-class>com.potix.zul.html.fn.ZulFns</function-class>
+		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
 		<function-signature>
-	java.lang.String getColAttrs(com.potix.zul.html.Row, int)
+	java.lang.String getColAttrs(org.zkoss.zul.Row, int)
 		</function-signature>
 		<description>
 	Returns the attribute used for the cell of the specified row and index.

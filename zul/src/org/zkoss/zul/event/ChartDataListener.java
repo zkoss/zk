@@ -16,16 +16,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.event;
+package org.zkoss.zul.event;
 
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Defines the methods used in listener when the content of
- * {@link com.potix.zul.html.ChartModel} is changed.
+ * {@link org.zkoss.zul.ChartModel} is changed.
  *
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
- * @see com.potix.zul.html.ChartModel
+ * @see org.zkoss.zul.ChartModel
  * @see ChartDataEvent
  */
 public interface ChartDataListener {

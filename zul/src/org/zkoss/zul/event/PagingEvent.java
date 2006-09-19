@@ -14,18 +14,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zul.html.event;
+package org.zkoss.zul.event;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.event.Event;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Event;
 
-import com.potix.zul.html.ext.Paginal;
+import org.zkoss.zul.ext.Paginal;
 
 /**
  * Used to notify that a new page is selected by the user.
  * It is used for paging long content. In other words, it is fired by
- * a paging component (aka., implementing {@link com.potix.zul.html.ext.Paginal}),
- * such as {@link com.potix.zul.html.Paging}.
+ * a paging component (aka., implementing {@link org.zkoss.zul.ext.Paginal}),
+ * such as {@link org.zkoss.zul.Paging}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

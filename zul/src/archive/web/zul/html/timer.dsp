@@ -16,4 +16,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
---%><span id="${requestScope.arg.self.uuid}" zk_type="zul.html.timer.Timer"${requestScope.arg.self.outerAttrs}${requestScope.arg.self.innerAttrs}></span>
+--%><span id="${requestScope.arg.self.uuid}" zk_type="zul.timer.Timer"${requestScope.arg.self.outerAttrs}${requestScope.arg.self.innerAttrs}></span>

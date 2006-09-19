@@ -16,22 +16,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.event.EventListener;
-import com.potix.zul.html.impl.ChartEngine;
-import com.potix.zul.html.event.ChartDataEvent;
-import com.potix.zul.html.event.ChartDataListener;
-import com.potix.zul.html.event.ChartAreaListener;
-import com.potix.image.AImage;
-import com.potix.lang.Classes;
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zul.impl.ChartEngine;
+import org.zkoss.zul.event.ChartDataEvent;
+import org.zkoss.zul.event.ChartDataListener;
+import org.zkoss.zul.event.ChartAreaListener;
+import org.zkoss.image.AImage;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 
 import java.util.Date;
 import java.io.ByteArrayOutputStream;
@@ -517,7 +517,7 @@ public class Chart extends Imagemap {
 						throw new UiException("chart must specify height");
 						
 					if (_engine == null)
-						_engine = new com.potix.zul.html.impl.SimpleChartEngine();
+						_engine = new org.zkoss.zul.impl.SimpleChartEngine();
 							
 					try {
 						final String title = getTitle();

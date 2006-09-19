@@ -16,16 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.UiException;
 
-import com.potix.zul.html.event.ListDataEvent;
-import com.potix.zul.html.event.ListDataListener;
+import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.event.ListDataListener;
 
 /**
  * A skeletal implementation for {@link ListModel}.

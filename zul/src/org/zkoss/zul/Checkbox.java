@@ -16,24 +16,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.lang.Objects;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.ext.Checkable;
-import com.potix.zk.ui.event.Events;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ext.Checkable;
+import org.zkoss.zk.ui.event.Events;
 
-import com.potix.zul.html.impl.LabelImageElement;
+import org.zkoss.zul.impl.LabelImageElement;
 
 /**
  * A checkbox.
  *
  * <p>Event:
  * <ol>
- * <li>com.potix.zk.ui.event.CheckEvent is sent when a checkbox
+ * <li>org.zkoss.zk.ui.event.CheckEvent is sent when a checkbox
  * is checked or unchecked by user.</li>
  * </ol>
  *

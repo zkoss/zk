@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zk.load("zul.html.sel");
+zk.load("zul.sel");
 
 //when this executes, sel.js might not be loaded yet, so we have to delay
 //the creation of zk.Tree until zkTree.init

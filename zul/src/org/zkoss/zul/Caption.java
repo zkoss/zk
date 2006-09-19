@@ -16,12 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
-import com.potix.zul.html.impl.LabelImageElement;
+import org.zkoss.zul.impl.LabelImageElement;
 
 /**
  *  A header for a {@link Groupbox}.

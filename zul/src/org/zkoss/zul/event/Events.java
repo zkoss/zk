@@ -14,14 +14,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zul.html.event;
+package org.zkoss.zul.event;
 
 /**
  * Utilities to access events for ZK and ZUL.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Events extends com.potix.zk.ui.event.Events {
+public class Events extends org.zkoss.zk.ui.event.Events {
 	protected Events() {} //prevent from creation
 
 	/** The onPaging event used with {@link PagingEvent}.

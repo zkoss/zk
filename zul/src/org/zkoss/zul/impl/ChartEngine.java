@@ -16,18 +16,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.impl;
+package org.zkoss.zul.impl;
 
 /**
  * Chart engine is an engine that do the real chart rendering.
  *
- * This interface defines the chart engine for components like {@link com.potix.zul.html.Chart}
+ * This interface defines the chart engine for components like {@link org.zkoss.zul.Chart}
  * use to get the value of each data and the size of the chart data.
  *
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
- * @see com.potix.zul.html.Chart
- * @see com.potix.zul.html.ChartModel
- * @see com.potix.zul.html.event.ChartAreaListener
+ * @see org.zkoss.zul.Chart
+ * @see org.zkoss.zul.ChartModel
+ * @see org.zkoss.zul.event.ChartAreaListener
  */
 public interface ChartEngine {
 	/**

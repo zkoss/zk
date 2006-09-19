@@ -16,10 +16,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * A constraint. It could be anything, but you could use {@link SimpleConstraint}

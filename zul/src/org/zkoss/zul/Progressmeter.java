@@ -16,12 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.xml.HTMLs;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.UiException;
-import com.potix.zul.html.impl.XulElement;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A progress meter is a bar that indicates how much of a task has been completed. 

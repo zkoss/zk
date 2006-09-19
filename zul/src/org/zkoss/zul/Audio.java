@@ -16,21 +16,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
-import com.potix.util.media.Media;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.media.Media;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.ext.Viewable;
-import com.potix.zk.au.AuScript;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ext.Viewable;
+import org.zkoss.zk.au.AuScript;
 
-import com.potix.zul.html.impl.XulElement;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * An audio clip.
@@ -43,7 +43,7 @@ public class Audio extends XulElement implements Viewable {
 	private String _align, _border;
 	protected String _src;
 	/** The audio. If not null, _src is generated automatically. */
-	private com.potix.sound.Audio _audio;
+	private org.zkoss.sound.Audio _audio;
 	/** Count the version of {@link #_audio}. */
 	private int _audver;
 	private boolean _autostart, _loop;
@@ -159,7 +159,7 @@ public class Audio extends XulElement implements Viewable {
 	 * @param audio the audio to display. If not null, it has higher
 	 * priority than {@link #getSrc}.
 	 */
-	public void setContent(com.potix.sound.Audio audio) {
+	public void setContent(org.zkoss.sound.Audio audio) {
 		if (audio != _audio) {
 			_audio = audio;
 			if (_audio != null) ++_audver; //enforce browser to reload
@@ -175,7 +175,7 @@ public class Audio extends XulElement implements Viewable {
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
 	 * It simply returns what is passed to {@link #setContent}.
 	 */
-	public com.potix.sound.Audio getContent() {
+	public org.zkoss.sound.Audio getContent() {
 		return _audio;
 	}
 

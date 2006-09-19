@@ -14,18 +14,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.mesg.Messages;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.au.Command;
+import org.zkoss.mesg.Messages;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.au.Command;
 
-import com.potix.zul.mesg.MZul;
-import com.potix.zul.html.event.Events;
-import com.potix.zul.html.event.PagingEvent;
-import com.potix.zul.html.impl.XulElement;
-import com.potix.zul.html.ext.Paginal;
-import com.potix.zul.au.impl.PagingCommand;
+import org.zkoss.zul.mesg.MZul;
+import org.zkoss.zul.event.Events;
+import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.au.impl.PagingCommand;
 
 /**
  * Paging of long content.

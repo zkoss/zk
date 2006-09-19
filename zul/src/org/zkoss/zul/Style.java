@@ -14,16 +14,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.Iterator;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.AbstractComponent;
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * The style component used to specify CSS styles for the owner desktop.

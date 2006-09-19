@@ -16,10 +16,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.au;
+package org.zkoss.zul.au;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * Make a window as normal window.

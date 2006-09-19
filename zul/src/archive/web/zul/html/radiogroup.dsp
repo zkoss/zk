@@ -20,6 +20,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <span id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="child" items="${self.children}">
-<span id="${child.uuid}" zk_type="zul.html.widget.Radio"${child.outerAttrs}><input type="radio" id="${child.uuid}!real"${child.innerAttrs}/><label for="${child.uuid}!real"${child.labelAttrs}>${child.imgTag} <c:out value="${child.label}"/></label><c:if test="${self.orient=='vertical'}"><br/></c:if></span>
+<span id="${child.uuid}" zk_type="zul.widget.Radio"${child.outerAttrs}><input type="radio" id="${child.uuid}!real"${child.innerAttrs}/><label for="${child.uuid}!real"${child.labelAttrs}>${child.imgTag} <c:out value="${child.label}"/></label><c:if test="${self.orient=='vertical'}"><br/></c:if></span>
 	</c:forEach>
 </span>

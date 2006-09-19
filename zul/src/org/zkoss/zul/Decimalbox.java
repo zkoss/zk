@@ -16,15 +16,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.math.BigDecimal;
 
-import com.potix.math.BigDecimals;
-import com.potix.zk.ui.WrongValueException;
+import org.zkoss.math.BigDecimals;
+import org.zkoss.zk.ui.WrongValueException;
 
-import com.potix.zul.mesg.MZul;
-import com.potix.zul.html.impl.FormatInputElement;
+import org.zkoss.zul.mesg.MZul;
+import org.zkoss.zul.impl.FormatInputElement;
 
 /**
  * An edit box for holding BigDecimal.

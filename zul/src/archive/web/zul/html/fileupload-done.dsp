@@ -33,7 +33,7 @@ ${z:outLangStyleSheets()}
 	<h:box color="red">
 	<pre><c:out value="${arg.alert}"/></pre>
  	</h:box>
-	<input type="button" value="${c:l('mesg:com.potix.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="closeUpload()"/>
+	<input type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="closeUpload()"/>
  </c:if>
 </body>
 <script type="text/javascript">

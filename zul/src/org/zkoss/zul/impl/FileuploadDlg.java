@@ -16,15 +16,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html.impl;
+package org.zkoss.zul.impl;
 
-import com.potix.util.media.Media;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.ext.Updatable;
-import com.potix.zul.html.Window;
+import org.zkoss.util.media.Media;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Updatable;
+import org.zkoss.zul.Window;
 
 /**
- * Used with {@link com.potix.zul.html.Fileupload} to implement
+ * Used with {@link org.zkoss.zul.Fileupload} to implement
  * the upload feature.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>

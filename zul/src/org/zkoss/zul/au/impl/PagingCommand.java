@@ -14,18 +14,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zul.au.impl;
+package org.zkoss.zul.au.impl;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.au.AuRequest;
-import com.potix.zk.au.Command;
-import com.potix.zul.html.event.PagingEvent;
-import com.potix.zul.html.ext.Paginal;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.Command;
+import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.ext.Paginal;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link PagingEvent}

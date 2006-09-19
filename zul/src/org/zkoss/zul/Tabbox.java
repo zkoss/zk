@@ -16,29 +16,29 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.Iterator;
 import java.util.Set;
 
-import com.potix.lang.Objects;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.ext.Selectable;
-import com.potix.zk.au.AuScript;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.Selectable;
+import org.zkoss.zk.au.AuScript;
 
-import com.potix.zul.html.impl.XulElement;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A tabbox.
  *
  * <p>Event:
  * <ol>
- * <li>com.potix.zk.ui.event.SelectEvent is sent when user changes
+ * <li>org.zkoss.zk.ui.event.SelectEvent is sent when user changes
  * the tab.</li>
  * </ol>
  *

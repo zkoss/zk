@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -27,16 +27,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
-import com.potix.lang.Objects;
-import com.potix.util.Locales;
-import com.potix.util.TimeZones;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.Locales;
+import org.zkoss.util.TimeZones;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 
-import com.potix.zul.mesg.MZul;
-import com.potix.zul.html.impl.FormatInputElement;
+import org.zkoss.zul.mesg.MZul;
+import org.zkoss.zul.impl.FormatInputElement;
 
 /**
  * An edit box for holding a date.

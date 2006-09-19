@@ -16,11 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.lang.Objects;
-import com.potix.zul.html.event.ChartDataEvent;
-import com.potix.zul.html.event.ChartDataListener;
+import org.zkoss.lang.Objects;
+import org.zkoss.zul.event.ChartDataEvent;
+import org.zkoss.zul.event.ChartDataListener;
 
 import org.jfree.data.general.*;
 

@@ -16,8 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zk.load("zul.html.vd");
-zk.load("zul.html.zul"); //required by window's doModal
+zk.load("zul.vd");
+zk.load("zul.zul"); //required by window's doModal
 
 ////
 // textbox //

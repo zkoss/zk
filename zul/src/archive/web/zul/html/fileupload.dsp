@@ -50,8 +50,8 @@ ${z:outLangStyleSheets()}
 	</tr>
 	<tr align="left">
 		<td style="border: outset 1px">
-		<input type="submit" value="${c:l('mesg:com.potix.zul.mesg.MZul:UPLOAD_SUBMIT')}" onclick="parent.zk.progress()"/>
-		<input type="button" value="${c:l('mesg:com.potix.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="cancelUpload()"/>
+		<input type="submit" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}" onclick="parent.zk.progress()"/>
+		<input type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="cancelUpload()"/>
 		</td>
 	<tr>
 	</table>

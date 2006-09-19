@@ -16,15 +16,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.lang.Objects;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.AbstractComponent;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * An area of a {@link Imagemap}.

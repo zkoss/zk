@@ -16,19 +16,19 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zul.html;
+package org.zkoss.zul;
 
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
-import com.potix.util.media.Media;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.media.Media;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.ext.Viewable;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Viewable;
 
-import com.potix.zul.html.impl.XulElement;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * An image.
@@ -44,7 +44,7 @@ public class Image extends XulElement implements Viewable {
 	private String _align, _border, _hspace, _vspace;
 	private String _src;
 	/** The image. If not null, _src is generated automatically. */
-	private com.potix.image.Image _image;
+	private org.zkoss.image.Image _image;
 	/** Count the version of {@link #_image}. */
 	private int _imgver;
 
@@ -164,7 +164,7 @@ public class Image extends XulElement implements Viewable {
 	 * @param image the image to display. If not null, it has higher
 	 * priority than {@link #getSrc}.
 	 */
-	public void setContent(com.potix.image.Image image) {
+	public void setContent(org.zkoss.image.Image image) {
 		if (image != _image) {
 			_image = image;
 			if (_image != null) ++_imgver; //enforce browser to reload image
@@ -175,7 +175,7 @@ public class Image extends XulElement implements Viewable {
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
 	 * It simply returns what is passed to {@link #setContent}.
 	 */
-	public com.potix.image.Image getContent() {
+	public org.zkoss.image.Image getContent() {
 		return _image;
 	}
 
