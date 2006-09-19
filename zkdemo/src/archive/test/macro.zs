@@ -15,7 +15,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 import com.potix.zk.ui.*;
-import com.potix.zul.html.*;
+import org.zkoss.zul.*;
 
 public class Username extends HtmlMacroComponent {
 	void addRow(String label) {
