@@ -5,7 +5,7 @@
 # Authors: Tom M. Yeh
 # Contributors:
 # Create Date: 2001/5/17 07:57PM
-# Purpose: Modifies com/potix/lang/D.java 
+# Purpose: Modifies org/zkoss/lang/D.java 
 # Description:
 #	Execute 'setdbg -h' to know how to use.
 #
@@ -19,7 +19,7 @@
 #}}IS_RIGHT
 #
 if [ \( "$1" = "-h" \) -o \( "$1" = "--help" \) ] ; then
-	echo "setdbg - modifies D.ON in com/potix/lang/D.java"
+	echo "setdbg - modifies D.ON in org/zkoss/lang/D.java"
 	echo "Copyright (C) 2001 Potix Corporation. All Rights Reserved."
 	echo
 	echo "Usage:"
@@ -40,7 +40,7 @@ if [ \( "$1" != "true" \) -a \( "$1" != "false" \) ] ; then
 	exit 1
 fi
 
-flnm=zcommon/src/com/potix/lang/D.java
+flnm=zcommon/src/org/zkoss/lang/D.java
 if [ ! -f $flnm ] ; then
 	echo "Error: $flnm does not exist"
 	exit 1

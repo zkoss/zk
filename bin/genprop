@@ -64,7 +64,7 @@ function showhelp
 	echo "    lower-case with four digits is allowed, and starts at 1000."
 	echo
 	echo " * 
-	echo " * You have to maintain com.potix.mesg.MessageConst.java"
+	echo " * You have to maintain org.zkoss.mesg.MessageConst.java"
 	echo "   consistently, if you add a new properties file."
 	echo " * Lines starting with # or being empty are ignored."
 }

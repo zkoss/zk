@@ -8,7 +8,7 @@ BEGIN {
 	printf "// %s, %s\n", usernm, when
 	printf "// Copyright(C) 2001 Potix Corporation. All Rights Reserved.\n\n"
 	printf "package %s;\n", pkgnm
-	printf "\npublic interface %s extends com.potix.mesg.MessageConst {\n", clsnm
+	printf "\npublic interface %s extends org.zkoss.mesg.MessageConst {\n", clsnm
 	printf "\tstatic final int MESSAGE_ID = Aide.register(%s.class, \"%s\");\n", clsnm, msgnm
 	key = ""
 }
