@@ -19,7 +19,7 @@ package com.potix.zkdemo;
 import java.util.Comparator;
 
 import com.potix.zk.ui.Component;
-import com.potix.zul.html.Label;
+import org.zkoss.zul.Label;
 
 /**
  * It assumes the first child is a label.

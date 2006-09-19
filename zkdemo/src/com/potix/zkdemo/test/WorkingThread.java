@@ -18,7 +18,7 @@ package com.potix.zkdemo.test;
 
 import com.potix.zk.ui.Desktop;
 import com.potix.zk.ui.Executions;
-import com.potix.zul.html.Label;
+import org.zkoss.zul.Label;
 
 /**
  * Illustrates how an event handler invokes a working thread

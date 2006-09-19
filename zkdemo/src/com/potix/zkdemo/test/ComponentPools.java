@@ -20,7 +20,7 @@ import java.util.*;
 
 import com.potix.zk.ui.*;
 import com.potix.zk.ui.util.WebAppInit;
-import com.potix.zul.html.*;
+import org.zkoss.zul.*;
 
 /**
  * A pool of components being created when app starts.

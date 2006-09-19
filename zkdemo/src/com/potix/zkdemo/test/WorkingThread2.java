@@ -19,7 +19,7 @@ package com.potix.zkdemo.test;
 import java.util.List;
 
 import com.potix.zk.ui.Desktop;
-import com.potix.zul.html.Label;
+import org.zkoss.zul.Label;
 
 /**
  * Another implementation that don't use Executions.wait and notify.
