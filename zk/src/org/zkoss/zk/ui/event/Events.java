@@ -37,7 +37,7 @@ import org.zkoss.zk.au.AuRequest;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Events {
-	protected Events() {} //prevent from creation
+	private Events() {} //prevent from creation
 
 	/** The onClick event (used with {@link MouseEvent}).
 	 */
