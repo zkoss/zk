@@ -446,7 +446,7 @@ zkDtbox.onkey = function (evt) {
 		var meta = zkau.getMeta(uuid);
 		if (meta) {
 			//Request 1551019: better responsive
-			if (evt.keyCode == 27) { //ENTER
+			if (evt.keyCode == 13) { //ENTER
 				meta.onchange();
 				return true;
 			}
