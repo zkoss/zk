@@ -16,13 +16,13 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.io;
+package org.zkoss.io;
 
 import java.io.File;
 
-import com.potix.mesg.MCommon;
-import com.potix.lang.Threads;
-import com.potix.util.logging.Log;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.lang.Threads;
+import org.zkoss.util.logging.Log;
 
 /**
  * File modification monitor thread. It monitors a gving file in a lowest

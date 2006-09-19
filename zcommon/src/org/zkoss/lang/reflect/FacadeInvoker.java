@@ -15,14 +15,14 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.lang.reflect;
+package org.zkoss.lang.reflect;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 
-import com.potix.lang.Classes;
+import org.zkoss.lang.Classes;
 
 /**
  * The facade invocation handler. Like the facade pattern, this invocation

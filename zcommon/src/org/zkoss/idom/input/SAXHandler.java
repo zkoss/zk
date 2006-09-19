@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.input;
+package org.zkoss.idom.input;
 
 import java.util.Stack;
 import java.util.List;
@@ -40,12 +40,12 @@ import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.XMLReader;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.util.logging.Log;
-import com.potix.util.resource.Locators;
-import com.potix.idom.util.SimpleLocator;
-import com.potix.idom.*;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.Locators;
+import org.zkoss.idom.util.SimpleLocator;
+import org.zkoss.idom.*;
 
 /**
  * The SAX Hanlder.
@@ -686,7 +686,7 @@ implements LexicalHandler, DeclHandler {
 		}
 
 		final String PREFIX = "/metainfo/xml";
-		final com.potix.util.resource.Locator loader = Locators.getDefault();
+		final org.zkoss.util.resource.Locator loader = Locators.getDefault();
 
 		URL url = null;
 		int j = systemId.indexOf("://");

@@ -16,7 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.mesg;
+package org.zkoss.mesg;
 
 /**
  * Denotes an object that contains a message by use of an integer,

@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom;
+package org.zkoss.idom;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -23,12 +23,12 @@ import java.util.Iterator;
 import java.util.Collections;
 import java.io.IOException;
 
-import com.potix.mesg.MCommon;
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
-import com.potix.lang.SystemException;
-import com.potix.util.Maps;
-import com.potix.idom.impl.*;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.Maps;
+import org.zkoss.idom.impl.*;
 
 /**
  * The iDOM processing instruction.
@@ -96,7 +96,7 @@ implements org.w3c.dom.ProcessingInstruction {
 	 * Sets the raw data with a data map.
 	 * Each entry in the data map is a (name, value) pair.
 	 *
-	 * @exception com.potix.util.IllegalSyntaxException if name contains
+	 * @exception org.zkoss.util.IllegalSyntaxException if name contains
 	 * an invalid character: '=', ' ', '\'', '"'
 	 */
 	public final void setData(Map data) {
@@ -127,7 +127,7 @@ implements org.w3c.dom.ProcessingInstruction {
 	 * ("b+3", null), ("345", null), ("c6", "abc=125&3?5"):<br>
 	 * a12 =12 b+3 345 c6=\t'abc=125&3?5'
 	 *
-	 * @exception com.potix.util.IllegalSyntaxException if syntax erros
+	 * @exception org.zkoss.util.IllegalSyntaxException if syntax erros
 	 */
 	public static final Map parseToMap(Map map, String rawData) {
 		if (rawData == null || rawData.trim().length() == 0)

@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom;
+package org.zkoss.idom;
 
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -38,12 +38,12 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.TypeInfo;
 
-import com.potix.mesg.Messages;
-import com.potix.mesg.MCommon;
-import com.potix.util.CollectionsX;
-import com.potix.util.CheckableTreeArray;
-import com.potix.xml.FacadeNodeList;
-import com.potix.idom.impl.*;
+import org.zkoss.mesg.Messages;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.CheckableTreeArray;
+import org.zkoss.xml.FacadeNodeList;
+import org.zkoss.idom.impl.*;
 
 /**
  * The iDOM element.

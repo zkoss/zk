@@ -15,11 +15,11 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom;
+package org.zkoss.idom;
 
 import org.w3c.dom.Node;
 
-import com.potix.xml.Locator;
+import org.zkoss.xml.Locator;
 
 /**
  * Represents an item (aka., node) of a iDOM tree. A iDOM tree is not necessary
@@ -114,7 +114,7 @@ public interface Item {
 	 *
 	 * <p>The returned value is neither trimmed nor normalized.
 	 * To trim, invoke String.trim.
-	 * To normalize, invoke com.potix.lang.Strings.normalize.
+	 * To normalize, invoke org.zkoss.lang.Strings.normalize.
 	 */
 	public String getText();
 	/**

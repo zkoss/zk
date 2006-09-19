@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util;
+package org.zkoss.util;
 
 //NOTE: DO NOT modify the algorithm here because i3lb/HostInfo counts on it.
 //If you really have to modify, you have to reserve old codes and modify

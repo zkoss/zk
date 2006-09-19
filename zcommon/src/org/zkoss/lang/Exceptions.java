@@ -16,7 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.lang;
+package org.zkoss.lang;
 
 import java.io.StringWriter;
 import java.io.PrintWriter;
@@ -24,10 +24,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 
-import com.potix.lang.D;
-import com.potix.mesg.MCommon;
-import com.potix.mesg.Messages;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.mesg.Messages;
+import org.zkoss.util.logging.Log;
 
 /**
  * Utilities for Exceptions.
@@ -383,7 +383,7 @@ public class Exceptions {
 	 *
 	 * @param prefix the prefix shown in front of each line of the stack trace;
 	 * null to denote empty
-	 * @see com.potix.util.logging.Log#realCause
+	 * @see org.zkoss.util.logging.Log#realCause
 	 */
 	public static final String formatStackTrace(Throwable t, String prefix) {
 		return formatStackTrace(null, t, prefix).toString();

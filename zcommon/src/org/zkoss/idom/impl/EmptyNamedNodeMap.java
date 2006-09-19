@@ -15,12 +15,12 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.impl;
+package org.zkoss.idom.impl;
 
 import org.w3c.dom.*;
 
-import com.potix.idom.*;
-import com.potix.idom.DOMException;
+import org.zkoss.idom.*;
+import org.zkoss.idom.DOMException;
 
 /**
  * An empty NamedNodeMap.

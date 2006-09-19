@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom;
+package org.zkoss.idom;
 
 import java.util.List;
 import java.util.Set;
@@ -24,7 +24,7 @@ import java.util.Collection;
 /**
  * Represents an item might have children. Group is also a item.
  * Developers usually extend new classes from 
- * {@link com.potix.idom.impl.AbstractGroup}, rather than
+ * {@link org.zkoss.idom.impl.AbstractGroup}, rather than
  * implement this interface directly.
  *
  * <p>Design consideration: we don't support removeChildren and setChild

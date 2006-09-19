@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util.resource;
+package org.zkoss.util.resource;
 
 import java.io.File;
 import java.io.InputStream;
@@ -25,7 +25,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.URL;
 
-import com.potix.io.Files;
+import org.zkoss.io.Files;
 
 /**
  * A {@link Loader} that loads the resource by use URL.getContent()

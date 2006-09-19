@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el.fn;
+package org.zkoss.el.fn;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
 /**
  * Utilities to manipulate strings in EL.

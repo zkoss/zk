@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.sound;
+package org.zkoss.sound;
 
-import com.potix.util.media.Media;
+import org.zkoss.util.media.Media;
 
 /**
  * Represents an audio.

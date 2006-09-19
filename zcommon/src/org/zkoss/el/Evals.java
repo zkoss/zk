@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el;
+package org.zkoss.el;
 
 import java.util.Date;
 import java.util.Map;
@@ -30,13 +30,13 @@ import javax.servlet.jsp.el.FunctionMapper;
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.Expression;
 
-import com.potix.mesg.MCommon;
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
-import com.potix.math.BigDecimals;
-import com.potix.math.BigIntegers;
-import com.potix.text.DateFormats;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.math.BigDecimals;
+import org.zkoss.math.BigIntegers;
+import org.zkoss.text.DateFormats;
 
 /**
  * Utilities to wrap the real implementation of Expression Language evaluators.
@@ -149,7 +149,7 @@ public class Evals {
 	 *
 	 * @param extend whether to consider Date, Character and Boolean as
 	 * a numeric object.
-	 * @link com.potix.lang.Classes#isNumeric
+	 * @link org.zkoss.lang.Classes#isNumeric
 	 */
 	public static boolean isNumeric(Object obj, boolean extend) {
 		if (obj == null)

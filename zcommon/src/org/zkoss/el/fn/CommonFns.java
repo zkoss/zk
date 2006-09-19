@@ -16,17 +16,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el.fn;
+package org.zkoss.el.fn;
 
 import java.util.Collection;
 import java.util.Map;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
-import com.potix.lang.Classes;
-import com.potix.mesg.Messages;
-import com.potix.util.resource.Labels;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.Classes;
+import org.zkoss.mesg.Messages;
+import org.zkoss.util.resource.Labels;
+import org.zkoss.util.logging.Log;
 
 /**
  * Functions used with EL.

@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.io;
+package org.zkoss.io;
 
 import java.io.Writer;
 import java.io.OutputStream;

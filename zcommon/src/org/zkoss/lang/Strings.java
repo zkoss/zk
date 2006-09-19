@@ -16,7 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.lang;
+package org.zkoss.lang;
 
 import java.util.Date;
 import java.util.Locale;
@@ -26,10 +26,10 @@ import java.text.ParseException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import com.potix.mesg.MCommon;
-import com.potix.text.DateFormats;
-import com.potix.util.Locales;
-import com.potix.util.IllegalSyntaxException;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.text.DateFormats;
+import org.zkoss.util.Locales;
+import org.zkoss.util.IllegalSyntaxException;
 
 /**
  * String utilties and constants
@@ -204,7 +204,7 @@ public class Strings {
 	 *
 	 * <p>Note: specials usually contains '\\'.	
 	 *
-	 * <p>For example, {@link com.potix.util.Maps#parse} will un-quote
+	 * <p>For example, {@link org.zkoss.util.Maps#parse} will un-quote
 	 * backspace. Thus, if you want to preserve backslash, you have
 	 * invoke escape(s, "\\") before calling Maps.parse().
 	 *

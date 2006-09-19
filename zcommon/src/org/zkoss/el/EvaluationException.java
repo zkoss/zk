@@ -16,10 +16,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el;
+package org.zkoss.el;
 
-import com.potix.lang.Exceptions;
-import com.potix.mesg.Messageable;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.mesg.Messageable;
 import javax.servlet.jsp.el.ELException;
 
 /**

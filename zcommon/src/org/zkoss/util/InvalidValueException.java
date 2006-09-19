@@ -16,15 +16,15 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util;
+package org.zkoss.util;
 
-import com.potix.lang.Expectable;
+import org.zkoss.lang.Expectable;
 
 /**
  * Denotes an invalid value is passed to a setter method.
  *
  * <p>Unlike {@link ModificationException}, this exception is
- * {@link com.potix.lang.Expectable}, i.e., it is usually user's error,
+ * {@link org.zkoss.lang.Expectable}, i.e., it is usually user's error,
  * not program's bug.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>

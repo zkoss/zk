@@ -15,15 +15,15 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.impl;
+package org.zkoss.idom.impl;
 
 import java.util.List;
 import org.w3c.dom.CharacterData;
 
-import com.potix.lang.Objects;
-import com.potix.lang.Classes;
-import com.potix.lang.SystemException;
-import com.potix.idom.*;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.SystemException;
+import org.zkoss.idom.*;
 
 /**
  * Represents a textual item.

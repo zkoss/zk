@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util.resource;
+package org.zkoss.util.resource;
 
 import java.util.Locale;
 import java.util.Map;
@@ -23,11 +23,11 @@ import java.util.HashMap;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.util.CacheMap;
-import com.potix.util.Maps;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.CacheMap;
+import org.zkoss.util.Maps;
+import org.zkoss.util.logging.Log;
 
 /**
  * The property bundle.

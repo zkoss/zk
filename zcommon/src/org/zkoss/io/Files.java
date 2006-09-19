@@ -16,12 +16,12 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.io;
+package org.zkoss.io;
 
 import java.io.*;
 
-import com.potix.lang.D;
-import com.potix.util.ArraysX;
+import org.zkoss.lang.D;
+import org.zkoss.util.ArraysX;
 
 /**
  * File related utilities.
@@ -48,14 +48,14 @@ public class Files {
 	/** Returns the conf directory.
 	 *
 	 * <p>The configure directory is assumed to be specified by
-	 * the system property called "com.potix.io.conf.dir".
+	 * the system property called "org.zkoss.io.conf.dir".
 	 * If property not found, it assumes the conf or config directory under
 	 * the directory specified by the system property called "user.dir".
 	 * If property not found, it assumes the conf directory under
 	 * the current directory.
 	 */
 	public final static File getConfigDirectory() {
-		final String confdir = System.getProperty("com.potix.io.conf.dir", null);
+		final String confdir = System.getProperty("org.zkoss.io.conf.dir", null);
 		if (confdir != null) return new File(confdir);
 
 		final File fl = new File(System.getProperty("user.dir", "."), "conf");

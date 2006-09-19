@@ -15,18 +15,18 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util.resource;
+package org.zkoss.util.resource;
 
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
-import com.potix.util.Locales;
-import com.potix.util.logging.Log;
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.lang.Exceptions;
+import org.zkoss.util.Locales;
+import org.zkoss.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Exceptions;
 
 /**
  * Utilities to load and locate resources.

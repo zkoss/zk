@@ -17,14 +17,14 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 
-package com.potix.util;
+package org.zkoss.util;
 
 import java.util.Date;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.Locale;
 
-import com.potix.lang.SystemException;
+import org.zkoss.lang.SystemException;
 
 /**
  * Utilities for java.util.Date

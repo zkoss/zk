@@ -16,7 +16,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.xawk;
+package org.zkoss.xawk;
 
 import java.io.File;
 import java.io.InputStream;
@@ -37,10 +37,10 @@ import bsh.Interpreter;
 import bsh.EvalError;
 import bsh.TargetError;
 
-import com.potix.util.logging.Log;
-import com.potix.idom.Element;
-import com.potix.idom.input.SAXBuilder;
-import com.potix.el.Evals;
+import org.zkoss.util.logging.Log;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.el.Evals;
 
 /**
  * An Awk-like even-driven XML parser.

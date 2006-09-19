@@ -16,10 +16,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util.resource;
+package org.zkoss.util.resource;
 
 import javax.servlet.jsp.el.VariableResolver;
-import com.potix.util.resource.impl.LabelLoader;
+import org.zkoss.util.resource.impl.LabelLoader;
 
 /**
  * Utilities to access labels. A label is a Locale-dependent string
@@ -35,7 +35,7 @@ public class Labels {
 	/** Returns the label of the specified key based
 	 * on the current Locale, or null if no found.
 	 *
-	 * <p>The current locale is given by {@link com.potix.util.Locales#getCurrent}.
+	 * <p>The current locale is given by {@link org.zkoss.util.Locales#getCurrent}.
 	 */
 	public static final String getLabel(String key) {
 		return _loader.getLabel(key);

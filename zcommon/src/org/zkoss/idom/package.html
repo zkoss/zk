@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>com.potix.idom</title>
+<title>org.zkoss.idom</title>
 </head>
 
 <body>
@@ -32,8 +32,8 @@ while Element.getAttributeValue returns null if the attribute not found.</p>
 <h3>Generic Sample</h3>
 <h4>Method 1: Let SAXBuilder create the SAX parser</h4>
 
-<code><pre>import com.potix.idom.input.SAXBuilder;
-import com.potix.idom.Document;
+<code><pre>import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.idom.Document;
 
 SAXBuilder builder = new SAXBuilder(true, false, true);
 Document doc = builder.build("file.xml");</pre></code>
@@ -44,8 +44,8 @@ Document doc = builder.build("file.xml");</pre></code>
 
 <p><code><pre>import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import com.potix.idom.input.SAXBuilder;
-import com.potix.idom.Document;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.idom.Document;
 
 SAXParserFactory factory = SAXParserFactory.newInstance();
 ...//configure factory as you want
@@ -67,7 +67,7 @@ it.hasNext();){
 a iDOM tree sequentially.</p>
 
 <p>To select beyond sequence searching (and regular expression),
-com.potix.xml.XPath could be used.</p>
+org.zkoss.xml.XPath could be used.</p>
 
 <hr>
 <h2>Extension to W3C DOM</h2>

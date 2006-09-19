@@ -15,10 +15,10 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom;
+package org.zkoss.idom;
 
-import com.potix.lang.Objects;
-import com.potix.idom.impl.*;
+import org.zkoss.lang.Objects;
+import org.zkoss.idom.impl.*;
 
 /**
  * The iDOM entity reference.

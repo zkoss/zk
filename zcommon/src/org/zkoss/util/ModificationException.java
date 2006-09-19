@@ -16,11 +16,11 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util;
+package org.zkoss.util;
 
-import com.potix.lang.CommonException;
-import com.potix.lang.Exceptions;
-import com.potix.lang.Expectable;
+import org.zkoss.lang.CommonException;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Expectable;
 
 /**
  * Denotes a modification fails. It is considered as
@@ -30,7 +30,7 @@ import com.potix.lang.Expectable;
  * <p>The create, remove and setter method of peristent beans (i3pb) must
  * declare this exception. Besides this exception and,
  * {@link InvalidValueException},
- * com.potix.i3.pb.RemoveException and com.potix.i3.pb.CreateException,
+ * org.zkoss.i3.pb.RemoveException and org.zkoss.i3.pb.CreateException,
  * who derive from this class, might be thrown
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>

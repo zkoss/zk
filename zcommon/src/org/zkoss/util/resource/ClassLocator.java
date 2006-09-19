@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util.resource;
+package org.zkoss.util.resource;
 
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
@@ -31,13 +31,13 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import com.potix.lang.D;
-import com.potix.util.CollectionsX;
-import com.potix.util.logging.Log;
-import com.potix.idom.Document;
-import com.potix.idom.Element;
-import com.potix.idom.util.IDOMs;
-import com.potix.idom.input.SAXBuilder;
+import org.zkoss.lang.D;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.logging.Log;
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.util.IDOMs;
+import org.zkoss.idom.input.SAXBuilder;
 
 /**
  * The locator searches the current thread's context class loader,

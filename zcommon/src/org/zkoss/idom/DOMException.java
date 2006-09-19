@@ -15,12 +15,12 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom;
+package org.zkoss.idom;
 
 import org.xml.sax.Locator;
 
-import com.potix.lang.Objects;
-import com.potix.idom.util.SimpleLocator;
+import org.zkoss.lang.Objects;
+import org.zkoss.idom.util.SimpleLocator;
 
 /**
  * Denotes an operation is not supported.

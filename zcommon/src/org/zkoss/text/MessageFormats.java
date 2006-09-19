@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.text;
+package org.zkoss.text;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,9 +27,9 @@ import java.util.Locale;
 import java.net.InetAddress;
 import java.text.MessageFormat;
 
-import com.potix.lang.D;
-import com.potix.lang.Strings;
-import com.potix.util.Locales;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.Locales;
 
 /**
  * The message formatting relevant utilities.

@@ -16,10 +16,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util.media;
+package org.zkoss.util.media;
 
-import com.potix.image.Image;
-import com.potix.util.ModificationException;
+import org.zkoss.image.Image;
+import org.zkoss.util.ModificationException;
 
 /**
  * Represents an object is associated with images.

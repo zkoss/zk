@@ -5,7 +5,7 @@
 Purpose: 
 Description: 
 History:
-C91/01/07 17:36:07, reate, Tom M. Yeh
+91/01/07 17:36:07, Create, Tom M. Yeh
 }}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
@@ -15,15 +15,15 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.xml;
+package org.zkoss.xml;
 
-import com.potix.idom.Verifier;
+import org.zkoss.idom.Verifier;
 
 /**
  * The XML relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @see com.potix.idom.Element
+ * @see org.zkoss.idom.Element
  */
 public class XMLs {
 	/** Converting a name to a valid XML name.

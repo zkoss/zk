@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el;
+package org.zkoss.el;
 
 import java.util.Enumeration;
 
@@ -33,7 +33,7 @@ import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ExpressionEvaluator;
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.el.impl.AttributesMap;
+import org.zkoss.el.impl.AttributesMap;
 
 /**
  * Used to wrap a servlet context to provide JSP-like evaluation.

@@ -15,9 +15,9 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.impl;
+package org.zkoss.idom.impl;
 
-import com.potix.idom.*;
+import org.zkoss.idom.*;
 
 /**
  * The iDOM's implementation of DOMImplementation.

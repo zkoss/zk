@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.impl;
+package org.zkoss.idom.impl;
 
 import java.util.List;
 import java.util.Collections;
@@ -29,9 +29,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.UserDataHandler;
 
-import com.potix.xml.Locator;
-import com.potix.xml.Nodes;
-import com.potix.idom.*;
+import org.zkoss.xml.Locator;
+import org.zkoss.xml.Nodes;
+import org.zkoss.idom.*;
 
 /**
  * A semi-implemented item for leaf vertices.
@@ -63,7 +63,7 @@ import com.potix.idom.*;
  * </dl>
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @see com.potix.idom.Item
+ * @see org.zkoss.idom.Item
  */
 public abstract class AbstractItem
 implements Item, Node, Serializable, Cloneable {

@@ -16,14 +16,14 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.math;
+package org.zkoss.math;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Locale;
 
-import com.potix.lang.Objects;
-import com.potix.math.BigIntegers;
+import org.zkoss.lang.Objects;
+import org.zkoss.math.BigIntegers;
 
 /**
  * Utilities and constants of big decimals.

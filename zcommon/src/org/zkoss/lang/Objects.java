@@ -16,7 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.lang;
+package org.zkoss.lang;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,10 +25,10 @@ import java.util.Collection;
 import java.lang.reflect.Method;
 import java.rmi.MarshalledObject;
 
-import com.potix.util.ArraysX;
-import com.potix.util.CollectionsX;
-import com.potix.util.logging.Log;
-import com.potix.text.DateFormats;
+import org.zkoss.util.ArraysX;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.logging.Log;
+import org.zkoss.text.DateFormats;
 
 /**
  * Utilities related to the Object class.
@@ -65,12 +65,12 @@ public class Objects {
 	 */
 	public static final Double ZERO_DOUBLE = new Double(0D);
 	/** Represents 0 in big decimal.
-	 * The same as {@link com.potix.math.BigDecimals#ZERO}.
-	 * @see com.potix.math.BigDecimals#ONE
+	 * The same as {@link org.zkoss.math.BigDecimals#ZERO}.
+	 * @see org.zkoss.math.BigDecimals#ONE
 	 */
 	public static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal(0D);
 	/** Represents 0 in big integer.
-	 * Same as {@link com.potix.math.BigIntegers#ZERO}.
+	 * Same as {@link org.zkoss.math.BigIntegers#ZERO}.
 	 */
 	public static final BigInteger ZERO_BIG_INTEGER = BigInteger.ZERO;
 	/** The null character.
@@ -88,11 +88,11 @@ public class Objects {
 	public static final String SEPARATOR_STRING = "" + SEPARATOR_CHAR;
 
 	/** The path seperator character that is used to construct a path.
-	 * See com.potix.i3.ds.Path.
+	 * See org.zkoss.i3.ds.Path.
 	 */
 	public static final char PATH_SEPARATOR_CHAR = '/';
 	/** The path seperator string that is used to construct a path.
-	 * See com.potix.i3.ds.Path.
+	 * See org.zkoss.i3.ds.Path.
 	 */
 	public static final String PATH_SEPARATOR_STRING = "" + PATH_SEPARATOR_CHAR;
 

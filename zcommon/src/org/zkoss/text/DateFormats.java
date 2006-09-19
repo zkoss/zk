@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.text;
+package org.zkoss.text;
 
 import java.util.Locale;
 import java.util.Date;
@@ -23,7 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
-import com.potix.util.Locales;
+import org.zkoss.util.Locales;
 
 /**
  * DateFormat relevant utilities.

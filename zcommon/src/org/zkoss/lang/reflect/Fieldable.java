@@ -16,9 +16,9 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.lang.reflect;
+package org.zkoss.lang.reflect;
 
-import com.potix.util.ModificationException;
+import org.zkoss.util.ModificationException;
 
 /**
  * Represents an object that is able to handle its fields by name.

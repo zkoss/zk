@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.impl;
+package org.zkoss.idom.impl;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -34,9 +34,9 @@ import java.util.Collections;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.potix.util.CheckableTreeArray;
-import com.potix.xml.FacadeNodeList;
-import com.potix.idom.*;
+import org.zkoss.util.CheckableTreeArray;
+import org.zkoss.xml.FacadeNodeList;
+import org.zkoss.idom.*;
 
 /**
  * A semi-implemented item for group. A group is a item that has child items.

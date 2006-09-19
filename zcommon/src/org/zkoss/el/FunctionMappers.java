@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el;
+package org.zkoss.el;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -30,21 +30,21 @@ import java.io.Serializable;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.lang.reflect.SerializableMethod;
-import com.potix.mesg.MCommon;
-import com.potix.lang.SystemException;
-import com.potix.util.IllegalSyntaxException;
-import com.potix.util.resource.Locator;
-import com.potix.util.resource.ResourceCache;
-import com.potix.util.resource.AbstractLoader;
-import com.potix.util.resource.ClassLocator;
-import com.potix.util.logging.Log;
-import com.potix.idom.input.SAXBuilder;
-import com.potix.idom.Document;
-import com.potix.idom.Element;
-import com.potix.idom.util.IDOMs;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.reflect.SerializableMethod;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.ResourceCache;
+import org.zkoss.util.resource.AbstractLoader;
+import org.zkoss.util.resource.ClassLocator;
+import org.zkoss.util.logging.Log;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.util.IDOMs;
 
 /**
  * Utilities for handling FunctionMapper.

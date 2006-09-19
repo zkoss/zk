@@ -17,7 +17,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 
-package com.potix.lang.reflect;
+package org.zkoss.lang.reflect;
 
 /**
  * A marker interface to represent a Zombie. A Zombie object is used to

@@ -16,13 +16,13 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.mesg;
+package org.zkoss.mesg;
 
 import java.util.List;
 import java.util.ArrayList;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
 
 /**
  * Defines the constants of message types.

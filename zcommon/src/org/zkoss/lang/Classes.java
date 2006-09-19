@@ -16,7 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.lang;
+package org.zkoss.lang;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -34,15 +34,15 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import com.potix.mesg.MCommon;
-import com.potix.mesg.Messages;
-import com.potix.lang.Strings;
-import com.potix.lang.Objects;
-import com.potix.math.BigDecimals;
-import com.potix.math.BigIntegers;
-import com.potix.util.CacheMap;
-import com.potix.util.IllegalSyntaxException;
-import com.potix.util.logging.Log;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.mesg.Messages;
+import org.zkoss.lang.Strings;
+import org.zkoss.lang.Objects;
+import org.zkoss.math.BigDecimals;
+import org.zkoss.math.BigIntegers;
+import org.zkoss.util.CacheMap;
+import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.util.logging.Log;
 
 /**
  * Utilities to handle java.lang.Class
@@ -1048,7 +1048,7 @@ public class Classes {
 	 *
 	 * @param extend whether to consider Date, char, boolean, Character
 	 * and Boolean as a numeric object.
-	 * @see com.potix.el.Evals#isNumeric
+	 * @see org.zkoss.el.Evals#isNumeric
 	 */
 	public static final boolean isNumeric(Class cls, boolean extend) {
 		if (cls.isPrimitive())

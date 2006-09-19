@@ -15,18 +15,18 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.util;
+package org.zkoss.idom.util;
 
 import java.io.Serializable;
 
-import com.potix.xml.Locator;
+import org.zkoss.xml.Locator;
 
 /**
  * The locator implementation. Useful to assign the location information
  * to vertices.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @see com.potix.idom.Item
+ * @see org.zkoss.idom.Item
  */
 public class SimpleLocator implements Locator, Serializable {
     private static final long serialVersionUID = 20060622L;

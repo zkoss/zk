@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.lang.reflect;
+package org.zkoss.lang.reflect;
 
 import java.lang.reflect.Method;
 import java.io.Serializable;
@@ -22,8 +22,8 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
-import com.potix.lang.Objects;
-import com.potix.lang.SystemException;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.SystemException;
 /**
  * A wrapper of java.lang.reflect.Method to make it serializable.
  *

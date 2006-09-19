@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.sound;
+package org.zkoss.sound;
 
 import java.io.File;
 import java.io.InputStream;
@@ -29,7 +29,7 @@ import java.net.URL;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import com.potix.util.media.ContentTypes;
+import org.zkoss.util.media.ContentTypes;
 
 /**
  * Represents an audio.
@@ -37,7 +37,7 @@ import com.potix.util.media.ContentTypes;
  * data as opaque rather than manilupate the sound.
  *
  * <p>In other words, it is used to retrieve and store the opaque data
- * as polymorphic thru the {@link com.potix.util.media.Media} interface.
+ * as polymorphic thru the {@link org.zkoss.util.media.Media} interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

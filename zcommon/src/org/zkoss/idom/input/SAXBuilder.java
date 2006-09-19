@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.input;
+package org.zkoss.idom.input;
 
 import java.io.IOException;
 import java.io.File;
@@ -32,8 +32,8 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
-import com.potix.util.logging.Log;
-import com.potix.idom.Document;
+import org.zkoss.util.logging.Log;
+import org.zkoss.idom.Document;
 
 /**
  * The builder based on SAX parsers.

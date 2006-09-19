@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.util.resource.impl;
+package org.zkoss.util.resource.impl;
 
 import java.util.Iterator;
 import java.util.List;
@@ -29,20 +29,20 @@ import java.io.IOException;
 
 import javax.servlet.jsp.el.VariableResolver;
 
-import com.potix.mesg.MCommon;
-import com.potix.lang.SystemException;
-import com.potix.util.Maps;
-import com.potix.util.Locales;
-import com.potix.util.resource.LabelLocator;
-import com.potix.util.resource.ClassLocator;
-import com.potix.util.logging.Log;
-import com.potix.util.WaitLock;
-import com.potix.el.EvaluatorImpl;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.Maps;
+import org.zkoss.util.Locales;
+import org.zkoss.util.resource.LabelLocator;
+import org.zkoss.util.resource.ClassLocator;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.WaitLock;
+import org.zkoss.el.EvaluatorImpl;
 
 /**
  * The label loader (implementation only).
  *
- * Used to implement {@link com.potix.util.resource.Labels}.
+ * Used to implement {@link org.zkoss.util.resource.Labels}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

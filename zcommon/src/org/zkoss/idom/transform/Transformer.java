@@ -18,7 +18,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.transform;
+package org.zkoss.idom.transform;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -35,12 +35,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.SAXResult;
 
-import com.potix.idom.Document;
-import com.potix.idom.Element;
-import com.potix.idom.DocType;
-import com.potix.idom.input.SAXHandler;
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.DocType;
+import org.zkoss.idom.input.SAXHandler;
 
-import com.potix.util.logging.Log;
+import org.zkoss.util.logging.Log;
 
 /**
  * Transforms an iDOM Document.

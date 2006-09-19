@@ -15,9 +15,9 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.input;
+package org.zkoss.idom.input;
 
-import com.potix.idom.*;
+import org.zkoss.idom.*;
 
 /**
  * A dom factory. It is the interface used by SaxBuild to create

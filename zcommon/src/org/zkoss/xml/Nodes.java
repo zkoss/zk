@@ -15,13 +15,13 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.xml;
+package org.zkoss.xml;
 
 import java.util.Collections;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.potix.idom.Item;
+import org.zkoss.idom.Item;
 
 /**
  * Node related utilities.

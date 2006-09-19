@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util.media;
+package org.zkoss.util.media;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -25,10 +25,10 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.potix.lang.D;
-import com.potix.lang.Strings;
-import com.potix.mesg.MCommon;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Strings;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.util.logging.Log;
 
 /**
  * Utilities relevant to content types.
@@ -98,7 +98,7 @@ public class ContentTypes {
 
 	static {
 		final String flnm =
-			"/metainfo/com/potix/util/media/contentTypes.properties";
+			"/metainfo/org/zkoss/util/media/contentTypes.properties";
 		if (!load(flnm))
 			log.warning(MCommon.FILE_NOT_FOUND, flnm);
 		load("/contentTypes.properties"); //override!

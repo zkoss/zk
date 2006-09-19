@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el;
+package org.zkoss.el;
 
 import java.util.Map;
 
@@ -28,15 +28,15 @@ import javax.servlet.jsp.el.ELException;
 
 import org.apache.commons.el.ExpressionEvaluatorImpl;
 
-import com.potix.lang.Classes;
-import com.potix.lang.SystemException;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.SystemException;
 
 /**
  * Our evaluator that implements ExpressionEvaluator.
  * It encapsulates the expression evaluator come with the container.
  *
  * <p>To make it work, you have to specify the system property,
- * "com.potix.el.ExpressionEvaluator.class", with the proper class name.
+ * "org.zkoss.el.ExpressionEvaluator.class", with the proper class name.
  * If you don't specify one, "org.apache.commons.el.ExpressionEvaluatorImpl"
  * is assumed.
  *
@@ -47,7 +47,7 @@ public class EvaluatorImpl extends ExpressionEvaluator {
 
 	public EvaluatorImpl() {
 		final String clsnm =
-			System.getProperty("com.potix.el.ExpressionEvaluator.class", null);
+			System.getProperty("org.zkoss.el.ExpressionEvaluator.class", null);
 		if (clsnm == null || clsnm.length() == 0) {
 			_eval = new ExpressionEvaluatorImpl();
 		} else {

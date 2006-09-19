@@ -16,7 +16,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.xawk;
+package org.zkoss.xawk;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -24,8 +24,8 @@ import java.util.LinkedList;
 import bsh.Interpreter;
 import bsh.EvalError;
 
-import com.potix.lang.Classes;
-import com.potix.idom.Element;
+import org.zkoss.lang.Classes;
+import org.zkoss.idom.Element;
 
 /**
  * A context when an element is being processing.
@@ -87,7 +87,7 @@ final public class Context {
 
 	/** Returns the attribute value of the element.
 	 * A shortcut of element.getAttributeValue(attrName).
-	 * @see com.potix.idom.Element#getAttributeValue(String)
+	 * @see org.zkoss.idom.Element#getAttributeValue(String)
 	 */
 	public final String getAttributeValue(String attrName) {
 		return this.element.getAttributeValue(attrName);

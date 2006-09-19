@@ -16,7 +16,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.image;
+package org.zkoss.image;
 
 import java.io.File;
 import java.io.InputStream;
@@ -32,11 +32,11 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
-import com.potix.lang.Objects;
-import com.potix.lang.SystemException;
-import com.potix.util.logging.Log;
-import com.potix.io.Files;
-import com.potix.util.media.ContentTypes;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.logging.Log;
+import org.zkoss.io.Files;
+import org.zkoss.util.media.ContentTypes;
 
 /**
  * Represents an image.
@@ -44,7 +44,7 @@ import com.potix.util.media.ContentTypes;
  * the raw image data, i.e., the original format, as opaque.
  *
  * <p>In other words, it is used to retrieve and store the opaque data
- * as polymorphic thru the {@link com.potix.util.media.Media} interface.
+ * as polymorphic thru the {@link org.zkoss.util.media.Media} interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

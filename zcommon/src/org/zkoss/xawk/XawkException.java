@@ -16,7 +16,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.xawk;
+package org.zkoss.xawk;
 
 /**
  * Represents Xawk fails to parse a XML.
@@ -24,7 +24,7 @@ package com.potix.xawk;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  * @see Xawk
  */
-public class XawkException extends com.potix.lang.CommonException {
+public class XawkException extends org.zkoss.lang.CommonException {
 	public XawkException(String msg, Throwable cause) {
 		super(msg, cause);
 	}

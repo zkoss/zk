@@ -16,10 +16,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util;
+package org.zkoss.util;
 
-import com.potix.lang.SystemException;
-import com.potix.lang.PotentialDeadLockException;
+import org.zkoss.lang.SystemException;
+import org.zkoss.lang.PotentialDeadLockException;
 
 /**
  * A simple lock used to implement load-on-deman mechanism.

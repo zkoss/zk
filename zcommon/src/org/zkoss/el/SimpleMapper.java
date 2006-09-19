@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el;
+package org.zkoss.el;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -28,8 +28,8 @@ import java.net.URL;
 import javax.servlet.jsp.el.FunctionMapper;
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.util.resource.Locator;
-import com.potix.idom.Element;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.idom.Element;
 
 /**
  * A simple function mapper.

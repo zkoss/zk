@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom.util;
+package org.zkoss.idom.util;
 
 import java.io.PrintWriter;
 import java.io.PrintStream;
@@ -32,24 +32,24 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import com.potix.mesg.MCommon;
-import com.potix.mesg.Messages;
-import com.potix.lang.Objects;
-import com.potix.lang.SystemException;
-import com.potix.util.Locales;
-import com.potix.util.IllegalSyntaxException;
-import com.potix.util.resource.Locator;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.mesg.Messages;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.Locales;
+import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.util.resource.Locator;
 
-import com.potix.idom.*;
-import com.potix.idom.input.SAXBuilder;
-import com.potix.idom.transform.Transformer;
+import org.zkoss.idom.*;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.idom.transform.Transformer;
 
 /**
  * The iDOM relevant utilities.
  *
  * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
- * @see com.potix.idom.Item
- * @see com.potix.idom.Group
+ * @see org.zkoss.idom.Item
+ * @see org.zkoss.idom.Group
  */
 public class IDOMs {
 	/** Returns the required element.

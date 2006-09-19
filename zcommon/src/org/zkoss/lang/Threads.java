@@ -16,10 +16,10 @@ Copyright (C) 2003 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.lang;
+package org.zkoss.lang;
 
-import com.potix.mesg.MCommon;
-import com.potix.util.logging.Log;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.util.logging.Log;
 
 /**
  * Thread relevant utilities.

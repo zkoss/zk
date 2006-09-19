@@ -16,17 +16,17 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.lang.reflect;
+package org.zkoss.lang.reflect;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.AccessibleObject;
 
-import com.potix.mesg.MCommon;
-import com.potix.lang.Classes;
-import com.potix.lang.Objects;
-import com.potix.lang.SystemException;
-import com.potix.util.ModificationException;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.ModificationException;
 
 /**
  * Utilities to access fields.

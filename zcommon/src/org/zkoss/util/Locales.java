@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util;
+package org.zkoss.util;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -24,8 +24,8 @@ import java.util.Locale;
 import java.util.Iterator;
 import java.util.Collection;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
 
 /**
  * The locale relevant utilities.

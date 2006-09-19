@@ -15,17 +15,17 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util.logging;
+package org.zkoss.util.logging;
 
 import java.util.logging.Logger;
 import java.util.logging.LogManager;
 import java.util.logging.Level;
 import java.util.logging.Handler;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.lang.Exceptions;
-import com.potix.mesg.Messages;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.mesg.Messages;
 
 /**
  * The I3 logger. Usage:
@@ -213,7 +213,7 @@ public class Log {
 			String cname = "", mname = "";
 			for (int j = 0; j < stack.length; ++j) {
 				if (!stack[j].getClassName()
-				.equals("com.potix.util.logging.Log")) {
+				.equals("org.zkoss.util.logging.Log")) {
 					cname = stack[j].getClassName();
 					mname = stack[j].getMethodName() + ':'
 						+ stack[j].getLineNumber();

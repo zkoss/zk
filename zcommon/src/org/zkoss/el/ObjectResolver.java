@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el;
+package org.zkoss.el;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
@@ -25,7 +25,7 @@ import java.lang.reflect.AccessibleObject;
 import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.lang.Classes;
+import org.zkoss.lang.Classes;
 
 /**
  * Resolves the specified object's members as variables.

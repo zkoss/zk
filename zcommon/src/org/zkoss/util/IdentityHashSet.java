@@ -16,7 +16,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util;
+package org.zkoss.util;
 
 import java.util.Collection;
 import java.util.Set;
@@ -24,7 +24,7 @@ import java.util.AbstractSet;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
 /**
  * Like java.util.InternalHashMap, it uses == and System.identityHashCode

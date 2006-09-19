@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util;
+package org.zkoss.util;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -30,7 +30,7 @@ import java.util.ListIterator;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
-import com.potix.lang.Strings;
+import org.zkoss.lang.Strings;
 
 /**
  * The collection related utilities.

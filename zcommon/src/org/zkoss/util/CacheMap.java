@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util;
+package org.zkoss.util;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -28,9 +28,9 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.lang.ref.ReferenceQueue;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
 
 /**
  * The cache map. The key-to-value mappings hold in this map is

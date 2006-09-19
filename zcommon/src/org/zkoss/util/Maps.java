@@ -16,7 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util;
+package org.zkoss.util;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -29,10 +29,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PushbackInputStream;
 
-import com.potix.lang.D;
-import com.potix.lang.Strings;
-import com.potix.mesg.MCommon;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Strings;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.util.logging.Log;
 
 /**
  * Utilities for process Map.
@@ -75,12 +75,12 @@ public class Maps {
 	 *}</code></pre>
 	 *
 	 * <p>Moreover, you could prefix a group of keys with certain prefix:
-	 * <pre><code>com.potix.some. {
+	 * <pre><code>org.zkoss.some. {
 	 * a = aaa
 	 * b = bbb
 	 *}</code></pre>
 	 *
-	 * It actually defines two keys: "com.potix.some.a" and "com.potix.some.b".
+	 * It actually defines two keys: "org.zkoss.some.a" and "org.zkoss.some.b".
 	 *
 	 * <p>Note: (1) whitespace in the {...} block are all preserved.<br>
 	 * (2) if only whitespaces is between '=' and '{', they are ignored.

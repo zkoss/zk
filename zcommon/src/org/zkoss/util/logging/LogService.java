@@ -16,7 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.util.logging;
+package org.zkoss.util.logging;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -28,12 +28,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.lang.SystemException;
-import com.potix.mesg.MCommon;
-import com.potix.io.FileWatchdog;
-import com.potix.io.Files;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.SystemException;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.io.FileWatchdog;
+import org.zkoss.io.Files;
 
 /**
  * The log service which is used to monitor i3-log.conf.

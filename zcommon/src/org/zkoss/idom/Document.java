@@ -15,7 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.idom;
+package org.zkoss.idom;
 
 import java.util.List;
 import java.util.Iterator;
@@ -27,9 +27,9 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMConfiguration;
 
-import com.potix.util.CheckableTreeArray;
-import com.potix.xml.FacadeNodeList;
-import com.potix.idom.impl.*;
+import org.zkoss.util.CheckableTreeArray;
+import org.zkoss.xml.FacadeNodeList;
+import org.zkoss.idom.impl.*;
 
 /**
  * Represents Document which is also W3C/DOM's document,

@@ -16,10 +16,10 @@ Copyright (C) 2003 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.math;
+package org.zkoss.math;
 
 import java.math.BigInteger;
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
 /**
  * BigInteger utilities.

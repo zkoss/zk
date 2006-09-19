@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el;
+package org.zkoss.el;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -44,9 +44,9 @@ import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ExpressionEvaluator;
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.util.CollectionsX;
-import com.potix.el.impl.StringKeysMap;
-import com.potix.el.impl.AttributesMap;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.el.impl.StringKeysMap;
+import org.zkoss.el.impl.AttributesMap;
 
 /**
  * Used to wrap a request to provide JSP-like evaluation.

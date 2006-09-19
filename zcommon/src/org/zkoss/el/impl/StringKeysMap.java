@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.el.impl;
+package org.zkoss.el.impl;
 
 import java.util.Map;
 import java.util.AbstractMap;

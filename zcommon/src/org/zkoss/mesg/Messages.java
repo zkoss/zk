@@ -16,16 +16,16 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.mesg;
+package org.zkoss.mesg;
 
 import java.util.Date;
 import java.util.Locale;
 
-import com.potix.lang.Objects;
-import com.potix.util.Locales;
-import com.potix.util.logging.Log;
-import com.potix.util.resource.PropertyBundle;
-import com.potix.text.MessageFormats;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.Locales;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.PropertyBundle;
+import org.zkoss.text.MessageFormats;
 
 /**
  * The message manager.
@@ -111,11 +111,11 @@ public class Messages implements MessageConst {
 	 * an error message to denote it.
 	 *
 	 * <p>If fmtArgs is not null,
-	 * {@link com.potix.text.MessageFormats#format} is called to format
+	 * {@link org.zkoss.text.MessageFormats#format} is called to format
 	 * the message. However, unlike MessageFormat's default behavior,
 	 * all null objects are treated as an empty string rather than "null".
 	 *
-	 * <p>It also recognizes {@link com.potix.lang.Objects#UNKNOWN}.
+	 * <p>It also recognizes {@link org.zkoss.lang.Objects#UNKNOWN}.
 	 *
 	 * @param code the code
 	 * @param fmtArgs the argument lists to format the message
