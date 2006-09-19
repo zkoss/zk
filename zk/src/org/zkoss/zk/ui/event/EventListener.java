@@ -16,21 +16,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.event;
+package org.zkoss.zk.ui.event;
 
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * An listener that will be notified when an event occurs, if it is
- * registered to {@link com.potix.zk.ui.Component#addEventListener}.
+ * registered to {@link org.zkoss.zk.ui.Component#addEventListener}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface EventListener {
 	/** Notifies this listener that an event occurs.
 	 * To get the event, you have to register it first by use of
-	 * {@link com.potix.zk.ui.Component#addEventListener} or
-	 * {@link com.potix.zk.ui.Page#addEventListener}.
+	 * {@link org.zkoss.zk.ui.Component#addEventListener} or
+	 * {@link org.zkoss.zk.ui.Page#addEventListener}.
 	 *
 	 * <p>If you want to forward the event to other component,
 	 * use {@link Events#sendEvent}.
@@ -41,8 +41,8 @@ public interface EventListener {
 	 * between client and server, so be careful.
 	 *
 	 * <p>Note: due to performance issue, this method is used only by
-	 * {@link com.potix.zk.ui.Component#addEventListener};
-	 * and is ignored by {@link com.potix.zk.ui.Page#addEventListener}
+	 * {@link org.zkoss.zk.ui.Component#addEventListener};
+	 * and is ignored by {@link org.zkoss.zk.ui.Page#addEventListener}
 	 */
 	public boolean isAsap();
 }

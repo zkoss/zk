@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
 import java.util.Map;
 import java.io.Reader;
@@ -26,15 +26,15 @@ import java.security.Principal;
 
 import javax.servlet.jsp.el.VariableResolver;
 
-import com.potix.idom.Document;
-import com.potix.web.servlet.Servlets;
-import com.potix.web.servlet.http.Encodes;
+import org.zkoss.idom.Document;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.http.Encodes;
 
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.util.Evaluator;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.au.AuResponse;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.util.Evaluator;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * An execution of a client request (e.g., ServletRequest).
@@ -44,7 +44,7 @@ import com.potix.zk.au.AuResponse;
  * thru this execution.
  *
  * <p>A client request, e.g., HttpServletRequest, might consist of
- * multiple ZK request ({@link com.potix.zk.au.AuRequest}).
+ * multiple ZK request ({@link org.zkoss.zk.au.AuRequest}).
  * However, these ZK requests
  * must target the same desktop of pages ({@link Page}).
  *
@@ -240,7 +240,7 @@ public interface Execution extends Evaluator {
 	/** Returns the page definition from the page file specified by an URI.
 	 *
 	 * <p>Implemetation Notes: this method must invoke
-	 * {@link com.potix.zk.ui.sys.UiFactory#getPageDefinition(com.potix.zk.ui.sys.RequestInfo, String)}
+	 * {@link org.zkoss.zk.ui.sys.UiFactory#getPageDefinition(org.zkoss.zk.ui.sys.RequestInfo, String)}
 	 *
 	 * @param uri the URI of the page file.
 	 *
@@ -252,7 +252,7 @@ public interface Execution extends Evaluator {
 	/** Converts the specified page content to a page definition.
 	 *
 	 * <p>Implemetation Notes: this method must invoke
-	 * {@link com.potix.zk.ui.sys.UiFactory#getPageDefinitionDirectly(com.potix.zk.ui.sys.RequestInfo, String, String)}
+	 * {@link org.zkoss.zk.ui.sys.UiFactory#getPageDefinitionDirectly(org.zkoss.zk.ui.sys.RequestInfo, String, String)}
 	 *
 	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content doesn't specify
@@ -445,7 +445,7 @@ public interface Execution extends Evaluator {
 	 * <p>Notice that {@link #createComponents(String,Component,Map)}
 	 * pops arg after creating components, and before processing any event.
 	 * In other words, it is not aviable for event listener, including onCreate.
-	 * However, {@link com.potix.zk.ui.event.CreateEvent#getArg} preserves
+	 * However, {@link org.zkoss.zk.ui.event.CreateEvent#getArg} preserves
 	 * the map for its event listeners.
 	 */
 	public Map getArg();

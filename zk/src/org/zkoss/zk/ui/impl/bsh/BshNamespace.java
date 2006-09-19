@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl.bsh;
+package org.zkoss.zk.ui.impl.bsh;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -29,13 +29,13 @@ import bsh.UtilEvalError;
 import bsh.Primitive;
 import bsh.BshMethod;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.lang.Objects;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Namespace;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Namespace;
 
 /**
  * An implementation of {@link Namespace} on top of BeanShell.

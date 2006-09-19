@@ -16,15 +16,15 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.event;
+package org.zkoss.zk.ui.event;
 
-import com.potix.zk.ui.Component;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event caused by a component whose z-index is modified
  * by the client.
  *
- * <p>A z-indexed component must implement {@link com.potix.zk.ui.ext.ZIndexed}.
+ * <p>A z-indexed component must implement {@link org.zkoss.zk.ui.ext.ZIndexed}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

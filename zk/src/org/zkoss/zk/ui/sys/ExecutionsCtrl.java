@@ -16,18 +16,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
 import java.lang.reflect.Method;
 
-import com.potix.lang.Classes;
-import com.potix.lang.Objects;
-import com.potix.util.Pair;
-import com.potix.util.CacheMap;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.Pair;
+import org.zkoss.util.CacheMap;
 
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.event.Event;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
 
 /**
  * Additional utilities for {@link Execution}.

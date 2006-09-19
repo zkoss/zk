@@ -16,14 +16,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
 import java.util.TimeZone;
-import com.potix.zk.ui.Session;
+import org.zkoss.zk.ui.Session;
 
 /**
  * Provides the time zone for the specified session.
- * Once specified (in {@link com.potix.zk.ui.util.Configuration}), an instance of the specified class
+ * Once specified (in {@link org.zkoss.zk.ui.util.Configuration}), an instance of the specified class
  * is created and then {@link #getTimeZone} is called, each time
  * a request from the client is received.
  * 

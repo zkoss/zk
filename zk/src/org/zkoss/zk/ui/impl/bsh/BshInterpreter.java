@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl.bsh;
+package org.zkoss.zk.ui.impl.bsh;
 
 import java.util.Iterator;
 import java.util.List;
@@ -31,10 +31,10 @@ import bsh.Primitive;
 import bsh.EvalError;
 import bsh.UtilEvalError;
 
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Interpreter;
-import com.potix.zk.ui.util.Namespace;
-import com.potix.zk.ui.util.VariableResolver;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Interpreter;
+import org.zkoss.zk.ui.util.Namespace;
+import org.zkoss.zk.ui.util.VariableResolver;
 
 /**
  * The interpreter that uses BeanShell to interpret zscript codes.

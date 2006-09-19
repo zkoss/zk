@@ -16,20 +16,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.event;
+package org.zkoss.zk.ui.event;
 
 import java.util.Set;
 
-import com.potix.lang.D;
+import org.zkoss.lang.D;
 
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.sys.ComponentCtrl;
-import com.potix.zk.ui.sys.ExecutionsCtrl;
-import com.potix.zk.ui.impl.EventProcessingThread;
-import com.potix.zk.au.AuRequest;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.impl.EventProcessingThread;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * Utilities to handle events.
@@ -94,7 +94,7 @@ public class Events {
 	 * used to denote the close button is pressed.
 	 */
 	public static final String ON_CLOSE = "onClose";
-	/** The onRender event (used with {@link com.potix.zk.ui.ext.Render}).
+	/** The onRender event (used with {@link org.zkoss.zk.ui.ext.Render}).
 	 */
 	public static final String ON_RENDER = "onRender";
 	/** The onTimer event (used with {@link Event}).

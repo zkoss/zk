@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -24,8 +24,8 @@ import java.util.Set;
 import java.net.URL;
 import java.io.InputStream;
 
-import com.potix.util.resource.Locator;
-import com.potix.zk.ui.util.Configuration;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * Represents a Web application.
@@ -34,7 +34,7 @@ import com.potix.zk.ui.util.Configuration;
  *
  * <p>In HTTP, Web application represents a servlet context that supports ZK.
  * In other word, a Web application is created if
- * {@link com.potix.zk.ui.http.DHtmlLayoutServlet} is declared in web.xml.
+ * {@link org.zkoss.zk.ui.http.DHtmlLayoutServlet} is declared in web.xml.
  *
  * <p>To get the current Web application, use {@link Desktop#getWebApp}.
  *

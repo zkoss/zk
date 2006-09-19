@@ -16,23 +16,23 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au;
+package org.zkoss.zk.au;
 
 import java.util.Map;
 import java.util.HashMap;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 
 /**
  * A response sent from the server to the client via
- * {@link com.potix.zk.ui.sys.UiEngine}.
+ * {@link org.zkoss.zk.ui.sys.UiEngine}.
  *
  * <p>Application developers rarely need access this class and its derived
  * directly.
- * Rather, use {@link com.potix.zk.ui.util.Clients} instead.
+ * Rather, use {@link org.zkoss.zk.ui.util.Clients} instead.
  * If you prefer to use the derives directly, you can use them with
- * {@link com.potix.zk.ui.Execution#addAuResponse}.
+ * {@link org.zkoss.zk.ui.Execution#addAuResponse}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

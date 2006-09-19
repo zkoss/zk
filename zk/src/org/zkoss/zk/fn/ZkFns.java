@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.fn;
+package org.zkoss.zk.fn;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -35,24 +35,24 @@ import java.io.IOException;
 
 import javax.servlet.ServletRequest;
 
-import com.potix.lang.Strings;
-import com.potix.lang.Objects;
-import com.potix.util.CacheMap;
-import com.potix.util.Locales;
-import com.potix.util.logging.Log;
-import com.potix.web.fn.ServletFns;
-import com.potix.web.servlet.JavaScript;
-import com.potix.web.servlet.StyleSheet;
+import org.zkoss.lang.Strings;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.CacheMap;
+import org.zkoss.util.Locales;
+import org.zkoss.util.logging.Log;
+import org.zkoss.web.fn.ServletFns;
+import org.zkoss.web.servlet.JavaScript;
+import org.zkoss.web.servlet.StyleSheet;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.sys.ExecutionsCtrl;
-import com.potix.zk.ui.sys.PageCtrl;
-import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * Utilities for using EL.

@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -24,27 +24,27 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import com.potix.lang.D;
-import com.potix.lang.Strings;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Sessions;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.ComponentNotFoundException;
-import com.potix.zk.ui.util.Configuration;
-import com.potix.zk.ui.util.Monitor;
-import com.potix.zk.ui.sys.PageCtrl;
-import com.potix.zk.ui.sys.RequestQueue;
-import com.potix.zk.ui.sys.DesktopCache;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.DesktopCtrl;
-import com.potix.zk.au.AuBookmark;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.Monitor;
+import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.RequestQueue;
+import org.zkoss.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.au.AuBookmark;
 
 /**
  * The implementation of {@link Desktop}.

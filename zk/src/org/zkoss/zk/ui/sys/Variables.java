@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
 import java.util.Set;
 import java.util.HashSet;

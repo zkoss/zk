@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au.http;
+package org.zkoss.zk.au.http;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -31,34 +31,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
 
-import com.potix.mesg.Messages;
-import com.potix.lang.Exceptions;
-import com.potix.util.logging.Log;
+import org.zkoss.mesg.Messages;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
 
-import com.potix.web.servlet.Servlets;
-import com.potix.web.servlet.http.Https;
-import com.potix.web.servlet.http.Encodes;
-import com.potix.web.servlet.auth.Authens;
-import com.potix.web.util.resource.ClassWebResource;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.http.Https;
+import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.servlet.auth.Authens;
+import org.zkoss.web.util.resource.ClassWebResource;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.ComponentNotFoundException;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.ui.http.ExecutionImpl;
-import com.potix.zk.ui.http.WebManager;
-import com.potix.zk.ui.http.I18Ns;
-import com.potix.zk.au.AuRequest;
-import com.potix.zk.au.AuResponse;
-import com.potix.zk.au.AuObsolete;
-import com.potix.zk.au.AuAlert;
-import com.potix.zk.au.AuSendRedirect;
-import com.potix.zk.au.Command;
-import com.potix.zk.au.CommandNotFoundException;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.http.ExecutionImpl;
+import org.zkoss.zk.ui.http.WebManager;
+import org.zkoss.zk.ui.http.I18Ns;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.AuObsolete;
+import org.zkoss.zk.au.AuAlert;
+import org.zkoss.zk.au.AuSendRedirect;
+import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.CommandNotFoundException;
 
 /**
  * Used to receive command from the server and send result back to client.

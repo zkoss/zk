@@ -14,16 +14,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
-import com.potix.util.resource.Locator;
+import org.zkoss.util.resource.Locator;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Session;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Session;
 
 /**
- * The request information used with {@link com.potix.zk.ui.sys.UiFactory}.
+ * The request information used with {@link org.zkoss.zk.ui.sys.UiFactory}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
@@ -36,7 +36,7 @@ public interface RequestInfo {
 	public Session getSession();
 	/** Returns the desktop, or null if not created yet.
 	 * In other words, it returns null if
-	 * {@link com.potix.zk.ui.sys.UiFactory#newDesktop} is called.
+	 * {@link org.zkoss.zk.ui.sys.UiFactory#newDesktop} is called.
 	 */
 	public Desktop getDesktop();
 	/** Returns the native request. For HTTP, it is

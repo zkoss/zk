@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.au;
+package org.zkoss.zk.au;
 
 /**
  * A response to ask the client to bookmark the desktop.

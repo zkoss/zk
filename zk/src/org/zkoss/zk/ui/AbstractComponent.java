@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -30,39 +30,39 @@ import java.util.HashMap;
 import java.io.Writer;
 import java.io.IOException;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
-import com.potix.util.CollectionsX;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.event.EventListener;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.ext.RawId;
-import com.potix.zk.ui.ext.Viewable;
-import com.potix.zk.ui.ext.Transparent;
-import com.potix.zk.ui.sys.ExecutionCtrl;
-import com.potix.zk.ui.sys.ExecutionsCtrl;
-import com.potix.zk.ui.sys.ComponentCtrl;
-import com.potix.zk.ui.sys.ComponentsCtrl;
-import com.potix.zk.ui.sys.PageCtrl;
-import com.potix.zk.ui.sys.DesktopCtrl;
-import com.potix.zk.ui.sys.SessionCtrl;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.ui.sys.Variables;
-import com.potix.zk.ui.util.Namespace;
-import com.potix.zk.ui.impl.Serializables;
-import com.potix.zk.ui.impl.bsh.BshNamespace;
-import com.potix.zk.ui.metainfo.Millieu;
-import com.potix.zk.ui.metainfo.ComponentDefinition;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.metainfo.ComponentDefinitionMap;
-import com.potix.zk.ui.metainfo.DefinitionNotFoundException;
-import com.potix.zk.au.AuResponse;
-import com.potix.zk.au.AuClientInfo;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.RawId;
+import org.zkoss.zk.ui.ext.Viewable;
+import org.zkoss.zk.ui.ext.Transparent;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.Variables;
+import org.zkoss.zk.ui.util.Namespace;
+import org.zkoss.zk.ui.impl.Serializables;
+import org.zkoss.zk.ui.impl.bsh.BshNamespace;
+import org.zkoss.zk.ui.metainfo.Millieu;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.AuClientInfo;
 
 /**
  * A skeletal implementation of {@link Component}. Though it is OK
@@ -356,7 +356,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected String getInitParam(String name) {
 		return Objects.toString(_mill.getParameter(this, name));
 	}
-	/** Returns URI that {@link com.potix.zk.au.http.DHtmlUpdateServlet}
+	/** Returns URI that {@link org.zkoss.zk.au.http.DHtmlUpdateServlet}
 	 * understands. Then, when DHtmlUpdateServlet serves the URI, it will
 	 * invoke {@link Viewable#getView} to response.
 	 *

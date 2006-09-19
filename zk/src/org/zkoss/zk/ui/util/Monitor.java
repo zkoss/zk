@@ -16,12 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
 import java.util.List;
 
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Desktop;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Desktop;
 
 /**
  * A callback for monitoring the status of ZK engine.
@@ -51,7 +51,7 @@ public interface Monitor {
 	/** Called when an asynchronous updated is called (and not yet processed).
 	 *
 	 * @param desktop the desktop that the update is sent to
-	 * @param requests a list of {@link com.potix.zk.au.AuRequest} that
+	 * @param requests a list of {@link org.zkoss.zk.au.AuRequest} that
 	 * are being processed.
 	 */
 	public void beforeUpdate(Desktop desktop, List requests);

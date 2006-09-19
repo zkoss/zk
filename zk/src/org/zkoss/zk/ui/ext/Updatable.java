@@ -16,19 +16,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.UiException;
 
 /**
- * Decorates {@link com.potix.zk.ui.Component} such that it supports special
+ * Decorates {@link org.zkoss.zk.ui.Component} such that it supports special
  * updates (other than async-update).
  *
  * <h2>Supported special updates</h2>
  * <h3>File upload</h3>
  * <ol>
  * <li>Component uses to use inner-frame or other mechanism to submit a file
- * to {@link com.potix.zk.au.http.DHtmlUpdateServlet}'s /upload.
+ * to {@link org.zkoss.zk.au.http.DHtmlUpdateServlet}'s /upload.
  * <li>DHtmlUpdateServlet than store the result in desktop's attribute,
  * and ask client to do a standard async-update called doUpdatable.
  * <li>When client sends doUpdatable request to the server, server invokes

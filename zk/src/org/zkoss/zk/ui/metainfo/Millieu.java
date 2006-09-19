@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -29,14 +29,14 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Evaluator;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Evaluator;
 
 /**
  * The snapshot of the component's definition.
@@ -65,9 +65,9 @@ public class Millieu implements Serializable {
 	public static final Millieu DUMMY = new Millieu();
 
 	/** Returns the current millieu, which is used only by
-	 * {@link com.potix.zk.ui.AbstractComponent}.
+	 * {@link org.zkoss.zk.ui.AbstractComponent}.
 	 * <p>UiEngine use this to communicate with
-	 * {@link com.potix.zk.ui.AbstractComponent}.
+	 * {@link org.zkoss.zk.ui.AbstractComponent}.
 	 */
 	public static Millieu getCurrent() {
 		return (Millieu)_mill.get();

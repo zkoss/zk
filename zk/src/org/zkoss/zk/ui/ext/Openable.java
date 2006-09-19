@@ -16,19 +16,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
 /**
- * Used to decorate a {@link com.potix.zk.ui.Component} object that
+ * Used to decorate a {@link org.zkoss.zk.ui.Component} object that
  * it allows users to change its open status from the client.
  *
- * <p>{@link com.potix.zk.ui.event.OpenEvent} will be sent wih name as "onOpen"
+ * <p>{@link org.zkoss.zk.ui.event.OpenEvent} will be sent wih name as "onOpen"
  * <b>after</b> {@link #setOpenByClient} is called
  * to notify application developers that it is called by user
  * (rather than by codes).
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see com.potix.zk.ui.event.OpenEvent
+ * @see org.zkoss.zk.ui.event.OpenEvent
  */
 public interface Openable {
 	/** Sets the open state caused by client's operation.

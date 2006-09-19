@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -29,25 +29,25 @@ import java.io.IOException;
 import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.idom.Document;
-import com.potix.web.servlet.Servlets;
-import com.potix.web.el.ELContexts;
-import com.potix.web.el.ELContext;
+import org.zkoss.idom.Document;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.el.ELContexts;
+import org.zkoss.web.el.ELContext;
 
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.metainfo.ComponentDefinition;
-import com.potix.zk.ui.metainfo.InstanceDefinition;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.ExecutionCtrl;
-import com.potix.zk.ui.sys.Visualizer;
-import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.au.AuResponse;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.InstanceDefinition;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.Visualizer;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * A skeletal implementation of {@link Execution}.

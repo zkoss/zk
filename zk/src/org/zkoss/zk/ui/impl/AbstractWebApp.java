@@ -16,16 +16,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.util.Configuration;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.ui.sys.UiFactory;
-import com.potix.zk.ui.sys.DesktopCacheProvider;
-import com.potix.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.DesktopCacheProvider;
+import org.zkoss.zk.ui.sys.DesktopCache;
 
 /**
  * A skeletal implementation of {@link WebApp}.

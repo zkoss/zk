@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -26,19 +26,19 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Collections;
 
-import com.potix.lang.D;
-import com.potix.lang.Strings;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Strings;
 
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.ext.DynamicTag;
-import com.potix.zk.ui.sys.ComponentCtrl;
-import com.potix.zk.ui.util.Condition;
-import com.potix.zk.ui.util.ForEach;
-import com.potix.zk.ui.util.impl.ForEachImpl;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.ext.DynamicTag;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.ForEach;
+import org.zkoss.zk.ui.util.impl.ForEachImpl;
 
 /**
  * An instance definition.

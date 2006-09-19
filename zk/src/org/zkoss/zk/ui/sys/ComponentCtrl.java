@@ -16,14 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.metainfo.Millieu;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.metainfo.Millieu;
 
 /**
- * An addition interface to {@link com.potix.zk.ui.Component}
+ * An addition interface to {@link org.zkoss.zk.ui.Component}
  * that is used for implementation.
  *
  * <p>Application developers shall never access any of this methods.

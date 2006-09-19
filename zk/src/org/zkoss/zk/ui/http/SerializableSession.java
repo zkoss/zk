@@ -16,17 +16,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.http;
+package org.zkoss.zk.ui.http;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionActivationListener;
 import javax.servlet.http.HttpSessionEvent;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
 
 /**
- * Serializable {@link com.potix.zk.ui.Session}.
+ * Serializable {@link org.zkoss.zk.ui.Session}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

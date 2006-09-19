@@ -16,10 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
 import java.util.List;
-import com.potix.zk.ui.Execution;
+import org.zkoss.zk.ui.Execution;
 
 /**
  * A part of {@link Execution} for visualizing the components whose

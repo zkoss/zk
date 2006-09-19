@@ -16,13 +16,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.metainfo.ZScript;
-import com.potix.zk.ui.util.Initiator;
-import com.potix.zk.ui.util.Namespace;
-import com.potix.zk.ui.util.Namespaces;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.metainfo.ZScript;
+import org.zkoss.zk.ui.util.Initiator;
+import org.zkoss.zk.ui.util.Namespace;
+import org.zkoss.zk.ui.util.Namespaces;
 
 /**
  * An initiator used to evaluate a zscript file.

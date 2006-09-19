@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -32,24 +32,24 @@ import java.util.Collections;
 import java.net.URL;
 import java.io.IOException;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.util.IllegalSyntaxException;
-import com.potix.util.logging.Log;
-import com.potix.util.resource.Locator;
-import com.potix.util.resource.ClassLocator;
-import com.potix.idom.Document;
-import com.potix.idom.Element;
-import com.potix.idom.ProcessingInstruction;
-import com.potix.idom.input.SAXBuilder;
-import com.potix.idom.util.IDOMs;
-import com.potix.el.Taglib;
-import com.potix.web.servlet.JavaScript;
-import com.potix.web.servlet.StyleSheet;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.ClassLocator;
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.ProcessingInstruction;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.idom.util.IDOMs;
+import org.zkoss.el.Taglib;
+import org.zkoss.web.servlet.JavaScript;
+import org.zkoss.web.servlet.StyleSheet;
 
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 
 /**
  * Utilities to load language definitions.

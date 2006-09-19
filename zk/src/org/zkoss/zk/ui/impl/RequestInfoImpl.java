@@ -16,15 +16,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
-import com.potix.util.resource.Locator;
+import org.zkoss.util.resource.Locator;
 
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.sys.RequestInfo;
 
 /**
  * An implementation of {@link RequestInfo}.

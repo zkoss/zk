@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.util.Iterator;
 import java.util.List;
@@ -27,23 +27,23 @@ import java.util.HashMap;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.lang.Classes;
-import com.potix.util.resource.Locator;
-import com.potix.el.FunctionMappers;
-import com.potix.el.Taglib;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.el.FunctionMappers;
+import org.zkoss.el.Taglib;
 
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Condition;
-import com.potix.zk.ui.util.Initiator;
-import com.potix.zk.ui.util.Namespace;
-import com.potix.zk.ui.util.Namespaces;
-import com.potix.zk.ui.util.VariableResolver;
-import com.potix.zk.ui.sys.ComponentCtrl;
-import com.potix.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.Initiator;
+import org.zkoss.zk.ui.util.Namespace;
+import org.zkoss.zk.ui.util.Namespaces;
+import org.zkoss.zk.ui.util.VariableResolver;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.PageCtrl;
 
 /**
  * A page definition.
@@ -97,7 +97,7 @@ public class PageDefinition extends InstanceDefinition {
 			addComponentDefinition((ComponentDefinition)it.next());
 	}
 
-	/** Adds a defintion of {@link com.potix.zk.ui.util.Initiator}. */
+	/** Adds a defintion of {@link org.zkoss.zk.ui.util.Initiator}. */
 	public void addInitiatorDefinition(InitiatorDefinition init) {
 		if (init == null)
 			throw new IllegalArgumentException("null");
@@ -131,7 +131,7 @@ public class PageDefinition extends InstanceDefinition {
 		return inits;
 	}
 
-	/** Adds a defintion of {@link com.potix.zk.ui.util.VariableResolver}. */
+	/** Adds a defintion of {@link org.zkoss.zk.ui.util.VariableResolver}. */
 	public void addVariableResolverDefinition(VariableResolverDefinition resolver) {
 		if (resolver == null)
 			throw new IllegalArgumentException("null");

@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -25,31 +25,31 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.lang.reflect.Method;
 
-import com.potix.lang.D;
-import com.potix.lang.Threads;
-import com.potix.lang.Exceptions;
-import com.potix.util.Locales;
-import com.potix.util.TimeZones;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Threads;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.Locales;
+import org.zkoss.util.TimeZones;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.event.EventListener;
-import com.potix.zk.ui.util.Namespace;
-import com.potix.zk.ui.util.Namespaces;
-import com.potix.zk.ui.util.Configuration;
-import com.potix.zk.ui.sys.SessionsCtrl;
-import com.potix.zk.ui.sys.ExecutionCtrl;
-import com.potix.zk.ui.sys.ExecutionsCtrl;
-import com.potix.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.util.Namespace;
+import org.zkoss.zk.ui.util.Namespaces;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /** Thread to handle events.
  * We need to handle events in a separate thread, because it might
- * suspend (by calling {@link com.potix.zk.ui.sys.UiEngine#wait}), such as waiting
+ * suspend (by calling {@link org.zkoss.zk.ui.sys.UiEngine#wait}), such as waiting
  * a modal dialog to complete.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
@@ -128,7 +128,7 @@ public class EventProcessingThread extends Thread {
 		return _comp;
 	}
 
-	/** Stops the thread. Called only by {@link com.potix.zk.ui.sys.UiEngine}
+	/** Stops the thread. Called only by {@link org.zkoss.zk.ui.sys.UiEngine}
 	 * when it is stopping.
 	 */
 	public void cease() {
@@ -142,7 +142,7 @@ public class EventProcessingThread extends Thread {
 			}
 		}
 	}
-	/** Stops the thread silently. Called by {@link com.potix.zk.ui.sys.UiEngine}
+	/** Stops the thread silently. Called by {@link org.zkoss.zk.ui.sys.UiEngine}
 	 * to stop abnormal
 	 * page.
 	 */
@@ -155,7 +155,7 @@ public class EventProcessingThread extends Thread {
 	 *
 	 * <p>Note:
 	 * <ul>
-	 * <li>It is used internally only for implementing {@link com.potix.zk.ui.sys.UiEngine}
+	 * <li>It is used internally only for implementing {@link org.zkoss.zk.ui.sys.UiEngine}
 	 * <li>Caller must invoke {@link Configuration#invokeEventThreadSuspends}
 	 * before calling this method. (Reason: UiEngine might have to store some info
 	 * after {!link Configuration#invokeEventThreadSuspends} is called.
@@ -253,9 +253,9 @@ public class EventProcessingThread extends Thread {
 
 	/** Ask this event thread to process the specified event.
 	 *
-	 * <p>Used internally to implement {@link com.potix.zk.ui.sys.UiEngine}.
+	 * <p>Used internally to implement {@link org.zkoss.zk.ui.sys.UiEngine}.
 	 * Application developers
-	 * shall use {@link com.potix.zk.ui.event.Events#sendEvent} instead.
+	 * shall use {@link org.zkoss.zk.ui.event.Events#sendEvent} instead.
 	 *
 	 * @return whether the event has been processed completely or just be suspended.
 	 * Recycle it only if true is returned.
@@ -412,7 +412,7 @@ public class EventProcessingThread extends Thread {
 	}
 
 	/** Sends the specified component and event and processes the event
-	 * synchronously. Used to implements {@link com.potix.zk.ui.event.Events#sendEvent}.
+	 * synchronously. Used to implements {@link org.zkoss.zk.ui.event.Events#sendEvent}.
 	 */
 	public void sendEvent(final Component comp, Event event)
 	throws Exception {

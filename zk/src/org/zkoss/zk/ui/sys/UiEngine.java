@@ -16,22 +16,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
 import java.io.Writer;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.au.AuRequest;
-import com.potix.zk.au.AuResponse;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * UI engine is reponsible to process requests from the client,
@@ -125,7 +125,7 @@ public interface UiEngine {
 	 * <ol>
 	 * <li>Interprets all scripts defined in page's definition.</li>
 	 * <li>Creates all components defined in
-	 * {@link com.potix.zk.ui.metainfo.InstanceDefinition}.</li>
+	 * {@link org.zkoss.zk.ui.metainfo.InstanceDefinition}.</li>
 	 * <li>Renders all visible components.</li>
 	 * </ol>
 	 */

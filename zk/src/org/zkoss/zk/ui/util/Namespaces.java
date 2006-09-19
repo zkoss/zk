@@ -14,15 +14,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
 import java.util.Map;
 
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Executions;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 
 /**
  * {@link Namespace} relevant utilities.
@@ -70,7 +70,7 @@ public class Namespaces {
 		return ns;
 	}
 	/** Prepares builtin variable before calling
-	 * {@link com.potix.zk.ui.Page#interpret}.
+	 * {@link org.zkoss.zk.ui.Page#interpret}.
 	 *
 	 * @see #beforeInterpret(Execution,Component)
 	 * @param exec the current execution.

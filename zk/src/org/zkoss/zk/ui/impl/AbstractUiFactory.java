@@ -16,20 +16,20 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
 import java.io.Reader;
 import java.io.IOException;
 
-import com.potix.idom.Document;
+import org.zkoss.idom.Document;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.sys.UiFactory;
-import com.potix.zk.ui.sys.RequestInfo;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.PageDefinitions;
 
 /**
  * The sketetal implementation of {@link UiFactory}.

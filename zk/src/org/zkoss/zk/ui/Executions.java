@@ -16,18 +16,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
 import java.util.Map;
 import java.io.Reader;
 import java.io.Writer;
 import java.io.IOException;
 
-import com.potix.idom.Document;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.ui.sys.WebAppCtrl;
+import org.zkoss.idom.Document;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
 
 /**
  * Utilities to access {@link Execution}.
@@ -78,7 +78,7 @@ public class Executions {
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
 	 * and the browser code.
-	 * Refer to {@link com.potix.web.servlet.Servlets#locate(ServletContext, ServletRequest, String, Locator)}
+	 * Refer to {@link org.zkoss.web.servlet.Servlets#locate(ServletContext, ServletRequest, String, Locator)}
 	 * for details. 
 	 */
 	public static final String encodeURL(String uri) {

@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.http;
+package org.zkoss.zk.ui.http;
 
 import java.io.StringWriter;
 import java.io.IOException;
@@ -31,20 +31,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.potix.util.logging.Log;
-import com.potix.web.servlet.BufferedResponse;
+import org.zkoss.util.logging.Log;
+import org.zkoss.web.servlet.BufferedResponse;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.sys.UiFactory;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.RequestInfo;
-import com.potix.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
  * Used to post-process the response into a ZK page.

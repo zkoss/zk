@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au.http;
+package org.zkoss.zk.au.http;
 
 import java.util.Iterator;
 import java.util.List;
@@ -36,27 +36,27 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
-import com.potix.lang.D;
-import com.potix.lang.Strings;
-import com.potix.lang.Exceptions;
-import com.potix.mesg.Messages;
-import com.potix.util.CollectionsX;
-import com.potix.util.logging.Log;
-import com.potix.util.media.Media;
-import com.potix.util.media.AMedia;
-import com.potix.image.AImage;
-import com.potix.sound.AAudio;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Strings;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.mesg.Messages;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.media.Media;
+import org.zkoss.util.media.AMedia;
+import org.zkoss.image.AImage;
+import org.zkoss.sound.AAudio;
 
-import com.potix.web.servlet.Servlets;
+import org.zkoss.web.servlet.Servlets;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.ComponentNotFoundException;
-import com.potix.zk.ui.util.Configuration;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 
 /**
  * The utility used to process file upload.

@@ -16,21 +16,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.lang.reflect.Method;
 import java.io.Serializable;
 
-import com.potix.lang.Classes;
-import com.potix.lang.Exceptions;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Condition;
-import com.potix.zk.ui.util.Evaluator;
-import com.potix.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.Evaluator;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
 
 /**
  * A property of a definition.

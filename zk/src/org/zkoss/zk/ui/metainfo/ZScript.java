@@ -16,22 +16,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.net.URL;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-import com.potix.lang.D;
-import com.potix.util.resource.ResourceCache;
-import com.potix.util.resource.ContentLoader;
-import com.potix.util.resource.Locator;
+import org.zkoss.lang.D;
+import org.zkoss.util.resource.ResourceCache;
+import org.zkoss.util.resource.ContentLoader;
+import org.zkoss.util.resource.Locator;
 
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Condition;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Condition;
 
 /**
  * Represents a zscript.

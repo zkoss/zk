@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.event;
+package org.zkoss.zk.ui.event;
 
 /** The onBookmarkChanged event used
  * to notify that user pressed BACK, FORWARD or specified URL directly

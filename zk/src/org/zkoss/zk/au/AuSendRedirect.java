@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au;
+package org.zkoss.zk.au;
 
 /**
  * A response to send a temporary redirect response to the client

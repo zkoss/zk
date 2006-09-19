@@ -16,9 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
-import com.potix.zk.ui.Component;
+import org.zkoss.zk.ui.Component;
 
 /**
  * An evaluator for evaluating EL expressions.

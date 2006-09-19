@@ -16,19 +16,19 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.util.logging.Log;
-import com.potix.zk.au.AuRequest;
-import com.potix.zk.au.Command;
-import com.potix.zk.ui.sys.RequestQueue;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.Command;
+import org.zkoss.zk.ui.sys.RequestQueue;
 
 /**
  * An implementation of {@link RequestQueue} behaving as

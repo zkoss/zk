@@ -18,9 +18,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>redraw</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
 		<function-signature>
-	void redraw(com.potix.zk.ui.Component, java.io.Writer)
+	void redraw(org.zkoss.zk.ui.Component, java.io.Writer)
 		</function-signature>
 		<description>
 	Redraw the specified component.
@@ -29,7 +29,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>outResponseJavaScripts</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
 		<function-signature>
 	java.lang.String outResponseJavaScripts(java.util.Collection);
 		</function-signature>
@@ -40,7 +40,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>outLangJavaScripts</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
 		<function-signature>
 	java.lang.String outLangJavaScripts(java.lang.String)
 		</function-signature>
@@ -51,7 +51,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 	<function>
 		<name>outLangStyleSheets</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
 		<function-signature>
 	java.lang.String outLangStyleSheets()
 		</function-signature>
@@ -62,9 +62,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>outPageHeaders</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
 		<function-signature>
-	java.lang.String outPageHeaders(com.potix.zk.ui.Page)
+	java.lang.String outPageHeaders(org.zkoss.zk.ui.Page)
 		</function-signature>
 		<description>
 	Returns HTML header tags defined in the specified page.
@@ -73,7 +73,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>toAbsoluteURI</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
 		<function-signature>
 	java.lang.String toAbsoluteURI(java.lang.String)
 		</function-signature>
@@ -84,7 +84,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>outLocaleJavaScript</name>
-		<function-class>com.potix.zk.fn.ZkFns</function-class>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
 		<function-signature>
 	java.lang.String outLocaleJavaScript()
 		</function-signature>

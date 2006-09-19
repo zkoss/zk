@@ -16,10 +16,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Implemented by an initiator that will be invoked if it is specified
@@ -45,8 +45,8 @@ public interface Initiator {
 	 * {@link Page#getId} and {@link Page#getTitle} all return null, since
 	 * the page is not initialized yet.
 	 * To get the current desktop, you have to use
-	 * {@link com.potix.zk.ui.Execution#getDesktop} (from 
-	 * {@link com.potix.zk.ui.Executions#getCurrent}) instead.
+	 * {@link org.zkoss.zk.ui.Execution#getDesktop} (from 
+	 * {@link org.zkoss.zk.ui.Executions#getCurrent}) instead.
 	 *
 	 * @param page the page being evaluated
 	 * @param args an array of arguments passed with

@@ -16,13 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.ComponentNotFoundException;
 
 /**
- * Additional interface of {@link com.potix.zk.ui.Session} for implementation.
+ * Additional interface of {@link org.zkoss.zk.ui.Session} for implementation.
  * <p>Note: applications shall never access this interface.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
@@ -51,7 +51,7 @@ public interface SessionCtrl {
 	public void onDestroyed();
 
 	/** Returns whether this session is invalidated
-	 * (i.e., {@link com.potix.zk.ui.Session#invalidate} was called).
+	 * (i.e., {@link org.zkoss.zk.ui.Session#invalidate} was called).
 	 */
 	public boolean isInvalidated();
 	/** Really invalidates the session.

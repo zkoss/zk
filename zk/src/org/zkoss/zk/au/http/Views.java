@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au.http;
+package org.zkoss.zk.au.http;
 
 import java.io.Writer;
 import java.io.IOException;
@@ -31,26 +31,26 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
-import com.potix.mesg.Messages;
-import com.potix.lang.D;
-import com.potix.io.Files;
-import com.potix.util.media.Media;
-import com.potix.util.logging.Log;
+import org.zkoss.mesg.Messages;
+import org.zkoss.lang.D;
+import org.zkoss.io.Files;
+import org.zkoss.util.media.Media;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.ComponentNotFoundException;
-import com.potix.zk.ui.util.Configuration;
-import com.potix.zk.ui.ext.Viewable;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.ui.http.ExecutionImpl;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.ext.Viewable;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.http.ExecutionImpl;
 
 /**
  * The utility used to response the content for {@link Viewable#getView}

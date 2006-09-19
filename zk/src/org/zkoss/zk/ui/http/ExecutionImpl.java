@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.http;
+package org.zkoss.zk.ui.http;
 
 import java.util.Map;
 import java.util.Enumeration;
@@ -34,28 +34,28 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.el.RequestResolver;
-import com.potix.el.impl.AttributesMap;
-import com.potix.idom.Document;
-import com.potix.web.servlet.Servlets;
-import com.potix.web.servlet.BufferedResponse;
-import com.potix.web.servlet.http.Encodes;
-import com.potix.web.el.ELContext;
-import com.potix.web.el.PageELContext;
+import org.zkoss.el.RequestResolver;
+import org.zkoss.el.impl.AttributesMap;
+import org.zkoss.idom.Document;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.BufferedResponse;
+import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.el.ELContext;
+import org.zkoss.web.el.PageELContext;
 
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.impl.AbstractExecution;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.metainfo.PageDefinitions;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.RequestInfo;
-import com.potix.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.impl.AbstractExecution;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
- * An {@link com.potix.zk.ui.Execution} implementation for HTTP request
+ * An {@link org.zkoss.zk.ui.Execution} implementation for HTTP request
  * and response.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>

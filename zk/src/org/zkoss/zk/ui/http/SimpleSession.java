@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.http;
+package org.zkoss.zk.ui.http;
 
 import java.util.Map;
 import java.util.Enumeration;
@@ -25,19 +25,19 @@ import java.util.Iterator;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import com.potix.util.logging.Log;
-import com.potix.el.impl.AttributesMap;
+import org.zkoss.util.logging.Log;
+import org.zkoss.el.impl.AttributesMap;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.sys.SessionCtrl;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.DesktopCache;
-import com.potix.zk.ui.util.Monitor;
-import com.potix.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.util.Monitor;
+import org.zkoss.zk.ui.util.Configuration;
 
-/** A non-serializable implementation of {@link com.potix.zk.ui.Session}.
+/** A non-serializable implementation of {@link org.zkoss.zk.ui.Session}.
  * 
  * <p>Note:<br/>
  * Though this class is serializable, it is meaningless to serialize

@@ -16,11 +16,11 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au.impl;
+package org.zkoss.zk.au.impl;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.au.AuRequest;
-import com.potix.zk.au.Command;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the remove command.

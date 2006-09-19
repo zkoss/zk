@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -180,6 +180,6 @@ public class Components {
 	/** Returns whether an ID is generated automatically.
 	 */
 	public static final boolean isAutoId(String id) {
-		return com.potix.zk.ui.sys.ComponentsCtrl.isAutoId(id);
+		return org.zkoss.zk.ui.sys.ComponentsCtrl.isAutoId(id);
 	}
 }

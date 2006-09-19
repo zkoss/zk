@@ -16,10 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Session;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Session;
 
 /**
  * Used to retrieve a desktop cache ({@link DesktopCache}).
@@ -44,13 +44,13 @@ public interface DesktopCacheProvider {
 	/** Notification that the session is about to be passivated
 	 * (aka., serialized).
 	 *
-	 * <p>It is called when {@link com.potix.zk.ui.sys.WebAppCtrl#sessionWillPassivate} is called.
+	 * <p>It is called when {@link org.zkoss.zk.ui.sys.WebAppCtrl#sessionWillPassivate} is called.
 	 */
 	public void sessionWillPassivate(Session sess);
 	/** Notification that the session has just been activated
 	 * (aka., deserialized).
 	 *
-	 * <p>It is called when {@link com.potix.zk.ui.sys.WebAppCtrl#sessionDidActivate} is called.
+	 * <p>It is called when {@link org.zkoss.zk.ui.sys.WebAppCtrl#sessionDidActivate} is called.
 	 */
 	public void sessionDidActivate(Session sess);
 

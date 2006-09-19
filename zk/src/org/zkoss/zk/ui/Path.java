@@ -16,11 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.sys.ComponentsCtrl;
-import com.potix.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 
 /**
  * A representation of a component path.

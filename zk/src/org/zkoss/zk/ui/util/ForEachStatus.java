@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
 /**
  * Represents the runtime information of each iteration caused by

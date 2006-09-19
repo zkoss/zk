@@ -16,28 +16,28 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
-import com.potix.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
- * Used to decorate a {@link com.potix.zk.ui.Component} object that
+ * Used to decorate a {@link org.zkoss.zk.ui.Component} object that
  * it allows users to change its content from the client.
  *
- * <p>{@link com.potix.zk.ui.event.InputEvent} will be sent wih name as "onChange" after
+ * <p>{@link org.zkoss.zk.ui.event.InputEvent} will be sent wih name as "onChange" after
  * {@link #setTextByClient} is called
  * to notify application developers that it is called by user
  * (rather than by codes).
  *
  * <p>For components that implement this interface MIGHT also support
- * {@link com.potix.zk.ui.event.InputEvent} with "onChanging". It is used to notified the server
+ * {@link org.zkoss.zk.ui.event.InputEvent} with "onChanging". It is used to notified the server
  * that user is changing its content (changing is on progress and not finished).
  *
  * <p>The server usually uses onChanging to implement auto-completion and
  * similar feature.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see com.potix.zk.ui.event.InputEvent
+ * @see org.zkoss.zk.ui.event.InputEvent
  */
 public interface Inputable {
 	/** Sets the value in string (aka., text) by the client.

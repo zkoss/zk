@@ -16,14 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.event;
+package org.zkoss.zk.ui.event;
 
-import com.potix.zk.ui.Component;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event caused by a component being moved.
  *
- * <p>A moveable component must implement {@link com.potix.zk.ui.ext.Moveable}.
+ * <p>A moveable component must implement {@link org.zkoss.zk.ui.ext.Moveable}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

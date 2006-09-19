@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -32,34 +32,34 @@ import java.io.Reader;
 import java.io.FileNotFoundException;
 import java.net.URL;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.lang.PotentialDeadLockException;
-import com.potix.util.logging.Log;
-import com.potix.util.resource.Locator;
-import com.potix.idom.Namespace;
-import com.potix.idom.Document;
-import com.potix.idom.Element;
-import com.potix.idom.Text;
-import com.potix.idom.CData;
-import com.potix.idom.Item;
-import com.potix.idom.Attribute;
-import com.potix.idom.ProcessingInstruction;
-import com.potix.idom.util.IDOMs;
-import com.potix.idom.input.SAXBuilder;
-import com.potix.el.Taglib;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.PotentialDeadLockException;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.idom.Namespace;
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.Text;
+import org.zkoss.idom.CData;
+import org.zkoss.idom.Item;
+import org.zkoss.idom.Attribute;
+import org.zkoss.idom.ProcessingInstruction;
+import org.zkoss.idom.util.IDOMs;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.el.Taglib;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.impl.ZScriptInitiator;
-import com.potix.zk.ui.util.Condition;
-import com.potix.zk.ui.util.impl.ConditionImpl;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.RequestInfo;
-import com.potix.zk.ui.sys.UiFactory;
-import com.potix.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.impl.ZScriptInitiator;
+import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.impl.ConditionImpl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
  * Used to prase the ZUL file

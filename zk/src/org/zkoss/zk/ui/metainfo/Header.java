@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
 
-import com.potix.xml.HTMLs;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Executions;
+import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Executions;
 
 /**
  * Represents a header element, such as &lt;link&gt; and &lt;meta&gt;.

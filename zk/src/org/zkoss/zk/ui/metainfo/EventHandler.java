@@ -14,11 +14,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.util.Condition;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.util.Condition;
 
 /**
  * An event handler of an instance definition ({@link InstanceDefinition}).

@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.http;
+package org.zkoss.zk.ui.http;
 
 import javax.servlet.http.HttpSessionEvent;
 

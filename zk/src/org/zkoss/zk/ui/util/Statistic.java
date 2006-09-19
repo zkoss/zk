@@ -16,12 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
 import java.util.List;
 
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Desktop;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Desktop;
 
 /**
  * An implementation of {@link Monitor} to accumulate statistic data

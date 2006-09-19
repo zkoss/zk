@@ -16,14 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util.impl;
+package org.zkoss.zk.ui.util.impl;
 
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.util.Condition;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.util.Condition;
 
 /**
  * An implementation of {@link Condition}.

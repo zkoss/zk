@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
 /**
  * Implemented by a component if it need the {@link #postCreate} callback

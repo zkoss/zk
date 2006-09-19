@@ -16,20 +16,20 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util.impl;
+package org.zkoss.zk.ui.util.impl;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import com.potix.util.CollectionsX;
+import org.zkoss.util.CollectionsX;
 
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.util.ForEach;
-import com.potix.zk.ui.util.ForEachStatus;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.util.ForEach;
+import org.zkoss.zk.ui.util.ForEachStatus;
 
 /**
  * An implementation of {@link ForEach}.

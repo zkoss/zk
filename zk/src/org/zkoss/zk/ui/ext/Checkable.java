@@ -16,18 +16,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
 /**
- * Used to decorate a {@link com.potix.zk.ui.Component} object that
+ * Used to decorate a {@link org.zkoss.zk.ui.Component} object that
  * it allows users to check its state from the client.
  *
- * <p>{@link com.potix.zk.ui.event.CheckEvent} will be sent after {@link #setCheckedByClient}
+ * <p>{@link org.zkoss.zk.ui.event.CheckEvent} will be sent after {@link #setCheckedByClient}
  * is called to notify application developers that it is called by user
  * (rather than by codes).
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see com.potix.zk.ui.event.CheckEvent
+ * @see org.zkoss.zk.ui.event.CheckEvent
  */
 public interface Checkable {
 	/** Checks the state caused by client.

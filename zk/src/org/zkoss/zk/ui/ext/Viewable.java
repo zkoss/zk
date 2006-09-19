@@ -16,23 +16,23 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
-import com.potix.util.media.Media;
-import com.potix.zk.ui.UiException;
+import org.zkoss.util.media.Media;
+import org.zkoss.zk.ui.UiException;
 
 /**
- * Decorate {@link com.potix.zk.ui.Component} to denote a component
+ * Decorate {@link org.zkoss.zk.ui.Component} to denote a component
  * might have viewable parts other than HTML (WML, XAML, or any client language).
  * A typical example is an image and a audio.
  *
  * <h3>How it woks:</h3>
  *
  * <ol>
- * <li>Viewable componet first invoke {@link com.potix.zk.ui.AbstractComponent#getViewURI}
+ * <li>Viewable componet first invoke {@link org.zkoss.zk.ui.AbstractComponent#getViewURI}
  * to retrieve a URI and generate proper HTML (or any client language).<li>
  * <li>Then, client will send a request to the URI</li>
- * <li> {@link com.potix.zk.au.http.DHtmlUpdateServlet} interprets it
+ * <li> {@link org.zkoss.zk.au.http.DHtmlUpdateServlet} interprets it
  * and call {@link #getView} to retrieve the media and return it the client</li>
  * </ol>
  *
@@ -46,9 +46,9 @@ public interface Viewable {
 	 * In other words, READ ONLY.
 	 *
 	 * @param pathInfo the extra info passed to 
-	 * {@link com.potix.zk.au.http.DHtmlUpdateServlet}.
+	 * {@link org.zkoss.zk.au.http.DHtmlUpdateServlet}.
 	 * It is what you passed to
-	 * {@link com.potix.zk.ui.AbstractComponent#getViewURI}.
+	 * {@link org.zkoss.zk.ui.AbstractComponent#getViewURI}.
 	 * It is never null. It must start with "/" or be empty.
 	 */
 	public Media getView(String pathInfo);

@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,34 +26,34 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.potix.lang.Exceptions;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.event.EventThreadInit;
-import com.potix.zk.ui.event.EventThreadCleanup;
-import com.potix.zk.ui.event.EventThreadSuspend;
-import com.potix.zk.ui.event.EventThreadResume;
-import com.potix.zk.ui.util.SessionInit;
-import com.potix.zk.ui.util.SessionCleanup;
-import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.ui.sys.DesktopCacheProvider;
-import com.potix.zk.ui.sys.LocaleProvider;
-import com.potix.zk.ui.sys.TimeZoneProvider;
-import com.potix.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventThreadInit;
+import org.zkoss.zk.ui.event.EventThreadCleanup;
+import org.zkoss.zk.ui.event.EventThreadSuspend;
+import org.zkoss.zk.ui.event.EventThreadResume;
+import org.zkoss.zk.ui.util.SessionInit;
+import org.zkoss.zk.ui.util.SessionCleanup;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.DesktopCacheProvider;
+import org.zkoss.zk.ui.sys.LocaleProvider;
+import org.zkoss.zk.ui.sys.TimeZoneProvider;
+import org.zkoss.zk.ui.sys.UiFactory;
 
 /**
  * The ZK configuration.
  *
  * <p>To retrieve the current configuration, use
- * {@link com.potix.zk.ui.WebApp#getConfiguration}.
+ * {@link org.zkoss.zk.ui.WebApp#getConfiguration}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
@@ -849,14 +849,14 @@ s	 * @param resumes a list of {@link EventThreadResume} instances returned from
 		_monitor = monitor;
 	}
 
-	/** Returns the charset used by {@link com.potix.zk.ui.http.DHtmlLayoutServlet},
+	/** Returns the charset used by {@link org.zkoss.zk.ui.http.DHtmlLayoutServlet},
 	 * or null to use the container's default.
 	 * <p>Default: UTF-8.
 	 */
 	public String getCharset() {
 		return _charset;
 	}
-	/** Sets the charset used by {@link com.potix.zk.ui.http.DHtmlLayoutServlet}.
+	/** Sets the charset used by {@link org.zkoss.zk.ui.http.DHtmlLayoutServlet}.
 	 *
 	 * @param charset the charset to use. If null or empty, the container's default
 	 * is used.

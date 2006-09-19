@@ -16,28 +16,28 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
 import java.util.Iterator;
 import java.net.URL;
 
 import javax.servlet.jsp.el.ExpressionEvaluator;
 
-import com.potix.lang.Classes;
-import com.potix.util.resource.Locator;
-import com.potix.util.logging.Log;
-import com.potix.idom.Element;
-import com.potix.idom.input.SAXBuilder;
-import com.potix.idom.util.IDOMs;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.logging.Log;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.idom.util.IDOMs;
 
-import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.ui.sys.DesktopCacheProvider;
-import com.potix.zk.ui.sys.UiFactory;
-import com.potix.zk.ui.sys.LocaleProvider;
-import com.potix.zk.ui.sys.TimeZoneProvider;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Configuration;
-import com.potix.zk.ui.metainfo.DefinitionLoaders;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.DesktopCacheProvider;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.LocaleProvider;
+import org.zkoss.zk.ui.sys.TimeZoneProvider;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 
 /**
  * Used to parse WEB-INF/zk.xml into {@link Configuration}.
@@ -83,7 +83,7 @@ public class ConfigParser {
 				if (v != null) config.setDesktopMaxInactiveInterval(v);
 
 				v = parseInteger(el, "file-check-period", true);
-				if (v != null) System.setProperty("com.potix.util.resource.checkPeriod", v.toString());
+				if (v != null) System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
 					//System-wide property
 			} else if ("session-config".equals(elnm)) {
 			//session-config
@@ -138,12 +138,12 @@ public class ConfigParser {
 			//el-config
 			//	evaluator-class
 				Class cls = parseClass(el, "evaluator-class", ExpressionEvaluator.class);
-				if (cls != null) System.setProperty("com.potix.el.ExpressionEvaluator.class", cls.getName());
+				if (cls != null) System.setProperty("org.zkoss.el.ExpressionEvaluator.class", cls.getName());
 					//System-wide property; reason: used in zcommon.jar
 			} else if ("log".equals(elnm)) {
 				final String base = el.getElementValue("log-base", true);
 				if (base != null)
-					com.potix.util.logging.LogService.init(base, null); //start the log service
+					org.zkoss.util.logging.LogService.init(base, null); //start the log service
 			} else if ("error-page".equals(elnm)) {
 				final String clsnm =
 					IDOMs.getRequiredElementValue(el, "exception-type");

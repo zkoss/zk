@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
 /**
  * The interpter used to interpret the zscript codes.
@@ -31,13 +31,13 @@ public interface Interpreter {
 	/** Sets a variable that both the interpreter and EL can see it.
 	 * The variable is defined in the scope of this page.
 	 * In other words, it is visible to all components in this page, unless
-	 * it is override by {@link com.potix.zk.ui.Component#setVariable}.
+	 * it is override by {@link org.zkoss.zk.ui.Component#setVariable}.
 	 */
 	public void setVariable(String name, Object val);
 	/** Returns the value of a variable defined in the BSH interpreter.
 	 * The variable is defined in the scope of this page.
 	 * In other words, it is visible to all components in this page, unless
-	 * it is override by {@link com.potix.zk.ui.Component#setVariable}.
+	 * it is override by {@link org.zkoss.zk.ui.Component#setVariable}.
 	 */
 	public Object getVariable(String name);
 	/** Unsets a variable.

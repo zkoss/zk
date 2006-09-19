@@ -16,16 +16,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au.impl;
+package org.zkoss.zk.au.impl;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.event.ClientInfoEvent;
-import com.potix.zk.au.AuRequest;
-import com.potix.zk.au.Command;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.ClientInfoEvent;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.Command;
 
 /**
  * Used by {@link AuRequest} to implement a command to broadcast

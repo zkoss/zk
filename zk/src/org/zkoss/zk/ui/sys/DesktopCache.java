@@ -16,10 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Desktop;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Desktop;
 
 /**
  * The cache used to store desktops.

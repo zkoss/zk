@@ -16,11 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
-import com.potix.lang.SystemException;
-import com.potix.lang.Exceptions;
-import com.potix.lang.Expectable;
+import org.zkoss.lang.SystemException;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Expectable;
 
 /**
  * Represents an UI-relevant runtime exception.

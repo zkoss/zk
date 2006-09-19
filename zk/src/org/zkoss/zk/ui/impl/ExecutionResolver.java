@@ -16,19 +16,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
 import java.util.Collections;
 
 import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ELException;
 
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.sys.ExecutionCtrl;
-import com.potix.zk.ui.sys.Variables;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.Variables;
 
 /**
  * Represents a variable resolver.

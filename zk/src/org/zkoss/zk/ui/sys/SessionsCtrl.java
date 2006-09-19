@@ -16,10 +16,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Sessions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 
 /**
  * An addition interface to {@link Sessions} for implementation.

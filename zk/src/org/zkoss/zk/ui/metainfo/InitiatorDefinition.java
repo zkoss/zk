@@ -16,17 +16,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.util.List;
 
-import com.potix.lang.Classes;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Initiator;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Initiator;
 
 /**
  * A definition of the initiator.

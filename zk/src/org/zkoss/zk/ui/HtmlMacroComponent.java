@@ -16,13 +16,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
 import java.util.Map;
 import java.util.HashMap;
 
-import com.potix.zk.ui.ext.PostCreate;
-import com.potix.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.ext.PostCreate;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
 
 /**
  * The implemetation of a macro component upon HTML.

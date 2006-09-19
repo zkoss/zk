@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au;
+package org.zkoss.zk.au;
 
-import com.potix.zk.ui.Component;
+import org.zkoss.zk.ui.Component;
 
 /**
  * A response to set focus to the specified component at the client.

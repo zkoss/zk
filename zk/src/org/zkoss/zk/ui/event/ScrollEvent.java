@@ -16,16 +16,16 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.event;
+package org.zkoss.zk.ui.event;
 
-import com.potix.zk.ui.Component;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event caused by that user is scrolling or
  * has scrolled at the client.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see com.potix.zk.ui.ext.Scrollable
+ * @see org.zkoss.zk.ui.ext.Scrollable
  */
 public class ScrollEvent extends Event {
 	private final int _pos;

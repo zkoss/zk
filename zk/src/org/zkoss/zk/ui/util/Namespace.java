@@ -16,15 +16,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
 /**
  * To represent the name space for storing variables and functions.
  * There are two ways to declare variables: by zscirpt, or by
- * {@link com.potix.zk.ui.Component#setVariable}/
- * {@link com.potix.zk.ui.Page#setVariable}.
+ * {@link org.zkoss.zk.ui.Component#setVariable}/
+ * {@link org.zkoss.zk.ui.Page#setVariable}.
  *
- * <p>Each ID space ({@link com.potix.zk.ui.IdSpace} has an independent
+ * <p>Each ID space ({@link org.zkoss.zk.ui.IdSpace} has an independent
  * name space to store varaibles and functions.
  * It is a mimic concept of ID space to work with BeanShell (and other
  * interpreter).
@@ -50,7 +50,7 @@ public interface Namespace {
 	 * in any of its ancestor (via {@link #getParent}). If local = false
 	 * and the ancestor is found, the value is stored to the ancestor
 	 * instead of this.
-	 * @exception com.potix.zk.ui.UiException if failed.
+	 * @exception org.zkoss.zk.ui.UiException if failed.
 	 */
 	public void setVariable(String name, Object value, boolean local);
 	/** Unsets a variable from the current ID space.

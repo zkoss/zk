@@ -16,20 +16,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
 /**
- * Used to decorate a {@link com.potix.zk.ui.Component} object that
+ * Used to decorate a {@link org.zkoss.zk.ui.Component} object that
  * users might enter a wrong value.
  *
- * <p>{@link com.potix.zk.ui.event.ErrorEvent} is sent when the client detects users entered
+ * <p>{@link org.zkoss.zk.ui.event.ErrorEvent} is sent when the client detects users entered
  * a wrong value. Note: if the client doesn't detect the error,
  * the value is sent back to the server with regular event, such as
- * {@link com.potix.zk.ui.event.InputEvent}.
+ * {@link org.zkoss.zk.ui.event.InputEvent}.
  *
  * <p>The server must memorize the error until another {@link #setErrorByClient}
  * is called with null message. Then, when getValue() or similar method
- * is called, it shall throw {@link com.potix.zk.ui.WrongValueException}
+ * is called, it shall throw {@link org.zkoss.zk.ui.WrongValueException}
  * with the error message (set by {@link #setErrorByClient}).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
@@ -45,7 +45,7 @@ public interface Errorable {
 	 * If null, it means user at the client cleared the error.
 	 * This happens: user entered a wrong value and corrected by restoring
 	 * the default value. If user restored the error by typing another
-	 * value, a regular event, like {@link com.potix.zk.ui.event.InputEvent}, is sent instead.
+	 * value, a regular event, like {@link org.zkoss.zk.ui.event.InputEvent}, is sent instead.
 	 */
 	public void setErrorByClient(String value, String message);
 }

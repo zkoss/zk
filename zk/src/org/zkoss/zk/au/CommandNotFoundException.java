@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au;
+package org.zkoss.zk.au;
 
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Represents an update-relevant exception.

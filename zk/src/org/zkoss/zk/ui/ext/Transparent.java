@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
 /**
  * To denote a component that might be transparent.
@@ -31,7 +31,7 @@ public interface Transparent {
 	 * in the client.
 	 * In other words, it doesn't generate any element in the client.
 	 * In this case, invalidate this component implies invalidate all
-	 * its children, and {@link com.potix.zk.ui.Component#smartUpdate} is meaningless
+	 * its children, and {@link org.zkoss.zk.ui.Component#smartUpdate} is meaningless
 	 * (and causes exception).
 	 *
 	 * <p>All its children are considered as children of its parent when

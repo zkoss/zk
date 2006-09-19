@@ -16,13 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
 /**
- * Decorates {@link com.potix.zk.ui.Component} to denote that
- * its UUID ({@link com.potix.zk.ui.Component#getUuid} must be
- * the same as {@link com.potix.zk.ui.Component#getId},
- * if com.potix.zk.ui.Component#setId} is ever called.
+ * Decorates {@link org.zkoss.zk.ui.Component} to denote that
+ * its UUID ({@link org.zkoss.zk.ui.Component#getUuid} must be
+ * the same as {@link org.zkoss.zk.ui.Component#getId},
+ * if org.zkoss.zk.ui.Component#setId} is ever called.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

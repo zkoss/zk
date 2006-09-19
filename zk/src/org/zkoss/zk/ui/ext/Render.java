@@ -16,12 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
 import java.util.Set;
 
 /**
- * Used to decorate a {@link com.potix.zk.ui.Component} object that
+ * Used to decorate a {@link org.zkoss.zk.ui.Component} object that
  * it supports render-on-demand. In other words, the component renders
  * its content only the client request for it.
  * A typical example is Listbox (it is similar to JList and ListModel in

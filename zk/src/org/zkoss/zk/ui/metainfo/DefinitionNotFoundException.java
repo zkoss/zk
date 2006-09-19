@@ -16,9 +16,9 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Dentoes a definition cannot be found.

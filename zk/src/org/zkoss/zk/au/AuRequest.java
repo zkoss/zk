@@ -16,27 +16,27 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au;
+package org.zkoss.zk.au;
 
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.ComponentNotFoundException;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.sys.PageCtrl;
-import com.potix.zk.ui.sys.ComponentsCtrl;
-import com.potix.zk.au.impl.*;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.au.impl.*;
 
 /**
- * A request sent from the client to {@link com.potix.zk.ui.sys.UiEngine}.
+ * A request sent from the client to {@link org.zkoss.zk.ui.sys.UiEngine}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

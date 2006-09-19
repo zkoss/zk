@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.io.File;
 import java.io.Reader;
@@ -25,19 +25,19 @@ import java.io.IOException;
 import java.net.URL;
 import javax.servlet.ServletContext;
 
-import com.potix.lang.D;
-import com.potix.util.resource.Locator;
-import com.potix.util.resource.ResourceCache;
-import com.potix.idom.Document;
-import com.potix.web.util.resource.ServletContextLocator;
-import com.potix.web.util.resource.ResourceCaches;
-import com.potix.web.util.resource.ResourceLoader;
+import org.zkoss.lang.D;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.ResourceCache;
+import org.zkoss.idom.Document;
+import org.zkoss.web.util.resource.ServletContextLocator;
+import org.zkoss.web.util.resource.ResourceCaches;
+import org.zkoss.web.util.resource.ResourceLoader;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.metainfo.Parser;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.metainfo.Parser;
 
 /**
  * Utilities to retrieve page definitions.
@@ -45,7 +45,7 @@ import com.potix.zk.ui.metainfo.Parser;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class PageDefinitions {
-	private static final String ATTR_PAGE_CACHE = "com.potix.zk.ui.PageCache";
+	private static final String ATTR_PAGE_CACHE = "org.zkoss.zk.ui.PageCache";
 
 	/** Returns the page definition of the specified raw content; never null.
 	 *
@@ -138,7 +138,7 @@ public class PageDefinitions {
 	 *
 	 * @param path the original path, or null if not available.
 	 * The original path is used to resolve a relative path.
-	 * If not specified, {@link com.potix.zk.ui.Desktop#getCurrentDirectory}
+	 * If not specified, {@link org.zkoss.zk.ui.Desktop#getCurrentDirectory}
 	 * is used.
 	 */
 	public static final Locator getLocator(WebApp wapp, String path) {

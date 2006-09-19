@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
 import java.util.Map;
 import java.util.Collection;
@@ -25,12 +25,12 @@ import java.util.List;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.zk.ui.util.Namespace;
-import com.potix.zk.ui.util.VariableResolver;
-import com.potix.zk.ui.event.EventListener;
-import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.metainfo.ComponentDefinition;
-import com.potix.zk.ui.metainfo.ComponentDefinitionMap;
+import org.zkoss.zk.ui.util.Namespace;
+import org.zkoss.zk.ui.util.VariableResolver;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 
 /**
  * A page. A desktop consists of a set of pages.
@@ -50,7 +50,7 @@ import com.potix.zk.ui.metainfo.ComponentDefinitionMap;
  * <h2>Desktop</h2>
  *
  * <p>In portal and some environments, a client request (e.g., ServletRequest)
- * might consists of several ZK requests ({@link com.potix.zk.au.AuRequest}).
+ * might consists of several ZK requests ({@link org.zkoss.zk.au.AuRequest}).
  * While each ZK request might ask to create an independent page,
  * all these pages are grouped as a desktop, such that they are activated
  * and removed at the same time.
@@ -68,7 +68,7 @@ import com.potix.zk.ui.metainfo.ComponentDefinitionMap;
  * <p>During each execution (${link Execution}), exactly one desktop of
  * pages are locked (aka., activated). Though an execution serves
  * a client request (e.g., ServletRequest), a client request might consist
- * of multiple ZK request ({@link com.potix.zk.au.AuRequest}).
+ * of multiple ZK request ({@link org.zkoss.zk.au.AuRequest}).
  * Each ZK request might target to a different page (of the same desktop).
  *
  * <h2><a name="#inter-page"></a>Inter-page Communication</h2>
@@ -91,7 +91,7 @@ public interface Page extends IdSpace {
 	/** Returns ID which is unique in the request (never null).
 	 *
 	 * <p>Note: it returns null when
-	 * {@link com.potix.zk.ui.util.Initiator#doInit} is called.
+	 * {@link org.zkoss.zk.ui.util.Initiator#doInit} is called.
 	 */
 	public String getId();
 
@@ -108,7 +108,7 @@ public interface Page extends IdSpace {
 	/** Returns the desktop that this page belongs to.
 	 *
 	 * <p>Note: it returns null when
-	 * {@link com.potix.zk.ui.util.Initiator#doInit} is called.
+	 * {@link org.zkoss.zk.ui.util.Initiator#doInit} is called.
 	 */
 	public Desktop getDesktop();
 

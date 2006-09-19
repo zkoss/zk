@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
@@ -36,44 +36,44 @@ import java.io.IOException;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
-import com.potix.lang.Exceptions;
-import com.potix.lang.Expectable;
-import com.potix.util.CollectionsX;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Expectable;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.IdSpace;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.ComponentNotFoundException;
-import com.potix.zk.ui.event.EventListener;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.metainfo.ComponentDefinition;
-import com.potix.zk.ui.metainfo.ComponentDefinitionMap;
-import com.potix.zk.ui.metainfo.DefinitionNotFoundException;
-import com.potix.zk.ui.util.Interpreter;
-import com.potix.zk.ui.util.Namespace;
-import com.potix.zk.ui.util.VariableResolver;
-import com.potix.zk.ui.sys.ExecutionCtrl;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.DesktopCtrl;
-import com.potix.zk.ui.sys.PageCtrl;
-import com.potix.zk.ui.sys.ComponentCtrl;
-import com.potix.zk.ui.sys.ComponentsCtrl;
-import com.potix.zk.ui.sys.Variables;
-import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.ui.impl.bsh.BshInterpreter;
-import com.potix.zk.au.AuSetTitle;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.util.Interpreter;
+import org.zkoss.zk.ui.util.Namespace;
+import org.zkoss.zk.ui.util.VariableResolver;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.Variables;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.impl.bsh.BshInterpreter;
+import org.zkoss.zk.au.AuSetTitle;
 
 /**
  * An implmentation of {@link Page} and {@link PageCtrl}.
@@ -95,7 +95,7 @@ import com.potix.zk.au.AuSetTitle;
  */
 public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);
-	private static final Log _zklog = Log.lookup("com.potix.zk.log");
+	private static final Log _zklog = Log.lookup("org.zkoss.zk.log");
     private static final long serialVersionUID = 20060707L;
 
 	/** URI for redrawing as a desktop or part of another desktop. */

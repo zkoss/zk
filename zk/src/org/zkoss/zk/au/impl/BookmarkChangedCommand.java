@@ -14,17 +14,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.au.impl;
+package org.zkoss.zk.au.impl;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.sys.DesktopCtrl;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.event.BookmarkEvent;
-import com.potix.zk.au.AuRequest;
-import com.potix.zk.au.Command;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.BookmarkEvent;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.Command;
 
 /**
  * Used by {@link AuRequest} to implement a command to broadcast
@@ -35,7 +35,7 @@ import com.potix.zk.au.Command;
 public class BookmarkChangedCommand extends Command {
 	/** Contruct an event to denote that the bookmark is changed.
 	 *
-	 * <p>Note: {@link com.potix.zk.ui.event.Event#getTarget} will return null. It means it is a broadcast
+	 * <p>Note: {@link org.zkoss.zk.ui.event.Event#getTarget} will return null. It means it is a broadcast
 	 * event.
 	 */
 	public BookmarkChangedCommand(String evtnm, int flags) {

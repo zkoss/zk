@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
-import com.potix.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * Represents a component that supports a range of properties.
@@ -38,7 +38,7 @@ public interface DynamicPropertied {
 	/** Sets an attribute with a value.
 	 *
 	 * <p>If a component supports only String-type values, it could
-	 * use com.potix.lang.Objects.toString() to convert the value
+	 * use org.zkoss.lang.Objects.toString() to convert the value
 	 * to a String instance.
 	 */
 	public void setDynamicProperty(String name, Object value)

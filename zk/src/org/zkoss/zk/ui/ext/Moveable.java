@@ -16,15 +16,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
 /**
- * Used to decorate a {@link com.potix.zk.ui.Component} object that
+ * Used to decorate a {@link org.zkoss.zk.ui.Component} object that
  * it is moveable by the client.
  *
  * <p>Once it is moved by the user, {@link #setLeftByClient} and
  * {@link #setTopByClient}
- * are called and {@link com.potix.zk.ui.event.MoveEvent} is sent to notify the component.
+ * are called and {@link org.zkoss.zk.ui.event.MoveEvent} is sent to notify the component.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

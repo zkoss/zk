@@ -16,11 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
 /**
  * Used to denote a collection of elements.
- * Currently, only {@link com.potix.zk.ui.metainfo.InstanceDefinition}
+ * Currently, only {@link org.zkoss.zk.ui.metainfo.InstanceDefinition}
  * uses it to represent the forEach attribute.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>

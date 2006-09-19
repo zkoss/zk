@@ -16,10 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
 /**
- * The name resolver used with {@link com.potix.zk.ui.Page#getVariable}.
+ * The name resolver used with {@link org.zkoss.zk.ui.Page#getVariable}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

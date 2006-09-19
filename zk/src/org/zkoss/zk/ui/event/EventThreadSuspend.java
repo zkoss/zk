@@ -16,10 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.event;
+package org.zkoss.zk.ui.event;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Used to listen when the event processing thread is going to suspend.
@@ -45,7 +45,7 @@ public interface EventThreadSuspend {
 	 * to limit number of suspended thread, they could throw
 	 * {@link UiException} to prevent the event thread from suspending.
 	 *
-	 * @param obj which object that {@link com.potix.zk.ui.Executions#wait}
+	 * @param obj which object that {@link org.zkoss.zk.ui.Executions#wait}
 	 * is called with.
 	 * @exception UiException preventing the thread from suspending.
 	 */

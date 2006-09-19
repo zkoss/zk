@@ -14,11 +14,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
 import java.util.Collection;
 
-import com.potix.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * A queue of {@link AuRequest}.

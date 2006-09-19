@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -34,24 +34,24 @@ import java.util.Arrays;
 import java.io.StringWriter;
 import java.io.IOException;
 
-import com.potix.lang.D;
-import com.potix.lang.Objects;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Components;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.ext.Transparent;
-import com.potix.zk.ui.ext.Cropper;
-import com.potix.zk.ui.ext.ChildChangedAware;
-import com.potix.zk.ui.sys.Visualizer;
-import com.potix.zk.ui.sys.DesktopCtrl;
-import com.potix.zk.ui.sys.PageCtrl;
-import com.potix.zk.ui.sys.ComponentCtrl;
-import com.potix.zk.au.*;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Transparent;
+import org.zkoss.zk.ui.ext.Cropper;
+import org.zkoss.zk.ui.ext.ChildChangedAware;
+import org.zkoss.zk.ui.sys.Visualizer;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.au.*;
 
 /**
  * An implementation of {@link Visualizer} that works with
@@ -92,7 +92,7 @@ import com.potix.zk.au.*;
 	private int _timed;
 	/** if not null, it means the current executing is aborting
 	 * and the content is reason to aborting. Its interpretation depends
-	 * on {@link com.potix.zk.ui.sys.UiEngine}.
+	 * on {@link org.zkoss.zk.ui.sys.UiEngine}.
 	 */
 	private AbortingReason _aborting;
 	/** Whether the first execution (_1stec) is for async-update. */
@@ -890,7 +890,7 @@ import com.potix.zk.au.*;
 	/** Sets the reason to aborting.
 	/** if not null, it means the current execution is aborting
 	 * and the specified argument is the reason to aborting.
-	 * Its interpretation depends on {@link com.potix.zk.ui.sys.UiEngine}.
+	 * Its interpretation depends on {@link org.zkoss.zk.ui.sys.UiEngine}.
 	 *
 	 * <p>Note: if setAbortingReason is ever set with non-null, you
 	 * CANNOT set it back to null.
@@ -904,7 +904,7 @@ import com.potix.zk.au.*;
 	 *
 	 * <p>This method doesn't really abort pending events and requests.
 	 * It just set a flag, {@link #getAbortingReason}, and it is
-	 * {@link com.potix.zk.ui.sys.UiEngine}'s job to detect this flag
+	 * {@link org.zkoss.zk.ui.sys.UiEngine}'s job to detect this flag
 	 * and handling it properly.
 	 */
 	public void setAbortingReason(AbortingReason reason) {

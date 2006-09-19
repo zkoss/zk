@@ -16,23 +16,23 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
 import java.util.Set;
 
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.UiException;
 
 /**
- * Used to decorate a {@link com.potix.zk.ui.Component} object that
+ * Used to decorate a {@link org.zkoss.zk.ui.Component} object that
  * it allows users to change the selection from the client.
  *
- * <p>{@link com.potix.zk.ui.event.SelectEvent} will be sent after {@link #selectItemsByClient}
+ * <p>{@link org.zkoss.zk.ui.event.SelectEvent} will be sent after {@link #selectItemsByClient}
  * is called
  * to notify application developers that it is called by user
  * (rather than by codes).
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see com.potix.zk.ui.event.SelectEvent
+ * @see org.zkoss.zk.ui.event.SelectEvent
  */
 public interface Selectable {
 	/** Set the selection to a set of specified items.

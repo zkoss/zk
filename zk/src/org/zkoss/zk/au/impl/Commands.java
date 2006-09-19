@@ -16,18 +16,18 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au.impl;
+package org.zkoss.zk.au.impl;
 
 import java.util.Set;
 import java.util.LinkedHashSet;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.au.AuRequest;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
 
 /**
- * Utilities to implement {@link com.potix.zk.au.Command}.
+ * Utilities to implement {@link org.zkoss.zk.au.Command}.
  * Used only internally.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>

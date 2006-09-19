@@ -16,10 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au.impl;
+package org.zkoss.zk.au.impl;
 
-import com.potix.zk.au.AuRequest;
-import com.potix.zk.au.Command;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.Command;
 
 /**
  * A dummy command that does nothing but triggers an execution

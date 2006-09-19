@@ -14,15 +14,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.sys.DesktopCache;
-import com.potix.zk.ui.sys.DesktopCacheProvider;
-import com.potix.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.sys.DesktopCacheProvider;
+import org.zkoss.zk.ui.sys.UiFactory;
 
 /**
- * Additional interface of {@link com.potix.zk.ui.WebApp} for implementation.
+ * Additional interface of {@link org.zkoss.zk.ui.WebApp} for implementation.
  * <p>Note: applications shall never access this interface.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>

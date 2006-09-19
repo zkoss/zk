@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -32,23 +32,23 @@ import java.io.IOException;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.lang.D;
-import com.potix.lang.Classes;
-import com.potix.lang.Objects;
-import com.potix.lang.Threads;
-import com.potix.lang.Exceptions;
-import com.potix.lang.Expectable;
-import com.potix.mesg.Messages;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Threads;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Expectable;
+import org.zkoss.mesg.Messages;
+import org.zkoss.util.logging.Log;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.*;
-import com.potix.zk.ui.sys.*;
-import com.potix.zk.ui.event.*;
-import com.potix.zk.ui.metainfo.*;
-import com.potix.zk.ui.ext.PostCreate;
-import com.potix.zk.ui.util.*;
-import com.potix.zk.au.*;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.*;
+import org.zkoss.zk.ui.sys.*;
+import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.metainfo.*;
+import org.zkoss.zk.ui.ext.PostCreate;
+import org.zkoss.zk.ui.util.*;
+import org.zkoss.zk.au.*;
 
 /**
  * An implementation of {@link UiEngine}.
@@ -1068,7 +1068,7 @@ public class UiEngineImpl implements UiEngine {
 	/** Returns a map of (Page, UiVisualizer). */
 	private static Map getVisualizers(Session sess) {
 		synchronized (sess) {
-			final String attr = "com.potix.zk.ui.Visualizers";
+			final String attr = "org.zkoss.zk.ui.Visualizers";
 			Map eis = (Map)sess.getAttribute(attr);
 			if (eis == null)
 				sess.setAttribute(attr, eis = new HashMap());

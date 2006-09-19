@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
 import java.util.List;
 import java.util.Map;
@@ -24,9 +24,9 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
-import com.potix.zk.ui.event.EventListener;
-import com.potix.zk.ui.util.Namespace;
-import com.potix.zk.au.AuResponse;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.util.Namespace;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * A UI component.
@@ -158,12 +158,12 @@ public interface Component extends java.io.Serializable, Cloneable {
 
 	/** Returns UUID (universal unique ID) which is unquie in the whole
 	 * desktop. The UUID is generated automatically and immutable, unless
-	 * {@link com.potix.zk.ui.ext.RawId} is also implemented.
+	 * {@link org.zkoss.zk.ui.ext.RawId} is also implemented.
 	 *
 	 * <p>It is mainly used for communication between client and server
 	 * and you rarely need to access it.
 	 *
-	 * <p>If {@link com.potix.zk.ui.ext.RawId} is implemented as part of
+	 * <p>If {@link org.zkoss.zk.ui.ext.RawId} is implemented as part of
 	 * a component, UUID is the same as {@link #getId} if {@link #setId}
 	 * is ever called. It is designed to migrate HTML pages to ZK, such
 	 * that the element ID could remain the same.
@@ -373,7 +373,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public boolean isVisible();
 	/** Sets whether this component is visible.
-	 * If this component is transaprent ({@link com.potix.zk.ui.ext.Transparent#isTransparent}), no
+	 * If this component is transaprent ({@link org.zkoss.zk.ui.ext.Transparent#isTransparent}), no
 	* {@link #smartUpdate} is caleld, so transparent compoents usually have
 	* to override this method for detail control.
 	 *
@@ -437,13 +437,13 @@ public interface Component extends java.io.Serializable, Cloneable {
 	/** Returns the mold for this component.
 	 * <p>Default: "default"
 	 *
-	 * @see com.potix.zk.ui.metainfo.ComponentDefinition
+	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
 	 */
 	public String getMold();
 	/** Sets the mold for this component.
 	 *
 	 * @param mold the mold. If null or empty, "default" is assumed.
-	 * @see com.potix.zk.ui.metainfo.ComponentDefinition
+	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
 	 */
 	public void setMold(String mold);
 
@@ -601,7 +601,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * developer might choose to invoke this method or not,
 	 * depending whether he wants to
 	 * initializes the component with the properties defined in
-	 * {@link com.potix.zk.ui.metainfo.LanguageDefinition}.
+	 * {@link org.zkoss.zk.ui.metainfo.LanguageDefinition}.
 	 */
 	public void applyProperties();
 

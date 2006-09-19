@@ -16,10 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.event;
+package org.zkoss.zk.ui.event;
 
 import java.util.TimeZone;
-import com.potix.util.TimeZones;
+import org.zkoss.util.TimeZones;
 
 /**
  * The onClientInfo event is used to notify the client's information, such
@@ -29,10 +29,10 @@ import com.potix.util.TimeZones;
  *
  * <p>Note: the information returned by this event is not stored in the server.
  * Thus, you might want to store in the session's attribute
- * ({@link com.potix.zk.ui.Session#setAttribute}).
+ * ({@link org.zkoss.zk.ui.Session#setAttribute}).
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see com.potix.zk.ui.util.Clients
+ * @see org.zkoss.zk.ui.util.Clients
  */
 public class ClientInfoEvent extends Event {
 	private final TimeZone _timeZone;
@@ -103,7 +103,7 @@ public class ClientInfoEvent extends Event {
 	/** The the current horizontal pixel location of the top-left corner of
 	 * the document in the window.
 	 * It is changed by user when he scrolls the browser.
-	 * <p>To change it programmingly, use {@link com.potix.zk.ui.util.Clients#scrollTo}.
+	 * <p>To change it programmingly, use {@link org.zkoss.zk.ui.util.Clients#scrollTo}.
 	 */
 	public int getDesktopXOffset() {
 		return _dtx;
@@ -111,7 +111,7 @@ public class ClientInfoEvent extends Event {
 	/** The the current vertical pixel location of the top-left corner of
 	 * the document in the window.
 	 * It is changed by user when he scrolls the browser.
-	 * <p>To change it programmingly, use {@link com.potix.zk.ui.util.Clients#scrollTo}.
+	 * <p>To change it programmingly, use {@link org.zkoss.zk.ui.util.Clients#scrollTo}.
 	 */
 	public int getDesktopYOffset() {
 		return _dty;

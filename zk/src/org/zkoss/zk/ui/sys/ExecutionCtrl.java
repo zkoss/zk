@@ -16,16 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 /**
- * Additional interface to {@link com.potix.zk.ui.Execution}
+ * Additional interface to {@link org.zkoss.zk.ui.Execution}
  * for implementation.
  *
  * <p>Application developers shall never access any of this methods.
@@ -41,7 +41,7 @@ public interface ExecutionCtrl {
 	 * <p>Design decision: we put it here because user need not to know
 	 * about the conccept of the current page.
 	 *
-	 * @see com.potix.zk.ui.Desktop#getPage
+	 * @see org.zkoss.zk.ui.Desktop#getPage
 	 */
 	public Page getCurrentPage();
 	/** Sets the current page.
@@ -61,7 +61,7 @@ public interface ExecutionCtrl {
 	public void setCurrentPageDefinition(PageDefinition pgdef);
 
 	/** Returns the next event queued by
-	 * {@link com.potix.zk.ui.Execution#postEvent}, or null if no event queued.
+	 * {@link org.zkoss.zk.ui.Execution#postEvent}, or null if no event queued.
 	 */
 	public Event getNextEvent();
 

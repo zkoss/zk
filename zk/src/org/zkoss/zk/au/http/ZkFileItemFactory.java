@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au.http;
+package org.zkoss.zk.au.http;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -28,9 +28,9 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
-import com.potix.util.logging.Log;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.impl.Attributes;
+import org.zkoss.util.logging.Log;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.impl.Attributes;
 
 /**
  * The file item factory that monitors the progress of uploading.

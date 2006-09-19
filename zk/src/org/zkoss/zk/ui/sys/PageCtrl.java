@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
 import java.util.Collection;
 import java.io.Writer;
@@ -24,13 +24,13 @@ import java.io.IOException;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
 
 /**
- * Addition interface to {@link com.potix.zk.ui.Page} for implementation
+ * Addition interface to {@link org.zkoss.zk.ui.Page} for implementation
  * purpose.
  *
  * <p>Application developers shall never access any of this methods.
@@ -98,7 +98,7 @@ public interface PageCtrl {
 
  	/** Returns the default parent, or null if no such parent.
  	 * If a default parent is defined (by use of {@link #setDefaultParent}),
- 	 * {@link com.potix.zk.ui.Executions#createComponents(String, Component, java.util.Map)} will
+ 	 * {@link org.zkoss.zk.ui.Executions#createComponents(String, Component, java.util.Map)} will
  	 * use it as the default parent, if developers didn't specify one.
  	 */
  	public Component getDefaultParent();

@@ -16,20 +16,20 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au.impl;
+package org.zkoss.zk.au.impl;
 
 import java.util.Set;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.event.SelectEvent;
-import com.potix.zk.ui.ext.Selectable;
-import com.potix.zk.au.AuRequest;
-import com.potix.zk.au.Command;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.ext.Selectable;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.Command;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link SelectEvent}

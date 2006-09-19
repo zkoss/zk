@@ -16,20 +16,20 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.util;
+package org.zkoss.zk.ui.util;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Executions;
-import com.potix.zk.au.*;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.au.*;
 
 /**
  * Utilities to send {@link AuResponse} to the client.
  *
  * <p>Utilities here are mainly to control how the client (aka., the browser window)
- * behaves. To get the status, you might refer to {@link com.potix.zk.ui.event.ClientInfoEvent}.
+ * behaves. To get the status, you might refer to {@link org.zkoss.zk.ui.event.ClientInfoEvent}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see com.potix.zk.ui.event.ClientInfoEvent
+ * @see org.zkoss.zk.ui.event.ClientInfoEvent
  */
 public class Clients {
 	/** Closes the error box at the browser belonging to
@@ -64,7 +64,7 @@ public class Clients {
 	 * If the number passed is positive, the desktop is scrolled down.
 	 * If negative, it is scrolled up.
 	 * @see #scrollTo
-	 * @see com.potix.zk.ui.event.ClientInfoEvent
+	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void scrollBy(int x, int y) {
 		addAuResponse(new AuScrollBy(x, y));
@@ -72,7 +72,7 @@ public class Clients {
 	/** Scrolls the current desktop (aka., browser window) to the specified location (in pixels).
 	 *
 	 * @see #scrollBy
-	 * @see com.potix.zk.ui.event.ClientInfoEvent
+	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void scrollTo(int x, int y) {
 		addAuResponse(new AuScrollTo(x, y));
@@ -82,7 +82,7 @@ public class Clients {
 	 * Negative numbers reduce the size of the desktop.
 	 *
 	 * @see #resizeTo
-	 * @see com.potix.zk.ui.event.ClientInfoEvent
+	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void resizeBy(int x, int y) {
 		addAuResponse(new AuResizeBy(x, y));
@@ -90,7 +90,7 @@ public class Clients {
 	/** Resizes the current desktop (aka., browser window) to the specified size (in pixels).
 	 *
 	 * @see #resizeBy
-	 * @see com.potix.zk.ui.event.ClientInfoEvent
+	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void resizeTo(int x, int y) {
 		addAuResponse(new AuResizeTo(x, y));
@@ -99,7 +99,7 @@ public class Clients {
 	 * If the number passed is positive, the desktop is moved down.
 	 * If negative, it is moved up.
 	 * @see #moveTo
-	 * @see com.potix.zk.ui.event.ClientInfoEvent
+	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void moveBy(int x, int y) {
 		addAuResponse(new AuMoveBy(x, y));
@@ -107,7 +107,7 @@ public class Clients {
 	/** Moves the current desktop (aka., browser window) to the specified location (in pixels).
 	 *
 	 * @see #moveBy
-	 * @see com.potix.zk.ui.event.ClientInfoEvent
+	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void moveTo(int x, int y) {
 		addAuResponse(new AuMoveTo(x, y));

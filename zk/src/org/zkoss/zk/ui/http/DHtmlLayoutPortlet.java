@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.http;
+package org.zkoss.zk.ui.http;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -32,30 +32,30 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletPreferences;
 
-import com.potix.lang.D;
-import com.potix.mesg.Messages;
-import com.potix.util.logging.Log;
+import org.zkoss.lang.D;
+import org.zkoss.mesg.Messages;
+import org.zkoss.util.logging.Log;
 
-import com.potix.web.Attributes;
-import com.potix.web.portlet.Portlets;
-import com.potix.web.portlet.PortletHttpSession;
-import com.potix.web.portlet.RenderHttpServletRequest;
-import com.potix.web.portlet.RenderHttpServletResponse;
+import org.zkoss.web.Attributes;
+import org.zkoss.web.portlet.Portlets;
+import org.zkoss.web.portlet.PortletHttpSession;
+import org.zkoss.web.portlet.RenderHttpServletRequest;
+import org.zkoss.web.portlet.RenderHttpServletResponse;
 
-import com.potix.zk.mesg.MZk;
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Execution;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.sys.UiFactory;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.SessionsCtrl;
-import com.potix.zk.ui.sys.RequestInfo;
-import com.potix.zk.ui.impl.RequestInfoImpl;
-import com.potix.zk.ui.metainfo.PageDefinition;
-import com.potix.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
+import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.PageDefinitions;
 
 /**
  * The portlet used to process the request for a ZUML page.

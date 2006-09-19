@@ -16,9 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
-import com.potix.zk.au.AuResponse;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * The aborting reason used with {@link UiVisualizer#setAbortingReason}.

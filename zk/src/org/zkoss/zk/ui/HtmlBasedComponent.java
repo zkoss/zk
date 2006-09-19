@@ -16,21 +16,21 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui;
+package org.zkoss.zk.ui;
 
-import com.potix.lang.Objects;
-import com.potix.lang.Strings;
-import com.potix.util.logging.Log;
-import com.potix.xml.HTMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.logging.Log;
+import org.zkoss.xml.HTMLs;
 
-import com.potix.zk.ui.AbstractComponent;
-import com.potix.zk.ui.event.Event;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.event.EventListener;
-import com.potix.zk.ui.ext.Moveable;
-import com.potix.zk.ui.ext.ZIndexed;
-import com.potix.zk.ui.ext.Transparent;
-import com.potix.zk.au.AuFocus;
+import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.ext.Moveable;
+import org.zkoss.zk.ui.ext.ZIndexed;
+import org.zkoss.zk.ui.ext.Transparent;
+import org.zkoss.zk.au.AuFocus;
 
 /**
  * A skeletal implementation for HTML based components.

@@ -16,12 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.au;
+package org.zkoss.zk.au;
 
 /**
  * A response to ask client to send a dummy request back to the server.
  *
- * <p>It is used by {@link com.potix.zk.ui.sys.UiEngine} to solve a special
+ * <p>It is used by {@link org.zkoss.zk.ui.sys.UiEngine} to solve a special
  * case.
  *
  * <p>data[0]: null (ie., empty for client)

@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -29,20 +29,20 @@ import java.util.Iterator;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
-import com.potix.util.resource.Locator;
-import com.potix.util.logging.Log;
-import com.potix.el.Taglib;
-import com.potix.el.FunctionMappers;
-import com.potix.el.EvaluatorImpl;
-import com.potix.el.ObjectResolver;
-import com.potix.web.servlet.JavaScript;
-import com.potix.web.servlet.StyleSheet;
-import com.potix.web.el.ELContexts;
-import com.potix.web.el.ELContext;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.logging.Log;
+import org.zkoss.el.Taglib;
+import org.zkoss.el.FunctionMappers;
+import org.zkoss.el.EvaluatorImpl;
+import org.zkoss.el.ObjectResolver;
+import org.zkoss.web.servlet.JavaScript;
+import org.zkoss.web.servlet.StyleSheet;
+import org.zkoss.web.el.ELContexts;
+import org.zkoss.web.el.ELContext;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Evaluator;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Evaluator;
 
 /**
  * A definition of a language, such as xul.
@@ -63,7 +63,7 @@ public class LanguageDefinition implements Evaluator {
 	/** The namespace for ZK. It is mainly used to resolve special components
 	 * and attributes, such as zscript and use.
 	 */
-	public static final String ZK_NAMESPACE = "http://www.potix.com/2005/zk";
+	public static final String ZK_NAMESPACE = "http://www.zkoss.org/2005/zk";
 
 	/** name */
 	private final String _name;

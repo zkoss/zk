@@ -14,13 +14,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.impl;
+package org.zkoss.zk.ui.impl;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.sys.SessionCtrl;
-import com.potix.zk.ui.sys.DesktopCache;
-import com.potix.zk.ui.sys.DesktopCacheProvider;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 
 /**
  * A implementation of {@link DesktopCacheProvider} that stores all desktops

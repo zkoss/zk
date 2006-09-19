@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.ext;
+package org.zkoss.zk.ui.ext;
 
 import java.util.Set;
 
@@ -25,7 +25,7 @@ import java.util.Set;
  * Example: only children of the active page of ZUL's grid are available
  * at the client, if it is in the paging mold.
  *
- * <p>{@link com.potix.zk.ui.sys.Visualizer} detects this interface
+ * <p>{@link org.zkoss.zk.ui.sys.Visualizer} detects this interface
  * and then ignores any update to
  * components that don't have counterpart at the client.
  *

@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package com.potix.zk.ui.http;
+package org.zkoss.zk.ui.http;
 
 import java.util.Locale;
 import java.util.TimeZone;
@@ -22,16 +22,16 @@ import java.util.TimeZone;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import com.potix.util.TimeZones;
-import com.potix.util.logging.Log;
-import com.potix.web.Attributes;
-import com.potix.web.servlet.Charsets;
+import org.zkoss.util.TimeZones;
+import org.zkoss.util.logging.Log;
+import org.zkoss.web.Attributes;
+import org.zkoss.web.servlet.Charsets;
 
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.util.Configuration;
-import com.potix.zk.ui.sys.LocaleProvider;
-import com.potix.zk.ui.sys.TimeZoneProvider;
-import com.potix.zk.ui.sys.SessionsCtrl;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.sys.LocaleProvider;
+import org.zkoss.zk.ui.sys.TimeZoneProvider;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
 
 /**
  * Internatization utilities.

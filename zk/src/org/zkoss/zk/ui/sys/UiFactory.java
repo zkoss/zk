@@ -16,18 +16,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.sys;
+package org.zkoss.zk.ui.sys;
 
 import java.io.Reader;
 import java.io.IOException;
 
-import com.potix.idom.Document;
+import org.zkoss.idom.Document;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Page;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 /**
  * Used to create {@link Desktop}, {@link Page} and to convert path/URL
@@ -96,7 +96,7 @@ public interface UiFactory {
 	 * {@link RequestInfo#setLocator} to change the default locator.
 	 *
 	 * <p>Implementation NOTE: DO NOT invoke
-	 * {@link com.potix.zk.ui.Execution#getPageDefinition(String)}.
+	 * {@link org.zkoss.zk.ui.Execution#getPageDefinition(String)}.
 	 * Otherwise, an endless loop occurs.
 	 *
 	 * @param ri the additional request information.
@@ -106,11 +106,11 @@ public interface UiFactory {
 	public PageDefinition getPageDefinition(RequestInfo ri, String path);
 	/** Returns the page definition of the specified content; never null.
 	 *
-	 * <p>It is called when a filter or {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(String, String)}
+	 * <p>It is called when a filter or {@link org.zkoss.zk.ui.Execution#getPageDefinitionDirectly(String, String)}
 	 * is going to generate a page definition for the content it intercepts.
 	 *
 	 * <p>Implementation NOTE: DO NOT invoke
-	 * {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(String, String)}.
+	 * {@link org.zkoss.zk.ui.Execution#getPageDefinitionDirectly(String, String)}.
 	 * Otherwise, an endless loop occurs.
 	 *
 	 * @param content the raw content of the page. It must be in ZUML.
@@ -123,11 +123,11 @@ public interface UiFactory {
 
 	/** Returns the page definition of the specified content; never null.
 	 *
-	 * <p>It is called when {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(Document, String)}
+	 * <p>It is called when {@link org.zkoss.zk.ui.Execution#getPageDefinitionDirectly(Document, String)}
 	 * is going to generate a page definition for the content it intercepts.
 	 *
 	 * <p>Implementation NOTE: DO NOT invoke
-	 * {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(Document, String)}.
+	 * {@link org.zkoss.zk.ui.Execution#getPageDefinitionDirectly(Document, String)}.
 	 * Otherwise, an endless loop occurs.
 	 *
 	 * @param content the raw content of the page in DOM.
@@ -139,11 +139,11 @@ public interface UiFactory {
 	RequestInfo ri, Document content, String extension);
 	/** Returns the page definition of the specified reader; never null.
 	 *
-	 * <p>It is called when {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(Reader, String)}
+	 * <p>It is called when {@link org.zkoss.zk.ui.Execution#getPageDefinitionDirectly(Reader, String)}
 	 * is going to generate a page definition for the content it intercepts.
 	 *
 	 * <p>Implementation NOTE: DO NOT invoke
-	 * {@link com.potix.zk.ui.Execution#getPageDefinitionDirectly(Reader, String)}.
+	 * {@link org.zkoss.zk.ui.Execution#getPageDefinitionDirectly(Reader, String)}.
 	 * Otherwise, an endless loop occurs.
 	 *
 	 * @param reader the reader to retrieve the raw content in ZUML.

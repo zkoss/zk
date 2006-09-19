@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zk.ui.http;
+package org.zkoss.zk.ui.http;
 
 import java.util.Set;
 import java.util.Map;
@@ -34,35 +34,35 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.potix.lang.D;
-import com.potix.util.CollectionsX;
-import com.potix.util.logging.Log;
-import com.potix.util.resource.Labels;
-import com.potix.el.impl.AttributesMap;
+import org.zkoss.lang.D;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.Labels;
+import org.zkoss.el.impl.AttributesMap;
 
-import com.potix.web.util.resource.ServletContextLocator;
-import com.potix.web.util.resource.ServletLabelLocator;
-import com.potix.web.util.resource.ServletLabelResovler;
-import com.potix.web.util.resource.ClassWebResource;
+import org.zkoss.web.util.resource.ServletContextLocator;
+import org.zkoss.web.util.resource.ServletLabelLocator;
+import org.zkoss.web.util.resource.ServletLabelResovler;
+import org.zkoss.web.util.resource.ClassWebResource;
 
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.Desktop;
-import com.potix.zk.ui.Session;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.util.Configuration;
-import com.potix.zk.ui.util.WebAppInit;
-import com.potix.zk.ui.util.WebAppCleanup;
-import com.potix.zk.ui.metainfo.PageDefinitions;
-import com.potix.zk.ui.sys.DesktopCacheProvider;
-import com.potix.zk.ui.sys.UiFactory;
-import com.potix.zk.ui.sys.SessionCtrl;
-import com.potix.zk.ui.sys.WebAppCtrl;
-import com.potix.zk.ui.sys.UiEngine;
-import com.potix.zk.ui.sys.ConfigParser;
-import com.potix.zk.ui.impl.AbstractWebApp;
-import com.potix.zk.ui.impl.RequestInfoImpl;
-import com.potix.zk.ui.impl.SessionDesktopCacheProvider;
-import com.potix.zk.ui.impl.UiEngineImpl;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.WebAppInit;
+import org.zkoss.zk.ui.util.WebAppCleanup;
+import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.sys.DesktopCacheProvider;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.ConfigParser;
+import org.zkoss.zk.ui.impl.AbstractWebApp;
+import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.impl.SessionDesktopCacheProvider;
+import org.zkoss.zk.ui.impl.UiEngineImpl;
 
 /**
  * A bridge bewteen Web server and ZK.
