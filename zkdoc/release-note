@@ -15,6 +15,7 @@ ZK 2.1.1
 
 * Upgrade Notes
   + The package of com.potix is renamed to org.zkoss
+  + The package of com.potix.zul.html is renamed to org.zkoss.zul
   + The namespace of XUL component set is renamed to
 	http://www.zkoss.org/2005/zul
   + Component.invalidate(Range) is removed.
