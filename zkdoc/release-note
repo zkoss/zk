@@ -260,7 +260,7 @@ ZK 1.0.0 RC6
 
 * DHtmlLayoutPortlet is added to work with Portal (JSR168).
 
-* com.potix.zul.html.Space is added to simplify the adding of vertical spacing.
+* org.zkoss.zul.Space is added to simplify the adding of vertical spacing.
 
 * Box, vbox, hbox, separator and space supports the spacing attribute
 	to let developer control the spacing.
