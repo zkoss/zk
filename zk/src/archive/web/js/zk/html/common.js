@@ -330,12 +330,12 @@ zk._focusDown = function (el, match, checkA) {
 };
 /** Focus the element with the specified ID and do it timeout later. */
 zk.focusDownById = function (id, timeout) {
-	var script = "if (!zk.focusDown($('"+id+"'))) window.focus()";
+	var script = "if (!zk.focusDown($e('"+id+"'))) window.focus()";
 	zk._doTwice(script, timeout);
 };
 /** Focus the element without looking down, and do it timeout later. */
 zk.focusById = function (id, timeout) {
-	var script = "zk._focus($('"+id+"'))";
+	var script = "zk._focus($e('"+id+"'))";
 	zk._doTwice(script, timeout);
 };
 zk._focus = function (cmp) {
@@ -344,7 +344,7 @@ zk._focus = function (cmp) {
 };
 /** Select the text of the element, and do it timeout later. */
 zk.selectById = function (id, timeout) {
-	var script = "zk._select($('"+id+"'))";
+	var script = "zk._select($e('"+id+"'))";
 	zk._doTwice(script, timeout);
 };
 zk._select = function (cmp) {
@@ -501,7 +501,7 @@ zk.isAncestor = function(p, c) {
 
 		//To resolve Bug 1486840 (see db.js and cb.js)
 		if (zk.gecko && c.getAttribute) { 
-			var n = $(c.getAttribute("zk_vparent"));
+			var n = $e(c.getAttribute("zk_vparent"));
 			if (n) {
 				c = n;
 				continue;
@@ -1140,7 +1140,7 @@ zk.queryToHiddens = function (frm, qs) {
 
 /** Creates a frame if it is not created yet. */
 zk.newFrame = function (name, src, style) {
-	var frm = $(name);
+	var frm = $e(name);
 	if (frm) return frm;
 
 	if (!src) src = zk.getUpdateURI('/web/img/spacer.gif');
@@ -1150,7 +1150,7 @@ zk.newFrame = function (name, src, style) {
 	if (style) html += ' style="'+style+'"';
 	html += '></iframe>';
 	zk.insertHTMLBeforeEnd(document.body, html);
-	return $(name);
+	return $e(name);
 };
 
 /** Copies the width of each cell from one row to another.

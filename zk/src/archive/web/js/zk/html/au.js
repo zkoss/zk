@@ -143,7 +143,7 @@ zkau._checkProgress = function () {
  * It is mainly used to generate the timeout argument of zkau.send.
  */
 zkau.asapTimeout = function (cmp, evtnm) {
-	cmp = $(cmp);
+	cmp = $e(cmp);
 	return cmp && cmp.getAttribute("zk_" + evtnm) == "true" ? 25: -1;
 };
 
@@ -342,7 +342,7 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 		zk.error(mesg.ILLEGAL_RESPONSE+"uuid is required for "+cmd);
 		return;
 	}
-	var cmp = $(uuid);
+	var cmp = $e(uuid);
 
 	if (zkau.processExt
 	&& zkau.processExt(cmd, uuid, cmp, datanum, dt1, dt2, dt3, dt4))
@@ -577,7 +577,7 @@ zkau.uuidOf = function (n) {
  */
 zkau.getReal = function (cmp) {
 	if (!cmp) return null;
-	var real = $(cmp.id + "!real");
+	var real = $e(cmp.id + "!real");
 	return real ? real: cmp;
 };
 /** Returns the enclosing element (not ends with !real).
@@ -586,7 +586,7 @@ zkau.getReal = function (cmp) {
 zkau.getOuter = function (cmp) {
 	var id = zkau.uuidOf(cmp);
 	if (id) {
-		var n = $(id);
+		var n = $e(id);
 		if (n) return n;
 	}
 	return cmp;
@@ -595,7 +595,7 @@ zkau.getOuter = function (cmp) {
 /** Returns the peer (xxx!real => xxx, xxx => xxx!real), or null if n/a.
  */
 /*zkau.getPeer = function (id) {
-	return id ? $(
+	return id ? $e(
 		id.endsWith("!real") ? id.substring(0, id.length-5): id+"!real"): null;
 };*/
 
@@ -604,7 +604,7 @@ zkau.getOuter = function (cmp) {
  * and the exterior is named with "uuid!chdextr".
  */
 zkau._getChildExterior = function (cmp) {
-	var n = $(cmp.id + "!chdextr");
+	var n = $e(cmp.id + "!chdextr");
 	return n ? n: cmp;
 };
 
@@ -654,7 +654,7 @@ zkau.doPopup = function (cmp) {
 
 	zkau.wndmode[cmp.id] = "popup";
 
-	var caption = $(cmp.id + "!caption");
+	var caption = $e(cmp.id + "!caption");
 	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 
 	zkau.fixZIndex(cmp);
@@ -665,12 +665,12 @@ zkau.doPopup = function (cmp) {
 };
 /** Makes the popup component as normal. */
 zkau.endPopup = function (uuid) {
-	var caption = $(uuid + "!caption");
+	var caption = $e(uuid + "!caption");
 	if (caption && caption.style.cursor == "move") caption.style.cursor = "";
 
 	zkau._popups.remove(uuid);
 	zkau.hideCovered();
-	var cmp = $(uuid);
+	var cmp = $e(uuid);
 	if (cmp) {
 		zkau.wndmode[cmp.id] = null;
 		zkau.disableMoveable(cmp);
@@ -682,7 +682,7 @@ zkau.doOverlapped = function (cmp) {
 
 	zkau.wndmode[cmp.id] = "overlapped";
 
-	var caption = $(cmp.id + "!caption");
+	var caption = $e(cmp.id + "!caption");
 	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 
 	zkau.fixZIndex(cmp);
@@ -693,13 +693,13 @@ zkau.doOverlapped = function (cmp) {
 };
 /** Makes the popup component as normal. */
 zkau.endOverlapped = function (uuid) {
-	var caption = $(uuid + "!caption");
+	var caption = $e(uuid + "!caption");
 	if (caption && caption.style.cursor == "move") caption.style.cursor = "";
 
 	zkau._overlaps.remove(uuid);
 	zkau.hideCovered();
 
-	var cmp = $(uuid);
+	var cmp = $e(uuid);
 	if (cmp) {
 		zkau.wndmode[cmp.id] = null;
 		zkau.disableMoveable(cmp);
@@ -710,7 +710,7 @@ zkau.enableMoveable = function (cmp, starteffect, endeffect) {
 	if (cmp) {
 		zkau.disableMoveable(cmp);
 
-		var handle = $(cmp.id + "!caption");
+		var handle = $e(cmp.id + "!caption");
 		if (handle) {
 			cmp.style.position = "absolute"; //just in case
 			zkau.initMoveable(cmp, {
@@ -953,7 +953,7 @@ zkau._onDocMouseover = function (evt) {
 	}
 	if (zkau._tipz) {
 		if (zkau._tipz.open) {
-			var tip = $(zkau._tipz.tipId);
+			var tip = $e(zkau._tipz.tipId);
 			if (tip && zk.isAncestor(tip, Event.element(evt))) {
 				zkau._tipz.shallClose = false; //don't close it
 			} else {
@@ -979,10 +979,10 @@ zkau._openTip = function (cmpId) {
 	//from one component to another
 	if (zkau._tipz && !zkau._tipz.open
 	 && (!cmpId || cmpId == zkau._tipz.cmpId)) {
-		var tip = $(zkau._tipz.tipId);
+		var tip = $e(zkau._tipz.tipId);
 		zkau.closeFloats(tip);
 		if (tip) {
-			var cmp = $(cmpId);
+			var cmp = $e(cmpId);
 			zkau._tipz.open = true;
 			zkau._autopos(tip, zkau._tipz.x, zkau._tipz.y);
 			zk.eval(tip, "context", null, cmp);
@@ -1109,7 +1109,7 @@ zkau.focusInFloats = function (target) {
 			return true;
 
 	for (var j = 0; j < zkau._popups.length; ++j) {
-		var el = $(zkau._popups[j]);
+		var el = $e(zkau._popups[j]);
 		if (el != null && target != null && zk.isAncestor(el, target))
 			return true;
 	}
@@ -1117,11 +1117,11 @@ zkau.focusInFloats = function (target) {
 };
 
 zkau.close = function (uuid) {
-	el = $(uuid);
+	el = $e(uuid);
 	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
 };
 zkau.hide = function (uuid) {
-	var el = $(uuid);
+	var el = $e(uuid);
 	if (el) el.style.display = "none";
 	zkau.send({uuid: el.id, cmd: "onShow", data: ["false"]},
 		zkau.asapTimeout(el, "onShow"));
@@ -1129,7 +1129,7 @@ zkau.hide = function (uuid) {
 
 /** Closes popups and floats. Return false if nothing changed. */
 zkau.closeFloats = function (owner) {
-	owner = $(owner);
+	owner = $e(owner);
 	var closed, popups = new Array();
 	for (;;) {
 		//reverse order is important if popup contains another
@@ -1137,7 +1137,7 @@ zkau.closeFloats = function (owner) {
 		var uuid = zkau._popups.pop();
 		if (!uuid) break;
 
-		if (zk.isAncestor($(uuid), owner)) {
+		if (zk.isAncestor($e(uuid), owner)) {
 			popups.push(uuid);
 		} else {
 			closed = true;
@@ -1159,7 +1159,7 @@ zkau.hideCovered = function() {
 
 	var ary = new Array();
 	for (var j = 0; j < zkau._popups.length; ++j) {
-		var el = $(zkau._popups[j]);
+		var el = $e(zkau._popups[j]);
 		if (el) ary.push(el);
 	}
 
@@ -1167,7 +1167,7 @@ zkau.hideCovered = function() {
 		zkau.floats[j].addHideCovered(ary);
 
 	for (var j = 0; j < zkau._overlaps.length; ++j) {
-		var el = $(zkau._overlaps[j]);
+		var el = $e(zkau._overlaps[j]);
 		if (el) ary.push(el);
 	}
 	zk.hideCovered(ary);
@@ -1226,7 +1226,7 @@ zkau.getByZid = function (n, zid) {
 		var v = zkau._idsp[n ? n.id: "zk_dksp"];
 		if (v) {
 			v = v[zid];
-			if (v) return $(v);
+			if (v) return $e(v);
 		}
 		if (n) n = n.parentNode;
 	}
@@ -1391,7 +1391,7 @@ zkau._ghostdrag = function (dg, ghosting) {
 				+'px;border:1px dotted black">&nbsp;</div>');
 
 			dg.zk_old = dg.element;
-			dg.element = $("zk_ddghost");
+			dg.element = $e("zk_ddghost");
 		} else if (dg.zk_old) {
 			zk.dragging = false;
 			Element.remove(dg.element);
@@ -1423,7 +1423,7 @@ function action() {}
 action.show = function (id, bShow) {
 	if (bShow == false) action.hide(id);
 	else {
-		var n = $(id);
+		var n = $e(id);
 		if (n) {
 			n.style.display = "";
 			zkau.onVisiAt(n); //callback later
@@ -1437,7 +1437,7 @@ action.show = function (id, bShow) {
 action.hide = function (id, bHide) {
 	if (bHide == false) action.show(id);
 	else {
-		var n = $(id);
+		var n = $e(id);
 		if (n) {
 			zkau.onHideAt(n); //callback first
 			n.style.display = "none";
@@ -1451,7 +1451,7 @@ action.hide = function (id, bHide) {
 action.slideDown = function (id, down) {
 	if (down == false) action.slideUp(id);
 	else {
-		var n = $(id);
+		var n = $e(id);
 		if (n && (!n.getAttribute || !n.getAttribute("zk_visible"))) {
 			if (n.setAttribute) n.setAttribute("zk_visible", "showing");
 			Effect.SlideDown(n, {duration:0.4, afterFinish: action._afterDown});
@@ -1472,7 +1472,7 @@ action._afterDown = function (ef) {
 action.slideUp = function (id, up) {
 	if (up == false) action.slideDown(id);
 	else {
-		var n = $(id);
+		var n = $e(id);
 		if (n && (!n.getAttribute || !n.getAttribute("zk_visible"))) {
 			if (n.setAttribute) n.setAttribute("zk_visible", "hiding");
 			zkau.onHideAt(n); //callback first
@@ -1500,7 +1500,7 @@ zk.Float.prototype = {
 		if (el != null && this._popupId != null) {
 			if (zkau.uuidOf(el) == uuid)
 				return true;
-			var popup = $(this._popupId);
+			var popup = $e(this._popupId);
 			return popup && zk.isAncestor(popup, el);
 		}
 		return false;
@@ -1508,7 +1508,7 @@ zk.Float.prototype = {
 	/** Closes (hides) all menus. */
 	closeFloats: function() {
 		if (this._popupId) {
-			var el = $(this._popupId);
+			var el = $e(this._popupId);
 			if (el) this._close(el);
 			return true;
 		}
@@ -1518,7 +1518,7 @@ zk.Float.prototype = {
 	 */
 	addHideCovered: function (ary) {
 		if (this._popupId) {
-			var el = $(this._popupId);
+			var el = $e(this._popupId);
 			if (el) ary.push(el);
 		}
 	}
@@ -1562,7 +1562,7 @@ if (zk.ie /*|| zk.safari*/) {
 		var url = zk.getUpdateURI("/web/js/zk/html/history.html", true);
 		if (nm) url += '?' +encodeURIComponent(nm);
 
-		var ifr = $('zk_histy');
+		var ifr = $e('zk_histy');
 		if (ifr) {
 			ifr.src = url;
 		} else {
@@ -1591,14 +1591,14 @@ zkau.beginUpload = function () {
 zkau.updateUploadInfo = function (p, cb) {
 	if (cb <= 0) zkau.endUpload();
 	else if (zkau._tmupload) {
-		var img = $("zk_upload!img");
+		var img = $e("zk_upload!img");
 		if (!img) {
 			var html = '<div id="zk_upload" style="position:absolute;border:1px solid #77a;padding:9px;background-color:#fec;z-index:79000">'
 				+'<div style="width:102px;border:1px inset"><img id="zk_upload!img" src="'+zk.getUpdateURI('/web/zk/img/prgmeter.gif')
 				+'"/></div><br/>'+mesg.FILE_SIZE+Math.round(cb/1024)+mesg.KBYTES+'</div>';
 			document.body.insertAdjacentHTML("afterbegin", html);
-			zk.center($("zk_upload"));
-			img = $("zk_upload!img");
+			zk.center($e("zk_upload"));
+			img = $e("zk_upload!img");
 		}
 		if (p >= 0 && p <= 100) {
 			img.style.height = "10px"; //avoid being scaled when setting width
@@ -1607,7 +1607,7 @@ zkau.updateUploadInfo = function (p, cb) {
 	}
 };
 zkau.endUpload = function () {
-	var div = $("zk_upload");
+	var div = $e("zk_upload");
 	if (div) Element.remove(div);
 	if (zkau._tmupload) {
 		clearInterval(zkau._tmupload);
@@ -1626,7 +1626,7 @@ zkau.cmd0 = { //no uuid at all
 		zk.error(dt1);
 	},
 	alert: function (dt0, dt1) {
-		var cmp = dt0 ? $(dt0): null;
+		var cmp = dt0 ? $e(dt0): null;
 		if (cmp) {
 			cmp = zkau.getReal(cmp); //refer to INPUT (e.g., datebox)
 			if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
@@ -1745,7 +1745,7 @@ zkau.cmd1 = {
 		zk.eval(cmp, "beforeOuter");
 		zk.cleanupAt(cmp, zkau.cleanupMeta);
 		zk.setOuterHTML(cmp, dt1);
-		cmp = $(uuid);
+		cmp = $e(uuid);
 		zk.initAt(cmp);
 		zk.eval(cmp, "afterOuter");
 		if (zkau.valid) zkau.valid.fixerrboxes();
@@ -1782,17 +1782,17 @@ zkau.cmd1 = {
 		//if (zk.eval(cmp, "addFirstChild", dt1))
 		//	return;
 
-		var n = $(uuid + "!cave");
+		var n = $e(uuid + "!cave");
 		if (!n) {
 			n = cmp.getAttribute("zk_cave");
-			if (n) n = $(n);
+			if (n) n = $e(n);
 		}
 		if (n) { //as last child of n
 			zkau._insertAndInitBeforeEnd(n, dt1);
 			return;
 		}
 
-		n = $(uuid + "!child");
+		n = $e(uuid + "!child");
 		if (n) { //as previous sibling of n
 			var to = n.previousSibling;
 			zk.insertHTMLBefore(n, dt1);

@@ -276,6 +276,13 @@ zk.eval = function (n, fn, type, a0, a1, a2) {
 	return false;
 };
 
+/** Note: it is easy to cause problem with EMBED, if we use prototype's $() since
+ * it tried to extend the element.
+ */
+function $e(id) {
+    return typeof id == 'string' ? document.getElementById(id): id;
+};
+
 /** Check zk_type and invoke zkxxx.cleanup if declared.
  * @param cufn an optional function. If specified,
  * cufn.apply(n, new Array(n)) is called
