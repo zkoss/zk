@@ -16,11 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zhtml;
+package org.zkoss.zhtml;
 
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.ext.Inputable;
-import com.potix.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ext.Inputable;
+import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
  * The input tag.

@@ -16,11 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zhtml;
+package org.zkoss.zhtml;
 
-import com.potix.mesg.Messages;
-import com.potix.zk.ui.WebApp;
-import com.potix.zk.ui.UiException;
+import org.zkoss.mesg.Messages;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Represents the message box.

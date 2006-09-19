@@ -16,12 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zhtml;
+package org.zkoss.zhtml;
 
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.ext.DynamicTag;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ext.DynamicTag;
 
-import com.potix.zhtml.impl.AbstractTag;
+import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
  * The raw component used to generate raw HTML elements.

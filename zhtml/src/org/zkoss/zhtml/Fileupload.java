@@ -16,11 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zhtml;
+package org.zkoss.zhtml;
 
-import com.potix.util.media.Media;
+import org.zkoss.util.media.Media;
 
-import com.potix.zk.ui.UiException;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * A fileupload dialog used to let user upload a file.

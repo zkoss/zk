@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zhtml.impl;
+package org.zkoss.zhtml.impl;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -24,18 +24,18 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 
-import com.potix.lang.Objects;
-import com.potix.xml.XMLs;
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.XMLs;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Components;
-import com.potix.zk.ui.AbstractComponent;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.event.Events;
-import com.potix.zk.ui.event.EventListener;
-import com.potix.zk.ui.ext.DynamicPropertied;
-import com.potix.zk.ui.ext.RawId;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.ext.RawId;
 
 /**
  * The raw component used to generate raw HTML elements.
@@ -124,7 +124,7 @@ implements DynamicPropertied, RawId {
 
 	/** Whether to hide the id attribute.
 	 * <p>Default: false.
-	 * <p>Some tags, such as {@link com.potix.zhtml.Html}, won't generate the id attribute.
+	 * <p>Some tags, such as {@link org.zkoss.zhtml.Html}, won't generate the id attribute.
 	 * They will override this method to return true.
 	 */
 	protected boolean shallHideId() {

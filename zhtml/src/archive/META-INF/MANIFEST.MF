@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Specification-Title: Potix ZK HTML Components
 Specification-Version: 1.0
 Specification-Vendor: Potix Corporation
-Implementation-Title: com.potix.zhtml
-Implementation-URL: http://www.potix.com/zhtml
+Implementation-Title: org.zkoss.zhtml
+Implementation-URL: http://www.zkoss.org/zhtml
 Implementation-Version: 1.0
 Implementation-Vendor: Potix Corporation

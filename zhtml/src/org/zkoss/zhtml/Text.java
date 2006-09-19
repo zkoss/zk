@@ -16,21 +16,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package com.potix.zhtml;
+package org.zkoss.zhtml;
 
 import java.io.Writer;
 import java.io.IOException;
 
-import com.potix.lang.Objects;
+import org.zkoss.lang.Objects;
 
-import com.potix.zk.ui.Component;
-import com.potix.zk.ui.Components;
-import com.potix.zk.ui.AbstractComponent;
-import com.potix.zk.ui.UiException;
-import com.potix.zk.ui.WrongValueException;
-import com.potix.zk.ui.ext.RawId;
-import com.potix.zk.ui.metainfo.LanguageDefinition;
-import com.potix.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ext.RawId;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * Represents a piece of text (of DOM).
