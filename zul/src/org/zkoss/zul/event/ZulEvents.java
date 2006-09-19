@@ -1,4 +1,4 @@
-/* Events.java
+/* ZulEvents.java
 
 {{IS_NOTE
 	Purpose:
@@ -21,8 +21,8 @@ package org.zkoss.zul.event;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Events extends org.zkoss.zk.ui.event.Events {
-	protected Events() {} //prevent from creation
+public class ZulEvents {
+	private ZulEvents() {} //prevent from creation
 
 	/** The onPaging event used with {@link PagingEvent}.
 	 */

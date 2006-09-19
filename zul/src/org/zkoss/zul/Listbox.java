@@ -47,12 +47,13 @@ import org.zkoss.zk.ui.ext.ChildChangedAware;
 import org.zkoss.zk.ui.ext.Cropper;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.event.Events;
+import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.event.PagingEvent;
 
 /**
@@ -700,11 +701,11 @@ ChildChangedAware, Cropper {
 							Listbox.this, evt.getPaginal(), evt.getActivePage()));
 				}
 			};
-		pgi.addEventListener(Events.ON_PAGING, _pgListener);
+		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 	}
 	/** Removes the event listener for the onPaging event. */
 	private void removePagingListener(Paginal pgi) {
-		pgi.removeEventListener(Events.ON_PAGING, _pgListener);
+		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
 	}
 
 	/** Called when the onPaging event is received (from {@link #getPaginal}).

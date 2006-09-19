@@ -19,9 +19,10 @@ package org.zkoss.zul;
 import org.zkoss.mesg.Messages;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.au.Command;
+import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.mesg.MZul;
-import org.zkoss.zul.event.Events;
+import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
@@ -80,7 +81,7 @@ public class Paging extends XulElement implements Paginal {
 		if (_pgsz != size) {
 			_pgsz = size;
 			updatePageNum();
-			Events.postEvent(new PagingEvent(Events.ON_PAGING, this, _actpg));
+			Events.postEvent(new PagingEvent(ZulEvents.ON_PAGING, this, _actpg));
 		}
 	}
 	public int getTotalSize() {
