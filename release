@@ -85,7 +85,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$prjnm/doc
 	mkdir -p /tmp/zk/$prjnm/demo/bin
 	mkdir -p /tmp/zk/$prjnm/demo/src/zkdemo/WebContent
-	mkdir -p /tmp/zk/$prjnm/demo/src/zkdemo/src/com
+	mkdir -p /tmp/zk/$prjnm/demo/src/zkdemo/src/org
 	mkdir -p /tmp/zk/$prjnm/demo/src/MyApp/WebContent
 
 	cd $HOME/prj/zk1
@@ -100,7 +100,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp zkdoc/ZK-dev*.pdf zkdoc/ZK-quickstart.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$prjnm/doc
 
 	cp -rp zkdemo/src/archive/* /tmp/zk/$prjnm/demo/src/zkdemo/WebContent
-	cp -rp zkdemo/src/com/* /tmp/zk/$prjnm/demo/src/zkdemo/src/com
+	cp -rp zkdemo/src/org/* /tmp/zk/$prjnm/demo/src/zkdemo/src/org
 	cp -rp MyApp/src/archive/* /tmp/zk/$prjnm/demo/src/MyApp/WebContent
 
 	cp -rp dist/lib/zkdemos.ear dist/lib/zkdemo.war /tmp/zk/$prjnm/demo/bin
