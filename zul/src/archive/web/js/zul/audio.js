@@ -53,12 +53,9 @@ zkAudio.pause = function (id) {
 	}
 };
 
-zkAudio.cleanup = function (id) {
-	var cmp = $e(id);
-	if (cmp) {
-		try { //Note: we cannot do "if (cmp.stop)" in IE
-			cmp.stop();
-		} catch (e) { //silent
-		}
+zkAudio.cleanup = function (cmp) {
+	try { //Note: we cannot do "if (cmp.stop)" in IE
+		cmp.stop();
+	} catch (e) { //silent
 	}
 };
