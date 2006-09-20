@@ -37,7 +37,7 @@ public class Html extends XulElement {
 
 	public Html() {
 	}
-	public Html(String context) {
+	public Html(String content) {
 		setContent(content);
 	}
 

@@ -21,7 +21,7 @@ zk.load("zul.widget");
 function zkCmbox() {}
 
 zkCmbox.init = function (cmp) {
-	var inp = zkau.getReal(cmp);
+	var inp = $real(cmp);
 	zkTxbox.init(inp);
 	Event.observe(inp, zk.ie ? "keydown": "keypress",
 		function (evt) {return zkCmbox.onkey(evt);});
@@ -53,38 +53,38 @@ zkCmbox.setAttr = function (cmp, nm, val) {
 		}
 		return true;
 	} else if ("style" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) zkau.setAttr(inp, nm, zk.getTextStyle(val, true, true));
 	} else if ("style.width" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) {
 			inp.style.width = val;
 			return true;
 		}
 	} else if ("style.height" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) {
 			inp.style.height = val;
 			return true;
 		}
 	} else if (zkCmbox._inflds.contains(nm)) {
-		cmp = zkau.getReal(cmp);
+		cmp = $real(cmp);
 	}
 	zkau.setAttr(cmp, nm, val);
 	return true;
 };
 zkCmbox.rmAttr = function (cmp, nm) {
 	if ("style" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) zkau.rmAttr(inp, nm);
 	} else if ("style.width" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) inp.style.width = "";
 	} else if ("style.height" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) inp.style.height = "";
 	} else if (zkCmbox._inflds.contains(nm))
-		cmp = zkau.getReal(cmp);
+		cmp = $real(cmp);
 	zkau.rmAttr(cmp, nm);
 	return true;
 };
@@ -104,7 +104,7 @@ zkCmbox.ondown = function (evt) {
 	if (evt.keyCode == 9) { //TAB; IE: close now so to show covered SELECT
 		var inp = Event.element(evt);
 		if (inp) {
-			var uuid = zkau.uuidOf(inp.id);
+			var uuid = $uuid(inp.id);
 			var pp = $e(uuid + "!pp");
 			if (pp && pp.style.display != "none") zkCmbox.close(pp);
 		}
@@ -115,7 +115,7 @@ zkCmbox.onkey = function (evt) {
 	var inp = Event.element(evt);
 	if (!inp) return true;
 
-	var uuid = zkau.uuidOf(inp.id);
+	var uuid = $uuid(inp.id);
 	var cb = $e(uuid);
 	var pp = $e(uuid + "!pp");
 	if (!pp) return true;
@@ -222,7 +222,7 @@ zkCmbox.open = function (pp, hilite) {
 	zkau.closeFloats(pp); //including popups
 	zkCmbox._pop._popupId = pp.id;
 
-	var uuid = zkau.uuidOf(pp.id);
+	var uuid = $uuid(pp.id);
 	var cb = $e(uuid);
 	if (!cb) return;
 
@@ -319,7 +319,7 @@ zkCmbox._selback = function (item) {
 /** Returns the input by specifying an item. */
 zkCmbox.getInputByItem = function (item) {
 	//we cannot use getParentByType because parentNode is changed in gecko
-	var uuid = zkau.uuidOf(item.parentNode);
+	var uuid = $uuid(item.parentNode);
 	if (!uuid) return null;
 
 	var inpId = uuid + "!real";
@@ -412,7 +412,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 
 zkCmbox.close = function (pp, focus) {
 	pp = $e(pp);
-	var uuid = zkau.uuidOf(pp.id);
+	var uuid = $uuid(pp.id);
 	if (zk.gecko) {
 		$e(uuid).appendChild(pp); //Bug 1486840
 		pp.removeAttribute("zk_vparent");

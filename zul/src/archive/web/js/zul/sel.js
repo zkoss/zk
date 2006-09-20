@@ -971,7 +971,7 @@ zkSel.onout = function (el) {
 };
 /** (!cm or !sel)'s onfocus. */
 zkSel.cmonfocus = function (el) {
-	var row = $e(zkau.uuidOf(el.id));
+	var row = $e($uuid(el.id));
 	if (row) 
 		if (!zk.gecko) row.style.textDecoration = "underline";
 		else if (row.cells.length) row.cells[0].style.textDecoration = "underline";
@@ -979,7 +979,7 @@ zkSel.cmonfocus = function (el) {
 };
 /** (!cm or !sel)'s onblur. */
 zkSel.cmonblur = function (el) {
-	var row = $e(zkau.uuidOf(el.id));
+	var row = $e($uuid(el.id));
 	if (row) 
 		if (!zk.gecko) row.style.textDecoration = "";
 		else if (row.cells.length) row.cells[0].style.textDecoration = "";
@@ -1093,7 +1093,7 @@ zkLisel.onchange = function (target) {
 		var opt = target.options[target.selectedIndex];
 		data = opt.id;
 	}
-	var uuid = zkau.uuidOf(target);
+	var uuid = $uuid(target);
 	zkau.send({uuid: uuid, cmd: "onSelect", data: [data]},
 			zkau.asapTimeout(uuid, "onSelect"));
 };

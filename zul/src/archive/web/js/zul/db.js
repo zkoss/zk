@@ -277,32 +277,32 @@ zkCal.setAttr = function (cmp, nm, val) {
 };
 
 zkCal.onyearofs = function (evt, ofs) {
-	var meta = zkau.getMeta(zkau.uuidOf(Event.element(evt)));
+	var meta = zkau.getMeta($uuid(Event.element(evt)));
 	if (meta) meta._onyearofs(ofs);
 };
 zkCal.onmonofs = function (evt, ofs) {
-	var meta = zkau.getMeta(zkau.uuidOf(Event.element(evt)));
+	var meta = zkau.getMeta($uuid(Event.element(evt)));
 	if (meta) meta._onmonofs(ofs);
 };
 zkCal.onmonclk = function (evt) {
 	var el = Event.element(evt);
-	var meta = zkau.getMeta(zkau.uuidOf(el));
+	var meta = zkau.getMeta($uuid(el));
 	if (meta) meta._onmonclk(el);
 };
 zkCal.ondayclk = function (evt) {
 	var el = Event.element(evt);
 	if (zk.tagName(el) == "A") el = el.parentNode;
-	var meta = zkau.getMeta(zkau.uuidOf(el));
+	var meta = zkau.getMeta($uuid(el));
 	if (meta) meta._ondayclk(el);
 };
 zkCal.onup = function (evt) {
-	var meta = zkau.getMeta(zkau.uuidOf(Event.element(evt)));
+	var meta = zkau.getMeta($uuid(Event.element(evt)));
 	if (meta && meta._changed) meta.onchange(); //delay onchange here to avoid too many reqs
 	return true;
 };
 zkCal.onkey = function (evt) {
 	if (!evt.altKey && evt.keyCode >= 37 && evt.keyCode <= 40) {
-		var meta = zkau.getMeta(zkau.uuidOf(Event.element(evt)));
+		var meta = zkau.getMeta($uuid(Event.element(evt)));
 		if (meta) {
 			ofs = evt.keyCode == 37 ? -1: evt.keyCode == 39 ? 1:
 				evt.keyCode == 38 ? -7: 7;
@@ -318,7 +318,7 @@ zkCal.onkey = function (evt) {
 };
 zkCal.onblur = function (evt) {
 	//onup is not called if onblur happens first
-	var meta = zkau.getMeta(zkau.uuidOf(Event.element(evt)));
+	var meta = zkau.getMeta($uuid(Event.element(evt)));
 	if (meta && meta._changed) meta.onchange();
 };
 
@@ -333,7 +333,7 @@ zkCal.onout = function (evt) {
 function zkDtbox() {}
 
 zkDtbox.init = function (cmp) {
-	var real = zkau.getReal(cmp);
+	var real = $real(cmp);
 	zkTxbox.init(real);
 	Event.observe(real, zk.ie ? "keydown": "keypress",
 		function (evt) {return zkDtbox.onkey(evt);});
@@ -361,45 +361,45 @@ zkDtbox.setAttr = function (cmp, nm, val) {
 	if ("zk_fmt" == nm) {
 		zkau.setAttr(cmp, nm, val);
 
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) {
 			var d = zk.parseDate(inp.value, val);
 			if (d) inp.value = zk.formatDate(d, val);
 		}
 		return true;
 	} else if ("style" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) zkau.setAttr(inp, nm, zk.getTextStyle(val, true, true));
 	} else if ("style.width" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) {
 			inp.style.width = val;
 			return true;
 		}
 	} else if ("style.height" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) {
 			inp.style.height = val;
 			return true;
 		}
 	} else if (zkDtbox._inflds.contains(nm)) {
-		cmp = zkau.getReal(cmp);
+		cmp = $real(cmp);
 	}
 	zkau.setAttr(cmp, nm, val);
 	return true;
 };
 zkDtbox.rmAttr = function (cmp, nm) {
 	if ("style" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) zkau.rmAttr(inp, nm);
 	} else if ("style.width" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) inp.style.width = "";
 	} else if ("style.height" == nm) {
-		var inp = zkau.getReal(cmp);
+		var inp = $real(cmp);
 		if (inp) inp.style.height = "";
 	} else if (zkDtbox._inflds.contains(nm))
-		cmp = zkau.getReal(cmp);
+		cmp = $real(cmp);
 	zkau.rmAttr(cmp, nm);
 	return true;
 };
@@ -411,7 +411,7 @@ zkDtbox.onkey = function (evt) {
 	var inp = Event.element(evt);
 	if (!inp) return true;
 
-	var uuid = zkau.uuidOf(inp.id);
+	var uuid = $uuid(inp.id);
 	var pp = $e(uuid + "!pp");
 	if (!pp) return true;
 
@@ -479,7 +479,7 @@ zkDtbox.open = function (pp) {
 	zkau.closeFloats(pp); //including popups
 	zkau._dtbox._popupId = pp.id;
 
-	var uuid = zkau.uuidOf(pp.id);
+	var uuid = $uuid(pp.id);
 	var cb = $e(uuid);
 	if (!cb) return;
 
@@ -535,7 +535,7 @@ zkDtbox._repos = function (uuid) {
 };
 
 zkDtbox.close = function (pp, focus) {
-	var uuid = zkau.uuidOf(pp.id);
+	var uuid = $uuid(pp.id);
 	if (zk.gecko) {
 		$e(uuid).appendChild(pp); //Bug 1486840
 		pp.removeAttribute("zk_vparent");

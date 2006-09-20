@@ -86,7 +86,7 @@ if (!zkMenu._pop)
 // menu //
 zkMenu.onover = function (evt) {
 	if (!evt) evt = window.event;
-	var cmp = zkau.getOuter(Event.element(evt));
+	var cmp = $outer(Event.element(evt));
 
 	var menubar = zkau.getParentByType(cmp, "Menubar");
 	var autodrop = !menubar || menubar.getAttribute("zk_autodrop") == "true";
@@ -109,7 +109,7 @@ zkMenu.onout = function (evt) {
 	if (zkMenu._pop.getPopupIds().length == 0) return; //nothing to do
 
 	if (!evt) evt = window.event;
-	var cmp = zkau.getOuter(Event.element(evt));
+	var cmp = $outer(Event.element(evt));
 
 	var menubar = zkau.getParentByType(cmp, "Menubar");
 	if (menubar && menubar.getAttribute("zk_autodrop") == "true") {
@@ -119,7 +119,7 @@ zkMenu.onout = function (evt) {
 };
 zkMenu.onclick = function (evt) {
 	if (!evt) evt = window.event;
-	var cmp = zkau.getOuter(Event.element(evt));
+	var cmp = $outer(Event.element(evt));
 	var type = zk.getCompType(cmp);
 	if ("Menu" == type) //note: Menuit also go thru this method
 		zkMenu.open(cmp, cmp.getAttribute("zk_top") == "true");
@@ -245,7 +245,7 @@ zkMenuit.onclick = function (evt) {
 	zkau.closeFloats(cmp);//including popups if visible
 	var anc = $e(cmp.id + "!a");
 	if ("javascript:;" == anc.href) {
-		var cmp = zkau.getOuter(anc);
+		var cmp = $outer(anc);
 		var uuid = cmp.id;
 		if (cmp.getAttribute("zk_autock")) {
 			var newval = cmp.getAttribute("zk_checked") != "true";

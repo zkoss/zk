@@ -49,7 +49,7 @@ zkTxbox.updateChange = function (inp, noonblur) {
 		if (msg) {
 			zkVld.errbox(inp.id, msg);
 			inp.setAttribute("zk_err", "true");
-			zkau.send({uuid: zkau.uuidOf(inp), cmd: "onError",
+			zkau.send({uuid: $uuid(inp), cmd: "onError",
 				data: [inp.value, msg]}, -1);
 			return false; //failed
 		}
@@ -104,12 +104,12 @@ zkTxbox.onupdate = function (inp) {
 	var newval = inp.value;
 	if (newval != inp.defaultValue) { //changed
 		inp.defaultValue = newval;
-		var uuid = zkau.uuidOf(inp);
+		var uuid = $uuid(inp);
 		zkau.send({uuid: uuid, cmd: "onChange",
 			data: [newval]}, zkau.asapTimeout(uuid, "onChange"));
 	} else if (inp.getAttribute("zk_err")) {
 		inp.removeAttribute("zk_err");
-		zkau.send({uuid: zkau.uuidOf(inp), cmd: "onError",
+		zkau.send({uuid: $uuid(inp), cmd: "onError",
 			data: [newval, null]}, -1); //clear error (even if not changed)
 	}
 };
@@ -117,7 +117,7 @@ zkTxbox.onfocus = function (inp) {
 	zkau.onfocus(inp);
 
 	//handling onChanging
-	if (inp && inp.id && zkau.getOuter(inp).getAttribute("zk_onChanging")) {
+	if (inp && inp.id && $outer(inp).getAttribute("zk_onChanging")) {
 		inp.setAttribute("zk_last_changing", inp.value);
 		zkau._intervals[inp.id] =
 			setInterval("zkTxbox._scanChanging('"+inp.id+"')", 500);
@@ -126,10 +126,10 @@ zkTxbox.onfocus = function (inp) {
 /** Scans whether any changes. */
 zkTxbox._scanChanging = function (id) {
 	var inp = $e(id);
-	if (inp && zkau.getOuter(inp).getAttribute("zk_onChanging")
+	if (inp && $outer(inp).getAttribute("zk_onChanging")
 	&& inp.getAttribute("zk_last_changing") != inp.value) {
 		inp.setAttribute("zk_last_changing", inp.value);
-		zkau.send({uuid: zkau.uuidOf(id),
+		zkau.send({uuid: $uuid(id),
 			cmd: "onChanging", data: [inp.value], implicit: true}, 1);
 	}
 }
@@ -178,7 +178,7 @@ zkTbtn.init = function (cmp) {
 // checkbox and radio //
 function zkCkbox() {}
 zkCkbox.init = function (cmp) {
-	cmp = zkau.getReal(cmp);
+	cmp = $real(cmp);
 	Event.observe(cmp, "click", function () {zkCkbox.onclick(cmp);});
 	Event.observe(cmp, "focus", function () {zkau.onfocus(cmp);});
 	Event.observe(cmp, "blur", function() {zkau.onblur(cmp);});
@@ -188,7 +188,7 @@ zkCkbox.setAttr = function (cmp, nm, val) {
 		var lbl = zk.firstChild(cmp, "LABEL", true);
 		if (lbl) zkau.setAttr(lbl, nm, zk.getTextStyle(val));
 	} else if (zkCkbox._inflds.contains(nm))
-		cmp = zkau.getReal(cmp);
+		cmp = $real(cmp);
 	zkau.setAttr(cmp, nm, val);
 	return true;
 };
@@ -197,7 +197,7 @@ zkCkbox.rmAttr = function (cmp, nm) {
 		var lbl = zk.firstChild(cmp, "LABEL", true);
 		if (lbl) zkau.rmAttr(lbl, nm);
 	} else if (zkCkbox._inflds.contains(nm))
-		cmp = zkau.getReal(cmp);
+		cmp = $real(cmp);
 	zkau.rmAttr(cmp, nm);
 	return true;
 };
@@ -216,7 +216,7 @@ zkCkbox.onclick = function (cmp) {
 	//by the browser -- so always zk.send
 	if (cmp.type == "radio" || newval != cmp.defaultChecked) { //changed
 		cmp.defaultChecked = newval;
-		var uuid = zkau.uuidOf(cmp);
+		var uuid = $uuid(cmp);
 		zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]},
 			zkau.asapTimeout(uuid, "onCheck"));
 	}
@@ -386,19 +386,19 @@ zkMap.init = function (cmp) {
 		//creates a hidden frame. However, in safari, we cannot use invisible frame
 		//otherwise, safari will open a new window
 	if (zk.ie && !zk.ie7) {
-		var img = zkau.getReal(cmp);
+		var img = $real(cmp);
 		return zkImg._fixpng(img);
 	}
 };
 zkArea.init = function (cmp) {
 	var map = zkau.getParentByType(cmp, "Map");
-	var img = zkau.getReal(map);
+	var img = $real(map);
 	if (img && !img.useMap)
 		img.useMap = "#" + map.id + "_map";
 };
 zkArea.cleanup = function (cmp) {
 	if (cmp.parentNode.areas.length <= 1) { //removing the last area
-		var img = zkau.getReal(zkau.getParentByType(cmp, "Map"));
+		var img = $real(zkau.getParentByType(cmp, "Map"));
 		if (img) img.useMap = "";
 			//Safari bug not solved yet: once useMap is cleaned up, ismap won't
 			//fall back to no-useMap
@@ -407,13 +407,13 @@ zkArea.cleanup = function (cmp) {
 
 zkMap.setAttr = function (cmp, nm, val) {
 	if (zkMap._inflds.contains(nm))
-		cmp = zkau.getReal(cmp);
+		cmp = $real(cmp);
 	zkau.setAttr(cmp, nm, val);
 	return true;
 };
 zkMap.rmAttr = function (cmp, nm) {
 	if (zkMap._inflds.contains(nm))
-		cmp = zkau.getReal(cmp);
+		cmp = $real(cmp);
 	zkau.rmAttr(cmp, nm);
 	return true;
 };

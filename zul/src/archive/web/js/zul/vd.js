@@ -24,7 +24,7 @@ zkau.valid = zkVld; //zkau depends on it
 zkVld.validate = function (id) {
 	//There are two ways to validate a component.
 	//1. specify the function in zk_valid or zk_valid2
-	id = zkau.uuidOf(id);
+	id = $uuid(id);
 	var cm = $e(id);
 	zkVld.validating = true; //to avoid deadloop (when both fields are invalid)
 	try {
@@ -66,9 +66,9 @@ zkVld.onlyNum = function (id, noDot) {
 	var inp = $e(id);
 	if (!inp) return null;
 
-	var fmt = zkau.getOuter(inp);
+	var fmt = $outer(inp);
 	if (fmt) fmt = fmt.getAttribute("zk_fmt");
-	inp = zkau.getReal(inp);
+	inp = $real(inp);
 	val = inp.value.trim();
 	for (var j=0,doted,numed,dashed,perted; j < val.length; ++j) {
 		var cc = val.charAt(j);
@@ -105,7 +105,7 @@ zkVld.onlyNum = function (id, noDot) {
 zkVld.noEmpty = function (id) {
 	var inp = $e(id);
 	if (!inp) return true;
-	inp = zkau.getReal(inp);
+	inp = $real(inp);
 	if (!inp.value.trim())
 		return mesg.EMPTY_NOT_ALLOWED;
 	return null;
@@ -167,7 +167,7 @@ zkVld._errbox = function (id, html) {
 	box.style.display = "block"; //we need to calculate the size
 	var inp = $e(id);
 	if (inp) {
-		var ref = $e(zkau.uuidOf(id));
+		var ref = $e($uuid(id));
 		if (!ref) ref = inp;
 		var ofs = Position.cumulativeOffset(ref);
 		ofs = zk.toParentOffset(box, ofs[0], ofs[1] + ref.offsetHeight);
