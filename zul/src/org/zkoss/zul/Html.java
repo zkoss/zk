@@ -37,6 +37,9 @@ public class Html extends XulElement {
 
 	public Html() {
 	}
+	public Html(String context) {
+		setContent(content);
+	}
 
 	/** Returns the HTML tags being embedded.
 	 * <p>Default: empty.
