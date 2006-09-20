@@ -50,8 +50,7 @@ public class DelegatingVariableResolver implements VariableResolver {
 		if (_ctx != null)
 			return _ctx;
 			
-		_ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(
-				(ServletContext)Executions.getCurrent().getDesktop().getWebApp().getNativeContext());
+		_ctx = SpringUtil.getApplicationContext();
 		_vars.put("springContext", _ctx);
 		return _ctx;
 	}

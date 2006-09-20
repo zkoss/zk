@@ -23,6 +23,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.ExecutionInit;
+import org.zkoss.zk.ui.util.ExecutionCleanup;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
@@ -59,6 +60,7 @@ import java.lang.reflect.Field;
 public class HibernateSessionContextListener implements ExecutionInit, EventThreadInit, EventThreadResume {
 	private static final Log log = Log.lookup(HibernateSessionContextListener.class);
 	private static final String HIBERNATE_SESSION_MAP = "org.zkoss.zkplus.hibernate.SessionMap";
+	private static final Object SOMETHING = new Object();
 
 	//-- ExecutionInit --//
 	public void init(Execution exec, Execution parent) {
@@ -74,7 +76,22 @@ public class HibernateSessionContextListener implements ExecutionInit, EventThre
 			//20060912, henrichen: tricky. Stuff something into session map to 
 			//prevent the map from being removed from context ThreadLocal by the 
 			//{@link ThreadLocalSessionContext#unbind()} when it is empty.
-			map.put(Boolean.TRUE, null); 
+			map.put(SOMETHING, null); 
+		}
+	}
+	
+	//-- ExecutionCleanup --//
+	public void cleanup(Execution exec, Execution parent) {
+		if (parent == null) { //root execution
+			//always prepare a ThreadLocal SessionMap in Execution attribute
+			Map map = getSessionMap();
+			if (map != null) {
+				//20060912, henrichen: tricky. Remove the previously stuffed 
+				//something from session map to make the map possible to be 
+				//removed by the 
+				//{@link ThreadLocalSessionContext#unbind()} when it is empty.
+				map.remove(SOMETHING);
+			}
 		}
 	}
 	
