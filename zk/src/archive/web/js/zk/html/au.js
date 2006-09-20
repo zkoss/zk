@@ -48,11 +48,64 @@ if (!zkau._reqs) {
 	});
 }
 
+/** A control might be enclosed by other tag while event is sent from
+ * the control directly, so... */
+function $uuid(n) {
+	if (typeof n != 'string') {
+		for (; n; n = n.parentNode)
+			if (n.id) {
+				n = n.id;
+				break;
+			}
+	}
+	if (!n) return "";
+	var j = n.lastIndexOf('!');
+	return j > 0 ? n.substring(0, j): n;
+}
+/** Returns the real element (ends with !real).
+ * If a component's attributes are located in the inner tag, i.e.,
+ * you have to surround it with span or other tag, you have to place
+ * uuid!real on the inner tag
+ *
+ * Note: !chdextr is put by the parent as the exterior of its children,
+ * while !real is by the component itself
+ */
+function $real(cmp) {
+	if (!cmp) return null;
+	var real = $e(cmp.id + "!real");
+	return real ? real: cmp;
+}
+/** Returns the enclosing element (not ends with !real).
+ * If not found, cmp is returned.
+ */
+function $outer(cmp) {
+	var id = $uuid(cmp);
+	if (id) {
+		var n = $e(id);
+		if (n) return n;
+	}
+	return cmp;
+}
+/** Returns the peer (xxx!real => xxx, xxx => xxx!real), or null if n/a.
+ */
+/*function $peer(id) {
+	return id ? $e(
+		id.endsWith("!real") ? id.substring(0, id.length-5): id+"!real"): null;
+}*/
+/** Returns the exterior of the specified component (ends with !chdextr).
+ * Some components, hbox nad vbox, need to add exterior to child compoents,
+ * and the exterior is named with "uuid!chdextr".
+ */
+function $childExterior(cmp) {
+	var n = $e(cmp.id + "!chdextr");
+	return n ? n: cmp;
+}
+
 /** Handles onclick for button-type.
  */
 zkau.onclick = function (evt) {
 	if (typeof evt == 'string') {
-		zkau.send({uuid: zkau.uuidOf(evt), cmd: "onClick", data: null});
+		zkau.send({uuid: $uuid(evt), cmd: "onClick", data: null});
 		return;
 	}
 
@@ -70,7 +123,7 @@ zkau.onclick = function (evt) {
 		return; //done
 	}
 
-	zkau.send({uuid: zkau.uuidOf(target.id),
+	zkau.send({uuid: $uuid(target.id),
 		cmd: "onClick", data: zkau._getMouseData(evt, target)});
 };
 /** Returns the data for onClick. */
@@ -552,62 +605,6 @@ zkau.rmAttr = function (cmp, name) {
 	}
 };
 
-/** A control might be enclosed by other tag while event is sent from
- * the control directly, so... */
-zkau.uuidOf = function (n) {
-	if (typeof n != 'string') {
-		for (; n; n = n.parentNode)
-			if (n.id) {
-				n = n.id;
-				break;
-			}
-	}
-	if (!n) return "";
-	var j = n.lastIndexOf('!');
-	return j > 0 ? n.substring(0, j): n;
-};
-
-/** Returns the real element (ends with !real).
- * If a component's attributes are located in the inner tag, i.e.,
- * you have to surround it with span or other tag, you have to place
- * uuid!real on the inner tag
- *
- * Note: !chdextr is put by the parent as the exterior of its children,
- * while !real is by the component itself
- */
-zkau.getReal = function (cmp) {
-	if (!cmp) return null;
-	var real = $e(cmp.id + "!real");
-	return real ? real: cmp;
-};
-/** Returns the enclosing element (not ends with !real).
- * If not found, cmp is returned.
- */
-zkau.getOuter = function (cmp) {
-	var id = zkau.uuidOf(cmp);
-	if (id) {
-		var n = $e(id);
-		if (n) return n;
-	}
-	return cmp;
-};
-
-/** Returns the peer (xxx!real => xxx, xxx => xxx!real), or null if n/a.
- */
-/*zkau.getPeer = function (id) {
-	return id ? $e(
-		id.endsWith("!real") ? id.substring(0, id.length-5): id+"!real"): null;
-};*/
-
-/** Returns the exterior of the specified component (ends with !chdextr).
- * Some components, hbox nad vbox, need to add exterior to child compoents,
- * and the exterior is named with "uuid!chdextr".
- */
-zkau._getChildExterior = function (cmp) {
-	var n = $e(cmp.id + "!chdextr");
-	return n ? n: cmp;
-};
-
 /** Corrects zIndex of the specified component, which must be absolute.
  * @param autoz whether it is called by
  * @param silent whether to send onZIndex
@@ -622,7 +619,7 @@ zkau.fixZIndex = function (cmp, silent, autoz) {
 	} else if (!autoz || zi < zkau.topZIndex) {
 		cmp.style.zIndex = ++zkau.topZIndex;
 		if (!silent && cmp.id) {
-			cmp = zkau.getOuter(cmp);
+			cmp = $outer(cmp);
 			zkau.send({uuid: cmp.id, cmd: "onZIndex",
 				data: [zi]}, zkau.asapTimeout(cmp, "onZIndex"));
 		}
@@ -752,7 +749,7 @@ zkau.onfocus = function (el) {
 	if (!zkau.focusInFloats(el)) zkau.closeFloats(el);
 	if (zkau.valid) zkau.valid.uncover(el);
 
-	var cmp = zkau.getOuter(el);
+	var cmp = $outer(el);
 	if (cmp.getAttribute("zk_onFocus") == "true")
 		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 25);
 };
@@ -761,7 +758,7 @@ zkau.onblur = function (el) {
 		//Note: _onDocMousedown is called before onblur, so we have to
 		//prevent it from being cleared
 
-	var cmp = zkau.getOuter(el);
+	var cmp = $outer(el);
 	if (cmp.getAttribute("zk_onBlur") == "true")
 		zkau.send({uuid: cmp.id, cmd: "onBlur", data: null}, 25);
 };
@@ -834,7 +831,7 @@ zkau._onDocLClick = function (evt) {
 			}
 
 			if (cmp.getAttribute("zk_lfclk") && zkau.insamepos(evt))
-				zkau.send({uuid: zkau.uuidOf(cmp),
+				zkau.send({uuid: $uuid(cmp),
 					cmd: "onClick", data: zkau._getMouseData(evt, cmp)});
 
 			//no need to Event.stop
@@ -889,7 +886,7 @@ zkau._onDocDClick = function (evt) {
 	cmp = zkau._getParentByAttr(cmp, "zk_dbclk");
 	if (cmp/* no need since browser handles it: && zkau.insamepos(evt)*/) {
 		var uuid = cmp.getAttribute("zk_item"); //treerow (and other transparent)
-		if (!uuid) uuid = zkau.uuidOf(cmp);
+		if (!uuid) uuid = $uuid(cmp);
 		zkau.send({uuid: uuid,
 			cmd: "onDoubleClick", data: zkau._getMouseData(evt, cmp)});
 		//no need to Event.stop
@@ -919,7 +916,7 @@ zkau._onDocCtxMnu = function (evt) {
 
 		if (cmp.getAttribute("zk_rtclk")/*no need since oncontextmenu: && zkau.insamepos(evt)*/) {
 			var uuid = cmp.getAttribute("zk_item"); //treerow (and other transparent)
-			if (!uuid) uuid = zkau.uuidOf(cmp);
+			if (!uuid) uuid = $uuid(cmp);
 			zkau.send({uuid: uuid,
 				cmd: "onRightClick", data: zkau._getMouseData(evt, cmp)});
 		}
@@ -1180,7 +1177,7 @@ zkau.hideCovered = function() {
 zkau.getMeta = function (cmp) {
 	var id = typeof cmp == 'string' ? cmp: cmp ? cmp.id: null;
 	if (!id) return null;
-	return zkau._metas[zkau.uuidOf(id)];
+	return zkau._metas[$uuid(id)];
 };
 /** Returns the meta info associated with the specified cmp or its UUID.
  */
@@ -1190,7 +1187,7 @@ zkau.setMeta = function (cmp, info) {
 		zk.error(mesg.COMP_OR_UUID_REQUIRED);
 		return;
 	}
-	zkau._metas[zkau.uuidOf(id)] = info;
+	zkau._metas[$uuid(id)] = info;
 };
 /** Returns the info by specified any child component and the type.
  */
@@ -1496,9 +1493,9 @@ zk.Float.prototype = {
 	 * event.
 	 */
 	focusInFloats: function (el) {
-		var uuid = zkau.uuidOf(this._popupId);
+		var uuid = $uuid(this._popupId);
 		if (el != null && this._popupId != null) {
-			if (zkau.uuidOf(el) == uuid)
+			if ($uuid(el) == uuid)
 				return true;
 			var popup = $e(this._popupId);
 			return popup && zk.isAncestor(popup, el);
@@ -1628,7 +1625,7 @@ zkau.cmd0 = { //no uuid at all
 	alert: function (dt0, dt1) {
 		var cmp = dt0 ? $e(dt0): null;
 		if (cmp) {
-			cmp = zkau.getReal(cmp); //refer to INPUT (e.g., datebox)
+			cmp = $real(cmp); //refer to INPUT (e.g., datebox)
 			if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
 		} else {
 			alert(dt1);
@@ -1714,7 +1711,7 @@ zkau.cmd1 = {
 			return; //done
 
 		if (!done) {
-			if (dt1.startsWith("on")) cmp = zkau.getReal(cmp);
+			if (dt1.startsWith("on")) cmp = $real(cmp);
 				//Client-side-action must be done at the inner tag
 
 			zkau.setAttr(cmp, dt1, dt2);
@@ -1736,7 +1733,7 @@ zkau.cmd1 = {
 			return; //done
 
 		if (!done) {
-			if (dt1.startsWith("on")) cmp = zkau.getReal(cmp);
+			if (dt1.startsWith("on")) cmp = $real(cmp);
 				//Client-side-action must be done at the inner tag
 			zkau.rmAttr(cmp, dt1);
 		}
@@ -1760,13 +1757,13 @@ zkau.cmd1 = {
 	},
 */
 	addAft: function (uuid, cmp, dt1) {
-		var n = zkau._getChildExterior(cmp);
+		var n = $childExterior(cmp);
 		var to = n.nextSibling;
 		zk.insertHTMLAfter(n, dt1);
 		zkau._initSibs(n, to, true);
 	},
 	addBfr: function (uuid, cmp, dt1) {
-		var n = zkau._getChildExterior(cmp);
+		var n = $childExterior(cmp);
 		var to = n.previousSibling;
 		zk.insertHTMLBefore(n, dt1);
 		zkau._initSibs(n, to, false);
@@ -1800,7 +1797,7 @@ zkau.cmd1 = {
 			return;
 		}
 
-		cmp = zkau.getReal(cmp); //go into the real tag (e.g., tabpanel)
+		cmp = $real(cmp); //go into the real tag (e.g., tabpanel)
 		zkau._insertAndInitBeforeEnd(cmp, dt1);
 	},
 	rm: function (uuid, cmp) {
@@ -1808,21 +1805,21 @@ zkau.cmd1 = {
 		//so keep silent if not found
 		if (cmp) {
 			zk.cleanupAt(cmp, zkau.cleanupMeta);
-			cmp = zkau._getChildExterior(cmp);
+			cmp = $childExterior(cmp);
 			Element.remove(cmp);
 		}
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
 	focus: function (uuid, cmp) {
 		if (!zk.eval(cmp, "focus")) {
-			cmp = zkau.getReal(cmp); //focus goes to inner tag
+			cmp = $real(cmp); //focus goes to inner tag
 			if (cmp.focus && !cmp.disabled)
 				zk.focusById(cmp.id, 5);
 					//delay it because focusDownById might be called implicitly
 		}
 	},
 	selAll: function (uuid, cmp) {
-		cmp = zkau.getReal(cmp); //select goes to inner tag
+		cmp = $real(cmp); //select goes to inner tag
 		if (cmp.select)
 			zk.selectById(cmp.id);
 	},
