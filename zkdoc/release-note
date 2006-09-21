@@ -2,9 +2,11 @@
 ZK 2.1.2 Freshly
 * Features:
   1562214
-  
+  + Support Spring Transaction Synchronization for ZK
+
 * Bugs:
   1548478
+  + Support JBoss Portal
 
 * Upgrade Notes
 
