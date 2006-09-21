@@ -64,11 +64,11 @@ public class ZkFns {
 
 	/** Denotes whether style sheets are generated for this request. */
 	private static final String ATTR_LANG_CSS_GENED
-		= "javax.potix.zk.lang.css.generated";
+		= "javax.zkoss.zk.lang.css.generated";
 		//Naming with javax to be able to shared among portlets
 	/** Denotes whether JavaScripts are generated for this request. */
 	private static final String ATTR_LANG_JS_GENED
-		= "javax.potix.zk.lang.js.generated";
+		= "javax.zkoss.zk.lang.js.generated";
 		//Naming with javax to be able to shared among portlets
 
 	protected ZkFns() {}

@@ -76,17 +76,17 @@ public class WebManager {
 	private static final Log log = Log.lookup(WebManager.class);
 
 	/** A session attribute. */
-	private static final String ATTR_SESS = "javax.potix.zk.ui.Session";
+	private static final String ATTR_SESS = "javax.zkoss.zk.ui.Session";
 		//Naming with javax to be able to shared among portlets
 
 	/** A context attribute for storing an instance of this class. */
 	/*package*/ static final String ATTR_WEB_MANAGER
-		= "javax.potix.zk.ui.WebManager";
+		= "javax.zkoss.zk.ui.WebManager";
 	/** A request attribute to store the current desktop.
 	 * Because we store this portlet request, we have to name it
 	 * with javax such that it is visible to other servlets and portlets.
 	 */
-	/*package*/ static final String DESKTOP = "javax.potix.zk.ui.desktop";
+	/*package*/ static final String DESKTOP = "javax.zkoss.zk.ui.desktop";
 
 	/** Map(ServletContext, List(ActivationListener)). */
 	private static final Map _actListeners = new HashMap();
