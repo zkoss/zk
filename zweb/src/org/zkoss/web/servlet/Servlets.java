@@ -507,6 +507,20 @@ public class Servlets {
 			final Map old = setPassThruAttr(request, params);
 			try {
 				disp.forward(request, response);
+			} catch (ClassCastException ex) {
+				//Tom M. Yeh, 2006/09/21: Bug 1548478
+				//Cause: http://issues.apache.org/bugzilla/show_bug.cgi?id=39417
+				//
+				//Bug or limitation of Catalina: not accepting HttpServletRequest
+				//othere than the original one or wrapper of original one
+				//
+				//Real Cause: org.apache.catalina.core.ApplicationDispatcher
+				//call unwrapRequest() twice, and then causes ClassCastException
+				//
+				//Resolution: since it is the almost last statement, it is safe
+				//to ignore this exception
+				if (!(request instanceof org.zkoss.web.portlet.RenderHttpServletRequest))
+					throw ex; //not the case described above
 			} finally {
 				restorePassThruAttr(request, old);
 			}
