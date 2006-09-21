@@ -41,7 +41,8 @@ public class PortletHttpSession implements HttpSession {
 
 	//-- HttpSession --//
 	public Object getAttribute(String name) {
-		return _sess.getAttribute(name);
+		final Object o = _sess.getAttribute(name);
+		return o != null ? o: _sess.getAttribute(name, PortletSession.APPLICATION_SCOPE);
 	}
 	public java.util.Enumeration getAttributeNames() {
 		return _sess.getAttributeNames();
@@ -99,7 +100,10 @@ public class PortletHttpSession implements HttpSession {
 	public void removeValue(String name) {
 	}
 	public void setAttribute(String name, Object value) {
-		_sess.setAttribute(name, value);
+		if (name != null && name.startsWith("javax."))
+			_sess.setAttribute(name, value, PortletSession.APPLICATION_SCOPE);
+		else
+			_sess.setAttribute(name, value);
 	}
 	public void setMaxInactiveInterval(int interval) {
 		_sess.setMaxInactiveInterval(interval);
