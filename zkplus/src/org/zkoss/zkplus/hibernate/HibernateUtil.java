@@ -30,10 +30,10 @@ import org.hibernate.cfg.Configuration;
  * hibernate's configuration file "hibernate.cfg.xml" to as follows:</p>
  *
  * <pre><code>
- *  <session-factory>
+ *  &lt;session-factory>
  *		...
- *		<property name="current_session_context_class">thread</property>
- *  </session-factory>
+ *		&lt;property name="current_session_context_class">thread&lt;/property>
+ *  &lt;/session-factory>
  * </code><pre>
  *
  * <p> Also notice that the zkplus.jar must be put under application's WEB-INF/lib because

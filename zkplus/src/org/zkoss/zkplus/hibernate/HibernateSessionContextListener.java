@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.ThreadLocals;
 import org.zkoss.util.logging.Log;
 
 import java.util.Map;
@@ -41,23 +42,22 @@ import java.lang.reflect.Field;
  * </p>
  * <p>
  * This listener is used with Hibernate's (version 3.1+) "thread" session context.
- * That is, when you specify 
+ * That is, when you specify </p>
  * <pre><code>
  * hibernate.current_session_context_class = thread
  * </code></pre>
  *
- * then you have to add following lines in application's WEB-INF/zk.xml:
+ * <p>then you have to add following lines in application's WEB-INF/zk.xml:</p>
  * <pre><code>
  * 	&lt;listener>
- *		&lt;description>Hibernate Session Management&lt;/description>
+ *		&lt;description>Hibernate thread session context management&lt;/description>
  *		&lt;listener-class>org.zkoss.zkplus.hibernate.HibernateSessionContextListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>
- * </p>
  *
  * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
  */
-public class HibernateSessionContextListener implements ExecutionInit, EventThreadInit, EventThreadResume {
+public class HibernateSessionContextListener implements ExecutionInit, ExecutionCleanup, EventThreadInit, EventThreadResume {
 	private static final Log log = Log.lookup(HibernateSessionContextListener.class);
 	private static final String HIBERNATE_SESSION_MAP = "org.zkoss.zkplus.hibernate.SessionMap";
 	private static final Object SOMETHING = new Object();
@@ -81,14 +81,13 @@ public class HibernateSessionContextListener implements ExecutionInit, EventThre
 	}
 	
 	//-- ExecutionCleanup --//
-	public void cleanup(Execution exec, Execution parent) {
+	public void cleanup(Execution exec, Execution parent, Throwable ex) {
 		if (parent == null) { //root execution
-			//always prepare a ThreadLocal SessionMap in Execution attribute
 			Map map = getSessionMap();
 			if (map != null) {
 				//20060912, henrichen: tricky. Remove the previously stuffed 
-				//something from session map to make the map possible to be 
-				//removed by the 
+				//something (when ExecutuionInit#init() is called) from 
+				//session map to make the map possible to be removed by the 
 				//{@link ThreadLocalSessionContext#unbind()} when it is empty.
 				map.remove(SOMETHING);
 			}
@@ -131,17 +130,6 @@ public class HibernateSessionContextListener implements ExecutionInit, EventThre
 	}
 	
 	private ThreadLocal getContextThreadLocal() {
-		try {
-			Class cls = Classes.forNameByThread("org.hibernate.context.ThreadLocalSessionContext");
-			Field fld = cls.getDeclaredField("context");
-			fld.setAccessible(true);
-			return (ThreadLocal) fld.get(cls); //class static field, a ThreadLocal
-		} catch (ClassNotFoundException ex) {
-			throw UiException.Aide.wrap(ex);
-		} catch (java.lang.NoSuchFieldException ex) {
-			throw UiException.Aide.wrap(ex);
-		} catch (java.lang.IllegalAccessException ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+		return ThreadLocals.getThreadLocal("org.hibernate.context.ThreadLocalSessionContext", "context");
 	}
 }

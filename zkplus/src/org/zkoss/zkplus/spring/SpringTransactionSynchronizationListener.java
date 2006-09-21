@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.ThreadLocals;
 import org.zkoss.util.logging.Log;
 
 import java.util.Map;
@@ -70,10 +71,7 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 	//-- EventThreadCleanup --//
 	public void cleanup(Component comp, Event evt, Throwable ex) {
 		getThreadLocals(); //get from event thread's ThreadLocal
-		
-		if (ex != null) {
-			throw UiException.Aide.wrap(ex);
-		}
+		//we don't handle the exception since the ZK engine will throw it again!
 	}
 
 	public void complete(Component comp, Event evt) {
@@ -141,14 +139,6 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 	}
 		
 	private ThreadLocal getThreadLocal(Class cls, String fldname) {
-		try {
-			Field fld = cls.getDeclaredField(fldname);
-			fld.setAccessible(true);
-			return (ThreadLocal) fld.get(cls); //class static field, a ThreadLocal
-		} catch (java.lang.NoSuchFieldException ex) {
-			throw UiException.Aide.wrap(ex);
-		} catch (java.lang.IllegalAccessException ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+		return ThreadLocals.getThreadLocal(cls, fldname);
 	}
 }

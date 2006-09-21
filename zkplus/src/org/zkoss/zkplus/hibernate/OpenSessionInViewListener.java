@@ -62,11 +62,11 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 				HibernateUtil.currentSession().getTransaction().commit();
 			} else if (ex instanceof StaleObjectStateException) {
 				// default implementation does not do any optimistic concurrency 
-				// control; it simply rollback the transaction and rethrow the exception
+				// control; it simply rollback the transaction.
 				handleStaleObjectStateException(exec, (StaleObjectStateException)ex);
 			} else {
 				// default implementation log the stacktrace and then rollback
-				// and rethrow the exception.
+				// the transaction.
 				handleOtherException(exec, ex);
 			}
 		}
@@ -75,7 +75,7 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	/**
 	 * <p>Default StaleObjectStateException handler. This implementation
 	 * does not implement optimistic concurrency control! It simply rollback 
-	 * the transaction and rethrow the exception.</p>
+	 * the transaction.</p>
 	 * 
 	 * <p>Application developer might want to extends this class and override 
 	 * this method to do other things like compensate for any permanent changes 
@@ -90,13 +90,11 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	protected void handleStaleObjectStateException(Execution exec, StaleObjectStateException ex) {
 		log.error("This listener does not implement optimistic concurrency control!");
 		rollback(exec, ex);
-		throw ex;
 	}
 	
 	/**
 	 * <p>Default other exception (other than StaleObjectStateException) handler. 
-	 * This implementation simply rollback the transaction and then wrap the 
-	 * throwable into UiException and throw it.</p>
+	 * This implementation simply rollback the transaction.</p>
 	 * 
 	 * <p>Application developer might want to extends this class and override 
 	 * this method to do other things like compensate for any permanent changes 
@@ -110,8 +108,6 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 		// Rollback only
 		ex.printStackTrace();
 		rollback(exec, ex);
-		// Let others handle it
-		throw UiException.Aide.wrap(ex);
 	}
 
 	/**
@@ -123,11 +119,11 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	private void rollback(Execution exec, Throwable ex) {
 		try {
 			if (HibernateUtil.currentSession().getTransaction().isActive()) {
-				log.debug("Trying to rollback database transaction after exception:"+exec);
+				log.debug("Trying to rollback database transaction after exception:"+ex);
 				HibernateUtil.currentSession().getTransaction().rollback();
 			}
 		} catch (Throwable rbEx) {
-			log.error("Could not rollback transaction after exception!", rbEx);
+			log.error("Could not rollback transaction after exception! Original Exception:\n"+ex, rbEx);
 		}
-	}		
+	}
 }
