@@ -157,7 +157,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	if [ "$target" == "official" ] ; then
 	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
 	cp dist/lib/ext/* /tmp/zk/$srcnm/dist/lib/ext
-	rm -f /tmp/zk/$srcnm/dist/lib/ext/commons-logging.jar
 	fi
 
 	cd /tmp/zk/$srcnm
