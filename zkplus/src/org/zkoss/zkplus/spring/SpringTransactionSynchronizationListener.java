@@ -37,7 +37,7 @@ import java.lang.reflect.Field;
 
 /**
  * <p>Listener to make sure each ZK thread got the same ThreadLocal value of the 
- * spring ({@link org.springframework.transaction.support.TransactionSynchronizationManager};
+ * spring's org.springframework.transaction.support.TransactionSynchronizationManager;
  * especially those thread bound resources.
  * </p>
  * <p>

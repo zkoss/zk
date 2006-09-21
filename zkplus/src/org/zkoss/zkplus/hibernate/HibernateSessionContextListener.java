@@ -38,7 +38,7 @@ import java.lang.reflect.Field;
 
 /**
  * <p>Listener to make sure each ZK thread got the same hibernat session context; 
- * used with Hibernate's "thread" session context ({@link org.hibernate.context.ThreadLocalSessionContext}).
+ * used with Hibernate's "thread" session context (org.hibernate.context.ThreadLocalSessionContext).
  * </p>
  * <p>
  * This listener is used with Hibernate's (version 3.1+) "thread" session context.
@@ -75,7 +75,7 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 			
 			//20060912, henrichen: tricky. Stuff something into session map to 
 			//prevent the map from being removed from context ThreadLocal by the 
-			//{@link ThreadLocalSessionContext#unbind()} when it is empty.
+			//ThreadLocalSessionContext#unbind() when it is empty.
 			map.put(SOMETHING, null); 
 		}
 	}
@@ -88,7 +88,7 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 				//20060912, henrichen: tricky. Remove the previously stuffed 
 				//something (when ExecutuionInit#init() is called) from 
 				//session map to make the map possible to be removed by the 
-				//{@link ThreadLocalSessionContext#unbind()} when it is empty.
+				//ThreadLocalSessionContext#unbind() when it is empty.
 				map.remove(SOMETHING);
 			}
 		}
