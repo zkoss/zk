@@ -826,7 +826,7 @@ public class Servlets {
 	}
 	private static final Map getExtWebCtxs(ServletContext ctx) {
 		synchronized (Servlets.class) { //don't use ctx because it might be a proxy (in portlet)
-			final String attr = "javax.potix.web.servlets.ExtendedWebContexts";
+			final String attr = "javax.zkoss.web.servlets.ExtendedWebContexts";
 				//such that it could be shared among portlets
 			Map ctxs = (Map)ctx.getAttribute(attr);
 			if (ctxs == null)
