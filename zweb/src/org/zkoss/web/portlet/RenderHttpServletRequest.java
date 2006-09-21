@@ -18,12 +18,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.portlet;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.PortletSession;
 
 import org.zkoss.util.CollectionsX;
+import org.zkoss.web.Attributes;
 
 /**
  * A facade of RenderRequest that implements HttpServletRespose.
@@ -33,6 +39,7 @@ import org.zkoss.util.CollectionsX;
 public class RenderHttpServletRequest implements HttpServletRequest {
 	private final RenderRequest _req;
 	private String _enc = "UTF-8";
+	private final Map _attrs = new HashMap(9);
 
 	public static HttpServletRequest getInstance(RenderRequest req) {
 		if (req instanceof HttpServletRequest)
@@ -43,15 +50,51 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		if (req == null)
 			throw new IllegalArgumentException("null");
 		_req = req;
+
+		String ctxpath = req.getContextPath();
+		if (ctxpath == null) ctxpath = "";
+		_attrs.put(Attributes.INCLUDE_CONTEXT_PATH, ctxpath);
+		_attrs.put(Attributes.INCLUDE_SERVLET_PATH, "");
+		_attrs.put(Attributes.INCLUDE_PATH_INFO, "");
+		_attrs.put(Attributes.INCLUDE_QUERY_STRING, "");
+		_attrs.put(Attributes.INCLUDE_REQUEST_URI, ctxpath);
 	}
 
 	//-- ServletRequest --//
 	public Object getAttribute(String name) {
-		return _req.getAttribute(name);
+		final String val = (String)_attrs.get(name);
+		return val != null ? val: _req.getAttribute(name);
 	}
-	public java.util.Enumeration getAttributeNames() {
-		return _req.getAttributeNames();
-	}
+	public Enumeration getAttributeNames() {
+		final Enumeration _e = _req.getAttributeNames();
+		final Iterator _it = _attrs.keySet().iterator();
+		return new Enumeration() {
+			Object _next;
+			{
+				next();
+			}
+			public boolean hasMoreElements() {
+				return _next != null;
+			}
+			public Object nextElement() {
+				Object next = _next;
+				next();
+				return next;
+			}
+			private void next() {
+				_next = null;
+				while (_e.hasMoreElements()) {
+					Object next = _e.nextElement();
+					if (!_attrs.containsKey(next)) {
+						 _next = next;
+						 return; //done
+					}
+				}
+				if (_it.hasNext())
+					_next = _it.next();
+			}
+		};
+   }
 	public String getCharacterEncoding() {
 		return _enc;
 	}
@@ -151,7 +194,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getAuthType();
 	}
 	public String getContextPath() {
-		return _req.getContextPath();
+		return (String)_attrs.get(Attributes.INCLUDE_CONTEXT_PATH);
 	}
 	public javax.servlet.http.Cookie[] getCookies() {
 		return new javax.servlet.http.Cookie[0];
@@ -175,13 +218,13 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return "GET";
 	}
 	public String getPathInfo() {
-		return (String)getAttribute("javax.servlet.include.path_info");
+		return (String)_attrs.get(Attributes.INCLUDE_PATH_INFO);
 	}
 	public String getPathTranslated() {
 		return null;
 	}
 	public String getQueryString() {
-		return (String)getAttribute("javax.servlet.include.query_string");
+		return (String)_attrs.get(Attributes.INCLUDE_QUERY_STRING);
 	}
 	public String getRemoteUser() {
 		return _req.getRemoteUser();
@@ -190,17 +233,13 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getRequestedSessionId();
 	}
 	public String getRequestURI() {
-		final String s = (String)
-			getAttribute("javax.servlet.include.request_uri");
-		return s != null ? s: "";
+		return (String)_attrs.get(Attributes.INCLUDE_REQUEST_URI);
 	}
 	public StringBuffer getRequestURL() {
 		return new StringBuffer();
 	}
 	public String getServletPath() {
-		final String s = (String)
-			getAttribute("javax.servlet.include.servlet_path");
-		return s != null ? s: "";
+		return (String)_attrs.get(Attributes.INCLUDE_SERVLET_PATH);
 	}
 	public HttpSession getSession() {
 		return PortletHttpSession.getInstance(_req.getPortletSession());
