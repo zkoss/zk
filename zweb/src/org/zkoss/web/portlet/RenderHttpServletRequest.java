@@ -33,6 +33,7 @@ import org.zkoss.util.CollectionsX;
 public class RenderHttpServletRequest implements HttpServletRequest {
 	private final RenderRequest _req;
 	private String _enc = "UTF-8";
+
 	public static HttpServletRequest getInstance(RenderRequest req) {
 		if (req instanceof HttpServletRequest)
 			return (HttpServletRequest)req;
