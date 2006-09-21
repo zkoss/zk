@@ -78,67 +78,6 @@ public class Servlets {
 	/** Utilities; no instantiation required. */
 	protected Servlets() {}
 
-	//-- Standard constants --//
-	/** The included context path; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
-	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
-	 */
-	protected static final String ATTR_INCLUDE_CONTEXT_PATH
-		= "javax.servlet.include.context_path";
-	/** The included servlet path; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
-	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
-	 */
-	protected static final String ATTR_INCLUDE_SERVLET_PATH
-		= "javax.servlet.include.servlet_path";
-	/** The included request URI; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisRequestURI
-	 */
-	protected static final String ATTR_INCLUDE_REQUEST_URI
-		= "javax.servlet.include.request_uri";
-	/** The included servlet path; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisPathInfo
-	 * @see org.zkoss.web.servlet.http.Https#getOriginPathInfo
-	 */
-	protected static final String ATTR_INCLUDE_PATH_INFO
-		= "javax.servlet.include.path_info";
-	/** The included servlet path; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisQueryString
-	 * @see org.zkoss.web.servlet.http.Https#getOriginQueryString
-	 */
-	protected static final String ATTR_INCLUDE_QUERY_STRING
-		= "javax.servlet.include.query_string";
-
-	/** The original context path that forwards this page; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
-	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
-	 */
-	protected static final String ATTR_FORWARD_CONTEXT_PATH
-		= "javax.servlet.forward.context_path";
-	/** The original servlet path that forwards this page; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
-	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
-	 */
-	protected static final String ATTR_FORWARD_SERVLET_PATH
-		= "javax.servlet.forward.servlet_path";
-	/** The original request URI that forwards this page; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisRequestURI
-	 */
-	protected static final String ATTR_FORWARD_REQUEST_URI
-		= "javax.servlet.forward.request_uri";
-	/** The original servlet path that forwards this page; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisPathInfo
-	 * @see org.zkoss.web.servlet.http.Https#getOriginPathInfo
-	 */
-	protected static final String ATTR_FORWARD_PATH_INFO
-		= "javax.servlet.forward.path_info";
-	/** The original servlet path that forwards this page; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisQueryString
-	 * @see org.zkoss.web.servlet.http.Https#getOriginQueryString
-	 */
-	protected static final String ATTR_FORWARD_QUERY_STRING
-		= "javax.servlet.forward.query_string";
-
 	/**
 	 * Gets a set of the parameters of a request.
 	 * Only parameters listed in the paramNames argument are returned.
@@ -416,7 +355,7 @@ public class Servlets {
 		//Jetty doesn't assign exception if NullPointerException is found
 		if(ex == null)
 			ex = (Throwable)
-				request.getAttribute("javax.servlet.error.exception");
+				request.getAttribute(Attributes.ERROR_EXCEPTION);
 
 		String exClass = "SEVERE ERROR: unable to locate the exception";
 		String exMsg = "", exStackTrace = "";
@@ -446,13 +385,13 @@ public class Servlets {
 	 * Tests whether this page is included by another page.
 	 */
 	public static final boolean isIncluded(ServletRequest request) {
-		return request.getAttribute(ATTR_INCLUDE_SERVLET_PATH) != null;
+		return request.getAttribute(Attributes.INCLUDE_CONTEXT_PATH) != null;
 	}
 	/**
 	 * Tests whether this page is forwarded by another page.
 	 */
 	public static final boolean isForwarded(ServletRequest request) {
-		return request.getAttribute(ATTR_FORWARD_SERVLET_PATH) != null;
+		return request.getAttribute(Attributes.FORWARD_CONTEXT_PATH) != null;
 	}
 	/**
 	 * Forward to the specified URI.

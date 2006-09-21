@@ -36,6 +36,7 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ExtendedWebContext;
 
@@ -113,7 +114,7 @@ public class Https extends Servlets {
 	 * @return "/" if request is not a http request
 	 */
 	public static final String getThisContextPath(ServletRequest request) {
-		String path = (String)request.getAttribute(ATTR_INCLUDE_CONTEXT_PATH);
+		String path = (String)request.getAttribute(Attributes.INCLUDE_CONTEXT_PATH);
 		return path != null ? path:
 			request instanceof HttpServletRequest ?
 				((HttpServletRequest)request).getContextPath(): "";
@@ -125,7 +126,7 @@ public class Https extends Servlets {
 	 * @return "/" if request is not a http request
 	 */
 	public static final String getThisServletPath(ServletRequest request) {
-		String path = (String)request.getAttribute(ATTR_INCLUDE_SERVLET_PATH);
+		String path = (String)request.getAttribute(Attributes.INCLUDE_SERVLET_PATH);
 		return path != null ? path:
 			request instanceof HttpServletRequest ?
 				((HttpServletRequest)request).getServletPath(): "/";
@@ -137,7 +138,7 @@ public class Https extends Servlets {
 	 * @return "/" if request is not a http request
 	 */
 	public static final String getThisRequestURI(ServletRequest request) {
-		String path = (String)request.getAttribute(ATTR_INCLUDE_REQUEST_URI);
+		String path = (String)request.getAttribute(Attributes.INCLUDE_REQUEST_URI);
 		return path != null ? path:
 			request instanceof HttpServletRequest ?
 				((HttpServletRequest)request).getRequestURI(): "/";
@@ -149,7 +150,7 @@ public class Https extends Servlets {
 	 * @return null if request is not a http request
 	 */
 	public static final String getThisQueryString(ServletRequest request) {
-		String path = (String)request.getAttribute(ATTR_INCLUDE_QUERY_STRING);
+		String path = (String)request.getAttribute(Attributes.INCLUDE_QUERY_STRING);
 		return path != null ? path:
 			isIncluded(request) ? null: //null is valid even included
 			request instanceof HttpServletRequest ?
@@ -162,7 +163,7 @@ public class Https extends Servlets {
 	 * @return null if request is not a http request
 	 */
 	public static final String getThisPathInfo(ServletRequest request) {
-		String path = (String)request.getAttribute(ATTR_INCLUDE_PATH_INFO);
+		String path = (String)request.getAttribute(Attributes.INCLUDE_PATH_INFO);
 		return path != null ? path:
 			isIncluded(request) ? null: //null is valid even included
 			request instanceof HttpServletRequest ?
@@ -174,7 +175,7 @@ public class Https extends Servlets {
 	 * Unlike getContextPath, it won't be affected by forwarding.
 	 */
 	public static final String getOriginContextPath(ServletRequest request) {
-		String path = (String)request.getAttribute(ATTR_FORWARD_CONTEXT_PATH);
+		String path = (String)request.getAttribute(Attributes.FORWARD_CONTEXT_PATH);
 		return path != null ? path:
 			request instanceof HttpServletRequest ?
 				((HttpServletRequest)request).getContextPath(): "";
@@ -184,7 +185,7 @@ public class Https extends Servlets {
 	 * Unlike getServletPath, it won't be affected by forwarding.
 	 */
 	public static final String getOriginServletPath(ServletRequest request) {
-		String path = (String)request.getAttribute(ATTR_FORWARD_SERVLET_PATH);
+		String path = (String)request.getAttribute(Attributes.FORWARD_SERVLET_PATH);
 		return path != null ? path:
 			request instanceof HttpServletRequest ?
 				((HttpServletRequest)request).getServletPath(): "/";
@@ -195,7 +196,7 @@ public class Https extends Servlets {
 	 * it won't be affected by forwarding.
 	 */
 	public static final String getOriginRequestURI(ServletRequest request) {
-		String path = (String)request.getAttribute(ATTR_FORWARD_REQUEST_URI);
+		String path = (String)request.getAttribute(Attributes.FORWARD_REQUEST_URI);
 		return path != null ? path:
 			request instanceof HttpServletRequest ?
 				((HttpServletRequest)request).getRequestURI(): "/";
@@ -205,7 +206,7 @@ public class Https extends Servlets {
 	 * Unlike getPathInfo, it won't be affected by forwarding.
 	 */
 	public static final String getOriginPathInfo(ServletRequest request) {
-		String path = (String)request.getAttribute(ATTR_FORWARD_QUERY_STRING);
+		String path = (String)request.getAttribute(Attributes.FORWARD_QUERY_STRING);
 		return path != null ? path:
 			isForwarded(request) ? null: //null is valid even included
 			request instanceof HttpServletRequest ?
@@ -216,7 +217,7 @@ public class Https extends Servlets {
 	 * Unlike getQueryString, it won't be affected by forwarding.
 	 */
 	public static final String getOriginQueryString(ServletRequest request) {
-		String path = (String)request.getAttribute(ATTR_FORWARD_PATH_INFO);
+		String path = (String)request.getAttribute(Attributes.FORWARD_PATH_INFO);
 		return path != null ? path:
 			isForwarded(request) ? null: //null is valid even included
 			request instanceof HttpServletRequest ?
