@@ -1,7 +1,7 @@
 	--------
 ZK 2.1.2 Freshly
 * Features:
-  1562214, 1563300
+  1562214, 1563300, 1561398
   + French messages are supported. Jerome Vergereau for his contribution.
   + Support Spring Transaction Synchronization for ZK
 
