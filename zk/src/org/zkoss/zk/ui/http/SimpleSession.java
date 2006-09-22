@@ -19,8 +19,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.io.Serializable;
+import java.io.Externalizable;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -51,6 +54,19 @@ import org.zkoss.zk.ui.util.Configuration;
 public class SimpleSession implements Session, SessionCtrl {
 	private static final Log log = Log.lookup(SimpleSession.class);
 
+	/** The attribute used to hold a map of attributes that are written
+	 * thru {@link #setAttribute}.
+	 *
+	 * <p>Note: once a HttpSession is serialized, all serializable attributes
+	 * are serialized. However, if ZK's session is not serializable, it causes
+	 * inconsistency. For example, if an application has stored a serializable
+	 * attribute, say myAttr, in a session. Then, it will be surprised to see
+	 * myAttr is available while the session is actually brand-new
+	 *
+	 * <p>It is used if java.io.Serializable is NOT implemented.
+	 */
+	private static final String ATTR_PRIVATE = "javax.zkoss.ui.session.private";
+
 	/** The Web application that this session belongs to. */
 	private WebApp _wapp;
 	/** The HTTP session that this session is associated with. */
@@ -71,6 +87,8 @@ public class SimpleSession implements Session, SessionCtrl {
 	String clientHost) {
 		if (wapp == null || hsess == null)
 			throw new IllegalArgumentException();
+
+		cleanSessAttrs(hsess);
 
 		_wapp = wapp;
 		_hsess = hsess;
@@ -103,10 +121,10 @@ public class SimpleSession implements Session, SessionCtrl {
 				return _hsess.getAttribute(key);
 			}
 			protected void setValue(String key, Object val) {
-				_hsess.setAttribute(key, val);
+				setAttribute(key, val);
 			}
 			protected void removeValue(String key) {
-				_hsess.removeAttribute(key);
+				removeAttribute(key);
 			}
 		};
 	}
@@ -115,13 +133,53 @@ public class SimpleSession implements Session, SessionCtrl {
 		return _hsess.getAttribute(name);
 	}
 	public void setAttribute(String name, Object value) {
-		_hsess.setAttribute(name, value);
+		//Note: we have to handle ATTR_PRIVATE, so cleanSessAttrs knows what to do
+		if (!(this instanceof Serializable || this instanceof Externalizable)
+		/*&& name != null && !name.startsWith("javax.")*/
+		&& (value instanceof Serializable || value instanceof Externalizable)) {
+			synchronized (this) {
+				_hsess.setAttribute(name, value);
+
+				Map prv = (Map)_hsess.getAttribute(ATTR_PRIVATE);
+				if (prv == null)
+					_hsess.setAttribute(ATTR_PRIVATE, prv = new HashMap());
+				prv.put(name, value);
+			}
+		} else {
+			_hsess.setAttribute(name, value);
+		}
 	}
 	public void removeAttribute(String name) {
-		_hsess.removeAttribute(name);
+		//Note: we have to handle ATTR_PRIVATE, so cleanSessAttrs knows what to do
+		if (!(this instanceof Serializable || this instanceof Externalizable)
+		/*&& name != null && !name.startsWith("javax.")*/) {
+			synchronized (this) {
+				_hsess.removeAttribute(name);
+
+				Map prv = (Map)_hsess.getAttribute(ATTR_PRIVATE);
+				if (prv != null)
+					prv.remove(name);
+			}
+		} else {
+			_hsess.removeAttribute(name);
+		}
 	}
 	public Map getAttributes() {
 		return _attrs;
+	}
+	/** Cleans up attributes that shall not available to a brand-new session
+	 * See {@link #ATTR_PRIVATE} for details.
+	 */
+	private static void cleanSessAttrs(HttpSession hsess) {
+		final Map prv = (Map)hsess.getAttribute(ATTR_PRIVATE);
+		if (prv != null) {
+			for (Iterator it = prv.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final String nm = (String)me.getKey();
+				if (hsess.getAttribute(nm) == me.getValue()) //don't use equals
+					hsess.removeAttribute(nm);
+			}
+		}
 	}
 
 	public String getClientAddr() {
