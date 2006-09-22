@@ -145,7 +145,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//parse desktop ID
 		final String dtid = request.getParameter("dtid");
 		if (dtid == null) {
-			log.warning("dtid not found: QS="+request.getQueryString()+", params="+request.getParameterMap().keySet());
+			log.warning("dtid not found: CP="+request.getContextPath()
+				+", SP="+request.getServletPath()+", QS="+request.getQueryString()
+				+", params="+request.getParameterMap().keySet());
 			//responseError(uieng, response, "Illegal request: dtid is required");
 			//Tom M. Yeh: 20060922: Unknown reason to get here but it is annoying
 			//to response it back to users
