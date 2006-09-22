@@ -33,3 +33,6 @@ mesg.INTEGER_REQUIRED = "Vous devez spécifiez un entier, plutot que";
 mesg.EMPTY_NOT_ALLOWED = "Champ vide non autorisé.\nVous ne pouvez pas n'indiquer rien";
 mesg.GOTO_ERROR_FIELD = "Allez sur le mauvais champ";
 mesg.PLEASE_WAIT = "Chargement...";
+
+mesg.FILE_SIZE = "File size: ";
+mesg.KBYTES = "KB";

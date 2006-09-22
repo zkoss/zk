@@ -106,21 +106,19 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		try {
 			final String pi = Https.getThisPathInfo(request);
 			if (log.finerable()) log.finer("Path info: "+pi);
-			if (pi != null) {
+			if (pi != null && pi.length() > 0) {
 				if (pi.startsWith(ClassWebResource.PATH_PREFIX)) {
 					WebManager.getWebManager(_ctx).
 						getClassWebResource().doGet(request, response);
-					return;
-				}
-				if (pi.startsWith("/upload")) {
+				} else if (pi.startsWith("/upload")) {
 					Uploads.process(sess, _ctx, request, response);
-					return;
-				}
-				if (pi.startsWith("/view")) {
+				} else if (pi.startsWith("/view")) {
 					Views.process(
 						sess, _ctx, request, response, pi.substring(5));
-					return;
+				} else {
+					log.warning("Unknown path info: "+pi);
 				}
+				return;
 			}
 
 			process(sess, request, response);
@@ -147,8 +145,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//parse desktop ID
 		final String dtid = request.getParameter("dtid");
 		if (dtid == null) {
-			log.error("dtid not found: QS="+request.getQueryString()+", params="+request.getParameterMap().keySet());
-			responseError(uieng, response, "Illegal request: dtid is required");
+			log.warning("dtid not found: QS="+request.getQueryString()+", params="+request.getParameterMap().keySet());
+			//responseError(uieng, response, "Illegal request: dtid is required");
+			//Tom M. Yeh: 20060922: Unknown reason to get here but it is annoying
+			//to response it back to users
 			return;
 		}
 		final Desktop desktop;
