@@ -18,8 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 function msgzul() {};
 
-msgzul.ITEM_NOT_FOUND = "找不到 Treeitem：";
-msgzul.TAB_NOT_FOUND = "找不到 Tab：";
 msgzul.FAILED_TO_CREATE_MASK = "無法建立 Modal Mask";
 msgzul.UNKNOWN_TYPE = "未知元件類型：";
 msgzul.DATE_REQUIRED = "只能輸入日期。格式：";

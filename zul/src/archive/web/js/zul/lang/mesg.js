@@ -18,8 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 function msgzul() {};
 
-msgzul.ITEM_NOT_FOUND = "Treeitem not found: ";
-msgzul.TAB_NOT_FOUND = "Tab not found: ";
 msgzul.FAILED_TO_CREATE_MASK = "Unable to create Modal Mask";
 msgzul.UNKNOWN_TYPE = "Unknown component type: ";
 msgzul.DATE_REQUIRED = "You must specify a date. Format: ";

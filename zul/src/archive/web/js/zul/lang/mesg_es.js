@@ -18,8 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 function msgzul() {};
 
-msgzul.ITEM_NOT_FOUND = "Item no encontrado en el Arbol: ";
-msgzul.TAB_NOT_FOUND = "Panel (Tab) no encontrado: ";
 msgzul.FAILED_TO_CREATE_MASK = "No es posible crear una mascada modal (Modal Mask) ";
 msgzul.UNKNOWN_TYPE = "Tipo de componente desconocido: ";
 msgzul.DATE_REQUIRED = "Debe especificar una fecha. Formato: ";
