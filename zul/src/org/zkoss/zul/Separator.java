@@ -34,6 +34,15 @@ public class Separator extends XulElement {
 	private String _spacing;
 	private boolean _bar;
 
+	public Separator() {
+	}
+	/**
+	 * @param orient either "horizontal" or "vertical".
+	 */
+	public Separator(String orient) {
+		setOrient(orient);
+	}
+
 	/** Returns the orient.
 	 * <p>Default: "horizontal".
 	 */

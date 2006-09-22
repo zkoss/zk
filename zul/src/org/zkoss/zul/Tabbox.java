@@ -58,6 +58,9 @@ public class Tabbox extends XulElement implements Selectable {
 	private String _panelSpacing;
 	private String _orient = "horizontal";
 
+	public Tabbox() {
+	}
+
 	/** Returns the tabs that this tabbox owns.
 	 */
 	public Tabs getTabs() {

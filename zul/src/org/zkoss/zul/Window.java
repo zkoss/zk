@@ -91,6 +91,17 @@ public class Window extends XulElement implements IdSpace  {
 	public Window() {
 		init();
 	}
+	/**
+	 * @param title the window title (see {@link #setTitle}).
+	 * @param border the border (see {@link #setBorder}).
+	 * @param closable whether it is closable (see {@link #setClosable}).
+	 */
+	public Window(String title, String border, boolean closable) {
+		this();
+		setTitle(title);
+		setBorder(border);
+		setClosable(closable);
+	}
 	private void init() {
 		_mutex = new Object();
 	}

@@ -41,6 +41,13 @@ public class Menubar extends XulElement {
 		setSclass("menubar");
 		setMold("horizontal");
 	}
+	/**
+	 * @param orient either horizontal or vertical
+	 */
+	public Menubar(String orient) {
+		setSclass("menubar");
+		setOrient(orient);
+	}
 
 	/** Returns the orient (the same as {@link #getMold}).
 	 * <p>Default: "horizontal".
@@ -49,6 +56,7 @@ public class Menubar extends XulElement {
 		return getMold();
 	}
 	/** Sets the orient.
+	 * @param orient either horizontal or vertical
 	 */
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))

@@ -36,6 +36,13 @@ public class Toolbar extends XulElement {
 	public Toolbar() {
 		setSclass("toolbar");
 	}
+	/**
+	 * @param orient either "horizontal" or "vertical".
+	 */
+	public Toolbar(String orient) {
+		this();
+		setOrient(orient);
+	}
 
 	/** Returns the orient.
 	 * <p>Default: "horizontal".

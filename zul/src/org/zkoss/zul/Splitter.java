@@ -42,6 +42,9 @@ public class Splitter extends XulElement implements Openable {
 	private String _collapse = "none";
 	private boolean _open = true;
 
+	public Splitter() {
+	}
+
 	/** Returns the orientation of the splitter.
 	 * It is the same as the parent's orientation ({@link Box#getOrient}.
 	 */

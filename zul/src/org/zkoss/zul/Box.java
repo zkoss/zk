@@ -43,6 +43,12 @@ public class Box extends XulElement {
 	public Box() {
 		setMold("vertical");
 	}
+	/**
+	 * @param orient either "horizontal" or "vertical".
+	 */
+	public Box(String orient) {
+		setOrient(orient);
+	}
 
 	/** Returns the orient (the same as {@link #getMold}).
 	 * <p>Default: "vertical".
@@ -51,6 +57,7 @@ public class Box extends XulElement {
 		return getMold();
 	}
 	/** Sets the orient.
+	 * @param orient either "horizontal" or "vertical".
 	 */
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))

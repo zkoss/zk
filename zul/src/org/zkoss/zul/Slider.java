@@ -37,6 +37,13 @@ public class Slider extends XulElement implements Scrollable {
 	public Slider() {
 		setWidth("100px");
 	}
+	/**
+	 * @param curpos the current position (default: 0)
+	 */
+	public Slider(int curpos) {
+		this();
+		setCurpos(curpos);
+	}
 
 	/** Returns the current position of the slider.
 	 *
