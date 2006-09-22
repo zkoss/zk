@@ -53,6 +53,7 @@ implements Inputable, Errorable, Constrainted {
 	/** The name. */
 	private String _name;
 	private int _maxlength, _cols;
+	private int _tabindex = -1;
 	private Constraint _constr;
 	private boolean _disabled, _readonly;
 	/** Whether this input is validated (Feature 1461209). */
@@ -284,6 +285,21 @@ implements Inputable, Errorable, Constrainted {
 			smartUpdate("cols", Integer.toString(_cols));
 		}
 	}
+	/** Returns the tab order of this component.
+	 * <p>Default: -1 (means the same as browser's default).
+	 */
+	public int getTabindex() {
+		return _tabindex;
+	}
+	/** Sets the tab order of this component.
+	 */
+	public void setTabindex(int tabindex) throws WrongValueException {
+		if (_tabindex != tabindex) {
+			_tabindex = tabindex;
+			if (tabindex < 0) smartUpdate("tabindex", null);
+			else smartUpdate("tabindex", Integer.toString(_tabindex));
+		}
+	}
 	/** Returns whether it is multiline.
 	 * <p>Default: false.
 	 */
@@ -346,6 +362,9 @@ implements Inputable, Errorable, Constrainted {
 			HTMLs.appendAttribute(sb, "type", 
 				"password".equals(getType()) ? "password": "text");
 		}
+
+		if (_tabindex >= 0)
+			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
 
 		HTMLs.appendAttribute(sb, "name", _name);
 		if (isDisabled())

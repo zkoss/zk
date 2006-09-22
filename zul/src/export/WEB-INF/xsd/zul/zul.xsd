@@ -152,6 +152,7 @@ elementFormDefault="qualified">
 		<xs:attribute name="readonly" type="xs:boolean" use="optional"/>
 		<xs:attribute name="maxlength" type="xs:integer" use="optional"/>
 		<xs:attribute name="cols" type="xs:positiveInteger" use="optional"/>
+		<xs:attribute name="tabindex" type="xs:integer" use="optional"/>
 		<xs:attribute name="constraint" type="javaClassType" use="optional"/>
 	</xs:attributeGroup>
 	<xs:attributeGroup name="formatInputElementAttrGroup">
@@ -304,6 +305,7 @@ elementFormDefault="qualified">
 		<xs:attribute name="target" type="xs:string" use="optional"/>
 		<xs:attribute name="disabled" type="xs:boolean" use="optional"/>
 		<xs:attribute name="readonly" type="xs:boolean" use="optional"/>
+		<xs:attribute name="tabindex" type="xs:integer" use="optional"/>
 		<xs:attribute name="onClick" type="xs:string" use="optional"/>
 		<xs:attribute name="onRightClick" type="xs:string" use="optional"/>
 		<xs:attribute name="onFocus" type="xs:string" use="optional"/>
@@ -950,6 +952,7 @@ elementFormDefault="qualified">
 		<xs:attribute name="dir" type="dirAttrType" use="optional"/>
 		<xs:attribute name="href" type="xs:anyURI" use="optional"/>
 		<xs:attribute name="target" type="xs:string" use="optional"/>
+		<xs:attribute name="tabindex" type="xs:integer" use="optional"/>
 		<xs:attribute name="onClick" type="xs:string" use="optional"/>
 		<xs:attribute name="onRightClick" type="xs:string" use="optional"/>
 		<xs:attribute name="onFocus" type="xs:string" use="optional"/>

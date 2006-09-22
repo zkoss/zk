@@ -40,6 +40,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Toolbarbutton extends LabelImageElement {
 	private String _orient = "horizontal", _dir = "normal";
 	private String _href, _target;
+	private int _tabindex = -1;
 
 	public Toolbarbutton() {
 	}
@@ -128,6 +129,22 @@ public class Toolbarbutton extends LabelImageElement {
 		}
 	}
 
+	/** Returns the tab order of this component.
+	 * <p>Default: -1 (means the same as browser's default).
+	 */
+	public int getTabindex() {
+		return _tabindex;
+	}
+	/** Sets the tab order of this component.
+	 */
+	public void setTabindex(int tabindex) throws WrongValueException {
+		if (_tabindex != tabindex) {
+			_tabindex = tabindex;
+			if (tabindex < 0) smartUpdate("tabindex", null);
+			else smartUpdate("tabindex", Integer.toString(_tabindex));
+		}
+	}
+
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =
@@ -148,6 +165,9 @@ public class Toolbarbutton extends LabelImageElement {
 				//When hyper to other page, we always show progress dlg
 		}
 		HTMLs.appendAttribute(sb, "target", _target);
+
+		if (_tabindex >= 0)
+			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
 		return sb.toString();
 	}
 }
