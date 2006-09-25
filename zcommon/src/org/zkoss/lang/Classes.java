@@ -1048,7 +1048,6 @@ public class Classes {
 	 *
 	 * @param extend whether to consider Date, char, boolean, Character
 	 * and Boolean as a numeric object.
-	 * @see org.zkoss.el.Evals#isNumeric
 	 */
 	public static final boolean isNumeric(Class cls, boolean extend) {
 		if (cls.isPrimitive())

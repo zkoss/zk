@@ -3,8 +3,8 @@ commons-el.jar
 commons-io.jar
 commons-fileupload.jar
 commons-logging.jar
-javax.servlet.jar
-javax.servlet.jsp.jar
+servlet-api.jar
+jsp-api.jar
 spring.jar
 portlet-api.jar
 jasper-compiler.jar
