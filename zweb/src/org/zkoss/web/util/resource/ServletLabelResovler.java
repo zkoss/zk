@@ -30,14 +30,19 @@ import org.zkoss.web.el.ELContext;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class ServletLabelResovler implements VariableResolver {
-	private final VariableResolver _parent;
 	public ServletLabelResovler() {
-		final ELContext jc = ELContexts.getCurrent();
-		_parent = jc != null ? jc.getVariableResolver(): null;
 	}
 	public Object resolveVariable(String name) throws ELException {
 		final Object o = Labels.getLabel(name);
-		return o != null ? o:
-			_parent != null ? _parent.resolveVariable(name): null;
+		if (o != null)
+			return o;
+
+		final ELContext jc = ELContexts.getCurrent();
+		if (jc != null) {
+			final VariableResolver parent = jc.getVariableResolver();
+			if (parent != null)
+				return parent.resolveVariable(name);
+		}
+		return null;
 	}
 }
