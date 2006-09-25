@@ -132,13 +132,13 @@ public class Combobox extends Textbox {
 	}
 
 	//-- super --//
-	public void setMultiline(boolean multiline) {
+	public void setMultiline(boolean multiline) throws UiException {
 		if (multiline)
-			throw new UnsupportedOperationException("multiline");
+			throw new UiException("Combobox doesn't support multiline");
 	}
-	public void setRows(int rows) throws WrongValueException {
+	public void setRows(int rows) throws UiException {
 		if (rows != 1)
-			throw new UnsupportedOperationException("rows");
+			throw new UiException("Combobox doesn't support multiple rows");
 	}
 
 	public String getOuterAttrs() {
