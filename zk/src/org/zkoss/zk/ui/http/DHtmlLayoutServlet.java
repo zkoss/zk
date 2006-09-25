@@ -57,7 +57,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class DHtmlLayoutServlet extends HttpServlet {
-	private static final Log log = Log.lookup(WebManager.class);
+	private static final Log log = Log.lookup(DHtmlLayoutServlet.class);
 	private ServletContext _ctx;
 	private WebManager _webman;
 
