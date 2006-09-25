@@ -34,5 +34,5 @@ mesg.EMPTY_NOT_ALLOWED = "Non è permesso il campo vuoto.\nNon puoi neanche inse
 mesg.GOTO_ERROR_FIELD = "Arrivato al campo sbagliato";
 mesg.PLEASE_WAIT = "Attendere...";
 
-mesg.FILE_SIZE = "File size: ";
+mesg.FILE_SIZE = "Dimensione file: ";
 mesg.KBYTES = "KB";
