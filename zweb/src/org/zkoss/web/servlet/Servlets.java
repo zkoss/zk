@@ -58,7 +58,7 @@ import org.zkoss.util.resource.Locators;
 import org.zkoss.util.resource.PropertyBundle;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
-import org.zkoss.el.Evals;
+import org.zkoss.math.Calcs;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.http.Encodes;
@@ -75,6 +75,8 @@ import org.zkoss.web.util.resource.ServletContextLocator;
 public class Servlets {
 	private static final Log log = Log.lookup(Servlets.class);
 
+	/** Whether EL is supported. */
+	private static Boolean _elSupported = null;
 	/** Utilities; no instantiation required. */
 	protected Servlets() {}
 
@@ -342,7 +344,7 @@ public class Servlets {
 	getProfile(ServletContext ctx, String flnm, String key, int defVal)
 	throws IOException {
 		String val = getProfile(ctx, flnm, key, null);
-		return val != null ? Evals.intValueOf(val): defVal;
+		return val != null ? Calcs.intValueOf(val): defVal;
 	}
 
 	/** Handles the exception and generates three variables stored
@@ -833,5 +835,19 @@ public class Servlets {
 				ctx.setAttribute(attr, ctxs = Collections.synchronizedMap(new HashMap(2)));
 			return ctxs;
 		}
+	}
+
+	/** Returns whether EL is supported by the servlet container.
+	 */
+	public static final boolean isELSupported() {
+		if (_elSupported == null) {
+			try {
+				if (javax.servlet.jsp.el.ExpressionEvaluator.class.getName() != null)
+					_elSupported = Boolean.TRUE;
+			} catch (Throwable ex) {
+				_elSupported = Boolean.FALSE;
+			}
+		}
+		return _elSupported.booleanValue();
 	}
 }
