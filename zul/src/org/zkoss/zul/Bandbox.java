@@ -107,11 +107,11 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 	//-- super --//
 	public void setMultiline(boolean multiline) {
 		if (multiline)
-			throw new UnsupportedOperationException("multiline");
+			throw new UnsupportedOperationException("Bandbox doesn't support multiline");
 	}
-	public void setRows(int rows) throws WrongValueException {
+	public void setRows(int rows) {
 		if (rows != 1)
-			throw new UnsupportedOperationException("rows");
+			throw new UnsupportedOperationException("Bandbox doesn't support multiple rows, "+rows);
 	}
 
 	public String getOuterAttrs() {
