@@ -161,7 +161,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cd /tmp/zk/$srcnm
 	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
-	find -name CVS | xargs rm -rf
+	#find -name CVS | xargs rm -rf
 	find -name .svn | xargs rm -rf
 
 	cd /tmp/zk
