@@ -40,7 +40,7 @@ import bsh.TargetError;
 import org.zkoss.util.logging.Log;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
-import org.zkoss.el.Evals;
+import org.zkoss.math.Calcs;
 
 /**
  * An Awk-like even-driven XML parser.
@@ -430,7 +430,7 @@ public class Xawk {
 			_end = end != null && end.length() != 0 ? end: null;
 		}
 
-		/** Evals this rule if matches.
+		/** Evaluates this rule if matches.
 		 *
 		 * @param mode one of BEGINxxx and ENDxxx
 		 * @return one of END_xxx.
@@ -458,12 +458,12 @@ public class Xawk {
 
 				//eval the global condition
 				if (mode != END_ALWAYS && Xawk.this._condition != null
-				&& !Evals.booleanValueOf(ctx.interpreter.eval(Xawk.this._condition)))
+				&& !Calcs.booleanValueOf(ctx.interpreter.eval(Xawk.this._condition)))
 					return END_NEVER; //global condition fails
 
 				//eval the rule condition
 				if (mode != END_ALWAYS && _condition != null
-				&& !Evals.booleanValueOf(ctx.interpreter.eval(_condition)))
+				&& !Calcs.booleanValueOf(ctx.interpreter.eval(_condition)))
 					return END_NEVER; //rule condition fails
 
 				if (log.debugable()) //no D.ON to help debugging
