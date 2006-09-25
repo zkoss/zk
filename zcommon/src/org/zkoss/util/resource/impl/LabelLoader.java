@@ -56,7 +56,6 @@ public class LabelLoader {
 	/** The variable resolver. */
 	private VariableResolver _resolv;
 
-
 	/** Returns the label of the specified key, or null if not found.
 	 */
 	public String getLabel(String key) {
