@@ -34,5 +34,5 @@ mesg.EMPTY_NOT_ALLOWED = "Champ vide non autorisé.\nVous ne pouvez pas n'indiqu
 mesg.GOTO_ERROR_FIELD = "Allez sur le mauvais champ";
 mesg.PLEASE_WAIT = "Chargement...";
 
-mesg.FILE_SIZE = "File size: ";
+mesg.FILE_SIZE = "Taille du fichier: ";
 mesg.KBYTES = "KB";
