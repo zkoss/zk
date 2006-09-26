@@ -98,7 +98,7 @@ zul.doModal = function (cmp) {
 		Event.observe(window, "scroll", zul.doMoveMask);
 	}
 
-	zkau.enableMoveable(cmp, null, zkau.onWndMove);
+	zkau.floatWnd(cmp, null, zkau.onWndMove);
 	zk.disableAll(cmp);
 	zk.restoreDisabled(cmp); //there might be two or more modal dlgs
 	zk.focusDownById(cmp.id);
@@ -140,7 +140,7 @@ zul.endModal = function (uuid) {
 	var cmp = $e(uuid);
 	if (cmp) {
 		zkau.wndmode[cmp.id] = null;
-		zkau.disableMoveable(cmp);
+		zkau.fixWnd(cmp);
 	}
 
 	if (prevfocusId) zk.focusById(prevfocusId, 10);

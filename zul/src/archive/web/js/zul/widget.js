@@ -234,12 +234,12 @@ zkWnd.init = function (cmp) {
 		if (!img.style.cursor) img.style.cursor = "default";
 	}
 
-	//Bug 1469887: re-init since it might be caused by invalidate
+	//bug 1469887: re-init since it might be caused by invalidate
 	if (zkau.wndmode[cmp.id]) {
 		var caption = $e(cmp.id + "!caption");
 		if (caption && caption.style.cursor == "") caption.style.cursor = "move";
-		zkau.disableMoveable(cmp);
-		zkau.enableMoveable(cmp, null, zkau.onWndMove);
+		zkau.fixWnd(cmp);
+		zkau.floatWnd(cmp, null, zkau.onWndMove);
 	}
 };
 zkWnd.cleanup = function (cmp) {
