@@ -23,6 +23,8 @@ import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.FunctionMapper;
 import javax.servlet.jsp.el.ELException;
 
+import org.zkoss.lang.Classes;
+
 /**
  * Utilities to wrap the real implementation of Expression Language evaluators.
  *
@@ -42,9 +44,13 @@ public class Evals {
 	public static Object evaluate(String expr, Class expectedType,
 	VariableResolver resolv, FunctionMapper funcs)
 	throws ELException {
-		if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0)
-			return expr;
+		if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0) {
+				if (expectedType == Object.class || expectedType == String.class)
+				return expr;
+			return Classes.coerce(expectedType, expr);
+		}
 
     	return new EvaluatorImpl().evaluate(expr, expectedType, resolv, funcs);
 	}
+	
 }
