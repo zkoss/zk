@@ -79,7 +79,7 @@ public class ForEachImpl implements ForEach {
 	}
 
 	/** Constructor.
-	 * In most cases, use {@link #getInstance(Component, String)}
+	 * In most cases, use {@link #getInstance(Component, String, String, String)}
 	 * instead of this constructor.
 	 */
 	public ForEachImpl(Component comp, String expr, String begin, String end) {
@@ -93,7 +93,7 @@ public class ForEachImpl implements ForEach {
 		_end = toIntegerOrExpr(end);
 	}
 	/** Constructor.
-	 * In most cases, use {@link #getInstance(Component, String)}
+	 * In most cases, use {@link #getInstance(Component, String, String, String)}
 	 * instead of this constructor.
 	 */
 	public ForEachImpl(Page page, String expr, String begin, String end) {
