@@ -655,7 +655,7 @@ zkau.doPopup = function (cmp) {
 	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 
 	zkau.fixZIndex(cmp);
-	zkau.enableMoveable(cmp, null, zkau.onWndMove);
+	zkau.floatWnd(cmp, null, zkau.onWndMove);
 	zkau._popups.push(cmp.id); //store ID because it might cease before endPopup
 	zkau.hideCovered();
 	zk.focusDownById(cmp.id, 0);
@@ -670,7 +670,7 @@ zkau.endPopup = function (uuid) {
 	var cmp = $e(uuid);
 	if (cmp) {
 		zkau.wndmode[cmp.id] = null;
-		zkau.disableMoveable(cmp);
+		zkau.fixWnd(cmp);
 	}
 };
 /** Makes the component as overlapped. */
@@ -683,7 +683,7 @@ zkau.doOverlapped = function (cmp) {
 	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 
 	zkau.fixZIndex(cmp);
-	zkau.enableMoveable(cmp, null, zkau.onWndMove);
+	zkau.floatWnd(cmp, null, zkau.onWndMove);
 	zkau._overlaps.push(cmp.id); //store ID because it might cease before endPopup
 	zkau.hideCovered();
 	zk.focusDownById(cmp.id, 0);
@@ -699,17 +699,17 @@ zkau.endOverlapped = function (uuid) {
 	var cmp = $e(uuid);
 	if (cmp) {
 		zkau.wndmode[cmp.id] = null;
-		zkau.disableMoveable(cmp);
+		zkau.fixWnd(cmp);
 	}
 }
 /** Makes a window moveable. */
-zkau.enableMoveable = function (cmp, starteffect, endeffect) {
+zkau.floatWnd = function (cmp, starteffect, endeffect) {
 	if (cmp) {
-		zkau.disableMoveable(cmp);
+		zkau.fixWnd(cmp);
 
 		var handle = $e(cmp.id + "!caption");
 		if (handle) {
-			cmp.style.position = "absolute"; //just in case
+			cmp.style.position = "absolute";
 			zkau.initMoveable(cmp, {
 				handle: handle,
 				starteffect: starteffect || Prototype.emptyFunction,
@@ -721,8 +721,11 @@ zkau.enableMoveable = function (cmp, starteffect, endeffect) {
 };
 
 /** Makes a window un-moveable. */
-zkau.disableMoveable = function (cmp) {
-	if (cmp) zkau.cleanMoveable(cmp.id);
+zkau.fixWnd = function (cmp) {
+	if (cmp) {
+		cmp.style.position = ""; //aculous changes it to relevant
+		zkau.cleanMoveable(cmp.id);
+	}
 };
 
 /** Make a component moveable (by moving). */
