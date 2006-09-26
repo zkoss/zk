@@ -40,6 +40,8 @@ import org.zkoss.zul.impl.XulElement;
 public class Row extends XulElement {
 	private Object _value;
 	private String _align, _valign;
+	/** Used only to generate getChildAttrs(). */
+	private transient int _rsflags;
 	private boolean _nowrap;
 
 	/** Returns the grid that contains this row. */
@@ -111,18 +113,37 @@ public class Row extends XulElement {
 	/** Returns the HTML attributes for the child of the specified index.
 	 */
 	public String getChildAttrs(int index) {
-		String colattrs = null;
+		String colattrs = null, wd = null, hgh = null;
 		final Grid grid = getGrid();
 		if (grid != null) {
 			final Columns cols = grid.getColumns();
 			if (cols != null) {
 				final List colchds = cols.getChildren();
-				if (index < colchds.size())
-					colattrs = ((Column)colchds.get(index)).getColAttrs();
+				if (index < colchds.size()) {
+					final Column col = (Column)colchds.get(index);
+					colattrs = col.getColAttrs();
+					wd = col.getWidth();
+					hgh = col.getHeight();
+				}
 			}
 		}
 
-		final String style = getRealStyle();
+		String style;
+		_rsflags = RS_NO_WIDTH|RS_NO_HEIGHT;
+		try {
+			style = getRealStyle();
+		} finally {
+			_rsflags = 0;
+		}
+
+		if (wd != null || hgh != null) {
+			final StringBuffer sb = new StringBuffer(80);
+			if (style != null) sb.append(style);
+			HTMLs.appendStyle(sb, "width", wd);
+			HTMLs.appendStyle(sb, "height", hgh);
+			style = sb.toString();
+		}
+
 		final String sclass = getSclass();
 		if (colattrs == null && sclass == null && style.length() == 0)
 			return "";
@@ -135,6 +156,9 @@ public class Row extends XulElement {
 	}
 
 	//-- super --//
+	protected int getRealStyleFlags() {
+		return super.getRealStyleFlags() | _rsflags;
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
