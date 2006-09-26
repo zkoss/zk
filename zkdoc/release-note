@@ -1,10 +1,11 @@
 	--------
 ZK 2.1.2 Freshly
 * Features:
-  1562214, 1563300, 1561398, 1450988.
-  + French messages are supported. Jerome Vergereau for his contribution.
+  1562214, 1563300, 1561398, 1450988, 1565483.
+  + French messages are supported. Thank Jerome Vergereau for his contribution.
   + Support Spring Transaction Synchronization for ZK.
   + Tomcat 4.1.x are supported. See How-tos.
+  + Support Acegi SecurityContext for ZK.
 
 * Bugs:
   1548478, 1563327, 1563932, 1565463, 1563206.
