@@ -27,8 +27,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </zscript>
 <listbox id="src" multiple="true" width="250px">
 	<listhead>
-		<listheader label="Population" sortAscending="${sa0}"/>
-		<listheader align="right" label="%" sortAscending="${sa1}" sortDescending="${sd1}"/>
+		<listheader width="150px" label="Population" sortAscending="${sa0}"/>
+		<listheader width="100px" align="right" label="%" sortAscending="${sa1}" sortDescending="${sd1}"/>
 	</listhead>
 	<listitem id="a" value="A">
 		<listcell label="A. Graduate"/>
@@ -70,10 +70,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</listitem>
 </listbox>
 </hbox>
-
+<vbox>
+The first column width above is 150, while the second is 100.
+<hbox>
 <button label="Move c before b" onClick="move(c, b)"/>
 <button label="Move b before a" onClick="move(b, a)"/>
 <button label="Move a before d" onClick="move(a, d)"/>
+</hbox>
+</vbox>
 <zscript>
 void move(Listitem li, Listitem before) {
 	src.insertBefore(li, before);

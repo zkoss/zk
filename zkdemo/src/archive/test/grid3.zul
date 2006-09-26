@@ -18,8 +18,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Grid Test 3">
-	Border between two rows:
-	<grid>
+	Border between two rows, and different width (100, 200):
+	<grid width="300px">
+		<columns>
+			<column width="100px"/>
+			<column width="200px"/>
+		</columns>
 		<rows>
 			<row>
 				<label value="(1, 1)"/>
