@@ -38,7 +38,7 @@ import org.acegisecurity.context.SecurityContextHolder;
  * lines in WEB-INF/zk.xml:
  * <pre><code>
  * 	&lt;listener>
- *		&lt;description>Acegi SecurityContext Management&lt;/description>
+ *		&lt;description>Acegi SecurityContext Handler&lt;/description>
  *		&lt;listener-class>org.zkoss.zkplus.acegi.AcegiSecurityContextListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>
