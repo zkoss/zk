@@ -7,7 +7,7 @@ ZK 2.1.2 Freshly
   + Tomcat 4.1.x are supported. See How-tos.
 
 * Bugs:
-  1548478, 1563327, 1563932.
+  1548478, 1563327, 1563932, 1565463.
   + Support JBoss Portal
 
 * Upgrade Notes
