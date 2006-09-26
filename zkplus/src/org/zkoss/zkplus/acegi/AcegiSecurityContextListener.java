@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkplus.hibernate;
+package org.zkoss.zkplus.acegi;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
