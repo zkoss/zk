@@ -129,7 +129,7 @@ public class Row extends XulElement {
 		}
 
 		String style;
-		_rsflags = RS_NO_WIDTH|RS_NO_HEIGHT;
+		_rsflags = RS_NO_WIDTH|RS_NO_HEIGHT|RS_NO_DISPLAY;
 		try {
 			style = getRealStyle();
 		} finally {
@@ -137,8 +137,7 @@ public class Row extends XulElement {
 		}
 
 		if (wd != null || hgh != null) {
-			final StringBuffer sb = new StringBuffer(80);
-			if (style != null) sb.append(style);
+			final StringBuffer sb = new StringBuffer(80).append(style);
 			HTMLs.appendStyle(sb, "width", wd);
 			HTMLs.appendStyle(sb, "height", hgh);
 			style = sb.toString();
