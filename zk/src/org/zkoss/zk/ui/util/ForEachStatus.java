@@ -34,7 +34,21 @@ public interface ForEachStatus {
 	/** Returns the object of this iteration.
 	 */
 	public Object getEach();
-	/** Returns the index of the current iterator, starting from 0.
+	/** Returns the index of the current round of the iteration.
+	 * If iteration is being performed over a subset of an underlying array,
+	 * collection, or other type, the index returned is absolute with respect
+	 * to the underlying collection. Indices are 0-based.
+	 *
+	 * <p>For example, if the iteration starts at the fifth element
+	 * (forEachBegin is 4), then the first value returned by this method will be 4.
 	 */
 	public int getIndex();
+	/** Returns the index (starting from 0) that the iteration begins at,
+	 * or null if not specified (and 0 is assumed).
+	 */
+	public Integer getBegin();
+	/** Returns the index (starting from 0) that the iteration ends at,
+	 * or null if not specified (and the last element is assumed).
+	 */
+	public Integer getEnd();
 }

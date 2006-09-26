@@ -29,6 +29,7 @@ import java.io.IOException;
 import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ELException;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.el.ELContexts;
@@ -98,8 +99,11 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	private Object evaluate0(Object self, String expr,
 	Class expectedType, Page page) {
-		if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0)
-			return expr;
+		if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0) {
+			if (expectedType == Object.class || expectedType == String.class)
+				return expr;
+			return Classes.coerce(expectedType, expr);
+		}
 
 		try {
 			if (page == null) page = _curpage;

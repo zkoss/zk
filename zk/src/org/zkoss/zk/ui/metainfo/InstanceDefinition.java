@@ -73,10 +73,10 @@ implements Condition {
 	 * If null, it means effective.
 	 */
 	private Condition _cond;
-	/** The forEach attribute which is used to evaluate this definition
-	 * multiple times.
+	/** The forEach, forEachBegin and forEachEnd attribute,
+	 * which are used to evaluate this definition multiple times.
 	 */
-	private String _forEach;
+	private String[] _forEach;
 
 	/** Constructs an instance definition.
 	 * @param parent the parent; never null.
@@ -232,16 +232,18 @@ implements Condition {
 	 * or null if this definition shall be interpreted only once.
 	 */
 	public ForEach getForEach(Page page, Component comp) {
-		return comp != null ?
-			ForEachImpl.getInstance(comp, _forEach):
-			ForEachImpl.getInstance(page, _forEach);
+		return _forEach == null ? null:
+			comp != null ?
+				ForEachImpl.getInstance(comp, _forEach[0], _forEach[1], _forEach[2]):
+				ForEachImpl.getInstance(page, _forEach[0], _forEach[1], _forEach[2]);
 	}
 	/** Sets the forEach attribute, which is usually an expression.
 	 * @param expr the expression to return a collection of objects, or
 	 * null/empty to denote no iteration.
 	 */
-	public void setForEach(String expr) {
-		_forEach = expr != null && expr.length() > 0 ? expr: null;
+	public void setForEach(String expr, String begin, String end) {
+		_forEach = expr != null && expr.length() > 0 ?
+			new String[] {expr, begin, end}: null;
 	}
 
 	/** Returns a readonly list of children.

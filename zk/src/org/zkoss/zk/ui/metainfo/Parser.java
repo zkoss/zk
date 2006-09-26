@@ -528,7 +528,8 @@ public class Parser {
 				}
 			}
 
-			String ifc = null, unless = null, forEach = null;
+			String ifc = null, unless = null,
+				forEach = null, forEachBegin = null, forEachEnd = null;
 			for (Iterator it = el.getAttributeItems().iterator();
 			it.hasNext();) {
 				final Attribute attr = (Attribute)it.next();
@@ -540,6 +541,10 @@ public class Parser {
 					unless = attval;
 				} else if ("forEach".equals(attnm)) {
 					forEach = attval;
+				} else if ("forEachBegin".equals(attnm)) {
+					forEachBegin = attval;
+				} else if ("forEachEnd".equals(attnm)) {
+					forEachEnd = attval;
 				} else if (!"use".equals(attnm)) {
 					final Namespace attns = attr.getNamespace();
 					final String attpref = attns != null ? attns.getPrefix(): "";
@@ -551,7 +556,7 @@ public class Parser {
 				}
 			}
 			instdef.setCondition(ConditionImpl.getInstance(ifc, unless));
-			instdef.setForEach(forEach);
+			instdef.setForEach(forEach, forEachBegin, forEachEnd);
 			parse(pgdef, instdef, el.getChildren()); //recursive
 		}
 	}

@@ -340,7 +340,7 @@ implements Moveable, ZIndexed {
 	}
 
 	/** Returns the real style after appending width, height and others
-	 * to {@link #setStyle}.
+	 * to {@link #setStyle} (never null).
 	 * <p>Use {@link #getRealStyleFlags} to control what attributes to
 	 * exclude.
 	 */
@@ -365,7 +365,7 @@ implements Moveable, ZIndexed {
 			sb.append(style);
 			if (!style.endsWith(";")) sb.append(';');
 		}
-		if (!isVisible()) {
+		if ((flags & RS_NO_DISPLAY) == 0 && !isVisible()) {
 			if (sb.length() == 0)
 				return "display:none;";
 			sb.append("display:none;");
@@ -380,6 +380,10 @@ implements Moveable, ZIndexed {
 	 * shall not generate the height style.
 	 */
 	protected static final int RS_NO_HEIGHT = 0x0002;
+	/** Used by {@link #getRealStyleFlags} to denote that {@link #getRealStyle}
+	 * shall not generate the display style.
+	 */
+	protected static final int RS_NO_DISPLAY = 0x0004;
 	/** Returns a combination of {@link #RS_NO_WIDTH} and {@link #RS_NO_HEIGHT}.
 	 * <p>Default: return 0.
 	 */
