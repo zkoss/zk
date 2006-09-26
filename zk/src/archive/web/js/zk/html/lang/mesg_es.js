@@ -34,5 +34,5 @@ mesg.EMPTY_NOT_ALLOWED = "Vacio o espacios en blanco no son permitidos.\n Debe e
 mesg.GOTO_ERROR_FIELD = "Ir al campo que contiene el error ";
 mesg.PLEASE_WAIT = "Procesando...";
 
-mesg.FILE_SIZE = "File size: ";
+mesg.FILE_SIZE = "Tamaño del archivo: ";
 mesg.KBYTES = "KB";
