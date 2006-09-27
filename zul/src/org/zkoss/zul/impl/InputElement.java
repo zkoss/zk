@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.ext.Errorable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.AuSelectAll;
 
+import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.Constraint;
 import org.zkoss.zul.SimpleConstraint;
 import org.zkoss.zul.ext.Constrainted;
@@ -179,6 +180,8 @@ implements Inputable, Errorable, Constrainted {
 	public void setText(String value) throws WrongValueException {
 		Object val;
 		try {
+			if (_maxlength > 0 && value != null && value.length() > _maxlength)
+				throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_maxlength));
 			val = coerceFromString(value);
 			validate(val);
 		} catch (Throwable ex) {
@@ -353,6 +356,8 @@ implements Inputable, Errorable, Constrainted {
 		if (isMultiline()) {
 			if (_cols > 0)
 				HTMLs.appendAttribute(sb, "cols",  _cols);
+			if (_maxlength > 0)
+				HTMLs.appendAttribute(sb, "zk_maxlen",  _maxlength);
 		} else {
 			HTMLs.appendAttribute(sb, "value",  coerceToString(_value));
 			if (_cols > 0)

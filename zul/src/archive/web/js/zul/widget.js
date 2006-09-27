@@ -40,6 +40,14 @@ zkTxbox.onblur = function (inp) {
  * @return false if failed (wrong data).
  */
 zkTxbox.updateChange = function (inp, noonblur) {
+	//Request 1565288: support maxlength for Textarea
+	var maxlen = inp.getAttribute("zk_maxlen");
+	if (maxlen) {
+		maxlen = parseInt(maxlen);
+		if (maxlen > 0 && inp.value != inp.defaultValue && inp.value.length > maxlen)
+			inp.value = inp.value.substring(0, maxlen);
+	}
+
 	if (zkVld.validating) return true; //to avoid deadloop (when both fields are invalid)
 
 	if (inp && inp.id) {
