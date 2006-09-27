@@ -60,32 +60,35 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		}
 	}
 	public Desktop getDesktop(String desktopId) {
+		final Desktop desktop;
 		synchronized (_desktops) {
-			final Desktop desktop = (Desktop)_desktops.get(desktopId);
-			if (desktop == null)
-				throw new ComponentNotFoundException("Desktop not found: "+desktopId);
-			return desktop;
+			desktop = (Desktop)_desktops.get(desktopId);
 		}
+		if (desktop == null)
+			throw new ComponentNotFoundException("Desktop not found: "+desktopId);
+		return desktop;
 	}
 	public void addDesktop(Desktop desktop) {
 		final boolean added;
+		final Object old;
 		synchronized (_desktops) {
-			final Object old = _desktops.put(desktop.getId(), desktop);
-			if (old != null) {
-				_desktops.put(((Desktop)old).getId(), old); //recover
-				log.warning(
-					desktop == old ? "Register a desktop twice: "+desktop:
-						"Replicated ID: "+desktop+"; already used by "+old);
-			}
-			//if (log.debugable()) log.debug("After added, desktops: "+_desktops);
+			old = _desktops.put(desktop.getId(), desktop);
 		}
-
+		if (old != null) {
+			_desktops.put(((Desktop)old).getId(), old); //recover
+			log.warning(
+				desktop == old ? "Register a desktop twice: "+desktop:
+					"Replicated ID: "+desktop+"; already used by "+old);
+		}
+		//if (log.debugable()) log.debug("After added, desktops: "+_desktops);
 	}
 	public void removeDesktop(Desktop desktop) {
+		final Object old;
 		synchronized (_desktops) {
-			if (_desktops.remove(desktop.getId()) == null)
-				log.warning("Removing non-existent desktop: "+desktop);
+			old = _desktops.remove(desktop.getId());
 		}
+		if (old == null)
+			log.warning("Removing non-existent desktop: "+desktop);
 		desktopDestroyed(desktop);
 	}
 	private static void desktopDestroyed(Desktop desktop) {
@@ -108,15 +111,19 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	 * desktops it cached.
 	 */
 	public void sessionWillPassivate(Session sess) {
-		for (Iterator it = _desktops.values().iterator(); it.hasNext();)
-			((DesktopCtrl)it.next()).sessionWillPassivate(sess);
+		synchronized (_desktops) {
+			for (Iterator it = _desktops.values().iterator(); it.hasNext();)
+				((DesktopCtrl)it.next()).sessionWillPassivate(sess);
+		}
 	}
 	/** Invokes {@link DesktopCtrl#sessionDidActivate} for each
 	 * desktops it cached.
 	 */
 	public void sessionDidActivate(Session sess) {
-		for (Iterator it = _desktops.values().iterator(); it.hasNext();)
-			((DesktopCtrl)it.next()).sessionDidActivate(sess);
+		synchronized (_desktops) {
+			for (Iterator it = _desktops.values().iterator(); it.hasNext();)
+				((DesktopCtrl)it.next()).sessionDidActivate(sess);
+		}
 	}
 
 	public void stop() {
