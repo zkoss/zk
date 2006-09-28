@@ -13,6 +13,11 @@ ZK 2.1.2 Freshly
   + Support JBoss Portal
 
 * Upgrade Notes
+  + org.zkoss.zk.ui.ext.PostCreate is renamed to org.zkoss.zk.ui.ext.AfterCompose
+    since it is less confusion (it is called before the onCreate event executes)
+    And, the postCreate method is renamed to afterCompose.
+    Note: macro components implement this interface, so use afterCompose instead
+    if you want to create macro components manually.
 
 	--------
 ZK 2.1.1
