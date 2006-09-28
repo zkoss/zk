@@ -85,18 +85,6 @@ public class Charsets {
 	 */
 	public static final
 	Object setup(ServletRequest request, ServletResponse response, String charset) {
-		//20050420: Tom Yeh:
-		//Since we store the preferred locale in HttpSession rather than
-		//org.zkoss.ext.security.Session,
-		//we don't need to invoke Authens.isAuthenticated() to re-authen.
-		//
-		//Side effect: if remember-me is ON and a page invokes getRemoteUser
-		//which causes auto-login, then this page is rendered with the
-		//preferred locale before login (not what is specified in i3 session)
-		//Note: if a protected page is visited, there is no such side effect
-		//because Realm.authenticate is called before any filter
-		//Authens.isAuthenticated(request);
-
 		if (hasSetup(request)) //processed before?
 			return Objects.UNKNOWN;
 

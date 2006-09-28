@@ -32,7 +32,6 @@ import javax.servlet.ServletException;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.servlet.dsp.action.ActionContext;
-import org.zkoss.web.servlet.auth.Authens;
 import org.zkoss.web.el.ELContexts;
 import org.zkoss.web.el.ELContext;
 
@@ -69,12 +68,6 @@ public class ServletFns {
 		return Encodes.encodeURL(
 			getCurrentServletContext(), getCurrentRequest(),
 			getCurrentResponse(), uri);
-	}
-
-	/** Returns whether the current session has already been authenticated.
-	 */
-	public static boolean isAuthenticated() {
-		return Authens.isAuthenticated(getCurrentRequest());
 	}
 
 	/** Returns whether the browser of the current request is Explorer.
