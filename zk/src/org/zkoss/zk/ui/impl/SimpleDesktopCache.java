@@ -59,6 +59,11 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			return _nextId++;
 		}
 	}
+	public Desktop getDesktopIfAny(String desktopId) {
+		synchronized (_desktops) {
+			return (Desktop)_desktops.get(desktopId);
+		}
+	}
 	public Desktop getDesktop(String desktopId) {
 		final Desktop desktop;
 		synchronized (_desktops) {

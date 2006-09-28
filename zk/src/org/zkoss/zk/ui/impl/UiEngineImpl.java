@@ -46,7 +46,7 @@ import org.zkoss.zk.ui.*;
 import org.zkoss.zk.ui.sys.*;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
-import org.zkoss.zk.ui.ext.PostCreate;
+import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.*;
 import org.zkoss.zk.au.*;
 
@@ -360,10 +360,10 @@ public class UiEngineImpl implements UiEngine {
 			mill.applyProperties(child);
 			mill.applyCustomAttributes(child);
 
-			if (child instanceof PostCreate)
-				((PostCreate)child).postCreate();
-
 			execCreate(exec, page, childdef, child); //recursive
+
+			if (child instanceof AfterCompose)
+				((AfterCompose)child).afterCompose();
 
 			if (Events.isListenerAvailable(child, Events.ON_CREATE, false))
 				Events.postEvent(

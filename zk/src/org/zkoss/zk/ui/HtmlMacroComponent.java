@@ -21,7 +21,7 @@ package org.zkoss.zk.ui;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.zkoss.zk.ui.ext.PostCreate;
+import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 
 /**
@@ -29,19 +29,19 @@ import org.zkoss.zk.ui.ext.DynamicPropertied;
  *
  * <p>Generally, a macro component is created automatically by ZK loader.
  * If a developer wants to create it manually, it has to instantiate from
- * the correct class, and then invoke {@link #postCreate}.
+ * the correct class, and then invoke {@link #afterCompose}.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class HtmlMacroComponent extends HtmlBasedComponent
-implements PostCreate, IdSpace, DynamicPropertied {
+implements AfterCompose, IdSpace, DynamicPropertied {
 	private Map _props = new HashMap(7);
 
 	public HtmlMacroComponent() {
 		_props.put("includer", this);
 	}
 
-	//-- PostCreate --//
+	//-- AfterCompose --//
 	/** Creates the child components after apply dynamic properties
 	 * {@link #setDynamicProperty}.
 	 *
@@ -49,14 +49,16 @@ implements PostCreate, IdSpace, DynamicPropertied {
 	 * automatically. Developers need to invoke this method only if they create
 	 * a macro component manually.
 	 */
-	public void postCreate() {
+	public void afterCompose() {
 		final Execution exec = Executions.getCurrent();
 		if (exec == null)
 			throw new IllegalStateException("No execution available.");
 		exec.createComponents(getMillieu().getMacroURI(this), this, _props);
 	}
+
+	//extra//
 	/** Detaches all child components and then recreate them by use of 
-	 * {@link #postCreate}.
+	 * {@link #afterCompose}.
 	 *
 	 * <p>It is used if you have assigned new values to dynamical properties
 	 * and want to re-create child components to reflect the new values.
@@ -66,7 +68,7 @@ implements PostCreate, IdSpace, DynamicPropertied {
 	 */
 	public void recreate() {
 		getChildren().clear();
-		postCreate();
+		afterCompose();
 	}
 
 	//Cloneable//

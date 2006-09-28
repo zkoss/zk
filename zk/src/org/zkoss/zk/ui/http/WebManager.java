@@ -324,10 +324,10 @@ public class WebManager {
 	 */
 	public static void setDesktop(HttpServletRequest request,
 	Desktop desktop) {
-		if (D.ON) {
+		/*if (D.ON) {
 			final Desktop dt = (Desktop)request.getAttribute(DESKTOP);
 			assert dt == null || dt == desktop: "old:"+dt+", new:"+desktop;
-		}
+		}*/
 		request.setAttribute(DESKTOP, desktop);
 	}
 

@@ -38,6 +38,9 @@ public interface DesktopCache {
 	 * is not found
 	 */
 	public Desktop getDesktop(String desktopId);
+	/** Returns the desktop for the specified desktop ID, or null if not found.
+	 */
+	public Desktop getDesktopIfAny(String desktopId);
 
 	/** Adds a desktop to this session.
 	 * It must be called when a desktop is created.

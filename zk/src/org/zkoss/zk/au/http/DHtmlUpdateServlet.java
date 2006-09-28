@@ -148,12 +148,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//to response it back to users
 			return;
 		}
-		final Desktop desktop;
-		try {
-			desktop = wappc.getDesktopCache(sess).getDesktop(dtid);
-			WebManager.setDesktop(request, desktop);
-				//reason: a new page might be created (such as include)
-		} catch (ComponentNotFoundException ex) {
+
+		final Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
+		if (desktop == null) {
 			final StringWriter out = getXmlWriter();
 
 			final String scmd = request.getParameter("cmd.0");
@@ -175,6 +172,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			flushXmlWriter(response, out);
 			return;
 		}
+		WebManager.setDesktop(request, desktop);
+			//reason: a new page might be created (such as include)
 
 		//parse commands
 		try {
