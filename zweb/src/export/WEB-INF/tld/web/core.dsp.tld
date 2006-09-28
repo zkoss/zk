@@ -357,15 +357,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Returns the locale for the current request.
 		</description>
 	</function>
-
-	<function>
-		<name>isAuthenticated</name>
-		<function-class>org.zkoss.web.fn.ServletFns</function-class>
-		<function-signature>
-	boolean isAuthenticated()
-		</function-signature>
-		<description>
-	Whether the current session has already been authenticated.
-		</description>
-	</function>
 </taglib>
