@@ -21,15 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window id="root" xmlns:h="http://www.w3.org/1999/xhtml">
 	<hbox>
 	<window id="treelist">
-		<tree id="toc" vflex="true" width="320px">
-			<attribute name="onSelect">
-				Treeitem item = self.getSelectedItem();
-				if (item != null) {
-					Include inc = Path.getComponent(root, "contents/xcontents");
-					inc.setSrc(null); //to make it dirty (and invalidate)
-					inc.setSrc(item.value);
-				}
-			</attribute>
+		<tree id="toc" use="org.zkoss.zkdemo.TocTree" vflex="true" width="320px">
 			<treecols>
 				<treecol label="Demo: Version ${desktop.webApp.version}"
 				onClick="Executions.sendRedirect(&quot;http://www.zkoss.org&quot;)"/>
@@ -135,23 +127,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</tree>
 	</window>
 	<window id="contents" border="normal" width="99%">
-		<include id="xcontents"/>
+		<include id="xcontents" src="${requestScope.contentSrc}"/><!-- prepared by TocTree -->
 	</window>
-	<zscript><![CDATA[
-		void doSelect(String s) {
-			try {
-				Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
-				Treeitem treeitem = tree.getSpaceOwner().getFellow(s);
-				tree.selectItem(treeitem);
-				Set items = new HashSet();
-				items.add(treeitem);
-				Events.postEvent(new SelectEvent("onSelect", tree, items));
-			} catch (ComponentNotFoundException ex) { //ignore
-			}
-		}
-		final String id = Executions.getCurrent().getParameter("id");
-		doSelect(id != null ? id : "s1");
-	]]></zscript>
 	</hbox>
 <!-- Use UA-121377-1 instead of UA-121377-3 (historical reason) -->
 <h:script type="text/javascript"><![CDATA[
