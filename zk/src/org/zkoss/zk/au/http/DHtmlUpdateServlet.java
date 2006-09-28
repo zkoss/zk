@@ -38,7 +38,6 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.Encodes;
-import org.zkoss.web.servlet.auth.Authens;
 import org.zkoss.web.util.resource.ClassWebResource;
 
 import org.zkoss.zk.mesg.MZk;
@@ -97,10 +96,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	protected
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		Authens.isAuthenticated(request);
-		//Enforce Web container to authenticate again
-		//CONSIDER: we might use login="required" to define pages
-
 		final Session sess = WebManager.getSession(_ctx, request);
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
