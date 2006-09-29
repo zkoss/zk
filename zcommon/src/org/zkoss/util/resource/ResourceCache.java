@@ -110,7 +110,7 @@ public class ResourceCache extends CacheMap {
 				} else if (o instanceof WaitLock) {
 					lock = (WaitLock)o;
 				} else {
-					put(src, lock = new WaitLock());
+					super.put(src, lock = new WaitLock());
 					break; //then, load it
 				}
 			} //sync(this)
@@ -137,28 +137,26 @@ public class ResourceCache extends CacheMap {
 			final Object resource = ri.getResource();
 			synchronized (this) {
 				if (resource != null) {
-					put(src, ri);
+					super.put(src, ri);
 				} else {
-					remove(src); //remove lock
+					super.remove(src); //remove lock
 				}
 			}
 
 			return resource;
 		} catch (Throwable ex) {
 			synchronized (this) {
-				remove(src); //remove lock
+				super.remove(src); //remove lock
 			}
 			throw SystemException.Aide.wrap(ex);
 		} finally {
 			lock.unlock();
 		}
 	}
-	/** Used only internally.
+	/** Don't use it.
 	 */
 	public Object put(Object src, Object val) {
-		if (!(val instanceof Info) && !(val instanceof WaitLock))
-			throw new UnsupportedOperationException("Don't put content directly.");
-		return super.put(src, val);
+		throw new UnsupportedOperationException("Used only internally");
 	}
 	/** It is OK to remove the resource if you don't want to cache it.
 	 * It is thread safe.
