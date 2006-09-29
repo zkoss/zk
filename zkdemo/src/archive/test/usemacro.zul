@@ -27,7 +27,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<attribute name="onClick">{
 	Username ua = new Username();
 	ua.setParent(wnd);
-	ua.postCreate();
+	ua.afterCompose();
 	}</attribute>
 	</button>
 
@@ -35,7 +35,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<attribute name="onClick">{
 	Component ua = page.getComponentDefinition("username", false).newInstance(page);
 	ua.setParent(wnd);
-	ua.postCreate();
+	ua.afterCompose();
 	}</attribute>
 	</button>	
 </window>
