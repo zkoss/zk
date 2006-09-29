@@ -390,6 +390,8 @@ implements Inputable, Errorable, Constrainted {
 		if (_constr != null) {
 			HTMLs.appendAttribute(sb, "zk_valid", _constr.getValidationScript());
 			HTMLs.appendAttribute(sb, "zk_ermg", _constr.getErrorMessage());
+			if (!_constr.isClientComplete())
+				sb.append(" zk_srvald=\"true\""); //validate-at-server is required
 		}
 		return sb.toString();
 	}

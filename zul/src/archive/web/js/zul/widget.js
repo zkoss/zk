@@ -27,6 +27,14 @@ zkau.textbox = zkTxbox; //zkau depends on it
 zkTxbox.init = function (cmp) {
 	Event.observe(cmp, "focus", function () {zkTxbox.onfocus(cmp);});
 	Event.observe(cmp, "blur", function() {zkTxbox.onblur(cmp);});
+
+	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
+	//at the server
+	if ($outer(cmp).getAttribute("zk_srvald") == "true") {
+		var old = cmp.value;
+		cmp.defaultValue = old + "-";
+		if (old != cmp.value) cmp.value = old; //Bug 1490079
+	}
 };
 
 /** Handles onblur for text input.
