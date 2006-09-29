@@ -108,8 +108,8 @@ public class ClassWebResource {
 		_ctx = ctx;
 		_mappingURI = mappingURI;
 		_cwc = new ClassWebContext();
-		_dspCache = new ResourceCache(new DSPLoader(_cwc), 29);
-		_dspCache.setMaxSize(500).setLifetime(60*60*1000); //1hr
+		_dspCache = new ResourceCache(new DSPLoader(_cwc), 131);
+		_dspCache.setMaxSize(1000).setLifetime(60*60*1000); //1hr
 		_dspCache.setCheckPeriod(60*60*1000); //1hr
 	}
 	/** Process the request. */
@@ -118,7 +118,7 @@ public class ClassWebResource {
 		final Object old = Charsets.setup(request, response, "UTF-8");
 		try {
 			final String pi = Https.getThisPathInfo(request);
-			if (D.ON && log.debugable()) log.debug("Path info: "+pi);
+			//if (D.ON && log.debugable()) log.debug("Path info: "+pi);
 			if (pi != null)
 				web(request, response, pi.substring(PATH_PREFIX.length()));
 		} finally {

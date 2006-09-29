@@ -132,7 +132,7 @@ class ActionNode extends Node {
 				if (_bExpr) {
 					args[0] = ic.dc.getExpressionEvaluator().evaluate(
 						(String)_value, Object.class, ic.resolver, ic.mapper);
-					if (D.ON && log.finerable()) log.finer("attr "+_method.getName()+"="+_value+" to "+args[0]);
+					//if (D.ON && log.finerable()) log.finer("attr "+_method.getName()+"="+_value+" to "+args[0]);
 				} else {
 					args[0] = _value;
 				}

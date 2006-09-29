@@ -80,30 +80,6 @@ public class Servlets {
 	/** Utilities; no instantiation required. */
 	protected Servlets() {}
 
-	/**
-	 * Gets a set of the parameters of a request.
-	 * Only parameters listed in the paramNames argument are returned.
-	 *
-	 * <p>The value of the result map is String[] instances.
-	 * In other word, ServletRequest.getParameterValues is used.
-	 *
-	 * @param request the request to get the parameters
-	 * @param paramNames the parameter's names to get
-	 * @return the map; never null
-	 * @exception NullPointerException if or request and paramNames is null
-	 */
-	public static final Map
-	getParameters(ServletRequest request, String[] paramNames) {
-		final Map map = new HashMap();
-		for (int j = 0; j < paramNames.length; ++j) {
-			String[] vals = request.getParameterValues(paramNames[j]);
-			if (vals != null && vals.length > 0)
-				map.put(paramNames[j],
-					vals.length == 1 ? (Object)vals[0]: (Object)vals);
-		}
-		return map;
-	}
-
 	/** Returns whether a URL starts with xxx://, mailto:, about:,
 	 * javascript:
 	 */
@@ -190,8 +166,8 @@ public class Servlets {
 		final String PGPATH_CACHE = "s_pgpath_cache";
 		Map map = (Map)ctx.getAttribute(PGPATH_CACHE);
 		if (map == null) {
-			map = Collections.synchronizedMap( //7 min
-				new CacheMap().setMaxSize(128).setLifetime(7*60*1000));
+			map = Collections.synchronizedMap( //10 min
+				new CacheMap(53).setMaxSize(500).setLifetime(10*60*1000));
 			ctx.setAttribute(PGPATH_CACHE, map);
 		}
 
@@ -300,87 +276,6 @@ public class Servlets {
 
 		agt = agt.toLowerCase();
 		return agt.indexOf("safari") >= 0;
-	}
-
-	//-- interface to access profile --//
-	/** The profile's filename, i.e., "/web.profile". */
-	public static final String PROFILE_FILENAME = "/web.profile";
-
-	/** Gets the profile value of the given key in the given file.
-	 *
-	 * <p>This implementation caches the result, so the performance shall
-	 * be good enough.
-	 */
-	public static final String
-	getProfile(ServletContext ctx, String flnm, String key, String defVal)
-	throws IOException {
-		final String PROFILE_CACHE = "s_profile_cache";
-		Map map = (Map)ctx.getAttribute(PROFILE_CACHE);
-		if (map == null) {
-			map = Collections.synchronizedMap(new CacheMap().setMaxSize(16));
-			ctx.setAttribute(PROFILE_CACHE, map);
-		}
-
-		Properties props = (Properties)map.get(flnm);
-		if (props == null) {
-			final InputStream is = ctx.getResourceAsStream(flnm);
-			if (is == null) {
-				if (!flnm.startsWith("/"))
-					throw new IOException("The filename must starts with '/': "+flnm);
-				if (D.ON)
-					log.debug(MCommon.FILE_NOT_FOUND, flnm);//not bother user
-				return defVal;
-			}
-
-			props = new Properties();
-			props.load(is);
-			map.put(flnm, props);
-		}
-		return props.getProperty(key, defVal);
-	}
-	/** Returns the profile value in integer.
-	 */
-	public static final int
-	getProfile(ServletContext ctx, String flnm, String key, int defVal)
-	throws IOException {
-		String val = getProfile(ctx, flnm, key, null);
-		return val != null ? Calcs.intValueOf(val): defVal;
-	}
-
-	/** Handles the exception and generates three variables stored
-	 * int the request's attribute: zk_class, zk_message, zk_throwable and zk_stack_trace.
-	 *
-	 * <p>It is designed to be used with the jsp pages that handle exceptions.
-	 */
-	public static void handle(ServletRequest request,
-	ServletResponse response, Throwable ex) {
-		//Jetty doesn't assign exception if NullPointerException is found
-		if(ex == null)
-			ex = (Throwable)
-				request.getAttribute(Attributes.ERROR_EXCEPTION);
-
-		String exClass = "SEVERE ERROR: unable to locate the exception";
-		String exMsg = "", exStackTrace = "";
-		Throwable exCause = null;
-		if(ex != null){
-			//save exMsg, the exception message
-			exMsg = Exceptions.getMessage(ex);
-
-			//save exClass, the exception class
-			exClass = ex.getClass().getName();
-
-			//prepare exCause, the real cause
-			exCause = Exceptions.getRealCause(ex);
-
-			//generate stack trace
-			StringWriter sw = new StringWriter(4096);
-			exCause.printStackTrace(new PrintWriter(sw));
-			exStackTrace = sw.toString();
-		}
-		request.setAttribute("zk_class", exClass);
-		request.setAttribute("zk_throwable", exCause);
-		request.setAttribute("zk_message", exMsg);
-		request.setAttribute("zk_stack_trace", exStackTrace);
 	}
 
 	/**
@@ -832,7 +727,8 @@ public class Servlets {
 				//such that it could be shared among portlets
 			Map ctxs = (Map)ctx.getAttribute(attr);
 			if (ctxs == null)
-				ctx.setAttribute(attr, ctxs = Collections.synchronizedMap(new HashMap(2)));
+				ctx.setAttribute(attr,
+					ctxs = Collections.synchronizedMap(new HashMap(5)));
 			return ctxs;
 		}
 	}
