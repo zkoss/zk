@@ -181,7 +181,8 @@ import org.zkoss.lang.Objects;
 	Number: <decimalbox format="#,##0.00"/>
 	Positive integer: <intbox format="#,##0" constraint="no negative,no zero,no empty"/>
 	Nonempty string: <textbox constraint="no empty"/>
-	Email: <textbox constraint="/.+@.+\.[a-z]+/: e-mail address only"/>
+	Email: <textbox id="email" constraint="/.+@.+\.[a-z]+/: e-mail address only"/>
+		<button label="check" onClick="email.getValue()" />
 	</window>
 
 	<window border="normal">
