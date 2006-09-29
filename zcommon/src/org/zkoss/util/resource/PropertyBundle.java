@@ -59,7 +59,7 @@ public class PropertyBundle {
 
 	/** The cache to hold bundles. */
 	private static final CacheMap _cache = //(Key, PropertyBundle)
-		new CacheMap(53).setMaxSize(50);
+		new CacheMap(53).setMaxSize(100);
 
 	/** The map of properties. */
 	private final Map _map;

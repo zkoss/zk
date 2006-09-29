@@ -123,8 +123,7 @@ public class ResourceCache extends CacheMap {
 				}
 				//invalid, so remove it (if not updated by others)
 				synchronized (this) {
-					Object o = super.get(src);
-					if (o == ri) super.remove(src);
+					if (super.get(src) == ri) super.remove(src);
 				}
 			} else if (!lock.waitUntilUnlock(300*1000)) { //5 minute
 				final PotentialDeadLockException ex =
@@ -194,7 +193,7 @@ public class ResourceCache extends CacheMap {
 		 * @param src the source
 		 */
 		public Info(Object src) throws Exception {
-			if (D.ON && log.debugable()) log.debug("Loading from "+src);
+			//if (D.ON && log.debugable()) log.debug("Loading from "+src);
 			_src = src;
 			load();
 		}
@@ -216,8 +215,8 @@ public class ResourceCache extends CacheMap {
 			final boolean valid = lastmod == _lastModified;
 			if (!valid)
 				log.info("Source is changed: "+_src);
-			else if (D.ON && log.finerable())
-				log.finer("Source not changed: "+_src);
+			//else if (D.ON && log.finerable())
+			//	log.finer("Source not changed: "+_src);
 			return valid;
 		}
 		/** Loads the file. */

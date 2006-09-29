@@ -634,7 +634,7 @@ public class Classes {
 		return m;
 	}
 	private static CacheMap _closms =
-		new CacheMap(79).setMaxSize(256).setLifetime(4*60*60*1000);
+		new CacheMap(113).setMaxSize(500).setLifetime(4*60*60*1000);
 	private static final Method
 	myGetCloseMethod(final Class cls, final String name,
 	final Class[] argTypes, final boolean bySubclass)
@@ -823,7 +823,7 @@ public class Classes {
 		}
 		return ao;
 	}
-	private static CacheMap _acsos = new CacheMap(79).setMaxSize(256).setLifetime(4*60*60*1000);
+	private static CacheMap _acsos = new CacheMap(113).setMaxSize(500).setLifetime(4*60*60*1000);
 	private static final AccessibleObject
 	myGetAcsObj(Class cls, String name, Class[] argTypes, int flags)
 	throws NoSuchMethodException {
