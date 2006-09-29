@@ -34,6 +34,7 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
@@ -1207,7 +1208,12 @@ ChildChangedAware, Cropper {
 			try {
 				_renderer.render(item, _model.getElementAt(item.getIndex()));
 			} catch (Throwable ex) {
-				clearItemAsUnloaded(item); //recover it
+				try {
+					item.setLabel(Exceptions.getMessage(ex));
+				} catch (Throwable t) {
+					log.error(t);
+				}
+				item.setLoaded(true);
 				throw ex;
 			} finally {
 				if (item.getChildren().isEmpty())
@@ -1224,6 +1230,8 @@ ChildChangedAware, Cropper {
 				} catch (Throwable t) {
 					throw UiException.Aide.wrap(t);
 				}
+			} else {
+				throw UiException.Aide.wrap(ex);
 			}
 		}
 		private void doFinally() {
