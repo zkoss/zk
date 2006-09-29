@@ -101,11 +101,11 @@ public class ResourceCache extends CacheMap {
 	 */
 	public Object get(Object src) {
 		WaitLock lock = null;
-		for (boolean skipCached = false;;) {
+		for (;;) {
 			Info ri = null;
 			synchronized (this) {
 				Object o = super.get(src);
-				if (!skipCached && (o instanceof Info)) { //was loaded
+				if (o instanceof Info) { //was loaded
 					ri = (Info)o;
 				} else if (o instanceof WaitLock) {
 					lock = (WaitLock)o;
@@ -121,7 +121,11 @@ public class ResourceCache extends CacheMap {
 					if (ri.isValid())
 						return ri.getResource(); //reuse cached
 				}
-				skipCached = true;
+				//invalid, so remove it (if not updated by others)
+				synchronized (this) {
+					Object o = super.get(src);
+					if (o == ri) super.remove(src);
+				}
 			} else if (!lock.waitUntilUnlock(300*1000)) { //5 minute
 				final PotentialDeadLockException ex =
 					new PotentialDeadLockException(
