@@ -118,7 +118,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 
 		if (alert != null)
 			attrs.put("alert", alert);
-		if (D.ON && log.debugable()) log.debug(attrs);
+		if (D.ON && log.finerable()) log.finer(attrs);
 
 		Servlets.forward(ctx, request, response,
 			nextURI, attrs, Servlets.PASS_THRU_ATTR);

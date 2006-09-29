@@ -209,7 +209,7 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 		if (_molds == null) {
 			synchronized (this) {
 				if (_molds == null) {
-					final Map molds = new HashMap(3);
+					final Map molds = new HashMap(5);
 					molds.put(name, moldUri);
 					_molds = molds;
 					return;

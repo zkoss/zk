@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.ext.DynamicPropertied;
  */
 public class HtmlMacroComponent extends HtmlBasedComponent
 implements AfterCompose, IdSpace, DynamicPropertied {
-	private Map _props = new HashMap(7);
+	private Map _props = new HashMap();
 
 	public HtmlMacroComponent() {
 		_props.put("includer", this);

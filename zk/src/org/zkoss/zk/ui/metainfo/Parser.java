@@ -86,14 +86,14 @@ public class Parser {
 	/** Parses the specified file.
 	 */
 	public PageDefinition parse(File file) throws Exception {
-		if (log.debugable()) log.debug("Parsing "+file);
+		//if (log.debugable()) log.debug("Parsing "+file);
 		return parse(new SAXBuilder(true, false, true).build(file),
 			getExtension(file.getName()));
 	}
 	/** Parses the specified URL.
 	 */
 	public PageDefinition parse(URL url) throws Exception {
-		if (log.debugable()) log.debug("Parsing "+url);
+		//if (log.debugable()) log.debug("Parsing "+url);
 		return parse(new SAXBuilder(true, false, true).build(url),
 			getExtension(url.toExternalForm()));
 	}
@@ -122,7 +122,7 @@ public class Parser {
 	 */
 	public PageDefinition parse(Reader reader, String extension)
 	throws Exception {
-		if (log.debugable()) log.debug("Parsing "+reader);
+		//if (log.debugable()) log.debug("Parsing "+reader);
 		return parse(new SAXBuilder(true, false, true).build(reader), extension);
 	}
 	/** Parss the raw content directly from a DOM tree.
@@ -238,7 +238,7 @@ public class Parser {
 				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 			if (uri == null || prefix == null)
 				throw new UiException("Both uri and prefix attribute are required, "+pi.getLocator());
-			if (D.ON && log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
+			//if (D.ON && log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
 			noEL("prefix", prefix, pi);
 			noEL("uri", uri, pi); //not support EL (kind of chicken-egg issue)
 			pgdef.addTaglib(new Taglib(prefix, uri));
@@ -303,7 +303,7 @@ public class Parser {
 			final String clsnm = (String)params.remove("class");
 			ComponentDefinition compdef;
 			if (macroUri != null) {
-				if (log.finerable()) log.finer("macro component definition: "+name);
+				//if (D.ON && log.finerable()) log.finer("macro component definition: "+name);
 
 				noEL("macro-uri", macroUri, pi);
 					//no EL because pagedef must be loaded to resolve
@@ -317,7 +317,7 @@ public class Parser {
 						//Resolve later since might defined in zscript
 				}
 			} else if (extds != null) { //extends
-				if (log.finerable()) log.finer("Override component definition: "+name);
+				//if (D.ON && log.finerable()) log.finer("Override component definition: "+name);
 
 				noEL("extends", extds, pi);
 				final ComponentDefinition ref = pgdef.getLanguageDefinition()
@@ -333,7 +333,7 @@ public class Parser {
 						//Resolve later since might defined in zscript
 				}
 			} else {
-				if (log.finerable()) log.finer("Add component definition: name="+name);
+				//if (D.ON && log.finerable()) log.finer("Add component definition: name="+name);
 
 				if (isEmpty(clsnm)) throw new UiException("class is required");
 				noEL("class", clsnm, pi);
@@ -486,7 +486,7 @@ public class Parser {
 				parent.addCustomAttributes(
 					new CustomAttributes(attrs, scope, ConditionImpl.getInstance(ifc, unless)));
 		} else {
-			if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
+			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
 
 			final InstanceDefinition instdef;
 			if ("zk".equals(nm) && isZkElement(langdef, nm, ns)) {

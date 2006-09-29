@@ -73,13 +73,13 @@ import org.zkoss.zk.au.*;
 	/** A set of removed pages. */
 	private Set _pgRemoved;
 	/** A set of invalidated components  (Component). */
-	private final Set _invalidated = new LinkedHashSet();
+	private final Set _invalidated = new LinkedHashSet(37);
 	/** A map of smart updates (Component comp, Map(String name, TimedValue(comp,name,value))). */
-	private final Map _smartUpdated = new HashMap(); //we use TimedValue for better sequence control
+	private final Map _smartUpdated = new HashMap(53); //we use TimedValue for better sequence control
 	/** A set of new attached components. */
-	private final Set _attached = new LinkedHashSet();
+	private final Set _attached = new LinkedHashSet(37);
 	/** A set of moved components (parent changed or page changed). */
-	private final Set _moved = new LinkedHashSet();
+	private final Set _moved = new LinkedHashSet(37);
 	/** A map of components whose UUID is changed (Component, UUID). */
 	private Map _idChgd;
 	/** A map of responses being added(Component/Page, Map(key, List/TimedValue(AuResponse))). */
@@ -146,7 +146,7 @@ import org.zkoss.zk.au.*;
 			return; //nothing to do
 
 		if (_pgInvalid == null)
-			_pgInvalid = new LinkedHashSet(3);
+			_pgInvalid = new LinkedHashSet(7);
 		_pgInvalid.add(page);
 	}
 	/** Adds an invalidated component. Once invalidated, all invocations
@@ -197,7 +197,7 @@ import org.zkoss.zk.au.*;
 	public void addUuidChanged(Component comp, boolean addOnlyMoved) {
 		if ((!addOnlyMoved || _moved.contains(comp))
 		&& (_idChgd == null || !_idChgd.containsKey(comp))) {
-			if (_idChgd == null) _idChgd = new LinkedHashMap();
+			if (_idChgd == null) _idChgd = new LinkedHashMap(23);
 			_idChgd.put(comp, comp.getUuid());
 		}
 	}
@@ -492,7 +492,7 @@ import org.zkoss.zk.au.*;
 				assert D.OFF || !isTransparent(comp): "not resolved?" +comp;
 
 				final Component parent = getNonTransparentParent(comp);
-				final Set newsibs = new LinkedHashSet();
+				final Set newsibs = new LinkedHashSet(37);
 				newsibs.add(comp);
 				desktops.add(newsibs);
 

@@ -100,7 +100,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
 			final String pi = Https.getThisPathInfo(request);
-			if (log.finerable()) log.finer("Path info: "+pi);
+			//if (log.finerable()) log.finer("Path info: "+pi);
 			if (pi != null && pi.length() > 0) {
 				if (pi.startsWith(ClassWebResource.PATH_PREFIX)) {
 					WebManager.getWebManager(_ctx).
@@ -205,7 +205,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
-		if (log.debugable()) log.debug("AU request: "+aureqs);
+		//if (log.debugable()) log.debug("AU request: "+aureqs);
 		final StringWriter out = getXmlWriter();
 
 		final Execution exec = new ExecutionImpl(

@@ -174,7 +174,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		};
 		_newChildren = new LinkedList();
-		_attrs = new HashMap(3);
+		_attrs = new HashMap(7);
 	}
 
 	/** Adds to the ID spaces, if any, when ID is changed.
@@ -916,7 +916,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (!Events.isValid(evtnm))
 			throw new IllegalArgumentException("Invalid event name: "+evtnm);
 
-		if (_listeners == null) _listeners = new HashMap(3);
+		if (_listeners == null) _listeners = new HashMap();
 
 		List l = (List)_listeners.get(evtnm);
 		if (l != null) {
@@ -1059,11 +1059,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Holds info shared of the same ID space. */
 	private static class SpaceInfo {
-		private Map attrs = new HashMap(7);
+		private Map attrs = new HashMap();
 			//don't create it dynamically because _ip bind it at constructor
 		private Namespace ns;
 		/** A map of ((String id, Component fellow). */
-		private Map fellows = new HashMap(23);
+		private Map fellows = new HashMap(41);
 
 		private SpaceInfo(Component owner, String id) {
 			ns = new BshNamespace(id);
@@ -1238,7 +1238,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			final String evtnm = (String)s.readObject();
 			if (evtnm == null) break; //no more
 
-			if (_listeners == null) _listeners = new HashMap(3);
+			if (_listeners == null) _listeners = new HashMap();
 			_listeners.put(evtnm, Serializables.smartRead(s, (Collection)null));
 		}
 

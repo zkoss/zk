@@ -145,7 +145,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	/** Holds desktops. */
 	private static class Cache extends CacheMap { //serializable
 		private Cache(Configuration config) {
-			super(5);
+			super(13);
 
 			Integer v = config.getMaxDesktops();
 			int i = v != null ? v.intValue(): 10;

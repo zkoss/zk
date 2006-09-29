@@ -162,7 +162,7 @@ implements Condition {
 		if (_evthds == null) {
 			synchronized (this) {
 				if (_evthds == null) {
-					final Map evthds = new HashMap(5);
+					final Map evthds = new HashMap();
 					evthds.put(name, evthd);
 					_evthds = evthds;
 					return;

@@ -51,7 +51,7 @@ public class ExecutionsCtrl extends Executions {
 
 	/** A map of (Pair(Class,String evtnm), Method). */
 	private static final CacheMap _evtmtds =
-		new CacheMap().setMaxSize(1000).setLifetime(60*60000);
+		new CacheMap(131).setMaxSize(1000).setLifetime(60*60000);
 	/** Returns the method for handling the specified event, or null
 	 * if not available.
 	 */
