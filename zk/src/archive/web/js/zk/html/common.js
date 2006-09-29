@@ -159,6 +159,8 @@ zk.center = function (el) {
 
 	var ofs = zk.toParentOffset(el,
 		left + (width - elwd) / 2, top + (height - elhgh) / 2);
+	if (ofs[0] < 0) ofs[0] = 0;
+	if (ofs[1] < 0) ofs[1] = 0;
 	el.style.left = ofs[0] + "px"; el.style.top =  ofs[1] + "px";
 };
 /** Returns the width and height.
