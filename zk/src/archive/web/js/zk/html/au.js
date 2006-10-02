@@ -705,11 +705,10 @@ zkau.endOverlapped = function (uuid) {
 /** Makes a window moveable. */
 zkau.floatWnd = function (cmp, starteffect, endeffect) {
 	if (cmp) {
-		zkau.fixWnd(cmp);
-
 		var handle = $e(cmp.id + "!caption");
 		if (handle) {
-			cmp.style.position = "absolute";
+			Position.absolutize(cmp);
+				//Bug 1568393: don't set "absolute" directly
 			zkau.initMoveable(cmp, {
 				handle: handle,
 				starteffect: starteffect || Prototype.emptyFunction,
