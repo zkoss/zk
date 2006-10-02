@@ -182,6 +182,21 @@ public class ExecutionImpl extends AbstractExecution {
 		return _request instanceof HttpServletRequest ?
 			((HttpServletRequest)_request).getRemoteUser(): null;
 	}
+	public String getRemoteName() {
+		return _request.getRemoteHost();
+	}
+	public String getRemoteAddr() {
+		return _request.getRemoteAddr();
+	}
+	public String getLocalName() {
+		return _request.getLocalName();
+	}
+	public String getLocalAddr() {
+		return _request.getLocalAddr();
+	}
+	public int getLocalPort() {
+		return _request.getLocalPort();
+	}
 	public String getContextPath() {
 		return _request instanceof HttpServletRequest ?
 			((HttpServletRequest)_request).getContextPath(): null;

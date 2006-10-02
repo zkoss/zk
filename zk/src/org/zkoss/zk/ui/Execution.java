@@ -227,6 +227,29 @@ public interface Execution extends Evaluator {
 	 * the browser and type of authentication.
 	 */
 	public String getRemoteUser();
+	/** Returns the fully qualified name of the client or the last proxy
+	 * that sent the request.
+	 * If the engine cannot or chooses not to resolve the hostname
+	 * (to improve performance), this method returns the dotted-string form of
+	 * the IP address.
+	 */
+	public String getRemoteName();
+	/**  Returns the Internet Protocol (IP) address of the client or last
+	 * proxy that sent the request.
+	 */
+	public String getRemoteAddr();
+	/** Returns the host name of the Internet Protocol (IP) interface
+	 * on which the request was received.
+	 */
+	public String getLocalName();
+	/** Returns the Internet Protocol (IP) address of the interface on which
+	 * the request was received.
+	 */
+	public String getLocalAddr();
+	/** Returns the Internet Protocol (IP) port number of the interface on which
+	 * the request was received.
+	 */
+	public int getLocalPort();
 
 	/** Returns the portion of the request URI that indicates the context of
 	 * the desktop. The path starts with a "/" character but does not end with
