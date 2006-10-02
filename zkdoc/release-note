@@ -9,7 +9,8 @@ ZK 2.1.2 Freshly
   + Support Acegi SecurityContext for ZK.
 
 * Bugs:
-  1548478, 1563327, 1563932, 1565463, 1563206, 1567464, 1567187, 1486556.
+  1548478, 1563327, 1563932, 1565463, 1563206, 1567464, 1567187, 1486556,
+  1568952.
   + Support JBoss Portal
 
 * Upgrade Notes
