@@ -20,7 +20,7 @@ ZK 2.1.2
     Note: macro components implement this interface, so use afterCompose instead
     if you want to create macro components manually.
   + The format of the argument for Window's setCtrlKeys is changed.
-    Refer to the Developer's Guide
+    Refer to the Developer's Guide.
 
 	--------
 ZK 2.1.1
