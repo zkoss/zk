@@ -1013,19 +1013,21 @@ zkau._getParentByAttr = function (n, attr1, attr2) {
 zkau._onDocKeydown = function (evt) {
 	if (!evt) evt = window.event;
 	var target = Event.element(evt);
-	var attrSkip, evtnm;
-	switch (evt.keyCode) {
+	var attrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys;
+	var keycode = evt.keyCode, zkcode; //zkcode used to search zk_ctkeys
+	switch (keycode) {
 	case 13: //ENTER
 		var tn = zk.tagName(target);
 		if (tn == "TEXTAREA" || tn == "BUTTON"
 		|| (tn == "INPUT" && target.type.toLowerCase() == "button"))
 			return true; //don't change button's behavior (Bug 1556836)
+		//fall thru
 	case 27: //ESC
 		if (zkau.closeFloats(target)) {
 			Event.stop(evt);
 			return false; //eat
 		}
-		if (evt.keyCode == 13) {
+		if (keycode == 13) {
 			attrSkip = "zk_skipOK"; evtnm = "onOK";
 		} else {
 			attrSkip = "zk_skipCancel"; evtnm = "onCancel";
@@ -1035,20 +1037,32 @@ zkau._onDocKeydown = function (evt) {
 	case 17: //Ctrl
 	case 18: //Alt
 		return true;
+	case 44: //Ins
+	case 45: //Del
+		zkcode = keycode == 44 ? 'I': 'J';
+		break;
 	default:
-		//F1: 112, F12: 123
-		if (evt.ctrlKey || (evt.keyCode >= 112 && evt.keyCode <= 123)) {
-			evtnm = "onCtrlKey";
+		if (keycode >= 33 && keycode <= 40) { //PgUp, PgDn, End, Home, L, U, R, D
+			zkcode = String.fromCharCode('A'.charCodeAt(0) + (keycode - 33));
+				//A~H: PgUp, ...
+			break;
+		} else if (keycode >= 112 && keycode <= 123) { //F1: 112, F12: 123
+			zkcode = String.fromCharCode('P'.charCodeAt(0) + (keycode - 112));
+				//M~Z: F1~F12
+			break;
+		} else if (evt.ctrlKey || evt.altKey) {
+			zkcode = String.fromCharCode(keycode).toLowerCase();
 			break;
 		}
 		return true;
 	}
 
+	if (zkcode) evtnm = "onCtrlKey";
+
 	for (var n = target; n; n = n.parentNode) {
 		if (n.id && n.getAttribute) {
 			if (n.getAttribute("zk_" + evtnm) == "true"
-			&& (evtnm != "onCtrlKey"
-			|| zkau._isInCtrlKeys(evt.keyCode, n.getAttribute("zk_ctkeys")))) {
+			&& (!zkcode || zkau._inCtkeys(evt, zkcode, n.getAttribute("zk_ctkeys")))) {
 				var bSend = true;
 				if (zkau.currentFocus) {
 					var inp = zkau.currentFocus;
@@ -1064,7 +1078,7 @@ zkau._onDocKeydown = function (evt) {
 				}
 
 				zkau.send({uuid: n.id, cmd: evtnm,
-					data: [evt.keyCode, evt.ctrlKey, evt.shiftKey, evt.altKey]},
+					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey]},
 					25);
 				Event.stop(evt);
 				return false;
@@ -1087,15 +1101,14 @@ zkau._onDocKeydown = function (evt) {
 	return true; //no special processing
 }
 /** returns whether a key code is specified in keys. */
-zkau._isInCtrlKeys = function (code, keys) {
+zkau._inCtkeys = function (evt, zkcode, keys) {
 	if (keys) {
-		for (var j = 0; j < keys.length; ++j) {
-			var cc = keys.charAt(j);
-			var v = keys.charCodeAt(j);
-			if (cc == '0') v = 121; //F10
-			else if (cc >= '1' && cc <= '9') v += 112 - "1".charCodeAt(0);
-
-			if (code == v) return true;
+		//format: ctl+k;alt+k;shft+k;k
+		var cc = evt.ctrlKey ? '^': evt.altKey ? '@': evt.shiftKey ? '$': '~';
+		var j = keys.indexOf(cc), k = keys.indexOf(';', j + 1);
+		if (j >=0 && k >= 0) {
+			keys = keys.substring(j + 1, k);
+			return keys.indexOf(zkcode) >= 0;
 		}
 	}
 	return false;

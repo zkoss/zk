@@ -26,6 +26,31 @@ import org.zkoss.zk.ui.Component;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class KeyEvent extends Event {
+	public static final int F1 = 112;
+	public static final int F2 = 113;
+	public static final int F3 = 114;
+	public static final int F4 = 115;
+	public static final int F5 = 116;
+	public static final int F6 = 117;
+	public static final int F7 = 118;
+	public static final int F8 = 119;
+	public static final int F9 = 120;
+	public static final int F10 = 121;
+	public static final int F11 = 122;
+	public static final int F12 = 123;
+
+	public static final int PAGE_UP = 33;
+	public static final int PAGE_DOWN = 34;
+	public static final int END = 35;
+	public static final int HOME = 36;
+	public static final int LEFT = 37;
+	public static final int UP = 38;
+	public static final int RIGHT = 39;
+	public static final int DOWN = 40;
+
+	public static final int INSERT = 45;
+	public static final int DELETE = 46;
+
 	private final int _keyCode;
 	private final boolean _ctrlKey, _shiftKey, _altKey;
 	/** Constructs a mouse relevant event.
