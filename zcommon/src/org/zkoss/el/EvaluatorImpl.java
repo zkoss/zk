@@ -46,8 +46,14 @@ public class EvaluatorImpl extends ExpressionEvaluator {
 	private final ExpressionEvaluator _eval;
 
 	public EvaluatorImpl() {
-		final String clsnm =
-			System.getProperty("org.zkoss.el.ExpressionEvaluator.class", null);
+		final String clsnm;
+		try {
+			clsnm =	System.getProperty("org.zkoss.el.ExpressionEvaluator.class", null);
+		} catch (Throwable ex) { //permission might not be allowed
+			_eval = new ExpressionEvaluatorImpl();
+			return;
+		}
+
 		if (clsnm == null || clsnm.length() == 0) {
 			_eval = new ExpressionEvaluatorImpl();
 		} else {
