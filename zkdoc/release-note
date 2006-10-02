@@ -10,7 +10,7 @@ ZK 2.1.2 Freshly
 
 * Bugs:
   1548478, 1563327, 1563932, 1565463, 1563206, 1567464, 1567187, 1486556,
-  1568952, 1568393, 1568220, 1562239.
+  1568952, 1568393, 1568220, 1562239, 1567233.
   + Support JBoss Portal
 
 * Upgrade Notes
@@ -19,6 +19,8 @@ ZK 2.1.2 Freshly
     And, the postCreate method is renamed to afterCompose.
     Note: macro components implement this interface, so use afterCompose instead
     if you want to create macro components manually.
+  + The format of the argument for Window's setCtrlKeys is changed.
+    Refer to the Developer's Guide
 
 	--------
 ZK 2.1.1
