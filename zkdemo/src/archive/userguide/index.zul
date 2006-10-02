@@ -39,7 +39,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="s10" label="More comboboxes" value="/userguide/simple/moreCombobox.zul"/>
 						<treeitem id="s10a" label="Bandboxes" value="/userguide/simple/bandbox.zul"/>
 						<treeitem id="s11" label="Sliders" value="/userguide/simple/slider.zul"/>
-						<treeitem id="s12" label="The onScrolling event" value="/userguide/simple/onScrolling.zul"/>
+						<treeitem id="s12" label="The onScrolling event" value="/userguide/simple/onScrolling.zul"
+							if="${desktop.execution.localName == &quot;localhost&quot;}"/>
 					</treechildren>
 				</treeitem>
 				<treeitem label="Modal Dialogs" value="/userguide/modal/index.zul">
