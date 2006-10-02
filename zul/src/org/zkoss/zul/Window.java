@@ -172,11 +172,11 @@ public class Window extends XulElement implements IdSpace  {
 	 * <p>The string could be a combination of the following:
 	 * <dl>
 	 * <dt>^k</dt>
-	 * <dd>A control key, i.e., Ctrl+k, where k could be a~z, 0~9, #n, *n</dd>
+	 * <dd>A control key, i.e., Ctrl+k, where k could be a~z, 0~9, #n, ~n</dd>
 	 * <dt>@k</dt>
-	 * <dd>A alt key, i.e., Alt+k, where k could be a~z, 0~9, #n, *n</dd>
+	 * <dd>A alt key, i.e., Alt+k, where k could be a~z, 0~9, #n, ~n</dd>
 	 * <dt>$k</dt>
-	 * <dd>A shift key, i.e., Shift+k, where k could be #n, *n</dd>
+	 * <dd>A shift key, i.e., Shift+k, where k could be #n, ~n</dd>
 	 * <dt>~home</dt>
 	 * <dd>Home</dd>
 	 * <dt>~end</dt>
