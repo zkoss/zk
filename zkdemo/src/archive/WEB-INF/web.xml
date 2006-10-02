@@ -52,6 +52,12 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>*.zhtml</url-pattern>
 	</servlet-mapping>
+	<!-- Used with richlet (ZK 2.2.0)
+	<servlet-mapping>
+		<servlet-name>zkLoader</servlet-name>
+		<url-pattern>/zk/*</url-pattern>
+	</servlet-mapping>
+	-->
 	<servlet>
 		<description>The asynchronous update engine for ZK</description>
 		<servlet-name>auEngine</servlet-name>
