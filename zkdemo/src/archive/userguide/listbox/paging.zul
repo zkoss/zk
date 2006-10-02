@@ -21,10 +21,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<vbox width="100%">
 		<html>
 			<attribute name="content"><![CDATA[
-	<h4>Listboxes with checkmarks</h4>
-	<p>The checkmark attribute controls whether to display a checkbox,
-	if multiple selection, or a radio button, if single selection,
-	in front of each list items</p>
+	<h4>Listboxes with paging control</h4>
+	<p>It is better to display large number of data in multiple pages by specifying
+	the paging mold.</p>
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
