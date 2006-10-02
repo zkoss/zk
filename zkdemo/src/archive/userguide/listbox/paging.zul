@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+paging.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct  2 21:46:35     2006, Created by tomyeh@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox width="100%">
+		<html>
+			<attribute name="content"><![CDATA[
+	<h4>Listboxes with checkmarks</h4>
+	<p>The checkmark attribute controls whether to display a checkbox,
+	if multiple selection, or a radio button, if single selection,
+	in front of each list items</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.ReloadButton"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="tryView" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.TryMeButton"/></caption>
+			<textbox id="codeView" use="org.zkoss.zkdemo.CodeView" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<window>
+	<zscript>
+List items = new java.util.AbstractList() {
+	public int size() {
+		return 1000;
+	}
+	public Object get(int j) {
+		return new Integer(j);
+	}
+};
+	</zscript>
+	<listbox mold="paging">
+		<listitem forEach="&#36;{items}">
+		<listcell label="&#36;{each}-1"/>
+		<listcell label="&#36;{each}-2"/>
+		<listcell label="&#36;{each}-3"/>
+		<listcell label="&#36;{each}-4"/>
+		</listitem>
+	</listbox>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+</window>
