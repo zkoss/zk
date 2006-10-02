@@ -823,14 +823,11 @@ if (!zk.activeTagnames) {
 	zk.activeTagnames =
 		new Array("A","BUTTON","TEXTAREA","INPUT","SELECT","IFRAME","APPLET");
 	zk._disTags = new Array(); //A list of {element: xx, what: xx}
+	zk._hidCvred = new Array(); //A list of {element: xx, visibility: xx}
 
-	if (zk.ie) {
-		zk._hidCvred = new Array(); //A list of {element: xx, visibility: xx}
-		zk.coveredTagnames = new Array("SELECT"/*,"IFRAME","APPLET"*/);
-			//though IFRAME might include SELECT (but prefer not to surprise user)
-	} else {
-		zk.coveredTagnames = new Array();
-	}
+	zk.coveredTagnames = new Array("IFRAME","APPLET"); //Bug 1562239 
+	if (zk.ie)
+		zk.coveredTagnames.unshift("SELECT");
 }
 
 /** Disables all active tags. */
@@ -924,8 +921,6 @@ zk.restoreDisabled = function (n) {
  * to this method.
  */
 zk.hideCovered = function (ary) {
-	if (!zk.ie) return; //nothing to do
-
 	if (!ary || ary.length == 0) {
 		for (;;) {
 			var info = zk._hidCvred.shift();

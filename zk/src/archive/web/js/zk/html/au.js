@@ -1154,8 +1154,6 @@ zkau.closeFloats = function (owner) {
 	return closed;
 };
 zkau.hideCovered = function() {
-	if (!zk.ie) return; //nothing to do
-
 	var ary = new Array();
 	for (var j = 0; j < zkau._popups.length; ++j) {
 		var el = $e(zkau._popups[j]);
