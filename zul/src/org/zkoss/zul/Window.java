@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.LinkedHashSet;
 
+import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
@@ -66,6 +67,8 @@ public class Window extends XulElement implements IdSpace  {
 	private String _title = "";
 	/** What control and function keys to intercepts. */
 	private String _ctrlKeys;
+	/** The value passed to the client; parsed from _ctrlKeys. */
+	private String _ctkeys;
 	/** One of MODAL, EMBEDDED, OVERLAPPED. */
 	private int _mode = EMBEDDED;
 	/** Used for doModal. */
@@ -158,28 +161,160 @@ public class Window extends XulElement implements IdSpace  {
 		}
 	}
 
-	/** Returns what control and function keys to intercept.
+	/** Returns what keystrokes to intercept.
 	 * <p>Default: null.
 	 */
 	public String getCtrlKeys() {
 		return _ctrlKeys;
 	}
-	/** Sets what control and function keys to intercept.
-	 * To intercept a control or function key, you have to set
-	 * what keys to intercept by use of {@link #setCtrlKeys}, and
-	 * then add listener for the onCtrlKey event.
+	/** Sets what keystrokes to intercept.
 	 *
-	 * <p>For example, If ctrlKeys="GW2" is specified, it means Ctrl+G,
-	 * Ctrl+W and F2 are all intercepted.
-	 * Note: 0 means F10.
+	 * <p>The string could be a combination of the following:
+	 * <dl>
+	 * <dt>^k</dt>
+	 * <dd>A control key, i.e., Ctrl+k, where k could be a~z, 0~9, #n, *n</dd>
+	 * <dt>@k</dt>
+	 * <dd>A alt key, i.e., Alt+k, where k could be a~z, 0~9, #n, *n</dd>
+	 * <dt>$k</dt>
+	 * <dd>A shift key, i.e., Shift+k, where k could be #n, *n</dd>
+	 * <dt>~home</dt>
+	 * <dd>Home</dd>
+	 * <dt>~end</dt>
+	 * <dd>End</dd>
+	 * <dt>~ins</dt>
+	 * <dd>Insert</dd>
+	 * <dt>~del</dt>
+	 * <dd>Delete</dd>
+	 * <dt>~l</dt>
+	 * <dd>Left arrow</dd>
+	 * <dt>~r</dt>
+	 * <dd>Right arrow</dd>
+	 * <dt>~u</dt>
+	 * <dd>Up arrow</dd>
+	 * <dt>~d</dt>
+	 * <dd>Down arrow</dd>
+	 * <dt>~pgup</dt>
+	 * <dd>PageUp</dd>
+	 * <dt>~pgdn</dt>
+	 * <dd>PageDn</dd>
+	 * <dt>#n</dt>
+	 * <dd>A function key, where n could be 1, 2, ... 12, representing
+	 * F1, F2, ... F12</dd>
+	 * </dl>
+	 *
+	 * <p>For example,
+	 * <dl>
+	 * <dt>^a^d@c#10*l*r</dt>
+	 * <dd>It means you want to intercept Ctrl+A, Ctrl+D, Alt+C, F10,
+	 * Left and Right.</dd>
+	 * <dt>^*l</dt>
+	 * <dd>It means Ctrl+Left.</dd>
+	 * <dt>^#1</dt>
+	 * <dd>It means Ctrl+F1.</dd>
+	 * <dt>@#3</dt>
+	 * <dd>It means Alt+F3.</dd>
+	 * </dl>
+	 *
+	 * <p>Note: it doesn't support Ctrl+Alt, Shift+Ctrl, Shift+Alt or Shift+Ctrl+Alt.
 	 */
-	public void setCtrlKeys(String ctrlKeys) {
+	public void setCtrlKeys(String ctrlKeys) throws UiException {
 		if (ctrlKeys != null && ctrlKeys.length() == 0)
 			ctrlKeys = null;
 		if (!Objects.equals(_ctrlKeys, ctrlKeys)) {
-			_ctrlKeys = ctrlKeys != null ? ctrlKeys.toUpperCase(): null;
-			smartUpdate("zk_ctkeys", _ctrlKeys);
+			parseCtrlKeys(ctrlKeys);
+			smartUpdate("zk_ctkeys", _ctkeys);
 		}
+	}
+	private void parseCtrlKeys(String keys) throws UiException {
+		if (keys == null || keys.length() == 0) {
+			_ctrlKeys = _ctkeys = null;
+			return;
+		}
+
+		final StringBuffer sbctl = new StringBuffer(),
+			sbsft = new StringBuffer(), sbalt = new StringBuffer(),
+			sbext = new StringBuffer();
+		StringBuffer sbcur = null;
+		for (int j = 0, len = keys.length(); j < len; ++j) {
+			char cc = keys.charAt(j);
+			switch (cc) {
+			case '^':
+			case '$':
+			case '@':
+				if (sbcur != null)
+					throw new WrongValueException("Combination of Shift, Alt and Ctrl not supported: "+keys);
+				sbcur = cc == '^' ? sbctl: cc == '@' ? sbalt: sbsft;
+				break;
+			case '~':
+				{
+					int k = j + 1;
+					for (; k < len; ++k) {
+						final char c2 = (char)keys.charAt(k);
+						if ((c2 > 'Z' || c2 < 'A') 	&& (c2 > 'z' || c2 < 'a'))
+							break;
+					}
+					if (k == j + 1)
+						throw new WrongValueException(MCommon.UNEXPECTED_CHARACTER, new Object[] {new Character(cc), keys});
+
+					final String s = keys.substring(j+1, k).toLowerCase();
+					if ("pgup".equals(s)) cc = 'A';
+					else if ("pgdn".equals(s)) cc = 'B';
+					else if ("end".equals(s)) cc = 'C';
+					else if ("home".equals(s)) cc = 'D';
+					else if ("l".equals(s)) cc = 'E';
+					else if ("u".equals(s)) cc = 'F';
+					else if ("r".equals(s)) cc = 'G';
+					else if ("d".equals(s)) cc = 'H';
+					else if ("ins".equals(s)) cc = 'I';
+					else if ("del".equals(s)) cc = 'J';
+					else throw new WrongValueException("Unknown ~"+s+" in "+keys);
+					if (sbcur == null) sbext.append(cc);
+					else sbcur.append(cc);
+					j = k - 1;
+				}
+				break;
+			case '#':
+				{
+					int k = j + 1;
+					for (; k < len; ++k) {
+						final char c2 = (char)keys.charAt(k);
+						if (c2 > '9' || c2 < '0')
+							break;
+					}
+					if (k == j + 1)
+						throw new WrongValueException(MCommon.UNEXPECTED_CHARACTER, new Object[] {new Character(cc), keys});
+
+					int v = Integer.parseInt(keys.substring(j+1, k));
+					if (v == 0 || v > 12)
+						throw new WrongValueException("Unsupported function key: #"+v);
+
+					cc = (char)('O' + v); //'P': F1, 'Q': F2... 'Z': F12
+					if (sbcur == null) sbext.append(cc);
+					else sbcur.append(cc);
+					j = k - 1;
+				}
+				break;
+			default:
+				if (sbcur == null || ((cc > 'Z' || cc < 'A') 
+				&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0')))
+					throw new WrongValueException(MCommon.UNEXPECTED_CHARACTER, new Object[] {new Character(cc), keys});
+				if (sbcur == sbsft)
+					throw new WrongValueException("$"+cc+" not supported: "+keys);
+
+				if (cc <= 'Z' && cc >= 'A')
+					cc = (char)(cc + ('a' - 'A')); //to lower case
+				sbcur.append(cc);
+				sbcur = null;
+				break;
+			}
+		}
+
+		_ctkeys = new StringBuffer()
+			.append('^').append(sbctl).append(';')
+			.append('@').append(sbalt).append(';')
+			.append('$').append(sbsft).append(';')
+			.append('~').append(sbext).append(';').toString();
+		_ctrlKeys = keys;
 	}
 
 	/** Returns the current mode.
@@ -483,7 +618,7 @@ public class Window extends XulElement implements IdSpace  {
 
 		if (_closable)
 			HTMLs.appendAttribute(sb, "zk_closable", true);
-		HTMLs.appendAttribute(sb, "zk_ctkeys", _ctrlKeys);
+		HTMLs.appendAttribute(sb, "zk_ctkeys", _ctkeys);
 		return sb.toString();
 	}
 
