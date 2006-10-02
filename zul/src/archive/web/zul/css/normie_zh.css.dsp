@@ -1,6 +1,8 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 
+html {height:100%}
+
 /* headers */
 h1 {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
