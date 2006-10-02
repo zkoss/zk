@@ -866,7 +866,7 @@ zkau._autopos = function (el, x, y) {
 	var wd = ofs[0], hgh = ofs[1];
 
 	var scx = zk.innerX(), scy = zk.innerY(),
-		scwd = zk.innerWidth(), schgh = zk.innerHeight();
+		scwd = scx + zk.innerWidth(), schgh = scy + zk.innerHeight();
 	if (x + wd > scwd) {
 		x = scwd - wd;
 		if (x < scx) x = scx;
