@@ -172,46 +172,45 @@ public class Window extends XulElement implements IdSpace  {
 	 * <p>The string could be a combination of the following:
 	 * <dl>
 	 * <dt>^k</dt>
-	 * <dd>A control key, i.e., Ctrl+k, where k could be a~z, 0~9, #n, ~n</dd>
+	 * <dd>A control key, i.e., Ctrl+k, where k could be a~z, 0~9, #n</dd>
 	 * <dt>@k</dt>
-	 * <dd>A alt key, i.e., Alt+k, where k could be a~z, 0~9, #n, ~n</dd>
+	 * <dd>A alt key, i.e., Alt+k, where k could be a~z, 0~9, #n</dd>
 	 * <dt>$k</dt>
-	 * <dd>A shift key, i.e., Shift+k, where k could be #n, ~n</dd>
-	 * <dt>~home</dt>
+	 * <dd>A shift key, i.e., Shift+k, where k could be #n</dd>
+	 * <dt>#home</dt>
 	 * <dd>Home</dd>
-	 * <dt>~end</dt>
+	 * <dt>#end</dt>
 	 * <dd>End</dd>
-	 * <dt>~ins</dt>
+	 * <dt>#ins</dt>
 	 * <dd>Insert</dd>
-	 * <dt>~del</dt>
+	 * <dt>#del</dt>
 	 * <dd>Delete</dd>
-	 * <dt>~l</dt>
+	 * <dt>#left</dt>
 	 * <dd>Left arrow</dd>
-	 * <dt>~r</dt>
+	 * <dt>#right</dt>
 	 * <dd>Right arrow</dd>
-	 * <dt>~u</dt>
+	 * <dt>#up</dt>
 	 * <dd>Up arrow</dd>
-	 * <dt>~d</dt>
+	 * <dt>#down</dt>
 	 * <dd>Down arrow</dd>
-	 * <dt>~pgup</dt>
+	 * <dt>#pgup</dt>
 	 * <dd>PageUp</dd>
-	 * <dt>~pgdn</dt>
+	 * <dt>#pgdn</dt>
 	 * <dd>PageDn</dd>
-	 * <dt>#n</dt>
-	 * <dd>A function key, where n could be 1, 2, ... 12, representing
-	 * F1, F2, ... F12</dd>
+	 * <dt>#f1 #f2 ... #f12</dt>
+	 * <dd>Function keys representing F1, F2, ... F12</dd>
 	 * </dl>
 	 *
 	 * <p>For example,
 	 * <dl>
-	 * <dt>^a^d@c#10*l*r</dt>
+	 * <dt>^a^d@c#f10#left#right</dt>
 	 * <dd>It means you want to intercept Ctrl+A, Ctrl+D, Alt+C, F10,
 	 * Left and Right.</dd>
-	 * <dt>^*l</dt>
+	 * <dt>^#left</dt>
 	 * <dd>It means Ctrl+Left.</dd>
-	 * <dt>^#1</dt>
+	 * <dt>^#f1</dt>
 	 * <dd>It means Ctrl+F1.</dd>
-	 * <dt>@#3</dt>
+	 * <dt>@#f3</dt>
 	 * <dd>It means Alt+F3.</dd>
 	 * </dl>
 	 *
@@ -245,12 +244,13 @@ public class Window extends XulElement implements IdSpace  {
 					throw new WrongValueException("Combination of Shift, Alt and Ctrl not supported: "+keys);
 				sbcur = cc == '^' ? sbctl: cc == '@' ? sbalt: sbsft;
 				break;
-			case '~':
+			case '#':
 				{
 					int k = j + 1;
 					for (; k < len; ++k) {
 						final char c2 = (char)keys.charAt(k);
-						if ((c2 > 'Z' || c2 < 'A') 	&& (c2 > 'z' || c2 < 'a'))
+						if ((c2 > 'Z' || c2 < 'A') 	&& (c2 > 'z' || c2 < 'a')
+						&& (c2 > '9' || c2 < '0'))
 							break;
 					}
 					if (k == j + 1)
@@ -261,36 +261,30 @@ public class Window extends XulElement implements IdSpace  {
 					else if ("pgdn".equals(s)) cc = 'B';
 					else if ("end".equals(s)) cc = 'C';
 					else if ("home".equals(s)) cc = 'D';
-					else if ("l".equals(s)) cc = 'E';
-					else if ("u".equals(s)) cc = 'F';
-					else if ("r".equals(s)) cc = 'G';
-					else if ("d".equals(s)) cc = 'H';
+					else if ("left".equals(s)) cc = 'E';
+					else if ("up".equals(s)) cc = 'F';
+					else if ("right".equals(s)) cc = 'G';
+					else if ("down".equals(s)) cc = 'H';
 					else if ("ins".equals(s)) cc = 'I';
 					else if ("del".equals(s)) cc = 'J';
-					else throw new WrongValueException("Unknown ~"+s+" in "+keys);
+					else if (s.length() > 1 && s.charAt(0) == 'f') {
+						final int v;
+						try {
+							v = Integer.parseInt(s.substring(1));
+						} catch (Throwable ex) {
+							throw new WrongValueException("Unknown #"+s+" in "+keys);
+						}
+						if (v == 0 || v > 12)
+							throw new WrongValueException("Unsupported function key: #f"+v);
+						cc = (char)('O' + v); //'P': F1, 'Q': F2... 'Z': F12
+					} else
+						throw new WrongValueException("Unknown #"+s+" in "+keys);
+
 					if (sbcur == null) sbext.append(cc);
-					else sbcur.append(cc);
-					j = k - 1;
-				}
-				break;
-			case '#':
-				{
-					int k = j + 1;
-					for (; k < len; ++k) {
-						final char c2 = (char)keys.charAt(k);
-						if (c2 > '9' || c2 < '0')
-							break;
+					else {
+						sbcur.append(cc);
+						sbcur = null;
 					}
-					if (k == j + 1)
-						throw new WrongValueException(MCommon.UNEXPECTED_CHARACTER, new Object[] {new Character(cc), keys});
-
-					int v = Integer.parseInt(keys.substring(j+1, k));
-					if (v == 0 || v > 12)
-						throw new WrongValueException("Unsupported function key: #"+v);
-
-					cc = (char)('O' + v); //'P': F1, 'Q': F2... 'Z': F12
-					if (sbcur == null) sbext.append(cc);
-					else sbcur.append(cc);
 					j = k - 1;
 				}
 				break;
@@ -313,7 +307,7 @@ public class Window extends XulElement implements IdSpace  {
 			.append('^').append(sbctl).append(';')
 			.append('@').append(sbalt).append(';')
 			.append('$').append(sbsft).append(';')
-			.append('~').append(sbext).append(';').toString();
+			.append('#').append(sbext).append(';').toString();
 		_ctrlKeys = keys;
 	}
 
