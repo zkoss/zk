@@ -37,14 +37,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 				<attribute name="value"><![CDATA[
 <window>
 	<zscript>
-List items = new java.util.AbstractList() {
-	public int size() {
-		return 1000;
-	}
-	public Object get(int j) {
-		return new Integer(j);
-	}
-};
+	List items = new org.zkoss.zkdemo.BigList(1000); //an list of Integer
 	</zscript>
 	<listbox mold="paging">
 		<listitem forEach="&#36;{items}">
