@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
   <zscript>
 import org.zkoss.lang.Objects;
   </zscript>
-  <window id="test" border="normal" ctrlKeys="^g^q#2">
+  <window id="test" border="normal" ctrlKeys="^g^q#f2">
 	Desktop: ${self.page.desktop.id}
 	<attribute name="onOK">
 	Messagebox.show("OK is pressed", "OK", Messagebox.OK, Messagebox.EXCLAMATION);
