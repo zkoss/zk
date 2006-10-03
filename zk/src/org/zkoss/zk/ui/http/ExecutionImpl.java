@@ -188,6 +188,12 @@ public class ExecutionImpl extends AbstractExecution {
 	public String getRemoteAddr() {
 		return _request.getRemoteAddr();
 	}
+	public String getServerName() {
+		return _request.getServerName();
+	}
+	public int getServerPort() {
+		return _request.getServerPort();
+	}
 	public String getLocalName() {
 		return _request.getLocalName();
 	}

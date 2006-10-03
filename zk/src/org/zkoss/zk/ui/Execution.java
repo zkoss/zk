@@ -238,8 +238,27 @@ public interface Execution extends Evaluator {
 	 * proxy that sent the request.
 	 */
 	public String getRemoteAddr();
+	/** Returns the host name of the server to which the request was sent.
+	 * It is the value of the part before ":" in the Host header value, if any,
+	 * or the resolved server name, or the server IP address.
+	 *
+	 * @see #getLocalName
+	 */
+	public String getServerName();
+	/** Returns the port number to which the request was sent.
+	 * It is the value of the part after ":" in the Host header value, if any,
+	 * or the server port where the client connection was accepted on.
+	 *
+	 * @see #getLocalPort
+	 */
+	public int getServerPort();
 	/** Returns the host name of the Internet Protocol (IP) interface
 	 * on which the request was received.
+	 *
+	 * <p>Note: it is the host name defined in the server. To retrieve the name
+	 * in URL, use {@link #getServerName}.
+	 *
+	 * @see #getServerName
 	 */
 	public String getLocalName();
 	/** Returns the Internet Protocol (IP) address of the interface on which
@@ -248,6 +267,8 @@ public interface Execution extends Evaluator {
 	public String getLocalAddr();
 	/** Returns the Internet Protocol (IP) port number of the interface on which
 	 * the request was received.
+	 *
+	 * @see #getServerPort
 	 */
 	public int getLocalPort();
 
