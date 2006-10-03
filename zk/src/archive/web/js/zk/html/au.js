@@ -1104,7 +1104,7 @@ zkau._onDocKeydown = function (evt) {
 zkau._inCtkeys = function (evt, zkcode, keys) {
 	if (keys) {
 		//format: ctl+k;alt+k;shft+k;k
-		var cc = evt.ctrlKey ? '^': evt.altKey ? '@': evt.shiftKey ? '$': '~';
+		var cc = evt.ctrlKey ? '^': evt.altKey ? '@': evt.shiftKey ? '$': '#';
 		var j = keys.indexOf(cc), k = keys.indexOf(';', j + 1);
 		if (j >=0 && k >= 0) {
 			keys = keys.substring(j + 1, k);
