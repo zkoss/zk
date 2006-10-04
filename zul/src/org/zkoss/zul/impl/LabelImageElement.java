@@ -126,7 +126,7 @@ public class LabelImageElement extends LabelElement implements Viewable {
 			.append("<img src=\"")
 			.append(_image != null ? getContentSrc(): //already encoded
 				getDesktop().getExecution().encodeURL(_src))
-			.append("\" align=\"middle\"/>");
+			.append("\"/>");
 
 		final String label = getLabel();
 		if (label != null && label.length() > 0) sb.append(' ');
