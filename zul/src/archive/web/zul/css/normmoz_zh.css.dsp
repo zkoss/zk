@@ -283,7 +283,7 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td, div.grid-paging td
 }
 
 div.listbox-foot { /* always used */
-	background: #EEE; border-top: 1px solid #BBB;
+	background: #E8EFEA; border-top: 1px solid #BBB;
 }
 
 tr.item, tr.item a, tr.item a:visited {
@@ -308,7 +308,7 @@ td.gridev, td.gridod { /* gridev and gridod always used. */
 	font-size: medium; font-weight: normal;
 }
 div.grid td.gridod { /* gridod always used for odd row. */
-	background: #EEE;
+	background: #E8EFEA;
 }
 
 /* ZK tab. */
