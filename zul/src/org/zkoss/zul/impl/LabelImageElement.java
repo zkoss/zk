@@ -122,10 +122,16 @@ public class LabelImageElement extends LabelElement implements Viewable {
 		if (_src == null && _image == null)
 			return null;
 
-		return new StringBuffer(64).append("<img src=\"")
+		final StringBuffer sb = new StringBuffer(64)
+			.append("<img src=\"")
 			.append(_image != null ? getContentSrc(): //already encoded
 				getDesktop().getExecution().encodeURL(_src))
-			.append("\" align=\"middle\"/>").toString();
+			.append("\" align=\"middle\"/>");
+
+		final String label = getLabel();
+		if (label != null && label.length() > 0) sb.append(' ');
+
+		return sb.toString(); //keep a space
 	}
 	/** Returns the encoded URL for the current image content.
 	 * Don't call this method unless _image is not null;

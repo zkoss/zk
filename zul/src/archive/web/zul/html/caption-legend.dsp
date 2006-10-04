@@ -19,4 +19,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<legend>${self.imgTag} <c:out value="${self.label}"/><c:forEach var="child" items="${self.children}"> ${z:redraw(child, null)}</c:forEach></legend>
+<legend>${self.imgTag}<c:out value="${self.label}"/><c:forEach var="child" items="${self.children}"> ${z:redraw(child, null)}</c:forEach></legend>
