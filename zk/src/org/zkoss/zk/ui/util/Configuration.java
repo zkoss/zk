@@ -26,7 +26,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.util.WaitLock;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Component;
@@ -35,6 +38,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
@@ -48,6 +52,7 @@ import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.LocaleProvider;
 import org.zkoss.zk.ui.sys.TimeZoneProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.impl.RichletConfigImpl;
 
 /**
  * The ZK configuration.
@@ -55,11 +60,15 @@ import org.zkoss.zk.ui.sys.UiFactory;
  * <p>To retrieve the current configuration, use
  * {@link org.zkoss.zk.ui.WebApp#getConfiguration}.
  *
+ * <p>Note: A {@link Configuration} instance can be assigned to at most one
+ * {@link WebApp} instance.
+ *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Configuration {
 	private static final Log log = Log.lookup(Configuration.class);
 
+	private final WebApp _wapp;
 	private final List
 		_evtInits = new LinkedList(), _evtCleans = new LinkedList(),
 		_evtSusps = new LinkedList(), _evtResus = new LinkedList(),
@@ -67,7 +76,8 @@ public class Configuration {
 		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
 		_dtInits = new LinkedList(), _dtCleans = new LinkedList(),
 		_execInits = new LinkedList(), _execCleans = new LinkedList();
-	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
+	private final Map _prefs  = Collections.synchronizedMap(new HashMap()),
+		_richlets = new HashMap();
 	/** List(ErrorPage). */
 	private final List _errpgs = new LinkedList();
 	private Monitor _monitor;
@@ -78,6 +88,11 @@ public class Configuration {
 	private Integer _maxUploadSize = new Integer(5120);
 	private String _charset = "UTF-8";
 
+	/** Contructor.
+	 */
+	public Configuration(WebApp wapp) {
+		_wapp = wapp;
+	}
 	/** Adds a listener class.
 	 */
 	public void addListener(Class klass) throws Exception {
@@ -454,11 +469,8 @@ s	 * @param resumes a list of {@link EventThreadResume} instances returned from
 	 *
 	 * <p>Unlike {@link #invokeWebAppInits}, it doesn't throw any exceptions.
 	 * Rather, it only logs them.
-	 *
-	 * @param wapp the Web application that is created
 	 */
-	public void invokeWebAppInits(WebApp wapp)
-	throws UiException {
+	public void invokeWebAppInits() throws UiException {
 		if (_appInits.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
@@ -466,7 +478,7 @@ s	 * @param resumes a list of {@link EventThreadResume} instances returned from
 			for (Iterator it = _appInits.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((WebAppInit)klass.newInstance()).init(wapp);
+					((WebAppInit)klass.newInstance()).init(_wapp);
 				} catch (Throwable ex) {
 					log.error("Failed to invoke "+klass, ex);
 				}
@@ -480,10 +492,8 @@ s	 * @param resumes a list of {@link EventThreadResume} instances returned from
 	 * and then invoke {@link WebAppCleanup#cleanup}.
 	 *
 	 * <p>It never throws an exception.
-	 *
-	 * @param wapp the Web application that is being destroyed
 	 */
-	public void invokeWebAppCleanups(WebApp wapp) {
+	public void invokeWebAppCleanups() {
 		if (_appCleans.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
@@ -491,7 +501,7 @@ s	 * @param resumes a list of {@link EventThreadResume} instances returned from
 			for (Iterator it = _appCleans.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((WebAppCleanup)klass.newInstance()).cleanup(wapp);
+					((WebAppCleanup)klass.newInstance()).cleanup(_wapp);
 				} catch (Throwable ex) {
 					log.error("Failed to invoke "+klass, ex);
 				}
@@ -889,6 +899,129 @@ s	 * @param resumes a list of {@link EventThreadResume} instances returned from
 	 */
 	public Set getPreferenceNames() {
 		return _prefs.keySet();
+	}
+
+	/** Adds a richlet with its class.
+	 *
+	 * @param params the initial parameters, or null if no initial parameter at all.
+	 * Once called, the caller cannot access <code>params</code> any more.
+	 * @return the previous richlet class or class-name with the specified path,
+	 * or null if no previous richlet.
+	 */
+	public Object addRichlet(String path, Class richletClass, Map params) {
+		if (!Richlet.class.isAssignableFrom(richletClass))
+			throw new IllegalArgumentException("A richlet class, "+richletClass+", must implement "+Richlet.class.getName());
+
+		return addRichlet0(path, richletClass, params);
+	}
+	/** Adds a richlet with its class name.
+	 *
+	 *
+	 * @param params the initial parameters, or null if no initial parameter at all.
+	 * Once called, the caller cannot access <code>params</code> any more.
+	 * @return the previous richlet class or class-name with the specified path,
+	 * or null if no previous richlet.
+	 */
+	public Object addRichlet(String path, String richletClassName, Map params) {
+		if (richletClassName == null || richletClassName.length() == 0)
+			throw new IllegalArgumentException("richletClassName is required");
+
+		return addRichlet0(path, richletClassName, params);
+	}
+	private Object addRichlet0(String path, Object richletClass, Map params) {
+		//richletClass was checked before calling this method
+		if (path == null || !path.startsWith("/"))
+			throw new IllegalArgumentException("path must start with '/', not "+path);
+
+		final Object o;
+		synchronized (_richlets) {
+			o = _richlets.put(path, new Object[] {richletClass, params});
+		}
+
+		if (o == null)
+			return null;
+		if (o instanceof Richlet) {
+			destroy((Richlet)o);
+			return o.getClass();
+		}
+		return ((Object[])o)[0];
+	}
+	private static void destroy(Richlet richlet) {
+		try {
+			richlet.destroy();
+		} catch (Throwable ex) {
+			log.error("Unable to destroy "+richlet);
+		}
+	}
+	/** Returns an instance of richlet for the specified path, or null if not found.
+	 */
+	public Richlet getRichlet(String path) {
+		WaitLock lock = null;
+		final Object[] info;
+		for (;;) {
+			synchronized (_richlets) {
+				Object o = _richlets.get(path);
+				if (o == null || (o instanceof Richlet)) { //loaded or not found
+					return (Richlet)o;
+				} else if (o instanceof WaitLock) { //loading by another thread
+					lock = (WaitLock)o;
+				} else { //going to load in this thread
+					info = (Object[])o;
+					_richlets.put(path, lock = new WaitLock());
+					break; //then, load it
+				}
+			} //sync(_richlets)
+
+			if (!lock.waitUntilUnlock(300*1000)) { //5 minute
+				final PotentialDeadLockException ex =
+					new PotentialDeadLockException(
+					"Unable to load from "+path+"\nCause: conflict too long.");
+				log.warningBriefly(ex); //very rare, possibly a bug
+				throw ex;
+			}
+		} //for (;;)
+
+		//load it
+		try {
+			if (info[0] instanceof String) {
+				try {
+					info[0] = Classes.forNameByThread((String)info[0]);
+				} catch (Throwable ex) {
+					throw new UiException("Failed to load "+info[0]);
+				}
+			}
+
+			final Object o = ((Class)info[0]).newInstance();
+			if (!(o instanceof Richlet))
+				throw new UiException(Richlet.class+" must be implemented by "+info[0]);
+
+			final Richlet richlet = (Richlet)o;
+			richlet.init(new RichletConfigImpl(_wapp, (Map)info[1]));
+
+			synchronized (_richlets) {
+				_richlets.put(path, richlet);
+			}
+			return richlet;
+		} catch (Throwable ex) {
+			synchronized (_richlets) {
+				_richlets.put(path, info); //remove lock and restore info
+			}
+			throw UiException.Aide.wrap(ex, "Unable to instantiate "+info[0]);
+		} finally {
+			lock.unlock();
+		}
+	}
+	/** Destroyes all richlets.
+	 */
+	public void detroyRichlets() {
+		synchronized (_richlets) {
+			for (Iterator it = _richlets.values().iterator(); it.hasNext();) {
+				final Object o = it.next();
+				if (o instanceof Richlet)
+					destroy((Richlet)o);
+			}
+			_richlets.clear();
+		}
 	}
 
 	/** Adds an error page.

@@ -414,25 +414,14 @@ public class DefinitionLoaders {
 		///if (log.finerable()) log.finer(exts);
 		return exts;
 	}
-	private static final
-	Map parseMap(Element elm, String type, String name, String value) {
-		final Map map = new HashMap();
-		for (Iterator it = elm.getElements(type).iterator(); it.hasNext();) {
-			final Element el = (Element)it.next();
-			final String nm = IDOMs.getRequiredElementValue(el, name);
-			final String uri = IDOMs.getRequiredElementValue(el, value);
-			map.put(nm, uri);
-		}
-		return map;
-	}
 	private static Map parseProps(Element elm) {
-		return parseMap(elm, "property", "property-name", "property-value");
+		return IDOMs.parseParams(elm, "property", "property-name", "property-value");
 	}
 	private static Map parseMolds(Element elm) {
-		return parseMap(elm, "mold", "mold-name", "mold-uri");
+		return IDOMs.parseParams(elm, "mold", "mold-name", "mold-uri");
 	}
 	private static Map parseParams(Element elm) {
-		return parseMap(elm, "param", "param-name", "param-value");
+		return IDOMs.parseParams(elm, "param", "param-name", "param-value");
 	}
 
 	private static class Addon {

@@ -35,19 +35,18 @@ import org.zkoss.zk.ui.sys.DesktopCache;
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private String _appnm = "ZK";
 	private final Configuration _config;
-	private final UiEngine _engine;
-	private final DesktopCacheProvider _provider;
-	private final UiFactory _factory;
+	private UiEngine _engine;
+	private DesktopCacheProvider _provider;
+	private UiFactory _factory;
 
-	protected AbstractWebApp(Configuration config, UiEngine engine,
-	DesktopCacheProvider provider, UiFactory factory) {
-		if (config == null || engine == null || provider == null
-		|| factory == null)
-			throw new IllegalArgumentException("null");
-		_config = config;
-		_engine = engine;
-		_provider = provider;
-		_factory = factory;
+	/** Constructor.
+	 *
+	 * <p>Note: after constructed, it is not initialized completely.
+	 * Rather, WebManager will initialize it later such as initializing
+	 * {@link #getConfiguration} by loading zk.xml and calling {@link #init}.
+	 */
+	protected AbstractWebApp() {
+		_config = new Configuration(this);
 	}
 
 	public String getAppName() {
@@ -64,6 +63,18 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	public final Configuration getConfiguration() {
 		return _config;
 	}
+
+	//WebAppCtrl//
+	public void init(UiEngine engine, DesktopCacheProvider provider,
+	UiFactory factory) {
+		if (engine == null || provider == null || factory == null)
+			throw new IllegalArgumentException("null");
+
+		_engine = engine;
+		_provider = provider;
+		_factory = factory;
+	}
+
 	public final UiEngine getUiEngine() {
 		return _engine;
 	}

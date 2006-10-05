@@ -12,11 +12,14 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.ui.Session;
+
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
@@ -28,6 +31,10 @@ import org.zkoss.zk.ui.sys.UiFactory;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface WebAppCtrl {
+	/** Initializes the {@link org.zkoss.zk.ui.WebApp}.
+	 */
+	public void init(UiEngine engine, DesktopCacheProvider provider,
+	UiFactory factory);
 	/** Returns the UI engine for this session.
 	 */
 	public UiEngine getUiEngine();

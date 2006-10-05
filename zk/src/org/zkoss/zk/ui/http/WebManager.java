@@ -111,7 +111,8 @@ public class WebManager {
 
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
 
-		final Configuration cfg = new Configuration();
+		_wapp = new MyWebApp();
+		final Configuration cfg = _wapp.getConfiguration();
 		try {
 			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
 			if (cfgUrl != null)
@@ -157,14 +158,14 @@ public class WebManager {
 			}
 		}
 
-		_wapp = new MyWebApp(cfg, engine, provider, factory);
+		((WebAppCtrl)_wapp).init(engine, provider, factory);
 		engine.start(_wapp);
 		provider.start(_wapp);
 		factory.start(_wapp);
 
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
-		cfg.invokeWebAppInits(_wapp);
+		cfg.invokeWebAppInits();
 
 		final List listeners = (List)_actListeners.remove(_ctx); //called and drop
 		if (listeners != null) {
@@ -181,7 +182,8 @@ public class WebManager {
 	}
 
 	public void destroy() {
-		_wapp.getConfiguration().invokeWebAppCleanups(_wapp);
+		_wapp.getConfiguration().invokeWebAppCleanups();
+		_wapp.getConfiguration().detroyRichlets();
 
 		final WebAppCtrl wappc = (WebAppCtrl)_wapp;
 		wappc.getUiFactory().stop(_wapp);
@@ -333,9 +335,7 @@ public class WebManager {
 
 	//-- inner classes --//
 	private class MyWebApp extends AbstractWebApp {
-		private MyWebApp(Configuration cfg, UiEngine engine,
-		DesktopCacheProvider provider, UiFactory factory) {
-			super(cfg, engine, provider, factory);
+		private MyWebApp() {
 		}
 		private final Map _attrs = new AttributesMap() {
 			protected Enumeration getKeys() {

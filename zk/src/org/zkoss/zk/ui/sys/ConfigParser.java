@@ -19,6 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.net.URL;
 
 import javax.servlet.jsp.el.ExpressionEvaluator;
@@ -69,7 +70,19 @@ public class ConfigParser {
 					final Class cls = Classes.forNameByThread(clsnm);
 					config.addListener(cls);
 				} catch (Throwable ex) {
-					throw new UiException("Unable to load "+clsnm, ex);
+					throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
+				}
+			} else if ("richlet".equals(elnm)) {
+				final String clsnm =
+					IDOMs.getRequiredElementValue(el, "richlet-class");
+				final String path =
+					IDOMs.getRequiredElementValue(el, "richlet-path");
+				final Map params =
+					IDOMs.parseParams(el, "init-param", "param-name", "param-value");
+				try {
+					config.addRichlet(path, clsnm, params);
+				} catch (Throwable ex) {
+					throw new UiException("Wrong richlet definition at "+el.getLocator(), ex);
 				}
 			} else if ("desktop-config".equals(elnm)) {
 			//desktop-config
@@ -153,7 +166,7 @@ public class ConfigParser {
 				try {
 					cls = Classes.forNameByThread(clsnm);
 				} catch (Throwable ex) {
-					throw new UiException("Unable to load "+clsnm, ex);
+					throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
 				}
 				config.addErrorPage(cls, loc);
 			} else if ("preference".equals(elnm)) {
@@ -161,7 +174,7 @@ public class ConfigParser {
 				final String val = IDOMs.getRequiredElementValue(el, "value");
 				config.setPreference(nm, val);
 			} else {
-				throw new UiException("Unknown element: "+elnm+", "+el.getLocator());
+				throw new UiException("Unknown element: "+elnm+", at "+el.getLocator());
 			}
 		}
 	}
@@ -175,7 +188,7 @@ public class ConfigParser {
 
 			final URL url = locator.getResource(path);
 			if (url == null)
-				log.error("File not found: "+path);
+				log.error("File not found: "+path+", at "+el.getLocator());
 			else
 				DefinitionLoaders.addLanguage(locator, url);
 		}
@@ -191,8 +204,8 @@ public class ConfigParser {
 					throw new UiException(clsnm+" must implement "+cls.getName()+", "+el.getLocator());
 				log.info("Using "+clsnm+" for "+cls);
 				return klass;
-			} catch (ClassNotFoundException ex) {
-				throw new UiException("Class not found: "+clsnm+", "+el.getLocator());
+			} catch (Throwable ex) {
+				throw new UiException("Unable to load "+clsnm+", at "+el.getLocator());
 			}
 		}
 		return null;
