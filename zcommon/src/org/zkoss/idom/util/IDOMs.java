@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -104,6 +105,30 @@ public class IDOMs {
 				return e;
 		}
 		return null;
+	}
+
+	/** Parses a tree of parameter elements into a map.
+	 *
+	 * <p>The tree of parameter elements is as follows.
+	 * <pre><code>
+	 * &lt;type&gt;
+	 *   &lt;name&gt;any&lt;/name&gt;
+	 *   &lt;vaue&gt;any&lt;/vaue&gt;
+	 * &lt;/type&gt;
+	 *
+	 * @return the map after parsed (never null). An empty map is returned
+	 * if no parameter is defined. The map is in the same order of the element tree.
+	 */
+	public static final
+	Map parseParams(Element elm, String type, String name, String value) {
+		final Map map = new LinkedHashMap();
+		for (Iterator it = elm.getElements(type).iterator(); it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String nm = getRequiredElementValue(el, name);
+			final String val = getRequiredElementValue(el, value);
+			map.put(nm, val);
+		}
+		return map;
 	}
 	
 	/** Formats the specified element for better readability by
@@ -240,249 +265,5 @@ public class IDOMs {
 			it.hasNext();)
 				dumpTree(s, (Item)it.next(), prefix);
 		}
-	}
-
-	/** Imports other XML files by processing &lt;import&gt;.
-	 * Unlike {@link #imports(Element, File)}, this method
-	 * assumes all imported files are loaded thru the locator's getResource().
-	 *
-	 * <p>Note: only the 'direct' children of the specified root is processed.
-	 *
-	 * <p>The format:<br>
-	 * <pre><code>&lt;root&gt;
-	 * ...
-	 *  &lt;import url="xyz.xml"&gt;
-	 * ...</code>
-	 *
-	 * <p>Then, this method will replace the import tag with the content
-	 * of xyz.xml.
-	 *
-	 * <p>The imported file (say xyz.xml in the above example) could also
-	 * have the import tag to import other files.
-	 *
-	 * @param locator the resource locator to load the imported file
-	 * @param refUrl the reference url; null to denote not available.
-	 * It is used to retrieve the absolute path, if the import tag specifies
-	 * a relative path, i.e., without xxx:// nor /.
-	 * If root is loaded from an URL, specified the URL as refUrl.<br>
-	 * How it works: refUrl.substring(0, refUrl.lastIndex('/')+1) + imported-url.
-	 */
-	public static final void
-	imports(Locator locator, Element root, String refUrl) {
-		String prefix = null;
-		for (final ListIterator it = root.getChildren().listIterator();
-		it.hasNext();) {
-			final Object o = it.next();
-			if (o instanceof Element) {
-				final Element e = (Element)o;
-				if (e.getName().equals("import")) {
-					String url = e.getAttributeValue("url");
-					if (url == null || url.length() == 0)
-						throw new IllegalSyntaxException(
-							MCommon.XML_ATTRIBUTE_REQUIRED, new Object[] {"url", e.getLocator()});
-
-					if (refUrl != null
-					&& url.charAt(0) != '/' && url.indexOf("://") < 0) {
-						if (prefix == null)
-							prefix =
-								refUrl.substring(0, refUrl.lastIndexOf('/') + 1);
-						url = prefix + url;
-					}
-
-					imports0(it, locator, url);
-				}
-			}
-		}
-	}
-	private static final void
-	imports0(ListIterator it, Locator locator, String flnm) {
-		final URL url = locator.getResource(flnm);
-		if (url == null)
-			throw new SystemException(MCommon.FILE_NOT_FOUND, flnm);
-
-		final Element imported;
-		try {
-			final SAXBuilder builder = new SAXBuilder(false, false, true);
-			imported = builder.build(url).getRootElement();
-		} catch(Exception ex) {
-			throw SystemException.Aide.wrap(ex);
-		}
-
-		imports(locator, imported, flnm); //recursive
-
-		it.remove();
-		for (Iterator e = imported.detachChildren().iterator(); e.hasNext();)
-			it.add(e.next());
-	}
-
-	/** Imports other XML files by processing &lt;import&gt;.
-	 * Unlike {@link #imports(Locator, Element, String)}, this method
-	 * assumes all imported files are from the file system.
-	 */
-	public static final void imports(Element root, File refFile) {
-		final File parent = refFile != null ? refFile.getParentFile(): null;
-		for (final ListIterator it = root.getChildren().listIterator();
-		it.hasNext();) {
-			final Object o = it.next();
-			if (o instanceof Element) {
-				final Element e = (Element)o;
-				if (e.getName().equals("import")) {
-					String url = e.getAttributeValue("url");
-					if (url == null || url.length() == 0)
-						throw new IllegalSyntaxException(
-							MCommon.XML_ATTRIBUTE_REQUIRED, new Object[] {"url", e.getLocator()});
-
-					imports0(it,
-						url.charAt(0) != '/' && url.indexOf("://") < 0 ?
-							new File(parent, url): new File(url));
-				}
-			}
-		}
-	}
-	private static final void imports0(ListIterator it, File file) {
-		final Element imported;
-		try {
-			final SAXBuilder builder = new SAXBuilder(false, false, true);
-			imported = builder.build(file).getRootElement();
-		} catch(Exception ex) {
-			throw SystemException.Aide.wrap(ex);
-		}
-
-		imports(imported, file); //recursive
-
-		it.remove();
-		for (Iterator e = imported.detachChildren().iterator(); e.hasNext();)
-			it.add(e.next());
-	}
-
-	//-- Merge --//
-	/** Merges two iDOM tree.
-	 * The child elements of the src tree is merged into the dst trees,
-	 * such that child elements with the same name are put together.
-	 */
-	public static void merge(Element dst, Element src) {
-		for (final Iterator it = src.getElements().iterator(); it.hasNext();) {
-			final Element e = (Element)it.next();
-			e.detach();
-
-			final String name = e.getName();
-			if (dst.getElement(name) == null) { //not found
-				dst.getChildren().add(e);
-				continue;
-			}
-
-			final ListIterator i2 = dst.getChildren().listIterator();
-			for (boolean found = false; i2.hasNext();) {
-				final Object o = i2.next();
-				if (o instanceof Element) {
-					final boolean match = ((Element)o).getName().equals(name);
-					if (found != match) {
-						if (found) { //&& !match
-							i2.previous();
-							break;
-						} else { //!found && match
-							found = true;
-						}
-					}
-				}
-			}
-			i2.add(e);
-		}
-	}
-	//-- Main --//
-	/** Handles XML files.
-	 */
-	public static void main(String[] args) throws Exception {
-		final List srcs = new LinkedList();
-		boolean merge = false, force = false, forceNewer = false, noDocType = false;
-		for (int j = 0; j < args.length; ++j) {
-			if (args[j].length() == 0)
-				continue;
-			if (args[j].charAt(0) == '-') {
-				if (args[j].length() == 1) {
-					error("Wrong argument, "+args[j]);
-					return;
-				}
-				switch(args[j].charAt(1)) {
-				case 'h':
-					help();
-					return;
-				case 'm':
-					merge = true;
-					break;
-				case 'f':
-					force = true;
-					break;
-				case 'n':
-					forceNewer = true;
-					break;
-				default:
-					error("Wrong argument, "+args[j]);
-					return;
-				}
-			} else {
-				srcs.add(args[j]);
-			}
-		}
-
-		if (srcs.size() < 2) {
-			error("At least one source file and one destination file must be specified");
-			return;
-		}
-
-		if (!merge) merge = true; //Currently we support only merge
-
-		final File dst = new File((String)srcs.remove(srcs.size() - 1));
-		if (!force && !forceNewer && dst.exists()) {
-			error(dst+" exists. Specify -f or -n if you want to overwrite it");
-			return;
-		}
-
-		boolean doit = !forceNewer;
-		for (final ListIterator it = srcs.listIterator(); it.hasNext();) {
-			final File src = new File((String)it.next());
-			if (!src.exists()) {
-				error(Messages.get(MCommon.FILE_NOT_FOUND, src));
-				return;
-			}
-			if (!doit && dst.lastModified() < src.lastModified()) {
-				doit = true;
-			}
-			it.set(src);
-		}
-
-		if (!doit)
-			return;
-		if (merge)
-			mergeFile(dst, srcs);
-	}
-	private static void mergeFile(File dst, List srcs)
-	throws Exception {
-		System.out.println("Merge "+srcs+" to "+dst);
-		Document doc = null;
-		for (final Iterator it = srcs.iterator(); it.hasNext();) {
-			final File src = (File)it.next();
-			final Document d = new SAXBuilder(false, false).build(src);
-			if (doc == null) {
-				doc = d;
-			} else {
-				merge(doc.getRootElement(), d.getRootElement());
-			}
-		}
-		new Transformer().transform(doc, new StreamResult(dst));
-	}
-	private static void error(String msg) {
-		System.err.println("idoms: "+msg+"\nidoms: Try 'idoms -h' for more information");
-	}
-	private static void help() {
-		System.out.println(
-		"Handles XML files.\n\n"
-		+"Usage:\n"
-		+"\tidoms [-h][-m] src-file1 [src-file2]... dst-file\n\n"
-		+"-f\tForce to overwrite if the destination exists. Optional.\n"
-		+"-n\tForce to overwrite if the destination is older. Optional.\n"
-		+"-h\tShow this message.\n"
-		+"-m\tMerges files. Optional.\n"
-		);
 	}
 }
