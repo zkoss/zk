@@ -37,6 +37,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 
 	<!-- Optional -->
+	<!-- You can define any number of richlets as follows.
+		Note: To use richlet, you have to map zkLoader to /xx/* in web.xml,
+		where xx could be any name. And, the final URL will be /xx/richlet-path.
+	-->
+	<richlet>
+		<richlet-class>org.zkoss.zkdemo.TestRichlet</richlet-class>
+		<richlet-path>/test</richlet-path>
+		<!-- Any number of initial parameters.
+		<init-param>
+			<param-name>any</param-name>
+			<param-value>any</param-value>
+		</init-param>
+		-->
+	</richlet>
+
+	<!-- Optional -->
 	<session-config>
 		<timeout-uri>/timeout.zul</timeout-uri>
 		<!-- An empty URL can cause the browser to reload the same URL
