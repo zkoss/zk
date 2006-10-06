@@ -51,9 +51,6 @@ public interface PageCtrl {
 	 */
 	public void init(String id, String title, String style, String headers);
 
-	/** Returns the CSS style of this page, or empty if not specified.
-	 */
-	public String getStyle();
 	/** Returns the (HTML) header elements declared in this page.
 	 */
 	public String getHeaders();

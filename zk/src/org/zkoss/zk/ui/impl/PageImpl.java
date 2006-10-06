@@ -230,6 +230,16 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			if (_style == null) _style = "";
 		}
 	}
+	public String getStyle() {
+		return _style;
+	}
+	public void setStyle(String style) {
+		if (style == null) style = "";
+		if (!Objects.equals(_style, style)) {
+			_style = style;
+			if (_desktop != null) evalStyle();
+		}
+	}
 
 	public Collection getRoots() {
 		return _roRoots;
@@ -452,9 +462,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 	};
 
-	public String getStyle() {
-		return _style;
-	}
 	public String getHeaders() {
 		return _headers;
 	}

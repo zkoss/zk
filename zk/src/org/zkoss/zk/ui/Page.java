@@ -105,6 +105,16 @@ public interface Page extends IdSpace {
 	 */
 	public void setTitle(String title);
 
+	/** Returns the CSS style of this page, or empty if not specified.
+	 */
+	public String getStyle();
+	/** Sets the CSS style of this page.
+	 *
+	 * <p>Note: Unlike {@link #setTitle}, you can change the style only in
+	 * the lifecycle of the loading page.
+	 */
+	public void setStyle(String style);
+
 	/** Returns the desktop that this page belongs to.
 	 *
 	 * <p>Note: it returns null when
