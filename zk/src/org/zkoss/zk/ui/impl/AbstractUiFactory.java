@@ -26,6 +26,7 @@ import org.zkoss.idom.Document;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -54,6 +55,9 @@ abstract public class AbstractUiFactory implements UiFactory {
 	}
 	public Page newPage(RequestInfo ri, PageDefinition pagedef, String path) {
 		return new PageImpl(pagedef);
+	}
+	public Page newPage(RequestInfo ri, Richlet richlet, String path) {
+		return new PageImpl(richlet.getLanguageDefinition());
 	}
 
 	/** Returns the page definition of the specified path, or null if not found.

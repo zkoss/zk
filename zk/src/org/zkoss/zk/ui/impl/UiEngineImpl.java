@@ -199,8 +199,18 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Creating a new page --//
+	public void execNewPage(Execution exec, Richlet richlet, Page page,
+	Writer out) throws IOException {
+		execNewPage0(exec, null, richlet, page, out);
+	}
 	public void execNewPage(Execution exec, PageDefinition pagedef,
 	Page page, Writer out) throws IOException {
+		execNewPage0(exec, pagedef, null, page, out);
+	}
+	/** It assumes exactly one of pagedef and richlet is not null.
+	 */
+	public void execNewPage0(Execution exec, PageDefinition pagedef,
+	Richlet richlet, Page page, Writer out) throws IOException {
 		//It is possible this method is invoked when processing other exec
 		final Execution oldexec = Executions.getCurrent();
 		final ExecutionCtrl oldexecCtrl = (ExecutionCtrl)oldexec;
@@ -231,21 +241,26 @@ public class UiEngineImpl implements UiEngine {
 			//1) stylesheet, tablib are inited in Page's contructor
 			//2) we add variable resolvers before init because
 			//init's zscirpt might depend on it.
-			page.addFunctionMapper(pagedef.getFunctionMapper());
-			initVariableResolvers(pagedef, page);
+			if (pagedef != null) {
+				page.addFunctionMapper(pagedef.getFunctionMapper());
+				initVariableResolvers(pagedef, page);
 
-			final Initiators inits = Initiators.doInit(pagedef, page);
-			try {
-				//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
-				pagedef.init(page,
-					!uv.isEverAsyncUpdate() && !uv.isAborting(), !uv.isAborting());
-				if (!uv.isAborting())
-					execCreate(exec, page, pagedef, null);
-			} catch(Throwable ex) {
-				inits.doCatch(ex);
-				throw UiException.Aide.wrap(ex);
-			} finally {
-				inits.doFinally();
+				final Initiators inits = Initiators.doInit(pagedef, page);
+				try {
+					//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
+					pagedef.init(page,
+						!uv.isEverAsyncUpdate() && !uv.isAborting(), !uv.isAborting());
+					if (!uv.isAborting())
+						execCreate(exec, page, pagedef, null);
+				} catch(Throwable ex) {
+					inits.doCatch(ex);
+					throw UiException.Aide.wrap(ex);
+				} finally {
+					inits.doFinally();
+				}
+			} else {
+				((PageCtrl)page).init(null, null, null, null);
+				richlet.service(page);
 			}
 
 			//Cycle 2: process pending events

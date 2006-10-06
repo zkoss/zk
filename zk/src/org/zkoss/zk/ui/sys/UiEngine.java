@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.au.AuRequest;
@@ -120,16 +121,15 @@ public interface UiEngine {
 	public void addUuidChanged(Component comp, boolean addOnlyMoved);
 
 	//-- execution --//
-	/** Executes when a new page is creates.
-	 * It has two phases:
-	 * <ol>
-	 * <li>Interprets all scripts defined in page's definition.</li>
-	 * <li>Creates all components defined in
-	 * {@link org.zkoss.zk.ui.metainfo.InstanceDefinition}.</li>
-	 * <li>Renders all visible components.</li>
-	 * </ol>
+	/** Creates components specified in the given page definition.
+	 * Called when a new page is creates.
 	 */
 	public void execNewPage(Execution exec, PageDefinition pagedef, Page page,
+	Writer out) throws IOException;
+	/** Invoke {@link Richlet#service}, when a new page is creates upon
+	 * visiting a richlet.
+	 */
+	public void execNewPage(Execution exec, Richlet richlet, Page page,
 	Writer out) throws IOException;
 
 	/** Executs an asynchronous update to a component (or page).

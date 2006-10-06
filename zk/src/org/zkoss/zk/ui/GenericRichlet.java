@@ -1,4 +1,4 @@
-/* Richlet.java
+/* GenericRichlet.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct  5 11:56:22     2006, Created by tomyeh@potix.com
+		Fri Oct  6 09:56:39     2006, Created by tomyeh@potix.com
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -18,34 +18,35 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 
 /**
- * A richlet must implement this interface.
- *
- * <p>To activate it, it must be added to {@link org.zkoss.zk.ui.util.Configuration}
- * by use of {@link org.zkoss.zk.ui.util.Configuration#addRichlet}, or specify
- * &lt;richlet&gt; in zk.xml.
+ * Defines a genric richlet. Developers can use it as a skeleton to implement
+ * an application-specific richlet.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public interface Richlet {
+abstract public class GenericRichlet implements Richlet {
 	/** Called by the richlet container to indicate to a richlet that
 	 * the richlet is being placed into service.
+	 *
+	 * <p>Default: does nothing.
 	 */
-	public void init(RichletConfig config);
+	public void init(RichletConfig config) {
+	}
 	/** Called by the richlet container to indicate to a richlet that
 	 * the richlet is being taken out of service.
+	 *
+	 * <p>Default: does nothing.
 	 */
-	public void destroy();
+	public void destroy() {
+	}
 	/** Returns the language defintion that this richlet belongs to.
 	 * Don't return null.
+	 *
+	 * <p>Default: return the language definition called "xul/html".
 	 */
-	public LanguageDefinition getLanguageDefinition();
-
-	/** Called by the richlet container to create components when
-	 * the specified page is visited and created.
-	 */
-	public void service(Page page);
+	public LanguageDefinition getLanguageDefinition() {
+		return LanguageDefinition.lookup("xul/html");
+	}
 }

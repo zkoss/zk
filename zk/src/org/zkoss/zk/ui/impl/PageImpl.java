@@ -129,7 +129,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	/** The header tags. */
 	private String _headers = "";
 
-	/** Constructs a page.
+	/** Constructs a page by giving the page definition.
 	 *
 	 * <p>Note: when a page is constructed, it doesn't belong to a desktop
 	 * yet. Caller has to invoke {@link #init} to complete
@@ -139,6 +139,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 *
 	 * <p>Also note that {@link #getId} and {@link #getTitle}
 	 * are not ready until {@link #init} is called.
+	 *
+	 * @param pgdef the page definition (never null).
 	 */
 	public PageImpl(PageDefinition pgdef) {
 		_langdef = pgdef.getLanguageDefinition();
@@ -146,6 +148,25 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_pgUri = _langdef.getPageURI();
 		_compdefs = pgdef.getComponentDefinitionMap();
 
+		init();
+	}
+	/** Constructs a page by giving the language definition. It is mainly
+	 * used to create a page for {@link org.zkoss.zk.ui.Richlet}.
+	 *
+	 * <p>Note: when a page is constructed, it doesn't belong to a desktop
+	 * yet. Caller has to invoke {@link #init} to complete
+	 * the creation of a page.
+	 *
+	 * <p>Also note that {@link #getId} and {@link #getTitle}
+	 * are not ready until {@link #init} is called.
+	 *
+	 * @param langdef the language definition (never null).
+	 */
+	public PageImpl(LanguageDefinition langdef) {
+		_langdef = langdef;
+		_dkUri = _langdef.getDesktopURI();
+		_pgUri = _langdef.getPageURI();
+		_compdefs = new ComponentDefinitionMap();
 		init();
 	}
 	/** Initialized the page when contructed or deserialized.

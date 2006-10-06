@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 /**
@@ -67,16 +68,22 @@ public interface UiFactory {
 	 */
 	public Desktop newDesktop(RequestInfo ri, String updateURI, String path);
 
-	/** Creates an instance of {@link Page}.
+	/** Creates an instance of {@link Page} for the specified page definition.
 	 *
 	 * <p>Note: the returned instance must also implement {@link PageCtrl}.
 	 *
 	 * @param ri the additional request information.
-	 * @param pagedef the page definition.
+	 * @param pagedef the page definition. If null, it means the page is served
+	 * by a {@link org.zkoss.zk.ui.Richlet} instance.
 	 * @param path the path to request this page, or null if it is caused
 	 * by a filter.
 	 */
 	public Page newPage(RequestInfo ri, PageDefinition pagedef, String path);
+	/** Creates an instance of {@link Page} for the specified richlet.
+	 *
+	 * <p>Note: the returned instance must also implement {@link PageCtrl}.
+	 */
+	public Page newPage(RequestInfo ri, Richlet richlet, String path);
 
 	/** Returns the page definition of the specified path, or null if
 	 * not found.

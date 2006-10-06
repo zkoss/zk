@@ -44,6 +44,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.sys.UiFactory;
@@ -117,8 +118,10 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	private void process(Session sess,
 	HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		final String path = Https.getThisServletPath(request);
-		if (D.ON && log.debugable()) log.debug("Creates from "+path);
+		final String pi = Https.getThisPathInfo(request);
+		final String path = pi != null & pi.length() > 0 ?
+			pi: Https.getThisServletPath(request);
+		if (D.ON && log.finerable()) log.finer("Creates from "+path+", "+pi);
 
 		final WebApp wapp = _webman.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
@@ -127,26 +130,44 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
 		final UiFactory uf = wappc.getUiFactory();
-		final PageDefinition pagedef = uf.getPageDefinition(ri, path);
-		if (pagedef == null) {
-			if (Servlets.isIncluded(request)) {
-				final String msg = Messages.get(MZk.PAGE_NOT_FOUND,
-					new Object[] {path});
-				final Map attrs = new HashMap();
-				attrs.put(Attributes.ALERT_TYPE, "error");
-				attrs.put(Attributes.ALERT, msg);
-				Servlets.include(_ctx, request, response,
-					"~./html/alert.dsp", attrs, Servlets.PASS_THRU_ATTR);
-			} else {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND);
-			}
-			return;
-		}
 
-		final Page page = uf.newPage(ri, pagedef, path);
-		final Execution exec = new ExecutionImpl(
-			_ctx, request, response, desktop, page);
-		wappc.getUiEngine()
-			.execNewPage(exec, pagedef, page, response.getWriter());
+		if (pi != null) {
+			final Richlet richlet = wapp.getConfiguration().getRichlet(pi);
+			if (richlet == null) {
+				sendError(request, response, pi);
+				return;
+			}
+			
+			final Page page = uf.newPage(ri, richlet, path);
+			final Execution exec = new ExecutionImpl(
+				_ctx, request, response, desktop, page);
+			wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
+		} else {
+			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
+			if (pagedef == null) {
+				sendError(request, response, path);
+				return;
+			}
+
+			final Page page = uf.newPage(ri, pagedef, path);
+			final Execution exec = new ExecutionImpl(
+				_ctx, request, response, desktop, page);
+			wappc.getUiEngine()
+				.execNewPage(exec, pagedef, page, response.getWriter());
+		}
+	}
+	private void sendError(HttpServletRequest request, HttpServletResponse response,
+	String path) throws ServletException, IOException {
+		if (Servlets.isIncluded(request)) {
+			final String msg = Messages.get(MZk.PAGE_NOT_FOUND,
+				new Object[] {path});
+			final Map attrs = new HashMap();
+			attrs.put(Attributes.ALERT_TYPE, "error");
+			attrs.put(Attributes.ALERT, msg);
+			Servlets.include(_ctx, request, response,
+				"~./html/alert.dsp", attrs, Servlets.PASS_THRU_ATTR);
+		} else {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		}
 	}
 }
