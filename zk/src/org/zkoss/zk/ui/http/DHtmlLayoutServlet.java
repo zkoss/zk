@@ -119,7 +119,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		final String pi = Https.getThisPathInfo(request);
-		final String path = pi != null & pi.length() > 0 ?
+		final String path = pi != null && pi.length() > 0 ?
 			pi: Https.getThisServletPath(request);
 		if (D.ON && log.finerable()) log.finer("Creates from "+path+", "+pi);
 
@@ -138,7 +138,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				return;
 			}
 			
-			final Page page = uf.newPage(ri, richlet, path);
+			final Page page = uf.newPage(ri, richlet, pi);
 			final Execution exec = new ExecutionImpl(
 				_ctx, request, response, desktop, page);
 			wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
