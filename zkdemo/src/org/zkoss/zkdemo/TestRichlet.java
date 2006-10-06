@@ -16,18 +16,37 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkdemo;
 
-import org.zkoss.zk.ui.Richlet;
-import org.zkoss.zk.ui.RichletConfig;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.GenericRichlet;
+import org.zkoss.zk.ui.event.*;
+import org.zkoss.zul.*;
 
 /**
  * Used to test richlet.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class TestRichlet implements Richlet {
+public class TestRichlet extends GenericRichlet {
 	//Richlet//
-	public void init(RichletConfig config) {
-	}
-	public void destroy() {
+	public void service(Page page) {
+		final Window w = new Window("Richlet Test", "normal", false);
+		new Label("Hello World!").setParent(w);
+		final Label l = new Label();
+		l.setParent(w);
+
+		final Button b = new Button("Change");
+		b.addEventListener(Events.ON_CLICK,
+			new EventListener() {
+				int count;
+				public boolean isAsap() {
+					return true;
+				}
+				public void onEvent(Event evt) {
+					l.setValue("" + ++count);
+				}
+			});
+		b.setParent(w);
+
+		w.setPage(page);
 	}
 }
