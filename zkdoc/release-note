@@ -1,6 +1,9 @@
 	--------
 ZK 2.2.0 Freshly
 * Features:
+  1567586.
+  + Richlet is supported. By implementing a richlet, developers can write an
+    application without using ZUML pages.
 
 * Bugs:
 
