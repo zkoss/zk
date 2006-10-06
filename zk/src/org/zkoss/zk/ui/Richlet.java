@@ -22,7 +22,9 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 
 /**
- * A richlet must implement this interface.
+ * Defines methods that all richlets must implement.
+ * A richlet is a small Java program that
+ * creates all necessary components for a given page in response to user's request.
  *
  * <p>To activate it, it must be added to {@link org.zkoss.zk.ui.util.Configuration}
  * by use of {@link org.zkoss.zk.ui.util.Configuration#addRichlet}, or specify

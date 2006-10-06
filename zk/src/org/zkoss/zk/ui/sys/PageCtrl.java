@@ -45,11 +45,9 @@ public interface PageCtrl {
 	 * is activated.
 	 *
 	 * @param id the page identifier, or null if auto-generation is required
-	 * @param title the page title, or null if no title at all.
-	 * @param style the CSS style, or null if no special style is required.
 	 * @param headers the header elements, or null if no header is required.
 	 */
-	public void init(String id, String title, String style, String headers);
+	public void init(String id, String headers);
 
 	/** Returns the (HTML) header elements declared in this page.
 	 */

@@ -211,23 +211,15 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (!Objects.equals(_title, title)) {
 			_title = title;
 			if (_desktop != null) {
-				evalTitle();
-				getUiEngine().addResponse("setTitle", new AuSetTitle(_title));
+				final Execution exec = getExecution();
+				if (_title.length() > 0) {
+					_title = (String)exec.evaluate(this, _title, String.class);
+					if (_title == null) _title = "";
+				}
+
+				if (exec.isAsyncUpdate(this))
+					getUiEngine().addResponse("setTitle", new AuSetTitle(_title));
 			}
-		}
-	}
-	private void evalTitle() {
-		if (_title.length() > 0) {
-			_title = (String)
-				getExecution().evaluate(this, _title, String.class);
-			if (_title == null) _title = "";
-		}
-	}
-	private void evalStyle() {
-		if (_style.length() > 0) {
-			_style = (String)
-				getExecution().evaluate(this, _style, String.class);
-			if (_style == null) _style = "";
 		}
 	}
 	public String getStyle() {
@@ -237,7 +229,14 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (style == null) style = "";
 		if (!Objects.equals(_style, style)) {
 			_style = style;
-			if (_desktop != null) evalStyle();
+			if (_desktop != null) {
+				final Execution exec = getExecution();
+				if (_style.length() > 0) {
+					_style = (String)exec.evaluate(this, _style, String.class);
+					if (_style == null) _style = "";
+				}
+				//FUTURE: might support the change of style dynamically
+			}
 		}
 	}
 
@@ -395,29 +394,30 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	//-- PageCtrl --//
-	public void init(String id, String title, String style, String headers) {
+	public void init(String id, String headers) {
 		if (_desktop != null)
 			throw new IllegalStateException("Don't init twice");
 
 		if (id != null) _id = id;
-		if (title != null) _title = title;
-		if (style != null) _style = style;
 		if (headers != null) _headers = headers;
 
-		_desktop = Executions.getCurrent().getDesktop();
+		final Execution exec = Executions.getCurrent();
+		_desktop = exec.getDesktop();
 		if (_desktop == null)
 			throw new IllegalArgumentException("null desktop");
 
 		final DesktopCtrl dtctrl = (DesktopCtrl)_desktop;
 		if (_id != null)
-			_id = (String)getExecution().evaluate(this, _id, String.class);
-		if (_id == null || _id.length() == 0)
+			_id = (String)exec.evaluate(this, _id, String.class);
+		if (_id != null && _id.length() != 0) {
+			final String INVALID = ".&\\%";
+			if (Strings.anyOf(_id, INVALID, 0) < _id.length())
+				throw new IllegalArgumentException("Invalid page ID: "+_id+". Invalid characters: "+INVALID);
+		} else {
 			_id = Strings.encode(new StringBuffer(12).append("_pp"),
 				dtctrl.getNextId()).toString();
+		}
 		dtctrl.addPage(this);	
-
-		evalStyle();
-		evalTitle();
 
 		_ip.setVariable("log", _zklog);
 		_ip.setVariable("page", this);
@@ -430,10 +430,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_ip.setVariable("applicationScope", _desktop.getWebApp().getAttributes());
 		_ip.setVariable("requestScope", REQUEST_ATTRS);
 		_ip.setVariable("spaceOwner", this);
-
-		final String INVALID = ".&\\%";
-		if (Strings.anyOf(_id, INVALID, 0) < _id.length())
-			throw new IllegalArgumentException("Invalid page ID: "+_id+"\nCharacters not allowed: "+INVALID);
 	}
 	private static final Map REQUEST_ATTRS = new AbstractMap() {
 		public Set entrySet() {

@@ -76,7 +76,7 @@ public class ConfigParser {
 				final String clsnm =
 					IDOMs.getRequiredElementValue(el, "richlet-class");
 				final String path =
-					IDOMs.getRequiredElementValue(el, "richlet-path");
+					IDOMs.getRequiredElementValue(el, "richlet-url");
 				final Map params =
 					IDOMs.parseParams(el, "init-param", "param-name", "param-value");
 				try {

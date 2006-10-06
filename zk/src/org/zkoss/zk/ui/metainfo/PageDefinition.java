@@ -271,8 +271,9 @@ public class PageDefinition extends InstanceDefinition {
 	 * the top level
 	 */
 	public void init(Page page, boolean evalHeaders, boolean evalTopZscripts) {
-		((PageCtrl)page).init(_id, _title, _style,
-			evalHeaders ? getHeaders(page): "");
+		((PageCtrl)page).init(_id, evalHeaders ? getHeaders(page): "");
+		if (_title != null) page.setTitle(_title);
+		if (_style != null) page.setStyle(_style);
 
 		if (evalTopZscripts) {
 			final List scripts = getLanguageDefinition().getScripts();
