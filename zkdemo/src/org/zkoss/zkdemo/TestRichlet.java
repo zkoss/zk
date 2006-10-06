@@ -29,6 +29,8 @@ import org.zkoss.zul.*;
 public class TestRichlet extends GenericRichlet {
 	//Richlet//
 	public void service(Page page) {
+		page.setTitle("Richlet Test");
+
 		final Window w = new Window("Richlet Test", "normal", false);
 		new Label("Hello World!").setParent(w);
 		final Label l = new Label();
