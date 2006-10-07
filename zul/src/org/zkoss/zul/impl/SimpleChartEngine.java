@@ -172,7 +172,7 @@ public class SimpleChartEngine implements ChartEngine {
 			area.setParent(chart);
 		 	area.setCoords(ce.getShapeCoords());
 		 	area.setShape(ce.getShapeType());
-		    area.setId(chart.getId()+'_'+(j++));
+		    area.setId("area_"+chart.getId()+'_'+(j++));
 		    if (chart.isShowTooltiptext() && ce.getToolTipText() != null) {
 		    	area.setTooltiptext(ce.getToolTipText());
 		    }
