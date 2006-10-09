@@ -937,8 +937,8 @@ zkau._onDocMouseover = function (evt) {
 		var tip = cmp.getAttribute("zk_tip");
 		tip = zkau.getByZid(cmp, tip);
 		if (tip) {
-			if (!zkau._tipz || zkau._tipz.cmdId != cmp.id) {
-				var open = zkau._tipz && zkau._tipz.open;
+			var open = zkau._tipz && zkau._tipz.open;
+			if (!open || zkau._tipz.cmpId != cmp.id) {
 				zkau._tipz = {
 					tipId: tip.id, cmpId: cmp.id,
 					x: Event.pointerX(evt) + 1, y: Event.pointerY(evt) + 2
