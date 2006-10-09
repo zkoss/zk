@@ -276,7 +276,7 @@ div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-pag
 div.listbox-paging, div.grid-paging {
 	border-bottom: 1px solid #AAB;
 }
-div.tree-body td, div.listbox-body td, div.listbox-paging td, div.grid-paging td {
+div.tree-body td, div.listbox-body td, div.listbox-paging td {
 	cursor: pointer; padding: 0 2px;
 	font-size: medium; font-weight: normal;
 }
