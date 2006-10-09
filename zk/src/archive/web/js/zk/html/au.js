@@ -941,8 +941,8 @@ zkau._onDocMouseover = function (evt) {
 				var open = zkau._tipz && zkau._tipz.open;
 				zkau._tipz = {
 					tipId: tip.id, cmpId: cmp.id,
-					x: Event.pointerX(evt),
-					y: Event.pointerY(evt)
+					x: Event.pointerX(evt) + 1, y: Event.pointerY(evt) + 2
+					 //Bug 1572286: position tooltip with some offset to allow
 				};
 				if (open) zkau._openTip(cmp.id);
 				else setTimeout("zkau._openTip('"+cmp.id+"')", 800);
