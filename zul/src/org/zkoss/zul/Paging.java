@@ -121,6 +121,7 @@ public class Paging extends XulElement implements Paginal {
 		if (_actpg != pg) {
 			_actpg = pg;
 			invalidate();
+			Events.postEvent(new PagingEvent(ZulEvents.ON_PAGING, this, _actpg));
 		}
 	}
 
