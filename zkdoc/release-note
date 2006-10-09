@@ -6,7 +6,7 @@ ZK 2.2.0 Freshly
     application without using ZUML pages.
 
 * Bugs:
-  + 1572055, 1573456, 1572514.
+  + 1572055, 1573456, 1572514, 1572286.
 
 * Upgrade Notes
 
