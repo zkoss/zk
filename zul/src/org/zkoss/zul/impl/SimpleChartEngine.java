@@ -140,11 +140,16 @@ public class SimpleChartEngine implements ChartEngine {
 		
 		alpha = (float)(((float)chart.getBgAlpha()) / 255);
 		plot.setBackgroundAlpha(alpha);
-		
+
 		int[] bgRGB = chart.getBgRGB();
 		if (bgRGB != null) {
 			plot.setBackgroundPaint(new Color(bgRGB[0], bgRGB[1], bgRGB[2], chart.getBgAlpha()));
 		}
+
+        int[] paneRGB = chart.getPaneRGB();
+        if (paneRGB != null) {
+            jfchart.setBackgroundPaint(new Color(paneRGB[0], paneRGB[1], paneRGB[2], chart.getPaneAlpha()));
+        }
 
 		//callbacks for each area
 		ChartRenderingInfo jfinfo = new ChartRenderingInfo();

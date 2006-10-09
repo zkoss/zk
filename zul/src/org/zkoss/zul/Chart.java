@@ -101,6 +101,9 @@ public class Chart extends Imagemap {
 	private boolean _showTooltiptext = true; //wether show tooltiptext
 	private String _orient = "vertical"; //orient
 	private ChartAreaListener _areaListener; //callback function when chart area changed
+    private String _paneColor; // pane's color
+    private int[] _paneRGB; //pane red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+    private int _paneAlpha = 255; //pane alpha transparency (0 ~ 255, default to 255)
 	
 	//plot related attributes
 	private int _fgAlpha = 255; //foreground alpha transparency (0 ~ 255, default to 255)
@@ -283,6 +286,62 @@ public class Chart extends Imagemap {
 	}
 	
 	/**
+	 * Set the pane alpha (transparency, 0 ~ 255).
+	 * @param alpha the transparency of pane color (0 ~ 255, default to 255 opaque).
+	 */
+	public void setPaneAlpha(int alpha) {
+		if (alpha == _paneAlpha) {
+			return;
+		}
+		if (alpha > 255 || alpha < 0) {
+			alpha = 255;
+		}
+		_paneAlpha = alpha;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Get the pane alpha (transparency, 0 ~ 255, opacue).
+	 */
+	public int getPaneAlpha() {
+		return _paneAlpha;
+	}
+
+	/**
+	 * Set the pane color of the chart.
+	 * @param color in #RRGGBB format (hexdecimal).
+	 */
+	public void setPaneColor(String color) {
+		if (Objects.equals(color, _paneColor)) {
+			return;
+		}
+		_paneColor = color;
+		if (_paneColor == null) {
+			_paneRGB = null;
+		} else {
+			_paneRGB = new int[3];
+			decode(_paneColor, _paneRGB);
+		}
+		smartDrawChart();
+	}
+	
+	/**
+	 * Get the pane color of the chart (in string as #RRGGBB).
+	 * null means default.
+	 */
+	public String getPaneColor() {
+		return _paneColor;
+	}
+	
+	/**
+	 * Get the pane color in int array (0: red, 1: green, 2:blue).
+	 * null means default.
+	 */
+	public int[] getPaneRGB() {
+		return _paneRGB;
+	}
+
+	/**
 	 * Set the foreground alpha (transparency, 0 ~ 255).
 	 * @param alpha the transparency of foreground color (0 ~ 255, default to 255 opaque).
 	 */
@@ -297,7 +356,7 @@ public class Chart extends Imagemap {
 		_fgAlpha = alpha;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Get the foreground alpha (transparency, 0 ~ 255, opacue).
 	 */
