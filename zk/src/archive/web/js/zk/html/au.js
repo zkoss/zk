@@ -1462,8 +1462,8 @@ action.slideDown = function (id, down) {
 	if (down == false) action.slideUp(id);
 	else {
 		var n = $e(id);
-		if (n && (!n.getAttribute || !n.getAttribute("zk_visible"))) {
-			if (n.setAttribute) n.setAttribute("zk_visible", "showing");
+		if (n && (!n.getAttribute || !n.getAttribute("zk_sliding"))) {
+			if (n.setAttribute) n.setAttribute("zk_sliding", "show");
 			Effect.SlideDown(n, {duration:0.4, afterFinish: action._afterDown});
 		}
 	}
@@ -1471,7 +1471,7 @@ action.slideDown = function (id, down) {
 action._afterDown = function (ef) {
 	var n = ef.element;
 	if (n) {
-		if (n.setAttribute) n.removeAttribute("zk_visible");
+		if (n.setAttribute) n.removeAttribute("zk_sliding");
 		zkau.onVisiAt(n);
 	}
 };
@@ -1483,8 +1483,8 @@ action.slideUp = function (id, up) {
 	if (up == false) action.slideDown(id);
 	else {
 		var n = $e(id);
-		if (n && (!n.getAttribute || !n.getAttribute("zk_visible"))) {
-			if (n.setAttribute) n.setAttribute("zk_visible", "hiding");
+		if (n && (!n.getAttribute || !n.getAttribute("zk_sliding"))) {
+			if (n.setAttribute) n.setAttribute("zk_sliding", "hide");
 			zkau.onHideAt(n); //callback first
 			Effect.SlideUp(n, {duration:0.4, afterFinish: action._afterUp});
 		}
@@ -1492,7 +1492,7 @@ action.slideUp = function (id, up) {
 };
 action._afterUp = function (ef) {
 	var n = ef.element;
-	if (n && n.setAttribute) n.removeAttribute("zk_visible");
+	if (n && n.setAttribute) n.removeAttribute("zk_sliding");
 };
 
 /*Float: used to be added to zkau.floats
