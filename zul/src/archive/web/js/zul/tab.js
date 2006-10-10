@@ -24,7 +24,8 @@ function zkTab() {};
 zkTab.onclick = function (evt) {
 	if (!evt) evt = window.event;
 	var tab = zkau.getParentByType(Event.element(evt), "Tab");
-	zkTab.selTab(tab);
+	if (!zkTab._sliding(tab)) //Bug 1571408
+		zkTab.selTab(tab);
 };
 
 /** Returns the selected tab by giving any tab as the reference point. */
@@ -42,6 +43,23 @@ zkTab._getSelTab = function (tab) {
 	for (var node = tab; (node = node.previousSibling) != null;)
 		if (node.getAttribute && node.getAttribute("zk_sel") == "true")
 			return node;
+};
+/** Whether any tab is sliding. */
+zkTab._sliding = function (tab) {
+	var tabboxId = tab.getAttribute("zk_box");
+	if (!tabboxId) return false;
+
+	var tabbox = $e(tabboxId);
+	if (tabbox.getAttribute("zk_accd") != "true")
+		return false;
+
+	for (var node = tab; (node = node.nextSibling) != null;)
+		if (node.getAttribute && node.getAttribute("zk_sliding"))
+			return true;
+	for (var node = tab; (node = node.previousSibling) != null;)
+		if (node.getAttribute && node.getAttribute("zk_sliding"))
+			return true;
+	return false;
 };
 /** Returns the selected tab by specified any HTML tag containing it. */
 zkTab._getSelTabFromTop = function (node, tabboxId) {
