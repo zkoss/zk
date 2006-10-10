@@ -244,9 +244,9 @@ td.hbox {
 }
 
 <%-- ZK tree, listbox, grid --%>
-div.grid {overflow: auto} <%--Bug 1562358 (workaroun of a IE bug--%>
 div.listbox, div.tree, div.grid, div.grid-no-striped { <%-- depends sclass. --%>
 	background: threedface; border: 1px solid #7F9DB9;
+	overflow: auto; <%--Bug 1562358 (workaround of a IE bug) --%>
 }
 div.tree-head, div.listbox-head, div.grid-head { <%-- always used. --%>
 	background: threedface; border: 0; overflow: hidden; width: 100%;
