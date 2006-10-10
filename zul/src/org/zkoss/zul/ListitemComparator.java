@@ -34,9 +34,11 @@ public class ListitemComparator implements Comparator {
 	/** Ascending. */
 	private final boolean _asc;
 	/** Ignore case. */
-	private final boolean _igcase;
+	private boolean _igcase;
 	/** Compares by value (instead of label) */
-	private final boolean _byval;
+	private boolean _byval;
+	/** Whether to treat null as the maximum value. */
+	private boolean _maxnull;
 
 	/** Compares with {@link Listitem#getValue}.
 	 *
@@ -48,7 +50,7 @@ public class ListitemComparator implements Comparator {
 	 * instead.
 	 */
 	public ListitemComparator() {
-		this(-1, true, true, false);
+		this(-1, true, true, false, false);
 	}
 	/** Compares with the column of the specified index.
 	 *
@@ -62,11 +64,13 @@ public class ListitemComparator implements Comparator {
 	 * If not, use {@link #ListitemComparator(int, boolean, boolean, boolean)}
 	 * instead.
 	 *
+	 * <p>A null value is considered as the minimum value.
+	 *
 	 * @param index which column to compare. If -1, {@link Listitem#getValue}
 	 * is used.
 	 */
 	public ListitemComparator(int index) {
-		this(index, true, true, false);
+		this(index, true, true, false, false);
 	}
 	/** Compares with the column of the specified index.
 	 *
@@ -80,6 +84,8 @@ public class ListitemComparator implements Comparator {
 	 * use {@link #ListitemComparator(int, boolean, boolean, boolean)}
 	 * instead.
 	 *
+	 * <p>A null value is considered as the minimum value.
+	 *
 	 * @param index which column to compare. If -1, {@link Listitem#getValue}
 	 * is used.
 	 * @param ascending whether to sort as ascending (or descending).
@@ -87,21 +93,30 @@ public class ListitemComparator implements Comparator {
 	 */
 	public ListitemComparator(int index, boolean ascending,
 	boolean ignoreCase) {
-		this(index, ascending, ignoreCase, false);
+		this(index, ascending, ignoreCase, false, false);
 	}
-	/** Compares with the column which the list header is at.
+	/** Compares with the column of the specified index.
 	 *
-	 * <p>Note: it compares the returned value of {@link Listcell#getLabel}.
-	 * If you want to compare {@link Listcell#getValue}.,
-	 * use {@link #ListitemComparator(Listheader, boolean, boolean, boolean)}
-	 * instead.
+	 * <p>0 for the first column, 1 for the second and so on
 	 *
+	 * <p>Note: -1 for {@link Listitem#getValue} and it assumes
+	 * the value implements Comparable.
+	 *
+	 * <p>A null value is considered as the minimum value.
+	 *
+	 * @param index which column to compare. If -1, {@link Listitem#getValue}
+	 * is used.
 	 * @param ascending whether to sort as ascending (or descending).
 	 * @param ignoreCase whether to sort case-insensitive
+	 * @param byValue whether to compare {@link Listcell#getValue}.
+	 * If false, it compares {@link Listcell#getLabel}.
+	 * If true, it assumes the value returned by {@link Listcell#getValue}
+	 * implements Comparable.
+	 * It is ignored if the index is -1.
 	 */
-	public ListitemComparator(Listheader header, boolean ascending,
-	boolean ignoreCase) {
-		this(header, ascending, ignoreCase, false);
+	public ListitemComparator(int index, boolean ascending,
+	boolean ignoreCase, boolean byValue) {
+		this(index, ascending, ignoreCase, byValue, false);
 	}
 	/** Compares with the column of the specified index.
 	 *
@@ -119,16 +134,37 @@ public class ListitemComparator implements Comparator {
 	 * If true, it assumes the value returned by {@link Listcell#getValue}
 	 * implements Comparable.
 	 * It is ignored if the index is -1.
+	 * @param nullAsMax whether to consider null as the maximum value.
+	 * If false, null is considered as the minimum value.
 	 */
 	public ListitemComparator(int index, boolean ascending,
-	boolean ignoreCase, boolean byValue) {
+	boolean ignoreCase, boolean byValue, boolean nullAsMax) {
 		_header = null;
 		_index = index;
 		_asc = ascending;
 		_igcase = ignoreCase;
 		_byval = byValue;
+		_maxnull = nullAsMax;
 	}
 	/** Compares with the column which the list header is at.
+	 *
+	 * <p>Note: it compares the returned value of {@link Listcell#getLabel}.
+	 * If you want to compare {@link Listcell#getValue}.,
+	 * use {@link #ListitemComparator(Listheader, boolean, boolean, boolean)}
+	 * instead.
+	 *
+	 * <p>A null value is considered as the minimum value.
+	 *
+	 * @param ascending whether to sort as ascending (or descending).
+	 * @param ignoreCase whether to sort case-insensitive
+	 */
+	public ListitemComparator(Listheader header, boolean ascending,
+	boolean ignoreCase) {
+		this(header, ascending, ignoreCase, false, false);
+	}
+	/** Compares with the column which the list header is at.
+	 *
+	 * <p>A null value is considered as the minimum value.
 	 *
 	 * @param ascending whether to sort as ascending (or descending).
 	 * @param ignoreCase whether to sort case-insensitive
@@ -137,11 +173,25 @@ public class ListitemComparator implements Comparator {
 	 */
 	public ListitemComparator(Listheader header, boolean ascending,
 	boolean ignoreCase, boolean byValue) {
+		this(header, ascending, ignoreCase, byValue, false);
+	}
+	/** Compares with the column which the list header is at.
+	 *
+	 * @param ascending whether to sort as ascending (or descending).
+	 * @param ignoreCase whether to sort case-insensitive
+	 * @param byValue whether to compare {@link Listcell#getValue}.
+	 * If false, it compares {@link Listcell#getLabel}.
+	 * @param nullAsMax whether to consider null as the maximum value.
+	 * If false, null is considered as the minimum value.
+	 */
+	public ListitemComparator(Listheader header, boolean ascending,
+	boolean ignoreCase, boolean byValue, boolean nullAsMax) {
 		_header = header;
 		_index = -1; //not decided yet
 		_asc = ascending;
 		_igcase = ignoreCase;
 		_byval = byValue;
+		_maxnull = nullAsMax;
 	}
 
 	/** Returns the listheader that this comparator is associated with, or null
@@ -192,8 +242,8 @@ public class ListitemComparator implements Comparator {
 			}
 		}
 
-		if (v1 == null) return v2 == null ? 0: _asc ? -1: 1;
-		if (v2 == null) return _asc ? 1: -1;
+		if (v1 == null) return v2 == null ? 0: _maxnull ? 1: -1;
+		if (v2 == null) return _maxnull ? -1: 1;
 		final int v = ((Comparable)v1).compareTo(v2);
 		return _asc ? v: -v;
 	}
