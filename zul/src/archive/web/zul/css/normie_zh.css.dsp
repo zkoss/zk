@@ -3,7 +3,7 @@
 
 html {height:100%}
 
-/* headers */
+<%-- headers --%>
 h1 {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: x-large; font-weight: bold; color: #250070;
@@ -30,7 +30,7 @@ h6 {
 	font-size: small; font-weight: normal; color: #404040;
 }
 
-/* paragraphs */
+<%-- paragraphs --%>
 p, div, span, label, a, li, dt, dd {
 	font-family: "Verdana", Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
@@ -101,7 +101,7 @@ ul li	{list-style: url(${c:encodeURL('~./img/bullet1.gif')}) disc}
 ul ul li	{list-style: url(${c:encodeURL('~./img/bullet2.gif')}) circle}
 ul ul ul li	{list-style: url(${c:encodeURL('~./img/bullet3.gif')}) square}
 
-/* Alpha */
+<%-- Alpha --%>
 a.alpha { color: #000000; text-decoration: none; }
 a.alpha:hover { color: #000000; text-decoration: underline; }
 tr.alpha { background: #6699CC; }
@@ -111,7 +111,7 @@ font.alpha { color: #000000; font-family: Tahoma, Arial; font-weight:  bold; }
 .alpha-neg-alert { color: #FF0000; }
 .alpha-pos-alert { color: #007F00; }
 
-/* Beta */
+<%-- Beta --%>
 a.beta { color: #000000; text-decoration: none; }
 a.beta:hover { color: #000000; text-decoration: underline; }
 tr.beta { background: #B6CBEB; }
@@ -121,7 +121,7 @@ font.beta { color: #000000; font-family: "Verdana", Tahoma, Arial; font-weight: 
 .beta-neg-alert { color: #FF0000; }
 .beta-pos-alert { color: #007F00; }
 
-/* Gamma */
+<%-- Gamma --%>
 a.gamma { color: #000000; text-decoration: none; }
 a.gamma:hover { color: #000000; text-decoration: underline; }
 tr.gamma { background: #F4F4F4; }
@@ -131,14 +131,14 @@ font.gamma { color: #000000; font-family: "Verdana", Tahoma, Arial; font-weight:
 .gamma-neg-alert { color: #FF0000; }
 .gamma-pos-alert { color: #007F00; }
 
-/* The hyperlink's style class. */
+<%-- The hyperlink's style class. --%>
 .link {cursor: hand; cursor: pointer;}
 
-/* ZK */
-div.embedded { /* must consistent with lang.xml */
+<%-- ZK --%>
+div.embedded { <%-- must consistent with lang.xml --%>
 	padding: 2px; border: 1px solid #aab;
 }
-div.modal, div.modal-none, div.overlapped, div.overlapped-none { /* must consistent with lang.xml */
+div.modal, div.modal-none, div.overlapped, div.overlapped-none { <%-- must consistent with lang.xml --%>
 	position: absolute;
 	background: #E8E8D0;
 	padding: 1px; margin: 1px;
@@ -146,14 +146,14 @@ div.modal, div.modal-none, div.overlapped, div.overlapped-none { /* must consist
 div.modal, div.overlapped {
 	border: 2px solid #77a; padding: 2px; margin: 0;
 }
-div.popup, div.popup-none { /* must consistent with lang.xml */
+div.popup, div.popup-none { <%-- must consistent with lang.xml --%>
 	position: absolute; background: white; padding: 1px; margin: 0;
 }
 div.popup {
 	border: 1px solid black;
 }
 
-/* groupbox caption */
+<%-- groupbox caption --%>
 .caption input, .caption td {
 	font-size: x-small;
 }
@@ -166,7 +166,7 @@ div.popup {
 	text-decoration: none;
 }
 
-/* window title/caption */
+<%-- window title/caption --%>
 .title td {
 	font-size: x-small; font-weight: bold;
 	padding-top: 2px; padding-bottom: 3px; margin-bottom: 2px;
@@ -179,18 +179,18 @@ div.popup {
 	text-decoration: underline;
 }
 
-div.modal_mask { /* don't change */
+div.modal_mask { <%-- don't change --%>
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;
 	opacity: .4; filter: alpha(opacity=40);
 	background:transparent !important;
 	background: #181818;
-	background-image: url(${c:encodeURL('~./zul/img/modal-mask.png')}) !important; /* Moz... */
+	background-image: url(${c:encodeURL('~./zul/img/modal-mask.png')}) !important; <%-- Moz... --%>
 	background-image: none; background-repeat: repeat;
 	display: none;
 }
 
-/* ZK separator */
+<%-- ZK separator --%>
 div.hsep, div.hsep-bar {
 	display: block; width: 100%; padding: 0; margin: 2pt 0; font-size: 0;
 }
@@ -211,7 +211,7 @@ td.hbox {
 	margin: 0; padding-right: 0.6em;
 }
 
-/* ZK toolbar and toolbarbutton */
+<%-- ZK toolbar and toolbarbutton --%>
 .toolbar {
 	padding: 1px; background: threedface; border: 1px solid;
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
@@ -243,11 +243,12 @@ td.hbox {
 	text-decoration: underline;
 }
 
-/* ZK tree, listbox, grid */
-div.listbox, div.tree, div.grid, div.grid-no-striped { /* depends sclass. */
+<%-- ZK tree, listbox, grid --%>
+div.grid {overflow: auto} <%--Bug 1562358 (workaroun of a IE bug--%>
+div.listbox, div.tree, div.grid, div.grid-no-striped { <%-- depends sclass. --%>
 	background: threedface; border: 1px solid #7F9DB9;
 }
-div.tree-head, div.listbox-head, div.grid-head { /* always used. */
+div.tree-head, div.listbox-head, div.grid-head { <%-- always used. --%>
 	background: threedface; border: 0; overflow: hidden; width: 100%;
 }
 div.listbox-paging th, div.grid-paging th {
@@ -278,7 +279,7 @@ div.listbox-head th.sort-dsc, div.grid-head th.sort-dsc, div.listbox-paging th.s
 	background-repeat: no-repeat;
 }
 
-div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging { /* always used. */
+div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging { <%-- always used. --%>
 	background: window; border: 0; overflow: auto; width: 100%;
 }
 div.listbox-paging, div.grid-paging {
@@ -289,7 +290,7 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td {
 	font-size: small; font-weight: normal;
 }
 
-div.listbox-foot { /* always used */
+div.listbox-foot { <%-- always used --%>
 	background: #E8EFEA; border-top: 1px solid #BBB;
 }
 
@@ -309,16 +310,16 @@ tr.itemsel a:hover {
 	text-decoration: underline;
 }
 
-td.gridev, td.gridod { /* gridev and gridod always used. */
+td.gridev, td.gridod { <%-- gridev and gridod always used. --%>
 	background: #FFF; border-bottom: none; border-left: 1px solid #FFF;
 	border-right: 1px solid #CCC; border-top: 1px solid #DDD; padding: 2px;
 	font-size: small; font-weight: normal;
 }
-div.grid td.gridod { /* gridod always used for odd row. */
+div.grid td.gridod { <%-- gridod always used for odd row. --%>
 	background: #E8EFEA;
 }
 
-/* ZK tab. */
+<%-- ZK tab. --%>
 .tab, .tab a, a.tab {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: x-small; font-weight: normal; color: #300030;
@@ -340,16 +341,16 @@ div.grid td.gridod { /* gridod always used for odd row. */
 	text-decoration: underline;
 }
 
-td.tabpanel-hr, div.tabpanel-ac, div.groupbox-3d { /* horz, accd, gb-3d */
+td.tabpanel-hr, div.tabpanel-ac, div.groupbox-3d { <%-- horz, accd, gb-3d --%>
 	border-left: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
-td.tabpanels { /* vert */
+td.tabpanels { <%-- vert --%>
 	border-top: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
 
-/* ZK menu. */
+<%-- ZK menu. --%>
 div.menubar, div.menupopup, div.ctxpopup {
 	cursor: hand; cursor: pointer; background: menu; padding: 1px;
 }
@@ -379,23 +380,23 @@ div.menupopup hr {
 	border: 0; color: darkgray; background: darkgray;
 }
 
-/** Combobox and Datebox */
+<%-- Combobox and Datebox --%>
 span.combobox, span.datebox, span.bandbox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 }
-div.comboboxpp, div.bandboxpp { /*hardcoded in DSP*/
+div.comboboxpp, div.bandboxpp { <%--hardcoded in DSP--%>
 	display: block; position: absolute; z-index: 80000; overflow: auto;
 	background: white; border: 1px solid black; padding: 2px;
 	font-size: x-small;
 }
-.comboboxpp td { /*label*/
+.comboboxpp td { <%--label--%>
 	white-space: nowrap; font-size: x-small; cursor: hand; cursor: pointer; 
 }
-.comboboxpp td span { /*description*/
+.comboboxpp td span { <%--description--%>
 	color: #888; font-size: xx-small; padding-left: 6px;
 }
 
-/* ZK error message box */
+<%-- ZK error message box --%>
 div.errbox {
 	margin: 0; padding: 1px; border: 1px outset; cursor: hand; cursor: pointer;
 	background: #E8E0D8; position: absolute; z-index: 70000;
@@ -418,8 +419,8 @@ div.paging a:hover {
 	background: #DAE8FF;
 }
 
-/* ZK datebox and calendar*/
-div.dateboxpp { /*hardcoded in DSP*/
+<%-- ZK datebox and calendar--%>
+div.dateboxpp { <%--hardcoded in DSP--%>
 	display: block; position: absolute; z-index: 80000;
 	background: white; border: 1px solid black; padding: 2px;
 }
