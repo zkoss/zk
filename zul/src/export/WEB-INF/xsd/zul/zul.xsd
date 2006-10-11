@@ -118,7 +118,7 @@
         <xs:attribute name="forEach" type="xs:string" use="optional" />
         <xs:attribute name="forEachBegin" type="xs:nonNegativeInteger" use="optional" />
         <xs:attribute name="forEachEnd" type="xs:nonNegativeInteger" use="optional" />
-        <xs:anyAttribute />
+        <xs:anyAttribute processContents="lax" />
     </xs:attributeGroup>
     <xs:attributeGroup name="abstractComponentAttrGroup">
         <xs:attributeGroup ref="zkAttrGroup" />
@@ -437,7 +437,7 @@
     <!-- custom-attributes -->
     <xs:element name="custom-attributes" type="custom-attributesType" />
     <xs:complexType name="custom-attributesType">
-        <xs:anyAttribute />
+        <xs:anyAttribute processContents="lax" />
     </xs:complexType>
     <!-- datebox -->
     <xs:element name="datebox" type="dateboxType" />
