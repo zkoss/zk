@@ -20,17 +20,17 @@ function mesg() {};
 
 mesg.NOT_FOUND = "Pas trouvé: ";
 mesg.UNSUPPORTED = "Pas encore supporté: "
-mesg.FAILED_TO_SEND = "Echec de l'envoie d'une requete vers le serveur: ";
-mesg.FAILED_TO_RESPONSE = "Le serveur à echouer dans le traitement de votre requête: ";
-mesg.UNSUPPORTED_BROWSER = "Navigateur non supporté,veuillez utilisez Internet Explorer ou Mozilla: ";
-mesg.ILLEGAL_RESPONSE = "Non connaissance de la réponse envoyer depuis le serveur . Veuillez recharger et réessayer de nouveau.\n";
-mesg.FAILED_TO_PROCESS = "Echec du processus ";
+mesg.FAILED_TO_SEND = "Echec de l'envoie d'une requête vers le serveur: ";
+mesg.FAILED_TO_RESPONSE = "Le serveur à échouer dans le traitement de votre requête: ";
+mesg.UNSUPPORTED_BROWSER = "Navigateur non supporté,veuillez utiliser Internet Explorer ou Mozilla: ";
+mesg.ILLEGAL_RESPONSE = "Réponse non connue envoyer depuis le serveur . Veuillez recharger et réessayer de nouveau.\n";
+mesg.FAILED_TO_PROCESS = "N'a pas été traité ";
 mesg.UUID_REQUIRED = "UUID requis";
-mesg.INVALID_STRUCTURE = "Invalide structure: ";
-mesg.COMP_OR_UUID_REQUIRED = "Le Composant ou son UUID est requis";
-mesg.NUMBER_REQUIRED = "Vous devez spécifiez un nombre, plutot que";
-mesg.INTEGER_REQUIRED = "Vous devez spécifiez un entier, plutot que";
-mesg.EMPTY_NOT_ALLOWED = "Champ vide non autorisé.\nVous ne pouvez pas n'indiquer rien";
+mesg.INVALID_STRUCTURE = "Structure invalide: ";
+mesg.COMP_OR_UUID_REQUIRED = "Le composant ou son UUID est requis";
+mesg.NUMBER_REQUIRED = "Vous devez spécifier un nombre, plutôt que";
+mesg.INTEGER_REQUIRED = "Vous devez spécifier un entier, plutôt que";
+mesg.EMPTY_NOT_ALLOWED = "Champ vide non autorisé.\nVous devez spécifiez une valeur";
 mesg.GOTO_ERROR_FIELD = "Allez sur le mauvais champ";
 mesg.PLEASE_WAIT = "Chargement...";
 
