@@ -23,6 +23,6 @@ zkRaw.init = function (cmp) {
 };
 
 zkRaw.onchange = function (cmp) {
-	if (cmp.getAttribute("zk_onChange"))
+	if (getZKAttr(cmp, "onChange"))
 		zkau.send({uuid: cmp.id, cmd: "onChange", data: [cmp.value]}, 25);
 };

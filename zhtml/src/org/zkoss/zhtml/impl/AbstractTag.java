@@ -138,7 +138,7 @@ implements DynamicPropertied, RawId {
 
 		//Bug 1477271: Tom M Yeh: 
 		//We can check ASAP only. Otherwise, if users add a page listener,
-		//all ZHTML will generate zk_onChange. Too complicate!
+		//all ZHTML will generate z:onChange. Too complicate!
 
 		final EventInfo ei;
 		for (int j = 0;; ++j) {
@@ -156,8 +156,8 @@ implements DynamicPropertied, RawId {
 			smartUpdate(ei.attr,
 				Events.isListenerAvailable(this, evtnm, true) ? "true": null); //asap only
 			if (bAddType && isTypeDeclared()) {
-				smartUpdate("zk_type", "zhtml.main.Raw");
-				smartUpdate("zk_init", true);
+				smartUpdate("z:type", "zhtml.main.Raw");
+				smartUpdate("z:init", true);
 			}
 		}
 		return ret;
@@ -191,7 +191,7 @@ implements DynamicPropertied, RawId {
 		}
 
 		if (typeDeclared)
-			out.write(" zk_type=\"zhtml.main.Raw\"");
+			out.write(" z:type=\"zhtml.main.Raw\"");
 
 		if (typeDeclared || !shallHideId() || !Components.isAutoId(getUuid())) {
 			out.write(" id=\"");
@@ -261,7 +261,7 @@ implements DynamicPropertied, RawId {
 		/** The attribute that will be generated to the client side.
 		 */
 		private final String attr;
-		/** Whether to generate zk_type
+		/** Whether to generate z:type
 		 */
 		private final boolean typed;
 		private EventInfo(String name, String attr, boolean typed) {
@@ -271,7 +271,7 @@ implements DynamicPropertied, RawId {
 		}
 	}
 	private static final EventInfo[] _evts = {
-		new EventInfo(Events.ON_CLICK, "zk_lfclk", false),
-		new EventInfo(Events.ON_CHANGE, "zk_onChange", true)
+		new EventInfo(Events.ON_CLICK, "z:lfclk", false),
+		new EventInfo(Events.ON_CHANGE, "z:onChange", true)
 	};
 }
