@@ -25,8 +25,10 @@ if (!zk.build) {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-	zk.build = "2L"; //increase this if we want the browser to reload JavaScript
+	zk.build = "2M"; //increase this if we want the browser to reload JavaScript
 	zk.mods = {}; //ZkFns depends on it
+
+	zk.namespace = "http://www.zkoss.org/2005/zk";
 
 	/** Browser info. */
 	zk.agent = navigator.userAgent.toLowerCase();
@@ -41,6 +43,30 @@ if (!zk.build) {
  */
 zk.getBuild = function (nm) {
 	return zk.mods[nm] || zk.build;
+};
+
+/** Returns the ZK attribute of the specified name.
+ * Note: the name space of ZK attributes is zk.namespace
+ */
+zk.getAttr = function (el, nm) {
+/* 20061012: Tom Yeh: in case that xmlns is not defined, we always use z:nm
+	if (el.getAttributeNS) return el.getAttributeNS(zk.namespace, nm);
+	else*/
+		return el.getAttribute("z:" + nm);
+};
+/** Sets the ZK attribute of the specified name with the specified value.
+ */
+zk.setAttr = function (el, nm, val) {
+/*	if (el.setAttributeNS)
+		el.setAttributeNS(zk.namespace, nm, val);
+	else*/
+		el.setAttribute("z:" + nm, val);
+};
+zk.rmAttr = function (el, nm) {
+/*	if (el.removeAttributeNS)
+		el.removeAttributeNS(zk.namespace, nm);
+	else*/
+		el.removeAttribute("z:" + nm);
 };
 
 /** Adds a function for module initialization.

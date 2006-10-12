@@ -887,7 +887,7 @@ zkau._onDocDClick = function (evt) {
 	var cmp = Event.element(evt);
 	cmp = zkau._getParentByAttr(cmp, "zk_dbclk");
 	if (cmp/* no need since browser handles it: && zkau.insamepos(evt)*/) {
-		var uuid = cmp.getAttribute("zk_item"); //treerow (and other transparent)
+		var uuid = zk.getAttr(cmp, "item"); //treerow (and other transparent)
 		if (!uuid) uuid = $uuid(cmp);
 		zkau.send({uuid: uuid,
 			cmd: "onDoubleClick", data: zkau._getMouseData(evt, cmp)});
@@ -917,7 +917,7 @@ zkau._onDocCtxMnu = function (evt) {
 		}
 
 		if (cmp.getAttribute("zk_rtclk")/*no need since oncontextmenu: && zkau.insamepos(evt)*/) {
-			var uuid = cmp.getAttribute("zk_item"); //treerow (and other transparent)
+			var uuid = zk.getAttr(cmp, "item"); //treerow (and other transparent)
 			if (!uuid) uuid = $uuid(cmp);
 			zkau.send({uuid: uuid,
 				cmd: "onRightClick", data: zkau._getMouseData(evt, cmp)});
