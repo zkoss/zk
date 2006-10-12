@@ -936,7 +936,7 @@
     </xs:complexType>
     <!-- style -->
     <xs:element name="style" type="styleType" />
-    <xs:complexType name="styleType">
+    <xs:complexType name="styleType" mixed="true">
         <xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
         <xs:attributeGroup ref="abstractComponentAttrGroup" />
         <xs:attribute name="src" type="xs:string" use="optional" />
