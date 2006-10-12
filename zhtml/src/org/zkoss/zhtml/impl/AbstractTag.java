@@ -177,6 +177,9 @@ implements DynamicPropertied, RawId {
 		out.write('<');
 		out.write(_tagnm);
 
+		if ("html".equals(_tagnm))
+			out.write(" xmlns:z=\"http://www.zkoss.org/2005/zk\"");
+
 		boolean typeDeclared = false;
 		for (int j = 0; j < _evts.length; ++j) {
 			if (Events.isListenerAvailable(this, _evts[j].name, true)) { //asap only
