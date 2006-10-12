@@ -121,7 +121,7 @@ public class Area extends AbstractComponent {
 		HTMLs.appendAttribute(sb, "shape", _shape);
 		HTMLs.appendAttribute(sb, "coords", _coords);
 		HTMLs.appendAttribute(sb, "title", _tooltiptext);
-		HTMLs.appendAttribute(sb, "zk_id", getId());
+		HTMLs.appendAttribute(sb, "z:aid", getId());
 		return sb.toString();
 	}
 
@@ -131,7 +131,7 @@ public class Area extends AbstractComponent {
 		super.setId(id);
 
 		id = getId();
-		if (!old.equals(id)) smartUpdate("zk_id", id);
+		if (!old.equals(id)) smartUpdate("z:aid", id);
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Imagemap))

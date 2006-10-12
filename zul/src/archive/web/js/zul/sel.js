@@ -278,7 +278,7 @@ zk.Selectable.prototype = {
 		if (zkSel._shallIgnoreEvent(target)
 		|| (zk.tagName(target) != "TR" && target.onclick)
 		|| (zk.tagName(target) == "A" && !target.id.endsWith("!sel"))
-		|| (target.getAttribute && (target.getAttribute("zk_lfclk") || target.getAttribute("zk_dbclk"))))
+		|| getZKAttr(target, "lfclk") || getZKAttr(target, "dbclk"))
 			return;
 
 		var checkmark = target.id && target.id.endsWith("!cm");
@@ -316,7 +316,7 @@ zk.Selectable.prototype = {
 
 	/** Returns # of rows allowed. */
 	size: function () {
-		var sz = this.element.getAttribute("zk_size");
+		var sz = getZKAttr(this.element, "size");
 		return sz ? parseInt(sz): 0;
 	},
 	/** Returns the real # of rows (aka., real size). */
@@ -351,7 +351,7 @@ zk.Selectable.prototype = {
 		case "selectAll":
 			this._selectAll();
 			return true; //no more processing
-		case "zk_multiple": //whether to support multiple
+		case "z:multiple": //whether to support multiple
 			this._setMultiple("true" == value);
 			return true;
 		case "chgSel": //value: a list of uuid to select
@@ -368,8 +368,8 @@ zk.Selectable.prototype = {
 			for (var j = 0; j < rows.length; ++j)
 				this._changeSelect(rows[j], sels[rows[j].id] == true);
 			return true;
-		case "zk_vflex":
-		case "zk_size":
+		case "z:vflex":
+		case "z:size":
 			zkau.setAttr(this.element, name, value);
 			this._recalcSize();
 			return true;
@@ -394,7 +394,7 @@ zk.Selectable.prototype = {
 		this._changeSelect(row, toSel);
 		this.focus(row);
 
-		//maintain zk_selId
+		//maintain z:selId
 		var selId = this._getSelectedId();
 		if (this._isMultiple()) {
 			if (row.id == selId)
@@ -443,7 +443,7 @@ zk.Selectable.prototype = {
 		this._sendSelect();
 	},
 
-	/** Changes the specified row as zk_focus. */
+	/** Changes the specified row as z:focus. */
 	focus: function (row) {
 		this._unsetFocusExcept(row);
 		this._setFocus(row, true);
@@ -517,19 +517,19 @@ zk.Selectable.prototype = {
 				if (el) el.checked = true;
 				row.className = row.className + "sel";
 				zkSel.onout(row);
-				row.setAttribute("zk_sel", "true");
+				setZKAttr(row, "sel", "true");
 			} else {
 				if (el) el.checked = false;
 				var len = row.className.length;
 				if (len > 3)
 					row.className = row.className.substring(0, len - 3);
 				zkSel.onout(row);
-				row.setAttribute("zk_sel", "false");
+				setZKAttr(row, "sel", "false");
 			}
 		}
 		return changed;
 	},
-	/** Changes the zk_focus status, and return whether zk_focus is changed. */
+	/** Changes the z:focus status, and return whether z:focus is changed. */
 	_setFocus: function (row, toFocus) {
 		if (!this._isValid(row)) return false;
 
@@ -540,13 +540,13 @@ zk.Selectable.prototype = {
 				var el = $e(row.id + "!cm");
 				if (!el) el = $e(row.id + "!sel");
 				if (el) zk.focusById(el.id);
-				row.setAttribute("zk_focus", "true");
+				setZKAttr(row, "focus", "true");
 				zkSel.cmonfocus(row);
 
 				if (!this.paging && zk.gecko) this._render(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
 			} else {
-				row.removeAttribute("zk_focus");
+				rmZKAttr(row, "focus");
 				zkSel.cmonblur(row);
 			}
 		}
@@ -599,7 +599,7 @@ zk.Selectable.prototype = {
 		setTimeout("zkSel._renderNow('"+this.id+"')", timeout);
 	},
 	_renderNow: function () {
-		if (this.element.getAttribute("zk_model") != "true") return;
+		if (getZKAttr(this.element, "model") != "true") return;
 
 		var rows = this.bodyrows;
 		if (!rows.length) return; //no row at all
@@ -614,7 +614,7 @@ zk.Selectable.prototype = {
 				var top = zk.offsetTop(r);
 				if (top + zk.offsetHeight(r) < min) continue;
 				if (top >= max) break;
-				if (r.getAttribute("zk_loaded") != "true")
+				if (getZKAttr(r, "loaded") != "true")
 					data += "," + this.getItemUuid(r);
 			}
 		}
@@ -717,7 +717,7 @@ zk.Selectable.prototype = {
 		hgh = 0;
 		var diff = 2/*experiment*/, sz = this.size();
 		if (!sz) {
-			if (this.element.getAttribute("zk_vflex") == "true") {
+			if (getZKAttr(this.element, "vflex") == "true") {
 				var gap = this._getFitGap();
 				hgh = this.body.offsetHeight - gap;
 				if (hgh < 25) hgh = 25;
@@ -850,22 +850,22 @@ zk.Selectable.prototype = {
 				zkau.asapTimeout(this.element, "onSelect"));
 	},
 
-	/** Returns zk_selId (aka., the id of the selected item), or null if
+	/** Returns z:selId (aka., the id of the selected item), or null if
 	 * no one is ever selected.
 	 */
 	_getSelectedId: function () {
-		var selId = this.element.getAttribute("zk_selId");
+		var selId = getZKAttr(this.element, "selId");
 		if (!selId) {
-			alert(mesg.INVALID_STRUCTURE + "zk_selId not found");
+			alert(mesg.INVALID_STRUCTURE + "z:selId not found");
 			return null;
 		}
 		return selId == "zk_n_a" ? null: selId;
 	},
-	/** Sets zk_selId (aka., the id of the selected item). */
+	/** Sets z:selId (aka., the id of the selected item). */
 	_setSelectedId: function (selId) {
-		this.element.setAttribute("zk_selId", selId ? selId: "zk_n_a");
+		setZKAttr(this.element, "selId", selId ? selId: "zk_n_a");
 	},
-	/** Fixes zk_selId to the first selected item. */
+	/** Fixes z:selId to the first selected item. */
 	_fixSelelectedId: function () {
 		var selId = null;
 		for (var j = 0; j < this.bodyrows.length; ++j) {
@@ -880,21 +880,21 @@ zk.Selectable.prototype = {
 
 	/** Whether an item is selected. */
 	_isSelected: function (row) {
-		return row && row.getAttribute("zk_sel") == "true";
+		return getZKAttr(row, "sel") == "true";
 	},
 	/** Whether an item has focus. */
 	_isFocus: function (row) {
-		return row && row.getAttribute("zk_focus") == "true";
+		return getZKAttr(row, "focus") == "true";
 	},
 	/** Whether the component is multiple.
 	 */
 	_isMultiple: function () {
-		return this.element.getAttribute("zk_multiple") == "true";
+		return getZKAttr(this.element, "multiple") == "true";
 	},
 	/** Changes the multiple status. Note: it won't notify the server any change
 	 */
 	_setMultiple: function (multiple) {
-		this.element.setAttribute("zk_multiple", multiple ? "true": "false");
+		setZKAttr(this.element, "multiple", multiple ? "true": "false");
 		if (!multiple) {
 			var row = $e(this._getSelectedId());
 			this._unsetSelectAllExcept(row);
@@ -908,12 +908,12 @@ zk.Selectable.prototype = {
 
 	/** Called when the form enclosing it is submitting. */
 	onsubmit: function () {
-		var nm = this.element.getAttribute("zk_name");
+		var nm = getZKAttr(this.element, "name");
 		if (!nm || !this.form) return;
 
 		for (var j = 0; j < this.form.elements.length; ++j){
 			var el = this.form.elements[j];
-			if (el.getAttribute("zk_hiddenBy") == this.id) {
+			if (getZKAttr(el, "hiddenBy") == this.id) {
 				Element.remove(el);
 				--j;
 			}
@@ -925,8 +925,8 @@ zk.Selectable.prototype = {
 				var inp = document.createElement("INPUT");
 				inp.type = "hidden";
 				inp.name = nm;
-				inp.value = r.getAttribute("zk_value");
-				inp.setAttribute("zk_hiddenBy", this.id);
+				inp.value = getZKAttr(r, "value");
+				setZKAttr(inp, "hiddenBy", this.id);
 				this.form.appendChild(inp);
 			}
 		}

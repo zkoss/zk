@@ -34,7 +34,7 @@ zk.Cal.prototype = {
 		this.element = $e(this.id);
 		if (!this.element) return;
 
-		var compact = this.element.getAttribute("zk_compact") == "true";
+		var compact = getZKAttr(this.element, "compact") == "true";
 		var html = this.popup ? '<table border="0" cellspacing="0" cellpadding="0" tabindex="-1">': '';
 		html += '<tr><td><table class="calyear" width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="5"></td><td align="right"><img src="'
 			+zk.getUpdateURI('/web/zul/img/cal/arrowL.gif')
@@ -92,13 +92,13 @@ zk.Cal.prototype = {
 		this.element = $e(this.id);
 		if (!this.element) return;
 
-		var val = this.input ? this.input.value: this.element.getAttribute("zk_value");
+		var val = this.input ? this.input.value: getZKAttr(this.element, "value");
 		if (val) val = zk.parseDate(val, this.getFormat());
 		this.date = val ? val: this.today();
 		this._output();
 	},
 	getFormat: function () {
-		var fmt = this.element.getAttribute("zk_fmt");
+		var fmt = getZKAttr(this.element, "fmt");
 		return fmt ? fmt: "yyyy/MM/dd";
 	},
 	today: function () {
@@ -268,7 +268,7 @@ zkCal.init = function (cmp) {
 	else zkau.setMeta(cmp, new zk.Cal(cmp, null));
 };
 zkCal.setAttr = function (cmp, nm, val) {
-	if ("zk_value" == nm) {
+	if ("z:value" == nm) {
 		var meta = zkau.getMeta(cmp);
 		if (meta) meta.setDate(zk.parseDate(val, "yyyy/MM/dd"));
 	}
@@ -346,10 +346,9 @@ zkDtbox.init = function (cmp) {
 zkDtbox.validate = function (cmp) {
 	var inp = $e(cmp.id+"!real");
 	if (inp.value) {
-		var fmt = cmp.getAttribute("zk_fmt");
-		var d = zk.parseDate(inp.value, fmt,
-			cmp.getAttribute("zk_lenient") == "false");
-		if (!d) return msgzul.DATE_REQUIRED+cmp.getAttribute("zk_fmt");
+		var fmt = getZKAttr(cmp, "fmt");
+		var d = zk.parseDate(inp.value, fmt, getZKAttr(cmp, "lenient") == "false");
+		if (!d) return msgzul.DATE_REQUIRED+fmt;
 
 		inp.value = zk.formatDate(d, fmt); //meta might not be ready
 	}
@@ -358,7 +357,7 @@ zkDtbox.validate = function (cmp) {
 
 /** Handles setAttr. */
 zkDtbox.setAttr = function (cmp, nm, val) {
-	if ("zk_fmt" == nm) {
+	if ("z:fmt" == nm) {
 		zkau.setAttr(cmp, nm, val);
 
 		var inp = $real(cmp);
@@ -495,7 +494,7 @@ zkDtbox.open = function (pp) {
 	zkau.onVisiChildren(pp);
 
 	if (zk.gecko) {
-		pp.setAttribute("zk_vparent", uuid); //used by zkTxbox._noonblur
+		setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp); //Bug 1486840
 	}
 
@@ -538,7 +537,7 @@ zkDtbox.close = function (pp, focus) {
 	var uuid = $uuid(pp.id);
 	if (zk.gecko) {
 		$e(uuid).appendChild(pp); //Bug 1486840
-		pp.removeAttribute("zk_vparent");
+		rmZKAttr(pp, "vparent");
 	}
 
 	pp = $e(pp);

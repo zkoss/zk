@@ -102,7 +102,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 
 		if (_rows != rows) {
 			_rows = rows;
-			smartUpdate("zk_size", Integer.toString(_rows));
+			smartUpdate("z:size", Integer.toString(_rows));
 			initAtClient();
 				//Don't use smartUpdate because client has to extra job
 				//besides maintaining HTML DOM
@@ -134,7 +134,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 	public void setName(String name) {
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
-			if (_name != null) smartUpdate("zk_name", _name);
+			if (_name != null) smartUpdate("z:name", _name);
 			else invalidate(); //1) generate _value; 2) add submit listener
 			_name = name;
 		}
@@ -177,7 +177,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 	public void setVflex(boolean vflex) {
 		if (_vflex != vflex) {
 			_vflex = vflex;
-			smartUpdate("zk_flex", _vflex);
+			smartUpdate("z:flex", _vflex);
 		}
 	}
 
@@ -211,13 +211,13 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 				_selItems.clear();
 				if (item != null)
 					_selItems.add(item);
-				//No need to update zk_selId because zk_multiple will do the job
+				//No need to update z:selId because z:multiple will do the job
 			}
 			if (isCheckmark()) invalidate(); //change check mark
-			else smartUpdate("zk_multiple", _multiple);
+			else smartUpdate("z:multiple", _multiple);
 		}
 	}
-	/** Returns the ID of the selected item (it is stored as the zk_selId
+	/** Returns the ID of the selected item (it is stored as the z:selId
 	 * attribute of the tree).
 	 */
 	private String getSelectedId() {
@@ -288,7 +288,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 				_selItems.add(item);
 				smartUpdateSelection();
 				if (fixSelected())
-					smartUpdate("zk_selId", getSelectedId());
+					smartUpdate("z:selId", getSelectedId());
 			}
 		}
 	}
@@ -306,7 +306,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 				_selItems.remove(item);
 				smartUpdateSelection();
 				if (fixSelected())
-					smartUpdate("zk_selId", getSelectedId());
+					smartUpdate("z:selId", getSelectedId());
 				//No need to use response because such info is carried on tags
 			}
 		}
@@ -414,7 +414,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 	/** Re-init the tree at the client.
 	 */
 	/*package*/ void initAtClient() {
-		smartUpdate("zk_init", true);
+		smartUpdate("z:init", true);
 	}
 
 	//-- Selectable --//
@@ -486,7 +486,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 			fixSel = _sel == item;
 			if (fixSel && !_multiple) {
 				_sel = null;
-				smartUpdate("zk_selId", getSelectedId());
+				smartUpdate("z:selId", getSelectedId());
 				assert _selItems.isEmpty();
 			}
 		}
@@ -512,7 +512,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 				if (_sel == null)
 					_sel = item;
 				_selItems.add(item);
-				smartUpdate("zk_selId", getSelectedId());
+				smartUpdate("z:selId", getSelectedId());
 			}
 		}
 	}
@@ -530,7 +530,7 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 				if (_sel == item) {
 					if (!_multiple) {
 						_sel = null;
-						smartUpdate("zk_selId", getSelectedId());
+						smartUpdate("z:selId", getSelectedId());
 						assert _selItems.isEmpty();
 						return; //done
 					}
@@ -602,15 +602,15 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64)
 			.append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "zk_name", _name);
-		HTMLs.appendAttribute(sb, "zk_size",  getRows());
-		HTMLs.appendAttribute(sb, "zk_selId", getSelectedId());
+		HTMLs.appendAttribute(sb, "z:name", _name);
+		HTMLs.appendAttribute(sb, "z:size",  getRows());
+		HTMLs.appendAttribute(sb, "z:selId", getSelectedId());
 		if (_multiple)
-			HTMLs.appendAttribute(sb, "zk_multiple", true);
+			HTMLs.appendAttribute(sb, "z:multiple", true);
 		//if (_checkmark)
-		//	HTMLs.appendAttribute(sb, "zk_checkmark",  _checkmark);
+		//	HTMLs.appendAttribute(sb, "z:checkmark",  _checkmark);
 		if (_vflex)
-			HTMLs.appendAttribute(sb, "zk_vflex", true);
+			HTMLs.appendAttribute(sb, "z:vflex", true);
 		appendAsapAttr(sb, Events.ON_SELECT);
 		return sb.toString();
 	}

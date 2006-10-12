@@ -153,8 +153,8 @@ public class Toolbarbutton extends LabelImageElement {
 		appendAsapAttr(sb, Events.ON_FOCUS);
 		appendAsapAttr(sb, Events.ON_BLUR);
 		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-			//no zk_dbclk to avoid confusing
-			//no zk_lfclk since it is handled by widget.js
+			//no z:dbclk to avoid confusing
+			//no z:lfclk since it is handled by widget.js
 
 		if (_href == null) {
 			sb.append(" href=\"javascript:;\"");

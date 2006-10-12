@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<table id="${self.uuid}" zk_type="zul.widget.Grbox"${self.outerAttrs}${self.innerAttrs}>
+<table id="${self.uuid}" z:type="zul.widget.Grbox"${self.outerAttrs}${self.innerAttrs}>
 <tr>
 	<td>
 <c:if test="${! empty self.caption}">

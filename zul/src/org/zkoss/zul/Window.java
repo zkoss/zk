@@ -221,7 +221,7 @@ public class Window extends XulElement implements IdSpace  {
 			ctrlKeys = null;
 		if (!Objects.equals(_ctrlKeys, ctrlKeys)) {
 			parseCtrlKeys(ctrlKeys);
-			smartUpdate("zk_ctkeys", _ctkeys);
+			smartUpdate("z:ctkeys", _ctkeys);
 		}
 	}
 	private void parseCtrlKeys(String keys) throws UiException {
@@ -611,8 +611,8 @@ public class Window extends XulElement implements IdSpace  {
 			//to support onClick for groupbox
 
 		if (_closable)
-			HTMLs.appendAttribute(sb, "zk_closable", true);
-		HTMLs.appendAttribute(sb, "zk_ctkeys", _ctkeys);
+			HTMLs.appendAttribute(sb, "z:closable", true);
+		HTMLs.appendAttribute(sb, "z:ctkeys", _ctkeys);
 		return sb.toString();
 	}
 

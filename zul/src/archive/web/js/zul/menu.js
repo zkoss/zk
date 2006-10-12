@@ -32,8 +32,7 @@ zk.FloatMenu.prototype = {
 	focusInFloats: function (el) {
 		if (!el) return false;
 
-		if (el.parentNode && el.parentNode.getAttribute
-		&& el.parentNode.getAttribute("zk_mpop") != null)
+		if (getZKAttr(el.parentNode, "mpop") != null)
 			return true;
 
 		for (var j = 0; j < this._popupIds.length; ++j) {
@@ -89,7 +88,7 @@ zkMenu.onover = function (evt) {
 	var cmp = $outer(Event.element(evt));
 
 	var menubar = zkau.getParentByType(cmp, "Menubar");
-	var autodrop = !menubar || menubar.getAttribute("zk_autodrop") == "true";
+	var autodrop = !menubar || getZKAttr(menubar, "autodrop") == "true";
 	if (autodrop) zkMenu._shallClose = false;
 		//turn off pending auto-close
 
@@ -112,7 +111,7 @@ zkMenu.onout = function (evt) {
 	var cmp = $outer(Event.element(evt));
 
 	var menubar = zkau.getParentByType(cmp, "Menubar");
-	if (menubar && menubar.getAttribute("zk_autodrop") == "true") {
+	if (menubar && getZKAttr(menubar, "autodrop") == "true") {
 		zkMenu._shallClose = true;
 		setTimeout("if (zkMenu._shallClose) zkau.closeFloats('"+menubar.id+"');", 500);
 	}
@@ -122,7 +121,7 @@ zkMenu.onclick = function (evt) {
 	var cmp = $outer(Event.element(evt));
 	var type = zk.getCompType(cmp);
 	if ("Menu" == type) //note: Menuit also go thru this method
-		zkMenu.open(cmp, cmp.getAttribute("zk_top") == "true");
+		zkMenu.open(cmp, getZKAttr(cmp, "top") == "true");
 };
 
 /** Opens a menupopup belong to the specified menu.
@@ -131,18 +130,18 @@ zkMenu.onclick = function (evt) {
 zkMenu.open = function (menu, toggle) {
 	if (toggle) zkau.closeFloats(menu); //including popups
 
-	var popupId = menu.getAttribute("zk_mpop");
+	var popupId = getZKAttr(menu, "mpop");
 	if (!popupId) return; //menuitem
 
 	var pp = $e(popupId);
 	if (!pp) {
-		zk.error(mesg.INVALID_STRUCTURE+"zk_mpop not exists");
+		zk.error(mesg.INVALID_STRUCTURE+"z:mpop not exists");
 		return;
 	}
 
-	var top = menu.getAttribute("zk_top") == "true"; //top-level menu
+	var top = getZKAttr(menu, "top") == "true"; //top-level menu
 	var ref = top || zk.tagName(menu) != "TD" ? menu: menu.parentNode; //use TR if not top
-	var pos = top && menu.getAttribute("zk_vert") == null ? "after-start": "end_before";
+	var pos = top && getZKAttr(menu, "vert") == null ? "after-start": "end_before";
 	zkMenu._open(pp, top, ref, pos);
 };
 /** Opens the specified menupopup
@@ -158,7 +157,7 @@ zkMenu._open = function (pp, top, ref, pos) {
 
 	/* not yet: we have to adjust CSS and some codes
 	if (zk.gecko) { //Bug 1486840
-		pp.setAttribute("zk_vparent", uuid); //used by zkTxbox._noonblur
+		setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp);
 	}*/
 
@@ -200,7 +199,7 @@ zkMenu._close = function (pp) {
 	if (pp) {
 		/*if (zk.gecko) { //Bug 1486840
 			$e(uuid).appendChild(pp); //Bug 1486840
-			pp.removeAttribute("zk_vparent");
+			rmZKAttr(pp, "vparent");
 		}*/
 		pp.style.display = "none";
 	}
@@ -208,7 +207,7 @@ zkMenu._close = function (pp) {
 
 zkMenu.init = function (cmp) {
 	var anc = $e(cmp.id + "!a");
-	if (cmp.getAttribute("zk_top") == "true") {
+	if (getZKAttr(cmp, "top") == "true") {
 		Event.observe(anc, "click", zkMenu.onclick);
 		Event.observe(anc, "mouseover", zkMenu.onover);
 		Event.observe(anc, "mouseout", zkMenu.onout);
@@ -233,7 +232,7 @@ zkMenuit.init = function (cmp) {
 	Event.observe(cmp, "mouseover", zkMenu.onover);
 	Event.observe(cmp, "mouseout", zkMenu.onout);
 
-	if (cmp.getAttribute("zk_top") != "true") { //non-topmost
+	if (getZKAttr(cmp, "top") != "true") { //non-topmost
 		var anc = $e(cmp.id + "!a");
 		Event.observe(anc, "focus", function () {zkau.onfocus(anc);});
 		Event.observe(anc, "blur", function () {zkau.onblur(anc);});
@@ -247,8 +246,8 @@ zkMenuit.onclick = function (evt) {
 	if ("javascript:;" == anc.href) {
 		var cmp = $outer(anc);
 		var uuid = cmp.id;
-		if (cmp.getAttribute("zk_autock")) {
-			var newval = cmp.getAttribute("zk_checked") != "true";
+		if (getZKAttr(cmp, "autock")) {
+			var newval = getZKAttr(cmp, "checked") != "true";
 			zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]}, -1);
 		}
 		zkau.send({uuid: uuid, cmd: "onClick", data: null}, 0);
@@ -270,7 +269,7 @@ function zkMpop() {}
 
 /** Called by au.js's context menu. */
 zkMpop.context = function (ctx, ref) {
-	if (ctx.getAttribute("zk_onOpen"))
+	if (getZKAttr(ctx, "onOpen"))
 		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
 	zkMenu._open(ctx, true);
 };

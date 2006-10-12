@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" zk_type="zul.grid.Grid"${self.outerAttrs}${self.innerAttrs}>
+<div id="${self.uuid}" z:type="zul.grid.Grid"${self.outerAttrs}${self.innerAttrs}>
 <c:if test="${!empty self.columns}">
 	<div id="${self.uuid}!head" class="grid-head">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">

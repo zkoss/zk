@@ -27,7 +27,7 @@ zk.Tree = Class.create();
 Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	/** Overrides what is defined in zk.Selectable. */
 	getItemUuid: function (row) {
-		return zk.getAttr(row, "item");
+		return getZKAttr(row, "item");
 	},
 	/** Process the setAttr command sent from the server. */
 	setAttr2: function (name, value) {
@@ -40,7 +40,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 				return true;
 			}
 			var toOpen = value.substring(j + 1) == "true";
-			var open = row.getAttribute("zk_open") == "true";
+			var open = getZKAttr(row, "open") == "true";
 			if (toOpen != open) {
 				var img = $e(row.id + "!open");
 				if (img) this._openItem(row, img, toOpen);
@@ -51,14 +51,14 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	},
 	/** Overrides what is defined in zk.Selectable. */
 	_doLeft: function (row) {
-		if (row.getAttribute("zk_open") == "true") {
+		if (getZKAttr(row, "open") == "true") {
 			var img = $e(row.id + "!open");
 			if (img) this._openItem(row, img, false);
 		}
 	},
 	/** Overrides what is defined in zk.Selectable. */
 	_doRight: function (row) {
-		if (row.getAttribute("zk_open") != "true") {
+		if (getZKAttr(row, "open") != "true") {
 			var img = $e(row.id + "!open");
 			if (img) this._openItem(row, img, true);
 		}
@@ -68,7 +68,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 		var row = zk.parentNode(target, "TR");
 		if (!row) return; //incomplete structure
 
-		var toOpen = row.getAttribute("zk_open") != "true"; //toggle
+		var toOpen = getZKAttr(row, "open") != "true"; //toggle
 		this._openItem(row, target, toOpen);
 
 		var el = $e(row.id + "!sel");
@@ -80,7 +80,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	/** Opens an item */
 	_openItem: function (row, img, toOpen) {
 		img.src = zk.renType(img.src, toOpen ? "open": "close");
-		row.setAttribute("zk_open", toOpen ? "true": "false"); //change it value
+		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
 
 		this._showChildren(row, toOpen);
 
@@ -90,25 +90,25 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 			//to make it smaller when closing some items.
 			//Thus, we only handle 'enlargement', i.e., toOpen is true
 
-		zkau.send({uuid: zk.getAttr(row, "item"),
-			cmd: "onOpen", data: [row.getAttribute("zk_open")]},
+		zkau.send({uuid: getZKAttr(row, "item"),
+			cmd: "onOpen", data: [getZKAttr(row, "open")]},
 			zkau.asapTimeout(row, "onOpen"));
 	},
 	/** Shows or hides all children
 	 * @param toOpen whether to toOpen
 	 */
 	_showChildren: function (row, toOpen, silent) {
-		var uuid = zk.getAttr(row, "item");
+		var uuid = getZKAttr(row, "item");
 		do {
 			var r = row.nextSibling;
 			if (zk.tagName(r) == "TR") {
-				var pid = zk.getAttr(r, "ptitem");
+				var pid = getZKAttr(r, "ptitem");
 				if (uuid != pid) return row; //not my child
 
 				if (!silent)
 					r.style.display = toOpen ? "": "none";
 				r = this._showChildren(r, toOpen,
-					toOpen && (silent || r.getAttribute("zk_open") != "true"));
+					toOpen && (silent || getZKAttr(r, "open") != "true"));
 			}
 			row = r;
 		} while (row);

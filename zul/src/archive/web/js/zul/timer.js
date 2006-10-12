@@ -33,8 +33,8 @@ zk.Timer.prototype = {
 
 		this.cleanup(); //stop pending timer/interval
 
-		var repeats = el.getAttribute("zk_repeats") == "true";
-		var delay = el.getAttribute("zk_delay");
+		var repeats = getZKAttr(el, "repeats") == "true";
+		var delay = getZKAttr(el, "delay");
 		var func = "zkTimer._fire('"+this.id+"')";
 		if (repeats)
 			this.interval = window.setInterval(func, delay);
@@ -62,14 +62,14 @@ zk.Timer.prototype = {
 
 /** Init (and re-init) a timer. */
 zkTimer.init = function (cmp) {
-	if (cmp.getAttribute("zk_running") != "false") {
+	if (getZKAttr(cmp, "running") != "false") {
 		var meta = zkau.getMeta(cmp);
 		if (meta) meta.init();
 		else new zk.Timer(cmp);
 	}
 };
 zkTimer.setAttr = function (cmp, nm, val) {
-	if (nm == "zk_running") {
+	if (nm == "z:running") {
 		zkau.setAttr(cmp, nm, val);
 		if (val == "true") zkTimer.init(cmp);
 		else {

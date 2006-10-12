@@ -123,7 +123,7 @@ public class Grid extends XulElement implements ChildChangedAware {
 	 * the column width at the client).
 	 */
 	/*package*/ void initAtClient() {
-		smartUpdate("zk_init", true);
+		smartUpdate("z:init", true);
 	}
 
 	//--Paging--//

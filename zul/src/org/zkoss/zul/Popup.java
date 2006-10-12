@@ -51,14 +51,14 @@ public class Popup extends XulElement {
 			final String oldid = getId();
 			if (!Objects.equals(id, oldid)) {
 				super.setId(id);
-				smartUpdate("zid", id);
+				smartUpdate("z:zid", id);
 			}
 		} else {
 			super.setId(id);
 		}
 	}
 	public String getOuterAttrs() {
-	//Note: don't generate zk_type here because Menupopup's zk_type diff
+	//Note: don't generate z:type here because Menupopup's z:type diff
 
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
@@ -68,7 +68,7 @@ public class Popup extends XulElement {
 		if (zidRequired()) {
 			final String id = getId();
 	 		if (!ComponentsCtrl.isAutoId(id))
-				HTMLs.appendAttribute(sb, "zid", id);
+				HTMLs.appendAttribute(sb, "z:zid", id);
 		}
 		return sb.toString();
 	}

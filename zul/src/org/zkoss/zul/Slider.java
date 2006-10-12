@@ -60,7 +60,7 @@ public class Slider extends XulElement implements Scrollable {
 			throw new WrongValueException("Negative is not allowed: "+curpos);
 		if (_curpos != curpos) {
 			_curpos = curpos;
-			smartUpdate("zk_curpos", _curpos);
+			smartUpdate("z:curpos", _curpos);
 		}
 	}
 
@@ -79,7 +79,7 @@ public class Slider extends XulElement implements Scrollable {
 			throw new WrongValueException("Nonpositive is not allowed: "+maxpos);
 		if (_maxpos != maxpos) {
 			_maxpos = maxpos;
-			smartUpdate("zk_maxpos", _maxpos);
+			smartUpdate("z:maxpos", _maxpos);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class Slider extends XulElement implements Scrollable {
 			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
 		if (_pginc != pginc) {
 			_pginc = pginc;
-			smartUpdate("zk_pginc", _pginc);
+			smartUpdate("z:pginc", _pginc);
 		}
 	}
 
@@ -115,15 +115,15 @@ public class Slider extends XulElement implements Scrollable {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "zk_curpos", _curpos);
-		HTMLs.appendAttribute(sb, "zk_maxpos", _maxpos);
-		HTMLs.appendAttribute(sb, "zk_pginc", _pginc);
+		HTMLs.appendAttribute(sb, "z:curpos", _curpos);
+		HTMLs.appendAttribute(sb, "z:maxpos", _maxpos);
+		HTMLs.appendAttribute(sb, "z:pginc", _pginc);
 
 		appendAsapAttr(sb, Events.ON_SCROLL);
 		appendAsapAttr(sb, Events.ON_SCROLLING);
 		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-			//no zk_dbclk to avoid confusion
-			//no zk_lfclk since it will be supported by sld.js
+			//no z:dbclk to avoid confusion
+			//no z:lfclk since it will be supported by sld.js
 
 		return sb.toString();
 	}

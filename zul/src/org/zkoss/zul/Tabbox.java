@@ -236,9 +236,9 @@ public class Tabbox extends XulElement implements Selectable {
 			new StringBuffer(64).append(super.getOuterAttrs());
 		appendAsapAttr(sb, Events.ON_SELECT);
 		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-			//no zk_dbclk/zk_lfclk since it is covered by both Tab and Tabpanel
+			//no z:dbclk/z:lfclk since it is covered by both Tab and Tabpanel
 
-		//HTMLs.appendAttribute(sb, "zk_orient", _orient);
+		//HTMLs.appendAttribute(sb, "z:orient", _orient);
 		return sb.toString();
 	}
 

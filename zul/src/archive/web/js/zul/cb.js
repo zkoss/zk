@@ -152,14 +152,14 @@ zkCmbox.onkey = function (evt) {
 
 	var bCombobox = zk.getCompType(cb) == "Cmbox";
 	var selback = evt.keyCode == 38 || evt.keyCode == 40; //UP and DN
-	if (cb.getAttribute("zk_adr") == "true" && !opened)
+	if (getZKAttr(cb, "adr") == "true" && !opened)
 		zkCmbox.open(pp, bCombobox && !selback);
 	else if (!bCombobox)
 		return true; //ignore
 	else if (!selback && opened)
 		setTimeout("zkCmbox._hilite('"+uuid+"')", 1); //IE: keydown
 
-	if (selback/* || cb.getAttribute("zk_aco") == "true"*/) {
+	if (selback/* || getZKAttr(cb, "aco") == "true"*/) {
 		//Note: zkCmbox.open won't repos immediately, so we have to delay it
 		setTimeout("zkCmbox._hilite('"+uuid+"',true,"+(evt.keyCode == 38)+")", 3);
 		Event.stop(evt);
@@ -242,7 +242,7 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	zkau.onVisiChildren(pp);
 
 	if (zk.gecko) {
-		pp.setAttribute("zk_vparent", uuid); //used by zkTxbox._noonblur
+		setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp); //Bug 1486840
 		//However, since the parent/child relation is changed, new listitem
 		//must be inserted into the popup (by use of uuid!child) rather
@@ -334,7 +334,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 	var inp = $e(uuid + "!real");
 	if (!inp) return;
 
-//	var aco = $e(uuid).getAttribute("zk_aco") == "true";
+//	var aco = getZKAttr($e(uuid), "aco") == "true";
 	var pp = $e(uuid + "!pp");
 	if (!pp || (!selback && /*!aco &&*/ !zk.isVisible(pp))) return;
 	var pp2 = $e(uuid + "!cave");
@@ -415,7 +415,7 @@ zkCmbox.close = function (pp, focus) {
 	var uuid = $uuid(pp.id);
 	if (zk.gecko) {
 		$e(uuid).appendChild(pp); //Bug 1486840
-		pp.removeAttribute("zk_vparent");
+		rmZKAttr(pp, "vparent");
 	}
 
 	zkCmbox._pop._popupId = null;

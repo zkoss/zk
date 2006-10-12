@@ -68,13 +68,13 @@ public class Menu extends LabelImageElement {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
 		if (_popup != null)
-			HTMLs.appendAttribute(sb, "zk_mpop", _popup.getUuid());
+			HTMLs.appendAttribute(sb, "z:mpop", _popup.getUuid());
 		if (isTopmost()) {
-			sb.append(" zk_top=\"true\"");
+			sb.append(" z:top=\"true\"");
 			final Component parent = getParent();
 			if (parent instanceof Menubar
 			&& "vertical".equals(((Menubar)parent).getOrient()))
-				sb.append(" zk_vert=\"true\"");
+				sb.append(" z:vert=\"true\"");
 		}
 		return sb.toString();
 	}

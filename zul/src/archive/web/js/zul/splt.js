@@ -22,7 +22,7 @@ zkSplt.init = function (cmp) {
 	else if (zk.gecko) cmp.style["-moz-user-select"] = "none";
 
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
-	var vert = cmp.getAttribute("zk_vert");
+	var vert = getZKAttr(cmp, "vert");
 	zkSplt._drags[cmp.id] = {
 		vert: vert,
 		drag: new Draggable(cmp, {
@@ -34,7 +34,7 @@ zkSplt.init = function (cmp) {
 
 	var btn = $e(cmp.id + "!btn");
 	Event.observe(btn, "click", function () {
-		zkSplt.open(cmp, cmp.getAttribute("zk_open") == "false");
+		zkSplt.open(cmp, getZKAttr(cmp, "open") == "false");
 	});
 
 	cmp.style.backgroundImage = "url(" +zk.getUpdateURI(
@@ -57,9 +57,9 @@ zkSplt.cleanup = function (cmp) {
 	}
 };
 zkSplt.setAttr = function (cmp, nm, val) {
-	if ("zk_open" == nm) {
+	if ("z:open" == nm) {
 		zkSplt.open(cmp, val == "true", true);
-		return true; //no need to store the zk_open attribute
+		return true; //no need to store the z:open attribute
 	}
 	return false;
 };
@@ -73,7 +73,7 @@ zkSplt._resize = function (cmp) {
 		//will affect the sliding
 		var nd = $e(cmp.id + "!chdextr");
 		var tn = zk.tagName(nd);
-		var vert = cmp.getAttribute("zk_vert");
+		var vert = getZKAttr(cmp, "vert");
 		for (nd = nd.parentNode.firstChild; nd; nd = nd.nextSibling)
 			if (tn == zk.tagName(nd))
 				if (vert) nd.style.height = nd.offsetHeight + "px";
@@ -82,13 +82,13 @@ zkSplt._resize = function (cmp) {
 };
 zkSplt._fixbtn = function (cmp) {
 	var btn = $e(cmp.id + "!btn");
-	var colps = cmp.getAttribute("zk_colps")
+	var colps = getZKAttr(cmp, "colps");
 	if (!colps || "none" == colps) {
 		btn.style.display = "none";
 	} else {
-		var vert = cmp.getAttribute("zk_vert");
+		var vert = getZKAttr(cmp, "vert");
 		var before = colps == "before";
-		if (cmp.getAttribute("zk_open") == "false") before = !before;
+		if (getZKAttr(cmp, "open") == "false") before = !before;
 		btn.src = zk.renType(btn.src,
 			vert ? before ? 't': 'b': before ? 'l': 'r');
 		btn.style.display = "";
@@ -139,7 +139,7 @@ zkSplt._snap = function (cmp, x, y) {
 };
 zkSplt._dragging = function (drag) {
 	var cmp = drag.element;
-	if (cmp.getAttribute("zk_open") == "false") return;
+	if (getZKAttr(cmp, "open") == "false") return;
 		//not draggable (or, user won't see the effect)
 
 	var drag = zkSplt._drags[cmp.id];
@@ -171,7 +171,7 @@ zkSplt._adj = function (n, fd, diff) {
 /** Adjusts the width of the splitter in the opposite dir. */
 zkSplt._adjSplt = function (n, fd, diff) {
 	if (zk.getCompType(n) == "Splt") {
-		var vert = n.getAttribute("zk_vert") != null;
+		var vert = getZKAttr(n, "vert") != null;
 		if (vert != (fd == "height")) {
 			var val = parseInt(n.style[fd] || "0") + diff;
 			n.style[fd] = (val > 0 ? val: 0) + "px";
@@ -182,7 +182,7 @@ zkSplt._adjSplt = function (n, fd, diff) {
 };
 /** Fixes the height (wd) of the specified splitter. */
 zkSplt._fixsz = function (cmp) {
-	var vert = cmp.getAttribute("zk_vert");
+	var vert = getZKAttr(cmp, "vert");
 	var parent = cmp.parentNode;
 	if (parent) {
 		//Note: when window resize, it might adjust splitter's wd (hgh)
@@ -218,16 +218,16 @@ zkSplt._fixszAll = function () {
 zkSplt.open = function (cmp, open, silent) {
 	var nd = $e(cmp.id + "!chdextr");
 	var tn = zk.tagName(nd);
-	if ((cmp.getAttribute("zk_open") != "false") == open) return; //nothing changed
+	if ((getZKAttr(cmp, "open") != "false") == open) return; //nothing changed
 
-	var colps = cmp.getAttribute("zk_colps")
+	var colps = getZKAttr(cmp, "colps")
 	if (!colps || "none" == colps) return; //nothing to do
 
-	var vert = cmp.getAttribute("zk_vert");
+	var vert = getZKAttr(cmp, "vert");
 	var sib = colps == "before" ?
 		zk.previousSibling(nd, tn): zk.nextSibling(nd, tn);
 	if (sib) action.show(sib, open);
-	cmp.setAttribute("zk_open", open ? "true": "false");
+	setZKAttr(cmp, "open", open ? "true": "false");
 
 	zkSplt._fixbtn(cmp);
 	zkSplt._fixszAll();

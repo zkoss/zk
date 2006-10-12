@@ -124,17 +124,17 @@ public class Treerow extends XulElement {
 
 		final Tree tree = getTree();
 		if (tree != null && tree.getName() != null)
-			HTMLs.appendAttribute(sb, "zk_value",  Objects.toString(item.getValue()));
+			HTMLs.appendAttribute(sb, "z:value",  Objects.toString(item.getValue()));
 		HTMLs.appendAttribute(sb, "z:item", item.getUuid());
 		HTMLs.appendAttribute(
 			sb, "z:ptitem", ptitem != null ? ptitem.getUuid(): "root");
 				//z:ptitem: parent item
-		HTMLs.appendAttribute(sb, "zk_sel", item.isSelected());
+		HTMLs.appendAttribute(sb, "z:sel", item.isSelected());
 		if (item.isContainer())
-			HTMLs.appendAttribute(sb, "zk_open", item.isOpen());
+			HTMLs.appendAttribute(sb, "z:open", item.isOpen());
 
 		if (item.isFocusRequired())
-			sb.append(" zk_focus=\"true\"");
+			sb.append(" z:focus=\"true\"");
 		appendAsapAttr(sb, Events.ON_OPEN);
 
 		final String clkattrs = item.getAllOnClickAttrs(false);

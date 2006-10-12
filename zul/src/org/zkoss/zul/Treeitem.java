@@ -105,7 +105,7 @@ public class Treeitem extends XulElement implements Openable, Transparent {
 
 			final Tree tree = getTree();
 			if (_treerow != null && tree != null && tree.getName() != null)
-				_treerow.smartUpdate("zk_value", Objects.toString(_value));
+				_treerow.smartUpdate("z:value", Objects.toString(_value));
 		}
 	}
 
@@ -286,7 +286,7 @@ public class Treeitem extends XulElement implements Openable, Transparent {
 			//_treerow might not be ready yet (a trick to avoid smartUpdate)
 		final boolean ret = super.addEventListener(evtnm, listener);
 		if (ret && !asap && isAsapRequired(evtnm))
-			_treerow.smartUpdate("zk_" + evtnm, "true");
+			_treerow.smartUpdate("z:" + evtnm, "true");
 		return ret;
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
@@ -295,12 +295,12 @@ public class Treeitem extends XulElement implements Openable, Transparent {
 			//_treerow might not be ready yet (a trick to avoid smartUpdate)
 		final boolean ret = super.removeEventListener(evtnm, listener);
 		if (ret && asap && !isAsapRequired(evtnm))
-			_treerow.smartUpdate("zk_" + evtnm, null);
+			_treerow.smartUpdate("z:" + evtnm, null);
 		return ret;
 	}
 
 	public void smartUpdate(String attr, String value) {
-		if ("zk_ctx".equals(attr) || "zk_pop".equals(attr) || "zk_tip".equals(attr)) {
+		if ("z:ctx".equals(attr) || "z:pop".equals(attr) || "z:tip".equals(attr)) {
 			if (_treerow != null) _treerow.smartUpdate(attr, value);
 		} else {
 			super.smartUpdate(attr, value); //cause IllegalStateException

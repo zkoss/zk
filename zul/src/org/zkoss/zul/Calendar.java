@@ -83,7 +83,7 @@ public class Calendar extends XulElement implements Inputable {
 		if (value == null) value = Dates.today();
 		if (!value.equals(_value)) {
 			_value = value;
-			smartUpdate("zk_value", getDateFormat().format(_value));
+			smartUpdate("z:value", getDateFormat().format(_value));
 		}
 	}
 
@@ -126,8 +126,8 @@ public class Calendar extends XulElement implements Inputable {
 
 		appendAsapAttr(sb, Events.ON_CHANGE);
 
-		HTMLs.appendAttribute(sb, "zk_value", getDateFormat().format(_value));
-		if (_compact) sb.append(" zk_compact=\"true\"");
+		HTMLs.appendAttribute(sb, "z:value", getDateFormat().format(_value));
+		if (_compact) sb.append(" z:compact=\"true\"");
 		return sb.toString();
 	}
 }

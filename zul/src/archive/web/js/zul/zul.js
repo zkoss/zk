@@ -178,12 +178,12 @@ zulSHdr.onclick = function (evt, cmp) {
 /** Tests whether it is sortable.
  */
 zulSHdr._sortable = function (cmp) {
-	return cmp.getAttribute("zk_asc") || cmp.getAttribute("zk_dsc");
+	return getZKAttr(cmp, "asc") || getZKAttr(cmp, "dsc");
 };
 /** Shows the hint, ascending or descending image.
  */
 zulSHdr._show = function (cmp) {
-	switch (cmp.getAttribute("zk_sort")) {
+	switch (getZKAttr(cmp, "sort")) {
 	case "ascending": zulSHdr._renCls(cmp, "asc"); break;
 	case "descending": zulSHdr._renCls(cmp, "dsc"); break;
 	case "natural": zulSHdr._renCls(cmp); break;
@@ -198,6 +198,6 @@ zulSHdr._renCls = function (cmp, ext) {
 };
 zulSHdr.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);
-	if (nm == "zk_sort") zulSHdr._show(cmp);
+	if (nm == "z:sort") zulSHdr._show(cmp);
 	return true;
 };

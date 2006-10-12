@@ -30,42 +30,42 @@ zkTab.onclick = function (evt) {
 
 /** Returns the selected tab by giving any tab as the reference point. */
 zkTab._getSelTab = function (tab) {
-	var tabboxId = tab.getAttribute("zk_box");
+	var tabboxId = getZKAttr(tab, "box");
 	if (tabboxId) {
 		var tabbox = $e(tabboxId);
-		if (tabbox.getAttribute("zk_accd") == "true")
+		if (getZKAttr(tabbox, "accd") == "true")
 			return zkTab._getSelTabFromTop(tabbox, tabboxId);
 	}
 
 	for (var node = tab; (node = node.nextSibling) != null;)
-		if (node.getAttribute && node.getAttribute("zk_sel") == "true")
+		if (getZKAttr(node, "sel") == "true")
 			return node;
 	for (var node = tab; (node = node.previousSibling) != null;)
-		if (node.getAttribute && node.getAttribute("zk_sel") == "true")
+		if (getZKAttr(node, "sel") == "true")
 			return node;
 };
 /** Whether any tab is sliding. */
 zkTab._sliding = function (tab) {
-	var tabboxId = tab.getAttribute("zk_box");
+	var tabboxId = getZKAttr(tab, "box");
 	if (!tabboxId) return false;
 
 	var tabbox = $e(tabboxId);
-	if (tabbox.getAttribute("zk_accd") != "true")
+	if (getZKAttr(tabbox, "accd") != "true")
 		return false;
 
 	for (var node = tab; (node = node.nextSibling) != null;)
-		if (node.getAttribute && node.getAttribute("zk_sliding"))
+		if (getZKAttr(node, "sliding"))
 			return true;
 	for (var node = tab; (node = node.previousSibling) != null;)
-		if (node.getAttribute && node.getAttribute("zk_sliding"))
+		if (getZKAttr(node, "sliding"))
 			return true;
 	return false;
 };
 /** Returns the selected tab by specified any HTML tag containing it. */
 zkTab._getSelTabFromTop = function (node, tabboxId) {
 	if (zk.getCompType(node) == "Tab"
-	&& node.getAttribute("zk_box") == tabboxId)
-		return node.getAttribute("zk_sel") == "true" ? node: null;
+	&& getZKAttr(node, "box") == tabboxId)
+		return getZKAttr(node, "sel") == "true" ? node: null;
 
 	for (var node = node.firstChild; node != null; node = node.nextSibling) {
 		var n = zkTab._getSelTabFromTop(node, tabboxId);
@@ -88,10 +88,10 @@ zkTab.selTab = function (tab) {
 
 /** Selects o unselect the specified tab. */
 zkTab._setTabSel = function (tab, toSel) {
-	if ((tab.getAttribute("zk_sel") == "true") == toSel)
+	if ((getZKAttr(tab, "sel") == "true") == toSel)
 		return; //nothing changed
 
-	tab.setAttribute("zk_sel", toSel ? "true": "false");
+	setZKAttr(tab, "sel", toSel ? "true": "false");
 	var tabreal = $e(tab.id + "!real");
 	if (tabreal) {
 		if (toSel) {
@@ -105,10 +105,10 @@ zkTab._setTabSel = function (tab, toSel) {
 
 	zkTab._changeBkgnd(tab, toSel);
 
-	var tabbox = tab.getAttribute("zk_box");
+	var tabbox = getZKAttr(tab, "box");
 	if (tabbox) tabbox = $e(tabbox);
-	var accd = tabbox && tabbox.getAttribute("zk_accd") == "true";
-	var panel = $e(tab.getAttribute("zk_panel"));
+	var accd = tabbox && getZKAttr(tabbox, "accd") == "true";
+	var panel = $e(getZKAttr(tab, "panel"));
 	if (panel)
 		if (accd) action.slideDown($e(panel.id + "!real"), toSel);
 		else action.show(panel, toSel);

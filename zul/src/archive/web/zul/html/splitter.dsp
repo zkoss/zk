@@ -16,4 +16,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" zk_type="zul.splt.Splt"${self.outerAttrs}${self.innerAttrs}><img id="${self.uuid}!btn" style="display:none" src="${c:encodeURL('~./zul/img/splt/colps-l.gif')}"/></div>
+<div id="${self.uuid}" z:type="zul.splt.Splt"${self.outerAttrs}${self.innerAttrs}><img id="${self.uuid}!btn" style="display:none" src="${c:encodeURL('~./zul/img/splt/colps-l.gif')}"/></div>

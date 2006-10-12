@@ -46,9 +46,9 @@ import org.zkoss.zk.ui.UiException;
 public class Imagemap extends Image {
 	//-- super --//
 	public String getOuterAttrs() {
-		//Imagemap handles onclick by itself, so don't generate zk_lfclk
+		//Imagemap handles onclick by itself, so don't generate z:lfclk
 		final String attrs = super.getOuterAttrs();
-		final String attrnm = " zk_lfclk=";
+		final String attrnm = " z:lfclk=";
 		final int j = attrs.indexOf(attrnm);
 		if (j < 0) return attrs;
 		int k = attrs.indexOf('"', j + attrnm.length());

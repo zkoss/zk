@@ -17,4 +17,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<table id="${self.uuid}" zk_type="zul.db.Cal"${self.outerAttrs}${self.innerAttrs}></table>
+<table id="${self.uuid}" z:type="zul.db.Cal"${self.outerAttrs}${self.innerAttrs}></table>

@@ -23,19 +23,19 @@ zkau.valid = zkVld; //zkau depends on it
 /** Validates the specified component and returns the error msg. */
 zkVld.validate = function (id) {
 	//There are two ways to validate a component.
-	//1. specify the function in zk_valid or zk_valid2
+	//1. specify the function in z:valid or z:valid2
 	id = $uuid(id);
 	var cm = $e(id);
 	zkVld.validating = true; //to avoid deadloop (when both fields are invalid)
 	try {
 		if (cm) {
-			var ermg = cm.getAttribute("zk_ermg"); //custom message
-			var fn = cm.getAttribute("zk_valid");
+			var ermg = getZKAttr(cm, "ermg"); //custom message
+			var fn = getZKAttr(cm, "valid");
 			if (fn) {
 				var msg = zk.resolve(fn).call(cm, id);
 				if (msg) return ermg ? ermg: msg;
 			}
-			fn = cm.getAttribute("zk_valid2");
+			fn = getZKAttr(cm, "valid2");
 			if (fn) {
 				var msg = zk.resolve(fn).call(cm, id);
 				if (msg) return ermg ? ermg: msg;
@@ -67,7 +67,7 @@ zkVld.onlyNum = function (id, noDot) {
 	if (!inp) return null;
 
 	var fmt = $outer(inp);
-	if (fmt) fmt = fmt.getAttribute("zk_fmt");
+	if (fmt) fmt = getZKAttr(fmt, "fmt");
 	inp = $real(inp);
 	val = inp.value.trim();
 	for (var j=0,doted,numed,dashed,perted; j < val.length; ++j) {
@@ -94,7 +94,7 @@ zkVld.onlyNum = function (id, noDot) {
 		case '\t':
 			continue;
 		default:
-			if (fmt && fmt.indexOf(cc) >= 0) //recognize only in zk_fmt
+			if (fmt && fmt.indexOf(cc) >= 0) //recognize only in z:fmt
 				continue;
 			//error
 		}

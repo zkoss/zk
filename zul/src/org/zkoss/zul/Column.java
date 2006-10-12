@@ -85,7 +85,7 @@ public class Column extends HeaderElement {
 			throw new WrongValueException("Unknown sort direction: "+sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
-			smartUpdate("zk_sort", _sortDir); //don't use null because sel.js assumes it
+			smartUpdate("z:sort", _sortDir); //don't use null because sel.js assumes it
 		}
 	}
 
@@ -99,8 +99,8 @@ public class Column extends HeaderElement {
 	 */
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
-			if (sorter == null) smartUpdate("zk_asc", null);
-			else if (_sortAsc == null) smartUpdate("zk_asc", "true");
+			if (sorter == null) smartUpdate("z:asc", null);
+			else if (_sortAsc == null) smartUpdate("z:asc", "true");
 			_sortAsc = sorter;
 		}
 	}
@@ -123,8 +123,8 @@ public class Column extends HeaderElement {
 	 */
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
-			if (sorter == null) smartUpdate("zk_dsc", null);
-			else if (_sortDsc == null) smartUpdate("zk_dsc", "true");
+			if (sorter == null) smartUpdate("z:dsc", null);
+			else if (_sortDsc == null) smartUpdate("z:dsc", "true");
 			_sortDsc = sorter;
 		}
 	}
@@ -234,11 +234,11 @@ public class Column extends HeaderElement {
 
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80);
-		if (_sortAsc != null) sb.append(" zk_asc=\"true\"");
-		if (_sortDsc != null) sb.append(" zk_dsc=\"true\"");
+		if (_sortAsc != null) sb.append(" z:asc=\"true\"");
+		if (_sortDsc != null) sb.append(" z:dsc=\"true\"");
 
 		if (!"natural".equals(_sortDir))
-			HTMLs.appendAttribute(sb, "zk_sort", _sortDir);
+			HTMLs.appendAttribute(sb, "z:sort", _sortDir);
 
 		final String clkattrs = getAllOnClickAttrs(false);
 		if (clkattrs != null) sb.append(clkattrs);

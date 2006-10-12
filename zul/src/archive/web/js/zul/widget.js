@@ -49,7 +49,7 @@ zkTxbox.onblur = function (inp) {
  */
 zkTxbox.updateChange = function (inp, noonblur) {
 	//Request 1565288: support maxlength for Textarea
-	var maxlen = inp.getAttribute("zk_maxlen");
+	var maxlen = getZKAttr(inp, "maxlen");
 	if (maxlen) {
 		maxlen = parseInt(maxlen);
 		if (maxlen > 0 && inp.value != inp.defaultValue && inp.value.length > maxlen)
@@ -88,20 +88,18 @@ zkTxbox._noonblur = function (inp) {
 		var el = inp;
 		for (;; el = el.parentNode) {
 			if (!el) return false;
-			if (el.getAttribute) {
-				if (el.getAttribute("zk_combo") == "true")
-					break;
-				if (el.getAttribute("zk_type"))
-					return false;
-			}
+			if (getZKAttr(el, "combo") == "true")
+				break;
+			if (getZKAttr(el, "type"))
+				return false;
 		}
 
 		while (cf) {
 			if (cf == el) return true;
 
 			//To resolve Bug 1486840 (see db.js and cb.js)
-			if (zk.gecko && cf.getAttribute) {
-				var n = $e(cf.getAttribute("zk_vparent"));
+			if (zk.gecko) {
+				var n = $e(getZKAttr(cf, "vparent"));
 				if (n) {
 					cf = n;
 					continue;
@@ -133,7 +131,7 @@ zkTxbox.onfocus = function (inp) {
 	zkau.onfocus(inp);
 
 	//handling onChanging
-	if (inp && inp.id && $outer(inp).getAttribute("zk_onChanging")) {
+	if (inp && inp.id && getZKAttr($outer(inp), "onChanging")) {
 		inp.setAttribute("zk_last_changing", inp.value);
 		zkau._intervals[inp.id] =
 			setInterval("zkTxbox._scanChanging('"+inp.id+"')", 500);
@@ -142,7 +140,7 @@ zkTxbox.onfocus = function (inp) {
 /** Scans whether any changes. */
 zkTxbox._scanChanging = function (id) {
 	var inp = $e(id);
-	if (inp && $outer(inp).getAttribute("zk_onChanging")
+	if (inp && getZKAttr($outer(inp), "onChanging")
 	&& inp.getAttribute("zk_last_changing") != inp.value) {
 		inp.setAttribute("zk_last_changing", inp.value);
 		zkau.send({uuid: $uuid(id),
@@ -280,9 +278,9 @@ function zkGrbox() {}
 function zkCapt() {}
 
 zkGrbox.setAttr = function (cmp, nm, val) {
-	if ("zk_open" == nm) {
+	if ("z:open" == nm) {
 		zkGrbox.open(cmp, val == "true", true);
-		return true; //no need to store the zk_open attribute
+		return true; //no need to store the z:open attribute
 	}
 	return false;
 };
@@ -297,7 +295,7 @@ zkGrbox.onclick = function (evt, uuid) {
 
 	if (uuid) {
 		var cmp = $e(uuid);
-		if (cmp && cmp.getAttribute("zk_closable") == "false")
+		if (getZKAttr(cmp, "closable") == "false")
 			return;
 
 		cmp = $e(uuid + "!slide");
@@ -372,7 +370,7 @@ if (zk.ie && !zk.ie7) {
 			//process zk_xxx
 			for (var attrs = img.attributes, j = 0; j < attrs.length; ++j) {
 				var attr = attrs.item(j);
-				if (attr.name.startsWith("zk_"))
+				if (attr.name.startsWith("z:"))
 					html += ' '+attr.name+'="'+attr.value+'"';
 			}
 
@@ -445,7 +443,7 @@ zkArea.onclick = function (id) {
 		var map = zkau.getParentByType(cmp, "Map");
 		if (map)
 			zkau.send({uuid: map.id,
-				cmd: "onClick", data: [cmp.getAttribute("zk_id")]});
+				cmd: "onClick", data: [getZKAttr(cmp, "aid")]});
 	}
 };
 /** Called by map-done.dsp */
@@ -484,13 +482,13 @@ function zkPMeter() {}
 zkPMeter.init = function (cmp) {
 	var img = $e(cmp.id + "!img");
 	if (img) {
-		var val = parseInt(cmp.getAttribute("zk_val") || "0");
+		var val = parseInt(getZKAttr(cmp, "value") || "0");
 		img.style.width = Math.round((cmp.clientWidth * val) / 100) + "px";
 	}
 };
 zkPMeter.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);
-	if ("zk_val" == nm)
+	if ("z:value" == nm)
 		zkPMeter.init(cmp);
 	return true;
 }
@@ -509,7 +507,7 @@ function zkPop() {}
 
 /** Called by au.js's context menu. */
 zkPop.context = function (ctx, ref) {
-	if (ctx.getAttribute("zk_onOpen"))
+	if (getZKAttr(ctx, "onOpen"))
 		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
 
 	action.show(ctx);

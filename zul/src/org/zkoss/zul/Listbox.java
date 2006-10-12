@@ -220,7 +220,7 @@ ChildChangedAware, Cropper {
 	public void setVflex(boolean vflex) {
 		if (_vflex != vflex) {
 			_vflex = vflex;
-			if (!inSelectMold()) smartUpdate("zk_flex", _vflex);
+			if (!inSelectMold()) smartUpdate("z:flex", _vflex);
 		}
 	}
 
@@ -238,7 +238,7 @@ ChildChangedAware, Cropper {
 			if (inSelectMold()) {
 				smartUpdate("disabled", _disabled);
 			} else {
-				smartUpdate("zk_disabled", _disabled);
+				smartUpdate("z:disabled", _disabled);
 			}
 		}
 	}
@@ -256,7 +256,7 @@ ChildChangedAware, Cropper {
 			if (inSelectMold()) {
 				smartUpdate("readonly", _readonly);
 			} else {
-				smartUpdate("zk_readonly", _readonly);
+				smartUpdate("z:readonly", _readonly);
 			}
 		}
 	}
@@ -281,7 +281,7 @@ ChildChangedAware, Cropper {
 			if (inSelectMold()) {
 				smartUpdate("size", _rows > 0 ? Integer.toString(_rows): null);
 			} else {
-				smartUpdate("zk_size", Integer.toString(_rows));
+				smartUpdate("z:size", Integer.toString(_rows));
 				initAtClient();
 				//Don't use smartUpdate because client has to extra job
 				//besides maintaining HTML DOM
@@ -318,16 +318,16 @@ ChildChangedAware, Cropper {
 				_selItems.clear();
 				if (item != null)
 					_selItems.add(item);
-				//No need to update zk_selId because zk_multiple will do the job
+				//No need to update z:selId because z:multiple will do the job
 			}
 
 			if (inSelectMold()) smartUpdate("multiple", _multiple);
 			else if (isCheckmark()) invalidate(); //change check mark
-			else smartUpdate("zk_multiple", _multiple);
+			else smartUpdate("z:multiple", _multiple);
 				//No need to use response because such info is carried on tags
 		}
 	}
-	/** Returns the ID of the selected item (it is stored as the zk_selId
+	/** Returns the ID of the selected item (it is stored as the z:selId
 	 * attribute of the listbox).
 	 */
 	private String getSelectedId() {
@@ -380,7 +380,7 @@ ChildChangedAware, Cropper {
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
 			if (inSelectMold()) smartUpdate("name", _name);
-			else if (_name != null) smartUpdate("zk_name", _name);
+			else if (_name != null) smartUpdate("z:name", _name);
 			else invalidate(); //1) generate _value; 2) add submit listener
 
 			_name = name;
@@ -471,7 +471,7 @@ ChildChangedAware, Cropper {
 			} else {
 				if (item.getIndex() < _jsel || _jsel < 0) {
 					_jsel = item.getIndex();
-					if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
 				}
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
@@ -502,7 +502,7 @@ ChildChangedAware, Cropper {
 				} else {
 					smartUpdateSelection();
 					if (oldSel != _jsel)
-						smartUpdate("zk_selId", getSelectedId());
+						smartUpdate("z:selId", getSelectedId());
 				}
 			}
 		}
@@ -602,7 +602,7 @@ ChildChangedAware, Cropper {
 	 */
 	/*package*/ void initAtClient() {
 		if (!inSelectMold() && !inPagingMold())
-			smartUpdate("zk_init", true);
+			smartUpdate("z:init", true);
 	}
 
 	//-- Selectable --//
@@ -867,12 +867,12 @@ ChildChangedAware, Cropper {
 				if (childItem.isSelected()) {
 					if (_jsel < 0) {
 						_jsel = childIndex;
-						if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
+						if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
 						_selItems.add(childItem);
 					} else if (_multiple) {
 						if (_jsel > childIndex) {
 							_jsel = childIndex;
-							if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
+							if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
 						}
 						_selItems.add(childItem);
 					} else { //deselect
@@ -882,7 +882,7 @@ ChildChangedAware, Cropper {
 				} else {
 					if (_jsel >= childIndex) {
 						++_jsel;
-						if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
+						if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
 					}
 				}
 				initAtClient();
@@ -949,12 +949,12 @@ ChildChangedAware, Cropper {
 				_selItems.remove(childItem);
 				if (_jsel == childIndex) {
 					fixSelectedIndex(childIndex);
-					if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
 				}
 			} else {
 				if (_jsel >= childIndex) {
 					--_jsel;
-					if (!inSelectMold()) smartUpdate("zk_selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
 				}
 			}
 			initAtClient();
@@ -1010,7 +1010,7 @@ ChildChangedAware, Cropper {
 				} else {
 					if (inSelectMold())
 						throw new UnsupportedOperationException("Mold select doesn't support ListModel");
-					smartUpdate("zk_model", "true");
+					smartUpdate("z:model", "true");
 				}
 
 				initDataListener();
@@ -1031,7 +1031,7 @@ ChildChangedAware, Cropper {
 			_model.removeListDataListener(_dataListener);
 			_model = null;
 			getItems().clear();
-			smartUpdate("zk_model", null);
+			smartUpdate("z:model", null);
 		}
 	}
 
@@ -1344,21 +1344,21 @@ ChildChangedAware, Cropper {
 			if (_readonly)
 				HTMLs.appendAttribute(sb, "readonly", "readonly");
 		} else {
-			HTMLs.appendAttribute(sb, "zk_name", _name);
-			HTMLs.appendAttribute(sb, "zk_size",  _rows);
+			HTMLs.appendAttribute(sb, "z:name", _name);
+			HTMLs.appendAttribute(sb, "z:size",  _rows);
 			if (_disabled)
-				HTMLs.appendAttribute(sb, "zk_disabled",  true);
+				HTMLs.appendAttribute(sb, "z:disabled",  true);
 			if (_readonly)
-				HTMLs.appendAttribute(sb, "zk_readonly", true);
+				HTMLs.appendAttribute(sb, "z:readonly", true);
 			if (_multiple)
-				HTMLs.appendAttribute(sb, "zk_multiple", true);
-			HTMLs.appendAttribute(sb, "zk_selId", getSelectedId());
+				HTMLs.appendAttribute(sb, "z:multiple", true);
+			HTMLs.appendAttribute(sb, "z:selId", getSelectedId());
 			//if (_checkmark)
-			//	HTMLs.appendAttribute(sb, "zk_checkmark",  true);
+			//	HTMLs.appendAttribute(sb, "z:checkmark",  true);
 			if (_vflex)
-				HTMLs.appendAttribute(sb, "zk_vflex", true);
+				HTMLs.appendAttribute(sb, "z:vflex", true);
 			if (_model != null)
-				HTMLs.appendAttribute(sb, "zk_model", true);
+				HTMLs.appendAttribute(sb, "z:model", true);
 		}
 
 		appendAsapAttr(sb, Events.ON_SELECT);

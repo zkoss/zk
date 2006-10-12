@@ -156,10 +156,10 @@ public class Menuitem extends LabelImageElement implements Checkable {
 		if (!topmost && !_autocheck) return attrs;
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
-		if (topmost) sb.append(" zk_top=\"true\"");
+		if (topmost) sb.append(" z:top=\"true\"");
 		if (_autocheck) {
-			sb.append(" zk_autock=\"true\"");
-			if (_checked) sb.append(" zk_checked=\"true\"");
+			sb.append(" z:autock=\"true\"");
+			if (_checked) sb.append(" z:checked=\"true\"");
 		}
 		return sb.toString();
 	}

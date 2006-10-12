@@ -100,7 +100,7 @@ zk.Slider.prototype = {
 		if (pos != this.slidepos) {
 			this.slidepos = pos;
 			if (this.slidetip) this.slidetip.innerHTML = pos;
-			if (this.element.getAttribute("zk_onScrolling"))
+			if (getZKAttr(this.element, "onScrolling"))
 				zkau.send({uuid: this.element.id, 
 					cmd: "onScrolling", data: [pos], implicit: true}, 0);
 		}
@@ -109,7 +109,7 @@ zk.Slider.prototype = {
 		var pos = this._realpos();
 		var curpos = this._curpos();
 		if (pos != curpos) {
-			this.element.setAttribute("zk_curpos", pos);
+			setZKAttr(this.element, "curpos", pos);
 			zkau.send({uuid: this.element.id, cmd: "onScroll", data: [pos]},
 				zkau.asapTimeout(this.element, "onScroll"));
 		}
@@ -129,10 +129,10 @@ zk.Slider.prototype = {
 		return pos >= 0 ? pos: 0;
 	},
 	_curpos: function () {
-		return parseInt(this.element.getAttribute("zk_curpos"));
+		return parseInt(getZKAttr(this.element, "curpos"));
 	},
 	_maxpos: function () {
-		return parseInt(this.element.getAttribute("zk_maxpos"))
+		return parseInt(getZKAttr(this.element, "maxpos"))
 	},
 	/** Returns the slider's real width. */
 	_width: function () {
@@ -171,8 +171,8 @@ zkSld._metaByBtn = function (button) {
 	return zkau.getMeta(btnid.substring(0, btnid.length-4));
 };
 zkSld.setAttr = function (cmp, nm, val) {
-	if ("zk_curpos" == nm) {
-		cmp.setAttribute("zk_curpos", val);
+	if ("z:curpos" == nm) {
+		setZKAttr(cmp, "curpos", val);
 		var meta = zkau.getMeta(cmp);
 		if (meta) meta._fixPos();
 		return true;
