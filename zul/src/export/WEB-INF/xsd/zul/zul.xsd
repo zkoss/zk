@@ -360,6 +360,8 @@
         <xs:attribute name="threeD" type="xs:boolean" use="optional" />
         <xs:attribute name="showLegend" type="xs:boolean" use="optional" />
         <xs:attribute name="showTooltiptext" type="xs:boolean" use="optional" />
+        <xs:attribute name="paneAlpha" type="xs:integer" use="optional" />
+        <xs:attribute name="paneColor" type="xs:string" use="optional" />
         <xs:attribute name="fgAlpha" type="xs:integer" use="optional" />
         <xs:attribute name="bgAlpha" type="xs:integer" use="optional" />
         <xs:attribute name="bgColor" type="xs:string" use="optional" />
