@@ -125,10 +125,10 @@ public class Treerow extends XulElement {
 		final Tree tree = getTree();
 		if (tree != null && tree.getName() != null)
 			HTMLs.appendAttribute(sb, "zk_value",  Objects.toString(item.getValue()));
-		HTMLs.appendAttribute(sb, "zk_item", item.getUuid());
+		HTMLs.appendAttribute(sb, "z:item", item.getUuid());
 		HTMLs.appendAttribute(
-			sb, "zk_ptitem", ptitem != null ? ptitem.getUuid(): "root");
-				//zk_ptitem: parent item
+			sb, "z:ptitem", ptitem != null ? ptitem.getUuid(): "root");
+				//z:ptitem: parent item
 		HTMLs.appendAttribute(sb, "zk_sel", item.isSelected());
 		if (item.isContainer())
 			HTMLs.appendAttribute(sb, "zk_open", item.isOpen());

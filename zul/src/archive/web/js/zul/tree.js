@@ -27,7 +27,7 @@ zk.Tree = Class.create();
 Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	/** Overrides what is defined in zk.Selectable. */
 	getItemUuid: function (row) {
-		return row.getAttribute("zk_item");
+		return zk.getAttr(row, "item");
 	},
 	/** Process the setAttr command sent from the server. */
 	setAttr2: function (name, value) {
@@ -90,7 +90,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 			//to make it smaller when closing some items.
 			//Thus, we only handle 'enlargement', i.e., toOpen is true
 
-		zkau.send({uuid: row.getAttribute("zk_item"),
+		zkau.send({uuid: zk.getAttr(row, "item"),
 			cmd: "onOpen", data: [row.getAttribute("zk_open")]},
 			zkau.asapTimeout(row, "onOpen"));
 	},
@@ -98,11 +98,11 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	 * @param toOpen whether to toOpen
 	 */
 	_showChildren: function (row, toOpen, silent) {
-		var uuid = row.getAttribute("zk_item");
+		var uuid = zk.getAttr(row, "item");
 		do {
 			var r = row.nextSibling;
 			if (zk.tagName(r) == "TR") {
-				var pid = r.getAttribute("zk_ptitem");
+				var pid = zk.getAttr(r, "ptitem");
 				if (uuid != pid) return row; //not my child
 
 				if (!silent)

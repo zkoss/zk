@@ -31,7 +31,7 @@ ${z:outPageHeaders(page)}
 </head>
 <body${c:attr('style', page.style)}>
 </c:if>
-<div id="${page.id}" style="${empty page.style ? 'width:100%': page.style}">
+<div xmlns:z="http://www.zkoss.org/2005/zk" id="${page.id}" style="${empty page.style ? 'width:100%': page.style}">
 <c:forEach var="root" items="${page.roots}">
 ${z:redraw(root, null)}
 </c:forEach>
