@@ -308,7 +308,7 @@ import org.zkoss.zk.au.*;
 
 		if (!ccawares.isEmpty())
 			for (Iterator it = ccawares.iterator(); it.hasNext();)
-				addSmartUpdate((Component)it.next(), "zk_chchg", "true");
+				addSmartUpdate((Component)it.next(), "z:chchg", "true");
 	}
 	private void doChildChanged(Collection col, List ccawares) {
 		for (Iterator it = col.iterator(); it.hasNext();) {

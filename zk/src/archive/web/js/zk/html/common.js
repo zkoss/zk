@@ -303,7 +303,7 @@ zk.focusDown = function (el) {
 		|| zk._focusDown(el, new Array("A"), false);
 };
 /** checkA whether to check the A tag specially (i.e., focus if one ancestor
- * has zk_type.
+ * has z:type).
  */
 zk._focusDown = function (el, match, checkA) {
 	if (!el) return false;
@@ -316,7 +316,7 @@ zk._focusDown = function (el, match, checkA) {
 		}
 		if (checkA && tn == "A") {
 			for (var n = el; (n = n.parentNode) != null;) {
-				if (n.getAttribute("zk_type")) {
+				if (getZKAttr(n, "type")) {
 					try {el.focus();} catch (e) {}
 					//IE throws exception when focus in some cases
 					return true;
@@ -502,8 +502,8 @@ zk.isAncestor = function(p, c) {
 			return true;
 
 		//To resolve Bug 1486840 (see db.js and cb.js)
-		if (zk.gecko && c.getAttribute) { 
-			var n = $e(c.getAttribute("zk_vparent"));
+		if (zk.gecko) { 
+			var n = $e(getZKAttr(c, "vparent"));
 			if (n) {
 				c = n;
 				continue;

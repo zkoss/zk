@@ -19,11 +19,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.ext;
 
 /**
- * Denote a component that requires the <code>zk_chchg</code> command,
+ * Denote a component that requires the <code>z:chchg</code> command,
  * when any of its children and descendants are changed.
  *
  * <p>Once a component implements this interface and {@link #isChildChangedAware}
- * returns true, the <code>zk_chchg</code> command is sent to the client
+ * returns true, the <code>z:chchg</code> command is sent to the client
  * for updating the visual representation. For example, a grid uses two tables
  * to implement header and body, and then it has to re-align the header
  * once any of its descendants is changed.
@@ -31,7 +31,7 @@ package org.zkoss.zk.ui.ext;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface ChildChangedAware {
-	/** Returns whether to send the <code>zk_chchg</code> command
+	/** Returns whether to send the <code>z:chchg</code> command
 	 * to the client.
 	 */
 	public boolean isChildChangedAware();

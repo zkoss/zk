@@ -117,9 +117,9 @@ zkau.onclick = function (evt) {
 		if (!target) return;
 		else if (target.id) break;
 
-	var href = target.getAttribute("zk_href");
+	var href = getZKAttr(target, "href");
 	if (href) {
-		zk.go(href, false, target.getAttribute("zk_target"));
+		zk.go(href, false, getZKAttr(target, "target"));
 		return; //done
 	}
 
@@ -196,8 +196,7 @@ zkau._checkProgress = function () {
  * It is mainly used to generate the timeout argument of zkau.send.
  */
 zkau.asapTimeout = function (cmp, evtnm) {
-	cmp = $e(cmp);
-	return cmp && cmp.getAttribute("zk_" + evtnm) == "true" ? 25: -1;
+	return getZKAttr($e(cmp), evtnm) == "true" ? 25: -1;
 };
 
 /** Adds a callback to be called before sending ZK request.
@@ -530,6 +529,10 @@ zkau.setAttr = function (cmp, name, value) {
 		value = "true" == value;
 		for (var j = 0; j < cmp.options.length; ++j)
 			cmp.options[j].selected = value;
+	} else if ("style" == name) {
+		zk.setStyle(cmp, value);
+	} else if (name.startsWith("z:")) { //ZK attributes
+		setZKAttr(cmp, name.substring(2), value);
 	} else {
 		var j = name.indexOf('.'); 
 		if (j >= 0) {
@@ -541,9 +544,6 @@ zkau.setAttr = function (cmp, name, value) {
 			if (typeof(cmp.style[name]) == "boolean") //just in case
 				value = "true" == value || name == value;
 			cmp.style[name] = value;
-			return;
-		} else if ("style" == name) {
-			zk.setStyle(cmp, value);
 			return;
 		}
 
@@ -581,16 +581,19 @@ zkau.setAttr = function (cmp, name, value) {
 };
 /** Returns the time stamp. */
 zkau.getStamp = function (cmp, name) {
-	var stamp = cmp.getAttribute("zk_st" + name);
+	var stamp = getZKAttr(cmp, "stm" + name);
 	return stamp ? stamp: "";
 };
 /** Sets the time stamp. */
 zkau.setStamp = function (cmp, name) {
-	cmp.setAttribute("zk_st" + name, "" + ++zkau._stamp);
+	setZKAttr(cmp, "stm" + name, "" + ++zkau._stamp);
 };
 zkau.rmAttr = function (cmp, name) {
 	if ("class" == name) {
 		if (cmp.className) cmp.className = "";
+	} else if (name.startsWith("z:")) { //ZK attributes
+		rmZKAttr(cmp, name.substring(2));
+		return;
 	} else {
 		var j = name.indexOf('.'); 
 		if (j >= 0) {
@@ -630,7 +633,7 @@ zkau.fixZIndex = function (cmp, silent, autoz) {
 zkau.autoZIndex = function (node) {
 	for (; node; node = node.parentNode) {
 		if (node.style && node.style.position == "absolute") {
-			if (node.getAttribute("zk_autoz"))
+			if (getZKAttr(node, "autoz"))
 				zkau.fixZIndex(node, false, true); //don't inc if equals
 			break;
 		}
@@ -752,7 +755,7 @@ zkau.onfocus = function (el) {
 	if (zkau.valid) zkau.valid.uncover(el);
 
 	var cmp = $outer(el);
-	if (cmp.getAttribute("zk_onFocus") == "true")
+	if (getZKAttr(cmp, "onFocus") == "true")
 		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 25);
 };
 zkau.onblur = function (el) {
@@ -761,7 +764,7 @@ zkau.onblur = function (el) {
 		//prevent it from being cleared
 
 	var cmp = $outer(el);
-	if (cmp.getAttribute("zk_onBlur") == "true")
+	if (getZKAttr(cmp, "onBlur") == "true")
 		zkau.send({uuid: cmp.id, cmd: "onBlur", data: null}, 25);
 };
 
@@ -816,9 +819,9 @@ zkau._onDocLClick = function (evt) {
 
 	if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
 		var cmp = Event.element(evt);
-		cmp = zkau._getParentByAttr(cmp, "zk_lfclk", "zk_pop");
+		cmp = zkau._parentByZKAttr(cmp, "lfclk", "pop");
 		if (cmp) {
-			var ctx = cmp.getAttribute("zk_pop");
+			var ctx = getZKAttr(cmp, "pop");
 			if (ctx) {
 				ctx = zkau.getByZid(cmp, ctx);
 				if (ctx) {
@@ -832,7 +835,7 @@ zkau._onDocLClick = function (evt) {
 				}
 			}
 
-			if (cmp.getAttribute("zk_lfclk") && zkau.insamepos(evt))
+			if (getZKAttr(cmp, "lfclk") && zkau.insamepos(evt))
 				zkau.send({uuid: $uuid(cmp),
 					cmd: "onClick", data: zkau._getMouseData(evt, cmp)});
 
@@ -885,9 +888,9 @@ zkau._onDocDClick = function (evt) {
 	if (!evt) evt = window.event;
 
 	var cmp = Event.element(evt);
-	cmp = zkau._getParentByAttr(cmp, "zk_dbclk");
+	cmp = zkau._parentByZKAttr(cmp, "dbclk");
 	if (cmp/* no need since browser handles it: && zkau.insamepos(evt)*/) {
-		var uuid = zk.getAttr(cmp, "item"); //treerow (and other transparent)
+		var uuid = getZKAttr(cmp, "item"); //treerow (and other transparent)
 		if (!uuid) uuid = $uuid(cmp);
 		zkau.send({uuid: uuid,
 			cmd: "onDoubleClick", data: zkau._getMouseData(evt, cmp)});
@@ -899,10 +902,10 @@ zkau._onDocCtxMnu = function (evt) {
 	if (!evt) evt = window.event;
 
 	var cmp = Event.element(evt);
-	cmp = zkau._getParentByAttr(cmp, "zk_ctx", "zk_rtclk");
+	cmp = zkau._parentByZKAttr(cmp, "ctx", "rtclk");
 
 	if (cmp) {
-		var ctx = cmp.getAttribute("zk_ctx");
+		var ctx = getZKAttr(cmp, "ctx");
 		if (ctx) {
 			ctx = zkau.getByZid(cmp, ctx);
 			if (ctx) {
@@ -916,8 +919,8 @@ zkau._onDocCtxMnu = function (evt) {
 			}
 		}
 
-		if (cmp.getAttribute("zk_rtclk")/*no need since oncontextmenu: && zkau.insamepos(evt)*/) {
-			var uuid = zk.getAttr(cmp, "item"); //treerow (and other transparent)
+		if (getZKAttr(cmp, "rtclk")/*no need since oncontextmenu: && zkau.insamepos(evt)*/) {
+			var uuid = getZKAttr(cmp, "item"); //treerow (and other transparent)
 			if (!uuid) uuid = $uuid(cmp);
 			zkau.send({uuid: uuid,
 				cmd: "onRightClick", data: zkau._getMouseData(evt, cmp)});
@@ -932,9 +935,9 @@ zkau._onDocMouseover = function (evt) {
 	if (!evt) evt = window.event;
 
 	var cmp = Event.element(evt);
-	cmp = zkau._getParentByAttr(cmp, "zk_tip");
+	cmp = zkau._parentByZKAttr(cmp, "tip");
 	if (cmp) {
-		var tip = cmp.getAttribute("zk_tip");
+		var tip = getZKAttr(cmp, "tip");
 		tip = zkau.getByZid(cmp, tip);
 		if (tip) {
 			var open = zkau._tipz && zkau._tipz.open;
@@ -999,12 +1002,10 @@ zkau._tryCloseTip = function () {
 };
 
 /** Returns the target of right-click, or null if not found. */
-zkau._getParentByAttr = function (n, attr1, attr2) {
+zkau._parentByZKAttr = function (n, attr1, attr2) {
 	for (; n; n = n.parentNode) {
-		if (n.getAttribute) {
-			if (attr1 && n.getAttribute(attr1)) return n;
-			if (attr2 && n.getAttribute(attr2)) return n;
-		}
+		if (attr1 && getZKAttr(n, attr1)) return n;
+		if (attr2 && getZKAttr(n, attr2)) return n;
 	}
 	return null;
 };
@@ -1013,8 +1014,8 @@ zkau._getParentByAttr = function (n, attr1, attr2) {
 zkau._onDocKeydown = function (evt) {
 	if (!evt) evt = window.event;
 	var target = Event.element(evt);
-	var attrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys;
-	var keycode = evt.keyCode, zkcode; //zkcode used to search zk_ctkeys
+	var zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys;
+	var keycode = evt.keyCode, zkcode; //zkcode used to search z:ctkeys
 	switch (keycode) {
 	case 13: //ENTER
 		var tn = zk.tagName(target);
@@ -1028,9 +1029,9 @@ zkau._onDocKeydown = function (evt) {
 			return false; //eat
 		}
 		if (keycode == 13) {
-			attrSkip = "zk_skipOK"; evtnm = "onOK";
+			zkAttrSkip = "skipOK"; evtnm = "onOK";
 		} else {
-			attrSkip = "zk_skipCancel"; evtnm = "onCancel";
+			zkAttrSkip = "skipCancel"; evtnm = "onCancel";
 		}
 		break;
 	case 16: //Shift
@@ -1061,8 +1062,8 @@ zkau._onDocKeydown = function (evt) {
 
 	for (var n = target; n; n = n.parentNode) {
 		if (n.id && n.getAttribute) {
-			if (n.getAttribute("zk_" + evtnm) == "true"
-			&& (!zkcode || zkau._inCtkeys(evt, zkcode, n.getAttribute("zk_ctkeys")))) {
+			if (getZKAttr(n, evtnm) == "true"
+			&& (!zkcode || zkau._inCtkeys(evt, zkcode, getZKAttr(n, "ctkeys")))) {
 				var bSend = true;
 				if (zkau.currentFocus) {
 					var inp = zkau.currentFocus;
@@ -1084,7 +1085,7 @@ zkau._onDocKeydown = function (evt) {
 				return false;
 			}
 			if ("onCancel" == evtnm && zk.getCompType(n) == "Wnd") {
-				if (n.getAttribute("zk_closable") == "true") {
+				if (getZKAttr(n, "closable") == "true") {
 					zkau.close(n);
 					Event.stop(evt);
 					return false;
@@ -1094,7 +1095,7 @@ zkau._onDocKeydown = function (evt) {
 				}
 				break;
 			}
-			if (attrSkip && n.getAttribute(attrSkip) == "true")
+			if (zkAttrSkip && getZKAttr(n, zkAttrSkip) == "true")
 				break; //nothing to do
 		}
 	}
@@ -1245,7 +1246,7 @@ zkau.getByZid = function (n, zid) {
 /** Returns the space owner that n belongs to, or null if not found. */
 zkau.getIdOwner = function (n) {
 	for (; n; n = n.parentNode) {
-		if (n.getAttribute && n.getAttribute("zk_idsp"))
+		if (getZKAttr(n, "idsp"))
 			return n;
 	}
 	return null;
@@ -1255,14 +1256,14 @@ zkau.initzid = function (n, zid) {
 	o = o ? o.id: "zk_dksp";
 	var ary = zkau._idsp[o];
 	if (!ary) ary = zkau._idsp[o] = {};
-	if (!zid) zid = n.getAttribute("zid");
+	if (!zid) zid = getZKAttr(n, "zid");
 	ary[zid] = n.id;
 };
 zkau.cleanzid = function (n) {
 	var o = zkau.getIdOwner(n);
 	o = o ? o.id: "zk_dksp";
 	var ary = zkau._idsp[o];
-	if (ary) ary[n.getAttribute("zid")] = null;
+	if (ary) ary[getZKAttr(n, "zid")] = null;
 };
 /** Clean an ID space. */
 zkau.cleanidsp = function (n) {
@@ -1341,13 +1342,13 @@ zkau._sendDrop = function (dragged, dropped) {
 	zkau.send({uuid: dropped, cmd: "onDrop", data: [dragged]});
 };
 zkau._getDrop = function (n, pointer) {
-	var dragType = n.getAttribute("zk_drag");
+	var dragType = getZKAttr(n, "drag");
 	l_next:
 	for (var j = 0; j < zkau._drops.length; ++j) {
 		var e = zkau._drops[j];
 		if (e == n) continue; //dropping to itself not allowed
 
-		var dropTypes = e.getAttribute("zk_drop");
+		var dropTypes = getZKAttr(e, "drop");
 		if (dropTypes != "true") { //accept all
 			if (dragType == "true") continue; //anonymous drag type
 
@@ -1462,8 +1463,8 @@ action.slideDown = function (id, down) {
 	if (down == false) action.slideUp(id);
 	else {
 		var n = $e(id);
-		if (n && (!n.getAttribute || !n.getAttribute("zk_sliding"))) {
-			if (n.setAttribute) n.setAttribute("zk_sliding", "show");
+		if (n && !getZKAttr(n, "sliding")) {
+			setZKAttr(n, "sliding", "show");
 			Effect.SlideDown(n, {duration:0.4, afterFinish: action._afterDown});
 		}
 	}
@@ -1471,7 +1472,7 @@ action.slideDown = function (id, down) {
 action._afterDown = function (ef) {
 	var n = ef.element;
 	if (n) {
-		if (n.setAttribute) n.removeAttribute("zk_sliding");
+		rmZKAttr(n, "sliding");
 		zkau.onVisiAt(n);
 	}
 };
@@ -1483,16 +1484,15 @@ action.slideUp = function (id, up) {
 	if (up == false) action.slideDown(id);
 	else {
 		var n = $e(id);
-		if (n && (!n.getAttribute || !n.getAttribute("zk_sliding"))) {
-			if (n.setAttribute) n.setAttribute("zk_sliding", "hide");
+		if (n && !getZKAttr(n, "sliding")) {
+			setZKAttr(n, "sliding", "hide");
 			zkau.onHideAt(n); //callback first
 			Effect.SlideUp(n, {duration:0.4, afterFinish: action._afterUp});
 		}
 	}
 };
 action._afterUp = function (ef) {
-	var n = ef.element;
-	if (n && n.setAttribute) n.removeAttribute("zk_sliding");
+	rmZKAttr(ef.element, "sliding");
 };
 
 /*Float: used to be added to zkau.floats
@@ -1688,7 +1688,7 @@ zkau.cmd0 = { //no uuid at all
 };
 zkau.cmd1 = {
 	setAttr: function (uuid, cmp, dt1, dt2) {
-		if (dt1 == "zk_init" || dt1 == "zk_chchg") { //initialize
+		if (dt1 == "z:init" || dt1 == "z:chchg") { //initialize
 			//Note: cmp might be null because it might be removed
 			if (cmp) {
 				var type = zk.getCompType(cmp);
@@ -1699,7 +1699,7 @@ zkau.cmd1 = {
 						cmps.push(cmp);
 						zk.addInitCmps(cmps);
 					} else {
-						zk.eval(cmp, dt1 == "zk_init" ? "init": "childchg", type);
+						zk.eval(cmp, dt1 == "z:init" ? "init": "childchg", type);
 					}
 				}
 			}
@@ -1707,12 +1707,12 @@ zkau.cmd1 = {
 		}
 
 		var done = false;
-		if ("zk_drag" == dt1) {
-			if (!cmp.getAttribute("zk_drag")) zkau.initdrag(cmp);
+		if ("z:drag" == dt1) {
+			if (!getZKAttr(cmp, "drag")) zkau.initdrag(cmp);
 			zkau.setAttr(cmp, dt1, dt2);
 			done = true;
-		} else if ("zk_drop" == dt1) {
-			if (!cmp.getAttribute("zk_drop")) zkau.initdrop(cmp);
+		} else if ("z:drop" == dt1) {
+			if (!getZKAttr(cmp, "drop")) zkau.initdrop(cmp);
 			zkau.setAttr(cmp, dt1, dt2);
 			done = true;
 		} else if ("zid" == dt1) {
@@ -1732,11 +1732,11 @@ zkau.cmd1 = {
 	},
 	rmAttr: function (uuid, cmp, dt1) {
 		var done = false;
-		if ("zk_drag" == dt1) {
+		if ("z:drag" == dt1) {
 			zkau.cleandrag(cmp);
 			zkau.rmAttr(cmp, dt1);
 			done = true;
-		} else if ("zk_drop" == dt1) {
+		} else if ("z:drop" == dt1) {
 			zkau.cleandrop(cmp);
 			zkau.rmAttr(cmp, dt1);
 			done = true;
@@ -1785,7 +1785,7 @@ zkau.cmd1 = {
 		/* To add the first child properly, it checks as follows.
 		//1) a function called addFirstChild
 		2) uuid + "!cave" (as parent)
-		3) an attribute called zk_cave to hold id (as parent)
+		3) an attribute called z:cave to hold id (as parent)
 		4) uuid + "!child" (as next sibling)
 		5) uuid + "!real" (as parent)
 		 */
@@ -1794,7 +1794,7 @@ zkau.cmd1 = {
 
 		var n = $e(uuid + "!cave");
 		if (!n) {
-			n = cmp.getAttribute("zk_cave");
+			n = getZKAttr(cmp, "cave");
 			if (n) n = $e(n);
 		}
 		if (n) { //as last child of n

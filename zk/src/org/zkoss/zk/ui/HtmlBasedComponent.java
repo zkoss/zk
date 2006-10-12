@@ -223,7 +223,7 @@ implements Moveable, ZIndexed {
 
 		if (!Objects.equals(_draggable, draggable)) {
 			_draggable = draggable;
-			smartUpdate("zk_drag", _draggable);
+			smartUpdate("z:drag", _draggable);
 		}
 	}
 	/** Returns the identifier of a draggable type of objects, or "false"
@@ -257,7 +257,7 @@ implements Moveable, ZIndexed {
 
 		if (!Objects.equals(_droppable, droppable)) {
 			_droppable = droppable;
-			smartUpdate("zk_drop", _droppable);
+			smartUpdate("z:drop", _droppable);
 		}
 	}
 	/** Returns the identifier of a droppable type of objects, or "false"
@@ -323,8 +323,8 @@ implements Moveable, ZIndexed {
 		HTMLs.appendAttribute(sb, "class", getSclass());
 		HTMLs.appendAttribute(sb, "style", getRealStyle());
 		HTMLs.appendAttribute(sb, "title", getTooltiptext());
-		HTMLs.appendAttribute(sb, "zk_drag", _draggable);
-		HTMLs.appendAttribute(sb, "zk_drop", _droppable);
+		HTMLs.appendAttribute(sb, "z:drag", _draggable);
+		HTMLs.appendAttribute(sb, "z:drop", _droppable);
 		return sb.toString();
 	}
 	/** Returns the interior attributes for generating the inner HTML tag;
@@ -420,10 +420,10 @@ implements Moveable, ZIndexed {
 		return sb;
 	}
 	private static String getAttrOfEvent(String evtnm) {
-		return Events.ON_CLICK.equals(evtnm) ? "zk_lfclk":
-			Events.ON_RIGHT_CLICK.equals(evtnm) ? "zk_rtclk":
-			Events.ON_DOUBLE_CLICK.equals(evtnm) ? "zk_dbclk":
-				"zk_" + evtnm;
+		return Events.ON_CLICK.equals(evtnm) ? "z:lfclk":
+			Events.ON_RIGHT_CLICK.equals(evtnm) ? "z:rtclk":
+			Events.ON_DOUBLE_CLICK.equals(evtnm) ? "z:dbclk":
+				"z:" + evtnm;
 	}
 
 	//-- Component --//

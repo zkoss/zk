@@ -21,52 +21,61 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 //zk//
 function zk() {}
 
-if (!zk.build) {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-	zk.build = "2M"; //increase this if we want the browser to reload JavaScript
-	zk.mods = {}; //ZkFns depends on it
+zk.build = "2M"; //increase this if we want the browser to reload JavaScript
+zk.mods = {}; //ZkFns depends on it
 
-	zk.namespace = "http://www.zkoss.org/2005/zk";
+zk.namespace = "http://www.zkoss.org/2005/zk";
 
-	/** Browser info. */
-	zk.agent = navigator.userAgent.toLowerCase();
-	zk.safari = zk.agent.indexOf("safari") != -1;
-	zk.opera = zk.agent.indexOf("opera") != -1;
-	zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
-	zk.ie7 = zk.agent.indexOf("msie 7") != -1;
-	zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
-}
+/** Browser info. */
+zk.agent = navigator.userAgent.toLowerCase();
+zk.safari = zk.agent.indexOf("safari") != -1;
+zk.opera = zk.agent.indexOf("opera") != -1;
+zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
+zk.ie7 = zk.agent.indexOf("msie 7") != -1;
+zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
 
-/** Returns the version of the specified module name.
+/** Note: it is easy to cause problem with EMBED, if we use prototype's $() since
+ * it tried to extend the element.
  */
-zk.getBuild = function (nm) {
-	return zk.mods[nm] || zk.build;
+function $e(id) {
+    return typeof id == 'string' ? document.getElementById(id): id;
 };
 
 /** Returns the ZK attribute of the specified name.
  * Note: the name space of ZK attributes is zk.namespace
  */
-zk.getAttr = function (el, nm) {
+function getZKAttr(el, nm) {
 /* 20061012: Tom Yeh: in case that xmlns is not defined, we always use z:nm
 	if (el.getAttributeNS) return el.getAttributeNS(zk.namespace, nm);
 	else*/
-		return el.getAttribute("z:" + nm);
+	try {
+		return el && el.getAttribute ? el.getAttribute("z:" + nm): null;
+	} catch (e) {
+		return null; //IE6: failed if el is TABLE and attribute not there
+	}
 };
 /** Sets the ZK attribute of the specified name with the specified value.
  */
-zk.setAttr = function (el, nm, val) {
+function setZKAttr(el, nm, val) {
 /*	if (el.setAttributeNS)
 		el.setAttributeNS(zk.namespace, nm, val);
 	else*/
-		el.setAttribute("z:" + nm, val);
+		if (el && el.setAttribute) el.setAttribute("z:" + nm, val);
 };
-zk.rmAttr = function (el, nm) {
+function rmZKAttr(el, nm) {
 /*	if (el.removeAttributeNS)
 		el.removeAttributeNS(zk.namespace, nm);
 	else*/
-		el.removeAttribute("z:" + nm);
+		if (el && el.removeAttribute) el.removeAttribute("z:" + nm);
+};
+
+/** Returns the version of the specified module name.
+ */
+zk.getBuild = function (nm) {
+	return zk.mods[nm] || zk.build;
 };
 
 /** Adds a function for module initialization.
@@ -109,16 +118,14 @@ zk.load = function (nm, fn) {
 };
 /** Loads the required module for the specified component.
  * Note: it DOES NOT check any of its children.
- * @return true if zk_type is defined.
+ * @return true if z:type is defined.
  */
 zk.loadByType = function (n) {
-	if (n.getAttribute) {
-		var type = n.getAttribute("zk_type");
-		if (type) {
-			var j = type.lastIndexOf('.');
-			if (j > 0) zk.load(type.substring(0, j));
-			return true;
-		}
+	var type = getZKAttr(n, "type");
+	if (type) {
+		var j = type.lastIndexOf('.');
+		if (j > 0) zk.load(type.substring(0, j));
+		return true;
 	}
 	return false;
 }
@@ -153,7 +160,7 @@ zk._bld = function () {
 	} else {
 		setTimeout(function () {
 			if (zk.loading) {
-				var n = document.getElementById("zk_loadprog");
+				var n = $e("zk_loadprog");
 				if (!n) zk._newProgDlg("zk_loadprog",
 					'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)', 20, 20);
 			}
@@ -165,13 +172,13 @@ zk._ald = function (modnm) {
 	if (--zk.loading) {
 		zk._updCnt();
 	} else {
-		var n = document.getElementById("zk_loadprog");
+		var n = $e("zk_loadprog");
 		if (n) n.parentNode.removeChild(n);
 		if (zk._ready) zk._evalInit(); //zk._loadAndInit mihgt not finish
 	}
 };
 zk._updCnt = function () {
-	var n = document.getElementById("zk_loadcnt");
+	var n = $e("zk_loadcnt");
 	if (n) {
 		n.removeChild(n.firstChild);
 		n.appendChild(document.createTextNode(zk.loading));
@@ -227,10 +234,8 @@ zk._loadAndInit = function (inf) {
 			}
 		}
 
-		if (n.getAttribute
-		&& (zk.loadByType(n)
-		 || n.getAttribute("zk_drag") || n.getAttribute("zk_drop")
-		 || n.getAttribute("zid")))
+		if (zk.loadByType(n) || getZKAttr(n, "drag")
+		|| getZKAttr(n, "drop") || getZKAttr(n, "zid"))
 			inf.cmps.push(n);
 
 		//if nosibling, don't process its sibling (only process children)
@@ -259,9 +264,9 @@ zk._evalInit = function () {
 			var m = zk.eval(n, "init");
 			if (m) n = m; //it might be transformed
 
-			if (n.getAttribute("zid")) zkau.initzid(n);
-			if (n.getAttribute("zk_drag")) zkau.initdrag(n);
-			if (n.getAttribute("zk_drop")) zkau.initdrop(n);
+			if (getZKAttr(n, "zid")) zkau.initzid(n);
+			if (getZKAttr(n, "drag")) zkau.initdrag(n);
+			if (getZKAttr(n, "drop")) zkau.initdrop(n);
 
 			if (++j > 2000 || zk.loading) {
 				if (cmps.length) zk.addInitCmps(cmps);
@@ -302,26 +307,17 @@ zk.eval = function (n, fn, type, a0, a1, a2) {
 	return false;
 };
 
-/** Note: it is easy to cause problem with EMBED, if we use prototype's $() since
- * it tried to extend the element.
- */
-function $e(id) {
-    return typeof id == 'string' ? document.getElementById(id): id;
-};
-
-/** Check zk_type and invoke zkxxx.cleanup if declared.
+/** Check z:type and invoke zkxxx.cleanup if declared.
  * @param cufn an optional function. If specified,
  * cufn.apply(n, new Array(n)) is called
- * for each node that has the zk_type attribute, after zkxxx.cleanup
+ * for each node that has the z:type attribute, after zkxxx.cleanup
  * is called.
  */
 zk.cleanupAt = function (n, cufn) {
-	if (n.getAttribute) {
-		if (n.getAttribute("zid")) zkau.cleanzid(n);
-		if (n.getAttribute("zk_idsp")) zkau.cleanidsp(n);
-		if (n.getAttribute("zk_drag")) zkau.cleandrag(n);
-		if (n.getAttribute("zk_drop")) zkau.cleandrop(n);
-	}
+	if (getZKAttr(n, "zid")) zkau.cleanzid(n);
+	if (getZKAttr(n, "idsp")) zkau.cleanidsp(n);
+	if (getZKAttr(n, "drag")) zkau.cleandrag(n);
+	if (getZKAttr(n, "drop")) zkau.cleandrop(n);
 
 	var type = zk.getCompType(n);
 	if (type) {
@@ -387,12 +383,10 @@ zk.getUpdateURI = function (uri, ignoreSessId) {
 
 /** Returns the type of a node without module. */
 zk.getCompType = function (n) {
-	if (n.getAttribute) {
-		var type = n.getAttribute("zk_type");
-		if (type) {
-			var j = type.lastIndexOf('.');
-			return j >= 0 ? type.substring(j + 1): type;
-		}
+	var type = getZKAttr(n, "type");
+	if (type) {
+		var j = type.lastIndexOf('.');
+		return j >= 0 ? type.substring(j + 1): type;
 	}
 	return null;
 };
@@ -406,13 +400,13 @@ zk.progress = function (timeout) {
 };
 zk.progressDone = function() {
 	zk._progressing = false;
-	var n = document.getElementById("zk_prog");
+	var n = $e("zk_prog");
 	if (n) n.parentNode.removeChild(n);
 };
 /** Generates the progressing dialog. */
 zk._progress = function () {
 	if (zk._progressing) {
-		var n = document.getElementById("zk_prog");
+		var n = $e("zk_prog");
 		if (!n) {
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
@@ -438,7 +432,7 @@ zk._newProgDlg = function (id, msg, x, y) {
 	+msg+'</div>';
 
 	zk._setOuterHTML(n, html);
-	return document.getElementById(id);
+	return $e(id);
 };
 
 //-- utilities --//
@@ -527,7 +521,7 @@ zk.message = function (msg) {
 };
 zk._domsg = function () {
 	if (zk._msg) {
-		var console = document.getElementById("zk_msg");
+		var console = $e("zk_msg");
 		if (!console) {
 			console = document.createElement("DIV");
 			document.body.appendChild(console);
@@ -535,10 +529,10 @@ zk._domsg = function () {
  '<div style="border:1px solid #77c">'
 +'<table cellpadding="0" cellspacing="0" width="100%"><tr>'
 +'<td width="20pt"><button onclick="zk._msgclose(this)">close</button><br/>'
-+'<button onclick="document.getElementById(\'zk_msg\').value = \'\'">clear</button></td>'
++'<button onclick="$e(\'zk_msg\').value = \'\'">clear</button></td>'
 +'<td><textarea id="zk_msg" style="width:100%" rows="3"></textarea></td></tr></table></div>';
 			zk._setOuterHTML(console, html);
-			console = document.getElementById("zk_msg");
+			console = $e("zk_msg");
 		}
 		console.value = console.value + zk._msg + '\n';
 		zk._msg = null;
@@ -569,7 +563,7 @@ zk.error = function (msg) {
 +'<td style="border:1px inset">'+zk.encodeXML(msg, true) //Bug 1463668: security
 +'</td></tr></table></div>';
 	zk._setOuterHTML(box, html);
-	box = document.getElementById(id); //we have to retrieve back
+	box = $e(id); //we have to retrieve back
 
 	try {
 		new Draggable(box, {
@@ -600,7 +594,7 @@ if (!zk._modules) {
 	if (zk.ie && !zk.https()) {
 		//IE consider the following <script> insecure, so skip is https
 		document.write('<script id="_zie_load" defer src="javascript:void(0)"><\/script>');
-		var e = document.getElementById("_zie_load");
+		var e = $e("_zie_load");
 		e.onreadystatechange = function() {
 			if ("complete" == this.readyState) { //don't check loaded!
 		        if (myload) myload(); // call the onload handler
