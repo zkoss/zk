@@ -21,7 +21,7 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.ext.ZidRequired;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Popup extends XulElement {
+public class Popup extends XulElement implements ZidRequired {
 	public Popup() {
 		super.setVisible(false);
 		if (!(this instanceof Menupopup)) setSclass("ctxpopup");
@@ -46,33 +46,15 @@ public class Popup extends XulElement {
 	public boolean setVisible(boolean visible) {
 		throw new UnsupportedOperationException("You cannot make it visible manually");
 	}
-	public void setId(String id) {
-		if (zidRequired()) {
-			final String oldid = getId();
-			if (!Objects.equals(id, oldid)) {
-				super.setId(id);
-				smartUpdate("z:zid", id);
-			}
-		} else {
-			super.setId(id);
-		}
-	}
 	public String getOuterAttrs() {
 	//Note: don't generate z:type here because Menupopup's z:type diff
-
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-
-		appendAsapAttr(sb, Events.ON_OPEN);
-
-		if (zidRequired()) {
-			final String id = getId();
-	 		if (!ComponentsCtrl.isAutoId(id))
-				HTMLs.appendAttribute(sb, "z:zid", id);
-		}
-		return sb.toString();
+		final StringBuffer sb = appendAsapAttr(null, Events.ON_OPEN);
+		final String attrs = super.getOuterAttrs();
+		return sb != null ? sb.append(attrs).toString(): attrs;
 	}
-	private boolean zidRequired() {
+
+	//ZidRequired//
+	public boolean isZidRequired() {
 		return !(getParent() instanceof Menu);
 	}
 }

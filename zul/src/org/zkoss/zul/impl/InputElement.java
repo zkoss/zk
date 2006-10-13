@@ -156,12 +156,9 @@ implements Inputable, Errorable, Constrainted {
 	 * <p>It invokes {@link #coerceToString} to convert the stored value
 	 * into a string.
 	 *
-	 * <p>It cannot be overriden. Rather, override {@link #checkUserError}
-	 * or {@link #coerceToString}.
-	 *
 	 * @exception WrongValueException if user entered a wrong value
 	 */
-	public final String getText() throws WrongValueException {
+	public String getText() throws WrongValueException {
 		checkUserError();
 		return coerceToString(_value);
 	}
