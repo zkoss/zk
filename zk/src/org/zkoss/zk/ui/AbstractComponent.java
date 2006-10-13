@@ -42,6 +42,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.Viewable;
 import org.zkoss.zk.ui.ext.Transparent;
+import org.zkoss.zk.ui.ext.ZidRequired;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -534,6 +535,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_id = id;
 			}
 			addToIdSpaces(this);
+
+			if ((this instanceof ZidRequired) && ((ZidRequired)this).isZidRequired())
+				smartUpdate("z:zid", _id);
 		}
 	}
 	private static boolean isTransparent(Component comp) {

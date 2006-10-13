@@ -37,6 +37,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Returns javascript to handle the specified responses.
 		</description>
 	</function>
+	<function>
+		<name>outHtmlComponentInfo</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outHtmlComponentInfo(org.zkoss.zk.ui.Component, boolean, boolean);
+		</function-signature>
+		<description><![CDATA[
+	Return a special HTML tag (<z:com>) to represent a component.
+
+	@param init whether this component requires to execute init and/or cleanup
+	at the client
+	@param visible whether this component requires to execute codes at the client
+	when it becomes visible or invsible
+		]]></description>
+	</function>
 
 	<function>
 		<name>outLangJavaScripts</name>

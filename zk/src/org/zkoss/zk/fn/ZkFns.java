@@ -45,10 +45,12 @@ import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.ZidRequired;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
@@ -410,4 +412,33 @@ public class ZkFns {
 	}
 	private static final CacheMap _datejs =
 		new CacheMap().setLifetime(24*60*60*1000);
+
+	/** Return a special HTML tag (&lt;z:com&gt;) to represent a component.
+	 *
+	 * @param init whether this component requires to execute init and/or cleanup
+	 * at the client
+	 * @param visible whether this component requires to execute codes at the client
+	 * when it becomes visible or invsible
+	 */
+	public static final
+	String outHtmlComponentInfo(Component comp, boolean init, boolean visible) {
+		if (!init) {
+			if (comp instanceof HtmlBasedComponent) {
+				final HtmlBasedComponent hbc = (HtmlBasedComponent)comp;
+				init = !"false".equals(hbc.getDraggable())
+					|| !"false".equals(hbc.getDroppable());
+			}
+			if (!init) {
+				init = (comp instanceof ZidRequired) && ((ZidRequired)comp).isZidRequired();
+
+				if (!init && !visible)
+					return null;
+			}
+		}
+		final StringBuffer sb = new StringBuffer(40).append("<z:com i=\"")
+			.append(comp.getUuid()).append("\" f=\"");
+		if (init) sb.append('i');
+		if (visible) sb.append('v');
+		return sb.append("\"/>").toString();
+	}
 }

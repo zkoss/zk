@@ -30,6 +30,8 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.Moveable;
 import org.zkoss.zk.ui.ext.ZIndexed;
 import org.zkoss.zk.ui.ext.Transparent;
+import org.zkoss.zk.ui.ext.ZidRequired;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.AuFocus;
 
 /**
@@ -325,6 +327,12 @@ implements Moveable, ZIndexed {
 		HTMLs.appendAttribute(sb, "title", getTooltiptext());
 		HTMLs.appendAttribute(sb, "z:drag", _draggable);
 		HTMLs.appendAttribute(sb, "z:drop", _droppable);
+
+		if ((this instanceof ZidRequired) && ((ZidRequired)this).isZidRequired()) {
+			final String id = getId();
+	 		if (!ComponentsCtrl.isAutoId(id))
+				HTMLs.appendAttribute(sb, "z:zid", id);
+		}
 		return sb.toString();
 	}
 	/** Returns the interior attributes for generating the inner HTML tag;
