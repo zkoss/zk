@@ -7,7 +7,8 @@ ZK 2.2.0 Freshly
    + Messages translated to Brazilian Portuguese. Thank Airton Carrara for his contribution.
 
 * Bugs:
-  + 1572055, 1573456, 1572514, 1572286, 1562358, 1571408, 1569901, 1574606.
+  + 1572055, 1573456, 1572514, 1572286, 1562358, 1571408, 1569901, 1574606,
+    1576386.
 
 * Upgrade Notes
 
