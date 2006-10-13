@@ -1,9 +1,10 @@
 	--------
 ZK 2.2.0 Freshly
 * Features:
-  1567586, 1572187, 1575649.
+  1567586, 1572187, 1575649, 1573501.
   + Richlet is supported. By implementing a richlet, developers can write an
     application without using ZUML pages.
+   + Messages translated to Brazilian Portuguese. Thank Airton Carrara for his contribution.
 
 * Bugs:
   + 1572055, 1573456, 1572514, 1572286, 1562358, 1571408, 1569901, 1574606.
