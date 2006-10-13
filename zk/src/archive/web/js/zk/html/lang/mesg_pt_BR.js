@@ -9,7 +9,7 @@
 		October 5, 2006 by Airton Carrara
 }}IS_NOTE
 
-Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
