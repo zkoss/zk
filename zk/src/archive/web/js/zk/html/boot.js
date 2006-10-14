@@ -285,7 +285,7 @@ zk._loadAndInit = function (inf) {
 	//We cannot use recursive algorithm because it might take too much time
 	//to execute and browser will alert users for aborting!
 	for (var j = 0; inf.stk.length;) {
-		if (++j > 2000) {
+		if (++j > 3000) {
 			setTimeout(function() {zk._loadAndInit(inf);}, 0);
 			return; //let browser breath
 		}
@@ -346,7 +346,7 @@ zk._evalInit = function () {
 		if (getZKAttr(n, "drag")) zkau.initdrag(n);
 		if (getZKAttr(n, "drop")) zkau.initdrop(n);
 
-		if (++j > 2000 || zk.loading) {
+		if (++j > 3000 || zk.loading) {
 			if (!zk.loading)
 				setTimeout(zk._evalInit, 0); //let browser breath
 			return;
