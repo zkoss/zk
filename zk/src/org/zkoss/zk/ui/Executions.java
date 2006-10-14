@@ -91,14 +91,14 @@ public class Executions {
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @see #createComponents(PageDefinition, Component, Map)
 	 */
 	public static final Component createComponents(
-	String uri, Component parent, Map params) {
-		return getCurrent().createComponents(uri, parent, params);
+	String uri, Component parent, Map arg) {
+		return getCurrent().createComponents(uri, parent, arg);
 	}
 	/** Creates components based on the specified page definition.
 	 * Shortcut to {@link Execution#createComponents(PageDefinition, Component, Map)}.
@@ -107,15 +107,15 @@ public class Executions {
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @return the first component being created.
 	 * @see #createComponents(String, Component, Map)
 	 */
 	public static final Component createComponents(PageDefinition pagedef,
-	Component parent, Map params) {
-		return getCurrent().createComponents(pagedef, parent, params);
+	Component parent, Map arg) {
+		return getCurrent().createComponents(pagedef, parent, arg);
 	}
 
 	/** Creates components from the raw content specified by a string.
@@ -130,7 +130,7 @@ public class Executions {
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @see #createComponents(PageDefinition, Component, Map)
@@ -139,8 +139,8 @@ public class Executions {
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
 	public static final Component createComponentsDirectly(String content,
-	String extension, Component parent, Map params) {
-		return getCurrent().createComponentsDirectly(content, extension, parent, params);
+	String extension, Component parent, Map arg) {
+		return getCurrent().createComponentsDirectly(content, extension, parent, arg);
 	}
 	/** Creates components from the raw content specified by a DOM tree.
 	 * Shortcut to {@link Execution#createComponentsDirectly(Document, String, Component, Map)}.
@@ -153,7 +153,7 @@ public class Executions {
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @see #createComponents(PageDefinition, Component, Map)
@@ -162,8 +162,8 @@ public class Executions {
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
 	public static final Component createComponentsDirectly(Document content,
-	String extension, Component parent, Map params) {
-		return getCurrent().createComponentsDirectly(content, extension, parent, params);
+	String extension, Component parent, Map arg) {
+		return getCurrent().createComponentsDirectly(content, extension, parent, arg);
 	}
 	/** Creates components from the raw content read from the specified reader.
 	 * Shortcut to {@link Execution#createComponentsDirectly(Reader, String, Component, Map)}.
@@ -181,7 +181,7 @@ public class Executions {
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @see #createComponents(PageDefinition, Component, Map)
@@ -190,9 +190,9 @@ public class Executions {
 	 * @see #createComponentsDirectly(String, String, Component, Map)
 	 */
 	public static Component createComponentsDirectly(Reader reader,
-	String extension, Component parent, Map params)
+	String extension, Component parent, Map arg)
 	throws IOException {
-		return getCurrent().createComponentsDirectly(reader, extension, parent, params);
+		return getCurrent().createComponentsDirectly(reader, extension, parent, arg);
 	}
 
 	/** Sends a temporary redirect response to the client using the specified

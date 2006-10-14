@@ -333,6 +333,9 @@ implements Moveable, ZIndexed {
 	 		if (!ComponentsCtrl.isAutoId(id))
 				HTMLs.appendAttribute(sb, "z:zid", id);
 		}
+		if (this instanceof IdSpace) {
+			sb.append(" z:idsp=\"true\"");
+		}
 		return sb.toString();
 	}
 	/** Returns the interior attributes for generating the inner HTML tag;

@@ -85,11 +85,11 @@ zk.getBuild = function (nm) {
 zk.addModuleInit = function (fn) {
 	zk._initmods.push(fn);
 };
-/** Adds an array of components that must be initialized after
+/** Adds a component that must be initialized after
  * all modules are loaded and initialized.
  */
-zk.addInitCmps = function (cmps) {
-	zk._initcmps.push(cmps);
+zk.addInitCmp = function (cmp) {
+	zk._initcmps.push(cmp);
 };
 /** Adds a function that will be invoked after the document is loaded.
  */
@@ -190,9 +190,9 @@ zk._updCnt = function () {
 zk.initAt = function (node) {
 	if (!node) return;
 
-	var cmps = new Array(), stk = new Array();
+	var stk = new Array();
 	stk.push(node);
-	zk._loadAndInit({cmps: cmps, stk: stk, nosibling: true});
+	zk._loadAndInit({stk: stk, nosibling: true});
 };
 
 /** Loads all required module and initializes components. */
@@ -236,7 +236,7 @@ zk._loadAndInit = function (inf) {
 
 		if (zk.loadByType(n) || getZKAttr(n, "drag")
 		|| getZKAttr(n, "drop") || getZKAttr(n, "zid"))
-			inf.cmps.push(n);
+			zk._initcmps.push(n);
 
 		//if nosibling, don't process its sibling (only process children)
 		if (inf.nosibling) inf.nosibling = false;
@@ -244,7 +244,6 @@ zk._loadAndInit = function (inf) {
 		if (n.firstChild) inf.stk.push(n.firstChild);
 	}
 
-	zk.addInitCmps(inf.cmps);
 	zk._evalInit();
 	zk._ready = true;
 };
@@ -256,24 +255,19 @@ zk._evalInit = function () {
 
 	//Note: if loading, zk._doLoad will execute zk._evalInit after finish
 	for (var j = 0; zk._initcmps.length && !zk.loading;) {
-		var cmps = zk._initcmps.pop(); //reverse-order
-		for (;;) {
-			var n = cmps.pop(); //reverse-order: child first
-			if (!n) break;
+		var n = zk._initcmps.pop(); //reverse-order
 
-			var m = zk.eval(n, "init");
-			if (m) n = m; //it might be transformed
+		var m = zk.eval(n, "init");
+		if (m) n = m; //it might be transformed
 
-			if (getZKAttr(n, "zid")) zkau.initzid(n);
-			if (getZKAttr(n, "drag")) zkau.initdrag(n);
-			if (getZKAttr(n, "drop")) zkau.initdrop(n);
+		if (getZKAttr(n, "zid")) zkau.initzid(n);
+		if (getZKAttr(n, "drag")) zkau.initdrag(n);
+		if (getZKAttr(n, "drop")) zkau.initdrop(n);
 
-			if (++j > 2000 || zk.loading) {
-				if (cmps.length) zk.addInitCmps(cmps);
-				if (!zk.loading)
-					setTimeout(zk._evalInit, 0); //let browser breath
-				return;
-			}
+		if (++j > 2000 || zk.loading) {
+			if (!zk.loading)
+				setTimeout(zk._evalInit, 0); //let browser breath
+			return;
 		}
 	}
 
@@ -296,24 +290,24 @@ zk._evalInit = function () {
 zk.eval = function (n, fn, type, a0, a1, a2) {
 	if (!type) type = zk.getCompType(n);
 	if (type) {
-		var cnm = "zk" + type;
-		fn = cnm + "." + fn;
-		try {
-			return eval("window."+cnm+"&&"+fn+"&&"+fn+"(n,a0,a1,a2)"); //to avoid being optimized, use short name
-		} catch (ex) {
-			zk.error("Failed to invoke "+fn+"\n"+ex.message);
+		var o = window["zk" + type];
+		if (o) {
+			var f = o[fn];
+			if (f) {
+				try {
+					return f(n,a0,a1,a2);
+				} catch (ex) {
+					zk.error("Failed to invoke zk"+type+"."+fn+"\n"+ex.message);
+				}
+			}
 		}
 	}
 	return false;
 };
 
 /** Check z:type and invoke zkxxx.cleanup if declared.
- * @param cufn an optional function. If specified,
- * cufn.apply(n, new Array(n)) is called
- * for each node that has the z:type attribute, after zkxxx.cleanup
- * is called.
  */
-zk.cleanupAt = function (n, cufn) {
+zk.cleanupAt = function (n) {
 	if (getZKAttr(n, "zid")) zkau.cleanzid(n);
 	if (getZKAttr(n, "idsp")) zkau.cleanidsp(n);
 	if (getZKAttr(n, "drag")) zkau.cleandrag(n);
@@ -322,11 +316,10 @@ zk.cleanupAt = function (n, cufn) {
 	var type = zk.getCompType(n);
 	if (type) {
 		zk.eval(n, "cleanup", type);
-		if (cufn) cufn.apply(n, new Array(n)); //cleanup meta later
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
-		zk.cleanupAt(n, cufn); //recursive for child component
+		zk.cleanupAt(n); //recursive for child component
 };
 
 /** Loads the specified style sheet (CSS).

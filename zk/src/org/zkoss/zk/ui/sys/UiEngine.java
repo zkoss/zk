@@ -159,13 +159,13 @@ public interface UiEngine {
 	 * parent's page is used).
 	 * @param parent the parent component, or null if no parent compoent.
 	 * If both parent and page are specified, page is ignored.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @return the first component being created.
 	 */
 	public Component createComponents(Execution exec,
-	PageDefinition pagedef, Page page, Component parent, Map params);
+	PageDefinition pagedef, Page page, Component parent, Map arg);
 
 	/** Sends a temporary redirect response to the client using the specified
 	 * redirect location URL.

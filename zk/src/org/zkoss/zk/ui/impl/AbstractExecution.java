@@ -183,35 +183,35 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public Component createComponents(String uri, Component parent,
-	Map params) {
+	Map arg) {
 		//if (log.debugable()) log.debug("Creating from "+uri);
 		return getUiEngine().createComponents(
-			this, getPageDefinition(uri), _curpage, parent, params);
+			this, getPageDefinition(uri), _curpage, parent, arg);
 	}
 	public Component createComponents(PageDefinition pagedef,
-	Component parent, Map params) {
+	Component parent, Map arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef cannot be null");
 		return getUiEngine().createComponents(
-			this, pagedef, _curpage, parent, params);
+			this, pagedef, _curpage, parent, arg);
 	}
 	public Component createComponentsDirectly(String content, String ext,
-	Component parent, Map params) {
+	Component parent, Map arg) {
 		return getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext), _curpage,
-			parent, params);
+			parent, arg);
 	}
 	public Component createComponentsDirectly(Document content, String ext,
-	Component parent, Map params) {
+	Component parent, Map arg) {
 		return getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext), _curpage,
-			parent, params);
+			parent, arg);
 	}
 	public Component createComponentsDirectly(Reader reader, String ext,
-	Component parent, Map params) throws IOException {
+	Component parent, Map arg) throws IOException {
 		return getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(reader, ext), _curpage,
-			parent, params);
+			parent, arg);
 	}
 
 	public void sendRedirect(String uri) {

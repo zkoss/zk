@@ -328,6 +328,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Returns the mold URI based on {@link #getMold}
 	 * and the molds defined in the component definition
 	 * ({@link ComponentDefinition}).
+	 *
+	 * <p>Used usually for component implementation.
 	 */
 	protected String getMoldURI() {
 		return _mill.getMoldURI(this, getMold());
@@ -335,7 +337,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Returns the initial parameter in int, or 0 if not found.
 	 * An initial parameter is a parameter defined with the
 	 * component's definition {@link ComponentDefinition}.
+	 *
 	 * <p>It evaluates before returning, if it is an EL expression.
+	 *
+	 * <p>Used usually for component implementation.
 	 */
 	protected int getIntInitParam(String name) {
 		final Integer v;
@@ -352,7 +357,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Returns the initial parameter, or null if not found.
 	 * An initial parameter is a parameter defined with the
 	 * component's definition {@link ComponentDefinition}.
+	 *
 	 * <p>It evaluates before returning, if it is an EL expression.
+	 *
+	 * <p>Used usually for component implementation.
 	 */
 	protected String getInitParam(String name) {
 		return Objects.toString(_mill.getParameter(this, name));
@@ -362,6 +370,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * invoke {@link Viewable#getView} to response.
 	 *
 	 * <p>Note: to use this method, {@link Viewable} must be implemented.
+	 *
+	 * <p>Used usually for component implementation.
 	 */
 	protected String getViewURI(String pathInfo) {
 		if (!(this instanceof Viewable))
@@ -1043,6 +1053,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 	/** Default: false.
+	 *
 	 * <p>Derived class might override it to return true for
 	 * components that are put in a different branch.
 	 * @see ComponentCtrl#inDifferentBranch

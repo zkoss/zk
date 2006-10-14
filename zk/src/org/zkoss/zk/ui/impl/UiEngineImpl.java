@@ -394,7 +394,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	public Component createComponents(Execution exec,
-	PageDefinition pagedef, Page page, Component parent, Map params) {
+	PageDefinition pagedef, Page page, Component parent, Map arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef");
 		if (parent != null)
@@ -410,7 +410,7 @@ public class UiEngineImpl implements UiEngine {
 		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
 		execCtrl.setCurrentPage(page);
 		execCtrl.setCurrentPageDefinition(pagedef);
-		exec.pushArg(params != null ? params: Collections.EMPTY_MAP);
+		exec.pushArg(arg != null ? arg: Collections.EMPTY_MAP);
 
 		//Note: we add taglib, stylesheets and var-resolvers to the page
 		//it might cause name pollution but we got no choice since they

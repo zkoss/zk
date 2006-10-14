@@ -348,7 +348,7 @@ public interface Execution extends Evaluator {
 	 * @see #createComponents(String, Component, Map)
 	 */
 	public Component createComponents(PageDefinition pagedef,
-	Component parent, Map params);
+	Component parent, Map arg);
 	/** Creates components from a page file specified by an URI.
 	 *
 	 * <p>It loads the page definition from the specified URI (by
@@ -359,7 +359,7 @@ public interface Execution extends Evaluator {
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @see #createComponents(PageDefinition, Component, Map)
@@ -368,7 +368,7 @@ public interface Execution extends Evaluator {
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
 	public Component createComponents(String uri, Component parent,
-	Map params);
+	Map arg);
 	/** Creates components from the raw content specified by a string.
 	 *
 	 * <p>The raw content is parsed to a page defintion by use of
@@ -384,7 +384,7 @@ public interface Execution extends Evaluator {
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @see #createComponents(PageDefinition, Component, Map)
@@ -393,7 +393,7 @@ public interface Execution extends Evaluator {
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
 	public Component createComponentsDirectly(String content, String extension,
-	Component parent, Map params);
+	Component parent, Map arg);
 	/** Creates components from the raw content specified by a DOM tree.
 	 *
 	 * <p>The raw content is parsed to a page defintion by use of
@@ -409,7 +409,7 @@ public interface Execution extends Evaluator {
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @see #createComponents(PageDefinition, Component, Map)
@@ -418,7 +418,7 @@ public interface Execution extends Evaluator {
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
 	public Component createComponentsDirectly(Document content, String extension,
-	Component parent, Map params);
+	Component parent, Map arg);
 	/** Creates components from the raw content read from the specified reader.
 	 *
 	 * <p>The raw content is loaded and parsed to a page defintion by use of
@@ -434,7 +434,7 @@ public interface Execution extends Evaluator {
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @see #createComponents(PageDefinition, Component, Map)
@@ -443,7 +443,7 @@ public interface Execution extends Evaluator {
 	 * @see #createComponentsDirectly(String, String, Component, Map)
 	 */
 	public Component createComponentsDirectly(Reader reader, String extension,
-	Component parent, Map params) throws IOException;
+	Component parent, Map arg) throws IOException;
 
 	/** Sends a temporary redirect response to the client using the specified
 	 * redirect location URL.
@@ -474,12 +474,12 @@ public interface Execution extends Evaluator {
 	 */
 	public void sendRedirect(String uri, String target);
 
-	/** Returns the params if {@link #pushArg} is called recently,
+	/** Returns the parameters (aka., arg) if {@link #pushArg} is called recently,
 	 * or an empty map if not available.
 	 *
-	 * <p>The use of this params (aka., arg) is application dependent.
+	 * <p>The use of parameters is application dependent.
 	 * ZK only provides the way to store ({@link #pushArg} and to
-	 * restore {@link #popArg}. And, let this params being accessible in
+	 * restore {@link #popArg}. And, let the parameters being accessible in
 	 * EL by referring it as the arg variable.
 	 *
 	 * <p>Currently, {@link #createComponents(String,Component,Map)}
@@ -493,12 +493,12 @@ public interface Execution extends Evaluator {
 	 * the map for its event listeners.
 	 */
 	public Map getArg();
-	/** Pushes the params that EL could refer it by the arg variable.
+	/** Pushes the parameters (aka., arg) that EL could refer it by the arg variable.
 	 * Remember to call {@link #popArg} in the finally clause.
 	 * @see #getArg
 	 */
 	public void pushArg(Map arg);
-	/** Pops the params that is pushed by {@link #pushArg}.
+	/** Pops the parameters (aka., arg) that is pushed by {@link #pushArg}.
 	 * <p>It never throws an exception.
 	 * @see #getArg
 	 */

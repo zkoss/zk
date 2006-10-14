@@ -451,10 +451,11 @@ zkau._insertAndInitBeforeEnd = function (n, html) {
 	else zkau._initChildren(n);
 };
 /** Invoke zk.cleanupAt for all children. */
+/* because inner not supported any more
 zkau._cleanupChildren = function (n) {
 	for (n = n.firstChild; n; n = n.nextSibling)
-		zk.cleanupAt(n, zkau.cleanupMeta);
-};
+		zk.cleanupAt(n);
+};*/
 
 /** Invoke zkau.onVisiAt for all descendant. */
 zkau.onVisiChildren = function (n) {
@@ -1695,9 +1696,7 @@ zkau.cmd1 = {
 				if (type) {
 					zk.loadByType(cmp);
 					if (zk.loading) {
-						var cmps = new Array();
-						cmps.push(cmp);
-						zk.addInitCmps(cmps);
+						zk.addInitCmp(cmp);
 					} else {
 						zk.eval(cmp, dt1 == "z:init" ? "init": "childchg", type);
 					}
@@ -1753,7 +1752,7 @@ zkau.cmd1 = {
 	},
 	outer: function (uuid, cmp, dt1) {
 		zk.eval(cmp, "beforeOuter");
-		zk.cleanupAt(cmp, zkau.cleanupMeta);
+		zk.cleanupAt(cmp);
 		zk.setOuterHTML(cmp, dt1);
 		cmp = $e(uuid);
 		zk.initAt(cmp);
@@ -1817,7 +1816,7 @@ zkau.cmd1 = {
 		//NOTE: it is possible the server asking removing a non-exist cmp
 		//so keep silent if not found
 		if (cmp) {
-			zk.cleanupAt(cmp, zkau.cleanupMeta);
+			zk.cleanupAt(cmp);
 			cmp = $childExterior(cmp);
 			Element.remove(cmp);
 		}
