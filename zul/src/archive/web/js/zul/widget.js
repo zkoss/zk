@@ -167,6 +167,15 @@ zkDcbox.validate = function (cmp) {
 };
 
 ////
+//doublebox//
+function zkDbbox() {}
+
+zkDbbox.init = zkTxbox.init;
+zkDbbox.validate = function (cmp) {
+	return zkVld.onlyNum(cmp.id);
+};
+
+////
 // button //
 function zkButton() {}
 zkButton.init = function (cmp) {

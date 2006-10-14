@@ -52,7 +52,7 @@ public class Intbox extends FormatInputElement {
 		final Object val = getRawValue();
 		return val != null ? ((Integer)val).intValue(): 0;
 	}
-	/** Sets the value (in Date).
+	/** Sets the value (in Integer).
 	 * @exception WrongValueException if value is wrong
 	 */
 	public void setValue(Integer value) throws WrongValueException {
