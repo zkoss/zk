@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 function zkRaw() {} //ZHTML components
 
 zkRaw.init = function (cmp) {
-	Event.observe(cmp, "change", function () {zkRaw.onchange(cmp);});
+	zk.listen(cmp, "change", function () {zkRaw.onchange(cmp);});
 };
 
 zkRaw.onchange = function (cmp) {
