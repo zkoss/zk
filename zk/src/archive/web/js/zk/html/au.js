@@ -34,71 +34,18 @@ if (!zkau._reqs) {
 	zkau._onsends = new Array(); //JS called before zkau._sendNow
 
 	zk.addInit(function () {
-		Event.observe(document, "keydown", zkau._onDocKeydown);
-		Event.observe(document, "mousedown", zkau._onDocMousedown);
-		Event.observe(document, "mouseover", zkau._onDocMouseover);
-		Event.observe(document, "mouseout", zkau._onDocMouseout);
+		zk.listen(document, "keydown", zkau._onDocKeydown);
+		zk.listen(document, "mousedown", zkau._onDocMousedown);
+		zk.listen(document, "mouseover", zkau._onDocMouseover);
+		zk.listen(document, "mouseout", zkau._onDocMouseout);
 
-		Event.observe(document, "contextmenu", zkau._onDocCtxMnu);
-		Event.observe(document, "click", zkau._onDocLClick);
-		Event.observe(document, "dblclick", zkau._onDocDClick);
+		zk.listen(document, "contextmenu", zkau._onDocCtxMnu);
+		zk.listen(document, "click", zkau._onDocLClick);
+		zk.listen(document, "dblclick", zkau._onDocDClick);
 
 		zkau._oldDocUnload = window.onunload;
-		window.onunload = zkau._onDocUnload; //unable to use Event.observe
+		window.onunload = zkau._onDocUnload; //unable to use zk.listen
 	});
-}
-
-/** A control might be enclosed by other tag while event is sent from
- * the control directly, so... */
-function $uuid(n) {
-	if (typeof n != 'string') {
-		for (; n; n = n.parentNode)
-			if (n.id) {
-				n = n.id;
-				break;
-			}
-	}
-	if (!n) return "";
-	var j = n.lastIndexOf('!');
-	return j > 0 ? n.substring(0, j): n;
-}
-/** Returns the real element (ends with !real).
- * If a component's attributes are located in the inner tag, i.e.,
- * you have to surround it with span or other tag, you have to place
- * uuid!real on the inner tag
- *
- * Note: !chdextr is put by the parent as the exterior of its children,
- * while !real is by the component itself
- */
-function $real(cmp) {
-	if (!cmp) return null;
-	var real = $e(cmp.id + "!real");
-	return real ? real: cmp;
-}
-/** Returns the enclosing element (not ends with !real).
- * If not found, cmp is returned.
- */
-function $outer(cmp) {
-	var id = $uuid(cmp);
-	if (id) {
-		var n = $e(id);
-		if (n) return n;
-	}
-	return cmp;
-}
-/** Returns the peer (xxx!real => xxx, xxx => xxx!real), or null if n/a.
- */
-/*function $peer(id) {
-	return id ? $e(
-		id.endsWith("!real") ? id.substring(0, id.length-5): id+"!real"): null;
-}*/
-/** Returns the exterior of the specified component (ends with !chdextr).
- * Some components, hbox nad vbox, need to add exterior to child compoents,
- * and the exterior is named with "uuid!chdextr".
- */
-function $childExterior(cmp) {
-	var n = $e(cmp.id + "!chdextr");
-	return n ? n: cmp;
 }
 
 /** Handles onclick for button-type.
@@ -110,7 +57,7 @@ zkau.onclick = function (evt) {
 	}
 
 	if (!evt) evt = window.event;
-	target = Event.element(evt);
+	var target = Event.element(evt);
 
 	//it might be clicked on the inside element
 	for (;; target = target.parentNode)
@@ -435,7 +382,7 @@ zkau._initChildren = function (n) {
 /** Invoke inserHTMLBeforeEnd and then zk.initAt.
  */
 zkau._insertAndInitBeforeEnd = function (n, html) {
-	if (zk.tagName(n) == "TABLE" && zk.tagOfHtml(html) == "TR") {
+	if ($tag(n) == "TABLE" && zk.tagOfHtml(html) == "TR") {
 		if (!n.tBodies || !n.tBodies.length) {
 			var m = document.createElement("TBODY");
 			n.appendChild(m);
@@ -492,7 +439,7 @@ zkau.onHideAt = function (n) {
 		}
 	}
 
-	var type = zk.getCompType(n);
+	var type = $type(n);
 	if (type) {
 		if (zkau.valid) {
 			zkau.valid.closeErrbox(n.id);
@@ -526,7 +473,7 @@ zkau.setAttr = function (cmp, name, value) {
 		//we have to update defaultChecked because click a radio
 		//might cause another to unchecked, but browser doesn't
 		//maintain defaultChecked
-	} else if ("selectAll" == name && zk.tagName(cmp) == "SELECT") {
+	} else if ("selectAll" == name && $tag(cmp) == "SELECT") {
 		value = "true" == value;
 		for (var j = 0; j < cmp.options.length; ++j)
 			cmp.options[j].selected = value;
@@ -826,7 +773,7 @@ zkau._onDocLClick = function (evt) {
 			if (ctx) {
 				ctx = zkau.getByZid(cmp, ctx);
 				if (ctx) {
-					var type = zk.getCompType(ctx);
+					var type = $type(ctx);
 					if (type) {
 						zkau.closeFloats(ctx);
 
@@ -910,7 +857,7 @@ zkau._onDocCtxMnu = function (evt) {
 		if (ctx) {
 			ctx = zkau.getByZid(cmp, ctx);
 			if (ctx) {
-				var type = zk.getCompType(ctx);
+				var type = $type(ctx);
 				if (type) {
 					zkau.closeFloats(ctx);
 
@@ -1019,7 +966,7 @@ zkau._onDocKeydown = function (evt) {
 	var keycode = evt.keyCode, zkcode; //zkcode used to search z:ctkeys
 	switch (keycode) {
 	case 13: //ENTER
-		var tn = zk.tagName(target);
+		var tn = $tag(target);
 		if (tn == "TEXTAREA" || tn == "BUTTON"
 		|| (tn == "INPUT" && target.type.toLowerCase() == "button"))
 			return true; //don't change button's behavior (Bug 1556836)
@@ -1068,7 +1015,7 @@ zkau._onDocKeydown = function (evt) {
 				var bSend = true;
 				if (zkau.currentFocus) {
 					var inp = zkau.currentFocus;
-					switch (zk.tagName(inp)) {
+					switch ($tag(inp)) {
 					case "INPUT":
 						var type = inp.type.toLowerCase();
 						if (type != "text" && type != "password")
@@ -1085,7 +1032,7 @@ zkau._onDocKeydown = function (evt) {
 				Event.stop(evt);
 				return false;
 			}
-			if ("onCancel" == evtnm && zk.getCompType(n) == "Wnd") {
+			if ("onCancel" == evtnm && $type(n) == "Wnd") {
 				if (getZKAttr(n, "closable") == "true") {
 					zkau.close(n);
 					Event.stop(evt);
@@ -1207,7 +1154,7 @@ zkau.setMeta = function (cmp, info) {
 /** Returns the info by specified any child component and the type.
  */
 zkau.getMetaByType = function (el, type) {
-	el = zkau.getParentByType(el, type);
+	el = $parentByType(el, type);
 	return el != null ? zkau.getMeta(el): null;
 };
 
@@ -1218,15 +1165,6 @@ zkau.cleanupMeta = function (cmp) {
 		if (meta.cleanup) meta.cleanup();
 		zkau.setMeta(cmp, null);
 	}
-};
-
-/** Returns the parent node with the specified type.
- */
-zkau.getParentByType = function (el, type) {
-	for (; el; el = el.parentNode)
-		if (zk.getCompType(el) == type)
-			return el;
-	return null;
 };
 
 ////
@@ -1282,7 +1220,7 @@ zkau.initdrag = function (n) {
 	});
 	if (zk.ie) {
 		//disable onselect
-		var tn = zk.tagName(n);
+		var tn = $tag(n);
 		var nosel;
 		if (tn == "INPUT") {
 			var t = n.type.toLowerCase();
@@ -1379,7 +1317,7 @@ zkau._ghostdrag = function (dg, ghosting) {
 	var special;
 	if (zk.gecko || zk.safari) {
 		if (ghosting) {
-			var tn = zk.tagName(dg.element);
+			var tn = $tag(dg.element);
 			zk.zk_special = special = "TR" == tn || "TD" == tn || "TH" == tn;
 		} else {
 			special = zk.zk_special;
@@ -1692,7 +1630,7 @@ zkau.cmd1 = {
 		if (dt1 == "z:init" || dt1 == "z:chchg") { //initialize
 			//Note: cmp might be null because it might be removed
 			if (cmp) {
-				var type = zk.getCompType(cmp);
+				var type = $type(cmp);
 				if (type) {
 					zk.loadByType(cmp);
 					if (zk.loading) {

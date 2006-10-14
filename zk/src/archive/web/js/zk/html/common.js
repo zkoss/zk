@@ -82,10 +82,32 @@ Array.prototype.contains = function (o) {
 //
 // More zk utilities (defined also in boot.js) //
 
+/** Listen an event.
+ * Why not to use prototype's Event.observe? Performance.
+ */
+zk.listen = function (el, evtnm, fn) {
+	if (el.addEventListener)
+		el.addEventListener(evtnm, fn, false);
+	else /*if (el.attachEvent)*/
+		el.attachEvent('on' + evtnm, fn);
+};
+/** Un-listen an event.
+ */
+zk.unlisten = function (el, evtnm, fn) {
+	if (el.removeEventListener)
+		el.removeEventListener(evtnm, fn, false);
+	else if (el.detachEvent) {
+		try {
+			el.detachEvent('on' + evtnm, fn);
+		} catch (e) {
+		}
+	}
+};
+
 /** Return el.offsetWidth, which solving Safari's bug. */
 zk.offsetWidth = function (el) {
 	if (!el) return 0;
-	if (!zk.safari || zk.tagName(el) != "TR") return el.offsetWidth;
+	if (!zk.safari || $tag(el) != "TR") return el.offsetWidth;
 
 	var wd = 0;
 	for (var j = el.cells.length; --j >= 0;)
@@ -95,7 +117,7 @@ zk.offsetWidth = function (el) {
 /** Return el.offsetHeight, which solving Safari's bug. */
 zk.offsetHeight = function (el) {
 	if (!el) return 0;
-	if (!zk.safari || zk.tagName(el) != "TR") return el.offsetHeight;
+	if (!zk.safari || $tag(el) != "TR") return el.offsetHeight;
 
 	var hgh = 0;
 	for (var j = el.cells.length; --j >= 0;) {
@@ -107,14 +129,14 @@ zk.offsetHeight = function (el) {
 /** Returns el.offsetTop, which solving Safari's bug. */
 zk.offsetTop = function (el) {
 	if (!el) return 0;
-	if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
+	if (zk.safari && $tag(el) === "TR" && el.cells.length)
 		el = el.cells[0];
 	return el.offsetTop;
 };
 /** Returns el.offsetLeft, which solving Safari's bug. */
 zk.offsetLeft = function (el) {
 	if (!el) return 0;
-	if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
+	if (zk.safari && $tag(el) === "TR" && el.cells.length)
 		el = el.cells[0];
 	return el.offsetLeft;
 };
@@ -122,7 +144,7 @@ if (zk.safari) {
 	//fix safari's bug
 	zk._oldposofs = Position.positionedOffset;
 	Position.positionedOffset = function (el) {
-		if (zk.tagName(el) === "TR" && el.cells.length)
+		if ($tag(el) === "TR" && el.cells.length)
 			el = el.cells[0];
 		return zk._oldposofs(el);
 	};
@@ -131,7 +153,7 @@ if (zk.gecko || zk.safari) {
 	zk._oldcumofs = Position.cumulativeOffset;
 	Position.cumulativeOffset = function (el) {
 		//fix safari's bug: TR has no offsetXxx
-		if (zk.safari && zk.tagName(el) === "TR" && el.cells.length)
+		if (zk.safari && $tag(el) === "TR" && el.cells.length)
 			el = el.cells[0];
 
 		//fix gecko and safari's bug: if not visible before, offset is wrong
@@ -308,7 +330,7 @@ zk.focusDown = function (el) {
 zk._focusDown = function (el, match, checkA) {
 	if (!el) return false;
 	if (el.focus) {
-		var tn = zk.tagName(el);
+		var tn = $tag(el);
 		if (match.contains(tn)) {
 			try {el.focus();} catch (e) {}
 			//IE throws exception when focus in some cases
@@ -366,7 +388,7 @@ zk._doTwice = function (script, timeout) {
  */
 zk.insertHTMLBefore = function (el, html) {
 	if (zk.ie) {
-		switch (zk.tagName(el)) { //exclude TABLE
+		switch ($tag(el)) { //exclude TABLE
 		case "TD": case "TH": case "TR": case "CAPTION":
 		case "TBODY": case "THEAD": case "TFOOT":
 			var n = document.createElement(zk.tagOfHtml(html));
@@ -381,7 +403,7 @@ zk.insertHTMLBefore = function (el, html) {
  */
 zk.insertHTMLBeforeEnd = function (el, html) {
 	if (zk.ie) {
-		var tn = zk.tagName(el);
+		var tn = $tag(el);
 		switch (tn) {
 		case "TABLE": case "TR":
 		case "TBODY": case "THEAD": case "TFOOT":
@@ -410,7 +432,7 @@ zk.insertHTMLBeforeEnd = function (el, html) {
  */
 zk.insertHTMLAfter = function (el, html) {
 	if (zk.ie) {
-		switch (zk.tagName(el)) { //exclude TABLE
+		switch ($tag(el)) { //exclude TABLE
 		case "TD": case "TH": case "TR": case "CAPTION":
 		case "TBODY": case "THEAD": case "TFOOT":
 			var sib = el.nextSibling;
@@ -441,7 +463,7 @@ zk.setInnerHTML = function (el, html) {
 zk.setOuterHTML = function (el, html) {
 	//NOTE: Safari doesn't support __defineSetter__
 	if (zk.ie) {
-		var tn = zk.tagName(el);
+		var tn = $tag(el);
 		if (tn == "TD" || tn == "TH" || tn == "TABLE" || tn == "TR"
 		|| tn == "CAPTION" || tn == "TBODY" || tn == "THEAD"
 		|| tn == "TFOOT") {
@@ -460,21 +482,21 @@ zk.setOuterHTML = function (el, html) {
 /** Returns the next sibling with the specified tag name, or null if not found.
  */
 zk.nextSibling = function (el, tagName) {
-	while (el && (el = el.nextSibling) != null && zk.tagName(el) != tagName)
+	while (el && (el = el.nextSibling) != null && $tag(el) != tagName)
 		;
 	return el;
 };
 /** Returns the next sibling with the specified tag name, or null if not found.
  */
 zk.previousSibling = function (el, tagName) {
-	while (el && (el = el.previousSibling) != null && zk.tagName(el) != tagName)
+	while (el && (el = el.previousSibling) != null && $tag(el) != tagName)
 		;
 	return el;
 };
 /** Returns the parent with the specified tag name, or null if not found.
  */
 zk.parentNode = function (el, tagName) {
-	while (el && (el = el.parentNode) != null && zk.tagName(el) != tagName)
+	while (el && (el = el.parentNode) != null && $tag(el) != tagName)
 		;
 	return el;
 };
@@ -482,7 +504,7 @@ zk.parentNode = function (el, tagName) {
 /** Returns the first child of the specified node. */
 zk.firstChild = function (el, tagName, descendant) {
 	for (var n = el.firstChild; n; n = n.nextSibling)
-		if (zk.tagName(n) == tagName)
+		if ($tag(n) == tagName)
 			return n;
 
 	if (descendant) {
@@ -571,7 +593,7 @@ if (zk.ie) {
 		j = head.skipWhitespaces(j);
 		k = head.nextWhitespace(j);
 		var tag = head.substring(j, k).toUpperCase();
-		if (zk.tagName(el) != tag) {
+		if ($tag(el) != tag) {
 			alert("Unsupported replace: different tags: old="+el.tagName+", new="+tag);
 			return;
 		}
@@ -631,7 +653,7 @@ if (zk.ie) {
 	 */
 	zk._agtIeReplaceInnerHTML = function (el, html) { //patch for IE
 		//replace inner
-		var tn = zk.tagName(el);
+		var tn = $tag(el);
 		if (tn == "TR" || tn == "TABLE" || tn == "TBODY" || tn == "THEAD"
 		|| tn == "TFOOT") { //ignore TD/TH/CAPTION
 			while (el.firstChild)
@@ -849,7 +871,7 @@ zk.disableAll = function (parent) {
 				continue;
 
 			var what;
-			var tn = zk.tagName(el);
+			var tn = $tag(el);
 			if (tn == "IFRAME" || tn == "APPLET" || (zk.ie && tn == "SELECT")) {
 	//Note: we don't check isOverlapped because mask always covers it
 				what = el.style.visibility;
@@ -895,7 +917,7 @@ zk.restoreDisabled = function (n) {
 
 			//Workaround IE: Bug 1498895
 			if (bug1498895) {
-				var tn = zk.tagName(el);
+				var tn = $tag(el);
 				if ((tn == "INPUT" && (el.type == "text" || el.type == "password"))
 				||  tn == "TEXTAREA"){
 				//focus only visible (to prevent scroll)

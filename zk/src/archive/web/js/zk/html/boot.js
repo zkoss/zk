@@ -43,6 +43,88 @@ zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
 function $e(id) {
     return typeof id == 'string' ? document.getElementById(id): id;
 };
+/** A control might be enclosed by other tag while event is sent from
+ * the control directly, so... */
+function $uuid(n) {
+	if (typeof n != 'string') {
+		for (; n; n = n.parentNode)
+			if (n.id) {
+				n = n.id;
+				break;
+			}
+	}
+	if (!n) return "";
+	var j = n.lastIndexOf('!');
+	return j > 0 ? n.substring(0, j): n;
+}
+/** Returns the real element (ends with !real).
+ * If a component's attributes are located in the inner tag, i.e.,
+ * you have to surround it with span or other tag, you have to place
+ * uuid!real on the inner tag
+ *
+ * Note: !chdextr is put by the parent as the exterior of its children,
+ * while !real is by the component itself
+ */
+function $real(cmp) {
+	if (!cmp) return null;
+	var real = $e(cmp.id + "!real");
+	return real ? real: cmp;
+}
+/** Returns the enclosing element (not ends with !real).
+ * If not found, cmp is returned.
+ */
+function $outer(cmp) {
+	var id = $uuid(cmp);
+	if (id) {
+		var n = $e(id);
+		if (n) return n;
+	}
+	return cmp;
+}
+/** Returns the type of a node without module. */
+function $type(n) {
+	var type = getZKAttr(n, "type");
+	if (type) {
+		var j = type.lastIndexOf('.');
+		return j >= 0 ? type.substring(j + 1): type;
+	}
+	return null;
+};
+/** Returns the peer (xxx!real => xxx, xxx => xxx!real), or null if n/a.
+ */
+/*function $peer(id) {
+	return id ? $e(
+		id.endsWith("!real") ? id.substring(0, id.length-5): id+"!real"): null;
+}*/
+/** Returns the exterior of the specified component (ends with !chdextr).
+ * Some components, hbox nad vbox, need to add exterior to child compoents,
+ * and the exterior is named with "uuid!chdextr".
+ */
+function $childExterior(cmp) {
+	var n = $e(cmp.id + "!chdextr");
+	return n ? n: cmp;
+}
+
+/** Returns the nearest parent element, including el itself, with the specified type.
+ */
+function $parentByType(el, type) {
+	for (; el; el = el.parentNode)
+		if ($type(el) == type)
+			return el;
+	return null;
+};
+/** Returns the tag name in the upper case. */
+function $tag(el) {
+	return el && el.tagName ? el.tagName.toUpperCase(): "";
+};
+/** Returns the nearest parent element, including el itself, with the specified type.
+ */
+function $parentByTag(el, tagName) {
+	for (; el; el = el.parentNode)
+		if ($tag(el) == tagName)
+			return el;
+	return null;
+};
 
 /** Returns the ZK attribute of the specified name.
  * Note: the name space of ZK attributes is zk.namespace
@@ -213,7 +295,7 @@ zk._loadAndInit = function (inf) {
 	//FF remembers the previous value that user entered when reload
 	//We have to reset them because the server doesn't know any of them
 		if (zk.gecko) {
-			switch (zk.tagName(n)) {
+			switch ($tag(n)) {
 			case "INPUT":
 				if (n.type == "checkbox" || n.type == "radio") {
 					if (n.checked != n.defaultChecked)
@@ -282,13 +364,13 @@ zk._evalInit = function () {
  *
  * @param n the component
  * @param fn the method name, e.g., "init"
- * @param type the component type. If omitted, zk.getCompType(n)
+ * @param type the component type. If omitted, $type(n)
  * is assumed.
  * @param a0 the first of extra arguments; null to omitted
  * @return the result
  */
 zk.eval = function (n, fn, type, a0, a1, a2) {
-	if (!type) type = zk.getCompType(n);
+	if (!type) type = $type(n);
 	if (type) {
 		var o = window["zk" + type];
 		if (o) {
@@ -313,7 +395,7 @@ zk.cleanupAt = function (n) {
 	if (getZKAttr(n, "drag")) zkau.cleandrag(n);
 	if (getZKAttr(n, "drop")) zkau.cleandrop(n);
 
-	var type = zk.getCompType(n);
+	var type = $type(n);
 	if (type) {
 		zk.eval(n, "cleanup", type);
 	}
@@ -372,16 +454,6 @@ zk.getUpdateURI = function (uri, ignoreSessId) {
 	if (k >= 0 && (j < 0 || k < j)) j = k;
 	uri = zk_action.substring(0, j) + uri;
 	return ignoreSessId ? uri: uri + zk_action.substring(j);
-};
-
-/** Returns the type of a node without module. */
-zk.getCompType = function (n) {
-	var type = getZKAttr(n, "type");
-	if (type) {
-		var j = type.lastIndexOf('.');
-		return j >= 0 ? type.substring(j + 1): type;
-	}
-	return null;
 };
 
 //-- progress --//
@@ -467,11 +539,6 @@ zk._setOuterHTML = function (n, html) {
 	}
 };
 
-/** Returns the tag name in the upper case. */
-zk.tagName = function (el) {
-	return el && el.tagName ? el.tagName.toUpperCase(): "";
-};
-
 /** Pause milliseconds. */
 zk.pause = function (millis) {
 	if (millis) {
@@ -533,7 +600,7 @@ zk._domsg = function () {
 };
 zk._msgclose = function (n) {
 	while ((n = n.parentNode) != null)
-		if (zk.tagName(n) == "DIV") {
+		if ($tag(n) == "DIV") {
 			n.parentNode.removeChild(n);
 			return;
 		}
