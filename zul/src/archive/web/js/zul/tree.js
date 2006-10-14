@@ -128,12 +128,12 @@ zkTree.init = function (cmp) {
 
 		var bdy = $e(cmp.id + "!body");
 		if (bdy)
-			Event.observe(bdy, "keydown",
-				function (evt) {return zkTree.bodyonkeydown(evt);});
+			Event.observe(bdy, "keydown", zkTree.bodyonkeydown);
 
 		new zk.Tree(cmp);
 	}
 };
+zkTree.cleanup = zkau.cleanupMeta;
 zkTree.childchg = zkTree.init;
 
 /** Called when a tree becomes visible because of its parent. */
@@ -188,8 +188,8 @@ zkTree.ontoggle = function (evt) {
 
 function zkTrow() {} //Treerow
 zkTrow.init = function (cmp) {
-	Event.observe(cmp, "click", function (evt) {zkTree.onclick(evt);});
-	Event.observe(cmp, "keydown", function (evt) {return zkTree.onkeydown(evt);});
+	Event.observe(cmp, "click", zkTree.onclick);
+	Event.observe(cmp, "keydown", zkTree.onkeydown);
 	Event.observe(cmp, "mouseover", function () {return zkSel.onover(cmp);});
 	Event.observe(cmp, "mouseout", function () {return zkSel.onout(cmp);});
 };
@@ -202,5 +202,5 @@ zkTcfc.init = function (cmp) {
 
 function zkTcop() {} //the image as the open button
 zkTcop.init = function (cmp) {
-	Event.observe(cmp, "click", function (evt) {zkTree.ontoggle(evt);});
+	Event.observe(cmp, "click", zkTree.ontoggle);
 };

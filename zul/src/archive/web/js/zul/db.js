@@ -335,8 +335,7 @@ function zkDtbox() {}
 zkDtbox.init = function (cmp) {
 	var real = $real(cmp);
 	zkTxbox.init(real);
-	Event.observe(real, zk.ie ? "keydown": "keypress",
-		function (evt) {return zkDtbox.onkey(evt);});
+	Event.observe(real, zk.ie ? "keydown": "keypress", zkDtbox.onkey);
 		//IE: use keydown. otherwise, it causes the window to scroll
 
 	var btn = $e(cmp.id + "!btn");

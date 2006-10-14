@@ -1032,12 +1032,12 @@ zkLibox.init = function (cmp) {
 	else {
 		var bd = $e(cmp.id + "!body");
 		if (bd)
-			Event.observe(bd, "keydown",
-				function (evt) {return zkLibox.bodyonkeydown(evt);});
+			Event.observe(bd, "keydown", zkLibox.bodyonkeydown);
 
 		new zk.Selectable(cmp);
 	}
 };
+zkLibox.cleanup = zkau.cleanupMeta;
 zkLibox.childchg = zkLibox.init;
 
 /** Called when a listbox becomes visible because of its parent. */
@@ -1048,8 +1048,8 @@ zkLibox.onVisi = function (cmp) {
 
 function zkLit() {} //listitem
 zkLit.init = function (cmp) {
-	Event.observe(cmp, "click", function (evt) {zkLibox.onclick(evt);});
-	Event.observe(cmp, "keydown", function (evt) {return zkLibox.onkeydown(evt);});
+	Event.observe(cmp, "click", zkLibox.onclick);
+	Event.observe(cmp, "keydown", zkLibox.onkeydown);
 	Event.observe(cmp, "mouseover", function () {return zkSel.onover(cmp);});
 	Event.observe(cmp, "mouseout", function () {return zkSel.onout(cmp);});
 };
@@ -1068,7 +1068,7 @@ zk.addModuleInit(function () {
 // listbox mold=select //
 function zkLisel() {}
 zkLisel.init = function (cmp) {
-	Event.observe(cmp, "change", function (evt) {zkLisel.onchange(cmp);});
+	Event.observe(cmp, "change", function () {zkLisel.onchange(cmp);});
 	Event.observe(cmp, "focus", function () {zkau.onfocus(cmp);});
 	Event.observe(cmp, "blur", function() {zkau.onblur(cmp);});
 };

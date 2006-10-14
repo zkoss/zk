@@ -179,7 +179,7 @@ zkDbbox.validate = function (cmp) {
 // button //
 function zkButton() {}
 zkButton.init = function (cmp) {
-	Event.observe(cmp, "click", function (evt) {zkau.onclick(evt);});
+	Event.observe(cmp, "click", zkau.onclick);
 	Event.observe(cmp, "focus", function () {zkau.onfocus(cmp);});
 	Event.observe(cmp, "blur", function() {zkau.onblur(cmp);});
 };

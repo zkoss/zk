@@ -16,4 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
---%><div id="${requestScope.arg.self.uuid}"${requestScope.arg.self.outerAttrs}${requestScope.arg.self.innerAttrs}>&nbsp;</div>
+--%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
+<c:set var="self" value="${requestScope.arg.self}"/>
+<div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>&nbsp;</div>

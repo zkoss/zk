@@ -158,7 +158,7 @@ zkTab.fixWidth = function (uuid) {
 };
 
 zkTab.init = function (cmp) {
-	Event.observe(cmp, "click", function (evt) {zkTab.onclick(evt);});
+	Event.observe(cmp, "click", zkTab.onclick);
 
 	var anc = $e(cmp.id + "!a");
 	if (anc) {

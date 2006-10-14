@@ -16,7 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
---%>
-<iframe id="${requestScope.arg.self.uuid}" frameborder="0"${requestScope.arg.self.outerAttrs}${requestScope.arg.self.innerAttrs}>
+--%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
+<c:set var="self" value="${requestScope.arg.self}"/>
+<iframe id="${self.uuid}" frameborder="0"${self.outerAttrs}${self.innerAttrs}>
 Your browser doesn't support inline frames.
 </iframe>

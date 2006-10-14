@@ -18,8 +18,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Locale;
-
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.mesg.MZul;
@@ -36,7 +34,11 @@ public class Doublebox extends FormatInputElement {
 	}
 	public Doublebox(double value) throws WrongValueException {
 		this();
-		setValue(new Double(value));
+		setValue(value);
+	}
+	public Doublebox(Double value) throws WrongValueException {
+		this();
+		setValue(value);
 	}
 
 	/** Returns the value (in Double), might be null unless
@@ -59,6 +61,12 @@ public class Doublebox extends FormatInputElement {
 		validate(value);
 		setRawValue(value);
 	}
+	/** Sets the value (in double)
+	 * @exception WrongValueException if value is wrong
+	 */
+	public void setValue(double value) throws WrongValueException {
+		setValue(new Double(value));
+	}
 
 	//-- super --//
 	protected Object coerceFromString(String value) throws WrongValueException {
@@ -80,6 +88,6 @@ public class Doublebox extends FormatInputElement {
 		}
 	}
 	protected String coerceToString(Object value) {
-		return formatNumber(value, "0.######");
+		return formatNumber(value, "0.##########");
 	}
 }

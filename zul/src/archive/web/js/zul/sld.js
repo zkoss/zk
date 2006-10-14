@@ -148,6 +148,7 @@ zkSld.init = function (cmp) {
 	if (meta) meta.init();
 	else new zk.Slider(cmp);
 };
+zkSld.cleanup = zkau.cleanupMeta;
 
 /** Starts dragging. */
 zkSld._startDrag = function (button) {

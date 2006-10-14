@@ -146,9 +146,9 @@ public class Listcell extends LabelImageElement {
 				.append('"');
 			if (item.isSelected())
 				sb.append(" checked=\"checked\"");
-			sb.append(" id=\"").append(item.getUuid()).append("!cm\"")
-				.append(" z:type=\"Lcfc\"").append("/>");
-			return sb.toString();
+
+			return sb.append(" id=\"").append(item.getUuid())
+				.append("!cm\" z:type=\"Lcfc\"/>").toString();
 		} else {
 			//To make the listbox's height more correct, we have to generate &nbsp;
 			//for empty cell. Otherwise, IE will make the height too small
@@ -166,11 +166,8 @@ public class Listcell extends LabelImageElement {
 		if (listbox != null && !listbox.isCheckmark()
 		&& item.getChildren().get(0) == this
 		&& isFocusRequired(listbox, item)) {
-			final StringBuffer sb = new StringBuffer(64)
-				.append("<a href=\"javascript:;\" id=\"")
-				.append(item.getUuid()).append("!sel\"")
-				.append(" z:type=\"Lcfc\"").append("> </a>");
-			return sb.toString();
+			return "<a href=\"javascript:;\" id=\"" + item.getUuid()
+				+ "!sel\" z:type=\"Lcfc\"> </a>";
 		} else {
 			return null;
 		}

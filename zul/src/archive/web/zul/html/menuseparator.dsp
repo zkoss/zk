@@ -16,4 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
---%><tr id="${requestScope.arg.self.uuid}" z:type="Menusp"${requestScope.arg.self.outerAttrs}${requestScope.arg.self.innerAttrs}><td colspan="3"><hr/></td></tr>
+--%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
+<c:set var="self" value="${requestScope.arg.self}"/>
+<tr id="${self.uuid}" z:type="Menusp"${self.outerAttrs}${self.innerAttrs}>
+	<td colspan="3"><hr/></td>
+</tr>

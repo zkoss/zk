@@ -5,8 +5,6 @@ window.dsp
 	Purpose:
 		
 	Description:
-		z:idsp:
-			An ID space (au.js)
 		z:autoz:
 			Automatically adjust z-index onmousedown (au.js)
 	History:
@@ -22,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" z:type="zul.widget.Wnd" z:idsp="true" z:autoz="true"${self.outerAttrs}${self.innerAttrs}>
+<div id="${self.uuid}" z:type="zul.widget.Wnd" z:autoz="true"${self.outerAttrs}${self.innerAttrs}>
 <c:if test="${!empty self.caption or !empty self.title}">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <c:choose>

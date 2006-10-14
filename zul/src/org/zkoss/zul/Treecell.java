@@ -132,10 +132,10 @@ public class Treecell extends LabelImageElement {
 					.append('"');
 				if (item.isSelected())
 					sb.append(" checked=\"checked\"");
-				sb.append(" id=\"")
-					.append(getParent().getUuid()).append("!cm\"")
-					.append(" z:type=\"Tcfc\"").append("/>");
-					//NOTE: use Treerow's uuid! NOT Treeitem's!
+
+				//NOTE: use Treerow's uuid! NOT Treeitem's!
+				sb.append(" id=\"").append(getParent().getUuid())
+					.append("!cm\" z:type=\"Tcfc\"/>");
 			}
 
 			final Treeitem[] pitems = getTreeitems(item);
@@ -173,12 +173,9 @@ public class Treecell extends LabelImageElement {
 		final Tree tree = getTree();
 		if (tree != null && !tree.isCheckmark() && isFirstColumn()
 		&& item.isFocusRequired()) {
-			final StringBuffer sb = new StringBuffer(64)
-				.append("<a href=\"javascript:;\" id=\"")
-				.append(getParent().getUuid()).append("!sel\"")
-				.append(" z:type=\"Tcfc\"").append("> </a>");
-					//NOTE: use Treerow's uuid! NOT Treeitem's!
-			return sb.toString();
+			//NOTE: use Treerow's uuid! NOT Treeitem's!
+			return "<a href=\"javascript:;\" id=\"" + getParent().getUuid()
+				+ "!sel\" z:type=\"Tcfc\">  </a>";
 		} else { 
 			return null;
 		}
@@ -236,9 +233,8 @@ public class Treecell extends LabelImageElement {
 		if (button) {
 			final Treeitem item = getTreeitem();
 			if (item != null) {
-				sb.append(" z:type=\"Tcop\"");
-				HTMLs.appendAttribute(sb,
-					"id", item.getTreerow().getUuid() + "!open");
+				sb.append(" z:type=\"Tcop\" id=\"")
+					.append(item.getTreerow().getUuid()).append("!open\"");
 			}
 
 			//HTMLs.appendAttribute(sb, "title", title);
