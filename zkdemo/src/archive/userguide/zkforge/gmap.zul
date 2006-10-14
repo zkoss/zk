@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+gmap.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat Oct 14 10:54:31     2006, Created by henrichen@potix.com
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox width="100%">
+		<html>
+			<attribute name="content"><![CDATA[
+	<h4>Demo of Google Maps</h4>
+	<p><a href="http://maps.google.com">Google Maps</a> is a popular maps service developed by Google.</p>
+	<p>In this demo, user can enters the new center(latitude and longitude) of the maps	and the maps would 
+	move to show  the new location. User can also drag the maps around to a new location and see the 
+	current center of the maps.</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.ReloadButton"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="tryView" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.TryMeButton"/></caption>
+			<textbox id="codeView" use="org.zkoss.zkdemo.CodeView" class="code" rows="10" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="Google Maps">
+	<zscript>
+		String sn = Executions.getCurrent().getServerName();
+		int sp = Executions.getCurrent().getServerPort();
+		String gkey;
+		if (sn.indexOf("potix") &gt;= 0) { //www.potix.com
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTT6-Op-9nAQgn7qnDG0QjE8aldaBRU1BQK2ADNWCt1BR2yg4ghOM6YIA";
+		} else if (sn.indexOf("zkoss") &gt;= 0) { //www.zkoss.org
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
+		} else if (sn.indexOf("localhost") &gt;= 0) { //localhost
+			if (sp == 80) //port 80
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRUITTZ-rzsyEVih16Hn3ApyUpSkA";
+			else if (sp == 8080) //port 8080
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTwM0brOpm-All5BF6PoaKBxRWWERSynObNOWSyMNmLGAMZAO1WkDUubA";
+			else
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTT6-Op-9nAQgn7qnDG0QjE8aldaBRU1BQK2ADNWCt1BR2yg4ghOM6YIA";
+		} else if (sn.indexOf("10.1.") &gt;=0) { //internal network
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxSaCJ3Eu2_Jgal0EfuIMOhRQnBKwxRaMAWlPyqbUS4CrFjdIToEv3Nu4w";
+		}	
+	</zscript>
+	<vbox>
+	<gmap id="mymap" width="500px" height="300px" showSmallCtrl="true" key="&#36;{gkey}">
+		<attribute name="onMapMove">
+			import java.math.BigDecimal;
+			mylat.setValue(self.getLat());
+			mylng.setValue(self.getLng());
+		</attribute>
+		<attribute name="onMapZoom">
+			myzoom.setValue(self.getZoom());
+		</attribute>
+	</gmap>
+	<grid><rows>
+		<row>Latitude: <doublebox id="mylat" value="&#36;{mymap.lat}" onChange="mymap.panTo(self.doubleValue(), mymap.getLng())"/></row>
+		<row>Longitude: <doublebox id="mylng" value="&#36;{mymap.lng}" onChange="mymap.panTo(mymap.getLat(), self.doubleValue())"/></row>
+		<row>Zoom Level: <intbox id="myzoom" value="&#36;{mymap.zoom}" onChange="mymap.setZoom(self.getValue())"/></row>
+	</rows></grid>
+	</vbox>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+</window>
