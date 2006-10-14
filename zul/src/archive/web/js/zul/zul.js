@@ -94,8 +94,8 @@ zul.doModal = function (cmp) {
 
 	zkau._modals.push(cmp.id);
 	if (nModals == 0) {
-		Event.observe(window, "resize", zul.doMoveMask);
-		Event.observe(window, "scroll", zul.doMoveMask);
+		zk.listen(window, "resize", zul.doMoveMask);
+		zk.listen(window, "scroll", zul.doMoveMask);
 	}
 
 	zkau.floatWnd(cmp, null, zkau.onWndMove);
@@ -120,8 +120,8 @@ zul.endModal = function (uuid) {
 	zkau._modals.remove(uuid);
 	for (;;) {
 		if (zkau._modals.length == 0) {
-			Event.stopObserving(window," resize", zul.doMoveMask);
-			Event.stopObserving(window, "scroll", zul.doMoveMask);
+			zk.unlisten(window," resize", zul.doMoveMask);
+			zk.unlisten(window, "scroll", zul.doMoveMask);
 			window.onscroll = null;
 			zk.restoreDisabled();
 			break;
@@ -168,7 +168,7 @@ zul.positionMask = function (mask) {
 function zulSHdr() {} //listheader
 zulSHdr.init = function (cmp) {
 	zulSHdr._show(cmp);
-	Event.observe(cmp, "click", function (evt) {zulSHdr.onclick(evt, cmp);});
+	zk.listen(cmp, "click", function (evt) {zulSHdr.onclick(evt, cmp);});
 };
 zulSHdr.onclick = function (evt, cmp) {
 	if (zulSHdr._sortable(cmp) && zkau.insamepos(evt))

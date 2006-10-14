@@ -23,22 +23,22 @@ function zkCmbox() {}
 zkCmbox.init = function (cmp) {
 	var inp = $real(cmp);
 	zkTxbox.init(inp);
-	Event.observe(inp, zk.ie ? "keydown": "keypress", zkCmbox.onkey);
+	zk.listen(inp, zk.ie ? "keydown": "keypress", zkCmbox.onkey);
 		//IE: use keydown. otherwise, it causes the window to scroll
-	Event.observe(inp, "click", function () {if (inp.readOnly) zkCmbox.onbutton(cmp);});
+	zk.listen(inp, "click", function () {if (inp.readOnly) zkCmbox.onbutton(cmp);});
 		//To mimic SELECT, it drops down if readOnly
 
 	var btn = $e(cmp.id + "!btn");
-	if (btn) Event.observe(btn, "click", function () {zkCmbox.onbutton(cmp);});
+	if (btn) zk.listen(btn, "click", function () {zkCmbox.onbutton(cmp);});
 	btn.align = "absmiddle";
 };
 
 function zkCmit() {}
 
 zkCmit.init = function (cmp) {
-	Event.observe(cmp, "click", function () {zkCmbox.onclickitem(cmp);});
-	Event.observe(cmp, "mouseover", function () {zkCmbox.onover(cmp);});
-	Event.observe(cmp, "mouseout", function () {zkCmbox.onout(cmp);});
+	zk.listen(cmp, "click", function () {zkCmbox.onclickitem(cmp);});
+	zk.listen(cmp, "mouseover", function () {zkCmbox.onover(cmp);});
+	zk.listen(cmp, "mouseout", function () {zkCmbox.onout(cmp);});
 };
 
 /** Handles setAttr. */
@@ -149,7 +149,7 @@ zkCmbox.onkey = function (evt) {
 	|| (evt.keyCode >= 112 && evt.keyCode <= 123)) //ALT and ESC, Fn
 		return true; //ignore it (doc will handle it)
 
-	var bCombobox = zk.getCompType(cb) == "Cmbox";
+	var bCombobox = $type(cb) == "Cmbox";
 	var selback = evt.keyCode == 38 || evt.keyCode == 40; //UP and DN
 	if (getZKAttr(cb, "adr") == "true" && !opened)
 		zkCmbox.open(pp, bCombobox && !selback);
@@ -317,7 +317,7 @@ zkCmbox._selback = function (item) {
 };
 /** Returns the input by specifying an item. */
 zkCmbox.getInputByItem = function (item) {
-	//we cannot use getParentByType because parentNode is changed in gecko
+	//we cannot use $parentByType because parentNode is changed in gecko
 	var uuid = $uuid(item.parentNode);
 	if (!uuid) return null;
 

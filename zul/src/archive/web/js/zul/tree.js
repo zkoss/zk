@@ -101,7 +101,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 		var uuid = getZKAttr(row, "item");
 		do {
 			var r = row.nextSibling;
-			if (zk.tagName(r) == "TR") {
+			if ($tag(r) == "TR") {
 				var pid = getZKAttr(r, "ptitem");
 				if (uuid != pid) return row; //not my child
 
@@ -128,7 +128,7 @@ zkTree.init = function (cmp) {
 
 		var bdy = $e(cmp.id + "!body");
 		if (bdy)
-			Event.observe(bdy, "keydown", zkTree.bodyonkeydown);
+			zk.listen(bdy, "keydown", zkTree.bodyonkeydown);
 
 		new zk.Tree(cmp);
 	}
@@ -188,19 +188,19 @@ zkTree.ontoggle = function (evt) {
 
 function zkTrow() {} //Treerow
 zkTrow.init = function (cmp) {
-	Event.observe(cmp, "click", zkTree.onclick);
-	Event.observe(cmp, "keydown", zkTree.onkeydown);
-	Event.observe(cmp, "mouseover", function () {return zkSel.onover(cmp);});
-	Event.observe(cmp, "mouseout", function () {return zkSel.onout(cmp);});
+	zk.listen(cmp, "click", zkTree.onclick);
+	zk.listen(cmp, "keydown", zkTree.onkeydown);
+	zk.listen(cmp, "mouseover", zkSel.onover);
+	zk.listen(cmp, "mouseout", zkSel.onout);
 };
 
 function zkTcfc() {} //checkmark or the first hyperlink of treecell
 zkTcfc.init = function (cmp) {
-	Event.observe(cmp, "focus", function () {return zkSel.cmonfocus(cmp);});
-	Event.observe(cmp, "blur", function () {return zkSel.cmonblur(cmp);});
+	zk.listen(cmp, "focus", zkSel.cmonfocus);
+	zk.listen(cmp, "blur", zkSel.cmonblur);
 }
 
 function zkTcop() {} //the image as the open button
 zkTcop.init = function (cmp) {
-	Event.observe(cmp, "click", zkTree.ontoggle);
+	zk.listen(cmp, "click", zkTree.ontoggle);
 };

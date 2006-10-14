@@ -23,7 +23,7 @@ function zkTab() {};
 /** Selects the specified tab. */
 zkTab.onclick = function (evt) {
 	if (!evt) evt = window.event;
-	var tab = zkau.getParentByType(Event.element(evt), "Tab");
+	var tab = $parentByType(Event.element(evt), "Tab");
 	if (!zkTab._sliding(tab)) //Bug 1571408
 		zkTab.selTab(tab);
 };
@@ -63,8 +63,7 @@ zkTab._sliding = function (tab) {
 };
 /** Returns the selected tab by specified any HTML tag containing it. */
 zkTab._getSelTabFromTop = function (node, tabboxId) {
-	if (zk.getCompType(node) == "Tab"
-	&& getZKAttr(node, "box") == tabboxId)
+	if ($type(node) == "Tab" && getZKAttr(node, "box") == tabboxId)
 		return getZKAttr(node, "sel") == "true" ? node: null;
 
 	for (var node = node.firstChild; node != null; node = node.nextSibling) {
@@ -144,7 +143,7 @@ zkTab.fixWidth = function (uuid) {
 	var tabs = zk.parentNode(tbl, "TABLE");
 		//Safari: THEAD's width and TD/TR's height is 0, so use TABLE instead
 	if (tabs) {
-		if ("TD" == zk.tagName(n)) { //horizontal
+		if ("TD" == $tag(n)) { //horizontal
 			var v = tabs.offsetWidth - tbl.offsetWidth + n.offsetWidth;
 			if (v < 0) v = 0;
 			n.style.width = v + "px";
@@ -158,12 +157,12 @@ zkTab.fixWidth = function (uuid) {
 };
 
 zkTab.init = function (cmp) {
-	Event.observe(cmp, "click", zkTab.onclick);
+	zk.listen(cmp, "click", zkTab.onclick);
 
 	var anc = $e(cmp.id + "!a");
 	if (anc) {
-		Event.observe(anc, "focus", function () {zkau.onfocus(anc);});
-		Event.observe(anc, "blur", function () {zkau.onblur(anc);});
+		zk.listen(anc, "focus", function () {zkau.onfocus(anc);});
+		zk.listen(anc, "blur", function () {zkau.onblur(anc);});
 	}
 };
 

@@ -87,7 +87,7 @@ zkMenu.onover = function (evt) {
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
 
-	var menubar = zkau.getParentByType(cmp, "Menubar");
+	var menubar = $parentByType(cmp, "Menubar");
 	var autodrop = !menubar || getZKAttr(menubar, "autodrop") == "true";
 	if (autodrop) zkMenu._shallClose = false;
 		//turn off pending auto-close
@@ -110,7 +110,7 @@ zkMenu.onout = function (evt) {
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
 
-	var menubar = zkau.getParentByType(cmp, "Menubar");
+	var menubar = $parentByType(cmp, "Menubar");
 	if (menubar && getZKAttr(menubar, "autodrop") == "true") {
 		zkMenu._shallClose = true;
 		setTimeout("if (zkMenu._shallClose) zkau.closeFloats('"+menubar.id+"');", 500);
@@ -119,8 +119,7 @@ zkMenu.onout = function (evt) {
 zkMenu.onclick = function (evt) {
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
-	var type = zk.getCompType(cmp);
-	if ("Menu" == type) //note: Menuit also go thru this method
+	if ("Menu" == $type(cmp)) //note: Menuit also go thru this method
 		zkMenu.open(cmp, getZKAttr(cmp, "top") == "true");
 };
 
@@ -140,7 +139,7 @@ zkMenu.open = function (menu, toggle) {
 	}
 
 	var top = getZKAttr(menu, "top") == "true"; //top-level menu
-	var ref = top || zk.tagName(menu) != "TD" ? menu: menu.parentNode; //use TR if not top
+	var ref = top || $tag(menu) != "TD" ? menu: menu.parentNode; //use TR if not top
 	var pos = top && getZKAttr(menu, "vert") == null ? "after-start": "end_before";
 	zkMenu._open(pp, top, ref, pos);
 };
@@ -180,7 +179,7 @@ zkMenu._fixWidth = function (popupId) {
 		var tbl = pp.firstChild;
 		for (;; tbl = tbl.nextSibling) {
 			if (!tbl) return;
-			if (zk.tagName(tbl) == "TABLE")
+			if ($tag(tbl) == "TABLE")
 				break;
 		}
 		if (pp.offsetWidth < tbl.offsetWidth)
@@ -208,16 +207,16 @@ zkMenu._close = function (pp) {
 zkMenu.init = function (cmp) {
 	var anc = $e(cmp.id + "!a");
 	if (getZKAttr(cmp, "top") == "true") {
-		Event.observe(anc, "click", zkMenu.onclick);
-		Event.observe(anc, "mouseover", zkMenu.onover);
-		Event.observe(anc, "mouseout", zkMenu.onout);
+		zk.listen(anc, "click", zkMenu.onclick);
+		zk.listen(anc, "mouseover", zkMenu.onover);
+		zk.listen(anc, "mouseout", zkMenu.onout);
 	} else {
-		Event.observe(cmp, "click", zkMenu.onclick);
-		Event.observe(cmp, "mouseover", zkMenu.onover);
-		Event.observe(cmp, "mouseout", zkMenu.onout);
+		zk.listen(cmp, "click", zkMenu.onclick);
+		zk.listen(cmp, "mouseover", zkMenu.onover);
+		zk.listen(cmp, "mouseout", zkMenu.onout);
 
-		Event.observe(anc, "focus", function () {zkau.onfocus(anc);});
-		Event.observe(anc, "blur", function () {zkau.onblur(anc);});
+		zk.listen(anc, "focus", function () {zkau.onfocus(anc);});
+		zk.listen(anc, "blur", function () {zkau.onblur(anc);});
 	}
 };
 
@@ -228,19 +227,19 @@ function zkMenuit() {} //menuitem
 function zkMenusp() {} //menuseparator
 
 zkMenuit.init = function (cmp) {
-	Event.observe(cmp, "click", zkMenuit.onclick);
-	Event.observe(cmp, "mouseover", zkMenu.onover);
-	Event.observe(cmp, "mouseout", zkMenu.onout);
+	zk.listen(cmp, "click", zkMenuit.onclick);
+	zk.listen(cmp, "mouseover", zkMenu.onover);
+	zk.listen(cmp, "mouseout", zkMenu.onout);
 
 	if (getZKAttr(cmp, "top") != "true") { //non-topmost
 		var anc = $e(cmp.id + "!a");
-		Event.observe(anc, "focus", function () {zkau.onfocus(anc);});
-		Event.observe(anc, "blur", function () {zkau.onblur(anc);});
+		zk.listen(anc, "focus", function () {zkau.onfocus(anc);});
+		zk.listen(anc, "blur", function () {zkau.onblur(anc);});
 	}
 };
 zkMenuit.onclick = function (evt) {
 	if (!evt) evt = window.event;
-	var cmp = zkau.getParentByType(Event.element(evt), "Menuit");
+	var cmp = $parentByType(Event.element(evt), "Menuit");
 	zkau.closeFloats(cmp);//including popups if visible
 	var anc = $e(cmp.id + "!a");
 	if ("javascript:;" == anc.href) {
@@ -260,8 +259,8 @@ zkMenuit.onclick = function (evt) {
 };
 
 zkMenusp.init = function (cmp) {
-	Event.observe(cmp, "mouseover", zkMenu.onover);
-	Event.observe(cmp, "mouseout", zkMenu.onout);
+	zk.listen(cmp, "mouseover", zkMenu.onover);
+	zk.listen(cmp, "mouseout", zkMenu.onout);
 };
 
 //menupopup//

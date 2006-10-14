@@ -291,7 +291,7 @@ zkCal.onmonclk = function (evt) {
 };
 zkCal.ondayclk = function (evt) {
 	var el = Event.element(evt);
-	if (zk.tagName(el) == "A") el = el.parentNode;
+	if ($tag(el) == "A") el = el.parentNode;
 	var meta = zkau.getMeta($uuid(el));
 	if (meta) meta._ondayclk(el);
 };
@@ -335,11 +335,11 @@ function zkDtbox() {}
 zkDtbox.init = function (cmp) {
 	var real = $real(cmp);
 	zkTxbox.init(real);
-	Event.observe(real, zk.ie ? "keydown": "keypress", zkDtbox.onkey);
+	zk.listen(real, zk.ie ? "keydown": "keypress", zkDtbox.onkey);
 		//IE: use keydown. otherwise, it causes the window to scroll
 
 	var btn = $e(cmp.id + "!btn");
-	if (btn) Event.observe(btn, "click", function () {zkDtbox.onbutton(cmp);});
+	if (btn) zk.listen(btn, "click", function () {zkDtbox.onbutton(cmp);});
 	btn.align = "absmiddle";
 };
 zkDtbox.validate = function (cmp) {

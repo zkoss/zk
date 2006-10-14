@@ -25,8 +25,8 @@ function zkTxbox() {}
 zkau.textbox = zkTxbox; //zkau depends on it
 
 zkTxbox.init = function (cmp) {
-	Event.observe(cmp, "focus", function () {zkTxbox.onfocus(cmp);});
-	Event.observe(cmp, "blur", function() {zkTxbox.onblur(cmp);});
+	zk.listen(cmp, "focus", function () {zkTxbox.onfocus(cmp);});
+	zk.listen(cmp, "blur", function() {zkTxbox.onblur(cmp);});
 
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
@@ -179,13 +179,13 @@ zkDbbox.validate = function (cmp) {
 // button //
 function zkButton() {}
 zkButton.init = function (cmp) {
-	Event.observe(cmp, "click", zkau.onclick);
-	Event.observe(cmp, "focus", function () {zkau.onfocus(cmp);});
-	Event.observe(cmp, "blur", function() {zkau.onblur(cmp);});
+	zk.listen(cmp, "click", zkau.onclick);
+	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});
+	zk.listen(cmp, "blur", function() {zkau.onblur(cmp);});
 };
 function zkTbtn() {} //toolbarbutton
 zkTbtn.init = function (cmp) {
-	Event.observe(cmp, "click", function (evt) {
+	zk.listen(cmp, "click", function (evt) {
 		if ("javascript:;" == cmp.href) zkau.onclick(evt);
 		else {
 			var t = cmp.getAttribute("target");
@@ -193,8 +193,8 @@ zkTbtn.init = function (cmp) {
 				zk.progress();
 		}
 	});
-	Event.observe(cmp, "focus", function () {zkau.onfocus(cmp);});
-	Event.observe(cmp, "blur", function() {zkau.onblur(cmp);});
+	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});
+	zk.listen(cmp, "blur", function() {zkau.onblur(cmp);});
 };
 
 ////
@@ -202,9 +202,9 @@ zkTbtn.init = function (cmp) {
 function zkCkbox() {}
 zkCkbox.init = function (cmp) {
 	cmp = $real(cmp);
-	Event.observe(cmp, "click", function () {zkCkbox.onclick(cmp);});
-	Event.observe(cmp, "focus", function () {zkau.onfocus(cmp);});
-	Event.observe(cmp, "blur", function() {zkau.onblur(cmp);});
+	zk.listen(cmp, "click", function () {zkCkbox.onclick(cmp);});
+	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});
+	zk.listen(cmp, "blur", function() {zkau.onblur(cmp);});
 };
 zkCkbox.setAttr = function (cmp, nm, val) {
 	if ("style" == nm) {
@@ -251,9 +251,9 @@ function zkWnd() {}
 zkWnd.init = function (cmp) {
 	var img = $e(cmp.id + "!img");
 	if (img) {
-		Event.observe(img, "click", function () {zkau.close(cmp);});
-		Event.observe(img, "mouseover", function () {zkau.onimgover(img);});
-		Event.observe(img, "mouseout", function () {zkau.onimgout(img);});
+		zk.listen(img, "click", function () {zkau.close(cmp);});
+		zk.listen(img, "mouseover", function () {zkau.onimgover(img);});
+		zk.listen(img, "mouseout", function () {zkau.onimgout(img);});
 		if (!img.style.cursor) img.style.cursor = "default";
 	}
 
@@ -297,7 +297,7 @@ zkGrbox.onclick = function (evt, uuid) {
 	if (!evt) evt = window.event;
 
 	var target = Event.element(evt);
-	var tn = zk.tagName(target);
+	var tn = $tag(target);
 	if ("BUTTON" == tn || "INPUT" == tn || "TEXTAREA" == tn || "SELECT" == tn
 	|| "A" == tn || ("TD" != tn && "TR" != tn && target.onclick))
 		return;
@@ -330,13 +330,13 @@ zkCapt.init = function (cmp) {
 	var gb = zkCapt._parentGrbox(cmp);
 	cmp = cmp.rows[0]; //first row
 	if (gb && cmp) {
-		Event.observe(cmp, "click",
+		zk.listen(cmp, "click",
 			function (evt) {zkGrbox.onclick(evt, gb.id);});
 	}
 };
 zkCapt._parentGrbox = function (p) {
 	while (p = p.parentNode) {
-		var type = zk.getCompType(p);
+		var type = $type(p);
 		if (type == "Grbox") return p;
 		if (type) break;
 	}
@@ -371,7 +371,7 @@ if (zk.ie && !zk.ie7) {
 				+img.src+"', sizingMethod='scale');display:inline-block;";
 			if (img.align == "left") html += "float:left;";
 			else if (img.align == "right") html += "float:right;";
-			if (zk.tagName(img.parentNode) == "A") html += "cursor:hand;";
+			if ($tag(img.parentNode) == "A") html += "cursor:hand;";
 			html += commonStyle+'"';
 			if (img.className) html += ' class="'+img.className+'"';
 			if (img.title) html += ' title="'+img.title+'"';
@@ -414,14 +414,14 @@ zkMap.init = function (cmp) {
 	}
 };
 zkArea.init = function (cmp) {
-	var map = zkau.getParentByType(cmp, "Map");
+	var map = $parentByType(cmp, "Map");
 	var img = $real(map);
 	if (img && !img.useMap)
 		img.useMap = "#" + map.id + "_map";
 };
 zkArea.cleanup = function (cmp) {
 	if (cmp.parentNode.areas.length <= 1) { //removing the last area
-		var img = $real(zkau.getParentByType(cmp, "Map"));
+		var img = $real($parentByType(cmp, "Map"));
 		if (img) img.useMap = "";
 			//Safari bug not solved yet: once useMap is cleaned up, ismap won't
 			//fall back to no-useMap
@@ -449,7 +449,7 @@ zkArea.onclick = function (id) {
 
 	var cmp = $e(id);
 	if (cmp) {
-		var map = zkau.getParentByType(cmp, "Map");
+		var map = $parentByType(cmp, "Map");
 		if (map)
 			zkau.send({uuid: map.id,
 				cmd: "onClick", data: [getZKAttr(cmp, "aid")]});
@@ -506,7 +506,7 @@ zkPMeter.setAttr = function (cmp, nm, val) {
 function zkPg() {}
 
 zkPg.go = function (anc, pgno) {
-	var cmp = zkau.getParentByType(anc, "Pg");
+	var cmp = $parentByType(anc, "Pg");
 	if (cmp)
 		zkau.send({uuid: cmp.id, cmd: "onPaging", data: [pgno]});
 };

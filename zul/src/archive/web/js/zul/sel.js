@@ -108,11 +108,11 @@ zk.Selectable.prototype = {
 						meta._recalcSize();
 					}
 				};
-				Event.observe(window, "resize", this.fnResize);
+				zk.listen(window, "resize", this.fnResize);
 			}
 
 			for (var n = this.element; (n = n.parentNode) != null;)
-				if (zk.tagName(n) == "FORM") {
+				if ($tag(n) == "FORM") {
 					this.form = n;
 					break;
 				}
@@ -120,7 +120,7 @@ zk.Selectable.prototype = {
 				this.fnSubmit = function () {
 					meta.onsubmit();
 				};
-				Event.observe(this.form, "submit", this.fnSubmit);
+				zk.listen(this.form, "submit", this.fnSubmit);
 			}
 		}
 
@@ -155,9 +155,9 @@ zk.Selectable.prototype = {
 	},
 	cleanup: function ()  {
 		if (this.fnResize)
-			Event.stopObserving(window, "resize", this.fnResize);
+			zk.unlisten(window, "resize", this.fnResize);
 		if (this.fnSubmit)
-			Event.stopObserving(this.form, "submit", this.fnSubmit);
+			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
 			this.foot = this.foottbl = null;
 			//in case: GC not works properly
@@ -182,7 +182,7 @@ zk.Selectable.prototype = {
 		case 32: //SPACE
 		case 36: //Home
 		case 35: //End
-			if (zk.tagName(target) != "A")
+			if ($tag(target) != "A")
 				this._refocus();
 			Event.stop(evt);
 			return false;
@@ -194,7 +194,7 @@ zk.Selectable.prototype = {
 		if (zkSel._shallIgnoreEvent(target))
 			return true;
 
-		var row = zk.tagName(target) == "TR" ? target: zk.parentNode(target, "TR");
+		var row = $tag(target) == "TR" ? target: zk.parentNode(target, "TR");
 		if (!row) return true;
 
 		var shift = evt.shiftKey, ctrl = evt.ctrlKey;
@@ -234,7 +234,7 @@ zk.Selectable.prototype = {
 		if (step) {
 			if (shift) this.toggleSelect(row, true);
 			for (; (row = step > 0 ? row.nextSibling: row.previousSibling) != null;) {
-				if (zk.tagName(row) == "TR"  && this._isValid(row)) {
+				if ($tag(row) == "TR"  && this._isValid(row)) {
 					if (shift) this.toggleSelect(row, true);
 
 					if (zk.isVisible(row)) {
@@ -276,13 +276,13 @@ zk.Selectable.prototype = {
 	},
 	doclick: function (evt, target) {
 		if (zkSel._shallIgnoreEvent(target)
-		|| (zk.tagName(target) != "TR" && target.onclick)
-		|| (zk.tagName(target) == "A" && !target.id.endsWith("!sel"))
+		|| ($tag(target) != "TR" && target.onclick)
+		|| ($tag(target) == "A" && !target.id.endsWith("!sel"))
 		|| getZKAttr(target, "lfclk") || getZKAttr(target, "dbclk"))
 			return;
 
 		var checkmark = target.id && target.id.endsWith("!cm");
-		var row = zk.tagName(target) == "TR" ? target: zk.parentNode(target, "TR");
+		var row = $tag(target) == "TR" ? target: zk.parentNode(target, "TR");
 		if (!row) return; //incomplete structure
 
 		if (checkmark) {
@@ -516,14 +516,14 @@ zk.Selectable.prototype = {
 			if (toSel) {
 				if (el) el.checked = true;
 				row.className = row.className + "sel";
-				zkSel.onout(row);
+				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "true");
 			} else {
 				if (el) el.checked = false;
 				var len = row.className.length;
 				if (len > 3)
 					row.className = row.className.substring(0, len - 3);
-				zkSel.onout(row);
+				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "false");
 			}
 		}
@@ -541,13 +541,13 @@ zk.Selectable.prototype = {
 				if (!el) el = $e(row.id + "!sel");
 				if (el) zk.focusById(el.id);
 				setZKAttr(row, "focus", "true");
-				zkSel.cmonfocus(row);
+				zkSel.cmonfocusTo(row);
 
 				if (!this.paging && zk.gecko) this._render(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
 			} else {
 				rmZKAttr(row, "focus");
-				zkSel.cmonblur(row);
+				zkSel.cmonblurTo(row);
 			}
 		}
 		return changed;
@@ -560,8 +560,8 @@ zk.Selectable.prototype = {
 				el.href = "javascript:;";
 				el.id = row.id + "!sel";
 				el.innerHTML = " ";
-				el.onfocus = new Function("zkSel.cmonfocus(this)");
-				el.onblur = new Function("zkSel.cmonblur(this)");
+				el.onfocus = zkSel.cmonfocus;
+				el.onblur = zkSel.cmonblur;
 				row.cells[0].appendChild(el);
 			}
 		} else {
@@ -784,7 +784,7 @@ zk.Selectable.prototype = {
 		for (var el = this.element;;) {
 			var p = el.offsetParent;
 			if (!p) return gap; //yes
-			if (zk.tagName(p) == "TD" && p.clientHeight > el.offsetHeight)
+			if ($tag(p) == "TD" && p.clientHeight > el.offsetHeight)
 				return 0; //not caused by this element
 			el = p;
 		}
@@ -950,36 +950,53 @@ zkSel._renderNow = function (uuid) {
 	if (meta) meta._renderNow();
 };
 zkSel._shallIgnoreEvent = function (el) {
-	var tn = zk.tagName(el);
+	var tn = $tag(el);
 	return !el || ((tn == "INPUT" && !el.id.endsWith("!cm"))
 	|| tn == "TEXTAREA" || tn == "BUTTON" || tn == "SELECT");
 };
+
 /** row's onmouseover. */
-zkSel.onover = function (el) {
+zkSel.onover = function (evt) {
 	if (!zk.dragging) {
-		zk.backupStyle(el, "backgroundColor");
-		var clr = zk.getCurrentStyle(el, "color");
-		el.style.backgroundColor =
-			clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
-			el.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
-			el.className.endsWith("sel") ? "#115588": "#DAE8FF";
+		if (!evt) evt = window.event;
+		var row = $parentByTag(Event.element(evt), "TR");
+		if (row) {
+			zk.backupStyle(row, "backgroundColor");
+			var clr = zk.getCurrentStyle(row, "color");
+			row.style.backgroundColor =
+				clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
+				row.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
+				row.className.endsWith("sel") ? "#115588": "#DAE8FF";
+		}
 	}
 };
 /** row's onmouseout. */
-zkSel.onout = function (el) {
-	if (!zk.dragging) zk.restoreStyle(el, "backgroundColor");
+zkSel.onout = function (evt) {
+	if (!zk.dragging) {
+		if (!evt) evt = window.event;
+		zkSel.onoutTo($parentByTag(Event.element(evt), "TR"));
+	}
+};
+zkSel.onoutTo = function (row) {
+	if (row)
+		zk.restoreStyle(row, "backgroundColor");
 };
 /** (!cm or !sel)'s onfocus. */
-zkSel.cmonfocus = function (el) {
-	var row = $e($uuid(el.id));
-	if (row) 
-		if (!zk.gecko) row.style.textDecoration = "underline";
-		else if (row.cells.length) row.cells[0].style.textDecoration = "underline";
-	
+zkSel.cmonfocus = function (evt) {
+	if (!evt) evt = window.event;
+	zkSel.cmonfocusTo($parentByTag(Event.element(evt), "TR"));
 };
 /** (!cm or !sel)'s onblur. */
-zkSel.cmonblur = function (el) {
-	var row = $e($uuid(el.id));
+zkSel.cmonblur = function (evt) {
+	if (!evt) evt = window.event;
+	zkSel.cmonblurTo($parentByTag(Event.element(evt), "TR"));
+};
+zkSel.cmonfocusTo = function (row) {
+	if (row)
+		if (!zk.gecko) row.style.textDecoration = "underline";
+		else if (row.cells.length) row.cells[0].style.textDecoration = "underline";	
+};
+zkSel.cmonblurTo = function (row) {
 	if (row) 
 		if (!zk.gecko) row.style.textDecoration = "";
 		else if (row.cells.length) row.cells[0].style.textDecoration = "";
@@ -1032,7 +1049,7 @@ zkLibox.init = function (cmp) {
 	else {
 		var bd = $e(cmp.id + "!body");
 		if (bd)
-			Event.observe(bd, "keydown", zkLibox.bodyonkeydown);
+			zk.listen(bd, "keydown", zkLibox.bodyonkeydown);
 
 		new zk.Selectable(cmp);
 	}
@@ -1048,16 +1065,16 @@ zkLibox.onVisi = function (cmp) {
 
 function zkLit() {} //listitem
 zkLit.init = function (cmp) {
-	Event.observe(cmp, "click", zkLibox.onclick);
-	Event.observe(cmp, "keydown", zkLibox.onkeydown);
-	Event.observe(cmp, "mouseover", function () {return zkSel.onover(cmp);});
-	Event.observe(cmp, "mouseout", function () {return zkSel.onout(cmp);});
+	zk.listen(cmp, "click", zkLibox.onclick);
+	zk.listen(cmp, "keydown", zkLibox.onkeydown);
+	zk.listen(cmp, "mouseover", zkSel.onover);
+	zk.listen(cmp, "mouseout", zkSel.onout);
 };
 
 function zkLcfc() {} //checkmark or the first hyperlink of listcell
 zkLcfc.init = function (cmp) {
-	Event.observe(cmp, "focus", function () {return zkSel.cmonfocus(cmp);});
-	Event.observe(cmp, "blur", function () {return zkSel.cmonblur(cmp);});
+	zk.listen(cmp, "focus", zkSel.cmonfocus);
+	zk.listen(cmp, "blur", zkSel.cmonblur);
 };
 
 zk.addModuleInit(function () {
@@ -1068,9 +1085,9 @@ zk.addModuleInit(function () {
 // listbox mold=select //
 function zkLisel() {}
 zkLisel.init = function (cmp) {
-	Event.observe(cmp, "change", function () {zkLisel.onchange(cmp);});
-	Event.observe(cmp, "focus", function () {zkau.onfocus(cmp);});
-	Event.observe(cmp, "blur", function() {zkau.onblur(cmp);});
+	zk.listen(cmp, "change", function () {zkLisel.onchange(cmp);});
+	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});
+	zk.listen(cmp, "blur", function() {zkau.onblur(cmp);});
 };
 /** Handles onchange from select/list. */
 zkLisel.onchange = function (target) {

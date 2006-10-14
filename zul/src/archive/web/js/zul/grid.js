@@ -63,7 +63,7 @@ zk.Grid.prototype = {
 					meta._recalcSize();
 				}
 			};
-			Event.observe(window, "resize", this.fnResize);
+			zk.listen(window, "resize", this.fnResize);
 		}
 
 		this._setSize();
@@ -133,7 +133,7 @@ zk.Grid.prototype = {
 	},
 	cleanup: function ()  {
 		if (this.fnResize)
-			Event.stopObserving(window, "resize", this.fnResize);
+			zk.unlisten(window, "resize", this.fnResize);
 		this.element = this.body = this.bodytbl = this.bodyrows
 			= this.head = this.headtbl = null;
 			//in case: GC not works properly

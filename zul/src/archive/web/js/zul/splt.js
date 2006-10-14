@@ -33,7 +33,7 @@ zkSplt.init = function (cmp) {
 	};
 
 	var btn = $e(cmp.id + "!btn");
-	Event.observe(btn, "click", function () {
+	zk.listen(btn, "click", function () {
 		zkSplt.open(cmp, getZKAttr(cmp, "open") == "false");
 	});
 
@@ -43,7 +43,7 @@ zkSplt.init = function (cmp) {
 	zkSplt._fixbtn(cmp);
 
 	var exc = "zkSplt._resize('" + cmp.id + "')";
-	Event.observe(window, "resize", function () {setTimeout(exc, 120);});
+	zk.listen(window, "resize", function () {setTimeout(exc, 120);});
 	setTimeout(exc, 120);
 
 	cmp.style.cursor = "move";
@@ -72,10 +72,10 @@ zkSplt._resize = function (cmp) {
 		//we have to convert auto-adjust to fix-width, or table
 		//will affect the sliding
 		var nd = $e(cmp.id + "!chdextr");
-		var tn = zk.tagName(nd);
+		var tn = $tag(nd);
 		var vert = getZKAttr(cmp, "vert");
 		for (nd = nd.parentNode.firstChild; nd; nd = nd.nextSibling)
-			if (tn == zk.tagName(nd))
+			if (tn == $tag(nd))
 				if (vert) nd.style.height = nd.offsetHeight + "px";
 				else nd.style.width = nd.offsetWidth + "px";
 	}
@@ -100,10 +100,10 @@ zkSplt._startDrag = function (cmp) {
 		var run = drag.run = {};
 		run.org = Position.cumulativeOffset(cmp);
 		var nd = $e(cmp.id + "!chdextr");
-		var tn = zk.tagName(nd);
+		var tn = $tag(nd);
 		run.prev = zk.previousSibling(nd, tn);
 		run.next = zk.nextSibling(nd, tn);
-		run.box = zkau.getParentByType(nd, "Box");
+		run.box = $parentByType(nd, "Box");
 	}
 };
 zkSplt._endDrag = function (cmp) {
@@ -170,7 +170,7 @@ zkSplt._adj = function (n, fd, diff) {
 };
 /** Adjusts the width of the splitter in the opposite dir. */
 zkSplt._adjSplt = function (n, fd, diff) {
-	if (zk.getCompType(n) == "Splt") {
+	if ($type(n) == "Splt") {
 		var vert = getZKAttr(n, "vert") != null;
 		if (vert != (fd == "height")) {
 			var val = parseInt(n.style[fd] || "0") + diff;
@@ -217,7 +217,7 @@ zkSplt._fixszAll = function () {
 
 zkSplt.open = function (cmp, open, silent) {
 	var nd = $e(cmp.id + "!chdextr");
-	var tn = zk.tagName(nd);
+	var tn = $tag(nd);
 	if ((getZKAttr(cmp, "open") != "false") == open) return; //nothing changed
 
 	var colps = getZKAttr(cmp, "colps")
