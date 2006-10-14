@@ -197,6 +197,7 @@
             <xs:element ref="datebox" />
             <xs:element ref="decimalbox" />
             <xs:element ref="div" />
+            <xs:element ref="doublebox" />
             <xs:element ref="grid" />
             <xs:element ref="groupbox" />
             <xs:element ref="hbox" />
@@ -480,6 +481,19 @@
         <xs:attribute name="onClick" type="xs:string" use="optional" />
         <xs:attribute name="onRightClick" type="xs:string" use="optional" />
         <xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
+        <xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
+        <xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+    </xs:complexType>
+    <!-- doublebox -->
+    <xs:element name="doublebox" type="doubleboxType" />
+    <xs:complexType name="doubleboxType">
+        <xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+        <xs:attributeGroup ref="formatInputElementAttrGroup" />
+        <xs:attribute name="value" type="xs:double" use="optional" />
+        <xs:attribute name="onChange" type="xs:string" use="optional" />
+        <xs:attribute name="onChanging" type="xs:string" use="optional" />
+        <xs:attribute name="onFocus" type="xs:string" use="optional" />
+        <xs:attribute name="onBlur" type="xs:string" use="optional" />
         <xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
         <xs:attribute name="onClientInfo" type="xs:string" use="optional" />
     </xs:complexType>
