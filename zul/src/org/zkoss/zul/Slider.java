@@ -111,7 +111,7 @@ public class Slider extends XulElement implements Scrollable {
 		_curpos = curpos;
 	}
 
-	//-- Component --//
+	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
