@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 zk.load("zul.zul");
 
+//Slider
 zk.Slider = Class.create();
 zk.Slider.prototype = {
 	initialize: function (comp) {
@@ -141,8 +142,9 @@ zk.Slider.prototype = {
 	}
 };
 
-/////////
-function zkSld() {}
+////
+//Slider//
+zkSld = {};
 zkSld.init = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();

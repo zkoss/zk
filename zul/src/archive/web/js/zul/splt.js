@@ -14,7 +14,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-function zkSplt() {}
+////
+zkSplt = {};
 
 zkSplt._drags = {};
 zkSplt.init = function (cmp) {

@@ -18,7 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 zk.load("zul.zul");
 
-function zkAudio() {};
+// Audio //
+zkAudio = {};
 
 zkAudio.play = function (id) {
 	var cmp = $e(id);

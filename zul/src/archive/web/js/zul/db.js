@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 zk.load("zul.widget");
 
 //Calendar//
-function zkCal() {}
+zkCal = {};
 
 zk.Cal = Class.create();
 zk.Cal.prototype = {
@@ -330,7 +330,7 @@ zkCal.onout = function (evt) {
 };
 
 //Datebox//
-function zkDtbox() {}
+zkDtbox = {};
 
 zkDtbox.init = function (cmp) {
 	var real = $real(cmp);

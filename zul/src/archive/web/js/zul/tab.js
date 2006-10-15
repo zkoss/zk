@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 ////
 // tab //
-function zkTab() {};
+zkTab = {};
 
 /** Selects the specified tab. */
 zkTab.onclick = function (evt) {
@@ -168,7 +168,7 @@ zkTab.init = function (cmp) {
 
 ////
 // tabs //
-function zkTabs() {}
+zkTabs = {};
 
 zkTabs.init = function (cmp) {
 	setTimeout("zkTab.fixWidth('"+cmp.id+"!last')", 30);

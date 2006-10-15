@@ -16,8 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-function msgzul() {};
-
+msgzul = {};
 msgzul.FAILED_TO_CREATE_MASK = "Kann keine modale Maske erzeugen";
 msgzul.UNKNOWN_TYPE = "Unbekannte Komponente: ";
 msgzul.DATE_REQUIRED = "Sie müssen ein Datum angeben. Format: ";

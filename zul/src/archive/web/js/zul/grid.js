@@ -18,6 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 zk.load("zul.zul");
 
+////
 zk.Grid = Class.create();
 zk.Grid.prototype = {
 	initialize: function (comp) {
@@ -195,8 +196,9 @@ zk.Grid.prototype = {
 	}
 };
 
-/////////
-function zkGrid() {}
+////
+// Grid //
+zkGrid = {};
 
 zkGrid._init = function (uuid) {
 	var meta = zkau.getMeta(uuid);

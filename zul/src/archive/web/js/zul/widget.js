@@ -21,7 +21,7 @@ zk.load("zul.zul"); //required by window's doModal
 
 ////
 // textbox //
-function zkTxbox() {}
+zkTxbox = {};
 zkau.textbox = zkTxbox; //zkau depends on it
 
 zkTxbox.init = function (cmp) {
@@ -150,8 +150,7 @@ zkTxbox._scanChanging = function (id) {
 
 ////
 //intbox//
-function zkInbox() {}
-
+zkInbox = {};
 zkInbox.init = zkTxbox.init;
 zkInbox.validate = function (cmp) {
 	return zkVld.onlyInt(cmp.id);
@@ -159,8 +158,7 @@ zkInbox.validate = function (cmp) {
 
 ////
 //decimalbox//
-function zkDcbox() {}
-
+zkDcbox = {};
 zkDcbox.init = zkTxbox.init;
 zkDcbox.validate = function (cmp) {
 	return zkVld.onlyNum(cmp.id);
@@ -168,8 +166,7 @@ zkDcbox.validate = function (cmp) {
 
 ////
 //doublebox//
-function zkDbbox() {}
-
+zkDbbox = {};
 zkDbbox.init = zkTxbox.init;
 zkDbbox.validate = function (cmp) {
 	return zkVld.onlyNum(cmp.id);
@@ -177,13 +174,14 @@ zkDbbox.validate = function (cmp) {
 
 ////
 // button //
-function zkButton() {}
+zkButton = {};
 zkButton.init = function (cmp) {
 	zk.listen(cmp, "click", zkau.onclick);
 	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});
 	zk.listen(cmp, "blur", function() {zkau.onblur(cmp);});
 };
-function zkTbtn() {} //toolbarbutton
+
+zkTbtn = {}; //toolbarbutton
 zkTbtn.init = function (cmp) {
 	zk.listen(cmp, "click", function (evt) {
 		if ("javascript:;" == cmp.href) zkau.onclick(evt);
@@ -199,7 +197,7 @@ zkTbtn.init = function (cmp) {
 
 ////
 // checkbox and radio //
-function zkCkbox() {}
+zkCkbox = {};
 zkCkbox.init = function (cmp) {
 	cmp = $real(cmp);
 	zk.listen(cmp, "click", function () {zkCkbox.onclick(cmp);});
@@ -227,7 +225,7 @@ zkCkbox.rmAttr = function (cmp, nm) {
 if (!zkCkbox._inflds)
 	zkCkbox._inflds = ["checked", "disabled", "readonly", "name", "value"];
 
-function zkRadio() {}
+zkRadio = {};
 zkRadio.init = zkCkbox.init;
 zkRadio.setAttr = zkCkbox.setAttr;
 zkRadio.rmAttr = zkCkbox.rmAttr;
@@ -247,7 +245,7 @@ zkCkbox.onclick = function (cmp) {
 
 ////
 // window //
-function zkWnd() {}
+zkWnd = {};
 zkWnd.init = function (cmp) {
 	var img = $e(cmp.id + "!img");
 	if (img) {
@@ -283,8 +281,8 @@ zkWnd.afterOuter = function (cmp) {
 
 ////
 // groupbox, caption //
-function zkGrbox() {}
-function zkCapt() {}
+zkGrbox = {};
+zkCapt = {};
 
 zkGrbox.setAttr = function (cmp, nm, val) {
 	if ("z:open" == nm) {
@@ -345,7 +343,7 @@ zkCapt._parentGrbox = function (p) {
 
 ////
 // Image//
-function zkImg() {}
+zkImg = {};
 
 if (zk.ie && !zk.ie7) {
 	//Request 1522329: PNG with alpha color in IE
@@ -400,8 +398,8 @@ if (zk.ie && !zk.ie7) {
 
 ////
 // Imagemap //
-function zkMap() {}
-function zkArea() {}
+zkMap = {};
+zkArea = {};
 
 zkMap.init = function (cmp) {
 	zk.newFrame("zk_hfr_",
@@ -486,8 +484,7 @@ zkMap._toofast = function () {
 }
 
 //progressmeter//
-function zkPMeter() {}
-
+zkPMeter = {};
 zkPMeter.init = function (cmp) {
 	var img = $e(cmp.id + "!img");
 	if (img) {
@@ -503,8 +500,7 @@ zkPMeter.setAttr = function (cmp, nm, val) {
 }
 
 //Paging//
-function zkPg() {}
-
+zkPg = {};
 zkPg.go = function (anc, pgno) {
 	var cmp = $parentByType(anc, "Pg");
 	if (cmp)
@@ -512,7 +508,7 @@ zkPg.go = function (anc, pgno) {
 };
 
 //popup//
-function zkPop() {}
+zkPop = {};
 
 /** Called by au.js's context menu. */
 zkPop.context = function (ctx, ref) {

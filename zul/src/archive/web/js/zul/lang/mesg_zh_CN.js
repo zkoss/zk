@@ -16,8 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-function msgzul() {};
-
+msgzul = {};
 msgzul.FAILED_TO_CREATE_MASK = "无法建立 Modal Mask";
 msgzul.UNKNOWN_TYPE = "未知元件类型：";
 msgzul.DATE_REQUIRED = "只能输入日期。格式：";

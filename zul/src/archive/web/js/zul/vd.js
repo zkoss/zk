@@ -16,7 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-function zkVld() {};
+////
+zkVld = {};
 if (!zkVld._ebs) zkVld._ebs = new Array();
 zkau.valid = zkVld; //zkau depends on it
 

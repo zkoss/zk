@@ -18,7 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 zk.load("zul.zul");
 
-function zkTimer() {}
+//Timer//
+zkTimer = {};
 
 zk.Timer = Class.create();
 zk.Timer.prototype = {

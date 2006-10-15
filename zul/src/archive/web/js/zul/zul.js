@@ -18,8 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 zk.load("zul.lang.mesg*");
 
-function zul() {}
-
+////
+zul = {};
 /** Exetends zkau.js to process additional command.
  * Note: it shall return wehther this command is processed.
  * If false, the default process will continue.
@@ -165,7 +165,7 @@ zul.positionMask = function (mask) {
 };
 
 //For sortable header, e.g., Column and Listheader
-function zulSHdr() {} //listheader
+zulSHdr = {}; //listheader
 zulSHdr.init = function (cmp) {
 	zulSHdr._show(cmp);
 	zk.listen(cmp, "click", function (evt) {zulSHdr.onclick(evt, cmp);});

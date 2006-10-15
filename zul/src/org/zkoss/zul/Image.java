@@ -128,16 +128,18 @@ public class Image extends XulElement implements Viewable {
 		}
 	}
 
-	/** Returns the src.
+	/** Returns the source URI of the image.
 	 * <p>Default: null.
 	 */
 	public String getSrc() {
 		return _src;
 	}
-	/** Sets the src.
+	/** Sets the source URI of the image.
 	 *
 	 * <p>If {@link #setContent} is ever called with non-null,
 	 * it takes heigher priority than this method.
+	 *
+	 * @param src the URI of the image source
 	 */
 	public void setSrc(String src) {
 		if (src != null && src.length() == 0)

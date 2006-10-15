@@ -535,6 +535,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>script</component-name>
+		<component-class>org.zkoss.zul.Script</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/script.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>slider</component-name>
 		<component-class>org.zkoss.zul.Slider</component-class>
 		<mold>

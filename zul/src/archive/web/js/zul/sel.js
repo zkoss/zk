@@ -935,7 +935,7 @@ zk.Selectable.prototype = {
 
 ////
 // Utilities to help implement zk.Selectable //
-function zkSel() {}
+zkSel = {};
 
 zkSel._init = function (uuid) {
 	var meta = zkau.getMeta(uuid);
@@ -1004,7 +1004,7 @@ zkSel.cmonblurTo = function (row) {
 
 ////
 // listbox //
-function zkLibox() {} //listbox
+zkLibox = {}; //listbox
 
 /** Called when the body got a key stroke. */
 zkLibox.bodyonkeydown = function (evt) {
@@ -1063,7 +1063,7 @@ zkLibox.onVisi = function (cmp) {
 	if (meta) meta.init();
 };
 
-function zkLit() {} //listitem
+zkLit = {}; //listitem
 zkLit.init = function (cmp) {
 	zk.listen(cmp, "click", zkLibox.onclick);
 	zk.listen(cmp, "keydown", zkLibox.onkeydown);
@@ -1071,7 +1071,7 @@ zkLit.init = function (cmp) {
 	zk.listen(cmp, "mouseout", zkSel.onout);
 };
 
-function zkLcfc() {} //checkmark or the first hyperlink of listcell
+zkLcfc = {}; //checkmark or the first hyperlink of listcell
 zkLcfc.init = function (cmp) {
 	zk.listen(cmp, "focus", zkSel.cmonfocus);
 	zk.listen(cmp, "blur", zkSel.cmonblur);
@@ -1083,7 +1083,7 @@ zk.addModuleInit(function () {
 
 ////
 // listbox mold=select //
-function zkLisel() {}
+zkLisel = {};
 zkLisel.init = function (cmp) {
 	zk.listen(cmp, "change", function () {zkLisel.onchange(cmp);});
 	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});

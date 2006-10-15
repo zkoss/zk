@@ -18,7 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 zk.load("zul.zul");
 
-function zkMenu() {}
+////
+zkMenu = {};
 
 zk.FloatMenu = Class.create();
 zk.FloatMenu.prototype = {
@@ -222,9 +223,9 @@ zkMenu.init = function (cmp) {
 
 ////
 // menubar, menuitem //
-function zkMenubar() {}
-function zkMenuit() {} //menuitem
-function zkMenusp() {} //menuseparator
+zkMenubar = {};
+zkMenuit = {}; //menuitem
+zkMenusp = {}; //menuseparator
 
 zkMenuit.init = function (cmp) {
 	zk.listen(cmp, "click", zkMenuit.onclick);
@@ -264,7 +265,7 @@ zkMenusp.init = function (cmp) {
 };
 
 //menupopup//
-function zkMpop() {}
+zkMpop = {};
 
 /** Called by au.js's context menu. */
 zkMpop.context = function (ctx, ref) {

@@ -118,7 +118,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 
 ////
 // tree //
-function zkTree() {}
+zkTree = {};
 /** Init (and re-init) a tree. */
 zkTree.init = function (cmp) {
 	var meta = zkau.getMeta(cmp);
@@ -186,7 +186,7 @@ zkTree.ontoggle = function (evt) {
 	if (meta) meta.toggleOpen(evt, target);
 };
 
-function zkTrow() {} //Treerow
+zkTrow = {}; //Treerow
 zkTrow.init = function (cmp) {
 	zk.listen(cmp, "click", zkTree.onclick);
 	zk.listen(cmp, "keydown", zkTree.onkeydown);
@@ -194,13 +194,13 @@ zkTrow.init = function (cmp) {
 	zk.listen(cmp, "mouseout", zkSel.onout);
 };
 
-function zkTcfc() {} //checkmark or the first hyperlink of treecell
+zkTcfc = {}; //checkmark or the first hyperlink of treecell
 zkTcfc.init = function (cmp) {
 	zk.listen(cmp, "focus", zkSel.cmonfocus);
 	zk.listen(cmp, "blur", zkSel.cmonblur);
 }
 
-function zkTcop() {} //the image as the open button
+zkTcop = {}; //the image as the open button
 zkTcop.init = function (cmp) {
 	zk.listen(cmp, "click", zkTree.ontoggle);
 };

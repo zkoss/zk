@@ -18,8 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 zk.load("zul.widget");
 
-function zkCmbox() {}
-
+////
+zkCmbox = {};
 zkCmbox.init = function (cmp) {
 	var inp = $real(cmp);
 	zkTxbox.init(inp);
@@ -33,8 +33,7 @@ zkCmbox.init = function (cmp) {
 	btn.align = "absmiddle";
 };
 
-function zkCmit() {}
-
+zkCmit = {};
 zkCmit.init = function (cmp) {
 	zk.listen(cmp, "click", function () {zkCmbox.onclickitem(cmp);});
 	zk.listen(cmp, "mouseover", function () {zkCmbox.onover(cmp);});

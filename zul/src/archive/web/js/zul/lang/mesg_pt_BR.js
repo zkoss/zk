@@ -16,8 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-function msgzul() {};
-
+msgzul = {};
 msgzul.FAILED_TO_CREATE_MASK = "Incapaz de criar Modal Mask";
 msgzul.UNKNOWN_TYPE = "Tipo de componente desconhecido: ";
 msgzul.DATE_REQUIRED = "Você deve especificar uma data. Formato: ";
