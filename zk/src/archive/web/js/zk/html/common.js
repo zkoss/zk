@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-
 // Standard //
 String.prototype.startsWith = function (prefix) {
 	return this.substring(0,prefix.length) == prefix;
