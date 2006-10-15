@@ -28,13 +28,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.ReloadButton"/></caption>
+			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">
 			</window>
 		</groupbox>
 		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.CodeView" class="code" rows="15" width="100%">
+			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
 <window title="ZScript Demo" border="normal" width="200px">
 	<label id="mylabel" value="Hello, World!"/>

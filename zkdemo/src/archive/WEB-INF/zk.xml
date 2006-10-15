@@ -42,7 +42,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		where xx could be any name. And, the final URL will be /xx/richlet-url.
 	-->
 	<richlet>
-		<richlet-class>org.zkoss.zkdemo.TestRichlet</richlet-class>
+		<richlet-class>org.zkoss.zkdemo.test.TestRichlet</richlet-class>
 		<richlet-url>/test</richlet-url>
 		<!-- Any number of initial parameters.
 		<init-param>

@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package org.zkoss.zkdemo;
+package org.zkoss.zkdemo.userguide;
 
 import java.util.Set;
 import java.util.HashSet;
