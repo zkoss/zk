@@ -38,6 +38,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="10" width="100%">
 				<attribute name="value"><![CDATA[
 <window title="Google Maps">
+	<div style="border: 1px solid red;margin-top:10px;margin-bottom:20px"
+	if="${empty desktopScope.gmapsKey}">
+		To use Google Maps for this site, you have to assign a proper key first.
+		Check the source codes of org.zkoss.zkdemo.userguide.MainWindow for details.
+	</div>
 	<vbox>
 	<gmap id="mymap" width="500px" height="300px" showSmallCtrl="true">
 		<attribute name="onMapMove">

@@ -18,7 +18,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="root" xmlns:h="http://www.w3.org/1999/xhtml">
+<window id="root" use="org.zkoss.zkdemo.userguide.MainWindow" xmlns:h="http://www.w3.org/1999/xhtml">
+	<!-- The following script is generated because we want to demo Google Maps later -->
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${desktopScope.gmapsKey}"
+		type="text/javascript" unless="${empty desktopScope.gmapsKey}"/>
+
 	<hbox>
 	<window id="treelist">
 		<tree id="toc" use="org.zkoss.zkdemo.userguide.TocTree" vflex="true" width="320px">
