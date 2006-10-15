@@ -17,14 +17,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="Google Maps">
+<window title="Google Maps" width="605px">
 	<zscript><![CDATA[
 		String sn = Executions.getCurrent().getServerName();
 		int sp = Executions.getCurrent().getServerPort();
 		String gkey;
-		if (sn.indexOf("potix") >= 0) { // http://www.potix.com/
+		if (sn.indexOf("potix.com") >= 0) { // http://www.potix.com/
 			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTT6-Op-9nAQgn7qnDG0QjE8aldaBRU1BQK2ADNWCt1BR2yg4ghOM6YIA";
-		} else if (sn.indexOf("zkoss") >= 0) { // http://www.zkoss.org/
+		} else if (sn.indexOf("zkoss.org") >= 0) { // http://www.zkoss.org/
 			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
 		} else if (sn.indexOf("localhost") >= 0) { //localhost
 			if (sp == 80) // http://localhost/
@@ -37,8 +37,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxSaCJ3Eu2_Jgal0EfuIMOhRQnBKwxRaMAWlPyqbUS4CrFjdIToEv3Nu4w";
 		}
 	]]></zscript>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${gkey}" type="text/javascript"/>
 	<vbox>
-	<gmap id="mymap" width="500px" height="300px" showSmallCtrl="true" key="${gkey}">
+	<gmap id="mymap" width="600px" height="350px" showSmallCtrl="true">
 		<attribute name="onMapMove">
 			mylat.setValue(self.getLat());
 			mylng.setValue(self.getLng());
@@ -47,10 +48,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			myzoom.setValue(self.getZoom());
 		</attribute>
 	</gmap>
-	<grid><rows>
+	<grid>
+	<rows>
 		<row>Latitude: <doublebox id="mylat" value="${mymap.lat}" onChange="mymap.panTo(self.doubleValue(), mymap.getLng())"/></row>
 		<row>Longitude: <doublebox id="mylng" value="${mymap.lng}" onChange="mymap.panTo(mymap.getLat(), self.doubleValue())"/></row>
 		<row>Zoom Level: <intbox id="myzoom" value="${mymap.zoom}" onChange="mymap.setZoom(self.getValue())"/></row>
-	</rows></grid>
+	</rows>
+	</grid>
 	</vbox>
 </window>
