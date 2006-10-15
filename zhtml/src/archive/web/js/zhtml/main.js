@@ -16,7 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-function zkRaw() {} //ZHTML components
+////
+//ZHTML components//
+zkRaw = {};
 
 zkRaw.init = function (cmp) {
 	zk.listen(cmp, "change", function () {zkRaw.onchange(cmp);});
