@@ -16,10 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-//
-//
 //zk//
-function zk() {}
+zk = {};
 
 /** Default version used for all modules that don't define their individual
  * version.
@@ -181,12 +179,16 @@ zk.addInit = function (fn) {
 
 /** Loads the specified module (JS). If a feature is called "a.b.c", then
  * zk_action + "/web/js" + "a/b/c.js" is loaded.
- * <p>To load a JS file directly, use zk.loadJS
+ *
+ * <p>To load a JS file that other modules don't depend on, use zk.loadJS.
+ *
  * @param nm the module name if no / is specified, or filename if / is
- * specified.
- * @param fn the function that will be added to zk.addModuleInit
+ * specified, or URL if :// is specified.
+ * @param initfn the function that will be added to zk.addModuleInit
+ * @param ckfn used ONLY if URL (i.e., xxx://) is used as nm,
+ * and the file being loaded doesn't invoke zk.ald().
  */
-zk.load = function (nm, fn) {
+zk.load = function (nm, initfn, ckfn) {
 	if (!nm) {
 		zk.error("Module name must be specified");
 		return;
@@ -194,8 +196,9 @@ zk.load = function (nm, fn) {
 
 	if (!zk._modules[nm]) {
 		zk._modules[nm] = true;
-		if (fn) zk.addModuleInit(fn);
+		if (initfn) zk.addModuleInit(initfn);
 		zk._load(nm);
+		if (ckfn) zk._ckfns.push(ckfn);
 	}
 };
 /** Loads the required module for the specified component.
@@ -212,25 +215,30 @@ zk.loadByType = function (n) {
 	return false;
 }
 
-/** Loads the javascript. It invokes _bld before loading,
- * and _ald after loaded.
+/** Loads the javascript. It invokes _bld before loading.
+ *
+ * <p>The JavaScript file being loaded must<br/>
+ * 1) call zk.ald() after loaded<br/>
+ * 2) pass ckfn to test whether it is loaded.
  */
 zk._load = function (nm) {
 	zk._bld();
 
 	var e = document.createElement("script");
 	e.type = "text/javascript" ;
-	e.charset = "UTF-8";
 
-	var zcb = "/_zcbzk._ald";
-		//Note: we use /_zcb to enforce callback
+	var zcb = "/_zcbzk.ald"; //Note: we use /_zcb to enforce callback of zk.ald
 	var uri = nm;
-	if (uri.indexOf('/') >= 0) {
+	if (uri.indexOf("://") > 0) {
+		e.src = uri;
+	} else if (uri.indexOf('/') >= 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
+		e.charset = "UTF-8";
 		e.src = zk.getUpdateURI("/web/_zver" + zk.build + zcb + uri);
 	} else { //module name
 		uri = uri.replace(/\./g, '/') + ".js";
 		if (uri.charAt(0) != '/') uri = '/' + uri;
+		e.charset = "UTF-8";
 		e.src = zk.getUpdateURI("/web/_zver" + zk.getBuild(nm) + zcb + "/js" + uri);
 	}
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
@@ -240,6 +248,14 @@ zk._bld = function () {
 	if (zk.loading ++) {
 		zk._updCnt();
 	} else {
+		zk._ckload = setInterval(function () {
+			for (var j = 0; j < zk._ckfns.length; ++j)
+				if (zk._ckfns[j]()) {
+					zk._ckfns.splice(j--, 1);
+					zk.ald();
+				} else return; //wait a while
+		}, 10);
+
 		setTimeout(function () {
 			if (zk.loading) {
 				var n = $e("zk_loadprog");
@@ -250,10 +266,15 @@ zk._bld = function () {
 	}
 };
 /** after load. */
-zk._ald = function (modnm) {
+zk.ald = function () {
 	if (--zk.loading) {
 		zk._updCnt();
 	} else {
+		if (zk._ckload) {
+			clearInterval(zk._ckload);
+			zk._ckload = null;
+		}
+
 		var n = $e("zk_loadprog");
 		if (n) n.parentNode.removeChild(n);
 		if (zk._ready) zk._evalInit(); //zk._loadAndInit mihgt not finish
@@ -423,6 +444,7 @@ zk.loadCSS = function (uri) {
  * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
  * unless http:// or https:// is specified
  * @param fn the function to execute after loading. It is optional.
+ * Not function under safari
  */
 zk.loadJS = function (uri, fn) {
 	var e = document.createElement("script");
@@ -640,7 +662,8 @@ if (!zk._modules) {
 	zk._modules = {};
 	zk._initfns = new Array(); //used by addInit
 	zk._initmods = new Array(); //used by addModuleInit
-	zk._initcmps = new Array(); //an array of comp list to init
+	zk._initcmps = new Array(); //an array of comps to init
+	zk._ckfns = new Array();
 
 	var myload =  function () {
 		//It is possible to move javascript defined in zul's language.xml

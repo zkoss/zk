@@ -341,7 +341,7 @@ public interface Execution extends Evaluator {
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
-	 * @param params a map of parameters that is accessible by the arg variable
+	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @return the first component being created.

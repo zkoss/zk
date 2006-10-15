@@ -16,8 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-function mesg() {};
-
+mesg = {};
 mesg.NOT_FOUND = "No encontrado: ";
 mesg.UNSUPPORTED = "No es soportado por esta version: "
 mesg.FAILED_TO_SEND = "Fallo al enviar peticiones (request) al servidor: ";
