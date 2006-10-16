@@ -98,6 +98,10 @@ public class Rows extends XulElement implements Cropper {
     }
 
 	//--Cropper--//
+	public boolean isCropper() {
+		final Grid grid = getGrid();
+		return grid != null && grid.inPagingMold();
+	}
 	public Set getAvailableAtClient() {
 		final Grid grid = getGrid();
 		if (grid == null || !grid.inPagingMold())

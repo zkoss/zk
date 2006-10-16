@@ -146,12 +146,12 @@ zk.Selectable.prototype = {
 					//Moz has a bug to send the request out if we don't wait long enough
 					//How long is enough is unknown, but 200 seems fine
 			};
-			this._render(20);
 
 			setTimeout("zkSel._calcSize('"+this.id+"')", 5);
 				//don't calc now because browser might size them later
 				//after the whole HTML page is processed
 		}
+		this._render(20);
 	},
 	cleanup: function ()  {
 		if (this.fnResize)

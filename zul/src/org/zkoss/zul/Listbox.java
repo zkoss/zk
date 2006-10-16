@@ -801,6 +801,9 @@ ChildChangedAware, Cropper {
 	}
 
 	//--Cropper--//
+	public boolean isCropper() {
+		return inPagingMold();
+	}
 	public Set getAvailableAtClient() {
 		if (!inPagingMold())
 			return null;
