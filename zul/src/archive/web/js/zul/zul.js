@@ -139,7 +139,7 @@ zul.endModal = function (uuid) {
 
 	var cmp = $e(uuid);
 	if (cmp) {
-		zkau.wndmode[cmp.id] = null;
+		delete zkau.wndmode[cmp.id];
 		zkau.fixWnd(cmp);
 	}
 

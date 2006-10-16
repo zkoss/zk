@@ -490,7 +490,7 @@ zkDtbox.open = function (pp) {
 	pp.style.overflow = "auto"; //just in case
 	pp.style.display = "block";
 	pp.style.zIndex = "80000";
-	zkau.onVisiChildren(pp);
+	//No special child, so no need to: zk.onVisiAt(pp);
 
 	if (zk.gecko) {
 		setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
@@ -542,6 +542,7 @@ zkDtbox.close = function (pp, focus) {
 	pp = $e(pp);
 	zkau._dtbox._popupId = null;
 	pp.style.display = "none";
+	//No special child, so no need to: zk.onHideAt(pp);
 	zkau.hideCovered();
 
 	if (focus)

@@ -274,7 +274,7 @@ zkWnd.beforeOuter = function (cmp) {
 zkWnd.afterOuter = function (cmp) {
 	var nm = cmp.id + "!modal";
 	if (zkau.wndmode[nm]) {
-		zkau.wndmode[nm] = null;
+		delete zkau.wndmode[nm];
 		zul.doModal(cmp);
 	}
 };
@@ -515,8 +515,7 @@ zkPop.context = function (ctx, ref) {
 	if (getZKAttr(ctx, "onOpen"))
 		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
 
-	action.show(ctx);
-	zkau.onVisiChildren(ctx);
+	action.show(ctx); //onVisiAt is called in action.show
 	zkPop._pop._popupId = ctx.id;
 	zkau.hideCovered();
 };

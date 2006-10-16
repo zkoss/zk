@@ -237,7 +237,7 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	pp.style.overflow = "auto"; //just in case
 	pp.style.display = "block";
 	pp.style.zIndex = "80000";
-	zkau.onVisiChildren(pp);
+	zk.onVisiAt(pp);
 
 	if (zk.gecko) {
 		setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
@@ -418,6 +418,7 @@ zkCmbox.close = function (pp, focus) {
 
 	zkCmbox._pop._popupId = null;
 	pp.style.display = "none";
+	zk.onHideAt(pp);
 	zkau.hideCovered();
 
 	if (focus)

@@ -53,7 +53,7 @@ zkSplt.init = function (cmp) {
 zkSplt.cleanup = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
-		zkSplt._drags[cmp.id] = null;
+		delete zkSplt._drags[cmp.id];
 		drag.drag.destroy();
 	}
 };
