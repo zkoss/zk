@@ -440,9 +440,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final
 	void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
 		final Desktop dt;
-		if (oldpg != null) dt = oldpg.getDesktop();
-		else if (newpg != null) dt = newpg.getDesktop();
-		else return;
+		if (oldpg != null) {
+			dt = oldpg.getDesktop();
+			if (newpg == null && !dt.getExecution().isAsyncUpdate(oldpg))
+				return; //detach a component that was in a loading page
+						//To avoid generate a redudant AuRemove
+		} else if (newpg != null) {
+			dt = newpg.getDesktop();
+		} else {
+			return;
+		}
 
 		((WebAppCtrl)dt.getWebApp())
 			.getUiEngine().addMoved(comp, oldparent, oldpg == null);
