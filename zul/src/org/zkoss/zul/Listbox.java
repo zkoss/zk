@@ -609,19 +609,35 @@ ChildChangedAware, Cropper {
 	public void selectItemsByClient(Set selItems) {
 		_noSmartUpdate = true;
 		try {
-			if (!_multiple || selItems == null || selItems.size() <= 1) {
+			final boolean paging = inPagingMold();
+			if (!_multiple
+			|| (!paging && (selItems == null || selItems.size() <= 1))) {
 				final Listitem item =
 					selItems != null && selItems.size() > 0 ?
 						(Listitem)selItems.iterator().next(): null;
 				selectItem(item);
 			} else {
+				int from, to;
+				if (paging) {
+					final Paginal pgi = getPaginal();
+					int pgsz = pgi.getPageSize();
+					from = pgi.getActivePage() * pgsz;
+					to = from + pgsz; //excluded
+				} else {
+					from = to = 0;
+				}
+
 				int j = 0;
 				for (Iterator it = _items.iterator(); it.hasNext(); ++j) {
 					final Listitem item = (Listitem)it.next();
 					if (selItems.contains(item)) {
 						addItemToSelection(item);
-					} else {
+					} else if (!paging) {
 						removeItemFromSelection(item);
+					} else {
+						final int index = item.getIndex();
+						if (index >= from && index < to)
+							removeItemFromSelection(item);
 					}
 				}
 			}
