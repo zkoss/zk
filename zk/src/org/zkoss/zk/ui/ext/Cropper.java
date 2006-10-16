@@ -34,6 +34,13 @@ import java.util.Set;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface Cropper {
+	/** Returns whether it is a cropper.
+	 *
+	 * <p>If {@link #isCropper} returns false, {@link #getAvailableAtClient} must return null.
+	 * In other words, the result of returning false is the same as not declaring
+	 * with {@link Cropper}.
+	 */
+	public boolean isCropper();
 	/** Returns a set of child components that are available at the client,
 	 * or null if all available.
 	 *

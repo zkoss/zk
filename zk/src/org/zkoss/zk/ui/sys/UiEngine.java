@@ -109,10 +109,11 @@ public interface UiEngine {
 	 * If a component's page or parent is changed, this method need to be
 	 * called only once for the top one.
 	 *
+	 * @param oldparent the parent before moved
 	 * @param newAttached whether the component is added to a page
 	 * first time.
 	 */
-	public void addMoved(Component comp, boolean newAttached);
+	public void addMoved(Component comp, Component oldparent, boolean newAttached);
 	/** Called before changing the component's UUID.
 	 *
 	 * @param addOnlyMoved if true, it is added only if it was moved

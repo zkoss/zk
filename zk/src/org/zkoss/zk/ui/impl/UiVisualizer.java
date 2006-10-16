@@ -176,16 +176,25 @@ import org.zkoss.zk.au.*;
 	 * If a component's page or parent is changed, this method need to be
 	 * called only once for the top one.
 	 *
+	 * @param oldparent the parent before moved
 	 * @param newAttached whether the component is added to a page
 	 * first time.
 	 */
-	public void addMoved(Component comp, boolean newAttached) {
+	public void addMoved(Component comp, Component oldparent, boolean newAttached) {
 		if (newAttached && !_moved.contains(comp)) {
 			_attached.add(comp);
 				//note: we cannot examine _exec.isAsyncUpdate here because
 				//comp.getPage might be ready when this method is called
 		} else {
-			_moved.add(comp);
+			if (_moved.add(comp)) { //first time added
+				//Due to the performance of Cropper.getAvailableAtClient
+				//usually not good, so we count on isCropper only
+				//In other words, this algorithm might redraw something that don't
+				//need to, but has better performance if no redudant redrawing
+				if ((oldparent instanceof Cropper)
+				&& ((Cropper)oldparent).isCropper())
+					_invalidated.add(oldparent);
+			}
 			_attached.remove(comp);
 		}
 	}
@@ -236,57 +245,72 @@ import org.zkoss.zk.au.*;
 	}
 
 	/** Process {@link Cropper}.
+	 *
+	 * <p>Note: it is too late to handle the moved/removed components here,
+	 * since we don't know their old parent now!
+	 * Rather, we handle it in {@link #addMoved}.
+	 *
+	 * @return whether any new invalidated is added
 	 */
-	private void doCrop() {
+	private boolean doCrop() {
 		final Map cropping = new HashMap();
-		crop(_attached, cropping, true, false, false);
-		crop(_invalidated, cropping, false, false, false);
-		crop(_smartUpdated.keySet(), cropping, false, true, false);
+		boolean invAdded = crop(_attached, cropping, true, false);
+		invAdded = crop(_smartUpdated.keySet(), cropping, false, false) || invAdded;
 		if (_responses != null)
-			crop(_responses.keySet(), cropping, false, false, true);
+			invAdded = crop(_responses.keySet(), cropping, false, true) || invAdded;
+		invAdded = crop(_invalidated, cropping, false, false) || invAdded;
+			//crop invalidate as the last step since new invalidated might be added
+		return invAdded;
 	}
 	/** Crop attached and moved.
+	 *
+	 * @return whether any new invalidated is added
 	 */
-	private void crop(Set coll, Map cropping, boolean bAttached,
-	boolean bSmartUpdate, boolean bResponse) {
-		l_out:
+	private boolean crop(Set coll, Map cropping, boolean bAttached,
+	boolean bResponse) {
+		Set newInvalid = null;
 		for (Iterator it = coll.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (!(o instanceof Component))
 				continue;
 
 			final Component comp = (Component)o;
-			if (!bResponse) {
-				if (!_exec.isAsyncUpdate(comp.getPage())) {
-					it.remove();
-					continue;
-				}
-
-				if (isAncestor(_invalidated, comp, bSmartUpdate)
-				|| isAncestor(_attached, comp, bSmartUpdate)) {
-					it.remove();
-					continue;
-				}
+			if (!_exec.isAsyncUpdate(comp.getPage())) {
+				if (!bResponse) it.remove(); //just in case
+				continue;
 			}
 
 			for (Component p, c = comp; (p = c.getParent()) != null; c = p) {
 				final Set avail = getAvailableAtClient(p, cropping);
 				if (avail != null) {
 					if (bAttached)  {
-						if (_moved.contains(c) || avail.contains(c))
-							_invalidated.add(p);
+						if (avail.contains(c)) {
+							if (c != comp)
+								continue; //not direct child, do as if not cropper
+
+							//don't add to _invalidate directly since coll might
+							//be _invalidate
+							if (newInvalid == null)
+								newInvalid = new HashSet();
+							newInvalid.add(p);
+						}
 						it.remove();
-						continue l_out;
+						break;
 					} else if (!avail.contains(c)) {
 						it.remove();
-						continue l_out;
+						break;
 					}
 				}
 			}
 		}
+
+		return newInvalid != null && _invalidated.addAll(newInvalid);
 	}
 	private static Set getAvailableAtClient(Component comp, Map cropping) {
 		if (comp instanceof Cropper) {
+			//we don't need to check isCropper first since its component's job
+			//to ensure the consistency
+
 			Set set = (Set)cropping.get(comp);
 			if (set != null)
 				return set != Collections.EMPTY_SET ? set: null;
@@ -301,22 +325,25 @@ import org.zkoss.zk.au.*;
 	/** Process {@link ChildChangedAware}
 	 */
 	private void doChildChanged() {
-		final List ccawares = new LinkedList();
-		doChildChanged(_invalidated, ccawares);
-		doChildChanged(_attached, ccawares);
-		doChildChanged(_smartUpdated.keySet(), ccawares);
+		final Set ccawares = new HashSet(), checked = new HashSet(79);
+		doChildChanged(_invalidated, ccawares, checked);
+		doChildChanged(_attached, ccawares, checked);
+		doChildChanged(_smartUpdated.keySet(), ccawares, checked);
 
 		if (!ccawares.isEmpty())
 			for (Iterator it = ccawares.iterator(); it.hasNext();)
 				addSmartUpdate((Component)it.next(), "z:chchg", "true");
 	}
-	private void doChildChanged(Collection col, List ccawares) {
+	private void doChildChanged(Collection col, Set ccawares, Set checked) {
 		for (Iterator it = col.iterator(); it.hasNext();) {
 			Component comp = (Component)it.next();
 			if (!_exec.isAsyncUpdate(comp.getPage()))
 				continue;
 
 			while ((comp = comp.getParent()) != null) {
+				if (!checked.add(comp))
+					break; //already checked
+
 				if ((comp instanceof ChildChangedAware)
 				//&& !_invalidated.contains(comp) && !_attached.contains(comp)
 					//No need to check _invalidated... since they are optimized
@@ -403,8 +430,8 @@ import org.zkoss.zk.au.*;
 	 * are invalidated and attached.
 	 */
 	public List getResponses() throws IOException {
-		if (D.ON && log.debugable())
-			log.debug("ei: "+this+"\nInvalidated: "+_invalidated+"\nSmart Upd: "+_smartUpdated
+		if (D.ON && log.finerable())
+			log.finer("ei: "+this+"\nInvalidated: "+_invalidated+"\nSmart Upd: "+_smartUpdated
 				+"\nAttached: "+_attached+"\nMoved:"+_moved+"\nResponses:"+_responses
 				+"\npgInvalid: "+_pgInvalid	+"\nUuidChanged: "+_idChgd);
 
@@ -412,15 +439,29 @@ import org.zkoss.zk.au.*;
 
 		//1. process dead comonents, cropping and the removed page
 		{
+			//1a. handle _moved
 			//The reason to remove first: some insertion might fail if the old
 			//componetns are not removed yet
 			//Also, we have to remove both parent and child because, at
 			//the client, they might not be parent-child relationship
-			Set removed = doMoved(responses); //process _attached and _moved
+			Set removed = doMoved(responses);
+				//after called, _moved is cleared (add to _attached if necessary)
 
-			doCrop(); //process Cropper
+			//1b. remove reduntant
+			removeRedundant(_invalidated);
+			removeRedundant(_attached);
+			removeCrossRedundant();
+				//it also handle isTransparent!!
 
-			//1a. prepare removed pages and optimize for invalidate or removed pages
+			//1c. process Cropper
+			if (doCrop()) {
+				//optimize it again since new invalidated is added
+				removeRedundant(_invalidated);
+				removeCrossRedundant();
+			}
+			resolveDirtyTransparent(responses);
+
+			//1d. prepare removed pages and optimize for invalidate or removed pages
 			checkPageRemoved(removed); //maintain _pgRemoved for pages being removed
 		}
 
@@ -458,27 +499,20 @@ import org.zkoss.zk.au.*;
 			_idChgd = null; //just in case
 		}
 
-		//4. reduntant: invalidate is parent of attached; vice-versa
-		//   reduntant: invalidate or create is parent of smartUpdate
-		removeRedundant(_invalidated);
-			//note: removeRedundant(_attached) are called before (in doMoved)
-		removeRedundant(responses, _invalidated, _smartUpdated, _attached);
-			//it also handle isTransparent!!
-
 		if (log.finerable())
 			log.finer("After removing redudant: invalidated: "+_invalidated
 			+"\nAttached: "+_attached+"\nSmartUpd:"+_smartUpdated);
 
-		//5. process special interfaces
+		//4. process special interfaces
 		doChildChanged(); //ChildChangedAware
 
-		//6. generate replace for invalidated
+		//5. generate replace for invalidated
 		for (Iterator it = _invalidated.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			responses.add(new AuReplace(comp, redraw(comp)));
 		}
 
-		//7. add attached components (including setParent)
+		//6. add attached components (including setParent)
 		//Due to cyclic references, we have to process all siblings
 		//at the same time
 		final List desktops = new LinkedList();
@@ -535,7 +569,6 @@ import org.zkoss.zk.au.*;
 		_invalidated.clear();
 		_smartUpdated.clear();
 		_attached.clear();
-		_moved.clear(); //free memory
 		_pgInvalid = _pgRemoved = null;
 		_responses = null;
 
@@ -546,7 +579,12 @@ import org.zkoss.zk.au.*;
 		return (comp instanceof Transparent) && ((Transparent)comp).isTransparent();
 	}
 
-	/** provess moved components.
+	/** process moved components.
+	 *
+	 * <p>After called, _moved becomes empty.
+	 * If they are removed, correponding AuRemove are generated.
+	 * If not, they are added to _attached.
+	 *
 	 * @return the dead components (i.e., not belong to any page)
 	 */
 	private Set doMoved(List responses) {
@@ -557,7 +595,6 @@ import org.zkoss.zk.au.*;
 			final Page pg = comp.getPage();
 			if (pg == null) {
 				removed.add(comp);
-				it.remove();
 
 				if (_responses != null) _responses.remove(comp);
 				_invalidated.remove(comp);
@@ -570,15 +607,11 @@ import org.zkoss.zk.au.*;
 				if (_exec.isAsyncUpdate(pg))
 					responses.add(new AuRemove(comp));
 				_attached.add(comp);
+					//copy to _attached since we handle them later in the same way
 			}
 		}
 
-		removeRedundant(_attached);
-			//we can not remove the redudant invalidated yet since they
-			//might be added later
-
-		//Note: we don't clear _moved since we have to use it to test whether
-		//it is new attached
+		_moved.clear(); //no longer required
 		return removed;
 	}
 
@@ -675,15 +708,15 @@ import org.zkoss.zk.au.*;
 			}
 		}
 	}
-	/** Removes redundant components (i.e., an descendant of another).
+	/** Removes redundant components cross _invalidate, _smartUpdate
+	 * and _attached.
 	 */
-	private static void removeRedundant(List responses, Set invalidated,
-	Map smartUpdated, Set attached) {
+	private void removeCrossRedundant() {
 		invLoop:
-		for (Iterator j = invalidated.iterator(); j.hasNext();) {
+		for (Iterator j = _invalidated.iterator(); j.hasNext();) {
 			final Component cj = (Component)j.next();
 
-			for (Iterator k = attached.iterator(); k.hasNext();) {
+			for (Iterator k = _attached.iterator(); k.hasNext();) {
 				final Component ck = (Component)k.next();
 				if (Components.isAncestor(ck, cj)) { //includes ck == cj
 					j.remove();
@@ -694,7 +727,7 @@ import org.zkoss.zk.au.*;
 			}
 		}
 		suLoop:
-		for (Iterator j = smartUpdated.keySet().iterator(); j.hasNext();) {
+		for (Iterator j = _smartUpdated.keySet().iterator(); j.hasNext();) {
 			final Component cj = (Component)j.next();
 
 			if (isTransparent(cj)) {
@@ -702,7 +735,7 @@ import org.zkoss.zk.au.*;
 				continue;
 			}
 
-			for (Iterator k = invalidated.iterator(); k.hasNext();) {
+			for (Iterator k = _invalidated.iterator(); k.hasNext();) {
 				final Component ck = (Component)k.next();
 
 
@@ -711,7 +744,7 @@ import org.zkoss.zk.au.*;
 					continue suLoop;
 				}
 			}
-			for (Iterator k = attached.iterator(); k.hasNext();) {
+			for (Iterator k = _attached.iterator(); k.hasNext();) {
 				final Component ck = (Component)k.next();
 				if (Components.isAncestor(ck, cj)) {
 					j.remove();
@@ -719,10 +752,15 @@ import org.zkoss.zk.au.*;
 				}
 			}
 		}
-
+	}
+	/** Resolve the transpancy of _invalidated and _attached by replacing
+	 * transparent components with their non-transparent children.
+	 * <p>Reason: a transparent component is not available at the client.
+	 */
+	private void resolveDirtyTransparent(List responses) {
 		//resolves transprent components.
 		List comps = null;
-		for (Iterator it = invalidated.iterator(); it.hasNext();) {
+		for (Iterator it = _invalidated.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			if (isTransparent(comp)) {
 				if (comps == null) comps = new LinkedList();
@@ -735,10 +773,10 @@ import org.zkoss.zk.au.*;
 			}
 		}
 		if (comps != null) {
-			resolveTransparent(comps, invalidated);
+			resolveTransparent(comps, _invalidated);
 			comps = null;
 		}
-		for (Iterator it = attached.iterator(); it.hasNext();) {
+		for (Iterator it = _attached.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			if (isTransparent(comp)) {
 				if (comps == null) comps = new LinkedList();
@@ -750,21 +788,7 @@ import org.zkoss.zk.au.*;
 					//in the client to remove)
 			}
 		}
-		if (comps != null) resolveTransparent(comps, attached);
-	}
-	/** Adds comps to invalidated, and resolves comps by replacing transparent
-	 * components with their non-transparent children.
-	 */
-	private static void resolveTransparent(List comps, Set invalidated) {
-		if (comps.isEmpty()) return;
-		for (Iterator it = comps.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			if (isTransparent(comp)) {
-				resolveTransparent(comp.getChildren(), invalidated); //recursive
-			} else {
-				invalidated.add(comp);
-			}
-		} 
+		if (comps != null) resolveTransparent(comps, _attached);
 	}
 	/** Copies comps to result, and resolves comps by replacing transparent
 	 * components with their non-transparent children.
@@ -777,6 +801,7 @@ import org.zkoss.zk.au.*;
 				resolveTransparent(comp.getChildren(), result); //recursive
 			} else {
 				result.add(comp);
+					//either _invalidated.add or _attached.add
 			}
 		} 
 	}

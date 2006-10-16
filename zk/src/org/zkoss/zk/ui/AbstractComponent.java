@@ -428,7 +428,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		if (_page != null) removeFromIdSpacesDown(this);
 
-		addMoved(this, _page, page); //Not depends on UUID
+		addMoved(this, _parent, _page, page); //Not depends on UUID
 		setPage0(page); //UUID might be changed here
 
 		if (_page != null) addToIdSpacesDown(this);
@@ -438,14 +438,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Calling getUiEngine().addMoved().
 	 */
 	private static final
-	void addMoved(Component comp, Page oldpg, Page newpg) {
+	void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
 		final Desktop dt;
 		if (oldpg != null) dt = oldpg.getDesktop();
 		else if (newpg != null) dt = newpg.getDesktop();
 		else return;
 
 		((WebAppCtrl)dt.getWebApp())
-			.getUiEngine().addMoved(comp, oldpg == null);
+			.getUiEngine().addMoved(comp, oldparent, oldpg == null);
 	}
 
 	/** Ses the page without fixing IdSpace
@@ -539,7 +539,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				if (_desktop != null) {
 					((DesktopCtrl)_desktop).addComponent(this);
 					if (_parent != null && isTransparent(this)) _parent.invalidate();
-					getThisUiEngine().addMoved(this, false);
+					getThisUiEngine().addMoved(this, _parent, false);
 				}
 			} else {
 				_id = id;
@@ -696,10 +696,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		if (_parent != null && isTransparent(this)) _parent.invalidate();
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
+		final Component oldparent = _parent;
 		if (_parent != null) {
-			final Component oldp = _parent;
 			_parent = null; //update first to avoid loop back
-			oldp.removeChild(this); //spec: removeChild must be called
+			oldparent.removeChild(this); //spec: removeChild must be called
 		} else {
 			if (_page != null)
 				((PageCtrl)_page).removeRoot(this); //Not depends on uuid
@@ -714,7 +714,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		} //if parent == null, assume no page at all (so no addRoot)
 
 		final Page newpg = _parent != null ? _parent.getPage(): null;
-		addMoved(this, _page, newpg); //Not depends on UUID
+		addMoved(this, oldparent, _page, newpg); //Not depends on UUID
 		setPage0(newpg); //UUID might be changed here
 
 		if (_spaceInfo != null) //ID space owner
@@ -763,11 +763,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (!added) _children.add(newChild);
 		}
 
+		final AbstractComponent nc = (AbstractComponent)newChild;
 		if (found) { //re-order
 			if (isTransparent(newChild)) invalidate();
-			addMoved(newChild, newChild.getPage(), _page);
+			addMoved(newChild, nc._parent, nc._page, _page);
+				//Not to use getPage and getParent to avoid calling user's codes
+				//if they override them
 		} else { //new added
-			if (newChild.getParent() != this) { //avoid loop back
+			if (nc._parent != this) { //avoid loop back
 				_newChildren.add(newChild); //used by setParent to avoid loop back
 				try {
 					newChild.setParent(this); //call addMoved, setPage0...
