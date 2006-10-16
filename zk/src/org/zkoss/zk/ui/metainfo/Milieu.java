@@ -1,4 +1,4 @@
-/* Millieu.java
+ /* Milieu.java
 
 {{IS_NOTE
 	Purpose:
@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.util.Evaluator;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Millieu implements Serializable {
+public class Milieu implements Serializable {
     private static final long serialVersionUID = 20060622L;
 
 	/** The language definition. */
@@ -62,25 +62,25 @@ public class Millieu implements Serializable {
 	//static//
 	private static final ThreadLocal _mill = new ThreadLocal();
 	/** A dummy millieu which assumes nothing is defined at all. */
-	public static final Millieu DUMMY = new Millieu();
+	public static final Milieu DUMMY = new Milieu();
 
 	/** Returns the current millieu, which is used only by
 	 * {@link org.zkoss.zk.ui.AbstractComponent}.
 	 * <p>UiEngine use this to communicate with
 	 * {@link org.zkoss.zk.ui.AbstractComponent}.
 	 */
-	public static Millieu getCurrent() {
-		return (Millieu)_mill.get();
+	public static Milieu getCurrent() {
+		return (Milieu)_mill.get();
 	}
 	/** Sets the current millieu.
 	 */
-	public static void setCurrent(Millieu mill) {
+	public static void setCurrent(Milieu mill) {
 		_mill.set(mill);
 	}
 
 	/** Constructor.
 	 */
-	/*package*/ Millieu(ComponentDefinition def) {
+	/*package*/ Milieu(ComponentDefinition def) {
 		_implcls = def.getImplementationClass();
 		_params = def.getParams();
 		_molds = def.getMolds();
@@ -100,7 +100,7 @@ public class Millieu implements Serializable {
 			_custAttrs = _pprops = null;
 		}
 	}
-	private Millieu() {
+	private Milieu() {
 		_implcls = null;
 		_evthds = _params = _molds = null;
 		_custAttrs = _lprops = _pprops = null;
@@ -129,7 +129,7 @@ public class Millieu implements Serializable {
 			try {
 				final Class cls = page.getClass(clsnm);
 				if (Objects.equals(
-				cls.getClassLoader(), Millieu.class.getClassLoader()))
+				cls.getClassLoader(), Milieu.class.getClassLoader()))
 					_implcls = cls; //cache only if static
 				return cls;
 			} catch (ClassNotFoundException ex) {

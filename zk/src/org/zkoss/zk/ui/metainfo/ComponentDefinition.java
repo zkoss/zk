@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.util.Evaluator;
  */
 public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	private String _name;
-	private Millieu _mill;
+	private Milieu _mill;
 	private transient LanguageDefinition _langdef;
 	/** Either String or Class. */
 	private Object _cls;
@@ -129,9 +129,9 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 
 	/** Returns the millieu representing this definition.
 	 */
-	public Millieu getMillieu() {
+	public Milieu getMilieu() {
 		if (_mill == null) //no need to synchronized since harmless
-			_mill = new Millieu(this);
+			_mill = new Milieu(this);
 		return _mill;
 	}
 
@@ -180,12 +180,12 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 
 	/** Returns an component of this definition (never null).
 	 *
-	 * <p>Note: {@link Millieu#applyProperties} will NOT be invoked,
+	 * <p>Note: {@link Milieu#applyProperties} will NOT be invoked,
 	 * if you call this method manually or create a component manually.
 	 */
 	public Component newInstance(Page page) {
-		final Millieu mill = getMillieu();
-		Millieu.setCurrent(mill);
+		final Milieu mill = getMilieu();
+		Milieu.setCurrent(mill);
 		final Component comp;
 		try {
 			comp = (Component)
@@ -194,7 +194,7 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 			throw UiException.Aide.wrap(ex);
 		} finally {
 			//theorectically, it shall be reset by AbstractComponent, but..
-			Millieu.setCurrent(null);
+			Milieu.setCurrent(null);
 		}
 		return comp;
 	}
@@ -283,7 +283,7 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	 */
 	/*package*/ final List getProperties() {
 	//Note: we don't allow InstanceDefinition to override it!!
-	//Reason: there are two set of properties and it's Millieu's job to handle
+	//Reason: there are two set of properties and it's Milieu's job to handle
 		return _props;
 	}
 

@@ -458,7 +458,7 @@ public class EventProcessingThread extends Thread {
 		final String evtnm = _event.getName();
 
 		final String script =
-			((ComponentCtrl)_comp).getMillieu().getEventHandler(_comp, evtnm);
+			((ComponentCtrl)_comp).getMilieu().getEventHandler(_comp, evtnm);
 		if (script != null) {
 			page.interpret(script, ns);
 			if (!_event.isPropagatable())

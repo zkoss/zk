@@ -53,7 +53,7 @@ implements AfterCompose, IdSpace, DynamicPropertied {
 		final Execution exec = Executions.getCurrent();
 		if (exec == null)
 			throw new IllegalStateException("No execution available.");
-		exec.createComponents(getMillieu().getMacroURI(this), this, _props);
+		exec.createComponents(getMilieu().getMacroURI(this), this, _props);
 	}
 
 	//extra//

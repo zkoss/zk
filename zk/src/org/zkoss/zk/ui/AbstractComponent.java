@@ -56,7 +56,7 @@ import org.zkoss.zk.ui.sys.Variables;
 import org.zkoss.zk.ui.util.Namespace;
 import org.zkoss.zk.ui.impl.Serializables;
 import org.zkoss.zk.ui.impl.bsh.BshNamespace;
-import org.zkoss.zk.ui.metainfo.Millieu;
+import org.zkoss.zk.ui.metainfo.Milieu;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
@@ -82,7 +82,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient Page _page;
 	private String _id;
 	private String _uuid;
-	private Millieu _mill;
+	private Milieu _mill;
 	private transient Component _parent;
 	/** The mold (default: "default"). */
 	private String _mold = "default";
@@ -111,12 +111,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected AbstractComponent() {
 		final Execution exec = Executions.getCurrent();
 
-		_mill = Millieu.getCurrent();
-		if (_mill != null) Millieu.setCurrent(null); //to avoid mis-use
+		_mill = Milieu.getCurrent();
+		if (_mill != null) Milieu.setCurrent(null); //to avoid mis-use
 		else {
 			final ComponentDefinition compdef = getDefinition(exec, getClass());
-			if (compdef != null) _mill = compdef.getMillieu();
-			else _mill = Millieu.DUMMY;
+			if (compdef != null) _mill = compdef.getMilieu();
+			else _mill = Milieu.DUMMY;
 		}
 
 		init();
@@ -1032,7 +1032,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	//-- ComponentCtrl --//
-	public Millieu getMillieu() {
+	public Milieu getMilieu() {
 		return _mill;
 	}
 	public void sessionWillPassivate(Page page) {

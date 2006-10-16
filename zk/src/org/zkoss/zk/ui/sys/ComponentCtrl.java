@@ -20,7 +20,7 @@ package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.metainfo.Millieu;
+import org.zkoss.zk.ui.metainfo.Milieu;
 
 /**
  * An addition interface to {@link org.zkoss.zk.ui.Component}
@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.metainfo.Millieu;
 public interface ComponentCtrl {
 	/** Returns the millieu of this component (never null).
 	 */
-	public Millieu getMillieu();
+	public Milieu getMilieu();
 
 	/** Notification that the session, which owns this component,
 	 * is about to be passivated (aka., serialized).

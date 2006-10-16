@@ -305,7 +305,7 @@ public class PageDefinition extends InstanceDefinition {
 	public String getMoldURI(String name) {
 		throw new UnsupportedOperationException();
 	}
-	public Millieu getMillieu() {
+	public Milieu getMilieu() {
 		throw new UnsupportedOperationException();
 	}
 

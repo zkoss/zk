@@ -107,7 +107,7 @@ public class Property implements Condition, Serializable {
 	/** Assigns the value of this memeber to the specified component.
 	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
 	 */
-	public void assign(Millieu mill, Component comp, Evaluator eval) {
+	public void assign(Milieu mill, Component comp, Evaluator eval) {
 		if (!isEffective(comp))
 			return; //ignored
 

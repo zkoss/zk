@@ -264,7 +264,7 @@ implements Condition {
 	//-- super --//
 	/** Returns an component of this definition (never null).
 	 *
-	 * <p>Note: {@link Millieu#applyProperties} will NOT be invoked,
+	 * <p>Note: {@link Milieu#applyProperties} will NOT be invoked,
 	 * if you call this method manually or create a component manually.
 	 */
 	public Component newInstance(Page page) {
@@ -285,14 +285,14 @@ implements Condition {
 	}	
 	public void addMold(String name, String moldUri) {
 		throw new UnsupportedOperationException();
-		//if we want to allow this, we have to modify Millieu
+		//if we want to allow this, we have to modify Milieu
 	}
 	/*package*/ Map getMolds() {
 		return _compdef.getMolds();
 	}
 	/*package*/ void addParam(String name, String value) {
 		throw new UnsupportedOperationException();
-		//if we want to allow this, we have to modify Millieu
+		//if we want to allow this, we have to modify Milieu
 	}
 	/*package*/ Map getParams() {
 		return _compdef.getParams();

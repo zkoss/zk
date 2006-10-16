@@ -372,7 +372,7 @@ public class UiEngineImpl implements UiEngine {
 			if (parent != null) child.setParent(parent);
 			else child.setPage(page);
 
-			final Millieu mill = ((ComponentCtrl)child).getMillieu();
+			final Milieu mill = ((ComponentCtrl)child).getMilieu();
 			mill.applyProperties(child);
 			mill.applyCustomAttributes(child);
 
