@@ -28,6 +28,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<button label="add 5 children" onClick="add(5)"/>
 	<button label="Change the first label" onClick="changeLabel(0)"/>
 	<button label="Change the last label" onClick="changeLabel(-1)"/>
+	<button label="Remove selected" onClick="rmsel()"/>
 	<button label="redraw" onClick="list.invalidate()"/>
 	<zscript><![CDATA[
 	void add(int cnt) {
@@ -49,6 +50,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			Listitem li = list.getItems().get(j);
 			li.getChildren().get(0).setLabel("Updated "+j);
 		}
+	}
+	void rmsel() {
+		Listitem item = list.getSelectedItem();
+		if (item != null) item.detach();
 	}
 	]]></zscript>
 
