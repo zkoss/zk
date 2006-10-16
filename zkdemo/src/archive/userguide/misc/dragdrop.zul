@@ -105,7 +105,7 @@ by dragging list items around.</p>
 			<listfooter label="100.00%"/>
 		</listfoot>
 	</listbox>
-	<image src="/img/circle.png" draggable="true" mold="alphafix"/>
+	<image src="/img/circle.png" width="100px" height="80px" draggable="true" mold="alphafix"/>
 	<zscript>
 	void move(Component dragged) {
 		if (dragged instanceof Listitem)
