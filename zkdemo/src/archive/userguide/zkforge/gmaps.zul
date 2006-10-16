@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-gmap.zul
+gmaps.zul
 
 {{IS_NOTE
 	Purpose:
@@ -23,8 +23,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<attribute name="content"><![CDATA[
 	<h4>Demo of Google Maps</h4>
 	<p><a href="http://maps.google.com">Google Maps</a> is a popular maps service developed by Google.</p>
-	<p>In this demo, user can enters the new center(latitude and longitude) of the maps	and the maps would 
-	move to show  the new location. User can also drag the maps around to a new location and see the 
+	<p>In this demo, user can enter the new center(latitude and longitude) of the maps and the maps would 
+	move to show the new location. User can also drag the maps around to a new location and see the 
 	current center of the maps.</p>
 			]]></attribute>
 		</html>
@@ -44,16 +44,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		Check the source codes of org.zkoss.zkdemo.userguide.MainWindow for details.
 	</div>
 	<vbox>
-	<gmap id="mymap" width="500px" height="300px" showSmallCtrl="true">
+	<gmaps id="mymap" width="500px" height="300px" showSmallCtrl="true">
 		<attribute name="onMapMove">
-			import java.math.BigDecimal;
 			mylat.setValue(self.getLat());
 			mylng.setValue(self.getLng());
 		</attribute>
 		<attribute name="onMapZoom">
 			myzoom.setValue(self.getZoom());
 		</attribute>
-	</gmap>
+	</gmaps>
 	<grid><rows>
 		<row>Latitude: <doublebox id="mylat" value="&#36;{mymap.lat}" onChange="mymap.panTo(self.doubleValue(), mymap.getLng())"/></row>
 		<row>Longitude: <doublebox id="mylng" value="&#36;{mymap.lng}" onChange="mymap.panTo(mymap.getLat(), self.doubleValue())"/></row>
