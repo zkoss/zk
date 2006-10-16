@@ -1,8 +1,8 @@
 	--------
 ZK 2.2.0 Freshly
 * Features:
-  1567586, 1572187, 1575649, 1573501, 1577003, 1577051, 1577496.
-  + Speed up the initialization (4 time faster)
+  1567586, 1572187, 1575649, 1573501, 1577003, 1577051, 1577496, 1575726.
+  + Speed up the initialization, showing and hiding (over 5 time faster)
   + Richlet is supported. By implementing a richlet, developers can write an
     application without using ZUML pages.
   + Messages translated to Brazilian Portuguese. Thank Airton Carrara for his contribution.
