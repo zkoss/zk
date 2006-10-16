@@ -22,7 +22,7 @@ zk = {};
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "2N"; //increase this if we want the browser to reload JavaScript
+zk.build = "2O"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 zk.namespace = "http://www.zkoss.org/2005/zk";
@@ -367,6 +367,15 @@ zk._evalInit = function () {
 		if (getZKAttr(n, "drag")) zkau.initdrag(n);
 		if (getZKAttr(n, "drop")) zkau.initdrop(n);
 
+		var type = $type(n);
+		if (type) {
+			var o = window["zk" + type];
+			if (o) {
+				if (o["onVisi"]) zk._visicmps[n.id] = true;
+				if (o["onHide"]) zk._hidecmps[n.id] = true;
+			}
+		}
+
 		if (++j > 3000 || zk.loading) {
 			if (!zk.loading)
 				setTimeout(zk._evalInit, 0); //let browser breath
@@ -419,12 +428,57 @@ zk.cleanupAt = function (n) {
 	var type = $type(n);
 	if (type) {
 		zk.eval(n, "cleanup", type);
+		delete zk._visicmps[n.id];
+		delete zk._hidecmps[n.id];
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
 		zk.cleanupAt(n); //recursive for child component
 };
 
+/** To notify a component that it becomes visible because one its ancestors
+ * becomes visible. It recursively invokes its descendants.
+ */
+zk.onVisiAt = function (n) {
+	for (nid in zk._visicmps) {
+		var elm = $e(nid);
+		for (var e = elm; e; e = e.parentNode) {
+			if (e == n) {
+				zk.eval(elm, "onVisi");
+				break;
+			}
+			if (e.style.display == "none")
+				break;
+		}
+	}
+};
+/** To notify a component that it becomes invisible because one its ancestors
+ * becomes invisible. It recursively invokes its descendants.
+ */
+zk.onHideAt = function (n) {
+	//Bug 1526542: we have to blur if we want to hide a focused control in gecko
+	if (zk.gecko) {
+		var f = zkau.currentFocus;
+		if (f && zk.isAncestor(n, f)) {
+			zkau.currentFocus = null;
+			try {f.blur();} catch (e) {}
+		}
+	}
+
+	for (nid in zk._hidecmps) {
+		var elm = $e(nid);
+		for (var e = elm; e; e = e.parentNode) {
+			if (e == n) {
+				zk.eval(elm, "onHide");
+				break;
+			}
+			if (e.style.display == "none") //yes, ignore hidden ones
+				break;
+		}
+	}
+}
+
+//extra//
 /** Loads the specified style sheet (CSS).
  * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
  * unless http:// or https:// is specified
@@ -662,8 +716,10 @@ if (!zk._modules) {
 	zk._modules = {};
 	zk._initfns = new Array(); //used by addInit
 	zk._initmods = new Array(); //used by addModuleInit
-	zk._initcmps = new Array(); //an array of comps to init
-	zk._ckfns = new Array();
+	zk._initcmps = new Array(); //comps to init
+	zk._ckfns = new Array(); //functions called to check whether a module is loaded (zk._load)
+	zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
+	zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
 
 	var myload =  function () {
 		//It is possible to move javascript defined in zul's language.xml

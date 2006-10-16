@@ -404,53 +404,6 @@ zkau._cleanupChildren = function (n) {
 		zk.cleanupAt(n);
 };*/
 
-/** Invoke zkau.onVisiAt for all descendant. */
-zkau.onVisiChildren = function (n) {
-	for (n = n.firstChild; n; n = n.nextSibling)
-		zkau.onVisiAt(n);
-};
-/** Invoke zkau.onHideAt for all descendant. */
-zkau.onHideChildren = function (n) {
-	for (n = n.firstChild; n; n = n.nextSibling)
-		zkau.onHideAt(n);
-};
-
-/** To notify a component that it becomes visible because one its ancestors
- * becomes visible. It recursively invokes its descendants.
- */
-zkau.onVisiAt = function (n) {
-	if (!n || (n.style && n.style.display == "none")) return; //done
-
-	zk.eval(n, "onVisi");
-	zkau.onVisiChildren(n);
-};
-/** To notify a component that it becomes invisible because one its ancestors
- * becomes invisible. It recursively invokes its descendants.
- */
-zkau.onHideAt = function (n) {
-	if (!n) return; //done
-
-	//Bug 1526542: we have to blur if we want to hide a focused control in gecko
-	if (zk.gecko) {
-		var f = zkau.currentFocus;
-		if (f && zk.isAncestor(n, f)) {
-			zkau.currentFocus = null;
-			try {f.blur();} catch (e) {}
-		}
-	}
-
-	var type = $type(n);
-	if (type) {
-		if (zkau.valid) {
-			zkau.valid.closeErrbox(n.id);
-			zkau.valid.closeErrbox(n.id + "!real");
-		}
-
-		zk.eval(n, "onHide", type);
-	}
-	zkau.onHideChildren(n);
-};
-
 /** Sets an attribute (the default one). */
 zkau.setAttr = function (cmp, name, value) {
 	if ("visibility" == name) {
@@ -620,7 +573,7 @@ zkau.endPopup = function (uuid) {
 	zkau.hideCovered();
 	var cmp = $e(uuid);
 	if (cmp) {
-		zkau.wndmode[cmp.id] = null;
+		delete zkau.wndmode[cmp.id];
 		zkau.fixWnd(cmp);
 	}
 };
@@ -649,7 +602,7 @@ zkau.endOverlapped = function (uuid) {
 
 	var cmp = $e(uuid);
 	if (cmp) {
-		zkau.wndmode[cmp.id] = null;
+		delete zkau.wndmode[cmp.id];
 		zkau.fixWnd(cmp);
 	}
 }
@@ -686,7 +639,7 @@ zkau.initMoveable = function (cmp, options) {
 zkau.cleanMoveable = function (id) {
 	if (zkau._movs[id]) {
 		zkau._movs[id].destroy();
-		zkau._movs[id] = null;
+		delete zkau._movs[id];
 	}
 }
 
@@ -1202,11 +1155,11 @@ zkau.cleanzid = function (n) {
 	var o = zkau.getIdOwner(n);
 	o = o ? o.id: "zk_dksp";
 	var ary = zkau._idsp[o];
-	if (ary) ary[getZKAttr(n, "zid")] = null;
+	if (ary) delete ary[getZKAttr(n, "zid")];
 };
 /** Clean an ID space. */
 zkau.cleanidsp = function (n) {
-	zkau._idsp[n.id] = null;
+	delete zkau._idsp[n.id];
 };
 
 ///////////////
@@ -1235,7 +1188,7 @@ zkau.cleandrag = function (n) {
 	if (zkau._drags[n.id]) {
 		n.onselectstart = null;
 		zkau._drags[n.id].destroy();
-		zkau._drags[n.id] = null;
+		delete zkau._drags[n.id];
 	}
 };
 zkau.initdrop = function (n) {
@@ -1376,7 +1329,7 @@ action.show = function (id, bShow) {
 		var n = $e(id);
 		if (n) {
 			n.style.display = "";
-			zkau.onVisiAt(n); //callback later
+			zk.onVisiAt(n); //callback later
 		}
 	}
 };
@@ -1389,7 +1342,7 @@ action.hide = function (id, bHide) {
 	else {
 		var n = $e(id);
 		if (n) {
-			zkau.onHideAt(n); //callback first
+			zk.onHideAt(n); //callback first
 			n.style.display = "none";
 		}
 	}
@@ -1412,7 +1365,7 @@ action._afterDown = function (ef) {
 	var n = ef.element;
 	if (n) {
 		rmZKAttr(n, "sliding");
-		zkau.onVisiAt(n);
+		zk.onVisiAt(n);
 	}
 };
 
@@ -1425,7 +1378,7 @@ action.slideUp = function (id, up) {
 		var n = $e(id);
 		if (n && !getZKAttr(n, "sliding")) {
 			setZKAttr(n, "sliding", "hide");
-			zkau.onHideAt(n); //callback first
+			zk.onHideAt(n); //callback first
 			Effect.SlideUp(n, {duration:0.4, afterFinish: action._afterUp});
 		}
 	}
