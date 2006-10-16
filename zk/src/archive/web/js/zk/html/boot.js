@@ -447,7 +447,7 @@ zk.onVisiAt = function (n) {
 				zk.eval(elm, "onVisi");
 				break;
 			}
-			if (e.style.display == "none")
+			if (e.style && e.style.display == "none")
 				break;
 		}
 	}
@@ -472,7 +472,7 @@ zk.onHideAt = function (n) {
 				zk.eval(elm, "onHide");
 				break;
 			}
-			if (e.style.display == "none") //yes, ignore hidden ones
+			if (e.style && e.style.display == "none") //yes, ignore hidden ones
 				break;
 		}
 	}
