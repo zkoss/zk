@@ -92,7 +92,7 @@ public class Label extends XulElement {
 	}
 	private static boolean isRawLabel(Component comp) {
 		final LanguageDefinition langdef =
-			((ComponentCtrl)comp).getMillieu().getLanguageDefinition();
+			((ComponentCtrl)comp).getMilieu().getLanguageDefinition();
 		return langdef != null && langdef.isRawLabel();
 	}
 
