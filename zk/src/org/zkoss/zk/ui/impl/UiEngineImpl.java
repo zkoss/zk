@@ -368,13 +368,8 @@ public class UiEngineImpl implements UiEngine {
 		if (ComponentDefinition.ZK == childdef.getComponentDefinition()) {
 			return execCreate(exec, page, childdef, parent);
 		} else {
-			final Component child = childdef.newInstance(page);
-			if (parent != null) child.setParent(parent);
-			else child.setPage(page);
-
-			final Milieu mill = ((ComponentCtrl)child).getMilieu();
-			mill.applyProperties(child);
-			mill.applyCustomAttributes(child);
+			final Component child = ((WebAppCtrl)exec.getDesktop().getWebApp())
+				.getUiFactory().newComponent(page, parent, childdef);
 
 			execCreate(exec, page, childdef, child); //recursive
 

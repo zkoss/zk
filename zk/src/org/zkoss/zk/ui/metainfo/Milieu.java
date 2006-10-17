@@ -39,22 +39,34 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Evaluator;
 
 /**
- * The snapshot of the component's definition.
+ * The snapshot of the component definition ({@link ComponentDefinition}).
+ *
+ * <p>Components created with the same component definition share the
+ * same {@link Milieu} instance. However, if a component is serialized and then
+ * de-serialized back, it will have an independent Milieu instance
+ * not shared with any others ({@link org.zkoss.zk.ui.sys.ComponentCtrl#getMilieu}).
+ * Moreover, {@link #getComponentDefinition} returns null in this case.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public class Milieu implements Serializable {
-    private static final long serialVersionUID = 20060622L;
+    private static final long serialVersionUID = 20061017L;
 
 	/** The language definition. */
 	private transient LanguageDefinition _langdef;
+	/** The component definition.
+	 * <p>Note: it becomes null after a component is serialized (and
+	 * deserialized back). So we have to make a copy of members that must
+	 * remain after a component is serialized.
+	 * <p>Note: this implementation use _compdef only in {@link #applyProperties}.
+	 */
+	private transient ComponentDefinition _compdef; //Yes, transient
 	/** either String or Class as the implementation class. */
 	private Object _implcls;
-	/** The properties defined in language and in page. */
-	private final List _lprops, _pprops;
-	/** custom attributes. */
-	private final List _custAttrs;
-	/** event handlers, molds and parameters. */
+	/** The event handlers, molds and parameters.
+	 * Note: we have to make a copy from _compdef, since they must remain
+	 * after a component is serialized.
+	 */
 	private final Map _evthds, _molds, _params;
 	/** URI. */
 	private final String _macroUri;
@@ -80,30 +92,25 @@ public class Milieu implements Serializable {
 
 	/** Constructor.
 	 */
-	/*package*/ Milieu(ComponentDefinition def) {
-		_implcls = def.getImplementationClass();
-		_params = def.getParams();
-		_molds = def.getMolds();
-		_macroUri = def.getMacroURI();
-		_langdef = def.getLanguageDefinition();
-		if (def instanceof InstanceDefinition) {
-
-			final InstanceDefinition idef = (InstanceDefinition)def;
-			_custAttrs = idef.getCustomAttributes();
-			_evthds = idef.getEventHandlers();
-
-			_pprops = idef.getProperties();
-			_lprops = idef.getComponentDefinition().getProperties();
+	/*package*/ Milieu(ComponentDefinition compdef) {
+		//Note: we have to make a copy of some members of compdef,
+		//since compdef is NOT serializable)
+		_implcls = compdef.getImplementationClass();
+		_params = compdef.getParams();
+		_molds = compdef.getMolds();
+		_macroUri = compdef.getMacroURI();
+		_langdef = compdef.getLanguageDefinition();
+		_compdef = compdef;
+		if (compdef instanceof InstanceDefinition) {
+			final InstanceDefinition instdef = (InstanceDefinition)compdef;
+			_evthds = instdef.getEventHandlers();
 		} else {
-			_lprops = def.getProperties();
 			_evthds = null;
-			_custAttrs = _pprops = null;
 		}
 	}
 	private Milieu() {
 		_implcls = null;
 		_evthds = _params = _molds = null;
-		_custAttrs = _lprops = _pprops = null;
 		_macroUri = null;
 	}
 
@@ -112,6 +119,15 @@ public class Milieu implements Serializable {
 	 */
 	public LanguageDefinition getLanguageDefinition() {
 		return _langdef;
+	}
+	/** Returns the component definition, or null if it doesn't belong to
+	 * any component definition or the associated component is serialized
+	 * (and de-serialized back).
+	 *
+	 * <p>See also {@link Milieu}.
+	 */
+	public ComponentDefinition getComponentDefinition() {
+		return _compdef;
 	}
 
 	/** Resolves and returns the class that implements the component.
@@ -139,18 +155,39 @@ public class Milieu implements Serializable {
 		return (Class)_implcls;
 	}
 
-	/** Applies the member initials to the component when a component
-	 * is created by a ZUML page (instead of by program).
+	/** Applies the properties and custom attributes defined in
+	 * {@link ComponentDefinition} (and {@link InstanceDefinition}).
+	 *
+	 * <p>Note: both properties and custom attributes are applied, if
+	 * {@link #getComponentDefinition} returns an instance of {@link InstanceDefinition}.
 	 */
 	public void applyProperties(Component comp) {
-		final Execution exec = Executions.getCurrent();
-		if (_lprops != null)
-			if (_langdef != null) applyProps(_langdef, comp, _lprops);
-			else applyProps(exec, comp, _lprops);
-				//_langdef is null if components are defined in page only
+		if (_compdef == null) //not belonging to any def (or been serialized)
+			return; //nothing to do
 
-		if (_pprops != null)
-			applyProps(exec, comp, _pprops);
+		final Execution exec = Executions.getCurrent();
+		final List lprops, pprops, custAttrs;
+		if (_compdef instanceof InstanceDefinition) {
+			final InstanceDefinition instdef = (InstanceDefinition)_compdef;
+			pprops = instdef.getProperties();
+			lprops = instdef.getComponentDefinition().getProperties();
+			custAttrs = instdef.getCustomAttributes();
+		} else {
+			lprops = _compdef.getProperties();
+			pprops = custAttrs = null;
+		}
+
+		if (lprops != null) {
+			if (_langdef != null) applyProps(_langdef, comp, lprops);
+			else applyProps(exec, comp, lprops);
+				//_langdef is null if components are defined in page only
+		}
+
+		if (pprops != null)
+			applyProps(exec, comp, pprops);
+
+		if (custAttrs != null)
+			applyCustAttrs(comp, custAttrs);
 	}
 	private void applyProps(Evaluator eval, Component comp, List props) {
 		synchronized (props) {
@@ -160,15 +197,11 @@ public class Milieu implements Serializable {
 			}
 		}
 	}
-
-	/** Applies the custom attributes.
-	 */
-	public void applyCustomAttributes(Component comp) {
-		if (_custAttrs != null)
-			synchronized (_custAttrs) {
-				for (Iterator it = _custAttrs.iterator(); it.hasNext();)
-					((CustomAttributes)it.next()).apply(comp);
-			}
+	private void applyCustAttrs(Component comp, List custAttrs) {
+		synchronized (custAttrs) {
+			for (Iterator it = custAttrs.iterator(); it.hasNext();)
+				((CustomAttributes)it.next()).apply(comp);
+		}
 	}
 
 	/** Returns the script of the event handler.

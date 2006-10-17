@@ -26,11 +26,15 @@ import org.zkoss.idom.Document;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Richlet;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.metainfo.Milieu;
 
 /**
  * The sketetal implementation of {@link UiFactory}.
@@ -58,6 +62,16 @@ abstract public class AbstractUiFactory implements UiFactory {
 	}
 	public Page newPage(RequestInfo ri, Richlet richlet, String path) {
 		return new PageImpl(richlet.getLanguageDefinition());
+	}
+	public Component newComponent(Page page, Component parent,
+	ComponentDefinition instdef) {
+		final Component comp = instdef.newInstance(page);
+
+		if (parent != null) comp.setParent(parent);
+		else comp.setPage(page);
+
+		comp.applyProperties(); //including custom-attributes
+		return comp;
 	}
 
 	/** Returns the page definition of the specified path, or null if not found.

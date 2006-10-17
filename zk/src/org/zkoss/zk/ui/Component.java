@@ -590,8 +590,8 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public Namespace getNamespace();
 
-	/** Initializes the properties (aka. members) based on what are
-	 * defined in the component definition.
+	/** Initializes the properties (aka. members) and custom-attributes
+	 * based on what are defined in the component definition.
 	 *
 	 * <p>This method is invoked automatically if a component is created
 	 * by evaluating a ZUML page, i.e., if it is specified as an elemnt
@@ -600,8 +600,9 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * <p>On the other hand, if it is created manually (by program),
 	 * developer might choose to invoke this method or not,
 	 * depending whether he wants to
-	 * initializes the component with the properties defined in
-	 * {@link org.zkoss.zk.ui.metainfo.LanguageDefinition}.
+	 * initializes the component with the properties and custom-attributes
+	 * defined in the ZUML page ({@link org.zkoss.zk.ui.metainfo.PageDefinition})
+	 * and the language definition ({@link org.zkoss.zk.ui.metainfo.LanguageDefinition}).
 	 */
 	public void applyProperties();
 

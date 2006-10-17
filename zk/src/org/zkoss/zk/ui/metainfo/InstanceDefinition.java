@@ -262,10 +262,22 @@ implements Condition {
 	}
 
 	//-- super --//
-	/** Returns an component of this definition (never null).
+	/** Creates an component of this definition (never null).
 	 *
-	 * <p>Note: {@link Milieu#applyProperties} will NOT be invoked,
-	 * if you call this method manually or create a component manually.
+	 * <p>Note: this method doesn't invoke {@link Milieu#applyProperties}.
+	 * It is caller's job to invoke them if necessary.
+	 * Since the value of properties might depend on the component tree,
+	 * it is better to assign the component with a proper parent
+	 * before calling {@link Milieu#applyProperties}.
+	 *
+	 * <p>This method is used to implement {@link org.zkoss.zk.ui.sys.UiFactory#newComponent}.
+	 * Others shall invoke {@link org.zkoss.zk.ui.sys.UiFactory#newComponent}
+	 * instead of this method, such that an application developer have a chance
+	 * to customize the way to instantiate a component.
+	 *
+	 * <p>In addition to instantiating a component with {@link #newInstance},
+	 * {@link org.zkoss.zk.ui.sys.UiFactory#newComponent} will initialize the
+	 * component with {@link Milieu#applyProperties}.
 	 */
 	public Component newInstance(Page page) {
 		final Component comp = super.newInstance(page);

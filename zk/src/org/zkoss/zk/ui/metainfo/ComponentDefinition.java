@@ -178,10 +178,24 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 		_cls = clsnm;
 	}
 
-	/** Returns an component of this definition (never null).
+	/** Creates an component of this definition.
 	 *
-	 * <p>Note: {@link Milieu#applyProperties} will NOT be invoked,
-	 * if you call this method manually or create a component manually.
+	 * <p>Note: this method doesn't invoke {@link Milieu#applyProperties}.
+	 * It is caller's job to apply these properties if necessary.
+	 * Since the value of a property might depend on the component tree,
+	 * it is better to assign the component with a proper parent
+	 * before calling {@link Milieu#applyProperties}.
+	 *
+	 * <p>In addition, an application developer can invoke
+	 * {@link org.zkoss.zk.ui.sys.UiFactory#newComponent}
+	 * instead of {@link #newInstance}, since it handles the initialization
+	 * of properties and attributes.
+	 * Notice that an application developer can customize
+	 * {@link org.zkoss.zk.ui.sys.UiFactory} to provide a different way
+	 * to instantiate a component.
+	 *
+	 * @param page the page the new component belongs to (never null)
+	 * @return the new component (never null)
 	 */
 	public Component newInstance(Page page) {
 		final Milieu mill = getMilieu();

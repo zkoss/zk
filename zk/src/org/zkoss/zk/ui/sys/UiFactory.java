@@ -26,9 +26,11 @@ import org.zkoss.idom.Document;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 
 /**
  * Used to create {@link Desktop}, {@link Page} and to convert path/URL
@@ -74,7 +76,7 @@ public interface UiFactory {
 	 *
 	 * @param ri the additional request information.
 	 * @param pagedef the page definition. If null, it means the page is served
-	 * by a {@link org.zkoss.zk.ui.Richlet} instance.
+	 * by a {@link Richlet} instance.
 	 * @param path the path to request this page, or null if it is caused
 	 * by a filter.
 	 */
@@ -84,6 +86,20 @@ public interface UiFactory {
 	 * <p>Note: the returned instance must also implement {@link PageCtrl}.
 	 */
 	public Page newPage(RequestInfo ri, Richlet richlet, String path);
+
+	/** Creates and initializes a component based on the specified
+	 * {@link ComponentDefinition}.
+	 *
+	 * <p>After called, the new component is added to the page, and becomes a
+	 * child of the specified parent, if any. In addition, the properties
+	 * and custom attributes defined in {@link ComponentDefinition} are all
+	 * applied to the new component.
+	 *
+	 * @param page the page that the new component belongs to (never null).
+	 * @param parent the parent compoent, or null if the new component is root.
+	 */
+	public Component newComponent(Page page, Component parent,
+	ComponentDefinition instdef);
 
 	/** Returns the page definition of the specified path, or null if
 	 * not found.
