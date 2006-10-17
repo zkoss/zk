@@ -45,7 +45,7 @@ abstract public class InputElement extends XulElement
 implements Constrainted {
 	/** The value. */
 	private Object _value;
-	/** Used by {@link #setTextByClient} to disable sending back the value */
+	/** Used by setTextByClient() to disable sending back the value */
 	private String _txtByClient;
 	/** The error message. Not null if users entered a wrong data (and
 	 * not correct it yet).
