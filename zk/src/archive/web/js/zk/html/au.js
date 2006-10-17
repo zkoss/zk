@@ -1036,7 +1036,7 @@ zkau.close = function (uuid) {
 };
 zkau.hide = function (uuid) {
 	var el = $e(uuid);
-	if (el) el.style.display = "none";
+	if (el) action.hide(el);
 	zkau.send({uuid: el.id, cmd: "onShow", data: ["false"]},
 		zkau.asapTimeout(el, "onShow"));
 };

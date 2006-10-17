@@ -35,6 +35,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<attribute name="onClick">{
 	Component ua = page.getComponentDefinition("username", false).newInstance(page);
 	ua.setParent(wnd);
+	ua.applyProperties();
 	ua.afterCompose();
 	}</attribute>
 	</button>	
