@@ -1,7 +1,8 @@
 	--------
 ZK 2.2.0 Freshly
 * Features:
-  1567586, 1572187, 1575649, 1573501, 1577003, 1577051, 1577496, 1575726.
+  1567586, 1572187, 1575649, 1573501, 1577003, 1577051, 1577496, 1575726,
+  1578371.
   + Speed up the initialization, showing and hiding (over 5 time faster)
   + Richlet is supported. By implementing a richlet, developers can write an
     application without using ZUML pages.
@@ -11,8 +12,8 @@ ZK 2.2.0 Freshly
   + New component <script/>
 
 * Bugs:
-  + 1572055, 1573456, 1572514, 1572286, 1562358, 1571408, 1569901, 1574606,
-    1576386, 1577002, 1570120, 1575048.
+  1572055, 1573456, 1572514, 1572286, 1562358, 1571408, 1569901, 1574606,
+  1576386, 1577002, 1570120, 1575048.
 
 * Upgrade Notes
 
