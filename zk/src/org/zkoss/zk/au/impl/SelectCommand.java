@@ -27,7 +27,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
-import org.zkoss.zk.ui.ext.Selectable;
+import org.zkoss.zk.ui.ext.client.Selectable;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 
@@ -49,7 +50,8 @@ public class SelectCommand extends Command {
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 
 		final Set items = Commands.convertToItems(request);
-		((Selectable)comp).selectItemsByClient(items);
+		((Selectable)((ComponentCtrl)comp).getExtraCtrl())
+			.selectItemsByClient(items);
 		Events.postEvent(new SelectEvent(getId(), comp, items));
 	}
 }

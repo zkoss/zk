@@ -25,7 +25,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ScrollEvent;
-import org.zkoss.zk.ui.ext.Scrollable;
+import org.zkoss.zk.ui.ext.client.Scrollable;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 
@@ -52,7 +53,8 @@ public class ScrollCommand extends Command {
 
 		final int newpos = Integer.parseInt(data[0]);
 		if (getId().equals(Events.ON_SCROLL))
-			((Scrollable)comp).setCurposByClient(newpos);
+			((Scrollable)((ComponentCtrl)comp).getExtraCtrl())
+				.setCurposByClient(newpos);
 		Events.postEvent(new ScrollEvent(getId(), comp, newpos));
 	}
 }

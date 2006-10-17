@@ -1,4 +1,4 @@
-/* Views.java
+/* DynaMedias.java
 
 {{IS_NOTE
 	Purpose:
@@ -47,22 +47,23 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.ext.Viewable;
+import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 
 /**
- * The utility used to response the content for {@link Viewable#getView}
+ * The utility used to response the content for {@link DynamicMedia#getMedia}
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-/*package*/ class Views {
-//	private static final Log log = Log.lookup(Views.class);
+/*package*/ class DynaMedias {
+//	private static final Log log = Log.lookup(DynaMedias.class);
 
-	private Views() {}
+	private DynaMedias() {}
 
-	/** Retrieves the response from {@link Viewable#getView}.
+	/** Retrieves the response from {@link DynamicMedia#getMedia}.
 	 */
 	public static final void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
@@ -97,9 +98,10 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 				config.invokeExecutionInits(exec, oldexec);
 
 				final Component comp = desktop.getComponentByUuid(uuid);
-				if (!(comp instanceof Viewable))
-					throw new ServletException(Viewable.class+" must be implemented: "+comp.getClass());
-				media = ((Viewable)comp).getView(k >= 0 ? pi.substring(k): "");
+				final Object cc = ((ComponentCtrl)comp).getExtraCtrl();
+				if (!(cc instanceof DynamicMedia))
+					throw new ServletException(DynamicMedia.class+" must be implemented by getExtraCtrl() of "+comp);
+				media = ((DynamicMedia)cc).getMedia(k >= 0 ? pi.substring(k): "");
 				if (media == null) {
 					response.sendError(response.SC_GONE, "Media not found in "+comp);
 					return;

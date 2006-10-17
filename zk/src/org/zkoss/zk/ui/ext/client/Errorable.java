@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.ext.client;
 
 /**
- * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getClientCtrl},
+ * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl},
  * if users might enter a wrong value for a component.
  *
  * <p>{@link org.zkoss.zk.ui.event.ErrorEvent} is sent when the client detects users entered

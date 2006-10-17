@@ -48,17 +48,29 @@ public interface ComponentCtrl {
 	 */
 	public void sessionDidActivate(Page page);
 
-	/** Whether the specified child is placed in different branch
-	 * of the DOM tree. For example, you might put caption at a branch
-	 * and the rest at another branch. Then, you shall return false
-	 * for the caption. Thus, {@link Visualizer} knows how to
-	 * handle them correctly. Note: for components, say caption,
-	 * in different branch,
-	 * you have to invalidate the parent when they are added or removed.
-	 * Only children causing this method to return true are handled
-	 * by {@link Visualizer}.
+	/** Returns the extra controls that tell ZK how to handle this component
+	 * specially.
 	 *
-	 * <p>Called only by {@link Visualizer}.
+	 * <p>Application developers need NOT to access this method.
+	 *
+	 * <p>There are two set of extra controls: org.zkoss.zk.ui.ext.client
+	 * and org.zkoss.zk.ui.ext.render.
+	 *
+	 * <p>The first package is used if the content of a component can be changed
+	 * by the user at the client. It is so-called the client controls.
+	 *
+	 * <p>The second package is used to control how to render a component
+	 * specially.
+	 *
+	 * <p>Override this method only if you want to return the extra
+	 * controls.
+	 *
+	 * @return null if no special handling required. If the component
+	 * requires some special controls, it could return an object that
+	 * implements one or several interfaces in the org.zkoss.zk.ui.ext.render
+	 * and org.zkoss.zk.ui.ext.client packages.
+	 * For example, {@link org.zkoss.zk.ui.ext.render.Cropper}
+	 * and {@link org.zkoss.zk.ui.ext.client.Inputable}.
 	 */
-	public boolean inDifferentBranch(Component child);
+	public Object getExtraCtrl();
 }

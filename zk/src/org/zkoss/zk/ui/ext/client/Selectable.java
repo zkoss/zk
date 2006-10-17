@@ -23,7 +23,7 @@ import java.util.Set;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getClientCtrl},
+ * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl},
  * if a component allows users to change the selection from the client.
  *
  * <p>{@link org.zkoss.zk.ui.event.SelectEvent} will be sent after {@link #selectItemsByClient}

@@ -27,10 +27,11 @@ import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.ext.Moveable;
-import org.zkoss.zk.ui.ext.ZIndexed;
-import org.zkoss.zk.ui.ext.Transparent;
-import org.zkoss.zk.ui.ext.ZidRequired;
+import org.zkoss.zk.ui.ext.client.Moveable;
+import org.zkoss.zk.ui.ext.client.ZIndexed;
+import org.zkoss.zk.ui.ext.render.Transparent;
+import org.zkoss.zk.ui.ext.render.ZidRequired;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.AuFocus;
 
@@ -50,8 +51,7 @@ import org.zkoss.zk.au.AuFocus;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-abstract public class HtmlBasedComponent extends AbstractComponent
-implements Moveable, ZIndexed {
+abstract public class HtmlBasedComponent extends AbstractComponent {
 	private static final Log log = Log.lookup(HtmlBasedComponent.class);
 
 	private String _tooltiptext;
@@ -69,6 +69,9 @@ implements Moveable, ZIndexed {
 	/** The droppable. */
 	private String _droppable;
 	private int _zIndex = -1;
+
+	protected HtmlBasedComponent() {
+	}
 
 	/** Returns the left position.
 	 */
@@ -328,7 +331,8 @@ implements Moveable, ZIndexed {
 		HTMLs.appendAttribute(sb, "z:drag", _draggable);
 		HTMLs.appendAttribute(sb, "z:drop", _droppable);
 
-		if ((this instanceof ZidRequired) && ((ZidRequired)this).isZidRequired()) {
+		final Object xc = getExtraCtrl();
+		if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired()) {
 			final String id = getId();
 	 		if (!ComponentsCtrl.isAutoId(id))
 				HTMLs.appendAttribute(sb, "z:zid", id);
@@ -460,17 +464,37 @@ implements Moveable, ZIndexed {
 		return ret;
 	}
 	private static boolean isTransparent(Component comp) {
-		return (comp instanceof Transparent) && ((Transparent)comp).isTransparent();
+		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
+		return (xc instanceof Transparent) && ((Transparent)xc).isTransparent();
 	}
 
-	//-- Moveable --//
-	public void setLeftByClient(String left) {
-		_left =left;
+	//--ComponentCtrl--//
+	/** Used by {@link #getExtraCtrl} to create a client control.
+	 * It is used only by component developers.
+	 *
+	 * <p>Defaut: creates an instance of {@link HtmlBasedComponent#ExtraInfo}.
+	 */
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
 	}
-	public void setTopByClient(String top) {
-		_top = top;
-	}
-	public void setZIndexByClient(int zIndex) {
-		_zIndex = zIndex;
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 *
+	 * <p>If a component requires more client controls, it is suggested to
+	 * override {@link #newExtraCtrl} to return an instance that extends from
+	 * this interface.
+	 */
+	protected class ExtraCtrl implements Moveable, ZIndexed {
+		//-- Moveable --//
+		public void setLeftByClient(String left) {
+			_left =left;
+		}
+		public void setTopByClient(String top) {
+			_top = top;
+		}
+		//-- ZIndexed --//
+		public void setZIndexByClient(int zIndex) {
+			_zIndex = zIndex;
+		}
 	}
 }

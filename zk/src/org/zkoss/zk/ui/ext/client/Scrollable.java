@@ -19,7 +19,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.ext.client;
 
 /**
- * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getClientCtrl},
+ * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl},
  * if a component is a slider or scrollbar with a position that user could change.
  *
  * <p>{@link org.zkoss.zk.ui.event.ScrollEvent} will be sent wih name as "onScroll" after

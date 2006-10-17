@@ -24,7 +24,9 @@ import org.zkoss.zk.ui.Component;
  * Represents an event caused by a component whose z-index is modified
  * by the client.
  *
- * <p>A z-indexed component must implement {@link org.zkoss.zk.ui.ext.ZIndexed}.
+ * <p>Component Implementation Note:<br/>
+ * A z-indexed component must implement {@link org.zkoss.zk.ui.ext.client.ZIndexed}
+ * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */

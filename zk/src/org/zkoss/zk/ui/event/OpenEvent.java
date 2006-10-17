@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Component;
  * something at the client.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see org.zkoss.zk.ui.ext.Openable
+ * @see org.zkoss.zk.ui.ext.client.Openable
  */
 public class OpenEvent extends Event {
 	private final boolean _open;

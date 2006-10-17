@@ -25,7 +25,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.OpenEvent;
-import org.zkoss.zk.ui.ext.Openable;
+import org.zkoss.zk.ui.ext.client.Openable;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 
@@ -53,10 +54,11 @@ public class OpenCommand extends Command {
 		final boolean open = "true".equals(data[0]);
 		final Component ref = data.length == 2 && data[1] != null ?
 			request.getDesktop().getComponentByUuidIfAny(data[1]): null;
-		if (comp instanceof Openable)
-			((Openable)comp).setOpenByClient(open);
+		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
+		if (xc instanceof Openable)
+			((Openable)xc).setOpenByClient(open);
 		else if (!open)
-			throw new UiException("If Openable not implemented, open must be true");
+			throw new UiException("If Openable not implemented by getExtraCtrl(), open must be true");
 		Events.postEvent(new OpenEvent(getId(), comp, open, ref));
 	}
 }

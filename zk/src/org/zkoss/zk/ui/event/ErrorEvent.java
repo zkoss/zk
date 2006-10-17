@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Component;
  * or clearing the last wrong data.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see org.zkoss.zk.ui.ext.Errorable
+ * @see org.zkoss.zk.ui.ext.client.Errorable
  */
 public class ErrorEvent extends InputEvent {
 	private final String _msg;

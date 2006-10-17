@@ -44,9 +44,10 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Transparent;
-import org.zkoss.zk.ui.ext.Cropper;
-import org.zkoss.zk.ui.ext.ChildChangedAware;
+import org.zkoss.zk.ui.ext.render.Transparent;
+import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
+import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
@@ -191,9 +192,11 @@ import org.zkoss.zk.au.*;
 				//usually not good, so we count on isCropper only
 				//In other words, this algorithm might redraw something that don't
 				//need to, but has better performance if no redudant redrawing
-				if ((oldparent instanceof Cropper)
-				&& ((Cropper)oldparent).isCropper())
-					_invalidated.add(oldparent);
+				if (oldparent != null) {
+					final Object xc = ((ComponentCtrl)oldparent).getExtraCtrl();
+					if ((xc instanceof Cropper) && ((Cropper)xc).isCropper())
+						_invalidated.add(oldparent);
+				}
 			}
 			_attached.remove(comp);
 		}
@@ -307,7 +310,8 @@ import org.zkoss.zk.au.*;
 		return newInvalid != null && _invalidated.addAll(newInvalid);
 	}
 	private static Set getAvailableAtClient(Component comp, Map cropping) {
-		if (comp instanceof Cropper) {
+		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
+		if (xc instanceof Cropper) {
 			//we don't need to check isCropper first since its component's job
 			//to ensure the consistency
 
@@ -315,7 +319,7 @@ import org.zkoss.zk.au.*;
 			if (set != null)
 				return set != Collections.EMPTY_SET ? set: null;
 
-			set = ((Cropper)comp).getAvailableAtClient();
+			set = ((Cropper)xc).getAvailableAtClient();
 			cropping.put(comp, set != null ? set: Collections.EMPTY_SET);
 			return set;
 		}
@@ -344,10 +348,11 @@ import org.zkoss.zk.au.*;
 				if (!checked.add(comp))
 					break; //already checked
 
-				if ((comp instanceof ChildChangedAware)
+				final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
+				if ((xc instanceof ChildChangedAware)
 				//&& !_invalidated.contains(comp) && !_attached.contains(comp)
 					//No need to check _invalidated... since they are optimized
-				&& ((ChildChangedAware)comp).isChildChangedAware())
+				&& ((ChildChangedAware)xc).isChildChangedAware())
 					ccawares.add(comp);
 			}
 		}
@@ -576,7 +581,8 @@ import org.zkoss.zk.au.*;
 		return responses;
 	}
 	private static boolean isTransparent(Component comp) {
-		return (comp instanceof Transparent) && ((Transparent)comp).isTransparent();
+		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
+		return (xc instanceof Transparent) && ((Transparent)xc).isTransparent();
 	}
 
 	/** process moved components.
@@ -646,10 +652,14 @@ import org.zkoss.zk.au.*;
 		final List before = new LinkedList();
 		Component anchor = null;
 		final ComponentCtrl ntparentCtrl = (ComponentCtrl)ntparent;
+		final Object ntparentxc =
+			ntparentCtrl != null ? ntparentCtrl.getExtraCtrl(): null;
 		for (Iterator it = sibs.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
-			if (ntparentCtrl != null && ntparentCtrl.inDifferentBranch(comp))
-				continue;
+
+			if ((ntparentxc instanceof MultiBranch)
+			&& ((MultiBranch)ntparentxc).inDifferentBranch(comp))
+					continue;
 
 			if (anchor != null) {
 				if (newsibs.remove(comp)) {

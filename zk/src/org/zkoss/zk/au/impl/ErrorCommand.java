@@ -25,7 +25,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ErrorEvent;
-import org.zkoss.zk.ui.ext.Errorable;
+import org.zkoss.zk.ui.ext.client.Errorable;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 
@@ -51,7 +52,8 @@ public class ErrorCommand extends Command {
 				new Object[] {Objects.toString(data), this});
 
 		final String newval = data[0], msg = data[1];
-		((Errorable)comp).setErrorByClient(newval, msg);
+		((Errorable)((ComponentCtrl)comp).getExtraCtrl())
+			.setErrorByClient(newval, msg);
 		Events.postEvent(new ErrorEvent(getId(), comp, newval, msg));
 	}
 }

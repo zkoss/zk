@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
  * Represents an event cause by user's input something at the client.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see org.zkoss.zk.ui.ext.Inputable
+ * @see org.zkoss.zk.ui.ext.client.Inputable
  */
 public class InputEvent extends Event {
 	private final String _val;

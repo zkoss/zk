@@ -25,7 +25,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.CheckEvent;
-import org.zkoss.zk.ui.ext.Checkable;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.ext.client.Checkable;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 
@@ -51,7 +52,8 @@ public class CheckCommand extends Command {
 				new Object[] {Objects.toString(data), this});
 
 		final boolean checked = "true".equals(data[0]);
-		((Checkable)comp).setCheckedByClient(checked);
+		((Checkable)((ComponentCtrl)comp).getExtraCtrl())
+			.setCheckedByClient(checked);
 		Events.postEvent(new CheckEvent(getId(), comp, checked));
 	}
 }

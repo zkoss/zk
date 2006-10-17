@@ -25,7 +25,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MoveEvent;
-import org.zkoss.zk.ui.ext.Moveable;
+import org.zkoss.zk.ui.ext.client.Moveable;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 
@@ -50,7 +51,7 @@ public class MoveCommand extends Command {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
-		final Moveable move = (Moveable)comp;
+		final Moveable move = (Moveable)((ComponentCtrl)comp).getExtraCtrl();
 		move.setLeftByClient(data[0]);
 		move.setTopByClient(data[1]);
 		Events.postEvent(new MoveEvent(getId(), comp, data[0], data[1]));

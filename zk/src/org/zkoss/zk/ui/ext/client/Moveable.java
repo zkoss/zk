@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.ext.client;
 
 /**
- * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getClientCtrl},
+ * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl},
  * a component is moveable by the client.
  *
  * <p>Once it is moved by the user, {@link #setLeftByClient} and

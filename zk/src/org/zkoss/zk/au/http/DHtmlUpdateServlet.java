@@ -108,7 +108,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				} else if (pi.startsWith("/upload")) {
 					Uploads.process(sess, _ctx, request, response);
 				} else if (pi.startsWith("/view")) {
-					Views.process(
+					DynaMedias.process(
 						sess, _ctx, request, response, pi.substring(5));
 				} else {
 					log.warning("Unknown path info: "+pi);

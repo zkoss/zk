@@ -21,7 +21,7 @@ package org.zkoss.zk.ui.ext.client;
 import org.zkoss.zk.ui.WrongValueException;
 
 /**
- * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getClientCtrl},
+ * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl},
  * if a component allows users to change its content from the client.
  *
  * <p>{@link org.zkoss.zk.ui.event.InputEvent} will be sent wih name as "onChange" after

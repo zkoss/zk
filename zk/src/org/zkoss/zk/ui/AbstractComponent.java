@@ -40,9 +40,8 @@ import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.RawId;
-import org.zkoss.zk.ui.ext.Viewable;
-import org.zkoss.zk.ui.ext.Transparent;
-import org.zkoss.zk.ui.ext.ZidRequired;
+import org.zkoss.zk.ui.ext.render.Transparent;
+import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -94,6 +93,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//don't create it dynamically because _ip bind it at constructor
 	/** A map of event listener: Map(evtnm, EventListener)). */
 	private transient Map _listeners;
+	/** The extra controls. */
+	private transient Object _xtrl;
 	/** A set of children being added. It is used only to speed up
 	 * the performance when adding a new child. And, cleared after added.
 	 * <p>To save footprint, we don't use Set (since it is rare to contain
@@ -166,6 +167,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	/** Initialize for contructor and serialization. */
 	private void init() {
+		_xtrl = newExtraCtrl();
 		_modChildren = new AbstractSequentialList() {
 			public int size() {
 				return _children.size();
@@ -365,30 +367,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected String getInitParam(String name) {
 		return Objects.toString(_mill.getParameter(this, name));
 	}
-	/** Returns URI that {@link org.zkoss.zk.au.http.DHtmlUpdateServlet}
-	 * understands. Then, when DHtmlUpdateServlet serves the URI, it will
-	 * invoke {@link Viewable#getView} to response.
-	 *
-	 * <p>Note: to use this method, {@link Viewable} must be implemented.
-	 *
-	 * <p>Used usually for component implementation.
-	 */
-	protected String getViewURI(String pathInfo) {
-		if (!(this instanceof Viewable))
-			throw new UiException(Viewable.class+" not implemented by "+this);
-		if (_desktop == null)
-			throw new UiException("Not callable because this component doesn't belong to any desktop: "+this);
-
-		final StringBuffer sb = new StringBuffer(32)
-			.append("/view/").append(_desktop.getId())
-			.append('/').append(getUuid());
-
-		if (pathInfo != null && pathInfo.length() > 0) {
-			if (!pathInfo.startsWith("/")) sb.append('/');
-			sb.append(pathInfo);
-		}
-		return _desktop.getUpdateURI(sb.toString());
-	}
 
 	/** Returns the UI engine based on {@link #_desktop}.
 	 * Don't call this method when _desktop is null.
@@ -553,12 +531,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 			addToIdSpaces(this);
 
-			if ((this instanceof ZidRequired) && ((ZidRequired)this).isZidRequired())
+			final Object xc = getExtraCtrl();
+			if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())
 				smartUpdate("z:zid", _id);
 		}
 	}
 	private static boolean isTransparent(Component comp) {
-		return (comp instanceof Transparent) && ((Transparent)comp).isTransparent();
+		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
+		return (xc instanceof Transparent) && ((Transparent)xc).isTransparent();
 	}
 
 	public final String getUuid() {
@@ -1062,14 +1042,35 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			sessionDidActivate0(page, child, pageLevelIdSpace); //recursive
 		}
 	}
-	/** Default: false.
+
+	/** Returns the extra controls that tell ZK how to handle this component
+	 * specially.
+	 * It is used only by component developers.
 	 *
-	 * <p>Derived class might override it to return true for
-	 * components that are put in a different branch.
-	 * @see ComponentCtrl#inDifferentBranch
+	 * <p>It is simpler to override {@link #newExtraCtrl} instead of this.
+	 * By use of {@link #newExtraCtrl}, you don't need to care of
+	 * cloning and serialization.
+	 *
+	 * <p>Default: return the object being created by {@link #newExtraCtrl},
+	 * if any.
+	 *
+	 * @see ComponentCtrl#getExtraCtrl
 	 */
-	public boolean inDifferentBranch(Component child) {
-		return false;
+	public Object getExtraCtrl() {
+		return _xtrl;
+	}
+	/** Used by {@link #getExtraCtrl} to create a client control.
+	 * It is used only by component developers.
+	 *
+	 * <p>Default: return null.
+	 *
+	 * <p>To provide extra controls, it is simpler to override this method
+	 * instead of {@link #getExtraCtrl}.
+	 * By use of {@link #newExtraCtrl}, you don't need to care of
+	 * cloning and serialization.
+	 */
+	protected Object newExtraCtrl() {
+		return null;
 	}
 
 	//-- Object --//

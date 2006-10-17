@@ -1,4 +1,4 @@
-/* Viewable.java
+/* DynamicMedia.java
 
 {{IS_NOTE
 	Purpose:
@@ -16,29 +16,29 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.ext.client;
+package org.zkoss.zk.ui.ext.render;
 
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getClientCtrl},
+ * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl},
  * if a component might have viewable parts other than HTML (WML, XAML
  * or any client language). A typical example is an image and an audio.
  *
  * <h3>How it woks:</h3>
  *
  * <ol>
- * <li>Viewable componet first invoke {@link org.zkoss.zk.ui.AbstractComponent#getViewURI}
+ * <li>DynamicMedia componet first invoke {@link org.zkoss.zk.ui.Desktop#getDynamicMediaURI}
  * to retrieve a URI and generate proper HTML (or any client language).<li>
  * <li>Then, client will send a request to the URI</li>
  * <li> {@link org.zkoss.zk.au.http.DHtmlUpdateServlet} interprets it
- * and call {@link #getView} to retrieve the media and return it the client</li>
+ * and call {@link #getMedia} to retrieve the media and return it the client</li>
  * </ol>
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public interface Viewable {
+public interface DynamicMedia {
 	/** Retrieve the view in {@link Media} format.
 	 *
 	 * <p>Unlike other methods, you cannot post event, create, remove,
@@ -48,8 +48,8 @@ public interface Viewable {
 	 * @param pathInfo the extra info passed to 
 	 * {@link org.zkoss.zk.au.http.DHtmlUpdateServlet}.
 	 * It is what you passed to
-	 * {@link org.zkoss.zk.ui.AbstractComponent#getViewURI}.
+	 * {@link org.zkoss.zk.ui.Desktop#getDynamicMediaURI}.
 	 * It is never null. It must start with "/" or be empty.
 	 */
-	public Media getView(String pathInfo);
+	public Media getMedia(String pathInfo);
 }

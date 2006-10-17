@@ -22,10 +22,10 @@ zk = {};
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "2O"; //increase this if we want the browser to reload JavaScript
+zk.build = "2P"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
-zk.namespace = "http://www.zkoss.org/2005/zk";
+//zk.namespace = "http://www.zkoss.org/2005/zk";
 
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();

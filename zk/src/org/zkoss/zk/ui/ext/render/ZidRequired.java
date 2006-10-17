@@ -16,25 +16,29 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.ext;
+package org.zkoss.zk.ui.ext.render;
 
 /**
- * Represents a component that might be accessible at the client with
+ * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}
+ * if the component might be accessible at the client with
  * {@link org.zkoss.zk.ui.Component#getId}.
  *
  * <p>In other words, the client engine will handle extra info related to
  * {@link org.zkoss.zk.ui.IdSpace} when this interface is declared and
  * {@link #isZidRequired} returns true.
  *
- * <p>Most components don't need to implement this interface.
- * Note: if a component is NOT derived from {@link org.zkoss.zk.ui.HtmlBasedComponent},
+ * <p>Most components don't need to implement this interface for the object
+ * returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
+ *
+ * <p>Note: if a component is NOT derived from {@link org.zkoss.zk.ui.HtmlBasedComponent},
  * it has to detect this interface and generate z:id if {@link #isZidRequired}
  * return true.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface ZidRequired {
-	/** Returns whether this component can be accessible at the client with
+	/** Returns whether the component that owns this object
+	 * can be accessible at the client with
 	 * {@link org.zkoss.zk.ui.Component#getId}.
 	 */
 	public boolean isZidRequired();

@@ -23,7 +23,8 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Updatable;
+import org.zkoss.zk.ui.ext.client.Updatable;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 
@@ -50,6 +51,6 @@ public class DoUpdatableCommand extends Command {
 		final Object result = request.getDesktop().removeAttribute(data[0]);
 		if (result == null)
 			throw new UiException("Content not found: "+data[0]);
-		((Updatable)comp).setResult(result);
+		((Updatable)((ComponentCtrl)comp).getExtraCtrl()).setResult(result);
 	}
 }

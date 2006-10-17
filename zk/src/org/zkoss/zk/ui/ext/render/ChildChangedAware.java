@@ -16,15 +16,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.ext;
+package org.zkoss.zk.ui.ext.render;
 
 /**
- * Denote a component that requires the <code>z:chchg</code> command,
+ * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}
+ * if a component requires the <code>z:chchg</code> command,
  * when any of its children and descendants are changed.
  *
  * <p>Once a component implements this interface and {@link #isChildChangedAware}
  * returns true, the <code>z:chchg</code> command is sent to the client
- * for updating the visual representation. For example, a grid uses two tables
+ * to update the visual representation. For example, a grid uses two tables
  * to implement header and body, and then it has to re-align the header
  * once any of its descendants is changed.
  *

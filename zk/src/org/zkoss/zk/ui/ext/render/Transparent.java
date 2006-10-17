@@ -16,21 +16,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.ext;
+package org.zkoss.zk.ui.ext.render;
 
 /**
- * To denote a component that might be transparent.
+ * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}
+ * to denote the component that might be transparent.
  * By transparent we mean this component doesn't have any counterpart
- * in the client.
+ * at the client.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface Transparent {
-	/** Returns whether this component is transparent.
-	 * By transparent we mean this component doesn't have any counterpart
+	/** Returns whether the component that owns this object is transparent.
+	 * By transparent we mean the component doesn't have any counterpart
 	 * in the client.
 	 * In other words, it doesn't generate any element in the client.
-	 * In this case, invalidate this component implies invalidate all
+	 * In this case, invalidate the component implies invalidate all
 	 * its children, and {@link org.zkoss.zk.ui.Component#smartUpdate} is meaningless
 	 * (and causes exception).
 	 *

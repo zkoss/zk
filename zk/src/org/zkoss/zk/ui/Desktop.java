@@ -117,4 +117,16 @@ public interface Desktop {
 	 * is sent to all pages of the desktop.
 	 */
 	public void setBookmark(String name);
+
+	/** Returns URI for a dynamic generated media.
+	 * ZK Update Engine will then invoke invoke
+	 * {@link org.zkoss.zk.ui.ext.render.DynamicMedia#getMedia} to response.
+	 *
+	 * <p>Note: to use with this method, {@link org.zkoss.zk.ui.ext.render.DynamicMedia}
+	 * must be implemented as part of the object returned by
+	 * {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
+	 *
+	 * <p>Used mainly for component implementation.
+	 */
+	public String getDynamicMediaURI(Component comp, String pathInfo);
 }

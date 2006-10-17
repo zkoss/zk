@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Component;
  * has scrolled at the client.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
- * @see org.zkoss.zk.ui.ext.Scrollable
+ * @see org.zkoss.zk.ui.ext.client.Scrollable
  */
 public class ScrollEvent extends Event {
 	private final int _pos;

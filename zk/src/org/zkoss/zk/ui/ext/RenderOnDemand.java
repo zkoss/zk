@@ -1,4 +1,4 @@
-/* Render.java
+/* RenderOnDemand.java
 
 {{IS_NOTE
 	Purpose:
@@ -29,7 +29,7 @@ import java.util.Set;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public interface Render {
+public interface RenderOnDemand {
 	/** Renders a set of specified items.
 	 */
 	public void renderItems(Set items);

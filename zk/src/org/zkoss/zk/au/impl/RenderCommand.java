@@ -23,7 +23,7 @@ import java.util.Set;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Render;
+import org.zkoss.zk.ui.ext.RenderOnDemand;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 
@@ -45,6 +45,8 @@ public class RenderCommand extends Command {
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 
 		final Set items = Commands.convertToItems(request);
-		((Render)comp).renderItems(items);
+		((RenderOnDemand)comp).renderItems(items);
+			//Note: it is not part of getExtraCtrl, since it is accessible
+			//to app developers, too.
 	}
 }

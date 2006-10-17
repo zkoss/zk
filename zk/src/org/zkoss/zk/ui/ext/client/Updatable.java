@@ -21,7 +21,7 @@ package org.zkoss.zk.ui.ext.client;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getClientCtrl}
+ * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}
  * if a component supports special updates (other than async-update).
  *
  * <h2>Supported special updates</h2>

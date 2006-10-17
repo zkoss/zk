@@ -39,7 +39,9 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Monitor;
+import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.RequestQueue;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -154,6 +156,20 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			uri = _updateURI + pathInfo;
 		}
 		return _exec.encodeURL(uri);
+	}
+	public String getDynamicMediaURI(Component comp, String pathInfo) {
+		if (!(((ComponentCtrl)comp).getExtraCtrl() instanceof DynamicMedia))
+			throw new UiException(DynamicMedia.class+" not implemented by getExtraCtrl() of "+comp);
+
+		final StringBuffer sb = new StringBuffer(32)
+			.append("/view/").append(getId())
+			.append('/').append(comp.getUuid());
+
+		if (pathInfo != null && pathInfo.length() > 0) {
+			if (!pathInfo.startsWith("/")) sb.append('/');
+			sb.append(pathInfo);
+		}
+		return getUpdateURI(sb.toString());
 	}
 
 	public Page getPage(String pageId) {
