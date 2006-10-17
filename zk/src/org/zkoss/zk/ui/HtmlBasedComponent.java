@@ -472,7 +472,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	/** Used by {@link #getExtraCtrl} to create a client control.
 	 * It is used only by component developers.
 	 *
-	 * <p>Defaut: creates an instance of {@link HtmlBasedComponent#ExtraInfo}.
+	 * <p>Defaut: creates an instance of {@link HtmlBasedComponent#ExtraCtrl}.
 	 */
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
