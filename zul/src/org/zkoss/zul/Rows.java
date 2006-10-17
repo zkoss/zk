@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Cropper;
+import org.zkoss.zk.ui.ext.render.Cropper;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
@@ -35,7 +35,7 @@ import org.zkoss.zul.ext.Paginal;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Rows extends XulElement implements Cropper {
+public class Rows extends XulElement {
 	/** Returns the grid that contains this rows. */
 	public Grid getGrid() {
 		return (Grid)getParent();
@@ -97,23 +97,32 @@ public class Rows extends XulElement implements Cropper {
 		}
     }
 
-	//--Cropper--//
-	public boolean isCropper() {
-		final Grid grid = getGrid();
-		return grid != null && grid.inPagingMold();
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
 	}
-	public Set getAvailableAtClient() {
-		final Grid grid = getGrid();
-		if (grid == null || !grid.inPagingMold())
-			return null;
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Cropper {
+		//--Cropper--//
+		public boolean isCropper() {
+			final Grid grid = getGrid();
+			return grid != null && grid.inPagingMold();
+		}
+		public Set getAvailableAtClient() {
+			final Grid grid = getGrid();
+			if (grid == null || !grid.inPagingMold())
+				return null;
 
-		final Set avail = new HashSet(37);
-		final Paginal pgi = grid.getPaginal();
-		int pgsz = pgi.getPageSize();
-		final int ofs = pgi.getActivePage() * pgsz;
-		for (final Iterator it = getChildren().listIterator(ofs);
-		--pgsz >= 0 && it.hasNext();)
-			avail.add(it.next());
-		return avail;
+			final Set avail = new HashSet(37);
+			final Paginal pgi = grid.getPaginal();
+			int pgsz = pgi.getPageSize();
+			final int ofs = pgi.getActivePage() * pgsz;
+			for (final Iterator it = getChildren().listIterator(ofs);
+			--pgsz >= 0 && it.hasNext();)
+				avail.add(it.next());
+			return avail;
+		}
 	}
 }

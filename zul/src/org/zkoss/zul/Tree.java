@@ -32,8 +32,8 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.Selectable;
-import org.zkoss.zk.ui.ext.ChildChangedAware;
+import org.zkoss.zk.ui.ext.client.Selectable;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
@@ -52,7 +52,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Tree extends XulElement implements Selectable, ChildChangedAware {
+public class Tree extends XulElement {
 	private transient Treecols _treecols;
 	private transient Treechildren _treechildren;
 	/** A list of selected items. */
@@ -417,29 +417,6 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 		smartUpdate("z:init", true);
 	}
 
-	//-- Selectable --//
-	public void selectItemsByClient(Set selItems) {
-		_noSmartUpdate = true;
-		try {
-			if (!_multiple || selItems == null || selItems.size() <= 1) {
-				final Treeitem item =
-					selItems != null && selItems.size() > 0 ?
-						(Treeitem)selItems.iterator().next(): null;
-				selectItem(item);
-			} else {
-				for (Iterator it = new ArrayList(_selItems).iterator(); it.hasNext();) {
-					final Treeitem item = (Treeitem)it.next();
-					if (!selItems.remove(item))
-						removeItemFromSelection(item);
-				}
-				for (Iterator it = selItems.iterator(); it.hasNext();)
-					addItemToSelection((Treeitem)it.next());
-			}
-		} finally {
-			_noSmartUpdate = false;
-		}
-	}
-
 	//-- Component --//
 	public void setHeight(String height) {
 		if (!Objects.equals(height, getHeight())) {
@@ -615,11 +592,6 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 		return sb.toString();
 	}
 
-	//ChildChangedAware//
-	public boolean isChildChangedAware() {
-		return true;
-	}
-
 	//Cloneable//
 	public Object clone() {
 		int cntSel = _selItems.size();
@@ -674,5 +646,42 @@ public class Tree extends XulElement implements Selectable, ChildChangedAware {
 		init();
 
 		afterUnmarshal(-1, -1);
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements Selectable, ChildChangedAware {
+		//-- Selectable --//
+		public void selectItemsByClient(Set selItems) {
+			_noSmartUpdate = true;
+			try {
+				if (!_multiple || selItems == null || selItems.size() <= 1) {
+					final Treeitem item =
+						selItems != null && selItems.size() > 0 ?
+							(Treeitem)selItems.iterator().next(): null;
+					selectItem(item);
+				} else {
+					for (Iterator it = new ArrayList(_selItems).iterator(); it.hasNext();) {
+						final Treeitem item = (Treeitem)it.next();
+						if (!selItems.remove(item))
+							removeItemFromSelection(item);
+					}
+					for (Iterator it = selItems.iterator(); it.hasNext();)
+						addItemToSelection((Treeitem)it.next());
+				}
+			} finally {
+				_noSmartUpdate = false;
+			}
+		}
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return true;
+		}
 	}
 }

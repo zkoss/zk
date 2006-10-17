@@ -26,7 +26,7 @@ import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.ChildChangedAware;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -60,7 +60,7 @@ import org.zkoss.zul.event.PagingEvent;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Grid extends XulElement implements ChildChangedAware {
+public class Grid extends XulElement {
 	private transient Rows _rows;
 	private transient Columns _cols;
 	private String _align;
@@ -315,11 +315,6 @@ public class Grid extends XulElement implements ChildChangedAware {
 		return true;
 	}
 
-	//ChildChangedAware//
-	public boolean isChildChangedAware() {
-		return true;
-	}
-
 	//Cloneable//
 	public Object clone() {
 		final Grid clone = (Grid)super.clone();
@@ -359,4 +354,19 @@ public class Grid extends XulElement implements ChildChangedAware {
 		//TODO: how to marshal _pgi if _pgi != _paging
 		//TODO: re-register event listener for onPaging
 	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements ChildChangedAware {
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return true;
+		}
+	} 
 }

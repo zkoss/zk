@@ -23,7 +23,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.Checkable;
+import org.zkoss.zk.ui.ext.client.Checkable;
 
 import org.zkoss.zul.impl.LabelImageElement;
 
@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Menuitem extends LabelImageElement implements Checkable {
+public class Menuitem extends LabelImageElement {
 	private String _value = "";
 	private String _href, _target;
 	private boolean _autocheck, _checked;
@@ -144,11 +144,6 @@ public class Menuitem extends LabelImageElement implements Checkable {
 		return !(getParent() instanceof Menupopup);
 	}
 
-	//-- Checkable --//
-	public void setCheckedByClient(boolean checked) {
-		setChecked(checked);
-	}
-
 	//-- Super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
@@ -179,5 +174,20 @@ public class Menuitem extends LabelImageElement implements Checkable {
 	/** Not childable. */
 	public boolean isChildable() {
 		return false;
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl
+	implements Checkable {
+		//-- Checkable --//
+		public void setCheckedByClient(boolean checked) {
+			setChecked(checked);
+		}
 	}
 }

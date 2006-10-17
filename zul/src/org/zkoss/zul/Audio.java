@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.Viewable;
+import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.au.AuScript;
 
 import org.zkoss.zul.impl.XulElement;
@@ -39,7 +39,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Audio extends XulElement implements Viewable {
+public class Audio extends XulElement {
 	private String _align, _border;
 	protected String _src;
 	/** The audio. If not null, _src is generated automatically. */
@@ -183,7 +183,8 @@ public class Audio extends XulElement implements Viewable {
 	 * Don't call this method unless _audio is not null;
 	 */
 	private String getAudioSrc() {
-		if (getDesktop() == null) return ""; //no avail at client
+		final Desktop desktop = getDesktop();
+		if (desktop == null) return ""; //no avail at client
 
 		final StringBuffer sb = new StringBuffer(64).append('/');
 		Strings.encode(sb, _audver);
@@ -201,12 +202,7 @@ public class Audio extends XulElement implements Viewable {
 			if (bExtRequired && format != null)
 				sb.append('.').append(format);
 		}
-		return getViewURI(sb.toString()); //already encoded
-	}
-
-	//-- Viewable --//
-	public Media getView(String pathInfo) {
-		return _audio;
+		return desktop.getDynamicMediaURI(this, sb.toString()); //already encoded
 	}
 
 	//-- super --//
@@ -226,5 +222,20 @@ public class Audio extends XulElement implements Viewable {
 	 */
 	public boolean isChildable() {
 		return false;
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements DynamicMedia {
+		//-- DynamicMedia --//
+		public Media getMedia(String pathInfo) {
+			return _audio;
+		}
 	}
 }

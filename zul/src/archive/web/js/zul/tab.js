@@ -75,8 +75,8 @@ zkTab._getSelTabFromTop = function (node, tabboxId) {
 
 /** Selects the specified tab (and unselect the current tab). */
 zkTab.selTab = function (tab) {
-	if (!tab) return;
 	tab = $e(tab);
+	if (!tab) return;
 
 	var old = zkTab._getSelTab(tab);
 	if (old != tab) {

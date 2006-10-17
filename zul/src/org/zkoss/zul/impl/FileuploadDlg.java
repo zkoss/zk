@@ -20,7 +20,7 @@ package org.zkoss.zul.impl;
 
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Updatable;
+import org.zkoss.zk.ui.ext.client.Updatable;
 import org.zkoss.zul.Window;
 
 /**
@@ -29,7 +29,7 @@ import org.zkoss.zul.Window;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class FileuploadDlg extends Window implements Updatable {
+public class FileuploadDlg extends Window {
 	private Media _result;
 
 	/** Returns the result.
@@ -42,11 +42,20 @@ public class FileuploadDlg extends Window implements Updatable {
 		detach();
 	}
 
-	//-- Updatable --//
-	/** Updates the result from the client.
-	 * Callback by the system only. Don't invoke it directly.
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
 	 */
-	public void setResult(Object result) {
-		_result = (Media)result;
+	protected class ExtraCtrl extends Window.ExtraCtrl implements Updatable {
+		//-- Updatable --//
+		/** Updates the result from the client.
+		 * Callback by the system only. Don't invoke it directly.
+		 */
+		public void setResult(Object result) {
+			_result = (Media)result;
+		}
 	}
 }

@@ -26,7 +26,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Viewable;
+import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Iframe extends XulElement implements Viewable {
+public class Iframe extends XulElement {
 	private String _align, _name;
 	private String _src;
 	/** The media. If not null, _src is generated automatically. */
@@ -141,7 +141,8 @@ public class Iframe extends XulElement implements Viewable {
 	 * Don't call this method unless _media is not null;
 	 */
 	private String getMediaSrc() {
-		if (getDesktop() == null) return ""; //no avail at client
+		final Desktop desktop = getDesktop();
+		if (desktop == null) return ""; //no avail at client
 
 		final StringBuffer sb = new StringBuffer(64).append('/');
 		Strings.encode(sb, _medver);
@@ -159,12 +160,7 @@ public class Iframe extends XulElement implements Viewable {
 			if (bExtRequired && format != null)
 				sb.append('.').append(format);
 		}
-		return getViewURI(sb.toString()); //already encoded
-	}
-
-	//-- Viewable --//
-	public Media getView(String pathInfo) {
-		return _media;
+		return desktop.getDynamicMediaURI(this, sb.toString()); //already encoded
 	}
 
 	//-- super --//
@@ -182,5 +178,20 @@ public class Iframe extends XulElement implements Viewable {
 	 */
 	public boolean isChildable() {
 		return false;
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements DynamicMedia {
+		//-- DynamicMedia --//
+		public Media getMedia(String pathInfo) {
+			return _media;
+		}
 	}
 }

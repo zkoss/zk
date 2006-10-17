@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.Openable;
+import org.zkoss.zk.ui.ext.client.Openable;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Splitter extends XulElement implements Openable {
+public class Splitter extends XulElement {
 	private String _collapse = "none";
 	private boolean _open = true;
 
@@ -118,11 +118,6 @@ public class Splitter extends XulElement implements Openable {
 		}
 	}
 
-	//-- Openable --//
-	public void setOpenByClient(boolean open) {
-		_open = open;
-	}
-
 	//super//
 	public String getOuterAttrs() {
 		final StringBuffer sb =
@@ -145,5 +140,19 @@ public class Splitter extends XulElement implements Openable {
 	 */
 	public boolean isChildable() {
 		return false;
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Openable {
+		//-- Openable --//
+		public void setOpenByClient(boolean open) {
+			_open = open;
+		}
 	}
 }

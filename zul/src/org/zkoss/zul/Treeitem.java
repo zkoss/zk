@@ -26,8 +26,8 @@ import org.zkoss.lang.Strings;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Openable;
-import org.zkoss.zk.ui.ext.Transparent;
+import org.zkoss.zk.ui.ext.client.Openable;
+import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.event.EventListener;
 
 import org.zkoss.zul.impl.XulElement;
@@ -44,7 +44,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Treeitem extends XulElement implements Openable, Transparent {
+public class Treeitem extends XulElement {
 	private transient Treerow _treerow;
 	private transient Treechildren _treechildren;
 	private Object _value;
@@ -307,17 +307,6 @@ public class Treeitem extends XulElement implements Openable, Transparent {
 		}
 	}
 
-	//-- Openable --//
-	public void setOpenByClient(boolean open) {
-		_open = open;
-	}
-
-	//-- Transparent --//
-	/** Always returns true. */
-	public boolean isTransparent() {
-		return true;
-	}
-
 	//-- Component --//
 	public void setParent(Component parent) {
 		final Component oldp = getParent();
@@ -421,5 +410,26 @@ public class Treeitem extends XulElement implements Openable, Transparent {
 		s.defaultReadObject();
 
 		afterUnmarshal(-1);
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements Openable, Transparent {
+		//-- Openable --//
+		public void setOpenByClient(boolean open) {
+			_open = open;
+		}
+
+		//-- Transparent --//
+		/** Always returns true. */
+		public boolean isTransparent() {
+			return true;
+		}
 	}
 }

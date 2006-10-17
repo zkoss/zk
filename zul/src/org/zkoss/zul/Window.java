@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.*;
 
@@ -60,7 +61,7 @@ import org.zkoss.zul.au.*;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Window extends XulElement implements IdSpace  {
+public class Window extends XulElement implements IdSpace {
 	private transient Caption _caption;
 
 	private String _border = "none";
@@ -616,11 +617,6 @@ public class Window extends XulElement implements IdSpace  {
 		return sb.toString();
 	}
 
-	//--ComponentCtrl--//
-	public boolean inDifferentBranch(Component child) {
-		return child instanceof Caption; //in different branch
-	}
-
 	//Cloneable//
 	public Object clone() {
 		final Window clone = (Window)super.clone();
@@ -644,5 +640,19 @@ public class Window extends XulElement implements IdSpace  {
 		s.defaultReadObject();
 		init();
 		afterUnmarshal();
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements MultiBranch {
+		//-- MultiBranch --//
+		public boolean inDifferentBranch(Component child) {
+			return child instanceof Caption; //in different branch
+		}
 	}
 }

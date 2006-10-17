@@ -21,7 +21,8 @@ package org.zkoss.zul;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.Openable;
+import org.zkoss.zk.ui.ext.render.MultiBranch;
+import org.zkoss.zk.ui.ext.client.Openable;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -30,7 +31,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Groupbox extends XulElement implements Openable {
+public class Groupbox extends XulElement {
 	private Caption _caption;
 	private boolean _open = true, _closable = true;
 
@@ -77,11 +78,6 @@ public class Groupbox extends XulElement implements Openable {
 		}
 	}
 
-	//-- Openable --//
-	public void setOpenByClient(boolean open) {
-		_open = open;
-	}
-
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
@@ -120,8 +116,22 @@ public class Groupbox extends XulElement implements Openable {
 		super.onChildRemoved(child);
 	}
 
-	//--ComponentCtrl--//
-	public boolean inDifferentBranch(Component child) {
-		return child instanceof Caption; //in different branch
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements MultiBranch, Openable {
+		//-- MultiBranch --//
+		public boolean inDifferentBranch(Component child) {
+			return child instanceof Caption; //in different branch
+		}
+		//-- Openable --//
+		public void setOpenByClient(boolean open) {
+			_open = open;
+		}
 	}
 }

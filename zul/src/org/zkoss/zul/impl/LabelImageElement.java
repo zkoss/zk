@@ -24,15 +24,16 @@ import org.zkoss.util.media.Media;
 import org.zkoss.image.Image;
 
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Viewable;
+import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
 /**
  * A HTML element with a label ({@link #getLabel})and an image ({@link #getImage}).
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class LabelImageElement extends LabelElement implements Viewable {
+public class LabelImageElement extends LabelElement {
 	private String _src = null;
 	/** The image. If not null, _src is generated automatically. */
 	private Image _image;
@@ -139,7 +140,8 @@ public class LabelImageElement extends LabelElement implements Viewable {
 	 * <p>Used only for component template, not for application developers.
 	 */
 	private String getContentSrc() {
-		if (getDesktop() == null) return ""; //no avail at client
+		final Desktop desktop = getDesktop();
+		if (desktop == null) return ""; //no avail at client
 
 		final StringBuffer sb = new StringBuffer(64).append('/');
 		Strings.encode(sb, _imgver);
@@ -157,11 +159,21 @@ public class LabelImageElement extends LabelElement implements Viewable {
 			if (bExtRequired && format != null)
 				sb.append('.').append(format);
 		}
-		return getViewURI(sb.toString()); //already encoded
+		return desktop.getDynamicMediaURI(this, sb.toString()); //already encoded
 	}
 
-	//-- Viewable --//
-	public Media getView(String pathInfo) {
-		return _image;
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends LabelElement.ExtraCtrl
+	implements DynamicMedia {
+		//-- DynamicMedia --//
+		public Media getMedia(String pathInfo) {
+			return _image;
+		}
 	}
 }

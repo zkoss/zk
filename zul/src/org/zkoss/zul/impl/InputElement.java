@@ -27,8 +27,8 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.ext.Inputable;
-import org.zkoss.zk.ui.ext.Errorable;
+import org.zkoss.zk.ui.ext.client.Inputable;
+import org.zkoss.zk.ui.ext.client.Errorable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.AuSelectAll;
 
@@ -42,7 +42,7 @@ import org.zkoss.zul.ext.Constrainted;
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 abstract public class InputElement extends XulElement
-implements Inputable, Errorable, Constrainted {
+implements Constrainted {
 	/** The value. */
 	private Object _value;
 	/** Used by {@link #setTextByClient} to disable sending back the value */
@@ -461,29 +461,39 @@ implements Inputable, Errorable, Constrainted {
 		return XMLs.encodeText(coerceToString(_value));
 	}
 
-	//-- Inputable --//
-	public void setTextByClient(String value) throws WrongValueException {
-		_txtByClient = value;
-		try {
-			setText(value);
-		} catch (WrongValueException ex) {
-			_errmsg = ex.getMessage();
-				//we have to 'remember' the error, so next call to getValue
-				//will throw an exception with proper value.
-			throw ex;
-		} finally {
-			_txtByClient = null;
-		}
-	}
-
-	//-- Errorable --//
-	public void setErrorByClient(String value, String msg) {
-		_errmsg = msg != null && msg.length() > 0 ? msg: null;
-	}
-
 	//-- Component --//
 	/** Not childable. */
 	public boolean isChildable() {
 		return false;
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements Inputable, Errorable {
+		//-- Inputable --//
+		public void setTextByClient(String value) throws WrongValueException {
+			_txtByClient = value;
+			try {
+				setText(value);
+			} catch (WrongValueException ex) {
+				_errmsg = ex.getMessage();
+					//we have to 'remember' the error, so next call to getValue
+					//will throw an exception with proper value.
+				throw ex;
+			} finally {
+				_txtByClient = null;
+			}
+		}
+
+		//-- Errorable --//
+		public void setErrorByClient(String value, String msg) {
+			_errmsg = msg != null && msg.length() > 0 ? msg: null;
+		}
 	}
 }

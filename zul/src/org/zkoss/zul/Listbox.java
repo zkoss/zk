@@ -42,10 +42,10 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.Selectable;
-import org.zkoss.zk.ui.ext.Render;
-import org.zkoss.zk.ui.ext.ChildChangedAware;
-import org.zkoss.zk.ui.ext.Cropper;
+import org.zkoss.zk.ui.ext.RenderOnDemand;
+import org.zkoss.zk.ui.ext.client.Selectable;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
+import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -99,8 +99,7 @@ import org.zkoss.zul.event.PagingEvent;
  * @see ListitemRenderer
  */
 public class Listbox extends XulElement
-implements Selectable, Render, java.io.Serializable,
-ChildChangedAware, Cropper {
+implements java.io.Serializable, RenderOnDemand {
 	private static final Log log = Log.lookup(Listbox.class);
 
 	private transient List _items;
@@ -605,47 +604,6 @@ ChildChangedAware, Cropper {
 			smartUpdate("z:init", true);
 	}
 
-	//-- Selectable --//
-	public void selectItemsByClient(Set selItems) {
-		_noSmartUpdate = true;
-		try {
-			final boolean paging = inPagingMold();
-			if (!_multiple
-			|| (!paging && (selItems == null || selItems.size() <= 1))) {
-				final Listitem item =
-					selItems != null && selItems.size() > 0 ?
-						(Listitem)selItems.iterator().next(): null;
-				selectItem(item);
-			} else {
-				int from, to;
-				if (paging) {
-					final Paginal pgi = getPaginal();
-					int pgsz = pgi.getPageSize();
-					from = pgi.getActivePage() * pgsz;
-					to = from + pgsz; //excluded
-				} else {
-					from = to = 0;
-				}
-
-				int j = 0;
-				for (Iterator it = _items.iterator(); it.hasNext(); ++j) {
-					final Listitem item = (Listitem)it.next();
-					if (selItems.contains(item)) {
-						addItemToSelection(item);
-					} else if (!paging) {
-						removeItemFromSelection(item);
-					} else {
-						final int index = item.getIndex();
-						if (index >= from && index < to)
-							removeItemFromSelection(item);
-					}
-				}
-			}
-		} finally {
-			_noSmartUpdate = false;
-		}
-	}
-
 	//--Paging--//
 	/** Returns the paging controller, or null if not available.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
@@ -798,28 +756,6 @@ ChildChangedAware, Cropper {
 			return Integer.MAX_VALUE;
 		final Paginal pgi = getPaginal();
 		return (pgi.getActivePage() + 1) * pgi.getPageSize() - 1; //inclusive
-	}
-
-	//--Cropper--//
-	public boolean isCropper() {
-		return inPagingMold();
-	}
-	public Set getAvailableAtClient() {
-		if (!inPagingMold())
-			return null;
-
-		final Set avail = new HashSet(37);
-		if (_listhead != null) avail.add(_listhead);
-		if (_listfoot != null) avail.add(_listfoot);
-		if (_paging != null) avail.add(_paging);
-
-		final Paginal pgi = getPaginal();
-		int pgsz = pgi.getPageSize();
-		final int ofs = pgi.getActivePage() * pgsz;
-		for (final Iterator it = getItems().listIterator(ofs);
-		--pgsz >= 0 && it.hasNext();)
-			avail.add(it.next());
-		return avail;
 	}
 
 	//-- Component --//
@@ -1299,7 +1235,7 @@ ChildChangedAware, Cropper {
 		}
 	}
 
-	//-- Render --//
+	//-- RenderOnDemand --//
 	public void renderItems(Set items) {
 		if (_model == null) { //just in case that app dev might change it
 			if (log.debugable()) log.debug("No model no render");
@@ -1446,11 +1382,6 @@ ChildChangedAware, Cropper {
 		}
 	}
 
-	//ChildChangedAware//
-	public boolean isChildChangedAware() {
-		return !inSelectMold();
-	}
-
 	//Cloneable//
 	public Object clone() {
 		final Listbox clone = (Listbox)super.clone();
@@ -1501,5 +1432,83 @@ ChildChangedAware, Cropper {
 		//TODO: re-register event listener for onPaging
 
 		if (_model != null) initDataListener();
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements Selectable, ChildChangedAware, Cropper {
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return !inSelectMold();
+		}
+
+		//--Cropper--//
+		public boolean isCropper() {
+			return inPagingMold();
+		}
+		public Set getAvailableAtClient() {
+			if (!inPagingMold())
+				return null;
+
+			final Set avail = new HashSet(37);
+			if (_listhead != null) avail.add(_listhead);
+			if (_listfoot != null) avail.add(_listfoot);
+			if (_paging != null) avail.add(_paging);
+	
+			final Paginal pgi = getPaginal();
+			int pgsz = pgi.getPageSize();
+			final int ofs = pgi.getActivePage() * pgsz;
+			for (final Iterator it = getItems().listIterator(ofs);
+			--pgsz >= 0 && it.hasNext();)
+				avail.add(it.next());
+			return avail;
+		}
+
+		//-- Selectable --//
+		public void selectItemsByClient(Set selItems) {
+			_noSmartUpdate = true;
+			try {
+				final boolean paging = inPagingMold();
+				if (!_multiple
+				|| (!paging && (selItems == null || selItems.size() <= 1))) {
+					final Listitem item =
+						selItems != null && selItems.size() > 0 ?
+							(Listitem)selItems.iterator().next(): null;
+					selectItem(item);
+				} else {
+					int from, to;
+					if (paging) {
+						final Paginal pgi = getPaginal();
+						int pgsz = pgi.getPageSize();
+						from = pgi.getActivePage() * pgsz;
+						to = from + pgsz; //excluded
+					} else {
+						from = to = 0;
+					}
+
+					int j = 0;
+					for (Iterator it = _items.iterator(); it.hasNext(); ++j) {
+						final Listitem item = (Listitem)it.next();
+						if (selItems.contains(item)) {
+							addItemToSelection(item);
+						} else if (!paging) {
+							removeItemFromSelection(item);
+						} else {
+							final int index = item.getIndex();
+							if (index >= from && index < to)
+								removeItemFromSelection(item);
+						}
+					}
+				}
+			} finally {
+				_noSmartUpdate = false;
+			}
+		}
 	}
 }

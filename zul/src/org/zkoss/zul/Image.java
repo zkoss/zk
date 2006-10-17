@@ -26,7 +26,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Viewable;
+import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -40,7 +40,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Image extends XulElement implements Viewable {
+public class Image extends XulElement {
 	private String _align, _border, _hspace, _vspace;
 	private String _src;
 	/** The image. If not null, _src is generated automatically. */
@@ -187,7 +187,8 @@ public class Image extends XulElement implements Viewable {
 	 * <p>Used only for component template, not for application developers.
 	 */
 	private String getContentSrc() {
-		if (getDesktop() == null) return ""; //no avail at client
+		final Desktop desktop = getDesktop();
+		if (desktop == null) return ""; //no avail at client
 
 		final StringBuffer sb = new StringBuffer(64).append('/');
 		Strings.encode(sb, _imgver);
@@ -205,12 +206,7 @@ public class Image extends XulElement implements Viewable {
 			if (bExtRequired && format != null)
 				sb.append('.').append(format);
 		}
-		return getViewURI(sb.toString()); //already encoded
-	}
-
-	//-- Viewable --//
-	public Media getView(String pathInfo) {
-		return _image;
+		return desktop.getDynamicMediaURI(this, sb.toString()); //already encoded
 	}
 
 	//-- super --//
@@ -260,5 +256,20 @@ public class Image extends XulElement implements Viewable {
 		//Request 1522329: to simplify the client, we always invalidate if alphafix
 		if (alphafix()) invalidate();
 		else super.smartUpdate(attr, value);
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements DynamicMedia {
+		//-- DynamicMedia --//
+		public Media getMedia(String pathInfo) {
+			return _image;
+		}
 	}
 }

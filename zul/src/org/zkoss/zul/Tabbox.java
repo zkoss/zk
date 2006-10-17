@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.Selectable;
+import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.au.AuScript;
 
 import org.zkoss.zul.impl.XulElement;
@@ -51,7 +51,7 @@ import org.zkoss.zul.impl.XulElement;
  * </dl>
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Tabbox extends XulElement implements Selectable {
+public class Tabbox extends XulElement {
 	private transient Tabs _tabs;
 	private transient Tabpanels _tabpanels;
 	private transient Tab _seltab;
@@ -175,14 +175,6 @@ public class Tabbox extends XulElement implements Selectable {
 			throw new WrongValueException("vertical can be used with the default mold");
 	}
 
-	//-- Selectable --//
-	public void selectItemsByClient(Set selItems) {
-		if (selItems != null && selItems.size() == 1)
-			setSelectedTab0((Tab)selItems.iterator().next(), false);
-		else
-			throw new UiException("Exactly one selected tab is required: "+selItems); //debug purpose
-	}
-
 	//-- Component --//
 	public void setMold(String mold) {
 		checkOrient(mold, getOrient());
@@ -280,5 +272,22 @@ public class Tabbox extends XulElement implements Selectable {
 		s.defaultReadObject();
 
 		afterUnmarshal(-1);
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Selectable {
+		//-- Selectable --//
+		public void selectItemsByClient(Set selItems) {
+			if (selItems != null && selItems.size() == 1)
+				setSelectedTab0((Tab)selItems.iterator().next(), false);
+			else
+				throw new UiException("Exactly one selected tab is required: "+selItems); //debug purpose
+		}
 	}
 }

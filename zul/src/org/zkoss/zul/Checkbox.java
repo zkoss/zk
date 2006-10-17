@@ -23,7 +23,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.Checkable;
+import org.zkoss.zk.ui.ext.client.Checkable;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.LabelImageElement;
@@ -39,7 +39,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Checkbox extends LabelImageElement implements Checkable {
+public class Checkbox extends LabelImageElement {
 	/** The name. */
 	private String _name;
 	private boolean _checked;
@@ -138,11 +138,6 @@ public class Checkbox extends LabelImageElement implements Checkable {
 		return style.length() > 0 ? "style=\""+style+'"': "";
 	}
 
-	//-- Checkable --//
-	public void setCheckedByClient(boolean checked) {
-		_checked = checked;
-	}
-
 	//-- super --//
 	/** Appends interior attributes for generating the HTML checkbox tag
 	 * (the name, disabled and other attribute).
@@ -177,5 +172,20 @@ public class Checkbox extends LabelImageElement implements Checkable {
 			//no z:lfclk since it is handled by widget.js
 
 		return sb.toString();
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl
+	implements Checkable {
+		//-- Checkable --//
+		public void setCheckedByClient(boolean checked) {
+			_checked = checked;
+		}
 	}
 }

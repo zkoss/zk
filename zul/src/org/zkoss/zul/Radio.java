@@ -59,11 +59,14 @@ public class Radio extends Checkbox {
 	}
 	/** Sets whether it is selected.
 	 * <p>Don't override this. Override {@link #setChecked} instead.
+	 * <p>The same as {@link #setChecked}.
 	 */
 	public final void setSelected(boolean selected) {
 		setChecked(selected);
 	}
-	//-- Checkable --//
+	/** Sets the radio is checked and unchecked the others in the same radio
+	 * group ({@link Radiogroup}.
+	 */
 	public void setChecked(boolean checked) {
 		if (checked != isChecked()) {
 			super.setChecked(checked);
@@ -77,8 +80,10 @@ public class Radio extends Checkbox {
 			if (checked) {
 				final Radio sib = group.getSelectedItem();
 				if (sib != null && sib != this) {
-					if (byclient) sib.setCheckedByClient(false);
-					else sib.setChecked(false); //and fixSelectedIndex
+					if (byclient)
+						((ExtraCtrl)sib.getExtraCtrl()).setCheckedByClient(false);
+					else
+						sib.setChecked(false); //and fixSelectedIndex
 					return;
 				}
 			}
@@ -126,16 +131,25 @@ public class Radio extends Checkbox {
 		return sb.toString();
 	}
 
-	//-- Checkable --//
-	public void setCheckedByClient(boolean checked) {
-		super.setCheckedByClient(checked);
-		fixSiblings(checked, true);
-	}
-
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Radiogroup))
 			throw new UiException("Unsupported parent for radio: "+parent);
 		super.setParent(parent);
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends Checkbox.ExtraCtrl {
+		//-- Checkable --//
+		public void setCheckedByClient(boolean checked) {
+			super.setCheckedByClient(checked);
+			fixSiblings(checked, true);
+		}
 	}
 }
