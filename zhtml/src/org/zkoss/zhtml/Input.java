@@ -18,8 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
+import java.lang.Object; //since we have org.zkoss.zhtml.Object
+
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.Inputable;
+import org.zkoss.zk.ui.ext.client.Inputable;
 import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
@@ -27,9 +29,10 @@ import org.zkoss.zhtml.impl.AbstractTag;
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class Input extends AbstractTag implements Inputable {
+public class Input extends AbstractTag {
+
 	public Input() {
-		super("input");
+		this("input");
 	}
 	protected Input(String tagnm) {
 		super(tagnm);
@@ -46,8 +49,13 @@ public class Input extends AbstractTag implements Inputable {
 		setDynamicProperty("value", value);
 	}
 
-	//-- Inputable --//
-	public void setTextByClient(String value) throws WrongValueException {
-		setValue(value);
+	//-- super --//
+	public Object newExtraCtrl() {
+		return new Inputable() {
+			//-- Inputable --//
+			public void setTextByClient(String value) throws WrongValueException {
+				setValue(value);
+			}
+		};
 	}
 }
