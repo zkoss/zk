@@ -839,7 +839,7 @@
     <xs:element name="popup" type="popupType" />
     <xs:complexType name="popupType">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="baseGroup" />
+            <xs:group ref="anyGroup" />
             <xs:element ref="menu" />
             <xs:element ref="menuitem" />
             <xs:element ref="menuseparator" />
