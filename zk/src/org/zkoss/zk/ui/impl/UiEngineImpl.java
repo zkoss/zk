@@ -182,10 +182,10 @@ public class UiEngineImpl implements UiEngine {
 	public void addResponse(String key, AuResponse response) {
 		getCurrentVisualizer().addResponse(key, response);
 	}
-	public void addMoved(Component comp, Component oldparent, boolean newAttached) {
+	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
 		if (comp == null)
 			throw new IllegalArgumentException();
-		getCurrentVisualizer().addMoved(comp, oldparent, newAttached);
+		getCurrentVisualizer().addMoved(comp, oldparent, oldpg, newpg);
 	}
 	/** Called before changing the component's UUID.
 	 *

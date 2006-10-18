@@ -418,19 +418,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final
 	void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
 		final Desktop dt;
-		if (oldpg != null) {
-			dt = oldpg.getDesktop();
-			if (newpg == null && !dt.getExecution().isAsyncUpdate(oldpg))
-				return; //detach a component that was in a loading page
-						//To avoid generate a redudant AuRemove
-		} else if (newpg != null) {
-			dt = newpg.getDesktop();
-		} else {
-			return;
-		}
+		if (oldpg != null) dt = oldpg.getDesktop();
+		else if (newpg != null) dt = newpg.getDesktop();
+		else return;
 
 		((WebAppCtrl)dt.getWebApp())
-			.getUiEngine().addMoved(comp, oldparent, oldpg == null);
+			.getUiEngine().addMoved(comp, oldparent, oldpg, newpg);
 	}
 
 	/** Ses the page without fixing IdSpace
@@ -524,7 +517,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				if (_desktop != null) {
 					((DesktopCtrl)_desktop).addComponent(this);
 					if (_parent != null && isTransparent(this)) _parent.invalidate();
-					getThisUiEngine().addMoved(this, _parent, false);
+					addMoved(this, _parent, _page, _page);
 				}
 			} else {
 				_id = id;

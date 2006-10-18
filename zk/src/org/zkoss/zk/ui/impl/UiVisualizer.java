@@ -181,8 +181,12 @@ import org.zkoss.zk.au.*;
 	 * @param newAttached whether the component is added to a page
 	 * first time.
 	 */
-	public void addMoved(Component comp, Component oldparent, boolean newAttached) {
-		if (newAttached && !_moved.contains(comp)) {
+	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
+		if ((newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
+		|| (oldpg == null && !_exec.isAsyncUpdate(newpg))) //attach to loading pg
+			return; //to avoid redundant AuRemove
+
+		if (oldpg == null && !_moved.contains(comp)) { //new attached
 			_attached.add(comp);
 				//note: we cannot examine _exec.isAsyncUpdate here because
 				//comp.getPage might be ready when this method is called
