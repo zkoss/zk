@@ -7,7 +7,7 @@ ZK 2.2.0 Freshly
   + Richlet is supported. By implementing a richlet, developers can write an
     application without using ZUML pages.
   + Messages translated to Brazilian Portuguese. Thank Airton Carrara for his contribution.
-  + Integrate Google Maps into ZK as a component <gmap/>.
+  + Integrate Google Maps into ZK as a component <gmaps/>.
   + New component <doublebox/>
   + New component <script/>
 
