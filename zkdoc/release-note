@@ -16,6 +16,8 @@ ZK 2.2.0 Freshly
   1576386, 1577002, 1570120, 1575048.
 
 * Upgrade Notes
+  + The interfaces used only for component development are moved from
+    org.zkoss.zk.ui.ext to org.zkoss.zk.ui.ext.render and org.zkoss.zk.ui.ext.client.
 
 	--------
 ZK 2.1.2
