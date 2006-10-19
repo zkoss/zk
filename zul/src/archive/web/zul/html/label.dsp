@@ -18,4 +18,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<span id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}><c:out value="${self.value}" maxlength="${self.maxlength}" multilineReplace="${self.multiline?'<br/>':''}"/></span>
+<span id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>${self.encodedText}</span>

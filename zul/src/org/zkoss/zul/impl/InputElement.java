@@ -457,7 +457,7 @@ implements Constrainted {
 	 *
 	 * <p>Used only for component generation. Not for applications.
 	 */
-	public final String getAreaText() {
+	public String getAreaText() {
 		return XMLs.encodeText(coerceToString(_value));
 	}
 

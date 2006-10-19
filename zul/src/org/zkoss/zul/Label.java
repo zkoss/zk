@@ -40,7 +40,6 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Label extends XulElement {
 	private String _value = "";
-	private boolean _multiline;
 	private int _maxlength;
 
 	public Label() {
@@ -67,8 +66,6 @@ public class Label extends XulElement {
 	}
 
 	/** Returns the maximal length of each item's label.
-	 * <p>Note: DBCS counts  two bytes (range 0x4E00~0x9FF).
-	 * Default: 0 (no limit).
 	 */
 	public int getMaxlength() {
 		return _maxlength;
@@ -96,18 +93,12 @@ public class Label extends XulElement {
 		return langdef != null && langdef.isRawLabel();
 	}
 
-	/** Returns whether this label supports multilines.
-	 * <p>Default: false.
-	 * <p>If multiline is false, '\n' is interpreted to a whitespace.
+	/** Returns the text for generating HTML tags (Internal Use Only).
+	 *
+	 * <p>Used only for component generation. Not for applications.
 	 */
-	public boolean isMultiline() {
-		return _multiline;
-	}
-	public void setMultiline(boolean multiline) {
-		if (multiline != _multiline) {
-			_multiline = multiline;
-			invalidate();
-		}
+	public String getEncodedText() {
+		return _value;
 	}
 
 	//-- super --//
@@ -124,7 +115,7 @@ public class Label extends XulElement {
 	}
 	public void redraw(Writer out) throws IOException {
 		if (isIdRequired()) super.redraw(out);
-		else out.write(_value); //no processing; direct output if not ZUL
+		else out.write(getEncodedText()); //no processing; direct output if not ZUL
 	}
 	public boolean isChildable() {
 		return false;

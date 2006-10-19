@@ -73,9 +73,6 @@ public class Listitem extends XulElement {
 	/** Returns the maximal length of each item's label.
 	 * It is a shortcut of getParent().getMaxlength();
 	 * Thus, it works only if the listbox's mold is "select".
-	 *
-	 * <p>Note: DBCS counts  two bytes (range 0x4E00~0x9FF).
-	 * Default: 0 (no limit).
 	 */
 	public int getMaxlength() {
 		final Listbox listbox = getListbox();

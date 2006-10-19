@@ -96,9 +96,6 @@ public class Treecell extends LabelImageElement {
 
 	/** Returns the maximal length for this cell, which is decided by
 	 * the corresponding {@link #getTreecol}'s {@link Treecol#getMaxlength}.
-	 *
-	 * <p>Note: DBCS counts  two bytes (range 0x4E00~0x9FF).
-	 * Default: 0 (no limit).
 	 */
 	public int getMaxlength() {
 		final Tree tree = getTree();

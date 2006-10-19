@@ -89,9 +89,6 @@ public class Listcell extends LabelImageElement {
 	 * {@link Listheader#getMaxlength}.
 	 *
 	 * <p>Note: {@link Listitem#getMaxlength} is the same as {@link Listbox#getMaxlength}.
-	 *
-	 * <p>Note: DBCS counts  two bytes (range 0x4E00~0x9FF).
-	 * Default: 0 (no limit).
 	 */
 	public int getMaxlength() {
 		final Listbox listbox = getListbox();

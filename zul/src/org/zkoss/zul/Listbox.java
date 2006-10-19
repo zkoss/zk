@@ -335,8 +335,6 @@ implements java.io.Serializable, RenderOnDemand {
 	}
 
 	/** Returns the maximal length of each item's label.
-	 * <p>Note: DBCS counts  two bytes (range 0x4E00~0x9FF).
-	 * Default: 0 (no limit).
 	 */
 	public int getMaxlength() {
 		return _maxlength;
