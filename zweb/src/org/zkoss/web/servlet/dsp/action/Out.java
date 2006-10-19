@@ -31,7 +31,6 @@ import org.zkoss.xml.XMLs;
  */
 public class Out extends AbstractAction {
 	private String _value = null;
-	private String _mlineReplace = "<br/>";
 	private int _maxlength = 0;
 	private boolean _escapeXML = true;
 
@@ -58,22 +57,7 @@ public class Out extends AbstractAction {
 		_value = value;
 	}
 
-	/** Returns the string to replace '\n'. If null,no replacement occur.
-	 * Default: <br/>
-	 */
-	public String getMultilineReplace() {
-		return _mlineReplace;
-	}
-	/** Sets the string to replace '\n'. If null or empty,no replacement occur.
-	 */
-	public void setMultilineReplace(String mlineReplace) {
-		_mlineReplace =
-			mlineReplace == null || mlineReplace.length() == 0 ?
-				null: mlineReplace;
-	}
-
 	/** Returns the maxlength of bytes to output.
-	 * <p>Note: DBCS counts  two bytes (range 0x4E00~0x9FF).
 	 * <p>Default: 0 (no limit).
 	 */
 	public int getMaxlength() {
@@ -104,8 +88,6 @@ public class Out extends AbstractAction {
 			int cnt = 0;
 			for (int j = 0; j < len; ++j, ++cnt) {
 				char cc = value.charAt(j);
-				if (cc >= 0x4E00 && cc < 0x9FFF) //Big5 and GB2312
-					++cnt;
 				if (cnt >= _maxlength) {
 					while (j > 0 && Character.isWhitespace(value.charAt(j)))
 						--j;
@@ -115,18 +97,12 @@ public class Out extends AbstractAction {
 			}
 		}
 
-		final boolean escNewLine = _mlineReplace != null;
-		if (_escapeXML || escNewLine) {
+		if (_escapeXML) {
 			StringBuffer sb = null;
 			len = value.length();
 			for (int j = 0; j < len; ++j) {
 				final char cc = value.charAt(j);
-				final String replace;
-				if (escNewLine && (cc == '\r' || cc == '\n')) {
-					replace = cc == '\n' ? _mlineReplace: "";
-				} else {
-					replace = _escapeXML ? XMLs.escapeXML(cc): null;
-				}
+				final String replace = _escapeXML ? XMLs.escapeXML(cc): null;
 
 				if (replace != null) {
 					if (sb == null) {
