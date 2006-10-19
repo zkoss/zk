@@ -98,7 +98,7 @@ public class DefinitionLoaders {
 
 		//2. process lang-addon.xml (with dependency)
 		try {
-			final List xmls = locator.getDependentXmlResources(
+			final List xmls = locator.getDependentXMLResources(
 				"metainfo/zk/lang-addon.xml", "addon-name", "depends");
 			for (Iterator it = xmls.iterator(); it.hasNext();) {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();

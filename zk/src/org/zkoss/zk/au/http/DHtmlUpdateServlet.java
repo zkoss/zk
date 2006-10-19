@@ -151,7 +151,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		final Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
 		if (desktop == null) {
-			final StringWriter out = getXmlWriter();
+			final StringWriter out = getXMLWriter();
 
 			final String scmd = request.getParameter("cmd.0");
 			if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
@@ -169,7 +169,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				uieng.response(resp, out);
 			}
 
-			flushXmlWriter(response, out);
+			flushXMLWriter(response, out);
 			return;
 		}
 		WebManager.setDesktop(request, desktop);
@@ -206,19 +206,19 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
-		final StringWriter out = getXmlWriter();
+		final StringWriter out = getXMLWriter();
 
 		final Execution exec = new ExecutionImpl(
 			_ctx, request, response, desktop, null);
 		uieng.execUpdate(exec, aureqs, out);
 
-		flushXmlWriter(response, out);
+		flushXMLWriter(response, out);
 	}
 
 	/** Returns the writer for output XML.
 	 * @param withrs whether to output <rs> first.
 	 */
-	private static StringWriter getXmlWriter() {
+	private static StringWriter getXMLWriter() {
 		final StringWriter out = new StringWriter();
 		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rs>\n");
 		return out;
@@ -228,7 +228,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @param withrs whether to output </rs> first.
 	 */
 	private static final
-	void flushXmlWriter(HttpServletResponse response, StringWriter out)
+	void flushXMLWriter(HttpServletResponse response, StringWriter out)
 	throws IOException {
 		out.write("\n</rs>");
 
@@ -248,8 +248,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		log.debug(errmsg);
 
 		//Don't use sendError because Browser cannot handle UTF-8
-		final StringWriter out = getXmlWriter();
+		final StringWriter out = getXMLWriter();
 		uieng.response(new AuAlert(errmsg), out);
-		flushXmlWriter(response, out);
+		flushXMLWriter(response, out);
 	}
 }
