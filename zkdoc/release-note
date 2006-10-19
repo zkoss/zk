@@ -2,7 +2,7 @@
 ZK 2.2.0 Freshly
 * Features:
   1567586, 1572187, 1575649, 1573501, 1577003, 1577051, 1577496, 1575726,
-  1578371.
+  1578371, 1580405, 1580579.
   + Speed up the initialization, showing and hiding (over 5 time faster)
   + Richlet is supported. By implementing a richlet, developers can write an
     application without using ZUML pages.
@@ -16,6 +16,8 @@ ZK 2.2.0 Freshly
   1576386, 1577002, 1570120, 1575048.
 
 * Upgrade Notes
+  + The multiline property of the Label component is removed. Use the pre property
+    instead.
   + The interfaces used only for component development are moved from
     org.zkoss.zk.ui.ext to org.zkoss.zk.ui.ext.render and org.zkoss.zk.ui.ext.client.
 
