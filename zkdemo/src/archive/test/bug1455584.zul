@@ -1,4 +1,4 @@
-<zk>
+<vbox>
 <zscript>
 public void doCreate(Event evt)
 {
@@ -9,8 +9,8 @@ public void doClick(Event evt)
   evt.target.setValue("    I have\n  been   clicked");
 }
 </zscript>
-<label onCreate="doCreate();" onClick="doClick()"
-       style="font-family: monospace; font-size: small; white-space: pre;"/>
-<label onCreate="doCreate();" onClick="doClick()"
+<label onCreate="doCreate(event);" onClick="doClick(event)"
+       style="font-family: monospace; white-space: pre;"/>
+<label onCreate="doCreate(event);" onClick="doClick(event)"
        pre="true"/>
-</zk>
+</vbox>
