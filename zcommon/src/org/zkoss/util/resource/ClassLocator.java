@@ -58,7 +58,7 @@ public class ClassLocator implements Locator {
 	private static final Log log = Log.lookup(ClassLocator.class);
 
 	/** Returns an enumeration of resources.
-	 * Unlike {@link #getDependentXmlResources}, it doesn't resolve the dependence
+	 * Unlike {@link #getDependentXMLResources}, it doesn't resolve the dependence
 	 * among the resouces.
 	 *
 	 * @param name the resouce name, such as "metainfo/i3-com.xml".
@@ -93,13 +93,13 @@ public class ClassLocator implements Locator {
 	 * @param elDepends the element used to specify the dependence.
 	 * @return a list of {@link Resource} of the specified name.
 	 */
-	public List getDependentXmlResources(String name, String elName,
+	public List getDependentXMLResources(String name, String elName,
 	String elDepends) throws IOException {
 		final Map rcmap = new LinkedHashMap();
 		for (Enumeration en = getResources(name); en.hasMoreElements();) {
 			final URL url = (URL)en.nextElement();
-			final XmlResource xr = new XmlResource(url, elName, elDepends);
-			final XmlResource old = (XmlResource)rcmap.put(xr.name, xr);
+			final XMLResource xr = new XMLResource(url, elName, elDepends);
+			final XMLResource old = (XMLResource)rcmap.put(xr.name, xr);
 			if (old != null)
 				log.warning("Replicate resource: "+xr.name
 					+"\nOverwrite "+old.url+"\nwith "+xr.url);
@@ -115,7 +115,7 @@ public class ClassLocator implements Locator {
 			//a set of names used to prevent dead-loop
 		while (!rcmap.isEmpty()) {
 			final Iterator it = rcmap.values().iterator();
-			final XmlResource xr = (XmlResource)it.next();
+			final XMLResource xr = (XMLResource)it.next();
 			it.remove();
 			resolveDependency(xr, rcs, rcmap, resolving);
 			assert D.OFF || resolving.isEmpty();
@@ -123,13 +123,13 @@ public class ClassLocator implements Locator {
 		return rcs;
 	}
 	private static
-	void resolveDependency(XmlResource xr, List rcs, Map rcmap, Set resolving) {
+	void resolveDependency(XMLResource xr, List rcs, Map rcmap, Set resolving) {
 		if (!resolving.add(xr.name))
 			throw new IllegalStateException("Recusrive reference among "+resolving);
 
 		for (Iterator it = xr.depends.iterator(); it.hasNext();) {
 			final String nm = (String)it.next();
-			final XmlResource dep = (XmlResource)rcmap.remove(nm);
+			final XMLResource dep = (XMLResource)rcmap.remove(nm);
 			if (dep != null) //not resolved yet
 				resolveDependency(dep, rcs, rcmap, resolving); //recusrively
 		}
@@ -139,13 +139,13 @@ public class ClassLocator implements Locator {
 
 		if (D.ON && log.debugable()) log.debug("Adding resolved resource: "+xr.name);
 	}
-	/** Info used with getDependentXmlResource. */
-	private static class XmlResource {
+	/** Info used with getDependentXMLResource. */
+	private static class XMLResource {
 		private final String name;
 		private final URL url;
 		private final Document document;
 		private final List depends;
-		private XmlResource(URL url, String elName, String elDepends)
+		private XMLResource(URL url, String elName, String elDepends)
 		throws IOException{
 			if (D.ON && log.debugable()) log.debug("Loading "+url);
 			try {
@@ -175,7 +175,7 @@ public class ClassLocator implements Locator {
 		}
 	};
 
-	/** An item of the list returned by {@link ClassLocator#getDependentXmlResources}.
+	/** An item of the list returned by {@link ClassLocator#getDependentXMLResources}.
 	 */
 	public static class Resource {
 		/** The URL of the resource. */
