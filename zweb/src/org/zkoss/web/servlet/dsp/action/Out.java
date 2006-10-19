@@ -84,17 +84,11 @@ public class Out extends AbstractAction {
 			return;
 			
 		String value = _value;
-		if (_maxlength > 0 && len > _maxlength / 2) {
-			int cnt = 0;
-			for (int j = 0; j < len; ++j, ++cnt) {
-				char cc = value.charAt(j);
-				if (cnt >= _maxlength) {
-					while (j > 0 && Character.isWhitespace(value.charAt(j)))
-						--j;
-					value = value.substring(0, j) + "...";
-					break;
-				}
-			}
+		if (_maxlength > 0 && len > _maxlength) {
+			int j = _maxlength;
+			while (j > 0 && Character.isWhitespace(value.charAt(j - 1)))
+				--j;
+			value = value.substring(0, j) + "...";
 		}
 
 		if (_escapeXML) {
