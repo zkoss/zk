@@ -694,50 +694,10 @@ if (zk.ie) {
 				j = k;
 			}
 		} else {
-			//Note: if TD/TH/CAPTION, we cannot use innerText
-			if (tn == "TD" || tn == "TH" || tn == "CAPTION"
-			|| html.indexOf('<') >= 0) {
-				el.innerHTML = html;
-			} else {
-			//Bug 1455584: IE bug: innerHTML ignores \n (even white-space:pre)
-			//To workaround, we have to use innerText but innerText
-			//won't handle &xx;, so...
-				var j = html.indexOf('&');
-				if (j >= 0) {
-					var cvt = "";
-					for (var l = 0;;) {
-						var k = html.indexOf(';', j + 1);
-						if (k < 0) {
-							cvt += html.substring(l);
-							break; //done
-						} else {
-							cvt += html.substring(l, j);
-							var s = html.substring(j + 1, k);
-							switch (s) {
-							case "amp": cvt += '&'; break;
-							case "lt": cvt += '<'; break;
-							case "gt": cvt += '>'; break;
-							case "quot": cvt += '"'; break;
-							case "apos": cvt += "'"; break;
-							default:
-								if (s.length && s.charAt(0) == '#') {
-									cvt += String.fromCharCode(parseInt(s.substring(1),10));
-								} else {
-									cvt += html.substring(j, k + 1);
-								}
-							}
-
-							j = html.indexOf('&', l = k + 1);
-							if (j < 0) {
-								cvt += html.substring(l);
-								break; //done
-							}
-						}
-					}
-					html = cvt;
-				}
-				el.innerText = html;
-			}
+			el.innerHTML = html;
+				//10192006:No longer handles IE's bug (see Bug 1455584)
+				//Reason: invalidate(Range) is removed, so no much chance to
+				//get here
 		}
 	};
 	/** Next tag info. */
