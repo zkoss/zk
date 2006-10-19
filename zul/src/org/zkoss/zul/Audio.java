@@ -141,7 +141,7 @@ public class Audio extends XulElement {
 	 *
 	 * <p>Default: false;
 	 */
-	public final boolean getAutostart() {
+	public final boolean isAutostart() {
 		return _autostart;
 	}
 	/** Sets whether to auto start playing the audio.

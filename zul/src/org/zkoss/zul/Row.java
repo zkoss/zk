@@ -67,7 +67,7 @@ public class Row extends XulElement {
 	/** Returns the nowrap.
 	 * <p>Default: null (system default: wrap).
 	 */
-	public boolean getNowrap() {
+	public boolean isNowrap() {
 		return _nowrap;
 	}
 	/** Sets the nowrap.

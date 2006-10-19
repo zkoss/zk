@@ -78,7 +78,7 @@ public class Include extends XulElement {
 	 *
 	 * <p>Default: false;
 	 */
-	public final boolean getLocalized() {
+	public final boolean isLocalized() {
 		return _localized;
 	}
 	/** Sets whether the source depends on the current Locale.
