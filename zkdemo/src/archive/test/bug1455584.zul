@@ -1,0 +1,16 @@
+<zk>
+<zscript>
+public void doCreate(Event evt)
+{
+  evt.target.setValue("    hello,\n  world");
+}
+public void doClick(Event evt)
+{
+  evt.target.setValue("    I have\n  been   clicked");
+}
+</zscript>
+<label onCreate="doCreate();" onClick="doClick()"
+       style="font-family: monospace; font-size: small; white-space: pre;"/>
+<label onCreate="doCreate();" onClick="doClick()"
+       pre="true"/>
+</zk>
