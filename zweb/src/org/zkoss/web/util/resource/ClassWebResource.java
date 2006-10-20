@@ -282,6 +282,9 @@ public class ClassWebResource {
 		/** Returns the locator for this {@link ClassWebContext}. */
 		public Locator getLocator() {
 			return new Locator() {
+				public String getDirectory() {
+					return null;
+				}
 				public URL getResource(String name) {
 					return ClassWebContext.this.getResource(name);
 				}

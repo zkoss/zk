@@ -189,6 +189,11 @@ public class ClassLocator implements Locator {
 	}
 
 	//-- Locator --//
+	/** Always returns null.
+	 */
+	public String getDirectory() {
+		return null;
+	}
 	public URL getResource(String name) {
 		final ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		final URL url = cl != null ? cl.getResource(resolveName(name)): null;

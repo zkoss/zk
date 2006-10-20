@@ -374,6 +374,9 @@ public class WebManager {
 			}
 			return null;
 		}
+		public String getDirectory() {
+			return null;
+		}
 		public URL getResource(String path) {
 			try {
 				return _ctx.getResource(path);

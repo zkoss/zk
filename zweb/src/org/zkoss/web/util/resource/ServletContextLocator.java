@@ -70,6 +70,9 @@ public class ServletContextLocator implements Locator {
 	}
 
 	//-- Locator --//
+	public String getDirectory() {
+		return _dir;
+	}
 	public URL getResource(String name) {
 		try {
 			return _ctx.getResource(fixName(name));

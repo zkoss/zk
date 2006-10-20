@@ -27,6 +27,12 @@ import java.io.InputStream;
  * @see Locators#getDefault
  */
 public interface Locator {
+	/** Returns the directory used to resolve the relative path, or null
+	 * if relative path is not allowed.
+	 *
+	 * <p>Note: if the returned directory is not null, it must end with '/'.
+	 */
+	public String getDirectory();
 	/**
 	 * Finds the resource with the given name. A resource is some data
 	 * (images, audio, text, etc) that can be accessed by class code in
