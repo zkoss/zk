@@ -27,7 +27,7 @@ if (!zkau._reqs) {
 	zkau._movs = {}; //(id, Draggable): moveables
 	zkau._drags = {}; //(id, Draggable): draggables
 	zkau._drops = new Array(); //dropables
-	zkau._idsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
+	zkau._zidsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
 	zkau._stamp = 0; //used to make a time stamp
 	zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
 	zkau.floats = new Array(); //popup of combobox, bandbox, datebox...
@@ -1126,7 +1126,7 @@ zkau.cleanupMeta = function (cmp) {
 zkau.getByZid = function (n, zid) {
 	while (n) {
 		n = zkau.getIdOwner(n);
-		var v = zkau._idsp[n ? n.id: "zk_dksp"];
+		var v = zkau._zidsp[n ? n.id: "_zk_dt"];
 		if (v) {
 			v = v[zid];
 			if (v) return $e(v);
@@ -1138,28 +1138,28 @@ zkau.getByZid = function (n, zid) {
 /** Returns the space owner that n belongs to, or null if not found. */
 zkau.getIdOwner = function (n) {
 	for (; n; n = n.parentNode) {
-		if (getZKAttr(n, "idsp"))
+		if (getZKAttr(n, "zidsp"))
 			return n;
 	}
 	return null;
 };
 zkau.initzid = function (n, zid) {
 	var o = zkau.getIdOwner(n);
-	o = o ? o.id: "zk_dksp";
-	var ary = zkau._idsp[o];
-	if (!ary) ary = zkau._idsp[o] = {};
+	o = o ? o.id: "_zk_dt";
+	var ary = zkau._zidsp[o];
+	if (!ary) ary = zkau._zidsp[o] = {};
 	if (!zid) zid = getZKAttr(n, "zid");
 	ary[zid] = n.id;
 };
 zkau.cleanzid = function (n) {
 	var o = zkau.getIdOwner(n);
-	o = o ? o.id: "zk_dksp";
-	var ary = zkau._idsp[o];
+	o = o ? o.id: "_zk_dt";
+	var ary = zkau._zidsp[o];
 	if (ary) delete ary[getZKAttr(n, "zid")];
 };
 /** Clean an ID space. */
-zkau.cleanidsp = function (n) {
-	delete zkau._idsp[n.id];
+zkau.cleanzidsp = function (n) {
+	delete zkau._zidsp[n.id];
 };
 
 ///////////////

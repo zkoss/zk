@@ -421,7 +421,7 @@ zk.eval = function (n, fn, type, a0, a1, a2) {
  */
 zk.cleanupAt = function (n) {
 	if (getZKAttr(n, "zid")) zkau.cleanzid(n);
-	if (getZKAttr(n, "idsp")) zkau.cleanidsp(n);
+	if (getZKAttr(n, "zidsp")) zkau.cleanzidsp(n);
 	if (getZKAttr(n, "drag")) zkau.cleandrag(n);
 	if (getZKAttr(n, "drop")) zkau.cleandrop(n);
 
