@@ -164,7 +164,7 @@ public class ExecutionImpl extends AbstractExecution {
 	public String encodeURL(String uri) {
 		try {
 			return Encodes.encodeURL(_ctx,
-				_request, _response, toAbsoluteURI(uri));
+				_request, _response, toAbsoluteURI(uri, true));
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}
@@ -210,7 +210,7 @@ public class ExecutionImpl extends AbstractExecution {
 
 	public PageDefinition getPageDefinition(String uri) {
 		//Note: we have to go thru UiFactory (so user can override it)
-		uri = toAbsoluteURI(uri);
+		uri = toAbsoluteURI(uri, false);
 		final PageDefinition pagedef =
 			((WebAppCtrl)getDesktop().getWebApp()).getUiFactory()
 			.getPageDefinition(newRequestInfo(uri), uri);

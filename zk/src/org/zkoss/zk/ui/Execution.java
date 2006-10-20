@@ -196,8 +196,12 @@ public interface Execution extends Evaluator {
 	 *
 	 * <p>In addtions, RequestDispatcher.include doesn't handle related URI
 	 * well.
+	 *
+	 * @param skipInclude whether not to convert to an absolute URI if
+	 * the current page is included by another page.
+	 * When use the include directive, skipInclude shall be true.
 	 */
-	public String toAbsoluteURI(String uri);
+	public String toAbsoluteURI(String uri, boolean skipInclude);
 
 	/** Encodes an URL.
 	 *

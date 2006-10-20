@@ -257,9 +257,11 @@ public class ZkFns {
 
 	/** Converts the specified URI to absolute if necessary.
 	 * Refer to {@link Execution#toAbsoluteURI}.
+	 *
+	 * <p>Note: it doesn't convert if this page is included by another page.
 	 */
 	public static String toAbsoluteURI(String uri) {
-		return Executions.getCurrent().toAbsoluteURI(uri);
+		return Executions.getCurrent().toAbsoluteURI(uri, true);
 	}
 
 	/** Returns HTML header elements of the specified page.
