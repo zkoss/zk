@@ -28,7 +28,7 @@ ${u:outLangStyleSheets()}
 ${u:outLangJavaScripts(arg.action)}
 	</c:if>
 
-<div id="${page.id}" style="${empty page.style ? 'width:100%': page.style}" xmlns:z="http://www.zkoss.org/2005/zk">
+<div id="${page.id}" style="${empty page.style ? 'width:100%': page.style}" xmlns:z="http://www.zkoss.org/2005/zk" z:zidsp="true">
 	<c:forEach var="root" items="${page.roots}">
 ${u:redraw(root, null)}
 	</c:forEach>
