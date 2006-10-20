@@ -170,8 +170,10 @@ public class Label extends XulElement {
 					break;
 				}
 
-				if (sb == null)
+				if (sb == null) {
+					assert j == 0;
 					sb = new StringBuffer(_value.length() + 10);
+				}
 				sb = encodeText(sb, j,
 					k > j && _value.charAt(k - 1) == '\r' ? k - 1: k);
 				sb.append("<br/>");
@@ -184,16 +186,16 @@ public class Label extends XulElement {
 	/*
 	 * @param k excluded
 	 */
-	private StringBuffer encodeText(StringBuffer sb, int j, int k) {
+	private StringBuffer encodeText(StringBuffer sb, int b, int e) {
 		int maxword = 0;
 		if (_maxlength > 0) {
-			int deta = k - j;
+			int deta = e - b;
 			if (deta > _maxlength) {
 				if (_hyphen) {
 					maxword = _maxlength;
 				} else if (!_pre) {
-					assert j == 0;
-					j = _maxlength;
+					assert b == 0;
+					int j = _maxlength;
 					while (j > 0 && Character.isWhitespace(_value.charAt(j - 1)))
 						--j;
 					return new StringBuffer(j + 3)
@@ -202,19 +204,36 @@ public class Label extends XulElement {
 			}
 		}
 
-		for (int cnt = 0, i = j; i < k; ++i) {
-			final char cc = _value.charAt(i);
+		for (int cnt = 0, j = b; j < e; ++j) {
+			final char cc = _value.charAt(j);
 			String val = null;
 			if (cc == '\t') {
 				cnt = 0;
 				if (_pre) val = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-			} else if (cc == ' ') {
+			} else if (cc == ' ' || cc == '\f') {
 				cnt = 0;
 				if (_pre) val = "&nbsp;";
 			} else {
 				if (maxword > 0  && ++cnt > maxword) {
-					sb = alloc(sb, j, i).append("-<br/>");
-					cnt = 1;
+					sb = alloc(sb, j);
+					int ofs = -1;
+					for (int k = sb.length(), n = maxword; --n >= 0;) {
+						final char c2 = sb.charAt(--k);
+						if (n > 0 && isEndSeparator(c2)) {
+							sb.insert(ofs = k + 1, ' ');
+							break;
+						} else if (isSeparator(c2)) {
+							sb.insert(ofs = k, ' ');
+							break;
+						}
+					}
+					if (ofs >= 0) {
+						cnt = sb.length() - ofs;
+					} else {
+						if (isSeparator(cc)) sb.append(' ');
+						else sb.append("-<br/>");
+						cnt = 1;
+					}
 				}
 				switch (cc) {
 				case '<': val = "&lt;"; break;
@@ -223,15 +242,23 @@ public class Label extends XulElement {
 				}
 			}
 
-			if (val != null) sb = alloc(sb, j, i).append(val);
+			if (val != null) sb = alloc(sb, j).append(val);
 			else if (sb != null) sb.append(cc);
 		}
 		return sb;
 	}
-	private StringBuffer alloc(StringBuffer sb, int j, int k) {
+	private static boolean isSeparator(char cc) {
+		return cc <= 0x7f
+			&& (cc < '0' || cc > '9') && (cc < 'a' || cc > 'z')
+			&& (cc < 'A' || cc > 'Z');
+	}
+	private static boolean isEndSeparator(char cc) {
+		return cc == ',' || cc == ';' || cc == '.' || cc == '?' || cc == '!';
+	}
+	private StringBuffer alloc(StringBuffer sb, int e) {
 		if (sb == null) {
 			sb = new StringBuffer(_value.length() + 10);
-			sb.append(_value.substring(j, k));
+			sb.append(_value.substring(0, e));
 		}
 		return sb;
 	}
