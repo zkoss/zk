@@ -310,7 +310,10 @@ zk.Selectable.prototype = {
 
 			//since row might was selected, we always enfoce focus here
 			this._focusToAnc(row);
-			Event.stop(evt);
+
+			//Event.stop(evt);
+			//No much reason to eat the event.
+			//Oppositely, it disabled popup (bug 1578659)
 		}
 	},
 
