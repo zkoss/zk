@@ -120,7 +120,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			else _mill = Milieu.DUMMY;
 		}
 
-		init();
+		init(false);
 
 		_uuid = _id = exec != null ?
 			nextUuid(exec.getDesktop()): ComponentsCtrl.AUTO_ID_PREFIX;
@@ -165,8 +165,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return null;
 	}
-	/** Initialize for contructor and serialization. */
-	private void init() {
+	/** Initialize for contructor and serialization.
+	 * @param cloning whether this method is called by clone()
+	 */
+	private void init(boolean cloning) {
 		_xtrl = newExtraCtrl();
 		_modChildren = new AbstractSequentialList() {
 			public int size() {
@@ -177,7 +179,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		};
 		_newChildren = new LinkedList();
-		_attrs = new HashMap(7);
+
+		if (!cloning)
+			_attrs = new HashMap(7);
 	}
 
 	/** Adds to the ID spaces, if any, when ID is changed.
@@ -1183,7 +1187,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);
-		clone.init();
+		clone.init(true);
 
 		//3. spaceinfo
 		if (clone._spaceInfo != null) {
@@ -1249,7 +1253,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		init();
+		init(false);
 
 		Serializables.smartRead(s, _attrs);
 
