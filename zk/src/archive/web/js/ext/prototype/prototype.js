@@ -2047,9 +2047,16 @@ var Position = {
   cumulativeOffset: function(element) {
     var valueT = 0, valueL = 0;
     do {
+//Tom M. Yeh, Potix: Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
+if(element.style.position == 'fixed') {
+	valueT += zk.innerY() + element.offsetTop;
+	valueL += zk.innerX() + element.offsetLeft;
+	element = null;
+} else {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
       element = element.offsetParent;
+}
     } while (element);
     return [valueL, valueT];
   },

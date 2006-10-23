@@ -455,13 +455,17 @@ zkau.setAttr = function (cmp, name, value) {
 			//--
 			//Better to call setStamp always but, to save memory,...
 
-		//Firefox return null for cmp.getAttribute("selectedIndex"...), so...
+		//Firefox cannot handle many properties well with getAttribute/setAttribute,
+		//such as selectedIndex, scrollTop...
 		var old = "class" == name ? cmp.className:
 			"selectedIndex" == name ? cmp.selectedIndex:
 			"defaultValue" == name ? cmp.defaultValue: //Moz has problem to use getAttribute with this
 			"disabled" == name ? cmp.disabled:
 			"readOnly" == name ? cmp.readOnly:
+			"scrollTop" == name ? cmp.scrollTop:
+			"scrollLeft" == name ? cmp.scrollLeft:
 				cmp.getAttribute(name);
+
 		//Note: "true" != true (but "123" = 123)
 		//so we have take care of boolean
 		if (typeof(old) == "boolean")
@@ -473,9 +477,11 @@ zkau.setAttr = function (cmp, name, value) {
 			else if ("defaultValue" == name) {
 				var old = cmp.value;
 				cmp.defaultValue = value;
-				if (old != cmp.value) cmp.value = old; //Bug 1490079 (happen in FF only)
+				if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
 			} else if ("disabled" == name) cmp.disabled = value;
 			else if ("readOnly" == name) cmp.readOnly = value;
+			else if ("scrollTop" == name) cmp.scrollTop = value;
+			else if ("scrollLeft" == name) cmp.scrollLeft = value;
 			else cmp.setAttribute(name, value);
 		}
 	}
