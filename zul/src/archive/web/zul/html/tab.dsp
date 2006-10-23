@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="suffix" value="-sel.gif" if="${self.selected}"/>
 <c:set var="suffix" value="-uns.gif" unless="${self.selected}"/>
-<td id="${self.uuid}" z:type="Tab"${self.outerAttrs} z:sel="${self.selected}" z:box="${self.tabbox.uuid}" z:panel="${self.linkedPanel.uuid}">
+<td id="${self.uuid}" z:type="Tab"${self.outerAttrs}${self.innerAttrs} z:sel="${self.selected}" z:box="${self.tabbox.uuid}" z:panel="${self.linkedPanel.uuid}">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
 	<td width="5" height="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-tl',suffix))})"></td>
@@ -30,7 +30,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <tr height="22">
 	<td width="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-ml',suffix))})"></td>
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"></td>
-	<td align="center" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})" id="${self.uuid}!real"${self.innerAttrs}><a href="javascript:;" id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a></td>
+	<td align="center" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"><a href="javascript:;" id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a></td>
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"></td>
 	<td width="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mr',suffix))})"></td>
 </tr>

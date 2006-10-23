@@ -91,15 +91,12 @@ zkTab._setTabSel = function (tab, toSel) {
 		return; //nothing changed
 
 	setZKAttr(tab, "sel", toSel ? "true": "false");
-	var tabreal = $e(tab.id + "!real");
-	if (tabreal) {
-		if (toSel) {
-			tabreal.className = tabreal.className + "sel";
-		} else {
-			var len = tabreal.className.length;
-			if (len > 3)
-				tabreal.className = tabreal.className.substring(0, len - 3);
-		}
+	if (toSel) {
+		tab.className = tab.className + "sel";
+	} else {
+		var len = tab.className.length;
+		if (len > 3)
+			tab.className = tab.className.substring(0, len - 3);
 	}
 
 	zkTab._changeBkgnd(tab, toSel);
