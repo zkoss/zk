@@ -40,16 +40,16 @@ ${z:outLangStyleSheets()}
 <!--
 	parent.zkau.endUpload();
 
-<%-- NOTE: we cannot execute doUpdatable in this frame when using Firefox,
+<%-- NOTE: we cannot execute zkau.sendUpdateResult in this frame with Firefox,
 	because this frame will be removed and it will cause the following error
 	if we try to insert some elements (some kind of NullPointerException
 	"Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIXMLHttpRequest.open]"
 --%>
 	function closeUpload() {
-		parent.setTimeout("zkau.remove('${arg.uuid}')", 0);
+		parent.setTimeout("zkau.sendRemove('${arg.uuid}')", 0);
 	}
 	function doUpdate() {
-		parent.setTimeout("zkau.doUpdatable('${arg.uuid}', '${arg.contentId}')", 0);
+		parent.setTimeout("zkau.sendUpdateResult('${arg.uuid}', '${arg.contentId}')", 0);
 	}
 	<c:if test="${!empty arg.contentId}">doUpdate();</c:if>
 	<c:if test="${empty arg.contentId and empty arg.alert}">closeUpload();</c:if>

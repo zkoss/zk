@@ -249,7 +249,7 @@ zkWnd = {};
 zkWnd.init = function (cmp) {
 	var img = $e(cmp.id + "!img");
 	if (img) {
-		zk.listen(img, "click", function () {zkau.close(cmp);});
+		zk.listen(img, "click", function () {zkau.sendOnClose(cmp);});
 		zk.listen(img, "mouseover", function () {zkau.onimgover(img);});
 		zk.listen(img, "mouseout", function () {zkau.onimgout(img);});
 		if (!img.style.cursor) img.style.cursor = "default";
