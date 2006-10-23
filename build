@@ -64,7 +64,10 @@ if [ "$jboss_profile" != "" ] ; then
 	jboss_profile=${jboss_profile%/*}
 fi
 jboss_home=/usr/jboss
-tomcat_home=/usr/tomcat
+tomcat_home="$CATALINA_HOME"
+if [ ! -d "$tomcat_home" ]; then
+  tomcat_home=/usr/tomcat
+fi
 if [ "$TERM" = "cygwin" ] ; then
 	jboss_home=$(cygpath -w $jboss_home)
 	jboss_home=${jboss_home%\\}
