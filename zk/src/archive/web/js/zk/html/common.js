@@ -210,7 +210,7 @@ zk.position = function (el, ref, type) {
 	refofs = Position.cumulativeOffset(ref);
 	var x, y;
 	var scx = zk.innerX(), scy = zk.innerY(),
-		scwd = zk.innerWidth(), schgh = zk.innerHeight();
+		scmaxx = scx + zk.innerWidth(), scmaxy = scy + zk.innerHeight();
 
 	if (type == "end_before") { //el's upper-left = ref's upper-right
 		x = refofs[0] + zk.offsetWidth(ref);
@@ -223,10 +223,10 @@ zk.position = function (el, ref, type) {
 			if (!isNaN(diff)) x += diff;
 		}
 
-		if (x + wd > scwd)
+		if (x + wd > scmaxx)
 			x = refofs[0] - wd;
-		if (y + hgh > schgh)
-			y = schgh - hgh;
+		if (y + hgh > scmaxy)
+			y = scmaxy - hgh;
 	} else { //after-start: el's upper-left = ref's lower-left
 		x = refofs[0];
 		y = refofs[1] + zk.offsetHeight(ref);
@@ -238,10 +238,10 @@ zk.position = function (el, ref, type) {
 			if (!isNaN(diff)) x += diff;
 		}
 
-		if (y + hgh > schgh)
+		if (y + hgh > scmaxy)
 			y = refofs[1] - hgh;
-		if (x + wd > scwd)
-			x = scwd - wd;
+		if (x + wd > scmaxx)
+			x = scmaxx - wd;
 	}
 
 	if (x < scx) x = scx;

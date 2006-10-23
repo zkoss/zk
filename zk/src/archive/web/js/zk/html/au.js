@@ -769,13 +769,13 @@ zkau._autopos = function (el, x, y) {
 	var wd = ofs[0], hgh = ofs[1];
 
 	var scx = zk.innerX(), scy = zk.innerY(),
-		scwd = scx + zk.innerWidth(), schgh = scy + zk.innerHeight();
-	if (x + wd > scwd) {
-		x = scwd - wd;
+		scmaxx = scx + zk.innerWidth(), scmaxy = scy + zk.innerHeight();
+	if (x + wd > scmaxx) {
+		x = scmaxx - wd;
 		if (x < scx) x = scx;
 	}
-	if (y + hgh > schgh) {
-		y = schgh - hgh;
+	if (y + hgh > scmaxy) {
+		y = scmaxy - hgh;
 		if (y < scy) y = scy;
 	}
 
