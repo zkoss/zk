@@ -178,8 +178,8 @@ import org.zkoss.zk.au.*;
 	 * called only once for the top one.
 	 *
 	 * @param oldparent the parent before moved
-	 * @param newAttached whether the component is added to a page
-	 * first time.
+	 * @param oldpg the page before moved
+	 * @param newpg the page after moved
 	 */
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
 		if ((newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
