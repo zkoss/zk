@@ -30,6 +30,7 @@ import java.io.ObjectInputStream;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.web.servlet.Servlets;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -69,7 +70,9 @@ public class Milieu implements Serializable {
 	 */
 	private final Map _evthds, _molds, _params;
 	/** URI. */
-	private final String _macroUri;
+	private final String _macroURI;
+	/** The current directory. */
+	private final String _curdir;
 
 	//static//
 	private static final ThreadLocal _mill = new ThreadLocal();
@@ -98,20 +101,33 @@ public class Milieu implements Serializable {
 		_implcls = compdef.getImplementationClass();
 		_params = compdef.getParams();
 		_molds = compdef.getMolds();
-		_macroUri = compdef.getMacroURI();
+		_macroURI = compdef.getMacroURI();
 		_langdef = compdef.getLanguageDefinition();
 		_compdef = compdef;
 		if (compdef instanceof InstanceDefinition) {
 			final InstanceDefinition instdef = (InstanceDefinition)compdef;
 			_evthds = instdef.getEventHandlers();
+
+			final PageDefinition pgdef = instdef.getPageDefinition();
+			String dir = null;
+			if (pgdef != null) {
+				dir = pgdef.getLocator().getDirectory();
+				if (dir != null)
+					if (dir.length() == 0) dir = null;
+					else if (dir.charAt(dir.length() - 1) != '/')
+						dir = dir + '/';
+			}
+			_curdir = dir;
 		} else {
 			_evthds = null;
+			_curdir = null;
 		}
 	}
 	private Milieu() {
 		_implcls = null;
 		_evthds = _params = _molds = null;
-		_macroUri = null;
+		_macroURI = null;
+		_curdir = null;
 	}
 
 	/** Returns the language definition, or null if it doesn't belong to any
@@ -263,21 +279,22 @@ public class Milieu implements Serializable {
 		synchronized (_molds) {
 			mold = (String)_molds.get(name);
 		}
-		return mold != null ? (String)evalByLang(comp, mold, String.class): null;
+		return mold != null ?
+			toAbsoluteURI((String)evalByLang(comp, mold, String.class)): null;
 			//mold is part of lang addon if _langdef != null
 	}
 	/** Returns whether this is a macro component.
 	 * @see #getMacroURI
 	 */
 	public boolean isMacro() {
-		return _macroUri != null;
+		return _macroURI != null;
 	}
 	/** Returns the macro URI, or null if not a macro.
 	 * It evaluates it before returning if the macro URI is an EL expression.
 	 * @see #isMacro
 	 */
 	public String getMacroURI(Component comp) {
-		return (String)evalByLang(comp, _macroUri, String.class);
+		return toAbsoluteURI((String)evalByLang(comp, _macroURI, String.class));
 			//macro-uri is part of lang addon if _langdef != null
 	}
 	/** Evluates the specified expression with {@link #getLanguageDefinition},
@@ -288,6 +305,14 @@ public class Milieu implements Serializable {
 		return _langdef != null ?
 			_langdef.evaluate(comp, expr, expectedType):
 			Executions.evaluate(comp, expr, expectedType);
+	}
+	private String toAbsoluteURI(String uri) {
+		if (_curdir != null && uri != null && uri.length() > 0) {
+			final char cc = uri.charAt(0);
+			if (cc != '/' && cc != '~' && !Servlets.isUniversalURL(uri)) 
+				return _curdir + uri;
+		}
+		return uri;
 	}
 
 	//Serializable//
@@ -315,8 +340,8 @@ public class Milieu implements Serializable {
 				sb.append(((Class)_implcls).getName());
 			else
 				sb.append(_implcls);
-			if (_macroUri != null)
-				sb.append(", ").append(_macroUri);
+			if (_macroURI != null)
+				sb.append(", ").append(_macroURI);
 		} else {
 			sb.append("dummy");
 		}

@@ -49,7 +49,7 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	private Object _cls;
 	private Map _molds, _params;
 	private List _props;
-	private String _macroUri;
+	private String _macroURI;
 
 	/** A special definition representing the zk component. */
 	public final static ComponentDefinition ZK =
@@ -85,14 +85,14 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	 * definition doesn't belong to any language.
 	 */
 	public ComponentDefinition(LanguageDefinition langdef, String name,
-	String macroUri) {
+	String macroURI) {
 		if (name == null)
 			throw new IllegalArgumentException("null name");
-		if (macroUri == null || macroUri.length() == 0)
-			throw new IllegalArgumentException("empty macroUri");
+		if (macroURI == null || macroURI.length() == 0)
+			throw new IllegalArgumentException("empty macroURI");
 		_langdef = langdef;
 		_name = name;
-		_macroUri = macroUri;
+		_macroURI = macroURI;
 	}
 	 
 
@@ -139,13 +139,13 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	 * @see #getMacroURI
 	 */
 	public boolean isMacro() {
-		return _macroUri != null;
+		return _macroURI != null;
 	}
 	/** Returns the macro URI (might be an EL expression),
 	 * or null if not a macro.
 	 */
 	/*package*/ String getMacroURI() {
-		return _macroUri;
+		return _macroURI;
 	}
 
 	/** Returns the class (Class) or the class name (String) that

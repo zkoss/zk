@@ -80,12 +80,18 @@ public class PageDefinition extends InstanceDefinition {
 		super(langdef);
 
 		if (locator == null)
-			throw new NullPointerException("locator");
+			throw new IllegalArgumentException("null locator");
 
 		_title = title != null && title.length() > 0 ? title: null;
 		_id = id != null && id.length() > 0 ? id: null;
 		_style = style != null && style.length() > 0 ? style: null;
 		_locator = locator;
+	}
+
+	/** Returns the locator associated with this page definition.
+	 */
+	public Locator getLocator() {
+		return _locator;
 	}
 
 	/** Imports the component definitions from the specified definition.

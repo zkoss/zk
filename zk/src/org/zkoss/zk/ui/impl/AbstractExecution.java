@@ -168,12 +168,16 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public String toAbsoluteURI(String uri, boolean skipInclude) {
-		if (uri == null) return null;
-
-		if (Servlets.isUniversalURL(uri)) return uri;
-		final char cc = uri.length() > 0 ? uri.charAt(0): (char)0;
-		return cc == '/' || cc == '~' || (skipInclude && isIncluded()) ? uri:
-				getDesktop().getCurrentDirectory() + uri;
+		if (uri != null && uri.length() > 0) {
+			final char cc = uri.charAt(0);
+			if (cc != '/' && cc != '~' && !(skipInclude && isIncluded())
+			&& !Servlets.isUniversalURL(uri)) {
+				final String dir = getDesktop().getCurrentDirectory();
+				if (dir != null)
+					return dir + uri;
+			}
+		}
+		return uri;
 		//we ignore _creating, because Servlet's include cannot handle
 		//related URI correctly (even though it is by the layout servlet)
 	}

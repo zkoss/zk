@@ -48,6 +48,7 @@ import org.zkoss.idom.ProcessingInstruction;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.el.Taglib;
+import org.zkoss.web.servlet.Servlets;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Component;
@@ -241,7 +242,7 @@ public class Parser {
 			//if (D.ON && log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
 			noEL("prefix", prefix, pi);
 			noEL("uri", uri, pi); //not support EL (kind of chicken-egg issue)
-			pgdef.addTaglib(new Taglib(prefix, uri));
+			pgdef.addTaglib(new Taglib(prefix, toAbsoluteURI(uri, false)));
 		} else if ("init".equals(target)) {
 			final List args = new LinkedList();
 			for (int j = 0;; ++j) {
@@ -298,18 +299,19 @@ public class Parser {
 			if (isEmpty(name)) throw new UiException("name is required, "+pi.getLocator());
 			noEL("name", name, pi); //note: macro-uri supports EL
 
-			final String macroUri = (String)params.remove("macro-uri");
+			final String macroURI = (String)params.remove("macro-uri");
 			final String extds = (String)params.remove("extends");
 			final String clsnm = (String)params.remove("class");
 			ComponentDefinition compdef;
-			if (macroUri != null) {
+			if (macroURI != null) {
 				//if (D.ON && log.finerable()) log.finer("macro component definition: "+name);
 
-				noEL("macro-uri", macroUri, pi);
+				noEL("macro-uri", macroURI, pi);
 					//no EL because pagedef must be loaded to resolve
 					//the impl class before creating an instance of macro
 
-				compdef = new ComponentDefinition(null, name, macroUri);
+				compdef = new ComponentDefinition(
+					null, name, toAbsoluteURI(macroURI, false));
 				pgdef.getLanguageDefinition().initMacroDefinition(compdef);
 				if (!isEmpty(clsnm)) {
 					noEL("class", clsnm, pi);
@@ -347,9 +349,10 @@ public class Parser {
 
 			final String moldnm = (String)params.remove("mold-name");
 			noEL("mold-name", moldnm, pi);
-			final String molduri = (String)params.remove("mold-uri");
-			if (!isEmpty(molduri))
-				compdef.addMold(isEmpty(moldnm) ? "default": moldnm, molduri);
+			final String moldURI = (String)params.remove("mold-uri");
+			if (!isEmpty(moldURI))
+				compdef.addMold(isEmpty(moldnm) ? "default": moldnm,
+					toAbsoluteURI(moldURI, true));
 			for (Iterator e = params.entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
 				compdef.addProperty(
@@ -369,6 +372,19 @@ public class Parser {
 	throws UiException {
 		if (val != null && val.indexOf("${") >= 0)
 			throw new UiException(nm+" does not support EL expressions, "+item.getLocator());
+	}
+	private String toAbsoluteURI(String uri, boolean allowEL) {
+		if (uri != null && uri.length() > 0) {
+			final char cc = uri.charAt(0);
+			if (cc != '/' && cc != '~' && (!allowEL || uri.indexOf("${") < 0)
+			&& !Servlets.isUniversalURL(uri)) {
+				final String dir = getLocator().getDirectory();
+				if (dir != null && dir.length() > 0)
+					return dir.charAt(dir.length() - 1) == '/' ?
+							dir + uri: dir + '/' + uri;
+			}
+		}
+		return uri;
 	}
 
 	/** Parses the specified elements.
