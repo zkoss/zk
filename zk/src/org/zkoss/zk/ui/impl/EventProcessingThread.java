@@ -275,7 +275,6 @@ public class EventProcessingThread extends Thread {
 			throw new InternalError("Not belonging to any desktop? "+comp);
 
 		_comp = comp;
-		_event = event;
 		_locale = Locales.getCurrent();
 		_timeZone = TimeZones.getCurrent();
 		_ex = null;
@@ -284,6 +283,8 @@ public class EventProcessingThread extends Thread {
 		_evtThdInits = config.newEventThreadInits(comp, event);
 		try {
 			synchronized (_evtmutex) {
+				_event = event;
+					//Bug 1577842: don't let event thread start (and end) too early
 				_evtmutex.notify(); //ask the event thread to handle it
 				if (!_ceased) _evtmutex.wait();
 					//wait until the event thread to complete or suspended
