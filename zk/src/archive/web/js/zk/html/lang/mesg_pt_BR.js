@@ -35,3 +35,5 @@ mesg.PLEASE_WAIT = "Processando...";
 
 mesg.FILE_SIZE = "Tamanho do arquivo: ";
 mesg.KBYTES = "KB";
+
+mesg.CANCEL="Cancelar";

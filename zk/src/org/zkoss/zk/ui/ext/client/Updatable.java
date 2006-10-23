@@ -30,8 +30,8 @@ import org.zkoss.zk.ui.UiException;
  * <li>Component uses to use inner-frame or other mechanism to submit a file
  * to {@link org.zkoss.zk.au.http.DHtmlUpdateServlet}'s /upload.
  * <li>DHtmlUpdateServlet than store the result in desktop's attribute,
- * and ask client to do a standard async-update called doUpdatable.
- * <li>When client sends doUpdatable request to the server, server invokes
+ * and ask client to do a standard async-update called updateResult.
+ * <li>When client sends the updateResult request to the server, server invokes
  * {@link #setResult} to put the upload result to the component.
  * </ol>
  *

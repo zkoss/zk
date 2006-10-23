@@ -1,4 +1,4 @@
-/* DoUpdatableCommand.java
+/* UpdateResultCommand.java
 
 {{IS_NOTE
 	Purpose:
@@ -29,12 +29,12 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 
 /**
- * Used only by {@link AuRequest} to implement the doUpdatable command.
+ * Used only by {@link AuRequest} to implement the updateResult command.
  * 
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
-public class DoUpdatableCommand extends Command {
-	public DoUpdatableCommand(String evtnm, int flags) {
+public class UpdateResultCommand extends Command {
+	public UpdateResultCommand(String evtnm, int flags) {
 		super(evtnm, flags);
 	}
 

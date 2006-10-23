@@ -87,12 +87,12 @@ zkau._getMouseData = function (evt, target) {
 };
 
 /** Asks the server to update a component. */
-zkau.doUpdatable = function (uuid, updatableId) {
-	zkau.send({uuid: uuid, cmd: "doUpdatable", data: [updatableId]}, -1);
-	zkau.remove(uuid);
+zkau.sendUpdateResult = function (uuid, updatableId) {
+	zkau.send({uuid: uuid, cmd: "updateResult", data: [updatableId]}, -1);
+	zkau.sendRemove(uuid);
 }
 /** Asks the server to remove a component. */
-zkau.remove = function (uuid) {
+zkau.sendRemove = function (uuid) {
 	if (!uuid) {
 		zk.error(mesg.UUID_REQUIRED);
 		return;
@@ -987,7 +987,7 @@ zkau._onDocKeydown = function (evt) {
 			}
 			if ("onCancel" == evtnm && $type(n) == "Wnd") {
 				if (getZKAttr(n, "closable") == "true") {
-					zkau.close(n);
+					zkau.sendOnClose(n);
 					Event.stop(evt);
 					return false;
 					//20060504: Bug 1481676: Tom Yeh
@@ -1030,14 +1030,14 @@ zkau.focusInFloats = function (target) {
 	return false;
 };
 
-zkau.close = function (uuid) {
+zkau.sendOnClose = function (uuid) {
 	el = $e(uuid);
 	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
 };
-zkau.hide = function (uuid) {
+zkau.sendOnShow = function (uuid, visible) {
 	var el = $e(uuid);
 	if (el) action.hide(el);
-	zkau.send({uuid: el.id, cmd: "onShow", data: ["false"]},
+	zkau.send({uuid: el.id, cmd: "onShow", data: [visible]},
 		zkau.asapTimeout(el, "onShow"));
 };
 
@@ -1055,7 +1055,7 @@ zkau.closeFloats = function (owner) {
 			popups.push(uuid);
 		} else {
 			closed = true;
-			zkau.hide(uuid);
+			zkau.sendOnShow(uuid, false);
 		}
 	}
 	zkau._popups = popups;
@@ -1484,8 +1484,12 @@ if (zk.ie /*|| zk.safari*/) {
 zkau.history = new zk.History();
 
 //Upload//
-zkau.beginUpload = function () {
+/** Begins upload (called when the submit button is pressed)
+ * @param cancelfn the function to cancel upload
+ */
+zkau.beginUpload = function (cancelfn) {
 	zkau.endUpload();
+	zkau._cancelfn = cancelfn;
 	zkau._tmupload = setInterval(function () {
 		zkau.send({uuid: '', cmd: "getUploadInfo", data: null});
 	}, 660);
@@ -1496,15 +1500,16 @@ zkau.updateUploadInfo = function (p, cb) {
 		var img = $e("zk_upload!img");
 		if (!img) {
 			var html = '<div id="zk_upload" style="position:absolute;border:1px solid #77a;padding:9px;background-color:#fec;z-index:79000">'
-				+'<div style="width:102px;border:1px inset"><img id="zk_upload!img" src="'+zk.getUpdateURI('/web/zk/img/prgmeter.gif')
-				+'"/></div><br/>'+mesg.FILE_SIZE+Math.round(cb/1024)+mesg.KBYTES+'</div>';
+				+'<div style="width:202px;border:1px inset"><img id="zk_upload!img" src="'+zk.getUpdateURI('/web/zk/img/prgmeter.gif')
+				+'"/></div><br/>'+mesg.FILE_SIZE+Math.round(cb/1024)+mesg.KBYTES
+				+'<br/><input type="button" value="'+mesg.CANCEL+'" onclick="if (zkau._cancelfn) zkau._cancelfn();zkau.endUpload();"</div>';
 			document.body.insertAdjacentHTML("afterbegin", html);
 			zk.center($e("zk_upload"));
 			img = $e("zk_upload!img");
 		}
 		if (p >= 0 && p <= 100) {
 			img.style.height = "10px"; //avoid being scaled when setting width
-			img.style.width = p + "px";
+			img.style.width = (p * 2) + "px";
 		}
 	}
 };
@@ -1515,6 +1520,7 @@ zkau.endUpload = function () {
 		clearInterval(zkau._tmupload);
 		zkau._tmupload = null;
 	}
+	zkau._cancelfn = null;
 };
 
 //Commands//

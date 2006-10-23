@@ -35,3 +35,5 @@ mesg.PLEASE_WAIT = "處理中…";
 
 mesg.FILE_SIZE = "檔案大小：";
 mesg.KBYTES = "KB";
+
+mesg.CANCEL="取消";

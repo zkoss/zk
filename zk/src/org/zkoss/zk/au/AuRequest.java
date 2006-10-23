@@ -177,7 +177,7 @@ public class AuRequest {
 			Command.IGNORE_OLD_EQUIV);
 		new CheckCommand(Events.ON_CHECK, 0);
 		new ClientInfoCommand(Events.ON_CLIENT_INFO, 0);
-		new DoUpdatableCommand("doUpdatable", 0);
+		new UpdateResultCommand("updateResult", 0);
 		new DropCommand(Events.ON_DROP, 0);
 		new DummyCommand("dummy", Command.SKIP_IF_EVER_ERROR);
 		new ErrorCommand(Events.ON_ERROR, Command.IGNORE_OLD_EQUIV);
