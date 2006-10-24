@@ -37,6 +37,7 @@ zkTab._getSelTab = function (tab) {
 			return zkTab._getSelTabFromTop(tabbox, tabboxId);
 	}
 
+	//non-accordion: we can use sibling directly
 	for (var node = tab; (node = node.nextSibling) != null;)
 		if (getZKAttr(node, "sel") == "true")
 			return node;
@@ -53,11 +54,13 @@ zkTab._sliding = function (tab) {
 	if (getZKAttr(tabbox, "accd") != "true")
 		return false;
 
-	for (var node = tab; (node = node.nextSibling) != null;)
-		if (getZKAttr(node, "sliding"))
+	//accordion: we must go to panel firs, and then browse its sibling
+	var panel = $e(getZKAttr(tab, "panel"));
+	for (var node = panel; (node = node.nextSibling) != null;)
+		if (getZKAttr($real(node), "sliding"))
 			return true;
-	for (var node = tab; (node = node.previousSibling) != null;)
-		if (getZKAttr(node, "sliding"))
+	for (var node = panel; (node = node.previousSibling) != null;)
+		if (getZKAttr($real(node), "sliding"))
 			return true;
 	return false;
 };
@@ -106,7 +109,7 @@ zkTab._setTabSel = function (tab, toSel) {
 	var accd = tabbox && getZKAttr(tabbox, "accd") == "true";
 	var panel = $e(getZKAttr(tab, "panel"));
 	if (panel)
-		if (accd) action.slideDown($e(panel.id + "!real"), toSel);
+		if (accd) action.slideDown($real(panel), toSel);
 		else action.show(panel, toSel);
 
 	if (!accd) {

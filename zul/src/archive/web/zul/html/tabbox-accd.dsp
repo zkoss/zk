@@ -1,5 +1,5 @@
 <%--
-accordions.dsp
+tabbox-accd.dsp
 
 {{IS_NOTE
 	Purpose:
