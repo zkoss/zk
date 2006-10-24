@@ -3,11 +3,11 @@ ZK 2.1.3 Freshly
 * Features:
   1567586, 1572187, 1575649, 1573501, 1577003, 1577051, 1577496, 1575726,
   1578371, 1580405, 1580579, 1581125.
-  + Speed up the initialization, showing and hiding (over 5 time faster)
+  + Speed up the initialization, showing and hiding (over 5 times faster)
   + Richlet is supported. By implementing a richlet, developers can write an
     application without using ZUML pages.
   + Messages translated to Brazilian Portuguese. Thank Airton Carrara for his contribution.
-  + Integrate Google Maps into ZK as a component <gmaps/>.
+  + Integrate Google Maps into ZK as a ZK component <gmaps/>.
   + New component <doublebox/>
   + New component <script/>
 
