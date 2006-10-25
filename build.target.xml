@@ -273,7 +273,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <target name="javadoc" depends="config.build">
 	<javadoc packagenames="org.zkoss.*"
 	 destdir="${working.javadoc.dir}"
-	 author="true" package="true" version="true" use="true"
+	 author="true" protected="true" version="true" use="true"
 	 windowtitle="${project.name} ${project.version} API"
 	 doctitle="${project.name} ${project.version} API"
 	 additionalparam="-breakiterator -source ${source.version}"
