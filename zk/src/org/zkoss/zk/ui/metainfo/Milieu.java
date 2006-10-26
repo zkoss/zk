@@ -73,6 +73,9 @@ public class Milieu implements Serializable {
 	private final String _macroURI;
 	/** The current directory. */
 	private final String _curdir;
+	/** The annotations of properties, (String propnm, Annotation).
+	 */
+	private final Map _annots;
 
 	//static//
 	private static final ThreadLocal _mill = new ThreadLocal();
@@ -118,14 +121,16 @@ public class Milieu implements Serializable {
 						dir = dir + '/';
 			}
 			_curdir = dir;
+
+			_annots = instdef.getAnnotations();
 		} else {
-			_evthds = null;
+			_evthds = _annots = null;
 			_curdir = null;
 		}
 	}
 	private Milieu() {
 		_implcls = null;
-		_evthds = _params = _molds = null;
+		_evthds = _params = _molds = _annots = null;
 		_macroURI = null;
 		_curdir = null;
 	}
@@ -144,6 +149,22 @@ public class Milieu implements Serializable {
 	 */
 	public ComponentDefinition getComponentDefinition() {
 		return _compdef;
+	}
+
+	/** Returns the annotation associated with the component definition,
+	 * or null if not available.
+	 */
+	public Annotation getAnnotation() {
+		return getAnnotation(null);
+	}
+	/** Returns the annotation associated wit the definition of the specified
+	 * property, or null if not available.
+	 *
+	 * @param propnm the property name, e.g., "value".
+	 * If null, it is the same as {@link #getAnnotation()}.
+	 */
+	public Annotation getAnnotation(String propnm) {
+		return _annots != null ? (Annotation)_annots.get(propnm): null;
 	}
 
 	/** Resolves and returns the class that implements the component.

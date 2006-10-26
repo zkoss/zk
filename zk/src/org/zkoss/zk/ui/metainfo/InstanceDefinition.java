@@ -77,6 +77,9 @@ implements Condition {
 	 * which are used to evaluate this definition multiple times.
 	 */
 	private String[] _forEach;
+	/** The annotations of properties, (String propnm, Annotation).
+	 */
+	private Map _annots;
 
 	/** Constructs an instance definition.
 	 * @param parent the parent; never null.
@@ -251,6 +254,25 @@ implements Condition {
 	 */
 	public List getChildren() {
 		return _roChildren;
+	}
+
+	/** Associate an annotation to this definition.
+	 *
+	 * @param propnm the property name. If null, it means the whole instance
+	 * definition.
+	 */
+	/*package*/ void addAnnotation(String propnm, Annotation annot) {
+		if (annot == null)
+			throw new IllegalArgumentException("null annot");
+		if (_annots == null)
+			_annots = new HashMap();
+		_annots.put(propnm, annot);
+	}
+	/** Returns the map of annotation (String property-name, Annotation annot),
+	 * or null if not available.
+	 */
+	/*package*/ Map getAnnotations() {
+		return _annots;
 	}
 
 	//-- Condition --//
