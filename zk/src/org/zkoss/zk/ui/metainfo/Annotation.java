@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.annotation;
+package org.zkoss.zk.ui.metainfo;
 
 /**
  * The common interface extended by all annotation types.
