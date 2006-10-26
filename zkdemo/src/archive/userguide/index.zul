@@ -137,12 +137,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<include id="xcontents" src="${requestScope.contentSrc}"/><!-- prepared by TocTree -->
 	</window>
 	</hbox>
-<!-- Use UA-121377-1 instead of UA-121377-3 (historical reason) -->
 <h:script type="text/javascript"><![CDATA[
 if (!zk.https()) {
 	_urchin = function() {
 		try {
-			_uacct = "UA-121377-1";
+			_uacct = "UA-121377-3";
 			urchinTracker();
 		} catch (e) {}
 	};
