@@ -50,6 +50,6 @@ public class PagingCommand extends Command {
 
 		final int pg = Integer.parseInt(data[0]);
 		((Paginal)comp).setActivePage(pg);
-		Events.postEvent(new PagingEvent(getId(), comp, pg));
+			//Don't send the onPaging event since setActivePage will do
 	}
 }
