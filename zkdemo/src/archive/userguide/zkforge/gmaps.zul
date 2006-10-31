@@ -52,11 +52,24 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<attribute name="onMapZoom">
 			myzoom.setValue(self.getZoom());
 		</attribute>
+
+		<ginfo id="myinfo" open="true">
+			<attribute name="content">
+				Hello, &lt;a href="http://www.zkoss.org"&gt;ZK&lt;/a&gt;.
+			</attribute>
+		</ginfo>
+		
+		<gmarker id="mymark" lat="37.4410" lng="-122.1490">
+			<attribute name="content">
+				Hello, &lt;a href="http://www.zkoss.org"&gt;ZK&lt;/a&gt; on top of Gmarker.
+			</attribute>
+		</gmarker>
 	</gmaps>
 	<grid><rows>
 		<row>Latitude: <doublebox id="mylat" value="&#36;{mymap.lat}" onChange="mymap.panTo(self.doubleValue(), mymap.getLng())"/></row>
 		<row>Longitude: <doublebox id="mylng" value="&#36;{mymap.lng}" onChange="mymap.panTo(mymap.getLat(), self.doubleValue())"/></row>
 		<row>Zoom Level: <intbox id="myzoom" value="&#36;{mymap.zoom}" onChange="mymap.setZoom(self.getValue())"/></row>
+		<row>Open Info: <button label="Change" onClick="myinfo.isOpen() ? mymark.setOpen(true) : myinfo.setOpen(true)"/></row>
 	</rows></grid>
 	</vbox>
 </window>

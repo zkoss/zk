@@ -23,7 +23,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		int sp = Executions.getCurrent().getServerPort();
 		String gkey = null;
 		if (sn.indexOf("www.potix.com") >= 0) { // http://www.potix.com/
-			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTT6-Op-9nAQgn7qnDG0QjE8aldaBRU1BQK2ADNWCt1BR2yg4ghOM6YIA";
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxRYCo_4ZGj_-54kHesWSk0nMkbs4xTpq0zo9O75_ZqvsSLGY2YkC7jjNg";
 		} else if (sn.indexOf("www.zkoss.org") >= 0) { // http://www.zkoss.org/
 			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
 		} else if (sn.indexOf("localhost") >= 0) { //localhost
@@ -51,12 +51,25 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<attribute name="onMapZoom">
 			myzoom.setValue(self.getZoom());
 		</attribute>
+		
+		<ginfo id="myinfo" open="true">
+			<attribute name="content"><![CDATA[
+				Hello, <a href="http://www.zkoss.org">ZK</a>.
+			]]></attribute>
+		</ginfo>
+		
+		<gmarker id="mymark" lat="37.4410" lng="-122.1490">
+			<attribute name="content"><![CDATA[
+				Hello, <a href="http://www.zkoss.org">ZK</a> on top of Gmarker.
+			]]></attribute>
+		</gmarker>
 	</gmaps>
 	<grid>
 	<rows>
 		<row>Latitude: <doublebox id="mylat" value="${mymap.lat}" onChange="mymap.panTo(self.doubleValue(), mymap.getLng())"/></row>
 		<row>Longitude: <doublebox id="mylng" value="${mymap.lng}" onChange="mymap.panTo(mymap.getLat(), self.doubleValue())"/></row>
 		<row>Zoom Level: <intbox id="myzoom" value="${mymap.zoom}" onChange="mymap.setZoom(self.getValue())"/></row>
+		<row>Open Info: <button label="Change" onClick="myinfo.isOpen() ? mymark.setOpen(true) : myinfo.setOpen(true)"/></row>
 	</rows>
 	</grid>
 	</vbox>

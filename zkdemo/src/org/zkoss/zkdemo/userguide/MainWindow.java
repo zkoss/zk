@@ -35,7 +35,7 @@ public class MainWindow extends Window {
 
 		String gkey = null;
 		if (sn.indexOf("www.potix.com") >= 0) { // http://www.potix.com/
-			gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxTT6-Op-9nAQgn7qnDG0QjE8aldaBRU1BQK2ADNWCt1BR2yg4ghOM6YIA";
+			gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxRYCo_4ZGj_-54kHesWSk0nMkbs4xTpq0zo9O75_ZqvsSLGY2YkC7jjNg";
 		} else if (sn.indexOf("www.zkoss.org") >= 0) { // http://www.zkoss.org/
 			gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
 		} else if (sn.indexOf("localhost") >= 0) { //localhost
