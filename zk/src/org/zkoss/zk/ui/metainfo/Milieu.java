@@ -159,9 +159,8 @@ public class Milieu implements Serializable {
 	public Annotation getAnnotation(String annotName) {
 		return getAnnotation(annotName, null);
 	}
-	/** Returns the annotation associated wit the definition of the specified
+	/** Returns the annotation associated with the definition of the specified
 	 * property, or null if not available.
-	 *
 	 *
 	 * @param annotName the annotation name
 	 * @param propName the property name, e.g., "value".
