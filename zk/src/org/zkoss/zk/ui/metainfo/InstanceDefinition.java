@@ -77,7 +77,7 @@ implements Condition {
 	 * which are used to evaluate this definition multiple times.
 	 */
 	private String[] _forEach;
-	/** The annotations of properties, (String propnm, Annotation).
+	/** The annotations of properties, Map(String propnm, Map(String annotnm, Annotation)).
 	 */
 	private Map _annots;
 
@@ -265,10 +265,16 @@ implements Condition {
 		if (annot == null)
 			throw new IllegalArgumentException("null annot");
 		if (_annots == null)
-			_annots = new HashMap();
-		_annots.put(propnm, annot);
+			_annots = new HashMap(3);
+
+		Map ans = (Map)_annots.get(propnm);
+		if (ans == null)
+			_annots.put(propnm, ans = new HashMap(3));
+
+		ans.put(annot.getName(), annot);
 	}
-	/** Returns the map of annotation (String property-name, Annotation annot),
+	/** Returns the map of annotation
+	 * (String property-name, Map(String annotation-name, Annotation annot)),
 	 * or null if not available.
 	 */
 	/*package*/ Map getAnnotations() {

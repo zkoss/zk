@@ -21,7 +21,7 @@ package org.zkoss.zk.ui.impl;
 import org.zkoss.zk.au.AuResponse;
 
 /**
- * The aborting reason used with {@link UiVisualizer#setAbortingReason}.
+ * The aborting reason used to abort the current execution.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
@@ -31,7 +31,7 @@ public interface AbortingReason {
 	public boolean isAborting();
 	/** Returns the response representing this aborting reason.
 	 * It is called when {@link UiEngineImpl} is about to abort
-	 * the current execution due to {@link UiVisualizer#setAbortingReason}.
+	 * the current execution.
 	 */
 	public AuResponse getResponse();
 }

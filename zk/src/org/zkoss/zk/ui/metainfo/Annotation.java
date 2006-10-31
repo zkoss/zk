@@ -16,10 +16,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.util.Map;
+
 /**
  * The common interface extended by all annotation types.
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
  */
 public interface Annotation {
+	/** Returns the name of this annotation.
+	 */
+	public String getName();
+	/** Returns the map of attributes (String name, String value) (never null).
+	 * The returned map is read-only.
+	 */
+	public Map getAttributes();
+	/** Returns the attribute of the given name, or null if not found.
+	 */
+	public String getAttribute(String name);
 }
