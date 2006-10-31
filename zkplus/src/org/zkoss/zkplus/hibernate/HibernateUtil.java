@@ -23,7 +23,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.ConnectionReleaseMode;
 import org.hibernate.HibernateException;
 import org.hibernate.cfg.Configuration;
-
+import org.hibernate.cfg.AnnotationConfiguration;
 /**
  * <p>Utitlity to access Hibernate Session. This implemenation works with the Hibernate's 
  * thread session context (version 3.1+). That is, you have to specified 
@@ -75,7 +75,9 @@ public class HibernateUtil {
 		if (_factory == null) {
 			try {
 			    // Create the SessionFactory from hibernate.cfg.xml
-			    _factory = new Configuration().configure().buildSessionFactory();
+			    _factory = new AnnotationConfiguration()
+			    		.configure()
+			    		.buildSessionFactory();
 			} catch (Throwable ex) {
 			    // Make sure you log the exception, as it might be swallowed
 			    log.error("Initial SessionFactory creation failed." + ex);

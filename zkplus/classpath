@@ -10,5 +10,7 @@
 ../dist/lib/ext/jsp-api.jar
 ../dist/lib/ext/spring.jar
 ../dist/lib/ext/hibernate3.jar
+../dist/lib/ext/hibernate-annotations.jar
+../dist/lib/ext/ejb3-persistence.jar
 ../dist/lib/ext/jta.jar
 ../dist/lib/ext/acegi-security.jar
