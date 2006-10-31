@@ -306,7 +306,7 @@ td.gridev, td.gridod { <%-- gridev and gridod always used. --%>
 	border-right: 1px solid #CCC; border-top: 1px solid #DDD; padding: 2px;
 	font-size: medium; font-weight: normal;
 }
-div.grid td.gridod { <%-- gridod always used for odd row. --%>
+td.gridod { <%-- gridod always used for odd row. --%>
 	background: #E8EFEA;
 }
 

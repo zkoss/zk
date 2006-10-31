@@ -173,7 +173,7 @@ public class Row extends XulElement {
 		final String s = getStyle();
 		if (!Objects.equals(s, style)) {
 			super.setStyle(style);
-			invalidate();
+			invalidate(); //yes, invalidate
 		}
 	}
 	public void setSclass(String sclass) {
@@ -182,7 +182,7 @@ public class Row extends XulElement {
 		final String s = getSclass();
 		if (!Objects.equals(s, sclass)) {
 			super.setSclass(sclass);
-			invalidate();
+			invalidate(); //yes, invalidate
 		}
 	}
 
