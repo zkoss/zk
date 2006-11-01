@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Apr 19 14:02:14     2006, Created by tomyeh@potix.com
+		Wed Apr 19 14:02:14     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Session;
 /**
  * The request information used with {@link org.zkoss.zk.ui.sys.UiFactory}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface RequestInfo {
 	/** Returns the Web application; never null.

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue May 31 11:27:07     2005, Created by tomyeh@potix.com
+		Tue May 31 11:27:07     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -49,7 +49,7 @@ import org.zkoss.zk.ui.sys.PageCtrl;
  * A page definition.
  * It represents a ZUL page.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see InstanceDefinition
  * @see ComponentDefinition
  */

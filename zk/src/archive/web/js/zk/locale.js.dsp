@@ -7,7 +7,7 @@ locale.js.dsp
 	Description:
 		JavaScript of the Locale-dependent strings
 	History:
-		Sat May  6 23:12:12     2006, Created by tomyeh@potix.com
+		Sat May  6 23:12:12     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

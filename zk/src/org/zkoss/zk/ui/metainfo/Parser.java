@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue May 31 14:26:18     2005, Created by tomyeh@potix.com
+		Tue May 31 14:26:18     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -64,7 +64,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
  * Used to prase the ZUL file
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Parser {
 	private static final Log log = Log.lookup(Parser.class);

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 14 17:39:00     2005, Created by tomyeh@potix.com
+		Tue Jun 14 17:39:00     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Represents an event cause by user's input something at the client.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see org.zkoss.zk.ui.ext.client.Inputable
  */
 public class InputEvent extends Event {

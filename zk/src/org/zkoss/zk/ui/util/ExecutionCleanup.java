@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 24 23:31:23     2006, Created by tomyeh@potix.com
+		Thu Aug 24 23:31:23     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.Execution;
  * the specified class is instantiated and {@link #cleanup} is called.</li>
  * </ol>
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ExecutionCleanup {
 	/** called when an execution is about to be destroyed.

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jun 21 19:32:30     2006, Created by tomyeh@potix.com
+		Wed Jun 21 19:32:30     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.WebApp;
  * the specified class is instantiated and {@link #cleanup} is called.</li>
  * </ol>
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface WebAppCleanup {
 	/** called when a ZK application is about to be destroyed.

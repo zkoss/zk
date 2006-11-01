@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Mar  8 11:12:53     2006, Created by tomyeh@potix.com
+		Wed Mar  8 11:12:53     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ package org.zkoss.zk.ui.util;
  * Currently, only {@link org.zkoss.zk.ui.metainfo.InstanceDefinition}
  * uses it to represent the forEach attribute.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ForEach {
 	/** Advanced to the next element.

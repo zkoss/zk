@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 13 11:26:16     2005, Created by tomyeh@potix.com
+		Thu Oct 13 11:26:16     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Component;
  * <p>data[0]: the uuid of the component<br>
  * data[1]: the attribute name
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuRemoveAttribute extends AuResponse {
 	public AuRemoveAttribute(Component comp, String attr) {

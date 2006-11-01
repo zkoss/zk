@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Mar  8 12:57:14     2006, Created by tomyeh@potix.com
+		Wed Mar  8 12:57:14     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ package org.zkoss.zk.ui.util;
  * <p>The main use is to get the object in the outer iteration:
  * <code>forEachStatus.previous.each</code>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ForEachStatus {
 	/** Returns the status of the enclosing forEach statement.

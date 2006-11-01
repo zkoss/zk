@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Jun 11 10:41:14     2005, Created by tomyeh@potix.com
+		Sat Jun 11 10:41:14     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Page;
 /**
  * An event sent to the event handler of a component.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see Component
  */
 public class Event {

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 13 11:32:06     2005, Created by tomyeh@potix.com
+		Thu Oct 13 11:32:06     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
  * <p>data[0]: the uuid of the component after which the HTML will insert<br>
  * data[1]: the unparsed HTML (aka., content)
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuInsertAfter extends AuResponse {
 	public AuInsertAfter(Component comp, String content) {

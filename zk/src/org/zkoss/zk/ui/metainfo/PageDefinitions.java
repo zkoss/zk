@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue May 31 12:34:43     2005, Created by tomyeh@potix.com
+		Tue May 31 12:34:43     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.metainfo.Parser;
 /**
  * Utilities to retrieve page definitions.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class PageDefinitions {
 	private static final String ATTR_PAGE_CACHE = "org.zkoss.zk.ui.PageCache";

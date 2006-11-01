@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May 30 21:29:17     2005, Created by tomyeh@potix.com
+		Mon May 30 21:29:17     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import java.util.Map;
  * A page, {@link Page}, might have many components, {@link Component}, while
  * a component belongs to exactly one page.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Session {
 	/** Returns the value of the specified custom attribute.

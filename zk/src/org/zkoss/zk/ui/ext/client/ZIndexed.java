@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Dec 24 23:01:45     2005, Created by tomyeh@potix.com
+		Sat Dec 24 23:01:45     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ package org.zkoss.zk.ui.ext.client;
  * <p>Once it is moved by the user, {@link #setZIndexByClient}
  * are called and {@link org.zkoss.zk.ui.event.ZIndexEvent} is sent to notify the component.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ZIndexed {
 	/** Sets the z-index of the component, caused by user's activity at

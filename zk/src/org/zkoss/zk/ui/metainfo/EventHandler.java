@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jun 19 15:17:41     2006, Created by tomyeh@potix.com
+		Mon Jun 19 15:17:41     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.util.Condition;
 /**
  * An event handler of an instance definition ({@link InstanceDefinition}).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class EventHandler implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;

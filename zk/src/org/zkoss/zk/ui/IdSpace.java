@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jul 29 10:41:31     2005, Created by tomyeh@potix.com
+		Fri Jul 29 10:41:31     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -54,7 +54,7 @@ package org.zkoss.zk.ui;
  * <p>Note: to make a component (deriving from {@link AbstractComponent})
  * an ID space owner, all it needs to do is to implement this interface.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface IdSpace {
 	/** Returns a component of the specified ID in the same ID space.

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu May 25 10:50:36     2006, Created by tomyeh@potix.com
+		Thu May 25 10:50:36     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.util.Namespaces;
 /**
  * An initiator used to evaluate a zscript file.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ZScriptInitiator implements Initiator {
 	private final ZScript _zscript;

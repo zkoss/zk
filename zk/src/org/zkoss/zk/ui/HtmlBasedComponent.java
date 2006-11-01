@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Dec 31 12:30:18     2005, Created by tomyeh@potix.com
+		Sat Dec 31 12:30:18     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -49,7 +49,7 @@ import org.zkoss.zk.au.AuFocus;
  * <li>{@link #focus}</li>
  * </ul>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class HtmlBasedComponent extends AbstractComponent {
 	private static final Log log = Log.lookup(HtmlBasedComponent.class);

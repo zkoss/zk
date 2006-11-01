@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Apr 13 09:06:16     2006, Created by tomyeh@potix.com
+		Thu Apr 13 09:06:16     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.util.Condition;
  * ({@link InstanceDefinition}).
  * It is equivalent to the custom-attributes element.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class CustomAttributes implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;

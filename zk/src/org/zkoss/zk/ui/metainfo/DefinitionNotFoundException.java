@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Jun  5 12:05:40     2005, Created by tomyeh@potix.com
+		Sun Jun  5 12:05:40     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * Dentoes a definition cannot be found.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class DefinitionNotFoundException extends UiException {
 	public DefinitionNotFoundException(String msg, Throwable cause) {

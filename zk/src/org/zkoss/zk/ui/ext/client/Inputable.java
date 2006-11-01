@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 14 22:47:29     2005, Created by tomyeh@potix.com
+		Tue Jun 14 22:47:29     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * <p>The server usually uses onChanging to implement auto-completion and
  * similar feature.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see org.zkoss.zk.ui.event.InputEvent
  */
 public interface Inputable {

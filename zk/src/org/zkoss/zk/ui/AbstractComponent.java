@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May 30 21:49:42     2005, Created by tomyeh@potix.com
+		Mon May 30 21:49:42     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -69,7 +69,7 @@ import org.zkoss.zk.au.AuClientInfo;
  * to implement Component from scratch, this class simplifies some of
  * the chores.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {

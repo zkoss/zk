@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jul 25 16:34:05     2006, Created by tomyeh@potix.com
+		Tue Jul 25 16:34:05     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.util.TimeZones;
  * Thus, you might want to store in the session's attribute
  * ({@link org.zkoss.zk.ui.Session#setAttribute}).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see org.zkoss.zk.ui.util.Clients
  */
 public class ClientInfoEvent extends Event {

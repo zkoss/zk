@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Aug 27 12:13:44     2006, Created by tomyeh@potix.com
+		Sun Aug 27 12:13:44     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ package org.zkoss.zk.ui.ext.render;
  * to implement header and body, and then it has to re-align the header
  * once any of its descendants is changed.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ChildChangedAware {
 	/** Returns whether to send the <code>z:chchg</code> command

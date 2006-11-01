@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 13 11:23:40     2005, Created by tomyeh@potix.com
+		Thu Oct 13 11:23:40     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Page;
  * A response to remove the specified component at the client.
  * <p>data[0]: the uuid of the component being removed
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuRemove extends AuResponse {
 	public AuRemove(Component comp) {

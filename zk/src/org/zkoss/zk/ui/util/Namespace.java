@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Apr 10 15:59:29     2006, Created by tomyeh@potix.com
+		Mon Apr 10 15:59:29     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ package org.zkoss.zk.ui.util;
  * It is a mimic concept of ID space to work with BeanShell (and other
  * interpreter).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see Interpreter
  */
 public interface Namespace {

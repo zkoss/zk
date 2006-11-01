@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Oct 25 16:05:13     2006, Created by tomyeh@potix.com
+		Wed Oct 25 16:05:13     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import java.util.Map;
  * To get the annotation associated with the declaration of a component property,
  * use {@link org.zkoss.zk.ui.metainfo.Milieu#getAnnotation(String, String)}
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see org.zkoss.zk.ui.metainfo.Milieu#getAnnotation(String)
  */
 public interface Annotation extends java.io.Serializable {

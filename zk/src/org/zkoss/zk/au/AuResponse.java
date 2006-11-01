@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue May 31 11:35:49     2005, Created by tomyeh@potix.com
+		Tue May 31 11:35:49     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.Page;
  * If you prefer to use the derives directly, you can use them with
  * {@link org.zkoss.zk.ui.Execution#addAuResponse}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuResponse {
 	private final String _cmd;

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Apr 10 16:08:23     2006, Created by tomyeh@potix.com
+		Mon Apr 10 16:08:23     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -40,7 +40,7 @@ import org.zkoss.zk.ui.util.Namespace;
 /**
  * An implementation of {@link Namespace} on top of BeanShell.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class BshNamespace implements Namespace {//not a good idea to serialize it
 	private static final Log log = Log.lookup(BshNamespace.class);

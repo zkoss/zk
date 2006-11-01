@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue May 31 11:31:13     2005, Created by tomyeh@potix.com
+		Tue May 31 11:31:13     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -38,7 +38,7 @@ import org.zkoss.zk.au.impl.*;
 /**
  * A request sent from the client to {@link org.zkoss.zk.ui.sys.UiEngine}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuRequest {
 	private final Desktop _desktop;

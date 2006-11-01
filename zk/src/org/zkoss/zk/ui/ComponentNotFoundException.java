@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Jun  5 12:05:40     2005, Created by tomyeh@potix.com
+		Sun Jun  5 12:05:40     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.zk.ui;
 /**
  * Dentoes a component cannot be found.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ComponentNotFoundException extends UiException {
 	public ComponentNotFoundException(String msg, Throwable cause) {

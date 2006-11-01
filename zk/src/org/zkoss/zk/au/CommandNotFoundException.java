@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jun  6 12:56:02     2005, Created by tomyeh@potix.com
+		Mon Jun  6 12:56:02     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * Represents an update-relevant exception.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class CommandNotFoundException extends UiException {
 	public CommandNotFoundException(String msg, Throwable cause) {

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun  3 17:55:01     2005, Created by tomyeh@potix.com
+		Fri Jun  3 17:55:01     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -51,7 +51,7 @@ import org.zkoss.zk.au.AuResponse;
  * <p>Because a request might come from HTTP or other protocol, Execution
  * also serves as an isolation layer.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see Page
  */
 public interface Execution extends Evaluator {

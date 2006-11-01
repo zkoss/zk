@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri May 26 14:25:06     2006, Created by tomyeh@potix.com
+		Fri May 26 14:25:06     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zk.au.*;
  * <p>Utilities here are mainly to control how the client (aka., the browser window)
  * behaves. To get the status, you might refer to {@link org.zkoss.zk.ui.event.ClientInfoEvent}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see org.zkoss.zk.ui.event.ClientInfoEvent
  */
 public class Clients {

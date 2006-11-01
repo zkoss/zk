@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Dec  9 16:27:21     2005, Created by tomyeh@potix.com
+		Fri Dec  9 16:27:21     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import java.util.Collection;
  * Once a desktop is locked to a request, all pages
  * contained in this desktop are free to access.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Desktop {
 	/** Returns ID of this desktop.

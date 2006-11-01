@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Aug 11 16:34:56     2006, Created by tomyeh@potix.com
+		Fri Aug 11 16:34:56     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zk.au.Command;
 /**
  * Used only by {@link AuRequest} to implement the redraw command.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class RedrawCommand extends Command {
 	public RedrawCommand(String evtnm, int flags) {

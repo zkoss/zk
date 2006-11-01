@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Aug 12 08:34:35     2005, Created by tomyeh@potix.com
+		Fri Aug 12 08:34:35     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Component;
  * A moveable component must implement {@link org.zkoss.zk.ui.ext.client.Moveable}
  * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class MoveEvent extends Event {
 	private final String _left, _top;

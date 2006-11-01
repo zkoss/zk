@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Nov 30 00:49:59     2005, Created by tomyeh@potix.com
+		Wed Nov 30 00:49:59     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -58,7 +58,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  * <li>Maps the servlet to the filter in web.xml</li>
  * </ul>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class DHtmlLayoutFilter implements Filter {
 	private static final Log log = Log.lookup(DHtmlLayoutFilter.class);

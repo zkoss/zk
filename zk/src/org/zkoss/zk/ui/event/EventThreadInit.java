@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jul 28 19:17:40     2005, Created by tomyeh@potix.com
+		Thu Jul 28 19:17:40     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.UiException;
  * {@link #prepare}, and then 
  * apply them in the event processing thread when {@link #init} is called.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface EventThreadInit {
 	/** Prepares the initialization at the servlet thread.

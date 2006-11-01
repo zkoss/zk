@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Aug  8 18:30:24     2005, Created by tomyeh@potix.com
+		Mon Aug  8 18:30:24     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -22,7 +22,7 @@ package org.zkoss.zk.ui;
  * Denotes the value passed to a setter (aka., mutator) of a component
  * is wrong.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class WrongValueException extends OperationException {
 	private Component _comp;

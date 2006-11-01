@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Aug  2 15:03:50     2005, Created by tomyeh@potix.com
+		Tue Aug  2 15:03:50     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import java.util.Collections;
 /**
  * variables utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Variables {
 	private Variables() {}

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Mar  6 23:18:09     2006, Created by tomyeh@potix.com
+		Mon Mar  6 23:18:09     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.Component;
  * <p>Thus, the typical use is to cleaup un-closed transactions
  * when {@link #cleanup} is called.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface EventThreadCleanup {
 	/** Cleans up the event processing thread.

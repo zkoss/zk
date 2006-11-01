@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Jun 25 22:54:45     2006, Created by tomyeh@potix.com
+		Sun Jun 25 22:54:45     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import java.io.IOException;
 /**
  * Utilities to handle java.io.Serializable.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Serializables {
 	/** Writes only serializable entries of the specified map.

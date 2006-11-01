@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun 23 20:41:25     2005, Created by tomyeh@potix.com
+		Thu Jun 23 20:41:25     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Component;
  * {@link org.zkoss.zk.ui.sys.UiEngine} post this event to compoents that
  * declares the onCreate handler (either as a method or as in instance definition).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class CreateEvent extends Event {
 	private final Map _args;

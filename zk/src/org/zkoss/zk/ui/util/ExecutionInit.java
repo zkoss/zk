@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 24 23:31:06     2006, Created by tomyeh@potix.com
+		Thu Aug 24 23:31:06     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.Execution;
  * the specified class is instantiated and {@link #init} is called.</li>
  * </ol>
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ExecutionInit {
 	/** Called when an exection is created and initialized.

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jan 20 23:28:02     2006, Created by tomyeh@potix.com
+		Fri Jan 20 23:28:02     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ package org.zkoss.zk.au;
  *
  * <p>data[0]: null (ie., empty for client)
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuEcho  extends AuResponse {
 	public AuEcho() {

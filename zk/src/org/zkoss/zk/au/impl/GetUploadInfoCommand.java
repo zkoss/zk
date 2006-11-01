@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Aug 14 21:40:53     2006, Created by tomyeh@potix.com
+		Mon Aug 14 21:40:53     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zk.au.Command;
  * Used with {@link AuRequest} to return the ratio (aka., the progress)
  * of the current uploading.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class GetUploadInfoCommand extends Command {
 	public GetUploadInfoCommand(String evtnm, int flags) {

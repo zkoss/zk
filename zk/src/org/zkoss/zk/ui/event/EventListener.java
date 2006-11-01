@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jul 22 16:06:46     2005, Created by tomyeh@potix.com
+		Fri Jul 22 16:06:46     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.UiException;
  * An listener that will be notified when an event occurs, if it is
  * registered to {@link org.zkoss.zk.ui.Component#addEventListener}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface EventListener {
 	/** Notifies this listener that an event occurs.

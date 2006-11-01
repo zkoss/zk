@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jun 13 20:55:18     2005, Created by tomyeh@potix.com
+		Mon Jun 13 20:55:18     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import java.util.Comparator;
 /**
  * Utilities to access {@link Component}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Components {
 	protected Components() {}

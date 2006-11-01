@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jul 15 12:17:21     2005, Created by tomyeh@potix.com
+		Fri Jul 15 12:17:21     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
  * Represents an event cause by user's showing or hiding
  * something at the client.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ShowEvent extends Event {
 	private final boolean _visible;

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun  1 12:09:52     2006, Created by tomyeh@potix.com
+		Thu Jun  1 12:09:52     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.zk.ui.util;
 /**
  * The name resolver used with {@link org.zkoss.zk.ui.Page#getVariable}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface VariableResolver {
 	/** Returns the value of the specified variable, or null if not found.

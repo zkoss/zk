@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jul  6 12:38:04     2006, Created by tomyeh@potix.com
+		Thu Jul  6 12:38:04     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.impl.AbstractUiFactory;
  * The instances returned by {@link #newSession} is serializable, such that
  * session can be stored when the Web server stops and restore after it starts.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class SerializableUiFactory extends AbstractUiFactory {
 	public Session newSession(WebApp wapp, Object nativeSess,

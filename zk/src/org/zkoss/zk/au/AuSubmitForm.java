@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri May 26 14:34:43     2006, Created by tomyeh@potix.com
+		Fri May 26 14:34:43     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -22,7 +22,7 @@ package org.zkoss.zk.au;
  *
  * <p>data[0]: the form's UUID.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuSubmitForm extends AuResponse {
 	/**

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Oct 13 15:47:20     2006, Created by tomyeh@potix.com
+		Fri Oct 13 15:47:20     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -34,7 +34,7 @@ package org.zkoss.zk.ui.ext.render;
  * it has to detect this interface and generate z:id if {@link #isZidRequired}
  * return true.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ZidRequired {
 	/** Returns whether the component that owns this object

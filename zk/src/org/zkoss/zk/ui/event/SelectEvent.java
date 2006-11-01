@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun 16 18:05:51     2005, Created by tomyeh@potix.com
+		Thu Jun 16 18:05:51     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Component;
  * Represents an event cause by user's the list selection is changed
  * at the client.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class SelectEvent extends Event {
 	private final Set _selectedItems;

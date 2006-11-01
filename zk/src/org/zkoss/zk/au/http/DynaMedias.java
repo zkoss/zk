@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Aug 14 12:48:56     2006, Created by tomyeh@potix.com
+		Mon Aug 14 12:48:56     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -56,7 +56,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 /**
  * The utility used to response the content for {@link DynamicMedia#getMedia}
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 /*package*/ class DynaMedias {
 //	private static final Log log = Log.lookup(DynaMedias.class);

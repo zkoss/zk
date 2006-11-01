@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Apr 18 10:54:20     2006, Created by tomyeh@potix.com
+		Tue Apr 18 10:54:20     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Session;
 /**
  * Used to retrieve a desktop cache ({@link DesktopCache}).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface DesktopCacheProvider {
 	/** Returns a desktop cache of the specified session.

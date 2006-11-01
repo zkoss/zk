@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep 27 09:15:39     2005, Created by tomyeh@potix.com
+		Tue Sep 27 09:15:39     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Represents a key pressed by the user.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class KeyEvent extends Event {
 	public static final int F1 = 112;

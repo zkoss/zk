@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jul 13 15:43:35     2006, Created by tomyeh@potix.com
+		Thu Jul 13 15:43:35     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Session;
  * is created and then {@link #getLocale} is called, is called each time
  * a request from the client is received.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface LocaleProvider {
 	/** Returns the locale of the specified session, or null if the default

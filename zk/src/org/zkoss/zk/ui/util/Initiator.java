@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug  4 12:09:19     2005, Created by tomyeh@potix.com
+		Thu Aug  4 12:09:19     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.UiException;
  * in {@link #doCatch} and commit it in {@link #doFinally}
  * (if {@link #doCatch} is not called).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Initiator {
 	/** Does the initializes before the page is evaluated.

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jul 20 11:24:00     2005, Created by tomyeh@potix.com
+		Wed Jul 20 11:24:00     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -52,7 +52,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * suspend (by calling {@link org.zkoss.zk.ui.sys.UiEngine#wait}), such as waiting
  * a modal dialog to complete.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class EventProcessingThread extends Thread {
 	private static final Log log = Log.lookup(EventProcessingThread.class);

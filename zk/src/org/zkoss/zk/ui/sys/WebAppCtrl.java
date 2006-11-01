@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Apr 18 11:07:30     2006, Created by tomyeh@potix.com
+		Tue Apr 18 11:07:30     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.sys.UiFactory;
  * Additional interface of {@link org.zkoss.zk.ui.WebApp} for implementation.
  * <p>Note: applications shall never access this interface.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface WebAppCtrl {
 	/** Initializes the {@link org.zkoss.zk.ui.WebApp}.

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 14 22:02:29     2006, Created by tomyeh@potix.com
+		Thu Sep 14 22:02:29     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.Executions;
  * For example, the link and meta directives represent &lt;link&gt;
  * and &lt;meta&gt; HTML tags, respectively.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Header {
 	private final String _name;

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jan 19 14:07:44     2006, Created by tomyeh@potix.com
+		Thu Jan 19 14:07:44     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 /**
  * A representation of a component path.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Path {
 	private final String _path;

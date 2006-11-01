@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Aug 14 19:21:26     2006, Created by tomyeh@potix.com
+		Mon Aug 14 19:21:26     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.impl.Attributes;
 /**
  * The file item factory that monitors the progress of uploading.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 /*package*/ class ZkFileItemFactory extends DiskFileItemFactory {
 	private static final Log log = Log.lookup(ZkFileItemFactory.class);

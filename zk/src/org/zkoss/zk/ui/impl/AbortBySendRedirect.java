@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Apr 30 18:15:25     2006, Created by tomyeh@potix.com
+		Sun Apr 30 18:15:25     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.au.AuSendRedirect;
  * The aborting reason for send-redirect.
  * In other words, the client will redirect the specified URL.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AbortBySendRedirect implements AbortingReason {
 	private final String _url;

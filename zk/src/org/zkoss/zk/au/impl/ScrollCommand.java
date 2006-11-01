@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Oct  2 21:30:04     2005, Created by tomyeh@potix.com
+		Sun Oct  2 21:30:04     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -34,7 +34,7 @@ import org.zkoss.zk.au.Command;
  * Used only by {@link AuRequest} to implement the {@link ScrollEvent}
  * relevant command.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ScrollCommand extends Command {
 	public ScrollCommand(String evtnm, int flags) {

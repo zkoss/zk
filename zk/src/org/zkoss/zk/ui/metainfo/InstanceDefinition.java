@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue May 31 11:27:13     2005, Created by tomyeh@potix.com
+		Tue May 31 11:27:13     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -52,7 +52,7 @@ import org.zkoss.zk.ui.util.impl.ForEachImpl;
  * <p>Note: InstanceDefinition is not Serializable, though it is derived
  * from {@link ComponentDefinition}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see PageDefinition
  */
 public class InstanceDefinition extends ComponentDefinition

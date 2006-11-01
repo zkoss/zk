@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jun  8 13:55:09     2005, Created by tomyeh@potix.com
+		Wed Jun  8 13:55:09     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.UiException;
  *
  * <p>Application developers shall never access any of this methods.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface PageCtrl {
 	/** Initializes a page by assigning an identifier, a title, and adding it

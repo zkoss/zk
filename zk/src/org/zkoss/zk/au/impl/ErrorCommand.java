@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Oct 21 15:58:32     2005, Created by tomyeh@potix.com
+		Fri Oct 21 15:58:32     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -34,7 +34,7 @@ import org.zkoss.zk.au.Command;
  * Used only by {@link AuRequest} to implement the {@link ErrorEvent}
  * relevant command.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ErrorCommand extends Command {
 	public ErrorCommand(String evtnm, int flags) {

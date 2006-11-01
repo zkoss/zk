@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct  5 11:56:22     2006, Created by tomyeh@potix.com
+		Thu Oct  5 11:56:22     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
  * by use of {@link org.zkoss.zk.ui.util.Configuration#addRichlet}, or specify
  * &lt;richlet&gt; in zk.xml.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Richlet {
 	/** Called by the richlet container to indicate to a richlet that

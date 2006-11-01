@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May 29 18:50:13     2006, Created by tomyeh@potix.com
+		Mon May 29 18:50:13     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.zk.au;
  *
  * <p>data[0]: the name of the bookmark.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuBookmark extends AuResponse {
 	/**

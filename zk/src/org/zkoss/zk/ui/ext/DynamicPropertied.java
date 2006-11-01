@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Oct  3 22:03:28     2005, Created by tomyeh@potix.com
+		Mon Oct  3 22:03:28     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * developers need to implement member functions (setter and getter)
  * for each property it supports.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface DynamicPropertied {
 	/** Returns whether a dynamic attribute is allowed.

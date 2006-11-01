@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Apr 14 13:54:13     2006, Created by tomyeh@potix.com
+		Fri Apr 14 13:54:13     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.ext.DynamicPropertied;
  * If a developer wants to create it manually, it has to instantiate from
  * the correct class, and then invoke {@link #afterCompose}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class HtmlMacroComponent extends HtmlBasedComponent
 implements AfterCompose, IdSpace, DynamicPropertied {

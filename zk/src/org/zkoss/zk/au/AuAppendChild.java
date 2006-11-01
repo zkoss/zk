@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 13 11:33:16     2005, Created by tomyeh@potix.com
+		Thu Oct 13 11:33:16     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Page;
  * <p>data[0]: the uuid of the component/page as the parent<br>
  * data[1]: the unparsed HTML (aka., content)
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuAppendChild extends AuResponse {
 	public AuAppendChild(Component comp, String content) {

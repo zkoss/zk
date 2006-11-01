@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jun  6 14:36:47     2005, Created by tomyeh@potix.com
+		Mon Jun  6 14:36:47     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
  *
  * <p>Application developers shall never access any of this methods.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ExecutionCtrl {
 	/** Returns the current page.

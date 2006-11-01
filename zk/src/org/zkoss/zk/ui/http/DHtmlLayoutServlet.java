@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May 30 21:11:28     2005, Created by tomyeh@potix.com
+		Mon May 30 21:11:28     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -55,7 +55,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 /**
  * Used to process the request for a ZUML page.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class DHtmlLayoutServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlLayoutServlet.class);

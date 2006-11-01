@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun 16 00:01:09     2006, Created by tomyeh@potix.com
+		Fri Jun 16 00:01:09     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Executions;
 /**
  * {@link Namespace} relevant utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Namespaces {
 	/** Prepares builtin variable before calling {@link Page#interpret}.

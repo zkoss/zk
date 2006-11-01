@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct  5 15:24:09     2006, Created by tomyeh@potix.com
+		Thu Oct  5 15:24:09     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.RichletConfig;
 /**
  * An implementation of {@link RichletConfig}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class RichletConfigImpl implements RichletConfig {
 	private final WebApp _wapp;

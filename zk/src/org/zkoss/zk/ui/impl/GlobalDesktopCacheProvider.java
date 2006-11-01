@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Apr 18 14:12:16     2006, Created by tomyeh@potix.com
+		Tue Apr 18 14:12:16     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.sys.DesktopCache;
  * <p>In other words, it ignores the session, and it depends only on
  * {@link WebApp}.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see SessionDesktopCacheProvider
  */
 public class GlobalDesktopCacheProvider implements DesktopCacheProvider,

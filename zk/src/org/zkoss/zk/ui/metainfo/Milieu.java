@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jun 19 12:21:08     2006, Created by tomyeh@potix.com
+		Mon Jun 19 12:21:08     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -48,7 +48,7 @@ import org.zkoss.zk.ui.util.Evaluator;
  * not shared with any others ({@link org.zkoss.zk.ui.sys.ComponentCtrl#getMilieu}).
  * Moreover, {@link #getComponentDefinition} returns null in this case.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Milieu implements Serializable {
     private static final long serialVersionUID = 20061017L;

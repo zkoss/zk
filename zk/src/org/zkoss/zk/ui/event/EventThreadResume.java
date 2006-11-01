@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue May  2 20:53:32     2006, Created by tomyeh@potix.com
+		Tue May  2 20:53:32     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -41,7 +41,7 @@ import org.zkoss.zk.ui.Component;
  * In this case, {@link #abortResume} is called instead of {@link #beforeResume}
  * and {@link #afterResume}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface EventThreadResume {
 	/** Called just before the suspended event thread is resumed.

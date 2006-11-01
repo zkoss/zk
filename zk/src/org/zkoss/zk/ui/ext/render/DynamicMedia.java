@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jul 22 08:59:10     2005, Created by tomyeh@potix.com
+		Fri Jul 22 08:59:10     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.UiException;
  * and call {@link #getMedia} to retrieve the media and return it the client</li>
  * </ol>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface DynamicMedia {
 	/** Retrieve the view in {@link Media} format.

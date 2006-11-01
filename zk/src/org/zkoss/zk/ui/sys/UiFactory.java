@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Apr 19 10:50:48     2006, Created by tomyeh@potix.com
+		Wed Apr 19 10:50:48     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
  * Used to create {@link Desktop}, {@link Page} and to convert path/URL
  * to {@link PageDefinition}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface UiFactory {
 	/** Starts this factory.

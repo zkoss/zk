@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Aug 14 21:57:02     2006, Created by tomyeh@potix.com
+		Mon Aug 14 21:57:02     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -19,7 +19,7 @@ package org.zkoss.zk.ui.impl;
 /**
  * Attributes used internally.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Attributes {
 	/** An integer (0~99) indicating the completeness percentage of 

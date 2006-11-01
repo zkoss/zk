@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Mar 14 23:32:51     2006, Created by tomyeh@potix.com
+		Tue Mar 14 23:32:51     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.Desktop;
  *
  * <p>It has no effect until you specify it in web.xml.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Statistic implements Monitor {
 	private final long _startTime;

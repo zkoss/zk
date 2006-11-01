@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Apr 19 11:32:23     2006, Created by tomyeh@potix.com
+		Wed Apr 19 11:32:23     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.metainfo.Milieu;
  * <p>Derived class must immplement {@link UiFactory#newSession}, which
  * depends on the Web container.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class AbstractUiFactory implements UiFactory {
 	//-- UiFactory --//

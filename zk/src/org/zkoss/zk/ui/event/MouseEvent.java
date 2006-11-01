@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 14 17:35:55     2005, Created by tomyeh@potix.com
+		Tue Jun 14 17:35:55     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Component;
  * One is by coordination ({@link #getX} and {@link #getY}.
  * The other is by a logical name, called area ({@link #getArea}).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class MouseEvent extends Event {
 	private final int _x, _y;

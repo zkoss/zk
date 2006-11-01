@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Aug 12 08:44:39     2005, Created by tomyeh@potix.com
+		Fri Aug 12 08:44:39     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ package org.zkoss.zk.ui.ext.client;
  * {@link #setTopByClient}
  * are called and {@link org.zkoss.zk.ui.event.MoveEvent} is sent to notify the component.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Moveable {
 	/** Sets the left of the component, caused by user's activity at

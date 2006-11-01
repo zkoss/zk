@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 14 10:57:48     2005, Created by tomyeh@potix.com
+		Tue Jun 14 10:57:48     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -58,7 +58,7 @@ import org.zkoss.zk.au.*;
  * An implementation of {@link Visualizer} that works with
  * {@link UiEngineImpl}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 /*package*/ class UiVisualizer implements Visualizer {
 	private static final Log log = Log.lookup(UiVisualizer.class);

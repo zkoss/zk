@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun  3 18:17:32     2005, Created by tomyeh@potix.com
+		Fri Jun  3 18:17:32     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -85,7 +85,7 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
  * one restriction:<br>
  * It cannot <b>create</b> component.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Page extends IdSpace {
 	/** Returns ID which is unique in the request (never null).

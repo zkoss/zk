@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Apr 16 16:08:41     2006, Created by tomyeh@potix.com
+		Sun Apr 16 16:08:41     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * An evaluator for evaluating EL expressions.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Evaluator {
 	/** Evaluates the specified expression against the specified component.

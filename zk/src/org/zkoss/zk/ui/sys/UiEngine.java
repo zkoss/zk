@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun  9 12:58:20     2005, Created by tomyeh@potix.com
+		Thu Jun  9 12:58:20     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -45,7 +45,7 @@ import org.zkoss.zk.au.AuResponse;
  * <p>Note: each application (a ServletContext in HTTP) has its own
  * UI Engine (Singleton per app).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface UiEngine {
 	/** Starts the engine.

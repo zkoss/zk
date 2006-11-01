@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 18 23:46:02     2005, Created by tomyeh@potix.com
+		Thu Aug 18 23:46:02     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import java.util.Set;
  * A typical example is Listbox (it is similar to JList and ListModel in
  * Swing).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface RenderOnDemand {
 	/** Renders a set of specified items.

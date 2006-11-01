@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Mar 30 18:28:18     2006, Created by tomyeh@potix.com
+		Thu Mar 30 18:28:18     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.Desktop;
  * the specified class is instantiated and {@link #cleanup} is called.</li>
  * </ol>
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface DesktopCleanup {
 	/** called when a desktop is about to be destroyed.

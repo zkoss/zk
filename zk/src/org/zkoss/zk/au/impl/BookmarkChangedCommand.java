@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May 29 19:34:36     2006, Created by tomyeh@potix.com
+		Mon May 29 19:34:36     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zk.au.Command;
  * Used by {@link AuRequest} to implement a command to broadcast
  * an {@link BookmarkEvent} event to all root components.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class BookmarkChangedCommand extends Command {
 	/** Contruct an event to denote that the bookmark is changed.

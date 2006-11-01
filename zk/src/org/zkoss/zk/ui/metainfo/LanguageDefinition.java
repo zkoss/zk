@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue May 31 18:01:38     2005, Created by tomyeh@potix.com
+		Tue May 31 18:01:38     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -47,7 +47,7 @@ import org.zkoss.zk.ui.util.Evaluator;
 /**
  * A definition of a language, such as xul.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class LanguageDefinition implements Evaluator {
 	private static final Log log = Log.lookup(LanguageDefinition.class);

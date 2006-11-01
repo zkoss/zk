@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Apr 18 10:38:22     2006, Created by tomyeh@potix.com
+		Tue Apr 18 10:38:22     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Desktop;
 /**
  * The cache used to store desktops.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface DesktopCache {
 	/** Returns the next available ID which is unique in the whole cache.

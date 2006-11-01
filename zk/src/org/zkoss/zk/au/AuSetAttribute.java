@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 13 11:28:05     2005, Created by tomyeh@potix.com
+		Thu Oct 13 11:28:05     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
  * data[1]: the attribute name<br/>
  * data[2]: the attribute value
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuSetAttribute extends AuResponse {
 	public AuSetAttribute(Component comp, String attr, String val) {

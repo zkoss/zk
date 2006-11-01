@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Dec 14 09:02:20     2005, Created by tomyeh@potix.com
+		Wed Dec 14 09:02:20     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 /**
  * A helper class used with {@link org.zkoss.zk.ui.sys.UiEngine} to process
  * {@link Initiator}
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 /*package*/ class Initiators {
 	/*package(inner)*/ static final Log log = Log.lookup(Initiators.class);

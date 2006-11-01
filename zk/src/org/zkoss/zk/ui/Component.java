@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May 30 21:03:47     2005, Created by tomyeh@potix.com
+		Mon May 30 21:03:47     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -55,7 +55,7 @@ import org.zkoss.zk.au.AuResponse;
  * <p>It also implies a limitation that you cannot access components
  * belonging to other desktops when processing an event.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Component extends java.io.Serializable, Cloneable {
 	/** Returns the owner of the ID space that this component belongs to.

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun  3 17:55:08     2005, Created by tomyeh@potix.com
+		Fri Jun  3 17:55:08     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 /**
  * Utilities to access {@link Execution}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Executions {
 	/** Stores the current {@link Execution}. */

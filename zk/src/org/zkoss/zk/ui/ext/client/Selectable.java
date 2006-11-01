@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun 16 18:14:14     2005, Created by tomyeh@potix.com
+		Thu Jun 16 18:14:14     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.UiException;
  * to notify application developers that it is called by user
  * (rather than by codes).
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see org.zkoss.zk.ui.event.SelectEvent
  */
 public interface Selectable {

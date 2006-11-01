@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun  1 14:51:22     2006, Created by tomyeh@potix.com
+		Thu Jun  1 14:51:22     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.zk.ui.util;
 /**
  * The interpter used to interpret the zscript codes.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Interpreter {
 	/** Returns {@link Namespace} belonging to this interpreter.

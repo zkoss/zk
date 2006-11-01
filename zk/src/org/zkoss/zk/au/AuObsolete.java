@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Oct 12 23:45:30     2005, Created by tomyeh@potix.com
+		Wed Oct 12 23:45:30     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Component;
  * <p>data[0]: the desktop ID.<br/>
  * data[1]: the message
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuObsolete extends AuResponse {
 	public AuObsolete(String dtid, String message) {

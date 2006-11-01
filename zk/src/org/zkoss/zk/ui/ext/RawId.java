@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Nov 29 08:59:37     2005, Created by tomyeh@potix.com
+		Tue Nov 29 08:59:37     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ package org.zkoss.zk.ui.ext;
  * the same as {@link org.zkoss.zk.ui.Component#getId},
  * if org.zkoss.zk.ui.Component#setId} is ever called.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface RawId {
 }

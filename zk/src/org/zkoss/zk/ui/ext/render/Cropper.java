@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Aug 22 16:43:40     2006, Created by tomyeh@potix.com
+		Tue Aug 22 16:43:40     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import java.util.Set;
  * <p>ZK Update Engine detects this interface and then ignores any update to
  * components that don't have counterpart at the client.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Cropper {
 	/** Returns whether it is a cropper, i.e., cropping is applied.

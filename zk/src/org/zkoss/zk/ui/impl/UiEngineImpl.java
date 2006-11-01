@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun  9 13:05:28     2005, Created by tomyeh@potix.com
+		Thu Jun  9 13:05:28     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -53,7 +53,7 @@ import org.zkoss.zk.au.*;
 /**
  * An implementation of {@link UiEngine}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class UiEngineImpl implements UiEngine {
 	private static final Log log = Log.lookup(UiEngineImpl.class);

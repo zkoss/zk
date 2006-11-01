@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Apr  8 21:08:05     2006, Created by tomyeh@potix.com
+		Sat Apr  8 21:08:05     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ package org.zkoss.zk.au;
  *
  * <p>no data.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuPrint extends AuResponse {
 	public AuPrint() {

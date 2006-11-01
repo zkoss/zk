@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu May 25 18:17:07     2006, Created by tomyeh@potix.com
+		Thu May 25 18:17:07     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
  *
  * <p>data[0]: the component's UUID.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuCloseErrorBox extends AuResponse {
 	/**

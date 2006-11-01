@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Dec  9 16:23:08     2005, Created by tomyeh@potix.com
+		Fri Dec  9 16:23:08     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -38,7 +38,7 @@ import org.zkoss.zk.ui.util.Configuration;
  *
  * <p>To get the current Web application, use {@link Desktop#getWebApp}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface WebApp extends Locator {
 	/** Returns the application name, never null.

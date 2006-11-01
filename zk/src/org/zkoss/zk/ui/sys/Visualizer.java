@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jan 20 23:06:03     2006, Created by tomyeh@potix.com
+		Fri Jan 20 23:06:03     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Execution;
  *
  * <p>Its implementation highly depends on {@link UiEngine}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Visualizer {
 	/** Returns the execution that this visualizer is associated with.

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jan 11 13:59:27     2006, Created by tomyeh@potix.com
+		Wed Jan 11 13:59:27     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -74,7 +74,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinitions;
  * processed by this portlet.</li>
  * </ul>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class DHtmlLayoutPortlet extends GenericPortlet {
 	private static final Log log = Log.lookup(DHtmlLayoutPortlet.class);

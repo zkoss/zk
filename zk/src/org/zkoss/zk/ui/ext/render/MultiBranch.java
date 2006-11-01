@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 17 14:02:55     2006, Created by tomyeh@potix.com
+		Tue Oct 17 14:02:55     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
  * Then, ZK will call {@link #inDifferentBranch} to see whether a child
  * is NOT on the main branch.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface MultiBranch {
 	/** Whether the specified child is placed in different branch

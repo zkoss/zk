@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May 30 21:33:01     2005, Created by tomyeh@potix.com
+		Mon May 30 21:33:01     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.zk.ui;
 /**
  * Utilities to access {@link Session}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Sessions {
 	/** Used to the store the session for the current thread. */

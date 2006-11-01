@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun 17 00:28:22     2005, Created by tomyeh@potix.com
+		Fri Jun 17 00:28:22     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Represents an event cause by user's check a state at the client.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class CheckEvent extends Event {
 	private final boolean _checked;

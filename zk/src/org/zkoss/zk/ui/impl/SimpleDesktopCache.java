@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Apr 18 13:00:34     2006, Created by tomyeh@potix.com
+		Tue Apr 18 13:00:34     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
  * A simple implementation of {@link DesktopCache}. It manages
  * all desktop in a {@link CacheMap} instance.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	private static final Log log = Log.lookup(SimpleDesktopCache.class);

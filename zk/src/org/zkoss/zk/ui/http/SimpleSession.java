@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun  3 17:05:30     2005, Created by tomyeh@potix.com
+		Fri Jun  3 17:05:30     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -49,7 +49,7 @@ import org.zkoss.zk.ui.util.Configuration;
  * Also, notice that {@link SimpleSession} is stored as an attribute
  * HttpSession.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class SimpleSession implements Session, SessionCtrl {
 	private static final Log log = Log.lookup(SimpleSession.class);

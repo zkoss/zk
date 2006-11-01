@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Aug 18 00:07:15     2006, Created by tomyeh@potix.com
+		Fri Aug 18 00:07:15     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ package org.zkoss.zk.au;
  * Also, if a command will generate an event, it shall register the
  * event in its constructor.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class Command {
 	private final String _id;

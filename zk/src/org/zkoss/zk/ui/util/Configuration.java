@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Mar 26 16:06:56     2006, Created by tomyeh@potix.com
+		Sun Mar 26 16:06:56     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -63,7 +63,7 @@ import org.zkoss.zk.ui.impl.RichletConfigImpl;
  * <p>Note: A {@link Configuration} instance can be assigned to at most one
  * {@link WebApp} instance.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Configuration {
 	private static final Log log = Log.lookup(Configuration.class);

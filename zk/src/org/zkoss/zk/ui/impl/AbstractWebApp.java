@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Mar 15 17:28:15     2006, Created by tomyeh@potix.com
+		Wed Mar 15 17:28:15     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.sys.DesktopCache;
 /**
  * A skeletal implementation of {@link WebApp}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private String _appnm = "ZK";

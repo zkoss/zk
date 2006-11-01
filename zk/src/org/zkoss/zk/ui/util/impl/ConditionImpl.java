@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun  2 22:41:20     2005, Created by tomyeh@potix.com
+		Thu Jun  2 22:41:20     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.util.Condition;
 /**
  * An implementation of {@link Condition}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ConditionImpl implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;

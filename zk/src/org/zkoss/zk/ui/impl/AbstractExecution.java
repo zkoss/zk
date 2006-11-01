@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jun  6 12:18:25     2005, Created by tomyeh@potix.com
+		Mon Jun  6 12:18:25     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -53,7 +53,7 @@ import org.zkoss.zk.au.AuResponse;
 /**
  * A skeletal implementation of {@link Execution}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private final Desktop _desktop;

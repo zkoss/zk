@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Oct  2 21:30:36     2005, Created by tomyeh@potix.com
+		Sun Oct  2 21:30:36     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
  * Represents an event caused by that user is scrolling or
  * has scrolled at the client.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see org.zkoss.zk.ui.ext.client.Scrollable
  */
 public class ScrollEvent extends Event {

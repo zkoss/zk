@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Oct  6 09:56:39     2006, Created by tomyeh@potix.com
+		Fri Oct  6 09:56:39     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
  * Defines a genric richlet. Developers can use it as a skeleton to implement
  * an application-specific richlet.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class GenericRichlet implements Richlet {
 	/** Called by the richlet container to indicate to a richlet that

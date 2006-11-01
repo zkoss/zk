@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun  3 15:08:34     2005, Created by tomyeh@potix.com
+		Fri Jun  3 15:08:34     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.ComponentNotFoundException;
  * Additional interface of {@link org.zkoss.zk.ui.Session} for implementation.
  * <p>Note: applications shall never access this interface.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface SessionCtrl {
 	/** Returns the desktop cache, or null if not available.

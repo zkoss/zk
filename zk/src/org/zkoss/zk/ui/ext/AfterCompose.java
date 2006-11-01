@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu May 25 11:15:15     2006, Created by tomyeh@potix.com
+		Thu May 25 11:15:15     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ package org.zkoss.zk.ui.ext;
  *
  * <p>If it is created manually, it is caller's job to invoke afterCompose.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface AfterCompose {
 	/** Invokes after ZK loader applies all properties.

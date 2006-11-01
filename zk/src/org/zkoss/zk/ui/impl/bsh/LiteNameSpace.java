@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun  1 15:37:04     2006, Created by tomyeh@potix.com
+		Thu Jun  1 15:37:04     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import bsh.NameSpace;
 /**
  * A light-weight namespace that never imports the default packages.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 /*package*/ class LiteNameSpace extends NameSpace {
 	/*package*/ LiteNameSpace(NameSpace parent, String id) {

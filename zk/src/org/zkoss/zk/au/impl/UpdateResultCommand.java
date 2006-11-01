@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Oct  2 14:24:59     2005, Created by tomyeh@potix.com
+		Sun Oct  2 14:24:59     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zk.au.Command;
 /**
  * Used only by {@link AuRequest} to implement the updateResult command.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class UpdateResultCommand extends Command {
 	public UpdateResultCommand(String evtnm, int flags) {

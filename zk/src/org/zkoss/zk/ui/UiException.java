@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jan 20 15:47:23     2006, Created by tomyeh@potix.com
+		Fri Jan 20 15:47:23     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.lang.Expectable;
 /**
  * Represents an UI-relevant runtime exception.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class UiException extends SystemException {
 	/** Utilities.

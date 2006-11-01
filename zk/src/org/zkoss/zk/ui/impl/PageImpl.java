@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun  3 18:17:32     2005, Created by tomyeh@potix.com
+		Fri Jun  3 18:17:32     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -91,7 +91,7 @@ import org.zkoss.zk.au.AuSetTitle;
  * It is not thread-safe because it is protected by the spec:
  * at most one thread can access a page and all its components at the same time.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);

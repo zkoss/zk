@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May 30 21:06:56     2005, Created by tomyeh@potix.com
+		Mon May 30 21:06:56     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.metainfo.Milieu;
  *
  * <p>Application developers shall never access any of this methods.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ComponentCtrl {
 	/** Returns the millieu of this component (never null).

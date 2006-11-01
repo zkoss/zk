@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jul 21 18:50:03     2005, Created by tomyeh@potix.com
+		Thu Jul 21 18:50:03     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.UiException;
  * {@link #setResult} to put the upload result to the component.
  * </ol>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Updatable {
 	/** Sets the result when it is updated from the client successfully.

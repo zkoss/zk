@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Apr 19 13:49:49     2006, Created by tomyeh@potix.com
+		Wed Apr 19 13:49:49     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.sys.RequestInfo;
 /**
  * An implementation of {@link RequestInfo}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class RequestInfoImpl implements RequestInfo {
 	private final WebApp _wapp;

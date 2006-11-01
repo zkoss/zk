@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Oct  2 21:30:31     2005, Created by tomyeh@potix.com
+		Sun Oct  2 21:30:31     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ package org.zkoss.zk.ui.ext.client;
  * {@link org.zkoss.zk.ui.event.ScrollEvent} with "onScrolling". It is used to notified the server
  * that user is changing its content (changing is on progress and not finished).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Scrollable {
 	/** Sets the value in string (aka., text) by client.

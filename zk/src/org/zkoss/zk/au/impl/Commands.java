@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Oct  2 11:48:07     2005, Created by tomyeh@potix.com
+		Sun Oct  2 11:48:07     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zk.au.AuRequest;
  * Utilities to implement {@link org.zkoss.zk.au.Command}.
  * Used only internally.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 class Commands {
 	/** Converts the data of the specified request to a set of Component.

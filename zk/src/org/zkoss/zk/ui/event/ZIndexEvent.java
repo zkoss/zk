@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Dec 24 23:04:41     2005, Created by tomyeh@potix.com
+		Sat Dec 24 23:04:41     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Component;
  * A z-indexed component must implement {@link org.zkoss.zk.ui.ext.client.ZIndexed}
  * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ZIndexEvent  extends Event {
 	private final int _zIndex;

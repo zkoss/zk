@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jun 22 09:50:57     2005, Created by tomyeh@potix.com
+		Wed Jun 22 09:50:57     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -59,7 +59,7 @@ import org.zkoss.zk.au.AuBookmark;
  * <p>On the other hand, it is OK to serialize and deserialize
  * {@link Component}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(DesktopImpl.class);

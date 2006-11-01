@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jul 28 14:13:09     2006, Created by tomyeh@potix.com
+		Fri Jul 28 14:13:09     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zk.au.Command;
  * Used by {@link AuRequest} to implement a command to broadcast
  * an {@link ClientInfoEvent} event to all root components.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ClientInfoCommand extends Command {
 	public ClientInfoCommand(String evtnm, int flags) {

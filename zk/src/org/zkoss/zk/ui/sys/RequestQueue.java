@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Apr 24 11:00:33     2006, Created by tomyeh@potix.com
+		Mon Apr 24 11:00:33     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.zk.au.AuRequest;
  * <p>Implementation Note:
  * Unlike only of desktop members, this class must be thread-safe.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface RequestQueue {
 	/** Returns whether any request is available in the queue.

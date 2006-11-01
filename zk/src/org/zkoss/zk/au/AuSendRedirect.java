@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 13 10:43:36     2005, Created by tomyeh@potix.com
+		Thu Oct 13 10:43:36     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ package org.zkoss.zk.au;
  * using the specified redirect location URL.
  * <p>data[0]: the URL to redirect to.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuSendRedirect extends AuResponse {
 	/**

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Aug 14 12:46:31     2006, Created by tomyeh@potix.com
+		Mon Aug 14 12:46:31     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -61,7 +61,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 /**
  * The utility used to process file upload.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 /*package*/ class Uploads {
 	private static final Log log = Log.lookup(Uploads.class);

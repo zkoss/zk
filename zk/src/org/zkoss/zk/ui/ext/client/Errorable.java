@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Oct 21 15:47:42     2005, Created by tomyeh@potix.com
+		Fri Oct 21 15:47:42     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ package org.zkoss.zk.ui.ext.client;
  * is called, it shall throw {@link org.zkoss.zk.ui.WrongValueException}
  * with the error message (set by {@link #setErrorByClient}).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Errorable {
 	/** Sets or clears the error by client.

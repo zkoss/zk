@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 13 10:29:32     2005, Created by tomyeh@potix.com
+		Thu Oct 13 10:29:32     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
  * A response to ask the client to execute the specified script.
  * <p>data[0]: the JavaScript codes
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuScript extends AuResponse {
 	/**

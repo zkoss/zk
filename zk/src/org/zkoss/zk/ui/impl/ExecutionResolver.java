@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun 24 12:22:23     2005, Created by tomyeh@potix.com
+		Fri Jun 24 12:22:23     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.sys.Variables;
 /**
  * Represents a variable resolver.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ExecutionResolver implements VariableResolver {
 	/** The parent resolver. */
