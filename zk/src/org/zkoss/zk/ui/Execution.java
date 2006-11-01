@@ -280,7 +280,10 @@ public interface Execution extends Evaluator {
 	 * the current execution. The path starts with a "/" character but does not end with
 	 * a "/" character. For servlets in the default (root) context,
 	 * this method returns "".
+	 *
 	 * <p>If the client is not using HTTP to access, this method return "";
+	 *
+	 * @see Page#getRequestPath
 	 */
 	public String getContextPath();
 

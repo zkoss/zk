@@ -57,7 +57,7 @@ public class PageDefinition extends InstanceDefinition {
 	private final Locator _locator;
 	private final String _id, _title, _style;
 	/** The request path. */
-	private String _path;
+	private String _path = "";
 	private final List _taglibs = new LinkedList();
 	private FunctionMapper _funmap;
 	/* List(InitiatorDefinition). */
@@ -96,7 +96,7 @@ public class PageDefinition extends InstanceDefinition {
 		return _locator;
 	}
 
-	/** Returns the request path of this page definition, or null
+	/** Returns the request path of this page definition, or ""
 	 * if not available.
 	 * <p>It is the same as the servlet path
 	 * (javax.servlet.http.HttpServletRequest's getServletPath), if ZK is running
@@ -108,7 +108,7 @@ public class PageDefinition extends InstanceDefinition {
 	/** Sets the request path of this page definition.
 	 */
 	/*package*/ void setRequestPath(String path) {
-		_path = path;
+		_path = path != null ? path: "";
 	}
 
 	/** Imports the component definitions from the specified definition.

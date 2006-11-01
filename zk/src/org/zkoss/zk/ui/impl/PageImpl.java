@@ -170,7 +170,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_dkUri = _langdef.getDesktopURI();
 		_pgUri = _langdef.getPageURI();
 		_compdefs = new ComponentDefinitionMap();
-		_path = path;
+		_path = path != null ? path: "";
 
 		init();
 	}
