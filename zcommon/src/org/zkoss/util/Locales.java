@@ -30,7 +30,7 @@ import org.zkoss.lang.Objects;
 /**
  * The locale relevant utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Locales {
 	private final static

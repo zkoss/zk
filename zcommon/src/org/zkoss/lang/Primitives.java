@@ -25,7 +25,7 @@ import java.util.HashMap;
 /**
  * Utilities regarding primitive type and its wrapper class.
  *
- * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
+ * @author henrichen
  */
 public class Primitives {
 

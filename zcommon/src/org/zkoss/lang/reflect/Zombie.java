@@ -25,7 +25,7 @@ package org.zkoss.lang.reflect;
  * To distinguish the difference between an existence object and a Zombie,
  * programer can check wether the object implements this Zombie interface.
  *
- * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
+ * @author henrichen
  */
 public interface Zombie {
 	//no methods, it is used as a marker only.

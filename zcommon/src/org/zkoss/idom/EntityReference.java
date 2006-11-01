@@ -23,7 +23,7 @@ import org.zkoss.idom.impl.*;
 /**
  * The iDOM entity reference.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class EntityReference extends AbstractGroup
 implements org.w3c.dom.EntityReference {

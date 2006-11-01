@@ -24,7 +24,7 @@ import org.w3c.dom.NodeList;
 /**
  * The NodeList which is a facade of another java List.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see FacadeList
  */
 public class FacadeNodeList implements NodeList {

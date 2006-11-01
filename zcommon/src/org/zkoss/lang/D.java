@@ -27,7 +27,7 @@ package org.zkoss.lang;
  *
  * <p>if (D.ON) your_test_codes;
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class D {
 	/**

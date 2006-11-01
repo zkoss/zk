@@ -73,7 +73,7 @@ import org.zkoss.util.logging.Log;
  * <p>We don't use PhantomReference because it is still required to
  * re-create the reference after enqueued.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class CacheMap implements Map, java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20060622L;

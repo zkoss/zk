@@ -31,7 +31,7 @@ import java.util.Collection;
  * or alike, because they can be done easily with List's methods and
  * getAttributeIndex.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Item
  * @see Attributable
  * @see Namespaceable

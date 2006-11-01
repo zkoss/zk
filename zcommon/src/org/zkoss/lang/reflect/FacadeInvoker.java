@@ -45,7 +45,7 @@ import org.zkoss.lang.Classes;
  *Then, you could do:
  *<code>I i = (I)FacadeInvoker.newInstance(new A(), new Class[] {I});</code></pre>
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class FacadeInvoker implements InvocationHandler {
 	/** The target that really implements the interfaces. */

@@ -32,7 +32,7 @@ import org.zkoss.util.logging.Log;
 /**
  * Utilities for Exceptions.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Exceptions {
 	private static final Log log = Log.lookup(Exceptions.class);

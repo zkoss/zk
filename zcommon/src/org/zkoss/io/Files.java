@@ -26,7 +26,7 @@ import org.zkoss.util.ArraysX;
 /**
  * File related utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Files {
 	protected Files() {}

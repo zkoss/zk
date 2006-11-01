@@ -47,7 +47,7 @@ import org.zkoss.util.logging.Log;
 /**
  * Utilities to handle java.lang.Class
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Classes {
 	private static final Log log = Log.lookup(Classes.class);

@@ -23,7 +23,7 @@ import java.io.InputStream;
 /**
  * A locator that is able to locate a resource.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Locators#getDefault
  */
 public interface Locator {

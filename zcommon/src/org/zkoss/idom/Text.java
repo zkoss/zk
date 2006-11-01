@@ -22,7 +22,7 @@ import org.zkoss.idom.impl.*;
 /**
  * The iDOM Text.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see CData
  */
 public class Text extends AbstractTextual implements org.w3c.dom.Text {

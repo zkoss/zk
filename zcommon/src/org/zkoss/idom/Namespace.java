@@ -28,7 +28,7 @@ import java.io.ObjectOutputStream;
  * Represents the namespace.
  * A namespace is immutable, so you have to get a new one
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Item
  */
 public final class Namespace implements Serializable, Cloneable {

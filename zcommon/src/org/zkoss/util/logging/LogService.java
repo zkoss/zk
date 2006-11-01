@@ -49,7 +49,7 @@ import org.zkoss.io.Files;
  * LogService cannot be a component (because ComponentManager depedns
  * on iDom, which depends on log). Thus, we use Singleton instead.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class LogService {
 	private static final Log log = Log.lookup(LogService.class);

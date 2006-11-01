@@ -25,7 +25,7 @@ import org.zkoss.idom.*;
  * overriding DefaultDomFactory, caller could create a set of
  * vertices other than the default ones.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see SAXBuilder
  */
 public interface IDOMFactory {

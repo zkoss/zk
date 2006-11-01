@@ -35,7 +35,7 @@ import org.zkoss.text.MessageFormats;
  * <p>Note: unlike MessageFormat's default behavior, all null objects
  * are treated as an empty string rather than "null".
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Messages implements MessageConst {
 	private static final Log log = Log.lookup(Messages.class);

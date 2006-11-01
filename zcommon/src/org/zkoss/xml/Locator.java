@@ -27,7 +27,7 @@ package org.zkoss.xml;
  * <p>Our applications, that provide source location info, shall
  * implements this interface, rather than any of above.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public interface Locator
 extends org.xml.sax.Locator, javax.xml.transform.SourceLocator {

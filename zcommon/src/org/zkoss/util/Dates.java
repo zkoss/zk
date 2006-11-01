@@ -29,8 +29,8 @@ import org.zkoss.lang.SystemException;
 /**
  * Utilities for java.util.Date
  *
- * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author henrichen
+ * @author tomyeh
  */
 public class Dates {
 	/**

@@ -22,7 +22,7 @@ import org.zkoss.idom.Verifier;
 /**
  * The XML relevant utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see org.zkoss.idom.Element
  */
 public class XMLs {

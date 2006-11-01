@@ -41,7 +41,7 @@ import org.zkoss.idom.Document;
  * <p>A new instance of {@link SAXHandler} is created and configured
  * each time one of the build methods is called.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see SAXHandler
  */
 public class SAXBuilder {

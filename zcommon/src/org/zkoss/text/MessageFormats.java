@@ -36,7 +36,7 @@ import org.zkoss.util.Locales;
  *
  * <p>See also java.text.MessageFormat.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class MessageFormats {
 	/** Creates a MessageFormat with the given pattern and uses it to

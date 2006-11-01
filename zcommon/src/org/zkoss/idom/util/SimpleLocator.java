@@ -25,7 +25,7 @@ import org.zkoss.xml.Locator;
  * The locator implementation. Useful to assign the location information
  * to vertices.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see org.zkoss.idom.Item
  */
 public class SimpleLocator implements Locator, Serializable {

@@ -26,7 +26,7 @@ import java.util.List;
  *
  * <p>Design consideration: Be as similar to Group as possible.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Item
  * @see Attribute
  */

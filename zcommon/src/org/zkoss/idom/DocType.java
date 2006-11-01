@@ -26,7 +26,7 @@ import org.zkoss.idom.impl.*;
 /**
  * The iDOM DocType.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Document
  */
 public class DocType extends AbstractItem implements DocumentType {

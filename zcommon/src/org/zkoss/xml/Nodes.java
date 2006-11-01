@@ -27,7 +27,7 @@ import org.zkoss.idom.Item;
  * Node related utilities.
  * It supports iDOM.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Nodes {
 	/** The empty node list. */

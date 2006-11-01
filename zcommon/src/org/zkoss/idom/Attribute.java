@@ -34,7 +34,7 @@ import org.zkoss.idom.impl.*;
  * it simplifies the use of xpath. A xpath migt return either
  * elements or attributes, so...
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Element
  */
 public class Attribute extends AbstractItem implements Namespaceable, Attr {

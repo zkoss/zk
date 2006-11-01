@@ -55,7 +55,7 @@ import org.zkoss.idom.*;
  * <p>This class doesn't depend on SAXBuilder, so it can be used in any
  * other place, e.g., javax.xml.transform.sax.SAXResult.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see SAXBuilder
  */
 public class SAXHandler extends DefaultHandler

@@ -62,7 +62,7 @@ import org.zkoss.idom.*;
  *  XMLOutputter does.</dd>
  * </dl>
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see org.zkoss.idom.Item
  */
 public abstract class AbstractItem

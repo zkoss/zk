@@ -23,7 +23,7 @@ import java.lang.reflect.Array;
 /**
  * Utilities for handling arrays.
  *
- * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
+ * @author henrichen
  */
 public class ArraysX {
 	/** Converts an array to a readable string (for debugging purpose).

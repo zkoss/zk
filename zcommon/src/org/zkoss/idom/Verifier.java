@@ -22,7 +22,7 @@ import org.xml.sax.Locator;
 /**
  * The verifier to verify W3C/DOM related constraints.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Verifier {
 	private Verifier() {

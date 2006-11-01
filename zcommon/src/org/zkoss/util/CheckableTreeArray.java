@@ -25,7 +25,7 @@ import java.util.Iterator;
  * classes could add validation when an element is added, removed or set.
  * It is also useful to maintain the modification flag.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public abstract class CheckableTreeArray extends TreeArray {
 	protected CheckableTreeArray() {

@@ -25,7 +25,7 @@ import org.zkoss.idom.util.SimpleLocator;
 /**
  * Denotes an operation is not supported.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class DOMException extends org.w3c.dom.DOMException {
 	protected Locator _loc;

@@ -22,7 +22,7 @@ import org.zkoss.idom.*;
 /**
  * The default iDOM factory.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class DefaultIDOMFactory implements IDOMFactory {
 	/** Constructor.

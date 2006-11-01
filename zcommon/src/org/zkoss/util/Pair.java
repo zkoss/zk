@@ -24,7 +24,7 @@ import org.zkoss.lang.Objects;
  * A pair of keys. It is used with DualHashSet and DualHashMap to
  * represent a pair of keys as an object.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Pair {
 	/** The first key. */

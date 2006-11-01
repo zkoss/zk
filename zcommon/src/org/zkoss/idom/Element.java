@@ -48,7 +48,7 @@ import org.zkoss.idom.impl.*;
 /**
  * The iDOM element.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Attribute
  */
 public class Element extends AbstractGroup

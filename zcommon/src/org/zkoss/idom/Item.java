@@ -41,7 +41,7 @@ import org.zkoss.xml.Locator;
  * <p>Be carefult that some methods look similar, but behave different.
  * Refer to package.html.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Attributable
  * @see Binable
  */

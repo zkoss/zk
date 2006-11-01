@@ -48,7 +48,7 @@ import org.zkoss.idom.transform.Transformer;
 /**
  * The iDOM relevant utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see org.zkoss.idom.Item
  * @see org.zkoss.idom.Group
  */

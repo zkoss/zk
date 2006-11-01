@@ -27,7 +27,7 @@ package org.zkoss.lang;
  * <p>It is mainly used to denote no to log the message, if possible,
  * and only shows up a brief description about the exception, and so on.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public interface Expectable {
 }

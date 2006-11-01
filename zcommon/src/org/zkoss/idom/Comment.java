@@ -22,7 +22,7 @@ import org.zkoss.idom.impl.*;
 /**
  * The iDOM Comment.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Comment extends AbstractTextual implements org.w3c.dom.Comment {
 	/** Constructor.

@@ -32,7 +32,7 @@ package org.zkoss.idom;
  * with a single argument whose type is String. The split method will
  * invoke it to create a new instance.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Item
  */
 public interface Textual {

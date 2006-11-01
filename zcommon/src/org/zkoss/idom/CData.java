@@ -23,7 +23,7 @@ import org.zkoss.idom.impl.*;
 /**
  * The iDOM CDATA.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Text
  */
 public class CData extends AbstractTextual implements CDATASection {

@@ -22,7 +22,7 @@ package org.zkoss.lang;
 /**
  * Utilities regarding Comparable type objects.
  *
- * @author <a href="mailto:henrichen@potix.com">Henri Chen</a>
+ * @author henrichen
  */
 public final class Comparables {
 	/**

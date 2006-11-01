@@ -29,7 +29,7 @@ import org.zkoss.idom.impl.*;
  * <p>To be compatible with W3C/DOM utility, it fakes as Text.
  * Thus, getNodeName returns "#text", rather than getName ("#binary").
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see CData
  */
 public class Binary extends AbstractTextual

@@ -45,7 +45,7 @@ import org.zkoss.idom.*;
  * Element. A deriving class has to re-implement it, if it is not applicable.
  * Example, Document.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Item
  */
 public abstract class AbstractGroup extends AbstractItem implements Group {

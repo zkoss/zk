@@ -22,7 +22,7 @@ package org.zkoss.idom;
  * It is usually implemented by a class that also implements Item or Group.
  * Currently, only Element and Attribute implement it.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Item
  * @see Group
  * @see Attributable

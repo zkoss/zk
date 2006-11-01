@@ -28,7 +28,7 @@ import org.zkoss.util.Locales;
 /**
  * DateFormat relevant utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class DateFormats {
 	/**

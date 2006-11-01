@@ -22,7 +22,7 @@ import org.zkoss.idom.*;
 /**
  * The iDOM's implementation of DOMImplementation.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class DOMImplementation implements org.w3c.dom.DOMImplementation {
 	/** DOM implementation singleton.

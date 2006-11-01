@@ -22,7 +22,7 @@ package org.zkoss.mesg;
  * Denotes an object that contains a message by use of an integer,
  * called code.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public interface Messageable extends MessageConst {
 	/**

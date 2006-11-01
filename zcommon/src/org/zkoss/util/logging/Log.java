@@ -65,7 +65,7 @@ import org.zkoss.mesg.Messages;
  *  ... do massive testing and/or printing (use finer)
  *}</code></pre>
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Log {
 	/* Don't interfere what a developer might configure its system

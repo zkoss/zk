@@ -42,7 +42,7 @@ import java.util.*;
  *
  * <p>The original algorithm is invented by Henri Chen.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see ListX
  */
 public class TreeArray extends AbstractList

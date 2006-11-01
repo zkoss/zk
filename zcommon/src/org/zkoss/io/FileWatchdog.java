@@ -38,7 +38,7 @@ import org.zkoss.util.logging.Log;
  * <p>The watchdog executes at the lowest priority, so it won't affect
  * much of the system performance.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class FileWatchdog extends Thread {
 	private static final Log log = Log.lookup(FileWatchdog.class);

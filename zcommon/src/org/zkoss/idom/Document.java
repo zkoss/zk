@@ -35,7 +35,7 @@ import org.zkoss.idom.impl.*;
  * Represents Document which is also W3C/DOM's document,
  * ie, org.w3c.dom.Document.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Element
  */
 public class Document extends AbstractGroup implements org.w3c.dom.Document {

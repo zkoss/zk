@@ -22,7 +22,7 @@ import org.zkoss.lang.SystemException;
 /**
  * Represents a syntax error.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class IllegalSyntaxException  extends SystemException {
 	public IllegalSyntaxException(String msg, Throwable cause) {

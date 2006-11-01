@@ -33,7 +33,7 @@ import org.zkoss.idom.*;
  * <p>Element.getText uses this class's isPartOfParentText to know
  * whether a child's text shall be catenated.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Element
  */
 public abstract class AbstractTextual extends AbstractItem

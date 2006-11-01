@@ -27,7 +27,7 @@ import org.zkoss.lang.Objects;
 /**
  * Defines the constants of message types.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Messages
  */
 public interface MessageConst {

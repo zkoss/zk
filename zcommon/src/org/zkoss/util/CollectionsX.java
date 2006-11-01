@@ -35,7 +35,7 @@ import org.zkoss.lang.Strings;
 /**
  * The collection related utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see java.util.Collections
  */
 public class CollectionsX {

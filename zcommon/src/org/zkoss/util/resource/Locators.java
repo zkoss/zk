@@ -31,7 +31,7 @@ import org.zkoss.lang.Exceptions;
 /**
  * Utilities to load and locate resources.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see Locator
  */
 public class Locators {

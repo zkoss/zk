@@ -25,7 +25,7 @@ import org.zkoss.idom.DOMException;
 /**
  * An empty NamedNodeMap.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class EmptyNamedNodeMap implements NamedNodeMap {
 	/** The ONLY instance of EmptyNamedNodeMap.

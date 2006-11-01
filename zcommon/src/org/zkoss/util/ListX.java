@@ -26,7 +26,7 @@ package org.zkoss.util;
  * this interface guarantees the binding between the entry and the
  * element never changes even after removed.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see TreeArray
  */
 public interface ListX {

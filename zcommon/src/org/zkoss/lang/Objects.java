@@ -33,7 +33,7 @@ import org.zkoss.text.DateFormats;
 /**
  * Utilities related to the Object class.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Objects {
 	private static final Log log = Log.lookup(Objects.class);

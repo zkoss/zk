@@ -27,7 +27,7 @@ import org.zkoss.lang.Expectable;
  * {@link org.zkoss.lang.Expectable}, i.e., it is usually user's error,
  * not program's bug.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class InvalidValueException extends ModificationException
 implements Expectable {
