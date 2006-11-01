@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct  4 09:15:59     2005, Created by tomyeh@potix.com
+		Tue Oct  4 09:15:59     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.ext.RawId;
  * <p>Note: ZHTML components ignore the page listener since it handles
  * only ASAP event listeners.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AbstractTag extends AbstractComponent
 implements DynamicPropertied, RawId {

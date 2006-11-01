@@ -8,7 +8,7 @@ page.dsp
 		zk_completeDesktop
 			Defined if this page is included by desktop.dsp
 	History:
-		Wed Jun  8 17:15:18     2005, Created by tomyeh@potix.com
+		Wed Jun  8 17:15:18     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

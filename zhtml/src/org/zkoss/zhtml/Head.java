@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Dec 13 10:49:25     2005, Created by tomyeh@potix.com
+		Tue Dec 13 10:49:25     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
 /**
  * The HEAD tag.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Head extends AbstractTag {
 	public Head() {

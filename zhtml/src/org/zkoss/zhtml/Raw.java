@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct  4 09:15:59     2005, Created by tomyeh@potix.com
+		Tue Oct  4 09:15:59     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
 /**
  * The raw component used to generate raw HTML elements.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Raw extends AbstractTag implements DynamicTag {
 	public Raw(String tagname) {

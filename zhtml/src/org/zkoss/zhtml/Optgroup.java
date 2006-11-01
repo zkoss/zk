@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Dec 13 15:04:02     2005, Created by tomyeh@potix.com
+		Tue Dec 13 15:04:02     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
 /**
  * The OPTGROUP tag.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Optgroup extends AbstractTag {
 	public Optgroup() {

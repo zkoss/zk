@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Nov 24 15:11:04     2005, Created by tomyeh@potix.com
+		Thu Nov 24 15:11:04     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.UiException;
  *
  * <p>A non-XHTML extension.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Fileupload {
 	/** Opens a modal dialog with the default message and title,

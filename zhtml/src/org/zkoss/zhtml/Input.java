@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Nov 29 21:59:11     2005, Created by tomyeh@potix.com
+		Tue Nov 29 21:59:11     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
 /**
  * The input tag.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Input extends AbstractTag {
 

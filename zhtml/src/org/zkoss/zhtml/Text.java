@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Nov 24 15:17:07     2005, Created by tomyeh@potix.com
+		Thu Nov 24 15:17:07     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 /**
  * Represents a piece of text (of DOM).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Text extends AbstractComponent implements RawId {
 	private String _value = "";
