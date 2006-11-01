@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri May 28 10:06:46     2004, Created by tomyeh@potix.com
+		Fri May 28 10:06:46     2004, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.web.servlet.jsp;
 /**
  * Denotes unable to write to an connection.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class JspWriterException extends JspTagException {
 	public JspWriterException(String msg, Throwable cause) {

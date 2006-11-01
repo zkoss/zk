@@ -43,7 +43,7 @@ import org.zkoss.web.util.resource.ExtendedWebContext;
 /**
  * The utilities relevant to servlets.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class Https extends Servlets {
 	private static final Log log = Log.lookup(Https.class);

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep  6 15:11:19     2005, Created by tomyeh@potix.com
+		Tue Sep  6 15:11:19     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.web.servlet.ServletException;
 /**
  * The set action used to set an attribute.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Set extends AbstractAction {
 	private int _scope = ActionContext.PAGE_SCOPE;

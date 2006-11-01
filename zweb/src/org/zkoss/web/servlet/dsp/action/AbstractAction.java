@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Sep  7 14:55:38     2005, Created by tomyeh@potix.com
+		Wed Sep  7 14:55:38     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.xml.XMLs;
 /**
  * A skeletal implementation to simplify the implementation of actions.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class AbstractAction implements Action {
 	/** A special integer to denote no attribute is assigned. */

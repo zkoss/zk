@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Sep 17 12:10:43     2005, Created by tomyeh@potix.com
+		Sat Sep 17 12:10:43     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import java.io.IOException;
  * Defines an interpretation of a DSP page.
  * It is a parsed result of a DSP page by use of {@link Interpreter#parse}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Interpretation {
 	/** Interprets this interpretation of a DSP page, and generates

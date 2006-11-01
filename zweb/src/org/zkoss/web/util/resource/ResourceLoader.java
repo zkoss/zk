@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Aug 30 18:31:26     2005, Created by tomyeh@potix.com
+		Tue Aug 30 18:31:26     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.util.logging.Log;
  * A semi-implemented loader to used with {@link ResourceCaches#get}
  * to retrieve servlet resources.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class ResourceLoader implements Loader {
 	private static final Log log = Log.lookup(ResourceLoader.class);

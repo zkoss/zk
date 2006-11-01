@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Sep 17 16:59:44     2005, Created by tomyeh@potix.com
+		Sat Sep 17 16:59:44     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.web.servlet.dsp.action.Action;
 /**
  * Holds the context for interpreting an {@link Interpretation}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 class InterpretContext {
 	final DSPContext dc;

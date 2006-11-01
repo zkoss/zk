@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep  6 16:14:44     2005, Created by tomyeh@potix.com
+		Tue Sep  6 16:14:44     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.web.servlet.ServletException;
 /**
  * The remove action used to remove an attribute.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Remove extends AbstractAction {
 	private int _scope = ActionContext.PAGE_SCOPE;

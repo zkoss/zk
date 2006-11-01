@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep 20 16:49:45     2005, Created by tomyeh@potix.com
+		Tue Sep 20 16:49:45     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -69,7 +69,7 @@ import org.zkoss.web.servlet.dsp.ServletDSPContext;
  * <p>Note: if a file is named with name-*.ext, it locates the proper file
  * based on the current Locale (org.zkoss.util.prefs.App.getCurrentLocale).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ClassWebResource {
 	private static final Log log = Log.lookup(ClassWebResource.class);

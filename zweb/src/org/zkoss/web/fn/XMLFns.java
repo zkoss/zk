@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Mar 31 14:16:40     2005, Created by tomyeh@potix.com
+		Thu Mar 31 14:16:40     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.web.fn;
 /**
  * Utilities to manipulate XML/HTML for EL.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class XMLFns {
 	/** Generates an attribute for HTML/XML.

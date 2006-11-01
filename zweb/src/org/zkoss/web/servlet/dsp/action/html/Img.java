@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep 20 15:13:32     2005, Created by tomyeh@potix.com
+		Tue Sep 20 15:13:32     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.web.servlet.dsp.action.ActionContext;
 /**
  * Generates the HTML &lt;img&gt; tag
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Img extends AbstractAction {
 	private String _id, _onclick;

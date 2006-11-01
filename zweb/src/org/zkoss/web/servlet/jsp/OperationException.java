@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 14 18:23:42     2003, Created by tomyeh@potix.com
+		Tue Oct 14 18:23:42     2003, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2003 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.lang.Expectable;
 /**
  * The expectable jsp tag exception denoting user's operation errors.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class OperationException extends JspTagException implements Expectable {
 	public OperationException(String msg, Throwable cause) {

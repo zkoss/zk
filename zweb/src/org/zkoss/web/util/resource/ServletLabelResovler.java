@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jun 12 13:58:56     2006, Created by tomyeh@potix.com
+		Mon Jun 12 13:58:56     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.web.el.ELContext;
  * Used with {@link org.zkoss.util.resource.Labels} to resolve
  * EL expressions in labels.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ServletLabelResovler implements VariableResolver {
 	public ServletLabelResovler() {

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jan 17 00:58:56     2006, Created by tomyeh@potix.com
+		Tue Jan 17 00:58:56     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -34,7 +34,7 @@ import org.zkoss.web.Attributes;
 /**
  * A facade of RenderRequest that implements HttpServletRespose.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class RenderHttpServletRequest implements HttpServletRequest {
 	private final RenderRequest _req;

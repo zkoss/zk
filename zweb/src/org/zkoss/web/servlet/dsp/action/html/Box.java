@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Sep 16 13:59:54     2005, Created by tomyeh@potix.com
+		Fri Sep 16 13:59:54     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.web.servlet.dsp.action.ActionContext;
 /**
  * Generates a box that has a caption and a border enclosing other tags.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Box extends AbstractAction {
 	private String _align;

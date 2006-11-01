@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Sep  5 17:06:34     2005, Created by tomyeh@potix.com
+		Mon Sep  5 17:06:34     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -55,7 +55,7 @@ import org.zkoss.web.util.resource.ServletContextLocator;
  * Default: UTF-8.</dd>
  * </dl>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class InterpreterServlet extends HttpServlet {
 	private static final Log log = Log.lookup(InterpreterServlet.class);

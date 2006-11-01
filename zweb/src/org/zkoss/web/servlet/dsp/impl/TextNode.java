@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Sep 17 14:11:45     2005, Created by tomyeh@potix.com
+		Sat Sep 17 14:11:45     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * Represents a node holding a plain text.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 class TextNode extends Node {
 	private final String _text;

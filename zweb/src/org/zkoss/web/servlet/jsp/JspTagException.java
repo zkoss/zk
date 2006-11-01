@@ -25,7 +25,7 @@ import org.zkoss.mesg.Messageable;
 /**
  * The I3 version of JspTagException.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class JspTagException
 extends javax.servlet.jsp.JspTagException implements Messageable {

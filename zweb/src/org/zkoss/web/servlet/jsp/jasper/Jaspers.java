@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Apr  8 11:09:32     2005, Created by tomyeh@potix.com
+		Fri Apr  8 11:09:32     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.apache.jasper.compiler.JspUtil;
 /**
  * Utilities to access Jasper (Tomcat's JSP engine).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Jaspers {
 	/** Maps a JSP URI to a Java name.

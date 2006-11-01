@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 15 21:01:44     2005, Created by tomyeh@potix.com
+		Thu Sep 15 21:01:44     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import javax.servlet.jsp.el.ExpressionEvaluator;
 /**
  * Used to wrap the context for evaluate EL.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ELContext {
 	/** Returns the writer, never null.

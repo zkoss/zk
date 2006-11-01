@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Aug 30 18:31:05     2005, Created by tomyeh@potix.com
+		Tue Aug 30 18:31:05     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -59,7 +59,7 @@ import org.zkoss.web.servlet.http.Https;
  * only once. Usage 1 is simple if you don't pase it into any intermediate
  * format.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ResourceCaches {
 	private static final Log log = Log.lookup(ResourceCaches.class);

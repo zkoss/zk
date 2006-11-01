@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Sep 17 17:03:58     2005, Created by tomyeh@potix.com
+		Sat Sep 17 17:03:58     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -33,7 +33,7 @@ import org.zkoss.web.servlet.dsp.action.ActionContext;
 /**
  * The resolver used to interpret an {@link Interpretation}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 class InterpretResolver implements VariableResolver {
 	private final VariableResolver _parent;

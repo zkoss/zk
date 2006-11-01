@@ -6,8 +6,8 @@
 	Description:
 		
 	History:
-		Tue Nov 12 17:49:51  2002, Created by andrewho@potix.com
-		Nov 15 11:20 2002, Modified by tomyeh@potix.com
+		Tue Nov 12 17:49:51  2002, Created by andrewho
+		Nov 15 11:20 2002, Modified by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -39,7 +39,7 @@ import org.zkoss.web.servlet.http.Https;
 
 /**
  * JspLoaderServlet Load the compiled JSP pages.
- * @author <a href="mailto:andrewho@potix.com">andrewho@potix.com</a>
+ * @author andrewho
  */
 public final class JspLoaderServlet extends HttpServlet {
 	private static final Log log = Log.lookup(JspLoaderServlet.class);

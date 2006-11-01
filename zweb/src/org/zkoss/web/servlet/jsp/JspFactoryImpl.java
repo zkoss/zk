@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Apr  8 11:07:01     2005, Created by tomyeh@potix.com
+		Fri Apr  8 11:07:01     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.web.el.ELContext;
 /**
  * To intercept how a JSP page is rendered.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 /*package*/ class JspFactoryImpl extends JspFactory {
 	/** The factory to wrap. */

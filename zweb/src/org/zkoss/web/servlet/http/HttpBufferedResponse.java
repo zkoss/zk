@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jan 17 14:02:29     2005, Created by tomyeh@potix.com
+		Mon Jan 17 14:02:29     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.web.servlet.ServletOutputStreamWrapper;
  * A servlet response that uses another writer or stream as
  * the output.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class HttpBufferedResponse extends HttpServletResponseWrapper {
 	private Writer _writer;

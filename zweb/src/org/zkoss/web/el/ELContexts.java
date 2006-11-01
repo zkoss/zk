@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Apr  8 12:16:23     2005, Created by tomyeh@potix.com
+		Fri Apr  8 12:16:23     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -33,7 +33,7 @@ import org.zkoss.util.logging.Log;
 /**
  * Utilities to access the JSP context.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ELContexts {
 //	private static final Log log = Log.lookup(ELContexts.class);

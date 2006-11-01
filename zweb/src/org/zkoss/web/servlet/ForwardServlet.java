@@ -41,7 +41,7 @@ import org.zkoss.web.servlet.http.Https;
  *  <dd>The target URL.</dd>
  * </dl>
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class ForwardServlet extends GenericServlet {
 	private static final Log log = Log.lookup(ForwardServlet.class);

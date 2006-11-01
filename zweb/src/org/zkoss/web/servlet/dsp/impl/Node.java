@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Sep 17 13:53:14     2005, Created by tomyeh@potix.com
+		Sat Sep 17 13:53:14     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import java.io.IOException;
 /**
  * Represents a node in an {@link org.zkoss.web.servlet.dsp.Interpretation}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract class Node {
 	protected List _children;

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Sep 17 12:35:35     2005, Created by tomyeh@potix.com
+		Sat Sep 17 12:35:35     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.web.servlet.dsp.*;
 /**
  * The root node for the parsed result.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 class RootNode extends Node implements Interpretation {
 //	private static final Log log = Log.lookup(RootNode.class);

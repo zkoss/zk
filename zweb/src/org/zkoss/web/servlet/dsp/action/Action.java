@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Sep  5 20:29:31     2005, Created by tomyeh@potix.com
+		Mon Sep  5 20:29:31     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import javax.servlet.ServletException;
  * {@link org.zkoss.web.servlet.dsp.InterpreterServlet}.
  * It is like a tag in JSP.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Action {
 	/** Processes the action and renders the output to

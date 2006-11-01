@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jan  5 13:55:30     2005, Created by tomyeh@potix.com
+		Wed Jan  5 13:55:30     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.web.Attributes;
 /**
  * Utilities to handle characters
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Charsets {
 	private static final Log log = Log.lookup(Charsets.class);

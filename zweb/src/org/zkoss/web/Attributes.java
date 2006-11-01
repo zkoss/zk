@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Nov 17 15:05:17     2004, Created by tomyeh@potix.com
+		Wed Nov 17 15:05:17     2004, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -22,7 +22,7 @@ package org.zkoss.web;
  * Definition of contstants used as attributes and parameters acrossing
  * requests.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Attributes {
 	/** Don't construct it. All members are static. */

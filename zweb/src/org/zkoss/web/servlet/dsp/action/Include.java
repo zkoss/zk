@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep 20 10:09:14     2005, Created by tomyeh@potix.com
+		Tue Sep 20 10:09:14     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.web.servlet.ServletException;
 /**
  * Includes another URL.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Include extends AbstractAction {
 	private String _page;

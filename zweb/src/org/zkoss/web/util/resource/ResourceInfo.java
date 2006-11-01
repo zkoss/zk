@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Aug 30 18:27:16     2005, Created by tomyeh@potix.com
+		Tue Aug 30 18:27:16     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import java.net.URL;
  * Note: we would like to use path as the key while we need file for loading,
  * so we pack them as one object.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 /*package*/ class ResourceInfo {
 	/*package*/ final String path;

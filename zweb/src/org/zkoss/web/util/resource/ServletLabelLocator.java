@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Apr  8 19:51:08     2006, Created by tomyeh@potix.com
+		Sat Apr  8 19:51:08     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.util.resource.LabelLocator;
 /**
  * Used by Lables to load labels from a servlet context.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ServletLabelLocator implements LabelLocator {
 	private final ServletContext _ctx;

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep  6 15:33:06     2005, Created by tomyeh@potix.com
+		Tue Sep  6 15:33:06     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.web.servlet.ServletException;
  * Tests whether an condition is true and render the child only
  * if the condition is true.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class If extends AbstractAction {
 	private boolean _cond, _trim = true;

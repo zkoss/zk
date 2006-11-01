@@ -68,7 +68,7 @@ import org.zkoss.web.util.resource.ServletContextLocator;
 /**
  * The servlet relevant utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  * @see org.zkoss.web.servlet.http.Https
  * @see org.zkoss.web.servlet.Charsets
  */

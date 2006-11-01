@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jan 17 10:46:06     2006, Created by tomyeh@potix.com
+		Tue Jan 17 10:46:06     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import javax.portlet.PortletSession;
 /**
  * A facade of PortletSession for implementing HttpSession.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class PortletHttpSession implements HttpSession {
 	private final PortletSession _sess;

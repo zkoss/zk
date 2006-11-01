@@ -35,7 +35,7 @@ import org.zkoss.web.servlet.http.Https;
  * A generic class to help implementing servlet filter.
  * Its role is like javax.servlet.GenericServlet to javax.servlet.Servlet.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public abstract class GenericFilter implements Filter {
 	protected FilterConfig _config;

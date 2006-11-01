@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jan 11 17:41:30     2005, Created by tomyeh@potix.com
+		Tue Jan 11 17:41:30     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import javax.portlet.PortletMode;
 /**
  * Utilities to handles {@link PortletMode}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class PortletModes {
 	/** Returns the portlet mode of the specified name.

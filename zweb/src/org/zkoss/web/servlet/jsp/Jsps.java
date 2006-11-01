@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Aug 30 01:10:34     2003, Created by tomyeh@potix.com
+		Sat Aug 30 01:10:34     2003, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2003 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.web.servlet.jsp.jasper.Jaspers;
 /**
  * JSP relevant utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Jsps {
 	protected Jsps() {} //prevent from instantiated

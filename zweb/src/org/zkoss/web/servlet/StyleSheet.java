@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun  2 12:32:59     2005, Created by tomyeh@potix.com
+		Thu Jun  2 12:32:59     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.lang.Objects;
 /**
  * Represents a style sheet.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class StyleSheet implements java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20060622L;

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Aug 29 18:27:04     2005, Created by tomyeh@potix.com
+		Mon Aug 29 18:27:04     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -43,7 +43,7 @@ import javax.servlet.http.HttpServletResponse;
  * <p>To registers an extended context, use 
  * {@link org.zkoss.web.servlet.Servlets#addExtendedWebContext}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ExtendedWebContext {
 	/** Returns the encoded URL.

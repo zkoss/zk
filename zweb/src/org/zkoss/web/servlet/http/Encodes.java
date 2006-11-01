@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun 21 14:13:50  2002, Created by tomyeh@potix.com
+		Fri Jun 21 14:13:50  2002, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -47,7 +47,7 @@ import org.zkoss.web.util.resource.ExtendedWebContext;
 /**
  * Encoding utilities for servlets.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see Https
  */
 public class Encodes {

@@ -12,7 +12,7 @@ alert.dsp
 		px_alert
 			The alert message
 	History:
-		Tue Apr 12 11:41:02     2005, Created by tomyeh@potix.com
+		Tue Apr 12 11:41:02     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

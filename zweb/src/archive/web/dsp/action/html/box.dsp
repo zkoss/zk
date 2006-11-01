@@ -6,7 +6,7 @@ normal.dsp
 		The head of each cell
 	Description:
 	History:
-		Thu Mar 31 22:00:59     2005, Created by tomyeh@potix.com
+		Thu Mar 31 22:00:59     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

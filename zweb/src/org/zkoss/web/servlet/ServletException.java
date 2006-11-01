@@ -24,7 +24,7 @@ import org.zkoss.mesg.Messageable;
  * Potix version of ServletException. It extends
  * javax.servlet.ServletException to provide error codes and other features.
  *
- * @author <a href="mailto:tomyeh@potix.com">Tom M. Yeh</a>
+ * @author tomyeh
  */
 public class ServletException extends javax.servlet.ServletException
 implements Messageable {

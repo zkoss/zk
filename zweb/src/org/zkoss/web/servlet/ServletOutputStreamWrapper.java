@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jan 17 14:08:22     2005, Created by tomyeh@potix.com
+		Mon Jan 17 14:08:22     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.io.WriterOutputStream;
 /**
  * A facade of OutputStream for implementing ServletOutputStream.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ServletOutputStreamWrapper extends ServletOutputStream {
 	private final OutputStream _stream;

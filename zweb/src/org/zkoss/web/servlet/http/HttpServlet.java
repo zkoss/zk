@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Dec 22 18:48:22     2003, Created by tomyeh@potix.com
+		Mon Dec 22 18:48:22     2003, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2003 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import org.zkoss.web.servlet.Servlets;
 /**
  * Extended javax.servlet.http.HttpServlet to provide extra utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class HttpServlet extends javax.servlet.http.HttpServlet {
 	/**

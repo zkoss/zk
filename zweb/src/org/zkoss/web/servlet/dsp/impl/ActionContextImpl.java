@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Sep 17 16:52:35     2005, Created by tomyeh@potix.com
+		Sat Sep 17 16:52:35     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import org.zkoss.web.servlet.dsp.action.ActionContext;
 /**
  * An implementation of {@link ActionContext}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 class ActionContextImpl implements ActionContext {
 	private final InterpretContext _ic;

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 25 17:14:40     2005, Created by tomyeh@potix.com
+		Tue Oct 25 17:14:40     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -22,7 +22,7 @@ package org.zkoss.web.servlet.dsp.action;
  * Exposes the current status of an iteration.
  * Used with {@link ForEach} if {@link ForEach#setVarStatus} is called.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface LoopStatus {
 	/** Retrieves the index of the current round of the iteration (0-based).

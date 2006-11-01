@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep  6 09:30:59     2005, Created by tomyeh@potix.com
+		Tue Sep  6 09:30:59     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import javax.servlet.ServletException;
  * Encapsulates a portion of DSP page in an object that can be invoked
  * as many times as needed.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface ActionContext {
 	/** The page scope. */
