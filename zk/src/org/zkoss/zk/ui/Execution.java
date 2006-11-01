@@ -277,7 +277,7 @@ public interface Execution extends Evaluator {
 	public int getLocalPort();
 
 	/** Returns the portion of the request URI that indicates the context of
-	 * the desktop. The path starts with a "/" character but does not end with
+	 * the current execution. The path starts with a "/" character but does not end with
 	 * a "/" character. For servlets in the default (root) context,
 	 * this method returns "".
 	 * <p>If the client is not using HTTP to access, this method return "";
