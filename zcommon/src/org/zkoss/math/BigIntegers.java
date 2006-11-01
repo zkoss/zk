@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Sep 19 13:06:48     2003, Created by tomyeh@potix.com
+		Fri Sep 19 13:06:48     2003, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2003 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.lang.Objects;
 /**
  * BigInteger utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class BigIntegers {
 	/** Represents 0 in big integer.

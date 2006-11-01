@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 28 14:40:50     2004, Created by tomyeh@potix.com
+		Thu Oct 28 14:40:50     2004, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.util.ModificationException;
 /**
  * Utilities to access fields.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Fields {
 	/** Returnst the value of the specfied field of the object.

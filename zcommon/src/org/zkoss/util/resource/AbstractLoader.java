@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun  3 09:45:42     2005, Created by tomyeh@potix.com
+		Fri Jun  3 09:45:42     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import java.net.URL;
 /**
  * A skeletal implementation that assumes the source is either URL or File.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class AbstractLoader implements Loader {
 	//-- Loader --//

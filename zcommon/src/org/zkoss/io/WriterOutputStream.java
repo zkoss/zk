@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May  1 22:00:51     2006, Created by tomyeh@potix.com
+		Mon May  1 22:00:51     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * An output stream that is on top of a writer.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class WriterOutputStream extends OutputStream {
 	private final Writer _writer;

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Sep  2 20:19:20  2002, Created by tomyeh@potix.com
+		Mon Sep  2 20:19:20  2002, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -45,7 +45,7 @@ import org.zkoss.math.Calcs;
 /**
  * An Awk-like even-driven XML parser.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see Context
  */
 public class Xawk {

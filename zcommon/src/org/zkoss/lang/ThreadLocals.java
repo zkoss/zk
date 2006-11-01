@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 21 10:07:46     2006, Created by henrichen@potix.com
+		Thu Sep 21 10:07:46     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
  * ThreadLocal related utilties. This implementation get the static 
  * ThreadLocal via reflection.
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  */
 public class ThreadLocals {
 	/** Given class name and static ThreadLocal field name, return the associated ThreadLocal.

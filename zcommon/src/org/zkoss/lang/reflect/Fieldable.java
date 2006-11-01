@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Nov 25 20:37:39  2002, Created by tomyeh@potix.com
+		Mon Nov 25 20:37:39  2002, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.util.ModificationException;
  * <p>Calcs detects whether an object implements this method. If so,
  * this interface is used. If not, reflection is used.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Fieldable {
 	/** Returns the value of the specified field.

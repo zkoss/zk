@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun  3 09:13:02     2005, Created by tomyeh@potix.com
+		Fri Jun  3 09:13:02     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -22,7 +22,7 @@ package org.zkoss.util.resource;
  * A loader that could load a resource to another format.
  * It is mainly designed to work with {@link ResourceCache}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Loader {
 	/** Returns whether to call {@link #getLastModified}.

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jun 21 17:57:05     2006, Created by tomyeh@potix.com
+		Wed Jun 21 17:57:05     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.lang.SystemException;
 /**
  * A wrapper of java.lang.reflect.Method to make it serializable.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class SerializableMethod implements Serializable, Cloneable {
     private static final long serialVersionUID = 20060622L;

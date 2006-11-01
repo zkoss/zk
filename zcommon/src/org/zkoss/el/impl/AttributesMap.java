@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Dec  6 22:40:23     2005, Created by tomyeh@potix.com
+		Tue Dec  6 22:40:23     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import java.util.Enumeration;
  *
  * <p>It is mainly used to implement sessionScope and requestScope in EL.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public abstract class AttributesMap extends StringKeysMap {
 	private Set _entries;

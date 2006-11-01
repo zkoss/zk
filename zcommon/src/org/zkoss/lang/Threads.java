@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Feb 21 23:12:06     2004, Created by tomyeh@potix.com
+		Sat Feb 21 23:12:06     2004, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2003 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.util.logging.Log;
 /**
  * Thread relevant utilities.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Threads {
 	private static final Log log = Log.lookup(Threads.class);

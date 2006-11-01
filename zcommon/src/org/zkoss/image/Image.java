@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct  7 22:01:19     2004, Created by tomyeh@potix.com
+		Thu Oct  7 22:01:19     2004, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.util.media.Media;
 /**
  * Represents an image.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Image extends Media {
 	/** Returns the width.

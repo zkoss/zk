@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Aug 20 19:59:17     2005, Created by tomyeh@potix.com
+		Sat Aug 20 19:59:17     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -45,7 +45,7 @@ import org.zkoss.el.impl.AttributesMap;
  * <p>To avoid user from misuse, it throws IllegalStateException
  * if variables that depend on request or session are accessed.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ServletContextResolver implements VariableResolver {
 	private final ServletContext _ctx;

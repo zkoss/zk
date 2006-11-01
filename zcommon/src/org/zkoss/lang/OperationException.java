@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 21 13:15:02     2003, Created by tomyeh@potix.com
+		Thu Aug 21 13:15:02     2003, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2003 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.lang;
 /**
  * The expectable system exception denoting user's operation errors.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class OperationException extends SystemException implements Expectable {
 	public OperationException(String msg, Throwable cause) {

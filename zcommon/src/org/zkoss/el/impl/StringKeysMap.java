@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Dec  6 22:35:32     2005, Created by tomyeh@potix.com
+		Tue Dec  6 22:35:32     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import java.util.Enumeration;
  * A sketetal implementation for Map to wrap something with enumeration of
  * keys, which must be String.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public abstract class StringKeysMap extends AbstractMap {
 	//-- Map --//

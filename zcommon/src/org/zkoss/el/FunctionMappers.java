@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jul  5 17:34:27     2005, Created by tomyeh@potix.com
+		Tue Jul  5 17:34:27     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -49,7 +49,7 @@ import org.zkoss.idom.util.IDOMs;
 /**
  * Utilities for handling FunctionMapper.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class FunctionMappers {
 	private static final Log log = Log.lookup(FunctionMappers.class);

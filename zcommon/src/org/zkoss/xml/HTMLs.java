@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Dec 31 12:46:27     2005, Created by tomyeh@potix.com
+		Sat Dec 31 12:46:27     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import java.util.HashSet;
 /**
  * Utilities for HTML attributes and styles.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class HTMLs {
 	/** Appends an attribute to the string buffer for HTML/XML (name="val").

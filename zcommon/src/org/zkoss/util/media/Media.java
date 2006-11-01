@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Feb 26 13:29:14     2003, Created by tomyeh@potix.com
+		Wed Feb 26 13:29:14     2003, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import java.io.InputStream;
  * <p>By implementing this interface, objects can be processed generically
  * by servlets and many other codes.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Media {
 	/** Returns whether the format of tis content is binary or text-based.

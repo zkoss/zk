@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Oct 27 10:20:17     2003, Created by tomyeh@potix.com
+		Mon Oct 27 10:20:17     2003, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2003 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.mesg.Messageable;
  * Represents an exception is a warning rather than error.
  * {@link #getCode} is the warnig code.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Warning extends Expectable, Messageable {
 }

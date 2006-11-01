@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Apr  7 14:16:39     2005, Created by tomyeh@potix.com
+		Thu Apr  7 14:16:39     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import java.net.URL;
  * will invoke {@link #locate} to locate any extra resource.
  * If so, it will load labels from it.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface LabelLocator {
 	/** Returns URL for the specified locale, or null if not available.

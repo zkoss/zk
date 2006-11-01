@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep 21 10:55:09     2004, Created by tomyeh@potix.com
+		Tue Sep 21 10:55:09     2004, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.util.resource.impl.LabelLoader;
  * Utilities to access labels. A label is a Locale-dependent string
  * that is stored in i3-label*properties.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Labels {
 	private Labels() {} //prevent form misuse

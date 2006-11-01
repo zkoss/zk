@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Aug 30 09:56:06     2005, Created by tomyeh@potix.com
+		Tue Aug 30 09:56:06     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -52,7 +52,7 @@ import org.zkoss.idom.input.SAXBuilder;
  * <p>Since this locator is used frequently, {@link Locators#getDefault}
  * is provided to return an instance of this class,
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ClassLocator implements Locator {
 	private static final Log log = Log.lookup(ClassLocator.class);

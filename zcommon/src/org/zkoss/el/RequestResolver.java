@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Mar 29 18:45:46     2005, Created by tomyeh@potix.com
+		Tue Mar 29 18:45:46     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -51,7 +51,7 @@ import org.zkoss.el.impl.AttributesMap;
 /**
  * Used to wrap a request to provide JSP-like evaluation.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see ServletContextResolver
  */
 public class RequestResolver implements VariableResolver {

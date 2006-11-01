@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Feb  6 16:56:33     2003, Created by tomyeh@potix.com
+		Thu Feb  6 16:56:33     2003, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -46,7 +46,7 @@ import org.zkoss.util.media.ContentTypes;
  * <p>In other words, it is used to retrieve and store the opaque data
  * as polymorphic thru the {@link org.zkoss.util.media.Media} interface.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AImage implements Image {
 	private static final Log log = Log.lookup(AImage.class);

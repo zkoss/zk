@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 28 17:13:15     2004, Created by tomyeh@potix.com
+		Thu Oct 28 17:13:15     2004, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import javax.servlet.jsp.el.ELException;
 /**
  * Our evaluation exception.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class EvaluationException extends ELException implements Messageable {
 	protected int _code = NULL_CODE;

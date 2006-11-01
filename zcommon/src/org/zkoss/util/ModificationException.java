@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug  8 19:59:53  2002, Created by tomyeh@potix.com
+		Thu Aug  8 19:59:53  2002, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -33,7 +33,7 @@ import org.zkoss.lang.Expectable;
  * org.zkoss.i3.pb.RemoveException and org.zkoss.i3.pb.CreateException,
  * who derive from this class, might be thrown
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ModificationException extends CommonException {
 	/** Utilities.

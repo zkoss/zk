@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Sep 13 11:18:11  2002, Created by tomyeh@potix.com
+		Fri Sep 13 11:18:11  2002, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.lang.Objects;
  * Like java.util.InternalHashMap, it uses == and System.identityHashCode
  * for doing HashSet.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see IdentityComparator
  */
 public class IdentityHashSet extends AbstractSet

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Sep  2 21:04:19  2002, Created by tomyeh@potix.com
+		Mon Sep  2 21:04:19  2002, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.idom.Element;
  * A context when an element is being processing.
  * The beanshell script could use it to get relevant information.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see Xawk
  */
 final public class Context {

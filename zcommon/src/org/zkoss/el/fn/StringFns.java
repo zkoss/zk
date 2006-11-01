@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Mar 31 12:25:57     2005, Created by tomyeh@potix.com
+		Thu Mar 31 12:25:57     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.lang.Objects;
 /**
  * Utilities to manipulate strings in EL.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class StringFns {
 	/** Catenates two strings.

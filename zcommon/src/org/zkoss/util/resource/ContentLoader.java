@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun  3 12:40:06     2005, Created by tomyeh@potix.com
+		Fri Jun  3 12:40:06     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import org.zkoss.io.Files;
  * if the source is URL, or loads into a String if the source is a File
  * (and assumging UTF-8).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ContentLoader extends AbstractLoader {
 	//-- Loader --//

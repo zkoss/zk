@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Mar  2 10:55:54     2005, Created by tomyeh@potix.com
+		Wed Mar  2 10:55:54     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -62,7 +62,7 @@ try {
  *
  * Refer to i3sys's SketchPostImpl, zweb's JspLoaderServlet for examples.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class WaitLock {
 	private final Thread _locker = Thread.currentThread();

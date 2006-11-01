@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Nov 16 15:15:40     2005, Created by tomyeh@potix.com
+		Wed Nov 16 15:15:40     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -39,7 +39,7 @@ import org.zkoss.util.media.ContentTypes;
  * <p>In other words, it is used to retrieve and store the opaque data
  * as polymorphic thru the {@link org.zkoss.util.media.Media} interface.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AAudio implements Audio {
 	/** The raw data in byte array.

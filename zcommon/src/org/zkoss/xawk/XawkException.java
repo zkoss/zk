@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Sep  2 20:59:27  2002, Created by tomyeh@potix.com
+		Mon Sep  2 20:59:27  2002, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.xawk;
 /**
  * Represents Xawk fails to parse a XML.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see Xawk
  */
 public class XawkException extends org.zkoss.lang.CommonException {

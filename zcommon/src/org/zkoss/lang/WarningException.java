@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Oct 27 10:19:59     2003, Created by tomyeh@potix.com
+		Mon Oct 27 10:19:59     2003, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2003 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.mesg.Messageable;
 /**
  * The warning exception.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class WarningException extends SystemException implements Warning {
 	public WarningException(String msg, Throwable cause) {

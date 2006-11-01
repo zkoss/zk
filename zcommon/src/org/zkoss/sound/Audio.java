@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Nov 16 12:07:03     2005, Created by tomyeh@potix.com
+		Wed Nov 16 12:07:03     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.util.media.Media;
 /**
  * Represents an audio.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Audio extends Media {
 }

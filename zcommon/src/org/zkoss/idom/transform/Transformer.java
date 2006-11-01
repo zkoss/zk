@@ -6,8 +6,8 @@
 	Description:
 		
 	History:
-		Mon May 13 17:31:01  2002, Created by andrewho@potix.com
-		May 19 2003, Modified by tomyeh@potix.com to make API more complete
+		Mon May 13 17:31:01  2002, Created by andrewho
+		May 19 2003, Modified by tomyeh to make API more complete
 		and let developer know about Source and Result
 }}IS_NOTE
 
@@ -46,7 +46,7 @@ import org.zkoss.util.logging.Log;
  * Transforms an iDOM Document.
  *
  * @author <a href="mailto:andrewho@potix.com">andrewho@potix.com</a>
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Transformer {
 	private static final Log log = Log.lookup(Transformer.class);

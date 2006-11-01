@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu May 27 15:10:46     2004, Created by tomyeh@potix.com
+		Thu May 27 15:10:46     2004, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import java.io.ByteArrayInputStream;
 /**
  * A media object holding content such PDF, HTML, DOC or XLS content.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AMedia implements Media {
 	/** The binary data, {@link #getByteData}. */

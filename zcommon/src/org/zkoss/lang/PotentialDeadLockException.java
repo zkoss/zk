@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Dec  5 10:53:52     2003, Created by tomyeh@potix.com
+		Fri Dec  5 10:53:52     2003, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2003 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ package org.zkoss.lang;
  * be updated in a special order. However, it still might happen, because
  * a transaction might trigger multiple syncBeans.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class PotentialDeadLockException extends OperationException {
 	public PotentialDeadLockException(String msg, Throwable cause) {

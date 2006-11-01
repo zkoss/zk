@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jul  6 09:03:10     2005, Created by tomyeh@potix.com
+		Wed Jul  6 09:03:10     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.el;
 /**
  * Represents a taglib.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Taglib {
 	private final String _prefix, _uri;

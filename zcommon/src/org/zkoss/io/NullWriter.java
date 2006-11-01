@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May  2 16:29:13     2005, Created by tomyeh@potix.com
+		Mon May  2 16:29:13     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * A writer that drops all output. It hehaves like Unix /dev/null.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class NullWriter extends Writer {
 	public void write(char[] cbuf, int off, int len) throws IOException {

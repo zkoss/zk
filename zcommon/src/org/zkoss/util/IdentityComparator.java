@@ -7,7 +7,7 @@
 	Description:
 		
 	History:
-		Fri Sep 13 10:14:11  2002, Created by tomyeh@potix.com
+		Fri Sep 13 10:14:11  2002, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
@@ -33,7 +33,7 @@ import java.util.Comparator;
  * <p>However, if possible, java.util.IdentityHashMap and {@link IdentityHashSet}
  * are preferred.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see IdentityHashSet
  */
 public class IdentityComparator implements Comparator {
