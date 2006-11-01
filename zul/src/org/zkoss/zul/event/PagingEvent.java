@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 17 16:18:13     2006, Created by tomyeh@potix.com
+		Thu Aug 17 16:18:13     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.zul.ext.Paginal;
  * a paging component (aka., implementing {@link org.zkoss.zul.ext.Paginal}),
  * such as {@link org.zkoss.zul.Paging}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class PagingEvent extends Event {
 	private final Paginal _pgi;

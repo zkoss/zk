@@ -9,7 +9,7 @@
 	 1. Properties defined here are assigned to all instances of the
 		specified definition, no matter it is created by ZUML or by program.
 	History:
-		Tue May 31 18:02:46     2005, Created by tomyeh@potix.com
+		Tue May 31 18:02:46     2005, Created by tomyeh
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->

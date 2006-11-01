@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 14 21:10:14     2006, Created by henrichen@potix.com
+		Thu Aug 14 21:10:14     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import java.util.Collection;
  * A HiLo chart data model (date, open, close, high, low, volumn) usually used in
  * stock market.
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  * @see Chart
  * @see SimpleHiLoModel
  */

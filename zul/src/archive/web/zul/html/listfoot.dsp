@@ -7,7 +7,7 @@ listfoot.dsp
 	Description:
 		
 	History:
-		Fri Jan 13 13:00:59     2006, Created by tomyeh@potix.com
+		Fri Jan 13 13:00:59     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

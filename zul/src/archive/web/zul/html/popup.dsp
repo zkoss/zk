@@ -7,7 +7,7 @@ popup.dsp
 	Description:
 		
 	History:
-		Mon Jun  5 11:03:53     2006, Created by tomyeh@potix.com
+		Mon Jun  5 11:03:53     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

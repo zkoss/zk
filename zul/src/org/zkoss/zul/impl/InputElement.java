@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jul  5 08:49:30     2005, Created by tomyeh@potix.com
+		Tue Jul  5 08:49:30     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -39,7 +39,7 @@ import org.zkoss.zul.ext.Constrainted;
 
 /**
  * A skeletal implementation of an input box.
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class InputElement extends XulElement
 implements Constrainted {

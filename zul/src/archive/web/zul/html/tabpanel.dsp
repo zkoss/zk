@@ -11,7 +11,7 @@ tabpanel.dsp
 		and then, in CSS, specify tr.yourClass td.tabpanel {...}
 
 	History:
-		Tue Jul 12 10:58:38     2005, Created by tomyeh@potix.com
+		Tue Jul 12 10:58:38     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

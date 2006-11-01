@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jul 20 15:17:40     2006, Created by tomyeh@potix.com
+		Thu Jul 20 15:17:40     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.UiException;
  * <p>Note: a style component can appear anywhere in a ZUML page, but it
  * affects all components in the same desktop.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Style extends AbstractComponent {
 	private String _src;

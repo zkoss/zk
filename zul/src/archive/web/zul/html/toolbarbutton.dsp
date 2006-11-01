@@ -7,7 +7,7 @@ toolbarbutton.dsp
 	Description:
 		
 	History:
-		Thu Jun 23 16:39:54     2005, Created by tomyeh@potix.com
+		Thu Jun 23 16:39:54     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

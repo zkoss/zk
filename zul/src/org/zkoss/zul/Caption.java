@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 11 14:31:07     2005, Created by tomyeh@potix.com
+		Tue Oct 11 14:31:07     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * It may contain either a text label, using {@link #setLabel},
  * or child elements for a more complex caption.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Caption extends LabelImageElement {
 	public Caption() {

@@ -7,7 +7,7 @@ tabbox-accd.dsp
 	Description:
 		
 	History:
-		Tue Sep 27 14:45:27     2005, Created by tomyeh@potix.com
+		Tue Sep 27 14:45:27     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

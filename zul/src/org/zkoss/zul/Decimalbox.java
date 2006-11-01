@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 28 13:40:20     2005, Created by tomyeh@potix.com
+		Tue Jun 28 13:40:20     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.FormatInputElement;
 /**
  * An edit box for holding BigDecimal.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Decimalbox extends FormatInputElement {
 	/** Used with {@link #setScale} to denote that the scale is decided by

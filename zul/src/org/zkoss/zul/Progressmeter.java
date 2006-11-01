@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Aug 14 16:38:24     2006, Created by tomyeh@potix.com
+		Mon Aug 14 16:38:24     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Default {@link #getSclass}: progressmeter.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Progressmeter extends XulElement {
 	private int _val;

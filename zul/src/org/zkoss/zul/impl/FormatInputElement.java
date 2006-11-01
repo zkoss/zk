@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jul  5 09:27:34     2005, Created by tomyeh@potix.com
+		Tue Jul  5 09:27:34     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.event.Events;
 /**
  * An input box that supports format.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class FormatInputElement extends InputElement {
 	private String _format;

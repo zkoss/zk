@@ -7,7 +7,7 @@ label.dsp
 	Description:
 		
 	History:
-		Wed Jun  8 18:56:09     2005, Created by tomyeh@potix.com
+		Wed Jun  8 18:56:09     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

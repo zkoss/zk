@@ -7,7 +7,7 @@ script.dsp
 	Description:
 		
 	History:
-		Sun Oct 15 12:14:24     2006, Created by tomyeh@potix.com
+		Sun Oct 15 12:14:24     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

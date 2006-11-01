@@ -7,7 +7,7 @@ slider-sph.dsp
 	Description:
 		
 	History:
-		Thu Sep 29 21:06:03     2005, Created by tomyeh@potix.com
+		Thu Sep 29 21:06:03     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

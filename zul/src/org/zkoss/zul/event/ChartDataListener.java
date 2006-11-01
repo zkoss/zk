@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Aug 03 11:57:21     2006, Created by henrichen@potix.com
+		Wed Aug 03 11:57:21     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.UiException;
  * Defines the methods used in listener when the content of
  * {@link org.zkoss.zul.ChartModel} is changed.
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  * @see org.zkoss.zul.ChartModel
  * @see ChartDataEvent
  */

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Aug 18 09:20:23     2006, Created by tomyeh@potix.com
+		Fri Aug 18 09:20:23     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -19,7 +19,7 @@ package org.zkoss.zul.event;
 /**
  * Utilities to access events for ZK and ZUL.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ZulEvents {
 	private ZulEvents() {} //prevent from creation

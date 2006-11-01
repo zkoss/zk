@@ -8,7 +8,7 @@ button.dsp
 		In Safari, the shape of <button> is not pleasure, so we use
 		<input> if no image is required
 	History:
-		Wed Jun  8 10:19:50     2005, Created by tomyeh@potix.com
+		Wed Jun  8 10:19:50     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

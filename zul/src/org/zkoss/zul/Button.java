@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jun  8 10:31:02     2005, Created by tomyeh@potix.com
+		Wed Jun  8 10:31:02     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 /**
  * A button.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Button extends LabelImageElement {
 	private String _orient = "horizontal", _dir = "normal";

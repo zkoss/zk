@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 25 15:40:35     2005, Created by tomyeh@potix.com
+		Tue Oct 25 15:40:35     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -58,7 +58,7 @@ import org.zkoss.zul.event.PagingEvent;
  *
  * <p>Default {@link #getSclass}: grid.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Grid extends XulElement {
 	private transient Rows _rows;

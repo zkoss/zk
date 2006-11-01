@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Aug 17 18:03:55     2005, Created by tomyeh@potix.com
+		Wed Aug 17 18:03:55     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zul.ListModel;
 /**
  * Defines an event that encapsulates changes to a list. 
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ListDataEvent {
 	/** Identifies one or more changes in the lists contents. */

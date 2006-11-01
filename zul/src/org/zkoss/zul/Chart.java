@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jul 10 16:57:48     2006, Created by henrichen@potix.com
+		Mon Jul 10 16:57:48     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -63,7 +63,7 @@ import java.awt.Paint;
  *   <tr><td>step</td><td>{@link XYModel}</td><td>x</td></tr>
  * </table>
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  */
 public class Chart extends Imagemap {
 	public static final String PIE = "pie";

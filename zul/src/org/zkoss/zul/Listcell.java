@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Aug  5 13:06:17     2005, Created by tomyeh@potix.com
+		Fri Aug  5 13:06:17     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 /**
  * A list cell.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Listcell extends LabelImageElement {
 	private Object _value;

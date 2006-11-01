@@ -7,7 +7,7 @@ listbox-pg.dsp
 	Description:
 		
 	History:
-		Mon Aug 28 11:55:34     2006, Created by tomyeh@potix.com
+		Mon Aug 28 11:55:34     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

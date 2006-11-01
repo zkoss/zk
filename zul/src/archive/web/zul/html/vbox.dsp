@@ -7,7 +7,7 @@ vbox.dsp
 	Description:
 		
 	History:
-		Tue Jun 21 08:48:47     2005, Created by tomyeh@potix.com
+		Tue Jun 21 08:48:47     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

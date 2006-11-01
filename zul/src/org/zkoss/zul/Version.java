@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jul 25 10:06:42     2006, Created by tomyeh@potix.com
+		Tue Jul 25 10:06:42     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -20,7 +20,7 @@ package org.zkoss.zul;
  * Specified this in lang.xml, such that ZK knows what lang.xml is associated
  * with ZUL.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Version {
 	/** Returns the version UID.

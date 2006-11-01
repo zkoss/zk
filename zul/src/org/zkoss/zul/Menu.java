@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 22 10:57:58     2005, Created by tomyeh@potix.com
+		Thu Sep 22 10:57:58     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * of the menu will be displayed.
  * This element is also used to create submenus (of {@link Menupopup}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Menu extends LabelImageElement {
 	private Menupopup _popup;

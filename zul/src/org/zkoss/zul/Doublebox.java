@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Oct 14 12:59:39     2006, Created by henrichen@potix.com
+		Sat Oct 14 12:59:39     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.zul.impl.FormatInputElement;
 /**
  * An edit box for holding an float point value (double).
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  */
 public class Doublebox extends FormatInputElement {
 	public Doublebox() {

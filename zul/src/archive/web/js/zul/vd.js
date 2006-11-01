@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 20 11:30:21     2005, Created by tomyeh@potix.com
+		Thu Oct 20 11:30:21     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

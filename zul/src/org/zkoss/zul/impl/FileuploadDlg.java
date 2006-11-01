@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Aug 17 16:33:06     2005, Created by tomyeh@potix.com
+		Wed Aug 17 16:33:06     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.zul.Window;
  * Used with {@link org.zkoss.zul.Fileupload} to implement
  * the upload feature.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class FileuploadDlg extends Window {
 	private Media _result;

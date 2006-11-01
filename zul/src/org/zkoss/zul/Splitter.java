@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun  8 14:54:05     2006, Created by tomyeh@potix.com
+		Thu Jun  8 14:54:05     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.XulElement;
  * inside the splitter, and one sibling element of the splitter is collapsed
  * when the grippy is clicked.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Splitter extends XulElement {
 	private String _collapse = "none";

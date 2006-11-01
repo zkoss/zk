@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jul 18 20:57:18     2005, Created by tomyeh@potix.com
+		Mon Jul 18 20:57:18     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.XulElement;
  * Thus, if you want to display such image, you have to use the alphafix mold.
  * <code>&lt;image mold="alphafix"/&gt;</code>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Image extends XulElement {
 	private String _align, _border, _hspace, _vspace;

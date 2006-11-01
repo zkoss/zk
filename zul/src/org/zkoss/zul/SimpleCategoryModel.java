@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 14 11:25:51     2006, Created by henrichen@potix.com
+		Thu Aug 14 11:25:51     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -39,7 +39,7 @@ import java.util.Collection;
  * A Category data model implementation of {@link CategoryModel}.
  * A Category model is an N series of (category, value) data objects.
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  * @see CategoryModel
  * @see Chart
  */

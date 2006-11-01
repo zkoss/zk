@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sat Jan 14 00:40:57     2006, Created by tomyeh@potix.com
+		Sat Jan 14 00:40:57     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.WrongValueException;
  *
  * <p>In other words, &lt;space&gt; is equivalent to &lt;separator orient="horizontal"&gt;
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Space extends Separator {
 	public Space() {

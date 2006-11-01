@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 14 15:48:28     2005, Created by tomyeh@potix.com
+		Tue Jun 14 15:48:28     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zul.impl.InputElement;
  *
  * <p>See <a href="package-summary.html">Specification</a>.</p>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Textbox extends InputElement {
 	private String _type = "text";

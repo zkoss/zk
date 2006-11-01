@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Aug 1 10:30:48     2006, Created by henrichen@potix.com
+		Tue Aug 1 10:30:48     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -51,7 +51,7 @@ import java.util.Iterator;
  * {@link org.zkoss.zul.event.ChartAreaListener} class that application developers
  * can do processing on each area.</p>
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  */
 public class SimpleChartEngine implements ChartEngine {
 	//as long as the series name is not set

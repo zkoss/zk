@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun 23 11:33:45     2005, Created by tomyeh@potix.com
+		Thu Jun 23 11:33:45     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * is not null, the onClick handler is ignored and this element is degenerated
  * to HTML's A tag.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Toolbarbutton extends LabelImageElement {
 	private String _orient = "horizontal", _dir = "normal";

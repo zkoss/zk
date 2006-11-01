@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Oct 12 23:42:27     2005, Created by tomyeh@potix.com
+		Wed Oct 12 23:42:27     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.au.AuResponse;
  * Make a window as an embedded window.
  * <p>data[0]: component's UUID
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class AuEndModal extends AuResponse {
 	public AuEndModal(Component comp) {

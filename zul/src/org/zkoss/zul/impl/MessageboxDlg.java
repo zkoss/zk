@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Aug 17 16:42:20     2005, Created by tomyeh@potix.com
+		Wed Aug 17 16:42:20     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.zul.Messagebox;
 /**
  * Used with {@link Messagebox} to implement a message box.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class MessageboxDlg extends Window {
 	/** A OK button. */

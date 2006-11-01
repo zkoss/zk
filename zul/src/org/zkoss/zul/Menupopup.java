@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 22 10:58:18     2005, Created by tomyeh@potix.com
+		Thu Sep 22 10:58:18     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.WrongValueException;
  *
  * <p>Default {@link #getSclass}: menupopup.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Menupopup extends Popup {
 	public Menupopup() {

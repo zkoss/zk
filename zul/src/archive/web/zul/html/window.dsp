@@ -8,7 +8,7 @@ window.dsp
 		z:autoz:
 			Automatically adjust z-index onmousedown (au.js)
 	History:
-		Tue May 31 19:37:23     2005, Created by tomyeh@potix.com
+		Tue May 31 19:37:23     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

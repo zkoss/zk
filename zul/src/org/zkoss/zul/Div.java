@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Dec 30 17:49:49     2005, Created by tomyeh@potix.com
+		Fri Dec 30 17:49:49     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.XulElement;
  * as {@link Div}, but {@link Div} doesn't implement IdSpace.
  * In other words, {@link Div} won't affect the uniqueness of identifiers.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Div extends XulElement {
 	private String _align;

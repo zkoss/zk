@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jul 12 12:09:00     2005, Created by tomyeh@potix.com
+		Tue Jul 12 12:09:00     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
 /**
  * A HTML element with a label ({@link #getLabel})and an image ({@link #getImage}).
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class LabelImageElement extends LabelElement {
 	private String _src = null;

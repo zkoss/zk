@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jan 13 12:42:38     2006, Created by tomyeh@potix.com
+		Fri Jan 13 12:42:38     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -32,7 +32,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Unlike {@link Listheader}, you could place any child in a list footer.
  * <p>Note: {@link Listcell} also accepts children.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Listfooter extends LabelImageElement {
 	public Listfooter() {

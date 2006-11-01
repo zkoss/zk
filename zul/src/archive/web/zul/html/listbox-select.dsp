@@ -7,7 +7,7 @@ listbox-select.dsp
 	Description:
 		
 	History:
-		Wed Sep 28 14:01:24     2005, Created by tomyeh@potix.com
+		Wed Sep 28 14:01:24     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

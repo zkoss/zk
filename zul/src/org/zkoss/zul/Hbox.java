@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jun 20 22:16:42     2005, Created by tomyeh@potix.com
+		Mon Jun 20 22:16:42     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -21,7 +21,7 @@ package org.zkoss.zul;
 /**
  * A hbox.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Hbox extends Box {
 	public Hbox() {

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 28 13:52:43     2005, Created by tomyeh@potix.com
+		Tue Jun 28 13:52:43     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zul.Constraint;
  * Decorates a component that its value is constrainted by
  * {@link Constraint}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Constrainted {
 	/** Sets the constraint.

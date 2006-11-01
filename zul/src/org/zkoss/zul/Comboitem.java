@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Dec 15 17:33:35     2005, Created by tomyeh@potix.com
+		Thu Dec 15 17:33:35     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * 
  * <p>Default {@link #getSclass}: item.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see Combobox
  */
 public class Comboitem extends LabelImageElement {

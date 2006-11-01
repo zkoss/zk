@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jun 20 21:51:32     2005, Created by tomyeh@potix.com
+		Mon Jun 20 21:51:32     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A box.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Box extends XulElement {
 	private String _spacing;

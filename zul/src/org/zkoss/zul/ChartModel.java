@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Aug 03 11:22:44     2006, Created by henrichen@potix.com
+		Wed Aug 03 11:22:44     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zul.event.ChartDataListener;
  * This interface defines the data model for components like {@link Chart}
  * use to get the value of data.
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  * @see Chart
  * @see PieModel
  * @see CategoryModel

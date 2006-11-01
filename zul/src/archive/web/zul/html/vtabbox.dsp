@@ -7,7 +7,7 @@ vtabbox.dsp
 	Description:
 		Vertical orientation of tabbox
 	History:
-		May 3 2006, Created by tomyeh@potix.com
+		May 3 2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

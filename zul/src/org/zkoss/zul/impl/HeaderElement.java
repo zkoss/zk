@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jan 11 11:55:13     2006, Created by tomyeh@potix.com
+		Wed Jan 11 11:55:13     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * A skeletal implementation for headers.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class HeaderElement extends LabelImageElement {
 	private String _align, _valign;

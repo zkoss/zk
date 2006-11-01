@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jun 17 09:20:52     2005, Created by tomyeh@potix.com
+		Fri Jun 17 09:20:52     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.UiException;
  * is checked or unchecked by user.</li>
  * </ol>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Radio extends Checkbox {
 	private String _value = "";

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Oct 15 12:15:47     2006, Created by tomyeh@potix.com
+		Sun Oct 15 12:15:47     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * Represents a HTML <code>script</code> element.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Script extends AbstractComponent {
 	private String _content = "";

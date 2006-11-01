@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 25 16:02:43     2005, Created by tomyeh@potix.com
+		Tue Oct 25 16:02:43     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.XulElement;
  * of the grid. The row with the most child elements determines the number
  * of columns in each row.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Row extends XulElement {
 	private Object _value;

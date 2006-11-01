@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Aug 03 11:22:44     2006, Created by henrichen@potix.com
+		Wed Aug 03 11:22:44     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ package org.zkoss.zul.impl;
  * This interface defines the chart engine for components like {@link org.zkoss.zul.Chart}
  * use to get the value of each data and the size of the chart data.
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  * @see org.zkoss.zul.Chart
  * @see org.zkoss.zul.ChartModel
  * @see org.zkoss.zul.event.ChartAreaListener

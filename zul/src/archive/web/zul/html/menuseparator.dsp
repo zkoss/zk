@@ -7,7 +7,7 @@ menuseparator.dsp
 	Description:
 		
 	History:
-		Thu Sep 22 14:41:39     2005, Created by tomyeh@potix.com
+		Thu Sep 22 14:41:39     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

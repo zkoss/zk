@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 28 13:41:01     2005, Created by tomyeh@potix.com
+		Tue Jun 28 13:41:01     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -49,7 +49,7 @@ import org.zkoss.zul.impl.FormatInputElement;
  * You might override {@link #getDefaultFormat} to provide your own default
  * format.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Datebox extends FormatInputElement {
 	private TimeZone _tzone;

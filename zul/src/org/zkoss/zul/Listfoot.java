@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jan 13 12:42:31     2006, Created by tomyeh@potix.com
+		Fri Jan 13 12:42:31     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Like {@link Listhead}, each listbox has at most one {@link Listfoot}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Listfoot extends XulElement {
 	/** Returns the list box that it belongs to.

@@ -7,7 +7,7 @@ column.dsp
 	Description:
 		
 	History:
-		Mon Jan  9 14:50:13     2006, Created by tomyeh@potix.com
+		Mon Jan  9 14:50:13     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

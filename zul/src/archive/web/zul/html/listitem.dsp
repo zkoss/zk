@@ -7,7 +7,7 @@ listitem.dsp
 	Description:
 		
 	History:
-		Wed Jun 15 18:20:57     2005, Created by tomyeh@potix.com
+		Wed Jun 15 18:20:57     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

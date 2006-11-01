@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Aug 19 23:44:56     2005, Created by tomyeh@potix.com
+		Fri Aug 19 23:44:56     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ package org.zkoss.zul;
  * <p>A typical use is to start a transaction and use it for rendering
  * all items from the same request.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface RendererCtrl {
 	/** Called before rendering any item.

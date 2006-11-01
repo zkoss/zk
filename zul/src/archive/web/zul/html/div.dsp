@@ -7,7 +7,7 @@ div.dsp
 	Description:
 		
 	History:
-		Fri Dec 30 17:53:28     2005, Created by tomyeh@potix.com
+		Fri Dec 30 17:53:28     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

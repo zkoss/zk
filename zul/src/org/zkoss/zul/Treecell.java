@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jul  6 18:56:30     2005, Created by tomyeh@potix.com
+		Wed Jul  6 18:56:30     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * Thus, you could place any kind of children in it. They will be placed
  * right after the image and label.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Treecell extends LabelImageElement {
 	private static final String ROOT_OPEN = "/root-open.gif";

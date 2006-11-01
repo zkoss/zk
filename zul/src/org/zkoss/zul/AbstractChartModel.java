@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 03 11:50:19     2006, Created by henrichen@potix.com
+		Thu Aug 03 11:50:19     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zul.event.ChartDataListener;
 /**
  * A skeletal implementation for {@link ChartModel}.
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  */
 abstract public class AbstractChartModel implements ChartModel {
 	private final List _listeners = new ArrayList(3);

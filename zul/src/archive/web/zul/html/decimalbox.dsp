@@ -7,7 +7,7 @@ decimalbox.dsp
 	Description:
 		
 	History:
-		Tue Jul  5 09:12:37     2005, Created by tomyeh@potix.com
+		Tue Jul  5 09:12:37     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

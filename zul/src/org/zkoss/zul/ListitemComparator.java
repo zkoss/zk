@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu May 25 21:25:55     2006, Created by tomyeh@potix.com
+		Thu May 25 21:25:55     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import java.util.Comparator;
 /**
  * A comparator used to compare {@link Listitem}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ListitemComparator implements Comparator {
 	/** The listheader (optinal). */

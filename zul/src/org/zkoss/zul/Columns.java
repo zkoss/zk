@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 25 16:00:29     2005, Created by tomyeh@potix.com
+		Tue Oct 25 16:00:29     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.zul.impl.XulElement;
  * Defines the columns of a grid.
  * Each child of a columns element should be a {@link Column} element.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Columns extends XulElement {
 	//-- Component --//

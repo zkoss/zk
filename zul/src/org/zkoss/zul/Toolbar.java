@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun 23 11:33:31     2005, Created by tomyeh@potix.com
+		Thu Jun 23 11:33:31     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Default {@link #getSclass}: toolbox.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Toolbar extends XulElement {
 	private String _orient = "horizontal";

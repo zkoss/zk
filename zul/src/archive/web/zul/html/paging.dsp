@@ -7,7 +7,7 @@ paging.dsp
 	Description:
 		
 	History:
-		Thu Aug 17 17:59:43     2006, Created by tomyeh@potix.com
+		Thu Aug 17 17:59:43     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

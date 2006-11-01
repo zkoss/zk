@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 28 13:58:11     2005, Created by tomyeh@potix.com
+		Tue Jun 28 13:58:11     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -37,7 +37,7 @@ import org.zkoss.zul.mesg.MZul;
  * you could combine the flags, such as {@link #NO_POSITIVE} + {@link #NO_ZERO}
  * to accept only negative number. 
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class SimpleConstraint implements Constraint, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;

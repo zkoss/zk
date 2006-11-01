@@ -7,7 +7,7 @@ textbox.dsp
 	Description:
 		
 	History:
-		Tue Jun 14 17:17:17     2005, Created by tomyeh@potix.com
+		Tue Jun 14 17:17:17     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

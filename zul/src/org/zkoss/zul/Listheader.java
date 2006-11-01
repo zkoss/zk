@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Aug  5 13:06:59     2005, Created by tomyeh@potix.com
+		Fri Aug  5 13:06:59     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -43,7 +43,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * Reason: easier to write Listbox.</li>
  * </ol>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Listheader extends HeaderElement {
     private static final long serialVersionUID = 20060731L;

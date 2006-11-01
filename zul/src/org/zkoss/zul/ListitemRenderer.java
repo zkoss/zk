@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Aug 17 17:44:13     2005, Created by tomyeh@potix.com
+		Wed Aug 17 17:44:13     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ package org.zkoss.zul;
  * implement {@link RendererCtrl}. For example, starts an transaction,
  * and uses it to render all items for the same request.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see ListModel
  * @see Listbox
  */

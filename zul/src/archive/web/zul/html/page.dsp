@@ -8,7 +8,7 @@ page.dsp
 		zk_htmlHeadRequired
 			It is set by desktop.dsp to ask this page to render </head><body>
 	History:
-		Wed Jun  8 17:15:18     2005, Created by tomyeh@potix.com
+		Wed Jun  8 17:15:18     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

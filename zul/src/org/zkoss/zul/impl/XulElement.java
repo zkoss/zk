@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jun 20 16:01:40     2005, Created by tomyeh@potix.com
+		Mon Jun 20 16:01:40     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.event.Events;
 /**
  * The fundamental class for XUL elements.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class XulElement extends HtmlBasedComponent {
 	/** The popup ID that will be shown when click. */

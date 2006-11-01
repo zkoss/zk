@@ -7,7 +7,7 @@ rows.dsp
 	Description:
 		
 	History:
-		Tue Oct 25 17:06:05     2005, Created by tomyeh@potix.com
+		Tue Oct 25 17:06:05     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

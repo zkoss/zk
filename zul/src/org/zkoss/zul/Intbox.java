@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 28 13:39:37     2005, Created by tomyeh@potix.com
+		Tue Jun 28 13:39:37     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.FormatInputElement;
 /**
  * An edit box for holding an integer.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Intbox extends FormatInputElement {
 	public Intbox() {

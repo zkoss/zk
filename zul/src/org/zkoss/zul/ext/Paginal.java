@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 17 15:27:03     2006, Created by tomyeh@potix.com
+		Thu Aug 17 15:27:03     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.event.EventListener;
  * the paging controllee shall access only this interface (rather than
  * {@link org.zkoss.zul.Paging} or so).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Paginal {
 	/** Returns the number of items per page.

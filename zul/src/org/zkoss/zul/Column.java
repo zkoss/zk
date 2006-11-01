@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 25 16:02:36     2005, Created by tomyeh@potix.com
+		Tue Oct 25 16:02:36     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -41,7 +41,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * <p>The use of column is mainly to define attributes for each cell
  * in the grid.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Column extends HeaderElement {
 	private String _sortDir = "natural";

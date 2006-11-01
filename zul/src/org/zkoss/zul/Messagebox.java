@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jul 18 19:07:13     2005, Created by tomyeh@potix.com
+		Mon Jul 18 19:07:13     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.MessageboxDlg;
  *
  * <p>A non-XUL extension.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Messagebox {
 	/** A symbol consisting of a question mark in a circle. */

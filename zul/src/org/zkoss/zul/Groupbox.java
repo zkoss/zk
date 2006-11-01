@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jul 29 16:55:24     2005, Created by tomyeh@potix.com
+		Fri Jul 29 16:55:24     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * Groups a set of child elements to have a visual effect.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Groupbox extends XulElement {
 	private Caption _caption;

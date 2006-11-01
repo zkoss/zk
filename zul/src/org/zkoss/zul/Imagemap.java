@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Mar 28 00:25:48     2006, Created by tomyeh@potix.com
+		Tue Mar 28 00:25:48     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -41,7 +41,7 @@ import org.zkoss.zk.ui.UiException;
  * Thus, if you want to display such image, you have to use the alphafix mold.
  * <code>&lt;imagemap mold="alphafix"/&gt;</code>
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Imagemap extends Image {
 	//-- super --//

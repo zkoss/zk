@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jul 19 10:26:42     2005, Created by tomyeh@potix.com
+		Tue Jul 19 10:26:42     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -39,7 +39,7 @@ import org.zkoss.zul.impl.FileuploadDlg;
  *
  * <p>A non-XUL extension.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Fileupload {
 	/** Opens a modal dialog with the default message and title,

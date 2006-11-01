@@ -7,7 +7,7 @@ progressmeter.dsp
 	Description:
 		
 	History:
-		Mon Aug 14 17:12:24     2006, Created by tomyeh@potix.com
+		Mon Aug 14 17:12:24     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

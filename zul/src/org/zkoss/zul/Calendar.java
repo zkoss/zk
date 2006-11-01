@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Apr 24 17:12:27     2006, Created by tomyeh@potix.com
+		Mon Apr 24 17:12:27     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Default {@link #getSclass}: calendar.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Calendar extends XulElement {
 	private TimeZone _tzone;

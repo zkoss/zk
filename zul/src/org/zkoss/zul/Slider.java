@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 29 20:16:03     2005, Created by tomyeh@potix.com
+		Thu Sep 29 20:16:03     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A slider.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Slider extends XulElement {
 	private int _curpos, _maxpos = 100, _pginc = 10;

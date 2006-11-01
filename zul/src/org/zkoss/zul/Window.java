@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue May 31 19:29:13     2005, Created by tomyeh@potix.com
+		Tue May 31 19:29:13     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -59,7 +59,7 @@ import org.zkoss.zul.au.*;
  * <p>Events:<br>
  * onMove, onShow, onOK, onCacnel and onCtrlKey.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Window extends XulElement implements IdSpace {
 	private transient Caption _caption;

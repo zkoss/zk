@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jul 19 12:31:35     2005, Created by tomyeh@potix.com
+		Tue Jul 19 12:31:35     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A separator.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Separator extends XulElement {
 	private String _orient = "horizontal";

@@ -7,7 +7,7 @@ listcell.dsp
 	Description:
 		
 	History:
-		Tue Aug  9 09:47:39     2005, Created by tomyeh@potix.com
+		Tue Aug  9 09:47:39     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

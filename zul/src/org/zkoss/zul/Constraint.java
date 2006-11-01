@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jun 28 13:42:37     2005, Created by tomyeh@potix.com
+		Tue Jun 28 13:42:37     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * A constraint. It could be anything, but you could use {@link SimpleConstraint}
  * to simplify the task.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public interface Constraint {
 	/** Verifies whether the value is acceptable.

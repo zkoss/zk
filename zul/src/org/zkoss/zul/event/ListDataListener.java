@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Aug 17 18:05:15     2005, Created by tomyeh@potix.com
+		Wed Aug 17 18:05:15     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.UiException;
  * Defines the methods used to listener when the content of
  * {@link org.zkoss.zul.ListModel} is changed.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see org.zkoss.zul.ListModel
  * @see ListDataEvent
  */

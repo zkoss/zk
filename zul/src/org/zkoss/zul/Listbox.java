@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jun 15 17:25:00     2005, Created by tomyeh@potix.com
+		Wed Jun 15 17:25:00     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -94,7 +94,7 @@ import org.zkoss.zul.event.PagingEvent;
  *
  * <p>Default {@link #getSclass}: listbox.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see ListModel
  * @see ListitemRenderer
  */

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jul 25 11:39:49     2005, Created by tomyeh@potix.com
+		Mon Jul 25 11:39:49     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>A non-XUL extension.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Html extends XulElement {
 	private String _content = "";

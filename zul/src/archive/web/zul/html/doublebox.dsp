@@ -7,7 +7,7 @@ doublebox.dsp
 	Description:
 		
 	History:
-		Sat Oct  14 13:25:12     2006, Created by henrichen@potix.com
+		Sat Oct  14 13:25:12     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

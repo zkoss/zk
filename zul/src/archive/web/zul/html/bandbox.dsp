@@ -7,7 +7,7 @@ bandbox.dsp
 	Description:
 		
 	History:
-		Mon Mar 20 12:43:40     2006, Created by tomyeh@potix.com
+		Mon Mar 20 12:43:40     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

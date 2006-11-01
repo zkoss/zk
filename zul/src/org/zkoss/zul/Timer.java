@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Sep 26 12:45:22     2005, Created by tomyeh@potix.com
+		Mon Sep 26 12:45:22     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>{@link Timer} is a special component that is invisible.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Timer extends XulElement {
 	private int _delay;

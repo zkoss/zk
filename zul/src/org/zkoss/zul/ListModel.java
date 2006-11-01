@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Aug 17 17:44:08     2005, Created by tomyeh@potix.com
+		Wed Aug 17 17:44:08     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zul.event.ListDataListener;
  * This interface defines the methods components like {@link Listbox}
  * use to get the value of each cell and the length of the list.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  * @see Listbox
  * @see ListitemRenderer
  */

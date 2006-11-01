@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Aug 03 11:59:03     2006, Created by henrichen@potix.com
+		Wed Aug 03 11:59:03     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zul.ChartModel;
 /**
  * Defines an event that encapsulates changes to a chart's data model. 
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  */
 public class ChartDataEvent {
 	/** Identifies one or more changes in the lists contents. */

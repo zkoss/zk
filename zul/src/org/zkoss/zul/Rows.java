@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 25 16:02:39     2005, Created by tomyeh@potix.com
+		Tue Oct 25 16:02:39     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -33,7 +33,7 @@ import org.zkoss.zul.ext.Paginal;
  * Defines the rows of a grid.
  * Each child of a rows element should be a {@link Row} element.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Rows extends XulElement {
 	/** Returns the grid that contains this rows. */

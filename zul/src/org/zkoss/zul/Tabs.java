@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Jul 12 10:43:14     2005, Created by tomyeh@potix.com
+		Tue Jul 12 10:43:14     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A collection of tabs ({@link Tab}).
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Tabs extends XulElement {
 	/** Returns the tabbox owns this component.

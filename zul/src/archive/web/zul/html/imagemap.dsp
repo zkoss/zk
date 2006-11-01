@@ -7,7 +7,7 @@ imagemap.dsp
 	Description:
 		
 	History:
-		Tue Mar 28 14:54:56     2006, Created by tomyeh@potix.com
+		Tue Mar 28 14:54:56     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

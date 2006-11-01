@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 22 10:58:23     2005, Created by tomyeh@potix.com
+		Thu Sep 22 10:58:23     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * sA single choice in a {@link Menupopup} element.
  * It acts much like a button but it is rendered on a menu.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class Menuitem extends LabelImageElement {
 	private String _value = "";

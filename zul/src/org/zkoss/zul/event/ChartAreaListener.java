@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Aug 1 14:04:21     2006, Created by henrichen@potix.com
+		Tue Aug 1 14:04:21     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zul.Area;
 /**
  * Identifies area inside a chart that can be customized.
  *
- * @author <a href="mailto:henri@potix.com">henri@potix.com</a>
+ * @author henrichen
  * @see org.zkoss.zul.Chart
  */
 public interface ChartAreaListener {

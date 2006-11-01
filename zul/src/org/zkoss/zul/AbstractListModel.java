@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 18 15:19:43     2005, Created by tomyeh@potix.com
+		Thu Aug 18 15:19:43     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -30,7 +30,7 @@ import org.zkoss.zul.event.ListDataListener;
 /**
  * A skeletal implementation for {@link ListModel}.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 abstract public class AbstractListModel implements ListModel {
 	private final List _listeners = new LinkedList();

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Aug 14 21:19:30     2006, Created by henrichen@potix.com
+		Thu Aug 14 21:19:30     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -37,7 +37,7 @@ import java.util.Collection;
  * A HiLo model is an model generally used in stock market to hold 
  * (date, open, high, low, close, volume) tuple data objects .
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  * @see HiLoModel
  * @see Chart
  */

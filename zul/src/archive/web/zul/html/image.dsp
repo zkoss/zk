@@ -7,7 +7,7 @@ image.dsp
 	Description:
 		
 	History:
-		Mon Jul 18 21:00:00     2005, Created by tomyeh@potix.com
+		Mon Jul 18 21:00:00     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
