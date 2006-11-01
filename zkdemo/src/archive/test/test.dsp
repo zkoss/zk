@@ -7,7 +7,7 @@ test.psp
 	Description:
 		
 	History:
-		Mon Sep  5 17:23:07     2005, Created by tomyeh@potix.com
+		Mon Sep  5 17:23:07     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

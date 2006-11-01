@@ -7,7 +7,7 @@ test.jsp
 	Description:
 		
 	History:
-		Mon May  1 13:48:44     2006, Created by tomyeh@potix.com
+		Mon May  1 13:48:44     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.

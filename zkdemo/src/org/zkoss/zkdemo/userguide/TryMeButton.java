@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 28 21:02:57     2006, Created by tomyeh@potix.com
+		Thu Sep 28 21:02:57     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -22,7 +22,7 @@ import org.zkoss.zul.*;
 /**
  * The "Try me!" button.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class TryMeButton extends Button {
 	public void onClick() {

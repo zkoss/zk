@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct  3 12:32:23     2006, Created by tomyeh@potix.com
+		Tue Oct  3 12:32:23     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -19,7 +19,7 @@ package org.zkoss.zkdemo.userguide;
 /**
  * A big list.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class BigList extends java.util.AbstractList {
 	private int _sz;

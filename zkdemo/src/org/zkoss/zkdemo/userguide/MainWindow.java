@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Sun Oct 15 16:35:05     2006, Created by tomyeh@potix.com
+		Sun Oct 15 16:35:05     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zul.Window;
 /**
  * The main window of userguide.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class MainWindow extends Window {
 	public MainWindow() {

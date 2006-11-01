@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jun 21 20:49:41     2006, Created by tomyeh@potix.com
+		Wed Jun 21 20:49:41     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -26,7 +26,7 @@ import org.zkoss.zul.*;
  * A pool of components being created when app starts.
  * It is used to test with desktop.zul.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class ComponentPools {
 	private static final List _comps = new LinkedList();

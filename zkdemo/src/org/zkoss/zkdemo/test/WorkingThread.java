@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jun  7 16:50:27     2006, Created by tomyeh@potix.com
+		Wed Jun  7 16:50:27     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zul.Label;
  * Illustrates how an event handler invokes a working thread
  * to execute a long operation.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class WorkingThread extends Thread {
 	private static int _cnt;

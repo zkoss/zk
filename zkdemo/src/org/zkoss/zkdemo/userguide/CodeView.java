@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 28 21:56:20     2006, Created by tomyeh@potix.com
+		Thu Sep 28 21:56:20     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -23,7 +23,7 @@ import org.zkoss.zul.*;
 /**
  * The code textbox.
  * 
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class CodeView extends Textbox implements AfterCompose {
 	public void afterCompose() {

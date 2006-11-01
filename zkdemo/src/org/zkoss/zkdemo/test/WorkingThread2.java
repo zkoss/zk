@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jun  7 18:42:47     2006, Created by tomyeh@potix.com
+		Wed Jun  7 18:42:47     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -24,7 +24,7 @@ import org.zkoss.zul.Label;
 /**
  * Another implementation that don't use Executions.wait and notify.
  *
- * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @author tomyeh
  */
 public class WorkingThread2 extends Thread {
 	private static int _cnt;
