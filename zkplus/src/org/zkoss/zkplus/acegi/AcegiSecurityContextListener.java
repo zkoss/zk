@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep  11 12:55:11     2006, Created by henrichen@potix.com
+		Tue Sep  11 12:55:11     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -44,7 +44,7 @@ import org.acegisecurity.context.SecurityContextHolder;
  * </code></pre>
  * </p>
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  */
 public class AcegiSecurityContextListener implements EventThreadInit, EventThreadCleanup, EventThreadResume {
 	private static final Log log = Log.lookup(AcegiSecurityContextListener.class);

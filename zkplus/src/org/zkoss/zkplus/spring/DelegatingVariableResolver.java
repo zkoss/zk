@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun  1 13:53:53     2006, Created by andrewho@potix.com
+		Thu Jun  1 13:53:53     2006, Created by andrewho
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -37,7 +37,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * <p>Usage:<br>
  * <code>&lt;?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?&gt;</code>
  *
- * @author <a href="mailto:andrewho@potix.com">andrewho@potix.com</a>
+ * @author andrewho
  */
 public class DelegatingVariableResolver implements VariableResolver {
 	protected ApplicationContext _ctx;

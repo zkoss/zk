@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep  5 10:11:55     2006, Created by henrichen@potix.com
+		Tue Sep  5 10:11:55     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -40,7 +40,7 @@ import org.hibernate.StaleObjectStateException;
  * </code></pre>
  * </p>
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  */
 public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanup {
 	private static final Log log = Log.lookup(OpenSessionInViewListener.class);

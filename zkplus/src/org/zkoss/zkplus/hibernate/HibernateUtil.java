@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Sep  4 17:18:21     2006, Created by henrichen@potix.com
+		Mon Sep  4 17:18:21     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -39,7 +39,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
  * <p> Also notice that the zkplus.jar must be put under application's WEB-INF/lib because
  * the SessionFactory is stored as a class static member.
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  */
 public class HibernateUtil {
 	private static final Log log = Log.lookup(HibernateUtil.class);

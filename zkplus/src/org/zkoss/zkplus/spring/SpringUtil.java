@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Jun  1 13:53:53     2006, Created by henrichen@potix.com
+		Thu Jun  1 13:53:53     2006, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -31,7 +31,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 /**
  * SpringUtil, a Spring utility.
  *
- * @author <a href="mailto:henrichen@potix.com">henrichen@potix.com</a>
+ * @author henrichen
  */
 public class SpringUtil {
 	/**
