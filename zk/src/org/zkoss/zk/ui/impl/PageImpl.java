@@ -108,6 +108,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private String _id;
 	private transient Interpreter _ip;
 	private String _title = "", _style = "";
+	private final String _path;
 	/** A list of root components. */
 	private final List _roots = new LinkedList();
 	private transient List _roRoots;
@@ -147,6 +148,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_dkUri = _langdef.getDesktopURI();
 		_pgUri = _langdef.getPageURI();
 		_compdefs = pgdef.getComponentDefinitionMap();
+		_path = pgdef.getRequestPath();
 
 		init();
 	}
@@ -161,12 +163,15 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 * are not ready until {@link #init} is called.
 	 *
 	 * @param langdef the language definition (never null).
+	 * @param path the request path, or null if not available
 	 */
-	public PageImpl(LanguageDefinition langdef) {
+	public PageImpl(LanguageDefinition langdef, String path) {
 		_langdef = langdef;
 		_dkUri = _langdef.getDesktopURI();
 		_pgUri = _langdef.getPageURI();
 		_compdefs = new ComponentDefinitionMap();
+		_path = path;
+
 		init();
 	}
 	/** Initialized the page when contructed or deserialized.
@@ -200,6 +205,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				_funmap = funmap;
 	}
 
+	public String getRequestPath() {
+		return _path;
+	}
 	public final String getId() {
 		return _id;
 	}

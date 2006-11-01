@@ -183,13 +183,13 @@ public class PageDefinitions {
 		throws Exception {
 			final Locator locator =
 				extra != null ? (Locator)extra: getLocator(_wapp, path);
-			return new Parser(_wapp, locator).parse(file);
+			return new Parser(_wapp, locator).parse(file, path);
 		}
 		protected Object parse(String path, URL url, Object extra)
 		throws Exception {
 			final Locator locator =
 				extra != null ? (Locator)extra: getLocator(_wapp, path);
-			return new Parser(_wapp, locator).parse(url);
+			return new Parser(_wapp, locator).parse(url, path);
 		}
 	}
 }

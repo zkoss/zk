@@ -85,18 +85,32 @@ public class Parser {
 	}
 
 	/** Parses the specified file.
+	 *
+	 * @param path the request path.
+	 * It is used as {@link org.zkoss.zk.ui.Page#getRequestPath}, or null
+	 * if not available.
 	 */
-	public PageDefinition parse(File file) throws Exception {
+	public PageDefinition parse(File file, String path) throws Exception {
 		//if (log.debugable()) log.debug("Parsing "+file);
-		return parse(new SAXBuilder(true, false, true).build(file),
-			getExtension(file.getName()));
+		final PageDefinition pgdef =
+			parse(new SAXBuilder(true, false, true).build(file),
+				getExtension(file.getName()));
+		pgdef.setRequestPath(path);
+		return pgdef;
 	}
 	/** Parses the specified URL.
+	 *
+	 * @param path the request path.
+	 * It is used as {@link org.zkoss.zk.ui.Page#getRequestPath}, or null
+	 * if not available.
 	 */
-	public PageDefinition parse(URL url) throws Exception {
+	public PageDefinition parse(URL url, String path) throws Exception {
 		//if (log.debugable()) log.debug("Parsing "+url);
-		return parse(new SAXBuilder(true, false, true).build(url),
-			getExtension(url.toExternalForm()));
+		final PageDefinition pgdef =
+			parse(new SAXBuilder(true, false, true).build(url),
+				getExtension(url.toExternalForm()));
+		pgdef.setRequestPath(path);
+		return pgdef;
 	}
 
 	private static final String getExtension(String nm) {

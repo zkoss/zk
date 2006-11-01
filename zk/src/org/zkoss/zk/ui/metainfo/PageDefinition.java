@@ -56,6 +56,8 @@ import org.zkoss.zk.ui.sys.PageCtrl;
 public class PageDefinition extends InstanceDefinition {
 	private final Locator _locator;
 	private final String _id, _title, _style;
+	/** The request path. */
+	private String _path;
 	private final List _taglibs = new LinkedList();
 	private FunctionMapper _funmap;
 	/* List(InitiatorDefinition). */
@@ -92,6 +94,21 @@ public class PageDefinition extends InstanceDefinition {
 	 */
 	public Locator getLocator() {
 		return _locator;
+	}
+
+	/** Returns the request path of this page definition, or null
+	 * if not available.
+	 * <p>It is the same as the servlet path
+	 * (javax.servlet.http.HttpServletRequest's getServletPath), if ZK is running
+	 * at a servlet container.
+	 */
+	public String getRequestPath() {
+		return _path;
+	}
+	/** Sets the request path of this page definition.
+	 */
+	/*package*/ void setRequestPath(String path) {
+		_path = path;
 	}
 
 	/** Imports the component definitions from the specified definition.

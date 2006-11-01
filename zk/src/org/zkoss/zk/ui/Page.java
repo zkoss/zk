@@ -115,6 +115,13 @@ public interface Page extends IdSpace {
 	 */
 	public void setStyle(String style);
 
+	/** Returns the request path of this page, or null if not available.
+	 * <p>It is the same as the servlet path
+	 * (javax.servlet.http.HttpServletRequest's getServletPath), if ZK is running
+	 * at a servlet container.
+	 */
+	public String getRequestPath();
+
 	/** Returns the desktop that this page belongs to.
 	 *
 	 * <p>Note: it returns null when
