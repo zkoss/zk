@@ -20,11 +20,22 @@ import java.util.Map;
 
 /**
  * The common interface extended by all annotation types.
+ * An annotation consists of a name ({@link #getName}) and a map of attributes
+ * {@link #getAttribute}.
+ *
+ * <p>To get the annotation associated with a component declaration, use
+ * {@link org.zkoss.zk.ui.metainfo.Milieu#getAnnotation(String)}.
+ * To get the annotation associated with the declaration of a component property,
+ * use {@link org.zkoss.zk.ui.metainfo.Milieu#getAnnotation(String, String)}
  *
  * @author <a href="mailto:tomyeh@potix.com">tomyeh@potix.com</a>
+ * @see org.zkoss.zk.ui.metainfo.Milieu#getAnnotation(String)
  */
-public interface Annotation {
+public interface Annotation extends java.io.Serializable {
 	/** Returns the name of this annotation.
+	 *
+	 * <p>For each declaration, there is at most one annotation with the same
+	 * name.
 	 */
 	public String getName();
 	/** Returns the map of attributes (String name, String value) (never null).
