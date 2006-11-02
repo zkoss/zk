@@ -1,7 +1,7 @@
 	--------
 ZK 2.2.0 Freshly
 * Features:
-  1587247, 1587699, 1587701, 1588387.
+  1587247, 1587699, 1587701, 1588387, 1589060.
   + HibernateUtil support Hibernate annotation.
   + New Google Maps components: ginfo and gmarker.
 
