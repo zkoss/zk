@@ -96,6 +96,27 @@ public class PageDefinition extends InstanceDefinition {
 		return _locator;
 	}
 
+	/** Returns the identitifer that will be assigned to pages created from
+	 * this definition, or null if the identifier shall be generated automatically.
+	 * <p>Note: the returned value might contain EL expressions.
+	 */
+	public String getId() {
+		return _id;
+	}
+	/** Returns the title that will be assigned to pages created from
+	 * this definition, or null if no title is assigned at the beginning.
+	 * <p>Note: the returned value might contain EL expressions.
+	 */
+	public String getTitle() {
+		return _title;
+	}
+	/** Returns the CSS style that will be assigned to pages created from
+	 * this definition, or null if no style is assigned at the beginning.
+	 * <p>Note: the returned value might contain EL expressions.
+	 */
+	public String getStyle() {
+		return _style;
+	}
 	/** Returns the request path of this page definition, or ""
 	 * if not available.
 	 * <p>It is the same as the servlet path

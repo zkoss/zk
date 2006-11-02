@@ -47,6 +47,8 @@ public interface Initiator {
 	 * To get the current desktop, you have to use
 	 * {@link org.zkoss.zk.ui.Execution#getDesktop} (from 
 	 * {@link org.zkoss.zk.ui.Executions#getCurrent}) instead.
+	 * On the other hand, {@link org.zkoss.zk.ui.Page#getRequestPath}
+	 * and {@link org.zkoss.zk.ui.Page#getAttribute} are all available.
 	 *
 	 * @param page the page being evaluated
 	 * @param args an array of arguments passed with

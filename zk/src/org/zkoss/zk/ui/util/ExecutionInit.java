@@ -41,6 +41,18 @@ public interface ExecutionInit {
 	 * {@link org.zkoss.zk.ui.Executions#getCurrent} is the same as
 	 * the exec argument.
 	 *
+	 * <p>When this method is called, you can retrieve the current page with
+	 * {@link org.zkoss.zk.ui.sys.ExecutionCtrl#getCurrentPage}.
+	 * However, the page is not initialized yet. In other words,
+	 * {@link org.zkoss.zk.ui.Page#getDesktop},
+	 * {@link org.zkoss.zk.ui.Page#getId} and {@link org.zkoss.zk.ui.Page#getTitle}
+	 * all return null.
+	 * To get the current desktop, you have to use
+	 * {@link org.zkoss.zk.ui.Execution#getDesktop} (from 
+	 * {@link org.zkoss.zk.ui.Executions#getCurrent}) instead.
+	 * On the other hand, {@link org.zkoss.zk.ui.Page#getRequestPath}
+	 * and {@link org.zkoss.zk.ui.Page#getAttribute} are all available.
+	 *
 	 * @param exec the execution being created.
 	 * @param parent the previous execution in the same (Servlet) request, or
 	 * null if this is the first execution of the request.
