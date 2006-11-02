@@ -21,6 +21,7 @@ package org.zkoss.zk.ui.metainfo;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Collections;
@@ -157,16 +158,37 @@ public class Milieu implements Serializable {
 	 * @param annotName the annotation name
 	 */
 	public Annotation getAnnotation(String annotName) {
-		return getAnnotation(annotName, null);
+		return getAnnotation0(annotName, null);
 	}
 	/** Returns the annotation associated with the definition of the specified
 	 * property, or null if not available.
 	 *
 	 * @param annotName the annotation name
 	 * @param propName the property name, e.g., "value".
-	 * If null, it is the same as {@link #getAnnotation(String)}.
 	 */
 	public Annotation getAnnotation(String annotName, String propName) {
+		if (propName == null || propName.length() == 0)
+			throw new IllegalArgumentException("The property name is required");
+		return getAnnotation0(annotName, propName);
+	}
+	/** Returns a read-only list of the names (String) of the properties
+	 * that are associated with the specified annotation (never null).
+	 */
+	public List getPropertiesByAnnotation(String annotName) {
+		List list = null;
+		if (_annots != null) {
+			for (Iterator it = _annots.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final Map ans = (Map)me.getValue();
+				if (ans.containsKey(annotName)) {
+					if (list == null) list = new LinkedList();
+					list.add(me.getKey());
+				}
+			}
+		}
+		return list != null ? list: Collections.EMPTY_LIST;
+	}
+	private Annotation getAnnotation0(String annotName, String propName) {
 		if (_annots != null) {
 			final Map ans = (Map)_annots.get(propName);
 			if (ans != null) return (Annotation)ans.get(annotName);
