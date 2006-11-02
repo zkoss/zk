@@ -1,7 +1,7 @@
 	--------
 ZK 2.2.0 Freshly
 * Features:
-  1587247, 1587699, 1587701, 1588387, 1589060, 1589050.
+  1587247, 1587699, 1587701, 1588387, 1589060, 1589050, 1589119.
   + HibernateUtil support Hibernate annotation.
   + New Google Maps components: ginfo and gmarker.
 
@@ -9,6 +9,8 @@ ZK 2.2.0 Freshly
   1584857, 1586951.
 
 * Upgrade Notes
+  + You have to implement a new method called doAfterCompose for classes
+    that implements org.zkoss.zk.ui.util.Initiator interface.
 
 	--------
 ZK 2.1.3
