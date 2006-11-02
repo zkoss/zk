@@ -961,9 +961,8 @@ implements java.io.Serializable, RenderOnDemand {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
 				} else {
-					if (inSelectMold())
-						throw new UnsupportedOperationException("Mold select doesn't support ListModel");
-					smartUpdate("z:model", "true");
+					if (!inSelectMold())
+						smartUpdate("z:model", "true");
 				}
 
 				initDataListener();
@@ -984,7 +983,8 @@ implements java.io.Serializable, RenderOnDemand {
 			_model.removeListDataListener(_dataListener);
 			_model = null;
 			getItems().clear();
-			smartUpdate("z:model", null);
+			if (!inSelectMold())
+				smartUpdate("z:model", null);
 		}
 	}
 
@@ -1076,7 +1076,8 @@ implements java.io.Serializable, RenderOnDemand {
 	public void onInitRender() {
 		final Renderer renderer = new Renderer();
 		try {
-			final int pgsz = inPagingMold() ? _pgi.getPageSize(): _rows;
+			final int pgsz = inSelectMold() ? getItemCount():
+				inPagingMold() ? _pgi.getPageSize(): _rows;
 			int j = 0;
 			for (Iterator it = getItems().iterator(); j < pgsz && it.hasNext(); ++j)
 				renderer.render((Listitem)it.next());
@@ -1090,6 +1091,13 @@ implements java.io.Serializable, RenderOnDemand {
 	/** Handles when the list model's content changed.
 	 */
 	private void onListDataChange(ListDataEvent event) {
+		if (inSelectMold()) {
+			invalidate();
+			syncModel(-1, -1);
+			Events.postEvent("onInitRender", this, null);
+			return;
+		}
+
 		//when this is called _model is never null
 		final int newsz = _model.getSize(), oldsz = getItemCount();
 		int min = event.getIndex0(), max = event.getIndex1();
