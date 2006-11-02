@@ -28,7 +28,9 @@ import org.zkoss.zk.ui.UiException;
  * <p>&lt;?init class="MyInit"?&gt;
  *
  * <p>Once specified, an instance is created and {@link #doInit} is called
- * before the page is evaluated. In additions, {@link #doFinally} is called
+ * before the page is evaluated. Then, {@link #doAfterCompose} is called
+ * after all components are created, and before any event is processed.
+ * In additions, {@link #doFinally} is called
  * after the page has been evaluated. If an exception occurs, {@link #doCatch}
  * is called.
  *
@@ -59,6 +61,20 @@ public interface Initiator {
 	 * If no argument is specified, args is an array with zero length.
 	 */
 	public void doInit(Page page, Object[] args) throws Exception;
+	/** Called after all components are created (aka., composed),
+	 * and before any event is processed.
+	 *
+	 * <p>For example, the data-binding managers could process the binding
+	 * at this callback.
+	 *
+	 * <p>It won't be called if an un-caught exception occurs when creating
+	 * components.
+	 *
+	 * @param page the page that new components are attached to. It is the same
+	 * as {@link #doInit}'s page argument.
+	 */
+	public void doAfterCompose(Page page) throws Exception;
+
 	/** Called when an exception occurs during the evaluation of the page.
 	 *
 	 * <p>This is only a notification for the happening of an exception.

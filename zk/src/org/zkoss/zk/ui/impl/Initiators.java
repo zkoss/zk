@@ -48,6 +48,9 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	}
 	protected Initiators() {
 	}
+
+	public void doAfterCompose(Page page) throws Exception {
+	}
 	public void doCatch(Throwable t) {
 	}
 	public void doFinally() {
@@ -61,6 +64,11 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	/*package*/ RealInits(List inits) {
 		_inits = inits;
 		
+	}
+	public void doAfterCompose(Page page) throws Exception {
+		for (Iterator it = _inits.iterator(); it.hasNext();) {
+			((Initiator)it.next()).doAfterCompose(page);
+		}
 	}
 	/** Invokes {@link Initiator#doCatch}.
 	 * It eats all exception without throwing one (but logging).

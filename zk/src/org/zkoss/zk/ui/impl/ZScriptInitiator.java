@@ -26,6 +26,9 @@ import org.zkoss.zk.ui.util.Namespaces;
 
 /**
  * An initiator used to evaluate a zscript file.
+ * Used internally by {@link org.zkoss.zk.ui.metainfo.Parser} to evaluate
+ * the init directive with zscript:<br/>
+ * <code>&lt;?init zscript="xxx"?&gt;</code>
  *
  * @author tomyeh
  */
@@ -43,6 +46,8 @@ public class ZScriptInitiator implements Initiator {
 		} finally {
 			Namespaces.afterInterpret(ns);
 		}
+	}
+	public void doAfterCompose(Page page) throws Exception {
 	}
 	public void doCatch(Throwable ex) {
 	}

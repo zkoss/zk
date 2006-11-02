@@ -252,6 +252,7 @@ public class UiEngineImpl implements UiEngine {
 						!uv.isEverAsyncUpdate() && !uv.isAborting(), !uv.isAborting());
 					if (!uv.isAborting())
 						execCreate(exec, page, pagedef, null);
+					inits.doAfterCompose(page);
 				} catch(Throwable ex) {
 					inits.doCatch(ex);
 					throw UiException.Aide.wrap(ex);
@@ -415,7 +416,9 @@ public class UiEngineImpl implements UiEngine {
 
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
-			return execCreate(exec, page, pagedef, parent);
+			final Component comp = execCreate(exec, page, pagedef, parent);
+			inits.doAfterCompose(page);
+			return comp;
 		} catch (Throwable ex) {
 			inits.doCatch(ex);
 			throw UiException.Aide.wrap(ex);
