@@ -47,8 +47,11 @@ public interface Initiator {
 	 * To get the current desktop, you have to use
 	 * {@link org.zkoss.zk.ui.Execution#getDesktop} (from 
 	 * {@link org.zkoss.zk.ui.Executions#getCurrent}) instead.
-	 * On the other hand, {@link org.zkoss.zk.ui.Page#getRequestPath}
-	 * and {@link org.zkoss.zk.ui.Page#getAttribute} are all available.
+	 * On the other hand, you can set the page's ID, title or style in
+	 * this method (to override the declarations in the page definition)
+	 * by {@link org.zkoss.zk.ui.Page#setId}, {@link Page#setTitle} and {@link Page#setStyle}.
+	 * In additions, {@link Page#getRequestPath}
+	 * and {@link Page#getAttribute} are all available.
 	 *
 	 * @param page the page being evaluated
 	 * @param args an array of arguments passed with

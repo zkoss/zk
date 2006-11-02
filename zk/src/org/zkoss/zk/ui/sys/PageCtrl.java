@@ -44,10 +44,20 @@ public interface PageCtrl {
 	 * <p>This method shall be called only after the current execution
 	 * is activated.
 	 *
-	 * @param id the page identifier, or null if auto-generation is required
+	 * @param id the page identifier, or null if auto-generation is required.
+	 * Note: it is ignored if an identitified is always assigned to this page,
+	 * i.e., {@link org.zkoss.zk.ui.Page#setId} was called with a non-empty value before.
+	 * @param title the page title, or null if not to assign a new title.
+	 * Note: it is ignored if a title is always assigned to this page,
+	 * i.e., {@link org.zkoss.zk.ui.Page#setTitle} was called with a non-empty
+	 * value before.
+	 * @param style the page's CSS style, or null if not to assign a new style.
+	 * Note: it is ignored if a style is always assigned to this page,
+	 * i.e., {@link org.zkoss.zk.ui.Page#setStyle} was called with a non-empty
+	 * value before.
 	 * @param headers the header elements, or null if no header is required.
 	 */
-	public void init(String id, String headers);
+	public void init(String id, String title, String style, String headers);
 
 	/** Returns the (HTML) header elements declared in this page.
 	 */

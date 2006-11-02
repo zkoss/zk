@@ -94,6 +94,19 @@ public interface Page extends IdSpace {
 	 * {@link org.zkoss.zk.ui.util.Initiator#doInit} is called.
 	 */
 	public String getId();
+	/** Sets the identifier of this page.
+	 *
+	 * <p>Note: you can change the page's ID only in
+	 * {@link org.zkoss.zk.ui.util.Initiator#doInit}
+	 * or {@link org.zkoss.zk.ui.util.ExecutionInit#init}.
+	 * Once the page is initialized (by {@link org.zkoss.zk.ui.sys.PageCtrl#init}),
+	 * calling this
+	 * method will cause an exception.
+	 *
+	 * @exception UiException if the page is initialized, i.e.,
+	 * {@link org.zkoss.zk.ui.sys.PageCtrl#init} is called.
+	 */
+	public void setId(String id);
 
 	/** Returns the title of the desktop this page belongs to
 	 * (and evaluate it if it contains an expression).

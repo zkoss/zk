@@ -211,6 +211,12 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public final String getId() {
 		return _id;
 	}
+	public void setId(String id) {
+		if (_desktop != null)
+			throw new UiException("Unable to change the identifier after the page is initialized");
+		if (id != null && id.length() > 0) _id = id;
+		//No need to update client since it is allowed only before init(...)
+	}
 	public String getTitle() {
 		return _title;
 	}
@@ -402,17 +408,29 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	//-- PageCtrl --//
-	public void init(String id, String headers) {
+	public void init(String id, String title, String style, String headers) {
 		if (_desktop != null)
 			throw new IllegalStateException("Don't init twice");
-
-		if (id != null) _id = id;
-		if (headers != null) _headers = headers;
 
 		final Execution exec = Executions.getCurrent();
 		_desktop = exec.getDesktop();
 		if (_desktop == null)
 			throw new IllegalArgumentException("null desktop");
+
+		_ip.setVariable("log", _zklog);
+		_ip.setVariable("page", this);
+		_ip.setVariable("desktop", _desktop);
+		_ip.setVariable("pageScope", getAttributes());
+		_ip.setVariable("desktopScope", _desktop.getAttributes());
+		_ip.setVariable("applicationScope", _desktop.getWebApp().getAttributes());
+		_ip.setVariable("requestScope", REQUEST_ATTRS);
+		_ip.setVariable("spaceOwner", this);
+		final Session sess = _desktop.getSession();
+		_ip.setVariable("session", sess);
+		_ip.setVariable("sessionScope", sess.getAttributes());
+
+		if (_id != null && id != null) _id = id;
+		if (headers != null) _headers = headers;
 
 		final DesktopCtrl dtctrl = (DesktopCtrl)_desktop;
 		if (_id != null)
@@ -427,17 +445,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 		dtctrl.addPage(this);	
 
-		_ip.setVariable("log", _zklog);
-		_ip.setVariable("page", this);
-		_ip.setVariable("desktop", _desktop);
-		_ip.setVariable("pageScope", getAttributes());
-		_ip.setVariable("desktopScope", _desktop.getAttributes());
-		final Session sess = _desktop.getSession();
-		_ip.setVariable("session", sess);
-		_ip.setVariable("sessionScope", sess.getAttributes());
-		_ip.setVariable("applicationScope", _desktop.getWebApp().getAttributes());
-		_ip.setVariable("requestScope", REQUEST_ATTRS);
-		_ip.setVariable("spaceOwner", this);
+		if (_title == null && title != null) setTitle(title);
+		if (_style == null && style != null) setStyle(style);
 	}
 	private static final Map REQUEST_ATTRS = new AbstractMap() {
 		public Set entrySet() {

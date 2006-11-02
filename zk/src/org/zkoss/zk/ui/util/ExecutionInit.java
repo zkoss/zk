@@ -48,9 +48,13 @@ public interface ExecutionInit {
 	 * {@link org.zkoss.zk.ui.Page#getId} and {@link org.zkoss.zk.ui.Page#getTitle}
 	 * all return null.
 	 * To get the current desktop, you have to use
-	 * {@link org.zkoss.zk.ui.Execution#getDesktop} (from 
+	 * {@link org.zkoss.zk.ui.Execution#getDesktop} (from
 	 * {@link org.zkoss.zk.ui.Executions#getCurrent}) instead.
-	 * On the other hand, {@link org.zkoss.zk.ui.Page#getRequestPath}
+	 * On the other hand, you can set the page's ID, title or style in
+	 * this method (to override the declarations in the page definition)
+	 * by {@link org.zkoss.zk.ui.Page#setId}, {@link org.zkoss.zk.ui.Page#setTitle}
+	 * and {@link org.zkoss.zk.ui.Page#setStyle}.
+	 * In additions, {@link org.zkoss.zk.ui.Page#getRequestPath}
 	 * and {@link org.zkoss.zk.ui.Page#getAttribute} are all available.
 	 *
 	 * @param exec the execution being created.
