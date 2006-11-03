@@ -104,6 +104,12 @@ public class Treerow extends XulElement {
 		final Treeitem ti = getTreeitem();
 		return ti != null ? ti.getTooltip(): null;
 	}
+	/** Returns the same as {@link Treeitem#getTooltiptext}
+	 */
+	public String getTooltiptext() {
+		final Treeitem ti = getTreeitem();
+		return ti != null ? ti.getTooltiptext(): null;
+	}
 
 	protected boolean isAsapRequired(String evtnm) {
 		if (!Events.ON_OPEN.equals(evtnm))

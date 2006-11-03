@@ -300,7 +300,8 @@ public class Treeitem extends XulElement {
 	}
 
 	public void smartUpdate(String attr, String value) {
-		if ("z:ctx".equals(attr) || "z:pop".equals(attr) || "z:tip".equals(attr)) {
+		if ("z:ctx".equals(attr) || "z:pop".equals(attr) || "z:tip".equals(attr)
+		|| "title".equals(attr)) {
 			if (_treerow != null) _treerow.smartUpdate(attr, value);
 		} else {
 			super.smartUpdate(attr, value); //cause IllegalStateException
