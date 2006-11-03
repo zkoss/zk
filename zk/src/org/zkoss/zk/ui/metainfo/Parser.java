@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.io.File;
@@ -35,6 +36,7 @@ import java.net.URL;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.PotentialDeadLockException;
+import org.zkoss.util.Maps;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.idom.Namespace;
@@ -500,12 +502,18 @@ public class Parser {
 
 			String ifc = null, unless = null,
 				forEach = null, forEachBegin = null, forEachEnd = null;
+			AnnotInfo attrAnnotInfo = null;
 			for (Iterator it = el.getAttributeItems().iterator();
 			it.hasNext();) {
 				final Attribute attr = (Attribute)it.next();
+				final Namespace attrns = attr.getNamespace();
 				final String attnm = attr.getLocalName();
 				final String attval = attr.getValue();
-				if ("if".equals(attnm)) {
+				if (attrns != null && LanguageDefinition.ANNO_NAMESPACE.equals(attrns.getURI())) {
+					if (attrAnnotInfo == null)
+						attrAnnotInfo = new AnnotInfo();
+					attrAnnotInfo.addRaw(attnm, attval);
+				} else if ("if".equals(attnm)) {
 					ifc = attval;
 				} else if ("unless".equals(attnm)) {
 					unless = attval;
@@ -521,13 +529,18 @@ public class Parser {
 					final String attruri = attns != null ? attns.getURI(): "";
 					if (!"xmlns".equals(attpref)
 					&& !("xmlns".equals(attnm) && "".equals(attpref))
-					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attruri))
+					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attruri)) {
 						addAttribute(instdef, attns, attnm, attval, null);
+						if (attrAnnotInfo != null)
+							attrAnnotInfo.updateAnnotations(instdef, attnm);
+					}
 				}
 			}
+
 			instdef.setCondition(ConditionImpl.getInstance(ifc, unless));
 			instdef.setForEach(forEach, forEachBegin, forEachEnd);
 			annotInfo.updateAnnotations(instdef, null);
+
 			parse(pgdef, instdef, el.getChildren(), annotInfo); //recursive
 		}
 	}
@@ -691,6 +704,10 @@ public class Parser {
 				_annots.put(name, ai = new AnnotImpl(name));
 			ai.setAttributes(attrs);
 		}
+		private void addRaw(String name, String rawValue) {
+			final Map attrs = Maps.parse(null, rawValue, ',', '\'');
+			add(name, attrs);
+		}
 		/** Updates the annotations to the specified instance definition.
 		 * Note: it clears all annotation definitions before returning.
 		 *
@@ -724,8 +741,15 @@ public class Parser {
 			_name = name;
 		}
 		private void setAttributes(Map attrs) {
-			if (attrs != null)
-				_attrs.putAll(attrs);
+			if (attrs != null) {
+				for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					final String nm = (String)me.getKey();
+					final String val = (String)me.getValue();
+					_attrs.put(nm != null && nm.length() > 0 ? nm: "value",
+						val != null ? val: "");
+				}
+			}
 		}
 		public String getName() {
 			return _name;

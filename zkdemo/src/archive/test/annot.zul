@@ -23,13 +23,25 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <window id="main" title="Annotation" >
 	<a:bind field="value"/>
 	<a:bind source="bigcat:1099"/>
-	<textbox id="textbox"/>
+	<textbox id="t1"/>
+	<textbox id="t2">
+		<a:hello say="hi"/>
+		<attribute name="value">Hello</attribute>
+	</textbox>
+	<textbox id="t3" a:mark="color='blue',shape='round'" value=""/>
 
 	<zscript>
 	void dump(StringBuffer sb, Component comp) {
 		sb.append(comp.getId()).append(": ")
 		  .append(comp.getMilieu().getAnnotations().toString())
 		  .append('\n');
+		for (Iterator it = comp.getMilieu().getAnnotatedProperties().iterator();
+		it.hasNext();) {
+			String prop = it.next();
+			sb.append(" with ").append(prop).append(": ")
+				.append(comp.getMilieu().getAnnotations(prop))
+				.append('\n');
+		}
 
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 			dump(sb, it.next());

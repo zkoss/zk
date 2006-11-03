@@ -166,22 +166,24 @@ public class Milieu implements Serializable {
 	 *
 	 * @param annotName the annotation name
 	 * @param propName the property name, e.g., "value".
+	 * @exception IllegalArgumentException if propName is null or empty
 	 */
 	public Annotation getAnnotation(String annotName, String propName) {
 		if (propName == null || propName.length() == 0)
 			throw new IllegalArgumentException("The property name is required");
 		return getAnnotation0(annotName, propName);
 	}
-	/** Returns a collection of all annotations associated with the
+	/** Returns a read-only collection of all annotations associated with the
 	 * component definition (never null).
 	 */
 	public Collection getAnnotations() {
 		return getAnnotations0(null);
 	}
-	/** Returns a collection of all annotations associated with the definition
-	 * of the specified property (never null).
+	/** Returns a read-only collection of all annotations associated with the
+	 * definition of the specified property (never null).
 	 *
 	 * @param propName the property name, e.g., "value".
+	 * @exception IllegalArgumentException if propName is null or empty
 	 */
 	public Collection getAnnotations(String propName) {
 		if (propName == null || propName.length() == 0)
@@ -191,15 +193,34 @@ public class Milieu implements Serializable {
 	/** Returns a read-only list of the names (String) of the properties
 	 * that are associated with the specified annotation (never null).
 	 */
-	public List getPropertiesByAnnotation(String annotName) {
+	public List getAnnotatedPropertiesBy(String annotName) {
 		List list = null;
 		if (_annots != null) {
 			for (Iterator it = _annots.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				final Map ans = (Map)me.getValue();
-				if (ans.containsKey(annotName)) {
+				final String propName = (String)me.getKey();
+				if (propName != null) {
+					final Map ans = (Map)me.getValue();
+					if (ans.containsKey(annotName)) {
+						if (list == null) list = new LinkedList();
+						list.add(propName);
+					}
+				}
+			}
+		}
+		return list != null ? list: Collections.EMPTY_LIST;
+	}
+	/** Returns a read-only list of the name (String) of properties that
+	 * are associated at least one annotation (never null).
+	 */
+	public List getAnnotatedProperties() {
+		List list = null;
+		if (_annots != null) {
+			for (Iterator it = _annots.keySet().iterator(); it.hasNext();) {
+				final String propName = (String)it.next();
+				if (propName != null) {
 					if (list == null) list = new LinkedList();
-					list.add(me.getKey());
+					list.add(propName);
 				}
 			}
 		}
