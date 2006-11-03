@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+annot.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov  3 12:16:26     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:a="http://www.zkoss.org/2005/zk/annotation">
+<a:author name="John Magic" date="3/17/2006"/>
+<a:editor name="Mary White" date="4/11/2006"/>
+<window id="main" title="Annotation" >
+	<a:bind field="value"/>
+	<a:bind source="bigcat:1099"/>
+	<textbox id="textbox"/>
+
+	<zscript>
+	void dump(StringBuffer sb, Component comp) {
+		sb.append(comp.getId()).append(": ")
+		  .append(comp.getMilieu().getAnnotations().toString())
+		  .append('\n');
+
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
+			dump(sb, it.next());
+	}
+	</zscript>
+	<button label="show">
+		<attribute name="onClick"><![CDATA[
+		StringBuffer sb = new StringBuffer(256);
+		dump(sb, main);
+		info.setValue(sb.toString());
+		]]></attribute>
+	</button>
+	<separator bar="true"/>
+	<label id="info" pre="true"/>
+</window>
+</zk>
