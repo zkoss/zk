@@ -223,7 +223,7 @@ public class Parser {
 
 		//5. Processing from the root element
 		final Element root = doc.getRootElement();
-		if (root != null) parse(pgdef, pgdef, root);
+		if (root != null) parse(pgdef, pgdef, root, new AnnotInfo());
 		return pgdef;
 	}
 	private static Class locateClass(String clsnm) throws Exception {
@@ -404,12 +404,12 @@ public class Parser {
 	/** Parses the specified elements.
 	 */
 	private void parse(PageDefinition pgdef, InstanceDefinition parent,
-	Collection items)
+	Collection items, AnnotInfo annotInfo)
 	throws Exception {
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
-				parse(pgdef, parent, (Element)o);
+				parse(pgdef, parent, (Element)o, annotInfo);
 			} else if (o instanceof ProcessingInstruction) {
 				parse(pgdef, (ProcessingInstruction)o);
 			} else if ((o instanceof Text) || (o instanceof CData)) {
@@ -438,93 +438,33 @@ public class Parser {
 
 	/** Parse an component definition specified in the given element.
 	 */
-	private void parse(PageDefinition pgdef,
-	InstanceDefinition parent, Element el) throws Exception {
+	private void parse(PageDefinition pgdef, InstanceDefinition parent,
+	Element el, AnnotInfo annotInfo)
+	throws Exception {
 		final String nm = el.getLocalName();
 		final Namespace ns = el.getNamespace();
+		final String pref = ns != null ? ns.getPrefix(): "";
+		final String uri = ns != null ? ns.getURI(): "";
 		final LanguageDefinition langdef = pgdef.getLanguageDefinition();
-		if ("zscript".equals(nm) && isZkElement(langdef, nm, ns)) {
-			//if (!el.getElements().isEmpty())
-			//	throw new UiException("Child elements are not allowed for the zscript element, "+el.getLocator());
-
-			if (el.getAttributeItem("forEach") != null)
-				throw new UiException("forEach not applicable to zscript, "+el.getLocator());
-
-			final String ifc = el.getAttribute("if"),
-				unless = el.getAttribute("unless"),
-				zsrc = el.getAttribute("src");
-
-			final Condition cond = ConditionImpl.getInstance(ifc, unless);
-			if (!isEmpty(zsrc)) {
-				final ZScript zs;
-				if (zsrc.indexOf("${") >= 0) {
-					zs = new ZScript(zsrc, cond, getLocator());
-				} else {
-					final URL url = getLocator().getResource(zsrc);
-					if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+el.getLocator());
-					zs = new ZScript(url, cond);
-				}
-
-				parent.appendChild(zs);
-			}
-
-			final String script = el.getText(true);
-			if (!isEmpty(script))
-				parent.appendChild(new ZScript(script, cond));
-		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, ns)) {
-			//if (!el.getElements().isEmpty())
-			//	throw new UiException("Child elements are not allowed for the attribute element, "+el.getLocator());
-
-			if (el.getAttributeItem("forEach") != null)
-				throw new UiException("forEach not applicable to attribute, "+el.getLocator());
-
-			//FUTURE: handling the namespace of if and unless
-			final String attnm = IDOMs.getRequiredAttributeValue(el, "name");
-			final String attval = el.getText(false); //don't trim!!
-			if (!isEmpty(attval)) {
-				addAttribute(parent, null, attnm, attval,
-					ConditionImpl.getInstance(
-						el.getAttribute("if"), el.getAttribute("unless")));
-			}
-		} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, ns)) {
-			//if (!el.getElements().isEmpty())
-			//	throw new UiException("Child elements are not allowed for the custom-attributes element, "+el.getLocator());
-			if (parent instanceof PageDefinition)
-				throw new UiException("custom-attributes must be used under a component, "+el.getLocator());
-
-			String ifc = null, unless = null, scope = null;
-			final Map attrs = new HashMap();
-			for (Iterator it = el.getAttributeItems().iterator();
-			it.hasNext();) {
-				final Attribute attr = (Attribute)it.next();
-				final String attnm = attr.getLocalName();
-				final String attval = attr.getValue();
-				if ("if".equals(attnm)) {
-					ifc = attval;
-				} else if ("unless".equals(attnm)) {
-					unless = attval;
-				} else if ("scope".equals(attnm)) {
-					scope = attval;
-				} else if ("forEach".equals(attnm)) {
-					throw new UiException("forEach not applicable to custom-attributes, "+el.getLocator());
-				} else {
-					attrs.put(attnm, attval);
-				}
-			}
-
-			if (!attrs.isEmpty())
-				parent.addCustomAttributes(
-					new CustomAttributes(attrs, scope, ConditionImpl.getInstance(ifc, unless)));
+		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+			parseZScript(parent, el, annotInfo);
+		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+			parseAttribute(parent, el, annotInfo);
+		} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+			parseCustomAttribute(parent, el, annotInfo);
+		} else if (LanguageDefinition.ANNO_NAMESPACE.equals(uri)) {
+			parseAnnotation(el, annotInfo);
 		} else {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
 
 			final InstanceDefinition instdef;
-			if ("zk".equals(nm) && isZkElement(langdef, nm, ns)) {
+			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+				if (annotInfo.clear())
+					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
+
 				instdef = new InstanceDefinition(
 					parent, ComponentDefinition.ZK, "zk"); 
 			} else {
-				final String pref = ns != null ? ns.getPrefix(): "";
-				final String uri = ns != null ? ns.getURI(): "";
 				if (LanguageDefinition.ZK_NAMESPACE.equals(uri))
 					throw new UiException("Unknown ZK component: "+el);
 
@@ -587,9 +527,109 @@ public class Parser {
 			}
 			instdef.setCondition(ConditionImpl.getInstance(ifc, unless));
 			instdef.setForEach(forEach, forEachBegin, forEachEnd);
-			parse(pgdef, instdef, el.getChildren()); //recursive
+			annotInfo.updateAnnotations(instdef, null);
+			parse(pgdef, instdef, el.getChildren(), annotInfo); //recursive
 		}
 	}
+	private void parseZScript(InstanceDefinition parent, Element el,
+	AnnotInfo annotInfo) throws Exception {
+		//if (!el.getElements().isEmpty())
+		//	throw new UiException("Child elements are not allowed for the zscript element, "+el.getLocator());
+
+		if (el.getAttributeItem("forEach") != null)
+			throw new UiException("forEach not applicable to zscript, "+el.getLocator());
+		if (annotInfo.clear())
+			log.warning("Annotations are ignored since <zscript> doesn't support them, "+el.getLocator());
+
+		final String ifc = el.getAttribute("if"),
+			unless = el.getAttribute("unless"),
+			zsrc = el.getAttribute("src");
+
+		final Condition cond = ConditionImpl.getInstance(ifc, unless);
+		if (!isEmpty(zsrc)) {
+			final ZScript zs;
+			if (zsrc.indexOf("${") >= 0) {
+				zs = new ZScript(zsrc, cond, getLocator());
+			} else {
+				final URL url = getLocator().getResource(zsrc);
+				if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+el.getLocator());
+				zs = new ZScript(url, cond);
+			}
+
+			parent.appendChild(zs);
+		}
+
+		final String script = el.getText(true);
+		if (!isEmpty(script))
+			parent.appendChild(new ZScript(script, cond));
+	}
+	private void parseAttribute(InstanceDefinition parent, Element el,
+	AnnotInfo annotInfo) throws Exception {
+		//if (!el.getElements().isEmpty())
+		//	throw new UiException("Child elements are not allowed for the attribute element, "+el.getLocator());
+
+		if (el.getAttributeItem("forEach") != null)
+			throw new UiException("forEach not applicable to attribute, "+el.getLocator());
+
+		//FUTURE: handling the namespace of if and unless
+		final String attnm = IDOMs.getRequiredAttributeValue(el, "name");
+		final String attval = el.getText(false); //don't trim!!
+		if (!isEmpty(attval)) {
+			addAttribute(parent, null, attnm, attval,
+				ConditionImpl.getInstance(
+					el.getAttribute("if"), el.getAttribute("unless")));
+		}
+
+		annotInfo.updateAnnotations(parent, attnm);
+	}
+	private void parseCustomAttribute(InstanceDefinition parent, Element el,
+	AnnotInfo annotInfo) throws Exception {
+		//if (!el.getElements().isEmpty())
+		//	throw new UiException("Child elements are not allowed for the custom-attributes element, "+el.getLocator());
+
+		if (parent instanceof PageDefinition)
+			throw new UiException("custom-attributes must be used under a component, "+el.getLocator());
+		if (annotInfo.clear())
+			log.warning("Annotations are ignored since <custom-attribute> doesn't support them, "+el.getLocator());
+
+		String ifc = null, unless = null, scope = null;
+		final Map attrs = new HashMap();
+		for (Iterator it = el.getAttributeItems().iterator();
+		it.hasNext();) {
+			final Attribute attr = (Attribute)it.next();
+			final String attnm = attr.getLocalName();
+			final String attval = attr.getValue();
+			if ("if".equals(attnm)) {
+				ifc = attval;
+			} else if ("unless".equals(attnm)) {
+				unless = attval;
+			} else if ("scope".equals(attnm)) {
+				scope = attval;
+			} else if ("forEach".equals(attnm)) {
+				throw new UiException("forEach not applicable to custom-attributes, "+el.getLocator());
+			} else {
+				attrs.put(attnm, attval);
+			}
+		}
+
+		if (!attrs.isEmpty())
+			parent.addCustomAttributes(
+					new CustomAttributes(attrs, scope, ConditionImpl.getInstance(ifc, unless)));
+	}
+	private void parseAnnotation(Element el, AnnotInfo annotInfo)
+	throws Exception {
+		if (!el.getElements().isEmpty())
+			throw new UiException("Child elements are not allowed for the annotations, "+el.getLocator());
+
+		final Map attrs = new HashMap();
+		for (Iterator it = el.getAttributeItems().iterator();
+		it.hasNext();) {
+			final Attribute attr = (Attribute)it.next();
+			attrs.put(attr.getLocalName(), attr.getValue());
+		}
+		annotInfo.add(el.getLocalName(), attrs);
+	}
+
 	/** Whether the name space belongs to the default language. */
 	private static final
 	boolean isDefault(LanguageDefinition langdef, String pref, String uri) {
@@ -601,11 +641,11 @@ public class Parser {
 		return s == null || s.length() == 0;
 	}
 	/** Returns whether the element is conflict with the language definition.
+	 * @param pref namespace's prefix
+	 * @param uri namespace's URI
 	 */
 	private static final boolean
-	isZkElement(LanguageDefinition langdef, String nm, Namespace ns) {
-		final String pref = ns != null ? ns.getPrefix(): "",
-			uri = ns != null ? ns.getURI(): "";
+	isZkElement(LanguageDefinition langdef, String nm, String pref, String uri) {
 		if (isDefault(langdef, pref, uri))
 			return !langdef.hasComponentDefinition(nm);
 		return LanguageDefinition.ZK_NAMESPACE.equals(uri);
@@ -633,5 +673,71 @@ public class Parser {
 			}
 		}
 		instdef.addProperty(name, value, cond);
+	}
+
+	/** Information of annotations.
+	 */
+	private static class AnnotInfo {
+		/** Map(String, Annotation); */
+		final Map _annots = new HashMap();
+
+		/** Adds an annotation definition. */
+		private void add(String name, Map attrs) {
+			if (name == null || name.length() == 0)
+				throw new IllegalArgumentException("empty name");
+
+			AnnotImpl ai = (AnnotImpl)_annots.get(name);
+			if (ai == null)
+				_annots.put(name, ai = new AnnotImpl(name));
+			ai.setAttributes(attrs);
+		}
+		/** Updates the annotations to the specified instance definition.
+		 * Note: it clears all annotation definitions before returning.
+		 *
+		 * @param instdef the instance definition to update
+		 * @param propName the property name
+		 */
+		private void updateAnnotations(InstanceDefinition instdef, String propName) {
+			if (!_annots.isEmpty()) {
+				for (Iterator it = _annots.values().iterator(); it.hasNext();)
+					instdef.addAnnotation(propName, (Annotation)it.next());
+				_annots.clear();
+			}
+		}
+		/** Clears all annotation definitions.
+		 * @return true if one or more annotation definitions are defined
+		 * (thru {@link #add}).
+		 */
+		private boolean clear() {
+			if (!_annots.isEmpty()) {
+				_annots.clear();
+				return true;
+			}
+			return false;
+		}
+	}
+	private static class AnnotImpl implements Annotation {
+		private final String _name;
+		private final Map _attrs = new LinkedHashMap(5);
+
+		private AnnotImpl(String name) {
+			_name = name;
+		}
+		private void setAttributes(Map attrs) {
+			if (attrs != null)
+				_attrs.putAll(attrs);
+		}
+		public String getName() {
+			return _name;
+		}
+		public Map getAttributes() {
+			return Collections.unmodifiableMap(_attrs);
+		}
+		public String getAttribute(String name) {
+			return (String)_attrs.get(name);
+		}
+		public String toString() {
+			return '[' + _name + ": " + _attrs + ']';
+		}
 	}
 }

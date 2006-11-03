@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Iterator;
+import java.util.Collection;
 import java.util.Collections;
 import java.io.Serializable;
 import java.io.ObjectOutputStream;
@@ -171,6 +172,22 @@ public class Milieu implements Serializable {
 			throw new IllegalArgumentException("The property name is required");
 		return getAnnotation0(annotName, propName);
 	}
+	/** Returns a collection of all annotations associated with the
+	 * component definition (never null).
+	 */
+	public Collection getAnnotations() {
+		return getAnnotations0(null);
+	}
+	/** Returns a collection of all annotations associated with the definition
+	 * of the specified property (never null).
+	 *
+	 * @param propName the property name, e.g., "value".
+	 */
+	public Collection getAnnotations(String propName) {
+		if (propName == null || propName.length() == 0)
+			throw new IllegalArgumentException("The property name is required");
+		return getAnnotations0(propName);
+	}
 	/** Returns a read-only list of the names (String) of the properties
 	 * that are associated with the specified annotation (never null).
 	 */
@@ -194,6 +211,13 @@ public class Milieu implements Serializable {
 			if (ans != null) return (Annotation)ans.get(annotName);
 		}
 		return null;
+	}
+	private Collection getAnnotations0(String propName) {
+		if (_annots != null) {
+			final Map ans = (Map)_annots.get(propName);
+			if (ans != null) return ans.values();
+		}
+		return Collections.EMPTY_LIST;
 	}
 
 	/** Resolves and returns the class that implements the component.
