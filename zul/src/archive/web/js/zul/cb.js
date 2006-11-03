@@ -29,7 +29,8 @@ zkCmbox.init = function (cmp) {
 		//To mimic SELECT, it drops down if readOnly
 
 	var btn = $e(cmp.id + "!btn");
-	if (btn) zk.listen(btn, "click", function () {zkCmbox.onbutton(cmp);});
+	if (btn) zk.listen(btn, "click", function () {if (!inp.disabled) zkCmbox.onbutton(cmp);});
+		//Note: to mimic SELECT, it drops down event if readOnly
 	btn.align = "absmiddle";
 };
 
