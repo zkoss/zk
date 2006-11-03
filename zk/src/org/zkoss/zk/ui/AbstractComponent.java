@@ -840,7 +840,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public void smartUpdate(String attr, String value) {
 		if (_parent != null && isTransparent(this))
-			throw new IllegalStateException("A transparent component cannot use smartUpdate");
+			throw new IllegalStateException("A transparent component cannot use smartUpdate: "+attr+'='+value);
 		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
 	/** A special smart-update that update a value in int.
