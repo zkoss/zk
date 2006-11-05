@@ -1020,34 +1020,44 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public Annotation getAnnotation(String annotName) {
-		return annots().getAnnotation(annotName);
+		final AnnotationMap am = annotmap();
+		return am != null ? am.getAnnotation(annotName): null;
 	}
 	public Annotation getAnnotation(String propName, String annotName) {
-		return annots().getAnnotation(propName, annotName);
+		final AnnotationMap am = annotmap();
+		return am != null ? am.getAnnotation(propName, annotName): null;
 	}
 	public Collection getAnnotations() {
-		return annots().getAnnotations();
+		final AnnotationMap am = annotmap();
+		return am != null ? am.getAnnotations(): null;
 	}
 	public Collection getAnnotations(String propName) {
-		return annots().getAnnotations(propName);
+		final AnnotationMap am = annotmap();
+		return am != null ? am.getAnnotations(propName): null;
 	}
 	public List getAnnotatedPropertiesBy(String annotName) {
-		return annots().getAnnotatedPropertiesBy(annotName);
+		final AnnotationMap am = annotmap();
+		return am != null ? am.getAnnotatedPropertiesBy(annotName): null;
 	}
 	public List getAnnotatedProperties() {
-		return annots().getAnnotatedProperties();
+		final AnnotationMap am = annotmap();
+		return am != null ? am.getAnnotatedProperties(): null;
 	}
 	public void addAnnotation(Annotation annot) {
-		if (_annots == null)
-			_annots = (AnnotationMap)getMilieu().getAnnotationMap().clone();
+		if (_annots == null) {
+			final AnnotationMap am = getMilieu().getAnnotationMap();
+			_annots = am != null ? (AnnotationMap)am.clone(): new AnnotationMap();
+		}
 		_annots.addAnnotation(annot);
 	}
 	public void addAnnotation(String propName, Annotation annot) {
-		if (_annots == null)
-			_annots = (AnnotationMap)getMilieu().getAnnotationMap().clone();
+		if (_annots == null) {
+			final AnnotationMap am = getMilieu().getAnnotationMap();
+			_annots = am != null ? (AnnotationMap)am.clone(): new AnnotationMap();
+		}
 		_annots.addAnnotation(propName, annot);
 	}
-	private AnnotationMap annots() {
+	private AnnotationMap annotmap() {
 		return _annots != null ? _annots: getMilieu().getAnnotationMap();
 	}
 
