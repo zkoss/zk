@@ -33,13 +33,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<zscript>
 	void dump(StringBuffer sb, Component comp) {
 		sb.append(comp.getId()).append(": ")
-		  .append(comp.getMilieu().getAnnotations().toString())
+		  .append(comp.getAnnotations().toString())
 		  .append('\n');
-		for (Iterator it = comp.getMilieu().getAnnotatedProperties().iterator();
+		for (Iterator it = comp.getAnnotatedProperties().iterator();
 		it.hasNext();) {
 			String prop = it.next();
 			sb.append(" with ").append(prop).append(": ")
-				.append(comp.getMilieu().getAnnotations(prop))
+				.append(comp.getAnnotations(prop))
 				.append('\n');
 		}
 
