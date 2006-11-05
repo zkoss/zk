@@ -56,6 +56,8 @@ import org.zkoss.zk.ui.util.Namespace;
 import org.zkoss.zk.ui.impl.Serializables;
 import org.zkoss.zk.ui.impl.bsh.BshNamespace;
 import org.zkoss.zk.ui.metainfo.Milieu;
+import org.zkoss.zk.ui.metainfo.AnnotationMap;
+import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
@@ -93,6 +95,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//don't create it dynamically because _ip bind it at constructor
 	/** A map of event listener: Map(evtnm, EventListener)). */
 	private transient Map _listeners;
+	/** A map of annotations. Serializable since a component might have
+	 * its own annotations.
+	 */
+	private AnnotationMap _annots;
 	/** The extra controls. */
 	private transient Object _xtrl;
 	/** A set of children being added. It is used only to speed up
@@ -1012,6 +1018,39 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public Milieu getMilieu() {
 		return _mill;
 	}
+
+	public Annotation getAnnotation(String annotName) {
+		return annots().getAnnotation(annotName);
+	}
+	public Annotation getAnnotation(String propName, String annotName) {
+		return annots().getAnnotation(propName, annotName);
+	}
+	public Collection getAnnotations() {
+		return annots().getAnnotations();
+	}
+	public Collection getAnnotations(String propName) {
+		return annots().getAnnotations(propName);
+	}
+	public List getAnnotatedPropertiesBy(String annotName) {
+		return annots().getAnnotatedPropertiesBy(annotName);
+	}
+	public List getAnnotatedProperties() {
+		return annots().getAnnotatedProperties();
+	}
+	public void addAnnotation(Annotation annot) {
+		if (_annots == null)
+			_annots = (AnnotationMap)getMilieu().getAnnotationMap().clone();
+		_annots.addAnnotation(annot);
+	}
+	public void addAnnotation(String propName, Annotation annot) {
+		if (_annots == null)
+			_annots = (AnnotationMap)getMilieu().getAnnotationMap().clone();
+		_annots.addAnnotation(propName, annot);
+	}
+	private AnnotationMap annots() {
+		return _annots != null ? _annots: getMilieu().getAnnotationMap();
+	}
+
 	public void sessionWillPassivate(Page page) {
 		//nothing to do
 	}

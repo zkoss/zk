@@ -75,9 +75,9 @@ public class Milieu implements Serializable {
 	private final String _macroURI;
 	/** The current directory. */
 	private final String _curdir;
-	/** The annotations of properties, (String propName, Map(String annotName, Annotation)).
+	/** The map of annotations.
 	 */
-	private final Map _annots;
+	private final AnnotationMap _annots;
 
 	//static//
 	private static final ThreadLocal _mill = new ThreadLocal();
@@ -124,15 +124,17 @@ public class Milieu implements Serializable {
 			}
 			_curdir = dir;
 
-			_annots = instdef.getAnnotations();
+			_annots = instdef.getAnnotationMap();
 		} else {
-			_evthds = _annots = null;
+			_evthds = null;
+			_annots = null;
 			_curdir = null;
 		}
 	}
 	private Milieu() {
 		_implcls = null;
-		_evthds = _params = _molds = _annots = null;
+		_evthds = _params = _molds = null;
+		_annots = null;
 		_macroURI = null;
 		_curdir = null;
 	}
@@ -153,92 +155,14 @@ public class Milieu implements Serializable {
 		return _compdef;
 	}
 
-	/** Returns the annotation associated with the component definition,
-	 * or null if not available.
+	/** Returns the map of annotations associated with this milieu.
 	 *
-	 * @param annotName the annotation name
+	 * <p>Note: It is shared by components using this milieu, so don't access
+	 * {@link AnnotationMap#addAnnotation}. Rather, use
+	 * {@link org.zkoss.zk.ui.sys.ComponentCtrl#addAnnotation}.
 	 */
-	public Annotation getAnnotation(String annotName) {
-		return getAnnotation0(annotName, null);
-	}
-	/** Returns the annotation associated with the definition of the specified
-	 * property, or null if not available.
-	 *
-	 * @param annotName the annotation name
-	 * @param propName the property name, e.g., "value".
-	 * @exception IllegalArgumentException if propName is null or empty
-	 */
-	public Annotation getAnnotation(String annotName, String propName) {
-		if (propName == null || propName.length() == 0)
-			throw new IllegalArgumentException("The property name is required");
-		return getAnnotation0(annotName, propName);
-	}
-	/** Returns a read-only collection of all annotations associated with the
-	 * component definition (never null).
-	 */
-	public Collection getAnnotations() {
-		return getAnnotations0(null);
-	}
-	/** Returns a read-only collection of all annotations associated with the
-	 * definition of the specified property (never null).
-	 *
-	 * @param propName the property name, e.g., "value".
-	 * @exception IllegalArgumentException if propName is null or empty
-	 */
-	public Collection getAnnotations(String propName) {
-		if (propName == null || propName.length() == 0)
-			throw new IllegalArgumentException("The property name is required");
-		return getAnnotations0(propName);
-	}
-	/** Returns a read-only list of the names (String) of the properties
-	 * that are associated with the specified annotation (never null).
-	 */
-	public List getAnnotatedPropertiesBy(String annotName) {
-		List list = null;
-		if (_annots != null) {
-			for (Iterator it = _annots.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String propName = (String)me.getKey();
-				if (propName != null) {
-					final Map ans = (Map)me.getValue();
-					if (ans.containsKey(annotName)) {
-						if (list == null) list = new LinkedList();
-						list.add(propName);
-					}
-				}
-			}
-		}
-		return list != null ? list: Collections.EMPTY_LIST;
-	}
-	/** Returns a read-only list of the name (String) of properties that
-	 * are associated at least one annotation (never null).
-	 */
-	public List getAnnotatedProperties() {
-		List list = null;
-		if (_annots != null) {
-			for (Iterator it = _annots.keySet().iterator(); it.hasNext();) {
-				final String propName = (String)it.next();
-				if (propName != null) {
-					if (list == null) list = new LinkedList();
-					list.add(propName);
-				}
-			}
-		}
-		return list != null ? list: Collections.EMPTY_LIST;
-	}
-	private Annotation getAnnotation0(String annotName, String propName) {
-		if (_annots != null) {
-			final Map ans = (Map)_annots.get(propName);
-			if (ans != null) return (Annotation)ans.get(annotName);
-		}
-		return null;
-	}
-	private Collection getAnnotations0(String propName) {
-		if (_annots != null) {
-			final Map ans = (Map)_annots.get(propName);
-			if (ans != null) return ans.values();
-		}
-		return Collections.EMPTY_LIST;
+	public AnnotationMap getAnnotationMap() {
+		return _annots;
 	}
 
 	/** Resolves and returns the class that implements the component.

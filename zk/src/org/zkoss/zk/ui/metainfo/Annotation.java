@@ -12,6 +12,8 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.metainfo;
@@ -23,13 +25,16 @@ import java.util.Map;
  * An annotation consists of a name ({@link #getName}) and a map of attributes
  * {@link #getAttribute}.
  *
- * <p>To get the annotation associated with a component declaration, use
- * {@link org.zkoss.zk.ui.metainfo.Milieu#getAnnotation(String)}.
- * To get the annotation associated with the declaration of a component property,
- * use {@link org.zkoss.zk.ui.metainfo.Milieu#getAnnotation(String, String)}
+ * <p>To get the annotation associated with a component, use
+ * {@link org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotation(String)}.
+ * To get the annotation associated with a component's property,
+ * use {@link org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotation(String, String)}
  *
  * @author tomyeh
- * @see org.zkoss.zk.ui.metainfo.Milieu#getAnnotation(String)
+ * @see org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotation(String)
+ * @see org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotation(String, String)
+ * @see org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotations()
+ * @see org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotations(String)
  */
 public interface Annotation extends java.io.Serializable {
 	/** Returns the name of this annotation.

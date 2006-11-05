@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.io.File;
@@ -699,10 +698,17 @@ public class Parser {
 			if (name == null || name.length() == 0)
 				throw new IllegalArgumentException("empty name");
 
-			AnnotImpl ai = (AnnotImpl)_annots.get(name);
+			AnnotationImpl ai = (AnnotationImpl)_annots.get(name);
 			if (ai == null)
-				_annots.put(name, ai = new AnnotImpl(name));
-			ai.setAttributes(attrs);
+				_annots.put(name, ai = new AnnotationImpl(name));
+			if (attrs != null) {
+				for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					final String val = (String)me.getValue();
+					ai.setAttribute((String)me.getKey(), val != null ? val: "");
+						//null means "", not removal
+				}
+			}
 		}
 		private void addRaw(String name, String rawValue) {
 			final Map attrs = Maps.parse(null, rawValue, ',', '\'');
@@ -716,8 +722,14 @@ public class Parser {
 		 */
 		private void updateAnnotations(InstanceDefinition instdef, String propName) {
 			if (!_annots.isEmpty()) {
-				for (Iterator it = _annots.values().iterator(); it.hasNext();)
-					instdef.addAnnotation(propName, (Annotation)it.next());
+				final AnnotationMap annots = instdef.getAnnotationMap();
+				for (Iterator it = _annots.values().iterator(); it.hasNext();) {
+					final Annotation annot = (Annotation)it.next();
+					if (propName != null)
+						annots.addAnnotation(propName, annot);
+					else
+						annots.addAnnotation(annot);
+				}
 				_annots.clear();
 			}
 		}
@@ -731,37 +743,6 @@ public class Parser {
 				return true;
 			}
 			return false;
-		}
-	}
-	private static class AnnotImpl implements Annotation {
-		private final String _name;
-		private final Map _attrs = new LinkedHashMap(5);
-
-		private AnnotImpl(String name) {
-			_name = name;
-		}
-		private void setAttributes(Map attrs) {
-			if (attrs != null) {
-				for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final String nm = (String)me.getKey();
-					final String val = (String)me.getValue();
-					_attrs.put(nm != null && nm.length() > 0 ? nm: "value",
-						val != null ? val: "");
-				}
-			}
-		}
-		public String getName() {
-			return _name;
-		}
-		public Map getAttributes() {
-			return Collections.unmodifiableMap(_attrs);
-		}
-		public String getAttribute(String name) {
-			return (String)_attrs.get(name);
-		}
-		public String toString() {
-			return '[' + _name + ": " + _attrs + ']';
 		}
 	}
 }

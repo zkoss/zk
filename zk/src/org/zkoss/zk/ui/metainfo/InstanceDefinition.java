@@ -77,9 +77,9 @@ implements Condition {
 	 * which are used to evaluate this definition multiple times.
 	 */
 	private String[] _forEach;
-	/** The annotations of properties, Map(String propnm, Map(String annotnm, Annotation)).
+	/** The map of annotations.
 	 */
-	private Map _annots;
+	private final AnnotationMap _annots = new AnnotationMap();
 
 	/** Constructs an instance definition.
 	 * @param parent the parent; never null.
@@ -256,28 +256,14 @@ implements Condition {
 		return _roChildren;
 	}
 
-	/** Associate an annotation to this definition.
+	/** Returns the map of annotations associated with this definition.
 	 *
-	 * @param propnm the property name. If null, it means the whole instance
-	 * definition.
+	 * <p>Note: It is shared by components created
+	 * by use of this definition, so don't access
+	 * {@link AnnotationMap#addAnnotation}, except the parser
+	 * that creates this definition. 
 	 */
-	/*package*/ void addAnnotation(String propnm, Annotation annot) {
-		if (annot == null)
-			throw new IllegalArgumentException("null annot");
-		if (_annots == null)
-			_annots = new HashMap(3);
-
-		Map ans = (Map)_annots.get(propnm);
-		if (ans == null)
-			_annots.put(propnm, ans = new HashMap(3));
-
-		ans.put(annot.getName(), annot);
-	}
-	/** Returns the map of annotation
-	 * (String property-name, Map(String annotation-name, Annotation annot)),
-	 * or null if not available.
-	 */
-	/*package*/ Map getAnnotations() {
+	public AnnotationMap getAnnotationMap() {
 		return _annots;
 	}
 
