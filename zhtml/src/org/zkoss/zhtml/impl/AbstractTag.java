@@ -213,11 +213,23 @@ implements DynamicPropertied, RawId {
 		}
 
 		if (isChildable()) {
-			out.write('>');
+			boolean divGened = false;
+			if ("body".equals(_tagnm)) {
+				if (_props != null && _props.containsKey("class")) {
+					out.write("><div class=\"zk\">\n");
+					divGened = true;
+				} else {
+					out.write(" class=\"zk\">\n");
+				}
+			} else {
+				out.write('>');
+			}
 
 			for (Iterator it = getChildren().iterator(); it.hasNext();)
 				((Component)it.next()).redraw(out);
 
+			if (divGened)
+				out.write("\n</div>");
 			out.write("</");
 			out.write(_tagnm);
 			out.write('>');
