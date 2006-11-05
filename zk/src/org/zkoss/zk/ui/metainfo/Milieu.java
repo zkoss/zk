@@ -155,7 +155,8 @@ public class Milieu implements Serializable {
 		return _compdef;
 	}
 
-	/** Returns the map of annotations associated with this milieu.
+	/** Returns the map of annotations associated with this milieu,
+	 * or null if no annotations at all.
 	 *
 	 * <p>Note: It is shared by components using this milieu, so don't access
 	 * {@link AnnotationMap#addAnnotation}. Rather, use

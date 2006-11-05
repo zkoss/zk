@@ -256,7 +256,8 @@ implements Condition {
 		return _roChildren;
 	}
 
-	/** Returns the map of annotations associated with this definition.
+	/** Returns the map of annotations associated with this definition, or
+	 * null if no annotation at all.
 	 *
 	 * <p>Note: It is shared by components created
 	 * by use of this definition, so don't access
