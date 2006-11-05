@@ -46,6 +46,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 			dump(sb, it.next());
 	}
+	Datebox db = new Datebox();
+	db.addAnnotation(new org.zkoss.zk.ui.metainfo.AnnotationImpl("datebox"));
+	db.setParent(main);
 	</zscript>
 	<button label="show">
 		<attribute name="onClick"><![CDATA[
