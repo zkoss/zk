@@ -22,8 +22,8 @@ import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.impl.AbortByRemoveDesktop;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 
@@ -42,6 +42,9 @@ public class RemoveDesktopCommand extends Command {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
-		Events.postEvent(new Event(Events.ON_REMOVE_DESKTOP, null));
+		((WebAppCtrl)request.getDesktop().getWebApp())
+			.getUiEngine().setAbortingReason(new AbortByRemoveDesktop());
+			//to avoid surprise, we don't remove it now
+			//rather, it is done by AbortByRemoveDesktop.getResponse
 	}
 }

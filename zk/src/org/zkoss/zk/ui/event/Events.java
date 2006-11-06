@@ -132,18 +132,6 @@ public class Events {
 	/** The onClientInfo event (used with {@link ClientInfoEvent}).
 	 */
 	public static final String ON_CLIENT_INFO = "onClientInfo";
-	/** The onRemoveDesktop event (used with {@link Event}) to notify
-	 * a desktop shall be removed.
-	 *
-	 * <p>{@link org.zkoss.zk.ui.AbstractComponent#onRemoveDesktop} will then
-	 * remove the desktop automatically.
-	 *
-	 * <p>An application usually listens to this event to cleanup desktop-related
-	 * resources. when the desktop is being removed.
-	 *
-	 * <p>Note: it cannot attach or detach components in this event listener.
-	 */
-	public static final String ON_REMOVE_DESKTOP = "onRemoveDesktop";
 
 	/** The onCreate event (used with {@link CreateEvent}) to notify a compoent
 	 * that it (and its children) has been created by ZK's evaluating a ZUML page.

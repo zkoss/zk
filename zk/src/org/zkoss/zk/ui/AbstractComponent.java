@@ -53,7 +53,6 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Variables;
 import org.zkoss.zk.ui.util.Namespace;
-import org.zkoss.zk.ui.impl.AbortByRemoveDesktop;
 import org.zkoss.zk.ui.impl.Serializables;
 import org.zkoss.zk.ui.impl.bsh.BshNamespace;
 import org.zkoss.zk.ui.metainfo.Milieu;
@@ -392,14 +391,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final Execution exec = Executions.getCurrent();
 		return exec != null ?
 			((WebAppCtrl)exec.getDesktop().getWebApp()).getUiEngine(): null;
-	}
-
-	//-- Event Handler --//
-	/** Process the {@link Events#ON_REMOVE_DESKTOP} event by removing
-	 * the desktop this component belongs to.
-	 */
-	public void onRemoveDesktop() {
-		getThisUiEngine().setAbortingReason(new AbortByRemoveDesktop());
 	}
 
 	//-- Component --//
