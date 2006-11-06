@@ -217,9 +217,9 @@ zk.position = function (el, ref, type) {
 		y = refofs[1];
 
 		if (zk.ie) {
-			var diff = parseInt(zk.getCurrentStyle(ref, "margin-top")||"0", 10);
+			var diff = parseInt(Element.getStyle(ref, "margin-top")||"0", 10);
 			if (!isNaN(diff)) y += diff;
-			diff = parseInt(zk.getCurrentStyle(ref, "margin-right")||"0", 10);
+			diff = parseInt(Element.getStyle(ref, "margin-right")||"0", 10);
 			if (!isNaN(diff)) x += diff;
 		}
 
@@ -232,9 +232,9 @@ zk.position = function (el, ref, type) {
 		y = refofs[1] + zk.offsetHeight(ref);
 
 		if (zk.ie) {
-			var diff = parseInt(zk.getCurrentStyle(ref, "margin-bottom")||"0", 10);
+			var diff = parseInt(Element.getStyle(ref, "margin-bottom")||"0", 10);
 			if (!isNaN(diff)) y += diff;
-			diff = parseInt(zk.getCurrentStyle(ref, "margin-left")||"0", 10);
+			diff = parseInt(Element.getStyle(ref, "margin-left")||"0", 10);
 			if (!isNaN(diff)) x += diff;
 		}
 
@@ -979,7 +979,7 @@ zk.setStyle = function (el, style) {
 			val = s.substring(l + 1).trim();
 		}
 
-		if (nm) el.style[zk.toJSStyleName(nm)] = val;
+		if (nm) el.style[nm.camelize()] = val;
 	}
 };
 
@@ -1006,22 +1006,6 @@ if (!zk._txtstyles)
 	zk._txtstyles = ["color", "background-color", "background",
 		"white-space"];
 
-/** Returns the current style. */
-zk.getCurrentStyle = function (el, prop) {
-	return document.defaultView && document.defaultView.getComputedStyle ?
-			document.defaultView.getComputedStyle(el,null).getPropertyValue(prop):
-		el.currentStyle ? el.currentStyle[zk.toJSStyleName(prop)]:
-			el.style[zk.toJSStyleName(prop)];
-};
-/** Converts a style name to JavaScript name. */
-zk.toJSStyleName = function (nm) {
-	var j = nm.indexOf('-');
-	if (j < 0) return nm;
-	if (j >= nm.length - 1) return nm.substring(0, j);
-	return nm.substring(0, j) + nm.substring(j+1, j+2).toUpperCase()
-		+ nm.substring(j + 2);
-};
-
 /** Backup a style of the specified name.
  * The second call to backupStyle is ignored until zk.restoreStyle is called.
  * Usually used with onmouseover.
@@ -1046,7 +1030,7 @@ zk.restoreStyle = function (el, nm) {
 /** Scroll inner into visible, assuming outer has a scrollbar. */
 zk.scrollIntoView = function (outer, inner) {
 	if (outer && inner) {
-		var padding = zk.getCurrentStyle(inner, "padding-top");
+		var padding = Element.getStyle(inner, "padding-top");
 		padding = padding ? parseInt(padding, 10): 0;
 		var limit = inner.offsetTop - padding;
 		if (limit < outer.scrollTop) {

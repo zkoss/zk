@@ -441,7 +441,7 @@ zkau.setAttr = function (cmp, name, value) {
 				zk.error(mesg.UNSUPPORTED+name);
 				return;
 			}
-			name = zk.toJSStyleName(name.substring(j + 1));
+			name = name.substring(j + 1).camelize();
 			if (typeof(cmp.style[name]) == "boolean") //just in case
 				value = "true" == value || name == value;
 			cmp.style[name] = value;

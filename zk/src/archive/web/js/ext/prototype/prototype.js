@@ -2048,7 +2048,7 @@ var Position = {
     var valueT = 0, valueL = 0;
     do {
 //Tom M. Yeh, Potix: Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
-if(element.style.position == 'fixed') {
+if (Element.getStyle(element, "position") == 'fixed') {
 	valueT += zk.innerY() + element.offsetTop;
 	valueL += zk.innerX() + element.offsetLeft;
 	element = null;
