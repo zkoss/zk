@@ -776,10 +776,10 @@ zk.Selectable.prototype = {
 	 */
 	_getFitGap: function () {
 		var gap = document.body.offsetHeight - zk.innerHeight()
-				+ parseInt(zk.getCurrentStyle(document.body, "margin-top"))
-				+ parseInt(zk.getCurrentStyle(document.body, "margin-bottom"))
-				+ parseInt(zk.getCurrentStyle(document.body, "padding-top"))
-				+ parseInt(zk.getCurrentStyle(document.body, "padding-bottom"));
+				+ parseInt(Element.getStyle(document.body, "margin-top"))
+				+ parseInt(Element.getStyle(document.body, "margin-bottom"))
+				+ parseInt(Element.getStyle(document.body, "padding-top"))
+				+ parseInt(Element.getStyle(document.body, "padding-bottom"));
 		if (zk.ie) ++gap; //strange, but...
 		if (gap <= 0) return gap; //already fit
 
@@ -965,7 +965,7 @@ zkSel.onover = function (evt) {
 		var row = $parentByTag(Event.element(evt), "TR");
 		if (row) {
 			zk.backupStyle(row, "backgroundColor");
-			var clr = zk.getCurrentStyle(row, "color");
+			var clr = Element.getStyle(row, "color");
 			row.style.backgroundColor =
 				clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
 				row.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
