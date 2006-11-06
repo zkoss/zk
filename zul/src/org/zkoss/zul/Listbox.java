@@ -1266,9 +1266,6 @@ implements java.io.Serializable, RenderOnDemand {
 	public void setMold(String mold) {
 		final String old = getMold();
 		if (!Objects.equals(old, mold)) {
-			if (_model != null && "select".equals(mold))
-				throw new UnsupportedOperationException("Mold select doesn't support ListModel");
-
 			super.setMold(mold);
 
 			if ("paging".equals(old)) { //change from paging
