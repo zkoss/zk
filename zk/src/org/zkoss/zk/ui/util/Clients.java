@@ -32,6 +32,21 @@ import org.zkoss.zk.au.*;
  * @see org.zkoss.zk.ui.event.ClientInfoEvent
  */
 public class Clients {
+	/** Asks the browser to confirm users whether to close the browser window.
+	 *
+	 * <p>If an non-null (non-empty) string is set, the browser will show up
+	 * a confirmation dialog when an user tries to close the browser window,
+	 * or browse to another URL.
+	 * To reset (i.e., not showing any confirmation dialog), just call this
+	 * method again with null.
+	 *
+	 * @param mesg the message to show when confirming users.
+	 * If null (default) or emtpy, users can close the browser window directly.
+	 */
+	public static final void confirmClose(String mesg) {
+		addAuResponse(new AuConfirmClose(mesg));
+	}
+
 	/** Closes the error box at the browser belonging to
 	 * the specified component, if any.
 	 */

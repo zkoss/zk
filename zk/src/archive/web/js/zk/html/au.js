@@ -43,8 +43,11 @@ if (!zkau._reqs) {
 		zk.listen(document, "click", zkau._onDocLClick);
 		zk.listen(document, "dblclick", zkau._onDocDClick);
 
-		zkau._oldDocUnload = window.onunload;
-		window.onunload = zkau._onDocUnload; //unable to use zk.listen
+		zkau._oldUnload = window.onunload;
+		window.onunload = zkau._onUnload; //unable to use zk.listen
+
+		zkau._oldBfUnload = window.onbeforeunload;
+		window.onbeforeunload = zkau._onBfUnload;
 	});
 }
 
@@ -684,8 +687,8 @@ zkau.onimgout = function (el) {
 		el.src = zk.renType(el.src, "off");
 };
 
-/** Handles document.unload. */
-zkau._onDocUnload = function () {
+/** Handles window.unload. */
+zkau._onUnload = function () {
 	if (zk.gecko) zk.restoreDisabled(); //Workaround Nav: Bug 1495382
 
 	var content = "dtid="+zk_desktopId+"&cmd.0=rmDesktop";
@@ -705,8 +708,19 @@ zkau._onDocUnload = function () {
 		}
 	}
 
-	if (zkau._oldDocUnload) zkau._oldDocUnload.apply(document);
+	if (zkau._oldUnload) zkau._oldUnload.apply(window, arguments);
 };
+/** Handles window.onbeforeunload. */
+zkau._onBfUnload = function () {
+	if (zkau._cfmClose)
+		return zkau._cfmClose;
+	if (zkau._oldBfUnload) {
+		var msg = zkau._oldBfUnload.apply(window, arguments);
+		if (msg) return msg;
+	}
+	//Don't return true nor false
+};
+
 /** Handle document.onmousedown. */
 zkau._onDocMousedown = function (evt) {
 	if (!evt) evt = window.event;
@@ -1588,6 +1602,9 @@ zkau.cmd0 = { //no uuid at all
 	},
 	moveTo: function (x, y) {
 		window.moveTo(x, y);
+	},
+	cfmClose: function (msg) {
+		zkau._cfmClose = msg;
 	}
 };
 zkau.cmd1 = {

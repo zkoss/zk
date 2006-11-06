@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * A response to ask the client to execute the specified script.
+ *
  * <p>data[0]: the JavaScript codes
  *
  * @author tomyeh
