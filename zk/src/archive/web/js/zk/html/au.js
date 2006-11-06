@@ -714,11 +714,9 @@ zkau._onUnload = function () {
 zkau._onBfUnload = function () {
 	if (zkau._cfmClose)
 		return zkau._cfmClose;
-	if (zkau._oldBfUnload) {
-		var msg = zkau._oldBfUnload.apply(window, arguments);
-		if (msg) return msg;
-	}
-	//Don't return true nor false
+	if (zkau._oldBfUnload)
+		return zkau._oldBfUnload.apply(window, arguments);
+	//Return nothing
 };
 
 /** Handle document.onmousedown. */
