@@ -20,6 +20,7 @@ package org.zkoss.zk.ui.impl;
 
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuSendRedirect;
+import org.zkoss.zk.ui.sys.AbortingReason;
 
 /**
  * The aborting reason for send-redirect.

@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.AbortingReason;
 import org.zkoss.zk.au.*;
 
 /**
@@ -926,8 +927,8 @@ import org.zkoss.zk.au.*;
 		}
 	};
 
-	/** Sets the reason to aborting.
-	/** if not null, it means the current execution is aborting
+	/** Sets the reason to abort the current execution.
+	 * if not null, it means the current execution is aborting
 	 * and the specified argument is the reason to aborting.
 	 * Its interpretation depends on {@link org.zkoss.zk.ui.sys.UiEngine}.
 	 *

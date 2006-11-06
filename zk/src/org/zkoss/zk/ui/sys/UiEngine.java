@@ -179,6 +179,19 @@ public interface UiEngine {
 	 * @param target the new target, or null to denote the same browser window
 	 */
 	public void sendRedirect(String uri, String target);
+	/** Aborts the current execution.
+	 * if not null, it means the current execution is aborting
+	 *
+	 * <p>Note: if setAbortingReason is ever set with non-null, you
+	 * CANNOT set it back to null.
+	 *
+	 * <p>After call this method, you shall not keep processing the page
+	 * because the rendering is dropped and the client is out-of-sync
+	 * with the server.
+	 *
+	 * @param aborting the aborting reason.
+	 */
+	public void setAbortingReason(AbortingReason aborting);
 
 	//-- wait/notify --//
 	/** Suspends the current processing of an event and wait until the

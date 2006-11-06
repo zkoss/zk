@@ -78,7 +78,7 @@ public interface Desktop {
 	 */
 	public Object removeAttribute(String name);
 
-	/** Returns all components contained in this page.
+	/** Returns all components contained in this desktop.
 	 */
 	public Collection getComponents();
 	/** Returns the component of the specified UUID ({@link Component#getUuid}).

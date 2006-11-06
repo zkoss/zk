@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.impl;
+package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.au.AuResponse;
 
@@ -30,8 +30,12 @@ public interface AbortingReason {
 	 */
 	public boolean isAborting();
 	/** Returns the response representing this aborting reason.
-	 * It is called when {@link UiEngineImpl} is about to abort
-	 * the current execution.
+	 * It is called when {@link UiEngine} to append the response representing
+	 * this reason.
+	 *
+	 * <p>Note: it is always called even if {@link #isAborting} returns false.
+	 *
+	 * @return the response to generate, or null if no response to generate.
 	 */
 	public AuResponse getResponse();
 }

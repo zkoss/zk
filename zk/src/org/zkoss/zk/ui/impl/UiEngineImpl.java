@@ -281,8 +281,11 @@ public class UiEngineImpl implements UiEngine {
 			List responses = uv.getResponses();
 
 			final AbortingReason aborting = uv.getAbortingReason();
-			if (aborting != null)
-				responses.add(0, aborting.getResponse());
+			if (aborting != null) {
+				final AuResponse abtresp = aborting.getResponse();
+				if (abtresp != null)
+					responses.add(0, abtresp);
+			}
 
 			if (olduv != null && olduv.addToFirstAsyncUpdate(responses))
 				responses = null;
@@ -446,6 +449,10 @@ public class UiEngineImpl implements UiEngine {
 			new AbortBySendRedirect(
 				uri != null ? uv.getExecution().encodeURL(uri): "", target));
 	}
+	public void setAbortingReason(AbortingReason aborting) {
+		final UiVisualizer uv = getCurrentVisualizer();
+		uv.setAbortingReason(aborting);
+	}
 
 	//-- Asynchronous updates --//
 	public void execUpdate(Execution exec, List requests, Writer out)
@@ -557,7 +564,11 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			final AbortingReason aborting = uv.getAbortingReason();
-			if (aborting != null) response(aborting.getResponse(), out);
+			if (aborting != null) {
+				final AuResponse abtresp = aborting.getResponse();
+				if (abtresp != null)
+					response(abtresp, out);
+			}
 
 			out.flush();
 				//flush before deactivating to make sure it has been sent
