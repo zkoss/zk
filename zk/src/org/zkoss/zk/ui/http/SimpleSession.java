@@ -133,6 +133,9 @@ public class SimpleSession implements Session, SessionCtrl {
 		return _hsess.getAttribute(name);
 	}
 	public void setAttribute(String name, Object value) {
+		if (name.startsWith("javax.zkoss"))
+			throw new IllegalArgumentException("Unable to change the readonly attribute: "+name);
+
 		//Note: we have to handle ATTR_PRIVATE, so cleanSessAttrs knows what to do
 		if (!(this instanceof Serializable || this instanceof Externalizable)
 		/*&& name != null && !name.startsWith("javax.")*/
@@ -150,6 +153,9 @@ public class SimpleSession implements Session, SessionCtrl {
 		}
 	}
 	public void removeAttribute(String name) {
+		if (name.startsWith("javax.zkoss"))
+			throw new IllegalArgumentException("Unable to remove the readonly attribute: "+name);
+
 		//Note: we have to handle ATTR_PRIVATE, so cleanSessAttrs knows what to do
 		if (!(this instanceof Serializable || this instanceof Externalizable)
 		/*&& name != null && !name.startsWith("javax.")*/) {
