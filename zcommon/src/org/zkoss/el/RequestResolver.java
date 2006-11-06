@@ -133,6 +133,12 @@ public class RequestResolver implements VariableResolver {
 				protected Object getValue(String key) {
 					return hreq.getHeader(key);
 				}
+				protected void setValue(String key, Object val) {
+					throw new UnsupportedOperationException("readonly");
+				}
+				protected void removeValue(String key) {
+					throw new UnsupportedOperationException("readonly");
+				}
 			};
 		} else if ("headerValues".equals(name)) {
 			if (!(_request instanceof HttpServletRequest))
@@ -161,6 +167,12 @@ public class RequestResolver implements VariableResolver {
 					}
 					return o;
 				}
+				protected void setValue(String key, Object val) {
+					throw new UnsupportedOperationException("readonly");
+				}
+				protected void removeValue(String key) {
+					throw new UnsupportedOperationException("readonly");
+				}
 			};
 		} else if ("initParam".equals(name)) {
 			if (_ctx == null)
@@ -172,6 +184,12 @@ public class RequestResolver implements VariableResolver {
 				}
 				protected Object getValue(String key) {
 					return _ctx.getInitParameter(key);
+				}
+				protected void setValue(String key, Object val) {
+					throw new UnsupportedOperationException("readonly");
+				}
+				protected void removeValue(String key) {
+					throw new UnsupportedOperationException("readonly");
 				}
 			};
 		} else if ("cookie".equals(name)) {
@@ -298,6 +316,12 @@ public class RequestResolver implements VariableResolver {
 		}
 		protected Enumeration getKeys() {
 			return _request.getParameterNames();
+		}
+		protected void setValue(String key, Object value) {
+			throw new UnsupportedOperationException("readonly");
+		}
+		protected void removeValue(String key) {
+			throw new UnsupportedOperationException("readonly");
 		}
 	} //ParamMap
 	/** Fake page context implementation.

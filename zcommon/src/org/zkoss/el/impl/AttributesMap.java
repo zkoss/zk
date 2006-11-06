@@ -73,17 +73,4 @@ public abstract class AttributesMap extends StringKeysMap {
 		removeValue((String)key);
 		return o;
 	}
-
-	/** Sets the value of the specified key.
-	 * <p>Default: throw exception.
-	 */
-	protected void setValue(String key, Object val) {
-		throw new UnsupportedOperationException("readonly");
-	}
-	/** Removes the key and its associated value.
-	 * <p>Default: throw exception.
-	 */
-	protected void removeValue(String key) {
-		throw new UnsupportedOperationException("readonly");
-	}
 }

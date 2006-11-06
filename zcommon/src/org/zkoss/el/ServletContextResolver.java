@@ -113,6 +113,12 @@ public class ServletContextResolver implements VariableResolver {
 				protected Object getValue(String key) {
 					return _ctx.getInitParameter(key);
 				}
+				protected void setValue(String key, Object val) {
+					throw new UnsupportedOperationException("readonly");
+				}
+				protected void removeValue(String key) {
+					throw new UnsupportedOperationException("readonly");
+				}
 			};
 		}
 		return _ctx.getAttribute(pName);

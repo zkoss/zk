@@ -42,6 +42,10 @@ public abstract class StringKeysMap extends AbstractMap {
 	abstract protected Object getValue(String key);
 	/** Returns an enumeration of keys. */
 	abstract protected Enumeration getKeys();
+	/** Sets the value associated with the specified key. */
+	abstract protected void setValue(String key, Object value);
+	/** Removes the specified key. */
+	abstract protected void removeValue(String key);
 
 	private class Entry implements Map.Entry {
 		private final String _key;
@@ -61,23 +65,26 @@ public abstract class StringKeysMap extends AbstractMap {
 		public Object getValue() {
 			return StringKeysMap.this.getValue(_key);
 		}
-		public Object setValue(Object val) {
-			throw new UnsupportedOperationException("setValue");
-			//no need to support it since never used
+		public Object setValue(Object value) {
+			final Object old = getValue();
+			StringKeysMap.this.setValue(_key, value);
+			return old;
 		}
 	}
 	/** The iterator class used to iterator the entries in this map.
 	 */
 	public class EntryIter implements Iterator{
 		private final Enumeration _keys = getKeys();
+		private String _key;
 		public boolean hasNext() {
 			return _keys.hasMoreElements();
 		}
 		public Object next() {
-			return new Entry((String)_keys.nextElement());
+			_key = (String)_keys.nextElement();
+			return new Entry(_key);
 		}
 		public void remove() {
-			throw new UnsupportedOperationException("remove");
+			StringKeysMap.this.removeValue(_key);
 		}
 	}
 }
