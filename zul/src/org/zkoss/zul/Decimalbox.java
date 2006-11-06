@@ -88,10 +88,10 @@ public class Decimalbox extends FormatInputElement {
 
 		try {
 			int j = val.indexOf('%'); //toNumberOnly translates Locale-dependent
-			BigDecimal bd = j == 0 ? BigDecimals.ZERO:
+			BigDecimal bd = j == 0 ? new BigDecimal(0D):
 				new BigDecimal(j < 0 ? val: val.substring(0, j));
 			if (_scale != AUTO) bd = bd.setScale(_scale);
-			if (j <= 0) return bd;
+			if (j < 0) return bd;
 
 			final BigDecimal hundred = new BigDecimal(100);
 			for (final int len = val.length(); j < len && bd.signum() != 0; ++j)
