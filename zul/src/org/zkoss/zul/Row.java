@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.io.IOException;
 
@@ -40,7 +41,8 @@ import org.zkoss.zul.impl.XulElement;
 public class Row extends XulElement {
 	private Object _value;
 	private String _align, _valign;
-	/** Used only to generate getChildAttrs(). */
+	private int[] _spans;
+	/** Used only to generate {@link #getChildAttrs}. */
 	private transient int _rsflags;
 	private boolean _nowrap;
 
@@ -108,6 +110,61 @@ public class Row extends XulElement {
 	 */
 	public void setValue(Object value) {
 		_value = value;
+	}
+
+	/** Returns the spans, which is a list of numbers separated by comma.
+	 *
+	 * <p>Default: empty.
+	 */
+	public String getSpans() {
+		if (_spans == null)
+			return "";
+
+		final StringBuffer sb = new StringBuffer(50);
+		for (int j = 0;;) {
+			sb.append(_spans[j]);
+			if (++j >= _spans.length) {
+				sb.append(',');
+				break;
+			}
+		}
+		return sb.toString();
+	}
+	/** Sets the spans, which is a list of numbers separated by comma.
+	 *
+	 * <p>For example, "1,2,3" means the second column will span two columns
+	 * and the following column span three columns, while others occupies
+	 * one column.
+	 */
+	public void setSpans(String spans) {
+		List lspans = new LinkedList();
+		if (spans != null) {
+			for (int j = 0;;) {
+				int k = spans.indexOf(',', j);
+				final String s =
+					(k >= 0 ? spans.substring(j, k): spans.substring(j)).trim();
+				if (s.length() == 0) {
+					if (k < 0) break;
+					lspans.add(new Integer(1));
+				} else {
+					//TODO
+				}	
+				if (k < 0) break;
+			}
+		}
+
+		int[] spansVal;
+		final int sz = lspans.size();
+		if (sz > 0) {
+			spansVal = new int[sz];
+		} else {
+			spansVal = null;
+		}
+
+		if (!Objects.equals(spansVal, _spans)) {
+			_spans = spansVal;
+			invalidate();
+		}
 	}
 
 	/** Returns the HTML attributes for the child of the specified index.
