@@ -22,6 +22,7 @@ import org.zkoss.zul.*;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.image.AImage;
+import org.zkoss.util.TimeZones;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 
@@ -32,10 +33,15 @@ import org.jfree.chart.entity.*;
 import org.jfree.data.general.*;
 import org.jfree.data.category.*;
 import org.jfree.data.xy.*;
+import org.jfree.data.time.RegularTimePeriod;
+import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.util.TableOrder;
 
 import java.util.List;
 import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TimeZone;
 import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
 import java.awt.Paint;
@@ -57,8 +63,8 @@ public class SimpleChartEngine implements ChartEngine {
 	//as long as the series name is not set
 	private static final String DEFAULT_HI_LO_SERIES = "High Low Data";
 	
-	//caching chartImpl if type and 3d are the same
-	private boolean _threeD;
+	//caching chartImpl if type and 3d are the same 
+	private boolean _threeD; 
 	private String _type; 
 	private ChartImpl _chartImpl; //chart implementaion
 	
@@ -293,6 +299,48 @@ public class SimpleChartEngine implements ChartEngine {
 			dataset.addSeries(xyser);
 		}
 		return dataset;
+	}
+
+	/**
+	 * transfer a XYModel into JFreeChart TimeSeriesCollection.
+	 */
+	private XYDataset XYModelToTimeDataset(XYModel model, Chart chart) {
+		TimeZone tz = chart.getTimeZone();
+		if (tz == null) tz = TimeZones.getCurrent();
+		String p = chart.getPeriod();
+		if (p == null) p = Chart.MILLISECOND;
+		Class pclass = (Class) _periodMap.get(p);
+		if (pclass == null) {
+			throw new UiException("Unsupported period for Time Series chart: "+p);
+		}
+		TimeSeriesCollection dataset = new TimeSeriesCollection(tz);
+		
+		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
+			final Comparable series = (Comparable) it.next();
+			final org.jfree.data.time.TimeSeries tser = 
+						new org.jfree.data.time.TimeSeries((String)series, pclass);
+			final int size = model.getDataCount(series);
+			for(int j = 0; j < size; ++j) {
+				final RegularTimePeriod period = RegularTimePeriod.createInstance(
+					pclass, new Date(model.getX(series, j).longValue()), tz);
+				tser.addOrUpdate(period, model.getY(series, j));
+			}
+			dataset.addSeries(tser);
+		}
+		return dataset;
+	}
+
+	private static Map _periodMap = new HashMap(10);	
+	static {
+		_periodMap.put(Chart.MILLISECOND, org.jfree.data.time.Millisecond.class);
+		_periodMap.put(Chart.SECOND, org.jfree.data.time.Second.class);
+		_periodMap.put(Chart.MINUTE, org.jfree.data.time.Minute.class);
+		_periodMap.put(Chart.HOUR, org.jfree.data.time.Hour.class);
+		_periodMap.put(Chart.DAY, org.jfree.data.time.Day.class);
+		_periodMap.put(Chart.WEEK, org.jfree.data.time.Week.class);
+		_periodMap.put(Chart.MONTH, org.jfree.data.time.Month.class);
+		_periodMap.put(Chart.QUARTER, org.jfree.data.time.Quarter.class);
+		_periodMap.put(Chart.YEAR, org.jfree.data.time.Year.class);
 	}
 
 	/**
@@ -980,7 +1028,7 @@ public class SimpleChartEngine implements ChartEngine {
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
-				XYModelToXYDataset((XYModel)model),
+				XYModelToTimeDataset((XYModel)model, chart),
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
 		}

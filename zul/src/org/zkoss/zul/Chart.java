@@ -34,6 +34,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 
 import java.util.Date;
+import java.util.TimeZone;
 import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
 import java.awt.Paint;
@@ -66,6 +67,7 @@ import java.awt.Paint;
  * @author henrichen
  */
 public class Chart extends Imagemap {
+	//chart type
 	public static final String PIE = "pie";
 	public static final String RING = "ring";
 	public static final String BAR = "bar";
@@ -82,6 +84,17 @@ public class Chart extends Imagemap {
 	public static final String HISTOGRAM = "histogram";
 	public static final String CANDLESTICK = "candlestick";
 	public static final String HIGHLOW = "highlow";
+	
+	//Time Series Chart Period
+	public static final String YEAR = "year";
+	public static final String QUARTER = "quarter";
+	public static final String MONTH = "month";
+	public static final String WEEK = "week";
+	public static final String DAY = "day";
+	public static final String HOUR = "hour";
+	public static final String MINUTE = "minute";
+	public static final String SECOND = "second";
+	public static final String MILLISECOND = "millisecond";
 	
 	//control variable
 	private boolean _smartDrawChart; //whether post the smartDraw event already?
@@ -110,6 +123,10 @@ public class Chart extends Imagemap {
 	private String _bgColor;
 	private int[] _bgRGB; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
 	private int _bgAlpha = 255; //background alpha transparency (0 ~ 255, default to 255)
+	
+	//Time Series Chart related attributes
+	private TimeZone _tzone;
+	private String _period;
 	
 	//chart data model
 	private ChartModel _model; //chart data model
@@ -437,6 +454,44 @@ public class Chart extends Imagemap {
 	 */
 	public String getOrient() {
 		return _orient;
+	}
+	
+	/** Returns the time zone that this Time Series Chart belongs to, or null if
+	 * the default time zone is used.
+	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 */
+	public TimeZone getTimeZone() {
+		return _tzone;
+	}
+	/** Sets the time zone that this Time Series Chart belongs to, or null if
+	 * the default time zone is used.
+	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 */
+	public void setTimeZone(TimeZone tzone) {
+		if (Objects.equals(tzone, _tzone)) {
+			return;
+		}
+		_tzone = tzone;
+		smartDrawChart();
+	}
+
+	/** Returns the period used in Time Series Chart. The value can be
+	 * "millisecond", "second", "minute", "hour", "day", "week", "month", "quarter", and "year".
+	 * default is "millisecond" if not specified.
+	 */
+	public String getPeriod() {
+		return _period;
+	}
+	
+	/** Sets the period used in Time Series Chart. The value can be
+	 * "millisecond", "second", "minute", "hour", "day", "week", "month", "quarter", and "year".
+	 */
+	public void setPeriod(String period) {
+		if (Objects.equals(period, _period)) {
+			return;
+		}
+		_period = period;
+		smartDrawChart();
 	}
 	
 	/** Returns the chart model associated with this chart, or null
