@@ -2200,14 +2200,17 @@ if (Element.getStyle(element, "position") == 'fixed') {
 
     element._originalLeft   = left - parseFloat(element.style.left  || 0);
     element._originalTop    = top  - parseFloat(element.style.top || 0);
+/* Tom M Yeh, Potix: Bug 1591389
     element._originalWidth  = element.style.width;
     element._originalHeight = element.style.height;
-
+*/
     element.style.position = 'absolute';
     element.style.top    = top + 'px';;
     element.style.left   = left + 'px';;
+/* Tom M Yeh, Potix: Bug 1591389
     element.style.width  = width + 'px';;
     element.style.height = height + 'px';;
+*/
   },
 
   relativize: function(element) {
@@ -2221,8 +2224,10 @@ if (Element.getStyle(element, "position") == 'fixed') {
 
     element.style.top    = top + 'px';
     element.style.left   = left + 'px';
+/* Tom M Yeh, Potix: Bug 1591389
     element.style.height = element._originalHeight;
     element.style.width  = element._originalWidth;
+*/
   }
 }
 
