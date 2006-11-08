@@ -28,6 +28,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -117,18 +118,7 @@ public class Row extends XulElement {
 	 * <p>Default: empty.
 	 */
 	public String getSpans() {
-		if (_spans == null)
-			return "";
-
-		final StringBuffer sb = new StringBuffer(50);
-		for (int j = 0;;) {
-			sb.append(_spans[j]);
-			if (++j >= _spans.length) {
-				sb.append(',');
-				break;
-			}
-		}
-		return sb.toString();
+		return numbersToString(_spans);
 	}
 	/** Sets the spans, which is a list of numbers separated by comma.
 	 *
@@ -136,48 +126,97 @@ public class Row extends XulElement {
 	 * and the following column span three columns, while others occupies
 	 * one column.
 	 */
-	public void setSpans(String spans) {
-		List lspans = new LinkedList();
-		if (spans != null) {
-			for (int j = 0;;) {
-				int k = spans.indexOf(',', j);
-				final String s =
-					(k >= 0 ? spans.substring(j, k): spans.substring(j)).trim();
-				if (s.length() == 0) {
-					if (k < 0) break;
-					lspans.add(new Integer(1));
-				} else {
-					//TODO
-				}	
-				if (k < 0) break;
-			}
-		}
-
-		int[] spansVal;
-		final int sz = lspans.size();
-		if (sz > 0) {
-			spansVal = new int[sz];
-		} else {
-			spansVal = null;
-		}
-
-		if (!Objects.equals(spansVal, _spans)) {
-			_spans = spansVal;
+	public void setSpans(String spans) throws WrongValueException {
+		final int[] ispans = parseNumbers(spans, 1);
+		if (!Objects.equals(ispans, _spans)) {
+			_spans = ispans;
 			invalidate();
 		}
+	}
+	/** Parse a list of numbers.
+	 *
+	 * @param defaultValue the value if a number is omitted. For example, ",2"
+	 * means "1,2" if defafultValue is 1
+	 * @return an array of int, or null if no integer at all
+	 */
+	/*package*/ static final int[] parseNumbers(String numbers, int defaultValue)
+	throws WrongValueException {
+		if (numbers == null)
+			return null;
+
+		List list = new LinkedList();
+		for (int j = 0;;) {
+			int k = numbers.indexOf(',', j);
+			final String s =
+				(k >= 0 ? numbers.substring(j, k): numbers.substring(j)).trim();
+			if (s.length() == 0) {
+				if (k < 0) break;
+				list.add(null);
+			} else {
+				try {
+					list.add(Integer.valueOf(s));
+				} catch (Throwable ex) {
+					throw new WrongValueException("Not a valid number list: "+numbers);
+				}
+			}	
+
+			if (k < 0) break;
+			j = k + 1;
+		}
+
+		int[] ary;
+		final int sz = list.size();
+		if (sz > 0) {
+			ary = new int[sz];
+			int j = 0;
+			for (Iterator it = list.iterator(); it.hasNext(); ++j) {
+				final Integer i = (Integer)it.next();
+				ary[j] = i != null ? i.intValue(): defaultValue;
+			}
+		} else {
+			ary = null;
+		}
+		return ary;
+	}
+	/** Converts an array of numbers to a string.
+	 */
+	/*package*/ static final String numbersToString(int[] ary) {
+		if (ary == null || ary.length == 0)
+			return "";
+
+		final StringBuffer sb = new StringBuffer(50);
+		for (int j = 0;;) {
+			sb.append(ary[j]);
+			if (++j >= ary.length) {
+				sb.append(',');
+				break;
+			}
+		}
+		return sb.toString();
 	}
 
 	/** Returns the HTML attributes for the child of the specified index.
 	 */
 	public String getChildAttrs(int index) {
+		int realIndex = index, span = 1;
+		if (_spans != null) {
+			for (int j = 0; j < _spans.length; ++j) {
+				if (j == index) {
+					span = _spans[j];
+					break;
+				}
+				realIndex += _spans[j] - 1;
+			}
+		}
+
 		String colattrs = null, wd = null, hgh = null;
 		final Grid grid = getGrid();
 		if (grid != null) {
 			final Columns cols = grid.getColumns();
 			if (cols != null) {
 				final List colchds = cols.getChildren();
-				if (index < colchds.size()) {
-					final Column col = (Column)colchds.get(index);
+				if (realIndex < colchds.size()) {
+					final Column col = (Column)colchds.get(realIndex);
 					colattrs = col.getColAttrs();
 					wd = col.getWidth();
 					hgh = col.getHeight();
@@ -201,13 +240,18 @@ public class Row extends XulElement {
 		}
 
 		final String sclass = getSclass();
-		if (colattrs == null && sclass == null && style.length() == 0)
+		if (colattrs == null && sclass == null && style.length() == 0
+		&& span == 1)
 			return "";
 
 		final StringBuffer sb = new StringBuffer(100);
-		if (colattrs != null) sb.append(colattrs);
+		if (colattrs != null)
+			sb.append(colattrs);
+		if (span > 1)
+			sb.append(" colspan=\"").append(span).append('"');
 		HTMLs.appendAttribute(sb, "class", sclass);
 		HTMLs.appendAttribute(sb, "style", style);
+		
 		return sb.toString();
 	}
 
