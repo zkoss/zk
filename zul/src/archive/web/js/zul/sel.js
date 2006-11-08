@@ -776,10 +776,10 @@ zk.Selectable.prototype = {
 	 */
 	_getFitGap: function () {
 		var gap = document.body.offsetHeight - zk.innerHeight()
-				+ parseInt(Element.getStyle(document.body, "margin-top"))
-				+ parseInt(Element.getStyle(document.body, "margin-bottom"))
-				+ parseInt(Element.getStyle(document.body, "padding-top"))
-				+ parseInt(Element.getStyle(document.body, "padding-bottom"));
+				+ parseInt(Element.getStyle(document.body, "margin-top")||"0")
+				+ parseInt(Element.getStyle(document.body, "margin-bottom")||"0")
+				+ parseInt(Element.getStyle(document.body, "padding-top")||"0")
+				+ parseInt(Element.getStyle(document.body, "padding-bottom")||"0");
 		if (zk.ie) ++gap; //strange, but...
 		if (gap <= 0) return gap; //already fit
 
@@ -787,8 +787,9 @@ zk.Selectable.prototype = {
 		for (var el = this.element;;) {
 			var p = el.offsetParent;
 			if (!p) return gap; //yes
-			if ($tag(p) == "TD" && p.clientHeight > el.offsetHeight)
+			if ($tag(p) == "TD" && p.clientHeight > el.offsetHeight + 2)
 				return 0; //not caused by this element
+					//2 is an experimental value. In IE, diff might be 0 or 1 (very rare)
 			el = p;
 		}
 	},
