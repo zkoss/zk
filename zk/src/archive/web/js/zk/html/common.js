@@ -1115,7 +1115,23 @@ zk.newFrame = function (name, src, style) {
 	return $e(name);
 };
 
+/** Returns the number of columns (considering colSpan)
+ */
+zk.ncols = function (cells) {
+	var cnt = 0;
+	if (cells) {
+		for (var j = 0; j < cells.length; ++j) {
+			var span = cells[j].colSpan;
+			if (span >= 1) cnt += span;
+			else ++cnt;
+		}
+	}
+	return cnt;
+};
+
 /** Copies the width of each cell from one row to another.
+ * It handles colspan of srcrows, but not dst's colspan, nor rowspan
+ *
  * @param srcrows all rows from the source table. Don't pass just one row
  * because a row might not have all cells.
  * @param times how many times to copy the cell width.
@@ -1127,29 +1143,44 @@ zk.cpCellWidth = function (dst, srcrows, times) {
 	|| !dst.cells || !dst.cells.length)
 		return;
 
-	var max = 0, src;
+	var ncols = dst.cells.length; //TODO: handle colspan for dst: ncols = zk.ncols(dst.cells);
+	var src, maxnc = 0;
 	for (var j = 0; j < srcrows.length; ++j) {
-		var sr = srcrows[j];
-		if (sr.style.display != "none") {
-			var l = sr.cells.length;
-			if (l > max) {
-				max = l;
-				src = sr;
-				if (max >= dst.cells.length) {
-					max = dst.cells.length;
-					break; //done
-				}
-			}
+		var row = srcrows[j];
+		var cells = row.cells;
+		var nc = zk.ncols(cells);
+		var valid = cells.length == nc && row.display != "none";
+			//skip with colspan and invisible
+		if (valid && nc >= ncols) {
+			maxnc = ncols;
+			src = row;
+			break;
+		}
+		if (nc > maxnc) {
+			src = valid ? row: null;
+			maxnc = nc;
+		} else if (nc == maxnc && !src && valid) {
+			src = row;
 		}
 	}
-	if (!src) return; //no visible cells
+	if (!maxnc) return;
+
+	var fakeRow = !src;
+	if (fakeRow) { //the longest row containing colspan
+		src = document.createElement("TR");
+		src.style.height = "0px";
+			//Note: we cannot use display="none" (offsetWidth won't be right)
+		for (var j = 0; j < maxnc; ++j)
+			src.appendChild(document.createElement("TD"));
+		srcrows[0].parentNode.appendChild(src);
+	}
 
 	//we have to clean up first, since, in FF, if dst contains %
 	//the copy might not be correct
-	for (var j = 0; j < max; ++j)
+	for (var j = 0; j < maxnc; ++j)
 		dst.cells[j].style.width = "";
 
-	for (var j = 0; j < max; ++j) {
+	for (var j = 0; j < maxnc; ++j) {
 		var d = dst.cells[j], s = src.cells[j];
 		d.style.width = s.offsetWidth + "px";
 		var v = s.offsetWidth - d.offsetWidth;
@@ -1159,6 +1190,10 @@ zk.cpCellWidth = function (dst, srcrows, times) {
 			d.style.width = v + "px";
 		}
 	}
+
+	if (fakeRow)
+		src.parentNode.removeChild(src);
+
 	if (times > 0)
 		setTimeout(function() {zk.cpCellWidth(dst, srcrows, times - 1);}, 100);
 };
