@@ -127,6 +127,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<datebox/>
 				<textbox rows="3"/>
 			</row>
+			<row spans="1,2">
+				The following cell is span2
+				<radiogroup>
+					<radio label="Apple"/>
+					<radio label="Orange" checked="true"/>
+					<radio label="Lemon"/>
+				</radiogroup>
+			</row>
 			<row>
 				<label value="A11"/>
 				<label value="A12"/>
