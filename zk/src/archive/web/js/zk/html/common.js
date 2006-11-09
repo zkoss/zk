@@ -1196,7 +1196,7 @@ zk.cpCellWidth = function (dst, srcrows, times) {
 	for (var j = 0; j < maxnc; ++j)
 		dst.cells[j].style.width = "";
 
-	for (var j = 0; j < maxnc; ++j) {
+	for (var j = maxnc; --j >= 0;) {
 		var d = dst.cells[j], s = src.cells[j];
 		d.style.width = s.offsetWidth + "px";
 		var v = s.offsetWidth - d.offsetWidth;
