@@ -59,7 +59,7 @@ public class ServletFns {
 	 * The browser code depends on what browser
 	 * the user are used to visit the web site.
 	 * Currently, the code for Internet Explorer is "ie", Safari is "saf",
-	 * and all others are "moz".
+	 * Opera is "opr" and all others are "moz".
 	 * Thus, in the above example, if the resource is named "ab**.cd"
 	 * and Firefox is used, then it searches "abmoz_zh_TW.cd", "abmoz_zh.cd"
 	 * and then "abmoz.cd", until any of them is found.
@@ -90,6 +90,11 @@ public class ServletFns {
 	 */
 	public static boolean isSafari() {
 		return Servlets.isSafari(getCurrentRequest());
+	}
+	/** Returns whether the browser of the current request is Opera.
+	 */
+	public static boolean isOpera() {
+		return Servlets.isOpera(getCurrentRequest());
 	}
 
 	/** Returns the current EL context. */

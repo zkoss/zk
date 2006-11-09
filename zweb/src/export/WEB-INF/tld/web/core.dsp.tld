@@ -335,6 +335,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Whether the current request is coming from Safari.
 		</description>
 	</function>
+	<function>
+		<name>isOpera</name>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
+		<function-signature>
+	boolean isOpera()
+		</function-signature>
+		<description>
+	Whether the current request is coming from Opera.
+		</description>
+	</function>
 
 	<function>
 		<name>render</name>

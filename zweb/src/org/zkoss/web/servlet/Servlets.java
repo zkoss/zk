@@ -109,7 +109,7 @@ public class Servlets {
 	 * The browser code depends on what browser
 	 * the user are used to visit the web site.
 	 * Currently, the code for Internet Explorer is "ie", Safari is "saf",
-	 * and all others are "moz".
+	 * Opera is "opr" and all others are "moz".
 	 * Thus, in the above example, if the resource is named "ab**.cd"
 	 * and Firefox is used, then it searches "abmoz_zh_TW.cd", "abmoz_zh.cd"
 	 * and then "abmoz.cd", until any of them is found.
@@ -151,7 +151,8 @@ public class Servlets {
 		int l = pgpath.lastIndexOf('*');
 		if (l > f) { //two '*'
 			final String bc = Servlets.isExplorer(request) ? "ie":
-				Servlets.isSafari(request) ? "saf": "moz";
+				Servlets.isSafari(request) ? "saf":
+				Servlets.isOpera(request) ? "opr": "moz";
 			l += bc.length() - 1;
 			pgpath = pgpath.substring(0, f) + bc + pgpath.substring(f + 1);
 		}
@@ -276,6 +277,17 @@ public class Servlets {
 
 		agt = agt.toLowerCase();
 		return agt.indexOf("safari") >= 0;
+	}
+	/** Returns whether the browser is Opera.
+	 */
+	public static final boolean isOpera(ServletRequest req) {
+		String agt = req instanceof HttpServletRequest ?
+			((HttpServletRequest)req).getHeader("user-agent"): null;
+		if (agt == null)
+			return false;
+
+		agt = agt.toLowerCase();
+		return agt.indexOf("opera") >= 0;
 	}
 
 	/**
