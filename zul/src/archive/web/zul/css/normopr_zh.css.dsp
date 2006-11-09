@@ -101,36 +101,6 @@ ul li	{list-style: url(${c:encodeURL('~./img/bullet1.gif')}) disc}
 ul ul li	{list-style: url(${c:encodeURL('~./img/bullet2.gif')}) circle}
 ul ul ul li	{list-style: url(${c:encodeURL('~./img/bullet3.gif')}) square}
 
-<%-- Alpha --%>
-a.alpha { color: #000000; text-decoration: none; }
-a.alpha:hover { color: #000000; text-decoration: underline; }
-tr.alpha { background: #6699CC; }
-td.alpha { background: #6699CC; }
-td.alpha-gradient { filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#B6CBEB, endColorStr=#6699CC); }
-font.alpha { color: #000000; font-family: Tahoma, Arial; font-weight:  bold; }
-.alpha-neg-alert { color: #FF0000; }
-.alpha-pos-alert { color: #007F00; }
-
-<%-- Beta --%>
-a.beta { color: #000000; text-decoration: none; }
-a.beta:hover { color: #000000; text-decoration: underline; }
-tr.beta { background: #B6CBEB; }
-td.beta { background: #B6CBEB; }
-td.beta-gradient { filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#FFFFFF, endColorStr=#B6CBEB); }
-font.beta { color: #000000; font-family: "Verdana", Tahoma, Arial; font-weight: normal; }
-.beta-neg-alert { color: #FF0000; }
-.beta-pos-alert { color: #007F00; }
-
-<%-- Gamma --%>
-a.gamma { color: #000000; text-decoration: none; }
-a.gamma:hover { color: #000000; text-decoration: underline; }
-tr.gamma { background: #F4F4F4; }
-td.gamma { background: #F4F4F4; }
-td.gamma-gradient { filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#FFFFFF, endColorStr=#F4F4F4); }
-font.gamma { color: #000000; font-family: "Verdana", Tahoma, Arial; font-weight: normal; }
-.gamma-neg-alert { color: #FF0000; }
-.gamma-pos-alert { color: #007F00; }
-
 <%-- The hyperlink's style class. --%>
 .link {cursor: hand; cursor: pointer;}
 
