@@ -691,20 +691,27 @@ zkau.onimgout = function (el) {
 zkau._onUnload = function () {
 	if (zk.gecko) zk.restoreDisabled(); //Workaround Nav: Bug 1495382
 
-	var content = "dtid="+zk_desktopId+"&cmd.0=rmDesktop";
-	var req;
-	if (window.ActiveXObject) { //IE
-		req = new ActiveXObject("Microsoft.XMLHTTP");
-	} else if (window.XMLHttpRequest) { //None-IE
-		req = new XMLHttpRequest();
-	}
+	//20061109: Tom Yeh: Failed to disable Opera's cache, so it's better not
+	//to remove the desktop. Side effect: BACK to an page, its content might
+	//not be consistent with server's (due to Opera incapable to restore
+	//DHTML content 100% correctly)
 
-	if (req) {
-		try {
-			req.open("POST", zk_action, true);
-			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			req.send(content);
-		} catch (e) { //silent
+	if (!zk.opera) {
+		var content = "dtid="+zk_desktopId+"&cmd.0=rmDesktop";
+		var req;
+		if (window.ActiveXObject) { //IE
+			req = new ActiveXObject("Microsoft.XMLHTTP");
+		} else if (window.XMLHttpRequest) { //None-IE
+			req = new XMLHttpRequest();
+		}
+
+		if (req) {
+			try {
+				req.open("POST", zk_action, true);
+				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				req.send(content);
+			} catch (e) { //silent
+			}
 		}
 	}
 

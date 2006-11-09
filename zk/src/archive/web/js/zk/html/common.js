@@ -386,13 +386,13 @@ zk._doTwice = function (script, timeout) {
  * @param el the sibling before which to insert
  */
 zk.insertHTMLBefore = function (el, html) {
-	if (zk.ie) {
+	if (zk.ie || zk.opera) {
 		switch ($tag(el)) { //exclude TABLE
 		case "TD": case "TH": case "TR": case "CAPTION":
 		case "TBODY": case "THEAD": case "TFOOT":
 			var n = document.createElement(zk.tagOfHtml(html));
 			el.parentNode.insertBefore(n, el);
-			zk._agtIeReplaceOuterHTML(n, html);
+			zk._tdfixReplaceOuterHTML(n, html);
 			return;
 		}
 	}
@@ -401,7 +401,7 @@ zk.insertHTMLBefore = function (el, html) {
 /** Inserts an unparsed HTML immediately before the ending element.
  */
 zk.insertHTMLBeforeEnd = function (el, html) {
-	if (zk.ie) {
+	if (zk.ie || zk.opera) {
 		var tn = $tag(el);
 		switch (tn) {
 		case "TABLE": case "TR":
@@ -420,7 +420,7 @@ zk.insertHTMLBeforeEnd = function (el, html) {
 			}
 			var n = document.createElement(tn2);
 			el.appendChild(n);
-			zk._agtIeReplaceOuterHTML(n, html);
+			zk._tdfixReplaceOuterHTML(n, html);
 			return;
 		}
 	}
@@ -430,7 +430,7 @@ zk.insertHTMLBeforeEnd = function (el, html) {
  * @param el the sibling after which to insert
  */
 zk.insertHTMLAfter = function (el, html) {
-	if (zk.ie) {
+	if (zk.ie || zk.opera) {
 		switch ($tag(el)) { //exclude TABLE
 		case "TD": case "TH": case "TR": case "CAPTION":
 		case "TBODY": case "THEAD": case "TFOOT":
@@ -440,7 +440,7 @@ zk.insertHTMLAfter = function (el, html) {
 			} else {
 				var n = document.createElement(zk.tagOfHtml(html));
 				el.parentNode.appendChild(n);
-				zk._agtIeReplaceOuterHTML(n, html);
+				zk._tdfixReplaceOuterHTML(n, html);
 			}
 			return;
 		}
@@ -451,8 +451,8 @@ zk.insertHTMLAfter = function (el, html) {
 /** Sets the inner HTML.
  */
 zk.setInnerHTML = function (el, html) {
-	if (zk.ie) {
-		zk._agtIeReplaceInnerHTML(el, html);
+	if (zk.ie || zk.opera) {
+		zk._tdfixReplaceInnerHTML(el, html);
 	} else {
 		el.innerHTML = html;
 	}
@@ -461,12 +461,12 @@ zk.setInnerHTML = function (el, html) {
  */
 zk.setOuterHTML = function (el, html) {
 	//NOTE: Safari doesn't support __defineSetter__
-	if (zk.ie) {
+	if (zk.ie || zk.opera) {
 		var tn = $tag(el);
 		if (tn == "TD" || tn == "TH" || tn == "TABLE" || tn == "TR"
 		|| tn == "CAPTION" || tn == "TBODY" || tn == "THEAD"
 		|| tn == "TFOOT") {
-			zk._agtIeReplaceOuterHTML(el, html);
+			zk._tdfixReplaceOuterHTML(el, html);
 			return;
 		}
 		el.outerHTML = html;
@@ -558,11 +558,18 @@ zk.tagOfHtml = function (html) {
 //zk.appendHTMLChild = function (el, html) {
 //	el.insertAdjacentHTML('beforeEnd', html);
 //};
-if (zk.ie) {
-	/** Replace HTML for TR, TD and others; the same as outerHTML, used
-	 * since IE don't support non-SPAN/DIV well.
+///// fix inserting/updating TABLE/TR/TD ////
+//IE don't support TABLE/TR/TD well.
+
+//20061109: Tom M. Yeh:
+//Browser: Opera:
+//Issue: When append TD with insertAdjacentHTML, it creates extra sibling,
+//TextNode.
+//Test: Live data of listbox in ZkDEMO
+if (zk.ie || zk.opera) {
+	/** Replace HTML for TR, TD and others; the same as outerHTML
 	 */
-	zk._agtIeReplaceOuterHTML = function (el, html) { //patch for IE
+	zk._tdfixReplaceOuterHTML = function (el, html) { //patch for IE
 		var j = html.indexOf('>');
 		if (j < 0) {
 			alert("Unsupported replace: "+html);
@@ -645,12 +652,12 @@ if (zk.ie) {
 		}
 
 		if (inner)
-			zk._agtIeReplaceInnerHTML(el, inner);
+			zk._tdfixReplaceInnerHTML(el, inner);
 	};
 	/** Replace HTML for TR, TD and others; the same as outerHTML, used
 	 * since IE don't support non-SPAN/DIV well.
 	 */
-	zk._agtIeReplaceInnerHTML = function (el, html) { //patch for IE
+	zk._tdfixReplaceInnerHTML = function (el, html) { //patch for IE
 		//replace inner
 		var tn = $tag(el);
 		if (tn == "TR" || tn == "TABLE" || tn == "TBODY" || tn == "THEAD"
@@ -659,7 +666,7 @@ if (zk.ie) {
 				el.removeChild(el.firstChild);
 
 			if (tn == "TABLE") {
-				var tagInfo = zk._agtIeNextTag(html, 0);
+				var tagInfo = zk._tdfixNextTag(html, 0);
 				if (tagInfo && tagInfo.tagName == "TR") {
 					var n = document.createElement("TBODY");
 					el.appendChild(n);
@@ -668,7 +675,7 @@ if (zk.ie) {
 			}
 
 			for (var j = 0, depth = 0; j < html.length;) {
-				var tagInfo = zk._agtIeNextTag(html, j);
+				var tagInfo = zk._tdfixNextTag(html, j);
 				if (!tagInfo) return;
 
 				var tagnm = tagInfo.tagName;
@@ -677,7 +684,7 @@ if (zk.ie) {
 
 				var k = html.indexOf('>', tagInfo.index);
 				for (var depth = 0; k >= 0;) {
-					tagInfo = zk._agtIeNextTag(html, k + 1);
+					tagInfo = zk._tdfixNextTag(html, k + 1);
 					if (!tagInfo) break;
 					k = html.indexOf('>', tagInfo.index);
 					if (tagnm == tagInfo.tagName) {
@@ -690,7 +697,7 @@ if (zk.ie) {
 
 				if (k < 0) k = html.length;
 				else ++k;
-				zk._agtIeReplaceOuterHTML(n, html.substring(j, k));
+				zk._tdfixReplaceOuterHTML(n, html.substring(j, k));
 				j = k;
 			}
 		} else {
@@ -701,7 +708,7 @@ if (zk.ie) {
 		}
 	};
 	/** Next tag info. */
-	zk._agtIeNextTag = function (html, j) {
+	zk._tdfixNextTag = function (html, j) {
 		var k = html.indexOf('<', j);
 		if (k < 0) return null;
 
@@ -734,7 +741,7 @@ zk.getElementValue = function (el) {
 
 /** Extends javascript for Non-IE
  */
-if (!zk.ie) {
+if (!zk.ie && !HTMLElement.prototype.insertAdjacentHTML) {
 	//insertAdjacentHTML
 	HTMLElement.prototype.insertAdjacentHTML = function (sWhere, sHTML) {
 		var df;   // : DocumentFragment
