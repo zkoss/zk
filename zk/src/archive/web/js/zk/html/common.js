@@ -274,11 +274,16 @@ zk.getStyleOffset = function (el) {
  * style.left/top is still relevant to original offsetParent
  */
 zk.toStylePos = function (el, x, y) {
-	//IE/gecko fix: otherwise, toStylePos won't correct
-	var fixleft = el.style.left == "" || el.style.left == "auto";
-	if (fixleft) el.style.left = "0";
-	var fixtop = el.style.top == "" || el.style.top == "auto";
-	if (fixtop) el.style.top = "0";
+	if (zk.opera) {
+		//Opera: we have to reset left/top. Or, the second call position wrong
+		el.style.left = el.style.top = "";
+	} else {
+		//IE/gecko fix: otherwise, toStylePos won't correct
+		var fixleft = el.style.left == "" || el.style.left == "auto";
+		if (fixleft) el.style.left = "0";
+		var fixtop = el.style.top == "" || el.style.top == "auto";
+		if (fixtop) el.style.top = "0";
+	}
 
 	var ofs1 = Position.cumulativeOffset(el);
 	var ofs2 = zk.getStyleOffset(el);

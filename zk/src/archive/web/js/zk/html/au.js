@@ -1292,8 +1292,9 @@ zkau._ghostdrag = function (dg, ghosting) {
 //Tom Yeh: 20060227: Use a 'fake' DIV if
 //1) FF cannot handle z-index well if listitem is dragged across two listboxes
 //2) Safari's ghosting position is wrong
+//3) Opera's width is wrong if cloned
 	var special;
-	if (zk.gecko || zk.safari) {
+	if (!zk.ie) {
 		if (ghosting) {
 			var tn = $tag(dg.element);
 			zk.zk_special = special = "TR" == tn || "TD" == tn || "TH" == tn;
@@ -1309,8 +1310,8 @@ zkau._ghostdrag = function (dg, ghosting) {
 
 			//Store scrolling offset first since Draggable.draw not handle DIV well
 			//after we transfer TR to DIV
-			dg.z_scrl = Position.realOffset(dg.element);
 			var pos = Position.cumulativeOffset(dg.element);
+			dg.z_scrl = Position.realOffset(dg.element);
 			pos[0] -= dg.z_scrl[0]; pos[1] -= dg.z_scrl[1];
 			document.body.insertAdjacentHTML("afterbegin",
 				'<div id="zk_ddghost" style="position:absolute;top:'
