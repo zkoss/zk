@@ -70,7 +70,7 @@ zk.Grid.prototype = {
 		this._setSize();
 
 		if (!this.paging) {
-			if (zk.gecko && this.headtbl && this.headtbl.rows.length == 1) {
+			if ((zk.gecko||zk.opera) && this.headtbl && this.headtbl.rows.length == 1) {
 				var headrow = this.headtbl.rows[0];
 				var empty = true;
 				l_out:
