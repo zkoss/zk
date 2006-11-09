@@ -1150,11 +1150,8 @@ zk.ncols = function (cells) {
  *
  * @param srcrows all rows from the source table. Don't pass just one row
  * because a row might not have all cells.
- * @param times how many times to copy the cell width.
- * It is useful since browser might re-adjust source's cell width.
- * after dst is changed
  */
-zk.cpCellWidth = function (dst, srcrows, times) {
+zk.cpCellWidth = function (dst, srcrows) {
 	if (dst == null || srcrows == null || !srcrows.length
 	|| !dst.cells || !dst.cells.length)
 		return;
@@ -1193,7 +1190,7 @@ zk.cpCellWidth = function (dst, srcrows, times) {
 
 	//we have to clean up first, since, in FF, if dst contains %
 	//the copy might not be correct
-	for (var j = 0; j < maxnc; ++j)
+	for (var j = maxnc; --j >=0;)
 		dst.cells[j].style.width = "";
 
 	for (var j = maxnc; --j >= 0;) {
@@ -1209,9 +1206,6 @@ zk.cpCellWidth = function (dst, srcrows, times) {
 
 	if (fakeRow)
 		src.parentNode.removeChild(src);
-
-	if (times > 0)
-		setTimeout(function() {zk.cpCellWidth(dst, srcrows, times - 1);}, 100);
 };
 
 //Number//
