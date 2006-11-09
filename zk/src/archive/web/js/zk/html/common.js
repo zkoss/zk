@@ -275,8 +275,12 @@ zk.getStyleOffset = function (el) {
  */
 zk.toStylePos = function (el, x, y) {
 	if (zk.opera) {
-		//Opera: we have to reset left/top. Or, the second call position wrong
-		el.style.left = el.style.top = "";
+		//Opera:
+		//1)we have to reset left/top. Or, the second call position wrong
+		//test case: Tooltips and Popups
+		//2)we cannot assing "", either
+		//test case: menu
+		el.style.left = el.style.top = "0";
 	} else {
 		//IE/gecko fix: otherwise, toStylePos won't correct
 		var fixleft = el.style.left == "" || el.style.left == "auto";
