@@ -38,20 +38,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<menubar id="menubar">
 		<menu label="File">
 			<menupopup>
-				<menuitem label="New"/>
-				<menuitem label="Open"/>
-				<menuitem label="Save"/>
+				<menuitem label="New" onClick="alert(self.label)"/>
+				<menuitem label="Open" onClick="alert(self.label)"/>
+				<menuitem label="Save" onClick="alert(self.label)"/>
 				<menuseparator/>
-				<menuitem label="Exit"/>
+				<menuitem label="Exit" onClick="alert(self.label)"/>
 			</menupopup>
 		</menu>
 		<menu label="Help">
 			<menupopup>
-				<menuitem label="Index"/>
+				<menuitem label="Index" onClick="alert(self.label)"/>
 				<menu label="About">
 					<menupopup>
-						<menuitem label="About ZK"/>
-						<menuitem label="About Potix"/>
+						<menuitem label="About ZK" onClick="alert(self.label)"/>
+						<menuitem label="About Potix" onClick="alert(self.label)"/>
 					</menupopup>
 				</menu>
 			</menupopup>
