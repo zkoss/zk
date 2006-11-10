@@ -1188,21 +1188,45 @@ zk.cpCellWidth = function (dst, srcrows) {
 		srcrows[0].parentNode.appendChild(src);
 	}
 
+	//Note: With Opera, we cannot use table-layout="fixed and we have to assign
+	//the table width (test case: fixed-table-header.html)
+	var tbl;
+	if (zk.opera)
+		tbl = dst.parentNode.parentNode;
+	if (tbl) {
+		tbl.style.tableLayout = "auto";
+		tbl.style.width = "";
+	}
+
 	//we have to clean up first, since, in FF, if dst contains %
 	//the copy might not be correct
 	for (var j = maxnc; --j >=0;)
 		dst.cells[j].style.width = "";
 
+	var sum = 0;
 	for (var j = maxnc; --j >= 0;) {
 		var d = dst.cells[j], s = src.cells[j];
-		d.style.width = s.offsetWidth + "px";
-		var v = s.offsetWidth - d.offsetWidth;
-		if (v != 0) {
-			v += s.offsetWidth;
-			if (v < 0) v = 0;
-			d.style.width = v + "px";
+		if (zk.opera) {
+			sum += s.offsetWidth;
+			var v = parseInt(Element.getStyle(s, "border-left"))
+				+ parseInt(Element.getStyle(s, "border-right"))
+				+ parseInt(Element.getStyle(s, "margin-left"))
+				+ parseInt(Element.getStyle(s, "margin-right"))
+				+ parseInt(Element.getStyle(s, "padding-left"))
+				+ parseInt(Element.getStyle(s, "padding-right"));
+			d.style.width = s.offsetWidth - v;
+		} else {
+			d.style.width = s.offsetWidth + "px";
+			var v = s.offsetWidth - d.offsetWidth;
+			if (v != 0) {
+				v += s.offsetWidth;
+				if (v < 0) v = 0;
+				d.style.width = v + "px";
+			}
 		}
 	}
+
+	if (tbl) tbl.style.width = sum + "px";
 
 	if (fakeRow)
 		src.parentNode.removeChild(src);
