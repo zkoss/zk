@@ -61,6 +61,11 @@ public class Tabbox extends XulElement {
 	public Tabbox() {
 	}
 
+	/** Returns whether it is in the accordion mold.
+	 */
+	/*package*/ boolean inAccordionMold() {
+		return "accordion".equals(getMold());
+	}
 	/** Returns the tabs that this tabbox owns.
 	 */
 	public Tabs getTabs() {

@@ -65,10 +65,25 @@ public class Tabs extends XulElement {
 		}
 		return false;
 	}
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+
+		final Tabbox tabbox = getTabbox();
+		if (tabbox == null || !tabbox.inAccordionMold())
+			smartUpdate("z:init", true); //fixWidth
+	}
+	public void onChildAdded(Component child) {
+		super.onChildAdded(child);
+
+		final Tabbox tabbox = getTabbox();
+		if (tabbox == null || !tabbox.inAccordionMold())
+			smartUpdate("z:init", true); //fixWidth
+	}
+		
 	/** Invalidates the tabbox if it is accordion.
 	 */
 	private static void invalidateIfAccordion(Tabbox tabbox) {
-		if (tabbox != null && "accordion".equals(tabbox.getMold()))
+		if (tabbox != null && tabbox.inAccordionMold())
 			tabbox.invalidate();
 	}
 }
