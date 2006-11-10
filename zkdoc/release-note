@@ -2,8 +2,9 @@
 ZK 2.2.0 Freshly
 * Features:
   1587247, 1587699, 1587701, 1588387, 1589060, 1589050, 1589119, 1567850,
-  1502660, 1548218, 1441459, 1589979.
+  1502660, 1548218, 1441459, 1589979, 1490690.
   + Support of ZUML annotations.
+  + Support the Opera browser.
   + HibernateUtil support Hibernate annotation.
   + New Google Maps components: ginfo and gmarker.
   + org.zkoss.zk.ui.util.Clients adds the confirmClose method to prevent an user
