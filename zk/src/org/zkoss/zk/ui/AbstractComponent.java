@@ -677,11 +677,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				throw new UiException("The new parent must be in the same desktop: "+parent);
 				//Not allow developers to access two desktops simutaneously
 
-			idSpaceChanged = _parent == null
-				|| parent.getSpaceOwner() != _parent.getSpaceOwner();
+			idSpaceChanged = parent.getSpaceOwner() !=
+				(_parent != null ? _parent.getSpaceOwner(): _page);
 			if (idSpaceChanged) checkIdSpacesDown(this, parent);
 		} else {
-			idSpaceChanged = true;
+			idSpaceChanged = _page != null;
 		}
 
 		if (_parent != null && isTransparent(this)) _parent.invalidate();
