@@ -24,19 +24,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
 	<td width="5" height="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-tl',suffix))})"></td>
-	<td colspan="3" height="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-tm',suffix))})"></td>
+	<td colspan="${self.closable ?4:3}" height="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-tm',suffix))})"></td>
 	<td width="5" height="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-tr',suffix))})"></td>
 </tr>
 <tr height="22">
 	<td width="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-ml',suffix))})"></td>
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"></td>
 	<td align="center" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"><a href="javascript:;" id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a></td>
+<c:if test="${self.closable}">
+	<td width="11" align="right" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"><img id="${self.uuid}!close" src="${c:encodeURL('~./zul/img/closesm-off.gif')}"/></td>
+</c:if>
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"></td>
 	<td width="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mr',suffix))})"></td>
 </tr>
 <tr>
 	<td width="5" height="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-bl',suffix))})"></td>
-	<td colspan="3" height="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-bm',suffix))})"></td>
+	<td colspan="${self.closable ?4:3}" height="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-bm',suffix))})"></td>
 	<td width="5" height="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-br',suffix))})"></td>
 </tr>
 </table>

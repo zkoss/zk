@@ -247,12 +247,12 @@ zkCkbox.onclick = function (cmp) {
 // window //
 zkWnd = {};
 zkWnd.init = function (cmp) {
-	var img = $e(cmp.id + "!img");
-	if (img) {
-		zk.listen(img, "click", function () {zkau.sendOnClose(cmp);});
-		zk.listen(img, "mouseover", function () {zkau.onimgover(img);});
-		zk.listen(img, "mouseout", function () {zkau.onimgout(img);});
-		if (!img.style.cursor) img.style.cursor = "default";
+	var btn = $e(cmp.id + "!close");
+	if (btn) {
+		zk.listen(btn, "click", function () {zkau.sendOnClose(cmp);});
+		zk.listen(btn, "mouseover", function () {zkau.onimgover(btn);});
+		zk.listen(btn, "mouseout", function () {zkau.onimgout(btn);});
+		if (!btn.style.cursor) btn.style.cursor = "default";
 	}
 
 	//bug 1469887: re-init since it might be caused by invalidate

@@ -32,6 +32,8 @@ import org.zkoss.zul.impl.LabelImageElement;
  */
 public class Tab extends LabelImageElement {
 	private boolean _selected;
+	/** Whether to show a close button. */
+	private boolean _closable;
 
 	public Tab() {
 	}
@@ -41,6 +43,50 @@ public class Tab extends LabelImageElement {
 	public Tab(String label, String image) {
 		setLabel(label);
 		setImage(image);
+	}
+
+	/** Returns whether this tab is closable.
+	 * If closable, a button is displayed and the onClose event is sent
+	 * if an user clicks the button.
+	 * <p>Default: false.
+	 */
+	public boolean isClosable() {
+		return _closable;
+	}
+	/** Sets whether this tab is closable.
+	 * If closable, a button is displayed and the onClose event is sent
+	 * if an user clicks the button.
+	 * <p>Default: false.
+	 * <p>You can intercept the default behavior by either overriding
+	 * {@link #onClose}, or listening the onClose event.
+	 */
+	public void setClosable(boolean closable) {
+		if (_closable != closable) {
+			_closable = closable;
+			invalidate(); //re-init is required
+		}
+	}
+
+	/** Process the onClose event sent when the close button is pressed.
+	 * <p>Default: detach itself and the corresponding {@link Tabpanel}.
+	 */
+	public void onClose() {
+		if (_selected) {
+			final Tabs tabs = (Tabs)getParent();
+			if (tabs != null) {
+				for (Iterator it = tabs.getChildren().iterator(); it.hasNext();) {
+					final Tab t = (Tab)it.next();
+					if (t != this) {
+						t.setSelected(true);
+						break;
+					}
+				}
+			}
+		}
+
+		final Tabpanel panel = getLinkedPanel();
+		if (panel != null) panel.detach();
+		detach();
 	}
 
 	/** Returns the tabbox owns this component.

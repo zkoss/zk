@@ -458,14 +458,14 @@ public class Chart extends Imagemap {
 	
 	/** Returns the time zone that this Time Series Chart belongs to, or null if
 	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 * <p>The default time zone is determined by {@link org.zkoss.util.TimeZones#getCurrent}.
 	 */
 	public TimeZone getTimeZone() {
 		return _tzone;
 	}
 	/** Sets the time zone that this Time Series Chart belongs to, or null if
 	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 * <p>The default time zone is determined by {@link org.zkoss.util.TimeZones#getCurrent}.
 	 */
 	public void setTimeZone(TimeZone tzone) {
 		if (Objects.equals(tzone, _tzone)) {

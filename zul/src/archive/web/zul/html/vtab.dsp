@@ -34,6 +34,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mm',suffix))})"></td>
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mr',suffix))})"></td>
 </tr>
+<c:if test="${self.closable}">
+<tr height="8">
+	<td width="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-ml',suffix))})"></td>
+	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mm',suffix))})"></td>
+	<td align="center" valign="bottom" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mm',suffix))})"><img id="${self.uuid}!close" src="${c:encodeURL('~./zul/img/closesm-off.gif')}"/></td>
+	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mm',suffix))})"></td>
+	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mr',suffix))})"></td>
+</tr>
+</c:if>
 <tr>
 	<td width="5" height="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-bl',suffix))})"></td>
 	<td colspan="3" height="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-bm',suffix))})"></td>

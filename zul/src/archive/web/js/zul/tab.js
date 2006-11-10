@@ -164,6 +164,13 @@ zkTab.init = function (cmp) {
 		zk.listen(anc, "focus", function () {zkau.onfocus(anc);});
 		zk.listen(anc, "blur", function () {zkau.onblur(anc);});
 	}
+	var btn = $e(cmp.id + "!close");
+	if (btn) {
+		zk.listen(btn, "click", function () {zkau.sendOnClose(cmp);});
+		zk.listen(btn, "mouseover", function () {zkau.onimgover(btn);});
+		zk.listen(btn, "mouseout", function () {zkau.onimgout(btn);});
+		if (!btn.style.cursor) btn.style.cursor = "default";
+	}
 };
 
 ////
