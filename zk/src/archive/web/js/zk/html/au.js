@@ -129,7 +129,8 @@ zkau._onRespReady = function () {
 		} catch (e) {
 			//NOTE: if connection is off and req.status is accessed,
 			//Mozilla throws exception while IE returns a value
-			zk.error(mesg.FAILED_TO_RESPONSE+e.message);
+			if (!zkau._unloading)
+				zk.error(mesg.FAILED_TO_RESPONSE+e.message);
 			zkau._cleanupOnFatal();
 		}
 	}
@@ -245,9 +246,10 @@ zkau._sendNow = function () {
 				if(typeof req.abort == "function") req.abort();
 			} catch (e2) {
 			}
-			zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+"\n"+e.message);
+			if (!zkau._unloading)
+				zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+"\n"+e.message);
 		}
-	} else {
+	} else if (!zkau._unloading) {
 		zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content);
 	}
 };
@@ -689,6 +691,8 @@ zkau.onimgout = function (el) {
 
 /** Handles window.unload. */
 zkau._onUnload = function () {
+	zkau._unloading = true; //to disable error message
+
 	if (zk.gecko) zk.restoreDisabled(); //Workaround Nav: Bug 1495382
 
 	//20061109: Tom Yeh: Failed to disable Opera's cache, so it's better not
