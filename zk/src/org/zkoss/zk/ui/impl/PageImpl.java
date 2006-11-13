@@ -429,10 +429,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_ip.setVariable("session", sess);
 		_ip.setVariable("sessionScope", sess.getAttributes());
 
-		if (_id != null && id != null) _id = id;
 		if (headers != null) _headers = headers;
 
 		final DesktopCtrl dtctrl = (DesktopCtrl)_desktop;
+		if (_id == null && id != null && id.length() != 0) _id = id;
 		if (_id != null)
 			_id = (String)exec.evaluate(this, _id, String.class);
 		if (_id != null && _id.length() != 0) {
