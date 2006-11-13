@@ -18,7 +18,7 @@ ZK 2.2.0 RC
 
 * Upgrade Notes
   + You have to implement a new method called doAfterCompose for classes
-    that implements org.zkoss.zk.ui.util.Initiator interface.
+    that implement the org.zkoss.zk.ui.util.Initiator interface.
 
 	--------
 ZK 2.1.3
