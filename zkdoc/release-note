@@ -12,7 +12,7 @@ ZK 2.2.0 Freshly
 
 * Bugs:
   1584857, 1586951, 1589575, 1588507, 1590590, 1590603, 1579515, 1591389,
-  1593939.
+  1593939, 1593674, 1594756.
 
 * Upgrade Notes
   + You have to implement a new method called doAfterCompose for classes
