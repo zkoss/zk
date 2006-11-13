@@ -64,11 +64,14 @@ function $uuid(n) {
  * while !real is by the component itself
  */
 function $real(cmp) {
-	if (typeof cmp == 'string')
-		cmp = $e($uuid(cmp));
-	if (!cmp) return null;
-	var real = $e(cmp.id + "!real");
-	return real ? real: cmp;
+	var id = $uuid(cmp);
+	if (id) {
+		var n = $e(id + "!real");
+		if (n) return n;
+		n = $e(id);
+		if (n) return n;
+	}
+	return cmp;
 }
 /** Returns the enclosing element (not ends with !real).
  * If not found, cmp is returned.
