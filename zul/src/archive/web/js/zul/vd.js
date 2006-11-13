@@ -119,11 +119,6 @@ zkVld.errbox = function (id, html) {
 	if (!cmp || !zk.isRealVisible(cmp)) return; //don't do it
 
 	zkVld._errInfo = {id: id, html: html};
-
-	var inp = $real(cmp);
-	cmp._vdOldStyle = {bgc:inp.style.backgroundColor};
-	inp.style.backgroundColor = "#ffd8c8";
-
 	setTimeout(zkVld._errbox, 5);
 	zkVld.validating = false;
 };
@@ -134,7 +129,14 @@ zkVld._errbox = function () {
 	zkVld._errInfo = null;
 
 	var boxid = id + "!errb";
-	zkVld.closeErrbox(boxid, true);
+	zkVld.closeErrbox(boxid);
+
+	cmp = $e(id);
+	if (cmp) {
+		var inp = $real(cmp);
+		cmp._vdOldStyle = {bgc:inp.style.backgroundColor};
+		inp.style.backgroundColor = "#ffd8c8";
+	}
 
 	html = '<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
 		+boxid+'" style="display:none;position:absolute" class="errbox"><div>'
@@ -157,7 +159,6 @@ zkVld._errbox = function () {
 
 	if (!zkVld._cnt) zkVld._cnt = 0;
 	box.style.zIndex = 70000 + zkVld._cnt++;
-	var cmp = $e(id);
 	if (cmp) {
 		var ofs = Position.cumulativeOffset(cmp), wd = cmp.offsetWidth, atTop;
 		if (zkau.currentFocus && zkau.currentFocus != cmp) {
@@ -180,7 +181,9 @@ zkVld._errbox = function () {
 	zkVld._fiximg(box);
 	zkVld.uncover();
 
-	Effect.SlideDown(box, {duration:0.5});
+	if (!zk.opera) Effect.SlideDown(box, {duration:0.5});
+		//if we slide, opera will slide it at the top of screen and position it
+		//later. No sure it is a bug of script.aculo.us or Opera
 	zkau.initMoveable(box, {
 		zindex: box.style.zIndex, effecting: zkVld._fiximg,
 		starteffect: Prototype.emptyFunction, endeffect: zkVld._fiximg});
@@ -245,7 +248,7 @@ zkVld._ebmdown = function () {zkVld.validating = true;};
 zkVld._ebmup = function () {zkVld.validating = false;};
 
 zkVld._fiximg = function (box) {
-	var id = box.id.substring(0, box.id.length - 5);
+	var id = $uuid(box.id);
 	var cmp = $e(id);
 	var img = $e(id + "!img");
 	if (cmp && img) {
