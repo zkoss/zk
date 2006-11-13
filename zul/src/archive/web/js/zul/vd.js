@@ -122,7 +122,7 @@ zkVld.errbox = function (id, html) {
 
 	var inp = $real(cmp);
 	cmp._vdOldStyle = {bgc:inp.style.backgroundColor};
-	inp.style.backgroundColor = "#fcc";
+	inp.style.backgroundColor = "#ffd8c8";
 
 	setTimeout(zkVld._errbox, 5);
 	zkVld.validating = false;
@@ -187,18 +187,18 @@ zkVld._errbox = function () {
 };
 /** box is the box element or the component's ID. */
 zkVld.closeErrbox = function (box, remaingError) {
-	var boxid, uuid;
+	var boxid, id;
 	if (typeof box == "string") {
-		uuid = $uuid(box);
-		box = $e(uuid + "!errb");
-	}
-	if (box) {
+		id = $uuid(box);
+		boxid = id + "!errb";
+		box = $e(boxid);
+	} else if (box) {
 		boxid = box.id;
-		uuid = $uuid(boxid);
+		id = $uuid(boxid);
 	}
 
 	if (!remaingError) {
-		var cmp = $e(uuid);
+		var cmp = $e(id);
 		if (cmp && cmp._vdOldStyle) {
 			$real(cmp).style.backgroundColor = cmp._vdOldStyle.bgc;
 			cmp._vdOldStyle = null;
