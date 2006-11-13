@@ -114,10 +114,16 @@ zkVld.noEmpty = function (id) {
 
 /** creates an error message box. */
 zkVld.errbox = function (id, html) {
+	id = $uuid(id);
 	var cmp = $e(id);
-	if (!zk.isRealVisible(cmp)) return; //don't do it
+	if (!cmp || !zk.isRealVisible(cmp)) return; //don't do it
 
 	zkVld._errInfo = {id: id, html: html};
+
+	var inp = $real(cmp);
+	cmp._vdOldStyle = {bgc:inp.style.backgroundColor};
+	inp.style.backgroundColor = "#fcc";
+
 	setTimeout(zkVld._errbox, 5);
 	zkVld.validating = false;
 };
@@ -128,7 +134,7 @@ zkVld._errbox = function () {
 	zkVld._errInfo = null;
 
 	var boxid = id + "!errb";
-	zkVld.closeErrbox($e(boxid));
+	zkVld.closeErrbox(boxid, true);
 
 	html = '<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
 		+boxid+'" style="display:none;position:absolute" class="errbox"><div>'
@@ -180,11 +186,23 @@ zkVld._errbox = function () {
 		starteffect: Prototype.emptyFunction, endeffect: zkVld._fiximg});
 };
 /** box is the box element or the component's ID. */
-zkVld.closeErrbox = function (box) {
-	var boxid;
+zkVld.closeErrbox = function (box, remaingError) {
+	var boxid, uuid;
 	if (typeof box == "string") {
-		boxid = box;
-		box = $e(box + "!errb");
+		uuid = $uuid(box);
+		box = $e(uuid + "!errb");
+	}
+	if (box) {
+		boxid = box.id;
+		uuid = $uuid(boxid);
+	}
+
+	if (!remaingError) {
+		var cmp = $e(uuid);
+		if (cmp && cmp._vdOldStyle) {
+			$real(cmp).style.backgroundColor = cmp._vdOldStyle.bgc;
+			cmp._vdOldStyle = null;
+		}
 	}
 
 	if (box) {
@@ -195,11 +213,12 @@ zkVld.closeErrbox = function (box) {
 		zkVld._ebs.remove(boxid);
 	}
 };
+/** Closes the errob only without clean up the error. */
 zkVld._ebclose = function (el) {
 	for (; el; el = el.parentNode)
 		if (el.id && el.id.endsWith("!errb")) {
 			var id = el.id.substring(0, el.id.length - 5);
-			zkVld.closeErrbox(id);
+			zkVld.closeErrbox(id, true);
 			//zkVld.focus($e(id));
 			//It is a bit annoying if user want to fix error later
 			return;
@@ -215,8 +234,11 @@ zkVld._eblocate = function (el) {
 };
 zkVld.focus = function (el) {
 	if (el) {
-		if (el.select) el.select();
-		if (el.focus) el.focus();
+		try {
+			if (el.select) el.select();
+			if (el.focus) el.focus();
+		} catch (e) {
+		}
 	}
 };
 zkVld._ebmdown = function () {zkVld.validating = true;};
