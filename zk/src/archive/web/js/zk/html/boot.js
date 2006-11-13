@@ -64,6 +64,8 @@ function $uuid(n) {
  * while !real is by the component itself
  */
 function $real(cmp) {
+	if (typeof cmp == 'string')
+		cmp = $e($uuid(cmp));
 	if (!cmp) return null;
 	var real = $e(cmp.id + "!real");
 	return real ? real: cmp;

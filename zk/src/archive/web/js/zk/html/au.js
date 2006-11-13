@@ -1782,10 +1782,8 @@ zkau.cmd1 = {
 		if (meta) meta[dt1].call(meta, dt2, dt3, dt4);
 	},
 	closeErrbox: function (uuid, cmp) {
-		if (zkau.valid) {
+		if (zkau.valid)
 			zkau.valid.closeErrbox(uuid);
-			zkau.valid.closeErrbox(uuid + "!real");
-		}
 	},
 	submit: function (uuid, cmp) {
 		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
