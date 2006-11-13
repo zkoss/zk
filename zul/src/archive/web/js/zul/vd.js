@@ -114,37 +114,24 @@ zkVld.noEmpty = function (id) {
 
 /** creates an error message box. */
 zkVld.errbox = function (id, html) {
-	var inp = $e(id);
-	if (!zk.isRealVisible(inp)) return; //don't do it
+	var cmp = $e(id);
+	if (!zk.isRealVisible(cmp)) return; //don't do it
 
-	if (zk.gecko && inp && inp.focus && zkVld.focusonerror) {
-		zkVld._errbox(id, html);
-		setTimeout(function() {
-			try {
-				if (inp.select) inp.select();
-				inp.focus();
-			} finally {
-				zkVld.validating = false;
-			}
-		}, 0);
-	} else {
-		try {
-			if (inp && zkVld.focusonerror) {
-				if (inp.select) inp.select();
-				if (inp.focus) inp.focus();
-			}
-			zkVld._errbox(id, html);
-		} finally {
-			zkVld.validating = false;
-		}
-	}
+	zkVld._errInfo = {id: id, html: html};
+	setTimeout(zkVld._errbox, 5);
+	zkVld.validating = false;
 };
-zkVld._errbox = function (id, html) {
+zkVld._errbox = function () {
+	if (!zkVld._errInfo) return; //nothing to do
+
+	var id = zkVld._errInfo.id, html = zkVld._errInfo.html;
+	zkVld._errInfo = null;
+
 	var boxid = id + "!errb";
 	zkVld.closeErrbox($e(boxid));
 
 	html = '<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
-		+boxid+'" style="display:none" class="errbox"><div>'
+		+boxid+'" style="display:none;position:absolute" class="errbox"><div>'
 		+'<table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'
 		+'<td width="17"><img src="'
 		+zk.getUpdateURI('/web/zul/img/vd/arrowU.gif')+'" id="'+id
@@ -164,20 +151,27 @@ zkVld._errbox = function (id, html) {
 
 	if (!zkVld._cnt) zkVld._cnt = 0;
 	box.style.zIndex = 70000 + zkVld._cnt++;
-	box.style.position = "absolute";
-	box.style.display = "block"; //we need to calculate the size
-	var inp = $e(id);
-	if (inp) {
-		var ref = $e($uuid(id));
-		if (!ref) ref = inp;
-		var ofs = Position.cumulativeOffset(ref);
-		ofs = zk.toParentOffset(box, ofs[0], ofs[1] + ref.offsetHeight);
+	var cmp = $e(id);
+	if (cmp) {
+		var ofs = Position.cumulativeOffset(cmp), wd = cmp.offsetWidth, atTop;
+		if (zkau.currentFocus && zkau.currentFocus != cmp) {
+			var o2 = Position.cumulativeOffset(zkau.currentFocus);
+			if (o2[0] < ofs[0] + wd) ofs[0] += wd + 2;
+			else if (o2[1] < ofs[1]) ofs[1] += cmp.offsetHeight + 2;
+			else atTop = true;
+		} else {
+			ofs[0] += wd + 2;
+		}
+
+		box.style.display = "block"; //we need to calculate the size
+		if (atTop) ofs[1] -= box.offsetHeight + 1;
+		ofs = zk.toParentOffset(box, ofs[0], ofs[1]);
 		box.style.left = ofs[0] + "px"; box.style.top = ofs[1] + "px";
-		//we don't consider zkau.currentFocus here because onblur
-		//is called before onfocus
 	} else {
+		box.style.display = "block"; //we need to calculate the size
 		zk.center(box);
 	}
+	zkVld._fiximg(box);
 	zkVld.uncover();
 
 	Effect.SlideDown(box, {duration:0.5});
@@ -185,7 +179,7 @@ zkVld._errbox = function (id, html) {
 		zindex: box.style.zIndex, effecting: zkVld._fiximg,
 		starteffect: Prototype.emptyFunction, endeffect: zkVld._fiximg});
 };
-/** box is the box element or the input's ID. */
+/** box is the box element or the component's ID. */
 zkVld.closeErrbox = function (box) {
 	var boxid;
 	if (typeof box == "string") {
@@ -230,20 +224,18 @@ zkVld._ebmup = function () {zkVld.validating = false;};
 
 zkVld._fiximg = function (box) {
 	var id = box.id.substring(0, box.id.length - 5);
-	var inp = $e(id);
+	var cmp = $e(id);
 	var img = $e(id + "!img");
-	if (inp && img) {
-		var inpofs = Position.cumulativeOffset(inp);
-		var imgofs = Position.cumulativeOffset(img);
-		var dx = inpofs[0] - imgofs[0], dy = inpofs[1] - imgofs[1],
-			hgh = inp.offsetHeight;
-		var dir;
-		if (dx > 20) {
-			dir = dy > hgh-5 ? "RD": dy < -10 ? "RU": "R";
-		} else if (dx < -inp.offsetWidth+10) {
-			dir = dy > hgh-5 ? "LD": dy < -10 ? "LU": "L";
+	if (cmp && img) {
+		var cmpofs = Position.cumulativeOffset(cmp);
+		var boxofs = Position.cumulativeOffset(box);
+		var dx = boxofs[0] - cmpofs[0], dy = boxofs[1] - cmpofs[1], dir;
+		if (dx > cmp.offsetWidth) {
+			dir = dy < -10 ? "LD": dy > cmp.offsetHeight + 10 ? "LU": "L";
+		} else if (dx < 0) {
+			dir = dy < -10 ? "RD": dy > cmp.offsetHeight + 10 ? "RU": "R";
 		} else {
-			dir = dy >= 0 ? "D": "U";
+			dir = dy < 0 ? "D": "U";
 		}
 		img.src = zk.getUpdateURI('/web/zul/img/vd/arrow'+dir+'.gif');
 	}
@@ -278,22 +270,36 @@ zkVld._uncover = function (box, el, ctag) {
 	if (zk.isOffsetOverlapped(
 	elofs, [el.offsetWidth, el.offsetHeight],
 	boxofs, [box.offsetWidth, box.offsetHeight])) {
-		var inp = $e(box.id.substring(0, box.id.length - 5));
+		var cmp = $e(box.id.substring(0, box.id.length - 5));
 		var y;
-		if (inp) {
-			var inpofs = Position.cumulativeOffset(inp);
+		if (cmp) {
+			var cmpofs = Position.cumulativeOffset(cmp), cmphgh = cmp.offsetHeight;
 			if (ctag) {
-				y = inpofs[1] < elofs[1] ? elofs[1] + el.offsetHeight:
-					elofs[1] - box.offsetHeight;
+				var y1 = elofs[1] + el.offsetHeight, boxhgh = box.offsetHeight;
+				y = cmpofs[1];
+				if (y1 > y + cmphgh || y1 + boxhgh < y) {
+					var y2 = elofs[1] - boxhgh;
+					if (y2 > y + cmphgh || y2 + boxhgh < y) {
+						//both not intercepted, use the closed one
+						var d1 = y1 > y ? y1 - y - cmphgh: y - y1 - boxhgh;
+						var d2 = y2 > y ? y2 - y - cmphgh: y - y2 - boxhgh;
+						y = d1 <= d2 ? y1: y2;
+					} else { //intercept with y2
+						y = y2;
+					}
+				} else { //intercept with y1
+					y = y1;
+				}
 			} else {
-				var inpbtm = inpofs[1] + inp.offsetHeight;
-				y = elofs[1] + el.offsetHeight <=  inpbtm ? inpbtm: inpofs[1] - box.offsetHeight;
+				var cmpbtm = cmpofs[1] + cmphgh;
+				y = elofs[1] + el.offsetHeight <=  cmpbtm ? cmpbtm: cmpofs[1] - box.offsetHeight;
 				//we compare bottom because default is located below
 			}
 		} else {
 			y = boxofs[1] > elofs[1] ?
 				elofs[1] + el.offsetHeight: elofs[1] - box.offsetHeight;
 		}
+
 		var ofs = zk.toParentOffset(box, 0, y);
 		box.style.top = ofs[1] + "px";
 		zkVld._fiximg(box);
@@ -309,8 +315,8 @@ zkVld.fixerrboxes = function () {
 		var box = $e(boxid);
 		if (box) {
 			var id = boxid.substring(0, boxid.length - 5);
-			var inp = $e(id);
-			if (!inp) zkVld.closeErrbox(box); //dead
+			var cmp = $e(id);
+			if (!cmp) zkVld.closeErrbox(box); //dead
 		} else {
 			zkVld._ebs.splice(j, 1);
 		}
