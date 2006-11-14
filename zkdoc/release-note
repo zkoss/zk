@@ -3,7 +3,7 @@ ZK 2.2.0 RC
 * Features:
   1587247, 1587699, 1587701, 1588387, 1589060, 1589050, 1589119, 1567850,
   1502660, 1548218, 1441459, 1589979, 1490690, 1446618, 1557255, 1554667,
-  1595528.
+  1595528, 1595720.
   + Support of ZUML annotations.
   + Support the Opera browser.
   + Slovenian messages are supported. Thank Ziga for his contribution.
