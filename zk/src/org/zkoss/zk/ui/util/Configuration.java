@@ -82,7 +82,8 @@ public class Configuration {
 	private final List _errpgs = new LinkedList();
 	private Monitor _monitor;
 	private String _timeoutUri;
-	private String _themeUri;
+	private final List _themeUris = new LinkedList();
+	private transient String[] _roThemeUris = new String[0];
 	private Class _uiengcls, _dcpcls, _uiftycls, _tzpcls, _lpcls;
 	private Integer _dtTimeout, _dtMax, _sessTimeout, _evtThdMax;
 	private Integer _maxUploadSize = new Integer(5120);
@@ -411,7 +412,7 @@ public class Configuration {
 	 * <p>It never throws an exception but logs and adds it to the errs argument,
 	 * if not null.
 	 *
-s	 * @param resumes a list of {@link EventThreadResume} instances returned from
+	 * @param resumes a list of {@link EventThreadResume} instances returned from
 	 * {@link #newEventThreadResumes}, or null if no instance at all.
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
@@ -675,16 +676,24 @@ s	 * @param resumes a list of {@link EventThreadResume} instances returned from
 		}
 	}
 
-	/** Sets the URI of CSS that will be generated for each ZUML desktop.
+	/** Adds an CSS resource that will be generated for each ZUML desktop.
 	 */
-	public void setThemeURI(String uri) {
-		_themeUri = uri;
+	public void addThemeURI(String uri) {
+		if (uri == null || uri.length() == 0)
+			throw new IllegalArgumentException("empty");
+		synchronized (_themeUris) {
+			_themeUris.add(uri);
+			_roThemeUris =
+				(String[])_themeUris.toArray(new String[_themeUris.size()]);
+		}
 	}
-	/** Returns the URI of CSS that will be generated for each ZUML desktop.
-	 * <p>Default: null
+	/** Returns a readonly list of the URI of the CSS resources that will be
+	 * generated for each ZUML desktop (never null).
+	 *
+	 * <p>Default: an array with zero length.
 	 */
-	public String getThemeURI() {
-		return _themeUri;
+	public String[] getThemeURIs() {
+		return _roThemeUris;
 	}
 
 	/** Sets the URI that is used when the session timeout or

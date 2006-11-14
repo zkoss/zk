@@ -89,8 +89,7 @@ public class ConfigParser {
 			//	theme-uri
 			//	desktop-timeout
 			//	file-check-period
-				String s = el.getElementValue("theme-uri", true);
-				if (s != null && s.length() > 0) config.setThemeURI(s);
+				parseThemeUri(config, el);
 
 				Integer v = parseInteger(el, "desktop-timeout", false);
 				if (v != null) config.setDesktopMaxInactiveInterval(v);
@@ -176,6 +175,16 @@ public class ConfigParser {
 			} else {
 				throw new UiException("Unknown element: "+elnm+", at "+el.getLocator());
 			}
+		}
+	}
+
+	/** Parse desktop-config/theme-uri. */
+	private static void parseThemeUri(Configuration config, Element conf) {
+		for (Iterator it = conf.getElements("theme-uri").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			String uri = el.getText().trim();
+			if (uri.length() != 0) config.addThemeURI(uri);
 		}
 	}
 
