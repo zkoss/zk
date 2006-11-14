@@ -78,6 +78,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<location>/WEB-INF/sys/error.zul</location>
 	</error-page>
 	-->
+	<!-- Configure the theme URIs
+	<desktop-config>
+		<theme-uri>/a.css</theme-uri>
+		<theme-uri>/b**.css</theme-uri>
+	</desktop-config>
+	-->
 
 	<!-- Any number of preferences. 
 	<preference>
