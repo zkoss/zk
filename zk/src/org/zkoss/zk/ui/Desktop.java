@@ -45,6 +45,9 @@ public interface Desktop {
 	 * <p>A desktop can use the languages belonging to the same client type.
 	 * See also {@link org.zkoss.zk.ui.metainfo.LanguageDefinition#getClientType}.
 	 *
+	 * <p>A component can be added to a desktop only if they belong to the same
+	 * client type.
+	 *
 	 * <p>Default: html.
 	 */
 	public String getClientType();
