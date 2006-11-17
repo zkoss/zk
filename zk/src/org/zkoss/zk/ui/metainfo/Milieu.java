@@ -214,7 +214,7 @@ public class Milieu implements Serializable {
 		}
 
 		if (lprops != null) {
-			if (_langdef != null) applyProps(_langdef, comp, lprops);
+			if (_langdef != null) applyProps(_langdef.getEvaluator(), comp, lprops);
 			else applyProps(exec, comp, lprops);
 				//_langdef is null if components are defined in page only
 		}
@@ -323,7 +323,7 @@ public class Milieu implements Serializable {
 	 */
 	private Object evalByLang(Component comp, String expr, Class expectedType) {
 		return _langdef != null ?
-			_langdef.evaluate(comp, expr, expectedType):
+			_langdef.getEvaluator().evaluate(comp, expr, expectedType):
 			Executions.evaluate(comp, expr, expectedType);
 	}
 	private String toAbsoluteURI(String uri) {

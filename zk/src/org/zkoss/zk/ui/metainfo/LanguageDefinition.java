@@ -49,7 +49,7 @@ import org.zkoss.zk.ui.util.Evaluator;
  *
  * @author tomyeh
  */
-public class LanguageDefinition implements Evaluator {
+public class LanguageDefinition {
 	private static final Log log = Log.lookup(LanguageDefinition.class);
 	//static//
 	/** A map of (String name or namespace, LanguageDefinition). */
@@ -102,6 +102,7 @@ public class LanguageDefinition implements Evaluator {
 	private LabelTemplate _labeltmpl;
 	/** The macro template. */
 	private MacroTemplate _macrotmpl;
+	private final Evaluator _evalor;
 	/** Whether the element name is case-insensitive. */
 	private boolean _ignoreCase;
 
@@ -198,6 +199,24 @@ public class LanguageDefinition implements Evaluator {
 		_desktopURI = desktopURI;
 		_pageURI = pageURI;
 		_locator = locator;
+
+		_evalor = new Evaluator() {
+			public Object evaluate(Component comp, String expr, Class expectedType) {
+				if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0)
+					return expr;
+
+				try {
+					final ELContext jc = ELContexts.getCurrent();
+					return new EvaluatorImpl().evaluate(
+						expr, expectedType,
+						new ObjectResolver(
+							jc != null ? jc.getVariableResolver(): null, comp),
+						getFunctionMapper());
+				} catch (javax.servlet.jsp.el.ELException ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+		};
 
 		boolean replWarned = false;
 		synchronized (_ldefByName) {
@@ -504,26 +523,10 @@ public class LanguageDefinition implements Evaluator {
 		return _mapper;
 	}
 
-	//-- Evaluator --//
-	/** Evluates the specified expression with the resolver of the current
-	 * ELContext and functions defined by {@link #addTaglib}.
-	 *
-	 * @param comp whose members will be resolved as variables
+	/** Returns the evaluator associated with this definition.
 	 */
-	public Object evaluate(Component comp, String expr, Class expectedType) {
-		if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0)
-			return expr;
-
-		try {
-			final ELContext jc = ELContexts.getCurrent();
-			return new EvaluatorImpl().evaluate(
-				expr, expectedType,
-				new ObjectResolver(
-					jc != null ? jc.getVariableResolver(): null, comp),
-				getFunctionMapper());
-		} catch (javax.servlet.jsp.el.ELException ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+	public Evaluator getEvaluator() {
+		return _evalor;
 	}
 
 	//Object//

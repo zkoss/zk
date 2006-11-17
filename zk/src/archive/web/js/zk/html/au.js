@@ -167,7 +167,7 @@ zkau.send = function (evt, timeout) {
 	if (timeout < 0) evt.implicit = true;
 	zkau._evts.push(evt);
 	if (!timeout) timeout = 0; //we don't send immediately (Bug 1593674)
-	if (timeout > 0) setTimeout(zkau._sendNow, timeout);
+	if (timeout >= 0) setTimeout(zkau._sendNow, timeout);
 };
 /** Sends a request before any pending events.
  * Note: it doesn't cause any pending events (including evt) to be sent.
