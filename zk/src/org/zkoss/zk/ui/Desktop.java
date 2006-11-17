@@ -48,7 +48,10 @@ public interface Desktop {
 	 * <p>A component can be added to a desktop only if they belong to the same
 	 * client type.
 	 *
-	 * <p>Default: html.
+	 * <p>Default: depends on the extension of the resource path,
+	 * "html" if the path or extension not available.
+	 * If {@link Richlet} is used, its language definition's client type is
+	 * assumed.
 	 */
 	public String getClientType();
 	/** Sets the client type that this desktop belongs to.

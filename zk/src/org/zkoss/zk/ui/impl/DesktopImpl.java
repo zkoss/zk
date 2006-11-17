@@ -151,11 +151,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return _clientType;
 	}
 	public void setClientType(String clientType) {
-		if (clientType == null || clientType.length() == 0)
-			throw new IllegalArgumentException("empty");
-		if (!_comps.isEmpty())
-			throw new UiException("Unable to change the client type since some components are attached.");
-		_clientType = clientType;
+		//Note: we check _comps.isEmpty() only if client type diffs, because
+		//a desktop might have several richlet and each of them will call
+		//this method once
+		if (!_clientType.equals(clientType)) {
+			if (clientType == null || clientType.length() == 0)
+				throw new IllegalArgumentException("empty");
+
+			if (!_comps.isEmpty())
+				throw new UiException("Unable to change the client type since some components are attached.");
+			_clientType = clientType;
+		}
 	}
 	public Execution getExecution() {
 		return _exec;

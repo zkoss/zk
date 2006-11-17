@@ -137,6 +137,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				sendError(request, response, pi);
 				return;
 			}
+
+			desktop.setClientType(richlet.getLanguageDefinition().getClientType());
 			
 			final Page page = uf.newPage(ri, richlet, pi);
 			final Execution exec = new ExecutionImpl(
