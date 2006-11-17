@@ -85,7 +85,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The request queue. */
 	private transient RequestQueue _rque;
 	private String _bookmark = "";
-	private String _clientType = "html";
+	private String _clientType;
 
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
@@ -93,8 +93,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 * @param dir the current directory.
 	 * It is used if a relative URI is specified.
 	 * If null or empty is specified, it means no current directory.
+	 * @param clientType the client type.
+	 * If null or empty is specified, "html" is assumed.
 	 */
-	public DesktopImpl(WebApp wapp, String updateURI, String dir) {
+	public DesktopImpl(WebApp wapp, String updateURI, String dir, String clientType) {
 		if (updateURI == null || wapp == null)
 			throw new IllegalArgumentException("null");
 
@@ -109,6 +111,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				dir += '/';
 		}
 		_dir = dir;
+
+		_clientType =
+			clientType != null && clientType.length() != 0 ? clientType: "html";
 
 		init();
 

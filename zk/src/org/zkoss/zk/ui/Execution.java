@@ -308,7 +308,7 @@ public interface Execution extends Evaluator {
 	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @see #getPageDefinitionDirectly(Document, String)
 	 * @see #getPageDefinitionDirectly(Reader, String)
@@ -320,7 +320,7 @@ public interface Execution extends Evaluator {
 	 * @param content the raw content of the page in DOM.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @see #getPageDefinitionDirectly(String, String)
 	 * @see #getPageDefinitionDirectly(Reader, String)
@@ -333,7 +333,7 @@ public interface Execution extends Evaluator {
 	 * @param reader used to input the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content of reader doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @see #getPageDefinitionDirectly(String, String)
 	 * @see #getPageDefinitionDirectly(Document, String)
@@ -386,7 +386,7 @@ public interface Execution extends Evaluator {
 	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
@@ -411,7 +411,7 @@ public interface Execution extends Evaluator {
 	 * @param content the raw content in DOM.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
@@ -436,7 +436,7 @@ public interface Execution extends Evaluator {
 	 * @param reader the reader to retrieve the raw content in ZUML.
 	 * @param extension the default extension if the content of reader doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be

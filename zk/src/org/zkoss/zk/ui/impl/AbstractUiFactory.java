@@ -34,6 +34,8 @@ import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.Milieu;
 
 /**
@@ -51,11 +53,22 @@ abstract public class AbstractUiFactory implements UiFactory {
 	public void stop(WebApp wapp) {
 	}
 	public Desktop newDesktop(RequestInfo ri, String updateURI, String path) {
+		String dir = null, clientType = null;
 		if (path != null) { //convert to directory
 			final int j = path.lastIndexOf('/');
-			path = j >= 0 ? path.substring(0, j+1): null;
+			dir = j >= 0 ? path.substring(0, j + 1): null;
+
+			final int k = path.lastIndexOf('.');
+			if (k > j && k + 1 < path.length()) {
+				final String ext = path.substring(k + 1);
+				try {
+					clientType =
+						LanguageDefinition.getByExtension(ext).getClientType();
+				} catch (DefinitionNotFoundException ex) { //ignore
+				} 
+			}
 		}
-		return new DesktopImpl(ri.getWebApp(), updateURI, path);
+		return new DesktopImpl(ri.getWebApp(), updateURI, dir, clientType);
 	}
 	public Page newPage(RequestInfo ri, PageDefinition pagedef, String path) {
 		return new PageImpl(pagedef);

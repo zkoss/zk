@@ -125,7 +125,7 @@ public class Executions {
 	 * compliant to the page format (such as ZUL).
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
@@ -148,7 +148,7 @@ public class Executions {
 	 * @param content the raw content in DOM.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
@@ -176,7 +176,7 @@ public class Executions {
 	 * @param reader the reader to retrieve the raw content.
 	 * @param extension the default extension if the content of reader doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be

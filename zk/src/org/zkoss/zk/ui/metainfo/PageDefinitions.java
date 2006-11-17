@@ -58,7 +58,7 @@ public class PageDefinitions {
 	 * If null, wapp is assumed ({@link WebApp} is also assumed).
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @exception UiException if failed to parse
 	 */
@@ -79,7 +79,7 @@ public class PageDefinitions {
 	 * If null, wapp is assumed ({@link WebApp} is also assumed).
 	 * @param extension the default extension if the content (of reader) doesn't specify
 	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @exception UiException if failed to parse
 	 */
@@ -101,7 +101,7 @@ public class PageDefinitions {
 	 * If null, wapp is assumed ({@link WebApp} is also assumed).
 	 * @param extension the default extension if doc doesn't specify
 	 * an language. Ignored if null.
-	 * If doc doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If doc doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 * @exception UiException if failed to parse
 	 */
