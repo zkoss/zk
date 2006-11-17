@@ -37,6 +37,7 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
@@ -233,6 +234,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return (Component)_comps.get(uuid);
 	}
 	public void addComponent(Component comp) {
+		//to avoid misuse, check whether new comp belongs to the same client type
+		final LanguageDefinition langdef =
+			((ComponentCtrl)comp).getMilieu().getLanguageDefinition();
+		if (langdef != null && !_clientType.equals(langdef.getClientType()))
+			throw new UiException("Component, "+comp+", does not belong to the same client type of the desktop, "+_clientType);
+
 		final Object old = _comps.put(comp.getUuid(), comp);
 		if (old != comp && old != null) {
 			_comps.put(((Component)old).getUuid(), old); //recover
