@@ -85,6 +85,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The request queue. */
 	private transient RequestQueue _rque;
 	private String _bookmark = "";
+	private String _clientType = "html";
 
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
@@ -140,6 +141,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	//-- Desktop --//
+	public String getClientType() {
+		return _clientType;
+	}
+	public void setClientType(String clientType) {
+		if (clientType == null || clientType.length() == 0)
+			throw new IllegalArgumentException("empty");
+		if (!_comps.isEmpty())
+			throw new UiException("Unable to change the client type since some components are attached.");
+		_clientType = clientType;
+	}
 	public Execution getExecution() {
 		return _exec;
 	}

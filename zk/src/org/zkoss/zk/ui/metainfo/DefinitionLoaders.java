@@ -169,6 +169,10 @@ public class DefinitionLoaders {
 			final String ns = (String)IDOMs.getRequiredElementValue(root, "namespace");
 			if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
 
+			String clientType = root.getElementValue("client-type", true);
+			if (clientType == null || clientType.length() == 0)
+				clientType = "html"; //default
+
 			final Map pagemolds = parseMolds(root);
 			final String desktopURI = (String)pagemolds.get("desktop");
 			final String pageURI = (String)pagemolds.get("page");
@@ -180,7 +184,7 @@ public class DefinitionLoaders {
 				throw new IllegalSyntaxException("The extension must be specified for "+lang);
 
 			langdef = new LanguageDefinition(
-				lang, ns, exts, desktopURI, pageURI, locator);
+				clientType, lang, ns, exts, desktopURI, pageURI, locator);
 
 			for (Iterator it = root.getElements("case-insensitive").iterator();
 			it.hasNext();) {

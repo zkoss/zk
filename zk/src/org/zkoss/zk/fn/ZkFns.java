@@ -45,6 +45,7 @@ import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -137,21 +138,24 @@ public class ZkFns {
 		if (action == null)
 			throw new IllegalArgumentException("null");
 
+		final Desktop desktop = Executions.getCurrent().getDesktop();
+		final String clientType = desktop.getClientType();
+
 		final StringBuffer sb = new StringBuffer(512);
 		sb.append("<script type=\"text/javascript\">\n")
 			.append("zk_action=\"").append(action)
 			.append("\";\nzk_desktopId=\"")
-			.append(Executions.getCurrent().getDesktop().getId())
+			.append(desktop.getId())
 			.append("\";\n</script>\n");
 
 		final Set jses = new LinkedHashSet(37);
-		for (Iterator it = LanguageDefinition.getAll().iterator();
+		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
 		it.hasNext();)
 			jses.addAll(((LanguageDefinition)it.next()).getJavaScripts());
 		for (Iterator it = jses.iterator(); it.hasNext();)
 			append(sb, (JavaScript)it.next());
 
-		for (Iterator it = LanguageDefinition.getAll().iterator();
+		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
 
@@ -217,8 +221,9 @@ public class ZkFns {
 
 		//Process all languages
 		final Execution exec = Executions.getCurrent();
+		final String clientType = exec.getDesktop().getClientType();
 		final StringBuffer sb = new StringBuffer(512);
-		for (Iterator it = LanguageDefinition.getAll().iterator();
+		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
 		it.hasNext();)
 			for (Iterator e = ((LanguageDefinition)it.next())
 			.getStyleSheets().iterator(); e.hasNext();)

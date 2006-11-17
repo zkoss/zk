@@ -147,7 +147,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	private static final
 	ComponentDefinition getDefinition(Execution exec, Class cls) {
-		LanguageDefinition langdef = null;
 		if (exec != null) {
 			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 			final PageDefinition pgdef = execCtrl.getCurrentPageDefinition();
@@ -157,16 +156,26 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				pgdef != null ? pgdef.getComponentDefinition(cls, true):
 					page.getComponentDefinition(cls, true);
 			if (compdef != null) return compdef;
+
+			return getDefinitionByClientType(exec.getDesktop().getClientType(), cls);
 		}
 
-		for (Iterator it = LanguageDefinition.getAll().iterator();
+		for (Iterator it = LanguageDefinition.getClientTypes().iterator(); it.hasNext();) {
+			final ComponentDefinition compdef =
+				getDefinitionByClientType((String)it.next(), cls);
+			if (compdef != null)
+				return compdef;
+		}
+		return null;
+	}
+	private static final ComponentDefinition
+	getDefinitionByClientType(String clientType, Class cls) {
+		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition ld = (LanguageDefinition)it.next();
-			if (ld != langdef) {
-				try {
-					return ld.getComponentDefinition(cls);
-				} catch (DefinitionNotFoundException ex) {
-				}
+			try {
+				return ld.getComponentDefinition(cls);
+			} catch (DefinitionNotFoundException ex) { //ignore
 			}
 		}
 		return null;

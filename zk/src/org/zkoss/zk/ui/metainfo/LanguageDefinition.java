@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
@@ -56,9 +57,8 @@ public class LanguageDefinition {
 	private static final Map _ldefByName = new HashMap();
 	/** A map of (String ext, LanguageDefinition). */
 	private static final Map _ldefsByExt = new HashMap();
-	/** A list of all languages. */
-	private static final List _langdefs = new LinkedList(),
-		_rolangdefs = Collections.unmodifiableList(_langdefs);
+	/** A map of (String clientType, List(LanguageDefinition). */
+	private static final Map _ldefsByClient = new HashMap();
 
 	/** The namespace for ZK. It is mainly used to resolve special components
 	 * and attributes, such as zscript and use.
@@ -68,6 +68,8 @@ public class LanguageDefinition {
 	 */
 	public static final String ANNO_NAMESPACE = "http://www.zkoss.org/2005/zk/annotation";
 
+	/** the client type that this definition belongs to. */
+	private final String _clientType;
 	/** name */
 	private final String _name;
 	/** The name space. */
@@ -142,10 +144,12 @@ public class LanguageDefinition {
 	 * @exception DefinitionNotFoundException is thrown if the definition
 	 * is not found
 	 */
-	public static final LanguageDefinition lookupByExtension(String ext) {
+	public static final LanguageDefinition getByExtension(String ext) {
 		init();
+
 		if (ext == null || ext.length() == 0)
 			ext = "zul";
+
 		final LanguageDefinition langdef;
 		synchronized (_ldefsByExt) {
 			langdef = (LanguageDefinition)_ldefsByExt.get(ext);
@@ -154,16 +158,39 @@ public class LanguageDefinition {
 			throw new DefinitionNotFoundException("Language not found for extension "+ext);
 		return langdef;
 	}
-	/** Returns all language definitions.
+	/** Returns a readonly list of language definitions belong to
+	 * the specified client type.
+	 *
+	 * <p>A client type identifies the type of a client. For example, "html"
+	 * represents all HTML compatible clients (aka., browsers),
+	 * while "ldml" represents clients that supports Limited Device Markup Language,
+	 * such as mobile phones.
+	 *
+	 * @param clientType the client type, e.g., "html".
+	 * @see #getClientType
 	 */
-	public static final List getAll() {
+	public static final List getByClientType(String clientType) {
 		init();
-		return _rolangdefs;
+
+		final List ldefs;
+		synchronized (_ldefsByClient) {
+			ldefs = (List)_ldefsByClient.get(clientType);
+		}
+		return ldefs != null ? ldefs: Collections.EMPTY_LIST;
+
+	}
+	/** Returns a readonly collection of all client types.
+	 * @see #getByClientType
+	 */
+	public static final Collection getClientTypes() {
+		init();
+
+		return _ldefsByClient.keySet();
 	}
 	private static void init() {
-		if (_langdefs.isEmpty()) {//OK not to syn because LinkedList
-			synchronized (_langdefs) {
-				if (_langdefs.isEmpty())
+		if (_ldefsByClient.isEmpty()) {//OK not to syn because LinkedList
+			synchronized (_ldefsByClient) {
+				if (_ldefsByClient.isEmpty())
 					DefinitionLoaders.load();
 			}
 		}
@@ -179,8 +206,10 @@ public class LanguageDefinition {
 	 * @param desktopURI the URI used to render a desktop; never null.
 	 * @param pageURI the URI used to render a page; never null.
 	 */
-	public LanguageDefinition(String name, String namespace,
+	public LanguageDefinition(String clientType, String name, String namespace,
 	List extensions, String desktopURI, String pageURI, Locator locator) {
+		if (clientType == null || clientType.length() == 0)
+			throw new UiException("clientType cannot be empty");
 		if (name == null || name.length() == 0)
 			throw new UiException("name cannot be empty");
 		if (namespace == null || namespace.length() == 0)
@@ -194,6 +223,7 @@ public class LanguageDefinition {
 		if (locator == null)
 			throw new UiException("locator cannot be null");
 
+		_clientType = clientType;
 		_name = name;
 		_ns = namespace;
 		_desktopURI = desktopURI;
@@ -227,7 +257,9 @@ public class LanguageDefinition {
 			_ldefByName.put(namespace, this);
 			final Object old = _ldefByName.put(name, this);
 			if (old != null) {
-				_langdefs.remove(old);
+				final List ldefs = (List)_ldefsByClient.get(clientType);
+				if (ldefs != null) ldefs.remove(old);
+
 				replWarned = true;
 				log.warning("Replicated language: "+name+", overriden by "+this);
 			//it is possible if zcommon.jar is placed in both
@@ -246,10 +278,24 @@ public class LanguageDefinition {
 				}
 			}
 		}
-		synchronized (_langdefs) {
-			_langdefs.add(this);
+		synchronized (_ldefsByClient) {
+			List ldefs = (List)_ldefsByClient.get(clientType);
+			if (ldefs == null)
+				_ldefsByClient.put(clientType, ldefs = new LinkedList());
+			ldefs.add(this);
 		}
 	}
+	/** Returns the client type that this definition belongs to.
+	 *
+	 * <p>A client type identifies the type of a client. For example, "html"
+	 * represents all HTML compatible clients (aka., browsers),
+	 * while "ldml" represents clients that supports Limited Device Markup Language,
+	 * such as mobile phones.
+	 */
+	public String getClientType() {
+		return _clientType;
+	}
+	 
 	/** Returns name of this language.
 	 * Each language definition has a unique name and namespace.
 	 */

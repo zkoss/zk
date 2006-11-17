@@ -133,7 +133,7 @@ public class Parser {
 	 *
 	 * @param extension the default extension if doc (of reader) doesn't specify
 	 * an language. Ignored if null.
-	 * If doc doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If doc doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 */
 	public PageDefinition parse(Reader reader, String extension)
@@ -145,7 +145,7 @@ public class Parser {
 	 *
 	 * @param extension the default extension if doc doesn't specify
 	 * an language. Ignored if null.
-	 * If doc doesn't specify an language, {@link LanguageDefinition#lookupByExtension}
+	 * If doc doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
 	 */
 	public PageDefinition parse(Document doc, String extension)
@@ -195,7 +195,7 @@ public class Parser {
 		//2. Create PageDefinition
 		final LanguageDefinition langdef =
 			extension != null && lang == null?
-				LanguageDefinition.lookupByExtension(extension):
+				LanguageDefinition.getByExtension(extension):
 				LanguageDefinition.lookup(lang);
 		final PageDefinition pgdef =
 			new PageDefinition(langdef, id, title, style, getLocator());

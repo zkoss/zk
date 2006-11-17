@@ -35,6 +35,29 @@ import java.util.Collection;
  * @author tomyeh
  */
 public interface Desktop {
+	/** Returns the client type that this desktop belongs to.
+	 *
+	 * <p>A client type identifies the type of a client. For example, "html"
+	 * represents all HTML compatible clients (aka., browsers),
+	 * while "ldml" represents clients that supports Limited Device Markup Language,
+	 * such as mobile phones.
+	 *
+	 * <p>A desktop can use the languages belonging to the same client type.
+	 * See also {@link org.zkoss.zk.ui.metainfo.LanguageDefinition#getClientType}.
+	 *
+	 * <p>Default: html.
+	 */
+	public String getClientType();
+	/** Sets the client type that this desktop belongs to.
+	 *
+	 * <p>Note: you can change the client type only before any component
+	 * is attached to a page of the desktop.
+	 * In other words, you can set the client type only
+	 *
+	 * @exception UiException if any component is attached to a page of the desktop.
+	 */
+	public void setClientType(String clientType);
+
 	/** Returns ID of this desktop.
 	 * It is unique in the whole session.
 	 */
