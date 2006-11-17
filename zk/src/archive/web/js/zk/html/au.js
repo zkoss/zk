@@ -162,13 +162,12 @@ zkau.removeOnSend = function (func) {
 /** Sends a request to the client and queue it to zkau._reqs.
  * @param timout milliseconds.
  * If negative, it won't be sent until next non-negative event
- * If zero, it is sent immediately.
  */
 zkau.send = function (evt, timeout) {
 	if (timeout < 0) evt.implicit = true;
 	zkau._evts.push(evt);
-	if (!timeout) zkau._sendNow();
-	else if (timeout > 0) setTimeout(zkau._sendNow, timeout);
+	if (!timeout) timeout = 0; //we don't send immediately (Bug 1593674)
+	if (timeout > 0) setTimeout(zkau._sendNow, timeout);
 };
 /** Sends a request before any pending events.
  * Note: it doesn't cause any pending events (including evt) to be sent.
