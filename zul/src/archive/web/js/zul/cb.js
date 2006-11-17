@@ -36,9 +36,47 @@ zkCmbox.init = function (cmp) {
 
 zkCmit = {};
 zkCmit.init = function (cmp) {
-	zk.listen(cmp, "click", function () {zkCmbox.onclickitem(cmp);});
-	zk.listen(cmp, "mouseover", function () {zkCmbox.onover(cmp);});
-	zk.listen(cmp, "mouseout", function () {zkCmbox.onout(cmp);});
+	zk.listen(cmp, "click", zkCmit.onclick);
+	zk.listen(cmp, "mouseover", zkCmit.onover);
+	zk.listen(cmp, "mouseout", zkCmit.onout);
+};
+/** When an item is clicked. */
+zkCmit.onclick = function (evt) {
+	if (!evt) evt = window.event;
+	var item = $parentByTag(Event.element(evt), "TR");
+	if (item) {
+		zkCmbox._selback(item);
+		zkau.closeFloats(item);
+		zkCmit.onout(item); //onmouseout might be sent (especiall we change parent)
+
+		//Request 1537962: better responsive
+		var inp = zkCmbox.getInputByItem(item);
+		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
+
+		Event.stop(evt); //Bug 1597852 (cb might be a child of listitem)
+	}
+};
+
+/** onmouoseover(evt). */
+zkCmit.onover = function (evt) {
+	if (!zk.dragging) {
+		if (!evt) evt = window.event;
+		var item = $parentByTag(Event.element(evt), "TR");
+		if (item) {
+			zk.backupStyle(item, "backgroundColor");
+			item.style.backgroundColor =
+				item.className.endsWith("sel") ? "#115588": "#DAE8FF";
+		}
+	}
+};
+/** onmouseout(evt). */
+zkCmit.onout = function (evt) {
+	if (!zk.dragging) {
+		if (!evt) evt = window.event;
+		var item = $parentByTag(Event.element(evt), "TR");
+		if (item)
+			zk.restoreStyle(item, "backgroundColor");
+	}
 };
 
 /** Handles setAttr. */
@@ -176,28 +214,6 @@ zkCmbox.onbutton = function (cmp) {
 	}
 };
 
-/** When an item is clicked. */
-zkCmbox.onclickitem = function (item) {
-	zkCmbox._selback(item);
-	zkau.closeFloats(item);
-	zkCmbox.onout(item); //onmouseout might be sent (especiall we change parent)
-
-	//Request 1537962: better responsive
-	var inp = zkCmbox.getInputByItem(item);
-	if (inp) zkTxbox.updateChange(inp, false); //fire onChange
-};
-/** onmouoseover(el). */
-zkCmbox.onover = function (el) {
-	if (!zk.dragging) {
-		zk.backupStyle(el, "backgroundColor");
-		el.style.backgroundColor =
-			el.className.endsWith("sel") ? "#115588": "#DAE8FF";
-	}
-};
-/** onmouseout(el). */
-zkCmbox.onout = function (el) {
-	if (!zk.dragging) zk.restoreStyle(el, "backgroundColor");
-};
 /** Marks an item as selected or un-selected. */
 zkCmbox._setsel = function (item, sel) {
 	var clsnm = item.className;
