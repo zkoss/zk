@@ -58,6 +58,9 @@ abstract public class AbstractUiFactory implements UiFactory {
 			final int j = path.lastIndexOf('/');
 			dir = j >= 0 ? path.substring(0, j + 1): null;
 
+			//though UiEngine.execNewPage will set the client type later,
+			//we 'guess' a value first by use of the extension
+			//reason: less dependent of how UiEngine is implemented
 			final int k = path.lastIndexOf('.');
 			if (k > j && k + 1 < path.length()) {
 				final String ext = path.substring(k + 1);
