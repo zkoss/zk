@@ -209,8 +209,17 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** It assumes exactly one of pagedef and richlet is not null.
 	 */
-	public void execNewPage0(Execution exec, PageDefinition pagedef,
-	Richlet richlet, Page page, Writer out) throws IOException {
+	public void execNewPage0(final Execution exec, final PageDefinition pagedef,
+	final Richlet richlet, final Page page, final Writer out) throws IOException {
+		//Update the client type first. If this is the second page and not
+		//belonging to the same client type, an exception is thrown
+		final Desktop desktop = exec.getDesktop();
+		final LanguageDefinition langdef = //default page
+			pagedef != null ? pagedef.getLanguageDefinition():
+			richlet != null ? richlet.getLanguageDefinition(): null;
+		if (langdef != null)
+			desktop.setClientType(langdef.getClientType()); //set and check!
+
 		//It is possible this method is invoked when processing other exec
 		final Execution oldexec = Executions.getCurrent();
 		final ExecutionCtrl oldexecCtrl = (ExecutionCtrl)oldexec;
@@ -227,7 +236,6 @@ public class UiEngineImpl implements UiEngine {
 		execCtrl.setCurrentPage(page);
 		execCtrl.setCurrentPageDefinition(pagedef);
 
-		final Desktop desktop = exec.getDesktop();
 		final Configuration config = desktop.getWebApp().getConfiguration();
 		boolean cleaned = false;
 		try {
