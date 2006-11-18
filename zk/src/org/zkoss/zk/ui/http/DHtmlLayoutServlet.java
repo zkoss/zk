@@ -138,12 +138,11 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				return;
 			}
 
-			desktop.setClientType(richlet.getLanguageDefinition().getClientType());
-			
 			final Page page = uf.newPage(ri, richlet, pi);
 			final Execution exec = new ExecutionImpl(
 				_ctx, request, response, desktop, page);
 			wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
+				//no need to set client type here, since UiEngine will do it later
 		} else {
 			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
 			if (pagedef == null) {
