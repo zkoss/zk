@@ -39,7 +39,7 @@ public interface Desktop {
 	 *
 	 * <p>A client type identifies the type of a client. For example, "html"
 	 * represents all HTML compatible clients (aka., browsers),
-	 * while "ldml" represents clients that supports Limited Device Markup Language,
+	 * while "lcd" represents clients that supports Limited Connected Device,
 	 * such as mobile phones.
 	 *
 	 * <p>A desktop can use the languages belonging to the same client type.

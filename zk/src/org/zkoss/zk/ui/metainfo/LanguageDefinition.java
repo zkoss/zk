@@ -163,7 +163,7 @@ public class LanguageDefinition {
 	 *
 	 * <p>A client type identifies the type of a client. For example, "html"
 	 * represents all HTML compatible clients (aka., browsers),
-	 * while "ldml" represents clients that supports Limited Device Markup Language,
+	 * while "lcd" represents clients that supports Limited Connected Device,
 	 * such as mobile phones.
 	 *
 	 * @param clientType the client type, e.g., "html".
@@ -289,7 +289,7 @@ public class LanguageDefinition {
 	 *
 	 * <p>A client type identifies the type of a client. For example, "html"
 	 * represents all HTML compatible clients (aka., browsers),
-	 * while "ldml" represents clients that supports Limited Device Markup Language,
+	 * while "lcd" represents clients that supports Limited Connected Device,
 	 * such as mobile phones.
 	 */
 	public String getClientType() {

@@ -81,6 +81,8 @@ public class PageDefinition extends InstanceDefinition {
 	String style, Locator locator) {
 		super(langdef);
 
+		if (langdef == null)
+			throw new IllegalArgumentException("null langdef");
 		if (locator == null)
 			throw new IllegalArgumentException("null locator");
 
@@ -241,6 +243,15 @@ public class PageDefinition extends InstanceDefinition {
 	 * against {@link #getComponentDefinitionMap}
 	 */
 	public void addComponentDefinition(ComponentDefinition compdef) {
+		final LanguageDefinition langdef = compdef.getLanguageDefinition();
+		if (langdef != null) {
+			final LanguageDefinition ld2 = getLanguageDefinition();
+			if (langdef != ld2
+			&& !langdef.getClientType().equals(ld2.getClientType()))
+				throw new UiException("Component definition, "+compdef
+					+", does not belong to the same client type of the page definition, "
+					+ld2.getClientType());
+		}
 		_compdefs.add(compdef);
 	}
 	/** Returns the component definition of the specified name, or null

@@ -110,6 +110,8 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 
 	/** Returns the language definition, or null if it is temporty definition
 	 * belonging to a page.
+	 *
+	 * <p>It is never null if this is a page definition ({@link PageDefinition}).
 	 */
 	public LanguageDefinition getLanguageDefinition() {
 		return _langdef;
