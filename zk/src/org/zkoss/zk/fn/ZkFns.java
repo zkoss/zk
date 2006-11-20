@@ -221,7 +221,9 @@ public class ZkFns {
 
 		//Process all languages
 		final Execution exec = Executions.getCurrent();
-		final String clientType = exec.getDesktop().getClientType();
+			//Note: exec is null if this method is called by fileupload.dsp
+		final String clientType =
+			exec != null ? exec.getDesktop().getClientType(): "html";
 		final StringBuffer sb = new StringBuffer(512);
 		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
 		it.hasNext();)
