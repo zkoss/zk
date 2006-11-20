@@ -24,7 +24,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="suffix" value="-uns.gif" unless="${tab.selected}"/>
 <tr id="${self.uuid}"><%-- no exteriorAttribute here because tab.js controls it diff --%>
 <td>
-<table id="${tab.uuid}"${tab.outerAttrs}${tab.innerAttrs} z:sel="${tab.selected}" z:type="zul.tab.Tab" z:box="${tab.tabbox.uuid}" z:panel="${self.uuid}" width="100%" border="0" cellpadding="0" cellspacing="0">
+<table id="${tab.uuid}"${tab.outerAttrs}${tab.innerAttrs} z.sel="${tab.selected}" z.type="zul.tab.Tab" z.box="${tab.tabbox.uuid}" z.panel="${self.uuid}" width="100%" border="0" cellpadding="0" cellspacing="0">
 <c:if test="${!empty self.tabbox.panelSpacing and self.index!=0}"><tr height="${self.tabbox.panelSpacing}"><td></td></tr></c:if>
 <tr>
 	<td width="5" height="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-tl',suffix))})"></td>

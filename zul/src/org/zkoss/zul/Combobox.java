@@ -63,7 +63,7 @@ public class Combobox extends Textbox {
 	public void setAutodrop(boolean autodrop) {
 		if (_autodrop != autodrop) {
 			_autodrop = autodrop;
-			smartUpdate("z:adr", autodrop);
+			smartUpdate("z.adr", autodrop);
 		}
 	}
 	/** Returns whether to automatically complete this text box
@@ -90,7 +90,7 @@ public class Combobox extends Textbox {
 	public void setAutocomplete(boolean autocomplete) {
 		if (_autocomplete != autocomplete) {
 			_autocomplete = autocomplete;
-			smartUpdate("z:aco", autocomplete);
+			smartUpdate("z.aco", autocomplete);
 		}
 	}
 
@@ -149,8 +149,8 @@ public class Combobox extends Textbox {
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		appendAsapAttr(sb, Events.ON_OPEN);
-		if (aco) HTMLs.appendAttribute(sb, "z:aco", "true");
-		if (adr) HTMLs.appendAttribute(sb, "z:adr", "true");
+		if (aco) HTMLs.appendAttribute(sb, "z.aco", "true");
+		if (adr) HTMLs.appendAttribute(sb, "z.adr", "true");
 		return sb.toString();
 	}
 	public String getInnerAttrs() {

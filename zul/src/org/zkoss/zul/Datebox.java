@@ -104,7 +104,7 @@ public class Datebox extends FormatInputElement {
 	public void setLenient(boolean lenient) {
 		if (_lenient != lenient) {
 			_lenient = lenient;
-			smartUpdate("z:lenient", _lenient);
+			smartUpdate("z.lenient", _lenient);
 		}
 	}
 	/** Returns whether to use a compact layout.
@@ -203,8 +203,8 @@ public class Datebox extends FormatInputElement {
 		if (_lenient && !_compact) return attrs;
 
 		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		if (!_lenient) sb.append(" z:lenient=\"false\"");
-		if (_compact) sb.append(" z:compact=\"true\"");
+		if (!_lenient) sb.append(" z.lenient=\"false\"");
+		if (_compact) sb.append(" z.compact=\"true\"");
 		return sb.toString();
 	}
 	public String getInnerAttrs() {

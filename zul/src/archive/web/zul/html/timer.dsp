@@ -18,4 +18,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<span id="${self.uuid}" z:type="zul.timer.Timer"${self.outerAttrs}${self.innerAttrs}></span>
+<span id="${self.uuid}" z.type="zul.timer.Timer"${self.outerAttrs}${self.innerAttrs}></span>

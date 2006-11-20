@@ -74,7 +74,7 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 	public void setAutodrop(boolean autodrop) {
 		if (_autodrop != autodrop) {
 			_autodrop = autodrop;
-			smartUpdate("z:adr", autodrop);
+			smartUpdate("z.adr", autodrop);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		appendAsapAttr(sb, Events.ON_OPEN);
-		if (adr) HTMLs.appendAttribute(sb, "z:adr", "true");
+		if (adr) HTMLs.appendAttribute(sb, "z.adr", "true");
 		return sb.toString();
 	}
 	public String getInnerAttrs() {

@@ -354,7 +354,7 @@ implements Constrainted {
 			if (_cols > 0)
 				HTMLs.appendAttribute(sb, "cols",  _cols);
 			if (_maxlength > 0)
-				HTMLs.appendAttribute(sb, "z:maxlen",  _maxlength);
+				HTMLs.appendAttribute(sb, "z.maxlen",  _maxlength);
 		} else {
 			HTMLs.appendAttribute(sb, "value",  coerceToString(_value));
 			if (_cols > 0)
@@ -385,8 +385,8 @@ implements Constrainted {
 		appendAsapAttr(sb, Events.ON_BLUR);
 
 		if (_constr != null) {
-			HTMLs.appendAttribute(sb, "z:valid", _constr.getValidationScript());
-			HTMLs.appendAttribute(sb, "z:ermg", _constr.getErrorMessage());
+			HTMLs.appendAttribute(sb, "z.valid", _constr.getValidationScript());
+			HTMLs.appendAttribute(sb, "z.ermg", _constr.getErrorMessage());
 			if (!_constr.isClientComplete())
 				sb.append(" zk_srvald=\"true\""); //validate-at-server is required
 		}

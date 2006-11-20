@@ -349,7 +349,7 @@ zk.Selectable.prototype = {
 		case "selectAll":
 			this._selectAll();
 			return true; //no more processing
-		case "z:multiple": //whether to support multiple
+		case "z.multiple": //whether to support multiple
 			this._setMultiple("true" == value);
 			return true;
 		case "chgSel": //value: a list of uuid to select
@@ -366,8 +366,8 @@ zk.Selectable.prototype = {
 			for (var j = 0; j < rows.length; ++j)
 				this._changeSelect(rows[j], sels[rows[j].id] == true);
 			return true;
-		case "z:vflex":
-		case "z:size":
+		case "z.vflex":
+		case "z.size":
 			zkau.setAttr(this.element, name, value);
 			this._recalcSize();
 			return true;
@@ -392,7 +392,7 @@ zk.Selectable.prototype = {
 		this._changeSelect(row, toSel);
 		this.focus(row);
 
-		//maintain z:selId
+		//maintain z.selId
 		var selId = this._getSelectedId();
 		if (this._isMultiple()) {
 			if (row.id == selId)
@@ -441,7 +441,7 @@ zk.Selectable.prototype = {
 		this._sendSelect();
 	},
 
-	/** Changes the specified row as z:focus. */
+	/** Changes the specified row as z.focus. */
 	focus: function (row) {
 		this._unsetFocusExcept(row);
 		this._setFocus(row, true);
@@ -527,7 +527,7 @@ zk.Selectable.prototype = {
 		}
 		return changed;
 	},
-	/** Changes the z:focus status, and return whether z:focus is changed. */
+	/** Changes the z.focus status, and return whether z.focus is changed. */
 	_setFocus: function (row, toFocus) {
 		if (!this._isValid(row)) return false;
 
@@ -849,22 +849,22 @@ zk.Selectable.prototype = {
 				zkau.asapTimeout(this.element, "onSelect"));
 	},
 
-	/** Returns z:selId (aka., the id of the selected item), or null if
+	/** Returns z.selId (aka., the id of the selected item), or null if
 	 * no one is ever selected.
 	 */
 	_getSelectedId: function () {
 		var selId = getZKAttr(this.element, "selId");
 		if (!selId) {
-			alert(mesg.INVALID_STRUCTURE + "z:selId not found");
+			alert(mesg.INVALID_STRUCTURE + "z.selId not found");
 			return null;
 		}
 		return selId == "zk_n_a" ? null: selId;
 	},
-	/** Sets z:selId (aka., the id of the selected item). */
+	/** Sets z.selId (aka., the id of the selected item). */
 	_setSelectedId: function (selId) {
 		setZKAttr(this.element, "selId", selId ? selId: "zk_n_a");
 	},
-	/** Fixes z:selId to the first selected item. */
+	/** Fixes z.selId to the first selected item. */
 	_fixSelelectedId: function () {
 		var selId = null;
 		for (var j = 0; j < this.bodyrows.length; ++j) {

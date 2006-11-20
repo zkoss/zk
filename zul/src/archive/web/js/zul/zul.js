@@ -198,6 +198,6 @@ zulSHdr._renCls = function (cmp, ext) {
 };
 zulSHdr.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);
-	if (nm == "z:sort") zulSHdr._show(cmp);
+	if (nm == "z.sort") zulSHdr._show(cmp);
 	return true;
 };

@@ -174,7 +174,7 @@ zkSld._metaByBtn = function (button) {
 	return zkau.getMeta(btnid.substring(0, btnid.length-4));
 };
 zkSld.setAttr = function (cmp, nm, val) {
-	if ("z:curpos" == nm) {
+	if ("z.curpos" == nm) {
 		setZKAttr(cmp, "curpos", val);
 		var meta = zkau.getMeta(cmp);
 		if (meta) meta._fixPos();

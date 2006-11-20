@@ -18,6 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<tr id="${self.uuid}" z:type="Menusp"${self.outerAttrs}${self.innerAttrs}>
+<tr id="${self.uuid}" z.type="Menusp"${self.outerAttrs}${self.innerAttrs}>
 	<td colspan="3"><hr/></td>
 </tr>

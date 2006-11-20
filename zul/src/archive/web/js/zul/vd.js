@@ -24,7 +24,7 @@ zkau.valid = zkVld; //zkau depends on it
 /** Validates the specified component and returns the error msg. */
 zkVld.validate = function (id) {
 	//There are two ways to validate a component.
-	//1. specify the function in z:valid or z:valid2
+	//1. specify the function in z.valid or z.valid2
 	id = $uuid(id);
 	var cm = $e(id);
 	zkVld.validating = true; //to avoid deadloop (when both fields are invalid)
@@ -95,7 +95,7 @@ zkVld.onlyNum = function (id, noDot) {
 		case '\t':
 			continue;
 		default:
-			if (fmt && fmt.indexOf(cc) >= 0) //recognize only in z:fmt
+			if (fmt && fmt.indexOf(cc) >= 0) //recognize only in z.fmt
 				continue;
 			//error
 		}

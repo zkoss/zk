@@ -56,7 +56,7 @@ public class Groupbox extends XulElement {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z:open", _open);
+			smartUpdate("z.open", _open);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class Groupbox extends XulElement {
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			smartUpdate("z:closable", closable);
+			smartUpdate("z.closable", closable);
 		}
 	}
 
@@ -89,7 +89,7 @@ public class Groupbox extends XulElement {
 			//to support onClick for groupbox
 
 		if (!_closable)
-			sb.append(" z:closable=\"false\"");
+			sb.append(" z.closable=\"false\"");
 		return sb.toString();
 	}
 

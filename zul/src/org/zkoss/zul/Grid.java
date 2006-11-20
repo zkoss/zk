@@ -123,7 +123,7 @@ public class Grid extends XulElement {
 	 * the column width at the client).
 	 */
 	/*package*/ void initAtClient() {
-		smartUpdate("z:init", true);
+		smartUpdate("z.init", true);
 	}
 
 	//--Paging--//

@@ -58,9 +58,9 @@ zkSplt.cleanup = function (cmp) {
 	}
 };
 zkSplt.setAttr = function (cmp, nm, val) {
-	if ("z:open" == nm) {
+	if ("z.open" == nm) {
 		zkSplt.open(cmp, val == "true", true);
-		return true; //no need to store the z:open attribute
+		return true; //no need to store the z.open attribute
 	}
 	return false;
 };

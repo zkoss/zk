@@ -131,7 +131,7 @@ public class Button extends LabelImageElement {
 			href = null;
 		if (!Objects.equals(_href, href)) {
 			_href = href;
-			smartUpdate("z:href", getEncodedHref());
+			smartUpdate("z.href", getEncodedHref());
 		}
 	}
 
@@ -154,7 +154,7 @@ public class Button extends LabelImageElement {
 
 		if (!Objects.equals(_target, target)) {
 			_target = target;
-			smartUpdate("z:target", _target);
+			smartUpdate("z.target", _target);
 		}
 	}
 	/** Returns the tab order of this component.
@@ -182,14 +182,14 @@ public class Button extends LabelImageElement {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z:href", getEncodedHref());
-		HTMLs.appendAttribute(sb, "z:target", getTarget());
+		HTMLs.appendAttribute(sb, "z.href", getEncodedHref());
+		HTMLs.appendAttribute(sb, "z.target", getTarget());
 
 		appendAsapAttr(sb, Events.ON_FOCUS);
 		appendAsapAttr(sb, Events.ON_BLUR);
 		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-			//no z:dbclk to avoid confusing
-			//no z:lfclk since it is handled by widget.js
+			//no z.dbclk to avoid confusing
+			//no z.lfclk since it is handled by widget.js
 
 		if (isDisabled())
 			HTMLs.appendAttribute(sb, "disabled",  "disabled");

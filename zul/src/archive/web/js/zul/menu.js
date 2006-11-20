@@ -135,7 +135,7 @@ zkMenu.open = function (menu, toggle) {
 
 	var pp = $e(popupId);
 	if (!pp) {
-		zk.error(mesg.INVALID_STRUCTURE+"z:mpop not exists");
+		zk.error(mesg.INVALID_STRUCTURE+"z.mpop not exists");
 		return;
 	}
 

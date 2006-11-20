@@ -83,7 +83,7 @@ public class Calendar extends XulElement {
 		if (value == null) value = Dates.today();
 		if (!value.equals(_value)) {
 			_value = value;
-			smartUpdate("z:value", getDateFormat().format(_value));
+			smartUpdate("z.value", getDateFormat().format(_value));
 		}
 	}
 
@@ -117,8 +117,8 @@ public class Calendar extends XulElement {
 
 		appendAsapAttr(sb, Events.ON_CHANGE);
 
-		HTMLs.appendAttribute(sb, "z:value", getDateFormat().format(_value));
-		if (_compact) sb.append(" z:compact=\"true\"");
+		HTMLs.appendAttribute(sb, "z.value", getDateFormat().format(_value));
+		if (_compact) sb.append(" z.compact=\"true\"");
 		return sb.toString();
 	}
 

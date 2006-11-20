@@ -47,7 +47,7 @@ zkCmit.onclick = function (evt) {
 	if (item) {
 		zkCmbox._selback(item);
 		zkau.closeFloats(item);
-		zkCmit.onout(item); //onmouseout might be sent (especiall we change parent)
+		zkCmit.onoutTo(item); //onmouseout might be sent (especiall we change parent)
 
 		//Request 1537962: better responsive
 		var inp = zkCmbox.getInputByItem(item);
@@ -73,10 +73,12 @@ zkCmit.onover = function (evt) {
 zkCmit.onout = function (evt) {
 	if (!zk.dragging) {
 		if (!evt) evt = window.event;
-		var item = $parentByTag(Event.element(evt), "TR");
-		if (item)
-			zk.restoreStyle(item, "backgroundColor");
+		zkCmit.onoutTo($parentByTag(Event.element(evt), "TR"));
 	}
+};
+zkCmit.onoutTo = function (item) {
+	if (item)
+		zk.restoreStyle(item, "backgroundColor");
 };
 
 /** Handles setAttr. */

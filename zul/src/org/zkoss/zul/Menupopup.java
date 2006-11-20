@@ -46,8 +46,8 @@ public class Menupopup extends Popup {
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		return typeRequired() ? attrs + " z:type=\"zul.menu.Mpop\"": attrs;
-			//to minimize HTML's size, generate z:type only if necessary
+		return typeRequired() ? attrs + " z.type=\"zul.menu.Mpop\"": attrs;
+			//to minimize HTML's size, generate z.type only if necessary
 	}
 	private boolean typeRequired() {
 		return !(getParent() instanceof Menu);

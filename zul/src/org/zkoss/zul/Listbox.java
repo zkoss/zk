@@ -219,7 +219,7 @@ implements java.io.Serializable, RenderOnDemand {
 	public void setVflex(boolean vflex) {
 		if (_vflex != vflex) {
 			_vflex = vflex;
-			if (!inSelectMold()) smartUpdate("z:flex", _vflex);
+			if (!inSelectMold()) smartUpdate("z.flex", _vflex);
 		}
 	}
 
@@ -237,7 +237,7 @@ implements java.io.Serializable, RenderOnDemand {
 			if (inSelectMold()) {
 				smartUpdate("disabled", _disabled);
 			} else {
-				smartUpdate("z:disabled", _disabled);
+				smartUpdate("z.disabled", _disabled);
 			}
 		}
 	}
@@ -255,7 +255,7 @@ implements java.io.Serializable, RenderOnDemand {
 			if (inSelectMold()) {
 				smartUpdate("readonly", _readonly);
 			} else {
-				smartUpdate("z:readonly", _readonly);
+				smartUpdate("z.readonly", _readonly);
 			}
 		}
 	}
@@ -280,7 +280,7 @@ implements java.io.Serializable, RenderOnDemand {
 			if (inSelectMold()) {
 				smartUpdate("size", _rows > 0 ? Integer.toString(_rows): null);
 			} else {
-				smartUpdate("z:size", Integer.toString(_rows));
+				smartUpdate("z.size", Integer.toString(_rows));
 				initAtClient();
 				//Don't use smartUpdate because client has to extra job
 				//besides maintaining HTML DOM
@@ -317,16 +317,16 @@ implements java.io.Serializable, RenderOnDemand {
 				_selItems.clear();
 				if (item != null)
 					_selItems.add(item);
-				//No need to update z:selId because z:multiple will do the job
+				//No need to update z.selId because z.multiple will do the job
 			}
 
 			if (inSelectMold()) smartUpdate("multiple", _multiple);
 			else if (isCheckmark()) invalidate(); //change check mark
-			else smartUpdate("z:multiple", _multiple);
+			else smartUpdate("z.multiple", _multiple);
 				//No need to use response because such info is carried on tags
 		}
 	}
-	/** Returns the ID of the selected item (it is stored as the z:selId
+	/** Returns the ID of the selected item (it is stored as the z.selId
 	 * attribute of the listbox).
 	 */
 	private String getSelectedId() {
@@ -377,7 +377,7 @@ implements java.io.Serializable, RenderOnDemand {
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
 			if (inSelectMold()) smartUpdate("name", _name);
-			else if (_name != null) smartUpdate("z:name", _name);
+			else if (_name != null) smartUpdate("z.name", _name);
 			else invalidate(); //1) generate _value; 2) add submit listener
 
 			_name = name;
@@ -468,7 +468,7 @@ implements java.io.Serializable, RenderOnDemand {
 			} else {
 				if (item.getIndex() < _jsel || _jsel < 0) {
 					_jsel = item.getIndex();
-					if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 				}
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
@@ -499,7 +499,7 @@ implements java.io.Serializable, RenderOnDemand {
 				} else {
 					smartUpdateSelection();
 					if (oldSel != _jsel)
-						smartUpdate("z:selId", getSelectedId());
+						smartUpdate("z.selId", getSelectedId());
 				}
 			}
 		}
@@ -599,7 +599,7 @@ implements java.io.Serializable, RenderOnDemand {
 	 */
 	/*package*/ void initAtClient() {
 		if (!inSelectMold() && !inPagingMold())
-			smartUpdate("z:init", true);
+			smartUpdate("z.init", true);
 	}
 
 	//--Paging--//
@@ -820,12 +820,12 @@ implements java.io.Serializable, RenderOnDemand {
 				if (childItem.isSelected()) {
 					if (_jsel < 0) {
 						_jsel = childIndex;
-						if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
+						if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 						_selItems.add(childItem);
 					} else if (_multiple) {
 						if (_jsel > childIndex) {
 							_jsel = childIndex;
-							if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
+							if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 						}
 						_selItems.add(childItem);
 					} else { //deselect
@@ -835,7 +835,7 @@ implements java.io.Serializable, RenderOnDemand {
 				} else {
 					if (_jsel >= childIndex) {
 						++_jsel;
-						if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
+						if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 					}
 				}
 				initAtClient();
@@ -902,12 +902,12 @@ implements java.io.Serializable, RenderOnDemand {
 				_selItems.remove(childItem);
 				if (_jsel == childIndex) {
 					fixSelectedIndex(childIndex);
-					if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 				}
 			} else {
 				if (_jsel >= childIndex) {
 					--_jsel;
-					if (!inSelectMold()) smartUpdate("z:selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 				}
 			}
 			initAtClient();
@@ -962,7 +962,7 @@ implements java.io.Serializable, RenderOnDemand {
 					_model.removeListDataListener(_dataListener);
 				} else {
 					if (!inSelectMold())
-						smartUpdate("z:model", "true");
+						smartUpdate("z.model", "true");
 				}
 
 				initDataListener();
@@ -984,7 +984,7 @@ implements java.io.Serializable, RenderOnDemand {
 			_model = null;
 			getItems().clear();
 			if (!inSelectMold())
-				smartUpdate("z:model", null);
+				smartUpdate("z.model", null);
 		}
 	}
 
@@ -1302,21 +1302,21 @@ implements java.io.Serializable, RenderOnDemand {
 			if (_readonly)
 				HTMLs.appendAttribute(sb, "readonly", "readonly");
 		} else {
-			HTMLs.appendAttribute(sb, "z:name", _name);
-			HTMLs.appendAttribute(sb, "z:size",  _rows);
+			HTMLs.appendAttribute(sb, "z.name", _name);
+			HTMLs.appendAttribute(sb, "z.size",  _rows);
 			if (_disabled)
-				HTMLs.appendAttribute(sb, "z:disabled",  true);
+				HTMLs.appendAttribute(sb, "z.disabled",  true);
 			if (_readonly)
-				HTMLs.appendAttribute(sb, "z:readonly", true);
+				HTMLs.appendAttribute(sb, "z.readonly", true);
 			if (_multiple)
-				HTMLs.appendAttribute(sb, "z:multiple", true);
-			HTMLs.appendAttribute(sb, "z:selId", getSelectedId());
+				HTMLs.appendAttribute(sb, "z.multiple", true);
+			HTMLs.appendAttribute(sb, "z.selId", getSelectedId());
 			//if (_checkmark)
-			//	HTMLs.appendAttribute(sb, "z:checkmark",  true);
+			//	HTMLs.appendAttribute(sb, "z.checkmark",  true);
 			if (_vflex)
-				HTMLs.appendAttribute(sb, "z:vflex", true);
+				HTMLs.appendAttribute(sb, "z.vflex", true);
 			if (_model != null)
-				HTMLs.appendAttribute(sb, "z:model", true);
+				HTMLs.appendAttribute(sb, "z.model", true);
 		}
 
 		appendAsapAttr(sb, Events.ON_SELECT);

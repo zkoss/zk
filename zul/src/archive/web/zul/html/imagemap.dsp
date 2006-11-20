@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<span id="${self.uuid}" z:type="zul.widget.Map" z:cave="${self.uuid}_map"${self.outerAttrs}>
+<span id="${self.uuid}" z.type="zul.widget.Map" z.cave="${self.uuid}_map"${self.outerAttrs}>
 <a href="${c:encodeURL('~./zul/html/imagemap-done.dsp')}?${self.uuid}" target="zk_hfr_"><img id="${self.uuid}!real" ismap="ismap"${self.innerAttrs}/></a>
 <map name="${self.uuid}_map" id="${self.uuid}_map">
 	<c:forEach var="child" items="${self.children}">

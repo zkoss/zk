@@ -268,7 +268,7 @@ zkCal.init = function (cmp) {
 	else zkau.setMeta(cmp, new zk.Cal(cmp, null));
 };
 zkCal.setAttr = function (cmp, nm, val) {
-	if ("z:value" == nm) {
+	if ("z.value" == nm) {
 		var meta = zkau.getMeta(cmp);
 		if (meta) meta.setDate(zk.parseDate(val, "yyyy/MM/dd"));
 	}
@@ -356,7 +356,7 @@ zkDtbox.validate = function (cmp) {
 
 /** Handles setAttr. */
 zkDtbox.setAttr = function (cmp, nm, val) {
-	if ("z:fmt" == nm) {
+	if ("z.fmt" == nm) {
 		zkau.setAttr(cmp, nm, val);
 
 		var inp = $real(cmp);

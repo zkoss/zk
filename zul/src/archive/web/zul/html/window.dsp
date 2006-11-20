@@ -5,7 +5,7 @@ window.dsp
 	Purpose:
 		
 	Description:
-		z:autoz:
+		z.autoz:
 			Automatically adjust z-index onmousedown (au.js)
 	History:
 		Tue May 31 19:37:23     2005, Created by tomyeh
@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" z:type="zul.widget.Wnd" z:autoz="true"${self.outerAttrs}${self.innerAttrs}>
+<div id="${self.uuid}" z.type="zul.widget.Wnd" z.autoz="true"${self.outerAttrs}${self.innerAttrs}>
 <c:choose>
  <c:when test="${empty self.caption and empty self.title}">
   <c:if test="${c:isExplorer() and !c:isExplorer7()}"><%-- Bug 1579515: to clickable, a child with 100% width is required for DIV --%>

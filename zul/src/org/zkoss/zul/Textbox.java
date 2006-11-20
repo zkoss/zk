@@ -143,6 +143,6 @@ public class Textbox extends InputElement {
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		return _multiline ? attrs + " z:skipOK=\"true\"": attrs;
+		return _multiline ? attrs + " z.skipOK=\"true\"": attrs;
 	}
 }

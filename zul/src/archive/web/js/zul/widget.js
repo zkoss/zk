@@ -285,9 +285,9 @@ zkGrbox = {};
 zkCapt = {};
 
 zkGrbox.setAttr = function (cmp, nm, val) {
-	if ("z:open" == nm) {
+	if ("z.open" == nm) {
 		zkGrbox.open(cmp, val == "true", true);
-		return true; //no need to store the z:open attribute
+		return true; //no need to store the z.open attribute
 	}
 	return false;
 };
@@ -377,7 +377,7 @@ if (zk.ie && !zk.ie7) {
 			//process zk_xxx
 			for (var attrs = img.attributes, j = 0; j < attrs.length; ++j) {
 				var attr = attrs.item(j);
-				if (attr.name.startsWith("z:"))
+				if (attr.name.startsWith("z."))
 					html += ' '+attr.name+'="'+attr.value+'"';
 			}
 
@@ -494,7 +494,7 @@ zkPMeter.init = function (cmp) {
 };
 zkPMeter.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);
-	if ("z:value" == nm)
+	if ("z.value" == nm)
 		zkPMeter.init(cmp);
 	return true;
 }

@@ -98,7 +98,7 @@ public class Splitter extends XulElement {
 
 		if (!Objects.equals(_collapse, collapse)) {
 			_collapse = collapse;
-			smartUpdate("z:colps", collapse);
+			smartUpdate("z.colps", collapse);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class Splitter extends XulElement {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z:open", open);
+			smartUpdate("z.open", open);
 		}
 	}
 
@@ -125,10 +125,10 @@ public class Splitter extends XulElement {
 		appendAsapAttr(sb, Events.ON_OPEN);
 
 		if ("vertical".equals(getOrient()))
-			HTMLs.appendAttribute(sb, "z:vert", "true");
+			HTMLs.appendAttribute(sb, "z.vert", "true");
 		if (!"none".equals(_collapse))
-			HTMLs.appendAttribute(sb, "z:colps", _collapse);
-		if (!_open) sb.append(" z:open=\"false\"");
+			HTMLs.appendAttribute(sb, "z.colps", _collapse);
+		if (!_open) sb.append(" z.open=\"false\"");
 		return sb.toString();
 	}
 	public void setParent(Component parent) {

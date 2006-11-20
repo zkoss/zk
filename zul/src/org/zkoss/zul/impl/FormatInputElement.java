@@ -48,7 +48,7 @@ abstract public class FormatInputElement extends InputElement {
 		if (!Objects.equals(_format, format)) {
 			final String old = _format;
 			_format = format;
-			smartUpdate("z:fmt", getFormat());
+			smartUpdate("z.fmt", getFormat());
 
 			try {
 				smartUpdate("value", getText());
@@ -126,7 +126,7 @@ abstract public class FormatInputElement extends InputElement {
 		final String attrs = super.getOuterAttrs();
 		final String fmt = getFormat();
 		return fmt != null && fmt.length() != 0 ?
-			attrs + " z:fmt=\""+fmt+'"': attrs;
+			attrs + " z.fmt=\""+fmt+'"': attrs;
 	}
 	protected boolean isAsapRequired(String evtnm) {
 		return (Events.ON_CHANGE.equals(evtnm) && getFormat() != null)

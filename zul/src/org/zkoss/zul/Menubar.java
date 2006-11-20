@@ -78,14 +78,14 @@ public class Menubar extends XulElement {
 	public void setAutodrop(boolean autodrop) {
 		if (_autodrop != autodrop) {
 			_autodrop = autodrop;
-			smartUpdate("z:autodrop", autodrop);
+			smartUpdate("z.autodrop", autodrop);
 		}
 	}
 
 	//-- Component --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		return _autodrop ?  attrs + " z:autodrop=\"true\"": attrs;
+		return _autodrop ?  attrs + " z.autodrop=\"true\"": attrs;
 	}
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Menu) && !(child instanceof Menuitem))

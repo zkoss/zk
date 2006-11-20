@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<table id="${self.uuid}" z:type="Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
+<table id="${self.uuid}" z.type="Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
 <tr valign="top" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
  <td id="${child.uuid}!chdextr"${c:attr('width',c:isInstance('org.zkoss.zk.ui.HtmlBasedComponent', child) ? child.width: null)}${c:isInstance('org.zkoss.zul.Splitter',child)?self.splitterExteriorAttrs:self.childExteriorAttrs}>${z:redraw(child, null)}</td>

@@ -47,7 +47,7 @@ public class Popup extends XulElement {
 		throw new UnsupportedOperationException("You cannot make it visible manually");
 	}
 	public String getOuterAttrs() {
-	//Note: don't generate z:type here because Menupopup's z:type diff
+	//Note: don't generate z.type here because Menupopup's z.type diff
 		final StringBuffer sb = appendAsapAttr(null, Events.ON_OPEN);
 		final String attrs = super.getOuterAttrs();
 		return sb != null ? sb.append(attrs).toString(): attrs;

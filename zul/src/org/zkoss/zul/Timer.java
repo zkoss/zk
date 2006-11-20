@@ -59,9 +59,9 @@ public class Timer extends XulElement {
 			throw new WrongValueException("Negative delay is not allowed: "+delay);
 		if (delay != _delay) {
 			_delay = delay;
-			smartUpdate("z:delay", Integer.toString(_delay));
+			smartUpdate("z.delay", Integer.toString(_delay));
 			if (_running)
-				smartUpdate("z:init", true); //init
+				smartUpdate("z.init", true); //init
 		}
 	}
 	/** Returns whether the timer shall send Event repeatly.
@@ -75,9 +75,9 @@ public class Timer extends XulElement {
 	public void setRepeats(boolean repeats) {
 		if (_repeats != repeats) {
 			_repeats = repeats;
-			smartUpdate("z:repeats", Boolean.toString(_repeats));
+			smartUpdate("z.repeats", Boolean.toString(_repeats));
 			if (_running)
-				smartUpdate("z:init", true); //init
+				smartUpdate("z.init", true); //init
 		}
 	}
 	/** Returns whether this timer is running.
@@ -100,7 +100,7 @@ public class Timer extends XulElement {
 	public void stop() {
 		if (_running) {
 			_running = false;
-			smartUpdate("z:running", false);
+			smartUpdate("z.running", false);
 		}
 	}
 	/** Starts the timer.
@@ -108,7 +108,7 @@ public class Timer extends XulElement {
 	public void start() {
 		if (!_running) {
 			_running = true;
-			smartUpdate("z:running", true);
+			smartUpdate("z.running", true);
 		}
 	}
 
@@ -116,10 +116,10 @@ public class Timer extends XulElement {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z:delay", _delay);
-		HTMLs.appendAttribute(sb, "z:repeats", _repeats);
+		HTMLs.appendAttribute(sb, "z.delay", _delay);
+		HTMLs.appendAttribute(sb, "z.repeats", _repeats);
 		if (!_running)
-			sb.append(" z:running=\"false\"");
+			sb.append(" z.running=\"false\"");
 		return sb.toString();
 	}
 

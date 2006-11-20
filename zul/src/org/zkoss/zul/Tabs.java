@@ -70,14 +70,14 @@ public class Tabs extends XulElement {
 
 		final Tabbox tabbox = getTabbox();
 		if (tabbox == null || !tabbox.inAccordionMold())
-			smartUpdate("z:init", true); //fixWidth
+			smartUpdate("z.init", true); //fixWidth
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
 
 		final Tabbox tabbox = getTabbox();
 		if (tabbox == null || !tabbox.inAccordionMold())
-			smartUpdate("z:init", true); //fixWidth
+			smartUpdate("z.init", true); //fixWidth
 	}
 		
 	/** Invalidates the tabbox if it is accordion.

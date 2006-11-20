@@ -50,7 +50,7 @@ public class Progressmeter extends XulElement {
 			throw new UiException("Illegal value: "+value+". Range: 0 ~ 100");
 		if (_val != value) {
 			_val = value;
-			smartUpdate("z:value", _val);
+			smartUpdate("z.value", _val);
 		}
 	}
 	/** Returns the current value of the progress meter.
@@ -63,7 +63,7 @@ public class Progressmeter extends XulElement {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z:value", _val);
+		HTMLs.appendAttribute(sb, "z.value", _val);
 		return sb.toString();
 	}
 

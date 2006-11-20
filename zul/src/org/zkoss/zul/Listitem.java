@@ -107,7 +107,7 @@ public class Listitem extends XulElement {
 				if (listbox.inSelectMold())
 					smartUpdate("value", Objects.toString(_value));
 				else if (listbox.getName() != null)
-					smartUpdate("z:value", Objects.toString(_value));
+					smartUpdate("z.value", Objects.toString(_value));
 		}
 	}
 
@@ -227,7 +227,7 @@ public class Listitem extends XulElement {
 
 			final Listbox listbox = getListbox();
 			if (listbox != null && listbox.getModel() != null)
-				smartUpdate("z:loaded", _loaded);
+				smartUpdate("z.loaded", _loaded);
 		}
 	}
 	/** Returns whether the content of this item is loaded; used if
@@ -296,15 +296,15 @@ public class Listitem extends XulElement {
 			final Listbox listbox = getListbox();
 			if (listbox != null) {
 				if (listbox.getName() != null)
-					HTMLs.appendAttribute(sb, "z:value",  Objects.toString(_value));
+					HTMLs.appendAttribute(sb, "z.value",  Objects.toString(_value));
 				final Listitem sel = listbox.getSelectedItem();
 				if (sel == this || (sel == null && getIndex() == 0))
-					sb.append(" z:focus=\"true\"");
+					sb.append(" z.focus=\"true\"");
 				if (listbox.getModel() != null)
-					HTMLs.appendAttribute(sb, "z:loaded", _loaded);
+					HTMLs.appendAttribute(sb, "z.loaded", _loaded);
 			}
 			if (isSelected())
-				HTMLs.appendAttribute(sb, "z:sel", "true");
+				HTMLs.appendAttribute(sb, "z.sel", "true");
 
 			final String clkattrs = getAllOnClickAttrs(false);
 			if (clkattrs != null) sb.append(clkattrs);

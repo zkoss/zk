@@ -20,7 +20,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="suffix" value="-sel.gif" if="${self.selected}"/>
 <c:set var="suffix" value="-uns.gif" unless="${self.selected}"/>
-<tr id="${self.uuid}" z:type="Tab"${self.outerAttrs} z:sel="${self.selected}" z:box="${self.tabbox.uuid}" z:panel="${self.linkedPanel.uuid}">
+<tr id="${self.uuid}" z.type="Tab"${self.outerAttrs} z.sel="${self.selected}" z.box="${self.tabbox.uuid}" z.panel="${self.linkedPanel.uuid}">
 <td align="right"><table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
 	<td width="5" height="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-tl',suffix))})"></td>

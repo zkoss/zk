@@ -68,7 +68,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public void setContext(String context) {
 		if (!Objects.equals(_ctx, context)) {
 			_ctx = context;
-			smartUpdate("z:ctx", _ctx);
+			smartUpdate("z.ctx", _ctx);
 		}
 	}
 	/** Returns the ID of {@link org.zkoss.zul.Popup} that should appear
@@ -90,7 +90,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public void setPopup(String popup) {
 		if (!Objects.equals(_popup, popup)) {
 			_popup = popup;
-			smartUpdate("z:pop", _popup);
+			smartUpdate("z.pop", _popup);
 		}
 	}
 	/** Returns the ID of {@link org.zkoss.zul.Popup} that should be used
@@ -113,7 +113,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public void setTooltip(String tooltip) {
 		if (!Objects.equals(_tooltip, tooltip)) {
 			_tooltip = tooltip;
-			smartUpdate("z:tip", _tooltip);
+			smartUpdate("z.tip", _tooltip);
 		}
 	}
 
@@ -275,9 +275,9 @@ abstract public class XulElement extends HtmlBasedComponent {
 			return attrs;
 
 		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		HTMLs.appendAttribute(sb, "z:ctx", ctx);
-		HTMLs.appendAttribute(sb, "z:pop", popup);
-		HTMLs.appendAttribute(sb, "z:tip", tip);
+		HTMLs.appendAttribute(sb, "z.ctx", ctx);
+		HTMLs.appendAttribute(sb, "z.pop", popup);
+		HTMLs.appendAttribute(sb, "z.tip", tip);
 		return sb.toString();
 	}
 

@@ -132,7 +132,7 @@ public class Treecell extends LabelImageElement {
 
 				//NOTE: use Treerow's uuid! NOT Treeitem's!
 				sb.append(" id=\"").append(getParent().getUuid())
-					.append("!cm\" z:type=\"Tcfc\"/>");
+					.append("!cm\" z.type=\"Tcfc\"/>");
 			}
 
 			final Treeitem[] pitems = getTreeitems(item);
@@ -172,7 +172,7 @@ public class Treecell extends LabelImageElement {
 		&& item.isFocusRequired()) {
 			//NOTE: use Treerow's uuid! NOT Treeitem's!
 			return "<a href=\"javascript:;\" id=\"" + getParent().getUuid()
-				+ "!sel\" z:type=\"Tcfc\">  </a>";
+				+ "!sel\" z.type=\"Tcfc\">  </a>";
 		} else { 
 			return null;
 		}
@@ -230,7 +230,7 @@ public class Treecell extends LabelImageElement {
 		if (button) {
 			final Treeitem item = getTreeitem();
 			if (item != null) {
-				sb.append(" z:type=\"Tcop\" id=\"")
+				sb.append(" z.type=\"Tcop\" id=\"")
 					.append(item.getTreerow().getUuid()).append("!open\"");
 			}
 
