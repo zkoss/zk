@@ -222,7 +222,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 	public void setTitle(String title) {
 		if (title == null) title = "";
-		if (!Objects.equals(_title, title)) {
+		if (!_title.equals(title)) {
 			_title = title;
 			if (_desktop != null) {
 				final Execution exec = getExecution();
@@ -241,7 +241,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 	public void setStyle(String style) {
 		if (style == null) style = "";
-		if (!Objects.equals(_style, style)) {
+		if (!_style.equals(style)) {
 			_style = style;
 			if (_desktop != null) {
 				final Execution exec = getExecution();
@@ -445,8 +445,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 		dtctrl.addPage(this);	
 
-		if (_title == null && title != null) setTitle(title);
-		if (_style == null && style != null) setStyle(style);
+		if (_title.length() == 0 && title != null) setTitle(title);
+		if (_style.length() == 0 && style != null) setStyle(style);
 	}
 	private static final Map REQUEST_ATTRS = new AbstractMap() {
 		public Set entrySet() {
