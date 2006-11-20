@@ -188,6 +188,9 @@ zkTree.ontoggle = function (evt) {
 
 zkTrow = {}; //Treerow
 zkTrow.init = function (cmp) {
+	//zk.disableSelection(cmp);
+	//Tom Yeh: 20060106: side effect: unable to select textbox if turned on
+
 	zk.listen(cmp, "click", zkTree.onclick);
 	zk.listen(cmp, "keydown", zkTree.onkeydown);
 	zk.listen(cmp, "mouseover", zkSel.onover);

@@ -89,11 +89,6 @@ zk.Selectable.prototype = {
 					}
 					return true;
 				};
-
-				//To turn-off select, use "-moz-user-select: none" in CSS
-//			} else if (zk.ie) {
-//				this.element.onselectstart = function () {return false;}
-//Tom Yeh: 20060106: side effect: unable to select textbox if turned on
 			}
 
 			if (!this.paging) {
@@ -1069,6 +1064,9 @@ zkLibox.onVisi = function (cmp) {
 
 zkLit = {}; //listitem
 zkLit.init = function (cmp) {
+	//zk.disableSelection(cmp);
+	//Tom Yeh: 20060106: side effect: unable to select textbox if turned on
+
 	zk.listen(cmp, "click", zkLibox.onclick);
 	zk.listen(cmp, "keydown", zkLibox.onkeydown);
 	zk.listen(cmp, "mouseover", zkSel.onover);
