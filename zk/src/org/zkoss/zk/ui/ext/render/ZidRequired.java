@@ -31,7 +31,7 @@ package org.zkoss.zk.ui.ext.render;
  * returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
  *
  * <p>Note: if a component is NOT derived from {@link org.zkoss.zk.ui.HtmlBasedComponent},
- * it has to detect this interface and generate z:id if {@link #isZidRequired}
+ * it has to detect this interface and generate z.zid if {@link #isZidRequired}
  * return true.
  *
  * @author tomyeh

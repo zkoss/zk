@@ -545,7 +545,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 			final Object xc = getExtraCtrl();
 			if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())
-				smartUpdate("z:zid", _id);
+				smartUpdate("z.zid", _id);
 		}
 	}
 	private static boolean isTransparent(Component comp) {

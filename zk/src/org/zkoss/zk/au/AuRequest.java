@@ -218,7 +218,7 @@ public class AuRequest {
 		new RedrawCommand("redraw", 0);
 		new RemoveDesktopCommand("rmDesktop", 0);
 		new RenderCommand(Events.ON_RENDER, Command.IGNORE_OLD_EQUIV);
-			//z:loaded is set only if replied from server, so it is OK
+			//z.loaded is set only if replied from server, so it is OK
 			//to drop if any follows -- which means users are scrolling fast
 
 		new ScrollCommand(Events.ON_SCROLLING,

@@ -228,7 +228,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 
 		if (!Objects.equals(_draggable, draggable)) {
 			_draggable = draggable;
-			smartUpdate("z:drag", _draggable);
+			smartUpdate("z.drag", _draggable);
 		}
 	}
 	/** Returns the identifier of a draggable type of objects, or "false"
@@ -262,7 +262,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 
 		if (!Objects.equals(_droppable, droppable)) {
 			_droppable = droppable;
-			smartUpdate("z:drop", _droppable);
+			smartUpdate("z.drop", _droppable);
 		}
 	}
 	/** Returns the identifier of a droppable type of objects, or "false"
@@ -328,14 +328,14 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		HTMLs.appendAttribute(sb, "class", getSclass());
 		HTMLs.appendAttribute(sb, "style", getRealStyle());
 		HTMLs.appendAttribute(sb, "title", getTooltiptext());
-		HTMLs.appendAttribute(sb, "z:drag", _draggable);
-		HTMLs.appendAttribute(sb, "z:drop", _droppable);
+		HTMLs.appendAttribute(sb, "z.drag", _draggable);
+		HTMLs.appendAttribute(sb, "z.drop", _droppable);
 
 		final Object xc = getExtraCtrl();
 		if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired()) {
 			final String id = getId();
 	 		if (!ComponentsCtrl.isAutoId(id))
-				HTMLs.appendAttribute(sb, "z:zid", id);
+				HTMLs.appendAttribute(sb, "z.zid", id);
 		}
 		return sb.toString();
 	}
@@ -432,10 +432,10 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		return sb;
 	}
 	private static String getAttrOfEvent(String evtnm) {
-		return Events.ON_CLICK.equals(evtnm) ? "z:lfclk":
-			Events.ON_RIGHT_CLICK.equals(evtnm) ? "z:rtclk":
-			Events.ON_DOUBLE_CLICK.equals(evtnm) ? "z:dbclk":
-				"z:" + evtnm;
+		return Events.ON_CLICK.equals(evtnm) ? "z.lfclk":
+			Events.ON_RIGHT_CLICK.equals(evtnm) ? "z.rtclk":
+			Events.ON_DOUBLE_CLICK.equals(evtnm) ? "z.dbclk":
+				"z." + evtnm;
 	}
 
 	//-- Component --//

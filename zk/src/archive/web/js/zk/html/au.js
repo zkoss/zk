@@ -436,7 +436,7 @@ zkau.setAttr = function (cmp, name, value) {
 			cmp.options[j].selected = value;
 	} else if ("style" == name) {
 		zk.setStyle(cmp, value);
-	} else if (name.startsWith("z:")) { //ZK attributes
+	} else if (name.startsWith("z.")) { //ZK attributes
 		setZKAttr(cmp, name.substring(2), value);
 	} else {
 		var j = name.indexOf('.'); 
@@ -502,7 +502,7 @@ zkau.setStamp = function (cmp, name) {
 zkau.rmAttr = function (cmp, name) {
 	if ("class" == name) {
 		if (cmp.className) cmp.className = "";
-	} else if (name.startsWith("z:")) { //ZK attributes
+	} else if (name.startsWith("z.")) { //ZK attributes
 		rmZKAttr(cmp, name.substring(2));
 		return;
 	} else {
@@ -944,7 +944,7 @@ zkau._onDocKeydown = function (evt) {
 	if (!evt) evt = window.event;
 	var target = Event.element(evt);
 	var zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys;
-	var keycode = evt.keyCode, zkcode; //zkcode used to search z:ctkeys
+	var keycode = evt.keyCode, zkcode; //zkcode used to search z.ctkeys
 	switch (keycode) {
 	case 13: //ENTER
 		var tn = $tag(target);
@@ -1618,7 +1618,7 @@ zkau.cmd0 = { //no uuid at all
 };
 zkau.cmd1 = {
 	setAttr: function (uuid, cmp, dt1, dt2) {
-		if (dt1 == "z:init" || dt1 == "z:chchg") { //initialize
+		if (dt1 == "z.init" || dt1 == "z.chchg") { //initialize
 			//Note: cmp might be null because it might be removed
 			if (cmp) {
 				var type = $type(cmp);
@@ -1627,7 +1627,7 @@ zkau.cmd1 = {
 					if (zk.loading) {
 						zk.addInitCmp(cmp);
 					} else {
-						zk.eval(cmp, dt1 == "z:init" ? "init": "childchg", type);
+						zk.eval(cmp, dt1 == "z.init" ? "init": "childchg", type);
 					}
 				}
 			}
@@ -1635,11 +1635,11 @@ zkau.cmd1 = {
 		}
 
 		var done = false;
-		if ("z:drag" == dt1) {
+		if ("z.drag" == dt1) {
 			if (!getZKAttr(cmp, "drag")) zkau.initdrag(cmp);
 			zkau.setAttr(cmp, dt1, dt2);
 			done = true;
-		} else if ("z:drop" == dt1) {
+		} else if ("z.drop" == dt1) {
 			if (!getZKAttr(cmp, "drop")) zkau.initdrop(cmp);
 			zkau.setAttr(cmp, dt1, dt2);
 			done = true;
@@ -1660,11 +1660,11 @@ zkau.cmd1 = {
 	},
 	rmAttr: function (uuid, cmp, dt1) {
 		var done = false;
-		if ("z:drag" == dt1) {
+		if ("z.drag" == dt1) {
 			zkau.cleandrag(cmp);
 			zkau.rmAttr(cmp, dt1);
 			done = true;
-		} else if ("z:drop" == dt1) {
+		} else if ("z.drop" == dt1) {
 			zkau.cleandrop(cmp);
 			zkau.rmAttr(cmp, dt1);
 			done = true;
@@ -1713,7 +1713,7 @@ zkau.cmd1 = {
 		/* To add the first child properly, it checks as follows.
 		//1) a function called addFirstChild
 		2) uuid + "!cave" (as parent)
-		3) an attribute called z:cave to hold id (as parent)
+		3) an attribute called z.cave to hold id (as parent)
 		4) uuid + "!child" (as next sibling)
 		5) uuid + "!real" (as parent)
 		 */

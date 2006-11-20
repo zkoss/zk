@@ -22,7 +22,7 @@ zk = {};
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "2W"; //increase this if we want the browser to reload JavaScript
+zk.build = "2X"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */
@@ -43,11 +43,20 @@ function $e(id) {
  * the control directly, so... */
 function $uuid(n) {
 	if (typeof n != 'string') {
-		for (; n; n = n.parentNode)
+		while (n) {
 			if (n.id) {
 				n = n.id;
 				break;
 			}
+			if (zk.gecko) { 
+				var p = $e(getZKAttr(n, "vparent"));
+				if (p) {
+					n = p;
+					continue;
+				}
+			}
+			n = n.parentNode;
+		}
 	}
 	if (!n) return "";
 	var j = n.lastIndexOf('!');
@@ -109,9 +118,18 @@ function $childExterior(cmp) {
 /** Returns the nearest parent element, including el itself, with the specified type.
  */
 function $parentByType(el, type) {
-	for (; el; el = el.parentNode)
+	while (el) {
 		if ($type(el) == type)
 			return el;
+		if (zk.gecko) { 
+			var p = $e(getZKAttr(el, "vparent"));
+			if (p) {
+				el = p;
+				continue;
+			}
+		}
+		el = el.parentNode;
+	}
 	return null;
 };
 /** Returns the tag name in the upper case. */
@@ -121,9 +139,18 @@ function $tag(el) {
 /** Returns the nearest parent element, including el itself, with the specified type.
  */
 function $parentByTag(el, tagName) {
-	for (; el; el = el.parentNode)
+	while (el) {
 		if ($tag(el) == tagName)
 			return el;
+		if (zk.gecko) { 
+			var p = $e(getZKAttr(el, "vparent"));
+			if (p) {
+				el = p;
+				continue;
+			}
+		}
+		el = el.parentNode;
+	}
 	return null;
 };
 
@@ -135,7 +162,7 @@ function getZKAttr(el, nm) {
 	//1) getAttributeNS doesn't work properly to retrieve attribute back
 	//2) setAttribute("z:nm", val) doesn't work in Safari
 	try {
-		return el && el.getAttribute ? el.getAttribute("z:" + nm): null;
+		return el && el.getAttribute ? el.getAttribute("z." + nm): null;
 	} catch (e) {
 		return null; //IE6: failed if el is TABLE and attribute not there
 	}
@@ -143,10 +170,10 @@ function getZKAttr(el, nm) {
 /** Sets the ZK attribute of the specified name with the specified value.
  */
 function setZKAttr(el, nm, val) {
-	if (el && el.setAttribute) el.setAttribute("z:" + nm, val);
+	if (el && el.setAttribute) el.setAttribute("z." + nm, val);
 };
 function rmZKAttr(el, nm) {
-	if (el && el.removeAttribute) el.removeAttribute("z:" + nm);
+	if (el && el.removeAttribute) el.removeAttribute("z." + nm);
 };
 
 /** Returns the version of the specified module name.
@@ -200,7 +227,7 @@ zk.load = function (nm, initfn, ckfn) {
 };
 /** Loads the required module for the specified component.
  * Note: it DOES NOT check any of its children.
- * @return true if z:type is defined.
+ * @return true if z.type is defined.
  */
 zk.loadByType = function (n) {
 	var type = getZKAttr(n, "type");
@@ -414,7 +441,7 @@ zk.eval = function (n, fn, type, a0, a1, a2) {
 	return false;
 };
 
-/** Check z:type and invoke zkxxx.cleanup if declared.
+/** Check z.type and invoke zkxxx.cleanup if declared.
  */
 zk.cleanupAt = function (n) {
 	if (getZKAttr(n, "zid")) zkau.cleanzid(n);

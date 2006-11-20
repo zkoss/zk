@@ -20,11 +20,11 @@ package org.zkoss.zk.ui.ext.render;
 
 /**
  * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}
- * if a component requires the <code>z:chchg</code> command,
+ * if a component requires the <code>z.chchg</code> command,
  * when any of its children and descendants are changed.
  *
  * <p>Once a component implements this interface and {@link #isChildChangedAware}
- * returns true, the <code>z:chchg</code> command is sent to the client
+ * returns true, the <code>z.chchg</code> command is sent to the client
  * to update the visual representation. For example, a grid uses two tables
  * to implement header and body, and then it has to re-align the header
  * once any of its descendants is changed.
@@ -32,7 +32,7 @@ package org.zkoss.zk.ui.ext.render;
  * @author tomyeh
  */
 public interface ChildChangedAware {
-	/** Returns whether to send the <code>z:chchg</code> command
+	/** Returns whether to send the <code>z.chchg</code> command
 	 * to the client.
 	 */
 	public boolean isChildChangedAware();

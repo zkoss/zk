@@ -333,7 +333,7 @@ zk.focusDown = function (el) {
 		|| zk._focusDown(el, new Array("A"), false);
 };
 /** checkA whether to check the A tag specially (i.e., focus if one ancestor
- * has z:type).
+ * has z.type).
  */
 zk._focusDown = function (el, match, checkA) {
 	if (!el) return false;
