@@ -25,8 +25,6 @@ zk = {};
 zk.build = "2W"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
-//zk.namespace = "http://www.zkoss.org/2005/zk";
-
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();
 zk.safari = zk.agent.indexOf("safari") != -1;
@@ -130,12 +128,12 @@ function $parentByTag(el, tagName) {
 };
 
 /** Returns the ZK attribute of the specified name.
- * Note: the name space of ZK attributes is zk.namespace
+ * Note: the name space of ZK attributes is "http://www.zkoss.org/2005/zk"
  */
 function getZKAttr(el, nm) {
-/* 20061012: Tom Yeh: in case that xmlns is not defined, we always use z:nm
-	if (el.getAttributeNS) return el.getAttributeNS(zk.namespace, nm);
-	else*/
+	//20061120:
+	//1) getAttributeNS doesn't work properly to retrieve attribute back
+	//2) setAttribute("z:nm", val) doesn't work in Safari
 	try {
 		return el && el.getAttribute ? el.getAttribute("z:" + nm): null;
 	} catch (e) {
@@ -145,16 +143,10 @@ function getZKAttr(el, nm) {
 /** Sets the ZK attribute of the specified name with the specified value.
  */
 function setZKAttr(el, nm, val) {
-/*	if (el.setAttributeNS)
-		el.setAttributeNS(zk.namespace, nm, val);
-	else*/
-		if (el && el.setAttribute) el.setAttribute("z:" + nm, val);
+	if (el && el.setAttribute) el.setAttribute("z:" + nm, val);
 };
 function rmZKAttr(el, nm) {
-/*	if (el.removeAttributeNS)
-		el.removeAttributeNS(zk.namespace, nm);
-	else*/
-		if (el && el.removeAttribute) el.removeAttribute("z:" + nm);
+	if (el && el.removeAttribute) el.removeAttribute("z:" + nm);
 };
 
 /** Returns the version of the specified module name.

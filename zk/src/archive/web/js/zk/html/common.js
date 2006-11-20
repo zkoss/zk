@@ -1370,3 +1370,53 @@ zk.formatDate = function (val, fmt) {
 zk.getIntAttr = function (el, nm) {
 	return parseInt(el.getAttribute(nm) || "0", 10);
 };
+
+//selection//
+zk.clearSelection = function(){
+	try{
+		if(window["getSelection"]){ 
+			if(zk.safari){
+				window.getSelection().collapse();
+			}else{
+				window.getSelection().removeAllRanges();
+			}
+		}else if(document.selection){
+			if(document.selection.empty){
+				document.selection.empty();
+			}else if(document.selection.clear){
+				document.selection.clear();
+			}
+		}
+		return true;
+	} catch (e){
+		return false;
+	}
+}
+/** Disable whether the specified element is selectable. */
+zk.disableSelection = function(el){
+	el = $e(el)||document.body;
+	if(zk.gecko){
+		el.style.MozUserSelect = "none";
+	}else if(zk.safari){
+		el.style.KhtmlUserSelect = "none"; 
+	}else if(zk.ie){
+		el.onselectstart = function () {return false;};
+	}else{
+		return false;
+	}
+	return true;
+}
+/** Enables whether the specified element is selectable. */
+zk.enableSelection = function(el){
+	el = $e(el)||document.body;
+	if(zk.gecko){ 
+		el.style.MozUserSelect = ""; 
+	}else if(zk.safari){
+		el.style.KhtmlUserSelect = "";
+	}else if(zk.ie){
+		el.onselectstart = null;
+	}else{
+		return false;
+	}
+	return true;
+}
