@@ -311,4 +311,12 @@ public class Listitem extends XulElement {
 		}
 		return sb.toString();
 	}
+	//Clone//
+	public Object clone() {
+		final Listitem clone = (Listitem)super.clone();
+		clone._index = -1;
+			//note: we have to reset, since listbox.insertBefore assumes
+			//that a parent-less listitem's index is -1
+		return clone;
+	}
 }

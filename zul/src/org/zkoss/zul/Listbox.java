@@ -1402,10 +1402,12 @@ implements java.io.Serializable, RenderOnDemand {
 	 * -1 means process all of them
 	 */
 	private void afterUnmarshal(int cnt) {
+		int index = 0;
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Listitem) {
 				final Listitem li = (Listitem)child;
+				li.setIndex(index ++); //since Listitem.clone() resets index
 				if (li.isSelected()) {
 					_selItems.add(li);
 					if (--cnt == 0) break;
