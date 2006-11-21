@@ -235,19 +235,9 @@ var orgpos = element.style.position; //Tom M. Yeh, Potix: Bug 1538506
         new Effect.Move(element, { x: -left_offset, y: -top_offset, duration: dur,
           queue: {scope:'_draggable', position:'end'}
         });
-//Tom M. Yeh, Potix: Bug 1538506
-//In IE, we have to detach and attach. We cannot simply restore position!!
-//Otherwise, a strange bar appear
-if (zdd && orgpos != 'absolute' && orgpos != 'relative') {
-	setTimeout( function () {
-		var p = element.parentNode;
-		var n = element.nextSibling;
-		Element.remove(element);
-		element.style.position = orgpos;
-		if (n) p.insertBefore(element, n);
-		else p.appendChild(element);
-	}, dur * 1000 + 10);
-}
+//Tom M. Yeh, Potix: Bug 1538506: a strange bar appear in IE
+if (zdd && orgpos != 'absolute' && orgpos != 'relative')
+	setTimeout( function () {zkau._fixie4drop(element, orgpos);}, dur * 1000 + 10);
       },
       endeffect: function(element) {
         var toOpacity = typeof element._opacity == 'number' ? element._opacity : 1.0;

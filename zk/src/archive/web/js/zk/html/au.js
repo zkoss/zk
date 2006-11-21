@@ -1244,13 +1244,30 @@ zkau._revertdrag = function (n, pointer) {
 	//Note: we hve to revert when zkau._onRespReady called, since app might
 	//change n's position
 	var dg = zkau._drags[n.id];
+	var orgpos = n.style.position;
 	zkau._revertpending = function() {
+		//Bug 1599737: a strange bar appears
+		if (zk.ie && orgpos != 'absolute' && orgpos != 'relative')
+			zkau._fixie4drop(n, orgpos);
 		n.style.left = dg.z_x;
 		n.style.top = dg.z_y;
 		zkau._revertpending = null; //exec once
 	};
 	return false;
 };
+if (zk.ie) {
+//In IE, we have to detach and attach. We cannot simply restore position!!
+//Otherwise, a strange bar appear
+	zkau._fixie4drop = function (el, orgpos) {
+		var p = el.parentNode;
+		var n = el.nextSibling;
+		Element.remove(el);
+		el.style.position = orgpos;
+		if (n) p.insertBefore(el, n);
+		else p.appendChild(el);
+	};
+}
+
 zkau._enddrag = function (n, pointer) {
 	zkau._cleanLastDrop(zkau._drags[n.id]);
 	var e = zkau._getDrop(n, pointer);
