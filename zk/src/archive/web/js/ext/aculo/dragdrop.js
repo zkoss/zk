@@ -1,11 +1,10 @@
-// script.aculo.us dragdrop.js v1.6.4, Wed Sep 06 11:30:58 CEST 2006
+// script.aculo.us dragdrop.js v1.6.5, Wed Nov 08 14:17:49 CET 2006
 
-// Copyright (c) 2005 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//           (c) 2005 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)
+// Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
+//           (c) 2005, 2006 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)
 // 
-// See scriptaculous.js for full license.
-
-/*--------------------------------------------------------------------------*/
+// script.aculo.us is freely distributable under the terms of an MIT-style license.
+// For details, see the script.aculo.us web site: http://script.aculo.us/
 
 if(typeof Effect == 'undefined')
   throw("dragdrop.js requires including script.aculo.us' effects.js library");
@@ -268,7 +267,7 @@ if (zdd && orgpos != 'absolute' && orgpos != 'relative') {
       delay: 0
     };
     
-    if(arguments[1] && typeof arguments[1].endeffect == 'undefined')
+    if(!arguments[1] || typeof arguments[1].endeffect == 'undefined')
       Object.extend(defaults, {
         starteffect: function(element) {
           element._opacity = Element.getOpacity(element);
@@ -281,10 +280,9 @@ if (zdd && orgpos != 'absolute' && orgpos != 'relative') {
 
     this.element = $(element);
     
-    if(options.handle && (typeof options.handle == 'string')) {
-      var h = Element.childrenWithClassName(this.element, options.handle, true);
-      if(h.length>0) this.handle = h[0];
-    }
+    if(options.handle && (typeof options.handle == 'string'))
+      this.handle = this.element.down('.'+options.handle, 0);
+    
     if(!this.handle) this.handle = $(options.handle);
     if(!this.handle) this.handle = this.element;
     
@@ -345,16 +343,16 @@ zkau.autoZIndex(src, false, true);
     this.dragging = true;
     
     if(this.options.ghosting) {
-    	//Tom M. Yeh, Potix: ghosting is controllable
-    	var ghosting = true;
-		if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, true);
-		if (ghosting) {
+//Tom M. Yeh, Potix: ghosting is controllable
+var ghosting = true;
+if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, true);
+if (ghosting) {
       this._clone = this.element.cloneNode(true);
 this.z_orgpos = this.element.style.position; //Tom M. Yeh, Potix: Bug 1514789
 if (this.z_orgpos != 'absolute')
       Position.absolutize(this.element);
       this.element.parentNode.insertBefore(this._clone, this.element);
-		}
+}
     }
     
     if(this.options.zindex) { //Tom M. Yeh, Poitx: after ghosting
@@ -395,12 +393,8 @@ if (this.z_orgpos != 'absolute')
         with(this._getWindowScroll(this.options.scroll)) { p = [ left, top, left+width, top+height ]; }
       } else {
         p = Position.page(this.options.scroll);
-        p[0] += this.options.scroll.scrollLeft;
-        p[1] += this.options.scroll.scrollTop;
-        
-        p[0] += (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0);
-        p[1] += (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0);
-        
+        p[0] += this.options.scroll.scrollLeft + Position.deltaX;
+        p[1] += this.options.scroll.scrollTop + Position.deltaY;
         p.push(p[0]+this.options.scroll.offsetWidth);
         p.push(p[1]+this.options.scroll.offsetHeight);
       }
@@ -422,17 +416,17 @@ if (this.z_orgpos != 'absolute')
     this.dragging = false;
 
     if(this.options.ghosting) {
-    	//Tom M. Yeh: Potix: ghosting is controllable
-    	var ghosting = true;
-		if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, false);
-		if (ghosting) {
+//Tom M. Yeh: Potix: ghosting is controllable
+var ghosting = true;
+if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, false);
+if (ghosting) {
 if (this.z_orgpos != "absolute") { //Tom M. Yeh, Potix: Bug 1514789
       Position.relativize(this.element);
 this.element.style.position = this.z_orgpos;
 }
       Element.remove(this._clone);
       this._clone = null;
-		}
+}
     }
 
     if(success) Droppables.fire(event, this.element);
@@ -477,7 +471,6 @@ this.element.style.position = this.z_orgpos;
     var pos = Position.cumulativeOffset(this.element);
     if(this.options.ghosting) {
       var r   = Position.realOffset(this.element);
-      window.status = r.inspect();
       pos[0] += r[0] - Position.deltaX; pos[1] += r[1] - Position.deltaY;
     }
     
@@ -510,6 +503,7 @@ this.element.style.position = this.z_orgpos;
 if (this.z_scrl) {
 	p[0] -= this.z_scrl[0]; p[1] -= this.z_scrl[1];
 }
+
     var style = this.element.style;
     if((!this.options.constraint) || (this.options.constraint=='horizontal'))
       style.left = p[0] + "px";
@@ -593,14 +587,16 @@ if (this.z_scrl) {
 }
 
 /*--------------------------------------------------------------------------*/
-//Tom M. Yeh, Potix: remove Sortable
+/* Tom M. Yeh, Potix: remove Sortable
+var Sortable = {
+...
+}
+*/
 
-/* Returns true if child is contained within element */
+// Returns true if child is contained within element
 Element.isParent = function(child, element) {
   if (!child.parentNode || child == element) return false;
-
   if (child.parentNode == element) return true;
-
   return Element.isParent(child.parentNode, element);
 }
 
@@ -623,8 +619,10 @@ Element.findChildren = function(element, only, recursive, tagName) {
 }
 
 Element.offsetSize = function (element, type) {
-  if (type == 'vertical' || type == 'height')
-    return zk.offsetHeight(element); //Tom M. Yeh, Potix: safari bug
-  else
-    return zk.offsetWidth(element); //Tom M. Yeh, Potix: safari bug
+//Tom M. Yeh, Potix: safari bug
+if (type == 'vertical' || type == 'height')
+  return zk.offsetHeight(element);
+else
+  return zk.offsetWidth(element);
+  //return element['offset' + ((type=='vertical' || type=='height') ? 'Height' : 'Width')];
 }
