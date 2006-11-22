@@ -190,13 +190,19 @@ zk.center = function (el) {
 zk.getDimension = function (el) {
 	var wd = zk.offsetWidth(el), hgh;
 	if (el.style.display == "none" && !wd) {
-		if (el.style.left == "" || el.style.left == "auto") el.style.left = "0";
-		if (el.style.top == "" || el.style.top == "auto") el.style.top = "0";
+		var fixleft = el.style.left == "" || el.style.left == "auto";
+		if (fixleft) el.style.left = "0";
+		var fixtop = el.style.top == "" || el.style.top == "auto";
+		if (fixtop) el.style.top = "0";
 			//IE6/gecko: otherwise, cumulativeOffset is wrong
+
 		el.style.display = "";
 		wd = zk.offsetWidth(el);
 		hgh = zk.offsetHeight(el);
 		el.style.display = "none";
+
+		if (fixleft) el.style.left = "";
+		if (fixtop) el.style.top = "";
 	} else {
 		hgh = zk.offsetHeight(el);
 	}
@@ -274,6 +280,7 @@ zk.getStyleOffset = function (el) {
  * style.left/top is still relevant to original offsetParent
  */
 zk.toStylePos = function (el, x, y) {
+	var fixleft, fixtop;
 	if (zk.opera) {
 		//Opera:
 		//1)we have to reset left/top. Or, the second call position wrong
@@ -283,9 +290,9 @@ zk.toStylePos = function (el, x, y) {
 		el.style.left = el.style.top = "0";
 	} else {
 		//IE/gecko fix: otherwise, toStylePos won't correct
-		var fixleft = el.style.left == "" || el.style.left == "auto";
+		fixleft = el.style.left == "" || el.style.left == "auto";
 		if (fixleft) el.style.left = "0";
-		var fixtop = el.style.top == "" || el.style.top == "auto";
+		fixtop = el.style.top == "" || el.style.top == "auto";
 		if (fixtop) el.style.top = "0";
 	}
 
