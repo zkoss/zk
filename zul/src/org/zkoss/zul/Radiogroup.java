@@ -35,6 +35,10 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A radio group.
  *
+ * <p>Note: To support the versatile layout, a radio group accepts any kind of
+ * children, including {@link Radio}. On the other hand, the parent of
+ * a radio, if any, must be a radio group.
+ *
  * @author tomyeh
  */
 public class Radiogroup extends XulElement {
