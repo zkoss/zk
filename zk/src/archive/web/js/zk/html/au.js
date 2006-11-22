@@ -670,14 +670,18 @@ zkau.floatWnd = function (cmp, starteffect, endeffect) {
 	if (cmp) {
 		var handle = $e(cmp.id + "!caption");
 		if (handle) {
+			//Bug 1601000: Position.positionedOffset not working if not visible
+			if (!zk.ie && cmp.style.display == "none") cmp.style.display = "";
+
+			//Bug 1568393: don't set "absolute" directly
 			Position.absolutize(cmp);
-				//Bug 1568393: don't set "absolute" directly
+
 			zkau.initMoveable(cmp, {
 				handle: handle,
 				starteffect: starteffect || Prototype.emptyFunction,
 				change: zkau.hideCovered,
 				endeffect: endeffect || Prototype.emptyFunction});
-			//we don't use change because it is called too frequently
+			//we don't use options.change because it is called too frequently
 		}
 	}
 };
