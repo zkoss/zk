@@ -41,7 +41,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Label extends XulElement {
 	private String _value = "";
 	private int _maxlength;
-	private boolean _pre, _hyphen;
+	private boolean _pre, _hyphen, _multiline;
 
 	public Label() {
 	}
@@ -78,7 +78,7 @@ public class Label extends XulElement {
 	 * <dt>hyphen="false" and pre="true"</dt>
 	 * <dd>maxlength has no effect.</dd>
 	 * <dt>maxlength=0</dt>
-	 * <dd>hypen has no effect</dd>
+	 * <dd>hyphen has no effect</dd>
 	 * </dl>
 	 */
 	public int getMaxlength() {
@@ -105,6 +105,10 @@ public class Label extends XulElement {
 	 *
 	 * <p>See {@link #getMaxlength} for the relationship among pre, hyphen and
 	 * maxlength.
+	 *
+	 * <p>Note: the new line is preserved either {@link #isPre} or
+	 * {@link #isMultiline} returns true.
+	 * In other words, <code>pre</code> implies <code>multiline</code>
 	 */
 	public boolean isPre() {
 		return _pre;
@@ -118,6 +122,25 @@ public class Label extends XulElement {
 	public void setPre(boolean pre) {
 		if (_pre != pre) {
 			_pre = pre;
+			invalidate();
+		}
+	}
+	/** Returns whether to preserve the new line and the white spaces at the
+	 * begining of each line.
+	 *
+	 * <p>Note: the new line is preserved either {@link #isPre} or
+	 * {@link #isMultiline} returns true.
+	 * In other words, <code>pre</code> implies <code>multiline</code>
+	 */
+	public boolean isMultiline() {
+		return _multiline;
+	}
+	/** Sets whether to preserve the new line and the white spaces at the
+	 * begining of each line.
+	 */
+	public void setMultiline(boolean multiline) {
+		if (_multiline != multiline) {
+			_multiline = multiline;
 			invalidate();
 		}
 	}
@@ -162,11 +185,11 @@ public class Label extends XulElement {
 	public String getEncodedText() {
 		StringBuffer sb = null;
 		final int len = _value.length();
-		if (_pre) {
+		if (_pre || _multiline) {
 			for (int j = 0, k;; j = k + 1) {
 				k = _value.indexOf('\n', j);
 				if (k < 0) {
-					sb = encodeText(sb, j, len);
+					sb = encodeLine(sb, j, len);
 					break;
 				}
 
@@ -174,26 +197,27 @@ public class Label extends XulElement {
 					assert j == 0;
 					sb = new StringBuffer(_value.length() + 10);
 				}
-				sb = encodeText(sb, j,
+				sb = encodeLine(sb, j,
 					k > j && _value.charAt(k - 1) == '\r' ? k - 1: k);
 				sb.append("<br/>");
 			}
 		} else {
-			sb = encodeText(null, 0, len);
+			sb = encodeLine(null, 0, len);
 		}
 		return sb != null ? sb.toString(): _value;
 	}
 	/*
 	 * @param k excluded
 	 */
-	private StringBuffer encodeText(StringBuffer sb, int b, int e) {
+	private StringBuffer encodeLine(StringBuffer sb, int b, int e) {
+		boolean prews = _pre || _multiline;
 		int maxword = 0;
 		if (_maxlength > 0) {
 			int deta = e - b;
 			if (deta > _maxlength) {
 				if (_hyphen) {
 					maxword = _maxlength;
-				} else if (!_pre) {
+				} else if (!prews) {
 					assert b == 0;
 					int j = _maxlength;
 					while (j > 0 && Character.isWhitespace(_value.charAt(j - 1)))
@@ -209,11 +233,13 @@ public class Label extends XulElement {
 			String val = null;
 			if (cc == '\t') {
 				cnt = 0;
-				if (_pre) val = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+				if (prews) val = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 			} else if (cc == ' ' || cc == '\f') {
 				cnt = 0;
-				if (_pre) val = "&nbsp;";
+				if (prews) val = "&nbsp;";
 			} else {
+				if (_multiline) prews = false;
+
 				if (maxword > 0  && ++cnt > maxword) {
 					sb = alloc(sb, j);
 					int ofs = -1;
