@@ -110,8 +110,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	find -name CVS | xargs rm -rf
 	find -name .svn | xargs rm -rf
 
-	echo Output ${prjnm}.tar.gz
-	tar zcf ${prjnm}.tar.gz $prjnm
+	if [ "$target" == "official" ] ; then
+		echo Output ${prjnm}.tar.gz
+		tar zcf ${prjnm}.tar.gz $prjnm
+	fi
 
 	echo Output ${prjnm}.zip
 	zip -qr9 ${prjnm}.zip $prjnm
