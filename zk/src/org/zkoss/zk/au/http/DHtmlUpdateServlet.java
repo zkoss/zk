@@ -61,6 +61,9 @@ import org.zkoss.zk.au.CommandNotFoundException;
 
 /**
  * Used to receive command from the server and send result back to client.
+ * Though it is called
+ * DHtmlUpdateServlet, it is used to serve all kind of HTTP-based clients,
+ * including html, lcd and others (see {@link Desktop#getClientType}.
  *
  * <p>Design decision: it is better to use independent servlets for
  * /web, /upload and /view. However, to simplify the configuration,

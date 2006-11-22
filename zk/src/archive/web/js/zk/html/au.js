@@ -20,7 +20,7 @@ zkau = {};
 
 if (!zkau._reqs) {
 	zkau._reqs = new Array(); //Ajax requests
-	zkau._respXmls = new Array(); //responses in XML
+	zkau._respQue = new Array(); //responses in XML
 	zkau._evts = new Array();
 	zkau._js4resps = new Array(); //JS to eval upon response
 	zkau._metas = {}; //(id, meta)
@@ -32,6 +32,7 @@ if (!zkau._reqs) {
 	zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
 	zkau.floats = new Array(); //popup of combobox, bandbox, datebox...
 	zkau._onsends = new Array(); //JS called before zkau._sendNow
+	zkau._seqId = 0;
 
 	zk.addInit(function () {
 		zk.listen(document, "keydown", zkau._onDocKeydown);
@@ -106,6 +107,7 @@ zkau.sendRemove = function (uuid) {
 /** Called when the response is received from zkau._reqs.
  */
 zkau._onRespReady = function () {
+	var que = zkau._respQue;
 	while (zkau._reqs.length > 0) {
 		var req = zkau._reqs.shift();
 		try {
@@ -118,10 +120,25 @@ zkau._onRespReady = function () {
 				//revert any pending when the first response is received
 
 			if (req.status == 200) {
-				var xmls = req.responseXML.getElementsByTagName("r");
-				if (xmls)
-					for (var j = 0; j < xmls.length; ++j)
-						zkau._respXmls.push(xmls[j]);
+				var sid = req.responseXML.getElementsByTagName("sid");
+				if (sid && sid.length) {
+					sid = parseInt(zk.getElementValue(sid[0]));
+					if (isNaN(sid) || sid < 0 || sid > 1024) sid = null; //ignore if error sid
+				} else
+					sid = null;
+
+				//locate whether to insert the response by use of sid
+				var ofs = que.length;
+				if (sid != null)
+					while (ofs > 0 && que[ofs - 1].sid != null
+					&& zkau.cmprsid(sid, que[ofs - 1].sid) < 0)
+						--ofs;
+
+				var resp = {
+					sid: sid, xmls: req.responseXML.getElementsByTagName("r")
+				};
+				if (ofs == que.length) que.push(resp);
+				else que.splice(ofs, 0, resp); //insert
 			} else {
 				zk.error(mesg.FAILED_TO_RESPONSE+req.statusText);
 				zkau._cleanupOnFatal();
@@ -138,8 +155,15 @@ zkau._onRespReady = function () {
 	zkau._doQueResps();
 	zkau._checkProgress();
 };
+/** Returns 1 if a > b, -1 if a < b, or 0 if a == b.
+ * Note: range of sid is 0 ~ 1023.
+ */
+zkau.cmprsid = function (a, b) {
+	var dt = a - b;
+	return dt == 0 ? 0: (dt > 0 && dt < 512) || dt < -512 ? 1: -1
+};
 zkau._checkProgress = function () {
-	if (zkau._respXmls.length == 0 && zkau._reqs.length == 0)
+	if (zkau._respQue.length == 0 && zkau._reqs.length == 0)
 		zk.progressDone();
 };
 
@@ -266,21 +290,40 @@ zkau._evalOnResponse = function () {
 	}
 };
 
-/** Process the responses queued in zkau._respXmls. */
+/** Process the responses queued in zkau._respQue. */
 zkau._doQueResps = function () {
 	var ex;
-	for (var j = 0; zkau._respXmls.length > 0;) {
+	var que = zkau._respQue;
+	for (var j = 0; que.length > 0;) {
 		if (zk.loading) {
 			if (!zkau._procadded) {
 				zkau._procadded = true;
 				zk.addInit(zkau._doQueResps); //Note: when callback, zk.loading is false
 			}
-			return; //wait until the loading is done
+			break; //wait until the loading is done
 		}
 		zkau._procadded = false;
 
 		try {
-			zkau._doResp(zkau._respXmls.shift());
+			var resp = que.shift();
+			if (resp.sid == null) {
+				zkau._doResps(resp.xmls);
+			} else if (resp.sid == zkau._seqId) {
+				if (++zkau._seqId == 1024) zkau._seqId = 0;
+				zkau._doResps(resp.xmls);
+			} else {
+				que.unshift(resp); //undo
+
+				var oldId = zkau._seqId;
+				setTimeout(function () {
+					if (que.length && zkau._seqId == oldId) { //no new processed
+						zkau._seqId = que[0].sid;
+							//skip to the first ID if timeout
+						zkau._doQueResps();
+					}
+				}, 3600);
+				break; //wait for timeout, or arrival of another response
+			}
 		} catch (e) {
 			if (!ex) ex = e;
 		}
@@ -295,9 +338,15 @@ zkau._doQueResps = function () {
 	if (ex) throw ex;
 };
 /** Process the specified response in XML. */
-zkau._doResp = function (respXml) {
-	var cmd = respXml.getElementsByTagName("c")[0];
-	var data = respXml.getElementsByTagName("d");
+zkau._doResps = function (xmls) {
+	if (xmls)
+		for (var j = 0; j < xmls.length; ++j)
+			zkau._doResp1(xmls[j]);
+};
+/** Process the specified response in XML. */
+zkau._doResp1 = function (xml) {
+	var cmd = xml.getElementsByTagName("c")[0];
+	var data = xml.getElementsByTagName("d");
 	if (!cmd) {
 		zk.error(mesg.ILLEGAL_RESPONSE+"Command required");
 		return;

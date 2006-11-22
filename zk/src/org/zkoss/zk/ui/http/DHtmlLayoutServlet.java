@@ -53,7 +53,9 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
- * Used to process the request for a ZUML page.
+ * Used to process the request for a ZUML page. Though it is called
+ * DHtmlLayoutServlet, it is used to serve all kind of HTTP-based clients,
+ * including html, lcd and others (see {@link Desktop#getClientType}.
  *
  * @author tomyeh
  */

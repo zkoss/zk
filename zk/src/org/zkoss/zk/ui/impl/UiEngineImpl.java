@@ -489,7 +489,7 @@ public class UiEngineImpl implements UiEngine {
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
-			final RequestQueue rque = ((DesktopCtrl)exec.getDesktop()).getRequestQueue();
+			final RequestQueue rque = ((DesktopCtrl)desktop).getRequestQueue();
 			final List errs = new LinkedList();
 			final long tmexpired = System.currentTimeMillis() + 3000;
 				//Tom Yeh: 20060120
@@ -564,6 +564,7 @@ public class UiEngineImpl implements UiEngine {
 				if (rque.hasRequest())
 					responses.add(new AuEcho());
 
+				responseSequenceId(desktop, out);
 				response(responses, out);
 
 				if (log.debugable())
@@ -574,8 +575,10 @@ public class UiEngineImpl implements UiEngine {
 			final AbortingReason aborting = uv.getAbortingReason();
 			if (aborting != null) {
 				final AuResponse abtresp = aborting.getResponse();
-				if (abtresp != null)
+				if (abtresp != null) {
+					responseSequenceId(desktop, out);
 					response(abtresp, out);
+				}
 			}
 
 			out.flush();
@@ -883,37 +886,42 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Generate output from a response --//
+	/** Output the next response sequence ID.
+	 */
+	private static void responseSequenceId(Desktop desktop, Writer out)
+	throws IOException {
+		final String attr = "org.zkoss.zk.ui.respId";
+		final Integer val = (Integer)desktop.getAttribute(attr);
+		final int i =
+			val == null ? 0: (val.intValue() + 1) & 0x3ff; //range: 0 ~ 1023
+		desktop.setAttribute(attr, new Integer(i));
+
+		out.write("\n<sid>");
+		out.write(Integer.toString(i));
+		out.write("</sid>");
+	}
 	public void response(AuResponse response, Writer out)
 	throws IOException {
-		final StringBuffer outsb = new StringBuffer(1024*4);
-		output(response, outsb);
-		out.write(outsb.toString());
-	}
-	public void response(List responses, Writer out)
-	throws IOException {
-		final StringBuffer outsb = new StringBuffer(1024*8);
-		for (Iterator it = responses.iterator(); it.hasNext();) {
-			final AuResponse response = (AuResponse)it.next();
-			output(response, outsb);
-		}
-		if (D.ON && log.finerable()) log.finer(outsb);
-		out.write(outsb.toString());
-	}
-	private static void output(AuResponse response, StringBuffer outsb) {
-		outsb.append("\n<r><c>")
-			.append(response.getCommand())
-			.append("</c>");
+		out.write("\n<r><c>");
+		out.write(response.getCommand());
+		out.write("</c>");
 		final String[] data = response.getData();
 		if (data != null) {
 			for (int j = 0; j < data.length; ++j) {
-				outsb.append("\n<d>");
-				encodeXML(outsb, data[j]);
-				outsb.append("</d>");
+				out.write("\n<d>");
+				encodeXML(data[j], out);
+				out.write("</d>");
 			}
 		}
-		outsb.append("\n</r>");
+		out.write("\n</r>");
 	}
-	private static void encodeXML(StringBuffer outsb, String data) {
+	public void response(List responses, Writer out)
+	throws IOException {
+		for (Iterator it = responses.iterator(); it.hasNext();)
+			response((AuResponse)it.next(), out);
+	}
+	private static void encodeXML(String data, Writer out)
+	throws IOException {
 		if (data == null || data.length() == 0)
 			return;
 
@@ -925,21 +933,24 @@ public class UiEngineImpl implements UiEngine {
 		//	if CDATA is not used
 		int j = 0;
 		for (int k; (k = data.indexOf("]]>", j)) >= 0;) {
-			encodeByCData(outsb, data.substring(j, k));
-			outsb.append("]]&gt;");
+			encodeByCData(data.substring(j, k), out);
+			out.write("]]&gt;");
 			j = k + 3;
 		}
-		encodeByCData(outsb, data.substring(j));
+		encodeByCData(data.substring(j), out);
 	}
-	private static void encodeByCData(StringBuffer outsb, String data) {
+	private static void encodeByCData(String data, Writer out)
+	throws IOException {
 		for (int j = data.length(); --j >= 0;) {
 			final char cc = data.charAt(j);
 			if (cc == '<' || cc == '>' || cc == '&') {
-				outsb.append("<![CDATA[").append(data).append("]]>");
+				out.write("<![CDATA[");
+				out.write(data);
+				out.write("]]>");
 				return;
 			}
 		}
-		outsb.append(data);
+		out.write(data);
 	}
 
 	public void activate(Execution exec) {
