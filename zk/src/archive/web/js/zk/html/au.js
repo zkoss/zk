@@ -108,7 +108,7 @@ zkau.sendRemove = function (uuid) {
  */
 zkau._onRespReady = function () {
 	var que = zkau._respQue;
-	while (zkau._reqs.length > 0) {
+	while (zkau._reqs.length) {
 		var req = zkau._reqs.shift();
 		try {
 			if (req.readyState != 4) {
@@ -324,7 +324,7 @@ zkau._evalOnResponse = function () {
 zkau._doQueResps = function () {
 	var ex;
 	var que = zkau._respQue;
-	for (var j = 0; que.length > 0;) {
+	for (var j = 0; que.length;) {
 		if (zk.loading) {
 			if (!zkau._procadded) {
 				zkau._procadded = true;
