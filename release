@@ -77,6 +77,57 @@ if [ "$target" == "official" ]  ; then
 	./build zkdemo zkdemos
 fi
 
+#Prepare the source codes
+if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+	mkdir -p /tmp/zk/$srcnm/dist/lib/ext
+	mkdir -p /tmp/zk/$srcnm/bin
+	mkdir -p /tmp/zk/$srcnm/doc
+
+	echo Prepare ${srcnm}.tar.gz
+	cd $HOME/prj/zk1
+	cp bin/* /tmp/zk/$srcnm/bin
+	cp build* /tmp/zk/$srcnm
+	cp -rp bin /tmp/zk/$srcnm
+	cp -rp zcommon /tmp/zk/$srcnm
+	cp -rp zweb /tmp/zk/$srcnm
+	cp -rp zk /tmp/zk/$srcnm
+	cp -rp zul /tmp/zk/$srcnm
+	cp -rp zhtml /tmp/zk/$srcnm
+	cp -rp zkplus /tmp/zk/$srcnm
+	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
+
+	if [ "$target" == "official" ] ; then
+	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
+	cp dist/lib/ext/* /tmp/zk/$srcnm/dist/lib/ext
+	fi
+
+	cd /tmp/zk/$srcnm
+	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
+	#find -name CVS | xargs rm -rf
+	find -name .svn | xargs rm -rf
+
+	cd /tmp/zk
+	echo Output ${srcnm}.tar.gz
+	tar zcf ${srcnm}.tar.gz $srcnm
+
+	#prepare src.jar
+	echo Prepare src.jar
+	mkdir -p src
+	cd $srcnm
+	cp -rp zcommon/codegen/* zcommon/src/* ../src
+	cp -rp zweb/codegen/* zweb/src/* ../src
+	cp -rp zul/codegen/* zul/src/* ../src
+	cp -rp zhtml/codegen/* zhtml/src/* ../src
+	cp -rp zkplus/codegen/* zkplus/src/* ../src
+	cp -rp zk/codegen/* zk/src/* ../src
+	cd ..
+	rm -rf $srcnm
+	rm -rf src/archive src/export
+	echo Output src.jar
+	jar cfM src.jar -C src .
+	rm -rf src
+fi
+
 #Prepare the binary release
 if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$prjnm/dist/lib/ext
@@ -89,6 +140,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$prjnm/demo/src/MyApp/WebContent
 
 	cd $HOME/prj/zk1
+	mv /tmp/zk/src.jar /tmp/zk/$prjnm
 	cp dist/lib/ext/bsh.jar /tmp/zk/$prjnm/dist/lib/ext
 	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$prjnm/dist/lib/ext
 	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar dist/lib/ext/commons-el.jar /tmp/zk/$prjnm/dist/lib/ext
@@ -136,40 +188,6 @@ if [ "$target" == "official" ] ; then
 	echo Ouput ${demonm}.zip
 	zip -qr9 ${demonm}.zip $demonm
 	rm -rf $demonm
-fi
-
-#Prepare the source codes
-if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
-	mkdir -p /tmp/zk/$srcnm/dist/lib/ext
-	mkdir -p /tmp/zk/$srcnm/bin
-	mkdir -p /tmp/zk/$srcnm/doc
-
-	cd $HOME/prj/zk1
-	cp bin/* /tmp/zk/$srcnm/bin
-	cp build* /tmp/zk/$srcnm
-	cp -rp bin /tmp/zk/$srcnm
-	cp -rp zcommon /tmp/zk/$srcnm
-	cp -rp zweb /tmp/zk/$srcnm
-	cp -rp zk /tmp/zk/$srcnm
-	cp -rp zul /tmp/zk/$srcnm
-	cp -rp zhtml /tmp/zk/$srcnm
-	cp -rp zkplus /tmp/zk/$srcnm
-	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
-
-	if [ "$target" == "official" ] ; then
-	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
-	cp dist/lib/ext/* /tmp/zk/$srcnm/dist/lib/ext
-	fi
-
-	cd /tmp/zk/$srcnm
-	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
-	#find -name CVS | xargs rm -rf
-	find -name .svn | xargs rm -rf
-
-	cd /tmp/zk
-	echo Output ${srcnm}.tar.gz
-	tar zcf ${srcnm}.tar.gz $srcnm
-	rm -rf $srcnm
 fi
 
 #Prepare the doc
