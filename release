@@ -140,7 +140,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$prjnm/demo/src/MyApp/WebContent
 
 	cd $HOME/prj/zk1
-	mv /tmp/zk/src.jar /tmp/zk/$prjnm
+	mv -f /tmp/zk/src.jar /tmp/zk/$prjnm
 	cp dist/lib/ext/bsh.jar /tmp/zk/$prjnm/dist/lib/ext
 	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$prjnm/dist/lib/ext
 	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar dist/lib/ext/commons-el.jar /tmp/zk/$prjnm/dist/lib/ext
