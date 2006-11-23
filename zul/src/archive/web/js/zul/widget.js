@@ -41,6 +41,14 @@ zkTxbox.init = function (cmp) {
  * Note: we don't use onChange because it won't work if user uses IE' auto-fill
  */
 zkTxbox.onblur = function (inp) {
+	//stop the scanning of onChaning first
+	var interval = zkau._intervals[inp.id];
+	if (interval) {
+		clearInterval(interval);
+		delete zkau._intervals[inp.id];
+	}
+	if (inp.removeAttribute) inp.removeAttribute("zk_last_changing");
+
 	zkTxbox.updateChange(inp, zkTxbox._noonblur(inp));
 	zkau.onblur(inp); //fire onBlur after onChange
 };
@@ -70,10 +78,6 @@ zkTxbox.updateChange = function (inp, noonblur) {
 			return false; //failed
 		}
 		zkVld.closeErrbox(inp.id);
-
-		if (inp.removeAttribute) inp.removeAttribute("zk_last_changing");
-		var interval = zkau._intervals[inp.id];
-		if (interval) clearInterval(interval);
 	}
 
 	if (!noonblur) zkTxbox.onupdate(inp);
@@ -133,8 +137,9 @@ zkTxbox.onfocus = function (inp) {
 	//handling onChanging
 	if (inp && inp.id && getZKAttr($outer(inp), "onChanging")) {
 		inp.setAttribute("zk_last_changing", inp.value);
-		zkau._intervals[inp.id] =
-			setInterval("zkTxbox._scanChanging('"+inp.id+"')", 500);
+		if (!zkau._intervals[inp.id])
+			zkau._intervals[inp.id] =
+				setInterval("zkTxbox._scanChanging('"+inp.id+"')", 500);
 	}
 };
 /** Scans whether any changes. */
