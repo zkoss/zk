@@ -39,7 +39,7 @@ int cnt = 0;
 			label = new Label();
 			label.setParent(row);
 			label.setValue("label2_2-" + cnt);
-			rowNr.setValue(""+serverRows.getChildren().size());
+			rowNr.setValue(cnt+":"+serverRows.getChildren().size());
 		</attribute>
 </timer>
 	<button label="Stops timer" onClick="timer.stop()"/>
