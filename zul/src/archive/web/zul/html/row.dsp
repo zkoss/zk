@@ -22,6 +22,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <tr id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="child" varStatus="status" items="${self.children}">
-	<td id="${child.uuid}!chdextr" ${u:getColAttrs(self, status.index)} class="gridev">${z:redraw(child, null)}</td>
+	<td id="${child.uuid}!chdextr"${u:getColAttrs(self, status.index)}>${z:redraw(child, null)}</td>
 	</c:forEach>
 </tr>

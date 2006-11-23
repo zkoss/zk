@@ -274,12 +274,12 @@ tr.itemsel a:hover {
 	text-decoration: underline;
 }
 
-td.gridev, td.gridod { <%-- gridev and gridod always used. --%>
+td.gridev, td.gridod, td.grid-no-stripedev, td.grid-no-stripedod {
 	background: #FFF; border-bottom: none; border-left: 1px solid #FFF;
 	border-right: 1px solid #CCC; border-top: 1px solid #DDD; padding: 2px;
 	font-size: small; font-weight: normal;
 }
-td.gridod { <%-- gridod always used for odd row. --%>
+td.gridod {
 	background: #E8EFEA;
 }
 

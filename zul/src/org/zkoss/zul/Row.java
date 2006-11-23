@@ -209,9 +209,20 @@ public class Row extends XulElement {
 			}
 		}
 
+		//Note: row's sclass, if any, becomes TD's sclass. Otherwise,
+		//grid.getSclass() + "ev" is used
+		String sclass = getSclass();
 		String colattrs = null, wd = null, hgh = null;
 		final Grid grid = getGrid();
 		if (grid != null) {
+			if (sclass == null || sclass.length() == 0) {
+				sclass = grid.getSclass();
+				if (sclass == null || sclass.length() == 0)
+					sclass = "gridev";
+				else
+					sclass += "ev";
+			}
+
 			final Columns cols = grid.getColumns();
 			if (cols != null) {
 				final List colchds = cols.getChildren();
@@ -239,7 +250,6 @@ public class Row extends XulElement {
 			style = sb.toString();
 		}
 
-		final String sclass = getSclass();
 		if (colattrs == null && sclass == null && style.length() == 0
 		&& span == 1)
 			return "";
@@ -300,7 +310,7 @@ public class Row extends XulElement {
 	throws IOException {
 		final StringBuffer sb = new StringBuffer(128)
 			.append("<td id=\"").append(child.getUuid())
-			.append("!chdextr\" class=\"gridev\"");
+			.append("!chdextr\"");
 
 		final Grid grid = getGrid();
 		if (grid != null) {
