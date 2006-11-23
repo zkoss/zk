@@ -110,8 +110,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	echo Output ${srcnm}.tar.gz
 	tar zcf ${srcnm}.tar.gz $srcnm
 
-	#prepare src.jar
-	echo Prepare src.jar
+	#prepare zk-src.jar
+	echo Prepare zk-src.jar
 	mkdir -p src
 	cd $srcnm
 	cp -rp zcommon/codegen/* zcommon/src/* ../src
@@ -123,8 +123,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cd ..
 	rm -rf $srcnm
 	rm -rf src/archive src/export
-	echo Output src.jar
-	jar cfM src.jar -C src .
+	echo Output zk-src.jar
+	jar cfM zk-src.jar -C src .
 	rm -rf src
 fi
 
@@ -140,7 +140,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$prjnm/demo/src/MyApp/WebContent
 
 	cd $HOME/prj/zk1
-	mv -f /tmp/zk/src.jar /tmp/zk/$prjnm
+	mv -f /tmp/zk/zk-src.jar /tmp/zk/$prjnm
 	cp dist/lib/ext/bsh.jar /tmp/zk/$prjnm/dist/lib/ext
 	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$prjnm/dist/lib/ext
 	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar dist/lib/ext/commons-el.jar /tmp/zk/$prjnm/dist/lib/ext
