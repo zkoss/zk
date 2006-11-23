@@ -57,6 +57,9 @@ import org.zkoss.zul.event.PagingEvent;
  * you want to use the same controller to control multiple grids.
  *
  * <p>Default {@link #getSclass}: grid.
+ * To have a grid withoug stripping, you might specify grid-no-striped as the sclass.
+ * To have a grid without stripping and grid lines, you can specify any name,
+ * other than grid and grid-on-striped, as the sclass.
  *
  * @author tomyeh
  */
