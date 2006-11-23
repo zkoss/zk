@@ -180,8 +180,16 @@ public class Listcell extends LabelImageElement {
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
+
 		final Listheader header = getListheader();
-		return header != null ? attrs+header.getColAttrs(): attrs;
+		final String clkattrs = getAllOnClickAttrs(false);
+		if (header == null && clkattrs == null)
+			return attrs;
+
+		final StringBuffer sb = new StringBuffer(64).append(attrs);
+		if (header != null) sb.append(header.getColAttrs());
+		if (clkattrs != null) sb.append(clkattrs);
+		return sb.toString();
 	}
 
 	//-- Component --//

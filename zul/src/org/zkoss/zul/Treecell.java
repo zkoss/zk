@@ -273,9 +273,17 @@ public class Treecell extends LabelImageElement {
 		throw new UnsupportedOperationException("Set treecol's width instead");
 	}
 	public String getOuterAttrs() {
-		final Treecol col = getTreecol();
 		final String attrs = super.getOuterAttrs();
-		return col != null ? attrs+col.getColAttrs(): attrs;
+
+		final Treecol col = getTreecol();
+		final String clkattrs = getAllOnClickAttrs(false);
+		if (col == null && clkattrs == null)
+			return attrs;
+
+		final StringBuffer sb = new StringBuffer(64).append(attrs);
+		if (col != null) sb.append(col.getColAttrs());
+		if (clkattrs != null) sb.append(clkattrs);
+		return sb.toString();
 	}
 
 	//-- Component --//

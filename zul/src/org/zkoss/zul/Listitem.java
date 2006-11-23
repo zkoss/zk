@@ -284,7 +284,7 @@ public class Listitem extends XulElement {
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
+			new StringBuffer(80).append(super.getOuterAttrs());
 
 		if (inSelectMold()) {
 			HTMLs.appendAttribute(sb, "value",  Objects.toString(_value));
