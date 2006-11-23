@@ -134,9 +134,7 @@ zkau._onRespReady = function () {
 					&& zkau.cmprsid(sid, que[ofs - 1].sid) < 0)
 						--ofs;
 
-				var resp = {
-					sid: sid, xmls: req.responseXML.getElementsByTagName("r")
-				};
+				var resp = {sid: sid, cmds: zkau._parseCmds(req.responseXML)};
 				if (ofs == que.length) que.push(resp);
 				else que.splice(ofs, 0, resp); //insert
 			} else {
@@ -154,6 +152,38 @@ zkau._onRespReady = function () {
 
 	zkau._doQueResps();
 	zkau._checkProgress();
+};
+zkau._parseCmds = function (xml) {
+	var rs = xml.getElementsByTagName("r")
+	if (!rs) return null;
+
+	var cmds = new Array();
+	for (var j = 0; j < rs.length; ++j) {
+		var cmd = rs[j].getElementsByTagName("c")[0];
+		var data = rs[j].getElementsByTagName("d");
+
+		if (!cmd) {
+			zk.error(mesg.ILLEGAL_RESPONSE+"Command required");
+			continue;
+		}
+
+		cmds.push(cmd = {cmd: zk.getElementValue(cmd)});
+
+		switch (cmd.datanum = data ? data.length: 0) {
+		default: //5 or more
+			cmd.dt4 = zk.getElementValue(data[4]);
+		case 4:
+			cmd.dt3 = zk.getElementValue(data[3]);
+		case 3:
+			cmd.dt2 = zk.getElementValue(data[2]);
+		case 2:
+			cmd.dt1 = zk.getElementValue(data[1]);
+		case 1:
+			cmd.dt0 = zk.getElementValue(data[0]);
+		case 0:
+		}
+	}
+	return cmds;
 };
 /** Returns 1 if a > b, -1 if a < b, or 0 if a == b.
  * Note: range of sid is 0 ~ 1023.
@@ -306,11 +336,12 @@ zkau._doQueResps = function () {
 
 		try {
 			var resp = que.shift();
-			if (resp.sid == null) {
-				zkau._doResps(resp.xmls);
-			} else if (resp.sid == zkau._seqId) {
-				if (++zkau._seqId == 1024) zkau._seqId = 0;
-				zkau._doResps(resp.xmls);
+			if (resp.sid == zkau._seqId || resp.sid == null) {
+				if (resp.sid != null && ++zkau._seqId == 1024)
+					zkau._seqId = 0;
+
+				if (!zkau._doResps(resp.cmds))
+					que.unshift(cmds); //handle it later
 			} else {
 				que.unshift(resp); //undo
 
@@ -338,45 +369,24 @@ zkau._doQueResps = function () {
 	if (ex) throw ex;
 };
 /** Process the specified response in XML. */
-zkau._doResps = function (xmls) {
-	if (xmls)
-		for (var j = 0; j < xmls.length; ++j)
-			zkau._doResp1(xmls[j]);
-};
-/** Process the specified response in XML. */
-zkau._doResp1 = function (xml) {
-	var cmd = xml.getElementsByTagName("c")[0];
-	var data = xml.getElementsByTagName("d");
-	if (!cmd) {
-		zk.error(mesg.ILLEGAL_RESPONSE+"Command required");
-		return;
-	}
+zkau._doResps = function (cmds) {
+	if (cmds)
+		while (cmds.length) {
+			if (zk.loading)
+				return false;
 
-	cmd = zk.getElementValue(cmd);
-	var dt0, dt1, dt2, dt3, dt4;
-	var datanum = data ? data.length: 0;
-	if (datanum >= 1) {
-		dt0 = zk.getElementValue(data[0]);
-		if (datanum >= 2) {
-			dt1 = zk.getElementValue(data[1]);
-			if (datanum >= 3) {
-				dt2 = zk.getElementValue(data[2]);
-				if (datanum >= 4) {
-					dt3 = zk.getElementValue(data[3]);
-					if (datanum >= 5) dt4 = zk.getElementValue(data[4]);
-				}
+			var cmd = cmds.shift();
+			try {
+				zkau.process(cmd.cmd, cmd.datanum,
+					cmd.dt0, cmd.dt1, cmd.dt2, cmd.dt3, cmd.dt4);
+			} catch (e) {
+				zk.error(mesg.FAILED_TO_PROCESS+cmd+"\n"+e.message+"\n"+cmd.dt0+"\n"+cmd.dt1);
+				throw e;
+			} finally {
+				zkau._evalOnResponse();
 			}
 		}
-	}
-
-	try {
-		zkau.process(cmd, datanum, dt0, dt1, dt2, dt3, dt4);
-	} catch (e) {
-		zk.error(mesg.FAILED_TO_PROCESS+cmd+"\n"+e.message+"\n"+dt0+"\n"+dt1);
-		throw e;
-	} finally {
-		zkau._evalOnResponse();
-	}
+	return true;
 };
 /** Process a command.
  */
