@@ -69,6 +69,7 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 				// the transaction.
 				handleOtherException(exec, ex);
 			}
+			HibernateUtil.closeSession(); //always close it
 		}
 	}
 	

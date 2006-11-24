@@ -91,6 +91,7 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 				//ThreadLocalSessionContext#unbind() when it is empty.
 				map.remove(SOMETHING);
 			}
+			exec.removeAttribute(HIBERNATE_SESSION_MAP);
 		}
 	}
 	
