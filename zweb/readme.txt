@@ -1,4 +1,4 @@
-zweb: Potix Web Library
+zweb: The ZK Web Library
 ------------------------
 
 Libraries to develop Web applications.
