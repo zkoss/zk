@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- pom.xml
-	Purpose:
-		
-	Description:
-		
-	History:
-		Fri Nov 24 12:52:32     2006, Created by tomyeh
-
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
--->
-
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.zkoss.zk</groupId>
