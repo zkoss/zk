@@ -12,12 +12,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 
 <project>
-  <modelVersion>${version}</modelVersion>
-  <groupId>org.zkoss.zul</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.zkoss.zk</groupId>
   <artifactId>zul</artifactId>
-  <version>2.0</version>
+  <version>${version}</version>
   <packaging>jar</packaging>
-  <name>The XUL Compnents</name>
+  <name>The XUL Compnents for ZK</name>
   <url>http://www.zkoss.org</url>
   <description>The XUL components for ZK</description>
   <licenses>
@@ -32,16 +32,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   </scm>
   <dependencies>
     <dependency>
-      <groupId>org.zkoss</groupId>
+      <groupId>org.zkoss.common</groupId>
       <artifactId>zcommon</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
-      <groupId>org.zkoss.web</groupId>
+      <groupId>org.zkoss.common</groupId>
       <artifactId>zweb</artifactId>
       <version>${version}</version>
     </dependency>
-  </dependencies>
     <dependency>
       <groupId>org.zkoss.zk</groupId>
       <artifactId>zk</artifactId>
