@@ -12,10 +12,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 
 <project>
-  <modelVersion>${version}</modelVersion>
-  <groupId>org.zkoss</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.zkoss.common</groupId>
   <artifactId>zcommon</artifactId>
-  <version>2.0</version>
+  <version>${version}</version>
   <packaging>jar</packaging>
   <name>The ZKoss Common Library</name>
   <url>http://www.zkoss.org</url>
