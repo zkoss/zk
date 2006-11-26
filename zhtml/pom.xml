@@ -15,7 +15,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.zkoss.zk</groupId>
   <artifactId>zhtml</artifactId>
-  <version>${version}</version>
+  <version>{version}</version>
   <packaging>jar</packaging>
   <name>The XHTML Components for ZK</name>
   <url>http://www.zkoss.org</url>
@@ -28,23 +28,23 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
     </license>
   </licenses>
   <scm>
-    <url>http://svn.sourceforge.net/viewvc/zk1/releases/${version}/zhtml</url>
+    <url>http://svn.sourceforge.net/viewvc/zk1/releases/{version}/zhtml</url>
   </scm>
   <dependencies>
     <dependency>
       <groupId>org.zkoss.common</groupId>
       <artifactId>zcommon</artifactId>
-      <version>${version}</version>
+      <version>{version}</version>
     </dependency>
     <dependency>
       <groupId>org.zkoss.common</groupId>
       <artifactId>zweb</artifactId>
-      <version>${version}</version>
+      <version>{version}</version>
     </dependency>
     <dependency>
       <groupId>org.zkoss.zk</groupId>
       <artifactId>zk</artifactId>
-      <version>${version}</version>
+      <version>{version}</version>
     </dependency>
   </dependencies>
 </project> 

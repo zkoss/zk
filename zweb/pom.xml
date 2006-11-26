@@ -15,7 +15,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.zkoss.common</groupId>
   <artifactId>zweb</artifactId>
-  <version>${version}</version>
+  <version>{version}</version>
   <packaging>jar</packaging>
   <name>The ZKoss Web Library</name>
   <url>http://www.zkoss.org</url>
@@ -28,7 +28,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
     </license>
   </licenses>
   <scm>
-    <url>http://svn.sourceforge.net/viewvc/zk1/releases/${version}/zweb</url>
+    <url>http://svn.sourceforge.net/viewvc/zk1/releases/{version}/zweb</url>
   </scm>
   <dependencies>
 	<dependency>
@@ -46,7 +46,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
     <dependency>
       <groupId>org.zkoss.common</groupId>
       <artifactId>zcommon</artifactId>
-      <version>${version}</version>
+      <version>{version}</version>
     </dependency>
   </dependencies>
 </project> 

@@ -110,21 +110,35 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	echo Output ${srcnm}.tar.gz
 	tar zcf ${srcnm}.tar.gz $srcnm
 
-	#prepare zk-src.jar
-	echo Prepare zk-src.jar
-	mkdir -p src
+	#prepare *-sources.jar
+	echo Prepare '*-sources.jar'
+	mkdir -p src/zcommon
+	mkdir -p src/zweb
+	mkdir -p src/zk
+	mkdir -p src/zul
+	mkdir -p src/zhtml
+	mkdir -p src/zkplus
 	cd $srcnm
-	cp -rp zcommon/codegen/* zcommon/src/* ../src
-	cp -rp zweb/codegen/* zweb/src/* ../src
-	cp -rp zul/codegen/* zul/src/* ../src
-	cp -rp zhtml/codegen/* zhtml/src/* ../src
-	cp -rp zkplus/codegen/* zkplus/src/* ../src
-	cp -rp zk/codegen/* zk/src/* ../src
+	cp -rp zcommon/codegen/* zcommon/src/* ../src/zcommon
+	cp -rp zweb/codegen/* zweb/src/* ../src/zweb
+	cp -rp zk/codegen/* zk/src/* ../src/zk
+	cp -rp zul/codegen/* zul/src/* ../src/zul
+	cp -rp zhtml/codegen/* zhtml/src/* ../src/zhtml
+	cp -rp zkplus/codegen/* zkplus/src/* ../src/zkplus
 	cd ..
 	rm -rf $srcnm
-	rm -rf src/archive src/export
-	echo Output zk-src.jar
-	jar cfM zk-src.jar -C src .
+	rm -rf src/*/archive src/*/export
+	echo Output '*-sources.jar'
+	cd src
+	find -name 'package.html' | xargs rm -rf
+	jar cfM zcommon-sources.jar -C zcommon .
+	jar cfM zweb-sources.jar -C zweb .
+	jar cfM zk-sources.jar -C zk .
+	jar cfM zul-sources.jar -C zul .
+	jar cfM zhtml-sources.jar -C zhtml .
+	jar cfM zkplus-sources.jar -C zkplus .
+	mv *-sources.jar ..
+	cd ..
 	rm -rf src
 fi
 
@@ -133,6 +147,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$prjnm/dist/lib/ext
 	mkdir -p /tmp/zk/$prjnm/dist/lib/zkforge
 	mkdir -p /tmp/zk/$prjnm/dist/WEB-INF
+	mkdir -p /tmp/zk/$prjnm/dist/src
 	mkdir -p /tmp/zk/$prjnm/doc
 	mkdir -p /tmp/zk/$prjnm/demo/bin
 	mkdir -p /tmp/zk/$prjnm/demo/src/zkdemo/WebContent
@@ -140,7 +155,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$prjnm/demo/src/MyApp/WebContent
 
 	cd $HOME/prj/zk1
-	mv -f /tmp/zk/zk-src.jar /tmp/zk/$prjnm
+	mv -f /tmp/zk/*-sources.jar /tmp/zk/$prjnm/dist/src
 	cp dist/lib/ext/bsh.jar /tmp/zk/$prjnm/dist/lib/ext
 	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$prjnm/dist/lib/ext
 	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar dist/lib/ext/commons-el.jar /tmp/zk/$prjnm/dist/lib/ext
@@ -169,6 +184,29 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	echo Output ${prjnm}.zip
 	zip -qr9 ${prjnm}.zip $prjnm
+
+	if [ "$target" == "official" ] ; then
+		#Prepare maven repository
+		function mvnrepo {
+			mkdir -p $1
+			mv /tmp/zk/$prjnm/dist/src/$1-sources.jar $1/$1-$ver-sources.jar
+			sed -e "s/{version}/$ver/" $HOME/prj/zk1/$1/pom.xml > $1/pom.xml
+			cp $HOME/prj/zk1/dist/lib/$1.jar $1/$1-$ver.jar
+			jar cfM $1-$ver-bundle.jar -C $1 .
+		}
+		mkdir -p maven
+		mkdir -p /tmp/maven
+		cd maven
+		mvnrepo zcommon
+		mvnrepo zweb
+		mvnrepo zk
+		mvnrepo zul
+		mvnrepo zhtml
+		mvnrepo zkplus
+		mv *-bundle.jar /tmp/maven
+		cd ..
+		rm -rf maven
+	fi
 	rm -rf $prjnm
 
 	#Prepare the java doc
