@@ -12,10 +12,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 
 <project>
-  <modelVersion>${version}</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
   <groupId>org.zkoss.zk</groupId>
   <artifactId>zk</artifactId>
-  <version>2.0</version>
+  <version>${version}</version>
   <packaging>jar</packaging>
   <name>The ZK Kernel</name>
   <url>http://www.zkoss.org</url>
@@ -32,12 +32,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   </scm>
   <dependencies>
     <dependency>
-      <groupId>org.zkoss</groupId>
+      <groupId>org.zkoss.common</groupId>
       <artifactId>zcommon</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
-      <groupId>org.zkoss.web</groupId>
+      <groupId>org.zkoss.common</groupId>
       <artifactId>zweb</artifactId>
       <version>${version}</version>
     </dependency>
