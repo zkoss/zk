@@ -57,5 +57,5 @@ fi
 grep -l "$onnew" $flnm > /dev/null
 if [ $? != 0 ] ; then
 	echo Update $flnm
-	overwrite $flnm sed "s/$onold/$onnew/" $flnm
+	../bin/overwrite $flnm sed "s/$onold/$onnew/" $flnm
 fi
