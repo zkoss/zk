@@ -25,7 +25,7 @@ if [ $# != 3 ] ; then
 fi
 
 if [ -f $1 ] && [ -f $2 ] ; then
-	if [ ! -f $3 ] || [ $1 -nt $3 ] ; then
+	if [ ! -f $3 ] || [ $1 -nt $3 ] || [ $2 -nt $3 ]; then
 		jarsz=$(ls -og $1 | cut -d' ' -f3)
 		../bin/overwrite $3 sed -e "s/{jar-size}/$jarsz/" $2
 	fi
