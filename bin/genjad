@@ -1,5 +1,5 @@
 #!/bin/bash
-# mv-jad
+# genjad
 #
 #{{IS_NOTE
 #	Purpose:
@@ -17,9 +17,10 @@
 #
 if [ $# != 3 ] ; then
 	echo "Usage:"
-	echo "  mv-jad jar-file src-jad-file dst-jad-file"
+	echo "  genjad jar-file src-jad-file dst-jad-file"
 	echo
-	echo "Move the specified JAD file, if exists, to the destination."
+	echo "Generate the destination JAD file based on the source JAD file, if any,"
+	echo "and the JAR file."
 	exit 1
 fi
 

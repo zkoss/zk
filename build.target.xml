@@ -164,8 +164,9 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		 excludes="META-INF/MANIFEST.MF"/>
 	</jar>
 
+	<!-- generate ${out.dir}/${project-name}.jad if any -->
 	<exec executable="bash" dir="." failonerror="true">
-		<arg value="${bin.dir}/mv-jad"/>
+		<arg value="${bin.dir}/genjad"/>
 		<arg value="${out.dir}/${jar.name}"/>
 		<arg value="${src.archive.dir}/META-INF/${project.name}.jad"/>
 		<arg value="${out.dir}/${project.name}.jad"/>
