@@ -1,0 +1,29 @@
+#!/bin/bash
+# mv-jad
+#
+#{{IS_NOTE
+#	Purpose:
+#		Move prj.jad from src to codegen
+#	Description:
+#		
+#	History:
+#		Mon Nov 27 18:53:46     2006, Created by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#}}IS_RIGHT
+#
+if [ $# != 3 ] ; then
+	echo "Usage:"
+	echo "  mv-jad jar-file src-jad-file dst-jad-file"
+	echo
+	echo "Move the specified JAD file, if exists, to the destination."
+	exit 1
+fi
+
+if [ -f $1 ] && [ -f $2 ] ; then
+	jarsz=$(ls -og $1 | cut -d' ' -f3)
+	overwrite $3 sed -e "s/{jar-size}/$jarsz/" $2
+fi
