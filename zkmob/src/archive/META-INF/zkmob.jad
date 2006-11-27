@@ -1,8 +1,9 @@
 MIDlet-1: ZK Mobile, /icons/zk.png, org.zkoss.zkmob.Mainlet
+MIDlet-Name: zkmob
 MIDlet-Description: ZK Mobile Client
+MIDlet-Icon: /icons/zk.png
 MIDlet-Jar-Size: {jar-size}
 MIDlet-Jar-URL: zkmob.jar
-MIDlet-Name: zkmob
 MIDlet-Permissions: javax.microedition.io.Connector.http
 MIDlet-Vendor: Potix Corporation
 MIDlet-Version: 2.0
