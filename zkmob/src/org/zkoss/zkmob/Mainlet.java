@@ -16,10 +16,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmob;
 
+import javax.microedition.midlet.MIDlet;
+
 /**
  * The main MIDlet of ZK Mobile Client.
  *
  * @author tomyeh
  */
-public class Mainlet {
+public class Mainlet extends MIDlet {
+	public Mainlet() {
+	}
+
+	//super//
+	protected void startApp() {
+	}
+	protected void pauseApp() {
+	}
+	protected void destroyApp(boolean unconditional) {
+	}
 }
