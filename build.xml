@@ -55,6 +55,8 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<available file="${dist.lib.ext.dir}/CVS" property="lib.ext.CVS.dir.exist"/>
 		<available file="${dist.lib.ext.dir}/.svn" property="lib.ext.svn.dir.exist"/>
 
+		<available file="${src.archive.dir}/META-INF/zkmob.jad" property="jad.exist"/>
+
 		<condition property="copy.web.jar.required">
 			<not>
 				<equals arg1="${import.libs}" arg2="nonexist"/>
@@ -65,8 +67,19 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<condition property="build.ear.required">
 			<equals arg1="${format}" arg2="ear"/>
 		</condition>
+		<condition property="build.jad.required">
+			<and>
+				<equals arg1="${format}" arg2="jar"/>
+				<isset property="jad.exist"/>
+			</and>
+		</condition>
 		<condition property="build.jar.required">
-			<equals arg1="${format}" arg2="jar"/>
+			<and>
+				<equals arg1="${format}" arg2="jar"/>
+				<not>
+					<isset property="jad.exist"/>
+				</not>
+			</and>
 		</condition>
 		<condition property="build.war.required">
 			<equals arg1="${format}" arg2="war"/>

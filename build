@@ -120,7 +120,7 @@ if [ "$outdir" = "$cmd" ] ; then
 fi
 
 #-- adjust javac debug and optimize flags
-dflag=$(grep '^debug' $setting)
+dflag=$(grep '^debug=' $setting)
 dflag=${dflag#debug=}
 if [ "$dflag" = "true" ] ; then
 	dflag=on
@@ -131,7 +131,7 @@ elif [ "$dflag" != "" ] ; then
 	exit 1
 fi
 
-oflag=$(grep '^optimize' $setting)
+oflag=$(grep '^optimize=' $setting)
 oflag=${oflag#optimize=}
 if [ "$oflag" = "true" ] ; then
 	oflag=on
@@ -408,6 +408,23 @@ function invoke_ant
 		tgtver=1.4
 	fi
 
+	this_dflag=$dflag
+	dflagtmp=$(grep '^debug=' version)
+	dflagtmp=${dflagtmp#debug=}
+	if [ "$dflagtmp" = "true" ] ; then
+		this_dflag=on
+	elif [ "$dflagtmp" = "false" ] ; then
+		this_dflag=off
+	fi
+	this_oflag=$oflag
+	oflagtmp=$(grep '^optimize=' version)
+	oflagtmp=${oflagtmp#optimize=}
+	if [ "$oflagtmp" = "true" ] ; then
+		this_oflag=on
+	elif [ "$oflagtmp" = "false" ] ; then
+		this_oflag=off
+	fi
+
 	format="$(head -1 format)"
 	if [ "$format" = "cpp" ] ; then
 		if [ ! -d $outdir ] ; then
@@ -431,7 +448,7 @@ function invoke_ant
 		-Dproject.name="$2" -Dproject.version="$prjver" \
 		-Dsource.version="$srcver" -Dtarget.version="$tgtver" \
 		-Dhaltonerror=$haltonerror -Dout.dir=$outdir \
-		-Ddebug=$dflag -Doptimize=$oflag ${nojc} \
+		-Ddebug=$this_dflag -Doptimize=$this_oflag ${nojc} \
 		-Dshare.javadoc.dir="$javadocdir" \
 		-Djavadoc.class.path="$DCP" -Dapp.name=$app $unziplist \
 		-Droot.context=$rootContext \

@@ -157,14 +157,31 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	</exec>
 
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
-		<fileset dir="${out.dir}" excludes="${exclude.list}, ${project.name}.jad"/>
+		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
+		<fileset dir="${src.archive.dir}" includes="**"
+		 excludes="META-INF/MANIFEST.MF, **/CVS/**, ${zipjs}/**"/>
+		<fileset dir="${codegen.archive.dir}" includes="**"
+		 excludes="META-INF/MANIFEST.MF"/>
+	</jar>
+</target>
+<target name="build.jad" depends="compile, copy.web.jar" if="build.jad.required">
+	<mkdir dir="${src.archive.dir}"/>
+	<mkdir dir="${codegen.archive.dir}"/>
+
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/preverify"/>
+		<arg value="${out.dir}"/>
+		<arg value="${outv.dir}"/>
+	</exec>
+	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
+		<fileset dir="${outv.dir}" excludes="${exclude.list}, ${project.name}.jad"/>
 		<fileset dir="${src.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF, META-INF/${project.name}.jad, **/CVS/**, ${zipjs}/**"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF"/>
 	</jar>
 
-	<!-- generate ${out.dir}/${project-name}.jad if any -->
+	<!-- generate ${out.dir}/${project-name}.jad -->
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/genjad"/>
 		<arg value="${out.dir}/${jar.name}"/>
@@ -214,7 +231,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 </target>
 
 <target name="build"
- depends="config.build, build.war, build.jar, build.ear, deploy">
+ depends="config.build, build.war, build.jad, build.jar, build.ear, deploy">
 </target>
 
 <!-- ===== -->
@@ -239,6 +256,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <target name="clean" depends="clean.all, clean.bin, clean.lib.ext">
 	<delete quiet="true" dir="${out.dir}"/>
 	<delete quiet="true" dir="${tmp.dir}"/>
+	<delete quiet="true" dir="${outv.dir}"/>
 	<delete quiet="true" dir="${codegen.dir}"/>
 	<delete quiet="true">
 		<fileset dir="${dist.lib.dir}" includes="${xar.name}"/>
