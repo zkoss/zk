@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkmob;
 
 import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.Display;
 
 /**
  * The main MIDlet of ZK Mobile Client.
@@ -24,14 +25,26 @@ import javax.microedition.midlet.MIDlet;
  * @author tomyeh
  */
 public class Mainlet extends MIDlet {
+	private Display _disp;
+
 	public Mainlet() {
 	}
 
 	//super//
 	protected void startApp() {
+		init();
 	}
 	protected void pauseApp() {
 	}
 	protected void destroyApp(boolean unconditional) {
+	}
+
+	//private//
+	/** Initializes this MIDlet. */
+	private void init() {
+		if (_disp == null) {
+			_disp = Display.getDisplay(this);
+			//_disp.setCurrent();
+		}
 	}
 }
