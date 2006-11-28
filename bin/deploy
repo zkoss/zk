@@ -66,7 +66,7 @@ for f in $*; do
 		cp -u -p -v dist/lib/$f.jad dist/lib/$f.jar $f/src/archive/META-INF/MANIFEST.MF $dstdir/bin
 		cp -urp $f/src/org $dstdir/src
 		cp -urp $f/src/archive/icons $dstdir/res
-		cp -urp $f/debug/org $dstdir/classes
+		cp -urp $f/debugv/org $dstdir/classes
 	elif [ -f dist/lib/$f.jar ] ; then
 		jar_found=true
 	fi
