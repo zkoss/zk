@@ -28,6 +28,25 @@ if [ $# == 0 ] ; then
 	exit 0
 fi
 
+function cpweb {
+	(
+		cd $1
+		for sub in * ; do
+			if [ -f "$sub" ] ; then
+				#echo cp -u -p "$sub" $2
+				cp -u -p -v "$sub" $2
+			elif [ "$sub" != CVS ] && [ "$sub" != .svn ] && [ -d "$sub" ] ; then
+				local dstsub=$2/$sub
+				if [ ! -d "$dstsub" ] ; then
+					mkdir -p "$dstsub"
+				fi
+				#echo cpweb $(pwd)/$sub $dstsub
+				cpweb $sub $dstsub
+			fi
+		done
+	)
+}
+
 jar_found=false
 for f in $*; do
 	f=${f%/}
@@ -39,30 +58,15 @@ for f in $*; do
 			dst=$f
 		fi
 		echo "cp dist/lib/$f /usr/tomcat/webapps/$dst"
-
-function cpweb
-{
-	(
-		cd $1
-		for sub in * ; do
-			if [ -f "$sub" ] ; then
-				#echo cp -u -p "$sub" $2
-				cp -u -p -v "$sub" $2
-			elif [ "$sub" != CVS ] && [ -d "$sub" ] ; then
-				local dstsub=$2/$sub
-				if [ ! -d "$dstsub" ] ; then
-					mkdir -p "$dstsub"
-				fi
-				#echo cpweb $(pwd)/$sub $dstsub
-				cpweb $sub $dstsub
-			fi
-		done
-	)
-}
 		cpweb $f/src/archive /usr/tomcat/webapps/$dst
 	fi
-
-	if [ -f dist/lib/$f.jar ] ; then
+	if [ -f dist/lib/$f.jad ] ; then
+		dstdir=/usr/WTK/apps/$f
+		echo "cp $f.jad $dstdir"
+		cp -u -p -v dist/lib/$f.jad dist/lib/$f.jar $f/src/archive/META-INF/MANIFEST.MF $dstdir/bin
+		cp -urp $f/src/org $dstdir/src
+		cp -urp $f/src/archive/icons $dstdir/res
+	elif [ -f dist/lib/$f.jar ] ; then
 		jar_found=true
 	fi
 done
@@ -72,7 +76,7 @@ if [ "$jar_found" = "true" ] ; then
 
 	for f in $*; do
 		f=${f%/}
-		if [ -f dist/lib/$f.jar ] ; then
+		if [ ! -f dist/lib/$f.jad ] && [ -f dist/lib/$f.jar ] ; then
 			#echo "cp dist/lib/$f.jar /usr/tomcat/shared/lib"
 			cp -p -u -v -f dist/lib/$f.jar /usr/tomcat/shared/lib
 		fi
