@@ -32,4 +32,4 @@ fi
 
 cp=$MIDP_HOME/lib/midpapi20.jar\;$MIDP_HOME/lib/cldcapi11.jar
 
-$MIDP_HOME/bin/preverify -classpath $cp -d $2 $1
+$MIDP_HOME/bin/preverify -target CLDC1.0 -cldc -classpath $cp -d $2 $1
