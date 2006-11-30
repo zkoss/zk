@@ -59,7 +59,9 @@ public class MouseCommand extends Command {
 				data.length == 2 ? 0: parseKeys(data[2]));
 		Events.postEvent(event);
 	}
-	private static int parseKeys(String flags) {
+	/** Parses the key flags.
+	 */
+	/*package*/ static int parseKeys(String flags) {
 		int keys = 0;
 		if (flags.indexOf("a") >= 0) keys |= MouseEvent.ALT_KEY;
 		if (flags.indexOf("c") >= 0) keys |= MouseEvent.CTRL_KEY;

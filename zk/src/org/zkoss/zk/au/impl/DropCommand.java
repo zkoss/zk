@@ -45,11 +45,12 @@ public class DropCommand extends Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data == null || data.length != 1)
+		if (data == null || (data.length != 1 && data.length != 2))
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
 		Events.postEvent(new DropEvent(getId(), comp,
-			request.getDesktop().getComponentByUuid(data[0])));
+			request.getDesktop().getComponentByUuid(data[0]),
+			data.length >= 2 ? MouseCommand.parseKeys(data[1]): 0));
 	}
 }
