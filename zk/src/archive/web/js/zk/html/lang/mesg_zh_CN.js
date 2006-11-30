@@ -18,11 +18,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "找不到：";
-mesg.UNSUPPORTED = "尚未支援："
-mesg.FAILED_TO_SEND = "无法传送资料到伺服器：";
-mesg.FAILED_TO_RESPONSE = "伺服器无法处理你的请求：";
-mesg.UNSUPPORTED_BROWSER = "尚未支援你使用的浏览器，请用 Internet Explorer, Firefox 或 Mozilla：";
-mesg.ILLEGAL_RESPONSE = "无法辨识伺服器传回的资料。请按重新载入，再试试。\n";
+mesg.UNSUPPORTED = "尚未支持："
+mesg.FAILED_TO_SEND = "无法传送资料到服务器：";
+mesg.FAILED_TO_RESPONSE = "服务器无法处理你的请求：";
+mesg.UNSUPPORTED_BROWSER = "尚未支持你使用的浏览器，请用 Internet Explorer, Firefox 或 Mozilla：";
+mesg.ILLEGAL_RESPONSE = "无法辨识服务器传回的资料。请按重新载入，再试试。\n";
 mesg.FAILED_TO_PROCESS = "无法处理：";
 mesg.UUID_REQUIRED = "必须指定 UUID";
 mesg.INVALID_STRUCTURE = "结构不正确：";
@@ -33,7 +33,7 @@ mesg.EMPTY_NOT_ALLOWED = "不能空白，也不能只含空白字元";
 mesg.GOTO_ERROR_FIELD = "回错误栏";
 mesg.PLEASE_WAIT = "处理中，请稍候…";
 
-mesg.FILE_SIZE = "档案大小：";
+mesg.FILE_SIZE = "文件大小：";
 mesg.KBYTES = "KB";
 
 mesg.CANCEL="取消";
