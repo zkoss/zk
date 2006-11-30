@@ -69,8 +69,8 @@ public class AnnotateDataBinder extends DataBinder {
 			for(final Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
 				Entry me = (Entry) it.next();
 				String attr = (String) me.getKey();
-				String expression = (String) me.getValue();
-				addBinding(comp, attr, expression);
+				String[] expr = parseExpression((String) me.getValue());
+				addBinding(comp, attr, expr[0], expr[1], expr[2]);
 			}
 		}
 		
@@ -78,5 +78,23 @@ public class AnnotateDataBinder extends DataBinder {
 		for (final Iterator it = children.iterator(); it.hasNext(); ) {
 			loadComponentAnnotation((Component) it.next()); //recursive back
 		}
+	}
+	
+	private String[] parseExpression(String expr) {
+		String[] results = new String[3]; //[0] expression, [1] access, [2] converter class
+		for (int k = 0; k < 2; ++k) {	
+			int j = expr.indexOf(";");
+			if (j < 0) {
+				results[k] = expr.trim();
+				return results;
+			}
+			results[k] = expr.substring(0, j).trim();
+			if (expr.length() <= (j+1)) {
+				return results;
+			}
+			expr = expr.substring(j+1);
+		}
+		results[2] = expr.trim();
+		return results;
 	}
 }

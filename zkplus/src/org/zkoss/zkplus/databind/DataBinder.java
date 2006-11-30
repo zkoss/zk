@@ -187,6 +187,8 @@ public class DataBinder {
 				_canRead = true;
 			} else if ("wo".equals(access)) {
 				_canWrite = true;
+			} else { //unknow
+				throw new UiException("Unknown DataBinder access right. Should be \"rw\", \"ro\", or \"wo\": "+access);
 			}
 			
 			if (converter != null) {
