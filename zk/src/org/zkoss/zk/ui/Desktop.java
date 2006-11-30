@@ -39,8 +39,9 @@ public interface Desktop {
 	 *
 	 * <p>A client type identifies the type of a client. For example, "html"
 	 * represents all HTML compatible clients (aka., browsers),
-	 * while "lcd" represents clients that supports Limited Connected Device,
-	 * such as mobile phones.
+	 * while "mul" represents clients that supports
+	 * <i>Mobile User interface markup Language</i> (on Limited Connected Device,
+	 * such as mobile phones).
 	 *
 	 * <p>A desktop can use the languages belonging to the same client type.
 	 * See also {@link org.zkoss.zk.ui.metainfo.LanguageDefinition#getClientType}.
