@@ -2,7 +2,7 @@
 ZK 2.2.0 Freshly
 * Features:
   1598491, 1600161, 1601030, 1600480, 1601498, 1601627, 1601661, 1602084,
-  1602095.
+  1602095, 1603857.
   + A new SmartListModel that would refresh the Listbox automatically.
 
 * Bugs:
