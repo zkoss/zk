@@ -23,17 +23,17 @@
     <dependency>
       <groupId>org.zkoss.common</groupId>
       <artifactId>zcommon</artifactId>
-      <version>{version}</version>
+      <version>2.2.0</version>
     </dependency>
     <dependency>
       <groupId>org.zkoss.common</groupId>
       <artifactId>zweb</artifactId>
-      <version>{version}</version>
+      <version>2.2.0</version>
     </dependency>
     <dependency>
       <groupId>org.zkoss.zk</groupId>
       <artifactId>zk</artifactId>
-      <version>{version}</version>
+      <version>2.2.0</version>
     </dependency>
   </dependencies>
 </project> 
