@@ -1,10 +1,26 @@
 README: Build ZK
 
 
+---
+zul
+	The ZK components implementing XUL, aka, the XUL components of ZK.
+	XUL: XML user interface markup language
+
+-----
+zhtml
+	The ZK components implementing XHTML, aka, the XHTML components of ZK.
+
+----
+zmul
+	The ZK components implementing MUL, aka, the MUL components of ZK.
+	MUL: Mobile user interface markup language
+
 -----
 zmobi
 
-	ZK Mobile Client is a MIDlet depending on MIDP.
+	ZK Mobile Client is a MIDlet that hat enables a user to display and interact
+	with user interfaces represented in MUL.
+	MUL: Mobile user interface markup language
 
 	1.	Download Sun Java Wireless Toolkit (WTK) at
 

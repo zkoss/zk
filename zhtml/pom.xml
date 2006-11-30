@@ -6,9 +6,9 @@
   <artifactId>zhtml</artifactId>
   <version>{version}</version>
   <packaging>jar</packaging>
-  <name>The XHTML Components for ZK</name>
+  <name>The XHTML Components of ZK</name>
   <url>http://www.zkoss.org</url>
-  <description>The XHTML components for ZK</description>
+  <description>The ZK components implementing XHTML.</description>
   <licenses>
     <license>
       <name>GNU General Public License, Version 2.0</name>
