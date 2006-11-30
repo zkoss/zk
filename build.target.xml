@@ -46,7 +46,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 
 <target name="deploy.lib" depends="config.build" if="deploy.lib.required">
 	<copy todir="${dist.lib.dir}" preservelastmodified="yes">
-		<fileset dir="${out.dir}" includes="${xar.name}, ${project.name}.jad"/>
+		<fileset dir="${out.dir}" includes="${xar.name}, ${jad.name}"/>
 	</copy>
 </target>
 
@@ -174,9 +174,9 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<arg value="${outv.dir}"/>
 	</exec>
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
-		<fileset dir="${outv.dir}" excludes="${exclude.list}, ${project.name}.jad"/>
+		<fileset dir="${outv.dir}" excludes="${exclude.list}, ${jad.name}"/>
 		<fileset dir="${src.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF, META-INF/${project.name}.jad, **/CVS/**, ${zipjs}/**"/>
+		 excludes="META-INF/MANIFEST.MF, META-INF/${jad.name}, **/CVS/**, ${zipjs}/**"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF"/>
 	</jar>
@@ -185,8 +185,8 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/genjad"/>
 		<arg value="${out.dir}/${jar.name}"/>
-		<arg value="${src.archive.dir}/META-INF/${project.name}.jad"/>
-		<arg value="${out.dir}/${project.name}.jad"/>
+		<arg value="${src.archive.dir}/META-INF/${jad.name}"/>
+		<arg value="${out.dir}/${jad.name}"/>
 	</exec>
 </target>
 <!-- copy WEB-relevant resource  to jar (into codegen.archive.web.dir) -->
@@ -242,7 +242,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<fileset dir="${dist.export.dir}" includes="**"/>
 	</delete>
 	<delete quiet="true">
-		<fileset dir="${dist.lib.dir}" includes="*.?ar"/>
+		<fileset dir="${dist.lib.dir}" includes="*.?ar, *.jad"/>
 	</delete>
 </target>
 
@@ -259,7 +259,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	<delete quiet="true" dir="${outv.dir}"/>
 	<delete quiet="true" dir="${codegen.dir}"/>
 	<delete quiet="true">
-		<fileset dir="${dist.lib.dir}" includes="${xar.name}"/>
+		<fileset dir="${dist.lib.dir}" includes="${xar.name}, ${jad.name}"/>
 		<fileset dir="${dist.deploy.dir}" includes="${xar.name}"/>
 		<!--fileset dir="${jboss.lib.dir}" includes="${xar.name}"/-->
 		<fileset dir="${jboss.deploy1.dir}" includes="${xar.name}"/>
