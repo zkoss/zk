@@ -1400,30 +1400,24 @@ zk.clearSelection = function(){
 	}
 }
 /** Disable whether the specified element is selectable. */
-zk.disableSelection = function(el){
-	el = $e(el)||document.body;
-	if(zk.gecko){
-		el.style.MozUserSelect = "none";
-	}else if(zk.safari){
-		el.style.KhtmlUserSelect = "none"; 
-	}else if(zk.ie){
-		el.onselectstart = function () {return false;};
-	}else{
-		return false;
-	}
-	return true;
-}
+zk.disableSelection = function (el) {
+	el = $e(el);
+	if (el)
+		if (zk.gecko)
+			el.style.MozUserSelect = "none";
+		else if(zk.safari)
+			el.style.KhtmlUserSelect = "none"; 
+		else if(zk.ie)
+			el.onselectstart = function () {return false;};
+};
 /** Enables whether the specified element is selectable. */
-zk.enableSelection = function(el){
-	el = $e(el)||document.body;
-	if(zk.gecko){ 
-		el.style.MozUserSelect = ""; 
-	}else if(zk.safari){
-		el.style.KhtmlUserSelect = "";
-	}else if(zk.ie){
-		el.onselectstart = null;
-	}else{
-		return false;
-	}
-	return true;
-}
+zk.enableSelection = function (el) {
+	el = $e(el);
+	if (el)
+		if (zk.gecko)
+			el.style.MozUserSelect = ""; 
+		else if (zk.safari)
+			el.style.KhtmlUserSelect = "";
+		else if (zk.ie)
+			el.onselectstart = null;
+};

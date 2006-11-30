@@ -1262,22 +1262,9 @@ zkau.initdrag = function (n) {
 		endeffect: zkau._enddrag, change: zkau._dragging,
 		ghosting: zkau._ghostdrag, z_dragdrop: true
 	});
-	if (zk.ie) {
-		//disable onselect
-		var tn = $tag(n);
-		var nosel;
-		if (tn == "INPUT") {
-			var t = n.type.toLowerCase();
-			nosel = t != "text" && t != "password";
-		} else {
-			nosel = tn != "TEXTAREA";
-		}
-		if (nosel) n.onselectstart = function () {return false;}
-	}
 };
 zkau.cleandrag = function (n) {
 	if (zkau._drags[n.id]) {
-		n.onselectstart = null;
 		zkau._drags[n.id].destroy();
 		delete zkau._drags[n.id];
 	}
