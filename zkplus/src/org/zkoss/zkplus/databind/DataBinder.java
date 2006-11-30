@@ -67,9 +67,9 @@ public class DataBinder {
 		attrMap.put(attr, new Binding(comp, attr, expression, access, converter));
 	}
 	
-	/** Bind a real bean object to the specified beanid. You might not need to do this because this
+	/** Bind a real bean object to the specified beanid. You might not need to call this method because this
 	 * DataBinder would look up the variable via the {@link org.zkoss.zk.ui.Component#getVariable()} method
-	 * if it cannot find the specified bean via the givn beanid.
+	 * if it cannot find the specified bean via the given beanid.
 	 *
 	 * @param beanid The bean id used in data binding.
 	 * @param bean The real bean object to be associated with the bean id.
@@ -187,8 +187,8 @@ public class DataBinder {
 				_canRead = true;
 			} else if ("wo".equals(access)) {
 				_canWrite = true;
-			} else { //unknow
-				throw new UiException("Unknown DataBinder access right. Should be \"rw\", \"ro\", or \"wo\": "+access);
+			} else { //unknow access mode
+				throw new UiException("Unknown DataBinder access mode. Should be \"rw\", \"ro\", or \"wo\": "+access);
 			}
 			
 			if (converter != null) {
