@@ -39,7 +39,7 @@ public class DataBinder {
 	private Map _beans = new HashMap(5); //(beanid, bean)
 	private static Map _converterMap = new HashMap(5); //(converterClassName, converter)
 	
-	/** Binding bean to UI component. This is the same as {@link #addBinding(comp, attr, expression, null, null)}. 
+	/** Binding bean to UI component. This is the same as addBinding(comp, attr, expression, null, null). 
 	 * @param comp The component to be associated.
 	 * @param attr The attribute of the component to be associated.
 	 * @param expression The expression to associate the data bean.
@@ -68,7 +68,7 @@ public class DataBinder {
 	}
 	
 	/** Bind a real bean object to the specified beanid. You might not need to call this method because this
-	 * DataBinder would look up the variable via the {@link org.zkoss.zk.ui.Component#getVariable()} method
+	 * DataBinder would look up the variable via the {@link org.zkoss.zk.ui.Component#getVariable} method
 	 * if it cannot find the specified bean via the given beanid.
 	 *
 	 * @param beanid The bean id used in data binding.

@@ -72,7 +72,7 @@ import java.util.Iterator;
 public class AnnotateDataBinder extends DataBinder {
 	/**
 	 * Constructor that read all binding annotations of the components inside the specified desktop.
-	 * @param Desktop the ZUML desktop.
+	 * @param desktop the ZUML desktop.
 	 */
 	public AnnotateDataBinder(Desktop desktop) {
 		for (final Iterator	it = desktop.getComponents().iterator(); it.hasNext(); ) {
