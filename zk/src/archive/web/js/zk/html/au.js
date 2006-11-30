@@ -1400,7 +1400,8 @@ zkau._ghostdrag = function (dg, ghosting) {
 			dg.zk_old = dg.element;
 			dg.element = $e("zk_ddghost");
 		} else if (dg.zk_old) {
-			zk.dragging = false;
+			setTimeout("zk.dragging = false;", 0);
+				//we have to reset it later since onclick is fired later (after onmouseup)
 			Element.remove(dg.element);
 			dg.element = dg.zk_old;
 			dg.zk_old = null;
@@ -1415,7 +1416,8 @@ zkau._ghostdrag = function (dg, ghosting) {
 		dg.z_x = dg.element.style.left; dg.z_y = dg.element.style.top;
 		zkau._revertpending = null;
 	} else {
-		zk.dragging = false;
+		setTimeout("zk.dragging = false;", 0);
+			//we have to reset it later since onclick is fired later (after onmouseup)
 	}
 	return true;
 };

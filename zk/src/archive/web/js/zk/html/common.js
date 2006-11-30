@@ -1405,9 +1405,9 @@ zk.disableSelection = function (el) {
 	if (el)
 		if (zk.gecko)
 			el.style.MozUserSelect = "none";
-		else if(zk.safari)
+		else if (zk.safari)
 			el.style.KhtmlUserSelect = "none"; 
-		else if(zk.ie)
+		else if (zk.ie)
 			el.onselectstart = function () {return false;};
 };
 /** Enables whether the specified element is selectable. */

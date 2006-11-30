@@ -317,7 +317,12 @@ if (zdd && orgpos != 'absolute' && orgpos != 'relative')
         src.tagName=='OPTION' ||
         src.tagName=='BUTTON' ||
         src.tagName=='TEXTAREA')) return;
-        
+
+//Tom M. Yeh, Potix: skip popup/dropdown (of combobox and others)
+for (var n = src; n && n != this.element; n = n.parentNode)
+	if (Element.getStyle(n, 'position') == 'absolute')
+		return;
+
       var pointer = [Event.pointerX(event), Event.pointerY(event)];
       var pos     = Position.cumulativeOffset(this.element);
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
