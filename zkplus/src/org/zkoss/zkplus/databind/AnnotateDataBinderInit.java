@@ -31,10 +31,11 @@ import org.zkoss.zk.ui.util.Initiator;
  * <pre>
  * &lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" [arg0="component-path"] ?>
  * </pre>
- * <p>Where the arg0 is the component path that specifies the component the AnnotateDataBinder convers. If the 
+ * <p>Where the arg0 is the component path that specifies the component the AnnotateDataBinder covers. If the 
  * arg0 is not specified, the AnnotateDataBinder will default to cover the whole page.</p>
  *
  * @author Henri Chen
+ * @see AnnotateDataBinder
  */
 public class AnnotateDataBinderInit implements Initiator {
 	private String _compPath;
