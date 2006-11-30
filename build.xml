@@ -55,7 +55,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<available file="${dist.lib.ext.dir}/CVS" property="lib.ext.CVS.dir.exist"/>
 		<available file="${dist.lib.ext.dir}/.svn" property="lib.ext.svn.dir.exist"/>
 
-		<available file="${src.archive.dir}/META-INF/zkmob.jad" property="jad.exist"/>
+		<available file="${src.archive.dir}/META-INF/${jad.name}" property="jad.exist"/>
 
 		<condition property="copy.web.jar.required">
 			<not>

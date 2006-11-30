@@ -2,7 +2,7 @@ README: Build ZK
 
 
 -----
-zkmob
+zmobi
 
 	ZK Mobile Client is a MIDlet depending on MIDP.
 
@@ -18,5 +18,5 @@ zkmob
 
 
 	To test with WTK, you have to execute the following command to copy
-	all relevant files to $MIDP_HOME/apps/zkmob
-		bin/deploy zkmob
+	all relevant files to $MIDP_HOME/apps/zmobi
+		bin/deploy zmobi
