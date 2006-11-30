@@ -20,4 +20,4 @@ msgzul = {};
 msgzul.FAILED_TO_CREATE_MASK = "无法建立 Modal Mask";
 msgzul.UNKNOWN_TYPE = "未知元件类型：";
 msgzul.DATE_REQUIRED = "只能输入日期。格式：";
-msgzul.NO_AUDIO_SUPPORT = "你的浏览器不支援动态音效";
+msgzul.NO_AUDIO_SUPPORT = "你的浏览器不支持动态音效";
