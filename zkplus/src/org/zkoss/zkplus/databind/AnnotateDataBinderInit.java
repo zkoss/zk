@@ -43,9 +43,11 @@ public class AnnotateDataBinderInit implements Initiator {
 	//-- Initator --//
 	public void doAfterCompose(Page page) {
 		AnnotateDataBinder binder = _compPath == null ?
-			new AnnotateDataBinder(page) :  new AnnotateDataBinder(Path.getComponent(_compPath));
+			new AnnotateDataBinder(page) :  _compPath.startsWith("/") ? 
+			new AnnotateDataBinder(Path.getComponent(_compPath)) : 
+			new AnnotateDataBinder(page.getFellow(_compPath));
 		page.setVariable("binder", binder);
-	    binder.loadAll(); //load data bean person into UI components
+	    binder.loadAll(); //load data bean properties into UI components
 	}
  	public void doCatch(java.lang.Throwable ex) {
  		// do nothing

@@ -16,8 +16,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
+import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+
+import org.zkoss.zul.impl.InputElement;
+import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Slider;
+import org.zkoss.zul.Calendar;
 
 import org.zkoss.util.ModificationException;
 import org.zkoss.lang.Classes;
@@ -25,6 +33,7 @@ import org.zkoss.lang.reflect.Fields;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.lang.reflect.Method;
@@ -45,26 +54,27 @@ public class DataBinder {
 	 * @param expression The expression to associate the data bean.
 	 */
 	public void addBinding(Component comp, String attr, String expression) {
-		addBinding(comp, attr, expression, null, null);
+		addBinding(comp, attr, expression, null, null, null);
 	}
 
 	/** Binding bean to UI component. 
 	 * @param comp The component to be associated.
 	 * @param attr The attribute of the component to be associated.
 	 * @param expression The expression to associate the data bean.
-	 * @param access In the view of UI component: "ro" read only, "rw" read write, "wo" write only when doing
-	 * data binding. null means using the default access natural of the component. e.g. Label is "ro", 
-	 * but Textbox is "rw".
+	 * @param eventList The event list to be registered for data loading.
+	 * @param access In the view of UI component: "load" load only, "both" load/save, "save" save only when doing
+	 * data binding. null means using the default access natural of the component. e.g. Label is "load", 
+	 * but Textbox is "both".
 	 * @param converter The converter class used to convert classes between component and the associated bean.
 	 * null means using the default class conversion method.
 	 */
-	public void addBinding(Component comp, String attr, String expression, String access, String converter) {
+	public void addBinding(Component comp, String attr, String expression, String[] eventList, String access, String converter) {
 		Map attrMap = (Map) _bindings.get(comp);
 		if (attrMap == null) {
 			attrMap = new LinkedHashMap(3);
 			_bindings.put(comp, attrMap);
 		}
-		attrMap.put(attr, new Binding(comp, attr, expression, access, converter));
+		attrMap.put(attr, new Binding(comp, attr, expression, eventList, access, converter));
 	}
 	
 	/** Bind a real bean object to the specified beanid. You might not need to call this method because this
@@ -119,7 +129,7 @@ public class DataBinder {
 	private void loadUi(Map attrMap) {
 		for (final Iterator it = attrMap.values().iterator(); it.hasNext(); ) {
 			final Binding binding = (Binding) it.next();
-			if (binding.canRead()) {
+			if (binding.canLoad()) {
 				binding.loadAttr();
 			}
 		}
@@ -128,7 +138,7 @@ public class DataBinder {
 	private void saveUi(Map attrMap) {
 		for (final Iterator it = attrMap.values().iterator(); it.hasNext(); ) {
 			final Binding binding = (Binding) it.next();
-			if (binding.canWrite()) {
+			if (binding.canSave()) {
 				binding.saveAttr();
 			}
 		}
@@ -141,7 +151,7 @@ public class DataBinder {
 				converter = (TypeConverter) Classes.newInstanceByThread(clsName);
 				_converterMap.put(clsName, converter);
 			} catch (java.lang.reflect.InvocationTargetException ex) {
-				throw UiException.Aide.wrap(ex.getCause());
+				throw UiException.Aide.wrap(ex);
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex);
 			}
@@ -156,65 +166,106 @@ public class DataBinder {
 		private String _expression;
 		private String _beanid;
 		private String _props; //a.b.c
-		private boolean _canRead;
-		private boolean _canWrite;
+		private boolean _canLoad;
+		private boolean _canSave;
 		private TypeConverter _converter;
 		
 		/** Construtor to form a binding between UI component and backend data bean.
 		 * @param comp The component to be associated.
 		 * @param attr The attribute of the component to be associated.
 		 * @param expression The expression to associate the data bean.
-		 * @param access In the view of UI component: "ro" read only, "rw" read write, "wo" write only when doing
+		 * @param eventList The event list to be registered for data loading.
+		 * @param access In the view of UI component: "load" load only, "both" load/save, "save" save only when doing
 		 * data binding. null means using the default access natural of the attribute of the component. 
-		 * e.g. Label.value is "ro" while Textbox.value is "rw".
+		 * e.g. Label.value is "load" while Textbox.value is "both".
 		 * @param converter The converter class used to convert classes between component and the associated bean.
 		 * null means using the default class conversion method.
 		 */
-		private Binding(Component comp, String attr, String expression, String access, String converter) {
+		private Binding(Component comp, String attr, String expression, String[] eventList, String access, String converter) {
 			_comp = comp;
 			_attr = attr;
 			_expression = expression;
-			parseExpression(expression);
-
+			String[] results = parseExpression(expression);
+			_beanid = results[0];
+			_props = results[1];
+			
 			if (access == null) {
 				access = decideAccessibility();
 			}
 			
-			if ("rw".equals(access)) {
-				_canRead = true;
-				_canWrite = true;
-			} else if ("ro".equals(access)) {
-				_canRead = true;
-			} else if ("wo".equals(access)) {
-				_canWrite = true;
+			if ("both".equals(access)) {
+				_canLoad = true;
+				_canSave = true;
+			} else if ("load".equals(access)) {
+				_canLoad = true;
+			} else if ("save".equals(access)) {
+				_canSave = true;
 			} else { //unknow access mode
-				throw new UiException("Unknown DataBinder access mode. Should be \"rw\", \"ro\", or \"wo\": "+access);
+				throw new UiException("Unknown DataBinder access mode. Should be \"both\", \"load\", or \"save\": "+access);
 			}
 			
 			if (converter != null) {
 				_converter = lookupConverter(converter);
 			}
+			
+			registerDefaultEventListener(eventList);
 		}
 		
 		private String decideAccessibility() {
-			if ((_comp instanceof org.zkoss.zul.impl.InputElement && "value".equals(_attr))
-				|| (_comp instanceof org.zkoss.zul.Checkbox && "checked".equals(_attr))
-				|| (_comp instanceof org.zkoss.zul.Listbox && "model".equals(_attr))
-				|| (_comp instanceof org.zkoss.zul.Slider && "curpos".equals(_attr))
-				|| (_comp instanceof org.zkoss.zul.Calendar && "value".equals(_attr)))
-				return "rw";
+			if ((_comp instanceof InputElement && "value".equals(_attr))
+				|| (_comp instanceof Checkbox && "checked".equals(_attr))
+				|| (_comp instanceof Slider && "curpos".equals(_attr))
+				|| (_comp instanceof Calendar && "value".equals(_attr)))
+				return "both";
 			else
-				return "ro";
+				return "load";
+		}
+
+		private TypeConverter getDefaultConverter(Object val) {
+			//collection set to ListModel
+			if (_comp instanceof org.zkoss.zul.Listbox 
+				&& "model".equals(_attr) 
+				&& (val instanceof Collection || val instanceof Map)) {
+				return new ListModelConverter();
+			}
+			return null;
+		}
+
+		//register DefaultEventListner to automatically save component value to the bean
+		private void registerDefaultEventListener(String[] eventList) {
+			if (canSave()) {
+				if (_comp instanceof InputElement && "value".equals(_attr)) {
+					_comp.addEventListener("onChange", new SaveEventListener());
+					
+				} else if (_comp instanceof Checkbox && "checked".equals(_attr)) {
+					_comp.addEventListener("onCheck", new SaveEventListener());
+					
+				} else if (_comp instanceof Slider && "curpos".equals(_attr)) {
+					_comp.addEventListener("onScroll", new SaveEventListener());
+					
+				} else if (_comp instanceof Calendar && "value".equals(_attr)) {
+					_comp.addEventListener("onChange", new SaveEventListener());
+				}
+			}
+			
+			if (canLoad() && eventList != null) {
+				for(int j = 0; j < eventList.length; ++j) {
+					String expr = eventList[j];
+					String[] results = parseExpression(expr); //[0] bean id or bean path, [1] event name
+					Component target = (Component) lookupBean(results[0]);
+					target.addEventListener(results[1], new LoadEventListener());
+				}
+			}
+		}
+
+		private boolean canLoad() {
+			return _canLoad;
 		}
 		
-		private boolean canRead() {
-			return _canRead;
+		private boolean canSave() {
+			return _canSave;
 		}
-		
-		private boolean canWrite() {
-			return _canWrite;
-		}
-		
+
 		private void saveAttr() {
 			try {
 				Object bean = lookupBean(_beanid);
@@ -222,6 +273,9 @@ public class DataBinder {
 					throw new UiException("Cannot find the specified bean: "+_beanid+" in "+_expression);
 				}
 				Object val = Fields.getField(_comp, _attr);
+				if (_converter == null) {
+					_converter = getDefaultConverter(val);
+				}
 				if (_converter != null) {
 					val = _converter.coerceToBean(val);
 				}
@@ -250,6 +304,9 @@ public class DataBinder {
 					throw new UiException("Cannot find the specified bean: "+_beanid+" in "+_expression);
 				}
 				Object val = _props == null ? bean : Fields.getField(bean, _props);
+				if (_converter == null) {
+					_converter = getDefaultConverter(val);
+				}
 				if (_converter != null) {
 					val = _converter.coerceToUi(val);
 				}
@@ -267,23 +324,47 @@ public class DataBinder {
 			Object bean = null;
 			if (_beans.containsKey(beanid)) {
 				bean = _beans.get(beanid);
+			} else if (beanid.startsWith("/")) { //a component Path in ID Space
+				bean = Path.getComponent(beanid);	
 			} else {
 				bean = _comp.getVariable(beanid, false);
 			}
 			return bean;
 		}
 
-		private void parseExpression(String expr) {
+		private String[] parseExpression(String expr) {
 			String beanid = null;
 			String props = null;
 			int j = expr.indexOf(".");
 			if (j < 0) { //bean only
-				_beanid = expr;
-				_props = null;
+				beanid = expr;
+				props = null;
 			} else {
-				_beanid = expr.substring(0, j);
-				_props = expr.substring(j+1);
+				beanid = expr.substring(0, j);
+				props = expr.substring(j+1);
 			}
-		}		
+			String[] results = new String[2];
+			results[0] = beanid;
+			results[1] = props;
+			return results;
+		}
+		
+		private class SaveEventListener implements EventListener {
+			public boolean isAsap() {
+				return true;
+			}
+			public void onEvent(Event event) {
+				saveAttr();
+			}
+		}
+		
+		private class LoadEventListener implements EventListener {
+			public boolean isAsap() {
+				return true;
+			}
+			public void onEvent(Event event) {
+				loadAttr();
+			}
+		}
 	}
 }
