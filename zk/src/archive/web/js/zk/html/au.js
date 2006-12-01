@@ -1328,13 +1328,13 @@ zkau._enddrag = function (n, pointer, evt) {
 			if (evt.ctrlKey) keys += 'c';
 			if (evt.shiftKey) keys += 's';
 		}
-		setTimeout("zkau._sendDrop('"+n.id+"','"+e.id+"','"+keys+"')", 50);
+		setTimeout("zkau._sendDrop('"+n.id+"','"+e.id+"','"+pointer[0]+"','"+pointer[1]+"','"+keys+"')", 50);
 		//In IE, listitem is selected after _enddrag, so we have to
 		//delay the sending of onDrop
 	}
 };
-zkau._sendDrop = function (dragged, dropped, keys) {
-	zkau.send({uuid: dropped, cmd: "onDrop", data: [dragged, keys]});
+zkau._sendDrop = function (dragged, dropped, x, y, keys) {
+	zkau.send({uuid: dropped, cmd: "onDrop", data: [dragged, x, y, keys]});
 };
 zkau._getDrop = function (n, pointer) {
 	var dragType = getZKAttr(n, "drag");

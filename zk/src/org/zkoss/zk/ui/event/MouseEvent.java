@@ -83,8 +83,11 @@ public class MouseEvent extends Event {
 
 	/** Returns the logical name of the area that the click occurs, or
 	 * null if not available.
+	 *
+	 * <p>It is used only with some special components, such as <code>imagemap</code>,
+	 * that partition itself into several logical areas.
 	 */
-	public final String getArea() {
+	public String getArea() {
 		return _area;
 	}
 	/** Returns the x coordination of the mouse pointer relevant to
