@@ -1,4 +1,4 @@
-/* SmartListModel.java
+/* ListModelList.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Nov 23 17:43:13     2006, Created by Henri
+		Thu Nov 23 17:43:13     2006, Created by Henri Chen
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -19,8 +19,6 @@ package org.zkoss.zul;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zk.ui.UiException;
 
-import org.zkoss.lang.reflect.FacadeInvoker;
-
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -28,38 +26,56 @@ import java.util.Collection;
 import java.util.ListIterator;
 
 /**
- * <p>This is the smart list model to be used with listbox. Add or remove the contents of 
- * this model would cause the associated listbox to change accordingly. Note that
- * this SmartListModel is also a java.util.List.</p>
+ * <p>This is the {@link ListModel} as a {@link java.util.List} to be used with {@link Listbox}.
+ * Add or remove the contents of this model as a List would cause the associated Listbox to change accordingly.</p> 
  *
- * @author Henri
+ * @author Henri Chen
+ * @see ListModel
+ * @see ListModelList
+ * @see ListModelMap
  */
-public class SmartListModel extends AbstractListModel implements List {
+public class ListModelList extends AbstractListModel implements List {
 	private List _list;
 	
 	/**
+	 * new an instance which accepts a "live" List as its inner List. Any change to this
+	 * ListModelList will change to the passed in "live" List.
+	 * @param list the inner List storage
+	 */
+	public static ListModelList instance(List list) {
+		return new ListModelList(list);
+	}
+
+	/**
+	 * <p>Constructor, unlike other List implementation, the passed in List is a "live" list inside
+	 * this ListModelList; i.e., when you add or remove items from this ListModelList,
+	 * the inner "live" list would be changed accordingly.</p>
+	 * @param list the inner "live" list that would be added and/or removed accordingly
+	 * when you add and/or remove item to this ListModelList.
+	 */
+	private ListModelList(List list) {
+		_list = list;
+	}
+
+	/**
 	 * Constructor.
 	 */
-	public SmartListModel() {
+	public ListModelList() {
 		_list = new ArrayList();
 	}
 	
 	/**
-	 * <p>Constructor, unlike other List implementation, the passed in List is a "live" list inside
-	 * this SmartListModel; i.e., when you add or remove items from this SmartListModel,
-	 * the inner "live" list would be changed accordingly.</p>
-	 * @param list the inner "live" list that would be added and/or removed accordingly
-	 * when you add and/or remove item to this SmartListModel.
+	 * Constructor.
 	 */
-	public SmartListModel(List list) {
-		_list = list;
+	public ListModelList(Collection c) {
+		_list = new ArrayList(c);
 	}
 	
 	/**
 	 * Constructor.
-	 * @param initialCapacity the initial capacity for this SmartListModel.
+	 * @param initialCapacity the initial capacity for this ListModelList.
 	 */
-	public SmartListModel(int initialCapacity) {
+	public ListModelList(int initialCapacity) {
 		_list = new ArrayList(initialCapacity);
 	}
 	
@@ -87,7 +103,13 @@ public class SmartListModel extends AbstractListModel implements List {
 		}
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, fromIndex, index - 1);
 	}
-	
+
+	/**
+	 * Get the inner real List.
+	 */	
+	public List getInnerList() {
+		return _list;
+	}
 	//-- ListModel --//
 	public int getSize() {
 		return _list.size();
@@ -255,7 +277,7 @@ public class SmartListModel extends AbstractListModel implements List {
 
 	public List subList(int fromIndex, int toIndex) {
 		List list = _list.subList(fromIndex, toIndex);
-		return new SmartListModel(list);
+		return new ListModelList(list);
 	}
 	
 	public Object[] toArray() {
