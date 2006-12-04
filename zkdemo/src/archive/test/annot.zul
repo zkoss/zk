@@ -47,7 +47,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			dump(sb, it.next());
 	}
 	Datebox db = new Datebox();
-	db.addAnnotation(new org.zkoss.zk.ui.metainfo.AnnotationImpl("datebox"));
+	db.addAnnotation("datebox", null);
 	db.setParent(main);
 	</zscript>
 	<button label="show">
