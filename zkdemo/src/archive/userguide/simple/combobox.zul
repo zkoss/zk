@@ -61,6 +61,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<comboitem label="Ajax and RIA" image="/img/cubfirs.gif"
 		description="Rich Internet Application by Ajax"/>
 	</combobox>
+	<separator bar="true"/>
+	<hbox>
+	<checkbox checked="true" onCheck="combo.autodrop = self.checked" label="auto drop popup when typing"/>
+	<checkbox checked="true" onCheck="combo.buttonVisible = self.checked" label="button visible"/>
+	</hbox>
+	<combobox id="combo" autodrop="true">
+		<comboitem label="Apple"/>
+		<comboitem label="Orange"/>
+		<comboitem label="Eggs"/>
+		<comboitem label="tomatoes and flowers"/>
+		<comboitem label="Orange Juice"/>
+		<comboitem label="apple pie"/>
+		<comboitem label="lemon juice"/>
+		<comboitem label="Tomato"/>
+		<comboitem label="tomato juice"/>
+	</combobox>
 	</vbox>
 </window>
 				]]></attribute>

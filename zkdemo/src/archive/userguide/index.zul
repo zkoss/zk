@@ -40,8 +40,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="s6" label="The onChanging event" value="/userguide/simple/onChanging.zul"/>
 						<treeitem id="s7" label="Radio and Checkboxes" value="/userguide/simple/radiocheckbox.zul"/>
 						<treeitem id="s9" label="Comboboxes" value="/userguide/simple/combobox.zul"/>
-						<treeitem id="s10" label="More comboboxes" value="/userguide/simple/moreCombobox.zul"/>
-						<treeitem id="s10a" label="Bandboxes" value="/userguide/simple/bandbox.zul"/>
+						<treeitem id="s10" label="Bandboxes" value="/userguide/simple/bandbox.zul"/>
 						<treeitem id="s11" label="Sliders" value="/userguide/simple/slider.zul"/>
 						<treeitem id="s12" label="The onScrolling event" value="/userguide/simple/onScrolling.zul"
 							unless="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}"/>

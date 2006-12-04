@@ -41,8 +41,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="The onChanging event" onClick="doSelect(&quot;s6&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Radio and Checkboxes" onClick="doSelect(&quot;s7&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Comboboxes" onClick="doSelect(&quot;s9&quot;)"/></h:li>
-		<h:li><toolbarbutton label="More comboboxes" onClick="doSelect(&quot;s10&quot;)"/></h:li>
-		<h:li><toolbarbutton label="Bandboxes" onClick="doSelect(&quot;s10a&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Bandboxes" onClick="doSelect(&quot;s10&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Sliders" onClick="doSelect(&quot;s11&quot;)"/></h:li>
 		<h:li unless="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}"><toolbarbutton label="The onScrolling event" onClick="doSelect(&quot;s12&quot;)"/></h:li>
 	</h:ul>

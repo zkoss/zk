@@ -65,6 +65,10 @@ Unlike combobox, the popup window could contain any kind of components.</p>
 </vbox>
 		</bandpopup>
 	</bandbox>
+	<hbox>
+	<checkbox checked="false" onCheck="bd.autodrop = self.checked" label="auto drop popup when typing"/>
+	<checkbox checked="true" onCheck="bd.buttonVisible = self.checked" label="button visible"/>
+	</hbox>
 	</vbox>
 </window>
 				]]></attribute>
