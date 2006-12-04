@@ -57,6 +57,7 @@ import org.zkoss.zk.ui.impl.Serializables;
 import org.zkoss.zk.ui.impl.bsh.BshNamespace;
 import org.zkoss.zk.ui.metainfo.Milieu;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
+import org.zkoss.zk.ui.metainfo.AnnotationMapImpl;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -98,7 +99,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A map of annotations. Serializable since a component might have
 	 * its own annotations.
 	 */
-	private AnnotationMap _annots;
+	private AnnotationMapImpl _annots;
 	/** The extra controls. */
 	private transient Object _xtrl;
 	/** A set of children being added. It is used only to speed up
@@ -1029,41 +1030,31 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public Annotation getAnnotation(String annotName) {
-		final AnnotationMap am = annotmap();
-		return am != null ? am.getAnnotation(annotName): null;
+		return annotmap().getAnnotation(annotName);
 	}
 	public Annotation getAnnotation(String propName, String annotName) {
-		final AnnotationMap am = annotmap();
-		return am != null ? am.getAnnotation(propName, annotName): null;
+		return annotmap().getAnnotation(propName, annotName);
 	}
 	public Collection getAnnotations() {
-		final AnnotationMap am = annotmap();
-		return am != null ? am.getAnnotations(): null;
+		return annotmap().getAnnotations();
 	}
 	public Collection getAnnotations(String propName) {
-		final AnnotationMap am = annotmap();
-		return am != null ? am.getAnnotations(propName): null;
+		return annotmap().getAnnotations(propName);
 	}
 	public List getAnnotatedPropertiesBy(String annotName) {
-		final AnnotationMap am = annotmap();
-		return am != null ? am.getAnnotatedPropertiesBy(annotName): null;
+		return annotmap().getAnnotatedPropertiesBy(annotName);
 	}
 	public List getAnnotatedProperties() {
-		final AnnotationMap am = annotmap();
-		return am != null ? am.getAnnotatedProperties(): null;
+		return annotmap().getAnnotatedProperties();
 	}
 	public void addAnnotation(Annotation annot) {
-		if (_annots == null) {
-			final AnnotationMap am = getMilieu().getAnnotationMap();
-			_annots = am != null ? (AnnotationMap)am.clone(): new AnnotationMap();
-		}
+		if (_annots == null)
+			_annots = (AnnotationMapImpl)getMilieu().getAnnotationMap().clone();
 		_annots.addAnnotation(annot);
 	}
 	public void addAnnotation(String propName, Annotation annot) {
-		if (_annots == null) {
-			final AnnotationMap am = getMilieu().getAnnotationMap();
-			_annots = am != null ? (AnnotationMap)am.clone(): new AnnotationMap();
-		}
+		if (_annots == null)
+			_annots = (AnnotationMapImpl)getMilieu().getAnnotationMap().clone();
 		_annots.addAnnotation(propName, annot);
 	}
 	private AnnotationMap annotmap() {
@@ -1239,9 +1230,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		clone._desktop = null;
 		clone._page = null;
 		clone._parent = null;
-		clone._attrs = new HashMap(clone._attrs);
+		clone._attrs = new HashMap(_attrs);
 		if (_listeners != null)
-			_listeners = new HashMap(clone._listeners);
+			clone._listeners = new HashMap(_listeners);
+		if (_annots != null)
+			clone._annots = (AnnotationMapImpl)_annots.clone();
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);

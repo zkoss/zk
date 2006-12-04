@@ -77,12 +77,10 @@ implements Condition {
 	 * which are used to evaluate this definition multiple times.
 	 */
 	private String[] _forEach;
-	/** The map of annotations.
-	 */
-	private final AnnotationMap _annots = new AnnotationMap();
 
 	/** Constructs an instance definition.
 	 * @param parent the parent; never null.
+	 * @param compdef the component definition; never null
 	 */
 	public InstanceDefinition(InstanceDefinition parent,
 	ComponentDefinition compdef, String tagnm) {
@@ -256,18 +254,6 @@ implements Condition {
 		return _roChildren;
 	}
 
-	/** Returns the map of annotations associated with this definition, or
-	 * null if no annotation at all.
-	 *
-	 * <p>Note: It is shared by components created
-	 * by use of this definition, so don't access
-	 * {@link AnnotationMap#addAnnotation}, except the parser
-	 * that creates this definition. 
-	 */
-	public AnnotationMap getAnnotationMap() {
-		return _annots;
-	}
-
 	//-- Condition --//
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(comp);
@@ -317,7 +303,7 @@ implements Condition {
 	/*package*/ Map getMolds() {
 		return _compdef.getMolds();
 	}
-	/*package*/ void addParam(String name, String value) {
+	public void addParam(String name, String value) {
 		throw new UnsupportedOperationException();
 		//if we want to allow this, we have to modify Milieu
 	}
@@ -325,6 +311,47 @@ implements Condition {
 		return _compdef.getParams();
 	}
 
+	/** Returns the map of annotations associated with this definition
+	 * (never null).
+	 */
+	public AnnotationMap getAnnotationMap() {
+		return _annots != null ? _annots:
+			_compdef != null ? _compdef.getAnnotationMap(): AnnotationMap.EMPTY;
+	}
+	public void addAnnotation(Annotation annot) {
+		if (_annots == null) {
+			synchronized (this) {
+				if (_annots == null) {
+					_annots = _compdef != null ?
+						(AnnotationMapImpl)_compdef.getAnnotationMap().clone():
+						new AnnotationMapImpl();
+					_annots.addAnnotation(annot);
+					return;
+				}
+			}
+		}
+		synchronized (_annots) {
+			_annots.addAnnotation(annot);
+		}
+	}
+	public void addAnnotation(String propName, Annotation annot) {
+		if (_annots == null) {
+			synchronized (this) {
+				if (_annots == null) {
+					_annots = _compdef != null ?
+						(AnnotationMapImpl)_compdef.getAnnotationMap().clone():
+						new AnnotationMapImpl();
+					_annots.addAnnotation(propName, annot);
+					return;
+				}
+			}
+		}
+		synchronized (_annots) {
+			_annots.addAnnotation(propName, annot);
+		}
+	}
+
+	//Serializable//
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
 		throw new java.io.IOException("InstanceDefinition not serializable");
@@ -333,5 +360,12 @@ implements Condition {
 	//Object//
 	public String toString() {
 		return "[InstanceDefinition:"+_compdef.getName()+'/'+getName()+']';
+	}
+
+	/** Not clonable.
+	 * @exception CloneNotSupportedException always thrown.
+	 */
+	public Object clone() {
+		throw new UnsupportedOperationException("InstanceDefinition not clonable");
 	}
 }

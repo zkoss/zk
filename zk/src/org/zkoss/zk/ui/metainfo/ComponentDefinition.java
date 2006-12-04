@@ -50,6 +50,7 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	private Map _molds, _params;
 	private List _props;
 	private String _macroURI;
+	/*package*/ AnnotationMapImpl _annots;
 
 	/** A special definition representing the zk component. */
 	public final static ComponentDefinition ZK =
@@ -222,6 +223,7 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 			throw new IllegalArgumentException("null");
 		if (name.length() == 0 || moldUri.length() == 0)
 			throw new IllegalArgumentException("empty");
+
 		if (_molds == null) {
 			synchronized (this) {
 				if (_molds == null) {
@@ -247,16 +249,26 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	}
 
 	/** Adds a parameter.
-	 * It is not public because we don't synchronize the access
-	 * (so it is called when booting).
 	 */
-	/*package*/ void addParam(String name, String value) {
+	public void addParam(String name, String value) {
 		if (name == null || value == null)
 			throw new IllegalArgumentException("null");
 		if (name.length() == 0 || value.length() == 0)
 			throw new IllegalArgumentException("empty");
-		if (_params == null) _params = new HashMap(5);
-		_params.put(name, value);
+
+		if (_params == null) {
+			synchronized (this) {
+				if (_params == null) {
+					final Map params = new HashMap(5);
+					params.put(name, value);
+					_params = params;
+					return;
+				}
+			}
+		}
+		synchronized (_params) {
+			_params.put(name, value);
+		}
 	}
 	/** Returns the list of parameters, or null if not available.
 	 *
@@ -277,6 +289,7 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	public void addProperty(String name, String value, Condition cond) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("name");
+
 		final Property prop = new Property(name, value, cond);
 		if (_props == null) {
 			synchronized (this) {
@@ -301,6 +314,51 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	//Note: we don't allow InstanceDefinition to override it!!
 	//Reason: there are two set of properties and it's Milieu's job to handle
 		return _props;
+	}
+
+	/** Returns the map of annotations associated with this definition
+	 * (never null).
+	 */
+	public AnnotationMap getAnnotationMap() {
+		return _annots != null ? _annots: AnnotationMap.EMPTY;
+	}
+	/** Associates an annotation to this component definition.
+	 */
+	public void addAnnotation(Annotation annot) {
+		if (_annots == null) {
+			synchronized (this) {
+				if (_annots == null) {
+					final AnnotationMapImpl annots = new AnnotationMapImpl();
+					annots.addAnnotation(annot);
+					_annots = annots;
+					return;
+				}
+			}
+		}
+		synchronized (_annots) {
+			_annots.addAnnotation(annot);
+		}
+	}
+	/** Adds an annotation to the specified proeprty of this component
+	 * definition.
+	 *
+	 * @param propName the property name.
+	 * @param annot the annotation.
+	 */
+	public void addAnnotation(String propName, Annotation annot) {
+		if (_annots == null) {
+			synchronized (this) {
+				if (_annots == null) {
+					final AnnotationMapImpl annots = new AnnotationMapImpl();
+					annots.addAnnotation(propName, annot);
+					_annots = annots;
+					return;
+				}
+			}
+		}
+		synchronized (_annots) {
+			_annots.addAnnotation(propName, annot);
+		}
 	}
 
 	/** Clones this definition and assins with the specified name.
@@ -336,15 +394,18 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 		return "[ComponentDefinition: "+_name+']';
 	}
 	public Object clone() {
-		try {
-			final ComponentDefinition compdef =
-				(ComponentDefinition)super.clone();
-			if (_props != null) compdef._props = new LinkedList(_props);
-			if (_molds != null) compdef._molds = new HashMap(_molds);
-			if (_params != null) compdef._params = new HashMap(_params);
-			return compdef;
-		} catch (CloneNotSupportedException ex) {
-			throw new InternalError();
+		synchronized (this) {
+			try {
+				final ComponentDefinition compdef =
+					(ComponentDefinition)super.clone();
+				if (_annots != null) compdef._annots = (AnnotationMapImpl)_annots.clone();
+				if (_props != null) compdef._props = new LinkedList(_props);
+				if (_molds != null) compdef._molds = new HashMap(_molds);
+				if (_params != null) compdef._params = new HashMap(_params);
+				return compdef;
+			} catch (CloneNotSupportedException ex) {
+				throw new InternalError();
+			}
 		}
 	}
 }

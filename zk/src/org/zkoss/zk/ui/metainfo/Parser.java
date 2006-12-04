@@ -722,13 +722,12 @@ public class Parser {
 		 */
 		private void updateAnnotations(InstanceDefinition instdef, String propName) {
 			if (!_annots.isEmpty()) {
-				final AnnotationMap annots = instdef.getAnnotationMap();
 				for (Iterator it = _annots.values().iterator(); it.hasNext();) {
 					final Annotation annot = (Annotation)it.next();
 					if (propName != null)
-						annots.addAnnotation(propName, annot);
+						instdef.addAnnotation(propName, annot);
 					else
-						annots.addAnnotation(annot);
+						instdef.addAnnotation(annot);
 				}
 				_annots.clear();
 			}
