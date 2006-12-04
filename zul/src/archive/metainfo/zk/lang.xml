@@ -107,7 +107,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<property-value></property-value>
 		</property>
 		-->
-		<!-- Any number of annotation
+
+		<!-- Any number of annotations
+		Annotation of this component definition
 		<annotation>
 			<annotation-name></annotation-name>
 			<attribute>
@@ -119,7 +121,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value></attribute-value>
 			</attribute>
 		</annotation>
+		Annotation of the specified field of this component definition
+		<annotation>
+			<annotation-name></annotation-name>
+			<property-name></property-name>
+			<attribute>
+				<attribute-name></attribute-name>
+				<attribute-value></attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name></attribute-name>
+				<attribute-value></attribute-value>
+			</attribute>
+		</annotation>
 		-->
+
 		<!-- any number of initial parameters
 			param-value could be an expression
 		<param>
