@@ -305,24 +305,23 @@ public class DefinitionLoaders {
 				langdef.addComponentDefinition(compdef);
 			}
 
-			Map map = parseMolds(el);
-			for (Iterator e = map.entrySet().iterator(); e.hasNext();) {
+			for (Iterator e = parseMolds(el).entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
 				compdef.addMold((String)me.getKey(), (String)me.getValue());
 			}
 
-			map = parseParams(el);
-			for (Iterator e = map.entrySet().iterator(); e.hasNext();) {
+			for (Iterator e = parseParams(el).entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
 				compdef.addParam((String)me.getKey(), (String)me.getValue());
 			}
 
-			map = parseProps(el);
-			for (Iterator e = map.entrySet().iterator(); e.hasNext();) {
+			for (Iterator e = parseProps(el).entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
 				compdef.addProperty(
 					(String)me.getKey(), (String)me.getValue(), null);
 			}
+
+			parseAnnots(compdef, el);
 		}
 	}
 	private static Class locateClass(String clsnm) throws Exception {
@@ -426,6 +425,28 @@ public class DefinitionLoaders {
 	}
 	private static Map parseParams(Element elm) {
 		return IDOMs.parseParams(elm, "param", "param-name", "param-value");
+	}
+	private static Map parseAttrs(Element elm) {
+		return IDOMs.parseParams(elm, "attribute", "attribute-name", "attribute-value");
+	}
+
+	private static void parseAnnots(ComponentDefinition compdef, Element top) {
+		for (Iterator it = top.getElements("annotation").iterator(); it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String nm = IDOMs.getRequiredElementValue(el, "annotation-name");
+			final AnnotationImpl an = new AnnotationImpl(nm);
+
+			for (Iterator e = parseAttrs(el).entrySet().iterator(); e.hasNext();) {
+				final Map.Entry me = (Map.Entry)e.next();
+				an.setAttribute((String)me.getKey(), (String)me.getValue());
+			}
+
+			final String prop = el.getElementValue("property-name", true);
+			if (prop == null || prop.length() == 0)
+				compdef.addAnnotation(an);
+			else
+				compdef.addAnnotation(prop, an);
+		}
 	}
 
 	private static class Addon {
