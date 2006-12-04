@@ -20,8 +20,13 @@ package org.zkoss.zul;
 
 /**
  * A simple implementation of {@link ListModel}.
+ * Note: It assumes the content is immutable. If not, use {@link ListModelList}
+ * instead.
  *
  * @author tomyeh
+ * @see ListModelSet
+ * @see ListModelList
+ * @see ListModelMap
  */
 public class SimpleListModel extends AbstractListModel
 implements java.io.Serializable {

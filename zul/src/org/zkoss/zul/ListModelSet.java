@@ -90,8 +90,8 @@ public class ListModelSet extends AbstractListModel implements Set {
 	 * @param initialCapacity the initial capacity for this ListModelMap.
 	 * @param loadFactor the loadFactor to increase capacity of this ListModelMap.
 	 */
-	public ListModelSet(int initialCapacity, float loadFactory) {
-		_set = new LinkedHashSet(initialCapacity, loadFactory);
+	public ListModelSet(int initialCapacity, float loadFactor) {
+		_set = new LinkedHashSet(initialCapacity, loadFactor);
 		_list = new ArrayList(initialCapacity);
 	}
 

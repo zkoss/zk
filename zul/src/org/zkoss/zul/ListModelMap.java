@@ -99,8 +99,8 @@ public class ListModelMap extends AbstractListModel implements Map {
 	 * @param initialCapacity the initial capacity for this ListModelMap.
 	 * @param loadFactor the loadFactor to increase capacity of this ListModelMap.
 	 */
-	public ListModelMap(int initialCapacity, float loadFactory) {
-		_map = new LinkedHashMap(initialCapacity, loadFactory);
+	public ListModelMap(int initialCapacity, float loadFactor) {
+		_map = new LinkedHashMap(initialCapacity, loadFactor);
 		_list = new ArrayList(initialCapacity);
 		init();
 	}
