@@ -105,6 +105,10 @@ zkCmbox.setAttr = function (cmp, nm, val) {
 			inp.style.height = val;
 			return true;
 		}
+	} else if ("z.btnVisi" == nm) {
+		var btn = $e(cmp.id + "!btn");
+		if (btn) btn.style.display = val == "true" ? "": "none";
+		return true;
 	} else if (zkCmbox._inflds.contains(nm)) {
 		cmp = $real(cmp);
 	}

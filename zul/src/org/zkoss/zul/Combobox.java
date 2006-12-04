@@ -40,7 +40,7 @@ import org.zkoss.zk.ui.event.Events;
  * @see Comboitem
  */
 public class Combobox extends Textbox {
-	private boolean _autodrop, _autocomplete;
+	private boolean _autodrop, _autocomplete, _btnVisible = true;
 
 	public Combobox() {
 		setSclass("combobox");
@@ -91,6 +91,21 @@ public class Combobox extends Textbox {
 		if (_autocomplete != autocomplete) {
 			_autocomplete = autocomplete;
 			smartUpdate("z.aco", autocomplete);
+		}
+	}
+
+	/** Returns whether the button (on the right of the textbox) is visible.
+	 * <p>Default: true.
+	 */
+	public boolean isButtonVisible() {
+		return _btnVisible;
+	}
+	/** Sets whether the button (on the right of the textbox) is visible.
+	 */
+	public void setButtonVisible(boolean visible) {
+		if (_btnVisible != visible) {
+			_btnVisible = visible;
+			smartUpdate("z.btnVisi", visible);
 		}
 	}
 

@@ -17,10 +17,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/><%-- z.combo means an input with addition buttons --%>
-<span id="${self.uuid}"${self.outerAttrs} z.type="zul.cb.Cmbox" z.combo="true"><input id="${self.uuid}!real" autocomplete="off"${self.innerAttrs}/><h:img id="${self.uuid}!btn" src="~./zul/img/combobtn.gif"/><div id="${self.uuid}!pp" class="comboboxpp" style="display:none" tabindex="-1">
+<span id="${self.uuid}"${self.outerAttrs} z.type="zul.cb.Cmbox" z.combo="true"><input id="${self.uuid}!real" autocomplete="off"${self.innerAttrs}/><img id="${self.uuid}!btn" src="${c:encodeURL('~./zul/img/combobtn.gif')}"${self.buttonVisible?'':' style="display:none"'}/><div id="${self.uuid}!pp" class="comboboxpp" style="display:none" tabindex="-1">
  <table id="${self.uuid}!cave" cellpadding="0" cellspacing="0">
 	<c:forEach var="child" items="${self.children}">
   ${z:redraw(child, null)}

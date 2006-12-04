@@ -288,6 +288,7 @@
         </xs:sequence>
         <xs:attributeGroup ref="inputElementAttrGroup" />
         <xs:attribute name="autodrop" type="xs:boolean" use="optional" />
+        <xs:attribute name="buttonVisible" type="xs:boolean" use="optional" />
         <xs:attribute name="image" type="xs:anyURI" use="optional" />
         <xs:attribute name="value" type="xs:string" use="optional" />
         <xs:attribute name="type" type="textboxTypeAttrType" use="optional" />
@@ -435,6 +436,7 @@
         </xs:choice>
         <xs:attributeGroup ref="inputElementAttrGroup" />
         <xs:attribute name="autodrop" type="xs:boolean" use="optional" />
+        <xs:attribute name="buttonVisible" type="xs:boolean" use="optional" />
         <xs:attribute name="value" type="xs:string" use="optional" />
         <xs:attribute name="type" type="textboxTypeAttrType" use="optional" />
         <xs:attribute name="onChange" type="xs:string" use="optional" />

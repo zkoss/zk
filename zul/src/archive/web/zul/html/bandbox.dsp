@@ -17,4 +17,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/><%-- z.combo means an input with addition buttons --%>
-<span id="${self.uuid}"${self.outerAttrs} z.type="zul.cb.Bdbox" z.combo="true"><input id="${self.uuid}!real"${self.innerAttrs}/><img id="${self.uuid}!btn" src="${c:encodeURL(self.image)}"/><div id="${self.uuid}!pp" class="bandboxpp" style="display:none" tabindex="-1">${z:redraw(self.dropdown, null)}</div></span>
+<span id="${self.uuid}"${self.outerAttrs} z.type="zul.cb.Bdbox" z.combo="true"><input id="${self.uuid}!real"${self.innerAttrs}/><img id="${self.uuid}!btn" src="${c:encodeURL(self.image)}"${self.buttonVisible?'':' style="display:none"'}/><div id="${self.uuid}!pp" class="bandboxpp" style="display:none" tabindex="-1">${z:redraw(self.dropdown, null)}</div></span>

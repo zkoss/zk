@@ -39,7 +39,7 @@ import org.zkoss.zk.au.AuScript;
 public class Bandbox extends Textbox { //note: it does NOT implement Openable to avoid redudant roundtrip
 	private transient Bandpopup _drop;
 	private String _img = "~./zul/img/bandbtn.gif";
-	private boolean _autodrop;
+	private boolean _autodrop, _btnVisible = true;
 
 	public Bandbox() {
 		setSclass("bandbox");
@@ -75,6 +75,21 @@ public class Bandbox extends Textbox { //note: it does NOT implement Openable to
 		if (_autodrop != autodrop) {
 			_autodrop = autodrop;
 			smartUpdate("z.adr", autodrop);
+		}
+	}
+
+	/** Returns whether the button (on the right of the textbox) is visible.
+	 * <p>Default: true.
+	 */
+	public boolean isButtonVisible() {
+		return _btnVisible;
+	}
+	/** Sets whether the button (on the right of the textbox) is visible.
+	 */
+	public void setButtonVisible(boolean visible) {
+		if (_btnVisible != visible) {
+			_btnVisible = visible;
+			smartUpdate("z.btnVisi", visible);
 		}
 	}
 
