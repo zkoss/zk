@@ -107,6 +107,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<property-value></property-value>
 		</property>
 		-->
+		<!-- Any number of annotation
+		<annotation>
+			<annotation-name></annotation-name>
+			<attribute>
+				<attribute-name></attribute-name>
+				<attribute-value></attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name></attribute-name>
+				<attribute-value></attribute-value>
+			</attribute>
+		</annotation>
+		-->
 		<!-- any number of initial parameters
 			param-value could be an expression
 		<param>
