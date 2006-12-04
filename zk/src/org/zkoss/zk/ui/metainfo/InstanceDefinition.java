@@ -318,36 +318,36 @@ implements Condition {
 		return _annots != null ? _annots:
 			_compdef != null ? _compdef.getAnnotationMap(): AnnotationMap.EMPTY;
 	}
-	public void addAnnotation(Annotation annot) {
+	public void addAnnotation(String annotName, Map annotAttrs) {
 		if (_annots == null) {
 			synchronized (this) {
 				if (_annots == null) {
 					_annots = _compdef != null ?
 						(AnnotationMapImpl)_compdef.getAnnotationMap().clone():
 						new AnnotationMapImpl();
-					_annots.addAnnotation(annot);
+					_annots.addAnnotation(annotName, annotAttrs);
 					return;
 				}
 			}
 		}
 		synchronized (_annots) {
-			_annots.addAnnotation(annot);
+			_annots.addAnnotation(annotName, annotAttrs);
 		}
 	}
-	public void addAnnotation(String propName, Annotation annot) {
+	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
 		if (_annots == null) {
 			synchronized (this) {
 				if (_annots == null) {
 					_annots = _compdef != null ?
 						(AnnotationMapImpl)_compdef.getAnnotationMap().clone():
 						new AnnotationMapImpl();
-					_annots.addAnnotation(propName, annot);
+					_annots.addAnnotation(propName, annotName, annotAttrs);
 					return;
 				}
 			}
 		}
 		synchronized (_annots) {
-			_annots.addAnnotation(propName, annot);
+			_annots.addAnnotation(propName, annotName, annotAttrs);
 		}
 	}
 

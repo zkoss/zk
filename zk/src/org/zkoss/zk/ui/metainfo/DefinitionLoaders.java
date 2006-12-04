@@ -433,19 +433,13 @@ public class DefinitionLoaders {
 	private static void parseAnnots(ComponentDefinition compdef, Element top) {
 		for (Iterator it = top.getElements("annotation").iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
-			final String nm = IDOMs.getRequiredElementValue(el, "annotation-name");
-			final AnnotationImpl an = new AnnotationImpl(nm);
-
-			for (Iterator e = parseAttrs(el).entrySet().iterator(); e.hasNext();) {
-				final Map.Entry me = (Map.Entry)e.next();
-				an.setAttribute((String)me.getKey(), (String)me.getValue());
-			}
-
+			final String annotName = IDOMs.getRequiredElementValue(el, "annotation-name");
+			final Map annotAttrs = parseAttrs(el);
 			final String prop = el.getElementValue("property-name", true);
 			if (prop == null || prop.length() == 0)
-				compdef.addAnnotation(an);
+				compdef.addAnnotation(annotName, annotAttrs);
 			else
-				compdef.addAnnotation(prop, an);
+				compdef.addAnnotation(prop, annotName, annotAttrs);
 		}
 	}
 

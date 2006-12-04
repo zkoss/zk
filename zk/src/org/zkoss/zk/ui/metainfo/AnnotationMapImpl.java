@@ -30,6 +30,8 @@ import java.util.Iterator;
 /**
  * An implementation of {@link AnnotationMap}.
  *
+ * <p>Note: it is not thread-safe.
+ *
  * @author tomyeh
  */
 public class AnnotationMapImpl implements AnnotationMap, java.io.Serializable {
@@ -88,17 +90,17 @@ public class AnnotationMapImpl implements AnnotationMap, java.io.Serializable {
 	//--extra (write)--//
 	/** Adds an annotation.
 	 */
-	public void addAnnotation(Annotation annot) {
-		addAnnotation0(null, annot);
+	public void addAnnotation(String annotName, Map annotAttrs) {
+		addAnnotation0(null, annotName, annotAttrs);
 	}
 	/** Adds an annotation to a proeprty.
 	 *
 	 * @param propName the property name.
 	 */
-	public void addAnnotation(String propName, Annotation annot) {
+	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
 		if (propName == null || propName.length() == 0)
 			throw new IllegalArgumentException("The property name is required");
-		addAnnotation0(propName, annot);
+		addAnnotation0(propName, annotName, annotAttrs);
 	}
 
 	private Annotation getAnnotation0(String propName, String annotName) {
@@ -116,17 +118,19 @@ public class AnnotationMapImpl implements AnnotationMap, java.io.Serializable {
 		return Collections.EMPTY_LIST;
 	}
 
-	private void addAnnotation0(String propnm, Annotation annot) {
-		if (annot == null)
-			throw new IllegalArgumentException("null annot");
+	private void addAnnotation0(String propName, String annotName, Map annotAttrs) {
 		if (_annots == null)
 			_annots = new HashMap(3);
 
-		Map ans = (Map)_annots.get(propnm);
+		Map ans = (Map)_annots.get(propName);
 		if (ans == null)
-			_annots.put(propnm, ans = new LinkedHashMap(3));
+			_annots.put(propName, ans = new LinkedHashMap(3));
 
-		ans.put(annot.getName(), annot);
+		AnnotImpl ai = (AnnotImpl)ans.get(annotName);
+		if (ai == null)
+			ans.put(annotName, ai = new AnnotImpl(annotName));
+
+		ai.addAttributes(annotAttrs);
 	}
 
 	//Cloneable//
@@ -145,5 +149,57 @@ public class AnnotationMapImpl implements AnnotationMap, java.io.Serializable {
 			}
 		}
 		return clone;
+	}
+
+	/** An implementation of {@link Annotation}. */
+	private class AnnotImpl implements Annotation {
+		private final String _name;
+		private Map _attrs;
+
+		private AnnotImpl(String name) {
+			_name = name;
+		}
+
+		//Extra//
+		/** Adds the specified attribute to the annotation.
+		 *
+		 * @param name the attribute name. "value" is assumed if name is null or empty.
+		 * @param value the attribute value. If null, "" is assumed (not removal).
+		 */
+		private void addAttribute(String name, String value) {
+			if (name == null || name.length() == 0)
+				name = "value";
+			if (value == null)
+				value = "";
+	
+			if (_attrs == null)
+				_attrs = new LinkedHashMap(5);
+			_attrs.put(name, value);
+		}
+		/** Adds a map of attributes, (String name, String value), to the annotation.
+		 */
+		private void addAttributes(Map attrs) {
+			if (attrs != null) {
+				for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					addAttribute((String)me.getKey(), (String)me.getValue());
+				}
+			}
+		}
+
+		//Annotation//
+		public String getName() {
+			return _name;
+		}
+		public Map getAttributes() {
+			return _attrs != null ? Collections.unmodifiableMap(_attrs):
+				Collections.EMPTY_MAP;
+		}
+		public String getAttribute(String name) {
+			return _attrs != null ? (String)_attrs.get(name): null;
+		}
+		public String toString() {
+			return '[' + _name + ": " + _attrs + ']';
+		}
 	}
 }

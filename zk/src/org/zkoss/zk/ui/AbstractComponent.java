@@ -1047,15 +1047,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public List getAnnotatedProperties() {
 		return annotmap().getAnnotatedProperties();
 	}
-	public void addAnnotation(Annotation annot) {
+	public void addAnnotation(String annotName, Map annotAttrs) {
 		if (_annots == null)
 			_annots = (AnnotationMapImpl)getMilieu().getAnnotationMap().clone();
-		_annots.addAnnotation(annot);
+		_annots.addAnnotation(annotName, annotAttrs);
 	}
-	public void addAnnotation(String propName, Annotation annot) {
+	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
 		if (_annots == null)
 			_annots = (AnnotationMapImpl)getMilieu().getAnnotationMap().clone();
-		_annots.addAnnotation(propName, annot);
+		_annots.addAnnotation(propName, annotName, annotAttrs);
 	}
 	private AnnotationMap annotmap() {
 		return _annots != null ? _annots: getMilieu().getAnnotationMap();

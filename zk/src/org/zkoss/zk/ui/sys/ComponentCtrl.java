@@ -20,6 +20,7 @@ package org.zkoss.zk.ui.sys;
 
 import java.util.List;
 import java.util.Collection;
+import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -76,14 +77,20 @@ public interface ComponentCtrl {
 	 *
 	 * <p>Unlike Java, you can add annotations dynamically, and each component
 	 * has its own annotations.
+	 *
+	 * @param annotName the annotation name (never null, nor empty).
+	 * @param annotAttrs a map of attributes, or null if no attribute.
+	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(Annotation annot);
+	public void addAnnotation(String annotName, Map annotAttrs);
 	/** Adds an annotation to the specified proeprty of this component.
 	 *
-	 * @param propName the property name.
-	 * @param annot the annotation.
+	 * @param propName the property name (never nul, nor empty).
+	 * @param annotName the annotation name (never null, nor empty).
+	 * @param annotAttrs a map of attributes, or null if no attribute at all.
+	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(String propName, Annotation annot);
+	public void addAnnotation(String propName, String annotName, Map annotAttrs);
 
 	/** Notification that the session, which owns this component,
 	 * is about to be passivated (aka., serialized).

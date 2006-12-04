@@ -323,41 +323,47 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 		return _annots != null ? _annots: AnnotationMap.EMPTY;
 	}
 	/** Associates an annotation to this component definition.
+	 *
+	 * @param annotName the annotation name (never null, nor empty).
+	 * @param annotAttrs a map of attributes, or null if no attribute at all.
+	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(Annotation annot) {
+	public void addAnnotation(String annotName, Map annotAttrs) {
 		if (_annots == null) {
 			synchronized (this) {
 				if (_annots == null) {
 					final AnnotationMapImpl annots = new AnnotationMapImpl();
-					annots.addAnnotation(annot);
+					annots.addAnnotation(annotName, annotAttrs);
 					_annots = annots;
 					return;
 				}
 			}
 		}
 		synchronized (_annots) {
-			_annots.addAnnotation(annot);
+			_annots.addAnnotation(annotName, annotAttrs);
 		}
 	}
 	/** Adds an annotation to the specified proeprty of this component
 	 * definition.
 	 *
-	 * @param propName the property name.
-	 * @param annot the annotation.
+	 * @param propName the property name (never nul, nor empty).
+	 * @param annotName the annotation name (never null, nor empty).
+	 * @param annotAttrs a map of attributes, or null if no attribute at all.
+	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(String propName, Annotation annot) {
+	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
 		if (_annots == null) {
 			synchronized (this) {
 				if (_annots == null) {
 					final AnnotationMapImpl annots = new AnnotationMapImpl();
-					annots.addAnnotation(propName, annot);
+					annots.addAnnotation(propName, annotName, annotAttrs);
 					_annots = annots;
 					return;
 				}
 			}
 		}
 		synchronized (_annots) {
-			_annots.addAnnotation(propName, annot);
+			_annots.addAnnotation(propName, annotName, annotAttrs);
 		}
 	}
 

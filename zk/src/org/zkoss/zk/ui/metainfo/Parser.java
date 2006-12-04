@@ -690,29 +690,18 @@ public class Parser {
 	/** Information of annotations.
 	 */
 	private static class AnnotInfo {
-		/** Map(String, Annotation); */
-		final Map _annots = new HashMap();
+		/** A list of Object[] = {String annotName, Map annotAttrs}; */
+		final List _annots = new LinkedList();
 
 		/** Adds an annotation definition. */
-		private void add(String name, Map attrs) {
-			if (name == null || name.length() == 0)
-				throw new IllegalArgumentException("empty name");
-
-			AnnotationImpl ai = (AnnotationImpl)_annots.get(name);
-			if (ai == null)
-				_annots.put(name, ai = new AnnotationImpl(name));
-			if (attrs != null) {
-				for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final String val = (String)me.getValue();
-					ai.setAttribute((String)me.getKey(), val != null ? val: "");
-						//null means "", not removal
-				}
-			}
+		private void add(String annotName, Map annotAttrs) {
+			if (annotName == null || annotName.length() == 0)
+				throw new IllegalArgumentException("empty");
+			_annots.add(new Object[] {annotName, annotAttrs});
 		}
-		private void addRaw(String name, String rawValue) {
+		private void addRaw(String annotName, String rawValue) {
 			final Map attrs = Maps.parse(null, rawValue, ',', '\'');
-			add(name, attrs);
+			add(annotName, attrs);
 		}
 		/** Updates the annotations to the specified instance definition.
 		 * Note: it clears all annotation definitions before returning.
@@ -721,16 +710,16 @@ public class Parser {
 		 * @param propName the property name
 		 */
 		private void updateAnnotations(InstanceDefinition instdef, String propName) {
-			if (!_annots.isEmpty()) {
-				for (Iterator it = _annots.values().iterator(); it.hasNext();) {
-					final Annotation annot = (Annotation)it.next();
-					if (propName != null)
-						instdef.addAnnotation(propName, annot);
-					else
-						instdef.addAnnotation(annot);
-				}
-				_annots.clear();
+			for (Iterator it = _annots.iterator(); it.hasNext();) {
+				final Object[] info = (Object[])it.next();
+				final String annotName = (String)info[0];
+				final Map annotAttrs = (Map)info[1];
+				if (propName != null)
+					instdef.addAnnotation(propName, annotName, annotAttrs);
+				else
+					instdef.addAnnotation(annotName, annotAttrs);
 			}
+			_annots.clear();
 		}
 		/** Clears all annotation definitions.
 		 * @return true if one or more annotation definitions are defined
