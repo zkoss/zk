@@ -163,8 +163,7 @@ public class ExecutionImpl extends AbstractExecution {
 
 	public String encodeURL(String uri) {
 		try {
-			return Encodes.encodeURL(_ctx,
-				_request, _response, toAbsoluteURI(uri, true));
+			return Encodes.encodeURL(_ctx, _request, _response, uri);
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}
