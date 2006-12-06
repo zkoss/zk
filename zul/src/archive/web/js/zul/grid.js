@@ -61,13 +61,13 @@ zk.Grid.prototype = {
 				var time = new Date().getTime();
 				if (!meta.nextTime || time > meta.nextTime) {
 					meta.nextTime = time + 3000;
-					meta._recalcSize();
+					meta.recalcSize(true);
 				}
 			};
 			zk.listen(window, "resize", this.fnResize);
 		}
 
-		this._setSize();
+		this.updSize();
 
 		if (!this.paging) {
 			if ((zk.gecko||zk.opera) && this.headtbl && this.headtbl.rows.length == 1) {
@@ -114,7 +114,7 @@ zk.Grid.prototype = {
 		}
 	},
 	/* set the size*/
-	_setSize: function () {
+	updSize: function () {
 		var hgh = this.element.style.height;
 		if (!hgh) {
 			hgh = this.element.getAttribute("zk_hgh");
@@ -178,12 +178,12 @@ zk.Grid.prototype = {
 		}
 	},
 	/** Recalculate the size. */
-	_recalcSize: function (timeout) {
-		this._cleansz();
+	recalcSize: function (cleansz) {
+		if (cleansz) this.cleanSize();
 		setTimeout("zkGrid._calcSize('"+this.id+"')", 20);
 	},
-	/* cleanup size */
-	_cleansz : function () {
+	/** Cleanup size */
+	cleanSize: function () {
 		this.body.style.width = this.bodytbl.style.width = "";
 		if (this.headtbl) {
 			this.head.style.width = "";
@@ -192,6 +192,14 @@ zk.Grid.prototype = {
 				for (var j = headrow.cells.length; --j >=0;)
 					headrow.cells[j].style.width = "";
 			}
+		}
+	},
+	/** Resize the specified column. */
+	resizeCol: function (icol, wd1, wd2, keys) {
+		var rows = this.bodyrows;
+		if (rows) {
+			zulHdr.resizeAll(rows, icol, wd1, wd2, keys);
+			this.recalcSize(false);
 		}
 	}
 };
@@ -248,7 +256,14 @@ zk.addModuleInit(function () {
 	Object.extend(zkCol, zulHdr);
 
 	/** Resize the column. */
-	zkCol.resize = function (cmp, j, wd, keys) {
-		cmp.style.width = wd + "px";
+	zkCol.resize = function (cmp, icol, wd1, wd2, keys) {
+		var grid = $parentByType(cmp, "Grid");
+		if (grid) {
+			var meta = zkau.getMeta(grid);
+			if (meta) meta.resizeCol(icol, wd1, wd2, keys);
+		}
 	};
+
+	//Columns
+	zkCols = zulHdrs;
 });

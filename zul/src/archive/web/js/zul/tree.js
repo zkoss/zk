@@ -207,3 +207,22 @@ zkTcop = {}; //the image as the open button
 zkTcop.init = function (cmp) {
 	zk.listen(cmp, "click", zkTree.ontoggle);
 };
+
+zk.addModuleInit(function () {
+	//Treecol
+	//init it later because zul.js might not be loaded yet
+	zkTcol = {}
+	Object.extend(zkTcol, zulHdr);
+
+	/** Resize the column. */
+	zkTcol.resize = function (cmp, icol, wd1, wd2, keys) {
+		var tree = $parentByType(cmp, "Tree");
+		if (tree) {
+			var meta = zkau.getMeta(tree);
+			if (meta) meta.resizeCol(icol, wd1, wd2, keys);
+		}
+	};
+
+	//Treecols
+	zkTcols = zulHdrs;
+});

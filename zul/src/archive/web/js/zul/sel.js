@@ -100,7 +100,7 @@ zk.Selectable.prototype = {
 					var time = new Date().getTime();
 					if (!meta.nextTime || time > meta.nextTime) {
 						meta.nextTime = time + 3000;
-						meta._recalcSize();
+						meta.recalcSize(true);
 					}
 				};
 				zk.listen(window, "resize", this.fnResize);
@@ -369,7 +369,7 @@ zk.Selectable.prototype = {
 		case "z.vflex":
 		case "z.size":
 			zkau.setAttr(this.element, name, value);
-			this._recalcSize();
+			this.recalcSize(true);
 			return true;
 		}
 		return false;
@@ -790,11 +790,11 @@ zk.Selectable.prototype = {
 	},
 
 	/** Recalculate the size. */
-	_recalcSize: function () {
-		this._cleansz();
+	recalcSize: function (cleansz) {
+		if (cleansz) this.cleanSize();
 		setTimeout("zkSel._calcSize('"+this.id+"')", 20);
 	},
-	_cleansz: function () {
+	cleanSize: function () {
 		this.body.style.width = this.bodytbl.style.width = "";
 		if (this.headtbl) {
 			this.head.style.width = this.body.style.height = "";
@@ -811,6 +811,14 @@ zk.Selectable.prototype = {
 				for (var j = footrow.cells.length; --j >=0;)
 					footrow.cells[j].style.width = "";
 			}
+		}
+	},
+	/** Resize the specified column. */
+	resizeCol: function (icol, wd1, wd2, keys) {
+		var rows = this.bodyrows;
+		if (rows) {
+			zulHdr.resizeAll(rows, icol, wd1, wd2, keys);
+			this.recalcSize(false);
 		}
 	},
 
@@ -1079,8 +1087,24 @@ zkLcfc.init = function (cmp) {
 	zk.listen(cmp, "blur", zkSel.cmonblur);
 };
 
-zk.addModuleInit(function () {zkLhr = zulHdr;});
+zk.addModuleInit(function () {
+	//Listheader
 	//init it later because zul.js might not be loaded yet
+	zkLhr = {}
+	Object.extend(zkLhr, zulHdr);
+
+	/** Resize the column. */
+	zkLhr.resize = function (cmp, icol, wd1, wd2, keys) {
+		var box = $parentByType(cmp, "Libox");
+		if (box) {
+			var meta = zkau.getMeta(box);
+			if (meta) meta.resizeCol(icol, wd1, wd2, keys);
+		}
+	};
+
+	//Listhead
+	zkLhrs = zulHdrs;
+});
 
 ////
 // listbox mold=select //

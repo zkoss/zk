@@ -35,10 +35,35 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Listhead extends XulElement {
+	private boolean _sizeable;
+
+	/** Returns whether the width of the child column is sizeable.
+	 */
+	public boolean isSizeable() {
+		return _sizeable;
+	}
+	/** Sets whether the width of the child column is sizeable.
+	 * If true, an user can drag the border between two columns ({@link Column})
+	 * to change the widths of adjacent columns.
+	 * <p>Default: false.
+	 */
+	public void setSizeable(boolean sizeable) {
+		if (_sizeable != sizeable) {
+			_sizeable = sizeable;
+			smartUpdate("z.sizeable", sizeable);
+		}
+	}
+
 	/** Returns the list box that it belongs to.
 	 */
 	public Listbox getListbox() {
 		return (Listbox)getParent();
+	}
+
+	//super//
+	public String getOuterAttrs() {
+		final String attrs = super.getOuterAttrs();
+		return _sizeable ? attrs + " z.sizeable=\"true\"": attrs;
 	}
 
 	//-- Component --//

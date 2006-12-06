@@ -166,26 +166,73 @@ zul.positionMask = function (mask) {
 };
 
 //For sortable header, e.g., Column and Listheader (TH or TD is assumed)
+zulHdrs = {};
+zulHdrs.setAttr = function (cmp, nm, val) {
+	zkau.setAttr(cmp, nm, val);
+
+	if (nm == "z.sizeable") {
+		var cells = cmp.cells;
+		if (cells) {
+			var sizeable = val == "true";
+			for (var j = 0; j < cells.length; ++j)
+				zulHdr.setSizeable(cells[j], sizeable);
+		}
+	}
+	return true;
+};
+
 zulHdr = {}; //listheader
 zulHdr._szs = {};
 zulHdr.init = function (cmp) {
 	zulHdr._show(cmp);
 	zk.listen(cmp, "click", function (evt) {zulHdr.onclick(evt, cmp);});
 	zk.listen(cmp, "mousemove", function (evt) {zulHdr.onmove(evt, cmp);});
-	zulHdr._szs[cmp.id] = new Draggable(cmp, {
-		starteffect: Prototype.emptyFunction,
-		endeffect: zulHdr._endsizing, ghosting: zulHdr._ghostsizing,
-		revert: zulHdr._revertsizing, ignoredrag: zulHdr._notsizing,
-		constraint: "horizontal"
-	});
+
+	zulHdr.setSizeable(cmp, zulHdr.sizeable(cmp));
+		//Note: IE6 failed to crop a column if it is draggable
+		//Thus we init only necessary (to avoid the IE6 bug)
 };
-zulHdr.cleanup = function (cmp) {
+zulHdr.sizeable = function (cmp) {
+	return cmp.parentNode && getZKAttr(cmp.parentNode, "sizeable") == "true";
+};
+zulHdr.setSizeable = function (cmp, sizeable) {
 	var id = cmp.id;
-	if (zulHdr._szs[id]) {
-		zulHdr._szs[id].destroy();
-		delete zulHdr._szs[id];
+	if (sizeable) {
+		if (!zulHdr._szs[id]) {
+			zulHdr._szs[id] = new Draggable(cmp, {
+				starteffect: Prototype.emptyFunction,
+				endeffect: zulHdr._endsizing, ghosting: zulHdr._ghostsizing,
+				revert: zulHdr._revertsizing, ignoredrag: zulHdr._notsizing,
+				constraint: "horizontal"
+			});
+		}
+	} else {
+		if (zulHdr._szs[id]) {
+			zulHdr._szs[id].destroy();
+			delete zulHdr._szs[id];
+		}
 	}
 };
+/** Resize all rows. (Utilities used by derived). */
+zulHdr.resizeAll = function (rows, icol, wd1, wd2, keys) {
+	var icol2 = icol + 1;
+	for (var j = 0; j < rows.length; ++j) {
+		var cells = rows[j].cells;
+		if (icol < cells.length)
+			cells[icol].style.width = wd1 + "px";
+		if (icol2 < cells.length)
+			cells[icol2].style.width = wd2 + "px";
+	}
+};
+zulHdr.cleanup = function (cmp) {
+	zulHdr.setSizeable(cmp, false);
+};
+zulHdr.setAttr = function (cmp, nm, val) {
+	zkau.setAttr(cmp, nm, val);
+	if (nm == "z.sort") zulHdr._show(cmp);
+	return true;
+};
+
 zulHdr.onclick = function (evt, cmp) {
 	if (zulHdr._sortable(cmp) && zkau.insamepos(evt))
 		zkau.send({uuid: cmp.id, cmd: "onSort", data: null}, 10);
@@ -206,9 +253,11 @@ zulHdr.ignoredrag = function (cmp, pointer) {
 };
 /** Returns 1 if right, -1 if left, 0 if none. */
 zulHdr._insizer = function (cmp, x) {
-	var cells = cmp.parentNode.cells;
-	if (cells[0] != cmp && x <= 5) return -1;
-	if (x >= cmp.offsetWidth - 5) return 1;
+	if (zulHdr.sizeable(cmp)) {
+		var cells = cmp.parentNode.cells;
+		if (cells[0] != cmp && x <= 5) return -1;
+		if (cells[cells.length-1] != cmp && x >= cmp.offsetWidth - 5) return 1;
+	}
 	return 0;
 };
 /** Called by zulHdr._szs[]'s ignoredrag for resizing column. */
@@ -227,13 +276,17 @@ zulHdr._endsizing = function (cmp, evt) {
 	var dg = zulHdr._szs[cmp.id];
 	if (dg && dg.z_szofs) {
 		//Adjust column width
-		var cells = cmp.parentNode.cells, j = 0;
+		var cells = cmp.parentNode.cells, j = 0, cmp2;
 		for (;; ++j) {
 			if (j >= cells.length) return; //impossible, but just in case
 			if (cmp == cells[j]) {
 				if (dg.z_szlft) {
 					if (!j) return; //impossible, but just in case
+					cmp2 = cmp;
 					cmp = cells[--j];
+				} else {
+					if (j + 1 >= cells.length) return; //impossible, but just in case
+					cmp2 = cells[j + 1];
 				}
 				break;
 			}
@@ -246,9 +299,17 @@ zulHdr._endsizing = function (cmp, evt) {
 			if (evt.shiftKey) keys += 's';
 		}
 
-		var wd = zk.offsetWidth(cmp) + dg.z_szofs;
-		if (wd < 0) wd = 0;
-		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+j+","+wd+",'"+keys+"')", 0);
+		var wd = zk.offsetWidth(cmp) + dg.z_szofs,
+			wd2 = zk.offsetWidth(cmp2) - dg.z_szofs;
+		if (wd < 0) {
+			wd2 += wd;
+			wd = 0;
+		} else if (wd2 < 0) {
+			wd += wd2;
+			wd2 = 0;
+		}
+
+		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+j+","+wd+","+wd2+",'"+keys+"')", 0);
 	}
 };
 
@@ -313,9 +374,4 @@ zulHdr._renCls = function (cmp, ext) {
 		clsnm = clsnm.substring(0, clsnm.length - 4);
 	if (ext) clsnm += '-' + ext;
 	if (clsnm != cmp.className) cmp.className = clsnm;
-};
-zulHdr.setAttr = function (cmp, nm, val) {
-	zkau.setAttr(cmp, nm, val);
-	if (nm == "z.sort") zulHdr._show(cmp);
-	return true;
 };
