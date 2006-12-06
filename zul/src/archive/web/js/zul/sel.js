@@ -1079,9 +1079,8 @@ zkLcfc.init = function (cmp) {
 	zk.listen(cmp, "blur", zkSel.cmonblur);
 };
 
-zk.addModuleInit(function () {
-	zkLhr = zulSHdr;
-});//init it later because zul.js might not be loaded yet
+zk.addModuleInit(function () {zkLhr = zulHdr;});
+	//init it later because zul.js might not be loaded yet
 
 ////
 // listbox mold=select //

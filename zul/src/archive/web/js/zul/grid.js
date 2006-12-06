@@ -241,5 +241,5 @@ zkGrid.setAttr = function (grid, name, value) {
 	return false;
 };
 
-zk.addModuleInit(function () {zkCol = zulSHdr}); //Column
+zk.addModuleInit(function () {zkCol = zulHdr}); //Column
 	//init it later because zul.js might not be loaded yet
