@@ -17,6 +17,34 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Grid Demo">
+  <checkbox label="sizeable" onCheck="cs.sizeable = self.checked"/>
+	<grid>
+		<columns id="cs">
+			<column label="AA"/>
+			<column label="BB"/>
+			<column label="CC"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+		</rows>
+	</grid>
+
+	<separator bar="true"/>
+
 	<style>
 	div.grid td.gridod {
 		background: red;
@@ -39,7 +67,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Comp asc = new Comp(true), dsc = new Comp(false);
 	</zscript>
 	<grid id="grid" width="500px" height="100px">
-		<columns>
+		<columns sizeable="true">
 			<column id="col" label="Order"  sortAscending="${asc}" sortDescending="${dsc}"/>
 			<column label="Head 1"/>
 			<column label="Head 2" align="center"/>
