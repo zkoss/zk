@@ -221,7 +221,8 @@ zulHdr._notsizing = function (cmp, pointer) {
 	if (dg) dg.z_left = v == -1;
 	return false;
 };
-zulHdr._endsizing = function (n, pointer, evt) {
+zulHdr._endsizing = function (cmp, pointer, evt) {
+	var dg = zulHdr._szs[cmp.id];
 };
 /* @param ghosting whether to create or remove the ghosting
  */
@@ -251,7 +252,7 @@ zulHdr._ghostsizing = function (dg, ghosting, pointer) {
 		dg.zk_old = null;
 	}
 };
-zulHdr._revertsizing = function (n, pointer) {
+zulHdr._revertsizing = function (cmp, pointer) {
 	return true;
 };
 /** Tests whether it is sortable.
