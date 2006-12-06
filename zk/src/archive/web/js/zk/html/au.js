@@ -1320,8 +1320,9 @@ if (zk.ie) {
 	};
 }
 
-zkau._enddrag = function (cmp, pointer, evt) {
+zkau._enddrag = function (cmp, evt) {
 	zkau._cleanLastDrop(zkau._drags[cmp.id]);
+	var pointer = [Event.pointerX(evt), Event.pointerY(evt)];
 	var e = zkau._getDrop(cmp, pointer);
 	if (e) {
 		var keys = "";
@@ -1390,23 +1391,26 @@ zkau._ghostdrag = function (dg, ghosting) {
 
 			//Store scrolling offset first since Draggable.draw not handle DIV well
 			//after we transfer TR to DIV
-			var pos = Position.cumulativeOffset(dg.element);
+			var ofs = Position.cumulativeOffset(dg.element);
 			dg.z_scrl = Position.realOffset(dg.element);
-			pos[0] -= dg.z_scrl[0]; pos[1] -= dg.z_scrl[1];
+			ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];
 			document.body.insertAdjacentHTML("afterbegin",
 				'<div id="zk_ddghost" style="position:absolute;top:'
-				+pos[1]+'px;left:'+pos[0]+'px;width:'
+				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 				+'px;border:1px dotted black"></div>');
 
-			dg.zk_old = dg.element;
+			dg.z_elorg = dg.element;
 			dg.element = $e("zk_ddghost");
-		} else if (dg.zk_old) {
+		} else {
 			setTimeout("zk.dragging=false", 0);
 				//we have to reset it later since onclick is fired later (after onmouseup)
-			Element.remove(dg.element);
-			dg.element = dg.zk_old;
-			dg.zk_old = null;
+
+			if (dg.z_elorg) {
+				Element.remove(dg.element);
+				dg.element = dg.z_elorg;
+				dg.z_elorg = null;
+			}
 		}
 		return false
 	}

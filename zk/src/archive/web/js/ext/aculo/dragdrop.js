@@ -446,7 +446,7 @@ this.element.style.position = this.z_orgpos;
       this.element.style.zIndex = this.originalZ;
 
     if(this.options.endeffect) 
-      this.options.endeffect(this.element, pointer, event); //Tom M. Yeh, Potix: add pointer and event
+      this.options.endeffect(this.element, event); //Tom M. Yeh, Potix: add event
       
     Draggables.deactivate(this);
     Droppables.reset();
