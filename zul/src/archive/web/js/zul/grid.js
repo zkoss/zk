@@ -241,5 +241,14 @@ zkGrid.setAttr = function (grid, name, value) {
 	return false;
 };
 
-zk.addModuleInit(function () {zkCol = zulHdr}); //Column
+zk.addModuleInit(function () {
+	//Column
 	//init it later because zul.js might not be loaded yet
+	zkCol = {}
+	Object.extend(zkCol, zulHdr);
+
+	/** Resize the column. */
+	zkCol.resize = function (cmp, j, wd, keys) {
+		cmp.style.width = wd + "px";
+	};
+});

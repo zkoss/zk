@@ -208,7 +208,7 @@ zulHdr.ignoredrag = function (cmp, pointer) {
 zulHdr._insizer = function (cmp, x) {
 	var cells = cmp.parentNode.cells;
 	if (cells[0] != cmp && x <= 5) return -1;
-	if (cells[cells.length-1] != cmp && x >= cmp.offsetWidth - 5) return 1;
+	if (x >= cmp.offsetWidth - 5) return 1;
 	return 0;
 };
 /** Called by zulHdr._szs[]'s ignoredrag for resizing column. */
@@ -218,12 +218,40 @@ zulHdr._notsizing = function (cmp, pointer) {
 	if (!v) return true;
 
 	var dg = zulHdr._szs[cmp.id];
-	if (dg) dg.z_left = v == -1;
+	if (dg) dg.z_szlft = v == -1;
+	zk.disableSelection(cmp);
 	return false;
 };
-zulHdr._endsizing = function (cmp, pointer, evt) {
+zulHdr._endsizing = function (cmp, evt) {
+	zk.enableSelection(cmp);
 	var dg = zulHdr._szs[cmp.id];
+	if (dg && dg.z_szofs) {
+		//Adjust column width
+		var cells = cmp.parentNode.cells, j = 0;
+		for (;; ++j) {
+			if (j >= cells.length) return; //impossible, but just in case
+			if (cmp == cells[j]) {
+				if (dg.z_szlft) {
+					if (!j) return; //impossible, but just in case
+					cmp = cells[--j];
+				}
+				break;
+			}
+		}
+
+		var keys = "";
+		if (evt) {
+			if (evt.altKey) keys += 'a';
+			if (evt.ctrlKey) keys += 'c';
+			if (evt.shiftKey) keys += 's';
+		}
+
+		var wd = zk.offsetWidth(cmp) + dg.z_szofs;
+		if (wd < 0) wd = 0;
+		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+j+","+wd+",'"+keys+"')", 0);
+	}
 };
+
 /* @param ghosting whether to create or remove the ghosting
  */
 zulHdr._ghostsizing = function (dg, ghosting, pointer) {
@@ -233,28 +261,38 @@ zulHdr._ghostsizing = function (dg, ghosting, pointer) {
 
 		//Store scrolling offset first since Draggable.draw not handle DIV well
 		//after we transfer TR to DIV
-		var pos = Position.cumulativeOffset(dg.element);
+		var ofs = Position.cumulativeOffset(dg.element);
 		dg.z_scrl = Position.realOffset(dg.element);
-		pos[0] -= dg.z_scrl[0]; pos[1] -= dg.z_scrl[1];
+		ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];
 		document.body.insertAdjacentHTML("afterbegin",
 			'<div id="zk_ddghost" style="position:absolute;top:'
-			+pos[1]+'px;left:'+pos[0]+'px;width:'
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-			+'px;border-'+(dg.z_left?'left':'right')+':3px solid darkgray"></div>');
+			+'px;border-'+(dg.z_szlft?'left':'right')+':3px solid darkgray"></div>');
 
-		dg.zk_old = dg.element;
+		dg.z_elorg = dg.element;
 		dg.element = $e("zk_ddghost");
 	} else {
 		setTimeout("zk.dragging=false", 0);
 			//we have to reset it later since onclick is fired later (after onmouseup)
-		Element.remove(dg.element);
-		dg.element = dg.zk_old;
-		dg.zk_old = null;
+
+		if (dg.z_elorg) {
+			var ofs1 = Position.cumulativeOffset(dg.element);
+			var ofs2 = Position.cumulativeOffset(dg.z_elorg);
+			dg.z_szofs = ofs1[0] - ofs2[0];
+
+			Element.remove(dg.element);
+			dg.element = dg.z_elorg;
+			dg.z_elorg = null;
+		} else {
+			dg.z_szofs = 0;
+		}
 	}
 };
 zulHdr._revertsizing = function (cmp, pointer) {
 	return true;
 };
+
 /** Tests whether it is sortable.
  */
 zulHdr._sortable = function (cmp) {
