@@ -17,12 +17,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 //zk//
+if (!window.zk) { //avoid eval twice
 zk = {};
 
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "30"; //increase this if we want the browser to reload JavaScript
+zk.build = "31"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */
@@ -734,51 +735,52 @@ zk.error = function (msg) {
 	} catch (e) {
 	}
 };
+
 //-- bootstrapping --//
-if (!zk._modules) {
-	zk.loading = 0;
-	zk._modules = {};
-	zk._initfns = new Array(); //used by addInit
-	zk._initmods = new Array(); //used by addModuleInit
-	zk._initcmps = new Array(); //comps to init
-	zk._ckfns = new Array(); //functions called to check whether a module is loaded (zk._load)
-	zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
-	zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
+zk.loading = 0;
+zk._modules = {};
+zk._initfns = new Array(); //used by addInit
+zk._initmods = new Array(); //used by addModuleInit
+zk._initcmps = new Array(); //comps to init
+zk._ckfns = new Array(); //functions called to check whether a module is loaded (zk._load)
+zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
+zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
 
-	var myload =  function () {
-		//It is possible to move javascript defined in zul's language.xml
-		//However, IE has bug to order JavaScript properly if zk._load is used
-		zk.progress(600);
-		zk.addInit(zk.progressDone);
-		zk.initAt(document.body);
+var myload =  function () {
+	//It is possible to move javascript defined in zul's language.xml
+	//However, IE has bug to order JavaScript properly if zk._load is used
+	zk.progress(600);
+	zk.addInit(zk.progressDone);
+	zk.initAt(document.body);
+};
+
+//Source: http://dean.edwards.name/weblog/2006/06/again/
+if (zk.ie && !zk.https()) {
+	//IE consider the following <script> insecure, so skip is https
+	document.write('<script id="_zie_load" defer src="javascript:void(0)"><\/script>');
+	var e = $e("_zie_load");
+	e.onreadystatechange = function() {
+		if ("complete" == this.readyState) { //don't check loaded!
+	        if (myload) myload(); // call the onload handler
+	        myload = null;
+	    }
 	};
-
-	//Source: http://dean.edwards.name/weblog/2006/06/again/
-	if (zk.ie && !zk.https()) {
-		//IE consider the following <script> insecure, so skip is https
-		document.write('<script id="_zie_load" defer src="javascript:void(0)"><\/script>');
-		var e = $e("_zie_load");
-		e.onreadystatechange = function() {
-			if ("complete" == this.readyState) { //don't check loaded!
-		        if (myload) myload(); // call the onload handler
-		        myload = null;
-		    }
-		};
-		e.onreadystatechange();
-	} else if (zk.gecko && document.addEventListener) { //FF
-		document.addEventListener("DOMContentLoaded", myload, false)
-			//Fire onload earlier than all content are loaded
-	} else if (zk.safari) {
-	    var timer = setInterval(function() {
-			if (/loaded|complete/.test(document.readyState)) {
-				clearInterval(timer);
-				delete timer;
-				myload();
-				myload = null;
-			}
-		}, 10);
-	} else {
-		if (window.onload) zk.addInit(window.onload);
-		window.onload = myload;
-	}
+	e.onreadystatechange();
+} else if (zk.gecko && document.addEventListener) { //FF
+	document.addEventListener("DOMContentLoaded", myload, false)
+		//Fire onload earlier than all content are loaded
+} else if (zk.safari) {
+    var timer = setInterval(function() {
+		if (/loaded|complete/.test(document.readyState)) {
+			clearInterval(timer);
+			delete timer;
+			myload();
+			myload = null;
+		}
+	}, 10);
+} else {
+	if (window.onload) zk.addInit(window.onload);
+	window.onload = myload;
 }
+
+} //if (!window.zk)

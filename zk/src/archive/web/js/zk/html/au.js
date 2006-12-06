@@ -16,41 +16,40 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
+if (!window.zkau) { //avoid eval twice
 zkau = {};
 
-if (!zkau._reqs) {
-	zkau._reqs = new Array(); //Ajax requests
-	zkau._respQue = new Array(); //responses in XML
-	zkau._evts = new Array();
-	zkau._js4resps = new Array(); //JS to eval upon response
-	zkau._metas = {}; //(id, meta)
-	zkau._movs = {}; //(id, Draggable): moveables
-	zkau._drags = {}; //(id, Draggable): draggables
-	zkau._drops = new Array(); //dropables
-	zkau._zidsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
-	zkau._stamp = 0; //used to make a time stamp
-	zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
-	zkau.floats = new Array(); //popup of combobox, bandbox, datebox...
-	zkau._onsends = new Array(); //JS called before zkau._sendNow
-	zkau._seqId = 0;
+zkau._reqs = new Array(); //Ajax requests
+zkau._respQue = new Array(); //responses in XML
+zkau._evts = new Array();
+zkau._js4resps = new Array(); //JS to eval upon response
+zkau._metas = {}; //(id, meta)
+zkau._movs = {}; //(id, Draggable): moveables
+zkau._drags = {}; //(id, Draggable): draggables
+zkau._drops = new Array(); //dropables
+zkau._zidsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
+zkau._stamp = 0; //used to make a time stamp
+zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
+zkau.floats = new Array(); //popup of combobox, bandbox, datebox...
+zkau._onsends = new Array(); //JS called before zkau._sendNow
+zkau._seqId = 0;
 
-	zk.addInit(function () {
-		zk.listen(document, "keydown", zkau._onDocKeydown);
-		zk.listen(document, "mousedown", zkau._onDocMousedown);
-		zk.listen(document, "mouseover", zkau._onDocMouseover);
-		zk.listen(document, "mouseout", zkau._onDocMouseout);
+zk.addInit(function () {
+	zk.listen(document, "keydown", zkau._onDocKeydown);
+	zk.listen(document, "mousedown", zkau._onDocMousedown);
+	zk.listen(document, "mouseover", zkau._onDocMouseover);
+	zk.listen(document, "mouseout", zkau._onDocMouseout);
 
-		zk.listen(document, "contextmenu", zkau._onDocCtxMnu);
-		zk.listen(document, "click", zkau._onDocLClick);
-		zk.listen(document, "dblclick", zkau._onDocDClick);
+	zk.listen(document, "contextmenu", zkau._onDocCtxMnu);
+	zk.listen(document, "click", zkau._onDocLClick);
+	zk.listen(document, "dblclick", zkau._onDocDClick);
 
-		zkau._oldUnload = window.onunload;
-		window.onunload = zkau._onUnload; //unable to use zk.listen
+	zkau._oldUnload = window.onunload;
+	window.onunload = zkau._onUnload; //unable to use zk.listen
 
-		zkau._oldBfUnload = window.onbeforeunload;
-		window.onbeforeunload = zkau._onBfUnload;
-	});
-}
+	zkau._oldBfUnload = window.onbeforeunload;
+	window.onbeforeunload = zkau._onBfUnload;
+});
 
 /** Handles onclick for button-type.
  */
@@ -1257,10 +1256,10 @@ zkau.cleanzidsp = function (n) {
 //Drag & Drop//
 zkau.initdrag = function (n) {
 	zkau._drags[n.id] = new Draggable(n, {
-		revert: zkau._revertdrag,
 		starteffect: Prototype.emptyFunction,
 		endeffect: zkau._enddrag, change: zkau._dragging,
-		ghosting: zkau._ghostdrag, z_dragdrop: true
+		ghosting: zkau._ghostdrag, z_dragdrop: true,
+		revert: zkau._revertdrag, ignoredrag: zkau._ignoredrag
 	});
 };
 zkau.cleandrag = function (n) {
@@ -1276,6 +1275,9 @@ zkau.cleandrop = function (n) {
 	zkau._drops.remove(n);
 };
 
+zkau._ignoredrag = function (el, pointer) {
+	return zk.eval(el, "ignoredrag", null, pointer);
+};
 zkau._dragging = function (dg, pointer) {
 	var e = zkau._getDrop(dg.element, pointer);
 	if (!e || e != dg.zk_lastDrop) {
@@ -1395,12 +1397,12 @@ zkau._ghostdrag = function (dg, ghosting) {
 				'<div id="zk_ddghost" style="position:absolute;top:'
 				+pos[1]+'px;left:'+pos[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-				+'px;border:1px dotted black">&nbsp;</div>');
+				+'px;border:1px dotted black"></div>');
 
 			dg.zk_old = dg.element;
 			dg.element = $e("zk_ddghost");
 		} else if (dg.zk_old) {
-			setTimeout("zk.dragging = false;", 0);
+			setTimeout("zk.dragging=false", 0);
 				//we have to reset it later since onclick is fired later (after onmouseup)
 			Element.remove(dg.element);
 			dg.element = dg.zk_old;
@@ -1865,3 +1867,5 @@ zkau.cmd1 = {
 		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
 	}
 };
+
+} //if (!window.zkau)

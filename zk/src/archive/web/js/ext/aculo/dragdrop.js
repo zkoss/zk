@@ -324,6 +324,9 @@ for (var n = src; n && n != this.element; n = n.parentNode)
 		return;
 
       var pointer = [Event.pointerX(event), Event.pointerY(event)];
+//Tom M. Yeh, Potix: give the element a chance to ignore dragging
+if (this.options.ignoredrag && this.options.ignoredrag(this.element, pointer))
+	return;
       var pos     = Position.cumulativeOffset(this.element);
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
       
