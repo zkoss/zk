@@ -1289,20 +1289,20 @@ zkau._dragging = function (dg, pointer) {
 		}
 	}
 };
-zkau._revertdrag = function (n, pointer) {
-	if (zkau._getDrop(n, pointer) == null)
+zkau._revertdrag = function (cmp, pointer) {
+	if (zkau._getDrop(cmp, pointer) == null)
 		return true;
 
 	//Note: we hve to revert when zkau._onRespReady called, since app might
-	//change n's position
-	var dg = zkau._drags[n.id];
-	var orgpos = n.style.position;
-	zkau._revertpending = function() {
+	//change cmp's position
+	var dg = zkau._drags[cmp.id];
+	var orgpos = cmp.style.position;
+	zkau._revertpending = function () {
 		//Bug 1599737: a strange bar appears
 		if (zk.ie && orgpos != 'absolute' && orgpos != 'relative')
-			zkau._fixie4drop(n, orgpos);
-		n.style.left = dg.z_x;
-		n.style.top = dg.z_y;
+			zkau._fixie4drop(cmp, orgpos);
+		cmp.style.left = dg.z_x;
+		cmp.style.top = dg.z_y;
 		zkau._revertpending = null; //exec once
 	};
 	return false;
@@ -1320,9 +1320,9 @@ if (zk.ie) {
 	};
 }
 
-zkau._enddrag = function (n, pointer, evt) {
-	zkau._cleanLastDrop(zkau._drags[n.id]);
-	var e = zkau._getDrop(n, pointer);
+zkau._enddrag = function (cmp, pointer, evt) {
+	zkau._cleanLastDrop(zkau._drags[cmp.id]);
+	var e = zkau._getDrop(cmp, pointer);
 	if (e) {
 		var keys = "";
 		if (evt) {
@@ -1330,7 +1330,7 @@ zkau._enddrag = function (n, pointer, evt) {
 			if (evt.ctrlKey) keys += 'c';
 			if (evt.shiftKey) keys += 's';
 		}
-		setTimeout("zkau._sendDrop('"+n.id+"','"+e.id+"','"+pointer[0]+"','"+pointer[1]+"','"+keys+"')", 50);
+		setTimeout("zkau._sendDrop('"+cmp.id+"','"+e.id+"','"+pointer[0]+"','"+pointer[1]+"','"+keys+"')", 50);
 		//In IE, listitem is selected after _enddrag, so we have to
 		//delay the sending of onDrop
 	}
@@ -1338,12 +1338,12 @@ zkau._enddrag = function (n, pointer, evt) {
 zkau._sendDrop = function (dragged, dropped, x, y, keys) {
 	zkau.send({uuid: dropped, cmd: "onDrop", data: [dragged, x, y, keys]});
 };
-zkau._getDrop = function (n, pointer) {
-	var dragType = getZKAttr(n, "drag");
+zkau._getDrop = function (cmp, pointer) {
+	var dragType = getZKAttr(cmp, "drag");
 	l_next:
 	for (var j = 0; j < zkau._drops.length; ++j) {
 		var e = zkau._drops[j];
-		if (e == n) continue; //dropping to itself not allowed
+		if (e == cmp) continue; //dropping to itself not allowed
 
 		var dropTypes = getZKAttr(e, "drop");
 		if (dropTypes != "true") { //accept all
