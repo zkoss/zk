@@ -34,7 +34,7 @@ import java.util.Iterator;
  * <p>The DataBinder that reads ZUML annotations to create binding info. The ZUML page must declare the 
  * XML namespace, xmlns:a="http://www.zkoss.org/2005/zk/annotation", to use the ZUML annotations. 
  * The annotation is declared before each Component. For example, the following annotation associates the 
- * attibute "value" of the component "textbox" to the bean expression "person.address.city".</p>
+ * attibute "value" of the component "textbox" to the bean's value "person.address.city".</p>
  * <pre>
  * &lt;a:bind value="person.address.city"/>
  * &lt;textbox/>
@@ -43,21 +43,24 @@ import java.util.Iterator;
  *
  * <p>The AnnotateDataBinder knows "a:bind" annotation only. The complete format is like this:
  * <pre>
- * &lt;a:bind attrY="bean-expression;[load-event-list];[access-mode];[TypeConverter-class-name]"/>
+ * &lt;a:bind attrY="bean's value;[tag:expression]..."/>
  * &lt;componentX/>
  * </pre>
  *
- * <p>This associates the componentX's attribute attrY to the bean-expression. The bean-expression is something
+ * <p>This associates the componentX's attribute attrY to the bean's value. The bean's value is something
  * in the form of beanid.field1.field2... You can either call {@link DataBinder#bindBean} to bind the beanid to a
  * real bean object or you can neglect it and this DataBinder would try to find it from the variables map via
  * ({@link org.zkoss.zk.ui.Component#getVariable} method. That is, all those variables defined in zscript are 
  * accessible by this DataBinder.</p>
  *
- * <p>The load-event-list is used to register event listeners to call data binding methods loadXxx. Note 
- * that the events is triggered by other components. The following annotations example associates the 
- * "value" attribute of Label "fullname" to the "onChange" events of the Textbox "firstname" and "lastname"; 
- * therefore, whenever Textbox "firstname" or "lastname" changed, the onChange event would trigger the event
- * listener to load the attribute "value" of the Label "fullname" automatically.</p>
+ * <p>The tag:expression is a generic form to bind more metainfo to the attrY of the componentX. The currently 
+ * supported tag includes "load-when", "save-when", "access", and "converter"</p>
+ *
+ * <ul>
+ * <li>load-when. You can specify the events concerned when to load the attribute of the component from the bean.
+ * Multiple definition is allowed and would be called one by one.
+ * For example, the attribute "value" of Label "fullName" will load from "person.fullName" when the Textbox 
+ * "firstName" or "lastName" fire "onChange" event.
  * <pre>
  * &lt;a:bind value="person.firstName"/>
  * &lt;textbox id="firstname"/>
@@ -65,23 +68,56 @@ import java.util.Iterator;
  * &lt;a:bind value="person.lastName"/>
  * &lt;textbox id="lastname"/>
  *
- * &lt;a:bind value="person.fullName; firstname.onChange, lastname.onChange"/>
+ * &lt;a:bind value="person.fullName; load-when:firstname.onChange; load-when:lastname.onChange"/>
  * &lt;label id="fullname"/>
  * </pre>
+ * </li>
+ *
+ * <li>save-when. You can specify the event concerned when to save the attribute of the component into the bean.
+ * Multiple definition is NOT allowed and the later defined would override the previous defined one.
+ * For example, the attribute "value" of Textbox "firstName" will save into "person.firstName" when the Textbox 
+ * itself fire "onChange" event.
+ * <pre>
+ * &lt;a:bind value="person.firstName; save-when:self.onChange"/>
+ * &lt;textbox id="firstName"/>
+ * </pre>
+ *
+ * However, you don't generally specify the save-when tag. If you don't specify it, the default events are used
+ * depends on the natural charactieric of the component's attribute as defined in lang-addon.xml. For example, 
+ * the save-when of Label.value is default to none while that of Textbox.value is default to self.onChange. 
+ * That is, the following example is the same as the above one.
+ * <pre>
+ * &lt;a:bind value="person.firstName"/>
+ * &lt;textbox id="firstName"/>
+ * </pre>
+ * </li>
  * 
- * <p>You can set the access-mode of the attrY of the componentX to be "both"(load/save),  
- * "load"(load Only), or "save"(save Only). The access-mode would affects the behavior of the DataBinder's loadXxx
+ * <li>access. You can set the access mode of the attrY of the componentX to be "both"(load/save),  
+ * "load"(load Only), "save"(save Only), or "none"(neither).  Multiple definition is NOT allowed 
+ * and the later defined would 
+ * override the previous defined one. The access mode would affects the behavior of the DataBinder's loadXxx
  * and saveXxx methods.
  * The {@link DataBinder#loadAll} and {@link DataBinder#loadComponent} would load only those attributes
  * with "both" or "load" access mode. The {@link DataBinder#saveAll} and 
  * {@link DataBinder#saveComponent} would save only those attributes with "both" or "save" access mode. If you
- * don't specify it, the default access mode depends on the natural characteristic of the component's attribute.
- * For example, Label.value is default to "load" access mode while Textbox.value is default to "both" access mode.</p>
+ * don't specify it, the default access mode depends on the natural characteristic of the component's attribute
+ * as defined in lang-addon.xml. For example, Label.value is default to "load" access mode while Textbox.value 
+ * is default to "both" access mode. For example, the Textbox "firstName" would allowing doing save into bean only
+ * , not the other way.
+ * <pre>
+ * &lt;a:bind value="person.firstName;access:save;"/>
+ * &lt;textbox id="firstName"/>
+ * </pre>
+ * </li>
  *
- * <p>The TypeConverter-class-name is the class name of {@link TypeConverter} implementation. It is used to 
- * convert the value type between component attribute and bean field. Most of the time you don't have to specify
- * this since this DataBinder supports converting most commonly used types. However, if you specify the 
- * TypeConverter class name, this DataBinder will new an instance and use it to cast the class.</p>
+ * <li>converter. You can specify the class name of the converter that implments the {@link TypeConverter} interface.
+ * It is used to convert the value between component attribute and bean field.  Multiple definition is NOT allowed 
+ * and the later defined would override the previous defined one.
+ * Most of the time you don't have to 
+ * specify this since this DataBinder supports converting most commonly used types. However, if you specify the 
+ * TypeConverter class name, this DataBinder will new an instance and use it to cast the class.
+ * </li>
+ * </ul>
  * 
  * @author Henri Chen
  * @see AnnotateDataBinderInit
@@ -94,7 +130,7 @@ public class AnnotateDataBinder extends DataBinder {
 	 */
 	public AnnotateDataBinder(Desktop desktop) {
 		for (final Iterator	it = desktop.getComponents().iterator(); it.hasNext(); ) {
-			loadComponentAnnotation((Component) it.next());
+			loadAnnotations((Component) it.next());
 		}			
 	}
 	
@@ -104,7 +140,7 @@ public class AnnotateDataBinder extends DataBinder {
 	 */
 	public AnnotateDataBinder(Page page) {
 		for (final Iterator it = page.getRoots().iterator(); it.hasNext(); ) {
-			loadComponentAnnotation((Component) it.next());
+			loadAnnotations((Component) it.next());
 		}
 	}
 	
@@ -113,7 +149,29 @@ public class AnnotateDataBinder extends DataBinder {
 	 * @param comp the ZUML component.
 	 */
 	public AnnotateDataBinder(Component comp) {
+		loadAnnotations(comp);
+	}
+	
+	private void loadAnnotations(Component comp) {
 		loadComponentAnnotation(comp);
+		loadComponentPropertyAnnotation(comp);
+	}
+	
+	private void loadComponentPropertyAnnotation(Component comp) {
+		ComponentCtrl compCtrl = (ComponentCtrl) comp;
+		final List props = compCtrl.getAnnotatedPropertiesBy("bind");
+		for (final Iterator it = props.iterator(); it.hasNext(); ) {
+			final String propName = (String) it.next();
+			//[0] value, [1] loadWhenEvents, [2] saveWhenEvent, [3] access, [4] converter
+			final Object[] objs = loadPropertyAnnotation(comp, propName, "bind");
+			addBinding(comp, propName, (String) objs[0], 
+					(String[]) objs[1], (String) objs[2], (String) objs[3], (String) objs[4]);
+		}
+
+		final List children = comp.getChildren();
+		for (final Iterator it = children.iterator(); it.hasNext(); ) {
+			loadComponentPropertyAnnotation((Component) it.next()); //recursive back
+		}
 	}
 	
 	private void loadComponentAnnotation(Component comp) {
@@ -124,55 +182,50 @@ public class AnnotateDataBinder extends DataBinder {
 			for(final Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
 				Entry me = (Entry) it.next();
 				String attr = (String) me.getKey();
-				//[0] bean expression, [1] event list, [2] access mode, [3] converter class name, 
+				//[0] bean value, [1 ~ *] tag:expression
 				String[] expr = parseExpression((String) me.getValue(), ";");
-				if (expr == null) {
-					throw new UiException("Cannot find any bean expression in the annotation <a:bind "+attr+"=\"\"/> for component "+comp+", id="+comp.getId());
+				if (expr == null || expr[0] == null) {
+					throw new UiException("Cannot find any bean value in the annotation <a:bind "+attr+"=\"\"/> for component "+comp+", id="+comp.getId());
+				} else {
+					String[] tags = parseExpression(expr[0], ":");
+					if (tags.length > 1) {
+						throw new UiException("bean value must be defined as the first statement in the annotation <a:bind "+attr+"=\"\"/> for component "+comp+", id="+comp.getId());
+					}
 				}
-				String[] eventList = expr.length > 1 && expr[1] != null ? parseExpression(expr[1], ",") : null;
-				addBinding(comp, attr, expr[0], eventList, expr.length > 2 ? expr[2] : null, expr.length > 3 ? expr[3] : null);
+				
+				List loadWhenEvents = new ArrayList(3);
+				String saveWhenEvent = null;
+				String access = null;
+				String converter = null;
+				
+				//process tags
+				for(int j = 1; j < expr.length; ++j) {
+					String[] tags = parseExpression(expr[j], ":");
+					if (tags == null) {
+						continue; //skip
+					}
+					if ("load-when".equals(tags[0])) {
+						if (tags.length > 1 && tags[1] != null) {
+							loadWhenEvents.add(tags[1]);
+						}
+					} else if ("save-when".equals(tags[0])) {
+						saveWhenEvent = tags.length > 1 ? tags[1] : null;
+					} else if ("access".equals(tags[0])) {
+						access = tags.length > 1 ? tags[1] : null;
+					} else if ("converter".equals(tags[0])) {
+						converter = tags.length > 1 ? tags[1] : null;
+					}
+				}
+				
+				int sz = loadWhenEvents.size();
+				addBinding(comp, attr, expr[0], 
+					sz > 0 ? (String[])loadWhenEvents.toArray(new String[sz]) : null, saveWhenEvent, access, converter);
 			}
 		}
 		
 		List children = comp.getChildren();
 		for (final Iterator it = children.iterator(); it.hasNext(); ) {
 			loadComponentAnnotation((Component) it.next()); //recursive back
-		}
-	}
-	
-	private String[] parseExpression(String expr, String seperator) {
-		List list = myParseExpression(expr, seperator);
-		String[] results = new String[list.size()];
-		int j = 0;
-		for(final Iterator it = list.iterator(); it.hasNext(); ++j) {
-			String result = (String) it.next();
-			if (result != null) {
-				result  = result.trim();
-				if (result.length() == 0)
-					result = null;
-			}
-			if (j == 0 && result == null) {
-				return null;
-			}
-			results[j] = result;
-		}
-		return results;
-	}
-	
-	private List myParseExpression(String expr, String separator) {
-		List results = new ArrayList(5);
-		while(true) {
-			int j = expr.indexOf(separator);
-			if (j < 0) {
-				results.add(expr);
-				return results;
-			}
-			results.add(expr.substring(0, j));
-
-			if (expr.length() <= (j+1)) {
-				return results;
-			}
-			expr = expr.substring(j+1);
 		}
 	}
 }
