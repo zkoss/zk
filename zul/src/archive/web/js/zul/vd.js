@@ -184,7 +184,7 @@ zkVld._errbox = function () {
 	if (!zk.opera) Effect.SlideDown(box, {duration:0.5});
 		//if we slide, opera will slide it at the top of screen and position it
 		//later. No sure it is a bug of script.aculo.us or Opera
-	zkau.initMoveable(box, {
+	zkau.initMovable(box, {
 		zindex: box.style.zIndex, effecting: zkVld._fiximg,
 		starteffect: Prototype.emptyFunction, endeffect: zkVld._fiximg});
 };
@@ -209,7 +209,7 @@ zkVld.closeErrbox = function (box, remaingError) {
 	}
 
 	if (box) {
-		zkau.cleanMoveable(box.id);
+		zkau.cleanMovable(box.id);
 		box.parentNode.removeChild(box);
 		zkVld._ebs.remove(box.id);
 	} else if (boxid) {

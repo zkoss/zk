@@ -170,12 +170,12 @@ zulHdrs = {};
 zulHdrs.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);
 
-	if (nm == "z.sizeable") {
+	if (nm == "z.sizable") {
 		var cells = cmp.cells;
 		if (cells) {
-			var sizeable = val == "true";
+			var sizable = val == "true";
 			for (var j = 0; j < cells.length; ++j)
-				zulHdr.setSizeable(cells[j], sizeable);
+				zulHdr.setSizable(cells[j], sizable);
 		}
 	}
 	return true;
@@ -188,16 +188,16 @@ zulHdr.init = function (cmp) {
 	zk.listen(cmp, "click", function (evt) {zulHdr.onclick(evt, cmp);});
 	zk.listen(cmp, "mousemove", function (evt) {zulHdr.onmove(evt, cmp);});
 
-	zulHdr.setSizeable(cmp, zulHdr.sizeable(cmp));
+	zulHdr.setSizable(cmp, zulHdr.sizable(cmp));
 		//Note: IE6 failed to crop a column if it is draggable
 		//Thus we init only necessary (to avoid the IE6 bug)
 };
-zulHdr.sizeable = function (cmp) {
-	return cmp.parentNode && getZKAttr(cmp.parentNode, "sizeable") == "true";
+zulHdr.sizable = function (cmp) {
+	return cmp.parentNode && getZKAttr(cmp.parentNode, "sizable") == "true";
 };
-zulHdr.setSizeable = function (cmp, sizeable) {
+zulHdr.setSizable = function (cmp, sizable) {
 	var id = cmp.id;
-	if (sizeable) {
+	if (sizable) {
 		if (!zulHdr._szs[id]) {
 			zulHdr._szs[id] = new Draggable(cmp, {
 				starteffect: Prototype.emptyFunction,
@@ -229,7 +229,7 @@ zulHdr.resizeAll = function (rows, cmp, icol, col1, wd1, col2, wd2, keys) {
 		zkau.asapTimeout(cmp, "onColSize"));
 };
 zulHdr.cleanup = function (cmp) {
-	zulHdr.setSizeable(cmp, false);
+	zulHdr.setSizable(cmp, false);
 };
 zulHdr.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);
@@ -257,7 +257,7 @@ zulHdr.ignoredrag = function (cmp, pointer) {
 };
 /** Returns 1 if right, -1 if left, 0 if none. */
 zulHdr._insizer = function (cmp, x) {
-	if (zulHdr.sizeable(cmp)) {
+	if (zulHdr.sizable(cmp)) {
 		var cells = cmp.parentNode.cells;
 		if (cells[0] != cmp && x <= 5) return -1;
 		if (cells[cells.length-1] != cmp && x >= cmp.offsetWidth - 5) return 1;

@@ -27,36 +27,36 @@ import org.zkoss.zul.event.ZulEvents;
  * @author tomyeh
  */
 abstract public class HeadersElement extends XulElement {
-	private boolean _sizeable;
+	private boolean _sizable;
 
-	/** Returns whether the width of the child column is sizeable.
+	/** Returns whether the width of the child column is sizable.
 	 */
-	public boolean isSizeable() {
-		return _sizeable;
+	public boolean isSizable() {
+		return _sizable;
 	}
-	/** Sets whether the width of the child column is sizeable.
+	/** Sets whether the width of the child column is sizable.
 	 * If true, an user can drag the border between two columns ({@link Column})
 	 * to change the widths of adjacent columns.
 	 * <p>Default: false.
 	 */
-	public void setSizeable(boolean sizeable) {
-		if (_sizeable != sizeable) {
-			_sizeable = sizeable;
-			smartUpdate("z.sizeable", sizeable);
+	public void setSizable(boolean sizable) {
+		if (_sizable != sizable) {
+			_sizable = sizable;
+			smartUpdate("z.sizable", sizable);
 		}
 	}
 
 	//super//
 	public String getOuterAttrs() {
-		StringBuffer sb = _sizeable ? new StringBuffer(80): null;
+		StringBuffer sb = _sizable ? new StringBuffer(80): null;
 		sb = appendAsapAttr(sb, ZulEvents.ON_COL_SIZE);
 
 		final String attrs = super.getOuterAttrs();
 		if (sb == null) return attrs;
 
 		sb.append(attrs);
-		if (_sizeable)
-			sb.append(" z.sizeable=\"true\"");
+		if (_sizable)
+			sb.append(" z.sizable=\"true\"");
 		return sb.toString();
 	}
 }

@@ -426,7 +426,7 @@
             <xs:element ref="column" />
         </xs:choice>
         <xs:attributeGroup ref="xulElementAttrGroup" />
-        <xs:attribute name="sizeable" type="xs:boolean" use="optional" />
+        <xs:attribute name="sizable" type="xs:boolean" use="optional" />
     </xs:complexType>
     <!-- combobox -->
     <xs:element name="combobox" type="comboboxType" />
@@ -757,7 +757,7 @@
             <xs:element ref="listheader" />
         </xs:choice>
         <xs:attributeGroup ref="xulElementAttrGroup" />
-        <xs:attribute name="sizeable" type="xs:boolean" use="optional" />
+        <xs:attribute name="sizable" type="xs:boolean" use="optional" />
     </xs:complexType>
     <!-- listheader -->
     <xs:element name="listheader" type="listheaderType" />
@@ -1155,7 +1155,7 @@
             <xs:element ref="treecol" />
         </xs:choice>
         <xs:attributeGroup ref="xulElementAttrGroup" />
-        <xs:attribute name="sizeable" type="xs:boolean" use="optional" />
+        <xs:attribute name="sizable" type="xs:boolean" use="optional" />
     </xs:complexType>
     <!-- treeitem -->
     <xs:element name="treeitem" type="treeitemType" />

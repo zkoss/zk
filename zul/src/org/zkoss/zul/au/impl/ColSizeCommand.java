@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.client.Sizeable;
+import org.zkoss.zk.ui.ext.client.Sizable;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
@@ -61,8 +61,8 @@ public class ColSizeCommand extends Command {
 		final Component col2 = desktop.getComponentByUuid(data[3]);
 		final int keys = Commands.parseKeys(data[5]);
 
-		((Sizeable)((ComponentCtrl)col1).getExtraCtrl()).setWidthByClient(data[2]);
-		((Sizeable)((ComponentCtrl)col2).getExtraCtrl()).setWidthByClient(data[4]);
+		((Sizable)((ComponentCtrl)col1).getExtraCtrl()).setWidthByClient(data[2]);
+		((Sizable)((ComponentCtrl)col2).getExtraCtrl()).setWidthByClient(data[4]);
 
 		Events.postEvent(
 			new ColSizeEvent(getId(), comp, icol, col1, col2, keys));
