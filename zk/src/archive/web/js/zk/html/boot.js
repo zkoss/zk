@@ -424,7 +424,7 @@ zk._evalInit = function () {
  * @param a0 the first of extra arguments; null to omitted
  * @return the result
  */
-zk.eval = function (n, fn, type, a0, a1, a2) {
+zk.eval = function (n, fn, type, a0, a1, a2, a3, a4, a5, a6, a7) {
 	if (!type) type = $type(n);
 	if (type) {
 		var o = window["zk" + type];
@@ -432,7 +432,7 @@ zk.eval = function (n, fn, type, a0, a1, a2) {
 			var f = o[fn];
 			if (f) {
 				try {
-					return f(n,a0,a1,a2);
+					return f(n,a0,a1,a2,a3,a4,a5,a6,a7);
 				} catch (ex) {
 					zk.error("Failed to invoke zk"+type+"."+fn+"\n"+ex.message);
 				}

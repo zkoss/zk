@@ -57,7 +57,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.impl.ZScriptInitiator;
 import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.ui.util.impl.ConditionImpl;
+import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.UiFactory;

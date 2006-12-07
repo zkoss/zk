@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.client.Moveable;
+import org.zkoss.zk.ui.ext.client.Sizeable;
 import org.zkoss.zk.ui.ext.client.ZIndexed;
 import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
@@ -481,7 +482,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * override {@link #newExtraCtrl} to return an instance that extends from
 	 * this interface.
 	 */
-	protected class ExtraCtrl implements Moveable, ZIndexed {
+	protected class ExtraCtrl implements Moveable, Sizeable, ZIndexed {
 		//-- Moveable --//
 		public void setLeftByClient(String left) {
 			_left =left;

@@ -38,7 +38,7 @@ import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ForEach;
-import org.zkoss.zk.ui.util.impl.ForEachImpl;
+import org.zkoss.zk.ui.util.ForEachImpl;
 
 /**
  * An instance definition.
