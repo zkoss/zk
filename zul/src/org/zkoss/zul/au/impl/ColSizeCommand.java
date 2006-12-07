@@ -1,4 +1,4 @@
-/* PagingCommand.java
+/* ColSizeCommand.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Aug 18 09:12:45     2006, Created by tomyeh
+		Thu Dec  7 11:08:01     2006, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -21,12 +21,17 @@ package org.zkoss.zul.au.impl;
 import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.client.Sizeable;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
-import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zk.au.impl.Commands;
+
+import org.zkoss.zul.event.ColSizeEvent;
 import org.zkoss.zul.ext.Paginal;
 
 /**
@@ -35,8 +40,8 @@ import org.zkoss.zul.ext.Paginal;
  * 
  * @author tomyeh
  */
-public class PagingCommand extends Command {
-	public PagingCommand(String evtnm, int flags) {
+public class ColSizeCommand extends Command {
+	public ColSizeCommand(String evtnm, int flags) {
 		super(evtnm, flags);
 	}
 
@@ -46,12 +51,20 @@ public class PagingCommand extends Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data == null || data.length != 1)
+		if (data == null || data.length != 6)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
-		final int pg = Integer.parseInt(data[0]);
-		((Paginal)comp).setActivePage(pg);
-			//Don't send the onPaging event since setActivePage will do
+		final Desktop desktop = request.getDesktop();
+		final int icol = Integer.parseInt(data[0]);
+		final Component col1 = desktop.getComponentByUuid(data[1]);
+		final Component col2 = desktop.getComponentByUuid(data[3]);
+		final int keys = Commands.parseKeys(data[5]);
+
+		((Sizeable)((ComponentCtrl)col1).getExtraCtrl()).setWidthByClient(data[2]);
+		((Sizeable)((ComponentCtrl)col2).getExtraCtrl()).setWidthByClient(data[4]);
+
+		Events.postEvent(
+			new ColSizeEvent(getId(), comp, icol, col1, col2, keys));
 	}
 }

@@ -814,10 +814,10 @@ zk.Selectable.prototype = {
 		}
 	},
 	/** Resize the specified column. */
-	resizeCol: function (icol, wd1, wd2, keys) {
+	resizeCol: function (cmp, icol, col1, wd1, col2, wd2, keys) {
 		var rows = this.bodyrows;
 		if (rows) {
-			zulHdr.resizeAll(rows, icol, wd1, wd2, keys);
+			zulHdr.resizeAll(rows, cmp, icol, col1, wd1, col2, wd2, keys);
 			this.recalcSize(false);
 		}
 	},
@@ -1094,11 +1094,13 @@ zk.addModuleInit(function () {
 	Object.extend(zkLhr, zulHdr);
 
 	/** Resize the column. */
-	zkLhr.resize = function (cmp, icol, wd1, wd2, keys) {
-		var box = $parentByType(cmp, "Libox");
+	zkLhr.resize = function (col1, col2, icol, wd1, wd2, keys) {
+		var box = $parentByType(col1, "Libox");
 		if (box) {
 			var meta = zkau.getMeta(box);
-			if (meta) meta.resizeCol(icol, wd1, wd2, keys);
+			if (meta)
+				meta.resizeCol(
+					$parentByType(col1, "Lhrs"), icol, col1, wd1, col2, wd2, keys);
 		}
 	};
 

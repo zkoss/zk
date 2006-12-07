@@ -214,15 +214,19 @@ zulHdr.setSizeable = function (cmp, sizeable) {
 	}
 };
 /** Resize all rows. (Utilities used by derived). */
-zulHdr.resizeAll = function (rows, icol, wd1, wd2, keys) {
+zulHdr.resizeAll = function (rows, cmp, icol, col1, wd1, col2, wd2, keys) {
 	var icol2 = icol + 1;
 	for (var j = 0; j < rows.length; ++j) {
 		var cells = rows[j].cells;
 		if (icol < cells.length)
-			cells[icol].style.width = wd1 + "px";
+			cells[icol].style.width = wd1;
 		if (icol2 < cells.length)
-			cells[icol2].style.width = wd2 + "px";
+			cells[icol2].style.width = wd2;
 	}
+
+	zkau.send({uuid: cmp.id, cmd: "onColSize",
+		data: [icol, col1.id, wd1, col2.id, wd2, keys]},
+		zkau.asapTimeout(cmp, "onColSize"));
 };
 zulHdr.cleanup = function (cmp) {
 	zulHdr.setSizeable(cmp, false);
@@ -309,7 +313,7 @@ zulHdr._endsizing = function (cmp, evt) {
 			wd2 = 0;
 		}
 
-		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+j+","+wd+","+wd2+",'"+keys+"')", 0);
+		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,$e('"+cmp2.id+"'),"+j+",'"+wd+"px','"+wd2+"px','"+keys+"')", 0);
 	}
 };
 

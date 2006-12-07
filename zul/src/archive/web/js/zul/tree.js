@@ -215,11 +215,13 @@ zk.addModuleInit(function () {
 	Object.extend(zkTcol, zulHdr);
 
 	/** Resize the column. */
-	zkTcol.resize = function (cmp, icol, wd1, wd2, keys) {
-		var tree = $parentByType(cmp, "Tree");
+	zkTcol.resize = function (col1, col2, icol, wd1, wd2, keys) {
+		var tree = $parentByType(col1, "Tree");
 		if (tree) {
 			var meta = zkau.getMeta(tree);
-			if (meta) meta.resizeCol(icol, wd1, wd2, keys);
+			if (meta)
+				meta.resizeCol(
+					$parentByType(col1, "Tcols"), icol, col1, wd1, col2, wd2, keys);
 		}
 	};
 

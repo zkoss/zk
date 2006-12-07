@@ -194,11 +194,14 @@ zk.Grid.prototype = {
 			}
 		}
 	},
-	/** Resize the specified column. */
-	resizeCol: function (icol, wd1, wd2, keys) {
+	/** Resize the specified column.
+	 * @param cmp columns
+	 */
+	resizeCol: function (cmp, icol, col1, wd1, col2, wd2, keys) {
 		var rows = this.bodyrows;
 		if (rows) {
-			zulHdr.resizeAll(rows, icol, wd1, wd2, keys);
+			zulHdr.resizeAll(rows,
+				cmp, icol, col1, wd1, col2, wd2, keys);
 			this.recalcSize(false);
 		}
 	}
@@ -256,11 +259,13 @@ zk.addModuleInit(function () {
 	Object.extend(zkCol, zulHdr);
 
 	/** Resize the column. */
-	zkCol.resize = function (cmp, icol, wd1, wd2, keys) {
-		var grid = $parentByType(cmp, "Grid");
+	zkCol.resize = function (col1, col2, icol, wd1, wd2, keys) {
+		var grid = $parentByType(col1, "Grid");
 		if (grid) {
 			var meta = zkau.getMeta(grid);
-			if (meta) meta.resizeCol(icol, wd1, wd2, keys);
+			if (meta)
+				meta.resizeCol(
+					$parentByType(col1, "Cols"), icol, col1, wd1, col2, wd2, keys);
 		}
 	};
 

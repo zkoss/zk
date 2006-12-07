@@ -26,7 +26,6 @@ import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.au.impl.PagingCommand;
 
 /**
  * Paging of long content.
@@ -36,11 +35,6 @@ import org.zkoss.zul.au.impl.PagingCommand;
  * @author tomyeh
  */
 public class Paging extends XulElement implements Paginal {
-	static {
-		//register commands
-		new PagingCommand("onPaging", Command.SKIP_IF_EVER_ERROR);
-	}
-
 	/** # of items per page. */
 	private int _pgsz = 20;
 	/** total # of items. */

@@ -23,7 +23,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * A skeletal implementation for headers.
+ * A skeletal implementation for a header.
  *
  * @author tomyeh
  */

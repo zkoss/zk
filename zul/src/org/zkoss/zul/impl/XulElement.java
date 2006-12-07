@@ -31,6 +31,10 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.au.Command;
+import org.zkoss.zul.au.impl.ColSizeCommand;
+import org.zkoss.zul.au.impl.PagingCommand;
+import org.zkoss.zul.event.ZulEvents;
 
 /**
  * The fundamental class for XUL elements.
@@ -38,6 +42,13 @@ import org.zkoss.zk.ui.event.Events;
  * @author tomyeh
  */
 abstract public class XulElement extends HtmlBasedComponent {
+	static {
+		//register commands
+		new ColSizeCommand(ZulEvents.ON_COL_SIZE, 0);
+			//Don't use Command.IGNORE_OLD_EQUIV since users might drag diff borders
+		new PagingCommand(ZulEvents.ON_PAGING, Command.SKIP_IF_EVER_ERROR);
+	}
+
 	/** The popup ID that will be shown when click. */
 	private String _popup;
 	/** The context ID that will be shown when right-click. */
