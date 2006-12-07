@@ -123,8 +123,10 @@ zk.Grid.prototype = {
 		this.setHgh(hgh);
 
 		//Bug 1553937: wrong sibling location
-		//IE: otherwise, element's width will be extended to fit body
-		if (zk.ie && !this.paging) { //note: we don't solve this bug for paging yet
+		//Otherwise,
+		//IE: element's width will be extended to fit body
+		//FF and IE: sometime a horizontal scrollbar appear (though it shalln't)
+		if (!this.paging) { //note: we don't solve this bug for paging yet
 			var wd = this.element.clientWidth;
 			if (wd) {
 				wd += "px";
