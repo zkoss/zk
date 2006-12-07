@@ -87,7 +87,7 @@ public class WebManager {
 	 * Because we store this portlet request, we have to name it
 	 * with javax such that it is visible to other servlets and portlets.
 	 */
-	/*package*/ static final String DESKTOP = "javax.zkoss.zk.ui.desktop";
+	/*package*/ static final String ATTR_DESKTOP = "javax.zkoss.zk.ui.desktop";
 
 	/** Map(ServletContext, List(ActivationListener)). */
 	private static final Map _actListeners = new HashMap();
@@ -378,10 +378,10 @@ public class WebManager {
 	 */
 	/*package*/ Desktop getDesktop(Session sess, ServletRequest request,
 	String path) {
-		Desktop desktop = (Desktop)getRequestLocal(request, DESKTOP);
+		Desktop desktop = (Desktop)getRequestLocal(request, ATTR_DESKTOP);
 		if (desktop == null) {
 			if (D.ON && log.debugable()) log.debug("Create desktop for "+path);
-			WebManager.setRequestLocal(request, DESKTOP,
+			WebManager.setRequestLocal(request, ATTR_DESKTOP,
 				desktop = newDesktop(sess, request, path));
 		}
 		return desktop;
@@ -399,10 +399,10 @@ public class WebManager {
 	public static void setDesktop(HttpServletRequest request,
 	Desktop desktop) {
 		/*if (D.ON) {
-			final Desktop dt = (Desktop)getRequestLocal(DESKTOP);
+			final Desktop dt = (Desktop)getRequestLocal(ATTR_DESKTOP);
 			assert dt == null || dt == desktop: "old:"+dt+", new:"+desktop;
 		}*/
-		WebManager.setRequestLocal(request, DESKTOP, desktop);
+		WebManager.setRequestLocal(request, ATTR_DESKTOP, desktop);
 	}
 
 	//-- inner classes --//
