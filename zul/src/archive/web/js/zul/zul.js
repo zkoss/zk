@@ -313,7 +313,9 @@ zulHdr._endsizing = function (cmp, evt) {
 			wd2 = 0;
 		}
 
-		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,$e('"+cmp2.id+"'),"+j+",'"+wd+"px','"+wd2+"px','"+keys+"')", 0);
+		cmp.style.width = wd += "px";
+		cmp2.style.width = wd2 += "px";
+		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,$e('"+cmp2.id+"'),"+j+",'"+wd+"','"+wd2+"','"+keys+"')", 0);
 	}
 };
 
