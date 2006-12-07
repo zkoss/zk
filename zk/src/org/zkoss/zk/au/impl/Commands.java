@@ -66,9 +66,11 @@ public class Commands {
 	 */
 	public static int parseKeys(String flags) {
 		int keys = 0;
-		if (flags.indexOf("a") >= 0) keys |= MouseEvent.ALT_KEY;
-		if (flags.indexOf("c") >= 0) keys |= MouseEvent.CTRL_KEY;
-		if (flags.indexOf("s") >= 0) keys |= MouseEvent.SHIFT_KEY;
+		if (flags != null) {
+			if (flags.indexOf("a") >= 0) keys |= MouseEvent.ALT_KEY;
+			if (flags.indexOf("c") >= 0) keys |= MouseEvent.CTRL_KEY;
+			if (flags.indexOf("s") >= 0) keys |= MouseEvent.SHIFT_KEY;
+		}
 		return keys;
 	}
 }
