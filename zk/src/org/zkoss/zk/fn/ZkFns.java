@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -131,9 +132,9 @@ public class ZkFns {
 	 */
 	public static final String outLangJavaScripts(String action) {
 		final ServletRequest request = ServletFns.getCurrentRequest();
-		if (request.getAttribute(ATTR_LANG_JS_GENED) != null)
+		if (WebManager.getRequestLocal(request, ATTR_LANG_JS_GENED) != null)
 			return ""; //nothing to generate
-		request.setAttribute(ATTR_LANG_JS_GENED, Boolean.TRUE);
+		WebManager.setRequestLocal(request, ATTR_LANG_JS_GENED, Boolean.TRUE);
 
 		if (action == null)
 			throw new IllegalArgumentException("null");
@@ -215,9 +216,9 @@ public class ZkFns {
 	 */
 	public static final String outLangStyleSheets() {
 		final ServletRequest request = ServletFns.getCurrentRequest();
-		if (request.getAttribute(ATTR_LANG_CSS_GENED) != null)
+		if (WebManager.getRequestLocal(request, ATTR_LANG_CSS_GENED) != null)
 			return ""; //nothing to generate
-		request.setAttribute(ATTR_LANG_CSS_GENED, Boolean.TRUE);
+		WebManager.setRequestLocal(request, ATTR_LANG_CSS_GENED, Boolean.TRUE);
 
 		//Process all languages
 		final Execution exec = Executions.getCurrent();

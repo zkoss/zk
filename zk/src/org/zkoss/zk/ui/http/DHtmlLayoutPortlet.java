@@ -181,9 +181,10 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	 */
 	private Desktop getDesktop(Session sess, RenderRequest request, String path)
 	throws PortletException {
-		Desktop desktop = (Desktop)request.getAttribute(WebManager.DESKTOP);
+		Desktop desktop =
+			(Desktop)WebManager.getRequestLocal(request, WebManager.DESKTOP);
 		if (desktop == null)
-			request.setAttribute(WebManager.DESKTOP,
+			WebManager.setRequestLocal(request, WebManager.DESKTOP,
 				desktop = getWebManager().newDesktop(sess, request, path));
 		return desktop;
 	}

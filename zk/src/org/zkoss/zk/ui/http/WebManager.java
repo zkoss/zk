@@ -33,6 +33,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.portlet.RenderRequest;
 
 import org.zkoss.lang.D;
 import org.zkoss.util.CollectionsX;
@@ -90,6 +91,8 @@ public class WebManager {
 
 	/** Map(ServletContext, List(ActivationListener)). */
 	private static final Map _actListeners = new HashMap();
+	/** Used to inter-communicate among portlet. */
+	private final static ThreadLocal _reqLocal = new ThreadLocal();
 
 	private final ServletContext _ctx;
 	private final WebApp _wapp;
@@ -206,6 +209,75 @@ public class WebManager {
 	}
 
 	//-- static --//
+	/** Initializes the request-local storage that is used to lift the limitation
+	 * of incapability of inter-portlet communication.
+	 *
+	 * <p>In other words, {@link #getRequestLocal} will look for this storage
+	 * in addition to request's attributes.
+	 */
+	/*package*/ static void initRequestLocal() {
+		_reqLocal.set(new HashMap());
+	}
+	/** Cleans up the request-local storage set by {@link #initRequestLocal}
+	/*package*/ static void cleanRequestLocal() {
+		_reqLocal.set(null);
+	}
+	/** Returns the value of the specified attribute in the request.
+	 * The implementation shall use this method instead of request.getAttribute,
+	 * since it resolves the limitation of incapability of inter-portlet
+	 * communication.
+	 *
+	 * @param name the attribute's name
+	 */
+	public static Object getRequestLocal(ServletRequest request, String name) {
+		final Object o = request.getAttribute(name);
+		if (o != null) return o;
+
+		final Map local = (Map)_reqLocal.get();
+		return local != null ? local.get(name): null;
+	}
+	/** Sets the value of the specified attribute in the request.
+	 * The implementation shall use this method instead of request.setAttribute,
+	 * since it resolves the limitation of incapability of inter-portlet
+	 * communication.
+	 * @param name the attribute's name
+	 * @param value the attribute's value
+	 */
+	public static
+	void setRequestLocal(ServletRequest request, String name, Object value) {
+		request.setAttribute(name, value);
+
+		final Map local = (Map)_reqLocal.get();
+		if (local != null) local.put(name, value);
+	}
+	/** Returns the value of the specified attribute in the request.
+	 * The implementation shall use this method instead of request.getAttribute,
+	 * since it resolves the limitation of incapability of inter-portlet
+	 * communication.
+	 *
+	 * @param name the attribute's name
+	 */
+	public static Object getRequestLocal(RenderRequest request, String name) {
+		final Object o = request.getAttribute(name);
+		if (o != null) return o;
+
+		final Map local = (Map)_reqLocal.get();
+		return local != null ? local.get(name): null;
+	}
+	/** Sets the value of the specified attribute in the request.
+	 * The implementation shall use this method instead of request.setAttribute,
+	 * since it resolves the limitation of incapability of inter-portlet
+	 * communication.
+	 * @param name the attribute's name
+	 * @param value the attribute's value
+	 */
+	public static
+	void setRequestLocal(RenderRequest request, String name, Object value) {
+		request.setAttribute(name, value);
+
+		final Map local = (Map)_reqLocal.get();
+		if (local != null) local.put(name, value);
+	}
 
 	/** Register a listener to the specified context such that
 	 * it will be invoked if the corresponding {@link WebManager} is created.
@@ -306,10 +378,10 @@ public class WebManager {
 	 */
 	/*package*/ Desktop getDesktop(Session sess, ServletRequest request,
 	String path) {
-		Desktop desktop = (Desktop)request.getAttribute(DESKTOP);
+		Desktop desktop = (Desktop)getRequestLocal(request, DESKTOP);
 		if (desktop == null) {
 			if (D.ON && log.debugable()) log.debug("Create desktop for "+path);
-			request.setAttribute(DESKTOP,
+			WebManager.setRequestLocal(request, DESKTOP,
 				desktop = newDesktop(sess, request, path));
 		}
 		return desktop;
@@ -327,10 +399,10 @@ public class WebManager {
 	public static void setDesktop(HttpServletRequest request,
 	Desktop desktop) {
 		/*if (D.ON) {
-			final Desktop dt = (Desktop)request.getAttribute(DESKTOP);
+			final Desktop dt = (Desktop)getRequestLocal(DESKTOP);
 			assert dt == null || dt == desktop: "old:"+dt+", new:"+desktop;
 		}*/
-		request.setAttribute(DESKTOP, desktop);
+		WebManager.setRequestLocal(request, DESKTOP, desktop);
 	}
 
 	//-- inner classes --//
