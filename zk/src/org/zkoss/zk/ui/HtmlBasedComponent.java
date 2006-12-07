@@ -27,8 +27,8 @@ import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.ext.client.Moveable;
-import org.zkoss.zk.ui.ext.client.Sizeable;
+import org.zkoss.zk.ui.ext.client.Movable;
+import org.zkoss.zk.ui.ext.client.Sizable;
 import org.zkoss.zk.ui.ext.client.ZIndexed;
 import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
@@ -482,15 +482,15 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * override {@link #newExtraCtrl} to return an instance that extends from
 	 * this interface.
 	 */
-	protected class ExtraCtrl implements Moveable, Sizeable, ZIndexed {
-		//-- Moveable --//
+	protected class ExtraCtrl implements Movable, Sizable, ZIndexed {
+		//-- Movable --//
 		public void setLeftByClient(String left) {
 			_left =left;
 		}
 		public void setTopByClient(String top) {
 			_top = top;
 		}
-		//-- Sizeable --//
+		//-- Sizable --//
 		public void setWidthByClient(String width) {
 			_width = width;
 		}

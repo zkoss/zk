@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
  * Represents an event caused by a component being moved.
  *
  * <p>Component Implementation Note:<br/>
- * A moveable component must implement {@link org.zkoss.zk.ui.ext.client.Moveable}
+ * A movable component must implement {@link org.zkoss.zk.ui.ext.client.Movable}
  * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
  * 
  * @author tomyeh

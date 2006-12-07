@@ -24,7 +24,7 @@ zkau._respQue = new Array(); //responses in XML
 zkau._evts = new Array();
 zkau._js4resps = new Array(); //JS to eval upon response
 zkau._metas = {}; //(id, meta)
-zkau._movs = {}; //(id, Draggable): moveables
+zkau._movs = {}; //(id, Draggable): movables
 zkau._drags = {}; //(id, Draggable): draggables
 zkau._drops = new Array(); //dropables
 zkau._zidsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
@@ -674,7 +674,7 @@ zkau.endOverlapped = function (uuid) {
 		zkau.fixWnd(cmp);
 	}
 }
-/** Makes a window moveable. */
+/** Makes a window movable. */
 zkau.floatWnd = function (cmp, starteffect, endeffect) {
 	if (cmp) {
 		var handle = $e(cmp.id + "!caption");
@@ -685,7 +685,7 @@ zkau.floatWnd = function (cmp, starteffect, endeffect) {
 			//Bug 1568393: don't set "absolute" directly
 			Position.absolutize(cmp);
 
-			zkau.initMoveable(cmp, {
+			zkau.initMovable(cmp, {
 				handle: handle,
 				starteffect: starteffect || Prototype.emptyFunction,
 				change: zkau.hideCovered,
@@ -695,20 +695,20 @@ zkau.floatWnd = function (cmp, starteffect, endeffect) {
 	}
 };
 
-/** Makes a window un-moveable. */
+/** Makes a window un-movable. */
 zkau.fixWnd = function (cmp) {
 	if (cmp) {
 		cmp.style.position = ""; //aculous changes it to relevant
-		zkau.cleanMoveable(cmp.id);
+		zkau.cleanMovable(cmp.id);
 	}
 };
 
-/** Make a component moveable (by moving). */
-zkau.initMoveable = function (cmp, options) {
+/** Make a component movable (by moving). */
+zkau.initMovable = function (cmp, options) {
 	zkau._movs[cmp.id] = new Draggable(cmp, options);
 };
-/** Undo moveable for a component. */
-zkau.cleanMoveable = function (id) {
+/** Undo movable for a component. */
+zkau.cleanMovable = function (id) {
 	if (zkau._movs[id]) {
 		zkau._movs[id].destroy();
 		delete zkau._movs[id];

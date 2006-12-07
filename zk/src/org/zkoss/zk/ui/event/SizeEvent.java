@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
  * Represents an event caused by a component being re-sized.
  *
  * <p>Component Implementation Note:<br/>
- * A sizeable component must implement {@link org.zkoss.zk.ui.ext.client.Moveable}
+ * A sizable component must implement {@link org.zkoss.zk.ui.ext.client.Sizable}
  * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
  * 
  * @author tomyeh
