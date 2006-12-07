@@ -78,6 +78,8 @@ public class Window extends XulElement implements IdSpace {
 	private boolean _moding;
 	/** Whether to show a close button. */
 	private boolean _closable;
+	/** Whether the window is sizable. */
+	private boolean _sizable;
 
 	/** Embeds the window as normal component. */
 	private static final int EMBEDDED = 0;
@@ -478,6 +480,22 @@ public class Window extends XulElement implements IdSpace {
 			invalidate(); //re-init is required
 		}
 	}
+	/** Returns whether the width of the child column is sizable.
+	 */
+	public boolean isSizable() {
+		return _sizable;
+	}
+	/** Sets whether the width of the child column is sizable.
+	 * If true, an user can drag the border between two columns (e.g., {@link org.zkoss.zul.Column})
+	 * to change the widths of adjacent columns.
+	 * <p>Default: false.
+	 */
+	public void setSizable(boolean sizable) {
+		if (_sizable != sizable) {
+			_sizable = sizable;
+			smartUpdate("z.sizable", sizable);
+		}
+	}
 
 	/** Process the onClose event sent when the close button is pressed.
 	 * <p>Default: detach itself.
@@ -606,6 +624,7 @@ public class Window extends XulElement implements IdSpace {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
 		appendAsapAttr(sb, Events.ON_MOVE);
+		appendAsapAttr(sb, Events.ON_SIZE);
 		appendAsapAttr(sb, Events.ON_Z_INDEX);
 		appendAsapAttr(sb, Events.ON_OK);
 		appendAsapAttr(sb, Events.ON_CANCEL);
@@ -617,7 +636,9 @@ public class Window extends XulElement implements IdSpace {
 			//to support onClick for groupbox
 
 		if (_closable)
-			HTMLs.appendAttribute(sb, "z.closable", true);
+			sb.append(" z.closable=\"true\"");
+		if (_sizable)
+			sb.append(" z.sizable=\"true\"");
 		HTMLs.appendAttribute(sb, "z.ctkeys", _ctkeys);
 		return sb.toString();
 	}
