@@ -125,11 +125,9 @@ zk.Grid.prototype = {
 		//Bug 1553937: wrong sibling location
 		//IE: otherwise, element's width will be extended to fit body
 		if (zk.ie && !this.paging) { //note: we don't solve this bug for paging yet
-			var wd = this.element.style.width;
-			if (wd && wd != "auto" && wd.indexOf('%') < 0) {
-				this.body.style.width = wd;
-				if (this.head) this.head.style.width = wd;
-			}
+			var wd = this.element.clientWidth + "px";
+			this.body.style.width = wd;
+			if (this.head) this.head.style.width = wd;
 		}
 	},
 	cleanup: function ()  {
