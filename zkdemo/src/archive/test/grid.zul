@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Grid Demo">
-  <checkbox label="sizeable" onCheck="cs.sizeable = self.checked"/>
+  <checkbox label="sizable" onCheck="cs.sizable = self.checked"/>
 	<grid>
 		<columns id="cs">
 			<column label="AA"/>
@@ -67,7 +67,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Comp asc = new Comp(true), dsc = new Comp(false);
 	</zscript>
 	<grid id="grid" width="500px" height="100px">
-		<columns sizeable="true">
+		<columns sizable="true">
 			<column id="col" label="Order"  sortAscending="${asc}" sortDescending="${dsc}"/>
 			<column label="Head 1"/>
 			<column label="Head 2" align="center"/>
