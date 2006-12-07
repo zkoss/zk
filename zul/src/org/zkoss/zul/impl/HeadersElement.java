@@ -35,7 +35,7 @@ abstract public class HeadersElement extends XulElement {
 		return _sizable;
 	}
 	/** Sets whether the width of the child column is sizable.
-	 * If true, an user can drag the border between two columns ({@link Column})
+	 * If true, an user can drag the border between two columns (e.g., {@link org.zkoss.zul.Column})
 	 * to change the widths of adjacent columns.
 	 * <p>Default: false.
 	 */

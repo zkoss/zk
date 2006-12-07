@@ -35,7 +35,7 @@ import org.zkoss.zul.event.ColSizeEvent;
 import org.zkoss.zul.ext.Paginal;
 
 /**
- * Used only by {@link AuRequest} to implement the {@link PagingEvent}
+ * Used only by {@link AuRequest} to implement the {@link ColSizeEvent}
  * relevant command.
  * 
  * @author tomyeh
