@@ -3,45 +3,17 @@
 
 html {height:100%}
 
-<%-- headers --%>
-h1 {
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: x-large; font-weight: bold; color: #250070;
-	letter-spacing: -1px; margin-top: 3pt;
-}
-h2 {
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: large; font-weight: bold; color: #200066;
-}
-h3 {
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: medium; font-weight: bold; color: #100050;
-}
-h4 {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
-	font-size: small; font-weight: bold; color: #107080;
-}
-h5 {
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: small; font-weight: bold; color: #603080;
-}
-h6 {
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: small; font-weight: normal; color: #404040;
-}
-
 <%-- paragraphs --%>
-p, div, span, label, a, li, dt, dd {
+p, div, span, label, a, li, dt, dd, input, textarea, pre, body {
 	font-family: "Verdana", Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
+}
+body {
+	margin: 2px 5px; padding: 0;
 }
 button {
 	font-family: Tahoma, Arial, serif;
 	font-size: x-small; font-weight: normal;
-}
-input, textarea {
-	font-family: "Verdana", Tahoma, Arial, serif;
-	font-size: small; font-weight: normal;
 }
 <%-- don't set option in mozilla. or, its height too small --%>
 legend {
@@ -51,15 +23,6 @@ legend {
 hr {
 	color: lightgray; background: lightgray;
 	height: 1px;
-}
-pre {
-	font-family: "Verdana", Tahoma, Arial, serif;
-	font-size: small; font-weight: normal;
-}
-body {
-	font-family: "Verdana", Tahoma, Arial, serif;
-	font-size: small; font-weight: normal;
-	margin: 2px 5px; padding: 0;
 }
 code {
 	font-family: "Lucida Console", "Courier New", Courier, mono;
@@ -80,23 +43,7 @@ thead tr {
 	font-weight: bold;
 }
 
-dt {
-	margin: 0.5em 0 0.3em 0;
-	font-family: Tahoma, Garamond, Century, Arial, serif;
-	font-weight: bold;
-}
-dd {
-	margin: 0 0 0 0.8em;
-}
-
 img	{border: 0;}
-
-h1 em	{color: #dd0000}
-
-li	{margin-top: 2pt}
-ul li	{list-style: url(${c:encodeURL('~./img/bullet1.gif')}) disc}
-ul ul li	{list-style: url(${c:encodeURL('~./img/bullet2.gif')}) circle}
-ul ul ul li	{list-style: url(${c:encodeURL('~./img/bullet3.gif')}) square}
 
 <%-- The hyperlink's style class. --%>
 .link {cursor: pointer;}
