@@ -18,7 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk>
+<style src="~./zul/css/normex**.css.dsp"/>
 <window id="root" use="org.zkoss.zkdemo.userguide.MainWindow" xmlns:h="http://www.w3.org/1999/xhtml">
+
 	<!-- The following script is generated because we want to demo Google Maps later -->
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${desktopScope.gmapsKey}"
 		type="text/javascript" unless="${empty desktopScope.gmapsKey}"/>
@@ -148,3 +151,4 @@ if (!zk.https()) {
 }
 ]]></h:script>
 </window>
+</zk>
