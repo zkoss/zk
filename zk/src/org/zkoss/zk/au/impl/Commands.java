@@ -24,20 +24,22 @@ import java.util.LinkedHashSet;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.MouseEvent;
 import org.zkoss.zk.au.AuRequest;
 
 /**
  * Utilities to implement {@link org.zkoss.zk.au.Command}.
- * Used only internally.
  *
  * @author tomyeh
  */
-class Commands {
+public class Commands {
 	/** Converts the data of the specified request to a set of Component.
 	 * The data is assumed to contain a list of item ID in the
 	 * comman-separated format
+	 *
+	 * @return a set of components.
 	 */
-	static Set convertToItems(AuRequest request) {
+	public static Set convertToItems(AuRequest request) {
 		final Set items = new LinkedHashSet();
 		final String[] data = request.getData();
 		String s = data != null && data.length > 0 ? data[0]: null;
@@ -56,5 +58,17 @@ class Commands {
 			}
 		}
 		return items;
+	}
+
+	/** Parses the key flags of a mouse event.
+	 * @return a combination of {@link MouseEvent#ALT_KEY},
+	 * {@link MouseEvent#SHIFT_KEY} and {@link MouseEvent#CTRL_KEY},
+	 */
+	public static int parseKeys(String flags) {
+		int keys = 0;
+		if (flags.indexOf("a") >= 0) keys |= MouseEvent.ALT_KEY;
+		if (flags.indexOf("c") >= 0) keys |= MouseEvent.CTRL_KEY;
+		if (flags.indexOf("s") >= 0) keys |= MouseEvent.SHIFT_KEY;
+		return keys;
 	}
 }

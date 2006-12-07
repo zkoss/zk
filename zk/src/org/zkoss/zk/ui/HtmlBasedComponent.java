@@ -489,6 +489,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		public void setTopByClient(String top) {
 			_top = top;
 		}
+		//-- Sizeable --//
+		public void setWidthByClient(String width) {
+			_width = width;
+		}
+		public void setHeightByClient(String height) {
+			_height = height;
+		}
 		//-- ZIndexed --//
 		public void setZIndexByClient(int zIndex) {
 			_zIndex = zIndex;

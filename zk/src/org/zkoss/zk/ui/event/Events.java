@@ -81,6 +81,9 @@ public class Events {
 	/** The onMove event (used with {@link MoveEvent}).
 	 */
 	public static final String ON_MOVE = "onMove";
+	/** The onSize event (used with {@link SizeEvent}).
+	 */
+	public static final String ON_SIZE = "onSize";
 	/** The onZIndex event (used with {@link ZIndexEvent}).
 	 */
 	public static final String ON_Z_INDEX = "onZIndex";

@@ -52,6 +52,6 @@ public class DropCommand extends Command {
 		Events.postEvent(new DropEvent(getId(), comp,
 			request.getDesktop().getComponentByUuid(data[0]),
 			Integer.parseInt(data[1]), Integer.parseInt(data[2]),
-			MouseCommand.parseKeys(data[3])));
+			Commands.parseKeys(data[3])));
 	}
 }
