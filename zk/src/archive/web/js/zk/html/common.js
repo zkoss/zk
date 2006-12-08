@@ -1042,11 +1042,13 @@ zk.backupStyle = function (el, nm) {
  * Usually used with onover.
  */
 zk.restoreStyle = function (el, nm) {
-	var bknm = "zk_bk" + nm;
-	var val = el.getAttribute(bknm);
-	if (val) {
-		el.removeAttribute(bknm);
-		el.style[nm] = val == "_zk_none_" ? "": val;
+	if (el && el.getAttribute && el.style) { //el might be removed!
+		var bknm = "zk_bk" + nm;
+		var val = el.getAttribute(bknm);
+		if (val) {
+			el.removeAttribute(bknm);
+			el.style[nm] = val == "_zk_none_" ? "": val;
+		}
 	}
 };
 

@@ -1285,7 +1285,7 @@ zkau._dragging = function (dg, pointer) {
 		zkau._cleanLastDrop(dg);
 		if (e) {
 			dg.zk_lastDrop = e;
-			dg.zk_lastDropBkc = e.style.backgroundColor;
+			zk.backupStyle(e, "backgroundColor");
 			e.style.backgroundColor = "#A8A858";
 		}
 	}
@@ -1365,8 +1365,8 @@ zkau._getDrop = function (cmp, pointer) {
 	return null;
 };
 zkau._cleanLastDrop = function (dg) {
-	if (dg.zk_lastDrop) {
-		dg.zk_lastDrop.style.backgroundColor = dg.zk_lastDropBkc;
+	if (dg && dg.zk_lastDrop) {
+		zk.restoreStyle(dg.zk_lastDrop, "backgroundColor");
 		dg.zk_lastDrop = null;
 	}
 };
