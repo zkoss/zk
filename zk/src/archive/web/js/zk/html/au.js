@@ -1120,7 +1120,8 @@ zkau.focusInFloats = function (target) {
 	return false;
 };
 
-zkau.sendOnClose = function (uuid) {
+zkau.sendOnClose = function (uuid, closeFloats) {
+	if (closeFloats) zkau.closeFloats();
 	el = $e(uuid);
 	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
 };
