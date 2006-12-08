@@ -243,9 +243,10 @@ zulHdr.onclick = function (evt, cmp) {
 };
 zulHdr.onmove = function (evt, cmp) {
 	var ofs = Position.cumulativeOffset(cmp);
-	if (zulHdr._insizer(cmp, Event.pointerX(evt) - ofs[0])) {
+	var v = zulHdr._insizer(cmp, Event.pointerX(evt) - ofs[0]);
+	if (v) {
 		zk.backupStyle(cmp, "cursor");
-		cmp.style.cursor = "move";
+		cmp.style.cursor = v == 1 ? "e-resize": "w-resize";
 	} else {
 		zk.restoreStyle(cmp, "cursor");
 	}

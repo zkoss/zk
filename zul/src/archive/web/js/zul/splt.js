@@ -19,8 +19,7 @@ zkSplt = {};
 
 zkSplt._drags = {};
 zkSplt.init = function (cmp) {
-	if (zk.ie) cmp.onselectstart = function () {return false;}
-	else if (zk.gecko) cmp.style["-moz-user-select"] = "none";
+	zk.disableSelection(cmp);
 
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
 	var vert = getZKAttr(cmp, "vert");
@@ -47,7 +46,7 @@ zkSplt.init = function (cmp) {
 	zk.listen(window, "resize", function () {setTimeout(exc, 120);});
 	setTimeout(exc, 120);
 
-	cmp.style.cursor = "move";
+	cmp.style.cursor = vert ? "s-resize": "e-resize";
 	btn.style.cursor = "default";
 };
 zkSplt.cleanup = function (cmp) {
