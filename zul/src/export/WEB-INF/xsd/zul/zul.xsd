@@ -980,6 +980,7 @@
         <xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
         <xs:attributeGroup ref="labelImageElementAttrGroup" />
         <xs:attribute name="selected" type="xs:boolean" use="optional" />
+        <xs:attribute name="closable" type="xs:boolean" use="optional" />
         <xs:attribute name="onRightClick" type="xs:string" use="optional" />
         <xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
     </xs:complexType>
