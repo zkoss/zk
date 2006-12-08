@@ -39,12 +39,14 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.reflect.Fields;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.List;
+import java.util.HashSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.Iterator;
 import java.lang.reflect.Method;
 
 /**
@@ -53,8 +55,12 @@ import java.lang.reflect.Method;
  * @author Henri Chen
  */
 public class DataBinder {
-	private Map _bindings = new LinkedHashMap(29); //(comp, (attr, Binding))
+	private Map _bindings = new LinkedHashMap(29); //(comp, MAP(attr, Binding))
 	private Map _beans = new HashMap(5); //(beanid, bean)
+	private Map _eventComponentMap = new HashMap(255); //(cloned target, MAP(template, cloned dataTarget))
+	private Set _targets = new HashSet(); //concerned template event triggering targets
+	private Set _dataTargets = new HashSet(); //concerned template event applied data targets
+	
 	private boolean _init; //whether this databinder is initialized. 
 							//Databinder is init automatically when saveXXX or loadXxx is called
 	private static Map _converterMap = new HashMap(5); //(converterClassName, converter)
@@ -87,6 +93,7 @@ public class DataBinder {
 	 */
 	public void addBinding(Component comp, String attr, String value,
 		String[] loadWhenEvents, String saveWhenEvent, String access, String converter) {
+		//handle default-bind defined in lang-addon.xml
 		Object[] objs = loadPropertyAnnotation(comp, attr, "default-bind");
 		/* logically impossible to hold "value" in default binding 
 		if (value == null) {
@@ -110,9 +117,29 @@ public class DataBinder {
 			attrMap = new LinkedHashMap(3);
 			_bindings.put(comp, attrMap);
 		}
-		attrMap.put(attr, new Binding(comp, attr, value, loadWhenEvents, saveWhenEvent, access, converter));
+		if (attrMap.containsKey(attr)) { //override and merge
+			final Binding binding = (Binding) attrMap.get(attr);
+			binding.setValue(value);
+			binding.addLoadWhenEvents(loadWhenEvents);
+			binding.setSaveWhenEvent(saveWhenEvent);
+			binding.setAccess(access);
+			binding.setConverter(converter);
+		} else {
+			attrMap.put(attr, new Binding(attr, value, loadWhenEvents, saveWhenEvent, access, converter));
+		}
 	}
-			
+	
+	/** Remove the binding associated with the attribute of the component.
+	 * @param comp The component to be removed the data binding association.
+	 * @param attr The attribute of the component to be removed the data binding association.
+	 */
+	public void removeBinding(Component comp, String attr) {
+		Map attrMap = (Map) _bindings.get(comp);
+		if (attrMap != null) {
+			attrMap.remove(attr);
+		}
+	}
+
 	//[0] value, [1] loadWhenEvents, [2] saveWhenEvent, [3] access, [4] converter
 	protected Object[] loadPropertyAnnotation(Component comp, String propName, String bindName) {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
@@ -136,7 +163,7 @@ public class DataBinder {
 				} else if ("converter".equals(tag)) {
 					converter = tagExpr;
 				} else if ("load-when".equals(tag)) {
-					loadWhenEvents = parseExpression(tagExpr, ";");
+					loadWhenEvents = parseExpression(tagExpr, ",");
 				} else if ("value".equals(tag)) {
 					expr = tagExpr;
 				}
@@ -287,13 +314,17 @@ public class DataBinder {
 			for(final Iterator it = _bindings.keySet().iterator(); it.hasNext();) {
 				final Component comp = (Component) it.next();
 				final Map attrMap = (Map) _bindings.get(comp);
+				
 				//_var special case; meaning a template component
 				if (attrMap.containsKey("_var")) {
-					comp.setAttribute(VAR, ((Binding)attrMap.get("_var")).getValue());
+					comp.setAttribute(VAR, ((Binding)attrMap.get("_var")).getBeanid());
 					setupTemplate(comp, Boolean.TRUE);
 					setupRenderer(comp);
 					detachs.add(comp);
 				}
+
+				//register event handler
+				registerEvents(comp, attrMap.values());
 			}
 			
 			for(final Iterator it = detachs.iterator(); it.hasNext(); ) {
@@ -303,6 +334,13 @@ public class DataBinder {
 		}
 	}
 	
+	private void registerEvents(Component comp, Collection attrs) {
+		for(final Iterator it = attrs.iterator(); it.hasNext();) {
+			Binding binding = (Binding) it.next();
+			binding.registerSaveEventListener(comp);
+			binding.registerLoadEventListeners(comp);
+		}
+	}	
 
 //vv----------------------------------------
 //:TODO: The following code is Component type tightly coupled, should change to use interface...
@@ -367,6 +405,19 @@ public class DataBinder {
 		}
 	}
 
+	//given cloned event target and template data target, get cloned data target
+	private Component lookupDataTarget(Component target, Component dataTarget) {
+		if (!_eventComponentMap.containsKey(target)) {
+			return dataTarget;
+		}
+		final Map dataTargetMap = (Map)_eventComponentMap.get(target);
+		if (!dataTargetMap.containsKey(dataTarget)) {
+			return dataTarget;
+		}
+		return (Component) dataTargetMap.get(dataTarget); 
+	}
+	
+	//parse token and return as a String[]
 	protected String[] parseExpression(String expr, String seperator) {
 		List list = myParseExpression(expr, seperator);
 		if (list == null) {
@@ -431,12 +482,13 @@ public class DataBinder {
 		private String _value;
 		private String _beanid;
 		private String _props; //a.b.c
-		private boolean _canLoad;
+		private String[] _loadWhenEvents;
+		private String _saveWhenEvent;
+		private boolean _canLoad = true; //default access to "load"
 		private boolean _canSave;
 		private TypeConverter _converter;
 		
 		/** Construtor to form a binding between UI component and backend data bean.
-		 * @param comp The component to be associated.
 		 * @param attr The attribute of the component to be associated.
 		 * @param value The expression to associate the data bean.
 		 * @param loadWhenEvents The event list when to load data.
@@ -447,45 +499,86 @@ public class DataBinder {
 		 * @param converter The converter class used to convert classes between component and the associated bean.
 		 * null means using the default class conversion method.
 		 */
-		private Binding(Component comp, String attr, String value, 
+		private Binding(String attr, String value, 
 			String[] loadWhenEvents, String saveWhenEvent, String access, String converter) {
+				
+			setAttr(attr);
+			setValue(value);
+			addLoadWhenEvents(loadWhenEvents);
+			setSaveWhenEvent(saveWhenEvent);
+			setAccess(access);
+			setConverter(converter);
+		}
+		
+		private void setAttr(String attr) {
 			_attr = attr;
-			_value = value;
-			String[] results = parseExpression(value);
-			_beanid = results[0];
-			_props = results[1];
+		}
+		
+		private void setValue(String value) {
+			if (value != null) {
+				String[] results = parseExpression(value);
+				_beanid = results[0];
+				_props = results[1];
+			}
+		}
+		
+		private void setSaveWhenEvent(String saveWhenEvent) {
+			if (saveWhenEvent != null) {
+				_saveWhenEvent = saveWhenEvent;
+			}
+		}
+		
+		private void addLoadWhenEvents(String[] loadWhenEvents) {
+			if (loadWhenEvents == null) {
+				return;
+			}
+			int sz1 = _loadWhenEvents == null ? 0 : _loadWhenEvents.length;
+			int sz2 = loadWhenEvents.length;
+			String[] merge = new String[sz1 + sz2];
 			
+			if (sz1 > 0) {
+				System.arraycopy(_loadWhenEvents, 0, merge, 0, sz1);
+			}
+			if (sz2 > 0) {
+				System.arraycopy(loadWhenEvents, 0, merge, sz1, sz2);
+			}
+			_loadWhenEvents = merge;
+		}
+
+		private void setAccess(String access) {
 			if (access == null) { //default access to load
-				access = "load";
+				return;
 			}
 			
-			if (access != null) {
-				if ("both".equals(access)) {
-					_canLoad = true;
-					_canSave = true;
-				} else if ("load".equals(access)) {
-					_canLoad = true;
-				} else if ("save".equals(access)) {
-					_canSave = true;
-				} else if (!"none".equals(access)) { //unknow access mode
-					throw new UiException("Unknown DataBinder access mode. Should be \"both\", \"load\", \"save\", or \"none\": "+access);
-				}
+			if ("both".equals(access)) {
+				_canLoad = true;
+				_canSave = true;
+			} else if ("load".equals(access)) {
+				_canLoad = true;
+				_canSave = false;
+			} else if ("save".equals(access)) {
+				_canLoad = false;
+				_canSave = true;
+			} else if ("none".equals(access)) { //unknow access mode
+				_canLoad = false;
+				_canSave = false;
+			} else {
+				throw new UiException("Unknown DataBinder access mode. Should be \"both\", \"load\", \"save\", or \"none\": "+access);
 			}
-			
+		}
+		
+		private void setConverter(String converter) {
 			if (converter != null) {
 				_converter = lookupConverter(converter);
 			}
-
-			registerSaveEventListener(comp, saveWhenEvent);
-			registerLoadEventListeners(comp, loadWhenEvents);
-		}
+		}			
 		
 		private String getBeanid() {
 			return _beanid;
 		}
 		
 		private String getValue() {
-			return _value;
+			return _beanid+"."+_props;
 		}
 		
 		private String getAttr() {
@@ -493,10 +586,10 @@ public class DataBinder {
 		}
 		
 		//register events when to load component value from the bean
-		private void registerLoadEventListeners(Component comp, String[] loadWhenEvents) {
-			if (canLoad() && loadWhenEvents != null) {
-				for(int j = 0; j < loadWhenEvents.length; ++j) {
-					String expr = loadWhenEvents[j];
+		private void registerLoadEventListeners(Component comp) {
+			if (canLoad() && _loadWhenEvents != null) {
+				for(int j = 0; j < _loadWhenEvents.length; ++j) {
+					String expr = _loadWhenEvents[j];
 					String[] results = parseExpression(expr); //[0] bean id or bean path, [1] event name
 					Component target = (Component) ("self".equals(results[0]) ? comp : lookupBean(comp, results[0]));
 					registerLoadEventListener(results[1], target, comp);
@@ -505,9 +598,9 @@ public class DataBinder {
 		}
 
 		//register events when to save component value to the bean.
-		private void registerSaveEventListener(Component comp, String saveWhenEvent) {
-			if (canSave() && saveWhenEvent != null) {
-				String expr = saveWhenEvent;
+		private void registerSaveEventListener(Component comp) {
+			if (canSave() && _saveWhenEvent != null) {
+				String expr = _saveWhenEvent;
 				String[] results = parseExpression(expr); //[0] bean id or bean path, [1] event name
 				Component target = (Component) ("self".equals(results[0]) ? comp : lookupBean(comp, results[0]));
 				registerSaveEventListener(results[1], target, comp);
@@ -515,11 +608,19 @@ public class DataBinder {
 		}
 
 		private void registerLoadEventListener(String eventName, Component target, Component dataTarget) {
-			target.addEventListener(eventName, new LoadEventListener(target, dataTarget));
+			if (isTemplate(dataTarget)) {
+				_targets.add(target); //concerned template event target
+				_dataTargets.add(dataTarget); //concerned template event applied data target
+			}
+			target.addEventListener(eventName, new LoadEventListener(dataTarget));
 		}
 
 		private void registerSaveEventListener(String eventName, Component target, Component dataTarget) {
-			target.addEventListener(eventName, new SaveEventListener(target, dataTarget));
+			if (isTemplate(dataTarget)) {
+				_targets.add(target); //concerned template event target
+				_dataTargets.add(dataTarget); //concerned template event applied data target
+			}
+			target.addEventListener(eventName, new SaveEventListener(dataTarget));
 		}
 		
 		private boolean canLoad() {
@@ -534,7 +635,7 @@ public class DataBinder {
 			try {
 				Object bean = lookupBean(comp, _beanid);
 				if (bean == null) {
-					throw new UiException("Cannot find the specified bean: "+_beanid+" in "+_value);
+					throw new UiException("Cannot find the specified bean: "+_beanid+" in "+getValue());
 				}
 				Object val = _props == null ? bean : Fields.getField(bean, _props);
 				if (_converter != null) {
@@ -554,7 +655,7 @@ public class DataBinder {
 			try {
 				Object bean = lookupBean(comp, _beanid);
 				if (bean == null) {
-					throw new UiException("Cannot find the specified bean: "+_beanid+" in "+_value);
+					throw new UiException("Cannot find the specified bean: "+_beanid+" in "+getValue());
 				}
 				Object val = Fields.getField(comp, _attr);
 				if (_converter != null) {
@@ -579,9 +680,8 @@ public class DataBinder {
 		}
 
 		private Object lookupBean(Component comp, String beanid) {
-			Object bean = NA;
-
 			//check collection template special case first
+			Object bean = NA;
 			if (isClone(comp)) {
 				bean = getListModelItem(comp, beanid);
 			}
@@ -618,42 +718,38 @@ public class DataBinder {
 		}
 
 		private abstract class BaseEventListener implements EventListener {
-			protected Component _target;
 			protected Component _dataTarget;
 			
-			public BaseEventListener(Component target, Component dataTarget) {
-				_target = target;
+			public BaseEventListener(Component dataTarget) {
 				_dataTarget = dataTarget;
 			}
 			
-			public Component getTarget() {
-				return _target;
-			}
-			
-			public Component getDataTarget() {
+/*			public Component getDataTarget() {
 				return _dataTarget;
 			}
-			
+*/			
 			public boolean isAsap() {
 				return true;
 			}
 		}
 			
 		private class LoadEventListener extends BaseEventListener {
-			public LoadEventListener(Component target, Component dataTarget) {
-				super(target, dataTarget);
+			public LoadEventListener(Component dataTarget) {
+				super(dataTarget);
 			}
 			public void onEvent(Event event) {
-				loadAttribute(_dataTarget);
+				Component dataTarget = lookupDataTarget((Component)event.getTarget(), _dataTarget);
+				loadAttribute(dataTarget);
 			}
 		}
 
 		private class SaveEventListener extends BaseEventListener {
-			public SaveEventListener(Component target, Component dataTarget) {
-				super(target, dataTarget);
+			public SaveEventListener(Component dataTarget) {
+				super(dataTarget);
 			}
 			public void onEvent(Event event) {
-				saveAttribute(_dataTarget);
+				Component dataTarget = lookupDataTarget(event.getTarget(), _dataTarget);
+				saveAttribute(dataTarget);
 			}
 		}
 	}
@@ -678,16 +774,32 @@ public class DataBinder {
 	        item.getChildren().addAll(new ArrayList(clonekids)); 
 	        System.out.println("item.getChildren()="+item.getChildren());
 	        
-	        //setup the clone listitem
-	        setupClone(item, _template, item);
+	        //setup the clone listitem and collect jump table for SaveEventListener and LoadEventListener
+	        Map dataTargetMap = new HashMap(7);
+	        List targetList = new ArrayList(7);
+	        setupClone(item, _template, item, dataTargetMap, targetList);
+	        
+	        //setup jump table for template SaveEventListner and LoadEventListener
+	        for(final Iterator it = targetList.iterator(); it.hasNext();) {
+	        	final Object target = it.next();
+	        	_eventComponentMap.put(target, dataTargetMap);
+	        }
 
 	        //apply the data binding
 	        loadComponent(item);
 	    }
 	
-		private void setupClone(Component comp, Component template, Component item) {
+		//link cloned to template, collection Save & Load Event mapping information, remove id
+		private void setupClone(Component comp, Component template, Component item, Map dataTargetMap, List targetList) {
+			if (_targets.contains(template)) {
+				targetList.add(comp);
+			}
+			if (_dataTargets.contains(template)) {
+				dataTargetMap.put(template, comp);
+			}
 			setTemplateComponent(comp, template);
 			comp.setAttribute(INDEXITEM, item);
+			comp.setId("@"+comp.getUuid()); //init id to @uuid to avoid duplicate id issue
 			
 	        //setup clone kids
 	        final Iterator itt = template.getChildren().iterator();
@@ -695,7 +807,7 @@ public class DataBinder {
 	        while (itt.hasNext()) {
 	        	final Component t = (Component) itt.next();
 	        	final Component c = (Component) itc.next();
-	        	setupClone(c, t, item);	//recursive
+	        	setupClone(c, t, item, dataTargetMap, targetList);	//recursive
 	        }
 	    }
 	}

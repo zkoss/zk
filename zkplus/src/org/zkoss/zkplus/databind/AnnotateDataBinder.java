@@ -155,6 +155,11 @@ public class AnnotateDataBinder extends DataBinder {
 	private void loadAnnotations(Component comp) {
 		loadComponentAnnotation(comp);
 		loadComponentPropertyAnnotation(comp);
+
+		final List children = comp.getChildren();
+		for (final Iterator it = children.iterator(); it.hasNext(); ) {
+			loadAnnotations((Component) it.next()); //recursive back
+		}
 	}
 	
 	private void loadComponentPropertyAnnotation(Component comp) {
@@ -166,11 +171,6 @@ public class AnnotateDataBinder extends DataBinder {
 			final Object[] objs = loadPropertyAnnotation(comp, propName, "bind");
 			addBinding(comp, propName, (String) objs[0], 
 					(String[]) objs[1], (String) objs[2], (String) objs[3], (String) objs[4]);
-		}
-
-		final List children = comp.getChildren();
-		for (final Iterator it = children.iterator(); it.hasNext(); ) {
-			loadComponentPropertyAnnotation((Component) it.next()); //recursive back
 		}
 	}
 	
@@ -206,7 +206,10 @@ public class AnnotateDataBinder extends DataBinder {
 					}
 					if ("load-when".equals(tags[0])) {
 						if (tags.length > 1 && tags[1] != null) {
-							loadWhenEvents.add(tags[1]);
+							final String[] events = parseExpression(tags[1], ",");
+							for(int k = 0; k < events.length; ++k) {
+								loadWhenEvents.add(events[k]);
+							}
 						}
 					} else if ("save-when".equals(tags[0])) {
 						saveWhenEvent = tags.length > 1 ? tags[1] : null;
@@ -221,11 +224,6 @@ public class AnnotateDataBinder extends DataBinder {
 				addBinding(comp, attr, expr[0], 
 					sz > 0 ? (String[])loadWhenEvents.toArray(new String[sz]) : null, saveWhenEvent, access, converter);
 			}
-		}
-		
-		List children = comp.getChildren();
-		for (final Iterator it = children.iterator(); it.hasNext(); ) {
-			loadComponentAnnotation((Component) it.next()); //recursive back
 		}
 	}
 }
