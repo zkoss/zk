@@ -81,6 +81,8 @@ Array.prototype.contains = function (o) {
 //
 // More zk utilities (defined also in boot.js) //
 
+zk.voidf = Prototype.emptyFunction;
+
 /** Listen an event.
  * Why not to use prototype's Event.observe? Performance.
  */
@@ -1423,3 +1425,16 @@ zk.enableSelection = function (el) {
 		else if (zk.ie)
 			el.onselectstart = null;
 };
+/** Clears selection, if any. */
+zk.clearSelection = function (){
+	try {
+		if (window["getSelection"]){ 
+			if (zk.safari) window.getSelection().collapse();
+			else window.getSelection().removeAllRanges();
+		} else if (document.selection){
+			if (document.selection.empty) document.selection.empty();
+			else if(document.selection.clear) document.selection.clear();
+		}
+	} catch (e){ //ignore
+	}
+}

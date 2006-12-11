@@ -687,9 +687,9 @@ zkau.floatWnd = function (cmp, starteffect, endeffect) {
 
 			zkau.initMovable(cmp, {
 				handle: handle,
-				starteffect: starteffect || Prototype.emptyFunction,
+				starteffect: starteffect || zk.voidf,
 				change: zkau.hideCovered,
-				endeffect: endeffect || Prototype.emptyFunction});
+				endeffect: endeffect || zk.voidf});
 			//we don't use options.change because it is called too frequently
 		}
 	}
@@ -1257,7 +1257,7 @@ zkau.cleanzidsp = function (n) {
 //Drag & Drop//
 zkau.initdrag = function (n) {
 	zkau._drags[n.id] = new Draggable(n, {
-		starteffect: Prototype.emptyFunction,
+		starteffect: zk.voidf,
 		endeffect: zkau._enddrag, change: zkau._dragging,
 		ghosting: zkau._ghostdrag, z_dragdrop: true,
 		revert: zkau._revertdrag, ignoredrag: zkau._ignoredrag
@@ -1333,8 +1333,9 @@ zkau._enddrag = function (cmp, evt) {
 			if (evt.shiftKey) keys += 's';
 		}
 		setTimeout("zkau._sendDrop('"+cmp.id+"','"+e.id+"','"+pointer[0]+"','"+pointer[1]+"','"+keys+"')", 50);
-		//In IE, listitem is selected after _enddrag, so we have to
-		//delay the sending of onDrop
+			//In IE, listitem is selected after _enddrag, so we have to
+			//delay the sending of onDrop
+		setTimeout("zk.clearSelection()", 50);
 	}
 };
 zkau._sendDrop = function (dragged, dropped, x, y, keys) {
