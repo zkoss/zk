@@ -40,7 +40,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
 <zk>
-	<window id="win" border="normal" width="200px">
+	<window id="win" border="normal" width="200px" sizable="true">
 		<caption image="/img/coffee.gif" label="Hi there!"/>
 		<checkbox label="Hello, Wolrd!"/>
 	</window>
