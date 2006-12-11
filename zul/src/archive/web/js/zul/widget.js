@@ -251,6 +251,7 @@ zkCkbox.onclick = function (cmp) {
 ////
 // window //
 zkWnd = {};
+zkWnd._szs = {}
 zkWnd.init = function (cmp) {
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
@@ -259,6 +260,9 @@ zkWnd.init = function (cmp) {
 		zk.listen(btn, "mouseout", function () {zkau.onimgout(btn);});
 		if (!btn.style.cursor) btn.style.cursor = "default";
 	}
+
+	zk.listen(cmp, "mousemove", function (evt) {zkWnd.onmove(evt, cmp);});
+	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));
 
 	//bug 1469887: re-init since it might be caused by invalidate
 	if (zkau.wndmode[cmp.id]) {
@@ -269,8 +273,14 @@ zkWnd.init = function (cmp) {
 	}
 };
 zkWnd.cleanup = function (cmp) {
+	zkWnd.setSizable(cmp, false);
 	if (zkau.wndmode[cmp.id] == "modal")
 		zul.endModal(cmp.id); //it also clear wndmode[cmp.id]
+};
+zkWnd.setAttr = function (cmp, nm, val) {
+	zkau.setAttr(cmp, nm, val);
+	if (nm == "z.sizable") zkWnd.setSizable(cmp, val == "true");
+	return true;
 };
 zkWnd.beforeOuter = function (cmp) {
 	if (zkau.wndmode[cmp.id] == "modal")
@@ -281,6 +291,139 @@ zkWnd.afterOuter = function (cmp) {
 	if (zkau.wndmode[nm]) {
 		delete zkau.wndmode[nm];
 		zul.doModal(cmp);
+	}
+};
+zkWnd.sizable = function (cmp) {
+	return getZKAttr(cmp, "sizable") == "true";
+};
+zkWnd.setSizable = function (cmp, sizable) {
+	var id = cmp.id;
+	if (sizable) {
+		if (!zkWnd._szs[id]) {
+			zkWnd._szs[id] = new Draggable(cmp, {
+				starteffect: zk.voidf,
+				endeffect: zkWnd._endsizing, ghosting: zkWnd._ghostsizing,
+				revert: true, ignoredrag: zkWnd._ignoresizing
+			});
+		}
+	} else {
+		if (zkWnd._szs[id]) {
+			zkWnd._szs[id].destroy();
+			delete zkWnd._szs[id];
+		}
+	}
+};
+/** 0: none, 1: top, 2: right-top, 3: right, 4: right-bottom, 5: bottom,
+ * 6: left-bottom, 7: left, 8: left-top
+ */
+zkWnd._insizer = function (cmp, x, y) {
+	var ofs = Position.cumulativeOffset(cmp);
+	var r = ofs[0] + cmp.offsetWidth, b = ofs[1] + cmp.offsetHeight;
+	if (x - ofs[0] <= 5) {
+		if (y - ofs[1] <= 5) return 8;
+		else if (b - y <= 5) return 6;
+		else return 7;
+	} else if (r - x <= 5) {
+		if (y - ofs[1] <= 5) return 2;
+		else if (b - y <= 5) return 4;
+		else return 3;
+	} else {
+		if (y - ofs[1] <= 5) return 1;
+		else if (b - y <= 5) return 5;
+	}
+};
+zkWnd.onmove = function (evt, cmp) {
+	var target = Event.element(evt);
+	if (zkWnd.sizable(cmp)) {
+		var c = zkWnd._insizer(cmp, Event.pointerX(evt), Event.pointerY(evt));
+		if (c) {
+			zk.backupStyle(cmp, "cursor");
+			cmp.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
+				c == 3 ? 'e-resize': c == 4 ? 'se-resize':
+				c == 5 ? 's-resize': c == 6 ? 'sw-resize':
+				c == 7 ? 'w-resize': 'nw-resize';
+		} else {
+			zk.restoreStyle(cmp, "cursor");
+		}
+	}
+};
+/** Called by zkWnd._szs[]'s ignoredrag for resizing window. */
+zkWnd._ignoresizing = function (cmp, pointer) {
+	var dg = zkWnd._szs[cmp.id];
+	if (dg) {
+		var v = zkWnd._insizer(cmp, pointer[0], pointer[1]);
+		if (v) {
+			switch (dg.z_dir = v) {
+			case 1: case 5: dg.options.constraint = 'vertical'; break;
+			case 3: case 7: dg.options.constraint = 'horizontal'; break;
+			default: dg.options.constraint = null;
+			}
+			zk.disableSelection(cmp);
+			return false;
+		}
+	}
+	return true;
+};
+zkWnd._endsizing = function (cmp, evt) {
+	zk.enableSelection(cmp);
+	var dg = zkWnd._szs[cmp.id];
+	if (dg && dg.z_szofs) {
+		var keys = "";
+		if (evt) {
+			if (evt.altKey) keys += 'a';
+			if (evt.ctrlKey) keys += 'c';
+			if (evt.shiftKey) keys += 's';
+		}
+
+		//adjust size
+	}
+};
+
+/* @param ghosting whether to create or remove the ghosting
+ */
+zkWnd._ghostsizing = function (dg, ghosting, pointer) {
+	if (ghosting) {
+		zk.dragging = true;
+		dg.delta = dg.currentDelta();
+
+		//Store scrolling offset first since Draggable.draw not handle DIV well
+		//after we transfer TR to DIV
+		var ofs = Position.cumulativeOffset(dg.element);
+		dg.z_scrl = Position.realOffset(dg.element);
+		ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];
+		var html =
+			'<div id="zk_ddghost" style="position:absolute;top:'
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
+			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
+			+'px;';
+		if (dg.z_dir == 8 || dg.z_dir <= 2)
+			html += 'border-top:3px solid darkgray;';
+		if (dg.z_dir >= 2 && dg.z_dir <= 4)
+			html += 'border-right:3px solid darkgray;';
+		if (dg.z_dir >= 4 && dg.z_dir <= 6)
+			html += 'border-bottom:3px solid darkgray;';
+		if (dg.z_dir >= 6 && dg.z_dir <= 8)
+			html += 'border-left:3px solid darkgray;';
+		document.body.insertAdjacentHTML("afterbegin", html + '"></div>');
+
+		dg.z_elorg = dg.element;
+		dg.element = $e("zk_ddghost");
+	} else {
+		setTimeout("zk.dragging=false", 0);
+			//we have to reset it later since onclick is fired later (after onmouseup)
+
+		if (dg.z_elorg) {
+			//calc how much window is resized
+			var ofs1 = Position.cumulativeOffset(dg.element);
+			var ofs2 = Position.cumulativeOffset(dg.z_elorg);
+			dg.z_szofs = [ofs1[0] - ofs2[0], ofs1[1] - ofs2[1]];
+
+			Element.remove(dg.element);
+			dg.element = dg.z_elorg;
+			dg.z_elorg = null;
+		} else {
+			dg.z_szofs = null;
+		}
 	}
 };
 

@@ -186,7 +186,7 @@ zkVld._errbox = function () {
 		//later. No sure it is a bug of script.aculo.us or Opera
 	zkau.initMovable(box, {
 		zindex: box.style.zIndex, effecting: zkVld._fiximg,
-		starteffect: Prototype.emptyFunction, endeffect: zkVld._fiximg});
+		starteffect: zk.voidf, endeffect: zkVld._fiximg});
 };
 /** box is the box element or the component's ID. */
 zkVld.closeErrbox = function (box, remaingError) {

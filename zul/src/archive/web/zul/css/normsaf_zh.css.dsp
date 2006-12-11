@@ -65,6 +65,9 @@ div.popup, div.popup-none { <%-- must consistent with lang.xml --%>
 div.popup {
 	border: 1px solid black;
 }
+div.wnd-i { <%-- the inner div of a window; independent of window's sclass --%>
+	margin:0; padding:0; cursor:auto;
+}
 
 <%-- groupbox caption --%>
 .caption input, .caption td {

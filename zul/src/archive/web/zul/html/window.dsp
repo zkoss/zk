@@ -21,6 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.widget.Wnd" z.autoz="true"${self.outerAttrs}${self.innerAttrs}>
+<div id="${self.uuid}!cave" class="wnd-i">
 <c:choose>
  <c:when test="${empty self.caption and empty self.title}">
   <c:if test="${c:isExplorer() and !c:isExplorer7()}"><%-- Bug 1579515: to clickable, a child with 100% width is required for DIV --%>
@@ -53,4 +54,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:forEach var="child" items="${self.children}">
 <c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if>
 </c:forEach>
+</div>
 </div>

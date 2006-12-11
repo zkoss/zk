@@ -470,9 +470,13 @@ public class Window extends XulElement implements IdSpace {
 	/** Sets whether to show a close button on the title bar.
 	 * If closable, a button is displayed and the onClose event is sent
 	 * if an user clicks the button.
+	 *
 	 * <p>Default: false.
+	 *
 	 * <p>You can intercept the default behavior by either overriding
 	 * {@link #onClose}, or listening the onClose event.
+	 *
+	 * <p>Note: the close button won't be displayed if no title or caption at all.
 	 */
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {

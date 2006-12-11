@@ -200,9 +200,9 @@ zulHdr.setSizable = function (cmp, sizable) {
 	if (sizable) {
 		if (!zulHdr._szs[id]) {
 			zulHdr._szs[id] = new Draggable(cmp, {
-				starteffect: Prototype.emptyFunction,
+				starteffect: zk.voidf,
 				endeffect: zulHdr._endsizing, ghosting: zulHdr._ghostsizing,
-				revert: zulHdr._revertsizing, ignoredrag: zulHdr._notsizing,
+				revert: true, ignoredrag: zulHdr._ignoresizing,
 				constraint: "horizontal"
 			});
 		}
@@ -266,15 +266,18 @@ zulHdr._insizer = function (cmp, x) {
 	return 0;
 };
 /** Called by zulHdr._szs[]'s ignoredrag for resizing column. */
-zulHdr._notsizing = function (cmp, pointer) {
-	var ofs = Position.cumulativeOffset(cmp);
-	var v = zulHdr._insizer(cmp, pointer[0] - ofs[0]);
-	if (!v) return true;
-
+zulHdr._ignoresizing = function (cmp, pointer) {
 	var dg = zulHdr._szs[cmp.id];
-	if (dg) dg.z_szlft = v == -1;
-	zk.disableSelection(cmp);
-	return false;
+	if (dg) {
+		var ofs = Position.cumulativeOffset(cmp);
+		var v = zulHdr._insizer(cmp, pointer[0] - ofs[0]);
+		if (v) {
+			dg.z_szlft = v == -1;
+			zk.disableSelection(cmp);
+			return false;
+		}
+	}
+	return true;
 };
 zulHdr._endsizing = function (cmp, evt) {
 	zk.enableSelection(cmp);
@@ -356,9 +359,6 @@ zulHdr._ghostsizing = function (dg, ghosting, pointer) {
 			dg.z_szofs = 0;
 		}
 	}
-};
-zulHdr._revertsizing = function (cmp, pointer) {
-	return true;
 };
 
 /** Tests whether it is sortable.
