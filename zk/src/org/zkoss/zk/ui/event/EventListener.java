@@ -24,6 +24,10 @@ import org.zkoss.zk.ui.UiException;
  * An listener that will be notified when an event occurs, if it is
  * registered to {@link org.zkoss.zk.ui.Component#addEventListener}.
  *
+ * <p>If an event listener is also implemented {@link Express}, the event
+ * listener is evaluated before all other listeners, including the onXxx member
+ * declared as part of a ZUML page.
+ *
  * @author tomyeh
  */
 public interface EventListener {

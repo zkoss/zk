@@ -39,6 +39,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.util.Namespace;
 import org.zkoss.zk.ui.util.Namespaces;
 import org.zkoss.zk.ui.util.Configuration;
@@ -458,6 +459,15 @@ public class EventProcessingThread extends Thread {
 		final Page page = _comp.getPage();
 		final String evtnm = _event.getName();
 
+		for (Iterator it = _comp.getListenerIterator(evtnm); it.hasNext();) {
+			final Object el = it.next();
+			if (el instanceof Express) {
+				((EventListener)el).onEvent(_event);
+				if (!_event.isPropagatable())
+					return; //done
+			}
+		}
+
 		final String script =
 			((ComponentCtrl)_comp).getMilieu().getEventHandler(_comp, evtnm);
 		if (script != null) {
@@ -467,9 +477,12 @@ public class EventProcessingThread extends Thread {
 		}
 
 		for (Iterator it = _comp.getListenerIterator(evtnm); it.hasNext();) {
-			((EventListener)it.next()).onEvent(_event);
-			if (!_event.isPropagatable())
-				return; //done
+			final Object el = it.next();
+			if (!(el instanceof Express)) {
+				((EventListener)el).onEvent(_event);
+				if (!_event.isPropagatable())
+					return; //done
+			}
 		}
 
 		final Method mtd = ExecutionsCtrl
