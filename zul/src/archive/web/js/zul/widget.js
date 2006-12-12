@@ -367,7 +367,7 @@ zkWnd._ignoresizing = function (cmp, pointer) {
 zkWnd._endsizing = function (cmp, evt) {
 	zk.enableSelection(cmp);
 	var dg = zkWnd._szs[cmp.id];
-	if (dg && dg.z_szofs) {
+	if (dg && dg.z_szofs && (dg.z_szofs[0] || dg.z_szofs[1])) {
 		var keys = "";
 		if (evt) {
 			if (evt.altKey) keys += 'a';
@@ -376,6 +376,17 @@ zkWnd._endsizing = function (cmp, evt) {
 		}
 
 		//adjust size
+		setTimeout("zkWnd._resize($e('"+cmp.id+"'),"+dg.z_dir+","
+			+dg.z_szofs[0]+","+dg.z_szofs[1]+",'"+keys+"')", 50);
+		dg.z_dir = dg.z_szofs = null;
+	}
+};
+zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
+	var l, t, w = cmp.offsetWidth, h = cmp.offsetHeight;
+	if (ofsy) {
+		if (dir == 8 || dir <= 2) {
+			t = parseInt(cmp.style.left || "0");
+		}
 	}
 };
 
@@ -383,14 +394,7 @@ zkWnd._endsizing = function (cmp, evt) {
  */
 zkWnd._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
-		zk.dragging = true;
-		dg.delta = dg.currentDelta();
-
-		//Store scrolling offset first since Draggable.draw not handle DIV well
-		//after we transfer TR to DIV
-		var ofs = Position.cumulativeOffset(dg.element);
-		dg.z_scrl = Position.realOffset(dg.element);
-		ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];
+		var ofs = zkau.beginGhostToDIV(dg);
 		var html =
 			'<div id="zk_ddghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
@@ -405,25 +409,18 @@ zkWnd._ghostsizing = function (dg, ghosting, pointer) {
 		if (dg.z_dir >= 6 && dg.z_dir <= 8)
 			html += 'border-left:3px solid darkgray;';
 		document.body.insertAdjacentHTML("afterbegin", html + '"></div>');
-
-		dg.z_elorg = dg.element;
 		dg.element = $e("zk_ddghost");
 	} else {
-		setTimeout("zk.dragging=false", 0);
-			//we have to reset it later since onclick is fired later (after onmouseup)
-
-		if (dg.z_elorg) {
+		var org = zkau.getGhostOrgin(dg);
+		if (org) {
 			//calc how much window is resized
 			var ofs1 = Position.cumulativeOffset(dg.element);
-			var ofs2 = Position.cumulativeOffset(dg.z_elorg);
+			var ofs2 = Position.cumulativeOffset(org);
 			dg.z_szofs = [ofs1[0] - ofs2[0], ofs1[1] - ofs2[1]];
-
-			Element.remove(dg.element);
-			dg.element = dg.z_elorg;
-			dg.z_elorg = null;
 		} else {
 			dg.z_szofs = null;
 		}
+		zkau.endGhostToDIV(dg);
 	}
 };
 
