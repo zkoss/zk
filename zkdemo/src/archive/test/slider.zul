@@ -32,5 +32,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		int v = event.getPos() + slider2.getCurpos();
 		image.setWidth((v*5 + 10) + "px");
 	}
+
+	//some is set by include.dsp (to test sessionSope)
+	new Label(sessionScope.get("some")).setParent(self);
 	</zscript>
 </window>

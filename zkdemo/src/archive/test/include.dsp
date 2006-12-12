@@ -20,6 +20,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <title>Include two zul pages</title>
 </head>
 <body>
+<c:set var="some" value="Some" scope="session"/>
 <c:include page="slider.zul"/>
 <c:include page="menu.zul"/>
 </body>
