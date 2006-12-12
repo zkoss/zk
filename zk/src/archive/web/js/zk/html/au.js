@@ -788,8 +788,8 @@ zkau._onUnload = function () {
 };
 /** Handles window.onbeforeunload. */
 zkau._onBfUnload = function () {
-	if (zkau._cfmClose)
-		return zkau._cfmClose;
+	if (zkau.confirmClose)
+		return zkau.confirmClose;
 	if (zkau._oldBfUnload)
 		return zkau._oldBfUnload.apply(window, arguments);
 	//Return nothing
@@ -1731,7 +1731,7 @@ zkau.cmd0 = { //no uuid at all
 		window.moveTo(x, y);
 	},
 	cfmClose: function (msg) {
-		zkau._cfmClose = msg;
+		zkau.confirmClose = msg;
 	}
 };
 zkau.cmd1 = {
