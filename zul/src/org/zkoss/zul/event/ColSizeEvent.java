@@ -80,7 +80,7 @@ public class ColSizeEvent extends Event {
 		return _col2;
 	}
 
-	/** Returns what keys were pressed when the mouse is clicked, or 0 if
+	/** Returns what keys were pressed when the column is resized, or 0 if
 	 * none of them was pressed.
 	 * It is a combination of {@link #CTRL_KEY}, {@link #SHIFT_KEY}
 	 * and {@link #ALT_KEY}.

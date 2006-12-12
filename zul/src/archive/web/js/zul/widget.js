@@ -385,8 +385,41 @@ zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
 	var l, t, w = cmp.offsetWidth, h = cmp.offsetHeight;
 	if (ofsy) {
 		if (dir == 8 || dir <= 2) {
-			t = parseInt(cmp.style.left || "0");
+			h -= ofsy;
+			if (h < 0) {
+				ofsy = cmp.offsetHeight;
+				h = 0;
+			}
+			t = parseInt(cmp.style.top || "0") + ofsy;
 		}
+		if (dir >= 4 && dir <= 6) {
+			h += ofsy;
+			if (h < 0) h = 0;
+		}
+	}
+	if (ofsx) {
+		if (dir >= 6 && dir <= 8) {
+			w -= ofsx;
+			if (w < 0) {
+				ofsx = cmp.offsetWidth;
+				w = 0;
+			}
+			l = parseInt(cmp.style.left || "0") + ofsx;
+		}
+		if (dir >= 2 && dir <= 4) {
+			w += ofsx;
+			if (w < 0) w = 0;
+		}
+	}
+	if (w != cmp.offsetWidth || h != cmp.offsetHeight) {
+		if (w != cmp.offsetWidth) cmp.style.width = w + "px";
+		if (h != cmp.offsetHeight) cmp.style.height = h + "px";
+		zkau.sendOnSize(cmp, keys);
+	}
+	if (l != null || t != null) {
+		if (l != null) cmp.style.left = l + "px";
+		if (t != null) cmp.style.top = t + "px";
+		zkau.sendOnMove(cmp, keys);
 	}
 };
 

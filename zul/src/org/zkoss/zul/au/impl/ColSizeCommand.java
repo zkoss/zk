@@ -59,12 +59,12 @@ public class ColSizeCommand extends Command {
 		final int icol = Integer.parseInt(data[0]);
 		final Component col1 = desktop.getComponentByUuid(data[1]);
 		final Component col2 = desktop.getComponentByUuid(data[3]);
-		final int keys = Commands.parseKeys(data[5]);
 
 		((Sizable)((ComponentCtrl)col1).getExtraCtrl()).setWidthByClient(data[2]);
 		((Sizable)((ComponentCtrl)col2).getExtraCtrl()).setWidthByClient(data[4]);
 
 		Events.postEvent(
-			new ColSizeEvent(getId(), comp, icol, col1, col2, keys));
+			new ColSizeEvent(getId(), comp, icol, col1, col2,
+				Commands.parseKeys(data[5])));
 	}
 }
