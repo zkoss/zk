@@ -1388,31 +1388,15 @@ zkau._ghostdrag = function (dg, ghosting) {
 
 	if (special) {
 		if (ghosting) {
-			zk.dragging = true;
-			dg.delta = dg.currentDelta();
-
-			//Store scrolling offset first since Draggable.draw not handle DIV well
-			//after we transfer TR to DIV
-			var ofs = Position.cumulativeOffset(dg.element);
-			dg.z_scrl = Position.realOffset(dg.element);
-			ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];
+			var ofs = zkau.beginGhostToDIV(dg);
 			document.body.insertAdjacentHTML("afterbegin",
 				'<div id="zk_ddghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 				+'px;border:1px dotted black"></div>');
-
-			dg.z_elorg = dg.element;
 			dg.element = $e("zk_ddghost");
 		} else {
-			setTimeout("zk.dragging=false", 0);
-				//we have to reset it later since onclick is fired later (after onmouseup)
-
-			if (dg.z_elorg) {
-				Element.remove(dg.element);
-				dg.element = dg.z_elorg;
-				dg.z_elorg = null;
-			}
+			zkau.endGhostToDIV(dg);
 		}
 		return false
 	}
@@ -1424,10 +1408,45 @@ zkau._ghostdrag = function (dg, ghosting) {
 		dg.z_x = dg.element.style.left; dg.z_y = dg.element.style.top;
 		zkau._revertpending = null;
 	} else {
-		setTimeout("zk.dragging = false;", 0);
+		setTimeout("zk.dragging=false", 0);
 			//we have to reset it later since onclick is fired later (after onmouseup)
 	}
 	return true;
+};
+/** Prepares to ghost dg.element to a DIV.
+ * It is used when you want to ghost with a div.
+ * @return the offset of dg.element.
+ */
+zkau.beginGhostToDIV = function (dg) {
+	zk.dragging = true;
+	dg.delta = dg.currentDelta();
+	dg.z_elorg = dg.element;
+
+	var ofs = Position.cumulativeOffset(dg.element);
+	dg.z_scrl = Position.realOffset(dg.element);
+	dg.z_scrl[0] -= zk.innerX(); dg.z_scrl[1] -= zk.innerY();
+		//Store scrolling offset since Draggable.draw not handle DIV well
+
+	ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];
+	return ofs;
+};
+/** Returns the origin element before ghosted.
+ * <p>Note: the ghosted DIV is dg.element.
+ * It is called between beginGhostToDIV and endGhostToDIV
+ */
+zkau.getGhostOrgin = function (dg) {
+	return dg.z_elorg;
+};
+/** Clean and remove the ghosted DIV.
+ */
+zkau.endGhostToDIV = function (dg) {
+	setTimeout("zk.dragging=false", 0);
+		//we have to reset it later since onclick is fired later (after onmouseup)
+	if (dg.z_elorg && dg.element != dg.z_elorg) {
+		Element.remove(dg.element);
+		dg.element = dg.z_elorg;
+		dg.z_elorg = null;
+	}
 };
 
 //////////////
