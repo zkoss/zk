@@ -716,10 +716,14 @@ zkau.cleanMovable = function (id) {
 }
 
 /** Called back when overlapped and popup is moved. */
-zkau.onWndMove = function (cmp) {
-	zkau.send({uuid: cmp.id, cmd: "onMove",
-		data: [cmp.style.left, cmp.style.top]},
-		zkau.asapTimeout(cmp, "onMove"));
+zkau.onWndMove = function (cmp, evt) {
+	var keys = "";
+	if (evt) {
+		if (evt.altKey) keys += 'a';
+		if (evt.ctrlKey) keys += 'c';
+		if (evt.shiftKey) keys += 's';
+	}
+	zkau.sendOnMove(cmp, keys);
 };
 
 zkau.onfocus = function (el) {
@@ -1120,6 +1124,16 @@ zkau.focusInFloats = function (target) {
 	return false;
 };
 
+zkau.sendOnMove = function (cmp, keys) {
+	zkau.send({uuid: cmp.id, cmd: "onMove",
+		data: [cmp.style.left, cmp.style.top, keys]},
+		zkau.asapTimeout(cmp, "onMove"));
+};
+zkau.sendOnSize = function (cmp, keys) {
+	zkau.send({uuid: cmp.id, cmd: "onSize",
+		data: [cmp.style.width, cmp.style.height, keys]},
+		zkau.asapTimeout(cmp, "onSize"));
+};
 zkau.sendOnClose = function (uuid, closeFloats) {
 	if (closeFloats) zkau.closeFloats();
 	el = $e(uuid);
