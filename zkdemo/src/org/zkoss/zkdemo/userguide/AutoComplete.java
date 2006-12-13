@@ -68,7 +68,8 @@ public class AutoComplete extends Combobox {
 		refresh(value);
 	}
 	public void onChanging(InputEvent evt) {
-		refresh(evt.getValue());
+		if (!evt.isChangingBySelectBack())
+			refresh(evt.getValue());
 	}
 
 	/** Refresh comboitem based on the specified value.
