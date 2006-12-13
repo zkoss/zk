@@ -280,6 +280,7 @@ zulHdr._ignoresizing = function (cmp, pointer) {
 	return true;
 };
 zulHdr._endsizing = function (cmp, evt) {
+	setTimeout("zk.clearSelection()", 5);
 	zk.enableSelection(cmp);
 	var dg = zulHdr._szs[cmp.id];
 	if (dg && dg.z_szofs) {
