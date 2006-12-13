@@ -332,6 +332,7 @@ zkCmbox._selback = function (item) {
 	var inp = zkCmbox.getInputByItem(item);
 	if (inp) {
 		inp.value = txt;
+		inp.setAttribute("zk_changing_selbk", txt); //used with onChanging (widget.js)
 		zk.focusById(inp.id);
 		zk.selectById(inp.id);
 	}

@@ -47,7 +47,10 @@ zkTxbox.onblur = function (inp) {
 		clearInterval(interval);
 		delete zkau._intervals[inp.id];
 	}
-	if (inp.removeAttribute) inp.removeAttribute("zk_last_changing");
+	if (inp.removeAttribute) {
+		inp.removeAttribute("zk_changing_last");
+		inp.removeAttribute("zk_changing_selbk");
+	}
 
 	zkTxbox.updateChange(inp, zkTxbox._noonblur(inp));
 	zkau.onblur(inp); //fire onBlur after onChange
@@ -136,7 +139,7 @@ zkTxbox.onfocus = function (inp) {
 
 	//handling onChanging
 	if (inp && inp.id && getZKAttr($outer(inp), "onChanging")) {
-		inp.setAttribute("zk_last_changing", inp.value);
+		inp.setAttribute("zk_changing_last", inp.value);
 		if (!zkau._intervals[inp.id])
 			zkau._intervals[inp.id] =
 				setInterval("zkTxbox._scanChanging('"+inp.id+"')", 500);
@@ -146,12 +149,15 @@ zkTxbox.onfocus = function (inp) {
 zkTxbox._scanChanging = function (id) {
 	var inp = $e(id);
 	if (inp && getZKAttr($outer(inp), "onChanging")
-	&& inp.getAttribute("zk_last_changing") != inp.value) {
-		inp.setAttribute("zk_last_changing", inp.value);
+	&& inp.getAttribute("zk_changing_last") != inp.value) {
+		inp.setAttribute("zk_changing_last", inp.value);
+		var selbk = inp.getAttribute("zk_changing_selbk");
+		inp.removeAttribute("zk_changing_selbk");
 		zkau.send({uuid: $uuid(id),
-			cmd: "onChanging", data: [inp.value], implicit: true}, 1);
+			cmd: "onChanging", data: [inp.value, selbk == inp.value],
+			implicit: true}, 1);
 	}
-}
+};
 
 ////
 //intbox//
