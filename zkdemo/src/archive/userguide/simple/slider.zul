@@ -44,7 +44,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<image id="img2" src="/img/sun.jpg" width="10px"/>
 
 		Progress meter:
-		<progressmeter value="20"/>
+		<progressmeter id="pm" value="20"/>
+		<hbox>
+		<button label="0" onClick="pm.value = 0"/>
+		<button label="50" onClick="pm.value = 50"/>
+		<button label="100" onClick="pm.value = 100"/>
+		</hbox>
 	</vbox>
 	<zscript>
 	void zoom(Slider slider, Image img) {
