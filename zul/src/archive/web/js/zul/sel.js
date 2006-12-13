@@ -270,14 +270,16 @@ zk.Selectable.prototype = {
 	_doRight: function (row) {
 	},
 	doclick: function (evt, target) {
-		if (zkSel._shallIgnoreEvent(target)
-		|| ($tag(target) != "TR" && target.onclick)
-		|| ($tag(target) == "A" && !target.id.endsWith("!sel"))
+		if (zkSel._shallIgnoreEvent(target))
+			return;
+		var tn = $tag(target);
+		if((tn != "TR" && target.onclick)
+		|| (tn == "A" && !target.id.endsWith("!sel"))
 		|| getZKAttr(target, "lfclk") || getZKAttr(target, "dbclk"))
 			return;
 
 		var checkmark = target.id && target.id.endsWith("!cm");
-		var row = $tag(target) == "TR" ? target: zk.parentNode(target, "TR");
+		var row = tn == "TR" ? target: zk.parentNode(target, "TR");
 		if (!row) return; //incomplete structure
 
 		if (checkmark) {
@@ -962,7 +964,7 @@ zkSel._renderNow = function (uuid) {
 zkSel._shallIgnoreEvent = function (el) {
 	var tn = $tag(el);
 	return !el || ((tn == "INPUT" && !el.id.endsWith("!cm"))
-	|| tn == "TEXTAREA" || tn == "BUTTON" || tn == "SELECT");
+	|| tn == "TEXTAREA" || tn == "BUTTON" || tn == "SELECT" || tn == "OPTION");
 };
 
 /** row's onmouseover. */
