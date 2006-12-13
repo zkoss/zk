@@ -8,13 +8,13 @@ ZK 2.2.0
   1602095, 1603857, 1605966, 1606091, 1606490, 1608252, 1608289, 1608933,
   1506441, 1609865, 1390288, 1613642.
   + Support of ZUML annotations.
-  + A new AnnotateDataBinder to do the data binding automatically.
+  + Add AnnotateDataBinder to do the data binding automatically.
   + Support the Opera browser.
   + Slovenian messages are supported. Thank Ziga for his contribution.
   + Indonesian messages are supported. Thank James Liam Supangkat for his contribution.
   + Listboxes, grids and trees support the sizeable columns.
   + Windows are now sizable.
-  + Support ListModelList, ListModelSet, ListModelMap that would refresh the Listbox automatically.
+  + ListModelList, ListModelSet, ListModelMap are supported to refresh the Listbox automatically.
   + HibernateUtil support Hibernate annotation.
   + New Google Maps components: ginfo and gmarker.
   + InterPortletFilter is added to resolve the limitation of the lack of inter-portlet
