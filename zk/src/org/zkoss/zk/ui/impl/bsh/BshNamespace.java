@@ -90,7 +90,7 @@ public class BshNamespace implements Namespace {//not a good idea to serialize i
 		final NameSpace oldp = local ? _ns.getParent(): null;
 		if (oldp != null) _ns.setParent(null); //to avoid calling parent's setVariable
 		try {
-			_ns.setVariable(name, value, false);
+			_ns.setVariable(name, value != null ? value: Primitive.NULL, false);
 		} catch (UtilEvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {

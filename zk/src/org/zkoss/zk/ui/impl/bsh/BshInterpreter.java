@@ -66,7 +66,7 @@ public class BshInterpreter implements Interpreter { //not a good idea to serial
 	}
 	public void setVariable(String name, Object val) {
 		try {
-			_ip.set(name, val);
+			_ip.set(name, val); //unlike NameSpace.setVariable, set handles null
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
