@@ -28,17 +28,43 @@ import org.zkoss.zk.ui.Component;
  */
 public class InputEvent extends Event {
 	private final String _val;
+	private final boolean _selbk;
 
 	/** Constructs a input-relevant event.
 	 * @param val the new value
 	 */
 	public InputEvent(String name, Component target, String val) {
+		this(name, target, val, false);
+	}
+	/** Constructs an event for <code>onChanging</code>.
+	 *
+	 * @param selbk whether this event is caused by user's selecting a list
+	 * of items. Currently, only combobox might set it to true for the onChanging
+	 * event. See {@link #isChangingBySelectBack} for details.
+	 */
+	public InputEvent(String name, Component target, String val, boolean selbk) {
 		super(name, target);
 		_val = val;
+		_selbk = selbk;
 	}
 	/** Returns the value that user input.
 	 */
 	public final String getValue() {
 		return _val;
+	}
+	/** Returns whether this event is <code>onChanging</code>, and caused by
+	 * user's selecting a list of items.
+	 *
+	 * <p>It is always false if it is caused by the <code>onChange</code> event.
+	 *
+	 * <p>Currently, only combobox might set it to true for the onChanging
+	 * event. It is useful when you implement autocomplete.
+	 * To have better response, you usually don't filter out unmatched items
+	 * if this method returns true. In other words, you simply ignore
+	 * the <code>onChanging</code> event if this method return true, when
+	 * implementing autocomplete.
+	 */
+	public final boolean isChangingBySelectBack() {
+		return _selbk;
 	}
 }
