@@ -503,10 +503,18 @@ if (this.z_scrl) {
 }
 
     var style = this.element.style;
+//Tom M. Yeh, Potix: support function constraint
+if (typeof this.options.constraint == 'function') {
+	var np = this.options.constraint(this, p); //return null or [newx, newy]
+	if (np) p = np;
+	style.left = p[0] + "px";
+	style.top  = p[1] + "px";
+} else {
     if((!this.options.constraint) || (this.options.constraint=='horizontal'))
       style.left = p[0] + "px";
     if((!this.options.constraint) || (this.options.constraint=='vertical'))
       style.top  = p[1] + "px";
+} //Tom M. Yeh, Potix
     
     if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering
   },
