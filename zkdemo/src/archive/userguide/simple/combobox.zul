@@ -62,21 +62,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		description="Rich Internet Application by Ajax"/>
 	</combobox>
 	<separator bar="true"/>
+	Auto-complete:
+	<combobox id="combo" autodrop="true" use="org.zkoss.zkdemo.userguide.AutoComplete"/>
 	<hbox>
 	<checkbox checked="true" onCheck="combo.autodrop = self.checked" label="auto drop popup when typing"/>
 	<checkbox checked="true" onCheck="combo.buttonVisible = self.checked" label="button visible"/>
 	</hbox>
-	<combobox id="combo" autodrop="true">
-		<comboitem label="Apple"/>
-		<comboitem label="Orange"/>
-		<comboitem label="Eggs"/>
-		<comboitem label="tomatoes and flowers"/>
-		<comboitem label="Orange Juice"/>
-		<comboitem label="apple pie"/>
-		<comboitem label="lemon juice"/>
-		<comboitem label="Tomato"/>
-		<comboitem label="tomato juice"/>
-	</combobox>
 	</vbox>
 </window>
 				]]></attribute>
