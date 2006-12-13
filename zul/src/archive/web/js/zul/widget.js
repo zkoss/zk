@@ -682,13 +682,7 @@ zkPg = {};
 zkPg.go = function (anc, pgno) {
 	var cmp = $parentByType(anc, "Pg");
 	if (cmp) {
-		if (zk.ie) { //Bug 1612312: IE/IE7 false invocation
-			var msg = zkau.confirmClose;
-			if (msg) {
-				zkau.confirmClose = null; 
-				setTimeout(function () {zkau.confirmClose = msg;}, 0); //restore
-			}
-		}
+		zkau.fixFalseConfirmClose(); //Fix bug 1612312
 		zkau.send({uuid: cmp.id, cmd: "onPaging", data: [pgno]});
 	}
 };
