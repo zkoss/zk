@@ -20,6 +20,7 @@ import org.zkoss.zul.ListModelSet;
 import org.zkoss.zul.ListModelMap;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Component;
 
 import java.util.Set;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class ListModelConverter implements TypeConverter {
 	/** Convert a Set, Map, or List to associated ListModel.
 	 * @param val must be instanceof Set, Map, or List.
 	 */
-	public Object coerceToUi(Object val) {
+	public Object coerceToUi(Object val, Component comp) {
 		if (val == null) {
 			throw new NullPointerException("val");
 		}
@@ -52,7 +53,7 @@ public class ListModelConverter implements TypeConverter {
 	/** Convert a ListModel to Set, Map, or List.
 	 * @param val must be ListModelSet, ListModelList, or ListModelMap
 	 */
-	public Object coerceToBean(Object val) {
+	public Object coerceToBean(Object val, Component comp) {
 		if (val == null) {
 			throw new NullPointerException("val");
 		}

@@ -47,4 +47,12 @@ implements java.io.Serializable {
 	public Object getElementAt(int j) {
 		return _data[j];
 	}
+	public int indexOf(Object elm) {
+		for(int j = 0; j < _data.length; ++j) {
+			if (_data[j] == elm) {
+				return j;
+			}
+		}
+		return  -1;
+	}
 }

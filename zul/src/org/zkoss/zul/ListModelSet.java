@@ -110,6 +110,10 @@ public class ListModelSet extends AbstractListModel implements Set {
 	public Object getElementAt(int j) {
 		return _list.get(j);
 	}
+	
+	public int indexOf(Object elm) {
+		return _list.indexOf(elm);
+	}
 
 	//-- Set --//
  	public boolean add(Object o) {

@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
+import org.zkoss.zk.ui.Component;
 /**
  * Converter to cast object class between UI Component attribute and backend data bean property.
  * This interface is used in DataBinder. The implementation of this converter should not hold any
@@ -26,11 +27,13 @@ package org.zkoss.zkplus.databind;
 public interface TypeConverter {
 	/** Convert an value object to UI component attribute type.
 	 * @param val the object to be corece to UI component attribute type.
+	 * @param comp associated component
 	 */
-	public Object coerceToUi(Object val);
+	public Object coerceToUi(Object val, Component comp);
 
 	/** Convert an value object to bean property type.
 	 * @param val the object to be corece to backend bean property type.
+	 * @param comp associated component
 	 */
-	public Object coerceToBean(Object val);
+	public Object coerceToBean(Object val, Component comp);
 }

@@ -151,14 +151,18 @@ public class ListModelMap extends AbstractListModel implements Map {
 	}
 	
 	public Object getElementAt(int j) {
-		return _map.get(getKey(j));
+		return getEntry(getKey(j));
 	}
 
+	public int indexOf(Object elem) {
+		return _list.indexOf(((Map.Entry)elem).getKey());
+	}
+	
 	private Object getKey(int j) {
 		return _list.get(j);
 	}
 	
-	//-- ListModel --//
+	//-- Map --//
 	public void clear() {
 		int i2 = _map.size() - 1;
 		if (i2 < 0) {
