@@ -41,7 +41,7 @@ the popup attribute.</li>
 			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
-<window title="Context Menu and Right Click" border="normal" width="360px">
+<window title="Customizable Tooltips" border="normal" width="360px">
 	<label value="Move Mouse Over Me!" tooltip="editPopup"/>
 	<separator bar="true"/>
 	<label value="Tooptip for Another Popup" tooltip="any"/>
