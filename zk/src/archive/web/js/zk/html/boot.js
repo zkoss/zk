@@ -481,13 +481,11 @@ zk.onVisiAt = function (n) {
  * becomes invisible. It recursively invokes its descendants.
  */
 zk.onHideAt = function (n) {
-	//Bug 1526542: we have to blur if we want to hide a focused control in gecko
-	if (zk.gecko) {
-		var f = zkau.currentFocus;
-		if (f && zk.isAncestor(n, f)) {
-			zkau.currentFocus = null;
-			try {f.blur();} catch (e) {}
-		}
+	//Bug 1526542: we have to blur if we want to hide a focused control in gecko and IE
+	var f = zkau.currentFocus;
+	if (f && zk.isAncestor(n, f)) {
+		zkau.currentFocus = null;
+		try {f.blur();} catch (e) {}
 	}
 
 	for (nid in zk._hidecmps) {
