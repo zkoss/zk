@@ -1,48 +1,40 @@
 	--------
-ZK 2.2.0 Freshly
+ZK 2.2.0
 * Features:
+  1587247, 1587699, 1587701, 1588387, 1589060, 1589050, 1589119, 1567850,
+  1502660, 1548218, 1441459, 1589979, 1490690, 1446618, 1557255, 1554667,
+  1595528, 1595720,
   1598491, 1600161, 1601030, 1600480, 1601498, 1601627, 1601661, 1602084,
   1602095, 1603857, 1605966, 1606091, 1606490, 1608252, 1608289, 1608933,
   1506441, 1609865, 1390288, 1613642.
+  + Support of ZUML annotations.
+  + A new AnnotateDataBinder to do the data binding automatically.
+  + Support the Opera browser.
+  + Slovenian messages are supported. Thank Ziga for his contribution.
   + Indonesian messages are supported. Thank James Liam Supangkat for his contribution.
   + Listboxes, grids and trees support the sizeable columns.
   + Windows are now sizable.
   + Support ListModelList, ListModelSet, ListModelMap that would refresh the Listbox automatically.
-  + A new AnnotateDataBinder to do the data binding automatically.
-  + InterPortletFilter is added to resolve the limitation of the lack of inter-portlet
-    communication.
-
-* Bugs:
-  1597852, 1593674, 1596399, 1599615, 1599692, 1599737, 1599788, 1575843,
-  1601000, 1601581, 1604549, 1611053, 1608736, 1613711, 1612312, 1614490,
-  1614500.
-
-* Upgrade Note:
-  + CSS styles that ZK doesn't use are moved to normex**.css.dsp. To use them, add
-	the following component to your page:
-	<style src="~./zul/css/normex**.css.dsp"/>
-
-	--------
-ZK 2.2.0 RC
-* Features:
-  1587247, 1587699, 1587701, 1588387, 1589060, 1589050, 1589119, 1567850,
-  1502660, 1548218, 1441459, 1589979, 1490690, 1446618, 1557255, 1554667,
-  1595528, 1595720.
-  + Support of ZUML annotations.
-  + Support the Opera browser.
-  + Slovenian messages are supported. Thank Ziga for his contribution.
   + HibernateUtil support Hibernate annotation.
   + New Google Maps components: ginfo and gmarker.
+  + InterPortletFilter is added to resolve the limitation of the lack of inter-portlet
+    communication.
   + org.zkoss.zk.ui.util.Clients adds the confirmClose method to prevent an user
     from closing the browser window, reloading and browsing to another URL.
 
 * Bugs:
   1584857, 1586951, 1589575, 1588507, 1590590, 1590603, 1579515, 1591389,
-  1593939, 1593674, 1594756.
+  1593939, 1593674, 1594756,
+  1597852, 1593674, 1596399, 1599615, 1599692, 1599737, 1599788, 1575843,
+  1601000, 1601581, 1604549, 1611053, 1608736, 1613711, 1612312, 1614490,
+  1614500.
 
-* Upgrade Notes
+* Upgrade Note:
   + You have to implement a new method called doAfterCompose for classes
     that implement the org.zkoss.zk.ui.util.Initiator interface.
+  + CSS styles that ZK doesn't use are moved to normex**.css.dsp. To use them, add
+	the following component to your page:
+	<style src="~./zul/css/normex**.css.dsp"/>
 
 	--------
 ZK 2.1.3
