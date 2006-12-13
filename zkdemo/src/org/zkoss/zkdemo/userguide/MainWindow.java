@@ -33,11 +33,15 @@ public class MainWindow extends Window {
 		final String sn = exec.getServerName();
 		final int sp = exec.getServerPort();
 
+		//To add more keys: http://www.google.com/apis/maps/signup.html
+
 		String gkey = null;
 		if (sn.indexOf("www.potix.com") >= 0) { // http://www.potix.com/
 			gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxRYCo_4ZGj_-54kHesWSk0nMkbs4xTpq0zo9O75_ZqvsSLGY2YkC7jjNg";
 		} else if (sn.indexOf("www.zkoss.org") >= 0) { // http://www.zkoss.org/
 			gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
+		} else if (sn.indexOf("zkoss.org") >= 0) { // http://www.zkoss.org/
+			gkey = "ABQIAAAAakIm31AXAvNGFHV8i1Tx8RSF4KLGEmvBsS1z1zAsQZvbQceuNRQBsm65qGaXpTWjZsc2bl-hm2Vyfw";
 		} else if (sn.indexOf("localhost") >= 0) { //localhost
 			if (sp == 80) // http://localhost/
 				gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRUITTZ-rzsyEVih16Hn3ApyUpSkA";
