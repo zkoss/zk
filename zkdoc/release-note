@@ -35,6 +35,8 @@ ZK 2.2.0
   + CSS styles that ZK doesn't use are moved to normex**.css.dsp. To use them, add
 	the following component to your page:
 	<style src="~./zul/css/normex**.css.dsp"/>
+  + You have to implment a new method called indexOf for classes that
+    implement the org.zkoss.zul.ListModel interface.
 
 	--------
 ZK 2.1.3
