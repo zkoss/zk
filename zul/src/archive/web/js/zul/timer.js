@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 	Purpose:
-		
+		Timer
 	Description:
 		
 	History:
