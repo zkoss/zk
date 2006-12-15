@@ -186,7 +186,10 @@ zulHdr._szs = {};
 zulHdr.init = function (cmp) {
 	zulHdr._show(cmp);
 	zk.listen(cmp, "click", function (evt) {zulHdr.onclick(evt, cmp);});
-	zk.listen(cmp, "mousemove", function (evt) {zulHdr.onmove(evt, cmp);});
+	zk.listen(cmp, "mousemove", function (evt) {if (window.zulHdr) zulHdr.onmove(evt, cmp);});
+		//FF: at the moment of browsing to other URL, listen is still attached but
+		//our js are unloaded. It causes JavaScript error though harmlessly
+		//This is a dirty fix (since onclick and others still fail but hardly happen)
 
 	zulHdr.setSizable(cmp, zulHdr.sizable(cmp));
 		//Note: IE6 failed to crop a column if it is draggable

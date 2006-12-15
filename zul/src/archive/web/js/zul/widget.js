@@ -262,12 +262,18 @@ zkWnd.init = function (cmp) {
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
-		zk.listen(btn, "mouseover", function () {zkau.onimgover(btn);});
+		zk.listen(btn, "mouseover", function () {if (window.zkau) zkau.onimgover(btn);});
+			//FF: at the moment of browsing to other URL, listen is still attached but
+			//our js are unloaded. It causes JavaScript error though harmlessly
+			//This is a dirty fix (since onclick and others still fail but hardly happen)
 		zk.listen(btn, "mouseout", function () {zkau.onimgout(btn);});
 		if (!btn.style.cursor) btn.style.cursor = "default";
 	}
 
-	zk.listen(cmp, "mousemove", function (evt) {zkWnd.onmove(evt, cmp);});
+	zk.listen(cmp, "mousemove", function (evt) {if(window.zkWnd) zkWnd.onmove(evt, cmp);});
+		//FF: at the moment of browsing to other URL, listen is still attached but
+		//our js are unloaded. It causes JavaScript error though harmlessly
+		//This is a dirty fix (since onclick and others still fail but hardly happen)
 	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));
 
 	//bug 1469887: re-init since it might be caused by invalidate
