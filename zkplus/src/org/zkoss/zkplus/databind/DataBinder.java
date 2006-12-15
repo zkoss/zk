@@ -19,6 +19,7 @@ package org.zkoss.zkplus.databind;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.event.EventListener;
@@ -264,7 +265,7 @@ public class DataBinder {
 
 			//save kids of this component
 			for(final Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-				loadComponent((Component) it.next()); //recursive
+				saveComponent((Component) it.next()); //recursive
 			}
 		}
 	}
@@ -363,19 +364,6 @@ public class DataBinder {
 		}
 	}
 	
-/*	private void registerDependency(Component comp, Collection attrs) {
-		for(final Iterator it = attrs.iterator(); it.hasNext();) {
-			Binding binding = (Binding) it.next();
-			if (binding.canLoad()) {
-				final String value = (String) binding.getValue();
-				final String[] keys = parseExpression(value, ".");
-				if (keys != null) {
-					_dependency.add(keys, binding);
-				}
-			}
-		}
-	}
-*/	
 //vv----------------------------------------
 //:TODO: The following code is Component type tightly coupled, should change to use interface...
 
@@ -721,7 +709,9 @@ public class DataBinder {
 			} catch (NoSuchMethodException ex) {
 				throw UiException.Aide.wrap(ex);
 			} catch (ModificationException ex) {
-				throw UiException.Aide.wrap(ex);
+				final Throwable t = ex.getCause();
+			} catch (WrongValueException ex) {
+				//Bug #1615371, eat this exception to avoid Constraint
 			}
 		}
 					
