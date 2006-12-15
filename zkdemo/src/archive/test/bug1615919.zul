@@ -1,0 +1,17 @@
+<zk>
+	<window id="win" border="normal" top="100px" width="200px" mode="overlapped">
+		<caption image="/img/coffee.gif" label="Hi there!"/>
+		<checkbox label="Hello, Wolrd!"/>
+	</window>
+	<window id="w2" border="normal" visible="false" width="300px" title="modal" closable="true">
+		This is a modal window
+	</window>
+	<button label="Create 1" onClick="w2.doModal()"/>
+	<button label="Create 2" onClick="create2()"/>
+	<zscript>
+	public void create2() {
+		final Window win = (Window) Executions.createComponents("bug1615919-1.zul", null, null);
+		win.doModal();
+	}
+	</zscript>
+</zk>
