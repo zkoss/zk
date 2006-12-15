@@ -694,12 +694,13 @@ public class DataBinder {
 			if ( _attr.startsWith("_") || comp.getPage() == null) { //cannot load or a control attribute, skip
 				return;
 			}
+			Object val = null;
 			try {
 				Object bean = lookupBean(comp, _beanid);
 
 				registerSameBeanid(bean);
 								
-				Object val = (_props == null || bean == null) ? bean : Fields.getField(bean, _props);
+				val = (_props == null || bean == null) ? bean : Fields.getField(bean, _props);
 				if (_converter != null) {
 					val = _converter.coerceToUi(val, comp);
 				}
@@ -709,9 +710,19 @@ public class DataBinder {
 			} catch (NoSuchMethodException ex) {
 				throw UiException.Aide.wrap(ex);
 			} catch (ModificationException ex) {
-				final Throwable t = ex.getCause();
+				throw UiException.Aide.wrap(ex);
 			} catch (WrongValueException ex) {
-				//Bug #1615371, eat this exception to avoid Constraint
+				//Bug #1615371, try to use setRawValue()
+				if ("value".equals(_attr)) {
+					try {
+						Fields.setField(comp, "rawValue", val, _converter == null);
+					} catch (Exception ex1) {
+						//exception
+						throw ex;
+					}
+				} else {
+					throw ex;
+				}
 			}
 		}
 					
