@@ -133,8 +133,8 @@ public class Parser {
 	 *
 	 * @param extension the default extension if doc (of reader) doesn't specify
 	 * an language. Ignored if null.
-	 * If doc doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 */
 	public PageDefinition parse(Reader reader, String extension)
 	throws Exception {
@@ -145,8 +145,8 @@ public class Parser {
 	 *
 	 * @param extension the default extension if doc doesn't specify
 	 * an language. Ignored if null.
-	 * If doc doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 */
 	public PageDefinition parse(Document doc, String extension)
 	throws Exception {

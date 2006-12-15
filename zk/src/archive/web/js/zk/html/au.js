@@ -1361,7 +1361,6 @@ zkau._enddrag = function (cmp, evt) {
 		setTimeout("zkau._sendDrop('"+cmp.id+"','"+e.id+"','"+pointer[0]+"','"+pointer[1]+"','"+keys+"')", 50);
 			//In IE, listitem is selected after _enddrag, so we have to
 			//delay the sending of onDrop
-		setTimeout("zk.clearSelection()", 50);
 	}
 };
 zkau._sendDrop = function (dragged, dropped, x, y, keys) {

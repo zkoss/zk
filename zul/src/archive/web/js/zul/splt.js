@@ -19,8 +19,6 @@ zkSplt = {};
 
 zkSplt._drags = {};
 zkSplt.init = function (cmp) {
-	zk.disableSelection(cmp);
-
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
 	var vert = getZKAttr(cmp, "vert");
 	zkSplt._drags[cmp.id] = {

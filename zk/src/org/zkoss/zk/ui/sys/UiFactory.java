@@ -139,6 +139,8 @@ public interface UiFactory {
 	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if doc doesn't specify
 	 * an language. Ignored if null.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @see #getPageDefinition
 	 */
 	public PageDefinition getPageDefinitionDirectly(
@@ -156,6 +158,8 @@ public interface UiFactory {
 	 * @param content the raw content of the page in DOM.
 	 * @param extension the default extension if doc doesn't specify
 	 * an language. Ignored if null.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @see #getPageDefinition
 	 */
 	public PageDefinition getPageDefinitionDirectly(
@@ -172,6 +176,8 @@ public interface UiFactory {
 	 * @param reader the reader to retrieve the raw content in ZUML.
 	 * @param extension the default extension if doc doesn't specify
 	 * an language. Ignored if null.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @see #getPageDefinition
 	 */
 	public PageDefinition getPageDefinitionDirectly(

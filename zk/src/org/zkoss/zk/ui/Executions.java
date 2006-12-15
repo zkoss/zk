@@ -124,9 +124,11 @@ public class Executions {
 	 * @param content the raw content of the page. It must be a XML and
 	 * compliant to the page format (such as ZUL).
 	 * @param extension the default extension if the content doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
@@ -147,9 +149,11 @@ public class Executions {
 	 *
 	 * @param content the raw content in DOM.
 	 * @param extension the default extension if the content doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
@@ -174,10 +178,12 @@ public class Executions {
 	 * to create components.
 	 *
 	 * @param reader the reader to retrieve the raw content.
-	 * @param extension the default extension if the content of reader doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.

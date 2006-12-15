@@ -307,9 +307,11 @@ public interface Execution extends Evaluator {
 	 *
 	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @see #getPageDefinitionDirectly(Document, String)
 	 * @see #getPageDefinitionDirectly(Reader, String)
 	 * @see #getPageDefinition
@@ -319,9 +321,11 @@ public interface Execution extends Evaluator {
 	 *
 	 * @param content the raw content of the page in DOM.
 	 * @param extension the default extension if the content doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @see #getPageDefinitionDirectly(String, String)
 	 * @see #getPageDefinitionDirectly(Reader, String)
 	 * @see #getPageDefinition
@@ -331,10 +335,12 @@ public interface Execution extends Evaluator {
 	 * a page definition.
 	 *
 	 * @param reader used to input the raw content of the page. It must be in ZUML.
-	 * @param extension the default extension if the content of reader doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @see #getPageDefinitionDirectly(String, String)
 	 * @see #getPageDefinitionDirectly(Document, String)
 	 * @see #getPageDefinition
@@ -385,9 +391,11 @@ public interface Execution extends Evaluator {
 	 *
 	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
@@ -410,9 +418,11 @@ public interface Execution extends Evaluator {
 	 *
 	 * @param content the raw content in DOM.
 	 * @param extension the default extension if the content doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.
@@ -434,10 +444,12 @@ public interface Execution extends Evaluator {
 	 * to create components.
 	 *
 	 * @param reader the reader to retrieve the raw content in ZUML.
-	 * @param extension the default extension if the content of reader doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @param parent the parent component, or null if you want it to be
 	 * a root component. If parent is null, the page is assumed to be
 	 * the current page, which is determined by the execution context.

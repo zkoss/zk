@@ -57,9 +57,11 @@ public class PageDefinitions {
 	 * @param locator the locator used to locate taglib and other resources.
 	 * If null, wapp is assumed ({@link WebApp} is also assumed).
 	 * @param extension the default extension if the content doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @exception UiException if failed to parse
 	 */
 	public static final
@@ -77,10 +79,12 @@ public class PageDefinitions {
 	 *
 	 * @param locator the locator used to locate taglib and other resources.
 	 * If null, wapp is assumed ({@link WebApp} is also assumed).
-	 * @param extension the default extension if the content (of reader) doesn't specify
-	 * an language. Ignored if null.
-	 * If the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @exception UiException if failed to parse
 	 */
 	public static final
@@ -99,10 +103,12 @@ public class PageDefinitions {
 	 *
 	 * @param locator the locator used to locate taglib and other resources.
 	 * If null, wapp is assumed ({@link WebApp} is also assumed).
-	 * @param extension the default extension if doc doesn't specify
-	 * an language. Ignored if null.
-	 * If doc doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
 	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
 	 * @exception UiException if failed to parse
 	 */
 	public static final

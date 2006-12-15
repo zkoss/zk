@@ -364,15 +364,12 @@ zkWnd._ignoresizing = function (cmp, pointer) {
 			case 3: case 7: dg.options.constraint = 'horizontal'; break;
 			default: dg.options.constraint = null;
 			}
-			zk.disableSelection(cmp);
 			return false;
 		}
 	}
 	return true;
 };
 zkWnd._endsizing = function (cmp, evt) {
-	setTimeout("zk.clearSelection()", 5);
-	zk.enableSelection(cmp);
 	var dg = zkWnd._szs[cmp.id];
 	if (dg && dg.z_szofs && (dg.z_szofs[0] || dg.z_szofs[1])) {
 		var keys = "";

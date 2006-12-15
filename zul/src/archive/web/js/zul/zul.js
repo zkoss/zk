@@ -273,15 +273,12 @@ zulHdr._ignoresizing = function (cmp, pointer) {
 		var v = zulHdr._insizer(cmp, pointer[0] - ofs[0]);
 		if (v) {
 			dg.z_szlft = v == -1;
-			zk.disableSelection(cmp);
 			return false;
 		}
 	}
 	return true;
 };
 zulHdr._endsizing = function (cmp, evt) {
-	setTimeout("zk.clearSelection()", 5);
-	zk.enableSelection(cmp);
 	var dg = zulHdr._szs[cmp.id];
 	if (dg && dg.z_szofs) {
 		//Adjust column width
