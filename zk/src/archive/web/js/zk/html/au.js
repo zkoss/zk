@@ -340,7 +340,7 @@ zkau._doQueResps = function () {
 					zkau._seqId = 0;
 
 				if (!zkau._doResps(resp.cmds))
-					que.unshift(resp.cmds); //handle it later
+					que.unshift(resp); //handle it later
 			} else {
 				que.unshift(resp); //undo
 

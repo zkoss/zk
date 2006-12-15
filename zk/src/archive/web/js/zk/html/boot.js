@@ -378,7 +378,7 @@ zk._loadAndInit = function (inf) {
 
 /** Initial components and init functions. */
 zk._evalInit = function () {
-	while (zk._initmods.length && !zk.loading)
+	while (!zk.loading && zk._initmods.length)
 		(zk._initmods.shift())();
 
 	//Note: if loading, zk._doLoad will execute zk._evalInit after finish
@@ -408,7 +408,7 @@ zk._evalInit = function () {
 		}
 	}
 
-	while (zk._initfns.length && !zk.loading)
+	while (!zk.loading && zk._initfns.length)
 		(zk._initfns.shift())();
 };
 /** Evaluate a method of the specified component.
