@@ -38,10 +38,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute name="value"><![CDATA[
 <window title="onScrolling event demo" border="normal">
 	<vbox>
-		<slider id="slider1" onScrolling="zooming(slider1, img1)"/>
+		<slider id="slider1" onScrolling="zooming(slider1, img1)" onScroll="zooming(slider1, img1)"/>
 		<image id="img1" src="/img/sun.jpg" width="10px"/>
 		<separator bar="true"/>
-		<slider id="slider2" onScrolling="zooming(slider2, img2)" width="200px" mold="sphere"/>
+		<slider id="slider2" onScrolling="zooming(slider2, img2)" onScroll="zooming(slider2, img2)" width="200px" mold="sphere"/>
 		<image id="img2" src="/img/sun.jpg" width="10px"/>
 	</vbox>
 	<zscript>
