@@ -336,11 +336,12 @@ zkau._doQueResps = function () {
 		try {
 			var resp = que.shift();
 			if (resp.sid == zkau._seqId || resp.sid == null) {
-				if (resp.sid != null && ++zkau._seqId == 1024)
-					zkau._seqId = 0;
-
-				if (!zkau._doResps(resp.cmds))
+				if (zkau._doResps(resp.cmds)) {
+					if (resp.sid != null && ++zkau._seqId == 1024)
+						zkau._seqId = 0;
+				} else {
 					que.unshift(resp); //handle it later
+				}
 			} else {
 				que.unshift(resp); //undo
 
@@ -369,22 +370,21 @@ zkau._doQueResps = function () {
 };
 /** Process the specified response in XML. */
 zkau._doResps = function (cmds) {
-	if (cmds)
-		while (cmds.length) {
-			if (zk.loading)
-				return false;
+	while (cmds && cmds.length) {
+		if (zk.loading)
+			return false;
 
-			var cmd = cmds.shift();
-			try {
-				zkau.process(cmd.cmd, cmd.datanum,
-					cmd.dt0, cmd.dt1, cmd.dt2, cmd.dt3, cmd.dt4);
-			} catch (e) {
-				zk.error(mesg.FAILED_TO_PROCESS+cmd+"\n"+e.message+"\n"+cmd.dt0+"\n"+cmd.dt1);
-				throw e;
-			} finally {
-				zkau._evalOnResponse();
-			}
+		var cmd = cmds.shift();
+		try {
+			zkau.process(cmd.cmd, cmd.datanum,
+				cmd.dt0, cmd.dt1, cmd.dt2, cmd.dt3, cmd.dt4);
+		} catch (e) {
+			zk.error(mesg.FAILED_TO_PROCESS+cmd+"\n"+e.message+"\n"+cmd.dt0+"\n"+cmd.dt1);
+			throw e;
+		} finally {
+			zkau._evalOnResponse();
 		}
+	}
 	return true;
 };
 /** Process a command.
