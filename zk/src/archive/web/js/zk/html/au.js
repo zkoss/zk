@@ -334,20 +334,22 @@ zkau._doQueResps = function () {
 		zkau._procadded = false;
 
 		try {
+			var oldSeqId = zkau._seqId;
 			var resp = que.shift();
 			if (resp.sid == zkau._seqId || resp.sid == null) {
-				if (zkau._doResps(resp.cmds)) {
-					if (resp.sid != null && ++zkau._seqId == 1024)
-						zkau._seqId = 0;
-				} else {
+				//we have to inc seqId first since _doResps might throw exception
+				if (resp.sid != null && ++zkau._seqId == 1024)
+					zkau._seqId = 0;
+
+				if (!zkau._doResps(resp.cmds)) {
 					que.unshift(resp); //handle it later
+					zkau._seqId = oldSeqId; //restore seqId
 				}
 			} else {
 				que.unshift(resp); //undo
 
-				var oldId = zkau._seqId;
 				setTimeout(function () {
-					if (que.length && zkau._seqId == oldId) { //no new processed
+					if (que.length && zkau._seqId == oldSeqId) { //no new processed
 						zkau._seqId = que[0].sid;
 							//skip to the first ID if timeout
 						zkau._doQueResps();
