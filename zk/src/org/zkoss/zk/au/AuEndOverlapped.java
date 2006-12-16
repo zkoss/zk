@@ -28,6 +28,6 @@ import org.zkoss.zk.ui.Component;
  */
 public class AuEndOverlapped extends AuResponse {
 	public AuEndOverlapped(Component comp) {
-		super("endOvl", comp, comp.getUuid());
+		super("endOvl", comp.getUuid()); //comp-indepedent
 	}
 }

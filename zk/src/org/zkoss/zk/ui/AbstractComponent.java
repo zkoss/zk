@@ -394,14 +394,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private final UiEngine getThisUiEngine() {
 		return ((WebAppCtrl)_desktop.getWebApp()).getUiEngine();
 	}
-	/** Returns the UI engine of the current execution, or null if no current
-	 * execution.
-	 */
-	private static final UiEngine getCurrentUiEngine() {
-		final Execution exec = Executions.getCurrent();
-		return exec != null ?
-			((WebAppCtrl)exec.getDesktop().getWebApp()).getUiEngine(): null;
-	}
 
 	//-- Component --//
 	public final Page getPage() {
@@ -528,8 +520,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 						//called before uuid is changed
 					((DesktopCtrl)_desktop).removeComponent(this);
 				} else {
-					final UiEngine eng = getCurrentUiEngine();
-					if (eng != null) eng.addUuidChanged(this, true);
+					final Execution exec = Executions.getCurrent();
+					if (exec != null)
+						((WebAppCtrl)exec.getDesktop().getWebApp())
+							.getUiEngine().addUuidChanged(this, true);
 				}
 
 				_uuid = _id = id;
@@ -849,10 +843,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 	public void response(String key, AuResponse response) {
-		//if response depends on nothing, it must be generated
-		if (_page != null
-		|| (_desktop != null && response.getDepends() == null))
-			 getThisUiEngine().addResponse(key, response);
+		//if response not depend on this component, it must be generated
+		if (_desktop != null) {
+			getThisUiEngine().addResponse(key, response);
+		} else if (response.getDepends() != this) {
+			final Execution exec = Executions.getCurrent();
+			if (exec != null)
+				((WebAppCtrl)exec.getDesktop().getWebApp())
+					.getUiEngine().addResponse(key, response);
+		}
 	}
 	public void smartUpdate(String attr, String value) {
 		if (_parent != null && isTransparent(this))

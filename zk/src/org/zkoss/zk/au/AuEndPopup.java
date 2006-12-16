@@ -28,6 +28,6 @@ import org.zkoss.zk.ui.Component;
  */
 public class AuEndPopup extends AuResponse {
 	public AuEndPopup(Component comp) {
-		super("endPop", comp, comp.getUuid());
+		super("endPop", comp.getUuid()); //comp-indepedent
 	}
 }
