@@ -31,7 +31,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zkplus.databind.Version</version-class>
-		<version-uid>2.2.0</version-uid>
+		<version-uid>2.2.1</version-uid>
 	</version>
 
 	<zscript>
