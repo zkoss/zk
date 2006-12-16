@@ -527,6 +527,7 @@ public class Window extends XulElement implements IdSpace {
 				response(null, new AuEndPopup(this));
 			else
 				response(null, new AuEndOverlapped(this));
+
 			_moding = false;
 		}
 	}
@@ -574,10 +575,11 @@ public class Window extends XulElement implements IdSpace {
 			fixMode(page != null);
 	}
 	public void setParent(Component parent) {
-		final Component old = getParent();
+		final Page old = getPage();
 		super.setParent(parent);
-		if (old != parent && (old == null || parent == null))
-			fixMode(parent != null);
+		final Page page = getPage();
+		if (old != page && (old == null || page == null))
+			fixMode(page != null);
 	}
 	private void fixMode(boolean attached) {
 		if (attached) {
