@@ -26,7 +26,7 @@ import java.util.Collections;
  *
  * @author tomyeh
  */
-public interface AnnotationMap extends Cloneable {
+public interface AnnotationMap extends Cloneable, java.io.Serializable {
 	/*package*/ static final AnnotationMap EMPTY = new AnnotationMap() {
 		public Annotation getAnnotation(String annotName) {
 			return null;
