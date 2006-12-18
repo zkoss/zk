@@ -632,10 +632,16 @@ zk.Selectable.prototype = {
 		//Otherwise,
 		//IE: element's width will be extended to fit body
 		//FF and IE: sometime a horizontal scrollbar appear (though it shalln't)
+		//
+		//Bug 1616056: we have to use style.width, if possible, since clientWidth
+		//is sometime too big
 		if (!this.paging) { //note: we don't solve this bug for paging yet
-			var wd = this.element.clientWidth;
+			var wd = this.element.style.width;
+			if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+				wd = this.element.clientWidth;
+				if (wd) wd += "px";
+			}
 			if (wd) {
-				wd += "px";
 				this.body.style.width = wd;
 				if (this.head) this.head.style.width = wd;
 				if (this.foot) this.foot.style.width = wd;
