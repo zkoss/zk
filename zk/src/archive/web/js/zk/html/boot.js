@@ -23,7 +23,7 @@ zk = {};
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "38"; //increase this if we want the browser to reload JavaScript
+zk.build = "39"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */

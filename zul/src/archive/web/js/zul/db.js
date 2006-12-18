@@ -333,13 +333,13 @@ zkCal.onout = function (evt) {
 zkDtbox = {};
 
 zkDtbox.init = function (cmp) {
-	var real = $real(cmp);
-	zkTxbox.init(real);
-	zk.listen(real, zk.ie ? "keydown": "keypress", zkDtbox.onkey);
+	var inp = $real(cmp);
+	zkTxbox.init(inp);
+	zk.listen(inp, zk.ie ? "keydown": "keypress", zkDtbox.onkey);
 		//IE: use keydown. otherwise, it causes the window to scroll
 
 	var btn = $e(cmp.id + "!btn");
-	if (btn) zk.listen(btn, "click", function () {zkDtbox.onbutton(cmp);});
+	if (btn) zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp);});
 	btn.align = "absmiddle";
 };
 zkDtbox.validate = function (cmp) {
