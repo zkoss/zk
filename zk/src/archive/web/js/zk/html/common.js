@@ -625,16 +625,16 @@ if (zk.ie || zk.opera) {
 			level = 0;
 			break;
 		case "TR":
-			html = '<table>' + html + '</table>';
 			level = 2;
+			html = '<table>' + html + '</table>';
 			break;
 		case "TH": case "TD":
-			html = '<table><tr>' + html + '</tr></table>';
 			level = 3;
+			html = '<table><tr>' + html + '</tr></table>';
 			break;
 		default://case "THEAD": case "TBODY": case "TFOOT": case "CAPTION":
-			html = '<table>' + html + '</table>';
 			level = 1;
+			html = '<table>' + html + '</table>';
 			break;
 		}
 
