@@ -21,11 +21,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <window>
 	<tabbox id="tb" width="400" orient="vertical">
 		<tabs>
-			<tab label="Tab 1"/>
+			<tab id="tab0" label="Tab 1"/>
 			<tab label="Tab 2"/>
 		</tabs>
 		<tabpanels>
-			<tabpanel>This is panel 1
+			<tabpanel id="panel0">This is panel 1
 <tabbox orient="vertical">
 	<tabs>
 		<tab label="Tab 1-1"/>
@@ -42,6 +42,8 @@ The second panel</tabpanel>
 		</tabpanels>
 	</tabbox>
 
+	<button label="Add tab" onClick="addTab(tb)"/>
+	<button label="Insert" onClick="insTab(tab0, panel0)"/>
 	<button label="Not ${tb.orient}" onClick="toggleOrient(tb)"/>
 	<button label="Not ${tb.mold}" onClick="toggleMold(tb)"/>
 	<zscript>
@@ -50,6 +52,14 @@ The second panel</tabpanel>
 	}
 	void toggleMold(Tabbox tb) {
 		tb.mold = tb.mold == "default" ? "accordion": "default";
+	}
+	void addTab(Tabbox tb) {
+		tb.getTabs().appendChild(new Tab("New"));
+		tb.getTabpanels().appendChild(new Tabpanel());
+	}
+	void insTab(Tab tab, Tabpanel panel) {
+		tab.getParent().insertBefore(new Tab("New"), tab);
+		panel.getParent().insertBefore(new Tabpanel(), panel);
 	}
 	</zscript>
 </window>
