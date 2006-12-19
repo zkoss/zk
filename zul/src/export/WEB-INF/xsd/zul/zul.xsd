@@ -911,6 +911,7 @@
         <xs:attribute name="align" type="gridAlignAttrType" use="optional" />
         <xs:attribute name="nowrap" type="xs:boolean" use="optional" />
         <xs:attribute name="valign" type="valignAttrType" use="optional" />
+        <xs:attribute name="value" type="xs:string" use="optional" />
     </xs:complexType>
     <!-- rows -->
     <xs:element name="rows" type="rowsType" />
