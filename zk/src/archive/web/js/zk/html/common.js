@@ -408,9 +408,10 @@ zk.insertHTMLBefore = function (el, html) {
 		switch ($tag(el)) { //exclude TABLE
 		case "TD": case "TH": case "TR": case "CAPTION":
 		case "TBODY": case "THEAD": case "TFOOT":
-			var n = document.createElement(zk.tagOfHtml(html));
-			el.parentNode.insertBefore(n, el);
-			zk._tdfixReplaceOuterHTML(n, html);
+			var ns = zk._tblCreateElements(html);
+			var p = el.parentNode;
+			for (var j = 0; j < ns.length; ++j)
+				p.insertBefore(ns[j], el);
 			return;
 		}
 	}
@@ -425,20 +426,19 @@ zk.insertHTMLBeforeEnd = function (el, html) {
 		case "TABLE": case "TR":
 		case "TBODY": case "THEAD": case "TFOOT":
 		/*case "TH": case "TD": case "CAPTION":*/ //no need to handle them
-			var tn2 = zk.tagOfHtml(html);
-			if (tn == "TABLE" && tn2 == "TR") {
+			var ns = zk._tblCreateElements(html);
+			if (tn == "TABLE" && ns.length && $tag(ns[0]) == "TR") {
 				var bd = el.tBodies;
 				if (!bd || !bd.length) {
 					bd = document.createElement("TBODY");
 					el.appendChild(bd);
 					el = bd;
 				} else {
-					el = bd[0];
+					el = bd[bd.length - 1];
 				}
 			}
-			var n = document.createElement(tn2);
-			el.appendChild(n);
-			zk._tdfixReplaceOuterHTML(n, html);
+			for (var j = 0; j < ns.length; ++j)
+				el.appendChild(ns[j]);
 			return;
 		}
 	}
@@ -452,14 +452,12 @@ zk.insertHTMLAfter = function (el, html) {
 		switch ($tag(el)) { //exclude TABLE
 		case "TD": case "TH": case "TR": case "CAPTION":
 		case "TBODY": case "THEAD": case "TFOOT":
+			var ns = zk._tblCreateElements(html);
 			var sib = el.nextSibling;
-			if (sib != null) {
-				zk.insertHTMLBefore(sib, html);
-			} else {
-				var n = document.createElement(zk.tagOfHtml(html));
-				el.parentNode.appendChild(n);
-				zk._tdfixReplaceOuterHTML(n, html);
-			}
+			var p = el.parentNode;
+			for (var j = 0; j < ns.length; ++j)
+				if (sib != null) p.insertBefore(ns[j], sib);
+				else p.appendChild(ns[j]);
 			return;
 		}
 	}
@@ -470,10 +468,30 @@ zk.insertHTMLAfter = function (el, html) {
  */
 zk.setInnerHTML = function (el, html) {
 	if (zk.ie || zk.opera) {
-		zk._tdfixReplaceInnerHTML(el, html);
-	} else {
-		el.innerHTML = html;
+		var tn = $tag(el);
+		if (tn == "TR" || tn == "TABLE" || tn == "TBODY" || tn == "THEAD"
+		|| tn == "TFOOT") { //ignore TD/TH/CAPTION
+			var ns = zk._tblCreateElements(html);
+			if (tn == "TABLE" && ns.length && $tag(ns[0]) == "TR") {
+				var bd = el.tBodies;
+				if (!bd || !bd.length) {
+					bd = document.createElement("TBODY");
+					el.appendChild(bd);
+					el = bd;
+				} else {
+					el = bd[0];
+					while (el.nextSibling)
+						el.parentNode.removeChild(el.nextSibling);
+				}
+			}
+			while (el.firstChild)
+				el.removeChild(el.firstChild);
+			for (var j = 0; j < ns.length; ++j)
+				el.appendChild(ns[j]);
+			return;
+		}
 	}
+	el.innerHTML = html;
 };
 /** Sets the outer HTML.
  */
@@ -484,7 +502,14 @@ zk.setOuterHTML = function (el, html) {
 		if (tn == "TD" || tn == "TH" || tn == "TABLE" || tn == "TR"
 		|| tn == "CAPTION" || tn == "TBODY" || tn == "THEAD"
 		|| tn == "TFOOT") {
-			zk._tdfixReplaceOuterHTML(el, html);
+			//no need to call zk._fixRowParent since impossible to have TABLE/TR
+			var ns = zk._tblCreateElements(html);
+			var p = el.parentNode;
+			var sib = el.nextSibling;
+			p.removeChild(el);
+			for (var j = 0; j < ns.length; ++j)
+				if (sib) p.insertBefore(ns[j], sib);
+				else p.appendChild(ns[j]);
 			return;
 		}
 		el.outerHTML = html;
@@ -560,7 +585,7 @@ zk.tagOfHtml = function (html) {
 
 	var j = html.indexOf('>'), k = html.lastIndexOf('<');
 	if (j < 0 || k < 0) {
-		alert("Unknown tag: "+html);
+		zk.error("Unknown tag: "+html);
 		return "";
 	}
 	var head = html.substring(0, j);
@@ -576,7 +601,9 @@ zk.tagOfHtml = function (html) {
 //zk.appendHTMLChild = function (el, html) {
 //	el.insertAdjacentHTML('beforeEnd', html);
 //};
+
 ///// fix inserting/updating TABLE/TR/TD ////
+if (zk.ie || zk.opera) {
 //IE don't support TABLE/TR/TD well.
 
 //20061109: Tom M. Yeh:
@@ -584,167 +611,46 @@ zk.tagOfHtml = function (html) {
 //Issue: When append TD with insertAdjacentHTML, it creates extra sibling,
 //TextNode.
 //Test: Live data of listbox in ZkDEMO
-if (zk.ie || zk.opera) {
-	/** Replace HTML for TR, TD and others; the same as outerHTML
+	/** Creates TABLE/TD/TH/TR... with the specified HTML text.
+	 *
+	 * Thanks the contribution of Ilian Ianev, Barclays Global Investors,
+	 * for the following fix.
 	 */
-	zk._tdfixReplaceOuterHTML = function (el, html) { //patch for IE
-		var j = html.indexOf('>');
-		if (j < 0) {
-			alert("Unsupported replace: "+html);
-			return;
-		}
-
-		var head, inner, k;
-		for (k = j; --k >= 0;) {
-			var cc = html.charAt(k);
-			if (cc == ' ' || cc == '\t' || cc == '\n') continue;
-			if (cc == '/') {
-				head = html.substring(0, k);
-				inner = "";
-			}
+	zk._tblCreateElements = function (html) {
+		var level;
+		html = html.trim(); //If not trim, Opera will create TextNode!
+		var tag = zk.tagOfHtml(html)
+		switch (tag) {
+		case "TABLE":
+			level = 0;
+			break;
+		case "TR":
+			html = '<table>' + html + '</table>';
+			level = 2;
+			break;
+		case "TH": case "TD":
+			html = '<table><tr>' + html + '</tr></table>';
+			level = 3;
+			break;
+		default://case "THEAD": case "TBODY": case "TFOOT": case "CAPTION":
+			html = '<table>' + html + '</table>';
+			level = 1;
 			break;
 		}
-		if (!head) {
-			head = html.substring(0, j);
-			k = html.lastIndexOf('<');
-			inner = k > j ? html.substring(j + 1, k): "";
+
+		//get the correct node
+		var el = document.createElement('DIV');
+		el.innerHTML = html;
+		while (--level >= 0)
+			el = el.firstChild;
+		
+		//detach from parent and return
+		var ns = new Array();
+		for (var n; n = el.firstChild;) {
+			ns.push(n);
+			el.removeChild(n);
 		}
-
-		//replace attributes
-		//Potential bug: we don't remove attributes not found in html
-		//It is enough for now but we might need to do it in FUTURE
-		j = head.indexOf('<') + 1;
-		j = head.skipWhitespaces(j);
-		k = head.nextWhitespace(j);
-		var tag = head.substring(j, k).toUpperCase();
-		if ($tag(el) != tag) {
-			alert("Unsupported replace: different tags: old="+el.tagName+", new="+tag);
-			return;
-		}
-
-		for (;;) {
-			j = k;
-			j = head.skipWhitespaces(j);
-			if (j >= head.length) break; //done
-			k = head.indexOf('=', j);
-			if (k < 0) {
-				alert("Unsupported: attribute must have a value:\n"+head)
-				return;
-			}
-			var attr = head.substring(j, head.skipWhitespacesBackward(k))
-				.toLowerCase();
-			var val;
-			j = head.skipWhitespaces(k + 1);
-			if (head.charAt(j) == '"') {
-				k = head.indexOf('"', ++j);
-				if (k < 0) k = head.length;
-				val = head.substring(j, k);
-				++k;
-			} else {
-				k = head.nextWhitespace(j);
-				val = head.substring(j, k);
-			}
-
-			switch (attr) {
-			case "id": el.id = val; break;
-			case "class": el.className = val; break;
-			case "style": zk.setStyle(el, val); break;
-			case "onclick":
-			case "ondblclick":
-			case "onkeydown":
-			case "onkeypress":
-			case "onkeyup":
-			case "onmousedown":
-			case "onmousemove":
-			case "onmouseout":
-			case "onmouseover":
-			case "onmouseup":
-				el[attr] = new Function(val); break;
-			case "colspan": el.colSpan = val; break; //IE bug
-			case "rowspan": el.rowSpan = val; break; //IE bug
-			case "cellpadding": el.cellPadding = val; break; //IE bug
-			case "cellspacing": el.cellSpacing = val; break; //IE bug
-			case "valign": el.vAlign = val; break; //IE bug
-			default: el.setAttribute(attr, val);
-			}
-		}
-
-		if (inner)
-			zk._tdfixReplaceInnerHTML(el, inner);
-	};
-	/** Replace HTML for TR, TD and others; the same as outerHTML, used
-	 * since IE don't support non-SPAN/DIV well.
-	 */
-	zk._tdfixReplaceInnerHTML = function (el, html) { //patch for IE
-		//replace inner
-		var tn = $tag(el);
-		if (tn == "TR" || tn == "TABLE" || tn == "TBODY" || tn == "THEAD"
-		|| tn == "TFOOT") { //ignore TD/TH/CAPTION
-			while (el.firstChild)
-				el.removeChild(el.firstChild);
-
-			if (tn == "TABLE") {
-				var tagInfo = zk._tdfixNextTag(html, 0);
-				if (tagInfo && tagInfo.tagName == "TR") {
-					var n = document.createElement("TBODY");
-					el.appendChild(n);
-					el = n;
-				}
-			}
-
-			for (var j = 0, depth = 0; j < html.length;) {
-				var tagInfo = zk._tdfixNextTag(html, j);
-				if (!tagInfo) return;
-
-				var tagnm = tagInfo.tagName;
-				var n = document.createElement(tagnm);
-				el.appendChild(n);
-
-				var k = html.indexOf('>', tagInfo.index);
-				for (var depth = 0; k >= 0;) {
-					tagInfo = zk._tdfixNextTag(html, k + 1);
-					if (!tagInfo) break;
-					k = html.indexOf('>', tagInfo.index);
-					if (tagnm == tagInfo.tagName) {
-						++depth;
-					} else if ("/" + tagnm == tagInfo.tagName) {
-						if (--depth < 0)
-							break;
-					}
-				}
-
-				if (k < 0) k = html.length;
-				else ++k;
-				zk._tdfixReplaceOuterHTML(n, html.substring(j, k));
-				j = k;
-			}
-		} else {
-			el.innerHTML = html;
-				//10192006:No longer handles IE's bug (see Bug 1455584)
-				//Reason: invalidate(Range) is removed, so no much chance to
-				//get here
-		}
-	};
-	/** Next tag info. */
-	zk._tdfixNextTag = function (html, j) {
-		var k = html.indexOf('<', j);
-		if (k < 0) return null;
-
-		var l = html.skipWhitespaces(k + 1);
-		var tagnm = "";
-		if (html.charAt(l) == '/') {
-			tagnm = "/";
-			l = html.skipWhitespaces(l + 1);
-		}
-
-		for (;; ++l) {
-			if (l >= html.length) return null; //ignore it
-			var cc = html.charAt(l);
-			if ((cc < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z'))
-				break;
-			tagnm += cc;
-		}
-		return {tagName: tagnm.toUpperCase(), index: l};
+		return ns;
 	};
 }
 
