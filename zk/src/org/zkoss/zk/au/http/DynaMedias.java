@@ -51,7 +51,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.util.ExecutionCleanup;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -114,12 +113,13 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 			} catch (Throwable ex) {
 				err = true;
 
-				final ErrorInfo ei = new ErrorInfo(ex);
-				config.invokeExecutionCleanups(exec, oldexec, ei);
+				final List errs = new LinkedList();
+				errs.add(ex);
+				config.invokeExecutionCleanups(exec, oldexec, errs);
 
 				final StringBuffer errmsg = new StringBuffer(100);
-				if (!ei.getErrors().isEmpty()) {
-					for (Iterator it = ei.getErrors().iterator(); it.hasNext();) {
+				if (!errs.isEmpty()) {
+					for (Iterator it = errs.iterator(); it.hasNext();) {
 						final Throwable t = (Throwable)it.next();
 						if (t == ex) //not eaten
 							log.error("Failed to load the media.", t);
@@ -164,15 +164,5 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 		out.write(data);
 		out.flush();
 		//FUTURE: support last-modified
-	}
-
-	private static class ErrorInfo implements ExecutionCleanup.ErrorInfo {
-		private final List _errs = new LinkedList();
-		private ErrorInfo(Throwable ex) {
-			if (ex != null) _errs.add(ex);
-		}
-		public List getErrors() {
-			return _errs;
-		}
 	}
 }

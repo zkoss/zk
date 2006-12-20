@@ -306,12 +306,13 @@ public class UiEngineImpl implements UiEngine {
 		} catch (Throwable ex) {
 			cleaned = true;
 
-			final ErrorInfo ei = new ErrorInfo(ex);
-			config.invokeExecutionCleanups(exec, oldexec, ei);
+			final List errs = new LinkedList();
+			errs.add(ex);
+			config.invokeExecutionCleanups(exec, oldexec, errs);
 				//CONSIDER: whether to pass cleanup's error to users
 
-			if (!ei.getErrors().isEmpty()) {
-				ex = (Throwable)ei.getErrors().get(0);
+			if (!errs.isEmpty()) {
+				ex = (Throwable)errs.get(0);
 				if (ex instanceof IOException) throw (IOException)ex;
 				throw UiException.Aide.wrap(ex);
 			}
@@ -496,7 +497,7 @@ public class UiEngineImpl implements UiEngine {
 		try {
 			config.invokeExecutionInits(exec, oldexec);
 			final RequestQueue rque = ((DesktopCtrl)desktop).getRequestQueue();
-			List errs = new LinkedList();
+			final List errs = new LinkedList();
 			final long tmexpired = System.currentTimeMillis() + 3000;
 				//Tom Yeh: 20060120
 				//Don't process all requests if this thread has processed
@@ -537,9 +538,7 @@ public class UiEngineImpl implements UiEngine {
 			//Cycle 3: Generate output
 			if (!uv.isAborting()) {
 				cleaned = true;
-				final ErrorInfo ei = new ErrorInfo(errs);
-				config.invokeExecutionCleanups(exec, oldexec, ei);
-				errs = ei.getErrors();
+				config.invokeExecutionCleanups(exec, oldexec, errs);
 
 				List responses;
 				try {
@@ -582,9 +581,10 @@ public class UiEngineImpl implements UiEngine {
 		} catch (Throwable ex) {
 			if (!cleaned) {
 				cleaned = true;
-				final ErrorInfo ei = new ErrorInfo(ex);
-				config.invokeExecutionCleanups(exec, oldexec, ei);
-				ex = ei.getErrors().isEmpty() ? null: (Throwable)ei.getErrors().get(0);
+				final List errs = new LinkedList();
+				errs.add(ex);
+				config.invokeExecutionCleanups(exec, oldexec, errs);
+				ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
 			}
 
 			if (ex != null) {
@@ -1118,21 +1118,6 @@ public class UiEngineImpl implements UiEngine {
 			if (eis == null)
 				sess.setAttribute(attr, eis = new HashMap());
 			return eis;
-		}
-	}
-
-	private static class ErrorInfo implements ExecutionCleanup.ErrorInfo {
-		private final List _errs;
-		private ErrorInfo(Throwable ex) {
-			_errs = new LinkedList();
-			if (ex != null) _errs.add(ex);
-		}
-		private ErrorInfo(List errs) {
-			if (errs != null) _errs = errs;
-			else _errs = new LinkedList();
-		}
-		public final List getErrors() {
-			return _errs;
 		}
 	}
 }

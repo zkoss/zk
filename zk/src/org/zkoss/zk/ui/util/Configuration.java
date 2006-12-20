@@ -647,19 +647,19 @@ public class Configuration {
 	 * <p>An instance of {@link ExecutionCleanup} is constructed first,
 	 * and then invoke {@link ExecutionCleanup#cleanup}.
 	 *
-	 * <p>It never throws an exception but logs and adds it to the errInfo argument,
+	 * <p>It never throws an exception but logs and adds it to the errs argument,
 	 * if not null.
 	 *
 	 * @param exec the execution that is being destroyed
 	 * @param parent the previous execution, or null if no previous at all
-	 * @param errInfo the information about the exceptions being thrown
-	 * (and not handled) during the execution, or null it is executed successfully.
-	 * If an exception is thrown by invoking {@link ExecutionCleanup#cleanup},
-	 * it will be added to errInfo ({@link ExecutionCleanup.ErrorInfo#getErrors}.
-	 * Note: all exceptions thrown by {@link ExecutionCleanup#cleanup} are always logged.
+	 * @param errs a list of exceptions (java.lang.Throwable) if any exception
+	 * occured before this method is called, or null if no exeption at all.
+	 * Note: you can manipulate the list directly to add or clean up exceptions.
+	 * For example, if exceptions are fixed correctly, you can call errs.clear()
+	 * such that no error message will be displayed at the client.
 	 */
 	public void invokeExecutionCleanups(Execution exec, Execution parent,
-	ExecutionCleanup.ErrorInfo errInfo) {
+	List errs) {
 		if (_execCleans.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
@@ -668,10 +668,10 @@ public class Configuration {
 				final Class klass = (Class)it.next();
 				try {
 					((ExecutionCleanup)klass.newInstance())
-						.cleanup(exec, parent, errInfo);
+						.cleanup(exec, parent, errs);
 				} catch (Throwable ex) {
 					log.error("Failed to invoke "+klass, ex);
-					if (errInfo != null) errInfo.getErrors().add(ex);
+					if (errs != null) errs.add(ex);
 				}
 			}
 		}
