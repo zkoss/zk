@@ -35,8 +35,11 @@ zkSplt.init = function (cmp) {
 		zkSplt.open(cmp, getZKAttr(cmp, "open") == "false");
 	});
 
-	cmp.style.backgroundImage = "url(" +zk.getUpdateURI(
-		"/web/zul/img/splt/"+(vert?"v":"h")+"splt.gif") + ")";
+	var bgi = getZKAttr(cmp, "bgi");
+	if (bgi) {
+		bgi = zk.renType(bgi, vert ? 'v': 'h');
+		cmp.style.backgroundImage = "url(" + bgi + ")";
+	}
 
 	zkSplt._fixbtn(cmp);
 
