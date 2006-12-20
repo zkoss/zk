@@ -18,6 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import java.util.List;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -43,16 +44,22 @@ public interface EventThreadCleanup {
 	/** Cleans up the event processing thread.
 	 * It is called, after a event processing thread has processed an event.
 	 *
-	 * <p>If this method threw an exception, it will be propagated back to
-	 * the servlet thread and then reported to the user.
+	 * <p>If this method threw an exception and errs is empty, the exception will
+	 * be propagated back to the servlet thread and then reported to the user.
 	 *
 	 * <p>Note: {@link #cleanup} is called first in the event processing thread,
 	 * and then {@link #complete} is called in the servlet thread.
+	 * Note: {@link #complete} of an {@link EventThreadCleanup} instance is called
+	 * only if {@link #cleanup} called against the same instnce
+	 * didn't throw any exception.
 	 *
-	 * @param ex the exception being thrown (and not handled) during
-	 * the processing of the event, or null it is executed successfully.
+	 * @param errs a list of exceptions (java.lang.Throwable) if any exception
+	 * occured before this method is called, or null if no exeption at all.
+	 * Note: you can manipulate the list directly to add or clean up exceptions.
+	 * For example, if exceptions are fixed correctly, you can call errs.clear()
+	 * such that no error message will be displayed at the client.
 	 */
-	public void cleanup(Component comp, Event evt, Throwable ex);
+	public void cleanup(Component comp, Event evt, List errs);
 	/** Called in the serlvet thread to clean up.
 	 * It is called after {@link #cleanup} is called.
 	 *

@@ -280,17 +280,13 @@ public class Configuration {
 	 *
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
-	 * @param ex the exception being thrown (and not handled) during
-	 * the processing of the event, or null it is executed successfully.
-	 * @param errs used to hold the exceptions that are thrown by
-	 * {@link EventThreadCleanup#cleanup}.
-	 * If null, all exceptions are ignored (but logged)
-	 * @return a list of {@link EventThreadCleanup} instances that is
-	 * constructed in this method (and their {@link EventThreadCleanup#cleanup}
-	 * are called successfully -- without throwing any exception).
+	 * @param errs a list of exceptions (java.lang.Throwable) if any exception
+	 * occured before this method is called, or null if no exeption at all.
+	 * Note: you can manipulate the list directly to add or clean up exceptions.
+	 * For example, if exceptions are fixed correctly, you can call errs.clear()
+	 * such that no error message will be displayed at the client.
 	 */
-	public List newEventThreadCleanups(Component comp, Event evt,
-	Throwable ex, List errs) {
+	public List newEventThreadCleanups(Component comp, Event evt, List errs) {
 		if (_evtCleans.isEmpty()) return Collections.EMPTY_LIST;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
@@ -301,7 +297,7 @@ public class Configuration {
 				try {
 					final EventThreadCleanup cleanup =
 						(EventThreadCleanup)klass.newInstance();
-					cleanup.cleanup(comp, evt, ex);
+					cleanup.cleanup(comp, evt, errs);
 					cleanups.add(cleanup);
 				} catch (Throwable t) {
 					if (errs != null) errs.add(t);
@@ -658,8 +654,7 @@ public class Configuration {
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
 	 */
-	public void invokeExecutionCleanups(Execution exec, Execution parent,
-	List errs) {
+	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs) {
 		if (_execCleans.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
 

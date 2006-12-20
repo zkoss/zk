@@ -359,21 +359,12 @@ public class EventProcessingThread extends Thread {
 
 						process0();
 					} catch (Throwable ex) {
-						_ex = ex;
 						cleaned = true;
-						_evtThdCleanups =
-							config.newEventThreadCleanups(_comp, _event, ex, null);
+						newEventThreadCleanups(config, ex);
 					} finally {
 						--_nBusyThd;
 
-						if (!cleaned) {
-							final List errs = new LinkedList();
-							_evtThdCleanups =
-								config.newEventThreadCleanups(_comp, _event, null, errs);
-							if (_ex == null && !errs.isEmpty())
-								_ex = (Throwable)errs.get(0);
-									//propogate back the first exception
-						}
+						if (!cleaned) newEventThreadCleanups(config, _ex);
 
 						cleanup();
 						ExecutionsCtrl.setCurrent(null);
@@ -411,6 +402,16 @@ public class EventProcessingThread extends Thread {
 		} finally {
 			--_nThd;
 		}
+	}
+	/** Invokes {@link Configuration#newEventThreadCleanups}.
+	 */
+	private void newEventThreadCleanups(Configuration config, Throwable ex) {
+		final List errs = new LinkedList();
+		if (ex != null) errs.add(ex);
+		_evtThdCleanups =
+			config.newEventThreadCleanups(_comp, _event, errs);
+		_ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
+			//propogate back the first exception
 	}
 
 	/** Sends the specified component and event and processes the event
