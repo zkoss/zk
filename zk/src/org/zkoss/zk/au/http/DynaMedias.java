@@ -20,6 +20,9 @@ package org.zkoss.zk.au.http;
 
 import java.io.Writer;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -33,6 +36,7 @@ import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.lang.D;
+import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
@@ -47,6 +51,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.ExecutionCleanup;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -59,7 +64,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
  * @author tomyeh
  */
 /*package*/ class DynaMedias {
-//	private static final Log log = Log.lookup(DynaMedias.class);
+	private static final Log log = Log.lookup(DynaMedias.class);
 
 	private DynaMedias() {}
 
@@ -108,13 +113,24 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 				}
 			} catch (Throwable ex) {
 				err = true;
-				config.invokeExecutionCleanups(exec, oldexec, ex, null);
 
-				if (ex instanceof ServletException) throw (ServletException)ex;
-				if (ex instanceof IOException) throw (IOException)ex;
-				throw UiException.Aide.wrap(ex);
+				final ErrorInfo ei = new ErrorInfo(ex);
+				config.invokeExecutionCleanups(exec, oldexec, ei);
+
+				final StringBuffer errmsg = new StringBuffer(100);
+				if (!ei.getErrors().isEmpty()) {
+					for (Iterator it = ei.getErrors().iterator(); it.hasNext();) {
+						final Throwable t = (Throwable)it.next();
+						if (t == ex) //not eaten
+							log.error("Failed to load the media.", t);
+						errmsg.append('\n').append(Exceptions.getMessage(t));
+					}
+				}
+
+				response.sendError(response.SC_GONE, "Failed to load the media."+errmsg);
+				return;
 			} finally {
-				if (!err) config.invokeExecutionCleanups(exec, oldexec, null, null);
+				if (!err) config.invokeExecutionCleanups(exec, oldexec, null);
 				uieng.deactivate(exec);
 			}
 		} catch (ComponentNotFoundException ex) {
@@ -148,5 +164,15 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 		out.write(data);
 		out.flush();
 		//FUTURE: support last-modified
+	}
+
+	private static class ErrorInfo implements ExecutionCleanup.ErrorInfo {
+		private final List _errs = new LinkedList();
+		private ErrorInfo(Throwable ex) {
+			if (ex != null) _errs.add(ex);
+		}
+		public List getErrors() {
+			return _errs;
+		}
 	}
 }

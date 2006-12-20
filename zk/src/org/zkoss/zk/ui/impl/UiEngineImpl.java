@@ -305,13 +305,19 @@ public class UiEngineImpl implements UiEngine {
 			((PageCtrl)page).redraw(responses, out);
 		} catch (Throwable ex) {
 			cleaned = true;
-			config.invokeExecutionCleanups(exec, oldexec, ex, null);
-				//TODO: find a way to send back the error message, if any, returned
 
-			if (ex instanceof IOException) throw (IOException)ex;
-			throw UiException.Aide.wrap(ex);
+			final ErrorInfo ei = new ErrorInfo(ex);
+			config.invokeExecutionCleanups(exec, oldexec, ei);
+				//CONSIDER: whether to pass cleanup's error to users
+
+			if (!ei.getErrors().isEmpty()) {
+				ex = (Throwable)ei.getErrors().get(0);
+				if (ex instanceof IOException) throw (IOException)ex;
+				throw UiException.Aide.wrap(ex);
+			}
 		} finally {
-			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null, null);
+			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
+				//CONSIDER: whether to pass cleanup's error to users
 
 			execCtrl.setCurrentPage(old); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
@@ -490,7 +496,7 @@ public class UiEngineImpl implements UiEngine {
 		try {
 			config.invokeExecutionInits(exec, oldexec);
 			final RequestQueue rque = ((DesktopCtrl)desktop).getRequestQueue();
-			final List errs = new LinkedList();
+			List errs = new LinkedList();
 			final long tmexpired = System.currentTimeMillis() + 3000;
 				//Tom Yeh: 20060120
 				//Don't process all requests if this thread has processed
@@ -530,6 +536,11 @@ public class UiEngineImpl implements UiEngine {
 
 			//Cycle 3: Generate output
 			if (!uv.isAborting()) {
+				cleaned = true;
+				final ErrorInfo ei = new ErrorInfo(errs);
+				config.invokeExecutionCleanups(exec, oldexec, ei);
+				errs = ei.getErrors();
+
 				List responses;
 				try {
 					//Note: we have to call visualizeErrors before uv.getResponses,
@@ -544,21 +555,6 @@ public class UiEngineImpl implements UiEngine {
 
 					log.error(ex);
 					errs.add(ex); //so invokeExecutionCleanups knows it
-				}
-
-				cleaned = true;
-				final List cleanerrs = new LinkedList();
-				config.invokeExecutionCleanups(
-					exec, oldexec, errs.isEmpty() ? null: (Throwable)errs.get(0),
-					cleanerrs);
-				if (!cleanerrs.isEmpty()) {
-					final StringBuffer errmsg = new StringBuffer(100);
-					for (Iterator it = cleanerrs.iterator(); it.hasNext();) {
-						final Throwable t = (Throwable)it.next();
-						if (errmsg.length() > 0) errmsg.append('\n');
-						errmsg.append(Exceptions.getMessage(t));
-					}
-					responses.add(new AuAlert(errmsg.toString()));
 				}
 
 				if (rque.hasRequest())
@@ -586,13 +582,17 @@ public class UiEngineImpl implements UiEngine {
 		} catch (Throwable ex) {
 			if (!cleaned) {
 				cleaned = true;
-				config.invokeExecutionCleanups(exec, oldexec, ex, null);
+				final ErrorInfo ei = new ErrorInfo(ex);
+				config.invokeExecutionCleanups(exec, oldexec, ei);
+				ex = ei.getErrors().isEmpty() ? null: (Throwable)ei.getErrors().get(0);
 			}
 
-			if (ex instanceof IOException) throw (IOException)ex;
-			throw UiException.Aide.wrap(ex);
+			if (ex != null) {
+				if (ex instanceof IOException) throw (IOException)ex;
+				throw UiException.Aide.wrap(ex);
+			}
 		} finally {
-			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null, null);
+			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
 
 			doDeactivate(exec);
 
@@ -631,6 +631,7 @@ public class UiEngineImpl implements UiEngine {
 		errs.add(err);
 	}
 	/** Post-process the errors to represent them to the user.
+	 * Note: errs must be non-empty
 	 */
 	private final
 	void visualizeErrors(Execution exec, UiVisualizer uv, List errs) {
@@ -1117,6 +1118,21 @@ public class UiEngineImpl implements UiEngine {
 			if (eis == null)
 				sess.setAttribute(attr, eis = new HashMap());
 			return eis;
+		}
+	}
+
+	private static class ErrorInfo implements ExecutionCleanup.ErrorInfo {
+		private final List _errs;
+		private ErrorInfo(Throwable ex) {
+			_errs = new LinkedList();
+			if (ex != null) _errs.add(ex);
+		}
+		private ErrorInfo(List errs) {
+			if (errs != null) _errs = errs;
+			else _errs = new LinkedList();
+		}
+		public final List getErrors() {
+			return _errs;
 		}
 	}
 }

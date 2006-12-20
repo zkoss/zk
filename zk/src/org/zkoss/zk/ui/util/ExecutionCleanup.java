@@ -18,6 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
+import java.util.List;
 import org.zkoss.zk.ui.Execution;
 
 /**
@@ -37,13 +38,32 @@ import org.zkoss.zk.ui.Execution;
 public interface ExecutionCleanup {
 	/** called when an execution is about to be destroyed.
 	 *
-	 * <p>If this method throws an exception, the error message will be displayed
-	 * at the client.
+	 * <p>If an exception occurs before calling this method, this method
+	 * will be called with a {@link ErrorInfo} instance
+	 *(thru <code>errInfo</code>). You can then examine the exceptions,
+	 * and even clean them up with ({@link ErrorInfo#getErrors}).
+	 * If all errors are cleaned, the user won't be alerted.
+	 *
+	 * <p>If this method throws an exception, the stack trace will be logged
+	 * and the error message will be displayed at the client.
 	 *
 	 * @param exec the exection to clean up.
 	 * @param parent the previous execution, or null if no previous at all
-	 * @param ex the first exception being thrown (and not handled) during
-	 * the execution, or null it is executed successfully.
+	 * @param errInfo information about the exceptions being thrown
+	 * (and not handled) during the execution, or null if it executes successfully.
 	 */
-	public void cleanup(Execution exec, Execution parent, Throwable ex);
+	public void cleanup(Execution exec, Execution parent, ErrorInfo errInfo);
+
+	/** The infomation about the exception, if any, that occurs before
+	 * {@link ExecutionCleanup#cleanup} is called.
+	 */
+	public interface ErrorInfo {
+		/** Returns a non-empty list of exceptioins that occur before
+		 * {@link ExecutionCleanup#cleanup} is called.
+		 *
+		 * <p>The returned list is live. In other words, you can add, remove
+		 * or clean exception from it directly.
+		 */
+		public List getErrors();
+	}
 }
