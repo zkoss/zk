@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.lang.reflect.Field;
 
-
+import java.util.List;
 /**
  * <p>Listener to make sure each ZK thread got the same hibernat session context; 
  * used with Hibernate's "thread" session context (org.hibernate.context.ThreadLocalSessionContext).
@@ -81,7 +81,7 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 	}
 	
 	//-- ExecutionCleanup --//
-	public void cleanup(Execution exec, Execution parent, Throwable ex) {
+	public void cleanup(Execution exec, Execution parent, List errs) {
 		if (parent == null) { //root execution
 			Map map = getSessionMap();
 			if (map != null) {

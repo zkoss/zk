@@ -29,6 +29,7 @@ import org.zkoss.util.logging.Log;
 import org.acegisecurity.context.SecurityContext;
 import org.acegisecurity.context.SecurityContextHolder;
 
+import java.util.List;
 /**
  * <p>Listener to copy servlet thread ThreadLocal, securityContext, over to 
  * event thread ThreadLocal.
@@ -61,7 +62,7 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 	}
 	
 	//-- EventThreadCleanup --//
-	public void cleanup(Component comp, Event evt, Throwable ex) {
+	public void cleanup(Component comp, Event evt, List errs) {
 		_context = SecurityContextHolder.getContext(); //get threadLocal from event thread
 	}
 	

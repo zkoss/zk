@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.lang.reflect.Field;
 
+import java.util.List;
 
 /**
  * <p>Listener to make sure each ZK thread got the same ThreadLocal value of the 
@@ -69,7 +70,7 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 	}
 
 	//-- EventThreadCleanup --//
-	public void cleanup(Component comp, Event evt, Throwable ex) {
+	public void cleanup(Component comp, Event evt, List errs) {
 		getThreadLocals(); //get from event thread's ThreadLocal
 		//we don't handle the exception since the ZK engine will throw it again!
 	}

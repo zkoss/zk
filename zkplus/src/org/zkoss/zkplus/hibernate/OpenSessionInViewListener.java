@@ -26,6 +26,8 @@ import org.zkoss.util.logging.Log;
 
 import org.hibernate.StaleObjectStateException;
 
+import java.util.List;
+
 /**
  * Listener to init and cleanup the hibernate session automatically, implement
  * the Hibernate's "Open Session In View" pattern without JTA support. This listener 
@@ -54,20 +56,23 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	}
 	
 	//-- ExecutionCleanup --//
-	public void cleanup(Execution exec, Execution parent, Throwable ex) {
+	public void cleanup(Execution exec, Execution parent, List errs) {
 		if (parent == null) { //the root execution of a servlet request
-			if (ex == null) {
+			if (errs == null || errs.isEmpty()) {
 				// Commit and cleanup
 				log.debug("Committing the database transaction: "+exec);
 				HibernateUtil.currentSession().getTransaction().commit();
-			} else if (ex instanceof StaleObjectStateException) {
-				// default implementation does not do any optimistic concurrency 
-				// control; it simply rollback the transaction.
-				handleStaleObjectStateException(exec, (StaleObjectStateException)ex);
 			} else {
-				// default implementation log the stacktrace and then rollback
-				// the transaction.
-				handleOtherException(exec, ex);
+				final Throwable ex = (Throwable) errs.get(0);
+				if (ex instanceof StaleObjectStateException) {
+					// default implementation does not do any optimistic concurrency 
+					// control; it simply rollback the transaction.
+					handleStaleObjectStateException(exec, (StaleObjectStateException)ex);
+				} else {
+					// default implementation log the stacktrace and then rollback
+					// the transaction.
+					handleOtherException(exec, ex);
+				}
 			}
 			HibernateUtil.closeSession(); //always close it
 		}
