@@ -91,6 +91,7 @@ ZK 2.1.2
   + Tomcat 4.1.x are supported. See How-tos.
   + forEachBegin and forEachEnd are supported.
   + Support Acegi SecurityContext for ZK.
+  + Support Servlet 2.3
 
 * Bugs:
   1548478, 1563327, 1563932, 1565463, 1563206, 1567464, 1567187, 1486556,
