@@ -18,6 +18,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.acegi;
 
+import org.zkoss.zkplus.spring.SpringUtil;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
@@ -26,13 +28,18 @@ import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.lang.Exceptions;
+
 import org.acegisecurity.context.SecurityContext;
 import org.acegisecurity.context.SecurityContextHolder;
+import org.acegisecurity.AcegiSecurityException;
+import org.acegisecurity.AuthenticationException;
 
 import java.util.List;
 /**
  * <p>Listener to copy servlet thread ThreadLocal, securityContext, over to 
- * event thread ThreadLocal.
+ * event thread ThreadLocal and handle Acegi Authentication Exception occured in
+ * Event handling (e.g. Acegi's MethodInterceptor).
  * </p>
  * <p>
  * Whenever you use Acegi as your security provider you have to add following 
@@ -64,6 +71,23 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 	//-- EventThreadCleanup --//
 	public void cleanup(Component comp, Event evt, List errs) {
 		_context = SecurityContextHolder.getContext(); //get threadLocal from event thread
+
+
+		//handle Acegi Exception occured within Event handling
+		if (errs != null && !errs.isEmpty() && errs.size() == 1) {
+			Throwable ex = (Throwable) errs.get(0);
+			if (ex != null) {
+				ex = Exceptions.findCause(ex, AcegiSecurityException.class);
+				if (ex instanceof AcegiSecurityException) {
+					final ZkExceptionTranslationHandler handler = 
+						(ZkExceptionTranslationHandler) SpringUtil.getBean("zkExceptionTranslationHandler");
+					if (handler != null) {
+						errs.clear();
+						handler.handle(comp, evt, (AcegiSecurityException)ex);
+					}
+				}
+			}
+		}
 	}
 	
 	public void complete(Component comp, Event evt) {

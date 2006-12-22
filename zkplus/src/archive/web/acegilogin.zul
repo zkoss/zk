@@ -1,0 +1,14 @@
+<window title="ZK Login" border="normal" width="300px" onOK="doOK(self)">
+  <grid>
+    <rows>
+      <row>User: <textbox id="j_username"/></row>
+      <row>Password: <textbox id="j_password" type="password"/></row>
+      <row><button label="OK" onClick="doOK(spaceOwner)"/><button label="Cancel" onClick="spaceOwner.detach()"/></row>
+    </rows>
+  </grid>
+  <zscript>
+  void doOK(Window modalwin) {
+  	org.zkoss.zkplus.acegi.SimpleAuthenticationEntryPoint.login(modalwin);
+  }
+  </zscript>
+</window>
