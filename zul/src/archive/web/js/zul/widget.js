@@ -370,6 +370,7 @@ zkWnd._ignoresizing = function (cmp, pointer) {
 			case 3: case 7: dg.options.constraint = 'horizontal'; break;
 			default: dg.options.constraint = null;
 			}
+			dg.z_orgzi = cmp.style.zIndex;
 			return false;
 		}
 	}
@@ -386,9 +387,11 @@ zkWnd._endsizing = function (cmp, evt) {
 		}
 
 		//adjust size
+		if (dg.z_orgzi != null)
+			cmp.style.zIndex = dg.z_orgzi; //restore it (Bug 1619349)
 		setTimeout("zkWnd._resize($e('"+cmp.id+"'),"+dg.z_dir+","
 			+dg.z_szofs[0]+","+dg.z_szofs[1]+",'"+keys+"')", 50);
-		dg.z_dir = dg.z_szofs = null;
+		dg.z_dir = dg.z_szofs = dg.z_orgzi = null;
 	}
 };
 zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
