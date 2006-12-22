@@ -580,8 +580,9 @@ zkau.rmAttr = function (cmp, name) {
 };
 
 /** Corrects zIndex of the specified component, which must be absolute.
- * @param autoz whether it is called by
  * @param silent whether to send onZIndex
+ * @param autoz whether to adjust zIndex only necessary.
+ * If false (used when creating a window), it always increases zIndex
  */
 zkau.fixZIndex = function (cmp, silent, autoz) {
 	if (!zkau._popups.length && !zkau._overlaps.length && !zkau._modals.length)
