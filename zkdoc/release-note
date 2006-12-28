@@ -1,7 +1,7 @@
 	--------
 ZK 2.2.1
 * Features:
-  1619271, 1619272, 1619530.
+  1619271, 1619272, 1619530, 1616213.
 
 * Bugs:
   1615959, 1616955, 1617664, 1617116, 1616783, 1619349, 1621425.
@@ -11,6 +11,7 @@ ZK 2.2.1
     Developers have a chance to clean up exceptions.
   + The signature of the cleanup method of EventThreadCleanup is changed.
     Developers have a chance to clean up exceptions.
+  + Support filtering of controller side events for Acegi security.
 
 	--------
 ZK 2.2.0-1
