@@ -204,19 +204,23 @@ implements Constrainted {
 			_value = val;
 
 			final String fmtval = coerceToString(_value);
-			if (_txtByClient == null || !Objects.equals(_txtByClient, fmtval))
+			if (_txtByClient == null || !Objects.equals(_txtByClient, fmtval)) {
+				_txtByClient = null; //only once
 				smartUpdate("value", fmtval);
 				//Note: we have to disable the sending back of the value
 				//Otherwise, it cause Bug 1488579's problem 3.
 				//Reason: when user set a value to correct one and set
 				//to an illegal one, then click the button cause both events
+			}
 				//being sent back to the server.
 		} else if (_txtByClient != null) {
 			//value equals but formatted result might differ because
 			//our parse is more fault tolerant
 			final String fmtval = coerceToString(_value);
-			if (!Objects.equals(_txtByClient, fmtval))
+			if (!Objects.equals(_txtByClient, fmtval)) {
+				_txtByClient = null; //only once
 				smartUpdate("value", fmtval);
+			}
 		}
 	}
 
