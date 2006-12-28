@@ -6,39 +6,78 @@
 	Description:
 		
 	History:
-		Thu Dec 21 16:11:38     2006, Created by Henri Chen
+		Thu Dec 21 16:17:28     2006, Created by Henri
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
-	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zkplus.acegi;
 
-import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+
+import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Window;
 
 import org.acegisecurity.AuthenticationException;
+import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
+import org.acegisecurity.ui.webapp.AuthenticationProcessingFilter;
+import org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint;
+import org.acegisecurity.context.SecurityContextHolder;
+import org.springframework.beans.factory.InitializingBean;
+
+import org.springframework.util.Assert;
+
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+import java.util.ArrayList;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * Used by {@link ZkExceptionTranslationHandler} to commence an authentication
- * scheme.
+ * <p>This implementation would forward to onAcegiLogin event and popup a login page.</p>
  *
- * @author Henri Chen
+ * @see ZkAuthenticationProcessingFilter
+ * @see ShowWindowEventListener
+ * @author Henri
  */
-public interface ZkAuthenticationEntryPoint {
-    /**
-     * Commences an authentication scheme. Return true would cause ZkExceptionTranslationHandler to repost
-     * this event.
-     *
-     * @param comp the component that cause this invocation.
-     * @param evt the event that cause this invocation.
-     * @param authException the exception occured within the event of the component.
-     *
-     * @return true if end user press "OK", false if end user press "CANCEL".
+public class ZkAuthenticationEntryPoint extends AuthenticationProcessingFilterEntryPoint {
+	/*package*/ static final String ON_ACEGILOGIN = "onAcegiLogin";
+    /** <p>This implmentation forward request to onAcegiLogin command.</p>
      */
-    public boolean commence(Component comp, Event evt, AuthenticationException authException);
+	public void commence(ServletRequest request, ServletResponse response, AuthenticationException authException)
+    throws IOException, ServletException {
+    	final Component comp = (Component) request.getAttribute(ZkEventExceptionFilter.COMPONENT);
+    	
+    	//remember the original event that cause the security login in session
+    	final Event evt = (Event) request.getAttribute(ZkEventExceptionFilter.EVENT);
+		((HttpServletRequest)request).getSession().setAttribute(ZkEventExceptionFilter.EVENT, evt);					
+
+		if (!comp.isListenerAvailable(ON_ACEGILOGIN, true)) {
+			final EventListener listener = new ShowWindowEventListener();
+			comp.setAttribute(ON_ACEGILOGIN, listener);
+			comp.addEventListener(ON_ACEGILOGIN, listener);
+		}
+		final String url = getLoginFormUrl();
+    	Events.postEvent(new Event(ON_ACEGILOGIN, comp, url != null ? url : "~./acegilogin.zul"));
+    }
 }
