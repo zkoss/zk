@@ -239,31 +239,34 @@ zkau._sendNow = function () {
 		return; //nothing to do
 
 	if (zk.loading) {
-		if (!zkau._sendadded) {
-			zkau._sendadded = true;
-			zk.addInit(zkau._sendNow); //note: when callback, zk.loading is false
-		}
+		zk.addInit(zkau._sendNow); //note: when callback, zk.loading is false
 		return; //wait
 	}
 
-	//callback
+	//decide implicit
+	var implicit = true;
+	for (var j = zkau._evts.length; --j >= 0;) {
+		if (!zkau._evts[j].implicit) {
+			implicit = false;
+			break;
+		}
+	}
+
+	//callback (fckez uses it to ensure its value is sent back correctly
 	for (var j = 0; j < zkau._onsends.length; ++j) {
 		try {
-			zkau._onsends[j]();
+			zkau._onsends[j](implicit); //it might add more events
 		} catch (e) {
 			zk.error(e.message);
 		}
 	}
 
-	zkau._sendadded = false;
-
 	//FUTURE: Consider XML (Pros: ?, Cons: larger packet)
-	var content = "", implicit = true;
+	var content = "";
 	for (var j = 0;; ++j) {
 		var evt = zkau._evts.shift();
 		if (!evt) break; //done
 
-		implicit = implicit && evt.implicit;
 		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+evt.uuid;
 		if (evt.data)
 			for (var k = 0; k < evt.data.length; ++k) {
@@ -325,13 +328,9 @@ zkau._doQueResps = function () {
 	var que = zkau._respQue;
 	for (var j = 0; que.length;) {
 		if (zk.loading) {
-			if (!zkau._procadded) {
-				zkau._procadded = true;
-				zk.addInit(zkau._doQueResps); //Note: when callback, zk.loading is false
-			}
+			zk.addInit(zkau._doQueResps); //Note: when callback, zk.loading is false
 			break; //wait until the loading is done
 		}
-		zkau._procadded = false;
 
 		try {
 			var oldSeqId = zkau._seqId;
