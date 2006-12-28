@@ -21,13 +21,18 @@ package org.zkoss.zkplus.acegi;
 import org.zkoss.zkplus.spring.SpringUtil;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadResume;
-import org.zkoss.util.logging.Log;
+import org.zkoss.zk.au.Command;
 
+import org.zkoss.util.logging.Log;
+import org.zkoss.web.servlet.BufferedResponse;
+import org.zkoss.io.NullWriter;
 import org.zkoss.lang.Exceptions;
 
 import org.acegisecurity.context.SecurityContext;
@@ -36,6 +41,13 @@ import org.acegisecurity.AcegiSecurityException;
 import org.acegisecurity.AuthenticationException;
 
 import java.util.List;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
 /**
  * <p>Listener to copy servlet thread ThreadLocal, securityContext, over to 
  * event thread ThreadLocal and handle Acegi Authentication Exception occured in
@@ -72,21 +84,47 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 	public void cleanup(Component comp, Event evt, List errs) {
 		_context = SecurityContextHolder.getContext(); //get threadLocal from event thread
 
-
 		//handle Acegi Exception occured within Event handling
+		final Execution exec = Executions.getCurrent();
 		if (errs != null && !errs.isEmpty() && errs.size() == 1) {
 			Throwable ex = (Throwable) errs.get(0);
 			if (ex != null) {
 				ex = Exceptions.findCause(ex, AcegiSecurityException.class);
 				if (ex instanceof AcegiSecurityException) {
-					final ZkExceptionTranslationHandler handler = 
-						(ZkExceptionTranslationHandler) SpringUtil.getBean("zkExceptionTranslationHandler");
-					if (handler != null) {
-						errs.clear();
-						handler.handle(comp, evt, (AcegiSecurityException)ex);
-					}
+					//ZK massage the exception to visual message (not an exception), so
+					//we remember the exception in request attribute and let ZkEventExceptionFilter
+					//to rethrow the exception so Acegi's ExcepitonTranslationFilter can
+					//catch that and show login window.
+
+					//to avoid show the massaged visula message
+					errs.clear();
+
+					exec.setAttribute(ZkEventExceptionFilter.EXCEPTION, ex);
+					exec.setAttribute(ZkEventExceptionFilter.COMPONENT, comp);
+					exec.setAttribute(ZkEventExceptionFilter.EVENT, evt);
 				}
 			}
+		}
+
+		//there was other exception, no need to go thru acegi filter chain.
+		if (errs != null && !errs.isEmpty()) return;
+		
+		//carry the current event that would be used by the filter chain.
+		exec.setAttribute(ZkAuthenticationProcessingFilter.CURRENT_EVENT, evt);
+		
+		Filter filter = (Filter) SpringUtil.getBean("zkFilterChainProxy");
+		if (filter != null) {
+			ServletRequest request = (ServletRequest) exec.getNativeRequest();
+			ServletResponse response = (ServletResponse) exec.getNativeResponse();
+			ServletResponse resp = BufferedResponse.getInstance(response, new NullWriter());
+			try {
+				filter.doFilter(request, resp, new NullFilterChain());
+			} catch(Exception ex1) {
+				throw UiException.Aide.wrap(ex1); //should never occur
+			}
+			
+			//after filter chain, SecurityContext could have changed
+			_context = SecurityContextHolder.getContext(); //get threadLocal from event thread
 		}
 	}
 	
@@ -108,4 +146,11 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
  	public void abortResume(Component comp, Event evt) {
  		//do nothing
  	}
+
+    private static class NullFilterChain implements FilterChain {
+    	public void doFilter(ServletRequest request, ServletResponse response)
+        throws java.io.IOException, ServletException {
+        	//do nothing
+        }
+    }
 }
