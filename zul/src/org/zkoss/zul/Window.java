@@ -83,7 +83,19 @@ public class Window extends XulElement implements IdSpace {
 
 	/** Embeds the window as normal component. */
 	private static final int EMBEDDED = 0;
-	/** Makes the window as a modal dialog. */
+	/** Makes the window as a modal dialog. A modal dialog must be visible
+	 * and the event thread is suspended until one of the following occurs.
+	 * <ol>
+	 * <li>{@link #setMode} is called with a mode other than MODAL.</li>
+	 * <li>Either {@link #doOverlapped}, {@link #doPopup} or
+	 * {@link #doEmbedded} is called.</li>
+	 * <li>{@link #setVisible} is called with false.</li>
+	 * <li>The window is detached from the window.</li>
+	 * </ol>
+	 *
+	 * <p>Note: In the last two cases, the mode becomes {@link #OVERLAPPED}.
+	 * In other words, one might say a modal window is a special overlapped window.
+	 */
 	private static final int MODAL = 1;
 	/** Makes the window as overlap other components.
 	 */
@@ -518,15 +530,17 @@ public class Window extends XulElement implements IdSpace {
 		if (_moding) {
 			assert D.OFF || _mode != EMBEDDED;
 
-			if (_mode == MODAL)
+			if (_mode == MODAL) {
 				Executions.notifyAll(_mutex);
-
-			if (_mode == MODAL)
 				response(null, new AuEndModal(this));
-			else if (_mode == POPUP)
+				_mode = OVERLAPPED;
+					//Note: we have to make it as overlapped window.
+					//Otherwise, it causes confustion as Bug 1621425
+			} else if (_mode == POPUP) {
 				response(null, new AuEndPopup(this));
-			else
+			} else {
 				response(null, new AuEndOverlapped(this));
+			}
 
 			_moding = false;
 		}
@@ -593,7 +607,11 @@ public class Window extends XulElement implements IdSpace {
 		}
 	}
 
-	/** If it becomes invisible, the modal mode ends automatically.
+	/** Changes the visibility of the window.
+	 *
+	 * <p>Note: If a modal dialog becomes invisible, the modal state
+	 * will be ended automatically. In other words, the mode ({@link #getMode})
+	 * will become {@link #OVERLAPPED} and the suspending thread is resumed.
 	 */
 	public boolean setVisible(boolean visible) {
 		if (!visible) endModing();
@@ -601,15 +619,10 @@ public class Window extends XulElement implements IdSpace {
 		final boolean ret = super.setVisible(visible);
 		if (!ret && visible && !_moding)
 			switch (_mode) {
-			case MODAL:
-				try {
-					doModal(); return false;
-				} catch (InterruptedException ex) {
-					throw UiException.Aide.wrap(ex);
-				}
 			case POPUP:
 				doPopup();
 				return false;
+			case MODAL: //impossible (just in case)
 			case OVERLAPPED:
 				doOverlapped();
 				return false;
