@@ -34,8 +34,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Used by {@link ZkExceptionTranslationHandler} to handle an
- * <code>AccessDeniedException</code>.
+ * Used by ExceptionTranslationFilter to handle an
+ * <code>AccessDeniedException</code>. This handler will popup the specified error page so it
+ * must be a Window that can be doModel.
  * 
  * @author Henri
  */

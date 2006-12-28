@@ -52,12 +52,63 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 /**
- * Used to fire exception in the Filter-chain.
+ * Used to fire exception in the ZK's event processing queue (Used with MethodSecurityInterceptor).
  *
- * <p>How to use:
- * <ul>
- * <li>Put after the Acegi Filter chain as the last one.</li>
- * </ul>
+ * <p>How to handle the ZK's Ajax login support for Acegi Security System:</p>
+ * <pre><code>
+ *	&lt;bean id="zkFilterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
+ *		&lt;property name="filterInvocationDefinitionSource">
+ *			&lt;value>
+ *				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+ *				PATTERN_TYPE_APACHE_ANT
+ *				/zkau/**=zkAuthenticationProcessingFilter,zkExceptionTranslationFilter,zkEventExceptionFilter
+ *			&lt;/value>
+ *		&lt;/property>
+ *	&lt;/bean>
+ *
+ *	&lt;bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
+ *		&lt;property name="filterInvocationDefinitionSource">
+ *			&lt;value>
+ *				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+ *				PATTERN_TYPE_APACHE_ANT
+ *				/zkau/**=httpSessionContextIntegrationFilter,logoutFilter,rememberMeProcessingFilter,anonymousProcessingFilter
+ *				/**=httpSessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+ *			&lt;/value>
+ *		&lt;/property>
+ *	&lt;/bean>
+ *
+ *	&lt;bean id="zkEventExceptionFilter" class="org.zkoss.zkplus.acegi.ZkEventExceptionFilter"/>
+ *
+ *	&lt;bean id="zkExceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">
+ *		&lt;property name="authenticationEntryPoint">
+ *			&lt;bean class="org.zkoss.zkplus.acegi.ZkAuthenticationEntryPoint">
+ *				&lt;property name="loginFormUrl" value="~./acegilogin.zul"/>
+ *				&lt;property name="forceHttps" value="false"/>
+ *				&lt;property name="serverSideRedirect" value="true"/>
+ *			&lt;/bean>
+ *		&lt;/property>
+ *		&lt;property name="accessDeniedHandler">
+ *			&lt;bean class="org.zkoss.zkplus.acegi.ZkAccessDeniedHandler">
+ *				&lt;property name="errorPage" value="~./accessDenied.zul"/>
+ *			&lt;/bean>
+ *		&lt;/property>
+ *	&lt;/bean>
+ *
+ *	&lt;bean id="zkAuthenticationProcessingFilter" class="org.zkoss.zkplus.acegi.ZkAuthenticationProcessingFilter">
+ *		&lt;property name="authenticationManager" ref="authenticationManager"/>
+ *		&lt;property name="authenticationFailureUrl" value="~./acegilogin.zul?login_error=1"/>
+ *		&lt;property name="defaultTargetUrl" value="/"/>
+ *		&lt;property name="filterProcessesUrl" value="/j_acegi_security_check"/>
+ *		&lt;property name="rememberMeServices" ref="zkRememberMeServices"/>
+ *	&lt;/bean>
+ *
+ *	&lt;bean id="zkRememberMeServices" class="org.zkoss.zkplus.acegi.ZkTokenBasedRememberMeServices">
+ *		&lt;property name="userDetailsService" ref="userDetailsService"/>
+ *		&lt;property name="key" value="changeThis"/>
+ *	&lt;/bean>
+ *
+ * ...
+ * </code></pre>
  *
  * @author henrichen
  */
