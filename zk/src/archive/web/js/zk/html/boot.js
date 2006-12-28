@@ -742,7 +742,14 @@ zk._ckfns = new Array(); //functions called to check whether a module is loaded 
 zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
 zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
 
-var myload =  function () {
+function myload() {
+	var f = zk._onload;
+	if (f) {
+		zk._onload = null; //called only once
+		f();
+	}
+}
+zk._onload = function () {
 	//It is possible to move javascript defined in zul's language.xml
 	//However, IE has bug to order JavaScript properly if zk._load is used
 	zk.progress(600);
@@ -756,27 +763,31 @@ if (zk.ie && !zk.https()) {
 	document.write('<script id="_zie_load" defer src="javascript:void(0)"><\/script>');
 	var e = $e("_zie_load");
 	e.onreadystatechange = function() {
-		if ("complete" == this.readyState) { //don't check loaded!
-	        if (myload) myload(); // call the onload handler
-	        myload = null;
-	    }
+		if ("complete" == this.readyState) //don't check loaded!
+	        myload(); // call the onload handler
 	};
 	e.onreadystatechange();
-} else if (zk.gecko && document.addEventListener) { //FF
-	document.addEventListener("DOMContentLoaded", myload, false)
-		//Fire onload earlier than all content are loaded
 } else if (zk.safari) {
     var timer = setInterval(function() {
 		if (/loaded|complete/.test(document.readyState)) {
 			clearInterval(timer);
 			delete timer;
 			myload();
-			myload = null;
 		}
 	}, 10);
 } else {
-	if (window.onload) zk.addInit(window.onload);
-	window.onload = myload;
+	//Bug 1619959: FF not always fire DOMContentLoaded (such as in 2nd iframe),
+	//so we have to register two event listeners.
+	if (zk.gecko && document.addEventListener) //FF
+		document.addEventListener("DOMContentLoaded", myload, false)
+		//Fire onload earlier than all content are loaded
+
+	zk._oldOnload = window.onload;
+	window.onload = function () {
+		myload();
+		if (zk._oldOnload)
+			zk._oldOnload.apply(window, arguments);
+	}
 }
 
 } //if (!window.zk)
