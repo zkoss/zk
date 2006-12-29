@@ -42,6 +42,12 @@ public class FileuploadDlg extends Window {
 		detach();
 	}
 
+	/** Sets the result.
+	 */
+	public void setResult(Media result) {
+		_result = result;
+	}
+
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -55,7 +61,16 @@ public class FileuploadDlg extends Window {
 		 * Callback by the system only. Don't invoke it directly.
 		 */
 		public void setResult(Object result) {
-			_result = (Media)result;
+			Media media = (Media)result;
+			if (media != null && media.inMemory() && media.isBinary()) {
+				final String nm = media.getName();
+				if (nm == null || nm.length() == 0) {
+					final byte[] bs = media.getByteData();
+					if (bs == null || bs.length == 0)
+						media = null; //Upload is pressed without specifying a file
+				}
+			}
+			FileuploadDlg.this.setResult(media);
 		}
 	}
 }
