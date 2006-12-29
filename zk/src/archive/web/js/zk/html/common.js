@@ -376,10 +376,10 @@ zk.focusDownById = function (id, timeout) {
 };
 /** Focus the element without looking down, and do it timeout later. */
 zk.focusById = function (id, timeout) {
-	var script = "zk._focus($e('"+id+"'))";
+	var script = "zk.focus($e('"+id+"'))";
 	zk._doTwice(script, timeout);
 };
-zk._focus = function (cmp) {
+zk.focus = function (cmp) {
 	if (cmp && cmp.focus) try {cmp.focus();} catch (e) {}
 		//IE throws exception when focus in some cases
 };

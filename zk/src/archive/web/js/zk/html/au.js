@@ -92,7 +92,6 @@ zkau._getMouseData = function (evt, target) {
 /** Asks the server to update a component. */
 zkau.sendUpdateResult = function (uuid, updatableId) {
 	zkau.send({uuid: uuid, cmd: "updateResult", data: [updatableId]}, -1);
-	zkau.sendRemove(uuid);
 }
 /** Asks the server to remove a component. */
 zkau.sendRemove = function (uuid) {
@@ -1645,11 +1644,11 @@ zkau.history = new zk.History();
 
 //Upload//
 /** Begins upload (called when the submit button is pressed)
- * @param cancelfn the function to cancel upload
+ * @param wndid id of window to close, if any
  */
-zkau.beginUpload = function (cancelfn) {
+zkau.beginUpload = function (wndid) {
 	zkau.endUpload();
-	zkau._cancelfn = cancelfn;
+	zkau._upldWndId = wndid;
 	zkau._tmupload = setInterval(function () {
 		zkau.send({uuid: '', cmd: "getUploadInfo", data: null});
 	}, 660);
@@ -1662,7 +1661,7 @@ zkau.updateUploadInfo = function (p, cb) {
 			var html = '<div id="zk_upload" style="position:absolute;border:1px solid #77a;padding:9px;background-color:#fec;z-index:79000">'
 				+'<div style="width:202px;border:1px inset"><img id="zk_upload!img" src="'+zk.getUpdateURI('/web/zk/img/prgmeter.gif')
 				+'"/></div><br/>'+mesg.FILE_SIZE+Math.round(cb/1024)+mesg.KBYTES
-				+'<br/><input type="button" value="'+mesg.CANCEL+'" onclick="if (zkau._cancelfn) zkau._cancelfn();zkau.endUpload();"</div>';
+				+'<br/><input type="button" value="'+mesg.CANCEL+'" onclick="zkau._cancelUpload()"</div>';
 			document.body.insertAdjacentHTML("afterbegin", html);
 			zk.center($e("zk_upload"));
 			img = $e("zk_upload!img");
@@ -1673,14 +1672,27 @@ zkau.updateUploadInfo = function (p, cb) {
 		}
 	}
 };
+zkau._cancelUpload = function () {
+	zkau.endUpload();
+
+	if (zkau._upldWndId) {
+		zkau.sendRemove(zkau._upldWndId);
+		zkau._upldWndId = null;
+	}
+};
+/** Called to end the upload. It must be called if beginUpload is called.
+ */
 zkau.endUpload = function () {
+	zk.focus(window);
+		//focus might be in iframe of fileupload dlg, so get it back
+		//otherwise, IE might lose focus forever (see also Bug 1526542)
+
 	var div = $e("zk_upload");
 	if (div) Element.remove(div);
 	if (zkau._tmupload) {
 		clearInterval(zkau._tmupload);
 		zkau._tmupload = null;
 	}
-	zkau._cancelfn = null;
 };
 
 //Commands//
