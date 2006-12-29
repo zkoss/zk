@@ -641,6 +641,7 @@ implements java.io.Serializable, RenderOnDemand {
 				} else { //_pgi != null
 					if (_pgi != _paging) {
 						if (_paging != null) _paging.detach();
+						_pgi.setTotalSize(getItemCount());
 						addPagingListener(_pgi);
 					}
 				}

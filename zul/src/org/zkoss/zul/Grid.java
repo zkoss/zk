@@ -168,6 +168,7 @@ public class Grid extends XulElement {
 				} else { //_pgi != null
 					if (_pgi != _paging) {
 						if (_paging != null) _paging.detach();
+						_pgi.setTotalSize(_rows != null ? _rows.getChildren().size(): 0);
 						addPagingListener(_pgi);
 					}
 				}
@@ -183,8 +184,7 @@ public class Grid extends XulElement {
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
 		paging.setDetailed(true);
-		final int sz = _rows != null ? _rows.getChildren().size(): 0;
-		paging.setTotalSize(sz);
+		paging.setTotalSize(_rows != null ? _rows.getChildren().size(): 0);
 		paging.setParent(this);
 		addPagingListener(_pgi);
 	}
