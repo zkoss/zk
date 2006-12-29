@@ -57,7 +57,7 @@ div.embedded { <%-- must consistent with lang.xml --%>
 }
 div.modal, div.modal-none, div.overlapped, div.overlapped-none { <%-- must consistent with lang.xml --%>
 	position: absolute;
-	background: #E8E8D0;
+	background: #F0F0D8;
 	padding: 1px; margin: 1px;
 }
 div.modal, div.overlapped {
@@ -102,7 +102,7 @@ div.wnd-i { <%-- the inner div of a window; independent of window's sclass --%>
 div.modal_mask { <%-- don't change --%>
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;
-	opacity: .4; filter: alpha(opacity=40);
+	opacity: .4;
 	background:transparent !important;
 	background: #181818;
 	background-image: url(${c:encodeURL('~./zul/img/modal-mask.png')}) !important; <%-- Moz... --%>

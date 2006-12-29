@@ -57,7 +57,7 @@ div.embedded { <%-- must consistent with lang.xml --%>
 }
 div.modal, div.modal-none, div.overlapped, div.overlapped-none { <%-- must consistent with lang.xml --%>
 	position: absolute;
-	background: #E8E8D0;
+	background: #F0F0D8;
 	padding: 1px; margin: 1px;
 }
 div.modal, div.overlapped {
