@@ -26,25 +26,28 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <title>Upload</title>
 <script type="text/javascript">
 <!--
-var wndid = '${param.uuid}';
-function cancelUpload() {
-	parent.zkau.sendRemove(wndid);
-	parent.zkau.endUpload();
-}
 function submitUpload() {
+	var wndid = '${param.uuid}';
 	var img = parent.$e(wndid + '!img');
 	if (img) img.parentNode.removeChild(img);
 		<%-- Bug 1578549: we have to remove the closable button first, since
-			it will not call endUpload
+			it might mis-behave if user clicks it after submitting
 		--%>
 
-	parent.zkau.beginUpload(cancelUpload);
+	parent.zkau.beginUpload(wndid);
+}
+function cancelUpload() {
+	parent.setTimeout("zk.focus(window); zkau.sendRemove('${param.uuid}');", 100);
+}
+function prepare() {
+	var inp = document.getElementById("file");
+	if (inp) inp.focus();
 }
 // -->
 </script>
 ${z:outLangStyleSheets()}
 </head>
-<body>
+<body onload="prepare()">
 	<form action="${param.action}?dtid=${param.dtid}&uuid=${param.uuid}" enctype="multipart/form-data" method="POST" onsubmit="submitUpload()">
 	<%-- We have to encode dtid and uuid in action rather than hidden fields,
 		because 1) dtid must be ready before parsing multi-part requests.
@@ -56,7 +59,7 @@ ${z:outLangStyleSheets()}
 
 	<table border="0">
 	<tr>
-		<td><input type="file" name="file"/></td>
+		<td><input type="file" id="file" name="file"/></td>
 	</tr>
 	<tr align="left">
 		<td style="border: outset 1px">
@@ -67,3 +70,4 @@ ${z:outLangStyleSheets()}
 	</table>
 	</form>
 </body>
+</html>

@@ -51,7 +51,7 @@ ${z:outLangStyleSheets()}
 	function doUpdate() {
 		parent.setTimeout("zkau.sendUpdateResult('${arg.uuid}', '${arg.contentId}')", 0);
 	}
-	<c:if test="${!empty arg.contentId}">doUpdate();</c:if>
+	<c:if test="${!empty arg.contentId}">doUpdate(); closeUpload();</c:if>
 	<c:if test="${empty arg.contentId and empty arg.alert}">closeUpload();</c:if>
 // -->
 </script>
