@@ -5,7 +5,7 @@ ZK 2.2.1
 
 * Bugs:
   1615959, 1616955, 1617664, 1617116, 1616783, 1619349, 1621425, 1619959,
-  1624086.
+  1624086, 1624169.
 
 * Upgrade Note:
   + The signature of the cleanup method of ExecutionCleanup is changed.
