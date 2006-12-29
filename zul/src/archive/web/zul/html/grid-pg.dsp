@@ -27,6 +27,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</tbody>
 	${z:redraw(self.rows, null)}
 	</table>
-	</div>
+	<div id="${self.uuid}!pgi" class="grid-pgi">
 	${z:redraw(self.paging, null)}
+	</div>
+	</div>
 </div>

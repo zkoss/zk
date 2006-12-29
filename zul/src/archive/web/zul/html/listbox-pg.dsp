@@ -36,6 +36,8 @@ ${z:redraw(item, null)}
 ${z:redraw(self.listfoot, null)}
 	</tbody>
 	</table>
-	</div>
+	<div id="${self.uuid}!pgi" class="listbox-pgi">
 	${z:redraw(self.paging, null)}
+	</div>
+	</div>
 </div>
