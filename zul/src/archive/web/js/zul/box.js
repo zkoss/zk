@@ -1,8 +1,8 @@
-/* splt.js
+/* box.js
 
 {{IS_NOTE
 	Purpose:
-		Splitter
+		box and splitter
 	Description:
 		
 	History:
@@ -14,6 +14,30 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+////
+//Box
+zkBox = {};
+zkBox.setAttr = function (cmp, nm, val) {
+	if ("valign" == nm) {
+		var n = $e(cmp.id + "!cave");
+		if (n) {
+			n.vAlign = val;
+			return true;
+		}
+	}
+	return false;
+};
+zkBox.rmAttr = function (cmp, nm) {
+	if ("valign" == nm) {
+		var n = $e(cmp.id + "!cave");
+		if (n) {
+			n.vAlign = "";
+			return true;
+		}
+	}
+	return false;
+};
+
 ////
 zkSplt = {};
 

@@ -43,6 +43,7 @@
     <xs:simpleType name="valignAttrType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="top" />
+            <xs:enumeration value="baseline" />
             <xs:enumeration value="middle" />
             <xs:enumeration value="bottom" />
         </xs:restriction>
@@ -186,7 +187,7 @@
     <xs:attributeGroup name="headerElementAttrGroup">
         <xs:attributeGroup ref="labelImageElementAttrGroup" />
         <xs:attribute name="align" use="optional" />
-        <xs:attribute name="valign" use="optional" />
+        <xs:attribute name="valign" type="valignAttrType" use="optional" />
     </xs:attributeGroup>
     <!--
         ELEMENTGROUP
@@ -318,6 +319,7 @@
         <xs:attribute name="spacing" type="xs:string" use="optional" />
         <xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
         <xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+        <xs:attribute name="valign" type="valignAttrType" use="optional" />
     </xs:complexType>
     <!-- button -->
     <xs:element name="button" type="buttonType" />
@@ -578,6 +580,7 @@
         <xs:attribute name="spacing" type="xs:string" use="optional" />
         <xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
         <xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+        <xs:attribute name="valign" type="valignAttrType" use="optional" />
     </xs:complexType>
     <!-- html -->
     <xs:element name="html" type="htmlType" />
@@ -1210,6 +1213,7 @@
         <xs:attribute name="spacing" type="xs:string" use="optional" />
         <xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
         <xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+        <xs:attribute name="valign" type="valignAttrType" use="optional" />
     </xs:complexType>
     <!-- window -->
     <xs:element name="window" type="windowType" />

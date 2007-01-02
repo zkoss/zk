@@ -37,6 +37,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Box extends XulElement {
 	private String _spacing;
+	private String _valign = "top";
 
 	/** Default: vertical ({@link Vbox}).
 	 */
@@ -79,6 +80,23 @@ public class Box extends XulElement {
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
 			invalidate();
+		}
+	}
+
+	/** Returns the vertical alignment of the adjacent cells of a box.
+	 * It is meaningful only if {@link #getOrient} is horizontal (i.e.,
+	 * {@link Hbox}).
+	 * <p>Default: top.
+	 */
+	public String getValign() {
+		return _valign;
+	}
+	/** Sets the vertical alignment of the adjacent cells of a box.
+	 */
+	public void setValign(String valign) {
+		if (!Objects.equals(_valign, valign)) {
+			_valign = valign;
+			smartUpdate("valign", _valign);
 		}
 	}
 
