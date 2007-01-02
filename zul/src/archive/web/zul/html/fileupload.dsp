@@ -39,7 +39,7 @@ function submitUpload() {
 function cancelUpload() {
 	parent.setTimeout("zk.focus(window); zkau.sendRemove('${param.uuid}');", 100);
 }
-function prepare() {
+function init() {
 	var inp = document.getElementById("file");
 	if (inp) inp.focus();
 }
@@ -47,7 +47,7 @@ function prepare() {
 </script>
 ${z:outLangStyleSheets()}
 </head>
-<body onload="prepare()">
+<body onload="init()">
 	<form action="${param.action}?dtid=${param.dtid}&uuid=${param.uuid}" enctype="multipart/form-data" method="POST" onsubmit="submitUpload()">
 	<%-- We have to encode dtid and uuid in action rather than hidden fields,
 		because 1) dtid must be ready before parsing multi-part requests.
