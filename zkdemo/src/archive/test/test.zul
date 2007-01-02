@@ -447,5 +447,16 @@ Line 2
 	</textbox>
 	<checkbox id="cbs" style="font-size: 20px" label="BIG FONT"/>
 	<button label="change style" onClick="cbs.setStyle(&quot;font-size:28px;background-color:blue&quot;)"/>
+
+<window title="toolbar demo" border="normal" width="300px">
+	<caption>
+		<toolbarbutton label="button3"/>
+		<toolbarbutton label="button4"/>
+	</caption>
+	<toolbar>
+		<toolbarbutton label="button1"/>
+		<toolbarbutton label="button2"/>
+	</toolbar>
+</window>
   </window>
 </zk>
