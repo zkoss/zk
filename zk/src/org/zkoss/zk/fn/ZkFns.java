@@ -303,7 +303,8 @@ public class ZkFns {
 	}
 	private final static
 	void appendAssignJavaScript(StringBuffer sb, String nm, char val) {
-		sb.append(nm).append("='").append(val).append("';\n");
+		final char quot = val == '"' ? '\'': '"';
+		sb.append(nm).append('=').append(quot).append(val).append(quot).append(";\n");
 	}
 	/** Output date/calendar relevant labels.
 	 */
