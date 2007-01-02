@@ -152,6 +152,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
+		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate,proxy-revalidate,max-age=0");
+		response.setHeader("Pragma", "no-cache,no-store");
+
 		final Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
 		if (desktop == null) {
 			final StringWriter out = getXMLWriter();
