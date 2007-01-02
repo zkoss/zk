@@ -813,7 +813,7 @@ implements java.io.Serializable, RenderOnDemand {
 					final int k = ((Listitem)refChild).getIndex();
 					if (fixFrom < 0 || k < fixFrom) fixFrom = k;
 				}
-				if (fixFrom < 0) childItem.setIndex(_items.size() - 1);
+				if (fixFrom < 0) childItem.setIndexDirectly(_items.size() - 1);
 				else fixItemIndices(fixFrom);
 
 				//Maintain selected
@@ -895,7 +895,7 @@ implements java.io.Serializable, RenderOnDemand {
 			//maintain items
 			final Listitem childItem = (Listitem)child;
 			final int childIndex = childItem.getIndex();
-			childItem.setIndex(-1); //mark
+			childItem.setIndexDirectly(-1); //mark
 			fixItemIndices(childIndex);
 
 			//Maintain selected
@@ -938,7 +938,7 @@ implements java.io.Serializable, RenderOnDemand {
 	/** Fix Childitem._index since j-th item. */
 	private void fixItemIndices(int j) {
 		for (Iterator it = _items.listIterator(j); it.hasNext(); ++j)
-			((Listitem)it.next()).setIndex(j);
+			((Listitem)it.next()).setIndexDirectly(j);
 	}
 
 	//-- ListModel dependent codes --//
@@ -1389,39 +1389,26 @@ implements java.io.Serializable, RenderOnDemand {
 	//Cloneable//
 	public Object clone() {
 		final Listbox clone = (Listbox)super.clone();
-		int cnt = clone._selItems.size();
-
 		clone.init();
-
-		if (clone._listhead != null) ++cnt;
-		if (clone._listfoot != null) ++cnt;
-		if (cnt > 0) clone.afterUnmarshal(cnt);
-
+		clone.afterUnmarshal();
 		return clone;
 	}
-	/** @param cnt # of children that need special handling (used for optimization).
-	 * -1 means process all of them
-	 */
-	private void afterUnmarshal(int cnt) {
+	private void afterUnmarshal() {
 		int index = 0;
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Listitem) {
 				final Listitem li = (Listitem)child;
-				li.setIndex(index ++); //since Listitem.clone() resets index
+				li.setIndexDirectly(index ++); //since Listitem.clone() resets index
 				if (li.isSelected()) {
 					_selItems.add(li);
-					if (--cnt == 0) break;
 				}
 			} else if (child instanceof Listhead) {
 				_listhead = (Listhead)child;
-				if (--cnt == 0) break;
 			} else if (child instanceof Listfoot) {
 				_listfoot = (Listfoot)child;
-				if (--cnt == 0) break;
 			} else if (child instanceof Paging) {
 				_pgi = _paging = (Paging)child;
-				if (--cnt == 0) break;
 			}
 		}
 	}
@@ -1433,7 +1420,7 @@ implements java.io.Serializable, RenderOnDemand {
 
 		init();
 
-		afterUnmarshal(-1);
+		afterUnmarshal();
 		//TODO: how to marshal _pgi if _pgi != _paging
 		//TODO: re-register event listener for onPaging
 
