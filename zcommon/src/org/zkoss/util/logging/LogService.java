@@ -173,23 +173,6 @@ public class LogService {
 		if (_logwdog != null) _logwdog.cease();
 	}
 
-	//-- Extra Utilities --//
-	/** Gets the priority level by giving a string.
-	 * @return the priority; null if no match at all
-	 */
-	public static final Level getLevel(String level) {
-		if (level != null) {
-			level = level.toUpperCase();
-			if (level.equals("DEBUG")) return Log.DEBUG;
-			if (level.equals("ERROR")) return Log.ERROR;
-			if (level.equals("FINER")) return Log.FINER; 
-			if (level.equals("INFO")) return Log.INFO;
-			if (level.equals("WARNING")) return Log.WARNING;
-			if (level.equals("OFF")) return Log.OFF;
-		}
-		return null;
-	}
-
 	/**
 	 * Configures based the properties.
 	 *
@@ -206,7 +189,7 @@ public class LogService {
 			String val = (String)me.getValue();
 			if (val != null) val = val.trim();
 
-			final Level level = getLevel(val);
+			final Level level = Log.getLevel(val);
 			if (level != null || val.equalsIgnoreCase("NULL")
 			|| val.equalsIgnoreCase("INHERIT")) {
 				Logger.getLogger(key).setLevel(level);

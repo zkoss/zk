@@ -172,6 +172,22 @@ public class Log {
 		getLogger().setLevel(level);
 	}
 
+	/** Return the logging level of the specified string.
+	 * @return the level; null if no match at all
+	 */
+	public static final Level getLevel(String level) {
+		if (level != null) {
+			level = level.toUpperCase();
+			if (level.equals("DEBUG")) return Log.DEBUG;
+			if (level.equals("ERROR")) return Log.ERROR;
+			if (level.equals("FINER")) return Log.FINER; 
+			if (level.equals("INFO")) return Log.INFO;
+			if (level.equals("WARNING")) return Log.WARNING;
+			if (level.equals("OFF")) return Log.OFF;
+		}
+		return null;
+	}
+
 	/**
 	 * Tests whether the {@link #WARNING} level is loggable.
 	 */
