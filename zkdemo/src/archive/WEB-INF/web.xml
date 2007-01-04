@@ -42,7 +42,14 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 			<param-name>update-uri</param-name>
 			<param-value>/zkau</param-value>
 		</init-param>
-		<load-on-startup>1</load-on-startup>
+		<!-- Optional. Specifies the default log level: OFF, ERROR, WARNING,
+			INFO, DEBUG and FINER. If not specified, the system default is used.
+		<init-param>
+			<param-name>log-level</param-name>
+			<param-value>OFF</param-value>
+		</init-param>
+		-->
+		<load-on-startup>1</load-on-startup><!-- Must -->
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>zkLoader</servlet-name>
