@@ -20,6 +20,7 @@ package org.zkoss.zk.ui.http;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -67,6 +68,13 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		//super.init(config);
 			//Note callback super to avoid saving config
+
+		final String loglevel = config.getInitParameter("log-level");
+		if (loglevel != null && loglevel.length() > 0) {
+			final Level level = Log.getLevel(loglevel);
+			if (level != null) Log.lookup("org.zkoss").setLevel(level);
+			else log.error("Unknown log-level: "+loglevel);
+		}
 
 		_ctx = config.getServletContext();
 		if (WebManager.getWebManagerIfAny(_ctx) != null)
