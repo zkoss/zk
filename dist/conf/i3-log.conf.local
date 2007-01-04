@@ -6,7 +6,7 @@
 # 2. The syntax is simple:
 #	package_or_class_name=level
 #
-# Level could be ERROR, WARNING, INFO, DEBUG and NULL.
+# Level could be ERROR, WARNING, INFO, DEBUG, FINER, OFF and INHERIT
 #
 # Created by Tom M. Yeh, May 18, 2001
 # Modified by Tom M. Yeh, July 25, 2001
