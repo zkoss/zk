@@ -175,7 +175,7 @@ public class LogService {
 
 	//-- Extra Utilities --//
 	/** Gets the priority level by giving a string.
-	 * @return the priority; null if no match
+	 * @return the priority; null if no match at all
 	 */
 	public static final Level getLevel(String level) {
 		if (level != null) {
@@ -185,6 +185,7 @@ public class LogService {
 			if (level.equals("FINER")) return Log.FINER; 
 			if (level.equals("INFO")) return Log.INFO;
 			if (level.equals("WARNING")) return Log.WARNING;
+			if (level.equals("OFF")) return Log.OFF;
 		}
 		return null;
 	}
@@ -193,7 +194,7 @@ public class LogService {
 	 * Configures based the properties.
 	 *
 	 * <p>The key is a logger name and the value is the level.
-	 * A special level, OFF or NULL, to denote resetting the level
+	 * A special level, INHERIT or NULL, to denote resetting the level
 	 * to be the same as the logger's parent.
 	 *
 	 * @param props the properties
@@ -205,17 +206,12 @@ public class LogService {
 			String val = (String)me.getValue();
 			if (val != null) val = val.trim();
 
-			if (key.equals("hierarchy")) { //backward compatible
-				log.warning("hierachy is always assumed");
-				continue;
-			}
-
 			final Level level = getLevel(val);
 			if (level != null || val.equalsIgnoreCase("NULL")
-			|| val.equalsIgnoreCase("OFF")) {
+			|| val.equalsIgnoreCase("INHERIT")) {
 				Logger.getLogger(key).setLevel(level);
 			} else {
-				log.warning("Illegal log level, val, for "+key);
+				log.warning("Illegal log level, "+val+", for "+key);
 			}
 		}
 	}

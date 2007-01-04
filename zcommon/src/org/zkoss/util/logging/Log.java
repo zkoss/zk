@@ -88,7 +88,9 @@ public class Log {
 	/** The DEBUG level. */
 	public static final Level DEBUG   = Level.FINE;
 	/** The FINER level. */
-	public static final Level FINER  = Level.FINER;
+	public static final Level FINER   = Level.FINER;
+	/** The OFF level used to turn of the logging. */
+	public static final Level OFF     = Level.OFF;
 
 	/** The category that this log belongs.
 	 * Note: it is temporay and set to null when {@link #logger} is called.
