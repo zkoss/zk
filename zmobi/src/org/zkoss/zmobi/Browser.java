@@ -1,4 +1,4 @@
-/* Mainlet.java
+/* Browser.java
 
 {{IS_NOTE
 	Purpose:
@@ -20,14 +20,14 @@ import javax.microedition.midlet.MIDlet;
 import javax.microedition.lcdui.Display;
 
 /**
- * The main MIDlet of ZK Mobile Client.
+ * The ZK Mobile Client.
  *
  * @author tomyeh
  */
-public class Mainlet extends MIDlet {
+public class Browser extends MIDlet {
 	private Display _disp;
 
-	public Mainlet() {
+	public Browser() {
 	}
 
 	//super//

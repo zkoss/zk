@@ -1,4 +1,4 @@
-MIDlet-1: ZK Mobile, /icons/zk.png, org.zkoss.zmobi.Mainlet
+MIDlet-1: ZK Mobile, /icons/zk.png, org.zkoss.zmobi.Browser
 MIDlet-Name: zmobi
 MIDlet-Description: ZK Mobile Client
 MIDlet-Icon: /icons/zk.png
