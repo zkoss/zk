@@ -1,4 +1,9 @@
 	--------
+ZK 2.2.2
+* Features:
+  1627515: A way to turn off logs completely.
+
+	--------
 ZK 2.2.1
 * Features:
   1619271, 1619272, 1619530, 1616213, 1615651, 1626042.
