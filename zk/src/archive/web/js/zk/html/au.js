@@ -294,7 +294,7 @@ zkau._sendNow = function () {
 			req.open("POST", zk_action, true);
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			req.send(content);
-			if (!implicit) zk.progress(900); //wait a moment to avoid annoying
+			if (!implicit) zk.progress(zk_promptDelay); //wait a moment to avoid annoying
 		} catch (e) {
 			try {
 				if(typeof req.abort == "function") req.abort();
@@ -956,7 +956,7 @@ zkau._onDocMouseover = function (evt) {
 					 //Bug 1572286: position tooltip with some offset to allow
 				};
 				if (open) zkau._openTip(cmp.id);
-				else setTimeout("zkau._openTip('"+cmp.id+"')", 800);
+				else setTimeout("zkau._openTip('"+cmp.id+"')", zk_tooltipDelay);
 			}
 			return; //done
 		}

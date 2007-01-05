@@ -87,6 +87,7 @@ public class Configuration {
 	private Class _uiengcls, _dcpcls, _uiftycls, _tzpcls, _lpcls;
 	private Integer _dtTimeout, _dtMax, _sessTimeout, _evtThdMax;
 	private Integer _maxUploadSize = new Integer(5120);
+	private int _promptDelay = 900, _tooltipDelay = 800;
 	private String _charset = "UTF-8";
 
 	/** Contructor.
@@ -809,6 +810,35 @@ public class Configuration {
 	 */
 	public Integer getDesktopMaxInactiveInterval() {
 		return _dtTimeout;
+	}
+
+	/** Specifies the time, in milliseconds, before the client shows
+	 * a dialog to prompt users that the request is in processming.
+	 *
+	 * <p>Default: 900
+	 */
+	public void setProcessingPromptDelay(int minisecs) {
+		_promptDelay = minisecs;
+	}
+	/** Returns the time, in milliseconds, before the client shows
+	 * a dialog to prompt users that the request is in processming.
+	 */
+	public int getProcessingPromptDelay() {
+		return _promptDelay;
+	}
+	/** Specifies the time, in milliseconds, before the client shows
+	 * the tooltip when a user moves the mouse over particual UI components.
+	 *
+	 * <p>Default: 800
+	 */
+	public void setTooltipDelay(int minisecs) {
+		_tooltipDelay = minisecs;
+	}
+	/** Returns the time, in milliseconds, before the client shows
+	 * the tooltip when a user moves the mouse over particual UI components.
+	 */
+	public int getTooltipDelay() {
+		return _tooltipDelay;
 	}
 
 	/**  Specifies the time, in seconds, between client requests

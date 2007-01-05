@@ -89,6 +89,8 @@ public class ConfigParser {
 			//	theme-uri
 			//	desktop-timeout
 			//	file-check-period
+			//  processing-prompt-delay
+			//	tooltip-delay
 				parseThemeUri(config, el);
 
 				Integer v = parseInteger(el, "desktop-timeout", false);
@@ -97,6 +99,12 @@ public class ConfigParser {
 				v = parseInteger(el, "file-check-period", true);
 				if (v != null) System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
 					//System-wide property
+
+				v = parseInteger(el, "processing-prompt-delay", true);
+				if (v != null) config.setProcessingPromptDelay(v.intValue());
+				v = parseInteger(el, "tooltip-delay", true);
+				if (v != null) config.setTooltipDelay(v.intValue());
+
 			} else if ("session-config".equals(elnm)) {
 			//session-config
 			//	session-timeout

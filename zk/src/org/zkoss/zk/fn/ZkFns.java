@@ -50,6 +50,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.http.WebManager;
@@ -140,14 +141,18 @@ public class ZkFns {
 			throw new IllegalArgumentException("null");
 
 		final Desktop desktop = Executions.getCurrent().getDesktop();
+		final Configuration config = desktop.getWebApp().getConfiguration();
 		final String clientType = desktop.getClientType();
 
 		final StringBuffer sb = new StringBuffer(512);
 		sb.append("<script type=\"text/javascript\">\n")
 			.append("zk_action=\"").append(action)
-			.append("\";\nzk_desktopId=\"")
-			.append(desktop.getId())
-			.append("\";\n</script>\n");
+			.append("\";\nzk_desktopId=\"").append(desktop.getId())
+			.append("\";\nzk_promptDelay=")
+				.append(config.getProcessingPromptDelay())
+			.append(";\nzk_tooltipDelay=")
+				.append(config.getTooltipDelay())
+			.append(";\n</script>\n");
 
 		final Set jses = new LinkedHashSet(37);
 		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
