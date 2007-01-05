@@ -558,18 +558,18 @@ zk.getUpdateURI = function (uri, ignoreSessId) {
 //-- progress --//
 /** Turn on the progressing dialog after the specified timeout. */
 zk.progress = function (timeout) {
-	zk._progressing = true;
+	zk.progressing = true;
 	if (timeout > 0) setTimeout(zk._progress, timeout);
 	else zk._progress();
 };
 zk.progressDone = function() {
-	zk._progressing = false;
+	zk.progressing = zk.progressPrompted = false;
 	var n = $e("zk_prog");
 	if (n) n.parentNode.removeChild(n);
 };
 /** Generates the progressing dialog. */
 zk._progress = function () {
-	if (zk._progressing) {
+	if (zk.progressing) {
 		var n = $e("zk_prog");
 		if (!n) {
 			var msg;
@@ -582,6 +582,7 @@ zk._progress = function () {
 				if (left < 0) left = 0;
 				n.style.left = left + "px";
 			}
+			zk.progressPrompted = true;
 		}
 	}
 };

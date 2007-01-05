@@ -943,8 +943,24 @@ zkau._onDocMouseover = function (evt) {
 	if (!evt) evt = window.event;
 
 	var cmp = Event.element(evt);
+	/** Request 1628075: give up.
+	    Why? the wait cursor won't disappear until users move the cursor
+	if (cmp && cmp.style && cmp.getAttribute && $tag(cmp) != "HTML") {
+		var bk = cmp.getAttribute("z_bk4wait");
+		if (zk.progressPrompted) {
+			if (!bk) {
+				var cr = cmp.style.cursor;
+				cmp.setAttribute("z_bk4wait", cr ? cr: "nil");
+				cmp.style.cursor = "wait";
+			}
+		} else if (bk) {
+			cmp.removeAttribute("z_bk4wait");
+			cmp.style.cursor = bk == "nil" ? "": bk;
+		}
+	}*/
+
 	cmp = zkau._parentByZKAttr(cmp, "tip");
-	if (cmp) {
+	if (cmp && !zk.progressing) { //skip tip if in processing
 		var tip = getZKAttr(cmp, "tip");
 		tip = zkau.getByZid(cmp, tip);
 		if (tip) {
