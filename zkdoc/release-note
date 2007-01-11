@@ -6,6 +6,9 @@ ZK 2.2.2
   1628452: Make the delay to prompt the Processing dialog configurable.
   1632869: Support messages in Bulgarian
 
+* Bugs:
+  1630359: RequestResolver's application scope was implemented wrong
+
 	--------
 ZK 2.2.1
 * Features:
