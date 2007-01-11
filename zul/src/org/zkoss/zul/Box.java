@@ -92,6 +92,8 @@ public class Box extends XulElement {
 		return _valign;
 	}
 	/** Sets the vertical alignment of the adjacent cells of a box.
+	 * @param valign the vertical alignment: top, middle and bottom.
+	 * If empty or null, the system default is used (usually middle).
 	 */
 	public void setValign(String valign) {
 		if (!Objects.equals(_valign, valign)) {
