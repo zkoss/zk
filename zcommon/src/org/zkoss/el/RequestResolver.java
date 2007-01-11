@@ -395,7 +395,7 @@ public class RequestResolver implements VariableResolver {
 			case PageContext.SESSION_SCOPE:
 				return getSessionScope().get(name);
 			case PageContext.APPLICATION_SCOPE:
-				return getSessionScope().get(name);
+				return getApplicationScope().get(name);
 			default:
 				return null;
 			}
@@ -424,7 +424,7 @@ public class RequestResolver implements VariableResolver {
 			case PageContext.SESSION_SCOPE:
 				getSessionScope().remove(name); return;
 			case PageContext.APPLICATION_SCOPE:
-				getSessionScope().remove(name); return;
+				getApplicationScope().remove(name); return;
 			}
 	    }
 		public void setAttribute(String name, Object value) {
@@ -441,7 +441,7 @@ public class RequestResolver implements VariableResolver {
 			case PageContext.SESSION_SCOPE:
 				getSessionScope().put(name, value); return;
 			case PageContext.APPLICATION_SCOPE:
-				getSessionScope().put(name, value); return;
+				getApplicationScope().put(name, value); return;
 			}
 	    }
 	}
