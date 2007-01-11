@@ -4,6 +4,7 @@ ZK 2.2.2
   1627515: A way to turn off logs completely.
   1628339: Make the tooltip open/close delay intravals configurable.
   1628452: Make the delay to prompt the Processing dialog configurable.
+  1632869: Support messages in Bulgarian
 
 	--------
 ZK 2.2.1
