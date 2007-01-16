@@ -20,5 +20,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-<c:include page="${z:toAbsoluteURI(self.src)}" unless="${empty self.src}"/>
+<c:include page="${z:toAbsoluteURI(self.src, false)}" unless="${empty self.src}"/>
 </div>
