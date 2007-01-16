@@ -273,10 +273,21 @@ public class ZkFns {
 	/** Converts the specified URI to absolute if necessary.
 	 * Refer to {@link Execution#toAbsoluteURI}.
 	 *
-	 * <p>Note: it doesn't convert if this page is included by another page.
+	 * @param skipInclude whether not to convert to an absolute URI if
+	 * the current page is included by another page.
+	 * When use the include directive, skipInclude shall be true.
+	 */
+	public static String toAbsoluteURI(String uri, boolean skipInclude) {
+		return Executions.getCurrent().toAbsoluteURI(uri, skipInclude);
+	}
+	/** Converts the specified URI to absolute if not included by another page.
+	 * It is a shortcut of {@link #toAbsoluteURI(String, boolean)} with skipInclude
+	 * is true.
 	 */
 	public static String toAbsoluteURI(String uri) {
-		return Executions.getCurrent().toAbsoluteURI(uri, true);
+		return toAbsoluteURI(uri, true);
+	//we preserve this method for backward compatibility (since some developers
+	//might have old version core.dsp.tld
 	}
 
 	/** Returns HTML header elements of the specified page.
