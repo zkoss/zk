@@ -184,6 +184,7 @@ zkCmbox.onkey = function (evt) {
 
 	//Request 1537962: better responsive
 	if (opened && evt.keyCode == 13) { //ENTER
+		zkCmbox._autoselback(uuid); //Better usability(Bug 1633335): auto selback
 		zkTxbox.updateChange(inp, false); //fire onChange
 		return true;
 	}
@@ -337,6 +338,21 @@ zkCmbox._selback = function (item) {
 		zk.selectById(inp.id);
 	}
 };
+/** Selects back the current hilited item, if any. */
+zkCmbox._autoselback = function (uuid) {
+	var pp2 = $e(uuid + "!cave");
+	if (!pp2) return;
+
+	var rows = pp2.rows;
+	if (!rows) return;
+
+	for (var j = 0; j < rows.length; ++j) {
+		var item = rows[j];
+		if (item.getAttribute("zk_hilite") == "true")
+			zkCmbox._selback(item);
+	}
+};
+
 /** Returns the input by specifying an item. */
 zkCmbox.getInputByItem = function (item) {
 	//we cannot use $parentByType because parentNode is changed in gecko
