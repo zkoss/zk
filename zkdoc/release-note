@@ -10,6 +10,7 @@ ZK 2.2.2 Freshly
   1630359: RequestResolver's application scope was implemented wrong
   1636562: Include a page that include another failed if relative path is used
   1635685: popup menu conflict with confirmClose
+  1633335: usability bug on "autocomplete" of combobox
 
 	--------
 ZK 2.2.1
