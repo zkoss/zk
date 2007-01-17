@@ -9,6 +9,7 @@ ZK 2.2.2 Freshly
 * Bugs:
   1630359: RequestResolver's application scope was implemented wrong
   1636562: Include a page that include another failed if relative path is used
+  1635685: popup menu conflict with confirmClose
 
 	--------
 ZK 2.2.1
