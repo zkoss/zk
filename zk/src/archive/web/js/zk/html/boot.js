@@ -23,7 +23,7 @@ zk = {};
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "3D"; //increase this if we want the browser to reload JavaScript
+zk.build = "3E"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */
@@ -360,6 +360,9 @@ zk._loadAndInit = function (inf) {
 					n.selected = n.defaultSelected;
 				break;
 			}
+		} else if (zk.ie && $tag(n) == 'A' && n.href.indexOf("javascript:") >= 0) {
+			//Fix bug 1635685 and 1612312
+			zk.listen(n, "click", zk._fixcc);
 		}
 
 		if (zk.loadByType(n) || getZKAttr(n, "drag")
@@ -375,6 +378,19 @@ zk._loadAndInit = function (inf) {
 	zk._evalInit();
 	zk._ready = true;
 };
+/** Fix bug 1635685 and 1612312 (IE/IE7 only):
+ * IE invokes onbeforeunload if <a href="javascript;"> is clicked (sometimes)
+ * It actually ignores zkau.confirmClose temporary.
+ */
+if (zk.ie) {
+	zk._fixcc = function () {
+		var msg = zkau.confirmClose;
+		if (msg) {
+			zkau.confirmClose = null; 
+			setTimeout(function () {zkau.confirmClose = msg;}, 0); //restore
+		}
+	};
+}
 
 /** Initial components and init functions. */
 zk._evalInit = function () {

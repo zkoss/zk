@@ -789,23 +789,11 @@ zkau._onUnload = function () {
 };
 /** Handles window.onbeforeunload. */
 zkau._onBfUnload = function () {
-	if (zkau._cfmClose)
-		return zkau._cfmClose;
+	if (zkau.confirmClose)
+		return zkau.confirmClose;
 	if (zkau._oldBfUnload)
 		return zkau._oldBfUnload.apply(window, arguments);
 	//Return nothing
-};
-/** Fix bug 1612312: the false invocation of onbeforeunload (IE/IE7 only)
- * It actually ignores zkau._cfmClose temporary.
- */
-zkau.fixFalseConfirmClose = function () {
-	if (zk.ie) {
-		var msg = zkau._cfmClose;
-		if (msg) {
-			zkau._cfmClose = null; 
-			setTimeout(function () {zkau._cfmClose = msg;}, 0); //restore
-		}
-	}
 };
 
 /** Handle document.onmousedown. */
@@ -1772,7 +1760,7 @@ zkau.cmd0 = { //no uuid at all
 		window.moveTo(x, y);
 	},
 	cfmClose: function (msg) {
-		zkau._cfmClose = msg;
+		zkau.confirmClose = msg;
 	}
 };
 zkau.cmd1 = {
