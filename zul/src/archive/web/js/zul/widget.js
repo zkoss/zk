@@ -694,10 +694,8 @@ zkPMeter.setAttr = function (cmp, nm, val) {
 zkPg = {};
 zkPg.go = function (anc, pgno) {
 	var cmp = $parentByType(anc, "Pg");
-	if (cmp) {
-		zkau.fixFalseConfirmClose(); //Fix bug 1612312
+	if (cmp)
 		zkau.send({uuid: cmp.id, cmd: "onPaging", data: [pgno]});
-	}
 };
 
 //popup//
