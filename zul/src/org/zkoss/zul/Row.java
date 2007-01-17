@@ -229,7 +229,9 @@ public class Row extends XulElement {
 				if (realIndex < colchds.size()) {
 					final Column col = (Column)colchds.get(realIndex);
 					colattrs = col.getColAttrs();
-					wd = col.getWidth();
+					if (span == 1) wd = col.getWidth();
+						//Bug 1633982: don't generate width if span > 1
+						//Side effect: the width might not be the same as specified
 					hgh = col.getHeight();
 				}
 			}
