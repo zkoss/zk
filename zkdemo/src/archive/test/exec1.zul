@@ -27,5 +27,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<label id="l"/>
 	<zscript>
 	l.setValue("Exec:"+Executions.getCurrent().getArg().get("first"));
+
+	void init(Label c) {
+		c.value = "onCreate is called";
+	}
 	</zscript>
+	<label onCreate="init(self)"/>
 </vbox>
