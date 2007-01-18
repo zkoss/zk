@@ -175,16 +175,16 @@ zk.center = function (el) {
 	var elwd = zk.offsetWidth(el);
 	var elhgh = zk.offsetHeight(el);
 
-	var height = zk.innerHeight();
-	var width = zk.innerWidth();
-	var top = zk.innerY();
-	var left = zk.innerX();
+	var height = zk.innerHeight(), width = zk.innerWidth(),
+		top = zk.innerY(), left = zk.innerX(),
+		x = left + (width - elwd) / 2,
+		y = top + (height - elhgh) / 2;
+	if (x < left) x = left;
+	if (y < top) y = top;
 
-	var ofs = zk.toParentOffset(el,
-		left + (width - elwd) / 2, top + (height - elhgh) / 2);
-	if (ofs[0] < 0) ofs[0] = 0;
-	if (ofs[1] < 0) ofs[1] = 0;
-	el.style.left = ofs[0] + "px"; el.style.top =  ofs[1] + "px";
+	var ofs = zk.toParentOffset(el, x, y);
+	el.style.left = ofs[0] + "px";
+	el.style.top =  ofs[1] + "px";
 };
 /** Returns the width and height.
  * In additions, it fixes brwoser's bugs, so call it as soon as possible.
