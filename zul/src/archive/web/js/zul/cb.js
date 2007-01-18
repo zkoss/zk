@@ -30,7 +30,6 @@ zkCmbox.init = function (cmp) {
 
 	var btn = $e(cmp.id + "!btn");
 	if (btn) zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
-	btn.align = "absmiddle";
 };
 
 zkCmit = {};
