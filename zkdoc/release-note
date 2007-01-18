@@ -4,7 +4,7 @@ ZK 2.2.2 Freshly
   1627515: A way to turn off logs completely.
   1628339: Make the tooltip open/close delay intravals configurable.
   1628452: Make the delay to prompt the Processing dialog configurable.
-  1632869: Support messages in Bulgarian
+  1632869: Support messages in Bulgarian.
 
 * Bugs:
   1630359: RequestResolver's application scope was implemented wrong
@@ -12,7 +12,7 @@ ZK 2.2.2 Freshly
   1635685: popup menu conflict with confirmClose (IE only)
   1633335: usability bug on "autocomplete" of combobox
   1633982: Label spanning 2 colums and specified width (IE only)
-  1633176: Hiding zhtml component with visible property is not working.
+  1633176: Hiding zhtml component with visible property is not working
 
 	--------
 ZK 2.2.1
