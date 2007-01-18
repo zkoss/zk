@@ -23,7 +23,7 @@ zk = {};
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "3E"; //increase this if we want the browser to reload JavaScript
+zk.build = "3F"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */
@@ -33,6 +33,8 @@ zk.opera = zk.agent.indexOf("opera") != -1;
 zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
 zk.ie7 = zk.agent.indexOf("msie 7") != -1;
 zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
+zk.windows = zk.agent.indexOf("windows") != -1;
+zk.macintosh = zk.agent.indexOf("macintosh") != -1;
 
 /** Note: it is easy to cause problem with EMBED, if we use prototype's $() since
  * it tried to extend the element.
