@@ -60,6 +60,53 @@ public class HTMLs {
 			sb.append(name).append(':').append(val).append(';');
 	}
 
+	/** Returns the position of the specified substyle, or -1 if not found.
+	 *
+	 * @param style the style
+	 * @param substyle the sub-style, e.g., display.
+	 * @exception IllegalArgumentException if style is null, or substyle is null
+	 * or empty.
+	 */
+	public static final int getSubstyleIndex(String style, String substyle) {
+		if (style == null || substyle == null)
+			throw new IllegalArgumentException("null");
+		if (substyle.length() == 0)
+			throw new IllegalArgumentException("empty substyle");
+
+		for (int j = 0, len = style.length();;) {
+			int k = -1, l = j;
+			for (; l < len; ++l) {
+				final char cc = style.charAt(l);
+				if (k < 0  && cc == ':') k = l; //colon found
+				else if (cc == ';') break; //done
+			}
+
+			final String nm =
+				(k >= 0 ? style.substring(j, k): style.substring(j, l)).trim();
+			if (nm.equals(substyle)) return j;
+			if (l >= len) return -1;
+			j = l + 1;
+		}
+	}
+	/** Returns the value starting at the specified index (never null).
+	 *
+	 * <p>Note: the index is usually the returned vale of {@link #getSubstyleIndex}.
+	 *
+	 * @param style the style
+	 * @param j the index that the substyle starts at (including the style's name)
+	 */
+	public static final String getSubstyleValue(final String style, int j) {
+		final int len = style.length();
+		int k = -1, l = j;
+		for (; l < len; ++l) {
+			final char cc = style.charAt(l);
+			if (k < 0  && cc == ':') k = l; //colon found
+			else if (cc == ';') break; //done
+		}
+		
+		return k < 0 ? "": style.substring(k + 1, l).trim();
+	}
+
 	/** Retrieves text relevant CSS styles.
 	 *
 	 * <p>For example, if style is
@@ -68,23 +115,29 @@ public class HTMLs {
 	 *
 	 * @return null if style is null. Otherwise, it never returns null.
 	 */
-	public static final String getTextRelevantStyle(String style) {
+	public static final String getTextRelevantStyle(final String style) {
 		if (style == null) return null;
 		if (style.length() == 0) return "";
 
 		final StringBuffer sb = new StringBuffer(64);
-		for (int j = 0, l = 0; l >= 0; j = l + 1) {
-			final int k = style.indexOf(':', j);
-			l = k >= 0 ? style.indexOf(';', k + 1): -1;
+		for (int j = 0, len = style.length();;) {
+			int k = -1, l = j;
+			for (; l < len; ++l) {
+				final char cc = style.charAt(l);
+				if (k < 0  && cc == ':') k = l; //colon found
+				else if (cc == ';') break; //done
+			}
 
 			final String nm =
-				(k >= 0 ? style.substring(j, k): style.substring(j)).trim();
+				(k >= 0 ? style.substring(j, k): style.substring(j, l)).trim();
 			if (nm.startsWith("font")  || nm.startsWith("text")
 			|| _txtstyles.contains(nm))
 				sb.append(
-					l >= 0 ? style.substring(j, l + 1): style.substring(j));
+					l < len ? style.substring(j, l + 1): style.substring(j));
+
+			if (l >= len) return sb.toString();
+			j = l + 1;
 		}
-		return sb.toString();
 	}
 	private final static Set _txtstyles;
 	static {
