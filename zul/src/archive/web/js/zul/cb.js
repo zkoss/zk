@@ -30,6 +30,11 @@ zkCmbox.init = function (cmp) {
 
 	var btn = $e(cmp.id + "!btn");
 	if (btn) zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
+
+	//the following alignment is based on experiment
+	if (zk.macintosh) btn.style.verticalAlign = "text-bottom";
+	else if (zk.gecko) btn.style.verticalAlign = "middle";
+	else btn.align = "absmiddle";
 };
 
 zkCmit = {};
