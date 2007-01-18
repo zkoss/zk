@@ -12,6 +12,7 @@ ZK 2.2.2 Freshly
   1635685: popup menu conflict with confirmClose (IE only)
   1633335: usability bug on "autocomplete" of combobox
   1633982: Label spanning 2 colums and specified width (IE only)
+  1633176: Hiding zhtml component with visible property is not working.
 
 	--------
 ZK 2.2.1
