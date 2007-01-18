@@ -26,6 +26,7 @@ import java.util.HashSet;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
+import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
@@ -78,6 +79,14 @@ implements DynamicPropertied, RawId {
 		return (String)getDynamicProperty("style");
 	}
 	/** Sets the CSS style.
+	 *
+	 * <p>Note: if display is not specified as part of style,
+	 * the returned value of {@link #isVisible} is assumed.
+	 * In other words, if not visible and dispaly is not specified as part of style,
+	 * "display:none" is appended.
+	 *
+	 * <p>On the other hand, if display is specified, then {@link #setVisible}
+	 * is called to reflect the visibility, if necessary.
 	 */
 	public void setStyle(String style) {
 		setDynamicProperty("style", style);
@@ -103,6 +112,9 @@ implements DynamicPropertied, RawId {
 	/** Sets the dynamic property.
 	 * Note: it converts the value to a string object (by use of
 	 * {@link Objects#toString}).
+	 *
+	 * <p>Note: it handles the style property specially. Refer to {@link #setStyle}
+	 * for details.
 	 */
 	public void setDynamicProperty(String name, Object value)
 	throws WrongValueException {
@@ -111,15 +123,40 @@ implements DynamicPropertied, RawId {
 		if (!hasDynamicProperty(name))
 			throw new WrongValueException("Attribute not allowed: "+name+"\nSpecify the ZK namespace if you want to use special ZK attributes");
 
-		final String sval = Objects.toString(value);
-		if (sval == null) {
+		String sval = Objects.toString(value);
+		if ("style".equals(name)) sval = filterStyle(sval);
+
+		setDynaProp(name, sval);
+		smartUpdate(name, sval);
+	}
+	/** Processes the style. */
+	private String filterStyle(String style) {
+		if (style != null) {
+			final int j = HTMLs.getSubstyleIndex(style, "display");
+			if (j >= 0) { //display is specified
+				super.setVisible(
+					!"none".equals(HTMLs.getSubstyleValue(style, j)));
+				return style; //done
+			}
+		}
+
+		if (!isVisible()) {
+			int len = style != null ? style.length(): 0;
+			if (len == 0) return "display:none;";
+			if (style.charAt(len - 1) != ';') style += ';';
+			style += "display:none;";
+		}
+		return style;
+	}
+	/** Set the dynamic property 'blindly'. */
+	private void setDynaProp(String name, String value) {
+		if (value == null) {
 			if (_props != null) _props.remove(name);
 		} else {
 			if (_props == null)
 				_props = new HashMap();
-			_props.put(name, sval);
+			_props.put(name, value);
 		}
-		smartUpdate(name, sval);
 	}
 
 	/** Whether to hide the id attribute.
@@ -132,6 +169,53 @@ implements DynamicPropertied, RawId {
 	}
 
 	//-- Component --//
+	/** Changes the visibility of this component.
+	 * <p>Note: it will adjust the style ({@link #getStyle}) based on the visibility.
+	 *
+	 * @return the previous visibility
+	 */
+	public boolean setVisible(boolean visible) {
+		final boolean old = super.setVisible(visible);
+		if (old != visible) {
+			final String style = (String)getDynamicProperty("style");
+			if (visible) {
+				if (style != null) {
+					final int j = HTMLs.getSubstyleIndex(style, "display");
+					if (j >= 0) {
+						final String val = HTMLs.getSubstyleValue(style, j);
+						if ("none".equals(val)) {
+							String newstyle = style.substring(0, j);
+							final int k = style.indexOf(';', j + 7);
+							if (k >= 0) newstyle += style.substring(k + 1);
+							setDynaProp("style", newstyle);
+						}
+					}
+				}
+			} else {
+				if (style == null) {
+					setDynaProp("style", "display:none;");
+				} else {
+					final int j = HTMLs.getSubstyleIndex(style, "display");
+					if (j >= 0) {
+						final String val = HTMLs.getSubstyleValue(style, j);
+						if (!"none".equals(val)) {
+							String newstyle = style.substring(0, j) + "display:none;";
+							final int k = style.indexOf(';', j + 7);
+							if (k >= 0) newstyle += style.substring(k + 1);
+							setDynaProp("style", newstyle);
+						}
+					} else {
+						final int len = style.length();
+						String newstyle =
+							len > 0 && style.charAt(len - 1) != ';' ?
+								style + ';': style;
+						setDynaProp("style", style + "display:none;");
+					}
+				}
+			}
+		}
+		return old;
+	}
 	public boolean addEventListener(String evtnm, EventListener listener) {
 		if (!listener.isAsap())
 			throw new UiException("ZHTML accepts only ASAP listener");
