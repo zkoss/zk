@@ -32,7 +32,7 @@ ${z:redraw(item, null)}
 	</c:forEach>
 	</tbody>
 
-	<tbody>
+	<tbody class="grid-foot">
 ${z:redraw(self.listfoot, null)}
 	</tbody>
 	</table>

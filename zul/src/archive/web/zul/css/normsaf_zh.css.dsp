@@ -207,8 +207,8 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td {
 	font-size: medium; font-weight: normal;
 }
 
-div.listbox-foot, div.grid-foot, div.tree-foot { <%-- always used --%>
-	background: #E8EFEA; border-top: 1px solid #BBB;
+div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, div.tree-foot, tbody.tree-foot { <%-- always used --%>
+	background: threedface; border-top: 1px solid threedshadow;
 }
 
 tr.item, tr.item a, tr.item a:visited {

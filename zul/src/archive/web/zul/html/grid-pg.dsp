@@ -23,9 +23,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<div id="${self.uuid}!paging" class="grid-paging">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="grid-btable">
 	<tbody>
-	${z:redraw(self.columns, null)}
+${z:redraw(self.columns, null)}
 	</tbody>
-	${z:redraw(self.rows, null)}
+${z:redraw(self.rows, null)}
+	<tbody class="grid-foot">
+${z:redraw(self.foot, null)}
+	</tbody>
 	</table>
 	<div id="${self.uuid}!pgi" class="grid-pgi">
 	${z:redraw(self.paging, null)}
