@@ -39,6 +39,8 @@ zk.Grid.prototype = {
 
 			this.head = $e(this.id + "!head");
 			if (this.head) this.headtbl = zk.firstChild(this.head, "TABLE", true);
+			this.foot = $e(this.id + "!foot");
+			if (this.foot) this.foottbl = zk.firstChild(this.foot, "TABLE", true);
 		} else {
 			this.paging = true;
 			this.body = $e(this.id + "!paging");
@@ -86,6 +88,7 @@ zk.Grid.prototype = {
 
 			this.body.onscroll = function () {
 				if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
+				if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
 			};
 		}
 
@@ -135,6 +138,7 @@ zk.Grid.prototype = {
 			if (wd) {
 				this.body.style.width = wd;
 				if (this.head) this.head.style.width = wd;
+				if (this.foot) this.foot.style.width = wd;
 			}
 		}
 	},
@@ -142,7 +146,7 @@ zk.Grid.prototype = {
 		if (this.fnResize)
 			zk.unlisten(window, "resize", this.fnResize);
 		this.element = this.body = this.bodytbl = this.bodyrows
-			= this.head = this.headtbl = null;
+			= this.head = this.headtbl = this.foot = this.foottbl = null;
 			//in case: GC not works properly
 	},
 
@@ -182,6 +186,11 @@ zk.Grid.prototype = {
 			if (this.headtbl.rows.length)
 				zk.cpCellWidth(this.headtbl.rows[0], this.bodyrows);
 		}
+		if (this.foottbl) {
+			if (tblwd) this.foot.style.width = tblwd + 'px';
+			if (this.foottbl.rows.length)
+				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows); //assign foot's col width
+		}
 	},
 	/** Recalculate the size. */
 	recalcSize: function (cleansz) {
@@ -197,6 +206,14 @@ zk.Grid.prototype = {
 				var headrow = this.headtbl.rows[0];
 				for (var j = headrow.cells.length; --j >=0;)
 					headrow.cells[j].style.width = "";
+			}
+		}
+		if (this.foottbl) {
+			this.foot.style.width = "";
+			if (this.foottbl.rows.length) {
+				var footrow = this.foottbl.rows[0];
+				for (var j = footrow.cells.length; --j >=0;)
+					footrow.cells[j].style.width = "";
 			}
 		}
 	},

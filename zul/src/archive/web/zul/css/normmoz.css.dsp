@@ -208,7 +208,7 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td {
 	font-size: small; font-weight: normal;
 }
 
-div.listbox-foot { <%-- always used --%>
+div.listbox-foot, div.grid-foot, div.tree-foot { <%-- always used --%>
 	background: #E8EFEA; border-top: 1px solid #BBB;
 }
 

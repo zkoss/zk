@@ -66,6 +66,7 @@ import org.zkoss.zul.event.PagingEvent;
 public class Grid extends XulElement {
 	private transient Rows _rows;
 	private transient Columns _cols;
+	private transient Foot _foot;
 	private String _align;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
@@ -89,6 +90,11 @@ public class Grid extends XulElement {
 	 */
 	public Columns getColumns() {
 		return _cols;
+	}
+	/** Returns the foot.
+	 */
+	public Foot getFoot() {
+		return _foot;
 	}
 
 	/** Returns the specified cell, or null if not available.
@@ -279,12 +285,14 @@ public class Grid extends XulElement {
 			if (_rows != null && _rows != newChild)
 				throw new UiException("Only one rows child is allowed: "+this);
 			_rows = (Rows)newChild;
-			if (_paging != null && refChild == null) refChild = _paging; //paging as last
 		} else if (newChild instanceof Columns) {
 			if (_cols != null && _cols != newChild)
 				throw new UiException("Only one columns child is allowed: "+this);
 			_cols = (Columns)newChild;
-			if (_paging != null && refChild == null) refChild = _paging; //paging as last
+		} else if (newChild instanceof Foot) {
+			if (_foot != null && _foot != newChild)
+				throw new UiException("Only one foot child is allowed: "+this);
+			_foot = (Foot)newChild;
 		} else if (newChild instanceof Paging) {
 			if (_pgi != null)
 				throw new UiException("External paging cannot coexist with child paging");
@@ -293,7 +301,6 @@ public class Grid extends XulElement {
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
 			_pgi = _paging = (Paging)newChild;
-			refChild = null; //as the last child
 		} else {
 			throw new UiException("Unsupported child for grid: "+newChild);
 		}
@@ -310,6 +317,7 @@ public class Grid extends XulElement {
 
 		if (_rows == child) _rows = null;
 		else if (_cols == child) _cols = null;
+		else if (_foot == child) _foot = null;
 		else if (_paging == child) {
 			_paging = null;
 			if (_pgi == child) _pgi = null;
@@ -325,6 +333,7 @@ public class Grid extends XulElement {
 		int cnt = 0;
 		if (clone._rows != null) ++cnt;
 		if (clone._cols != null) ++cnt;
+		if (clone._foot != null) ++cnt;
 		if (clone._paging != null) ++cnt;
 		if (cnt > 0) clone.afterUnmarshal(cnt);
 
@@ -341,6 +350,9 @@ public class Grid extends XulElement {
 				if (--cnt == 0) break;
 			} else if (child instanceof Columns) {
 				_cols = (Columns)child;
+				if (--cnt == 0) break;
+			} else if (child instanceof Foot) {
+				_foot = (Foot)child;
 				if (--cnt == 0) break;
 			} else if (child instanceof Paging) {
 				_pgi = _paging = (Paging)child;
