@@ -54,6 +54,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Tree extends XulElement {
 	private transient Treecols _treecols;
+	private transient Treefoot _treefoot;
 	private transient Treechildren _treechildren;
 	/** A list of selected items. */
 	private transient Set _selItems;
@@ -79,6 +80,11 @@ public class Tree extends XulElement {
 	 */
 	public Treecols getTreecols() {
 		return _treecols;
+	}
+	/** Returns the treefoot that this tree owns (might null).
+	 */
+	public Treefoot getTreefoot() {
+		return _treefoot;
 	}
 	/** Returns the treechildren that this tree owns (might null).
 	 */
@@ -427,20 +433,28 @@ public class Tree extends XulElement {
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public boolean insertBefore(Component child, Component refChild) {
 		if (child instanceof Treecols) {
 			if (_treecols != null && _treecols != child)
 				throw new UiException("Only one treecols is allowed: "+this);
 			if (!getChildren().isEmpty())
-				insertBefore = (Component)getChildren().get(0);
+				refChild = (Component)getChildren().get(0);
 				//always makes treecols as the first child
 			_treecols = (Treecols)child;
+			invalidate();
+		} else if (child instanceof Treefoot) {
+			if (_treefoot != null && _treefoot != child)
+				throw new UiException("Only one treefoot is allowed: "+this);
+			_treefoot = (Treefoot)child;
+			refChild = null; //treefoot as the last
 			invalidate();
 		} else if (child instanceof Treechildren) {
 			if (_treechildren != null && _treechildren != child)
 				throw new UiException("Only one treechildren is allowed: "+this);
-			if (insertBefore instanceof Treecols)
+			if (refChild instanceof Treecols)
 				throw new UiException("treecols must be the first child");
+			if (refChild == null)
+				refChild = _treefoot; //treefoot as the last
 			_treechildren = (Treechildren)child;
 			invalidate();
 
@@ -448,7 +462,7 @@ public class Tree extends XulElement {
 		} else {
 			throw new UiException("Unsupported child for tree: "+child);
 		}
-		return super.insertBefore(child, insertBefore);
+		return super.insertBefore(child, refChild);
 	}
 	/** Called by {@link Treeitem} when is added to a tree. */
 	/*package*/ void onTreeitemAdded(Treeitem item) {
@@ -525,6 +539,8 @@ public class Tree extends XulElement {
 	public void onChildRemoved(Component child) {
 		if (child instanceof Treecols) {
 			_treecols = null;
+		} else if (child instanceof Treefoot) {
+			_treefoot = null;
 		} else if (child instanceof Treechildren) {
 			_treechildren = null;
 			_selItems.clear();
@@ -601,6 +617,7 @@ public class Tree extends XulElement {
 
 		int cnt = 0;
 		if (_treecols != null) ++cnt;
+		if (_treefoot != null) ++cnt;
 		if (_treechildren != null) ++cnt;
 		if (cnt > 0 || cntSel > 0) clone.afterUnmarshal(cnt, cntSel);
 
@@ -616,6 +633,9 @@ public class Tree extends XulElement {
 				final Object child = it.next();
 				if (child instanceof Treecols) {
 					_treecols = (Treecols)child;
+					if (--cnt == 0) break;
+				} else if (child instanceof Treefoot) {
+					_treefoot = (Treefoot)child;
 					if (--cnt == 0) break;
 				} else if (child instanceof Treechildren) {
 					_treechildren = (Treechildren)child;

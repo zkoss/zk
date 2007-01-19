@@ -285,19 +285,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
-		<component-name>footer</component-name>
-		<component-class>org.zkoss.zul.Footer</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/footer.dsp</mold-uri>
-		</mold>
-	</component>
-	<component>
 		<component-name>foot</component-name>
 		<component-class>org.zkoss.zul.Foot</component-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/foot.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>footer</component-name>
+		<component-class>org.zkoss.zul.Footer</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/footer.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -417,19 +417,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
-		<component-name>listfooter</component-name>
-		<component-class>org.zkoss.zul.Listfooter</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listfooter.dsp</mold-uri>
-		</mold>
-	</component>
-	<component>
 		<component-name>listfoot</component-name>
 		<component-class>org.zkoss.zul.Listfoot</component-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/listfoot.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>listfooter</component-name>
+		<component-class>org.zkoss.zul.Listfooter</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/listfooter.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -738,6 +738,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/treecols.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>treefoot</component-name>
+		<component-class>org.zkoss.zul.Treefoot</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/treefoot.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>treefooter</component-name>
+		<component-class>org.zkoss.zul.Treefooter</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/treefooter.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>

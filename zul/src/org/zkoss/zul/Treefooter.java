@@ -1,4 +1,4 @@
-/* Footer.java
+/* Treefooter.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jan 19 12:27:04     2007, Created by tomyeh
+		Fri Jan 19 15:36:11     2007, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -26,34 +26,35 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
- * A column of the footer of a grid ({@link Grid}).
- * Its parent must be {@link Foot}.
+ * A column of the footer of a tree ({@link Tree}).
+ * Its parent must be {@link Treefoot}.
  *
- * <p>Unlike {@link Column}, you could place any child in a grid footer.
- *
+ * <p>Unlike {@link Treecol}, you could place any child in a tree footer.
+ * <p>Note: {@link Treecell} also accepts children.
+ * 
  * @author tomyeh
  */
-public class Footer  extends LabelImageElement {
-	public Footer() {
+public class Treefooter extends LabelImageElement {
+	public Treefooter() {
 	}
-	public Footer(String label) {
+	public Treefooter(String label) {
 		setLabel(label);
 	}
-	public Footer(String label, String src) {
+	public Treefooter(String label, String src) {
 		setLabel(label);
 		setImage(src);
 	}
 
-	/** Returns the grid that this belongs to.
+	/** Returns the tree that this belongs to.
 	 */
-	public Grid getGrid() {
+	public Tree getTree() {
 		final Component comp = getParent();
-		return comp != null ? (Grid)comp.getParent(): null;
+		return comp != null ? (Tree)comp.getParent(): null;
 	}
 	/** Returns the set of footers that this belongs to.
 	 */
-	public Foot getFoot() {
-		return (Foot)getParent();
+	public Treefoot getTreefoot() {
+		return (Treefoot)getParent();
 	}
 	/** Returns the column index, starting from 0.
 	 */
@@ -65,18 +66,18 @@ public class Footer  extends LabelImageElement {
 				break;
 		return j;
 	}
-	/** Returns the column that is in the same column as
+	/** Returns the tree header that is in the same column as
 	 * this footer, or null if not available.
 	 */
-	public Column getColumn() {
-		final Grid grid = getGrid();
-		if (grid != null) {
-			final Columns cs = grid.getColumns();
+	public Treecol getTreecol() {
+		final Tree tree = getTree();
+		if (tree != null) {
+			final Treecols cs = tree.getTreecols();
 			if (cs != null) {
 				final int j = getColumnIndex();
 				final List cschs = cs.getChildren();
 				if (j < cschs.size())
-					return (Column)cschs.get(j);
+					return (Treecol)cschs.get(j);
 			}
 		}
 		return null;
@@ -90,7 +91,7 @@ public class Footer  extends LabelImageElement {
 		final String clkattrs = getAllOnClickAttrs(false);
 		if (clkattrs != null) sb.append(clkattrs);
 
-		final Column col = getColumn();
+		final Treecol col = getTreecol();
 		if (col != null) sb.append(col.getColAttrs());
 
 		return sb.toString();
@@ -98,7 +99,7 @@ public class Footer  extends LabelImageElement {
 
 	//-- Component --//
 	public void setParent(Component parent) {
-		if (parent != null && !(parent instanceof Foot))
+		if (parent != null && !(parent instanceof Treefoot))
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
 	}

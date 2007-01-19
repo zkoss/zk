@@ -32,4 +32,9 @@ ${z:redraw(self.treecols, null)}
 ${z:redraw(self.treechildren, null)}
 	</table>
 	</div>
+	<div id="${self.uuid}!foot" class="tree-foot">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+${z:redraw(self.treefoot, null)}
+	</table>
+	</div>
 </div>
