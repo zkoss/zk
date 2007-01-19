@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
- * A column of the footer of a listbox.
+ * A column of the footer of a list box ({@link Listbox}).
  * Its parent must be {@link Listfoot}.
  *
  * <p>Unlike {@link Listheader}, you could place any child in a list footer.
@@ -51,7 +51,7 @@ public class Listfooter extends LabelImageElement {
 		final Component comp = getParent();
 		return comp != null ? (Listbox)comp.getParent(): null;
 	}
-	/** Returns the listhead that this belongs to.
+	/** Returns the set of footers that this belongs to.
 	 */
 	public Listfoot getListfoot() {
 		return (Listfoot)getParent();
