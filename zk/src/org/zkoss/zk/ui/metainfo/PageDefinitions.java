@@ -134,6 +134,9 @@ public class PageDefinitions {
 	 */
 	public static final
 	PageDefinition getPageDefinition(WebApp wapp, Locator locator, String path) {
+		wapp.getConfiguration().invokeURIInterceptors(path);
+			//give the security a chance to reject
+
 		final Object ctx = wapp.getNativeContext();
 		if (ctx instanceof ServletContext)
 			return (PageDefinition)ResourceCaches.get(
