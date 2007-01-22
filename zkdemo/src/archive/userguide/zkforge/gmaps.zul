@@ -52,6 +52,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<attribute name="onMapZoom">
 			myzoom.setValue(self.getZoom());
 		</attribute>
+		<attribute name="onMapClick">
+			Gmarker gmarker = event.getGmarker();
+			if (gmarker != null) {
+				gmarker.setOpen(true);
+			}
+		</attribute>
 
 		<ginfo id="myinfo" open="true">
 			<attribute name="content">
