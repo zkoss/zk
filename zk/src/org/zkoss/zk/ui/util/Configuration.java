@@ -45,8 +45,6 @@ import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadSuspend;
 import org.zkoss.zk.ui.event.EventThreadResume;
-import org.zkoss.zk.ui.util.SessionInit;
-import org.zkoss.zk.ui.util.SessionCleanup;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.LocaleProvider;
@@ -75,7 +73,8 @@ public class Configuration {
 		_appInits = new LinkedList(), _appCleans = new LinkedList(),
 		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
 		_dtInits = new LinkedList(), _dtCleans = new LinkedList(),
-		_execInits = new LinkedList(), _execCleans = new LinkedList();
+		_execInits = new LinkedList(), _execCleans = new LinkedList(),
+		_uriIntcps = new LinkedList();
 	private final Map _prefs  = Collections.synchronizedMap(new HashMap()),
 		_richlets = new HashMap();
 	/** List(ErrorPage). */
@@ -98,76 +97,99 @@ public class Configuration {
 	/** Adds a listener class.
 	 */
 	public void addListener(Class klass) throws Exception {
+		boolean added = false;
 		if (Monitor.class.isAssignableFrom(klass)) {
 			if (_monitor != null)
 				throw new UiException("Monitor listener can be assigned only once");
 			_monitor = (Monitor)klass.newInstance();
+			added = true;
 		}
 
 		if (EventThreadInit.class.isAssignableFrom(klass)) {
 			synchronized (_evtInits) {
 				_evtInits.add(klass);
 			}
+			added = true;
 		}
 		if (EventThreadCleanup.class.isAssignableFrom(klass)) {
 			synchronized (_evtCleans) {
 				_evtCleans.add(klass);
 			}
+			added = true;
 		}
 		if (EventThreadSuspend.class.isAssignableFrom(klass)) {
 			synchronized (_evtSusps) {
 				_evtSusps.add(klass);
 			}
+			added = true;
 		}
 		if (EventThreadResume.class.isAssignableFrom(klass)) {
 			synchronized (_evtResus) {
 				_evtResus.add(klass);
 			}
+			added = true;
 		}
 
 		if (WebAppInit.class.isAssignableFrom(klass)) {
 			synchronized (_appInits) {
 				_appInits.add(klass);
 			}
+			added = true;
 		}
 		if (WebAppCleanup.class.isAssignableFrom(klass)) {
 			synchronized (_appCleans) {
 				_appCleans.add(klass);
 			}
+			added = true;
 		}
 
 		if (SessionInit.class.isAssignableFrom(klass)) {
 			synchronized (_sessInits) {
 				_sessInits.add(klass);
 			}
+			added = true;
 		}
 		if (SessionCleanup.class.isAssignableFrom(klass)) {
 			synchronized (_sessCleans) {
 				_sessCleans.add(klass);
 			}
+			added = true;
 		}
 
 		if (DesktopInit.class.isAssignableFrom(klass)) {
 			synchronized (_dtInits) {
 				_dtInits.add(klass);
 			}
+			added = true;
 		}
 		if (DesktopCleanup.class.isAssignableFrom(klass)) {
 			synchronized (_dtCleans) {
 				_dtCleans.add(klass);
 			}
+			added = true;
 		}
 
 		if (ExecutionInit.class.isAssignableFrom(klass)) {
 			synchronized (_execInits) {
 				_execInits.add(klass);
 			}
+			added = true;
 		}
 		if (ExecutionCleanup.class.isAssignableFrom(klass)) {
 			synchronized (_execCleans) {
 				_execCleans.add(klass);
 			}
+			added = true;
 		}
+		if (URIInterceptor.class.isAssignableFrom(klass)) {
+			synchronized (_uriIntcps) {
+				_uriIntcps.add(klass);
+			}
+			added = true;
+		}
+
+		if (!added)
+			throw new UiException("Unknown listener: "+klass);
 	}
 	/** Removes a listener class.
 	 */
@@ -208,6 +230,9 @@ public class Configuration {
 		}
 		synchronized (_execCleans) {
 			_execCleans.remove(klass);
+		}
+		synchronized (_uriIntcps) {
+			_uriIntcps.remove(klass);
 		}
 	}
 
@@ -668,6 +693,30 @@ public class Configuration {
 				} catch (Throwable ex) {
 					log.error("Failed to invoke "+klass, ex);
 					if (errs != null) errs.add(ex);
+				}
+			}
+		}
+	}
+
+	/** Invokes {@link URIInterceptor#request} for each relevant listner
+	 * registered by {@link #addListener}.
+	 *
+	 * <p>If any of them throws an exception, the exception is propogated to
+	 * the caller.
+	 *
+	 * @exception UiException if it is rejected by the interceptor.
+	 * Use {@link UiException#getCause} to retrieve the cause.
+	 */
+	public void invokeURIInterceptors(String uri) {
+		if (_uriIntcps.isEmpty()) return;
+
+		synchronized (_uriIntcps) {
+			for (Iterator it = _uriIntcps.iterator(); it.hasNext();) {
+				final Class klass = (Class)it.next();
+				try {
+					((URIInterceptor)klass.newInstance()).request(uri);
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex);
 				}
 			}
 		}

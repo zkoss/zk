@@ -29,17 +29,16 @@ package org.zkoss.zk.ui.util;
  * </li>
  * <li>Then, even time ZK wants to load a page definition based on an URI,
  * an instnace of the specified class is instantiated and
- * {@link #init} is called.
- * Note: {@link #init} is called even if the page definition is cached.</li>
+ * {@link #request} is called.
+ * Note: {@link #request} is called even if the page definition is cached.</li>
  * </ol>
  * 
  * @author tomyeh
  */
 public interface URIInterceptor {
-	/** Called when a desktop is created and initialized.
+	/** Called when the current user requests to loadthe page of the specified URI.
 	 *
-	 * <p>Note: when it is called, {@link org.zkoss.zk.ui.Executions#getCurrent}
-	 * might be null, since a page definition might be loaded by a background thread.
+	 * <p>To deny the access, the class shall throw an excetion.
 	 */
-	public void intercept(String uri);
+	public void request(String uri) throws Exception;
 }

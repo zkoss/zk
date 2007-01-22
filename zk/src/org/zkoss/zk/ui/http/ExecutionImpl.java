@@ -210,9 +210,12 @@ public class ExecutionImpl extends AbstractExecution {
 	public PageDefinition getPageDefinition(String uri) {
 		//Note: we have to go thru UiFactory (so user can override it)
 		uri = toAbsoluteURI(uri, false);
-		final PageDefinition pagedef =
-			((WebAppCtrl)getDesktop().getWebApp()).getUiFactory()
-			.getPageDefinition(newRequestInfo(uri), uri);
+		final WebApp wapp = getDesktop().getWebApp();
+
+		wapp.getConfiguration().invokeURIInterceptors(uri);
+
+		final PageDefinition pagedef = ((WebAppCtrl)wapp).
+			getUiFactory().getPageDefinition(newRequestInfo(uri), uri);
 		if (pagedef == null)
 			throw new UiException("Page not found: "+uri);
 		return pagedef;
