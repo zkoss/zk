@@ -39,13 +39,22 @@ import javax.servlet.ServletException;
  * @author tomyeh
  */
 public class InterPortletFilter implements Filter {
+	private ThreadLocal _first;
+
 	public void doFilter(ServletRequest request, ServletResponse response,
 	FilterChain chain) throws IOException, ServletException {
-		WebManager.initRequestLocal();
+		final boolean first = _first.get() == null;
+		if (first) {
+			WebManager.initRequestLocal();
+			_first.set(Boolean.TRUE);
+		}
 		try {
 			chain.doFilter(request, response);
 		} finally {
-			WebManager.cleanRequestLocal();
+			if (first) {
+				_first.set(null);
+				WebManager.cleanRequestLocal();
+			}
 		}
 	}
 	public void destroy() {
