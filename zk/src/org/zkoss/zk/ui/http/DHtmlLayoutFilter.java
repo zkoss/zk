@@ -78,6 +78,8 @@ public class DHtmlLayoutFilter implements Filter {
 		final Session sess = webman.getSession(_ctx, request);
 		final Object old = I18Ns.setup(sess, request, response, _charset);
 		try {
+			response.setContentLength(-1); //note: the chained servlet might set it
+
 			final Desktop desktop = webman.getDesktop(sess, request, null);
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request, null);
