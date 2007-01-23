@@ -18,6 +18,7 @@ ZK 2.2.2 Freshly
   1633176: Hiding zhtml component with visible property is not working
   1638447: Modal nested window positioning problem
   1642270: InterPortletFilter doesn't work
+  1642386: Output of DHtmlLayoutFilter is truncated if content-length
 
 	--------
 ZK 2.2.1
