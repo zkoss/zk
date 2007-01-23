@@ -17,6 +17,7 @@ ZK 2.2.2 Freshly
   1633982: Label spanning 2 colums and specified width (IE only)
   1633176: Hiding zhtml component with visible property is not working
   1638447: Modal nested window positioning problem
+  1642270: InterPortletFilter doesn't work
 
 	--------
 ZK 2.2.1
