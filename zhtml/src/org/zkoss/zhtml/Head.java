@@ -48,21 +48,31 @@ public class Head extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
+		final String zktags = outZKHtmlTags();
+		if (zktags != null) {
+			final int j = buf.lastIndexOf("</head>");
+			if (j >= 0) buf.insert(j, zktags);
+			else buf.append(zktags);
+		}
+	
+		out.write(buf.toString());
+		out.write('\n');
+	}
+	/** Generates the ZK specific HTML tags.
+	 * @return the buffer holding the HTML tags, or null if already generated.
+	 */
+	/*package*/ static String outZKHtmlTags() {
 		final Execution exec = Executions.getCurrent();
 		final String ATTR_ACTION = "zk_argAction";
 		final String action = (String)exec.getAttribute(ATTR_ACTION);
-		if (action != null) {
-			int j = buf.indexOf("</head>");
-			if (j < 0) j = buf.length();
-			buf.insert(j, '\n')
-				.insert(j, ZkFns.outLangJavaScripts(action))
-				.insert(j, '\n')
-				.insert(j, ZkFns.outLangStyleSheets())
-				.insert(j, '\n');
+		if (action == null)
+			return null;
 
-			exec.removeAttribute(ATTR_ACTION); //turn off page.dsp's generation
-		}
+		final StringBuffer sb = new StringBuffer(512).append('\n')
+			.append(ZkFns.outLangStyleSheets()).append('\n')
+			.append(ZkFns.outLangJavaScripts(action)).append('\n');
 
-		out.write(buf.toString());
+		exec.removeAttribute(ATTR_ACTION); //turn off page.dsp's generation
+		return sb.toString();
 	}
 }

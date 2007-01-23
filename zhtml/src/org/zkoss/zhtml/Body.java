@@ -68,19 +68,35 @@ public class Body extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
+		final String zktags = Head.outZKHtmlTags(),
+			zkresp = outZKResponses();
+		if (zktags != null || zkresp != null) {
+			final int j = buf.lastIndexOf("</body>");
+			if (j >= 0) {
+				if (zkresp != null) buf.insert(j, zkresp);
+				if (zktags != null) buf.insert(j, zktags);
+			} else {
+				if (zktags != null) buf.append(zktags);
+				if (zkresp != null) buf.append(zkresp);
+			}
+		}
+	
+		out.write(buf.toString());
+		out.write('\n');
+	}
+	private static String outZKResponses() {
 		final Execution exec = Executions.getCurrent();
 		final String ATTR_RESPONSES = "zk_argResponses";
 		final Collection responses = (Collection)exec.getAttribute(ATTR_RESPONSES);
-		if (responses != null) {
-			int j = buf.indexOf("</body>");
-			if (j < 0) j = buf.length();
-			buf.insert(j, "\n</script>\n")
-			   .insert(j, ZkFns.outResponseJavaScripts(responses))
-			   .insert(j, "\n<script type=\"text/javascript\">\n");
+		if (responses == null || responses.isEmpty())
+			return null;
 
-			exec.removeAttribute(ATTR_RESPONSES); //turn off page.dsp's generation
-		}
+		final StringBuffer sb = new StringBuffer(256)
+			.append("\n<script type=\"text/javascript\">\n")
+			.append(ZkFns.outResponseJavaScripts(responses))
+			.append("\n</script>\n");
 
-		out.write(buf.toString());
+		exec.removeAttribute(ATTR_RESPONSES); //turn off page.dsp's generation
+		return sb.toString();
 	}
 }

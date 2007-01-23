@@ -36,4 +36,8 @@ public class Title extends AbstractTag {
 	protected boolean shallHideId() {
 		return true;
 	}
+	public void redraw(java.io.Writer out) throws java.io.IOException {
+		super.redraw(out);
+		out.write('\n');
+	}
 }
