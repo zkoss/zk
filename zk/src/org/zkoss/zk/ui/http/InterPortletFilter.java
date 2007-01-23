@@ -39,7 +39,7 @@ import javax.servlet.ServletException;
  * @author tomyeh
  */
 public class InterPortletFilter implements Filter {
-	private ThreadLocal _first;
+	private final ThreadLocal _first = new ThreadLocal();
 
 	public void doFilter(ServletRequest request, ServletResponse response,
 	FilterChain chain) throws IOException, ServletException {
