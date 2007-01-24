@@ -29,7 +29,9 @@ import java.net.URL;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import org.zkoss.lang.SystemException;
 import org.zkoss.util.media.ContentTypes;
+import org.zkoss.io.NullInputStream;
 
 /**
  * Represents an audio.
@@ -42,21 +44,33 @@ import org.zkoss.util.media.ContentTypes;
  * @author tomyeh
  */
 public class AAudio implements Audio {
+	/** Used if you want to implement a meida whose input stream is created
+	 * dynamically each time {@link #getStreamData} is called.
+	 * @see #AAudio(String,,InputStream)
+	 */
+	protected static final InputStream DYNAMIC_STREAM = new NullInputStream();
+
 	/** The raw data in byte array.
 	 * Exactly one of {@link #_data} and {@link #_isdata} is not null.
 	 */
-	protected final byte[] _data;
-	/** The raw data in stream.
+	private final byte[] _data;
+	/** The raw data in stream (or {@link #DYNAMIC_STREAM}).
 	 * Exactly one of {@link #_data} and {@link #_isdata} is not null.
 	 */
-	protected final InputStream _isdata;
+	private final InputStream _isdata;
+	/** The URL of the data.
+	 */
+	private final URL _url;
+	/** The file of the data.
+	 */
+	private final File _file;
 
 	/** The format name, e.g., "jpeg", "gif" and "png". */
-	protected final String _format;
+	private final String _format;
 	/** The content type. */
-	protected final String _ctype;
+	private final String _ctype;
 	/** The name (usually filename). */
-	protected final String _name;
+	private final String _name;
 
 	public AAudio(String name, byte[] data) throws IOException {
 		if (data == null)
@@ -64,6 +78,8 @@ public class AAudio implements Audio {
 		_name = name;
 		_data = data;
 		_isdata = null;
+		_url = null;
+		_file = null;
 
 		String format = null;
 		try {
@@ -78,16 +94,25 @@ public class AAudio implements Audio {
 		_format = format;
 		_ctype = getContentType(_format);
 	}
-	public AAudio(String name, InputStream data) throws IOException {
-		if (data == null)
-			throw new IllegalArgumentException("null data");
+	/**
+	 * Creates an instance of an audio with an input stream.
+	 * If the stream shall be created each time {@link #getStreamData} is called,
+	 * you can pass {@link #DYNAMIC_STREAM} to the dat argument, and then
+	 * override {@link #getStreamData}.
+	 */
+	public AAudio(String name, InputStream isdata) throws IOException {
+		if (isdata == null)
+			throw new IllegalArgumentException("null stream");
 		_name = name;
-		_isdata = data;
+		_isdata = isdata;
 		_data = null;
+		_url = null;
+		_file = null;
 
 		String format = null;
 		try {
-			format = AudioSystem.getAudioFileFormat(data)
+			format = AudioSystem.getAudioFileFormat(
+					isdata == DYNAMIC_STREAM ? getStreamData(): isdata)
 				.getType().getExtension();
 		} catch (UnsupportedAudioFileException ex) {
 			format = getFormatByName(_name);
@@ -101,8 +126,10 @@ public class AAudio implements Audio {
 		if (url == null)
 			throw new IllegalArgumentException("null url");
 		_name = getName(url);
-		_isdata = url.openStream();
+		_url = url;
+		_isdata = DYNAMIC_STREAM;
 		_data = null;
+		_file = null;
 
 		String format = null;
 		try {
@@ -120,8 +147,10 @@ public class AAudio implements Audio {
 		if (file == null)
 			throw new IllegalArgumentException("null url");
 		_name = file.getName();
-		_isdata = new FileInputStream(file);
+		_file = file;
+		_isdata = DYNAMIC_STREAM;
 		_data = null;
+		_url = null;
 
 		String format = null;
 		try {
@@ -190,6 +219,13 @@ public class AAudio implements Audio {
 	/** Always throws IllegalStateException.
 	 */
 	public InputStream getStreamData() {
+		try {
+			if (_url != null) return _url.openStream();
+			if (_file != null) return new FileInputStream(_file);
+		} catch (java.io.IOException ex) {
+			throw new SystemException("Unable to read "
+				+(_url != null ? _url.toString(): _file.toString()), ex);
+		}
 		if (_isdata != null) return _isdata;
 		return new ByteArrayInputStream(_data);
 	}

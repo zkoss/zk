@@ -52,17 +52,17 @@ public class AImage implements Image {
 	private static final Log log = Log.lookup(AImage.class);
 
 	/** The raw data. */
-	protected byte[] _data;
+	private byte[] _data;
 	/** The format name, e.g., "jpeg", "gif" and "png". */
-	protected final String _format;
+	private final String _format;
 	/** The content type. */
-	protected final String _ctype;
+	private final String _ctype;
 	/** The name (usually filename). */
-	protected final String _name;
+	private final String _name;
 	/** The width. */
-	protected final int _width;
+	private final int _width;
 	/** The height. */
-	protected final int _height;
+	private final int _height;
 	/** the hash code. */
 //	private transient int _hashCode = 0;
 
