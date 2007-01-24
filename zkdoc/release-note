@@ -19,6 +19,7 @@ ZK 2.2.2 Freshly
   1638447: Modal nested window positioning problem
   1642270: InterPortletFilter doesn't work
   1642386: Output of DHtmlLayoutFilter is truncated if content-length
+  1639558: Uploaded Media cannot be processed more than once
 
 	--------
 ZK 2.2.1
