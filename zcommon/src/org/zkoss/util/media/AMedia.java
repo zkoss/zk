@@ -23,26 +23,40 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.ByteArrayInputStream;
 
+import org.zkoss.io.NullInputStream;
+import org.zkoss.io.NullReader;
+
 /**
  * A media object holding content such PDF, HTML, DOC or XLS content.
  *
  * @author tomyeh
  */
 public class AMedia implements Media {
+	/** Used if you want to implement a meida whose input stream is created
+	 * dynamically each time {@link #getStreamData} is called.
+	 * @see #AMedia(String,String,String,InputStream)
+	 */
+	protected static final InputStream DYNAMIC_STREAM = new NullInputStream();
+	/** Used if you want to implement a meida whose reader is created
+	 * dynamically each time {@link #getReaderData} is called.
+	 * @see #AMedia(String,String,String,Reader)
+	 */
+	protected static final Reader DYNAMIC_READER = new NullReader();
+
 	/** The binary data, {@link #getByteData}. */
-	protected byte[] _bindata;
+	private byte[] _bindata;
 	/** The text data, {@link #getStringData}. */
-	protected String _strdata;
+	private String _strdata;
 	/** The input stream, {@link #getStreamData} */
-	protected InputStream _isdata;
+	private InputStream _isdata;
 	/** The input stream, {@link #getReaderData} */
-	protected Reader _rddata;
+	private Reader _rddata;
 	/** The content type. */
-	protected String _ctype;
+	private String _ctype;
 	/** The format (e.g., pdf). */
-	protected String _format;
+	private String _format;
 	/** The name (usually filename). */
-	protected String _name;
+	private String _name;
 
 	/** Construct with name, format, content type and binary data.
 	 *
@@ -81,7 +95,11 @@ public class AMedia implements Media {
 	 * @param name the name (usually filename); might be null.
 	 * @param format the format; might be null.
 	 * @param ctype the content type; might be null.
-	 * @param data the binary data; never null
+	 * @param data the binary data; never null.
+	 * If the input stream is created dyanmically each tiime {@link #getStreamData}
+	 * is called, you shall pass {@link #DYNAMIC_STREAM}
+	 * as the data argument. Then, override {@link #getStreamData} to return
+	 * the correct stream.
 	 */
 	public AMedia(String name, String format, String ctype, InputStream data) {
 		if (data == null)
@@ -96,7 +114,11 @@ public class AMedia implements Media {
 	 * @param name the name (usually filename); might be null.
 	 * @param format the format; might be null.
 	 * @param ctype the content type; might be null.
-	 * @param data the binary data; never null
+	 * @param data the string data; never null
+	 * If the reader is created dyanmically each tiime {@link #getReaderData}
+	 * is called, you shall pass {@link #DYNAMIC_READER}
+	 * as the data argument. Then, override {@link #getReaderData} to return
+	 * the correct reader.
 	 */
 	public AMedia(String name, String format, String ctype, Reader data) {
 		if (data == null)
@@ -104,22 +126,10 @@ public class AMedia implements Media {
 		_rddata = data;
 		setup(name, format, ctype);
 	}
-	/** Constructs a media holding nothing. Deriving class must initialize
-	 * exactly one of {@link #_bindata}, {@link #_strdata}, {@link #_isdata}
-	 * or {@link #_rddata} properly.
-	 */
-	protected AMedia() {
-	}
-	/** Constructs a media holding nothing. Deriving class must initialize
-	 * {@link #_bindata} or {@link #_strdata} properly.
-	 */
-	protected AMedia(String name, String format, String ctype) {
-		setup(name, format, ctype);
-	}
 	/** Sets up the format and content type.
 	 * It assumes one of them is not null.
 	 */
-	protected void setup(String name, String format, String ctype) {
+	private void setup(String name, String format, String ctype) {
 		if (ctype != null && format == null) {
 			format = ContentTypes.getFormat(ctype);
 		} else if (ctype == null && format != null) {
