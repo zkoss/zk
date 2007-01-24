@@ -158,8 +158,16 @@ import org.zkoss.zk.au.*;
 		if (!_exec.isAsyncUpdate(comp.getPage()))
 			return; //nothing to do
 
+		checkDesktop(comp);
+
 		if (_invalidated.add(comp))
 			_smartUpdated.remove(comp);
+	}
+	/** Ensure the use of component is correct. */
+	private void checkDesktop(Component comp) {
+		final Desktop dt = comp.getDesktop();
+		if (dt != null && dt != _exec.getDesktop())
+			throw new IllegalStateException("Access denied: component, "+comp+", belongs to another desktop: "+dt);
 	}
 	/** Smart updates a component's attribute.
 	 * Meaningful only if {@link #addInvalidate(Component)} is not called in this
@@ -168,6 +176,8 @@ import org.zkoss.zk.au.*;
 	public void addSmartUpdate(Component comp, String attr, String value) {
 		if (!_exec.isAsyncUpdate(comp.getPage()) || _invalidated.contains(comp))
 			return; //nothing to do
+
+		checkDesktop(comp);
 
 		Map respmap = (Map)_smartUpdated.get(comp);
 		if (respmap == null)
