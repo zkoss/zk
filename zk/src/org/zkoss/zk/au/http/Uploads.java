@@ -53,6 +53,7 @@ import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -148,13 +149,14 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 				try {
 					media = fi.isInMemory() ? new AImage(name, fi.get()):
 						new AImage(name, fi.getInputStream());
+							//note: AImage converts stream to binary array
 				} catch (Throwable ex) {
 					if (log.debugable()) log.debug("Unknown file format: "+ctype);
 				}
 			} else if (ctype.startsWith("audio/")) {
 				try {
 					media = fi.isInMemory() ? new AAudio(name, fi.get()):
-						new AAudio(name, fi.getInputStream());
+						new StreamAudio(name, fi);
 				} catch (Throwable ex) {
 					if (log.debugable()) log.debug("Unknown file format: "+ctype);
 				}
@@ -163,7 +165,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 		if (media == null)
 			media = fi.isInMemory() ?
 				new AMedia(name, null, ctype, fi.get()):
-				new AMedia(name, null, ctype, fi.getInputStream());
+				new StreamMedia(name, null, ctype, fi);
 
 		final String contentId = Strings.encode(
 			new StringBuffer(12).append("_pctt"),
@@ -254,5 +256,34 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 	public static final boolean isMultipartContent(HttpServletRequest request) {
 		return "post".equals(request.getMethod().toLowerCase())
 			&& FileUploadBase.isMultipartContent(new ServletRequestContext(request));
+	}
+
+	private static class StreamMedia extends AMedia {
+		private final FileItem _fi;
+		public StreamMedia(String name, String format, String ctype, FileItem fi) {
+			super(name, format, ctype, DYNAMIC_STREAM);
+			_fi = fi;
+		}
+		public java.io.InputStream getStreamData() {
+			try {
+				return _fi.getInputStream();
+			} catch (IOException ex) {
+				throw new UiException("Unable to read "+_fi, ex);
+			}
+		}
+	}
+	private static class StreamAudio extends AAudio {
+		private final FileItem _fi;
+		public StreamAudio(String name, FileItem fi) throws IOException {
+			super(name, DYNAMIC_STREAM);
+			_fi = fi;
+		}
+		public java.io.InputStream getStreamData() {
+			try {
+				return _fi.getInputStream();
+			} catch (IOException ex) {
+				throw new UiException("Unable to read "+_fi, ex);
+			}
+		}
 	}
 }
