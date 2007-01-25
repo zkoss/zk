@@ -23,7 +23,7 @@ zk = {};
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "3F"; //increase this if we want the browser to reload JavaScript
+zk.build = "3G"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */
@@ -214,8 +214,9 @@ zk.addInit = function (fn) {
  * @param initfn the function that will be added to zk.addModuleInit
  * @param ckfn used ONLY if URL (i.e., xxx://) is used as nm,
  * and the file being loaded doesn't invoke zk.ald().
+ * @param modver the version of the module, or null to use zk.getBuild(nm)
  */
-zk.load = function (nm, initfn, ckfn) {
+zk.load = function (nm, initfn, ckfn, modver) {
 	if (!nm) {
 		zk.error("Module name must be specified");
 		return;
@@ -224,7 +225,7 @@ zk.load = function (nm, initfn, ckfn) {
 	if (!zk._modules[nm]) {
 		zk._modules[nm] = true;
 		if (initfn) zk.addModuleInit(initfn);
-		zk._load(nm);
+		zk._load(nm, modver);
 		if (ckfn) zk._ckfns.push(ckfn);
 	}
 };
@@ -248,7 +249,7 @@ zk.loadByType = function (n) {
  * 1) call zk.ald() after loaded<br/>
  * 2) pass ckfn to test whether it is loaded.
  */
-zk._load = function (nm) {
+zk._load = function (nm, modver) {
 	zk._bld();
 
 	var e = document.createElement("script");
@@ -261,12 +262,13 @@ zk._load = function (nm) {
 	} else if (uri.indexOf('/') >= 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		e.charset = "UTF-8";
-		e.src = zk.getUpdateURI("/web/_zver" + zk.build + zcb + uri);
+		e.src = zk.getUpdateURI("/web" + zcb + uri, false, modver);
 	} else { //module name
 		uri = uri.replace(/\./g, '/') + ".js";
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		e.charset = "UTF-8";
-		e.src = zk.getUpdateURI("/web/_zver" + zk.getBuild(nm) + zcb + "/js" + uri);
+		if (!modver) modver = zk.getBuild(nm);
+		e.src = zk.getUpdateURI("/web" + zcb + "/js" + uri, false, modver);
 	}
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
 };
@@ -530,7 +532,7 @@ zk.loadCSS = function (uri) {
 	e.type = "text/css";
 	if (uri.indexOf("://") < 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
-		uri = zk.getUpdateURI("/web/_zver" + zk.build + uri);
+		uri = zk.getUpdateURI("/web" + uri);
 	}
 	e.href = uri;
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
@@ -552,7 +554,7 @@ zk.loadJS = function (uri, fn) {
 
 	if (uri.indexOf("://") < 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
-		uri = zk.getUpdateURI("/web/_zver" + zk.build + uri);
+		uri = zk.getUpdateURI("/web" + uri);
 	}
 	e.src = uri;
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
@@ -560,11 +562,16 @@ zk.loadJS = function (uri, fn) {
 
 /** Returns the proper URI.
  * @param ignoreSessId whether not to append session ID.
+ * @param modver the module version to insert into uri, or null to use zk.build.
+ * Note: modver is used if uri starts with /uri
  */
-zk.getUpdateURI = function (uri, ignoreSessId) {
+zk.getUpdateURI = function (uri, ignoreSessId, modver) {
 	if (!uri) return zk_action;
 
 	if (uri.charAt(0) != '/') uri = '/' + uri;
+	if (uri.length >= 5 && uri.substring(0, 5) == "/web/")
+		uri = "/web/_zver" + modver + uri.substring(4);
+
 	var j = zk_action.lastIndexOf(';'), k = zk_action.lastIndexOf('?');
 	if (j < 0 && k < 0) return zk_action + uri;
 
