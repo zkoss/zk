@@ -38,5 +38,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	ua.applyProperties();
 	ua.afterCompose();
 	}</attribute>
-	</button>	
+	</button>
+	<button label="Call zscript in macro">
+	<attribute name="onClick">{
+	ua.namespace.getMethod("addInMacro", null, true).invoke(page.interpreter, null);
+	}</attribute>
+	</button>
 </window>
