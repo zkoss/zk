@@ -72,6 +72,8 @@ public class EventProcessingThread extends Thread {
 	private List _evtThdInits;
 	/** Part of the result: a list of EventThreadResume instances. */
 	private List _evtThdResumes;
+	/** Part of the result. a list of EventThreadSuspend instances. */
+	private List _evtThdSuspends;
 	/** Part of the result: a list of EventThreadCleanup instances. */
 	private List _evtThdCleanups;
 	/** Result of the result. */
@@ -157,14 +159,14 @@ public class EventProcessingThread extends Thread {
 	 * <p>Note:
 	 * <ul>
 	 * <li>It is used internally only for implementing {@link org.zkoss.zk.ui.sys.UiEngine}
-	 * <li>Caller must invoke {@link Configuration#invokeEventThreadSuspends}
+	 * <li>Caller must invoke {@link #newEventThreadSuspends}
 	 * before calling this method. (Reason: UiEngine might have to store some info
-	 * after {!link Configuration#invokeEventThreadSuspends} is called.
+	 * after {@link #newEventThreadSuspends} is called.
 	 * <li>The current thread must be {@link EventProcessingThread}.
 	 * <li>It is a static method.
 	 * </ul>
 	 */
-	public static void doSuspend(Object mutex) throws InterruptedException {
+	/*package*/ static void doSuspend(Object mutex) throws InterruptedException {
 		((EventProcessingThread)Thread.currentThread()).doSuspend0(mutex);
 	}
 	private void doSuspend0(Object mutex) throws InterruptedException {
@@ -202,8 +204,8 @@ public class EventProcessingThread extends Thread {
 			_desktop.getWebApp().getConfiguration()
 				.invokeEventThreadResumes(_evtThdResumes, _comp, _event, null);
 				//FUTURE: how to propogate errors to the client
-			_evtThdResumes = null;
 		}
+		_evtThdResumes = null;
 	}
 	/** Resumes this thread and returns only if the execution (being suspended
 	 * by {@link #doSuspend}) completes.
@@ -287,8 +289,15 @@ public class EventProcessingThread extends Thread {
 				_event = event;
 					//Bug 1577842: don't let event thread start (and end) too early
 				_evtmutex.notify(); //ask the event thread to handle it
-				if (!_ceased) _evtmutex.wait();
-					//wait until the event thread to complete or suspended
+				if (!_ceased) {
+					_evtmutex.wait();
+						//wait until the event thread to complete or suspended
+
+					if (_suspended) {
+						config.invokeEventThreadSuspends(_evtThdSuspends, comp, event);
+						_evtThdSuspends = null;
+					}
+				}
 			}
 		} catch (InterruptedException ex) {
 			throw new UiException(ex);
@@ -301,17 +310,28 @@ public class EventProcessingThread extends Thread {
 		checkError(); //check any error occurs
 		return isIdle();
 	}
+	/** Invokes {@link Configuration#newEventThreadSuspends}.
+	 * The caller must execute in the event processing thread.
+	 */
+	/*package*/ void newEventThreadSuspends(Object mutex) {
+		if (_comp == null) throw new IllegalStateException();
+		_evtThdSuspends = _desktop.getWebApp().getConfiguration()
+			.newEventThreadSuspends(_comp, _event, mutex);
+			//it might throw an exception, so process it before updating
+			//_suspended
+	}
+
 	private void invokeEventThreadCompletes(Configuration config,
 	Component comp, Event event) throws UiException {
 		if (_evtThdCleanups != null && !_evtThdCleanups.isEmpty()) {
 			final List errs = _ex != null ? null: new LinkedList();
 
 			config.invokeEventThreadCompletes(_evtThdCleanups, comp, event, errs);
-			_evtThdCleanups = null;
 
 			if (errs != null && !errs.isEmpty())
 				throw UiException.Aide.wrap((Throwable)errs.get(0));
 		}
+		_evtThdCleanups = null;
 	}
 	/** Setup for execution. */
 	synchronized private void setup() {

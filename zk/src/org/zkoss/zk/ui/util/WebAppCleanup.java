@@ -40,5 +40,5 @@ public interface WebAppCleanup {
 	 * <p>If this method throws an exception, the error message is
 	 * only logged (user won't see it).
 	 */
-	public void cleanup(WebApp wapp);
+	public void cleanup(WebApp wapp) throws Exception;
 }

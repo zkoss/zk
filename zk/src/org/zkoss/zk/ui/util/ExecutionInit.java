@@ -61,5 +61,5 @@ public interface ExecutionInit {
 	 * @param parent the previous execution in the same (Servlet) request, or
 	 * null if this is the first execution of the request.
 	 */
-	public void init(Execution exec, Execution parent);
+	public void init(Execution exec, Execution parent) throws Exception;
 }

@@ -40,5 +40,5 @@ public interface SessionCleanup {
 	 * <p>If this method throws an exception, the error message is
 	 * only logged (user won't see it).
 	 */
-	public void cleanup(Session sess);
+	public void cleanup(Session sess) throws Exception;
 }

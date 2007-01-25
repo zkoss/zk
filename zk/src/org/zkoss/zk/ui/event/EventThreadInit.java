@@ -19,7 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.event;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * Used to initialize the event processing thread.
@@ -48,10 +47,9 @@ public interface EventThreadInit {
 	/** Prepares the initialization at the servlet thread.
 	 * <p>It is invoked in the servlet thread (and before {@link #init}).
 	 *
-	 * @exception UiException to prevent an event from be processed
+	 * @exception Exception to prevent an event from be processed
 	 */
-	public void prepare(Component comp, Event evt)
-	throws UiException;
+	public void prepare(Component comp, Event evt) throws Exception;
 
 	/** Initialize the event processing thread before processing the event.
 	 *
@@ -60,5 +58,5 @@ public interface EventThreadInit {
 	 *
 	 * <p>Any exception being thrown by this method is ignored (but logged).
 	 */
-	public void init(Component comp, Event evt);
+	public void init(Component comp, Event evt) throws Exception;
 }

@@ -50,7 +50,7 @@ public interface EventThreadResume {
 	 *
 	 * <p>If an exception is thrown, the event thread won't be resumed.
 	 */
-	public void beforeResume(Component comp, Event evt);
+	public void beforeResume(Component comp, Event evt) throws Exception;
 	/** Called after the suspended event thread is resumed.
 	 * Unlike {@link #beforeResume}, it executes in the event processing thread.
 	 *
@@ -58,7 +58,7 @@ public interface EventThreadResume {
 	 * a thread from resuming (by throwing an exception).
 	 * If an exception is thrown, it is only logged.
 	 */
-	public void afterResume(Component comp, Event evt);
+	public void afterResume(Component comp, Event evt) throws Exception;
 
  	/** Called when the suspended event thread is aborted.
  	 * It is called in the main thread (i.e., the servlet thread).
@@ -73,5 +73,5 @@ public interface EventThreadResume {
  	 * {@link EventThreadCleanup#complete} will be called.
  	 * Thus, you have to do necessary cleanups in this method.
  	 */
- 	public void abortResume(Component comp, Event evt);
+ 	public void abortResume(Component comp, Event evt) throws Exception;
 }

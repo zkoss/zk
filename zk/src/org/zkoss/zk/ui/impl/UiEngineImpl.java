@@ -710,15 +710,12 @@ public class UiEngineImpl implements UiEngine {
 			throw new UiException("This method can be called only in an event listener, not in paging loading.");
 		if (D.ON && log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
 
+		final EventProcessingThread evtthd = (EventProcessingThread)thd;
+		evtthd.newEventThreadSuspends(mutex);
+			//it may throw an exception, so process it before updating _suspended
+
 		final Execution exec = Executions.getCurrent();
 		final Desktop desktop = exec.getDesktop();
-
-		final EventProcessingThread evtthd = (EventProcessingThread)thd;
-		desktop.getWebApp().getConfiguration()
-			.invokeEventThreadSuspends(
-				evtthd.getComponent(), evtthd.getEvent(), mutex);
-			//it might throw an exception, so process it before updating
-			//_suspended
 
 		Map map;
 		synchronized (_suspended) {

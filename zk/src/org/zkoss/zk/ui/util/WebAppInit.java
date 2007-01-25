@@ -40,5 +40,5 @@ public interface WebAppInit {
 	 * <p>You could
 	 * retrieve the servlet context by {@link WebApp#getNativeContext}</p>
 	 */
-	public void init(WebApp wapp);
+	public void init(WebApp wapp) throws Exception;
 }

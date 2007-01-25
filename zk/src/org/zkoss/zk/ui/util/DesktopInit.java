@@ -37,5 +37,5 @@ import org.zkoss.zk.ui.Desktop;
 public interface DesktopInit {
 	/** Called when a desktop is created and initialized.
 	 */
-	public void init(Desktop desktop);
+	public void init(Desktop desktop) throws Exception;
 }

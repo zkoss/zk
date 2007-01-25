@@ -40,5 +40,5 @@ public interface DesktopCleanup {
 	 * <p>If this method throws an exception, the error message is
 	 * only logged (user won't see it).
 	 */
-	public void cleanup(Desktop desktop);
+	public void cleanup(Desktop desktop) throws Exception;
 }

@@ -360,11 +360,10 @@ public class Configuration {
 		}
 	}
 
-	/** Invokes {@link EventThreadSuspend#beforeSuspend} for each relevant
+	/** Constructs a list of {@link EventThreadSuspend} instances and invokes
+	 * {@link EventThreadSuspend#beforeSuspend} for each relevant
 	 * listener registered by {@link #addListener}.
-	 *
-	 * <p>An instance of {@link EventThreadSuspend} is constructed first,
-	 * and then invoke {@link EventThreadSuspend#beforeSuspend}.
+	 * Caller shall execute in the event processing thread.
 	 *
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
@@ -372,21 +371,50 @@ public class Configuration {
 	 * is called with.
 	 * @exception UiException to prevent a thread from suspending
 	 */
-	public void invokeEventThreadSuspends(Component comp, Event evt, Object obj)
-	throws UiException {
-		if (_evtSusps.isEmpty()) return;
+	public List newEventThreadSuspends(Component comp, Event evt, Object obj) {
+		if (_evtSusps.isEmpty()) return Collections.EMPTY_LIST;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
+		final List suspends = new LinkedList();
 		synchronized (_evtSusps) {
 			for (Iterator it = _evtSusps.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((EventThreadSuspend)klass.newInstance())
-						.beforeSuspend(comp, evt, obj);
+					final EventThreadSuspend suspend =
+						(EventThreadSuspend)klass.newInstance();
+					suspend.beforeSuspend(comp, evt, obj);
+					suspends.add(suspend);
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the thread to suspend
+					//Don't intercept; to prevent the event being suspended
 				}
+			}
+		}
+		return suspends;
+	}
+	/** Invokes {@link EventThreadSuspend#afterSuspend} for each relevant
+	 * listener registered by {@link #addListener}.
+	 * Unlike {@link #invokeEventThreadSuspends}, caller shall execute in
+	 * the main thread (aka, servlet thread).
+	 *
+	 * <p>Unlike {@link #invokeEventThreadSuspends}, exceptions are logged
+	 * and ignored.
+	 *
+	 * @param suspends a list of {@link EventThreadSuspend} instances returned
+	 * from {@link #newEventThreadSuspends}, or null if no instance at all.
+	 * @param comp the component which the event is targeting
+	 * @param evt the event to process
+	 */
+	public void invokeEventThreadSuspends(List suspends, Component comp, Event evt)
+	throws UiException {
+		if (suspends == null || suspends.isEmpty()) return;
+
+		for (Iterator it = suspends.iterator(); it.hasNext();) {
+			final EventThreadSuspend fn = (EventThreadSuspend)it.next();
+			try {
+				fn.afterSuspend(comp, evt);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+fn+" after suspended", ex);
 			}
 		}
 	}

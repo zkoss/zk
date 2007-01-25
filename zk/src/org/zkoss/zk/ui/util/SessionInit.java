@@ -40,5 +40,5 @@ public interface SessionInit {
 	 * <p>If the client is based on HTTP (such as browsers), you could
 	 * retrieve the HTTP session by {@link Session#getNativeSession}</p>
 	 */
-	public void init(Session sess);
+	public void init(Session sess) throws Exception;
 }
