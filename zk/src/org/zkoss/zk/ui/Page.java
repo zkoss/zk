@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
+import org.zkoss.zk.ui.util.Interpreter;
 import org.zkoss.zk.ui.util.Namespace;
 import org.zkoss.zk.ui.util.VariableResolver;
 import org.zkoss.zk.ui.event.EventListener;
@@ -335,6 +336,9 @@ public interface Page extends IdSpace {
 	 * @param ns the namspace. If null, the page's namespace is assumed.
 	 */
 	public void interpret(String script, Namespace ns);
+	/** Returns the interpreter associated with this page.
+	 */
+	public Interpreter getInterpreter();
 
 	//metainfo//
 	/** Returns the function mapper for resolving EL functions, or null if

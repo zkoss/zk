@@ -60,6 +60,11 @@ public class BshInterpreter implements Interpreter { //not a good idea to serial
 		_ns = new BshNamespace(_ip.getNameSpace());
 	}
 
+	/** Returns the native interpretor. */
+	public bsh.Interpreter getNativeInterpreter() {
+		return _ip;
+	}
+
 	//-- Interpreter --//
 	public Namespace getNamespace() {
 		return _ns;

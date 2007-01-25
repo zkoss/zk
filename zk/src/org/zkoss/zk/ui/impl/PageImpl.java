@@ -564,6 +564,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public void interpret(String script, Namespace ns) {
 		_ip.interpret(script, ns);
 	}
+	public Interpreter getInterpreter() {
+		return _ip;
+	}
 
 	public boolean isListenerAvailable(String evtnm) {
 		if (_listeners != null) {

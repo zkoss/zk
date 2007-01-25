@@ -59,6 +59,13 @@ public interface Namespace {
 	 */
 	public void unsetVariable(String name);
 
+	/** Returns the method of the specified name, or null if not defined.
+	 *
+	 * @param argTypes the list of argument (aka., parameter) types.
+	 * If null, Class[0] is assumed.
+	 */
+	public Method getMethod(String name, Class[] argTypes, boolean local);
+
 	/** Returns the parent name space, or null if this is topmost.
 	 */
 	public Namespace getParent();

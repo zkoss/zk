@@ -36,6 +36,7 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Namespace;
+import org.zkoss.zk.ui.util.Method;
 
 /**
  * An implementation of {@link Namespace} on top of BeanShell.
@@ -99,6 +100,18 @@ public class BshNamespace implements Namespace {//not a good idea to serialize i
 	}
 	public void unsetVariable(String name) {
 		_ns.unsetVariable(name);
+	}
+	public Method getMethod(String name, Class[] argTypes, boolean local) {
+		if (argTypes == null)
+			argTypes = new Class[0];
+
+		try {
+		 	final BshMethod m = _ns.getMethod(name, argTypes, local);
+		 	return m != null ? new org.zkoss.zk.ui.impl.bsh.BshMethod(m): null;
+		} catch (UtilEvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	 	
 	}
 	public Namespace getParent() {
 		return _parent;
