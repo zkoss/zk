@@ -230,7 +230,9 @@ public class Treeitem extends XulElement {
 		setSrc(image);
 	}
 
-	/** Returns the nestest parent {@link Treeitem}.
+	/** Returns the nestest ancestor {@link Treeitem}, if any, or null if it is
+	 * the top-level {@link Treeitem}. By top-level we mean the first level of
+	 * a {@link Tree}.
 	 */
 	public Treeitem getTreeitem() {
 		final Component p = getParent();
