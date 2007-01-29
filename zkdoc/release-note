@@ -11,7 +11,7 @@ ZK 2.2.2 Freshly
   1641269: Supports URIInterceptor.
   1639628: Add afterSuspend method to EventThreadSuspend interface.
   1647101: Upgrade to script.aculo.us 1.7.0
-	1636000: please remove indexOf() method from ListModel interface
+	1636000: please remove indexOf() method from ListModel interface.
 	
 * Bugs:
   1630359: RequestResolver's application scope was implemented wrong
