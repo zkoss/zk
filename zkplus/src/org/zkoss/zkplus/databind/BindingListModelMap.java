@@ -23,13 +23,14 @@ import org.zkoss.zul.ListModelMap;
 import java.util.Map;
 
 /**
- * <p>This is the {@link BindingListModel} as a {@link java.util.Map} to be used with {@link Listbox} 
+ * <p>This is the {@link BindingListModel} as a {@link java.util.Map} to be used with {@link org.zkoss.zul.Listbox} 
  * and {@link DataBinder}.
  * Add or remove the contents of this model as a Map would cause the associated Listbox to change accordingly.</p> 
  *
  * @author Henri Chen
- * @see ListModel
- * @see ListModelMap
+ * @see BindingListModel
+ * @see org.zkoss.zul.ListModel
+ * @see org.zkoss.zul.ListModelMap
  */
 public class BindingListModelMap extends ListModelMap implements BindingListModel {
 	/* package */ BindingListModelMap(Map map) {

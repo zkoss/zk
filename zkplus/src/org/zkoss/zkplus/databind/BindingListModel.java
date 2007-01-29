@@ -24,9 +24,9 @@ import org.zkoss.zul.ListModel;
  * This interface defines the methods used by SelectedItem
  *
  * @author Henri
- * @see SelectedListModelList
- * @see SelectedListModelSet
- * @see SelectedListModelMap
+ * @see BindingListModelList
+ * @see BindingListModelSet
+ * @see BindingListModelMap
  * @see org.zkoss.zul.ListModel
  */
 public interface BindingListModel extends ListModel {

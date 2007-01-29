@@ -23,13 +23,14 @@ import org.zkoss.zul.ListModelSet;
 import java.util.Set;
 
 /**
- * <p>This is the {@link BindingListModel} as a {@link java.util.Set} to be used with {@link Listbox} 
+ * <p>This is the {@link BindingListModel} as a {@link java.util.Set} to be used with {@link org.zkoss.zul.Listbox} 
  * and {@link DataBinder}.
  * Add or remove the contents of this model as a Set would cause the associated Listbox to change accordingly.</p> 
  *
  * @author Henri Chen
- * @see ListModel
- * @see ListModelSet
+ * @see BindingListModel
+ * @see org.zkoss.zul.ListModel
+ * @see org.zkoss.zul.ListModelSet
  */
 public class BindingListModelSet extends ListModelSet implements BindingListModel {
 	/* package */ BindingListModelSet(Set set) {
