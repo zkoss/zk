@@ -585,6 +585,14 @@ import org.zkoss.zk.au.*;
 				responses.add(tvs[j].getResponse());
 		}
 
+		//any aborting reason
+		//Note: we don't give up other responses (Bug 1647085)
+		if (_aborting != null) {
+			final AuResponse abtresp = _aborting.getResponse();
+			if (abtresp != null)
+				responses.add(abtresp); //add to the end
+		}
+
 		//free memory
 		_invalidated.clear();
 		_smartUpdated.clear();

@@ -288,13 +288,6 @@ public class UiEngineImpl implements UiEngine {
 			//Cycle 3: Redraw the page (and responses)
 			List responses = uv.getResponses();
 
-			final AbortingReason aborting = uv.getAbortingReason();
-			if (aborting != null) {
-				final AuResponse abtresp = aborting.getResponse();
-				if (abtresp != null)
-					responses.add(0, abtresp);
-			}
-
 			if (olduv != null && olduv.addToFirstAsyncUpdate(responses))
 				responses = null;
 				//A new ZK page might be included by an async update
@@ -536,45 +529,34 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			//Cycle 3: Generate output
-			if (!uv.isAborting()) {
-				cleaned = true;
-				config.invokeExecutionCleanups(exec, oldexec, errs);
+			cleaned = true;
+			config.invokeExecutionCleanups(exec, oldexec, errs);
 
-				List responses;
-				try {
-					//Note: we have to call visualizeErrors before uv.getResponses,
-					//since it might create/update components
-					if (!errs.isEmpty())
-						visualizeErrors(exec, uv, errs);
+			List responses;
+			try {
+				//Note: we have to call visualizeErrors before uv.getResponses,
+				//since it might create/update components
+				if (!errs.isEmpty())
+					visualizeErrors(exec, uv, errs);
 
-					responses = uv.getResponses();
-				} catch (Throwable ex) {
-					responses = new LinkedList();
-					responses.add(new AuAlert(Exceptions.getMessage(ex)));
+				responses = uv.getResponses();
+			} catch (Throwable ex) {
+				responses = new LinkedList();
+				responses.add(new AuAlert(Exceptions.getMessage(ex)));
 
-					log.error(ex);
-					errs.add(ex); //so invokeExecutionCleanups knows it
-				}
-
-				if (rque.hasRequest())
-					responses.add(new AuEcho());
-
-				responseSequenceId(desktop, out);
-				response(responses, out);
-
-				if (log.debugable())
-					if (responses.size() < 5 || log.finerable()) log.debug("Responses: "+responses);
-					else log.debug("Responses: "+responses.subList(0, 5)+"...");
+				log.error(ex);
+				errs.add(ex); //so invokeExecutionCleanups knows it
 			}
 
-			final AbortingReason aborting = uv.getAbortingReason();
-			if (aborting != null) {
-				final AuResponse abtresp = aborting.getResponse();
-				if (abtresp != null) {
-					responseSequenceId(desktop, out);
-					response(abtresp, out);
-				}
-			}
+			if (rque.hasRequest())
+				responses.add(new AuEcho());
+
+			responseSequenceId(desktop, out);
+			response(responses, out);
+
+			if (log.debugable())
+				if (responses.size() < 5 || log.finerable()) log.debug("Responses: "+responses);
+				else log.debug("Responses: "+responses.subList(0, 5)+"...");
 
 			out.flush();
 				//flush before deactivating to make sure it has been sent
