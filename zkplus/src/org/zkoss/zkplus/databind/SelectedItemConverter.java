@@ -39,11 +39,12 @@ public class SelectedItemConverter implements TypeConverter {
     public Object coerceToUi(Object val, Component comp) { 
     	Listbox lbx = (Listbox) comp;
     	if (val != null) {
-    		ListModel model = lbx.getModel();
-    		if (model != null) {
+    		final ListModel xmodel = lbx.getModel();
+    		if (xmodel instanceof BindingListModel) {
+    			final BindingListModel model = (BindingListModel) xmodel;
     			int index = model.indexOf(val);
     			if (index >= 0) {
-    				Listitem item = lbx.getItemAtIndex(index);
+	    			final Listitem item = (Listitem) lbx.getItemAtIndex(index);
     				if (item != null) {
 	    				Set items = new HashSet();
 	    				items.add(item);

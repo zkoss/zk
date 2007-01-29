@@ -35,7 +35,7 @@ import java.util.ListIterator;
  * @see ListModelMap
  */
 public class ListModelList extends AbstractListModel implements List {
-	private List _list;
+	protected List _list;
 	
 	/**
 	 * new an instance which accepts a "live" List as its inner List. Any change to this

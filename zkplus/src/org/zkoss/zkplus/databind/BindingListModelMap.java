@@ -1,0 +1,43 @@
+/* BindingListModelMap.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 29 21:07:15     2007, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package org.zkoss.zkplus.databind;
+
+import org.zkoss.zul.ListModelMap;
+
+import java.util.Map;
+
+/**
+ * <p>This is the {@link BindingListModel} as a {@link java.util.Map} to be used with {@link Listbox} 
+ * and {@link DataBinder}.
+ * Add or remove the contents of this model as a Map would cause the associated Listbox to change accordingly.</p> 
+ *
+ * @author Henri Chen
+ * @see ListModel
+ * @see ListModelMap
+ */
+public class BindingListModelMap extends ListModelMap implements BindingListModel {
+	/* package */ BindingListModelMap(Map map) {
+		super(map);
+	}
+
+	public int indexOf(Object elem) {
+		return _list.indexOf(((Map.Entry)elem).getKey());
+	}
+}
+

@@ -40,11 +40,11 @@ public class ListModelConverter implements TypeConverter {
 			throw new NullPointerException("val");
 		}
 		if (val instanceof Set) {
-			return ListModelSet.instance((Set)val);
+			return new BindingListModelSet((Set)val);
 		} else if (val instanceof List) {
-			return ListModelList.instance((List)val);
+			return new BindingListModelList((List)val);
 		} else if (val instanceof Map) {
-			return ListModelMap.instance((Map)val);
+			return new BindingListModelMap((Map)val);
 		} else {
 			throw new UiException("Expects only java.util.Set, java.util.List, java.util.Map only. "+val.getClass());
 		}

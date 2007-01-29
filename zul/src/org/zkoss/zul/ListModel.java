@@ -35,9 +35,6 @@ public interface ListModel {
 	/** Returns the length of the list.
 	 */
 	public int getSize();
-	/** Returns the index of a given element.
-	 */
-	public int indexOf(Object elm);
 
 	/** Adds a listener to the list that's notified each time a change
 	 * to the data model occurs. 

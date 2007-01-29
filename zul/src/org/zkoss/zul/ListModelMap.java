@@ -39,9 +39,9 @@ import java.lang.reflect.Method;
  * @see ListModelMap
  */
 public class ListModelMap extends AbstractListModel implements Map {
-	private List _list; //(key)
-	private Map _map; //(key, value)
-	private Method _getEntry;
+	protected List _list; //(key)
+	protected Map _map; //(key, value)
+	protected Method _getEntry;
 	
 	/**
 	 * new an instance which accepts a "live" Map as its inner Map. Any change to this
@@ -154,10 +154,6 @@ public class ListModelMap extends AbstractListModel implements Map {
 		return getEntry(getKey(j));
 	}
 
-	public int indexOf(Object elem) {
-		return _list.indexOf(((Map.Entry)elem).getKey());
-	}
-	
 	private Object getKey(int j) {
 		return _list.get(j);
 	}

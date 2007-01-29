@@ -36,8 +36,8 @@ import java.util.Collection;
  * @see ListModelMap
  */
 public class ListModelSet extends AbstractListModel implements Set {
-	private List _list;
-	private Set _set;
+	protected List _list;
+	protected Set _set;
 
 	/**
 	 * new an instance which accepts a "live" Set as its inner Set. Any change to this
@@ -111,10 +111,6 @@ public class ListModelSet extends AbstractListModel implements Set {
 		return _list.get(j);
 	}
 	
-	public int indexOf(Object elm) {
-		return _list.indexOf(elm);
-	}
-
 	//-- Set --//
  	public boolean add(Object o) {
  		if (!_set.contains(o)) {
