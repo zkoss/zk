@@ -1,4 +1,4 @@
-// script.aculo.us dragdrop.js v1.6.5, Wed Nov 08 14:17:49 CET 2006
+// script.aculo.us dragdrop.js v1.7.0, Fri Jan 19 19:16:36 CET 2007
 
 // Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 //           (c) 2005, 2006 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)
@@ -281,7 +281,7 @@ if (zdd && orgpos != 'absolute' && orgpos != 'relative')
       this._isScrollChild = Element.childOf(this.element, options.scroll);
     }
 
-	if (!options.z_dragdrop) //Tom M. Yeh, Potix: Bug 1534426, 1535787
+if (zk.opera || !options.z_dragdrop) //Tom M. Yeh, Potix: Bug 1534426, 1535787 (ie: no makePositioned), 1647114 (opera: makePositioned required)
     Element.makePositioned(this.element); // fix IE    
 
     this.delta    = this.currentDelta();
@@ -311,13 +311,13 @@ if (zdd && orgpos != 'absolute' && orgpos != 'relative')
     if(Event.isLeftClick(event)) {    
       // abort on form elements, fixes a Firefox issue
       var src = Event.element(event);
-      if(src.tagName && (
-        src.tagName=='INPUT' ||
-        src.tagName=='SELECT' ||
-        src.tagName=='OPTION' ||
-        src.tagName=='BUTTON' ||
-        src.tagName=='TEXTAREA')) return;
-
+      if((tag_name = src.tagName.toUpperCase()) && (
+        tag_name=='INPUT' ||
+        tag_name=='SELECT' ||
+        tag_name=='OPTION' ||
+        tag_name=='BUTTON' ||
+        tag_name=='TEXTAREA')) return;
+        
 //Tom M. Yeh, Potix: skip popup/dropdown (of combobox and others)
 for (var n = src; n && n != this.element; n = n.parentNode)
 	if (Element.getStyle(n, 'position') == 'absolute')
@@ -598,7 +598,12 @@ if (typeof this.options.constraint == 'function') {
 }
 
 /*--------------------------------------------------------------------------*/
+
 /* Tom M. Yeh, Potix: remove Sortable
+var SortableObserver = Class.create();
+SortableObserver.prototype = {
+...
+}
 var Sortable = {
 ...
 }
