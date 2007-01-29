@@ -10,6 +10,7 @@ ZK 2.2.2 Freshly
   1632869: Support messages in Bulgarian. Thank Boril Yonchev for his contribution.
   1641269: Supports URIInterceptor.
   1639628: Add afterSuspend method to EventThreadSuspend interface.
+  1647101: Upgrade to script.aculo.us 1.7.0
 
 * Bugs:
   1630359: RequestResolver's application scope was implemented wrong
@@ -22,6 +23,7 @@ ZK 2.2.2 Freshly
   1642270: InterPortletFilter doesn't work
   1642386: Output of DHtmlLayoutFilter is truncated if content-length
   1639558: Uploaded Media cannot be processed more than once
+  1647114: Draggable in a scrollable listbox positioned wrong (Opera)
 
 * Upgrade Notes:
   + EventThreadSuspend adds a new method called afterSuspend
