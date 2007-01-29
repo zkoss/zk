@@ -1719,8 +1719,12 @@ zkau.cmd0 = { //no uuid at all
 		}
 	},
 	redirect: function (dt0, dt1) {
-		if (dt1) zk.go(dt0, false, dt1);
-		else document.location.href = dt0;
+		try {
+			if (dt1) zk.go(dt0, false, dt1);
+			else document.location.href = dt0;
+		} catch (ex) {
+			if (!zkau.confirmClose) throw ex;
+		}
 	},
 	title: function (dt0) {
 		document.title = dt0;
