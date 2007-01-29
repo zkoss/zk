@@ -24,6 +24,7 @@ ZK 2.2.2 Freshly
   1642386: Output of DHtmlLayoutFilter is truncated if content-length
   1639558: Uploaded Media cannot be processed more than once
   1647114: Draggable in a scrollable listbox positioned wrong (Opera)
+  1647085: Clients.confirmClose(null) does not work with sendRedirect
 
 * Upgrade Notes:
   + EventThreadSuspend adds a new method called afterSuspend
