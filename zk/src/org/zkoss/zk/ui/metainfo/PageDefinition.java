@@ -67,6 +67,7 @@ public class PageDefinition extends InstanceDefinition {
 	/** List(Header). */
 	private final List _headerdefs = new LinkedList();
 	private final ComponentDefinitionMap _compdefs = new ComponentDefinitionMap();
+
 	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
 	 * is specified. Note: a page might have components from different
@@ -162,7 +163,7 @@ public class PageDefinition extends InstanceDefinition {
 	}
 	/** Sets the request path of this page definition.
 	 */
-	/*package*/ void setRequestPath(String path) {
+	public void setRequestPath(String path) {
 		_path = path != null ? path: "";
 	}
 
