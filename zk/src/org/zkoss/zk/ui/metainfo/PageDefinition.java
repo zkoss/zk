@@ -55,7 +55,7 @@ import org.zkoss.zk.ui.sys.PageCtrl;
  */
 public class PageDefinition extends InstanceDefinition {
 	private final Locator _locator;
-	private final String _id, _title, _style;
+	private String _id, _title, _style;
 	/** The request path. */
 	private String _path = "";
 	private final List _taglibs = new LinkedList();
@@ -67,18 +67,12 @@ public class PageDefinition extends InstanceDefinition {
 	/** List(Header). */
 	private final List _headerdefs = new LinkedList();
 	private final ComponentDefinitionMap _compdefs = new ComponentDefinitionMap();
-	/**
+	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
 	 * is specified. Note: a page might have components from different
 	 * languages.
-	 * @param id ID used to identify a page created by this definition.
-	 * If null or empty, page's ID is generated automatically.
-	 * If not empty, ID must be unquie in the same request.
-	 * @param title the tile. If not empty, it is used as the title when
-	 * this page is displayed as a single page (rather than being included). 
 	 */
-	public PageDefinition(LanguageDefinition langdef, String id, String title,
-	String style, Locator locator) {
+	public PageDefinition(LanguageDefinition langdef, Locator locator) {
 		super(langdef);
 
 		if (langdef == null)
@@ -86,10 +80,22 @@ public class PageDefinition extends InstanceDefinition {
 		if (locator == null)
 			throw new IllegalArgumentException("null locator");
 
-		_title = title != null && title.length() > 0 ? title: null;
-		_id = id != null && id.length() > 0 ? id: null;
-		_style = style != null && style.length() > 0 ? style: null;
 		_locator = locator;
+	}
+	/** Constructor.
+	 * @param langdef the default language which is used if no namespace
+	 * is specified. Note: a page might have components from different
+	 * languages.
+	 * @param id the identifier. See {@link #setId}.
+	 * @param title the title. See {@link #setTitle}.
+	 * @param style the CSS style. See {@link #setStyle}.
+	 */
+	public PageDefinition(LanguageDefinition langdef, String id, String title,
+	String style, Locator locator) {
+		this(langdef, locator);
+		setId(id);
+		setTitle(title);
+		setStyle(style);
 	}
 
 	/** Returns the locator associated with this page definition.
@@ -105,6 +111,16 @@ public class PageDefinition extends InstanceDefinition {
 	public String getId() {
 		return _id;
 	}
+	/** Sets the identifier that will be assigned to pages created from this
+	 * definition.
+	 * @param id the identifier. It might contain EL expressions.
+	 * If null or empty (null is assumed), page's ID is generated automatically.
+	 * If not empty, ID (after evaluated) must be unquie in the same request.
+	 */
+	public void setId(String id) {
+		_id = id != null && id.length() > 0 ? id: null;
+	}
+		
 	/** Returns the title that will be assigned to pages created from
 	 * this definition, or null if no title is assigned at the beginning.
 	 * <p>Note: the returned value might contain EL expressions.
@@ -112,6 +128,14 @@ public class PageDefinition extends InstanceDefinition {
 	public String getTitle() {
 		return _title;
 	}
+	/** Sets the title that will be assigned to pages created from
+	 * this definition, or null if no title is assigned at the beginning.
+	 * @param title the title. If empty, null is assumed.
+	 */
+	public void setTitle(String title) {
+		_title = title != null && title.length() > 0 ? title: null;
+	}
+
 	/** Returns the CSS style that will be assigned to pages created from
 	 * this definition, or null if no style is assigned at the beginning.
 	 * <p>Note: the returned value might contain EL expressions.
@@ -119,6 +143,14 @@ public class PageDefinition extends InstanceDefinition {
 	public String getStyle() {
 		return _style;
 	}
+	/** Sets the CSS style that will be assigned to pages created from
+	 * this definition, or null if no style is assigned at the beginning.
+	 * @param style the CSS style. If empty, null is assumed.
+	 */
+	public void setStyle(String style) {
+		_style = style != null && style.length() > 0 ? style: null;
+	}
+
 	/** Returns the request path of this page definition, or ""
 	 * if not available.
 	 * <p>It is the same as the servlet path

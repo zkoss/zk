@@ -153,7 +153,7 @@ public class Parser {
 		//1. parse the page and import directive if any
 		final List pis = new LinkedList();
 		final List imports = new LinkedList();
-		String lang = null, title = null, id = null, style = null;
+		String lang = null;
 		for (Iterator it = doc.getChildren().iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (!(o instanceof ProcessingInstruction)) continue;
@@ -161,23 +161,16 @@ public class Parser {
 			final ProcessingInstruction pi = (ProcessingInstruction)o;
 			final String target = pi.getTarget();
 			if ("page".equals(target)) {
-				for (Iterator i2 = pi.parseData().entrySet().iterator(); i2.hasNext();) {
-					final Map.Entry me = (Map.Entry)i2.next();
-					final String nm = (String)me.getKey();
-					final String val = (String)me.getValue();
-					if ("language".equals(nm)) {
-						lang = val;
-						noEL("language", lang, pi);
-					} else if ("title".equals(nm)) {
-						title = val;
-					} else if ("style".equals(nm)) {
-						style = val;
-					} else if ("id".equals(nm)) {
-						id = val;
-					} else {
-						log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
-					}
+				//we handle only the language attribute here
+				final Map params = pi.parseData();
+				final String l = (String)params.remove("language");
+				if (l != null) {
+					noEL("language", l, pi);
+					lang = l;
 				}
+
+				if (!params.isEmpty())
+					pis.add(pi); //process" it later
 			} else if ("import".equals(target)) { //import
 				final Map params = pi.parseData();
 				final String src = (String)params.remove("src");
@@ -197,8 +190,7 @@ public class Parser {
 			extension != null && lang == null?
 				LanguageDefinition.getByExtension(extension):
 				LanguageDefinition.lookup(lang);
-		final PageDefinition pgdef =
-			new PageDefinition(langdef, id, title, style, getLocator());
+		final PageDefinition pgdef = new PageDefinition(langdef, getLocator());
 
 		//3. resolve imports
 		if (!imports.isEmpty()) {
@@ -376,11 +368,32 @@ public class Parser {
 		} else if ("link".equals(target) || "meta".equals(target)) { //declare a header element
 			pgdef.addHeader(new Header(target, params));
 		} else if ("page".equals(target)) {
-			log.warning("Ignored page directive at "+pi.getLocator());
+			parsePageDirective(pgdef, pi, params);
 		} else if ("import".equals(target)) { //import
-			throw new UiException("The import directive can be used only at the top level, "+pi);
+			throw new UiException("The import directive can be used only at the top level, "+pi.getLocator());
 		} else {
 			log.warning("Unknown processing instruction: "+target);
+		}
+	}
+	/** Process the page directive. */
+	private static void parsePageDirective(PageDefinition pgdef,
+	ProcessingInstruction pi, Map params) {
+		for (Iterator it = pi.parseData().entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String nm = (String)me.getKey();
+			final String val = (String)me.getValue();
+			if ("language".equals(nm)) {
+				if (!(pi.getParent() instanceof Document))
+					log.warning("Ignored language attribute since the page directive is not at the top level, "+pi.getLocator());
+			} else if ("title".equals(nm)) {
+				pgdef.setTitle(val);
+			} else if ("style".equals(nm)) {
+				pgdef.setStyle(val);
+			} else if ("id".equals(nm)) {
+				pgdef.setId(val);
+			} else {
+				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
+			}
 		}
 	}
 	private static void noEL(String nm, String val, Item item)
