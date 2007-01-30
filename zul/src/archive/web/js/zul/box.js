@@ -66,6 +66,8 @@ zkSplt.init = function (cmp) {
 	}
 
 	zkSplt._fixbtn(cmp);
+	if (getZKAttr(cmp, "open") == "false")
+		zkSplt.open(cmp, false, true, true);
 
 	var exc = "zkSplt._resize('" + cmp.id + "')";
 	zk.listen(window, "resize", function () {setTimeout(exc, 120);});
@@ -240,10 +242,11 @@ zkSplt._fixszAll = function () {
 	}
 };
 
-zkSplt.open = function (cmp, open, silent) {
+zkSplt.open = function (cmp, open, silent, enforce) {
 	var nd = $e(cmp.id + "!chdextr");
 	var tn = $tag(nd);
-	if ((getZKAttr(cmp, "open") != "false") == open) return; //nothing changed
+	if (!enforce && (getZKAttr(cmp, "open") != "false") == open)
+		return; //nothing changed
 
 	var colps = getZKAttr(cmp, "colps")
 	if (!colps || "none" == colps) return; //nothing to do
