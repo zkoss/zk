@@ -403,7 +403,7 @@ function invoke_ant
 		srcver=1.4
 	fi
 	tgtver=$(grep '^target=' version)
-	tgtver=${srcver#target=}
+	tgtver=${tgtver#target=}
 	if [ "$tgtver" = "" ] ; then
 		tgtver=1.4
 	fi
