@@ -11,8 +11,8 @@ ZK 2.2.2 Freshly
   1641269: Supports URIInterceptor.
   1639628: Add afterSuspend method to EventThreadSuspend interface.
   1647101: Upgrade to script.aculo.us 1.7.0
-	1636000: please remove indexOf() method from ListModel interface.
-	
+  1636000: please remove indexOf() method from ListModel interface.
+
 * Bugs:
   1630359: RequestResolver's application scope was implemented wrong
   1636562: Include a page that include another failed if relative path is used
@@ -27,6 +27,7 @@ ZK 2.2.2 Freshly
   1647114: Draggable in a scrollable listbox positioned wrong (Opera)
   1647085: Clients.confirmClose(null) does not work with sendRedirect
   1647139: A JS error if user press NO for sendRedirect+confirmCllose
+  1647572: <splitter open="false" ...> not working
 
 * Upgrade Notes:
   + EventThreadSuspend adds a new method called afterSuspend
