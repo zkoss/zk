@@ -308,10 +308,15 @@ public class ClassWebResource {
 
 			//prefix context path
 			if (request instanceof HttpServletRequest) {
-				//Work around with a bug when we wrap Pluto's RenderRequest (1.0.1)
 				String ctxpath = ((HttpServletRequest)request).getContextPath();
-				if (ctxpath.length() > 0 && ctxpath.charAt(0) != '/')
-					ctxpath = '/' + ctxpath;
+				final int ctxlen = ctxpath.length();
+				if (ctxlen > 0) {
+					final char cc = ctxpath.charAt(0);
+					if (cc != '/') ctxpath = '/' + ctxpath;
+						//Work around a bug for Pluto's RenderRequest (1.0.1)
+					else if (ctxlen == 1) ctxpath = ""; // "/" =>  ""
+						//Work around liferay's issue: Upload 1627928 (not verified)
+				}
 				uri = ctxpath + uri;
 			}
 
