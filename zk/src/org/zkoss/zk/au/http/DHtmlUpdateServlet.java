@@ -102,9 +102,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final Session sess = WebManager.getSession(_ctx, request);
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
-			final String pi = Https.getThisPathInfo(request);
-			//if (log.finerable()) log.finer("Path info: "+pi);
-			if (pi != null && pi.length() > 0) {
+			String pi = Https.getThisPathInfo(request);
+			if (pi == null) {
+				pi = request.getPathInfo();
+				if (pi != null)
+					log.warning("Fix path info to "+pi+": included="+Https.isIncluded(request));
+			}
+
+			if (pi != null && pi.length() != 0) {
+				//if (log.finerable()) log.finer("Path info: "+pi);
 				if (pi.startsWith(ClassWebResource.PATH_PREFIX)) {
 					WebManager.getWebManager(_ctx).
 						getClassWebResource().doGet(request, response);
@@ -143,8 +149,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//parse desktop ID
 		final String dtid = request.getParameter("dtid");
 		if (dtid == null) {
-			log.warning("dtid not found: CP="+request.getContextPath()
-				+", SP="+request.getServletPath()+", QS="+request.getQueryString()
+			log.warning("dtid not found: CP="+request.getContextPath()+" and "+Https.getThisContextPath(request)
+				+", SP="+request.getServletPath()+" and "+Https.getThisServletPath(request)
+				+", QS="+request.getQueryString()+" and "+Https.getThisQueryString(request)
 				+", params="+request.getParameterMap().keySet());
 			//responseError(uieng, response, "Illegal request: dtid is required");
 			//Tom M. Yeh: 20060922: Unknown reason to get here but it is annoying
