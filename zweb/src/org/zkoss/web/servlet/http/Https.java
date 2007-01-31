@@ -151,10 +151,9 @@ public class Https extends Servlets {
 	 */
 	public static final String getThisQueryString(ServletRequest request) {
 		String path = (String)request.getAttribute(Attributes.INCLUDE_QUERY_STRING);
-		return path != null ? path:
-			isIncluded(request) ? null: //null is valid even included
-			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getQueryString(): null;
+		return path != null || isIncluded(request)
+			|| !(request instanceof HttpServletRequest) ? path: //null is valid even included
+				((HttpServletRequest)request).getQueryString();
 	}
 	/**
 	 * Gets the path info of this page.
@@ -164,10 +163,9 @@ public class Https extends Servlets {
 	 */
 	public static final String getThisPathInfo(ServletRequest request) {
 		String path = (String)request.getAttribute(Attributes.INCLUDE_PATH_INFO);
-		return path != null ? path:
-			isIncluded(request) ? null: //null is valid even included
-			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getPathInfo(): null;
+		return path != null || isIncluded(request)
+			|| !(request instanceof HttpServletRequest) ? path: //null is valid even included
+				((HttpServletRequest)request).getPathInfo();
 	}
 
 	/**
