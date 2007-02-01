@@ -29,6 +29,8 @@ ZK 2.3.0 Freshly
   1647085: Clients.confirmClose(null) does not work with sendRedirect
   1647139: A JS error if user press NO for sendRedirect+confirmCllose
   1647572: <splitter open="false" ...> not working
+  1649625: listbox inserted to wrong position if refChild is wrong
+  1649554: Listbox failed to move an item (IndexOutOfBoundsException)
 
 * Upgrade Notes:
   + EventThreadSuspend adds a new method called afterSuspend
