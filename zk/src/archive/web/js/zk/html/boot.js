@@ -297,15 +297,24 @@ zk._bld = function () {
 /** after load. */
 zk.ald = function () {
 	if (--zk.loading) {
-		zk._updCnt();
-	} else {
-		if (zk._ckload) {
-			clearInterval(zk._ckload);
-			zk._ckload = null;
+		try {
+			zk._updCnt();
+		} catch (ex) {
+			zk.error("Failed to count. "+ex.message);
 		}
+	} else {
+		try {
+			if (zk._ckload) {
+				clearInterval(zk._ckload);
+				zk._ckload = null;
+			}
 
-		var n = $e("zk_loadprog");
-		if (n) n.parentNode.removeChild(n);
+			var n = $e("zk_loadprog");
+			if (n) n.parentNode.removeChild(n);
+		} catch (ex) {
+			zk.error("Failed to stop counting. "+ex.message);
+		}
+		
 		if (zk._ready) zk._evalInit(); //zk._loadAndInit mihgt not finish
 	}
 };
