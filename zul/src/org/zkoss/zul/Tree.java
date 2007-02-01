@@ -453,7 +453,7 @@ public class Tree extends XulElement {
 				throw new UiException("Only one treechildren is allowed: "+this);
 			if (refChild instanceof Treecols)
 				throw new UiException("treecols must be the first child");
-			if (refChild == null)
+			if (refChild == null || refChild.getParent() != this)
 				refChild = _treefoot; //treefoot as the last
 			_treechildren = (Treechildren)child;
 			invalidate();
