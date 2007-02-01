@@ -23,7 +23,7 @@ zk = {};
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "3I"; //increase this if we want the browser to reload JavaScript
+zk.build = "3J"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */
@@ -311,10 +311,7 @@ zk.ald = function () {
 };
 zk._updCnt = function () {
 	var n = $e("zk_loadcnt");
-	if (n) {
-		n.removeChild(n.firstChild);
-		n.appendChild(document.createTextNode(zk.loading));
-	}
+	if (n) n.innerHTML = "" + zk.loading;
 };
 
 /** Initializes the dom tree.
