@@ -556,7 +556,10 @@ implements java.io.Serializable, RenderOnDemand {
 	/** Returns the selected item.
 	 */
 	public Listitem getSelectedItem() {
-		return _jsel >= 0 ? getItemAtIndex(_jsel): null;
+		return _jsel >= 0 ?
+//			_jsel > 0 && _selItems.size() == 1 ? //optimize for performance
+//				(Listitem)_selItems.iterator().next():
+				getItemAtIndex(_jsel): null;
 	}
 	/**  Deselects all of the currently selected items and selects
 	 * the given item.
@@ -789,14 +792,23 @@ implements java.io.Serializable, RenderOnDemand {
 	}
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
+			//first: listhead
+			//last two: listfoot and paging
+			if (refChild != null && refChild.getParent() != this)
+				refChild = null; //Bug 1649625: it becomes the last child
+			if (refChild != null && refChild == _listhead)
+				refChild = _items.isEmpty() ? null: (Component)_items.get(0);
+
 			if (refChild == null) {
-				if (_listfoot != null) refChild = _listfoot; //listfoot as last
-				else if (_paging != null) refChild = _paging; //_paging as last
-			} else if (refChild == _listhead) {
-				throw new UiException("Unable to insert before listhead: "+newChild);
+				if (_listfoot != null) refChild = _listfoot;
+				else refChild = _paging;
+			} else if (refChild == _paging && _listfoot != null) {
+				refChild = _listfoot;
 			}
 
-			final boolean existChild = newChild.getParent() == this;
+			final Listitem newItem = (Listitem)newChild;
+			final int jfrom = newItem.getParent() == this ? newItem.getIndex(): -1;
+
 			if (super.insertBefore(newChild, refChild)) {
 				final List children = getChildren();
 				if (_listhead != null && children.get(1) == newChild)
@@ -805,39 +817,46 @@ implements java.io.Serializable, RenderOnDemand {
 				//this case requires invalidate (because we use insert-after)
 
 				//Maintain _items
-				final Listitem childItem = (Listitem)newChild;
-				int fixFrom = childItem.getIndex();
-				if (refChild != null && refChild != _listfoot
-				&& refChild != _paging
-				&& refChild.getParent() == this) {
-					final int k = ((Listitem)refChild).getIndex();
-					if (fixFrom < 0 || k < fixFrom) fixFrom = k;
-				}
-				if (fixFrom < 0) childItem.setIndexDirectly(_items.size() - 1);
+				final int
+					jto = refChild instanceof Listitem ?
+							((Listitem)refChild).getIndex(): -1,
+					fixFrom = jfrom < 0 || (jto >= 0 && jfrom > jto) ? jto: jfrom;
+						//jfrom < 0: use jto
+						//jto < 0: use jfrom
+						//otherwise: use min(jfrom, jto)
+				if (fixFrom < 0) newItem.setIndexDirectly(_items.size() - 1);
 				else fixItemIndices(fixFrom);
 
 				//Maintain selected
-				final int childIndex = childItem.getIndex();
-				if (childItem.isSelected()) {
+				final int newIndex = newItem.getIndex();
+				if (newItem.isSelected()) {
 					if (_jsel < 0) {
-						_jsel = childIndex;
+						_jsel = newIndex;
 						if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
-						_selItems.add(childItem);
+						_selItems.add(newItem);
 					} else if (_multiple) {
-						if (_jsel > childIndex) {
-							_jsel = childIndex;
+						if (_jsel > newIndex) {
+							_jsel = newIndex;
 							if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 						}
-						_selItems.add(childItem);
+						_selItems.add(newItem);
 					} else { //deselect
-						childItem.setSelectedDirectly(false);
-						childItem.invalidate();
+						newItem.setSelectedDirectly(false);
 					}
 				} else {
-					if (_jsel >= childIndex) {
-						++_jsel;
-						if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
+					final int oldjsel = _jsel;
+					if (jfrom < 0) { //no existent child
+						if (_jsel >= newIndex) ++_jsel;
+					} else if (_jsel >= 0) { //any selected
+						if (jfrom > _jsel) { //from below
+							if (jto >= 0 && jto <= _jsel) ++_jsel;
+						} else { //from above
+							if (jto < 0 || jto > _jsel) --_jsel;
+						}
 					}
+
+					if (oldjsel != _jsel && !inSelectMold())
+						smartUpdate("z.selId", getSelectedId());
 				}
 				initAtClient();
 				return true;
@@ -893,20 +912,20 @@ implements java.io.Serializable, RenderOnDemand {
 			_listfoot = null;
 		} else if (child instanceof Listitem) {
 			//maintain items
-			final Listitem childItem = (Listitem)child;
-			final int childIndex = childItem.getIndex();
-			childItem.setIndexDirectly(-1); //mark
-			fixItemIndices(childIndex);
+			final Listitem item = (Listitem)child;
+			final int index = item.getIndex();
+			item.setIndexDirectly(-1); //mark
+			fixItemIndices(index);
 
 			//Maintain selected
-			if (childItem.isSelected()) {
-				_selItems.remove(childItem);
-				if (_jsel == childIndex) {
-					fixSelectedIndex(childIndex);
+			if (item.isSelected()) {
+				_selItems.remove(item);
+				if (_jsel == index) {
+					fixSelectedIndex(index);
 					if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 				}
 			} else {
-				if (_jsel >= childIndex) {
+				if (_jsel >= index) {
 					--_jsel;
 					if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 				}
