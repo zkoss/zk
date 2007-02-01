@@ -557,8 +557,8 @@ implements java.io.Serializable, RenderOnDemand {
 	 */
 	public Listitem getSelectedItem() {
 		return _jsel >= 0 ?
-//			_jsel > 0 && _selItems.size() == 1 ? //optimize for performance
-//				(Listitem)_selItems.iterator().next():
+			_jsel > 0 && _selItems.size() == 1 ? //optimize for performance
+				(Listitem)_selItems.iterator().next():
 				getItemAtIndex(_jsel): null;
 	}
 	/**  Deselects all of the currently selected items and selects
