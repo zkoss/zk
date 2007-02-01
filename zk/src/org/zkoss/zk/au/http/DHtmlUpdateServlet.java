@@ -102,13 +102,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final Session sess = WebManager.getSession(_ctx, request);
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
-			String pi = Https.getThisPathInfo(request);
-			if (pi == null) {
-				pi = request.getPathInfo();
-				if (pi != null)
-					log.warning("Fix path info to "+pi+": included="+Https.isIncluded(request));
-			}
-
+			final String pi = Https.getThisPathInfo(request);
 			if (pi != null && pi.length() != 0) {
 				//if (log.finerable()) log.finer("Path info: "+pi);
 				if (pi.startsWith(ClassWebResource.PATH_PREFIX)) {
