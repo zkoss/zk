@@ -61,9 +61,9 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
-import org.zkoss.zk.ui.scripting.Interpreter;
-import org.zkoss.zk.ui.scripting.Namespace;
-import org.zkoss.zk.ui.scripting.VariableResolver;
+import org.zkoss.zk.scripting.Interpreter;
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.VariableResolver;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -72,7 +72,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.Variables;
 import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.scripting.bsh.BshInterpreter;
+import org.zkoss.zk.scripting.bsh.BshInterpreter;
 import org.zkoss.zk.au.AuSetTitle;
 
 /**

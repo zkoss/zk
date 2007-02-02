@@ -48,7 +48,7 @@ import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.*;
-import org.zkoss.zk.ui.scripting.*;
+import org.zkoss.zk.scripting.*;
 import org.zkoss.zk.au.*;
 
 /**

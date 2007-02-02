@@ -24,7 +24,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.scripting.VariableResolver;
+import org.zkoss.zk.scripting.VariableResolver;
 
 /**
  * A definition of the variable resolver ({@link VariableResolver}).

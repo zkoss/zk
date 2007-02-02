@@ -29,9 +29,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.ui.el.Evaluator;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
-
+import org.zkoss.zk.el.Evaluator;
 /**
  * A property of a definition.
  *

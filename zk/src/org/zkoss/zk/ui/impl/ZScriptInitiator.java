@@ -21,8 +21,8 @@ package org.zkoss.zk.ui.impl;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.util.Initiator;
-import org.zkoss.zk.ui.scripting.Namespace;
-import org.zkoss.zk.ui.scripting.Namespaces;
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Namespaces;
 
 /**
  * An initiator used to evaluate a zscript file.

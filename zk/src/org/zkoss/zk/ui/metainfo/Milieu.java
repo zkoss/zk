@@ -39,7 +39,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.el.Evaluator;
+import org.zkoss.zk.el.Evaluator;
 
 /**
  * The snapshot of the component definition ({@link ComponentDefinition}).
