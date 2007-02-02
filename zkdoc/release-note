@@ -35,6 +35,9 @@ ZK 2.3.0 Freshly
 * Upgrade Notes:
   + EventThreadSuspend adds a new method called afterSuspend
   + ListModel removes indexOf() method
+  + Interpreter, Namespace, Namespaces and Method are moved from
+    org.zkoss.zk.ui.util to org.zkoss.zk.scripting
+  + Evaluator is moved from org.zkoss.zk.ui.util to org.zkoss.zk.el
 
 	--------
 ZK 2.2.1
