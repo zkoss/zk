@@ -39,9 +39,9 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.Initiator;
-import org.zkoss.zk.ui.util.Namespace;
-import org.zkoss.zk.ui.util.Namespaces;
-import org.zkoss.zk.ui.util.VariableResolver;
+import org.zkoss.zk.ui.scripting.Namespace;
+import org.zkoss.zk.ui.scripting.Namespaces;
+import org.zkoss.zk.ui.scripting.VariableResolver;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 

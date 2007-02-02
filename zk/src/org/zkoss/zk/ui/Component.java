@@ -25,7 +25,7 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.util.Namespace;
+import org.zkoss.zk.ui.scripting.Namespace;
 import org.zkoss.zk.au.AuResponse;
 
 /**

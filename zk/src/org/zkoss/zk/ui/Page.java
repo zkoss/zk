@@ -25,9 +25,9 @@ import java.util.List;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
-import org.zkoss.zk.ui.util.Interpreter;
-import org.zkoss.zk.ui.util.Namespace;
-import org.zkoss.zk.ui.util.VariableResolver;
+import org.zkoss.zk.ui.scripting.Interpreter;
+import org.zkoss.zk.ui.scripting.Namespace;
+import org.zkoss.zk.ui.scripting.VariableResolver;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
