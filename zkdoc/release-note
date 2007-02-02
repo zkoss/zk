@@ -38,6 +38,7 @@ ZK 2.3.0 Freshly
   + Interpreter, Namespace, Namespaces, VariableResolver and Method are moved from
     org.zkoss.zk.ui.util to org.zkoss.zk.scripting
   + Evaluator is moved from org.zkoss.zk.ui.util to org.zkoss.zk.el
+  + Richlet adds the getZScriptLanguage method.
 
 	--------
 ZK 2.2.1
