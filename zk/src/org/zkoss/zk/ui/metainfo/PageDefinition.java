@@ -210,7 +210,7 @@ public class PageDefinition extends InstanceDefinition {
 		return inits;
 	}
 
-	/** Adds a defintion of {@link org.zkoss.zk.ui.util.VariableResolver}. */
+	/** Adds a defintion of {@link org.zkoss.zk.scripting.VariableResolver}. */
 	public void addVariableResolverDefinition(VariableResolverDefinition resolver) {
 		if (resolver == null)
 			throw new IllegalArgumentException("null");
