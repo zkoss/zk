@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
  * {@link Namespace}.
  *
  * <p>To add a new interpreter, a developer has to implement this interface
- * and add the implementation class to {@link InterpreterFactoryManager}, which
+ * and add the implementation class to {@link InterpreterFactories}, which
  * can be done automatically by adding a declaration to zk.xml or lang-addon.xml.
  *
  * @author tomyeh
@@ -40,8 +40,13 @@ public interface InterpreterFactory {
 	/** Creates a namespace with the specified identifier
 	 * for the specified component.
 	 *
+	 * <p>The component is called the owner. It must be attached to a page
+	 * when calling this method.
+	 *
 	 * @param owner the component that the returned namespace belongs to.
 	 * @param id the identifer (never null).
+	 * @exception IllegalStateException if owner doesn't belong to any page yet
+	 * (i.e., {@link Component#getPage} returns null).
 	 */
 	public Namespace newNamespace(Component owner, String id);
 }

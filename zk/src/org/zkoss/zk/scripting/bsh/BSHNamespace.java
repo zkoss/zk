@@ -20,9 +20,6 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
 
 import bsh.NameSpace;
 import bsh.UtilEvalError;
@@ -36,6 +33,7 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.AbstractNamespace;
 import org.zkoss.zk.scripting.Method;
 
 /**
@@ -43,13 +41,11 @@ import org.zkoss.zk.scripting.Method;
  *
  * @author tomyeh
  */
-public class BSHNamespace implements Namespace {//not a good idea to serialize it
+public class BSHNamespace extends AbstractNamespace {//not a good idea to serialize it
 	private static final Log log = Log.lookup(BSHNamespace.class);
 
 	private Namespace _parent;
 	private NameSpace _ns;
-	/** A stack of backup-ed variables List(Map(String name, Object val)). */
-	private List _backups;
 
 	/** Constructs a name space of a component (ID space owner).
 	 */
@@ -299,32 +295,6 @@ public class BSHNamespace implements Namespace {//not a good idea to serialize i
 			if (nm == null) break; //no more
 
 			_ns.importPackage(nm);
-		}
-	}
-
-	public void backupVariable(String name, boolean newBlock) {
-		if (newBlock || _backups == null || _backups.isEmpty()) {
-			if (_backups == null) _backups = new LinkedList();
-			_backups.add(0, new HashMap());
-		}
-		if (name != null) {
-			final Map map = (Map)_backups.get(0);
-			map.put(name, getVariable(name, true));
-		}
-	}
-	public void restoreVariables() {
-		if (_backups == null || _backups.isEmpty()) {
-			log.warning("restore without any block of backup-ed variables, "+this);
-		} else {
-			final Map map = (Map)_backups.remove(0);
-			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String name = (String)me.getKey();
-				final Object val = me.getValue();
-				//if (D.ON && log.finerable()) log.finer("Restore "+name+"="+val);
-				if (val != null) setVariable(name, val, true);
-				else unsetVariable(name);
-			}
 		}
 	}
 

@@ -28,6 +28,7 @@ import java.util.HashMap;
 import javax.servlet.jsp.el.FunctionMapper;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.el.FunctionMappers;
 import org.zkoss.el.Taglib;
@@ -42,6 +43,7 @@ import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.zk.scripting.InterpreterFactories;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 
@@ -107,12 +109,26 @@ public class PageDefinition extends InstanceDefinition {
 		return _locator;
 	}
 
-	/** Returns the name of scripting language used by zscript elements.
+	/** Returns the name of scripting language used by zscript elements for pages
+	 * created with this definition.
 	 *
-	 * <p> It is called when creating a new page for this richlet to serve.
+	 * <p>It is called when creating a new page for this richlet to serve.
+	 *
+	 * <p>Default: Java.
 	 */
 	public String getZScriptLanguage() {
 		return _zslang;
+	}
+	/** Sets the name of scripting language used by zscript elements for pages
+	 * created with this definition.
+	 *
+	 * @param zslang the name of the scripting language
+	 */
+	public void setZScriptLanguage(String zslang) {
+		if (!Objects.equals(zslang, _zslang)) {
+			InterpreterFactories.lookup(zslang); //test its existence
+			_zslang = zslang;
+		}
 	}
 
 	/** Returns the identitifer that will be assigned to pages created from
