@@ -39,6 +39,7 @@ import org.zkoss.zk.ui.sys.TimeZoneProvider;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
+import org.zkoss.zk.scripting.InterpreterFactoryManager;
 
 /**
  * Used to parse WEB-INF/zk.xml into {@link Configuration}.
@@ -160,6 +161,9 @@ public class ConfigParser {
 				Class cls = parseClass(el, "evaluator-class", ExpressionEvaluator.class);
 				if (cls != null) System.setProperty("org.zkoss.el.ExpressionEvaluator.class", cls.getName());
 					//System-wide property; reason: used in zcommon.jar
+			} else if ("zscript-config".equals(elnm)) {
+			//zscript-config
+				InterpreterFactoryManager.the().add(config.getWebApp(), el);
 			} else if ("log".equals(elnm)) {
 				final String base = el.getElementValue("log-base", true);
 				if (base != null)

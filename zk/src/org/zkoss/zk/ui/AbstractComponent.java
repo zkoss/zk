@@ -54,7 +54,7 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Variables;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.ui.impl.Serializables;
-import org.zkoss.zk.scripting.bsh.BshNamespace;
+import org.zkoss.zk.scripting.bsh.BSHNamespace;
 import org.zkoss.zk.ui.metainfo.Milieu;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.AnnotationMapImpl;
@@ -1137,7 +1137,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		private Map fellows = new HashMap(41);
 
 		private SpaceInfo(Component owner, String id) {
-			ns = new BshNamespace(id);
+			ns = new BSHNamespace(id);
 			ns.setVariable("spaceScope", attrs, true);
 			ns.setVariable("spaceOwner", owner, true);
 		}

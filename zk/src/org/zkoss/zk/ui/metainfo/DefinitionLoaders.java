@@ -50,6 +50,7 @@ import org.zkoss.web.servlet.StyleSheet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.scripting.InterpreterFactoryManager;
 
 /**
  * Utilities to load language definitions.
@@ -198,6 +199,13 @@ public class DefinitionLoaders {
 		parseLabelTemplate(langdef, root);
 		parseDynamicTag(langdef, root);
 		parseMacroTemplate(langdef, root);
+
+		for (Iterator it = root.getElements("zscript-config").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			InterpreterFactoryManager.the().add(null, el);
+				//Note: zscript-config is applied to the whole system, not just langdef
+		}
 
 		for (Iterator it = root.getElements("javascript").iterator();
 		it.hasNext();) {

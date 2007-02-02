@@ -72,7 +72,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.Variables;
 import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.scripting.bsh.BshInterpreter;
+import org.zkoss.zk.scripting.bsh.BSHInterpreter;
 import org.zkoss.zk.au.AuSetTitle;
 
 /**
@@ -177,7 +177,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	/** Initialized the page when contructed or deserialized.
 	 */
 	protected void init() {
-		_ip = new BshInterpreter();
+		_ip = new BSHInterpreter();
 		_roRoots = Collections.unmodifiableList(_roots);
 		_attrs = new HashMap();
 		_fellows = new HashMap();

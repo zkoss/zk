@@ -94,6 +94,11 @@ public class Configuration {
 	public Configuration(WebApp wapp) {
 		_wapp = wapp;
 	}
+	/** Returns the Web application that this configuration belongs to.
+	 */
+	public WebApp getWebApp() {
+		return _wapp;
+	}
 	/** Adds a listener class.
 	 */
 	public void addListener(Class klass) throws Exception {

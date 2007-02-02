@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.scripting;
 
 /**
- * The interpreter dependent factory to create {@link Interpretor} and
+ * The interpreter dependent factory to create {@link Interpreter} and
  * {@link Namespace}.
  *
  * <p>To add a new interpreter, a developer has to implement this interface
