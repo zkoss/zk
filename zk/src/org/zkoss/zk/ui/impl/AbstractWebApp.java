@@ -20,12 +20,17 @@ package org.zkoss.zk.ui.impl;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.http.SimpleUiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.impl.SessionDesktopCacheProvider;
+import org.zkoss.zk.ui.impl.UiEngineImpl;
+import org.zkoss.zk.scripting.InterpreterFactoryManager;
 
 /**
  * A skeletal implementation of {@link WebApp}.
@@ -65,14 +70,63 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	//WebAppCtrl//
-	public void init(UiEngine engine, DesktopCacheProvider provider,
-	UiFactory factory) {
-		if (engine == null || provider == null || factory == null)
-			throw new IllegalArgumentException("null");
+	public void init() {
+		Class cls = _config.getUiEngineClass();
+		final UiEngine engine;
+		if (cls == null) {
+			engine = new UiEngineImpl();
+		} else {
+			try {
+				engine = (UiEngine)cls.newInstance();
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+			}
+		}
+
+		cls = _config.getDesktopCacheProviderClass();
+		final DesktopCacheProvider provider;
+		if (cls == null) {
+			provider = new SessionDesktopCacheProvider();
+		} else {
+			try {
+				provider = (DesktopCacheProvider)cls.newInstance();
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+			}
+		}
+
+		cls = _config.getUiFactoryClass();
+		final UiFactory factory;
+		if (cls == null) {
+			factory = new SimpleUiFactory();
+		} else {
+			try {
+				factory = (UiFactory)cls.newInstance();
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+			}
+		}
 
 		_engine = engine;
 		_provider = provider;
 		_factory = factory;
+
+		engine.start(this);
+		provider.start(this);
+		factory.start(this);
+
+		_config.invokeWebAppInits();
+	}
+	public void destroy() {
+		_config.invokeWebAppCleanups();
+
+		_config.detroyRichlets();
+
+		getUiFactory().stop(this);
+		getDesktopCacheProvider().stop(this);
+		getUiEngine().stop(this);
+
+		InterpreterFactoryManager.the().clear(this);
 	}
 
 	public final UiEngine getUiEngine() {

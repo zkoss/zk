@@ -51,10 +51,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.util.WebAppInit;
-import org.zkoss.zk.ui.util.WebAppCleanup;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
-import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -62,8 +59,6 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.impl.AbstractWebApp;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
-import org.zkoss.zk.ui.impl.SessionDesktopCacheProvider;
-import org.zkoss.zk.ui.impl.UiEngineImpl;
 
 /**
  * A bridge bewteen Web server and ZK.
@@ -113,6 +108,7 @@ public class WebManager {
 		Labels.setVariableResolver(new ServletLabelResovler());
 
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
+		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
 		_wapp = new MyWebApp();
 		final Configuration cfg = _wapp.getConfiguration();
@@ -125,50 +121,7 @@ public class WebManager {
 			log.error("Unable to load /WEB-INF/zk.xml", ex);
 		}
 
-		Class cls = cfg.getUiEngineClass();
-		final UiEngine engine;
-		if (cls == null) {
-			engine = new UiEngineImpl();
-		} else {
-			try {
-				engine = (UiEngine)cls.newInstance();
-			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
-			}
-		}
-
-		cls = cfg.getDesktopCacheProviderClass();
-		final DesktopCacheProvider provider;
-		if (cls == null) {
-			provider = new SessionDesktopCacheProvider();
-		} else {
-			try {
-				provider = (DesktopCacheProvider)cls.newInstance();
-			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
-			}
-		}
-
-		cls = cfg.getUiFactoryClass();
-		final UiFactory factory;
-		if (cls == null) {
-			factory = new SimpleUiFactory();
-		} else {
-			try {
-				factory = (UiFactory)cls.newInstance();
-			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
-			}
-		}
-
-		((WebAppCtrl)_wapp).init(engine, provider, factory);
-		engine.start(_wapp);
-		provider.start(_wapp);
-		factory.start(_wapp);
-
-		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
-
-		cfg.invokeWebAppInits();
+		((WebAppCtrl)_wapp).init();
 
 		final List listeners = (List)_actListeners.remove(_ctx); //called and drop
 		if (listeners != null) {
@@ -185,13 +138,7 @@ public class WebManager {
 	}
 
 	public void destroy() {
-		_wapp.getConfiguration().invokeWebAppCleanups();
-		_wapp.getConfiguration().detroyRichlets();
-
-		final WebAppCtrl wappc = (WebAppCtrl)_wapp;
-		wappc.getUiFactory().stop(_wapp);
-		wappc.getDesktopCacheProvider().stop(_wapp);
-		wappc.getUiEngine().stop(_wapp);
+		((WebAppCtrl)_wapp).destroy();
 	}
 
 	/** Returns the handler to retrieve resource from class path,

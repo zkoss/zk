@@ -54,8 +54,7 @@ public class InterpreterFactoryManager {
 	 * If null, the factory is visible to all Web application.
 	 * @param name the name of the factory. It is case insensitive.
 	 */
-	public InterpreterFactory addFactory(
-	WebApp wapp, String name, InterpreterFactory fty) {
+	public InterpreterFactory add(WebApp wapp, String name, InterpreterFactory fty) {
 		if (name == null || name.length() == 0 || fty == null)
 			throw new IllegalArgumentException("emty or null");
 
@@ -66,10 +65,15 @@ public class InterpreterFactoryManager {
 	 *
 	 * @exception InterpreterNotFoundException if not found.
 	 */
-	public InterpreterFactory getFactory(WebApp wap, String name) {
+	public InterpreterFactory get(WebApp wap, String name) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException(name);
 
 		throw new InterpreterNotFoundException(name, MZk.INTERPRETER_NOT_FOUND, name);
+	}
+	/** Clears the definitions of the specified Web application.
+	 * It must be called when a Web application is about to be destroyed.
+	 */
+	public void clear(WebApp wapp) {
 	}
 }

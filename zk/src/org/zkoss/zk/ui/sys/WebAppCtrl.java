@@ -31,10 +31,13 @@ import org.zkoss.zk.ui.sys.UiFactory;
  * @author tomyeh
  */
 public interface WebAppCtrl {
-	/** Initializes the {@link org.zkoss.zk.ui.WebApp}.
+	/** Initializes this WebApplication.
 	 */
-	public void init(UiEngine engine, DesktopCacheProvider provider,
-	UiFactory factory);
+	public void init();
+	/** Destroys this Web applicaiton.
+	 */
+	public void destroy();
+
 	/** Returns the UI engine for this session.
 	 */
 	public UiEngine getUiEngine();
