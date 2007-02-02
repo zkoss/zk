@@ -182,7 +182,7 @@ public interface Page extends IdSpace {
 
 	/** Returns all custom attributes of the specified scope.
 	 * You could reference them thru componentScope, spaceScope, pageScope,
-	 * requestScope and desktopScope in BSH and EL.
+	 * requestScope and desktopScope in zscript and EL.
 	 *
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
@@ -242,7 +242,7 @@ public interface Page extends IdSpace {
 	 * it is override by {@link Component#setVariable}.
 	 */
 	public void setVariable(String name, Object val);
-	/** Returns the value of a variable defined in the BSH interpreter.
+	/** Returns the value of a variable defined in the zscript interpreter.
 	 * The variable is defined in the scope of this page.
 	 * In other words, it is visible to all components in this page, unless
 	 * it is override by {@link Component#setVariable}.
@@ -339,6 +339,11 @@ public interface Page extends IdSpace {
 	/** Returns the interpreter associated with this page.
 	 */
 	public Interpreter getInterpreter();
+
+	/** Returns the scripting language used by zscript elements.
+	 * For example, Java.
+	 */
+	public String getZScriptLanguage();
 
 	//metainfo//
 	/** Returns the function mapper for resolving EL functions, or null if

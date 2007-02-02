@@ -88,7 +88,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * first (by use of {@link Page#getFellow} and then use {@link #getFellow}
 	 * against the owner of the ID space.
 	 *
-	 * <p>In BSH and EL, a component with explicit ID can be accessed
+	 * <p>In zscript and EL, a component with explicit ID can be accessed
 	 * directly by the ID. In other word, a variable named by the ID is
 	 * created automatically.
 	 *
@@ -228,7 +228,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 
 	/** Returns all custom attributes of the specified scope.
 	 * You could reference them thru componentScope, spaceScope, pageScope,
-	 * requestScope and desktopScope in BSH and EL.
+	 * requestScope and desktopScope in zscript and EL.
 	 *
 	 * <p>If scope is {@link #COMPONENT_SCOPE}, it means custom attributes private
 	 * to this component.

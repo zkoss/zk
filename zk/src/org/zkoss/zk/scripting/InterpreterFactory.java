@@ -18,6 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting;
 
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+
 /**
  * The interpreter dependent factory to create {@link Interpreter} and
  * {@link Namespace}.
@@ -29,5 +32,16 @@ package org.zkoss.zk.scripting;
  * @author tomyeh
  */
 public interface InterpreterFactory {
-	
+	/** Creates an interpreter.
+	 *
+	 * @param owner the page that the returne interpreter belongs to.
+	 */
+	public Interpreter newInterpreter(Page owner);
+	/** Creates a namespace with the specified identifier
+	 * for the specified component.
+	 *
+	 * @param owner the component that the returned namespace belongs to.
+	 * @param id the identifer (never null).
+	 */
+	public Namespace newNamespace(Component owner, String id);
 }

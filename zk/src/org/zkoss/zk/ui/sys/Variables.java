@@ -62,7 +62,7 @@ public class Variables {
 		return true;
 	}
 	/** Returns whether the specified name is reserved.
-	 * If true, you cannot use it in BSH (and EL).
+	 * If true, you cannot use it in zscript (and EL).
 	 */
 	public static final boolean isReserved(String name) {
 		return _reves.contains(name);

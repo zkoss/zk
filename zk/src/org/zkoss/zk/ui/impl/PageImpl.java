@@ -46,6 +46,7 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.IdSpace;
@@ -64,6 +65,8 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.zk.scripting.InterpreterFactory;
+import org.zkoss.zk.scripting.InterpreterFactories;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -72,7 +75,6 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.Variables;
 import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.scripting.bsh.BSHInterpreter;
 import org.zkoss.zk.au.AuSetTitle;
 
 /**
@@ -108,7 +110,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private String _id;
 	private transient Interpreter _ip;
 	private String _title = "", _style = "";
-	private final String _path;
+	private final String _path, _zslang;
 	/** A list of root components. */
 	private final List _roots = new LinkedList();
 	private transient List _roRoots;
@@ -149,11 +151,11 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_pgUri = _langdef.getPageURI();
 		_compdefs = pgdef.getComponentDefinitionMap();
 		_path = pgdef.getRequestPath();
+		_zslang = pgdef.getZScriptLanguage();
 
 		init();
 	}
-	/** Constructs a page by giving the language definition. It is mainly
-	 * used to create a page for {@link org.zkoss.zk.ui.Richlet}.
+	/** Constructs a page by specifying a richlet.
 	 *
 	 * <p>Note: when a page is constructed, it doesn't belong to a desktop
 	 * yet. Caller has to invoke {@link #init} to complete
@@ -162,22 +164,23 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 * <p>Also note that {@link #getId} and {@link #getTitle}
 	 * are not ready until {@link #init} is called.
 	 *
-	 * @param langdef the language definition (never null).
+	 * @param richlet the richlet to serve this page.
 	 * @param path the request path, or null if not available
 	 */
-	public PageImpl(LanguageDefinition langdef, String path) {
-		_langdef = langdef;
+	public PageImpl(Richlet richlet, String path) {
+		_langdef = richlet.getLanguageDefinition();
 		_dkUri = _langdef.getDesktopURI();
 		_pgUri = _langdef.getPageURI();
 		_compdefs = new ComponentDefinitionMap();
 		_path = path != null ? path: "";
+		_zslang = richlet.getZScriptLanguage();
 
 		init();
 	}
 	/** Initialized the page when contructed or deserialized.
 	 */
 	protected void init() {
-		_ip = new BSHInterpreter();
+		_ip = InterpreterFactories.lookup(_zslang).newInterpreter(this);
 		_roRoots = Collections.unmodifiableList(_roots);
 		_attrs = new HashMap();
 		_fellows = new HashMap();
@@ -566,6 +569,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 	public Interpreter getInterpreter() {
 		return _ip;
+	}
+	public String getZScriptLanguage() {
+		return _zslang;
 	}
 
 	public boolean isListenerAvailable(String evtnm) {

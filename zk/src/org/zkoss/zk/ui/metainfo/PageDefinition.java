@@ -58,6 +58,8 @@ public class PageDefinition extends InstanceDefinition {
 	private String _id, _title, _style;
 	/** The request path. */
 	private String _path = "";
+	/** The zscript language. */
+	private String _zslang = "Java";
 	private final List _taglibs = new LinkedList();
 	private FunctionMapper _funmap;
 	/* List(InitiatorDefinition). */
@@ -103,6 +105,14 @@ public class PageDefinition extends InstanceDefinition {
 	 */
 	public Locator getLocator() {
 		return _locator;
+	}
+
+	/** Returns the name of scripting language used by zscript elements.
+	 *
+	 * <p> It is called when creating a new page for this richlet to serve.
+	 */
+	public String getZScriptLanguage() {
+		return _zslang;
 	}
 
 	/** Returns the identitifer that will be assigned to pages created from
@@ -355,14 +365,14 @@ public class PageDefinition extends InstanceDefinition {
 	 * It setup the identifier and title, adds it to desktop,
 	 * and then iInterpret all scripts unpon the page.
 	 *
-	 * @param evalTopZscripts whether to evaluate the zscript declared at
+	 * @param evalTopZScripts whether to evaluate the zscript declared at
 	 * the top level
 	 */
-	public void init(Page page, boolean evalHeaders, boolean evalTopZscripts) {
+	public void init(Page page, boolean evalHeaders, boolean evalTopZScripts) {
 		((PageCtrl)page).init(
 			_id, _title, _style, evalHeaders ? getHeaders(page): "");
 
-		if (evalTopZscripts) {
+		if (evalTopZScripts) {
 			final List scripts = getLanguageDefinition().getScripts();
 			if (!scripts.isEmpty()) {
 				final Namespace ns = Namespaces.beforeInterpret(null, page);

@@ -30,7 +30,6 @@ import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.impl.SessionDesktopCacheProvider;
 import org.zkoss.zk.ui.impl.UiEngineImpl;
-import org.zkoss.zk.scripting.InterpreterFactoryManager;
 
 /**
  * A skeletal implementation of {@link WebApp}.
@@ -125,8 +124,6 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		getUiFactory().stop(this);
 		getDesktopCacheProvider().stop(this);
 		getUiEngine().stop(this);
-
-		InterpreterFactoryManager.the().clear(this);
 	}
 
 	public final UiEngine getUiEngine() {

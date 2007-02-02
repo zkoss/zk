@@ -77,7 +77,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 		return new PageImpl(pagedef);
 	}
 	public Page newPage(RequestInfo ri, Richlet richlet, String path) {
-		return new PageImpl(richlet.getLanguageDefinition(), path);
+		return new PageImpl(richlet, path);
 	}
 	public Component newComponent(Page page, Component parent,
 	ComponentDefinition instdef) {

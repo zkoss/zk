@@ -43,8 +43,16 @@ public interface Richlet {
 	public void destroy();
 	/** Returns the language defintion that this richlet belongs to.
 	 * Don't return null.
+	 *
+	 * <p> It is called when creating a new page for this richlet to serve.
 	 */
 	public LanguageDefinition getLanguageDefinition();
+	/** Returns the name of scripting language used by zscript elements.
+	 * For example, Java.
+	 *
+	 * <p> It is called when creating a new page for this richlet to serve.
+	 */
+	public String getZScriptLanguage();
 
 	/** Called by the richlet container to create components when
 	 * the specified page is visited and created.
