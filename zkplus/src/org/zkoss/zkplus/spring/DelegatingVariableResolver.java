@@ -21,7 +21,7 @@ import java.util.HashMap;
 import javax.servlet.ServletContext;
 
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.util.VariableResolver;
+import org.zkoss.zk.scripting.VariableResolver;
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
