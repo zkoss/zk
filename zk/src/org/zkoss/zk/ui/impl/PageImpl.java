@@ -558,7 +558,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			//Don't use include. Otherwise, headers (set by JSP) will be eaten.
 		}
 	}
-	public Class getClass(String clsnm) throws ClassNotFoundException {
+	public Class getClass(String clsnm) {
 		return _ip.getNamespace().getClass(clsnm);
 	}
 	public final Namespace getNamespace() {

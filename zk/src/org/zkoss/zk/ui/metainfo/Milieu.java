@@ -31,6 +31,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.web.servlet.Servlets;
 
@@ -81,10 +82,10 @@ public class Milieu implements Serializable {
 
 	//static//
 	private static final ThreadLocal _mill = new ThreadLocal();
-	/** A dummy millieu which assumes nothing is defined at all. */
+	/** A dummy milieu which assumes nothing is defined at all. */
 	public static final Milieu DUMMY = new Milieu();
 
-	/** Returns the current millieu, which is used only by
+	/** Returns the current milieu, which is used only by
 	 * {@link org.zkoss.zk.ui.AbstractComponent}.
 	 * <p>UiEngine use this to communicate with
 	 * {@link org.zkoss.zk.ui.AbstractComponent}.
@@ -92,7 +93,7 @@ public class Milieu implements Serializable {
 	public static Milieu getCurrent() {
 		return (Milieu)_mill.get();
 	}
-	/** Sets the current millieu.
+	/** Sets the current milieu.
 	 */
 	public static void setCurrent(Milieu mill) {
 		_mill.set(mill);
@@ -169,22 +170,47 @@ public class Milieu implements Serializable {
 	 *
 	 * @param page the page used to resolve the class name from its
 	 * namespace ({@link Page#getNamespace}).
-	 * @exception UiException if the class not found
+	 * @exception ClassNotFoundException if the class not found
 	 */
-	public Class resolveImplementationClass(Page page) throws UiException {
+	public Class resolveImplementationClass(Page page)
+	throws ClassNotFoundException {
 		if (_implcls instanceof String) {
 			final String clsnm = (String)_implcls;
-			try {
-				final Class cls = page.getClass(clsnm);
-				if (Objects.equals(
-				cls.getClassLoader(), Milieu.class.getClassLoader()))
-					_implcls = cls; //cache only if static
-				return cls;
-			} catch (ClassNotFoundException ex) {
-				throw new UiException("Class not found: "+clsnm, ex);
-			}
+			final Class cls = page.getClass(clsnm);
+			if (cls == null)
+				throw new ClassNotFoundException(clsnm);
+			if (Objects.equals(cls.getClassLoader(), Milieu.class.getClassLoader()))
+				_implcls = cls; //cache only if static
+			return cls;
 		}
 		return (Class)_implcls;
+	}
+	/** Returns whether a component belongs to this milieu.
+	 *
+	 * <p>If {@link #resolveImplementationClass} failed to resolve,
+	 * true is returned!
+	 */
+	public boolean isInstance(Component comp) {
+		Class cls;
+		if (_implcls instanceof String) {
+			final Page page = comp.getPage();
+			if (page != null) {
+				try {
+					cls = resolveImplementationClass(page);
+				} catch (ClassNotFoundException ex) {
+					return true; //consider as true if not resolvable
+				}
+			} else {
+				try {
+					cls = Classes.forNameByThread((String)_implcls);
+				} catch (ClassNotFoundException ex) {
+					return true; //consider as true if not found
+				}
+			}
+		} else {
+			cls = (Class)_implcls;
+		}
+		return cls.isInstance(comp);
 	}
 
 	/** Applies the properties and custom attributes defined in
@@ -350,7 +376,7 @@ public class Milieu implements Serializable {
 
 	//Object//
 	public String toString() {
-		final StringBuffer sb  = new StringBuffer(64).append("[millieu: ");
+		final StringBuffer sb  = new StringBuffer(64).append("[milieu: ");
 		if (_implcls != null) {
 			if (_implcls instanceof Class)
 				sb.append(((Class)_implcls).getName());

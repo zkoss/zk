@@ -110,13 +110,13 @@ public class Property implements Condition, Serializable {
 		if (!isEffective(comp))
 			return; //ignored
 
-		final Class cls = mill.resolveImplementationClass(comp.getPage());
-		if (_lastcls != cls) {
-			resolve(cls);
-			_lastcls = cls;
-		}
-
 		try {
+			final Class cls = mill.resolveImplementationClass(comp.getPage());
+			if (_lastcls != cls) {
+				resolve(cls);
+				_lastcls = cls;
+			}
+
 			//Note: if _mtd and _mtds are both null, it must be dyna-attr
 			//However, if dyna-attr, _mtd or _mtds might not be null
 			final Class type =

@@ -36,9 +36,16 @@ import org.zkoss.zk.ui.metainfo.Annotation;
  * @author tomyeh
  */
 public interface ComponentCtrl {
-	/** Returns the millieu of this component (never null).
+	/** Returns the milieu of this component (never null).
 	 */
 	public Milieu getMilieu();
+	/** Sets the milieu of this component.
+	 * <p>The milieu affects how a component behaves. Developers rarely
+	 * need to call this method. If a wrong milieu is assigned,
+	 * the result is unpredictable (and hard to debug). It is mainly designed
+	 * for developing tools.
+	 */
+	public void setMilieu(Milieu milieu);
 
 	/** Returns the annotation associated with the component,
 	 * or null if not available.

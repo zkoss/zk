@@ -59,7 +59,7 @@ public class InterpreterFactories {
 	 */
 	public static final InterpreterFactory lookup(String zslang) {
 		if (zslang == null || zslang.length() == 0)
-			throw new IllegalArgumentException(zslang);
+			throw new IllegalArgumentException("empty or null");
 
 		zslang = zslang.toLowerCase();
 		final InterpreterFactory fty;

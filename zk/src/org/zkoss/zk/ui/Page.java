@@ -316,14 +316,12 @@ public interface Page extends IdSpace {
 	 */
 	public void invalidate();
 
-	/** Returns the class of the specified name.
+	/** Returns the class of the specified name, or null if not found.
 	 * It's a shortcut to {@link Namespace#getClass} (of {@link #getNamespace}.
 	 * Before delegating to the thread class loader, it also looks for
 	 * the classes defined in the interpretor.
-	 *
-	 * @exception ClassNotFoundException if not found.
 	 */
-	public Class getClass(String clsnm) throws ClassNotFoundException;
+	public Class getClass(String clsnm);
 
 	/** Returns the namespace used to store variables and functions
 	 * belonging to this page.

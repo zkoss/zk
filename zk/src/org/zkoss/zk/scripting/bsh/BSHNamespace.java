@@ -33,7 +33,6 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.AbstractNamespace;
 import org.zkoss.zk.scripting.Method;
 
 /**
@@ -41,68 +40,65 @@ import org.zkoss.zk.scripting.Method;
  *
  * @author tomyeh
  */
-public class BSHNamespace extends AbstractNamespace {//not a good idea to serialize it
+public class BSHNamespace implements Namespace {//not a good idea to serialize it
 	private static final Log log = Log.lookup(BSHNamespace.class);
 
 	private Namespace _parent;
-	private NameSpace _ns;
+	private NameSpace _bshns;
 
 	/** Constructs a name space of a component (ID space owner).
 	 */
 	public BSHNamespace(String id) {
-		_ns = new LiteNameSpace(null, id);
+		_bshns = new LiteNameSpace(null, id);
 	}
 	/** Constructs a name space for a page.
 	 */
 	public BSHNamespace(NameSpace ns) {
 		if (ns == null)
 			throw new IllegalArgumentException("null");
-		_ns = ns;
+		_bshns = ns;
 	}
  
  	//-- Namespace --//
-	public Class getClass(String clsnm) throws ClassNotFoundException {
+	public Class getClass(String clsnm) {
 		try {
-			final Class cls = _ns.getClass(clsnm);
-			if (cls == null)
-				throw new ClassNotFoundException("Class not found: "+clsnm);
-			return cls;
+			return _bshns.getClass(clsnm);
 		} catch (UtilEvalError ex) {
-			throw new ClassNotFoundException("Failed to load class "+clsnm);
+			throw new UiException("Failed to load class "+clsnm, ex);
 		}
 			
 	}
  	public Object getVariable(String name, boolean local) {
-		final NameSpace oldp = local ? _ns.getParent(): null;
-		if (oldp != null) _ns.setParent(null); //to avoid calling parent's getVariable
+		final NameSpace oldp = local ? _bshns.getParent(): null;
+		if (oldp != null) _bshns.setParent(null); //to avoid calling parent's getVariable
  		try {
-	 		return Primitive.unwrap(_ns.getVariable(name));
+	 		return Primitive.unwrap(_bshns.getVariable(name));
 		} catch (UtilEvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (oldp != null) _ns.setParent(oldp); //restore
+			if (oldp != null) _bshns.setParent(oldp); //restore
 		}
  	}
 	public void setVariable(String name, Object value, boolean local) {
-		final NameSpace oldp = local ? _ns.getParent(): null;
-		if (oldp != null) _ns.setParent(null); //to avoid calling parent's setVariable
+		final NameSpace oldp = local ? _bshns.getParent(): null;
+		if (oldp != null) _bshns.setParent(null); //to avoid calling parent's setVariable
 		try {
-			_ns.setVariable(name, value != null ? value: Primitive.NULL, false);
+			_bshns.setVariable(name, value != null ? value: Primitive.NULL, false);
 		} catch (UtilEvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (oldp != null) _ns.setParent(oldp); //restore
+			if (oldp != null) _bshns.setParent(oldp); //restore
 		}
 	}
 	public void unsetVariable(String name) {
-		_ns.unsetVariable(name);
+		_bshns.unsetVariable(name);
 	}
 	public Method getMethod(String name, Class[] argTypes, boolean local) {
 		if (argTypes == null)
 			argTypes = new Class[0];
 
 		try {
-		 	final BshMethod m = _ns.getMethod(name, argTypes, local);
+		 	final BshMethod m = _bshns.getMethod(name, argTypes, local);
 		 	return m != null ? new BSHMethod(m): null;
 		} catch (UtilEvalError ex) {
 			throw UiException.Aide.wrap(ex);
@@ -115,48 +111,46 @@ public class BSHNamespace extends AbstractNamespace {//not a good idea to serial
 	public void setParent(Namespace parent) {
 		if (!Objects.equals(_parent, parent)) {
 			_parent = parent;
-			_ns.setParent(parent != null ? 
+			_bshns.setParent(parent != null ? 
 				(NameSpace)parent.getNativeNamespace(): null);
 		}
 	}
 
 	public Object getNativeNamespace() {
-		return _ns;
+		return _bshns;
 	}
 
-	public void copy(Namespace from, Filter filter) {
-		if (!(from instanceof BSHNamespace))
-			throw new UnsupportedOperationException("BSHNamespace to BSHNamespace only: "+from);
-
-		final NameSpace bshfrom = ((BSHNamespace)from)._ns;
+	public Object clone(String id) {
+		final BSHNamespace to = new BSHNamespace(id);		
 
 		//variables
-		try {
-			final String[] vars = bshfrom.getVariableNames();
-			for (int j = vars != null ? vars.length: 0; --j >= 0;) {
-				final String nm = vars[j];
-				if (!"bsh".equals(nm)) {
-					final Object val = from.getVariable(nm, true);
-					if (filter == null || filter.accept(nm, val))
-						setVariable(nm, val, true);
-				}
+		final String[] vars = _bshns.getVariableNames();
+		for (int j = vars != null ? vars.length: 0; --j >= 0;) {
+			final String nm = vars[j];
+			if (!"bsh".equals(nm)) {
+				final Object val = this.getVariable(nm, true);
+				to.setVariable(nm, val, true);
 			}
+		}
 
+		try {
 			//methods
-			final BshMethod[] mtds = bshfrom.getMethods();
+			final BshMethod[] mtds = _bshns.getMethods();
 			for (int j = mtds != null ? mtds.length: 0; --j >= 0;) {
 				final String nm = mtds[j].getName();
-				if (filter == null || filter.accept(nm, mtds[j]))
-					_ns.setMethod(nm, mtds[j]);
+				to._bshns.setMethod(nm, mtds[j]);
 			}
 		} catch (UtilEvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
+
+		if (_parent != null) to.setParent(_parent);
+		return to;
 	}
 	public void write(java.io.ObjectOutputStream s, Filter filter)
 	throws java.io.IOException {
 		//1. variables
-		final String[] vars = _ns.getVariableNames();
+		final String[] vars = _bshns.getVariableNames();
 		for (int j = vars != null ? vars.length: 0; --j >= 0;) {
 			final String nm = vars[j];
 			if (nm != null && !"bsh".equals(nm)) {
@@ -173,7 +167,7 @@ public class BSHNamespace extends AbstractNamespace {//not a good idea to serial
 		s.writeObject(null); //denote end-of-vars
 
 		//2. methods
-		final BshMethod[] mtds = _ns.getMethods();
+		final BshMethod[] mtds = _bshns.getMethods();
 		for (int j = mtds != null ? mtds.length: 0; --j >= 0;) {
 			final String nm = mtds[j].getName();
 			if (filter == null || filter.accept(nm, mtds[j])) {
@@ -209,7 +203,7 @@ public class BSHNamespace extends AbstractNamespace {//not a good idea to serial
 			f = Classes.getAnyField(NameSpace.class, "importedClasses");
 			acs = f.isAccessible();
 			f.setAccessible(true);
-			final Map clses = (Map)f.get(_ns);
+			final Map clses = (Map)f.get(_bshns);
 			if (clses != null)
 				for (Iterator it = clses.values().iterator(); it.hasNext();) {
 					final String clsnm = (String)it.next();
@@ -232,7 +226,7 @@ public class BSHNamespace extends AbstractNamespace {//not a good idea to serial
 			f = Classes.getAnyField(NameSpace.class, "importedPackages");
 			acs = f.isAccessible();
 			f.setAccessible(true);
-			final Collection pkgs = (Collection)f.get(_ns);
+			final Collection pkgs = (Collection)f.get(_bshns);
 			if (pkgs != null)
 				for (Iterator it = pkgs.iterator(); it.hasNext();) {
 					final String pkgnm = (String)it.next();
@@ -270,14 +264,14 @@ public class BSHNamespace extends AbstractNamespace {//not a good idea to serial
 					f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
 					acs = f.isAccessible();
 					f.setAccessible(true);
-					f.set(mtd, _ns);				
+					f.set(mtd, _bshns);				
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 				} finally {
 					if (f != null) f.setAccessible(acs);
 				}
 
-				_ns.setMethod(mtd.getName(), mtd);
+				_bshns.setMethod(mtd.getName(), mtd);
 			}
 		} catch (UtilEvalError ex) {
 			throw UiException.Aide.wrap(ex);
@@ -287,22 +281,22 @@ public class BSHNamespace extends AbstractNamespace {//not a good idea to serial
 			final String nm = (String)s.readObject();
 			if (nm == null) break; //no more
 
-			_ns.importClass(nm);
+			_bshns.importClass(nm);
 		}
 
 		for (;;) {
 			final String nm = (String)s.readObject();
 			if (nm == null) break; //no more
 
-			_ns.importPackage(nm);
+			_bshns.importPackage(nm);
 		}
 	}
 
 	//-- Object --//
 	public int hashCode() {
-		return _ns.hashCode();
+		return _bshns.hashCode();
 	}
 	public boolean equals(Object o) {
-		return o instanceof BSHNamespace && ((BSHNamespace)o)._ns.equals(_ns);
+		return o instanceof BSHNamespace && ((BSHNamespace)o)._bshns.equals(_bshns);
 	}
 }

@@ -33,9 +33,9 @@ package org.zkoss.zk.scripting;
  * @see Interpreter
  */
 public interface Namespace {
-	/** Returns the class defined in the beanshell.
+	/** Returns the class defined in the beanshell, or null if not found.
 	 */
-	public Class getClass(String clsnm) throws ClassNotFoundException;
+	public Class getClass(String clsnm);
 	/** Returns the variable of the specified name, or null if not
 	 * defined.
 	 * @param local whether not to search its ancestor.
@@ -77,51 +77,34 @@ public interface Namespace {
 	 */
 	public Object getNativeNamespace();
 
-	/** Copies the variables and methods from the specified
-	 * the name space.
+	/** Clones this namespace.
 	 *
-	 * @param filter to filter what variables to copy. Ignored if null.
+	 * @param id the identifier
 	 */
-	public void copy(Namespace from, Filter filter);
+	public Object clone(String id);
+
 	/** Writes the name and value of the variables of this namespace
 	 * to the specified stream.
 	 *
 	 * <p>If the variable's value is not serializable, it won't be written.
 	 *
 	 * <p>To read back, use {@link #read}.
+	 *
+	 * <p>Note: it doesn't write the parent ({@link #getParent}).
 	 */
 	public void write(java.io.ObjectOutputStream s, Filter filter)
 	throws java.io.IOException;
 	/** Reads the name and value of the variable from the specified input
 	 * stream.
+	 *
+	 * <p>Note: it doesn't read the parent ({@link #getParent}).
+	 *
 	 * @see #write
 	 */
 	public void read(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException;
 
-	/** Backup the specfied variable, such that it can be restored with
-	 * {@link #restoreVariables}.
-	 *
-	 * <p>Backup-ed variables are gathered in a block such that all of them
-	 * in the same block are restored at once when {@link #restoreVariables}
-	 * is called.
-	 *
-	 * @param name the variable to backup. If null and newBlock is true,
-	 * it simply creates a new block. If null and newBlock is false, nothing
-	 * happens.
-	 * @param newBlock whether to create a new block. If true, a new block
-	 * is created and the specified variable and following {@link #backupVariable}
-	 * are gathered in this new block.
-	 * If false, the variable's value is added to the same block of the previous
-	 * invocation of {@link #backupVariable}.
-	 */
-	public void backupVariable(String name, boolean newBlock);
-	/** Restores the variables that are backup-ed by {@link #backupVariable}
-	 * in the same block.
-	 */
-	public void restoreVariables();
-
-	/** The filter used with {@link Namespace#copy} and {@link Namespace#write}.
+	/** The filter used with {@link Namespace#write}.
 	 */
 	public interface Filter {
 		/** Whether to accept the specified variable name and its value.

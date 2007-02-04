@@ -468,9 +468,9 @@ public class EventProcessingThread extends Thread {
 		//Bug 1506712: event listeners might be zscript, so we have to
 		//keep built-in variables as long as possible
 		final Namespace ns = Namespaces.beforeInterpret(null, _comp);
-		ns.backupVariable("event", false);
-		ns.setVariable("event", _event, true);
 		try {
+			Namespaces.backupVariable(ns, "event");
+			ns.setVariable("event", _event, true);
 			process1(ns);
 		} finally {
 			Namespaces.afterInterpret(ns);
