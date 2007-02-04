@@ -344,7 +344,7 @@ public class Parser {
 			} else {
 				//if (D.ON && log.finerable()) log.finer("Add component definition: name="+name);
 
-				if (isEmpty(clsnm)) throw new UiException("class is required");
+				if (isEmpty(clsnm)) throw new UiException("class is required, "+pi.getLocator());
 				noEL("class", clsnm, pi);
 
 				compdef = new ComponentDefinition(null, name, (Class)null);
@@ -372,7 +372,7 @@ public class Parser {
 		} else if ("import".equals(target)) { //import
 			throw new UiException("The import directive can be used only at the top level, "+pi.getLocator());
 		} else {
-			log.warning("Unknown processing instruction: "+target);
+			log.warning("Unknown processing instruction: "+target+", "+pi.getLocator());
 		}
 	}
 	/** Process the page directive. */
@@ -391,6 +391,11 @@ public class Parser {
 				pgdef.setStyle(val);
 			} else if ("id".equals(nm)) {
 				pgdef.setId(val);
+			} else if ("zscript-language".equals(nm)) {
+				if (isEmpty(val))
+					throw new UiException("zscript-language cannot be empty, "+pi.getLocator());
+				noEL("zscript-language", val, pi);
+				pgdef.setZScriptLanguage(val);
 			} else {
 				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
 			}
@@ -480,7 +485,7 @@ public class Parser {
 					parent, ComponentDefinition.ZK, "zk"); 
 			} else {
 				if (LanguageDefinition.ZK_NAMESPACE.equals(uri))
-					throw new UiException("Unknown ZK component: "+el);
+					throw new UiException("Unknown ZK component: "+el+", "+el.getLocator());
 
 				final LanguageDefinition complangdef;
 				if (isDefault(langdef, pref, uri)) {
@@ -499,7 +504,7 @@ public class Parser {
 				} else {
 					compdef = complangdef.getDynamicTagDefinition();
 					if (compdef == null)
-						throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef);
+						throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef+", "+el.getLocator());
 					instdef = new InstanceDefinition(parent, compdef, nm);
 				}
 

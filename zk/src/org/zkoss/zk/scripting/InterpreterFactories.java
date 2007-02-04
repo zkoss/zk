@@ -61,10 +61,10 @@ public class InterpreterFactories {
 		if (zslang == null || zslang.length() == 0)
 			throw new IllegalArgumentException("empty or null");
 
-		zslang = zslang.toLowerCase();
+		final String zsl = zslang.toLowerCase();
 		final InterpreterFactory fty;
 		synchronized (_ftys) {
-			fty = (InterpreterFactory)_ftys.get(zslang);
+			fty = (InterpreterFactory)_ftys.get(zsl);
 		}
 		if (fty == null)
 			throw new InterpreterNotFoundException(zslang, MZk.INTERPRETER_NOT_FOUND, zslang);
@@ -91,9 +91,9 @@ public class InterpreterFactories {
 		if (log.debugable()) log.debug("Scripting language is added: "+zslang+", "+fty);
 		_zslangs.add(zslang);
 
-		zslang = zslang.toLowerCase();
+		final String zsl = zslang.toLowerCase();
 		synchronized (_ftys) {
-			return (InterpreterFactory)_ftys.put(zslang, fty);
+			return (InterpreterFactory)_ftys.put(zsl, fty);
 		}
 	}
 	/** Adds an interpreter factory based on the XML declaration.
