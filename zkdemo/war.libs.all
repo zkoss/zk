@@ -12,3 +12,4 @@ bsh.jar
 commons-fileupload.jar
 commons-io.jar
 commons-el.jar
+json_simple.jar
