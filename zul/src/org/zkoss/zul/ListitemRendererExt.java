@@ -70,7 +70,7 @@ return cell;
 	 *
 	 * <p>To simplify the implementation of {@link ListitemRenderer#render},
 	 * {@link Listbox}, by default, detached the list cell before calling
-	 * {@link LisitemRenderer#render}.
+	 * {@link ListitemRenderer#render}.
 	 *
 	 * <p>If you want the cell to being detached before
 	 * {@link ListitemRenderer#render} (the default behavior), just return true.
