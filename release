@@ -163,6 +163,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$prjnm/dist/lib/
 	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar dist/lib/timelinez.jar /tmp/zk/$prjnm/dist/lib/zkforge
 
+	cp dist/lib/ext/json_simple.jar /tmp/zk/$prjnm/dist/lib/ext
+		#required by timelinez
+
 	cp -rp dist/export/WEB-INF/* /tmp/zk/$prjnm/dist/WEB-INF
 	cp zkdoc/ZK-dev*.pdf zkdoc/ZK-quickstart.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$prjnm/doc
 
