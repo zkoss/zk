@@ -1,7 +1,5 @@
 D.ON=true
 domain=my-host.my-domain.com
-share.remote=//time/potix/rd/java/share/zk
-share.local=~/prj/share
 javadoc=~/prj/javadoc
 unzip.enabled
 debug=true

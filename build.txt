@@ -36,11 +36,7 @@ build.setting.local (Must)
 		Controls whether to turn on D.ON
 	domain=my-host.my-domain.com
 		Specifies the domain name
-	share.remote=//time/potix/rd/java/share
-		Specifies the remote location to download or update shared resouces.
-	share.local=~/prj/share
-		Specifies the local location to download or update shared resouces.
-	javadoc=//time/download/javadoc/i3
+	javadoc=~/prj/javadoc
 		Specifies where to store Java apidocs.
 	unzip.enabled
 		Optional. Default: false.
@@ -118,7 +114,6 @@ import.libs (Optional)
 
 cactus.properties (Must if Web-based Unit Test)
 	Specifies the information required by web-based unit test codes.
-	Refer to i3pb/cactus.properties for how-to.
 
 class.test.local (Optional)
  	Specifies a list of classes (one per line) that the unit test must

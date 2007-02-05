@@ -249,11 +249,8 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <target name="clean.bin" depends="config" if="clean.bin.required">
 	<delete quiet="true" dir="${bin.dir}"/>
 </target>
-<target name="clean.lib.ext" depends="config" if="clean.lib.ext.required">
-	<delete quiet="true" dir="${dist.lib.ext.dir}"/>
-</target>
 
-<target name="clean" depends="clean.all, clean.bin, clean.lib.ext">
+<target name="clean" depends="clean.all, clean.bin">
 	<delete quiet="true" dir="${out.dir}"/>
 	<delete quiet="true" dir="${tmp.dir}"/>
 	<delete quiet="true" dir="${outv.dir}"/>
@@ -318,7 +315,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 
 	<delete quiet="true" dir="${dist.javadoc.dir}"/>
 	<move todir="${dist.javadoc.dir}">
-		<fileset dir="${working.javadoc.dir}" excludes="**/i3/util/Runtime.html"/>
+		<fileset dir="${working.javadoc.dir}"/>
 	</move>
 	<delete quiet="true" dir="${working.javadoc.dir}"/>
 

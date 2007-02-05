@@ -168,17 +168,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 				</not>
 			</and>
 		</condition>
-		<condition property="clean.lib.ext.required">
-			<and>
-				<isset property="do.all"/>
-				<not>
-					<or>
-						<isset property="lib.ext.CVS.dir.exist"/>
-						<isset property="lib.ext.svn.dir.exist"/>
-					</or>
-				</not>
-			</and>
-		</condition>
 	</target>
 	<target name="config.build" depends="config">
 		<mkdir dir="${codegen.dir}"/>
