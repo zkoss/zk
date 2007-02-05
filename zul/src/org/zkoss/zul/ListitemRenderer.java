@@ -26,9 +26,13 @@ package org.zkoss.zul;
  * implement {@link RendererCtrl}. For example, starts an transaction,
  * and uses it to render all items for the same request.
  *
+ * <p>If you need better control, your renderer can also implement
+ * {@link ListitemRendererExt}.
+ *
  * @author tomyeh
  * @see ListModel
  * @see Listbox
+ * @see ListitemRendererExt
  */
 public interface ListitemRenderer {
 	/** Renders the data to the specified list item.

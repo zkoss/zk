@@ -1025,8 +1025,7 @@ implements java.io.Serializable, RenderOnDemand {
 	 * @exception UiException if failed to initialize with the model
 	 */
 	public void setItemRenderer(ListitemRenderer renderer) {
-		if (_renderer != renderer)
-			_renderer = renderer;
+		_renderer = renderer;
 	}
 	/** Sets the renderer by use of a class name.
 	 * It creates an instance automatically.
@@ -1064,23 +1063,37 @@ implements java.io.Serializable, RenderOnDemand {
 			newUnloadedItem().setParent(this);
 	}
 	/** Creates an new and unloaded listitem. */
-	private static Listitem newUnloadedItem() {
-		final Listitem item = new Listitem();
-		item.applyProperties();
+	private final Listitem newUnloadedItem() {
+		final ListitemRenderer renderer = getRealRenderer();
+		final Listitem item;
+		if (renderer instanceof ListitemRendererExt) {
+			item = ((ListitemRendererExt)renderer).newListitem(this);
+		} else {
+			item = new Listitem();
+			item.applyProperties();
+		}
 		item.setLoaded(false);
 
-		final Listcell cell = new Listcell();
-		cell.applyProperties();
-		cell.setParent(item); //an empty listheader
+		newUnloadedCell(item);
 		return item;
 	}
+	private Listcell newUnloadedCell(Listitem item) {
+		final ListitemRenderer renderer = getRealRenderer();
+		final Listcell cell;
+		if (renderer instanceof ListitemRendererExt) {
+			cell = ((ListitemRendererExt)renderer).newListcell(item);
+		} else {
+			cell = new Listcell();
+			cell.applyProperties();
+		}
+		cell.setParent(item);
+		return cell;
+	}
 	/** Clears a listitem as if it is not loaded. */
-	private static void clearItemAsUnloaded(Listitem item) {
+	private final void clearItemAsUnloaded(Listitem item) {
 		final List cells = item.getChildren();
 		if (cells.isEmpty()) {
-			final Listcell cell = new Listcell();
-			cell.applyProperties();
-			cell.setParent(item);
+			newUnloadedCell(item);
 		} else {
 			final Listcell listcell = (Listcell)cells.get(0);
 			listcell.setLabel(null);
@@ -1165,6 +1178,11 @@ implements java.io.Serializable, RenderOnDemand {
 			item.setValue(data);
 		}
 	};
+	/** Returns the renderer used to render items.
+	 */
+	private ListitemRenderer getRealRenderer() {
+		return _renderer != null ? _renderer: getDefaultItemRenderer();
+	}
 
 	/** Used to render listitem if _model is specified. */
 	private class Renderer implements java.io.Serializable {
@@ -1172,8 +1190,7 @@ implements java.io.Serializable, RenderOnDemand {
 		private boolean _rendered, _ctrled;
 
 		private Renderer() {
-			_renderer = Listbox.this._renderer != null ?
-				Listbox.this._renderer: getDefaultItemRenderer();
+			_renderer = getRealRenderer();
 		}
 		private void render(Listitem item) throws Throwable {
 			if (item.isLoaded())
