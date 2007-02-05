@@ -1203,9 +1203,8 @@ implements java.io.Serializable, RenderOnDemand {
 			}
 
 			final Listcell cell = (Listcell)item.getChildren().get(0);
-			if ((_renderer instanceof ListitemRendererExt	
-			&& ((ListitemRendererExt)_renderer).shallDetachOnRender(cell)) 
-			|| _renderer instanceof ListitemRenderer)
+			if (!(_renderer instanceof ListitemRendererExt)
+			|| ((ListitemRendererExt)_renderer).shallDetachOnRender(cell))
 				cell.detach();
 
 			try {
