@@ -234,14 +234,6 @@ if [ "$domain" = "" ] ; then
 fi
 echo "domain: $domain"
 
-#-- import external binaries and executable
-#To have better speed, we don't download each time it executes
-if [ "$cmd" != "clean" ] ; then
-	if [ ! -d bin ] || [ ! -d dist/lib/ext ] ; then
-		java.download
-	fi
-fi
-
 #-- prepare javadocdir ...
 if [ "$cmd" = "javadoc" ] ; then
 	javadocdir=$(grep '^javadoc' $setting)
