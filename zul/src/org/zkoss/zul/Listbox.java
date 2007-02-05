@@ -1074,11 +1074,10 @@ implements java.io.Serializable, RenderOnDemand {
 		}
 		item.setLoaded(false);
 
-		newUnloadedCell(item);
+		newUnloadedCell(renderer, item);
 		return item;
 	}
-	private Listcell newUnloadedCell(Listitem item) {
-		final ListitemRenderer renderer = getRealRenderer();
+	private Listcell newUnloadedCell(ListitemRenderer renderer, Listitem item) {
 		final Listcell cell;
 		if (renderer instanceof ListitemRendererExt) {
 			cell = ((ListitemRendererExt)renderer).newListcell(item);
@@ -1093,7 +1092,7 @@ implements java.io.Serializable, RenderOnDemand {
 	private final void clearItemAsUnloaded(Listitem item) {
 		final List cells = item.getChildren();
 		if (cells.isEmpty()) {
-			newUnloadedCell(item);
+			newUnloadedCell(getRealRenderer(), item);
 		} else {
 			final Listcell listcell = (Listcell)cells.get(0);
 			listcell.setLabel(null);
