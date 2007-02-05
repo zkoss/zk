@@ -1065,10 +1065,11 @@ implements java.io.Serializable, RenderOnDemand {
 	/** Creates an new and unloaded listitem. */
 	private final Listitem newUnloadedItem() {
 		final ListitemRenderer renderer = getRealRenderer();
-		final Listitem item;
-		if (renderer instanceof ListitemRendererExt) {
+		Listitem item = null;
+		if (renderer instanceof ListitemRendererExt)
 			item = ((ListitemRendererExt)renderer).newListitem(this);
-		} else {
+
+		if (item == null) {
 			item = new Listitem();
 			item.applyProperties();
 		}
@@ -1078,10 +1079,11 @@ implements java.io.Serializable, RenderOnDemand {
 		return item;
 	}
 	private Listcell newUnloadedCell(ListitemRenderer renderer, Listitem item) {
-		final Listcell cell;
-		if (renderer instanceof ListitemRendererExt) {
+		Listcell cell = null;
+		if (renderer instanceof ListitemRendererExt)
 			cell = ((ListitemRendererExt)renderer).newListcell(item);
-		} else {
+
+		if (cell == null) {
 			cell = new Listcell();
 			cell.applyProperties();
 		}
@@ -1201,7 +1203,10 @@ implements java.io.Serializable, RenderOnDemand {
 			}
 
 			final Listcell cell = (Listcell)item.getChildren().get(0);
-			cell.detach();
+			if ((_renderer instanceof ListitemRendererExt)
+			&& ((ListitemRendererExt)_renderer).shallDetachOnRender(cell))
+				cell.detach();
+
 			try {
 				_renderer.render(item, _model.getElementAt(item.getIndex()));
 			} catch (Throwable ex) {

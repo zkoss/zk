@@ -31,7 +31,7 @@ public interface ListitemRendererExt {
 	 * <p>Note: remember to invoke {@link Listitem#applyProperties} to initialize
 	 * the properties properly.
 	 *
-	 * <p>Example:
+	 * <p>If null is returned, the default list item is created as follow.
 <pre><code>
 final Listitem item = new Listitem();
 item.applyProperties();
@@ -39,6 +39,9 @@ return item;
 </code></pre>
 	 *
 	 * <p>Note: DO NOT call {@link Listitem#setParent}.
+	 *
+	 * @return the list item if you'd like to create it differently, or null
+	 * if you want {@link Listbox} to create it for you
 	 */
 	public Listitem newListitem(Listbox listbox);
 	/** Create an instance of {@link Listcell} as the first cell of the list item.
@@ -47,7 +50,7 @@ return item;
 	 * the properties properly. Also, to invoke {@link Listcell#setParent}
 	 * to make it as a child of the specified item.
 	 *
-	 * <p>Example:
+	 * <p>If null is returned, the default list cell is created as follow.
 <pre><code>
 final Listcell cell = new Listcell();
 cell.applyProperties();
@@ -58,6 +61,21 @@ return cell;
 	 *
 	 * @param item the list item. It is the same as that is returned
 	 * by {@link #newListitem}
+	 * @return the list cell if you'd like to create it differently, or null
+	 * if you want {@link Listbox} to create it for you
 	 */
 	public Listcell newListcell(Listitem item);
+
+	/** Called to see whether to detach the list cell adde by {@link #newListcell}.
+	 *
+	 * <p>To simplify the implementation of {@link ListitemRenderer#render},
+	 * {@link Listbox}, by default, detached the list cell before calling
+	 * {@link LisitemRenderer#render}.
+	 *
+	 * <p>If you want the cell to being detached before
+	 * {@link ListitemRenderer#render} (the default behavior), just return true.
+	 * If you return false, your implementation of  {@link ListitemRenderer#render}
+	 * must be aware of the existence of the first cell (of an unloaded list item).
+	 */
+	public boolean shallDetachOnRender(Listcell cell);
 }
