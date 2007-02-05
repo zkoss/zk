@@ -13,6 +13,7 @@ ZK 2.3.0 Freshly
   1647101: Upgrade to script.aculo.us 1.7.0
   1636000: please remove indexOf() method from ListModel interface.
   1647599: Allow the page directive being placed under other elements
+  1652091: A way to let developer create Listitem with live data
 
 * Bugs:
   1630359: RequestResolver's application scope was implemented wrong
