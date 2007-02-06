@@ -34,7 +34,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<version-uid>2.3.0</version-uid>
 	</version>
 
-	<zscript>
+	<zscript language="Java">
 	import org.zkoss.zkplus.databind.*;
 	</zscript>
 
