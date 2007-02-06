@@ -84,8 +84,8 @@ public class LanguageDefinition {
 	private ComponentDefinition _dyntagDefn;
 	/** The set of reserved attributes used by _dyntagDefn. */
 	private Set _dyntagRvAttrs;
-	/** A list of ZK scripts (String). */
-	private final List _scripts = new LinkedList();
+	/** Map(String lang, List(String script). */
+	private final Map _scripts = new HashMap(5);
 	/** The URI to render a page. */
 	private final String _desktopURI, _pageURI;
 	/** A list of Taglib. */
@@ -383,18 +383,31 @@ public class LanguageDefinition {
 		return old;
 	}
 
-	/** Adds a script for BeanShell.
+	/** Adds a script that shall execute when a page's interpreter is initialized.
+	 *
+	 * @param lang the language, say, Java.
 	 */
-	public void addScript(String script) {
+	public void addScript(String lang, String script) {
+		if (lang == null || lang.length() == 0)
+			throw new IllegalArgumentException("null or empty language");
 		if (script != null && script.length() > 0) {
+			List ss;
 			synchronized (_scripts) {
-				_scripts.add(script);
+				ss = (List)_scripts.get(lang);
+				if (ss == null)
+					_scripts.put(lang,
+						ss = Collections.synchronizedList(new LinkedList()));
 			}
+			ss.add(script);
 		}
 	}
-	/** Returns all scripts. */
-	/*package*/ List getScripts() {
-		return _scripts;
+	/** Returns all scripts of the specified language.
+	 */
+	public List getScripts(String lang) {
+		synchronized (_scripts) {
+			final List ss = (List)_scripts.get(lang);
+			return ss != null ? ss: Collections.EMPTY_LIST;
+		}
 	}
 
 	/** Adds a {@link JavaScript} required by this language.

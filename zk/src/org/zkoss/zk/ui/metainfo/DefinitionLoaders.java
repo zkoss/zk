@@ -40,6 +40,7 @@ import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
+import org.zkoss.idom.Attribute;
 import org.zkoss.idom.ProcessingInstruction;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -255,8 +256,17 @@ public class DefinitionLoaders {
 		for (Iterator it = root.getElements("zscript").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
+			final String zslang;
+			final Attribute attr = el.getAttributeItem("language");
+			if (attr == null) {
+				zslang = "Java";
+			} else {
+				zslang = attr.getValue();
+				if (zslang == null || zslang.length() == 0)
+					throw new UiException("The language attribute cannot be empty, "+attr.getLocator());
+			}
 			final String s = el.getText(true);
-			langdef.addScript(s);
+			langdef.addScript(zslang, s);
 		}
 
 		for (Iterator it = root.getElements("component").iterator();

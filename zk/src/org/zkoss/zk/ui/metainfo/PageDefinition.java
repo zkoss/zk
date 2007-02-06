@@ -389,7 +389,7 @@ public class PageDefinition extends InstanceDefinition {
 			_id, _title, _style, evalHeaders ? getHeaders(page): "");
 
 		if (evalTopZScripts) {
-			final List scripts = getLanguageDefinition().getScripts();
+			final List scripts = getLanguageDefinition().getScripts(page.getZScriptLanguage());
 			if (!scripts.isEmpty()) {
 				final Namespace ns = Namespaces.beforeInterpret(null, page);
 				try {
