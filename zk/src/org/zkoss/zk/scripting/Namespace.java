@@ -18,6 +18,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting;
 
+import org.zkoss.zk.ui.Component;
+
 /**
  * To represent the name space for storing variables and functions.
  * There are two ways to declare variables: by zscirpt, or by
@@ -79,9 +81,10 @@ public interface Namespace {
 
 	/** Clones this namespace.
 	 *
+	 * @param owner the component that owns the new namespace.
 	 * @param id the identifier
 	 */
-	public Object clone(String id);
+	public Object clone(Component owner, String id);
 
 	/** Writes the name and value of the variables of this namespace
 	 * to the specified stream.

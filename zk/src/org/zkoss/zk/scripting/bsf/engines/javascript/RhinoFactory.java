@@ -1,4 +1,4 @@
-/* BSHFactory.java
+/* RhinoFactory.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Feb  2 15:18:52     2007, Created by tomyeh
+		Tue Feb  6 14:38:42     2007, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -16,24 +16,28 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.scripting.bsh;
+package org.zkoss.zk.scripting.bsf.engines.javascript;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.scripting.InterpreterFactory;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.bsf.BSFInterpreter;
+import org.zkoss.zk.scripting.bsf.LocalNamespace;
 
 /**
- * The interpreter factory for BeanShell.
+ * The interpreter factory for BSF's JavaScript engine (Rhino).
  *
  * @author tomyeh
  */
-public class BSHFactory implements InterpreterFactory {
+public class RhinoFactory implements InterpreterFactory {
+	//InterpreterFactory//
 	public Interpreter newInterpreter(Page owner) {
-		return new BSHInterpreter();
+		return new BSFInterpreter("JavaScript",
+			"org.zkoss.zk.scripting.bsf.engines.javascript.RhinoEngine");
 	}
 	public Namespace newNamespace(Component owner, String id) {
-		return new BSHNamespace(id);
+		return new LocalNamespace(owner);
 	}
 }

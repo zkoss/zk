@@ -1184,7 +1184,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		private NS(NS from) {
 			_id = from._id;
 			if (from._realns != null) {
-				_realns = (Namespace)from._realns.clone(_id);
+				_realns = (Namespace)from._realns.clone(AbstractComponent.this, _id);
 			} else {
 				_parent = from._parent;
 				_vars = new HashMap(from._vars);
@@ -1253,10 +1253,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			throw new UnsupportedOperationException("Not attached yet");
 		}
 
-		public Object clone(String id) {
+		public Object clone(Component owner, String id) {
 			final NS clone = new NS(id);
 			if (clone._realns != null) {
-				clone._realns = (Namespace)_realns.clone(id);
+				clone._realns = (Namespace)_realns.clone(owner, id);
 				clone._vars = null; //useless
 			} else {
 				clone._parent = _parent;

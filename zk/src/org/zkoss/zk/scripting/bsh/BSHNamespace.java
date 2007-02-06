@@ -31,6 +31,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Method;
@@ -120,7 +121,7 @@ public class BSHNamespace implements Namespace {//not a good idea to serialize i
 		return _bshns;
 	}
 
-	public Object clone(String id) {
+	public Object clone(Component owner, String id) {
 		final BSHNamespace to = new BSHNamespace(id);		
 
 		//variables
