@@ -9,6 +9,8 @@ dojoz.jar
 gmapsz.jar
 timelinez.jar
 bsh.jar
+bsf.jar
+js.jar
 commons-fileupload.jar
 commons-io.jar
 jfreechart.jar
