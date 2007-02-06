@@ -156,15 +156,22 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cd $HOME/prj/zk1
 	mv -f /tmp/zk/*-sources.jar /tmp/zk/$prjnm/dist/src
-	cp dist/lib/ext/bsh.jar /tmp/zk/$prjnm/dist/lib/ext
-	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$prjnm/dist/lib/ext
 	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar dist/lib/ext/commons-el.jar /tmp/zk/$prjnm/dist/lib/ext
+		#Fileupload
+	cp dist/lib/ext/bsh.jar /tmp/zk/$prjnm/dist/lib/ext
+		#BeanShell
+	cp dist/lib/ext/bsf.jar /tmp/zk/$prjnm/dist/lib/ext
+		#BSF
+	cp dist/lib/ext/js.jar /tmp/zk/$prjnm/dist/lib/ext
+		#JavaScript (rhino)
+	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$prjnm/dist/lib/ext
+		#jFreeChart
 
 	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$prjnm/dist/lib/
-	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar dist/lib/timelinez.jar /tmp/zk/$prjnm/dist/lib/zkforge
+	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$prjnm/dist/lib/zkforge
 
-	cp dist/lib/ext/json_simple.jar /tmp/zk/$prjnm/dist/lib/ext
-		#required by timelinez
+	cp dist/lib/timelinez.jar dist/lib/ext/json_simple.jar /tmp/zk/$prjnm/dist/lib/zkforge
+		#timelinez
 
 	cp -rp dist/export/WEB-INF/* /tmp/zk/$prjnm/dist/WEB-INF
 	cp zkdoc/ZK-dev*.pdf zkdoc/ZK-quickstart.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$prjnm/doc
