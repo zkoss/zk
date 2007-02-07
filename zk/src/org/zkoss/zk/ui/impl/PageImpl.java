@@ -603,7 +603,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return _ns;
 	}
 	public void interpret(String zslang, String script, Namespace ns) {
-		getInterpreter(zslang).interpret(script, ns);
+		getInterpreter(zslang).interpret(script, ns != null ? ns: _ns);
+			//default to _ns (not nul)!
 	}
 	public Interpreter getInterpreter(String zslang) {
 		zslang = (zslang != null ? zslang: _zslang).toLowerCase();

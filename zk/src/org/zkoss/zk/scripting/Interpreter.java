@@ -29,14 +29,17 @@ package org.zkoss.zk.scripting;
 public interface Interpreter {
 	/** Evaluates the script against the specified namespace.
 	 *
-	 * @param ns the namespace; never null.
+	 * @param ns the namespace. Ignored if null.
+	 * Note: Unlike {@link org.zkoss.zk.ui.Page#interpret} which assumes
+	 * {@link org.zkoss.zk.ui.Page#getNamespace}, this method simply
+	 * ignores namespace if null.
 	 */
 	public void interpret(String script, Namespace ns);
 
 	/** Returns the class defined in this interpreter, or null if not found.
 	 *
-	 * <p>Note: unlike {@link Component#getClass}, this method returns
-	 * null instead of throwing ClassNotFoundException.
+	 * <p>Note: unlike {@link org.zkoss.zk.ui.Component#getClass}, this method
+	 * returns null instead of throwing ClassNotFoundException.
 	 */
 	public Class getClass(String clsnm);
 	/** Returns the method of the specified name defined in this interpreter,
