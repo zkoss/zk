@@ -64,17 +64,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	}
 	</zscript>
 
-	<!-- Note: zscript-config is applied to the whole system. Not just this language.
-	-->
-	<zscript-config>
-		<language-name>Java</language-name>
-		<factory-class>org.zkoss.zk.scripting.bsh.BSHFactory</factory-class>
-	</zscript-config>
-	<zscript-config>
-		<language-name>JavaScript</language-name>
-		<factory-class>org.zkoss.zk.scripting.bsf.engines.javascript.RhinoFactory</factory-class>
-	</zscript-config>
-
 	<!-- 
 		Note: '~./' means it is located in the class path starting from
 		'/metainfo/web'. For example, '~./img/abc.gif' means abc.gif located
