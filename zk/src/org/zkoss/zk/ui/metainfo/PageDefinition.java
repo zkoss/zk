@@ -109,20 +109,18 @@ public class PageDefinition extends InstanceDefinition {
 		return _locator;
 	}
 
-	/** Returns the name of scripting language used by zscript elements for pages
-	 * created with this definition.
-	 *
-	 * <p>It is called when creating a new page for this richlet to serve.
+	/** Returns the default scripting language which is assumed when
+	 * a zscript element doesn't specify any language.
 	 *
 	 * <p>Default: Java.
 	 */
 	public String getZScriptLanguage() {
 		return _zslang;
 	}
-	/** Sets the name of scripting language used by zscript elements for pages
-	 * created with this definition.
+	/** Sets the default scripting language which is assumed when
+	 * a zscript element doesn't specify any language.
 	 *
-	 * @param zslang the name of the scripting language
+	 * @param zslang the default scripting language.
 	 */
 	public void setZScriptLanguage(String zslang) {
 		if (!Objects.equals(zslang, _zslang)) {
@@ -378,28 +376,11 @@ public class PageDefinition extends InstanceDefinition {
 	}
 
 	/** Initializes a page after execution is activated.
-	 * It setup the identifier and title, adds it to desktop,
-	 * and then iInterpret all scripts unpon the page.
-	 *
-	 * @param evalTopZScripts whether to evaluate the zscript declared at
-	 * the top level
+	 * It setup the identifier and title, and adds it to desktop.
 	 */
-	public void init(Page page, boolean evalHeaders, boolean evalTopZScripts) {
+	public void init(Page page, boolean evalHeaders) {
 		((PageCtrl)page).init(
 			_id, _title, _style, evalHeaders ? getHeaders(page): "");
-
-		if (evalTopZScripts) {
-			final List scripts = getLanguageDefinition().getScripts(page.getZScriptLanguage());
-			if (!scripts.isEmpty()) {
-				final Namespace ns = Namespaces.beforeInterpret(null, page);
-				try {
-					for (Iterator it = scripts.iterator(); it.hasNext();)
-						page.interpret((String)it.next(), ns);
-				} finally {
-					Namespaces.afterInterpret(ns);
-				}
-			}
-		}
 	}
 
 	//-- super --//

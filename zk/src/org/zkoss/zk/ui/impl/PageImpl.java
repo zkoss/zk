@@ -37,6 +37,7 @@ import java.io.IOException;
 import javax.servlet.jsp.el.FunctionMapper;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
@@ -62,11 +63,6 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
-import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.VariableResolver;
-import org.zkoss.zk.scripting.InterpreterFactory;
-import org.zkoss.zk.scripting.InterpreterFactories;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -76,6 +72,11 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.Variables;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.au.AuSetTitle;
+import org.zkoss.zk.scripting.Interpreter;
+import org.zkoss.zk.scripting.SerializableInterpreter;
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.zk.scripting.InterpreterFactories;
 
 /**
  * An implmentation of {@link Page} and {@link PageCtrl}.
@@ -108,7 +109,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private transient String _ownerUuid;
 	private transient Desktop _desktop;
 	private String _id;
-	private transient Interpreter _ip;
 	private String _title = "", _style = "";
 	private final String _path, _zslang;
 	/** A list of root components. */
@@ -118,7 +118,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private transient Map _fellows;
 	/** A map of attributes. */
 	private transient Map _attrs;
-		//don't create it dynamically because _ip bind it at constructor
 	/** A map of event listener: Map(evtnm, List(EventListener)). */
 	private transient Map _listeners;
 	/** The default parent. */
@@ -131,6 +130,11 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private transient LanguageDefinition _langdef;
 	/** The header tags. */
 	private String _headers = "";
+	/** A map of interpreters Map(String zslang, Interpreter ip). */
+	private transient Map _ips;
+	private transient NS _ns;
+	/** A list of {@link VariableResolver}. */
+	private transient List _resolvers;
 
 	/** Constructs a page by giving the page definition.
 	 *
@@ -180,7 +184,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	/** Initialized the page when contructed or deserialized.
 	 */
 	protected void init() {
-		_ip = InterpreterFactories.lookup(_zslang).newInterpreter(this);
+		_ips = new HashMap(3);
+		_ns = new NS();
 		_roRoots = Collections.unmodifiableList(_roots);
 		_attrs = new HashMap();
 		_fellows = new HashMap();
@@ -325,23 +330,29 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	public void setVariable(String name, Object val) {
-		_ip.setVariable(name, val);
+		_ns.setVariable(name, val, true);
 	}
 	public Object getVariable(String name) {
-		return _ip.getVariable(name);
+		return _ns.getVariable(name, true);
 	}
 	public void unsetVariable(String name) {
-		_ip.unsetVariable(name);
+		_ns.unsetVariable(name, true);
+	}
+	public Class getClass(String clsnm) throws ClassNotFoundException {
+		try {
+			return Classes.forNameByThread(clsnm);
+		} catch (ClassNotFoundException ex) {
+			for (Iterator it = getLoadedInterpreters().iterator();
+			it.hasNext();) {
+				Class cls = ((Interpreter)it.next()).getClass(clsnm);
+				if (cls != null)
+					return cls;
+			}
+			throw ex;
+		}
 	}
 
-	public boolean addVariableResolver(VariableResolver resolver) {
-		return _ip.addVariableResolver(resolver);
-	}
-	public boolean removeVariableResolver(VariableResolver resolver) {
-		return _ip.removeVariableResolver(resolver);
-	}
-
-	public Object resolveElVariable(String name) {
+	public Object getELVariable(String name) {
 		try {
 			final javax.servlet.jsp.el.VariableResolver resolv =
 				getExecution().getVariableResolver();
@@ -349,6 +360,32 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		} catch (javax.servlet.jsp.el.ELException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
+	}
+
+	public Object resolveVariable(String name) {
+		if (_resolvers != null) {
+			for (Iterator it = _resolvers.iterator(); it.hasNext();) {
+				Object o = ((VariableResolver)it.next()).getVariable(name);
+				if (o != null)
+					return o;
+			}
+		}
+		return null;
+	}
+	public boolean addVariableResolver(VariableResolver resolver) {
+		if (resolver == null)
+			throw new IllegalArgumentException("null");
+
+		if (_resolvers == null)
+			_resolvers = new LinkedList();
+		else if (_resolvers.contains(resolver))
+			return false;
+
+		_resolvers.add(0, resolver); //FIFO order
+		return true;
+	}
+	public boolean removeVariableResolver(VariableResolver resolver) {
+		return _resolvers != null && _resolvers.remove(resolver);
 	}
 
 	public boolean addEventListener(String evtnm, EventListener listener) {
@@ -420,17 +457,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (_desktop == null)
 			throw new IllegalArgumentException("null desktop");
 
-		_ip.setVariable("log", _zklog);
-		_ip.setVariable("page", this);
-		_ip.setVariable("desktop", _desktop);
-		_ip.setVariable("pageScope", getAttributes());
-		_ip.setVariable("desktopScope", _desktop.getAttributes());
-		_ip.setVariable("applicationScope", _desktop.getWebApp().getAttributes());
-		_ip.setVariable("requestScope", REQUEST_ATTRS);
-		_ip.setVariable("spaceOwner", this);
-		final Session sess = _desktop.getSession();
-		_ip.setVariable("session", sess);
-		_ip.setVariable("sessionScope", sess.getAttributes());
+		initVariables();
 
 		if (headers != null) _headers = headers;
 
@@ -450,6 +477,19 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 		if (_title.length() == 0 && title != null) setTitle(title);
 		if (_style.length() == 0 && style != null) setStyle(style);
+	}
+	private void initVariables() {
+		setVariable("log", _zklog);
+		setVariable("page", this);
+		setVariable("desktop", _desktop);
+		setVariable("pageScope", getAttributes());
+		setVariable("desktopScope", _desktop.getAttributes());
+		setVariable("applicationScope", _desktop.getWebApp().getAttributes());
+		setVariable("requestScope", REQUEST_ATTRS);
+		setVariable("spaceOwner", this);
+		final Session sess = _desktop.getSession();
+		setVariable("session", sess);
+		setVariable("sessionScope", sess.getAttributes());
 	}
 	private static final Map REQUEST_ATTRS = new AbstractMap() {
 		public Set entrySet() {
@@ -558,17 +598,36 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			//Don't use include. Otherwise, headers (set by JSP) will be eaten.
 		}
 	}
-	public Class getClass(String clsnm) {
-		return _ip.getNamespace().getClass(clsnm);
-	}
+
 	public final Namespace getNamespace() {
-		return _ip.getNamespace();
+		return _ns;
 	}
-	public void interpret(String script, Namespace ns) {
-		_ip.interpret(script, ns);
+	public void interpret(String zslang, String script, Namespace ns) {
+		getInterpreter(zslang).interpret(script, ns);
 	}
-	public Interpreter getInterpreter() {
-		return _ip;
+	public Interpreter getInterpreter(String zslang) {
+		zslang = (zslang != null ? zslang: _zslang).toLowerCase();
+		Interpreter ip = (Interpreter)_ips.get(zslang);
+		if (ip == null) {
+			ip = InterpreterFactories.lookup(_zslang).newInterpreter(this);
+			_ips.put(zslang, ip);
+				//set first to avoid dead loop if the script calls interpret again
+
+			final List scripts = _langdef.getScripts(zslang);
+			if (!scripts.isEmpty()) {
+				//we use a simplified NS since the script defined in language defn
+				//shall not depend on the current context of the page
+				final NS ns = new NS();
+				ns.setVariable("log", _zklog, true);
+				ns.setVariable("page", this, true);
+				for (Iterator it = scripts.iterator(); it.hasNext();)
+					ip.interpret((String)it.next(), ns);
+			}
+		}
+		return ip;
+	}
+	public Collection getLoadedInterpreters() {
+		return _ips.values();
 	}
 	public String getZScriptLanguage() {
 		return _zslang;
@@ -663,14 +722,38 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 		Serializables.smartWrite(s, _attrs);
 		Serializables.smartWrite(s, _listeners);
+		Serializables.smartWrite(s, _resolvers);
 
-		_ip.getNamespace().write(s, new Namespace.Filter() {
-			public boolean accept(String name, Object value) {
-				return !(value instanceof Component);
+		//handle namespace
+		for (Iterator it = _ns._vars.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String nm = (String)me.getKey();
+			final Object val = me.getValue();
+			if (isVariableSerializable(nm, val)
+			&& (val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
+				s.writeObject(nm);
+				s.writeObject(val);
 			}
-		});
-	}
+		}
+		s.writeObject(null); //denote end-of-namespace
 
+		//Handles interpreters
+		for (Iterator it = _ips.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final Object ip = me.getValue();
+			if (ip instanceof SerializableInterpreter) {
+				s.writeObject((String)me.getKey()); //zslang
+
+				((SerializableInterpreter)ip).write(s,
+					new SerializableInterpreter.Filter() {
+						public boolean accept(String name, Object value) {
+							return isVariableSerializable(name, value);
+						}
+					});
+			}
+		}
+		s.writeObject(null); //denote end-of-interpreters
+	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
@@ -690,9 +773,38 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 		Serializables.smartRead(s, _attrs);
 		_listeners = Serializables.smartRead(s, _listeners); //might be null
+		_resolvers = (List)Serializables.smartRead(s, _resolvers); //might be null
 
-		_ip.getNamespace().read(s);
+		//handle namespace
+		initVariables();
+		for (;;) {
+			final String nm = (String)s.readObject();
+			if (nm == null) break; //no more
+
+			Object val = s.readObject();
+			_ns.setVariable(nm, val, true);
+		}
+
 		fixFellows(_roots);
+
+		//Handles interpreters
+		for (;;) {
+			final String zslang = (String)s.readObject();
+			if (zslang == null) break; //no more
+
+			((SerializableInterpreter)getInterpreter(zslang)).read(s);
+		}
+	}
+	private static boolean isVariableSerializable(String name, Object value) {
+		return !_nonSerNames.contains(name) && !(value instanceof Component);
+	}
+	private final static Set _nonSerNames = new HashSet();
+	static {
+		final String[] nms = {"log", "page", "desktop", "pageScope", "desktopScope",
+			"applicationScope", "requestScope", "spaceOwner",
+		"session", "sessionScope"};
+		for (int j = 0; j < nms.length; ++j)
+			_nonSerNames.add(nms[j]);
 	}
 	private final void fixFellows(Collection c) {
 		for (Iterator it = c.iterator(); it.hasNext();) {
@@ -735,6 +847,31 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			if (m == null)
 				m = this.oldm.resolveFunction(prefix, name);
 			return m;
+		}
+	}
+
+	private static class NS implements Namespace {
+		private final Map _vars = new HashMap();
+
+		//Namespace//
+		public Set getVariableNames() {
+			return _vars.keySet();
+		}
+		public Object getVariable(String name, boolean local) {
+			return _vars.get(name);
+		}
+		public void setVariable(String name, Object value, boolean local) {
+			_vars.put(name, value);
+		}
+		public void unsetVariable(String name, boolean local) {
+			_vars.remove(name);
+		}
+
+		public Namespace getParent() {
+			return null;
+		}
+		public void setParent(Namespace parent) {
+			throw new UnsupportedOperationException();
 		}
 	}
 }

@@ -180,9 +180,7 @@ public class Events {
 	 */
 	public static
 	boolean isListenerAvailable(Component comp, String evtnm, boolean asap) {
-		final String script =
-			((ComponentCtrl)comp).getMilieu().getEventHandler(comp, evtnm);
-		if (script != null)
+		if (((ComponentCtrl)comp).getMilieu().getEventHandler(comp, evtnm) != null)
 			return true;
 
 		if (ExecutionsCtrl.getEventMethod(comp.getClass(), evtnm) != null

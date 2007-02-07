@@ -167,11 +167,11 @@ public class ForEachImpl implements ForEach {
 			if (_status.previous != null)
 				_comp.setVariable("forEachStatus", _status.previous, true);
 			else
-				_comp.unsetVariable("forEachStatus");
+				_comp.unsetVariable("forEachStatus", true);
 			if (_oldEach != null)
 				_comp.setVariable("each", _oldEach, true);
 			else
-				_comp.unsetVariable("each");
+				_comp.unsetVariable("each", true);
 		} else {
 			if (_status.previous != null)
 				_page.setVariable("forEachStatus", _status.previous);

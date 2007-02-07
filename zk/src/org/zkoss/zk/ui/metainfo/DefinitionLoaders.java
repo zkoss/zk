@@ -167,6 +167,9 @@ public class DefinitionLoaders {
 
 			if (!root.getElements("case-insensitive").isEmpty())
 				throw new UiException("You can not specify case-insensitive in addon");
+		} else if ("[system-config]".equals(lang)) { //system config only
+			parseZScriptConfig(root);
+			return; //done
 		} else {
 			final String ns = (String)IDOMs.getRequiredElementValue(root, "namespace");
 			if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
@@ -200,13 +203,7 @@ public class DefinitionLoaders {
 		parseLabelTemplate(langdef, root);
 		parseDynamicTag(langdef, root);
 		parseMacroTemplate(langdef, root);
-
-		for (Iterator it = root.getElements("zscript-config").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
-			InterpreterFactories.add(el);
-				//Note: zscript-config is applied to the whole system, not just langdef
-		}
+		parseZScriptConfig(root);
 
 		for (Iterator it = root.getElements("javascript").iterator();
 		it.hasNext();) {
@@ -377,6 +374,14 @@ public class DefinitionLoaders {
 			} else {
 				log.warning("Unknown processing instruction: "+target);
 			}
+		}
+	}
+	private static void parseZScriptConfig(Element root) {
+		for (Iterator it = root.getElements("zscript-config").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			InterpreterFactories.add(el);
+				//Note: zscript-config is applied to the whole system, not just langdef
 		}
 	}
 	/** Parse the component used to represent a label.

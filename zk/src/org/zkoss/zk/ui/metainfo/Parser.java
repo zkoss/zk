@@ -270,11 +270,11 @@ public class Parser {
 
 				final ZScript zs;
 				if (zsrc.indexOf("${") >= 0) {
-					zs = new ZScript(zsrc, null, getLocator());
+					zs = new ZScript(null, zsrc, null, getLocator()); //URL in EL
 				} else {
 					final URL url = getLocator().getResource(zsrc);
 					if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+pi.getLocator());
-					zs = new ZScript(url, null);
+					zs = new ZScript(null, url, null);
 				}
 
 				pgdef.addInitiatorDefinition(
@@ -575,15 +575,19 @@ public class Parser {
 			unless = el.getAttribute("unless"),
 			zsrc = el.getAttribute("src");
 
+		String zslang = el.getAttribute("language");
+		if (zslang != null && zslang.length() == 0) zslang = null;
+			//means the default scripting language
+
 		final Condition cond = ConditionImpl.getInstance(ifc, unless);
 		if (!isEmpty(zsrc)) {
 			final ZScript zs;
 			if (zsrc.indexOf("${") >= 0) {
-				zs = new ZScript(zsrc, cond, getLocator());
+				zs = new ZScript(zslang, zsrc, cond, getLocator());
 			} else {
 				final URL url = getLocator().getResource(zsrc);
 				if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+el.getLocator());
-				zs = new ZScript(url, cond);
+				zs = new ZScript(zslang, url, cond);
 			}
 
 			parent.appendChild(zs);
@@ -591,7 +595,7 @@ public class Parser {
 
 		final String script = el.getText(true);
 		if (!isEmpty(script))
-			parent.appendChild(new ZScript(script, cond));
+			parent.appendChild(new ZScript(zslang, script, cond));
 	}
 	private void parseAttribute(InstanceDefinition parent, Element el,
 	AnnotInfo annotInfo) throws Exception {
@@ -698,7 +702,7 @@ public class Parser {
 					bZkAttr = LanguageDefinition.ZK_NAMESPACE.equals(uri);
 			}
 			if (bZkAttr) {
-				instdef.addEventHandler(name, value, cond);
+				instdef.addEventHandler(name, ZScript.parseContent(value, null), cond);
 				return; //done
 			}
 		}

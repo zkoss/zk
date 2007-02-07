@@ -19,12 +19,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.scripting.bsf.engines.javascript;
 
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.scripting.InterpreterFactory;
 import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.bsf.BSFInterpreter;
-import org.zkoss.zk.scripting.bsf.LocalNamespace;
 
 /**
  * The interpreter factory for BSF's JavaScript engine (Rhino).
@@ -34,10 +30,7 @@ import org.zkoss.zk.scripting.bsf.LocalNamespace;
 public class RhinoFactory implements InterpreterFactory {
 	//InterpreterFactory//
 	public Interpreter newInterpreter(Page owner) {
-		return new BSFInterpreter("JavaScript",
-			"org.zkoss.zk.scripting.bsf.engines.javascript.RhinoEngine");
-	}
-	public Namespace newNamespace(Component owner, String id) {
-		return new LocalNamespace(owner);
+		return new RhinoInterpreter("JavaScript",
+			"org.apache.bsf.engines.javascript.JavaScriptEngine");
 	}
 }

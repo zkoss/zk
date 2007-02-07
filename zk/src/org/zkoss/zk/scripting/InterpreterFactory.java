@@ -22,8 +22,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 
 /**
- * The interpreter dependent factory to create {@link Interpreter} and
- * {@link Namespace}.
+ * The interpreter dependent factory to create {@link Interpreter} .
  *
  * <p>To add a new interpreter, a developer has to implement this interface
  * and add the implementation class to {@link InterpreterFactories}, which
@@ -34,19 +33,7 @@ import org.zkoss.zk.ui.Component;
 public interface InterpreterFactory {
 	/** Creates an interpreter.
 	 *
-	 * @param owner the page that the returne interpreter belongs to.
+	 * @param owner the page that the returned interpreter belongs to.
 	 */
 	public Interpreter newInterpreter(Page owner);
-	/** Creates a namespace with the specified identifier
-	 * for the specified component.
-	 *
-	 * <p>The component is called the owner. It must be attached to a page
-	 * when calling this method.
-	 *
-	 * @param owner the component that the returned namespace belongs to.
-	 * @param id the identifer (never null).
-	 * @exception IllegalStateException if owner doesn't belong to any page yet
-	 * (i.e., {@link Component#getPage} returns null).
-	 */
-	public Namespace newNamespace(Component owner, String id);
 }

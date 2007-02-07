@@ -22,7 +22,7 @@ package org.zkoss.zk.scripting;
  * Represents a method stored in an interpretor.
  *
  * @author tomyeh
- * @see Namespace#getMethod
+ * @see Interpreter#getMethod
  */
 public interface Method {
 	/** Returns an array of Class objects that represent the formal parameter types,

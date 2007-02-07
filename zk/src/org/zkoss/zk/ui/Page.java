@@ -237,22 +237,49 @@ public interface Page extends IdSpace {
 	public Object removeAttribute(String name);
 
 	/** Sets a variable that both the interpreter and EL can see it.
-	 * The variable is defined in the scope of this page.
-	 * In other words, it is visible to all components in this page, unless
-	 * it is override by {@link Component#setVariable}.
+	 *
+	 * <p>It is the same as getNamespace().setVariable(name, value, true).
+	 *
+	 * @see Component#setVariable
 	 */
 	public void setVariable(String name, Object val);
 	/** Returns the value of a variable defined in the zscript interpreter.
-	 * The variable is defined in the scope of this page.
-	 * In other words, it is visible to all components in this page, unless
-	 * it is override by {@link Component#setVariable}.
+	 *
+	 * <p>It is the same as getNamespace().getVariable(name, true).
+	 *
+	 * @see Component#getVariable
 	 */
 	public Object getVariable(String name);
 	/** Unsets a variable.
+	 *
+	 * <p>It is the same as getNamespace().unsetVariable(name, true).
+	 *
+	 * @see Component#unsetVariable
 	 * @see #setVariable
 	 */
 	public void unsetVariable(String name);
+	/** Returns the class of the specified name.
+	 * In addition to the thread class loader, it also looks for
+	 * the classes defined in the loaded interpreters
+	 * ({@link #getLoadedInterpreters}).
+	 *
+	 * <p>Unlike {@link org.zkoss.zk.scripting.Interpreter#getClass},
+	 * this method throws ClassNotFoundException if unable to locate the class.
+	 *
+	 * @exception ClassNotFoundException if not found.
+	 */
+	public Class getClass(String clsnm) throws ClassNotFoundException;
 
+	/** Gets a variable that is visible to EL expressions.
+	 *
+	 * <p>This method is mainly used to access special variable, such as
+	 * request parameters (if this page is requested by HTTP).
+	 *
+	 * <p>Note: components that are specified with an ID are already accessible
+	 * by {@link #getVariable}.
+	 */
+	public Object getELVariable(String name);
+ 
 	/** Adds a name resolver that will be used to resolve a variable
 	 * by {@link #getVariable}.
 	 *
@@ -270,16 +297,6 @@ public interface Page extends IdSpace {
 	 */
 	public boolean removeVariableResolver(VariableResolver resolver);
 
-	/** Resolves the variable that EL has.
-	 *
-	 * <p>This method is mainly used to access special variable, such as
-	 * request parameters (if this page is requested by HTTP).
-	 *
-	 * <p>Note: components that are specified with an ID are already accessible
-	 * by {@link #getVariable}.
-	 */
-	public Object resolveElVariable(String name);
- 
 	//-- event listener --//
 	/** Adds an event listener to specified event for all components in
 	 * this page.
@@ -316,30 +333,38 @@ public interface Page extends IdSpace {
 	 */
 	public void invalidate();
 
-	/** Returns the class of the specified name, or null if not found.
-	 * It's a shortcut to {@link Namespace#getClass} (of {@link #getNamespace}.
-	 * Before delegating to the thread class loader, it also looks for
-	 * the classes defined in the interpretor.
-	 */
-	public Class getClass(String clsnm);
-
-	/** Returns the namespace used to store variables and functions
-	 * belonging to this page.
+	/** Returns the namespace used to store variables belonging to
+	 * the ID space of this page.
 	 *
 	 * @see #interpret
 	 */
 	public Namespace getNamespace();
-	/** Interpret a BeanShell script against the specified namespace.
+	/** Interpret a script of the specified scripting language against
+	 * the specified namespace.
 	 *
+	 * @param zslang the scripting language. If null, {@link #getZScriptLanguage}
+	 * is assumed.
 	 * @param ns the namspace. If null, the page's namespace is assumed.
 	 */
-	public void interpret(String script, Namespace ns);
-	/** Returns the interpreter associated with this page.
+	public void interpret(String zslang, String script, Namespace ns);
+	/** Returns the interpreter of the specified scripting language.
+	 *
+	 * <p>The interpreter will be loaded and initialized,
+	 * if it is not loaded yet.
+	 *
+	 * @param zslang the scripting language. If null, {@link #getZScriptLanguage}
+	 * is assumed.
+	 * @exception InterpreterNotFoundException if not found.
 	 */
-	public Interpreter getInterpreter();
+	public Interpreter getInterpreter(String zslang);
+	/** Returns all loaded interpreters.
+	 */
+	public Collection getLoadedInterpreters();
 
-	/** Returns the scripting language used by zscript elements.
-	 * For example, Java.
+	/** Returns the default scripting language which is assumed when
+	 * a zscript element doesn't specify any language.
+	 *
+	 * @return the default scripting language, say, Java. Never null.
 	 */
 	public String getZScriptLanguage();
 

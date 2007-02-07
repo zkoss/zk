@@ -41,21 +41,22 @@ public interface Richlet {
 	 * the richlet is being taken out of service.
 	 */
 	public void destroy();
+
+	/** Called by the richlet container to create components when
+	 * the specified page is visited and created.
+	 */
+	public void service(Page page);
+
 	/** Returns the language defintion that this richlet belongs to.
 	 * Don't return null.
 	 *
 	 * <p> It is called when creating a new page for this richlet to serve.
 	 */
 	public LanguageDefinition getLanguageDefinition();
-	/** Returns the name of scripting language used by zscript elements.
-	 * For example, Java.
+	/** Returns the default scripting language which is assumed when
+	 * a zscript element doesn't specify any language.
 	 *
-	 * <p> It is called when creating a new page for this richlet to serve.
+	 * @return the default scripting language, say, Java. Never null.
 	 */
 	public String getZScriptLanguage();
-
-	/** Called by the richlet container to create components when
-	 * the specified page is visited and created.
-	 */
-	public void service(Page page);
 }

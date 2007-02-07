@@ -19,10 +19,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.scripting.bsh;
 
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.scripting.InterpreterFactory;
 import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Namespace;
 
 /**
  * The interpreter factory for BeanShell.
@@ -31,9 +29,6 @@ import org.zkoss.zk.scripting.Namespace;
  */
 public class BSHFactory implements InterpreterFactory {
 	public Interpreter newInterpreter(Page owner) {
-		return new BSHInterpreter();
-	}
-	public Namespace newNamespace(Component owner, String id) {
-		return new BSHNamespace(id);
+		return new BSHInterpreter(owner);
 	}
 }

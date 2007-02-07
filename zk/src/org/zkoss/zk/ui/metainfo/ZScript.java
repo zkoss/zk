@@ -32,24 +32,64 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.scripting.InterpreterFactories;
 
 /**
  * Represents a zscript.
  *
  * @author tomyeh
  */
-public class ZScript implements Condition {
+public class ZScript implements Condition, java.io.Serializable {
+	private final String _zslang;
 	private final String _cnt;
 	private final Object _url;
 	private final Locator _locator;
 	private final Condition _cond;
 
+	/** Parses the content into a {@link ZScript} instance.
+	 *
+	 * <p>This method assumes the content is in the following format:<br/>
+	 * <code>lang:codes</code><br/>
+	 * <code>codes</code>
+	 *
+	 * <p>For example, "javascript:var m = 0;" returns "javascript", while
+	 * "var m = 0;" returns null.
+	 *
+	 * <p>Note: if the language doesn't exist, null is returned.
+	 * Reason: the above syntax may be conflict with some scripting languages.
+	 *
+	 * <p>Note: no space is allowed.
+	 *
+	 * @param content the content of zscript codes
+	 */
+	public static final ZScript parseContent(String content, Condition cond) {
+		final int len = content != null ? content.length(): 0;
+		for (int j = 0; j < len; ++j) {
+			final char cc = content.charAt(j);
+			if (cc == ':') {
+				if (j > 0) {
+					final String zslang = content.substring(0, j);
+					if (InterpreterFactories.exists(zslang))
+						return new ZScript(
+							zslang, content.substring(j + 1), cond);
+				}
+				break;
+			} if (!InterpreterFactories.isLegalName(cc)) {
+				break; //done
+			}
+		}
+		return new ZScript(null, content, cond);
+	}
+
 	/** Creates a zscript object with the content directly.
 	 *
+	 * @param zslang the scripting language. If null, it is the same as
+	 * {@link Page#getZScriptLanguage}.
 	 * @param content the zscript content
 	 */
-	public ZScript(String content, Condition cond) {
-		_cnt = content;
+	public ZScript(String zslang, String content, Condition cond) {
+		_zslang = zslang;
+		_cnt = content != null ? content: "";
 		_url = null;
 		_locator = null;
 		_cond = cond;
@@ -58,9 +98,12 @@ public class ZScript implements Condition {
 	 *
 	 * @param url the URL to load the content of zscript.
 	 */
-	public ZScript(URL url, Condition cond) {
+	public ZScript(String zslang, URL url, Condition cond) {
 		if (url == null)
 			throw new IllegalArgumentException("null");
+
+		//TODO: use url's extension to determine zslang
+		_zslang = zslang;
 		_url = url;
 		_cnt = null;
 		_locator = null;
@@ -71,14 +114,23 @@ public class ZScript implements Condition {
 	 *
 	 * @param locator the locator used to locate the zscript file
 	 */
-	public ZScript(String url, Condition cond, Locator locator) {
+	public ZScript(String zslang, String url, Condition cond, Locator locator) {
 		if (url == null || locator == null)
 			throw new IllegalArgumentException("null");
 
+		//TODO: use url's extension to determine zslang
+		_zslang = zslang;
 		_url = url;
 		_cnt = null;
 		_locator = locator;
 		_cond = cond;
+	}
+
+	/** Returns the scripting language, or null if the default scripting language
+	 * is preferred.
+	 */
+	public String getLanguage() {
+		return _zslang;
 	}
 
 	/** Returns the script.
@@ -86,9 +138,9 @@ public class ZScript implements Condition {
 	 * {@link #isEffective(Component)} or {@link #isEffective(Page)} first.
 	 *
 	 * @param page the page when this zscript is interpreted.
-	 * Used only if this object is contructed with {@link #ZScript(String, Condition, Locator)}.
+	 * Used only if this object is contructed with {@link #ZScript(String, String, Condition, Locator)}.
 	 * @param comp the component when this zscript is interpreted.
-	 * Used only if this object is contructed with {@link #ZScript(String, Condition, Locator)}.
+	 * Used only if this object is contructed with {@link #ZScript(String, String, Condition, Locator)}.
 	 */
 	public String getContent(Page page, Component comp) throws IOException {
 		if (_cnt != null)

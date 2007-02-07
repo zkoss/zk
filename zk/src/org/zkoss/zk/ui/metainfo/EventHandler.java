@@ -28,14 +28,14 @@ import org.zkoss.zk.ui.util.Condition;
 public class EventHandler implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;
 
-	private final String _script;
+	private final ZScript _zscript;
 	private final Condition _cond;
-	public EventHandler(String script, Condition cond) {
-		_script = script;
+	public EventHandler(ZScript zscript, Condition cond) {
+		_zscript = zscript;
 		_cond = cond;
 	}
-	public String getScript() {
-		return _script;
+	public ZScript getZScript() {
+		return _zscript;
 	}
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(comp);

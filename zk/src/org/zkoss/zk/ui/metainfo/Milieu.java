@@ -41,6 +41,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.el.Evaluator;
+import org.zkoss.zk.scripting.Interpreter;
 
 /**
  * The snapshot of the component definition ({@link ComponentDefinition}).
@@ -176,12 +177,19 @@ public class Milieu implements Serializable {
 	throws ClassNotFoundException {
 		if (_implcls instanceof String) {
 			final String clsnm = (String)_implcls;
-			final Class cls = page.getClass(clsnm);
-			if (cls == null)
-				throw new ClassNotFoundException(clsnm);
-			if (Objects.equals(cls.getClassLoader(), Milieu.class.getClassLoader()))
-				_implcls = cls; //cache only if static
-			return cls;
+			try {
+				Class cls = Classes.forNameByThread(clsnm);
+				_implcls = cls; //cache it only if static loaded
+				return cls;
+			} catch (ClassNotFoundException ex) {
+				for (Iterator it = page.getLoadedInterpreters().iterator();
+				it.hasNext();) {
+					Class cls = ((Interpreter)it.next()).getClass(clsnm);
+					if (cls != null)
+						return cls;
+				}
+				throw ex;
+			}
 		}
 		return (Class)_implcls;
 	}
@@ -262,16 +270,16 @@ public class Milieu implements Serializable {
 		}
 	}
 
-	/** Returns the script of the event handler.
+	/** Returns the zscript of the event handler.
 	 */
-	public String getEventHandler(Component comp, String name) {
+	public ZScript getEventHandler(Component comp, String name) {
 		if (_evthds != null) {
 			final EventHandler ehi;
 			synchronized (_evthds) {
 				ehi = (EventHandler)_evthds.get(name);
 			}
 			if (ehi != null && ehi.isEffective(comp))
-				return ehi.getScript();
+				return ehi.getZScript();
 		}
 		return null;
 	}

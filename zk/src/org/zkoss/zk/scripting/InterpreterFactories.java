@@ -52,7 +52,7 @@ public class InterpreterFactories {
 	private InterpreterFactories() { //disable it
 	}
 
-	/** Returns the interpter factory of the specified language name.
+	/** Returns the interpter factory for the specified language name.
 	 *
 	 * @param zslang the name of the scripting language, say, Java.
 	 * @exception InterpreterNotFoundException if not found.
@@ -69,6 +69,19 @@ public class InterpreterFactories {
 		if (fty == null)
 			throw new InterpreterNotFoundException(zslang, MZk.INTERPRETER_NOT_FOUND, zslang);
 		return fty;
+	}
+	/** Tests whether the interpreter factory for the specified language name
+	 * exists.
+	 *
+	 * @param zslang the name of the scripting language, say, Java.
+	 */
+	public static final boolean exists(String zslang) {
+		if (zslang == null) return false;
+
+		zslang = zslang.toLowerCase();
+		synchronized (_ftys) {
+			return _ftys.containsKey(zslang);
+		}
 	}
 	/** Returns a set of names of the scripting languages supported by this
 	 * installation.
@@ -88,6 +101,12 @@ public class InterpreterFactories {
 		if (zslang == null || zslang.length() == 0 || fty == null)
 			throw new IllegalArgumentException("emty or null");
 
+		for (int j = zslang.length();  --j >= 0;) {
+			final char cc = zslang.charAt(j);
+			if (!isLegalName(cc))
+				throw new IllegalArgumentException('\''+cc+"' not allowed in a language name, "+zslang);
+		}
+
 		if (log.debugable()) log.debug("Scripting language is added: "+zslang+", "+fty);
 		_zslangs.add(zslang);
 
@@ -95,6 +114,13 @@ public class InterpreterFactories {
 		synchronized (_ftys) {
 			return (InterpreterFactory)_ftys.put(zsl, fty);
 		}
+	}
+	/** Tests whether a character is legal to be used as part of the scripting
+	 * language name.
+	 */
+	public static boolean isLegalName(char cc) {
+		return (cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')
+			|| (cc >= '0' && cc <= '9') || cc == '_';
 	}
 	/** Adds an interpreter factory based on the XML declaration.
 	 *

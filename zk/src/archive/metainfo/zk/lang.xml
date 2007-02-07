@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- lang.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb  7 11:49:07     2007, Created by tomyeh
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+-->
+
+<language>
+	<language-name>[system-config]</language-name>
+		<!-- denote: for system configuration only (rather than defining a language) -->
+
+	<version>
+		<version-class>org.zkoss.zk.Version</version-class>
+		<version-uid>2.3.0</version-uid>
+	</version>
+
+	<!-- Note: zscript-config is applied to the whole system. Not just this language.
+	-->
+	<zscript-config>
+		<language-name>Java</language-name>
+		<factory-class>org.zkoss.zk.scripting.bsh.BSHFactory</factory-class>
+	</zscript-config>
+	<zscript-config>
+		<language-name>JavaScript</language-name>
+		<factory-class>org.zkoss.zk.scripting.bsf.engines.javascript.RhinoFactory</factory-class>
+	</zscript-config>
+</language>

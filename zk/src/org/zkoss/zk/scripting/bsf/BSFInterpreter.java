@@ -21,19 +21,16 @@ package org.zkoss.zk.scripting.bsf;
 import org.apache.bsf.BSFException;
 
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.zk.scripting.GenericInterpreter;
 
 /**
  * Represents a BSF (Bean Scripting Framework) interpreter.
  *
  * @author tomyeh
  */
-public class BSFInterpreter implements Interpreter {
+public class BSFInterpreter extends GenericInterpreter {
 	private final BSFManager _manager = new BSFManager();
 	private final String _lang;
-	private final Namespace _ns = new GlobalNamespace(_manager);
 
 	/** Constructs a BSF interpreter.
 	 *
@@ -44,34 +41,43 @@ public class BSFInterpreter implements Interpreter {
 		if (lang == null || lang.length() == 0
 		|| engineClassnm == null || engineClassnm.length() == 0)
 			throw new IllegalArgumentException("null or empty");
-		_manager.registerScriptingEngine(lang, engineClassnm, null);
-		_lang = lang;
+		try {
+			_lang = lang;
+			_manager.registerScriptingEngine(lang, engineClassnm, null);
+			_manager.loadScriptingEngine(lang);
+		} catch (BSFException ex) {
+			throw new UiException(ex);
+		}
 	}
 
-	//Interpreter//
-	public Namespace getNamespace() {
-		return _ns;
-	}
-	public void setVariable(String name, Object val) {
-		_ns.setVariable(name, val, true);
-	}
-	public Object getVariable(String name) {
-		return _ns.getVariable(name, true);
-	}
-	public void unsetVariable(String name) {
-		_ns.unsetVariable(name);
-	}
-	public boolean addVariableResolver(VariableResolver resolver) {
-		throw new UnsupportedOperationException("BSF doesn't support variable resolver");
-	}
-	public boolean removeVariableResolver(VariableResolver resolver) {
-		return false;
-	}
-	public void interpret(String script, Namespace ns) {
+	//super//
+	protected void exec(String script) {
 		try {
 			_manager.exec(_lang, "zk", 0, 0, script);
 		} catch (BSFException ex) {
 			throw new UiException(ex);
 		}
+	}
+	protected void setVariable(String name, Object value) {
+		try {
+			if (value != null)
+				_manager.declareBean(name, value, value.getClass());
+			else
+				_manager.declareBean(name, null, null);
+		} catch (BSFException ex) {
+			throw new UiException(ex);
+		}
+	}
+	protected void unsetVariable(String name) {
+		try {
+			_manager.undeclareBean(name);
+		} catch (BSFException ex) {
+			throw new UiException(ex);
+		}
+	}
+
+	//Interpreter//
+	public Object getVariable(String name) {
+		return _manager.getDeclaredBean(name);
 	}
 }

@@ -20,6 +20,7 @@ package org.zkoss.zk.ui;
 
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Set;
 import java.util.List;
 import java.util.AbstractSequentialList;
 import java.util.LinkedList;
@@ -31,6 +32,7 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CollectionsX;
@@ -65,7 +67,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.InterpreterFactories;
+import org.zkoss.zk.scripting.Interpreter;
 
 /**
  * A skeletal implementation of {@link Component}. Though it is OK
@@ -134,7 +136,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			//though it doesn't belong to any desktop yet, we autogen uuid
 			//it is optional but it is slightly better (of course, subjective)
 
-		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(_uuid): null;
+		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(this): null;
 
 		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
@@ -343,7 +345,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private void unbindFromIdSpace(String compId) {
 		_spaceInfo.fellows.remove(compId);
 		if (Variables.isValid(compId))
-			_spaceInfo.ns.unsetVariable(compId);
+			_spaceInfo.ns.unsetVariable(compId, true);
 	}
 
 	//-- Extra utlities --//
@@ -484,12 +486,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				((DesktopCtrl)_desktop).addComponent(this); //depends on uuid
 			}
 		}
-		if (_spaceInfo != null) {
-			if (_parent == null)
-				_spaceInfo.ns.setParent(page != null ? page.getNamespace(): null);
-			if (_page != null)
-				_spaceInfo.ns.bind();
-		}
+		if (_spaceInfo != null && _parent == null)
+			_spaceInfo.ns.setParent(page != null ? page.getNamespace(): null);
 
 		//process all children recursively
 		for (final Iterator it = _children.iterator(); it.hasNext();) {
@@ -662,8 +660,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public Object getVariable(String name, boolean local) {
 		return getNamespace().getVariable(name, local);
 	}
-	public void unsetVariable(String name) {
-		getNamespace().unsetVariable(name);
+	public void unsetVariable(String name, boolean local) {
+		getNamespace().unsetVariable(name, local);
 	}
 
 	public Component getParent() {
@@ -986,7 +984,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public Class getClass(String clsnm) throws ClassNotFoundException {
-		return getNamespace().getClass(clsnm);
+		try {
+			return Classes.forNameByThread(clsnm);
+		} catch (ClassNotFoundException ex) {
+			if (_page != null) {
+				for (Iterator it = _page.getLoadedInterpreters().iterator();
+				it.hasNext();) {
+					Class cls = ((Interpreter)it.next()).getClass(clsnm);
+					if (cls != null)
+						return cls;
+				}
+			}
+			throw ex;
+		}
 	}
 	public Namespace getNamespace() {
 		if (this instanceof IdSpace)
@@ -1139,161 +1149,83 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	/** Holds info shared of the same ID space. */
-	private class SpaceInfo {
+	private static class SpaceInfo {
 		private Map attrs = new HashMap();
 			//don't create it dynamically because _ip bind it at constructor
 		private NS ns;
 		/** A map of ((String id, Component fellow). */
 		private Map fellows = new HashMap(41);
 
-		private SpaceInfo(String id) {
-			ns = new NS(id);
-			initVars();
+		private SpaceInfo(Component owner) {
+			ns = new NS();
+			init(owner);
 		}
-		private SpaceInfo(NS from) {
-			ns = new NS(from);
-			initVars();
+		private SpaceInfo(Component owner, NS from) {
+			ns = new NS();
+			ns._vars.putAll(from._vars);
+			init(owner);
 		}
-		private void initVars() {
+		private void init(Component owner) {
 			ns.setVariable("spaceScope", attrs, true);
-			ns.setVariable("spaceOwner", AbstractComponent.this, true);
+			ns.setVariable("spaceOwner", owner, true);
 		}
 	}
-	/** The namespace used as a proxy to the real namespace.
-	 * Its behavior depends whether the component is attached to a page.
-	 * If true, the real name space is created and this is simply a proxy to it.
-	 * If false, it is not associated with any real namespace, and
-	 * it holds all variables in a private map.
-	 */
-	private class NS implements Namespace {
-		private final String _id;
 
-		//Group 1: _parent and _var if not attached
+	private static class NS implements Namespace {
 		private Namespace _parent;
-		private Map _vars;
+		private final Map _vars;
 
-		//Group 2: _realns if attached
-		/** The real namespace that the interpreter needs. */
-		private Namespace _realns;
-
-		private NS(String id) {
-			_id = id;
+		private NS() {
 			_vars = new HashMap();
 		}
-		/** Clones from the specified NS. */
-		private NS(NS from) {
-			_id = from._id;
-			if (from._realns != null) {
-				_realns = (Namespace)from._realns.clone(AbstractComponent.this, _id);
-			} else {
-				_parent = from._parent;
-				_vars = new HashMap(from._vars);
-			}
-		}
-
-		/** Binds to the real namespace.
-		 * <p>Note: calling this method only when the component is
-		 * attached to a page.
-		 */
-		private void bind() {
-			if (_realns == null) {
-				if (_page == null)
-					throw new InternalError("not attached");
-
-				_realns = InterpreterFactories.lookup(_page.getZScriptLanguage())
-					.newNamespace(AbstractComponent.this, _id);
-
-				for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					_realns.setVariable((String)me.getKey(), me.getValue(), true);
-				}
-
-				if (_parent != null)
-					_realns.setParent(_parent);
-
-				_vars = null;
-				_parent = null;
-			}
-		}
-
 
 		//Namespace//
-		public Class getClass(String clsnm) {
-			return _realns != null ? _realns.getClass(clsnm): null;
+		public Set getVariableNames() {
+			return _vars.keySet();
 		}
 		public Object getVariable(String name, boolean local) {
-			return _realns != null ?
-				_realns.getVariable(name, local): _vars.get(name);
+			Object val = _vars.get(name);
+			if (local || _parent == null || val != null || _vars.containsKey(name))
+				return val;
+			return _parent.getVariable(name, false);
 		}
 		public void setVariable(String name, Object value, boolean local) {
-			if (_realns != null) _realns.setVariable(name, value, local);
-			else _vars.put(name, value);
-		}
-		public void unsetVariable(String name) {
-			if (_realns != null) _realns.unsetVariable(name);
-			else _vars.remove(name);
-		}
+			if (!local && _parent != null && !_vars.containsKey(name)) {
+				for (Namespace p = _parent;;) {
+					if (p.getVariableNames().contains(name)) {
+						p.setVariable(name, value, true);
+						return; //done;
+					}
+					if ((p = p.getParent()) == null)
+						break;
+				}
+			}
 
-		public org.zkoss.zk.scripting.Method
-		getMethod(String name, Class[] argTypes, boolean local) {
-			return _realns != null ? _realns.getMethod(name, argTypes, local): null;
+			_vars.put(name, value);
+		}
+		public void unsetVariable(String name, boolean local) {
+			if (_vars.remove(name) == null
+			&& !local && _parent != null && !_vars.containsKey(name)) {
+				for (Namespace p = _parent; p != null; p = p.getParent()) {
+					if (p.getVariableNames().contains(name)) {
+						p.unsetVariable(name, true);
+						break;
+					}
+					if ((p = p.getParent()) == null)
+						break;
+				}
+			}
 		}
 
 		public Namespace getParent() {
-			return _realns != null ? _realns.getParent(): _parent;
+			return _parent;
 		}
 		public void setParent(Namespace parent) {
-			if (_realns != null) _realns.setParent(parent);
-			else _parent = parent;
-		}
-	
-		public Object getNativeNamespace() {
-			if (_realns != null)
-				return _realns.getNativeNamespace();
-			throw new UnsupportedOperationException("Not attached yet");
-		}
-
-		public Object clone(Component owner, String id) {
-			final NS clone = new NS(id);
-			if (clone._realns != null) {
-				clone._realns = (Namespace)_realns.clone(owner, id);
-				clone._vars = null; //useless
-			} else {
-				clone._parent = _parent;
-				clone._vars = new HashMap(_vars);
-			}
-			return clone;
-		}
-		public void write(java.io.ObjectOutputStream s, Filter filter)
-		throws java.io.IOException {
-			if (_realns != null) {
-				_realns.write(s, filter);
-			} else {
-				for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final String nm = (String)me.getKey();
-					final Object val = me.getValue();
-					if (((val instanceof java.io.Serializable)
-						|| (val instanceof java.io.Externalizable))
-					&& (filter == null || filter.accept(nm, val))) {
-						s.writeObject(nm);
-						s.writeObject(val);
-					}
-				}
-				s.writeObject(null); //denote end-of-vars
-			}
-		}
-		public void read(java.io.ObjectInputStream s)
-		throws java.io.IOException, ClassNotFoundException {
-			if (_realns != null) {
-				_realns.read(s);
-			} else {
-				for (;;) {
-					final String nm = (String)s.readObject();
-					if (nm == null) break; //no more
-
-					setVariable(nm, s.readObject(), true);
-				}
+			if (_parent != parent) {
+				for (Namespace p = parent; p != null; p = p.getParent())
+					if (p == this)
+						throw new IllegalArgumentException("Recursive namespace: "+this+" with "+parent);
+				_parent = parent;
 			}
 		}
 	}
@@ -1396,7 +1328,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//3. spaceinfo
 		if (clone._spaceInfo != null) {
-			clone._spaceInfo = clone.new SpaceInfo(_spaceInfo.ns);
+			clone._spaceInfo = new SpaceInfo(clone, _spaceInfo.ns);
 			cloneSpaceInfo(clone, this._spaceInfo);
 		}
 		return clone;
@@ -1446,11 +1378,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			Serializables.smartWrite(s, _spaceInfo.attrs);
 
 			//write _spaceInfo.ns (only variables that are not fellows)
-			_spaceInfo.ns.write(s, new Namespace.Filter() {
-				public boolean accept(String name, Object value) {
-					return !(value instanceof Component);
+			for (Iterator it = _spaceInfo.ns._vars.entrySet().iterator();
+			it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final String nm = (String)me.getKey();
+				final Object val = me.getValue();
+				if (isVariableSerializable(nm, val)
+				&& (val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
+					s.writeObject(nm);
+					s.writeObject(val);
 				}
-			});
+			}
+			s.writeObject(null); //denote end-of-namespace
 		}
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
@@ -1477,7 +1416,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//restore _spaceInfo
 		if (this instanceof IdSpace) {
-			_spaceInfo = new SpaceInfo(_uuid);
+			_spaceInfo = new SpaceInfo(this);
 
 			//fix child's _spaceInfo's parent
 			fixSpaceParentOneLevelDown(this, _spaceInfo.ns);
@@ -1486,13 +1425,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			Serializables.smartRead(s, _spaceInfo.attrs);
 
 			//_spaceInfo.ns
-			_spaceInfo.ns.read(s);
+			for (;;) {
+				final String nm = (String)s.readObject();
+				if (nm == null) break; //no more
+
+				Object val = s.readObject();
+				_spaceInfo.ns.setVariable(nm, val, true);
+			}
 
 			//restore ID space by binding itself and all children
 			bindToIdSpace(this);
 			for (Iterator it = getChildren().iterator(); it.hasNext();)
 				addToIdSpacesDown((Component)it.next(), this);
 		}
+	}
+	private static boolean isVariableSerializable(String name, Object value) {
+		return !"spaceScope".equals(name) && !"spaceOwner".equals(name)
+			&& !(value instanceof Component);
 	}
 	/** Fixed Namespace's parent of children only one level.
 	 */

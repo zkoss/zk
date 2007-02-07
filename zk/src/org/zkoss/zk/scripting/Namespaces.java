@@ -41,12 +41,13 @@ public class Namespaces {
 	 *
 	 * <p>Typical use:
 	 * <pre><code>
-	 * final Namespace ns = Namespaces.beforeInterpret(exec, comp);
+	 * final Map backup = new HashMap();
+	 * final Namespace ns = Namespaces.beforeInterpret(backup, comp);
 	 * try {
-	 	Namespaces.backupVariables(ns, "some");
-	 *   page.interpret(zscript, ns);
+	 *	 Namespaces.backupVariable(backup, ns, "some");
+	 *   page.interpret(zslang, zscript, ns);
 	 * } finally {
-	 *   Namespaces.afterInterpret(ns);
+	 *   Namespaces.afterInterpret(backup, ns);
 	 * }
 	 * </code></pre>
 	 *
@@ -54,70 +55,64 @@ public class Namespaces {
 	 * {@link #backupVariable} between {@link #beforeInterpret}
 	 * and {@link #afterInterpret}.
 	 *
-	 * @param exec the current execution.
-	 * If null, {@link Desktop#getExecution} is used.
+	 * @param backup the map to hold the backup variables. Never null.
 	 * @param comp the component, never null.
 	 * @return the namespace that owns the specified component
 	 */
-	public static final
-	Namespace beforeInterpret(Execution exec, Component comp) {
+	public static final Namespace beforeInterpret(Map backup, Component comp) {
 		final Namespace ns = comp.getNamespace();
-		backupVariable0(ns, "self", true);
-		backupVariable0(ns, "componentScope", false);
+
+		backupVariable(backup, ns, "self");
+		backupVariable(backup, ns, "componentScope");
+		backupVariable(backup, ns, "arg");
+
 		ns.setVariable("self", comp, true);
 		ns.setVariable("componentScope",
 			comp.getAttributes(Component.COMPONENT_SCOPE), true);
 
-		final Object arg = getArg(exec, comp);
-		if (arg != null) {
-			backupVariable0(ns, "arg", false);
-			ns.setVariable("arg", arg, true);
-		}
+		final Execution exec = Executions.getCurrent();
+		final Object arg = exec != null ? exec.getArg(): null;
+		ns.setVariable("arg", arg, true);
+
 		return ns;
 	}
 	/** Prepares builtin variable before calling
 	 * {@link org.zkoss.zk.ui.Page#interpret}.
 	 *
-	 * @see #beforeInterpret(Execution,Component)
-	 * @param exec the current execution.
-	 * If null, {@link Desktop#getExecution} is used.
+	 * @see #beforeInterpret
+	 * @param backup the map to hold the backup variables. Never null.
 	 * @param page the page, never null.
 	 * @return the namespace that owns the specified page
 	 */
-	public static final Namespace beforeInterpret(Execution exec, Page page) {
+	public static final Namespace beforeInterpret(Map backup, Page page) {
 		final Namespace ns = page.getNamespace();
-		backupVariable0(ns, null, true);
 
-		final Object arg = getArg(exec, page);
-		if (arg != null) {
-			backupVariable0(ns, "arg", false);
-			ns.setVariable("arg", arg, true);
-		}
+		backupVariable(backup, ns, "arg");
+
+		final Execution exec = Executions.getCurrent();
+		final Object arg = exec != null ? exec.getArg(): null;
+		ns.setVariable("arg", arg, true);
+
 		return ns;
 	}
-	/** Used with {@link #beforeInterpret(Execution,Component)} to clean up builtin
+	/** Used with {@link #beforeInterpret} to clean up builtin
 	 * variables.
+	 *
+	 * @param backup the map to hold the backup variables. Never null.
+	 * It must be the same as the backup argument of {@link #beforeInterpret}.
+	 * @param ns the namespace returned by {@link #beforeInterpret}
 	 */
-	public static final void afterInterpret(Namespace ns) {
-		//Restores the variables that are backup-ed by {@link #backupVariable0}
-	 	//in the same block.
-		List backups = (List)ns.getVariable(VAR_BACKUPS, true);
-		if (backups == null || backups.isEmpty()) {
-			log.warning("restore without any block of backup-ed variables, "+ns);
-		} else {
-			final Map map = (Map)backups.remove(0);
-			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String name = (String)me.getKey();
-				final Object val = me.getValue();
-				//if (D.ON && log.finerable()) log.finer("Restore "+name+"="+val);
-				if (val != null) ns.setVariable(name, val, true);
-				else ns.unsetVariable(name);
-			}
+	public static final void afterInterpret(Map backup, Namespace ns) {
+		for (Iterator it = backup.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String name = (String)me.getKey();
+			final Object val = me.getValue();
+			//if (D.ON && log.finerable()) log.finer("Restore "+name+"="+val);
+			if (val != VOID) ns.setVariable(name, val, true);
+			else ns.unsetVariable(name, true);
 		}
 	}
 
-	private static final String VAR_BACKUPS = "__zk__backups__";
 	/** Backup the specfied variable, such that it can be restored with
 	 * {@link #afterInterpret}.
 	 *
@@ -125,56 +120,14 @@ public class Namespaces {
 	 * this method. Then, backup-ed variables will be restored together
 	 * when {@link #afterInterpret} is called.
 	 *
+	 * @param backup the map to hold the backup variables. Never null.
+	 * It must be the same as the backup argument of {@link #beforeInterpret}.
 	 * @param name the variable to backup.
 	 */
-	public static final void backupVariable(Namespace ns, String name) {
-		backupVariable0(ns, name, false);
+	public static final void backupVariable(Map backup, Namespace ns, String name) {
+		final Object val = ns.getVariable(name, true);
+		backup.put(name,
+			val != null || ns.getVariableNames().contains(name) ? val: VOID);
 	}
-	/** Backup the specified variables
-	 *
-	 * @param name the variable to backup. If null and newBlock is true,
-	 * it simply creates a new block. If null and newBlock is false, nothing
-	 * happens.
-	 * @param newBlock whether to create a new block. If true, a new block
-	 * is created and the specified variable and following {@link #backupVariable0}
-	 * are gathered in this new block.
-	 * If false, the variable's value is added to the same block of the previous
-	 * invocation of {@link #backupVariable}.
-	 */
-	private static final
-	void backupVariable0(Namespace ns, String name, boolean newBlock) {
-		List backups = (List)ns.getVariable(VAR_BACKUPS, true);
-		if (newBlock || backups == null || backups.isEmpty()) {
-			if (backups == null) 
-				ns.setVariable(VAR_BACKUPS, backups = new LinkedList(), true);
-			backups.add(0, new HashMap());
-		}
-		if (name != null) {
-			final Map map = (Map)backups.get(0);
-			map.put(name, ns.getVariable(name, true));
-		}
-	}
-
-	private static Map getArg(Execution exec, Component comp) {
-		if (exec == null) {
-			exec = Executions.getCurrent();
-			if (exec == null && comp != null) {
-				final Desktop dt = comp.getDesktop();
-				if (dt != null) exec = dt.getExecution();
-			}
-			if (exec == null) return null;
-		}
-		return exec.getArg();
-	}
-	private static Map getArg(Execution exec, Page page) {
-		if (exec == null) {
-			exec = Executions.getCurrent();
-			if (exec == null && page != null) {
-				final Desktop dt = page.getDesktop();
-				if (dt != null) exec = dt.getExecution();
-			}
-			if (exec == null) return null;
-		}
-		return exec.getArg();
-	}
+	private static final Object VOID = new Object();
 }

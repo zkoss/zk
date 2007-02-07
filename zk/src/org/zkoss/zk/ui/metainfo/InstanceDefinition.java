@@ -148,17 +148,18 @@ implements Condition {
 	}
 
 	/** Adds an event handler.
+	 *
 	 * @param name the event name.
-	 * @param script the script. It don't support expression.
+	 * @param zscript the script.
 	 */
-	public void addEventHandler(String name, String script, Condition cond) {
-		if (name == null || script == null)
-			throw new IllegalArgumentException("name and script cannot be null");
+	public void addEventHandler(String name, ZScript zscript, Condition cond) {
+		if (name == null || zscript == null)
+			throw new IllegalArgumentException("name and zscript cannot be null");
 		//if (!Events.isValid(name))
 		//	throw new IllegalArgumentException("Invalid event name: "+name);
 			//AbstractParser has checked it, so no need to check again
 
-		final EventHandler evthd = new EventHandler(script, cond);
+		final EventHandler evthd = new EventHandler(zscript, cond);
 
 		if (_evthds == null) {
 			synchronized (this) {

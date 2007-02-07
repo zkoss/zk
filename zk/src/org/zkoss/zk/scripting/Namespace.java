@@ -18,26 +18,28 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting;
 
+import java.util.Set;
 import org.zkoss.zk.ui.Component;
 
 /**
- * To represent the name space for storing variables and functions.
+ * To represent the name space for storing variables.
  * There are two ways to declare variables: by zscirpt, or by
  * {@link org.zkoss.zk.ui.Component#setVariable}/
  * {@link org.zkoss.zk.ui.Page#setVariable}.
  *
  * <p>Each ID space ({@link org.zkoss.zk.ui.IdSpace} has an independent
- * name space to store varaibles and functions.
- * It is a mimic concept of ID space to work with BeanShell (and other
- * interpreter).
+ * name space to store varaibles.
+ * It is a mimic concept of ID space to work with zscript.
  *
  * @author tomyeh
  * @see Interpreter
  */
 public interface Namespace {
-	/** Returns the class defined in the beanshell, or null if not found.
+	/** Returns a set of variable names stored in this name space.
+	 * <p>Note: it doesn't include the parent's varaibles.
 	 */
-	public Class getClass(String clsnm);
+	public Set getVariableNames();
+
 	/** Returns the variable of the specified name, or null if not
 	 * defined.
 	 * @param local whether not to search its ancestor.
@@ -59,14 +61,7 @@ public interface Namespace {
 	 * <p>Unlike {@link #setVariable}, this method removed only
 	 * the variable defined in the ID space cotnaining this component.
 	 */
-	public void unsetVariable(String name);
-
-	/** Returns the method of the specified name, or null if not defined.
-	 *
-	 * @param argTypes the list of argument (aka., parameter) types.
-	 * If null, Class[0] is assumed.
-	 */
-	public Method getMethod(String name, Class[] argTypes, boolean local);
+	public void unsetVariable(String name, boolean local);
 
 	/** Returns the parent name space, or null if this is topmost.
 	 */
@@ -74,44 +69,4 @@ public interface Namespace {
 	/** Sets the parent name space.
 	 */
 	public void setParent(Namespace parent);
-
-	/** Returns the native name space.
-	 */
-	public Object getNativeNamespace();
-
-	/** Clones this namespace.
-	 *
-	 * @param owner the component that owns the new namespace.
-	 * @param id the identifier
-	 */
-	public Object clone(Component owner, String id);
-
-	/** Writes the name and value of the variables of this namespace
-	 * to the specified stream.
-	 *
-	 * <p>If the variable's value is not serializable, it won't be written.
-	 *
-	 * <p>To read back, use {@link #read}.
-	 *
-	 * <p>Note: it doesn't write the parent ({@link #getParent}).
-	 */
-	public void write(java.io.ObjectOutputStream s, Filter filter)
-	throws java.io.IOException;
-	/** Reads the name and value of the variable from the specified input
-	 * stream.
-	 *
-	 * <p>Note: it doesn't read the parent ({@link #getParent}).
-	 *
-	 * @see #write
-	 */
-	public void read(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException;
-
-	/** The filter used with {@link Namespace#write}.
-	 */
-	public interface Filter {
-		/** Whether to accept the specified variable name and its value.
-		 */
-		public boolean accept(String name, Object value);
-	};
 }

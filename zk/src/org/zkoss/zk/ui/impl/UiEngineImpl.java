@@ -257,8 +257,7 @@ public class UiEngineImpl implements UiEngine {
 				final Initiators inits = Initiators.doInit(pagedef, page);
 				try {
 					//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
-					pagedef.init(page,
-						!uv.isEverAsyncUpdate() && !uv.isAborting(), !uv.isAborting());
+					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
 					if (!uv.isAborting())
 						execCreate(exec, page, pagedef, null);
 					inits.doAfterCompose(page);
@@ -358,15 +357,17 @@ public class UiEngineImpl implements UiEngine {
 					}
 				}
 			} else if (obj instanceof ZScript) {
-				final ZScript script = (ZScript)obj;
-				if (isEffective(script, page, parent)) {
+				final ZScript zscript = (ZScript)obj;
+				if (isEffective(zscript, page, parent)) {
+					final Map backup = new HashMap();
 					final Namespace ns = parent != null ?
-						Namespaces.beforeInterpret(exec, parent):
-						Namespaces.beforeInterpret(exec, page);
+						Namespaces.beforeInterpret(backup, parent):
+						Namespaces.beforeInterpret(backup, page);
 					try {
-						page.interpret(script.getContent(page, parent), ns);
+						page.interpret(zscript.getLanguage(),
+							zscript.getContent(page, parent), ns);
 					} finally {
-						Namespaces.afterInterpret(ns);
+						Namespaces.afterInterpret(backup, ns);
 					}
 				}
 			} else {

@@ -21,20 +21,21 @@ package org.zkoss.zk.scripting.bsh;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
-import java.io.Reader;
-import java.io.StringReader;
 
 import bsh.BshClassManager;
 import bsh.NameSpace;
+import bsh.BshMethod;
 import bsh.Variable;
 import bsh.Primitive;
 import bsh.EvalError;
 import bsh.UtilEvalError;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.zk.scripting.Method;
 
 /**
  * The interpreter that uses BeanShell to interpret zscript codes.
@@ -42,22 +43,21 @@ import org.zkoss.zk.scripting.VariableResolver;
  * @author tomyeh
  */
 public class BSHInterpreter implements Interpreter { //not a good idea to serialize it
+	private final Page _page;
 	private final bsh.Interpreter _ip;
-	private final Namespace _ns;
-	/** A list of {@link VariableResolver}. */
-	private List _resolvers;
+	private final NS _bshns;
+	/** A list of {@link Namespace}.
+	 * Top of it is the active one (may be null).
+	 */
+	private final List _nss = new LinkedList();
 
-	public BSHInterpreter() {
+	public BSHInterpreter(Page owner) {
+		_page = owner;
 		_ip = new bsh.Interpreter();
 		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
 
-		final BshClassManager classManager = _ip.getClassManager();
-		//final NameSpace oldns = _ip.getNameSpace();
-		_ip.setNameSpace(new MyNameSpace(classManager, "global"));
-		//classManager.removeListener(oldns);
-			//ClassManagerImpl doesn't implement removeListener
-
-		_ns = new BSHNamespace(_ip.getNameSpace());
+		_bshns = new NS(_ip.getClassManager(), "global");
+		_ip.setNameSpace(_bshns);
 	}
 
 	/** Returns the native interpretor. */
@@ -66,19 +66,35 @@ public class BSHInterpreter implements Interpreter { //not a good idea to serial
 	}
 
 	//-- Interpreter --//
-	public Namespace getNamespace() {
-		return _ns;
-	}
-	public void setVariable(String name, Object val) {
+	public Class getClass(String clsnm) {
 		try {
-			_ip.set(name, val); //unlike NameSpace.setVariable, set handles null
+			return _bshns.getClass(clsnm);
+		} catch (UtilEvalError ex) {
+			throw new UiException("Failed to load class "+clsnm, ex);
+		}
+	}
+	public Method getMethod(String name, Class[] argTypes) {
+		if (argTypes == null)
+			argTypes = new Class[0];
+
+		try {
+		 	final BshMethod m = _bshns.getMethod(name, argTypes, false);
+		 	return m != null ? new BSHMethod(m): null;
+		} catch (UtilEvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+
+	public Object getVariable(String name) {
+		try {
+			return Primitive.unwrap(_ip.get(name));
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	public Object getVariable(String name) {
+	/*public void setVariable(String name, Object val) {
 		try {
-			return Primitive.unwrap(_ip.get(name));
+			_ip.set(name, val); //unlike NameSpace.setVariable, set handles null
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -89,72 +105,70 @@ public class BSHInterpreter implements Interpreter { //not a good idea to serial
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
-	}
-
-	public boolean addVariableResolver(VariableResolver resolver) {
-		if (resolver == null)
-			throw new IllegalArgumentException("null");
-
-		if (_resolvers == null)
-			_resolvers = new LinkedList();
-		else if (_resolvers.contains(resolver))
-			return false;
-
-		_resolvers.add(0, resolver); //FIFO order
-		return true;
-	}
-	public boolean removeVariableResolver(VariableResolver resolver) {
-		return _resolvers != null && _resolvers.remove(resolver);
-	}
+	}*/
 
 	public void interpret(String script, Namespace ns) {
 		try {
-			if (ns != null)
-				_ip.eval(script, (NameSpace)ns.getNativeNamespace());
-			else
+			push(ns);
+			try {
 				_ip.eval(script);
+			} finally {
+				pop();
+			}
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
+	/** Use the specified namespace as the active namespace.
+	 */
+	private void push(Namespace ns) {
+		_nss.add(0, ns);
+	}
+	/** Remove the active namespace.
+	 */
+	private void pop() {
+		_nss.remove(0);
+	}
+	/** Returns the active namespace.
+	 */
+	private Namespace getActive() {
+		return _nss.isEmpty() ? null: (Namespace)_nss.get(0);
+	}
 
-	private class MyNameSpace extends NameSpace {
+	private class NS extends NameSpace {
 		private boolean _inGet;
 
 		/** Don't call this method. */
-	    private MyNameSpace(BshClassManager classManager, String name) {
+	    private NS(BshClassManager classManager, String name) {
 	    	super(classManager, name);
 	    }
 
-		////
+		//super//
 		protected Variable getVariableImpl(String name, boolean recurse)
 		throws UtilEvalError {
 			//Tom M Yeh: 20060606:
 			//We cannot override getVariable because BeanShell use
 			//getVariableImpl to resolve a variable recusrivly
 			//
-			//However, Variable has no public/protected contructor, so
-			//we have to store the value back
-			//
-			//Limitation: here we assume the binding of the variable
-			//is immutable. (due to Variable.getValue is not accessible)
+			//setVariable will callback this method,
+			//so use _inGet to prevent dead loop
 			Variable var = super.getVariableImpl(name, recurse);
-			if (!_inGet && var == null && _resolvers != null) {
-				for (Iterator it = _resolvers.iterator(); it.hasNext();) {
-					final Object v =
-						((VariableResolver)it.next()).getVariable(name);
-					if (v != null) {
-						//setVariable will callback this method,
-						//so use _inGet to prevent dead loop
-						_inGet = true;
-						try {
-							this.setVariable(name, v, false);
-						} finally {
-							_inGet = false;
-						}
-
-						var = super.getVariableImpl(name, recurse);
-						break;
+			if (!_inGet && var == null) {
+				final Namespace ns = getActive();
+				Object v = ns != null ? ns.getVariable(name, false): null;
+				if (v == null)
+					v = ((PageCtrl)_page).resolveVariable(name);
+				if (v != null) {
+			//Variable has no public/protected contructor, so we have to
+			//store the value back (with setVariable) and retrieve again
+					_inGet = true;
+					try {
+						this.setVariable(name,
+							v != null ? v: Primitive.NULL, false);
+						var = super.getVariableImpl(name, false);
+						this.unsetVariable(name); //restore
+					} finally {
+						_inGet = false;
 					}
 				}
 			}

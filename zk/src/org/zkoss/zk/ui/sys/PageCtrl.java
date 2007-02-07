@@ -63,6 +63,12 @@ public interface PageCtrl {
 	 */
 	public String getHeaders();
 
+	/** Resolves a variable thru all registered variable resolvers
+	 * ({@link org.zkoss.zk.scripting.VariableResolver}).
+	 * @see org.zkoss.zk.ui.Page#addVariableResolver
+	 */
+	public Object resolveVariable(String name);
+
 	/** Returns the owner of this page, or null if it is not owned by
 	 * any component.
 	 * A page is included by a component. We say it is owned by the component.

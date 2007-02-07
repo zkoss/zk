@@ -349,10 +349,24 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public Object getVariable(String name, boolean local);
 	/** Unsets a variable from the current ID space.
-	 * <p>Unlike {@link #setVariable}, this method removed only
-	 * the variable defined in the ID space cotnaining this component.
+	 *
+	 * @param local whether not to search its ancestor.
+	 * If false and the current ID space doen't define the variable,
+	 * it searches up its ancestor (via {@link #getParent}) to see
+	 * any of them has defined the specified variable.
 	 */
-	public void unsetVariable(String name);
+	public void unsetVariable(String name, boolean local);
+	/** Returns the class of the specified name.
+	 * In addition to the thread class loader, it also looks for
+	 * the classes defined in the loaded interpreters
+	 * ({@link Page#getLoadedInterpreters}), if it is attached a page.
+	 *
+	 * <p>Unlike {@link org.zkoss.zk.scripting.Interpreter#getClass},
+	 * this method throws ClassNotFoundException if unable to locate the class.
+	 *
+	 * @exception ClassNotFoundException if not found.
+	 */
+	public Class getClass(String clsnm) throws ClassNotFoundException;
 
 	/** Returns the parent component, or null if this is the root component.
 	 */
@@ -573,16 +587,6 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public boolean isChildable();
 
-	/** Returns the class of the specified name.
-	 * It's a shortcut to {@link Namespace#getClass} (of {@link #getNamespace}.
-	 * Before delegating to the thread class loader, it also looks for
-	 * the classes defined in the name space (part of the interpretor).
-	 *
-	 * <p>Note: a namespace per ID space.
-	 *
-	 * @exception ClassNotFoundException if not found.
-	 */
-	public Class getClass(String clsnm) throws ClassNotFoundException;
 	/** Returns the namespace to store variables and functions belonging
 	 * to the ID space of this component.
 	 *

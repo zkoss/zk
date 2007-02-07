@@ -18,6 +18,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.util.HashMap;
+
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.util.Initiator;
@@ -40,11 +42,13 @@ public class ZScriptInitiator implements Initiator {
 		_zscript = script;
 	}
 	public void doInit(Page page, Object[] args) throws Exception {
-		final Namespace ns = Namespaces.beforeInterpret(null, page);
+		final HashMap backup = new HashMap();
+		final Namespace ns = Namespaces.beforeInterpret(backup, page);
 		try {
-			page.interpret(_zscript.getContent(page, null), ns);
+			page.interpret(
+				_zscript.getLanguage(), _zscript.getContent(page, null), ns);
 		} finally {
-			Namespaces.afterInterpret(ns);
+			Namespaces.afterInterpret(backup, ns);
 		}
 	}
 	public void doAfterCompose(Page page) throws Exception {

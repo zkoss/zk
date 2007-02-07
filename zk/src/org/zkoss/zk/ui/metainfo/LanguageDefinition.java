@@ -391,6 +391,7 @@ public class LanguageDefinition {
 		if (lang == null || lang.length() == 0)
 			throw new IllegalArgumentException("null or empty language");
 		if (script != null && script.length() > 0) {
+			lang = lang.toLowerCase();
 			List ss;
 			synchronized (_scripts) {
 				ss = (List)_scripts.get(lang);
@@ -401,9 +402,10 @@ public class LanguageDefinition {
 			ss.add(script);
 		}
 	}
-	/** Returns all scripts of the specified language.
+	/** Returns all scripts (String) of the specified language.
 	 */
 	public List getScripts(String lang) {
+		lang = lang.toLowerCase();
 		synchronized (_scripts) {
 			final List ss = (List)_scripts.get(lang);
 			return ss != null ? ss: Collections.EMPTY_LIST;

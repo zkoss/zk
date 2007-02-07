@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
@@ -40,13 +41,14 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Express;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.metainfo.ZScript;
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Namespaces;
 
 /** Thread to handle events.
  * We need to handle events in a separate thread, because it might
@@ -467,13 +469,14 @@ public class EventProcessingThread extends Thread {
 
 		//Bug 1506712: event listeners might be zscript, so we have to
 		//keep built-in variables as long as possible
-		final Namespace ns = Namespaces.beforeInterpret(null, _comp);
+		final HashMap backup = new HashMap();
+		final Namespace ns = Namespaces.beforeInterpret(backup, _comp);
 		try {
-			Namespaces.backupVariable(ns, "event");
+			Namespaces.backupVariable(backup, ns, "event");
 			ns.setVariable("event", _event, true);
 			process1(ns);
 		} finally {
-			Namespaces.afterInterpret(ns);
+			Namespaces.afterInterpret(backup, ns);
 		}
 	}
 	private void process1(Namespace ns) throws Exception {
@@ -489,10 +492,11 @@ public class EventProcessingThread extends Thread {
 			}
 		}
 
-		final String script =
+		final ZScript zscript =
 			((ComponentCtrl)_comp).getMilieu().getEventHandler(_comp, evtnm);
-		if (script != null) {
-			page.interpret(script, ns);
+		if (zscript != null) {
+			page.interpret(
+				zscript.getLanguage(), zscript.getContent(page, _comp), ns);
 			if (!_event.isPropagatable())
 				return; //done
 		}
