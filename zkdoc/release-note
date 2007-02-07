@@ -4,7 +4,6 @@ ZK 2.3.0 Freshly
   1621941: BSF support (for zscript)
   1653099: JavaScript support (for zscript)
   	Limitations:
-  	* No hierarchical namespaces
   	* No getClass and getMethod
   1636304: Add Grid footer (foot and footer)
   1639117: Add Tree footer (treefoot and treefooter)
@@ -45,6 +44,10 @@ ZK 2.3.0 Freshly
     org.zkoss.zk.ui.util to org.zkoss.zk.scripting
   + Evaluator is moved from org.zkoss.zk.ui.util to org.zkoss.zk.el
   + Richlet adds the getZScriptLanguage method.
+  + Page:
+    + The signature of getInterpreter and interpret are changed. You have to
+      specify a language now.
+    + getClass is removed. Use getInterpreter(zslang).getClass(...) instead.
 
 	--------
 ZK 2.2.1
