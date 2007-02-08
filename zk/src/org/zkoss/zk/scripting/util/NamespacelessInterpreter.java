@@ -38,7 +38,9 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  * A skeletal class for implementing a interpreter ({@link Interpreter}) that
  * doesn't support {@link Namespace}.
  *
- * <p>Deriving class usually overrides {@link #exec} instead of {@link #interpret}.
+ * <p>Deriving classes usually overrides {@link #exec} instead of {@link #interpret}.
+ * In addition, they have to override {@link #getVariable(String)}
+ * and {@link #setVariable}.
  *
  * @author tomyeh
  */
@@ -48,6 +50,10 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	/** A list of {@link ExecInfo}. */
 	private final List _execInfos = new LinkedList();
 
+	protected NamespacelessInterpreter() {
+	}
+
+	//interface to override//
 	/** Executes the specified script.
 	 * Deriving class shall provide an implementation of this method, rather
 	 * than overriding {@link #interpret}.

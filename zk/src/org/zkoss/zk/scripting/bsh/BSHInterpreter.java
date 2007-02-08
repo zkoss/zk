@@ -18,10 +18,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting.bsh;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-
 import bsh.BshClassManager;
 import bsh.NameSpace;
 import bsh.BshMethod;
@@ -32,27 +28,21 @@ import bsh.UtilEvalError;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Method;
+import org.zkoss.zk.scripting.util.GenericInterpreter;
 
 /**
  * The interpreter that uses BeanShell to interpret zscript codes.
  *
  * @author tomyeh
  */
-public class BSHInterpreter implements Interpreter { //not a good idea to serialize it
-	private final Page _page;
+public class BSHInterpreter extends GenericInterpreter { //not a good idea to serialize it
 	private final bsh.Interpreter _ip;
 	private final NS _bshns;
-	/** A list of {@link Namespace}.
-	 * Top of it is the active one (may be null).
-	 */
-	private final List _nss = new LinkedList();
 
 	public BSHInterpreter(Page owner) {
-		_page = owner;
+		super(owner);
+
 		_ip = new bsh.Interpreter();
 		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
 
@@ -64,6 +54,37 @@ public class BSHInterpreter implements Interpreter { //not a good idea to serial
 	public bsh.Interpreter getNativeInterpreter() {
 		return _ip;
 	}
+
+	//GenericInterpreter//
+	protected void exec(String script) {
+		try {
+			_ip.eval(script);
+		} catch (EvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+
+	protected Object getVariable(String name) {
+		try {
+			return Primitive.unwrap(_ip.get(name));
+		} catch (EvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+	/*protected void setVariable(String name, Object val) {
+		try {
+			_ip.set(name, val); //unlike NameSpace.setVariable, set handles null
+		} catch (EvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+	protected void unsetVariable(String name) {
+		try {
+			_ip.unset(name);
+		} catch (EvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}*/
 
 	//-- Interpreter --//
 	public Class getClass(String clsnm) {
@@ -85,59 +106,6 @@ public class BSHInterpreter implements Interpreter { //not a good idea to serial
 		}
 	}
 
-	public Object getVariable(String name, boolean skipNamespace) {
-		if (skipNamespace) push(null);
-		try {
-			return Primitive.unwrap(_ip.get(name));
-		} catch (EvalError ex) {
-			throw UiException.Aide.wrap(ex);
-		} finally {
-			if (skipNamespace) pop();
-		}
-	}
-	/*public void setVariable(String name, Object val) {
-		try {
-			_ip.set(name, val); //unlike NameSpace.setVariable, set handles null
-		} catch (EvalError ex) {
-			throw UiException.Aide.wrap(ex);
-		}
-	}
-	public void unsetVariable(String name) {
-		try {
-			_ip.unset(name);
-		} catch (EvalError ex) {
-			throw UiException.Aide.wrap(ex);
-		}
-	}*/
-
-	public void interpret(String script, Namespace ns) {
-		try {
-			push(ns);
-			try {
-				_ip.eval(script);
-			} finally {
-				pop();
-			}
-		} catch (EvalError ex) {
-			throw UiException.Aide.wrap(ex);
-		}
-	}
-	/** Use the specified namespace as the active namespace.
-	 */
-	private void push(Namespace ns) {
-		_nss.add(0, ns);
-	}
-	/** Remove the active namespace.
-	 */
-	private void pop() {
-		_nss.remove(0);
-	}
-	/** Returns the active namespace.
-	 */
-	private Namespace getActive() {
-		return _nss.isEmpty() ? null: (Namespace)_nss.get(0);
-	}
-
 	private class NS extends NameSpace {
 		private boolean _inGet;
 
@@ -157,10 +125,7 @@ public class BSHInterpreter implements Interpreter { //not a good idea to serial
 			//so use _inGet to prevent dead loop
 			Variable var = super.getVariableImpl(name, recurse);
 			if (!_inGet && var == null) {
-				final Namespace ns = getActive();
-				Object v = ns != null ? ns.getVariable(name, false): null;
-				if (v == null)
-					v = ((PageCtrl)_page).resolveVariable(name);
+				Object v = locateVariable(name);
 				if (v != null) {
 			//Variable has no public/protected contructor, so we have to
 			//store the value back (with setVariable) and retrieve again

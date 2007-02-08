@@ -21,7 +21,9 @@ package org.zkoss.zk.scripting;
 /**
  * The interpter used to interpret the zscript codes.
  *
- * <p>Interpreters that don't support {@link Namespace} could derive from
+ * <p>Interpreters that support {@link Namespace} could derive from
+ * {@link org.zkoss.zk.scripting.util.GenericInterpreter}.
+ * Interpreters that don't support {@link Namespace} could derive from
  * {@link org.zkoss.zk.scripting.util.NamespacelessInterpreter}.
  *
  * @author tomyeh
