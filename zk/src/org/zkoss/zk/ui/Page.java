@@ -258,17 +258,29 @@ public interface Page extends IdSpace {
 	 * @see #setVariable
 	 */
 	public void unsetVariable(String name);
-	/** Returns the class of the specified name.
-	 * In addition to the thread class loader, it also looks for
-	 * the classes defined in the loaded interpreters
-	 * ({@link #getLoadedInterpreters}).
+	/** Returns the class of the specified name by searching
+	 * the thread class loader and  the classes defined in the
+	 * loaded interpreters.
 	 *
-	 * <p>Unlike {@link org.zkoss.zk.scripting.Interpreter#getClass},
-	 * this method throws ClassNotFoundException if unable to locate the class.
-	 *
-	 * @exception ClassNotFoundException if not found.
+	 * @return the class, or null if not found
+	 * @see #getLoadedInterpreters
 	 */
-	public Class getClass(String clsnm) throws ClassNotFoundException;
+	public Class getZScriptClass(String clsnm);
+	/** Returns the variable of the specified name by searching
+	 * the loaded interpreters.
+	 *
+	 * @return the method, or null if not found
+	 * @see #getLoadedInterpreters
+	 */
+	public org.zkoss.zk.scripting.Method getZScriptMethod(
+	String name, Class[] argTypes);
+	/** Returns the value of the variable of the specified name by searching
+	 * the namespaces and the loaded interpreters.
+	 *
+	 * @return the value of the variable, or null if not found
+	 * @see #getLoadedInterpreters
+	 */
+	public Object getZScriptVariable(String name);
 
 	/** Gets a variable that is visible to EL expressions.
 	 *

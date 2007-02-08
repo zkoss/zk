@@ -51,6 +51,9 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	 */
 	abstract protected void exec(String script);
 
+	/** Returns a variable from this interpreter directly.
+	 */
+	abstract protected Object getVariable(String name);
 	/** Sets a variable to this interpreter directly.
 	 */
 	abstract protected void setVariable(String name, Object value);
@@ -90,6 +93,11 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	public Method getMethod(String name, Class[] argTypes) {
 		return null;
 	}
+	public Object getVariable(String name, boolean skipNamespace) {
+		//TODO: if (skipNamespace) restore variables
+		return getVariable(name);
+	}
+
 	/** Info stored in {@link NamespacelessInterpreter#_execInfos}.
 	 */
 	private static class ExecInfo {

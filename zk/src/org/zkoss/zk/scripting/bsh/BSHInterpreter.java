@@ -85,11 +85,14 @@ public class BSHInterpreter implements Interpreter { //not a good idea to serial
 		}
 	}
 
-	public Object getVariable(String name) {
+	public Object getVariable(String name, boolean skipNamespace) {
+		if (skipNamespace) push(null);
 		try {
 			return Primitive.unwrap(_ip.get(name));
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
+		} finally {
+			if (skipNamespace) pop();
 		}
 	}
 	/*public void setVariable(String name, Object val) {

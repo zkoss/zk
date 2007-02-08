@@ -54,6 +54,11 @@ public interface Interpreter {
 	 *
 	 * <p>Note: Unlike {@link Namespace#getVariable}, this method
 	 * also retrieve variables defined when executing the script.
+	 *
+	 * @param skipNamespace whether to skip the active namespace, if any.
+	 * Note: when {@link #interpret} is called, the namespace specified
+	 * in the ns argument becomes the active namespace. It affects
+	 * what this method will returned if skipNamespace is false.
 	 */
-	public Object getVariable(String name);
+	public Object getVariable(String name, boolean skipNamespace);
 }

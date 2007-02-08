@@ -75,9 +75,7 @@ public class BSFInterpreter extends NamespacelessInterpreter {
 			throw new UiException(ex);
 		}
 	}
-
-	//Interpreter//
-	public Object getVariable(String name) {
+	protected Object getVariable(String name) {
 		return _manager.getDeclaredBean(name);
 	}
 }

@@ -68,6 +68,7 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
+import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.AbstractNamespace;
 
 /**
@@ -984,7 +985,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return false;
 	}
 
-	public Class getClass(String clsnm) throws ClassNotFoundException {
+	public Class getZScriptClass(String clsnm) {
 		try {
 			return Classes.forNameByThread(clsnm);
 		} catch (ClassNotFoundException ex) {
@@ -996,9 +997,36 @@ implements Component, ComponentCtrl, java.io.Serializable {
 						return cls;
 				}
 			}
-			throw ex;
+			return null;
 		}
 	}
+	public Method getZScriptMethod(String name, Class[] argTypes) {
+		if (_page != null) {
+			for (Iterator it = _page.getLoadedInterpreters().iterator();
+			it.hasNext();) {
+				Method mtd = ((Interpreter)it.next()).getMethod(name, argTypes);
+				if (mtd != null)
+					return mtd;
+			}
+		}
+		return null;
+	}
+	public Object getZScriptVariable(String name) {
+		Object val = getVariable(name, false);
+		if (val != null)
+			return val;
+
+		if (_page != null) {
+			for (Iterator it = _page.getLoadedInterpreters().iterator();
+			it.hasNext();) {
+				val = ((Interpreter)it.next()).getVariable(name, true);
+				if (val != null)
+					return val;
+			}
+		}
+		return null;
+	}
+
 	public Namespace getNamespace() {
 		if (this instanceof IdSpace)
 			return _spaceInfo.ns;

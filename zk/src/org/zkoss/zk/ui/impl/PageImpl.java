@@ -339,7 +339,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public void unsetVariable(String name) {
 		_ns.unsetVariable(name, true);
 	}
-	public Class getClass(String clsnm) throws ClassNotFoundException {
+	public Class getZScriptClass(String clsnm) {
 		try {
 			return Classes.forNameByThread(clsnm);
 		} catch (ClassNotFoundException ex) {
@@ -349,8 +349,32 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				if (cls != null)
 					return cls;
 			}
-			throw ex;
+			return null;
 		}
+	}
+	public org.zkoss.zk.scripting.Method
+	getZScriptMethod(String name, Class[] argTypes) {
+		for (Iterator it = getLoadedInterpreters().iterator();
+		it.hasNext();) {
+			org.zkoss.zk.scripting.Method mtd =
+				((Interpreter)it.next()).getMethod(name, argTypes);
+			if (mtd != null)
+				return mtd;
+		}
+		return null;
+	}
+	public Object getZScriptVariable(String name) {
+		Object val = getVariable(name);
+		if (val != null)
+			return val;
+
+		for (Iterator it = getLoadedInterpreters().iterator();
+		it.hasNext();) {
+			val = ((Interpreter)it.next()).getVariable(name, true);
+			if (val != null)
+				return val;
+		}
+		return null;
 	}
 
 	public Object getELVariable(String name) {
