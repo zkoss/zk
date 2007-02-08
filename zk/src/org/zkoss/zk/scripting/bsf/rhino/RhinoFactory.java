@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.scripting.bsf.engines.javascript;
+package org.zkoss.zk.scripting.bsf.rhino;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.scripting.InterpreterFactory;

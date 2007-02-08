@@ -28,6 +28,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</zscript-config>
 	<zscript-config>
 		<language-name>JavaScript</language-name>
-		<factory-class>org.zkoss.zk.scripting.bsf.engines.javascript.RhinoFactory</factory-class>
+		<factory-class>org.zkoss.zk.scripting.bsf.rhino.RhinoFactory</factory-class>
 	</zscript-config>
 </language>

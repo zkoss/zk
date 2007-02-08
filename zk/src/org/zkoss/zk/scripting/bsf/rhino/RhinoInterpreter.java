@@ -14,7 +14,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package org.zkoss.zk.scripting.bsf.engines.javascript;
+package org.zkoss.zk.scripting.bsf.rhino;
 
 import org.mozilla.javascript.Context;
 
