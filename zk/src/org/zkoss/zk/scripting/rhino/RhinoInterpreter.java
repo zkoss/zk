@@ -16,6 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting.rhino;
 
+import org.mozilla.javascript.Context;
+
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
@@ -36,4 +38,18 @@ public class RhinoInterpreter extends GenericInterpreter {
 	protected Object getVariable(String name) {
 		return null; //TODO
 	}
+	protected void beforeExec() {
+		Context.enter();
+	}
+	protected void afterExec() {
+		Context.exit();
+	}
+
+	//Interpreter//
+	/**TODO: feasible but need to read manual/source first
+	public Class getClass(String clsnm) {
+	}
+	public Method getMethod(String name, Class[] argTypes) {
+	}
+	*/
 }
