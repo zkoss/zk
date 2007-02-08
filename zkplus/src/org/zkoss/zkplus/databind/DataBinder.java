@@ -56,7 +56,7 @@ import java.util.LinkedHashSet;
  * @author Henri Chen
  */
 public class DataBinder {
-	/*package*/ static final String NULLIFY = "null"; //used to nullify default configuration
+	/*package*/ static final String NULLIFY = "none"; //used to nullify default configuration
 	/*package*/ static final String VARNAME = "zkplus.databind.VARNAME"; //_var name
 	/*package*/ static final String TEMPLATEMAP = "zkplus.databind.TEMPLATEMAP"; // template -> clone
 	/*package*/ static final String TEMPLATE = "zkplus.databind.TEMPLATE"; //clone -> template
@@ -72,8 +72,8 @@ public class DataBinder {
 	private boolean _init; //whether this databinder is initialized. 
 		//Databinder is init automatically when saveXXX or loadXxx is called
 
-		/** Binding bean to UI component. This is the same as 
-	 * {@link #addBinding(comp, attr, expr, null, null, null, null)}. 
+	/** Binding bean to UI component. This is the same as 
+	 * addBinding(Component comp, String attr, String expr, (List)null, (String)null, (String)null, (String)null). 
 	 * @param comp The component to be associated.
 	 * @param attr The attribute of the component to be associated.
 	 * @param expr The expression to associate the data bean.

@@ -33,8 +33,8 @@ import org.zkoss.zk.ui.util.Initiator;
  * </pre>
  * <p>Where the arg0 is the component path that specifies the component the AnnotateDataBinder covers. If the 
  * arg0 is not specified or set to "page", the AnnotateDataBinder will default to cover the whole page.</p>
- * <p>Where the arg1 is used to decide whether to load default binding configuration. If the arg1 is not specified
- * it is default to true.</p>
+ * <p>Where the arg1 is used to decide whether to load default binding configuration defined in lang-addon.xml. 
+ * If the arg1 is not specified it is default to true.</p>
  *
  * @author Henri Chen
  * @see AnnotateDataBinder

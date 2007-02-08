@@ -32,7 +32,7 @@ import java.util.LinkedHashMap;
  *
  * @author Henri
  */
-public class BindingNode {
+/*package*/ class BindingNode {
 	private LinkedHashSet _bindingSet = new LinkedHashSet(); //(Binding set of this expression BindingNode)
 	private Map _kids = new LinkedHashMap(7); //(nodeid, BindingNode)
 	private String _path; //path of this BindingNode
@@ -40,7 +40,8 @@ public class BindingNode {
 	private boolean _var; //a var node
 	
 	/** Constructor.
-	 * @path the path of this node in the expression dependant tree.
+	 * @param path the path of this node in the expression dependant tree.
+	 * @param var whether a _var variable binding node.
 	 */
 	public BindingNode(String path, boolean var) {
 		_path = path;

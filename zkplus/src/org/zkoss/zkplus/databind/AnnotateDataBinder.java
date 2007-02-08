@@ -82,12 +82,24 @@ import java.util.Iterator;
  * &lt;textbox id="firstName"/>
  * </pre>
  *
- * However, you don't generally specify the save-when tag. If you don't specify it, the default events are used
+ * <p>However, you don't generally specify the save-when tag. If you don't specify it, the default events are used
  * depends on the natural charactieric of the component's attribute as defined in lang-addon.xml. For example, 
  * the save-when of Label.value is default to none while that of Textbox.value is default to self.onChange. 
- * That is, the following example is the same as the above one.
+ * That is, the following example is the same as the above one.</p>
  * <pre>
  * &lt;a:bind value="person.firstName"/>
+ * &lt;textbox id="firstName"/>
+ * </pre>
+ *
+ * <p>On the other hand, you might not specify the save-when tag nor you want the default events to be used. Then you
+ * can specify a "none" keyword or simply leave empty to indicate such cases.</p>
+ * <pre>
+ * &lt;a:bind value="person.firstName; save-when:none;"/>
+ * &lt;textbox id="firstName"/>
+ * </pre>
+ * or
+ * <pre>
+ * &lt;a:bind value="person.firstName; save-when: ;"/>
  * &lt;textbox id="firstName"/>
  * </pre>
  * </li>
