@@ -71,6 +71,8 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 *
 	 * <p>The ID space relevant methods include {@link #getFellow},
 	 * {@link #getAttribute} and {@link #getVariable}.
+	 *
+	 * @see #getNamespace
 	 */
 	public IdSpace getSpaceOwner();
 
@@ -307,53 +309,67 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public Object removeAttribute(String name);
 
-	/** Sets a variable that both the interpreter and EL can see it.
-	 * The variable is defined in the scope of the ID space containing
-	 * this component ({@link #getSpaceOwner}).
-	 * In other words, all components in the same ID space share the same
-	 * set of variables (and functions).
+	/** Sets a variable to the namespace.
 	 *
-	 * <p>The other scope to set a variable is {@link Page#setVariable}.
-	 * If this component doesn't belong to any ID space, this method
-	 * is the same as {@link Page#setVariable}.
+	 * <p>This method is the same as
+	 * getNamespace().setVariable(name, value, local).
 	 *
-	 * <p>Since variables (and functions) are associated with the ID space,
-	 * the child ID space could see the variable in the parent
-	 * ID space.
+	 * <p>Once a variable is set thru this method, it is visible to
+	 * both the interpreter and EL.
+	 *
+	 * <p>Note: Exactly one namespace is allocated for each ID space.
+	 * For example, if the space owner of this component is the page, then
+	 * the returned namespace is the same as {@link Page#getNamespace}.
+	 * Otherwise, it is the same as the namspace returned by the component
+	 * owning this ID space.
 	 *
 	 * <h3>When to use setVariable and setAttribute?</h3>
 	 *
-	 * First, setVariable supports only the ID space. Second, the variable is
-	 * easy to reference in zsript and EL (such type the variable name directly),
-	 * while attribute needs to specify the scope first, such as spaceScope.
+	 * <p>First, only the ID space support {@link #setVariable} and so.
+	 * Second, the variables can be referenced directly in zscript and EL
+	 * expressions, while attributes are referenced thru the scope,
+	 * such as spaceScope.
 	 * On the other hand, using attributes causes less name popultion.
 	 * In general, if you could use attributes, don't use variable.
 	 *
-	 * @param local whether not to search any of the ancestor ID space defines
+	 * @param local whether not to search any of the ancestor namespace defines
 	 * the variable. If local is false and an ancesotor has defined a variable
 	 * with the same name, the variable in the ancestor is changed directly.
-	 * Otherwise, a new variable is created in the ID space containing
+	 * Otherwise, a new variable is created in the namespace containing
 	 * this component.
+	 * @see #getSpaceOwner
+	 * @see #getNamespace
 	 */
 	public void setVariable(String name, Object val, boolean local);
-	/** Returns the value of a variable defined in the interpreter.
-	 * The variable is defined in the ID space containing this component
-	 *  ({@link #getSpaceOwner}).
-	 * In other words, all components in the same ID space share the same
-	 * set of variables.
+	/** Returns the value of a variable defined in the namespace.
+	 *
+	 * <p>This method is the same as getNamespace().getVariable(name, local).
+	 *
+	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
+	 *
+	 * <p>{@link #getVariable} returns only variables defined by
+	 * {@link #setVariable} (and {@link Namespace#setVariable}.
+	 * On the other hand, {@link #getZScriptVariable} returns these variables
+	 * and those defined when executing zscripts.
 	 *
 	 * @param local whether not to search its ancestor.
-	 * If false and the current ID space doen't define the variable,
+	 * If false and the current namespace doen't define the variable,
 	 * it searches up its ancestor (via {@link #getParent}) to see
 	 * any of them has defined the specified variable.
+	 * @see #getSpaceOwner
+	 * @see #getNamespace
 	 */
 	public Object getVariable(String name, boolean local);
-	/** Unsets a variable from the current ID space.
+	/** Unsets a variable defined in the namespace.
+	 *
+	 * <p>This method is the same as  getNamespace().getVariable(name, local).
 	 *
 	 * @param local whether not to search its ancestor.
-	 * If false and the current ID space doen't define the variable,
+	 * If false and the current namespace doen't define the variable,
 	 * it searches up its ancestor (via {@link #getParent}) to see
 	 * any of them has defined the specified variable.
+	 * @see #getSpaceOwner
+	 * @see #getNamespace
 	 */
 	public void unsetVariable(String name, boolean local);
 
@@ -381,6 +397,13 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 *
 	 * <p>Note: the loaded interpreters ({@link Page#getLoadedInterpreters})
 	 * are searched only if it is attached a page.
+	 *
+	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
+	 *
+	 * <p>{@link #getVariable} returns only variables defined by
+	 * {@link #setVariable} (and {@link Namespace#setVariable}.
+	 * On the other hand, {@link #getZScriptVariable} returns these variables
+	 * and those defined when executing zscripts.
 	 *
 	 * @return the value of the variable, or null if not found
 	 */
@@ -608,7 +631,19 @@ public interface Component extends java.io.Serializable, Cloneable {
 	/** Returns the namespace to store variables and functions belonging
 	 * to the ID space of this component.
 	 *
-	 * <p>Note: a namespace per ID space.
+	 * <p>Exactly one namespace is allocated for each ID space.
+	 * For example, if the space owner of this component is the page, then
+	 * the returned namespace is the same as {@link Page#getNamespace}.
+	 * Otherwise, it is the same as the namspace returned by the component
+	 * owning this ID space.
+	 *
+	 * <p>Namspace is another part of an ID space. It holds only variables
+	 * defined thru {@link #setVariable} (and {@link Namespace#setVariable}.
+	 *
+	 * <p>Note: The namespace doesn't include any variable defined by
+	 * executing zscripts. To retrieve them, use {@link #getZScriptVariable}.
+	 *
+	 * @see #getSpaceOwner
 	 */
 	public Namespace getNamespace();
 

@@ -236,28 +236,38 @@ public interface Page extends IdSpace {
 	 */
 	public Object removeAttribute(String name);
 
-	/** Sets a variable that both the interpreter and EL can see it.
+	/** Sets a variable to the namespace ({@link #getNamespace}).
 	 *
 	 * <p>It is the same as getNamespace().setVariable(name, value, true).
 	 *
 	 * @see Component#setVariable
+	 * @see Component#getNamespace
 	 */
 	public void setVariable(String name, Object val);
-	/** Returns the value of a variable defined in the zscript interpreter.
+	/** Returns the value of a variable defined in the namespace ({@link #getNamespace}).
 	 *
 	 * <p>It is the same as getNamespace().getVariable(name, true).
 	 *
+	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
+	 *
+	 * <p>{@link #getVariable} returns only variables defined by
+	 * {@link #setVariable} (and {@link Namespace#setVariable}.
+	 * On the other hand, {@link #getZScriptVariable} returns these variables
+	 * and those defined when executing zscripts.
+	 *
 	 * @see Component#getVariable
+	 * @see Component#getNamespace
 	 */
 	public Object getVariable(String name);
-	/** Unsets a variable.
+	/** Unsets a variable from the namespace ({@link #getNamespace}).
 	 *
 	 * <p>It is the same as getNamespace().unsetVariable(name, true).
 	 *
 	 * @see Component#unsetVariable
-	 * @see #setVariable
+	 * @see Component#getNamespace
 	 */
 	public void unsetVariable(String name);
+
 	/** Returns the class of the specified name by searching
 	 * the thread class loader and  the classes defined in the
 	 * loaded interpreters.
@@ -276,6 +286,13 @@ public interface Page extends IdSpace {
 	String name, Class[] argTypes);
 	/** Returns the value of the variable of the specified name by searching
 	 * the namespaces and the loaded interpreters.
+	 *
+	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
+	 *
+	 * <p>{@link #getVariable} returns only variables defined by
+	 * {@link #setVariable} (and {@link Namespace#setVariable}.
+	 * On the other hand, {@link #getZScriptVariable} returns these variables
+	 * and those defined when executing zscripts.
 	 *
 	 * @return the value of the variable, or null if not found
 	 * @see #getLoadedInterpreters

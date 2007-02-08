@@ -22,7 +22,7 @@ package org.zkoss.zk.scripting;
  * The interpter used to interpret the zscript codes.
  *
  * <p>Interpreters that don't support {@link Namespace} could derive from
- * {@link NamespacelessInterpreter}.
+ * {@link org.zkoss.zk.scripting.util.NamespacelessInterpreter}.
  *
  * @author tomyeh
  */
@@ -37,9 +37,6 @@ public interface Interpreter {
 	public void interpret(String script, Namespace ns);
 
 	/** Returns the class defined in this interpreter, or null if not found.
-	 *
-	 * <p>Note: unlike {@link org.zkoss.zk.ui.Component#getClass}, this method
-	 * returns null instead of throwing ClassNotFoundException.
 	 */
 	public Class getClass(String clsnm);
 	/** Returns the method of the specified name defined in this interpreter,
