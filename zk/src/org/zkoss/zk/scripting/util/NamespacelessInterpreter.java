@@ -32,6 +32,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Method;
+import org.zkoss.zk.scripting.NamespaceChangeListener;
 
 /**
  * A skeletal class for implementing a interpreter ({@link Interpreter}) that
@@ -62,6 +63,18 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	/** Sets a variable to this interpreter directly.
 	 */
 	abstract protected void setVariable(String name, Object value);
+
+	/** Called before {@link #exec} or setting a variable.
+	 * <p>Default: does nothing.
+	 */
+	protected void beforeExec() {
+	}
+	/** Called after {@link #exec} or setting a variable.
+	 * <p>Default: does nothing.
+	 */
+	protected void afterExec() {
+	}
+
 	/** Unsets a variable from this interpreter directly.
 	 */
 //	abstract protected void unsetVariable(String name);
@@ -70,24 +83,19 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	 * to this interpreter.
 	 */
 	private void push(Namespace ns) {
-		//check whether it is the special case that all execinfo are popped
-		//but we keep one for improving performance
+		//Note: if execinfo.count < 0, it means that all execinfo shall
+		//be popped, but we keep one for improving performance
 		final ExecInfo oei = getActive();
-		if (oei != null && oei.count < 0) {
-			assert D.OFF || _execInfos.size() == 1: "Wrong: "+_execInfos;
-			if (oei.ns == ns) { //yes, the same case
-				oei.count = 0;
-				return; //done; reuse oei
-			} else {
-				oei.restore();
-				_execInfos.remove(0);
-			}
-		} else if (oei != null) {
+		if (oei != null) {
 			if (oei.ns == ns) {
 				oei.count++; //reuse it
 				return; //done
 			}
+
 			oei.restore();
+
+			if (oei.count < 0) //special case
+				_execInfos.remove(0);
 		}
 
 		final ExecInfo ei = new ExecInfo(ns);
@@ -104,6 +112,9 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 			if (_execInfos.size() > 1) {
 				_execInfos.remove(0);
 				ei.restore();
+
+				((ExecInfo)_execInfos.get(0)).backup();
+					//make it effective again
 			}
 		}
 	}
@@ -123,11 +134,13 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	 * this method.
 	 */
 	public void interpret(String script, Namespace ns) {
+		beforeExec();
 		push(ns);
 		try {
 			exec(script);
 		} finally {
 			pop();
+			afterExec();
 		}
 	}
 	public Object getVariable(String name, boolean skipNamespace) {
@@ -167,50 +180,140 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 		private int count;
 
 		/** A map of (name, value) of variables that are backup. */
-		private Map backup;
+		private Map _backup;
+		/** A list of listener. */
+		private List _listeners;
 
 		private ExecInfo(Namespace ns) {
 			this.ns = ns;
 		}
 		private void backup() {
-			if (ns != null) {
-//TODO: addChangeListener to monitor what has been changed for each in nss.
-				backup = new HashMap();
-				final List nss = new LinkedList();
-				for (Namespace p = ns; p != null; p = p.getParent())
-					nss.add(0, p); //reverse order
-				for (Iterator it = nss.iterator(); it.hasNext();) {
-					final Namespace ns = (Namespace)it.next();
-					for (Iterator e = ns.getVariableNames().iterator();
-					e.hasNext();) {
-						final String nm = (String)e.next();
-						try {
-							backup.put(nm, getVariable(nm));
-							setVariable(nm, ns.getVariable(nm, true));
-						} catch (Throwable ex) {
-							log.error("Failed to backup "+nm, ex);
-						}
-					}
+			if (this.ns != null) {
+				try {
+					backup0();
+				} catch (Throwable ex) {
+					log.error("Failed to backup "+this, ex);
 				}
+			}
+		}
+		private void backup0() {
+			_backup = new HashMap();
+			_listeners = new LinkedList();
+
+			final List nss = new LinkedList();
+			for (Namespace p = this.ns; p != null; p = p.getParent()) {
+				ChangeListener l = new ChangeListener(this, p);
+				_listeners.add(l);
+
+				nss.add(0, p); //reverse order
+			}
+			for (Iterator it = nss.iterator(); it.hasNext();) {
+				final Namespace p = (Namespace)it.next();
+				for (Iterator e = p.getVariableNames().iterator();
+				e.hasNext();) {
+					final String nm = (String)e.next();
+					backup(nm, p.getVariable(nm, true));
+				}
+			}
+		}
+		/** Backup a variable.
+		 */
+		private void backup(String name, Object newvalue) {
+			try {
+				if (!_backup.containsKey(name))
+					_backup.put(name, getVariable(name));
+				setVariable(name, newvalue);
+			} catch (Throwable ex) {
+				log.error("Failed to backup "+name, ex);
 			}
 		}
 		private void restore() {
-			if (backup != null) {
-//TODO: removeChangeListener
-				for (Iterator it = backup.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					try {
-						setVariable((String)me.getKey(), me.getValue());
-					} catch (Throwable ex) {
-						log.error("Failed to restore "+me.getKey(), ex);
-					}
+			if (_backup != null) {
+				try {
+					restore0();
+				} catch (Throwable ex) {
+					log.error("Failed to restore "+this, ex);
 				}
-				backup = null;
 			}
+		}
+		private void restore0() {
+			for (Iterator it = _listeners.iterator(); it.hasNext();) {
+				final ChangeListener l = (ChangeListener)it.next();
+				try {
+					l.unlisten();
+				} catch (Throwable ex) {
+					log.error("Failed to unlisten "+l, ex);
+				}
+			}
+			_listeners = null;
+
+			for (Iterator it = _backup.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				try {
+					setVariable((String)me.getKey(), me.getValue());
+				} catch (Throwable ex) {
+					log.error("Failed to restore "+me.getKey(), ex);
+				}
+			}
+			_backup = null;
 		}
 
 		public String toString() {
-			return "[count="+count+", "+ns+']';
+			return "[count="+this.count+", "+this.ns+']';
+		}
+	}
+
+	private class ChangeListener implements NamespaceChangeListener {
+		private final ExecInfo _ei;
+		private final Namespace _ns;
+		private ChangeListener(ExecInfo ei, Namespace ns) {
+			_ei = ei;
+			_ns = ns;
+			_ns.addChangeListener(this);
+		}
+		private void unlisten() {
+			_ns.removeChangeListener(this);
+		}
+
+		/** Whether the variable is not obscure by child namespace.
+		 */
+		private boolean isEffective(String name) {
+			for (Namespace p = _ei.ns; p != _ns; p = p.getParent())
+				if (p.containsVariable(name, true))
+					return false;
+			return true;
+		}
+		public void onAdd(String name, Object value) {
+			if (isEffective(name)) {
+				beforeExec();
+				try {
+					_ei.backup(name, value);
+				} finally {
+					afterExec();
+				}
+			}
+		}
+		public void onRemove(String name) {
+			if (isEffective(name)) {
+				beforeExec();
+				try {
+					_ei.backup(name, null);
+				} finally {
+					afterExec();
+				}
+			}
+		}
+		public void onParentChanged(Namespace newparent) {
+			beforeExec();
+			try {
+				_ei.restore();
+				_ei.backup();
+			} finally {
+				afterExec();
+			}
+		}
+		public String toString() {
+			return "["+_ei+" for "+_ns+']';
 		}
 	}
 }

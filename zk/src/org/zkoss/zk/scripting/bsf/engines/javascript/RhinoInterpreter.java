@@ -36,17 +36,21 @@ public class RhinoInterpreter extends BSFInterpreter {
 		super(lang, engineClassnm);
 	}
 
-	//Interpreter//
-	public void interpret(String script, Namespace ns) {
-		//Note: we have to prepare context since GenericInterpreter.interpret
-		//will set variables before calling exec. And, it will cause exception
-		//if the context is not ready (since Rhino will wrap value with its
-		//own class)
+	//NamespacelessInterpreter//
+	protected void setVariable(String name, Object value) {
+		//Rhino doesn't allow to set the null value, so we unset it instead
+		if (value != null) super.setVariable(name, value);
+		else unsetVariable(name);
+	}
+
+	//Note: we have to prepare context since GenericInterpreter.interpret
+	//will set variables before calling exec. And, it will cause exception
+	//if the context is not ready (since Rhino will wrap value with its
+	//own class)
+	protected void beforeExec() {
 		Context.enter();
-		try {
-			super.interpret(script, ns);
-		} finally {
-			Context.exit();
-		}
+	}
+	protected void afterExec() {
+		Context.exit();
 	}
 }

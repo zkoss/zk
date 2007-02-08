@@ -50,7 +50,7 @@ public class BSFInterpreter extends NamespacelessInterpreter {
 		}
 	}
 
-	//super//
+	//NamespacelessInterpreter//
 	protected void exec(String script) {
 		try {
 			_manager.exec(_lang, "zk", 0, 0, script);
@@ -68,13 +68,13 @@ public class BSFInterpreter extends NamespacelessInterpreter {
 			throw new UiException(ex);
 		}
 	}
-/*	protected void unsetVariable(String name) {
+	protected void unsetVariable(String name) {
 		try {
 			_manager.undeclareBean(name);
 		} catch (BSFException ex) {
 			throw new UiException(ex);
 		}
-	}*/
+	}
 	protected Object getVariable(String name) {
 		return _manager.getDeclaredBean(name);
 	}
