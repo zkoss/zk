@@ -45,9 +45,16 @@ ZK 2.3.0 Freshly
   + Evaluator is moved from org.zkoss.zk.ui.util to org.zkoss.zk.el
   + Richlet adds the getZScriptLanguage method.
   + Page:
-    + The signature of getInterpreter and interpret are changed. You have to
+    - The signature of getInterpreter and interpret are changed. You have to
       specify a language now.
-    + getClass is removed. Use getInterpreter(zslang).getClass(...) instead.
+    - getClass is renamed to getZScriptClass.
+    - getVariable returns variables defined in namespace, excluding those
+      defined in the interpreters.
+      To retrieve variables defined in the interpreter, use getZScriptVariable.
+  + Component
+    - getVariable returns variables defined in namespace, excluding those
+      defined in the interpreters.
+      To retrieve variables defined in the interpreter, use getZScriptVariable.
 
 	--------
 ZK 2.2.1
