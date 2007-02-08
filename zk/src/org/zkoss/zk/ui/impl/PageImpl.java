@@ -185,7 +185,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	/** Initialized the page when contructed or deserialized.
 	 */
 	protected void init() {
-		_ips = new HashMap(3);
+		_ips = new LinkedHashMap(3);
 		_ns = new NS();
 		_roRoots = Collections.unmodifiableList(_roots);
 		_attrs = new HashMap();

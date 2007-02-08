@@ -150,7 +150,7 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 			if (ei != null) {
 				ei.restore();
 				if (ei.count < 0) {
-					ei = null; //no need to backup
+					ei = null; //no need to backup again
 					_execInfos.remove(0);
 				}
 			}
