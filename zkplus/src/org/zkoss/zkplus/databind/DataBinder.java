@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Nov 15 14:24:25     2006, Created by Henri Chen.
+		Thu Feb  1 18:27:18     2007, Created by Henri
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -16,41 +16,39 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Express;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.metainfo.Annotation; 
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.Express;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Interpreter;
 
-import org.zkoss.zul.impl.InputElement;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.Checkbox;
-import org.zkoss.zul.Slider;
-import org.zkoss.zul.Calendar;
-import org.zkoss.zul.ListitemRenderer;
 
 import org.zkoss.util.ModificationException;
-import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Primitives;
 import org.zkoss.lang.reflect.Fields;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.List;
 import java.util.HashSet;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
-import java.lang.reflect.Method;
+import java.util.LinkedHashSet;
 
 /**
  * The DataBinder used for binding ZK UI component and the backend data bean.
@@ -58,82 +56,151 @@ import java.lang.reflect.Method;
  * @author Henri Chen
  */
 public class DataBinder {
-	private Map _compBindingMap = new LinkedHashMap(29); //(comp, Map(attr, Binding))
-	private Map _beanBindingMap = new HashMap(29); //(beanid, Set(Binding))
-	private Map _sameBeanidMap = new HashMap(5); //(bean, Set(beanid)) and (beanid, Set(beanid));
-	private Map _cloneMap = new HashMap(255); //(cloned item target, Map(template, clone))
-	private Map _beans = new HashMap(5); //(beanid, bean)
-//	private Node _dependency = new Node(); //(beanid+prop) dependency tree.
-	
-	private boolean _init; //whether this databinder is initialized. 
-							//Databinder is init automatically when saveXXX or loadXxx is called
-	private static Map _converterMap = new HashMap(5); //(converterClassName, converter)
-	private static final String VAR = "org.koss.zkplus.databind.VAR"; //the template variable name
-	private static final String INDEXITEM = "org.koss.zkplus.databind.INDEXITEM"; //the listitem with index
-	private static final String TEMPLATE = "org.koss.zkplus.databind.TEMPLATE"; //the template
-	private static final String ISTEMPLATE = "org.koss.zkplus.databind.ISTEMPLATE"; //whether a template
+	/*package*/ static final String NULLIFY = "null"; //used to nullify default configuration
+	/*package*/ static final String VARNAME = "zkplus.databind.VARNAME"; //_var name
+	/*package*/ static final String TEMPLATEMAP = "zkplus.databind.TEMPLATEMAP"; // template -> clone
+	/*package*/ static final String TEMPLATE = "zkplus.databind.TEMPLATE"; //clone -> template
+	private static final String OWNER = "zkplus.databind.OWNER"; //the collection owner of the template component
 	private static final Object NA = new Object();
-	
-	/** Binding bean to UI component. This is the same as addBinding(comp, attr, value, null, null). 
+
+	private Map _compBindingMap = new LinkedHashMap(29); //(comp, Map(attr, Binding))
+	private Map _beans = new HashMap(29); //bean local to this DataBinder
+	private Map _beanSameNodes = new HashMap(29); //bean same nodes
+	private BindingNode _pathTree = new BindingNode("/", false); //path dependency tree.
+	private Set _pageSet = new HashSet(1); //page that associated with this DataBinder
+	private boolean _defaultConfig = true; //whether load default configuration from lang-addon.xml
+	private boolean _init; //whether this databinder is initialized. 
+		//Databinder is init automatically when saveXXX or loadXxx is called
+
+		/** Binding bean to UI component. This is the same as 
+	 * {@link #addBinding(comp, attr, expr, null, null, null, null)}. 
 	 * @param comp The component to be associated.
 	 * @param attr The attribute of the component to be associated.
-	 * @param value The expression to associate the data bean.
+	 * @param expr The expression to associate the data bean.
 	 */
-	public void addBinding(Component comp, String attr, String value) {
-		addBinding(comp, attr, value, null, null, null, null);
+	public void addBinding(Component comp, String attr, String expr) {
+		addBinding(comp, attr, expr, (List)null, null, null, null);
 	}
 
 	/** Binding bean to UI component. 
 	 * @param comp The component to be associated.
 	 * @param attr The attribute of the component to be associated.
-	 * @param value The expression to associate the data bean.
+	 * @param expr The expression to associate the data bean.
 	 * @param loadWhenEvents The event list when to load data.
 	 * @param saveWhenEvent The event when to save data.
-	 * @param access In the view of UI component: "load" load only, "both" load/save, "save" save only when doing
-	 * data binding. null means using the default access natural of the component. e.g. Label.value is "load", 
-	 * but Textbox.value is "both".
-	 * @param converter The converter class used to convert classes between component and the associated bean.
-	 * null means using the default class conversion method.
+	 * @param access In the view of UI component: "load" load only, 
+	 * "both" load/save, "save" save only when doing
+	 * data binding. null means using the default access natural of the component. 
+	 * e.g. Label.value is "load", but Textbox.value is "both".
+	 * @param converter The converter class used to convert classes between component 
+	 *  and the associated bean. null means using the default class conversion method.
 	 */
-	public void addBinding(Component comp, String attr, String value,
+	public void addBinding(Component comp, String attr, String expr,
 		String[] loadWhenEvents, String saveWhenEvent, String access, String converter) {
+		List loadEvents = null;
+		if (loadWhenEvents != null && loadWhenEvents.length > 0) {
+			loadEvents = new ArrayList(loadWhenEvents.length);
+			for (int j = 0; j < loadWhenEvents.length; ++j) {
+				loadEvents.add(loadWhenEvents[j]);
+			}
+		}
+		addBinding(comp, attr, expr, loadEvents, saveWhenEvent, access, converter);
+	}
+	
+	/** Binding bean to UI component. 
+	 * @param comp The component to be associated.
+	 * @param attr The attribute of the component to be associated.
+	 * @param expr The expression to associate the data bean.
+	 * @param loadWhenEvents The event list when to load data.
+	 * @param saveWhenEvent The event when to save data.
+	 * @param access In the view of UI component: "load" load only, 
+	 * "both" load/save, "save" save only when doing
+	 * data binding. null means using the default access natural of the component. 
+	 * e.g. Label.value is "load", but Textbox.value is "both".
+	 * @param converter The converter class used to convert classes between component 
+	 *  and the associated bean. null means using the default class conversion method.
+	 */
+	public void addBinding(Component comp, String attr, String expr,
+		List loadWhenEvents, String saveWhenEvent, String access, String converter) {
 			
-		//handle default-bind defined in lang-addon.xml
-		Object[] objs = loadPropertyAnnotation(comp, attr, "default-bind");
-		/* logically impossible to hold "value" in default binding 
-		if (value == null) {
-			value = (String) objs[0];
+		//add EventListener if not have done so
+		Page page = comp.getPage();
+		if (!_pageSet.contains(page)) {
+			_pageSet.add(page);
+			page.addEventListener("onLoadOnSave", new LoadOnSaveEventListener(this));
 		}
-		if (loadWhenEvents == null) {
-			loadWhenEvents = (String[]) objs[1];
+			
+		if (isDefaultConfig()) { //use default binding configuration
+			//handle default-bind defined in lang-addon.xml
+			Object[] objs = loadPropertyAnnotation(comp, attr, "default-bind");
+			
+			/* logically impossible to hold "expr" in default binding 
+			if (expr == null && objs[0] != null) {
+				expr = (String) objs[0];
+			}
+			*/
+
+			if (loadWhenEvents == null && objs[1] != null) {
+				loadWhenEvents = (List) objs[1];
+			}
+			if (saveWhenEvent == null && objs[2] != null) {
+				saveWhenEvent = (String) objs[2];
+			}
+			if (access == null && objs[3] != null) {
+				access = (String) objs[3];
+			}
+			if (converter == null && objs[4] != null) {
+				converter = (String) objs[4];
+			}
 		}
-		*/
-		if (saveWhenEvent == null) {
-			saveWhenEvent = (String) objs[2];
+	
+		//nullify check
+		boolean nullify = false;
+		LinkedHashSet loadEvents = null;
+		if (loadWhenEvents != null && loadWhenEvents.size() > 0) {
+			loadEvents = new LinkedHashSet(loadWhenEvents.size());
+			for(final Iterator it = loadWhenEvents.iterator(); it.hasNext();) {
+				final String event = (String) it.next();
+				if (NULLIFY.equals(event)) {
+					loadEvents.clear();
+					nullify = true;
+				} else {
+					nullify = false;
+					loadEvents.add(event);
+				}
+			}
+			if (nullify) { 
+				loadEvents = null;
+			}
 		}
-		if (access == null) {
-			access = (String) objs[3];
+
+		if (NULLIFY.equals(saveWhenEvent)) {
+			saveWhenEvent = null;
 		}
-		if (converter == null) {
-			converter = (String) objs[4];
+		
+		if (NULLIFY.equals(access)) {
+			access = null;
 		}
+		
+		if (NULLIFY.equals(converter)) {
+			converter = null;
+		}
+		
 		Map attrMap = (Map) _compBindingMap.get(comp);
 		if (attrMap == null) {
 			attrMap = new LinkedHashMap(3);
 			_compBindingMap.put(comp, attrMap);
 		}
-		if (attrMap.containsKey(attr)) { //override and merge
+			
+		if (attrMap.containsKey(attr)) { //override
 			final Binding binding = (Binding) attrMap.get(attr);
-			binding.setValue(value);
-			binding.addLoadWhenEvents(loadWhenEvents);
+			binding.setExpression(expr);
+			binding.setLoadWhenEvents(loadEvents);
 			binding.setSaveWhenEvent(saveWhenEvent);
 			binding.setAccess(access);
 			binding.setConverter(converter);
 		} else {
-			if (objs[1] != null) { //default-bind
-				loadWhenEvents = mergeStringArray((String[])objs[1], loadWhenEvents);
-			}
-			attrMap.put(attr, new Binding(comp, attr, value, loadWhenEvents, saveWhenEvent, access, converter));
+			attrMap.put(attr, new Binding(this, comp, attr, expr, loadEvents, saveWhenEvent, access, converter));
 		}
 	}
 	
@@ -148,13 +215,198 @@ public class DataBinder {
 		}
 	}
 
-	//[0] value, [1] loadWhenEvents, [2] saveWhenEvent, [3] access, [4] converter
+	/** Given component and attr, return the associated {@link Binding}.
+	 * @param comp the concerned component
+	 * @param attr the concerned attribute
+	 */
+	public Binding getBinding(Component comp, String attr) {
+		if (isClone(comp)) {
+			comp = (Component) comp.getAttribute(TEMPLATE);
+		}
+		Map attrMap = (Map) _compBindingMap.get(comp);
+		return attrMap != null ?  (Binding) attrMap.get(attr) : null;
+	}
+
+	/** Given component, return the associated list of {@link Binding}s.
+	 * @param comp the concerned component
+	 */
+	public Collection getBindings(Component comp) {
+		if (isClone(comp)) {
+			comp = (Component) comp.getAttribute(TEMPLATE);
+		}
+		Map attrMap = (Map)_compBindingMap.get(comp);
+		return attrMap != null ?  (Collection) attrMap.values() : null;
+	}
+	
+	/** Whether this component associated with any bindings.
+	 */
+	public boolean existsBindings(Component comp) {
+		if (isClone(comp)) {
+			comp = (Component) comp.getAttribute(TEMPLATE);
+		}
+		return _compBindingMap.containsKey(comp);
+	}
+	
+	/** Whether this component and attribute associated with a binding.
+	 */
+	public boolean existBinding(Component comp, String attr) {
+		if (isClone(comp)) {
+			comp = (Component) comp.getAttribute(TEMPLATE);
+		}
+		if (_compBindingMap.containsKey(comp)) {
+			Map attrMap = (Map) _compBindingMap.get(comp);
+			return attrMap.containsKey(attr);
+		}
+		return false;
+	}		
+	
+	/** Whether use the default binding configuration.
+	 */
+	public boolean isDefaultConfig(){
+		return _defaultConfig;
+	}
+	
+	/** Whether use the default binding configuration.
+	 */
+	public void setDefaultConfig(boolean b) {
+		_defaultConfig = b;
+	}
+	
+	/** Bind a real bean object to the specified beanid. You might not need to call this method because this
+	 * DataBinder would look up the variable via the {@link org.zkoss.zk.ui.Component#getVariable} method
+	 * if it cannot find the specified bean via the given beanid.
+	 *
+	 * @param beanid The bean id used in data binding.
+	 * @param bean The real bean object to be associated with the bean id.
+	 */
+	public void bindBean(String beanid, Object bean) {
+		_beans.put(beanid, bean);
+	}
+	
+	
+	/** Load value from the data bean property to a specified attribute of the UI component.
+	 * @param comp the UI component to be loaded value.
+	 * @param attr the UI component attribute to be loaded value.
+	 */
+	public void loadAttribute(Component comp, String attr) {
+		if (isTemplate(comp) || comp.getPage() == null) {
+			return; //skip detached component
+		}
+		init();
+		Binding binding = getBinding(comp, attr);
+		if (binding != null) {
+			binding.loadAttribute(comp);
+		}
+	}			
+
+	/** Save value from a specified attribute of the UI component to a data bean property.
+	 * @param comp the UI component used to save value into backend data bean.
+	 * @param attr the UI component attribute used to save value into backend data bean.
+	 */
+	public void saveAttribute(Component comp, String attr) {
+		if (isTemplate(comp) || comp.getPage() == null) {
+			return; //skip detached component
+		}
+		init();
+		Binding binding = getBinding(comp, attr);
+		if (binding != null) {
+			binding.saveAttribute(comp);
+		}
+	}
+	
+	/** Load values from the data bean properties to all attributes of a specified UI component. 
+	 * @param comp the UI component to be loaded value.
+	 */
+	public void loadComponent(Component comp) {
+		if (isTemplate(comp) || comp.getPage() == null) {
+			return; //skip detached component
+		}
+		init();
+		Collection bindings = getBindings(comp);
+		if (bindings != null) {
+			loadAttrs(comp, bindings);
+		}
+			
+		//load kids of this component
+		for(final Iterator it = comp.getChildren().iterator(); it.hasNext();) {
+			loadComponent((Component) it.next()); //recursive
+		}
+	}
+	
+	/** Save values from all attributes of a specified UI component to data bean properties.
+	 * @param comp the UI component used to save value into backend data bean.
+	 */
+	public void saveComponent(Component comp) {
+		if (isTemplate(comp) || comp.getPage() == null) {
+			return; //skip detached component
+		}
+		init();
+		Collection bindings = getBindings(comp);
+		if (bindings != null) {
+			saveAttrs(comp, bindings);
+		}
+
+		//save kids of this component
+		for(final Iterator it = comp.getChildren().iterator(); it.hasNext();) {
+			saveComponent((Component) it.next()); //recursive
+		}
+	}
+	
+	/** Load all value from data beans to UI components. */
+	public void loadAll() {
+		init();
+		for (final Iterator it = _compBindingMap.keySet().iterator(); it.hasNext(); ) {
+			final Component comp = (Component) it.next();
+			loadComponent(comp);
+		}
+	}
+	
+	/** Save all values from UI components to beans. */
+	public void saveAll() {
+		init();
+		for (final Iterator it = _compBindingMap.keySet().iterator(); it.hasNext(); ) {
+			final Component comp = (Component) it.next();
+			saveComponent(comp);
+		}
+	}
+
+	private void loadAttrs(String expr, Collection attrs) {
+		for(final Iterator it = attrs.iterator(); it.hasNext();) {
+			Binding binding = (Binding) it.next();
+			Component comp = binding.getComponent();
+			binding.loadAttribute(comp, expr);
+		}
+	}	
+
+	private void saveAttrs(String expr, Collection attrs) {
+		for(final Iterator it = attrs.iterator(); it.hasNext();) {
+			Binding binding = (Binding) it.next();
+			Component comp = binding.getComponent();
+			binding.saveAttribute(comp, expr);
+		}
+	}
+
+	private void loadAttrs(Component comp, Collection attrs) {
+		for(final Iterator it = attrs.iterator(); it.hasNext();) {
+			Binding binding = (Binding) it.next();
+			binding.loadAttribute(comp);
+		}
+	}	
+
+	private void saveAttrs(Component comp, Collection attrs) {
+		for(final Iterator it = attrs.iterator(); it.hasNext();) {
+			Binding binding = (Binding) it.next();
+			binding.saveAttribute(comp);
+		}
+	}
+
+	//[0] expr, [1] loadWhenEvents, [2] saveWhenEvent, [3] access, [4] converter
 	protected Object[] loadPropertyAnnotation(Component comp, String propName, String bindName) {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		Annotation ann = compCtrl.getAnnotation(propName, bindName);
 		if (ann != null) {
 			final Map attrs = ann.getAttributes(); //(tag, tagExpr)
-			String[] loadWhenEvents = null;
+			List loadWhenEvents = null;
 			String saveWhenEvent = null;
 			String access = null;
 			String converter = null;
@@ -181,292 +433,149 @@ public class DataBinder {
 		return new Object[5];
 	}
 	
-	/** Bind a real bean object to the specified beanid. You might not need to call this method because this
-	 * DataBinder would look up the variable via the {@link org.zkoss.zk.ui.Component#getVariable} method
-	 * if it cannot find the specified bean via the given beanid.
-	 *
-	 * @param beanid The bean id used in data binding.
-	 * @param bean The real bean object to be associated with the bean id.
-	 */
-	public void bindBean(String beanid, Object bean) {
-		_beans.put(beanid, bean);
-	}
-
-	/** Load value from the data bean property to a specified attribute of the UI component.
-	 * @param comp the UI component to be loaded value.
-	 * @param attr the UI component attribute to be loaded value.
-	 */
-	public void loadAttribute(Component comp, String attr) {
-		//skip detached component
-		if (comp.getPage() != null) {
-			init();
-			final Component template = getTemplateComponent(comp);
-			Map attrMap = (Map) (template != null ? _compBindingMap.get(template) : _compBindingMap.get(comp));
-			if (attrMap != null) {
-				Binding binding = (Binding) attrMap.get(attr);
-				if (binding != null) {
-					binding.loadAttribute(comp);
-				}
-			}
-		}
-	}			
-
-	/** Save value from a specified attribute of the UI component to a data bean property.
-	 * @param comp the UI component used to save value into backend data bean.
-	 * @param attr the UI component attribute used to save value into backend data bean.
-	 */
-	public void saveAttribute(Component comp, String attr) {
-		//skip detached component
-		if (comp.getPage() != null) {
-			init();
-			final Component template = getTemplateComponent(comp);
-			Map attrMap = (Map) (template != null ? _compBindingMap.get(template) : _compBindingMap.get(comp));
-			if (attrMap != null) {
-				Binding binding = (Binding) attrMap.get(attr);
-				if (binding != null) {
-					binding.saveAttribute(comp);
-				}
-			}
-		}
-	}
-	
-	/** Load values from the data bean properties to all attributes of a specified UI component. 
-	 * @param comp the UI component to be loaded value.
-	 */
-	public void loadComponent(Component comp) {
-		//skip detached component
-		if (comp.getPage() != null) {
-			init();
-			final Component template = getTemplateComponent(comp);
-			Map attrMap = (Map) (template != null ? _compBindingMap.get(template) : _compBindingMap.get(comp));
-			if (attrMap != null) {
-				loadAttrs(comp, attrMap.values());
-			}
-			
-			//load kids of this component
-			for(final Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-				loadComponent((Component) it.next()); //recursive
-			}
-		}
-	}
-	
-	/** Save values from all attributes of a specified UI component to data bean properties. 
-	 * @param comp the UI component used to save value into backend data bean.
-	 */
-	public void saveComponent(Component comp) {
-		//skip detached component
-		if (comp.getPage() != null) {
-			init();
-			final Component template = getTemplateComponent(comp);
-			Map attrMap = (Map) (template != null ? _compBindingMap.get(template) : _compBindingMap.get(comp));
-			if (attrMap != null) {
-				saveAttrs(comp, attrMap.values());
-			}
-
-			//save kids of this component
-			for(final Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-				saveComponent((Component) it.next()); //recursive
-			}
-		}
-	}
-	
-	/** Load all value from data beans to UI components. */
-	public void loadAll() {
-		init();
-		for (final Iterator it = _compBindingMap.keySet().iterator(); it.hasNext(); ) {
-			final Component comp = (Component) it.next();
-			if (isTemplate(comp)) { //do via model and renderer, so skip
-				continue;
-			}
-			loadComponent(comp);
-		}
-	}
-	
-	/** Save all values from UI components to beans. */
-	public void saveAll() {
-		init();
-		for (final Iterator it = _compBindingMap.keySet().iterator(); it.hasNext(); ) {
-			final Component comp = (Component) it.next();
-			if (isTemplate(comp)) { //do via model and renderer, so skip
-				continue;
-			}
-			saveComponent(comp);
-		}
-	}
-
-	private void loadAttrs(Component comp, Collection attrs) {
-		for(final Iterator it = attrs.iterator(); it.hasNext();) {
-			Binding binding = (Binding) it.next();
-			binding.loadAttribute(comp);
-		}
-	}	
-
-	private void saveAttrs(Component comp, Collection attrs) {
-		for(final Iterator it = attrs.iterator(); it.hasNext();) {
-			Binding binding = (Binding) it.next();
-			binding.saveAttribute(comp);
-		}
-	}
-
 	//late init
 	protected void init() {
 		if (!_init) {
 			_init = true;
-			
-			//process template data binding
-			List detachs = new ArrayList(_compBindingMap.size());
-			for(final Iterator it = _compBindingMap.keySet().iterator(); it.hasNext();) {
-				final Component comp = (Component) it.next();
-				final Map attrMap = (Map) _compBindingMap.get(comp);
+
+			//setup all added bindings
+			final Set varnameSet = new HashSet();
+			final LinkedHashSet toBeDetached = new LinkedHashSet();
+			for(final Iterator it = _compBindingMap.entrySet().iterator(); it.hasNext(); ) {
+				final Entry me = (Entry) it.next();
+				final Component comp = (Component) me.getKey();
+				final Map attrMap = (Map) me.getValue();
+				final Collection bindings = attrMap.values();
 				
 				//_var special case; meaning a template component
 				if (attrMap.containsKey("_var")) {
-					comp.setAttribute(VAR, ((Binding)attrMap.get("_var")).getBeanid());
-					setupTemplate(comp, Boolean.TRUE);
-					setupRenderer(comp);
-					detachs.add(comp);
+					setupTemplateComponent(comp, getCollectionOwner(comp)); //setup as template components
+					String varname = ((Binding)attrMap.get("_var")).getExpression();
+					varnameSet.add(varname);
+					comp.setAttribute(VARNAME, varname);
+					setupBindingRenderer(comp); //setup binding renderer
+					toBeDetached.add(comp);
 				}
 
-				//register event handler
-				registerEvents(comp, attrMap.values());
+				if (bindings != null) {
+					//construct the path dependant tree
+					setupPathTree(bindings, varnameSet);
 				
-				//register beanid -> Binding(s) map
-				registerBeanidBinding(comp, attrMap.values());
+					//register save-when event
+					registerSaveEvent(comp, bindings);
+					
+					//register load-when events
+					registerLoadEvents(comp, bindings);
+				}
 			}
-			
-			for(final Iterator it = detachs.iterator(); it.hasNext(); ) {
+            
+			//detach template components so they will not interfer the visual part
+			for(final Iterator it = toBeDetached.iterator(); it.hasNext(); ) {
 				final Component comp = (Component) it.next();
 				comp.detach();
 			}
 		}
 	}
 	
-	private void registerEvents(Component comp, Collection attrs) {
-		for(final Iterator it = attrs.iterator(); it.hasNext();) {
-			Binding binding = (Binding) it.next();
-			binding.registerSaveEventListener(comp);
-			binding.registerLoadEventListeners(comp);
+	//Tightly coupled to Component
+	//get Collection owner of a given collection item.
+	private static Component getCollectionOwner(Component comp) {
+		if (isTemplate(comp)) {
+			return (Component) comp.getAttribute(OWNER);
 		}
+		if (comp instanceof Listitem) {
+			return ((Listitem)comp).getListbox();
+		}
+		throw new UiException("Collection Databinder now supports Listbox and Listitem only! CollectionItem:"+comp);
 	}
 	
-	private void registerBeanidBinding(Component comp, Collection attrs) {
-		for(final Iterator it = attrs.iterator(); it.hasNext();) {
-			Binding binding = (Binding) it.next();
-			if (binding.canLoad()) {
-				final String beanid = binding.getBeanid();
-				Set bindings = (Set) _beanBindingMap.get(beanid);
-				if (bindings == null) {
-					bindings = new LinkedHashSet(32);
-					_beanBindingMap.put(beanid, bindings);
-				}
-				bindings.add(binding);
-			}
-		}
+	//get associated clone of a given bean and template component
+	private static Component getCollectionItem(Component comp, Object bean) {
+		Component owner = getCollectionOwner(comp);
+		if (owner instanceof Listbox) {
+			final Listbox lbx = (Listbox) owner;
+  		final ListModel xmodel = lbx.getModel();
+  		if (xmodel instanceof BindingListModel) {
+  			final BindingListModel model = (BindingListModel) xmodel;
+  			int index = model.indexOf(bean);
+  			if (index >= 0) {
+    			Listitem li = (Listitem) lbx.getItemAtIndex(index);
+    			return lookupClone(li, comp);
+    		}
+    	}
+    	return null;
+    } 
+		throw new UiException("Collection Databinder now supports Listbox and Listitem only! CollectionItem:"+comp+", CollectionOwner:"+owner);
 	}
-	
-//vv----------------------------------------
-//:TODO: The following code is Component type tightly coupled, should change to use interface...
-
-	//20061205, Henri Chen: Tightly coupled with Component type
-	private void setupRenderer(Component template) {
-		if (template instanceof Listitem) {
-			final Listitem li = (Listitem) template;
+  		
+	//set the binding renderer for the template listitem component (Tigthly couple to a component)
+	private void setupBindingRenderer(Component comp) {
+		if (comp instanceof Listitem) {
+			final Listitem li = (Listitem)comp;
 			final Listbox lbx = li.getListbox();
 			if (lbx.getItemRenderer() == null) {
-				lbx.setItemRenderer(new Renderer(li));
+				lbx.setItemRenderer(new BindingRenderer(li, this));
+			}
+			return;
+		}
+		throw new UiException("Collection Databinder now supports Listbox and Listitem only! CollectionItem:"+comp);
+	}
+	//^^ above Tightly coupled to component
+	
+	private void setupPathTree(Collection bindings, Set varnameSet) {
+		for(final Iterator it = bindings.iterator(); it.hasNext(); ) {
+			final Binding binding = (Binding) it.next();
+			String[] paths = binding.getPaths();
+			for(int j = 0; j < paths.length; ++j) {
+				final String path = (String) paths[j];
+				_pathTree.addBinding(path, binding, varnameSet);
 			}
 		}
 	}
 	
-	//20061205, Henri Chen: Tightly coupled with Component type
-	//get index of the specified component, if not a indexitem, return -1.
-	private Object getListModelItem(Component comp, String beanid) {
-		final Component indexitem = (Component) comp.getAttribute(INDEXITEM);
-		if (indexitem != null && indexitem instanceof Listitem) {
-			final Listitem li = (Listitem) indexitem;
-			final String var = (String)getTemplateComponent(li).getAttribute(VAR);
-			if (beanid.equals(var)) {
-				final Listbox lbx = li.getListbox();
-				final ListModel model = lbx.getModel();
-				final int index = li.getIndex();
-				return model.getElementAt(index);
-			} else {
-				return NA;
-			}
+	private void registerSaveEvent(Component comp, Collection bindings) {
+		for(final Iterator it = bindings.iterator(); it.hasNext(); ) {
+			final Binding binding = (Binding) it.next();
+			binding.registerSaveEvent(comp);
 		}
-		throw new UiException("Unsupported collection item component for DataBinder: "+comp);
+	}
+
+	private void registerLoadEvents(Component comp, Collection bindings) {
+		for(final Iterator it = bindings.iterator(); it.hasNext(); ) {
+			final Binding binding = (Binding) it.next();
+			binding.registerLoadEvents(comp);
+		}
+	}
+
+	
+	//whether exists the specified bean in this DataBinder.
+	/* package */ boolean existsBean(String beanid) {
+		return _beans.containsKey(beanid);
+	}
+
+	//get a bean by the beanid from this Data binder
+	/* package */ Object getBean(String beanid) {
+		return _beans.get(beanid);
+	}
+
+	//set a bean into this Data binder
+	/* package */ void setBean(String beanid, Object bean) {
+		_beans.put(beanid, bean);
 	}
 	
-//^^----------------------------------------------
-	//get associated template component of a cloned component
-	private Component getTemplateComponent(Component comp) {
-		return (Component) comp.getAttribute(TEMPLATE);
-	}
-	
-	//set associated template component of a cloned component
-	private void setTemplateComponent(Component comp, Component template) {
-		comp.setAttribute(TEMPLATE, template);
-	}
-
-	//whether a cloned item
-	private boolean isClone(Component comp) {
-		return getTemplateComponent(comp) != null;
-	}
-
-	//whether the specified component a template component
-	private boolean isTemplate(Component comp) {
-		return comp.getAttribute(ISTEMPLATE) == Boolean.TRUE;
-	}
-
-	//set the specified comp and its decendents to be template (or not)
-	private void setupTemplate(Component comp, Boolean b) {
-		comp.setAttribute(ISTEMPLATE, b);
+	//setup the specified comp and its decendents to be as template (or not)
+	/* package */ void setupTemplateComponent(Component comp, Object owner) {
+		if (existsBindings(comp)) {
+			comp.setAttribute(OWNER, owner);
+		}
 		List kids = comp.getChildren();
 		for(final Iterator it = kids.iterator(); it.hasNext(); ) {
-			setupTemplate((Component) it.next(), b); //recursive
+			setupTemplateComponent((Component) it.next(), owner); //recursive
 		}
-	}
-
-	//given reference cloned component, return assoicated cloned component of _comp
-	private Object lookupComponentByReference(Object bean, Component ref, Component comp) {
-		if (isTemplate(comp)) {
-			final Component item = (Component) ref.getAttribute(INDEXITEM);
-			final Map compMap = (Map) (item != null ? _cloneMap.get(item) : _cloneMap.get(bean));
-			//ref could have not been rendered, so the associate _cloneMap has not been established.
-			if (compMap != null) {
-				return (Component) compMap.get(comp);
-			} else {
-				return NA;
-			}
-		} else {
-			return comp;
-		}
-	}
-
-	//parse token and return as a String[]
-	protected String[] parseExpression(String expr, String seperator) {
-		List list = myParseExpression(expr, seperator);
-		if (list == null) {
-			return null;
-		}
-		String[] results = new String[list.size()];
-		int j = 0;
-		for(final Iterator it = list.iterator(); it.hasNext(); ++j) {
-			String result = (String) it.next();
-			if (result != null) {
-				result  = result.trim();
-				if (result.length() == 0)
-					result = null;
-			}
-			if (j == 0 && result == null) {
-				return null;
-			}
-			results[j] = result;
-		}
-		return results;
 	}
 	
-	private List myParseExpression(String expr, String separator) {
+	//parse token and return as a List of String
+	/* package */ static List parseExpression(String expr, String separator) {
 		if (expr == null) {
 			return null;
 		}
@@ -474,10 +583,10 @@ public class DataBinder {
 		while(true) {
 			int j = expr.indexOf(separator);
 			if (j < 0) {
-				results.add(expr);
+				results.add(expr.trim());
 				return results;
 			}
-			results.add(expr.substring(0, j));
+			results.add(expr.substring(0, j).trim());
 
 			if (expr.length() <= (j+1)) {
 				return results;
@@ -486,549 +595,311 @@ public class DataBinder {
 		}
 	}
 
-	//assume no state is stored in TypeConverter
-	private static TypeConverter lookupConverter(String clsName) {
-		TypeConverter converter = (TypeConverter) _converterMap.get(clsName);
-		if (converter == null) {
-			try {
-				converter = (TypeConverter) Classes.newInstanceByThread(clsName);
-				_converterMap.put(clsName, converter);
-			} catch (java.lang.reflect.InvocationTargetException ex) {
-				throw UiException.Aide.wrap(ex);
-			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex);
-			}
-		}
-		return converter;
-	}
-
-	private String[] mergeStringArray(String[] s1, String[] s2) {
-		if (s2 == null) {
-			return s1;
-		}
-		int sz1 = s1 == null ? 0 : s1.length;
-		int sz2 = s2.length;
-		String[] merge = new String[sz1 + sz2];
-		
-		if (sz1 > 0) {
-			System.arraycopy(s1, 0, merge, 0, sz1);
-		}
-		if (sz2 > 0) {
-			System.arraycopy(s2, 0, merge, sz1, sz2);
-		}
-		return merge;
+	//whether a component is a binding template rather than a real component
+	/* package */ static boolean isTemplate(Component comp) {
+		return comp.getAttribute(OWNER) != null;
 	}
 	
-	//A binding association class.
-	private class Binding {
-		private Component _comp;
-		private String _attr;
-		private String _value;
-		private String _beanid;
-		private String _props; //a.b.c
-		private String[] _loadWhenEvents;
-		private String _saveWhenEvent;
-		private boolean _canLoad = true; //default access to "load"
-		private boolean _canSave;
-		private TypeConverter _converter;
-		
-		/** Construtor to form a binding between UI component and backend data bean.
-		 * @param comp The concerned component
-		 * @param attr The attribute of the component to be associated.
-		 * @param value The expression to associate the data bean.
-		 * @param loadWhenEvents The event list when to load data.
-		 * @param saveWhenEvent The event when to save data.
-		 * @param access In the view of UI component: "load" load only, "both" load/save, "save" save only when doing
-		 * data binding. null means using the default access natural of the component. e.g. Label.value is "load", 
-		 * but Textbox.value is "both".
-		 * @param converter The converter class used to convert classes between component and the associated bean.
-		 * null means using the default class conversion method.
-		 */
-		private Binding(Component comp, String attr, String value, 
-			String[] loadWhenEvents, String saveWhenEvent, String access, String converter) {
-				
-			_comp = comp;
-			setAttr(attr);
-			setValue(value);
-			addLoadWhenEvents(loadWhenEvents);
-			setSaveWhenEvent(saveWhenEvent);
-			setAccess(access);
-			setConverter(converter);
-		}
-		
-		private void setAttr(String attr) {
-			_attr = attr;
-		}
-		
-		private void setValue(String value) {
-			if (value != null) {
-				String[] results = splitBeanid(value);
-				_beanid = results[0];
-				_props = results[1];
+	//whether a cloned component from the template.
+	/* package */ static boolean isClone(Component comp) {
+		return (comp.getAttribute(TEMPLATE) instanceof Component);
+	}
+	
+	//set a bean to SameNode Set 
+	/* package */ void setBeanSameNodes(Object bean, Set set) {
+		_beanSameNodes.put(bean, set);
+	}
+	
+	//get SameNode Set of the given bean
+	/* package */ Set getBeanSameNodes(Object bean) {
+		return (Set) _beanSameNodes.get(bean);
+	}
+	
+	//remove SameNode set of the given bean
+	/* package */ Set removeBeanSameNodes(Object bean) {
+		return (Set) _beanSameNodes.remove(bean);
+	}
+
+	/** traverse the path nodes and return the final bean.
+	 */
+	/* package */ Object getBeanAndRegisterBeanSameNodes(Component comp, String path) {
+		Object bean = null;
+		BindingNode currentNode = _pathTree;
+		final List nodeids = parseExpression(path, ".");
+		final Iterator it = nodeids.iterator();
+		if (it != null && it.hasNext()) {
+			String nodeid = (String) it.next();
+			currentNode = (BindingNode) currentNode.getKidNode(nodeid);
+			if (currentNode == null) {
+				throw new UiException("Cannot find the specified databind bean expression:" + path);
 			}
+			bean = lookupBean(comp, nodeid);
+			registerBeanNode(bean, currentNode);
+		} else {
+			throw new UiException("Incorrect format of databind bean expression:" + path);
 		}
 		
-		private void setSaveWhenEvent(String saveWhenEvent) {
-			if (saveWhenEvent != null) {
-				_saveWhenEvent = saveWhenEvent;
+		while(bean != null && it.hasNext()) {
+			String nodeid = (String) it.next();
+			currentNode = (BindingNode) currentNode.getKidNode(nodeid);
+			if (currentNode == null) {
+				throw new UiException("Cannot find the specified databind bean expression:" + path);
 			}
-		}
-		
-		private void addLoadWhenEvents(String[] loadWhenEvents) {
-			_loadWhenEvents = mergeStringArray(_loadWhenEvents, loadWhenEvents);
+			try {
+				bean = Fields.get(bean, nodeid);
+			} catch (NoSuchMethodException ex) {
+				throw UiException.Aide.wrap(ex);
+			}
+			registerBeanNode(bean, currentNode);
 		}
 
-		private void setAccess(String access) {
-			if (access == null) { //default access to load
-				return;
+		return bean;
+	}
+
+	/* package */ void setBeanAndRegisterBeanSameNodes(Component comp, Object val, Binding binding, String path, boolean autoConvert) {
+		Object orgVal = null;
+		Object bean = null;
+		BindingNode currentNode = _pathTree;
+		boolean refChanged = false; //wether this setting change the reference
+		String beanid = null;
+		final List nodeids = parseExpression(path, ".");
+		final Iterator it = nodeids.iterator();
+		if (it != null && it.hasNext()) {
+			beanid = (String) it.next();
+			currentNode = (BindingNode) currentNode.getKidNode(beanid);
+			if (currentNode == null) {
+				throw new UiException("Cannot find the specified databind bean expression:" + path);
 			}
-			
-			if ("both".equals(access)) {
-				_canLoad = true;
-				_canSave = true;
-			} else if ("load".equals(access)) {
-				_canLoad = true;
-				_canSave = false;
-			} else if ("save".equals(access)) {
-				_canLoad = false;
-				_canSave = true;
-			} else if ("none".equals(access)) { //unknow access mode
-				_canLoad = false;
-				_canSave = false;
+			bean = lookupBean(comp, beanid);
+		} else {
+			throw new UiException("Incorrect format of databind bean expression:" + path);
+		}
+		
+		if (!it.hasNext()) { //assign back to where bean is stored
+			orgVal = bean;
+			if(Objects.equals(orgVal, val)) {
+				return; //same value, no need to do anything
+			}
+			if (existsBean(beanid)) {
+				setBean(beanid, val);
+			} else if (comp.containsVariable(beanid, false)) {
+				comp.setVariable(beanid, val, false);
 			} else {
-				throw new UiException("Unknown DataBinder access mode. Should be \"both\", \"load\", \"save\", or \"none\": "+access);
+				setZScriptVariable(comp, beanid, val);
 			}
-		}
-		
-		private void setConverter(String converter) {
-			if (converter != null) {
-				_converter = lookupConverter(converter);
+			refChanged = true;
+		} else {
+			if (bean == null) {
+				return; //no bean to set value, skip
 			}
-		}			
-		
-		private String getBeanid() {
-			return _beanid;
-		}
-		
-		private String getValue() {
-			return _beanid+(_props == null ? "" : ("."+_props));
-		}
-		
-		private String getAttr() {
-			return _attr;
-		}
-		
-		//register events when to load component value from the bean
-		private void registerLoadEventListeners(Component comp) {
-			if (_loadWhenEvents != null) {
-				for(int j = 0; j < _loadWhenEvents.length; ++j) {
-					String expr = _loadWhenEvents[j];
-					String[] results = splitBeanid(expr); //[0] bean id or bean path, [1] event name
-					Component target = (Component) ("self".equals(results[0]) ? comp : lookupBean(comp, results[0]));
-					registerLoadEventListener(results[1], target, comp);
+			int sz = nodeids.size() - 2; //minus first and last beanid in path
+			for(;bean != null && it.hasNext() && sz > 0; --sz) {
+				beanid = (String) it.next();
+				currentNode = (BindingNode) currentNode.getKidNode(beanid);
+				if (currentNode == null) {
+					throw new UiException("Cannot find the specified databind bean expression:" + path);
+				}
+				try {
+					bean = Fields.get(bean, beanid);
+				} catch (NoSuchMethodException ex) {
+					throw UiException.Aide.wrap(ex);
 				}
 			}
-		}
-
-		//register events when to save component value to the bean.
-		private void registerSaveEventListener(Component comp) {
-			if (_saveWhenEvent != null) {
-				String expr = _saveWhenEvent;
-				String[] results = splitBeanid(expr); //[0] bean id or bean path, [1] event name
-				Component target = (Component) ("self".equals(results[0]) ? comp : lookupBean(comp, results[0]));
-				registerSaveEventListener(results[1], target, comp);
+			if (bean == null) {
+				return; //no bean to set value, skip
+			}
+			try {
+				beanid = (String) it.next();
+				orgVal = Fields.get(bean, beanid);
+				if(Objects.equals(orgVal, val)) {
+					return; //same value, no need to do anything
+				}
+				Fields.set(bean, beanid, val, autoConvert);
+				if (!isPrimitive(val) && !isPrimitive(orgVal)) { //val is a bean (null is not primitive)
+					currentNode = (BindingNode) currentNode.getKidNode(beanid);
+					if (currentNode == null) {
+						throw new UiException("Cannot find the specified databind bean expression:" + path);
+					}
+					bean = orgVal;
+					refChanged = true;
+				}
+			} catch (NoSuchMethodException ex) {
+				throw UiException.Aide.wrap(ex);
+			} catch (ModificationException ex) {
+				throw UiException.Aide.wrap(ex);
 			}
 		}
-
-		private void registerLoadEventListener(String eventName, Component target, Component dataTarget) {
-			target.addEventListener(eventName, new LoadEventListener(dataTarget));
+		if (refChanged && !binding.isLoadable() && binding.isSavable()) { //the sameNodes should change accordingly.
+			registerBeanNode(val, currentNode);
 		}
-
-		private void registerSaveEventListener(String eventName, Component target, Component dataTarget) {
-			target.addEventListener(eventName, new SaveEventListener(dataTarget));
+		//All kid nodes should be reloaded 
+		Events.postEvent(new Event("onLoadOnSave", comp, new Object[] {this, currentNode, binding, (refChanged ? val : bean)}));
+	}
+	
+	private void registerBeanNode(Object bean, BindingNode node) {
+		if (isPrimitive(bean)) {
+			return;
+		}
+		final Set nodeSameNodes = node.getSameNodes();
+		final Set binderSameNodes = getBeanSameNodes(bean);
+		
+		//variable node is special, sameNodes will not keep only variable node in binderSameNodes and nodeSameNodes.
+		//e.g. a Listitem bean but not a selected bean
+		if (node.isVar() && binderSameNodes == null) {
+			return;
 		}
 		
-		private boolean canLoad() {
-			return _canLoad;
-		}
-		
-		private boolean canSave() {
-			return _canSave;
-		}
-
-		private void loadAttributeByReference(Component comp, Object bean) {
-			final Object clone = lookupComponentByReference(bean, comp, _comp);
-			if (clone != NA) {
-				loadAttribute((Component)clone);
+		if (!nodeSameNodes.contains(bean)) {
+			//remove the old bean
+			for(final Iterator it = nodeSameNodes.iterator(); it.hasNext();) {
+				final Object elm = it.next();
+				if (!(elm instanceof BindingNode)) {
+					it.remove();
+					removeBeanSameNodes(elm); //remove the binderSameNodes of the original bean
+					break;
+				}
 			}
-		}
-		
-		//link same beanid together
-		private void registerSameBeanid(Object bean) {
-			if (!canLoad()) {
-				return;
-			}
-			//register beanid
-			Set beanidSet = null;
-			beanidSet = (Set) _sameBeanidMap.get(bean);
-			if (beanidSet == null) {
-				beanidSet = (Set) _sameBeanidMap.get(_beanid);
-			}
-			if (beanidSet == null) {
-				beanidSet = new HashSet(5);
-			}
+			//add the new bean if not null
 			if (bean != null) {
-				_sameBeanidMap.put(bean, beanidSet);
+				nodeSameNodes.add(bean);
 			}
-			_sameBeanidMap.put(_beanid, beanidSet);
-			beanidSet.add(_beanid);
-		}			
-		
-		private void loadAttribute(Component comp) {
-			if (!canLoad()) { //cannot load , skip
-				return;
-			}
-			myLoadAttribute(comp);
 		}
-		private void myLoadAttribute(Component comp) {
-			if ( _attr.startsWith("_") || comp.getPage() == null) { //cannot load or a control attribute, skip
-				return;
-			}
-			Object val = null;
-			try {
-				Object bean = lookupBean(comp, _beanid);
 
-				registerSameBeanid(bean);
-								
-				val = (_props == null || bean == null) ? bean : Fields.getField(bean, _props);
-				if (_converter != null) {
-					val = _converter.coerceToUi(val, comp);
-				}
-				Fields.setField(comp, _attr, val, _converter == null);
-			} catch (ClassCastException ex) {
-				throw UiException.Aide.wrap(ex);
-			} catch (NoSuchMethodException ex) {
-				throw UiException.Aide.wrap(ex);
-			} catch (ModificationException ex) {
-				throw UiException.Aide.wrap(ex);
-			} catch (WrongValueException ex) {
-				//Bug #1615371, try to use setRawValue()
-				if ("value".equals(_attr)) {
-					try {
-						Fields.setField(comp, "rawValue", val, _converter == null);
-					} catch (Exception ex1) {
-						//exception
-						throw ex;
-					}
-				} else {
-					throw ex;
-				}
+		if (binderSameNodes == null) {
+			if (bean != null) {
+				setBeanSameNodes(bean, nodeSameNodes);
 			}
-		}
-					
-		private void saveAttribute(Component comp) {
-			if (!canSave()) { //cannot save, skip
-				return;
-			}
-			mySaveAttribute(comp);
+		} else {
+			node.mergeAndSetSameNodes(binderSameNodes);
 		}
 		
-		private void mySaveAttribute(Component comp) {
-			if (_attr.startsWith("_") || comp.getPage() == null) { //cannot save or a control attribute, skip
-				return;
-			}
-			try {
-				final Object bean = lookupBean(comp, _beanid);
-				Object val = Fields.getField(comp, _attr);
-				if (_converter != null) {
-					val = _converter.coerceToBean(val, comp);
-				}
-
-				if (_props == null) { //assign back to where bean is stored
-					if (!isClone(comp)) {
-						if (_beans.containsKey(_beanid)) {
-							_beans.put(_beanid, val);
-						} else {
-							comp.setVariable(_beanid, val, false);
-						}
-					}
-					
-					//load what is changed
-					//bean == val, nothing to load
-					//bean != null && val == null, get list of bean(remove list of bean), load the list, .
-					//bean == null && val != null, get list of beanid, load the list, register binding with val, add val as binding key.
-					//bean != null && val != null, get list of bean, load the list, register binding with val, change binding key from bean to val.
-					if (bean != val) {
-						if (val == null) {
-							final Set beanidSet = (Set) _sameBeanidMap.remove(bean);
-							loadDependencies(comp, val, beanidSet);
-						} else {
-							Set beanidSet = (Set) _sameBeanidMap.get(bean == null ? _beanid : bean);
-							if (beanidSet != null) {
-								//merge beanidSet
-								final Set valBeanidSet = (Set) _sameBeanidMap.get(val);
-								if (valBeanidSet != null) {
-									valBeanidSet.addAll(beanidSet);
-									beanidSet = valBeanidSet;
-								} else {
-									_sameBeanidMap.put(val, beanidSet);
-								}
-							}
-							loadDependencies(comp, val, beanidSet);
-							registerSameBeanid(val);
-						}
-					}
-				} else if (bean != null) {
-					Fields.setField(bean, _props, val, _converter == null);
-					final Set beanidSet = (Set) _sameBeanidMap.get(bean);
-					loadDependencies(comp, bean, beanidSet);
-					registerSameBeanid(bean);
-				} else {
-					throw new UiException("saveAttribute: Cannot find the specified bean: "+_beanid+" in "+getValue());
-				}
-/*				
-				final String value = getValue();
-				final String[] keys = parseExpression(value, ".");
-				final List bindings = _dependency.getAllBindings(keys);
-				for(final Iterator it = bindings.iterator(); it.hasNext();) {
-					final Binding binding = (Binding) it.next();
-					if (binding == this) { //don't load that just save, skip
-						continue;
-					}
-					binding.loadAttributeByReference(comp);
-				}
-*/
-			} catch (ClassCastException ex) {
-				throw UiException.Aide.wrap(ex);
-			} catch (NoSuchMethodException ex) {
-				throw UiException.Aide.wrap(ex);
-			} catch (ModificationException ex) {
-				throw UiException.Aide.wrap(ex);
-			}
-		}
-
-		private void loadDependencies(Component comp, Object bean, Set beanidSet) {
-			//automatically load back dependent component
-			if (bean instanceof Component) {
-				loadComponent((Component) bean);
-			}
-			
-			//same beanid must be load back
-			if (beanidSet != null) {
-				for(final Iterator its = beanidSet.iterator(); its.hasNext();) {
-					final String beanid = (String) its.next();
-					final Set bindings = (Set) _beanBindingMap.get(beanid);
-					if (bindings != null) {
-						for(final Iterator it = bindings.iterator(); it.hasNext();) {
-							final Binding binding = (Binding) it.next();
-							if (binding == this) { //don't load that just save, skip
-								continue;
-							}
-							binding.loadAttributeByReference(comp, bean);
-						}
-					}
-				}
-			}
-		}
-		
-		private Object lookupBean(Component comp, String beanid) {
-			//check collection template special case first
-			Object bean = NA;
-			if (isClone(comp)) {
-				bean = getListModelItem(comp, beanid);
-			}
-			
-			if (bean == NA) { //not available 
-				//fetch the bean object
-				if (_beans.containsKey(beanid)) {
-					bean = _beans.get(beanid);
-				} else if (beanid.startsWith("/")) { //a component Path in ID Space
-					bean = Path.getComponent(beanid);	
-				} else {
-					bean = comp.getVariable(beanid, false);
-				}
-			}
-
-			return bean;
-		}
-
-		private String[] splitBeanid(String expr) {
-			String beanid = null;
-			String props = null;
-			int j = expr.indexOf(".");
-			if (j < 0) { //bean only
-				beanid = expr;
-				props = null;
-			} else {
-				beanid = expr.substring(0, j);
-				props = expr.substring(j+1);
-			}
-			String[] results = new String[2];
-			results[0] = beanid;
-			results[1] = props;
-			return results;
-		}
-
-		private abstract class BaseEventListener implements EventListener, Express {
-			protected Component _dataTarget;
-			
-			public BaseEventListener(Component dataTarget) {
-				_dataTarget = dataTarget;
-			}
-			
-/*			public Component getDataTarget() {
-				return _dataTarget;
-			}
-*/			
-			public boolean isAsap() {
-				return true;
-			}
-		}
-			
-		private class LoadEventListener extends BaseEventListener {
-			public LoadEventListener(Component dataTarget) {
-				super(dataTarget);
-			}
-			public void onEvent(Event event) {
-				final Object dataTarget = lookupComponentByReference(null, event.getTarget(), _dataTarget);
-				if (dataTarget != NA) {
-					myLoadAttribute((Component )dataTarget);
-				}
-			}
-		}
-
-		private class SaveEventListener extends BaseEventListener {
-			public SaveEventListener(Component dataTarget) {
-				super(dataTarget);
-			}
-			public void onEvent(Event event) {
-				final Object dataTarget = lookupComponentByReference(null, event.getTarget(), _dataTarget);
-				if (dataTarget != NA) {
-					mySaveAttribute((Component )dataTarget);
-				}
-			}
-		}
 	}
 
-	private class Renderer implements org.zkoss.zul.ListitemRenderer {
-		private Listitem _template;
-		
-		private Renderer(Listitem template) {
-			_template = template;
+	private boolean isPrimitive(Object bean) {
+		if (bean != null) {
+			final String clsname = bean.getClass().getName();
+			return ("java.lang.String".equals(clsname) || Primitives.isPrimitive(clsname));
 		}
-	    public void render(Listitem item, java.lang.Object bean) {
-			//clone from template
-	        final Listitem clone = (Listitem)_template.clone();
-	        setupTemplate(clone, null); //not template for cloned component tree
-	        
-	        //copy children into item from clone
-	        final List clonekids = clone.getChildren();
-
-	        item.getChildren().clear();
-	        //addAll will cause kids to move parent and thus change clonekids, must make a copy
-	        item.getChildren().addAll(new ArrayList(clonekids)); 
-	        
-	        //setup the clone listitem and collect comp table for template
-	        Map compMap = new HashMap(7);
-	        setupClone(item, _template, item, compMap);
-	        
-	        //setup cloneMap for tempalte
-	        _cloneMap.put(item, compMap);
-	        if (bean != null) {
-	        	_cloneMap.put(bean, compMap);
-	        }
-
-	        //apply the data binding
-	        loadComponent(item);
-	    }
+		return false; //null is not primitive
+	}
 	
-		//link cloned to template, collection Save & Load Event mapping information, remove id
-		private void setupClone(Component comp, Component template, Component item, Map compMap) {
-			if (_compBindingMap.containsKey(template)) { //as long as there is a binding
-				compMap.put(template, comp);
-			}
-			setTemplateComponent(comp, template);
-			comp.setAttribute(INDEXITEM, item);
-			comp.setId("@"+comp.getUuid()); //init id to @uuid to avoid duplicate id issue
-			
-	        //setup clone kids
-	        final Iterator itt = template.getChildren().iterator();
-	        final Iterator itc = comp.getChildren().iterator();
-	        while (itt.hasNext()) {
-	        	final Component t = (Component) itt.next();
-	        	final Component c = (Component) itc.next();
-	        	setupClone(c, t, item, compMap);	//recursive
-	        }
-	    }
+	//Very tricky implementation, assume "=" the assignment operator for all interpreters.
+	//All loaded interperter will be set a zscript variable
+	private void setZScriptVariable(Component comp, String beanid, Object val) {
+		final Page page = comp.getPage();
+		//put val into Page's name space with a strange variable name.
+		page.setVariable("var_abcefghijklmnopqrstuvwxyz", val);
+		
+		//for all loaded interperter, let interpret the assignment script
+		final String script = beanid + " = var_abcefghijklmnopqrstuvwxyz";
+		final Namespace ns = page.getNamespace();
+		final Collection interpreters = page.getLoadedInterpreters();
+		for(final Iterator it = interpreters.iterator(); it.hasNext();) {
+			final Interpreter interpreter = (Interpreter) it.next();
+			interpreter.interpret(script, ns);
+		}
 	}
-	/*
-	//dependency Node, when a bean saveXXX, the associate loadXXX should be called to reflect the UI component
-	private static class Node {
-		private List _bindingList;
-		private Map _kids = new LinkedHashMap(7);
-		
-		public void add(String[] keys, Binding binding) {
-			insert(keys, binding, 0);
-		}
-		
-		public List getAllBindings(String[] keys) {
-			final Node node = locate(keys, 0);
-			if (node != null) {
-				final List bindings = new ArrayList(32);
-				node.collectBindings(bindings);
-				return bindings;
-			}
-			return null;
-		}
 
-		private void addBinding(Binding binding) {
-			if (_bindingList == null) {
-				_bindingList = new ArrayList(8);
+	/*package*/ Object lookupBean(Component comp, String beanid) {
+		//fetch the bean object
+		Object bean = null;
+		if (isClone(comp)) {
+			bean = myLookupBean1(comp, beanid);
+			if (bean != NA) {
+				return bean;
 			}
-			_bindingList.add(binding);
+		}
+		if (existsBean(beanid)) {
+			bean = getBean(beanid);
+		} else if (beanid.startsWith("/")) { //a component Path in ID Space
+			bean = Path.getComponent(beanid);	
+		} else if (comp.containsVariable(beanid, false)) {
+			bean = comp.getVariable(beanid, false);
+		} else {
+			bean = comp.getZScriptVariable(beanid);
+		}
+		return bean;
+	}
+
+	//given a beanid and a template, return the associated bean
+	//return NA if cannot find it
+	private Object myLookupBean1(Component comp, String beanid) {
+		Map templatemap = (Map) comp.getAttribute(TEMPLATEMAP);
+		return myLookupBean2(beanid, templatemap);
+	}
+	private Object myLookupBean2(String beanid, Map templatemap) {
+		if (templatemap != null) {
+			if (templatemap.containsKey(beanid)) { //got it
+				return templatemap.get(beanid);
+			} else { //search up the parent templatemap
+				templatemap = (Map) templatemap.get(TEMPLATEMAP);
+				return myLookupBean2(beanid, templatemap); //recursive
+			}
+		}
+		return NA; //not available
+	}
+
+	//given a clone and a template, return the associated clone of that template.
+	/*package*/ static Component lookupClone(Component srcClone, Component srcTemplate) {
+		if (isTemplate(srcTemplate)) {
+			Map templatemap = (Map) srcClone.getAttribute(TEMPLATEMAP);
+			return myLookupClone(srcTemplate, templatemap);
+		}
+		return null;
+	}
+	private static Component myLookupClone(Component srcTemplate, Map templatemap) {
+		if (templatemap != null) {
+			if (templatemap.containsKey(srcTemplate)) { //got it
+				return (Component) templatemap.get(srcTemplate);
+			} else { //search up the parent templatemap
+				templatemap = (Map) templatemap.get(TEMPLATEMAP);
+				return myLookupClone(srcTemplate, templatemap); //recursive
+			}
+		}
+		return null;
+	}
+
+	
+	private static class LoadOnSaveEventListener implements EventListener {
+		private DataBinder _binder;
+		
+		public LoadOnSaveEventListener(DataBinder binder) {
+			_binder = binder;
 		}
 		
-		private void insert(String[] keys, Binding binding, int level) {
-			final String key = keys[level];
-			Node next = getKidNode(key);
-			if (next == null) {
-				next = new Node();
-				addKidNode(key, next);
+		//-- EventListener --//
+		public void onEvent(Event event) {
+			Object[] data = (Object[]) event.getData();
+			if (!data[0].equals(_binder)) {
+				return; //not for this DataBinder, skip
 			}
-			if (keys.length <= (level+1)) {
-				next.addBinding(binding);
-			} else {
-				next.insert(keys, binding, level+1); //recursive
-			}
-		}
-		
-		private Node locate(String[] keys, int level) {
-			final String key = keys[level];
-			Node next = getKidNode(key);
-			if (keys.length <= (level+1) || next == null) {
-				return next;
-			} else {
-				return next.locate(keys, level+1); //recursive
-			}
-		}
-		
-		private void collectBindings(List list) {
-			if (_bindingList != null) {
-				list.addAll(_bindingList);
-			}
-			for(final Iterator it = _kids.values().iterator(); it.hasNext(); ) {
-				final Node kid = (Node) it.next();
-				kid.collectBindings(list); //recursive
+			final BindingNode node = (BindingNode) data[1]; //to be loaded nodes
+			final Binding savebinding = (Binding) data[2]; //to be excluded binding
+			final Object bean = data[3]; //saved bean
+			final Component savecomp = event.getTarget(); //saved comp that trigger this load-on-save event
+			
+			final LinkedHashSet bindings = node.getAllBindings();
+			for(final Iterator it = bindings.iterator(); it.hasNext();) {
+				final Binding binding = (Binding) it.next();
+				/* save then load might change the format, so still load back
+				if (binding == savebinding) {
+					continue;
+				}
+				*/
+				Component comp = binding.getComponent();
+				if (isTemplate(comp)) { //a template component, locate the listitem
+					if (isClone(savecomp)) {
+						comp = lookupClone(savecomp, comp);
+					} else {
+						comp = getCollectionItem(comp, bean);
+					}
+				}
+				binding.loadAttribute(comp);
 			}
 		}
 		
-		private void addKidNode(String key, Node node) {
-			_kids.put(key, node);
+		public boolean isAsap() {
+			return true;
 		}
-		
-		private Node getKidNode(String key) {
-			return (Node) _kids.get(key);
-		}
-	}	
-	*/
+	}
 }

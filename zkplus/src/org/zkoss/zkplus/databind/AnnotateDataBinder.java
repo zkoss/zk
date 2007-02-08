@@ -129,6 +129,32 @@ public class AnnotateDataBinder extends DataBinder {
 	 * @param desktop the ZUML desktop.
 	 */
 	public AnnotateDataBinder(Desktop desktop) {
+		this(desktop, true);
+	}
+	
+	/**
+	 * Constructor that read all binding annotations of the components inside the specified page.
+	 * @param page the ZUML page.
+	 */
+	public AnnotateDataBinder(Page page) {
+		this(page, true);
+	}
+	
+	/**
+	 * Constructor that read all binding annotations in the components inside the specified component (inclusive).
+	 * @param comp the ZUML component.
+	 */
+	public AnnotateDataBinder(Component comp) {
+		this(comp, true);
+	}
+
+	/**
+	 * Constructor that read all binding annotations of the components inside the specified desktop.
+	 * @param desktop the ZUML desktop.
+	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
+	 */
+	public AnnotateDataBinder(Desktop desktop, boolean defaultConfig) {
+		setDefaultConfig(defaultConfig);
 		for (final Iterator	it = desktop.getComponents().iterator(); it.hasNext(); ) {
 			loadAnnotations((Component) it.next());
 		}			
@@ -137,8 +163,10 @@ public class AnnotateDataBinder extends DataBinder {
 	/**
 	 * Constructor that read all binding annotations of the components inside the specified page.
 	 * @param page the ZUML page.
+	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
 	 */
-	public AnnotateDataBinder(Page page) {
+	public AnnotateDataBinder(Page page, boolean defaultConfig) {
+		setDefaultConfig(defaultConfig);
 		for (final Iterator it = page.getRoots().iterator(); it.hasNext(); ) {
 			loadAnnotations((Component) it.next());
 		}
@@ -147,10 +175,13 @@ public class AnnotateDataBinder extends DataBinder {
 	/**
 	 * Constructor that read all binding annotations in the components inside the specified component (inclusive).
 	 * @param comp the ZUML component.
+	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
 	 */
-	public AnnotateDataBinder(Component comp) {
+	public AnnotateDataBinder(Component comp, boolean defaultConfig) {
+		setDefaultConfig(defaultConfig);
 		loadAnnotations(comp);
 	}
+	
 	
 	private void loadAnnotations(Component comp) {
 		loadComponentAnnotation(comp);
@@ -183,46 +214,47 @@ public class AnnotateDataBinder extends DataBinder {
 				Entry me = (Entry) it.next();
 				String attr = (String) me.getKey();
 				//[0] bean value, [1 ~ *] tag:expression
-				String[] expr = parseExpression((String) me.getValue(), ";");
-				if (expr == null || expr[0] == null) {
+				List expr = parseExpression((String) me.getValue(), ";");
+				if (expr == null || expr.get(0) == null) {
 					throw new UiException("Cannot find any bean value in the annotation <a:bind "+attr+"=\"\"/> for component "+comp+", id="+comp.getId());
 				} else {
-					String[] tags = parseExpression(expr[0], ":");
-					if (tags.length > 1) {
+					List tags = parseExpression((String)expr.get(0), ":");
+					if (tags.size() > 1) {
 						throw new UiException("bean value must be defined as the first statement in the annotation <a:bind "+attr+"=\"\"/> for component "+comp+", id="+comp.getId());
 					}
 				}
 				
-				List loadWhenEvents = new ArrayList(3);
+				List loadWhenEvents = null;
 				String saveWhenEvent = null;
 				String access = null;
 				String converter = null;
 				
 				//process tags
-				for(int j = 1; j < expr.length; ++j) {
-					String[] tags = parseExpression(expr[j], ":");
+				for(int j = 1; j < expr.size(); ++j) {
+					List tags = parseExpression((String)expr.get(j), ":");
 					if (tags == null) {
 						continue; //skip
 					}
-					if ("load-when".equals(tags[0])) {
-						if (tags.length > 1 && tags[1] != null) {
-							final String[] events = parseExpression(tags[1], ",");
-							for(int k = 0; k < events.length; ++k) {
-								loadWhenEvents.add(events[k]);
-							}
+					if ("load-when".equals(tags.get(0))) {
+						if (tags.size() > 1 && tags.get(1) != null) {
+							loadWhenEvents = parseExpression((String)tags.get(1), ",");
+						} else {
+							loadWhenEvents.add(NULLIFY);
 						}
-					} else if ("save-when".equals(tags[0])) {
-						saveWhenEvent = tags.length > 1 ? tags[1] : null;
-					} else if ("access".equals(tags[0])) {
-						access = tags.length > 1 ? tags[1] : null;
-					} else if ("converter".equals(tags[0])) {
-						converter = tags.length > 1 ? tags[1] : null;
+					} else if ("save-when".equals(tags.get(0))) {
+						saveWhenEvent = tags.size() > 1 ? (String)tags.get(1) : NULLIFY;
+					} else if ("access".equals(tags.get(0))) {
+						access = tags.size() > 1 ? (String) tags.get(1) : NULLIFY;
+					} else if ("converter".equals(tags.get(0))) {
+						converter = tags.size() > 1 ? (String) tags.get(1) : NULLIFY;
 					}
 				}
 				
-				int sz = loadWhenEvents.size();
-				addBinding(comp, attr, expr[0], 
-					sz > 0 ? (String[])loadWhenEvents.toArray(new String[sz]) : null, saveWhenEvent, access, converter);
+				if (loadWhenEvents != null && loadWhenEvents.isEmpty()) {
+					loadWhenEvents = null;
+				}
+				
+				addBinding(comp, attr, (String) expr.get(0), loadWhenEvents, saveWhenEvent, access, converter);
 			}
 		}
 	}

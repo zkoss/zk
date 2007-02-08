@@ -1,0 +1,180 @@
+/* BindingNode.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb  1 16:16:54     2007, Created by Henri
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+*/
+package org.zkoss.zkplus.databind;
+
+import org.zkoss.zk.ui.UiException;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
+
+/**
+ * BindingNode that forms a databinding bean path dependant tree.
+ *
+ * @author Henri
+ */
+public class BindingNode {
+	private LinkedHashSet _bindingSet = new LinkedHashSet(); //(Binding set of this expression BindingNode)
+	private Map _kids = new LinkedHashMap(7); //(nodeid, BindingNode)
+	private String _path; //path of this BindingNode
+	private Set _sameNodes = new HashSet(); //BindingNode Set that refer to the same object
+	private boolean _var; //a var node
+	
+	/** Constructor.
+	 * @path the path of this node in the expression dependant tree.
+	 */
+	public BindingNode(String path, boolean var) {
+		_path = path;
+		_sameNodes.add(this);
+		_var = var;
+	}
+	
+	public LinkedHashSet getBindings() {
+		return _bindingSet;
+	}
+	
+	/** Get all Bindings below the given nodes (deepth first traverse).
+	 */
+	public LinkedHashSet getAllBindings() {
+		Set walkedNodes = new HashSet(23);
+		LinkedHashSet all = new LinkedHashSet(23*2);
+		myGetAllBindings(all, walkedNodes);
+		
+		return all;
+	}
+	
+	private void myGetAllBindings(LinkedHashSet all, Set walkedNodes) {
+		if (walkedNodes.contains(this)) {
+			return; //already walked, skip
+		}
+		
+		//mark as walked already
+		walkedNodes.add(this);
+		
+		for(final Iterator it = _kids.values().iterator(); it.hasNext();) {
+			((BindingNode) it.next()).myGetAllBindings(all, walkedNodes); //recursive
+		}
+		
+		for(final Iterator it = _sameNodes.iterator(); it.hasNext();) {
+			final Object obj = it.next();
+			if (obj instanceof BindingNode) {
+				((BindingNode) obj).myGetAllBindings(all, walkedNodes); //recursive
+			}
+		}
+		
+		all.addAll(getBindings());
+	}
+		
+	public String getPath() {
+		return _path;
+	}
+	
+	public boolean isVar() {
+		return _var;
+	}
+	
+	/** Add a binding in the BindingNode of the specified path.
+	 * @param path the path of the specified BindingNode in the tree.
+	 * @param binding the binding to be added to the specified BindingNode.
+	 * @param varnameSet set with all _var names
+	 */
+	public void addBinding(String path, Binding binding, Set varnameSet) {
+		final List nodeids = DataBinder.parseExpression(path, ".");
+		if (nodeids.size() <= 0) {
+			throw new UiException("Incorrect bean expression: "+path);
+		}
+		boolean var = varnameSet.contains(nodeids.get(0));
+		BindingNode currentNode = this;
+		for(final Iterator it = nodeids.iterator(); it.hasNext();) {
+			final String nodeid = (String) it.next();
+			if (nodeid == null) {
+				throw new UiException("Incorrect bean expression: "+path);
+			}
+			BindingNode kidNode = (BindingNode) currentNode.getKidNode(nodeid);
+			if (kidNode == null) { //if not found, then add one
+				kidNode = new BindingNode(("/".equals(currentNode._path) ? "" : (currentNode._path + ".")) + nodeid, var);
+				currentNode.addKidNode(nodeid, kidNode);
+			} else {
+				var = var || kidNode._var;
+			}
+			currentNode = kidNode;
+		}
+		if (currentNode == this) {
+			throw new UiException("Incorrect bean expression: "+path);
+		}
+		currentNode.addBinding(binding);
+	}
+	
+	/** Add a binding to this BindingNode.
+	 * @param binding the binding to be added to this node.
+	 */
+	public void addBinding(Binding binding) {
+		_bindingSet.add(binding);
+	}
+	
+	/** Locate the BindingNode of the specified path.
+	 * @param path the path of the specified BindingNode in the tree.
+	 */
+	public BindingNode locate(String path) {
+		BindingNode currentNode = this;
+		final List nodeids = DataBinder.parseExpression(path, ".");
+		for(final Iterator it = nodeids.iterator(); it.hasNext(); ) {
+			final String nodeid = (String) it.next();
+			if (nodeid == null) {
+				throw new UiException("Incorrect format of bean expression: "+path);
+			}
+			currentNode = (BindingNode) currentNode.getKidNode(nodeid);
+			if (currentNode == null) {
+				return null; 
+			}
+		}
+		return currentNode == this ? null : currentNode;
+	}
+	
+	/** get the sameNodes of this BindingNode.
+	 */
+	public Set getSameNodes() {
+		return _sameNodes;
+	}
+	
+	/** merge and set the given other sameNodes as sameNodes of this BindingNode.
+	 */
+	public void mergeAndSetSameNodes(Set other) {
+		if (other == _sameNodes) { //same set, no need to merge
+			return;
+		}
+		if (_sameNodes != null) {
+			other.addAll(_sameNodes);
+		}
+		_sameNodes = other;
+	}
+
+	// Get kid nodes of the specified nodeid.
+	/*package*/ BindingNode getKidNode(String nodeid) {
+		return (BindingNode) _kids.get(nodeid);
+	}
+
+	private void addKidNode(String nodeid, BindingNode kid) {
+		_kids.put(nodeid, kid);
+	}
+	
+}
