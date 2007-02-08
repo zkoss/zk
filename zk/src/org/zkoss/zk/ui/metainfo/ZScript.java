@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 
 import org.zkoss.lang.D;
+import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.util.resource.ContentLoader;
 import org.zkoss.util.resource.Locator;
@@ -40,6 +41,8 @@ import org.zkoss.zk.scripting.InterpreterFactories;
  * @author tomyeh
  */
 public class ZScript implements Condition, java.io.Serializable {
+	private static final Log log = Log.lookup(ZScript.class);
+
 	private final String _zslang;
 	private final String _cnt;
 	private final Object _url;
@@ -69,9 +72,12 @@ public class ZScript implements Condition, java.io.Serializable {
 			if (cc == ':') {
 				if (j > 0) {
 					final String zslang = content.substring(0, j);
-					if (InterpreterFactories.exists(zslang))
+					if (InterpreterFactories.exists(zslang)) {
 						return new ZScript(
 							zslang, content.substring(j + 1), cond);
+					} else {
+						log.warning("Ignored: unknown scripting language, "+zslang);
+					}
 				}
 				break;
 			} if (!InterpreterFactories.isLegalName(cc)) {

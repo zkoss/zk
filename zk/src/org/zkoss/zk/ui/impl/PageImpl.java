@@ -638,7 +638,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		zslang = (zslang != null ? zslang: _zslang).toLowerCase();
 		Interpreter ip = (Interpreter)_ips.get(zslang);
 		if (ip == null) {
-			ip = InterpreterFactories.lookup(_zslang).newInterpreter(this);
+			ip = InterpreterFactories.lookup(zslang).newInterpreter(this);
 			_ips.put(zslang, ip);
 				//set first to avoid dead loop if the script calls interpret again
 
