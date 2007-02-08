@@ -68,6 +68,7 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
+import org.zkoss.zk.scripting.util.AbstractNamespace;
 
 /**
  * A skeletal implementation of {@link Component}. Though it is OK
@@ -1171,7 +1172,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 
-	private static class NS implements Namespace {
+	private static class NS extends AbstractNamespace {
 		private Namespace _parent;
 		private final Map _vars;
 
@@ -1202,10 +1203,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 
 			_vars.put(name, value);
+			notifyAdd(name, value);
 		}
 		public void unsetVariable(String name, boolean local) {
-			if (_vars.remove(name) == null
-			&& !local && _parent != null && !_vars.containsKey(name)) {
+			if (_vars.remove(name) != null || _vars.containsKey(name)) {
+				notifyRemove(name);
+			} else if (!local && _parent != null) {
 				for (Namespace p = _parent; p != null; p = p.getParent()) {
 					if (p.getVariableNames().contains(name)) {
 						p.unsetVariable(name, true);
@@ -1226,6 +1229,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					if (p == this)
 						throw new IllegalArgumentException("Recursive namespace: "+this+" with "+parent);
 				_parent = parent;
+				notifyParentChanged(parent);
 			}
 		}
 	}

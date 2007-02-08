@@ -69,4 +69,19 @@ public interface Namespace {
 	/** Sets the parent name space.
 	 */
 	public void setParent(Namespace parent);
+
+	/** Adds a change listener to listen whether this namespace is changed.
+	 * The listener is called when a variable is added, removed, or
+	 * the parent is changed.
+	 *
+	 * @return wether the resolver is added successfully.
+	 * Note: if the resolver was added before, it won't be added again
+	 * and this method returns false.
+	 */
+	public boolean addChangeListener(NamespaceChangeListener listener);
+	/** Removes a change listener from this namespace.
+	 *
+	 * @return false if resolved is not added before.
+	 */
+	public boolean removeChangeListener(NamespaceChangeListener listener);
 }

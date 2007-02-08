@@ -77,6 +77,7 @@ import org.zkoss.zk.scripting.SerializableInterpreter;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.VariableResolver;
 import org.zkoss.zk.scripting.InterpreterFactories;
+import org.zkoss.zk.scripting.util.AbstractNamespace;
 
 /**
  * An implmentation of {@link Page} and {@link PageCtrl}.
@@ -381,7 +382,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		else if (_resolvers.contains(resolver))
 			return false;
 
-		_resolvers.add(0, resolver); //FIFO order
+		_resolvers.add(0, resolver); //FILO order
 		return true;
 	}
 	public boolean removeVariableResolver(VariableResolver resolver) {
@@ -851,7 +852,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 	}
 
-	private static class NS implements Namespace {
+	private static class NS extends AbstractNamespace {
 		private final Map _vars = new HashMap();
 
 		//Namespace//
@@ -863,9 +864,11 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 		public void setVariable(String name, Object value, boolean local) {
 			_vars.put(name, value);
+			notifyAdd(name, value);
 		}
 		public void unsetVariable(String name, boolean local) {
 			_vars.remove(name);
+			notifyRemove(name);
 		}
 
 		public Namespace getParent() {

@@ -1,4 +1,4 @@
-/* GenericInterpreter.java
+/* NamespacelessInterpreter.java
 
 {{IS_NOTE
 	Purpose:
@@ -12,9 +12,23 @@
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.scripting;
+package org.zkoss.zk.scripting.util;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
+
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Interpreter;
+import org.zkoss.zk.scripting.Method;
 
 /**
  * A skeletal class for implementing a interpreter ({@link Interpreter}) that
@@ -24,7 +38,10 @@ package org.zkoss.zk.scripting;
  *
  * @author tomyeh
  */
-abstract public class GenericInterpreter implements Interpreter {
+abstract public class NamespacelessInterpreter implements Interpreter {
+	/** A list of {@link ExecInfo}. */
+	private final List _execInfos = new LinkedList();
+
 	/** Executes the specified script.
 	 * Deriving class shall provide an implementation of this method, rather
 	 * than overriding {@link #interpret}.
@@ -41,6 +58,11 @@ abstract public class GenericInterpreter implements Interpreter {
 	 */
 	abstract protected void unsetVariable(String name);
 
+	private void push(Namespace ns) {
+	}
+	private void pop() {
+	}
+
 	//Interpreter//
 	/** Interprets the script against the specified namespace.
 	 * It maintains a stack to copy variables from the name space to
@@ -51,7 +73,12 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * this method.
 	 */
 	public void interpret(String script, Namespace ns) {
-		exec(script);
+		push(ns);
+		try {
+			exec(script);
+		} finally {
+			pop();
+		}
 	}
 	/** Returns null since retrieving class is not supported.
 	 */
@@ -63,4 +90,21 @@ abstract public class GenericInterpreter implements Interpreter {
 	public Method getMethod(String name, Class[] argTypes) {
 		return null;
 	}
+	/** Info stored in {@link NamespacelessInterpreter#_execInfos}.
+	 */
+	private static class ExecInfo {
+		private final Namespace ns;
+		private int count;
+		/** A map of (name, value) of variables that are backup. */
+		private final Map backup = new HashMap();
+		/** A set of variable names that need to be backed after becoming active. */
+		private final Set pending = new HashSet();
+		/** If true, it means all variables have to re-backup after becoming active. */
+		private boolean invalid;
+
+		private ExecInfo(Namespace ns) {
+			this.ns = ns;
+		}
+	}
+	private static final Object VOID = new Object();
 }

@@ -21,14 +21,14 @@ package org.zkoss.zk.scripting.bsf;
 import org.apache.bsf.BSFException;
 
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.scripting.GenericInterpreter;
+import org.zkoss.zk.scripting.util.NamespacelessInterpreter;
 
 /**
  * Represents a BSF (Bean Scripting Framework) interpreter.
  *
  * @author tomyeh
  */
-public class BSFInterpreter extends GenericInterpreter {
+public class BSFInterpreter extends NamespacelessInterpreter {
 	private final BSFManager _manager = new BSFManager();
 	private final String _lang;
 
