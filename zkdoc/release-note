@@ -44,12 +44,10 @@ ZK 2.3.0 Freshly
  	1647817: Data Binding: DOS with two Listboxes in same page
  	
 * Upgrade Notes:
-  + EventThreadSuspend adds a new method called afterSuspend
-  + ListModel removes indexOf() method
-  + Interpreter, Namespace, Namespaces, VariableResolver and Method are moved from
-    org.zkoss.zk.ui.util to org.zkoss.zk.scripting
-  + Evaluator is moved from org.zkoss.zk.ui.util to org.zkoss.zk.el
-  + Richlet adds the getZScriptLanguage method.
+  + The concept of variables and methods defined in zscript are changed.
+    Each interpreter now supports only one logical scope. Variables and methods
+    defined in zscript are visible for the same interpreter.
+    Refer to the Developer's Guide for details.
   + Page:
     - The signature of getInterpreter and interpret are changed. You have to
       specify a language now.
@@ -61,6 +59,12 @@ ZK 2.3.0 Freshly
     - getVariable returns variables defined in namespace, excluding those
       defined in the interpreters.
       To retrieve variables defined in the interpreter, use getZScriptVariable.
+  + EventThreadSuspend adds a new method called afterSuspend
+  + ListModel removes indexOf() method
+  + Interpreter, Namespace, Namespaces, VariableResolver and Method are moved from
+    org.zkoss.zk.ui.util to org.zkoss.zk.scripting
+  + Evaluator is moved from org.zkoss.zk.ui.util to org.zkoss.zk.el
+  + Richlet adds the getZScriptLanguage method.
 
 	--------
 ZK 2.2.1
