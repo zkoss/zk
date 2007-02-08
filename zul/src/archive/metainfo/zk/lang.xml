@@ -63,6 +63,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		return org.zkoss.web.servlet.http.Encodes.encodeURIComponent(s);
 	}
 	</zscript>
+	<zscript language="JavaScript">
+	importPackage(Packages.java.util);
+	importPackage(Packages.org.zkoss.zk.ui);
+	importPackage(Packages.org.zkoss.zk.ui.event);
+	importClass(Packages.org.zkoss.zk.ui.util.Clients);
+	importPackage(Packages.org.zkoss.zul);
+	function alert(m) {
+		Messagebox.show(m);
+	}
+	</zscript>
 
 	<!-- 
 		Note: '~./' means it is located in the class path starting from
