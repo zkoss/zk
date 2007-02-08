@@ -111,7 +111,7 @@ public class Fields {
 		}
 	}
 
-	private static final Object get(Object obj, String name)
+	public static final Object get(Object obj, String name)
 	throws NoSuchMethodException {
 		//if (log.debugable()) log.debug("get value of field "+name+" of object "+obj);
 		if (obj instanceof Fieldable) {
@@ -131,7 +131,7 @@ public class Fields {
 			throw SystemException.Aide.wrap(ex, MCommon.NOT_FOUND, name);
 		}
 	}
-	private static final void set(Object obj, String name, Object val,
+	public static final void set(Object obj, String name, Object val,
 	boolean autoCoerce) throws NoSuchMethodException, ModificationException {
 		if (obj instanceof Fieldable) {
 			((Fieldable)obj).setField(name, val);
@@ -170,7 +170,7 @@ public class Fields {
 			throw ModificationException.Aide.wrap(ex, MCommon.NOT_FOUND, name);
 		}
 	}
-	private static final void remove(Object obj, String name)
+	public static final void remove(Object obj, String name)
 	throws ModificationException {
 		if (obj instanceof Fieldable)
 			((Fieldable)obj).removeField(name);
