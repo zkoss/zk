@@ -1,4 +1,4 @@
-/* BSHFactory.java
+/* RhinoFactory.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Feb  2 15:18:52     2007, Created by tomyeh
+		Fri Feb  9 00:23:57     2007, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -16,19 +16,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.scripting.bsh;
+package org.zkoss.zk.scripting.rhino;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.scripting.InterpreterFactory;
 import org.zkoss.zk.scripting.Interpreter;
 
 /**
- * The interpreter factory for BeanShell - Java interpreter.
- *
+ * The interpreter factory for Rhino - JavaScript interpreter.
+ * 
  * @author tomyeh
  */
-public class BSHFactory implements InterpreterFactory {
+public class RhinoFactory implements InterpreterFactory {
 	public Interpreter newInterpreter(Page owner) {
-		return new BSHInterpreter(owner);
+		return new RhinoInterpreter(owner);
 	}
 }

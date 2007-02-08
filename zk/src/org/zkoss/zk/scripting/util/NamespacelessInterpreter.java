@@ -149,6 +149,10 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 			afterExec();
 		}
 	}
+	/** Handles skipNamespace and then invokes {@link #getVariable(String)}
+	 * if necessary.
+	 * <p>Don't override this method. Rather, override {@link #getVariable(String)}.
+	 */
 	public Object getVariable(String name, boolean skipNamespace) {
 		ExecInfo ei = null;
 		if (skipNamespace) {

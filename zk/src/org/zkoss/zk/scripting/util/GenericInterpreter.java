@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.sys.PageCtrl;
 
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Method;
 
 /**
  * A skeletal class for implementing a interpreter ({@link Interpreter}) that
@@ -93,6 +94,9 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 
 	//Interpreter//
+	/** Handles the namespace and then invoke {@link #exec}.
+	 * <p>Don't override this method, rather, override {@link #exec}.
+	 */
 	public void interpret(String script, Namespace ns) {
 		beforeExec();
 		push(ns);
@@ -103,6 +107,20 @@ abstract public class GenericInterpreter implements Interpreter {
 			afterExec();
 		}
 	}
+	/** Returns null since retrieving class is not supported.
+	 */
+	public Class getClass(String clsnm) {
+		return null;
+	}
+	/** Returns null since retrieving methods is not supported.
+	 */
+	public Method getMethod(String name, Class[] argTypes) {
+		return null;
+	}
+	/** Handles skipNamespace and then invokes {@link #getVariable(String)}
+	 * if necessary.
+	 * <p>Don't override this method. Rather, override {@link #getVariable(String)}.
+	 */
 	public Object getVariable(String name, boolean skipNamespace) {
 		if (skipNamespace) push(null);
 		try {
