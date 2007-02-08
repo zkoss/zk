@@ -385,18 +385,21 @@ public class LanguageDefinition {
 
 	/** Adds a script that shall execute when a page's interpreter is initialized.
 	 *
-	 * @param lang the language, say, Java.
+	 * <p>Note: it doesn't test the existence of the specified language,
+	 * such that you can add the scripting language later.
+	 *
+	 * @param zslang the scripting language, say, Java.
 	 */
-	public void addScript(String lang, String script) {
-		if (lang == null || lang.length() == 0)
+	public void addScript(String zslang, String script) {
+		if (zslang == null || zslang.length() == 0)
 			throw new IllegalArgumentException("null or empty language");
 		if (script != null && script.length() > 0) {
-			lang = lang.toLowerCase();
+			zslang = zslang.toLowerCase();
 			List ss;
 			synchronized (_scripts) {
-				ss = (List)_scripts.get(lang);
+				ss = (List)_scripts.get(zslang);
 				if (ss == null)
-					_scripts.put(lang,
+					_scripts.put(zslang,
 						ss = Collections.synchronizedList(new LinkedList()));
 			}
 			ss.add(script);
@@ -404,10 +407,10 @@ public class LanguageDefinition {
 	}
 	/** Returns all scripts (String) of the specified language.
 	 */
-	public List getScripts(String lang) {
-		lang = lang.toLowerCase();
+	public List getScripts(String zslang) {
+		zslang = zslang.toLowerCase();
 		synchronized (_scripts) {
-			final List ss = (List)_scripts.get(lang);
+			final List ss = (List)_scripts.get(zslang);
 			return ss != null ? ss: Collections.EMPTY_LIST;
 		}
 	}
