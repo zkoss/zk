@@ -40,8 +40,17 @@ public interface Namespace {
 	 */
 	public Set getVariableNames();
 
+	/** Returns whether the specified variable is defined.
+	 *
+	 * @param local whether not to search its ancestor.
+	 * If false and the current ID space doen't define the variable,
+	 * it searches up its ancestor (via {@link #getParent}) to see
+	 * any of them has defined the specified variable.
+	 */
+	public boolean containsVariable(String name, boolean local);
 	/** Returns the variable of the specified name, or null if not
-	 * defined.
+	 * defined or the value is null.
+	 *
 	 * @param local whether not to search its ancestor.
 	 * If false and the current ID space doen't define the variable,
 	 * it searches up its ancestor (via {@link #getParent}) to see

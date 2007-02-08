@@ -578,6 +578,8 @@ public interface Execution extends Evaluator {
 	 */
 	public Object getAttribute(String name);
 	/** Sets the value of the specified request attribute.
+	 *
+	 * @param value the value. If null, the attribute is removed.
 	 */
 	public void setAttribute(String name, Object value);
 	/** Removes the specified request attribute.

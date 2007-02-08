@@ -659,6 +659,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void setVariable(String name, Object val, boolean local) {
 		getNamespace().setVariable(name, val, local);
 	}
+	public boolean containsVariable(String name, boolean local) {
+		return getNamespace().containsVariable(name, local);
+	}
 	public Object getVariable(String name, boolean local) {
 		return getNamespace().getVariable(name, local);
 	}
@@ -1211,6 +1214,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//Namespace//
 		public Set getVariableNames() {
 			return _vars.keySet();
+		}
+		public boolean containsVariable(String name, boolean local) {
+			return _vars.containsKey(name)
+			|| (!local && _parent != null && _parent.containsVariable(name, true));
 		}
 		public Object getVariable(String name, boolean local) {
 			Object val = _vars.get(name);

@@ -333,6 +333,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public void setVariable(String name, Object val) {
 		_ns.setVariable(name, val, true);
 	}
+	public boolean containsVariable(String name) {
+		return _ns.containsVariable(name, true);
+	}
 	public Object getVariable(String name) {
 		return _ns.getVariable(name, true);
 	}
@@ -882,6 +885,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		//Namespace//
 		public Set getVariableNames() {
 			return _vars.keySet();
+		}
+		public boolean containsVariable(String name, boolean local) {
+			return _vars.containsKey(name);
 		}
 		public Object getVariable(String name, boolean local) {
 			return _vars.get(name);

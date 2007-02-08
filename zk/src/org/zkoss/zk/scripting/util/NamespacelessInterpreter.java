@@ -62,8 +62,29 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	abstract protected void unsetVariable(String name);
 
 	private void push(Namespace ns) {
+		if (!_execInfos.isEmpty()) {
+			final ExecInfo oei = (ExecInfo)_execInfos.get(0);
+			if (oei.ns == ns) {
+				oei.count++;
+				return; //done
+			}
+			oei.restore();
+		}
+
+		final ExecInfo ei = new ExecInfo(ns);
+		ei.backup();
+		_execInfos.add(0, ei);
 	}
 	private void pop() {
+		final ExecInfo ei = (ExecInfo)_execInfos.get(0);
+		if (ei.count-- == 0) {
+			//Note: to speed up performance, we don't restore if only one
+			//ns is left (so we can reuse it if next push is with the same ns
+			if (_execInfos.size() > 1) {
+				_execInfos.remove(0);
+				ei.restore();
+			}
+		}
 	}
 
 	//Interpreter//
@@ -100,18 +121,19 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 
 	/** Info stored in {@link NamespacelessInterpreter#_execInfos}.
 	 */
-	private static class ExecInfo {
+	private class ExecInfo {
 		private final Namespace ns;
 		private int count;
+
 		/** A map of (name, value) of variables that are backup. */
-		private final Map backup = new HashMap();
-		/** A set of variable names that need to be backed after becoming active. */
-		private final Set pending = new HashSet();
-		/** If true, it means all variables have to re-backup after becoming active. */
-		private boolean invalid;
+		private Map backup;
 
 		private ExecInfo(Namespace ns) {
 			this.ns = ns;
+		}
+		private void backup() {
+		}
+		private void restore() {
 		}
 	}
 	private static final Object VOID = new Object();

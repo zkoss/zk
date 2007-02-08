@@ -230,6 +230,11 @@ public interface Page extends IdSpace {
 	 */
 	public Object getAttribute(String name);
 	/** Sets the value of the specified custom attribute associated with this page.
+	 *
+	 * <p>Note: The attribute is removed (by {@link #removeAttribute}
+	 * if value is null, while {@link #setVariable} considers null as a legal value.
+	 *
+	 * @param value the value. If null, the attribute is removed.
 	 */
 	public Object setAttribute(String name, Object value);
 	/** Removes the specified attribute custom associated with the page.
@@ -244,6 +249,14 @@ public interface Page extends IdSpace {
 	 * @see Component#getNamespace
 	 */
 	public void setVariable(String name, Object val);
+	/** Returns whether the specified variable is defined.
+	 *
+	 * <p>Note: null is a valid value for variable, so this method is used
+	 * to know whether a variable is defined.
+	 * On the other hand, {@link #setAttribute} actually remove
+	 * an attribute (by {@link #removeAttribute} if value is null.
+	 */
+	public boolean containsVariable(String name);
 	/** Returns the value of a variable defined in the namespace ({@link #getNamespace}).
 	 *
 	 * <p>It is the same as getNamespace().getVariable(name, true).
@@ -269,7 +282,7 @@ public interface Page extends IdSpace {
 	public void unsetVariable(String name);
 
 	/** Returns the class of the specified name by searching
-	 * the thread class loader and  the classes defined in the
+	 * the thread class loader and the classes defined in the
 	 * loaded interpreters.
 	 *
 	 * @return the class, or null if not found

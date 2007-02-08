@@ -246,7 +246,9 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
 	public Map getAttributes(int scope);
-	/** Returns the value of the specified custom attribute in the specified scope.
+	/** Returns the value of the specified custom attribute in the specified scope,
+	 * or null if not defined.
+	 *
 	 * <p>If scope is {@link #COMPONENT_SCOPE}, it means attributes private
 	 * to this component.
 	 * <p>If scope is {@link #SPACE_SCOPE}, it means custom attributes shared
@@ -262,6 +264,10 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public Object getAttribute(String name, int scope);
 	/** Sets the value of the specified custom attribute in the specified scope.
+	 *
+	 * <p>Note: The attribute is removed (by {@link #removeAttribute}
+	 * if value is null, while {@link #setVariable} considers null as a legal value.
+	 *
 	 * <p>If scope is {@link #COMPONENT_SCOPE}, it means custom attributes private
 	 * to this component.
 	 * <p>If scope is {@link #SPACE_SCOPE}, it means custom attributes shared
@@ -274,6 +280,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
+	 * @param value the value. If null, the attribute is removed.
 	 */
 	public Object setAttribute(String name, Object value, int scope);
 	/** Removes the specified custom attribute in the specified scope.
@@ -341,7 +348,21 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * @see #getNamespace
 	 */
 	public void setVariable(String name, Object val, boolean local);
-	/** Returns the value of a variable defined in the namespace.
+	/** Returns whether the specified variable is defined.
+	 *
+	 * <p>Note: null is a valid value for variable, so this method is used
+	 * to know whether a variable is defined.
+	 * On the other hand, {@link #setAttribute} actually remove
+	 * an attribute (by {@link #removeAttribute} if value is null.
+	 *
+	 * @param local whether not to search its ancestor.
+	 * If false and the current namespace doen't define the variable,
+	 * it searches up its ancestor (via {@link #getParent}) to see
+	 * any of them has defined the specified variable.
+	 */
+	public boolean containsVariable(String name, boolean local);
+	/** Returns the value of a variable defined in the namespace,
+	 * or null if not defined or the value is null.
 	 *
 	 * <p>This method is the same as getNamespace().getVariable(name, local).
 	 *
