@@ -142,7 +142,9 @@ public class Column extends HeaderElement {
 	IllegalAccessException {
 		if (clsnm == null || clsnm.length() == 0) return null;
 
-		final Class cls = getClass(clsnm);
+		final Class cls = getZScriptClass(clsnm);
+		if (cls == null)
+			throw new ClassNotFoundException(clsnm);
 		if (!Comparator.class.isAssignableFrom(cls))
 			throw new UiException("Comparator must be implemented: "+clsnm);
 		return (Comparator)cls.newInstance();
