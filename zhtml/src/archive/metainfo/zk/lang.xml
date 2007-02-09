@@ -63,7 +63,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Messagebox.show(m);
 	}
 	</zscript>
+	<!-- Groovy "forgot" everything after executing, so we have to
+		re-initialize each time a groovy script is executed.
+	-->
+	<zscript language="Groovy" each-time="true">
+	import java.util.*;
+	import org.zkoss.zk.ui.*;
+	import org.zkoss.zk.ui.event.*;
+	import org.zkoss.zk.ui.util.Clients;
+	import org.zkoss.zhtml.*;
 
+	void alert(String m) {
+		Messagebox.show(m);
+	}
+	</zscript>
 	<!-- Defines the component and attribute names used to represent
 	a label when a plain text is found in ZUL XML.
 	-->
