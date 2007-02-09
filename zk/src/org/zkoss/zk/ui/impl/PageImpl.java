@@ -642,7 +642,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			_ips.put(zslang, ip);
 				//set first to avoid dead loop if the script calls interpret again
 
-			final List scripts = _langdef.getScripts(zslang);
+			final List scripts = _langdef.getInitScripts(zslang);
 			if (!scripts.isEmpty()) {
 				//we use a simplified NS since the script defined in language defn
 				//shall not depend on the current context of the page

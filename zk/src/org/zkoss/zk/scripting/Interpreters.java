@@ -48,7 +48,8 @@ public class Interpreters {
 	/** Map(zslang, class); */
 	private static final Map _ips = new HashMap();
 	/** A set of language names. */
-	private static final Set _zslangs = Collections.synchronizedSet(new LinkedHashSet());
+	private static final Set _zslangs =
+		Collections.synchronizedSet(new LinkedHashSet());
 
 	private Interpreters() { //disable it
 	}

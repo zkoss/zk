@@ -85,7 +85,9 @@ public class LanguageDefinition {
 	/** The set of reserved attributes used by _dyntagDefn. */
 	private Set _dyntagRvAttrs;
 	/** Map(String lang, List(String script). */
-	private final Map _scripts = new HashMap(5);
+	private final Map _initscripts = new HashMap();
+	/** Map(String lang, List(String script). */
+	private final Map _eachscripts = new HashMap();
 	/** The URI to render a page. */
 	private final String _desktopURI, _pageURI;
 	/** A list of Taglib. */
@@ -383,34 +385,74 @@ public class LanguageDefinition {
 		return old;
 	}
 
-	/** Adds a script that shall execute when a page's interpreter is initialized.
+	/** Adds the script that shall execute when a page's interpreter
+	 * is initialized. In other words, they are evaluated only once for each
+	 * page.
 	 *
 	 * <p>Note: it doesn't test the existence of the specified language,
 	 * such that you can add the scripting language later.
 	 *
 	 * @param zslang the scripting language, say, Java.
 	 */
-	public void addScript(String zslang, String script) {
+	public void addInitScript(String zslang, String script) {
 		if (zslang == null || zslang.length() == 0)
 			throw new IllegalArgumentException("null or empty language");
 		if (script != null && script.length() > 0) {
 			zslang = zslang.toLowerCase();
 			List ss;
-			synchronized (_scripts) {
-				ss = (List)_scripts.get(zslang);
+			synchronized (_initscripts) {
+				ss = (List)_initscripts.get(zslang);
 				if (ss == null)
-					_scripts.put(zslang,
+					_initscripts.put(zslang,
 						ss = Collections.synchronizedList(new LinkedList()));
 			}
 			ss.add(script);
 		}
 	}
-	/** Returns all scripts (String) of the specified language.
+	/** Returns the intial scripts (a list of String) of
+	 * the specified language.
 	 */
-	public List getScripts(String zslang) {
+	public List getInitScripts(String zslang) {
 		zslang = zslang.toLowerCase();
-		synchronized (_scripts) {
-			final List ss = (List)_scripts.get(zslang);
+		synchronized (_initscripts) {
+			final List ss = (List)_initscripts.get(zslang);
+			return ss != null ? ss: Collections.EMPTY_LIST;
+		}
+	}
+
+	/** Adds the script that shall execute each time before evaluating
+	 * zscript.
+	 *
+	 * <p>Note: it doesn't test the existence of the specified language,
+	 * such that you can add the scripting language later.
+	 *
+	 * @param zslang the scripting language, say, Java.
+	 */
+	public void addEachTimeScript(String zslang, String script) {
+		if (zslang == null || zslang.length() == 0)
+			throw new IllegalArgumentException("null or empty language");
+		if (script != null && script.length() > 0) {
+			zslang = zslang.toLowerCase();
+			List ss;
+			synchronized (_eachscripts) {
+				ss = (List)_eachscripts.get(zslang);
+				if (ss == null)
+					_eachscripts.put(zslang,
+						ss = Collections.synchronizedList(new LinkedList()));
+			}
+			ss.add(script);
+		}
+	}
+	/** Returns the each-time scripts (a list of String) of 
+	 * the specified language.
+	 *
+	 * <p>The each-time script is evaluated each time before evaluating
+	 * zscript.
+	 */
+	public List getEachTimeScripts(String zslang) {
+		zslang = zslang.toLowerCase();
+		synchronized (_eachscripts) {
+			final List ss = (List)_eachscripts.get(zslang);
 			return ss != null ? ss: Collections.EMPTY_LIST;
 		}
 	}

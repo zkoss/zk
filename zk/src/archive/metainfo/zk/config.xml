@@ -30,4 +30,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			specifying org.zkoss.zk.scripting.bsf.rhino.RhinoInterpreter
 		-->
 	</zscript-config>
+	<zscript-config>
+		<language-name>Groovy</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.groovy.GroovyInterpreter</interpreter-class>
+	</zscript-config>
 </config>

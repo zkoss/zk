@@ -25,7 +25,6 @@ import org.mozilla.javascript.Undefined;
 import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.ImporterTopLevel;
 
-import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.Method;
@@ -86,7 +85,7 @@ public class RhinoInterpreter extends GenericInterpreter {
 
 		final Context ctx = Context.enter();
 		try {
-			_global = new GlobalLevel(ctx);
+			_global = new GlobalScope(ctx);
 		} finally {
 			Context.exit();
 		}
@@ -114,8 +113,8 @@ public class RhinoInterpreter extends GenericInterpreter {
 	//supporting class//
 	/** Extends ImporterTopLevel to support ZK namespaces.
 	 */
-	private class GlobalLevel extends ImporterTopLevel {
-		private GlobalLevel(Context ctx) {
+	private class GlobalScope extends ImporterTopLevel {
+		private GlobalScope(Context ctx) {
 			super(ctx);
 		}
 		/* Not sure the side effect yet, so disable it

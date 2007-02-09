@@ -287,7 +287,11 @@ public class DefinitionLoaders {
 					throw new UiException("The language attribute cannot be empty, "+attr.getLocator());
 			}
 			final String s = el.getText(true);
-			langdef.addScript(zslang, s);
+			final String eachTime = el.getAttributeValue("each-time");
+			if ("true".equals(eachTime))
+				langdef.addEachTimeScript(zslang, s);
+			else
+				langdef.addInitScript(zslang, s);
 		}
 
 		for (Iterator it = root.getElements("component").iterator();
