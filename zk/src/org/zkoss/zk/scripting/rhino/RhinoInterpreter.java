@@ -37,17 +37,9 @@ import org.zkoss.zk.scripting.util.GenericInterpreter;
  * @author tomyeh
  */
 public class RhinoInterpreter extends GenericInterpreter {
-	private final Scriptable _global;
+	private Scriptable _global;
 
-	public RhinoInterpreter(Page owner) {
-		super(owner);
-
-		final Context ctx = Context.enter();
-		try {
-			_global = new GlobalLevel(ctx);
-		} finally {
-			Context.exit();
-		}
+	public RhinoInterpreter() {
 	}
 
 	/** Returns the top-level scope.
@@ -89,6 +81,17 @@ public class RhinoInterpreter extends GenericInterpreter {
 	}
 
 	//Interpreter//
+	public void init(Page owner) {
+		super.init(owner);
+
+		final Context ctx = Context.enter();
+		try {
+			_global = new GlobalLevel(ctx);
+		} finally {
+			Context.exit();
+		}
+	}
+
 	/**TODO: feasible but need to read manual/source first
 	public Class getClass(String clsnm) {
 	}

@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.scripting.InterpreterFactories;
+import org.zkoss.zk.scripting.Interpreters;
 
 /**
  * Represents a zscript.
@@ -72,7 +72,7 @@ public class ZScript implements Condition, java.io.Serializable {
 			if (cc == ':') {
 				if (j > 0) {
 					final String zslang = content.substring(0, j);
-					if (InterpreterFactories.exists(zslang)) {
+					if (Interpreters.exists(zslang)) {
 						return new ZScript(
 							zslang, content.substring(j + 1), cond);
 					} else {
@@ -80,7 +80,7 @@ public class ZScript implements Condition, java.io.Serializable {
 					}
 				}
 				break;
-			} if (!InterpreterFactories.isLegalName(cc)) {
+			} if (!Interpreters.isLegalName(cc)) {
 				break; //done
 			}
 		}

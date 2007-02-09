@@ -37,7 +37,7 @@ public class BSFInterpreter extends NamespacelessInterpreter {
 	 * @param lang the language, say, Groovy.
 	 * @param engineClassnm the class name of BSF engine
 	 */
-	public BSFInterpreter(String lang, String engineClassnm) {
+	protected BSFInterpreter(String lang, String engineClassnm) {
 		if (lang == null || lang.length() == 0
 		|| engineClassnm == null || engineClassnm.length() == 0)
 			throw new IllegalArgumentException("null or empty");

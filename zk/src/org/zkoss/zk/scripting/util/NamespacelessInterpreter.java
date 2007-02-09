@@ -29,6 +29,7 @@ import java.util.HashSet;
 import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Method;
@@ -134,6 +135,11 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	}
 
 	//Interpreter//
+	/** Default: does nothing.
+	 */
+	public void init(Page owner) {
+	}
+
 	/** Interprets the script against the specified namespace.
 	 * It maintains a stack to copy variables from the name space to
 	 * this interpreter -- it assumes this interpreter doesn't support

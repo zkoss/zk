@@ -46,17 +46,10 @@ import org.zkoss.zk.scripting.SerializableInterpreter;
  */
 public class BSHInterpreter extends GenericInterpreter
 implements SerializableInterpreter {
-	private final bsh.Interpreter _ip;
-	private final NS _bshns;
+	private bsh.Interpreter _ip;
+	private NS _bshns;
 
-	public BSHInterpreter(Page owner) {
-		super(owner);
-
-		_ip = new bsh.Interpreter();
-		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
-
-		_bshns = new NS(_ip.getClassManager(), "global");
-		_ip.setNameSpace(_bshns);
+	public BSHInterpreter() {
 	}
 
 	/** Returns the native interpretor. */
@@ -97,6 +90,16 @@ implements SerializableInterpreter {
 	}
 
 	//-- Interpreter --//
+	public void init(Page owner) {
+		super.init(owner);
+
+		_ip = new bsh.Interpreter();
+		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
+
+		_bshns = new NS(_ip.getClassManager(), "global");
+		_ip.setNameSpace(_bshns);
+	}
+
 	public Class getClass(String clsnm) {
 		try {
 			return _bshns.getClass(clsnm);

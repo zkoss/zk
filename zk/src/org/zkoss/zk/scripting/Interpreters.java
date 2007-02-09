@@ -1,4 +1,4 @@
-/* InterpreterFactories.java
+/* Interpreters.java
 
 {{IS_NOTE
 	Purpose:
@@ -30,47 +30,73 @@ import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
 
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * The utilities to access interpreter factories ({@link InterpreterFactory}).
+ * The utilities to access interpreters ({@link Interpreter}).
  *
  * <p>Application developers and deployers rarely need to access this
- * class directly. Rather, they can declare the interpreter factory in
- * either lang-addon.xml or WEB-INF/zk.xml.
+ * class directly. Rather, they can declare the interpreter class in
+ * either zk/config.xml or WEB-INF/zk.xml.
  *
  * @author tomyeh
  */
-public class InterpreterFactories {
-	private static final Log log = Log.lookup(InterpreterFactories.class);
+public class Interpreters {
+	private static final Log log = Log.lookup(Interpreters.class);
 
-	/** Map(zslang, factory); */
-	private static final Map _ftys = new HashMap();
+	/** Map(zslang, class); */
+	private static final Map _ips = new HashMap();
 	/** A set of language names. */
 	private static final Set _zslangs = Collections.synchronizedSet(new LinkedHashSet());
 
-	private InterpreterFactories() { //disable it
+	private Interpreters() { //disable it
 	}
 
-	/** Returns the interpter factory for the specified language name.
+	/** Returns the interpter for the specified language name.
 	 *
 	 * @param zslang the name of the scripting language, say, Java.
 	 * @exception InterpreterNotFoundException if not found.
 	 */
-	public static final InterpreterFactory lookup(String zslang) {
-		if (zslang == null || zslang.length() == 0)
+	public static final Interpreter newInterpreter(String zslang, Page owner) {
+		if (zslang == null || zslang.length() == 0 || owner == null)
 			throw new IllegalArgumentException("empty or null");
 
 		final String zsl = zslang.toLowerCase();
-		final InterpreterFactory fty;
-		synchronized (_ftys) {
-			fty = (InterpreterFactory)_ftys.get(zsl);
+		final Object clsnm;
+		synchronized (_ips) {
+			clsnm = _ips.get(zsl);
 		}
-		if (fty == null)
+		if (clsnm == null)
 			throw new InterpreterNotFoundException(zslang, MZk.INTERPRETER_NOT_FOUND, zslang);
-		return fty;
+
+		final Class cls;
+		if (clsnm instanceof String) {
+			try {
+				cls = Classes.forNameByThread((String)clsnm);
+			} catch (ClassNotFoundException ex) {
+				throw new UiException("Failed to load class "+clsnm);
+			}
+			if (!Interpreter.class.isAssignableFrom(cls))
+				throw new IllegalArgumentException(cls+" must implements "+Interpreter.class);
+
+			synchronized (_ips) {
+				if (_ips.put(zsl, cls) != clsnm)
+					_ips.put(zsl, clsnm); //changed by someone else; so restore
+			}
+		} else {
+			cls = (Class)clsnm;
+		}
+
+		try {
+			final Interpreter ip = (Interpreter)cls.newInstance();
+			ip.init(owner);
+			return ip;
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
+		}
 	}
-	/** Tests whether the interpreter factory for the specified language name
+	/** Tests whether the interpreter for the specified language name
 	 * exists.
 	 *
 	 * @param zslang the name of the scripting language, say, Java.
@@ -79,8 +105,8 @@ public class InterpreterFactories {
 		if (zslang == null) return false;
 
 		zslang = zslang.toLowerCase();
-		synchronized (_ftys) {
-			return _ftys.containsKey(zslang);
+		synchronized (_ips) {
+			return _ips.containsKey(zslang);
 		}
 	}
 	/** Returns a set of names of the scripting languages supported by this
@@ -90,15 +116,15 @@ public class InterpreterFactories {
 		return _zslangs;
 	}
 
-	/** Adds an interpreter factory.
+	/** Adds an interpreter class.
 	 *
 	 * @param zslang the name of the scripting language, say, Java.
 	 * It is case insensitive.
-	 * @return the previous factory, or null if not defined yet
+	 * @param ipcls the class name of interpreter ({@link Interpreter}).
+	 * @return the previous class name, or null if not defined yet
 	 */
-	public static final
-	InterpreterFactory add(String zslang, InterpreterFactory fty) {
-		if (zslang == null || zslang.length() == 0 || fty == null)
+	public static final String add(String zslang, String ipcls) {
+		if (zslang == null || zslang.length() == 0 || ipcls == null)
 			throw new IllegalArgumentException("emty or null");
 
 		for (int j = zslang.length();  --j >= 0;) {
@@ -107,13 +133,16 @@ public class InterpreterFactories {
 				throw new IllegalArgumentException('\''+cc+"' not allowed in a language name, "+zslang);
 		}
 
-		if (log.debugable()) log.debug("Scripting language is added: "+zslang+", "+fty);
+		if (log.debugable()) log.debug("Scripting language is added: "+zslang+", "+ipcls);
 		_zslangs.add(zslang);
 
 		final String zsl = zslang.toLowerCase();
-		synchronized (_ftys) {
-			return (InterpreterFactory)_ftys.put(zsl, fty);
+		final Object old;
+		synchronized (_ips) {
+			old = _ips.put(zsl, ipcls);
 		}
+
+		return old instanceof Class ? ((Class)old).getName(): (String)old;
 	}
 	/** Tests whether a character is legal to be used as part of the scripting
 	 * language name.
@@ -122,30 +151,27 @@ public class InterpreterFactories {
 		return (cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')
 			|| (cc >= '0' && cc <= '9') || cc == '_';
 	}
-	/** Adds an interpreter factory based on the XML declaration.
+	/** Adds an interpreter based on the XML declaration.
 	 *
 	 * <pre><code>
 &lt;zscript-config&gt;
   &lt;zscript-language&gt;
     &lt;language-name&gt;SuperJava&lt;/language-name&gt;&lt;!-- case insensitive --!&gt;
-    &lt;factory-class&gt;my.MySuperJavaInterpreterFactory&lt;/factory-class&gt;
+    &lt;interpreter-class&gt;my.MySuperJavaInterpreter&lt;/interpreter-class&gt;
   &lt;/zscript-language&gt;
 &lt;/zscript-config&gt;
 	 * </code></pre>
 	 *
 	 * @param config the XML element called zscript-config
-	 * @return the previous factory, or null if not defined yet
+	 * @return the previous class, or null if not defined yet
 	 */
-	public static final InterpreterFactory add(Element config) {
+	public static final String add(Element config) {
+		//Spec: it is OK to declare an nonexist interpreter, since
+		//deployer might remove unused jar files.
 		final String zslang =
 			IDOMs.getRequiredElementValue(config, "language-name");
 		final String clsnm =
-			IDOMs.getRequiredElementValue(config, "factory-class");
-		try {
-			final Class cls = Classes.forNameByThread(clsnm);
-			return add(zslang, (InterpreterFactory)cls.newInstance());
-		} catch (Throwable ex) {
-			throw new UiException("Unable to load "+clsnm+", at "+config.getLocator(), ex);
-		}
+			IDOMs.getRequiredElementValue(config, "interpreter-class");
+		return add(zslang, clsnm);
 	}
 }

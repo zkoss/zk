@@ -76,7 +76,7 @@ import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.SerializableInterpreter;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.VariableResolver;
-import org.zkoss.zk.scripting.InterpreterFactories;
+import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.scripting.util.AbstractNamespace;
 
 /**
@@ -638,7 +638,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		zslang = (zslang != null ? zslang: _zslang).toLowerCase();
 		Interpreter ip = (Interpreter)_ips.get(zslang);
 		if (ip == null) {
-			ip = InterpreterFactories.lookup(zslang).newInterpreter(this);
+			ip = Interpreters.newInterpreter(zslang, this);
 			_ips.put(zslang, ip);
 				//set first to avoid dead loop if the script calls interpret again
 

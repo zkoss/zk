@@ -18,6 +18,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting;
 
+import org.zkoss.zk.ui.Page;
+
 /**
  * The interpter used to interpret the zscript codes.
  *
@@ -29,6 +31,11 @@ package org.zkoss.zk.scripting;
  * @author tomyeh
  */
 public interface Interpreter {
+	/** Initializes the interpreter.
+	 * It is called once when the interpreter is contructed.
+	 */
+	public void init(Page owner);
+
 	/** Evaluates the script against the specified namespace.
 	 *
 	 * @param ns the namespace. Ignored if null.

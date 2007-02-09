@@ -41,14 +41,13 @@ import org.zkoss.zk.scripting.Method;
  */
 abstract public class GenericInterpreter implements Interpreter {
 	/** The owner. */
-	private final Page _owner;
+	private Page _owner;
 	/** A list of {@link Namespace}.
 	 * Top of it is the active one (may be null).
 	 */
 	private final List _nss = new LinkedList();
 
-	protected GenericInterpreter(Page owner) {
-		_owner = owner;
+	protected GenericInterpreter() {
 	}
 
 	//interface to override//
@@ -105,6 +104,10 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 
 	//Interpreter//
+	public void init(Page owner) {
+		_owner = owner;
+	}
+
 	/** Handles the namespace and then invoke {@link #exec}.
 	 * <p>Don't override this method, rather, override {@link #exec}.
 	 */

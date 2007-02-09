@@ -21,13 +21,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	-->
 	<zscript-config>
 		<language-name>Java</language-name>
-		<factory-class>org.zkoss.zk.scripting.bsh.BSHFactory</factory-class>
+		<interpreter-class>org.zkoss.zk.scripting.bsh.BSHInterpreter</interpreter-class>
 	</zscript-config>
 	<zscript-config>
 		<language-name>JavaScript</language-name>
-		<factory-class>org.zkoss.zk.scripting.rhino.RhinoFactory</factory-class>
+		<interpreter-class>org.zkoss.zk.scripting.rhino.RhinoInterpreter</interpreter-class>
 		<!-- Alternatively, you can use BSF-based Rhino interpreter by
-			specifying org.zkoss.zk.scripting.bsf.rhino.RhinoFactory
+			specifying org.zkoss.zk.scripting.bsf.rhino.RhinoInterpreter
 		-->
 	</zscript-config>
 </config>

@@ -28,12 +28,10 @@ import org.zkoss.zk.scripting.Namespace;
  */
 public class RhinoInterpreter extends BSFInterpreter {
 	/** Constructs a Rhino-based interpreter.
-	 *
-	 * @param lang the language, say, Groovy.
-	 * @param engineClassnm the class name of BSF engine
 	 */
-	public RhinoInterpreter(String lang, String engineClassnm) {
-		super(lang, engineClassnm);
+	public RhinoInterpreter() {
+		super("JavaScript",
+			"org.apache.bsf.engines.javascript.JavaScriptEngine");
 	}
 
 	//NamespacelessInterpreter//
