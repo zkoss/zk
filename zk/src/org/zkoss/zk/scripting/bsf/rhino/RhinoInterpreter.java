@@ -37,10 +37,10 @@ public class RhinoInterpreter extends BSFInterpreter {
 	}
 
 	//NamespacelessInterpreter//
-	protected void setVariable(String name, Object value) {
+	protected void set(String name, Object value) {
 		//Rhino doesn't allow to set the null value, so we unset it instead
-		if (value != null) super.setVariable(name, value);
-		else unsetVariable(name);
+		if (value != null) super.set(name, value);
+		else unset(name);
 	}
 
 	//Note: we have to prepare context since GenericInterpreter.interpret

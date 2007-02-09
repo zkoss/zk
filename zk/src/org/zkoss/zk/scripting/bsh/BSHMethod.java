@@ -12,6 +12,8 @@
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.scripting.bsh;
@@ -23,10 +25,10 @@ import org.zkoss.zk.scripting.Interpreter;
  * 
  * @author tomyeh
  */
-public class BSHMethod
+/*package*/ class BSHMethod
 implements org.zkoss.zk.scripting.Method, java.io.Serializable {
 	private final bsh.BshMethod _method;
-	public BSHMethod(bsh.BshMethod method) {
+	/*package*/ BSHMethod(bsh.BshMethod method) {
 		if (method == null)
 			throw new IllegalArgumentException("null");
 		_method = method;

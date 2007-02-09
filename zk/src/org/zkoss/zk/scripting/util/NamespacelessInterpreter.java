@@ -39,8 +39,9 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  * doesn't support {@link Namespace}.
  *
  * <p>Deriving classes usually overrides {@link #exec} instead of {@link #interpret}.
- * In addition, they have to override {@link #getVariable(String)}
- * and {@link #setVariable}.
+ * In addition, don't override {@link #getVariable},
+ * {@link #setVariable} and {@link #unsetVariable}.
+ * Instead, override {@link #get}, {@link #set} and {@link #unset} instead.
  *
  * @author tomyeh
  */
@@ -60,15 +61,21 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	 *
 	 * <p>It is invoked by {@link #interpret} after 'copying' variables from
 	 * the namespace to the interpreter.
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 */
 	abstract protected void exec(String script);
-
-	/** Returns a variable from this interpreter directly.
+	/** Gets the variable from the interpreter.
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 */
-	abstract protected Object getVariable(String name);
-	/** Sets a variable to this interpreter directly.
+	abstract protected Object get(String name);
+	/** Sets the variable from the interpreter.
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 */
-	abstract protected void setVariable(String name, Object value);
+	abstract protected void set(String name, Object value);
+	/** Removes the variable from the interpreter.
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 */
+	abstract protected void unset(String name);
 
 	/** Called before {@link #exec} or setting a variable.
 	 * <p>Default: does nothing.
@@ -80,10 +87,6 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	 */
 	protected void afterExec() {
 	}
-
-	/** Unsets a variable from this interpreter directly.
-	 */
-//	abstract protected void unsetVariable(String name);
 
 	/** Makes ns as the active namespace and copies all its variable
 	 * to this interpreter.
@@ -136,10 +139,10 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	 * this interpreter -- it assumes this interpreter doesn't support
 	 * the concept of namespace.
 	 *
-	 * <p>Deriving class usually override {@link #exec} instead of
+	 * <p>Deriving class shall override {@link #exec} instead of
 	 * this method.
 	 */
-	public void interpret(String script, Namespace ns) {
+	public final void interpret(String script, Namespace ns) {
 		beforeExec();
 		push(ns);
 		try {
@@ -149,29 +152,60 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 			afterExec();
 		}
 	}
-	/** Handles skipNamespace and then invokes {@link #getVariable(String)}
-	 * if necessary.
-	 * <p>Don't override this method. Rather, override {@link #getVariable(String)}.
+	/** Retrieve the variable.
+	 *
+	 * <p>Deriving class shall override {@link #get}, instead of this method.
 	 */
-	public Object getVariable(String name, boolean skipNamespace) {
-		ExecInfo ei = null;
-		if (skipNamespace) {
-			ei = getActive();
-			if (ei != null) {
-				ei.restore();
-				if (ei.count < 0) {
-					ei = null; //no need to backup again
-					_execInfos.remove(0);
+	public final Object getVariable(String name, boolean ignoreNamespace) {
+		beforeExec();
+		try {
+			ExecInfo ei = null;
+			if (ignoreNamespace) {
+				ei = getActive();
+				if (ei != null) {
+					ei.restore();
+					if (ei.count < 0) {
+						ei = null; //no need to backup again
+						_execInfos.remove(0);
+					}
 				}
 			}
-		}
-		try {
-			return getVariable(name);
+
+			try {
+				return get(name);
+			} finally {
+				if (ei != null)
+					ei.backup();
+			}
 		} finally {
-			if (ei != null)
-				ei.backup();
+			afterExec();
 		}
 	}
+	/** Sets the variable to this interpreter.
+	 *
+	 * <p>Deriving class shall override {@link #set}, instead of this method.
+	 */
+	public final void setVariable(String name, Object value) {
+		beforeExec();
+		try {
+			set(name, value);
+		} finally {
+			afterExec();
+		}
+	}
+	/** Removes the variable from this interpreter.
+	 *
+	 * <p>Deriving class shall override {@link #unset}, instead of this method.
+	 */
+	public final void unsetVariable(String name) {
+		beforeExec();
+		try {
+			unset(name);
+		} finally {
+			afterExec();
+		}
+	}
+
 	/** Returns null since retrieving class is not supported.
 	 */
 	public Class getClass(String clsnm) {
@@ -231,8 +265,8 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 		private void backup(String name, Object newvalue) {
 			try {
 				if (!_backup.containsKey(name))
-					_backup.put(name, getVariable(name));
-				setVariable(name, newvalue);
+					_backup.put(name, get(name));
+				set(name, newvalue);
 			} catch (Throwable ex) {
 				log.error("Failed to backup "+name, ex);
 			}
@@ -260,7 +294,7 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 			for (Iterator it = _backup.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				try {
-					setVariable((String)me.getKey(), me.getValue());
+					set((String)me.getKey(), me.getValue());
 				} catch (Throwable ex) {
 					log.error("Failed to restore "+me.getKey(), ex);
 				}

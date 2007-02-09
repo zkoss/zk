@@ -33,7 +33,9 @@ import org.zkoss.zk.scripting.Method;
  * support {@link Namespace}.
  *
  * <p>Derive classes usually override {@link #exec} instead of {@link #interpret};
- * override {@link #getVariable(String)}) instead of {@link #getVariable(String, boolean)}.
+ * In addition, don't override {@link #getVariable},
+ * {@link #setVariable} and {@link #unsetVariable}.
+ * Instead, override {@link #get}, {@link #set} and {@link #unset} instead.
  *
  * @author tomyeh
  */
@@ -59,9 +61,18 @@ abstract public class GenericInterpreter implements Interpreter {
 	 */
 	abstract protected void exec(String script);
 
-	/** Returns a variable from this interpreter directly.
+	/** Gets the variable from the interpreter.
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 */
-	abstract protected Object getVariable(String name);
+	abstract protected Object get(String name);
+	/** Sets the variable from the interpreter.
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 */
+	abstract protected void set(String name, Object value);
+	/** Removes the variable from the interpreter.
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 */
+	abstract protected void unset(String name);
 
 	/** Called before {@link #exec}.
 	 * <p>Default: does nothing.
@@ -86,11 +97,11 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * <p>It is usually called to search namespaces and variable resolvers,
 	 * when the real interpreter failed to find a variable in its own scope.
 	 */
-	protected Object locateVariable(String name) {
+	protected Object getFromNamespace(String name) {
 		final Namespace ns = getActive();
 		final Object v = ns != null ? ns.getVariable(name, false): null;
-		return v != null || ns.containsVariable(name, false) ? v:
-			((PageCtrl)_owner).resolveVariable(name);
+		return v != null || (ns != null && ns.containsVariable(name, false)) ?
+			v: ((PageCtrl)_owner).resolveVariable(name);
 	}
 
 	//Interpreter//
@@ -117,18 +128,45 @@ abstract public class GenericInterpreter implements Interpreter {
 	public Method getMethod(String name, Class[] argTypes) {
 		return null;
 	}
-	/** Handles skipNamespace and then invokes {@link #getVariable(String)}
-	 * if necessary.
-	 * <p>Don't override this method. Rather, override {@link #getVariable(String)}.
+	/** Retrieve the variable.
+	 *
+	 * <p>Deriving class shall override {@link #get}, instead of this method.
 	 */
-	public Object getVariable(String name, boolean skipNamespace) {
-		if (skipNamespace) push(null);
+	public Object getVariable(String name, boolean ignoreNamespace) {
+		beforeExec();
+		if (ignoreNamespace) push(null);
 		try {
-			return getVariable(name);
+			return get(name);
 		} finally {
-			if (skipNamespace) pop();
+			if (ignoreNamespace) pop();
+			afterExec();
 		}
 	}
+	/** Sets the variable to this interpreter.
+	 *
+	 * <p>Deriving class shall override {@link #set}, instead of this method.
+	 */
+	public final void setVariable(String name, Object value) {
+		beforeExec();
+		try {
+			set(name, value);
+		} finally {
+			afterExec();
+		}
+	}
+	/** Removes the variable from this interpreter.
+	 *
+	 * <p>Deriving class shall override {@link #unset}, instead of this method.
+	 */
+	public final void unsetVariable(String name) {
+		beforeExec();
+		try {
+			unset(name);
+		} finally {
+			afterExec();
+		}
+	}
+
 	/** Use the specified namespace as the active namespace.
 	 */
 	private void push(Namespace ns) {

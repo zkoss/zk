@@ -58,7 +58,7 @@ public class BSFInterpreter extends NamespacelessInterpreter {
 			throw new UiException(ex);
 		}
 	}
-	protected void setVariable(String name, Object value) {
+	protected void set(String name, Object value) {
 		try {
 			if (value != null)
 				_manager.declareBean(name, value, value.getClass());
@@ -68,14 +68,14 @@ public class BSFInterpreter extends NamespacelessInterpreter {
 			throw new UiException(ex);
 		}
 	}
-	protected void unsetVariable(String name) {
+	protected void unset(String name) {
 		try {
 			_manager.undeclareBean(name);
 		} catch (BSFException ex) {
 			throw new UiException(ex);
 		}
 	}
-	protected Object getVariable(String name) {
+	protected Object get(String name) {
 		return _manager.getDeclaredBean(name);
 	}
 }

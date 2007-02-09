@@ -60,7 +60,7 @@ implements SerializableInterpreter {
 	}
 
 	/** Returns the native interpretor. */
-	public bsh.Interpreter getNativeInterpreter() {
+	/*package*/ bsh.Interpreter getNativeInterpreter() {
 		return _ip;
 	}
 
@@ -73,27 +73,28 @@ implements SerializableInterpreter {
 		}
 	}
 
-	protected Object getVariable(String name) {
+	protected Object get(String name) {
 		try {
 			return Primitive.unwrap(_ip.get(name));
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	protected void setVariable(String name, Object val) {
+	protected void set(String name, Object val) {
 		try {
-			_ip.set(name, val); //unlike NameSpace.setVariable, set handles null
+			_ip.set(name, val);
+				//unlike NameSpace.setVariable, _ip.set() handles null
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	/*protected void unsetVariable(String name) {
+	protected void unset(String name) {
 		try {
 			_ip.unset(name);
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
-	}*/
+	}
 
 	//-- Interpreter --//
 	public Class getClass(String clsnm) {
@@ -116,6 +117,7 @@ implements SerializableInterpreter {
 	}
 
 	//supporting classes//
+	/** NameSpace. */
 	private class NS extends NameSpace {
 		private boolean _inGet;
 
@@ -135,7 +137,7 @@ implements SerializableInterpreter {
 			//so use _inGet to prevent dead loop
 			Variable var = super.getVariableImpl(name, recurse);
 			if (!_inGet && var == null) {
-				Object v = locateVariable(name);
+				Object v = getFromNamespace(name);
 				if (v != null) {
 			//Variable has no public/protected contructor, so we have to
 			//store the value back (with setVariable) and retrieve again
@@ -162,9 +164,8 @@ implements SerializableInterpreter {
 		for (int j = vars != null ? vars.length: 0; --j >= 0;) {
 			final String nm = vars[j];
 			if (nm != null && !"bsh".equals(nm)) {
-				final Object val = getVariable(nm, true);
-				//we cannot store null value since setVariable won't accept it
-				if (((val instanceof java.io.Serializable)
+				final Object val = get(nm);
+				if ((val == null || (val instanceof java.io.Serializable)
 					|| (val instanceof java.io.Externalizable))
 				&& (filter == null || filter.accept(nm, val))) {
 					s.writeObject(nm);
@@ -257,7 +258,7 @@ implements SerializableInterpreter {
 			final String nm = (String)s.readObject();
 			if (nm == null) break; //no more
 
-			setVariable(nm, s.readObject());
+			set(nm, s.readObject());
 		}
 
 		try {

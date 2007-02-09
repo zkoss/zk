@@ -51,13 +51,20 @@ public interface Interpreter {
 
 	/** Returns the value of a variable defined in this interpreter.
 	 *
-	 * <p>Note: Unlike {@link Namespace#getVariable}, this method
-	 * also retrieve variables defined when executing the script.
-	 *
-	 * @param skipNamespace whether to skip the active namespace, if any.
+	 * @param ignoreNamespace whether to ignore the active namespace, if any.
 	 * Note: when {@link #interpret} is called, the namespace specified
-	 * in the ns argument becomes the active namespace. It affects
-	 * what this method will returned if skipNamespace is false.
+	 * in the ns argument becomes the active namespace.
+	 * 
 	 */
-	public Object getVariable(String name, boolean skipNamespace);
+	public Object getVariable(String name, boolean ignoreNamespace);
+	/** Sets the value of a variable to this interpreter, as if
+	 * they are defined in the interpreter.
+	 *
+	 * <p>Note: it is not part of any namespace and it has higher prioerty
+	 * if its name conflicts with any variable defined in the namespaces.
+	 */
+	public void setVariable(String name, Object value);
+	/** Removes the value of a variable defined in this interpreter.
+	 */
+	public void unsetVariable(String name);
 }

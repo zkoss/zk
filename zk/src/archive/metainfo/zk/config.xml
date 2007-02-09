@@ -25,6 +25,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</zscript-config>
 	<zscript-config>
 		<language-name>JavaScript</language-name>
-		<factory-class>org.zkoss.zk.scripting.bsf.rhino.RhinoFactory</factory-class>
+		<factory-class>org.zkoss.zk.scripting.rhino.RhinoFactory</factory-class>
+		<!-- Alternatively, you can use BSF-based Rhino interpreter by
+			specifying org.zkoss.zk.scripting.bsf.rhino.RhinoFactory
+		-->
 	</zscript-config>
 </config>
