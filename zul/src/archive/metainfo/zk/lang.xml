@@ -73,7 +73,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Messagebox.show(m);
 	}
 	</zscript>
+	<!-- Groovy "forgot" everything after executing, so we have to
+		re-initialize each time a groovy script is executed.
+	-->
+	<zscript language="Groovy" each-time="true">
+	import java.util.*
+	import org.zkoss.zk.ui.*
+	import org.zkoss.zk.ui.event.*
+	import org.zkoss.zk.ui.util.Clients
+	import org.zkoss.zul.*
 
+	void alert(String m) {
+		Messagebox.show(m)
+	}
+	</zscript>
 	<!-- 
 		Note: '~./' means it is located in the class path starting from
 		'/metainfo/web'. For example, '~./img/abc.gif' means abc.gif located
