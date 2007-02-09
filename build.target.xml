@@ -241,9 +241,9 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	<delete quiet="true" includeEmptyDirs="true">
 		<fileset dir="${dist.export.dir}" includes="**"/>
 	</delete>
-	<delete quiet="true">
+	<!--delete quiet="true">
 		<fileset dir="${dist.lib.dir}" includes="*.?ar, *.jad"/>
-	</delete>
+	</delete-->
 </target>
 
 <target name="clean.bin" depends="config" if="clean.bin.required">
