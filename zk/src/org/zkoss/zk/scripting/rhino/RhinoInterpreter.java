@@ -115,6 +115,10 @@ public class RhinoInterpreter extends GenericInterpreter {
 		private GlobalLevel(Context ctx) {
 			super(ctx);
 		}
+		/* Not sure the side effect yet, so disable it
+		public boolean has(String name, Scriptable start) {
+			return super.has(name, start) || getFromNamespace(name) != null;
+		}*/
 		public Object get(String name, Scriptable start) {
 			final Object val = super.get(name, start);
 			if (val == Scriptable.NOT_FOUND
