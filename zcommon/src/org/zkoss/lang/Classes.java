@@ -231,6 +231,22 @@ public class Classes {
 		}
 		return null;
 	}
+	/** Returns all interfaces that are implemented by the specified class.
+	 * <p>Unlike {@link Class#getInterfaces}, it recursively searches
+	 * for all derived classes.
+	 */
+	public static Class[] getAllInterfaces(Class cls) {
+		final List l = new LinkedList();
+		while (cls != null) {
+			final Class[] ifs = cls.getInterfaces();
+			for (int j = 0; j < ifs.length; ++j)
+				l.add(ifs[j]);
+
+			cls = cls.getSuperclass();
+		}
+		final int sz = l.size();
+		return (Class[])l.toArray(new Class[sz]);
+	}		
 
 	/**
 	 * Tests whether a class contains the specified method.
