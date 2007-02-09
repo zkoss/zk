@@ -52,11 +52,6 @@ implements SerializableInterpreter {
 	public BSHInterpreter() {
 	}
 
-	/** Returns the native interpretor. */
-	/*package*/ bsh.Interpreter getNativeInterpreter() {
-		return _ip;
-	}
-
 	//GenericInterpreter//
 	protected void exec(String script) {
 		try {
@@ -301,6 +296,26 @@ implements SerializableInterpreter {
 			if (nm == null) break; //no more
 
 			_bshns.importPackage(nm);
+		}
+	}
+
+	private class BSHMethod implements Method {
+		private final bsh.BshMethod _method;
+		private BSHMethod(bsh.BshMethod method) {
+			if (method == null)
+				throw new IllegalArgumentException("null");
+			_method = method;
+		}
+
+		//-- Method --//
+		public Class[] getParameterTypes() {
+			return _method.getParameterTypes();
+		}
+		public Class getReturnType() {
+			return _method.getReturnType();
+		}
+		public Object invoke(Object[] args) throws Exception {
+			return _method.invoke(args != null ? args: new Object[0], _ip);
 		}
 	}
 }

@@ -131,4 +131,30 @@ public class RhinoInterpreter extends GenericInterpreter {
 			return val;
 		}
 	}
+
+	private class RhinoMethod implements Method {
+		private final Function _func;
+		private RhinoMethod(Function func) {
+			if (func == null)
+				throw new IllegalArgumentException("null");
+			_func = func;
+		}
+
+		//-- Method --//
+		public Class[] getParameterTypes() {
+			return new Class[0];
+		}
+		public Class getReturnType() {
+			return Object.class;
+		}
+		public Object invoke(Object[] args) throws Exception {
+			final Context ctx = Context.enter();
+			try {
+				final Scriptable scope = getGlobalScope();
+				return _func.call(ctx, scope, scope, args);
+			} finally {
+				Context.exit();
+			}
+		}
+	}
 }

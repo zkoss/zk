@@ -28,7 +28,6 @@ import org.codehaus.groovy.runtime.InvokerHelper;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 
@@ -113,7 +112,7 @@ public class GroovyInterpreter extends GenericInterpreter {
 		public Class getReturnType() {
 			return Object.class;
 		}
-		public Object invoke(Interpreter ip, Object[] args) throws Exception {
+		public Object invoke(Object[] args) throws Exception {
 			if (args == null) return _closure.call();
 			else return _closure.call(args);
 		}

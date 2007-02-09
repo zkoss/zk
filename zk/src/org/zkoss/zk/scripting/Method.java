@@ -36,10 +36,8 @@ public interface Method {
 	public Class getReturnType();
 	/** Invokes this method with the specified arguments.
 	 *
-	 * @param ip the interpreter to evaluate this method.
-	 * It is usually the one returned by {@link org.zkoss.zk.ui.Page#getInterpreter}.
 	 * @param args the arguments used for the method call.
 	 * If null, Object[0] is assumed.
 	 */
-	public Object invoke(Interpreter ip, Object[] args) throws Exception;
+	public Object invoke(Object[] args) throws Exception;
 }
