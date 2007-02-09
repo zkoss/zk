@@ -84,7 +84,21 @@ public class DefinitionLoaders {
 	/*package*/ static void load() {
 		final ClassLocator locator = new ClassLocator();
 
-		//1. process lang.xml (no particular dependency)
+		//1. process config.xml (no particular dependency)
+		try {
+			for (Enumeration en = locator.getResources("metainfo/zk/config.xml");
+			en.hasMoreElements();) {
+				final URL url = (URL)en.nextElement();
+				if (log.debugable()) log.debug("Loading "+url);
+				final Document doc = new SAXBuilder(false, false, true).build(url);
+				if (checkVersion(url, doc))
+					parseConfig(doc, locator);
+			}
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex); //abort
+		}
+
+		//2. process lang.xml (no particular dependency)
 		try {
 			for (Enumeration en = locator.getResources("metainfo/zk/lang.xml");
 			en.hasMoreElements();) {
@@ -92,13 +106,13 @@ public class DefinitionLoaders {
 				if (log.debugable()) log.debug("Loading "+url);
 				final Document doc = new SAXBuilder(false, false, true).build(url);
 				if (checkVersion(url, doc))
-					parse(doc, locator, false);
+					parseLang(doc, locator, false);
 			}
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex); //abort
 		}
 
-		//2. process lang-addon.xml (with dependency)
+		//3. process lang-addon.xml (with dependency)
 		try {
 			final List xmls = locator.getDependentXMLResources(
 				"metainfo/zk/lang-addon.xml", "addon-name", "depends");
@@ -106,7 +120,7 @@ public class DefinitionLoaders {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				if (checkVersion(res.url, res.document)) {
 					try {
-						parse(res.document, locator, true);
+						parseLang(res.document, locator, true);
 					} catch (Exception ex) {
 						log.error("Failed to load addon", ex);
 						//keep running
@@ -118,13 +132,13 @@ public class DefinitionLoaders {
 			//keep running
 		}
 
-		//3. process other addon (from ConfigParser)
+		//4. process other addon (from ConfigParser)
 		for (Iterator it = _addons.iterator(); it.hasNext();) {
 			final Object[] p = (Object[])it.next();
 			final Locator loc = (Locator)p[0];
 			final URL url = (URL)p[1];
 			try {
-				parse(new SAXBuilder(false, false, true).build(url),
+				parseLang(new SAXBuilder(false, false, true).build(url),
 					loc, true);
 			} catch (Exception ex) {
 				log.error("Failed to load addon: "+url, ex);
@@ -156,7 +170,21 @@ public class DefinitionLoaders {
 		}
 	}
 
-	private static void parse(Document doc, Locator locator, boolean addon)
+	private static void parseConfig(Document doc, Locator locator)
+	throws Exception {
+		final Element root = doc.getRootElement();
+		parseZScriptConfig(root);
+	}
+	private static void parseZScriptConfig(Element root) {
+		for (Iterator it = root.getElements("zscript-config").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			InterpreterFactories.add(el);
+				//Note: zscript-config is applied to the whole system, not just langdef
+		}
+	}
+
+	private static void parseLang(Document doc, Locator locator, boolean addon)
 	throws Exception {
 		final Element root = doc.getRootElement();
 		final String lang = IDOMs.getRequiredElementValue(root, "language-name");
@@ -167,9 +195,6 @@ public class DefinitionLoaders {
 
 			if (!root.getElements("case-insensitive").isEmpty())
 				throw new UiException("You can not specify case-insensitive in addon");
-		} else if ("[system-config]".equals(lang)) { //system config only
-			parseZScriptConfig(root);
-			return; //done
 		} else {
 			final String ns = (String)IDOMs.getRequiredElementValue(root, "namespace");
 			if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
@@ -203,7 +228,6 @@ public class DefinitionLoaders {
 		parseLabelTemplate(langdef, root);
 		parseDynamicTag(langdef, root);
 		parseMacroTemplate(langdef, root);
-		parseZScriptConfig(root);
 
 		for (Iterator it = root.getElements("javascript").iterator();
 		it.hasNext();) {
@@ -374,14 +398,6 @@ public class DefinitionLoaders {
 			} else {
 				log.warning("Unknown processing instruction: "+target);
 			}
-		}
-	}
-	private static void parseZScriptConfig(Element root) {
-		for (Iterator it = root.getElements("zscript-config").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
-			InterpreterFactories.add(el);
-				//Note: zscript-config is applied to the whole system, not just langdef
 		}
 	}
 	/** Parse the component used to represent a label.

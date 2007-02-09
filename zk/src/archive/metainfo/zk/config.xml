@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- lang.xml
+<!-- config.xml
 	Purpose:
 		
 	Description:
@@ -11,10 +11,7 @@
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 
-<language>
-	<language-name>[system-config]</language-name>
-		<!-- denote: for system configuration only (rather than defining a language) -->
-
+<config>
 	<version>
 		<version-class>org.zkoss.zk.Version</version-class>
 		<version-uid>2.3.0</version-uid>
@@ -30,4 +27,4 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<language-name>JavaScript</language-name>
 		<factory-class>org.zkoss.zk.scripting.bsf.rhino.RhinoFactory</factory-class>
 	</zscript-config>
-</language>
+</config>
