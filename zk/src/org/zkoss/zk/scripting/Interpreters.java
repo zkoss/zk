@@ -71,7 +71,9 @@ public class Interpreters {
 			throw new InterpreterNotFoundException(zslang, MZk.INTERPRETER_NOT_FOUND, zslang);
 
 		final Class cls;
-		if (clsnm instanceof String) {
+		if (clsnm instanceof Class) {
+			cls = (Class)clsnm;
+		} else {
 			try {
 				cls = Classes.forNameByThread((String)clsnm);
 			} catch (ClassNotFoundException ex) {
@@ -81,11 +83,10 @@ public class Interpreters {
 				throw new IllegalArgumentException(cls+" must implements "+Interpreter.class);
 
 			synchronized (_ips) {
-				if (_ips.put(zsl, cls) != clsnm)
-					_ips.put(zsl, clsnm); //changed by someone else; so restore
+				final Object old = _ips.put(zsl, cls);
+				if (old != clsnm)
+					_ips.put(zsl, old); //changed by someone else; so restore
 			}
-		} else {
-			cls = (Class)clsnm;
 		}
 
 		try {
@@ -93,7 +94,7 @@ public class Interpreters {
 			ip.init(owner);
 			return ip;
 		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex);
+			throw UiException.Aide.wrap(ex, "Unable to create "+cls);
 		}
 	}
 	/** Tests whether the interpreter for the specified language name
@@ -124,7 +125,8 @@ public class Interpreters {
 	 * @return the previous class name, or null if not defined yet
 	 */
 	public static final String add(String zslang, String ipcls) {
-		if (zslang == null || zslang.length() == 0 || ipcls == null)
+		if (zslang == null || zslang.length() == 0
+		|| ipcls == null || ipcls.length() == 0)
 			throw new IllegalArgumentException("emty or null");
 
 		for (int j = zslang.length();  --j >= 0;) {
