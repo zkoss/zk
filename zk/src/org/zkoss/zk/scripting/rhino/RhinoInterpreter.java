@@ -80,8 +80,8 @@ public class RhinoInterpreter extends GenericInterpreter {
 	}
 
 	//Interpreter//
-	public void init(Page owner) {
-		super.init(owner);
+	public void init(Page owner, String zslang) {
+		super.init(owner, zslang);
 
 		final Context ctx = Context.enter();
 		try {

@@ -33,10 +33,16 @@ import org.zkoss.zk.ui.Page;
 public interface Interpreter {
 	/** Initializes the interpreter.
 	 * It is called once when the interpreter is contructed.
+	 *
+	 * @param zslang the language this interpreter is associated with
 	 */
-	public void init(Page owner);
+	public void init(Page owner, String zslang);
 
 	/** Evaluates the script against the specified namespace.
+	 *
+	 * <p>Implementation Note: the implementation has to concatenate
+	 * the string returned by {@link LanguageDefinition#getEachTimeScript}
+	 * if not null.
 	 *
 	 * @param ns the namespace. Ignored if null.
 	 * Note: Unlike {@link org.zkoss.zk.ui.Page#interpret} which assumes

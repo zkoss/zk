@@ -66,14 +66,14 @@ public class GroovyInterpreter extends GenericInterpreter {
 	}
 
 	//Interpreter//
-	public void init(Page owner) {
-		super.init(owner);
+	public void init(Page owner, String zslang) {
+		super.init(owner, zslang);
 
 		_global = new Binding(new MyMap());
 		_ip = new GroovyShell(_global);
 	}
 
-	/**TODO: feasible but need to read manual/source first
+	/**TODO: after calling evaluate, all defined variables are gone, so...
 	public Class getClass(String clsnm) {
 	}
 	public Method getMethod(String name, Class[] argTypes) {

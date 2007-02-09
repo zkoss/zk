@@ -90,8 +90,8 @@ implements SerializableInterpreter {
 	}
 
 	//-- Interpreter --//
-	public void init(Page owner) {
-		super.init(owner);
+	public void init(Page owner, String zslang) {
+		super.init(owner, zslang);
 
 		_ip = new bsh.Interpreter();
 		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());

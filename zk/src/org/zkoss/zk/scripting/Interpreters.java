@@ -92,7 +92,7 @@ public class Interpreters {
 
 		try {
 			final Interpreter ip = (Interpreter)cls.newInstance();
-			ip.init(owner);
+			ip.init(owner, zslang);
 			return ip;
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex, "Unable to create "+cls);

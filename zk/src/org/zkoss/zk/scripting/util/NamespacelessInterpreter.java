@@ -51,8 +51,22 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 
 	/** A list of {@link ExecInfo}. */
 	private final List _execInfos = new LinkedList();
+	private Page _owner;
+	private String _zslang;
 
 	protected NamespacelessInterpreter() {
+	}
+
+	//utilities//
+	/** Returns the owner.
+	 */
+	public Page getOwner() {
+		return _owner;
+	}
+	/** Returns the scripting language this interpreter is associated with.
+	 */
+	public String getZScriptLanguage() {
+		return _zslang;
 	}
 
 	//interface to override//
@@ -135,9 +149,9 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	}
 
 	//Interpreter//
-	/** Default: does nothing.
-	 */
-	public void init(Page owner) {
+	public void init(Page owner, String zslang) {
+		_owner = owner;
+		_zslang = zslang;
 	}
 
 	/** Interprets the script against the specified namespace.
@@ -149,6 +163,11 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 	 * this method.
 	 */
 	public final void interpret(String script, Namespace ns) {
+		final String each =
+			_owner.getLanguageDefinition().getEachTimeScript(_zslang);
+		if (each != null)
+			script = each + '\n' + script;
+
 		beforeExec();
 		push(ns);
 		try {

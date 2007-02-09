@@ -40,12 +40,12 @@ import org.zkoss.zk.scripting.Method;
  * @author tomyeh
  */
 abstract public class GenericInterpreter implements Interpreter {
-	/** The owner. */
-	private Page _owner;
 	/** A list of {@link Namespace}.
 	 * Top of it is the active one (may be null).
 	 */
 	private final List _nss = new LinkedList();
+	private Page _owner;
+	private String _zslang;
 
 	protected GenericInterpreter() {
 	}
@@ -90,6 +90,11 @@ abstract public class GenericInterpreter implements Interpreter {
 	public Page getOwner() {
 		return _owner;
 	}
+	/** Returns the scripting language this interpreter is associated with.
+	 */
+	public String getZScriptLanguage() {
+		return _zslang;
+	}
 	/** Locates and returns the variable through namespaces and
 	 * variable resolvers.
 	 *
@@ -104,14 +109,20 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 
 	//Interpreter//
-	public void init(Page owner) {
+	public void init(Page owner, String zslang) {
 		_owner = owner;
+		_zslang = zslang;
 	}
 
 	/** Handles the namespace and then invoke {@link #exec}.
 	 * <p>Don't override this method, rather, override {@link #exec}.
 	 */
 	public void interpret(String script, Namespace ns) {
+		final String each =
+			_owner.getLanguageDefinition().getEachTimeScript(_zslang);
+		if (each != null)
+			script = each + '\n' + script;
+
 		beforeExec();
 		push(ns);
 		try {
