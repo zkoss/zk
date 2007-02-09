@@ -30,8 +30,7 @@ public class RhinoInterpreter extends BSFInterpreter {
 	/** Constructs a Rhino-based interpreter.
 	 */
 	public RhinoInterpreter() {
-		super("JavaScript",
-			"org.apache.bsf.engines.javascript.JavaScriptEngine");
+		super("org.apache.bsf.engines.javascript.JavaScriptEngine");
 	}
 
 	//NamespacelessInterpreter//

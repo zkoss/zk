@@ -20,6 +20,7 @@ package org.zkoss.zk.scripting.bsf;
 
 import org.apache.bsf.BSFException;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.util.NamespacelessInterpreter;
 
@@ -29,22 +30,24 @@ import org.zkoss.zk.scripting.util.NamespacelessInterpreter;
  * @author tomyeh
  */
 public class BSFInterpreter extends NamespacelessInterpreter {
-	private final BSFManager _manager = new BSFManager();
-	private final String _lang;
+	private final String _engcls;
+	private BSFManager _manager = new BSFManager();
 
 	/** Constructs a BSF interpreter.
 	 *
-	 * @param lang the language, say, Groovy.
 	 * @param engineClassnm the class name of BSF engine
 	 */
-	protected BSFInterpreter(String lang, String engineClassnm) {
-		if (lang == null || lang.length() == 0
-		|| engineClassnm == null || engineClassnm.length() == 0)
+	protected BSFInterpreter(String engineClassnm) {
+		if (engineClassnm == null || engineClassnm.length() == 0)
 			throw new IllegalArgumentException("null or empty");
+		_engcls = engineClassnm;
+	}
+
+	//Interpreter//
+	public void init(Page owner, String zslang) {
 		try {
-			_lang = lang;
-			_manager.registerScriptingEngine(lang, engineClassnm, null);
-			_manager.loadScriptingEngine(lang);
+			_manager.registerScriptingEngine(zslang, _engcls, null);
+			_manager.loadScriptingEngine(zslang);
 		} catch (BSFException ex) {
 			throw new UiException(ex);
 		}
@@ -53,7 +56,7 @@ public class BSFInterpreter extends NamespacelessInterpreter {
 	//NamespacelessInterpreter//
 	protected void exec(String script) {
 		try {
-			_manager.exec(_lang, "zk", 0, 0, script);
+			_manager.exec(getZScriptLanguage(), "zk", 0, 0, script);
 		} catch (BSFException ex) {
 			throw new UiException(ex);
 		}
