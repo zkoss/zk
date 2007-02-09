@@ -56,12 +56,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	void alert(String m) {
 		Messagebox.show(m);
 	}
-	String encodeURI(String s) {
-		return org.zkoss.web.servlet.http.Encodes.encodeURI(s);
-	}
-	String encodeURIComponent(String s) {
-		return org.zkoss.web.servlet.http.Encodes.encodeURIComponent(s);
-	}
 	</zscript>
 	<zscript language="JavaScript">
 	importPackage(Packages.java.util);
