@@ -23,10 +23,12 @@ import java.util.HashMap;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
+import groovy.lang.Closure;
 import org.codehaus.groovy.runtime.InvokerHelper;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 
@@ -73,13 +75,19 @@ public class GroovyInterpreter extends GenericInterpreter {
 		_ip = new GroovyShell(_global);
 	}
 
-	/**TODO: after calling evaluate, all defined variables are gone, so...
+	/**TODO: need to digg out a solution from groovy's manual
 	public Class getClass(String clsnm) {
 	}
-	public Method getMethod(String name, Class[] argTypes) {
-		
-	}
 	*/
+	/** Returns the method.
+	 * <p>Currently it only looks for closures, and argTypes are ignored.
+	 */
+	public Method getMethod(String name, Class[] argTypes) {
+		final Object val = get(name);
+		if (!(val instanceof Closure))
+			return null;
+		return new ClosureMethod((Closure)val);
+	}
 
 	//supporting class//
 	/** Extends Binding to support ZK namespaces.
@@ -90,6 +98,24 @@ public class GroovyInterpreter extends GenericInterpreter {
 			if (val != null || containsKey(key) || !(key instanceof String))
 				return val;
 			return getFromNamespace((String)key);
+		}
+	}
+	private static class ClosureMethod implements Method {
+		private final Closure _closure;
+		private ClosureMethod(Closure closure) {
+			_closure = closure;
+		}
+
+		//-- Method --//
+		public Class[] getParameterTypes() {
+			return new Class[0];
+		}
+		public Class getReturnType() {
+			return Object.class;
+		}
+		public Object invoke(Interpreter ip, Object[] args) throws Exception {
+			if (args == null) return _closure.call();
+			else return _closure.call(args);
 		}
 	}
 }
