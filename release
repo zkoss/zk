@@ -164,6 +164,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#BSF
 	cp dist/lib/ext/js.jar /tmp/zk/$prjnm/dist/lib/ext
 		#JavaScript (rhino)
+	cp dist/lib/ext/groovy.jar /tmp/zk/$prjnm/dist/lib/ext
+		#Groovy
 	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$prjnm/dist/lib/ext
 		#jFreeChart
 
