@@ -11,6 +11,7 @@ timelinez.jar
 bsh.jar
 bsf.jar
 js.jar
+groovy.jar
 commons-fileupload.jar
 commons-io.jar
 jfreechart.jar
