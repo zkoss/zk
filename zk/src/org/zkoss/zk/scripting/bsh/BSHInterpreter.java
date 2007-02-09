@@ -18,6 +18,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting.bsh;
 
+import java.lang.reflect.Field;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Collection;
+
 import bsh.BshClassManager;
 import bsh.NameSpace;
 import bsh.BshMethod;
@@ -26,17 +31,21 @@ import bsh.Primitive;
 import bsh.EvalError;
 import bsh.UtilEvalError;
 
+import org.zkoss.lang.Classes;
+
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
+import org.zkoss.zk.scripting.SerializableInterpreter;
 
 /**
  * The interpreter that uses BeanShell to interpret zscript codes.
  *
  * @author tomyeh
  */
-public class BSHInterpreter extends GenericInterpreter { //not a good idea to serialize it
+public class BSHInterpreter extends GenericInterpreter
+implements SerializableInterpreter {
 	private final bsh.Interpreter _ip;
 	private final NS _bshns;
 
@@ -71,14 +80,14 @@ public class BSHInterpreter extends GenericInterpreter { //not a good idea to se
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	/*protected void setVariable(String name, Object val) {
+	protected void setVariable(String name, Object val) {
 		try {
 			_ip.set(name, val); //unlike NameSpace.setVariable, set handles null
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	protected void unsetVariable(String name) {
+	/*protected void unsetVariable(String name) {
 		try {
 			_ip.unset(name);
 		} catch (EvalError ex) {
@@ -106,6 +115,7 @@ public class BSHInterpreter extends GenericInterpreter { //not a good idea to se
 		}
 	}
 
+	//supporting classes//
 	private class NS extends NameSpace {
 		private boolean _inGet;
 
@@ -141,6 +151,152 @@ public class BSHInterpreter extends GenericInterpreter { //not a good idea to se
 				}
 			}
 			return var;
+		}
+	}
+
+	//SerializableInterpreter//
+	public void write(java.io.ObjectOutputStream s, Filter filter)
+	throws java.io.IOException {
+		//1. variables
+		final String[] vars = _bshns.getVariableNames();
+		for (int j = vars != null ? vars.length: 0; --j >= 0;) {
+			final String nm = vars[j];
+			if (nm != null && !"bsh".equals(nm)) {
+				final Object val = getVariable(nm, true);
+				//we cannot store null value since setVariable won't accept it
+				if (((val instanceof java.io.Serializable)
+					|| (val instanceof java.io.Externalizable))
+				&& (filter == null || filter.accept(nm, val))) {
+					s.writeObject(nm);
+					s.writeObject(val);
+				}
+			}
+		}
+		s.writeObject(null); //denote end-of-vars
+
+		//2. methods
+		final BshMethod[] mtds = _bshns.getMethods();
+		for (int j = mtds != null ? mtds.length: 0; --j >= 0;) {
+			final String nm = mtds[j].getName();
+			if (filter == null || filter.accept(nm, mtds[j])) {
+				//hack BeanShell 2.0b4 which cannot be serialized correctly
+				Field f = null;
+				boolean acs = false;
+				try {
+					f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
+					acs = f.isAccessible();
+					f.setAccessible(true);
+					final Object old = f.get(mtds[j]);
+					try {
+						f.set(mtds[j], null);				
+						s.writeObject(mtds[j]);
+					} finally {
+						f.set(mtds[j], old);
+					}
+				} catch (java.io.IOException ex) {
+					throw ex;
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
+				} finally {
+					if (f != null) f.setAccessible(acs);
+				}
+			}
+		}
+		s.writeObject(null); //denote end-of-mtds
+
+		//3. imported class
+		Field f = null;
+		boolean acs = false;
+		try {
+			f = Classes.getAnyField(NameSpace.class, "importedClasses");
+			acs = f.isAccessible();
+			f.setAccessible(true);
+			final Map clses = (Map)f.get(_bshns);
+			if (clses != null)
+				for (Iterator it = clses.values().iterator(); it.hasNext();) {
+					final String clsnm = (String)it.next();
+					if (!clsnm.startsWith("bsh."))
+						s.writeObject(clsnm);
+				}
+		} catch (java.io.IOException ex) {
+			throw ex;
+		} catch (Throwable ex) {
+			throw UiException.Aide.wrap(ex);
+		} finally {
+			if (f != null) f.setAccessible(acs);
+		}
+		s.writeObject(null); //denote end-of-cls
+
+		//4. imported package
+		f = null;
+		acs = false;
+		try {
+			f = Classes.getAnyField(NameSpace.class, "importedPackages");
+			acs = f.isAccessible();
+			f.setAccessible(true);
+			final Collection pkgs = (Collection)f.get(_bshns);
+			if (pkgs != null)
+				for (Iterator it = pkgs.iterator(); it.hasNext();) {
+					final String pkgnm = (String)it.next();
+					if (!pkgnm.startsWith("java.awt")
+					&& !pkgnm.startsWith("javax.swing"))
+						s.writeObject(pkgnm);
+				}
+		} catch (java.io.IOException ex) {
+			throw ex;
+		} catch (Throwable ex) {
+			throw UiException.Aide.wrap(ex);
+		} finally {
+			if (f != null) f.setAccessible(acs);
+		}
+		s.writeObject(null); //denote end-of-cls
+	}
+	public void read(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		for (;;) {
+			final String nm = (String)s.readObject();
+			if (nm == null) break; //no more
+
+			setVariable(nm, s.readObject());
+		}
+
+		try {
+			for (;;) {
+				final BshMethod mtd = (BshMethod)s.readObject();
+				if (mtd == null) break; //no more
+
+				//fix declaringNameSpace
+				Field f = null;
+				boolean acs = false;
+				try {
+					f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
+					acs = f.isAccessible();
+					f.setAccessible(true);
+					f.set(mtd, _bshns);				
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
+				} finally {
+					if (f != null) f.setAccessible(acs);
+				}
+
+				_bshns.setMethod(mtd.getName(), mtd);
+			}
+		} catch (UtilEvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+
+		for (;;) {
+			final String nm = (String)s.readObject();
+			if (nm == null) break; //no more
+
+			_bshns.importClass(nm);
+		}
+
+		for (;;) {
+			final String nm = (String)s.readObject();
+			if (nm == null) break; //no more
+
+			_bshns.importPackage(nm);
 		}
 	}
 }
