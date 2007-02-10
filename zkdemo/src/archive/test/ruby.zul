@@ -22,7 +22,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<vbox id="vb">
 		<label id="l" value="Hi"/>
 		<button label="change label" onClick="$l.value='Hi, Ruby';"/>
-		<button label="add label" onClick="new Java::Label('New').setParent($vb);"/>
+		<button label="add label"
+			onClick="(Java::Label.new 'New').parent = $vb"/>
 	</vbox>
-	<button label="alert" onClick="alert('Hi, Ruby')"/>
+	<button label="alert" onClick="alert 'Hi, Ruby'"/>
 </window>
