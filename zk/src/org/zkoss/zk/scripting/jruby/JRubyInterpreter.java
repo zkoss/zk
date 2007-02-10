@@ -20,8 +20,14 @@ package org.zkoss.zk.scripting.jruby;
 
 import org.jruby.IRuby;
 import org.jruby.Ruby;
-import org.jruby.internal.runtime.GlobalVariables;
+import org.jruby.javasupport.Java;
 import org.jruby.javasupport.JavaEmbedUtils;
+import org.jruby.javasupport.JavaObject;
+import org.jruby.javasupport.JavaUtil;
+import org.jruby.runtime.IAccessor;
+import org.jruby.runtime.GlobalVariable;
+import org.jruby.runtime.builtin.IRubyObject;
+import org.jruby.internal.runtime.GlobalVariables;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -43,11 +49,17 @@ public class JRubyInterpreter extends GenericInterpreter {
 	}
 
 	protected Object get(String name) {
-		return null;
+		IRubyObject ro = _runtime.getGlobalVariables().get(
+			GlobalVariable.variableName(name));
+		return rubyToJava(ro);
 	}
 	protected void set(String name, Object value) {
+		_runtime.getGlobalVariables().define(
+			GlobalVariable.variableName(name), new Variable(value));
 	}
 	protected void unset(String name) {
+		_runtime.getGlobalVariables().set(
+			GlobalVariable.variableName(name), _runtime.getNil());
 	}
 
 	//Interpreter//
@@ -61,9 +73,59 @@ public class JRubyInterpreter extends GenericInterpreter {
 
 		super.destroy();
 	}
+
+	/**TODO: need to digg out a solution from jruby's manual
+	public Class getClass(String clsnm) {
+	}
+	public Method getMethod(String name, Class[] argTypes) {
+	}
+	*/
+
+	//utilities//
+	private IRubyObject javaToRuby(Object value) {
+		IRubyObject ro = JavaUtil.convertJavaToRuby(_runtime, value);
+		if (ro instanceof JavaObject)
+			return _runtime.getModule("JavaUtilities")
+				.callMethod(_runtime.getCurrentContext(), "wrap", ro);
+		return ro;
+	}
+	private Object rubyToJava(IRubyObject value) {
+		return JavaUtil.convertArgument(
+			Java.ruby_to_java(_runtime.getObject(), value), Object.class);
+	}
+
+	/** The global scope. */
 	private class Variables extends GlobalVariables {
 		private Variables(IRuby runtime) {
 			super(runtime);
+		}
+
+		public IRubyObject get(String name) {
+			IRubyObject ro = super.get(name);
+			if (ro == _runtime.getNil()) {
+				if (name.length() > 1 && name.charAt(0) == '$') //just in case
+					name = name.substring(1);
+				Object val = getFromNamespace(name);
+				if (val != null) 
+					return javaToRuby(val);
+			}
+			return ro;
+		}
+	}
+	/*ruby variable*/
+	private class Variable implements IAccessor {
+		private Object _value;
+	
+		public Variable(Object value) {
+			_value = value;
+		}
+	
+		public IRubyObject getValue() {
+			return javaToRuby(_value);
+		}	
+		public IRubyObject setValue(IRubyObject value) {
+			_value = rubyToJava(value);
+			return value;
 		}
 	}
 }
