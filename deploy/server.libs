@@ -12,6 +12,7 @@ bsh.jar
 bsf.jar
 js.jar
 groovy.jar
+jruby.jar
 commons-fileupload.jar
 commons-io.jar
 jfreechart.jar
