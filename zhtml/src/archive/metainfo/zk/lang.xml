@@ -47,8 +47,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Messagebox.show(m);
 	}
 	</zscript>
+
 	<zscript language="JavaScript">
-	importPackage(Packages.java.util);
 	importPackage(Packages.org.zkoss.zk.ui);
 	importPackage(Packages.org.zkoss.zk.ui.event);
 	importClass(Packages.org.zkoss.zk.ui.util.Clients);
@@ -57,10 +57,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Messagebox.show(m);
 	}
 	</zscript>
+
 	<!-- Groovy "forgot" what are imported, so we have to import each time
 	-->
 	<zscript language="Groovy" each-time="true">
-	import java.util.*;
 	import org.zkoss.zk.ui.*;
 	import org.zkoss.zk.ui.event.*;
 	import org.zkoss.zk.ui.util.Clients;
@@ -68,6 +68,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</zscript>
 	<zscript language="Groovy">
 	alert = {m -> Messagebox.show(m)}
+	</zscript>
+
+	<zscript language="Ruby">
+	require 'java'
+	module Java
+		include_package 'java.lang'
+		include_package 'java.util'
+		include_package 'org.zkoss.zk.ui'
+		include_package 'org.zkoss.zk.ui.event'
+		include_class 'org.zkoss.zk.ui.util.Clients'
+		include_package 'org.zkoss.zhtml'
+	end
 	</zscript>
 
 	<!-- Defines the component and attribute names used to represent
