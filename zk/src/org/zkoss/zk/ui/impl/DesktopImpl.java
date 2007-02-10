@@ -310,6 +310,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			if (D.ON && log.debugable()) log.debug("After removed, pages: "+_pages.values());
 		}
 		removeComponents(page.getRoots());
+
+		((PageCtrl)page).destroy();
 	}
 	private void removeComponents(Collection comps) {
 		for (Iterator it = comps.iterator(); it.hasNext();) {
@@ -321,6 +323,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	public void setBookmarkByClient(String name) {
 		_bookmark = name != null ? name: "";
+	}
+
+	public void destroy() {
+		for (Iterator it = _pages.values().iterator(); it.hasNext();) {
+			final PageCtrl pgc = (PageCtrl)it.next();
+			try {
+				pgc.destroy();
+			} catch (Throwable ex) {
+				log.error("Failed to destroy "+pgc, ex);
+			}
+		}
 	}
 
 	//-- Object --//

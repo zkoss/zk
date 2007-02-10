@@ -56,11 +56,11 @@ public interface UiEngine {
 	 */
 	public void stop(WebApp wapp);
 
-	/** Cleans up a desktop before really removing it.
-	 * Developers don't need to remove pages and desktops.
+	/** Called when a desktop is being removed.
+	 * <p>Application developers don't need to remove pages and desktops.
 	 * They are removed and cleaned up automatically.
 	 */
-	public void cleanup(Desktop desktop);
+	public void desktopDestroyed(Desktop desktop);
 
 	//-- update (draw) --//
 	/** Called before a component redraws itself if the component might

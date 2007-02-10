@@ -153,6 +153,9 @@ abstract public class NamespacelessInterpreter implements Interpreter {
 		_owner = owner;
 		_zslang = zslang;
 	}
+	/** Does nothing. */
+	public void destroy() {
+	}
 
 	/** Interprets the script against the specified namespace.
 	 * It maintains a stack to copy variables from the name space to

@@ -86,4 +86,8 @@ public interface DesktopCtrl {
 	 * has just been activated (aka., deserialized).
 	 */
 	public void sessionDidActivate(Session sess);
+
+	/** Called when the desktop is about to be destroyed.
+	 */
+	public void destroy();
 }

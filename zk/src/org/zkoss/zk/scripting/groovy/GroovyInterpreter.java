@@ -70,7 +70,7 @@ public class GroovyInterpreter extends GenericInterpreter {
 	public void init(Page owner, String zslang) {
 		super.init(owner, zslang);
 
-		_global = new Binding(new MyMap());
+		_global = new Binding(new Variables());
 		_ip = new GroovyShell(_global);
 	}
 
@@ -91,7 +91,7 @@ public class GroovyInterpreter extends GenericInterpreter {
 	//supporting class//
 	/** Extends Binding to support ZK namespaces.
 	 */
-	private class MyMap extends HashMap {
+	private class Variables extends HashMap {
 		public Object get(Object key) {
 			Object val = super.get(key);
 			if (val != null || containsKey(key) || !(key instanceof String))

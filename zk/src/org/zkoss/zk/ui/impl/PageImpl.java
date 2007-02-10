@@ -519,6 +519,18 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		setVariable("session", sess);
 		setVariable("sessionScope", sess.getAttributes());
 	}
+	public void destroy() {
+		for (Iterator it = getLoadedInterpreters().iterator(); it.hasNext();) {
+			final Interpreter ip = (Interpreter)it.next();
+			try {
+				ip.destroy();
+			} catch (Throwable ex) {
+				log.error("Failed to destroy "+ip, ex);
+			}
+		}
+		_ips.clear();
+	}
+
 	private static final Map REQUEST_ATTRS = new AbstractMap() {
 		public Set entrySet() {
 			final Execution exec = Executions.getCurrent();

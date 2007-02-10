@@ -113,6 +113,9 @@ abstract public class GenericInterpreter implements Interpreter {
 		_owner = owner;
 		_zslang = zslang;
 	}
+	/** Does nothing. */
+	public void destroy() {
+	}
 
 	/** Handles the namespace and then invoke {@link #exec}.
 	 * <p>Don't override this method, rather, override {@link #exec}.

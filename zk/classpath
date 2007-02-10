@@ -8,3 +8,4 @@
 ../dist/lib/ext/bsf.jar
 ../dist/lib/ext/js.jar
 ../dist/lib/ext/groovy.jar
+../dist/lib/ext/jruby.jar

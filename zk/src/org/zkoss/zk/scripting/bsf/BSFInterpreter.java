@@ -52,6 +52,10 @@ public class BSFInterpreter extends NamespacelessInterpreter {
 			throw new UiException(ex);
 		}
 	}
+	public void destroy() {
+		super.destroy();
+		_manager = null;
+	}
 
 	//NamespacelessInterpreter//
 	protected void exec(String script) {

@@ -37,6 +37,10 @@ public interface Interpreter {
 	 * @param zslang the language this interpreter is associated with
 	 */
 	public void init(Page owner, String zslang);
+	/** Called when the interpreter is about to be detroyed.
+	 * After called, this interpreter cannot be used again.
+	 */
+	public void destroy();
 
 	/** Evaluates the script against the specified namespace.
 	 *

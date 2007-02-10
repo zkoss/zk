@@ -113,8 +113,8 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 
-	public void cleanup(Desktop desktop) {
-		if (log.debugable()) log.debug("Cleanup "+desktop);
+	public void desktopDestroyed(Desktop desktop) {
+		if (log.debugable()) log.debug("destroy "+desktop);
 
 		final Configuration conf = desktop.getWebApp().getConfiguration();
 		final Map map;
@@ -151,6 +151,8 @@ public class UiEngineImpl implements UiEngine {
 				}
 			}
 		}
+
+		((DesktopCtrl)desktop).destroy();
 	}
 
 	private static UiVisualizer getCurrentVisualizer() {

@@ -23,6 +23,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<language-name>Java</language-name>
 		<interpreter-class>org.zkoss.zk.scripting.bsh.BSHInterpreter</interpreter-class>
 	</zscript-config>
+
 	<zscript-config>
 		<language-name>JavaScript</language-name>
 		<interpreter-class>org.zkoss.zk.scripting.rhino.RhinoInterpreter</interpreter-class>
@@ -30,8 +31,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			specifying org.zkoss.zk.scripting.bsf.rhino.RhinoInterpreter
 		-->
 	</zscript-config>
+
 	<zscript-config>
 		<language-name>Groovy</language-name>
 		<interpreter-class>org.zkoss.zk.scripting.groovy.GroovyInterpreter</interpreter-class>
+	</zscript-config>
+
+	<zscript-config>
+		<language-name>Ruby</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.jruby.JRubyInterpreter</interpreter-class>
 	</zscript-config>
 </config>

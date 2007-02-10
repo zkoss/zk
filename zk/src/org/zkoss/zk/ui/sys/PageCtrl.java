@@ -38,7 +38,7 @@ import org.zkoss.zk.ui.UiException;
  * @author tomyeh
  */
 public interface PageCtrl {
-	/** Initializes a page by assigning an identifier, a title, and adding it
+	/** Initializes this page by assigning an identifier, a title, and adding it
 	 * to a desktop (by use of {@link Execution#getDesktop}).
 	 *
 	 * <p>This method shall be called only after the current execution
@@ -58,6 +58,10 @@ public interface PageCtrl {
 	 * @param headers the header elements, or null if no header is required.
 	 */
 	public void init(String id, String title, String style, String headers);
+	/** Called when this page is about to be detroyed.
+	 * It is called by desktop, after removing it from the desktop.
+	 */
+	public void destroy();
 
 	/** Returns the (HTML) header elements declared in this page.
 	 */
