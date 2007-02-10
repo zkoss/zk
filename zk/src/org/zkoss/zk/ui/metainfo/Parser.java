@@ -170,7 +170,7 @@ public class Parser {
 				}
 
 				if (!params.isEmpty())
-					pis.add(pi); //process" it later
+					pis.add(pi); //process it later
 			} else if ("import".equals(target)) { //import
 				final Map params = pi.parseData();
 				final String src = (String)params.remove("src");
@@ -269,12 +269,13 @@ public class Parser {
 					throw new UiException("Either the class or zscript attribute must be specified, "+pi.getLocator());
 
 				final ZScript zs;
+				final String zslang = pgdef.getZScriptLanguage();
 				if (zsrc.indexOf("${") >= 0) {
-					zs = new ZScript(null, zsrc, null, getLocator()); //URL in EL
+					zs = new ZScript(zslang, zsrc, null, getLocator()); //URL in EL
 				} else {
 					final URL url = getLocator().getResource(zsrc);
 					if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+pi.getLocator());
-					zs = new ZScript(null, url, null);
+					zs = new ZScript(zslang, url, null);
 				}
 
 				pgdef.addInitiatorDefinition(
@@ -576,8 +577,10 @@ public class Parser {
 			zsrc = el.getAttribute("src");
 
 		String zslang = el.getAttribute("language");
-		if (zslang != null && zslang.length() == 0) zslang = null;
-			//means the default scripting language
+		if (zslang != null && zslang.length() == 0)
+			zslang = parent.getPageDefinition().getZScriptLanguage();
+			//we have to resolve it in parser since a page might be
+			//created by use of createComponents
 
 		final Condition cond = ConditionImpl.getInstance(ifc, unless);
 		if (!isEmpty(zsrc)) {
@@ -702,7 +705,12 @@ public class Parser {
 					bZkAttr = LanguageDefinition.ZK_NAMESPACE.equals(uri);
 			}
 			if (bZkAttr) {
-				instdef.addEventHandler(name, ZScript.parseContent(value, null), cond);
+				final ZScript zscript = ZScript.parseContent(value, null);
+				if (zscript.getLanguage() == null)
+					zscript.setLanguage(
+						instdef.getPageDefinition().getZScriptLanguage());
+						//resolve it here instead of runtime since createComponents
+				instdef.addEventHandler(name, zscript, cond);
 				return; //done
 			}
 		}

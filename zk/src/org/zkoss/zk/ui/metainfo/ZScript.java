@@ -43,7 +43,7 @@ import org.zkoss.zk.scripting.Interpreters;
 public class ZScript implements Condition, java.io.Serializable {
 	private static final Log log = Log.lookup(ZScript.class);
 
-	private final String _zslang;
+	private String _zslang;
 	private final String _cnt;
 	private final Object _url;
 	private final Locator _locator;
@@ -137,6 +137,14 @@ public class ZScript implements Condition, java.io.Serializable {
 	 */
 	public String getLanguage() {
 		return _zslang;
+	}
+	/** Sets the scripting language.
+	 *
+	 * @param zslang the scripting language. If null, the default scripting
+	 * language is assume.
+	 */
+	public void setLanguage(String zslang) {
+		_zslang = zslang;
 	}
 
 	/** Returns the script.
