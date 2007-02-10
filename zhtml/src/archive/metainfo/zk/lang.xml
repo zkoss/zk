@@ -80,6 +80,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		include_class 'org.zkoss.zk.ui.util.Clients'
 		include_package 'org.zkoss.zhtml'
 	end
+	def alert (m)
+		Java::Messagebox.show m
+	end
 	</zscript>
 
 	<!-- Defines the component and attribute names used to represent
