@@ -3,6 +3,7 @@ ZK 2.3.0 Freshly
 * Features:
   1653099: JavaScript support (for zscript)
   1613080: Groovy support (for zscript)
+  1656785: Ruby support (for zscript)
   1621941: BSF support (for zscript)
   1636304: Add Grid footer (foot and footer)
   1639117: Add Tree footer (treefoot and treefooter)
