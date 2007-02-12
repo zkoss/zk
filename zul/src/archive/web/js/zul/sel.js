@@ -292,7 +292,7 @@ zk.Selectable.prototype = {
 		//Bug 1650540: double click as select again
 		//Note: we don't handle if clicking on checkmark, since FF always
 		//toggle and it causes incosistency
-			if (zk.gecko && getZKAttr(row, "dbclk")) {
+			if ((zk.gecko || zk.safari) && getZKAttr(row, "dbclk")) {
 				var now = new Date(), last = row._last;
 				row._last = now;
 				if (last && now - last < 900)
