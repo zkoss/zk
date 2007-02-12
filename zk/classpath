@@ -5,7 +5,6 @@
 ../dist/lib/ext/jsp-api.jar
 ../dist/lib/ext/portlet-api.jar
 ../dist/lib/ext/bsh.jar
-../dist/lib/ext/bsf.jar
 ../dist/lib/ext/js.jar
 ../dist/lib/ext/groovy.jar
 ../dist/lib/ext/jruby.jar
