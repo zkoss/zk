@@ -1718,10 +1718,11 @@ zkau.cmd0 = { //no uuid at all
 			alert(dt1);
 		}
 	},
-	redirect: function (dt0, dt1) {
+	redirect: function (url, target) {
 		try {
-			if (dt1) zk.go(dt0, false, dt1);
-			else document.location.href = dt0;
+			if (target) zk.go(url, false, target);
+			else if (url) document.location.href = url;
+			else document.location.reload();
 		} catch (ex) {
 			if (!zkau.confirmClose) throw ex;
 		}

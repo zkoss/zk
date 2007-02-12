@@ -970,7 +970,9 @@ zk.scrollIntoView = function (outer, inner) {
  * @param target the target frame (ignored if overwrite is true
  */
 zk.go = function (url, overwrite, target) {
-	if (overwrite) {
+	if (!url) {
+		document.location.reload();
+	} else if (overwrite) {
 		document.location.replace(url);
 	} else {
 		//we have to process query string because browser won't do it
