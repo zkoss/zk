@@ -9,7 +9,12 @@ dojoz.jar
 gmapsz.jar
 timelinez.jar
 bsh.jar
+js.jar
+groovy.jar
+jruby.jar
 commons-fileupload.jar
 commons-io.jar
 commons-el.jar
+jfreechart.jar
+jcommon.jar
 json_simple.jar
