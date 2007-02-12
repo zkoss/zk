@@ -38,11 +38,12 @@ ZK 2.3.0 Freshly
   1647572: <splitter open="false" ...> not working
   1649625: listbox inserted to wrong position if refChild is wrong
   1649554: Listbox failed to move an item (IndexOutOfBoundsException)
- 	1641191: AnnotateDataBinder save error
- 	1643148: Bind save-when method problem
- 	1647811: Data Binding: EventListeners get lost...
- 	1647817: Data Binding: DOS with two Listboxes in same page
- 	
+  1641191: AnnotateDataBinder save error
+  1643148: Bind save-when method problem
+  1647811: Data Binding: EventListeners get lost...
+  1647817: Data Binding: DOS with two Listboxes in same page
+  1655128: Nested modal windows positioning problem (again)
+
 * Upgrade Notes:
   + The concept of variables and methods defined in zscript are changed.
     Each interpreter now supports only one logical scope. Variables and methods
