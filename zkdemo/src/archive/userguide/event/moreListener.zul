@@ -51,9 +51,7 @@ uncomment the following zscript.
 				return true;
 			}
 			public void onEvent(Event event) throws UiException {
-				if (event instanceof MouseEvent) {
-					event.target.getFellow("myLabel").setValue("Hello, Event!");
-				}
+				myLabel.value = "Hello, Event!";
 			}
 		}
 		myButton.addEventListener("onClick", new ClickEventListener());
