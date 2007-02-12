@@ -21,12 +21,10 @@ package org.zkoss.zk.scripting;
 import org.zkoss.zk.ui.Page;
 
 /**
- * The interpter used to interpret the zscript codes.
+ * Represents an interpter that can interpret the scripting codes.
  *
- * <p>Interpreters that support {@link Namespace} could derive from
- * {@link org.zkoss.zk.scripting.util.GenericInterpreter}.
- * Interpreters that don't support {@link Namespace} could derive from
- * {@link org.zkoss.zk.scripting.util.NamespacelessInterpreter}.
+ * <p>It is easier to implement by extending
+ * from {@link org.zkoss.zk.scripting.util.GenericInterpreter}.
  *
  * @author tomyeh
  */
@@ -51,12 +49,21 @@ public interface Interpreter {
 
 	/** Evaluates the script against the specified namespace.
 	 *
-	 * <p>Implementation Note: the implementation has to concatenate
-	 * the string returned by {@link LanguageDefinition#getEachTimeScript}
-	 * if not null.
+	 * <p>Implementation Note:
+	 * <ol>
+	 * <li>The implementation has to concatenate
+	 * the string returned by
+	 * {@link org.zkoss.zk.ui.metainfo.LanguageDefinition#getEachTimeScript}
+	 * if not null.</li>
+	 * <li>The implementation must use {@link Namespaces#getCurrent}
+	 * to retrieve the current namesace if the ns argument is null.
 	 *
-	 * @param ns the namespace. If null, it is the same as the name space
-	 * of the owner ({@link #getOwner}).
+	 * @param ns the namspace. If null, the current namespace is assumed.
+	 * The current namespace is the event target's namespace
+	 * ({@link org.zkoss.zk.ui.event.Event#getTarget}),
+	 * if the thread is processing an event.
+	 * Otherwise, the current namespace is the owner page's namespace
+	 * ({@link #getOwner}.
 	 */
 	public void interpret(String script, Namespace ns);
 

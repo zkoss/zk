@@ -130,4 +130,55 @@ public class Namespaces {
 			val != null || ns.getVariableNames().contains(name) ? val: VOID);
 	}
 	private static final Object VOID = new Object();
+
+	/** Returns the current namespace.
+	 * The current namespace is the event target's namespace if this thread
+	 * is processing an event ({@link org.zkoss.zk.ui.event.Event#getTarget}.
+	 * Otherwise, the namespace of the page specified is assumed.
+	 *
+	 * <p>This method is used only to implement {@link org.zkoss.zk.scripting.Interpreter}.
+	 * You rarely need to access it other than implementing an interpreter.
+	 */
+	public static final Namespace getCurrent(Page page) {
+		final List nss = (List)_curnss.get();
+		final Namespace ns =
+			nss != null && !nss.isEmpty() ? (Namespace)nss.get(0): null;
+		return ns != null ? ns: page.getNamespace();
+	}
+	/** Pushes the specified namespace as the current namespace.
+	 *
+	 * <p>It must be called as follows.
+	 * <pre><code>
+Namespaces.pushCurrent(ns);
+try {
+	...
+} finally {
+	Namespaces.pop();
+}
+	 </code></pre>
+	 *
+	 * <p>Application developer rarely needs to call this method, unless
+	 * he wants to simulate the context of a particular namespace
+	 * for interpreter to evaluate (mostly methods of classes defined
+	 * in scripting codes).
+	 *
+	 * @param ns the namespace. If null, it means page's namespace.
+	 */
+	public static final void pushCurrent(Namespace ns) {
+		List nss = (List)_curnss.get();
+		if (nss == null)
+			_curnss.set(nss = new LinkedList());
+		nss.add(0, ns);
+	}
+	/** Pops the current namespce (pushed by {@link #pushCurrent}).
+	 */
+	public static final void popCurrent() {
+		final List nss = (List)_curnss.get();
+		if (nss == null || nss.isEmpty())
+			log.error("Illegal popCurrent: empty stack");
+		nss.remove(0);
+	}
+
+	/** A stack of current namespace. */
+	private static final ThreadLocal _curnss = new ThreadLocal();
 }

@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.sys.PageCtrl;
 
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.NamespaceChangeListener;
 
@@ -44,7 +45,7 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  */
 abstract public class GenericInterpreter implements Interpreter {
 	/** A list of {@link Namespace}.
-	 * Top of it is the active one (may be null).
+	 * Top of it is the current one (if null, it means Namespaces.getCurrent)
 	 */
 	private final List _nss = new LinkedList();
 	private Page _owner;
@@ -122,12 +123,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * when the real interpreter failed to find a variable in its own scope.
 	 */
 	protected Object getFromNamespace(String name) {
-		Namespace ns = getActive();
-		if (ns == null) ns = _owner.getNamespace();
-			//we assume owner's namespace if null, because zscript might
-			//define a class that will be invoke thru, say, event listener
-			//In other words, interpret is not called, so ns is not specified
-
+		final Namespace ns = getCurrent();
 		final Object v = ns.getVariable(name, false);
 		return v != null || ns.containsVariable(name, false) ?
 			v: ((PageCtrl)_owner).resolveVariable(name);
@@ -183,7 +179,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	public Object getVariable(String name, boolean ignoreNamespace) {
 		beforeExec();
 		if (ignoreNamespace) push(_emptyns);
-			//don't use null since it means _owner's namespace
+			//don't use null since it means Namespaces#getCurrent, see below
 		try {
 			return get(name);
 		} finally {
@@ -226,9 +222,15 @@ abstract public class GenericInterpreter implements Interpreter {
 	private void pop() {
 		_nss.remove(0);
 	}
-	/** Returns the active namespace.
+	/** Returns the current namespace, never null.
+	 *
+	 * <p>This method will handle {Namespace#getCurrent} automatically.
 	 */
-	protected Namespace getActive() {
-		return _nss.isEmpty() ? null: (Namespace)_nss.get(0);
+	protected Namespace getCurrent() {
+		Namespace ns = _nss.isEmpty() ? null: (Namespace)_nss.get(0);
+		return ns != null ? ns: Namespaces.getCurrent(_owner);
+			//we assume owner's namespace if null, because zscript might
+			//define a class that will be invoke thru, say, event listener
+			//In other words, interpret is not called, so ns is not specified
 	}
 }

@@ -471,11 +471,14 @@ public class EventProcessingThread extends Thread {
 		//keep built-in variables as long as possible
 		final HashMap backup = new HashMap();
 		final Namespace ns = Namespaces.beforeInterpret(backup, _comp);
+		Namespaces.pushCurrent(ns);
+			//we have to push since process1 might invoke methods from zscript class
 		try {
 			Namespaces.backupVariable(backup, ns, "event");
 			ns.setVariable("event", _event, true);
 			process1(ns);
 		} finally {
+			Namespaces.popCurrent();
 			Namespaces.afterInterpret(backup, ns);
 		}
 	}

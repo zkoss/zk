@@ -386,7 +386,11 @@ public interface Page extends IdSpace {
 	 *
 	 * @param zslang the scripting language. If null, {@link #getZScriptLanguage}
 	 * is assumed.
-	 * @param ns the namspace. If null, the page's namespace is assumed.
+	 * @param ns the namspace. If null, the current namespace is assumed.
+	 * The current namespace is the event target's namespace
+	 * ({@link org.zkoss.zk.ui.event.Event#getTarget}),
+	 * if the thread is processing an event.
+	 * Otherwise, the current namespace is this page's namespace
 	 */
 	public void interpret(String zslang, String script, Namespace ns);
 	/** Returns the interpreter of the specified scripting language.
