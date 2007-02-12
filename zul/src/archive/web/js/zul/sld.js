@@ -55,11 +55,11 @@ zk.Slider.prototype = {
 		}
 		this._fixPos();
 	},
-	/** (x, y) is in the style's coordination (use zk.toStylePos to convert).
+	/** (x, y) is in the style's coordination (use zk.toStyleOffset to convert).
 	 */
 	_snap: function (x, y) {
 		var ofs = Position.cumulativeOffset(this.element);
-		ofs = zk.toStylePos(this.button, ofs[0], ofs[1]);
+		ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
 			x = ofs[0];
 		} else {
@@ -78,7 +78,7 @@ zk.Slider.prototype = {
 		var wd = this._width();
 		var x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0;
 		var ofs = Position.cumulativeOffset(this.element);
-		ofs = zk.toStylePos(this.button, ofs[0], ofs[1]);
+		ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);
 		ofs = this._snap(ofs[0] + x, 0);
 		this.button.style.left = ofs[0] + "px";
 	},

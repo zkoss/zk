@@ -172,7 +172,7 @@ zkVld._errbox = function () {
 
 		box.style.display = "block"; //we need to calculate the size
 		if (atTop) ofs[1] -= box.offsetHeight + 1;
-		ofs = zk.toParentOffset(box, ofs[0], ofs[1]);
+		ofs = zk.toStyleOffset(box, ofs[0], ofs[1]);
 		box.style.left = ofs[0] + "px"; box.style.top = ofs[1] + "px";
 	} else {
 		box.style.display = "block"; //we need to calculate the size
@@ -325,7 +325,7 @@ zkVld._uncover = function (box, el, ctag) {
 				elofs[1] + el.offsetHeight: elofs[1] - box.offsetHeight;
 		}
 
-		var ofs = zk.toParentOffset(box, 0, y);
+		var ofs = zk.toStyleOffset(box, 0, y);
 		box.style.top = ofs[1] + "px";
 		zkVld._fiximg(box);
 	}

@@ -145,7 +145,7 @@ zkSplt._snap = function (cmp, x, y) {
 	if (drag) {
 		var run = drag.run;
 		var ofs = Position.cumulativeOffset(run.box);
-		ofs = zk.toStylePos(cmp, ofs[0], ofs[1]);
+		ofs = zk.toStyleOffset(cmp, ofs[0], ofs[1]);
 		if (drag.vert) {
 			if (y <= ofs[1]) {
 				y = ofs[1];
