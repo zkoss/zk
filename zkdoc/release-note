@@ -44,6 +44,7 @@ ZK 2.3.0 Freshly
   1647817: Data Binding: DOS with two Listboxes in same page
   1655128: Nested modal windows positioning problem (again)
   1650585: onOK event missing for combobox with autodrop="true" (IE)
+  1657764: Combobox with autodrop won't close dropdown (FF)
 
 * Upgrade Notes:
   + The concept of variables and methods defined in zscript are changed.
