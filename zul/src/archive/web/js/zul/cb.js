@@ -23,8 +23,7 @@ zkCmbox = {};
 zkCmbox.init = function (cmp) {
 	var inp = $real(cmp);
 	zkTxbox.init(inp);
-	zk.listen(inp, zk.ie ? "keydown": "keypress", zkCmbox.onkey);
-		//IE: use keydown. otherwise, it causes the window to scroll
+	zk.listen(inp, "keydown", zkCmbox.onkey);
 	zk.listen(inp, "click", function () {if (inp.readOnly && !zk.dragging) zkCmbox.onbutton(cmp);});
 		//To mimic SELECT, it drops down if readOnly
 
