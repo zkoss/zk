@@ -1301,7 +1301,7 @@ zkau.cleandrag = function (n) {
 	}
 };
 zkau.initdrop = function (n) {
-	zkau._drops.push(n);
+	zkau._drops.unshift(n); //last created, first matched
 };
 zkau.cleandrop = function (n) {
 	zkau._drops.remove(n);
@@ -1373,6 +1373,7 @@ zkau._sendDrop = function (dragged, dropped, x, y, keys) {
 };
 zkau._getDrop = function (cmp, pointer) {
 	var dragType = getZKAttr(cmp, "drag");
+	var found = null;
 	l_next:
 	for (var j = 0; j < zkau._drops.length; ++j) {
 		var e = zkau._drops[j];
@@ -1390,10 +1391,11 @@ zkau._getDrop = function (cmp, pointer) {
 				k = l + 1;
 			}
 		}
-		if (Position.withinIncludingScrolloffsets(e, pointer[0], pointer[1]))
-			return e;
+		if (Position.withinIncludingScrolloffsets(e, pointer[0], pointer[1])
+		&& (!found || found.style.zIndex < e.style.zIndex))
+				found = e;
 	}
-	return null;
+	return found;
 };
 zkau._cleanLastDrop = function (dg) {
 	if (dg && dg.zk_lastDrop) {
