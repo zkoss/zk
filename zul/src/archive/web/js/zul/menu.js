@@ -139,10 +139,14 @@ zkMenu.open = function (menu, toggle) {
 		return;
 	}
 
-	var top = getZKAttr(menu, "top") == "true"; //top-level menu
-	var ref = top || $tag(menu) != "TD" ? menu: menu.parentNode; //use TR if not top
-	var pos = top && getZKAttr(menu, "vert") == null ? "after-start": "end_before";
-	zkMenu._open(pp, top, ref, pos);
+	if (pp.style.display == "none") {
+		var top = getZKAttr(menu, "top") == "true"; //top-level menu
+		var ref = top || $tag(menu) != "TD" ? menu: menu.parentNode; //use TR if not top
+		var pos = top && getZKAttr(menu, "vert") == null ? "after-start": "end_before";
+		if (getZKAttr(pp, "onOpen"))
+			zkau.send({uuid: pp.id, cmd: "onOpen", data: [true, menu.id]});
+		zkMenu._open(pp, top, ref, pos);
+	}
 };
 /** Opens the specified menupopup
  * @param pp menupopup
@@ -151,10 +155,6 @@ zkMenu.open = function (menu, toggle) {
  * @param pos how to position the menu
  */
 zkMenu._open = function (pp, top, ref, pos) {
-	var visible = pp.style.display != "none";
-	if (visible)
-		return; //nothing to do
-
 	/* not yet: we have to adjust CSS and some codes
 	if (zk.gecko) { //Bug 1486840
 		setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
@@ -269,7 +269,9 @@ zkMpop = {};
 
 /** Called by au.js's context menu. */
 zkMpop.context = function (ctx, ref) {
-	if (getZKAttr(ctx, "onOpen"))
-		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
-	zkMenu._open(ctx, true);
+	if (ctx.style.display == "none") {
+		if (getZKAttr(ctx, "onOpen"))
+			zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
+		zkMenu._open(ctx, true);
+	}
 };

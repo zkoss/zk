@@ -31,8 +31,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * A container used to display menus. It should be placed inside a
  * {@link Menu}.
  *
- * <p>Four events: onPopupHiding, onPupupHidden, onPopupShowing
- * and onPopupShown.
+ * <p>Supported event: onOpen.
  *
  * <p>Default {@link #getSclass}: menupopup.
  *
