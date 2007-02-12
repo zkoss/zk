@@ -138,6 +138,8 @@ zkVld._errbox = function () {
 		inp.style.backgroundColor = "#ffd8c8";
 	}
 
+	if (!zk.isRealVisible(cmp)) return; //don't show the erro box
+
 	html = '<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
 		+boxid+'" style="display:none;position:absolute" class="errbox"><div>'
 		+'<table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'

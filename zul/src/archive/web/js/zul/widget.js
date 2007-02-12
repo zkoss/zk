@@ -36,6 +36,10 @@ zkTxbox.init = function (cmp) {
 		if (old != cmp.value) cmp.value = old; //Bug 1490079
 	}
 };
+zkTxbox.onHide = function (cmp) {
+	var inp = $real(cmp);
+	if (inp) zkVld.closeErrbox(inp.id);
+};
 
 /** Handles onblur for text input.
  * Note: we don't use onChange because it won't work if user uses IE' auto-fill
@@ -163,6 +167,7 @@ zkTxbox._scanChanging = function (id) {
 //intbox//
 zkInbox = {};
 zkInbox.init = zkTxbox.init;
+zkInbox.onHide = zkTxbox.onHide;
 zkInbox.validate = function (cmp) {
 	return zkVld.onlyInt(cmp.id);
 };
@@ -171,6 +176,7 @@ zkInbox.validate = function (cmp) {
 //decimalbox//
 zkDcbox = {};
 zkDcbox.init = zkTxbox.init;
+zkDcbox.onHide = zkTxbox.onHide;
 zkDcbox.validate = function (cmp) {
 	return zkVld.onlyNum(cmp.id);
 };
@@ -179,6 +185,7 @@ zkDcbox.validate = function (cmp) {
 //doublebox//
 zkDbbox = {};
 zkDbbox.init = zkTxbox.init;
+zkDbbox.onHide = zkTxbox.onHide;
 zkDbbox.validate = function (cmp) {
 	return zkVld.onlyNum(cmp.id);
 };

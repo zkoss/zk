@@ -35,6 +35,7 @@ zkCmbox.init = function (cmp) {
 	else if (zk.gecko) btn.style.verticalAlign = "middle";
 	else btn.align = "absmiddle";
 };
+zkCmbox.onHide = zkTxbox.onHide;
 
 zkCmit = {};
 zkCmit.init = function (cmp) {

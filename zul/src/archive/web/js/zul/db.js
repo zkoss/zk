@@ -342,6 +342,7 @@ zkDtbox.init = function (cmp) {
 	if (btn) zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp);});
 	btn.align = "absmiddle";
 };
+zkDtbox.onHide = zkTxbox.onHide;
 zkDtbox.validate = function (cmp) {
 	var inp = $e(cmp.id+"!real");
 	if (inp.value) {
