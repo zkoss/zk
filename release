@@ -160,8 +160,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#Fileupload
 	cp dist/lib/ext/bsh.jar /tmp/zk/$prjnm/dist/lib/ext
 		#BeanShell
-	cp dist/lib/ext/bsf.jar /tmp/zk/$prjnm/dist/lib/ext
-		#BSF
 	cp dist/lib/ext/js.jar /tmp/zk/$prjnm/dist/lib/ext
 		#JavaScript (rhino)
 	cp dist/lib/ext/groovy.jar /tmp/zk/$prjnm/dist/lib/ext
