@@ -182,7 +182,7 @@ zk.center = function (el) {
 	if (x < left) x = left;
 	if (y < top) y = top;
 
-	var ofs = zk.toParentOffset(el, x, y);
+	var ofs = zk.toStyleOffset(el, x, y);
 	el.style.left = ofs[0] + "px";
 	el.style.top =  ofs[1] + "px";
 };
@@ -254,21 +254,10 @@ zk.position = function (el, ref, type) {
 
 	if (x < scx) x = scx;
 	if (y < scy) y = scy;
-	refofs = zk.toStylePos(el, x, y);
+	refofs = zk.toStyleOffset(el, x, y);
 	el.style.left = refofs[0] + "px"; el.style.top = refofs[1] + "px";
 };
 
-/** Converts to coordination related to the containing element.
- * This is useful if you need to specify el.style.left or top.
- */
-zk.toParentOffset = function (el, x, y) {
-	var p = Position.offsetParent(el);
-	if (p) {
-		var refofs = Position.positionedOffset(p);
-		x -= refofs[0]; y -= refofs[1];
-	}
-	return [x, y];
-};
 /** Returns the style's coordination in [integer, integer].
  * Note: it ignores the unit and assumes px (so pt or others will be wrong)
  */
@@ -281,7 +270,7 @@ zk.getStyleOffset = function (el) {
  * after calling Draggable, offsetParent becomes BODY but
  * style.left/top is still relevant to original offsetParent
  */
-zk.toStylePos = function (el, x, y) {
+zk.toStyleOffset = function (el, x, y) {
 	var fixleft, fixtop;
 	if (zk.opera) {
 		//Opera:
@@ -291,7 +280,7 @@ zk.toStylePos = function (el, x, y) {
 		//test case: menu
 		el.style.left = el.style.top = "0";
 	} else {
-		//IE/gecko fix: otherwise, toStylePos won't correct
+		//IE/gecko fix: otherwise, zk.toStyleOffset won't correct
 		fixleft = el.style.left == "" || el.style.left == "auto";
 		if (fixleft) el.style.left = "0";
 		fixtop = el.style.top == "" || el.style.top == "auto";

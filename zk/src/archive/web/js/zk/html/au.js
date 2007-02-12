@@ -874,7 +874,7 @@ zkau._autopos = function (el, x, y) {
 		if (y < scy) y = scy;
 	}
 
-	ofs = zk.toStylePos(el, x, y);
+	ofs = zk.toStyleOffset(el, x, y);
 	el.style.left = ofs[0] + "px";
 	el.style.top = ofs[1] + "px";
 };
