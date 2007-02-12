@@ -27,9 +27,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<zscript-config>
 		<language-name>JavaScript</language-name>
 		<interpreter-class>org.zkoss.zk.scripting.rhino.RhinoInterpreter</interpreter-class>
-		<!-- Alternatively, you can use BSF-based Rhino interpreter by
-			specifying org.zkoss.zk.scripting.bsf.rhino.RhinoInterpreter
-		-->
 	</zscript-config>
 
 	<zscript-config>

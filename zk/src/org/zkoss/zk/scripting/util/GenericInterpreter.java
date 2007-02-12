@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting.util;
 
+import java.util.Set;
+import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -27,6 +29,7 @@ import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Method;
+import org.zkoss.zk.scripting.NamespaceChangeListener;
 
 /**
  * A skeletal class for implementing a interpreter ({@link Interpreter}) that
@@ -46,6 +49,33 @@ abstract public class GenericInterpreter implements Interpreter {
 	private final List _nss = new LinkedList();
 	private Page _owner;
 	private String _zslang;
+
+	private static final Namespace _emptyns = new Namespace() {
+		public Set getVariableNames() {
+			return Collections.EMPTY_SET;
+		}
+		public boolean containsVariable(String name, boolean local) {
+			return false;
+		}
+		public Object getVariable(String name, boolean local) {
+			return null;
+		}
+		public void setVariable(String name, Object value, boolean local) {
+		}
+		public void unsetVariable(String name, boolean local) {
+		}
+		public Namespace getParent() {
+			return null;
+		}
+		public void setParent(Namespace parent) {
+		}
+		public boolean addChangeListener(NamespaceChangeListener listener) {
+			return false;
+		}
+		public boolean removeChangeListener(NamespaceChangeListener listener) {
+			return false;
+		}
+	};
 
 	protected GenericInterpreter() {
 	}
@@ -85,16 +115,6 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 
 	//utilities//
-	/** Returns the owner.
-	 */
-	public Page getOwner() {
-		return _owner;
-	}
-	/** Returns the scripting language this interpreter is associated with.
-	 */
-	public String getZScriptLanguage() {
-		return _zslang;
-	}
 	/** Locates and returns the variable through namespaces and
 	 * variable resolvers.
 	 *
@@ -102,9 +122,14 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * when the real interpreter failed to find a variable in its own scope.
 	 */
 	protected Object getFromNamespace(String name) {
-		final Namespace ns = getActive();
-		final Object v = ns != null ? ns.getVariable(name, false): null;
-		return v != null || (ns != null && ns.containsVariable(name, false)) ?
+		Namespace ns = getActive();
+		if (ns == null) ns = _owner.getNamespace();
+			//we assume owner's namespace if null, because zscript might
+			//define a class that will be invoke thru, say, event listener
+			//In other words, interpret is not called, so ns is not specified
+
+		final Object v = ns.getVariable(name, false);
+		return v != null || ns.containsVariable(name, false) ?
 			v: ((PageCtrl)_owner).resolveVariable(name);
 	}
 
@@ -115,6 +140,12 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 	/** Does nothing. */
 	public void destroy() {
+	}
+	public Page getOwner() {
+		return _owner;
+	}
+	public String getLanguage() {
+		return _zslang;
 	}
 
 	/** Handles the namespace and then invoke {@link #exec}.
@@ -127,7 +158,7 @@ abstract public class GenericInterpreter implements Interpreter {
 			script = each + '\n' + script;
 
 		beforeExec();
-		push(ns);
+		push(ns); //getFromNamespace will handle null
 		try {
 			exec(script);
 		} finally {
@@ -151,7 +182,8 @@ abstract public class GenericInterpreter implements Interpreter {
 	 */
 	public Object getVariable(String name, boolean ignoreNamespace) {
 		beforeExec();
-		if (ignoreNamespace) push(null);
+		if (ignoreNamespace) push(_emptyns);
+			//don't use null since it means _owner's namespace
 		try {
 			return get(name);
 		} finally {

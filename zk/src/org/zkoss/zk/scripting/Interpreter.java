@@ -42,16 +42,21 @@ public interface Interpreter {
 	 */
 	public void destroy();
 
+	/** Returns the owner of this interpreter.
+	 */
+	public Page getOwner();
+	/** Returns the scripting language this interpreter is associated with.
+	 */
+	public String getLanguage();
+
 	/** Evaluates the script against the specified namespace.
 	 *
 	 * <p>Implementation Note: the implementation has to concatenate
 	 * the string returned by {@link LanguageDefinition#getEachTimeScript}
 	 * if not null.
 	 *
-	 * @param ns the namespace. Ignored if null.
-	 * Note: Unlike {@link org.zkoss.zk.ui.Page#interpret} which assumes
-	 * {@link org.zkoss.zk.ui.Page#getNamespace}, this method simply
-	 * ignores namespace if null.
+	 * @param ns the namespace. If null, it is the same as the name space
+	 * of the owner ({@link #getOwner}).
 	 */
 	public void interpret(String script, Namespace ns);
 
