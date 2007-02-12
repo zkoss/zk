@@ -47,6 +47,7 @@ ZK 2.3.0 Freshly
   1657764: Combobox with autodrop won't close dropdown (FF)
   1657810: onOpen isn't fire when menu opens menupopup
   1650540: Usability bug:listbox with checkmark="true" multiple="true" (FF/Safari)
+  1647845: Validation popups conflicts with visibility
 
 * Upgrade Notes:
   + The concept of variables and methods defined in zscript are changed.
