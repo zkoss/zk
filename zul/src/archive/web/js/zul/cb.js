@@ -193,8 +193,8 @@ zkCmbox.onkey = function (evt) {
 		return true;
 	}
 
-	if (evt.keyCode == 18 || evt.keyCode == 27
-	|| (evt.keyCode >= 112 && evt.keyCode <= 123)) //ALT and ESC, Fn
+	if (evt.keyCode == 18 || evt.keyCode == 27 || evt.keyCode == 13
+	|| (evt.keyCode >= 112 && evt.keyCode <= 123)) //ALT, ESC, Enter, Fn
 		return true; //ignore it (doc will handle it)
 
 	var bCombobox = $type(cb) == "Cmbox";
