@@ -49,6 +49,7 @@ ZK 2.3.0 Freshly
   1650540: Usability bug:listbox with checkmark="true" multiple="true" (FF/Safari)
   1647845: Validation popups conflicts with visibility
   1649718: Droppable attributes suppress each other
+  1639707: A way to determine whether there's any suspended thread
 
 * Upgrade Notes:
   + The concept of variables and methods defined in zscript are changed.
