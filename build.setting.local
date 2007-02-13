@@ -6,5 +6,4 @@ debug=true
 optimize=true
 jboss.deploy=potix/deploy1
 start.service=Apache Tomcat
-version=2.3.0-FL
-sub-version=
+version=2.3.0-RC

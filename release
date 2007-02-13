@@ -27,18 +27,11 @@ if [ "$javadocdir" = "" ] ; then
 fi
 javadocdir=${javadocdir/\~/$HOME}
 
+ver=$(grep '^version=' build.setting.local)
+ver=${ver#version=}
+
 #jar
 if [ "$target" == "official" ] ; then
-	majorver=$(grep '^version=' build.setting.local)
-	majorver=${majorver#version=}
-	subver=$(grep '^sub-version=' build.setting.local)
-	subver=${subver#sub-version=}
-	if [ "$subver" = "" ] ; then
-		ver=${majorver}
-	else
-		ver=${majorver}-${subver}
-	fi
-
 	prjnm=zk-$ver
 	demonm=zk-demo-$ver
 	javadocnm=zk-javadoc-$ver
@@ -46,9 +39,6 @@ if [ "$target" == "official" ] ; then
 	echo "Release $prjnm..."
 elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
 	target=daily
-	majorver=$(grep '^version=' build.setting.local)
-	majorver=${majorver#version=}
-	ver=$majorver
 
 	prjnm=zk-$ver-$stamp
 	javadocnm=zk-javadoc-$ver-$stamp
