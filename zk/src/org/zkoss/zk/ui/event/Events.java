@@ -28,7 +28,8 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zk.ui.impl.EventProcessingThread;
+import org.zkoss.zk.ui.sys.EventProcessingThread;
+import org.zkoss.zk.ui.impl.EventProcessingThreadImpl;
 import org.zkoss.zk.au.AuRequest;
 
 /**
@@ -201,10 +202,10 @@ public class Events {
 	 */
 	public static void sendEvent(Component comp, Event event) {
 		final Thread thd = (Thread)Thread.currentThread();
-		if (!(thd instanceof EventProcessingThread))
+		if (!(thd instanceof EventProcessingThreadImpl))
 			throw new UiException("Callable only when processing an event");
 		try {
-			((EventProcessingThread)thd).sendEvent(comp, event);
+			((EventProcessingThreadImpl)thd).sendEvent(comp, event);
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}

@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
+import java.util.Collection;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -59,14 +60,14 @@ import org.zkoss.zk.au.*;
 public class UiEngineImpl implements UiEngine {
 	private static final Log log = Log.lookup(UiEngineImpl.class);
 
-	/** A pool of idle EventProcessingThread. */
+	/** A pool of idle EventProcessingThreadImpl. */
 	private final List _evtthds = new LinkedList();
 	/** A map of suspended processing:
-	 * (Desktop desktop, IdentityHashMap(Object mutex, List(EventProcessingThread)).
+	 * (Desktop desktop, IdentityHashMap(Object mutex, List(EventProcessingThreadImpl)).
 	 */
 	private final Map _suspended = new HashMap();
 	/** A map of resumed processing
-	 * (Desktop desktop, List(EventProcessingThread)).
+	 * (Desktop desktop, List(EventProcessingThreadImpl)).
 	 */
 	private final Map _resumed = new HashMap();
 	/** The maximal allowed # of event handling threads.*/
@@ -84,7 +85,7 @@ public class UiEngineImpl implements UiEngine {
 	public void stop(WebApp wapp) {
 		synchronized (_evtthds) {
 			for (Iterator it = _evtthds.iterator(); it.hasNext();)
-				((EventProcessingThread)it.next()).cease();
+				((EventProcessingThreadImpl)it.next()).cease();
 			_evtthds.clear();
 		}
 
@@ -95,7 +96,7 @@ public class UiEngineImpl implements UiEngine {
 					for (Iterator i2 = map.values().iterator(); i2.hasNext();) {
 						final List list = (List)i2.next();
 						for (Iterator i3 = list.iterator(); i3.hasNext();)
-							((EventProcessingThread)i3.next()).cease();
+							((EventProcessingThreadImpl)i3.next()).cease();
 					}
 				}
 			}
@@ -106,11 +107,19 @@ public class UiEngineImpl implements UiEngine {
 				final List list = (List)it.next();
 				synchronized (list) {
 					for (Iterator i2 = list.iterator(); i2.hasNext();)
-						((EventProcessingThread)i2.next()).cease();
+						((EventProcessingThreadImpl)i2.next()).cease();
 				}
 			}
 			_resumed.clear();
 		}
+	}
+	public Collection getSuspendedThreads(Desktop desktop) {
+		final Map map;
+		synchronized (_suspended) {
+			map = (Map)_suspended.get(desktop);
+		}
+		if (map == null) return Collections.EMPTY_LIST;
+		return Collections.synchronizedMap(map).values();
 	}
 
 	public void desktopDestroyed(Desktop desktop) {
@@ -126,8 +135,8 @@ public class UiEngineImpl implements UiEngine {
 				for (Iterator it = map.values().iterator(); it.hasNext();) {
 					final List list = (List)it.next();
 					for (Iterator i2 = list.iterator(); i2.hasNext();) {
-						final EventProcessingThread evtthd =
-							(EventProcessingThread)i2.next();
+						final EventProcessingThreadImpl evtthd =
+							(EventProcessingThreadImpl)i2.next();
 						evtthd.ceaseSilently();
 						conf.invokeEventThreadResumeAborts(
 							evtthd.getComponent(), evtthd.getEvent());
@@ -143,8 +152,8 @@ public class UiEngineImpl implements UiEngine {
 		if (list != null) {
 			synchronized (list) {
 				for (Iterator it = list.iterator(); it.hasNext();) {
-					final EventProcessingThread evtthd =
-						(EventProcessingThread)it.next();
+					final EventProcessingThreadImpl evtthd =
+						(EventProcessingThreadImpl)it.next();
 					evtthd.ceaseSilently();
 					conf.invokeEventThreadResumeAborts(
 						evtthd.getComponent(), evtthd.getEvent());
@@ -692,11 +701,11 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException("null mutex");
 
 		final Thread thd = Thread.currentThread();
-		if (!(thd instanceof EventProcessingThread))
+		if (!(thd instanceof EventProcessingThreadImpl))
 			throw new UiException("This method can be called only in an event listener, not in paging loading.");
 		if (D.ON && log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
 
-		final EventProcessingThread evtthd = (EventProcessingThread)thd;
+		final EventProcessingThreadImpl evtthd = (EventProcessingThreadImpl)thd;
 		evtthd.newEventThreadSuspends(mutex);
 			//it may throw an exception, so process it before updating _suspended
 
@@ -718,7 +727,7 @@ public class UiEngineImpl implements UiEngine {
 			list.add(evtthd);
 		}
 		try {
-			EventProcessingThread.doSuspend(mutex);
+			EventProcessingThreadImpl.doSuspend(mutex);
 		} catch (Throwable ex) {
 			//error recover
 			synchronized (map) {
@@ -743,16 +752,16 @@ public class UiEngineImpl implements UiEngine {
 		final Map map;
 		synchronized (_suspended) {
 			map = (Map)_suspended.get(desktop);
-			if (map == null) return; //nothing to notify
 		}
+		if (map == null) return; //nothing to notify
 
-		final EventProcessingThread evtthd;
+		final EventProcessingThreadImpl evtthd;
 		synchronized (map) {
 			final List list = (List)map.get(mutex);
 			if (list == null) return; //nothing to notify
 
 			//Note: list is never empty
-			evtthd = (EventProcessingThread)list.remove(0);
+			evtthd = (EventProcessingThreadImpl)list.remove(0);
 			if (list.isEmpty()) map.remove(mutex); //clean up
 		}
 		addResumed(desktop, evtthd);
@@ -770,8 +779,8 @@ public class UiEngineImpl implements UiEngine {
 		final Map map;
 		synchronized (_suspended) {
 			map = (Map)_suspended.get(desktop);
-			if (map == null) return; //nothing to notify
 		}
+		if (map == null) return; //nothing to notify
 
 		final List list;
 		synchronized (map) {
@@ -779,10 +788,10 @@ public class UiEngineImpl implements UiEngine {
 			if (list == null) return; //nothing to notify
 		}
 		for (Iterator it = list.iterator(); it.hasNext();)
-			addResumed(desktop, (EventProcessingThread)it.next());
+			addResumed(desktop, (EventProcessingThreadImpl)it.next());
 	}
 	/** Adds to _resumed */
-	private void addResumed(Desktop desktop, EventProcessingThread evtthd) {
+	private void addResumed(Desktop desktop, EventProcessingThreadImpl evtthd) {
 		if (D.ON && log.finerable()) log.finer("Ready to resume "+evtthd);
 		List list;
 		synchronized (_resumed) {
@@ -809,8 +818,8 @@ public class UiEngineImpl implements UiEngine {
 
 			synchronized (list) {
 				for (Iterator it = list.iterator(); it.hasNext();) {
-					final EventProcessingThread evtthd =
-						(EventProcessingThread)it.next();
+					final EventProcessingThreadImpl evtthd =
+						(EventProcessingThreadImpl)it.next();
 					if (D.ON && log.finerable()) log.finer("Resume "+evtthd);
 					if (uv.isAborting()) {
 						evtthd.ceaseSilently();
@@ -838,14 +847,14 @@ public class UiEngineImpl implements UiEngine {
 			return; //nothing to do
 		}
 
-		EventProcessingThread evtthd = null;
+		EventProcessingThreadImpl evtthd = null;
 		synchronized (_evtthds) {
 			if (!_evtthds.isEmpty())
-				evtthd = (EventProcessingThread)_evtthds.remove(0);
+				evtthd = (EventProcessingThreadImpl)_evtthds.remove(0);
 		}
 
 		if (evtthd == null)
-			evtthd = new EventProcessingThread();
+			evtthd = new EventProcessingThreadImpl();
 
 		try {
 			if (evtthd.processEvent(comp, event))
@@ -855,7 +864,7 @@ public class UiEngineImpl implements UiEngine {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	private void recycleEventThread(EventProcessingThread evtthd) {
+	private void recycleEventThread(EventProcessingThreadImpl evtthd) {
 		if (!evtthd.isCeased()) {
 			if (evtthd.isIdle()) {
 				synchronized (_evtthds) {

@@ -1,4 +1,4 @@
-/* EventProcessingThread.java
+/* EventProcessingThreadImpl.java
 
 {{IS_NOTE
 	Purpose:
@@ -42,6 +42,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
@@ -57,8 +58,9 @@ import org.zkoss.zk.scripting.Namespaces;
  * 
  * @author tomyeh
  */
-public class EventProcessingThread extends Thread {
-	private static final Log log = Log.lookup(EventProcessingThread.class);
+public class EventProcessingThreadImpl extends Thread
+implements EventProcessingThread {
+	private static final Log log = Log.lookup(EventProcessingThreadImpl.class);
 
 	/** Part of the command: component to handle the event. */
 	private Component _comp;
@@ -95,44 +97,27 @@ public class EventProcessingThread extends Thread {
 	/** Whether it is suspended. */
 	private transient boolean _suspended;
 
-	public EventProcessingThread() {
+	public EventProcessingThreadImpl() {
 		if (log.debugable()) log.debug("Starting an event processing thread");
 		Threads.setDaemon(this, true);
 		start();
 	}
 
-	/** Returns the number of event threads.
-	 */
-	public static final int getThreadNumber() {
-		return _nThd;
-	}
-	/** Returns the number of event threads in processing.
-	 */
-	public static final int getThreadNumberInProcessing() {
-		return _nBusyThd;
-	}
-
-	/** Returns whether it is ceased.
-	 */
+	//EventProcessingThread//
 	public boolean isCeased() {
 		return _ceased;
 	}
-	/** Returns whether this thread is idle, i.e., not processing any event.
-	 */
 	synchronized public boolean isIdle() {
 		return _event == null;
 	}
-	/** Returns the event being processed by this thread, or null if idle.
-	 */
 	public final Event getEvent() {
 		return _event;
 	}
-	/** Returns the component being processed by this thread, or null if idle.
-	 */
 	public final Component getComponent() {
 		return _comp;
 	}
 
+	//extra utilities//
 	/** Stops the thread. Called only by {@link org.zkoss.zk.ui.sys.UiEngine}
 	 * when it is stopping.
 	 */
@@ -148,13 +133,24 @@ public class EventProcessingThread extends Thread {
 		}
 	}
 	/** Stops the thread silently. Called by {@link org.zkoss.zk.ui.sys.UiEngine}
-	 * to stop abnormal
-	 * page.
+	 * to stop abnormally.
 	 */
 	public void ceaseSilently() {
 		_silent = true;
 		cease();
 	}
+
+	/** Returns the number of event threads.
+	 */
+	public static final int getThreadNumber() {
+		return _nThd;
+	}
+	/** Returns the number of event threads in processing.
+	 */
+	public static final int getThreadNumberInProcessing() {
+		return _nBusyThd;
+	}
+
 	/** Suspends the current thread and Waits until {@link #doResume}
 	 * is called.
 	 *
@@ -164,12 +160,12 @@ public class EventProcessingThread extends Thread {
 	 * <li>Caller must invoke {@link #newEventThreadSuspends}
 	 * before calling this method. (Reason: UiEngine might have to store some info
 	 * after {@link #newEventThreadSuspends} is called.
-	 * <li>The current thread must be {@link EventProcessingThread}.
+	 * <li>The current thread must be {@link EventProcessingThreadImpl}.
 	 * <li>It is a static method.
 	 * </ul>
 	 */
 	/*package*/ static void doSuspend(Object mutex) throws InterruptedException {
-		((EventProcessingThread)Thread.currentThread()).doSuspend0(mutex);
+		((EventProcessingThreadImpl)Thread.currentThread()).doSuspend0(mutex);
 	}
 	private void doSuspend0(Object mutex) throws InterruptedException {
 		if (log.finerable()) log.finer("Suspend event processing; "+_event);
@@ -266,7 +262,7 @@ public class EventProcessingThread extends Thread {
 	 * Recycle it only if true is returned.
 	 */
 	public boolean processEvent(Component comp, Event event) {
-		if (Thread.currentThread() instanceof EventProcessingThread)
+		if (Thread.currentThread() instanceof EventProcessingThreadImpl)
 			throw new IllegalStateException("processEvent cannot be called in an event thread");
 		if (comp == null || event == null)
 			throw new IllegalArgumentException("null");
@@ -444,7 +440,7 @@ public class EventProcessingThread extends Thread {
 		if (D.ON && log.finerable()) log.finer("Process sent event: "+event);
 		if (event == null || comp == null)
 			throw new IllegalArgumentException("Both comp and event must be specified");
-		if (!(Thread.currentThread() instanceof EventProcessingThread))
+		if (!(Thread.currentThread() instanceof EventProcessingThreadImpl))
 			throw new IllegalStateException("Only callable when processing an event");
 		if (_desktop != comp.getDesktop())
 			throw new IllegalStateException("Must in the same desktop");

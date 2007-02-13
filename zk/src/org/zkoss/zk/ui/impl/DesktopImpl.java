@@ -276,6 +276,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public String getCurrentDirectory() {
 		return _dir;
 	}
+	public Collection getSuspendedThreads() {
+		return ((WebAppCtrl)_wapp).getUiEngine().getSuspendedThreads(this);
+	}
 
 	//-- DesktopCtrl --//
 	public RequestQueue getRequestQueue() {

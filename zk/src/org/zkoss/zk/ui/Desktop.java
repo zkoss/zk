@@ -159,4 +159,12 @@ public interface Desktop {
 	 * <p>Used mainly for component implementation.
 	 */
 	public String getDynamicMediaURI(Component comp, String pathInfo);
+
+	/** Returns a collection of suspended event processing threads, or empty
+	 * if no suspended thread at all.
+	 *
+	 * <p>An event processing thread is an instance of
+	 * {@link org.zkoss.zk.ui.sys.EventProcessingThread}
+	 */
+	public Collection getSuspendedThreads();
 }

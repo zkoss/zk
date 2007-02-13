@@ -20,6 +20,7 @@ package org.zkoss.zk.ui.sys;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -295,4 +296,12 @@ public interface UiEngine {
 	 * and access components.
 	 */
 	public void deactivate(Execution exec);
+
+	/** Returns a collection of suspended event processing threads, or empty
+	 * if no suspended thread at all.
+	 *
+	 * <p>An event processing thread is an instance of
+	 * {@link EventProcessingThread}
+	 */
+	public Collection getSuspendedThreads(Desktop desktop);
 }
