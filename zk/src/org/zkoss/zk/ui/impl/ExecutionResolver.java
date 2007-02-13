@@ -109,17 +109,17 @@ public class ExecutionResolver implements VariableResolver {
 			Page page = null;
 			if (_self instanceof Component) {
 				final Component comp = (Component)_self;
-				final Object o = comp.getVariable(name, false);
+				final Object o = comp.getZScriptVariable(name);
 				if (o != null)
 					return o;
-				page = comp.getPage();
 			} else if (_self instanceof Page) {
 				page = (Page)_self;
-			}
-			if (page == null)
+			} else {
 				page = ((ExecutionCtrl)_exec).getCurrentPage();
+			}
+
 			if (page != null) {
-				final Object o = page.getVariable(name);
+				final Object o = page.getZScriptVariable(name);
 				if (o != null)
 					return o;
 			}
