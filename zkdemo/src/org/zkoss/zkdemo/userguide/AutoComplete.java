@@ -32,7 +32,7 @@ public class AutoComplete extends Combobox {
 		"abacus", "accuracy", "acuity", "adage", "afar", "after", "apple",
 		"bible", "bird", "bingle", "blog",
 		"cabane", "cape", "cease", "cedar",
-		"dacron", "definable", "defacto", "deluxe",
+		"dacron", "defacto", "definable", "deluxe",
 		"each", "eager", "effect", "efficacy",
 		"far", "far from",
 		"girl", "gigantean", "giant",
@@ -55,6 +55,9 @@ public class AutoComplete extends Combobox {
 		"yea", "yellow",
 		"zebra", "zk",
 	};
+	static {
+		Arrays.sort(_dict);
+	}
 
 	public AutoComplete() {
 		refresh("");
