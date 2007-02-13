@@ -20,6 +20,45 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 if (!window.zk) { //avoid eval twice
 zk = {};
 
+//To prevent user from pressing ESC we disable it as soon as possible//
+/** Listen an event.
+ * Why not to use prototype's Event.observe? Performance.
+ */
+zk.listen = function (el, evtnm, fn) {
+	if (el.addEventListener)
+		el.addEventListener(evtnm, fn, false);
+	else /*if (el.attachEvent)*/
+		el.attachEvent('on' + evtnm, fn);
+};
+/** Un-listen an event.
+ */
+zk.unlisten = function (el, evtnm, fn) {
+	if (el.removeEventListener)
+		el.removeEventListener(evtnm, fn, false);
+	else if (el.detachEvent) {
+		try {
+			el.detachEvent('on' + evtnm, fn);
+		} catch (e) {
+		}
+	}
+};
+zk._noEsc = function (evt) {
+	if (!evt) evt = window.event;
+	if (evt.keyCode == 27) {
+		if (evt.preventDefault) {
+			evt.preventDefault();
+			evt.stopPropagation();
+		} else {
+			evt.returnValue = false;
+			evt.cancelBubble = true;
+		}
+		return false;//eat
+	}
+	return true;
+}
+zk.listen(document, "keydown", zk._noEsc);
+
+//////////////////////////////////////
 /** Default version used for all modules that don't define their individual
  * version.
  */
@@ -304,9 +343,13 @@ zk.ald = function () {
 		}
 	} else {
 		try {
+			if (zk._noEsc) {
+				zk.unlisten(document, "keydown", zk._noEsc);
+				delete zk._noEsc;
+			}
 			if (zk._ckload) {
 				clearInterval(zk._ckload);
-				zk._ckload = null;
+				delete zk._ckload;
 			}
 
 			var n = $e("zk_loadprog");

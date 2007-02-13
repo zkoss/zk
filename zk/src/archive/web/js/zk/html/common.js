@@ -83,28 +83,6 @@ Array.prototype.contains = function (o) {
 
 zk.voidf = Prototype.emptyFunction;
 
-/** Listen an event.
- * Why not to use prototype's Event.observe? Performance.
- */
-zk.listen = function (el, evtnm, fn) {
-	if (el.addEventListener)
-		el.addEventListener(evtnm, fn, false);
-	else /*if (el.attachEvent)*/
-		el.attachEvent('on' + evtnm, fn);
-};
-/** Un-listen an event.
- */
-zk.unlisten = function (el, evtnm, fn) {
-	if (el.removeEventListener)
-		el.removeEventListener(evtnm, fn, false);
-	else if (el.detachEvent) {
-		try {
-			el.detachEvent('on' + evtnm, fn);
-		} catch (e) {
-		}
-	}
-};
-
 /** Return el.offsetWidth, which solving Safari's bug. */
 zk.offsetWidth = function (el) {
 	if (!el) return 0;
