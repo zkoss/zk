@@ -1,6 +1,15 @@
 	--------
 ZK 2.3.0 Freshly
 * Features:
+
+* Bugs:
+  1658748: Prevent user from pressing ESC when loading JS
+
+* Upgrade Notes:
+
+	--------
+ZK 2.3.0 RC
+* Features:
   1653099: JavaScript support (for zscript)
   1613080: Groovy support (for zscript)
   1656785: Ruby support (for zscript)
