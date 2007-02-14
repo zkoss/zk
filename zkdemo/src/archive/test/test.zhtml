@@ -1,4 +1,4 @@
-<html xmlns:zk="http://www.zkoss.org/2005/zk">
+<html xmlns:zk="http://www.zkoss.org/2005/zk" xmlns:z="http://www.zkoss.org/2005/zul">
 <head>
 <title>ZHTML Demo</title>
 </head>
@@ -38,6 +38,7 @@
 	<iframe name="inner">
 	</iframe>
 
-	<input type="image" src="/zkdemo/img/coffee.gif"/>
+	<input type="image" src="/zkdemo/img/coffee.gif"/> <br/>
+	<z:datebox/>
 </body>
 </html>
