@@ -38,7 +38,7 @@ zkTxbox.init = function (cmp) {
 };
 zkTxbox.onHide = function (cmp) {
 	var inp = $real(cmp);
-	if (inp) zkVld.closeErrbox(inp.id);
+	if (inp) zkVld.closeErrbox(inp.id, true);
 };
 
 /** Handles onblur for text input.
