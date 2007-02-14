@@ -509,15 +509,18 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private void initVariables() {
 		setVariable("log", _zklog);
 		setVariable("page", this);
-		setVariable("desktop", _desktop);
 		setVariable("pageScope", getAttributes());
-		setVariable("desktopScope", _desktop.getAttributes());
-		setVariable("applicationScope", _desktop.getWebApp().getAttributes());
 		setVariable("requestScope", REQUEST_ATTRS);
 		setVariable("spaceOwner", this);
-		final Session sess = _desktop.getSession();
-		setVariable("session", sess);
-		setVariable("sessionScope", sess.getAttributes());
+
+		if (_desktop != null) {
+			setVariable("desktop", _desktop);
+			setVariable("desktopScope", _desktop.getAttributes());
+			setVariable("applicationScope", _desktop.getWebApp().getAttributes());
+			final Session sess = _desktop.getSession();
+			setVariable("session", sess);
+			setVariable("sessionScope", sess.getAttributes());
+		}
 	}
 	public void destroy() {
 		for (Iterator it = getLoadedInterpreters().iterator(); it.hasNext();) {
@@ -718,6 +721,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 		for (Iterator it = _roots.iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).sessionDidActivate(this);
+
+		initVariables(); //since some variables depend on desktop
 	}
 
 	public LanguageDefinition getLanguageDefinition() {
