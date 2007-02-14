@@ -57,8 +57,18 @@ zk.disableESC = function () {
 				return false;//eat
 			}
 			return true;
-		}
+		};
 		zk.listen(document, "keydown", zk._noESC);
+
+		//if error occurs, the loading will be never ended, so try to ignore it
+		zk._noErr = function (msg, url, lineno) {
+			mesg = "Failed to load "+url+" at "+lineno
+				+"\nIt may be caused by bad traffic. You could reload this page to resolve the problem.\nCause: "+msg;
+			if (zk.error) zk.error(msg);
+			else alert(msg);
+			return true;
+		};
+		zk.listen(window, "error", zk._noErr);
 	}
 };
 zk.disableESC(); //disable it as soon as possible
@@ -67,6 +77,10 @@ zk.enableESC = function () {
 	if (zk._noESC) {
 		zk.unlisten(document, "keydown", zk._noESC);
 		delete zk._noESC;
+	}
+	if (zk._noErr) {
+		zk.unlisten(window, "error", zk._noErr);
+		delete zk._noErr;
 	}
 };
 
@@ -306,7 +320,15 @@ zk._load = function (nm, modver) {
 	var e = document.createElement("script");
 	e.type = "text/javascript" ;
 
-	var zcb = "/_zcbzk.ald"; //Note: we use /_zcb to enforce callback of zk.ald
+	var zcb;
+	if (zk.gecko) {
+		e.onload = zk.ald;
+		zcb = "";
+	} else {
+		zcb = "/_zcbzk.ald";
+			//Note: we use /_zcb to enforce callback of zk.ald
+	}
+
 	var uri = nm;
 	if (uri.indexOf("://") > 0) {
 		e.src = uri;
@@ -803,7 +825,7 @@ zk.error = function (msg) {
 	var html =
  '<div style="position:absolute;z-index:99000;padding:3px;left:'
 +(zk.innerX()+50)+'px;top:'+(zk.innerY()+20)
-+'px;width:250px;border:1px solid #963;background-color:#fc9" id="'
++'px;width:450px;border:1px solid #963;background-color:#fc9" id="'
 +id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
 +'<td width="20pt"><button onclick="zk._msgclose(this)">close</button></td>'
 +'<td style="border:1px inset">'+zk.encodeXML(msg, true) //Bug 1463668: security
@@ -821,7 +843,7 @@ zk.error = function (msg) {
 
 //-- bootstrapping --//
 zk.loading = 0;
-zk._modules = {};
+zk._modules = {}; //Map(String nm, boolean loaded)
 zk._initfns = new Array(); //used by addInit
 zk._initmods = new Array(); //used by addModuleInit
 zk._initcmps = new Array(); //comps to init
@@ -864,10 +886,9 @@ if (zk.ie && !zk.https()) {
 	}, 10);
 } else {
 	//Bug 1619959: FF not always fire DOMContentLoaded (such as in 2nd iframe),
-	//so we have to register two event listeners.
-	if (zk.gecko && document.addEventListener) //FF
-		document.addEventListener("DOMContentLoaded", myload, false)
-		//Fire onload earlier than all content are loaded
+	//so we have to use onload in addition to register DOMContentLoaded
+	if (zk.gecko)
+		zk.listen(document, "DOMContentLoaded", myload)
 
 	zk._oldOnload = window.onload;
 	window.onload = function () {
