@@ -21,6 +21,9 @@ zk.load("zul.widget");
 ////
 zkCmbox = {};
 zkCmbox.init = function (cmp) {
+	if (!zkCmbox.onHide) zkCmbox.onHide = zkTxbox.onHide;
+		//we cannot assign it until now, since widget.js might be loaded after this
+
 	var inp = $real(cmp);
 	zkTxbox.init(inp);
 	zk.listen(inp, "keydown", zkCmbox.onkey);
@@ -35,7 +38,6 @@ zkCmbox.init = function (cmp) {
 	else if (zk.gecko) btn.style.verticalAlign = "middle";
 	else btn.align = "absmiddle";
 };
-zkCmbox.onHide = zkTxbox.onHide;
 
 zkCmit = {};
 zkCmit.init = function (cmp) {

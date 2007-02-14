@@ -333,6 +333,9 @@ zkCal.onout = function (evt) {
 zkDtbox = {};
 
 zkDtbox.init = function (cmp) {
+	if (!zkDtbox.onHide) zkDtbox.onHide = zkTxbox.onHide;
+		//we cannot assign it until now, since widget.js might be loaded after this
+
 	var inp = $real(cmp);
 	zkTxbox.init(inp);
 	zk.listen(inp, zk.ie ? "keydown": "keypress", zkDtbox.onkey);
@@ -342,7 +345,6 @@ zkDtbox.init = function (cmp) {
 	if (btn) zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp);});
 	btn.align = "absmiddle";
 };
-zkDtbox.onHide = zkTxbox.onHide;
 zkDtbox.validate = function (cmp) {
 	var inp = $e(cmp.id+"!real");
 	if (inp.value) {
