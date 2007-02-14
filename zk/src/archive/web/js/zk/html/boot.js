@@ -20,7 +20,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 if (!window.zk) { //avoid eval twice
 zk = {};
 
-//To prevent user from pressing ESC we disable it as soon as possible//
 /** Listen an event.
  * Why not to use prototype's Event.observe? Performance.
  */
@@ -42,27 +41,40 @@ zk.unlisten = function (el, evtnm, fn) {
 		}
 	}
 };
-zk._noEsc = function (evt) {
-	if (!evt) evt = window.event;
-	if (evt.keyCode == 27) {
-		if (evt.preventDefault) {
-			evt.preventDefault();
-			evt.stopPropagation();
-		} else {
-			evt.returnValue = false;
-			evt.cancelBubble = true;
+/** disable ESC to prevent user from pressing ESC to stop loading */
+zk.disableESC = function () {
+	if (!zk._noESC) {
+		zk._noESC = function (evt) {
+			if (!evt) evt = window.event;
+			if (evt.keyCode == 27) {
+				if (evt.preventDefault) {
+					evt.preventDefault();
+					evt.stopPropagation();
+				} else {
+					evt.returnValue = false;
+					evt.cancelBubble = true;
+				}
+				return false;//eat
+			}
+			return true;
 		}
-		return false;//eat
+		zk.listen(document, "keydown", zk._noESC);
 	}
-	return true;
-}
-zk.listen(document, "keydown", zk._noEsc);
+};
+zk.disableESC(); //disable it as soon as possible
+/** Enables ESC to back to the normal mode. */
+zk.enableESC = function () {
+	if (zk._noESC) {
+		zk.unlisten(document, "keydown", zk._noESC);
+		delete zk._noESC;
+	}
+};
 
 //////////////////////////////////////
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "3K"; //increase this if we want the browser to reload JavaScript
+zk.build = "3L"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */
@@ -316,6 +328,8 @@ zk._bld = function () {
 	if (zk.loading ++) {
 		zk._updCnt();
 	} else {
+		zk.disableESC();
+
 		zk._ckload = setInterval(function () {
 			for (var j = 0; j < zk._ckfns.length; ++j)
 				if (zk._ckfns[j]()) {
@@ -343,10 +357,8 @@ zk.ald = function () {
 		}
 	} else {
 		try {
-			if (zk._noEsc) {
-				zk.unlisten(document, "keydown", zk._noEsc);
-				delete zk._noEsc;
-			}
+			zk.enableESC();
+
 			if (zk._ckload) {
 				clearInterval(zk._ckload);
 				delete zk._ckload;
