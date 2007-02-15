@@ -5,6 +5,7 @@ ZK 2.3.0 Freshly
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
+  1660340: addAnnotation failed if component is created programmingly
 
 * Upgrade Notes:
 
