@@ -377,7 +377,7 @@ import org.zkoss.lang.Objects;
 	}
 	</zscript>
 
-	<window id="modal" title="About" left="20" top="230" width="200px" border="normal"
+	<window id="modal" title="About" left="20px" top="230px" width="200px" border="normal"
 	closable="true">
 	<caption>
 		<button label="Hi">
@@ -394,7 +394,7 @@ import org.zkoss.lang.Objects;
 	<button label="doPopup" onClick="modal.doPopup();"/>
 	<button label="doEmbedded" onClick="modal.doEmbedded();"/>
 	<separator bar="true"/>
-	<window id="modal2" title="About" left="20" top="230" width="200px" border="normal"
+	<window id="modal2" title="About" left="20px" top="230px" width="200px" border="normal"
 	closable="true">
 	<caption>
 		<toolbarbutton label="Hello">
