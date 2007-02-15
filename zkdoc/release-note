@@ -8,6 +8,7 @@ ZK 2.3.0 Freshly
   1660340: addAnnotation failed if component is created programmingly
   1659601: 3D Groupbox and Disappearing Grid items in IE6
   1659972: IE Table update - COL and COLGROUP elements
+  1660495: ZHTML: Colgroup cannot accept children
 
 * Upgrade Notes:
 
