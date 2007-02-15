@@ -61,14 +61,16 @@ zk.disableESC = function () {
 		zk.listen(document, "keydown", zk._noESC);
 
 		//if error occurs, the loading will be never ended, so try to ignore it
-		zk._noErr = function (msg, url, lineno) {
-			mesg = "Failed to load "+url+" at "+lineno
-				+"\nIt may be caused by bad traffic. You could reload this page to resolve the problem.\nCause: "+msg;
+		//we cannot use zk.listen; otherwise, no way to get back msg...(FF)
+		zk._oldOnErr = window.onerror;
+		zk._onErrChanged = true;
+		window.onerror = function (msg, url, lineno) {
+			msg = mesg.FAILED_TO_LOAD + url + "\n" + mesg.FAILED_TO_LOAD_DETAIL
+				+ "\n" + mesg.CAUSE + msg+" (line "+lineno + ")";
 			if (zk.error) zk.error(msg);
 			else alert(msg);
 			return true;
 		};
-		zk.listen(window, "error", zk._noErr);
 	}
 };
 zk.disableESC(); //disable it as soon as possible
@@ -78,9 +80,10 @@ zk.enableESC = function () {
 		zk.unlisten(document, "keydown", zk._noESC);
 		delete zk._noESC;
 	}
-	if (zk._noErr) {
-		zk.unlisten(window, "error", zk._noErr);
-		delete zk._noErr;
+	if (zk._onErrChanged) {
+		window.onerror = zk._oldOnErr;
+		if (zk._oldOnErr) delete zk._oldOnErr;
+		delete zk._onErrChanged;
 	}
 };
 
@@ -825,7 +828,7 @@ zk.error = function (msg) {
 	var html =
  '<div style="position:absolute;z-index:99000;padding:3px;left:'
 +(zk.innerX()+50)+'px;top:'+(zk.innerY()+20)
-+'px;width:450px;border:1px solid #963;background-color:#fc9" id="'
++'px;width:550px;border:1px solid #963;background-color:#fc9" id="'
 +id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
 +'<td width="20pt"><button onclick="zk._msgclose(this)">close</button></td>'
 +'<td style="border:1px inset">'+zk.encodeXML(msg, true) //Bug 1463668: security

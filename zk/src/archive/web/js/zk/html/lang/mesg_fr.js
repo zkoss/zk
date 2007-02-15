@@ -37,3 +37,7 @@ mesg.FILE_SIZE = "Taille du fichier: ";
 mesg.KBYTES = "KB";
 
 mesg.CANCEL="Annuler";
+
+mesg.FAILED_TO_LOAD="Failed to load ";
+mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";
+mesg.CAUSE="Cause: ";

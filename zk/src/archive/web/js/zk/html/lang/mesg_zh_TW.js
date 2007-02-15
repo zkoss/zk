@@ -37,3 +37,7 @@ mesg.FILE_SIZE = "檔案大小：";
 mesg.KBYTES = "KB";
 
 mesg.CANCEL="取消";
+
+mesg.FAILED_TO_LOAD="無法載入：";
+mesg.FAILED_TO_LOAD_DETAIL="可能是連線問題，請按重載再試一次。";
+mesg.CAUSE="原因：";
