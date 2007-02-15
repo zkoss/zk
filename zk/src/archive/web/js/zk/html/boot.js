@@ -62,6 +62,7 @@ zk.disableESC = function () {
 
 		//if error occurs, the loading will be never ended, so try to ignore it
 		//we cannot use zk.listen; otherwise, no way to get back msg...(FF)
+		//FUTURE: onerror not working in Safari and Opera
 		zk._oldOnErr = window.onerror;
 		zk._onErrChanged = true;
 		window.onerror = function (msg, url, lineno) {
