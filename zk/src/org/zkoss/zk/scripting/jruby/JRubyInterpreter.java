@@ -45,7 +45,6 @@ public class JRubyInterpreter extends GenericInterpreter {
 	//GenericInterpreter//
 	protected void exec(String script) {
 		_runtime.evalScript(script);
-		_runtime.setGlobalVariables(new Variables(_runtime));
 	}
 
 	protected Object get(String name) {
@@ -65,7 +64,9 @@ public class JRubyInterpreter extends GenericInterpreter {
 	//Interpreter//
 	public void init(Page owner, String zslang) {
 		super.init(owner, zslang);
+
 		_runtime = Ruby.getDefaultInstance();
+		_runtime.setGlobalVariables(new Variables(_runtime));
 	}
 	public void destroy() {
     	JavaEmbedUtils.terminate(_runtime);

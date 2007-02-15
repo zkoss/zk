@@ -30,12 +30,12 @@ import org.zkoss.zk.ui.Page;
  */
 public interface Interpreter {
 	/** Initializes the interpreter.
-	 * It is called once when the interpreter is contructed.
+	 * It is called once when the new instance of interpreter is constructed.
 	 *
 	 * @param zslang the language this interpreter is associated with
 	 */
 	public void init(Page owner, String zslang);
-	/** Called when the interpreter is about to be detroyed.
+	/** Called when the interpreter is about to be destroyed.
 	 * After called, this interpreter cannot be used again.
 	 */
 	public void destroy();

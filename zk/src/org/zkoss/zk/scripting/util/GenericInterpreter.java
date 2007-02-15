@@ -85,24 +85,34 @@ abstract public class GenericInterpreter implements Interpreter {
 	/** Executes the specified script.
 	 * Deriving class shall provide an implementation of this method, rather
 	 * than overriding {@link #interpret}.
-	 *
-	 * <p>It is invoked by {@link #interpret} after 'copying' variables from
-	 * the namespace to the interpreter.
 	 */
 	abstract protected void exec(String script);
 
 	/** Gets the variable from the interpreter.
+	 * Optional. Implement it if you want to expose variables defined
+	 * in the interpreter to Java codes.
+	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 */
-	abstract protected Object get(String name);
+	protected Object get(String name) {
+		return null;
+	}
 	/** Sets the variable from the interpreter.
+	 * Optional. Implement it if you want to allow Java codes to define
+	 * a variable in the interpreter.
+	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 */
-	abstract protected void set(String name, Object value);
+	protected void set(String name, Object value) {
+	}
 	/** Removes the variable from the interpreter.
+	 * Optional. Implement it if you want to allow Java codes to undefine
+	 * a variable from the interpreter.
+	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 */
-	abstract protected void unset(String name);
+	protected void unset(String name) {
+	}
 
 	/** Called before {@link #exec}.
 	 * <p>Default: does nothing.
