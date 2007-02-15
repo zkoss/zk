@@ -111,6 +111,7 @@ public class Milieu implements Serializable {
 		_macroURI = compdef.getMacroURI();
 		_langdef = compdef.getLanguageDefinition();
 		_compdef = compdef;
+		_annots = compdef.getAnnotationMap();
 		if (compdef instanceof InstanceDefinition) {
 			final InstanceDefinition instdef = (InstanceDefinition)compdef;
 			_evthds = instdef.getEventHandlers();
@@ -125,11 +126,8 @@ public class Milieu implements Serializable {
 						dir = dir + '/';
 			}
 			_curdir = dir;
-
-			_annots = instdef.getAnnotationMap();
 		} else {
 			_evthds = null;
-			_annots = null;
 			_curdir = null;
 		}
 	}
