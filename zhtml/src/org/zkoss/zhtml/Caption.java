@@ -29,4 +29,8 @@ public class Caption extends AbstractTag {
 	public Caption() {
 		super("caption");
 	}
+	public Caption(String label) {
+		this();
+		new Text(label).setParent(this);
+	}
 }

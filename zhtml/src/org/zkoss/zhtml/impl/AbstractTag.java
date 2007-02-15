@@ -339,7 +339,7 @@ implements DynamicPropertied, RawId {
 	static {
 		final String[] childless = {
 			"area", "base", "basefont", "bgsound", "br",
-			"col", "colgroup", "embed", "hr", "img", "input",
+			"col", "embed", "hr", "img", "input",
 			"isindex", "keygen", "link", "meta", "plaintext",
 			"spacer", "wbr"
 		};
