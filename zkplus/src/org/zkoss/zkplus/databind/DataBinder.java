@@ -169,7 +169,7 @@ public class DataBinder {
 					loadEvents.add(event);
 				}
 			}
-			if (nullify) { 
+			if (loadEvents.isEmpty()) { 
 				loadEvents = null;
 			}
 		}
@@ -415,7 +415,6 @@ public class DataBinder {
 				Map.Entry entry = (Map.Entry) it.next();
 				String tag = (String) entry.getKey();
 				String tagExpr = (String) entry.getValue();
-	
 				if ("save-when".equals(tag)) {
 					saveWhenEvent = tagExpr;
 				} else if ("access".equals(tag)) {
