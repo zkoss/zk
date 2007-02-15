@@ -7,6 +7,7 @@ ZK 2.3.0 Freshly
   1659512: Datebox failed to init if no textbox was used
   1660340: addAnnotation failed if component is created programmingly
   1659601: 3D Groupbox and Disappearing Grid items in IE6
+  1659972: IE Table update - COL and COLGROUP elements
 
 * Upgrade Notes:
 
