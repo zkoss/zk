@@ -32,9 +32,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	${z:redraw(self.rows, null)}
 	</table>
 	</div>
+<c:if test="${!empty self.foot}">
 	<div id="${self.uuid}!foot" class="grid-foot">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 ${z:redraw(self.foot, null)}
 	</table>
 	</div>
+</c:if>
 </div>

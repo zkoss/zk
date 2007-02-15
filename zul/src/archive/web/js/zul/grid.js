@@ -69,8 +69,6 @@ zk.Grid.prototype = {
 			zk.listen(window, "resize", this.fnResize);
 		}
 
-		this.updSize();
-
 		if (!this.paging) {
 			if ((zk.gecko||zk.opera) && this.headtbl && this.headtbl.rows.length == 1) {
 				var headrow = this.headtbl.rows[0];
@@ -174,6 +172,9 @@ zk.Grid.prototype = {
 
 	/** Calculates the size. */
 	_calcSize: function () {
+		this.updSize();
+			//Bug 1659601: we cannot do it in init(); or, IE failed!
+
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
 			if (tblwd && this.body.offsetWidth - tblwd > 11) { //scrollbar
