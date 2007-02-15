@@ -373,7 +373,7 @@ zk._doTwice = function (script, timeout) {
 zk.insertHTMLBefore = function (el, html) {
 	if (zk.ie || zk.opera) {
 		switch ($tag(el)) { //exclude TABLE
-		case "TD": case "TH": case "TR": case "CAPTION":
+		case "TD": case "TH": case "TR": case "CAPTION": case "COLGROUP":
 		case "TBODY": case "THEAD": case "TFOOT":
 			var ns = zk._tblCreateElements(html);
 			var p = el.parentNode;
@@ -391,7 +391,7 @@ zk.insertHTMLBeforeEnd = function (el, html) {
 		var tn = $tag(el);
 		switch (tn) {
 		case "TABLE": case "TR":
-		case "TBODY": case "THEAD": case "TFOOT":
+		case "TBODY": case "THEAD": case "TFOOT": case "COLGROUP":
 		/*case "TH": case "TD": case "CAPTION":*/ //no need to handle them
 			var ns = zk._tblCreateElements(html);
 			if (tn == "TABLE" && ns.length && $tag(ns[0]) == "TR") {
@@ -419,6 +419,7 @@ zk.insertHTMLAfter = function (el, html) {
 		switch ($tag(el)) { //exclude TABLE
 		case "TD": case "TH": case "TR": case "CAPTION":
 		case "TBODY": case "THEAD": case "TFOOT":
+		case "COLGROUP": case "COL":
 			var ns = zk._tblCreateElements(html);
 			var sib = el.nextSibling;
 			var p = el.parentNode;
@@ -437,7 +438,7 @@ zk.setInnerHTML = function (el, html) {
 	if (zk.ie || zk.opera) {
 		var tn = $tag(el);
 		if (tn == "TR" || tn == "TABLE" || tn == "TBODY" || tn == "THEAD"
-		|| tn == "TFOOT") { //ignore TD/TH/CAPTION
+		|| tn == "TFOOT" || tn == "COLGROUP" || tn == "COL") { //ignore TD/TH/CAPTION
 			var ns = zk._tblCreateElements(html);
 			if (tn == "TABLE" && ns.length && $tag(ns[0]) == "TR") {
 				var bd = el.tBodies;
@@ -468,8 +469,7 @@ zk.setOuterHTML = function (el, html) {
 		var tn = $tag(el);
 		if (tn == "TD" || tn == "TH" || tn == "TABLE" || tn == "TR"
 		|| tn == "CAPTION" || tn == "TBODY" || tn == "THEAD"
-		|| tn == "TFOOT") {
-			//no need to call zk._fixRowParent since impossible to have TABLE/TR
+		|| tn == "TFOOT" || tn == "COLGROUP" || tn == "COL") {
 			var ns = zk._tblCreateElements(html);
 			var p = el.parentNode;
 			var sib = el.nextSibling;
@@ -599,7 +599,11 @@ if (zk.ie || zk.opera) {
 			level = 3;
 			html = '<table><tr>' + html + '</tr></table>';
 			break;
-		default://case "THEAD": case "TBODY": case "TFOOT": case "CAPTION":
+		case "COL":
+			level = 2;
+			html = '<table><colgroup>'+html+'</colgroup></table>';
+			break;
+		default://case "THEAD": case "TBODY": case "TFOOT": case "CAPTION": case "COLGROUP":
 			level = 1;
 			html = '<table>' + html + '</table>';
 			break;
@@ -614,7 +618,12 @@ if (zk.ie || zk.opera) {
 		//detach from parent and return
 		var ns = new Array();
 		for (var n; n = el.firstChild;) {
-			ns.push(n);
+			//IE creates extra tbody if add COLGROUP
+			//However, the following skip is dirty-fix, assuming html doesn't
+			//contain TBODY (unless it is the first tag)
+			var nt = $tag(n);
+			if (nt == tag || nt != "TBODY")
+				ns.push(n);
 			el.removeChild(n);
 		}
 		return ns;
