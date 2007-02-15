@@ -92,7 +92,7 @@ zk.enableESC = function () {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "3L"; //increase this if we want the browser to reload JavaScript
+zk.build = "3M"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */
