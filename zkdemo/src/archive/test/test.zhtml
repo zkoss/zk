@@ -8,18 +8,20 @@
 		<li>The first item.</li>
 		<li>The second item.</li>
 	</ul>
-	<input type="button" value="Add Item" zk:onClick="addItem()"/>
+	<input type="button" value="Add Item" zk:onClick="addItem(null)"/>
+	<input id="mm" type="button" value="Add but cause failure" zk:onClick="addItem(&quot;mm&quot;)"/>
 	<br/>
-	<input id="inp0" type="text" zk:onChange="add()"/> +
-	<input id="inp1" type="text" zk:onChange="add()"/> =
+	<input id="inp0" type="text" zk:onChange="plus()"/> +
+	<input id="inp1" type="text" zk:onChange="plus()"/> =
 	<text id="out"/>
 	<zscript>
-	void addItem() {
+	void addItem(String id) {
 		Component li = new Raw("li");
+		if (id != null) li.setId(id);
 		li.setParent(ul);
 		new Text("Item "+ul.getChildren().size()).setParent(li);
 	}
-	void add() {
+	void plus() {
 		out.setValue(inp0.getValue() + inp1.getValue());
 	}
 	</zscript>
