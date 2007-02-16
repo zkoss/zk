@@ -83,8 +83,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
     private static final long serialVersionUID = 20060622L;
 
-	/* Note: if _page != null, then _desktop != null, vice versa. */
-	private transient Desktop _desktop;
 	private transient Page _page;
 	private String _id;
 	private String _uuid;
@@ -137,7 +135,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			nextUuid(exec.getDesktop()): ComponentsCtrl.AUTO_ID_PREFIX;
 			//though it doesn't belong to any desktop yet, we autogen uuid
 			//it is optional but it is slightly better (of course, subjective)
-
 		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(this): null;
 
 		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
@@ -392,11 +389,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return Objects.toString(_mil.getParameter(this, name));
 	}
 
-	/** Returns the UI engine based on {@link #_desktop}.
-	 * Don't call this method when _desktop is null.
+	/** Returns the UI engine based on {@link #_page}'s getDesktop().
+	 * Don't call this method when _page is null.
 	 */
 	private final UiEngine getThisUiEngine() {
-		return ((WebAppCtrl)_desktop.getWebApp()).getUiEngine();
+		return ((WebAppCtrl)_page.getDesktop().getWebApp()).getUiEngine();
 	}
 
 	//-- Component --//
@@ -404,7 +401,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _page;
 	}
 	public final Desktop getDesktop() {
-		return _desktop;
+		return _page != null ? _page.getDesktop(): null;
 	}
 
 	/** Sets the page that this component belongs to. */
@@ -414,10 +411,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_parent != null)
 			throw new UiException("Only the parent of a root component can be changed: "+this);
 		if (page != null) {
-			if (page.getDesktop() != _desktop && _desktop != null)
+			if (_page != null && _page.getDesktop() != page.getDesktop())
 				throw new UiException("The new page must be in the same desktop: "+page);
 				//Not allow developers to access two desktops simutaneously
 			checkIdSpacesDown(this, (PageCtrl)page);
+
+			//No need to check UUID since checkIdSpacesDown covers it
+			//-- a page is an ID space
 		}
 
 		if (_page != null) removeFromIdSpacesDown(this);
@@ -449,14 +449,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return; //nothing changed
 
 		//assert D.OFF || _parent == null || _parent.getPage() == page;
-
 		//detach
 		final boolean bRoot = _parent == null;
 		if (_page != null) {
 			if (bRoot) ((PageCtrl)_page).removeRoot(this);
 			if (page == null) {
-				((DesktopCtrl)_desktop).removeComponent(this);
-				_desktop = null;
+				((DesktopCtrl)_page.getDesktop()).removeComponent(this);
 			}
 		}
 
@@ -466,26 +464,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//attach
 		if (_page != null) {
 			if (bRoot) ((PageCtrl)_page).addRoot(this); //Not depends on uuid
+			final Desktop desktop = _page.getDesktop();
 			if (oldpage == null) {
-				_desktop = _page.getDesktop();
-
-				final boolean anonymous =
+				final boolean anonymous = //unassigned; created when exec null
 					ComponentsCtrl.AUTO_ID_PREFIX.equals(_uuid);
-				if (anonymous || _desktop.getComponentByUuidIfAny(_uuid) != null) {
+				if (anonymous || desktop.getComponentByUuidIfAny(_uuid) != null) {
 					if (!anonymous)
 						getThisUiEngine().addUuidChanged(this, true);
-						//called before uuid is changed
 
 					//stupid but no better way to find a correct UUID yet
 					//also, it is rare so performance not an issue
 					do {
-						_uuid = nextUuid(_desktop);
-					} while (_desktop.getComponentByUuidIfAny(_uuid) != null);
-
+						_uuid = nextUuid(desktop);
+					} while (desktop.getComponentByUuidIfAny(_uuid) != null);
 					if (D.ON && log.finerable()) log.finer("Uuid changed: "+this);
 				}
 
-				((DesktopCtrl)_desktop).addComponent(this); //depends on uuid
+				((DesktopCtrl)desktop).addComponent(this); //depends on uuid
 			}
 		}
 		if (_spaceInfo != null && _parent == null)
@@ -510,18 +505,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Variables.getReservedNames());
 
 			final boolean rawId = this instanceof RawId;
-			if (rawId && _desktop != null
-			&& _desktop.getComponentByUuidIfAny(id) != null)
+			if (rawId && _page != null
+			&& _page.getDesktop().getComponentByUuidIfAny(id) != null)
 				throw new UiException("Replicated ID is not allowed for "+getClass()+": "+id+"\nNote: HTML/WML tags, ID must be unique");
 
 			checkIdSpaces(this, id);
 
 			removeFromIdSpaces(this);
 			if (rawId) { //we have to change UUID
-				if (_desktop != null) {
+				if (_page != null) {
 					getThisUiEngine().addUuidChanged(this, false);
 						//called before uuid is changed
-					((DesktopCtrl)_desktop).removeComponent(this);
+					((DesktopCtrl)_page.getDesktop()).removeComponent(this);
 				} else {
 					final Execution exec = Executions.getCurrent();
 					if (exec != null)
@@ -531,8 +526,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 				_uuid = _id = id;
 
-				if (_desktop != null) {
-					((DesktopCtrl)_desktop).addComponent(this);
+				if (_page != null) {
+					((DesktopCtrl)_page.getDesktop()).addComponent(this);
 					if (_parent != null && isTransparent(this)) _parent.invalidate();
 					addMoved(this, _parent, _page, _page);
 				}
@@ -600,14 +595,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return _page != null ?
 				_page.getAttributes(): Collections.EMPTY_MAP;
 		case DESKTOP_SCOPE:
-			return _desktop != null ?
-				_desktop.getAttributes(): Collections.EMPTY_MAP;
+			return _page != null ?
+				_page.getDesktop().getAttributes(): Collections.EMPTY_MAP;
 		case SESSION_SCOPE:
-			return _desktop != null ?
-				_desktop.getSession().getAttributes(): Collections.EMPTY_MAP;
+			return _page != null ?
+				_page.getDesktop().getSession().getAttributes(): Collections.EMPTY_MAP;
 		case APPLICATION_SCOPE:
-			return _desktop != null ?
-				_desktop.getWebApp().getAttributes(): Collections.EMPTY_MAP;
+			return _page != null ?
+				_page.getDesktop().getWebApp().getAttributes(): Collections.EMPTY_MAP;
 		case COMPONENT_SCOPE:
 			return _attrs;
 		case REQUEST_SCOPE:
@@ -619,7 +614,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 	private final Execution getExecution() {
-		return _desktop != null ? _desktop.getExecution():
+		return _page != null ? _page.getDesktop().getExecution():
 			Executions.getCurrent();
 	}
 	public Object getAttribute(String name, int scope) {
@@ -683,13 +678,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (!parent.isChildable())
 				throw new UiException(parent+" doesn't allow any child");
 			final Page newpage = parent.getPage();
-			if (newpage != null && newpage.getDesktop() != _desktop && _desktop != null)
+			if (newpage != null && _page != null && newpage.getDesktop() != _page.getDesktop())
 				throw new UiException("The new parent must be in the same desktop: "+parent);
-				//Not allow developers to access two desktops simutaneously
+					//Not allow developers to access two desktops simutaneously
 
 			idSpaceChanged = parent.getSpaceOwner() !=
 				(_parent != null ? _parent.getSpaceOwner(): _page);
 			if (idSpaceChanged) checkIdSpacesDown(this, parent);
+
+			//Note: No need to check UUID since checkIdSpacesDown covers it
+			//-- a page is an ID space
 		} else {
 			idSpaceChanged = _page != null;
 		}
@@ -850,7 +848,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public void response(String key, AuResponse response) {
 		//if response not depend on this component, it must be generated
-		if (_desktop != null) {
+		if (_page != null) {
 			getThisUiEngine().addResponse(key, response);
 		} else if (response.getDepends() != this) {
 			final Execution exec = Executions.getCurrent();
@@ -923,7 +921,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final Map attrs = new HashMap(3);
 		attrs.put("self", this);
-		_desktop.getExecution()
+		_page.getDesktop().getExecution()
 			.include(out, mold, attrs, Execution.PASS_THRU_ATTR);
 	}
 	/* Default: does nothing.
@@ -960,7 +958,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @param evtnm which event is changed. If null, it means all have to check.
 	 */
 	private void checkRootEvents(String evtnm) {
-		if (_desktop != null && _parent == null) {
+		if (_page != null && _parent == null) {
 			if ((evtnm == null || Events.ON_CLIENT_INFO.equals(evtnm))
 			&& Events.isListenerAvailable(this, Events.ON_CLIENT_INFO, true))
 				response("clientInfo", new AuClientInfo());
@@ -1125,7 +1123,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static void sessionDidActivate0(Page page,
 	AbstractComponent comp, boolean pageLevelIdSpace) {
 		comp._page = page;
-		comp._desktop = page.getDesktop();
 
 		//Note: we need only to fix the first-level spaceInfo.
 		//Others are handled by readObject
@@ -1352,7 +1349,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		//1. make it not belonging to any page
-		clone._desktop = null;
 		clone._page = null;
 		clone._parent = null;
 		clone._attrs = new HashMap(_attrs);
