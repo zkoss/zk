@@ -27,12 +27,14 @@ import org.zkoss.zk.ui.UiException;
 /**
  * A radio button.
  *
- * <p>Radio buttons without a parent {@link Radiogroup} is considered
+ * <p>Radio buttons without a ancestor {@link Radiogroup} is considered
  * as the same group.
+ * The nearest ancestor {@link Radiogroup} is the group that the radio
+ * belongs to. See also {@link #getRadiogroup}.
  * 
  * <p>Event:
  * <ol>
- * <li>org.zkoss.zk.ui.event.CheckEvent is sent when a checkbox
+ * <li>{@link org.zkoss.zk.ui.event.CheckEvent} is sent when a checkbox
  * is checked or unchecked by user.</li>
  * </ol>
  *
@@ -48,6 +50,22 @@ public class Radio extends Checkbox {
 	}
 	public Radio(String label, String image) {
 		super(label, image);
+	}
+
+	/** Returns {@link Radiogroup} that this radio button belongs to.
+	 * It is the nearest ancestor {@link Radiogroup}.
+	 * In other words, it searches up the parent, parent's parent
+	 * and so on for any {@link Radiogroup} instance.
+	 * If found this radio belongs the found radiogroup.
+	 * If not, this radio itself is a group.
+	 */
+	public Radiogroup getRadiogroup() {
+		for (Component p = this;;) {
+			Component q = p.getParent();
+			if ((q instanceof Radiogroup) || q == null)
+				return (Radiogroup)q;
+			p = q;
+		}
 	}
 
 	/** Returns whether it is selected.
@@ -75,7 +93,7 @@ public class Radio extends Checkbox {
 	}
 	/** Make sure only one of them is checked. */
 	private void fixSiblings(boolean checked, boolean byclient) {
-		final Radiogroup group = (Radiogroup)getParent();
+		final Radiogroup group = getRadiogroup();
 		if (group != null) {
 			if (checked) {
 				final Radio sib = group.getSelectedItem();
@@ -116,8 +134,8 @@ public class Radio extends Checkbox {
 	 * to be the same as its parent's name ({@link Radiogroup#getName}).
 	 */
 	public final String getName() {
-		final Component p = getParent();
-		return p instanceof Radiogroup ? ((Radiogroup)p).getName(): getUuid();
+		final Radiogroup group = getRadiogroup();
+		return group != null ? group.getName(): getUuid();
 	}
 
 	/** Returns the inner attributes for generating the HTML radio tag
@@ -133,9 +151,14 @@ public class Radio extends Checkbox {
 
 	//-- Component --//
 	public void setParent(Component parent) {
-		if (parent != null && !(parent instanceof Radiogroup))
-			throw new UiException("Unsupported parent for radio: "+parent);
+		final Radiogroup oldgp = getRadiogroup();
 		super.setParent(parent);
+
+		final Radiogroup newgp = getRadiogroup();
+		if (oldgp != newgp) {
+			if (oldgp != null) oldgp.fixOnRemove(this);
+			if (newgp != null) newgp.fixOnAdd(this);
+		}
 	}
 
 	//-- ComponentCtrl --//

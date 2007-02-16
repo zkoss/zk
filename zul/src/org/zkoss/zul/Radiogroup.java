@@ -22,6 +22,7 @@ import java.util.Iterator;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.MutableInteger;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -85,23 +86,44 @@ public class Radiogroup extends XulElement {
 	/** Returns the radio button at the specified index.
 	 */
 	public Radio getItemAtIndex(int index) {
-		//Note: getChildren().get(index) doesn't perform better due to linked list
-		int cnt = 0;
-		for (Iterator it = getChildren().iterator(); it.hasNext();) {
-			final Object child = it.next();
-			if ((child instanceof Radio) && cnt++ == index)
-				return (Radio)child;
-		}
-		throw new IndexOutOfBoundsException(index+" out of "+cnt);
+		if (index < 0)
+			throw new IndexOutOfBoundsException("Wrong index: "+index);
+
+		final MutableInteger cur = new MutableInteger(0);
+		final Radio radio = getAt(this, cur, index);
+		if (radio == null)
+			throw new IndexOutOfBoundsException(index+" out of 0.."+(cur.value-1));
+		return radio;
 	}
+	private static Radio getAt(Component comp, MutableInteger cur, int index) {
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
+			final Component child = (Component)it.next();
+			if (child instanceof Radio) {
+				if (cur.value++ == index)
+					return (Radio)child;
+			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
+				Radio r = getAt(child, cur, index);
+				if (r != null) return r;
+			}
+		}
+		return null;
+	}
+
 	/** Returns the number of radio buttons in this group.
 	 */
 	public int getItemCount() {
-		int cnt = 0;
-		for (Iterator it = getChildren().iterator(); it.hasNext();)
-			if (it.next() instanceof Radio)
-				++cnt;
-		return cnt;
+		return countItems(this);
+	}
+	private static int countItems(Component comp) {
+		int sum = 0;
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
+			final Component child = (Component)it.next();
+			if (child instanceof Radio)
+				++sum;
+			else if (!(child instanceof Radiogroup)) //skip nested radiogroup
+				sum += countItems(child);
+		}
+		return sum;
 	}
 	 
 	/** Returns the index of the selected radio button (-1 if no one is selected).
@@ -180,55 +202,46 @@ public class Radiogroup extends XulElement {
 		}
 	}
 
-	//-- Component --//
-	public boolean insertBefore(Component child, Component insertBefore) {
-		if (super.insertBefore(child, insertBefore)) {
-		//To have more versatile layout, a radio group accepts any kind of child
-		//However, radio's parent must be radiogroup due to difficulty of handling
-		//_jsel and event listener
-			if (child instanceof Radio) {
-				final Radio radio = (Radio)child;
-				if (_jsel >= 0 && radio.isSelected()) {
-					radio.setSelected(false); //it will call fixSelectedIndex
-				} else {
-					fixSelectedIndex();
-				}
-				child.addEventListener(Events.ON_CHECK, _listener);
-			}
-			return true;
+	//utilities for radio//
+	/** Called when a radio is added to this group.
+	 */
+	/*package*/ void fixOnAdd(Radio child) {
+		if (_jsel >= 0 && child.isSelected()) {
+			child.setSelected(false); //it will call fixSelectedIndex
+		} else {
+			fixSelectedIndex();
 		}
-		return false;
+		child.addEventListener(Events.ON_CHECK, _listener);
 	}
-	public boolean removeChild(Component child) {
-		final boolean ret = super.removeChild(child);
-		if (ret && (child instanceof Radio)) { //might have diff child in future
-			final Radio radio = (Radio)child;
-			if (radio.isSelected()) {
-				_jsel = -1;
-			} else if (_jsel > 0) { //excluding 0
-				fixSelectedIndex();
-			}
-			child.removeEventListener(Events.ON_CHECK, _listener);
+	/** Called when a radio is removed from this group.
+	 */
+	/*package*/ void fixOnRemove(Radio child) {
+		if (child.isSelected()) {
+			_jsel = -1;
+		} else if (_jsel > 0) { //excluding 0
+			fixSelectedIndex();
 		}
-		return ret;
+		child.removeEventListener(Events.ON_CHECK, _listener);
 	}
 	/** Fix the selected index, _jsel, assuming there are no selected one
 	 * before (and excludes) j-the radio button.
 	 */
 	/*package*/ void fixSelectedIndex() {
-		_jsel = -1;
-		int j = 0;
-		for (Iterator it = getChildren().iterator(); it.hasNext();) {
-			final Object child = it.next();
+		_jsel = fixSelIndex(this, new MutableInteger(0));
+	}
+	private static int fixSelIndex(Component comp, MutableInteger cur) {
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
+			final Component child = (Component)it.next();
 			if (child instanceof Radio) {
-				final Radio radio = (Radio)child;
-				if (radio.isSelected()) {
-					_jsel = j;
-					return;
-				}
-				++j;
+				if (((Radio)child).isSelected())
+					return cur.value;
+				++cur.value;
+			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
+				int jsel = fixSelIndex(child, cur);
+				if (jsel >= 0) return jsel;
 			}
 		}
+		return -1;
 	}
 
 	/** Generates the group name for child radio buttons.
@@ -247,26 +260,34 @@ public class Radiogroup extends XulElement {
 	private static void fixClone(Radiogroup clone) {
 		if (clone._name.startsWith("_pg")) clone._name = clone.genGroupName();
 
-		//remove listener from children first
-		for (Iterator it = clone.getChildren().iterator(); it.hasNext();) {
-			final Object child = it.next();
-			if (child instanceof Radio) {
-				final Radio radio = (Radio)it.next();
-				radio.removeEventListener(Events.ON_CHECK, clone._listener);
-			}
-		}
+		rmListenerDown(clone, clone._listener);
+			//remove listener from children first
 
 		//create and add back listener
 		clone.init();
 		clone.afterUnmarshal();
 	}
+	private static void rmListenerDown(Component comp, EventListener listener) {
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
+			final Component child = (Component)it.next();
+			if (child instanceof Radio) {
+				((Radio)it.next()).removeEventListener(Events.ON_CHECK, listener);
+			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
+				rmListenerDown(child, listener);
+			}
+		}
+	}
 
 	private void afterUnmarshal() {
-		for (Iterator it = getChildren().iterator(); it.hasNext();) {
-			final Object child = it.next();
+		addListenerDown(this, _listener);
+	}
+	private static void addListenerDown(Component comp, EventListener listener) {
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
+			final Component child = (Component)it.next();
 			if (child instanceof Radio) {
-				final Radio radio = (Radio)it.next();
-				radio.addEventListener(Events.ON_CHECK, _listener);
+				((Radio)it.next()).addEventListener(Events.ON_CHECK, listener);
+			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
+				addListenerDown(child, listener);
 			}
 		}
 	}
