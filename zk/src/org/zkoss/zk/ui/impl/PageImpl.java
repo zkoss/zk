@@ -73,10 +73,11 @@ import org.zkoss.zk.ui.sys.Variables;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.au.AuSetTitle;
 import org.zkoss.zk.scripting.Interpreter;
+import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.scripting.SerializableInterpreter;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.VariableResolver;
-import org.zkoss.zk.scripting.Interpreters;
+import org.zkoss.zk.scripting.InterpreterNotFoundException;
 import org.zkoss.zk.scripting.util.AbstractNamespace;
 
 /**
@@ -111,7 +112,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private transient Desktop _desktop;
 	private String _id;
 	private String _title = "", _style = "";
-	private final String _path, _zslang;
+	private final String _path;
+	private String _zslang;
 	/** A list of root components. */
 	private final List _roots = new LinkedList();
 	private transient List _roRoots;
@@ -178,7 +180,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_pgUri = _langdef.getPageURI();
 		_compdefs = new ComponentDefinitionMap();
 		_path = path != null ? path: "";
-		_zslang = richlet.getZScriptLanguage();
+		_zslang = "Java";
 
 		init();
 	}
@@ -673,6 +675,14 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 	public String getZScriptLanguage() {
 		return _zslang;
+	}
+	public void setZScriptLanguage(String zslang)
+	throws InterpreterNotFoundException {
+		if (!Objects.equals(zslang, _zslang)) {
+			if (!Interpreters.exists(zslang))
+				throw new InterpreterNotFoundException(zslang, MZk.INTERPRETER_NOT_FOUND, zslang);
+			_zslang = zslang;
+		}
 	}
 
 	public boolean isListenerAvailable(String evtnm) {

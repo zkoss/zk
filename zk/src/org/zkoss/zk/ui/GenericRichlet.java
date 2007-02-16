@@ -51,13 +51,4 @@ abstract public class GenericRichlet implements Richlet {
 	public LanguageDefinition getLanguageDefinition() {
 		return LanguageDefinition.lookup("xul/html");
 	}
-	/** Returns the name of scripting language (used by zscript elements).
-	 *
-	 * <p> It is called when creating a new page for this richlet to serve.
-	 *
-	 * <p>Default: Java.
-	 */
-	public String getZScriptLanguage() {
-		return "Java";
-	}
 }

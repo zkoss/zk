@@ -28,6 +28,7 @@ import javax.servlet.jsp.el.FunctionMapper;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.zk.scripting.InterpreterNotFoundException;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
@@ -413,6 +414,13 @@ public interface Page extends IdSpace {
 	 * @return the default scripting language, say, Java. Never null.
 	 */
 	public String getZScriptLanguage();
+	/** Sets the defafult scripting language which will be assumed
+	 * if a zscript element doesn't specify any language.
+	 *
+	 * @exception InterpreterNotFoundException if no such language
+	 */
+	public void setZScriptLanguage(String zslang)
+	throws InterpreterNotFoundException;
 
 	//metainfo//
 	/** Returns the function mapper for resolving EL functions, or null if

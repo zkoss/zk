@@ -53,10 +53,4 @@ public interface Richlet {
 	 * <p> It is called when creating a new page for this richlet to serve.
 	 */
 	public LanguageDefinition getLanguageDefinition();
-	/** Returns the default scripting language which is assumed when
-	 * a zscript element doesn't specify any language.
-	 *
-	 * @return the default scripting language, say, Java. Never null.
-	 */
-	public String getZScriptLanguage();
 }
