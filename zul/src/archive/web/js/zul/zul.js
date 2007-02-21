@@ -20,6 +20,9 @@ zk.load("zul.lang.msgzul*");
 
 ////
 zul = {};
+zul._modal2 = new Array();
+	//an array of modal wnd's uuid waiting for 2nd phase processing,
+	//e.g. disable
 
 /** Exetends zkau.js to process additional command.
  * Note: it shall return wehther this command is processed.
@@ -100,10 +103,24 @@ zul.doModal = function (cmp) {
 	}
 
 	zkau.floatWnd(cmp, null, zkau.onWndMove);
-	zk.disableAll(cmp);
-	zk.restoreDisabled(cmp); //there might be two or more modal dlgs
 	zk.focusDownById(cmp.id);
+
+	zul._modal2.push(cmp.id);
+	setTimeout(zul._doModal2, 8); //process it later for better responsive
 };
+/** Does the 2nd phase processing of modal. */
+zul._doModal2 = function () {
+	if (zul._modal2.length) {
+		var uuid = zul._modal2.shift();
+		var cmp = $(uuid);
+		if (cmp) {
+			zk.restoreDisabled(cmp); //there might be two or more modal dlgs
+			zk.disableAll(cmp);
+		}
+		if (zul._modal2.length)
+			setTimeout(zul._doModal2, 8);
+	}
+}
 
 /** Makes the modal component as normal. */
 zul.endModal = function (uuid) {
@@ -119,6 +136,7 @@ zul.endModal = function (uuid) {
 	}
 
 	zkau._modals.remove(uuid);
+	zul._modal2.remove(uuid);
 	for (;;) {
 		if (zkau._modals.length == 0) {
 			zk.unlisten(window," resize", zul.doMoveMask);
