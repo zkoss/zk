@@ -21,8 +21,8 @@ package org.zkoss.zk.ui;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.zkoss.zk.ui.ext.AfterCompose;
-import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.ext.Macro;
 
 /**
  * The implemetation of a macro component upon HTML.
@@ -33,15 +33,15 @@ import org.zkoss.zk.ui.ext.DynamicPropertied;
  *
  * @author tomyeh
  */
-public class HtmlMacroComponent extends HtmlBasedComponent
-implements AfterCompose, IdSpace, DynamicPropertied {
+public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	private Map _props = new HashMap();
+	private String _uri;
 
 	public HtmlMacroComponent() {
 		_props.put("includer", this);
 	}
 
-	//-- AfterCompose --//
+	//-- Macro --//
 	/** Creates the child components after apply dynamic properties
 	 * {@link #setDynamicProperty}.
 	 *
@@ -55,17 +55,12 @@ implements AfterCompose, IdSpace, DynamicPropertied {
 			throw new IllegalStateException("No execution available.");
 		exec.createComponents(getMilieu().getMacroURI(this), this, _props);
 	}
-
-	//extra//
-	/** Detaches all child components and then recreate them by use of 
-	 * {@link #afterCompose}.
-	 *
-	 * <p>It is used if you have assigned new values to dynamical properties
-	 * and want to re-create child components to reflect the new values.
-	 * Note: it is convenient but the performance is better if you can manipulate
-	 * only the child components that need to be changed.
-	 * Refer to the Developer's Guide for details.
-	 */
+	public void setMacroURI(String uri) {
+		if (!Objects.equals(_uri, uri)) {
+			_uri = uri;
+			recreate();
+		}
+	}
 	public void recreate() {
 		getChildren().clear();
 		afterCompose();
