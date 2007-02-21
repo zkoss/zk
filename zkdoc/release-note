@@ -3,6 +3,7 @@ ZK 2.3.0 Freshly
 * Features:
   1658748: Prevent user from pressing ESC when loading JS
   1655219: Radiogroup's layout independent Radio button
+  1662365: Macro setMacroURI()
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
