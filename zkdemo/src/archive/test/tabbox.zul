@@ -19,8 +19,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window>
-	<tabbox id="tb" width="400" orient="vertical">
-		<tabs>
+	<tabbox id="tb" width="400px" orient="vertical">
+		<tabs width="100px">
 			<tab id="tab0" label="Tab 1"/>
 			<tab label="Tab 2"/>
 		</tabs>
