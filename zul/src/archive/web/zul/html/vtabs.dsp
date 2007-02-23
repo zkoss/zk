@@ -20,7 +20,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <td id="${self.uuid}" align="right" z.type="zul.tab.Tabs"${self.outerAttrs}${self.innerAttrs}>
-<table border="0" cellpadding="0" cellspacing="0">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
 
 <%-- prefix row  --%>
 <tr>
