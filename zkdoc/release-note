@@ -11,6 +11,7 @@ ZK 2.3.0 Freshly
   1659601: 3D Groupbox and Disappearing Grid items in IE6
   1659972: IE Table update - COL and COLGROUP elements
   1660495: ZHTML: Colgroup cannot accept children
+  1666286: the size of the vertical tabs not changeable
 
 * Upgrade Notes:
 
