@@ -14,6 +14,7 @@ ZK 2.3.0 Freshly
   1666286: the size of the vertical tabs not changeable
   1668708: NullPointerException in BindingRenderer
   1639006: Listbox col. header in IE7 renders in wrong place
+  1638662: Bandpopup size limit on IE7
 
 * Upgrade Notes:
 
