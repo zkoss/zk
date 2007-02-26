@@ -141,11 +141,12 @@ zk.Selectable.prototype = {
 					//Moz has a bug to send the request out if we don't wait long enough
 					//How long is enough is unknown, but 200 seems fine
 			};
-
-			setTimeout("zkSel._calcSize('"+this.id+"')", 5);
-				//don't calc now because browser might size them later
-				//after the whole HTML page is processed
 		}
+
+		setTimeout("zkSel._calcSize('"+this.id+"')", 5);
+			//don't calc now because browser might size them later
+			//after the whole HTML page is processed
+
 		this._render(20);
 	},
 	cleanup: function ()  {
@@ -638,6 +639,8 @@ zk.Selectable.prototype = {
 	_calcSize: function () {
 		this._calcHgh();
 
+		if (this.paging) return; //nothing to adjust since single table
+
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
 		//IE: element's width will be extended to fit body
@@ -645,17 +648,15 @@ zk.Selectable.prototype = {
 		//
 		//Bug 1616056: we have to use style.width, if possible, since clientWidth
 		//is sometime too big
-		if (!this.paging) { //note: we don't solve this bug for paging yet
-			var wd = this.element.style.width;
-			if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-				wd = this.element.clientWidth;
-				if (wd) wd += "px";
-			}
-			if (wd) {
-				this.body.style.width = wd;
-				if (this.head) this.head.style.width = wd;
-				if (this.foot) this.foot.style.width = wd;
-			}
+		var wd = this.element.style.width;
+		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+			wd = this.element.clientWidth;
+			if (wd) wd += "px";
+		}
+		if (wd) {
+			this.body.style.width = wd;
+			if (this.head) this.head.style.width = wd;
+			if (this.foot) this.foot.style.width = wd;
 		}
 
 		var tblwd = this.body.clientWidth;
@@ -663,7 +664,8 @@ zk.Selectable.prototype = {
 			if (tblwd && this.body.offsetWidth - tblwd > 11) {
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
-			} else this.bodytbl.style.width = "";
+			} else
+				this.bodytbl.style.width = "";
 
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
@@ -816,6 +818,8 @@ zk.Selectable.prototype = {
 		setTimeout("zkSel._calcSize('"+this.id+"')", 20);
 	},
 	cleanSize: function () {
+		if (this.paging) return; //nothing to adjust since single table
+
 		this.body.style.width = this.bodytbl.style.width = "";
 		if (this.headtbl) {
 			this.head.style.width = this.body.style.height = "";

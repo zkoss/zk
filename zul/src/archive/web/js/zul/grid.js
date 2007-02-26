@@ -92,8 +92,7 @@ zk.Grid.prototype = {
 
 		this.stripe();
 
-		if (!this.paging)
-			setTimeout("zkGrid._calcSize('"+this.id+"')", 5);
+		setTimeout("zkGrid._calcSize('"+this.id+"')", 5);
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
 	},
@@ -175,12 +174,15 @@ zk.Grid.prototype = {
 		this.updSize();
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
 
+		if (this.paging) return; //nothing to adjust since single table
+
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
 			if (tblwd && this.body.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
-			} else this.bodytbl.style.width = "";
+			} else
+					this.bodytbl.style.width = "";
 
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + "px";
@@ -200,6 +202,8 @@ zk.Grid.prototype = {
 	},
 	/** Cleanup size */
 	cleanSize: function () {
+		if (this.paging) return; //nothing to adjust since single table
+
 		this.body.style.width = this.bodytbl.style.width = "";
 		if (this.headtbl) {
 			this.head.style.width = "";
