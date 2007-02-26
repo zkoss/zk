@@ -259,8 +259,11 @@ zkCmbox.open = function (pp, hilite) {
 		zkau.asapTimeout(cb, "onOpen"));
 };
 zkCmbox._open = function (cb, uuid, pp, hilite) {
+	var ppofs = zkCmbox._popupofs(pp);
+	pp.style.width = ppofs[0];
+	pp.style.height = "auto";
+
 	var pp2 = $e(uuid + "!cave");
-	pp.style.width = pp.style.height = "auto";
 	if (pp2) pp2.style.width = pp2.style.height = "auto";
 	pp.style.position = "absolute"; //just in case
 	pp.style.overflow = "auto"; //just in case
@@ -277,21 +280,23 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	}
 
 	//fix size
-	if (pp.offsetHeight > 200) {
-		pp.style.height = "200px";
-		pp.style.width = "auto"; //recalc
+	if (ppofs[1] == "auto" && pp.offsetHeight > 250) {
+		pp.style.height = "250px";
 	} else if (pp.offsetHeight < 10) {
 		pp.style.height = "10px"; //minimal
 	}
-	if (pp.offsetWidth < cb.offsetWidth) {
-		pp.style.width = cb.offsetWidth + "px";
-		if (pp2) pp2.style.width = "100%";
-			//Note: we have to set width to auto and then 100%
-			//Otherwise, IE won't behave correctly.
-	} else {
-		var wd = zk.innerWidth() - 20;
-		if (wd < cb.offsetWidth) wd = cb.offsetWidth;
-		if (pp.offsetWidth > wd) pp.style.width = wd;
+
+	if (ppofs[0] == "auto") {
+		if (pp.offsetWidth < cb.offsetWidth) {
+			pp.style.width = cb.offsetWidth + "px";
+			if (pp2) pp2.style.width = "100%";
+				//Note: we have to set width to auto and then 100%
+				//Otherwise, the width is too wide in IE
+		} else {
+			var wd = zk.innerWidth() - 20;
+			if (wd < cb.offsetWidth) wd = cb.offsetWidth;
+			if (pp.offsetWidth > wd) pp.style.width = wd;
+		}
 	}
 
 	zk.position(pp, cb, "after-start");
@@ -300,6 +305,19 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 		//IE issue: we have to re-position again because some dimensions
 		//might not be correct here
 };
+/** Returns [width, height] for the popup if specified by user. */
+zkCmbox._popupofs = function (pp) {
+	for (var n = pp.firstChild; n; n = n.nextSibling)
+		if (n.id) {
+			if (!n.id.endsWith("!cave")) { //bandbox's popup
+				var w = n.style.width, h = n.style.height; 
+				return [w ? w: "auto", h ? h: "auto"];
+			}
+			break;
+		}
+	return ["auto", "auto"];
+};
+
 /** Re-position the popup. */
 zkCmbox._repos = function (uuid, hilite) {
 	var cb = $e(uuid);
