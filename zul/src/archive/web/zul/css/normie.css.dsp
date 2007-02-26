@@ -211,6 +211,9 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td {
 	cursor: hand; cursor: pointer; padding: 0 2px;
 	font-size: x-small; font-weight: normal;
 }
+div.tree-body td {
+	font-size: 110%; <%-- Too small comparing to the spacing --%>
+}
 
 div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, div.tree-foot, tbody.tree-foot { <%-- always used --%>
 	background: threedface; border-top: 1px solid threedshadow;
