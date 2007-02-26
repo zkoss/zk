@@ -81,14 +81,18 @@ import java.util.Iterator;
 		
 	//-- ListitemRenderer --//
 	public void render(Listitem item, java.lang.Object bean) {
-		item.getChildren().addAll((List)item.getAttribute(KIDS));
-		item.removeAttribute(KIDS);
-		
-		//remove template mark of cloned component and its decendant
-		_binder.setupTemplateComponent(item, null); 
-		
-		//setup clone id
-		setupCloneIds(item);
+		final List kids = (List) item.getAttribute(KIDS);
+		//kids is null when it is a simple rerender without going thru newListitem()
+		if (kids != null) {
+			item.getChildren().addAll(kids);
+			item.removeAttribute(KIDS);
+			
+			//remove template mark of cloned component and its decendant
+			_binder.setupTemplateComponent(item, null); 
+			
+			//setup clone id
+			setupCloneIds(item);
+		}
 
 		//bind bean to the associated listitem and its decendant
 		final String varname = (String) _template.getAttribute(_binder.VARNAME);

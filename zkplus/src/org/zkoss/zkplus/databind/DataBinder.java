@@ -62,6 +62,7 @@ public class DataBinder {
 	/*package*/ static final String TEMPLATE = "zkplus.databind.TEMPLATE"; //clone -> template
 	private static final String OWNER = "zkplus.databind.OWNER"; //the collection owner of the template component
 	private static final Object NA = new Object();
+	private static final String ASSIGNVAR = "var_tmp_assignment"; //the temp var name for assignment script
 
 	private Map _compBindingMap = new LinkedHashMap(29); //(comp, Map(attr, Binding))
 	private Map _beans = new HashMap(29); //bean local to this DataBinder
@@ -787,15 +788,19 @@ public class DataBinder {
 	private void setZScriptVariable(Component comp, String beanid, Object val) {
 		final Page page = comp.getPage();
 		//put val into Page's name space with a strange variable name.
-		page.setVariable("var_abcefghijklmnopqrstuvwxyz", val);
+		page.setVariable(ASSIGNVAR, val);
 		
 		//for all loaded interperter, let interpret the assignment script
-		final String script = beanid + " = var_abcefghijklmnopqrstuvwxyz";
+		final String script = beanid + " = "+ ASSIGNVAR;
 		final Namespace ns = page.getNamespace();
 		final Collection interpreters = page.getLoadedInterpreters();
 		for(final Iterator it = interpreters.iterator(); it.hasNext();) {
 			final Interpreter interpreter = (Interpreter) it.next();
-			interpreter.interpret(script, ns);
+			if ("ruby".equalsIgnoreCase(interpreter.getLanguage())) {
+				interpreter.interpret("$"+script, ns);
+			} else {
+				interpreter.interpret(script, ns);
+			}
 		}
 	}
 
