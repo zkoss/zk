@@ -152,6 +152,12 @@ import org.zkoss.lang.Objects;
 		<comboitem label="Item 19"/>
 		<comboitem label="Item 20"/>
 		<comboitem label="Item 21"/>
+		<comboitem label="Item 22"/>
+		<comboitem label="Item 23"/>
+		<comboitem label="Item 24"/>
+		<comboitem label="Item 25"/>
+		<comboitem label="Item 26"/>
+		<comboitem label="Item 27"/>
 		<comboitem label="Last"/>
 	</combobox>
 	<checkbox onCheck="combo3.autodrop = self.checked" label="autodrop"/>
