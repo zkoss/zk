@@ -77,6 +77,9 @@ div.wnd-i { <%-- the inner div of a window; independent of window's sclass --%>
 .caption input, .caption td {
 	font-size: x-small;
 }
+.caption td.caption {
+	font-size: small;
+}
 .caption button {
 	font-size: xx-small; font-weight: normal;
 	padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;
@@ -88,7 +91,7 @@ div.wnd-i { <%-- the inner div of a window; independent of window's sclass --%>
 
 <%-- window title/caption --%>
 .title td {
-	font-size: x-small; font-weight: bold;
+	font-size: small;
 	padding-top: 2px; padding-bottom: 3px; margin-bottom: 2px;
 	background: #669; color: white;
 }
@@ -210,6 +213,9 @@ div.listbox-pgi, div.grid-pgi {
 div.tree-body td, div.listbox-body td, div.listbox-paging td {
 	cursor: hand; cursor: pointer; padding: 0 2px;
 	font-size: small; font-weight: normal;
+}
+div.tree-body td, div.tree-head th {
+	font-size: 12px; <%-- Too small if the spacing with 18px --%>
 }
 
 div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, div.tree-foot, tbody.tree-foot { <%-- always used --%>

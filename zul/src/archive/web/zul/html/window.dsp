@@ -35,7 +35,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
   <c:choose>
    <c:when test="${empty self.caption}">
 <tr id="${self.uuid}!caption" class="title">
-<td><c:out value="${self.title}"/></td>
+<td class="caption"><c:out value="${self.title}"/></td>
 <c:if test="${self.closable}">
 	<td width="16"><img id="${self.uuid}!close" src="${c:encodeURL('~./zul/img/close-off.gif')}"/></td>
 </c:if>

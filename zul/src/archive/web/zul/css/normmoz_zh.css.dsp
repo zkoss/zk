@@ -72,10 +72,13 @@ div.wnd-i { <%-- the inner div of a window; independent of window's sclass --%>
 
 <%-- groupbox caption --%>
 .caption input, .caption td {
-	font-size: x-small;
+	font-size: small;
+}
+.caption td.caption {
+	font-size: medium;
 }
 .caption button {
-	font-size: xx-small; font-weight: normal;
+	font-size: x-small; font-weight: normal;
 	padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;
 }
 .caption a, .caption a:visited {
@@ -85,7 +88,7 @@ div.wnd-i { <%-- the inner div of a window; independent of window's sclass --%>
 
 <%-- window title/caption --%>
 .title td {
-	font-size: small; font-weight: bold;
+	font-size: medium;
 	padding-top: 2px; padding-bottom: 3px; margin-bottom: 2px;
 	background: #669; color: white;
 }
