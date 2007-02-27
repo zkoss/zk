@@ -47,6 +47,7 @@ import org.zkoss.zk.ui.sys.RequestQueue;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.au.AuBookmark;
 
 /**
@@ -276,9 +277,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public String getCurrentDirectory() {
 		return _dir;
 	}
-	public Collection getSuspendedThreads() {
-		return ((WebAppCtrl)_wapp).getUiEngine().getSuspendedThreads(this);
-	}
 
 	//-- DesktopCtrl --//
 	public RequestQueue getRequestQueue() {
@@ -337,6 +335,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				log.error("Failed to destroy "+pgc, ex);
 			}
 		}
+	}
+
+	public Collection getSuspendedThreads() {
+		return ((WebAppCtrl)_wapp).getUiEngine().getSuspendedThreads(this);
+	}
+	public void ceaseSuspendedThread(EventProcessingThread evtthd, String cause) {
+		//TODO
 	}
 
 	//-- Object --//

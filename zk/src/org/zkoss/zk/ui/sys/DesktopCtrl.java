@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.util.Collection;
+
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -90,4 +92,37 @@ public interface DesktopCtrl {
 	/** Called when the desktop is about to be destroyed.
 	 */
 	public void destroy();
+
+	/** Returns a collection of suspended event processing threads, or empty
+	 * if no suspended thread at all.
+	 *
+	 * <p>An event processing thread is an instance of
+	 * {@link EventProcessingThread}
+	 *
+	 * <p>Note: if you access this method NOT in an event listener for
+	 * the SAME desktop, you have to synchronize the iteration
+	 * (though the returned collection is synchronized).
+	 * Of course, it is always safe to test whether it is empty
+	 * ({@link Collection#isEmpty}).
+	 *
+	 * <pre><code>
+//Use the following pathern IF it is not in the SAME desktop's listener
+Collection c = otherDesktop.getSuspendedThreads();
+if (c.isEmpty()) {
+	//do something accordingly
+} else {
+  synchronized (c) {
+    for (Iterator it = c.iterator(); it.hasNext();) {
+      //...
+    }
+  }
+}</code></pre>
+	 */
+	public Collection getSuspendedThreads();
+	/** Ceases the specified event thread.
+	 *
+	 * @param cause a human-readable text to describe the cause.
+	 * It will be the message of the thrown InterruptedException.
+	 */
+	public void ceaseSuspendedThread(EventProcessingThread evtthd, String cause);
 }

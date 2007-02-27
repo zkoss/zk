@@ -87,6 +87,11 @@ public interface WebApp extends Locator {
 	 * on the server's filesystem would be served by a request for
 	 * "http://host/contextPath/index.html", where contextPath is
 	 * the context path of this {@link WebApp}.
+	 *
+	 * <p>Notice that ZK don't count on this method to retrieve resources.
+	 * If you want to change the mapping of URI to different resources,
+	 * override {@link org.zkoss.zk.ui.sys.UiFactory#getPageDefinition}
+	 * instead.
 	 */
 	public String getRealPath(String path);
 

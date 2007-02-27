@@ -91,7 +91,10 @@ implements EventProcessingThread {
 	private final Object _evtmutex = new Object();
 	/** The mutex use to suspend an event processing. */
 	private Object _suspmutex;
-	private boolean _ceased;
+	/** If null, it means not ceased yet.
+	 * If not null, it means it is ceased and it is a text describing the cause.
+	 */
+	private String _ceased;
 	/** Whether not to show message when stopping. */
 	private boolean _silent;
 	/** Whether it is suspended. */
@@ -105,7 +108,10 @@ implements EventProcessingThread {
 
 	//EventProcessingThread//
 	public boolean isCeased() {
-		return _ceased;
+		return _ceased != null;
+	}
+	public boolean isSuspended() {
+		return _suspended;
 	}
 	synchronized public boolean isIdle() {
 		return _event == null;
@@ -120,10 +126,15 @@ implements EventProcessingThread {
 	//extra utilities//
 	/** Stops the thread. Called only by {@link org.zkoss.zk.ui.sys.UiEngine}
 	 * when it is stopping.
+	 * <p>Application developers shall use {@link org.zkoss.zk.ui.sys.DesktopCtrl#ceaseSuspendedThread}
+	 * instead.
+	 *
+	 * @param cause a human readable text describing the cause.
+	 * If null, an empty string is assumed.
 	 */
-	public void cease() {
+	public void cease(String cause) {
 		synchronized (_evtmutex) {
-			_ceased = true;
+			_ceased = cause != null ? cause: "";
 			_evtmutex.notifyAll();
 		}
 		if (_suspmutex != null) {
@@ -135,9 +146,9 @@ implements EventProcessingThread {
 	/** Stops the thread silently. Called by {@link org.zkoss.zk.ui.sys.UiEngine}
 	 * to stop abnormally.
 	 */
-	public void ceaseSilently() {
+	public void ceaseSilently(String cause) {
 		_silent = true;
-		cease();
+		cease(cause);
 	}
 
 	/** Returns the number of event threads.
@@ -188,14 +199,16 @@ implements EventProcessingThread {
 					_evtmutex.notify();
 				}
 
-				if (!_ceased) _suspmutex.wait();
+				if (_ceased == null) _suspmutex.wait();
 			}
 		} finally {
 			_suspmutex = null;
 			_suspended = false; //just in case (such as _ceased)
 		}
 
-		if (_ceased) throw new InterruptedException("Ceased");
+		if (_ceased != null)
+			throw new InterruptedException(_ceased);
+
 		setup();
 
 		if (_evtThdResumes != null && !_evtThdResumes.isEmpty()) {
@@ -239,7 +252,7 @@ implements EventProcessingThread {
 			//If complete: isIdle() is true
 			//If suspend again: _suspended is true
 			synchronized (_evtmutex) {
-				if (!_ceased && !isIdle() && !_suspended)
+				if (_ceased == null && !isIdle() && !_suspended)
 					_evtmutex.wait();
 			}
 		} finally {
@@ -266,8 +279,8 @@ implements EventProcessingThread {
 			throw new IllegalStateException("processEvent cannot be called in an event thread");
 		if (comp == null || event == null)
 			throw new IllegalArgumentException("null");
-		if (_ceased)
-			throw new InternalError("The event thread has beeing stopped");
+		if (_ceased != null)
+			throw new InternalError("The event thread has beeing stopped. Cause: "+_ceased);
 		if (_comp != null)
 			throw new InternalError("reentering processEvent not allowed");
 
@@ -287,7 +300,7 @@ implements EventProcessingThread {
 				_event = event;
 					//Bug 1577842: don't let event thread start (and end) too early
 				_evtmutex.notify(); //ask the event thread to handle it
-				if (!_ceased) {
+				if (_ceased == null) {
 					_evtmutex.wait();
 						//wait until the event thread to complete or suspended
 
@@ -359,7 +372,7 @@ implements EventProcessingThread {
 	public void run() {
 		++_nThd;
 		try {
-			while (!_ceased) {
+			while (_ceased == null) {
 				final boolean evtAvail = !isIdle();
 				if (evtAvail) {
 					Configuration config = _desktop.getWebApp().getConfiguration();
@@ -397,7 +410,8 @@ implements EventProcessingThread {
 					if (evtAvail)
 						_evtmutex.notify();
 						//wake the main thread OR the resuming thread
-					if (!_ceased) _evtmutex.wait();
+					if (_ceased == null)
+						_evtmutex.wait();
 						//wait the main thread to issue another request
 				}
 			}

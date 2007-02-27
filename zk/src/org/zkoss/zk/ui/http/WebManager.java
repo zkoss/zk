@@ -18,16 +18,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.Enumeration;
 import java.net.URL;
-import java.net.MalformedURLException;
-import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -36,10 +32,8 @@ import javax.servlet.http.HttpSession;
 import javax.portlet.RenderRequest;
 
 import org.zkoss.lang.D;
-import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
-import org.zkoss.el.impl.AttributesMap;
 
 import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.web.util.resource.ServletLabelLocator;
@@ -57,7 +51,6 @@ import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.ConfigParser;
-import org.zkoss.zk.ui.impl.AbstractWebApp;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
@@ -110,7 +103,7 @@ public class WebManager {
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
-		_wapp = new MyWebApp();
+		_wapp = new SimpleWebApp(_ctx);
 		final Configuration cfg = _wapp.getConfiguration();
 		try {
 			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
@@ -350,81 +343,5 @@ public class WebManager {
 			assert dt == null || dt == desktop: "old:"+dt+", new:"+desktop;
 		}*/
 		WebManager.setRequestLocal(request, ATTR_DESKTOP, desktop);
-	}
-
-	//-- inner classes --//
-	private class MyWebApp extends AbstractWebApp {
-		private MyWebApp() {
-		}
-		private final Map _attrs = new AttributesMap() {
-			protected Enumeration getKeys() {
-				return _ctx.getAttributeNames();
-			}
-			protected Object getValue(String key) {
-				return _ctx.getAttribute(key);
-			}
-			protected void setValue(String key, Object val) {
-				_ctx.setAttribute(key, val);
-			}
-			protected void removeValue(String key) {
-				_ctx.removeAttribute(key);
-			}
-		};
-
-		public Object getAttribute(String name) {
-			return _ctx.getAttribute(name);
-		}
-		public void setAttribute(String name, Object value) {
-			_ctx.setAttribute(name, value);
-		}
-		public void removeAttribute(String name) {
-			_ctx.removeAttribute(name);
-		}
-		public Map getAttributes() {
-			return _attrs;
-		}
-
-		public WebApp getWebApp(String uripath) {
-			final ServletContext another = _ctx.getContext(uripath);
-			if (another != null) {
-				final WebManager webman = getWebManagerIfAny(another);
-				if (webman != null)
-					return webman.getWebApp();
-			}
-			return null;
-		}
-		public String getDirectory() {
-			return null;
-		}
-		public URL getResource(String path) {
-			try {
-				return _ctx.getResource(path);
-			} catch (MalformedURLException ex) {
-				throw new UiException("Failed to retrieve "+path, ex);
-			}
-		}
-		public InputStream getResourceAsStream(String path) {
-			return _ctx.getResourceAsStream(path);
-		}
-
-		public String getInitParameter(String name) {
-			return _ctx.getInitParameter(name);
-		}
-		public Iterator getInitParameterNames() {
-			return new CollectionsX.EnumerationIterator(
-				_ctx.getInitParameterNames());
-		}
-		public String getRealPath(String path) {
-			return _ctx.getRealPath(path);
-		}
-		public String getMimeType(String file) {
-			return _ctx.getMimeType(file);
-		}
-		public Set getResourcePaths(String path) {
-			return _ctx.getResourcePaths(path);
-		}
-		public Object getNativeContext() {
-			return _ctx;
-		}
 	}
 }

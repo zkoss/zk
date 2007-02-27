@@ -85,7 +85,7 @@ public class UiEngineImpl implements UiEngine {
 	public void stop(WebApp wapp) {
 		synchronized (_evtthds) {
 			for (Iterator it = _evtthds.iterator(); it.hasNext();)
-				((EventProcessingThreadImpl)it.next()).cease();
+				((EventProcessingThreadImpl)it.next()).cease("Stop application");
 			_evtthds.clear();
 		}
 
@@ -96,7 +96,7 @@ public class UiEngineImpl implements UiEngine {
 					for (Iterator i2 = map.values().iterator(); i2.hasNext();) {
 						final List list = (List)i2.next();
 						for (Iterator i3 = list.iterator(); i3.hasNext();)
-							((EventProcessingThreadImpl)i3.next()).cease();
+							((EventProcessingThreadImpl)i3.next()).cease("Stop application");
 					}
 				}
 			}
@@ -107,7 +107,7 @@ public class UiEngineImpl implements UiEngine {
 				final List list = (List)it.next();
 				synchronized (list) {
 					for (Iterator i2 = list.iterator(); i2.hasNext();)
-						((EventProcessingThreadImpl)i2.next()).cease();
+						((EventProcessingThreadImpl)i2.next()).cease("Stop application");
 				}
 			}
 			_resumed.clear();
@@ -118,8 +118,8 @@ public class UiEngineImpl implements UiEngine {
 		synchronized (_suspended) {
 			map = (Map)_suspended.get(desktop);
 		}
-		if (map == null) return Collections.EMPTY_LIST;
-		return Collections.synchronizedMap(map).values();
+		return map == null || map.isEmpty() ? Collections.EMPTY_LIST:
+			Collections.synchronizedMap(map).values();
 	}
 
 	public void desktopDestroyed(Desktop desktop) {
@@ -137,7 +137,7 @@ public class UiEngineImpl implements UiEngine {
 					for (Iterator i2 = list.iterator(); i2.hasNext();) {
 						final EventProcessingThreadImpl evtthd =
 							(EventProcessingThreadImpl)i2.next();
-						evtthd.ceaseSilently();
+						evtthd.ceaseSilently("Destroy desktop "+desktop);
 						conf.invokeEventThreadResumeAborts(
 							evtthd.getComponent(), evtthd.getEvent());
 					}
@@ -154,7 +154,7 @@ public class UiEngineImpl implements UiEngine {
 				for (Iterator it = list.iterator(); it.hasNext();) {
 					final EventProcessingThreadImpl evtthd =
 						(EventProcessingThreadImpl)it.next();
-					evtthd.ceaseSilently();
+					evtthd.ceaseSilently("Destroy desktop "+desktop);
 					conf.invokeEventThreadResumeAborts(
 						evtthd.getComponent(), evtthd.getEvent());
 				}
@@ -822,7 +822,7 @@ public class UiEngineImpl implements UiEngine {
 						(EventProcessingThreadImpl)it.next();
 					if (D.ON && log.finerable()) log.finer("Resume "+evtthd);
 					if (uv.isAborting()) {
-						evtthd.ceaseSilently();
+						evtthd.ceaseSilently("Resume aborted");
 					} else {
 						try {
 							if (evtthd.doResume()) //wait it complete or suspend again
@@ -874,7 +874,7 @@ public class UiEngineImpl implements UiEngine {
 					}
 				}
 			}
-			evtthd.ceaseSilently();
+			evtthd.ceaseSilently("Recycled");
 		}
 	}
 
