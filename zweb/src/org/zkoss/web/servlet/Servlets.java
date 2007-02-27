@@ -157,12 +157,27 @@ public class Servlets {
 			pgpath = pgpath.substring(0, f) + bc + pgpath.substring(f + 1);
 		}
 
-		//by locale?
-		if (l < pgpath.length() - 1
-		&& (pgpath.charAt(l + 1) != '.' || pgpath.indexOf('/', l + 1) >= 0))
+		//remove "*"
+		pgpath = pgpath.substring(0, l) + pgpath.substring(l + 1); //remove
+
+		//by locale? 1) before the first dot, 2) the last char if no dot
+		boolean byLocale = l == pgpath.length()
+		|| (pgpath.charAt(l) == '.' && pgpath.indexOf('/', l + 1) < 0);
+		if (byLocale) {
+			//make sure no dot before it
+			for (int j = l; --j >= 0;) {
+				final char cc = pgpath.charAt(j);
+				if (cc == '.') {
+					byLocale = false;
+					break;
+				} else if (cc == '/') {
+					break;
+				}
+			}
+		}
+		if (!byLocale)
 			return qstr != null ? pgpath + qstr: pgpath; //not by locale
 
-		pgpath = pgpath.substring(0, l) + pgpath.substring(l + 1); //remove "*"
 
 		final String PGPATH_CACHE = "s_pgpath_cache";
 		Map map = (Map)ctx.getAttribute(PGPATH_CACHE);
