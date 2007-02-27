@@ -367,4 +367,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Returns the locale for the current request.
 		</description>
 	</function>
+	<function>
+		<name>testCurrentLocale</name>
+		<function-class>org.zkoss.util.Locales</function-class>
+		<function-signature>
+	boolean testCurrent(java.lang.String, java.lang.String)
+		</function-signature>
+		<description>
+	Returns whether the current locale belongs to the specified
+	language and/or country.
+
+	@param lang the language code, e.g., en and zh. Ignored if null.
+	@param country the country code, e.g., US. Ignored if null.
+		If empty, it means no country code at all.
+		</description>
+	</function>
 </taglib>
