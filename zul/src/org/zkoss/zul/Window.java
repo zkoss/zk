@@ -356,6 +356,12 @@ public class Window extends XulElement implements IdSpace {
 	 * @param name the mode which could be one of
 	 * "embedded", "overlapped" and "popup".
 	 * Note: it cannot be "modal". Use {@link #doModal} instead.
+	 *
+	 * @exception InterruptedException thrown if "modal" is specified,
+	 * and one of the following conditions occurs:
+	 * 1) the desktop or the Web application is being destroyed, or
+	 * 2) {@link org.zkoss.zk.ui.sys.DesktopCtrl#ceaseSuspendedThread}.
+	 * To tell the difference, check the getMessage method of InterruptedException.
 	 */
 	public void setMode(String name) throws InterruptedException {
 		if ("popup".equals(name)) doPopup();
@@ -396,6 +402,11 @@ public class Window extends XulElement implements IdSpace {
 	 * Rather, you shall use {@link org.zkoss.zk.ui.event.Events#postEvent} to
 	 * post the onModal event.
 	 * Refer to {@link #setMode} for more description.
+	 *
+	 * @exception InterruptedException thrown if the desktop or
+	 * the Web application is being destroyed, or
+	 * {@link org.zkoss.zk.ui.sys.DesktopCtrl#ceaseSuspendedThread}.
+	 * To tell the difference, check the getMessage method of InterruptedException.
 	 */
 	public void doModal() throws InterruptedException {
 		checkOverlappable();
