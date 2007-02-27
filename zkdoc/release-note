@@ -18,6 +18,9 @@ ZK 2.3.0 Freshly
 
 * Upgrade Notes:
 
+* Notes for upgrading from 2.3.0 RC
+  + getSuspsendedThreads is moved from Desktop to DesktopCtrl
+
 	--------
 ZK 2.3.0 RC
 * Features:
