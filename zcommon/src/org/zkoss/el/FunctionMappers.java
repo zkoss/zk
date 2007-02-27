@@ -116,7 +116,7 @@ public class FunctionMappers {
 			try {
 				cls = Classes.forNameByThread(clsName);
 			} catch (ClassNotFoundException ex) {
-				log.error("Class not found: "+clsName+", "+e.getLocator());
+				log.error("Class not found: "+clsName+", "+e.getLocator(), ex);
 				excp = ex;
 				continue; //to report as many errors as possible
 			}
@@ -128,15 +128,15 @@ public class FunctionMappers {
 				else
 					log.error("Not a static method: "+mtd);
 			} catch (ClassNotFoundException ex) {
-				log.error("Class not found: "+clsName+", "+e.getLocator());
+				log.error("Relavant class not found when loading "+clsName+", "+e.getLocator(), ex);
 				excp = ex;
 				continue;
 			} catch (NoSuchMethodException ex) {
-				log.error("Method not found in "+clsName+": "+sig+" "+e.getLocator());
+				log.error("Method not found in "+clsName+": "+sig+" "+e.getLocator(), ex);
 				excp = ex;
 				continue;
 			} catch (IllegalSyntaxException ex) {
-				log.error("Illegal Signature: "+sig+" "+e.getLocator());
+				log.error("Illegal Signature: "+sig+" "+e.getLocator(), ex);
 				excp = ex;
 				continue;
 			}

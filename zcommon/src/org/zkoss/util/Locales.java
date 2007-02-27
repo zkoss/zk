@@ -46,6 +46,18 @@ public class Locales {
 		final Locale l = (Locale)_thdLocale.get();
 		return l != null ? l: Locale.getDefault();
 	}
+	/** Returns whether the current locale ({@link #getCurrent}) belongs
+	 * to the specified language and/or country.
+	 *
+	 * @param lang the language code, e.g., en and zh. Ignored if null.
+	 * @param country the country code, e.g., US. Ignored if null.
+	 * If empty, it means no country code at all.
+	 */
+	public static final boolean testCurrent(String lang, String country) {
+		final Locale l = getCurrent();
+		return (lang == null || lang.equals(l.getLanguage()))
+			&& (country == null || country.equals(l.getCountry()));
+	}
 	/**
 	 * Sets the locale for the current thread only.
 	 *
