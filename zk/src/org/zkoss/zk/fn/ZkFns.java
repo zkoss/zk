@@ -129,6 +129,8 @@ public class ZkFns {
 	/** Returns HTML tags to include all JavaScript files and codes that are
 	 * required when loading a ZUML page.
 	 *
+	 * <p>Note: it assumes {@link Executions#getCurrent} is available.
+	 *
 	 * <p>FUTURE CONSIDERATION: we might generate the inclusion on demand
 	 * instead of all at once.
 	 */
@@ -213,6 +215,8 @@ public class ZkFns {
 	/** Returns HTML tags to include all style sheets that are
 	 * defined in all languages.
 	 *
+	 * <p>Note: it assumes {@link Executions#getCurrent} is available.
+	 *
 	 * <p>In addition to style sheets defined in lang.xml and lang-addon.xml,
 	 * it also include:
 	 * <ol>
@@ -230,22 +234,23 @@ public class ZkFns {
 
 		//Process all languages
 		final Execution exec = Executions.getCurrent();
-			//Note: exec is null if this method is called by fileupload.dsp
-		final String clientType =
-			exec != null ? exec.getDesktop().getClientType(): "html";
+		final Desktop desktop = exec.getDesktop();
+		final Configuration config = desktop.getWebApp().getConfiguration();
+		final String clientType = desktop.getClientType();
 		final StringBuffer sb = new StringBuffer(512);
 		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
-		it.hasNext();)
-			for (Iterator e = ((LanguageDefinition)it.next())
-			.getStyleSheets().iterator(); e.hasNext();)
-				append(sb, (StyleSheet)e.next(), exec, null);
-
-		if (exec != null) {
-			final String[] hrefs = exec.getDesktop()
-				.getWebApp().getConfiguration().getThemeURIs();
-			for (int j = 0; j < hrefs.length; ++j)
-				append(sb, new StyleSheet(hrefs[j], "text/css"), exec, null);
+		it.hasNext();) {
+			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+			if (config.isDefaultThemeEnabled(langdef.getName())) {
+				for (Iterator e = langdef.getStyleSheets().iterator();
+				e.hasNext();)
+					append(sb, (StyleSheet)e.next(), exec, null);
+			}
 		}
+
+		final String[] hrefs = config.getThemeURIs();
+		for (int j = 0; j < hrefs.length; ++j)
+			append(sb, new StyleSheet(hrefs[j], "text/css"), exec, null);
 
 		return sb.toString();
 	}

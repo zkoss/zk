@@ -22,9 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.HashSet;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.PotentialDeadLockException;
@@ -88,6 +89,8 @@ public class Configuration {
 	private Integer _maxUploadSize = new Integer(5120);
 	private int _promptDelay = 900, _tooltipDelay = 800;
 	private String _charset = "UTF-8";
+	/** A set of the language name whose theme is disabled. */
+	private Set _disabledDefThemes;
 
 	/** Contructor.
 	 */
@@ -1139,6 +1142,39 @@ public class Configuration {
 			}
 			_richlets.clear();
 		}
+	}
+
+	/** Enables or disables the default theme of the specified language.
+	 *
+	 * @param lang the language name, such as xul/html and xhtml.
+	 * @param enable whether to enable or disable.
+	 * If false, the default theme of the specified language is disabled.
+	 * Default: enabled.
+	 */
+	public void enableDefaultTheme(String lang, boolean enable) {
+		if (lang == null || lang.length() == 0)
+			throw new IllegalArgumentException("lang is required");
+
+		synchronized (this) {
+			if (enable) {
+				if (_disabledDefThemes != null) {
+					_disabledDefThemes.remove(lang);
+					if (_disabledDefThemes.isEmpty())
+						_disabledDefThemes = null;
+				}
+			} else {
+				if (_disabledDefThemes == null)
+					_disabledDefThemes =
+						Collections.synchronizedSet(new HashSet(3));
+				_disabledDefThemes.add(lang);
+			}
+		}
+	}
+	/** Returns whether the default theme of the specified language is
+	 * enabled.
+	 */
+	public boolean isDefaultThemeEnabled(String lang) {
+		return _disabledDefThemes == null || !_disabledDefThemes.contains(lang);
 	}
 
 	/** Adds an error page.

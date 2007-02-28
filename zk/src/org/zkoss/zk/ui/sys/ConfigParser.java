@@ -87,12 +87,21 @@ public class ConfigParser {
 				}
 			} else if ("desktop-config".equals(elnm)) {
 			//desktop-config
+			//  disable-theme-uri
 			//	theme-uri
 			//	desktop-timeout
 			//	file-check-period
 			//  processing-prompt-delay
 			//	tooltip-delay
 				parseThemeUri(config, el);
+
+				Element subel = el.getElement("disable-default-theme");
+				if (subel != null) {
+					String s = subel.getText(true);
+					if (s.length() == 0)
+						throw new UiException("The language name, such as xul/html, is required, "+subel.getLocator());
+					config.enableDefaultTheme(s, false); //disable it
+				}
 
 				Integer v = parseInteger(el, "desktop-timeout", false);
 				if (v != null) config.setDesktopMaxInactiveInterval(v);
