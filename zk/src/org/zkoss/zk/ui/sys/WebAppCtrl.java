@@ -19,10 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.ui.Session;
-
-import org.zkoss.zk.ui.sys.DesktopCache;
-import org.zkoss.zk.ui.sys.DesktopCacheProvider;
-import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * Additional interface of {@link org.zkoss.zk.ui.WebApp} for implementation.
@@ -32,9 +29,15 @@ import org.zkoss.zk.ui.sys.UiFactory;
  */
 public interface WebAppCtrl {
 	/** Initializes this WebApplication.
+	 *
+	 * @param context the servlet context, if servlets are used.
+	 * Currently, ZK supports only servlets. In the future there might be
+	 * more to support.
+	 * @param config the configuration (never null)
 	 */
-	public void init();
+	public void init(Object context, Configuration config);
 	/** Destroys this Web applicaiton.
+	 * <p>Note; once destroyed, this instance cannot be used anymore.
 	 */
 	public void destroy();
 

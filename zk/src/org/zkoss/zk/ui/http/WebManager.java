@@ -103,18 +103,19 @@ public class WebManager {
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
-		_wapp = new SimpleWebApp(_ctx);
-		final Configuration cfg = _wapp.getConfiguration();
+		final Configuration config = new Configuration();
 		try {
 			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
 			if (cfgUrl != null)
 				new ConfigParser()
-					.parse(cfgUrl, cfg, new ServletContextLocator(_ctx));
+					.parse(cfgUrl, config, new ServletContextLocator(_ctx));
 		} catch (Throwable ex) {
 			log.error("Unable to load /WEB-INF/zk.xml", ex);
 		}
 
-		((WebAppCtrl)_wapp).init();
+		//create a WebApp instance
+		_wapp = newWebApp(config);
+		((WebAppCtrl)_wapp).init(_ctx, config);
 
 		final List listeners = (List)_actListeners.remove(_ctx); //called and drop
 		if (listeners != null) {
@@ -126,6 +127,18 @@ public class WebManager {
 				} catch (Throwable ex) {
 					log.realCause(ex);
 				}
+			}
+		}
+	}
+	private static WebApp newWebApp(Configuration config) {
+		Class cls = config.getWebAppClass();
+		if (cls == null) {
+			return new SimpleWebApp();
+		} else {
+			try {
+				return (WebApp)cls.newInstance();
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
 			}
 		}
 	}

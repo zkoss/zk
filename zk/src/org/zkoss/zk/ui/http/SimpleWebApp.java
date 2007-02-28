@@ -33,6 +33,7 @@ import org.zkoss.el.impl.AttributesMap;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.impl.AbstractWebApp;
 
 /**
@@ -41,9 +42,17 @@ import org.zkoss.zk.ui.impl.AbstractWebApp;
  * @author tomyeh
  */
 public class SimpleWebApp extends AbstractWebApp {
-	private final ServletContext _ctx;
-	public SimpleWebApp(ServletContext ctx) {
-		_ctx = ctx;
+	private ServletContext _ctx;
+	public SimpleWebApp() {
+	}
+
+	//super//
+	public void init(Object context, Configuration config) {
+		if (context == null)
+			throw new IllegalArgumentException("context");
+		_ctx = (ServletContext)context;
+
+		super.init(context, config);
 	}
 
 	private final Map _attrs = new AttributesMap() {

@@ -38,7 +38,7 @@ import org.zkoss.zk.ui.impl.UiEngineImpl;
  */
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private String _appnm = "ZK";
-	private final Configuration _config;
+	private Configuration _config;
 	private UiEngine _engine;
 	private DesktopCacheProvider _provider;
 	private UiFactory _factory;
@@ -46,11 +46,13 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	/** Constructor.
 	 *
 	 * <p>Note: after constructed, it is not initialized completely.
-	 * Rather, WebManager will initialize it later such as initializing
-	 * {@link #getConfiguration} by loading zk.xml and calling {@link #init}.
+	 * For example, {@link #getConfiguration} returns null.
+	 *
+	 * WebManager will initialize it later such as initializing
+	 * a {@link Configuration} instance by loading zk.xml,
+	 * and then calling {@link #init}.
 	 */
 	protected AbstractWebApp() {
-		_config = new Configuration(this);
 	}
 
 	public String getAppName() {
@@ -69,7 +71,17 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	//WebAppCtrl//
-	public void init() {
+	public void init(Object context, Configuration config) {
+		if (_config != null)
+			throw new IllegalStateException("Cannot be initialized twice");
+		if (config == null)
+			throw new IllegalArgumentException("null");
+		final WebApp oldwapp = config.getWebApp();
+		if (oldwapp != null && oldwapp != this)
+			throw new IllegalArgumentException("config already belongs to other Web app, "+oldwapp);
+		_config = config;
+		_config.setWebApp(this);
+
 		Class cls = _config.getUiEngineClass();
 		final UiEngine engine;
 		if (cls == null) {
@@ -124,6 +136,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		getUiFactory().stop(this);
 		getDesktopCacheProvider().stop(this);
 		getUiEngine().stop(this);
+
+		//we don't reset _config since WebApp cannot be re-inited after stop
 	}
 
 	public final UiEngine getUiEngine() {

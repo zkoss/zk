@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadSuspend;
 import org.zkoss.zk.ui.event.EventThreadResume;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.LocaleProvider;
@@ -67,7 +68,7 @@ import org.zkoss.zk.ui.impl.RichletConfigImpl;
 public class Configuration {
 	private static final Log log = Log.lookup(Configuration.class);
 
-	private final WebApp _wapp;
+	private WebApp _wapp;
 	private final List
 		_evtInits = new LinkedList(), _evtCleans = new LinkedList(),
 		_evtSusps = new LinkedList(), _evtResus = new LinkedList(),
@@ -84,7 +85,7 @@ public class Configuration {
 	private String _timeoutUri;
 	private final List _themeUris = new LinkedList();
 	private transient String[] _roThemeUris = new String[0];
-	private Class _uiengcls, _dcpcls, _uiftycls, _tzpcls, _lpcls;
+	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _tzpcls, _lpcls;
 	private Integer _dtTimeout, _dtMax, _sessTimeout, _evtThdMax;
 	private Integer _maxUploadSize = new Integer(5120);
 	private int _promptDelay = 900, _tooltipDelay = 800;
@@ -94,14 +95,21 @@ public class Configuration {
 
 	/** Contructor.
 	 */
-	public Configuration(WebApp wapp) {
-		_wapp = wapp;
+	public Configuration() {
 	}
-	/** Returns the Web application that this configuration belongs to.
+
+	/** Returns the Web application that this configuration belongs to,
+	 * or null if it is not associated yet.
 	 */
 	public WebApp getWebApp() {
 		return _wapp;
 	}
+	/** Associates it with a web application.
+	 */
+	public void setWebApp(WebApp wapp) {
+		_wapp = wapp;
+	}
+
 	/** Adds a listener class.
 	 */
 	public void addListener(Class klass) throws Exception {
@@ -800,7 +808,7 @@ public class Configuration {
 		return _timeoutUri;
 	}
 
-	/** Sets the class for implementing {@link LocaleProvider}, or null to
+	/** Sets the class that implements {@link LocaleProvider}, or null to
 	 * use the default.
 	 */
 	public void setLocaleProviderClass(Class cls) {
@@ -808,12 +816,12 @@ public class Configuration {
 			throw new IllegalArgumentException("LocaleProvider not implemented: "+cls);
 		_lpcls = cls;
 	}
-	/** Returns the class for implementing {@link LocaleProvider}, or null for default.
+	/** Returns the class that implements {@link LocaleProvider}, or null if default is used.
 	 */
 	public Class getLocaleProviderClass() {
 		return _lpcls;
 	}
-	/** Sets the class for implementing {@link TimeZoneProvider}, or null to
+	/** Sets the class that implements {@link TimeZoneProvider}, or null to
 	 * use the default.
 	 */
 	public void setTimeZoneProviderClass(Class cls) {
@@ -821,13 +829,13 @@ public class Configuration {
 			throw new IllegalArgumentException("TimeZoneProvider not implemented: "+cls);
 		_tzpcls = cls;
 	}
-	/** Returns the class for implementing {@link TimeZoneProvider}, or null for default.
+	/** Returns the class that implements {@link TimeZoneProvider}, or null if default is used.
 	 */
 	public Class getTimeZoneProviderClass() {
 		return _tzpcls;
 	}
 
-	/** Sets the class for implementing {@link UiEngine}, or null to
+	/** Sets the class that implements {@link UiEngine}, or null to
 	 * use the default.
 	 */
 	public void setUiEngineClass(Class cls) {
@@ -835,13 +843,29 @@ public class Configuration {
 			throw new IllegalArgumentException("UiEngine not implemented: "+cls);
 		_uiengcls = cls;
 	}
-	/** Returns the class for implementing {@link UiEngine}, or null for default.
+	/** Returns the class that implements {@link UiEngine}, or null if default is used.
 	 */
 	public Class getUiEngineClass() {
 		return _uiengcls;
 	}
 
-	/** Sets the class for implementing {@link DesktopCacheProvider}, or null to
+	/** Sets the class that implements {@link WebApp} and
+	 * {@link WebAppCtrl}, or null to use the default.
+	 */
+	public void setWebAppClass(Class cls) {
+		if (cls != null && (!WebApp.class.isAssignableFrom(cls)
+		|| !WebAppCtrl.class.isAssignableFrom(cls)))
+			throw new IllegalArgumentException("WebApp or WebAppCtrl not implemented: "+cls);
+		_wappcls = cls;
+	}
+	/** Returns the class that implements {@link WebApp} and
+	 * {@link WebAppCtrl}, or null if default is used.
+	 */
+	public Class getWebAppClass() {
+		return _wappcls;
+	}
+
+	/** Sets the class that implements {@link DesktopCacheProvider}, or null to
 	 * use the default.
 	 */
 	public void setDesktopCacheProviderClass(Class cls) {
@@ -849,13 +873,13 @@ public class Configuration {
 			throw new IllegalArgumentException("DesktopCacheProvider not implemented: "+cls);
 		_dcpcls = cls;
 	}
-	/** Returns the class for implementing the UI engine, or null for default.
+	/** Returns the class that implements the UI engine, or null if default is used.
 	 */
 	public Class getDesktopCacheProviderClass() {
 		return _dcpcls;
 	}
 
-	/** Sets the class for implementing {@link UiFactory}, or null to
+	/** Sets the class that implements {@link UiFactory}, or null to
 	 * use the default.
 	 */
 	public void setUiFactoryClass(Class cls) {
@@ -863,7 +887,7 @@ public class Configuration {
 			throw new IllegalArgumentException("UiFactory not implemented: "+cls);
 		_uiftycls = cls;
 	}
-	/** Returns the class for implementing the UI engine, or null for default.
+	/** Returns the class that implements the UI engine, or null if default is used.
 	 */
 	public Class getUiFactoryClass() {
 		return _uiftycls;
@@ -885,13 +909,13 @@ public class Configuration {
 	}
 
 	/** Specifies the time, in seconds, between client requests
-	 * before ZK will invalidate the desktop, or null for default (1 hour).
+	 * before ZK will invalidate the desktop, or null if default is used (1 hour).
 	 */
 	public void setDesktopMaxInactiveInterval(Integer secs) {
 		_dtTimeout = secs;
 	}
 	/** Returns the time, in seconds, between client requests
-	 * before ZK will invalidate the desktop, or null for default.
+	 * before ZK will invalidate the desktop, or null if default is used.
 	 */
 	public Integer getDesktopMaxInactiveInterval() {
 		return _dtTimeout;
@@ -927,39 +951,39 @@ public class Configuration {
 	}
 
 	/**  Specifies the time, in seconds, between client requests
-	 * before ZK will invalidate the session, or null for default.
+	 * before ZK will invalidate the session, or null to use the default.
 	 */
 	public void setSessionMaxInactiveInterval(Integer secs) {
 		_sessTimeout = secs;
 	}
 	/** Returns the time, in seconds, between client requests
-	 * before ZK will invalidate the session, or null for default.
+	 * before ZK will invalidate the session, or null if default is used.
 	 */
 	public Integer getSessionMaxInactiveInterval() {
 		return _sessTimeout;
 	}
 
 	/** Specifies the maximal allowed number of desktop
-	 * per session, or null for default (10).
+	 * per session, or null to use the default (10).
 	 */
 	public void setMaxDesktops(Integer max) {
 		_dtMax = max;
 	}
 	/** Returns the maximal allowed number of desktop
-	 * per session, or null for default (10).
+	 * per session, or null if default is used (10).
 	 */
 	public Integer getMaxDesktops() {
 		return _dtMax;
 	}
 
 	/** Specifies the maximal allowed number of event processing threads
-	 * per Web application, or null for default (100).
+	 * per Web application, or null to use the default (100).
 	 */
 	public void setMaxEventThreads(Integer max) {
 		_evtThdMax = max;
 	}
 	/** Returns the maximal allowed number of event processing threads
-	 * per Web application, or null for default (100).
+	 * per Web application, or null if default is used (100).
 	 */
 	public Integer getMaxEventThreads() {
 		return _evtThdMax;

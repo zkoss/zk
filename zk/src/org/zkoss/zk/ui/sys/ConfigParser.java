@@ -140,6 +140,9 @@ public class ConfigParser {
 			//  cache-provider-class
 			//  ui-factory-class
 			//	engine-class
+			//  web-app-class
+			//  locale-provider-class
+			//	time-zone-provider-class
 				Integer v = parseInteger(el, "max-event-threads", true);
 				if (v != null) config.setMaxEventThreads(v);
 				
@@ -159,10 +162,13 @@ public class ConfigParser {
 				cls = parseClass(el, "engine-class", UiEngine.class);
 				if (cls != null) config.setUiEngineClass(cls);
 
+				cls = parseClass(el, "web-app-class", UiEngine.class);
+				if (cls != null) config.setWebAppClass(cls);
+
 				cls = parseClass(el, "locale-provider-class", LocaleProvider.class);
 				if (cls != null) config.setLocaleProviderClass(cls);
 
-				cls = parseClass(el, "timeZone-provider-class", TimeZoneProvider.class);
+				cls = parseClass(el, "time-zone-provider-class", TimeZoneProvider.class);
 				if (cls != null) config.setTimeZoneProviderClass(cls);
 			} else if ("el-config".equals(elnm)) {
 			//el-config
