@@ -121,6 +121,30 @@ public class UiEngineImpl implements UiEngine {
 		return map == null || map.isEmpty() ? Collections.EMPTY_LIST:
 			Collections.synchronizedMap(map).values();
 	}
+	public boolean ceaseSuspendedThread(Desktop desktop,
+	EventProcessingThread evtthd, String cause) {
+		final Map map;
+		synchronized (_suspended) {
+			map = (Map)_suspended.get(desktop);
+		}
+		if (map == null) return false;
+
+		boolean found = false;
+		synchronized (map) {
+			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final List list = (List)me.getValue();
+				if (list.remove(evtthd)) { //found
+					if (list.isEmpty())
+						it.remove(); //(mutex, list) no longer useful
+					break; //DONE
+				}
+			}
+		}
+		if (found)
+			((EventProcessingThreadImpl)evtthd).cease(cause);
+		return found;
+	}
 
 	public void desktopDestroyed(Desktop desktop) {
 		if (log.debugable()) log.debug("destroy "+desktop);

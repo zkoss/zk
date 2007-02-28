@@ -121,8 +121,10 @@ if (c.isEmpty()) {
 	public Collection getSuspendedThreads();
 	/** Ceases the specified event thread.
 	 *
-	 * @param cause a human-readable text to describe the cause.
+	 * @param cause an arbitrary text to describe the cause.
 	 * It will be the message of the thrown InterruptedException.
+	 * @return true if the event processing thread is ceased successfully;
+	 * false if no such thread or it is not suspended.
 	 */
-	public void ceaseSuspendedThread(EventProcessingThread evtthd, String cause);
+	public boolean ceaseSuspendedThread(EventProcessingThread evtthd, String cause);
 }

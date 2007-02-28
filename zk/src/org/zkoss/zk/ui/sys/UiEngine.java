@@ -304,4 +304,14 @@ public interface UiEngine {
 	 * {@link EventProcessingThread}
 	 */
 	public Collection getSuspendedThreads(Desktop desktop);
+	/** Ceases the specified event thread.
+	 *
+	 * @param desktop which desktop the event thread belongs to
+	 * @param cause an arbitrary text to describe the cause.
+	 * It will be the message of the thrown InterruptedException.
+	 * @return true if the event processing thread is ceased successfully;
+	 * false if no such thread or it is not suspended.
+	 */
+	public boolean ceaseSuspendedThread(
+		Desktop desktop, EventProcessingThread evtthd, String cause);
 }

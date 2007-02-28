@@ -340,8 +340,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public Collection getSuspendedThreads() {
 		return ((WebAppCtrl)_wapp).getUiEngine().getSuspendedThreads(this);
 	}
-	public void ceaseSuspendedThread(EventProcessingThread evtthd, String cause) {
-		//TODO
+	public boolean ceaseSuspendedThread(EventProcessingThread evtthd, String cause) {
+		return ((WebAppCtrl)_wapp).getUiEngine()
+			.ceaseSuspendedThread(this, evtthd, cause);
 	}
 
 	//-- Object --//
