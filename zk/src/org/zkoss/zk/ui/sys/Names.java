@@ -1,4 +1,4 @@
-/* Variables.java
+/* Names.java
 
 {{IS_NOTE
 	Purpose:
@@ -23,12 +23,12 @@ import java.util.HashSet;
 import java.util.Collections;
 
 /**
- * variables utilities.
+ * Utilities about variable's names.
  *
  * @author tomyeh
  */
-public class Variables {
-	private Variables() {}
+public class Names {
+	private Names() {}
 	private static final Set _reves;
 	static {
 		Set reves = new HashSet();

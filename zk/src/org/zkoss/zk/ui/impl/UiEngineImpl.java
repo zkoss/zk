@@ -405,6 +405,10 @@ public class UiEngineImpl implements UiEngine {
 						Namespaces.afterInterpret(backup, ns);
 					}
 				}
+			} else if (obj instanceof Variables) {
+				final Variables vars = (Variables)obj;
+				if (parent != null) vars.apply(parent);
+				else vars.apply(page);
 			} else {
 				throw new IllegalStateException("Unknown object: "+obj);
 			}

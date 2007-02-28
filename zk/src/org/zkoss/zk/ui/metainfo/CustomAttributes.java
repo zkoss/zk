@@ -50,7 +50,7 @@ public class CustomAttributes implements Condition, java.io.Serializable {
 	 */
 	public CustomAttributes(Map attrs, String scope, Condition cond) {
 		if (attrs == null)
-			throw new IllegalArgumentException("null");
+			throw new IllegalArgumentException("null attrs");
 		_scope = scope == null ?
 			Component.COMPONENT_SCOPE: Components.getScope(scope);
 		_attrs = attrs;
@@ -64,8 +64,10 @@ public class CustomAttributes implements Condition, java.io.Serializable {
 		if (isEffective(comp))
 			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				comp.setAttribute((String)me.getKey(),
-					Executions.evaluate(comp, (String)me.getValue(), Object.class),
+				final String name = (String)me.getKey(),
+					value = (String)me.getValue();
+				comp.setAttribute(name,
+					Executions.evaluate(comp, value, Object.class),
 					_scope);
 			}
 	}
@@ -80,7 +82,7 @@ public class CustomAttributes implements Condition, java.io.Serializable {
 
 	//Object//
 	public String toString() {
-		final StringBuffer sb = new StringBuffer(40).append("[Custom Attrs:");
+		final StringBuffer sb = new StringBuffer(40).append("[custom-attributes:");
 		for (Iterator it = _attrs.keySet().iterator(); it.hasNext();)
 			sb.append(' ').append(it.next());
 		return sb.append(']').toString();

@@ -133,15 +133,23 @@ implements Condition {
 	/** Adds a script child. */
 	public void appendChild(ZScript script) {
 		if (script == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException("script");
 		synchronized (_children) {
 			_children.add(script);
+		}
+	}
+	/** Adds a variable child. */
+	public void appendChild(Variables variables) {
+		if (variables == null)
+			throw new IllegalArgumentException("variables");
+		synchronized (_children) {
+			_children.add(variables);
 		}
 	}
 	/** Adds an instance-definition child. */
 	public void appendChild(InstanceDefinition instdef) {
 		if (instdef == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException("instdef");
 		synchronized (_children) {
 			_children.add(instdef);
 		}

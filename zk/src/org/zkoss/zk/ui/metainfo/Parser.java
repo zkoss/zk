@@ -407,6 +407,15 @@ public class Parser {
 		if (val != null && val.indexOf("${") >= 0)
 			throw new UiException(nm+" does not support EL expressions, "+item.getLocator());
 	}
+	/** Checks whether the value is an empty string.
+	 * Note: Like {@link #noEL}, it is OK to be null!!
+	 * To check neither null nor empty, use IDOMs.getRequiredAttribute.
+	 */
+	private static void noEmpty(String nm, String val, Item item)
+	throws UiException {
+		if (val != null && val.length() == 0)
+			throw new UiException(nm+" cannot be empty, "+item.getLocator());
+	}
 	private String toAbsoluteURI(String uri, boolean allowEL) {
 		if (uri != null && uri.length() > 0) {
 			final char cc = uri.charAt(0);
@@ -471,7 +480,9 @@ public class Parser {
 		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			parseAttribute(parent, el, annotInfo);
 		} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			parseCustomAttribute(parent, el, annotInfo);
+			parseCustomAttributes(parent, el, annotInfo);
+		} else if ("variables".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+			parseVariables(parent, el, annotInfo);
 		} else if (LanguageDefinition.ANNO_NAMESPACE.equals(uri)) {
 			parseAnnotation(el, annotInfo);
 		} else {
@@ -510,8 +521,9 @@ public class Parser {
 				}
 
 				//process use first because addProperty needs it
-				final String use = el.getAttribute("use");
-				if (!isEmpty(use)) {
+				final String use = el.getAttributeValue("use");
+				if (use != null) {
+					noEmpty("use", use, el);
 					noEL("use", use, el);
 					instdef.setImplementationClass(use);
 						//Resolve later since might defined in zscript
@@ -564,26 +576,27 @@ public class Parser {
 	}
 	private void parseZScript(InstanceDefinition parent, Element el,
 	AnnotInfo annotInfo) throws Exception {
-		//if (!el.getElements().isEmpty())
-		//	throw new UiException("Child elements are not allowed for the zscript element, "+el.getLocator());
-
 		if (el.getAttributeItem("forEach") != null)
-			throw new UiException("forEach not applicable to zscript, "+el.getLocator());
+			throw new UiException("forEach not applicable to <zscript>, "+el.getLocator());
 		if (annotInfo.clear())
 			log.warning("Annotations are ignored since <zscript> doesn't support them, "+el.getLocator());
 
-		final String ifc = el.getAttribute("if"),
-			unless = el.getAttribute("unless"),
-			zsrc = el.getAttribute("src");
+		final String ifc = el.getAttributeValue("if"),
+			unless = el.getAttributeValue("unless"),
+			zsrc = el.getAttributeValue("src");
 
-		String zslang = el.getAttribute("language");
-		if (zslang != null && zslang.length() == 0)
+		String zslang = el.getAttributeValue("language");
+		if (zslang == null) {
 			zslang = parent.getPageDefinition().getZScriptLanguage();
 			//we have to resolve it in parser since a page might be
 			//created by use of createComponents
+		} else {
+			noEmpty("language", zslang, el);
+			noEL("language", zslang, el);
+		}
 
 		final Condition cond = ConditionImpl.getInstance(ifc, unless);
-		if (!isEmpty(zsrc)) {
+		if (!isEmpty(zsrc)) { //ignore empty (not error)
 			final ZScript zs;
 			if (zsrc.indexOf("${") >= 0) {
 				zs = new ZScript(zslang, zsrc, cond, getLocator());
@@ -614,15 +627,15 @@ public class Parser {
 		if (!isEmpty(attval)) {
 			addAttribute(parent, null, attnm, attval,
 				ConditionImpl.getInstance(
-					el.getAttribute("if"), el.getAttribute("unless")));
+					el.getAttributeValue("if"), el.getAttributeValue("unless")));
 		}
 
 		annotInfo.updateAnnotations(parent, attnm);
 	}
-	private void parseCustomAttribute(InstanceDefinition parent, Element el,
+	private void parseCustomAttributes(InstanceDefinition parent, Element el,
 	AnnotInfo annotInfo) throws Exception {
 		//if (!el.getElements().isEmpty())
-		//	throw new UiException("Child elements are not allowed for the custom-attributes element, "+el.getLocator());
+		//	throw new UiException("Child elements are not allowed for <custom-attributes>, "+el.getLocator());
 
 		if (parent instanceof PageDefinition)
 			throw new UiException("custom-attributes must be used under a component, "+el.getLocator());
@@ -643,7 +656,7 @@ public class Parser {
 			} else if ("scope".equals(attnm)) {
 				scope = attval;
 			} else if ("forEach".equals(attnm)) {
-				throw new UiException("forEach not applicable to custom-attributes, "+el.getLocator());
+				throw new UiException("forEach not applicable to <custom-attributes>, "+el.getLocator());
 			} else {
 				attrs.put(attnm, attval);
 			}
@@ -652,6 +665,40 @@ public class Parser {
 		if (!attrs.isEmpty())
 			parent.addCustomAttributes(
 					new CustomAttributes(attrs, scope, ConditionImpl.getInstance(ifc, unless)));
+	}
+	private void parseVariables(InstanceDefinition parent, Element el,
+	AnnotInfo annotInfo) throws Exception {
+		//if (!el.getElements().isEmpty())
+		//	throw new UiException("Child elements are not allowed for <variables> element, "+el.getLocator());
+
+		if (el.getAttributeItem("forEach") != null)
+			throw new UiException("forEach not applicable to <variables>, "+el.getLocator());
+		if (annotInfo.clear())
+			log.warning("Annotations are ignored since <variables> doesn't support them, "+el.getLocator());
+
+		String ifc = null, unless = null;
+		boolean local = false;
+		final Map vars = new HashMap();
+		for (Iterator it = el.getAttributeItems().iterator();
+		it.hasNext();) {
+			final Attribute attr = (Attribute)it.next();
+			final String attnm = attr.getLocalName();
+			final String attval = attr.getValue();
+			if ("if".equals(attnm)) {
+				ifc = attval;
+			} else if ("unless".equals(attnm)) {
+				unless = attval;
+			} else if ("local".equals(attnm)) {
+				local = "true".equals(attval);
+			} else if ("forEach".equals(attnm)) {
+				throw new UiException("forEach not applicable to <variables>, "+el.getLocator());
+			} else {
+				vars.put(attnm, attval);
+			}
+		}
+		if (!vars.isEmpty())
+			parent.appendChild(
+				new Variables(vars, local, ConditionImpl.getInstance(ifc, unless)));
 	}
 	private void parseAnnotation(Element el, AnnotInfo annotInfo)
 	throws Exception {
@@ -725,7 +772,7 @@ public class Parser {
 
 		/** Adds an annotation definition. */
 		private void add(String annotName, Map annotAttrs) {
-			if (annotName == null || annotName.length() == 0)
+			if (isEmpty(annotName))
 				throw new IllegalArgumentException("empty");
 			_annots.add(new Object[] {annotName, annotAttrs});
 		}

@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.scripting.Interpreters;
 
 /**
- * Represents a zscript.
+ * Represents a zscript element.
  *
  * @author tomyeh
  */
@@ -106,7 +106,7 @@ public class ZScript implements Condition, java.io.Serializable {
 	 */
 	public ZScript(String zslang, URL url, Condition cond) {
 		if (url == null)
-			throw new IllegalArgumentException("null");
+			throw new IllegalArgumentException("null url");
 
 		//TODO: use url's extension to determine zslang
 		_zslang = zslang;
@@ -198,7 +198,7 @@ public class ZScript implements Condition, java.io.Serializable {
 
 	//Object//
 	public String toString() {
-		final StringBuffer sb = new StringBuffer(40).append("[ZScript: ");
+		final StringBuffer sb = new StringBuffer(40).append("[zscript: ");
 		if (_url != null) {
 			sb.append(_url);
 		} else {

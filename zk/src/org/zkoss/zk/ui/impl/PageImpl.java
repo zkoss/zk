@@ -69,7 +69,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.sys.Variables;
+import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.au.AuSetTitle;
 import org.zkoss.zk.scripting.Interpreter;
@@ -595,7 +595,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				throw new InternalError("Called shall prevent replicated ID for roots");
 			}
 
-			if (Variables.isValid(compId)) {
+			if (Names.isValid(compId)) {
 				try {
 					setVariable(compId, comp);
 				} catch (Throwable ex) {
@@ -606,7 +606,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 	public void removeFellow(Component comp) {
 		final String compId = comp.getId();
-		if (_fellows.remove(compId) != null && Variables.isValid(compId)) {
+		if (_fellows.remove(compId) != null && Names.isValid(compId)) {
 			try {
 				unsetVariable(compId);
 			} catch (Throwable ex) {

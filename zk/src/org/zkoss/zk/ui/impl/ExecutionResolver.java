@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.Variables;
+import org.zkoss.zk.ui.sys.Names;
 
 /**
  * Represents a variable resolver.
@@ -105,7 +105,7 @@ public class ExecutionResolver implements VariableResolver {
 		if ("arg".equals(name))
 			return _exec.getArg();
 
-		if (!Variables.isReserved(name)){
+		if (!Names.isReserved(name)){
 			Page page = null;
 			if (_self instanceof Component) {
 				final Component comp = (Component)_self;

@@ -53,7 +53,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.sys.Variables;
+import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.impl.Serializables;
 import org.zkoss.zk.ui.metainfo.Milieu;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
@@ -335,7 +335,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final String compId = comp.getId();
 		//assert D.OFF || !ComponentsCtrl.isAutoId(compId): "Auto ID shall be ignored: "+compId;
 		_spaceInfo.fellows.put(compId, comp);
-		if (Variables.isValid(compId))
+		if (Names.isValid(compId))
 			_spaceInfo.ns.setVariable(compId, comp, true);
 	}
 	/** Unbind comp from this ID space (owned by this component).
@@ -343,7 +343,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	private void unbindFromIdSpace(String compId) {
 		_spaceInfo.fellows.remove(compId);
-		if (Variables.isValid(compId))
+		if (Names.isValid(compId))
 			_spaceInfo.ns.unsetVariable(compId, true);
 	}
 
@@ -501,8 +501,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			throw new UiException("ID cannot be empty");
 
 		if (!_id.equals(id)) {
-			if (Variables.isReserved(id) || ComponentsCtrl.isAutoId(id))
-				throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Variables.getReservedNames());
+			if (Names.isReserved(id) || ComponentsCtrl.isAutoId(id))
+				throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Names.getReservedNames());
 
 			final boolean rawId = this instanceof RawId;
 			if (rawId && _page != null
