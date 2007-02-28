@@ -78,7 +78,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<location>/WEB-INF/sys/error.zul</location>
 	</error-page>
 	-->
-	<!-- Configure the theme URIs
+	<!-- Configure ZUL to use larger fonts for Chinese characters, and
+		smaller fonts for the rest Locales
+	<desktop-config>
+		<disable-default-theme>xul/html</disable-default-theme>
+		<theme-uri>~./zul/css/norm**.css.dsp</theme-uri>
+	</desktop-config>
+	-->
+	<!-- Configure additional theme URIs
 	<desktop-config>
 		<theme-uri>/a.css</theme-uri>
 		<theme-uri>/b**.css</theme-uri>
