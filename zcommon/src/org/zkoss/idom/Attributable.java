@@ -74,7 +74,7 @@ public interface Attributable {
 
 	/**
 	 * Gets the value of the first attribute that matches
-	 * the giving criteria.
+	 * the giving criteria, or null if not found.
 	 *
 	 * <p>According to Section 3.3.3 of XML 1.0 spec, the value is normalized,
 	 * including trimmed.
@@ -86,7 +86,11 @@ public interface Attributable {
 	 * @return the value of the attribute; null if not found
 	 */
 	public String getAttributeValue(String namespace, String name, int mode);
-	/** Returns the value of the attribute of the specified tag name.
+	/** Returns the value of the attribute of the specified tag name,
+	 * or null if not specified.
+	 *
+	 * <p>Note: unlike W3C's getAttribute, which returns empty if not specified,
+	 * this method returns null if not specified.
 	 */
 	public String getAttributeValue(String tname);
 
