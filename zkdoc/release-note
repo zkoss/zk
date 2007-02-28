@@ -8,6 +8,7 @@ ZK 2.3.0 Freshly
   1669828: A way to specify URI depending on browser, but not locale
   1669842: A way to replace the default theme-uri rather than add-on
   1669849: A way to turn off the use of special CSS for Chinese
+  1669660: A way to cease a suspended thread
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
