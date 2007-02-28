@@ -20,6 +20,7 @@ ZK 2.3.0 Freshly
   1668708: NullPointerException in BindingRenderer
   1639006: Listbox col. header in IE7 renders in wrong place
   1638662: Bandpopup size limit on IE7
+  1663472: references to a specific impl of EventProcessingThread
 
 * Upgrade Notes:
 
