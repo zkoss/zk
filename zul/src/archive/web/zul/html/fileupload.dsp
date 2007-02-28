@@ -24,6 +24,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Upload</title>
+<link rel="stylesheet" type="text/css" href="${c:encodeURL('~./zul/css/norm**.css.dsp')}"/>
+<%-- We cannot use ${z:outLangStyleSheets()} since Executions.getCurrent()
+	is not available for this page.
+ --%>
 <script type="text/javascript">
 <!--
 function submitUpload() {
@@ -45,7 +49,6 @@ function init() {
 }
 // -->
 </script>
-${z:outLangStyleSheets()}
 </head>
 <body onload="init()">
 	<form action="${param.action}?dtid=${param.dtid}&uuid=${param.uuid}" enctype="multipart/form-data" method="POST" onsubmit="submitUpload()">

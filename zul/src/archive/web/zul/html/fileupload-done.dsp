@@ -26,7 +26,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Upload Result</title>
-${z:outLangStyleSheets()}
+<link rel="stylesheet" type="text/css" href="${c:encodeURL('~./zul/css/norm**.css.dsp')}"/>
+<%-- We cannot use ${z:outLangStyleSheets()} since Executions.getCurrent()
+	is not available for this page.
+ --%>
 </head>
 <body>
  <c:if test="${!empty arg.alert}">
