@@ -168,6 +168,7 @@ implements EventProcessingThread {
 	 * <p>Note:
 	 * <ul>
 	 * <li>It is used internally only for implementing {@link org.zkoss.zk.ui.sys.UiEngine}
+	 * Don't call it directly.
 	 * <li>Caller must invoke {@link #newEventThreadSuspends}
 	 * before calling this method. (Reason: UiEngine might have to store some info
 	 * after {@link #newEventThreadSuspends} is called.
@@ -175,7 +176,7 @@ implements EventProcessingThread {
 	 * <li>It is a static method.
 	 * </ul>
 	 */
-	/*package*/ static void doSuspend(Object mutex) throws InterruptedException {
+	public static void doSuspend(Object mutex) throws InterruptedException {
 		((EventProcessingThreadImpl)Thread.currentThread()).doSuspend0(mutex);
 	}
 	private void doSuspend0(Object mutex) throws InterruptedException {
@@ -323,8 +324,10 @@ implements EventProcessingThread {
 	}
 	/** Invokes {@link Configuration#newEventThreadSuspends}.
 	 * The caller must execute in the event processing thread.
+	 * It is called only for implementing {@link org.zkoss.zk.ui.sys.UiEngine}.
+	 * Don't call it directly.
 	 */
-	/*package*/ void newEventThreadSuspends(Object mutex) {
+	public void newEventThreadSuspends(Object mutex) {
 		if (_comp == null) throw new IllegalStateException();
 		_evtThdSuspends = _desktop.getWebApp().getConfiguration()
 			.newEventThreadSuspends(_comp, _event, mutex);
