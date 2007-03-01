@@ -61,13 +61,14 @@ public class DataBinder {
 	/*package*/ static final String TEMPLATEMAP = "zkplus.databind.TEMPLATEMAP"; // template -> clone
 	/*package*/ static final String TEMPLATE = "zkplus.databind.TEMPLATE"; //clone -> template
 	private static final String OWNER = "zkplus.databind.OWNER"; //the collection owner of the template component
+	private static final String HASTEMPLATEOWNER = "zkplus.databind.HASTEMPLATEOWNER"; //whether has template owner (collection in collection)
 	private static final Object NA = new Object();
 	private static final String ASSIGNVAR = "var_tmp_assignment"; //the temp var name for assignment script
 
 	private Map _compBindingMap = new LinkedHashMap(29); //(comp, Map(attr, Binding))
 	private Map _beans = new HashMap(29); //bean local to this DataBinder
-	private Map _beanSameNodes = new HashMap(29); //bean same nodes
-	private BindingNode _pathTree = new BindingNode("/", false); //path dependency tree.
+	private Map _beanSameNodes = new HashMap(29); //(bean, Set(BindingNode)) bean same nodes, diff expression but actually hold the same bean
+	private BindingNode _pathTree = new BindingNode("/", false, "/", false); //path dependency tree.
 	private Set _pageSet = new HashSet(1); //page that associated with this DataBinder
 	private boolean _defaultConfig = true; //whether load default configuration from lang-addon.xml
 	private boolean _init; //whether this databinder is initialized. 
@@ -449,7 +450,7 @@ public class DataBinder {
 				
 				//_var special case; meaning a template component
 				if (attrMap.containsKey("_var")) {
-					setupTemplateComponent(comp, getCollectionOwner(comp)); //setup as template components
+					setupTemplateComponent(comp, getComponentCollectionOwner(comp)); //setup as template components
 					String varname = ((Binding)attrMap.get("_var")).getExpression();
 					varnameSet.add(varname);
 					comp.setAttribute(VARNAME, varname);
@@ -479,19 +480,27 @@ public class DataBinder {
 	
 	//Tightly coupled to Component
 	//get Collection owner of a given collection item.
-	private static Component getCollectionOwner(Component comp) {
-		if (isTemplate(comp)) {
-			return (Component) comp.getAttribute(OWNER);
-		}
+	private static Component getComponentCollectionOwner(Component comp) {
 		if (comp instanceof Listitem) {
 			return ((Listitem)comp).getListbox();
 		}
 		throw new UiException("Collection Databinder now supports Listbox and Listitem only! CollectionItem:"+comp);
 	}
+
+	//get Collection owner of a given collection item.
+	private static Component getCollectionOwner(Component comp) {
+		if (isTemplate(comp)) {
+			return (Component) comp.getAttribute(OWNER);
+		}
+		return getComponentCollectionOwner(comp);
+	}
 	
 	//get associated clone of a given bean and template component
 	private static Component getCollectionItem(Component comp, Object bean) {
 		Component owner = getCollectionOwner(comp);
+		
+		assert !isTemplate(owner) : "collection in collection, should never occure! comp:" + comp + ", bean:" + bean+", owner: "+owner;
+		
 		if (owner instanceof Listbox) {
 			final Listbox lbx = (Listbox) owner;
   		final ListModel xmodel = lbx.getModel();
@@ -566,6 +575,9 @@ public class DataBinder {
 	//setup the specified comp and its decendents to be as template (or not)
 	/* package */ void setupTemplateComponent(Component comp, Object owner) {
 		if (existsBindings(comp)) {
+			if (comp.getAttribute(OWNER) != null) {
+				comp.setAttribute(HASTEMPLATEOWNER, Boolean.TRUE); //owner is a template
+			}
 			comp.setAttribute(OWNER, owner);
 		}
 		List kids = comp.getChildren();
@@ -605,6 +617,11 @@ public class DataBinder {
 		return (comp.getAttribute(TEMPLATE) instanceof Component);
 	}
 	
+	//whether has template owner (collection in collection)
+	/* package */ static boolean hasTemplateOwner(Component comp) {
+		return (comp.getAttribute(HASTEMPLATEOWNER) != null);
+	}
+	
 	//set a bean to SameNode Set 
 	/* package */ void setBeanSameNodes(Object bean, Set set) {
 		_beanSameNodes.put(bean, set);
@@ -623,6 +640,14 @@ public class DataBinder {
 	/** traverse the path nodes and return the final bean.
 	 */
 	/* package */ Object getBeanAndRegisterBeanSameNodes(Component comp, String path) {
+		return myGetBeanWithExpression(comp, path, true);
+	}
+	
+	private Object getBeanWithExpression(Component comp, String path) {
+		return myGetBeanWithExpression(comp, path, false);
+	}
+	
+	private Object myGetBeanWithExpression(Component comp, String path, boolean registerNode) {
 		Object bean = null;
 		BindingNode currentNode = _pathTree;
 		final List nodeids = parseExpression(path, ".");
@@ -634,7 +659,9 @@ public class DataBinder {
 				throw new UiException("Cannot find the specified databind bean expression:" + path);
 			}
 			bean = lookupBean(comp, nodeid);
-			registerBeanNode(bean, currentNode);
+			if (registerNode) {
+				registerBeanNode(bean, currentNode);
+			}
 		} else {
 			throw new UiException("Incorrect format of databind bean expression:" + path);
 		}
@@ -650,12 +677,14 @@ public class DataBinder {
 			} catch (NoSuchMethodException ex) {
 				throw UiException.Aide.wrap(ex);
 			}
-			registerBeanNode(bean, currentNode);
+			if (registerNode) {
+				registerBeanNode(bean, currentNode);
+			}
 		}
 
 		return bean;
 	}
-
+	
 	/* package */ void setBeanAndRegisterBeanSameNodes(Component comp, Object val, Binding binding, String path, boolean autoConvert) {
 		Object orgVal = null;
 		Object bean = null;
@@ -733,7 +762,7 @@ public class DataBinder {
 			registerBeanNode(val, currentNode);
 		}
 		//All kid nodes should be reloaded 
-		Events.postEvent(new Event("onLoadOnSave", comp, new Object[] {this, currentNode, binding, (refChanged ? val : bean)}));
+		Events.postEvent(new Event("onLoadOnSave", comp, new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged)}));
 	}
 	
 	private void registerBeanNode(Object bean, BindingNode node) {
@@ -743,7 +772,7 @@ public class DataBinder {
 		final Set nodeSameNodes = node.getSameNodes();
 		final Set binderSameNodes = getBeanSameNodes(bean);
 		
-		//variable node is special, sameNodes will not keep only variable node in binderSameNodes and nodeSameNodes.
+		//variable node(with _var) is special, sameNodes will not keep only variable node in binderSameNodes and nodeSameNodes.
 		//e.g. a Listitem bean but not a selected bean
 		if (node.isVar() && binderSameNodes == null) {
 			return;
@@ -880,11 +909,87 @@ public class DataBinder {
 			final BindingNode node = (BindingNode) data[1]; //to be loaded nodes
 			final Binding savebinding = (Binding) data[2]; //to be excluded binding
 			final Object bean = data[3]; //saved bean
+			final boolean refChanged = ((Boolean)data[4]).booleanValue(); //whether bean itself changed
 			final Component savecomp = event.getTarget(); //saved comp that trigger this load-on-save event
+			loadAllNodes(bean, node, savecomp, savebinding, refChanged);
+		}
+		
+		public boolean isAsap() {
+			return true;
+		}
+
+		/** Load all associated BindingNodes below the given nodes (depth first traverse).
+		 */
+		private void loadAllNodes(Object bean, BindingNode node, Component collectionComp, Binding savebinding, boolean refChanged) {
+			Set walkedNodes = new HashSet(23);
+			Set loadedBindings = new HashSet(23*2);
+			myLoadAllNodes(bean, node, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
 			
-			final LinkedHashSet bindings = node.getAllBindings();
+		}
+		
+		private void myLoadAllNodes(Object bean, BindingNode node, Component collectionComp,
+		Set walkedNodes, Binding savebinding, Set loadedBindings, boolean refChanged) {
+			if (walkedNodes.contains(node)) {
+				return; //already walked, skip
+			}
+			
+			//mark as walked already
+			walkedNodes.add(node);
+
+			//loading
+			collectionComp = loadBindings(bean, node, collectionComp, savebinding, loadedBindings, refChanged);
+			
+			for(final Iterator it = node.getKidNodes().iterator(); it.hasNext();) {
+				final BindingNode kidnode = (BindingNode) it.next();
+				final Object kidbean = fetchValue(bean, kidnode, kidnode.getNodeId());
+				myLoadAllNodes(kidbean, kidnode, collectionComp, walkedNodes, savebinding, loadedBindings, true); //recursive
+			}
+			
+			for(final Iterator it = node.getSameNodes().iterator(); it.hasNext();) {
+				final Object obj = it.next();
+				if (obj instanceof BindingNode) {
+					final BindingNode samenode = (BindingNode) obj;
+					if (node == samenode) {
+						continue;
+					}
+					if (samenode.isVar()) { // -> var node
+						//var node must traverse from the root 
+						//even a root, must make sure the samebean (could be diff)
+						//even the same bean, if a inner var root(collection in collection), not a real root
+						if (!samenode.isRoot() || !isSameBean(samenode, bean) || samenode.isInnerCollectionNode()) { 
+							continue;
+						}
+					} else if (node.isVar() && !isSameBean(samenode, bean)) { //var -> !var, must same bean
+						continue;
+					}
+					myLoadAllNodes(bean, samenode, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged); //recursive
+				}
+			}
+		}
+	
+		private Object fetchValue(Object bean, BindingNode node, String nodeid) {
+			if (bean != null) {
+				try {
+					bean = Fields.get(bean, nodeid);
+				} catch (NoSuchMethodException ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+			_binder.registerBeanNode(bean, node);
+			return bean;
+		}
+		
+		//return nearest collection item Component (i.e. ListItem)
+		private Component loadBindings(Object bean, BindingNode node, Component collectionComp, 
+		Binding savebinding, Set loadedBindings, boolean refChanged) {
+			final Collection bindings = node.getBindings();
 			for(final Iterator it = bindings.iterator(); it.hasNext();) {
 				final Binding binding = (Binding) it.next();
+				if (loadedBindings.contains(binding)) {
+					continue;
+				}
+				loadedBindings.add(binding);
+				
 				/* save then load might change the format, so still load back
 				if (binding == savebinding) {
 					continue;
@@ -892,18 +997,33 @@ public class DataBinder {
 				*/
 				Component comp = binding.getComponent();
 				if (isTemplate(comp)) { //a template component, locate the listitem
-					if (isClone(savecomp)) {
-						comp = lookupClone(savecomp, comp);
+					if (isClone(collectionComp)) {
+						comp = lookupClone(collectionComp, comp);
 					} else {
 						comp = getCollectionItem(comp, bean);
 					}
+					if ("_var".equals(binding.getAttr())) {
+						collectionComp = comp;
+					}
 				}
-				binding.loadAttribute(comp);
+				
+				if (refChanged) {
+					binding.loadAttribute(comp, bean);
+				}
 			}
+			return collectionComp;
 		}
-		
-		public boolean isAsap() {
-			return true;
+		private boolean isSameBean(BindingNode node, Object bean) {	
+			final Collection bindings = node.getBindings();
+			if (bindings.isEmpty()) {
+				return true;
+			}
+			final Component comp = ((Binding)bindings.iterator().next()).getComponent();
+			if (isTemplate(comp)) {
+				return true;
+			}
+			final Object nodebean = _binder.getBeanWithExpression(comp, node.getPath());
+			return Objects.equals(nodebean, bean);
 		}
 	}
 }
