@@ -53,7 +53,7 @@ public class ListModelList extends AbstractListModel implements List {
 	 * @param list the inner "live" list that would be added and/or removed accordingly
 	 * when you add and/or remove item to this ListModelList.
 	 */
-	private ListModelList(List list) {
+	protected ListModelList(List list) {
 		_list = list;
 	}
 
