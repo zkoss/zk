@@ -170,4 +170,11 @@ public class Toolbarbutton extends LabelImageElement {
 			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
 		return sb.toString();
 	}
+
+	//Component//
+	/** No child is allowed.
+	 */
+	public boolean isChildable() {
+		return false;
+	}
 }
