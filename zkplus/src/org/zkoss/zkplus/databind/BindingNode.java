@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 
@@ -38,15 +39,20 @@ import java.util.LinkedHashMap;
 	private String _path; //path of this BindingNode
 	private Set _sameNodes = new HashSet(); //BindingNode Set that refer to the same object
 	private boolean _var; //a var node
+	private String _nodeId; //node id of this BindingNode
+	private boolean _root; //whether root node of a path
+	private boolean _innerCollectionNode; //whether a collection in collection item node
 	
 	/** Constructor.
 	 * @param path the path of this node in the expression dependant tree.
 	 * @param var whether a _var variable binding node.
 	 */
-	public BindingNode(String path, boolean var) {
+	public BindingNode(String path, boolean var, String id, boolean root) {
 		_path = path;
 		_sameNodes.add(this);
 		_var = var;
+		_nodeId = id;
+		_root = root;
 	}
 	
 	public LinkedHashSet getBindings() {
@@ -89,8 +95,16 @@ import java.util.LinkedHashMap;
 		return _path;
 	}
 	
+	public String getNodeId() {
+		return _nodeId;
+	}
+
 	public boolean isVar() {
 		return _var;
+	}
+	
+	public boolean isRoot() {
+		return _root;
 	}
 	
 	/** Add a binding in the BindingNode of the specified path.
@@ -112,7 +126,11 @@ import java.util.LinkedHashMap;
 			}
 			BindingNode kidNode = (BindingNode) currentNode.getKidNode(nodeid);
 			if (kidNode == null) { //if not found, then add one
-				kidNode = new BindingNode(("/".equals(currentNode._path) ? "" : (currentNode._path + ".")) + nodeid, var);
+				if ("/".equals(currentNode._path)) {
+					kidNode = new BindingNode(nodeid, var, nodeid, true);
+				} else {
+					kidNode = new BindingNode(currentNode._path + "." + nodeid, var, nodeid, false);
+				}
 				currentNode.addKidNode(nodeid, kidNode);
 			} else {
 				var = var || kidNode._var;
@@ -123,6 +141,13 @@ import java.util.LinkedHashMap;
 			throw new UiException("Incorrect bean expression: "+path);
 		}
 		currentNode.addBinding(binding);
+		if ("_var".equals(binding.getAttr())) {
+			currentNode._innerCollectionNode =  DataBinder.hasTemplateOwner(binding.getComponent());
+		}
+	}
+	
+	public boolean isInnerCollectionNode() {
+		return _innerCollectionNode;
 	}
 	
 	/** Add a binding to this BindingNode.
@@ -168,7 +193,16 @@ import java.util.LinkedHashMap;
 		}
 		_sameNodes = other;
 	}
+	
+	public String toString() {
+		return _path;
+	}
 
+	// Get kid nodes
+	/*package*/ Collection getKidNodes() {
+		return _kids.values();
+	}
+	
 	// Get kid nodes of the specified nodeid.
 	/*package*/ BindingNode getKidNode(String nodeid) {
 		return (BindingNode) _kids.get(nodeid);
