@@ -26,6 +26,7 @@ ZK 2.3.0 Freshly
   1671418: CSS ID Selector and underscore issue (IE6 only)
   1671510: splitter resize: problem with inner Tree and Tabbox
   1671512: Failed to change the width of tree/grid/listbox dynamically
+  1671549: Failed to change the width of tabbox
 
 * Upgrade Notes:
 
