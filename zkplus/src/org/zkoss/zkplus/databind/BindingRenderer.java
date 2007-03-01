@@ -62,7 +62,6 @@ import java.util.Iterator;
 		if (parenttemplatemap != null) {
 				templatemap.put(_binder.TEMPLATEMAP, parenttemplatemap);
 		}
-		
 		//kept clone kids somewhere to avoid create too many components in browser
 		final List kids = new ArrayList(clone.getChildren());
 		clone.setAttribute(KIDS, kids);
