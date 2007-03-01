@@ -34,8 +34,8 @@ public class Event {
 	private boolean _propagatable = true;
 
 	/** Constructs a simple event.
-	 * @param target a component, or null to indicate broadcasting
-	 * the event to all root components.
+	 * @param target the component to receive this event,
+	 * or null to indicate broadcasting the event to all root components.
 	 */
 	public Event(String name, Component target) {
 		if (name == null)
@@ -45,8 +45,8 @@ public class Event {
 		_data = null;
 	}
 	/** Constructs a simple event.
-	 * @param target a component, or null to indicate broadcasting
-	 * the event to all root components.
+	 * @param target the component to receive this event,
+	 * or null to indicate broadcasting the event to all root components.
 	 * @param data an arbitary data
 	 */
 	public Event(String name, Component target, Object data) {
@@ -62,7 +62,8 @@ public class Event {
 	public final String getName() {
 		return _name;
 	}
-	/** Returns the target, or null if broadcast.
+	/** Returns the target component that receives this event,
+	 * or null if broadcast.
 	 */
 	public final Component getTarget() {
 		return _target;
