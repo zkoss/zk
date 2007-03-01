@@ -168,7 +168,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 				new StreamMedia(name, null, ctype, fi);
 
 		final String contentId = Strings.encode(
-			new StringBuffer(12).append("_pctt"),
+			new StringBuffer(12).append("z__ul_"),
 			((DesktopCtrl)desktop).getNextId()).toString();
 		desktop.setAttribute(contentId, media);
 		attrs.put("contentId", contentId);

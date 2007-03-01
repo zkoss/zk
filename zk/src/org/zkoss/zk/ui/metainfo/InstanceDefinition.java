@@ -109,7 +109,7 @@ implements Condition {
 	}
 	private static final String getNextName() {
 		return Strings.encode(
-			new StringBuffer(12).append("_pid_"), _nextName++).toString();
+			new StringBuffer(12).append("z__id"), _nextName++).toString();
 	}
 	private static int _nextName = 0;
 

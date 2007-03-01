@@ -25,7 +25,8 @@ package org.zkoss.zk.ui.sys;
  */
 public class ComponentsCtrl {
 	/** The prefix for auto generated ID. */
-	public static final String AUTO_ID_PREFIX = "_pc";
+	public static final String AUTO_ID_PREFIX = "z__",
+		AUTO_PAGE_ID_PREFIX = "z__p_";
 
 	/** Returns whether an ID is generated automatically.
 	 */
