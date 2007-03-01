@@ -55,7 +55,7 @@ public class ListModelSet extends AbstractListModel implements Set {
 	 * @param set the inner "live" set that would be added and/or removed accordingly
 	 * when you add and/or remove item to this ListModelSet.
 	 */
-	private  ListModelSet(Set set) {
+	protected  ListModelSet(Set set) {
 		_set = set;
 		_list = new ArrayList(set);
 	}
