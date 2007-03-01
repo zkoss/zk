@@ -167,10 +167,12 @@ public class Charsets {
 			final HttpSession sess =
 				((HttpServletRequest)request).getSession(false);
 			if (sess != null) {
-				final Locale l =
-					(Locale)sess.getAttribute(Attributes.PREFERRED_LOCALE);
-				if (l != null)
-					return l;
+				final Object v = sess.getAttribute(Attributes.PREFERRED_LOCALE);
+				if (v != null) {
+					if (v instanceof Locale)
+						return (Locale)v;
+					log.warning(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
+				}
 			}
 		}
 
