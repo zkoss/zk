@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class BindingListModelMap extends ListModelMap implements BindingListModel {
 	/* package */ BindingListModelMap(Map map) {
-		super(map);
+		super(map, /*dummy*/ 0);
 	}
 
 	public int indexOf(Object elem) {
