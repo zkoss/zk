@@ -56,7 +56,7 @@ public class Strings {
 		return true;
 	}
 	/** Returns an encoded string buffer, faster and shorter than
-	 * Integer.toHexString. It uses number and lower-case leters.
+	 * Integer.toHexString. It uses numbers and lower-case leters only.
 	 * Thus it is a valid variable name if prefix with an alphabet.
 	 * At least one character is generated.
 	 *
@@ -76,7 +76,7 @@ public class Strings {
 		return sb;
 	}
 	/** Returns an encoded string buffer, faster and shorter than
-	 * Long.toHexString. It uses alpanumeric and '_'.
+	 * Long.toHexString. It uses numbers and lower-case letters only.
 	 * Thus it is a valid variable name if prefix with an alphabet.
 	 * At least one character is generated.
 	 *
