@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} border="0" cellpadding="0" cellspacing="0">
+<table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.tabs="${self.tabs.uuid}" z.type="zul.tab.Tabbox" border="0" cellpadding="0" cellspacing="0">
 <tr valign="top">
 ${z:redraw(self.tabs, null)}
 ${z:redraw(self.tabpanels, null)}

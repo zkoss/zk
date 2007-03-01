@@ -17,6 +17,25 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 ////
+// tabbox //
+zkTabbox = {};
+
+zkTabbox.setAttr = function (cmp, name, value) {
+	switch (name) {
+	case "style":
+	case "style.width":
+	case "style.height":
+		var uuid = getZKAttr(cmp, "tabs");
+		if (uuid) {
+			zkau.setAttr(cmp, name, value);
+			zkTabs.fixWidth(uuid);
+		}
+		return true;
+	}
+	return false;
+};
+
+////
 // tab //
 zkTab = {};
 
@@ -115,7 +134,7 @@ zkTab._setTabSel = function (tab, toSel) {
 	if (!accd) {
 		var tabs = zk.parentNode(zk.parentNode(tab, "TABLE"), "THEAD");
 		if (tabs)
-			zkTabs.fixWidth(tabs.id + "!last");
+			zkTabs.fixWidth(tabs.id);
 	}
 
 	if (toSel && tabbox)
@@ -156,7 +175,7 @@ zkTab.init = function (cmp) {
 zkTabs = {};
 
 zkTabs.init = function (cmp) {
-	setTimeout("zkTabs.fixWidth('"+cmp.id+"!last')", 30);
+	setTimeout("zkTabs.fixWidth('"+cmp.id+"')", 30);
 };
 zkTabs.onVisi = zkTabs.onSize = function (cmp) {
 	zkTabs.init(cmp);
@@ -164,7 +183,7 @@ zkTabs.onVisi = zkTabs.onSize = function (cmp) {
 
 /** Fix the width of the last column in tabs. */
 zkTabs.fixWidth = function (uuid) {
-	var n = $e(uuid);
+	var n = $e(uuid + "!last");
 	if (!n) return;
 
 	var tbl = zk.parentNode(zk.parentNode(n, "TABLE"), "TABLE");
