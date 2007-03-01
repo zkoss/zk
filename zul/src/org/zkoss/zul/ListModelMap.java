@@ -60,7 +60,7 @@ public class ListModelMap extends AbstractListModel implements Map {
 	 * when you add and/or remove item to this ListModelMap.
 	 * @parm dummy dummy argument to avoid confuse with consturctor {@link ListModelMap(Map)}.
 	 */
-	private ListModelMap(Map map, int dummy) {
+	protected ListModelMap(Map map, int dummy) {
 		_map = map;
 		_list = new ArrayList(map.keySet());
 		init();
