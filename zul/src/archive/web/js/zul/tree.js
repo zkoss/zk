@@ -137,7 +137,7 @@ zkTree.cleanup = zkau.cleanupMeta;
 zkTree.childchg = zkTree.init;
 
 /** Called when a tree becomes visible because of its parent. */
-zkTree.onVisi = function (cmp) {
+zkTree.onVisi = zkTree.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 };

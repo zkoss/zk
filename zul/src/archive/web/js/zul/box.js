@@ -90,8 +90,7 @@ zkSplt.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
-
-zkSplt._resize = function (cmp) {
+zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
 	cmp = $e(cmp);
 	if (cmp) {
 		zkSplt._fixsz(cmp);
@@ -193,6 +192,8 @@ zkSplt._adj = function (n, fd, diff) {
 	if (n) {
 		var val = parseInt(n.style[fd] || "0") + diff;
 		n.style[fd] = (val > 0 ? val: 0) + "px";
+
+		zk.onSizeAt(n); //notify descendants
 	}
 };
 /** Adjusts the width of the splitter in the opposite dir. */
@@ -202,6 +203,7 @@ zkSplt._adjSplt = function (n, fd, diff) {
 		if (vert != (fd == "height")) {
 			var val = parseInt(n.style[fd] || "0") + diff;
 			n.style[fd] = (val > 0 ? val: 0) + "px";
+			//No need to call zk.onSizeAt(n) since it is handled above
 		}
 	}
 	for (n = n.firstChild; n; n = n.nextSibling)

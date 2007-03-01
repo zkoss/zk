@@ -1090,7 +1090,7 @@ zkLibox.cleanup = zkau.cleanupMeta;
 zkLibox.childchg = zkLibox.init;
 
 /** Called when a listbox becomes visible because of its parent. */
-zkLibox.onVisi = function (cmp) {
+zkLibox.onVisi = zkLibox.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 };

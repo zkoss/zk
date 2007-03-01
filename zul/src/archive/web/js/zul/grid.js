@@ -258,7 +258,7 @@ zkGrid.cleanup = zkau.cleanupMeta;
 zkGrid.childchg = zkGrid.init;
 
 /** Called when a grid becomes visible because of its parent. */
-zkGrid.onVisi = function (cmp) {
+zkGrid.onVisi = zkGrid.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 };

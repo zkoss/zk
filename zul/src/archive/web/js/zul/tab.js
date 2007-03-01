@@ -115,7 +115,7 @@ zkTab._setTabSel = function (tab, toSel) {
 	if (!accd) {
 		var tabs = zk.parentNode(zk.parentNode(tab, "TABLE"), "THEAD");
 		if (tabs)
-			zkTab.fixWidth(tabs.id + "!last");
+			zkTabs.fixWidth(tabs.id + "!last");
 	}
 
 	if (toSel && tabbox)
@@ -132,28 +132,6 @@ zkTab._changeBkgnd = function (node, toSel) {
 
 	for (node = node.firstChild; node; node = node.nextSibling)
 		zkTab._changeBkgnd(node, toSel);
-};
-
-/** Fix the width of the last column in tabs. */
-zkTab.fixWidth = function (uuid) {
-	var n = $e(uuid);
-	if (!n) return;
-
-	var tbl = zk.parentNode(zk.parentNode(n, "TABLE"), "TABLE");
-	var tabs = zk.parentNode(tbl, "TABLE");
-		//Safari: THEAD's width and TD/TR's height is 0, so use TABLE instead
-	if (tabs) {
-		if ("TD" == $tag(n)) { //horizontal
-			var v = tabs.offsetWidth - tbl.offsetWidth + n.offsetWidth;
-			if (v < 0) v = 0;
-			n.style.width = v + "px";
-		} else { //vertical
-			if (n.cells && n.cells.length) n = n.cells[0];
-			var v = tabs.offsetHeight - tbl.offsetHeight + n.offsetHeight;
-			if (v < 0) v = 0;
-			n.style.height = v + "px";
-		}
-	}
 };
 
 zkTab.init = function (cmp) {
@@ -178,8 +156,31 @@ zkTab.init = function (cmp) {
 zkTabs = {};
 
 zkTabs.init = function (cmp) {
-	setTimeout("zkTab.fixWidth('"+cmp.id+"!last')", 30);
+	setTimeout("zkTabs.fixWidth('"+cmp.id+"!last')", 30);
 };
-zkTabs.onVisi = function (cmp) {
+zkTabs.onVisi = zkTabs.onSize = function (cmp) {
 	zkTabs.init(cmp);
 };
+
+/** Fix the width of the last column in tabs. */
+zkTabs.fixWidth = function (uuid) {
+	var n = $e(uuid);
+	if (!n) return;
+
+	var tbl = zk.parentNode(zk.parentNode(n, "TABLE"), "TABLE");
+	var tabs = zk.parentNode(tbl, "TABLE");
+		//Safari: THEAD's width and TD/TR's height is 0, so use TABLE instead
+	if (tabs) {
+		if ("TD" == $tag(n)) { //horizontal
+			var v = tabs.offsetWidth - tbl.offsetWidth + n.offsetWidth;
+			if (v < 0) v = 0;
+			n.style.width = v + "px";
+		} else { //vertical
+			if (n.cells && n.cells.length) n = n.cells[0];
+			var v = tabs.offsetHeight - tbl.offsetHeight + n.offsetHeight;
+			if (v < 0) v = 0;
+			n.style.height = v + "px";
+		}
+	}
+};
+
