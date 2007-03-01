@@ -216,6 +216,21 @@ import java.util.LinkedHashSet;
 			return; //cannot load, a control attribute, or a detached component, skip!
 		}
 		Object bean = _binder.getBeanAndRegisterBeanSameNodes(comp, _expression);
+		myLoadAttribute(comp, bean);
+	}
+
+	/** load bean value into the attribute of the specified component.
+	 * @param comp the component.
+	 * @param bean the bean value.
+	 */
+	public void loadAttribute(Component comp, Object bean) {
+		if (!isLoadable() || _attr.startsWith("_") || _binder.isTemplate(comp) || comp.getPage() == null) { 
+			return; //cannot load, a control attribute, or a detached component, skip!
+		}
+		myLoadAttribute(comp, bean);
+	}
+	
+	private void myLoadAttribute(Component comp, Object bean) {
 		try {
 			if (_converter != null) {
 				bean = _converter.coerceToUi(bean, comp);
