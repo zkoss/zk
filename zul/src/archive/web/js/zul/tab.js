@@ -191,14 +191,20 @@ zkTabs.fixWidth = function (uuid) {
 		//Safari: THEAD's width and TD/TR's height is 0, so use TABLE instead
 	if (tabs) {
 		if ("TD" == $tag(n)) { //horizontal
-			var v = tabs.offsetWidth - tbl.offsetWidth + n.offsetWidth;
-			if (v < 0) v = 0;
-			n.style.width = v + "px";
+			n.style.width = "1px"; //let tab's width be re-calc
+			setTimeout(function () {
+				var v = tabs.offsetWidth - tbl.offsetWidth + n.offsetWidth;
+				if (v < 0) v = 0;
+				n.style.width = v + "px";
+			}, 0);
 		} else { //vertical
-			if (n.cells && n.cells.length) n = n.cells[0];
-			var v = tabs.offsetHeight - tbl.offsetHeight + n.offsetHeight;
-			if (v < 0) v = 0;
-			n.style.height = v + "px";
+			n.style.height = "1px"; //let tab's height be re-calc
+			setTimeout(function () {
+				if (n.cells && n.cells.length) n = n.cells[0];
+				var v = tabs.offsetHeight - tbl.offsetHeight + n.offsetHeight;
+				if (v < 0) v = 0;
+				n.style.height = v + "px";
+			}, 0);
 		}
 	}
 };
