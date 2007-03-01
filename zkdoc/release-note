@@ -14,6 +14,7 @@ ZK 2.3.0 Freshly
   1669100: Support live ListModelArray
   1669103: Support BindingListModelArray
   1665332: Add Listbox binding support for enum
+  1671646: The attribute element supports trim="true"
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
