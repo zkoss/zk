@@ -384,6 +384,14 @@ zk.Selectable.prototype = {
 			zkau.setAttr(this.element, name, value);
 			this.recalcSize(true);
 			return true;
+		case "style":
+		case "style.width":
+		case "style.height":
+			if (!this.paging) {
+				zkau.setAttr(this.element, name, value);
+				this.init();
+				return true;
+			}
 		}
 		return false;
 	},

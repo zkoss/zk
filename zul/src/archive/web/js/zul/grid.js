@@ -274,8 +274,14 @@ zkGrid.setAttr = function (grid, name, value) {
 		var meta = zkau.getMeta(grid);
 		if (meta) {
 			meta.setHgh(value);
+			if (!meta.paging) meta.init();
 			return true;
 		}
+	} else if (name == "style" || name == "style.width") {
+		zkau.setAttr(grid, name, value);
+		var meta = zkau.getMeta(grid);
+		if (meta && !meta.paging) meta.init();
+		return true;
 	}
 	return false;
 };
