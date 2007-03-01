@@ -92,7 +92,7 @@ zk.enableESC = function () {
 /** Default version used for all modules that don't define their individual
  * version.
  */
-zk.build = "3N"; //increase this if we want the browser to reload JavaScript
+zk.build = "3O"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */
@@ -505,6 +505,7 @@ zk._evalInit = function () {
 			if (o) {
 				if (o["onVisi"]) zk._visicmps[n.id] = true;
 				if (o["onHide"]) zk._hidecmps[n.id] = true;
+				if (o["onSize"]) zk._sizecmps[n.id] = true;
 			}
 		}
 
@@ -562,6 +563,7 @@ zk.cleanupAt = function (n) {
 		zk.eval(n, "cleanup", type);
 		delete zk._visicmps[n.id];
 		delete zk._hidecmps[n.id];
+		delete zk._sizecmps[n.id];
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
@@ -569,13 +571,13 @@ zk.cleanupAt = function (n) {
 };
 
 /** To notify a component that it becomes visible because one its ancestors
- * becomes visible. It recursively invokes its descendants.
+ * becomes visible. All descendants of n is invoked if onVisi is declared.
  */
 zk.onVisiAt = function (n) {
 	for (nid in zk._visicmps) {
 		var elm = $e(nid);
 		for (var e = elm; e; e = e.parentNode) {
-			if (e == n) {
+			if (e == n) { //elm is a child of n
 				zk.eval(elm, "onVisi");
 				break;
 			}
@@ -585,7 +587,7 @@ zk.onVisiAt = function (n) {
 	}
 };
 /** To notify a component that it becomes invisible because one its ancestors
- * becomes invisible. It recursively invokes its descendants.
+ * becomes invisible. All descendants of n is invoked if onHide is declared.
  */
 zk.onHideAt = function (n) {
 	//Bug 1526542: we have to blur if we want to hide a focused control in gecko and IE
@@ -598,7 +600,7 @@ zk.onHideAt = function (n) {
 	for (nid in zk._hidecmps) {
 		var elm = $e(nid);
 		for (var e = elm; e; e = e.parentNode) {
-			if (e == n) {
+			if (e == n) { //elm is a child of n
 				zk.eval(elm, "onHide");
 				break;
 			}
@@ -607,6 +609,43 @@ zk.onHideAt = function (n) {
 		}
 	}
 }
+/** To notify a component that its size is changed.
+ *  All descendants of n is invoked if onSize is declared.
+ * Note: since onSize usually triggers another onSize, it handles them
+ * asynchronously.
+ */
+zk.onSizeAt = function (n) {
+	for (nid in zk._sizecmps) {
+		var elm = $e(nid);
+		for (var e = elm; e; e = e.parentNode) {
+			if (e == n) { //elm is a child of n
+				if (!zk._tmOnSizeAt)
+					zk._tmOnSizeAt = setTimeout(zk._onSizeAt, 550);
+				zk._toOnSize[nid] = true;
+				break;
+			}
+			if (e.style && e.style.display == "none")
+				break;
+		}
+	}
+};
+zk._onSizeAt = function () {
+	delete zk._tmOnSizeAt;
+	var once;
+	for (nid in zk._toOnSize) {
+		if (once) {
+			if (!zk._tmOnSizeAt)
+				zk._tmOnSizeAt = setTimeout(zk._onSizeAt, 0);
+			break; //only once
+		}
+		once = true;
+
+		delete zk._toOnSize[nid];
+
+		var elm = $e(nid);
+		if (elm) zk.eval(elm, "onSize");
+	}
+};
 
 //extra//
 /** Loads the specified style sheet (CSS).
@@ -854,6 +893,8 @@ zk._initcmps = new Array(); //comps to init
 zk._ckfns = new Array(); //functions called to check whether a module is loaded (zk._load)
 zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
 zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
+zk._sizecmps = {}; //a set of component's ID that requires zkType.onSize
+zk._toOnSize = {}; //a set of component's waiting to execute onSize
 
 function myload() {
 	var f = zk._onload;
