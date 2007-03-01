@@ -173,6 +173,8 @@ public class Tab extends LabelImageElement {
 		else
 			super.invalidate();
 	}
+	/** No child is allowed.
+	 */
 	public boolean isChildable() {
 		return false;
 	}

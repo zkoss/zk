@@ -305,6 +305,8 @@ public class Label extends XulElement {
 		if (isIdRequired()) super.redraw(out);
 		else out.write(getEncodedText()); //no processing; direct output if not ZUL
 	}
+	/** No child is allowed.
+	 */
 	public boolean isChildable() {
 		return false;
 	}

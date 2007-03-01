@@ -178,6 +178,7 @@ public class Button extends LabelImageElement {
 		return _href != null && dt != null ? dt.getExecution().encodeURL(_href): null;
 			//if desktop is null, it doesn't belong to any execution
 	}
+
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =
@@ -198,5 +199,12 @@ public class Button extends LabelImageElement {
 		if (_tabindex >= 0)
 			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
 		return sb.toString();
+	}
+
+	//Component//
+	/** No child is allowed.
+	 */
+	public boolean isChildable() {
+		return false;
 	}
 }
