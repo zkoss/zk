@@ -623,12 +623,12 @@ public class Parser {
 
 		//FUTURE: handling the namespace of if and unless
 		final String attnm = IDOMs.getRequiredAttributeValue(el, "name");
-		final String attval = el.getText(false); //don't trim!!
-		if (!isEmpty(attval)) {
-			addAttribute(parent, null, attnm, attval,
-				ConditionImpl.getInstance(
-					el.getAttributeValue("if"), el.getAttributeValue("unless")));
-		}
+		final String trim = el.getAttributeValue("trim");
+		noEL("trim", trim, el);
+		final String attval = el.getText(trim != null && "true".equals(trim));
+		addAttribute(parent, null, attnm, attval,
+			ConditionImpl.getInstance(
+				el.getAttributeValue("if"), el.getAttributeValue("unless")));
 
 		annotInfo.updateAnnotations(parent, attnm);
 	}
