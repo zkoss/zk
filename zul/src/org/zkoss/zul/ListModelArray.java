@@ -37,7 +37,7 @@ public class ListModelArray extends AbstractListModel
 implements java.io.Serializable {
 	private static final long serialVersionUID = 20070226L;
 
-	protected final Object[] _data;
+	protected final Object[] _array;
 
 	/**
 	 * new an instance which accepts a "live" Object array as its inner array. Any change to this
@@ -57,7 +57,7 @@ implements java.io.Serializable {
 	 * @param dummy dummy argument to avoid confuse with consturctor {@link #ListModelArray(Object[])}.
 	 */
 	protected ListModelArray(Object[] array, int dummy) {
-		if (data == null)
+		if (array == null)
 			throw new NullPointerException();
 		_array = array;
 	}
@@ -69,8 +69,8 @@ implements java.io.Serializable {
 	public ListModelArray(Object[] src) {
 		if (src == null)
 			throw new NullPointerException();
-		_data = new Object[src.length];
-		System.arraycopy(src, 0, _data, 0, src.length);
+		_array = new Object[src.length];
+		System.arraycopy(src, 0, _array, 0, src.length);
 	}
 	
 	/**
@@ -78,7 +78,7 @@ implements java.io.Serializable {
 	 * @param size the array size.
 	 */
 	public ListModelArray(int size) {
-		_data = new Object[size];
+		_array = new Object[size];
 	}
 
 	/** Get the value of this ListModelArray at specified index.
@@ -92,16 +92,16 @@ implements java.io.Serializable {
 	 * @param index the array index to be set the new value.
 	 */
 	public void set(int index, Object value) {
-		_data[index] = value;
+		_array[index] = value;
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
 	}
 		
 	//-- ListModel --//
 	public int getSize() {
-		return _data.length;
+		return _array.length;
 	}
 	
 	public Object getElementAt(int j) {
-		return _data[j];
+		return _array[j];
 	}
 }
