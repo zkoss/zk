@@ -1,5 +1,5 @@
 <%--
-test.psp
+test.dsp
 
 {{IS_NOTE
 	Purpose:
@@ -35,3 +35,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	This is inside a box.
 	</h:box>
 </body>
+</html>
