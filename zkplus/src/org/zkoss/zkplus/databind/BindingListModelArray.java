@@ -39,8 +39,8 @@ public class BindingListModelArray extends ListModelArray implements BindingList
 	
 	//-- BindingListModel --//
 	public int indexOf(Object elm) {
-		for(int j = 0; j < _data.length; ++j) {
-			if (Objects.equals(elm, _data[j])) {
+		for(int j = 0; j < _array.length; ++j) {
+			if (Objects.equals(elm, _array[j])) {
 				return j;
 			}
 		}
