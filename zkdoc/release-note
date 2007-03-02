@@ -15,6 +15,8 @@ ZK 2.3.0 Freshly
   1669103: Support BindingListModelArray
   1665332: Add Listbox binding support for enum
   1671646: The attribute element supports trim="true"
+  1665366: Personalize upload dialog
+  1672116: Personalize the message dialog
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
