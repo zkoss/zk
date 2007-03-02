@@ -52,8 +52,12 @@ import org.zkoss.web.util.resource.ClassWebResource;
  * <p>Initial parameters:
  * <dl>
  * <dt>charset</dt>
- * <dd>The default character set if not specified in the DSP page.
+ * <dd>The default character set if not specified in the DSP page.<br/>
  * Default: UTF-8.</dd>
+ * <dt>class-resource</dt>
+ * <dd>Whether to search the class loader if a resource is not found
+ * in the Web application (i.e., ServletContext).</dd>
+ * Default: false.</dd>
  * </dl>
  *
  * @author tomyeh
