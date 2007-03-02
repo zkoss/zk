@@ -79,9 +79,21 @@ public class ClassWebResource {
 	private final ClassWebContext _cwc;
 	private final ResourceCache _dspCache;
 
-	/** The prefix of path. */
+	/** The prefix of path of web resources ("/web"). */
 	public static final String PATH_PREFIX = "/web";
 
+	/** Returns the URL of the resource of the specified URI by searching
+	 * the class path (with {@link #PATH_PREFIX}).
+	 */
+	public static URL getResource(String uri) {
+		return Locators.getDefault().getResource(PATH_PREFIX + uri);
+	}
+	/** Returns the resource in a stream of the specified URI by searching
+	 * the class path (with {@link #PATH_PREFIX}).
+	 */
+	public static InputStream getResourceAsStream(String uri) {
+		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + uri);
+	}
 	/** Returns the instance (singlton in the whole app) for
 	 * handling resources located in class path.
 	 */
@@ -193,7 +205,7 @@ public class ClassWebResource {
 		}
 
 		pi = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
-		final InputStream is = _cwc.getResourceAsStream(pi);
+		final InputStream is = getResourceAsStream(pi);
 		final byte[] data;
 		if (is == null) {
 			if ("js".equals(ext) || "css".equals(ext)) {
@@ -248,7 +260,7 @@ public class ClassWebResource {
 		public Object load(Object src) throws Exception {
 			if (D.ON && log.debugable()) log.debug("Parse "+src);
 			final String path = (String)src;
-			final InputStream is = _cwc.getResourceAsStream(path);
+			final InputStream is = getResourceAsStream(path);
 			if (is == null)
 				return null;
 			try {
@@ -286,10 +298,10 @@ public class ClassWebResource {
 					return null;
 				}
 				public URL getResource(String name) {
-					return ClassWebContext.this.getResource(name);
+					return ClassWebResource.getResource(name);
 				}
 				public InputStream getResourceAsStream(String name) {
-					return ClassWebContext.this.getResourceAsStream(name);
+					return ClassWebResource.getResourceAsStream(name);
 				}
 			};
 		}
@@ -342,10 +354,10 @@ public class ClassWebResource {
 			return _ctx.getRequestDispatcher(_mappingURI + PATH_PREFIX + uri);
 		}
 		public URL getResource(String uri) {
-			return Locators.getDefault().getResource(PATH_PREFIX + uri);
+			return ClassWebResource.getResource(PATH_PREFIX + uri);
 		}
 		public InputStream getResourceAsStream(String uri) {
-			return Locators.getDefault().getResourceAsStream(PATH_PREFIX + uri);
+			return ClassWebResource.getResourceAsStream(PATH_PREFIX + uri);
 		}
 	}
 }

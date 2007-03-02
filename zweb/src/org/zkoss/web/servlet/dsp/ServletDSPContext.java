@@ -54,8 +54,8 @@ public class ServletDSPContext implements DSPContext {
 	 * Constructor.
 	 *
 	 * @param locator used to locate resources, such as taglib.
-	 * If null is specified, the locator for the specified servlet context is
-	 * used. (In other words, we use ServletContextLocator if locator is null).
+	 * If null is specified, the locator for the specified servlet context
+	 * is used. (In other words, we use ServletContextLocator(ctx), if locator is null).
 	 */
 	public ServletDSPContext(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response,

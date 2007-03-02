@@ -62,7 +62,7 @@ public class Charsets {
 	 * {@link #getPreferredLocale}. After setting up, you shall invoke
 	 * {@link #cleanup} before exiting.
 	 *
-	 * <pre><code> final Object old = setup(request, response);
+	 * <pre><code> final Object old = setup(request, response, null);
 	 * try {
 	 *	  ....
 	 * } finally {

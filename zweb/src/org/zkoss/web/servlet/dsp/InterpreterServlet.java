@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServlet;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.util.resource.Locator;
@@ -43,7 +44,7 @@ import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.ResourceCaches;
 import org.zkoss.web.util.resource.ResourceLoader;
-import org.zkoss.web.util.resource.ServletContextLocator;
+import org.zkoss.web.util.resource.ClassWebResource;
 
 /**
  * The servlet used to interpret the DSP file (Potix Dynamic Script Page).
@@ -61,6 +62,7 @@ public class InterpreterServlet extends HttpServlet {
 	private static final Log log = Log.lookup(InterpreterServlet.class);
 	private ServletContext _ctx;
 	private String _charset = "UTF-8";
+	private Locator _locator;
 
 	public void init(ServletConfig config) throws ServletException {
 		//super.init(config);
@@ -68,9 +70,30 @@ public class InterpreterServlet extends HttpServlet {
 
 		_ctx = config.getServletContext();
 
-		final String cs = config.getInitParameter("charset");
-		if (cs != null)
-			_charset = cs.length() > 0 ? cs: null;
+		String s = config.getInitParameter("class-resource");
+		final boolean bClsRes = "true".equals(s);
+		_locator = new Locator() {
+			public String getDirectory() {
+				return null; //FUTURE: support relative path
+			}
+			public URL getResource(String name) {
+				try {
+					URL url = _ctx.getResource(name);
+					return !bClsRes || url != null ? url:
+						ClassWebResource.getResource(name);
+				} catch (java.net.MalformedURLException ex) {
+					throw new SystemException(ex);
+				}
+			}
+			public InputStream getResourceAsStream(String name) {
+				InputStream is = _ctx.getResourceAsStream(name);
+				return !bClsRes || is != null ? is:
+					ClassWebResource.getResourceAsStream(name);
+			}
+		};
+
+		s = config.getInitParameter("charset");
+		if (s != null) _charset = s.length() > 0 ? s: null;
 	}
 	public ServletContext getServletContext() {
 		return _ctx;
@@ -86,7 +109,7 @@ public class InterpreterServlet extends HttpServlet {
 		final Object old = Charsets.setup(request, response, _charset);
 		try {
 			final Interpretation cnt = (Interpretation)
-				ResourceCaches.get(getCache(_ctx), _ctx, path, null);
+				ResourceCaches.get(getCache(), _ctx, path, null);
 			if (cnt == null) {
 				if (Https.isIncluded(request)) log.error("Not found: "+path);
 					//It might be eaten, so log the error
@@ -106,24 +129,22 @@ public class InterpreterServlet extends HttpServlet {
 	}
 
 	private static final String ATTR_PAGE_CACHE = "org.zkoss.web.servlet.dsp.PageCache";
-	private static final ResourceCache getCache(ServletContext ctx) {
-		ResourceCache cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
+	private final ResourceCache getCache() {
+		ResourceCache cache = (ResourceCache)_ctx.getAttribute(ATTR_PAGE_CACHE);
 		if (cache == null) {
 			synchronized (InterpreterServlet.class) {
-				cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
+				cache = (ResourceCache)_ctx.getAttribute(ATTR_PAGE_CACHE);
 				if (cache == null) {
-					cache = new ResourceCache(new MyLoader(ctx), 29);
+					cache = new ResourceCache(new MyLoader(), 29);
 					cache.setMaxSize(500).setLifetime(60*60*1000); //1hr
-					ctx.setAttribute(ATTR_PAGE_CACHE, cache);
+					_ctx.setAttribute(ATTR_PAGE_CACHE, cache);
 				}
 			}
 		}
 		return cache;
 	}
-	private static class MyLoader extends ResourceLoader {
-		private final Locator _locator;
-		private MyLoader(ServletContext ctx) {
-			_locator = new ServletContextLocator(ctx);
+	private class MyLoader extends ResourceLoader {
+		private MyLoader() {
 		}
 		//-- super --//
 		protected Object parse(String path, File file, Object extra)

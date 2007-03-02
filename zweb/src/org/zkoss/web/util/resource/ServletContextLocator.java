@@ -20,7 +20,6 @@ package org.zkoss.web.util.resource;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.net.MalformedURLException;
 import javax.servlet.ServletContext;
 
 import org.zkoss.lang.SystemException;
@@ -76,7 +75,7 @@ public class ServletContextLocator implements Locator {
 	public URL getResource(String name) {
 		try {
 			return _ctx.getResource(fixName(name));
-		} catch (MalformedURLException ex) {
+		} catch (java.net.MalformedURLException ex) {
 			throw new SystemException(ex);
 		}
 	}
