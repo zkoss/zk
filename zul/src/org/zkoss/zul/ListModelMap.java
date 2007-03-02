@@ -58,7 +58,7 @@ public class ListModelMap extends AbstractListModel implements Map {
 	 * the inner "live" map would be changed accordingly.</p>
 	 * @param map the inner "live" map that would be added and/or removed accordingly
 	 * when you add and/or remove item to this ListModelMap.
-	 * @parm dummy dummy argument to avoid confuse with consturctor {@link ListModelMap(Map)}.
+	 * @param dummy dummy argument to avoid confuse with consturctor {@link #ListModelMap(Map)}.
 	 */
 	protected ListModelMap(Map map, int dummy) {
 		_map = map;

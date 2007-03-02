@@ -44,8 +44,8 @@ implements java.io.Serializable {
 	 * ListModelArray will change to the passed in "live" array.
 	 * @param array the inner array storage
 	 */
-	public static ListModelArray instance(Object[] data) {
-		return new ListModelArray(data, 0);
+	public static ListModelArray instance(Object[] array) {
+		return new ListModelArray(array, 0);
 	}
 
 	/**
@@ -54,11 +54,12 @@ implements java.io.Serializable {
 	 * the inner "live" array would be changed accordingly.</p>
 	 * @param array the inner "live" Object array that would be modified accordingly
 	 * when you modify to this ListModelArray.
+	 * @param dummy dummy argument to avoid confuse with consturctor {@link #ListModelArray(Object[])}.
 	 */
-	protected ListModelArray(Object[] data, int dummy) {
+	protected ListModelArray(Object[] array, int dummy) {
 		if (data == null)
 			throw new NullPointerException();
-		_data = data;
+		_array = array;
 	}
 
 	/**
