@@ -17,6 +17,7 @@ ZK 2.3.0 Freshly
   1671646: The attribute element supports trim="true"
   1665366: Personalize upload dialog
   1672116: Personalize the message dialog
+  1569740: Fileupload supports uploading multiple files at the same time
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
