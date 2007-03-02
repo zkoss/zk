@@ -131,7 +131,8 @@ class ActionNode extends Node {
 			try {
 				if (_bExpr) {
 					args[0] = ic.dc.getExpressionEvaluator().evaluate(
-						(String)_value, Object.class, ic.resolver, ic.mapper);
+						(String)_value, _method.getParameterTypes()[0],
+						ic.resolver, ic.mapper);
 					//if (D.ON && log.finerable()) log.finer("attr "+_method.getName()+"="+_value+" to "+args[0]);
 				} else {
 					args[0] = _value;
@@ -139,9 +140,13 @@ class ActionNode extends Node {
 				_method.invoke(action, args);
 			} catch (Exception ex) {
 				if (log.debugable()) log.debug(ex);
-				throw new ServletException("Failed to invoke "+_method+" with "+(_bExpr ? _value: args[0])
-					+". Cause: "+ex.getClass().getName()+", "+Exceptions.getMessage(ex)
-					+"\n"+Exceptions.getFirstStackTrace(ex));
+				throw new ServletException("Failed to invoke "+_method+" with "+args[0]
+	+(args[0] != null ? " @"+args[0].getClass().getName(): "")
+	+(_bExpr ? " ("+_value+')': "")
+	+". Cause: "+ex.getClass().getName()+", "+Exceptions.getMessage(ex)
+	+"\n"+Exceptions.getBriefStackTrace(ex));
+					//Web container might not show the real cause, we have to
+					//make it part of the exception
 			}
 		}
 	}

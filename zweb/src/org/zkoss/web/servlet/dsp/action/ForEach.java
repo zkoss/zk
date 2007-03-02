@@ -40,6 +40,7 @@ public class ForEach extends AbstractAction {
 	private Object _items;
 	private int _beg = 0, _end = Integer.MAX_VALUE;
 	private boolean _trim = true;
+	private boolean _endSpecified, _itemsSpecified;
 
 	/** Returns the variable name used to iterate thru items. */
 	public String getVar() {
@@ -67,6 +68,7 @@ public class ForEach extends AbstractAction {
 	/** Sets the attribute items. */
 	public void setItems(Object items) {
 		_items = items;
+		_itemsSpecified = true;
 	}
 
 	/** Returns the index of the item at which the iteration begins.
@@ -92,6 +94,7 @@ public class ForEach extends AbstractAction {
 	 */
 	public void setEnd(int end) {
 		_end = end;
+		_endSpecified = true;
 	}
 
 	/** Returns whether to trim the result. */
@@ -108,7 +111,10 @@ public class ForEach extends AbstractAction {
 	//-- Action --//
 	public void render(ActionContext ac, boolean nested)
 	throws javax.servlet.ServletException, IOException {
-		if (!nested || _items == null || !isEffective())
+		//at least items or end must be specified
+		if (!nested || (_itemsSpecified && _items == null)
+		|| (_endSpecified && _end < _beg)
+		|| (!_itemsSpecified && !_endSpecified) || !isEffective())
 			return;
 
 		final Object old1 =
@@ -123,7 +129,9 @@ public class ForEach extends AbstractAction {
 			st = null;
 		}
 
-		if (_items.getClass().isArray()) {
+		if (_items == null) { //use begin and end only
+			renderWith(ac, st);
+		} else if (_items.getClass().isArray()) {
 			if (_items instanceof Object[])
 				renderWith(ac, st, (Object[])_items);
 			else if (_items instanceof int[])
@@ -165,6 +173,18 @@ public class ForEach extends AbstractAction {
 		if (_varStatus != null) ac.setAttribute(_varStatus, old2, ac.PAGE_SCOPE);
 	}
 
+	private void renderWith(ActionContext ac, Status st)
+	throws javax.servlet.ServletException, IOException {
+		final StringWriter out = _trim ? new StringWriter(): null;
+		for (int j = _beg; j <= _end; ++j) {
+			final Object val = new Integer(j);
+			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
+			if (st != null) st.update(j, val);
+			ac.renderFragment(out);
+		}
+		if (out != null)
+			ac.getOut().write(out.toString().trim());
+	}
 	private void renderWith(ActionContext ac, Status st, ListIterator it)
 	throws javax.servlet.ServletException, IOException {
 		final StringWriter out = _trim ? new StringWriter(): null;

@@ -136,7 +136,7 @@ public class InterpreterServlet extends HttpServlet {
 					log.realCauseBriefly("Failed to parse "+file, ex);
 				else
 					log.error("Failed to parse "+file+"\nCause: "+Exceptions.getMessage(ex)
-						+"\n"+Exceptions.getFirstStackTrace(ex));
+						+"\n"+Exceptions.getBriefStackTrace(ex));
 				return null; //as non-existent
 			}
 		}

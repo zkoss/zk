@@ -259,7 +259,7 @@ public class ClassWebResource {
 				else
 					log.error("Failed to parse "+path
 					+"\nCause: "+ex.getClass().getName()+" "+Exceptions.getMessage(ex)
-					+"\n"+Exceptions.getFirstStackTrace(ex));
+					+"\n"+Exceptions.getBriefStackTrace(ex));
 				return null; //as non-existent
 			}
 		}
