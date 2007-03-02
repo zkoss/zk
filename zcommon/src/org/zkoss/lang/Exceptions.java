@@ -372,11 +372,12 @@ public class Exceptions {
 		return getMessage(code, (Object[])null);
 	}
 
-	/** Returns the first stack trace, or null if not available.
+	/** Returns the first few lines of the stack trace.
+	 * It is useful to make the cause exception's stacktrace to be
+	 * part of the message of the exception thrown to the user.
 	 */
-	public static final String getFirstStackTrace(Throwable t) {
-		final StackTraceElement[] ste = t.getStackTrace();
-		return ste != null && ste.length > 0 ? ste[0].toString(): null;
+	public static final String getBriefStackTrace(Throwable t) {
+		return formatStackTrace(null, t, ">>", 6).toString();
 	}
 	/** Formats the stack trace and returns the result.
 	 * Currently, it only adds the prefix to each line.
@@ -420,7 +421,12 @@ public class Exceptions {
 			 	sb = new StringBuffer(len + 256);
 			if (maxcnt <= 0)
 				maxcnt = Integer.MAX_VALUE;
-			for (int j = 0; j < len && --maxcnt >= 0;) { //for each line
+			for (int j = 0; j < len;) { //for each line
+				if (--maxcnt < 0) {
+					sb.append(prefix).append("...");
+					break;
+				}
+
 				//StringBuffer has no indexOf(char,j), so...
 				int k = j;
 				while (k < len && trace.charAt(k++) != '\n')

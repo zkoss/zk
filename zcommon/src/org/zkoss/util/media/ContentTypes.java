@@ -54,6 +54,7 @@ public class ContentTypes {
 		synchronized (_fmt2ct) {
 			ctype = (String)_fmt2ct.get(format);
 		}
+
 		if (D.ON && ctype == null)
 			log.warning("Unknown format: "+format);
 		return ctype;
@@ -75,7 +76,8 @@ public class ContentTypes {
 				}
 			}
 		}
-		if (D.ON && format == null)
+
+		if (D.ON && format == null && !"application/octet-stream".equals(ctype))
 			log.warning("Unknown content type: "+ctype);
 		return format;
 	}
