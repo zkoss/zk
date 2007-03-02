@@ -18,6 +18,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.List;
+import java.util.Iterator;
+
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.client.Updatable;
@@ -30,11 +33,12 @@ import org.zkoss.zul.Window;
  * @author tomyeh
  */
 public class FileuploadDlg extends Window {
-	private Media _result;
+	private Media[] _result;
 
 	/** Returns the result.
+	 * @return an array of media (length >= 1), or null if nothing.
 	 */
-	public Media getResult() {
+	public Media[] getResult() {
 		return _result;
 	}
 
@@ -44,7 +48,7 @@ public class FileuploadDlg extends Window {
 
 	/** Sets the result.
 	 */
-	public void setResult(Media result) {
+	public void setResult(Media[] result) {
 		_result = result;
 	}
 
@@ -59,18 +63,28 @@ public class FileuploadDlg extends Window {
 		//-- Updatable --//
 		/** Updates the result from the client.
 		 * Callback by the system only. Don't invoke it directly.
+		 *
+		 * @param result a list of media instances, or null
 		 */
 		public void setResult(Object result) {
-			Media media = (Media)result;
-			if (media != null && media.inMemory() && media.isBinary()) {
-				final String nm = media.getName();
-				if (nm == null || nm.length() == 0) {
-					final byte[] bs = media.getByteData();
-					if (bs == null || bs.length == 0)
-						media = null; //Upload is pressed without specifying a file
+			final List list = (List)result;
+			if (list != null) {
+				for (Iterator it = list.iterator(); it.hasNext();) {
+					final Media media = (Media)it.next();
+					if (media != null && media.inMemory() && media.isBinary()) {
+						final String nm = media.getName();
+						if (nm == null || nm.length() == 0) {
+							final byte[] bs = media.getByteData();
+							if (bs == null || bs.length == 0)
+								it.remove(); //Upload is pressed without specifying a file
+						}
+					}
 				}
+				result = list.isEmpty() ?
+					null: (Media[])list.toArray(new Media[list.size()]);
 			}
-			FileuploadDlg.this.setResult(media);
+
+			FileuploadDlg.this.setResult((Media[])result);
 		}
 	}
 }

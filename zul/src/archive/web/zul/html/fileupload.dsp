@@ -61,11 +61,15 @@ function init() {
 	--%>
 
 	<table border="0">
+<c:set var="maxcnt" value="${empty param.max ? 1: param.max}"/>
+<c:forEach var="cnt" begin="1" end="${maxcnt}">
 	<tr>
+		<td align="right"><c:if test="${maxcnt gt 3}">${cnt}</c:if></td>
 		<td><input type="file" id="file" name="file"/></td>
 	</tr>
+</c:forEach>
 	<tr align="left">
-		<td style="border: outset 1px">
+		<td colspan="2" style="border: outset 1px">
 		<input type="submit" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}" onclick="parent.zk.progress()"/>
 		<input type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="cancelUpload()"/>
 		</td>

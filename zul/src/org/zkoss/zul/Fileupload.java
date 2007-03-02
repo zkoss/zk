@@ -60,6 +60,30 @@ public class Fileupload {
 	 */
 	public static Media get(String message, String title)
 	throws InterruptedException {
+		final Media[] result = get(message, title, 1);
+		return result != null ? result[0]: null;
+	}
+	/** Opens a modal dialog to upload mulitple files with
+	 * the default message and title.
+	 *
+	 * @param max the maximal allowed number that an user can upload
+	 * at once. If nonpositive, 1 is assumed.
+	 * @return an array of files that an users has uploaded,
+	 * or null if uploaded.
+	 */
+	public static Media[] get(int max) throws InterruptedException {
+		return get(null, null, max);
+	}
+	/** Opens a modal dialog to upload multiple files with
+	 * the specified message and title.
+	 *
+	 * @param max the maximal allowed number that an user can upload
+	 * at once. If nonpositive, 1 is assumed.
+	 * @return an array of files that an users has uploaded,
+	 * or null if uploaded.
+	 */
+	public static Media[] get(String message, String title, int max)
+	throws InterruptedException {
 		final Map params = new HashMap(5);
 		final Execution exec = Executions.getCurrent();
 		params.put("action", exec.getDesktop().getUpdateURI("/upload"));
@@ -67,35 +91,13 @@ public class Fileupload {
 			Messages.get(MZul.UPLOAD_MESSAGE): message);
 		params.put("title", title == null ?
 			Messages.get(MZul.UPLOAD_TITLE): title);
+		params.put("max", new Integer(max <= 1 ? 1: max));
 
 		final FileuploadDlg dlg = (FileuploadDlg)
 			exec.createComponents(
 				_templ, null, params);
 		dlg.doModal();
 		return dlg.getResult();
-	}
-	/** Opens a modal dialog to upload mulitple files with
-	 * the default message and title.
-	 *
-	 * @param count the maximal allowed number that an user can upload
-	 * at once. If nonpositive, 1 is assumed.
-	 * @return an array of files that an users has uploaded,
-	 * or null if uploaded.
-	 */
-	public static Media[] get(int count) throws InterruptedException {
-		return null; //TODO
-	}
-	/** Opens a modal dialog to upload multiple files with
-	 * the specified message and title.
-	 *
-	 * @param count the maximal allowed number that an user can upload
-	 * at once. If nonpositive, 1 is assumed.
-	 * @return an array of files that an users has uploaded,
-	 * or null if uploaded.
-	 */
-	public static Media[] get(String message, String title, int count)
-	throws InterruptedException {
-		return null; //TODO
 	}
 
 	/** Sets the template used to create the upload dialog.

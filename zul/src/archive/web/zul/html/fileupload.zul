@@ -22,7 +22,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window title="${arg.title}" border="normal" width="360px" closable="true"
 use="org.zkoss.zul.impl.FileuploadDlg">
 	<label value="${arg.message}"/>
-	<iframe width="100%" style="border: 1px solid #aaa"
-	src="~./zul/html/fileupload.dsp?dtid=${self.desktop.id}&amp;uuid=${self.parent.uuid}&amp;action=${arg.action}"/>
+	<variables frhgh="${arg.max*16+30}" if="${arg.max > 3}"/>
+	<variables frhgh="${frhgh}pt" if="${!empty frhgh}"/>
+	<iframe width="100%" height="${frhgh}" style="border: 1px solid #aaa"
+	src="~./zul/html/fileupload.dsp?dtid=${self.desktop.id}&amp;uuid=${self.parent.uuid}&amp;action=${arg.action}&amp;max=${arg.max}"/>
 		<!-- since arg.action might contain ;jsessionid=xx, so put it to the last one -->
 </window>
