@@ -39,6 +39,8 @@ import org.zkoss.zul.impl.MessageboxDlg;
  * @author tomyeh
  */
 public class Messagebox {
+	private static String _templ = "~./zul/html/messagebox.zul";
+
 	/** A symbol consisting of a question mark in a circle. */
 	public static final String QUESTION = "~./zul/img/question.gif";
 	/** A symbol consisting of an exclamation point in a triangle with
@@ -107,8 +109,7 @@ public class Messagebox {
 			params.put("IGNORE", Messages.get(MZul.IGNORE));
 
 		final MessageboxDlg dlg = (MessageboxDlg)
-			Executions.createComponents(
-			"~./zul/html/messagebox.zul", null, params);
+			Executions.createComponents(_templ, null, params);
 		dlg.setButtons(buttons);
 		dlg.doModal();
 		return dlg.getResult();
@@ -155,5 +156,24 @@ public class Messagebox {
 	throws InterruptedException {
 		return show(Messages.get(messageCode),
 			titleCode > 0 ? Messages.get(titleCode): null, button, icon);
+	}
+
+	/** Sets the template used to create the message dialog.
+	 *
+	 * <p>The template must follow the default template:
+	 * ~./zul/html/messagebox.zul
+	 *
+	 * <p>In other words, just adjust the label and layout and don't
+	 * change the component's ID.
+	 */
+	public static void setTemplate(String uri) {
+		if (uri == null || uri.length() == 0)
+			throw new IllegalArgumentException("empty");
+		_templ = uri;
+	}
+	/** Returns the template used to create the message dialog.
+	 */
+	public static String getTemplate() {
+		return _templ;
 	}
 }
