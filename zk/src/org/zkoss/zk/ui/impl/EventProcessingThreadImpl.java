@@ -429,7 +429,7 @@ implements EventProcessingThread {
 			if (_silent) {
 				if (log.debugable())
 					log.debug("The event processing thread interrupted: "+Exceptions.getMessage(ex)
-						+"\n"+Exceptions.getFirstStackTrace(ex));
+						+"\n"+Exceptions.getBriefStackTrace(ex));
 			} else {	
 				System.out.println("The event processing thread interrupted: "+Exceptions.getMessage(ex));
 				//Don't use log because it might be stopped

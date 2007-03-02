@@ -91,15 +91,13 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 					} else {
 						final Desktop desktop = ((WebAppCtrl)sess.getWebApp())
 							.getDesktopCache(sess).getDesktop(dtid);
-						final Map params = parseRequest(request, desktop, false);
+						final Map params = parseRequest(request, desktop);
 
 						final String uri = (String)params.get("nextURI");
 						if (uri != null && uri.length() != 0)
 							nextURI = uri;
 
-						final FileItem fi = (FileItem)params.get("file");
-						if (fi != null)
-							process0(sess, desktop, fi, attrs);
+						processItems(desktop, params, attrs);
 					}
 				}
 			}
@@ -125,10 +123,30 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 			nextURI, attrs, Servlets.PASS_THRU_ATTR);
 	}
 
-	/** Returns the error message, or null if success.
+	/** Process fileitems named file0, file1 and so on.
 	 */
 	private static final
-	String process0(Session sess, Desktop desktop, FileItem fi, Map attrs)
+	void processItems(Desktop desktop, Map params, Map attrs)
+	throws IOException {
+		final List meds = new LinkedList();
+		final Object fis = params.get("file");
+		if (fis instanceof FileItem) {
+			meds.add(processItem((FileItem)fis));
+		} else {
+			for (Iterator it = ((List)fis).iterator(); it.hasNext();) {
+				meds.add(processItem((FileItem)it.next()));
+			}
+		}
+
+		final String contentId = Strings.encode(
+			new StringBuffer(12).append("z__ul_"),
+			((DesktopCtrl)desktop).getNextId()).toString();
+		attrs.put("contentId", contentId);
+		desktop.setAttribute(contentId, meds);
+	}
+	/** Process the specified fileitem.
+	 */
+	private static final Media processItem(FileItem fi)
 	throws IOException {
 		Media media = null;
 		String name = getBaseName(fi);
@@ -162,55 +180,25 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 				}
 			}
 
-		if (media == null)
-			media = fi.isInMemory() ?
+		return media != null ? media:
+			fi.isInMemory() ?
 				new AMedia(name, null, ctype, fi.get()):
 				new StreamMedia(name, null, ctype, fi);
-
-		final String contentId = Strings.encode(
-			new StringBuffer(12).append("z__ul_"),
-			((DesktopCtrl)desktop).getNextId()).toString();
-		desktop.setAttribute(contentId, media);
-		attrs.put("contentId", contentId);
-
-		//Note: we don't invoke Updatable.setResult() here because it might
-		//cause a sequence of updates. Thus, we use javascript to go thru
-		//standard async-update (by the doUpdate request)
-		return null; //success
 	}
 
 	/** Parses the multipart request into a map of
 	 * (String nm, FileItem/String/List(FileItem/String)).
-	 *
-	 * @param incPramMap whether to include request.getParameterMap in
-	 * the returned map
 	 */
 	private static Map parseRequest(HttpServletRequest request,
-	Desktop desktop, boolean incParamMap)
+	Desktop desktop)
 	throws FileUploadException {
 		final Map params = new HashMap();
-
-		if (incParamMap) {
-			for (Iterator it = request.getParameterMap().entrySet().iterator();
-			it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String nm = (String)me.getKey();
-				final String[] vals = (String[])me.getValue();
-				if (vals.length == 0) params.put(nm, "");
-				else if (vals.length == 1) params.put(nm, vals[0]);
-				else {
-					final List l = new LinkedList();
-					CollectionsX.addAll(l, vals);
-					params.put(nm, l);
-				}
-			}
-		}
-
 		final ServletFileUpload sfu =
 			new ServletFileUpload(new ZkFileItemFactory(desktop, request));
 		final Configuration cfg = desktop.getWebApp().getConfiguration();
 		final Integer maxsz = cfg.getMaxUploadSize();
 		sfu.setSizeMax(maxsz != null ? 1024L*maxsz.intValue(): -1);
+
 		for (Iterator it = sfu.parseRequest(request).iterator(); it.hasNext();) {
 			final FileItem fi = (FileItem)it.next();
 			final String nm = fi.getFieldName();
@@ -225,7 +213,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 			if (old != null) {
 				final List vals;
 				if (old instanceof List) {
-					vals = (List)old;
+					params.put(nm, vals = (List)old);
 				} else {
 					params.put(nm, vals = new LinkedList());
 					vals.add(old);
