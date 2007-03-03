@@ -84,11 +84,11 @@ function zips
 					fi
 					if [ $cvt = false ] ; then
 						echo copy $f
-						cp -u -p ./$f $dst
+						cp -p ./$f $dst
 							#$f might starts with -
 						if [ $? != 0 ] ; then
 							echo "Failed:"
-							echo "  cp -u -p $f $dst"
+							echo "  cp -p $f $dst"
 							failed=true
 						fi
 					fi
