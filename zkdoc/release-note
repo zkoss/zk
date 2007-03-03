@@ -35,6 +35,7 @@ ZK 2.3.0 Freshly
   1671510: splitter resize: problem with inner Tree and Tabbox
   1671512: Failed to change the width of tree/grid/listbox dynamically
   1671549: Failed to change the width of tabbox
+  1672747: The bin/zipjs script failed on FreeBSD
 
 * Upgrade Notes:
 
