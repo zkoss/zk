@@ -354,10 +354,10 @@ public class ClassWebResource {
 			return _ctx.getRequestDispatcher(_mappingURI + PATH_PREFIX + uri);
 		}
 		public URL getResource(String uri) {
-			return ClassWebResource.getResource(PATH_PREFIX + uri);
+			return ClassWebResource.getResource(uri);
 		}
 		public InputStream getResourceAsStream(String uri) {
-			return ClassWebResource.getResourceAsStream(PATH_PREFIX + uri);
+			return ClassWebResource.getResourceAsStream(uri);
 		}
 	}
 }
