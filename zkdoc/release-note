@@ -19,6 +19,7 @@ ZK 2.3.0 Freshly
   1672116: Personalize the message dialog
   1569740: Fileupload supports uploading multiple files at the same time
   1648100: Allow custom DSP files to access zk.jar TLD files
+  1673292: Message translated to Romanian. Thank Calin Vaida for his contribution.
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
