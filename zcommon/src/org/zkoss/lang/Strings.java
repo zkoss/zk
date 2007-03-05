@@ -65,6 +65,11 @@ public class Strings {
 	 * <p>It is useful to generate a string to represent a number.
 	 */
 	public static final StringBuffer encode(StringBuffer sb, int val) {
+		if (v < 0) {
+			sb.append('z');
+			v = -v;
+		}
+
 		do {
 			int v = val & 31;
 			if (v < 10) {
@@ -85,6 +90,11 @@ public class Strings {
 	 * <p>It is useful to generate a string to represent a number.
 	 */
 	public static final StringBuffer encode(StringBuffer sb, long val) {
+		if (v < 0) {
+			sb.append('z');
+			v = -v;
+		}
+
 		do {
 			int v = ((int)val) & 31;
 			if (v < 10) {
