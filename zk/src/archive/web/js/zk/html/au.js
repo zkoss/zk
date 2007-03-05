@@ -229,17 +229,17 @@ zkau.sendAhead = function (evt) {
 	zkau._evts.unshift(evt);
 };
 zkau._sendNow = function () {
-	if (!zk_action || !zk_desktopId) {
-		zk.error(mesg.NOT_FOUND+"zk_action or zk_desktopId");
-		return;
-	}
-
 	if (zkau._evts.length == 0)
 		return; //nothing to do
 
 	if (zk.loading) {
 		zk.addInit(zkau._sendNow); //note: when callback, zk.loading is false
 		return; //wait
+	}
+
+	if (!zk_action || !zk_dtid) {
+		zk.error(mesg.NOT_FOUND+"zk_action or zk_dtid");
+		return;
 	}
 
 	//decide implicit
@@ -277,7 +277,7 @@ zkau._sendNow = function () {
 
 	if (!content) return; //nothing to do
 
-	content = "dtid="+zk_desktopId + content;
+	content = "dtid="+zk_dtid + content;
 	var req;
 	if (window.ActiveXObject) { //IE
 		req = new ActiveXObject("Microsoft.XMLHTTP");
@@ -294,7 +294,7 @@ zkau._sendNow = function () {
 			req.open("POST", zk_action, true);
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			req.send(content);
-			if (!implicit) zk.progress(zk_promptDelay); //wait a moment to avoid annoying
+			if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
 		} catch (e) {
 			try {
 				if(typeof req.abort == "function") req.abort();
@@ -767,7 +767,7 @@ zkau._onUnload = function () {
 	//DHTML content 100% correctly)
 
 	if (!zk.opera) {
-		var content = "dtid="+zk_desktopId+"&cmd.0=rmDesktop";
+		var content = "dtid="+zk_dtid+"&cmd.0=rmDesktop";
 		var req;
 		if (window.ActiveXObject) { //IE
 			req = new ActiveXObject("Microsoft.XMLHTTP");
@@ -960,7 +960,7 @@ zkau._onDocMouseover = function (evt) {
 					 //Bug 1572286: position tooltip with some offset to allow
 				};
 				if (open) zkau._openTip(cmp.id);
-				else setTimeout("zkau._openTip('"+cmp.id+"')", zk_tooltipDelay);
+				else setTimeout("zkau._openTip('"+cmp.id+"')", zk_tipto);
 			}
 			return; //done
 		}
@@ -1707,7 +1707,7 @@ zkau.cmd0 = { //no uuid at all
 		zkau.history.bookmark(dt0);
 	},
 	obsolete: function (dt0, dt1) { //desktop timeout
-		if (dt0 == zk_desktopId) //just in case
+		if (dt0 == zk_dtid) //just in case
 			zkau._cleanupOnFatal();
 		zk.error(dt1);
 	},

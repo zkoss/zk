@@ -148,16 +148,7 @@ public class ZkFns {
 		final Configuration config = wapp.getConfiguration();
 		final String clientType = desktop.getClientType();
 
-		final StringBuffer sb = new StringBuffer(512);
-		sb.append("<script type=\"text/javascript\">\n")
-			.append("zk_action=\"").append(action)
-			.append("\";\nzk_desktopId=\"").append(desktop.getId())
-			.append("\";\nzk_promptDelay=")
-				.append(config.getProcessingPromptDelay())
-			.append(";\nzk_tooltipDelay=")
-				.append(config.getTooltipDelay())
-			.append(";\nzk_version='").append(wapp.getVersion())
-			.append("';\n</script>\n");
+		final StringBuffer sb = new StringBuffer(1536);
 
 		final Set jses = new LinkedHashSet(37);
 		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
@@ -165,6 +156,16 @@ public class ZkFns {
 			jses.addAll(((LanguageDefinition)it.next()).getJavaScripts());
 		for (Iterator it = jses.iterator(); it.hasNext();)
 			append(sb, (JavaScript)it.next());
+
+		sb.append("<script type=\"text/javascript\">\n")
+			.append("zk_action=\"").append(action)
+			.append("\";\nzk_dtid=\"").append(desktop.getId())
+			.append("\";\nzk_procto=")
+				.append(config.getProcessingPromptDelay())
+			.append(";\nzk_tipto=")
+				.append(config.getTooltipDelay())
+			.append(";\nzk_ver='").append(wapp.getVersion())
+			.append("';\n</script>\n");
 
 		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
 		it.hasNext();) {
