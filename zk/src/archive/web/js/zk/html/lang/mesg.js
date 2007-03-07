@@ -21,7 +21,7 @@ mesg.NOT_FOUND = "Not found: ";
 mesg.UNSUPPORTED = "Not supported yet: "
 mesg.FAILED_TO_SEND = "Failed to send requests to server: ";
 mesg.FAILED_TO_RESPONSE = "Server failed to process your request: ";
-mesg.UNSUPPORTED_BROWSER = "Unsupported browser, please use Internet Explorer, Firefox or Mozilla: ";
+mesg.UNSUPPORTED_BROWSER = "Unsupported browser: ";
 mesg.ILLEGAL_RESPONSE = "Unknown response sent from the server. Please reload and try again.\n";
 mesg.FAILED_TO_PROCESS = "Failed to process ";
 mesg.UUID_REQUIRED = "UUID is required";
@@ -38,6 +38,6 @@ mesg.KBYTES = "KB";
 
 mesg.CANCEL="Cancel";
 
-mesg.FAILED_TO_LOAD="Failed to load ";
-mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";
-mesg.CAUSE="Cause: ";
+mesg.FAILED_TO_LOAD = "Failed to load ";
+mesg.FAILED_TO_LOAD_DETAIL = "It may be caused by bad traffic. You could reload this page and try again.";
+mesg.CAUSE = "Cause: ";
