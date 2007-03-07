@@ -57,6 +57,21 @@ public interface UiFactory {
 	public Session newSession(WebApp wapp, Object nativeSess,
 	String clientAddr, String clientHost);
 
+	/** Tests whether the specified request is a richlet.
+	 *
+	 * <p>If this method returns true, {@link #getRichlet} is called to create
+	 * the richlet. Otherwise, {@link #getPageDefinition} is called to retrieve
+	 * the page definition from a ZUML page.
+	 *
+	 * @param bRichlet the default value that this method shall return.
+	 * It is a suggetion. If you don't know what to do, just return bRichlet.
+	 * @return true if it is a richlet, or false if it is a ZUML page.
+	 */
+	public boolean isRichlet(RequestInfo ri, boolean bRichlet);
+	/** Returns a richlet for specified request, or null if the richlet is not found..
+	 */
+	public Richlet getRichlet(RequestInfo ri, String path);
+
 	/** Creates an instance of {@link Desktop}.
 	 *
 	 * <p>Note: the returned instance must also implement {@link DesktopCtrl}.

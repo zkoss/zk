@@ -52,6 +52,14 @@ abstract public class AbstractUiFactory implements UiFactory {
 	}
 	public void stop(WebApp wapp) {
 	}
+
+	public boolean isRichlet(RequestInfo ri, boolean bRichlet) {
+		return bRichlet;
+	}
+	public Richlet getRichlet(RequestInfo ri, String path) {
+		return ri.getWebApp().getConfiguration().getRichlet(path);
+	}
+
 	public Desktop newDesktop(RequestInfo ri, String updateURI, String path) {
 		String dir = null, clientType = null;
 		if (path != null) { //convert to directory

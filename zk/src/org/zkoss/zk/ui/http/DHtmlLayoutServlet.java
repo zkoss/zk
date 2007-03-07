@@ -141,8 +141,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			PageDefinitions.getLocator(wapp, path));
 		final UiFactory uf = wappc.getUiFactory();
 
-		if (pi != null) {
-			final Richlet richlet = wapp.getConfiguration().getRichlet(pi);
+		if (uf.isRichlet(ri, pi != null)) {
+			final Richlet richlet = uf.getRichlet(ri, path);
 			if (richlet == null) {
 				sendError(request, response, pi);
 				return;

@@ -48,6 +48,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -69,6 +70,13 @@ import org.zkoss.zk.ui.metainfo.PageDefinitions;
  *  <li>From the portlet preference called zk_page.</li>
  * </ol>
  * </li>
+ * <li>If not found, it looks for the portlet from the following locations:
+ * <ol>
+ *  <li>From the request parameter called zk_richlet.</li>
+ *  <li>From the request attribute called zk_richlet.</li>
+ *  <li>From the portlet preference called zk_richlet.</li>
+ * </ol>
+ * </li>
  * <li>It is based {@link DHtmlLayoutServlet}, so you have to declare
  * {@link DHtmlLayoutServlet} even if you want every ZUML pages being
  * processed by this portlet.</li>
@@ -81,6 +89,8 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 	/** The parameter or attribute to specify the path of the ZUML page. */
 	private static final String ATTR_PAGE = "zk_page";
+	/** The parameter or attribute to specify the path of the richlet. */
+	private static final String ATTR_RICHLET = "zk_richlet";
 	private PortletContext _ctx;
 	/** The default page. */
 	private String _defpage;
@@ -100,21 +110,10 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 	protected void doView(RenderRequest request, RenderResponse response)
 	throws PortletException, IOException {
-		//try parameter first and then attribute
-		String path = request.getParameter(ATTR_PAGE);
-		if (path == null) {
-			path = (String)request.getAttribute(ATTR_PAGE);
-			if (path == null) {
-				PortletPreferences prefs = request.getPreferences();
-				path = prefs.getValue(ATTR_PAGE, null);
-				if (path == null) path = _defpage;
-			}
-		}
-
 		final Session sess = getSession(request);
 		SessionsCtrl.setCurrent(sess);
 		try {
-			process(sess, request, response, path);
+			process(sess, request, response);
 		} finally {
 			SessionsCtrl.setCurrent(null);
 		}
@@ -131,12 +130,35 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 				getWebManager().getWebApp(), hsess, null, null);
 	}
 	/** Process a portlet request.
-	 * @param path the path of the ZUML page to render. If null or not found,
-	 * an error page is rendered.
 	 */
 	private void process(Session sess, RenderRequest request,
-	RenderResponse response, String path)
+	RenderResponse response)
 	throws PortletException, IOException {
+		//try parameter first and then attribute
+		boolean bRichlet = false;
+		String path = request.getParameter(ATTR_PAGE);
+		if (path == null) {
+			path = (String)request.getAttribute(ATTR_PAGE);
+			if (path == null) {
+				PortletPreferences prefs = request.getPreferences();
+				path = prefs.getValue(ATTR_PAGE, null);
+				if (path == null) {
+					path = request.getParameter(ATTR_RICHLET);
+					bRichlet = path != null;
+					if (!bRichlet) {
+						path = (String)request.getAttribute(ATTR_RICHLET);
+						bRichlet = path != null;
+						if (!bRichlet) {
+							path = prefs.getValue(ATTR_RICHLET, null);
+							bRichlet = path != null;
+							if (!bRichlet)
+								path = _defpage;
+						}
+					}
+				}
+			}
+		}
+
 		if (D.ON && log.debugable()) log.debug("Creates from "+path);
 		final WebApp wapp = getWebManager().getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
@@ -146,35 +168,54 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
 		final UiFactory uf = wappc.getUiFactory();
-		final PageDefinition pagedef = path != null ?
-			uf.getPageDefinition(ri, path): null;
-		if (pagedef == null) {
-			final String msg = path != null ?
-				Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path}):
-				Messages.get(MZk.PORTLET_PAGE_REQUIRED);
-			final Map attrs = new HashMap();
-			attrs.put(Attributes.ALERT_TYPE, "error");
-			attrs.put(Attributes.ALERT, msg);
-			Portlets.include(_ctx, request, response,
-				"~./html/alert.dsp", attrs, Portlets.OVERWRITE_URI);
-				//Portlets doesn't support PASS_THRU_ATTR yet (because
-				//protlet request will mangle attribute name)
-			return;
+		if (uf.isRichlet(ri, bRichlet)) {
+			final Richlet richlet = uf.getRichlet(ri, path);
+			if (richlet != null) {
+				final Page page = uf.newPage(ri, richlet, path);
+				final Execution exec =
+					new ExecutionImpl(
+						(ServletContext)wapp.getNativeContext(),
+						RenderHttpServletRequest.getInstance(request),
+						RenderHttpServletResponse.getInstance(response),
+						desktop, page);
+
+				//Bug 1548478: content-type is required for some implementation (JBoss Portal)
+				if (response.getContentType() == null)
+					response.setContentType("text/html;charset=UTF-8");
+
+				wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
+			}
+		} else if (path != null) {
+			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
+			if (pagedef != null) {
+				final Page page = uf.newPage(ri, pagedef, path);
+				final Execution exec =
+					new ExecutionImpl(
+						(ServletContext)wapp.getNativeContext(),
+						RenderHttpServletRequest.getInstance(request),
+						RenderHttpServletResponse.getInstance(response),
+						desktop, page);
+
+				//Bug 1548478: content-type is required for some implementation (JBoss Portal)
+				if (response.getContentType() == null)
+					response.setContentType("text/html;charset=UTF-8");
+	
+				wappc.getUiEngine()
+					.execNewPage(exec, pagedef, page, response.getWriter());
+				return; //done
+			}
 		}
 
-		final Page page = uf.newPage(ri, pagedef, path);
-		final Execution exec =
-			new ExecutionImpl((ServletContext)wapp.getNativeContext(),
-				RenderHttpServletRequest.getInstance(request),
-				RenderHttpServletResponse.getInstance(response),
-				desktop, page);
-
-		//Bug 1548478: content-type is required for some implementation (JBoss Portal)
-		if (response.getContentType() == null)
-			response.setContentType("text/html;charset=UTF-8");
-
-		wappc.getUiEngine()
-			.execNewPage(exec, pagedef, page, response.getWriter());
+		final String msg = path != null ?
+			Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path}):
+			Messages.get(MZk.PORTLET_PAGE_REQUIRED);
+		final Map attrs = new HashMap();
+		attrs.put(Attributes.ALERT_TYPE, "error");
+		attrs.put(Attributes.ALERT, msg);
+		Portlets.include(_ctx, request, response,
+			"~./html/alert.dsp", attrs, Portlets.OVERWRITE_URI);
+			//Portlets doesn't support PASS_THRU_ATTR yet (because
+			//protlet request will mangle attribute name)
 	}
 
 	/** Returns the desktop of the specified request.
