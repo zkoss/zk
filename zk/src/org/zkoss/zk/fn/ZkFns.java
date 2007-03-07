@@ -159,13 +159,12 @@ public class ZkFns {
 
 		sb.append("<script type=\"text/javascript\">\n")
 			.append("zk_action=\"").append(action)
-			.append("\";\nzk_dtid=\"").append(desktop.getId())
 			.append("\";\nzk_procto=")
 				.append(config.getProcessingPromptDelay())
 			.append(";\nzk_tipto=")
 				.append(config.getTooltipDelay())
 			.append(";\nzk_ver='").append(wapp.getVersion())
-			.append("';\n</script>\n");
+			.append("';\n");
 
 		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
 		it.hasNext();) {
@@ -174,15 +173,15 @@ public class ZkFns {
 			//Generate module versions
 			final Set mods = langdef.getJavaScriptModules().entrySet();
 			if (!mods.isEmpty()) {
-				sb.append("\n<script type=\"text/javascript\">");
 				for (Iterator e = mods.iterator(); e.hasNext();) {
 					final Map.Entry me = (Map.Entry)e.next();
 					sb.append("\nzk.mods[\"").append(me.getKey())
 						.append("\"]=\"").append(me.getValue()).append("\";");
 				}
-				sb.append("\n</script>");
 			}
 		}
+
+		sb.append("\n</script>\n");
 
 		return sb.toString();
 	}

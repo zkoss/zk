@@ -456,6 +456,9 @@ zk._loadAndInit = function (inf) {
 			zk.listen(n, "click", zk._fixcc);
 		}
 
+		var v = getZKAttr(n, "dtid");
+		if (v) zkau.addDesktop(v); //desktop's ID found
+
 		if (zk.loadByType(n) || getZKAttr(n, "drag")
 		|| getZKAttr(n, "drop") || getZKAttr(n, "zid"))
 			zk._initcmps.push(n);

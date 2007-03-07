@@ -21,7 +21,7 @@ zkau = {};
 
 zkau._reqs = new Array(); //Ajax requests
 zkau._respQue = new Array(); //responses in XML
-zkau._evts = new Array();
+zkau._evts = {}; //(dtid, Array())
 zkau._js4resps = new Array(); //JS to eval upon response
 zkau._metas = {}; //(id, meta)
 zkau._movs = {}; //(id, Draggable): movables
@@ -33,6 +33,26 @@ zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
 zkau.floats = new Array(); //popup of combobox, bandbox, datebox...
 zkau._onsends = new Array(); //JS called before zkau._sendNow
 zkau._seqId = 0;
+zkau._dtids = new Array(); //an array of desktop IDs
+
+/** Adds a desktop. */
+zkau.addDesktop = function (dtid) {
+	var ds = zkau._dtids;
+	for (var j = ds.length; --j >= 0;)
+		if (ds[j] == dtid)
+			return; //nothing to do
+	ds.push(dtid);
+};
+/** Returns the desktop's ID. */
+zkau._dtid = function (uuid) {
+	if (zkau._dtids.length == 1) return zkau._dtids[0];
+
+	for (var n = $e(uuid); n; n = n.parentNode) {
+		var id = getZKAttr(n, "dtid");
+		if (id) return id;
+	}
+	return null;
+}
 
 zk.addInit(function () {
 	zk.listen(document, "keydown", zkau._onDocKeydown);
@@ -202,6 +222,15 @@ zkau.asapTimeout = function (cmp, evtnm) {
 	return getZKAttr($e(cmp), evtnm) == "true" ? 25: -1;
 };
 
+/** Returns the event list of the specified desktop ID.
+ */
+zkau._events = function (dtid) {
+	var es = zkau._evts;
+	if (!es[dtid])
+		es[dtid] = new Array();
+	return es[dtid];
+};
+
 /** Adds a callback to be called before sending ZK request.
  * @param func the function call
  */
@@ -217,35 +246,49 @@ zkau.removeOnSend = function (func) {
  */
 zkau.send = function (evt, timeout) {
 	if (timeout < 0) evt.implicit = true;
-	zkau._evts.push(evt);
+
+	var uuid = evt.uuid;
+	if (!uuid) {
+		alert("Event requires uuid, "+evt);
+		return;
+	}
+	var dtid = zkau._dtid(uuid);
+	zkau._events(dtid).push(evt);
+
 	if (!timeout) timeout = 0; //we don't send immediately (Bug 1593674)
-	if (timeout >= 0) setTimeout(zkau._sendNow, timeout);
+	if (timeout >= 0) setTimeout("zkau._sendNow('"+dtid+"')", timeout);
 };
 /** Sends a request before any pending events.
  * Note: it doesn't cause any pending events (including evt) to be sent.
  * It is designed to be called in zkau.onSend
  */
 zkau.sendAhead = function (evt) {
-	zkau._evts.unshift(evt);
+	var uuid = evt.uuid;
+	if (!uuid) {
+		alert("Event requires uuid, "+evt);
+		return;
+	}
+	zkau._events(zkau._dtid(uuid)).unshift(evt);
 };
-zkau._sendNow = function () {
-	if (zkau._evts.length == 0)
+zkau._sendNow = function (dtid) {
+	var es = zkau._events(dtid);
+	if (es.length == 0)
 		return; //nothing to do
 
 	if (zk.loading) {
-		zk.addInit(zkau._sendNow); //note: when callback, zk.loading is false
+		zk.addInit(function () {zkau._sendNow(dtid);});
 		return; //wait
 	}
 
-	if (!zk_action || !zk_dtid) {
-		zk.error(mesg.NOT_FOUND+"zk_action or zk_dtid");
+	if (!zk_action) {
+		zk.error(mesg.NOT_FOUND+"zk_action");
 		return;
 	}
 
 	//decide implicit
 	var implicit = true;
-	for (var j = zkau._evts.length; --j >= 0;) {
-		if (!zkau._evts[j].implicit) {
+	for (var j = es.length; --j >= 0;) {
+		if (!es[j].implicit) {
 			implicit = false;
 			break;
 		}
@@ -263,7 +306,7 @@ zkau._sendNow = function () {
 	//FUTURE: Consider XML (Pros: ?, Cons: larger packet)
 	var content = "";
 	for (var j = 0;; ++j) {
-		var evt = zkau._evts.shift();
+		var evt = es.shift();
 		if (!evt) break; //done
 
 		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+evt.uuid;
@@ -277,7 +320,7 @@ zkau._sendNow = function () {
 
 	if (!content) return; //nothing to do
 
-	content = "dtid="+zk_dtid + content;
+	content = "dtid=" + dtid + content;
 	var req;
 	if (window.ActiveXObject) { //IE
 		req = new ActiveXObject("Microsoft.XMLHTTP");
@@ -767,20 +810,24 @@ zkau._onUnload = function () {
 	//DHTML content 100% correctly)
 
 	if (!zk.opera) {
-		var content = "dtid="+zk_dtid+"&cmd.0=rmDesktop";
-		var req;
-		if (window.ActiveXObject) { //IE
-			req = new ActiveXObject("Microsoft.XMLHTTP");
-		} else if (window.XMLHttpRequest) { //None-IE
-			req = new XMLHttpRequest();
-		}
+		var ds = zkau._dtids;
+		for (var j = 0; j < ds.length; ++j) {
+			var content = "dtid="+ds[j]+"&cmd.0=rmDesktop";
 
-		if (req) {
-			try {
-				req.open("POST", zk_action, true);
-				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				req.send(content);
-			} catch (e) { //silent
+			var req;
+			if (window.ActiveXObject) { //IE
+				req = new ActiveXObject("Microsoft.XMLHTTP");
+			} else if (window.XMLHttpRequest) { //None-IE
+				req = new XMLHttpRequest();
+			}
+
+			if (req) {
+				try {
+					req.open("POST", zk_action, true);
+					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+					req.send(content);
+				} catch (e) { //silent
+				}
 			}
 		}
 	}
@@ -1707,8 +1754,7 @@ zkau.cmd0 = { //no uuid at all
 		zkau.history.bookmark(dt0);
 	},
 	obsolete: function (dt0, dt1) { //desktop timeout
-		if (dt0 == zk_dtid) //just in case
-			zkau._cleanupOnFatal();
+		zkau._cleanupOnFatal();
 		zk.error(dt1);
 	},
 	alert: function (dt0, dt1) {
