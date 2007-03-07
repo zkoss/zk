@@ -28,7 +28,7 @@ ${u:outLangStyleSheets()}
 ${u:outLangJavaScripts(arg.action)}
 	</c:if>
 
-<div id="${page.id}" class="zk" style="${empty page.style ? 'width:100%': page.style}" z.zidsp="true">
+<div id="${page.id}" z.dtid="${page.desktop.id}" class="zk" style="${empty page.style ? 'width:100%': page.style}" z.zidsp="true">
 	<c:forEach var="root" items="${page.roots}">
 ${u:redraw(root, null)}
 	</c:forEach>
@@ -52,6 +52,10 @@ ${u:redraw(root, null)}
 ${u:outLangStyleSheets()}
 ${u:outLangJavaScripts(zk_argAction)}
 	</c:if>
+<script type="text/javascript">
+	zkau.addDesktop("${page.desktop.id}");
+</script>
+
 	<c:if test="${!empty zk_argResponses}">
 <script type="text/javascript">
 ${u:outResponseJavaScripts(zk_argResponses)}
