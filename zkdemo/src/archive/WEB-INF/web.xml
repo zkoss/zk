@@ -93,21 +93,6 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</filter-mapping>
 	-->
 
-	<!-- Uncomment if you want to use the inter-portlet filter to resolve
-	the limitation of incapability to inter-portlet communication.
-	It is useful if there are two more ZK portlets in the same portal page.
-	The performance will be better if url-pattern is more specific to portal's entry
-	<filter>
-		<filter-name>InterPortletFilter</filter-name>
-		<filter-class>org.zkoss.zk.ui.http.InterPortletFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>InterPortletFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	-->
-	<!-- //// -->
-
 	<!-- ///////////// -->
 	<!-- DSP (optional) -->
 	<!-- Uncomment if you want to use Potix DSP in your Website

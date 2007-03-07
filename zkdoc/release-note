@@ -22,6 +22,7 @@ ZK 2.3.0 Freshly
   1673292: Message translated to Romanian. Thank Calin Vaida for his contribution.
   1672246: Binder available on AnnotateDataBinderInit's subclasses
   1675446: Message translated to Japanese. Thank Poli Lee for his contribution.
+  1673821: A way/option to allow multiple desktops at one HTML page
  	
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
@@ -42,6 +43,7 @@ ZK 2.3.0 Freshly
   1674062: tabpanel with height is not correctly shown
 
 * Upgrade Notes:
+  + Removed InterPortletFilter from web.xml since it is no longer required.
 
 * Notes for upgrading from 2.3.0 RC
   + getSuspsendedThreads is moved from Desktop to DesktopCtrl
@@ -77,7 +79,6 @@ ZK 2.3.0 RC
   1633982: Label spanning 2 colums and specified width (IE only)
   1633176: Hiding zhtml component with visible property is not working
   1638447: Modal nested window positioning problem
-  1642270: InterPortletFilter doesn't work
   1642386: Output of DHtmlLayoutFilter is truncated if content-length
   1639558: Uploaded Media cannot be processed more than once
   1647114: Draggable in a scrollable listbox positioned wrong (Opera)
