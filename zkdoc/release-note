@@ -23,7 +23,9 @@ ZK 2.3.0 Freshly
   1672246: Binder available on AnnotateDataBinderInit's subclasses
   1675446: Message translated to Japanese. Thank Poli Lee for his contribution.
   1673821: A way/option to allow multiple desktops at one HTML page
- 	
+  1673842: A way to let UiFactory decides if a request is a richlet
+  1675626: Portlet supports richlet by specifying zk_richlet
+
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
   1660340: addAnnotation failed if component is created programmingly
@@ -44,6 +46,8 @@ ZK 2.3.0 Freshly
 
 * Upgrade Notes:
   + Removed InterPortletFilter from web.xml since it is no longer required.
+  + Implements the getRichlet and isRichlet method for your UiFactory class,
+    if you doesn't extend it from AbstractUiFactory.
 
 * Notes for upgrading from 2.3.0 RC
   + getSuspsendedThreads is moved from Desktop to DesktopCtrl
