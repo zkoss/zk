@@ -566,8 +566,9 @@ public class Window extends XulElement implements IdSpace {
 	public String getSclass() {
 		final String scls = super.getSclass();
 		if (scls != null) return scls;
-		return "normal".equals(getBorder()) ?
-			getMode(): getMode() + '-' + getBorder();
+
+		final String border = getBorder();
+		return "normal".equals(border) ? getMode(): getMode() + '-' + border;
 	}
 
 	//-- Component --//

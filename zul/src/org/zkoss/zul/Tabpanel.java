@@ -30,6 +30,11 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A tab panel.
  *
+ * <p>Default {@link #getSclass}: tabpanel if the default mold is used
+ * for the tabbox ({@link #getTabbox}),
+ * or tabpanel-<em>mold</em> if other mold is used (where mold is the value
+ * returned by {@link #getMold}.
+ *
  * @author tomyeh
  */
 public class Tabpanel extends XulElement {
@@ -81,6 +86,24 @@ public class Tabpanel extends XulElement {
 		final String attrs = super.getOuterAttrs();
 		final String clkattrs = getAllOnClickAttrs(false);
 		return clkattrs == null ? attrs: attrs + clkattrs;
+	}
+	/** Returns the style class.
+	 *
+	 * <p>The default style class, i.e., the style class is not defined (i.e.,
+	 * {@link #setSclass} is not called or called with null or empty):
+	 * it returns "tabpanel" if {@link #getMold} of {@link #getTabbox}
+	 * returns "default",
+	 * or "tabpanel-<em>mode</em>" if other mold is used,
+	 * where <em>mode</em> is the value returned by {@link #getMold}.
+	 */
+	public String getSclass() {
+		final String scls = super.getSclass();
+		if (scls != null) return scls;
+
+		final Tabbox tabbox = getTabbox();
+		final String mold = tabbox != null ? tabbox.getMold(): null;
+		return mold == null || "default".equals(mold) ?
+			"tabpanel": "tabpanel-"+mold;
 	}
 
 	//-- Component --//

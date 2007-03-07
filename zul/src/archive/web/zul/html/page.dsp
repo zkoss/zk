@@ -31,7 +31,7 @@ ${z:outPageHeaders(page)}
 </head>
 <body${c:attr('style', page.style)}>
 </c:if>
-<div id="${page.id}" class="zk" style="${empty page.style ? 'width:100%': page.style}" z.zidsp="true">
+<div id="${page.id}" z.dtid="${page.desktop.id}" class="zk" style="${empty page.style ? 'width:100%': page.style}" z.zidsp="true">
 <c:forEach var="root" items="${page.roots}">
 ${z:redraw(root, null)}
 </c:forEach>

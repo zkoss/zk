@@ -21,9 +21,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}" z.type="zul.widget.Grbox"${self.outerAttrs}${self.innerAttrs}>
-<tr>
+<tr valign="top">
 	<td>
-<c:if test="${! empty self.caption}">
+<c:if test="${!empty self.caption}">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
 	<td width="5" height="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-tl-uns.gif')})"></td>

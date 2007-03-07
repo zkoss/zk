@@ -262,7 +262,7 @@ td.gridod {
 	text-decoration: underline;
 }
 
-td.tabpanel-hr, div.tabpanel-ac, div.groupbox-3d { <%-- horz, accd, gb-3d --%>
+tr.tabpanel td.tabpanel-hr, div.tabpanel-accordion, div.groupbox-3d { <%-- horz, accd, gb-3d --%>
 	border-left: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
