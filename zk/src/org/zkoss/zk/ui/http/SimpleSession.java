@@ -81,6 +81,8 @@ public class SimpleSession implements Session, SessionCtrl {
 	/** The client's host name. */
 	private String _clientHost;
 	private DesktopCache _cache;
+	/** Next available component uuid. */
+	private int _nextUuid;
 	private boolean _invalid;
 
 	public SimpleSession(WebApp wapp, HttpSession hsess, String clientAddr,
@@ -203,6 +205,12 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 	public Object getNativeSession() {
 		return _hsess;
+	}
+
+	synchronized public int getNextUuidGroup(int groupSize) {
+		int uuid = _nextUuid;
+		_nextUuid += groupSize;
+		return uuid;
 	}
 
 	public final WebApp getWebApp() {

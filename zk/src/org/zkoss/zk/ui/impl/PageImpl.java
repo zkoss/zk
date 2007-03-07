@@ -500,9 +500,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			if (Strings.anyOf(_id, INVALID, 0) < _id.length())
 				throw new IllegalArgumentException("Invalid page ID: "+_id+". Invalid characters: "+INVALID);
 		} else {
-			_id = Strings.encode(new StringBuffer(12)
-				.append(ComponentsCtrl.AUTO_PAGE_ID_PREFIX),
-				dtctrl.getNextId()).toString();
+			_id = ComponentsCtrl.toAutoPageId(dtctrl.getNextId());
 		}
 		dtctrl.addPage(this);	
 

@@ -80,7 +80,7 @@ public class WebManager {
 	/** Map(ServletContext, List(ActivationListener)). */
 	private static final Map _actListeners = new HashMap();
 	/** Used to inter-communicate among portlet. */
-	private final static ThreadLocal _reqLocal = new ThreadLocal();
+//	private final static ThreadLocal _reqLocal = new ThreadLocal();
 
 	private final ServletContext _ctx;
 	private final WebApp _wapp;
@@ -168,13 +168,16 @@ public class WebManager {
 	 * <p>In other words, {@link #getRequestLocal} will look for this storage
 	 * in addition to request's attributes.
 	 */
-	/*package*/ static void initRequestLocal() {
+/* deprecated (reason: multi-desktop per HTML page is allowed)
+	static void initRequestLocal() {
 		_reqLocal.set(new HashMap());
-	}
-	/** Cleans up the request-local storage set by {@link #initRequestLocal}
-	/*package*/ static void cleanRequestLocal() {
+	}*/
+	/** Cleans up the request-local storage set by {@link #initRequestLocal}.
+	 */
+/* deprecated
+	static void cleanRequestLocal() {
 		_reqLocal.set(null);
-	}
+	}*/
 	/** Returns the value of the specified attribute in the request.
 	 * The implementation shall use this method instead of request.getAttribute,
 	 * since it resolves the limitation of incapability of inter-portlet
@@ -183,11 +186,14 @@ public class WebManager {
 	 * @param name the attribute's name
 	 */
 	public static Object getRequestLocal(ServletRequest request, String name) {
+		return request.getAttribute(name);
+/* deprecated
 		final Object o = request.getAttribute(name);
 		if (o != null) return o;
 
 		final Map local = (Map)_reqLocal.get();
 		return local != null ? local.get(name): null;
+*/
 	}
 	/** Sets the value of the specified attribute in the request.
 	 * The implementation shall use this method instead of request.setAttribute,
@@ -199,9 +205,10 @@ public class WebManager {
 	public static
 	void setRequestLocal(ServletRequest request, String name, Object value) {
 		request.setAttribute(name, value);
-
+/* deprecated
 		final Map local = (Map)_reqLocal.get();
 		if (local != null) local.put(name, value);
+*/
 	}
 	/** Returns the value of the specified attribute in the request.
 	 * The implementation shall use this method instead of request.getAttribute,
@@ -211,11 +218,14 @@ public class WebManager {
 	 * @param name the attribute's name
 	 */
 	public static Object getRequestLocal(RenderRequest request, String name) {
+		return request.getAttribute(name);
+/*deprecated
 		final Object o = request.getAttribute(name);
 		if (o != null) return o;
 
 		final Map local = (Map)_reqLocal.get();
 		return local != null ? local.get(name): null;
+*/
 	}
 	/** Sets the value of the specified attribute in the request.
 	 * The implementation shall use this method instead of request.setAttribute,
@@ -227,9 +237,10 @@ public class WebManager {
 	public static
 	void setRequestLocal(RenderRequest request, String name, Object value) {
 		request.setAttribute(name, value);
-
+/*deprecated
 		final Map local = (Map)_reqLocal.get();
 		if (local != null) local.put(name, value);
+*/
 	}
 
 	/** Register a listener to the specified context such that

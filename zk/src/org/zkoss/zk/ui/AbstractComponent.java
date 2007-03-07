@@ -34,7 +34,6 @@ import java.io.IOException;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 
@@ -132,20 +131,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		init(false);
 
 		_uuid = _id = exec != null ?
-			nextUuid(exec.getDesktop()): ComponentsCtrl.AUTO_ID_PREFIX;
+			((DesktopCtrl)exec.getDesktop()).getNextUuid():
+			ComponentsCtrl.getAnonymousId();
 			//though it doesn't belong to any desktop yet, we autogen uuid
 			//it is optional but it is slightly better (of course, subjective)
 		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(this): null;
 
 		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
-	}
-	/** Generates the next UUID for the specified desktop.
-	 */
-	private static final String nextUuid(Desktop desktop) {
-		final StringBuffer sb = new StringBuffer(12)
-			.append(ComponentsCtrl.AUTO_ID_PREFIX);
-		Strings.encode(sb, ((DesktopCtrl)desktop).getNextId());
-		return sb.toString();
 	}
 	private static final
 	ComponentDefinition getDefinition(Execution exec, Class cls) {
@@ -466,8 +458,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (bRoot) ((PageCtrl)_page).addRoot(this); //Not depends on uuid
 			final Desktop desktop = _page.getDesktop();
 			if (oldpage == null) {
+				final DesktopCtrl dtctl = (DesktopCtrl)desktop;
 				final boolean anonymous = //unassigned; created when exec null
-					ComponentsCtrl.AUTO_ID_PREFIX.equals(_uuid);
+					ComponentsCtrl.getAnonymousId().equals(_uuid);
 				if (anonymous || desktop.getComponentByUuidIfAny(_uuid) != null) {
 					if (!anonymous)
 						getThisUiEngine().addUuidChanged(this, true);
@@ -475,12 +468,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					//stupid but no better way to find a correct UUID yet
 					//also, it is rare so performance not an issue
 					do {
-						_uuid = nextUuid(desktop);
+						_uuid = dtctl.getNextUuid();
 					} while (desktop.getComponentByUuidIfAny(_uuid) != null);
 					if (D.ON && log.finerable()) log.finer("Uuid changed: "+this);
 				}
 
-				((DesktopCtrl)desktop).addComponent(this); //depends on uuid
+				dtctl.addComponent(this); //depends on uuid
 			}
 		}
 		if (_spaceInfo != null && _parent == null)

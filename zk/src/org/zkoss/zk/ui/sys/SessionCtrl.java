@@ -58,4 +58,11 @@ public interface SessionCtrl {
 	 * <p>Application shall never access this method.
 	 */
 	public void invalidateNow();
+
+	/** Returns a sequence of UUID for {@link DesktopCtrl#getNextUuid}
+	 * to generate component UUID.
+	 *
+	 * @param groupSize how many number of UUID the caller wants.
+	 */
+	public int getNextUuidGroup(int groupSize);
 }

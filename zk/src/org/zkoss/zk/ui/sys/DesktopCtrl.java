@@ -40,10 +40,17 @@ public interface DesktopCtrl {
 	public RequestQueue getRequestQueue();
 
 	/** Returns the next available ID which is unique in the whole desktop.
-	 *
-	 * <p>{@link Page} uses this method to generate ID automatically.
 	 */
 	public int getNextId();
+	/** Returns the next available UUID for a component.
+	 * The returned UUID is unique in the desktop.
+	 * You can consider it as unique in the whole session, though
+	 * it may not be true if {@link org.zkoss.zk.ui.ext.RawId} is used
+	 * (developer's responsibility to avoid conflict),
+	 * or integer overflow (too many UUID in one session, which
+	 * can be considered as impossible).
+	 */
+	public String getNextUuid();
 
 	/** Adds a component to this page.
 	 * <p>It is used internally and developers shall not invoke it

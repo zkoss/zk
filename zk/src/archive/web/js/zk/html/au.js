@@ -247,12 +247,15 @@ zkau.removeOnSend = function (func) {
 zkau.send = function (evt, timeout) {
 	if (timeout < 0) evt.implicit = true;
 
-	var uuid = evt.uuid;
-	if (!uuid) {
-		alert("Event requires uuid, "+evt);
-		return;
+	if (evt.uuid) {
+		zkau._send(zkau._dtid(evt.uuid), evt, timeout);
+	} else {
+		var ds = zkau._dtids;
+		for (var j = 0; j < ds.length; ++j)
+			zkau._send(ds[j], evt, timeout);
 	}
-	var dtid = zkau._dtid(uuid);
+};
+zkau._send = function (dtid, evt, timeout) {
 	zkau._events(dtid).push(evt);
 
 	if (!timeout) timeout = 0; //we don't send immediately (Bug 1593674)
@@ -263,12 +266,13 @@ zkau.send = function (evt, timeout) {
  * It is designed to be called in zkau.onSend
  */
 zkau.sendAhead = function (evt) {
-	var uuid = evt.uuid;
-	if (!uuid) {
-		alert("Event requires uuid, "+evt);
-		return;
+	if (evt.uuid) {
+		zkau._events(zkau._dtid(evt.uuid)).unshift(evt);
+	} else {
+		var ds = zkau._dtids;
+		for (var j = ds.length; --j >= 0; ++j)
+			zkau._events(ds[j]).unshift(evt);
 	}
-	zkau._events(zkau._dtid(uuid)).unshift(evt);
 };
 zkau._sendNow = function (dtid) {
 	var es = zkau._events(dtid);
