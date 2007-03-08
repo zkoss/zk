@@ -36,7 +36,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"></td>
 	<td align="left" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"><a href="javascript:;" id="${tab.uuid}!a">${tab.imgTag}<c:out value="${tab.label}"/></a></td>
 <c:if test="${tab.closable}">
-	<td width="11" align="right" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"><img id="${tab.uuid}!close" src="${c:encodeURL('~./zul/img/closesm-off.gif')}"/></td>
+	<td width="11" align="right" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"><img id="${tab.uuid}!close" src="${c:encodeURL('~./zul/img/close-off.gif')}"/></td>
 </c:if>
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mm',suffix))})"></td>
 	<td width="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/3d-mr',suffix))})"></td>

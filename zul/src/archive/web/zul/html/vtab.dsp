@@ -38,7 +38,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <tr height="8">
 	<td width="5" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-ml',suffix))})"></td>
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mm',suffix))})"></td>
-	<td align="center" valign="bottom" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mm',suffix))})"><img id="${self.uuid}!close" src="${c:encodeURL('~./zul/img/closesm-off.gif')}"/></td>
+	<td align="center" valign="bottom" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mm',suffix))})"><img id="${self.uuid}!close" src="${c:encodeURL('~./zul/img/close-off.gif')}"/></td>
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mm',suffix))})"></td>
 	<td width="3" style="background-image:url(${c:encodeURL(c:cat('~./zul/img/tab/v3d-mr',suffix))})"></td>
 </tr>
