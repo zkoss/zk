@@ -1058,6 +1058,7 @@ implements RenderOnDemand {
 	 * @param max the higher index that a range of invalidated items
 	 */
 	private void syncModel(int min, int max) {
+		ListitemRenderer renderer = null;
 		final int newsz = _model.getSize();
 		final int oldsz = getItemCount();
 		if (oldsz > 0) {
@@ -1067,20 +1068,25 @@ implements RenderOnDemand {
 				if (min < 0) min = 0;
 
 				for (Iterator it = _items.listIterator(min);
-				min <= max && it.hasNext(); ++min)
-					clearItemAsUnloaded((Listitem)it.next());
+				min <= max && it.hasNext(); ++min) {
+					if (renderer == null)
+						renderer = getRealRenderer();
+					unloadItem(renderer, (Listitem)it.next());
+				}
 			}
 
 			for (int j = newsz; j < oldsz; ++j)
 				getItemAtIndex(newsz).detach(); //detach and remove
 		}
 
-		for (int j = oldsz; j < newsz; ++j)
-			newUnloadedItem().setParent(this);
+		for (int j = oldsz; j < newsz; ++j) {
+			if (renderer == null)
+				renderer = getRealRenderer();
+			newUnloadedItem(renderer).setParent(this);
+		}
 	}
 	/** Creates an new and unloaded listitem. */
-	private final Listitem newUnloadedItem() {
-		final ListitemRenderer renderer = getRealRenderer();
+	private final Listitem newUnloadedItem(ListitemRenderer renderer) {
 		Listitem item = null;
 		if (renderer instanceof ListitemRendererExt)
 			item = ((ListitemRendererExt)renderer).newListitem(this);
@@ -1107,21 +1113,33 @@ implements RenderOnDemand {
 		return cell;
 	}
 	/** Clears a listitem as if it is not loaded. */
-	private final void clearItemAsUnloaded(Listitem item) {
-		final List cells = item.getChildren();
-		if (cells.isEmpty()) {
-			newUnloadedCell(getRealRenderer(), item);
-		} else {
-			//detach and remove all but the first cell
-			for (Iterator it = cells.listIterator(1); it.hasNext();) {
-				it.next();
-				it.remove();
-			}
-
-			final Listcell listcell = (Listcell)cells.get(0);
-			listcell.setLabel(null);
-			listcell.setImage(null);
+	private final void unloadItem(ListitemRenderer renderer, Listitem item) {
+		boolean bDefault = true;
+		if (renderer instanceof ListitemRendererExt) {
+			final Listitem li =
+				((ListitemRendererExt)renderer).unloadListitem(item);
+			bDefault = li == null;
+			if (!bDefault)
+				item = li;
 		}
+
+		if (bDefault) {
+			final List cells = item.getChildren();
+			if (cells.isEmpty()) {
+				newUnloadedCell(getRealRenderer(), item);
+			} else {
+				//detach and remove all but the first cell
+				for (Iterator it = cells.listIterator(1); it.hasNext();) {
+					it.next();
+					it.remove();
+				}
+
+				final Listcell listcell = (Listcell)cells.get(0);
+				listcell.setLabel(null);
+				listcell.setImage(null);
+			}
+		}
+
 		item.setLoaded(false);
 	}
 	/** Handles a private event, onInitRender. It is used only for
@@ -1165,9 +1183,14 @@ implements RenderOnDemand {
 				log.warning("Conflict event: number of added items not matched: "+event);
 				break; //handle it as CONTENTS_CHANGED
 			}
+
+			ListitemRenderer renderer = null;
 			final Listitem before = min < oldsz ? getItemAtIndex(min): null;
-			for (int j = min; j <= max; ++j)
-				insertBefore(newUnloadedItem(), before);
+			for (int j = min; j <= max; ++j) {
+				if (renderer == null)
+					renderer = getRealRenderer();
+				insertBefore(newUnloadedItem(renderer), before);
+			}
 			done = true;
 			break;
 

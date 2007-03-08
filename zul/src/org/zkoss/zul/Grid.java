@@ -394,6 +394,7 @@ implements RenderOnDemand {
 	 * @param max the higher index that a range of invalidated rows
 	 */
 	private void syncModel(int min, int max) {
+		RowRenderer renderer = null;
 		final int newsz = _model.getSize();
 		final int oldsz = _rows != null ? _rows.getChildren().size(): 0;
 		if (oldsz > 0) {
@@ -403,8 +404,11 @@ implements RenderOnDemand {
 				if (min < 0) min = 0;
 
 				for (Iterator it = _rows.getChildren().listIterator(min);
-				min <= max && it.hasNext(); ++min)
-					clearRowAsUnloaded((Row)it.next());
+				min <= max && it.hasNext(); ++min) {
+					if (renderer == null)
+						renderer = getRealRenderer();
+					unloadRow(renderer, (Row)it.next());
+				}
 			}
 
 			//detach and remove
@@ -421,12 +425,14 @@ implements RenderOnDemand {
 		if (_rows == null)
 			new Rows().setParent(this);
 
-		for (int j = oldsz; j < newsz; ++j)
-			newUnloadedRow().setParent(_rows);
+		for (int j = oldsz; j < newsz; ++j) {
+			if (renderer == null)
+				renderer = getRealRenderer();
+			newUnloadedRow(renderer).setParent(_rows);
+		}
 	}
 	/** Creates an new and unloaded row. */
-	private final Row newUnloadedRow() {
-		final RowRenderer renderer = getRealRenderer();
+	private final Row newUnloadedRow(RowRenderer renderer) {
 		Row row = null;
 		if (renderer instanceof RowRendererExt)
 			row = ((RowRendererExt)renderer).newRow(this);
@@ -461,27 +467,37 @@ implements RenderOnDemand {
 		return label;
 	}
 	/** Clears a row as if it is not loaded. */
-	private final void clearRowAsUnloaded(Row row) {
-		final List cells = row.getChildren();
-		boolean bNewCell = cells.isEmpty();
-		if (!bNewCell) {
-			//detach and remove all but the first cell
-			for (Iterator it = cells.listIterator(1); it.hasNext();) {
-				it.next();
-				it.remove();
-			}
-
-			final Component cell = (Component)cells.get(0);
-			bNewCell = !(cell instanceof Label);
-			if (bNewCell) {
-				cell.detach();
-			} else {
-				((Label)cell).setValue("");
-			}
+	private final void unloadRow(RowRenderer renderer, Row row) {
+		boolean bDefault = true;
+		if (renderer instanceof RowRendererExt) {
+			final Row r = ((RowRendererExt)renderer).unloadRow(row);
+			bDefault = r == null;
+			if (!bDefault)
+				row = r;
 		}
 
-		if (bNewCell)
-			newUnloadedCell(getRealRenderer(), row);
+		if (bDefault) {
+			final List cells = row.getChildren();
+			boolean bNewCell = cells.isEmpty();
+			if (!bNewCell) {
+				//detach and remove all but the first cell
+				for (Iterator it = cells.listIterator(1); it.hasNext();) {
+					it.next();
+					it.remove();
+				}
+
+				final Component cell = (Component)cells.get(0);
+				bNewCell = !(cell instanceof Label);
+				if (bNewCell) {
+					cell.detach();
+				} else {
+					((Label)cell).setValue("");
+				}
+			}
+
+			if (bNewCell)
+				newUnloadedCell(getRealRenderer(), row);
+		}
 
 		row.setLoaded(false);
 	}
@@ -522,10 +538,14 @@ implements RenderOnDemand {
 				break; //handle it as CONTENTS_CHANGED
 			}
 
+			RowRenderer renderer = null;
 			final Row before =
 				min < oldsz ? (Row)_rows.getChildren().get(min): null;
-			for (int j = min; j <= max; ++j)
-				insertBefore(newUnloadedRow(), before);
+			for (int j = min; j <= max; ++j) {
+				if (renderer == null)
+					renderer = getRealRenderer();
+				insertBefore(newUnloadedRow(renderer), before);
+			}
 
 			done = true;
 			break;

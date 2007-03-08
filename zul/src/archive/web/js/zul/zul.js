@@ -93,9 +93,6 @@ zul.doModal = function (cmp) {
 			mask.setAttribute("zk_prevfocus", zkau.currentFocus.id);
 	}
 
-	var caption = $e(cmp.id + "!caption");
-	if (caption && caption.style.cursor == "") caption.style.cursor = "move";
-
 	zkau._modals.push(cmp.id);
 	if (nModals == 0) {
 		zk.listen(window, "resize", zul.doMoveMask);
@@ -124,9 +121,6 @@ zul._doModal2 = function () {
 
 /** Makes the modal component as normal. */
 zul.endModal = function (uuid) {
-	var caption = $e(uuid + "!caption");
-	if (caption && caption.style.cursor == "move") caption.style.cursor = "";
-
 	var maskId = uuid + ".mask";
 	var mask = $e(maskId);
 	var prevfocusId;
