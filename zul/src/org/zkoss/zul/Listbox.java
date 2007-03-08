@@ -122,6 +122,7 @@ implements java.io.Serializable, RenderOnDemand {
 	 */
 	private transient Paging _paging;
 	private transient EventListener _pgListener;
+	private int _tabindex = -1;
 	private boolean _multiple;
 	private boolean _disabled, _readonly, _checkmark;
 	private boolean _vflex;
@@ -257,6 +258,24 @@ implements java.io.Serializable, RenderOnDemand {
 			} else {
 				smartUpdate("z.readonly", _readonly);
 			}
+		}
+	}
+
+	/** Returns the tab order of this component.
+	 * <p>Currently, only the "select" mold supports this property.
+	 * <p>Default: -1 (means the same as browser's default).
+	 */
+	public int getTabindex() {
+		return _tabindex;
+	}
+	/** Sets the tab order of this component.
+	 * <p>Currently, only the "select" mold supports this property.
+	 */
+	public void setTabindex(int tabindex) throws WrongValueException {
+		if (_tabindex != tabindex) {
+			_tabindex = tabindex;
+			if (tabindex < 0) smartUpdate("tabindex", null);
+			else smartUpdate("tabindex", Integer.toString(_tabindex));
 		}
 	}
 
@@ -1342,6 +1361,8 @@ implements java.io.Serializable, RenderOnDemand {
 				HTMLs.appendAttribute(sb, "disabled",  "disabled");
 			if (_readonly)
 				HTMLs.appendAttribute(sb, "readonly", "readonly");
+			if (_tabindex >= 0)
+				HTMLs.appendAttribute(sb, "tabindex", _tabindex);
 		} else {
 			HTMLs.appendAttribute(sb, "z.name", _name);
 			HTMLs.appendAttribute(sb, "z.size",  _rows);

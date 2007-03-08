@@ -42,6 +42,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Checkbox extends LabelImageElement {
 	/** The name. */
 	private String _name;
+	private int _tabindex = -1;
 	private boolean _checked;
 	private boolean _disabled, _readonly;
 
@@ -129,6 +130,22 @@ public class Checkbox extends LabelImageElement {
 		}
 	}
 
+	/** Returns the tab order of this component.
+	 * <p>Default: -1 (means the same as browser's default).
+	 */
+	public int getTabindex() {
+		return _tabindex;
+	}
+	/** Sets the tab order of this component.
+	 */
+	public void setTabindex(int tabindex) throws WrongValueException {
+		if (_tabindex != tabindex) {
+			_tabindex = tabindex;
+			if (tabindex < 0) smartUpdate("tabindex", null);
+			else smartUpdate("tabindex", Integer.toString(_tabindex));
+		}
+	}
+
 	/** Returns the attributes used by the embedded HTML LABEL tag.
 	 * It returns text-relevant styles only.
 	 * <p>Used only by component developer.
@@ -154,6 +171,8 @@ public class Checkbox extends LabelImageElement {
 			HTMLs.appendAttribute(sb, "readonly", "readonly");
 		if (isChecked())
 			HTMLs.appendAttribute(sb, "checked",  "checked");
+		if (_tabindex >= 0)
+			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
 		return sb.toString();
 	}
 	/** Appends exterior attributes for generating the HTML span tag
