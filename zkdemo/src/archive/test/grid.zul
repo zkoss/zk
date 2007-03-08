@@ -46,9 +46,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<separator bar="true"/>
 
 	<style>
-	div.grid td.gridod {
+	div.grid tr.grid-od td.gc {
 		background: red;
-		}
+	}
 	</style>
 	Note: the odd row's color shall be red (controlled by the style component).
 	<zscript>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+gridlive.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar  8 14:52:22     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Live Grid" border="normal">
+	<zscript>
+		String[] data = new String[30];
+		for(int j=0; j &lt; data.length; ++j) {
+			data[j] = "option "+j;
+		}
+		ListModel strset = new SimpleListModel(data);
+	</zscript>
+
+	Live:
+	<grid width="200px" height="100px" model="${strset}">
+	</grid>
+
+	<separator/>
+
+	Live with header:
+	<grid width="200px" height="100px" model="${strset}">
+		<columns>
+			<column label="options"/>
+		</columns>
+	</grid>
+
+	<separator/>
+
+	Static:
+	<grid width="200px" height="100px">
+		<rows>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+			<row>ab</row>
+		</rows>
+	</grid>
+</window>
