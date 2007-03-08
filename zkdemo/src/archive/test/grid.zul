@@ -113,6 +113,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</grid>
 	<button label="Change width" onClick="changeWidth()"/>
 	<button label="Add row" onClick="addRow()"/>
+	<button label="Insert row" onClick="insRow()"/>
 	<zscript>
 	void changeWidth() {
 		col.setWidth("200px");
@@ -122,6 +123,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		new Label("A31").setParent(r);
 		new Label("A32").setParent(r);
 		grid.getRows().appendChild(r);
+	}
+	void insRow() {
+		Row r = new Row();
+		new Label("Ins1").setParent(r);
+		new Label("Ins2").setParent(r);
+		grid.getRows().insertBefore(r, grid.getRows().getChildren().get(0));
 	}
 	addRow();
 	</zscript>
