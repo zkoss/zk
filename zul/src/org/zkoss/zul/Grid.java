@@ -20,19 +20,27 @@ package org.zkoss.zul;
 
 import java.util.List;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
+import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
+import org.zkoss.zk.ui.ext.RenderOnDemand;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.event.PagingEvent;
 
@@ -42,11 +50,26 @@ import org.zkoss.zul.event.PagingEvent;
  * Both the rows and columns are displayed at once although only one will
  * typically contain content, while the other may provide size information.
  *
+ * <p>Besides creating {@link Row} programmingly, you can assign
+ * a data model (a {@link ListModel} instance) to a grid via
+ * {@link #setModel} and then the grid will retrieve data
+ * by calling {@link ListModel#getElementAt} when necessary.
+ *
+ * <p>Besides assign a list model, you could assign a renderer
+ * (a {@link RowRenderer} instance) to a grid, such that
+ * the grid will use this
+ * renderer to render the data returned by {@link ListModel#getElementAt}.
+ * If not assigned, the default renderer, which assumes a label per row,
+ * is used.
+ * In other words, the default renderer adds a label to
+ * a row by calling toString against the object returned
+ * by {@link ListModel#getElementAt}
+ * 
  * <p>There are two ways to handle long content: scrolling and paging.
  * If {@link #getMold} is "default", scrolling is used if {@link #setHeight}
  * is called and too much content to display.
  * If {@link #getMold} is "paging", paging is used if two or more pages are
- * required. To control the number of items to display in a page, use
+ * required. To control the number of rows to display in a page, use
  * {@link #setPageSize}.
  *
  * <p>If paging is used, the page controller is either created automatically
@@ -62,12 +85,21 @@ import org.zkoss.zul.event.PagingEvent;
  * other than grid and grid-on-striped, as the sclass.
  *
  * @author tomyeh
+ * @see ListModel
+ * @see RowRenderer
+ * @see RowRendererExt
  */
-public class Grid extends XulElement {
+public class Grid extends XulElement
+implements RenderOnDemand {
+	private static final Log log = Log.lookup(Grid.class);
+
 	private transient Rows _rows;
 	private transient Columns _cols;
 	private transient Foot _foot;
 	private String _align;
+	private ListModel _model;
+	private RowRenderer _renderer;
+	private transient ListDataListener _dataListener;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
 	/** The paging controller, used only if mold = "paging" and user
@@ -128,7 +160,7 @@ public class Grid extends XulElement {
 		}
 	}
 
-	/** Re-initialize the listbox at the client (actually, re-calculate
+	/** Re-initialize the grid at the client (actually, re-calculate
 	 * the column width at the client).
 	 */
 	/*package*/ void initAtClient() {
@@ -220,6 +252,24 @@ public class Grid extends XulElement {
 	 * <p>Default: getRows().invalidate().
 	 */
 	public void onPaging() {
+		if (_rows != null && _model != null && inPagingMold()) {
+		//theorectically, _rows shall not be null if _model is not null when
+		//this method is called. But, just in case -- if sent manually
+			final Renderer renderer = new Renderer();
+			try {
+				final Paginal pgi = getPaginal();
+				int pgsz = pgi.getPageSize();
+				final int ofs = pgi.getActivePage() * pgsz;
+				for (final Iterator it = _rows.getChildren().listIterator(ofs);
+				--pgsz >= 0 && it.hasNext();)
+					renderer.render((Row)it.next());
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
+			}
+		}
+
 		if (_rows != null) _rows.invalidate();
 	}
 
@@ -230,7 +280,7 @@ public class Grid extends XulElement {
 	public Paging getPaging() {
 		return _paging;
 	}
-	/** Returns the page size, aka., the number items per page.
+	/** Returns the page size, aka., the number rows per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
 	 * i.e., mold is not "paging" and no external controller is specified.
 	 */
@@ -239,7 +289,7 @@ public class Grid extends XulElement {
 			throw new IllegalStateException("Available only the paging mold");
 		return _pgi.getPageSize();
 	}
-	/** Sets the page size, aka., the number items per page.
+	/** Sets the page size, aka., the number rows per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
 	 * i.e., mold is not "paging" and no external controller is specified.
 	 */
@@ -253,6 +303,399 @@ public class Grid extends XulElement {
 	 */
 	/*package*/ boolean inPagingMold() {
 		return "paging".equals(getMold());
+	}
+
+	//-- ListModel dependent codes --//
+	/** Returns the list model associated with this grid, or null
+	 * if this grid is not associated with any list data model.
+	 */
+	public ListModel getModel() {
+		return _model;
+	}
+	/** Sets the list model associated with this grid.
+	 * If a non-null model is assigned, no matter whether it is the same as
+	 * the previous, it will always cause re-render.
+	 *
+	 * @param model the list model to associate, or null to dis-associate
+	 * any previous model.
+	 * @exception UiException if failed to initialize with the model
+	 */
+	public void setModel(ListModel model) {
+		if (model != null) {
+			if (_model != model) {
+				if (_model != null) {
+					_model.removeListDataListener(_dataListener);
+				} else {
+					smartUpdate("z.model", "true");
+				}
+
+				initDataListener();
+				_model = model;
+				_model.addListDataListener(_dataListener);
+			}
+
+			//Always syncModel because it is easier for user to enfore reload
+			syncModel(-1, -1); //create rows if necessary
+			Events.postEvent("onInitRender", this, null);
+			//Since user might setModel and setRender separately or repeatedly,
+			//we don't handle it right now until the event processing phase
+			//such that we won't render the same set of data twice
+			//--
+			//For better performance, we shall load the first few row now
+			//(to save a roundtrip)
+		} else if (_model != null) {
+			_model.removeListDataListener(_dataListener);
+			_model = null;
+			if (_rows != null) _rows.getChildren().clear();
+			smartUpdate("z.model", null);
+		}
+	}
+	private void initDataListener() {
+		if (_dataListener == null)
+			_dataListener = new ListDataListener() {
+				public void onChange(ListDataEvent event) {
+					onListDataChange(event);
+				}
+			};
+	}
+
+	/** Returns the renderer to render each row, or null if the default
+	 * renderer is used.
+	 */
+	public RowRenderer getRowRenderer() {
+		return _renderer;
+	}
+	/** Sets the renderer which is used to render each row
+	 * if {@link #getModel} is not null.
+	 *
+	 * <p>Note: changing a render will not cause the grid to re-render.
+	 * If you want it to re-render, you could assign the same model again 
+	 * (i.e., setModel(getModel())), or fire an {@link ListDataEvent} event.
+	 *
+	 * @param renderer the renderer, or null to use the default.
+	 * @exception UiException if failed to initialize with the model
+	 */
+	public void setRowRenderer(RowRenderer renderer) {
+		_renderer = renderer;
+	}
+	/** Sets the renderer by use of a class name.
+	 * It creates an instance automatically.
+	 */
+	public void setRowRenderer(String clsnm)
+	throws ClassNotFoundException, NoSuchMethodException,
+	InstantiationException, java.lang.reflect.InvocationTargetException {
+		if (clsnm != null)
+			setRowRenderer((RowRenderer)Classes.newInstanceByThread(clsnm));
+	}
+
+	/** Synchronizes the grid to be consistent with the specified model.
+	 *
+	 * @param min the lower index that a range of invalidated rows
+	 * @param max the higher index that a range of invalidated rows
+	 */
+	private void syncModel(int min, int max) {
+		final int newsz = _model.getSize();
+		final int oldsz = _rows != null ? _rows.getChildren().size(): 0;
+		if (oldsz > 0) {
+			if (newsz > 0 && min < oldsz) {
+				if (max < 0 || max >= oldsz) max = oldsz - 1;
+				if (max >= newsz) max = newsz - 1;
+				if (min < 0) min = 0;
+
+				for (Iterator it = _rows.getChildren().listIterator(min);
+				min <= max && it.hasNext(); ++min)
+					clearRowAsUnloaded((Row)it.next());
+			}
+
+			//detach and remove
+			if (oldsz > newsz) {
+				for (Iterator it = _rows.getChildren().listIterator(newsz);
+				it.hasNext();) {
+					it.next();
+					it.remove();
+				}
+			}
+		}
+
+		//auto create but it means <grid model="xx"><rows/>... will fail
+		if (_rows == null)
+			new Rows().setParent(this);
+
+		for (int j = oldsz; j < newsz; ++j)
+			newUnloadedRow().setParent(_rows);
+	}
+	/** Creates an new and unloaded row. */
+	private final Row newUnloadedRow() {
+		final RowRenderer renderer = getRealRenderer();
+		Row row = null;
+		if (renderer instanceof RowRendererExt)
+			row = ((RowRendererExt)renderer).newRow(this);
+
+		if (row == null) {
+			row = new Row();
+			row.applyProperties();
+		}
+		row.setLoaded(false);
+
+		newUnloadedCell(renderer, row);
+		return row;
+	}
+	private Component newUnloadedCell(RowRenderer renderer, Row row) {
+		Component cell = null;
+		if (renderer instanceof RowRendererExt)
+			cell = ((RowRendererExt)renderer).newCell(row);
+
+		if (cell == null) {
+			cell = newRenderLabel(null);
+			cell.applyProperties();
+		}
+		cell.setParent(row);
+		return cell;
+	}
+	/** Returns the label for the cell generated by the default renderer.
+	 */
+	private static Label newRenderLabel(String value) {
+		final Label label =
+			new Label(value != null && value.length() > 0 ? value: " ");
+		label.setPre(true); //to make sure &nbsp; is generated, and then occupies some space
+		return label;
+	}
+	/** Clears a row as if it is not loaded. */
+	private final void clearRowAsUnloaded(Row row) {
+		final List cells = row.getChildren();
+		boolean bNewCell = cells.isEmpty();
+		if (!bNewCell) {
+			//detach and remove all but the first cell
+			for (Iterator it = cells.listIterator(1); it.hasNext();) {
+				it.next();
+				it.remove();
+			}
+
+			final Component cell = (Component)cells.get(0);
+			bNewCell = !(cell instanceof Label);
+			if (bNewCell) {
+				cell.detach();
+			} else {
+				((Label)cell).setValue("");
+			}
+		}
+
+		if (bNewCell)
+			newUnloadedCell(getRealRenderer(), row);
+
+		row.setLoaded(false);
+	}
+	/** Handles a private event, onInitRender. It is used only for
+	 * implementation, and you rarely need to invoke it explicitly.
+	 */
+	public void onInitRender() {
+		final Renderer renderer = new Renderer();
+		try {
+			final int pgsz = inPagingMold() ? _pgi.getPageSize(): 20;
+				//we don't know # of visible rows, so a 'smart' guess
+				//It is OK since client will send back request if not enough
+			int j = 0;
+			for (Iterator it = _rows.getChildren().iterator();
+			j < pgsz && it.hasNext(); ++j)
+				renderer.render((Row)it.next());
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}
+	}
+
+	/** Handles when the list model's content changed.
+	 */
+	private void onListDataChange(ListDataEvent event) {
+		//when this is called _model is never null
+		final int newsz = _model.getSize(), oldsz = _rows.getChildren().size();
+		int min = event.getIndex0(), max = event.getIndex1();
+		if (min < 0) min = 0;
+
+		boolean done = false;
+		switch (event.getType()) {
+		case ListDataEvent.INTERVAL_ADDED:
+			if (max < 0) max = newsz - 1;
+			if ((max - min + 1) != (newsz - oldsz)) {
+				log.warning("Conflict event: number of added rows not matched: "+event);
+				break; //handle it as CONTENTS_CHANGED
+			}
+
+			final Row before =
+				min < oldsz ? (Row)_rows.getChildren().get(min): null;
+			for (int j = min; j <= max; ++j)
+				insertBefore(newUnloadedRow(), before);
+
+			done = true;
+			break;
+
+		case ListDataEvent.INTERVAL_REMOVED:
+			if (max < 0) max = oldsz - 1;
+			if ((max - min + 1) != (oldsz - newsz)) {
+				log.warning("Conflict event: number of removed rows not matched: "+event);
+				break; //handle it as CONTENTS_CHANGED
+			}
+
+			//detach and remove
+			for (Iterator it = _rows.getChildren().listIterator(min);
+			it.hasNext();) {
+				it.next();
+				it.remove();
+			}
+
+			done = true;
+			break;
+		}
+
+		if (!done) //CONTENTS_CHANGED
+			syncModel(min, max);
+
+		initAtClient();
+			//client have to send back for what have to reload
+	}
+
+	private static final RowRenderer getDefaultRowRenderer() {
+		return _defRend;
+	}
+	private static final RowRenderer _defRend = new RowRenderer() {
+		public void render(Row row, Object data) {
+			final Label label = newRenderLabel(Objects.toString(data));
+			label.applyProperties();
+			label.setParent(row);
+			row.setValue(data);
+		}
+	};
+	/** Returns the renderer used to render rows.
+	 */
+	private RowRenderer getRealRenderer() {
+		return _renderer != null ? _renderer: getDefaultRowRenderer();
+	}
+
+	/** Used to render row if _model is specified. */
+	private class Renderer implements java.io.Serializable {
+		private final RowRenderer _renderer;
+		private boolean _rendered, _ctrled;
+
+		private Renderer() {
+			_renderer = getRealRenderer();
+		}
+		private void render(Row row) throws Throwable {
+			if (row.isLoaded())
+				return; //nothing to do
+
+			if (!_rendered && (_renderer instanceof RendererCtrl)) {
+				((RendererCtrl)_renderer).doTry();
+				_ctrled = true;
+			}
+
+			final Component cell = (Component)row.getChildren().get(0);
+			if (!(_renderer instanceof RowRendererExt)
+			|| ((RowRendererExt)_renderer).shallDetachOnRender(cell))
+				cell.detach();
+
+			try {
+				_renderer.render(row, _model.getElementAt(row.getIndex()));
+			} catch (Throwable ex) {
+				try {
+					final Label label = newRenderLabel(Exceptions.getMessage(ex));
+					label.applyProperties();
+					label.setParent(row);
+				} catch (Throwable t) {
+					log.error(t);
+				}
+				row.setLoaded(true);
+				throw ex;
+			} finally {
+				if (row.getChildren().isEmpty())
+					cell.setParent(row);
+			}
+
+			row.setLoaded(true);
+			_rendered = true;
+		}
+		private void doCatch(Throwable ex) {
+			if (_ctrled) {
+				try {
+					((RendererCtrl)_renderer).doCatch(ex);
+				} catch (Throwable t) {
+					throw UiException.Aide.wrap(t);
+				}
+			} else {
+				throw UiException.Aide.wrap(ex);
+			}
+		}
+		private void doFinally() {
+			if (_rendered)
+				initAtClient();
+					//reason: after rendering, the column width might change
+					//Also: Mozilla remembers scrollTop when user's pressing
+					//RELOAD, it makes init more desirable.
+			if (_ctrled)
+				((RendererCtrl)_renderer).doFinally();
+		}
+	}
+
+	/** Renders the specified {@link Row} if not loaded yet,
+	 * with {@link #getRowRenderer}.
+	 *
+	 * <p>It does nothing if {@link #getModel} returns null.
+	 * In other words, it is meaningful only if live data model is used.
+	 */
+	public void renderRow(Row li) {
+		if (_model == null) return;
+
+		final Renderer renderer = new Renderer();
+		try {
+			renderer.render(li);
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}
+	}
+	/** Renders all {@link Row} if not loaded yet,
+	 * with {@link #getRowRenderer}.
+	 */
+	public void renderAll() {
+		if (_model == null) return;
+
+		final Renderer renderer = new Renderer();
+		try {
+			for (Iterator it = _rows.getChildren().iterator(); it.hasNext();)
+				renderer.render((Row)it.next());
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}
+	}
+	/** Renders a set of specified rows.
+	 * It is the same as {@link #renderItems}.
+	 */
+	public void renderRows(Set rows) {
+		renderItems(rows);
+	}
+
+	//-- RenderOnDemand --//
+	public void renderItems(Set rows) {
+		if (_model == null) { //just in case that app dev might change it
+			if (log.debugable()) log.debug("No model no render");
+			return;
+		}
+
+		if (rows.isEmpty())
+			return; //nothing to do
+
+		final Renderer renderer = new Renderer();
+		try {
+			for (Iterator it = rows.iterator(); it.hasNext();)
+				renderer.render((Row)it.next());
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}
 	}
 
 	//-- super --//
@@ -276,14 +719,22 @@ public class Grid extends XulElement {
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		return _align != null ? attrs + " align=\"" + _align +'"': attrs;
+		if (_align == null && _model == null)
+			return attrs;
+
+		final StringBuffer sb = new StringBuffer(80).append(attrs);
+		if (_align != null)
+			HTMLs.appendAttribute(sb, "align", _align);
+		if (_model != null)
+			HTMLs.appendAttribute(sb, "z.model", true);
+		return sb.toString();
 	}
 
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Rows) {
 			if (_rows != null && _rows != newChild)
-				throw new UiException("Only one rows child is allowed: "+this);
+				throw new UiException("Only one rows child is allowed: "+this+"\nNote: rows is created automatically if live data");
 			_rows = (Rows)newChild;
 		} else if (newChild instanceof Columns) {
 			if (_cols != null && _cols != newChild)
@@ -368,6 +819,8 @@ public class Grid extends XulElement {
 		afterUnmarshal(-1);
 		//TODO: how to marshal _pgi if _pgi != _paging
 		//TODO: re-register event listener for onPaging
+
+		if (_model != null) initDataListener();
 	}
 
 	//-- ComponentCtrl --//

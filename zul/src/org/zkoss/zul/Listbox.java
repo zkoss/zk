@@ -75,8 +75,14 @@ import org.zkoss.zul.event.PagingEvent;
  * necessary.
  *
  * <p>Besides assign a list model, you could assign a renderer
- * (a {@link ListitemRenderer} instance) to a listbox, and then it will use this
+ * (a {@link ListitemRenderer} instance) to a listbox, such that
+ * the listbox will use this
  * renderer to render the data returned by {@link ListModel#getElementAt}.
+ * If not assigned, the default renderer, which assumes a label per
+ * list item, is used.
+ * In other words, the default renderer adds a label to
+ * a row by calling toString against the object returned
+ * by {@link ListModel#getElementAt}
  * 
  * <p>There are two ways to handle long content: scrolling and paging.
  * If {@link #getMold} is "default", scrolling is used if {@link #setHeight}
@@ -97,9 +103,10 @@ import org.zkoss.zul.event.PagingEvent;
  * @author tomyeh
  * @see ListModel
  * @see ListitemRenderer
+ * @see ListitemRendererExt
  */
 public class Listbox extends XulElement
-implements java.io.Serializable, RenderOnDemand {
+implements RenderOnDemand {
 	private static final Log log = Log.lookup(Listbox.class);
 
 	private transient List _items;
@@ -783,16 +790,6 @@ implements java.io.Serializable, RenderOnDemand {
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
-	/** When detached from a page, it is detached from the model
-	 * (by invoking {@link #setModel} with null) automatically.
-	 */
-	public void setPage(Page page) {
-		super.setPage(page);
-		if (page == null && _model != null) {
-			_model.removeListDataListener(_dataListener);
-			_model = null;
-		}
-	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
 		if (inSelectMold()) invalidate();
@@ -1115,11 +1112,15 @@ implements java.io.Serializable, RenderOnDemand {
 		if (cells.isEmpty()) {
 			newUnloadedCell(getRealRenderer(), item);
 		} else {
+			//detach and remove all but the first cell
+			for (Iterator it = cells.listIterator(1); it.hasNext();) {
+				it.next();
+				it.remove();
+			}
+
 			final Listcell listcell = (Listcell)cells.get(0);
 			listcell.setLabel(null);
 			listcell.setImage(null);
-			for (int k = cells.size(); --k > 0;)
-				((Component)cells.get(1)).detach(); //detach and remove
 		}
 		item.setLoaded(false);
 	}

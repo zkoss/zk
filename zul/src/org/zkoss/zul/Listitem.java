@@ -236,6 +236,7 @@ public class Listitem extends XulElement {
 	/*package*/ final boolean isLoaded() {
 		return _loaded;
 	}
+
 	//-- Utilities for implementation only (called by Listbox) */
 	/*package*/ final void setIndexDirectly(int index) {
 		_index = index;

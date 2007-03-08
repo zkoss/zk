@@ -29,7 +29,7 @@ public interface ListitemRendererExt {
 	 * The created component will be passed to {@link ListitemRenderer#render}.
 	 *
 	 * <p>Note: remember to invoke {@link Listitem#applyProperties} to initialize
-	 * the properties properly.
+	 * the properties, defined in the component definition, properly.
 	 *
 	 * <p>If null is returned, the default list item is created as follow.
 <pre><code>
@@ -47,8 +47,10 @@ return item;
 	/** Create an instance of {@link Listcell} as the first cell of the list item.
 	 *
 	 * <p>Note: remember to invoke {@link Listcell#applyProperties} to initialize
-	 * the properties properly. Also, to invoke {@link Listcell#setParent}
-	 * to make it as a child of the specified item.
+	 * the properties, defined in the component definition, properly.
+	 *
+	 * <p>Note: DO NOT call {@link Listitem#setParent}.
+	 * Don't create cells for other columns.
 	 *
 	 * <p>If null is returned, the default list cell is created as follow.
 <pre><code>

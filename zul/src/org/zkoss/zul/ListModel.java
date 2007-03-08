@@ -21,10 +21,11 @@ package org.zkoss.zul;
 import org.zkoss.zul.event.ListDataListener;
 
 /**
- * This interface defines the methods components like {@link Listbox}
- * use to get the value of each cell and the length of the list.
+ * This interface defines the methods that components like {@link Listbox}
+ * and {@link Grid} use to get the content of items.
  *
  * @author tomyeh
+ * @see Grid
  * @see Listbox
  * @see ListitemRenderer
  */

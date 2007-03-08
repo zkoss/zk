@@ -22,12 +22,12 @@ package org.zkoss.zul;
  * Identifies components that can be used as "rubber stamps" to paint
  * the cells in a {@link Listbox}.
  *
- * <p>If you need further control about rendering, you could also
- * implement {@link RendererCtrl}. For example, starts an transaction,
- * and uses it to render all items for the same request.
- *
  * <p>If you need better control, your renderer can also implement
  * {@link ListitemRendererExt}.
+ *
+ * <p>In addition, you could also
+ * implement {@link RendererCtrl}. For example, starts an transaction,
+ * and uses it to render all items for the same request.
  *
  * @author tomyeh
  * @see ListModel
@@ -39,11 +39,12 @@ public interface ListitemRenderer {
 	 *
 	 * @param item the listitem to render the result.
 	 * Note: when this method is called, the listitem has no child
-	 * at all. You can invoke {@link Listitem#setLabel} to create
+	 * at all, unless you implement {@link ListitemRendererExt#shallDetachOnRender}
+	 * to return false.
+	 * You can invoke {@link Listitem#setLabel} to create
 	 * {@link Listcell} implicitly, or create one or multiple
 	 * {@link Listcell} explicitly.
 	 * @param data that is returned from {@link ListModel#getElementAt}
-	 * if this method is called by {@link Listbox}.
 	 */
 	public void render(Listitem item, Object data) throws Exception;
 }

@@ -37,6 +37,8 @@ import org.zkoss.zul.impl.XulElement;
  * of the grid. The row with the most child elements determines the number
  * of columns in each row.
  *
+ * <p>Default {@link #getSclass}: the same as grid's sclass.
+ *
  * @author tomyeh
  */
 public class Row extends XulElement {
@@ -46,6 +48,10 @@ public class Row extends XulElement {
 	/** Used only to generate {@link #getChildAttrs}. */
 	private transient int _rsflags;
 	private boolean _nowrap;
+	/** whether the content of this row is loaded; used if
+	 * the grid owning this row is using a list model.
+	 */
+	private boolean _loaded;
 
 	/** Returns the grid that contains this row. */
 	public Grid getGrid() {
@@ -195,6 +201,37 @@ public class Row extends XulElement {
 		return sb.toString();
 	}
 
+	/** Sets whether the content of this row is loaded; used if
+	 * the grid owning this row is using a list model.
+	 */
+	/*package*/ final void setLoaded(boolean loaded) {
+		if (loaded != _loaded) {
+			_loaded = loaded;
+
+			final Grid grid = getGrid();
+			if (grid != null && grid.getModel() != null)
+				smartUpdate("z.loaded", _loaded);
+		}
+	}
+	/** Returns whether the content of this row is loaded; used if
+	 * the grid owning this row is using a list model.
+	 */
+	/*package*/ final boolean isLoaded() {
+		return _loaded;
+	}
+	/** Returns the index of the specified row.
+	 * The current implementation is stupid, so not public it yet.
+	 */
+	/*package*/ int getIndex() {
+		int j = 0;
+		for (Iterator it = getParent().getChildren().iterator();
+		it.hasNext(); ++j) {
+			if (it.next() == this)
+				break;
+		}
+		return j;
+	}
+
 	/** Returns the HTML attributes for the child of the specified index.
 	 */
 	public String getChildAttrs(int index) {
@@ -209,20 +246,9 @@ public class Row extends XulElement {
 			}
 		}
 
-		//Note: row's sclass, if any, becomes TD's sclass. Otherwise,
-		//grid.getSclass() + "ev" is used
-		String sclass = getSclass();
 		String colattrs = null, wd = null, hgh = null;
 		final Grid grid = getGrid();
 		if (grid != null) {
-			if (sclass == null || sclass.length() == 0) {
-				sclass = grid.getSclass();
-				if (sclass == null || sclass.length() == 0)
-					sclass = "gridev";
-				else
-					sclass += "ev";
-			}
-
 			final Columns cols = grid.getColumns();
 			if (cols != null) {
 				final List colchds = cols.getChildren();
@@ -252,19 +278,17 @@ public class Row extends XulElement {
 			style = sb.toString();
 		}
 
-		if (colattrs == null && sclass == null && style.length() == 0
-		&& span == 1)
-			return "";
+		if (colattrs == null && style.length() == 0 && span == 1)
+			return " class=\"gc\"";
 
 		final StringBuffer sb = new StringBuffer(100);
 		if (colattrs != null)
 			sb.append(colattrs);
 		if (span > 1)
 			sb.append(" colspan=\"").append(span).append('"');
-		HTMLs.appendAttribute(sb, "class", sclass);
 		HTMLs.appendAttribute(sb, "style", style);
 		
-		return sb.toString();
+		return sb.append(" class=\"gc\"").toString();
 	}
 
 	//-- super --//
@@ -281,6 +305,10 @@ public class Row extends XulElement {
 		HTMLs.appendAttribute(sb, "valign", _valign);
 		if (_nowrap)
 			HTMLs.appendAttribute(sb, "nowrap", "nowrap");
+
+		final Grid grid = getGrid();
+		if (grid != null && grid.getModel() != null)
+			HTMLs.appendAttribute(sb, "z.loaded", _loaded);
 		return sb.toString();
 	}
 	public void setStyle(String style) {
@@ -301,6 +329,17 @@ public class Row extends XulElement {
 			invalidate(); //yes, invalidate
 		}
 	}
+	/** Returns the style class.
+	 * By default, it is the same as grid's stye class, unless
+	 * {@link #setSclass} is called with non-empty value.
+	 */
+	public String getSclass() {
+		final String sclass = super.getSclass();
+		if (sclass != null) return sclass;
+
+		final Grid grid = getGrid();
+		return grid != null ? grid.getSclass(): sclass;
+	}
 
 	//-- Component --//
 	public void setParent(Component parent) {
@@ -316,14 +355,11 @@ public class Row extends XulElement {
 
 		final Grid grid = getGrid();
 		if (grid != null) {
-			final Columns cols = grid.getColumns();
-			if (cols != null) {
-				int j = 0;
-				for (Iterator it = getChildren().iterator(); it.hasNext(); ++j)
-					if (child == it.next())
-						break;
-				sb.append(getChildAttrs(j));
-			}
+			int j = 0;
+			for (Iterator it = getChildren().iterator(); it.hasNext(); ++j)
+				if (child == it.next())
+					break;
+			sb.append(getChildAttrs(j));
 		}
 		sb.append('>');
 		out.insert(0, sb);

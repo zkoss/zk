@@ -87,6 +87,9 @@ zk.Grid.prototype = {
 			this.body.onscroll = function () {
 				if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
 				if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
+				meta._render(zk.gecko ? 200: 0);
+					//Moz has a bug to send the request out if we don't wait long enough
+					//How long is enough is unknown, but 200 seems fine
 			};
 		}
 
@@ -95,6 +98,8 @@ zk.Grid.prototype = {
 		setTimeout("zkGrid._calcSize('"+this.id+"')", 5);
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
+
+		this._render(20);
 	},
 	/* set the height. */
 	setHgh: function (hgh) {
@@ -153,16 +158,13 @@ zk.Grid.prototype = {
 		for (var j = 0, even = true; j < this.bodyrows.length; ++j) {
 			var row = this.bodyrows[j];
 			if (row.style.display != "none") {
-				for (var k = 0; k < row.cells.length; ++k) {
-					var cell = row.cells[k];
-					var cs = cell.className;
-					if (even) { //even
-						if (cs.endsWith("od"))
-							cell.className = cs.substring(0, cs.length - 2) + "ev";
-					} else {
-						if (cs.endsWith("ev"))
-							cell.className = cs.substring(0, cs.length - 2) + "od";
-					}
+				var cs = row.className;
+				if (even) { //even
+					if (cs.endsWith("-od"))
+						row.className = cs.substring(0, cs.length - 3);
+				} else {
+					if (!cs.endsWith("-od"))
+						row.className = cs + "-od";
 				}
 				even = !even;
 			}
@@ -175,6 +177,18 @@ zk.Grid.prototype = {
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
 
 		if (this.paging) return; //nothing to adjust since single table
+
+		//refer to sel.js's _calcSize for why
+		var wd = this.element.style.width;
+		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+			wd = this.element.clientWidth;
+			if (wd) wd += "px";
+		}
+		if (wd) {
+			this.body.style.width = wd;
+			if (this.head) this.head.style.width = wd;
+			if (this.foot) this.foot.style.width = wd;
+		}
 
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
@@ -232,6 +246,37 @@ zk.Grid.prototype = {
 				cmp, icol, col1, wd1, col2, wd2, keys);
 			this.recalcSize(false);
 		}
+	},
+
+	/** Renders listitems that become visible by scrolling.
+	 */
+	_render: function (timeout) {
+		setTimeout("zkGrid._renderNow('"+this.id+"')", timeout);
+	},
+	_renderNow: function () {
+		if (getZKAttr(this.element, "model") != "true") return;
+
+		var rows = this.bodyrows;
+		if (!rows.length) return; //no row at all
+
+		//Note: we have to calculate from top to bottom because each row's
+		//height might diff (due to different content)
+		var data = "";
+		var min = this.body.scrollTop, max = min + this.body.offsetHeight;
+		for (var j = 0; j < rows.length; ++j) {
+			var r = rows[j];
+			if (zk.isVisible(r)) {
+				var top = zk.offsetTop(r);
+				if (top + zk.offsetHeight(r) < min) continue;
+				if (top >= max) break;
+				if (getZKAttr(r, "loaded") != "true")
+					data += "," + r.id;
+			}
+		}
+		if (data) {
+			data = data.substring(1);
+			zkau.send({uuid: this.id, cmd: "onRender", data: [data]}, 0);
+		}
 	}
 };
 
@@ -284,6 +329,11 @@ zkGrid.setAttr = function (grid, name, value) {
 		return true;
 	}
 	return false;
+};
+
+zkGrid._renderNow = function (uuid) {
+	var meta = zkau.getMeta(uuid);
+	if (meta) meta._renderNow();
 };
 
 zk.addModuleInit(function () {
