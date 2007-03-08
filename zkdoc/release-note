@@ -55,6 +55,8 @@ ZK 2.3.0 Freshly
 	tr.grid-od td.gc {
 		background: gray;
 	}
+  + Implements the unloadListitem method of the LisitemRendererExt interface
+    by doing nothing but returning null.
 
 * Notes for upgrading from 2.3.0 RC
   + getSuspsendedThreads is moved from Desktop to DesktopCtrl
