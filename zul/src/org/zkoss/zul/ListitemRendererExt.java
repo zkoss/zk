@@ -77,6 +77,16 @@ return cell;
 	 *
 	 * <p>If null is returned, the default unload is applied: remove
 	 * all children of the specified item except the first cell.
+	 *
+	 * <p>If you want to recreate the item, you can implement as follows.
+<pre><code>
+Listbox box = item.getListbox();
+Listitem newitem = newListitem(box); //assume you create a list item
+newListcell(newitem).setParent(item); //assume you create a list cell
+box.insertBefore(newitem, item);
+item.detach();
+return newitem;
+</code></pre>
 	 */
 	public Listitem unloadListitem(Listitem item);
 
