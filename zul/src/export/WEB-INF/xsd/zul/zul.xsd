@@ -171,6 +171,7 @@
 		<xs:attribute name="maxlength" type="xs:string" use="optional" />
 		<xs:attribute name="cols" type="xs:string" use="optional" />
 		<xs:attribute name="constraint" type="javaClassType" use="optional" />
+		<xs:attribute name="tabindex" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="formatInputElementAttrGroup">
 		<xs:attributeGroup ref="inputElementAttrGroup" />
@@ -332,10 +333,11 @@
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="dir" type="dirAttrType" use="optional" />
-		<xs:attribute name="href" type="xs:anyURI" use="optional" />
+		<xs:attribute name="href" type="xs:string" use="optional" />
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="xs:string" use="optional" />
 		<xs:attribute name="readonly" type="xs:string" use="optional" />
+		<xs:attribute name="tabindex" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
@@ -404,6 +406,7 @@
 		<xs:attribute name="checked" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="xs:string" use="optional" />
 		<xs:attribute name="readonly" type="xs:string" use="optional" />
+		<xs:attribute name="tabindex" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
@@ -675,7 +678,7 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
-		<xs:attribute name="src" type="xs:anyURI" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
@@ -686,7 +689,7 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="border" type="xs:string" use="optional" />
-		<xs:attribute name="src" type="xs:anyURI" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="hspace" type="xs:string" use="optional" />
 		<xs:attribute name="vspace" type="xs:string" use="optional" />
@@ -705,7 +708,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="border" type="xs:string" use="optional" />
-		<xs:attribute name="src" type="xs:anyURI" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="hspace" type="xs:string" use="optional" />
 		<xs:attribute name="vspace" type="xs:string" use="optional" />
@@ -719,7 +722,7 @@
 	<xs:complexType name="includeType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="src" type="xs:anyURI" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="localized" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
@@ -802,6 +805,7 @@
 		<xs:attribute name="rows" type="xs:string" use="optional" />
 		<xs:attribute name="maxlength" type="xs:string" use="optional" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
+		<xs:attribute name="tabindex" type="xs:string" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
@@ -901,7 +905,7 @@
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="checked" type="xs:string" use="optional" />
 		<xs:attribute name="autocheck" type="xs:string" use="optional" />
-		<xs:attribute name="href" type="xs:anyURI" use="optional" />
+		<xs:attribute name="href" type="xs:string" use="optional" />
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 	</xs:complexType>
@@ -965,6 +969,7 @@
 		<xs:attribute name="checked" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="xs:string" use="optional" />
 		<xs:attribute name="readonly" type="xs:string" use="optional" />
+		<xs:attribute name="tabindex" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
@@ -1163,8 +1168,9 @@
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="dir" type="dirAttrType" use="optional" />
-		<xs:attribute name="href" type="xs:anyURI" use="optional" />
+		<xs:attribute name="href" type="xs:string" use="optional" />
 		<xs:attribute name="target" type="xs:string" use="optional" />
+		<xs:attribute name="tabindex" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
@@ -1343,7 +1349,7 @@
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="open" type="xs:string" use="optional" />
 		<xs:attribute name="selected" type="xs:string" use="optional" />
-		<xs:attribute name="image" type="xs:anyURI" use="optional" />
+		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- treerow -->
@@ -1462,7 +1468,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attributeGroup ref="zkAttrGroup" />
-				<xs:attribute name="src" type="xs:anyURI" use="optional" />
+				<xs:attribute name="src" type="xs:string" use="optional" />
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
