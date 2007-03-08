@@ -73,6 +73,9 @@ import java.util.Iterator;
 	public Listcell newListcell(Listitem item) {
 		return null;
 	}
+	public Listitem unloadListitem(Listitem item) {
+		return null;
+	}
 	
 	public boolean shallDetachOnRender(Listcell cell) {
 		return true;
