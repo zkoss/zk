@@ -78,7 +78,7 @@ import java.util.Iterator;
 	}
 	
 	public int getControls() {
-		return DETACH_ON_RENDER;
+		return DETACH_ON_RENDER|DETACH_ON_UNLOAD;
 	}
 		
 	//-- ListitemRenderer --//
