@@ -626,6 +626,8 @@
 		<xs:attribute name="align" type="gridAlignAttrType" use="optional" />
 		<xs:attribute name="pageSize" type="xs:string" use="optional" />
 		<xs:attribute name="paginal" type="xs:string" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="rowRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="onPaging" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
@@ -806,6 +808,8 @@
 		<xs:attribute name="maxlength" type="xs:string" use="optional" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="tabindex" type="xs:string" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
