@@ -45,6 +45,7 @@ ZK 2.3.0 Freshly
   1671549: Failed to change the width of tabbox
   1672747: The bin/zipjs script failed on FreeBSD
   1674062: tabpanel with height is not correctly shown
+  1676393: Incorrectly override the "binder" variable
 
 * Upgrade Notes:
   + Removed InterPortletFilter from web.xml since it is no longer required.
