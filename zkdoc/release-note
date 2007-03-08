@@ -3,6 +3,7 @@ ZK 2.3.0 Freshly
 * Features:
   1666877: Support the variables element
   1655219: Radiogroup's layout independent Radio button
+  1676244: Grid supports live data (ListModel)
   1658748: Prevent user from pressing ESC when loading JS
   1662365: Macro setMacroURI()
   1669824: InterruptedException shall carry the cause
@@ -49,6 +50,10 @@ ZK 2.3.0 Freshly
   + Removed InterPortletFilter from web.xml since it is no longer required.
   + Implements the getRichlet and isRichlet method for your UiFactory class,
     if you doesn't extend it from AbstractUiFactory.
+  + Use the following pattern to specify the style of a row of a grid.
+	tr.grid-od td.gc {
+		background: gray;
+	}
 
 * Notes for upgrading from 2.3.0 RC
   + getSuspsendedThreads is moved from Desktop to DesktopCtrl
