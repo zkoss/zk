@@ -77,8 +77,8 @@ import java.util.Iterator;
 		return null;
 	}
 	
-	public boolean shallDetachOnRender(Listcell cell) {
-		return true;
+	public int getControls() {
+		return DETACH_ON_RENDER;
 	}
 		
 	//-- ListitemRenderer --//
