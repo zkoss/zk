@@ -1069,9 +1069,12 @@ implements RenderOnDemand {
 
 				for (Iterator it = _items.listIterator(min);
 				min <= max && it.hasNext(); ++min) {
-					if (renderer == null)
-						renderer = getRealRenderer();
-					unloadItem(renderer, (Listitem)it.next());
+					final Listitem item = (Listitem)it.next();
+					if (item.isLoaded()) {
+						if (renderer == null)
+							renderer = getRealRenderer();
+						unloadItem(renderer, item);
+					}
 				}
 			}
 
@@ -1114,19 +1117,12 @@ implements RenderOnDemand {
 	}
 	/** Clears a listitem as if it is not loaded. */
 	private final void unloadItem(ListitemRenderer renderer, Listitem item) {
-		boolean bDefault = true;
-		if (renderer instanceof ListitemRendererExt) {
-			final Listitem li =
-				((ListitemRendererExt)renderer).unloadListitem(item);
-			bDefault = li == null;
-			if (!bDefault)
-				item = li;
-		}
-
-		if (bDefault) {
+		if (!(renderer instanceof ListitemRendererExt)
+		|| (((ListitemRendererExt)renderer).getControls() & 
+				ListitemRendererExt.DETACH_ON_UNLOAD) == 0) { //re-use (default)
 			final List cells = item.getChildren();
 			if (cells.isEmpty()) {
-				newUnloadedCell(getRealRenderer(), item);
+				newUnloadedCell(renderer, item);
 			} else {
 				//detach and remove all but the first cell
 				for (Iterator it = cells.listIterator(1); it.hasNext();) {
@@ -1138,9 +1134,11 @@ implements RenderOnDemand {
 				listcell.setLabel(null);
 				listcell.setImage(null);
 			}
+			item.setLoaded(false);
+		} else { //detach
+			item.getParent().insertBefore(newUnloadedItem(renderer), item);
+			item.detach();
 		}
-
-		item.setLoaded(false);
 	}
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.
@@ -1247,8 +1245,10 @@ implements RenderOnDemand {
 
 			final Listcell cell = (Listcell)item.getChildren().get(0);
 			if (!(_renderer instanceof ListitemRendererExt)
-			|| ((ListitemRendererExt)_renderer).shallDetachOnRender(cell))
+			|| (((ListitemRendererExt)_renderer).getControls() & 
+				ListitemRendererExt.DETACH_ON_RENDER) != 0) { //detach (default)
 				cell.detach();
+			}
 
 			try {
 				_renderer.render(item, _model.getElementAt(item.getIndex()));

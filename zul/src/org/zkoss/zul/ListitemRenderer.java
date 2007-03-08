@@ -39,11 +39,14 @@ public interface ListitemRenderer {
 	 *
 	 * @param item the listitem to render the result.
 	 * Note: when this method is called, the listitem has no child
-	 * at all, unless you implement {@link ListitemRendererExt#shallDetachOnRender}
-	 * to return false.
-	 * You can invoke {@link Listitem#setLabel} to create
+	 * at all, unless you don't return
+	 * {@link ListitemRendererExt#DETACH_ON_RENDER} when
+	 * {@link ListitemRendererExt#getControls} is called.
+	 *
+	 * <p>You can invoke {@link Listitem#setLabel} to create
 	 * {@link Listcell} implicitly, or create one or multiple
 	 * {@link Listcell} explicitly.
+	 *
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 */
 	public void render(Listitem item, Object data) throws Exception;

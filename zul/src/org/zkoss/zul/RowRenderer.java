@@ -39,8 +39,10 @@ public interface RowRenderer {
 	 *
 	 * @param row the row to render the result.
 	 * Note: when this method is called, the row has no child
-	 * at all, unless you implement {@link RowRendererExt#shallDetachOnRender}
-	 * to return false.
+	 * at all, unless you don't return
+	 * {@link RowRendererExt#DETACH_ON_RENDER} when
+	 * {@link RowRendererExt#getControls} is called.
+	 *
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 */
 	public void render(Row row, Object data) throws Exception;

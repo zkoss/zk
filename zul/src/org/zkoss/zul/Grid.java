@@ -405,9 +405,12 @@ implements RenderOnDemand {
 
 				for (Iterator it = _rows.getChildren().listIterator(min);
 				min <= max && it.hasNext(); ++min) {
-					if (renderer == null)
-						renderer = getRealRenderer();
-					unloadRow(renderer, (Row)it.next());
+					final Row row = (Row)it.next();
+					if (row.isLoaded()) {
+						if (renderer == null)
+							renderer = getRealRenderer();
+						unloadRow(renderer, row);
+					}
 				}
 			}
 
@@ -468,15 +471,9 @@ implements RenderOnDemand {
 	}
 	/** Clears a row as if it is not loaded. */
 	private final void unloadRow(RowRenderer renderer, Row row) {
-		boolean bDefault = true;
-		if (renderer instanceof RowRendererExt) {
-			final Row r = ((RowRendererExt)renderer).unloadRow(row);
-			bDefault = r == null;
-			if (!bDefault)
-				row = r;
-		}
-
-		if (bDefault) {
+		if (!(renderer instanceof RowRendererExt)
+		|| (((RowRendererExt)renderer).getControls() & 
+				RowRendererExt.DETACH_ON_UNLOAD) == 0) { //re-use (default)
 			final List cells = row.getChildren();
 			boolean bNewCell = cells.isEmpty();
 			if (!bNewCell) {
@@ -496,10 +493,12 @@ implements RenderOnDemand {
 			}
 
 			if (bNewCell)
-				newUnloadedCell(getRealRenderer(), row);
+				newUnloadedCell(renderer, row);
+			row.setLoaded(false);
+		} else { //detach
+			row.getParent().insertBefore(newUnloadedRow(renderer), row);
+			row.detach();
 		}
-
-		row.setLoaded(false);
 	}
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.
@@ -611,8 +610,10 @@ implements RenderOnDemand {
 
 			final Component cell = (Component)row.getChildren().get(0);
 			if (!(_renderer instanceof RowRendererExt)
-			|| ((RowRendererExt)_renderer).shallDetachOnRender(cell))
+			|| (((RowRendererExt)_renderer).getControls() & 
+				RowRendererExt.DETACH_ON_RENDER) != 0) { //detach (default)
 				cell.detach();
+			}
 
 			try {
 				_renderer.render(row, _model.getElementAt(row.getIndex()));
