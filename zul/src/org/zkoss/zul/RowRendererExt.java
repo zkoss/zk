@@ -78,6 +78,16 @@ return cell;
 	 *
 	 * <p>If null is returned, the default unload is applied: remove
 	 * all children of the specified row except the first cell.
+	 *
+	 * <p>If you want to recreate the row, you can implement as follows.
+<pre><code>
+Grid grid = row.getListbox();
+Row newrow = newRow(grid); //assume you create a row in newRow
+newCell(newrow).setParent(row); //assume you create a cell in newCell
+grid.insertBefore(newrow, row);
+row.detach();
+return newrow;
+</code></pre>
 	 */
 	public Row unloadRow(Row row);
 
