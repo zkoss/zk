@@ -557,18 +557,41 @@ public class Window extends XulElement implements IdSpace {
 		}
 	}
 
+	/** Returns the style class used for the inner div.
+	 *
+	 * <p>If {@link #getBorder} is "normal", "wi-<i>mode</i>" is returned,
+	 * where <i>mode</i> is the value returned by {@link #getMode}.
+	 * Otherwise, "wi-<i>mode</i>-<i>border</i>",
+	 * where <i>border</i> is the value returned by {@link #getBorder}.
+	 */
+	public String getInnerSclass() {
+		final StringBuffer sb =
+			new StringBuffer(30).append("wi-").append(getMode());
+
+		final String border = getBorder();
+		if (!"normal".equals(border))
+			sb.append('-').append(border);
+		return sb.toString();
+	}
+	/** Returns the style class used for the title.
+	 *
+	 * <p>It returns "wt-<i>mode</i>" is returned,
+	 * where <i>mode</i> is the value returned by {@link #getMode}.
+	 */
+	public String getTitleSclass() {
+		return "wt-" + getMode();
+	}
+
 	//-- super --//
 	/** Returns the style class.
 	 * If the style class is not defined ({@link #setSclass} is not called
-	 * or called with null or empty), it returns the style class based
-	 * on {@link #getMode} and {@link #getBorder}.
+	 * or called with null or empty), it returns {@link #getMode}.
+	 * In other words, the style class is, by default, the same as
+	 * the mode name.
 	 */
 	public String getSclass() {
 		final String scls = super.getSclass();
-		if (scls != null) return scls;
-
-		final String border = getBorder();
-		return "normal".equals(border) ? getMode(): getMode() + '-' + border;
+		return scls != null ? scls: getMode();
 	}
 
 	//-- Component --//

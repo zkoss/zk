@@ -49,27 +49,6 @@ img	{border: 0;}
 .link {cursor: pointer;}
 
 <%-- ZK --%>
-div.embedded { <%-- must consistent with lang.xml --%>
-	padding: 2px; border: 1px solid #aab;
-}
-div.modal, div.modal-none, div.overlapped, div.overlapped-none { <%-- must consistent with lang.xml --%>
-	position: absolute;
-	background: #F0F0D8;
-	padding: 1px; margin: 1px;
-}
-div.modal, div.overlapped {
-	border: 2px solid #77a; padding: 2px; margin: 0;
-}
-div.popup, div.popup-none { <%-- must consistent with lang.xml --%>
-	position: absolute; background: white; padding: 1px; margin: 0;
-}
-div.popup {
-	border: 1px solid black;
-}
-div.wnd-i { <%-- the inner div of a window; independent of window's sclass --%>
-	margin:0; padding:0; cursor:auto;
-}
-
 <%-- groupbox caption --%>
 .caption input, .caption td {
 	font-size: x-small;
@@ -87,11 +66,75 @@ div.wnd-i { <%-- the inner div of a window; independent of window's sclass --%>
 }
 
 <%-- window title/caption --%>
-.title td {
-	font-size: small;
-	padding-top: 2px; padding-bottom: 3px; margin-bottom: 2px;
-	background: #669; color: white;
+div.embedded {
+	margin: 0; padding: 0;
 }
+div.wi-embedded, div.wi-embedded-none {
+	padding:2px; cursor:auto;
+}
+div.wi-embedded {
+	border: 1px solid #aab;
+}
+
+div.modal, div.overlapped, div.popup {
+	position: absolute; margin:0, padding:0;
+}
+div.wi-modal, div.wi-modal-none {
+	padding:2px; background: #f0f0d8;
+}
+div.wi-overlapped, div.wi-overlapped-none {
+	padding:2px; background: white;
+}
+div.wi-popup, div.wi-popup-none {
+	padding:1px; background: white;
+}
+div.wi-modal, div.wi-overlapped {
+	border: 2px solid #1854c2;
+}
+div.wi-popup {
+	border: 1px solid #1854c2;
+}
+
+td.lwt-embedded, td.lwt-popup, td.lwt-modal, td.lwt-overlapped, td.mwt-embedded, td.mwt-popup, td.mwt-modal, td.mwt-overlapped, td.rwt-embedded, td.rwt-popup, td.rwt-modal, td.rwt-overlapped {
+	font-size: small;
+	padding-top: 3px; padding-bottom: 3px; margin-bottom: 2px;
+	color: white;
+}
+td.lwt-embedded {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wte-l.png')}); background-repeat: no-repeat;
+	width: 5px;
+}
+td.mwt-embedded {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wte-m.png')}); background-repeat: repeat-x;
+}
+td.rwt-embedded {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wte-r.png')}); background-repeat: no-repeat;
+	width: 5px;
+}
+td.lwt-popup {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wtp-l.png')}); background-repeat: no-repeat;
+	width: 5px;
+}
+td.mwt-popup {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wtp-m.png')}); background-repeat: repeat-x;
+}
+td.rwt-popup {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wtp-r.png')}); background-repeat: no-repeat;
+	width: 5px;
+}
+
+td.lwt-modal, td.lwt-overlapped {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wto-l.png')}); background-repeat: no-repeat;
+	width: 5px;
+}
+td.mwt-modal, td.mwt-overlapped {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wto-m.png')}); background-repeat: repeat-x;
+}
+td.rwt-modal, td.rwt-overlapped {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wto-r.png')}); background-repeat: no-repeat;
+	width: 5px;
+}
+
 .title a, .title a:visited {
 	color: white;
 }

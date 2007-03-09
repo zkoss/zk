@@ -285,8 +285,6 @@ zkWnd.init = function (cmp) {
 
 	//bug 1469887: re-init since it might be caused by invalidate
 	if (zkau.wndmode[cmp.id]) {
-		var caption = $e(cmp.id + "!caption");
-		if (caption && caption.style.cursor == "") caption.style.cursor = "move";
 		zkau.fixWnd(cmp);
 		zkau.floatWnd(cmp, null, zkau.onWndMove);
 	}
