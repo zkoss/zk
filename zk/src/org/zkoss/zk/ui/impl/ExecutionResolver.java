@@ -106,22 +106,37 @@ public class ExecutionResolver implements VariableResolver {
 			return _exec.getArg();
 
 		if (!Names.isReserved(name)){
-			Page page = null;
 			if (_self instanceof Component) {
 				final Component comp = (Component)_self;
-				final Object o = comp.getZScriptVariable(name);
-				if (o != null)
-					return o;
-			} else if (_self instanceof Page) {
-				page = (Page)_self;
-			} else {
-				page = ((ExecutionCtrl)_exec).getCurrentPage();
-			}
 
-			if (page != null) {
-				final Object o = page.getZScriptVariable(name);
+				//We have to look getZScriptVariable first and then namespace
+				//so it is in the same order of interpreter
+				final Page page = comp.getPage();
+				if (page != null) {
+					final Object o = page.getZScriptVariable(name);
+					if (o != null)
+						return o;
+				}
+
+				final Object o = comp.getVariable(name, false);
 				if (o != null)
 					return o;
+			} else {
+				Page page;
+				if (_self instanceof Page) {
+					page = (Page)_self;
+				} else {
+					page = ((ExecutionCtrl)_exec).getCurrentPage();
+				}
+
+				if (page != null) {
+					Object o = page.getZScriptVariable(name);
+					if (o != null)
+						return o;
+					o = page.getVariable(name);
+					if (o != null)
+						return o;
+				}
 			}
 		}
 		return _parent != null ? _parent.resolveVariable(name): null;

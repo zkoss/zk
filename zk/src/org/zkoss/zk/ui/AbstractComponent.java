@@ -979,48 +979,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return false;
 	}
 
-	public Class getZScriptClass(String clsnm) {
-		try {
-			return Classes.forNameByThread(clsnm);
-		} catch (ClassNotFoundException ex) {
-			if (_page != null) {
-				for (Iterator it = _page.getLoadedInterpreters().iterator();
-				it.hasNext();) {
-					Class cls = ((Interpreter)it.next()).getClass(clsnm);
-					if (cls != null)
-						return cls;
-				}
-			}
-			return null;
-		}
-	}
-	public Method getZScriptMethod(String name, Class[] argTypes) {
-		if (_page != null) {
-			for (Iterator it = _page.getLoadedInterpreters().iterator();
-			it.hasNext();) {
-				Method mtd = ((Interpreter)it.next()).getMethod(name, argTypes);
-				if (mtd != null)
-					return mtd;
-			}
-		}
-		return null;
-	}
-	public Object getZScriptVariable(String name) {
-		Object val = getVariable(name, false);
-		if (val != null)
-			return val;
-
-		if (_page != null) {
-			for (Iterator it = _page.getLoadedInterpreters().iterator();
-			it.hasNext();) {
-				val = ((Interpreter)it.next()).getVariable(name, true);
-				if (val != null)
-					return val;
-			}
-		}
-		return null;
-	}
-
 	public Namespace getNamespace() {
 		if (this instanceof IdSpace)
 			return _spaceInfo.ns;

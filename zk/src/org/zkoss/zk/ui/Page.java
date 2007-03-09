@@ -265,7 +265,7 @@ public interface Page extends IdSpace {
 	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
 	 *
 	 * <p>{@link #getVariable} returns only variables defined by
-	 * {@link #setVariable} (and {@link Namespace#setVariable}.
+	 * {@link #setVariable} (i.e., a shortcut to {@link Namespace#setVariable}).
 	 * On the other hand, {@link #getZScriptVariable} returns these variables
 	 * and those defined when executing zscripts.
 	 *
@@ -286,6 +286,9 @@ public interface Page extends IdSpace {
 	 * the thread class loader and the classes defined in the
 	 * loaded interpreters.
 	 *
+	 * <p>Note: it also looks for the class by use of the current thread's
+	 * class loader.
+	 *
 	 * @return the class, or null if not found
 	 * @see #getLoadedInterpreters
 	 */
@@ -304,7 +307,7 @@ public interface Page extends IdSpace {
 	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
 	 *
 	 * <p>{@link #getVariable} returns only variables defined by
-	 * {@link #setVariable} (and {@link Namespace#setVariable}.
+	 * {@link #setVariable} (i.e., a shortcut to {@link Namespace#setVariable}).
 	 * On the other hand, {@link #getZScriptVariable} returns these variables
 	 * and those defined when executing zscripts.
 	 *
@@ -313,7 +316,7 @@ public interface Page extends IdSpace {
 	 */
 	public Object getZScriptVariable(String name);
 
-	/** Gets a variable that is visible to EL expressions.
+	/** Returns a variable that is visible to EL expressions.
 	 *
 	 * <p>This method is mainly used to access special variable, such as
 	 * request parameters (if this page is requested by HTTP).

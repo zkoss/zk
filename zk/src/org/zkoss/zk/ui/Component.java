@@ -366,11 +366,11 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 *
 	 * <p>This method is the same as getNamespace().getVariable(name, local).
 	 *
-	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
+	 * <h3>Differences between {@link #getVariable} and {@link Page#getZScriptVariable}</h3>
 	 *
 	 * <p>{@link #getVariable} returns only variables defined by
-	 * {@link #setVariable} (and {@link Namespace#setVariable}.
-	 * On the other hand, {@link #getZScriptVariable} returns these variables
+	 * {@link #setVariable} (i.e., a shortcut of {@link Namespace#setVariable}).
+	 * On the other hand, {@link Page#getZScriptVariable} returns these variables
 	 * and those defined when executing zscripts.
 	 *
 	 * @param local whether not to search its ancestor.
@@ -393,42 +393,6 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * @see #getNamespace
 	 */
 	public void unsetVariable(String name, boolean local);
-
-	/** Returns the class of the specified name by searching
-	 * the thread class loader, and classes in the loaded interpreters.
-	 *
-	 * <p>Note: the loaded interpreters ({@link Page#getLoadedInterpreters})
-	 * are searched only if it is attached a page.
-	 *
-	 * @return the class, or null if not found
-	 */
-	public Class getZScriptClass(String clsnm);
-	/** Returns the variable of the specified name by searching
-	 * the loaded interpreters.
-	 *
-	 * <p>Note: the loaded interpreters ({@link Page#getLoadedInterpreters})
-	 * are searched only if it is attached a page.
-	 *
-	 * @return the method, or null if not found
-	 */
-	public org.zkoss.zk.scripting.Method getZScriptMethod(
-	String name, Class[] argTypes);
-	/** Returns the value of the variable of the specified name by searching
-	 * namespace and the loaded interpreters.
-	 *
-	 * <p>Note: the loaded interpreters ({@link Page#getLoadedInterpreters})
-	 * are searched only if it is attached a page.
-	 *
-	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
-	 *
-	 * <p>{@link #getVariable} returns only variables defined by
-	 * {@link #setVariable} (and {@link Namespace#setVariable}.
-	 * On the other hand, {@link #getZScriptVariable} returns these variables
-	 * and those defined when executing zscripts.
-	 *
-	 * @return the value of the variable, or null if not found
-	 */
-	public Object getZScriptVariable(String name);
 
 	/** Returns the parent component, or null if this is the root component.
 	 */
@@ -662,7 +626,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * defined thru {@link #setVariable} (and {@link Namespace#setVariable}.
 	 *
 	 * <p>Note: The namespace doesn't include any variable defined by
-	 * executing zscripts. To retrieve them, use {@link #getZScriptVariable}.
+	 * executing zscripts. To retrieve them, use {@link Page#getZScriptVariable}.
 	 *
 	 * @see #getSpaceOwner
 	 */

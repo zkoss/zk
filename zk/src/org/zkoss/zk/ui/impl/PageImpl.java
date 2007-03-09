@@ -345,15 +345,16 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_ns.unsetVariable(name, true);
 	}
 	public Class getZScriptClass(String clsnm) {
+		for (Iterator it = getLoadedInterpreters().iterator();
+		it.hasNext();) {
+			Class cls = ((Interpreter)it.next()).getClass(clsnm);
+			if (cls != null)
+				return cls;
+		}
+
 		try {
 			return Classes.forNameByThread(clsnm);
 		} catch (ClassNotFoundException ex) {
-			for (Iterator it = getLoadedInterpreters().iterator();
-			it.hasNext();) {
-				Class cls = ((Interpreter)it.next()).getClass(clsnm);
-				if (cls != null)
-					return cls;
-			}
 			return null;
 		}
 	}
@@ -369,13 +370,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return null;
 	}
 	public Object getZScriptVariable(String name) {
-		Object val = getVariable(name);
-		if (val != null)
-			return val;
-
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
-			val = ((Interpreter)it.next()).getVariable(name, true);
+			final Object val = ((Interpreter)it.next()).getVariable(name, true);
 			if (val != null)
 				return val;
 		}
