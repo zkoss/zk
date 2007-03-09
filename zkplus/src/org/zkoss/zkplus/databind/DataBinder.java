@@ -866,7 +866,9 @@ public class DataBinder {
 		} else if (comp.containsVariable(beanid, false)) {
 			bean = comp.getVariable(beanid, false);
 		} else {
-			bean = comp.getZScriptVariable(beanid);
+			final Page page = comp.getPage();
+			if (page != null)
+				bean = page.getZScriptVariable(beanid);
 		}
 		return bean;
 	}
