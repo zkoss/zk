@@ -97,7 +97,7 @@ div.wi-popup {
 
 td.lwt-embedded, td.lwt-popup, td.lwt-modal, td.lwt-overlapped, td.mwt-embedded, td.mwt-popup, td.mwt-modal, td.mwt-overlapped, td.rwt-embedded, td.rwt-popup, td.rwt-modal, td.rwt-overlapped {
 	font-size: small;
-	padding-top: 3px; padding-bottom: 3px; margin-bottom: 2px;
+	padding-top: 4px; padding-bottom: 3px; margin-bottom: 2px;
 	color: white;
 }
 td.lwt-embedded {
