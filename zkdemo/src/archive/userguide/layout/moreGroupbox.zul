@@ -40,7 +40,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<vbox>
 		Which kind of fruit do you want?
 		<groupbox mold="3d" width="300px">
-			<caption image="/img/coffee.gif" label="fruits"/>
+			<caption image="/img/inet.png" label="fruits"/>
 			<radiogroup onCheck="fruit.value = self.selectedItem.label">
 				<radio label="Apple"/>
 				<radio label="Orange"/>
