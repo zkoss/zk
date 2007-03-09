@@ -299,7 +299,6 @@ zkGrid.init = function (cmp) {
 	if (meta) meta.init();
 	else new zk.Grid(cmp);
 };
-zkGrid.cleanup = zkau.cleanupMeta;
 zkGrid.childchg = zkGrid.init;
 
 /** Called when a grid becomes visible because of its parent. */

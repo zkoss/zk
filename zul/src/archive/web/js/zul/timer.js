@@ -69,7 +69,6 @@ zkTimer.init = function (cmp) {
 		else new zk.Timer(cmp);
 	}
 };
-zkTimer.cleanup = zkau.cleanupMeta;
 zkTimer.setAttr = function (cmp, nm, val) {
 	if (nm == "z.running") {
 		zkau.setAttr(cmp, nm, val);

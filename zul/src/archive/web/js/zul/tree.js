@@ -133,7 +133,6 @@ zkTree.init = function (cmp) {
 		new zk.Tree(cmp);
 	}
 };
-zkTree.cleanup = zkau.cleanupMeta;
 zkTree.childchg = zkTree.init;
 
 /** Called when a tree becomes visible because of its parent. */

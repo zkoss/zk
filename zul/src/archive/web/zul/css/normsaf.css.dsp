@@ -76,7 +76,7 @@ div.wi-embedded {
 }
 
 div.modal, div.overlapped, div.popup {
-	position: absolute; margin:0, padding:0;
+	position: absolute; margin:0; padding:0;
 }
 div.wi-modal, div.wi-modal-none {
 	padding:2px; background: #f0f0d8;

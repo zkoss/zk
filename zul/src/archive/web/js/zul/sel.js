@@ -807,17 +807,10 @@ zk.Selectable.prototype = {
 				+ parseInt(Element.getStyle(document.body, "padding-top")||"0")
 				+ parseInt(Element.getStyle(document.body, "padding-bottom")||"0");
 		if (zk.ie) ++gap; //strange, but...
-		if (gap <= 0) return gap; //already fit
-
-		//this overflow might be caused by another element
-		for (var el = this.element;;) {
-			var p = el.offsetParent;
-			if (!p) return gap; //yes
-			if ($tag(p) == "TD" && p.clientHeight > el.offsetHeight + 2)
-				return 0; //not caused by this element
-					//2 is an experimental value. In IE, diff might be 0 or 1 (very rare)
-			el = p;
-		}
+		return gap; //already fit
+			//TODO: it is possible that this tree is in a cell and
+			//shrinking won't help to make the whole document smaller
+			//However, we don't find a good way to
 	},
 
 	/** Recalculate the size. */
@@ -1094,7 +1087,6 @@ zkLibox.init = function (cmp) {
 		new zk.Selectable(cmp);
 	}
 };
-zkLibox.cleanup = zkau.cleanupMeta;
 zkLibox.childchg = zkLibox.init;
 
 /** Called when a listbox becomes visible because of its parent. */
