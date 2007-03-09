@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-<style src="~./zul/css/normex**.css.dsp"/>
+<style src="~./zul/css/ext*.css.dsp*"/>
 <window id="root" use="org.zkoss.zkdemo.userguide.MainWindow" xmlns:h="http://www.w3.org/1999/xhtml">
 
 	<!-- The following script is generated because we want to demo Google Maps later -->
