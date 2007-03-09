@@ -47,6 +47,8 @@ ZK 2.3.0 Freshly
   1672747: The bin/zipjs script failed on FreeBSD
   1674062: tabpanel with height is not correctly shown
   1676393: Incorrectly override the "binder" variable
+  1677072: (Manual) Variables defined in zscript shall be visible to EL expr
+  1677090: EL's variable resolved not in the same order as interpreter
 
 * Upgrade Notes:
   + Removed InterPortletFilter from web.xml since it is no longer required.
@@ -61,6 +63,8 @@ ZK 2.3.0 Freshly
 
 * Notes for upgrading from 2.3.0 RC
   + getSuspsendedThreads is moved from Desktop to DesktopCtrl
+  + getZScriptVariable, getZScriptMethod and getZScriptClass are removed
+    from Component. Use the corresponding methods defined in Page.
 
 	--------
 ZK 2.3.0 RC
