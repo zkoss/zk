@@ -66,35 +66,28 @@ import java.util.Iterator;
 		final List kids = new ArrayList(clone.getChildren());
 		clone.setAttribute(KIDS, kids);
 		clone.getChildren().clear();
-
 		return clone;
 	}
 	
 	public Listcell newListcell(Listitem item) {
 		return null;
 	}
-	public Listitem unloadListitem(Listitem item) {
-		return null;
-	}
 	
 	public int getControls() {
-		return DETACH_ON_RENDER|DETACH_ON_UNLOAD;
+		return DETACH_ON_RENDER;
 	}
 		
 	//-- ListitemRenderer --//
 	public void render(Listitem item, java.lang.Object bean) {
 		final List kids = (List) item.getAttribute(KIDS);
-		//kids is null when it is a simple rerender without going thru newListitem()
-		if (kids != null) {
-			item.getChildren().addAll(kids);
-			item.removeAttribute(KIDS);
+		item.getChildren().addAll(kids);
+//			item.removeAttribute(KIDS);
 			
-			//remove template mark of cloned component and its decendant
-			_binder.setupTemplateComponent(item, null); 
+		//remove template mark of cloned component and its decendant
+		_binder.setupTemplateComponent(item, null); 
 			
-			//setup clone id
-			setupCloneIds(item);
-		}
+		//setup clone id
+		setupCloneIds(item);
 
 		//bind bean to the associated listitem and its decendant
 		final String varname = (String) _template.getAttribute(_binder.VARNAME);

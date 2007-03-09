@@ -685,7 +685,7 @@ public class DataBinder {
 		return bean;
 	}
 	
-	/* package */ void setBeanAndRegisterBeanSameNodes(Component comp, Object val, Binding binding, String path, boolean autoConvert) {
+	/* package */ void setBeanAndRegisterBeanSameNodes(Component comp, Object val, Binding binding, String path, boolean autoConvert, Object rawval) {
 		Object orgVal = null;
 		Object bean = null;
 		BindingNode currentNode = _pathTree;
@@ -758,9 +758,27 @@ public class DataBinder {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
-		if (refChanged && !binding.isLoadable() && binding.isSavable()) { //the sameNodes should change accordingly.
-			registerBeanNode(val, currentNode);
+		
+		if (val != null) {
+			if (refChanged && !binding.isLoadable() && binding.isSavable()) { //the sameNodes should change accordingly.
+				registerBeanNode(val, currentNode);
+			}
+			//20070309, Henri Chen: Tricky. 
+			//When loading page, listbox.selectedItem == null. The _var Listitem will not be able to 
+			//associate with the selectedItem (no way to associate via null bean). When end user then 
+			//select one Listitem, we have to force such association.
+			if (rawval instanceof Component) {
+				Binding varbinding = getBinding((Component) rawval, "_var");
+				if (varbinding != null) {
+					registerBeanNode(val, currentNode);
+					getBeanAndRegisterBeanSameNodes((Component) rawval, varbinding.getExpression());
+				}
+			}
 		}
+			
+		//TODO:Henri Chen: Is it possible to make the loadOnSave event to be called once only for a
+		//setXxx. So avoid load a node several times?
+			
 		//All kid nodes should be reloaded 
 		Events.postEvent(new Event("onLoadOnSave", comp, new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged)}));
 	}
@@ -771,9 +789,8 @@ public class DataBinder {
 		}
 		final Set nodeSameNodes = node.getSameNodes();
 		final Set binderSameNodes = getBeanSameNodes(bean);
-		
-		//variable node(with _var) is special, sameNodes will not keep only variable node in binderSameNodes and nodeSameNodes.
-		//e.g. a Listitem bean but not a selected bean
+		//variable node(with _var) is special. Assume selectedItem then _var. 
+		//e.g. a Listitem but no selectedItem yet
 		if (node.isVar() && binderSameNodes == null) {
 			return;
 		}
@@ -911,7 +928,9 @@ public class DataBinder {
 			final Object bean = data[3]; //saved bean
 			final boolean refChanged = ((Boolean)data[4]).booleanValue(); //whether bean itself changed
 			final Component savecomp = event.getTarget(); //saved comp that trigger this load-on-save event
-			loadAllNodes(bean, node, savecomp, savebinding, refChanged);
+			if (savecomp != null) {
+				loadAllNodes(bean, node, savecomp, savebinding, refChanged);
+			}
 		}
 		
 		public boolean isAsap() {
@@ -935,7 +954,12 @@ public class DataBinder {
 			
 			//mark as walked already
 			walkedNodes.add(node);
-
+			
+			//the component might have been removed
+			if (collectionComp == null) {
+				return;
+			}
+			
 			//loading
 			collectionComp = loadBindings(bean, node, collectionComp, savebinding, loadedBindings, refChanged);
 			
@@ -989,7 +1013,6 @@ public class DataBinder {
 					continue;
 				}
 				loadedBindings.add(binding);
-				
 				/* save then load might change the format, so still load back
 				if (binding == savebinding) {
 					continue;

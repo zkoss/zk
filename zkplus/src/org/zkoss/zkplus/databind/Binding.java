@@ -265,11 +265,9 @@ import java.util.LinkedHashSet;
 			return; //cannot save, a control attribute, or a detached component, skip!
 		}
 		try {
-			Object val = Fields.get(comp, _attr);
-			if (_converter != null) {
-				val = _converter.coerceToBean(val, comp);
-			}
-			_binder.setBeanAndRegisterBeanSameNodes(comp, val, this, _expression, _converter == null);
+			Object rawval = Fields.get(comp, _attr);
+			Object val = (_converter == null) ? rawval : _converter.coerceToBean(rawval, comp);
+			_binder.setBeanAndRegisterBeanSameNodes(comp, val, this, _expression, _converter == null, rawval);
 		} catch (ClassCastException ex) {
 			throw UiException.Aide.wrap(ex);
 		} catch (NoSuchMethodException ex) {
