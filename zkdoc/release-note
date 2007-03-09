@@ -27,6 +27,7 @@ ZK 2.3.0 Freshly
   1673842: A way to let UiFactory decides if a request is a richlet
   1675626: Portlet supports richlet by specifying zk_richlet
   1651944: Add support of tabIndex to Listbox and Checkbox
+  1677053: New window look and easy to customize
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
