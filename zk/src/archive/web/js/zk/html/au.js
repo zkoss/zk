@@ -1263,7 +1263,8 @@ zkau.setMeta = function (cmp, info) {
 		zk.error(mesg.COMP_OR_UUID_REQUIRED);
 		return;
 	}
-	zkau._metas[$uuid(id)] = info;
+	if (info) zkau._metas[$uuid(id)] = info;
+	else delete zkau._metas[$uuid(id)]; //save memory
 };
 /** Returns the info by specified any child component and the type.
  */
@@ -1272,7 +1273,10 @@ zkau.getMetaByType = function (el, type) {
 	return el != null ? zkau.getMeta(el): null;
 };
 
-/** Cleans up meta of the specified component. */
+/** Cleans up meta of the specified component.
+ * <p>Note: this method is called automatically if z.type is defined.
+ * So, you need to call this method only if no z.type -- very rare.
+ */
 zkau.cleanupMeta = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) {

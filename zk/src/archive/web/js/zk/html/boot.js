@@ -19,6 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 //zk//
 if (!window.zk) { //avoid eval twice
 zk = {};
+zk.build = "3Q"; //increase this if we want the browser to reload JavaScript
 
 /** Listen an event.
  * Why not to use prototype's Event.observe? Performance.
@@ -89,10 +90,6 @@ zk.enableESC = function () {
 };
 
 //////////////////////////////////////
-/** Default version used for all modules that don't define their individual
- * version.
- */
-zk.build = "3P"; //increase this if we want the browser to reload JavaScript
 zk.mods = {}; //ZkFns depends on it
 
 /** Browser info. */
@@ -564,6 +561,7 @@ zk.cleanupAt = function (n) {
 	var type = $type(n);
 	if (type) {
 		zk.eval(n, "cleanup", type);
+		zkau.cleanupMeta(n); //note: it is called only if type is defined
 		delete zk._visicmps[n.id];
 		delete zk._hidecmps[n.id];
 		delete zk._sizecmps[n.id];
