@@ -49,6 +49,7 @@ ZK 2.3.0 Freshly
   1676393: Incorrectly override the "binder" variable
   1677072: (Manual) Variables defined in zscript shall be visible to EL expr
   1677090: EL's variable resolved not in the same order as interpreter
+  1676629: Datebox stops working after "window.title" change
 
 * Upgrade Notes:
   + Removed InterPortletFilter from web.xml since it is no longer required.
