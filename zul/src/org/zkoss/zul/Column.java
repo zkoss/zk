@@ -22,8 +22,10 @@ import java.util.Iterator;
 import java.util.Comparator;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Classes;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
@@ -142,7 +144,9 @@ public class Column extends HeaderElement {
 	IllegalAccessException {
 		if (clsnm == null || clsnm.length() == 0) return null;
 
-		final Class cls = getZScriptClass(clsnm);
+		final Page page = getPage();
+		final Class cls = page != null ?
+			page.getZScriptClass(clsnm): Classes.forNameByThread(clsnm);
 		if (cls == null)
 			throw new ClassNotFoundException(clsnm);
 		if (!Comparator.class.isAssignableFrom(cls))
