@@ -52,6 +52,8 @@ ZK 2.3.0 Freshly
   1676629: Datebox stops working after "window.title" change
 
 * Upgrade Notes:
+  + The way to customize window's look and feel is changed.
+    Refer to the Developer's Guide for details.
   + Removed InterPortletFilter from web.xml since it is no longer required.
   + Implements the getRichlet and isRichlet method for your UiFactory class,
     if you doesn't extend it from AbstractUiFactory.
