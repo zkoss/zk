@@ -23,7 +23,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<treecol label="From"/>
 	</treecols>
 	<treechildren>
-		<treeitem open="false" onOpen="load()">
+		<treeitem open="false" onOpen="if (event.open) load()">
 			<treerow>
 				<treecell label="Intel Snares XML"/>
 				<treecell label="David Needle"/>

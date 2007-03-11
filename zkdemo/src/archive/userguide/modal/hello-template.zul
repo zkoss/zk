@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="win" title="1st window" border="normal" width="200px"
-closable="true" onShow="self.detach()">
+closable="true">
 	Hello, World!
 	<button label="OK" onClick="win.detach()"/>
 </window>
