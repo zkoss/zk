@@ -21,6 +21,16 @@ if (!window.zk) { //avoid eval twice
 zk = {};
 zk.build = "3Q"; //increase this if we want the browser to reload JavaScript
 
+/** Browser info. */
+zk.agent = navigator.userAgent.toLowerCase();
+zk.safari = zk.agent.indexOf("safari") != -1;
+zk.opera = zk.agent.indexOf("opera") != -1;
+zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
+zk.ie7 = zk.agent.indexOf("msie 7") != -1;
+zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
+zk.windows = zk.agent.indexOf("windows") != -1;
+zk.macintosh = zk.agent.indexOf("macintosh") != -1;
+
 /** Listen an event.
  * Why not to use prototype's Event.observe? Performance.
  */
@@ -61,18 +71,27 @@ zk.disableESC = function () {
 		};
 		zk.listen(document, "keydown", zk._noESC);
 
-		//if error occurs, the loading will be never ended, so try to ignore it
-		//we cannot use zk.listen; otherwise, no way to get back msg...(FF)
 		//FUTURE: onerror not working in Safari and Opera
+		//if error occurs, loading will be never ended, so try to ignore
+		//we cannot use zk.listen. reason: no way to get back msg...(FF)
 		zk._oldOnErr = window.onerror;
 		zk._onErrChanged = true;
-		window.onerror = function (msg, url, lineno) {
-			msg = mesg.FAILED_TO_LOAD + url + "\n" + mesg.FAILED_TO_LOAD_DETAIL
-				+ "\n" + mesg.CAUSE + msg+" (line "+lineno + ")";
-			if (zk.error) zk.error(msg);
-			else alert(msg);
-			return true;
-		};
+		window.onerror =
+	function (msg, url, lineno) {
+		//We display errors only for local class web resource
+		//It is annoying to show error if google analytics's js not found
+		if (url.indexOf(location.host) >= 0) {
+			var v = zk_action.lastIndexOf(';');
+			var v = v >= 0 ? zk_action.substring(0, v): zk_action;
+			if (url.indexOf(v + "/web/") >= 0) {
+				msg = mesg.FAILED_TO_LOAD + url + "\n" + mesg.FAILED_TO_LOAD_DETAIL
+					+ "\n" + mesg.CAUSE + msg+" (line "+lineno + ")";
+				if (zk.error) zk.error(msg);
+				else alert(msg);
+				return true;
+			}
+		}
+	};
 	}
 };
 zk.disableESC(); //disable it as soon as possible
@@ -91,16 +110,6 @@ zk.enableESC = function () {
 
 //////////////////////////////////////
 zk.mods = {}; //ZkFns depends on it
-
-/** Browser info. */
-zk.agent = navigator.userAgent.toLowerCase();
-zk.safari = zk.agent.indexOf("safari") != -1;
-zk.opera = zk.agent.indexOf("opera") != -1;
-zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
-zk.ie7 = zk.agent.indexOf("msie 7") != -1;
-zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
-zk.windows = zk.agent.indexOf("windows") != -1;
-zk.macintosh = zk.agent.indexOf("macintosh") != -1;
 
 /** Note: it is easy to cause problem with EMBED, if we use prototype's $() since
  * it tried to extend the element.
