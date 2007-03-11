@@ -35,6 +35,14 @@ import org.zkoss.zk.ui.event.Events;
  * {@link #setAutodrop}.
  *
  * <p>Default {@link #getSclass}: combobox.
+ *
+ * <p>Events: onOpen<br/>
+ * Developers can listen to the onOpen event and initializes it
+ * when {@link org.zkoss.ui.event.OpenEvent#isOpen} is true, and/or
+ * clean up if false.
+ *
+ * <p>Note: to have better performance, onOpen is sent only if an ASAP event
+ * listener is registered.
  * 
  * @author tomyeh
  * @see Comboitem

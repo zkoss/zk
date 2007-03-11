@@ -56,8 +56,22 @@ import org.zkoss.zul.au.*;
  * are not visible in Y's space. To retrieve a descendant, say Z, of X, 
  * you have to invoke Y.getFellow('X').getFellow('Z').
  *
- * <p>Events:<br>
- * onMove, onShow, onOK, onCacnel and onCtrlKey.
+ * <p>Events:<br/>
+ * onMove, onOpen, onClose, onOK, onCacnel and onCtrlKey.<br/>
+ * Note: to have better performance, onOpen is sent only if an ASAP event
+ * listener is registered.
+ *
+ * <p><code>onClose</code> is sent when the close button is pressed
+ * (if {@link #isClosable} is true). The window has to detach or hide
+ * the window. By default, {@link #onClose} detaches the window. To prevent
+ * it from detached, you have to call {@link org.zkoss.zk.ui.event.Event#stopPropagation}
+ * to prevent {@link #onClose} is called.
+ *
+ * <p>On the other hand, <code>onOpen</code> is sent when a popup
+ * window (i.e., {@link #getMode} is popup) is closed due to user's activity
+ * (such as press ESC). This event is only a notification.
+ * In other words, the popup is hidden before the event is sent to the server.
+ * The application cannot prevent the window from being hidden.
  *
  * @author tomyeh
  */
@@ -683,6 +697,8 @@ public class Window extends XulElement implements IdSpace {
 		appendAsapAttr(sb, Events.ON_OK);
 		appendAsapAttr(sb, Events.ON_CANCEL);
 		appendAsapAttr(sb, Events.ON_CTRL_KEY);
+		appendAsapAttr(sb, Events.ON_OPEN);
+		//no need to generate ON_CLOSE since it is always sent (as ASAP)
 
 		final String clkattrs = getAllOnClickAttrs(false);
 		if (clkattrs != null) sb.append(clkattrs);

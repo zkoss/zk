@@ -143,9 +143,10 @@ zkMenu.open = function (menu, toggle) {
 		var top = getZKAttr(menu, "top") == "true"; //top-level menu
 		var ref = top || $tag(menu) != "TD" ? menu: menu.parentNode; //use TR if not top
 		var pos = top && getZKAttr(menu, "vert") == null ? "after-start": "end_before";
-		if (getZKAttr(pp, "onOpen"))
-			zkau.send({uuid: pp.id, cmd: "onOpen", data: [true, menu.id]});
 		zkMenu._open(pp, top, ref, pos);
+
+		if (zkau.asap(pp, "onOpen"))
+			zkau.send({uuid: pp.id, cmd: "onOpen", data: [true, menu.id]});
 	}
 };
 /** Opens the specified menupopup
@@ -202,6 +203,10 @@ zkMenu._close = function (pp) {
 			rmZKAttr(pp, "vparent");
 		}*/
 		pp.style.display = "none";
+
+		if (zkau.asap(pp, "onOpen"))
+			zkau.send({uuid: pp.id, cmd: "onOpen", data: [false]});
+			//for better performance, sent only if ASAP
 	}
 };
 
@@ -270,8 +275,9 @@ zkMpop = {};
 /** Called by au.js's context menu. */
 zkMpop.context = function (ctx, ref) {
 	if (ctx.style.display == "none") {
-		if (getZKAttr(ctx, "onOpen"))
-			zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
 		zkMenu._open(ctx, true);
+
+		if (zkau.asap(ctx, "onOpen"))
+			zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
 	}
 };

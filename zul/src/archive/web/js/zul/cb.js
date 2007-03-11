@@ -255,8 +255,8 @@ zkCmbox.open = function (pp, hilite) {
 
 	zkCmbox._open(cb, uuid, pp, hilite);
 
-	zkau.send({uuid: uuid, cmd: "onOpen", data: [true]},
-		zkau.asapTimeout(cb, "onOpen"));
+	if (zkau.asap(cb, "onOpen"))
+		zkau.send({uuid: uuid, cmd: "onOpen", data: [true]});
 };
 zkCmbox._open = function (cb, uuid, pp, hilite) {
 	var ppofs = zkCmbox._popupofs(pp);
@@ -486,6 +486,11 @@ zkCmbox.close = function (pp, focus) {
 
 	if (focus)
 		zk.focusById(uuid + "!real");
+
+	var cb = $parentByType(pp, "Cmbox");
+	if (!cb) cb = $parentByType(pp, "Bdbox");
+	if (cb && zkau.asap(cb, "onOpen"))
+		zkau.send({uuid: cb.id, cmd: "onOpen", data: [false]});
 };
 
 zk.FloatCombo = Class.create();

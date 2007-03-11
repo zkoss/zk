@@ -25,13 +25,19 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * A container used to display menus. It should be placed inside a
  * {@link Menu}.
  *
- * <p>Supported event: onOpen.
+ * <p>Supported event: onOpen.<br/>
+ * Note: to have better performance, onOpen is sent only if an ASAP event
+ * listener is registered.
+ *
+ * <p>To load the content dynamically, you can listen to the onOpen event,
+ * and then create menuitem when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen}
+ * is true.
  *
  * <p>Default {@link #getSclass}: menupopup.
  *
@@ -44,9 +50,14 @@ public class Menupopup extends Popup {
 
 	//-- super --//
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		return typeRequired() ? attrs + " z.type=\"zul.menu.Mpop\"": attrs;
+		final StringBuffer sb =
+			new StringBuffer(64).append(super.getOuterAttrs());
+
+		appendAsapAttr(sb, Events.ON_OPEN);
+		if (typeRequired())
+			sb.append(" z.type=\"zul.menu.Mpop\"");
 			//to minimize HTML's size, generate z.type only if necessary
+		return sb.toString();
 	}
 	private boolean typeRequired() {
 		return !(getParent() instanceof Menu);

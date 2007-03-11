@@ -1073,6 +1073,7 @@
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="selected" type="xs:string" use="optional" />
 		<xs:attribute name="closable" type="xs:string" use="optional" />
+		<xs:attribute name="onClose" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 	</xs:complexType>
@@ -1407,7 +1408,7 @@
 		<xs:attribute name="onCancel" type="xs:string" use="optional" />
 		<xs:attribute name="onCtrlKey" type="xs:string" use="optional" />
 		<xs:attribute name="onMove" type="xs:string" use="optional" />
-		<xs:attribute name="onShow" type="xs:string" use="optional" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attribute name="onClose" type="xs:string" use="optional" />
 		<xs:attribute name="onZIndex" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />

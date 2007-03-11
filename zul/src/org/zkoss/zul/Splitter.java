@@ -36,6 +36,8 @@ import org.zkoss.zul.impl.XulElement;
  * inside the splitter, and one sibling element of the splitter is collapsed
  * when the grippy is clicked.
  *
+ * <p>Events: onOpen
+ *
  * @author tomyeh
  */
 public class Splitter extends XulElement {

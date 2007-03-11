@@ -91,8 +91,9 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 			//Thus, we only handle 'enlargement', i.e., toOpen is true
 
 		zkau.send({uuid: getZKAttr(row, "item"),
-			cmd: "onOpen", data: [getZKAttr(row, "open")]},
+			cmd: "onOpen", data: [toOpen]},
 			zkau.asapTimeout(row, "onOpen"));
+			//always send since the client has to update Openable
 	},
 	/** Shows or hides all children
 	 * @param toOpen whether to toOpen

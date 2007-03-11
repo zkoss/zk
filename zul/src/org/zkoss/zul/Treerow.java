@@ -142,6 +142,7 @@ public class Treerow extends XulElement {
 		if (item.isFocusRequired())
 			sb.append(" z.focus=\"true\"");
 		appendAsapAttr(sb, Events.ON_OPEN);
+			//it calls isAsapRequired, so it also tested Treeitem for onOpen
 
 		final String clkattrs = item.getAllOnClickAttrs(false);
 		if (clkattrs != null) sb.append(clkattrs);

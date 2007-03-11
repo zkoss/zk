@@ -34,9 +34,17 @@ import org.zkoss.zk.au.AuScript;
  *
  * <p>Default {@link #getSclass}: bandbox.
  *
+ * <p>Events: onOpen<br/>
+ * Developers can listen to the onOpen event and initializes it
+ * when {@link org.zkoss.ui.event.OpenEvent#isOpen} is true, and/or
+ * clean up if false.
+ *
+ * <p>Note: to have better performance, onOpen is sent only if an ASAP event
+ * listener is registered.
+ *
  * @author tomyeh
  */
-public class Bandbox extends Textbox { //note: it does NOT implement Openable to avoid redudant roundtrip
+public class Bandbox extends Textbox {
 	private transient Bandpopup _drop;
 	private String _img = "~./zul/img/bandbtn.gif";
 	private boolean _autodrop, _btnVisible = true;
