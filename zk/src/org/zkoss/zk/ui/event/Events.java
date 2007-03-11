@@ -91,9 +91,6 @@ public class Events {
 	/** The onOpen event (used with {@link OpenEvent}).
 	 */
 	public static final String ON_OPEN = "onOpen";
-	/** The onShow event (used with {@link ShowEvent}).
-	 */
-	public static final String ON_SHOW = "onShow";
 	/** The onClose event (used with {@link Event})
 	 * used to denote the close button is pressed.
 	 */

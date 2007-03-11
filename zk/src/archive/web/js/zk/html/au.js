@@ -219,7 +219,12 @@ zkau._checkProgress = function () {
  * It is mainly used to generate the timeout argument of zkau.send.
  */
 zkau.asapTimeout = function (cmp, evtnm) {
-	return getZKAttr($e(cmp), evtnm) == "true" ? 25: -1;
+	return zkau.asap(cmp, evtnm) ? 25: -1;
+};
+/** Returns whether any ASAP event is registered for the specified event.
+ */
+zkau.asap = function (cmp, evtnm) {
+	return getZKAttr($e(cmp), evtnm) == "true" ;
 };
 
 /** Returns the event list of the specified desktop ID.
@@ -1195,12 +1200,6 @@ zkau.sendOnClose = function (uuid, closeFloats) {
 	el = $e(uuid);
 	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
 };
-zkau.sendOnShow = function (uuid, visible) {
-	var el = $e(uuid);
-	if (el) action.hide(el);
-	zkau.send({uuid: el.id, cmd: "onShow", data: [visible]},
-		zkau.asapTimeout(el, "onShow"));
-};
 
 /** Closes popups and floats. Return false if nothing changed. */
 zkau.closeFloats = function (owner) {
@@ -1212,11 +1211,18 @@ zkau.closeFloats = function (owner) {
 		var uuid = zkau._popups.pop();
 		if (!uuid) break;
 
-		if (zk.isAncestor($e(uuid), owner)) {
+		var n = $e(uuid);
+		if (zk.isAncestor(n, owner)) {
 			popups.push(uuid);
 		} else {
 			closed = true;
-			zkau.sendOnShow(uuid, false);
+			if (n) {
+				action.hide(n);
+				if (zkau.asap(n, "onOpen"))
+					zkau.send({uuid: n.id, cmd: "onOpen", data: [false]}, 15);
+					//to have better performance, we don't send onOpen
+					//until an ASAP listener is registered.
+			}
 		}
 	}
 	zkau._popups = popups;

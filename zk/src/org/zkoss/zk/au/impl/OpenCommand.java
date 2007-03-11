@@ -57,8 +57,6 @@ public class OpenCommand extends Command {
 		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
 		if (xc instanceof Openable)
 			((Openable)xc).setOpenByClient(open);
-		else if (!open)
-			throw new UiException("If Openable not implemented by getExtraCtrl(), open must be true");
 		Events.postEvent(new OpenEvent(getId(), comp, open, ref));
 	}
 }

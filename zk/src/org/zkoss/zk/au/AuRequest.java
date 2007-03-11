@@ -227,7 +227,6 @@ public class AuRequest {
 		new ScrollCommand(Events.ON_SCROLL, Command.IGNORE_IMMEDIATE_OLD_EQUIV);
 
 		new SelectCommand(Events.ON_SELECT, 0);
-		new ShowCommand(Events.ON_SHOW, 0);
 
 		new ZIndexCommand(Events.ON_Z_INDEX, Command.IGNORE_OLD_EQUIV);
 	}

@@ -23,6 +23,17 @@ import org.zkoss.zk.ui.Component;
 /**
  * Represents an event cause by user's openning or closing
  * something at the client.
+ *
+ * <p>Note: it is a bit confusing but {@link Events#ON_CLOSE} is sent when
+ * user clicks a close button. It is a request to ask the server
+ * to close a window, a tab or others. If the server ignores the event,
+ * nothing will happen at the client. By default, the component is
+ * detached when receiving this event.
+ *
+ * <p>On the other hand, {@link Events#ON_OPEN} (with {@link OpenEvent}) is
+ * a notification. It is sent to notify the server that the client has
+ * opened or closed something.
+ * And, the server can not prevent the client from opening or closing.
  * 
  * @author tomyeh
  * @see org.zkoss.zk.ui.ext.client.Openable
