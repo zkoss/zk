@@ -212,6 +212,7 @@ public class ClassWebResource {
 				//Don't sendError. Reason: 1) IE waits and no onerror fired
 				//2) better to debug (user will tell us what went wrong)
 				data = ("(zk.error?zk.error:alert)('"+pi+" not found');").getBytes();
+					//FUTURE: zweb shall not depend on zk
 			} else {
 				if (Servlets.isIncluded(request)) log.error("Resource not found: "+pi);
 				response.sendError(response.SC_NOT_FOUND, pi+" not found.");
