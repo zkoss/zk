@@ -208,11 +208,10 @@ public class ClassWebResource {
 		final InputStream is = getResourceAsStream(pi);
 		final byte[] data;
 		if (is == null) {
-			if ("js".equals(ext) || "css".equals(ext)) {
-				//1. Don't sendError for them. Otherwise FF won't invoke onload
-				//2. always log because browser usually don't show error message for them
-				log.warning("Resource not found: "+pi);
-				data = new byte[0];
+			if ("js".equals(ext)) {
+				//Don't sendError. Reason: 1) IE waits and no onerror fired
+				//2) better to debug (user will tell us what went wrong)
+				data = ("zk.error('"+pi+" not found');").getBytes();
 			} else {
 				if (Servlets.isIncluded(request)) log.error("Resource not found: "+pi);
 				response.sendError(response.SC_NOT_FOUND, pi+" not found.");
