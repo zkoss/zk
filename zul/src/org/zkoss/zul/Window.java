@@ -559,14 +559,14 @@ public class Window extends XulElement implements IdSpace {
 
 	/** Returns the style class used for the inner div.
 	 *
-	 * <p>If {@link #getBorder} is "normal", "wi-<i>mode</i>" is returned,
-	 * where <i>mode</i> is the value returned by {@link #getMode}.
+	 * <p>If {@link #getBorder} is "normal", "wi-<i>sclass</i>" is returned,
+	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
 	 * Otherwise, "wi-<i>mode</i>-<i>border</i>",
 	 * where <i>border</i> is the value returned by {@link #getBorder}.
 	 */
 	public String getInnerSclass() {
 		final StringBuffer sb =
-			new StringBuffer(30).append("wi-").append(getMode());
+			new StringBuffer(30).append("wi-").append(getSclass());
 
 		final String border = getBorder();
 		if (!"normal".equals(border))
@@ -575,11 +575,11 @@ public class Window extends XulElement implements IdSpace {
 	}
 	/** Returns the style class used for the title.
 	 *
-	 * <p>It returns "wt-<i>mode</i>" is returned,
-	 * where <i>mode</i> is the value returned by {@link #getMode}.
+	 * <p>It returns "wt-<i>sclass</i>" is returned,
+	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
 	 */
 	public String getTitleSclass() {
-		return "wt-" + getMode();
+		return "wt-" + getSclass();
 	}
 
 	//-- super --//
