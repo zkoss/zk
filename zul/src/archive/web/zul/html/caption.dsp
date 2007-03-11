@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <table id="${self.uuid}" z.type="zul.widget.Capt"${self.outerAttrs}${self.innerAttrs} width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr valign="middle">
 	<td align="left" class="caption">${self.imgTag}<c:out value="${self.compoundLabel}"/></td>
-	<td align="right" id="${self.uuid}!cave"><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach></td>
+	<td align="right" class="caption" id="${self.uuid}!cave"><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach></td>
 <c:if test="${self.closableVisible}">
 	<td width="16"><img id="${self.parent.uuid}!close" src="${c:encodeURL('~./zul/img/close-off.gif')}"/></td>
 </c:if>
