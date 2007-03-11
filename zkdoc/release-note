@@ -28,6 +28,7 @@ ZK 2.3.0 Freshly
   1675626: Portlet supports richlet by specifying zk_richlet
   1651944: Add support of tabIndex to Listbox and Checkbox
   1677053: New window look and easy to customize
+  1678288: Replace onShow with onOpen with open = false
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
@@ -50,6 +51,8 @@ ZK 2.3.0 Freshly
   1677072: (Manual) Variables defined in zscript shall be visible to EL expr
   1677090: EL's variable resolved not in the same order as interpreter
   1676629: Datebox stops working after "window.title" change
+  1678338: Menupopup failed to send onOpen when closing up
+  1678343: Combobox/bandbox failed to send onOpen when closing dropdown
 
 * Upgrade Notes:
   + The way to customize window's look and feel is changed.
@@ -63,6 +66,7 @@ ZK 2.3.0 Freshly
 	}
   + Implements the getControls method of the LisitemRendererExt interface
     instead of the shallDetachOnRender method.
+  + Use onOpen instead of onShow to be notified when a popup is closed.
 
 * Notes for upgrading from 2.3.0 RC
   + getSuspsendedThreads is moved from Desktop to DesktopCtrl
