@@ -266,6 +266,8 @@ zkCkbox.onclick = function (cmp) {
 zkWnd = {};
 zkWnd._szs = {}
 zkWnd.init = function (cmp) {
+	zkWnd._fixHgh(cmp);
+
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
@@ -296,13 +298,49 @@ zkWnd.cleanup = function (cmp) {
 };
 zkWnd.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);
-	if (nm == "z.sizable") zkWnd.setSizable(cmp, val == "true");
+	switch (nm) {
+	case "z.sizable":
+		zkWnd.setSizable(cmp, val == "true");
+		break;
+
+	case "z.cntStyle":
+		var n = $e(cmp.id + "!cave");
+		if (n) zk.setStyle(n, val != null ? val: "");
+		break;
+
+	case "style":
+	case "style.height":
+		zkWnd._fixHgh(cmp);
+	}
+		
 	return true;
 };
+zkWnd._fixHgh = function (cmp) {
+	var hgh = cmp.style.height;
+	if (hgh && hgh != "auto") {
+		var n = $e(cmp.id + "!cave");
+		if (n) {
+			if (zk.ie) {
+				hgh = cmp.clientHeight- n.offsetTop;
+			} else { //FF and Opera's offsetTop seems not working
+				hgh = cmp.clientHeight;
+				for (var p = n;;) {
+					var q = p.previousSibling;
+					if (!q) break;
+					if (q.offsetHeight) hgh -= q.offsetHeight;
+					p = q;
+				}
+			}
+			zk.setOffsetHeight(n, hgh);
+		}
+	}
+};
+/** Called by au.js when executing the outer command. */
 zkWnd.beforeOuter = function (cmp) {
 	if (zkau.wndmode[cmp.id] == "modal")
 		zkau.wndmode[cmp.id + "!modal"] = true; //so afterOuter know to doModal
 };
+/** Called by au.js when executing the outer command. */
 zkWnd.afterOuter = function (cmp) {
 	var nm = cmp.id + "!modal";
 	if (zkau.wndmode[nm]) {
@@ -431,7 +469,10 @@ zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
 	}
 	if (w != cmp.offsetWidth || h != cmp.offsetHeight) {
 		if (w != cmp.offsetWidth) cmp.style.width = w + "px";
-		if (h != cmp.offsetHeight) cmp.style.height = h + "px";
+		if (h != cmp.offsetHeight) {
+			cmp.style.height = h + "px";
+			zkWnd._fixHgh(cmp);
+		}
 		zkau.sendOnSize(cmp, keys);
 	}
 	if (l != null || t != null) {

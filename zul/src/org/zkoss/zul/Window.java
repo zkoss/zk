@@ -94,6 +94,8 @@ public class Window extends XulElement implements IdSpace {
 	private boolean _closable;
 	/** Whether the window is sizable. */
 	private boolean _sizable;
+	/** The style used for the content block. */
+	private String _cntStyle;
 
 	/** Embeds the window as normal component. */
 	private static final int EMBEDDED = 0;
@@ -521,14 +523,13 @@ public class Window extends XulElement implements IdSpace {
 			invalidate(); //re-init is required
 		}
 	}
-	/** Returns whether the width of the child column is sizable.
+	/** Returns whether the width of the width is sizable.
 	 */
 	public boolean isSizable() {
 		return _sizable;
 	}
-	/** Sets whether the width of the child column is sizable.
-	 * If true, an user can drag the border between two columns (e.g., {@link org.zkoss.zul.Column})
-	 * to change the widths of adjacent columns.
+	/** Sets whether the width of the width is sizable.
+	 * If true, an user can drag the border to change the window width.
 	 * <p>Default: false.
 	 */
 	public void setSizable(boolean sizable) {
@@ -571,14 +572,30 @@ public class Window extends XulElement implements IdSpace {
 		}
 	}
 
-	/** Returns the style class used for the inner div.
+	/** Returns the CSS style for the content block of the window.
+	 */
+	public String getContentStyle() {
+		return _cntStyle;
+	}
+	/** Sets the CSS style for the content block of the window.
+	 *
+	 * <p>Default: null.
+	 */
+	public void setContentStyle(String style) {
+		if (!Objects.equals(_cntStyle, style)) {
+			_cntStyle = style;
+			smartUpdate("z.cntStyle", _cntStyle);
+		}
+	}
+
+	/** Returns the style class used for the content block.
 	 *
 	 * <p>If {@link #getBorder} is "normal", "wi-<i>sclass</i>" is returned,
 	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
 	 * Otherwise, "wi-<i>mode</i>-<i>border</i>",
 	 * where <i>border</i> is the value returned by {@link #getBorder}.
 	 */
-	public String getInnerSclass() {
+	public String getContentSclass() {
 		final StringBuffer sb =
 			new StringBuffer(30).append("wi-").append(getSclass());
 
