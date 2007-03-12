@@ -29,6 +29,7 @@ ZK 2.3.0 Freshly
   1651944: Add support of tabIndex to Listbox and Checkbox
   1677053: New window look and easy to customize
   1678288: Replace onShow with onOpen with open = false
+  1678856: Scrollable window
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
