@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.event.SelectEvent;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Convert selected item to bean and vice versa.
@@ -35,7 +36,7 @@ import java.util.HashSet;
  * @author Henri
  */
 public class SelectedItemConverter implements TypeConverter {
-  public Object coerceToUi(Object val, Component comp) { 
+  public Object coerceToUi(Object val, Component comp) { //load
   	Listbox lbx = (Listbox) comp;
   	if (val != null) {
   		final ListModel xmodel = lbx.getModel();
@@ -52,6 +53,16 @@ public class SelectedItemConverter implements TypeConverter {
     			}
   				return item;
   			}
+  		} else if (xmodel == null) { //no model case, assume Listitem.value to be used with selectedItem
+System.out.println("val="+val);
+  			//iterate to find the selected item assume the value (select mold)
+  			for (final Iterator it = lbx.getItems().iterator(); it.hasNext();) {
+  				final Listitem li = (Listitem) it.next();
+System.out.println("li="+li);
+  				if (val.equals(li.getValue())) {
+  					return li;
+  				}
+  			}
   		} else {
   			throw new UiException("model of the databind listbox "+lbx+" must be an instanceof of org.zkoss.zkplus.databind.BindingListModel." + xmodel);
   		}
@@ -63,7 +74,8 @@ public class SelectedItemConverter implements TypeConverter {
   	Listbox lbx = (Listbox) comp;
   	if (val != null) {
   		ListModel model = lbx.getModel();
- 			return model != null ? model.getElementAt(((Listitem) val).getIndex()) : null;
+  		//no model case, assume Listitem.value to be used with selectedItem
+ 			return model != null ? model.getElementAt(((Listitem) val).getIndex()) : ((Listitem) val).getValue();
   	}
  		return null;
   }
