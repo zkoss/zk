@@ -30,6 +30,8 @@ ZK 2.3.0 Freshly
   1677053: New window look and easy to customize
   1678288: Replace onShow with onOpen with open = false
   1678856: Scrollable window
+  1679024: Scrollable groupbox (mold=3d)
+  1642895: Groupbox without a border
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
@@ -54,6 +56,7 @@ ZK 2.3.0 Freshly
   1676629: Datebox stops working after "window.title" change
   1678338: Menupopup failed to send onOpen when closing up
   1678343: Combobox/bandbox failed to send onOpen when closing dropdown
+  1674064: Groupbox mold=3d with height not correct shown
 
 * Upgrade Notes:
   + The way to customize window's look and feel is changed.
