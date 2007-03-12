@@ -185,7 +185,7 @@ public class ClassWebResource {
 				final Interpretation cnt =
 					(Interpretation)_dspCache.get(pi);
 				if (cnt == null) {
-					if (Servlets.isIncluded(request)) log.error("Resource not found: "+pi);
+					if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+pi);
 						//It might be eaten, so log the error
 					response.sendError(response.SC_NOT_FOUND, pi+" not found.");
 					return;
