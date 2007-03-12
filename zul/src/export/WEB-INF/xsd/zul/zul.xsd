@@ -645,6 +645,7 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="open" type="xs:string" use="optional" />
 		<xs:attribute name="closable" type="xs:string" use="optional" />
+		<xs:attribute name="contentStyle" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
