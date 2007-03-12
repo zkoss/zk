@@ -54,11 +54,9 @@ public class SelectedItemConverter implements TypeConverter {
   				return item;
   			}
   		} else if (xmodel == null) { //no model case, assume Listitem.value to be used with selectedItem
-System.out.println("val="+val);
   			//iterate to find the selected item assume the value (select mold)
   			for (final Iterator it = lbx.getItems().iterator(); it.hasNext();) {
   				final Listitem li = (Listitem) it.next();
-System.out.println("li="+li);
   				if (val.equals(li.getValue())) {
   					return li;
   				}
