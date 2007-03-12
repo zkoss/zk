@@ -18,12 +18,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.lang.Objects;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.ext.client.Openable;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -33,6 +34,8 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Groupbox extends XulElement {
 	private Caption _caption;
+	/** The style used for the content block. */
+	private String _cntStyle;
 	private boolean _open = true, _closable = true;
 
 	/** Returns the caption of this groupbox.
@@ -76,6 +79,35 @@ public class Groupbox extends XulElement {
 			_closable = closable;
 			smartUpdate("z.closable", closable);
 		}
+	}
+
+	/** Returns the CSS style for the content block of the groupbox.
+	 * Used only if {@link #getMold} is not default.
+	 */
+	public String getContentStyle() {
+		return _cntStyle;
+	}
+	/** Sets the CSS style for the content block of the groupbox.
+	 * Used only if {@link #getMold} is not default.
+	 *
+	 * <p>Default: null.
+	 */
+	public void setContentStyle(String style) {
+		if (!Objects.equals(_cntStyle, style)) {
+			_cntStyle = style;
+			smartUpdate("z.cntStyle", _cntStyle);
+		}
+	}
+	/** Returns the style class used for the content block of the groupbox.
+	 * Used only if {@link #getMold} is not default.
+	 *
+	 * <p>If {@link #getSclass} is null, "gc-default" is returned,
+	 * Otherwise, "gc-<i>sclass</i>",
+	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
+	 */
+	public String getContentSclass() {
+		final String sclass = getSclass();
+		return sclass == null ? "gc-default": "gc-" + sclass;
 	}
 
 	//-- super --//

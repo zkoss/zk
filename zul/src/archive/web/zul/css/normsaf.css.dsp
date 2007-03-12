@@ -69,25 +69,25 @@ div.embedded, div.modal, div.overlapped, div.popup, div.wndcyan {
 	margin: 0; padding: 0;
 }
 
-div.wi-embedded, div.wi-embedded-none, div.wi-wndcyan {
-	padding:2px; background: white;
+div.wc-embedded, div.wc-embedded-none, div.wc-wndcyan {
+	padding: 2px; background: white;
 }
-div.wi-embedded, div.wi-wndcyan {
-	border: 1px solid #aab;
+div.wc-embedded, div.wc-wndcyan {
+	padding: 3px; border: 1px solid #aab;
 }
-div.wi-modal, div.wi-modal-none {
-	padding:2px; background: #f0f0d8;
+div.wc-modal, div.wc-modal-none {
+	padding: 2px; background: #f0f0d8;
 }
-div.wi-overlapped, div.wi-overlapped-none {
-	padding:2px; background: white;
+div.wc-overlapped, div.wc-overlapped-none {
+	padding: 2px; background: white;
 }
-div.wi-popup, div.wi-popup-none {
-	padding:1px; background: white;
+div.wc-modal, div.wc-overlapped {
+	padding: 4px; border: 2px solid #1854c2;
 }
-div.wi-modal, div.wi-overlapped {
-	border: 2px solid #1854c2;
+div.wc-popup, div.wc-popup-none {
+	padding: 1px; background: white;
 }
-div.wi-popup {
+div.wc-popup {
 	border: 1px solid #1854c2;
 }
 
@@ -317,7 +317,10 @@ tr.grid-od td.gc {
 	text-decoration: underline;
 }
 
-tr.tabpanel td.tabpanel-hr, div.tabpanel-accordion, div.groupbox-3d { <%-- horz, accd, gb-3d --%>
+div.gc-default { <%-- content of 3d groupbox --%>
+	border: 1px solid #5C6C7C; padding: 5px;
+}
+tr.tabpanel td.tabpanel-hr, div.tabpanel-accordion { <%-- horz, accd --%>
 	border-left: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }

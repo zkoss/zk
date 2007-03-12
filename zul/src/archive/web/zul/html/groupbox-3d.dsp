@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}" z.type="zul.widget.Grbox"${self.outerAttrs}${self.innerAttrs}>
@@ -42,17 +41,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </tr>
 </table>
 </c:if>
-	<div id="${self.uuid}!slide"${self.open?'':' style="display:none"'} class="groupbox-3d"><div id="${self.uuid}!cave"<c:if test="${empty self.caption}"> style="border: 1px solid #5C6C7C"</c:if>>
+<c:set var="gcExtStyle" value="${c:cat(empty self.caption ? null: 'border-top:0;', self.contentStyle)}"/>
+	<div id="${self.uuid}!slide"${self.open?'':' style="display:none"'}><div id="${self.uuid}!cave" class="${self.contentSclass}"${c:attr('style',gcExtStyle)}>
 	<c:forEach var="child" items="${self.children}">
 	<c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if>
 	</c:forEach>
 	</div></div>
 <%-- shadow --%>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<table id="${self.uuid}!sdw" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
- <td width="6"><h:img width="6" height="6" src="~./img/shdlf.gif"/></td>
- <td style="background-image:url(${c:encodeURL('~./img/shdmd.gif')})"><h:img width="1" height="1" src="~./img/spacer.gif"/></td>
- <td width="6"><h:img width="6" height="6" src="~./img/shdrg.gif"/></td>
+ <td width="6"><img width="6" height="6" src="${c:encodeURL('~./img/shdlf.gif')}"/></td>
+ <td style="background-image:url(${c:encodeURL('~./img/shdmd.gif')})"><img width="1" height="1" src="${c:encodeURL('~./img/spacer.gif')}"/></td>
+ <td width="6"><img width="6" height="6" src="${c:encodeURL('~./img/shdrg.gif')}"/></td>
 </tr>
 </table>
 	</td>

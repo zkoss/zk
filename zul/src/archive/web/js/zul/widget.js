@@ -297,39 +297,41 @@ zkWnd.cleanup = function (cmp) {
 		zul.endModal(cmp.id); //it also clear wndmode[cmp.id]
 };
 zkWnd.setAttr = function (cmp, nm, val) {
-	zkau.setAttr(cmp, nm, val);
 	switch (nm) {
 	case "z.sizable":
+		zkau.setAttr(cmp, nm, val);
 		zkWnd.setSizable(cmp, val == "true");
-		break;
+		return true;
 
 	case "z.cntStyle":
 		var n = $e(cmp.id + "!cave");
-		if (n) zk.setStyle(n, val != null ? val: "");
-		break;
+		if (n) {
+			zk.setStyle(n, val != null ? val: "");
+			zkWnd._fixHgh(cmp); //border's dimension might be changed
+		}
+		return true;  //no need to store z.cntType
 
 	case "style":
 	case "style.height":
+		zkau.setAttr(cmp, nm, val);
 		zkWnd._fixHgh(cmp);
+		return true;
 	}
-		
-	return true;
+	return false;
 };
 zkWnd._fixHgh = function (cmp) {
 	var hgh = cmp.style.height;
 	if (hgh && hgh != "auto") {
 		var n = $e(cmp.id + "!cave");
 		if (n) {
-			if (zk.ie) {
-				hgh = cmp.clientHeight- n.offsetTop;
-			} else { //FF and Opera's offsetTop seems not working
-				hgh = cmp.clientHeight;
-				for (var p = n;;) {
-					var q = p.previousSibling;
-					if (!q) break;
-					if (q.offsetHeight) hgh -= q.offsetHeight;
-					p = q;
-				}
+			hgh = cmp.clientHeight;
+			for (var p = n, q; q = p.previousSibling;) {
+				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
+				p = q;
+			}
+			for (var p = n, q; q = p.nextSibling;) {
+				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
+				p = q;
 			}
 			zk.setOffsetHeight(n, hgh);
 		}
@@ -521,10 +523,51 @@ zkWnd._ghostsizing = function (dg, ghosting, pointer) {
 zkGrbox = {};
 zkCapt = {};
 
+zkGrbox.init = zkGrbox._fixHgh = function (cmp) {
+	var n = $e(cmp.id + "!cave");
+	if (n) {
+		var hgh = cmp.style.height;
+		if (hgh && hgh != "auto") {
+			hgh = cmp.clientHeight;
+			for (var p = n, q; q = p.previousSibling;) {
+				if (q.offsetHeight) hgh -= q.offsetHeight;
+				p = q;
+			}
+			for (var p = n, q; q = p.nextSibling;) {
+				if (q.offsetHeight) hgh -= q.offsetHeight;
+				p = q;
+			}
+			zk.setOffsetHeight(n, hgh);
+		}
+
+		//if no border-bottom, hide the shadow
+		var sdw = $(cmp.id + "!sdw");
+		if (sdw) {
+			var w = parseInt(Element.getStyle(n, "border-bottom-width")||"0", 10);
+			sdw.style.display = w ? "": "none";
+		}
+	}
+
+};
 zkGrbox.setAttr = function (cmp, nm, val) {
-	if ("z.open" == nm) {
+	switch (nm) {
+	case "z.open":
 		zkGrbox.open(cmp, val == "true", true);
-		return true; //no need to store the z.open attribute
+		return true; //no need to store z.open
+
+	case "z.cntStyle":
+		var n = $e(cmp.id + "!cave");
+		if (n) {
+			zk.setStyle(n, val != null ? val: "");
+			zkGrbox._fixHgh(cmp);
+		}
+		return true; //no need to store z.cntType
+
+	case "style":
+	case "style.height":
+		zkau.setAttr(cmp, nm, val);
+		zkGrbox._fixHgh(cmp);
+		return true;
 	}
 	return false;
 };
@@ -557,6 +600,7 @@ zkGrbox.open = function (gb, open, silent) {
 			if (!silent)
 				zkau.send({uuid: gb.id, cmd: "onOpen", data: [open]},
 					zkau.asapTimeout(gb, "onOpen"));
+			setTimeout(function() {zkGrbox._fixHgh(gb);}, 500); //after slide down
 		}
 	}
 };

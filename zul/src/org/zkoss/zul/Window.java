@@ -88,14 +88,14 @@ public class Window extends XulElement implements IdSpace {
 	private int _mode = EMBEDDED;
 	/** Used for doModal. */
 	private transient Object _mutex;
+	/** The style used for the content block. */
+	private String _cntStyle;
 	/** Whether this window is in a special mode that need to be ended. */
 	private boolean _moding;
 	/** Whether to show a close button. */
 	private boolean _closable;
 	/** Whether the window is sizable. */
 	private boolean _sizable;
-	/** The style used for the content block. */
-	private String _cntStyle;
 
 	/** Embeds the window as normal component. */
 	private static final int EMBEDDED = 0;
@@ -590,14 +590,14 @@ public class Window extends XulElement implements IdSpace {
 
 	/** Returns the style class used for the content block.
 	 *
-	 * <p>If {@link #getBorder} is "normal", "wi-<i>sclass</i>" is returned,
+	 * <p>If {@link #getBorder} is "normal", "wc-<i>sclass</i>" is returned,
 	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
-	 * Otherwise, "wi-<i>mode</i>-<i>border</i>",
+	 * Otherwise, "wc-<i>mode</i>-<i>border</i>",
 	 * where <i>border</i> is the value returned by {@link #getBorder}.
 	 */
 	public String getContentSclass() {
 		final StringBuffer sb =
-			new StringBuffer(30).append("wi-").append(getSclass());
+			new StringBuffer(30).append("wc-").append(getSclass());
 
 		final String border = getBorder();
 		if (!"normal".equals(border))

@@ -53,14 +53,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
    </c:otherwise>
   </c:choose>
 </table>
-  <c:set var="wiExtStyle" value="border-top:0;"/><%-- used below --%>
+  <c:set var="wcExtStyle" value="border-top:0;"/><%-- used below --%>
  </c:otherwise>
 </c:choose>
-<c:set var="wiExtStyle" value="${c:cat(wiExtStyle, self.contentStyle)}"/>
-<div id="${self.uuid}!cave" class="${self.contentSclass}"${c:attr('style',wiExtStyle)}>
+<c:set var="wcExtStyle" value="${c:cat(wcExtStyle, self.contentStyle)}"/>
+<div id="${self.uuid}!cave" class="${self.contentSclass}"${c:attr('style',wcExtStyle)}>
 <c:forEach var="child" items="${self.children}">
 <c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if>
 </c:forEach>
-</div>
+</div><%-- we don't generate shadow here since it looks odd when on top of modal mask --%>
 </div>
 </div>
