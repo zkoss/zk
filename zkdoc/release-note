@@ -57,7 +57,7 @@ ZK 2.3.0 Freshly
   1678338: Menupopup failed to send onOpen when closing up
   1678343: Combobox/bandbox failed to send onOpen when closing dropdown
   1674064: Groupbox mold=3d with height not correct shown
-	1679054: Simple Listbox databind not work
+  1679054: Simple Listbox databind not work
 	
 * Upgrade Notes:
   + The way to customize window's look and feel is changed.
