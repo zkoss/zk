@@ -1572,6 +1572,7 @@ action.slideDown = function (id, down) {
 		if (n && !getZKAttr(n, "sliding")) {
 			setZKAttr(n, "sliding", "show");
 			Effect.SlideDown(n, {duration:0.4, afterFinish: action._afterDown});
+				//duration must be less than 0.5 since other part assumes it
 		}
 	}
 };
@@ -1594,6 +1595,7 @@ action.slideUp = function (id, up) {
 			setZKAttr(n, "sliding", "hide");
 			zk.onHideAt(n); //callback first
 			Effect.SlideUp(n, {duration:0.4, afterFinish: action._afterUp});
+				//duration must be less than 0.5 since other part assumes it
 		}
 	}
 };
