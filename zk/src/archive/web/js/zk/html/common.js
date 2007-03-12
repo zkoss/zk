@@ -83,6 +83,18 @@ Array.prototype.contains = function (o) {
 
 zk.voidf = Prototype.emptyFunction;
 
+/** Sets the offset height. */
+zk.setOffsetHeight = function (el, hgh) {
+	hgh = hgh
+		- parseInt(Element.getStyle(el, "padding-top")||"0", 10)
+		- parseInt(Element.getStyle(el, "padding-bottom")||"0", 10)
+		- parseInt(Element.getStyle(el, "margin-top")||"0", 10)
+		- parseInt(Element.getStyle(el, "margin-bottom")||"0", 10)
+		- parseInt(Element.getStyle(el, "border-top-width")||"0", 10)
+		- parseInt(Element.getStyle(el, "border-bottom-width")||"0", 10);
+	el.style.height = (hgh > 0 ? hgh: 0) + "px";
+};
+
 /** Return el.offsetWidth, which solving Safari's bug. */
 zk.offsetWidth = function (el) {
 	if (!el) return 0;
