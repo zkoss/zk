@@ -54,6 +54,24 @@ public class Doublebox extends FormatInputElement {
 		final Object val = getRawValue();
 		return val != null ? ((Double)val).doubleValue(): 0.0;
 	}
+	/** Returns the value in integer. If null, zero is returned.
+	 */
+	public int intValue() throws WrongValueException {
+		final Object val = getRawValue();
+		return val != null ? ((Double)val).intValue(): 0;
+	}
+	/** Returns the value in long. If null, zero is returned.
+	 */
+	public long longValue() throws WrongValueException {
+		final Object val = getRawValue();
+		return val != null ? ((Double)val).longValue(): 0;
+	}
+	/** Returns the value in short. If null, zero is returned.
+	 */
+	public short shortValue() throws WrongValueException {
+		final Object val = getRawValue();
+		return val != null ? ((Double)val).shortValue(): 0;
+	}
 	/** Sets the value (in Double).
 	 * @exception WrongValueException if value is wrong
 	 */
