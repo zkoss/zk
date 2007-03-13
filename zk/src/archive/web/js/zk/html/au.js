@@ -687,10 +687,8 @@ zkau.endPopup = function (uuid) {
 	zkau._popups.remove(uuid);
 	zkau.hideCovered();
 	var cmp = $e(uuid);
-	if (cmp) {
-		delete zkau.wndmode[cmp.id];
-		zkau.fixWnd(cmp);
-	}
+	if (cmp) zkau.fixWnd(cmp);
+	delete zkau.wndmode[uuid];
 };
 /** Makes the component as overlapped. */
 zkau.doOverlapped = function (cmp) {
@@ -710,10 +708,8 @@ zkau.endOverlapped = function (uuid) {
 	zkau.hideCovered();
 
 	var cmp = $e(uuid);
-	if (cmp) {
-		delete zkau.wndmode[cmp.id];
-		zkau.fixWnd(cmp);
-	}
+	if (cmp) zkau.fixWnd(cmp);
+	delete zkau.wndmode[uuid];
 }
 /** Makes a window movable. */
 zkau.floatWnd = function (cmp, starteffect, endeffect) {
@@ -739,8 +735,8 @@ zkau.floatWnd = function (cmp, starteffect, endeffect) {
 /** Makes a window un-movable. */
 zkau.fixWnd = function (cmp) {
 	if (cmp) {
-		cmp.style.position = ""; //aculous changes it to relevant
 		zkau.cleanMovable(cmp.id);
+		cmp.style.position = ""; //aculous changes it to relative
 	}
 };
 
