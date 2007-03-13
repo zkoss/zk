@@ -272,7 +272,8 @@ public class UiEngineImpl implements UiEngine {
 		execCtrl.setCurrentPage(page);
 		execCtrl.setCurrentPageDefinition(pagedef);
 
-		final Configuration config = desktop.getWebApp().getConfiguration();
+		final WebApp wapp = desktop.getWebApp();
+		final Configuration config = wapp.getConfiguration();
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
@@ -294,7 +295,9 @@ public class UiEngineImpl implements UiEngine {
 					//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
 					if (!uv.isAborting())
-						execCreate(exec, page, pagedef, null);
+						execCreate(
+							((WebAppCtrl)wapp).getUiFactory(),
+							exec, page, pagedef, null);
 					inits.doAfterCompose(page);
 				} catch(Throwable ex) {
 					inits.doCatch(ex);
@@ -364,8 +367,8 @@ public class UiEngineImpl implements UiEngine {
 	 * Creates all child components defined in the specified definition.
 	 * @return the first component being created.
 	 */
-	private static final Component execCreate(Execution exec, Page page,
-	InstanceDefinition parentdef, Component parent)
+	private static final Component execCreate(UiFactory uf,
+	Execution exec, Page page, InstanceDefinition parentdef, Component parent)
 	throws IOException {
 		Component firstCreated = null;
 		final PageDefinition pagedef = parentdef.getPageDefinition();
@@ -379,14 +382,14 @@ public class UiEngineImpl implements UiEngine {
 				if (forEach == null) {
 					if (isEffective(childdef, page, parent)) {
 						final Component child =
-							execCreateChild(exec, page, parent, childdef);
+							execCreateChild(uf, exec, page, parent, childdef);
 						if (firstCreated == null) firstCreated = child;
 					}
 				} else {
 					while (forEach.next()) {
 						if (isEffective(childdef, page, parent)) {
 							final Component child =
-								execCreateChild(exec, page, parent, childdef);
+								execCreateChild(uf, exec, page, parent, childdef);
 							if (firstCreated == null) firstCreated = child;
 						}
 					}
@@ -415,16 +418,21 @@ public class UiEngineImpl implements UiEngine {
 		}
 		return firstCreated;
 	}
-	private static
-	Component execCreateChild(Execution exec, Page page, Component parent,
+	private static Component execCreateChild(UiFactory uf,
+	Execution exec, Page page, Component parent,
 	InstanceDefinition childdef) throws IOException {
 		if (ComponentDefinition.ZK == childdef.getComponentDefinition()) {
-			return execCreate(exec, page, childdef, parent);
+			return execCreate(uf, exec, page, childdef, parent);
+		} else if (childdef.isInlineMacro()) {
+			final Map props = new HashMap();
+			props.put("includer", parent);
+			childdef.evalProperties(props, page, parent);
+			return exec.createComponents(
+				childdef.getMacroURI(), parent, props);
 		} else {
-			final Component child = ((WebAppCtrl)exec.getDesktop().getWebApp())
-				.getUiFactory().newComponent(page, parent, childdef);
+			final Component child = uf.newComponent(page, parent, childdef);
 
-			execCreate(exec, page, childdef, child); //recursive
+			execCreate(uf, exec, page, childdef, child); //recursive
 
 			if (child instanceof AfterCompose)
 				((AfterCompose)child).afterCompose();
@@ -468,7 +476,9 @@ public class UiEngineImpl implements UiEngine {
 
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
-			final Component comp = execCreate(exec, page, pagedef, parent);
+			final Component comp = execCreate(
+				((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
+				exec, page, pagedef, parent);
 			inits.doAfterCompose(page);
 			return comp;
 		} catch (Throwable ex) {

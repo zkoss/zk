@@ -314,14 +314,19 @@ public class Parser {
 			if (macroURI != null) {
 				//if (D.ON && log.finerable()) log.finer("macro component definition: "+name);
 
+				final String inline = (String)params.remove("inline");
+				noEL("inline", inline, pi);
 				noEL("macro-uri", macroURI, pi);
 					//no EL because pagedef must be loaded to resolve
 					//the impl class before creating an instance of macro
 
+				final boolean bInline = "true".equals(inline);
 				compdef = new ComponentDefinition(
-					null, name, toAbsoluteURI(macroURI, false));
+					null, name, toAbsoluteURI(macroURI, false), bInline);
 				pgdef.getLanguageDefinition().initMacroDefinition(compdef);
 				if (!isEmpty(clsnm)) {
+					if (bInline)
+						throw new UiException("class not allowed with inline macros, "+pi.getLocator());
 					noEL("class", clsnm, pi);
 					compdef.setImplementationClass(clsnm);
 						//Resolve later since might defined in zscript

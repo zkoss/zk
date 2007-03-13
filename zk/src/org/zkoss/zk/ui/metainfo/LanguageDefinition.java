@@ -41,6 +41,7 @@ import org.zkoss.web.servlet.StyleSheet;
 import org.zkoss.web.el.ELContexts;
 import org.zkoss.web.el.ELContext;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.el.Evaluator;
@@ -235,6 +236,12 @@ public class LanguageDefinition {
 
 		_evalor = new Evaluator() {
 			public Object evaluate(Component comp, String expr, Class expectedType) {
+				return evaluate0(comp, expr, expectedType);
+			}
+			public Object evaluate(Page page, String expr, Class expectedType) {
+				return evaluate0(page, expr, expectedType);
+			}
+			private Object evaluate0(Object obj, String expr, Class expectedType) {
 				if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0)
 					return expr;
 
@@ -243,7 +250,7 @@ public class LanguageDefinition {
 					return new EvaluatorImpl().evaluate(
 						expr, expectedType,
 						new ObjectResolver(
-							jc != null ? jc.getVariableResolver(): null, comp),
+							jc != null ? jc.getVariableResolver(): null, obj),
 						getFunctionMapper());
 				} catch (javax.servlet.jsp.el.ELException ex) {
 					throw UiException.Aide.wrap(ex);

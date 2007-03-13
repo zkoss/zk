@@ -69,6 +69,19 @@ public class Property implements Condition, Serializable {
 		_bExpr = value != null && value.indexOf("${") >= 0;
 	}
 
+	/** Returns the name of the property.
+	 */
+	public String getName() {
+		return _name;
+	}
+	/** Returns the value of the property.
+	 * Note: it is the original value without evaluation.
+	 * In other words, it may contain EL expressions.
+	 */
+	public String getValue() {
+		return _value;
+	}
+
 	private final void resolve(Class cls) {
 		final String mtdnm = Classes.toMethodName(_name, "set");
 		if (_bExpr) {

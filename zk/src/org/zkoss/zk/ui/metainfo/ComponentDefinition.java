@@ -50,6 +50,8 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	private Map _molds, _params;
 	private List _props;
 	private String _macroURI;
+	/** inline or regular macro. Used if _macroURI is not null. */
+	private boolean _inline;
 	/*package*/ AnnotationMapImpl _annots;
 
 	/** A special definition representing the zk component. */
@@ -86,7 +88,7 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	 * definition doesn't belong to any language.
 	 */
 	public ComponentDefinition(LanguageDefinition langdef, String name,
-	String macroURI) {
+	String macroURI, boolean inline) {
 		if (name == null)
 			throw new IllegalArgumentException("null name");
 		if (macroURI == null || macroURI.length() == 0)
@@ -94,19 +96,31 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 		_langdef = langdef;
 		_name = name;
 		_macroURI = macroURI;
+		_inline = inline;
 	}
 	 
 
 	/** Used by deriving class to contruct a 'virtual' definition that
-	 * depends on other definitions.
+	 * depends on the specified definition.
 	 * It is currently used only by {@link InstanceDefinition}.
+	 *
+	 * <p>At least one of langdef or compdef must be non-null.
+	 *
+	 * @param langdef the language definition. If null, compdef's language
+	 * definition is assumed.
 	 */
-	protected ComponentDefinition(LanguageDefinition langdef, String name) {
+	protected ComponentDefinition(LanguageDefinition langdef,
+	ComponentDefinition compdef, String name) {
 		if (name == null)
 			throw new IllegalArgumentException("null name");
 
-		_langdef =langdef;
 		_name = name;
+		_langdef = langdef != null ? langdef: compdef._langdef;
+			//at least one of them is not null
+		if (compdef != null) {
+			_macroURI = compdef._macroURI;
+			_inline = compdef._inline;
+		}
 	}
 
 	/** Returns the language definition, or null if it is temporty definition
@@ -144,11 +158,17 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	public boolean isMacro() {
 		return _macroURI != null;
 	}
-	/** Returns the macro URI (might be an EL expression),
-	 * or null if not a macro.
+	/** Returns the macro URI, or null if not a macro.
 	 */
-	/*package*/ String getMacroURI() {
+	public String getMacroURI() {
 		return _macroURI;
+	}
+	/** Returns whether this is an inline macro.
+	 * If false, you have to examine {@link #isMacro} to see whether it
+	 * is a regular macro.
+	 */
+	public boolean isInlineMacro() {
+		return _inline;
 	}
 
 	/** Returns the class (Class) or the class name (String) that

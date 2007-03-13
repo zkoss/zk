@@ -305,7 +305,10 @@ public class DefinitionLoaders {
 			if (macroUri != null && macroUri.length() != 0) {
 				if (log.finerable()) log.finer("macro component definition: "+name);
 
-				compdef = new ComponentDefinition(langdef, name, macroUri);
+				final String inline = el.getElementValue("inline", true);
+				compdef = new ComponentDefinition(
+					langdef, name, macroUri, "true".equals(inline));
+
 				langdef.initMacroDefinition(compdef);
 
 				final String clsnm = el.getElementValue("component-class", true);

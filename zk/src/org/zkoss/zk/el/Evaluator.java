@@ -18,6 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.el;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -29,4 +30,7 @@ public interface Evaluator {
 	/** Evaluates the specified expression against the specified component.
 	 */
 	public Object evaluate(Component comp, String expr, Class expectedType);
+	/** Evaluates the specified expression against the specified page.
+	 */
+	public Object evaluate(Page page, String expr, Class expectedType);
 }

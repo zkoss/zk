@@ -39,6 +39,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
+import org.zkoss.zk.el.Evaluator;
 
 /**
  * An instance definition.
@@ -84,7 +85,8 @@ implements Condition {
 	 */
 	public InstanceDefinition(InstanceDefinition parent,
 	ComponentDefinition compdef, String tagnm) {
-		super(compdef.getLanguageDefinition(), getNextName());
+		super(null, compdef, getNextName());
+
 		_parent = parent;
 		_pagedef = parent.getPageDefinition();
 		_compdef = compdef;
@@ -101,7 +103,7 @@ implements Condition {
 	/** Used by {@link PageDefinition} only.
 	 */
 	protected InstanceDefinition(LanguageDefinition langdef) {
-		super(langdef, getNextName());
+		super(langdef, null, getNextName());
 		_parent = null;
 		_pagedef = (PageDefinition)this;
 		_compdef = null;
@@ -299,12 +301,6 @@ implements Condition {
 		final Object cls = super.getImplementationClass();
 		return cls != null ? cls: _compdef.getImplementationClass();
 	}
-	public boolean isMacro() {
-		return _compdef.isMacro();
-	}
-	/*package*/ String getMacroURI() {
-		return _compdef.getMacroURI();
-	}	
 	public void addMold(String name, String moldUri) {
 		throw new UnsupportedOperationException();
 		//if we want to allow this, we have to modify Milieu
@@ -318,6 +314,48 @@ implements Condition {
 	}
 	/*package*/ Map getParams() {
 		return _compdef.getParams();
+	}
+
+	/** Evaluates and retrieves properties to the specified map from
+	 * {@link ComponentDefinition} (and {@link InstanceDefinition}).
+	 *
+	 * @param propmap the map to store the retrieved properties.
+	 * If null, a HashMap instance is created.
+	 */
+	public Map evalProperties(Map propmap, Page page, Component comp) {
+		if (propmap == null)
+			propmap = new HashMap();
+
+		List props = _compdef.getProperties();
+		if (props != null) {
+			final LanguageDefinition langdef = getLanguageDefinition();
+			if (langdef != null)
+				evalProps(propmap, langdef.getEvaluator(), page, comp, props);
+			else //langdef is null if components are defined in page only
+				evalProps(propmap, Executions.getCurrent(), page, comp, props);
+		}
+
+		props = getProperties();
+		if (props != null)
+			evalProps(propmap, Executions.getCurrent(), page, comp, props);
+		return propmap;
+	}
+	private static void evalProps(Map propmap, Evaluator eval,
+	Page page, Component comp, List props) {
+		synchronized (props) {
+			for (Iterator it = props.iterator(); it.hasNext();) {
+				final Property prop = (Property)it.next();
+				if (comp != null) {
+					if (prop.isEffective(comp))
+						propmap.put(prop.getName(),
+							eval.evaluate(comp, prop.getValue(), Object.class));
+				} else {
+					if (prop.isEffective(page))
+						propmap.put(prop.getName(),
+							eval.evaluate(page, prop.getValue(), Object.class));
+				}
+			}
+		}
 	}
 
 	/** Returns the map of annotations associated with this definition

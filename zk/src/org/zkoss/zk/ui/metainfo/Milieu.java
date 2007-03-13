@@ -338,12 +338,12 @@ public class Milieu implements Serializable {
 		return _macroURI != null;
 	}
 	/** Returns the macro URI, or null if not a macro.
-	 * It evaluates it before returning if the macro URI is an EL expression.
+	 *
 	 * @see #isMacro
 	 */
-	public String getMacroURI(Component comp) {
-		return toAbsoluteURI((String)evalByLang(comp, _macroURI, String.class));
-			//macro-uri is part of lang addon if _langdef != null
+	public String getMacroURI() {
+		return _macroURI; //no EL; refer to Paser.java for reason
+			//converted to absolute by parser
 	}
 	/** Evluates the specified expression with {@link #getLanguageDefinition},
 	 * if any. If null, the current execution ({@link Executions#evaluate})
