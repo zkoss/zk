@@ -46,7 +46,7 @@ public class SelectedItemConverter implements TypeConverter {
   			if (index >= 0) {
     			final Listitem item = (Listitem) lbx.getItemAtIndex(index);
     			final int selIndex = lbx.getSelectedIndex();
-  				if (item != null && selIndex != index) { // Bug-ID 1647817, avoid endless-loop
+  				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
     				Set items = new HashSet();
     				items.add(item);
     				Events.postEvent(new SelectEvent("onSelect", lbx, items));

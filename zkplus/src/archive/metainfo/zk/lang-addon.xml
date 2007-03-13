@@ -346,10 +346,26 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			</attribute>
 		</annotation>
 	</component>
-	<!--component>
+	<component>
 		<component-name>radiogroup</component-name>
 		<extends>radiogroup</extends>
-	</component-->
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>selectedItem</property-name>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onCheck</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>converter</attribute-name>
+				<attribute-value>org.zkoss.zkplus.databind.RadiogroupSelectedItemConverter</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
 	<!--component>
 		<component-name>row</component-name>
 		<extends>row</extends>
