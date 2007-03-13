@@ -32,6 +32,7 @@ ZK 2.3.0 Freshly
   1678856: Scrollable window
   1679024: Scrollable groupbox (mold=3d)
   1642895: Groupbox without a border
+  1678796: Get value of a Decimalbox as a double
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
