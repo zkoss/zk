@@ -61,7 +61,8 @@ ZK 2.3.0 Freshly
   1678343: Combobox/bandbox failed to send onOpen when closing dropdown
   1674064: Groupbox mold=3d with height not correct shown
   1679054: Simple Listbox databind not work
-	
+  1679593: Sizable window positioned wrong if overlap -> hide -> embed
+
 * Upgrade Notes:
   + The way to customize window's look and feel is changed.
     Refer to the Developer's Guide for details.
