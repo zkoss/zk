@@ -151,10 +151,8 @@ zul.endModal = function (uuid) {
 	}
 
 	var cmp = $e(uuid);
-	if (cmp) {
-		delete zkau.wndmode[cmp.id];
-		zkau.fixWnd(cmp);
-	}
+	if (cmp) zkau.fixWnd(cmp);
+	delete zkau.wndmode[uuid];
 
 	if (prevfocusId) zk.focusById(prevfocusId, 10);
 	if (prevfocusId) zk.focusById(prevfocusId, 10);

@@ -561,7 +561,7 @@ public class Window extends XulElement implements IdSpace {
 				response(null, new AuEndModal(this));
 				_mode = OVERLAPPED;
 					//Note: we have to make it as overlapped window.
-					//Otherwise, it causes confustion as Bug 1621425
+					//Otherwise, it causes confusion as Bug 1621425
 			} else if (_mode == POPUP) {
 				response(null, new AuEndPopup(this));
 			} else {
@@ -688,7 +688,6 @@ public class Window extends XulElement implements IdSpace {
 			case POPUP:
 				doPopup();
 				return false;
-			case MODAL: //impossible (just in case)
 			case OVERLAPPED:
 				doOverlapped();
 				return false;

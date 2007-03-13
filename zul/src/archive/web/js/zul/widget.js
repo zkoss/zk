@@ -344,9 +344,9 @@ zkWnd.beforeOuter = function (cmp) {
 };
 /** Called by au.js when executing the outer command. */
 zkWnd.afterOuter = function (cmp) {
-	var nm = cmp.id + "!modal";
-	if (zkau.wndmode[nm]) {
-		delete zkau.wndmode[nm];
+	var tagnm = cmp.id + "!modal"; //note: not cmp.id
+	if (zkau.wndmode[tagnm]) {
+		delete zkau.wndmode[tagnm];
 		zul.doModal(cmp);
 	}
 };
@@ -357,11 +357,13 @@ zkWnd.setSizable = function (cmp, sizable) {
 	var id = cmp.id;
 	if (sizable) {
 		if (!zkWnd._szs[id]) {
+			var orgpos = cmp.style.position; //Bug 1679593
 			zkWnd._szs[id] = new Draggable(cmp, {
 				starteffect: zk.voidf,
 				endeffect: zkWnd._endsizing, ghosting: zkWnd._ghostsizing,
 				revert: true, ignoredrag: zkWnd._ignoresizing
 			});
+			cmp.style.position = orgpos;
 		}
 	} else {
 		if (zkWnd._szs[id]) {
@@ -423,7 +425,14 @@ zkWnd._ignoresizing = function (cmp, pointer) {
 };
 zkWnd._endsizing = function (cmp, evt) {
 	var dg = zkWnd._szs[cmp.id];
-	if (dg && dg.z_szofs && (dg.z_szofs[0] || dg.z_szofs[1])) {
+	if (!dg) return;
+
+	if (dg.z_orgzi != null) {
+		cmp.style.zIndex = dg.z_orgzi; //restore it (Bug 1619349)
+		dg.z_orgzi = null
+	}
+
+	if (dg.z_szofs && (dg.z_szofs[0] || dg.z_szofs[1])) {
 		var keys = "";
 		if (evt) {
 			if (evt.altKey) keys += 'a';
@@ -432,11 +441,9 @@ zkWnd._endsizing = function (cmp, evt) {
 		}
 
 		//adjust size
-		if (dg.z_orgzi != null)
-			cmp.style.zIndex = dg.z_orgzi; //restore it (Bug 1619349)
 		setTimeout("zkWnd._resize($e('"+cmp.id+"'),"+dg.z_dir+","
 			+dg.z_szofs[0]+","+dg.z_szofs[1]+",'"+keys+"')", 50);
-		dg.z_dir = dg.z_szofs = dg.z_orgzi = null;
+		dg.z_dir = dg.z_szofs = null;
 	}
 };
 zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
