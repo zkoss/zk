@@ -37,6 +37,17 @@ public class Pair {
 		this.y = y;
 	}
 
+	/** Returns the first value of the pair.
+	 */
+	public Object getX() {
+		return this.x;
+	}
+	/** Returns the second value of the pair.
+	 */
+	public Object getY() {
+		return this.y;
+	}
+
 	//-- Object --//
 	public final boolean equals(Object o) {
 		if (!(o instanceof Pair))
