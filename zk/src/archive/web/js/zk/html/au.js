@@ -672,6 +672,8 @@ if (!zkau._popups) {
 }
 /** Makes the component as popup. */
 zkau.doPopup = function (cmp) {
+	if (cmp.style.display == "none") return; //Bug 1678968
+
 	zkau.closeFloats(cmp);
 
 	zkau.wndmode[cmp.id] = "popup";
@@ -692,6 +694,8 @@ zkau.endPopup = function (uuid) {
 };
 /** Makes the component as overlapped. */
 zkau.doOverlapped = function (cmp) {
+	if (cmp.style.display == "none") return; //Bug 1678968
+
 	zkau.closeFloats(cmp);
 
 	zkau.wndmode[cmp.id] = "overlapped";
@@ -1214,10 +1218,10 @@ zkau.closeFloats = function (owner) {
 			closed = true;
 			if (n) {
 				action.hide(n);
-				if (zkau.asap(n, "onOpen"))
-					zkau.send({uuid: n.id, cmd: "onOpen", data: [false]}, 15);
-					//to have better performance, we don't send onOpen
-					//until an ASAP listener is registered.
+				zkau.send({uuid: n.id, cmd: "onOpen", data: [false]},
+					zkau.asapTimeout(n, "onOpen"));
+					//We have to send onOpen since the server need to know
+					//whether the popup becomes invsibile
 			}
 		}
 	}
