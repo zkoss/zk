@@ -128,7 +128,7 @@ zkTab._setTabSel = function (tab, toSel) {
 	var accd = tabbox && getZKAttr(tabbox, "accd") == "true";
 	var panel = $e(getZKAttr(tab, "panel"));
 	if (panel)
-		if (accd) action.slideDown($real(panel), toSel);
+		if (accd) anima.slideDown($real(panel), toSel);
 		else action.show(panel, toSel);
 
 	if (!accd) {

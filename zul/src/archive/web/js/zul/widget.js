@@ -604,7 +604,7 @@ zkGrbox.open = function (gb, open, silent) {
 		var panel = $e(gb.id + "!slide");
 		if (panel && open != (panel.style.display != "none")
 		&& !panel.getAttribute("zk_visible")) {
-			action.slideDown(panel, open);
+			anima.slideDown(panel, open);
 			if (!silent)
 				zkau.send({uuid: gb.id, cmd: "onOpen", data: [open]},
 					zkau.asapTimeout(gb, "onOpen"));

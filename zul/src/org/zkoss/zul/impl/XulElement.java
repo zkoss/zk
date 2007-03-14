@@ -21,11 +21,13 @@ package org.zkoss.zul.impl;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Date;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.WrongValueException;
@@ -149,20 +151,24 @@ abstract public class XulElement extends HtmlBasedComponent {
 				//do it first because parseAction might fail
 			_action = action;
 
-			if (_actmap != null)
-				for (Iterator it = _actmap.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final String actnm = (String)me.getKey();
-					final String actval = (String)me.getValue();
-					if (old == null || !Objects.equals(actval, old.get(actnm)))
-						smartUpdate(actnm, toJavaScript(actval));
-				}
-			if (old != null)
-				for (Iterator it = old.keySet().iterator(); it.hasNext();) {
-					final String actnm = (String)it.next();
-					if (_actmap == null || !_actmap.containsKey(actnm))
-						smartUpdate(actnm, null);
-				}
+			if (getPage() != null) {
+				if (_actmap != null)
+					for (Iterator it = _actmap.entrySet().iterator();
+					it.hasNext();) {
+						final Map.Entry me = (Map.Entry)it.next();
+						final String actnm = (String)me.getKey();
+						final String actval = (String)me.getValue();
+						if (old == null
+						|| !Objects.equals(actval, old.get(actnm)))
+							smartUpdate(actnm, toJavaScript(actval));
+					}
+				if (old != null)
+					for (Iterator it = old.keySet().iterator(); it.hasNext();) {
+						final String actnm = (String)it.next();
+						if (_actmap == null || !_actmap.containsKey(actnm))
+							smartUpdate(actnm, null);
+					}
+			}
 		}
 	}
 
@@ -217,42 +223,42 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 */
 	private final String toJavaScript(String action) {
 		if (action == null) return null;
+
 		StringBuffer sb = null;
-		char quote = (char)0;
-		for (int j = 0, len = action.length(); j < len; ++j) {
-			char cc = action.charAt(j);
-			if (quote == (char)0 &&
-			(cc == '_' || (cc >= 'a' && cc <='z') || (cc >= 'A' && cc <='Z'))) {
-				int k = j + 1;
-				for (; k < len; ++k) {
-					cc = action.charAt(k);
-					if (cc != '_' && (cc < 'a' || cc > 'z')
-					&& (cc < 'A' || cc > 'Z') && (cc < '0' || cc > '9'))
-						break;
-				}
-				final String var = action.substring(j, k);
-				try {
-					final Component fellow = getFellow(var);
-					if (sb == null)
-						sb = new StringBuffer(len + 16)
-							.append(action.substring(0, j));
-					sb.append('\'').append(fellow.getUuid()).append('\'');
-				} catch (ComponentNotFoundException ex) {
-					if (sb != null) sb.append(var);
-				}
-				j = k - 1;
-			} else {
-				if (sb != null) sb.append(cc);
-				if (quote != (char)0) {
-					if (cc == quote) quote = (char)0;
-					else if (cc == '\\' && ++j < len && sb != null)
-						sb.append(action.charAt(j));
-				} else if (cc == '\'' || cc == '"') {
-					quote = cc;
-				}
+		for (int j = 0, len = action.length();;) {
+			final int k = action.indexOf("#{", j);
+			if (k < 0)
+				return sb != null ?
+					sb.append(action.substring(j)).toString(): action;
+
+			final int l = action.indexOf('}', k + 2);
+			if (l < 0)
+				throw new WrongValueException("Illegal action: unclosed EL expression.\n"+action);
+
+			if (sb == null) sb = new StringBuffer(len);
+			sb.append(action.substring(j, k));
+
+			//eval EL
+			Object val = Executions.evaluate(this,
+				'$' + action.substring(k + 1, l + 1), Object.class);
+			if (val == null || (val instanceof Number)) {
+				sb.append(val);
+			} else if (val instanceof Component) {
+				sb.append(" $e('")
+					.append(Strings.escape(((Component)val).getUuid(), "'\\"))
+					.append("')");
+			} else if (val instanceof Date) {
+				sb.append(" new Date(").append(((Date)val).getTime())
+					.append(')');
+			} else { //FUTURE: regex
+				sb.append('\'')
+					.append(Strings.escape(val.toString(), "'\\"))
+					.append('\'');
 			}
+
+			//next
+			j = l + 1;
 		}
-		return sb != null ? sb.toString(): action;
 	}
 
 	/** Returns the attributes for onClick, onRightClick and onDoubleClick
