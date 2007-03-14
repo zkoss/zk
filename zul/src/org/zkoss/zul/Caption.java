@@ -102,4 +102,11 @@ public class Caption extends LabelImageElement {
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
 	}
+	public void invalidate() {
+		final Component p = getParent();
+		if ((p instanceof Groupbox) && "default".equals(p.getMold()))
+			p.invalidate(); //Bug 1679629
+		else
+			super.invalidate();
+	}
 }
