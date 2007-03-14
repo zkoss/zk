@@ -63,6 +63,7 @@ ZK 2.3.0 Freshly
   1679054: Simple Listbox databind not work
   1679593: Sizable window positioned wrong if overlap -> hide -> embed
   1679630: Sizable window positioned wrong if overlap -> embed -> resize
+  1678968: Problem with overlapped windows visibility in firefox
 
 * Upgrade Notes:
   + The way to customize window's look and feel is changed.
