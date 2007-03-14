@@ -236,8 +236,12 @@ var orgpos = element.style.position; //Tom M. Yeh, Potix: Bug 1538506
           queue: {scope:'_draggable', position:'end'}
         });
 //Tom M. Yeh, Potix: Bug 1538506: a strange bar appear in IE
+setTimeout(function () {
 if (zdd && orgpos != 'absolute' && orgpos != 'relative')
-	setTimeout( function () {zkau._fixie4drop(element, orgpos);}, dur * 1000 + 10);
+	zkau._fixie4drop(element, orgpos);
+else
+	element.style.position = orgpos;
+}, dur * 1000 + 10);
       },
       endeffect: function(element) {
         var toOpacity = typeof element._opacity == 'number' ? element._opacity : 1.0;
