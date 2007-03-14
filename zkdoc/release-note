@@ -5,6 +5,7 @@ ZK 2.3.0 Freshly
   1655219: Radiogroup's layout independent Radio button
   1676244: Grid supports live data (ListModel)
   1678817: Macro components support inline expansion
+  1680474: Allow EL expr to reference a component in Client Side Action
   1658748: Prevent user from pressing ESC when loading JS
   1662365: Macro setMacroURI()
   1669824: InterruptedException shall carry the cause
@@ -80,6 +81,9 @@ ZK 2.3.0 Freshly
   + Implements the getControls method of the LisitemRendererExt interface
     instead of the shallDetachOnRender method.
   + Use onOpen instead of onShow to be notified when a popup is closed.
+  + Client Side Action now use EL expressions (#{}) to reference a component
+    or any object.
+    <textbox action="onfocus: action.show(#{help1}); onblur: action.hide(#{help1})"/>
 
 * Notes for upgrading from 2.3.0 RC
   + getSuspsendedThreads is moved from Desktop to DesktopCtrl
