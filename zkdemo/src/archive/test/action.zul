@@ -19,8 +19,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window title="Client Side Action">
 <vbox>
-	<textbox action="onfocus: action.show(help1); onblur: action.hide(help1)"/>
-	<textbox action="onfocus: action.show(help2); onblur: action.hide(help2)"/>
+	<textbox action="onfocus: action.show(#{help1}); onblur: action.hide(#{help1})"/>
+	<textbox action="onfocus: action.show(#{help2}); onblur: action.hide(#{help2})"/>
 	<separator/>
 	<label id="help1" visible="false" value="This is the first input."/>
 	<label id="help2" visible="false" value="You see this when moving focus down."/>
