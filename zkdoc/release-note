@@ -64,6 +64,7 @@ ZK 2.3.0 Freshly
   1679593: Sizable window positioned wrong if overlap -> hide -> embed
   1679630: Sizable window positioned wrong if overlap -> embed -> resize
   1678968: Problem with overlapped windows visibility in firefox
+  1679629: Label for Caption (of groupbox) can not be changed
 
 * Upgrade Notes:
   + The way to customize window's look and feel is changed.
