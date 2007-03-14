@@ -361,7 +361,8 @@ zkWnd.setSizable = function (cmp, sizable) {
 			zkWnd._szs[id] = new Draggable(cmp, {
 				starteffect: zk.voidf,
 				endeffect: zkWnd._endsizing, ghosting: zkWnd._ghostsizing,
-				revert: true, ignoredrag: zkWnd._ignoresizing
+				revert: true, reverteffect: zk.voidf,
+				ignoredrag: zkWnd._ignoresizing
 			});
 			cmp.style.position = orgpos;
 		}
