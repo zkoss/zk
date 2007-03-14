@@ -35,6 +35,7 @@ ZK 2.3.0 Freshly
   1642895: Groupbox without a border
   1678796: Get value of a Decimalbox as a double
   1679066: Support radiogroup databind radio with radio value
+  1677711: A way to specify the width for each column of hbox
 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
