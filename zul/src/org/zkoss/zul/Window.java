@@ -37,6 +37,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
+import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.*;
 
@@ -438,9 +439,11 @@ public class Window extends XulElement implements IdSpace {
 				invalidate();
 			}
 
-			response("doModal", new AuDoModal(this));
 			_moding = true;
 			setVisible(true); //after _molding = true to avoid dead-loop
+
+			response("doModal", new AuDoModal(this));
+				//after setVisible since client assume visible first
 
 			//no need to synchronized (_mutex) because no racing is possible
 			Executions.wait(_mutex);
@@ -459,9 +462,11 @@ public class Window extends XulElement implements IdSpace {
 				invalidate();
 			}
 
-			response("doOverlapped", new AuDoOverlapped(this));
 			_moding = true;
 			setVisible(true); //after _molding = true to avoid dead-loop
+
+			response("doOverlapped", new AuDoOverlapped(this));
+				//after setVisible since client assume visible first
 		}
 	}
 	/** Makes this window as popup, which is overlapped with other component
@@ -478,9 +483,11 @@ public class Window extends XulElement implements IdSpace {
 				invalidate();
 			}
 
-			response("doPopup", new AuDoPopup(this));
 			_moding = true;
 			setVisible(true); //after _molding = true to avoid dead-loop
+
+			response("doPopup", new AuDoPopup(this));
+				//after setVisible since client assume visible first
 		}
 	}
 	/** Makes this window as embeded with other components (Default).
@@ -761,10 +768,15 @@ public class Window extends XulElement implements IdSpace {
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements MultiBranch {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements MultiBranch, Openable {
 		//-- MultiBranch --//
 		public boolean inDifferentBranch(Component child) {
 			return child instanceof Caption; //in different branch
+		}
+		//-- Openable --//
+		public void setOpenByClient(boolean open) {
+			setVisible(open);
 		}
 	}
 }

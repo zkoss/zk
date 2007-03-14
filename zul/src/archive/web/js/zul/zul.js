@@ -53,6 +53,8 @@ zul._center = function (cmp, zi) {
 
 /** Makes the component as modal. */
 zul.doModal = function (cmp) {
+	if (cmp.style.display == "none") return; //Bug 1678968
+
 	//center component
 	var nModals = zkau._modals.length;
 	zkau.fixZIndex(cmp, true); //let fixZIndex reset topZIndex if possible
