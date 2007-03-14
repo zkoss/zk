@@ -38,7 +38,7 @@ import org.zkoss.zk.ui.event.Events;
  *
  * <p>Events: onOpen<br/>
  * Developers can listen to the onOpen event and initializes it
- * when {@link org.zkoss.ui.event.OpenEvent#isOpen} is true, and/or
+ * when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen} is true, and/or
  * clean up if false.
  *
  * <p>Note: to have better performance, onOpen is sent only if an ASAP event

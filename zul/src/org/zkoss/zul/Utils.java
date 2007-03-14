@@ -1,0 +1,150 @@
+/* Utils.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 14 15:30:49     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package org.zkoss.zul;
+
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Iterator;
+
+import org.zkoss.zk.ui.WrongValueException;
+
+/**
+ * A collection of utilities.
+ *
+ * @author tomyeh
+ */
+/*package*/ class Utils {
+	/** Parse a list of numbers.
+	 *
+	 * @param defaultValue the value if a number is omitted. For example, ",2"
+	 * means "1,2" if defafultValue is 1
+	 * @return an array of int, or null if no integer at all
+	 */
+	/*package*/ static final
+	int[] stringToInts(String numbers, int defaultValue)
+	throws WrongValueException {
+		if (numbers == null)
+			return null;
+
+		List list = new LinkedList();
+		for (int j = 0;;) {
+			int k = numbers.indexOf(',', j);
+			final String s =
+				(k >= 0 ? numbers.substring(j, k): numbers.substring(j)).trim();
+			if (s.length() == 0) {
+				if (k < 0) break;
+				list.add(null);
+			} else {
+				try {
+					list.add(Integer.valueOf(s));
+				} catch (Throwable ex) {
+					throw new WrongValueException("Not a valid number list: "+numbers);
+				}
+			}	
+
+			if (k < 0) break;
+			j = k + 1;
+		}
+
+		int[] ary;
+		final int sz = list.size();
+		if (sz > 0) {
+			ary = new int[sz];
+			int j = 0;
+			for (Iterator it = list.iterator(); it.hasNext(); ++j) {
+				final Integer i = (Integer)it.next();
+				ary[j] = i != null ? i.intValue(): defaultValue;
+			}
+		} else {
+			ary = null;
+		}
+		return ary;
+	}
+	/** Converts an array of numbers to a string.
+	 * @param defaultValue the default value that will be replaced with defaultString
+	 * @param defaultString the default string used if defaultValue is found in the array
+	 */
+	/*package*/ static final String intsToString(int[] ary,
+	int defaultValue, String defaultString) {
+		if (ary == null || ary.length == 0)
+			return "";
+
+		final StringBuffer sb = new StringBuffer(50);
+		for (int j = 0;;) {
+			if (ary[j] != defaultValue)
+				sb.append(ary[j]);
+			else if (defaultString != null)
+				sb.append(defaultString);
+
+			if (++j >= ary.length) {
+				sb.append(',');
+				break;
+			}
+		}
+		return sb.toString();
+	}
+
+	/** Parse a list of numbers.
+	 *
+	 * @param defaultValue the value used if an empty string is fund.
+	 * For example, ",2" means "1,2" if defafultValue is "1"
+	 * @return an array of string, or null if no data at all
+	 */
+	/*package*/ static final
+	String[] stringToArray(String src, String defaultValue) {
+		if (src == null)
+			return null;
+
+		List list = new LinkedList();
+		for (int j = 0;;) {
+			int k = src.indexOf(',', j);
+			final String s =
+				(k >= 0 ? src.substring(j, k): src.substring(j)).trim();
+			if (s.length() == 0) {
+				if (k < 0) break;
+				list.add(defaultValue);
+			} else {
+				list.add(s);
+			}	
+
+			if (k < 0) break;
+			j = k + 1;
+		}
+
+		return (String[])list.toArray(new String[list.size()]);
+	}
+	/** Converts an array of strings to a string, by catenating them
+	 * together and separated with comma.
+	 */
+	/*package*/ static final String arrayToString(String[] ary) {
+		if (ary == null || ary.length == 0)
+			return "";
+
+		final StringBuffer sb = new StringBuffer(50);
+		for (int j = 0;;) {
+			sb.append(ary[j]);
+
+			if (++j >= ary.length) {
+				sb.append(',');
+				break;
+			}
+		}
+		return sb.toString();
+	}
+}

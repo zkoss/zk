@@ -124,7 +124,7 @@ public class Row extends XulElement {
 	 * <p>Default: empty.
 	 */
 	public String getSpans() {
-		return numbersToString(_spans);
+		return Utils.intsToString(_spans, 0, null);
 	}
 	/** Sets the spans, which is a list of numbers separated by comma.
 	 *
@@ -133,73 +133,13 @@ public class Row extends XulElement {
 	 * one column.
 	 */
 	public void setSpans(String spans) throws WrongValueException {
-		final int[] ispans = parseNumbers(spans, 1);
+		final int[] ispans = Utils.stringToInts(spans, 1);
 		if (!Objects.equals(ispans, _spans)) {
 			_spans = ispans;
 			invalidate();
 		}
 	}
-	/** Parse a list of numbers.
-	 *
-	 * @param defaultValue the value if a number is omitted. For example, ",2"
-	 * means "1,2" if defafultValue is 1
-	 * @return an array of int, or null if no integer at all
-	 */
-	/*package*/ static final int[] parseNumbers(String numbers, int defaultValue)
-	throws WrongValueException {
-		if (numbers == null)
-			return null;
 
-		List list = new LinkedList();
-		for (int j = 0;;) {
-			int k = numbers.indexOf(',', j);
-			final String s =
-				(k >= 0 ? numbers.substring(j, k): numbers.substring(j)).trim();
-			if (s.length() == 0) {
-				if (k < 0) break;
-				list.add(null);
-			} else {
-				try {
-					list.add(Integer.valueOf(s));
-				} catch (Throwable ex) {
-					throw new WrongValueException("Not a valid number list: "+numbers);
-				}
-			}	
-
-			if (k < 0) break;
-			j = k + 1;
-		}
-
-		int[] ary;
-		final int sz = list.size();
-		if (sz > 0) {
-			ary = new int[sz];
-			int j = 0;
-			for (Iterator it = list.iterator(); it.hasNext(); ++j) {
-				final Integer i = (Integer)it.next();
-				ary[j] = i != null ? i.intValue(): defaultValue;
-			}
-		} else {
-			ary = null;
-		}
-		return ary;
-	}
-	/** Converts an array of numbers to a string.
-	 */
-	/*package*/ static final String numbersToString(int[] ary) {
-		if (ary == null || ary.length == 0)
-			return "";
-
-		final StringBuffer sb = new StringBuffer(50);
-		for (int j = 0;;) {
-			sb.append(ary[j]);
-			if (++j >= ary.length) {
-				sb.append(',');
-				break;
-			}
-		}
-		return sb.toString();
-	}
 
 	/** Sets whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.

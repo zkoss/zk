@@ -26,4 +26,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	Returns the attribute used for the cell of the specified row and index.
 		</description>
 	</function>
+	<function>
+		<name>getBoxChildAttrs</name>
+		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
+		<function-signature>
+	java.lang.String getBoxChildAttrs(org.zkoss.zk.ui.Component)
+		</function-signature>
+		<description>
+	Returns the attributes used for the cell of the specified child
+	when it is placed inside of hbox/vobx.
+		</description>
+	</function>
 </taglib>

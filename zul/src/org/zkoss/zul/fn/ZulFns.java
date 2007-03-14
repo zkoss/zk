@@ -16,7 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.fn;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Row;
+import org.zkoss.zul.Box;
 
 /**
  * Utilities for using EL.
@@ -31,5 +33,13 @@ public class ZulFns {
 	 */
 	public static final String getColAttrs(Row row, int index) {
 		return row.getChildAttrs(index);
+	}
+
+	/**
+	 * Returns the attributes used for the cell of the specified child
+	 * when it is placed inside of hbox/vobx.
+	 */
+	public static final String getBoxChildAttrs(Component child) {
+		return ((Box)child.getParent()).getChildAttrs(child);
 	}
 }

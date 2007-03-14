@@ -18,9 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
+<%@ taglib uri="/WEB-INF/tld/zul/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}" z.type="zul.box.Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
 	<c:forEach var="child" items="${self.children}">
-	<tr id="${child.uuid}!chdextr" valign="${self.valign}"><td${c:isInstance('org.zkoss.zul.Splitter',child)?self.splitterExteriorAttrs:self.childExteriorAttrs}>${z:redraw(child, null)}</td></tr>
+	<tr id="${child.uuid}!chdextr" valign="${self.valign}"><td${u:getBoxChildAttrs(child)}>${z:redraw(child, null)}</td></tr>
 	</c:forEach>
 </table>

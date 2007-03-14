@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Iterator;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
@@ -38,6 +39,8 @@ import org.zkoss.zul.impl.XulElement;
 public class Box extends XulElement {
 	private String _spacing;
 	private String _valign = "top";
+	/** Array of width/height for each cell. */
+	private String[] _sizes;
 
 	/** Default: vertical ({@link Vbox}).
 	 */
@@ -102,35 +105,111 @@ public class Box extends XulElement {
 		}
 	}
 
+	/** Returns the widths/heights, which is a list of numbers separated by comma
+	 * to denote the width/height of each cell in a box.
+	 * If {@link Hbox} (i.e., {@link #getOrient} is horizontal),
+	 * it is a list of widths.
+	 * If {@link Vbox} (i.e., {@link #getOrient} is vertical),
+	 * it is a list of heights.
+	 *
+	 * <p>It is the same as {@link #getHeights}.
+	 *
+	 * <p>Default: empty.
+	 */
+	public String getWidths() {
+		return Utils.arrayToString(_sizes);
+	}
+	/** Returns the heights/widths, which is a list of numbers separated by comma
+	 * to denote the height/width of each cell in a box.
+	 * If {@link Hbox} (i.e., {@link #getOrient} is horizontal),
+	 * it is a list of widths.
+	 * If {@link Vbox} (i.e., {@link #getOrient} is vertical),
+	 * it is a list of heights.
+	 *
+	 * <p>It is the same as {@link #getWidths}.
+	 *
+	 * <p>Default: empty.
+	 */
+	public String getHeights() {
+		return getWidths();
+	}
+	/** Sets the widths/heights, which is a list of numbers separated
+	 * by comma to denote the width/height of each cell in a box.
+	 *
+	 * <p>It is the same as {@link #setHeights}.
+	 *
+	 * <p>For example, "10%,20%,30%" means the second cell shall
+	 * occupy 10% width, the second cell 20%, the third cell 30%,
+	 * and the following cells don't specify any width.
+	 *
+	 * <p>Note: the splitters are ignored, i.e., they are not cells.
+	 *
+	 * <p>Another example, ",,30%" means the third cell shall occupy
+	 * 30% width, and the rest of cells don't specify any width.
+	 * Of course, the real widths depend on the interpretation of
+	 * the browser.
+	 */
+	public void setWidths(String widths) throws WrongValueException {
+		final String[] sizes = Utils.stringToArray(widths, null);
+		if (!Objects.equals(sizes, _sizes)) {
+			_sizes = sizes;
+			invalidate();
+		}
+	}
+	/** Sets the widths/heights, which is a list of numbers separated
+	 * by comma to denote the width/height of each cell in a box.
+	 *
+	 * <p>It is the same as {@link #setWidths}.
+	 */
+	public void setHeights(String heights) throws WrongValueException {
+		setWidths(heights);
+	}
+
 	/** Returns the attributes used to wrap the children (never null).
 	 * Used only by component development to generate HTML tags.
 	 */
-	public String getChildExteriorAttrs() {
-		final StringBuffer sb = new StringBuffer(32);
+	public String getChildAttrs(Component child) {
 		final boolean vert = "vertical".equals(getOrient());
+		if (child instanceof Splitter)
+			return (vert ? " height": " width") + "=\"8px\"";
+
+		final StringBuffer sb = new StringBuffer(64);
 		HTMLs.appendAttribute(sb, "class", vert ? "vbox": "hbox");
-		if (_spacing != null) {
+
+		String size = null;
+		if (_sizes != null) {
+			int j = 0;
+			for (Iterator it = getChildren().iterator(); it.hasNext();) {
+				final Object o = it.next();
+				if (child == o) {
+					size = _sizes[j];
+					break;
+				} else if (!(o instanceof Splitter)) {
+					if (++j >= _sizes.length)
+						break; //not found
+				}
+			}
+		}
+
+		if (_spacing != null || size != null) {
 			sb.append("style=\"");
-			if (vert) sb.append("padding-bottom:").append(_spacing);
-			else sb.append("padding-right:").append(_spacing);
+			if (_spacing != null)
+				sb.append("padding-")
+					.append(vert ? "bottom": "right")
+					.append(':').append(_spacing).append(';');
+			if (size != null)
+				sb.append(vert ? "height": "width")
+					.append(':').append(size);
 			sb.append('"');
 		}
 		return sb.toString();
 	}
-	/** Returns the attributes used to wrap splitter (never null).
-	 * Used only by component development to generate HTML tags.
-	 */
-	public String getSplitterExteriorAttrs() {
-		final boolean vert = "vertical".equals(getOrient());
-		return (vert ? " height": " width") + "=\"8px\"";
-	}
-	 
 
 	//-- Component --//
 	public void onDrawNewChild(Component child, StringBuffer out)
 	throws IOException {
-		final String chdattrs = child instanceof Splitter ?
-			getSplitterExteriorAttrs(): getChildExteriorAttrs();
+		final String chdattrs = getChildAttrs(child);
+
 		if ("vertical".equals(getOrient())) {
 			final StringBuffer sb = new StringBuffer(16)
 				.append("<tr id=\"").append(child.getUuid())

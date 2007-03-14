@@ -18,11 +18,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
+<%@ taglib uri="/WEB-INF/tld/zul/core.dsp.tld" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}" z.type="zul.box.Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
 <tr valign="${self.valign}" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
- <td id="${child.uuid}!chdextr"${c:attr('width',c:isInstance('org.zkoss.zk.ui.HtmlBasedComponent', child) ? child.width: null)}${c:isInstance('org.zkoss.zul.Splitter',child)?self.splitterExteriorAttrs:self.childExteriorAttrs}>${z:redraw(child, null)}</td>
+ <td id="${child.uuid}!chdextr"${c:attr('width',c:isInstance('org.zkoss.zk.ui.HtmlBasedComponent', child) ? child.width: null)}${u:getBoxChildAttrs(child)}>${z:redraw(child, null)}</td>
 	</c:forEach>
 </tr>
 </table>

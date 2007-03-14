@@ -322,6 +322,8 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
+		<xs:attribute name="widths" type="xs:string" use="optional" />
+		<xs:attribute name="heights" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="valign" type="valignAttrType" use="optional" />
@@ -662,6 +664,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
+		<xs:attribute name="widths" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="valign" type="valignAttrType" use="optional" />
@@ -1381,6 +1384,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
+		<xs:attribute name="heights" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="valign" type="valignAttrType" use="optional" />
