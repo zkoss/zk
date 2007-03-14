@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
+if (!window.anima) { //avoid eval twice
+
 // Standard //
 String.prototype.startsWith = function (prefix) {
 	return this.substring(0,prefix.length) == prefix;
@@ -1334,3 +1336,85 @@ zk.clearSelection = function (){
 	} catch (e){ //ignore
 	}
 }
+
+//////////////
+/// ACTION ///
+action = {};
+
+/** Makes a component visible.
+ * @param bShow false means hide; otherwise (including undefined) is show
+ */
+action.show = function (id, bShow) {
+	if (bShow == false) action.hide(id);
+	else {
+		var n = $e(id);
+		if (n) {
+			n.style.display = "";
+			zk.onVisiAt(n); //callback later
+		}
+	}
+};
+
+/** Makes a component invisible.
+ * @param bHide false means show; otherwise (including undefined) is hide
+ */
+action.hide = function (id, bHide) {
+	if (bHide == false) action.show(id);
+	else {
+		var n = $e(id);
+		if (n) {
+			zk.onHideAt(n); //callback first
+			n.style.display = "none";
+		}
+	}
+};
+
+///////////
+// anima //
+/* Animation effects. It requires the component to have the <div><div>
+ * structure.
+ */
+anima = {}
+
+/** Slides down a component.
+ * @param down false means slide-up; otherwise (including undefined) is slide-down
+ */
+anima.slideDown = function (id, down) {
+	if (down == false) anima.slideUp(id);
+	else {
+		var n = $e(id);
+		if (n && !getZKAttr(n, "sliding")) {
+			setZKAttr(n, "sliding", "show");
+			Effect.SlideDown(n, {duration:0.4, afterFinish: anima._afterDown});
+				//duration must be less than 0.5 since other part assumes it
+		}
+	}
+};
+anima._afterDown = function (ef) {
+	var n = ef.element;
+	if (n) {
+		rmZKAttr(n, "sliding");
+		zk.onVisiAt(n);
+	}
+};
+
+/** Slides down a component.
+ * @param up false means slide-down; otherwise (including undefined) is slide-up
+ */
+anima.slideUp = function (id, up) {
+	if (up == false) anima.slideDown(id);
+	else {
+		var n = $e(id);
+		if (n && !getZKAttr(n, "sliding")) {
+			setZKAttr(n, "sliding", "hide");
+			zk.onHideAt(n); //callback first
+			Effect.SlideUp(n, {duration:0.4, afterFinish: anima._afterUp});
+				//duration must be less than 0.5 since other part assumes it
+		}
+	}
+};
+anima._afterUp = function (ef) {
+	rmZKAttr(ef.element, "sliding");
+};
+
+} //if (!window.anima)
