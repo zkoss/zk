@@ -1337,35 +1337,70 @@ zk.clearSelection = function (){
 	}
 }
 
-//////////////
-/// ACTION ///
-action = {};
-
-/** Makes a component visible.
- * @param bShow false means hide; otherwise (including undefined) is show
+/** The lowest level to make a component visible/invisible.
+ * CSA shall not call this method.
  */
-action.show = function (id, bShow) {
-	if (bShow == false) action.hide(id);
+zk.show = function (id, bShow) {
+	if (bShow == false) zk.hide(id);
 	else {
 		var n = $e(id);
 		if (n) {
-			n.style.display = "";
-			zk.onVisiAt(n); //callback later
+			var js = getZKAttr(n, "conshow");
+			if (js) {
+				eval(js);
+			} else {
+				action.show(n);
+			}
+		}
+	}
+};
+/** The lowest level to make a component invisible/visible.
+ * CSA shall not call this method.
+ */
+zk.hide = function (id, bHide) {
+	if (bHide == false) zk.show(id);
+	else {
+		var n = $e(id);
+		if (n) {
+			var js = getZKAttr(n, "conhide");
+			if (js) {
+				rmZKAttr(n, "conhide"); //avoid dead loop
+				try {
+					eval(js);
+				} finally {
+					setZKAttr(n, "conhide", js);
+				}
+			} else {
+				zk.onHideAt(n); //callback first
+				n.style.display = "none";
+			}
 		}
 	}
 };
 
-/** Makes a component invisible.
- * @param bHide false means show; otherwise (including undefined) is hide
+//////////////
+/// ACTION ///
+/** Basic utilities for Client Side Action.
  */
-action.hide = function (id, bHide) {
-	if (bHide == false) action.show(id);
-	else {
-		var n = $e(id);
-		if (n) {
-			zk.onHideAt(n); //callback first
-			n.style.display = "none";
-		}
+action = {};
+
+/** Makes a component visible.
+ */
+action.show = function (id) {
+	var n = $e(id);
+	if (n) {
+		n.style.display = "";
+		zk.onVisiAt(n); //callback later
+	}
+};
+
+/** Makes a component invisible.
+ */
+action.hide = function (id) {
+	var n = $e(id);
+	if (n) {
+		zk.onHideAt(n); //callback first
+		n.style.display = "none";
 	}
 };
 
@@ -1376,45 +1411,109 @@ action.hide = function (id, bHide) {
  */
 anima = {}
 
-/** Slides down a component.
- * @param down false means slide-up; otherwise (including undefined) is slide-down
+/** Make a component visible by increasing the opacity.
+ * @param id component or its ID
  */
-anima.slideDown = function (id, down) {
-	if (down == false) anima.slideUp(id);
-	else {
-		var n = $e(id);
-		if (n && !getZKAttr(n, "sliding")) {
-			setZKAttr(n, "sliding", "show");
-			Effect.SlideDown(n, {duration:0.4, afterFinish: anima._afterDown});
+anima.appear = function (id) {
+	var n = $e(id);
+	if (n) {
+		if (getZKAttr(n, "animating")) {
+			setTimeout("anima.appear('"+n.id+"')", 100);
+		} else {
+			setZKAttr(n, "animating", "show");
+			Effect.Appear(n, {duration:0.8, afterFinish: anima._afterVisi});
+		}
+	}
+};
+/** Make a component visible by sliding down.
+ * @param id component or its ID
+ */
+anima.slideDown = function (id) {
+	var n = $e(id);
+	if (n) {
+		if (getZKAttr(n, "animating")) {
+			setTimeout("anima.slideDown('"+n.id+"')", 100);
+		} else {
+			setZKAttr(n, "animating", "show");
+			Effect.SlideDown(n, {duration:0.4, afterFinish: anima._afterVisi});
 				//duration must be less than 0.5 since other part assumes it
 		}
 	}
 };
-anima._afterDown = function (ef) {
-	var n = ef.element;
+/** Make a component invisible by sliding up.
+ * @param id component or its ID
+ */
+anima.slideUp = function (id) {
+	var n = $e(id);
 	if (n) {
-		rmZKAttr(n, "sliding");
-		zk.onVisiAt(n);
+		if (getZKAttr(n, "animating")) {
+			setTimeout("anima.slideUp('"+n.id+"')", 100);
+		} else {
+			setZKAttr(n, "animating", "hide");
+			zk.onHideAt(n); //callback first
+			Effect.SlideUp(n, {duration:0.4, afterFinish: anima._afterHide});
+				//duration must be less than 0.5 since other part assumes it
+		}
+	}
+};
+/** Make a component invisible by fading it out.
+ * @param id component or its ID
+ */
+anima.fade = function (id) {
+	var n = $e(id);
+	if (n) {
+		if (getZKAttr(n, "animating")) {
+			setTimeout("anima.fade('"+n.id+"')", 100);
+		} else {
+			setZKAttr(n, "animating", "hide");
+			zk.onHideAt(n); //callback first
+			Effect.Fade(n, {duration:0.55, afterFinish: anima._afterHide});
+		}
+	}
+};
+/** Make a component invisible by puffing away.
+ * @param id component or its ID
+ */
+anima.puff = function (id) {
+	var n = $e(id);
+	if (n) {
+		if (getZKAttr(n, "animating")) {
+			setTimeout("anima.puff('"+n.id+"')", 100);
+		} else {
+			setZKAttr(n, "animating", "hide");
+			zk.onHideAt(n); //callback first
+			Effect.Puff(n, {duration:0.7, afterFinish: anima._afterHide0});
+		}
+	}
+};
+/** Make a component invisible by fading and dropping out.
+ * @param id component or its ID
+ */
+anima.dropOut = function (id) {
+	var n = $e(id);
+	if (n) {
+		if (getZKAttr(n, "animating")) {
+			setTimeout("anima.dropOut('"+n.id+"')", 100);
+		} else {
+			setZKAttr(n, "animating", "hide");
+			zk.onHideAt(n); //callback first
+			Effect.DropOut(n, {duration:0.7, afterFinish: anima._afterHide0});
+		}
 	}
 };
 
-/** Slides down a component.
- * @param up false means slide-down; otherwise (including undefined) is slide-up
- */
-anima.slideUp = function (id, up) {
-	if (up == false) anima.slideDown(id);
-	else {
-		var n = $e(id);
-		if (n && !getZKAttr(n, "sliding")) {
-			setZKAttr(n, "sliding", "hide");
-			zk.onHideAt(n); //callback first
-			Effect.SlideUp(n, {duration:0.4, afterFinish: anima._afterUp});
-				//duration must be less than 0.5 since other part assumes it
-		}
+anima._afterVisi = function (ef) {
+	var n = ef.element;
+	if (n) {
+		rmZKAttr(n, "animating");
+		zk.onVisiAt(n);
 	}
 };
-anima._afterUp = function (ef) {
-	rmZKAttr(ef.element, "sliding");
+anima._afterHide = function (ef) {
+	rmZKAttr(ef.element, "animating");
+};
+anima._afterHide0 = function (ef) {
+	rmZKAttr(ef.effects[0].element, "animating");
 };
 
 } //if (!window.anima)

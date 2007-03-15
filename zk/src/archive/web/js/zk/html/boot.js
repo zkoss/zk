@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 //zk//
 if (!window.zk) { //avoid eval twice
 zk = {};
-zk.build = "3T"; //increase this if we want the browser to reload JavaScript
+zk.build = "3U"; //increase this if we want the browser to reload JavaScript
 
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();
@@ -252,6 +252,7 @@ function setZKAttr(el, nm, val) {
 };
 function rmZKAttr(el, nm) {
 	if (el && el.removeAttribute) el.removeAttribute("z." + nm);
+	else setZKAttr(el, nm, "");
 };
 
 /** Returns the version of the specified module name.

@@ -521,7 +521,7 @@ zkau._cleanupChildren = function (n) {
 /** Sets an attribute (the default one). */
 zkau.setAttr = function (cmp, name, value) {
 	if ("visibility" == name) {
-		action.show(cmp, "true" == value);
+		zk.show(cmp, "true" == value);
 	} else if ("value" == name) {
 		if (value != cmp.value) {
 			cmp.value = value;
@@ -1217,7 +1217,7 @@ zkau.closeFloats = function (owner) {
 		} else {
 			closed = true;
 			if (n) {
-				action.hide(n);
+				zk.hide(n);
 				zkau.send({uuid: n.id, cmd: "onOpen", data: [false]},
 					zkau.asapTimeout(n, "onOpen"));
 					//We have to send onOpen since the server need to know
