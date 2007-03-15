@@ -186,32 +186,47 @@ abstract public class XulElement extends HtmlBasedComponent {
 			if (actnm.length() == 0) throw new WrongValueException("Unknown action: "+action);
 
 			//2. next ':'
-			int l = len; //next ':'
-			for (j = ++k; k < len; ++k) {
+			int l;
+			char quote = (char)0; //no quote
+			for (j = ++k; ; ++k) {
+				if (k >= len) {
+					l = len; //next ':'
+					break;
+				}
+
 				final char cc = action.charAt(k);
-				if (cc == '\'' || cc == '"') {
-					while (++k < len) {
-						final char c2 = action.charAt(k);
-						if (c2 == cc) break;
-						if (c2 == '\\') ++k;
-					}
+				if (cc == '\\')
+					continue;
+
+				if (quote != (char)0) {
+					if (quote == cc)
+						quote = (char)0;
+				} else if (cc == '\'' || cc == '"') {
+					quote = cc;
 				} else if (cc == ';') {
 					l = Strings.skipWhitespaces(action, k + 1);
 					for (; l < len; ++l) {
 						final char c2 = action.charAt(l);
-						if (c2 < 'a' || c2 > 'z')
-							break;
+						if ((c2 < 'a' || c2 > 'z') && (c2 < 'A' || c2 > 'Z'))
+							break; //inner loop
 					}
+
 					l = Strings.skipWhitespaces(action, l);
-					if (l >= len || action.charAt(l) == ':') {
-						++k;
-						break; //found
+					if (l >= len) {
+						k = len;
+						break; //no more action
 					}
+					if (action.charAt(l) == ':') {
+						++k; //after ';'
+						break; //found (and there is another action)
+					}
+
+					k = l - 1; //since l point the next non-apha
 				}
 			}
 
 			//3. generate it
-			final String val = action.substring(j, k > len ? len: k).trim();
+			final String val = action.substring(j, k).trim();
 			if (val.length() > 0) map.put(actnm, val);
 			if (l >= len) return map; //done
 			j = k;
