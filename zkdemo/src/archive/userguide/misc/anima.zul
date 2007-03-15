@@ -37,7 +37,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <window title="Animation Effects" border="normal" xmlns:h="http://www.w3.org/1999/xhtml">
 	<style>
 .ctl {
-	border: 1px outset #777; background:#ddeecc;
+	border: 1px outset #777; background:#ddeedd;
 	margin: 2px; margin-right: 10px; padding-left: 2px; padding-right: 2px; 
 }
 	</style>
