@@ -457,9 +457,9 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 	}
 	var cmp = $e(uuid);
 
-	if (zkau.processExt
-	&& zkau.processExt(cmd, uuid, cmp, datanum, dt1, dt2, dt3, dt4))
-		return;
+//	if (zkau.procX
+//	&& zkau.procX(cmd, uuid, cmp, datanum, dt1, dt2, dt3, dt4))
+//		return;
 
 	fn = zkau.cmd1[cmd];
 	if (fn) {
@@ -667,105 +667,7 @@ if (!zkau._popups) {
 	zkau._popups = new Array(); //uuid
 	zkau._overlaps = new Array(); //uuid
 	zkau._modals = new Array(); //uuid (used zul.js or other modal)
-	zkau.wndmode = {}; //uuid of wnd that is draggable
-	zkau._intervals = {};
 }
-/** Makes the component as popup. */
-zkau.doPopup = function (cmp) {
-	if (cmp.style.display == "none") return; //Bug 1678968
-
-	zkau.closeFloats(cmp);
-
-	zkau.wndmode[cmp.id] = "popup";
-
-	zkau.fixZIndex(cmp);
-	zkau.floatWnd(cmp, null, zkau.onWndMove);
-	zkau._popups.push(cmp.id); //store ID because it might cease before endPopup
-	zkau.hideCovered();
-	zk.focusDownById(cmp.id, 0);
-};
-/** Makes the popup component as normal. */
-zkau.endPopup = function (uuid) {
-	zkau._popups.remove(uuid);
-	zkau.hideCovered();
-	var cmp = $e(uuid);
-	if (cmp) zkau.fixWnd(cmp);
-	delete zkau.wndmode[uuid];
-};
-/** Makes the component as overlapped. */
-zkau.doOverlapped = function (cmp) {
-	if (cmp.style.display == "none") return; //Bug 1678968
-
-	zkau.closeFloats(cmp);
-
-	zkau.wndmode[cmp.id] = "overlapped";
-
-	zkau.fixZIndex(cmp);
-	zkau.floatWnd(cmp, null, zkau.onWndMove);
-	zkau._overlaps.push(cmp.id); //store ID because it might cease before endPopup
-	zkau.hideCovered();
-	zk.focusDownById(cmp.id, 0);
-};
-/** Makes the popup component as normal. */
-zkau.endOverlapped = function (uuid) {
-	zkau._overlaps.remove(uuid);
-	zkau.hideCovered();
-
-	var cmp = $e(uuid);
-	if (cmp) zkau.fixWnd(cmp);
-	delete zkau.wndmode[uuid];
-}
-/** Makes a window movable. */
-zkau.floatWnd = function (cmp, starteffect, endeffect) {
-	if (cmp) {
-		var handle = $e(cmp.id + "!caption");
-		if (handle) {
-			//Bug 1601000: Position.positionedOffset not working if not visible
-			if (!zk.ie && cmp.style.display == "none") cmp.style.display = "";
-
-			//Bug 1568393: don't set "absolute" directly
-			Position.absolutize(cmp);
-
-			zkau.initMovable(cmp, {
-				handle: handle,
-				starteffect: starteffect || zk.voidf,
-				change: zkau.hideCovered,
-				endeffect: endeffect || zk.voidf});
-			//we don't use options.change because it is called too frequently
-		}
-	}
-};
-
-/** Makes a window un-movable. */
-zkau.fixWnd = function (cmp) {
-	if (cmp) {
-		zkau.cleanMovable(cmp.id);
-		cmp.style.position = ""; //aculous changes it to relative
-	}
-};
-
-/** Make a component movable (by moving). */
-zkau.initMovable = function (cmp, options) {
-	zkau._movs[cmp.id] = new Draggable(cmp, options);
-};
-/** Undo movable for a component. */
-zkau.cleanMovable = function (id) {
-	if (zkau._movs[id]) {
-		zkau._movs[id].destroy();
-		delete zkau._movs[id];
-	}
-}
-
-/** Called back when overlapped and popup is moved. */
-zkau.onWndMove = function (cmp, evt) {
-	var keys = "";
-	if (evt) {
-		if (evt.altKey) keys += 'a';
-		if (evt.ctrlKey) keys += 'c';
-		if (evt.shiftKey) keys += 's';
-	}
-	zkau.sendOnMove(cmp, keys);
-};
 
 zkau.onfocus = function (el) {
 	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases
@@ -1179,7 +1081,8 @@ zkau.focusInFloats = function (target) {
 
 	for (var j = 0; j < zkau._popups.length; ++j) {
 		var el = $e(zkau._popups[j]);
-		if (el != null && target != null && zk.isAncestor(el, target))
+		if (el != null && el.style.display != "none"
+		&& target != null && zk.isAncestor(el, target))
 			return true;
 	}
 	return false;
@@ -1204,28 +1107,21 @@ zkau.sendOnClose = function (uuid, closeFloats) {
 /** Closes popups and floats. Return false if nothing changed. */
 zkau.closeFloats = function (owner) {
 	owner = $e(owner);
-	var closed, popups = new Array();
-	for (;;) {
-		//reverse order is important if popup contains another
-		//otherwise, IE might have bug to handle them correctly
-		var uuid = zkau._popups.pop();
-		if (!uuid) break;
-
+	var closed;
+	for (var j = zkau._popups.length; --j >=0;) {
+	//reverse order is important if popup contains another
+	//otherwise, IE seem have bug to handle them correctly
+		var uuid = zkau._popups[j];
 		var n = $e(uuid);
-		if (zk.isAncestor(n, owner)) {
-			popups.push(uuid);
-		} else {
+		if (n && n.style.display != "none" && !zk.isAncestor(n, owner)) {
 			closed = true;
-			if (n) {
-				zk.hide(n);
-				zkau.send({uuid: n.id, cmd: "onOpen", data: [false]},
-					zkau.asapTimeout(n, "onOpen"));
-					//We have to send onOpen since the server need to know
-					//whether the popup becomes invsibile
-			}
+			zk.hide(n);
+			zkau.send({uuid: uuid, cmd: "onOpen", data: [false]},
+				zkau.asapTimeout(n, "onOpen"));
+				//We have to send onOpen since the server need to know
+				//whether the popup becomes invsibile
 		}
 	}
-	zkau._popups = popups;
 
 	for (var j = 0; j < zkau.floats.length; ++j)
 		if (zkau.floats[j].closeFloats()) //combobox popup
@@ -1239,7 +1135,7 @@ zkau.hideCovered = function() {
 	var ary = new Array();
 	for (var j = 0; j < zkau._popups.length; ++j) {
 		var el = $e(zkau._popups[j]);
-		if (el) ary.push(el);
+		if (el && el.style.display != "none") ary.push(el);
 	}
 
 	for (var j = 0; j < zkau.floats.length; ++j)
@@ -1247,7 +1143,7 @@ zkau.hideCovered = function() {
 
 	for (var j = 0; j < zkau._overlaps.length; ++j) {
 		var el = $e(zkau._overlaps[j]);
-		if (el) ary.push(el);
+		if (el && el.style.display != "none") ary.push(el);
 	}
 	zk.hideCovered(ary);
 
@@ -1811,12 +1707,12 @@ zkau.cmd1 = {
 		}
 	},
 	outer: function (uuid, cmp, dt1) {
-		zk.eval(cmp, "beforeOuter");
+		//zk.eval(cmp, "beforeOuter");
 		zk.cleanupAt(cmp);
 		zk.setOuterHTML(cmp, dt1);
 		cmp = $e(uuid);
 		zk.initAt(cmp);
-		zk.eval(cmp, "afterOuter");
+		//zk.eval(cmp, "afterOuter");
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
 /* 20060907: Tom M. Yeh: abandon inner to reduce the complexity
@@ -1894,18 +1790,6 @@ zkau.cmd1 = {
 		cmp = $real(cmp); //select goes to inner tag
 		if (cmp.select)
 			zk.selectById(cmp.id);
-	},
-	doPop: function (uuid, cmp) {
-		zkau.doPopup(cmp);
-	},
-	endPop: function (uuid, cmp) {
-		zkau.endPopup(uuid);
-	},
-	doOvl: function (uuid, cmp) {
-		zkau.doOverlapped(cmp);
-	},
-	endOvl: function (uuid, cmp) {
-		zkau.endOverlapped(uuid);
 	},
 	meta: function (uuid, cmp, dt1, dt2, dt3, dt4) {
 		var meta = zkau.getMeta(uuid);
