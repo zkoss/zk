@@ -24,7 +24,6 @@ zkau._respQue = new Array(); //responses in XML
 zkau._evts = {}; //(dtid, Array())
 zkau._js4resps = new Array(); //JS to eval upon response
 zkau._metas = {}; //(id, meta)
-zkau._movs = {}; //(id, Draggable): movables
 zkau._drags = {}; //(id, Draggable): draggables
 zkau._drops = new Array(); //dropables
 zkau._zidsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
