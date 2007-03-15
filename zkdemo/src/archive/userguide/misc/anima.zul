@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+anima.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 15 13:20:35     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
+	<vbox width="100%">
+		<html>
+			<attribute name="content"><![CDATA[
+				<h4>Animation Effects</h4>
+				<p>Versatile visual effects enabled with the <a href="http://script.aculo.us">script.aculo.us</a> libraries.</p>
+			]]></attribute>
+		</html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="tryView" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="20" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="Animation Effects" border="normal" xmlns:h="http://www.w3.org/1999/xhtml">
+	<style>
+.ctl {
+	border: 1px outset #777; background:#ddeecc;
+	margin: 2px; margin-right: 10px; padding-left: 2px; padding-right: 2px; 
+}
+	</style>
+
+	<label value="Slide" sclass="ctl"
+action="onmouseover: anima.slideDown(#{t}); onmouseout: anima.slideUp(#{t})"/>
+	<label value="Fade" sclass="ctl"
+action="onmouseover: anima.appear(#{t}); onmouseout: anima.fade(#{t})"/>
+	<label value="Puff" sclass="ctl"
+action="onmouseover: anima.appear(#{t}); onmouseout: anima.puff(#{t})"/>
+	<label value="Drop Out" sclass="ctl"
+action="onmouseover: anima.appear(#{t}); onmouseout: anima.dropOut(#{t})"/>
+
+	<div id="t" visible="false">
+		<div>
+		<groupbox>
+			<caption label="Dynamic Content"/>
+			Content to show and hide dynamically.
+			<datebox/>
+		</groupbox>
+		Description <textbox/>
+		</div>
+	</div>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+</window>

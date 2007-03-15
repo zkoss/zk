@@ -40,6 +40,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="onOK, onCancel and onCtrlKey" onClick="doSelect(&quot;e3&quot;)"/></h:li>
 		<h:li><toolbarbutton label="More event listener" onClick="doSelect(&quot;e4&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Focus" onClick="doSelect(&quot;e5&quot;)"/></h:li>
-		<h:li><toolbarbutton label="Client side action" onClick="doSelect(&quot;e6&quot;)"/></h:li>
 	</h:ul>
 </window>

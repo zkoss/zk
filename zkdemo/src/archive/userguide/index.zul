@@ -90,13 +90,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="tr3" label="Checkmarks" value="/userguide/tree/checkmarks.zul"/>
 					</treechildren>
 				</treeitem>
-				<treeitem label="Miscellaneous elements" value="/userguide/misc/index.zul">
+				<treeitem label="Miscellaneous" value="/userguide/misc/index.zul">
 					<treechildren>
 						<treeitem id="mi0" label="Drag and Drop" value="/userguide/misc/dragdrop.zul"/>
 						<treeitem id="mimacro" label="Macro Components" value="/userguide/misc/macro.zul"/>
 						<treeitem id="mictxmnu" label="Context Menus" value="/userguide/misc/ctxmnu.zul"/>
 						<treeitem id="mitooltip" label="Tooltips and Popups" value="/userguide/misc/tooltip.zul"/>
 						<treeitem id="michart" label="Chart" value="/userguide/misc/chart.zul"/>
+						<treeitem id="csa" label="Client side action" value="/userguide/misc/action.zul"/>
+						<treeitem id="anima" label="Animations" value="/userguide/misc/anima.zul"/>
 						<treeitem id="mi1" label="Timer" value="/userguide/misc/timer.zul"/>
 						<treeitem id="miaudio" label="Audio" value="/userguide/misc/audio.zul"/>
 						<treeitem id="mimorebtn" label="More button features" value="/userguide/misc/moreButton.zul"/>
@@ -122,7 +124,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="e3" label="onOK, onCancel and onCtrlKey" value="/userguide/event/onOK.zul"/>
 						<treeitem id="e4" label="More event listener" value="/userguide/event/moreListener.zul"/>
 						<treeitem id="e5" label="Focus" value="/userguide/event/focus.zul"/>
-						<treeitem id="e6" label="Client side action" value="/userguide/event/action.zul"/>
 					</treechildren>
 				</treeitem>
 				<treeitem label="ZK.forge" value="/userguide/zkforge/index.zul">
