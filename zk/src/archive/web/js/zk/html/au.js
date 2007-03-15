@@ -645,8 +645,7 @@ zkau.fixZIndex = function (cmp, silent, autoz) {
 		cmp.style.zIndex = ++zkau.topZIndex;
 		if (!silent && cmp.id) {
 			cmp = $outer(cmp);
-			zkau.send({uuid: cmp.id, cmd: "onZIndex",
-				data: [zi]}, zkau.asapTimeout(cmp, "onZIndex"));
+			zkau.sendOnZIndex(cmp);
 		}
 	}
 };
@@ -1090,8 +1089,12 @@ zkau.focusInFloats = function (target) {
 
 zkau.sendOnMove = function (cmp, keys) {
 	zkau.send({uuid: cmp.id, cmd: "onMove",
-		data: [cmp.style.left, cmp.style.top, keys]},
+		data: [cmp.style.left, cmp.style.top, keys ? keys: ""]},
 		zkau.asapTimeout(cmp, "onMove"));
+};
+zkau.sendOnZIndex = function (cmp) {
+	zkau.send({uuid: cmp.id, cmd: "onZIndex",
+		data: [cmp.style.zIndex]}, zkau.asapTimeout(cmp, "onZIndex"));
 };
 zkau.sendOnSize = function (cmp, keys) {
 	zkau.send({uuid: cmp.id, cmd: "onSize",
