@@ -321,37 +321,26 @@ zkWnd._cleanMode2 = function (uuid, replace) {
 	}
 };
 
-//Popup//
+//Overlap/Popup//
 /** Makes the component as popup. */
 zkWnd._doPopup = function (cmp, replace) {
-	if (replace) {
-		zkau.fixZIndex(cmp);
-		zkWnd._float(cmp);
-		return;
-	}
-
-	zkau.closeFloats(cmp);
-
-	zkau.fixZIndex(cmp);
-	zkWnd._float(cmp);
-	zkau._popups.push(cmp.id); //store ID because it might cease before endPopup
-	zkau.hideCovered();
-	zk.focusDownById(cmp.id, 0);
+	zkWnd._doOverpop(cmp, zkau._popups, replace);
 };
 /** Makes the popup component as normal. */
 zkWnd._endPopup = function (uuid, replace) {
-	zkau._popups.remove(uuid);
-	zkau.hideCovered();
-
-	if (!replace) {
-		var cmp = $e(uuid);
-		if (cmp) zkWnd._stick(cmp);
-	}
+	zkWnd._endOverpop(uuid, zkau._popups, replace);
 };
 
-//Overlapped//
 /** Makes the component as overlapped. */
 zkWnd._doOverlapped = function (cmp, replace) {
+	zkWnd._doOverpop(cmp, zkau._overlaps, replace);
+};
+/** Makes the popup component as normal. */
+zkWnd._endOverlapped = function (uuid, replace) {
+	zkWnd._endOverpop(uuid, zkau._overlaps, replace);
+};
+
+zkWnd._doOverpop = function (cmp, storage, replace) {
 	if (replace) {
 		zkau.fixZIndex(cmp);
 		zkWnd._float(cmp);
@@ -362,26 +351,30 @@ zkWnd._doOverlapped = function (cmp, replace) {
 
 	zkau.fixZIndex(cmp);
 	zkWnd._float(cmp);
-	zkau._overlaps.push(cmp.id); //store ID because it might cease before endPopup
+	storage.push(cmp.id); //store ID because it might cease before endPopup
 	zkau.hideCovered();
+
+	if (cmp.style.display != "none") {
+		var js = getZKAttr(cmp, "conshow");
+		if (js) eval(js);
+	}
+
 	zk.focusDownById(cmp.id, 0);
 };
-/** Makes the popup component as normal. */
-zkWnd._endOverlapped = function (uuid, replace) {
-	zkau._overlaps.remove(uuid);
+zkWnd._endOverpop = function (uuid, storage, replace) {
+	storage.remove(uuid);
 	zkau.hideCovered();
 
 	if (!replace) {
 		var cmp = $e(uuid);
 		if (cmp) zkWnd._stick(cmp);
 	}
-}
+};
 
 //Modal//
 /** Makes the window as modal. */
 zkWnd._doModal = function (cmp, replace) {
 	if (replace) {
-		zkWnd._center(cmp, zkau.topZIndex);
 		zkWnd._float(cmp);
 		return;
 	}
@@ -513,8 +506,17 @@ zkWnd._center = function (cmp, zi) {
 	cmp.style.display = "block"; //we need to calculate the size
 	zk.center(cmp);
 	cmp.style.display = "none"; //avoid Firefox to display it too early
-	cmp.style.display = "block";
 	cmp.style.zIndex = zi;
+
+	zkau.sendOnMove(cmp);
+	zkau.sendOnZIndex(cmp);
+		//let the server know the position. otherwise, invalidate will
+		//cause it to be moved to center again
+
+	var js = getZKAttr(cmp, "conshow");
+	if (js) eval(js);
+
+	cmp.style.display = "block";
 }
 
 //Utilities//
