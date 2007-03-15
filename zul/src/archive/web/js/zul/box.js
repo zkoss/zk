@@ -256,7 +256,7 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	var vert = getZKAttr(cmp, "vert");
 	var sib = colps == "before" ?
 		zk.previousSibling(nd, tn): zk.nextSibling(nd, tn);
-	if (sib) action.show(sib, open);
+	if (sib) zk.show(sib, open);
 	setZKAttr(cmp, "open", open ? "true": "false");
 
 	zkSplt._fixbtn(cmp);

@@ -76,10 +76,10 @@ zkTab._sliding = function (tab) {
 	//accordion: we must go to panel firs, and then browse its sibling
 	var panel = $e(getZKAttr(tab, "panel"));
 	for (var node = panel; (node = node.nextSibling) != null;)
-		if (getZKAttr($real(node), "sliding"))
+		if (getZKAttr($real(node), "animating"))
 			return true;
 	for (var node = panel; (node = node.previousSibling) != null;)
-		if (getZKAttr($real(node), "sliding"))
+		if (getZKAttr($real(node), "animating"))
 			return true;
 	return false;
 };
@@ -128,8 +128,11 @@ zkTab._setTabSel = function (tab, toSel) {
 	var accd = tabbox && getZKAttr(tabbox, "accd") == "true";
 	var panel = $e(getZKAttr(tab, "panel"));
 	if (panel)
-		if (accd) anima.slideDown($real(panel), toSel);
-		else action.show(panel, toSel);
+		if (accd) {
+			if (toSel) anima.slideDown($real(panel));
+			else anima.slideUp($real(panel));
+		} else
+			zk.show(panel, toSel);
 
 	if (!accd) {
 		var tabs = zk.parentNode(zk.parentNode(tab, "TABLE"), "THEAD");

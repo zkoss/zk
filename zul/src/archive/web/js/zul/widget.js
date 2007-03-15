@@ -604,10 +604,13 @@ zkGrbox.open = function (gb, open, silent) {
 		var panel = $e(gb.id + "!slide");
 		if (panel && open != (panel.style.display != "none")
 		&& !panel.getAttribute("zk_visible")) {
-			anima.slideDown(panel, open);
+			if (open) anima.slideDown(panel);
+			else anima.slideUp(panel);
+
 			if (!silent)
 				zkau.send({uuid: gb.id, cmd: "onOpen", data: [open]},
 					zkau.asapTimeout(gb, "onOpen"));
+
 			setTimeout(function() {zkGrbox._fixHgh(gb);}, 500); //after slide down
 		}
 	}
@@ -801,7 +804,7 @@ zkPop = {};
 
 /** Called by au.js's context menu. */
 zkPop.context = function (ctx, ref) {
-	action.show(ctx); //onVisiAt is called in action.show
+	zk.show(ctx); //onVisiAt is called in zk.show
 	zkPop._pop._popupId = ctx.id;
 	zkau.hideCovered();
 
@@ -810,7 +813,7 @@ zkPop.context = function (ctx, ref) {
 };
 zkPop.close = function (ctx) {
 	zkPop._pop._popupId = null;
-	action.hide(ctx);
+	zk.hide(ctx);
 	zkau.hideCovered();
 
 	if (zkau.asap(ctx, "onOpen"))

@@ -182,7 +182,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 
 		int j = 0, len = action.length();
 		for (;;) {
-			final String actnm = action.substring(j, k).trim();
+			String actnm = action.substring(j, k).trim();
 			if (actnm.length() == 0) throw new WrongValueException("Unknown action: "+action);
 
 			//2. next ':'
@@ -227,7 +227,13 @@ abstract public class XulElement extends HtmlBasedComponent {
 
 			//3. generate it
 			final String val = action.substring(j, k).trim();
-			if (val.length() > 0) map.put(actnm, val);
+			if (val.length() > 0) {
+				String nm = actnm.toLowerCase();
+				if ("onshow".equals(nm) || "onhide".equals(nm))
+					actnm = "z.c" + nm;
+				map.put(actnm, val);
+			}
+
 			if (l >= len) return map; //done
 			j = k;
 			k = l;
