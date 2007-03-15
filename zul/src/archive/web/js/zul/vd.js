@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
+zk.load("zul.zul"); //zul
+
 ////
 zkVld = {};
 if (!zkVld._ebs) zkVld._ebs = new Array();
@@ -186,7 +188,7 @@ zkVld._errbox = function () {
 	if (!zk.opera) Effect.SlideDown(box, {duration:0.5});
 		//if we slide, opera will slide it at the top of screen and position it
 		//later. No sure it is a bug of script.aculo.us or Opera
-	zkau.initMovable(box, {
+	zul.initMovable(box, {
 		zindex: box.style.zIndex, effecting: zkVld._fiximg,
 		starteffect: zk.voidf, endeffect: zkVld._fiximg});
 };
@@ -211,7 +213,7 @@ zkVld.closeErrbox = function (box, remaingError) {
 	}
 
 	if (box) {
-		zkau.cleanMovable(box.id);
+		zul.cleanMovable(box.id);
 		box.parentNode.removeChild(box);
 		zkVld._ebs.remove(box.id);
 	} else if (boxid) {
@@ -225,7 +227,7 @@ zkVld._ebclose = function (el) {
 			var id = el.id.substring(0, el.id.length - 5);
 			zkVld.closeErrbox(id, true);
 			//zkVld.focus($e(id));
-			//It is a bit annoying if user want to fix error later
+			//annoying (unable to leave) if user want to fix error later
 			return;
 		}
 };

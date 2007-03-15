@@ -20,7 +20,24 @@ zk.load("zul.lang.msgzul*");
 
 ////
 zul = {};
+zul._movs = {}; //(id, Draggable): movables
 
+/////////
+// Movable
+/** Make a component movable (by moving). */
+zul.initMovable = function (cmp, options) {
+	zul._movs[cmp.id] = new Draggable(cmp, options);
+};
+/** Undo movable for a component. */
+zul.cleanMovable = function (id) {
+	if (zul._movs[id]) {
+		zul._movs[id].destroy();
+		delete zul._movs[id];
+	}
+};
+
+/////////
+// Headers
 //For sortable header, e.g., Column and Listheader (TH or TD is assumed)
 zulHdrs = {};
 zulHdrs.setAttr = function (cmp, nm, val) {

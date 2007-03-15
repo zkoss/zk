@@ -14,7 +14,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-zk.load("zul.zul"); //msgzul
+zk.load("zul.zul"); //zul and msgzul
 
 ////
 // window //
@@ -526,7 +526,7 @@ zkWnd._float = function (cmp) {
 		var handle = $e(cmp.id + "!caption");
 		if (handle) {
 			cmp.style.position = "absolute"; //just in case
-			zkWnd._initMoveable(cmp, {
+			zul.initMovable(cmp, {
 				handle: handle, starteffect: zk.voidf,
 				change: zkau.hideCovered,
 				endeffect: zkWnd._onWndMove});
@@ -537,22 +537,10 @@ zkWnd._float = function (cmp) {
 /** Makes a window un-movable. */
 zkWnd._stick = function (cmp) {
 	if (cmp) {
-		zkWnd._cleanMoveable(cmp.id);
+		zul.cleanMovable(cmp.id);
 		cmp.style.position = ""; //aculous changes it to relative
 	}
 };
-
-/** Make a component movable (by moving). */
-zkWnd._initMoveable = function (cmp, options) {
-	zkau._movs[cmp.id] = new Draggable(cmp, options);
-};
-/** Undo movable for a component. */
-zkWnd._cleanMoveable = function (id) {
-	if (zkau._movs[id]) {
-		zkau._movs[id].destroy();
-		delete zkau._movs[id];
-	}
-}
 
 /** Called back when overlapped and popup is moved. */
 zkWnd._onWndMove = function (cmp, evt) {
