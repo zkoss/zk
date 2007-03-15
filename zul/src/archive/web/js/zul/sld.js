@@ -16,8 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zk.load("zul.zul");
-
 //Slider
 zk.Slider = Class.create();
 zk.Slider.prototype = {

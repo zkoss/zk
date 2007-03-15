@@ -17,11 +17,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zk.load("zul.vd");
-zk.load("zul.zul"); //required by window's doModal
 
 ////
 // textbox //
 zkTxbox = {};
+zkTxbox._intervals = {};
+
 zkau.textbox = zkTxbox; //zkau depends on it
 
 zkTxbox.init = function (cmp) {
@@ -46,10 +47,10 @@ zkTxbox.onHide = function (cmp) {
  */
 zkTxbox.onblur = function (inp) {
 	//stop the scanning of onChaning first
-	var interval = zkau._intervals[inp.id];
+	var interval = zkTxbox._intervals[inp.id];
 	if (interval) {
 		clearInterval(interval);
-		delete zkau._intervals[inp.id];
+		delete zkTxbox._intervals[inp.id];
 	}
 	if (inp.removeAttribute) {
 		inp.removeAttribute("zk_changing_last");
@@ -144,8 +145,8 @@ zkTxbox.onfocus = function (inp) {
 	//handling onChanging
 	if (inp && inp.id && getZKAttr($outer(inp), "onChanging")) {
 		inp.setAttribute("zk_changing_last", inp.value);
-		if (!zkau._intervals[inp.id])
-			zkau._intervals[inp.id] =
+		if (!zkTxbox._intervals[inp.id])
+			zkTxbox._intervals[inp.id] =
 				setInterval("zkTxbox._scanChanging('"+inp.id+"')", 500);
 	}
 };
@@ -258,271 +259,6 @@ zkCkbox.onclick = function (cmp) {
 		var uuid = $uuid(cmp);
 		zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]},
 			zkau.asapTimeout(uuid, "onCheck"));
-	}
-};
-
-////
-// window //
-zkWnd = {};
-zkWnd._szs = {}
-zkWnd.init = function (cmp) {
-	zkWnd._fixHgh(cmp);
-
-	var btn = $e(cmp.id + "!close");
-	if (btn) {
-		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
-		zk.listen(btn, "mouseover", function () {if (window.zkau) zkau.onimgover(btn);});
-			//FF: at the moment of browsing to other URL, listen is still attached but
-			//our js are unloaded. It causes JavaScript error though harmlessly
-			//This is a dirty fix (since onclick and others still fail but hardly happen)
-		zk.listen(btn, "mouseout", function () {zkau.onimgout(btn);});
-		if (!btn.style.cursor) btn.style.cursor = "default";
-	}
-
-	zk.listen(cmp, "mousemove", function (evt) {if(window.zkWnd) zkWnd.onmove(evt, cmp);});
-		//FF: at the moment of browsing to other URL, listen is still attached but
-		//our js are unloaded. It causes JavaScript error though harmlessly
-		//This is a dirty fix (since onclick and others still fail but hardly happen)
-	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));
-
-	//bug 1469887: re-init since it might be caused by invalidate
-	if (zkau.wndmode[cmp.id]) {
-		zkau.fixWnd(cmp);
-		zkau.floatWnd(cmp, null, zkau.onWndMove);
-	}
-};
-zkWnd.cleanup = function (cmp) {
-	zkWnd.setSizable(cmp, false);
-	if (zkau.wndmode[cmp.id] == "modal")
-		zul.endModal(cmp.id); //it also clear wndmode[cmp.id]
-};
-zkWnd.setAttr = function (cmp, nm, val) {
-	switch (nm) {
-	case "z.sizable":
-		zkau.setAttr(cmp, nm, val);
-		zkWnd.setSizable(cmp, val == "true");
-		return true;
-
-	case "z.cntStyle":
-		var n = $e(cmp.id + "!cave");
-		if (n) {
-			zk.setStyle(n, val != null ? val: "");
-			zkWnd._fixHgh(cmp); //border's dimension might be changed
-		}
-		return true;  //no need to store z.cntType
-
-	case "style":
-	case "style.height":
-		zkau.setAttr(cmp, nm, val);
-		zkWnd._fixHgh(cmp);
-		return true;
-	}
-	return false;
-};
-zkWnd._fixHgh = function (cmp) {
-	var hgh = cmp.style.height;
-	if (hgh && hgh != "auto") {
-		var n = $e(cmp.id + "!cave");
-		if (n) {
-			hgh = cmp.clientHeight;
-			for (var p = n, q; q = p.previousSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
-				p = q;
-			}
-			for (var p = n, q; q = p.nextSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
-				p = q;
-			}
-			zk.setOffsetHeight(n, hgh);
-		}
-	}
-};
-/** Called by au.js when executing the outer command. */
-zkWnd.beforeOuter = function (cmp) {
-	if (zkau.wndmode[cmp.id] == "modal")
-		zkau.wndmode[cmp.id + "!modal"] = true; //so afterOuter know to doModal
-};
-/** Called by au.js when executing the outer command. */
-zkWnd.afterOuter = function (cmp) {
-	var tagnm = cmp.id + "!modal"; //note: not cmp.id
-	if (zkau.wndmode[tagnm]) {
-		delete zkau.wndmode[tagnm];
-		zul.doModal(cmp);
-	}
-};
-zkWnd.sizable = function (cmp) {
-	return getZKAttr(cmp, "sizable") == "true";
-};
-zkWnd.setSizable = function (cmp, sizable) {
-	var id = cmp.id;
-	if (sizable) {
-		if (!zkWnd._szs[id]) {
-			var orgpos = cmp.style.position; //Bug 1679593
-			zkWnd._szs[id] = new Draggable(cmp, {
-				starteffect: zk.voidf,
-				endeffect: zkWnd._endsizing, ghosting: zkWnd._ghostsizing,
-				revert: true, reverteffect: zk.voidf,
-				ignoredrag: zkWnd._ignoresizing
-			});
-			cmp.style.position = orgpos;
-		}
-	} else {
-		if (zkWnd._szs[id]) {
-			zkWnd._szs[id].destroy();
-			delete zkWnd._szs[id];
-		}
-	}
-};
-/** 0: none, 1: top, 2: right-top, 3: right, 4: right-bottom, 5: bottom,
- * 6: left-bottom, 7: left, 8: left-top
- */
-zkWnd._insizer = function (cmp, x, y) {
-	var ofs = Position.cumulativeOffset(cmp);
-	var r = ofs[0] + cmp.offsetWidth, b = ofs[1] + cmp.offsetHeight;
-	if (x - ofs[0] <= 5) {
-		if (y - ofs[1] <= 5) return 8;
-		else if (b - y <= 5) return 6;
-		else return 7;
-	} else if (r - x <= 5) {
-		if (y - ofs[1] <= 5) return 2;
-		else if (b - y <= 5) return 4;
-		else return 3;
-	} else {
-		if (y - ofs[1] <= 5) return 1;
-		else if (b - y <= 5) return 5;
-	}
-};
-zkWnd.onmove = function (evt, cmp) {
-	var target = Event.element(evt);
-	if (zkWnd.sizable(cmp)) {
-		var c = zkWnd._insizer(cmp, Event.pointerX(evt), Event.pointerY(evt));
-		if (c) {
-			zk.backupStyle(cmp, "cursor");
-			cmp.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
-				c == 3 ? 'e-resize': c == 4 ? 'se-resize':
-				c == 5 ? 's-resize': c == 6 ? 'sw-resize':
-				c == 7 ? 'w-resize': 'nw-resize';
-		} else {
-			zk.restoreStyle(cmp, "cursor");
-		}
-	}
-};
-/** Called by zkWnd._szs[]'s ignoredrag for resizing window. */
-zkWnd._ignoresizing = function (cmp, pointer) {
-	var dg = zkWnd._szs[cmp.id];
-	if (dg) {
-		var v = zkWnd._insizer(cmp, pointer[0], pointer[1]);
-		if (v) {
-			switch (dg.z_dir = v) {
-			case 1: case 5: dg.options.constraint = 'vertical'; break;
-			case 3: case 7: dg.options.constraint = 'horizontal'; break;
-			default: dg.options.constraint = null;
-			}
-			dg.z_orgzi = cmp.style.zIndex;
-			return false;
-		}
-	}
-	return true;
-};
-zkWnd._endsizing = function (cmp, evt) {
-	var dg = zkWnd._szs[cmp.id];
-	if (!dg) return;
-
-	if (dg.z_orgzi != null) {
-		cmp.style.zIndex = dg.z_orgzi; //restore it (Bug 1619349)
-		dg.z_orgzi = null
-	}
-
-	if (dg.z_szofs && (dg.z_szofs[0] || dg.z_szofs[1])) {
-		var keys = "";
-		if (evt) {
-			if (evt.altKey) keys += 'a';
-			if (evt.ctrlKey) keys += 'c';
-			if (evt.shiftKey) keys += 's';
-		}
-
-		//adjust size
-		setTimeout("zkWnd._resize($e('"+cmp.id+"'),"+dg.z_dir+","
-			+dg.z_szofs[0]+","+dg.z_szofs[1]+",'"+keys+"')", 50);
-		dg.z_dir = dg.z_szofs = null;
-	}
-};
-zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
-	var l, t, w = cmp.offsetWidth, h = cmp.offsetHeight;
-	if (ofsy) {
-		if (dir == 8 || dir <= 2) {
-			h -= ofsy;
-			if (h < 0) {
-				ofsy = cmp.offsetHeight;
-				h = 0;
-			}
-			t = parseInt(cmp.style.top || "0") + ofsy;
-		}
-		if (dir >= 4 && dir <= 6) {
-			h += ofsy;
-			if (h < 0) h = 0;
-		}
-	}
-	if (ofsx) {
-		if (dir >= 6 && dir <= 8) {
-			w -= ofsx;
-			if (w < 0) {
-				ofsx = cmp.offsetWidth;
-				w = 0;
-			}
-			l = parseInt(cmp.style.left || "0") + ofsx;
-		}
-		if (dir >= 2 && dir <= 4) {
-			w += ofsx;
-			if (w < 0) w = 0;
-		}
-	}
-	if (w != cmp.offsetWidth || h != cmp.offsetHeight) {
-		if (w != cmp.offsetWidth) cmp.style.width = w + "px";
-		if (h != cmp.offsetHeight) {
-			cmp.style.height = h + "px";
-			zkWnd._fixHgh(cmp);
-		}
-		zkau.sendOnSize(cmp, keys);
-	}
-	if (l != null || t != null) {
-		if (l != null) cmp.style.left = l + "px";
-		if (t != null) cmp.style.top = t + "px";
-		zkau.sendOnMove(cmp, keys);
-	}
-};
-
-/* @param ghosting whether to create or remove the ghosting
- */
-zkWnd._ghostsizing = function (dg, ghosting, pointer) {
-	if (ghosting) {
-		var ofs = zkau.beginGhostToDIV(dg);
-		var html =
-			'<div id="zk_ddghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-			+'px;';
-		if (dg.z_dir == 8 || dg.z_dir <= 2)
-			html += 'border-top:3px solid darkgray;';
-		if (dg.z_dir >= 2 && dg.z_dir <= 4)
-			html += 'border-right:3px solid darkgray;';
-		if (dg.z_dir >= 4 && dg.z_dir <= 6)
-			html += 'border-bottom:3px solid darkgray;';
-		if (dg.z_dir >= 6 && dg.z_dir <= 8)
-			html += 'border-left:3px solid darkgray;';
-		document.body.insertAdjacentHTML("afterbegin", html + '"></div>');
-		dg.element = $e("zk_ddghost");
-	} else {
-		var org = zkau.getGhostOrgin(dg);
-		if (org) {
-			//calc how much window is resized
-			var ofs1 = Position.cumulativeOffset(dg.element);
-			var ofs2 = Position.cumulativeOffset(org);
-			dg.z_szofs = [ofs1[0] - ofs2[0], ofs1[1] - ofs2[1]];
-		} else {
-			dg.z_szofs = null;
-		}
-		zkau.endGhostToDIV(dg);
 	}
 };
 

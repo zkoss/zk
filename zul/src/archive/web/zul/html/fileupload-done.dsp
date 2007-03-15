@@ -48,11 +48,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	if we try to insert some elements (some kind of NullPointerException
 	"Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIXMLHttpRequest.open]"
 --%>
-	function closeUpload() {
-		parent.setTimeout("zkau.sendRemove('${arg.uuid}')", 0);
-	}
 	function doUpdate() {
 		parent.setTimeout("zkau.sendUpdateResult('${arg.uuid}', '${arg.contentId}')", 0);
+	}
+	function closeUpload() {
+		parent.setTimeout("zkau.sendRemove('${arg.uuid}')", 0);
 	}
 	<c:if test="${!empty arg.contentId}">doUpdate(); closeUpload();</c:if>
 	<c:if test="${empty arg.contentId and empty arg.alert}">closeUpload();</c:if>

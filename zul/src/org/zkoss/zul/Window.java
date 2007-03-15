@@ -39,10 +39,8 @@ import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.au.*;
 
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.au.*;
 
 /**
  * A generic window.
@@ -91,8 +89,6 @@ public class Window extends XulElement implements IdSpace {
 	private transient Object _mutex;
 	/** The style used for the content block. */
 	private String _cntStyle;
-	/** Whether this window is in a special mode that need to be ended. */
-	private boolean _moding;
 	/** Whether to show a close button. */
 	private boolean _closable;
 	/** Whether the window is sizable. */
@@ -426,88 +422,67 @@ public class Window extends XulElement implements IdSpace {
 	 * To tell the difference, check the getMessage method of InterruptedException.
 	 */
 	public void doModal() throws InterruptedException {
-		checkOverlappable();
-
 		if (!Events.inEventListener())
 			throw new WrongValueException("doModal() and setMode(\"modal\") can only be called in an event listener, not in page loading");
 
-		if (_mode != MODAL || !_moding) {
-			endModing();
+		checkOverlappable();
 
-			if (_mode != MODAL) {
-				_mode = MODAL;
-				invalidate();
-			}
+		if (_mode != MODAL) {
+			invalidate();
+			setVisible(true); //if MODAL, it must be visible; vice versa
 
-			_moding = true;
-			setVisible(true); //after _molding = true to avoid dead-loop
-
-			response("doModal", new AuDoModal(this));
-				//after setVisible since client assume visible first
-
-			//no need to synchronized (_mutex) because no racing is possible
-			Executions.wait(_mutex);
+			enterModal();
 		}
 	}
 	/** Makes this window as overlapped with other components.
 	 */
 	public void doOverlapped() {
 		checkOverlappable();
-
-		if (_mode != OVERLAPPED || !_moding) {
-			endModing();
-
-			if (_mode != OVERLAPPED) {
-				_mode = OVERLAPPED;
-				invalidate();
-			}
-
-			_moding = true;
-			setVisible(true); //after _molding = true to avoid dead-loop
-
-			response("doOverlapped", new AuDoOverlapped(this));
-				//after setVisible since client assume visible first
-		}
+		setNonModalMode(OVERLAPPED);
 	}
 	/** Makes this window as popup, which is overlapped with other component
 	 * and auto-hiden when user clicks outside of the window.
 	 */
 	public void doPopup() {
 		checkOverlappable();
-
-		if (_mode != POPUP || !_moding) {
-			endModing();
-
-			if (_mode != POPUP) {
-				_mode = POPUP;
-				invalidate();
-			}
-
-			_moding = true;
-			setVisible(true); //after _molding = true to avoid dead-loop
-
-			response("doPopup", new AuDoPopup(this));
-				//after setVisible since client assume visible first
-		}
+		setNonModalMode(POPUP);
 	}
 	/** Makes this window as embeded with other components (Default).
 	 */
 	public void doEmbedded() {
-		if (_mode != EMBEDDED) {
-			endModing();
-			_mode = EMBEDDED;
+		setNonModalMode(EMBEDDED);
+	}
+	/* Set non-modal mode. */
+	private void setNonModalMode(int mode) {
+		if (_mode != mode) {
+			if (_mode == MODAL) leaveModal();
+			_mode = mode;
 			invalidate();
 		}
 		setVisible(true);
+	}
+
+	/** Set mode to MODAL and suspend this thread. */
+	private void enterModal() throws InterruptedException {
+		_mode = MODAL;
+		//no need to synchronized (_mutex) because no racing is possible
+		Executions.wait(_mutex);
+	}
+	/** Resumes the suspendded thread and set mode to OVERLAPPED. */
+	private void leaveModal() {
+		_mode = OVERLAPPED;
+		Executions.notifyAll(_mutex);
 	}
 	/** Makes sure it is not draggable. */
 	private void checkOverlappable() {
 		if (!"false".equals(getDraggable()))
 			throw new UiException("Draggable window cannot be modal, overlapped or popup: "+this);
+
 		for (Component comp = this; (comp = comp.getParent()) != null;)
 			if (!comp.isVisible())
 				throw new UiException("One of its ancestors, "+comp+", is not visible, so unable to be modal, overlapped or popup");
 	}
+
 	/** Returns whether to show a close button on the title bar.
 	 */
 	public boolean isClosable() {
@@ -556,27 +531,6 @@ public class Window extends XulElement implements IdSpace {
 	 */
 	public void onModal() throws InterruptedException {
 		doModal();
-	}
-
-	/** Ends the modal mode. */
-	private void endModing() {
-		if (_moding) {
-			assert D.OFF || _mode != EMBEDDED;
-
-			if (_mode == MODAL) {
-				Executions.notifyAll(_mutex);
-				response(null, new AuEndModal(this));
-				_mode = OVERLAPPED;
-					//Note: we have to make it as overlapped window.
-					//Otherwise, it causes confusion as Bug 1621425
-			} else if (_mode == POPUP) {
-				response(null, new AuEndPopup(this));
-			} else {
-				response(null, new AuEndOverlapped(this));
-			}
-
-			_moding = false;
-		}
 	}
 
 	/** Returns the CSS style for the content block of the window.
@@ -656,28 +610,16 @@ public class Window extends XulElement implements IdSpace {
 	}
 
 	public void setPage(Page page) {
-		final Page old = getPage();
 		super.setPage(page);
-		if (old != page && (old == null || page == null))
-			fixMode(page != null);
+
+		if (page == null && _mode == MODAL)
+			leaveModal();
 	}
 	public void setParent(Component parent) {
-		final Page old = getPage();
 		super.setParent(parent);
-		final Page page = getPage();
-		if (old != page && (old == null || page == null))
-			fixMode(page != null);
-	}
-	private void fixMode(boolean attached) {
-		if (attached) {
-			switch (_mode) {
-			case OVERLAPPED: doOverlapped();
-			case POPUP: doPopup();
-			}
-		} else {
-			endModing();
-			if (_mode == MODAL) _mode = EMBEDDED;
-		}
+
+		if (_mode == MODAL && getPage() == null)
+			leaveModal();
 	}
 
 	/** Changes the visibility of the window.
@@ -687,19 +629,11 @@ public class Window extends XulElement implements IdSpace {
 	 * will become {@link #OVERLAPPED} and the suspending thread is resumed.
 	 */
 	public boolean setVisible(boolean visible) {
-		if (!visible) endModing();
-
-		final boolean ret = super.setVisible(visible);
-		if (!ret && visible && !_moding)
-			switch (_mode) {
-			case POPUP:
-				doPopup();
-				return false;
-			case OVERLAPPED:
-				doOverlapped();
-				return false;
-			}
-		return ret;
+		if (!visible && _mode == MODAL) {
+			leaveModal();
+			invalidate();
+		}
+		return super.setVisible(visible);
 	}
 
 	//-- super --//
@@ -710,6 +644,11 @@ public class Window extends XulElement implements IdSpace {
 				throw new UiException("Only embedded window could be draggable: "+this);
 		}
 		super.setDraggable(draggable);
+	}
+	protected String getRealStyle() {
+		final String style = super.getRealStyle();
+		return _mode != EMBEDDED ? "position:absolute;" + style: style;
+			//If no absolute, Opera ignores left and top
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
@@ -732,6 +671,8 @@ public class Window extends XulElement implements IdSpace {
 			sb.append(" z.closable=\"true\"");
 		if (_sizable)
 			sb.append(" z.sizable=\"true\"");
+		if (_mode != EMBEDDED)
+			HTMLs.appendAttribute(sb, "z.mode", getMode());
 		HTMLs.appendAttribute(sb, "z.ctkeys", _ctkeys);
 		return sb.toString();
 	}

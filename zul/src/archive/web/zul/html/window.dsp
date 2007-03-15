@@ -21,7 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="titlesc" value="${self.titleSclass}"/>
-<div id="${self.uuid}" z.type="zul.widget.Wnd" z.autoz="true"${self.outerAttrs}${self.innerAttrs}>
+<div id="${self.uuid}" z.type="zul.wnd.Wnd" z.autoz="true"${self.outerAttrs}${self.innerAttrs}>
 <div><%-- for animation effect --%>
 <c:choose>
  <c:when test="${empty self.caption and empty self.title}">
