@@ -106,26 +106,24 @@ public class Decimalbox extends FormatInputElement {
 
 	//-- super --//
 	protected Object coerceFromString(String value) throws WrongValueException {
-		final String val = toNumberOnly(value);
+		final Object[] vals = toNumberOnly(value);
+		final String val = (String)vals[0];
 		if (val == null || val.length() == 0)
 			return null;
 
 		try {
-			int j = val.indexOf('%'); //toNumberOnly translates Locale-dependent
-			BigDecimal bd = j == 0 ? new BigDecimal(0D):
-				new BigDecimal(j < 0 ? val: val.substring(0, j));
-			if (_scale != AUTO) bd = bd.setScale(_scale);
-			if (j < 0) return bd;
+			BigDecimal v = new BigDecimal(val);
+			if (_scale != AUTO) v = v.setScale(_scale);
 
-			final BigDecimal hundred = new BigDecimal(100);
-			for (final int len = val.length(); j < len && bd.signum() != 0; ++j)
-				if (val.charAt(j) == '%')
-					bd = bd.divide(hundred,
-						_scale == AUTO ? bd.scale()+2: _scale,
+			int divscale = vals[1] != null ? ((Integer)vals[1]).intValue(): 0;
+			if (divscale > 0) {
+				final BigDecimal ten = new BigDecimal(10);
+				do {
+					v = v.divide(ten, _scale == AUTO ? v.scale()+1: _scale,
 						BigDecimal.ROUND_HALF_EVEN);
-				else
-					throw new WrongValueException(this, MZul.NUMBER_REQUIRED, value);
-			return bd;
+				} while (--divscale > 0);
+			}
+			return v;
 		} catch (NumberFormatException ex) {
 			throw new WrongValueException(this, MZul.NUMBER_REQUIRED, value);
 		}

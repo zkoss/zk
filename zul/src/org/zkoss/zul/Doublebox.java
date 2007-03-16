@@ -88,18 +88,16 @@ public class Doublebox extends FormatInputElement {
 
 	//-- super --//
 	protected Object coerceFromString(String value) throws WrongValueException {
-		final String val = toNumberOnly(value);
+		final Object[] vals = toNumberOnly(value);
+		final String val = (String)vals[0];
 		if (val == null || val.length() == 0)
 			return null;
 
 		try {
-			int j = val.indexOf('%'); //toNumberOnly translates Locale-dependent
-			double v =  j == 0 ? 0.0 : Double.parseDouble(j < 0 ? val: val.substring(0, j));
-			if (j <= 0) return new Double(v);
-
-			for (final int len = val.length(); j < len && v != 0; ++j)
-				if (val.charAt(j) == '%') v /= 100;
-				else throw new WrongValueException(this, MZul.NUMBER_REQUIRED, value);
+			double v = Double.parseDouble(val);
+			int divscale = vals[1] != null ? ((Integer)vals[1]).intValue(): 0;
+			if (divscale > 0)
+				v /= Math.pow(10, divscale);
 			return new Double(v);
 		} catch (NumberFormatException ex) {
 			throw new WrongValueException(this, MZul.NUMBER_REQUIRED, value);

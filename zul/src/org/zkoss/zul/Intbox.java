@@ -62,22 +62,19 @@ public class Intbox extends FormatInputElement {
 
 	//-- super --//
 	protected Object coerceFromString(String value) throws WrongValueException {
-		final String val = toNumberOnly(value);
+		final Object[] vals = toNumberOnly(value);
+		final String val = (String)vals[0];
 		if (val == null || val.length() == 0)
 			return null;
 
 		try {
-			int j = val.indexOf('%'); //toNumberOnly translates Locale-dependent
-			if (j <= 0)
-				return j == 0 ? new Integer(0): Integer.valueOf(val);
-
-			int v = Integer.parseInt(val.substring(0, j));
-			for (final int len = val.length(); j < len && v != 0; ++j)
-				if (val.charAt(j) == '%') v /= 100;
-				else throw new WrongValueException(this, MZul.INTEGER_REQUIRED, value);
+			int v = Integer.parseInt(val);
+			int divscale = vals[1] != null ? ((Integer)vals[1]).intValue(): 0;
+			while (v != 0 && --divscale >= 0)
+				v /= 10;
 			return new Integer(v);
 		} catch (NumberFormatException ex) {
-			throw new WrongValueException(this, MZul.INTEGER_REQUIRED, value);
+			throw new WrongValueException(this, MZul.NUMBER_REQUIRED, value);
 		}
 	}
 	protected String coerceToString(Object value) {
