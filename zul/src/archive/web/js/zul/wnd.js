@@ -454,22 +454,19 @@ zkWnd._endModal = function (uuid, replace) {
 
 	zkau._modals.remove(uuid);
 	delete zkWnd._modal2[uuid];
-	for (;;) {
-		if (zkau._modals.length == 0) {
-			zk.unlisten(window," resize", zkWnd._onMoveMask);
-			zk.unlisten(window, "scroll", zkWnd._onMoveMask);
-			window.onscroll = null;
-			zk.restoreDisabled();
-			break;
-		}
 
+	if (zkau._modals.length == 0) {
+		zk.unlisten(window," resize", zkWnd._onMoveMask);
+		zk.unlisten(window, "scroll", zkWnd._onMoveMask);
+		window.onscroll = null;
+		zk.restoreDisabled();
+	} else {
 		var lastid = zkau._modals[zkau._modals.length - 1];
 		var last = $e(lastid);
 		if (last) {
 			zk.restoreDisabled(last);
 			if (!prevfocusId) zk.focusDownById(lastid, 10);
 			if (!prevfocusId) zk.focusDownById(lastid, 10);
-			break;
 		}
 	}
 
