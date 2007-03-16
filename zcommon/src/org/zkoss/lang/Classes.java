@@ -683,9 +683,14 @@ public class Classes {
 				if (k == argTypes.length) { //all matched
 					if (bPublic)
 						return ms[j];
-					return getMethodInPublic(
-						cls, ms[j].getName(), ms[j].getParameterTypes());
+					try {
+						return getMethodInPublic(
+							cls, ms[j].getName(), ms[j].getParameterTypes());
+					} catch (NoSuchMethodException ex) {
+					}
+					break;//not match; look for next
 				}
+
 				final Class argType = argTypes[k], mType = mTypes[k];
 				if (argType == null
 				|| (!bySubclass && mType.isAssignableFrom(argType))
