@@ -672,6 +672,8 @@ zkau.onfocus = function (el) {
 	if (!zkau.focusInFloats(el)) zkau.closeFloats(el);
 	if (zkau.valid) zkau.valid.uncover(el);
 
+	zkau.autoZIndex(el);
+
 	var cmp = $outer(el);
 	if (getZKAttr(cmp, "onFocus") == "true")
 		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 25);
@@ -1782,6 +1784,7 @@ zkau.cmd1 = {
 	},
 	focus: function (uuid, cmp) {
 		if (!zk.eval(cmp, "focus")) {
+			zkau.autoZIndex(cmp); //some, say, window, not listen to onfocus
 			cmp = $real(cmp); //focus goes to inner tag
 			if (cmp.focus && !cmp.disabled)
 				zk.focusById(cmp.id, 5);
