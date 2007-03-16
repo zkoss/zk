@@ -1414,28 +1414,28 @@ anima = {}
 /** Make a component visible by increasing the opacity.
  * @param id component or its ID
  */
-anima.appear = function (id) {
+anima.appear = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
 			setTimeout("anima.appear('"+n.id+"')", 100);
 		} else {
 			setZKAttr(n, "animating", "show");
-			Effect.Appear(n, {duration:0.8, afterFinish: anima._afterVisi});
+			Effect.Appear(n, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterVisi});
 		}
 	}
 };
 /** Make a component visible by sliding down.
  * @param id component or its ID
  */
-anima.slideDown = function (id) {
+anima.slideDown = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
 			setTimeout("anima.slideDown('"+n.id+"')", 100);
 		} else {
 			setZKAttr(n, "animating", "show");
-			Effect.SlideDown(n, {duration:0.4, afterFinish: anima._afterVisi});
+			Effect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi});
 				//duration must be less than 0.5 since other part assumes it
 		}
 	}
@@ -1443,7 +1443,7 @@ anima.slideDown = function (id) {
 /** Make a component invisible by sliding up.
  * @param id component or its ID
  */
-anima.slideUp = function (id) {
+anima.slideUp = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
@@ -1451,7 +1451,7 @@ anima.slideUp = function (id) {
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
-			Effect.SlideUp(n, {duration:0.4, afterFinish: anima._afterHide});
+			Effect.SlideUp(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterHide});
 				//duration must be less than 0.5 since other part assumes it
 		}
 	}
@@ -1459,7 +1459,7 @@ anima.slideUp = function (id) {
 /** Make a component invisible by fading it out.
  * @param id component or its ID
  */
-anima.fade = function (id) {
+anima.fade = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
@@ -1467,14 +1467,14 @@ anima.fade = function (id) {
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
-			Effect.Fade(n, {duration:0.55, afterFinish: anima._afterHide});
+			Effect.Fade(n, {duration:dur ? dur/1000: 0.55, afterFinish: anima._afterHide});
 		}
 	}
 };
 /** Make a component invisible by puffing away.
  * @param id component or its ID
  */
-anima.puff = function (id) {
+anima.puff = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
@@ -1482,14 +1482,14 @@ anima.puff = function (id) {
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
-			Effect.Puff(n, {duration:0.7, afterFinish: anima._afterHide0});
+			Effect.Puff(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
 		}
 	}
 };
 /** Make a component invisible by fading and dropping out.
  * @param id component or its ID
  */
-anima.dropOut = function (id) {
+anima.dropOut = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
@@ -1497,7 +1497,7 @@ anima.dropOut = function (id) {
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
-			Effect.DropOut(n, {duration:0.7, afterFinish: anima._afterHide0});
+			Effect.DropOut(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
 		}
 	}
 };
