@@ -69,6 +69,8 @@ ZK 2.3.0 Freshly
   1678968: Problem with overlapped windows visibility in firefox
   1679629: Label for Caption (of groupbox) can not be changed
   1680490: doublebox failed to handle #,##0;(#,##0)
+  1680482: label popup/context/draggable/droppable/style... in ZHTML
+  1678907: Modal onClose and Messagebox
 
 * Upgrade Notes:
   + The way to customize window's look and feel is changed.
