@@ -71,6 +71,7 @@ ZK 2.3.0 Freshly
   1680490: doublebox failed to handle #,##0;(#,##0)
   1680482: label popup/context/draggable/droppable/style... in ZHTML
   1678907: Modal onClose and Messagebox
+  1677341: Focus not bring the window to top
 
 * Upgrade Notes:
   + The way to customize window's look and feel is changed.
