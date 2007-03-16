@@ -67,10 +67,10 @@ public class ExecutionsCtrl extends Executions {
 		Method mtd = null;
 		try {
 			mtd = Classes.getCloseMethodBySubclass(
-					cls, evtnm, new Class[] {Event.class});
+					cls, evtnm, new Class[] {Event.class}); //with event arg
 		} catch (NoSuchMethodException ex) {
 			try {
-				mtd = cls.getMethod(evtnm, null);
+				mtd = cls.getMethod(evtnm, null); //no argument case
 			} catch (NoSuchMethodException e2) {
 			}
 		}
