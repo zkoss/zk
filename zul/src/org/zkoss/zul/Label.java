@@ -167,8 +167,16 @@ public class Label extends XulElement {
 	/** Whether to generate the value directly without ID. */
 	private boolean isIdRequired() {
 		final Component p = getParent();
-		return p == null || !isVisible() || !Components.isAutoId(getId())
-			|| !isRawLabel(p) || isAsapRequired(Events.ON_CLICK)
+		return p == null || !isVisible() 
+			|| !isRawLabel(p) || !Components.isAutoId(getId())
+			|| getContext() != null || getTooltip() != null
+			|| getTooltiptext() != null || getPopup() != null
+			|| getAction() != null
+			|| getDraggable() != null || getDroppable() != null
+			|| getStyle() != null || getSclass() != null
+			|| getLeft() != null || getTop() != null
+			|| getWidth() != null || getHeight() != null
+			|| isAsapRequired(Events.ON_CLICK)
 			|| isAsapRequired(Events.ON_RIGHT_CLICK)
 			|| isAsapRequired(Events.ON_DOUBLE_CLICK);
 	}
