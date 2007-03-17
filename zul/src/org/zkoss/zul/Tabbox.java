@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Selectable;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.au.AuScript;
 
 import org.zkoss.zul.impl.XulElement;
@@ -286,13 +287,19 @@ public class Tabbox extends XulElement {
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Selectable {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements Selectable, ChildChangedAware {
 		//-- Selectable --//
 		public void selectItemsByClient(Set selItems) {
 			if (selItems != null && selItems.size() == 1)
 				setSelectedTab0((Tab)selItems.iterator().next(), false);
 			else
 				throw new UiException("Exactly one selected tab is required: "+selItems); //debug purpose
+		}
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return !inAccordionMold();
+				//we have to adjust the width of last cell
 		}
 	}
 }

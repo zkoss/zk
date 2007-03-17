@@ -34,6 +34,11 @@ zkTabbox.setAttr = function (cmp, name, value) {
 	}
 	return false;
 };
+zkTabbox.childchg = function (cmp) {
+	var uuid = getZKAttr(cmp, "tabs");
+	if (uuid)
+		zkTabs.fixWidth(uuid);
+};
 
 ////
 // tab //
