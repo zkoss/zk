@@ -104,8 +104,13 @@ public class DHtmlLayoutFilter implements Filter {
 		chain.doFilter(request,
 			BufferedResponse.getInstance(response, sw));
 
-		process((HttpServletRequest)request,
-			(HttpServletResponse)response, sw.toString());
+		//Bug 1673839: servlet might redirect
+		//FUTURE: there are many reason to cause commit and we might have
+		//to handle them differently (such as check header)
+		if (!response.isCommitted()) {
+			process((HttpServletRequest)request,
+				(HttpServletResponse)response, sw.toString());
+		}
 	}
 	public void destroy() {
 	}
