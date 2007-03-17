@@ -164,8 +164,16 @@ if (zk.gecko || zk.safari) {
 
 /** Center the specified element. */
 zk.center = function (el) {
-	var elwd = zk.offsetWidth(el);
-	var elhgh = zk.offsetHeight(el);
+	var elwd = zk.offsetWidth(el),
+		elhgh = zk.offsetHeight(el);
+
+	if ((!elwd || !elhgh) && el.style.display == "none") {
+		el.style.top = "-10000px"; //avoid annoying effect
+		el.style.display = "block"; //we need to calculate the size
+		elwd = zk.offsetWidth(el);
+		elhgh = zk.offsetHeight(el),
+		el.style.display = "none"; //avoid Firefox to display it too early
+	}
 
 	var height = zk.innerHeight(), width = zk.innerWidth(),
 		top = zk.innerY(), left = zk.innerX(),
