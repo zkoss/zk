@@ -499,10 +499,7 @@ zkWnd._posMask = function (mask) {
 /** Makes a window in the center. */
 zkWnd._center = function (cmp, zi) {
 	cmp.style.position = "absolute";
-	cmp.style.top = "-10000px"; //avoid annoying effect
-	cmp.style.display = "block"; //we need to calculate the size
 	zk.center(cmp);
-	cmp.style.display = "none"; //avoid Firefox to display it too early
 	cmp.style.zIndex = zi;
 
 	zkau.sendOnMove(cmp);

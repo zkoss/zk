@@ -59,8 +59,6 @@ abstract public class XulElement extends HtmlBasedComponent {
 	private String _tooltip;
 	/** The action. */
 	private String _action;
-	/** The parsed actions. */
-	private Map _actmap;
 
 	/** Returns the ID of {@link org.zkoss.zul.Popup} that should appear
 	 * when the user right-clicks on the element (aka., context menu).
@@ -145,31 +143,61 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public void setAction(String action) {
 		if (action != null && action.length() == 0) action = null;
 		if (!Objects.equals(_action, action)) {
-			final Map old = _actmap;
-
-			_actmap = action != null ? parseAction(action): null;
-				//do it first because parseAction might fail
 			_action = action;
-
-			if (getPage() != null) {
-				if (_actmap != null)
-					for (Iterator it = _actmap.entrySet().iterator();
-					it.hasNext();) {
-						final Map.Entry me = (Map.Entry)it.next();
-						final String actnm = (String)me.getKey();
-						final String actval = (String)me.getValue();
-						if (old == null
-						|| !Objects.equals(actval, old.get(actnm)))
-							smartUpdate(actnm, toJavaScript(actval));
-					}
-				if (old != null)
-					for (Iterator it = old.keySet().iterator(); it.hasNext();) {
-						final String actnm = (String)it.next();
-						if (_actmap == null || !_actmap.containsKey(actnm))
-							smartUpdate(actnm, null);
-					}
-			}
+			invalidate();
+				//action is rarely changed dynamically, so we
+				//don't use smartUpdate (it requires two for-loop to
+				//replace and remove actions)
 		}
+	}
+
+	/** Returns the attributes for onClick, onRightClick and onDoubleClick
+	 * by checking whether the corresponding listeners are added,
+	 * or null if none is added.
+	 *
+	 * @param ignoreOnClick whether to ignore onClick
+	 */
+	protected String getAllOnClickAttrs(boolean ignoreOnClick) {
+		StringBuffer sb = null;
+		if (!ignoreOnClick) sb = appendAsapAttr(sb, Events.ON_CLICK);
+		sb = appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
+		sb = appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
+		return sb != null ? sb.toString():  null;
+	}
+
+	//-- super --//
+	public String getOuterAttrs() {
+		final String attrs = super.getOuterAttrs();
+		final String ctx = getContext(), popup = getPopup(), tip = getTooltip();
+			//Let derives (e.g., treerow has a chance to override it)
+		if (ctx == null &&  tip == null && popup == null)
+			return attrs;
+
+		final StringBuffer sb = new StringBuffer(80).append(attrs);
+		HTMLs.appendAttribute(sb, "z.ctx", ctx);
+		HTMLs.appendAttribute(sb, "z.pop", popup);
+		HTMLs.appendAttribute(sb, "z.tip", tip);
+		return sb.toString();
+	}
+
+	/** Generates the Client-Side-Action attributes to the interior tag.
+	 * Reason: onfocus is the main use.
+	 */
+	public String getInnerAttrs() {
+		final String attrs = super.getInnerAttrs();
+		if (_action == null)
+			return attrs;
+
+		//To have smaller footprint for each component, we don't cache
+		//the parsed result
+		final StringBuffer sb = new StringBuffer(100).append(attrs);
+		for (Iterator it = parseAction(_action).entrySet().iterator();
+		it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			HTMLs.appendAttribute(sb,
+				(String)me.getKey(), toJavaScript((String)me.getValue()));
+		}
+		return sb.toString();
 	}
 
 	/** Returns a map of actions (String name, String javascript).
@@ -280,59 +308,5 @@ abstract public class XulElement extends HtmlBasedComponent {
 			//next
 			j = l + 1;
 		}
-	}
-
-	/** Returns the attributes for onClick, onRightClick and onDoubleClick
-	 * by checking whether the corresponding listeners are added,
-	 * or null if none is added.
-	 *
-	 * @param ignoreOnClick whether to ignore onClick
-	 */
-	protected String getAllOnClickAttrs(boolean ignoreOnClick) {
-		StringBuffer sb = null;
-		if (!ignoreOnClick) sb = appendAsapAttr(sb, Events.ON_CLICK);
-		sb = appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
-		sb = appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-		return sb != null ? sb.toString():  null;
-	}
-
-	//Cloneable//
-	public Object clone() {
-		final XulElement clone = (XulElement)super.clone();
-		if (clone._actmap != null)
-			clone._actmap = new HashMap(clone._actmap);
-		return clone;
-	}
-
-	//-- super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String ctx = getContext(), popup = getPopup(), tip = getTooltip();
-			//Let derives (e.g., treerow has a chance to override it)
-		if (ctx == null &&  tip == null && popup == null)
-			return attrs;
-
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		HTMLs.appendAttribute(sb, "z.ctx", ctx);
-		HTMLs.appendAttribute(sb, "z.pop", popup);
-		HTMLs.appendAttribute(sb, "z.tip", tip);
-		return sb.toString();
-	}
-
-	/** Generates the Client-Side-Action attributes to the interior tag.
-	 * Reason: onfocus is the main use.
-	 */
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		if (_actmap == null)
-			return attrs;
-
-		final StringBuffer sb = new StringBuffer(100).append(attrs);
-		for (Iterator it = _actmap.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			HTMLs.appendAttribute(sb,
-				(String)me.getKey(), toJavaScript((String)me.getValue()));
-		}
-		return sb.toString();
 	}
 }
