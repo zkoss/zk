@@ -22,7 +22,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<html>
 			<attribute name="content"><![CDATA[
 				<h4>Animation Effects</h4>
-				<p>Versatile visual effects enabled with the <a href="http://script.aculo.us">script.aculo.us</a> libraries.</p>
+				<p>Versatile visual effects powered by the <a href="http://script.aculo.us">script.aculo.us</a> libraries.</p>
 			]]></attribute>
 		</html>
 		<groupbox mold="3d" width="100%">
