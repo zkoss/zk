@@ -17,8 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="Test Client Info" onClientInfo="onClientInfo(event)">
-<grid>
+<grid onClientInfo="onClientInfo(event)">
 	<rows>
 		<row>Time Zone <label id="tm"/></row>
 		<row>Screen <label id="scrn"/></row>
@@ -31,4 +30,3 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	}
 	</zscript>
 </grid>
-</window>
