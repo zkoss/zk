@@ -194,10 +194,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			</attribute>
 		</annotation>
 	</component>
-	<!--component>
+	<component>
 		<component-name>grid</component-name>
 		<extends>grid</extends>
-	</component-->
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>converter</attribute-name>
+				<attribute-value>org.zkoss.zkplus.databind.ListModelConverter</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
 	<!--component>
 		<component-name>groupbox</component-name>
 		<extends>groupbox</extends>
