@@ -18,6 +18,35 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 //zk//
 if (!window.zk) { //avoid eval twice
+////
+//Customization
+/** Creates the error box to display the specified error message.
+ * Developer can override this method to provide a customize errorbox.
+ * If null is returned, alert() is used.
+ *
+ * @param id the progress box's ID
+ * @param msg the message
+ * @param x the x-coordinate of the box
+ * @param y the y-coordinate of the box
+ */
+if (!window.Boot_progressbox) { //not customized
+	window.Boot_progressbox = function (id, msg, x, y) {
+		var n = document.createElement("DIV");
+		document.body.appendChild(n);
+
+		var html = '<div id="'+id+'" style="left:'+x+'px;top:'+y+'px;'
+		+'position:absolute;z-index:79000;background-color:#FFF0C8;'
+		+'white-space:nowrap;border:1px solid #77a;padding:6px;">'
+		+'<img alt="." src="'+zk.getUpdateURI('/web/zk/img/progress.gif')+'"/> '
+		+msg+'</div>';
+
+		zk._setOuterHTML(n, html);
+		return $e(id);
+	};
+}
+
+/////
+// zk
 zk = {};
 zk.build = "3Y"; //increase this if we want the browser to reload JavaScript
 
@@ -374,8 +403,10 @@ zk._bld = function () {
 		setTimeout(function () {
 			if (zk.loading) {
 				var n = $e("zk_loadprog");
-				if (!n) zk._newProgDlg("zk_loadprog",
-					'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)', 20, 20);
+				if (!n)
+					Boot_progressbox("zk_loadprog",
+						'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)',
+						zk.innerX(), zk.innerY() + 50);
 			}
 		}, 1500);
 	}
@@ -738,28 +769,10 @@ zk._progress = function () {
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
 				//when the first boot, mesg is not ready
 
-			n = zk._newProgDlg("zk_prog", msg, 0, zk.innerY());
-			if (n) {
-				var left = zk.innerWidth() - n.offsetWidth - 20;
-				if (left < 0) left = 0;
-				n.style.left = left + "px";
-			}
+			Boot_progressbox("zk_prog", msg, zk.innerX(), zk.innerY());
 			zk.progressPrompted = true;
 		}
 	}
-};
-zk._newProgDlg = function (id, msg, x, y) {
-	var n = document.createElement("DIV");
-	document.body.appendChild(n);
-
-	var html = '<div id="'+id+'" style="left:'+x+'px;top:'+y+'px;'
-	+'position:absolute;z-index:79000;background-color:#FFF0C8;'
-	+'white-space:nowrap;border:1px solid #77a;padding:6px;">'
-	+'<img alt="." src="'+zk.getUpdateURI('/web/zk/img/progress.gif')+'"/> '
-	+msg+'</div>';
-
-	zk._setOuterHTML(n, html);
-	return $e(id);
 };
 
 //-- utilities --//

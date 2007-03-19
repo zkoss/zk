@@ -20,7 +20,6 @@ package org.zkoss.zk.scripting.jruby;
 
 import java.util.Iterator;
 
-import org.jruby.IRuby;
 import org.jruby.Ruby;
 import org.jruby.javasupport.Java;
 import org.jruby.javasupport.JavaEmbedUtils;
@@ -28,6 +27,7 @@ import org.jruby.javasupport.JavaObject;
 import org.jruby.javasupport.JavaUtil;
 import org.jruby.runtime.IAccessor;
 import org.jruby.runtime.GlobalVariable;
+import org.jruby.runtime.Block;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.internal.runtime.GlobalVariables;
 
@@ -42,7 +42,7 @@ import org.zkoss.zk.scripting.util.GenericInterpreter;
  * @author tomyeh
  */
 public class JRubyInterpreter extends GenericInterpreter {
-	private IRuby _runtime;
+	private Ruby _runtime;
 
 	//GenericInterpreter//
 	protected void exec(String script) {
@@ -94,12 +94,14 @@ public class JRubyInterpreter extends GenericInterpreter {
 	}
 	private Object rubyToJava(IRubyObject value) {
 		return JavaUtil.convertArgument(
-			Java.ruby_to_java(_runtime.getObject(), value), Object.class);
+			Java.ruby_to_java(
+				_runtime.getObject(), value, Block.NULL_BLOCK),
+			Object.class);
 	}
 
 	/** The global scope. */
 	private class Variables extends GlobalVariables {
-		private Variables(IRuby runtime) {
+		private Variables(Ruby runtime) {
 			super(runtime);
 
 			//we have to copy variables from the origin one to this
