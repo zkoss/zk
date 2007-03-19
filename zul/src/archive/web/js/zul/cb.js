@@ -19,6 +19,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 zk.load("zul.widget");
 
 ////
+//Customization
+/** Returns the background color for a combo item.
+ * Developer can override this method by providing a different background.
+ */
+if (!window.Comboitem_bgcolor) { //define it only if not customized
+	window.Comboitem_bgcolor = function (item) {
+		return item.className.endsWith("sel") ? "#115588": "#DAE8FF";
+	};
+}
+
+////
 zkCmbox = {};
 zkCmbox.init = function (cmp) {
 	if (!zkCmbox.onHide) zkCmbox.onHide = zkTxbox.onHide;
@@ -69,8 +80,7 @@ zkCmit.onover = function (evt) {
 		var item = $parentByTag(Event.element(evt), "TR");
 		if (item) {
 			zk.backupStyle(item, "backgroundColor");
-			item.style.backgroundColor =
-				item.className.endsWith("sel") ? "#115588": "#DAE8FF";
+			item.style.backgroundColor = Comboitem_bgcolor(item);
 		}
 	}
 };

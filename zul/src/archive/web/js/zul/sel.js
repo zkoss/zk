@@ -19,6 +19,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 zk.load("zul.zul");
 
 ////
+//Customization
+/** Returns the background color for a list item or tree item.
+ * Developer can override this method by providing a different background.
+ */
+if (!window.Selectable_bgcolor) { //define it only if not customized
+	window.Selectable_bgcolor = function (row) {
+		var clr = Element.getStyle(row, "color");
+		return clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
+			row.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
+			row.className.endsWith("sel") ? "#115588": "#DAE8FF";
+	};
+}
+
+////
 // Seletable //
 zk.Selectable = Class.create();
 zk.Selectable.prototype = {
@@ -965,20 +979,6 @@ zk.Selectable.prototype = {
 		}
 	}
 };
-
-////
-//Customization
-/** Returns the background color. Developer can override this method
- * by providing a different background.
- */
-if (!window.Selectable_bgcolor) { //define it only if not customized
-	window.Selectable_bgcolor = function (row) {
-		var clr = Element.getStyle(row, "color");
-		return clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
-			row.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
-			row.className.endsWith("sel") ? "#115588": "#DAE8FF";
-	}
-}
 
 ////
 // Utilities to help implement zk.Selectable //

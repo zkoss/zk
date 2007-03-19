@@ -19,6 +19,34 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 zk.load("zul.zul"); //zul
 
 ////
+//Customization
+/** Creates the error box to display the specified error message.
+ * Developer can override this method to provide a customize errorbox.
+ * If null is returned, alert() is used.
+ *
+ * @param id the component's ID
+ * @param boxid the error box's ID
+ * @param msg the message
+ */
+if (!window.Validate_errorbox) { //not customized
+	window.Validate_errorbox = function (id, boxid, msg) {
+		var html =
+	'<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
+	+boxid+'" style="display:none;position:absolute" class="errbox"><div>'
+	+'<table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'
+	+'<td width="17"><img src="'
+	+zk.getUpdateURI('/web/zul/img/vd/arrowU.gif')+'" id="'+id
+	+'!img" onclick="zkVld._eblocate(this)" title="'+mesg.GOTO_ERROR_FIELD
+	+'"/></td><td>'+zk.encodeXML(msg, true) //Bug 1463668: security
+	+'</td><td width="16"><img src="'+zk.getUpdateURI('/web/zul/img/close-off.gif')
+	+'" onclick="zkVld._ebclose(this)" onmouseover="zkau.onimgover(this)" onmouseout="zkau.onimgout(this)"/>'
+	+'</td></tr></table></div></div>';
+		document.body.insertAdjacentHTML("afterbegin", html);
+		return $e(boxid);
+	};
+}
+
+////
 zkVld = {};
 if (!zkVld._ebs) zkVld._ebs = new Array();
 zkau.valid = zkVld; //zkau depends on it
@@ -142,24 +170,13 @@ zkVld._errbox = function () {
 
 	if (!zk.isRealVisible(cmp)) return; //don't show the erro box
 
-	html = '<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
-		+boxid+'" style="display:none;position:absolute" class="errbox"><div>'
-		+'<table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'
-		+'<td width="17"><img src="'
-		+zk.getUpdateURI('/web/zul/img/vd/arrowU.gif')+'" id="'+id
-		+'!img" onclick="zkVld._eblocate(this)" title="'+mesg.GOTO_ERROR_FIELD
-		+'"/></td><td>'+zk.encodeXML(html, true) //Bug 1463668: security
-		+'</td><td width="16"><img src="'+zk.getUpdateURI('/web/zul/img/close-off.gif')
-		+'" onclick="zkVld._ebclose(this)" onmouseover="zkau.onimgover(this)" onmouseout="zkau.onimgout(this)"/>'
-		+'</td></tr></table></div></div>';
-	document.body.insertAdjacentHTML("afterbegin", html);
-	var box = $e(boxid);
+	var box = Validate_errorbox(id, boxid, html);
 	if (!box) {
 		alert(html);
 		return;
 	}
 
-	zkVld._ebs.push(box.id);
+	zkVld._ebs.push(boxid);
 
 	if (!zkVld._cnt) zkVld._cnt = 0;
 	box.style.zIndex = 70000 + zkVld._cnt++;
