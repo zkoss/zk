@@ -823,6 +823,7 @@
 	<xs:complexType name="listcellType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="span" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- listfoot -->
 	<xs:element name="listfoot" type="listfootType" />
@@ -838,6 +839,7 @@
 	<xs:complexType name="listfooterType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />

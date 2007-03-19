@@ -21,6 +21,8 @@ package org.zkoss.zul;
 import java.util.List;
 import java.util.Iterator;
 
+import org.zkoss.xml.HTMLs;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -33,6 +35,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  */
 public class Listcell extends LabelImageElement {
 	private Object _value;
+	private int _span = 1;
 
 	public Listcell() {
 	}
@@ -117,6 +120,22 @@ public class Listcell extends LabelImageElement {
 		_value = value;
 	}
 
+	/** Returns number of columns to span this footer.
+	 * Default: 1.
+	 */
+	public int getSpan() {
+		return _span;
+	}
+	/** Sets the number of columns to span this footer.
+	 * <p>It is the same as the colspan attribute of HTML TD tag.
+	 */
+	public void setSpan(int span) {
+		if (_span != span) {
+			_span = span;
+			smartUpdate("colspan", Integer.toString(_span));
+		}
+	}
+
 	//-- super --//
 	/** Returns the width which the same as {@link #getListheader}'s width.
 	 */
@@ -183,12 +202,15 @@ public class Listcell extends LabelImageElement {
 
 		final Listheader header = getListheader();
 		final String clkattrs = getAllOnClickAttrs(false);
-		if (header == null && clkattrs == null)
+		if (header == null && clkattrs == null && _span == 1)
 			return attrs;
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		if (header != null) sb.append(header.getColAttrs());
 		if (clkattrs != null) sb.append(clkattrs);
+		if (_span != 1)
+			HTMLs.appendAttribute(sb, "colspan", _span);
+
 		return sb.toString();
 	}
 
