@@ -40,6 +40,7 @@ ZK 2.3.0 Freshly
   1677711: A way to specify the width for each column of hbox
   1495307: Support diff visaul effects when div (zul) becomes visible
   1615999: Allow a span of '0'
+  1683390: Listfooter and Listcell support the span property
   
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
