@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 //zk//
 if (!window.zk) { //avoid eval twice
 zk = {};
-zk.build = "3X"; //increase this if we want the browser to reload JavaScript
+zk.build = "3Y"; //increase this if we want the browser to reload JavaScript
 
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();
