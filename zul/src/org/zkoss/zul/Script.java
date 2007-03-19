@@ -16,32 +16,43 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Iterator;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * Represents a HTML <code>script</code> element.
+ * A component to represent script codes running at the client.
+ * It is the same as HTML SCRIPT tag.
+ *
+ * <p>Note: it is the scripting codes running at the client, not at the
+ * server. Don't confuse it with the <code>zscript</code> element.
+ *
+ * <p>To avoid typo, this compnent requires you to specify the type
+ * ({@link #setType}) -- which is, if JavaScript, "text/javascript".
  *
  * @author tomyeh
  */
 public class Script extends AbstractComponent {
-	private String _content = "";
 	private String _src, _type, _charset;
 	private boolean _defer;
 
 	public Script() {
 	}
 
-	/** Returns the type of this script.
-	 * <p>Default: null.
+	/** Returns the type of this client script.
+	 * <p>Default: null. However, it is invalid.
+	 * In other words, you must specify a correct type.
+	 * For JavaScript, it is "text/javascript".
 	 */
 	public String getType() {
 		return _type;
 	}
-	/** Sets the type of this script.
+	/** Sets the type of this client script.
 	 * For JavaScript, it is <code>text/javascript</code>
 	 *
 	 * <p>Note: this property is NOT optional. You must specify one.
@@ -100,28 +111,6 @@ public class Script extends AbstractComponent {
 		}
 	}
 
-	/** Returns the content of the script codes.
-	 * <p>Default: empty.
-	 */
-	public String getContent() {
-		return _content;
-	}
-	/** Sets the content of the script codes directly.
-	 *
-	 * <p>You either set the script codes directly with {@link #setContent}, or
-	 * set the URI to load the script codes with {@link #setSrc}.
-	 * But, not both.
-	 *
-	 * @param content the script codes
-	 */
-	public void setContent(String content) {
-		if (content == null) content = "";
-		if (!Objects.equals(_content, content)) {
-			_content = content;
-			invalidate();
-		}
-	}
-
 	/** Returns whether to defer the execution of the script codes.
 	 *
 	 * <p>Default: false.
@@ -138,28 +127,41 @@ public class Script extends AbstractComponent {
 		}
 	}
 
-	/** Returns the exterior attribute for generating HTML tags.
-	 * <p>Used only for component development.
+	//-- Component --//
+	/** Only {@link Label} children are allowed.
 	 */
-	public String getOuterAttrs() {
+	public boolean insertBefore(Component child, Component insertBefore) {
+		if (!(child instanceof Label))
+			throw new UiException("Unsupported child for style: "+child);
+		if (super.insertBefore(child, insertBefore)) {
+			invalidate();
+			return true;
+		}
+		return false;
+	}
+	public void redraw(java.io.Writer out) throws java.io.IOException {
 		if (_type == null)
 			throw new UiException("The type is required. For example, text/javascript");
 
-		final StringBuffer sb = new StringBuffer(80);
+		final StringBuffer sb = new StringBuffer(256).append("<script");
+		HTMLs.appendAttribute(sb, "id",  getUuid());
 		HTMLs.appendAttribute(sb, "type",  _type);
 		HTMLs.appendAttribute(sb, "charset",  _charset);
+
 		if (_src != null)
 			HTMLs.appendAttribute(sb, "src",
 				getDesktop().getExecution().encodeURL(_src));
+
 		if (_defer)
 			sb.append(" defer=\"defer\"");
-		return sb.toString();
-	}
 
-	//-- Component --//
-	/** Default: not childable.
-	 */
-	public boolean isChildable() {
-		return false;
+		out.write(sb.append(">\n").toString());
+
+		for (final Iterator it = getChildren().iterator(); it.hasNext();) {
+			out.write(((Label)it.next()).getValue());
+			out.write('\n');
+		}
+
+		out.write("</script>");
 	}
 }

@@ -72,10 +72,17 @@ public class Style extends AbstractComponent {
 		}
 	}
 
+	//Component//
+	/** Only {@link Label} children are allowed.
+	 */
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Label))
 			throw new UiException("Unsupported child for style: "+child);
-		return super.insertBefore(child, insertBefore);
+		if (super.insertBefore(child, insertBefore)) {
+			invalidate();
+			return true;
+		}
+		return false;
 	}
 
 	public void redraw(java.io.Writer out) throws java.io.IOException {
@@ -88,9 +95,11 @@ public class Style extends AbstractComponent {
 		} else {
 			out.write("<style type=\"text/css\" id=\"");
 			out.write(getUuid());
-			out.write("\">");
-			for (final Iterator it = getChildren().iterator(); it.hasNext();)
+			out.write("\">\n");
+			for (final Iterator it = getChildren().iterator(); it.hasNext();) {
 				out.write(((Label)it.next()).getValue());
+				out.write('\n');
+			}
 			out.write("</style>");
 		}
 	}

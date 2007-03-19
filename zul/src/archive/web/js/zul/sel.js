@@ -967,6 +967,20 @@ zk.Selectable.prototype = {
 };
 
 ////
+//Customization
+/** Returns the background color. Developer can override this method
+ * by providing a different background.
+ */
+if (!window.Selectable_bgcolor) { //define it only if not customized
+	window.Selectable_bgcolor = function (row) {
+		var clr = Element.getStyle(row, "color");
+		return clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
+			row.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
+			row.className.endsWith("sel") ? "#115588": "#DAE8FF";
+	}
+}
+
+////
 // Utilities to help implement zk.Selectable //
 zkSel = {};
 
@@ -995,11 +1009,7 @@ zkSel.onover = function (evt) {
 		var row = $parentByTag(Event.element(evt), "TR");
 		if (row) {
 			zk.backupStyle(row, "backgroundColor");
-			var clr = Element.getStyle(row, "color");
-			row.style.backgroundColor =
-				clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
-				row.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
-				row.className.endsWith("sel") ? "#115588": "#DAE8FF";
+			row.style.backgroundColor = Selectable_bgcolor(row);
 		}
 	}
 };
