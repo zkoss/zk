@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting.jruby;
 
+import java.util.Iterator;
+
 import org.jruby.IRuby;
 import org.jruby.Ruby;
 import org.jruby.javasupport.Java;
@@ -69,8 +71,8 @@ public class JRubyInterpreter extends GenericInterpreter {
 		_runtime.setGlobalVariables(new Variables(_runtime));
 	}
 	public void destroy() {
-    	JavaEmbedUtils.terminate(_runtime);
-        _runtime = null;
+		JavaEmbedUtils.terminate(_runtime);
+		_runtime = null;
 
 		super.destroy();
 	}
@@ -99,6 +101,13 @@ public class JRubyInterpreter extends GenericInterpreter {
 	private class Variables extends GlobalVariables {
 		private Variables(IRuby runtime) {
 			super(runtime);
+
+			//we have to copy variables from the origin one to this
+			GlobalVariables vars = runtime.getGlobalVariables();
+			for (Iterator it = vars.getNames(); it.hasNext();) {
+				final String nm = (String)it.next();
+				set(nm, vars.get(nm));
+			}
 		}
 
 		public IRubyObject get(String name) {
