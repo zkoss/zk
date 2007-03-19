@@ -33,13 +33,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * <p>This implementation process zk specific popup login page.</p>
+ * <p>This implementation process zk specific popup login page. If send user login sucessfullly, an
+ * "onLoginOK" event would be fired to the component that fired the event and caused the login 
+ * processing. Since it will be tedious to register "onLoginOK" handler on every possible component, it is
+ * better to register an onLoginOK event handler on the concerned page.</p>
  *
  * @see ZkAuthenticationEntryPoint
  * @see ShowWindowEventListener
  * @author Henri
  */
 public class ZkAuthenticationProcessingFilter extends AuthenticationProcessingFilter {
+	/** If end user login sucessfully, an ON_LOGIN_OK is fired. Register an associated event 
+	 * listener on the page and operate per the success. */
+	private static final String ON_LOGIN_OK = "onLoginOK";
 	/*package*/ static final String CURRENT_EVENT = "org.zkoss.zkplus.acegi.CURRENT_EVENT";
 	private boolean _resendZkEvent = false; //default to false
 
@@ -69,6 +75,7 @@ public class ZkAuthenticationProcessingFilter extends AuthenticationProcessingFi
 		final Component comp = evt.getTarget();
 		final String updateURI = comp.getDesktop().getUpdateURI(null);
     	if (url.indexOf(updateURI) >= 0) { //saved request
+    		Events.postEvent(new Event(ON_LOGIN_OK, comp, null)); //post onLoginOK event
     		if (_resendZkEvent) {
 				((HttpServletRequest)request).getSession().removeAttribute(ZkEventExceptionFilter.EVENT);
 	    		Events.postEvent(evt);
