@@ -154,7 +154,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#JavaScript (rhino)
 	cp dist/lib/ext/groovy.jar /tmp/zk/$prjnm/dist/lib/ext
 		#Groovy
-	cp dist/lib/ext/jruby.jar /tmp/zk/$prjnm/dist/lib/ext
+	cp dist/lib/ext/jruby.jar dist/lib/ext/asm.jar /tmp/zk/$prjnm/dist/lib/ext
 		#Ruby (jruby)
 	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$prjnm/dist/lib/ext
 		#jFreeChart
