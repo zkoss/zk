@@ -124,7 +124,7 @@ public class Row extends XulElement {
 	 * <p>Default: empty.
 	 */
 	public String getSpans() {
-		return Utils.intsToString(_spans, 0, null);
+		return Utils.intsToString(_spans);
 	}
 	/** Sets the spans, which is a list of numbers separated by comma.
 	 *
@@ -224,7 +224,7 @@ public class Row extends XulElement {
 		final StringBuffer sb = new StringBuffer(100);
 		if (colattrs != null)
 			sb.append(colattrs);
-		if (span > 1)
+		if (span != 1)
 			sb.append(" colspan=\"").append(span).append('"');
 		HTMLs.appendAttribute(sb, "style", style);
 		

@@ -80,17 +80,13 @@ import org.zkoss.zk.ui.WrongValueException;
 	 * @param defaultValue the default value that will be replaced with defaultString
 	 * @param defaultString the default string used if defaultValue is found in the array
 	 */
-	/*package*/ static final String intsToString(int[] ary,
-	int defaultValue, String defaultString) {
+	/*package*/ static final String intsToString(int[] ary) {
 		if (ary == null || ary.length == 0)
 			return "";
 
 		final StringBuffer sb = new StringBuffer(50);
 		for (int j = 0;;) {
-			if (ary[j] != defaultValue)
-				sb.append(ary[j]);
-			else if (defaultString != null)
-				sb.append(defaultString);
+			sb.append(ary[j]);
 
 			if (++j >= ary.length) {
 				sb.append(',');

@@ -6,6 +6,7 @@ ZK 2.3.0 Freshly
   1676244: Grid supports live data (ListModel)
   1678817: Macro components support inline expansion
   1680474: Allow EL expr to reference a component in Client Side Action
+  1683371: DataBind support Grid
   1658748: Prevent user from pressing ESC when loading JS
   1662365: Macro setMacroURI()
   1669824: InterruptedException shall carry the cause
@@ -38,7 +39,7 @@ ZK 2.3.0 Freshly
   1679066: Support radiogroup databind radio with radio value
   1677711: A way to specify the width for each column of hbox
   1495307: Support diff visaul effects when div (zul) becomes visible
-  1683371: DataBind support Grid
+  1615999: Allow a span of '0'
   
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
