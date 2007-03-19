@@ -45,7 +45,8 @@ ZK 2.3.0 Freshly
   1683398: Treecell and treefooter support the span property
   1683438: ZUL's script shall accept JS codes, rather thru content
   1647768: make listbox configurable
-
+  1631231: ZK and Acegi: refresh main page after login
+ 
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
   1660340: addAnnotation failed if component is created programmingly
