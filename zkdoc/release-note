@@ -44,8 +44,12 @@ ZK 2.3.0 Freshly
   1683396: Footer support the span property
   1683398: Treecell and treefooter support the span property
   1683438: ZUL's script shall accept JS codes, rather thru content
-  1647768: make listbox configurable
+  1647768: A way to customize listbox's background color (onmouseover)
+  1683466: A way to customize the error box for illegal values
+  1683475: A way to customize the progressing popup
   1631231: ZK and Acegi: refresh main page after login
+  1683464: Upgrade to JRuby 0.9.8
+  1683500: Upgrade to JFreeChart 1.0.4
  
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
