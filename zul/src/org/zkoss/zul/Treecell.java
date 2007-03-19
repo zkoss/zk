@@ -50,6 +50,8 @@ public class Treecell extends LabelImageElement {
 	private static final String VBAR = "/vbar.gif";
 	private static final String SPACER = "/spacer.gif";
 
+	private int _span = 1;
+
 	public Treecell() {
 	}
 	public Treecell(String label) {
@@ -110,6 +112,22 @@ public class Treecell extends LabelImageElement {
 	public int getLevel() {
 		final Component parent = getParent();
 		return parent != null ? ((Treerow)parent).getLevel(): 0;
+	}
+
+	/** Returns number of columns to span this cell.
+	 * Default: 1.
+	 */
+	public int getSpan() {
+		return _span;
+	}
+	/** Sets the number of columns to span this cell.
+	 * <p>It is the same as the colspan attribute of HTML TD tag.
+	 */
+	public void setSpan(int span) {
+		if (_span != span) {
+			_span = span;
+			smartUpdate("colspan", Integer.toString(_span));
+		}
 	}
 
 	//-- Internal use only --//
@@ -277,12 +295,13 @@ public class Treecell extends LabelImageElement {
 
 		final Treecol col = getTreecol();
 		final String clkattrs = getAllOnClickAttrs(false);
-		if (col == null && clkattrs == null)
+		if (col == null && clkattrs == null && _span == 1)
 			return attrs;
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		if (col != null) sb.append(col.getColAttrs());
 		if (clkattrs != null) sb.append(clkattrs);
+		if (_span != 1) HTMLs.appendAttribute(sb, "colspan", _span);
 		return sb.toString();
 	}
 

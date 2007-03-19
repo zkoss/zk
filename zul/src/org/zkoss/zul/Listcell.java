@@ -120,13 +120,13 @@ public class Listcell extends LabelImageElement {
 		_value = value;
 	}
 
-	/** Returns number of columns to span this footer.
+	/** Returns number of columns to span this cell.
 	 * Default: 1.
 	 */
 	public int getSpan() {
 		return _span;
 	}
-	/** Sets the number of columns to span this footer.
+	/** Sets the number of columns to span this cell.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 */
 	public void setSpan(int span) {
@@ -208,8 +208,7 @@ public class Listcell extends LabelImageElement {
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		if (header != null) sb.append(header.getColAttrs());
 		if (clkattrs != null) sb.append(clkattrs);
-		if (_span != 1)
-			HTMLs.appendAttribute(sb, "colspan", _span);
+		if (_span != 1) HTMLs.appendAttribute(sb, "colspan", _span);
 
 		return sb.toString();
 	}
