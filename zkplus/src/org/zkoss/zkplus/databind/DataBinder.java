@@ -29,6 +29,8 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.Row;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListModel;
@@ -484,7 +486,10 @@ public class DataBinder {
 		if (comp instanceof Listitem) {
 			return ((Listitem)comp).getListbox();
 		}
-		throw new UiException("Collection Databinder now supports Listbox and Listitem only! CollectionItem:"+comp);
+		if (comp instanceof Row) {
+			return ((Row)comp).getGrid();
+		}
+		throw new UiException("Collection Databinder now supports Listbox and Grid only! CollectionItem:"+comp);
 	}
 
 	//get Collection owner of a given collection item.
@@ -514,7 +519,21 @@ public class DataBinder {
     	}
     	return null;
     } 
-		throw new UiException("Collection Databinder now supports Listbox and Listitem only! CollectionItem:"+comp+", CollectionOwner:"+owner);
+		if (owner instanceof Grid) {
+			final Grid grid = (Grid) owner;
+  		final ListModel xmodel = grid.getModel();
+  		if (xmodel instanceof BindingListModel) {
+  			final BindingListModel model = (BindingListModel) xmodel;
+  			int index = model.indexOf(bean);
+  			if (index >= 0) {
+    			Row row = (Row) grid.getRows().getChildren().get(index);
+    			return lookupClone(row, comp);
+    		}
+    	}
+    	return null;
+    } 
+
+		throw new UiException("Collection Databinder now supports Listbox and Grid only! CollectionItem:"+comp+", CollectionOwner:"+owner);
 	}
   		
 	//set the binding renderer for the template listitem component (Tigthly couple to a component)
@@ -523,11 +542,19 @@ public class DataBinder {
 			final Listitem li = (Listitem)comp;
 			final Listbox lbx = li.getListbox();
 			if (lbx.getItemRenderer() == null) {
-				lbx.setItemRenderer(new BindingRenderer(li, this));
+				lbx.setItemRenderer(new BindingListitemRenderer(li, this));
 			}
 			return;
 		}
-		throw new UiException("Collection Databinder now supports Listbox and Listitem only! CollectionItem:"+comp);
+		if (comp instanceof Row) {
+			final Row row = (Row)comp;
+			final Grid grid = row.getGrid();
+			if (grid.getRowRenderer() == null) {
+				grid.setRowRenderer(new BindingRowRenderer(row, this));
+			}
+			return;
+		}
+		throw new UiException("Collection Databinder now supports Listbox and Grid only! CollectionItem:"+comp);
 	}
 	//^^ above Tightly coupled to component
 	

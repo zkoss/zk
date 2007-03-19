@@ -23,9 +23,10 @@ import org.zkoss.zul.ListModelArray;
 import org.zkoss.lang.Objects;
 
 /**
- * <p>This is the {@link BindingListModel} as a Object array to be used with {@link org.zkoss.zul.Listbox} 
+ * <p>This is the {@link BindingListModel} as a Object array to be used with 
+ * {@link org.zkoss.zul.Listbox}, {@link org.zkoss.zul.Grid},  
  * and {@link DataBinder}.
- * Modify the contents of this model as an Object array would cause the associated Listbox to change accordingly.</p> 
+ * Modify the contents of this model as an Object array would cause the associated Listbox or Grid to change accordingly.</p> 
  *
  * @author Henri Chen
  * @see BindingListModel

@@ -1,4 +1,4 @@
-/* BindingRenderer.java
+/* BindingListitemRenderer.java
 
 {{IS_NOTE
 	Purpose:
@@ -9,7 +9,7 @@
 		Sat Feb  3 14:18:27     2007, Created by Henri
 }}IS_NOTE
 
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
@@ -19,6 +19,7 @@ package org.zkoss.zkplus.databind;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 
+import org.zkoss.zul.Grid;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Listcell;
@@ -31,13 +32,13 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/*package*/ class BindingRenderer implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt {
+/*package*/ class BindingListitemRenderer implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt {
 	private static final String KIDS = "zkplus.databind.KIDS";
 	private Listitem _template;
 	private DataBinder _binder;
 	private int x = 0;
 	
-	public BindingRenderer(Listitem template, DataBinder binder) {
+	public BindingListitemRenderer(Listitem template, DataBinder binder) {
 		_template = template;
 		_binder = binder;
 	}
@@ -106,8 +107,8 @@ import java.util.Iterator;
 			clone.setAttribute(_binder.TEMPLATE, template);
 		}
 		
-		//Listbox in Listbox, no need to process
-		if (template instanceof Listbox) {
+		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, no need to process
+		if (template instanceof Grid || template instanceof Listbox) {
 			return;
 		}
 		
@@ -124,8 +125,8 @@ import java.util.Iterator;
 	private void setupCloneIds(Component clone) {
 		clone.setId("@"+clone.getUuid()); //init id to @uuid to avoid duplicate id issue
 
-		//Listbox in Listbox, no need to process down
-		if (clone instanceof Listbox) {
+		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, no need to process
+		if (clone instanceof Grid || clone instanceof Listbox) {
 			return;
 		}
 		
