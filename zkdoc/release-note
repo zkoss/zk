@@ -41,6 +41,8 @@ ZK 2.3.0 Freshly
   1495307: Support diff visaul effects when div (zul) becomes visible
   1615999: Allow a span of '0'
   1683390: Listfooter and Listcell support the span property
+  1683396: Footer support the span property
+  1683398: Treecell and treefooter support the span property
   
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
