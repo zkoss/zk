@@ -383,7 +383,7 @@ div.errbox {
 }
 
 div.progressmeter {
-	border: 1px inset;
+	border: 1px inset; text-align: left;
 }
 
 div.paging, div.paging a {
