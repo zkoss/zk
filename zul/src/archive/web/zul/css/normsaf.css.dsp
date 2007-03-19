@@ -5,14 +5,14 @@ html {height:100%}
 
 <%-- paragraphs --%>
 p, div, span, label, a, li, dt, dd, input, textarea, pre, body {
-	font-family: "Verdana", Tahoma, Arial, serif;
+	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
 }
 body {
 	margin: 2px 5px; padding: 0;
 }
 button {
-	font-family: Tahoma, Arial, serif;
+	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: x-small; font-weight: normal;
 }
 legend {
