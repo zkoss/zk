@@ -199,6 +199,7 @@ public class Chart extends Imagemap {
 		}
 		_intWidth = stringToInt(w);
 		super.setWidth(w);
+		smartDrawChart();
 	}
 	
 	/**
@@ -217,6 +218,7 @@ public class Chart extends Imagemap {
 		}
 		_intHeight = stringToInt(h);
 		super.setHeight(h);
+		smartDrawChart();
 	}
 	
 	/**
@@ -650,7 +652,7 @@ public class Chart extends Imagemap {
 	}
 		
 	//-- utilities --//
-	private void decode(String color, int[] rgb) {
+	/*package*/ static void decode(String color, int[] rgb) {
 		if (color == null) {
 			return;
 		}
@@ -662,7 +664,7 @@ public class Chart extends Imagemap {
 		rgb[2] = Integer.parseInt(color.substring(5, 7), 16);
 	}
 	
-	private int stringToInt(String str) {
+	/*package*/ static int stringToInt(String str) {
 		int j = str.lastIndexOf("px");
 		if (j > 0) {
 			final String num = str.substring(0, j);
