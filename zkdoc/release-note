@@ -38,7 +38,8 @@ ZK 2.3.0 Freshly
   1679066: Support radiogroup databind radio with radio value
   1677711: A way to specify the width for each column of hbox
   1495307: Support diff visaul effects when div (zul) becomes visible
-
+  1683371: DataBind support Grid
+  
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
   1660340: addAnnotation failed if component is created programmingly
@@ -74,6 +75,7 @@ ZK 2.3.0 Freshly
   1677341: Focus not bring the window to top
   1682266: Vertical tab display wrong if tabpanel becomes larger
   1673839: zkFilter doesn't handle redirect response properly
+  1681128: Chart does not update when change width/height
 
 * Upgrade Notes:
   + The way to customize window's look and feel is changed.
@@ -96,6 +98,7 @@ ZK 2.3.0 Freshly
   + getSuspsendedThreads is moved from Desktop to DesktopCtrl
   + getZScriptVariable, getZScriptMethod and getZScriptClass are removed
     from Component. Use the corresponding methods defined in Page.
+  + org.zkoss.zkplus.databind.BindingRenderer renamed to org.zkoss.zkplus.databind.BindingListitemRenderer
 
 	--------
 ZK 2.3.0 RC
