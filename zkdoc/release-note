@@ -43,7 +43,9 @@ ZK 2.3.0 Freshly
   1683390: Listfooter and Listcell support the span property
   1683396: Footer support the span property
   1683398: Treecell and treefooter support the span property
-  
+  1683438: ZUL's script shall accept JS codes, rather thru content
+  1647768: make listbox configurable
+
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
   1660340: addAnnotation failed if component is created programmingly
@@ -97,6 +99,8 @@ ZK 2.3.0 Freshly
   + Client Side Action now use EL expressions (#{}) to reference a component
     or any object.
     <textbox action="onfocus: action.show(#{help1}); onblur: action.hide(#{help1})"/>
+  + script: Use child (label) to specify the embedded JavaScript codes
+    instead of the content property
 
 * Notes for upgrading from 2.3.0 RC
   + getSuspsendedThreads is moved from Desktop to DesktopCtrl
