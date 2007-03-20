@@ -88,6 +88,7 @@ ZK 2.3.0 Freshly
   1673839: zkFilter doesn't handle redirect response properly
   1681128: Chart does not update when change width/height
   1683727: Progressmeter display progression
+  1683841: Auto-gen Popup.getId() doesn't work with Label.tooltip
 
 * Upgrade Notes:
   + The way to customize window's look and feel is changed.

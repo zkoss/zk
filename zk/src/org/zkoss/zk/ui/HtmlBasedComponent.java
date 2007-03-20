@@ -33,7 +33,6 @@ import org.zkoss.zk.ui.ext.client.ZIndexed;
 import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.AuFocus;
 
 /**
@@ -333,11 +332,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		HTMLs.appendAttribute(sb, "z.drop", _droppable);
 
 		final Object xc = getExtraCtrl();
-		if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired()) {
-			final String id = getId();
-	 		if (!ComponentsCtrl.isAutoId(id))
-				HTMLs.appendAttribute(sb, "z.zid", id);
-		}
+		if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())
+			HTMLs.appendAttribute(sb, "z.zid", getId());
 		return sb.toString();
 	}
 	/** Returns the interior attributes for generating the inner HTML tag;
