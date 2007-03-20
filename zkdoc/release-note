@@ -1,8 +1,8 @@
 	--------
-ZK 2.3.0 Freshly
+ZK 2.3.0
 * Features:
   1666877: Support the variables element
-  1655219: Radiogroup's layout independent Radio button
+  1655219: Radiogroup's layout independent of Radio button
   1676244: Grid supports live data (ListModel)
   1678817: Macro components support inline expansion
   1680474: Allow EL expr to reference a component in Client Side Action
