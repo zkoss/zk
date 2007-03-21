@@ -1,4 +1,11 @@
 	--------
+ZK 2.3.1 Freshly
+* Features
+
+* Bugs
+  1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
+
+	--------
 ZK 2.3.0
 * Features:
   1666877: Support the variables element
