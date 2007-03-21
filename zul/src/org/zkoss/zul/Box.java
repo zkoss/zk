@@ -21,6 +21,7 @@ package org.zkoss.zul;
 import java.util.Iterator;
 import java.io.IOException;
 
+import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
@@ -214,7 +215,8 @@ public class Box extends XulElement {
 			final StringBuffer sb = new StringBuffer(16)
 				.append("<tr id=\"").append(child.getUuid())
 				.append("!chdextr\"><td ").append(chdattrs).append('>');
-			out.insert(0, sb);
+			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
+			else out.insert(0, sb.toString());
 			out.append("</td></tr>");
 		} else {
 			final StringBuffer sb = new StringBuffer(32)
@@ -226,7 +228,8 @@ public class Box extends XulElement {
 					sb.append(" width=\"").append(width).append('"');
 			}
 			sb.append(chdattrs).append('>');
-			out.insert(0, sb);
+			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
+			else out.insert(0, sb.toString());
 			out.append("</td>");
 		}
 	}

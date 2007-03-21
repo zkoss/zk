@@ -20,6 +20,8 @@ package org.zkoss.zul;
 
 import java.io.IOException;
 
+import org.zkoss.lang.JVMs;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
@@ -104,7 +106,8 @@ public class Menubar extends XulElement {
 					sb.append(" height=\"").append(height).append('"');
 			}
 			sb.append('>');
-			out.insert(0, sb);
+			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
+			else out.insert(0, sb.toString());
 			out.append("</tr>");
 		}
 	}

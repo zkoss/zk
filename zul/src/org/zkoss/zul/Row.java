@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import java.io.IOException;
 
+import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
@@ -302,7 +303,8 @@ public class Row extends XulElement {
 			sb.append(getChildAttrs(j));
 		}
 		sb.append('>');
-		out.insert(0, sb);
+		if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
+		else out.insert(0, sb.toString());
 		out.append("</td>");
 	}
 }
