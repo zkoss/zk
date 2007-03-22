@@ -30,7 +30,6 @@ public class JVMs {
 	private static final boolean _j5;
 	static {
 		final String s = System.getProperty("java.version");
-		System.out.println(s);
 		int major = 0, minor = 0;
 		if (s != null) {
 			final int j = s.indexOf('.'), k = s.indexOf('.', j + 1);
