@@ -29,6 +29,9 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>{@link Timer} is a special component that is invisible.
  *
+ * <p>Notice that the timer won't fire any event until it is attached
+ * to a page.
+ *
  * @author tomyeh
  */
 public class Timer extends XulElement {
