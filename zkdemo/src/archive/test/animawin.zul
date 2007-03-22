@@ -25,6 +25,7 @@ action="onshow:anima.appear(#{self});onhide:anima.fade(#{self})" visible="false"
 		<button label="close" onClick="win.visible = false"/>
 	</window>
 	<button label="Overlap" onClick="win.doOverlapped();"/>
+	<button label="Popup" onClick="win.doPopup();"/>
 	<button label="Modal" onClick="win.doModal();"/>
 	<button label="Toggle Visible" onClick="win.visible = !win.visible"/>
 </zk>
