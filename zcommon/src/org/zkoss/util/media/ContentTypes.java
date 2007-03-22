@@ -55,8 +55,7 @@ public class ContentTypes {
 			ctype = (String)_fmt2ct.get(format);
 		}
 
-		if (D.ON && ctype == null)
-			log.warning("Unknown format: "+format);
+		//if (ctype == null && log.debugable())	log.debug("Unknown format: "+format);
 		return ctype;
 	}
 	/** Returns the format of the specified content type, or null if not found.
