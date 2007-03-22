@@ -4,6 +4,7 @@ ZK 2.3.1 Freshly
 
 * Bugs
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
+  1685165: bundled asm.jar imcompatibility with ZK 2.3
 
 	--------
 ZK 2.3.0
