@@ -37,6 +37,11 @@ import org.zkoss.zk.ui.metainfo.Annotation;
  */
 public interface ComponentCtrl {
 	/** Returns the milieu of this component (never null).
+	 * The milieu object holds the mini version of the component
+	 * or instance definition of this component.
+	 *
+	 * <p>Refer to {@link Milieu} for the reason not to associate a component with the component or
+	 * instance definition.
 	 */
 	public Milieu getMilieu();
 	/** Sets the milieu of this component.

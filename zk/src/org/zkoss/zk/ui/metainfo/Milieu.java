@@ -44,14 +44,34 @@ import org.zkoss.zk.el.Evaluator;
 import org.zkoss.zk.scripting.Interpreter;
 
 /**
- * The snapshot of the component definition ({@link ComponentDefinition}).
+ * The snapshot of the component or instance definition
+ * ({@link ComponentDefinition}/{@link InstanceDefinition}.
+ * It is a mini version of component/instance definition.
+ * Unlike {@link ComponentDefinition} and {@link InstanceDefinition},
+ * a {@link Milieu} instance is serializable.
  *
- * <p>Components created with the same component definition share the
- * same {@link Milieu} instance. However, if a component is serialized and then
- * de-serialized back, it will have an independent Milieu instance
- * not shared with any others ({@link org.zkoss.zk.ui.sys.ComponentCtrl#getMilieu}).
+ * <p>ZK doesn't associate a component with a component or instance definition
+ * directly. Rather, it associates them thru an Milieu instance.
+ * The main reason is to make a component serializable, since only
+ * the necessary infomation (i.e., the Milieu instance) has to be serialized
+ * rather than the whole page definition and instance definitions tree.
+ *
+ * <p>When ZK loader creates a component from a ZUML page, it associates
+ * the component with a milieu object representing the instance definition
+ * in the ZUML page. In other words, the milieu is shared by all components
+ * created from the same instance definition.
+ *
+ * <p>Similarly, if you create a component directly (with the new operator),
+ * the component is assoicated with a milieu object representing
+ * the component definition.
+ *
+ * <p>However, if a component is created due to de-serialization (from,
+ * of course, the serialized content of another component),
+ * it will have an independent Milieu instance, which is
+ * not shared with any others components.
  * Moreover, {@link #getComponentDefinition} returns null in this case.
  *
+ * @see org.zkoss.zk.ui.sys.ComponentCtrl#getMilieu
  * @author tomyeh
  */
 public class Milieu implements Serializable {
@@ -146,8 +166,10 @@ public class Milieu implements Serializable {
 		return _langdef;
 	}
 	/** Returns the component definition, or null if it doesn't belong to
-	 * any component definition or the associated component is serialized
-	 * (and de-serialized back).
+	 * any component definition or the associated component was de-serialized.
+	 *
+	 * <p>If a component is created because of ZK's loading a ZUML page,
+	 * the returned definition is actually {@link InstanceDefinition}.
 	 *
 	 * <p>See also {@link Milieu}.
 	 */
