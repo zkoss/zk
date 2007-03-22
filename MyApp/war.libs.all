@@ -12,7 +12,6 @@ bsh.jar
 js.jar
 groovy.jar
 jruby.jar
-asm.jar
 commons-fileupload.jar
 commons-io.jar
 commons-el.jar
