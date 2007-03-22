@@ -419,7 +419,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		if (_page != null) addToIdSpacesDown(this);
 
-		checkRootEvents(null);
+		checkRootEvents();
 	}
 	/** Calling getUiEngine().addMoved().
 	 */
@@ -713,7 +713,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_parent != null ? _parent.getNamespace(): null);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
 
-		checkRootEvents(null);
+		checkRootEvents();
 	}
 
 	/** Default: return true (allows to have children).
@@ -943,19 +943,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		l.add(listener);
 
-		checkRootEvents(evtnm);
+		if (Events.ON_CLIENT_INFO.equals(evtnm))
+			checkRootEvents();
 		return true;
 	}
 	/** Checks special events for root components.
-	 *
-	 * @param evtnm which event is changed. If null, it means all have to check.
 	 */
-	private void checkRootEvents(String evtnm) {
-		if (_page != null && _parent == null) {
-			if ((evtnm == null || Events.ON_CLIENT_INFO.equals(evtnm))
-			&& Events.isListenerAvailable(this, Events.ON_CLIENT_INFO, true))
+	private void checkRootEvents() {
+		if (_page != null && _parent == null
+		&& Events.isListenerAvailable(this, Events.ON_CLIENT_INFO, true))
 				response("clientInfo", new AuClientInfo());
-		}
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
 		if (evtnm == null || listener == null)
