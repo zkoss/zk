@@ -8,6 +8,9 @@
 // 
 // script.aculo.us is freely distributable under the terms of an MIT-style license.
 // For details, see the script.aculo.us web site: http://script.aculo.us/ 
+//Tom M. Yeh, Potix: prevent it from load twice
+if (!window.z_effects_js) {
+	z_effects_js = true;
 
 // converts rgb() and #xxx to #xxxxxx format,  
 // returns self (or first argument) if not convertable  
@@ -1088,3 +1091,5 @@ Element.Methods.visualEffect = function(element, effect, options) {
 };
 
 Element.addMethods();
+
+} //Tom M. Yeh, Potix: prevent it from load twice

@@ -6,6 +6,10 @@
 // script.aculo.us is freely distributable under the terms of an MIT-style license.
 // For details, see the script.aculo.us web site: http://script.aculo.us/
 
+//Tom M. Yeh, Potix: prevent it from load twice
+if (!window.z_dragdrop_js) {
+	z_dragdrop_js = true;
+
 if(typeof Effect == 'undefined')
   throw("dragdrop.js requires including script.aculo.us' effects.js library");
 
@@ -646,3 +650,5 @@ else
   return zk.offsetWidth(element);
   //return element['offset' + ((type=='vertical' || type=='height') ? 'Height' : 'Width')];
 }
+
+} //Tom M. Yeh, Potix: prevent it from load twice

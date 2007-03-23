@@ -5,6 +5,9 @@
  *  For details, see the Prototype web site: http://prototype.conio.net/
  *
 /*--------------------------------------------------------------------------*/
+//Tom M. Yeh, Potix :prevent it from load twice
+if (!window.z_prototype_js) {
+z_prototype_js = true;
 
 var Prototype = {
   Version: '1.5.0',
@@ -2229,3 +2232,5 @@ if (/Konqueror|Safari|KHTML/.test(navigator.userAgent)) {
 }
 
 Element.addMethods();
+
+}//Tom M. Yeh, Potix :prevent it from load twice
