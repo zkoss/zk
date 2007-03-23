@@ -22,6 +22,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <body>
 <c:set var="some" value="Some" scope="session"/>
 <c:include page="slider.zul"/>
+<c:include page="ctxmnu.zul"/>
 <c:include page="menu.zul"/>
+<c:include page="ctxmnu-bug.zul"/>
 </body>
 </html>
