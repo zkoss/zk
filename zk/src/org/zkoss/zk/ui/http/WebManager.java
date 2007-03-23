@@ -345,7 +345,7 @@ public class WebManager {
 		Desktop desktop = (Desktop)getRequestLocal(request, ATTR_DESKTOP);
 		if (desktop == null) {
 			if (D.ON && log.debugable()) log.debug("Create desktop for "+path);
-			WebManager.setRequestLocal(request, ATTR_DESKTOP,
+			setRequestLocal(request, ATTR_DESKTOP,
 				desktop = newDesktop(sess, request, path));
 		}
 		return desktop;
@@ -366,6 +366,6 @@ public class WebManager {
 			final Desktop dt = (Desktop)getRequestLocal(ATTR_DESKTOP);
 			assert dt == null || dt == desktop: "old:"+dt+", new:"+desktop;
 		}*/
-		WebManager.setRequestLocal(request, ATTR_DESKTOP, desktop);
+		setRequestLocal(request, ATTR_DESKTOP, desktop);
 	}
 }
