@@ -313,10 +313,8 @@ zkau._sendNow = function (dtid) {
 
 	//FUTURE: Consider XML (Pros: ?, Cons: larger packet)
 	var content = "";
-	for (var j = 0;; ++j) {
+	for (var j = 0; es.length; ++j) {
 		var evt = es.shift();
-		if (!evt) break; //done
-
 		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+evt.uuid;
 		if (evt.data)
 			for (var k = 0; k < evt.data.length; ++k) {
@@ -365,11 +363,8 @@ zkau.addOnResponse = function (script) {
 };
 /** Evaluates scripts registered by addOnResponse. */
 zkau._evalOnResponse = function () {
-	for (;;) {
-		var script = zkau._js4resps.shift();
-		if (!script) break;
-		setTimeout(script, 0);
-	}
+	while (zkau._js4resps.length)
+		setTimeout(zkau._js4resps.shift(), 0);
 };
 
 /** Process the responses queued in zkau._respQue. */

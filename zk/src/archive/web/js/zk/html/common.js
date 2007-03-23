@@ -781,10 +781,8 @@ zk.disableAll = function (parent) {
  */
 zk.restoreDisabled = function (n) {
 	var skipped = new Array();
-	for (var bug1498895 = zk.ie;;) {
+	for (var bug1498895 = zk.ie; zk._disTags.length;) {
 		var info = zk._disTags.shift();
-		if (!info) break;
-
 		var el = info.element;
 		if (el && el.tagName) { //still exists
 			if (n && !zk.isAncestor(n, el)) { //not processed yet
@@ -832,10 +830,8 @@ zk.restoreDisabled = function (n) {
  */
 zk.hideCovered = function (ary) {
 	if (!ary || ary.length == 0) {
-		for (;;) {
+		while (zk._hidCvred.length) {
 			var info = zk._hidCvred.shift();
-			if (!info) break;
-
 			if (info.element.style)
 				info.element.style.visibility = info.visibility;
 		}
