@@ -1190,42 +1190,39 @@ zkau.cleanupMeta = function (cmp) {
 //ID Space//
 /** Returns element of the specified zid. */
 zkau.getByZid = function (n, zid) {
-	while (n) {
-		n = zkau.getIdOwner(n);
-		var v = zkau._zidsp[n ? n.id: "_zk_dt"];
-		if (v) {
-			v = v[zid];
-			if (v) return $e(v);
-		}
-		if (n) n = n.parentNode;
+	var oid = zkau._zidOwner(n);
+	var v = zkau._zidsp[oid];
+	if (v) {
+		v = v[zid];
+		if (v) return $e(v);
 	}
-	return null;
-};
-/** Returns the space owner that n belongs to, or null if not found. */
-zkau.getIdOwner = function (n) {
-	for (; n; n = n.parentNode) {
-		if (getZKAttr(n, "zidsp"))
-			return n;
-	}
-	return null;
 };
 zkau.initzid = function (n, zid) {
-	var o = zkau.getIdOwner(n);
-	o = o ? o.id: "_zk_dt";
-	var ary = zkau._zidsp[o];
-	if (!ary) ary = zkau._zidsp[o] = {};
+	var oid = zkau._zidOwner(n);
+	var ary = zkau._zidsp[oid];
+	if (!ary) ary = zkau._zidsp[oid] = {};
 	if (!zid) zid = getZKAttr(n, "zid");
 	ary[zid] = n.id;
 };
 zkau.cleanzid = function (n) {
-	var o = zkau.getIdOwner(n);
-	o = o ? o.id: "_zk_dt";
-	var ary = zkau._zidsp[o];
+	var oid = zkau._zidOwner(n);
+	var ary = zkau._zidsp[oid];
 	if (ary) delete ary[getZKAttr(n, "zid")];
 };
 /** Clean an ID space. */
 zkau.cleanzidsp = function (n) {
 	delete zkau._zidsp[n.id];
+};
+/** Returns the space owner that n belongs to, or null if not found. */
+zkau._zidOwner = function (n) {
+	//zidsp currently applied only to page, since we'd like
+	//developers easy to reference other component in the same page
+	//If you want to support a new space, just generae zidsp="true"
+	for (var p = n; p; p = p.parentNode) {
+		if (getZKAttr(p, "zidsp"))
+			return p.id;
+	}
+	return "_zdt_" + zkau._dtid(n);
 };
 
 ///////////////
