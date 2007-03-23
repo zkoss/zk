@@ -45,14 +45,11 @@ zk.FloatMenu.prototype = {
 	/** Closes (hides) all menus. */
 	closeFloats: function() {
 		var closed;
-		for (;;) {
+		while (this._popupIds.length) {
 		//reverse order is important if pp contains another
 		//otherwise, IE might have bug to handle them correctly
-			var uuid = this._popupIds.pop();
-			if (!uuid) break;
-
 			closed = true;
-			zkMenu._close(uuid);
+			zkMenu._close(this._popupIds.pop());
 		}
 		return closed;
 	},
