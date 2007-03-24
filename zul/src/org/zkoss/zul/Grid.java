@@ -496,7 +496,7 @@ implements RenderOnDemand {
 				newUnloadedCell(renderer, row);
 			row.setLoaded(false);
 		} else { //detach
-			row.getParent().insertBefore(newUnloadedRow(renderer), row);
+			_rows.insertBefore(newUnloadedRow(renderer), row);
 			row.detach();
 		}
 	}
@@ -543,7 +543,7 @@ implements RenderOnDemand {
 			for (int j = min; j <= max; ++j) {
 				if (renderer == null)
 					renderer = getRealRenderer();
-				insertBefore(newUnloadedRow(renderer), before);
+				_rows.insertBefore(newUnloadedRow(renderer), before);
 			}
 
 			done = true;
