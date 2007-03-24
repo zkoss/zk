@@ -34,6 +34,6 @@ public class AuReplace extends AuResponse {
 		super("outer", comp, new String[] {comp.getUuid(), content});
 	}
 	public AuReplace(Page page, String content) {
-		super("outer", page, new String[] {page.getId(), content});
+		super("outer", page, new String[] {page.getUuid(), content});
 	}
 }

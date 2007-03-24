@@ -28,8 +28,7 @@ import org.zkoss.lang.Strings;
 public class ComponentsCtrl {
 	/** The prefix for auto generated ID. */
 	private static final String
-		AUTO_ID_PREFIX = "z_", AUTO_PAGE_ID_PREFIX = "z__p",
-		ANONYMOUS_ID = "z__i";
+		AUTO_ID_PREFIX = "z_", ANONYMOUS_ID = "z__i";
 
 	/** Returns the automatically generate component's UUID/ID.
 	 */
@@ -38,13 +37,6 @@ public class ComponentsCtrl {
 			.append(AUTO_ID_PREFIX).append(prefix).append('_');
 		Strings.encode(sb, id);
 		return sb.toString();
-	}
-	/** Returns the automatically generated page ID.
-	 */
-	public static final String toAutoPageId(int id) {
-		return Strings.encode(
-			new StringBuffer(12).append(AUTO_PAGE_ID_PREFIX),
-			id).toString();
 	}
 	/** Returns the anonymous UUID.
 	 */

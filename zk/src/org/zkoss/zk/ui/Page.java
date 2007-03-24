@@ -110,6 +110,14 @@ public interface Page extends IdSpace {
 	 */
 	public void setId(String id);
 
+	/** Returns UUID (universal unique ID) which is unquie in the whole
+	 * session. The UUID is generated automatically and immutable.
+	 *
+	 * <p>It is mainly used for communication between client and server
+	 * and you rarely need to access it.
+	 */
+	public String getUuid();
+
 	/** Returns the title of the desktop this page belongs to
 	 * (and evaluate it if it contains an expression).
 	 * <p>Default: "".

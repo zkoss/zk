@@ -159,7 +159,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	public void setPage(Page page);
 
 	/** Returns UUID (universal unique ID) which is unquie in the whole
-	 * desktop. The UUID is generated automatically and immutable, unless
+	 * session. The UUID is generated automatically and immutable, unless
 	 * {@link org.zkoss.zk.ui.ext.RawId} is also implemented.
 	 *
 	 * <p>It is mainly used for communication between client and server

@@ -35,6 +35,6 @@ public class AuAppendChild extends AuResponse {
 		super("addChd", comp, new String[] {comp.getUuid(), content});
 	}
 	public AuAppendChild(Page page, String content) {
-		super("addChd", page, new String[] {page.getId(), content});
+		super("addChd", page, new String[] {page.getUuid(), content});
 	}
 }

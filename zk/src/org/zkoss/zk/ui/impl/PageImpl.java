@@ -110,7 +110,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	/** Used to retore _owner. */
 	private transient String _ownerUuid;
 	private transient Desktop _desktop;
-	private String _id;
+	private String _id, _uuid;
 	private String _title = "", _style = "";
 	private final String _path;
 	private String _zslang;
@@ -221,6 +221,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 	public final String getId() {
 		return _id;
+	}
+	public final String getUuid() {
+		return _uuid;
 	}
 	public void setId(String id) {
 		if (_desktop != null)
@@ -484,6 +487,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (_desktop == null)
 			throw new IllegalArgumentException("null desktop");
 
+		_uuid = ((DesktopCtrl)_desktop).getNextUuid();
+
 		initVariables();
 
 		if (headers != null) _headers = headers;
@@ -497,7 +502,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			if (Strings.anyOf(_id, INVALID, 0) < _id.length())
 				throw new IllegalArgumentException("Invalid page ID: "+_id+". Invalid characters: "+INVALID);
 		} else {
-			_id = ComponentsCtrl.toAutoPageId(dtctrl.getNextId());
+			_id = _uuid;
 		}
 		dtctrl.addPage(this);	
 

@@ -32,7 +32,7 @@ public class AuRemove extends AuResponse {
 		super("rm", comp, comp.getUuid());
 	}
 	public AuRemove(Page page) {
-		super("rm", page, page.getId());
+		super("rm", page, page.getUuid());
 	}
 	/** Removes a component by its UUID.
 	 * This constructor is used only if a component's UUID is changed.
