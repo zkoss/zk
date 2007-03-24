@@ -95,7 +95,8 @@ public class Script extends AbstractComponent {
 	}
 	/** Sets the URI of the source that contains the script codes.
 	 *
-	 * <p>You either set the script codes directly with {@link #setContent}, or
+	 * <p>You either add the script codes directly with the {@link Label}
+	 * children, or
 	 * set the URI to load the script codes with {@link #setSrc}.
 	 * But, not both.
 	 *
