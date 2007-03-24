@@ -24,6 +24,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <c:include page="slider.zul"/>
 <c:include page="ctxmnu.zul"/>
 <c:include page="menu.zul"/>
-<c:include page="ctxmnu-bug.zul"/>
+<c:include page="ctxmnu.zul"/>
 </body>
 </html>
