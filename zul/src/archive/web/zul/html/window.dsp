@@ -22,7 +22,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="titlesc" value="${self.titleSclass}"/>
 <div id="${self.uuid}" z.type="zul.wnd.Wnd" z.autoz="true"${self.outerAttrs}${self.innerAttrs}>
-<div><%-- for animation effect --%>
 <c:choose>
  <c:when test="${empty self.caption and empty self.title}">
   <c:if test="${c:isExplorer() and !c:isExplorer7()}"><%-- Bug 1579515: to clickable, a child with 100% width is required for DIV --%>
@@ -62,5 +61,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if>
 </c:forEach>
 </div><%-- we don't generate shadow here since it looks odd when on top of modal mask --%>
-</div>
 </div>
