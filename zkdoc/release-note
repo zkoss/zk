@@ -6,6 +6,8 @@ ZK 2.3.1 Freshly
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
   1685165: bundled asm.jar imcompatibility with ZK 2.3
   1686521: IE6 only. Opaque round corner of Window title
+  1686278: Rightclick event request's dtid param is null (with Liferay)
+  1687233: Grid creates blank row into wrong place when model changed
 
 	--------
 ZK 2.3.0
