@@ -63,6 +63,8 @@ zk.addInit(function () {
 	zk.listen(document, "click", zkau._onDocLClick);
 	zk.listen(document, "dblclick", zkau._onDocDClick);
 
+	zk.listen(window, "resize", zkau._onResize);
+
 	zkau._oldUnload = window.onunload;
 	window.onunload = zkau._onUnload; //unable to use zk.listen
 
@@ -919,6 +921,7 @@ zkau._onDocMouseover = function (evt) {
 			zkau._tipz = null;
 	}
 };
+/** document.onmouseout */
 zkau._onDocMouseout = function (evt) {
 	if (!evt) evt = window.event;
 
@@ -929,6 +932,24 @@ zkau._onDocMouseout = function (evt) {
 		} else
 			zkau._tipz = null;
 };
+/** window.onresize */
+zkau._onResize = function () {
+	if (zkau._cInfoReg) {
+		//since IE keeps sending onresize when dragging the browser border,
+		//we reduce # of packs sent to the server by use of timeout
+		zkau._cInfoPend = true;
+		setTimeout(zkau._doClientInfo, 100);
+	}
+};
+
+/** send clientInfo to the server ontimeout. */
+zkau._doClientInfo = function () {
+	if (zkau._cInfoPend) {
+		zkau._cInfoPend = false;
+		zkau.cmd0.clientInfo();
+	}
+};
+
 zkau._openTip = function (cmpId) {
 	//We have to filter out non-matched cmpId because user might move
 	//from one component to another
@@ -1608,6 +1629,7 @@ zkau.cmd0 = { //no uuid at all
 		zkau.send({uuid: "", cmd: "dummy", data: null});
 	},
 	clientInfo: function () {
+		zkau._cInfoReg = true;
 		zkau.send({uuid: "", cmd: "onClientInfo", data: [
 			new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
