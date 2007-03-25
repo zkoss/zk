@@ -101,6 +101,7 @@ public class BufferedResponse extends ServletResponseWrapper {
 		_stream = stream;
 	}
 
+	//super//
 	public PrintWriter getWriter() throws IOException {
 		if (_sos != null)
 			throw new IllegalStateException("getOutputStream was called");

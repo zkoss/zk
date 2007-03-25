@@ -44,6 +44,7 @@ public class HttpBufferedResponse extends HttpServletResponseWrapper {
 
 	private PrintWriter _pwt;
 	private ServletOutputStream _sos;
+	private boolean _bSendRedirect;
 
 	/** Returns a buffered response with a writer, if writer is not null;
 	 * or the original response if writer is null.
@@ -87,6 +88,14 @@ public class HttpBufferedResponse extends HttpServletResponseWrapper {
 		_stream = stream;
 	}
 
+	//extra//
+	/** Returns whether {@link #sendRedirect} was called.
+	 */
+	public boolean isSendRedirect() {
+		return _bSendRedirect;
+	}
+
+	//super//
 	public PrintWriter getWriter() throws IOException {
 		if (_sos != null)
 			throw new IllegalStateException("getOutputStream was called");
@@ -133,6 +142,11 @@ public class HttpBufferedResponse extends HttpServletResponseWrapper {
 		} else if (_stream instanceof ByteArrayOutputStream) {
 			((ByteArrayOutputStream)_stream).reset();
 		}
+	}
+
+	public void sendRedirect(String location) throws IOException {
+		super.sendRedirect(location);
+		_bSendRedirect = true;
 	}
 
 	//deprecated//
