@@ -187,7 +187,7 @@ public class Checkbox extends LabelImageElement {
 		appendAsapAttr(sb, Events.ON_BLUR);
 		appendAsapAttr(sb, Events.ON_CHECK);
 		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-			//no z.dbclk to avoid confusing
+		appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
 			//no z.lfclk since it is handled by widget.js
 
 		return sb.toString();

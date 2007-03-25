@@ -196,6 +196,8 @@ zkDbbox.validate = function (cmp) {
 zkButton = {};
 zkButton.init = function (cmp) {
 	zk.listen(cmp, "click", zkau.onclick);
+	zk.listen(cmp, "dblclick", zkau.ondblclick);
+		//we have to handle here since _onDocDClick won't receive it
 	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});
 	zk.listen(cmp, "blur", function() {zkau.onblur(cmp);});
 };
