@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.util.logging.Log;
-import org.zkoss.web.servlet.BufferedResponse;
+import org.zkoss.web.servlet.http.HttpBufferedResponse;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
@@ -101,16 +101,14 @@ public class DHtmlLayoutFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response,
 	FilterChain chain) throws IOException, ServletException {
 		final StringWriter sw = new StringWriter(4096*2);
-		chain.doFilter(request,
-			BufferedResponse.getInstance(response, sw));
+		final HttpServletResponse hres = (HttpServletResponse)response;
+		final HttpBufferedResponse hbufres =
+			(HttpBufferedResponse)HttpBufferedResponse.getInstance(hres, sw);
+		chain.doFilter(request, hbufres);
 
 		//Bug 1673839: servlet might redirect
-		//FUTURE: there are many reason to cause commit and we might have
-		//to handle them differently (such as check header)
-		if (!response.isCommitted()) {
-			process((HttpServletRequest)request,
-				(HttpServletResponse)response, sw.toString());
-		}
+		if (!hbufres.isSendRedirect())
+			process((HttpServletRequest)request, hres, sw.toString());
 	}
 	public void destroy() {
 	}
