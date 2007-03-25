@@ -21,12 +21,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<rows>
 		<row>Time Zone <label id="tm"/></row>
 		<row>Screen <label id="scrn"/></row>
+		<row>Browser <label id="brw"/></row>
 		</rows>
 		
 	<zscript>
 	void onClientInfo(ClientInfoEvent evt) {
 		tm.setValue(evt.getTimeZone().toString());
 		scrn.setValue(evt.getScreenWidth()+"x"+evt.getScreenHeight()+"x"+evt.getColorDepth());
+		brw.setValue(evt.getDesktopWidth()+"x"+evt.getDesktopHeight());
 	}
 	</zscript>
 </grid>
