@@ -97,6 +97,29 @@ zkau.onclick = function (evt) {
 	zkau.send({uuid: $uuid(target.id),
 		cmd: "onClick", data: zkau._getMouseData(evt, target)});
 };
+/** Handles ondblclick for button (for non-FF).
+ * Note: double clicks are handled by zkau._onDocDClick, but
+ * some tags (button and checkbox) eat the event, so _onDocDClick won't
+ * get the event.
+ */
+zkau.ondblclick = function (evt) {
+	if (!evt) evt = window.event;
+	var cmp = Event.element(evt);
+
+	//it might be clicked on the inside element
+	for (;; cmp = cmp.parentNode)
+		if (!cmp) return;
+		else if (cmp.id) break;
+
+	cmp = $outer(cmp);
+	if (cmp && getZKAttr(cmp, "dbclk")) {
+		zkau.send({uuid: cmp.id,
+			cmd: "onDoubleClick", data: zkau._getMouseData(evt, cmp)});
+		Event.stop(evt); //just in case: prevent _onDocDClick to run again
+		return false;
+	}
+};
+
 /** Returns the data for onClick. */
 zkau._getMouseData = function (evt, target) {
 	var extra = "";

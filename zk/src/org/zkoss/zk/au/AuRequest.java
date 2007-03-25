@@ -212,7 +212,7 @@ public class AuRequest {
 		new MouseCommand(Events.ON_DOUBLE_CLICK,
 			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
 		new MouseCommand(Events.ON_RIGHT_CLICK,
-			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
+			Command.SKIP_IF_EVER_ERROR|Command.IGNORE_OLD_EQUIV);
 
 		new OpenCommand(Events.ON_OPEN, 0);
 		new RemoveCommand("remove", 0);

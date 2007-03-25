@@ -88,8 +88,7 @@ public class RequestQueueImpl implements RequestQueue {
 			}
 
 			final AuRequest req2 = (AuRequest)_requests.get(last);
-			final Command cmd2 = req2.getCommand();
-			if ((cmd2.getFlags() & Command.IGNORABLE) != 0) {
+			if ((req2.getCommand().getFlags() & Command.IGNORABLE) != 0) {
 				if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
 				_requests.remove(last); //drop it
 				if (last == 0) {
@@ -105,10 +104,10 @@ public class RequestQueueImpl implements RequestQueue {
 		if ((flags & Command.CTRL_GROUP) != 0) {
 			for (Iterator it = _requests.iterator(); it.hasNext();) {
 				final AuRequest req2 = (AuRequest)it.next();
-				final Command cmd2 = req2.getCommand();
-				if ((cmd2.getFlags() & Command.CTRL_GROUP) != 0) {
-					if (D.ON && log.debugable()) log.debug("Eat request: "+request);
-					return; //eat new
+				if ((req2.getCommand().getFlags() & Command.CTRL_GROUP) != 0) {
+					if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
+					it.remove(); //drop req2
+					break; //no need to iterate because impossible to have more
 				}
 			}
 
