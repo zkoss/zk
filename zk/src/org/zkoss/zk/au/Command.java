@@ -41,8 +41,9 @@ abstract public class Command {
 	 */
 	public static final int SKIP_IF_EVER_ERROR = 0x0001;
 	/** Whether this command is ignorable. 
-	 * In other words, it is ignored if there is any following command is
-	 * recieved.
+	 * In other words, the ignorable command is dropped, if
+	 * a new command is received
+	 * before the ignorable command is processed.
 	 *
 	 * <p>Part of the returned value of {@link #getFlags}.
 	 */
