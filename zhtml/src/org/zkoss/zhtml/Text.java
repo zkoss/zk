@@ -71,7 +71,7 @@ public class Text extends AbstractComponent implements RawId {
 	}
 	private static boolean isRawLabel(Component comp) {
 		final LanguageDefinition langdef =
-			((ComponentCtrl)comp).getMilieu().getLanguageDefinition();
+			comp.getDefinition().getLanguageDefinition();
 		return langdef != null && langdef.isRawLabel();
 	}
 
