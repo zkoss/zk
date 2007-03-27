@@ -1,16 +1,27 @@
 	--------
 ZK 2.3.1 Freshly
-* Features
+* Features:
+  1688892: A way to abandom Milieu
+  1686198: A way to specify custom attributes in lang addon
+  1688093: Remove Component's param since it's redundant to custom-attr
   1686617: generate onClientInfo when browser size changes
   1687371: button and checkbox suport DoubleClick
 
-* Bugs
+* Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
   1685165: bundled asm.jar imcompatibility with ZK 2.3
   1686521: IE6 only. Opaque round corner of Window title
   1686278: Rightclick event request's dtid param is null (with Liferay)
   1687233: Grid creates blank row into wrong place when model changed
   1673839: zkFilter doesn't handle redirect response properly
+
+* Upgrade Notes:
+  + UiFactory's newComponent adds an extra argument, clsnm.
+  + Milieu and InstanceDefinition are removed. ComponentInfo is added.
+    . A component has a reference to the component definition
+    . ComponentInfo represents a node in a ZUML page.
+      It is used to create a component, but the component doesn't
+      have any reference to it once created.
 
 	--------
 ZK 2.3.0
