@@ -83,7 +83,7 @@ public interface ComponentDefinition extends Cloneable {
 	public void setImplementationClass(Class cls);
 	/** Sets the class name to implements the component.
 	 * Unlike {@link #setImplementationClass(Class)}, the class won't
-	 * be resolved until {@link InstanceDefinition#newInstance} or {@link #getImplementationClass}
+	 * be resolved until {@link ComponentInfo#newInstance} or {@link #getImplementationClass}
 	 * is used. In other words, the class can be provided later
 	 * (thru, usually, zscript).
 	 */
@@ -210,7 +210,8 @@ public interface ComponentDefinition extends Cloneable {
 	public ComponentDefinition clone(LanguageDefinition langdef, String name);
 
 	/** Clones this component definition.
-	 * You rarely invoke this method directly. Rather, use {@link #clone(String)}.
+	 * You rarely invoke this method directly. Rather, use
+	 * {@link #clone(LanguageDefinition, String)}.
 	 *
 	 * <p>Note: the caller usually has to change the component name,
 	 * and then assign to a language definition ({@link LanguageDefinition})
