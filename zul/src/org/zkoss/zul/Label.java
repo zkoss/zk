@@ -29,7 +29,6 @@ import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -182,7 +181,7 @@ public class Label extends XulElement {
 	}
 	private static boolean isRawLabel(Component comp) {
 		final LanguageDefinition langdef =
-			((ComponentCtrl)comp).getMilieu().getLanguageDefinition();
+			comp.getDefinition().getLanguageDefinition();
 		return langdef != null && langdef.isRawLabel();
 	}
 

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
@@ -259,25 +260,33 @@ public class Treecell extends LabelImageElement {
 
 	/** Returns the width of the icon. */
 	private int getIconWidth() {
-		return getRequiredIntInitParam("icon-width");
+		return getIntAttr("icon-width", 18);
 	}
 	/** Returns the height of the icon. */
 	private int getIconHeight() {
-		return getRequiredIntInitParam("icon-height");
+		return getIntAttr("icon-height", 18);
 	}
 	/** Returns the icon URI.
 	 */
 	private String getIconURI(String name) {
-		final String s = getInitParam("icon-uri");
-		if (s == null)
-			throw new UiException("The icon-uri param must be defined");
+		String s = Objects.toString(getAttribute("icon-uri"));
+		if (s == null) s = "~./zul/img/tree";
 		return s + name;
 	}
-	private int getRequiredIntInitParam(String name) {
-		final int v = getIntInitParam(name);
-		if (v <= 0)
-			throw new UiException("The "+name+" param must be defined and positive");
-		return v;
+	private int getIntAttr(String name, int defVal) {
+		int v;
+		Object o = getAttribute(name);
+		if (o instanceof Number) {
+			v = ((Number)o).intValue();
+		} else {
+			String s = Objects.toString(o);
+			if (s == null || s.length() == 0)
+				return defVal;
+
+			v = Integer.parseInt(s);
+			setAttribute(name, new Integer(v)); //to have better performance
+		}
+		return v > 0 ? v: defVal;
 	}
 
 	//-- super --//

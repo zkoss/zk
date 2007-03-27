@@ -167,12 +167,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</annotation>
 		-->
 
-		<!-- any number of initial parameters
-			param-value could be an expression
-		<param>
-			<param-name></param-name>
-			<param-value></param-value>
-		</param>
+		<!-- any number of custom attributes
+			attribute-value could be an EL expression
+		<custom-attribute>
+			<attribute-name></attribute-name>
+			<attribute-value></attribute-value>
+		</custom-attribute>
 		-->
 	</component>
 	<component>
@@ -730,18 +730,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/treecell.dsp</mold-uri>
 		</mold>
-		<param>
-			<param-name>icon-width</param-name>
-			<param-value>18</param-value>
-		</param>
-		<param>
-			<param-name>icon-height</param-name>
-			<param-value>18</param-value>
-		</param>
-		<param>
-			<param-name>icon-uri</param-name>
-			<param-value>~./zul/img/tree</param-value>
-		</param>
+		<!-- Uncomment custom-attribute if you want to use other values
+		<custom-attribute>
+			<attribute-name>icon-width</attribute-name>
+			<attribute-value>18</attribute-value>
+		</custom-attribute>
+		<custom-attribute>
+			<attribute-name>icon-height</attribute-name>
+			<attribute-value>18</attribute-value>
+		</custom-attribute>
+		<custom-attribute>
+			<attribute-name>icon-uri</attribute-name>
+			<attribute-value>~./zul/img/tree</attribute-value>
+		</custom-attribute>
+		-->
 	</component>
 	<component>
 		<component-name>treechildren</component-name>
