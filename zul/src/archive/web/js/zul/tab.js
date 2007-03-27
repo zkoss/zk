@@ -37,7 +37,8 @@ zkTabbox.setAttr = function (cmp, name, value) {
 zkTabbox.childchg = function (cmp) {
 	var uuid = getZKAttr(cmp, "tabs");
 	if (uuid)
-		zkTabs.fixWidth(uuid);
+		setTimeout("zkTabs.fixWidth('"+uuid+"')", 0);
+			//Bug 1688071: width might not be ready right after visible
 };
 
 ////
