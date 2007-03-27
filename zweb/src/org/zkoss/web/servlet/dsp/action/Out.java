@@ -33,6 +33,7 @@ public class Out extends AbstractAction {
 	private String _value = null;
 	private int _maxlength = 0;
 	private boolean _escapeXML = true;
+	private boolean _nbsp = false;
 
 	/** Returns whether to escape XML.
 	 * Default: true.
@@ -44,6 +45,17 @@ public class Out extends AbstractAction {
 	 */
 	public void setEscapeXML(boolean escapeXML) {
 		_escapeXML = escapeXML;
+	}
+	/** Returns whether to generate &amp;nbsp; if the content is empty.
+	 * Default: true.
+	 */
+	public boolean getNbsp() {
+		return _escapeXML;
+	}
+	/** Sets whether to generate &amp;nbsp; if the content is empty.
+	 */
+	public void setNbsp(boolean nbsp) {
+		_nbsp = nbsp;
 	}
 	/** Returns the value.
 	 * Default: null.
@@ -77,11 +89,13 @@ public class Out extends AbstractAction {
 		if (nested)
 			throw new ServletException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
 				new Object[] {this, new Integer(ac.getLineNumber())});
-		if (_value == null)
+
+		int len = _value != null ? _value.length(): 0;
+		if (len == 0 || (_nbsp && _value.trim().length() == 0)) {
+			if (_nbsp)
+				ac.getOut().write("&nbsp;");
 			return;
-		int len = _value.length();
-		if (len == 0)
-			return;
+		}
 			
 		String value = _value;
 		if (_maxlength > 0 && len > _maxlength) {
