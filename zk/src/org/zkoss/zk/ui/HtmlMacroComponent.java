@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.ext.Macro;
+import org.zkoss.zk.ui.impl.Serializables;
 
 /**
  * The implemetation of a macro component upon HTML.
@@ -34,10 +35,14 @@ import org.zkoss.zk.ui.ext.Macro;
  * @author tomyeh
  */
 public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
-	private Map _props = new HashMap();
+	private transient Map _props;
 	private String _uri;
 
 	public HtmlMacroComponent() {
+		init();
+	}
+	private void init() {
+		_props = new HashMap();
 		_props.put("includer", this);
 	}
 
@@ -70,10 +75,29 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		afterCompose();
 	}
 
+	//Serializable//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		_props.remove("includer");
+		Serializables.smartWrite(s, _props);
+		_props.put("includer", this);
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		init();
+		Serializables.smartRead(s, _props);
+	}
+
 	//Cloneable//
 	public Object clone() {
 		final HtmlMacroComponent clone = (HtmlMacroComponent)super.clone();
-		clone._props = new HashMap(clone._props);
+		clone.init();
+		clone._props.putAll(_props);
+		clone._props.put("includer", this);
 		return clone;
 	}
 

@@ -133,16 +133,23 @@ implements Cloneable, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
-		s.writeObject(_compdefs != null ? _compdefs.values(): null);
+		if (_compdefs != null) {
+			synchronized (_compdefs) {
+				s.writeInt(_compdefs.size());
+				for (Iterator it = _compdefs.values().iterator(); it.hasNext();)
+					s.writeObject(it.next());
+			}
+		} else {
+			s.writeInt(0);
+		}
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		final Collection c = (Collection)s.readObject();
-		if (c != null)
-			for (Iterator it = c.iterator(); it.hasNext();)
-				add((ComponentDefinition)it.next());
+		int cnt = s.readInt();
+		while (--cnt >= 0)
+			add((ComponentDefinition)s.readObject());
 	}
 
 	//Cloneable//
@@ -150,8 +157,10 @@ implements Cloneable, java.io.Serializable {
 		final ComponentDefinitionMap clone;
 		try {
 			clone = (ComponentDefinitionMap)super.clone();
-			clone._compdefs = new HashMap(_compdefs);
-			clone._compdefsByClass = new HashMap(_compdefsByClass);
+			clone._compdefs =
+				Collections.synchronizedMap(new HashMap(_compdefs));
+			clone._compdefsByClass =
+				Collections.synchronizedMap(new HashMap(_compdefsByClass));
 		} catch (CloneNotSupportedException ex) {
 			throw new InternalError();
 		}
