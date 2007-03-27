@@ -75,10 +75,8 @@ public class LanguageDefinition {
 	private final String _name;
 	/** The name space. */
 	private final String _ns;
-	/** A map of (String name, ComponentDefinition). */
-	private final Map _compdefs = new HashMap();
-	/** A map of (String clsnm, ComponentDefinition). */
-	private final Map _compdefsByClass = new HashMap();
+	/** The component map. */
+	private final ComponentDefinitionMap _compdefs;
 	/** The component name for dynamic tags. */
 	private String _dyntagnm;
 	/** The component definition for dynamic tags. */
@@ -108,8 +106,6 @@ public class LanguageDefinition {
 	/** The macro template. */
 	private MacroTemplate _macrotmpl;
 	private final Evaluator _evalor;
-	/** Whether the element name is case-insensitive. */
-	private boolean _ignoreCase;
 
 	/** Returns whether the specified language exists.
 	 */
@@ -209,9 +205,11 @@ public class LanguageDefinition {
 	 *
 	 * @param desktopURI the URI used to render a desktop; never null.
 	 * @param pageURI the URI used to render a page; never null.
+	 * @param ignoreCase whether the component name is case-insensitive 
 	 */
 	public LanguageDefinition(String clientType, String name, String namespace,
-	List extensions, String desktopURI, String pageURI, Locator locator) {
+	List extensions, String desktopURI, String pageURI, boolean ignoreCase,
+	Locator locator) {
 		if (clientType == null || clientType.length() == 0)
 			throw new UiException("clientType cannot be empty");
 		if (name == null || name.length() == 0)
@@ -233,6 +231,7 @@ public class LanguageDefinition {
 		_desktopURI = desktopURI;
 		_pageURI = pageURI;
 		_locator = locator;
+		_compdefs = new ComponentDefinitionMap(ignoreCase);
 
 		_evalor = new Evaluator() {
 			public Object evaluate(Component comp, String expr, Class expectedType) {
@@ -319,6 +318,11 @@ public class LanguageDefinition {
 	public String getNamespace() {
 		return _ns;
 	}
+	/** Returns the map of components defined in this language.
+	 */
+	public ComponentDefinitionMap getComponentDefinitionMap() {
+		return _compdefs;
+	}
 	/** Returns {@link ComponentDefinition} of the specified name.
 	 *
 	 * <p>Note: anonymous component definition won't be returned by
@@ -329,24 +333,11 @@ public class LanguageDefinition {
 	 * is not found
 	 */
 	public ComponentDefinition getComponentDefinition(String name) {
-		if (isCaseInsensitive())
-			name = name.toLowerCase();
-		synchronized (_compdefs) {
-			final ComponentDefinition compdef =
-				(ComponentDefinition)_compdefs.get(name);
-			if (compdef == null)
-				throw new DefinitionNotFoundException("Component definition not found: "+name);
-			return compdef;
-		}
-	}
-	/** Returns whether the component of the specified name exists.
-	 */
-	public boolean hasComponentDefinition(String name) {
-		if (isCaseInsensitive())
-			name = name.toLowerCase();
-		synchronized (_compdefs) {
-			return _compdefs.containsKey(name);
-		}
+		final ComponentDefinition compdef =
+			(ComponentDefinition)_compdefs.get(name);
+		if (compdef == null)
+			throw new DefinitionNotFoundException("Component definition not found: "+name);
+		return compdef;
 	}
 	/** Returns {@link ComponentDefinition} of the specified class.
 	 *
@@ -358,38 +349,21 @@ public class LanguageDefinition {
 	 * is not found
 	 */
 	public ComponentDefinition getComponentDefinition(Class klass) {
-		synchronized (_compdefsByClass) {
-			for (Class cls = klass; cls != null; cls = cls.getSuperclass()) {
-				final ComponentDefinition compdef =
-					(ComponentDefinition)_compdefsByClass.get(cls.getName());
-				if (compdef != null) return compdef;
-			}
-		}
-		throw new DefinitionNotFoundException("Component definition not found: "+klass);
+		final ComponentDefinition compdef =
+			(ComponentDefinition)_compdefs.get(klass);
+		if (compdef == null)
+			throw new DefinitionNotFoundException("Component definition not found: "+klass);
+		return compdef;
 	}
-	/** Adds a {@link ComponentDefinition}.
-	 * @return the previous component definition, or null if it isn't defined yet.
+	/** Returns whether the specified component is defined.
 	 */
-	/*package*/
-	ComponentDefinition addComponentDefinition(ComponentDefinition compdef) {
-		final Object implcls = compdef.getImplementationClass();
-		ComponentDefinition old;
-		synchronized (_compdefsByClass) {
-			old = (ComponentDefinition)_compdefsByClass.put(
-				implcls instanceof Class ?
-					((Class)implcls).getName(): implcls, compdef);
-		}
-		if (old != null)
-			log.info(old+" is overwriten by "+compdef+" because they use the same class: "+implcls);
-
-		final String nm = compdef.getName();
-		synchronized (_compdefs) {
-			old = (ComponentDefinition)_compdefs.put(
-				isCaseInsensitive() ? nm.toLowerCase(): nm, compdef);
-		}
-		if (old != null)
-			log.info(old+" is overwriten by "+compdef+" because they use the same name: "+compdef.getName());
-		return old;
+	public boolean hasComponentDefinition(String name) {
+		return _compdefs.contains(name);
+	}
+	/** Adds a component definition.
+	 */
+	public void addComponentDefinition(ComponentDefinition compdef) {
+		_compdefs.add(compdef);
 	}
 
 	/** Adds the script that shall execute when a page's interpreter
@@ -401,14 +375,15 @@ public class LanguageDefinition {
 	 *
 	 * @param zslang the scripting language, say, Java.
 	 */
-	/*package*/ void addInitScript(String zslang, String script) {
-	//no need to sync since we only addInitScript is not public
+	public void addInitScript(String zslang, String script) {
 		if (zslang == null || zslang.length() == 0)
 			throw new IllegalArgumentException("null or empty language");
 		if (script != null && script.length() > 0) {
 			zslang = zslang.toLowerCase();
-			final String s = (String)_initscripts.get(zslang);
-			_initscripts.put(zslang, s != null ? s + '\n' + script: script);
+			synchronized (_initscripts) {
+				final String s = (String)_initscripts.get(zslang);
+				_initscripts.put(zslang, s != null ? s + '\n' + script: script);
+			}
 		}
 	}
 	/** Returns the intial scripts of
@@ -416,7 +391,9 @@ public class LanguageDefinition {
 	 */
 	public String getInitScript(String zslang) {
 		zslang = zslang.toLowerCase();
-		return (String)_initscripts.get(zslang);
+		synchronized (_initscripts) {
+			return (String)_initscripts.get(zslang);
+		}
 	}
 
 	/** Adds the script that shall execute each time before evaluating
@@ -427,14 +404,15 @@ public class LanguageDefinition {
 	 *
 	 * @param zslang the scripting language, say, Java.
 	 */
-	/*package*/ void addEachTimeScript(String zslang, String script) {
-	//no need to sync since we only addEachTimeScript is not public
+	public void addEachTimeScript(String zslang, String script) {
 		if (zslang == null || zslang.length() == 0)
 			throw new IllegalArgumentException("null or empty language");
 		if (script != null && script.length() > 0) {
 			zslang = zslang.toLowerCase();
-			final String s = (String)_eachscripts.get(zslang);
-			_eachscripts.put(zslang, s != null ? s + '\n' + script: script);
+			synchronized (_eachscripts) {
+				final String s = (String)_eachscripts.get(zslang);
+				_eachscripts.put(zslang, s != null ? s + '\n' + script: script);
+			}
 		}
 	}
 	/** Returns the each-time scripts of 
@@ -445,7 +423,9 @@ public class LanguageDefinition {
 	 */
 	public String getEachTimeScript(String zslang) {
 		zslang = zslang.toLowerCase();
-		return (String)_eachscripts.get(zslang);
+		synchronized (_eachscripts) {
+			return (String)_eachscripts.get(zslang);
+		}
 	}
 
 	/** Adds a {@link JavaScript} required by this language.
@@ -498,15 +478,10 @@ public class LanguageDefinition {
 		return _ross;
 	}
 
-	/** Returns whether the element names are case-insensitive.
+	/** Returns whether the component names are case-insensitive.
 	 */
 	public boolean isCaseInsensitive() {
-		return _ignoreCase;
-	}
-	/** Sets whether the element names are case-insensitive.
-	 */
-	/*package*/ void setCaseInsensitive(boolean caseInsensitive) {
-		_ignoreCase = caseInsensitive;
+		return _compdefs.isCaseInsensitive();
 	}
 
 	/** Return the URI to render a full page (which might be an expression).
@@ -540,24 +515,23 @@ public class LanguageDefinition {
 
 	/** Sets the component and attribute names used to represent a label.
 	 * Since label is used a lot in a page, there is a simple way to create
-	 * an {@link InstanceDefinition} by calling {@link #newLabelDefinition}.
+	 * an {@link ComponentInfo} by calling {@link #newLabelInfo}.
 	 *
-	 * <p>To be able to call {@link #newLabelDefinition}, this method must
+	 * <p>To be able to call {@link #newLabelInfo}, this method must
 	 * be called to define the component and attribute names used to create
-	 * an {@link InstanceDefinition} for a label.
+	 * an {@link ComponentInfo} for a label.
 	 */
 	public void setLabelTemplate(String compName, String propName, boolean raw) {
 		_labeltmpl = compName != null ?
 			new LabelTemplate(compName, propName, raw): null;
 	}
-	/** Constructs and returns an {@link InstanceDefinition} for
+	/** Constructs and returns an {@link ComponentInfo} for
 	 * the specified parent and text,
 	 */
-	public InstanceDefinition
-	newLabelDefinition(InstanceDefinition parent, String text) {
+	public ComponentInfo newLabelInfo(ComponentInfo parent, String text) {
 		if (_labeltmpl == null)
 			throw new UiException("No default label component is supported by "+this);
-		return _labeltmpl.newDefinition(parent, text);
+		return _labeltmpl.newComponentInfo(parent, text);
 	}
 	/** Returns whether the raw label is required.
 	 * If true, the parser won't trim the text, and the text is generated
@@ -662,15 +636,13 @@ public class LanguageDefinition {
 			_prop = prop;
 			this.raw = raw;
 		}
-		private InstanceDefinition newDefinition(
-		InstanceDefinition parent, String text) {
+		private ComponentInfo newComponentInfo(ComponentInfo parent, String text) {
 			if (_compdef == null) //no sync since racing is OK
 				_compdef = getComponentDefinition(_name);
 
-			final InstanceDefinition instdef =
-				new InstanceDefinition(parent, _compdef);
-			instdef.addProperty(_prop, text, null);
-			return instdef;
+			final ComponentInfo info = new ComponentInfo(parent, _compdef);
+			info.addProperty(_prop, text, null);
+			return info;
 		}
 	}
 }

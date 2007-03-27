@@ -508,8 +508,7 @@ implements EventProcessingThread {
 			}
 		}
 
-		final ZScript zscript =
-			((ComponentCtrl)_comp).getMilieu().getEventHandler(_comp, evtnm);
+		final ZScript zscript = ((ComponentCtrl)_comp).getEventHandler(evtnm);
 		if (zscript != null) {
 			page.interpret(
 				zscript.getLanguage(), zscript.getContent(page, _comp), ns);

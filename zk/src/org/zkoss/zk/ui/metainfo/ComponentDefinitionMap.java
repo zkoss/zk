@@ -30,17 +30,34 @@ import java.util.Iterator;
  *
  * @author tomyeh
  */
-public class ComponentDefinitionMap implements java.io.Serializable {
+public class ComponentDefinitionMap
+implements Cloneable, java.io.Serializable {
 	/** A map of component definition defined in this page. */
 	private transient Map _compdefs;
 	/** Map(String clsnm, ComponentDefinition compdef). */
 	private transient Map _compdefsByClass;
+	/** Whether the element name is case-insensitive. */
+	private final boolean _ignoreCase;
+
+	/** Constructor.
+	 */
+	public ComponentDefinitionMap(boolean ignoreCase) {
+		_ignoreCase = ignoreCase;
+	}
+
+	/** Returns whether the component names are case-insensitive.
+	 */
+	public boolean isCaseInsensitive() {
+		return _ignoreCase;
+	}
+
 
 	/** Returns a collection of component definitions, {@link ComponentDefinition},
 	 *  defined in this map.
 	 */
-	public Collection getAll() {
-		return _compdefs != null ? _compdefs.values(): Collections.EMPTY_LIST;
+	public Collection getNames() {
+		return _compdefs != null ?
+			_compdefs.keySet(): (Collection)Collections.EMPTY_LIST;
 	}
 	/** Adds a component definition to this map.
 	 *
@@ -50,26 +67,34 @@ public class ComponentDefinitionMap implements java.io.Serializable {
 		if (compdef == null)
 			throw new IllegalArgumentException("null");
 
-		if (_compdefs == null) {
-			synchronized (this) {
-				if (_compdefs == null) {
-					_compdefsByClass = new HashMap(5);
-					_compdefs = new HashMap(5);
-				}
-			}
-		}
-		synchronized (_compdefs) {
-			_compdefs.put(compdef.getName(), compdef);
-		}
+		String name = compdef.getName();
+		if (isCaseInsensitive())
+			name = name.toLowerCase();
 
-		final Object implcls = compdef.getImplementationClass();
-		synchronized (_compdefsByClass) {
-			if (implcls instanceof Class)
-				_compdefsByClass.put(((Class)implcls).getName(), compdef);
-			else //String
-				_compdefsByClass.put(implcls, compdef);
+		Object implcls = compdef.getImplementationClass();
+		if (implcls instanceof Class)
+			implcls = ((Class)implcls).getName();
+
+		synchronized (this) {
+			if (_compdefs == null) {
+				_compdefsByClass =
+					Collections.synchronizedMap(new HashMap(3));
+				_compdefs =
+					Collections.synchronizedMap(new HashMap(3));
+			}
+
+			_compdefs.put(name, compdef);
+			_compdefsByClass.put(implcls, compdef);
 		}
 	}
+	/** Returns whether the specified component exists.
+	 */
+	public boolean contains(String name) {
+		return _compdefs != null
+			&& _compdefs.containsKey(
+				isCaseInsensitive() ? name.toLowerCase(): name);
+	}
+
 	/** Returns the component definition of the specified name, or null if not
 	 * not found.
 	 *
@@ -78,11 +103,10 @@ public class ComponentDefinitionMap implements java.io.Serializable {
 	 * It just returns null.
 	 */
 	public ComponentDefinition get(String name) {
-		if (_compdefs == null) return null;
-
-		synchronized (_compdefs) {
-			return (ComponentDefinition)_compdefs.get(name);
-		}
+		return _compdefs != null ?
+			(ComponentDefinition)_compdefs.get(
+				isCaseInsensitive() ? name.toLowerCase(): name):
+			null;
 	}
 	/** Returns the component definition of the specified class, or null if not
 	 * found.
@@ -92,13 +116,12 @@ public class ComponentDefinitionMap implements java.io.Serializable {
 	 * It just returns null.
 	 */
 	public ComponentDefinition get(Class cls) {
-		if (_compdefsByClass == null) return null;
-
-		synchronized (_compdefsByClass) {
+		if (_compdefsByClass != null) {
 			for (; cls != null; cls = cls.getSuperclass()) {
 				final ComponentDefinition compdef =
 					(ComponentDefinition)_compdefsByClass.get(cls.getName());
-				if (compdef != null) return compdef;
+				if (compdef != null)
+					return compdef;
 			}
 		}
 		return null;
@@ -120,5 +143,18 @@ public class ComponentDefinitionMap implements java.io.Serializable {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				add((ComponentDefinition)it.next());
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final ComponentDefinitionMap clone;
+		try {
+			clone = (ComponentDefinitionMap)super.clone();
+			clone._compdefs = new HashMap(_compdefs);
+			clone._compdefsByClass = new HashMap(_compdefsByClass);
+		} catch (CloneNotSupportedException ex) {
+			throw new InternalError();
+		}
+		return clone;
 	}
 }

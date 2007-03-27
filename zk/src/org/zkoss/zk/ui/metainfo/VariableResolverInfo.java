@@ -1,4 +1,4 @@
-/* VariableResolverDefinition.java
+/* VariableResolverInfo.java
 
 {{IS_NOTE
 	Purpose:
@@ -37,8 +37,8 @@ import org.zkoss.zk.scripting.VariableResolver;
  * 
  * @author tomyeh
  */
-public class VariableResolverDefinition {
-	private static final Log log = Log.lookup(VariableResolverDefinition.class);
+public class VariableResolverInfo {
+	private static final Log log = Log.lookup(VariableResolverInfo.class);
 
 	/** A class, a EL string or an VariableResolver. */
 	private final Object _resolver;
@@ -46,7 +46,7 @@ public class VariableResolverDefinition {
 	/** Constructs with a class, and {@link #newVariableResolver} will
 	 * instantiate a new instance.
 	 */
-	public VariableResolverDefinition(Class cls) {
+	public VariableResolverInfo(Class cls) {
 		checkClass(cls);
 		_resolver = cls;
 	}
@@ -60,7 +60,7 @@ public class VariableResolverDefinition {
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
 	 */
-	public VariableResolverDefinition(String clsnm)
+	public VariableResolverInfo(String clsnm)
 	throws ClassNotFoundException {
 		if (clsnm == null || clsnm.length() == 0)
 			throw new IllegalArgumentException("empty");
@@ -80,7 +80,7 @@ public class VariableResolverDefinition {
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newVariableResolver} is called.
 	 */
-	public VariableResolverDefinition(VariableResolver resolver) {
+	public VariableResolverInfo(VariableResolver resolver) {
 		if (resolver == null)
 			throw new IllegalArgumentException("null");
 		_resolver = resolver;

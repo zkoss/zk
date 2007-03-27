@@ -49,8 +49,7 @@ import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
 
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.impl.*;
 import org.zkoss.zk.scripting.Interpreters;
 
 /**
@@ -193,8 +192,8 @@ public class DefinitionLoaders {
 			if (log.debugable()) log.debug("Addon language to "+lang+" from "+root.getElementValue("addon-name", true));
 			langdef = LanguageDefinition.lookup(lang);
 
-			if (!root.getElements("case-insensitive").isEmpty())
-				throw new UiException("You can not specify case-insensitive in addon");
+			if (root.getElement("case-insensitive") != null)
+				throw new UiException("case-insensitive not allowed in addon");
 		} else {
 			final String ns = (String)IDOMs.getRequiredElementValue(root, "namespace");
 			if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
@@ -213,15 +212,10 @@ public class DefinitionLoaders {
 			if (exts.isEmpty())
 				throw new IllegalSyntaxException("The extension must be specified for "+lang);
 
+			String ignoreCase = root.getElementValue("case-insensitive", true);
 			langdef = new LanguageDefinition(
-				clientType, lang, ns, exts, desktopURI, pageURI, locator);
-
-			for (Iterator it = root.getElements("case-insensitive").iterator();
-			it.hasNext();) {
-				final Element el = (Element)it.next();
-				final String s = el.getText(true);
-				langdef.setCaseInsensitive(!"false".equalsIgnoreCase(s));
-			}
+				clientType, lang, ns, exts, desktopURI, pageURI,
+				"true".equals(ignoreCase), locator);
 		}
 
 		parsePI(langdef, doc);
@@ -301,12 +295,12 @@ public class DefinitionLoaders {
 				IDOMs.getRequiredElementValue(el, "component-name");
 
 			final String macroUri = el.getElementValue("macro-uri", true);
-			final ComponentDefinition compdef;
+			final ComponentDefinitionImpl compdef;
 			if (macroUri != null && macroUri.length() != 0) {
 				if (log.finerable()) log.finer("macro component definition: "+name);
 
 				final String inline = el.getElementValue("inline", true);
-				compdef = new ComponentDefinition(
+				compdef = new ComponentDefinitionImpl(
 					langdef, name, macroUri, "true".equals(inline));
 
 				langdef.initMacroDefinition(compdef);
@@ -323,15 +317,15 @@ public class DefinitionLoaders {
 				if (log.finerable()) log.finer("Override component definition: "+name);
 
 				final String extnm = el.getElementValue("extends", true);
-				final ComponentDefinition ref =
-					langdef.getComponentDefinition(extnm);
+				final ComponentDefinition ref = langdef.getComponentDefinition(extnm);
 				if (ref.isMacro())
 					throw new UiException("Unable to extend from a macro component, "+el.getLocator());
 
 				if (extnm.equals(name)) {
-					compdef = ref;
+					compdef = (ComponentDefinitionImpl)ref;
 				} else {
-					compdef = ref.clone(name);
+					compdef = (ComponentDefinitionImpl)
+						ref.clone(ref.getLanguageDefinition(), name);
 					langdef.addComponentDefinition(compdef);
 				}
 
@@ -346,7 +340,7 @@ public class DefinitionLoaders {
 				final String clsnm =
 					IDOMs.getRequiredElementValue(el, "component-class");
 				noEL("component-class", clsnm, el);
-				compdef = new ComponentDefinition(
+				compdef = new ComponentDefinitionImpl(
 					langdef, name, locateClass(clsnm));
 				langdef.addComponentDefinition(compdef);
 			}
@@ -356,15 +350,14 @@ public class DefinitionLoaders {
 				compdef.addMold((String)me.getKey(), (String)me.getValue());
 			}
 
-			for (Iterator e = parseParams(el).entrySet().iterator(); e.hasNext();) {
+			for (Iterator e = parseCustAttrs(el).entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
-				compdef.addParam((String)me.getKey(), (String)me.getValue());
+				compdef.addCustomAttribute((String)me.getKey(), (String)me.getValue());
 			}
 
 			for (Iterator e = parseProps(el).entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
-				compdef.addProperty(
-					(String)me.getKey(), (String)me.getValue(), null);
+				compdef.addProperty((String)me.getKey(), (String)me.getValue());
 			}
 
 			parseAnnots(compdef, el);
@@ -469,14 +462,14 @@ public class DefinitionLoaders {
 	private static Map parseMolds(Element elm) {
 		return IDOMs.parseParams(elm, "mold", "mold-name", "mold-uri");
 	}
-	private static Map parseParams(Element elm) {
-		return IDOMs.parseParams(elm, "param", "param-name", "param-value");
+	private static Map parseCustAttrs(Element elm) {
+		return IDOMs.parseParams(elm, "custom-attribute", "attribute-name", "attribute-value");
 	}
 	private static Map parseAttrs(Element elm) {
 		return IDOMs.parseParams(elm, "attribute", "attribute-name", "attribute-value");
 	}
 
-	private static void parseAnnots(ComponentDefinition compdef, Element top) {
+	private static void parseAnnots(ComponentDefinitionImpl compdef, Element top) {
 		for (Iterator it = top.getElements("annotation").iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String annotName = IDOMs.getRequiredElementValue(el, "annotation-name");

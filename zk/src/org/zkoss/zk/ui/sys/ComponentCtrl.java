@@ -24,8 +24,10 @@ import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.metainfo.Milieu;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.Annotation;
+import org.zkoss.zk.ui.metainfo.ZScript;
+import org.zkoss.zk.ui.metainfo.EventHandler;
 
 /**
  * An addition interface to {@link org.zkoss.zk.ui.Component}
@@ -36,21 +38,25 @@ import org.zkoss.zk.ui.metainfo.Annotation;
  * @author tomyeh
  */
 public interface ComponentCtrl {
-	/** Returns the milieu of this component (never null).
-	 * The milieu object holds the mini version of the component
-	 * or instance definition of this component.
-	 *
-	 * <p>Refer to {@link Milieu} for the reason not to associate a component with the component or
-	 * instance definition.
+	/** Returns the event handler of the specified name, or null
+	 * if not found.
 	 */
-	public Milieu getMilieu();
-	/** Sets the milieu of this component.
-	 * <p>The milieu affects how a component behaves. Developers rarely
-	 * need to call this method. If a wrong milieu is assigned,
+	public ZScript getEventHandler(String evtnm);
+	/** Adds an event handler.
+	 */
+	public void addEventHandler(String name, EventHandler evthd);
+
+	/** Sets the component definition.
+	 *
+	 * <p>The component definition affects how a component behaves.
+	 * Developers rarely need to call this method. If a wrong definition
+	 * is assigned,
 	 * the result is unpredictable (and hard to debug). It is mainly designed
 	 * for developing tools.
+	 *
+	 * @exception IllegalArgumentException if compdef is null
 	 */
-	public void setMilieu(Milieu milieu);
+	public void setComponentDefinition(ComponentDefinition compdef);
 
 	/** Returns the annotation associated with the component,
 	 * or null if not available.

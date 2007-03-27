@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.metainfo;
+package org.zkoss.zk.ui.metainfo.impl;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -26,6 +26,8 @@ import java.util.LinkedHashMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+
+import org.zkoss.zk.ui.metainfo.*;
 
 /**
  * An implementation of {@link AnnotationMap}.

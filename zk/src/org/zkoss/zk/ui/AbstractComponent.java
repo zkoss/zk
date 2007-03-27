@@ -54,15 +54,17 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.impl.Serializables;
-import org.zkoss.zk.ui.metainfo.Milieu;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
-import org.zkoss.zk.ui.metainfo.AnnotationMapImpl;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.metainfo.EventHandler;
+import org.zkoss.zk.ui.metainfo.ZScript;
+import org.zkoss.zk.ui.metainfo.impl.AnnotationMapImpl;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
@@ -80,12 +82,12 @@ import org.zkoss.zk.scripting.util.AbstractNamespace;
 public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
-    private static final long serialVersionUID = 20060622L;
+    private static final long serialVersionUID = 20070326L;
 
 	private transient Page _page;
 	private String _id;
 	private String _uuid;
-	private Milieu _mil;
+	private transient ComponentDefinition _def;
 	private transient Component _parent;
 	/** The mold (default: "default"). */
 	private String _mold = "default";
@@ -101,6 +103,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * its own annotations.
 	 */
 	private AnnotationMapImpl _annots;
+	/** A Map of event handler (String name, EventHandler) to handle events. */
+	private Map _evthds;
 	/** The extra controls. */
 	private transient Object _xtrl;
 	/** A set of children being added. It is used only to speed up
@@ -120,12 +124,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected AbstractComponent() {
 		final Execution exec = Executions.getCurrent();
 
-		_mil = Milieu.getCurrent();
-		if (_mil != null) Milieu.setCurrent(null); //to avoid mis-use
+		_def = ComponentsCtrl.getCurrentDefinition();
+		if (_def != null) ComponentsCtrl.setCurrentDefinition(null); //to avoid mis-use
 		else {
-			final ComponentDefinition compdef = getDefinition(exec, getClass());
-			if (compdef != null) _mil = compdef.getMilieu();
-			else _mil = Milieu.DUMMY;
+			_def = lookupDefinition(exec, getClass());
+			if (_def == null)
+				_def = ComponentsCtrl.DUMMY;
 		}
 
 		init(false);
@@ -140,7 +144,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
 	private static final
-	ComponentDefinition getDefinition(Execution exec, Class cls) {
+	ComponentDefinition lookupDefinition(Execution exec, Class cls) {
 		if (exec != null) {
 			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 			final PageDefinition pgdef = execCtrl.getCurrentPageDefinition();
@@ -151,19 +155,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					page.getComponentDefinition(cls, true);
 			if (compdef != null) return compdef;
 
-			return getDefinitionByClientType(exec.getDesktop().getClientType(), cls);
+			return lookupDefinitionByClientType(exec.getDesktop().getClientType(), cls);
 		}
 
 		for (Iterator it = LanguageDefinition.getClientTypes().iterator(); it.hasNext();) {
 			final ComponentDefinition compdef =
-				getDefinitionByClientType((String)it.next(), cls);
+				lookupDefinitionByClientType((String)it.next(), cls);
 			if (compdef != null)
 				return compdef;
 		}
 		return null;
 	}
 	private static final ComponentDefinition
-	getDefinitionByClientType(String clientType, Class cls) {
+	lookupDefinitionByClientType(String clientType, Class cls) {
 		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition ld = (LanguageDefinition)it.next();
@@ -347,38 +351,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * <p>Used usually for component implementation.
 	 */
 	protected String getMoldURI() {
-		return _mil.getMoldURI(this, getMold());
-	}
-	/** Returns the initial parameter in int, or 0 if not found.
-	 * An initial parameter is a parameter defined with the
-	 * component's definition {@link ComponentDefinition}.
-	 *
-	 * <p>It evaluates before returning, if it is an EL expression.
-	 *
-	 * <p>Used usually for component implementation.
-	 */
-	protected int getIntInitParam(String name) {
-		final Integer v;
-		final Object o = _mil.getParameter(this, name);
-		if (o instanceof Integer) {
-			v = (Integer)o;
-		} else if (o != null) {
-			v = Integer.valueOf(Objects.toString(o));
-		} else {
-			v = new Integer(0);
-		}
-		return v.intValue();
-	}
-	/** Returns the initial parameter, or null if not found.
-	 * An initial parameter is a parameter defined with the
-	 * component's definition {@link ComponentDefinition}.
-	 *
-	 * <p>It evaluates before returning, if it is an EL expression.
-	 *
-	 * <p>Used usually for component implementation.
-	 */
-	protected String getInitParam(String name) {
-		return Objects.toString(_mil.getParameter(this, name));
+		return _def.getMoldURI(this, getMold());
 	}
 
 	/** Returns the UI engine based on {@link #_page}'s getDesktop().
@@ -896,9 +869,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (mold == null || mold.length() == 0)
 			mold = "default";
 		if (!Objects.equals(_mold, mold)) {
-			if (!_mil.hasMold(mold))
+			if (!_def.hasMold(mold))
 				throw new UiException("Unknown mold: "+mold
-					+", while allowed include "+_mil.getMoldNames());
+					+", while allowed include "+_def.getMoldNames());
 			_mold = mold;
 			invalidate();
 		}
@@ -1011,19 +984,36 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public void applyProperties() {
-		_mil.applyProperties(this);
+		_def.applyProperties(this);
+	}
+
+	public ComponentDefinition getDefinition() {
+		return _def;
 	}
 
 	//-- ComponentCtrl --//
-	public Milieu getMilieu() {
-		return _mil;
-	}
-	public void setMilieu(Milieu milieu) {
-		if (milieu == null)
+	public void setComponentDefinition(ComponentDefinition compdef) {
+		if (compdef == null)
 			throw new IllegalArgumentException("null");
-		if (!milieu.isInstance(this))
-			throw new IllegalArgumentException("Incompatible "+milieu+" for "+this);
-		_mil = milieu;
+		if (!compdef.isInstance(this))
+			throw new IllegalArgumentException("Incompatible "+compdef+" for "+this);
+		_def = compdef;
+	}
+
+	public ZScript getEventHandler(String evtnm) {
+		if (_evthds == null)
+			return null;
+		final EventHandler evthd = (EventHandler)_evthds.get(evtnm);
+		return evthd != null && evthd.isEffective(this) ?
+			evthd.getZScript(): null;
+	}
+	public void addEventHandler(String name, EventHandler evthd) {
+		if (name == null || evthd == null)
+			throw new IllegalArgumentException("name and evthd required");
+
+		if (_evthds == null)
+			_evthds = new HashMap(3);
+		_evthds.put(name, evthd);
 	}
 
 	public Annotation getAnnotation(String annotName) {
@@ -1046,16 +1036,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public void addAnnotation(String annotName, Map annotAttrs) {
 		if (_annots == null)
-			_annots = (AnnotationMapImpl)getMilieu().getAnnotationMap().clone();
+			_annots = (AnnotationMapImpl)_def.getAnnotationMap().clone();
 		_annots.addAnnotation(annotName, annotAttrs);
 	}
 	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
 		if (_annots == null)
-			_annots = (AnnotationMapImpl)getMilieu().getAnnotationMap().clone();
+			_annots = (AnnotationMapImpl)_def.getAnnotationMap().clone();
 		_annots.addAnnotation(propName, annotName, annotAttrs);
 	}
 	private AnnotationMap annotmap() {
-		return _annots != null ? _annots: getMilieu().getAnnotationMap();
+		return _annots != null ? _annots: _def.getAnnotationMap();
 	}
 
 	public void sessionWillPassivate(Page page) {
@@ -1345,6 +1335,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
+		if (_def == ComponentsCtrl.DUMMY) {
+			s.writeObject(null);
+		} else {
+			LanguageDefinition langdef = _def.getLanguageDefinition();
+			if (langdef != null) {
+				s.writeObject(langdef.getName());
+				s.writeObject(_def.getName());
+			} else {
+				s.writeObject(_def);
+			}
+		}
+
 		Serializables.smartWrite(s, _attrs);
 
 		if (_listeners != null)
@@ -1380,6 +1382,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		s.defaultReadObject();
 
 		init(false);
+
+		Object def = s.readObject();
+		if (def == null) {
+			_def = ComponentsCtrl.DUMMY;
+		} else if (def instanceof String) {
+			LanguageDefinition langdef = LanguageDefinition.lookup((String)def);
+			_def = langdef.getComponentDefinition((String)s.readObject());
+		} else {
+			_def = (ComponentDefinition)def;
+		}
 
 		Serializables.smartRead(s, _attrs);
 

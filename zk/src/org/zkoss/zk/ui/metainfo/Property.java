@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.el.Evaluator;
 /**
- * A property of a definition.
+ * Info about how to initialize a property (aka., a field of a component).
  *
  * @author tomyeh
  */
@@ -81,7 +81,13 @@ public class Property implements Condition, Serializable {
 	public String getValue() {
 		return _value;
 	}
+	/** Returns the condition.
+	 */
+	public Condition getCondition() {
+		return _cond;
+	}
 
+	/** Resolves the method. */
 	private final void resolve(Class cls) {
 		final String mtdnm = Classes.toMethodName(_name, "set");
 		if (_bExpr) {
@@ -117,14 +123,15 @@ public class Property implements Condition, Serializable {
 	}
 
 	/** Assigns the value of this memeber to the specified component.
+	 *
 	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
 	 */
-	public void assign(Milieu mill, Component comp, Evaluator eval) {
+	public void assign(Evaluator eval, Component comp) {
 		if (!isEffective(comp))
 			return; //ignored
 
 		try {
-			final Class cls = mill.resolveImplementationClass(comp.getPage());
+			final Class cls = comp.getClass();
 			if (_lastcls != cls) {
 				resolve(cls);
 				_lastcls = cls;

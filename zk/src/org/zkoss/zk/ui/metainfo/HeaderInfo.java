@@ -1,4 +1,4 @@
-/* Header.java
+/* HeaderInfo.java
 
 {{IS_NOTE
 	Purpose:
@@ -27,14 +27,15 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 
 /**
- * Represents a header element, such as &lt;link&gt; and &lt;meta&gt;.
+ * Represents a header element, such as &lt;link&gt; and &lt;meta&gt;
+ * on the ZUML page.
  * They are usually represented as directives in ZUML.
  * For example, the link and meta directives represent &lt;link&gt;
  * and &lt;meta&gt; HTML tags, respectively.
  *
  * @author tomyeh
  */
-public class Header {
+public class HeaderInfo {
 	private final String _name;
 	private final List _attrs;
 
@@ -46,7 +47,7 @@ public class Header {
 	 * @param name the tag name, such as link (never null or empty).
 	 * @param attrs a map of (String, String) attributes.
 	 */
-	public Header(String name, Map attrs) {
+	public HeaderInfo(String name, Map attrs) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("empty");
 

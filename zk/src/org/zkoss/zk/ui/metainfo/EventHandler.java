@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.Condition;
 
 /**
- * An event handler of an instance definition ({@link InstanceDefinition}).
+ * An event handler of a component definition ({@link ComponentDefinition}).
  *
  * @author tomyeh
  */
@@ -30,13 +30,19 @@ public class EventHandler implements Condition, java.io.Serializable {
 
 	private final ZScript _zscript;
 	private final Condition _cond;
+
 	public EventHandler(ZScript zscript, Condition cond) {
 		_zscript = zscript;
 		_cond = cond;
 	}
+
+	/** Returns the zscript associated with this event handler.
+	 */
 	public ZScript getZScript() {
 		return _zscript;
 	}
+
+	//Condition//
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(comp);
 	}

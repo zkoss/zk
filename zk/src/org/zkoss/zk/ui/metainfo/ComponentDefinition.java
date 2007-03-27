@@ -18,165 +18,61 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
-
-import org.zkoss.lang.Classes;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.el.Evaluator;
+import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
 
 /**
  * A component definition.
  * Like class in Java, a {@link ComponentDefinition} defines the behavior
  * of a component.
  *
+ * <p>The implementation must be thread-safe, since the caller depends on it.
+ * 
  * @author tomyeh
- * @see LanguageDefinition
  */
-public class ComponentDefinition implements Cloneable, java.io.Serializable {
-	private String _name;
-	private Milieu _mill;
-	private transient LanguageDefinition _langdef;
-	/** Either String or Class. */
-	private Object _cls;
-	private Map _molds, _params;
-	private List _props;
-	private String _macroURI;
-	/** inline or regular macro. Used if _macroURI is not null. */
-	private boolean _inline;
-	/*package*/ AnnotationMapImpl _annots;
-
+public interface ComponentDefinition extends Cloneable {
 	/** A special definition representing the zk component. */
 	public final static ComponentDefinition ZK =
-		new ComponentDefinition(null, "zk", Component.class);;
+		new ComponentDefinitionImpl(null, "zk", Component.class);;
 
-	/** Constructs a native component, i.e., a component implemented by
-	 * a Java class.
-	 *
-	 * @param langdef the language definition, or null if this is a temporary
-	 * definition, such as components defined in a page,
-	 * doesn't belong to any language.
-	 * @param cls the implementation class.
-	 */
-	public ComponentDefinition(LanguageDefinition langdef, String name,
-	Class cls) {
-		if (name == null)
-			throw new IllegalArgumentException("null name");
-		if (cls != null && !Component.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException(cls+" must implement "+Component.class);
-			//cls might be assigned later
-
-		_langdef = langdef;
-		_name = name;
-		_cls = cls;
-	}
-	/** Constructs a macro component, i.e., a component implemented by
-	 * a macro.
-	 *
-	 * <p>After calling this method, the caller MUST invoke
-	 * {@link LanguageDefinition#initMacroDefinition}.
-	 *
-	 * @param langdef the language definition, or null if this is a temporary
-	 * definition doesn't belong to any language.
-	 */
-	public ComponentDefinition(LanguageDefinition langdef, String name,
-	String macroURI, boolean inline) {
-		if (name == null)
-			throw new IllegalArgumentException("null name");
-		if (macroURI == null || macroURI.length() == 0)
-			throw new IllegalArgumentException("empty macroURI");
-		_langdef = langdef;
-		_name = name;
-		_macroURI = macroURI;
-		_inline = inline;
-	}
-	 
-
-	/** Used by deriving class to contruct a 'virtual' definition that
-	 * depends on the specified definition.
-	 * It is currently used only by {@link InstanceDefinition}.
-	 *
-	 * <p>At least one of langdef or compdef must be non-null.
-	 *
-	 * @param langdef the language definition. If null, compdef's language
-	 * definition is assumed.
-	 */
-	protected ComponentDefinition(LanguageDefinition langdef,
-	ComponentDefinition compdef, String name) {
-		if (name == null)
-			throw new IllegalArgumentException("null name");
-
-		_name = name;
-		_langdef = langdef != null ? langdef: compdef._langdef;
-			//at least one of them is not null
-		if (compdef != null) {
-			_macroURI = compdef._macroURI;
-			_inline = compdef._inline;
-		}
-	}
-
-	/** Returns the language definition, or null if it is temporty definition
+	/** Returns the language definition, or null if it is a temporty definition
 	 * belonging to a page.
-	 *
-	 * <p>It is never null if this is a page definition ({@link PageDefinition}).
 	 */
-	public LanguageDefinition getLanguageDefinition() {
-		return _langdef;
-	}
-	/** Sets the language definition.
-	 */
-	public void setLanguageDefinition(LanguageDefinition langdef) {
-		_langdef = langdef;
-	}
+	public LanguageDefinition getLanguageDefinition();
 
 	/** Returns name of this component definition (never null).
-	 * It is unique in the same language, {@link LanguageDefinition}.
+	 * It is unique in the same language, {@link LanguageDefinition},
+	 * if it belongs to a language, i.e.,
+	 * {@link #getLanguageDefinition} is not null.
 	 */
-	public String getName() {
-		return _name;
-	}
-
-	/** Returns the millieu representing this definition.
-	 */
-	public Milieu getMilieu() {
-		if (_mill == null) //no need to synchronized since harmless
-			_mill = new Milieu(this);
-		return _mill;
-	}
+	public String getName();
 
 	/** Returns whether this is a macro component.
 	 * @see #getMacroURI
 	 */
-	public boolean isMacro() {
-		return _macroURI != null;
-	}
+	public boolean isMacro();
 	/** Returns the macro URI, or null if not a macro.
 	 */
-	public String getMacroURI() {
-		return _macroURI;
-	}
+	public String getMacroURI();
 	/** Returns whether this is an inline macro.
 	 * If false, you have to examine {@link #isMacro} to see whether it
 	 * is a regular macro.
 	 */
-	public boolean isInlineMacro() {
-		return _inline;
-	}
+	public boolean isInlineMacro();
 
 	/** Returns the class (Class) or the class name (String) that
 	 * implements the component.
+	 *
+	 * <p>If a string is returned, the real class may depend on
+	 * which page a component will be created to.
+	 * Reason: the zscript interpreter is associated with a page and
+	 * it may define classes upon evaluating a page.
 	 */
-	public Object getImplementationClass() {
-		return _cls;
-	}
+	public Object getImplementationClass();
 	/** Sets the class to implements the component.
 	 *
 	 * <p>Note: currently, classes specified in lang.xml or lang-addon.xml
@@ -184,254 +80,143 @@ public class ComponentDefinition implements Cloneable, java.io.Serializable {
 	 * However, classes specified in a page (by use of class or use attributes)
 	 * might be resolved later because it might be defined by zscript.
 	 */
-	public void setImplementationClass(Class cls) {
-		if (!Component.class.isAssignableFrom(cls))
-			throw new UiException(Component.class.getName()+" must be implemented by "+cls);
-		_cls = cls;
-	}
+	public void setImplementationClass(Class cls);
 	/** Sets the class name to implements the component.
 	 * Unlike {@link #setImplementationClass(Class)}, the class won't
 	 * be resolved until {@link InstanceDefinition#newInstance} or {@link #getImplementationClass}
 	 * is used. In other words, the class can be provided later
 	 * (thru, usually, zscript).
 	 */
-	public void setImplementationClass(String clsnm) {
-		if (clsnm == null || clsnm.length() == 0)
-			throw new UiException("Non-empty class name is required");
-		_cls = clsnm;
-	}
+	public void setImplementationClass(String clsnm);
+	/** Resolves and returns the class that implements the component.
+	 *
+	 * <p>Unlike {@link #getImplementationClass},
+	 * this method will resolve a class name (String) to a class (Class),
+	 * if necessary.
+	 * In addition, if the clsnm argument is specified,
+	 * it is used instead of {@link #getImplementationClass}.
+	 * In other words, it overrides the default class.
+	 *
+	 * @param clsnm [optional] If specified, clsnm is used instead of
+	 * {@link #getImplementationClass}.
+	 * In other words, it overrides the default class.
+	 * @param page the page that is used to resolve the implementation
+	 * class. It is used only this definition is associated
+	 * with a class name by {@link #setImplementationClass(String)},
+	 * or clsnm is not null.
+	 * Note: this method won't attach the component to the specified page.
+	 * It can be null if {@link #getImplementationClass} returns a Class
+	 * instance, and clsnm is null.
+	 * @exception ClassNotFoundException if the class not found
+	 */
+	public Class resolveImplementationClass(Page page, String clsnm)
+	throws ClassNotFoundException;
+	/** Returns whether a component belongs to this definition.
+	 *
+	 * <p>If {@link #resolveImplementationClass} failed to resolve,
+	 * true is returned!
+	 */
+	public boolean isInstance(Component comp);
 
 	/** Creates an component of this definition.
 	 *
-	 * <p>Note: this method doesn't invoke {@link Milieu#applyProperties}.
+	 * <p>Note: this method doesn't invoke {@link #applyProperties}.
 	 * It is caller's job to apply these properties if necessary.
 	 * Since the value of a property might depend on the component tree,
 	 * it is better to assign the component with a proper parent
-	 * before calling {@link Milieu#applyProperties}.
+	 * before calling {@link #applyProperties}.
 	 *
-	 * <p>In addition, an application developer can invoke
+	 * <p>Similarly, this method doesn't attach the component to the
+	 * specified page. Developers may or may not add it to a page or
+	 * a parent.
+	 *
+	 * <p>An application developer can invoke
 	 * {@link org.zkoss.zk.ui.sys.UiFactory#newComponent}
-	 * instead of {@link #newInstance}, since it handles the initialization
-	 * of properties and attributes.
-	 * Notice that an application developer can customize
-	 * {@link org.zkoss.zk.ui.sys.UiFactory} to provide a different way
-	 * to instantiate a component.
+	 * instead of {@link #newInstance}, since a deployer might
+	 * customize the way to create components by providing
+	 * an implementation of {@link org.zkoss.zk.ui.sys.UiFactory}.
+	 * In additions, it also invokes {@link #applyProperties}
+	 * assigning page/parent.
 	 *
-	 * @param page the page the new component belongs to (never null)
+	 * <p>On the other hand, this method is 'low-level'. It simply resolves
+	 * the implementation class by use of {@link #resolveImplementationClass},
+	 * and then uses it to create an instance.
+	 *
+	 * @param clsnm [optional] If specified, clsnm is used instead of
+	 * {@link #getImplementationClass}.
+	 * In other words, it overrides the default class.
+	 * @param page the page that is used to resolve the implementation
+	 * class. It is used only this definition is associated
+	 * with a class name by {@link #setImplementationClass(String)},
+	 * or clsnm is not null.
+	 * Note: this method won't attach the component to the specified page.
+	 * It can be null if {@link #getImplementationClass} returns a Class
+	 * instance, and clsnm is null.
 	 * @return the new component (never null)
 	 */
-	public Component newInstance(Page page) {
-		final Milieu mill = getMilieu();
-		Milieu.setCurrent(mill);
-		final Component comp;
-		try {
-			comp = (Component)
-				mill.resolveImplementationClass(page).newInstance();
-		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex);
-		} finally {
-			//theorectically, it shall be reset by AbstractComponent, but..
-			Milieu.setCurrent(null);
-		}
-		return comp;
-	}
+	public Component newInstance(Page page, String clsnm);
 
-	/** Adds a mold.
-	 */
-	public void addMold(String name, String moldUri) {
-		if (name == null || moldUri == null)
-			throw new IllegalArgumentException("null");
-		if (name.length() == 0 || moldUri.length() == 0)
-			throw new IllegalArgumentException("empty");
-
-		if (_molds == null) {
-			synchronized (this) {
-				if (_molds == null) {
-					final Map molds = new HashMap(5);
-					molds.put(name, moldUri);
-					_molds = molds;
-					return;
-				}
-			}
-		}
-		synchronized (_molds) {
-			_molds.put(name, moldUri);
-		}
-	}
-	/** Returns a map of molds, or null if no one is defined.
+	/** Adds a mold
 	 *
-	 * <p>Note: to access the returned, you have to use synchronized to
-	 * synchronized the returned list (if not null).
-	 * Also, a mold might be an EL expression
+	 * @param moldURI the URI of the mold; never null nor empty.
+	 * It can be an EL expression.
 	 */
-	/*package*/ Map getMolds() {
-		return _molds;
-	}
-
-	/** Adds a parameter.
-	 */
-	public void addParam(String name, String value) {
-		if (name == null || value == null)
-			throw new IllegalArgumentException("null");
-		if (name.length() == 0 || value.length() == 0)
-			throw new IllegalArgumentException("empty");
-
-		if (_params == null) {
-			synchronized (this) {
-				if (_params == null) {
-					final Map params = new HashMap(5);
-					params.put(name, value);
-					_params = params;
-					return;
-				}
-			}
-		}
-		synchronized (_params) {
-			_params.put(name, value);
-		}
-	}
-	/** Returns the list of parameters, or null if not available.
+	public void addMold(String name, String moldURI);
+	/** Returns the URI of the mold, or null if no such mold available.
+	 * If mold contains an expression, it will be evaluated first
+	 * before returning.
 	 *
-	 * <p>Note: to access the returned, you have to use synchronized to
-	 * synchronized the returned list (if not null).
-	 * Also, a pamater might be an EL expression
+	 * @param name the mold
 	 */
-	/*package*/ Map getParams() {
-		return _params;
-	}
+	public String getMoldURI(Component comp, String name);
+	/** Returns whether the specified mold exists.
+	 */
+	public boolean hasMold(String name);
+	/** Returns a readonly collection of mold names supported by
+	 * this definition.
+	 */
+	public Collection getMoldNames();
 
 	/** Adds a property initializer.
 	 * It will initialize a component when created with is definition.
+	 *
 	 * @param name the member name. The component must have a valid setter
 	 * for it.
 	 * @param value the value. It might contain expressions (${}).
 	 */
-	public void addProperty(String name, String value, Condition cond) {
-		if (name == null || name.length() == 0)
-			throw new IllegalArgumentException("name");
-
-		final Property prop = new Property(name, value, cond);
-		if (_props == null) {
-			synchronized (this) {
-				if (_props == null) {
-					final List props = new LinkedList();
-					props.add(prop);
-					_props = props;
-					return;
-				}
-			}
-		}
-		synchronized (_props) {
-			_props.add(prop);
-		}
-	}
-	/** Returns the list of properties, or null if no properties at all.
-	 *
-	 * <p>Note: to access the returned, you have to use synchronized to
-	 * synchronized the returned list (if not null).
+	public void addProperty(String name, String value);
+	/** Applies the properties and custom attributes defined in
+	 * {@link ComponentDefinition} (and {@link ComponentInfo}).
 	 */
-	/*package*/ final List getProperties() {
-	//Note: we don't allow InstanceDefinition to override it!!
-	//Reason: there are two set of properties and it's Milieu's job to handle
-		return _props;
-	}
+	public void applyProperties(Component comp);
+	/** Evaluates and retrieves properties to the specified map from
+	 * {@link ComponentDefinition} (and {@link ComponentInfo}).
+	 *
+	 * @param propmap the map to store the retrieved properties.
+	 * If null, a HashMap instance is created.
+	 * @param owner the owner page; used if parent is null
+	 * @param parent the parent
+	 */
+	public Map evalProperties(Map propmap, Page owner, Component parent);
 
 	/** Returns the map of annotations associated with this definition
 	 * (never null).
 	 */
-	public AnnotationMap getAnnotationMap() {
-		return _annots != null ? _annots: AnnotationMap.EMPTY;
-	}
-	/** Associates an annotation to this component definition.
+	public AnnotationMap getAnnotationMap();
+
+	/** Clones this definition and assins with the specified language
+	 * definition and name.
+	 */
+	public ComponentDefinition clone(LanguageDefinition langdef, String name);
+
+	/** Clones this component definition.
+	 * You rarely invoke this method directly. Rather, use {@link #clone(String)}.
 	 *
-	 * @param annotName the annotation name (never null, nor empty).
-	 * @param annotAttrs a map of attributes, or null if no attribute at all.
-	 * The attribute must be in a pair of strings (String name, String value).
-	 */
-	public void addAnnotation(String annotName, Map annotAttrs) {
-		if (_annots == null) {
-			synchronized (this) {
-				if (_annots == null) {
-					final AnnotationMapImpl annots = new AnnotationMapImpl();
-					annots.addAnnotation(annotName, annotAttrs);
-					_annots = annots;
-					return;
-				}
-			}
-		}
-		synchronized (_annots) {
-			_annots.addAnnotation(annotName, annotAttrs);
-		}
-	}
-	/** Adds an annotation to the specified proeprty of this component
-	 * definition.
+	 * <p>Note: the caller usually has to change the component name,
+	 * and then assign to a language definition ({@link LanguageDefinition})
+	 * or a page definition ({@link PageDefinition}).
 	 *
-	 * @param propName the property name (never nul, nor empty).
-	 * @param annotName the annotation name (never null, nor empty).
-	 * @param annotAttrs a map of attributes, or null if no attribute at all.
-	 * The attribute must be in a pair of strings (String name, String value).
+	 * @return the new component definition by cloning from this definition.
 	 */
-	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
-		if (_annots == null) {
-			synchronized (this) {
-				if (_annots == null) {
-					final AnnotationMapImpl annots = new AnnotationMapImpl();
-					annots.addAnnotation(propName, annotName, annotAttrs);
-					_annots = annots;
-					return;
-				}
-			}
-		}
-		synchronized (_annots) {
-			_annots.addAnnotation(propName, annotName, annotAttrs);
-		}
-	}
-
-	/** Clones this definition and assins with the specified name.
-	 */
-	public ComponentDefinition clone(String name) {
-		if (name == null || name.length() == 0)
-			throw new IllegalArgumentException("empty");
-
-		final ComponentDefinition cd = (ComponentDefinition)clone();
-		cd._name = name;
-		return cd;
-	}
-
-	//Serializable//
-	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
-		s.defaultWriteObject();
-
-		s.writeObject(_langdef != null ? _langdef.getName(): null);
-	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		s.defaultReadObject();
-
-		final String langnm = (String)s.readObject();
-		if (langnm != null)
-			_langdef = LanguageDefinition.lookup(langnm);
-	}
-
-	//Object//
-	public String toString() {
-		return "[ComponentDefinition: "+_name+']';
-	}
-	public Object clone() {
-		synchronized (this) {
-			try {
-				final ComponentDefinition compdef =
-					(ComponentDefinition)super.clone();
-				if (_annots != null) compdef._annots = (AnnotationMapImpl)_annots.clone();
-				if (_props != null) compdef._props = new LinkedList(_props);
-				if (_molds != null) compdef._molds = new HashMap(_molds);
-				if (_params != null) compdef._params = new HashMap(_params);
-				return compdef;
-			} catch (CloneNotSupportedException ex) {
-				throw new InternalError();
-			}
-		}
-	}
+	public Object clone();
 }

@@ -112,9 +112,12 @@ public interface UiFactory {
 	 *
 	 * @param page the page that the new component belongs to (never null).
 	 * @param parent the parent compoent, or null if the new component is root.
+	 * @param clsnm the implementation class of the component.
+	 * If null, {@link ComponentDefinition#getImplementationClass} will
+	 * be used.
 	 */
 	public Component newComponent(Page page, Component parent,
-	ComponentDefinition instdef);
+	ComponentDefinition compdef, String clsnm);
 
 	/** Returns the page definition of the specified path, or null if
 	 * not found.

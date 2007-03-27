@@ -1,4 +1,4 @@
-/* Variables.java
+/* VariablesInfo.java
 
 {{IS_NOTE
 	Purpose:
@@ -29,16 +29,16 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
 
 /**
- * Represents a variable element.
+ * The information about the variables element in the ZUML page.
  * 
  * @author tomyeh
  */
-public class Variables implements Condition, java.io.Serializable {
+public class VariablesInfo implements Condition, java.io.Serializable {
 	private final Map _vars;
 	private final Condition _cond;
 	private final boolean _local;
 
-	public Variables(Map vars, boolean local, Condition cond) {
+	public VariablesInfo(Map vars, boolean local, Condition cond) {
 		if (vars == null)
 			throw new IllegalArgumentException("null vars");
 		_vars = vars;

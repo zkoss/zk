@@ -178,7 +178,7 @@ public class Events {
 	 */
 	public static
 	boolean isListenerAvailable(Component comp, String evtnm, boolean asap) {
-		if (((ComponentCtrl)comp).getMilieu().getEventHandler(comp, evtnm) != null)
+		if (((ComponentCtrl)comp).getEventHandler(evtnm) != null)
 			return true;
 
 		if (ExecutionsCtrl.getEventMethod(comp.getClass(), evtnm) != null

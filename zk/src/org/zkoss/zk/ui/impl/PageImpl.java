@@ -178,7 +178,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_langdef = richlet.getLanguageDefinition();
 		_dkUri = _langdef.getDesktopURI();
 		_pgUri = _langdef.getPageURI();
-		_compdefs = new ComponentDefinitionMap();
+		_compdefs = new ComponentDefinitionMap(false);
 		_path = path != null ? path: "";
 		_zslang = "Java";
 

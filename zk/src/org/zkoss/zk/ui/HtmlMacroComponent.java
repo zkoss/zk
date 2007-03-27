@@ -54,7 +54,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		if (exec == null)
 			throw new IllegalStateException("No execution available.");
 		exec.createComponents(
-			_uri != null ? _uri: getMilieu().getMacroURI(),
+			_uri != null ? _uri: getDefinition().getMacroURI(),
 			this, _props);
 	}
 	public void setMacroURI(String uri) {

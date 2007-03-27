@@ -20,9 +20,11 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.zkoss.zk.ui.metainfo.impl.AnnotationMapImpl;
+
 /**
  * A map of annotations used with {@link ComponentDefinition} and
- * {@link InstanceDefinition}.
+ * {@link ComponentInfo}.
  *
  * @author tomyeh
  */

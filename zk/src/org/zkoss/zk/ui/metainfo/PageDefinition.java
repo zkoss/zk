@@ -51,10 +51,10 @@ import org.zkoss.zk.ui.sys.PageCtrl;
  * It represents a ZUL page.
  *
  * @author tomyeh
- * @see InstanceDefinition
  * @see ComponentDefinition
  */
-public class PageDefinition extends InstanceDefinition {
+public class PageDefinition extends NodeInfo {
+	private final LanguageDefinition _langdef;
 	private final Locator _locator;
 	private String _id, _title, _style;
 	/** The request path. */
@@ -63,13 +63,13 @@ public class PageDefinition extends InstanceDefinition {
 	private String _zslang = "Java";
 	private final List _taglibs = new LinkedList();
 	private FunctionMapper _funmap;
-	/* List(InitiatorDefinition). */
+	/* List(InitiatorInfo). */
 	private final List _initdefs = new LinkedList();
-	/** List(VariableResolverDefinition). */
+	/** List(VariableResolverInfo). */
 	private final List _resolvdefs = new LinkedList();
-	/** List(Header). */
+	/** List(HeaderInfo). */
 	private final List _headerdefs = new LinkedList();
-	private final ComponentDefinitionMap _compdefs = new ComponentDefinitionMap();
+	private final ComponentDefinitionMap _compdefs = new ComponentDefinitionMap(false);
 
 	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
@@ -77,13 +77,12 @@ public class PageDefinition extends InstanceDefinition {
 	 * languages.
 	 */
 	public PageDefinition(LanguageDefinition langdef, Locator locator) {
-		super(langdef);
-
 		if (langdef == null)
 			throw new IllegalArgumentException("null langdef");
 		if (locator == null)
 			throw new IllegalArgumentException("null locator");
 
+		_langdef = langdef;
 		_locator = locator;
 	}
 	/** Constructor.
@@ -100,6 +99,17 @@ public class PageDefinition extends InstanceDefinition {
 		setId(id);
 		setTitle(title);
 		setStyle(style);
+	}
+
+	/** Returns the language definition that this page is default to be.
+	 */
+	public LanguageDefinition getLanguageDefinition() {
+		return _langdef;
+	}
+	/** Returns the parent (always null).
+	 */
+	public NodeInfo getParent() {
+		return null;
 	}
 
 	/** Returns the locator associated with this page definition.
@@ -193,13 +203,16 @@ public class PageDefinition extends InstanceDefinition {
 	 */
 	public void imports(PageDefinition pgdef) {
 		for (Iterator it = pgdef._initdefs.iterator(); it.hasNext();)
-			addInitiatorDefinition((InitiatorDefinition)it.next());
-		for (Iterator it = pgdef._compdefs.getAll().iterator(); it.hasNext();)
-			addComponentDefinition((ComponentDefinition)it.next());
+			addInitiatorInfo((InitiatorInfo)it.next());
+		for (Iterator it = pgdef._compdefs.getNames().iterator();
+		it.hasNext();) {
+			final String name = (String)it.next();
+			addComponentDefinition(pgdef._compdefs.get(name));
+		}
 	}
 
 	/** Adds a defintion of {@link org.zkoss.zk.ui.util.Initiator}. */
-	public void addInitiatorDefinition(InitiatorDefinition init) {
+	public void addInitiatorInfo(InitiatorInfo init) {
 		if (init == null)
 			throw new IllegalArgumentException("null");
 		synchronized (_initdefs) {
@@ -217,7 +230,7 @@ public class PageDefinition extends InstanceDefinition {
 		final List inits = new LinkedList();
 		synchronized (_initdefs) {
 			for (Iterator it = _initdefs.iterator(); it.hasNext();) {
-				final InitiatorDefinition def = (InitiatorDefinition)it.next();
+				final InitiatorInfo def = (InitiatorInfo)it.next();
 				try {
 					final Initiator init = def.newInitiator(page);
 					if (init != null) {
@@ -233,7 +246,7 @@ public class PageDefinition extends InstanceDefinition {
 	}
 
 	/** Adds a defintion of {@link org.zkoss.zk.scripting.VariableResolver}. */
-	public void addVariableResolverDefinition(VariableResolverDefinition resolver) {
+	public void addVariableResolverInfo(VariableResolverInfo resolver) {
 		if (resolver == null)
 			throw new IllegalArgumentException("null");
 		synchronized (_resolvdefs) {
@@ -250,8 +263,8 @@ public class PageDefinition extends InstanceDefinition {
 		final List resolvs = new LinkedList();
 		synchronized (_resolvdefs) {
 			for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
-				final VariableResolverDefinition def =
-					(VariableResolverDefinition)it.next();
+				final VariableResolverInfo def =
+					(VariableResolverInfo)it.next();
 				try {
 					final VariableResolver resolv = def.newVariableResolver(page);
 					if (resolv != null) resolvs.add(resolv);
@@ -263,16 +276,16 @@ public class PageDefinition extends InstanceDefinition {
 		return resolvs;
 	}
 
-	/** Adds a header definition ({@link Header}.
+	/** Adds a header definition ({@link HeaderInfo}.
 	 */
-	public void addHeader(Header header) {
+	public void addHeaderInfo(HeaderInfo header) {
 		if (header == null)
 			throw new IllegalArgumentException("null");
 		synchronized (_headerdefs) {
 			_headerdefs.add(header);
 		}
 	}
-	/** Converts the header definitions (added by {@link #addHeader} to
+	/** Converts the header definitions (added by {@link #addHeaderInfo} to
 	 * HTML tags.
 	 */
 	public String getHeaders(Page page) {
@@ -282,7 +295,7 @@ public class PageDefinition extends InstanceDefinition {
 		final StringBuffer sb = new StringBuffer(256);
 		synchronized (_headerdefs) {
 			for (Iterator it = _headerdefs.iterator(); it.hasNext();)
-				sb.append(((Header)it.next()).toHTML(page)).append('\n');
+				sb.append(((HeaderInfo)it.next()).toHTML(page)).append('\n');
 		}
 		return sb.toString();
 	}
@@ -381,28 +394,13 @@ public class PageDefinition extends InstanceDefinition {
 			_id, _title, _style, evalHeaders ? getHeaders(page): "");
 	}
 
-	//-- super --//
-	public void addCustomAttributes(CustomAttributes custAttrs) {
-		throw new UnsupportedOperationException();
-	}
-	public void addProperty(String name, String value, Condition cond) {
-		throw new UnsupportedOperationException();
-	}
-	public void addEventHandler(String name, String script) {
-		throw new UnsupportedOperationException();
-	}
-	public Component newInstance(Page page) {
-		throw new UnsupportedOperationException();
-	}
-	public String getMoldURI(String name) {
-		throw new UnsupportedOperationException();
-	}
-	public Milieu getMilieu() {
-		throw new UnsupportedOperationException();
+	//NodeInfo//
+	public PageDefinition getPageDefinition() {
+		return this;
 	}
 
 	//Object//
 	public String toString() {
-		return "[PageDefinition:"+getName()+']';
+		return "[PageDefinition:"+(_id != null ? _id: _title)+']';
 	}
 }

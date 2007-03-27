@@ -20,7 +20,7 @@ package org.zkoss.zk.ui.util;
 
 /**
  * Used to denote a collection of elements.
- * Currently, only {@link org.zkoss.zk.ui.metainfo.InstanceDefinition}
+ * Currently, only {@link org.zkoss.zk.ui.metainfo.ComponentInfo}
  * uses it to represent the forEach attribute.
  *
  * @author tomyeh

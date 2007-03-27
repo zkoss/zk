@@ -1,4 +1,4 @@
-/* InitiatorDefinition.java
+/* InitiatorInfo.java
 
 {{IS_NOTE
 	Purpose:
@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
 
 /**
- * A definition of the initiator.
+ * A initiator node on the ZUML page.
  *
  * <p>Note: we resolve the class by use fo Classes.forNameByThread.
  * In other words, it doesn't support the class defined in zscript.
@@ -39,8 +39,8 @@ import org.zkoss.zk.ui.util.Initiator;
  *
  * @author tomyeh
  */
-public class InitiatorDefinition {
-	private static final Log log = Log.lookup(InitiatorDefinition.class);
+public class InitiatorInfo {
+	private static final Log log = Log.lookup(InitiatorInfo.class);
 
 	/** A class, a EL string or an Initiator. */
 	private final Object _init;
@@ -50,7 +50,7 @@ public class InitiatorDefinition {
 	/** Constructs with a class, and {@link #newInitiator} will
 	 * instantiate a new instance.
 	 */
-	public InitiatorDefinition(Class cls, String[] args) {
+	public InitiatorInfo(Class cls, String[] args) {
 		checkClass(cls);
 		_init = cls;
 		_args = args != null ? args: new String[0];
@@ -63,7 +63,7 @@ public class InitiatorDefinition {
 	/** Constructs with a class, and {@link #newInitiator} will
 	 * instantiate a new instance.
 	 */
-	public InitiatorDefinition(Class cls, List args) {
+	public InitiatorInfo(Class cls, List args) {
 		this(cls, args != null ?
 			(String[])args.toArray(new String[args.size()]): null);
 	}
@@ -72,7 +72,7 @@ public class InitiatorDefinition {
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
 	 */
-	public InitiatorDefinition(String clsnm, String[] args)
+	public InitiatorInfo(String clsnm, String[] args)
 	throws ClassNotFoundException {
 		if (clsnm == null || clsnm.length() == 0)
 			throw new IllegalArgumentException("empty");
@@ -95,7 +95,7 @@ public class InitiatorDefinition {
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
 	 */
-	public InitiatorDefinition(String clsnm, List args)
+	public InitiatorInfo(String clsnm, List args)
 	throws ClassNotFoundException {
 		this(clsnm, args != null ?
 			(String[])args.toArray(new String[args.size()]): null);
@@ -103,7 +103,7 @@ public class InitiatorDefinition {
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newInitiator} is called.
 	 */
-	public InitiatorDefinition(Initiator init, String[] args) {
+	public InitiatorInfo(Initiator init, String[] args) {
 		if (init == null)
 			throw new IllegalArgumentException("null");
 		_init = init;
@@ -112,7 +112,7 @@ public class InitiatorDefinition {
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newInitiator} is called.
 	 */
-	public InitiatorDefinition(Initiator init, List args) {
+	public InitiatorInfo(Initiator init, List args) {
 		this(init, args != null ?
 			(String[])args.toArray(new String[args.size()]): null);
 	}

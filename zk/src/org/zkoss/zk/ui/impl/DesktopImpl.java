@@ -255,7 +255,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void addComponent(Component comp) {
 		//to avoid misuse, check whether new comp belongs to the same client type
 		final LanguageDefinition langdef =
-			((ComponentCtrl)comp).getMilieu().getLanguageDefinition();
+			comp.getDefinition().getLanguageDefinition();
 		if (langdef != null && !_clientType.equals(langdef.getClientType()))
 			throw new UiException("Component, "+comp+", does not belong to the same client type of the desktop, "+_clientType);
 

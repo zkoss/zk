@@ -62,6 +62,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.metainfo.impl.*;
 
 /**
  * Used to prase the ZUL file
@@ -278,16 +279,16 @@ public class Parser {
 					zs = new ZScript(zslang, url, null);
 				}
 
-				pgdef.addInitiatorDefinition(
-					new InitiatorDefinition(new ZScriptInitiator(zs), args));
+				pgdef.addInitiatorInfo(
+					new InitiatorInfo(new ZScriptInitiator(zs), args));
 			} else {
 				if (!isEmpty(zsrc))
 					throw new UiException("You cannot specify both class and zscript, "+pi.getLocator());
 
-				pgdef.addInitiatorDefinition(
+				pgdef.addInitiatorInfo(
 					clsnm.indexOf("${") >= 0 ? //class supports EL
-						new InitiatorDefinition(clsnm, args):
-						new InitiatorDefinition(locateClass(clsnm), args));
+						new InitiatorInfo(clsnm, args):
+						new InitiatorInfo(locateClass(clsnm), args));
 					//Note: we don't resolve the class name later because
 					//no zscript run before init (and better performance)
 			}
@@ -298,10 +299,10 @@ public class Parser {
 			if (!params.isEmpty())
 				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 
-			pgdef.addVariableResolverDefinition(
+			pgdef.addVariableResolverInfo(
 				clsnm.indexOf("${") >= 0 ? //class supports EL
-					new VariableResolverDefinition(clsnm):
-					new VariableResolverDefinition(locateClass(clsnm)));
+					new VariableResolverInfo(clsnm):
+					new VariableResolverInfo(locateClass(clsnm)));
 		} else if ("component".equals(target)) { //declare a component
 			final String name = (String)params.remove("name");
 			if (isEmpty(name)) throw new UiException("name is required, "+pi.getLocator());
@@ -321,7 +322,7 @@ public class Parser {
 					//the impl class before creating an instance of macro
 
 				final boolean bInline = "true".equals(inline);
-				compdef = new ComponentDefinition(
+				compdef = new ComponentDefinitionImpl(
 					null, name, toAbsoluteURI(macroURI, false), bInline);
 				pgdef.getLanguageDefinition().initMacroDefinition(compdef);
 				if (!isEmpty(clsnm)) {
@@ -340,8 +341,7 @@ public class Parser {
 				if (ref.isMacro())
 					throw new UiException("Unable to extend from a macro component, "+pi.getLocator());
 
-				compdef = (ComponentDefinition)ref.clone(name);
-				compdef.setLanguageDefinition(null);
+				compdef = ref.clone(null, name);
 				if (!isEmpty(clsnm)) {
 					noEL("class", clsnm, pi);
 					compdef.setImplementationClass(clsnm);
@@ -353,7 +353,11 @@ public class Parser {
 				if (isEmpty(clsnm)) throw new UiException("class is required, "+pi.getLocator());
 				noEL("class", clsnm, pi);
 
-				compdef = new ComponentDefinition(null, name, (Class)null);
+				final ComponentDefinitionImpl cdi =
+					new ComponentDefinitionImpl(null, name, (Class)null);
+				cdi.setCurrentDirectory(getLocator().getDirectory());
+					//mold URI requires it
+				compdef = cdi;
 				compdef.setImplementationClass(clsnm);
 					//Resolve later since might be defined in zscript
 			}
@@ -368,11 +372,10 @@ public class Parser {
 					toAbsoluteURI(moldURI, true));
 			for (Iterator e = params.entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
-				compdef.addProperty(
-					(String)me.getKey(), (String)me.getValue(), null);
+				compdef.addProperty((String)me.getKey(), (String)me.getValue());
 			}
 		} else if ("link".equals(target) || "meta".equals(target)) { //declare a header element
-			pgdef.addHeader(new Header(target, params));
+			pgdef.addHeaderInfo(new HeaderInfo(target, params));
 		} else if ("page".equals(target)) {
 			parsePageDirective(pgdef, pi, params);
 		} else if ("import".equals(target)) { //import
@@ -437,7 +440,7 @@ public class Parser {
 
 	/** Parses the specified elements.
 	 */
-	private void parse(PageDefinition pgdef, InstanceDefinition parent,
+	private void parse(PageDefinition pgdef, NodeInfo parent,
 	Collection items, AnnotInfo annotInfo)
 	throws Exception {
 		for (Iterator it = items.iterator(); it.hasNext();) {
@@ -447,32 +450,39 @@ public class Parser {
 			} else if (o instanceof ProcessingInstruction) {
 				parse(pgdef, (ProcessingInstruction)o);
 			} else if ((o instanceof Text) || (o instanceof CData)) {
-				String label = ((Item)o).getText();
+				String label = ((Item)o).getText(),
+					trimLabel = label.trim();;
 
-				final LanguageDefinition parentlang =
-					getLanguageDefinition(pgdef, parent);
-				if (!parentlang.isRawLabel())
-					label = label.trim();
+				LanguageDefinition parentlang = getLanguageDefinition(parent);
+				if (parentlang == null)
+					parentlang = pgdef.getLanguageDefinition();
 
-				if (label.trim().length() > 0) //consider as a label
-					parentlang.newLabelDefinition(parent, label);
+				if (trimLabel.length() > 0) { //consider as a label
+					if (!parentlang.isRawLabel())
+						label = trimLabel;
+					parentlang.newLabelInfo((ComponentInfo)parent, label);
+				}
 			}
 		}
 	}
 	private static final
-	LanguageDefinition getLanguageDefinition(PageDefinition pgdef,
-	InstanceDefinition instdef) {
-		for (; instdef != null; instdef = instdef.getParent()) {
-			LanguageDefinition langdef = instdef.getLanguageDefinition();
-			if (langdef != null)
-				return langdef;
+	LanguageDefinition getLanguageDefinition(NodeInfo node) {
+		for (; node != null; node = node.getParent()) {
+			if (node instanceof ComponentInfo) {
+				LanguageDefinition langdef =
+					((ComponentInfo)node).getLanguageDefinition();
+				if (langdef != null)
+					return langdef;
+			} else if (node instanceof PageDefinition) {
+				return ((PageDefinition)node).getLanguageDefinition();
+			}
 		}
-		return pgdef.getLanguageDefinition();
+		return null;
 	}
 
 	/** Parse an component definition specified in the given element.
 	 */
-	private void parse(PageDefinition pgdef, InstanceDefinition parent,
+	private void parse(PageDefinition pgdef, NodeInfo parent,
 	Element el, AnnotInfo annotInfo)
 	throws Exception {
 		final String nm = el.getLocalName();
@@ -483,7 +493,10 @@ public class Parser {
 		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			parseZScript(parent, el, annotInfo);
 		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			parseAttribute(parent, el, annotInfo);
+			if (!(parent instanceof ComponentInfo))
+				throw new UiException("<attribute> cannot be the root element, "+el.getLocator());
+
+			parseAttribute((ComponentInfo)parent, el, annotInfo);
 		} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			parseCustomAttributes(parent, el, annotInfo);
 		} else if ("variables".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
@@ -493,12 +506,12 @@ public class Parser {
 		} else {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
 
-			final InstanceDefinition instdef;
+			final ComponentInfo compInfo;
 			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 				if (annotInfo.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
 
-				instdef = new InstanceDefinition(
+				compInfo = new ComponentInfo(
 					parent, ComponentDefinition.ZK, "zk"); 
 			} else {
 				if (LanguageDefinition.ZK_NAMESPACE.equals(uri))
@@ -514,15 +527,15 @@ public class Parser {
 				ComponentDefinition compdef =
 					pgdef.getComponentDefinitionMap().get(nm);
 				if (compdef != null) {
-					instdef = new InstanceDefinition(parent, compdef);
+					compInfo = new ComponentInfo(parent, compdef);
 				} else if (complangdef.hasComponentDefinition(nm)) {
 					compdef = complangdef.getComponentDefinition(nm);
-					instdef = new InstanceDefinition(parent, compdef);
+					compInfo = new ComponentInfo(parent, compdef);
 				} else {
 					compdef = complangdef.getDynamicTagDefinition();
 					if (compdef == null)
 						throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef+", "+el.getLocator());
-					instdef = new InstanceDefinition(parent, compdef, nm);
+					compInfo = new ComponentInfo(parent, compdef, nm);
 				}
 
 				//process use first because addProperty needs it
@@ -530,7 +543,7 @@ public class Parser {
 				if (use != null) {
 					noEmpty("use", use, el);
 					noEL("use", use, el);
-					instdef.setImplementationClass(use);
+					compInfo.setImplementationClass(use);
 						//Resolve later since might defined in zscript
 				}
 			}
@@ -565,21 +578,21 @@ public class Parser {
 					if (!"xmlns".equals(attpref)
 					&& !("xmlns".equals(attnm) && "".equals(attpref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attruri)) {
-						addAttribute(instdef, attns, attnm, attval, null);
+						addAttribute(compInfo, attns, attnm, attval, null);
 						if (attrAnnotInfo != null)
-							attrAnnotInfo.updateAnnotations(instdef, attnm);
+							attrAnnotInfo.updateAnnotations(compInfo, attnm);
 					}
 				}
 			}
 
-			instdef.setCondition(ConditionImpl.getInstance(ifc, unless));
-			instdef.setForEach(forEach, forEachBegin, forEachEnd);
-			annotInfo.updateAnnotations(instdef, null);
+			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
+			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
+			annotInfo.updateAnnotations(compInfo, null);
 
-			parse(pgdef, instdef, el.getChildren(), annotInfo); //recursive
+			parse(pgdef, compInfo, el.getChildren(), annotInfo); //recursive
 		}
 	}
-	private void parseZScript(InstanceDefinition parent, Element el,
+	private void parseZScript(NodeInfo parent, Element el,
 	AnnotInfo annotInfo) throws Exception {
 		if (el.getAttributeItem("forEach") != null)
 			throw new UiException("forEach not applicable to <zscript>, "+el.getLocator());
@@ -618,7 +631,7 @@ public class Parser {
 		if (!isEmpty(script))
 			parent.appendChild(new ZScript(zslang, script, cond));
 	}
-	private void parseAttribute(InstanceDefinition parent, Element el,
+	private void parseAttribute(ComponentInfo parent, Element el,
 	AnnotInfo annotInfo) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for the attribute element, "+el.getLocator());
@@ -637,7 +650,7 @@ public class Parser {
 
 		annotInfo.updateAnnotations(parent, attnm);
 	}
-	private void parseCustomAttributes(InstanceDefinition parent, Element el,
+	private void parseCustomAttributes(NodeInfo parent, Element el,
 	AnnotInfo annotInfo) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for <custom-attributes>, "+el.getLocator());
@@ -668,10 +681,10 @@ public class Parser {
 		}
 
 		if (!attrs.isEmpty())
-			parent.addCustomAttributes(
-					new CustomAttributes(attrs, scope, ConditionImpl.getInstance(ifc, unless)));
+			parent.appendChild(new AttributesInfo(
+				attrs, scope, ConditionImpl.getInstance(ifc, unless)));
 	}
-	private void parseVariables(InstanceDefinition parent, Element el,
+	private void parseVariables(NodeInfo parent, Element el,
 	AnnotInfo annotInfo) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for <variables> element, "+el.getLocator());
@@ -702,8 +715,8 @@ public class Parser {
 			}
 		}
 		if (!vars.isEmpty())
-			parent.appendChild(
-				new Variables(vars, local, ConditionImpl.getInstance(ifc, unless)));
+			parent.appendChild(new VariablesInfo(
+				vars, local, ConditionImpl.getInstance(ifc, unless)));
 	}
 	private void parseAnnotation(Element el, AnnotInfo annotInfo)
 	throws Exception {
@@ -742,13 +755,13 @@ public class Parser {
 
 	/** Parse an attribute and adds it to the definition.
 	 */
-	private void addAttribute(InstanceDefinition instdef, Namespace attrns,
+	private void addAttribute(ComponentInfo compInfo, Namespace attrns,
 	String name, String value, Condition cond) throws Exception {
 		if (Events.isValid(name)) {
 			boolean bZkAttr = attrns == null;
 			if (!bZkAttr) {
-				final String pref = attrns.getPrefix(), uri = attrns.getURI();
-				final LanguageDefinition langdef = instdef.getLanguageDefinition();
+				String pref = attrns.getPrefix(), uri = attrns.getURI();
+				LanguageDefinition langdef = compInfo.getLanguageDefinition();
 				if (langdef == null)
 					bZkAttr = true;
 				else if (isDefault(langdef, pref, uri))
@@ -760,13 +773,13 @@ public class Parser {
 				final ZScript zscript = ZScript.parseContent(value, null);
 				if (zscript.getLanguage() == null)
 					zscript.setLanguage(
-						instdef.getPageDefinition().getZScriptLanguage());
+						compInfo.getPageDefinition().getZScriptLanguage());
 						//resolve it here instead of runtime since createComponents
-				instdef.addEventHandler(name, zscript, cond);
+				compInfo.addEventHandler(name, zscript, cond);
 				return; //done
 			}
 		}
-		instdef.addProperty(name, value, cond);
+		compInfo.addProperty(name, value, cond);
 	}
 
 	/** Information of annotations.
@@ -788,18 +801,18 @@ public class Parser {
 		/** Updates the annotations to the specified instance definition.
 		 * Note: it clears all annotation definitions before returning.
 		 *
-		 * @param instdef the instance definition to update
+		 * @param compInfo the instance definition to update
 		 * @param propName the property name
 		 */
-		private void updateAnnotations(InstanceDefinition instdef, String propName) {
+		private void updateAnnotations(ComponentInfo compInfo, String propName) {
 			for (Iterator it = _annots.iterator(); it.hasNext();) {
 				final Object[] info = (Object[])it.next();
 				final String annotName = (String)info[0];
 				final Map annotAttrs = (Map)info[1];
 				if (propName != null)
-					instdef.addAnnotation(propName, annotName, annotAttrs);
+					compInfo.addAnnotation(propName, annotName, annotAttrs);
 				else
-					instdef.addAnnotation(annotName, annotAttrs);
+					compInfo.addAnnotation(annotName, annotAttrs);
 			}
 			_annots.clear();
 		}

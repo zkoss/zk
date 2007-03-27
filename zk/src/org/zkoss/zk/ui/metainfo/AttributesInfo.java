@@ -1,4 +1,4 @@
-/* CustomAttributes.java
+/* AttributesInfo.java
 
 {{IS_NOTE
 	Purpose:
@@ -30,13 +30,13 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
 
 /**
- * Represents a map of custom attributes of an instance definition
- * ({@link InstanceDefinition}).
+ * Represents a map of custom attributes of a component definition
+ * ({@link ComponentDefinition}).
  * It is equivalent to the custom-attributes element.
  *
  * @author tomyeh
  */
-public class CustomAttributes implements Condition, java.io.Serializable {
+public class AttributesInfo implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;
 
 	private final Map _attrs;
@@ -48,7 +48,7 @@ public class CustomAttributes implements Condition, java.io.Serializable {
 	 * Once called, the caller shall not access attrs again -- it belongs
 	 * to this object.
 	 */
-	public CustomAttributes(Map attrs, String scope, Condition cond) {
+	public AttributesInfo(Map attrs, String scope, Condition cond) {
 		if (attrs == null)
 			throw new IllegalArgumentException("null attrs");
 		_scope = scope == null ?
@@ -68,6 +68,20 @@ public class CustomAttributes implements Condition, java.io.Serializable {
 					value = (String)me.getValue();
 				comp.setAttribute(name,
 					Executions.evaluate(comp, value, Object.class),
+					_scope);
+			}
+	}
+	/** Applies the custom attributes.
+	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
+	 */
+	public void apply(Page page) {
+		if (isEffective(page))
+			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final String name = (String)me.getKey(),
+					value = (String)me.getValue();
+				page.setAttribute(name,
+					Executions.evaluate(page, value, Object.class),
 					_scope);
 			}
 	}

@@ -36,7 +36,6 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
-import org.zkoss.zk.ui.metainfo.Milieu;
 
 /**
  * The sketetal implementation of {@link UiFactory}.
@@ -88,8 +87,8 @@ abstract public class AbstractUiFactory implements UiFactory {
 		return new PageImpl(richlet, path);
 	}
 	public Component newComponent(Page page, Component parent,
-	ComponentDefinition instdef) {
-		final Component comp = instdef.newInstance(page);
+	ComponentDefinition compdef, String clsnm) {
+		final Component comp = compdef.newInstance(page, clsnm);
 
 		if (parent != null) comp.setParent(parent);
 		else comp.setPage(page);

@@ -368,28 +368,28 @@ public class UiEngineImpl implements UiEngine {
 	 * @return the first component being created.
 	 */
 	private static final Component execCreate(UiFactory uf,
-	Execution exec, Page page, InstanceDefinition parentdef, Component parent)
+	Execution exec, Page page, NodeInfo parentInfo, Component parent)
 	throws IOException {
 		Component firstCreated = null;
-		final PageDefinition pagedef = parentdef.getPageDefinition();
+		final PageDefinition pagedef = parentInfo.getPageDefinition();
 			//note: don't use page.getDefinition because createComponents
 			//might be called from a page other than instance's
-		for (Iterator it = parentdef.getChildren().iterator(); it.hasNext();) {
+		for (Iterator it = parentInfo.getChildren().iterator(); it.hasNext();) {
 			final Object obj = it.next();
-			if (obj instanceof InstanceDefinition) {
-				final InstanceDefinition childdef = (InstanceDefinition)obj;
-				final ForEach forEach = childdef.getForEach(page, parent);
+			if (obj instanceof ComponentInfo) {
+				final ComponentInfo childInfo = (ComponentInfo)obj;
+				final ForEach forEach = childInfo.getForEach(page, parent);
 				if (forEach == null) {
-					if (isEffective(childdef, page, parent)) {
+					if (isEffective(childInfo, page, parent)) {
 						final Component child =
-							execCreateChild(uf, exec, page, parent, childdef);
+							execCreateChild(uf, exec, page, parent, childInfo);
 						if (firstCreated == null) firstCreated = child;
 					}
 				} else {
 					while (forEach.next()) {
-						if (isEffective(childdef, page, parent)) {
+						if (isEffective(childInfo, page, parent)) {
 							final Component child =
-								execCreateChild(uf, exec, page, parent, childdef);
+								execCreateChild(uf, exec, page, parent, childInfo);
 							if (firstCreated == null) firstCreated = child;
 						}
 					}
@@ -408,8 +408,12 @@ public class UiEngineImpl implements UiEngine {
 						Namespaces.afterInterpret(backup, ns);
 					}
 				}
-			} else if (obj instanceof Variables) {
-				final Variables vars = (Variables)obj;
+			} else if (obj instanceof AttributesInfo) {
+				final AttributesInfo attrs = (AttributesInfo)obj;
+				if (parent != null) attrs.apply(parent);
+				else attrs.apply(page);
+			} else if (obj instanceof VariablesInfo) {
+				final VariablesInfo vars = (VariablesInfo)obj;
 				if (parent != null) vars.apply(parent);
 				else vars.apply(page);
 			} else {
@@ -420,19 +424,23 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private static Component execCreateChild(UiFactory uf,
 	Execution exec, Page page, Component parent,
-	InstanceDefinition childdef) throws IOException {
-		if (ComponentDefinition.ZK == childdef.getComponentDefinition()) {
-			return execCreate(uf, exec, page, childdef, parent);
+	ComponentInfo childInfo) throws IOException {
+		final ComponentDefinition childdef = childInfo.getComponentDefinition();
+		if (ComponentDefinition.ZK == childdef) {
+			return execCreate(uf, exec, page, childInfo, parent);
 		} else if (childdef.isInlineMacro()) {
 			final Map props = new HashMap();
 			props.put("includer", parent);
-			childdef.evalProperties(props, page, parent);
+			childInfo.evalProperties(props, page, parent, true);
 			return exec.createComponents(
 				childdef.getMacroURI(), parent, props);
 		} else {
-			final Component child = uf.newComponent(page, parent, childdef);
+			final Component child = uf.newComponent(
+				page, parent, childdef, childInfo.getImplementationClass());
+			childInfo.applyProperties(child, false);
+				//def's applyProperties was called by uf.newComponent
 
-			execCreate(uf, exec, page, childdef, child); //recursive
+			execCreate(uf, exec, page, childInfo, child); //recursive
 
 			if (child instanceof AfterCompose)
 				((AfterCompose)child).afterCompose();

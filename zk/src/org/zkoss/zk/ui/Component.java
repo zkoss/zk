@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.au.AuResponse;
@@ -58,6 +59,10 @@ import org.zkoss.zk.au.AuResponse;
  * @author tomyeh
  */
 public interface Component extends java.io.Serializable, Cloneable {
+	/** Returns the component definition of this component (never null).
+	 */
+	public ComponentDefinition getDefinition();
+
 	/** Returns the owner of the ID space that this component belongs to.
 	 * It is either a component, a page or null.
 	 * If it has an ancestor that implements {@link IdSpace}, it is returned.
