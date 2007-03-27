@@ -438,10 +438,11 @@ public class Exceptions {
 					; //point k to the char after \n
 
 				String frame = trace.substring(j, k);
-				ignoreCount = inStack(frame, "java.")
-					|| inStack(frame, "javax.") || inStack(frame, "sun.");
 				sb.append(prefix).append(frame);
 				j = k;
+
+				ignoreCount = inStack(frame, "java.")
+					|| inStack(frame, "javax.") || inStack(frame, "sun.");
 			}
 		} else {
 			if (sb == null)
