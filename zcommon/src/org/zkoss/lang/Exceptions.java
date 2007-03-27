@@ -402,6 +402,10 @@ public class Exceptions {
 	/** Formats the stack trace and appends it to the specified string buffer,
 	 * but only display at most maxcnt lines.
 	 *
+	 * <p>The maximal allowed number of lines is controlled by
+	 * maxcnt. Note: a stack frame is not counted, if it belongs
+	 * to java.*, javax.* or sun.*.
+	 *
 	 * @param sb the string buffer to append the stack trace. A string buffer
 	 * will be created if null.
 	 * @param prefix the prefix shown in front of each line of the stack trace;
@@ -421,8 +425,9 @@ public class Exceptions {
 			 	sb = new StringBuffer(len + 256);
 			if (maxcnt <= 0)
 				maxcnt = Integer.MAX_VALUE;
+			boolean ignoreCount = false;
 			for (int j = 0; j < len;) { //for each line
-				if (--maxcnt < 0) {
+				if (!ignoreCount && --maxcnt < 0) {
 					sb.append(prefix).append("...");
 					break;
 				}
@@ -431,7 +436,11 @@ public class Exceptions {
 				int k = j;
 				while (k < len && trace.charAt(k++) != '\n')
 					; //point k to the char after \n
-				sb.append(prefix).append(trace.substring(j, k));
+
+				String frame = trace.substring(j, k);
+				ignoreCount = inStack(frame, "java.")
+					|| inStack(frame, "javax.") || inStack(frame, "sun.");
+				sb.append(prefix).append(frame);
 				j = k;
 			}
 		} else {
@@ -440,5 +449,13 @@ public class Exceptions {
 			sb.append(trace);
 		}
 		return sb;
+	}
+	private static boolean inStack(String frame, String sub) {
+		final int j = frame.indexOf(sub);
+		if (j < 0) return false;
+		if (j == 0) return true;
+
+		final char cc = frame.charAt(j - 1);
+		return (cc < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z');
 	}
 }
