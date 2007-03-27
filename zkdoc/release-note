@@ -15,6 +15,7 @@ ZK 2.3.1 Freshly
   1687233: Grid creates blank row into wrong place when model changed
   1673839: zkFilter doesn't handle redirect response properly
   1688261: Groupbox/window caption wrong behavoir when null
+  1688071: tabpanel incorrectly rendered in FF2.x
 
 * Upgrade Notes:
   + UiFactory's newComponent adds an extra argument, clsnm.
