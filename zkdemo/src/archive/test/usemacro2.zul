@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?init zscript="macro.zs"?>
-<?component name="username" macro-uri="macro.zul" class="Username"?>
+<?component name="username" macro-uri="macro.zul"?>
 
 <!--
 usemacro.zul
@@ -22,14 +21,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <window id="wnd">
 	<username id="ua"/>
 	<username label="Account"/>
-	<button label="Add Row" onClick="ua.addRow(&quot;ID&quot;)"/>
-	<button label="Create Manullay">
-	<attribute name="onClick">{
-	Username ua = new Username();
-	ua.setParent(wnd);
-	ua.afterCompose();
-	}</attribute>
-	</button>
 
 	<button label="Create Manullay by Definition">
 	<attribute name="onClick">{
@@ -40,14 +31,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	}</attribute>
 	</button>
 
-	<zscript>
-	int cnt = 0;
-	</zscript>
-	<button label="Clone">
+	<button label="Serialize Current Desktop">
 		<attribute name="onClick">{
-Username c = ua.clone();
-c.setId("new"+cnt++);
-vb.appendChild(c);
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(desktop);
+	new Label(boa.toByteArray().length+" bytes copied").setParent(vb);
 		}</attribute>
 	</button>
 	<vbox id="vb"/>

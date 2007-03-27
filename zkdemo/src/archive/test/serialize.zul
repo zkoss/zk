@@ -53,22 +53,28 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	import java.io.*;
 	ByteArrayOutputStream boa = new ByteArrayOutputStream();
 	new ObjectOutputStream(boa).writeObject(src);
-	Listbox l = new ObjectInputStream(new ByteArrayInputStream(boa.toByteArray())).readObject();
+	byte[] bs = boa.toByteArray();
+	Listbox l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
 	l.setId("dst" + ++cnt);
 	vb.insertBefore(l, self);
+	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
 		}</attribute>
 	</button>
 	<button label="Serialize Current Desktop">
-		<attribute name="onClick">
+		<attribute name="onClick">{
 	import java.io.*;
-	new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(desktop);
-		</attribute>
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(desktop);
+	vb.insertBefore(new Label(boa.toByteArray().length+" bytes copied"), self);
+		}</attribute>
 	</button>
 	<button label="Serialize All Desktops">
-		<attribute name="onClick">
+		<attribute name="onClick">{
 	import java.io.*;
-	new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(desktop.webApp.desktopCacheProvider.getDesktopCache(session));
-		</attribute>
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(desktop.webApp.desktopCacheProvider.getDesktopCache(session));
+	vb.insertBefore(new Label(boa.toByteArray().length+" bytes copied"), self);
+		}</attribute>
 	</button>
 	<button label="Serialize Current Session">
 		<attribute name="onClick">
