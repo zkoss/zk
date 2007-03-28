@@ -208,6 +208,8 @@ public class Events {
 		}
 	}
 	/** Sends the event the target specified in the event.
+	 *
+	 * <p>Note: {@link Event#getTarget} cannot be null.
 	 */
 	public static void sendEvent(Event event) {
 		sendEvent(event.getTarget(), event);
