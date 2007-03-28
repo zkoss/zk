@@ -86,6 +86,6 @@ public class Threads {
 	 * statments around it.
 	 */
 	public static final void dummy(Object o) {
-		new Integer(Objects.hashCode(o)).intValue();
+		new Integer(Objects.hashCode(o));
 	}
 }
