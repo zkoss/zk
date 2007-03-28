@@ -207,6 +207,12 @@ public class Events {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
+	/** Sends the event the target specified in the event.
+	 */
+	public static void sendEvent(Event event) {
+		sendEvent(event.getTarget(), event);
+	}
+
 	/** Posts an event.
 	 */
 	public static final void postEvent(Event event) {
