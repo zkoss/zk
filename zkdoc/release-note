@@ -6,6 +6,7 @@ ZK 2.3.1 Freshly
   1688093: Remove Component's param since it's redundant to custom-attr
   1686617: generate onClientInfo when browser size changes
   1687371: button and checkbox suport DoubleClick
+  1689560: Add Events.sendEvent(Event evt)
 
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
