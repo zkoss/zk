@@ -69,9 +69,14 @@ public interface PageCtrl {
 
 	/** Resolves a variable thru all registered variable resolvers
 	 * ({@link org.zkoss.zk.scripting.VariableResolver}).
+	 *
+	 * <p>You rarely need to call this method, since
+	 * it is called implicitly by {@link org.zkoss.zk.ui.Page#getVariable}.
+	 *
 	 * @see org.zkoss.zk.ui.Page#addVariableResolver
 	 */
-	public Object resolveVariable(String name);
+	//deprecated
+	//public Object resolveVariable(String name);
 
 	/** Returns the owner of this page, or null if it is not owned by
 	 * any component.

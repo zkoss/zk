@@ -133,10 +133,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * when the real interpreter failed to find a variable in its own scope.
 	 */
 	protected Object getFromNamespace(String name) {
-		final Namespace ns = getCurrent();
-		final Object v = ns.getVariable(name, false);
-		return v != null || ns.containsVariable(name, false) ?
-			v: ((PageCtrl)_owner).resolveVariable(name);
+		return getCurrent().getVariable(name, false);
 	}
 
 	//Interpreter//

@@ -392,7 +392,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 	}
 
-	public Object resolveVariable(String name) {
+	/** Resolves the variable defined in variable resolvers.
+	 */
+	private Object resolveVariable(String name) {
 		if (_resolvers != null) {
 			for (Iterator it = _resolvers.iterator(); it.hasNext();) {
 				Object o = ((VariableResolver)it.next()).getVariable(name);
@@ -905,7 +907,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 	}
 
-	private static class NS extends AbstractNamespace {
+	private class NS extends AbstractNamespace {
 		private final Map _vars = new HashMap();
 
 		//Namespace//
@@ -913,10 +915,13 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			return _vars.keySet();
 		}
 		public boolean containsVariable(String name, boolean local) {
-			return _vars.containsKey(name);
+			return _vars.containsKey(name)
+				|| resolveVariable(name) != null;
 		}
 		public Object getVariable(String name, boolean local) {
-			return _vars.get(name);
+			final Object o = _vars.get(name);
+			return o != null || _vars.containsKey(name) ?
+				o: resolveVariable(name);
 		}
 		public void setVariable(String name, Object value, boolean local) {
 			_vars.put(name, value);
