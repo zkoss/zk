@@ -18,6 +18,7 @@ ZK 2.3.1 Freshly
   1688261: Groupbox/window caption wrong behavoir when null
   1688071: tabpanel incorrectly rendered in FF2.x
   1689346: Listbox Databind broken in 2007-03-27
+  1688200: Variable Resolver in Macro Components broken
 
 * Upgrade Notes:
   + UiFactory's newComponent adds an extra argument, clsnm.
