@@ -1,0 +1,135 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?> 
+<zk>
+<zscript src="Person.zs"/>
+<window id="mainwin" xmlns:a="http://www.zkoss.org/2005/zk/annotation">
+  <hbox>
+  <a:bind model="personList" selectedItem="selected"/>
+  <listbox width="800px" rows="8">
+    <listhead>
+      <listheader width="200px"/>
+      <listheader width="200px"/>
+      <listheader width="200px"/>
+      <listheader width="200px"/>
+    </listhead>
+    <a:bind _var="person"/>
+    <listitem onDoubleClick="alert(&quot;doubleclick&quot;);">
+      <listcell style="white-space:nowrap;overflow:hidden">
+        <a:bind value="person.firstName"/>
+        <textbox id="fn"/>
+      </listcell>
+      <listcell style="white-space:nowrap;overflow:hidden">
+        <a:bind value="person.lastName"/>
+        <textbox id="ln"/>
+      </listcell>
+      <listcell style="white-space:nowrap;overflow:hidden">
+        <a:bind value="person.fullName"/>
+        <label maxlength="20"/>
+      </listcell>
+
+      <listcell>
+        <a:bind model="emailList" selectedItem="person.email"/>
+        <listbox mold="select" rows="1">
+        	<a:bind _var="email" label="email"/>
+        	<listitem/>
+        </listbox>
+      </listcell>
+    </listitem>
+  </listbox>
+  
+  <grid>
+    <rows>
+      <row>
+        First Name:
+        <a:bind value="selected.firstName"/>
+        <textbox id="firstName"/>
+      </row>
+      
+      <row>
+        Last Name:
+        <a:bind value="selected.lastName"/>
+        <textbox id="lastName"/>
+      </row>
+      
+      <row>
+        Email:
+      <a:bind model="emailList" selectedItem="selected.email"/>
+      <listbox mold="select" rows="1">
+        <a:bind _var="email" label="email"/>
+        <listitem/>
+      </listbox>
+      </row>
+					<row> 
+						Email: 
+						<a:bind model="emailList" selectedItem="selected.email"/> 
+						<listbox mold="select" rows="1"> 
+							<a:bind _var="email" label="email"/> 
+							<listitem/> 
+						</listbox> 
+					</row> 
+      <row>
+      	Street:
+      	<a:bind value="selected.address.street"/>
+      	<textbox id="street"/>
+      </row>
+      <row>
+      	City:
+      	<a:bind value="selected.address.city"/>
+      	<textbox id="city"/>
+      </row>
+    </rows>
+  </grid>
+  </hbox>
+<grid>
+<columns>
+	<column width="50%"/>
+	<column width="50%"/>
+</columns>
+<rows>
+<row> 
+<label value="FirstName, after Save button:" /> 
+<a:bind value="selected.firstName;save-when:SaveButton.onClick" /> 
+<textbox id="ID"/> 
+</row> 
+<row> 
+<label value="LastName, after Save button:" /> 
+<a:bind value="selected.lastName;save-when:SaveButton.onClick" /> 
+<textbox id="Phone1"/> 
+</row>
+</rows>
+</grid> 
+<button id="SaveButton" label="Save" onClick="doNothing()"/> 
+   <zscript>
+   doNothing() { }
+   
+    //prepare collection list
+    setupPerson(Person person, int j) {
+      person.setFirstName("First"+j);
+      person.setLastName("Last"+j);
+      person.setEmail("email"+j+"@potix.com");
+    }
+    
+    //prepare a selected person
+    Person selected = new Person();
+    
+    //prepare the example person List
+    int count = 30;
+    List personList = new ArrayList();
+//    self.setVariable("personList", personList, false);
+    for(int j= 0; j &lt; count; ++j) {
+      Person personx = new Person();
+      if (j == 1) {
+      	personx.setAddress(new Address());
+      	selected = personx;
+      }
+      setupPerson(personx, j);
+      personList.add(personx);
+    }
+    
+    //prepare email list
+    Set emailList = new LinkedHashSet();
+    for(int j= 0; j &lt; count; ++j) {
+      emailList.add("email"+j+"@potix.com");
+    }
+  </zscript>
+</window>
+</zk>

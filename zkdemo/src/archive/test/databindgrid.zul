@@ -39,9 +39,6 @@
 	  person.setEmail("email"+j+"@potix.com");
 	}
 	
-	//prepare a selected person
-	Person selected = new Person();
-	
 	//prepare the example person List
 	int count = 30;
 	List personList = new ArrayList();
