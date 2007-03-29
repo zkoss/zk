@@ -186,7 +186,10 @@ public interface ComponentDefinition extends Cloneable {
 	 */
 	public void addProperty(String name, String value);
 	/** Applies the properties and custom attributes defined in
-	 * {@link ComponentDefinition} (and {@link ComponentInfo}).
+	 * this definition to the specified component.
+	 *
+	 * <p>Note: annotations are applied to the component when a component
+	 * is created. So, this method doesn't and need not to copy them.
 	 */
 	public void applyProperties(Component comp);
 	/** Evaluates and retrieves properties to the specified map from
@@ -199,8 +202,8 @@ public interface ComponentDefinition extends Cloneable {
 	 */
 	public Map evalProperties(Map propmap, Page owner, Component parent);
 
-	/** Returns the map of annotations associated with this definition
-	 * (never null).
+	/** Returns the annotation map defined in this definition, or null
+	 * if no annotation is ever defined.
 	 */
 	public AnnotationMap getAnnotationMap();
 

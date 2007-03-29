@@ -28,6 +28,8 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.EventHandler;
+import org.zkoss.zk.ui.metainfo.AnnotationMap;
+import org.zkoss.zk.ui.metainfo.EventHandlerMap;
 
 /**
  * An addition interface to {@link org.zkoss.zk.ui.Component}
@@ -38,14 +40,6 @@ import org.zkoss.zk.ui.metainfo.EventHandler;
  * @author tomyeh
  */
 public interface ComponentCtrl {
-	/** Returns the event handler of the specified name, or null
-	 * if not found.
-	 */
-	public ZScript getEventHandler(String evtnm);
-	/** Adds an event handler.
-	 */
-	public void addEventHandler(String name, EventHandler evthd);
-
 	/** Sets the component definition.
 	 *
 	 * <p>The component definition affects how a component behaves.
@@ -57,6 +51,23 @@ public interface ComponentCtrl {
 	 * @exception IllegalArgumentException if compdef is null
 	 */
 	public void setComponentDefinition(ComponentDefinition compdef);
+
+	/** Returns the event handler of the specified name, or null
+	 * if not found.
+	 */
+	public ZScript getEventHandler(String evtnm);
+	/** Adds an event handler.
+	 */
+	public void addEventHandler(String name, EventHandler evthd);
+	/** Adds a map of event handlers which is shared by other components.
+	 * In other words, this component shall have all event handlers
+	 * defined in the specified map, evthds. Meanwhile, this component
+	 * shall not modify evthds, since it is shared.
+	 * The caller shall not change annots after the invocation, too
+	 *
+	 * @param evthds a map of event handler
+	 */
+	public void addSharedEventHandlerMap(EventHandlerMap evthds);
 
 	/** Returns the annotation associated with the component,
 	 * or null if not available.
@@ -91,6 +102,15 @@ public interface ComponentCtrl {
 	 * are associated at least one annotation (never null).
 	 */
 	public List getAnnotatedProperties();
+	/** Add a map of annotations which is shared by other components.
+	 * In other words, this component shall have all annotations
+	 * defined in the specified map, annots. Meanwhile, this component
+	 * shall not modify annots, since it is shared.
+	 * The caller shall not change annots after the invocation, too
+	 *
+	 * @param annots a annotation map.
+	 */
+	public void addSharedAnnotationMap(AnnotationMap annots);
 	/** Associates an annotation to this component.
 	 *
 	 * <p>Unlike Java, you can add annotations dynamically, and each component

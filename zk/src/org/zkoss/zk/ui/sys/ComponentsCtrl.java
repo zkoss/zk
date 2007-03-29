@@ -138,9 +138,8 @@ public class ComponentsCtrl {
 		public Map evalProperties(Map propmap, Page owner, Component parent) {
 			return propmap != null ? propmap: new HashMap(3);
 		}
-
 		public AnnotationMap getAnnotationMap() {
-			return AnnotationMap.EMPTY;
+			return null;
 		}
 		public ComponentDefinition clone(LanguageDefinition langdef, String name) {
 			throw new UnsupportedOperationException();

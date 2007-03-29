@@ -56,6 +56,7 @@ import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.impl.Serializables;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.Annotation;
+import org.zkoss.zk.ui.metainfo.EventHandlerMap;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
@@ -64,7 +65,6 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.ui.metainfo.impl.AnnotationMapImpl;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
@@ -99,12 +99,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//don't create it dynamically because _ip bind it at constructor
 	/** A map of event listener: Map(evtnm, EventListener)). */
 	private transient Map _listeners;
-	/** A map of annotations. Serializable since a component might have
-	 * its own annotations.
-	 */
-	private AnnotationMapImpl _annots;
-	/** A Map of event handler (String name, EventHandler) to handle events. */
-	private Map _evthds;
 	/** The extra controls. */
 	private transient Object _xtrl;
 	/** A set of children being added. It is used only to speed up
@@ -113,9 +107,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * more than one)
 	 */
 	private transient List _newChildren;
+	/** A map of annotations. Serializable since a component might have
+	 * its own annotations.
+	 */
+	private AnnotationMap _annots;
+	/** A Map of event handler to handle events. */
+	private EventHandlerMap _evthds;
 	/** Used when user is modifying the children by Iterator.
 	 */
 	private transient boolean _modChildByIter;
+	/** Whether _annots is shared with other components. */
+	private transient boolean _annotsShared;
+	/** Whether _evthds is shared with other components. */
+	private transient boolean _evthdsShared;
 	/** Whether this component is visible. */
 	private boolean _visible = true;
 
@@ -140,6 +144,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			//though it doesn't belong to any desktop yet, we autogen uuid
 			//it is optional but it is slightly better (of course, subjective)
 		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(this): null;
+
+		addSharedAnnotationMap(_def.getAnnotationMap());
 
 		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
@@ -1001,51 +1007,91 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public ZScript getEventHandler(String evtnm) {
-		if (_evthds == null)
-			return null;
-		final EventHandler evthd = (EventHandler)_evthds.get(evtnm);
-		return evthd != null && evthd.isEffective(this) ?
-			evthd.getZScript(): null;
+		final EventHandler evthd = _evthds != null ? _evthds.get(evtnm): null;
+		return evthd != null && evthd.isEffective(this) ? evthd.getZScript(): null;
+	}
+	public void addSharedEventHandlerMap(EventHandlerMap evthds) {
+		if (evthds != null && !evthds.isEmpty()) {
+			unshareEventHandlerMap(false);
+			if (_evthds == null) {
+				_evthds = evthds;
+				_evthdsShared = true;
+			} else {
+				_evthds.addAll(evthds);
+			}
+		}
 	}
 	public void addEventHandler(String name, EventHandler evthd) {
 		if (name == null || evthd == null)
 			throw new IllegalArgumentException("name and evthd required");
 
-		if (_evthds == null)
-			_evthds = new HashMap(3);
-		_evthds.put(name, evthd);
+		unshareEventHandlerMap(true);
+		_evthds.add(name, evthd);
+	}
+	/** Clones the shared event handlers, if shared.
+	 * @param autocreate whether to create an event handler map if not available.
+	 */
+	private void unshareEventHandlerMap(boolean autocreate) {
+		if (_evthdsShared) {
+			_evthds = (EventHandlerMap)_evthds.clone();
+			_evthdsShared = false;
+		} else if (autocreate && _evthds == null) {
+			_evthds = new EventHandlerMap();
+		}
 	}
 
 	public Annotation getAnnotation(String annotName) {
-		return annotmap().getAnnotation(annotName);
+		return _annots != null ? _annots.getAnnotation(annotName): null;
 	}
 	public Annotation getAnnotation(String propName, String annotName) {
-		return annotmap().getAnnotation(propName, annotName);
+		return _annots != null ?
+			_annots.getAnnotation(propName, annotName): null;
 	}
 	public Collection getAnnotations() {
-		return annotmap().getAnnotations();
+		return _annots != null ?
+			_annots.getAnnotations(): Collections.EMPTY_LIST;
 	}
 	public Collection getAnnotations(String propName) {
-		return annotmap().getAnnotations(propName);
+		return _annots != null ?
+			_annots.getAnnotations(propName): Collections.EMPTY_LIST;
 	}
 	public List getAnnotatedPropertiesBy(String annotName) {
-		return annotmap().getAnnotatedPropertiesBy(annotName);
+		return _annots != null ?
+			_annots.getAnnotatedPropertiesBy(annotName): Collections.EMPTY_LIST;
 	}
 	public List getAnnotatedProperties() {
-		return annotmap().getAnnotatedProperties();
+		return _annots != null ?
+			_annots.getAnnotatedProperties(): Collections.EMPTY_LIST;
+	}
+	public void addSharedAnnotationMap(AnnotationMap annots) {
+		if (annots != null && !annots.isEmpty()) {
+			unshareAnnotationMap(false);
+			if (_annots == null) {
+				_annots = annots;
+				_annotsShared = true;
+			} else {
+				_annots.addAll(annots);
+			}
+		}
 	}
 	public void addAnnotation(String annotName, Map annotAttrs) {
-		if (_annots == null)
-			_annots = (AnnotationMapImpl)_def.getAnnotationMap().clone();
+		unshareAnnotationMap(true);
 		_annots.addAnnotation(annotName, annotAttrs);
 	}
 	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
-		if (_annots == null)
-			_annots = (AnnotationMapImpl)_def.getAnnotationMap().clone();
+		unshareAnnotationMap(true);
 		_annots.addAnnotation(propName, annotName, annotAttrs);
 	}
-	private AnnotationMap annotmap() {
-		return _annots != null ? _annots: _def.getAnnotationMap();
+	/** Clones the shared annotations, if shared.
+	 * @param autocreate whether to create an annotation map if not available.
+	 */
+	private void unshareAnnotationMap(boolean autocreate) {
+		if (_annotsShared) {
+			_annots = (AnnotationMap)_annots.clone();
+			_annotsShared = false;
+		} else if (autocreate && _annots == null) {
+			_annots = new AnnotationMap();
+		}
 	}
 
 	public void sessionWillPassivate(Page page) {
@@ -1292,8 +1338,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		clone._attrs = new HashMap(_attrs);
 		if (_listeners != null)
 			clone._listeners = new HashMap(_listeners);
-		if (_annots != null)
-			clone._annots = (AnnotationMapImpl)_annots.clone();
+		if (!_annotsShared && _annots != null)
+			clone._annots = (AnnotationMap)_annots.clone();
+		if (!_evthdsShared && _evthds != null)
+			clone._evthds = (EventHandlerMap)_evthds.clone();
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);
@@ -1333,6 +1381,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	//NOTE: they must be declared as private
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
+		unshareAnnotationMap(false);
+		unshareEventHandlerMap(false);
+
 		s.defaultWriteObject();
 
 		if (_def == ComponentsCtrl.DUMMY) {

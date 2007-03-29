@@ -33,7 +33,6 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.metainfo.impl.AnnotationMapImpl;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Condition;
@@ -55,9 +54,10 @@ implements Cloneable, Condition {
 	private String _implcls;
 	/** A list of {@link Property}. */
 	private List _props;
-	/** A Map of event handler (String name, EventHandler) to handle events. */
-	private Map _evthds;
-	private AnnotationMapImpl _annots;
+	/** A Map of event handler to handle events. */
+	private EventHandlerMap _evthds;
+	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
+	private AnnotationMap _annots;
 	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
 	private final String _tagnm;
 	/** The effectiveness condition (see {@link #isEffective}).
@@ -65,11 +65,11 @@ implements Cloneable, Condition {
 	 */
 	private Condition _cond;
 	/** The forEach, forEachBegin and forEachEnd attribute,
-	 * which are used to evaluate this definition multiple times.
+	 * which are used to evaluate this info multiple times.
 	 */
 	private String[] _forEach;
 
-	/** Constructs an instance definition.
+	/** Constructs the information about how to create component.
 	 * @param parent the parent; never null.
 	 * @param compdef the component definition; never null
 	 * @param tagnm the tag name; Note: if component implements
@@ -88,7 +88,7 @@ implements Cloneable, Condition {
 		_tagnm = tagnm;
 		_parent.appendChild(this);
 	}
-	/** Constructs an instance definition.
+	/** Constructs the info about how to create a component.
 	 * @param parent the parent; never null.
 	 */
 	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef) {
@@ -120,7 +120,7 @@ implements Cloneable, Condition {
 	}
 
 	/** Adds a property initializer.
-	 * It will initialize a component when created with is definition.
+	 * It will initialize a component when created with this info.
 	 * @param name the member name. The component must have a valid setter
 	 * for it.
 	 * @param value the value. It might contain expressions (${}).
@@ -161,17 +161,15 @@ implements Cloneable, Condition {
 		if (_evthds == null) {
 			synchronized (this) {
 				if (_evthds == null) {
-					final Map evthds = new HashMap(5);
-					evthds.put(name, evthd);
+					final EventHandlerMap evthds = new EventHandlerMap();
+					evthds.add(name, evthd);
 					_evthds = evthds;
 					return;
 				}
 			}
 		}
 
-		synchronized (_evthds) {
-			_evthds.put(name, evthd);
-		}
+		_evthds.add(name, evthd);
 	}
 
 	/** Sets the effectiveness condition.
@@ -186,8 +184,8 @@ implements Cloneable, Condition {
 	 * <p>If comp is not null, both pagedef and page are ignored.
 	 * If comp is null, page must be specified.
 	 *
-	 * @return the forEach object to iterate this definition multiple times,
-	 * or null if this definition shall be interpreted only once.
+	 * @return the forEach object to iterate this info multiple times,
+	 * or null if this info shall be interpreted only once.
 	 */
 	public ForEach getForEach(Page page, Component comp) {
 		return _forEach == null ? null:
@@ -217,7 +215,7 @@ implements Cloneable, Condition {
 		_implcls = clsnm;
 	}
 
-	/** Creates an component of this definition (never null).
+	/** Creates an component based on this info (never null).
 	 *
 	 * <p>Like {@link ComponentDefinition#newInstance},
 	 * this method doesn't invoke {@link #applyProperties}.
@@ -233,23 +231,21 @@ implements Cloneable, Condition {
 		return comp;
 	}
 
-	/** Applies the event handlers, properties and custom attributes to
-	 * the specified component.
+	/** Applies the event handlers, annotations, properties and
+	 * custom attributes to the specified component.
+	 *
+	 * <p>Unlike {@link ComponentDefinition#applyProperties},
+	 * this method copies annotations defined in this info to
+	 * the component.
 	 *
 	 * @param defIncluded whether to call {@link ComponentDefinition#applyProperties}.
 	 */
 	public void applyProperties(Component comp, boolean defIncluded) {
-		if (_evthds != null) {
-			final ComponentCtrl compCtrl = (ComponentCtrl)comp;
-			synchronized (_evthds) {
-				for (Iterator it = _evthds.entrySet().iterator();
-				it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					compCtrl.addEventHandler(
-						(String)me.getKey(), (EventHandler)me.getValue());
-				}
-			}
-		}
+		if (_annots != null)
+			((ComponentCtrl)comp).addSharedAnnotationMap(_annots);
+
+		if (_evthds != null)
+			((ComponentCtrl)comp).addSharedEventHandlerMap(_evthds);
 
 		if (defIncluded)
 			_compdef.applyProperties(comp);
@@ -302,13 +298,7 @@ implements Cloneable, Condition {
 		return propmap;
 	}
 
-	/** Returns the map of annotations associated with this definition
-	 * (never null).
-	 */
-	public AnnotationMap getAnnotationMap() {
-		return _annots != null ? _annots: _compdef.getAnnotationMap();
-	}
-	/** Associates an annotation to this component definition.
+	/** Associates an annotation to this component info.
 	 *
 	 * @param annotName the annotation name (never null, nor empty).
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
@@ -318,20 +308,17 @@ implements Cloneable, Condition {
 		if (_annots == null) {
 			synchronized (this) {
 				if (_annots == null) {
-					AnnotationMapImpl annots =
-						(AnnotationMapImpl)_compdef.getAnnotationMap().clone();
+					final AnnotationMap annots = new AnnotationMap();
 					annots.addAnnotation(annotName, annotAttrs);
 					_annots = annots;
 					return;
 				}
 			}
 		}
-		synchronized (_annots) {
-			_annots.addAnnotation(annotName, annotAttrs);
-		}
+		_annots.addAnnotation(annotName, annotAttrs);
 	}
 	/** Adds an annotation to the specified proeprty of this component
-	 * definition.
+	 * info.
 	 *
 	 * @param propName the property name (never nul, nor empty).
 	 * @param annotName the annotation name (never null, nor empty).
@@ -342,17 +329,14 @@ implements Cloneable, Condition {
 		if (_annots == null) {
 			synchronized (this) {
 				if (_annots == null) {
-					AnnotationMapImpl annots =
-						(AnnotationMapImpl)_compdef.getAnnotationMap().clone();
+					final AnnotationMap annots = new AnnotationMap();
 					annots.addAnnotation(propName, annotName, annotAttrs);
 					_annots = annots;
 					return;
 				}
 			}
 		}
-		synchronized (_annots) {
-			_annots.addAnnotation(propName, annotName, annotAttrs);
-		}
+		_annots.addAnnotation(propName, annotName, annotAttrs);
 	}
 
 	//Condition//
@@ -381,11 +365,11 @@ implements Cloneable, Condition {
 				final ComponentInfo info = (ComponentInfo)super.clone();
 				info._parent = null;
 				if (_annots != null)
-					info._annots = (AnnotationMapImpl)_annots.clone();
+					info._annots = (AnnotationMap)_annots.clone();
 				if (_props != null)
 					info._props = new LinkedList(_props);
 				if (_evthds != null)
-					info._evthds = new HashMap(_evthds);
+					info._evthds = (EventHandlerMap)_evthds.clone();
 				return info;
 			} catch (CloneNotSupportedException ex) {
 				throw new InternalError();

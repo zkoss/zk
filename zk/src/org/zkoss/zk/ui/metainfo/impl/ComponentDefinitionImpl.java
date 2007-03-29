@@ -35,6 +35,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.el.Evaluator;
@@ -61,7 +62,7 @@ implements ComponentDefinition, java.io.Serializable {
 	private String _curdir;
 	/** inline or regular macro. Used if _macroURI is not null. */
 	private boolean _inline;
-	private AnnotationMapImpl _annots;
+	private AnnotationMap _annots;
 
 	/** Constructs a native component, i.e., a component implemented by
 	 * a Java class.
@@ -139,16 +140,14 @@ implements ComponentDefinition, java.io.Serializable {
 		if (_annots == null) {
 			synchronized (this) {
 				if (_annots == null) {
-					final AnnotationMapImpl annots = new AnnotationMapImpl();
+					final AnnotationMap annots = new AnnotationMap();
 					annots.addAnnotation(annotName, annotAttrs);
 					_annots = annots;
 					return;
 				}
 			}
 		}
-		synchronized (_annots) {
-			_annots.addAnnotation(annotName, annotAttrs);
-		}
+		_annots.addAnnotation(annotName, annotAttrs);
 	}
 	/** Adds an annotation to the specified proeprty of this component
 	 * definition.
@@ -162,16 +161,14 @@ implements ComponentDefinition, java.io.Serializable {
 		if (_annots == null) {
 			synchronized (this) {
 				if (_annots == null) {
-					final AnnotationMapImpl annots = new AnnotationMapImpl();
+					final AnnotationMap annots = new AnnotationMap();
 					annots.addAnnotation(propName, annotName, annotAttrs);
 					_annots = annots;
 					return;
 				}
 			}
 		}
-		synchronized (_annots) {
-			_annots.addAnnotation(propName, annotName, annotAttrs);
-		}
+		_annots.addAnnotation(propName, annotName, annotAttrs);
 	}
 
 	/** Returns the current directory which is used to convert
@@ -284,6 +281,10 @@ implements ComponentDefinition, java.io.Serializable {
 		return (Class)cls;
 	}
 
+	public AnnotationMap getAnnotationMap() {
+		return _annots;
+	}
+
 	public void addProperty(String name, String value) {
 	//Implementation Note: the reason not to have condition because
 	//isEffective always assumes Executions.getCurrent, which is
@@ -308,6 +309,9 @@ implements ComponentDefinition, java.io.Serializable {
 		}
 	}
 	public void applyProperties(Component comp) {
+		//Note: it doesn't apply annotations since it is done
+		//by AbstractComponent's initial with getAnnotationMap()
+
 		if (_custAttrs != null) {
 			synchronized (_custAttrs) {
 				for (Iterator it = _custAttrs.entrySet().iterator();
@@ -409,10 +413,6 @@ implements ComponentDefinition, java.io.Serializable {
 			_molds.keySet(): (Collection)Collections.EMPTY_LIST;
 	}
 
-	public AnnotationMap getAnnotationMap() {
-		return _annots != null ? _annots: AnnotationMap.EMPTY;
-	}
-
 	private String toAbsoluteURI(String uri) {
 		if (_curdir != null && uri != null && uri.length() > 0) {
 			final char cc = uri.charAt(0);
@@ -460,7 +460,7 @@ implements ComponentDefinition, java.io.Serializable {
 				final ComponentDefinitionImpl compdef =
 					(ComponentDefinitionImpl)super.clone();
 				if (_annots != null)
-					compdef._annots = (AnnotationMapImpl)_annots.clone();
+					compdef._annots = (AnnotationMap)_annots.clone();
 				if (_props != null)
 					compdef._props = new LinkedList(_props);
 				if (_molds != null)
