@@ -32,7 +32,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<zscript>
 	void dump(StringBuffer sb, Component comp) {
-		sb.append(comp.getId()).append(": ")
+		sb.append(comp.getClass().getName()).append(' ').append(comp.getId()).append(": ")
 		  .append(comp.getAnnotations().toString())
 		  .append('\n');
 		for (Iterator it = comp.getAnnotatedProperties().iterator();
