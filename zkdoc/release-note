@@ -7,6 +7,7 @@ ZK 2.3.1 Freshly
   1686617: generate onClientInfo when browser size changes
   1687371: button and checkbox suport DoubleClick
   1689560: Add Events.sendEvent(Event evt)
+  1684148: support captcha component
 
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
