@@ -21,8 +21,12 @@ ZK 2.3.1 Freshly
   1689346: Listbox Databind broken in 2007-03-27
   1688200: Variable Resolver in Macro Components broken
   1690524: animation onshow, onhide fail to apply on menupopup
+  1690399: ListModel out of sync when Listbox sorted
 
 * Upgrade Notes:
+  + The way to sort listbox/grid with live data is changed:
+    implements ListModelExt instead of overriding the sort method.
+    Refer to the dev's guide for details.
   + UiFactory's newComponent adds an extra argument, clsnm.
   + Milieu and InstanceDefinition are removed. ComponentInfo is added.
     . A component has a reference to the component definition
