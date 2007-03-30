@@ -1349,11 +1349,15 @@ zk.show = function (id, bShow) {
 	else {
 		var n = $e(id);
 		if (n) {
-			var js = getZKAttr(n, "conshow");
-			if (js) {
-				eval(js);
+			if (getZKAttr(n, "animating")) {
+				setTimeout("zk.show('"+n.id+"')", 100);
 			} else {
-				action.show(n);
+				var js = getZKAttr(n, "conshow");
+				if (js) {
+					eval(js);
+				} else {
+					action.show(n);
+				}
 			}
 		}
 	}
@@ -1366,17 +1370,21 @@ zk.hide = function (id, bHide) {
 	else {
 		var n = $e(id);
 		if (n) {
-			var js = getZKAttr(n, "conhide");
-			if (js) {
-				rmZKAttr(n, "conhide"); //avoid dead loop
-				try {
-					eval(js);
-				} finally {
-					setZKAttr(n, "conhide", js);
-				}
+			if (getZKAttr(n, "animating")) {
+				setTimeout("zk.hide('"+n.id+"')", 100);
 			} else {
-				zk.onHideAt(n); //callback first
-				n.style.display = "none";
+				var js = getZKAttr(n, "conhide");
+				if (js) {
+					rmZKAttr(n, "conhide"); //avoid dead loop
+					try {
+						eval(js);
+					} finally {
+						setZKAttr(n, "conhide", js);
+					}
+				} else {
+					zk.onHideAt(n); //callback first
+					n.style.display = "none";
+				}
 			}
 		}
 	}

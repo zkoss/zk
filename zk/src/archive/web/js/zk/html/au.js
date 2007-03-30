@@ -1156,7 +1156,9 @@ zkau.closeFloats = function (owner) {
 	//otherwise, IE seem have bug to handle them correctly
 		var uuid = zkau._popups[j];
 		var n = $e(uuid);
-		if (n && n.style.display != "none" && !zk.isAncestor(n, owner)) {
+		if (n && n.style.display != "none"
+		&& getZKAttr(n, "animating") != "hide" && !zk.isAncestor(n, owner)) {
+		//we avoid hiding twice we have to check animating
 			closed = true;
 			zk.hide(n);
 			zkau.send({uuid: uuid, cmd: "onOpen", data: [false]},
