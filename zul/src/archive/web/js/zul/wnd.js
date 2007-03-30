@@ -320,6 +320,12 @@ zkWnd._cleanMode2 = function (uuid, replace) {
 		}
 	}
 };
+/** Shows the window with the anima effect, if any. */
+zkWnd._show = function (cmp) {
+	if (getZKAttr(cmp, "conshow")) //enforce the anima effect, if any
+		cmp.style.display = "none";
+	zk.show(cmp);
+};
 
 //Overlap/Popup//
 /** Makes the component as popup. */
@@ -354,10 +360,8 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 	storage.push(cmp.id); //store ID because it might cease before endPopup
 	zkau.hideCovered();
 
-	if (cmp.style.display != "none") {
-		var js = getZKAttr(cmp, "conshow");
-		if (js) eval(js);
-	}
+	if (cmp.style.display != "none") //it happens when closing a modal (becomes overlap)
+		zkWnd._show(cmp);
 
 	zk.focusDownById(cmp.id, 0);
 };
@@ -385,6 +389,8 @@ zkWnd._doModal = function (cmp, replace) {
 	var zi = ++zkau.topZIndex; //mask also need another index
 	zkWnd._center(cmp, zi);
 		//show dialog first to have better response.
+
+	zkWnd._show(cmp); //unlike other mode, it must be visible
 
 	zkau.closeFloats(cmp);
 
@@ -506,11 +512,6 @@ zkWnd._center = function (cmp, zi) {
 	zkau.sendOnZIndex(cmp);
 		//let the server know the position. otherwise, invalidate will
 		//cause it to be moved to center again
-
-	var js = getZKAttr(cmp, "conshow");
-	if (js) eval(js);
-
-	cmp.style.display = "block";
 }
 
 //Utilities//
