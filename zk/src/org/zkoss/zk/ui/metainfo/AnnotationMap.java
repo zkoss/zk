@@ -146,7 +146,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 			}
 		}			
 	}
-	/** Adds the value of _annots, Map(String annotName, AnnotImpl),.
+	/** Adds the value of _annots, Map(String annotName, AnnotImpl).
 	 */
 	public static void addAllAns(Map ans, Map srcans) {
 		synchronized (ans) {
