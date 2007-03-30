@@ -1350,7 +1350,7 @@ zk.show = function (id, bShow) {
 		var n = $e(id);
 		if (n) {
 			if (getZKAttr(n, "animating")) {
-				setTimeout("zk.show('"+n.id+"')", 100);
+				setTimeout("zk.show('"+n.id+"')", 10);
 			} else {
 				var js = getZKAttr(n, "conshow");
 				if (js) {
@@ -1371,7 +1371,7 @@ zk.hide = function (id, bHide) {
 		var n = $e(id);
 		if (n) {
 			if (getZKAttr(n, "animating")) {
-				setTimeout("zk.hide('"+n.id+"')", 100);
+				setTimeout("zk.hide('"+n.id+"')", 10);
 			} else {
 				var js = getZKAttr(n, "conhide");
 				if (js) {
@@ -1430,7 +1430,7 @@ anima.appear = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.appear('"+n.id+"')", 100);
+			setTimeout("anima.appear('"+n.id+"')", 10);
 		} else {
 			setZKAttr(n, "animating", "show");
 			Effect.Appear(n, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterVisi});
@@ -1444,7 +1444,7 @@ anima.slideDown = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.slideDown('"+n.id+"')", 100);
+			setTimeout("anima.slideDown('"+n.id+"')", 10);
 		} else {
 			setZKAttr(n, "animating", "show");
 			Effect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi});
@@ -1459,7 +1459,7 @@ anima.slideUp = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.slideUp('"+n.id+"')", 100);
+			setTimeout("anima.slideUp('"+n.id+"')", 10);
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
@@ -1475,7 +1475,7 @@ anima.fade = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.fade('"+n.id+"')", 100);
+			setTimeout("anima.fade('"+n.id+"')", 10);
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
@@ -1490,7 +1490,7 @@ anima.puff = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.puff('"+n.id+"')", 100);
+			setTimeout("anima.puff('"+n.id+"')", 10);
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
@@ -1505,7 +1505,7 @@ anima.dropOut = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.dropOut('"+n.id+"')", 100);
+			setTimeout("anima.dropOut('"+n.id+"')", 10);
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
