@@ -151,7 +151,7 @@ if (zk.gecko || zk.safari) {
 
 		//fix gecko and safari's bug: if not visible before, offset is wrong
 		var ofs;
-		if (el.style.display == "none") {
+		if (el.style.display == "none" && !zk.offsetWidth(el)) {
 			el.style.display = "";
 			ofs = zk._oldcumofs(el);
 			el.style.display = "none";
