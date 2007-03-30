@@ -158,9 +158,9 @@ zkMenu._open = function (pp, top, ref, pos) {
 	}*/
 
 
-	pp.style.display = "block";
 	pp.style.position = "absolute"; //just in case
 	if (ref) zk.position(pp, ref, pos);
+	zk.show(pp); //animation effect, if any
 
 	zkMenu._pop.addPopupId(pp.id);
 	zkau.hideCovered();
