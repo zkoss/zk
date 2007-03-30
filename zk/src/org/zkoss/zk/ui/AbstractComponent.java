@@ -1381,8 +1381,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	//NOTE: they must be declared as private
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
-		unshareAnnotationMap(false);
-		unshareEventHandlerMap(false);
+		//No need to unshare since they are stored as an independent copy
+		//unshareAnnotationMap(false);
+		//unshareEventHandlerMap(false);
 
 		s.defaultWriteObject();
 
