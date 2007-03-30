@@ -19,6 +19,7 @@ ZK 2.3.1 Freshly
   1688071: tabpanel incorrectly rendered in FF2.x
   1689346: Listbox Databind broken in 2007-03-27
   1688200: Variable Resolver in Macro Components broken
+  1690524: animation onshow, onhide fail to apply on menupopup
 
 * Upgrade Notes:
   + UiFactory's newComponent adds an extra argument, clsnm.
