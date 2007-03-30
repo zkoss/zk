@@ -1349,15 +1349,16 @@ zk.show = function (id, bShow) {
 	else {
 		var n = $e(id);
 		if (n) {
-			if (getZKAttr(n, "animating")) {
-				setTimeout("zk.show('"+n.id+"')", 10);
-			} else {
-				var js = getZKAttr(n, "conshow");
-				if (js) {
+			var js = getZKAttr(n, "conshow");
+			if (js) {
+				rmZKAttr(n, "conshow"); //avoid dead loop
+				try {
 					eval(js);
-				} else {
-					action.show(n);
+				} finally {
+					setZKAttr(n, "conshow", js);
 				}
+			} else {
+				action.show(n);
 			}
 		}
 	}
@@ -1370,21 +1371,16 @@ zk.hide = function (id, bHide) {
 	else {
 		var n = $e(id);
 		if (n) {
-			if (getZKAttr(n, "animating")) {
-				setTimeout("zk.hide('"+n.id+"')", 10);
-			} else {
-				var js = getZKAttr(n, "conhide");
-				if (js) {
-					rmZKAttr(n, "conhide"); //avoid dead loop
-					try {
-						eval(js);
-					} finally {
-						setZKAttr(n, "conhide", js);
-					}
-				} else {
-					zk.onHideAt(n); //callback first
-					n.style.display = "none";
+			var js = getZKAttr(n, "conhide");
+			if (js) {
+				rmZKAttr(n, "conhide"); //avoid dead loop
+				try {
+					eval(js);
+				} finally {
+					setZKAttr(n, "conhide", js);
 				}
+			} else {
+				action.hide(n);
 			}
 		}
 	}
@@ -1400,20 +1396,26 @@ action = {};
  */
 action.show = function (id) {
 	var n = $e(id);
-	if (n) {
-		n.style.display = "";
-		zk.onVisiAt(n); //callback later
-	}
+	if (n)
+		if (getZKAttr(n, "animating")) {
+			zk._addAnique(n.id, "zk.show");
+		} else {
+			n.style.display = "";
+			zk.onVisiAt(n); //callback later
+		}
 };
 
 /** Makes a component invisible.
  */
 action.hide = function (id) {
 	var n = $e(id);
-	if (n) {
-		zk.onHideAt(n); //callback first
-		n.style.display = "none";
-	}
+	if (n)
+		if (getZKAttr(n, "animating")) {
+			zk._addAnique(n.id, "zk.hide");
+		} else {
+			zk.onHideAt(n); //callback first
+			n.style.display = "none";
+		}
 };
 
 ///////////
@@ -1430,7 +1432,7 @@ anima.appear = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.appear('"+n.id+"')", 10);
+			zk._addAnique(n.id, "anima.appear");
 		} else {
 			setZKAttr(n, "animating", "show");
 			Effect.Appear(n, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterVisi});
@@ -1444,7 +1446,7 @@ anima.slideDown = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.slideDown('"+n.id+"')", 10);
+			zk._addAnique(n.id, "anima.slideDown");
 		} else {
 			setZKAttr(n, "animating", "show");
 			Effect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi});
@@ -1459,7 +1461,7 @@ anima.slideUp = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.slideUp('"+n.id+"')", 10);
+			zk._addAnique(n.id, "anima.slideUp");
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
@@ -1475,7 +1477,7 @@ anima.fade = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.fade('"+n.id+"')", 10);
+			zk._addAnique(n.id, "anima.fade");
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
@@ -1490,7 +1492,7 @@ anima.puff = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.puff('"+n.id+"')", 10);
+			zk._addAnique(n.id, "anima.puff");
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
@@ -1505,7 +1507,7 @@ anima.dropOut = function (id, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			setTimeout("anima.dropOut('"+n.id+"')", 10);
+			zk._addAnique(n.id, "anima.dropOut");
 		} else {
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
@@ -1519,13 +1521,47 @@ anima._afterVisi = function (ef) {
 	if (n) {
 		rmZKAttr(n, "animating");
 		zk.onVisiAt(n);
+		zk._doAnique(n.id);
 	}
 };
 anima._afterHide = function (ef) {
-	rmZKAttr(ef.element, "animating");
+	var n = ef.element;
+	if (n) {
+		rmZKAttr(n, "animating");
+		zk._doAnique(n.id);
+	}
 };
 anima._afterHide0 = function (ef) {
-	rmZKAttr(ef.effects[0].element, "animating");
+	var n = ef.effects[0].element;
+	if (n) {
+		rmZKAttr(n, "animating");
+		zk._doAnique(n.id);
+	}
+};
+
+//animation queue
+zk._anique = {};
+	//queue for waiting animating to clear: map(id, array(js_func_name))
+zk._addAnique = function(id, funcnm) {
+	var ary = zk._anique[id];
+	if (!ary)
+		ary = zk._anique[id] = new Array();
+	ary.push(funcnm);
+};
+zk._doAnique = function (id) {
+	var ary = zk._anique[id];
+	if (ary) {
+		var n = $e(id);
+		while (ary.length) {
+			if (getZKAttr(n, "animating"))
+				break;
+			var js = ary.shift();
+			eval(js+"('"+id+"')");
+		}
+			
+		if (!ary.length)
+			delete zk._anique[id];
+	}
 };
 
 } //if (!window.anima)
