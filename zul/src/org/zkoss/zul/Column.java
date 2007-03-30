@@ -166,12 +166,20 @@ public class Column extends HeaderElement {
 	 * with "natural" before invoking this method.
 	 * Alternatively, you can invoke {@link #sort(boolean, boolean)} instead.
 	 *
-	 * <p>It sorts the rows by use of {@link Components#sort}.
+	 * <p>It sorts the rows by use of {@link Components#sort}, if not live
+	 * data (i.e., {@link Grid#getModel} is null).
+	 *
+	 * <p>On the other hand, it invokes {@link ListModelExt#sort} to sort
+	 * the rows, if live data (i.e., {@link Grid#getModel} is not null).
+	 * In other words, if you use the live data, you have to implement
+	 * {@link ListModelExt} to sort the live data explicitly.
 	 *
 	 * @param ascending whether to use {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
 	 * @return whether the rows are sorted.
+	 * @exception UiException if {@link Grid#getModel} is not
+	 * null but {@link ListModelExt} is not implemented.
 	 */
 	public boolean sort(boolean ascending) {
 		final String dir = getSortDirection();
@@ -181,12 +189,20 @@ public class Column extends HeaderElement {
 			if ("descending".equals(dir)) return false;
 		}
 
-		final Comparator cpr = ascending ? _sortAsc: _sortDsc;
-		if (cpr == null) return false;
+		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
+		if (cmpr == null) return false;
 
 		final Grid grid = getGrid();
 		if (grid == null) return false;
-		Components.sort(grid.getRows().getChildren(), cpr);
+
+		final ListModel model = grid.getModel();
+		if (model != null) { //live data
+			if (!(model instanceof ListModelExt))
+				throw new UiException("ListModelExt must be implemented in "+model.getClass().getName());
+			((ListModelExt)model).sort(cmpr, ascending);
+		} else { //not live data
+			Components.sort(grid.getRows().getChildren(), cmpr);
+		}
 
 		//maintain
 		for (Iterator it = grid.getColumns().getChildren().iterator();

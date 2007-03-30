@@ -36,6 +36,16 @@ public class ListDataEvent {
 	private final ListModel _model;
 	private final int _type, _index0, _index1;
 
+	/** Contructor.
+	 *
+	 * @param type one of {@link #CONTENTS_CHANGED},
+	 * {@link #INTERVAL_ADDED}, or {@link #INTERVAL_REMOVED}.
+	 * @param index0 the lower index of the change range.
+	 * For simple element, index0 is the same as index1.
+	 * -1 means the first element (the same as 0).
+	 * @param index1 the upper index of the change range.
+	 * -1 means the last element.
+	 */
 	public ListDataEvent(ListModel model, int type, int index0, int index1) {
 		if (model == null)
 			throw new NullPointerException();

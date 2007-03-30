@@ -24,10 +24,14 @@ import org.zkoss.zul.event.ListDataListener;
  * This interface defines the methods that components like {@link Listbox}
  * and {@link Grid} use to get the content of items.
  *
+ * <p>If the list model is used with sortable listbox or grid,
+ * the developer must also implement {@link ListModelExt}.
+ *
  * @author tomyeh
  * @see Grid
  * @see Listbox
  * @see ListitemRenderer
+ * @see ListModelExt
  */
 public interface ListModel {
 	/** Returns the value at the specified index.
