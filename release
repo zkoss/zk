@@ -158,6 +158,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#Ruby (jruby)
 	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$prjnm/dist/lib/ext
 		#jFreeChart
+	cp dist/lib/ext/Filters.jar /tmp/zk/$prjnm/dist/lib/ext
+		#captcha
 
 	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$prjnm/dist/lib/
 	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$prjnm/dist/lib/zkforge

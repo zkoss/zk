@@ -16,5 +16,6 @@ commons-fileupload.jar
 commons-io.jar
 jfreechart.jar
 jcommon.jar
+Filters.jar
 json_simple.jar
  #required-by-timelinez

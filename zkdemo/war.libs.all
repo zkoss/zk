@@ -17,4 +17,5 @@ commons-io.jar
 commons-el.jar
 jfreechart.jar
 jcommon.jar
+Filters.jar
 json_simple.jar
