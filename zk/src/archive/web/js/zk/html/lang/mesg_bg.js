@@ -1,4 +1,4 @@
-﻿/* mesg.js "charset=utf-8"
+/* mesg.js "charset=utf-8"
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-　　Tranlated by Boril Yonchev (yonchev@gmail.com) 10 January 2007
+　　Tranlated by Boril Yonchev (yonchev@gmail.com) 28 March 2007
 }}IS_NOTE
 
 Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
@@ -38,6 +38,6 @@ mesg.KBYTES = "KB";
 
 mesg.CANCEL="Откажи";
 
-mesg.FAILED_TO_LOAD="Failed to load ";
-mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";
-mesg.CAUSE="Cause: ";
+mesg.FAILED_TO_LOAD="Проблем при зареждане ";
+mesg.FAILED_TO_LOAD_DETAIL="Възможно е да се дължи на лоша връзка със сървъра. Опитайте да презаредите страницата отново.";
+mesg.CAUSE="Причина: ";
