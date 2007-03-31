@@ -64,6 +64,12 @@ public class OpenEvent extends Event {
 	 *
 	 * <p>It is null, if the open event is not caused by opening
 	 * a context menu, a tooltip or a popup.
+	 * Note: the onOpen event is also sent when closing the context menu
+	 * (tooltip and popup), and this method returns null in this case.
+	 * Thus, it is better to test {@link #isOpen} or {@link #getReference}
+	 * before accessing the returned value.
+	 *
+	 * <code>if (event.isOpen()) doSome(event.getReference());</code>
 	 */
 	public Component getReference() {
 		return _ref;
