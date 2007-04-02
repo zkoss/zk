@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Comparator;
 
 /**
- * A comparator used to compare {@link Listitem}.
+ * A comparator used to compare {@link Listitem}, if not live data,
+ * or the data themselves, if live data.
  *
  * @author tomyeh
  */
@@ -221,25 +222,29 @@ public class ListitemComparator implements Comparator {
 		if (_index < 0 && _header != null) //decide the index
 			_index = _header.getColumnIndex();
 
-		final Listitem li1 = (Listitem)o1, li2 = (Listitem)o2;
-
 		Object v1, v2;
-		if (_index < 0) {
-			v1 = handleCase((Comparable)li1.getValue());
-			v2 = handleCase((Comparable)li2.getValue());
-		} else {
-			List lcs1 = li1.getChildren();
-			if (_index >= lcs1.size()) v1 = null;
-			else {
-				final Listcell lc = (Listcell)lcs1.get(_index);
-				v1 = handleCase(_byval ? lc.getValue(): lc.getLabel());
+		if (o1 instanceof Listitem) { //not live data
+			final Listitem li1 = (Listitem)o1, li2 = (Listitem)o2;
+			if (_index < 0) {
+				v1 = handleCase((Comparable)li1.getValue());
+				v2 = handleCase((Comparable)li2.getValue());
+			} else {
+				List lcs1 = li1.getChildren();
+				if (_index >= lcs1.size()) v1 = null;
+				else {
+					final Listcell lc = (Listcell)lcs1.get(_index);
+					v1 = handleCase(_byval ? lc.getValue(): lc.getLabel());
+				}
+				List lcs2 = li2.getChildren();
+				if (_index >= lcs2.size()) v2 = null;
+				else {
+					final Listcell lc = (Listcell)lcs2.get(_index);
+					v2 = handleCase(_byval ? lc.getValue(): lc.getLabel());
+				}
 			}
-			List lcs2 = li2.getChildren();
-			if (_index >= lcs2.size()) v2 = null;
-			else {
-				final Listcell lc = (Listcell)lcs2.get(_index);
-				v2 = handleCase(_byval ? lc.getValue(): lc.getLabel());
-			}
+		} else { //live data
+			v1 = handleCase(o1);
+			v2 = handleCase(o2);
 		}
 
 		if (v1 == null) return v2 == null ? 0: _maxnull ? 1: -1;

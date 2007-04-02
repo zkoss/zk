@@ -18,6 +18,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
+import org.zkoss.zul.event.ListDataEvent;
+
 /**
  * A simple implementation of {@link ListModel}.
  * Note: It assumes the content is immutable. If not, use {@link ListModelList}
@@ -29,7 +34,7 @@ package org.zkoss.zul;
  * @see ListModelMap
  */
 public class SimpleListModel extends AbstractListModel
-implements java.io.Serializable {
+implements ListModelExt, java.io.Serializable {
     private static final long serialVersionUID = 20060707L;
 
 	private final Object[] _data;
@@ -46,5 +51,17 @@ implements java.io.Serializable {
 	}
 	public Object getElementAt(int j) {
 		return _data[j];
+	}
+
+	//-- ListModelExt --//
+	/** Sorts the data.
+	 *
+	 * @param cmpr the comparator.
+	 * @param ascending whether to sort in the ascending order.
+	 * It is ignored since this implementation uses cmprt to compare.
+	 */
+	public void sort(Comparator cmpr, final boolean ascending) {
+		Arrays.sort(_data, cmpr);
+		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}
 }
