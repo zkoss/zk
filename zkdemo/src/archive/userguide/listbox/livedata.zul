@@ -46,7 +46,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</zscript>
 	<listbox id="list" width="200px" rows="10" model="&#36;{strset}">
 		<listhead>
-			<listheader label="Load on Demend"/>
+			<listheader label="Load on Demend" sort="auto"/>
 		</listhead>
 	</listbox>
 </window>
