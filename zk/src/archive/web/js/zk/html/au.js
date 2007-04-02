@@ -540,7 +540,13 @@ zkau._cleanupChildren = function (n) {
 /** Sets an attribute (the default one). */
 zkau.setAttr = function (cmp, name, value) {
 	if ("visibility" == name) {
-		zk.show(cmp, "true" == value);
+		var visible = "true" == value;
+		var ext = $e(cmp.id + "!chdextr");
+		if (visible && ext) ext.style.display = ""; //parent visible first
+
+		zk.show(cmp, visible);
+
+		if (!visible && ext) ext.style.display = "none"; //parent invisible later
 	} else if ("value" == name) {
 		if (value != cmp.value) {
 			cmp.value = value;
@@ -578,6 +584,12 @@ zkau.setAttr = function (cmp, name, value) {
 			if (typeof(cmp.style[name]) == "boolean") //just in case
 				value = "true" == value || name == value;
 			cmp.style[name] = value;
+
+			if ("width" == name) {
+				var ext = $e(cmp.id + "!chdextr");
+				if (ext && $tag(ext) == "TD" && ext.colSpan == 1)
+					ext.style.width = value;
+			}
 			return;
 		}
 
