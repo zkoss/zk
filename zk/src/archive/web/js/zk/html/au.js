@@ -542,6 +542,7 @@ zkau.setAttr = function (cmp, name, value) {
 	if ("visibility" == name) {
 		var visible = "true" == value;
 		var ext = $e(cmp.id + "!chdextr");
+		if (ext && "true" != getZKAttr(ext, "coexist")) ext = null;
 		if (visible && ext) ext.style.display = ""; //parent visible first
 
 		zk.show(cmp, visible);
