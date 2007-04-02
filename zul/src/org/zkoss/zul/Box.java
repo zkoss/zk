@@ -174,7 +174,10 @@ public class Box extends XulElement {
 		if (child instanceof Splitter)
 			return (vert ? " height": " width") + "=\"8px\"";
 
-		final StringBuffer sb = new StringBuffer(64);
+		final StringBuffer sb =
+			new StringBuffer(64).append(" z.coexist=\"true\"");
+				//coexist: it means the visibility of exterior is the same
+				//as the child
 		HTMLs.appendAttribute(sb, "class", vert ? "vbox": "hbox");
 
 		String size = null;
@@ -192,15 +195,27 @@ public class Box extends XulElement {
 			}
 		}
 
-		if (_spacing != null || size != null) {
+		final boolean visible = child.isVisible();
+		final String wd =
+			size == null && !vert && (child instanceof HtmlBasedComponent) ?
+				((HtmlBasedComponent)child).getWidth(): null;
+				//size has higher priorty
+		if (_spacing != null || size != null || wd != null || !visible) {
 			sb.append("style=\"");
+			if (!visible)
+				sb.append("display:none;");
+
 			if (_spacing != null)
 				sb.append("padding-")
 					.append(vert ? "bottom": "right")
 					.append(':').append(_spacing).append(';');
+
 			if (size != null)
 				sb.append(vert ? "height": "width")
 					.append(':').append(size);
+			else
+				HTMLs.appendStyle(sb, "width", wd);
+
 			sb.append('"');
 		}
 		return sb.toString();
@@ -222,11 +237,6 @@ public class Box extends XulElement {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<td id=\"").append(child.getUuid())
 				.append("!chdextr\"");
-			if (child instanceof HtmlBasedComponent) {
-				final String width = ((HtmlBasedComponent)child).getWidth();
-				if (width != null)
-					sb.append(" width=\"").append(width).append('"');
-			}
 			sb.append(chdattrs).append('>');
 			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 			else out.insert(0, sb.toString());
