@@ -1358,6 +1358,7 @@ zk.show = function (id, bShow) {
 					setZKAttr(n, "conshow", js);
 				}
 			} else {
+				zk._showExtr(n);  //parent visible first
 				action.show(n);
 			}
 		}
@@ -1381,9 +1382,22 @@ zk.hide = function (id, bHide) {
 				}
 			} else {
 				action.hide(n);
+				zk._hideExtr(n); //hide parent later
 			}
 		}
 	}
+};
+/** Shows the exterior. */
+zk._showExtr = function (n) {
+	var ext = $e(n.id + "!chdextr");
+	if (ext && "true" == getZKAttr(ext, "coexist"))
+		ext.style.display = "";
+};
+/** Hides the exterior. */
+zk._hideExtr = function (n) {
+	var ext = $e(n.id + "!chdextr");
+	if (ext && "true" == getZKAttr(ext, "coexist"))
+		ext.style.display = "none";
 };
 
 //////////////
@@ -1435,6 +1449,7 @@ anima.appear = function (id, dur) {
 			zk._addAnique(n.id, "anima.appear");
 		} else {
 			setZKAttr(n, "animating", "show");
+			zk._showExtr(n);  //parent visible first
 			Effect.Appear(n, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterVisi});
 		}
 	}
@@ -1449,6 +1464,7 @@ anima.slideDown = function (id, dur) {
 			zk._addAnique(n.id, "anima.slideDown");
 		} else {
 			setZKAttr(n, "animating", "show");
+			zk._showExtr(n);  //parent visible first
 			Effect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi});
 				//duration must be less than 0.5 since other part assumes it
 		}
@@ -1527,6 +1543,7 @@ anima._afterVisi = function (ef) {
 anima._afterHide = function (ef) {
 	var n = ef.element;
 	if (n) {
+		zk._hideExtr(n); //hide parent later
 		rmZKAttr(n, "animating");
 		zk._doAnique(n.id);
 	}
@@ -1534,6 +1551,7 @@ anima._afterHide = function (ef) {
 anima._afterHide0 = function (ef) {
 	var n = ef.effects[0].element;
 	if (n) {
+		zk._hideExtr(n); //hide parent later
 		rmZKAttr(n, "animating");
 		zk._doAnique(n.id);
 	}

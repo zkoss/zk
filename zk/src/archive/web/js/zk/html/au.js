@@ -540,14 +540,7 @@ zkau._cleanupChildren = function (n) {
 /** Sets an attribute (the default one). */
 zkau.setAttr = function (cmp, name, value) {
 	if ("visibility" == name) {
-		var visible = "true" == value;
-		var ext = $e(cmp.id + "!chdextr");
-		if (ext && "true" != getZKAttr(ext, "coexist")) ext = null;
-		if (visible && ext) ext.style.display = ""; //parent visible first
-
-		zk.show(cmp, visible);
-
-		if (!visible && ext) ext.style.display = "none"; //parent invisible later
+		zk.show(cmp, "true" == value);
 	} else if ("value" == name) {
 		if (value != cmp.value) {
 			cmp.value = value;
