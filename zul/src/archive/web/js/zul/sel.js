@@ -315,9 +315,9 @@ zk.Selectable.prototype = {
 			}
 
 			if (this._isMultiple()) {
-				if (evt.shiftKey) {
+				if (evt && evt.shiftKey) {
 					this.selectUpto(row);
-				} else if (evt.ctrlKey) {
+				} else if (evt && evt.ctrlKey) {
 					this.toggleSelect(row, !this._isSelected(row));
 				} else {
 	//Note: onclick means toggle if checkmark is enabled
@@ -333,7 +333,7 @@ zk.Selectable.prototype = {
 			//since row might was selected, we always enfoce focus here
 			this._focusToAnc(row);
 
-			//Event.stop(evt);
+			//if (evt) Event.stop(evt);
 			//No much reason to eat the event.
 			//Oppositely, it disabled popup (bug 1578659)
 		}
@@ -1114,6 +1114,11 @@ zkLit.init = function (cmp) {
 	zk.listen(cmp, "keydown", zkLibox.onkeydown);
 	zk.listen(cmp, "mouseover", zkSel.onover);
 	zk.listen(cmp, "mouseout", zkSel.onout);
+};
+/** Called when _onDocCtxMnu is called. */
+zkLit.onrtclk = function (cmp) {
+	var meta = zkau.getMetaByType(cmp, "Libox");
+	if (meta && !meta._isSelected(cmp)) meta.doclick(null, cmp);
 };
 
 zkLcfc = {}; //checkmark or the first hyperlink of listcell

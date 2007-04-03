@@ -196,6 +196,11 @@ zkTrow.init = function (cmp) {
 	zk.listen(cmp, "mouseover", zkSel.onover);
 	zk.listen(cmp, "mouseout", zkSel.onout);
 };
+/** Called when _onDocCtxMnu is called. */
+zkTrow.onrtclk = function (cmp) {
+	var meta = zkau.getMetaByType(cmp, "Tree");
+	if (meta && !meta._isSelected(cmp)) meta.doclick(null, cmp);
+};
 
 zkTcfc = {}; //checkmark or the first hyperlink of treecell
 zkTcfc.init = function (cmp) {
