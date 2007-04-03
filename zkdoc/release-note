@@ -24,6 +24,7 @@ ZK 2.3.1 Freshly
   1690399: ListModel out of sync when Listbox sorted
   1692660: Resize the width of a child of hbox doesn't work properly
   1690992: Hbox doesn't render correctly if a cell is invisble
+  1690583: popup incorrectly rendered when attached to
 
 * Upgrade Notes:
   + The way to sort listbox/grid with live data is changed:
