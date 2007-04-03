@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.ext.client.Sizable;
 import org.zkoss.zk.ui.ext.client.ZIndexed;
 import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
+import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuFocus;
 
@@ -334,6 +335,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		final Object xc = getExtraCtrl();
 		if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())
 			HTMLs.appendAttribute(sb, "z.zid", getId());
+		if ((xc instanceof Floating) && ((Floating)xc).isFloating())
+			sb.append(" z.float=\"true\"");
 		return sb.toString();
 	}
 	/** Returns the interior attributes for generating the inner HTML tag;

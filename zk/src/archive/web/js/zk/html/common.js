@@ -1389,15 +1389,19 @@ zk.hide = function (id, bHide) {
 };
 /** Shows the exterior. */
 zk._showExtr = function (n) {
-	var ext = $e(n.id + "!chdextr");
-	if (ext && "true" == getZKAttr(ext, "coexist"))
-		ext.style.display = "";
+	if ("true" != getZKAttr(n, "float")) {
+		var ext = $e(n.id + "!chdextr");
+		if (ext && "true" == getZKAttr(ext, "coexist"))
+			ext.style.display = "";
+	}
 };
 /** Hides the exterior. */
 zk._hideExtr = function (n) {
-	var ext = $e(n.id + "!chdextr");
-	if (ext && "true" == getZKAttr(ext, "coexist"))
-		ext.style.display = "none";
+	if ("true" != getZKAttr(n, "float")) {
+		var ext = $e(n.id + "!chdextr");
+		if (ext && "true" == getZKAttr(ext, "coexist"))
+			ext.style.display = "none";
+	}
 };
 
 //////////////
