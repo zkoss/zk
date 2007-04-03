@@ -22,6 +22,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
+import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -60,10 +61,15 @@ public class Popup extends XulElement {
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements ZidRequired {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements ZidRequired, Floating {
 		//ZidRequired//
 		public boolean isZidRequired() {
 			return !(getParent() instanceof Menu);
+		}
+		//Floating//
+		public boolean isFloating() {
+			return true;
 		}
 	}
 }

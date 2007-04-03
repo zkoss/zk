@@ -29,6 +29,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.ext.render.Floating;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -195,12 +197,15 @@ public class Box extends XulElement {
 			}
 		}
 
-		final boolean visible = child.isVisible();
+		final Object xc = ((ComponentCtrl)child).getExtraCtrl();
+		final boolean floating =
+			(xc instanceof Floating) && ((Floating)xc).isFloating();
+		final boolean visible = floating || child.isVisible();
 		final String wd =
-			size == null && !vert && (child instanceof HtmlBasedComponent) ?
+			!floating && size == null && !vert && (child instanceof HtmlBasedComponent) ?
 				((HtmlBasedComponent)child).getWidth(): null;
-				//size has higher priorty
-		if (_spacing != null || size != null || wd != null || !visible) {
+				//priority: floating, size and then child's width
+		if (_spacing != null || size != null || wd != null || floating || !visible) {
 			sb.append("style=\"");
 			if (!visible)
 				sb.append("display:none;");
@@ -210,9 +215,9 @@ public class Box extends XulElement {
 					.append(vert ? "bottom": "right")
 					.append(':').append(_spacing).append(';');
 
-			if (size != null)
+			if (floating || size != null)
 				sb.append(vert ? "height": "width")
-					.append(':').append(size);
+					.append(':').append(floating ? "0": size);
 			else
 				HTMLs.appendStyle(sb, "width", wd);
 
