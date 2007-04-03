@@ -869,11 +869,26 @@ zkau._onDocDClick = function (evt) {
 zkau._onDocCtxMnu = function (evt) {
 	if (!evt) evt = window.event;
 
-	var cmp = Event.element(evt);
-	cmp = zkau._parentByZKAttr(cmp, "ctx", "rtclk");
+	var target = Event.element(evt);
+	var cmp = zkau._parentByZKAttr(target, "ctx", "rtclk");
 
 	if (cmp) {
 		var ctx = getZKAttr(cmp, "ctx");
+		var rtclk = getZKAttr(cmp, "rtclk");
+		if (ctx || rtclk) {
+			//Give the component a chance to handle right-click
+			for (var n = target; n; n = n.parentNode) {
+				var type = $type(n);
+				if (type) {
+					var o = window["zk" + type];
+					if (o && o.onrtclk)
+						if (o.onrtclk(n))
+							ctx = rtclk = null;
+				}
+				if (n == cmp) break; //only up to the one with right click
+			}
+		}
+
 		if (ctx) {
 			ctx = zkau.getByZid(cmp, ctx);
 			if (ctx) {
@@ -887,7 +902,7 @@ zkau._onDocCtxMnu = function (evt) {
 			}
 		}
 
-		if (getZKAttr(cmp, "rtclk")/*no need since oncontextmenu: && zkau.insamepos(evt)*/) {
+		if (rtclk/*no need since oncontextmenu: && zkau.insamepos(evt)*/) {
 			var uuid = getZKAttr(cmp, "item"); //treerow (and other transparent)
 			if (!uuid) uuid = $uuid(cmp);
 			zkau.send({uuid: uuid,

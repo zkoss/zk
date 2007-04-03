@@ -147,7 +147,24 @@ public class ZScript implements Condition, java.io.Serializable {
 		_zslang = zslang;
 	}
 
-	/** Returns the script.
+	/** Returns the raw content.
+	 * It is the content specified in the contructor
+	 * ({@link #ZScript(String, String, Condition)}.
+	 * If URL is specified in the contructor, null is returned.
+	 *
+	 * <p>On the other hand, {@link #getContent} will load the content
+	 * automatically if URL is specified.
+	 *
+	 * @return the raw content specified in the contructor, or null
+	 * if URL is specified instead.
+	 */
+	public String getRawContent() {
+		return _cnt;
+	}
+	/** Returns the content of zscript.
+	 * If URL is specified, this method loads the content from it.
+	 * If URL is an EL expression, it will be evaluated first.
+	 *
 	 * <p>Note: before evaluating the returned script, you have to invoke
 	 * {@link #isEffective(Component)} or {@link #isEffective(Page)} first.
 	 *
