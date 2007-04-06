@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.Component;
 import java.util.Set;
 import java.util.Map;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * The {@link TypeConverter} implmentation for converting collection to ListModel and vice versa.
@@ -37,7 +38,7 @@ public class ListModelConverter implements TypeConverter {
 	 */
 	public Object coerceToUi(Object val, Component comp) {
 		if (val == null) {
-			throw new NullPointerException("val");
+			val = new ArrayList();
 		}
 		if (val instanceof Set) {
 			return new BindingListModelSet((Set)val);
