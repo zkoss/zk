@@ -9,7 +9,8 @@ ZK 2.3.1 Freshly
   1689560: Add Events.sendEvent(Event evt)
   1684148: support captcha component
   1693686: Rightclick shall select the list item if it is not selected
-
+  1692783: ListModelConverter coerce empty Listmodel from null
+  
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
   1685165: bundled asm.jar imcompatibility with ZK 2.3
