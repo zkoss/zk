@@ -196,8 +196,8 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 		final ServletFileUpload sfu =
 			new ServletFileUpload(new ZkFileItemFactory(desktop, request));
 		final Configuration cfg = desktop.getWebApp().getConfiguration();
-		final Integer maxsz = cfg.getMaxUploadSize();
-		sfu.setSizeMax(maxsz != null ? 1024L*maxsz.intValue(): -1);
+		final int maxsz = cfg.getMaxUploadSize();
+		sfu.setSizeMax(maxsz >= 0 ? 1024L*maxsz: -1);
 
 		for (Iterator it = sfu.parseRequest(request).iterator(); it.hasNext();) {
 			final FileItem fi = (FileItem)it.next();

@@ -60,6 +60,8 @@ import org.zkoss.zk.au.*;
 public class UiEngineImpl implements UiEngine {
 	private static final Log log = Log.lookup(UiEngineImpl.class);
 
+	/** The Web application this engine belongs to. */
+	private WebApp _wapp;
 	/** A pool of idle EventProcessingThreadImpl. */
 	private final List _evtthds = new LinkedList();
 	/** A map of suspended processing:
@@ -70,17 +72,16 @@ public class UiEngineImpl implements UiEngine {
 	 * (Desktop desktop, List(EventProcessingThreadImpl)).
 	 */
 	private final Map _resumed = new HashMap();
-	/** The maximal allowed # of event handling threads.*/
-	private int _maxEvtThds;
+	/** # of suspended event processing threads.
+	 */
+	private int _suspCnt;
 
 	public UiEngineImpl() {
 	}
 
 	//-- UiEngine --//
 	public void start(WebApp wapp) {
-		final Integer v = wapp.getConfiguration().getMaxEventThreads();
-		final int i = v != null ? v.intValue(): 100;
-		_maxEvtThds = i > 0 ? i: 100;
+		_wapp = wapp;
 	}
 	public void stop(WebApp wapp) {
 		synchronized (_evtthds) {
@@ -134,7 +135,8 @@ public class UiEngineImpl implements UiEngine {
 			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final List list = (List)me.getValue();
-				if (list.remove(evtthd)) { //found
+				found = list.remove(evtthd); //found
+				if (found) {
 					if (list.isEmpty())
 						it.remove(); //(mutex, list) no longer useful
 					break; //DONE
@@ -149,7 +151,7 @@ public class UiEngineImpl implements UiEngine {
 	public void desktopDestroyed(Desktop desktop) {
 		if (log.debugable()) log.debug("destroy "+desktop);
 
-		final Configuration conf = desktop.getWebApp().getConfiguration();
+		final Configuration conf = _wapp.getConfiguration();
 		final Map map;
 		synchronized (_suspended) {
 			map = (Map)_suspended.remove(desktop);
@@ -272,8 +274,7 @@ public class UiEngineImpl implements UiEngine {
 		execCtrl.setCurrentPage(page);
 		execCtrl.setCurrentPageDefinition(pagedef);
 
-		final WebApp wapp = desktop.getWebApp();
-		final Configuration config = wapp.getConfiguration();
+		final Configuration config = _wapp.getConfiguration();
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
@@ -296,7 +297,7 @@ public class UiEngineImpl implements UiEngine {
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
 					if (!uv.isAborting())
 						execCreate(
-							((WebAppCtrl)wapp).getUiFactory(),
+							((WebAppCtrl)_wapp).getUiFactory(),
 							exec, page, pagedef, null);
 					inits.doAfterCompose(page);
 				} catch(Throwable ex) {
@@ -312,14 +313,11 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			//Cycle 2: process pending events
+			//Unlike execUpdate, execution is aborted here if any exception
 			Event event = nextEvent(uv);
 			do {
-				for (; event != null; event = nextEvent(uv)) {
+				for (; event != null; event = nextEvent(uv))
 					process(desktop, event);
-					//Unlike execUpdate, we don't cache exception here
-				}
-
-				//Cycle 2a: processing resumed event processing
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
@@ -582,7 +580,6 @@ public class UiEngineImpl implements UiEngine {
 						}
 					}
 
-					//Cycle 2a: processing resumed event processing
 					resumeAll(desktop, uv, errs);
 				} while ((event = nextEvent(uv)) != null);
 			}
@@ -693,13 +690,23 @@ public class UiEngineImpl implements UiEngine {
 				exec.setAttribute("javax.servlet.error.exception", err);
 				exec.setAttribute("javax.servlet.error.exception_type", err.getClass());
 				exec.setAttribute("javax.servlet.error.status_code", new Integer(500));
-				final Component c = exec.createComponents(location, null, null);
-				if (c == null) {
-					log.error("No component in "+location);
-				} else {
-					process(exec.getDesktop(), new Event(Events.ON_MODAL, c, null));
-					return; //done
-				}
+				exec.createComponents(location, null, null);
+
+				//process pending events
+				//the execution is aborted if an exception is thrown
+				final Desktop desktop = exec.getDesktop();
+				Event event = nextEvent(uv);
+				do {
+					for (; event != null; event = nextEvent(uv)) {
+						try {
+							process(desktop, event);
+						} catch (TooManySuspendedException ex) {
+							//ignore it (possible and reasonable)
+						}
+					}
+					resumeAll(desktop, uv, null);
+				} while ((event = nextEvent(uv)) != null);
+				return; //done
 			} catch (Throwable ex) {
 				log.realCause("Unable to generate custom error page, "+location, ex);
 			}
@@ -742,7 +749,8 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 
-	public void wait(Object mutex) throws InterruptedException {
+	public void wait(Object mutex)
+	throws InterruptedException, TooManySuspendedException {
 		if (mutex == null)
 			throw new IllegalArgumentException("null mutex");
 
@@ -758,6 +766,8 @@ public class UiEngineImpl implements UiEngine {
 		final Execution exec = Executions.getCurrent();
 		final Desktop desktop = exec.getDesktop();
 
+		incSuspended();
+
 		Map map;
 		synchronized (_suspended) {
 			map = (Map)_suspended.get(desktop);
@@ -772,6 +782,7 @@ public class UiEngineImpl implements UiEngine {
 				map.put(mutex, list = new LinkedList());
 			list.add(evtthd);
 		}
+
 		try {
 			EventProcessingThreadImpl.doSuspend(mutex);
 		} catch (Throwable ex) {
@@ -783,9 +794,25 @@ public class UiEngineImpl implements UiEngine {
 					if (list.isEmpty()) map.remove(mutex);
 				}
 			}
+
 			if (ex instanceof InterruptedException)
 				throw (InterruptedException)ex;
 			throw UiException.Aide.wrap(ex, "Unable to suspend "+evtthd);
+		} finally {
+			decSuspended();
+		}
+	}
+	private void incSuspended() {
+		final int v = _wapp.getConfiguration().getMaxSuspendedThreads();
+		synchronized (this) {
+			if (v >= 0 && _suspCnt >= v)
+				throw new TooManySuspendedException(MZk.TOO_MANY_SUSPENDED);
+			++_suspCnt;
+		}
+	}
+	private void decSuspended() {
+		synchronized (this) {
+			--_suspCnt;
 		}
 	}
 	public void notify(Object mutex) {
@@ -851,7 +878,8 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	/** Does the real resume.
-	 * Note: {@link #resume} only puts a thread into a resume queue in execution.
+	 * <p>Note 1: the current thread will wait until the resumed threads, if any, complete
+	 * <p>Note 2: {@link #resume} only puts a thread into a resume queue in execution.
 	 */
 	private void resumeAll(Desktop desktop, UiVisualizer uv, List errs) {
 		//We have to loop because a resumed thread might resume others
@@ -866,10 +894,10 @@ public class UiEngineImpl implements UiEngine {
 				for (Iterator it = list.iterator(); it.hasNext();) {
 					final EventProcessingThreadImpl evtthd =
 						(EventProcessingThreadImpl)it.next();
-					if (D.ON && log.finerable()) log.finer("Resume "+evtthd);
 					if (uv.isAborting()) {
 						evtthd.ceaseSilently("Resume aborted");
 					} else {
+						if (D.ON && log.finerable()) log.finer("Resume "+evtthd);
 						try {
 							if (evtthd.doResume()) //wait it complete or suspend again
 								recycleEventThread(evtthd); //completed
@@ -913,8 +941,9 @@ public class UiEngineImpl implements UiEngine {
 	private void recycleEventThread(EventProcessingThreadImpl evtthd) {
 		if (!evtthd.isCeased()) {
 			if (evtthd.isIdle()) {
+				final int max = _wapp.getConfiguration().getMaxSpareThreads();
 				synchronized (_evtthds) {
-					if (_evtthds.size() < _maxEvtThds) {
+					if (max < 0 || _evtthds.size() < max) {
 						_evtthds.add(evtthd); //return to pool
 						return; //done
 					}

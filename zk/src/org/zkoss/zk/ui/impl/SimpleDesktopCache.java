@@ -147,14 +147,11 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		private Cache(Configuration config) {
 			super(13);
 
-			Integer v = config.getMaxDesktops();
-			int i = v != null ? v.intValue(): 10;
-			if (i <= 0) i = 10;
-			setMaxSize(i);
+			int v = config.getMaxDesktops();
+			setMaxSize(v >= 0 ? v: Integer.MAX_VALUE);
 
 			v = config.getDesktopMaxInactiveInterval();
-			i = v != null ? v.intValue(): 3600;
-			setLifetime(i >= 0 ? i * 1000: Integer.MAX_VALUE);
+			setLifetime(v >= 0 ? v * 1000: Integer.MAX_VALUE);
 		}
 		/** To save memory, expunge whever necessary (not just when GC).
 		protected java.lang.ref.ReferenceQueue newQueue() {

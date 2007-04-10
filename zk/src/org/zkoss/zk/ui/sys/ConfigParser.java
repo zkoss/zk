@@ -34,6 +34,7 @@ import org.zkoss.idom.util.IDOMs;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.LocaleProvider;
 import org.zkoss.zk.ui.sys.TimeZoneProvider;
 import org.zkoss.zk.ui.UiException;
@@ -104,7 +105,7 @@ public class ConfigParser {
 				}
 
 				Integer v = parseInteger(el, "desktop-timeout", false);
-				if (v != null) config.setDesktopMaxInactiveInterval(v);
+				if (v != null) config.setDesktopMaxInactiveInterval(v.intValue());
 
 				v = parseInteger(el, "file-check-period", true);
 				if (v != null) System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
@@ -121,10 +122,10 @@ public class ConfigParser {
 			//	max-desktops-per-session
 			//	timeout-uri
 				Integer v = parseInteger(el, "session-timeout", false);
-				if (v != null) config.setSessionMaxInactiveInterval(v);
+				if (v != null) config.setSessionMaxInactiveInterval(v.intValue());
 
 				v = parseInteger(el, "max-desktops-per-session", true);
-				if (v != null) config.setMaxDesktops(v);
+				if (v != null) config.setMaxDesktops(v.intValue());
 
 				final String s = el.getElementValue("timeout-uri", true);
 				if (s != null) config.setTimeoutURI(s);
@@ -134,20 +135,25 @@ public class ConfigParser {
 				parseLangAddon(locator, el);
 			} else if ("system-config".equals(elnm)) {
 			//system-config
-			//	max-event-threads
+			//	max-spare-threads
+			//  max-suspended-threads
 			//  max-upload-size
 			//	response-charset
 			//  cache-provider-class
 			//  ui-factory-class
+			//  failover-manager-class
 			//	engine-class
 			//  web-app-class
 			//  locale-provider-class
 			//	time-zone-provider-class
-				Integer v = parseInteger(el, "max-event-threads", true);
-				if (v != null) config.setMaxEventThreads(v);
+				Integer v = parseInteger(el, "max-spare-threads", true);
+				if (v != null) config.setMaxSpareThreads(v.intValue());
 				
+				v = parseInteger(el, "max-suspended-threads", true);
+				if (v != null) config.setMaxSuspendedThreads(v.intValue());
+
 				v = parseInteger(el, "max-upload-size", true);
-				if (v != null) config.setMaxUploadSize(v);
+				if (v != null) config.setMaxUploadSize(v.intValue());
 
 				final String s = el.getElementValue("response-charset", true);
 				if (s != null) config.setCharset(s);
@@ -158,6 +164,9 @@ public class ConfigParser {
 
 				cls = parseClass(el, "ui-factory-class", UiFactory.class);
 				if (cls != null) config.setUiFactoryClass(cls);
+
+				cls = parseClass(el, "failover-manager-class", FailoverManager.class);
+				if (cls != null) config.setFailoverManagerClass(cls);
 
 				cls = parseClass(el, "engine-class", UiEngine.class);
 				if (cls != null) config.setUiEngineClass(cls);

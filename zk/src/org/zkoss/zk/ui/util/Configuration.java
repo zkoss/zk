@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.LocaleProvider;
 import org.zkoss.zk.ui.sys.TimeZoneProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 
 /**
@@ -85,10 +86,12 @@ public class Configuration {
 	private String _timeoutUri;
 	private final List _themeUris = new LinkedList();
 	private transient String[] _roThemeUris = new String[0];
-	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _tzpcls, _lpcls;
-	private Integer _dtTimeout, _dtMax, _sessTimeout, _evtThdMax;
-	private Integer _maxUploadSize = new Integer(5120);
-	private int _promptDelay = 900, _tooltipDelay = 800;
+	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _failmancls,
+		_tzpcls, _lpcls;
+	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
+		_sparThdMax = 100, _suspThdMax = -1,
+		_maxUploadSize = 5120,
+		_promptDelay = 900, _tooltipDelay = 800;
 	private String _charset = "UTF-8";
 	/** A set of the language name whose theme is disabled. */
 	private Set _disabledDefThemes;
@@ -893,31 +896,52 @@ public class Configuration {
 		return _uiftycls;
 	}
 
+	/** Sets the class that implements {@link FailoverManager}, or null if
+	 * no custom failover mechanism.
+	 */
+	public void setFailoverManagerClass(Class cls) {
+		if (cls != null && !FailoverManager.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("FailoverManager not implemented: "+cls);
+		_failmancls = cls;
+	}
+	/** Returns the class that implements the failover manger,
+	 * or null if no custom failover mechanism.
+	 */
+	public Class getFailoverManagerClass() {
+		return _failmancls;
+	}
+
 	/** Specifies the maximal allowed upload size, in kilobytes.
 	 * <p>Default: 5120.
-	 * @param sz the maximal allowed upload size. If null, there is no
-	 * limitation.
+	 * @param sz the maximal allowed upload size.
+	 * A negative value indicates therre is no limit.
 	 */
-	public void setMaxUploadSize(Integer sz) {
+	public void setMaxUploadSize(int sz) {
 		_maxUploadSize = sz;
 	}
-	/** Returns the maximal allowed upload size, in kilobytes, or null
-	 * if no limiatation.
+	/** Returns the maximal allowed upload size, in kilobytes, or 
+	 * a negative value if no limit.
 	 */
-	public Integer getMaxUploadSize() {
+	public int getMaxUploadSize() {
 		return _maxUploadSize;
 	}
 
 	/** Specifies the time, in seconds, between client requests
-	 * before ZK will invalidate the desktop, or null if default is used (1 hour).
+	 * before ZK will invalidate the desktop.
+	 *
+	 * <p>Default: 3600 (1 hour).
+	 *
+	 * <p>A negative value indicates the desktop should never timeout.
 	 */
-	public void setDesktopMaxInactiveInterval(Integer secs) {
+	public void setDesktopMaxInactiveInterval(int secs) {
 		_dtTimeout = secs;
 	}
 	/** Returns the time, in seconds, between client requests
-	 * before ZK will invalidate the desktop, or null if default is used.
+	 * before ZK will invalidate the desktop.
+	 *
+	 * <p>A negative value indicates the desktop should never timeout.
 	 */
-	public Integer getDesktopMaxInactiveInterval() {
+	public int getDesktopMaxInactiveInterval() {
 		return _dtTimeout;
 	}
 
@@ -951,42 +975,79 @@ public class Configuration {
 	}
 
 	/**  Specifies the time, in seconds, between client requests
-	 * before ZK will invalidate the session, or null to use the default.
+	 * before ZK will invalidate the session.
+	 *
+	 * <p>Default: .
 	 */
-	public void setSessionMaxInactiveInterval(Integer secs) {
+	public void setSessionMaxInactiveInterval(int secs) {
 		_sessTimeout = secs;
 	}
 	/** Returns the time, in seconds, between client requests
-	 * before ZK will invalidate the session, or null if default is used.
+	 * before ZK will invalidate the session.
+	 *
+	 * <p>Default: 0 (means the system default).
+	 *
+	 * <p>A negative value indicates that there is no limit.
+	 * Zero means to use the system default (usually defined in web.xml).
 	 */
-	public Integer getSessionMaxInactiveInterval() {
+	public int getSessionMaxInactiveInterval() {
 		return _sessTimeout;
 	}
 
 	/** Specifies the maximal allowed number of desktop
-	 * per session, or null to use the default (10).
+	 * per session.
+	 *
+	 * <p>Defafult: 10.
+	 *
+	 * <p>A negative value indicates there is no limit.
 	 */
-	public void setMaxDesktops(Integer max) {
+	public void setMaxDesktops(int max) {
 		_dtMax = max;
 	}
-	/** Returns the maximal allowed number of desktop
-	 * per session, or null if default is used (10).
+	/** Returns the maximal allowed number of desktop per session.
+	 *
+	 * <p>A negative value indicates there is no limit.
 	 */
-	public Integer getMaxDesktops() {
+	public int getMaxDesktops() {
 		return _dtMax;
 	}
 
-	/** Specifies the maximal allowed number of event processing threads
-	 * per Web application, or null to use the default (100).
+	/** Specifies the maximal allowed number of the spare pool for
+	 * queuing the event processing threads (per Web application).
+	 *
+	 * <p>Default: 100.
+	 *
+	 * <p>A negative value indicates there is no limit.
+	 *
+	 * <p>ZK uses a thread pool to keep the idle event processing threads.
+	 * It speeds up the service of an event by reusing the thread queued
+	 * in this pool.
 	 */
-	public void setMaxEventThreads(Integer max) {
-		_evtThdMax = max;
+	public void setMaxSpareThreads(int max) {
+		_sparThdMax = max;
 	}
-	/** Returns the maximal allowed number of event processing threads
-	 * per Web application, or null if default is used (100).
+	/** Returns the maximal allowed number of the spare pool for
+	 * queuing event processing threads (per Web application).
 	 */
-	public Integer getMaxEventThreads() {
-		return _evtThdMax;
+	public int getMaxSpareThreads() {
+		return _sparThdMax;
+	}
+
+	/** Specifies the maximal allowed number of suspended event
+	 * processing threads (per Web application).
+	 *
+	 * <p>Default: -1 (no limit).
+	 *
+	 * <p>A negative value indicates there is no limit.
+	 */
+	public void setMaxSuspendedThreads(int max) {
+		_suspThdMax = max;
+	}
+	/** Returns the maximal allowed number of suspended event
+	 * processing threads (per Web application).
+	 */
+	public int getMaxSuspendedThreads() {
+		return _suspThdMax;
 	}
 
 	/** Returns the monitor for this application, or null if not set.

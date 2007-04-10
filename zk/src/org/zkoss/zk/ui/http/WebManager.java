@@ -303,9 +303,8 @@ public class WebManager {
 
 		//Note: we set timeout here, because HttpSession might have been created
 		//by other servlet or filter
-		final Integer v = wapp.getConfiguration().getSessionMaxInactiveInterval();
-		if (v != null)
-			hsess.setMaxInactiveInterval(v.intValue());
+		final int v = wapp.getConfiguration().getSessionMaxInactiveInterval();
+		if (v != 0) hsess.setMaxInactiveInterval(v);
 		return sess;
 	}
 	/** Returns the session of the specified HTTP session, or null if n/a. */
