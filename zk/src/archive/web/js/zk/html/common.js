@@ -162,29 +162,49 @@ if (zk.gecko || zk.safari) {
 	};
 }
 
-/** Center the specified element. */
-zk.center = function (el) {
-	var elwd = zk.offsetWidth(el),
-		elhgh = zk.offsetHeight(el);
+/** Center the specified element.
+ * @param flags a combination of center, left, right, top and bottom.
+ * If omitted, center is assigned.
+ */
+zk.center = function (el, flags) {
+	var wdgap = zk.offsetWidth(el),
+		hghgap = zk.offsetHeight(el);
 
-	if ((!elwd || !elhgh) && el.style.display == "none") {
+	if ((!wdgap || !hghgap) && el.style.display == "none") {
 		el.style.top = "-10000px"; //avoid annoying effect
 		el.style.display = "block"; //we need to calculate the size
-		elwd = zk.offsetWidth(el);
-		elhgh = zk.offsetHeight(el),
+		wdgap = zk.offsetWidth(el);
+		hghgap = zk.offsetHeight(el),
 		el.style.display = "none"; //avoid Firefox to display it too early
 	}
 
-	var height = zk.innerHeight(), width = zk.innerWidth(),
-		top = zk.innerY(), left = zk.innerX(),
-		x = left + (width - elwd) / 2,
-		y = top + (height - elhgh) / 2;
+	var left = zk.innerX(), top = zk.innerY();
+	var x, y, skipx, skipy;
+
+	wdgap = zk.innerWidth() - wdgap;
+	if (!flags) x = left + wdgap / 2;
+	else if (flags.indexOf("left") >= 0) x = left;
+	else if (flags.indexOf("right") >= 0) x = left + wdgap - 1; //just in case
+	else if (flags.indexOf("center") >= 0) x = left + wdgap / 2;
+	else {
+		x = 0; skipx = true;
+	}
+
+	hghgap = zk.innerHeight() - hghgap;
+	if (!flags) y = top + hghgap / 2;
+	else if (flags.indexOf("top") >= 0) y = top;
+	else if (flags.indexOf("bottom") >= 0) y = top + hghgap - 1; //just in case
+	else if (flags.indexOf("center") >= 0) y = top + hghgap / 2;
+	else {
+		y = 0; skipy = true;
+	}
+
 	if (x < left) x = left;
 	if (y < top) y = top;
 
 	var ofs = zk.toStyleOffset(el, x, y);
-	el.style.left = ofs[0] + "px";
-	el.style.top =  ofs[1] + "px";
+	if (!skipx) el.style.left = ofs[0] + "px";
+	if (!skipy) el.style.top =  ofs[1] + "px";
 };
 /** Returns the width and height.
  * In additions, it fixes brwoser's bugs, so call it as soon as possible.
