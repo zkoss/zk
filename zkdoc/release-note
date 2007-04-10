@@ -12,6 +12,7 @@ ZK 2.3.1 Freshly
   1692783: ListModelConverter coerce empty Listmodel from null
   1692772: a way to limit live-threads
   1696799: doModal shall be allowed if not in processing an event
+  1642306: Position overlapped/popup widows at center, left, right...
   
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
