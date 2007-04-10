@@ -10,6 +10,8 @@ ZK 2.3.1 Freshly
   1684148: support captcha component
   1693686: Rightclick shall select the list item if it is not selected
   1692783: ListModelConverter coerce empty Listmodel from null
+  1692772: a way to limit live-threads
+  1696799: doModal shall be allowed if not in processing an event
   
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
@@ -38,6 +40,9 @@ ZK 2.3.1 Freshly
     . ComponentInfo represents a node in a ZUML page.
       It is used to create a component, but the component doesn't
       have any reference to it once created.
+  + max-event-threads is renamed to max-spare-threads
+  + onModal is no longer sent to the error page. Developers have to
+    specify mode="modal" explicity.
 
 	--------
 ZK 2.3.0
