@@ -1421,6 +1421,7 @@
 		<xs:attribute name="mode" type="windowModeAttrType" use="optional" />
 		<xs:attribute name="closable" type="xs:string" use="optional" />
 		<xs:attribute name="sizable" type="xs:string" use="optional" />
+		<xs:attribute name="position" type="xs:string" use="optional" />
 		<xs:attribute name="contentStyle" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />

@@ -64,6 +64,13 @@ zkWnd.setAttr = function (cmp, nm, val) {
 		}
 		return true;  //no need to store z.cntType
 
+	case "z.pos":
+		zkau.setAttr(cmp, nm, val);
+		if (val && getZKAttr(cmp, "mode") != "embedded")
+			zkWnd._center(cmp, null, val);
+			//if val is null, it means no change at all
+		return true;
+
 	case "style":
 	case "style.height":
 		zkau.setAttr(cmp, nm, val);
@@ -353,6 +360,9 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 		return;
 	}
 
+	var pos = getZKAttr(cmp, "pos");
+	if (pos) zkWnd._center(cmp, null, pos); //unlike modal, change only if pos
+
 	zkau.closeFloats(cmp);
 
 	zkau.fixZIndex(cmp);
@@ -387,7 +397,7 @@ zkWnd._doModal = function (cmp, replace) {
 	var nModals = zkau._modals.length;
 	zkau.fixZIndex(cmp, true); //let fixZIndex reset topZIndex if possible
 	var zi = ++zkau.topZIndex; //mask also need another index
-	zkWnd._center(cmp, zi);
+	zkWnd._center(cmp, zi, getZKAttr(cmp, "pos")); //called even if pos not defined
 		//show dialog first to have better response.
 
 	zkWnd._show(cmp); //unlike other mode, it must be visible
@@ -503,15 +513,17 @@ zkWnd._posMask = function (mask) {
 	mask.style.height = zk.innerHeight() + "px";
 };
 /** Makes a window in the center. */
-zkWnd._center = function (cmp, zi) {
-	cmp.style.position = "absolute";
-	zk.center(cmp);
-	cmp.style.zIndex = zi;
-
+zkWnd._center = function (cmp, zi, pos) {
+	cmp.style.position = "absolute"; //just in case
+	zk.center(cmp, pos);
 	zkau.sendOnMove(cmp);
-	zkau.sendOnZIndex(cmp);
+
+	if (zi || zi == 0) {
+		cmp.style.zIndex = zi;
+		zkau.sendOnZIndex(cmp);
 		//let the server know the position. otherwise, invalidate will
 		//cause it to be moved to center again
+	}
 }
 
 //Utilities//

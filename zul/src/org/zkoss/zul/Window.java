@@ -93,6 +93,8 @@ public class Window extends XulElement implements IdSpace {
 	private transient Object _mutex;
 	/** The style used for the content block. */
 	private String _cntStyle;
+	/** How to position the window. */
+	private String _pos;
 	/** Whether to show a close button. */
 	private boolean _closable;
 	/** Whether the window is sizable. */
@@ -445,8 +447,15 @@ public class Window extends XulElement implements IdSpace {
 				enterModal();
 			} catch (TooManySuspendedException ex) {
 				try {
-					setMode(modeToString(mode));
-					setVisible(visi);
+					if (Executions.getCurrent()
+					.getAttribute("javax.servlet.error.exception") != null) {
+						//handle it specially if it is used for dispalying err
+						setMode("overlapped");
+						setPosition("center");
+					} else {
+						setMode(modeToString(mode));
+						setVisible(visi);
+					}
 				} catch (Throwable e2) {
 					log.realCauseBriefly("Causing another error", e2);
 				}
@@ -525,12 +534,12 @@ public class Window extends XulElement implements IdSpace {
 			invalidate(); //re-init is required
 		}
 	}
-	/** Returns whether the width of the width is sizable.
+	/** Returns whether the window is sizable.
 	 */
 	public boolean isSizable() {
 		return _sizable;
 	}
-	/** Sets whether the width of the width is sizable.
+	/** Sets whether the window is sizable.
 	 * If true, an user can drag the border to change the window width.
 	 * <p>Default: false.
 	 */
@@ -539,6 +548,43 @@ public class Window extends XulElement implements IdSpace {
 			_sizable = sizable;
 			smartUpdate("z.sizable", sizable);
 		}
+	}
+	/** Returns how to position the window at the client screen.
+	 * It is meaningless if the embedded mode is used.
+	 *
+	 * <p>Default: null which depends on {@link #getMode}:
+	 * If overlapped or popup, {@link #setLeft} and {@link #setTop} are
+	 * assumed. If modal, it is always centered.
+	 */
+	public String getPosition() {
+		return _pos;
+	}
+	/** Sets how to position the window at the client screen.
+	 * It is meaningless if the embedded mode is used.
+	 *
+	 * @param pos how to position. It can be null (the default), or
+	 * a combination of the following values (by separating with comma).
+	 * <dl>
+	 * <dt>center</dt>
+	 * <dd>Position the window at the center. {@link #setTop} and {@link #setLeft}
+	 * are both ignored.</dd>
+	 * <dt>left</dt>
+	 * <dd>Position the window at the left edge. {@link #setLeft} is ignored.</dd>
+	 * <dt>right</dt>
+	 * <dd>Position the window at the right edge. {@link #setLeft} is ignored.</dd>
+	 * <dt>top</dt>
+	 * <dd>Position the window at the top edge. {@link #setTop} is ignored.</dd>
+	 * <dt>bottom</dt>
+	 * <dd>Position the window at the bottom edge. {@link #setTop} is ignored.</dd>
+	 * </dl>
+	 * <p>For example, "left,center" means to position it at the center of
+	 * the left edge.
+	 */
+	public void setPosition(String pos) {
+		//Note: we always update since the window might be dragged by an user
+		_pos = pos;
+		if (_mode != EMBEDDED)
+			smartUpdate("z.pos", pos);
 	}
 
 	/** Process the onClose event sent when the close button is pressed.
@@ -691,8 +737,13 @@ public class Window extends XulElement implements IdSpace {
 			sb.append(" z.closable=\"true\"");
 		if (_sizable)
 			sb.append(" z.sizable=\"true\"");
-		if (_mode != EMBEDDED)
+
+		if (_mode != EMBEDDED) {
+			if (_pos != null)
+				HTMLs.appendAttribute(sb, "z.pos", _pos);
 			HTMLs.appendAttribute(sb, "z.mode", getMode());
+		}
+
 		HTMLs.appendAttribute(sb, "z.ctkeys", _ctkeys);
 		return sb.toString();
 	}
