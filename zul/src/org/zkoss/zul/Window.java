@@ -28,6 +28,7 @@ import java.util.LinkedHashSet;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
@@ -35,6 +36,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.TooManySuspendedException;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.ext.client.Openable;
@@ -75,6 +77,8 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Window extends XulElement implements IdSpace {
+	private static final Log log = Log.lookup(Window.class);
+
 	private transient Caption _caption;
 
 	private String _border = "none";
@@ -343,28 +347,24 @@ public class Window extends XulElement implements IdSpace {
 	 * One of "modal", "embedded", "overlapped" and "popup".
 	 */
 	public String getMode() {
-		switch (_mode) {
+		return modeToString(_mode);
+	}
+	private static String modeToString(int mode) {
+		switch (mode) {
 		case MODAL: return "modal";
 		case POPUP: return "popup";
 		case OVERLAPPED: return "overlapped";
 		default: return "embedded";
 		}
 	}
-	/** Sets the mode.
+	/** Sets the mode to overlapped, popup, modal or embedded.
 	 *
-	 * <p>Notice that you can specify "modal" to this method only in an event
+	 * <p>Notice: {@link Events#ON_MODAL} is posted if you specify
+	 * "modal" to this method and in a thread other than an event
 	 * listener ({@link Events#inEventListener}).
-	 * Rather, you shall use {@link org.zkoss.zk.ui.event.Events#postEvent} to
-	 * post the onModal event. For example, in a ZUML page, you can put a window
-	 * into modal immediately after rendered as follows.
-	 *
-	 * <pre><code>
-	 *&lt;window title="..."&gt;
-	 *...
-	 *  &lt;zscript&gt;
-	 *    Events.postEvent(Events.ON_MODAL, self, null);
-	 *  &lt;/zscript&gt;
-	 *&lt;/window&gt;
+	 * In other words, if this method is called with modal and
+	 * <em>not</em> in any event listener, the mode won't be changed
+	 * immediately (until {@link Events#ON_MODAL} is processed later).
 	 *
 	 * @param name the mode which could be one of
 	 * "embedded", "overlapped" and "popup".
@@ -380,7 +380,7 @@ public class Window extends XulElement implements IdSpace {
 		if ("popup".equals(name)) doPopup();
 		else if ("overlapped".equals(name)) doOverlapped();
 		else if ("embedded".equals(name)) doEmbedded();
-		else if ("modal".equals(name)) 	doModal();
+		else if ("modal".equals(name)) doModal();
 		else throw new WrongValueException("Uknown mode: "+name);
 	}
 
@@ -410,28 +410,48 @@ public class Window extends XulElement implements IdSpace {
 	 * It will automatically center the window (ignoring {@link #getLeft} and
 	 * {@link #getTop}).
 	 *
-	 * <p>Notice that this method can be called only in an event listener
-	 * ({@link Events#inEventListener}).
-	 * Rather, you shall use {@link org.zkoss.zk.ui.event.Events#postEvent} to
-	 * post the onModal event.
-	 * Refer to {@link #setMode} for more description.
+	 * <p>Notice: {@link Events#ON_MODAL} is posted if you specify
+	 * "modal" to this method and in a thread other than an event
+	 * listener ({@link Events#inEventListener}).
+	 * In other words, if this method is called with modal and
+	 * <em>not</em> in any event listener, the mode won't be changed
+	 * immediately (until {@link Events#ON_MODAL} is processed later).
 	 *
+	 * @exception TooManySuspendedException if there are too many suspended
+	 * processing thread than the deployer allows.
+	 * By default, there is no limit of # of suspended threads.
 	 * @exception InterruptedException thrown if the desktop or
 	 * the Web application is being destroyed, or
 	 * {@link org.zkoss.zk.ui.sys.DesktopCtrl#ceaseSuspendedThread}.
 	 * To tell the difference, check the getMessage method of InterruptedException.
 	 */
-	public void doModal() throws InterruptedException {
-		if (!Events.inEventListener())
-			throw new WrongValueException("doModal() and setMode(\"modal\") can only be called in an event listener, not in page loading");
-
+	public void doModal()
+	throws InterruptedException, TooManySuspendedException {
 		checkOverlappable();
 
 		if (_mode != MODAL) {
+			if (!Events.inEventListener()) {
+				Events.postEvent(Events.ON_MODAL, this, null);
+				return; //done
+			}
+
+			int mode = _mode;
+			boolean visi = isVisible();
+
 			invalidate();
 			setVisible(true); //if MODAL, it must be visible; vice versa
 
-			enterModal();
+			try {
+				enterModal();
+			} catch (TooManySuspendedException ex) {
+				try {
+					setMode(modeToString(mode));
+					setVisible(visi);
+				} catch (Throwable e2) {
+					log.realCauseBriefly("Causing another error", e2);
+				}
+				throw ex;
+			}
 		}
 	}
 	/** Makes this window as overlapped with other components.

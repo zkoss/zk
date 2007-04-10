@@ -26,6 +26,7 @@ import org.zkoss.zul.mesg.MZul;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.TooManySuspendedException;
 
 import org.zkoss.zul.impl.MessageboxDlg;
 
@@ -111,7 +112,12 @@ public class Messagebox {
 		final MessageboxDlg dlg = (MessageboxDlg)
 			Executions.createComponents(_templ, null, params);
 		dlg.setButtons(buttons);
-		dlg.doModal();
+		try {
+			dlg.doModal();
+		} catch (TooManySuspendedException ex) {
+			dlg.detach();
+			throw ex;
+		}
 		return dlg.getResult();
 	}
 	/** Shows a message box and returns what button is pressed.

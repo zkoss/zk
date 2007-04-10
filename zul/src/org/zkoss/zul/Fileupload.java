@@ -25,9 +25,10 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.util.media.Media;
 
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.TooManySuspendedException;
 
 import org.zkoss.zul.impl.FileuploadDlg;
 
@@ -96,7 +97,12 @@ public class Fileupload {
 		final FileuploadDlg dlg = (FileuploadDlg)
 			exec.createComponents(
 				_templ, null, params);
-		dlg.doModal();
+		try {
+			dlg.doModal();
+		} catch (TooManySuspendedException ex) {
+			dlg.detach();
+			throw ex;
+		}
 		return dlg.getResult();
 	}
 
