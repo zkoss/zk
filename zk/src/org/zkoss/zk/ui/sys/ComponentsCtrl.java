@@ -18,18 +18,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.Pair;
+import org.zkoss.util.CacheMap;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
+import org.zkoss.zk.ui.event.Event;
 
 /**
  * Utilities for implementing components.
@@ -79,6 +85,37 @@ public class ComponentsCtrl {
 	 */
 	public static void setCurrentDefinition(ComponentDefinition compdef) {
 		_compdef.set(compdef);
+	}
+
+	/** A map of (Pair(Class,String evtnm), Method). */
+	private static final CacheMap _evtmtds =
+		new CacheMap(131).setMaxSize(1000).setLifetime(60*60000);
+	/** Returns the method for handling the specified event, or null
+	 * if not available.
+	 */
+	public static final Method getEventMethod(Class cls, String evtnm) {
+		final Pair key = new Pair(cls, evtnm);
+		final Object o;
+		synchronized (_evtmtds) {
+			o = _evtmtds.get(key);
+		}
+		if (o != null)
+			return o == Objects.UNKNOWN ? null: (Method)o;
+
+		Method mtd = null;
+		try {
+			mtd = Classes.getCloseMethodBySubclass(
+					cls, evtnm, new Class[] {Event.class}); //with event arg
+		} catch (NoSuchMethodException ex) {
+			try {
+				mtd = cls.getMethod(evtnm, null); //no argument case
+			} catch (NoSuchMethodException e2) {
+			}
+		}
+		synchronized (_evtmtds) {
+			_evtmtds.put(key, mtd != null ? mtd: Objects.UNKNOWN);
+		}
+		return mtd;
 	}
 
 	/** Represents a dummy definition. */

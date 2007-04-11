@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.impl.EventProcessingThreadImpl;
 import org.zkoss.zk.au.AuRequest;
@@ -181,7 +181,7 @@ public class Events {
 		if (((ComponentCtrl)comp).getEventHandler(evtnm) != null)
 			return true;
 
-		if (ExecutionsCtrl.getEventMethod(comp.getClass(), evtnm) != null
+		if (ComponentsCtrl.getEventMethod(comp.getClass(), evtnm) != null
 		|| comp.isListenerAvailable(evtnm, asap))
 			return true;
 

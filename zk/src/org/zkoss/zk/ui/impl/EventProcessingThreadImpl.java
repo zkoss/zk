@@ -47,6 +47,7 @@ import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
@@ -525,8 +526,8 @@ implements EventProcessingThread {
 			}
 		}
 
-		final Method mtd = ExecutionsCtrl
-			.getEventMethod(_comp.getClass(), evtnm);
+		final Method mtd =
+			ComponentsCtrl.getEventMethod(_comp.getClass(), evtnm);
 		if (mtd != null) {
 			if (D.ON && log.finerable())
 				log.finer("Method for event="+evtnm+" comp="+_comp+" method="+mtd);
