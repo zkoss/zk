@@ -19,20 +19,31 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <window title="Custom Constraint" border="normal">
 	<zscript><![CDATA[
-Constraint ctt = new Constraint() {
-	public void validate(Component comp, Object value) throws WrongValueException {
-		if (value == null || value < 100) {
-			String msg = "At least 100 must be specified";
-			errmsg.setValue(msg);
-			throw new WrongValueException(comp, msg);
-		}
+class MyConst implements Constraint {
+	public void validate(Component comp, Object value) {
+		if (value == null || value < 100)
+			throw new WrongValueException(comp, "At least 100 must be specified");
 	}
-	public String getValidationScript() {return null;}
-	public String getErrorMessage() {return null;}
-	boolean isClientComplete() {return false;}
 }
+class MyCustomConst extends MyConst implements CustomConstraint {
+	public void showCustomError(Component comp, WrongValueException ex) {
+		errmsg.setValue(ex != null ? ex.getMessage(): "");
+	}
+}
+Constraint ctt = new MyConst();
+Constraint custom_ctt = new MyCustomConst();
 	]]></zscript>
+	<vbox>
+		<hbox>
 	Enter a number at least 100:
-	<intbox constraint="${ctt}"/>
+	<intbox constraint="${custom_ctt}"/>
 	<label id="errmsg"/>
+		</hbox>
+		<hbox>
+	another number at least 100: <intbox constraint="${ctt}"/>
+		</hbox>
+		<hbox>
+	any number: <intbox/>
+		</hbox>
+	</vbox>
 </window>
