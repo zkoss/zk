@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.HashMap;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.xml.XMLs;
@@ -31,6 +33,8 @@ import org.zkoss.zk.ui.ext.client.Inputable;
 import org.zkoss.zk.ui.ext.client.Errorable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.AuSelectAll;
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Namespaces;
 
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.Constraint;
@@ -254,8 +258,18 @@ implements Constrainted {
 	 */
 	protected void validate(Object value) throws WrongValueException {
 		final Constraint constr = getConstraint();
-		if (constr != null)
-			constr.validate(this, value);
+		if (constr != null) {
+			//Bug 1698190: contructor might be zscript
+			final HashMap backup = new HashMap();
+			final Namespace ns = Namespaces.beforeInterpret(backup, this);
+			Namespaces.pushCurrent(ns);
+			try {
+				constr.validate(this, value);
+			} finally {
+				Namespaces.popCurrent();
+				Namespaces.afterInterpret(backup, ns);
+			}
+		}
 	}
 
 	/** Returns the maxlength.
