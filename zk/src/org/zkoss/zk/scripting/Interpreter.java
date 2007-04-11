@@ -59,9 +59,9 @@ public interface Interpreter {
 	 * to retrieve the current namesace if the ns argument is null.
 	 *
 	 * @param ns the namspace. If null, the current namespace is assumed.
-	 * The current namespace is the event target's namespace
-	 * ({@link org.zkoss.zk.ui.event.Event#getTarget}),
-	 * if the thread is processing an event.
+	 * The current namespace is {@link Namespaces#getCurrent}, which
+	 * is the event target's namespace, if the thread is processing an event.
+	 * The event target is {@link org.zkoss.zk.ui.event.Event#getTarget}.
 	 * Otherwise, the current namespace is the owner page's namespace
 	 * ({@link #getOwner}.
 	 */
