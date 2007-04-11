@@ -31,7 +31,7 @@ zkTxbox.init = function (cmp) {
 
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
-	if ($outer(cmp).getAttribute("zk_srvald") == "true") {
+	if (getZKAttr($outer(cmp), "srvald")) {
 		var old = cmp.value;
 		cmp.defaultValue = old + "-";
 		if (old != cmp.value) cmp.value = old; //Bug 1490079

@@ -125,7 +125,8 @@ public class Decimalbox extends FormatInputElement {
 			}
 			return v;
 		} catch (NumberFormatException ex) {
-			throw new WrongValueException(this, MZul.NUMBER_REQUIRED, value);
+			throw showCustomError(
+				new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
 		}
 	}
 	protected String coerceToString(Object value) {

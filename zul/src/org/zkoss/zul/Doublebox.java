@@ -100,7 +100,8 @@ public class Doublebox extends FormatInputElement {
 				v /= Math.pow(10, divscale);
 			return new Double(v);
 		} catch (NumberFormatException ex) {
-			throw new WrongValueException(this, MZul.NUMBER_REQUIRED, value);
+			throw showCustomError(
+				new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
 		}
 	}
 	protected String coerceToString(Object value) {

@@ -57,6 +57,9 @@ zkVld.validate = function (id) {
 	//1. specify the function in z.valid or z.valid2
 	id = $uuid(id);
 	var cm = $e(id);
+	if (getZKAttr(cm, "srvald") == "custom")
+		return; //no client validation at all
+
 	zkVld.validating = true; //to avoid deadloop (when both fields are invalid)
 	try {
 		if (cm) {
@@ -169,6 +172,9 @@ zkVld._errbox = function () {
 	}
 
 	if (!zk.isRealVisible(cmp)) return; //don't show the erro box
+
+	if (getZKAttr(cmp, "srvald") == "custom")
+		return; //don't show the default error box if custom
 
 	var box = Validate_errorbox(id, boxid, html);
 	if (!box) {

@@ -39,8 +39,9 @@ import org.zkoss.zul.mesg.MZul;
  *
  * @author tomyeh
  */
-public class SimpleConstraint implements Constraint, java.io.Serializable {
-    private static final long serialVersionUID = 20060622L;
+public class SimpleConstraint
+implements Constraint, ClientConstraint, java.io.Serializable {
+    private static final long serialVersionUID = 20070411L;
 
 	/** Postive numbers are not allowed. */
 	public static final int NO_POSITIVE = 0x0001;
@@ -257,11 +258,12 @@ public class SimpleConstraint implements Constraint, java.io.Serializable {
 		}
 		throw new InternalError();
 	}
-	public String getValidationScript() {
+	//ClientConstraint//
+	public String getClientValidation() {
 		return (_flags & NO_EMPTY) != 0 ? "zkVld.noEmpty": null;
 			//FUTURE: support more validation in client
 	}
-	public String getErrorMessage() {
+	public String getErrorMessage(Component comp) {
 		return _errmsg;
 	}
 	public boolean isClientComplete() {

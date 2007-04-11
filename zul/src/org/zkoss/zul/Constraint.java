@@ -22,10 +22,25 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 
 /**
- * A constraint. It could be anything, but you could use {@link SimpleConstraint}
- * to simplify the task.
+ * A constraint.
+ * Instead of implementing this interface from scratch,
+ * you may use {@link SimpleConstraint} if applicable.
+ *
+ * <p>To have better responsiveness, you can handle more or all validations
+ * at the client by implementing an additional interface,
+ * {@link ClientConstraint}.
+ *
+ * <p>If you prefer to have a custom way to display
+ * the error message (other than the default error box).
+ * You can also implement {@link CustomConstraint}.
+ * Then, {@link CustomConstraint#showCustomError} is called instead of
+ * showing the default error box.
+ * In addition, {@link ClientConstraint} is ignored in this case,
+ * since all validation will be done at the server.
  *
  * @author tomyeh
+ * @see CustomConstraint
+ * @see ClientConstraint
  */
 public interface Constraint {
 	/** Verifies whether the value is acceptable.
@@ -33,22 +48,4 @@ public interface Constraint {
 	 */
 	public void validate(Component comp, Object value)
 	throws WrongValueException;
-	/** Returns the function name in JavaScript used to validate
-	 * the value in the client, or null if no client verification is
-	 * supported.
-	 *
-	 * <p>Example: if "zkVld.noEmpty" is returned, then
-	 * zkVld.noEmpty(id) is then called.
-	 */
-	public String getValidationScript();
-	/** Returns whether the client's validation is complete.
-	 * If true, onChange won't be sent immediately (unless onChange is listened).
-	 * If false, onChange is always sent no matter {@link #getValidationScript}
-	 * return null or not.
-	 */
-	public boolean isClientComplete();
-	/** Returns the error message, or null if not specified (and default
-	 * message shall be used).
-	 */
-	public String getErrorMessage();
 }

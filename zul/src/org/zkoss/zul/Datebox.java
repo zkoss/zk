@@ -170,14 +170,16 @@ public class Datebox extends FormatInputElement {
 		try {
 			date = df.parse(value);
 		} catch (ParseException ex) {
-			throw new WrongValueException(this, MZul.DATE_REQUIRED,
-				new Object[] {value, fmt});
+			throw showCustomError(
+				new WrongValueException(this, MZul.DATE_REQUIRED,
+					new Object[] {value, fmt}));
 		}
 /*
 		if (date.compareTo(_min) < 0 || date.compareTo(_max) > 0)
-			throw new WrongValueException(
-				MZul.DATE_OUT_OF_RANGE,
-				new Object[] {value, df.format(_min), df.format(_max), fmt});
+			throw showCustomError(
+				new WrongValueException(
+					MZul.DATE_OUT_OF_RANGE,
+					new Object[] {value, df.format(_min), df.format(_max), fmt}));
 */
 		return date;
 	}

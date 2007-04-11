@@ -25,6 +25,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.xml.XMLs;
 
 import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -38,6 +39,8 @@ import org.zkoss.zk.scripting.Namespaces;
 
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.Constraint;
+import org.zkoss.zul.ClientConstraint;
+import org.zkoss.zul.CustomConstraint;
 import org.zkoss.zul.SimpleConstraint;
 import org.zkoss.zul.ext.Constrainted;
 
@@ -47,6 +50,8 @@ import org.zkoss.zul.ext.Constrainted;
  */
 abstract public class InputElement extends XulElement
 implements Constrainted {
+	private static final Log log = Log.lookup(InputElement.class);
+
 	/** The value. */
 	private Object _value;
 	/** Used by setTextByClient() to disable sending back the value */
@@ -182,23 +187,15 @@ implements Constrainted {
 		Object val;
 		try {
 			if (_maxlength > 0 && value != null && value.length() > _maxlength)
-				throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_maxlength));
+				throw showCustomError(
+					new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_maxlength)));
 			val = coerceFromString(value);
 			validate(val);
-		} catch (Throwable ex) {
-			//Note: a constraint might be a BeanShell class, so we have to
-			//dig for the real cause
-			if (!(ex instanceof WrongValueException)) {
-				Throwable t = Exceptions.findCause(ex, WrongValueException.class);
-				if (t != null)
-					ex = t;
-			}
-
-			if (ex instanceof WrongValueException)
-				smartUpdate("defaultValue", "zk_wrong!~-.zk_pha!6");
+		} catch (WrongValueException ex) {
+			smartUpdate("defaultValue", "zk_wrong!~-.zk_pha!6");
 				//a value to enforce client to send back request
 				//If you changed it, remember to correct boot.js
-			throw UiException.Aide.wrap(ex);
+			throw ex;
 		}
 
 		clearErrorMessage(); //no error at all
@@ -265,11 +262,54 @@ implements Constrainted {
 			Namespaces.pushCurrent(ns);
 			try {
 				constr.validate(this, value);
+				if (constr instanceof CustomConstraint) {
+					try {
+						((CustomConstraint)constr).showCustomError(this, null);
+						//not call thru showCustomError(Wrong...) for better performance
+					} catch (Throwable ex) {
+						log.realCauseBriefly(ex);
+					}
+				}
+			} catch (Throwable ex) {
+				//Note: a constraint might be a BeanShell class, so we
+				//have to dig for the real cause
+				WrongValueException t = (WrongValueException)
+					Exceptions.findCause(ex, WrongValueException.class);
+				if (t != null)
+					throw showCustomError(t);
+				throw UiException.Aide.wrap(ex);
 			} finally {
 				Namespaces.popCurrent();
 				Namespaces.afterInterpret(backup, ns);
 			}
 		}
+	}
+	/** Shows the error message in the custom way by calling
+	 * ({@link CustomConstraint#showCustomError}, if the contraint
+	 * implements {@link CustomConstraint}.
+	 *
+	 * <p>Derived class shall call this method before throwing
+	 * {@link WrongValueException}, such that the constraint,
+	 * if any, has a chance to show the error message in a custom way.
+	 *
+	 * @param ex the exception, or null to clean up the error.
+	 * @return the exception (ex)
+	 */
+	protected WrongValueException showCustomError(WrongValueException ex) {
+		if (_constr instanceof CustomConstraint) {
+			final HashMap backup = new HashMap();
+			final Namespace ns = Namespaces.beforeInterpret(backup, this);
+			Namespaces.pushCurrent(ns);
+			try {
+				((CustomConstraint)_constr).showCustomError(this, ex);
+			} catch (Throwable t) {
+				log.realCause(t); //and ignore it
+			} finally {
+				Namespaces.popCurrent();
+				Namespaces.afterInterpret(backup, ns);
+			}
+		}
+		return ex;
 	}
 
 	/** Returns the maxlength.
@@ -341,9 +381,13 @@ implements Constrainted {
 	//-- Constrainted --//
 	public void setConstraint(String constr) {
 		_constr = SimpleConstraint.getInstance(constr);
+		invalidate(); //regenerate attributes
 	}
 	public void setConstraint(Constraint constr) {
-		_constr = constr;
+		if (_constr != constr) {
+			_constr = constr;
+			invalidate();
+		}
 	}
 	public final Constraint getConstraint() {
 		return _constr;
@@ -356,11 +400,13 @@ implements Constrainted {
 	 *
 	 * <p>Default: Besides super.isAsapRequired(evtnm), it also returns true
 	 * if evtnm is Events.ON_CHANGE, {@link #getConstraint} is not null,
-	 * and {@link Constraint#getValidationScript} is null.
+	 * and {@link ClientConstraint#getClientValidation} is null.
 	 */
 	protected boolean isAsapRequired(String evtnm) {
-		return (Events.ON_CHANGE.equals(evtnm) 
-			&& _constr != null && !_constr.isClientComplete())
+		return (Events.ON_CHANGE.equals(evtnm) && _constr != null
+			&& ((_constr instanceof CustomConstraint)
+				|| !(_constr instanceof ClientConstraint)
+				|| !((ClientConstraint)_constr).isClientComplete()))
 			|| super.isAsapRequired(evtnm);
 	}
 
@@ -403,10 +449,21 @@ implements Constrainted {
 		appendAsapAttr(sb, Events.ON_BLUR);
 
 		if (_constr != null) {
-			HTMLs.appendAttribute(sb, "z.valid", _constr.getValidationScript());
-			HTMLs.appendAttribute(sb, "z.ermg", _constr.getErrorMessage());
-			if (!_constr.isClientComplete())
-				sb.append(" zk_srvald=\"true\""); //validate-at-server is required
+			String serverValid = null;
+			if (_constr instanceof CustomConstraint) {
+				serverValid = "custom";
+					//validate-at-server is required and no client validation
+			} else if (_constr instanceof ClientConstraint) {
+				final ClientConstraint cc = (ClientConstraint)_constr;
+				HTMLs.appendAttribute(sb, "z.valid", cc.getClientValidation());
+				HTMLs.appendAttribute(sb, "z.ermg", cc.getErrorMessage(this));
+				if (!cc.isClientComplete())
+					serverValid = "both";
+					//validate-at-server is required after the client validation
+			} else {
+				serverValid = "both";
+			}
+			HTMLs.appendAttribute(sb, "z.srvald", serverValid);
 		}
 		return sb.toString();
 	}
@@ -466,7 +523,8 @@ implements Constrainted {
 	 */
 	protected void checkUserError() throws WrongValueException {
 		if (_errmsg != null)
-			throw new WrongValueException(this, _errmsg);
+			throw showCustomError(new WrongValueException(this, _errmsg));
+
 		if (!_valided && _constr != null)
 			setText(coerceToString(_value));
 	}
