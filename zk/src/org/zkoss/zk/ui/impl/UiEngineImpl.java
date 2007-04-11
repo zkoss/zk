@@ -657,11 +657,11 @@ public class UiEngineImpl implements UiEngine {
 			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));
 		}
 
-		final String msg = Exceptions.getMessage(ex);
 		if (ex instanceof WrongValueException) {
 			final Component comp = ((WrongValueException)ex).getComponent();
 			if (comp != null) {
-				uv.addResponse("wrongValue", new AuAlert(comp, msg));
+				uv.addResponse("wrongValue",
+					new AuAlert(comp, Exceptions.getMessage(ex)));
 				return;
 			}
 		}

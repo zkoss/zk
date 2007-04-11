@@ -41,14 +41,15 @@ public class Namespaces {
 	 *
 	 * <p>Typical use:
 	 * <pre><code>
-	 * final Map backup = new HashMap();
-	 * final Namespace ns = Namespaces.beforeInterpret(backup, comp);
-	 * try {
-	 *	 Namespaces.backupVariable(backup, ns, "some");
-	 *   page.interpret(zslang, zscript, ns);
-	 * } finally {
-	 *   Namespaces.afterInterpret(backup, ns);
-	 * }
+final Map backup = new HashMap();
+final Namespace ns = Namespaces.beforeInterpret(backup, comp);
+try {
+  Namespaces.backupVariable(backup, ns, "some");
+  page.interpret(zslang, zscript, ns);
+} finally {
+  Namespaces.afterInterpret(backup, ns);
+}
+</code></pre>
 	 * </code></pre>
 	 *
 	 * <p>If you need to backup some variables, you can invoke
@@ -156,6 +157,20 @@ try {
 	Namespaces.pop();
 }
 	 </code></pre>
+	 *
+	 * <p>In most case, it is used with {@link #beforeInterpret} as follows.
+	 * <pre><code>
+final Map backup = new HashMap();
+final Namespace ns = Namespaces.beforeInterpret(backup, comp);
+Namespaces.pushCurrent(ns);
+try {
+  Namespaces.backupVariable(backup, ns, "some");
+  page.interpret(zslang, zscript, ns);
+} finally {
+  Namespaces.afterInterpret(backup, ns);
+  Namespaces.popCurrent();
+}
+</code></pre>
 	 *
 	 * <p>Application developer rarely needs to call this method, unless
 	 * he wants to simulate the context of a particular namespace

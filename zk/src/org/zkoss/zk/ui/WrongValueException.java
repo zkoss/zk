@@ -27,22 +27,30 @@ package org.zkoss.zk.ui;
 public class WrongValueException extends OperationException {
 	private Component _comp;
 
-	/** @param comp the component that causes this exception. */
+	/** Contructs a wrong value exception to show an error box at the client.
+	 * @param comp the component that causes this exception.
+	 */
 	public WrongValueException(Component comp, String msg) {
 		super(msg);
 		_comp = comp;
 	}
-	/** @param comp the component that causes this exception. */
+	/** Contructs a wrong value exception to show an error box at the client.
+	 * @param comp the component that causes this exception.
+	 */
 	public WrongValueException(Component comp, int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 		_comp = comp;
 	}
-	/** @param comp the component that causes this exception. */
+	/** Contructs a wrong value exception to show an error box at the client.
+	 * @param comp the component that causes this exception.
+	 */
 	public WrongValueException(Component comp, int code, Object fmtArg) {
 		super(code, fmtArg);
 		_comp = comp;
 	}
-	/** @param comp the component that causes this exception. */
+	/** Contructs a wrong value exception to show an error box at the client.
+	 * @param comp the component that causes this exception.
+	 */
 	public WrongValueException(Component comp, int code) {
 		super(code);
 		_comp = comp;
