@@ -21,7 +21,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<zscript><![CDATA[
 Constraint ctt = new Constraint() {
 	public void validate(Component comp, Object value) throws WrongValueException {
-		if (((Integer)value).intValue() < 100) {
+		if (value == null || value < 100) {
 			String msg = "At least 100 must be specified";
 			errmsg.setValue(msg);
 			throw new WrongValueException(comp, msg);
