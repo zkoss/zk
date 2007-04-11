@@ -20,6 +20,7 @@ package org.zkoss.zul;
 
 import java.util.Iterator;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
@@ -30,6 +31,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Namespaces;
 
 import org.zkoss.zul.impl.HeaderElement;
 
@@ -195,13 +198,22 @@ public class Column extends HeaderElement {
 		final Grid grid = getGrid();
 		if (grid == null) return false;
 
-		final ListModel model = grid.getModel();
-		if (model != null) { //live data
-			if (!(model instanceof ListModelExt))
-				throw new UiException("ListModelExt must be implemented in "+model.getClass().getName());
-			((ListModelExt)model).sort(cmpr, ascending);
-		} else { //not live data
-			Components.sort(grid.getRows().getChildren(), cmpr);
+		//comparator might be zscript
+		final HashMap backup = new HashMap();
+		final Namespace ns = Namespaces.beforeInterpret(backup, this);
+		Namespaces.pushCurrent(ns);
+		try {
+			final ListModel model = grid.getModel();
+			if (model != null) { //live data
+				if (!(model instanceof ListModelExt))
+					throw new UiException("ListModelExt must be implemented in "+model.getClass().getName());
+				((ListModelExt)model).sort(cmpr, ascending);
+			} else { //not live data
+				Components.sort(grid.getRows().getChildren(), cmpr);
+			}
+		} finally {
+			Namespaces.popCurrent();
+			Namespaces.afterInterpret(backup, ns);
 		}
 
 		//maintain
