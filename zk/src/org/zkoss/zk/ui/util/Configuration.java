@@ -95,6 +95,8 @@ public class Configuration {
 	private String _charset = "UTF-8";
 	/** A set of the language name whose theme is disabled. */
 	private Set _disabledDefThemes;
+	/** keep-across-visits. */
+	private boolean _keepDesktop;
 
 	/** Contructor.
 	 */
@@ -1262,6 +1264,22 @@ public class Configuration {
 		return _disabledDefThemes == null || !_disabledDefThemes.contains(lang);
 	}
 
+	/** Specifies whether to keep the desktops across visits.
+	 * If false, the desktops are removed when an user reloads an URL
+	 * or browses to another URL.
+	 *
+	 * <p>Default: false.
+	 */
+	public void setKeepDesktopAcrossVisits(boolean keep) {
+		_keepDesktop = keep;
+	}
+	/** Returns whether to keep the desktops across visits.
+	 * If false, the desktops are removed when an user reloads an URL
+	 * or browses to another URL.
+	 */
+	public boolean isKeepDesktopAcrossVisits() {
+		return _keepDesktop;
+	}
 	/** Adds an error page.
 	 *
 	 * @param type what type of errors the error page is associated with.

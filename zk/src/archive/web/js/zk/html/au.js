@@ -734,7 +734,7 @@ zkau._onUnload = function () {
 	//not be consistent with server's (due to Opera incapable to restore
 	//DHTML content 100% correctly)
 
-	if (!zk.opera) {
+	if (!zk.opera && !zk.keepDesktop) {
 		var ds = zkau._dtids;
 		for (var j = 0; j < ds.length; ++j) {
 			var content = "dtid="+ds[j]+"&cmd.0=rmDesktop";

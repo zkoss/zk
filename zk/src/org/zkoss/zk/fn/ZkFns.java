@@ -166,6 +166,9 @@ public class ZkFns {
 			.append(";\nzk_ver='").append(wapp.getVersion())
 			.append("';\n");
 
+		if (config.isKeepDesktopAcrossVisits())
+			sb.append("zk.keepDesktop=true;\n");
+
 		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();

@@ -88,12 +88,13 @@ public class ConfigParser {
 				}
 			} else if ("desktop-config".equals(elnm)) {
 			//desktop-config
-			//  disable-theme-uri
+			//  disable-default-theme
 			//	theme-uri
 			//	desktop-timeout
 			//	file-check-period
 			//  processing-prompt-delay
 			//	tooltip-delay
+			//  keep-across-visits
 				parseThemeUri(config, el);
 
 				Element subel = el.getElement("disable-default-theme");
@@ -116,6 +117,9 @@ public class ConfigParser {
 				v = parseInteger(el, "tooltip-delay", true);
 				if (v != null) config.setTooltipDelay(v.intValue());
 
+				String s = el.getElementValue("keep-across-visits", true);
+				if (s != null)
+					config.setKeepDesktopAcrossVisits(!"false".equals(s));
 			} else if ("session-config".equals(elnm)) {
 			//session-config
 			//	session-timeout
