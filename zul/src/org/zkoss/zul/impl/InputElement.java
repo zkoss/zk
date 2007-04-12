@@ -258,8 +258,7 @@ implements Constrainted {
 		if (constr != null) {
 			//Bug 1698190: contructor might be zscript
 			final HashMap backup = new HashMap();
-			final Namespace ns = Namespaces.beforeInterpret(backup, this);
-			Namespaces.pushCurrent(ns);
+			final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
 			try {
 				constr.validate(this, value);
 				if (constr instanceof CustomConstraint) {
@@ -279,8 +278,7 @@ implements Constrainted {
 					throw showCustomError(t);
 				throw UiException.Aide.wrap(ex);
 			} finally {
-				Namespaces.popCurrent();
-				Namespaces.afterInterpret(backup, ns);
+				Namespaces.afterInterpret(backup, ns, true);
 			}
 		}
 	}
@@ -298,15 +296,13 @@ implements Constrainted {
 	protected WrongValueException showCustomError(WrongValueException ex) {
 		if (_constr instanceof CustomConstraint) {
 			final HashMap backup = new HashMap();
-			final Namespace ns = Namespaces.beforeInterpret(backup, this);
-			Namespaces.pushCurrent(ns);
+			final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
 			try {
 				((CustomConstraint)_constr).showCustomError(this, ex);
 			} catch (Throwable t) {
 				log.realCause(t); //and ignore it
 			} finally {
-				Namespaces.popCurrent();
-				Namespaces.afterInterpret(backup, ns);
+				Namespaces.afterInterpret(backup, ns, true);
 			}
 		}
 		return ex;

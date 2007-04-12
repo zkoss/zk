@@ -297,8 +297,7 @@ public class Listheader extends HeaderElement {
 
 		//comparator might be zscript
 		final HashMap backup = new HashMap();
-		final Namespace ns = Namespaces.beforeInterpret(backup, this);
-		Namespaces.pushCurrent(ns);
+		final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
 		try {
 			final ListModel model = box.getModel();
 			if (model != null) { //live data
@@ -309,8 +308,7 @@ public class Listheader extends HeaderElement {
 				Components.sort(box.getItems(), cmpr);
 			}
 		} finally {
-			Namespaces.popCurrent();
-			Namespaces.afterInterpret(backup, ns);
+			Namespaces.afterInterpret(backup, ns, true);
 		}
 
 		//maintain
