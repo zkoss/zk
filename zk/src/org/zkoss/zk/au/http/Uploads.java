@@ -182,7 +182,9 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 
 		return media != null ? media:
 			fi.isInMemory() ?
-				new AMedia(name, null, ctype, fi.get()):
+				ctype.startsWith("text/") ?
+					new AMedia(name, null, ctype, fi.getString()):
+					new AMedia(name, null, ctype, fi.get()):
 				new StreamMedia(name, null, ctype, fi);
 	}
 
