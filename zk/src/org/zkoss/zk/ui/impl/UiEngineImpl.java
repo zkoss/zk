@@ -397,13 +397,13 @@ public class UiEngineImpl implements UiEngine {
 				if (isEffective(zscript, page, parent)) {
 					final Map backup = new HashMap();
 					final Namespace ns = parent != null ?
-						Namespaces.beforeInterpret(backup, parent):
-						Namespaces.beforeInterpret(backup, page);
+						Namespaces.beforeInterpret(backup, parent, false):
+						Namespaces.beforeInterpret(backup, page, false);
 					try {
 						page.interpret(zscript.getLanguage(),
 							zscript.getContent(page, parent), ns);
 					} finally {
-						Namespaces.afterInterpret(backup, ns);
+						Namespaces.afterInterpret(backup, ns, false);
 					}
 				}
 			} else if (obj instanceof AttributesInfo) {

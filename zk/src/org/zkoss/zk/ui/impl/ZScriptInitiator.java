@@ -43,12 +43,12 @@ public class ZScriptInitiator implements Initiator {
 	}
 	public void doInit(Page page, Object[] args) throws Exception {
 		final HashMap backup = new HashMap();
-		final Namespace ns = Namespaces.beforeInterpret(backup, page);
+		final Namespace ns = Namespaces.beforeInterpret(backup, page, false);
 		try {
 			page.interpret(
 				_zscript.getLanguage(), _zscript.getContent(page, null), ns);
 		} finally {
-			Namespaces.afterInterpret(backup, ns);
+			Namespaces.afterInterpret(backup, ns, false);
 		}
 	}
 	public void doAfterCompose(Page page) throws Exception {

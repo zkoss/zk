@@ -484,16 +484,14 @@ implements EventProcessingThread {
 		//Bug 1506712: event listeners might be zscript, so we have to
 		//keep built-in variables as long as possible
 		final HashMap backup = new HashMap();
-		final Namespace ns = Namespaces.beforeInterpret(backup, _comp);
-		Namespaces.pushCurrent(ns);
+		final Namespace ns = Namespaces.beforeInterpret(backup, _comp, true);
 			//we have to push since process1 might invoke methods from zscript class
 		try {
 			Namespaces.backupVariable(backup, ns, "event");
 			ns.setVariable("event", _event, true);
 			process1(ns);
 		} finally {
-			Namespaces.popCurrent();
-			Namespaces.afterInterpret(backup, ns);
+			Namespaces.afterInterpret(backup, ns, true);
 		}
 	}
 	private void process1(Namespace ns) throws Exception {

@@ -42,15 +42,26 @@ public class Namespaces {
 	 * <p>Typical use:
 	 * <pre><code>
 final Map backup = new HashMap();
-final Namespace ns = Namespaces.beforeInterpret(backup, comp);
+final Namespace ns = Namespaces.beforeInterpret(backup, comp, false);
 try {
   Namespaces.backupVariable(backup, ns, "some");
-  page.interpret(zslang, zscript, ns);
+  page.interpret(zslang, zscript, ns); //it will push ns as the current namespace
 } finally {
-  Namespaces.afterInterpret(backup, ns);
+  Namespaces.afterInterpret(backup, ns, false);
 }
 </code></pre>
-	 * </code></pre>
+	 *
+	 * <p>Another example:
+	 * <pre><code>
+final Map backup = new HashMap();
+final Namespace ns = Namespaces.beforeInterpret(backup, comp, true);
+try {
+  Namespaces.backupVariable(backup, ns, "some");
+  constr.validate(comp); //if constr might be an instance of a class implemented in zscript
+} finally {
+  Namespaces.afterInterpret(backup, ns, true);
+}
+</code></pre>
 	 *
 	 * <p>If you need to backup some variables, you can invoke
 	 * {@link #backupVariable} between {@link #beforeInterpret}
@@ -58,9 +69,14 @@ try {
 	 *
 	 * @param backup the map to hold the backup variables. Never null.
 	 * @param comp the component, never null.
+	 * @param pushNS whether to make the namespace being returned
+	 * as the current namespace ({@link #getCurrent}).
+	 * Note: its value must be the same as the popNS argument of
+	 * {@link #afterInterpret}.
 	 * @return the namespace that owns the specified component
 	 */
-	public static final Namespace beforeInterpret(Map backup, Component comp) {
+	public static final Namespace beforeInterpret(Map backup, Component comp,
+	boolean pushNS) {
 		final Namespace ns = comp.getNamespace();
 
 		backupVariable(backup, ns, "self");
@@ -75,17 +91,24 @@ try {
 		final Object arg = exec != null ? exec.getArg(): null;
 		ns.setVariable("arg", arg, true);
 
+		if (pushNS) push(ns);
 		return ns;
 	}
 	/** Prepares builtin variable before calling
-	 * {@link org.zkoss.zk.ui.Page#interpret}.
+	 * {@link org.zkoss.zk.ui.Page#interpret} or a method that might be
+	 * implemented with zscript.
 	 *
 	 * @see #beforeInterpret
 	 * @param backup the map to hold the backup variables. Never null.
 	 * @param page the page, never null.
+	 * @param pushNS whether to make the namespace being returned
+	 * as the current namespace ({@link #getCurrent}).
+	 * Note: its value must be the same as the popNS argument of
+	 * {@link #afterInterpret}.
 	 * @return the namespace that owns the specified page
 	 */
-	public static final Namespace beforeInterpret(Map backup, Page page) {
+	public static final Namespace beforeInterpret(Map backup, Page page,
+	boolean pushNS) {
 		final Namespace ns = page.getNamespace();
 
 		backupVariable(backup, ns, "arg");
@@ -94,6 +117,7 @@ try {
 		final Object arg = exec != null ? exec.getArg(): null;
 		ns.setVariable("arg", arg, true);
 
+		if (pushNS) push(ns);
 		return ns;
 	}
 	/** Used with {@link #beforeInterpret} to clean up builtin
@@ -102,8 +126,11 @@ try {
 	 * @param backup the map to hold the backup variables. Never null.
 	 * It must be the same as the backup argument of {@link #beforeInterpret}.
 	 * @param ns the namespace returned by {@link #beforeInterpret}
+	 * @param popNS whether to pop out the current namespace.
+	 * Its value must be the same as the pushNS argument of {@link #beforeInterpret}.
 	 */
-	public static final void afterInterpret(Map backup, Namespace ns) {
+	public static final void afterInterpret(Map backup, Namespace ns,
+	boolean popNS) {
 		for (Iterator it = backup.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final String name = (String)me.getKey();
@@ -112,6 +139,7 @@ try {
 			if (val != VOID) ns.setVariable(name, val, true);
 			else ns.unsetVariable(name, true);
 		}
+		if (popNS) pop(ns);
 	}
 
 	/** Backup the specfied variable, such that it can be restored with
@@ -148,50 +176,20 @@ try {
 	}
 	/** Pushes the specified namespace as the current namespace.
 	 *
-	 * <p>It must be called as follows.
-	 * <pre><code>
-Namespaces.pushCurrent(ns);
-try {
-	...
-} finally {
-	Namespaces.pop();
-}
-	 </code></pre>
-	 *
-	 * <p>In most case, it is used with {@link #beforeInterpret} as follows.
-	 * <pre><code>
-final Map backup = new HashMap();
-final Namespace ns = Namespaces.beforeInterpret(backup, comp);
-Namespaces.pushCurrent(ns);
-try {
-  Namespaces.backupVariable(backup, ns, "some");
-  page.interpret(zslang, zscript, ns);
-} finally {
-  Namespaces.afterInterpret(backup, ns);
-  Namespaces.popCurrent();
-}
-</code></pre>
-	 *
-	 * <p>Application developer rarely needs to call this method, unless
-	 * he wants to simulate the context of a particular namespace
-	 * for interpreter to evaluate (mostly methods of classes defined
-	 * in scripting codes).
-	 *
 	 * @param ns the namespace. If null, it means page's namespace.
 	 */
-	public static final void pushCurrent(Namespace ns) {
+	private static final void push(Namespace ns) {
 		List nss = (List)_curnss.get();
 		if (nss == null)
 			_curnss.set(nss = new LinkedList());
 		nss.add(0, ns);
 	}
-	/** Pops the current namespce (pushed by {@link #pushCurrent}).
+	/** Pops the current namespce (pushed by {@link #push}).
 	 */
-	public static final void popCurrent() {
+	private static final void pop(Namespace ns) {
 		final List nss = (List)_curnss.get();
-		if (nss == null || nss.isEmpty())
-			log.error("Illegal popCurrent: empty stack");
-		nss.remove(0);
+		if (nss.remove(0) != ns)
+			log.realCauseBriefly(new IllegalStateException("Unmatched pop the current namespace"));
 	}
 
 	/** A stack of current namespace. */
