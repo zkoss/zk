@@ -83,8 +83,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	abstract protected ELContext getELContext();
 
 	//-- Execution --//
-	public boolean isAsyncUpdate(Page page) {
-		return page != null && (_creating == null || _creating != page);
+	public final boolean isAsyncUpdate(Page page) {
+		return _creating == null || (page != null && _creating != page);
 	}
 	public Desktop getDesktop() {
 		return _desktop;

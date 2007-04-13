@@ -37,10 +37,12 @@ public interface Visualizer {
 	/** Whether the execution associated with this visualizer
 	 * is caued by an async-update.
 	 *
-	 * <p>Note: unlike {@link Execution#isAsyncUpdate}, which it
-	 * tells whether a page is in async-update, this method tells whether
-	 * this first execution is caused by async-update (no matter this
-	 * execution is async-update or creating a new page).
+	 * <p>Note: There might be a chain of executions.
+	 * {@link Execution#isAsyncUpdate} returns whether a page is
+	 * in async-update in the execution being called,
+	 * On the other hand, this method returns whether
+	 * this first execution (of the whole chain) is caused by
+	 * async-update.
 	 */
 	public boolean isEverAsyncUpdate();
 	/** Adds the responses to the first {@link Visualizer} if it is

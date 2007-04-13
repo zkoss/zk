@@ -144,7 +144,7 @@ import org.zkoss.zk.au.*;
 	/** Invalidates the whole page.
 	 */
 	public void addInvalidate(Page page) {
-		if (!_exec.isAsyncUpdate(page))
+		if (page == null || !_exec.isAsyncUpdate(page))
 			return; //nothing to do
 
 		if (_pgInvalid == null)
@@ -155,7 +155,8 @@ import org.zkoss.zk.au.*;
 	 * to {@link #addSmartUpdate} are ignored in this execution.
 	 */
 	public void addInvalidate(Component comp) {
-		if (!_exec.isAsyncUpdate(comp.getPage()))
+		final Page page = comp.getPage();
+		if (page == null || !_exec.isAsyncUpdate(page))
 			return; //nothing to do
 
 		checkDesktop(comp);
@@ -174,7 +175,8 @@ import org.zkoss.zk.au.*;
 	 * execution
 	 */
 	public void addSmartUpdate(Component comp, String attr, String value) {
-		if (!_exec.isAsyncUpdate(comp.getPage()) || _invalidated.contains(comp))
+		final Page page = comp.getPage();
+		if (page == null || !_exec.isAsyncUpdate(page) || _invalidated.contains(comp))
 			return; //nothing to do
 
 		checkDesktop(comp);
@@ -193,7 +195,8 @@ import org.zkoss.zk.au.*;
 	 * @param newpg the page after moved
 	 */
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
-		if ((newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
+		if ((newpg == null && oldpg == null)
+		|| (newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
 		|| (oldpg == null && !_exec.isAsyncUpdate(newpg))) //attach to loading pg
 			return; //to avoid redundant AuRemove
 
@@ -293,7 +296,8 @@ import org.zkoss.zk.au.*;
 				continue;
 
 			final Component comp = (Component)o;
-			if (!_exec.isAsyncUpdate(comp.getPage())) {
+			final Page page = comp.getPage();
+			if (page == null || !_exec.isAsyncUpdate(page)) {
 				if (!bResponse) it.remove(); //just in case
 				continue;
 			}
@@ -356,7 +360,8 @@ import org.zkoss.zk.au.*;
 	private void doChildChanged(Collection col, Set ccawares, Set checked) {
 		for (Iterator it = col.iterator(); it.hasNext();) {
 			Component comp = (Component)it.next();
-			if (!_exec.isAsyncUpdate(comp.getPage()))
+			final Page page = comp.getPage();
+			if (page == null || !_exec.isAsyncUpdate(page))
 				continue;
 
 			while ((comp = comp.getParent()) != null) {
@@ -542,19 +547,22 @@ import org.zkoss.zk.au.*;
 			final Component comp = attached[j];
 			//Note: attached comp might change from another page to
 			//the one being created. In this case, no need to add
-			if (comp != null && _exec.isAsyncUpdate(comp.getPage())) {
-				assert D.OFF || !isTransparent(comp): "not resolved?" +comp;
+			if (comp != null) {
+				final Page page = comp.getPage();
+				if (page != null && _exec.isAsyncUpdate(page)) {
+					assert D.OFF || !isTransparent(comp): "not resolved?" +comp;
 
-				final Component parent = getNonTransparentParent(comp);
-				final Set newsibs = new LinkedHashSet(37);
-				newsibs.add(comp);
-				desktops.add(newsibs);
+					final Component parent = getNonTransparentParent(comp);
+					final Set newsibs = new LinkedHashSet(37);
+					newsibs.add(comp);
+					desktops.add(newsibs);
 
-				for (int k = j + 1; k < attached.length; ++k) {
-					final Component ck = attached[k];
-					if (ck != null && getNonTransparentParent(ck) == parent) {
-						newsibs.add(ck);
-						attached[k] = null;
+					for (int k = j + 1; k < attached.length; ++k) {
+						final Component ck = attached[k];
+						if (ck != null && getNonTransparentParent(ck) == parent) {
+							newsibs.add(ck);
+							attached[k] = null;
+						}
 					}
 				}
 			}
@@ -621,8 +629,8 @@ import org.zkoss.zk.au.*;
 		final Set removed = new HashSet();
 		for (Iterator it = _moved.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
-			final Page pg = comp.getPage();
-			if (pg == null) {
+			final Page page = comp.getPage();
+			if (page == null) {
 				removed.add(comp);
 
 				if (_responses != null) _responses.remove(comp);
@@ -632,8 +640,8 @@ import org.zkoss.zk.au.*;
 				responses.add(new AuRemove(comp));
 				//Note: it is too late to handle isTransparent here
 				//because it is detached and we don't know it is ex-parent
-			} else {
-				if (_exec.isAsyncUpdate(pg))
+			} else { //page != null
+				if (_exec.isAsyncUpdate(page))
 					responses.add(new AuRemove(comp));
 				_attached.add(comp);
 					//copy to _attached since we handle them later in the same way

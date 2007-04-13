@@ -60,13 +60,16 @@ public interface Execution extends Evaluator {
 	 */
 	public Desktop getDesktop();
 
-	/** Returns whether this execution does asynchronous updates for the
-	 * specified page (thru zkau).
+	/** Returns whether this execution is asynchronous updating the
+	 * specified page (thru ZK Update Engine).
 	 *
-	 * @return false if page is null, or page is not the page being
-	 * asynchronous updated.
-	 * Each execution remembers what page is being creating (or none being
-	 * created). All other pages are consided as being asynchronous updated.
+	 * @return whether the specified page is being asynchronous updated
+	 * by this execution.
+	 * If the specified page is null, this method returns
+	 * whether this execution is asynchronous updating a page
+	 * (rather than creating/loading a new page).
+	 * Each execution remembers the page being creating.
+	 * All other pages are consided as being asynchronous updated.
 	 */
 	public boolean isAsyncUpdate(Page page);
 
