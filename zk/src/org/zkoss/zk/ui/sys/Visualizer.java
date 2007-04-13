@@ -38,7 +38,7 @@ public interface Visualizer {
 	 * is caued by an async-update.
 	 *
 	 * <p>Note: unlike {@link Execution#isAsyncUpdate}, which it
-	 * tells whether a page is async-update, this method tells whether
+	 * tells whether a page is in async-update, this method tells whether
 	 * this first execution is caused by async-update (no matter this
 	 * execution is async-update or creating a new page).
 	 */

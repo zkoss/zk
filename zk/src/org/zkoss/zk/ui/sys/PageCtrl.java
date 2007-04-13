@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.ZScript;
 
 /**
  * Addition interface to {@link org.zkoss.zk.ui.Page} for implementation
@@ -116,6 +117,14 @@ public interface PageCtrl {
 	 */
 	public boolean hasFellow(String compId);
 
+	/** Adds a deferred zscript.
+	 *
+	 * @param parent the component that is the parent of zscript (in
+	 * the ZUML page), or null if it belongs to the page.
+	 * @param zscript the zscript that shall be evaluated as late as
+	 * when the interpreter of the same language is being loaded.
+	 */
+	public void addDeferredZScript(Component parent, ZScript zscript);
  	/** Returns the default parent, or null if no such parent.
  	 * If a default parent is defined (by use of {@link #setDefaultParent}),
  	 * {@link org.zkoss.zk.ui.Executions#createComponents(String, Component, java.util.Map)} will

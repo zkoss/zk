@@ -394,7 +394,9 @@ public class UiEngineImpl implements UiEngine {
 				}
 			} else if (obj instanceof ZScript) {
 				final ZScript zscript = (ZScript)obj;
-				if (isEffective(zscript, page, parent)) {
+				if (zscript.isDeferred()) {
+					((PageCtrl)page).addDeferredZScript(parent, zscript);
+				} else if (isEffective(zscript, page, parent)) {
 					final Map backup = new HashMap();
 					final Namespace ns = parent != null ?
 						Namespaces.beforeInterpret(backup, parent, false):

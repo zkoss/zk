@@ -599,9 +599,12 @@ public class Parser {
 		if (annotInfo.clear())
 			log.warning("Annotations are ignored since <zscript> doesn't support them, "+el.getLocator());
 
-		final String ifc = el.getAttributeValue("if"),
+		final String
+			ifc = el.getAttributeValue("if"),
 			unless = el.getAttributeValue("unless"),
 			zsrc = el.getAttributeValue("src");
+		final boolean
+			deferred = "true".equals(el.getAttributeValue("deferred"));
 
 		String zslang = el.getAttributeValue("language");
 		if (zslang == null) {
@@ -624,12 +627,16 @@ public class Parser {
 				zs = new ZScript(zslang, url, cond);
 			}
 
+			if (deferred) zs.setDeferred(true);
 			parent.appendChild(zs);
 		}
 
 		final String script = el.getText(true);
-		if (!isEmpty(script))
-			parent.appendChild(new ZScript(zslang, script, cond));
+		if (!isEmpty(script)) {
+			final ZScript zs = new ZScript(zslang, script, cond);
+			if (deferred) zs.setDeferred(true);
+			parent.appendChild(zs);
+		}
 	}
 	private void parseAttribute(ComponentInfo parent, Element el,
 	AnnotInfo annotInfo) throws Exception {

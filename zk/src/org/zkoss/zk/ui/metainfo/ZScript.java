@@ -48,6 +48,7 @@ public class ZScript implements Condition, java.io.Serializable {
 	private final Object _url;
 	private final Locator _locator;
 	private final Condition _cond;
+	private boolean _deferred;
 
 	/** Parses the content into a {@link ZScript} instance.
 	 *
@@ -203,6 +204,18 @@ public class ZScript implements Condition, java.io.Serializable {
 		if (!(o instanceof String))
 			throw new IOException("Illegal file type: "+o.getClass());
 		return (String)o;
+	}
+
+	/** Returns whether the evaluation of the zscript shall be deferred.
+	 */
+	public boolean isDeferred() {
+		return _deferred;
+	}
+	/** Sets whether the evaluation of the zscript shall be deferred.
+	 * <p>Default: false.
+	 */
+	public void setDeferred(boolean deferred) {
+		_deferred = deferred;
 	}
 
 	//Condition//

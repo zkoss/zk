@@ -63,6 +63,8 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.metainfo.ZScript;
+import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -101,7 +103,7 @@ import org.zkoss.zk.scripting.util.AbstractNamespace;
 public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);
 	private static final Log _zklog = Log.lookup("org.zkoss.zk.log");
-    private static final long serialVersionUID = 20060707L;
+    private static final long serialVersionUID = 20070413L;
 
 	/** URI for redrawing as a desktop or part of another desktop. */
 	private final String _dkUri, _pgUri;
@@ -114,6 +116,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private String _title = "", _style = "";
 	private final String _path;
 	private String _zslang;
+	/** A list of deferred zscript [Component parent, {@link ZScript}]. */
+	private List _zsDeferred;
 	/** A list of root components. */
 	private final List _roots = new LinkedList();
 	private transient List _roRoots;
@@ -670,9 +674,17 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				ns.setVariable("page", this, true);
 				ip.interpret(script, ns);
 			}
+
+			//evaluate deferred zscripts, if any
+			try {
+				evalDeferredZScripts(ip, zslang);
+			} catch (IOException ex) {
+				throw new UiException(ex);
+			}
 		}
 		return ip;
 	}
+
 	public Collection getLoadedInterpreters() {
 		return _ips.values();
 	}
@@ -686,6 +698,45 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				throw new InterpreterNotFoundException(zslang, MZk.INTERPRETER_NOT_FOUND, zslang);
 			_zslang = zslang;
 		}
+	}
+	public void addDeferredZScript(Component parent, ZScript zscript) {
+		if (zscript != null) {
+			if (_zsDeferred == null)
+				_zsDeferred = new LinkedList();
+			_zsDeferred.add(new Object[] {parent, zscript});
+		}
+	}
+	/** Evaluates the deferred zscript.
+	 * It is called when the interpreter is loaded
+	 */
+	private void evalDeferredZScripts(Interpreter ip, String zslang)
+	throws IOException {
+		if (_zsDeferred != null) {
+			for (Iterator it = _zsDeferred.iterator(); it.hasNext();) {
+				final Object[] zsInfo = (Object[])it.next();
+				final ZScript zscript = (ZScript)zsInfo[1];
+				String targetlang = zscript.getLanguage();
+				if (targetlang == null)
+					targetlang = _zslang; //use default
+
+				if (targetlang.equalsIgnoreCase(zslang)) { //case insensitive
+					it.remove(); //done
+
+					final Component parent = (Component)zsInfo[0];
+					if ((parent == null || parent.getPage() == this)
+					&& isEffective(zscript, parent)) {
+						ip.interpret(zscript.getContent(this, parent),
+							parent != null ? parent.getNamespace(): _ns);
+					}
+				}
+			}
+
+			if (_zsDeferred.isEmpty())
+				_zsDeferred = null;
+		}
+	}
+	private boolean isEffective(Condition cond, Component comp) {
+		return comp != null ? cond.isEffective(comp): cond.isEffective(this);
 	}
 
 	public boolean isListenerAvailable(String evtnm) {
