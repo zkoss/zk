@@ -54,6 +54,7 @@ import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 
@@ -84,7 +85,8 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 		final int k = pi.indexOf('/', ++j);
 		final String uuid = k >= 0 ? pi.substring(j, k): pi.substring(j);
 
-		final Media media;
+		Media media;
+		boolean download = false;
 		try {
 			final WebApp wapp = sess.getWebApp();
 			final WebAppCtrl wappc = (WebAppCtrl)wapp;
@@ -101,14 +103,19 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 			try {
 				config.invokeExecutionInits(exec, oldexec);
 
-				final Component comp = desktop.getComponentByUuid(uuid);
-				final Object cc = ((ComponentCtrl)comp).getExtraCtrl();
-				if (!(cc instanceof DynamicMedia))
-					throw new ServletException(DynamicMedia.class+" must be implemented by getExtraCtrl() of "+comp);
-				media = ((DynamicMedia)cc).getMedia(k >= 0 ? pi.substring(k): "");
-				if (media == null) {
-					response.sendError(response.SC_GONE, "Media not found in "+comp);
-					return;
+				media = ((DesktopCtrl)desktop).getDownloadMedia(uuid, true);
+				if (media != null) {
+					download = true; //yes, it is for download
+				} else {
+					final Component comp = desktop.getComponentByUuid(uuid);
+					final Object cc = ((ComponentCtrl)comp).getExtraCtrl();
+					if (!(cc instanceof DynamicMedia))
+						throw new ServletException(DynamicMedia.class+" must be implemented by getExtraCtrl() of "+comp);
+					media = ((DynamicMedia)cc).getMedia(k >= 0 ? pi.substring(k): "");
+					if (media == null) {
+						response.sendError(response.SC_GONE, "Media not found in "+comp);
+						return;
+					}
 				}
 			} catch (Throwable ex) {
 				err = true;
@@ -143,6 +150,14 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 		final String ctype = media.getContentType();
 		if (ctype != null)
 			response.setContentType(ctype);
+
+		if (download) {
+			String value = "attachment;";
+			final String flnm = media.getName();
+			if (flnm != null && flnm.length() > 0)
+				value += "filename="+flnm;
+			response.setHeader("content-disposition", value);
+		}
 
 		if (!media.inMemory()) {
 			if (media.isBinary()) {

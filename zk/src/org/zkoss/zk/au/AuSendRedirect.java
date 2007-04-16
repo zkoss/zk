@@ -21,6 +21,7 @@ package org.zkoss.zk.au;
 /**
  * A response to send a temporary redirect response to the client
  * using the specified redirect location URL.
+ *
  * <p>data[0]: the URL to redirect to.
  *
  * @author tomyeh

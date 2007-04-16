@@ -1682,6 +1682,12 @@ zkau.cmd0 = { //no uuid at all
 			zk.innerWidth(), zk.innerHeight(), zk.innerX(), zk.innerY()
 		]});
 	},
+	download: function (url) {
+		if (url) {
+			var html = '<iframe src="'+url+'" style="display:none;width:0;height:0;border:0"></iframe>';
+			zk.insertHTMLBeforeEnd(document.body, html);
+		}
+	},
 	print: function () {
 		window.print();
 	},

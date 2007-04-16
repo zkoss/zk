@@ -26,7 +26,9 @@ import java.util.LinkedHashMap;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
+import org.zkoss.util.CacheMap;
 import org.zkoss.util.logging.Log;
+import org.zkoss.util.media.Media;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
@@ -67,7 +69,10 @@ import org.zkoss.zk.au.AuBookmark;
  */
 public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(DesktopImpl.class);
-    private static final long serialVersionUID = 20060622L;
+    private static final long serialVersionUID = 20070416L;
+
+	/** Represents media. It must be distinguishable from component's ID. */
+	private static final String MEDIA_PREFIX = "med";
 
 	private transient WebApp _wapp;
 	private transient Session _sess;
@@ -99,6 +104,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient RequestQueue _rque;
 	private String _bookmark = "";
 	private String _clientType;
+	/** A map of media (String key, Media content). */
+	private CacheMap _meds;
+	/** ID used to identify what is stored in _meds. */
+	private int _medId;
 
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
@@ -197,7 +206,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (!(((ComponentCtrl)comp).getExtraCtrl() instanceof DynamicMedia))
 			throw new UiException(DynamicMedia.class+" not implemented by getExtraCtrl() of "+comp);
 
-		final StringBuffer sb = new StringBuffer(32)
+		final StringBuffer sb = new StringBuffer(64)
 			.append("/view/").append(getId())
 			.append('/').append(comp.getUuid());
 
@@ -206,6 +215,31 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			sb.append(pathInfo);
 		}
 		return getUpdateURI(sb.toString());
+	}
+	public String getDownloadMediaURI(Media media, String pathInfo) {
+		if (media == null)
+			throw new IllegalArgumentException("null media");
+
+		if (_meds == null)
+			_meds = new CacheMap().setLifetime(6 * 60 * 1000);
+				//6 minutes (consider to be configurable)
+		String medId = Strings.encode(
+			new StringBuffer(12).append(MEDIA_PREFIX), _medId++).toString();
+		_meds.put(medId, media);
+
+		final StringBuffer sb = new StringBuffer(64)
+			.append("/view/").append(getId())
+			.append('/').append(medId);
+
+		if (pathInfo != null && pathInfo.length() > 0) {
+			if (!pathInfo.startsWith("/")) sb.append('/');
+			sb.append(pathInfo);
+		}
+		return getUpdateURI(sb.toString());
+	}
+	public Media getDownloadMedia(String medId, boolean remove) {
+		return _meds != null ? remove ?
+			(Media)_meds.remove(medId): (Media)_meds.get(medId): null;
 	}
 
 	public Page getPage(String pageId) {

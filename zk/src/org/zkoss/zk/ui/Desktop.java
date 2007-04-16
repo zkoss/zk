@@ -21,6 +21,8 @@ package org.zkoss.zk.ui;
 import java.util.Map;
 import java.util.Collection;
 
+import org.zkoss.util.media.Media;
+
 /**
  * Represents a desktop.
  * All pages that is created from the same URL is called a desktop.
@@ -148,7 +150,7 @@ public interface Desktop {
 	 */
 	public void setBookmark(String name);
 
-	/** Returns URI for a dynamic generated media.
+	/** Returns URI for a dynamic generated media associated with a component.
 	 * ZK Update Engine will then invoke invoke
 	 * {@link org.zkoss.zk.ui.ext.render.DynamicMedia#getMedia} to response.
 	 *
@@ -159,4 +161,12 @@ public interface Desktop {
 	 * <p>Used mainly for component implementation.
 	 */
 	public String getDynamicMediaURI(Component comp, String pathInfo);
+	/** Returns URI for a media that is used to download to the client.
+	 * The client will open a Save As dialog to save the specified file.
+	 *
+	 * <p>Note: once called, the media belongs to desktop and it is
+	 * purged automatically. Thus, don't access it again after calling
+	 * this method.
+	 */
+	public String getDownloadMediaURI(Media media, String pathInfo);
 }

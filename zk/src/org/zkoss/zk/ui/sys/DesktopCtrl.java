@@ -20,6 +20,8 @@ package org.zkoss.zk.ui.sys;
 
 import java.util.Collection;
 
+import org.zkoss.util.media.Media;
+
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -134,4 +136,16 @@ if (c.isEmpty()) {
 	 * false if no such thread or it is not suspended.
 	 */
 	public boolean ceaseSuspendedThread(EventProcessingThread evtthd, String cause);
+
+	/** Returns the media that is associated with
+	 * {@link org.zkoss.zk.ui.Desktop#getDownloadMediaURI}, or
+	 * null if not found.
+	 *
+	 * <p>This method is used internally. Developers rarely need to
+	 * access this method.
+	 *
+	 * @param remove whether to remove it from cache once returned.
+	 * @return the media or null if not found.
+	 */
+	public Media getDownloadMedia(String medId, boolean remove);
 }
