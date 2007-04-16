@@ -55,7 +55,6 @@ public class ContentTypes {
 			ctype = (String)_fmt2ct.get(format);
 		}
 
-		//if (ctype == null && log.debugable())	log.debug("Unknown format: "+format);
 		return ctype;
 	}
 	/** Returns the format of the specified content type, or null if not found.
@@ -68,16 +67,18 @@ public class ContentTypes {
 		}
 		if (format == null) {
 			//sometime, content type is "text/html;charset=UTF-8"
-			final int j = ctype.indexOf(';');
+			int j = ctype.indexOf(';');
 			if (j >= 0) {
+				ctype = ctype.substring(0, j);
 				synchronized (_ct2fmt) {
-					format = (String)_ct2fmt.get(ctype.substring(0, j));
+					format = (String)_ct2fmt.get(ctype);
 				}
 			}
+			if (format == null) {
+				j = ctype.indexOf('/');
+				format = j >= 0 ? ctype.substring(j + 1): ctype;
+			}	
 		}
-
-		if (D.ON && format == null && !"application/octet-stream".equals(ctype))
-			log.warning("Unknown content type: "+ctype);
 		return format;
 	}
 	/** Adds additional binding of the format and content type.
