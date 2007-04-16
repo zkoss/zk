@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.zk.ui.Desktop;
+
 /**
  * Represents a class that is able to handle fail-over in the
  * application specific way.
@@ -41,4 +43,10 @@ package org.zkoss.zk.ui.sys;
  * @author tomyeh
  */
 public interface FailoverManager {
+	/** Tests whether the specified desktop ID is recoverable.
+	 */
+	public boolean isRecoverable(String desktopId);
+	/** Recovers the specified desktop.
+	 */
+	public void recover(Desktop desktop);
 }
