@@ -41,6 +41,7 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * <p>A non-XUL extension.
  *
  * @author tomyeh
+ * @see Filedownload
  */
 public class Fileupload {
 	private static String _templ = "~./zul/html/fileupload.zul";
