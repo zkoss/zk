@@ -2,10 +2,11 @@
 ZK 2.3.1 Freshly
 * Features:
   1698249: A way to customize the error box withouot writing JavaScript
+  1690498: A way to download a file from server with save as dialog
   1688892: A way to abandom Milieu
   1699729: Adds the deferred option to zscript
   1686198: A way to specify custom attributes in lang addon
-  1688093: Remove Component's param since it's redundant to custom-attr
+  1688093: Remove Component's param since it's redundant to custom-attribute
   1686617: generate onClientInfo when browser size changes
   1687371: button and checkbox suport DoubleClick
   1689560: Add Events.sendEvent(Event evt)
