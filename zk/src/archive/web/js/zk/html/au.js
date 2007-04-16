@@ -1684,8 +1684,13 @@ zkau.cmd0 = { //no uuid at all
 	},
 	download: function (url) {
 		if (url) {
-			var html = '<iframe src="'+url+'" style="display:none;width:0;height:0;border:0"></iframe>';
-			zk.insertHTMLBeforeEnd(document.body, html);
+			var ifr = $e('zk_download');
+			if (ifr) {
+				ifr.src = url; //It is OK to reuse the same iframe
+			} else {
+				var html = '<iframe src="'+url+'" id="zk_download" name="zk_download" style="display:none;width:0;height:0;border:0"></iframe>';
+				zk.insertHTMLBeforeEnd(document.body, html);
+			}
 		}
 	},
 	print: function () {
