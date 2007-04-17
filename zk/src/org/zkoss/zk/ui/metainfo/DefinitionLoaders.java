@@ -61,7 +61,7 @@ public class DefinitionLoaders {
 	private static final Log log = Log.lookup(DefinitionLoaders.class);
 
 	private static List _addons;
-	private static String _zkver;
+	private static short[] _zkver;
 	private static boolean _loaded;
 
 	/** Adds a language addon.
@@ -87,7 +87,23 @@ public class DefinitionLoaders {
 	 * <p>It is used when loading the definions.
 	 */
 	public static void setZkVersion(String version) {
-		_zkver = version != null && version.length() > 0 ? version: null;
+		if (version != null) {
+			_zkver = new short[4];
+			int cnt = 0;
+			for (int j = 0, len = version.length();
+			j < len && cnt < 4 && version.charAt(j) != '-'; ++cnt) {
+				final int k = Strings.anyOf(version, ".-_", j);
+				final String s = version.substring(j, k);
+				try {
+					_zkver[cnt] = Short.parseShort(s);
+				} catch (Throwable ex) {
+					log.warning("Unknown ZK version: "+version);
+					break; //assume OK
+				}
+				j = k + 1;
+			}
+			if (cnt == 0) _zkver = null;
+		}
 	}
 
 	/** Loads all config.xml, lang.xml and lang-addon.xml found in
@@ -211,35 +227,22 @@ public class DefinitionLoaders {
 	 */
 	private static boolean checkZkVersion(String required) {
 		if (_zkver != null && required != null) {
-			final int curlen = _zkver.length(), reqlen = required.length();
-			for (int cur = 0, req = 0; cur < curlen && _zkver.charAt(cur) != '-'
-			&& req < reqlen && required.charAt(req) != '-';) {
-				//parse current version
-				int l = Strings.anyOf(_zkver, ".-", cur);
-				String s = _zkver.substring(cur, l);
-				int curVal;
+			for (int j = 0, cnt = 0, len = required.length();
+			j < len && cnt < 4 && required.charAt(j) != '-'; ++cnt) {
+				final int k = Strings.anyOf(required, ".-_", j);
+				final String s = required.substring(j, k);
+				short val;
 				try {
-					curVal = Integer.parseInt(s);
+					val = Short.parseShort(s);
 				} catch (Throwable ex) {
-					log.warning("Unknown version: "+_zkver);
-					return true; //assume OK
+					log.warning("Unknown zk-version: "+required);
+					break; //assume OK
 				}
-				cur = l + 1;
 
-				//parse target version
-				l = Strings.anyOf(required, ".-", req);
-				s = required.substring(req, l);
-				int reqVal;
-				try {
-					reqVal = Integer.parseInt(s);
-				} catch (Throwable ex) {
-					log.warning("Unknown version: "+required);
-					return true; //assume OK
-				}
-				req = l + 1;
+				if (val < _zkver[cnt]) return true; //OK
+				if (val > _zkver[cnt]) return false; //failed
 
-				if (reqVal > curVal) return false; //failed
-				if (reqVal < curVal) return true; //OK
+				j = k + 1;
 			}
 		}
 		return true;
