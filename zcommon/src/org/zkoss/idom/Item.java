@@ -113,8 +113,6 @@ public interface Item {
 	 * For binable vertices, getText is actually getValue().toString().
 	 *
 	 * <p>The returned value is neither trimmed nor normalized.
-	 * To trim, invoke String.trim.
-	 * To normalize, invoke org.zkoss.lang.Strings.normalize.
 	 */
 	public String getText();
 	/**
