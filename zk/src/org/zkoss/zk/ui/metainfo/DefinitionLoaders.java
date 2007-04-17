@@ -33,6 +33,7 @@ import java.io.IOException;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
@@ -86,7 +87,7 @@ public class DefinitionLoaders {
 	 * <p>It is used when loading the definions.
 	 */
 	public static void setZkVersion(String version) {
-		_zkver = version;
+		_zkver = version != null && version.length() > 0 ? version: null;
 	}
 
 	/** Loads all config.xml, lang.xml and lang-addon.xml found in
@@ -182,9 +183,14 @@ public class DefinitionLoaders {
 	private static boolean checkVersion(URL url, Document doc) throws Exception {
 		final Element el = doc.getRootElement().getElement("version");
 		if (el != null) {
+			final String zkver = el.getElementValue("zk-version", true);
+			if (!checkZkVersion(zkver)) {
+				log.info("Ignore "+url+"\nCause: ZK version must be "+zkver+" or later, not "+_zkver);
+				return false;
+			}
+
 			final String clsnm = IDOMs.getRequiredElementValue(el, "version-class");
 			final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
-			checkZkVersion(el.getElementValue("zk-version", true));
 			final Class cls = Classes.forNameByThread(clsnm);
 			final Field fld = cls.getField("UID");
 			final String uidInClass = (String)fld.get(null);
@@ -199,9 +205,44 @@ public class DefinitionLoaders {
 			return false; //backward compatible
 		}
 	}
-	private static void checkZkVersion(String zkver) {
-		if (_zkver != null && zkver != null) {
+	/** Compares whether _zkver is no less than zkver.
+	 * It assumes the version format: nn.nn.nn-x, and it compares
+	 * only the numbers before -, if any.
+	 */
+	private static boolean checkZkVersion(String required) {
+		if (_zkver != null && required != null) {
+			final int curlen = _zkver.length(), reqlen = required.length();
+			for (int cur = 0, req = 0; cur < curlen && _zkver.charAt(cur) != '-'
+			&& req < reqlen && required.charAt(req) != '-';) {
+				//parse current version
+				int l = Strings.anyOf(_zkver, ".-", cur);
+				String s = _zkver.substring(cur, l);
+				int curVal;
+				try {
+					curVal = Integer.parseInt(s);
+				} catch (Throwable ex) {
+					log.warning("Unknown version: "+_zkver);
+					return true; //assume OK
+				}
+				cur = l + 1;
+
+				//parse target version
+				l = Strings.anyOf(required, ".-", req);
+				s = required.substring(req, l);
+				int reqVal;
+				try {
+					reqVal = Integer.parseInt(s);
+				} catch (Throwable ex) {
+					log.warning("Unknown version: "+required);
+					return true; //assume OK
+				}
+				req = l + 1;
+
+				if (reqVal > curVal) return false; //failed
+				if (reqVal < curVal) return true; //OK
+			}
 		}
+		return true;
 	}
 
 	private static void parseConfig(Document doc, Locator locator)
