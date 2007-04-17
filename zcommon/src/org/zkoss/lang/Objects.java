@@ -379,18 +379,20 @@ public class Objects {
 				return ArraysX.toString((Object[])o);
 			if (o instanceof int[])
 				return ArraysX.toString((int[])o);
-			if (o instanceof byte[])
-				return ArraysX.toString((byte[])o);
-			if (o instanceof char[])
-				return ArraysX.toString((char[])o);
+			if (o instanceof short[])
+				return ArraysX.toString((short[])o);
 			if (o instanceof long[])
 				return ArraysX.toString((long[])o);
 			if (o instanceof double[])
 				return ArraysX.toString((double[])o);
-			if (o instanceof float[])
-				return ArraysX.toString((float[])o);
+			if (o instanceof byte[])
+				return ArraysX.toString((byte[])o);
 			if (o instanceof boolean[])
 				return ArraysX.toString((boolean[])o);
+			if (o instanceof char[])
+				return ArraysX.toString((char[])o);
+			if (o instanceof float[])
+				return ArraysX.toString((float[])o);
 		}
 		return o.toString();
  	}
