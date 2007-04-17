@@ -196,7 +196,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 	throws FileUploadException {
 		final Map params = new HashMap();
 		final ServletFileUpload sfu =
-			new ServletFileUpload(new ZKFileItemFactory(desktop, request));
+			new ServletFileUpload(new ZkFileItemFactory(desktop, request));
 		final Configuration cfg = desktop.getWebApp().getConfiguration();
 		final int maxsz = cfg.getMaxUploadSize();
 		sfu.setSizeMax(maxsz >= 0 ? 1024L*maxsz: -1);
