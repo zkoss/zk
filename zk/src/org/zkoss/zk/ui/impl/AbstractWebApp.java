@@ -83,7 +83,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_config = config;
 		_config.setWebApp(this);
 
-		DefinitionLoaders.setZKVersion(getVersion());
+		DefinitionLoaders.setZkVersion(getVersion());
 
 		Class cls = _config.getUiEngineClass();
 		final UiEngine engine;

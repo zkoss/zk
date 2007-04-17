@@ -85,7 +85,7 @@ public class DefinitionLoaders {
 	 *
 	 * <p>It is used when loading the definions.
 	 */
-	public static void setZKVersion(String version) {
+	public static void setZkVersion(String version) {
 		_zkver = version;
 	}
 
@@ -184,7 +184,7 @@ public class DefinitionLoaders {
 		if (el != null) {
 			final String clsnm = IDOMs.getRequiredElementValue(el, "version-class");
 			final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
-			checkZKVersion(el.getElementValue("zk-version", true));
+			checkZkVersion(el.getElementValue("zk-version", true));
 			final Class cls = Classes.forNameByThread(clsnm);
 			final Field fld = cls.getField("UID");
 			final String uidInClass = (String)fld.get(null);
@@ -199,7 +199,7 @@ public class DefinitionLoaders {
 			return false; //backward compatible
 		}
 	}
-	private static void checkZKVersion(String zkver) {
+	private static void checkZkVersion(String zkver) {
 		if (_zkver != null && zkver != null) {
 		}
 	}
