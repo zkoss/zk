@@ -186,6 +186,9 @@ public class ClassLocator implements Locator {
 			this.url = url;
 			this.document = document;
 		}
+		public String toString() {
+			return "[res: " + url + ']';
+		}
 	}
 
 	//-- Locator --//
