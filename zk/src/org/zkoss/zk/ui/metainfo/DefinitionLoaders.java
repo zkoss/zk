@@ -28,7 +28,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Enumeration;
-import java.util.Collections;
 import java.net.URL;
 import java.io.IOException;
 
@@ -60,27 +59,53 @@ import org.zkoss.zk.scripting.Interpreters;
 public class DefinitionLoaders {
 	private static final Log log = Log.lookup(DefinitionLoaders.class);
 
-	private static List _addons = Collections.EMPTY_LIST;
+	private static List _addons;
+	private static String _zkver;
+	private static boolean _loaded;
 
 	/** Adds a language addon.
-	 *
-	 * <p>Note: this method can be called only before definitions have
-	 * been loaded.
-	 *
-	 * @exception IllegalStateException if definitions has been loaded.
 	 */
-	public static void addLanguage(Locator locator, URL url) {
+	public static void addAddon(Locator locator, URL url) {
 		if (locator == null || url == null)
 			throw new IllegalArgumentException("null");
-		if (_addons == null)
-			throw new IllegalStateException("Definition has been loaded. You cannot add more.");
-		if (_addons == Collections.EMPTY_LIST)
-			_addons = new LinkedList();
-		_addons.add(new Object[] {locator, url});
+		if (_loaded) {
+			loadAddon(locator, url);
+		} else {
+			if (_addons == null)
+				_addons = new LinkedList();
+			_addons.add(new Object[] {locator, url});
+		}
 	}
 
-	/** Loads all lang.xml found in /metainfo/zk. */
+	//TODO: provide removeAddon to unload the definition defined by previous
+	//addon
+
+	/** Ses the ZK version that is used to check whether a language
+	 * or language-addon is acceptable.
+	 *
+	 * <p>It is used when loading the definions.
+	 */
+	public static void setZKVersion(String version) {
+		_zkver = version;
+	}
+
+	/** Loads all config.xml, lang.xml and lang-addon.xml found in
+	 * the /metainfo/zk path.
+	 *
+	 * <p>Remember to call {@link #addAddon}, if necessary, before
+	 * calling this method.
+	 */
 	/*package*/ static void load() {
+		if (!_loaded) {
+			synchronized (DefinitionLoaders.class) {
+				if (!_loaded) {
+					_loaded = true; //only once
+					load0();
+				}
+			}
+		}
+	}
+	private static void load0() {
 		final ClassLocator locator = new ClassLocator();
 
 		//1. process config.xml (no particular dependency)
@@ -131,20 +156,25 @@ public class DefinitionLoaders {
 			//keep running
 		}
 
-		//4. process other addon (from ConfigParser)
-		for (Iterator it = _addons.iterator(); it.hasNext();) {
-			final Object[] p = (Object[])it.next();
-			final Locator loc = (Locator)p[0];
-			final URL url = (URL)p[1];
-			try {
-				parseLang(new SAXBuilder(false, false, true).build(url),
-					loc, true);
-			} catch (Exception ex) {
-				log.error("Failed to load addon: "+url, ex);
-				//keep running
+		//4. process other addon (from addAddon)
+		if (_addons != null) {
+			for (Iterator it = _addons.iterator(); it.hasNext();) {
+				final Object[] p = (Object[])it.next();
+				loadAddon((Locator)p[0], (URL)p[1]);
 			}
+			_addons = null; //free memory
 		}
-		_addons = null; //prevent addLanguage being called again
+	}
+	/** Loads a language addon.
+	 */
+	private static void loadAddon(Locator locator, URL url) {
+		try {
+			parseLang(
+				new SAXBuilder(false, false, true).build(url), locator, true);
+		} catch (Exception ex) {
+			log.error("Failed to load addon: "+url, ex);
+			//keep running
+		}
 	}
 
 	/** Checks and returns whether the loaded document's version is correct.
@@ -154,6 +184,7 @@ public class DefinitionLoaders {
 		if (el != null) {
 			final String clsnm = IDOMs.getRequiredElementValue(el, "version-class");
 			final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
+			checkZKVersion(el.getElementValue("zk-version", true));
 			final Class cls = Classes.forNameByThread(clsnm);
 			final Field fld = cls.getField("UID");
 			final String uidInClass = (String)fld.get(null);
@@ -166,6 +197,10 @@ public class DefinitionLoaders {
 		} else {
 			log.info("Ignore "+url+"\nCause: version not specified");
 			return false; //backward compatible
+		}
+	}
+	private static void checkZKVersion(String zkver) {
+		if (_zkver != null && zkver != null) {
 		}
 	}
 

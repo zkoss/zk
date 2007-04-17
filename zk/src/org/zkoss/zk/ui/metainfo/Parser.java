@@ -490,16 +490,16 @@ public class Parser {
 		final String pref = ns != null ? ns.getPrefix(): "";
 		final String uri = ns != null ? ns.getURI(): "";
 		final LanguageDefinition langdef = pgdef.getLanguageDefinition();
-		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+		if ("zscript".equals(nm) && isZKElement(langdef, nm, pref, uri)) {
 			parseZScript(parent, el, annotInfo);
-		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+		} else if ("attribute".equals(nm) && isZKElement(langdef, nm, pref, uri)) {
 			if (!(parent instanceof ComponentInfo))
 				throw new UiException("<attribute> cannot be the root element, "+el.getLocator());
 
 			parseAttribute((ComponentInfo)parent, el, annotInfo);
-		} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+		} else if ("custom-attributes".equals(nm) && isZKElement(langdef, nm, pref, uri)) {
 			parseCustomAttributes(parent, el, annotInfo);
-		} else if ("variables".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+		} else if ("variables".equals(nm) && isZKElement(langdef, nm, pref, uri)) {
 			parseVariables(parent, el, annotInfo);
 		} else if (LanguageDefinition.ANNO_NAMESPACE.equals(uri)) {
 			parseAnnotation(el, annotInfo);
@@ -507,7 +507,7 @@ public class Parser {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
 
 			final ComponentInfo compInfo;
-			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+			if ("zk".equals(nm) && isZKElement(langdef, nm, pref, uri)) {
 				if (annotInfo.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
 
@@ -754,7 +754,7 @@ public class Parser {
 	 * @param uri namespace's URI
 	 */
 	private static final boolean
-	isZkElement(LanguageDefinition langdef, String nm, String pref, String uri) {
+	isZKElement(LanguageDefinition langdef, String nm, String pref, String uri) {
 		if (isDefault(langdef, pref, uri))
 			return !langdef.hasComponentDefinition(nm);
 		return LanguageDefinition.ZK_NAMESPACE.equals(uri);
@@ -765,18 +765,18 @@ public class Parser {
 	private void addAttribute(ComponentInfo compInfo, Namespace attrns,
 	String name, String value, Condition cond) throws Exception {
 		if (Events.isValid(name)) {
-			boolean bZkAttr = attrns == null;
-			if (!bZkAttr) {
+			boolean bZKAttr = attrns == null;
+			if (!bZKAttr) {
 				String pref = attrns.getPrefix(), uri = attrns.getURI();
 				LanguageDefinition langdef = compInfo.getLanguageDefinition();
 				if (langdef == null)
-					bZkAttr = true;
+					bZKAttr = true;
 				else if (isDefault(langdef, pref, uri))
-					bZkAttr = !langdef.isDynamicReservedAttributes("[event]");
+					bZKAttr = !langdef.isDynamicReservedAttributes("[event]");
 				else
-					bZkAttr = LanguageDefinition.ZK_NAMESPACE.equals(uri);
+					bZKAttr = LanguageDefinition.ZK_NAMESPACE.equals(uri);
 			}
-			if (bZkAttr) {
+			if (bZKAttr) {
 				final ZScript zscript = ZScript.parseContent(value, null);
 				if (zscript.getLanguage() == null)
 					zscript.setLanguage(

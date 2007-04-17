@@ -240,7 +240,7 @@ public class ConfigParser {
 			if (url == null)
 				log.error("File not found: "+path+", at "+el.getLocator());
 			else
-				DefinitionLoaders.addLanguage(locator, url);
+				DefinitionLoaders.addAddon(locator, url);
 		}
 	}
 	/** Parse a class, if specified, whether it implements cls.

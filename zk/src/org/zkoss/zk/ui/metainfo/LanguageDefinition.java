@@ -111,6 +111,7 @@ public class LanguageDefinition {
 	 */
 	public static boolean exists(String name) {
 		init();
+
 		synchronized (_ldefByName) {
 			return _ldefByName.containsKey(name);
 		}
@@ -126,6 +127,7 @@ public class LanguageDefinition {
 	 */
 	public static final LanguageDefinition lookup(String name) {
 		init();
+
 		if (name == null || name.length() == 0)
 			name = "xul/html";
 		final LanguageDefinition langdef;
@@ -187,13 +189,8 @@ public class LanguageDefinition {
 
 		return _ldefsByClient.keySet();
 	}
-	private static void init() {
-		if (_ldefsByClient.isEmpty()) {//OK not to syn because LinkedList
-			synchronized (_ldefsByClient) {
-				if (_ldefsByClient.isEmpty())
-					DefinitionLoaders.load();
-			}
-		}
+	private static final void init() {
+		DefinitionLoaders.load();
 	}
 
 	/** Constructs a language defintion.

@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.ui.http.SimpleUiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
@@ -48,7 +49,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	 * <p>Note: after constructed, it is not initialized completely.
 	 * For example, {@link #getConfiguration} returns null.
 	 *
-	 * WebManager will initialize it later such as initializing
+	 * <p>WebManager will initialize it later such as initializing
 	 * a {@link Configuration} instance by loading zk.xml,
 	 * and then calling {@link #init}.
 	 */
@@ -81,6 +82,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			throw new IllegalArgumentException("config already belongs to other Web app, "+oldwapp);
 		_config = config;
 		_config.setWebApp(this);
+
+		DefinitionLoaders.setZKVersion(getVersion());
 
 		Class cls = _config.getUiEngineClass();
 		final UiEngine engine;
