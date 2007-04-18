@@ -64,6 +64,21 @@ public class DefinitionLoaders {
 	private static short[] _zkver;
 	private static boolean _loaded;
 
+	//CONSIDER:
+	//Sotre language definitions per WebApp, since diff app may add its
+	//own definitions thru WEB-INF's lang-addon, or a JAR in WEB-INF/lib.
+	//
+	//CONSEQUENCE:
+	//Other Web app is affected by another in the current implementation
+	//
+	//WORKAROUND:
+	//Copy ZK libraries into WEB-INF/lib
+	//
+	//DIFFICULTY TO SUPPORT
+	//To support it we have to pass WebApp around. It is a challenge for
+	//1) a working thread (other than servlet/event thread);
+	//2) deserialize LanguageDefinition (and maybe ComponentDefinition)
+
 	/** Adds a language addon.
 	 */
 	public static void addAddon(Locator locator, URL url) {
@@ -77,9 +92,6 @@ public class DefinitionLoaders {
 			_addons.add(new Object[] {locator, url});
 		}
 	}
-
-	//TODO: provide removeAddon to unload the definition defined by previous
-	//addon
 
 	/** Ses the ZK version that is used to check whether a language
 	 * or language-addon is acceptable.
