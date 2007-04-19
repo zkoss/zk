@@ -972,14 +972,9 @@ public class UiEngineImpl implements UiEngine {
 	 */
 	private static void responseSequenceId(Desktop desktop, Writer out)
 	throws IOException {
-		final String attr = "org.zkoss.zk.ui.respId";
-		final Integer val = (Integer)desktop.getAttribute(attr);
-		final int i =
-			val == null ? 0: (val.intValue() + 1) & 0x3ff; //range: 0 ~ 1023
-		desktop.setAttribute(attr, new Integer(i));
-
 		out.write("\n<sid>");
-		out.write(Integer.toString(i));
+		out.write(Integer.toString(
+			((DesktopCtrl)desktop).getResponseSequence(true)));
 		out.write("</sid>");
 	}
 	public void response(AuResponse response, Writer out)

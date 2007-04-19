@@ -31,7 +31,7 @@ zkau._stamp = 0; //used to make a time stamp
 zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
 zkau.floats = new Array(); //popup of combobox, bandbox, datebox...
 zkau._onsends = new Array(); //JS called before zkau._sendNow
-zkau._seqId = 0;
+zkau._seqId = 0; //starting at 0 - the same as Desktop.getResponseSequence
 zkau._dtids = new Array(); //an array of desktop IDs
 
 /** Adds a desktop. */
@@ -405,7 +405,8 @@ zkau._doQueResps = function () {
 		try {
 			var oldSeqId = zkau._seqId;
 			var resp = que.shift();
-			if (resp.sid == zkau._seqId || resp.sid == null) {
+			if (resp.sid == zkau._seqId || resp.sid == null
+			|| zkau._dtids.length > 1) { //unable to support seqId if multi-desktop
 				//we have to inc seqId first since _doResps might throw exception
 				if (resp.sid != null && ++zkau._seqId == 1024)
 					zkau._seqId = 0;

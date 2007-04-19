@@ -110,6 +110,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** ID used to identify what is stored in _meds. */
 	private int _medId;
 
+	private static final int MAX_RESPONSE_SEQUENCE = 1024;
+	/** The response sequence ID. */
+	private int _respSeqId = MAX_RESPONSE_SEQUENCE - 1;
+		//so the next value will be 0
+
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
 	 * Note: it is NOT encoded yet.
@@ -405,6 +410,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void recoverDidFail(Throwable ex) {
 		((WebAppCtrl)_wapp).getDesktopCache(_sess).removeDesktop(this);
+	}
+	public int getResponseSequence(boolean advance) {
+		if (advance && ++_respSeqId == MAX_RESPONSE_SEQUENCE)
+			_respSeqId = 0;
+		return _respSeqId;
+	}
+	public void setResponseSequence(int seqId) {
+		if (seqId < 0 || seqId >= 1024)
+			throw new IllegalArgumentException("Invalid sequence: "+seqId);
+		_respSeqId = seqId;
 	}
 
 	public void destroy() {

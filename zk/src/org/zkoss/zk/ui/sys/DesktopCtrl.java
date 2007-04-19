@@ -103,6 +103,24 @@ public interface DesktopCtrl {
 	 */
 	public void recoverDidFail(Throwable ex);
 
+	/** Returns the sequence ID of the response.
+	 * The client and server uses the sequence ID to make sure
+	 * the responses are processed in the correct order.
+	 *
+	 * <p>The range of the sequence IDs is 0~1023.
+	 *
+	 * @param advance whether to advance the number before returning.
+	 * If true, the ID is increased and then returned.
+	 * If false, the previous value is returned
+	 */
+	public int getResponseSequence(boolean advance);
+	/** Sets the sequence ID of the response.
+	 *
+	 * <p>It is rarely called other than in the recovering mode, i.e.,
+	 * {@link ExecutionCtrl#isRecovering} is true.
+	 */
+	public void setResponseSequence(int seqId);
+
 	/** Notification that the session, which owns this desktop,
 	 * is about to be passivated (aka., serialized).
 	 */
