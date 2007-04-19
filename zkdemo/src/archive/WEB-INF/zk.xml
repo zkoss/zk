@@ -36,6 +36,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</system-config>
 	-->
 
+	<!-- Turn on to test FailoverManager with an useless failover manager
+	<system-config>
+		<failover-manager-class>org.zkoss.zkdemo.test.DumbFailoverManager</failover-manager-class>
+	</system-config>
+	-->
+
 	<!-- Optional -->
 	<!-- You can define any number of richlets as follows.
 		Note: To use richlet, you have to map zkLoader to /xx/* in web.xml,
