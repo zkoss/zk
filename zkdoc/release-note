@@ -19,6 +19,7 @@ ZK 2.3.1 Freshly
   1698195: Translate messages to Swedish. Thank Easit AB (http://www.easit.com) for his contribution.
   1699225: Translate messages to Turkish. Thank Kursat Kurt for his contribution.
   1699073: A way to prevent removing a desktop when user browse away
+  1617806: A way to support custom failover mechanism
   
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
