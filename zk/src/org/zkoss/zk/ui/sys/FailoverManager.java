@@ -77,6 +77,7 @@ public interface FailoverManager {
 	 *
 	 * <p>During the recovering process, you have to do the following:
 	 *
+	 * <p><b>Recover Desktop</b></p>
 	 * <ul>
 	 * <li>[must] Call {@link DesktopCtrl#setId} to correct the desktop ID.</li>
 	 * <li>[optional] Call {@link Desktop#setCurrentDirectory} to
@@ -85,6 +86,15 @@ public interface FailoverManager {
 	 * <li>[optional] Call {@link Desktop#setClientType} to correct
 	 * the client type (default: html).</li>
 	 * <li>[Must] Recover all pages and components.</li>
+	 * <li>[Optional] Recover desktop's attributes.</li>
+	 * </ul>
+	 *
+	 * <p><b>Recover Page</b></p>
+	 * <ul>
+	 * <li>[Must] Invoke {@link org.zkoss.zk.ui.impl.PageImpl#PageImpl(org.zkoss.zk.ui.metainfo.LanguageDefinition, org.zkoss.zk.ui.metainfo.ComponentDefinitionMap, String, String)}
+	 * (or your own implementaton) to create an instance of {@link org.zkoss.zk.ui.Page}.</li>
+	 * <li>[Must] Then, invoke {@link org.zkoss.zk.ui.sys.PageCtrl#init} to initialized the page.</li>
+	 * <li>[Optional] Recover page's attributes.</li>
 	 * </ul>
 	 *
 	 * @exception UiException if failed to recover
