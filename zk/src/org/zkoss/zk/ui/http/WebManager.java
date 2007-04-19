@@ -336,13 +336,15 @@ public class WebManager {
 		}
 	}
 
-	/** Returns the desktop of the specified request.
+	/** Returns the desktop of the specified request, or null
+	 * if not found and autocreate is false.
 	 * @param path the path of the ZUML page.
+	 * @param autocreate whether to create one if not found
 	 */
-	/*package*/ Desktop getDesktop(Session sess, ServletRequest request,
-	String path) {
+	public Desktop getDesktop(Session sess, ServletRequest request,
+	String path, boolean autocreate) {
 		Desktop desktop = (Desktop)getRequestLocal(request, ATTR_DESKTOP);
-		if (desktop == null) {
+		if (desktop == null && autocreate) {
 			if (D.ON && log.debugable()) log.debug("Create desktop for "+path);
 			setRequestLocal(request, ATTR_DESKTOP,
 				desktop = newDesktop(sess, request, path));

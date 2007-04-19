@@ -138,6 +138,11 @@ public interface Desktop {
 	 * In other words, you could use getCurrentDirectory() + relative_path.
 	 */
 	public String getCurrentDirectory();
+	/** Sets the current directory.
+	 * @param dir the current directory. If null, an empty string is assumed
+	 * (means no current directory at all).
+	 */
+	public void setCurrentDirectory(String dir);
 
 	/** Returns the current bookmark (never null).
 	 * The returned might be the same as the last call to {@link #setBookmark},

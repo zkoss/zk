@@ -18,7 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Represents a class that is able to handle fail-over in the
@@ -40,13 +43,50 @@ import org.zkoss.zk.ui.Desktop;
 &lt;/system-config&gt;
 </code></pre>
  *
+ * <p>The recovery involves two phases:
+ *<ol>
+ *<li>{@link #isRecoverable}: It tests whether the desktop is recoverable.</li>
+ *<li>{@link #recover}: If recoverable,
+ * ZK will create the desktop accordingly, prepare the execution
+ * and then invoke this method to do real recovery.<li>
+ *</ol>
+ *
  * @author tomyeh
  */
 public interface FailoverManager {
 	/** Tests whether the specified desktop ID is recoverable.
+	 *
+	 * <p>Note: when this method called, no execution
+	 * ({@link Execution}) is available.
+	 * The implementation shall only check whether it is possible to
+	 * recover the specified desktop ID.
+	 * Then, do the real recovery in {@link #recover}.
+	 *
+	 * @param sess the session
+	 * @param desktopId the desktop ID to recover
 	 */
-	public boolean isRecoverable(String desktopId);
+	public boolean isRecoverable(Session sess, String desktopId);
 	/** Recovers the specified desktop.
+	 * It is called only when {@link #isRecoverable} returns true.
+	 * Before calling this method, the desktop and execution
+	 * {@link Execution}) are all prepared.
+	 *
+	 * <p>Note: ZK assumes the failover manager can recover the desktop
+	 * completely, so it won't update the browser whatever have been done
+	 * in this method.
+	 *
+	 * <p>During the recovering process, you have to do the following:
+	 *
+	 * <ul>
+	 * <li>[must] Call {@link DesktopCtrl#setId} to correct the desktop ID.</li>
+	 * <li>[optional] Call {@link Desktop#setCurrentDirectory} to
+	 * correct the current directory.
+	 * It is the directory of the path of the ZUML page.</li>
+	 * <li>[Must] Recover all pages and components.</li>
+	 * </ul>
+	 *
+	 * @exception UiException if failed to recover
 	 */
-	public void recover(Desktop desktop);
+	public void recover(Session sess, Execution exec, Desktop desktop)
+	throws UiException;
 }

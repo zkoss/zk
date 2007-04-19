@@ -151,6 +151,10 @@ public interface UiEngine {
 	public void response(List responses, Writer out)
 	throws IOException;
 
+	/** Executes the recovering.
+	 */
+	public void execRecover(Execution exec, FailoverManager failover);
+
 	/** Creates components from the specified page and definition.
 	 * It can be called when {@link #execNewPage} or {@link #execUpdate}
 	 * was called.

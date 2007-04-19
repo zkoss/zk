@@ -27,11 +27,11 @@ import org.zkoss.zk.ui.Desktop;
  * @author tomyeh
  */
 public interface DesktopCache {
-	/** Returns the next available ID which is unique in the whole cache.
+	/** Returns the next available key which is unique in the whole cache.
 	 *
 	 * <p>{@link Desktop} uses this method to generate ID automatically.
 	 */
-	public int getNextId();
+	public int getNextKey();
 
 	/** Returns the desktop for the specified desktop ID.
 	 * @exception ComponentNotFoundException is thrown if the desktop

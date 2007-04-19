@@ -80,7 +80,7 @@ public class DHtmlLayoutFilter implements Filter {
 		try {
 			response.setContentLength(-1); //note: the chained servlet might set it
 
-			final Desktop desktop = webman.getDesktop(sess, request, null);
+			final Desktop desktop = webman.getDesktop(sess, request, null, true);
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request, null);
 			final UiFactory uf = wappc.getUiFactory();

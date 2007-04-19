@@ -79,6 +79,14 @@ public interface ExecutionCtrl {
 	 */
 	public void onDeactivate();
 
+	/** Returns whether this execution is in recovering.
+	 * In other words, it is in the invocation of {@link FailoverManager#recover}.
+	 * If in recovering, no response is sent to the client.
+	 * It assumes the server is recovering the desktop and all it contains
+	 * to match the client's status.
+	 */
+	public boolean isRecovering();
+
 	/** Sets the {@link Visualizer} for this execution.
 	 * It could be anything that {@link UiEngine} requires.
 	 */

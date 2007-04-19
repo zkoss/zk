@@ -44,8 +44,8 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 
 	/** Used to purge obsolete desktops. */
 	private final Cache _desktops;
-	/** The next available ID. */
-	private int _nextId = ((int)System.currentTimeMillis()) & 0xffff;
+	/** The next available key. */
+	private int _nextKey = ((int)System.currentTimeMillis()) & 0xffff;
 		//to reduce the chance that two browsers with the same desktop ID
 		//it is possible if we re-boot the server
 
@@ -54,9 +54,9 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	}
 
 	//-- DesktopCache --//
-	public int getNextId() {
+	public int getNextKey() {
 		synchronized (this) {
-			return _nextId++;
+			return _nextKey++;
 		}
 	}
 	public Desktop getDesktopIfAny(String desktopId) {

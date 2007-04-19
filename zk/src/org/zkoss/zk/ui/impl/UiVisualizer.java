@@ -99,17 +99,22 @@ import org.zkoss.zk.au.*;
 	private AbortingReason _aborting;
 	/** Whether the first execution (_1stec) is for async-update. */
 	private final boolean _1stau;
+	/** Whether it is in recovering. */
+	private final boolean _recovering;
 
 	/**
 	 * Creates a root execution (without parent).
 	 * In other words, it must be the first execution in the current request.
 	 *
-	 * @param asyncUpdate whether this exec is for async-update
+	 * @param asyncUpdate whether this execution is for async-update
+	 * @param recovering whether this execution is in recovering,
+	 * i.e., caused by {@link org.zkoss.zk.ui.sys.FailoverManager#recover}.
 	 */
-	public UiVisualizer(Execution exec, boolean asyncUpdate) {
+	public UiVisualizer(Execution exec, boolean asyncUpdate, boolean recovering) {
 		_exec = exec;
 		_1stec = this;
 		_1stau = asyncUpdate;
+		_recovering = recovering;
 		_owners = new LinkedList();
 	}
 	/**
@@ -120,6 +125,7 @@ import org.zkoss.zk.au.*;
 		_exec = exec;
 		_1stec = parent._1stec;
 		_1stau = parent._1stau;
+		_recovering = false;
 		_owners = null;
 	}
 
@@ -137,6 +143,9 @@ import org.zkoss.zk.au.*;
 		for (Iterator it = responses.iterator(); it.hasNext();)
 			_1stec.addResponse(null, (AuResponse)it.next());
 		return true;
+	}
+	public boolean isRecovering() {
+		return _recovering;
 	}
 
 	//-- update/redraw --//

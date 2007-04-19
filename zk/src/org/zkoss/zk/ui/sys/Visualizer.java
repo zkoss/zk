@@ -51,4 +51,10 @@ public interface Visualizer {
 	 * is NOT caused by assync responses.
 	 */
 	public boolean addToFirstAsyncUpdate(List responses);
+
+	/** Returns whether it is in recovering.
+	 * In other words, it is in the invocation of {@link FailoverManager#recover}.
+	 * If in recovering, no response is sent to the client.
+	 */
+	public boolean isRecovering();
 }

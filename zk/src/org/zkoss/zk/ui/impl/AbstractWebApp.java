@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.impl.SessionDesktopCacheProvider;
 import org.zkoss.zk.ui.impl.UiEngineImpl;
 
@@ -43,6 +44,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private UiEngine _engine;
 	private DesktopCacheProvider _provider;
 	private UiFactory _factory;
+	private FailoverManager _failover;
 
 	/** Constructor.
 	 *
@@ -86,48 +88,50 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		DefinitionLoaders.setZkVersion(getVersion());
 
 		Class cls = _config.getUiEngineClass();
-		final UiEngine engine;
 		if (cls == null) {
-			engine = new UiEngineImpl();
+			_engine = new UiEngineImpl();
 		} else {
 			try {
-				engine = (UiEngine)cls.newInstance();
+				_engine = (UiEngine)cls.newInstance();
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
 			}
 		}
 
 		cls = _config.getDesktopCacheProviderClass();
-		final DesktopCacheProvider provider;
 		if (cls == null) {
-			provider = new SessionDesktopCacheProvider();
+			_provider = new SessionDesktopCacheProvider();
 		} else {
 			try {
-				provider = (DesktopCacheProvider)cls.newInstance();
+				_provider = (DesktopCacheProvider)cls.newInstance();
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
 			}
 		}
 
 		cls = _config.getUiFactoryClass();
-		final UiFactory factory;
 		if (cls == null) {
-			factory = new SimpleUiFactory();
+			_factory = new SimpleUiFactory();
 		} else {
 			try {
-				factory = (UiFactory)cls.newInstance();
+				_factory = (UiFactory)cls.newInstance();
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
 			}
 		}
 
-		_engine = engine;
-		_provider = provider;
-		_factory = factory;
+		cls = _config.getFailoverManagerClass();
+		if (cls != null) {
+			try {
+				_failover = (FailoverManager)cls.newInstance();
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+			}
+		}
 
-		engine.start(this);
-		provider.start(this);
-		factory.start(this);
+		_engine.start(this);
+		_provider.start(this);
+		_factory.start(this);
 
 		_config.invokeWebAppInits();
 	}
@@ -154,6 +158,9 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 	public UiFactory getUiFactory() {
 		return _factory;
+	}
+	public FailoverManager getFailoverManager() {
+		return _failover;
 	}
 
 	/** Invokes {@link #getDesktopCacheProvider}'s

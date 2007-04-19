@@ -159,6 +159,10 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		ELContexts.pop();
 	}
 
+	public boolean isRecovering() {
+		return _ei.isRecovering();
+	}
+
 	public void setVisualizer(Visualizer ei) {
 		_ei = ei;
 	}

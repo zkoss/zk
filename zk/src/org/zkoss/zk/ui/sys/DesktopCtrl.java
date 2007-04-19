@@ -41,9 +41,9 @@ public interface DesktopCtrl {
 	 */
 	public RequestQueue getRequestQueue();
 
-	/** Returns the next available ID which is unique in the whole desktop.
+	/** Returns the next available key which is unique in the whole desktop.
 	 */
-	public int getNextId();
+	public int getNextKey();
 	/** Returns the next available UUID for a component.
 	 * The returned UUID is unique in the desktop.
 	 * You can consider it as unique in the whole session, though
@@ -88,6 +88,20 @@ public interface DesktopCtrl {
 	 * from the client.
 	 */
 	public void setBookmarkByClient(String name);
+
+	/** Sets the desktop identifier.
+	 *
+	 * <p>It is callable only if it is the recovering phase, i.e.,
+	 * {@link ExecutionCtrl#isRecovering} is true.
+	 * In other words, callable only in the invocation of
+	 * {@link FailoverManager#recover}.
+	 *
+	 * @exception IllegalStateException if it is NOT in recovering.
+	 */
+	public void setId(String id);
+	/** Called when the recoving failed.
+	 */
+	public void recoverDidFail(Throwable ex);
 
 	/** Notification that the session, which owns this desktop,
 	 * is about to be passivated (aka., serialized).

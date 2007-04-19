@@ -47,7 +47,9 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.I18Ns;
@@ -156,28 +158,32 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate,proxy-revalidate,max-age=0");
 		response.setHeader("Pragma", "no-cache,no-store");
 
-		final Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
+		Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
 		if (desktop == null) {
-			final StringWriter out = getXMLWriter();
+			desktop = recover(sess, request, response, wappc, dtid);
 
-			final String scmd = request.getParameter("cmd.0");
-			if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
-			&& !"onTimer".equals(scmd)) {//possible in FF due to cache
-				String uri = wapp.getConfiguration().getTimeoutURI();
-				final AuResponse resp;
-				if (uri != null) {
-					if (uri.length() != 0)
-						uri = Encodes.encodeURL(_ctx, request, response, uri);
-					resp = new AuSendRedirect(uri, null);
-				} else {
-					resp = new AuObsolete(
-						dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
+			if (desktop == null) {
+				final StringWriter out = getXMLWriter();
+
+				final String scmd = request.getParameter("cmd.0");
+				if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
+				&& !"onTimer".equals(scmd)) {//possible in FF due to cache
+					String uri = wapp.getConfiguration().getTimeoutURI();
+					final AuResponse resp;
+					if (uri != null) {
+						if (uri.length() != 0)
+							uri = Encodes.encodeURL(_ctx, request, response, uri);
+						resp = new AuSendRedirect(uri, null);
+					} else {
+						resp = new AuObsolete(
+							dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
+					}
+					uieng.response(resp, out);
 				}
-				uieng.response(resp, out);
-			}
 
-			flushXMLWriter(response, out);
-			return;
+				flushXMLWriter(response, out);
+				return;
+			}
 		}
 		WebManager.setDesktop(request, desktop);
 			//reason: a new page might be created (such as include)
@@ -215,9 +221,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
 		final StringWriter out = getXMLWriter();
 
-		final Execution exec = new ExecutionImpl(
-			_ctx, request, response, desktop, null);
-		uieng.execUpdate(exec, aureqs, out);
+		uieng.execUpdate(
+			new ExecutionImpl(_ctx, request, response, desktop, null),
+			aureqs, out);
 
 		flushXMLWriter(response, out);
 	}
@@ -245,6 +251,32 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		response.setContentLength(bs.length);
 		response.getOutputStream().write(bs);
 		response.flushBuffer();
+	}
+
+	/** Recovers the desktop if possible.
+	 */
+	private Desktop recover(Session sess,
+	HttpServletRequest request, HttpServletResponse response,
+	WebAppCtrl wappc, String dtid) {
+		final FailoverManager failover = wappc.getFailoverManager();
+		if (failover != null) {
+			Desktop desktop = null;
+			try {
+				if (failover.isRecoverable(sess, dtid)) {
+					desktop = WebManager.getWebManager(_ctx)
+						.getDesktop(sess, request, null, true);
+					wappc.getUiEngine().execRecover(
+						new ExecutionImpl(_ctx, request, response, desktop, null),
+						failover);
+					return desktop; //success
+				}
+			} catch (Throwable ex) {
+				log.error("Unable to recover "+dtid, ex);
+				if (desktop != null)
+					((DesktopCtrl)desktop).recoverDidFail(ex);
+			}
+		}
+		return null;
 	}
 
 	/** Generates a response for an error message.

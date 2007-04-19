@@ -135,7 +135,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 		final WebApp wapp = _webman.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
-		final Desktop desktop = _webman.getDesktop(sess, request, path);
+		final Desktop desktop = _webman.getDesktop(sess, request, path, true);
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));

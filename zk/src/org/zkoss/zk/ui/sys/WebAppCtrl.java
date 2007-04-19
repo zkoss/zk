@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.util.Configuration;
  * @author tomyeh
  */
 public interface WebAppCtrl {
-	/** Initializes this WebApplication.
+	/** Initializes this Web application.
 	 *
 	 * @param context the servlet context, if servlets are used.
 	 * Currently, ZK supports only servlets. In the future there might be
@@ -41,7 +41,7 @@ public interface WebAppCtrl {
 	 */
 	public void destroy();
 
-	/** Returns the UI engine for this session.
+	/** Returns the UI engine for this Web application (never null).
 	 */
 	public UiEngine getUiEngine();
 	/** Returns the desktop cache.
@@ -52,9 +52,12 @@ public interface WebAppCtrl {
 	/** Returns the desktop cache provider.
 	 */
 	public DesktopCacheProvider getDesktopCacheProvider();
-	/** Returns the UI factory.
+	/** Returns the UI factory for this Web application (never null).
 	 */
 	public UiFactory getUiFactory();
+	/** Returns the failover manager, or null if not available.
+	 */
+	public FailoverManager getFailoverManager();
 
 	/** Notification that the session is about to be passivated
 	 * (aka., serialized).
