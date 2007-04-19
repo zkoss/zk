@@ -308,7 +308,7 @@ public class UiEngineImpl implements UiEngine {
 				}
 			} else {
 				//FUTURE: a way to allow richlet to set page ID
-				((PageCtrl)page).init(null, null, null, null);
+				((PageCtrl)page).init(null, null, null, null, null);
 				richlet.service(page);
 			}
 

@@ -57,8 +57,11 @@ public interface PageCtrl {
 	 * i.e., {@link org.zkoss.zk.ui.Page#setStyle} was called with a non-empty
 	 * value before.
 	 * @param headers the header elements, or null if no header is required.
+	 * @param uuid the page's UUID. It is used only if in the recovering mode
+	 * ({@link ExecutionCtrl#isRecovering}).
 	 */
-	public void init(String id, String title, String style, String headers);
+	public void init(String id, String title, String style, String headers,
+		String uuid);
 	/** Called when this page is about to be detroyed.
 	 * It is called by desktop, after removing it from the desktop.
 	 */

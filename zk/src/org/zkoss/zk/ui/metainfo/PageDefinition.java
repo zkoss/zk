@@ -69,7 +69,7 @@ public class PageDefinition extends NodeInfo {
 	private final List _resolvdefs = new LinkedList();
 	/** List(HeaderInfo). */
 	private final List _headerdefs = new LinkedList();
-	private final ComponentDefinitionMap _compdefs = new ComponentDefinitionMap(false);
+	private final ComponentDefinitionMap _compdefs;
 
 	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
@@ -84,6 +84,8 @@ public class PageDefinition extends NodeInfo {
 
 		_langdef = langdef;
 		_locator = locator;
+		_compdefs = new ComponentDefinitionMap(
+			_langdef.getComponentDefinitionMap().isCaseInsensitive());
 	}
 	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
@@ -391,7 +393,7 @@ public class PageDefinition extends NodeInfo {
 	 */
 	public void init(Page page, boolean evalHeaders) {
 		((PageCtrl)page).init(
-			_id, _title, _style, evalHeaders ? getHeaders(page): "");
+			_id, _title, _style, evalHeaders ? getHeaders(page): "", null);
 	}
 
 	//NodeInfo//

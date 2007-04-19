@@ -153,7 +153,7 @@ import org.zkoss.zk.au.*;
 	/** Invalidates the whole page.
 	 */
 	public void addInvalidate(Page page) {
-		if (page == null || !_exec.isAsyncUpdate(page))
+		if (_recovering || page == null || !_exec.isAsyncUpdate(page))
 			return; //nothing to do
 
 		if (_pgInvalid == null)
@@ -165,7 +165,7 @@ import org.zkoss.zk.au.*;
 	 */
 	public void addInvalidate(Component comp) {
 		final Page page = comp.getPage();
-		if (page == null || !_exec.isAsyncUpdate(page))
+		if (_recovering || page == null || !_exec.isAsyncUpdate(page))
 			return; //nothing to do
 
 		checkDesktop(comp);
@@ -185,7 +185,8 @@ import org.zkoss.zk.au.*;
 	 */
 	public void addSmartUpdate(Component comp, String attr, String value) {
 		final Page page = comp.getPage();
-		if (page == null || !_exec.isAsyncUpdate(page) || _invalidated.contains(comp))
+		if (_recovering || page == null || !_exec.isAsyncUpdate(page)
+		|| _invalidated.contains(comp))
 			return; //nothing to do
 
 		checkDesktop(comp);
@@ -204,7 +205,7 @@ import org.zkoss.zk.au.*;
 	 * @param newpg the page after moved
 	 */
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
-		if ((newpg == null && oldpg == null)
+		if (_recovering || (newpg == null && oldpg == null)
 		|| (newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
 		|| (oldpg == null && !_exec.isAsyncUpdate(newpg))) //attach to loading pg
 			return; //to avoid redundant AuRemove

@@ -157,15 +157,31 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 * @param pgdef the page definition (never null).
 	 */
 	public PageImpl(PageDefinition pgdef) {
-		_langdef = pgdef.getLanguageDefinition();
+		this(pgdef.getLanguageDefinition(), pgdef.getComponentDefinitionMap(),
+			pgdef.getRequestPath(), pgdef.getZScriptLanguage());
+	}
+	/** Constructs a page without page definition and richlet.
+	 *
+	 * @param langdef the language definition (never null)
+	 * @param compdefs the component definition map.
+	 * If null, an empty map is assumed.
+	 * @param path the request path. If null, empty is assumed.
+	 * @param zslang the zscript language. If null, "Java" is assumed.
+	 */
+	public PageImpl(LanguageDefinition langdef,
+	ComponentDefinitionMap compdefs, String path, String zslang) {
+		_langdef = langdef;
 		_dkUri = _langdef.getDesktopURI();
 		_pgUri = _langdef.getPageURI();
-		_compdefs = pgdef.getComponentDefinitionMap();
-		_path = pgdef.getRequestPath();
-		_zslang = pgdef.getZScriptLanguage();
+		_compdefs = compdefs != null ? compdefs:
+			new ComponentDefinitionMap(
+				_langdef.getComponentDefinitionMap().isCaseInsensitive());
+		_path = path != null ? path: "";
+		_zslang = zslang != null ? zslang: "Java";
 
 		init();
 	}
+
 	/** Constructs a page by specifying a richlet.
 	 *
 	 * <p>Note: when a page is constructed, it doesn't belong to a desktop
@@ -182,7 +198,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_langdef = richlet.getLanguageDefinition();
 		_dkUri = _langdef.getDesktopURI();
 		_pgUri = _langdef.getPageURI();
-		_compdefs = new ComponentDefinitionMap(false);
+		_compdefs = new ComponentDefinitionMap(
+			_langdef.getComponentDefinitionMap().isCaseInsensitive());
 		_path = path != null ? path: "";
 		_zslang = "Java";
 
@@ -484,7 +501,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	//-- PageCtrl --//
-	public void init(String id, String title, String style, String headers) {
+	public void init(String id, String title, String style, String headers,
+	String uuid) {
 		if (_desktop != null)
 			throw new IllegalStateException("Don't init twice");
 
@@ -493,27 +511,33 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (_desktop == null)
 			throw new IllegalArgumentException("null desktop");
 
-		_uuid = ((DesktopCtrl)_desktop).getNextUuid();
-
 		initVariables();
 
-		if (headers != null) _headers = headers;
-
-		final DesktopCtrl dtctrl = (DesktopCtrl)_desktop;
-		if (_id == null && id != null && id.length() != 0) _id = id;
-		if (_id != null)
-			_id = (String)exec.evaluate(this, _id, String.class);
-		if (_id != null && _id.length() != 0) {
-			final String INVALID = ".&\\%";
-			if (Strings.anyOf(_id, INVALID, 0) < _id.length())
-				throw new IllegalArgumentException("Invalid page ID: "+_id+". Invalid characters: "+INVALID);
+		if (((ExecutionCtrl)exec).isRecovering()) {
+			if (uuid == null || id == null)
+				throw new IllegalArgumentException("both id and uuid are required in recovering");
+			_uuid = uuid;
+			_id = id;
 		} else {
-			_id = _uuid;
-		}
-		dtctrl.addPage(this);	
+			_uuid = ((DesktopCtrl)_desktop).getNextUuid();
 
+			if (_id == null && id != null && id.length() != 0) _id = id;
+			if (_id != null)
+				_id = (String)exec.evaluate(this, _id, String.class);
+			if (_id != null && _id.length() != 0) {
+				final String INVALID = ".&\\%";
+				if (Strings.anyOf(_id, INVALID, 0) < _id.length())
+					throw new IllegalArgumentException("Invalid page ID: "+_id+". Invalid characters: "+INVALID);
+			} else {
+				_id = _uuid;
+			}
+		}
+
+		if (headers != null) _headers = headers;
 		if (_title.length() == 0 && title != null) setTitle(title);
 		if (_style.length() == 0 && style != null) setStyle(style);
+
+		((DesktopCtrl)_desktop).addPage(this);	
 	}
 	private void initVariables() {
 		setVariable("log", _zklog);

@@ -160,12 +160,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
 		if (desktop == null) {
-			desktop = recover(sess, request, response, wappc, dtid);
+			final String scmd = request.getParameter("cmd.0");
+			if (!"rmDesktop".equals(scmd))
+				desktop = recover(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
 				final StringWriter out = getXMLWriter();
 
-				final String scmd = request.getParameter("cmd.0");
 				if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
 				&& !"onTimer".equals(scmd)) {//possible in FF due to cache
 					String uri = wapp.getConfiguration().getTimeoutURI();

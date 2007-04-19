@@ -315,7 +315,7 @@ public class LanguageDefinition {
 	public String getNamespace() {
 		return _ns;
 	}
-	/** Returns the map of components defined in this language.
+	/** Returns the map of components defined in this language (never null).
 	 */
 	public ComponentDefinitionMap getComponentDefinitionMap() {
 		return _compdefs;
