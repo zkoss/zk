@@ -68,9 +68,11 @@ public class DumbFailoverManager implements FailoverManager {
 		System.out.println("Recover "+_killed.getId());
 
 		//recover desktop
-		((DesktopCtrl)desktop).setId(_killed.getId()); //required
+		final DesktopCtrl dtc = (DesktopCtrl)desktop;
+		dtc.setId(_killed.getId()); //required
 		desktop.setCurrentDirectory(_killed.getCurrentDirectory()); //optional
 		desktop.setClientType(_killed.getClientType()); //optional
+		dtc.setResponseSequence(((DesktopCtrl)_killed).getResponseSequence(false));
 			//optional: copy _killed's attributes to desktop
 
 		//recover pages
@@ -79,18 +81,20 @@ public class DumbFailoverManager implements FailoverManager {
 		_killed = null;
 	}
 	private static void recover(Page killed) {
+		//recover page
 		final Page page = new PageImpl(
 			killed.getLanguageDefinition(), //required; never null
 			killed.getComponentDefinitionMap(), //If unknown, just pass null
 			killed.getRequestPath(), //If unknown, just pass null
 			killed.getZScriptLanguage()); //If unkown, just pass null (Java assumed)
+
 		((PageCtrl)page).init(
 			killed.getId(), //required; never null
 			killed.getTitle(), //if unknown, just pass null
 			killed.getStyle(), //if unknown, just pass null
 			((PageCtrl)killed).getHeaders(), //if unknown, just pass null
 			killed.getUuid()); //required; never null
-		//optional: copy killed's attrs to page
+			//optional: copy killed's attrs to page
 
 		for (Iterator it = killed.getRoots().iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
