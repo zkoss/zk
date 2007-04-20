@@ -89,7 +89,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</filter>
 	<filter-mapping>
 		<filter-name>zkFilter</filter-name>
-		<url-pattern>/test/special.jsp</url-pattern>
+		<url-pattern>/test/filter.dsp</url-pattern>
 	</filter-mapping>
 	-->
 
