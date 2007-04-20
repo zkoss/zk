@@ -173,7 +173,7 @@ public class Strings {
 	/**
 	 * Returns the next index after skipping whitespaces.
 	 */
-	public static final int skipWhitespaces(String src, int from) {
+	public static final int skipWhitespaces(CharSequence src, int from) {
 		for (final int len = src.length();
 		from < len && Character.isWhitespace(src.charAt(from)); ++from)
 			;
@@ -185,7 +185,7 @@ public class Strings {
 	 * @return the next index that is not a whitespace.
 	 * If it is negative, it means no whitespace in front of it.
 	 */
-	public static final int skipWhitespacesBackward(String src, int from) {
+	public static final int skipWhitespacesBackward(CharSequence src, int from) {
 		final int len = src.length();
 		if (from >= len)
 			from = len - 1;
@@ -195,7 +195,7 @@ public class Strings {
 	}
 	/** Returns the next whitespace.
 	 */
-	public static final int nextWhitespace(String src, int from) {
+	public static final int nextWhitespace(CharSequence src, int from) {
 		for (final int len = src.length();
 		from < len && !Character.isWhitespace(src.charAt(from)); ++from)
 			;
