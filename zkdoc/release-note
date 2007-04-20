@@ -41,6 +41,7 @@ ZK 2.3.1 Freshly
   1694879: Fileupload of txt file not working
   1699786: Execution.isAsyncUpdate(null) shall return if in async-updat
   1702216: DHtmlLayoutFilter cannot parsing DOCTYPE
+  1701319: setVisible method is not working for Vbox
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
