@@ -31,6 +31,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.http.HttpBufferedResponse;
 
@@ -96,6 +97,28 @@ public class DHtmlLayoutFilter implements Filter {
 			I18Ns.cleanup(request, old);
 		}
 	}
+	/** Filters the content to make it legal XML if possible.
+	 * Currently, it only removes DOCTYPE since it makes it non-XML and
+	 * ZK always generates its own DOCTYPE.
+	 */
+	private static String xmlfilter(StringBuffer sb) {
+		for (int j = 0, len = sb.length(); j < len; ++j) {
+			char cc = sb.charAt(j);
+			if (cc == '<') {
+				if (++j < len && sb.charAt(j) == '!') {
+					j = Strings.skipWhitespaces(sb, j + 1);
+					if (j + 7 < len
+					&& "DOCTYPE".equalsIgnoreCase(sb.substring(j, j + 7))) {
+						for (j += 7; j < len; ++j)
+							if (sb.charAt(j) == '>')
+								return sb.substring(j + 1);
+					}
+				}
+				break;
+			}
+		}
+		return sb.toString();
+	}
 
 	//-- Filter --//
 	public void doFilter(ServletRequest request, ServletResponse response,
@@ -108,7 +131,7 @@ public class DHtmlLayoutFilter implements Filter {
 
 		//Bug 1673839: servlet might redirect
 		if (!hbufres.isSendRedirect())
-			process((HttpServletRequest)request, hres, sw.toString());
+			process((HttpServletRequest)request, hres, xmlfilter(sw.getBuffer()));
 	}
 	public void destroy() {
 	}

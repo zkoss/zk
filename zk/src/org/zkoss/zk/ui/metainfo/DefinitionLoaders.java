@@ -99,11 +99,11 @@ public class DefinitionLoaders {
 	 * <p>It is used when loading the definions.
 	 */
 	public static void setZkVersion(String version) {
-		if (version != null) {
+		final int len = version != null ? version.length(): 0;
+		if (len != 0) {
 			_zkver = new short[4];
 			int cnt = 0;
-			for (int j = 0, len = version.length();
-			j < len && cnt < 4 && version.charAt(j) != '-'; ++cnt) {
+			for (int j = 0;;) {
 				final int k = Strings.anyOf(version, ".-_", j);
 				final String s = version.substring(j, k);
 				try {
@@ -112,7 +112,10 @@ public class DefinitionLoaders {
 					log.warning("Unknown ZK version: "+version);
 					break; //assume OK
 				}
+
 				j = k + 1;
+				if (++cnt >= 4 || j >= len || version.charAt(k) == '-')
+					break; //ignore the number after -
 			}
 			if (cnt == 0) _zkver = null;
 		}

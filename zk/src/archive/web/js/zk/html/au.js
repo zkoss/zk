@@ -702,7 +702,7 @@ zkau.onfocus = function (el) {
 	zkau.autoZIndex(el);
 
 	var cmp = $outer(el);
-	if (getZKAttr(cmp, "onFocus") == "true")
+	if (zkau.asap(cmp, "onFocus"))
 		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 25);
 };
 zkau.onblur = function (el) {
@@ -711,7 +711,7 @@ zkau.onblur = function (el) {
 		//prevent it from being cleared
 
 	var cmp = $outer(el);
-	if (getZKAttr(cmp, "onBlur") == "true")
+	if (zkau.asap(cmp, "onBlur"))
 		zkau.send({uuid: cmp.id, cmd: "onBlur", data: null}, 25);
 };
 
