@@ -23,7 +23,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <table id="${self.uuid}" z.type="zul.box.Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
 <tr valign="${self.valign}" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
- <td id="${child.uuid}!chdextr"${u:getBoxChildAttrs(child)}>${z:redraw(child, null)}</td>
+ <td id="${child.uuid}!chdextr"${u:getBoxChildOuterAttrs(child)}${u:getBoxChildInnerAttrs(child)}>${z:redraw(child, null)}</td>
 	</c:forEach>
 </tr>
 </table>

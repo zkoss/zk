@@ -36,10 +36,17 @@ public class ZulFns {
 	}
 
 	/**
-	 * Returns the attributes used for the cell of the specified child
-	 * when it is placed inside of hbox/vobx.
+	 * Returns the inner attributes used for the cell of the specified child
+	 * when it is placed inside of hbox/vbox.
 	 */
-	public static final String getBoxChildAttrs(Component child) {
-		return ((Box)child.getParent()).getChildAttrs(child);
+	public static final String getBoxChildInnerAttrs(Component child) {
+		return ((Box)child.getParent()).getChildInnerAttrs(child);
+	}
+	/**
+	 * Returns the outer attributes used for the cell of the specified child
+	 * when it is placed inside of hbox/vbox.
+	 */
+	public static final String getBoxChildOuterAttrs(Component child) {
+		return ((Box)child.getParent()).getChildOuterAttrs(child);
 	}
 }

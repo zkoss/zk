@@ -168,18 +168,39 @@ public class Box extends XulElement {
 		setWidths(heights);
 	}
 
-	/** Returns the attributes used to wrap the children (never null).
-	 * Used only by component development to generate HTML tags.
+	/** Returns the outer attributes used to wrap the children (never null).
+	 * It is used only for the vertical layout.
 	 */
-	public String getChildAttrs(Component child) {
+	public String getChildOuterAttrs(Component child) {
 		final boolean vert = "vertical".equals(getOrient());
 		if (child instanceof Splitter)
 			return (vert ? " height": " width") + "=\"8px\"";
-
+		
 		final StringBuffer sb =
 			new StringBuffer(64).append(" z.coexist=\"true\"");
-				//coexist: it means the visibility of exterior is the same
-				//as the child
+			//coexist: the visibility of exterior is the same as child.
+
+		//Note: visible is handled in getChildInnerAttrs if horizontal layout
+		if (vert) {
+			HTMLs.appendAttribute(sb, "valign", _valign);
+			if (!child.isVisible()) {
+				final Object xc = ((ComponentCtrl)child).getExtraCtrl();
+				if (!(xc instanceof Floating) || !((Floating)xc).isFloating())
+					sb.append(" style=\"display:none\"");
+			}
+		}
+		return sb.toString();
+	}
+	/** Returns the inner attributes used to wrap the children (never null).
+	 * Used only by component development to generate HTML tags.
+	 */
+	public String getChildInnerAttrs(Component child) {
+		if (child instanceof Splitter)
+			return "";
+
+		final boolean vert = "vertical".equals(getOrient());
+		final StringBuffer sb = new StringBuffer(64);
+
 		HTMLs.appendAttribute(sb, "class", vert ? "vbox": "hbox");
 
 		String size = null;
@@ -200,7 +221,9 @@ public class Box extends XulElement {
 		final Object xc = ((ComponentCtrl)child).getExtraCtrl();
 		final boolean floating =
 			(xc instanceof Floating) && ((Floating)xc).isFloating();
-		final boolean visible = floating || child.isVisible();
+		final boolean visible = vert || floating || child.isVisible();
+			//if vert, visible is handled by getChildOutAttrs
+
 		final String wd =
 			!floating && size == null && !vert && (child instanceof HtmlBasedComponent) ?
 				((HtmlBasedComponent)child).getWidth(): null;
@@ -229,20 +252,21 @@ public class Box extends XulElement {
 	//-- Component --//
 	public void onDrawNewChild(Component child, StringBuffer out)
 	throws IOException {
-		final String chdattrs = getChildAttrs(child);
-
 		if ("vertical".equals(getOrient())) {
-			final StringBuffer sb = new StringBuffer(16)
+			final StringBuffer sb = new StringBuffer(32)
 				.append("<tr id=\"").append(child.getUuid())
-				.append("!chdextr\"><td ").append(chdattrs).append('>');
+				.append("!chdextr\"")
+				.append(getChildOuterAttrs(child)).append("><td")
+				.append(getChildInnerAttrs(child)).append('>');
 			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 			else out.insert(0, sb.toString());
 			out.append("</td></tr>");
 		} else {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<td id=\"").append(child.getUuid())
-				.append("!chdextr\"");
-			sb.append(chdattrs).append('>');
+				.append("!chdextr\"")
+				.append(getChildOuterAttrs(child))
+			 	.append(getChildInnerAttrs(child)).append('>');
 			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 			else out.insert(0, sb.toString());
 			out.append("</td>");

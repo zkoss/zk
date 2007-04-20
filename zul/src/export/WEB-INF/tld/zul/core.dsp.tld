@@ -27,14 +27,25 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</description>
 	</function>
 	<function>
-		<name>getBoxChildAttrs</name>
+		<name>getBoxChildOuterAttrs</name>
 		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
 		<function-signature>
-	java.lang.String getBoxChildAttrs(org.zkoss.zk.ui.Component)
+	java.lang.String getBoxChildOuterAttrs(org.zkoss.zk.ui.Component)
 		</function-signature>
 		<description>
-	Returns the attributes used for the cell of the specified child
-	when it is placed inside of hbox/vobx.
+	Returns the inner attributes used for the cell of the specified child
+	when it is placed inside of hbox/vbox.
+		</description>
+	</function>
+	<function>
+		<name>getBoxChildInnerAttrs</name>
+		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
+		<function-signature>
+	java.lang.String getBoxChildInnerAttrs(org.zkoss.zk.ui.Component)
+		</function-signature>
+		<description>
+	Returns the outer attributes used for the cell of the specified child
+	when it is placed inside of hbox/vbox.
 		</description>
 	</function>
 </taglib>
