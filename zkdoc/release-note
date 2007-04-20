@@ -40,6 +40,7 @@ ZK 2.3.1 Freshly
   1698190: Constraint in zscript cannot access components by name
   1694879: Fileupload of txt file not working
   1699786: Execution.isAsyncUpdate(null) shall return if in async-updat
+  1702216: DHtmlLayoutFilter cannot parsing DOCTYPE
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
