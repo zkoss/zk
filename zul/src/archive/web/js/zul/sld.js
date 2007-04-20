@@ -99,7 +99,7 @@ zk.Slider.prototype = {
 		if (pos != this.slidepos) {
 			this.slidepos = pos;
 			if (this.slidetip) this.slidetip.innerHTML = pos;
-			if (getZKAttr(this.element, "onScrolling"))
+			if (zkau.asap(this.element, "onScrolling"))
 				zkau.send({uuid: this.element.id, 
 					cmd: "onScrolling", data: [pos], implicit: true}, 0);
 		}

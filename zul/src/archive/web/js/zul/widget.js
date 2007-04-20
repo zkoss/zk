@@ -143,7 +143,7 @@ zkTxbox.onfocus = function (inp) {
 	zkau.onfocus(inp);
 
 	//handling onChanging
-	if (inp && inp.id && getZKAttr($outer(inp), "onChanging")) {
+	if (inp && inp.id && zkau.asap($outer(inp), "onChanging")) {
 		inp.setAttribute("zk_changing_last", inp.value);
 		if (!zkTxbox._intervals[inp.id])
 			zkTxbox._intervals[inp.id] =
@@ -153,7 +153,7 @@ zkTxbox.onfocus = function (inp) {
 /** Scans whether any changes. */
 zkTxbox._scanChanging = function (id) {
 	var inp = $e(id);
-	if (inp && getZKAttr($outer(inp), "onChanging")
+	if (inp && zkau.asap($outer(inp), "onChanging")
 	&& inp.getAttribute("zk_changing_last") != inp.value) {
 		inp.setAttribute("zk_changing_last", inp.value);
 		var selbk = inp.getAttribute("zk_changing_selbk");
