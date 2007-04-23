@@ -509,6 +509,59 @@ implements Constrainted {
 		}
 		return true;
 	}
+
+	/**
+	 * Sets the text of this InputElement to the specified text which is
+	 * begining with the new start point and ending with the new end point.
+	 * 
+	 * @param start -
+	 *            the start position of the text >= 0.
+	 * @param end -
+	 *            the end position of the text >= 0.
+	 * @param txt -
+	 *            the new text to be set.
+	 * @param isHighLight -
+	 *            Sets whether it will represent highlihgt style or cursor
+	 *            style.If the start point same with the end point always
+	 *            represent cursor style.
+	 */
+	public void setSelectedText(int start, int end, String txt,
+			boolean isHighLight) {
+		if (start > end)
+			return;
+		final String _txt = getText();
+		if (_txt.length() >= start && _txt.length() >= end && start >= 0
+				&& end >= 0) {
+			setText( _txt.substring(0,start) + txt + _txt.substring(end));
+			end = start + txt.length();
+			if(!isHighLight)
+				end = start;
+			setSelection(start,end);
+		}
+
+	}
+
+	/**
+	 * Sets the selection end to the specified position and the selection start
+	 * to the specified position. The new end point is constrained to be at or
+	 * after the current selection start. If the new start point is different
+	 * with the new end point, then will represent the result of highlight in
+	 * this text.
+	 * 
+	 * @param start -
+	 *            the start position of the text >= 0
+	 * @param end -
+	 *            the end position of the text >= 0
+	 */
+	public void setSelection(int start, int end) {
+		final String txt = getText();
+		if (txt.length() >= start && txt.length() >= end && start >= 0
+				&& end >= 0) {
+			smartUpdate("z.sel", "s:" + start + ",e:" + end + ",t:"
+					+ (start != end));
+		}
+	}
+	
 	/** Checks whether user entered a wrong value (and not correct it yet).
 	 * Since user might enter a wrong value and moves on to other components,
 	 * this methid is called when {@link #getText} or {@link #getRawValue} is
