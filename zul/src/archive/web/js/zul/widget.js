@@ -24,10 +24,42 @@ zkTxbox = {};
 zkTxbox._intervals = {};
 
 zkau.textbox = zkTxbox; //zkau depends on it
+zkau.textbox.selection = {};
+zkau.textbox.selection.create = function(cmp) {	
+	this.cmp = cmp;
+	if (document.selection != null && this.cmp.selectionStart == null) {
+		return this.getIE();
+	} else {
+		return this.getMoz();
+	}
+}
+zkau.textbox.selection.getMoz = function() {
+	return { 
+		start: this.cmp.selectionStart, 
+		end: this.cmp.selectionEnd 
+	};
+};
+zkau.textbox.selection.getIE = function() {
+	var range = document.selection.createRange(); 
+	var rangetwo = this.cmp.createTextRange(); 
+	var stored_range = ""; 
+	if(this.cmp.type == "text"){
+		stored_range = rangetwo.duplicate();
+	}else{
+		 stored_range = range.duplicate(); 
+		 stored_range.moveToElementText(this.cmp); 
+	}
+	stored_range.setEndPoint('EndToEnd', range); 
+	var result = {};
+	result.start = stored_range.text.length - range.text.length; 
+	result.end = result.start + range.text.length; 
+	return result;
+};
 
 zkTxbox.init = function (cmp) {
 	zk.listen(cmp, "focus", function () {zkTxbox.onfocus(cmp);});
 	zk.listen(cmp, "blur", function() {zkTxbox.onblur(cmp);});
+	zk.listen(cmp, "select", function() {zkTxbox.onselect(cmp);});
 
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
@@ -42,6 +74,14 @@ zkTxbox.onHide = function (cmp) {
 	if (inp) zkVld.closeErrbox(inp.id, true);
 };
 
+zkTxbox.onselect = function (inp) {
+	var s = zkau.textbox.selection.create(inp);
+	var cmp = $outer(inp);
+	if (zkau.asap(cmp, "onSelection"))
+		zkau.send({uuid: cmp.id, cmd: "onSelection",
+				data: [s.start, s.end,inp.value.substring(s.start,s.end)]},
+    	 	10);
+};
 /** Handles onblur for text input.
  * Note: we don't use onChange because it won't work if user uses IE' auto-fill
  */
@@ -163,11 +203,38 @@ zkTxbox._scanChanging = function (id) {
 			implicit: true}, 1);
 	}
 };
-
+zkTxbox.setAttr = function (cmp, nm, val) {
+	if("z.sel" == nm){
+		var ary = val.split(",");
+		var start = parseInt(ary[0].substring(ary[0].indexOf("s:")+2));
+		var end = parseInt(ary[1].substring(ary[1].indexOf("e:")+2));
+		var ty = ary[2].substring(ary[2].indexOf("t:")+2);
+		if (cmp.setSelectionRange) {
+			if(ty == "true"){
+				cmp.setSelectionRange(start,end);		
+			}else{			
+				cmp.setSelectionRange(start,start);	
+			}				
+			cmp.focus();
+		} else if (cmp.createTextRange) {
+			var range = cmp.createTextRange();
+			if(ty == "true"){
+				range.moveEnd('character',end-range.text.length);
+				range.moveStart('character',start);
+			}else{
+				range.move('character', start);
+			}
+			range.select();
+		}
+		return true;
+	}
+	return false;
+}
 ////
 //intbox//
 zkInbox = {};
 zkInbox.init = zkTxbox.init;
+zkInbox.setAttr = zkTxbox.setAttr ;
 zkInbox.onHide = zkTxbox.onHide;
 zkInbox.validate = function (cmp) {
 	return zkVld.onlyInt(cmp.id);
@@ -177,6 +244,7 @@ zkInbox.validate = function (cmp) {
 //decimalbox//
 zkDcbox = {};
 zkDcbox.init = zkTxbox.init;
+zkDcbox.setAttr = zkTxbox.setAttr ;
 zkDcbox.onHide = zkTxbox.onHide;
 zkDcbox.validate = function (cmp) {
 	return zkVld.onlyNum(cmp.id);
@@ -186,6 +254,7 @@ zkDcbox.validate = function (cmp) {
 //doublebox//
 zkDbbox = {};
 zkDbbox.init = zkTxbox.init;
+zkDbbox.setAttr = zkTxbox.setAttr ;
 zkDbbox.onHide = zkTxbox.onHide;
 zkDbbox.validate = function (cmp) {
 	return zkVld.onlyNum(cmp.id);
