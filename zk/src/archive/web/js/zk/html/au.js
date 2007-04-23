@@ -1863,11 +1863,6 @@ zkau.cmd1 = {
 					//delay it because focusDownById might be called implicitly
 		}
 	},
-	selAll: function (uuid, cmp) {
-		cmp = $real(cmp); //select goes to inner tag
-		if (cmp.select)
-			zk.selectById(cmp.id);
-	},
 	meta: function (uuid, cmp, dt1, dt2, dt3, dt4) {
 		var meta = zkau.getMeta(uuid);
 		if (meta) meta[dt1].call(meta, dt2, dt3, dt4);

@@ -409,6 +409,29 @@ zk._doTwice = function (script, timeout) {
 		//the first one might fail (even we prolong the timeout to 1 sec)
 };
 
+/** Returns the selection range of the specified control
+ */
+zk.getSelectionRange = function(inp) {	
+	if (document.selection != null && inp.selectionStart == null) { //IE
+		var range = document.selection.createRange(); 
+		var rangetwo = inp.createTextRange(); 
+		var stored_range = ""; 
+		if(inp.type.toLowerCase() == "text"){
+			stored_range = rangetwo.duplicate();
+		}else{
+			 stored_range = range.duplicate(); 
+			 stored_range.moveToElementText(inp); 
+		}
+		stored_range.setEndPoint('EndToEnd', range); 
+
+		var start = stored_range.text.length - range.text.length; 
+		return [start, start + range.text.length];
+	} else { //Gecko
+		return [inp.selectionStart, inp.selectionEnd];
+	}
+}
+
+
 /** Inserts an unparsed HTML immediately before the specified element.
  * @param el the sibling before which to insert
  */

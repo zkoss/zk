@@ -47,7 +47,7 @@ public class SelectionEvent extends Event {
 	 * 
 	 * @return the end position >= 0
 	 */
-	public int getSelectionEnd() {
+	public int getEnd() {
 		return _end;
 	}
 
@@ -56,7 +56,7 @@ public class SelectionEvent extends Event {
 	 * 
 	 * @return the start position >= 0
 	 */
-	public int getSelectionStart() {
+	public int getStart() {
 		return _start;
 	}
 
