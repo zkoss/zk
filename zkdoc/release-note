@@ -22,6 +22,7 @@ ZK 2.3.1 Freshly
   1617806: A way to support custom failover mechanism
   1704040: Add onSelection event to InputElement
   1705531: Textbox supports setSelectionRange
+  1705715: InputElement's clearErrorMessage shall be public
 
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
@@ -45,6 +46,7 @@ ZK 2.3.1 Freshly
   1702216: DHtmlLayoutFilter cannot parsing DOCTYPE
   1701319: setVisible method is not working for Vbox
   1698981: The constraint doesn't works when assing value first
+  1701986: The error msgbox remains even if error is corrected
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
