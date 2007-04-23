@@ -76,6 +76,9 @@ public class Events {
 	/** The onSelect event (used with {@link SelectEvent}).
 	 */
 	public static final String ON_SELECT = "onSelect";
+	/** The onSelection event (used with {@link SelectionEvent}).
+	 */
+	public static final String ON_SELECTION = "onSelection";
 	/** The onCheck event (used with {@link CheckEvent}).
 	 */
 	public static final String ON_CHECK = "onCheck";
