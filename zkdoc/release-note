@@ -44,6 +44,7 @@ ZK 2.3.1 Freshly
   1699786: Execution.isAsyncUpdate(null) shall return if in async-updat
   1702216: DHtmlLayoutFilter cannot parsing DOCTYPE
   1701319: setVisible method is not working for Vbox
+  1698981: The constraint doesn't works when assing value first
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
