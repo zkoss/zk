@@ -24,6 +24,7 @@ ZK 2.3.1 Freshly
   1705531: Textbox supports setSelectionRange
   1704040: Add onSelection event to InputElement
   1705715: InputElement's clearErrorMessage shall be public
+  1704194: Get value without validation -- getRawValue and getRawText)
 
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
@@ -64,6 +65,8 @@ ZK 2.3.1 Freshly
   + max-event-threads is renamed to max-spare-threads
   + onModal is no longer sent to the error page. Developers have to
     specify mode="modal" explicity.
+  + The protected getRawValue method of InputElement is renamed to
+    getTargetValue.
   + Execution.isAsyncUpdate(null) means whether the execution is
     asynchronous updating a page (rather than creating a new page).
 
