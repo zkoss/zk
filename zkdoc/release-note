@@ -21,7 +21,8 @@ ZK 2.3.1 Freshly
   1699073: A way to prevent removing a desktop when user browse away
   1617806: A way to support custom failover mechanism
   1704040: Add onSelection event to InputElement
-  
+  1705531: Textbox supports setSelectionRange
+
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
   1685165: bundled asm.jar imcompatibility with ZK 2.3
