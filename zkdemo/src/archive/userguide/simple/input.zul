@@ -85,8 +85,8 @@ text line2...
 				<textbox id="sel" rows="5" cols="40" >
 					<attribute name="value">Welcome John !</attribute>
 					<attribute name="onSelection">
-						int start = event.getSelectionStart();
-						int end = event.getSelectionEnd();
+						int start = event.start;
+						int end = event.end;
 						msg.setValue("Start: "+start+" , End:"+end);
 					</attribute>
 				</textbox>
