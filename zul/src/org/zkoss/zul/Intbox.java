@@ -44,12 +44,12 @@ public class Intbox extends FormatInputElement {
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public Integer getValue() throws WrongValueException {
-		return (Integer)getRawValue();
+		return (Integer)getTargetValue();
 	}
 	/** Returns the value in int. If null, zero is returned.
 	 */
 	public int intValue() throws WrongValueException {
-		final Object val = getRawValue();
+		final Object val = getTargetValue();
 		return val != null ? ((Integer)val).intValue(): 0;
 	}
 	/** Sets the value (in Integer).

@@ -478,15 +478,50 @@ implements Constrainted {
 		return sb.toString();
 	}
 
-	/** Returns the raw value, which is converted from {@link #getText}.
+	/** Returns the value in the targeting type.
+	 * It is used by the deriving class to implement the getValue method.
+	 * For example, {@link org.zkoss.zul.Intbox#getValue} is the same
+	 * as this method except with a different signature.
+	 *
 	 * <p>It invokes {@link #checkUserError} to ensure no user error.
-	 * @exception WrongValueException if user entered a wrong value
+	 * @exception WrongValueException if the user entered a wrong value
+	 * @see #getText
 	 */
-	protected Object getRawValue() throws WrongValueException {
+	protected Object getTargetValue() throws WrongValueException {
 		checkUserError();
 		return _value;
 	}
-	/** Sets the row value directly. The caller must make sure the value
+
+	/** Returns the raw value directly with checking whether any
+	 * error message not yet fixed. In other words, it does NOT invoke
+	 * {@link #checkUserError}.
+	 *
+	 * <p>Note: if the user entered an incorrect value (i.e., caused
+	 * {@link WrongValueException}), the incorrect value doesn't
+	 * be stored so this method returned the last correct value.
+	 *
+	 * @see #getRawText
+	 * @see #getText
+	 * @see #setRawValue
+	 */
+	public Object getRawValue() {
+		return _value;
+	}
+	/** Returns the text directly without checking whether any error
+	 * message not yet fixed. In other words, it does NOT invoke
+	 * {@link #checkUserError}.
+	 *
+	 * <p>Note: if the user entered an incorrect value (i.e., caused
+	 * {@link WrongValueException}), the incorrect value doesn't
+	 * be stored so this method returned the last correct value.
+	 *
+	 * @see #getRawValue
+	 * @see #getText
+	 */
+	public String getRawText() {
+		return coerceToString(_value);
+	}
+	/** Sets the raw value directly. The caller must make sure the value
 	 * is correct (or intend to be incorrect), because this method
 	 * doesn't do any validation.
 	 *
@@ -496,7 +531,9 @@ implements Constrainted {
 	 * value (such as an empty string to a textbox with no-empty contraint).
 	 *
 	 * <p>Like setValue, the result is returned back to the server
-	 * by calling {@link #getText}
+	 * by calling {@link #getText}.
+	 *
+	 * @see #getRawValue
 	 */
 	public void setRawValue(Object value) {
 		if (_errmsg != null || !Objects.equals(_value, value)) {
@@ -575,11 +612,11 @@ implements Constrainted {
 
 	/** Checks whether user entered a wrong value (and not correct it yet).
 	 * Since user might enter a wrong value and moves on to other components,
-	 * this methid is called when {@link #getText} or {@link #getRawValue} is
+	 * this methid is called when {@link #getText} or {@link #getTargetValue} is
 	 * called.
 	 *
 	 * <p>Derives rarely need to access this method if they use only
-	 * {@link #getText} and {@link #getRawValue}.
+	 * {@link #getText} and {@link #getTargetValue}.
 	 */
 	protected void checkUserError() throws WrongValueException {
 		if (_errmsg != null)

@@ -51,7 +51,7 @@ public class Decimalbox extends FormatInputElement {
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public BigDecimal getValue() throws WrongValueException {
-		return (BigDecimal)getRawValue();
+		return (BigDecimal)getTargetValue();
 	}
 	/** Returns the value in double. If null, zero is returned.
 	 */

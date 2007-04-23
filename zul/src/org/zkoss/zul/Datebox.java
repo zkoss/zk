@@ -127,7 +127,7 @@ public class Datebox extends FormatInputElement {
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public Date getValue() throws WrongValueException {
-		return (Date)getRawValue();
+		return (Date)getTargetValue();
 	}
 	/** Sets the value (in Date).
 	 * @exception WrongValueException if value is wrong
