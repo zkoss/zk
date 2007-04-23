@@ -36,6 +36,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 					<li>Try to enter some non-decimal into "decimal box" and tab away.</li>
 					<li>Also try to enter some non-date format string into the "date box" and tab away.</li>
 					<li>Try to enter some negative integer or zero into "positive box" and tab away.</li>
+					<li>Try to highlight the name "John" in textbox of "Selection Event" and press "Replace" button below and "John" will be replaced with "Mary".</li>
 				</ul>
 				</p>
 			]]></attribute>
@@ -77,9 +78,30 @@ text line1...
 text line2...
  				</attribute>
  			</textbox>
+		</row>		
+		<row>
+			Selection event: 
+			<vbox>
+				<textbox id="sel" rows="5" cols="40" >
+					<attribute name="value">Welcome John !</attribute>
+					<attribute name="onSelection">
+						int start = event.getSelectionStart();
+						int end = event.getSelectionEnd();
+						msg.setValue("Start: "+start+" , End:"+end);
+					</attribute>
+				</textbox>
+				<button label="Replace" onClick="replace()"/>
+				<label id="msg"/>
+			</vbox>
 		</row>
 	</rows>
 	</grid>
+<zscript>
+	int start,end;
+	void replace(){
+		sel.setSelectedText(start,end,"Mary",true);
+	}
+</zscript>
 </window>
 				]]></attribute>
 			</textbox>
