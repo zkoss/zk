@@ -375,6 +375,7 @@ implements Constrainted {
 	//-- Constrainted --//
 	public void setConstraint(String constr) {
 		_constr = SimpleConstraint.getInstance(constr);
+		_valided = false;
 		invalidate(); //regenerate attributes
 	}
 	public void setConstraint(Constraint constr) {
