@@ -288,7 +288,7 @@ zkCkbox.rmAttr = function (cmp, nm) {
 	return true;
 };
 if (!zkCkbox._inflds)
-	zkCkbox._inflds = ["checked", "disabled", "readonly", "name", "value"];
+	zkCkbox._inflds = ["checked", "defaultChecked", "disabled", "readonly", "name", "value"];
 
 zkRadio = {};
 zkRadio.init = zkCkbox.init;

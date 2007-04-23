@@ -144,10 +144,18 @@ implements Constrainted {
 		return _errmsg;
 	}
 	/** Resets the error message.
-	 * Used only internally since we have to maintain value and errmsg at the same
-	 * time to avoid inconsistency between client and server.
+	 * <p>The error message is cleared automatically, so you rarely need
+	 * to call this method.
+	 * However, if a constraint depends on multiple input fields and
+	 * the error can be fixed by correcting one of these fields,
+	 * then you may have to clear the error message manullay by invoking
+	 * this method.
+	 * <p>For example, assume you have two {@link org.zkoss.zul.Intbox}
+	 * and want the value of the first one be smaller that that of the
+	 * second one. Then, you have to call this method for the other field
+	 * once the validation succeeds.
 	 */
-	private void clearErrorMessage() {
+	public void clearErrorMessage() {
 		if (_errmsg != null) {
 			_errmsg = null;
 			Clients.closeErrorBox(this);

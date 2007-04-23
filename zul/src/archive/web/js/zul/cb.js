@@ -49,7 +49,6 @@ zkCmbox.init = function (cmp) {
 	else if (zk.gecko) btn.style.verticalAlign = "middle";
 	else btn.align = "absmiddle";
 };
-
 zkCmit = {};
 zkCmit.init = function (cmp) {
 	zk.listen(cmp, "click", zkCmit.onclick);
@@ -125,6 +124,8 @@ zkCmbox.setAttr = function (cmp, nm, val) {
 		var btn = $e(cmp.id + "!btn");
 		if (btn) btn.style.display = val == "true" ? "": "none";
 		return true;
+	} else if ("z.sel" == nm ) {
+		return zkTxbox.setAttr(cmp, nm, val);
 	} else if (zkCmbox._inflds.contains(nm)) {
 		cmp = $real(cmp);
 	}
@@ -147,8 +148,8 @@ zkCmbox.rmAttr = function (cmp, nm) {
 	return true;
 };
 if (!zkCmbox._inflds)
-	zkCmbox._inflds = ["name", "value", "cols", "size", "maxlength",
-		"type", "disabled", "readonly", "rows"];
+	zkCmbox._inflds = ["name", "value", "defaultValue", "cols", "size",
+		"maxlength", "type", "disabled", "readonly", "rows"];
 
 /** Eats UP/DN keys. */
 zkCmbox.ondown = function (evt) {

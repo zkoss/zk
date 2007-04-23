@@ -384,10 +384,10 @@ zkDtbox.setAttr = function (cmp, nm, val) {
 			inp.style.height = val;
 			return true;
 		}
+	} else if ("z.sel" == nm ) {
+		return zkTxbox.setAttr(cmp, nm, val);
 	} else if (zkDtbox._inflds.contains(nm)) {
 		cmp = $real(cmp);
-	} else if ("z.sel" == nm ){
-		return zkTxbox.setAttr(cmp, nm, val);
 	}
 	zkau.setAttr(cmp, nm, val);
 	return true;
@@ -408,8 +408,8 @@ zkDtbox.rmAttr = function (cmp, nm) {
 	return true;
 };
 if (!zkDtbox._inflds)
-	zkDtbox._inflds = ["name", "value", "cols", "size", "maxlength",
-		"type", "disabled", "readonly", "rows"];
+	zkDtbox._inflds = ["name", "value", "defaultValue", "cols", "size",
+		"maxlength", "type", "disabled", "readonly", "rows"];
 
 zkDtbox.onkey = function (evt) {
 	var inp = Event.element(evt);
