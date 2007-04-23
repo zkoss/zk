@@ -33,7 +33,6 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.client.Inputable;
 import org.zkoss.zk.ui.ext.client.Errorable;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.au.AuSelectAll;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 
@@ -370,8 +369,7 @@ implements Constrainted {
 	/** Selects the whole text in this input.
 	 */
 	public void select() {
-		response("select", new AuSelectAll(this));
-			//don't use smartUpdate because the tag doesn't carry such info
+		smartUpdate("z.sel", "all");
 	}
 
 	//-- Constrainted --//
@@ -443,6 +441,7 @@ implements Constrainted {
 		appendAsapAttr(sb, Events.ON_CHANGING);
 		appendAsapAttr(sb, Events.ON_FOCUS);
 		appendAsapAttr(sb, Events.ON_BLUR);
+		appendAsapAttr(sb, Events.ON_SELECTION);
 
 		if (_constr != null) {
 			String serverValid = null;
@@ -514,31 +513,31 @@ implements Constrainted {
 	 * Sets the text of this InputElement to the specified text which is
 	 * begining with the new start point and ending with the new end point.
 	 * 
-	 * @param start -
-	 *            the start position of the text >= 0.
-	 * @param end -
-	 *            the end position of the text >= 0.
-	 * @param txt -
-	 *            the new text to be set.
-	 * @param isHighLight -
+	 * @param start the start position of the text (included)
+	 * @param end the end position of the text (excluded)
+	 * @param newtxt the new text to be set.
+	 * @param isHighLight
 	 *            Sets whether it will represent highlihgt style or cursor
 	 *            style.If the start point same with the end point always
 	 *            represent cursor style.
 	 */
-	public void setSelectedText(int start, int end, String txt,
+	public void setSelectedText(int start, int end, String newtxt,
 			boolean isHighLight) {
-		if (start > end)
-			return;
-		final String _txt = getText();
-		if (_txt.length() >= start && _txt.length() >= end && start >= 0
-				&& end >= 0) {
-			setText( _txt.substring(0,start) + txt + _txt.substring(end));
-			end = start + txt.length();
-			if(!isHighLight)
-				end = start;
-			setSelection(start,end);
-		}
+		if (start <= end) {
+			final String txt = getText();
+			final int len = txt.length();
+			if (start < 0) start = 0;
+			if (start > len) start = len;
+			if (end < 0) end = 0;
+			if (end > len) end = len;
 
+			if (newtxt == null)
+				newtxt = "";
+
+			setText( txt.substring(0, start) + newtxt + txt.substring(end));
+			setSelectionRange(start,
+				isHighLight ? start + newtxt.length(): start);
+		}
 	}
 
 	/**
@@ -547,21 +546,18 @@ implements Constrainted {
 	 * after the current selection start. If the new start point is different
 	 * with the new end point, then will represent the result of highlight in
 	 * this text.
+	 *
+	 * <p>Set both arguments to the same value to move the cursor to
+	 * the corresponding position without selecting text.
 	 * 
-	 * @param start -
-	 *            the start position of the text >= 0
-	 * @param end -
-	 *            the end position of the text >= 0
+	 * @param start the start position of the text (included)
+	 * @param end the end position of the text (excluded)
 	 */
-	public void setSelection(int start, int end) {
-		final String txt = getText();
-		if (txt.length() >= start && txt.length() >= end && start >= 0
-				&& end >= 0) {
-			smartUpdate("z.sel", "s:" + start + ",e:" + end + ",t:"
-					+ (start != end));
-		}
+	public void setSelectionRange(int start, int end) {
+		if (start <= end)
+			smartUpdate("z.sel", start + "," + end);
 	}
-	
+
 	/** Checks whether user entered a wrong value (and not correct it yet).
 	 * Since user might enter a wrong value and moves on to other components,
 	 * this methid is called when {@link #getText} or {@link #getRawValue} is

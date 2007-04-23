@@ -387,7 +387,7 @@ zkDtbox.setAttr = function (cmp, nm, val) {
 	} else if (zkDtbox._inflds.contains(nm)) {
 		cmp = $real(cmp);
 	} else if ("z.sel" == nm ){
-		return zkTxbox.setAttr($real(cmp), nm, val);
+		return zkTxbox.setAttr(cmp, nm, val);
 	}
 	zkau.setAttr(cmp, nm, val);
 	return true;
