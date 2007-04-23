@@ -143,17 +143,23 @@ implements Constrainted {
 	public String getErrorMessage() {
 		return _errmsg;
 	}
-	/** Resets the error message.
+	/** Clears the error message.
+	 *
 	 * <p>The error message is cleared automatically, so you rarely need
 	 * to call this method.
 	 * However, if a constraint depends on multiple input fields and
-	 * the error can be fixed by correcting one of these fields,
+	 * the error can be corrected by changing one of these fields,
 	 * then you may have to clear the error message manullay by invoking
 	 * this method.
+	 *
 	 * <p>For example, assume you have two {@link org.zkoss.zul.Intbox}
-	 * and want the value of the first one be smaller that that of the
-	 * second one. Then, you have to call this method for the other field
-	 * once the validation succeeds.
+	 * and want the value of the first one to be smaller than that of the
+	 * second one. Then, you have to call this method for the second intbox
+	 * once the validation of the first intbox succeeds, and vice versa.
+	 * Otherwise, the error message for the seoncd intbox remains if
+	 * the user fixed the error by lowering down the value of the first one
+	 * Why? The second intbox got no idea to clear the error message
+	 * (since its content doesn't change).
 	 */
 	public void clearErrorMessage() {
 		if (_errmsg != null) {
