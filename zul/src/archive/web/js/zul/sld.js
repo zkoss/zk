@@ -51,7 +51,8 @@ zk.Slider.prototype = {
 			this.button.onload = function () {meta._fixPos();};
 				//fix gecko bug: mis-position if img is not ready yet
 		}
-		this._fixPos();
+		setTimeout("zkSld._fixPos('"+this.id+"')", 20);
+			//IE: sometimes we cannot fix the position immediately
 	},
 	/** (x, y) is in the style's coordination (use zk.toStyleOffset to convert).
 	 */
@@ -178,4 +179,8 @@ zkSld.setAttr = function (cmp, nm, val) {
 		return true;
 	}
 	return false;
+};
+zkSld.onVisi = zkSld.onSize = zkSld._fixPos = function (cmp) {
+	var meta = zkau.getMeta(cmp); //cmp or id both OK
+	if (meta) meta._fixPos();
 };
