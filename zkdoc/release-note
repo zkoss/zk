@@ -49,6 +49,9 @@ ZK 2.3.1 Freshly
   1701319: setVisible method is not working for Vbox
   1698981: The constraint doesn't works when assing value first
   1701986: The error msgbox remains even if error is corrected
+  1697214: in TAB:slider always in left position even if curpos changed
+  1706019: Bandbox validation on firing always
+  1706290: Popup in popup bug
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
