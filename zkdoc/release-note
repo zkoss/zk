@@ -51,7 +51,9 @@ ZK 2.3.1 Freshly
   1701986: The error msgbox remains even if error is corrected
   1697214: in TAB:slider always in left position even if curpos changed
   1706019: Bandbox validation on firing always
-  1706290: Popup in popup bug
+  1706290: Menu and comobox in popup causes unexpected dismiss
+  1707153: Menu and comobox doesn't work properly in a context popup
+  1707254: Menu and comobobox in bandbox causes unexpected dismiss
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
