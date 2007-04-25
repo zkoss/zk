@@ -58,6 +58,8 @@ public class Slider extends XulElement {
 	throws WrongValueException {
 		if (curpos < 0)
 			throw new WrongValueException("Negative is not allowed: "+curpos);
+		if (curpos > _maxpos)
+			throw new WrongValueException("Illegal position: "+curpos+". Range: 0~"+_maxpos);
 		if (_curpos != curpos) {
 			_curpos = curpos;
 			smartUpdate("z.curpos", _curpos);
@@ -78,6 +80,8 @@ public class Slider extends XulElement {
 		if (maxpos <= 0)
 			throw new WrongValueException("Nonpositive is not allowed: "+maxpos);
 		if (_maxpos != maxpos) {
+			if (_curpos > maxpos)
+				setCurpos(maxpos);
 			_maxpos = maxpos;
 			smartUpdate("z.maxpos", _maxpos);
 		}

@@ -587,14 +587,17 @@ zkPop = {};
 /** Called by au.js's context menu. */
 zkPop.context = function (ctx, ref) {
 	zk.show(ctx); //onVisiAt is called in zk.show
-	zkPop._pop._popupId = ctx.id;
+	zkPop._pop.addPopupId(ctx.id);
 	zkau.hideCovered();
 
 	if (zkau.asap(ctx, "onOpen"))
 		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
 };
 zkPop.close = function (ctx) {
-	zkPop._pop._popupId = null;
+	zkPop._pop.removePopupId(ctx.id);
+	zkPop._close(ctx);
+};
+zkPop._close = function (ctx) {
 	zk.hide(ctx);
 	zkau.hideCovered();
 
@@ -603,9 +606,9 @@ zkPop.close = function (ctx) {
 };
 
 zk.Popup = Class.create();
-Object.extend(Object.extend(zk.Popup.prototype, zk.Float.prototype), {
+Object.extend(Object.extend(zk.Popup.prototype, zk.Floats.prototype), {
 	_close: function (el) {
-		zkPop.close(el);
+		zkPop._close(el);
 	}
 });
 if (!zkPop._pop)

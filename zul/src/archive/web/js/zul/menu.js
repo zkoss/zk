@@ -20,59 +20,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 zkMenu = {};
 
 zk.FloatMenu = Class.create();
-zk.FloatMenu.prototype = {
-	initialize: function () {
-		this._popupIds = new Array();
-	},
-
-	/** Whether the mousedown event shall be ignored for the specified
-	 * event.
-	 */
+Object.extend(Object.extend(zk.FloatMenu.prototype, zk.Floats.prototype), {
+	focusInFloats0: zk.Floats.prototype.focusInFloats,
 	focusInFloats: function (el) {
-		if (!el) return false;
-
-		if (getZKAttr(el.parentNode, "mpop") != null)
+		if (el && getZKAttr(el.parentNode, "mpop") != null)
 			return true;
 
-		for (var j = 0; j < this._popupIds.length; ++j) {
-			var pp = $e(this._popupIds[j]);
-			if (pp != null && zk.isAncestor(pp, el))
-				return true;
-		}
-		return false;
+		return this.focusInFloats0(el);
 	},
-
-	/** Closes (hides) all menus. */
-	closeFloats: function() {
-		var closed;
-		while (this._popupIds.length) {
-		//reverse order is important if pp contains another
-		//otherwise, IE might have bug to handle them correctly
-			closed = true;
-			zkMenu._close(this._popupIds.pop());
-		}
-		return closed;
-	},
-
-	/** Adds elements that we have to hide what they covers.
-	 */
-	addHideCovered: function (ary) {
-		for (var j = 0; j < this._popupIds.length; ++j) {
-			var el = $e(this._popupIds[j]);
-			if (el) ary.push(el);
-		}
-	},
-
-	getPopupIds: function () {
-		return this._popupIds;
-	},
-	addPopupId: function (id) {
-		this._popupIds.push(id);
-	},
-	removePopupId: function (id) {
-		this._popupIds.remove(id);
+	_close: function (el) {
+		zkMenu._close(el);
 	}
-};
+});
 
 if (!zkMenu._pop)
 	zkau.floats.push(zkMenu._pop = new zk.FloatMenu()); //hook to zkau.js
