@@ -1406,10 +1406,10 @@ zk.Float.prototype = {
 	 * event.
 	 */
 	focusInFloats: function (el) {
-		if (el && this._popupId) {
-			if ($uuid(this._popupId) == $uuid(el)) //same component (but diff parts)
+		if (el && this._ftid) {
+			if ($uuid(this._ftid) == $uuid(el)) //same component (but diff parts)
 				return true;
-			var pp = $e(this._popupId);
+			var pp = $e(this._ftid);
 			return pp && zk.isAncestor(pp, el);
 		}
 		return false;
@@ -1418,13 +1418,13 @@ zk.Float.prototype = {
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloats: function() {
-		if (this._popupId) {
-			var n = $e(this._popupId);
+		if (this._ftid) {
+			var n = $e(this._ftid);
 			if (n && n.style.display != "none"
 			&& getZKAttr(n, "animating") != "hide"
 			&& !zk.isAncestorX(n, arguments)) {
 				this._close(n);
-				this._popupId = null;
+				this._ftid = null;
 				return true;
 			}
 		}
@@ -1433,10 +1433,17 @@ zk.Float.prototype = {
 	/** Adds elements that we have to hide what they covers.
 	 */
 	addHideCovered: function (ary) {
-		if (this._popupId) {
-			var el = $e(this._popupId);
+		if (this._ftid) {
+			var el = $e(this._ftid);
 			if (el) ary.push(el);
 		}
+	},
+//zk.Float doesn't support asPopup. Reason: if asPopup is true, there must
+//be multiple floats, i.e., zk.Floats shall be used instead
+	/** Sets the popup ID.
+	 */
+	setFloatId: function (id) {
+		this._ftid = id;
 	}
 };
 
@@ -1446,7 +1453,8 @@ zk.Float.prototype = {
 zk.Floats = Class.create();
 zk.Floats.prototype = {
 	initialize: function () {
-		this._ppids = new Array();
+		this._ftids = new Array();
+		this._aspps = {}; //(id, whether a float behaves like a popup)
 	},
 	/** Whether the mousedown event shall be ignored for the specified
 	 * event.
@@ -1454,10 +1462,10 @@ zk.Floats.prototype = {
 	focusInFloats: function (el) {
 		if (el) {
 			var uuid = $uuid(el);
-			for (var j = this._ppids.length; --j >= 0;) {
-				if ($uuid(this._ppids[j]) == uuid) //same component (but diff parts)
+			for (var j = this._ftids.length; --j >= 0;) {
+				if ($uuid(this._ftids[j]) == uuid) //same component (but diff parts)
 					return true;
-				var pp = $e(this._ppids[j]);
+				var pp = $e(this._ftids[j]);
 				if (pp && zk.isAncestor(pp, el))
 					return true;
 			}
@@ -1469,12 +1477,13 @@ zk.Floats.prototype = {
 	 */
 	closeFloats: function () {
 		var closed;
-		for (var j = this._ppids.length; --j >= 0;) {
-			var n = $e(this._ppids[j]);
+		for (var j = this._ftids.length; --j >= 0;) {
+			var id = this._ftids[j];
+			var n = $e(id);
 			if (n && n.style.display != "none"
 			&& getZKAttr(n, "animating") != "hide"
-			&& !zk.isAncestorX(n, arguments)) {
-				this._ppids.splice(j, 1);
+			&& (!this._aspps[id] || !zk.isAncestorX(n, arguments))) {
+				this._ftids.splice(j, 1);
 				this._close(n);
 				closed = true;
 			}
@@ -1484,20 +1493,29 @@ zk.Floats.prototype = {
 	/** Adds elements that we have to hide what they covers.
 	 */
 	addHideCovered: function (ary) {
-		for (var j = 0; j < this._ppids.length; ++j) {
-			var el = $e(this._ppids[j]);
+		for (var j = 0; j < this._ftids.length; ++j) {
+			var el = $e(this._ftids[j]);
 			if (el) ary.push(el);
 		}
 	},
 
-	getPopupIds: function () {
-		return this._ppids;
+	getFloatIds: function () {
+		return this._ftids;
 	},
-	addPopupId: function (id) {
-		this._ppids.push(id);
+	/** Adds the float ID.
+	 *
+	 * @param asPopup whether the float behaves like a popup window
+	 * (i.e., it remains open if closeFloats is called due to
+	 * the activities of its child),
+	 * Otherwise, the float is always closed when closeFloats is called.
+	 */
+	addFloatId: function (id, asPopup) {
+		this._ftids.push(id);
+		if (asPopup) this._aspps[id] = true;
 	},
-	removePopupId: function (id) {
-		this._ppids.remove(id);
+	removeFloatId: function (id) {
+		this._ftids.remove(id);
+		delete this._aspps[id];
 	}
 };
 

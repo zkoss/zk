@@ -35,6 +35,7 @@ import org.zkoss.lang.Classes;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 import org.zkoss.zk.scripting.SerializableInterpreter;
@@ -53,6 +54,9 @@ implements SerializableInterpreter {
 	}
 
 	//GenericInterpreter//
+	protected void beforeInterpret(Namespace ns) {
+		super.beforeInterpret(ns);
+	}
 	protected void exec(String script) {
 		try {
 			_ip.eval(script);

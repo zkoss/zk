@@ -115,11 +115,26 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 
 	/** Called before {@link #exec}.
+	 * <p>Default: call {@link #beforeExec} and push the namespace
+	 * as the active one.
+	 */
+	protected void beforeInterpret(Namespace ns) {
+		beforeExec();
+		push(ns); //getFromNamespace will handle null
+	}
+	/** Called after {@link #exec}.
+	 * <p>Default: call {@link #afterExec}.
+	 */
+	protected void afterInterpret(Namespace ns) {
+		pop();
+		afterExec();
+	}
+	/** Called before {@link #exec}, {@link #get} and many others.
 	 * <p>Default: does nothing.
 	 */
 	protected void beforeExec() {
 	}
-	/** Called after {@link #exec}.
+	/** Called after {@link #exec}, {@link #get} and many others.
 	 * <p>Default: does nothing.
 	 */
 	protected void afterExec() {
@@ -160,13 +175,11 @@ abstract public class GenericInterpreter implements Interpreter {
 		if (each != null)
 			script = each + '\n' + script;
 
-		beforeExec();
-		push(ns); //getFromNamespace will handle null
+		beforeInterpret(ns);
 		try {
 			exec(script);
 		} finally {
-			pop();
-			afterExec();
+			afterInterpret(ns);
 		}
 	}
 	/** Returns null since retrieving class is not supported.
