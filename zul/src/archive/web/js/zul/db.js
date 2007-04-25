@@ -481,7 +481,7 @@ zkDtbox.onbutton = function (cmp) {
 zkDtbox.open = function (pp) {
 	pp = $e(pp);
 	zkau.closeFloats(pp); //including popups
-	zkau._dtbox._popupId = pp.id;
+	zkau._dtbox.setFloatId(pp.id);
 
 	var uuid = $uuid(pp.id);
 	var cb = $e(uuid);
@@ -546,7 +546,7 @@ zkDtbox.close = function (pp, focus) {
 	}
 
 	pp = $e(pp);
-	zkau._dtbox._popupId = null;
+	zkau._dtbox.setFloatId(null);
 	pp.style.display = "none";
 	//No special child, so no need to: zk.onHideAt(pp);
 	zkau.hideCovered();

@@ -587,14 +587,14 @@ zkPop = {};
 /** Called by au.js's context menu. */
 zkPop.context = function (ctx, ref) {
 	zk.show(ctx); //onVisiAt is called in zk.show
-	zkPop._pop.addPopupId(ctx.id);
+	zkPop._pop.addFloatId(ctx.id, true); //it behaves like Popup (rather than dropdown)
 	zkau.hideCovered();
 
 	if (zkau.asap(ctx, "onOpen"))
 		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
 };
 zkPop.close = function (ctx) {
-	zkPop._pop.removePopupId(ctx.id);
+	zkPop._pop.removeFloatId(ctx.id);
 	zkPop._close(ctx);
 };
 zkPop._close = function (ctx) {

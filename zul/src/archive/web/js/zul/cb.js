@@ -61,7 +61,8 @@ zkCmit.onclick = function (evt) {
 	var item = $parentByTag(Event.element(evt), "TR");
 	if (item) {
 		zkCmbox._selback(item);
-		zkau.closeFloats(item);
+		zkau.closeFloats($outer(item.parentNode));
+			//including combobox, but excluding dropdown
 		zkCmit.onoutTo(item); //onmouseout might be sent (especiall we change parent)
 
 		//Request 1537962: better responsive
@@ -257,8 +258,8 @@ zkCmbox.getLabel = function (item) {
 
 zkCmbox.open = function (pp, hilite) {
 	pp = $e(pp);
-	zkau.closeFloats(pp); //including popups
-	zkCmbox._pop._popupId = pp.id;
+	zkau.closeFloats(pp);
+	zkCmbox._pop.setFloatId(pp.id);
 
 	var uuid = $uuid(pp.id);
 	var cb = $e(uuid);
@@ -490,7 +491,7 @@ zkCmbox.close = function (pp, focus) {
 		rmZKAttr(pp, "vparent");
 	}
 
-	zkCmbox._pop._popupId = null;
+	zkCmbox._pop.setFloatId(null);
 	pp.style.display = "none";
 	zk.onHideAt(pp);
 	zkau.hideCovered();
@@ -498,8 +499,7 @@ zkCmbox.close = function (pp, focus) {
 	if (focus)
 		zk.focusById(uuid + "!real");
 
-	var cb = $parentByType(pp, "Cmbox");
-	if (!cb) cb = $parentByType(pp, "Bdbox");
+	var cb = $outer(pp);
 	if (cb && zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: cb.id, cmd: "onOpen", data: [false]});
 };

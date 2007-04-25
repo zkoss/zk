@@ -47,7 +47,7 @@ zkMenu.onover = function (evt) {
 	if (autodrop) zkMenu._shallClose = false;
 		//turn off pending auto-close
 
-	var popupIds = zkMenu._pop.getPopupIds();
+	var popupIds = zkMenu._pop.getFloatIds();
 	if (!autodrop && popupIds.length == 0) return;
 
 	//Close non-child menu
@@ -60,7 +60,7 @@ zkMenu.onover = function (evt) {
 	zkMenu.open(cmp, false);
 };
 zkMenu.onout = function (evt) {
-	if (zkMenu._pop.getPopupIds().length == 0) return; //nothing to do
+	if (zkMenu._pop.getFloatIds().length == 0) return; //nothing to do
 
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
@@ -82,7 +82,7 @@ zkMenu.onclick = function (evt) {
  * @param toggle whether to close all menu first and then open the specified menu
  */
 zkMenu.open = function (menu, toggle) {
-	if (toggle) zkau.closeFloats(menu); //including popups
+	if (toggle) zkau.closeFloats(menu);
 
 	var popupId = getZKAttr(menu, "mpop");
 	if (!popupId) return; //menuitem
@@ -121,7 +121,7 @@ zkMenu._open = function (pp, top, ref, pos) {
 	if (ref) zk.position(pp, ref, pos);
 	zk.show(pp); //animation effect, if any
 
-	zkMenu._pop.addPopupId(pp.id);
+	zkMenu._pop.addFloatId(pp.id);
 	zkau.hideCovered();
 	if (zk.gecko)
 		setTimeout("zkMenu._fixWidth('"+pp.id+"')", 10);
@@ -145,7 +145,7 @@ zkMenu._fixWidth = function (popupId) {
 
 /** Closes the menu. */
 zkMenu.close = function (pp) {
-	zkMenu._pop.removePopupId(pp.id);
+	zkMenu._pop.removeFloatId(pp.id);
 	zkMenu._close(pp);
 	zkau.hideCovered();
 };
@@ -200,7 +200,7 @@ zkMenuit.init = function (cmp) {
 zkMenuit.onclick = function (evt) {
 	if (!evt) evt = window.event;
 	var cmp = $parentByType(Event.element(evt), "Menuit");
-	zkau.closeFloats(cmp);//including popups if visible
+	zkau.closeFloats(cmp);
 	var anc = $e(cmp.id + "!a");
 	if ("javascript:;" == anc.href) {
 		var cmp = $outer(anc);
