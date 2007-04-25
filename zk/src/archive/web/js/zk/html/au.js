@@ -796,7 +796,7 @@ zkau._onDocLClick = function (evt) {
 				if (ctx) {
 					var type = $type(ctx);
 					if (type) {
-						zkau.closeFloats(ctx);
+						zkau.closeFloatsCtx(ctx, cmp);
 
 						zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
 						zk.eval(ctx, "context", type, cmp);
@@ -895,7 +895,7 @@ zkau._onDocCtxMnu = function (evt) {
 			if (ctx) {
 				var type = $type(ctx);
 				if (type) {
-					zkau.closeFloats(ctx);
+					zkau.closeFloatsCtx(ctx, cmp);
 
 					zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
 					zk.eval(ctx, "context", type, cmp);
@@ -1001,7 +1001,7 @@ zkau._openTip = function (cmpId) {
 	if (zkau._tipz && !zkau._tipz.open
 	 && (!cmpId || cmpId == zkau._tipz.cmpId)) {
 		var tip = $e(zkau._tipz.tipId);
-		zkau.closeFloats(tip);
+		zkau.closeFloatsCtx(tip, $e(cmpId));
 		if (tip) {
 			var cmp = $e(cmpId);
 			zkau._tipz.open = true;
@@ -1169,35 +1169,57 @@ zkau.sendOnClose = function (uuid, closeFloats) {
 	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
 };
 
-/** Closes popups and floats. Return false if nothing changed. */
-zkau.closeFloats = function (owner) {
-	owner = $e(owner);
+/** Closes popups, if not ancestor of arguments, and all floats.
+ * Return false if nothing changed.
+ * @param arguments a list of component (or its ID) to exclude if
+ * a popup contains any of them
+ */
+zkau.closeFloats = function () {
+	zkau._closeFloats(arguments, true);
+};
+/** Closes popups and floats if not ancestor of arguments.
+ * Unlike zkau.closeFloats, this method tries to keep a float if it
+ * is an ancestor of arguments.
+ * @param arguments a list of component (or its ID) to exclude if
+ * a popup or a float contains any of them
+ */
+zkau.closeFloatsCtx = function () {
+	zkau._closeFloats(arguments, false);
+}
+zkau._closeFloats = function (ancestors, allFloats) {
 	var closed;
 	for (var j = zkau._popups.length; --j >=0;) {
 	//reverse order is important if popup contains another
 	//otherwise, IE seem have bug to handle them correctly
-		var uuid = zkau._popups[j];
-		var n = $e(uuid);
+		var n = $e(zkau._popups[j]);
 		if (n && n.style.display != "none"
-		&& getZKAttr(n, "animating") != "hide" && !zk.isAncestor(n, owner)) {
+		&& getZKAttr(n, "animating") != "hide"
+		&& !zk.isAncestorX(n, ancestors)) {
 		//we avoid hiding twice we have to check animating
 			closed = true;
 			zk.hide(n);
-			zkau.send({uuid: uuid, cmd: "onOpen", data: [false]},
+			zkau.send({uuid: n.id, cmd: "onOpen", data: [false]},
 				zkau.asapTimeout(n, "onOpen"));
 				//We have to send onOpen since the server need to know
 				//whether the popup becomes invsibile
 		}
 	}
 
-	for (var j = 0; j < zkau.floats.length; ++j)
-		if (zkau.floats[j].closeFloats()) //combobox popup
+	//floats: combobox, context menu...
+	for (var j = zkau.floats.length; --j >= 0;) {
+		var n = zkau.floats[j];
+		if (allFloats) {
+			if (n.closeFloats()) //ignore ancestors
+				closed = true;
+		} else if (n.closeFloats.apply(n, ancestors))
 			closed = true;
+	}
 
 	if (closed)
 		zkau.hideCovered();
 	return closed;
 };
+
 zkau.hideCovered = function() {
 	var ary = new Array();
 	for (var j = 0; j < zkau._popups.length; ++j) {
@@ -1490,102 +1512,6 @@ zkau.endGhostToDIV = function (dg) {
 	}
 };
 
-/*Float: used to be added to zkau.floats
-	Derives must provide an implementation of _close(el).
-*/
-zk.Float = Class.create();
-zk.Float.prototype = {
-	initialize: function () {
-	},
-	/** Whether the mousedown event shall be ignored for the specified
-	 * event.
-	 */
-	focusInFloats: function (el) {
-		var uuid = $uuid(this._popupId);
-		if (el != null && this._popupId != null) {
-			if ($uuid(el) == uuid)
-				return true;
-			var popup = $e(this._popupId);
-			return popup && zk.isAncestor(popup, el);
-		}
-		return false;
-	},
-	/** Closes (hides) all menus. */
-	closeFloats: function() {
-		if (this._popupId) {
-			var el = $e(this._popupId);
-			if (el) this._close(el);
-			return true;
-		}
-		return false;
-	},
-	/** Adds elements that we have to hide what they covers.
-	 */
-	addHideCovered: function (ary) {
-		if (this._popupId) {
-			var el = $e(this._popupId);
-			if (el) ary.push(el);
-		}
-	}
-};
-
-//Histroy//
-zk.History = Class.create();
-zk.History.prototype = {
-	initialize: function () {
-		this.curbk = "";
-		setInterval("zkau.history.checkBookmark()", 520);
-			//Though IE use history.html, timer is still required 
-			//because user might specify URL directly
-	},
-	/** Sets a bookmark that user can use forward and back buttons */
-	bookmark: function (nm) {
-		if (this.curbk != nm) {
-			this.curbk = nm; //to avoid loop back the server
-			var encnm = encodeURIComponent(nm);
-			window.location.hash = zk.safari ? encnm: '#' + encnm;
-			if (zk.ie /*|| zk.safari*/) this.bkIframe(nm);
-		}
-	},
-	/** Checks whether the bookmark is changed. */
-	checkBookmark: function() {
-		var nm = this.getBookmark();
-		if (nm != this.curbk) {
-			this.curbk = nm;
-			zkau.send({uuid: '', cmd: "onBookmarkChanged", data: [nm]}, 25);
-		}
-	},
-	getBookmark: function () {
-		var nm = window.location.hash;
-		var j = nm.indexOf('#');
-		return j >= 0 ? decodeURIComponent(nm.substring(j + 1)): '';
-	}
-};
-if (zk.ie /*|| zk.safari*/) {
-	/** bookmark iframe */
-	zk.History.prototype.bkIframe = function (nm) {
-		var url = zk.getUpdateURI("/web/js/zk/html/history.html", true);
-		if (nm) url += '?' +encodeURIComponent(nm);
-
-		var ifr = $e('zk_histy');
-		if (ifr) {
-			ifr.src = url;
-		} else {
-			zk.newFrame('zk_histy', url,
-				/*zk.safari ? "width:0;height:0;display:inline":*/ "display:none");
-		}
-	};
-	/** called when history.html is loaded*/
-	zk.History.prototype.onHistoryLoaded = function (src) {
-		var j = src.indexOf('?');
-		var nm = j >= 0 ? src.substring(j + 1): '';
-		window.location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm: '';
-		this.checkBookmark();
-	};
-}
-
-zkau.history = new zk.History();
-
 //Upload//
 /** Begins upload (called when the submit button is pressed)
  * @param wndid id of window to close, if any
@@ -1638,6 +1564,9 @@ zkau.endUpload = function () {
 		zkau._tmupload = null;
 	}
 };
+
+//Miscellanous//
+zkau.history = new zk.History();
 
 //Commands//
 zkau.cmd0 = { //no uuid at all
