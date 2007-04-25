@@ -278,7 +278,6 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	var pp2 = $e(uuid + "!cave");
 	if (pp2) pp2.style.width = pp2.style.height = "auto";
 	pp.style.position = "absolute"; //just in case
-	pp.style.overflow = "auto"; //just in case
 	pp.style.display = "block";
 	pp.style.zIndex = "80000";
 	zk.onVisiAt(pp);
