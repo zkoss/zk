@@ -372,9 +372,12 @@ span.combobox, span.datebox, span.bandbox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 }
 div.comboboxpp, div.bandboxpp { <%--hardcoded in DSP--%>
-	display: block; position: absolute; z-index: 80000; overflow: auto;
+	display: block; position: absolute; z-index: 80000;
 	background: white; border: 1px solid black; padding: 2px;
 	font-size: xx-small;
+}
+div.comboboxpp {
+	overflow: auto; <%-- if bandboxpp overflow:auto, crop popup if any --%>
 }
 .comboboxpp td { <%--label--%>
 	white-space: nowrap; font-size: xx-small; cursor: hand; cursor: pointer; 
