@@ -39,20 +39,20 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  * <p>Derive classes usually override {@link #exec} instead of {@link #interpret};
  * In addition, don't override {@link #getVariable},
  * {@link #setVariable} and {@link #unsetVariable}.
- * Instead, override {@link #get}, {@link #set} and {@link #unset} instead.
+ * Instead, override {@link #get(String)}, {@link #set} and {@link #unset} instead.
  *
- * <p>If an interpreter doesn't support hierachical namespaces or scopes,
- * it can simply implement a global namespace, and then use
+ * <p>If an interpreter doesn't support hierachical scopes,
+ * it can simply implement a global scope, and then use
  * {@link #getFromNamespace} to
  * retrieve variables from ZK's hierachical namespaces.
  *
- * <p>If it supports hierachical namespaces or scopes
+ * <p>If it supports hierachical scopes
  * (example: {@link org.zkoss.zk.scripting.bsh.BSHInterpreter}), it
- * can store its namescape (or scope) in {@link Namespace}
- * (with a special name) and vice versa, such that it can retrieve
- * the correct {@link Namespace} no matter {@link Namespaces#beforeInterpret}
- * is called or not.
- * Such kind of implementation is optional.
+ * can maintain a one-to-one relationship among interpreter's scopes
+ * and ZK's {@link Namespace}. Thus, it can retrieve
+ * the correct scope by giving ZK's {@link Namespace}, and vice versa.
+ *
+ * <p>Whether to support hierachical namespaces is optional.
  *
  * @author tomyeh
  */
@@ -64,7 +64,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	private Page _owner;
 	private String _zslang;
 
-	private static final Namespace _emptyns = new Namespace() {
+	private static final Namespace EMPTY_NAMESPACE = new Namespace() {
 		public Set getVariableNames() {
 			return Collections.EMPTY_SET;
 		}
@@ -106,9 +106,27 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * in the interpreter to Java codes.
 	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 *
+	 * <p>An empty (and fake) namespace is pushed so {@link #getFromNamespace}
+	 * always returns null.
 	 */
 	protected Object get(String name) {
 		return null;
+	}
+	/** Gets the variable from the interpreter's scope of the giving
+	 * namespace.
+	 * You need to implement this method only if {@link org.zkoss.zk.scripting.HierachicalAware}
+	 * is also imiplemented.
+	 *
+	 * <p>Default: the same as {@link #get(String)}.
+	 *
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 *
+	 * <p>An empty (and fake) namespace is pushed so {@link #getFromNamespace}
+	 * always returns null.
+	 */
+	protected Object get(Namespace ns, String name) {
+		return get(name);
 	}
 	/** Sets the variable from the interpreter.
 	 * Optional. Implement it if you want to allow Java codes to define
@@ -209,14 +227,35 @@ abstract public class GenericInterpreter implements Interpreter {
 	 *
 	 * <p>Deriving class shall override {@link #get}, instead of this method.
 	 */
-	public Object getVariable(String name, boolean ignoreNamespace) {
+	public Object getVariable(String name) {
 		beforeExec();
-		if (ignoreNamespace) push(_emptyns);
+		push(EMPTY_NAMESPACE);
 			//don't use null since it means Namespaces#getCurrent, see below
 		try {
 			return get(name);
 		} finally {
-			if (ignoreNamespace) pop();
+			pop();
+			afterExec();
+		}
+	}
+	/** Retrieve the variable by using the specified namespace
+	 * as a reference.
+	 *
+	 * <p>Deriving class shall override {@link #get(Namespace ns, String)},
+	 * instead of this method.
+	 *
+	 * <p>This method is part of {@link org.zkoss.zk.scripting.HierachicalAware}.
+	 * It is defined here to simplify the implementation of the
+	 * deriving classes, if they support the hierachical scopes.
+	 */
+	public Object getVariable(Namespace ns, String name) {
+		beforeExec();
+		push(EMPTY_NAMESPACE);
+			//don't use null since it means Namespaces#getCurrent, see below
+		try {
+			return get(ns, name);
+		} finally {
+			pop();
 			afterExec();
 		}
 	}

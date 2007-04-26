@@ -76,7 +76,8 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.au.AuSetTitle;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Interpreters;
-import org.zkoss.zk.scripting.SerializableInterpreter;
+import org.zkoss.zk.scripting.HierachicalAware;
+import org.zkoss.zk.scripting.SerializableAware;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.VariableResolver;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
@@ -396,7 +397,19 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public Object getZScriptVariable(String name) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
-			final Object val = ((Interpreter)it.next()).getVariable(name, true);
+			final Object val = ((Interpreter)it.next()).getVariable(name);
+			if (val != null)
+				return val;
+		}
+		return null;
+	}
+	public Object getZScriptVariable(Namespace ns, String name) {
+		for (Iterator it = getLoadedInterpreters().iterator();
+		it.hasNext();) {
+			final Object ip = it.next();
+			final Object val = ip instanceof HierachicalAware ?
+				((HierachicalAware)ip).getVariable(ns, name):
+				((Interpreter)ip).getVariable(name);
 			if (val != null)
 				return val;
 		}
@@ -691,12 +704,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 			final String script = _langdef.getInitScript(zslang);
 			if (script != null) {
-				//we use a simplified NS since the script defined in langdef
-				//shall not depend on the current context of the page
-				final NS ns = new NS();
-				ns.setVariable("log", _zklog, true);
-				ns.setVariable("page", this, true);
-				ip.interpret(script, ns);
+				_ns.setVariable("log", _zklog, true);
+				_ns.setVariable("page", this, true);
+				ip.interpret(script, _ns);
 			}
 
 			//evaluate deferred zscripts, if any
@@ -873,11 +883,11 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		for (Iterator it = _ips.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final Object ip = me.getValue();
-			if (ip instanceof SerializableInterpreter) {
+			if (ip instanceof SerializableAware) {
 				s.writeObject((String)me.getKey()); //zslang
 
-				((SerializableInterpreter)ip).write(s,
-					new SerializableInterpreter.Filter() {
+				((SerializableAware)ip).write(s,
+					new SerializableAware.Filter() {
 						public boolean accept(String name, Object value) {
 							return isVariableSerializable(name, value);
 						}
@@ -924,7 +934,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			final String zslang = (String)s.readObject();
 			if (zslang == null) break; //no more
 
-			((SerializableInterpreter)getInterpreter(zslang)).read(s);
+			((SerializableAware)getInterpreter(zslang)).read(s);
 		}
 	}
 	private static boolean isVariableSerializable(String name, Object value) {

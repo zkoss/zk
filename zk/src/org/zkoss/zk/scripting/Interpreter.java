@@ -79,13 +79,9 @@ public interface Interpreter {
 	public Method getMethod(String name, Class[] argTypes);
 
 	/** Returns the value of a variable defined in this interpreter.
-	 *
-	 * @param ignoreNamespace whether to ignore the active namespace, if any.
-	 * Note: when {@link #interpret} is called, the namespace specified
-	 * in the ns argument becomes the active namespace.
-	 * 
+	 * Note: it doesn't search the namespace.
 	 */
-	public Object getVariable(String name, boolean ignoreNamespace);
+	public Object getVariable(String name);
 	/** Sets the value of a variable to this interpreter, as if
 	 * they are defined in the interpreter.
 	 *

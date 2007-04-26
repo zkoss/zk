@@ -310,19 +310,34 @@ public interface Page extends IdSpace {
 	public org.zkoss.zk.scripting.Method getZScriptMethod(
 	String name, Class[] argTypes);
 	/** Returns the value of the variable of the specified name by searching
-	 * the namespaces and the loaded interpreters.
+	 * the loaded interpreters, if any.
 	 *
 	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
 	 *
-	 * <p>{@link #getVariable} returns only variables defined by
+	 * <p>{@link #getVariable} returns variables defined by
 	 * {@link #setVariable} (i.e., a shortcut to {@link Namespace#setVariable}).
-	 * On the other hand, {@link #getZScriptVariable} returns these variables
-	 * and those defined when executing zscripts.
+	 * On the other hand, {@link #getZScriptVariable} returns the variables
+	 * that are defined when executing zscripts.
 	 *
 	 * @return the value of the variable, or null if not found
 	 * @see #getLoadedInterpreters
 	 */
 	public Object getZScriptVariable(String name);
+	/** Returns the value of the variable of the specified name by searching
+	 * the loaded interpreters, if any.
+	 *
+	 * <p>It is similar to {@link #getZScriptVariable(String)}, except
+	 * it uses the specified namespace as a reference to identify the
+	 * correct scope for searching the variable.
+	 * If the interpreter does NOT support hierachical scopes,
+	 * this method is the same as {@link #getZScriptVariable(String)}.
+	 *
+	 * @param ns the namespace used as a reference to identify the
+	 * correct scope for searching the variable.
+	 * It is ignored if the interpreter doesn't support hierachical scopes.
+	 * Note: this method doesn't look for any variable stored in ns.
+	 */
+	public Object getZScriptVariable(Namespace ns, String name);
 
 	/** Returns a variable that is visible to EL expressions.
 	 *

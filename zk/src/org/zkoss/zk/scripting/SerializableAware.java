@@ -1,4 +1,4 @@
-/* SerializableInterpreter.java
+/* SerializableAware.java
 
 {{IS_NOTE
 	Purpose:
@@ -19,11 +19,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.scripting;
 
 /**
- * An extra interface implemented by an interpreter if it supports serialization.
+ * An extra interface implemented by an interpreter ({@link Interpreter})
+ * if it supports serialization.
  *
  * @author tomyeh
+ * @see Interpreter
  */
-public interface SerializableInterpreter {
+public interface SerializableAware {
 	/** Writes the name and value of the variables of this namespace
 	 * to the specified stream.
 	 *
@@ -41,7 +43,7 @@ public interface SerializableInterpreter {
 	public void read(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException;
 
-	/** The filter used with {@link SerializableInterpreter#write}.
+	/** The filter used with {@link SerializableAware#write}.
 	 */
 	public interface Filter {
 		/** Whether to accept the specified variable name and its value.

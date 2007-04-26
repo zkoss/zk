@@ -38,28 +38,44 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
-import org.zkoss.zk.scripting.SerializableInterpreter;
+import org.zkoss.zk.scripting.SerializableAware;
+import org.zkoss.zk.scripting.HierachicalAware;
 
 /**
  * The interpreter that uses BeanShell to interpret zscript codes.
  *
+ * <p>Unlike many other implementations, it supports the hierachical
+ * scopes ({@link HierachicAware}).
+ * That is, it uses an independent BeanShell NameSpace
+ * (aka. interpreter's scope) to store the variables/classes/methods
+ * defined in BeanShell script for each ZK namespace ({@link Namespace}).
+ * Since one-to-one relationship between BeanShell's scope and ZK namespace,
+ * the invocation of BeanShell methods can execute correctly without knowing
+ * what namespace it is.
+ * However, if you want your codes portable across different interpreters,
+ * you had better to call
+ * {@link org.zkoss.zk.scripting.Namespaces#beforeInterpret}
+ * to prepare the proper namespace, before calling any method defined in
+ * zscript.
+ *
  * @author tomyeh
  */
 public class BSHInterpreter extends GenericInterpreter
-implements SerializableInterpreter {
+implements SerializableAware, HierachicalAware {
+	/** A variable of {@link Namespace}. The value is an instance of
+	 * BeanShell's NameSpace.
+	 */
+	private static final String VAR_NS = "z_bshnS";
 	private bsh.Interpreter _ip;
-	private Variables _bshns;
+	private GlobalNS _bshns;
 
 	public BSHInterpreter() {
 	}
 
 	//GenericInterpreter//
-	protected void beforeInterpret(Namespace ns) {
-		super.beforeInterpret(ns);
-	}
 	protected void exec(String script) {
 		try {
-			_ip.eval(script);
+			_ip.eval(script, prepareNS(getCurrent()));
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -71,6 +87,19 @@ implements SerializableInterpreter {
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
+	}
+	protected Object get(Namespace ns, String name) {
+		if (ns != null) {
+			final NameSpace bshns = prepareNS(ns);
+			if (bshns != _bshns) {
+		 		try {
+			 		return Primitive.unwrap(bshns.getVariable(name));
+				} catch (UtilEvalError ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+		}
+		return get(name);
 	}
 	protected void set(String name, Object val) {
 		try {
@@ -95,7 +124,7 @@ implements SerializableInterpreter {
 		_ip = new bsh.Interpreter();
 		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
 
-		_bshns = new Variables(_ip.getClassManager(), "global");
+		_bshns = new GlobalNS(_ip.getClassManager(), "global");
 		_ip.setNameSpace(_bshns);
 	}
 
@@ -118,15 +147,45 @@ implements SerializableInterpreter {
 		}
 	}
 
+	/** Prepares the namespace for non-top-level namespace.
+	 */
+	private NameSpace prepareNS(Namespace ns) {
+		if (ns == getOwner().getNamespace())
+			return _bshns;
+
+		NameSpace bshns;
+		NSX nsx = (NSX)ns.getVariable(VAR_NS, true);
+		if (nsx != null) {
+			bshns = nsx.ns;
+		} else {
+			//bind bshns and ns
+			bshns = new NS(null, ns);
+			ns.setVariable(VAR_NS, new NSX(bshns), true);
+		}
+
+		Namespace parent = ns.getParent();
+		NameSpace bshparent = parent != null ? prepareNS(parent): null;
+		if (bshparent != bshns.getParent())
+			bshns.setParent(bshparent);
+		return bshns;
+	}
+
 	//supporting classes//
-	/** NameSpace. */
-	private class Variables extends NameSpace {
+	/** The global namespace. */
+	private class GlobalNS extends NameSpace {
 		private boolean _inGet;
 
 		/** Don't call this method. */
-	    private Variables(BshClassManager classManager, String name) {
+	    private GlobalNS(BshClassManager classManager, String name) {
 	    	super(classManager, name);
 	    }
+	    protected GlobalNS(NameSpace ns, String name) {
+	    	super(ns, name);
+	    }
+
+		protected Object getFromNamespace(String name) {
+			return BSHInterpreter.this.getFromNamespace(name);
+		}
 
 		//super//
 		protected Variable getVariableImpl(String name, boolean recurse)
@@ -156,9 +215,35 @@ implements SerializableInterpreter {
 			}
 			return var;
 		}
+	    public void loadDefaultImports() {
+	    	 //to speed up the formance
+	    }
+	}
+	/** The per-Namespace NameSpace. */
+	private class NS extends GlobalNS {
+		private Namespace _ns;
+
+		private NS(NameSpace parent, Namespace ns) {
+			super(parent, "ns" + System.identityHashCode(ns));
+			_ns = ns;
+		}
+
+		/** Search _ns instead. */
+		protected Object getFromNamespace(String name) {
+			return _ns.getVariable(name, false);
+		}
+	}
+	/** Non-serializable namespace. It is used to prevent itself from
+	 * being serialized
+	 */
+	private static class NSX {
+		NameSpace ns;
+		private NSX(NameSpace ns) {
+			this.ns = ns;
+		}
 	}
 
-	//SerializableInterpreter//
+	//SerializableAware//
 	public void write(java.io.ObjectOutputStream s, Filter filter)
 	throws java.io.IOException {
 		//1. variables

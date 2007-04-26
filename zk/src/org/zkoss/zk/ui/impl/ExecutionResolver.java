@@ -113,7 +113,8 @@ public class ExecutionResolver implements VariableResolver {
 				//so it is in the same order of interpreter
 				final Page page = comp.getPage();
 				if (page != null) {
-					final Object o = page.getZScriptVariable(name);
+					final Object o =
+						page.getZScriptVariable(comp.getNamespace(), name);
 					if (o != null)
 						return o;
 				}
