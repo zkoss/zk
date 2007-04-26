@@ -41,6 +41,19 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  * {@link #setVariable} and {@link #unsetVariable}.
  * Instead, override {@link #get}, {@link #set} and {@link #unset} instead.
  *
+ * <p>If an interpreter doesn't support hierachical namespaces or scopes,
+ * it can simply implement a global namespace, and then use
+ * {@link #getFromNamespace} to
+ * retrieve variables from ZK's hierachical namespaces.
+ *
+ * <p>If it supports hierachical namespaces or scopes
+ * (example: {@link org.zkoss.zk.scripting.bsh.BSHInterpreter}), it
+ * can store its namescape (or scope) in {@link Namespace}
+ * (with a special name) and vice versa, such that it can retrieve
+ * the correct {@link Namespace} no matter {@link Namespaces#beforeInterpret}
+ * is called or not.
+ * Such kind of implementation is optional.
+ *
  * @author tomyeh
  */
 abstract public class GenericInterpreter implements Interpreter {
