@@ -115,8 +115,11 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 	/** Gets the variable from the interpreter's scope of the giving
 	 * namespace.
-	 * You need to implement this method only if {@link org.zkoss.zk.scripting.HierachicalAware}
-	 * is also imiplemented.
+	 * Optional. Implement it if you want to expose variables defined
+	 * in the interpreter to Java codes.
+	 *
+	 * <p>This method is implemented only if the interpreter that supports
+	 * hierachical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
 	 *
 	 * <p>Default: the same as {@link #get(String)}.
 	 *
@@ -180,6 +183,20 @@ abstract public class GenericInterpreter implements Interpreter {
 	 */
 	protected Object getFromNamespace(String name) {
 		return getCurrent().getVariable(name, false);
+	}
+	/** Locates and returns the variable through the specified namespaces and
+	 * variable resolvers.
+	 *
+	 * <p>It is usually called to search namespaces and variable resolvers,
+	 * when the real interpreter failed to find a variable in its own scope.
+	 *
+	 * <p>This method is used with the interpreter that supports
+	 * hierachical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
+	 *
+	 * @param ns the namespace to search from
+	 */
+	protected Object getFromNamespace(Namespace ns, String name) {
+		return getCurrent() != EMPTY_NAMESPACE ? ns.getVariable(name, false): null;
 	}
 
 	//Interpreter//
@@ -304,16 +321,5 @@ abstract public class GenericInterpreter implements Interpreter {
 			//we assume owner's namespace if null, because zscript might
 			//define a class that will be invoke thru, say, event listener
 			//In other words, interpret is not called, so ns is not specified
-	}
-	/** Returns whether the current namespace is disabled.
-	 * The current namespace is sometime disabled so the interpreter won't
-	 * look for any variable defined in ZK namespaces.
-	 *
-	 * <p>To do so, GenericInterpreter push an empty namespace to make
-	 * it the current namespace. Therefore, {@link #getCurrent} always
-	 * returns a non-null namespace.
-	 */
-	public boolean isCurrentDisabled() {
-		return getCurrent() == EMPTY_NAMESPACE;
 	}
 }

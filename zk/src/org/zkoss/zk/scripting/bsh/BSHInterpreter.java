@@ -180,8 +180,6 @@ implements SerializableAware, HierachicalAware {
 
 		protected Object getFromNamespace(String name) {
 			return BSHInterpreter.this.getFromNamespace(name);
-				//Alternatively we can use getOwner().getNamespace().getVariable(),
-				//(if so, we have to check isCurrentDisabled)
 		}
 
 		//super//
@@ -228,8 +226,7 @@ implements SerializableAware, HierachicalAware {
 
 		/** Search _ns instead. */
 		protected Object getFromNamespace(String name) {
-			return isCurrentDisabled() ? null: _ns.getVariable(name, false);
-				//Note: we don't check namespace if isCurrentDisabled
+			return BSHInterpreter.this.getFromNamespace(_ns, name);
 		}
 	}
 	private class NSCListener implements NamespaceChangeListener {
