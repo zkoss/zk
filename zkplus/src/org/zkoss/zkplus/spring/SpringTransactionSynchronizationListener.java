@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.ThreadLocals;
+import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 
 import java.util.Map;
@@ -108,8 +109,19 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 			_threadLocals[5] = getThreadLocal(cls, "deferredCloseHolder").get();
 			
 			cls = Classes.forNameByThread("org.springframework.transaction.interceptor.TransactionAspectSupport");
-			_threadLocals[6] = getThreadLocal(cls, "currentTransactionInfo").get();
 			
+			//Spring 1.2.8 and Spring 2.0.x, the ThreadLocal field name has changed, default use 2.0.x
+			//2.0.x transactionInfoHolder
+			//1.2.8 currentTransactionInfo
+			try { 
+				_threadLocals[6] = getThreadLocal(cls, "transactionInfoHolder").get();
+			} catch (SystemException ex) {
+				if (ex.getCause() instanceof NoSuchFieldException) {
+					_threadLocals[6] = getThreadLocal(cls, "currentTransactionInfo").get();
+				} else {
+					throw ex;
+				}
+			}
 		} catch (ClassNotFoundException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -130,7 +142,18 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 				getThreadLocal(cls, "deferredCloseHolder").set(_threadLocals[5]);
 
 				cls = Classes.forNameByThread("org.springframework.transaction.interceptor.TransactionAspectSupport");
-				getThreadLocal(cls, "currentTransactionInfo").set(_threadLocals[6]);
+				//Spring 1.2.8 and Spring 2.0.x, the ThreadLocal field name has changed, default use 2.0.x
+				//2.0.x transactionInfoHolder
+				//1.2.8 currentTransactionInfo
+				try { 
+					getThreadLocal(cls, "transactionInfoHolder").set(_threadLocals[6]);
+				} catch (SystemException ex) {
+					if (ex.getCause() instanceof NoSuchFieldException) {
+						getThreadLocal(cls, "currentTransactionInfo").set(_threadLocals[6]);
+					} else {
+						throw ex;
+					}
+				}
 				
 				_threadLocals = null;
 			} catch (ClassNotFoundException ex) {
