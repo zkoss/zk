@@ -305,4 +305,15 @@ abstract public class GenericInterpreter implements Interpreter {
 			//define a class that will be invoke thru, say, event listener
 			//In other words, interpret is not called, so ns is not specified
 	}
+	/** Returns whether the current namespace is disabled.
+	 * The current namespace is sometime disabled so the interpreter won't
+	 * look for any variable defined in ZK namespaces.
+	 *
+	 * <p>To do so, GenericInterpreter push an empty namespace to make
+	 * it the current namespace. Therefore, {@link #getCurrent} always
+	 * returns a non-null namespace.
+	 */
+	public boolean isCurrentDisabled() {
+		return getCurrent() == EMPTY_NAMESPACE;
+	}
 }

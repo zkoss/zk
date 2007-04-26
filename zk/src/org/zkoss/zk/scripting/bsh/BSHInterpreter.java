@@ -46,7 +46,7 @@ import org.zkoss.zk.scripting.HierachicalAware;
  * The interpreter that uses BeanShell to interpret zscript codes.
  *
  * <p>Unlike many other implementations, it supports the hierachical
- * scopes ({@link HierachicAware}).
+ * scopes ({@link HierachicalAware}).
  * That is, it uses an independent BeanShell NameSpace
  * (aka. interpreter's scope) to store the variables/classes/methods
  * defined in BeanShell script for each ZK namespace ({@link Namespace}).
@@ -180,6 +180,8 @@ implements SerializableAware, HierachicalAware {
 
 		protected Object getFromNamespace(String name) {
 			return BSHInterpreter.this.getFromNamespace(name);
+				//Alternatively we can use getOwner().getNamespace().getVariable(),
+				//(if so, we have to check isCurrentDisabled)
 		}
 
 		//super//
@@ -226,7 +228,8 @@ implements SerializableAware, HierachicalAware {
 
 		/** Search _ns instead. */
 		protected Object getFromNamespace(String name) {
-			return _ns.getVariable(name, false);
+			return isCurrentDisabled() ? null: _ns.getVariable(name, false);
+				//Note: we don't check namespace if isCurrentDisabled
 		}
 	}
 	private class NSCListener implements NamespaceChangeListener {
