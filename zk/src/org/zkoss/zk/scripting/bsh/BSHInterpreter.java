@@ -36,6 +36,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.NamespaceChangeListener;
 import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 import org.zkoss.zk.scripting.SerializableAware;
@@ -153,20 +154,14 @@ implements SerializableAware, HierachicalAware {
 		if (ns == getOwner().getNamespace())
 			return _bshns;
 
-		NameSpace bshns;
 		NSX nsx = (NSX)ns.getVariable(VAR_NS, true);
-		if (nsx != null) {
-			bshns = nsx.ns;
-		} else {
-			//bind bshns and ns
-			bshns = new NS(null, ns);
-			ns.setVariable(VAR_NS, new NSX(bshns), true);
-		}
+		if (nsx != null)
+			return nsx.ns;
 
-		Namespace parent = ns.getParent();
-		NameSpace bshparent = parent != null ? prepareNS(parent): null;
-		if (bshparent != bshns.getParent())
-			bshns.setParent(bshparent);
+		//bind bshns and ns
+		Namespace p = ns.getParent();
+		NameSpace bshns = new NS(p != null ? prepareNS(p): null, ns);
+		ns.setVariable(VAR_NS, new NSX(bshns), true);
 		return bshns;
 	}
 
@@ -221,11 +216,12 @@ implements SerializableAware, HierachicalAware {
 	}
 	/** The per-Namespace NameSpace. */
 	private class NS extends GlobalNS {
-		private Namespace _ns;
+		private final Namespace _ns;
 
 		private NS(NameSpace parent, Namespace ns) {
 			super(parent, "ns" + System.identityHashCode(ns));
 			_ns = ns;
+			_ns.addChangeListener(new NSCListener(this));
 		}
 
 		/** Search _ns instead. */
@@ -233,6 +229,20 @@ implements SerializableAware, HierachicalAware {
 			return _ns.getVariable(name, false);
 		}
 	}
+	private class NSCListener implements NamespaceChangeListener {
+		private final NameSpace _bshns;
+		private NSCListener(NameSpace bshns) {
+			_bshns = bshns;
+		}
+		public void onAdd(String name, Object value) {
+		}
+		public void onRemove(String name) {
+		}
+		public void onParentChanged(Namespace newparent) {
+			_bshns.setParent(
+				newparent != null ? prepareNS(newparent): null);
+		}
+	};
 	/** Non-serializable namespace. It is used to prevent itself from
 	 * being serialized
 	 */
