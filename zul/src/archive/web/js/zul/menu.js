@@ -21,13 +21,6 @@ zkMenu = {};
 
 zk.FloatMenu = Class.create();
 Object.extend(Object.extend(zk.FloatMenu.prototype, zk.Floats.prototype), {
-	focusInFloats0: zk.Floats.prototype.focusInFloats,
-	focusInFloats: function (el) {
-		if (el && getZKAttr(el.parentNode, "mpop") != null)
-			return true;
-
-		return this.focusInFloats0(el);
-	},
 	_close: function (el) {
 		zkMenu._close(el);
 	}

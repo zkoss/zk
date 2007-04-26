@@ -258,12 +258,12 @@ zkCmbox.getLabel = function (item) {
 
 zkCmbox.open = function (pp, hilite) {
 	pp = $e(pp);
-	zkau.closeFloats(pp);
-	zkCmbox._pop.setFloatId(pp.id);
-
 	var uuid = $uuid(pp.id);
 	var cb = $e(uuid);
 	if (!cb) return;
+
+	zkau.closeFloats(pp);
+	zkCmbox._pop.addFloatId(pp.id, $type(cb) != "Cmbox");
 
 	zkCmbox._open(cb, uuid, pp, hilite);
 
@@ -490,7 +490,7 @@ zkCmbox.close = function (pp, focus) {
 		rmZKAttr(pp, "vparent");
 	}
 
-	zkCmbox._pop.setFloatId(null);
+	zkCmbox._pop.removeFloatId(pp.id);
 	pp.style.display = "none";
 	zk.onHideAt(pp);
 	zkau.hideCovered();
@@ -504,7 +504,7 @@ zkCmbox.close = function (pp, focus) {
 };
 
 zk.FloatCombo = Class.create();
-Object.extend(Object.extend(zk.FloatCombo.prototype, zk.Float.prototype), {
+Object.extend(Object.extend(zk.FloatCombo.prototype, zk.Floats.prototype), {
 	_close: function (el) {
 		zkCmbox.close(el);
 	}
