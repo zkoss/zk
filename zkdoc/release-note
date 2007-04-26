@@ -55,6 +55,7 @@ ZK 2.3.1 Freshly
   1706290: Menu and comobox in popup causes unexpected dismiss
   1707153: Menu and comobox doesn't work properly in a context popup
   1707254: Menu and comobobox in bandbox causes unexpected dismiss
+  1704072: Can not work with spring 2.0.x
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
