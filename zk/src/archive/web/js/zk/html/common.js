@@ -591,8 +591,15 @@ zk.firstChild = function (el, tagName, descendant) {
 	return null;
 };
 
-/** Returns whether a node is an ancestor of another (including itself). */
-zk.isAncestor = function (p, c) {
+/** Returns whether a node is an ancestor of another (including itself).
+ *
+ * @param checkuuid whether to check UUID is the same (i.e., whether
+ * they are different part of the same component).
+ */
+zk.isAncestor = function (p, c, checkuuid) {
+	if (checkuuid && $uuid(p) == $uuid(c))
+		return true;
+
 	p = $e(p);
 	c = $e(c);
 	while (c) {
@@ -612,10 +619,13 @@ zk.isAncestor = function (p, c) {
 	return false;
 };
 /** Returns whether a node is an ancestor of one of an array of elements.
+ *
+ * @param checkuuid whether to check UUID is the same (i.e., whether
+ * they are different part of the same component).
  */
-zk.isAncestorX = function (p, ary) {
+zk.isAncestorX = function (p, ary, checkuuid) {
 	for (var j = 0; j < ary.length; ++j)
-		if (zk.isAncestor(p, ary[j]))
+		if (zk.isAncestor(p, ary[j], checkuuid))
 			return true;
 	return false;
 };
@@ -1402,27 +1412,24 @@ zk.Float = Class.create();
 zk.Float.prototype = {
 	initialize: function () {
 	},
-	/** Whether the mousedown event shall be ignored for the specified
-	 * event.
-	 */
-	focusInFloats: function (el) {
-		if (el && this._ftid) {
-			if ($uuid(this._ftid) == $uuid(el)) //same component (but diff parts)
-				return true;
-			var pp = $e(this._ftid);
-			return pp && zk.isAncestor(pp, el);
-		}
-		return false;
-	},
-	/** Closes (hides) all menus.
+	/** Closes (hides) all floats.
 	 * @param arguments a list of components that shall be closed
 	 */
-	closeFloats: function() {
+	closeFloats: function () {
+		this._closeFloats(false, arguments);
+	},
+	/** Closes all floats when a component is getting the focus.
+	 * @param arguments a list of components that shall be closed
+	 */
+	closeFloatsOnFocus: function () {
+		this._closeFloats(true, arguments);
+	},
+	_closeFloats: function (onfocus, ancestors) {
 		if (this._ftid) {
 			var n = $e(this._ftid);
 			if (n && n.style.display != "none"
 			&& getZKAttr(n, "animating") != "hide"
-			&& !zk.isAncestorX(n, arguments)) {
+			&& (!onfocus || !zk.isAncestorX(n, ancestors, true))) {
 				this._close(n);
 				this._ftid = null;
 				return true;
@@ -1456,33 +1463,26 @@ zk.Floats.prototype = {
 		this._ftids = new Array();
 		this._aspps = {}; //(id, whether a float behaves like a popup)
 	},
-	/** Whether the mousedown event shall be ignored for the specified
-	 * event.
-	 */
-	focusInFloats: function (el) {
-		if (el) {
-			var uuid = $uuid(el);
-			for (var j = this._ftids.length; --j >= 0;) {
-				if ($uuid(this._ftids[j]) == uuid) //same component (but diff parts)
-					return true;
-				var pp = $e(this._ftids[j]);
-				if (pp && zk.isAncestor(pp, el))
-					return true;
-			}
-		}
-		return false;
-	},
-	/** Closes (hides) all menus.
+	/** Closes (hides) all floats.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloats: function () {
+		this._closeFloats(false, arguments);
+	},
+	/** Closes all floats when a component is getting the focus.
+	 * @param arguments a list of components that shall be closed
+	 */
+	closeFloatsOnFocus: function () {
+		this._closeFloats(true, arguments);
+	},
+	_closeFloats: function (onfocus, ancestors) {
 		var closed;
 		for (var j = this._ftids.length; --j >= 0;) {
 			var id = this._ftids[j];
 			var n = $e(id);
 			if (n && n.style.display != "none"
 			&& getZKAttr(n, "animating") != "hide"
-			&& (!this._aspps[id] || !zk.isAncestorX(n, arguments))) {
+			&& ((!onfocus && !this._aspps[id]) || !zk.isAncestorX(n, ancestors, true))) {
 				this._ftids.splice(j, 1);
 				this._close(n);
 				closed = true;

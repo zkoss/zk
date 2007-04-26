@@ -696,7 +696,7 @@ if (!zkau._popups) {
 
 zkau.onfocus = function (el) {
 	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases
-	if (!zkau.focusInFloats(el)) zkau.closeFloats(el);
+	zkau.closeFloatsOnFocus(el);
 	if (zkau.valid) zkau.valid.uncover(el);
 
 	zkau.autoZIndex(el);
@@ -778,7 +778,7 @@ zkau._onDocMousedown = function (evt) {
 	var node = Event.element(evt);
 	zkau.currentFocus = node;
 
-	if (!zkau.focusInFloats(node)) zkau.closeFloats(node);
+	zkau.closeFloatsOnFocus(node);
 
 	zkau.autoZIndex(node);
 };
@@ -1134,21 +1134,6 @@ zkau._inCtkeys = function (evt, zkcode, keys) {
 	return false;
 };
 
-/** Whether the focus is in the same component. */
-zkau.focusInFloats = function (target) {
-	for (var j = 0; j < zkau.floats.length; ++j)
-		if (zkau.floats[j].focusInFloats(target))
-			return true;
-
-	for (var j = 0; j < zkau._popups.length; ++j) {
-		var el = $e(zkau._popups[j]);
-		if (el != null && el.style.display != "none"
-		&& target != null && zk.isAncestor(el, target))
-			return true;
-	}
-	return false;
-};
-
 zkau.sendOnMove = function (cmp, keys) {
 	zkau.send({uuid: cmp.id, cmd: "onMove",
 		data: [cmp.style.left, cmp.style.top, keys ? keys: ""]},
@@ -1175,6 +1160,17 @@ zkau.sendOnClose = function (uuid, closeFloats) {
  * a popup contains any of them
  */
 zkau.closeFloats = function () {
+	zkau._closeFloats("closeFloats", arguments);
+};
+/** Similar to zkau.closeFloats, except it is called when a component
+ * is getting the focus.
+ * More precisely, it treats all floats as popup windows, i.e.,
+ * floats remains if it is an ancestor of aruments.
+ */
+zkau.closeFloatsOnFocus = function () {
+	zkau._closeFloats("closeFloatsOnFocus", arguments);
+};
+zkau._closeFloats = function (method, ancestors) {
 	var closed;
 	for (var j = zkau._popups.length; --j >=0;) {
 	//reverse order is important if popup contains another
@@ -1182,7 +1178,7 @@ zkau.closeFloats = function () {
 		var n = $e(zkau._popups[j]);
 		if (n && n.style.display != "none"
 		&& getZKAttr(n, "animating") != "hide"
-		&& !zk.isAncestorX(n, arguments)) {
+		&& !zk.isAncestorX(n, ancestors, true)) {
 		//we avoid hiding twice we have to check animating
 			closed = true;
 			zk.hide(n);
@@ -1196,7 +1192,7 @@ zkau.closeFloats = function () {
 	//floats: combobox, context menu...
 	for (var j = zkau.floats.length; --j >= 0;) {
 		var n = zkau.floats[j];
-		if (n.closeFloats.apply(n, arguments))
+		if (n[method].apply(n, ancestors))
 			closed = true;
 	}
 
