@@ -36,12 +36,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<javascript src="~./js/zk/html/au.js" charset="UTF-8"/>
 	<javascript src="~./js/zk/locale.js.dsp" charset="UTF-8"/>
 
+	<!-- To have better performance with BeanShell, import most-common later -->
 	<zscript language="Java">
-	import java.lang.*;
-	import java.util.*;
-	import org.zkoss.zk.ui.*;
-	import org.zkoss.zk.ui.event.*;
 	import org.zkoss.zk.ui.util.Clients;
+	import org.zkoss.zk.ui.event.*;
+	import java.util.*;
+	import java.lang.*;
+	import org.zkoss.zk.ui.*;
 	import org.zkoss.zhtml.*;
 
 	void alert(String m) {
@@ -50,10 +51,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</zscript>
 
 	<zscript language="JavaScript">
+	importPackage(Packages.java.lang);
+	importPackage(Packages.java.util);
+	importPackage(Packages.org.zkoss.zhtml);
 	importPackage(Packages.org.zkoss.zk.ui);
 	importPackage(Packages.org.zkoss.zk.ui.event);
 	importClass(Packages.org.zkoss.zk.ui.util.Clients);
-	importPackage(Packages.org.zkoss.zhtml);
 	function alert(m) {
 		Messagebox.show(m);
 	}
@@ -62,10 +65,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!-- Groovy "forgot" what are imported, so we have to import each time
 	-->
 	<zscript language="Groovy" each-time="true">
-	import org.zkoss.zk.ui.*;
-	import org.zkoss.zk.ui.event.*;
-	import org.zkoss.zk.ui.util.Clients;
-	import org.zkoss.zhtml.*;
+	import java.lang.*
+	import java.util.*
+	import org.zkoss.zhtml.*
+	import org.zkoss.zk.ui.*
+	import org.zkoss.zk.ui.event.*
+	import org.zkoss.zk.ui.util.Clients
 	</zscript>
 	<zscript language="Groovy">
 	alert = {m -> Messagebox.show(m)}
@@ -76,10 +81,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	module Java
 		include_package 'java.lang'
 		include_package 'java.util'
+		include_package 'org.zkoss.zhtml'
 		include_package 'org.zkoss.zk.ui'
 		include_package 'org.zkoss.zk.ui.event'
 		include_class 'org.zkoss.zk.ui.util.Clients'
-		include_package 'org.zkoss.zhtml'
 	end
 	def alert (m)
 		Java::Messagebox.show m
