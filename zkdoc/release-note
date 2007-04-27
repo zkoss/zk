@@ -25,7 +25,8 @@ ZK 2.3.1 Freshly
   1705531: Textbox supports setSelectionRange
   1704040: Add onSelection event to InputElement
   1705715: InputElement's clearErrorMessage shall be public
-  1704194: Get value without validation -- getRawValue and getRawText)
+  1704194: Get value without validation -- getRawValue and getRawText
+  1708577: A way to control default encoding of the uploaded text file
 
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
