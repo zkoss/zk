@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * <p>This is the {@link ListModel} as a {@link java.util.Set} to be used with {@link Listbox}.
@@ -35,7 +37,7 @@ import java.util.Collection;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelSet extends AbstractListModel implements Set {
+public class ListModelSet extends AbstractListModel implements ListModelExt, Set {
 	protected List _list;
 	protected Set _set;
 
@@ -172,9 +174,25 @@ public class ListModelSet extends AbstractListModel implements Set {
 		return _set.isEmpty();
 	}
     
-    public Iterator iterator() {
-    	return _set.iterator();
-    }
+	public Iterator iterator() {
+		return new Iterator() {
+			private Iterator _it = _set.iterator();
+			private Object _current = null;
+			public boolean hasNext() {
+				return _it.hasNext();
+			}
+			public Object next() {
+				_current = _it.next();
+				return _current;
+			}
+			public void remove() {
+				int index = _list.indexOf(_current);
+				_list.remove(index);
+				_it.remove();
+				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+			}
+		};
+	}
 	
 	public boolean remove(Object o) {
 		if (_set.contains(o)) {
@@ -245,5 +263,19 @@ public class ListModelSet extends AbstractListModel implements Set {
 
 	public Object[] toArray(Object[] a) {
 		return _set.toArray(a);
+	}
+
+	//-- ListModelExt --//
+	/** Sorts the data.
+	 *
+	 * @param cmpr the comparator.
+	 * @param ascending whether to sort in the ascending order.
+	 * It is ignored since this implementation uses cmprt to compare.
+	 */
+	public void sort(Comparator cmpr, final boolean ascending) {
+		Collections.sort(_list, cmpr);
+		_set.clear();
+		_set.addAll(_list);
+		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}
 }

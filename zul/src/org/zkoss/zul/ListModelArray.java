@@ -22,6 +22,8 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.lang.Objects;
+import java.util.Comparator;
+import java.util.Arrays;
 
 /**
  * <p>This is the {@link ListModel} as an Object array to be used with {@link Listbox}.
@@ -34,7 +36,7 @@ import org.zkoss.lang.Objects;
  * @see ListModelMap
  */
 public class ListModelArray extends AbstractListModel
-implements java.io.Serializable {
+implements ListModelExt, java.io.Serializable {
 	private static final long serialVersionUID = 20070226L;
 
 	protected final Object[] _array;
@@ -104,4 +106,17 @@ implements java.io.Serializable {
 	public Object getElementAt(int j) {
 		return _array[j];
 	}
+	
+	//-- ListModelExt --//
+	/** Sorts the data.
+	 *
+	 * @param cmpr the comparator.
+	 * @param ascending whether to sort in the ascending order.
+	 * It is ignored since this implementation uses cmprt to compare.
+	 */
+	public void sort(Comparator cmpr, final boolean ascending) {
+		Arrays.sort(_array, cmpr);
+		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+	}
+
 }

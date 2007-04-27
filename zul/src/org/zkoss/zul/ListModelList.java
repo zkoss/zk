@@ -22,7 +22,9 @@ import org.zkoss.zk.ui.UiException;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.ListIterator;
 
 /**
@@ -34,7 +36,7 @@ import java.util.ListIterator;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelList extends AbstractListModel implements List {
+public class ListModelList extends AbstractListModel implements ListModelExt, List {
 	protected List _list;
 	
 	/**
@@ -286,5 +288,17 @@ public class ListModelList extends AbstractListModel implements List {
 
 	public Object[] toArray(Object[] a) {
 		return _list.toArray(a);
+	}
+
+	//-- ListModelExt --//
+	/** Sorts the data.
+	 *
+	 * @param cmpr the comparator.
+	 * @param ascending whether to sort in the ascending order.
+	 * It is ignored since this implementation uses cmprt to compare.
+	 */
+	public void sort(Comparator cmpr, final boolean ascending) {
+		Collections.sort(_list, cmpr);
+		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}
 }
