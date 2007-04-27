@@ -18,6 +18,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<iframe id="${self.uuid}" frameborder="0"${self.outerAttrs}${self.innerAttrs}>
-Your browser doesn't support inline frames.
+<iframe id="${self.uuid}" z.type="zul.widget.Ifr" frameborder="0"${self.outerAttrs}${self.innerAttrs}>
 </iframe>

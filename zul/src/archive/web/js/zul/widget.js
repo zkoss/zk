@@ -613,3 +613,13 @@ Object.extend(Object.extend(zk.Popup.prototype, zk.Floats.prototype), {
 });
 if (!zkPop._pop)
 	zkau.floats.push(zkPop._pop = new zk.Popup()); //hook to zkau.js
+
+//iframe//
+if (zk.gecko) { //Bug 1692495
+	zkIfr = {}
+
+	zkIfr.onVisi = function (cmp) {
+		if (cmp.src.indexOf(".xml") >= 0)
+			cmp.src = cmp.src; //strange workaround: reload xml
+	};
+}
