@@ -130,6 +130,11 @@ public class AMedia implements Media {
 	 * It assumes one of them is not null.
 	 */
 	private void setup(String name, String format, String ctype) {
+		if (ctype != null) {
+			int j = ctype.indexOf(';');
+			if (j >= 0) ctype = ctype.substring(0, j);
+		}
+
 		if (ctype != null && format == null) {
 			format = ContentTypes.getFormat(ctype);
 		} else if (ctype == null && format != null) {
