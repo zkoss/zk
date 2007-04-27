@@ -76,7 +76,9 @@ implements SerializableAware, HierachicalAware {
 	//GenericInterpreter//
 	protected void exec(String script) {
 		try {
-			_ip.eval(script, prepareNS(getCurrent()));
+			final Namespace ns = getCurrent();
+			if (ns != null) _ip.eval(script, prepareNS(ns));
+			else _ip.eval(script); //unlikely (but just in case)
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -92,6 +94,8 @@ implements SerializableAware, HierachicalAware {
 	protected Object get(Namespace ns, String name) {
 		if (ns != null) {
 			final NameSpace bshns = prepareNS(ns);
+				//note: we have to create NameSpace (with prepareNS)
+				//to have the correct chain
 			if (bshns != _bshns) {
 		 		try {
 			 		return Primitive.unwrap(bshns.getVariable(name));

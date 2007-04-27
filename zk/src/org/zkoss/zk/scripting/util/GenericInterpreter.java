@@ -23,9 +23,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
 
+import org.zkoss.lang.Objects;
+
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
-
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
@@ -63,33 +64,6 @@ abstract public class GenericInterpreter implements Interpreter {
 	private final List _nss = new LinkedList();
 	private Page _owner;
 	private String _zslang;
-
-	private static final Namespace EMPTY_NAMESPACE = new Namespace() {
-		public Set getVariableNames() {
-			return Collections.EMPTY_SET;
-		}
-		public boolean containsVariable(String name, boolean local) {
-			return false;
-		}
-		public Object getVariable(String name, boolean local) {
-			return null;
-		}
-		public void setVariable(String name, Object value, boolean local) {
-		}
-		public void unsetVariable(String name, boolean local) {
-		}
-		public Namespace getParent() {
-			return null;
-		}
-		public void setParent(Namespace parent) {
-		}
-		public boolean addChangeListener(NamespaceChangeListener listener) {
-			return false;
-		}
-		public boolean removeChangeListener(NamespaceChangeListener listener) {
-			return false;
-		}
-	};
 
 	protected GenericInterpreter() {
 	}
@@ -182,7 +156,8 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * when the real interpreter failed to find a variable in its own scope.
 	 */
 	protected Object getFromNamespace(String name) {
-		return getCurrent().getVariable(name, false);
+		final Namespace ns = getCurrent();
+		return ns != null ? ns.getVariable(name, false): null;
 	}
 	/** Locates and returns the variable through the specified namespaces and
 	 * variable resolvers.
@@ -193,10 +168,12 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * <p>This method is used with the interpreter that supports
 	 * hierachical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
 	 *
-	 * @param ns the namespace to search from
+	 * @param ns the namespace to search from (never null).
+	 * Note: if {@link #getCurrent} returns null, this method simply returns
+	 * null (i.e., ignoring ns).
 	 */
 	protected Object getFromNamespace(Namespace ns, String name) {
-		return getCurrent() != EMPTY_NAMESPACE ? ns.getVariable(name, false): null;
+		return getCurrent() != null ? ns.getVariable(name, false): null;
 	}
 
 	//Interpreter//
@@ -246,7 +223,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 */
 	public Object getVariable(String name) {
 		beforeExec();
-		push(EMPTY_NAMESPACE);
+		push(Objects.UNKNOWN);
 			//don't use null since it means Namespaces#getCurrent, see below
 		try {
 			return get(name);
@@ -267,7 +244,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 */
 	public Object getVariable(Namespace ns, String name) {
 		beforeExec();
-		push(EMPTY_NAMESPACE);
+		push(Objects.UNKNOWN);
 			//don't use null since it means Namespaces#getCurrent, see below
 		try {
 			return get(ns, name);
@@ -303,7 +280,7 @@ abstract public class GenericInterpreter implements Interpreter {
 
 	/** Use the specified namespace as the active namespace.
 	 */
-	private void push(Namespace ns) {
+	private void push(Object ns) {
 		_nss.add(0, ns);
 	}
 	/** Remove the active namespace.
@@ -311,15 +288,23 @@ abstract public class GenericInterpreter implements Interpreter {
 	private void pop() {
 		_nss.remove(0);
 	}
-	/** Returns the current namespace, never null.
+	/** Returns the current namespace, or null if no namespace is allowed.
+	 * Note: if this method returns null, it means the interpreter shall
+	 * not search variables defined in ZK namespace.
 	 *
-	 * <p>This method will handle {Namespace#getCurrent} automatically.
+	 * <p>This method will handle {@link Namespaces#getCurrent} automatically.
 	 */
 	protected Namespace getCurrent() {
-		Namespace ns = _nss.isEmpty() ? null: (Namespace)_nss.get(0);
-		return ns != null ? ns: Namespaces.getCurrent(_owner);
+		if (!_nss.isEmpty()) {
+			Object o = _nss.get(0);
+			if (o == Objects.UNKNOWN)
+				return null; //no namespace allowed
+			if (o != null)
+				return (Namespace)o;
 			//we assume owner's namespace if null, because zscript might
 			//define a class that will be invoke thru, say, event listener
 			//In other words, interpret is not called, so ns is not specified
+		}
+		return Namespaces.getCurrent(_owner); //never null
 	}
 }
