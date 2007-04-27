@@ -148,7 +148,6 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 	 */
 	private static final Media processItem(FileItem fi)
 	throws IOException {
-		Media media = null;
 		String name = getBaseName(fi);
 		if (name != null) {
 		//Not sure whether a name might contain ;jsessionid or similar
@@ -161,31 +160,55 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 			}
 		}
 
-		final String ctype = fi.getContentType();
+		final String ctype = fi.getContentType(),
+			ctypelc = ctype != null ? ctype.toLowerCase(): null;
 		if (ctype != null)
-			if (ctype.startsWith("image/")) {
+			if (ctypelc.startsWith("image/")) {
 				try {
-					media = fi.isInMemory() ? new AImage(name, fi.get()):
+					return fi.isInMemory() ? new AImage(name, fi.get()):
 						new AImage(name, fi.getInputStream());
 							//note: AImage converts stream to binary array
 				} catch (Throwable ex) {
 					if (log.debugable()) log.debug("Unknown file format: "+ctype);
 				}
-			} else if (ctype.startsWith("audio/")) {
+			} else if (ctypelc.startsWith("audio/")) {
 				try {
-					media = fi.isInMemory() ? new AAudio(name, fi.get()):
+					return fi.isInMemory() ? new AAudio(name, fi.get()):
 						new StreamAudio(name, fi);
 				} catch (Throwable ex) {
 					if (log.debugable()) log.debug("Unknown file format: "+ctype);
 				}
 			}
 
-		return media != null ? media:
-			fi.isInMemory() ?
-				ctype.startsWith("text/") ?
-					new AMedia(name, null, ctype, fi.getString()):
-					new AMedia(name, null, ctype, fi.get()):
+		if (ctypelc != null && ctypelc.startsWith("text/")) {
+			final String charset = getCharset(ctype);
+			return fi.isInMemory() ?
+				new AMedia(name, null, ctype, fi.getString(charset)):
+				new ReaderMedia(name, null, ctype, fi, charset);
+		} else {
+			return fi.isInMemory() ?
+				new AMedia(name, null, ctype, fi.get()):
 				new StreamMedia(name, null, ctype, fi);
+		}
+	}
+	private static String getCharset(String ctype) {
+		final String ctypelc = ctype.toLowerCase();
+		for (int j = 0; (j = ctypelc.indexOf("charset", j)) >= 0; j += 7) {
+			int k = Strings.skipWhitespacesBackward(ctype, j - 1);
+			if (k < 0 || ctype.charAt(k) == ';') {
+				k = Strings.skipWhitespaces(ctype, j + 7);
+				if (k <= ctype.length() && ctype.charAt(k) == '=') {
+					j = ctype.indexOf(';', ++k);
+					String charset =
+						(j >= 0 ? ctype.substring(k, j): ctype.substring(k)).trim();
+					if (charset.length() > 0)
+						return charset;
+					break; //use default
+				}
+			}
+		}
+
+		return "UTF-8";
 	}
 
 	/** Parses the multipart request into a map of
@@ -257,6 +280,24 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 		public java.io.InputStream getStreamData() {
 			try {
 				return _fi.getInputStream();
+			} catch (IOException ex) {
+				throw new UiException("Unable to read "+_fi, ex);
+			}
+		}
+	}
+	private static class ReaderMedia extends AMedia {
+		private final FileItem _fi;
+		private final String _charset;
+		public ReaderMedia(String name, String format, String ctype,
+		FileItem fi, String charset) {
+			super(name, format, ctype, DYNAMIC_STREAM);
+			_fi = fi;
+			_charset = charset;
+		}
+		public java.io.Reader getReaderData() {
+			try {
+				return new java.io.InputStreamReader(
+					_fi.getInputStream(), _charset);
 			} catch (IOException ex) {
 				throw new UiException("Unable to read "+_fi, ex);
 			}
