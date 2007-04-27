@@ -159,8 +159,11 @@ public class ConfigParser {
 				v = parseInteger(el, "max-upload-size", true);
 				if (v != null) config.setMaxUploadSize(v.intValue());
 
-				final String s = el.getElementValue("response-charset", true);
-				if (s != null) config.setCharset(s);
+				String s = el.getElementValue("upload-charset", true);
+				if (s != null) config.setUploadCharset(s);
+
+				s = el.getElementValue("response-charset", true);
+				if (s != null) config.setResponseCharset(s);
 
 				Class cls = parseClass(el, "cache-provider-class",
 					DesktopCacheProvider.class);

@@ -92,7 +92,7 @@ public class Configuration {
 		_sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120,
 		_promptDelay = 900, _tooltipDelay = 800;
-	private String _charset = "UTF-8";
+	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	/** A set of the language name whose theme is disabled. */
 	private Set _disabledDefThemes;
 	/** keep-across-visits. */
@@ -927,6 +927,22 @@ public class Configuration {
 	public int getMaxUploadSize() {
 		return _maxUploadSize;
 	}
+	/** Returns the charset used to encode the uploaded text file
+	 * (never null).
+	 *
+	 * <p>Default: UTF-8.
+	 */
+	public String getUploadCharset() {
+		return _charsetUpload;
+	}
+	/** Sets the charset used to encode the upload text file.
+	 *
+	 * @param charset the charset to use.
+	 * If null or empty, UTF-8 is assumed.
+	 */
+	public void setUploadCharset(String charset) {
+		_charsetUpload = charset != null && charset.length() > 0 ? charset: "UTF-8";
+	}
 
 	/** Specifies the time, in seconds, between client requests
 	 * before ZK will invalidate the desktop.
@@ -1066,20 +1082,23 @@ public class Configuration {
 		_monitor = monitor;
 	}
 
-	/** Returns the charset used by {@link org.zkoss.zk.ui.http.DHtmlLayoutServlet},
+	/** Returns the charset used to generate the HTTP response
 	 * or null to use the container's default.
+	 * It is currently used by {@link org.zkoss.zk.ui.http.DHtmlLayoutServlet},
+	 *
 	 * <p>Default: UTF-8.
 	 */
-	public String getCharset() {
-		return _charset;
+	public String getResponseCharset() {
+		return _charsetResp;
 	}
-	/** Sets the charset used by {@link org.zkoss.zk.ui.http.DHtmlLayoutServlet}.
+	/** Sets the charset used to generate HTTP response.
+	 * It is currently used by {@link org.zkoss.zk.ui.http.DHtmlLayoutServlet},
 	 *
 	 * @param charset the charset to use. If null or empty, the container's default
 	 * is used.
 	 */
-	public void setCharset(String charset) {
-		_charset = charset != null && charset.length() > 0 ? charset: null;
+	public void setResponseCharset(String charset) {
+		_charsetResp = charset != null && charset.length() > 0 ? charset: null;
 	}
 
 	/** Returns the value of the preference defined in zk.xml, or by

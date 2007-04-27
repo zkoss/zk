@@ -131,10 +131,10 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 		final List meds = new LinkedList();
 		final Object fis = params.get("file");
 		if (fis instanceof FileItem) {
-			meds.add(processItem((FileItem)fis));
+			meds.add(processItem(desktop, (FileItem)fis));
 		} else {
 			for (Iterator it = ((List)fis).iterator(); it.hasNext();) {
-				meds.add(processItem((FileItem)it.next()));
+				meds.add(processItem(desktop, (FileItem)it.next()));
 			}
 		}
 
@@ -146,7 +146,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 	}
 	/** Process the specified fileitem.
 	 */
-	private static final Media processItem(FileItem fi)
+	private static final Media processItem(Desktop desktop, FileItem fi)
 	throws IOException {
 		String name = getBaseName(fi);
 		if (name != null) {
@@ -181,7 +181,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 			}
 
 		if (ctypelc != null && ctypelc.startsWith("text/")) {
-			final String charset = getCharset(ctype);
+			final String charset = getCharset(desktop, ctype);
 			return fi.isInMemory() ?
 				new AMedia(name, null, ctype, fi.getString(charset)):
 				new ReaderMedia(name, null, ctype, fi, charset);
@@ -191,7 +191,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 				new StreamMedia(name, null, ctype, fi);
 		}
 	}
-	private static String getCharset(String ctype) {
+	private static String getCharset(Desktop desktop, String ctype) {
 		final String ctypelc = ctype.toLowerCase();
 		for (int j = 0; (j = ctypelc.indexOf("charset", j)) >= 0; j += 7) {
 			int k = Strings.skipWhitespacesBackward(ctype, j - 1);
@@ -208,7 +208,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 			}
 		}
 
-		return "UTF-8";
+		return desktop.getWebApp().getConfiguration().getUploadCharset();
 	}
 
 	/** Parses the multipart request into a map of

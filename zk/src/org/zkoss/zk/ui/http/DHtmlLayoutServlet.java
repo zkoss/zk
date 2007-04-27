@@ -111,7 +111,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	throws ServletException, IOException {
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		final Object old = I18Ns.setup(sess, request, response,
-			sess.getWebApp().getConfiguration().getCharset());
+			sess.getWebApp().getConfiguration().getResponseCharset());
 		try {
 			process(sess, request, response);
 		} finally {
