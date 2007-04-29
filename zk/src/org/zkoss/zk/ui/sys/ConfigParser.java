@@ -31,12 +31,7 @@ import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
 
-import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.sys.DesktopCacheProvider;
-import org.zkoss.zk.ui.sys.UiFactory;
-import org.zkoss.zk.ui.sys.FailoverManager;
-import org.zkoss.zk.ui.sys.LocaleProvider;
-import org.zkoss.zk.ui.sys.TimeZoneProvider;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
@@ -178,7 +173,7 @@ public class ConfigParser {
 				cls = parseClass(el, "engine-class", UiEngine.class);
 				if (cls != null) config.setUiEngineClass(cls);
 
-				cls = parseClass(el, "web-app-class", UiEngine.class);
+				cls = parseClass(el, "web-app-class", WebApp.class);
 				if (cls != null) config.setWebAppClass(cls);
 
 				cls = parseClass(el, "locale-provider-class", LocaleProvider.class);
