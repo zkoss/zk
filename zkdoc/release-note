@@ -61,6 +61,7 @@ ZK 2.3.1 Freshly
   1707254: Menu and comobobox in bandbox causes unexpected dismiss
   1704072: Can not work with spring 2.0.x
   1692495: Invisible iframe in tab incorrectly handled on FF2.0
+  1708752: org.zkoss.zk.ui.sys.ConfigParser Typo
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
