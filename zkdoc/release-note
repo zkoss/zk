@@ -1,5 +1,5 @@
 	--------
-ZK 2.3.1 Freshly
+ZK 2.3.1
 * Features:
   1698249: A way to customize the error box withouot writing JavaScript
   1690498: A way to download a file from server with save as dialog
