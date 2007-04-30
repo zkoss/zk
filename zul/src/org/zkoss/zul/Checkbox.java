@@ -44,7 +44,7 @@ public class Checkbox extends LabelImageElement {
 	private String _name;
 	private int _tabindex = -1;
 	private boolean _checked;
-	private boolean _disabled, _readonly;
+	private boolean _disabled;
 
 	public Checkbox() {
 	}
@@ -68,20 +68,6 @@ public class Checkbox extends LabelImageElement {
 		if (_disabled != disabled) {
 			_disabled = disabled;
 			smartUpdate("disabled", _disabled);
-		}
-	}
-	/** Returns whether it is readonly.
-	 * <p>Default: false.
-	 */
-	public boolean isReadonly() {
-		return _readonly;
-	}
-	/** Sets whether it is readonly.
-	 */
-	public void setReadonly(boolean readonly) {
-		if (_readonly != readonly) {
-			_readonly = readonly;
-			smartUpdate("readOnly", _readonly);
 		}
 	}
 
@@ -167,8 +153,6 @@ public class Checkbox extends LabelImageElement {
 		HTMLs.appendAttribute(sb, "name", getName());
 		if (isDisabled())
 			HTMLs.appendAttribute(sb, "disabled",  "disabled");
-		if (isReadonly())
-			HTMLs.appendAttribute(sb, "readonly", "readonly");
 		if (isChecked())
 			HTMLs.appendAttribute(sb, "checked",  "checked");
 		if (_tabindex >= 0)

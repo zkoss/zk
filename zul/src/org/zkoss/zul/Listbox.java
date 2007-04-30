@@ -131,7 +131,7 @@ implements RenderOnDemand {
 	private transient EventListener _pgListener;
 	private int _tabindex = -1;
 	private boolean _multiple;
-	private boolean _disabled, _readonly, _checkmark;
+	private boolean _disabled, _checkmark;
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
@@ -246,24 +246,6 @@ implements RenderOnDemand {
 				smartUpdate("disabled", _disabled);
 			} else {
 				smartUpdate("z.disabled", _disabled);
-			}
-		}
-	}
-	/** Returns whether it is readonly.
-	 * <p>Default: false.
-	 */
-	public final boolean isReadonly() {
-		return _readonly;
-	}
-	/** Sets whether it is readonly.
-	 */
-	public void setReadonly(boolean readonly) {
-		if (_readonly != readonly) {
-			_readonly = readonly;
-			if (inSelectMold()) {
-				smartUpdate("readonly", _readonly);
-			} else {
-				smartUpdate("z.readonly", _readonly);
 			}
 		}
 	}
@@ -1383,8 +1365,6 @@ implements RenderOnDemand {
 				HTMLs.appendAttribute(sb, "multiple",  "multiple");
 			if (_disabled)
 				HTMLs.appendAttribute(sb, "disabled",  "disabled");
-			if (_readonly)
-				HTMLs.appendAttribute(sb, "readonly", "readonly");
 			if (_tabindex >= 0)
 				HTMLs.appendAttribute(sb, "tabindex", _tabindex);
 		} else {
@@ -1392,8 +1372,6 @@ implements RenderOnDemand {
 			HTMLs.appendAttribute(sb, "z.size",  _rows);
 			if (_disabled)
 				HTMLs.appendAttribute(sb, "z.disabled",  true);
-			if (_readonly)
-				HTMLs.appendAttribute(sb, "z.readonly", true);
 			if (_multiple)
 				HTMLs.appendAttribute(sb, "z.multiple", true);
 			HTMLs.appendAttribute(sb, "z.selId", getSelectedId());
