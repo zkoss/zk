@@ -65,6 +65,7 @@ ZK 2.3.1
   1708752: org.zkoss.zk.ui.sys.ConfigParser Typo
   1684164: Readonly attribute on checkbox doesn't works
   1709788: databind with checkboxes
+  1710412: Window border incorrect if height specified and shown later
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
