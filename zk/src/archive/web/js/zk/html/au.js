@@ -1160,7 +1160,7 @@ zkau.sendOnClose = function (uuid, closeFloats) {
  * a popup contains any of them
  */
 zkau.closeFloats = function () {
-	zkau._closeFloats("closeFloats", arguments);
+	return zkau._closeFloats("closeFloats", arguments);
 };
 /** Similar to zkau.closeFloats, except it is called when a component
  * is getting the focus.
@@ -1168,7 +1168,7 @@ zkau.closeFloats = function () {
  * floats remains if it is an ancestor of aruments.
  */
 zkau.closeFloatsOnFocus = function () {
-	zkau._closeFloats("closeFloatsOnFocus", arguments);
+	return zkau._closeFloats("closeFloatsOnFocus", arguments);
 };
 zkau._closeFloats = function (method, ancestors) {
 	var closed;

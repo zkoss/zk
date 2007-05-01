@@ -1422,13 +1422,13 @@ zk.Float.prototype = {
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloats: function () {
-		this._closeFloats(false, arguments);
+		return this._closeFloats(false, arguments);
 	},
 	/** Closes all floats when a component is getting the focus.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloatsOnFocus: function () {
-		this._closeFloats(true, arguments);
+		return this._closeFloats(true, arguments);
 	},
 	_closeFloats: function (onfocus, ancestors) {
 		if (this._ftid) {
@@ -1473,13 +1473,13 @@ zk.Floats.prototype = {
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloats: function () {
-		this._closeFloats(false, arguments);
+		return this._closeFloats(false, arguments);
 	},
 	/** Closes all floats when a component is getting the focus.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloatsOnFocus: function () {
-		this._closeFloats(true, arguments);
+		return this._closeFloats(true, arguments);
 	},
 	_closeFloats: function (onfocus, ancestors) {
 		var closed;
