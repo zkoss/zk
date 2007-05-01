@@ -901,8 +901,10 @@ zk.hideCovered = function (ary) {
 		return;
 	}
 
-	for (var j = 0; j < zk.coveredTagnames.length; ++j) {
-		var els = document.getElementsByTagName(zk.coveredTagnames[j]);
+	var cts = zk.coveredTagnames;
+	for (var j = 0; j < cts.length; ++j) {
+		var els = document.getElementsByTagName(cts[j]);
+		var ifr = "IFRAME" == cts[j];
 		loop_els:
 		for (var k = 0 ; k < els.length; k++) {
 			var el = els[k];
@@ -914,10 +916,14 @@ zk.hideCovered = function (ary) {
 			}
 
 			var overlapped = false;
-			for (var m = 0; m < ary.length; ++m) {
-				if (zk.isOverlapped(ary[m], el)) {
-					overlapped = true;
-					break;
+			if (!ifr || getZKAttr(el, "autohide") == "true") {
+			//Note: z.autohide may be set dynamically,
+			//so consider it as not overlapped
+				for (var m = 0; m < ary.length; ++m) {
+					if (zk.isOverlapped(ary[m], el)) {
+						overlapped = true;
+						break;
+					}
 				}
 			}
 
