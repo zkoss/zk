@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * @author Henri Chen
  */
 public class ListModelConverter implements TypeConverter {
-	/** Convert a Set, Map, or List to associated ListModel.
+	/** Convert a Set, Map, List, or BindingListModel to associated {@link BindingListModel}.
 	 * @param val must be instanceof Set, Map, or List.
 	 */
 	public Object coerceToUi(Object val, Component comp) {
@@ -50,13 +50,15 @@ public class ListModelConverter implements TypeConverter {
 			return new BindingListModelArray((Object[]) val);
 		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class)val)) {
 			return new BindingListModelArray((Object[]) ((Class)val).getEnumConstants());
+		} else if (val instanceof BindingListModel) {
+			return val;
 		} else {
-			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, or Enum Class only. "+val.getClass());
+			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, Enum Class, or BindingListModel only. "+val.getClass());
 		}
 	}
 
-	/** Convert a ListModel to Set, Map, or List.
-	 * @param val must be ListModelSet, ListModelList, or ListModelMap
+	/** Convert a {@link BindingListModel} to Set, Map, List, or BindingListModel (itself).
+	 * @param val must be ListModelSet, ListModelList, ListModelMap, or BindingListModel
 	 */
 	public Object coerceToBean(Object val, Component comp) {
 		if (val == null) {
@@ -68,8 +70,10 @@ public class ListModelConverter implements TypeConverter {
 			return ((ListModelList)val).getInnerList();
 		} else if (val instanceof Map) {
 			return ((ListModelMap)val).getInnerMap();
+		} else if (val instanceof BindingListModel) {
+			return val;
 		} else {
-			throw new UiException("Expects ListModelSet, ListModelList, or ListModelMap only."+val.getClass());
+			throw new UiException("Expects ListModelSet, ListModelList, ListModelMap, or BindingListModel only."+val.getClass());
 		}
 	}
 }
