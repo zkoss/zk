@@ -42,6 +42,8 @@ public class Iframe extends XulElement {
 	private Media _media; 
 	/** Count the version of {@link #_media}. */
 	private int _medver;
+	/** Whether to hide when a popup or dropdown is placed on top of it. */
+	private boolean _autohide;
 
 	public Iframe() {
 	}
@@ -82,6 +84,30 @@ public class Iframe extends XulElement {
 		if (!Objects.equals(_name, name)) {
 			_name = name;
 			smartUpdate("name", _name);
+		}
+	}
+
+	/** Returns whether to automatically hide this component if
+	 * a popup or dropdown is overlapped with it.
+	 *
+	 * <p>Default: false.
+	 *
+	 * <p>If an iframe contains PDF or other embeds, it will be placed
+	 * on top of other components. It may then make popups and dropdowns
+	 * obscure. In this case, you have to specify autohide="true" to
+	 * ask ZK to hide the iframe when popups or dropdowns is overlapped
+	 * with the iframe.
+	 */
+	public boolean isAutohide() {
+		return _autohide;
+	}
+	/** Sets whether to automatically hide this component if
+	 * a popup or dropdown is overlapped with it.
+	 */
+	public void setAutohide(boolean autohide) {
+		if (_autohide != autohide) {
+			_autohide = autohide;
+			smartUpdate("z.autohide", "true");
 		}
 	}
 
@@ -170,6 +196,8 @@ public class Iframe extends XulElement {
 		HTMLs.appendAttribute(sb, "align",  _align);
 		HTMLs.appendAttribute(sb, "name",  _name);
 		HTMLs.appendAttribute(sb, "src",  getEncodedSrc());
+		if (_autohide)
+			HTMLs.appendAttribute(sb, "z.autohide", _autohide);
 		return sb.toString();
 	}
 
