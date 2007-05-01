@@ -63,6 +63,7 @@ ZK 2.3.1
   1692495: Invisible iframe in tab incorrectly handled on FF2.0
   1708752: org.zkoss.zk.ui.sys.ConfigParser Typo
   1684164: Readonly attribute on checkbox doesn't works
+  1709788: databind with checkboxes
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
