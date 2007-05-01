@@ -849,11 +849,8 @@ public class DataBinder {
 	}
 
 	private boolean isPrimitive(Object bean) {
-		if (bean != null) {
-			final String clsname = bean.getClass().getName();
-			return ("java.lang.String".equals(clsname) || Primitives.isPrimitive(clsname));
-		}
-		return false; //null is not primitive
+		//String is deemed as primitive and null is not primitive
+		return (bean instanceof String) || (bean != null && Primitives.toPrimitive(bean.getClass()) != null);
 	}
 	
 	//Very tricky implementation, assume "=" the assignment operator for all interpreters.
@@ -983,12 +980,11 @@ public class DataBinder {
 			
 			//mark as walked already
 			walkedNodes.add(node);
-			
+
 			//the component might have been removed
 			if (collectionComp == null) {
 				return;
 			}
-			
 			//loading
 			collectionComp = loadBindings(bean, node, collectionComp, savebinding, loadedBindings, refChanged);
 			
