@@ -49,6 +49,25 @@ zkWnd.cleanup = function (cmp) {
 	zkWnd.setSizable(cmp, false);
 	zkWnd._cleanMode(cmp);
 };
+/** Fixed the content div's height. */
+zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
+	var hgh = cmp.style.height;
+	if (hgh && hgh != "auto") {
+		var n = $e(cmp.id + "!cave");
+		if (n) {
+			hgh = cmp.clientHeight;
+			for (var p = n, q; q = p.previousSibling;) {
+				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
+				p = q;
+			}
+			for (var p = n, q; q = p.nextSibling;) {
+				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
+				p = q;
+			}
+			zk.setOffsetHeight(n, hgh);
+		}
+	}
+};
 zkWnd.setAttr = function (cmp, nm, val) {
 	switch (nm) {
 	case "z.sizable":
@@ -78,26 +97,6 @@ zkWnd.setAttr = function (cmp, nm, val) {
 		return true;
 	}
 	return false;
-};
-
-/** Fixed the content div's height. */
-zkWnd._fixHgh = function (cmp) {
-	var hgh = cmp.style.height;
-	if (hgh && hgh != "auto") {
-		var n = $e(cmp.id + "!cave");
-		if (n) {
-			hgh = cmp.clientHeight;
-			for (var p = n, q; q = p.previousSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
-				p = q;
-			}
-			for (var p = n, q; q = p.nextSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
-				p = q;
-			}
-			zk.setOffsetHeight(n, hgh);
-		}
-	}
 };
 
 ////////
