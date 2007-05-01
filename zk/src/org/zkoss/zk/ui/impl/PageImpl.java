@@ -681,8 +681,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (bIncluded) {
 			exec.include(out, uri, attrs, Execution.PASS_THRU_ATTR);
 		} else {
-			execCtrl.setHeader("Cache-Control", "no-cache,no-store,must-revalidate,proxy-revalidate,max-age=0"); // bug 1520444
+			execCtrl.setHeader("Cache-Control", "no-cache,no-store,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0"); // bug 1520444
 			execCtrl.setHeader("Pragma", "no-cache,no-store"); // bug 1520444
+			execCtrl.setHeader("Expires", "-1");
 			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
 			//Don't use include. Otherwise, headers (set by JSP) will be eaten.
 		}
