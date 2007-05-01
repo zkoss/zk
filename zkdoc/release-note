@@ -31,6 +31,7 @@ ZK 2.3.1
   1708615: Upgrade to jFreechart 1.0.5
   1708616: Upgrade to jRuby 0.9.9
   1710373: ListModelConverter should accept BindingListModel
+  1710542: Make AImage serializable
   
 * Bugs:
   1682844: Java 1.4.2 compatibility problem with StringBuffer.insert
@@ -66,6 +67,7 @@ ZK 2.3.1
   1684164: Readonly attribute on checkbox doesn't works
   1709788: databind with checkboxes
   1710412: Window border incorrect if height specified and shown later
+  1710552: No need to hide iframe if it is HTML
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
@@ -73,6 +75,9 @@ ZK 2.3.1
   + The way to sort listbox/grid with live data is changed:
     implements ListModelExt instead of overriding the sort method.
     Refer to the dev's guide for details.
+  + To embed an iframe with contents other than HTML (such as PDF), you
+    have to specify autohide to true.
+    <iframe autohide="true" src="my.pdf"/>
   + UiFactory's newComponent adds an extra argument, clsnm.
   + Milieu and InstanceDefinition are removed. ComponentInfo is added.
     . A component has a reference to the component definition
