@@ -48,7 +48,7 @@ import org.zkoss.util.media.ContentTypes;
  *
  * @author tomyeh
  */
-public class AImage implements Image {
+public class AImage implements Image, java.io.Serializable {
 	private static final Log log = Log.lookup(AImage.class);
 
 	/** The raw data. */
