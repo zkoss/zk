@@ -17,7 +17,6 @@ Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 msgzul = {};
-msgzul.FAILED_TO_CREATE_MASK = "Невъзмоно е да се създаде модална маска";
 msgzul.UNKNOWN_TYPE = "Непознат тип на компонента: ";
 msgzul.DATE_REQUIRED = "Трябва да зададете дата в формат: ";
 msgzul.NO_AUDIO_SUPPORT = "Броузерът ви неподдържа динамично аудио";

@@ -17,7 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 msgzul = {};
-msgzul.FAILED_TO_CREATE_MASK = "Kann keine modale Maske erzeugen";
 msgzul.UNKNOWN_TYPE = "Unbekannte Komponente: ";
 msgzul.DATE_REQUIRED = "Sie müssen ein Datum angeben. Format: ";
 msgzul.NO_AUDIO_SUPPORT = "Ihr Browser unterstützt keine Tonwiedergabe";

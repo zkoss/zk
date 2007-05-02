@@ -84,23 +84,44 @@ public class Style extends AbstractComponent {
 		}
 		return false;
 	}
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+		invalidate();
+	}
 
 	public void redraw(java.io.Writer out) throws java.io.IOException {
+		final boolean ie = Executions.getCurrent().isExplorer();
+		if (ie) {
+			//IE: unable to look back LINK or STYLE with ID
+			out.write("<div id=\"");
+			out.write(getUuid());
+			out.write("\">");
+		}
+
 		if (_src != null) {
 			out.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"");
 			out.write(getDesktop().getExecution().encodeURL(_src));
-			out.write("\" id=\"");
-			out.write(getUuid());
+			if (!ie) {
+				out.write("\" id=\"");
+				out.write(getUuid());
+			}
 			out.write("\"/>");
 		} else {
-			out.write("<style type=\"text/css\" id=\"");
-			out.write(getUuid());
-			out.write("\">\n");
+			out.write("<style type=\"text/css\"");
+			if (!ie) {
+				out.write(" id=\"");
+				out.write(getUuid());
+				out.write('"');
+			}
+			out.write(">\n");
 			for (final Iterator it = getChildren().iterator(); it.hasNext();) {
 				out.write(((Label)it.next()).getValue());
 				out.write('\n');
 			}
 			out.write("</style>");
 		}
+
+		if (ie)
+			out.write("</div>\n");
 	}
 }

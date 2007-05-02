@@ -17,7 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 msgzul = {};
-msgzul.FAILED_TO_CREATE_MASK = "Impossibile creare la Modal Mask";
 msgzul.UNKNOWN_TYPE = "Tipo di componente sconosciuto: ";
 msgzul.DATE_REQUIRED = "Devi inserire una data. Formato: ";
 msgzul.NO_AUDIO_SUPPORT = "Il tuo browser non supporta la funzione di audio dinamico";

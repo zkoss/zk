@@ -17,7 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 msgzul = {};
-msgzul.FAILED_TO_CREATE_MASK = "Ni bilo mogoèe narediti oblikovne maske";
 msgzul.UNKNOWN_TYPE = "Neznan tip komponente: ";
 msgzul.DATE_REQUIRED = "Vnesti je potrebno datum. Oblika: ";
 msgzul.NO_AUDIO_SUPPORT = "Vaš brskalnik ne podpira dinamiène glasbe";

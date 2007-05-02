@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 msgzul = {};
-msgzul.FAILED_TO_CREATE_MASK = "Modasl maskeleme yapılamıyor";
 msgzul.UNKNOWN_TYPE = "Bilinmeyen bileşen(component) tipi: ";
 msgzul.DATE_REQUIRED = "Tarih belirtilmeli. Format: ";
 msgzul.NO_AUDIO_SUPPORT = "Tarayıcınız dinamik ses bileşenini desteklememektedir.";

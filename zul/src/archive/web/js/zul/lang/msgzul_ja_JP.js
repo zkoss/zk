@@ -17,7 +17,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 msgzul = {};
-msgzul.FAILED_TO_CREATE_MASK = "Modal Mask が造れない";
 msgzul.UNKNOWN_TYPE = "未知のコンポーネント－タイプ";
 msgzul.DATE_REQUIRED = "日にちしかインプットできない。フォーマット: ";
 msgzul.NO_AUDIO_SUPPORT = "あなたのブラウザはオーディオをサポートしない";

@@ -420,7 +420,6 @@ zkWnd._doModal = function (cmp, replace) {
 			cmp.insertAdjacentHTML(
 				"beforebegin", '<div id="'+maskId+'" class="modal_mask"></div>');
 			mask =  $e(maskId);
-			if (!mask) zk.debug(msgzul.FAILED_TO_CREATE_MASK);
 		}
 	}
 
