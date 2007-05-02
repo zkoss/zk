@@ -181,7 +181,7 @@ zkCmbox.onkey = function (evt) {
 	if (!pp) return true;
 
 	var opened = pp.style.display != "none";
-	if (evt.keyCode == 9) { //TAB
+	if (evt.keyCode == 9 || (zk.safari && evt.keyCode == 0)) { //TAB or SHIFT-TAB (safari)
 		if (opened) zkCmbox.close(pp);
 		return true;
 	}
