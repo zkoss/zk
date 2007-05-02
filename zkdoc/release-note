@@ -69,6 +69,7 @@ ZK 2.3.1
   1710412: Window border incorrect if height specified and shown later
   1710552: No need to hide iframe if it is HTML
   1710697: Unable to add style dynamically (IE only)
+  1707818: Validate in onChange failed to check for 2nd onblur
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and
