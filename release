@@ -69,7 +69,7 @@ fi
 
 #Prepare the source codes
 if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
-	mkdir -p /tmp/zk/$srcnm/dist/lib/ext
+	#mkdir -p /tmp/zk/$srcnm/dist/lib/ext
 	mkdir -p /tmp/zk/$srcnm/bin
 	mkdir -p /tmp/zk/$srcnm/doc
 
@@ -86,10 +86,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zkplus /tmp/zk/$srcnm
 	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
 
-	if [ "$target" == "official" ] ; then
-	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
-	cp dist/lib/ext/* /tmp/zk/$srcnm/dist/lib/ext
-	fi
+	#if [ "$target" == "official" ] ; then
+	#cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
+	#cp dist/lib/ext/* /tmp/zk/$srcnm/dist/lib/ext
+	#fi
 
 	cd /tmp/zk/$srcnm
 	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
