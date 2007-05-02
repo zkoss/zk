@@ -599,7 +599,6 @@ zkau.setAttr = function (cmp, name, value) {
 		//such as selectedIndex, scrollTop...
 		var old = "class" == name ? cmp.className:
 			"selectedIndex" == name ? cmp.selectedIndex:
-			"defaultValue" == name ? cmp.defaultValue: //Moz has problem to use getAttribute with this
 			"disabled" == name ? cmp.disabled:
 			"readOnly" == name ? cmp.readOnly:
 			"scrollTop" == name ? cmp.scrollTop:
@@ -614,11 +613,7 @@ zkau.setAttr = function (cmp, name, value) {
 		if (old != value) {
 			if ("selectedIndex" == name) cmp.selectedIndex = value;
 			else if ("class" == name) cmp.className = value;
-			else if ("defaultValue" == name) {
-				var old = cmp.value;
-				cmp.defaultValue = value;
-				if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
-			} else if ("disabled" == name) cmp.disabled = value;
+			else if ("disabled" == name) cmp.disabled = value;
 			else if ("readOnly" == name) cmp.readOnly = value;
 			else if ("scrollTop" == name) cmp.scrollTop = value;
 			else if ("scrollLeft" == name) cmp.scrollLeft = value;
@@ -1558,14 +1553,8 @@ zkau.cmd0 = { //no uuid at all
 		zkau._cleanupOnFatal();
 		zk.error(dt1);
 	},
-	alert: function (dt0, dt1) {
-		var cmp = dt0 ? $e(dt0): null;
-		if (cmp) {
-			cmp = $real(cmp); //refer to INPUT (e.g., datebox)
-			if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
-		} else {
-			alert(dt1);
-		}
+	alert: function (msg) {
+		alert(msg);
 	},
 	redirect: function (url, target) {
 		try {
@@ -1630,6 +1619,21 @@ zkau.cmd0 = { //no uuid at all
 	}
 };
 zkau.cmd1 = {
+	wrongValue: function (uuid, cmp, dt1) {
+		if (cmp) {
+			cmp = $real(cmp); //refer to INPUT (e.g., datebox)
+
+			//we have to update default value so validation will be done again
+			var old = cmp.value;
+			cmp.defaultValue = old + "_err"; //enforce to validate
+			if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
+
+			if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
+			else alert(dt1);
+		} else {
+			alert(dt1);
+		}
+	},
 	setAttr: function (uuid, cmp, dt1, dt2) {
 		if (dt1 == "z.init" || dt1 == "z.chchg") { //initialize
 			//Note: cmp might be null because it might be removed

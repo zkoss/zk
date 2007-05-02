@@ -675,7 +675,7 @@ public class UiEngineImpl implements UiEngine {
 			final Component comp = ((WrongValueException)ex).getComponent();
 			if (comp != null) {
 				uv.addResponse("wrongValue",
-					new AuAlert(comp, Exceptions.getMessage(ex)));
+					new AuWrongValue(comp, Exceptions.getMessage(ex)));
 				return;
 			}
 		}

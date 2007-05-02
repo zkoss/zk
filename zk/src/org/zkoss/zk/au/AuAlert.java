@@ -18,21 +18,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
-import org.zkoss.zk.ui.Component;
-
 /**
  * A response to ask client to show an alert.
  *
- * <p>data[0]: component's UUID or null (ie., empty for client)
- * data[1]: the alert message
+ * <p>data[0]: the alert message
  * 
  * @author tomyeh
  */
 public class AuAlert extends AuResponse {
 	public AuAlert(String message) {
-		super("alert", new String[] {null, message});
-	}
-	public AuAlert(Component comp, String message) {
-		super("alert", comp, new String[] {comp.getUuid(), message});
+		super("alert", message); //component-independent
 	}
 }
