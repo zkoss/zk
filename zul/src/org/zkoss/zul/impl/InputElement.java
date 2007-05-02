@@ -197,19 +197,12 @@ implements Constrainted {
 	 * @param value the value; If null, it is considered as empty.
 	 */
 	public void setText(String value) throws WrongValueException {
-		Object val;
-		try {
-			if (_maxlength > 0 && value != null && value.length() > _maxlength)
-				throw showCustomError(
-					new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_maxlength)));
-			val = coerceFromString(value);
-			validate(val);
-		} catch (WrongValueException ex) {
-			smartUpdate("defaultValue", "zk_wrong!~-.zk_pha!6");
-				//a value to enforce client to send back request
-				//If you changed it, remember to correct boot.js
-			throw ex;
-		}
+		if (_maxlength > 0 && value != null && value.length() > _maxlength)
+			throw showCustomError(
+				new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_maxlength)));
+
+		final Object val = coerceFromString(value);
+		validate(val);
 
 		clearErrorMessage(); //no error at all
 		_valided = true;
