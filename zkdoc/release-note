@@ -71,6 +71,7 @@ ZK 2.3.1
   1710697: Unable to add style dynamically (IE only)
   1707818: Validate in onChange failed to check for 2nd onblur
   1710946: Comobox not allow shift+tab if autodrop (Safari only)
+  1711310: modal dialog and tab key
 
 * Upgrade Notes:
   + org.zkoss.zul.Constraint is simplified while ClientConstraint and

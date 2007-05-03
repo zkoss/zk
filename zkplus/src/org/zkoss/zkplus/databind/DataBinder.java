@@ -886,13 +886,13 @@ public class DataBinder {
 		if (existsBean(beanid)) {
 			bean = getBean(beanid);
 		} else if (beanid.startsWith("/")) { //a component Path in ID Space
-			bean = Path.getComponent(beanid);	
-		} else if (comp.containsVariable(beanid, false)) {
-			bean = comp.getVariable(beanid, false);
+			bean = Path.getComponent(beanid);
 		} else {
 			final Page page = comp.getPage();
 			if (page != null)
-				bean = page.getZScriptVariable(beanid);
+				bean = page.getZScriptVariable(comp.getNamespace(), beanid);
+			if (bean == null)
+				bean = comp.getVariable(beanid, false);
 		}
 		return bean;
 	}
