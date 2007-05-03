@@ -48,10 +48,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<!-- To have better performance with BeanShell, import most-common later -->
 	<zscript language="Java">
-	import org.zkoss.zk.ui.util.Clients;
-	import org.zkoss.zk.ui.event.*;
 	import java.util.*;
 	import java.lang.*;
+	import org.zkoss.zk.ui.util.Clients;
+	import org.zkoss.zk.ui.event.*;
 	import org.zkoss.zk.ui.*;
 	import org.zkoss.zul.*;
 
@@ -61,12 +61,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</zscript>
 
 	<zscript language="JavaScript">
-	importPackage(Packages.java.lang);
 	importPackage(Packages.java.util);
-	importPackage(Packages.org.zkoss.zul);
-	importPackage(Packages.org.zkoss.zk.ui);
-	importPackage(Packages.org.zkoss.zk.ui.event);
+	importPackage(Packages.java.lang);
 	importClass(Packages.org.zkoss.zk.ui.util.Clients);
+	importPackage(Packages.org.zkoss.zk.ui.event);
+	importPackage(Packages.org.zkoss.zk.ui);
+	importPackage(Packages.org.zkoss.zul);
 	function alert(m) {
 		Messagebox.show(m);
 	}
@@ -75,12 +75,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!-- Groovy "forgot" what are imported, so we have to import each time
 	-->
 	<zscript language="Groovy" each-time="true">
-	import java.lang.*
 	import java.util.*
-	import org.zkoss.zul.*
-	import org.zkoss.zk.ui.*
-	import org.zkoss.zk.ui.event.*
+	import java.lang.*
 	import org.zkoss.zk.ui.util.Clients
+	import org.zkoss.zk.ui.event.*
+	import org.zkoss.zk.ui.*
+	import org.zkoss.zul.*
 	</zscript>
 	<zscript language="Groovy">
 	alert = {m -> Messagebox.show(m)}
@@ -89,12 +89,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<zscript language="Ruby">
 	require 'java'
 	module Java
-		include_package 'java.lang'
 		include_package 'java.util'
-		include_package 'org.zkoss.zul'
-		include_package 'org.zkoss.zk.ui'
-		include_package 'org.zkoss.zk.ui.event'
+		include_package 'java.lang'
 		include_class 'org.zkoss.zk.ui.util.Clients'
+		include_package 'org.zkoss.zk.ui.event'
+		include_package 'org.zkoss.zk.ui'
+		include_package 'org.zkoss.zul'
 	end
 	def alert (m)
 		Java::Messagebox.show m
