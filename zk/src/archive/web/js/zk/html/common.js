@@ -830,7 +830,7 @@ zk.disableAll = function (parent) {
 			} else if (zk.gecko && tn == "A") {
 	//Firefox doesn't support the disable of A
 				what = "h:" + zkau.getStamp(el, "tabIndex") + ":" +
-					(el.tabIndex ? el.tabIndex: 0);
+					(el.tabIndex ? el.tabIndex: 0); //just in case (if null)
 				el.tabIndex = -1;
 			} else {
 				what = "d:" + zkau.getStamp(el, "disabled") + ":" + el.disabled;
