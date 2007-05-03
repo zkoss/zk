@@ -487,7 +487,8 @@ zk.Selectable.prototype = {
 		var uuid = typeof row == 'string' ? row: row.id;
 		var el = $e(uuid + "!cm");
 		if (!el) el = $e(uuid + "!sel");
-		if (el) zk.focusById(el.id);
+		if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
+			zk.focusById(el.id);
 	},
 
 	/** Selects one and deselect others, and return whehter any changes.
@@ -572,7 +573,8 @@ zk.Selectable.prototype = {
 			if (toFocus) {
 				var el = $e(row.id + "!cm");
 				if (!el) el = $e(row.id + "!sel");
-				if (el) zk.focusById(el.id);
+				if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
+					zk.focusById(el.id);
 				setZKAttr(row, "focus", "true");
 				zkSel.cmonfocusTo(row);
 
