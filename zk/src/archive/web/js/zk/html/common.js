@@ -792,8 +792,8 @@ zk.rename = function (url, name) {
 };
 
 //-- special routines --//
-if (!zk.activeTagnames) {
-	zk.activeTagnames =
+if (!zk._actTagnms) {
+	zk._actTagnms =
 		new Array("A","BUTTON","TEXTAREA","INPUT","SELECT","IFRAME","APPLET");
 	zk._disTags = new Array(); //A list of {element: xx, what: xx}
 	zk._hidCvred = new Array(); //A list of {element: xx, visibility: xx}
@@ -805,8 +805,8 @@ if (!zk.activeTagnames) {
 
 /** Disables all active tags. */
 zk.disableAll = function (parent) {
-	for (var j = 0; j < zk.activeTagnames.length; j++) {
-		var els = document.getElementsByTagName(zk.activeTagnames[j]);
+	for (var j = 0; j < zk._actTagnms.length; j++) {
+		var els = document.getElementsByTagName(zk._actTagnms[j]);
 		l_els:
 		for (var k = 0 ; k < els.length; k++) {
 			var el = els[k];
@@ -827,10 +827,11 @@ zk.disableAll = function (parent) {
 	//Note: we don't check isOverlapped because mask always covers it
 				what = el.style.visibility;
 				el.style.visibility = "hidden";
-			} else if (!zk.ie && tn == "A") {
+			} else if (zk.gecko && tn == "A") {
 	//Firefox doesn't support the disable of A
-				what = "h:" + zkau.getStamp(el, "href") + ":" + el.href;
-				el.href = "";
+				what = "h:" + zkau.getStamp(el, "tabIndex") + ":" +
+					(el.tabIndex ? el.tabIndex: 0);
+				el.tabIndex = -1;
 			} else {
 				what = "d:" + zkau.getStamp(el, "disabled") + ":" + el.disabled;
 				el.disabled = true;
@@ -860,7 +861,7 @@ zk.restoreDisabled = function (n) {
 			} else if (what.startsWith("h:")) {
 				var j = what.indexOf(':', 2);
 				if (what.substring(2, j) == zkau.getStamp(el, "href"))
-					el.href = what.substring(j + 1);
+					el.tabIndex = what.substring(j + 1);
 			} else 
 				el.style.visibility = what;
 
