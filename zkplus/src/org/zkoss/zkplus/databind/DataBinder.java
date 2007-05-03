@@ -892,7 +892,7 @@ public class DataBinder {
 		} else {
 			final Page page = comp.getPage();
 			if (page != null)
-				bean = page.getZScriptVariable(beanid);
+				bean = page.getZScriptVariable(comp.getNamespace(), beanid);
 		}
 		return bean;
 	}
