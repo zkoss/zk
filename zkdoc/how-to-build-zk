@@ -4,6 +4,9 @@ How to Build ZK
 
 * Install Cygwin 1.90 or above, if Windows is used.
 
+* Install Java 6 SDK or above
+  ZK's target JVM is 1.4, but the compiler must be Java 6.
+
 * The required jar files are shipped only with the official releases (under the
   dist/lib/ext directory).
  
