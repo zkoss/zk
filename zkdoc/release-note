@@ -1,9 +1,10 @@
 	--------
 ZK 2.3.2 Freshly
 * Features:
-  1712518 ] Decimalbox supports different round mode
+  1712518: Decimalbox supports different round mode
 
 * Bugs:
+  1711769: Grid on Vbox visibility bug
 
 * Upgrade Notes:
 

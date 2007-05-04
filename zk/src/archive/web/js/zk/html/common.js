@@ -530,26 +530,34 @@ zk.setInnerHTML = function (el, html) {
  */
 zk.setOuterHTML = function (el, html) {
 	//NOTE: Safari doesn't support __defineSetter__
+	var p = el.parentNode;
 	if (zk.ie || zk.opera) {
 		var tn = $tag(el);
 		if (tn == "TD" || tn == "TH" || tn == "TABLE" || tn == "TR"
 		|| tn == "CAPTION" || tn == "TBODY" || tn == "THEAD"
 		|| tn == "TFOOT" || tn == "COLGROUP" || tn == "COL") {
 			var ns = zk._tblCreateElements(html);
-			var p = el.parentNode;
 			var sib = el.nextSibling;
 			p.removeChild(el);
 			for (var j = 0; j < ns.length; ++j)
 				if (sib) p.insertBefore(ns[j], sib);
 				else p.appendChild(ns[j]);
-			return;
+		} else {
+			el.outerHTML = html;
 		}
-		el.outerHTML = html;
 	} else {
 		var r = el.ownerDocument.createRange();
 		r.setStartBefore(el);
 		var df = r.createContextualFragment(html);
-		el.parentNode.replaceChild(df, el);
+		p.replaceChild(df, el);
+	}
+
+	for (p = p.firstChild; p; p = p.nextSibling) {
+		if ($tag(p)) { //skip Text
+			if (p.style.display == "none") zk._hideExtr(p);
+			else zk._showExtr(p);
+			break;
+		}
 	}
 };
 
