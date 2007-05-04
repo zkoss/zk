@@ -48,9 +48,9 @@ public class Messagebox {
 	 * a yellow background.
 	 */
 	public static final String EXCLAMATION  = "~./zul/img/exclamation.gif";
-	/** The same as {@link #EXCLAMATION}.
+	/** A symbol of a lowercase letter i in a circle.
 	 */
-	public static final String INFORMATION = EXCLAMATION;
+	public static final String INFORMATION = "~./zul/img/information.gif";
 	/** A symbol consisting of a white X in a circle with a red background. */
 	public static final String ERROR = "~./zul/img/error.gif";
 	/** Contains no symbols. */
