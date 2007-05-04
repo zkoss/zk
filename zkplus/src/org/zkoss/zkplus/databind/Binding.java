@@ -335,10 +335,6 @@ import java.util.LinkedHashSet;
 		public BaseEventListener(Component dataTarget) {
 			_dataTarget = dataTarget;
 		}
-		
-		public boolean isAsap() {
-			return true;
-		}
 	}
 			
 	private class LoadEventListener extends BaseEventListener {

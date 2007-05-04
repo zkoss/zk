@@ -59,10 +59,6 @@ import java.util.Iterator;
  * @author Henri
  */
 public class ShowWindowEventListener implements EventListener {
-	public boolean isAsap() {
-		return true;
-	}
-	
 	public void onEvent(Event event) {
 		//fetch old Event stored in Session and post again
 		final Component comp = event.getTarget();

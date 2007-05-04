@@ -959,10 +959,6 @@ public class DataBinder {
 			}
 		}
 		
-		public boolean isAsap() {
-			return true;
-		}
-
 		/** Load all associated BindingNodes below the given nodes (depth first traverse).
 		 */
 		private void loadAllNodes(Object bean, BindingNode node, Component collectionComp, Binding savebinding, boolean refChanged) {
