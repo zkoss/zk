@@ -930,10 +930,8 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** Process an event. */
 	private void processEvent(Component comp, Event event) {
-		if (comp.getPage() == null) {
-			if (D.ON && log.debugable()) log.debug("Event is ignored due to dead");
+		if (comp.getPage() == null)
 			return; //nothing to do
-		}
 
 		EventProcessingThreadImpl evtthd = null;
 		synchronized (_evtthds) {

@@ -227,6 +227,9 @@ public class Events {
 	}
 
 	/** Posts an event.
+	 *
+	 * <p>Note: if the target of an event is not attached to
+	 * the page yet, the event is ignored silently.
 	 */
 	public static final void postEvent(Event event) {
 		Executions.getCurrent().postEvent(event);
