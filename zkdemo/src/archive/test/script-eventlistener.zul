@@ -27,9 +27,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 		<zscript>
 		private class ClickEventListener implements EventListener {
-			public boolean isAsap() {
-				return true;
-			}
 			public void onEvent(Event event) throws UiException {
 				myLabel.value = "Hello, Event!";
 			}

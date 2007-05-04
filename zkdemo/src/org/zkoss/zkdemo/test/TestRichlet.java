@@ -40,9 +40,6 @@ public class TestRichlet extends GenericRichlet {
 		b.addEventListener(Events.ON_CLICK,
 			new EventListener() {
 				int count;
-				public boolean isAsap() {
-					return true;
-				}
 				public void onEvent(Event evt) {
 					l.setValue("" + ++count);
 				}
