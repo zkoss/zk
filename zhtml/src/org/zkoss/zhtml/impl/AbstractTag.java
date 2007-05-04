@@ -42,7 +42,8 @@ import org.zkoss.zk.ui.ext.RawId;
  * The raw component used to generate raw HTML elements.
  *
  * <p>Note: ZHTML components ignore the page listener since it handles
- * only ASAP event listeners.
+ * non-deferrable event listeners
+ * (see {@link org.zkoss.zk.ui.event.Deferrable}).
  *
  * @author tomyeh
  */
@@ -217,13 +218,6 @@ implements DynamicPropertied, RawId {
 		return old;
 	}
 	public boolean addEventListener(String evtnm, EventListener listener) {
-		if (!listener.isAsap())
-			throw new UiException("ZHTML accepts only ASAP listener");
-
-		//Bug 1477271: Tom M Yeh: 
-		//We can check ASAP only. Otherwise, if users add a page listener,
-		//all ZHTML will generate z.onChange. Too complicate!
-
 		final EventInfo ei;
 		for (int j = 0;; ++j) {
 			if (j >= _evts.length)
@@ -238,7 +232,10 @@ implements DynamicPropertied, RawId {
 		final boolean ret = super.addEventListener(evtnm, listener);
 		if (ret) {
 			smartUpdate(ei.attr,
-				Events.isListenerAvailable(this, evtnm, true) ? "true": null); //asap only
+				Events.isListened(this, evtnm, true) ? "true": null);
+				//Bug 1477271: Tom M Yeh: 
+				//We check non-deferable only. Otherwise, if users add a page
+				//event listener, all ZHTML will generate z.onChange.
 			if (bAddType && isTypeDeclared()) {
 				smartUpdate("z.type", "zhtml.main.Raw");
 				smartUpdate("z.init", true);
@@ -249,7 +246,7 @@ implements DynamicPropertied, RawId {
 	private boolean isTypeDeclared() {
 		for (int j = 0; j < _evts.length; ++j)
 			if (_evts[j].typed
-			&& Events.isListenerAvailable(this, _evts[j].name, true)) //asap only
+			&& Events.isListened(this, _evts[j].name, true)) //asap only
 				return true;
 		return false;
 	}
@@ -263,7 +260,7 @@ implements DynamicPropertied, RawId {
 
 		boolean typeDeclared = false;
 		for (int j = 0; j < _evts.length; ++j) {
-			if (Events.isListenerAvailable(this, _evts[j].name, true)) { //asap only
+			if (Events.isListened(this, _evts[j].name, true)) { //asap only
 				if (_evts[j].typed) typeDeclared = true;
 				out.write(' ');
 				out.write(_evts[j].attr);
