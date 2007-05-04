@@ -113,7 +113,8 @@ public class Decimalbox extends FormatInputElement {
 
 		try {
 			BigDecimal v = new BigDecimal(val);
-			if (_scale != AUTO) v = v.setScale(_scale);
+			if (_scale != AUTO)
+				v = v.setScale(_scale, BigDecimal.ROUND_HALF_EVEN);
 
 			int divscale = vals[1] != null ? ((Integer)vals[1]).intValue(): 0;
 			if (divscale > 0) {
