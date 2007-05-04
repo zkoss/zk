@@ -1608,7 +1608,6 @@ zk.show = function (id, bShow) {
 					setZKAttr(n, "conshow", js);
 				}
 			} else {
-				zk._showExtr(n);  //parent visible first
 				action.show(n);
 			}
 		}
@@ -1632,7 +1631,6 @@ zk.hide = function (id, bHide) {
 				}
 			} else {
 				action.hide(n);
-				zk._hideExtr(n); //hide parent later
 			}
 		}
 	}
@@ -1668,6 +1666,7 @@ action.show = function (id) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "zk.show");
 		} else {
+			zk._showExtr(n);  //parent visible first
 			n.style.display = "";
 			zk.onVisiAt(n); //callback later
 		}
@@ -1683,6 +1682,7 @@ action.hide = function (id) {
 		} else {
 			zk.onHideAt(n); //callback first
 			n.style.display = "none";
+			zk._hideExtr(n); //hide parent later
 		}
 };
 
