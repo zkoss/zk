@@ -1,4 +1,13 @@
 	--------
+ZK 2.3.2 Freshly
+* Features:
+  1712518 ] Decimalbox supports different round mode
+
+* Bugs:
+
+* Upgrade Notes:
+
+	--------
 ZK 2.3.1
 * Features:
   1698249: A way to customize the error box withouot writing JavaScript

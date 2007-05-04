@@ -24,14 +24,14 @@ import org.zkoss.math.BigDecimals;
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.mesg.MZul;
-import org.zkoss.zul.impl.FormatInputElement;
+import org.zkoss.zul.impl.NumberInputElement;
 
 /**
  * An edit box for holding BigDecimal.
  *
  * @author tomyeh
  */
-public class Decimalbox extends FormatInputElement {
+public class Decimalbox extends NumberInputElement {
 	/** Used with {@link #setScale} to denote that the scale is decided by
 	 * what user has entered.
 	 */
@@ -114,14 +114,14 @@ public class Decimalbox extends FormatInputElement {
 		try {
 			BigDecimal v = new BigDecimal(val);
 			if (_scale != AUTO)
-				v = v.setScale(_scale, BigDecimal.ROUND_HALF_EVEN);
+				v = v.setScale(_scale, getRoundingMode());
 
 			int divscale = vals[1] != null ? ((Integer)vals[1]).intValue(): 0;
 			if (divscale > 0) {
 				final BigDecimal ten = new BigDecimal(10);
 				do {
 					v = v.divide(ten, _scale == AUTO ? v.scale()+1: _scale,
-						BigDecimal.ROUND_HALF_EVEN);
+						getRoundingMode());
 				} while (--divscale > 0);
 			}
 			return v;

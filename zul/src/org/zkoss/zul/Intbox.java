@@ -23,14 +23,14 @@ import java.util.Locale;
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.mesg.MZul;
-import org.zkoss.zul.impl.FormatInputElement;
+import org.zkoss.zul.impl.NumberInputElement;
 
 /**
  * An edit box for holding an integer.
  *
  * @author tomyeh
  */
-public class Intbox extends FormatInputElement {
+public class Intbox extends NumberInputElement {
 	public Intbox() {
 		setCols(11);
 	}

@@ -88,37 +88,9 @@ public class Fields {
 	throws NoSuchMethodException, ModificationException {
 		setField(obj, name, val, false);
 	}
-	/** Remove the field of the specified field.
-	 *
-	 * @param name the field name. It can be in form of "a.b.c", but cannot
-	 * be an expression.
-	 * @exception UnsupportedOperationException if the object is not
-	 * {@link Fieldable}
-	 */
-	public static final void removeField(Object obj, String name)
-	throws NoSuchMethodException, ModificationException {
-		for (;;) {
-			final int j = name.indexOf('.');
-			if (j < 0) {
-				remove(obj, name);
-				return;
-			}
-
-			obj = get(obj, name.substring(0, j));
-			if (obj == null)
-				return;
-			name = name.substring(j + 1);
-		}
-	}
 
 	public static final Object get(Object obj, String name)
 	throws NoSuchMethodException {
-		//if (log.debugable()) log.debug("get value of field "+name+" of object "+obj);
-		if (obj instanceof Fieldable) {
-			final Object o = ((Fieldable)obj).getField(name);
-			return o == Objects.UNKNOWN ? null: o;
-		}
-
 		try {
 			final AccessibleObject acs = Classes.getAccessibleObject(
 				obj.getClass(), name, null,
@@ -133,11 +105,6 @@ public class Fields {
 	}
 	public static final void set(Object obj, String name, Object val,
 	boolean autoCoerce) throws NoSuchMethodException, ModificationException {
-		if (obj instanceof Fieldable) {
-			((Fieldable)obj).setField(name, val);
-			return;
-		}
-
 		try {
 			AccessibleObject acs;
 			try {
@@ -169,12 +136,5 @@ public class Fields {
 		} catch (Exception ex) {
 			throw ModificationException.Aide.wrap(ex, MCommon.NOT_FOUND, name);
 		}
-	}
-	public static final void remove(Object obj, String name)
-	throws ModificationException {
-		if (obj instanceof Fieldable)
-			((Fieldable)obj).removeField(name);
-		else
-			throw new UnsupportedOperationException("removeObject: " + obj+" for field "+name);
 	}
 }

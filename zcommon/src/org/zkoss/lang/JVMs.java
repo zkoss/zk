@@ -27,7 +27,7 @@ public class JVMs {
 	private JVMs() {}
 
 	private static final int _major, _minor;
-	private static final boolean _j5;
+	private static final boolean _j5, _j6;
 	static {
 		final String s = System.getProperty("java.version");
 		int major = 0, minor = 0;
@@ -44,13 +44,19 @@ public class JVMs {
 		}
 		_major = major;
 		_minor = minor;
-		_j5 = (_major == 1 && _minor >= 5) || _major > 1;
+		_j5 = (_major == 1 && _minor >= 5) || _major >= 5;
+		_j6 = (_major == 1 && _minor >= 6) || _major >= 6;
 	}
 
 	/** Returns whether JVM is 5.0 or above
 	 */
 	public static final boolean isJava5() {
 		return _j5;
+	}
+	/** Returns whether JVM is 6.0 or above.
+	 */
+	public static final boolean isJava6() {
+		return _j6;
 	}
 	/** Returns the major version.
 	 */

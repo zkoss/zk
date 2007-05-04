@@ -31,22 +31,6 @@ import org.zkoss.math.BigIntegers;
  * @author tomyeh
  */
 public class BigDecimals {
-	/** The default rounding mode. */
-	private static int _roundingMode = BigDecimal.ROUND_HALF_UP;
-
-	/** Gets the default rounding mode for BigDecimal.
-	 * It is used when a rounding mode is required and no one
-	 * is specified explicitly.
-	 */
-	public static final int getRoundingMode() {
-		return _roundingMode;
-	}
-	/** Sets the default rounding mode, one of BigDecimal.ROUND_xxx.
-	 */
-	public static final void setRoundingMode(int mode) {
-		_roundingMode = mode;
-	}
-
 	/** Represents 0 in big decimal.
 	 * @see #ONE
 	 * @see #MINUS_ONE
@@ -94,10 +78,10 @@ public class BigDecimals {
 		return new BigDecimal(v).setScale(scale, roundingMode);
 	}
 	/** Converts a double to a big decimal with a scale.
-	 * The rounding mode uses the default one, getRoundingMode.
+	 * It uses {@link BigDecimal#ROUND_HALF_UP}.
 	 */
 	public static final BigDecimal toBigDecimal(double v, int scale) {
-		return toBigDecimal(v, scale, _roundingMode);
+		return toBigDecimal(v, scale, BigDecimal.ROUND_HALF_UP);
 	}
 	/** Converts an integer to a big decimal with a scale.
 	 */

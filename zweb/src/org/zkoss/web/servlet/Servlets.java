@@ -58,7 +58,6 @@ import org.zkoss.util.resource.Locators;
 import org.zkoss.util.resource.PropertyBundle;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
-import org.zkoss.math.Calcs;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.http.Encodes;

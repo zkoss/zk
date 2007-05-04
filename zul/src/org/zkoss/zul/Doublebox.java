@@ -21,14 +21,14 @@ package org.zkoss.zul;
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.mesg.MZul;
-import org.zkoss.zul.impl.FormatInputElement;
+import org.zkoss.zul.impl.NumberInputElement;
 
 /**
  * An edit box for holding an float point value (double).
  *
  * @author henrichen
  */
-public class Doublebox extends FormatInputElement {
+public class Doublebox extends NumberInputElement {
 	public Doublebox() {
 		setCols(11);
 	}
