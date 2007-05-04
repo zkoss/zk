@@ -2,12 +2,17 @@
 ZK 2.3.2 Freshly
 * Features:
   1712518: Decimalbox supports different round mode
+  1712548: isAsap shall not be part of EventListener
 
 * Bugs:
   1711769: Grid on Vbox visibility bug
   1712063: Vbox visibility bug with CSA action.show
 
 * Upgrade Notes:
+  + The isAsap method is abandoned. Rather, you have to implement
+    org.zkoss.zk.ui.event.Deferrable if you want it to be deferrable listener.
+    In other words, any event listener that returns false for the isAsap method
+    shall implements Deferrable and returns true for the isDeferrable method.
 
 	--------
 ZK 2.3.1
