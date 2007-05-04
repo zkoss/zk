@@ -47,6 +47,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			Messagebox.show("Question is pressed. Are you sure?", "Question", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);
 		}</attribute>
 	</button>
+	<button label="Information" width="100px">
+		<attribute name="onClick">{
+			Messagebox.show("Information is pressed", "Information", Messagebox.OK, Messagebox.INFORMATION);
+		}</attribute>
+	</button>
 	<button label="Error" width="100px">
 		<attribute name="onClick">{
 			Messagebox.show("Error is pressed", "Error", Messagebox.OK, Messagebox.ERROR);
