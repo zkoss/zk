@@ -245,7 +245,8 @@ zkau._checkProgress = function () {
 zkau.asapTimeout = function (cmp, evtnm) {
 	return zkau.asap(cmp, evtnm) ? 25: -1;
 };
-/** Returns whether any ASAP event is registered for the specified event.
+/** Returns whether any non-deferrable listener is registered for
+ * the specified event.
  */
 zkau.asap = function (cmp, evtnm) {
 	return getZKAttr($e(cmp), evtnm) == "true" ;

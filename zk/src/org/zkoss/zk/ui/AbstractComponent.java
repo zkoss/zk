@@ -39,6 +39,7 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.Transparent;
@@ -930,8 +931,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	private void checkRootEvents() {
 		if (_page != null && _parent == null
-		&& Events.isListenerAvailable(this, Events.ON_CLIENT_INFO, true))
-				response("clientInfo", new AuClientInfo());
+		&& Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap & deferrable
+			response("clientInfo", new AuClientInfo());
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
 		if (evtnm == null || listener == null)
@@ -973,7 +974,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 				for (Iterator it = l.iterator(); it.hasNext();) {
 					final EventListener li = (EventListener)it.next();
-					if (li.isAsap())
+					if (!(li instanceof Deferrable)
+					|| !(((Deferrable)li).isDeferrable()))
 						return true;
 				}
 			}

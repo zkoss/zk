@@ -509,8 +509,17 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public boolean removeEventListener(String evtnm, EventListener listener);
 	/** Returns whether the event listener is available.
-	 * @param asap whether to check only ASAP listener.
-	 * See {@link Component#addEventListener} for more description.
+	 *
+	 * <p>Unlike {@link org.zkoss.zk.ui.event.Events#isListened},
+	 * this method checks only the event listener registered by
+	 * {@link #addEventListener}.
+	 *
+	 * @param asap whether to check only non-deferrable listener,
+	 * i.e., not implementing {@link org.zkoss.zk.ui.event.Deferrable},
+	 * or {@link org.zkoss.zk.ui.event.Deferrable#isDeferrable} is false.
+	 * @see org.zkoss.zk.ui.event.Deferrable
+	 * @see org.zkoss.zk.ui.event.Events#isListened
+	 * @see Component#addEventListener
 	 */
 	public boolean isListenerAvailable(String evtnm, boolean asap);
 	/** Returns an iterator for iterating listener for the specified event.

@@ -24,11 +24,30 @@ import org.zkoss.zk.ui.UiException;
  * An listener that will be notified when an event occurs, if it is
  * registered to {@link org.zkoss.zk.ui.Component#addEventListener}.
  *
- * <p>If an event listener is also implemented {@link Express}, the event
- * listener is evaluated before all other listeners, including the onXxx member
- * declared as part of a ZUML page.
+ * <p>If an event listener also implements {@link Deferrable}
+ * and {@link Deferrable#isDeferrable} returns true, the event
+ * for the listener will NOT be sent to the server immediately (when it
+ * is fired at the client). It is called the deferrable event listener.
+ * It helps to improve the performance since the deferred events will
+ * be 'packed' together and sent to the server at once. It is usully used
+ * for event listeners that maintains the application states, rather
+ * than generating visual responses.
+ *
+ * <p>By default (i.e., if {@link Deferrable} is not implemented), the event
+ * listener is not deferrable. It is also called the ASAP event listener.
+ *
+ * <p>If an event listener also implements {@link Express}, the event
+ * listener is evaluated before all other listeners, including the onXxx members
+ * declared in the ZUML page.
+ *
+ * <p>By default (i.e., if {@link Express} is not implemented,
+ * the event listener is eveluated after the onXxx members declared
+ * in the ZUML page, but before the onXxx methods declared in the
+ * component class.
  *
  * @author tomyeh
+ * @see Deferrable
+ * @see Express
  */
 public interface EventListener {
 	/** Notifies this listener that an event occurs.
@@ -40,13 +59,4 @@ public interface EventListener {
 	 * use {@link Events#sendEvent}.
 	 */
 	public void onEvent(Event event);
-	/** Returns whether the client shall send the event back as soon as
-	 * it detects the event. Returning true might cause much more traffic
-	 * between client and server, so be careful.
-	 *
-	 * <p>Note: due to performance issue, this method is used only by
-	 * {@link org.zkoss.zk.ui.Component#addEventListener};
-	 * and is ignored by {@link org.zkoss.zk.ui.Page#addEventListener}
-	 */
-	public boolean isAsap();
 }

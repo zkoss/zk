@@ -445,7 +445,7 @@ public class UiEngineImpl implements UiEngine {
 			if (child instanceof AfterCompose)
 				((AfterCompose)child).afterCompose();
 
-			if (Events.isListenerAvailable(child, Events.ON_CREATE, false))
+			if (Events.isListened(child, Events.ON_CREATE, false))
 				Events.postEvent(
 					new CreateEvent(Events.ON_CREATE, child, exec.getArg()));
 

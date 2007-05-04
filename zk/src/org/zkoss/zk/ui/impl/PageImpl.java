@@ -459,8 +459,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			throw new IllegalArgumentException("null");
 		if (!Events.isValid(evtnm))
 			throw new IllegalArgumentException("Invalid event name: "+evtnm);
-		if (listener.isAsap())
-			log.warning("Ignored: ASAP is meaningless if an event listener added to a page: "+listener);
 
 		if (_listeners == null)
 			_listeners = new HashMap(3);

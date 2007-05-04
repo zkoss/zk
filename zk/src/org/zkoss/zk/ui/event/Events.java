@@ -176,11 +176,19 @@ public class Events {
 	 * A event listener is {@link EventListener} being added
 	 * by {@link Component#addEventListener} and {@link Page#addEventListener}.
 	 *
-	 * @param asap whether to check only ASAP listener and handlers.
-	 * See {@link Component#addEventListener} for more description.
+	 * <p>Unlike {@link Component#isListenerAvailable}, this method
+	 * check both event handlers and listeners, i.e.,
+	 * the onXxx members defined in ZUML, the onXxx method defined
+	 * in the implementation class, and the event listener registered.
+	 *
+	 * @param asap whether to check only non-deferrable listener,
+	 * i.e., not implementing {@link org.zkoss.zk.ui.event.Deferrable},
+	 * or {@link org.zkoss.zk.ui.event.Deferrable#isDeferrable} is false.
+	 * @see org.zkoss.zk.ui.event.Deferrable
+	 * @see Component#isListenerAvailable
 	 */
 	public static
-	boolean isListenerAvailable(Component comp, String evtnm, boolean asap) {
+	boolean isListened(Component comp, String evtnm, boolean asap) {
 		if (((ComponentCtrl)comp).getEventHandler(evtnm) != null)
 			return true;
 

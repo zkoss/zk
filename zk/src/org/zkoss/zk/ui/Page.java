@@ -371,9 +371,8 @@ public interface Page extends IdSpace {
 	 * this page.
 	 *
 	 * <p>Due to performance consideration, unlike {@link Component#addEventListener},
-	 * you CANNOT ask the client to send the event back as soon as it detects
-	 * this event for this listener registered by this method.
-	 * In other words, {@link EventListener#isAsap} is ignored by this method.
+	 * all event listeners for the page are deferrable, no matter
+	 * {@link org.zkoss.zk.ui.event.Deferrable} is implemented or not.
 	 *
 	 * @param evtnm what event to listen (never null)
 	 * @return whether the listener is added; false if it was added before.

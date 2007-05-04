@@ -309,8 +309,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * &lt;yy id="${self.uuid}!real"${self.innerAttrs}&gt;...
 	 *</code></pre>
 	 *
-	 * <p>Note: This class handles ASAP event listeners (i.e., event listeners
-	 * whose {@link EventListener#isAsap} return true) automatically.
+	 * <p>Note: This class handles non-deferrable event listeners automatically.
 	 * However, you have to invoke {@link #appendAsapAttr} for each event
 	 * the component handles in {@link #getOuterAttrs} as follows.
 	 *<pre><code>
@@ -404,15 +403,16 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	}
 
 	/** Returns whether to send back the request of the specified event
-	 * immediately (ASAP). Returns true if you want the component (on the server)
+	 * immediately -- i.e., non-deferrable.
+	 * Returns true if you want the component (on the server)
 	 * to process the event immediately.
 	 *
-	 * <p>Default: return true if any ASAP event handler or listener of
+	 * <p>Default: return true if any non-deferable event listener of
 	 * the specified event is found. In other words, it returns
-	 * {@link Events#isListenerAvailable}.
+	 * {@link Events#isListened} with asap = true.
 	 */
 	protected boolean isAsapRequired(String evtnm) {
-		return Events.isListenerAvailable(this, evtnm, true);
+		return Events.isListened(this, evtnm, true);
 	}
 	/** Appends the HTML attribute for the specified event name, say, onChange.
 	 * It is called by derived's {@link #getOuterAttrs}.
