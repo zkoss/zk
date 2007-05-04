@@ -311,7 +311,7 @@ zk.Selectable.prototype = {
 				var now = new Date(), last = row._last;
 				row._last = now;
 				if (last && now - last < 900)
-					retur; //ignore double-click
+					return; //ignore double-click
 			}
 
 			if (this._isMultiple()) {
