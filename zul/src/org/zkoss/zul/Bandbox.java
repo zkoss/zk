@@ -39,8 +39,9 @@ import org.zkoss.zk.au.AuScript;
  * when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen} is true, and/or
  * clean up if false.
  *
- * <p>Note: to have better performance, onOpen is sent only if an ASAP event
- * listener is registered.
+ * <p>Note: to have better performance, onOpen is sent only if
+ * a non-deferrable event listener is registered
+ * (see {@link org.zkoss.zk.ui.event.Deferrable}).
  *
  * @author tomyeh
  */

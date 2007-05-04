@@ -397,7 +397,8 @@ implements Constrainted {
 
 	//-- super --//
 	/** Returns whether to send back the request of the specified event
-	 * immediately (ASAP). Returns true if you want the component (on the server)
+	 * immediately -- non-deferable.
+	 * Returns true if you want the component (on the server)
 	 * to process the event immediately.
 	 *
 	 * <p>Default: Besides super.isAsapRequired(evtnm), it also returns true

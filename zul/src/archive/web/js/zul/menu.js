@@ -153,7 +153,7 @@ zkMenu._close = function (pp) {
 
 		if (zkau.asap(pp, "onOpen"))
 			zkau.send({uuid: pp.id, cmd: "onOpen", data: [false]});
-			//for better performance, sent only if ASAP
+			//for better performance, sent only if non-deferable
 	}
 };
 

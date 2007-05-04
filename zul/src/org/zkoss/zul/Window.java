@@ -59,8 +59,9 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Events:<br/>
  * onMove, onOpen, onClose, onOK, onCacnel and onCtrlKey.<br/>
- * Note: to have better performance, onOpen is sent only if an ASAP event
- * listener is registered.
+ * Note: to have better performance, onOpen is sent only if a
+ * non-deferrable event listener is registered
+ * (see {@link org.zkoss.zk.ui.event.Deferrable}).
  *
  * <p><code>onClose</code> is sent when the close button is pressed
  * (if {@link #isClosable} is true). The window has to detach or hide

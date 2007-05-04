@@ -616,9 +616,6 @@ public class Chart extends Imagemap {
 		_smartDrawChart = true;
 		if (_smartDrawChartListener == null) {
 			_smartDrawChartListener = new EventListener() {
-				public boolean isAsap() {
-					return true;
-				}
 				public void onEvent(Event event) {
 					if (Strings.isBlank(getType()))
 						throw new UiException("chart must specify type (pie, bar, line, ...)");

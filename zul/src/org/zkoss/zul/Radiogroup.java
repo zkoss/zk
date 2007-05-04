@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Deferrable;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -54,14 +55,7 @@ public class Radiogroup extends XulElement {
 		init();
 	}
 	private void init() {
-		_listener = new EventListener() {
-			public void onEvent(Event event) {
-				Events.sendEvent(Radiogroup.this, event);
-			}
-			public boolean isAsap() {
-				return Events.isListenerAvailable(Radiogroup.this, Events.ON_CHECK, true);
-			}
-		};
+		_listener = new Listener();
 	}
 
 	/** Returns the orient.
@@ -304,5 +298,13 @@ public class Radiogroup extends XulElement {
 		//the server when the component is deserialized by Web Container.
 		//If we don't, the group name might be conflict when developer
 		//deserializes explicitly and add back the same desktop
+	}
+	private class Listener implements EventListener, Deferrable {
+		public void onEvent(Event event) {
+			Events.sendEvent(Radiogroup.this, event);
+		}
+		public boolean isDeferrable() {
+			return !Events.isListened(Radiogroup.this, Events.ON_CHECK, true);
+		}
 	}
 }

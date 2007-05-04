@@ -32,8 +32,9 @@ import org.zkoss.zk.ui.event.Events;
  * {@link Menu}.
  *
  * <p>Supported event: onOpen.<br/>
- * Note: to have better performance, onOpen is sent only if an ASAP event
- * listener is registered.
+ * Note: to have better performance, onOpen is sent only if
+ * non-deferrable event listener is registered
+ * (see {@link org.zkoss.zk.ui.event.Deferrable}).
  *
  * <p>To load the content dynamically, you can listen to the onOpen event,
  * and then create menuitem when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen}

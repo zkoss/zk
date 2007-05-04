@@ -345,9 +345,6 @@ public class Captcha extends org.zkoss.zul.Image {
 		_smartDrawCaptcha = true;
 		if (_smartDrawCaptchaListener == null) {
 			_smartDrawCaptchaListener = new EventListener() {
-				public boolean isAsap() {
-					return true;
-				}
 				public void onEvent(Event event) {
 					if (Strings.isBlank(getValue()))
 						throw new UiException("captcha must specify text value");

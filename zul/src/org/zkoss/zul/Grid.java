@@ -230,9 +230,6 @@ implements RenderOnDemand {
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
 			_pgListener = new EventListener() {
-				public boolean isAsap() {
-					return true;
-				}
 				public void onEvent(Event event) {
 					final PagingEvent evt = (PagingEvent)event;
 					Events.postEvent(
