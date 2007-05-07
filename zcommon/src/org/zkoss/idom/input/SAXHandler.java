@@ -735,7 +735,7 @@ implements LexicalHandler, DeclHandler {
 		if (eh != null) {
 			eh.fatalError(ex);
 		} else {
-			log.error(ex.getMessage() + SimpleLocator.toString(_loc));
+			if (log.debugable()) log.debug(ex.getMessage() + SimpleLocator.toString(_loc));
 			throw ex;
 		}
 	}
