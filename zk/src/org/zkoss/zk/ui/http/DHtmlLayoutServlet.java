@@ -199,6 +199,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 						if (process(sess, request, response, errpg, false))
 							return; //done
 						log.warning("The error page not found: "+errpg);
+					} catch (IOException ex) { //eat it (connection off)
 					} catch (Throwable ex) {
 						log.warning("Failed to load the error page: "+errpg, ex);
 					}
