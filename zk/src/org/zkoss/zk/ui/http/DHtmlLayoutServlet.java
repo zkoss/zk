@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.lang.D;
+import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.Attributes;
@@ -46,6 +47,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Richlet;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.sys.UiFactory;
@@ -109,11 +111,19 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	protected
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
+		String path = Https.getThisPathInfo(request);
+		final boolean bRichlet = path != null && path.length() > 0;
+		if (!bRichlet)
+			path = Https.getThisServletPath(request);
+		if (D.ON && log.finerable()) log.finer("Creates from "+path);
+
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		final Object old = I18Ns.setup(sess, request, response,
 			sess.getWebApp().getConfiguration().getResponseCharset());
 		try {
-			process(sess, request, response);
+			process(sess, request, response, path, bRichlet);
+		} catch (Throwable ex) {
+			handleError(sess, request, response, path, ex);
 		} finally {
 			I18Ns.cleanup(request, old);
 		}
@@ -126,13 +136,9 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 	//-- private --//
 	private void process(Session sess,
-	HttpServletRequest request, HttpServletResponse response)
+	HttpServletRequest request, HttpServletResponse response, String path,
+	boolean bRichlet)
 	throws ServletException, IOException {
-		final String pi = Https.getThisPathInfo(request);
-		final String path = pi != null && pi.length() > 0 ?
-			pi: Https.getThisServletPath(request);
-		if (D.ON && log.finerable()) log.finer("Creates from "+path+", "+pi);
-
 		final WebApp wapp = _webman.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 		final Desktop desktop = _webman.getDesktop(sess, request, path, true);
@@ -141,14 +147,14 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			PageDefinitions.getLocator(wapp, path));
 		final UiFactory uf = wappc.getUiFactory();
 
-		if (uf.isRichlet(ri, pi != null)) {
+		if (uf.isRichlet(ri, bRichlet)) {
 			final Richlet richlet = uf.getRichlet(ri, path);
 			if (richlet == null) {
-				sendError(request, response, pi);
+				handleError(sess, request, response, path, null);
 				return;
 			}
 
-			final Page page = uf.newPage(ri, richlet, pi);
+			final Page page = uf.newPage(ri, richlet, path);
 			final Execution exec = new ExecutionImpl(
 				_ctx, request, response, desktop, page);
 			wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
@@ -156,7 +162,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		} else {
 			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
 			if (pagedef == null) {
-				sendError(request, response, path);
+				handleError(sess, request, response, path, null);
 				return;
 			}
 
@@ -167,17 +173,36 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				.execNewPage(exec, pagedef, page, response.getWriter());
 		}
 	}
-	private void sendError(HttpServletRequest request, HttpServletResponse response,
-	String path) throws ServletException, IOException {
+	/** Handles exception being thrown when rendering a page.
+	 * @param ex the exception being throw. If null, it means the page
+	 * is not found.
+	 */
+	private void handleError(Session sess,
+	HttpServletRequest request, HttpServletResponse response,
+	String path, Throwable ex) throws ServletException, IOException {
 		if (Servlets.isIncluded(request)) {
-			final String msg = Messages.get(MZk.PAGE_NOT_FOUND,
-				new Object[] {path});
+			final String msg;
+			if (ex != null) {
+				msg = Messages.get(MZk.PAGE_FAILED,
+					new Object[] {path, Exceptions.getMessage(ex),
+						Exceptions.formatStackTrace(null, ex, null, 6)});
+			} else {
+				msg = Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path});
+			}
 			final Map attrs = new HashMap();
 			attrs.put(Attributes.ALERT_TYPE, "error");
 			attrs.put(Attributes.ALERT, msg);
 			Servlets.include(_ctx, request, response,
 				"~./html/alert.dsp", attrs, Servlets.PASS_THRU_ATTR);
 		} else {
+			if (ex != null) {
+				if (ex instanceof ServletException)
+					throw (ServletException)ex;
+				else if (ex instanceof IOException)
+					throw (IOException)ex;
+				else
+					throw UiException.Aide.wrap(ex);
+			}
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
