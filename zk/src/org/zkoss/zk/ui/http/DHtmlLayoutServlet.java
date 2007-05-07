@@ -121,7 +121,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final Object old = I18Ns.setup(sess, request, response,
 			sess.getWebApp().getConfiguration().getResponseCharset());
 		try {
-			process(sess, request, response, path, bRichlet);
+			if (!process(sess, request, response, path, bRichlet))
+				handleError(sess, request, response, path, null);
 		} catch (Throwable ex) {
 			handleError(sess, request, response, path, ex);
 		} finally {
@@ -135,7 +136,10 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	}
 
 	//-- private --//
-	private void process(Session sess,
+	/**
+	 * @return false if the page is not found.
+	 */
+	private boolean process(Session sess,
 	HttpServletRequest request, HttpServletResponse response, String path,
 	boolean bRichlet)
 	throws ServletException, IOException {
@@ -149,10 +153,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 		if (uf.isRichlet(ri, bRichlet)) {
 			final Richlet richlet = uf.getRichlet(ri, path);
-			if (richlet == null) {
-				handleError(sess, request, response, path, null);
-				return;
-			}
+			if (richlet == null)
+				return false; //not found
 
 			final Page page = uf.newPage(ri, richlet, path);
 			final Execution exec = new ExecutionImpl(
@@ -161,10 +163,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				//no need to set client type here, since UiEngine will do it later
 		} else {
 			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
-			if (pagedef == null) {
-				handleError(sess, request, response, path, null);
-				return;
-			}
+			if (pagedef == null)
+				return false; //not found
 
 			final Page page = uf.newPage(ri, pagedef, path);
 			final Execution exec = new ExecutionImpl(
@@ -172,6 +172,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			wappc.getUiEngine()
 				.execNewPage(exec, pagedef, page, response.getWriter());
 		}
+		return true; //success
 	}
 	/** Handles exception being thrown when rendering a page.
 	 * @param ex the exception being throw. If null, it means the page
@@ -179,13 +180,29 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	 */
 	private void handleError(Session sess,
 	HttpServletRequest request, HttpServletResponse response,
-	String path, Throwable ex) throws ServletException, IOException {
+	String path, Throwable err) throws ServletException, IOException {
 		if (Servlets.isIncluded(request)) {
 			final String msg;
-			if (ex != null) {
+			if (err != null) {
+				final String errpg =
+					sess.getWebApp().getConfiguration().getErrorPage(err);
+				if (errpg != null) {
+					try {
+						request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
+						request.setAttribute("javax.servlet.error.exception", err);
+						request.setAttribute("javax.servlet.error.exception_type", err.getClass());
+						request.setAttribute("javax.servlet.error.status_code", new Integer(500));
+						if (process(sess, request, response, errpg, false))
+							return; //done
+						log.warning("The error page not found: "+errpg);
+					} catch (Throwable ex) {
+						log.warning("Failed to load the error page: "+errpg, ex);
+					}
+				}
+
 				msg = Messages.get(MZk.PAGE_FAILED,
-					new Object[] {path, Exceptions.getMessage(ex),
-						Exceptions.formatStackTrace(null, ex, null, 6)});
+					new Object[] {path, Exceptions.getMessage(err),
+						Exceptions.formatStackTrace(null, err, null, 6)});
 			} else {
 				msg = Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path});
 			}
@@ -195,13 +212,13 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			Servlets.include(_ctx, request, response,
 				"~./html/alert.dsp", attrs, Servlets.PASS_THRU_ATTR);
 		} else {
-			if (ex != null) {
-				if (ex instanceof ServletException)
-					throw (ServletException)ex;
-				else if (ex instanceof IOException)
-					throw (IOException)ex;
+			if (err != null) {
+				if (err instanceof ServletException)
+					throw (ServletException)err;
+				else if (err instanceof IOException)
+					throw (IOException)err;
 				else
-					throw UiException.Aide.wrap(ex);
+					throw UiException.Aide.wrap(err);
 			}
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
