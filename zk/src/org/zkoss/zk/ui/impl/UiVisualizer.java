@@ -921,17 +921,12 @@ import org.zkoss.zk.au.*;
 	public void popOwner() {
 		_1stec._owners.remove(0);
 	}
-	/** Sets the owner of the specified page. 
+	/** Returns the owner component for this execution, or null if
+	 * this execution is not owned by any component.
 	 * The owner is the top of the stack pushed by {@link #pushOwner}.
 	 */
-	public void setOwner(Page page) {
-		if (_1stec._owners.isEmpty()) {
-			log.warning("No owner available for "+page);
-		} else {
-			final Component owner = (Component)_1stec._owners.get(0);
-			((PageCtrl)page).setOwner(owner);
-			if (D.ON && log.finerable()) log.finer("Set owner of "+page+" to "+owner);
-		}
+	public Component getOwner() {
+		return _1stec._owners.isEmpty() ? null: (Component)_1stec._owners.get(0);
 	}
 
 	/** Used to hold smart update and response with a time stamp.

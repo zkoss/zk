@@ -279,7 +279,13 @@ public class UiEngineImpl implements UiEngine {
 		try {
 			config.invokeExecutionInits(exec, oldexec);
 
-			if (olduv != null) olduv.setOwner(page);
+			if (olduv != null) {
+				final Component owner = olduv.getOwner();
+				if (owner != null) {
+					((PageCtrl)page).setOwner(owner);
+					if (D.ON && log.finerable()) log.finer("Set owner of "+page+" to "+owner);
+				}
+			}
 
 			//Cycle 1: Creates all components
 
