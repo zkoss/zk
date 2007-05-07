@@ -33,6 +33,7 @@ import javax.portlet.RenderResponse;
 import javax.portlet.PortletPreferences;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Exceptions;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.logging.Log;
 
@@ -110,30 +111,6 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 	protected void doView(RenderRequest request, RenderResponse response)
 	throws PortletException, IOException {
-		final Session sess = getSession(request);
-		SessionsCtrl.setCurrent(sess);
-		try {
-			process(sess, request, response);
-		} finally {
-			SessionsCtrl.setCurrent(null);
-		}
-	}
-
-	/** Returns the session. */
-	private Session getSession(RenderRequest request)
-	throws PortletException {
-		final HttpSession hsess =
-			PortletHttpSession.getInstance(request.getPortletSession());
-		final Session sess = WebManager.getSession(hsess);
-		return sess != null ? sess:
-			WebManager.newSession(
-				getWebManager().getWebApp(), hsess, null, null);
-	}
-	/** Process a portlet request.
-	 */
-	private void process(Session sess, RenderRequest request,
-	RenderResponse response)
-	throws PortletException, IOException {
 		//try parameter first and then attribute
 		boolean bRichlet = false;
 		String path = request.getParameter(ATTR_PAGE);
@@ -159,6 +136,34 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			}
 		}
 
+		final Session sess = getSession(request);
+		SessionsCtrl.setCurrent(sess);
+		try {
+			if (!process(sess, request, response, path, bRichlet))
+				handleError(sess, request, response, path, null);
+		} catch (Throwable ex) {
+			handleError(sess, request, response, path, ex);
+		} finally {
+			SessionsCtrl.setCurrent(null);
+		}
+	}
+
+	/** Returns the session. */
+	private Session getSession(RenderRequest request)
+	throws PortletException {
+		final HttpSession hsess =
+			PortletHttpSession.getInstance(request.getPortletSession());
+		final Session sess = WebManager.getSession(hsess);
+		return sess != null ? sess:
+			WebManager.newSession(
+				getWebManager().getWebApp(), hsess, null, null);
+	}
+	/** Process a portlet request.
+	 * @return false if the page is not found.
+	 */
+	private boolean process(Session sess, RenderRequest request,
+	RenderResponse response, String path, boolean bRichlet)
+	throws PortletException, IOException {
 		if (D.ON && log.debugable()) log.debug("Creates from "+path);
 		final WebApp wapp = getWebManager().getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
@@ -167,55 +172,47 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
+
 		final UiFactory uf = wappc.getUiFactory();
 		if (uf.isRichlet(ri, bRichlet)) {
 			final Richlet richlet = uf.getRichlet(ri, path);
-			if (richlet != null) {
-				final Page page = uf.newPage(ri, richlet, path);
-				final Execution exec =
-					new ExecutionImpl(
-						(ServletContext)wapp.getNativeContext(),
-						RenderHttpServletRequest.getInstance(request),
-						RenderHttpServletResponse.getInstance(response),
-						desktop, page);
+			if (richlet == null)
+				return false; //not found
 
-				//Bug 1548478: content-type is required for some implementation (JBoss Portal)
-				if (response.getContentType() == null)
-					response.setContentType("text/html;charset=UTF-8");
+			final Page page = uf.newPage(ri, richlet, path);
+			final Execution exec =
+				new ExecutionImpl(
+					(ServletContext)wapp.getNativeContext(),
+					RenderHttpServletRequest.getInstance(request),
+					RenderHttpServletResponse.getInstance(response),
+					desktop, page);
 
-				wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
-			}
+			//Bug 1548478: content-type is required for some implementation (JBoss Portal)
+			if (response.getContentType() == null)
+				response.setContentType("text/html;charset=UTF-8");
+
+			wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
 		} else if (path != null) {
 			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
-			if (pagedef != null) {
-				final Page page = uf.newPage(ri, pagedef, path);
-				final Execution exec =
-					new ExecutionImpl(
-						(ServletContext)wapp.getNativeContext(),
-						RenderHttpServletRequest.getInstance(request),
-						RenderHttpServletResponse.getInstance(response),
-						desktop, page);
+			if (pagedef == null)
+				return false; //not found
 
-				//Bug 1548478: content-type is required for some implementation (JBoss Portal)
-				if (response.getContentType() == null)
-					response.setContentType("text/html;charset=UTF-8");
-	
-				wappc.getUiEngine()
-					.execNewPage(exec, pagedef, page, response.getWriter());
-				return; //done
-			}
+			final Page page = uf.newPage(ri, pagedef, path);
+			final Execution exec =
+				new ExecutionImpl(
+					(ServletContext)wapp.getNativeContext(),
+					RenderHttpServletRequest.getInstance(request),
+					RenderHttpServletResponse.getInstance(response),
+					desktop, page);
+
+			//Bug 1548478: content-type is required for some implementation (JBoss Portal)
+			if (response.getContentType() == null)
+				response.setContentType("text/html;charset=UTF-8");
+
+			wappc.getUiEngine()
+				.execNewPage(exec, pagedef, page, response.getWriter());
 		}
-
-		final String msg = path != null ?
-			Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path}):
-			Messages.get(MZk.PORTLET_PAGE_REQUIRED);
-		final Map attrs = new HashMap();
-		attrs.put(Attributes.ALERT_TYPE, "error");
-		attrs.put(Attributes.ALERT, msg);
-		Portlets.include(_ctx, request, response,
-			"~./html/alert.dsp", attrs, Portlets.OVERWRITE_URI);
-			//Portlets doesn't support PASS_THRU_ATTR yet (because
-			//protlet request will mangle attribute name)
+		return true; //success
 	}
 
 	/** Returns the desktop of the specified request.
@@ -238,5 +235,49 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		if (webman == null)
 			throw new PortletException("The Layout Servlet not found. Make sure <load-on-startup> is specified for "+DHtmlLayoutServlet.class.getName());
 		return webman;
+	}
+	/** Handles exception being thrown when rendering a page.
+	 * @param ex the exception being throw. If null, it means the page
+	 * is not found.
+	 */
+	private void handleError(Session sess, RenderRequest request,
+	RenderResponse response, String path, Throwable err)
+	throws PortletException, IOException {
+		final String msg;
+		if (err != null) {
+		//Bug 1714094: we have to handle err, because Web container
+		//didn't allow developer to intercept errors caused by inclusion
+			final String errpg =
+				sess.getWebApp().getConfiguration().getErrorPage(err);
+			if (errpg != null) {
+				try {
+					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
+					request.setAttribute("javax.servlet.error.exception", err);
+					request.setAttribute("javax.servlet.error.exception_type", err.getClass());
+					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
+					if (process(sess, request, response, errpg, false))
+						return; //done
+					log.warning("The error page not found: "+errpg);
+				} catch (Throwable ex) {
+					log.warning("Failed to load the error page: "+errpg, ex);
+				}
+			}
+
+			msg = Messages.get(MZk.PAGE_FAILED,
+				new Object[] {path, Exceptions.getMessage(err),
+					Exceptions.formatStackTrace(null, err, null, 6)});
+		} else {
+			msg = path != null ?
+				Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path}):
+				Messages.get(MZk.PORTLET_PAGE_REQUIRED);
+		}
+
+		final Map attrs = new HashMap();
+		attrs.put(Attributes.ALERT_TYPE, "error");
+		attrs.put(Attributes.ALERT, msg);
+		Portlets.include(_ctx, request, response,
+			"~./html/alert.dsp", attrs, Portlets.OVERWRITE_URI);
+			//Portlets doesn't support PASS_THRU_ATTR yet (because
+			//protlet request will mangle attribute name)
 	}
 }

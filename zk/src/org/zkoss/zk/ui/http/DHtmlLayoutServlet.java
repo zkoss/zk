@@ -137,6 +137,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 	//-- private --//
 	/**
+	 * Process the request.
 	 * @return false if the page is not found.
 	 */
 	private boolean process(Session sess,
@@ -145,12 +146,13 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	throws ServletException, IOException {
 		final WebApp wapp = _webman.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+
 		final Desktop desktop = _webman.getDesktop(sess, request, path, true);
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
-		final UiFactory uf = wappc.getUiFactory();
 
+		final UiFactory uf = wappc.getUiFactory();
 		if (uf.isRichlet(ri, bRichlet)) {
 			final Richlet richlet = uf.getRichlet(ri, path);
 			if (richlet == null)
@@ -178,12 +180,14 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	 * @param ex the exception being throw. If null, it means the page
 	 * is not found.
 	 */
-	private void handleError(Session sess,
-	HttpServletRequest request, HttpServletResponse response,
-	String path, Throwable err) throws ServletException, IOException {
+	private void handleError(Session sess, HttpServletRequest request,
+	HttpServletResponse response, String path, Throwable err)
+	throws ServletException, IOException {
 		if (Servlets.isIncluded(request)) {
 			final String msg;
 			if (err != null) {
+			//Bug 1714094: we have to handle err, because Web container
+			//didn't allow developer to intercept errors caused by inclusion
 				final String errpg =
 					sess.getWebApp().getConfiguration().getErrorPage(err);
 				if (errpg != null) {
@@ -206,12 +210,14 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			} else {
 				msg = Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path});
 			}
+
 			final Map attrs = new HashMap();
 			attrs.put(Attributes.ALERT_TYPE, "error");
 			attrs.put(Attributes.ALERT, msg);
 			Servlets.include(_ctx, request, response,
 				"~./html/alert.dsp", attrs, Servlets.PASS_THRU_ATTR);
 		} else {
+			//If not included, let the Web container handle it
 			if (err != null) {
 				if (err instanceof ServletException)
 					throw (ServletException)err;
