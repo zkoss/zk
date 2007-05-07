@@ -894,8 +894,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final Map attrs = new HashMap(3);
 		attrs.put("self", this);
-		_page.getDesktop().getExecution()
-			.include(out, mold, attrs, Execution.PASS_THRU_ATTR);
+		getExecution().include(out, mold, attrs, Execution.PASS_THRU_ATTR);
 	}
 	/* Default: does nothing.
 	 */
