@@ -18,11 +18,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.HashMap;
 import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.mesg.Messages;
+import org.zkoss.util.logging.Log;
 
+import org.zkoss.web.Attributes;
+
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.UiEngine;
@@ -42,6 +51,8 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Include extends XulElement {
+	private static final Log log = Log.lookup(Include.class);
+
 	protected String _src;
 	private boolean _localized;
 
@@ -101,9 +112,53 @@ public class Include extends XulElement {
 			((WebAppCtrl)getDesktop().getWebApp()).getUiEngine();
 		ueng.pushOwner(this);
 		try {
-			super.redraw(out);
+			out.write("<div id=\"");
+			out.write(getUuid());
+			out.write('"');
+			out.write(getOuterAttrs());
+			out.write(getInnerAttrs());
+			out.write(">\n");
+
+			if (_src != null && _src.length() > 0)
+				include(out);
+
+			out.write("\n</div>");
 		} finally {
 			ueng.popOwner();
+		}
+	}
+	private void include(Writer out) throws IOException {
+		final Desktop desktop = getDesktop();
+		final Execution exec = desktop.getExecution();
+		final String src = exec.toAbsoluteURI(_src, false);
+		try {
+			exec.include(out, src, null, 0);
+		} catch (Throwable err) {
+		//though DHtmlLayoutServlet handles exception, we still have to
+		//handle it because src might not be ZUML
+			final String errpg =
+				desktop.getWebApp().getConfiguration().getErrorPage(err);
+			if (errpg != null) {
+				try {
+					exec.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
+					exec.setAttribute("javax.servlet.error.exception", err);
+					exec.setAttribute("javax.servlet.error.exception_type", err.getClass());
+					exec.setAttribute("javax.servlet.error.status_code", new Integer(500));
+					exec.include(out, errpg, null, 0);
+					return; //done
+				} catch (Throwable ex) {
+					log.warning("Failed to load the error page: "+errpg, ex);
+				}
+			}
+
+			final String msg = Messages.get(MZk.PAGE_FAILED,
+				new Object[] {src, Exceptions.getMessage(err),
+					Exceptions.formatStackTrace(null, err, null, 6)});
+			final HashMap attrs = new HashMap();
+			attrs.put(Attributes.ALERT_TYPE, "error");
+			attrs.put(Attributes.ALERT, msg);
+			exec.include(out,
+				"~./html/alert.dsp", attrs, Execution.PASS_THRU_ATTR);
 		}
 	}
 }

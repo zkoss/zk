@@ -422,6 +422,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>include</component-name>
+		<component-class>org.zkoss.zul.Include</component-class>
+	</component>
+	<component>
 		<component-name>intbox</component-name>
 		<component-class>org.zkoss.zul.Intbox</component-class>
 		<mold>
@@ -615,14 +619,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/separator.dsp</mold-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>include</component-name>
-		<component-class>org.zkoss.zul.Include</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/include.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
