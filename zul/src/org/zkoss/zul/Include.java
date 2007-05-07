@@ -146,6 +146,7 @@ public class Include extends XulElement {
 					exec.setAttribute("javax.servlet.error.status_code", new Integer(500));
 					exec.include(out, errpg, null, 0);
 					return; //done
+				} catch (IOException ex) { //eat it (connection off)
 				} catch (Throwable ex) {
 					log.warning("Failed to load the error page: "+errpg, ex);
 				}
