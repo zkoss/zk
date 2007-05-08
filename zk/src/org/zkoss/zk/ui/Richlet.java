@@ -47,10 +47,20 @@ public interface Richlet {
 	 */
 	public void service(Page page);
 
-	/** Returns the language defintion that this richlet belongs to.
+	/** Returns the default language defintion that this richlet belongs to.
 	 * Don't return null.
 	 *
-	 * <p> It is called when creating a new page for this richlet to serve.
+	 * <p>The default language definition is used to initialize
+	 * a page when the page is created to be served by this richlet.
+	 * Note: you can use components from different languages as long as
+	 * they belong to the same client type ({@link LanguageDefinition#getClientType}.
+	 *
+	 * <p>The default language definition controls the URIs used to
+	 * render a desktop and a page, and the initial zscript codes used
+	 * to initialize the interpreter (of a page).
+	 *
+	 * <p>For example, you can return
+	 * <pre><code>LanguageDefinition.lookup("xul/html");</code></pre>
 	 */
 	public LanguageDefinition getLanguageDefinition();
 }
