@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.scripting.util.SimpleNamespace;
 
 /**
  * {@link Namespace} relevant utilities.
@@ -77,7 +78,8 @@ try {
 	 */
 	public static final Namespace beforeInterpret(Map backup, Component comp,
 	boolean pushNS) {
-		final Namespace ns = comp.getNamespace();
+		Namespace ns = comp.getNamespace();
+		if (ns == null) ns = new SimpleNamespace();
 
 		backupVariable(backup, ns, "self");
 		backupVariable(backup, ns, "componentScope");

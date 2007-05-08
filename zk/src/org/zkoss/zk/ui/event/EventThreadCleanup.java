@@ -53,6 +53,10 @@ public interface EventThreadCleanup {
 	 * only if {@link #cleanup} called against the same instnce
 	 * didn't throw any exception.
 	 *
+	 * <p>If the use of the event thread is disabled
+	 * ({@link org.zkoss.zk.ui.util.Configuration#isEventThreadEnabled}
+	 * returns false), this method is also invoked in the Servlet thread.
+	 *
 	 * @param errs a list of exceptions (java.lang.Throwable) if any exception
 	 * occured before this method is called, or null if no exeption at all.
 	 * Note: you can manipulate the list directly to add or clean up exceptions.

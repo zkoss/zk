@@ -308,11 +308,19 @@ public interface UiEngine {
 	 */
 	public void deactivate(Execution exec);
 
-	/** Returns a collection of suspended event processing threads, or empty
-	 * if no suspended thread at all.
+	/** Returns if any suspended event processing thread in the
+	 * whole system.
+	 */
+	public boolean hasSuspendedThread();
+	/** Returns a collection of suspended event processing threads
+	 * belonging to the specified desktop,
+	 * or empty if no suspended thread at all.
 	 *
 	 * <p>An event processing thread is an instance of
 	 * {@link EventProcessingThread}
+	 *
+	 * @param desktop the desktop that the suspended event processing
+	 * threads belong to (never null).
 	 */
 	public Collection getSuspendedThreads(Desktop desktop);
 	/** Ceases the specified event thread.

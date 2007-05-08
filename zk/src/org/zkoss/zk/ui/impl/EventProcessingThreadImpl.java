@@ -18,13 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.lang.reflect.Method;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Threads;
@@ -33,24 +30,12 @@ import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.util.logging.Log;
 
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
-import org.zkoss.zk.ui.sys.SessionsCtrl;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
 
 /** Thread to handle events.
  * We need to handle events in a separate thread, because it might
@@ -61,26 +46,22 @@ import org.zkoss.zk.scripting.Namespaces;
  */
 public class EventProcessingThreadImpl extends Thread
 implements EventProcessingThread {
-	private static final Log log = Log.lookup(EventProcessingThreadImpl.class);
+//	private static final Log log = Log.lookup(EventProcessingThreadImpl.class);
 
-	/** Part of the command: component to handle the event. */
-	private Component _comp;
-	/** Part of the command: event to process. */
-	private Event _event;
-	/** The desktop that the component belongs to. */
-	private Desktop _desktop;
+	/** The processor. */
+	private EventProcessor _proc;
 	/** Part of the command: locale. */
 	private Locale _locale;
 	/** Part of the command: time zone. */
 	private TimeZone _timeZone;
 	/** Part of the result: a list of EventThreadInit instances. */
 	private List _evtThdInits;
+	/** Part of the result: a list of EventThreadCleanup instances. */
+	private List _evtThdCleanups;
 	/** Part of the result: a list of EventThreadResume instances. */
 	private List _evtThdResumes;
 	/** Part of the result. a list of EventThreadSuspend instances. */
 	private List _evtThdSuspends;
-	/** Part of the result: a list of EventThreadCleanup instances. */
-	private List _evtThdCleanups;
 	/** Result of the result. */
 	private Throwable _ex;
 
@@ -102,7 +83,7 @@ implements EventProcessingThread {
 	private transient boolean _suspended;
 
 	public EventProcessingThreadImpl() {
-		if (log.debugable()) log.debug("Starting an event processing thread");
+//		if (log.debugable()) log.debug("Starting an event processing thread");
 		Threads.setDaemon(this, true);
 		start();
 	}
@@ -115,13 +96,13 @@ implements EventProcessingThread {
 		return _suspended;
 	}
 	synchronized public boolean isIdle() {
-		return _event == null;
+		return _proc == null;
 	}
 	public final Event getEvent() {
-		return _event;
+		return _proc.getEvent();
 	}
 	public final Component getComponent() {
-		return _comp;
+		return _proc.getComponent();
 	}
 
 	//extra utilities//
@@ -181,7 +162,7 @@ implements EventProcessingThread {
 		((EventProcessingThreadImpl)Thread.currentThread()).doSuspend0(mutex);
 	}
 	private void doSuspend0(Object mutex) throws InterruptedException {
-		if (log.finerable()) log.finer("Suspend event processing; "+_event);
+//		if (log.finerable()) log.finer("Suspend event processing; "+_proc);
 		if (mutex == null)
 			throw new IllegalArgumentException("null mutex");
 		if (isIdle())
@@ -214,8 +195,9 @@ implements EventProcessingThread {
 		setup();
 
 		if (_evtThdResumes != null && !_evtThdResumes.isEmpty()) {
-			_desktop.getWebApp().getConfiguration()
-				.invokeEventThreadResumes(_evtThdResumes, _comp, _event, null);
+			_proc.getDesktop().getWebApp().getConfiguration()
+				.invokeEventThreadResumes(
+					_evtThdResumes, getComponent(), getEvent(), null);
 				//FUTURE: how to propogate errors to the client
 		}
 		_evtThdResumes = null;
@@ -230,16 +212,17 @@ implements EventProcessingThread {
 	public boolean doResume() throws InterruptedException {
 		if (this.equals(Thread.currentThread()))
 			throw new IllegalStateException("A thread cannot resume itself");
-		if (D.ON && log.finerable()) log.finer("Resume event processing; "+_event);
+//		if (log.finerable()) log.finer("Resume event processing; "+_proc);
 		if (isIdle())
 			throw new InternalError("Called without processing event?");
 		if (_suspmutex == null)
 			throw new InternalError("Resume non-suspended thread?");
 
 		//Copy first since event thread clean up them, when completed
-		final Configuration config = _desktop.getWebApp().getConfiguration();
-		final Component comp = _comp;
-		final Event event = _event;
+		final Configuration config =
+			_proc.getDesktop().getWebApp().getConfiguration();
+		final Component comp = getComponent();
+		final Event event = getEvent();
 		try {
 			_evtThdResumes = config.newEventThreadResumes(comp, event);
 
@@ -276,31 +259,26 @@ implements EventProcessingThread {
 	 * @return whether the event has been processed completely or just be suspended.
 	 * Recycle it only if true is returned.
 	 */
-	public boolean processEvent(Component comp, Event event) {
+	public boolean processEvent(Desktop desktop, Component comp, Event event) {
 		if (Thread.currentThread() instanceof EventProcessingThreadImpl)
 			throw new IllegalStateException("processEvent cannot be called in an event thread");
-		if (comp == null || event == null)
-			throw new IllegalArgumentException("null");
 		if (_ceased != null)
 			throw new InternalError("The event thread has beeing stopped. Cause: "+_ceased);
-		if (_comp != null)
+		if (_proc != null)
 			throw new InternalError("reentering processEvent not allowed");
 
-		_desktop = comp.getDesktop();
-		if (_desktop == null)
-			throw new InternalError("Not belonging to any desktop? "+comp);
-
-		_comp = comp;
 		_locale = Locales.getCurrent();
 		_timeZone = TimeZones.getCurrent();
 		_ex = null;
 
-		final Configuration config = _desktop.getWebApp().getConfiguration();
+		final EventProcessor proc = new EventProcessor(desktop, comp, event);
+			//it also check the correctness of desktop/comp/event
+		final Configuration config = desktop.getWebApp().getConfiguration();
 		_evtThdInits = config.newEventThreadInits(comp, event);
 		try {
 			synchronized (_evtmutex) {
-				_event = event;
-					//Bug 1577842: don't let event thread start (and end) too early
+				_proc = proc; //Bug 1577842: don't let event thread start (and end) too early
+
 				_evtmutex.notify(); //ask the event thread to handle it
 				if (_ceased == null) {
 					_evtmutex.wait();
@@ -329,9 +307,11 @@ implements EventProcessingThread {
 	 * Don't call it directly.
 	 */
 	public void newEventThreadSuspends(Object mutex) {
-		if (_comp == null) throw new IllegalStateException();
-		_evtThdSuspends = _desktop.getWebApp().getConfiguration()
-			.newEventThreadSuspends(_comp, _event, mutex);
+		if (_proc == null)
+			throw new IllegalStateException();
+
+		_evtThdSuspends = _proc.getDesktop().getWebApp().getConfiguration()
+			.newEventThreadSuspends(getComponent(), getEvent(), mutex);
 			//it might throw an exception, so process it before updating
 			//_suspended
 	}
@@ -350,22 +330,16 @@ implements EventProcessingThread {
 	}
 	/** Setup for execution. */
 	synchronized private void setup() {
-		SessionsCtrl.setCurrent(_desktop.getSession());
-		final Execution exec = _desktop.getExecution();
-		ExecutionsCtrl.setCurrent(exec);
-		((ExecutionCtrl)exec).setCurrentPage(_comp.getPage());
-			//Note: _com.getPage might return null because this method
-			//is also called when resumed.
+		_proc.setup();
 	}
 	/** Cleanup for executionl. */
 	synchronized private void cleanup() {
-		_comp = null;
-		_event = null;
-		_desktop = null;
+		_proc.cleanup();
+		_proc = null;
 	}
 	private void checkError() {
 		if (_ex != null) { //failed to process
-			if (log.debugable()) log.realCause(_ex);
+//			if (log.debugable()) log.realCause(_ex);
 			final Throwable ex = _ex;
 			_ex = null;
 			throw UiException.Aide.wrap(ex);
@@ -379,17 +353,18 @@ implements EventProcessingThread {
 			while (_ceased == null) {
 				final boolean evtAvail = !isIdle();
 				if (evtAvail) {
-					Configuration config = _desktop.getWebApp().getConfiguration();
+					Configuration config = _proc.getDesktop().getWebApp().getConfiguration();
 					boolean cleaned = false;
 					++_nBusyThd;
 					try {
-						if (D.ON && log.finerable()) log.finer("Processing event: "+_event);
+//						if (log.finerable()) log.finer("Processing event: "+_proc);
 
 						Locales.setThreadLocal(_locale);
 						TimeZones.setThreadLocal(_timeZone);
 						setup();
 
-						config.invokeEventThreadInits(_evtThdInits, _comp, _event);
+						config.invokeEventThreadInits(
+							_evtThdInits, getComponent(), getEvent());
 						_evtThdInits = null;
 
 						process0();
@@ -401,12 +376,10 @@ implements EventProcessingThread {
 
 						if (!cleaned) newEventThreadCleanups(config, _ex);
 
+//						if (log.finerable()) log.finer("Real processing is done: "+_proc);
 						cleanup();
-						ExecutionsCtrl.setCurrent(null);
-						SessionsCtrl.setCurrent(null);
 						Locales.setThreadLocal(_locale = null);
 						TimeZones.setThreadLocal(_timeZone = null);
-						if (D.ON && log.finerable()) log.finer("Real processing is done; "+_event);
 					}
 				}
 
@@ -421,16 +394,16 @@ implements EventProcessingThread {
 			}
 
 			if (_silent) {
-				if (log.debugable()) log.debug("The event processing thread stops");
+//				if (log.debugable()) log.debug("The event processing thread stops");
 			} else {
 				System.out.println("The event processing thread stops");
 				//Don't use log because it might be stopped
 			}
 		} catch (InterruptedException ex) {
 			if (_silent) {
-				if (log.debugable())
-					log.debug("The event processing thread interrupted: "+Exceptions.getMessage(ex)
-						+"\n"+Exceptions.getBriefStackTrace(ex));
+//				if (log.debugable())
+//					log.debug("The event processing thread interrupted: "+Exceptions.getMessage(ex)
+//						+"\n"+Exceptions.getBriefStackTrace(ex));
 			} else {	
 				System.out.println("The event processing thread interrupted: "+Exceptions.getMessage(ex));
 				//Don't use log because it might be stopped
@@ -445,7 +418,7 @@ implements EventProcessingThread {
 		final List errs = new LinkedList();
 		if (ex != null) errs.add(ex);
 		_evtThdCleanups =
-			config.newEventThreadCleanups(_comp, _event, errs);
+			config.newEventThreadCleanups(getComponent(), getEvent(), errs);
 		_ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
 			//propogate back the first exception
 	}
@@ -455,98 +428,32 @@ implements EventProcessingThread {
 	 */
 	public void sendEvent(final Component comp, Event event)
 	throws Exception {
-		if (D.ON && log.finerable()) log.finer("Process sent event: "+event);
+//		if (log.finerable()) log.finer("Process sent event: "+event);
 		if (event == null || comp == null)
 			throw new IllegalArgumentException("Both comp and event must be specified");
 		if (!(Thread.currentThread() instanceof EventProcessingThreadImpl))
 			throw new IllegalStateException("Only callable when processing an event");
-		if (_desktop != comp.getDesktop())
-			throw new IllegalStateException("Must in the same desktop");
-		final Component oldComp = _comp;
-		final Event oldEvent = _event;
+
+		final EventProcessor oldproc = _proc;
+		_proc = new EventProcessor(_proc.getDesktop(), comp, event);
 		try {
-			_comp = comp;
-			_event = event;
 			setup();
 			process0();
 		} finally {
-			_comp = oldComp;
-			_event = oldEvent;
+			_proc = oldproc;
 			setup();
 		}
 	}
 	/** Processes the component and event.
 	 */
 	private void process0() throws Exception {
-		if (_comp == null || _event == null)
-			throw new IllegalStateException("comp and event must be initialized");
-
-		//Bug 1506712: event listeners might be zscript, so we have to
-		//keep built-in variables as long as possible
-		final HashMap backup = new HashMap();
-		final Namespace ns = Namespaces.beforeInterpret(backup, _comp, true);
-			//we have to push since process1 might invoke methods from zscript class
-		try {
-			Namespaces.backupVariable(backup, ns, "event");
-			ns.setVariable("event", _event, true);
-			process1(ns);
-		} finally {
-			Namespaces.afterInterpret(backup, ns, true);
-		}
-	}
-	private void process1(Namespace ns) throws Exception {
-		final Page page = _comp.getPage();
-		final String evtnm = _event.getName();
-
-		for (Iterator it = _comp.getListenerIterator(evtnm); it.hasNext();) {
-			final Object el = it.next();
-			if (el instanceof Express) {
-				((EventListener)el).onEvent(_event);
-				if (!_event.isPropagatable())
-					return; //done
-			}
-		}
-
-		final ZScript zscript = ((ComponentCtrl)_comp).getEventHandler(evtnm);
-		if (zscript != null) {
-			page.interpret(
-				zscript.getLanguage(), zscript.getContent(page, _comp), ns);
-			if (!_event.isPropagatable())
-				return; //done
-		}
-
-		for (Iterator it = _comp.getListenerIterator(evtnm); it.hasNext();) {
-			final Object el = it.next();
-			if (!(el instanceof Express)) {
-				((EventListener)el).onEvent(_event);
-				if (!_event.isPropagatable())
-					return; //done
-			}
-		}
-
-		final Method mtd =
-			ComponentsCtrl.getEventMethod(_comp.getClass(), evtnm);
-		if (mtd != null) {
-			if (D.ON && log.finerable())
-				log.finer("Method for event="+evtnm+" comp="+_comp+" method="+mtd);
-
-			if (mtd.getParameterTypes().length == 0)
-				mtd.invoke(_comp, null);
-			else
-				mtd.invoke(_comp, new Object[] {_event});
-			if (!_event.isPropagatable())
-				return; //done
-		}
-
-		for (Iterator it = page.getListenerIterator(evtnm); it.hasNext();) {
-			((EventListener)it.next()).onEvent(_event);
-			if (!_event.isPropagatable())
-				return; //done
-		}
+		if (_proc == null)
+			throw new IllegalStateException("Not initialized");
+		_proc.process();
 	}
 
 	//-- Object --//
 	public String toString() {
-		return "[Event processing thread: event="+_event+", ceased="+_ceased+']';
+		return "[proc="+_proc+", ceased="+_ceased+']';
 	}
 }

@@ -56,6 +56,10 @@ public interface EventThreadInit {
 	 * <p>Unlike {@link #prepare}, it is invoked in the event processing
 	 * thread (and after {@link #prepare}).
 	 *
+	 * <p>If the use of the event thread is disabled
+	 * ({@link org.zkoss.zk.ui.util.Configuration#isEventThreadEnabled}
+	 * returns false), this method is also invoked in the Servlet thread.
+	 *
 	 * <p>Any exception being thrown by this method is ignored (but logged).
 	 */
 	public void init(Component comp, Event evt) throws Exception;

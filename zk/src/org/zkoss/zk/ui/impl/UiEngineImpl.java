@@ -63,7 +63,7 @@ public class UiEngineImpl implements UiEngine {
 	/** The Web application this engine belongs to. */
 	private WebApp _wapp;
 	/** A pool of idle EventProcessingThreadImpl. */
-	private final List _evtthds = new LinkedList();
+	private final List _idles = new LinkedList();
 	/** A map of suspended processing:
 	 * (Desktop desktop, IdentityHashMap(Object mutex, List(EventProcessingThreadImpl)).
 	 */
@@ -84,10 +84,10 @@ public class UiEngineImpl implements UiEngine {
 		_wapp = wapp;
 	}
 	public void stop(WebApp wapp) {
-		synchronized (_evtthds) {
-			for (Iterator it = _evtthds.iterator(); it.hasNext();)
+		synchronized (_idles) {
+			for (Iterator it = _idles.iterator(); it.hasNext();)
 				((EventProcessingThreadImpl)it.next()).cease("Stop application");
-			_evtthds.clear();
+			_idles.clear();
 		}
 
 		synchronized (_suspended) {
@@ -114,6 +114,19 @@ public class UiEngineImpl implements UiEngine {
 			_resumed.clear();
 		}
 	}
+	public boolean hasSuspendedThread() {
+		if (!_suspended.isEmpty()) {
+			synchronized (_suspended) {
+				for (Iterator it = _suspended.values().iterator(); it.hasNext();) {
+					final Map map = (Map)it.next();
+					if (!map.isEmpty())
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+		
 	public Collection getSuspendedThreads(Desktop desktop) {
 		final Map map;
 		synchronized (_suspended) {
@@ -751,9 +764,7 @@ public class UiEngineImpl implements UiEngine {
 		if (log.debugable()) log.debug("Processing event: "+event);
 		final Component comp = event.getTarget();
 		if (comp != null) {
-			//Note: a component might be removed before event being processed
-			if (comp.getPage() != null)
-				processEvent(comp, event);
+			processEvent(desktop, comp, event);
 		} else {
 			//since an event might change the page/desktop/component relation,
 			//we copy roots first
@@ -764,7 +775,7 @@ public class UiEngineImpl implements UiEngine {
 			for (Iterator it = roots.iterator(); it.hasNext();) {
 				final Component c = (Component)it.next();
 				if (c.getPage() != null) //might be removed, so check first
-					processEvent(c, event);
+					processEvent(desktop, c, event);
 			}
 		}
 	}
@@ -935,21 +946,18 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 	/** Process an event. */
-	private void processEvent(Component comp, Event event) {
-		if (comp.getPage() == null)
-			return; //nothing to do
-
+	private void processEvent(Desktop desktop, Component comp, Event event) {
 		EventProcessingThreadImpl evtthd = null;
-		synchronized (_evtthds) {
-			if (!_evtthds.isEmpty())
-				evtthd = (EventProcessingThreadImpl)_evtthds.remove(0);
+		synchronized (_idles) {
+			if (!_idles.isEmpty())
+				evtthd = (EventProcessingThreadImpl)_idles.remove(0);
 		}
 
 		if (evtthd == null)
 			evtthd = new EventProcessingThreadImpl();
 
 		try {
-			if (evtthd.processEvent(comp, event))
+			if (evtthd.processEvent(desktop, comp, event))
 				recycleEventThread(evtthd);
 		} catch (Throwable ex) {
 			recycleEventThread(evtthd);
@@ -960,9 +968,9 @@ public class UiEngineImpl implements UiEngine {
 		if (!evtthd.isCeased()) {
 			if (evtthd.isIdle()) {
 				final int max = _wapp.getConfiguration().getMaxSpareThreads();
-				synchronized (_evtthds) {
-					if (max < 0 || _evtthds.size() < max) {
-						_evtthds.add(evtthd); //return to pool
+				synchronized (_idles) {
+					if (max < 0 || _idles.size() < max) {
+						_idles.add(evtthd); //return to pool
 						return; //done
 					}
 				}

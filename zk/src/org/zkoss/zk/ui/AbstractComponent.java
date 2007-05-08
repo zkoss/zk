@@ -71,7 +71,7 @@ import org.zkoss.zk.au.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Method;
-import org.zkoss.zk.scripting.util.AbstractNamespace;
+import org.zkoss.zk.scripting.util.SimpleNamespace;
 
 /**
  * A skeletal implementation of {@link Component}. Though it is OK
@@ -1166,17 +1166,17 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static class SpaceInfo {
 		private Map attrs = new HashMap();
 			//don't create it dynamically because _ip bind it at constructor
-		private NS ns;
+		private SimpleNamespace ns;
 		/** A map of ((String id, Component fellow). */
 		private Map fellows = new HashMap(41);
 
 		private SpaceInfo(Component owner) {
-			ns = new NS();
+			ns = new SimpleNamespace();
 			init(owner);
 		}
-		private SpaceInfo(Component owner, NS from) {
-			ns = new NS();
-			ns._vars.putAll(from._vars);
+		private SpaceInfo(Component owner, SimpleNamespace from) {
+			ns = new SimpleNamespace();
+			ns.copy(from);
 			init(owner);
 		}
 		private void init(Component owner) {
@@ -1185,71 +1185,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 
-	private static class NS extends AbstractNamespace {
-		private Namespace _parent;
-		private final Map _vars;
-
-		private NS() {
-			_vars = new HashMap();
-		}
-
-		//Namespace//
-		public Set getVariableNames() {
-			return _vars.keySet();
-		}
-		public boolean containsVariable(String name, boolean local) {
-			return _vars.containsKey(name)
-			|| (!local && _parent != null && _parent.containsVariable(name, true));
-		}
-		public Object getVariable(String name, boolean local) {
-			Object val = _vars.get(name);
-			if (local || _parent == null || val != null || _vars.containsKey(name))
-				return val;
-			return _parent.getVariable(name, false);
-		}
-		public void setVariable(String name, Object value, boolean local) {
-			if (!local && _parent != null && !_vars.containsKey(name)) {
-				for (Namespace p = _parent;;) {
-					if (p.getVariableNames().contains(name)) {
-						p.setVariable(name, value, true);
-						return; //done;
-					}
-					if ((p = p.getParent()) == null)
-						break;
-				}
-			}
-
-			_vars.put(name, value);
-			notifyAdd(name, value);
-		}
-		public void unsetVariable(String name, boolean local) {
-			if (_vars.remove(name) != null || _vars.containsKey(name)) {
-				notifyRemove(name);
-			} else if (!local && _parent != null) {
-				for (Namespace p = _parent; p != null; p = p.getParent()) {
-					if (p.getVariableNames().contains(name)) {
-						p.unsetVariable(name, true);
-						break;
-					}
-					if ((p = p.getParent()) == null)
-						break;
-				}
-			}
-		}
-
-		public Namespace getParent() {
-			return _parent;
-		}
-		public void setParent(Namespace parent) {
-			if (_parent != parent) {
-				for (Namespace p = parent; p != null; p = p.getParent())
-					if (p == this)
-						throw new IllegalArgumentException("Recursive namespace: "+this+" with "+parent);
-				_parent = parent;
-				notifyParentChanged(parent);
-			}
-		}
-	}
 	private class ChildIter implements ListIterator  {
 		private final ListIterator _it;
 		private Object _last;
@@ -1416,11 +1351,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			Serializables.smartWrite(s, _spaceInfo.attrs);
 
 			//write _spaceInfo.ns (only variables that are not fellows)
-			for (Iterator it = _spaceInfo.ns._vars.entrySet().iterator();
+			for (Iterator it = _spaceInfo.ns.getVariableNames().iterator();
 			it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String nm = (String)me.getKey();
-				final Object val = me.getValue();
+				final String nm = (String)it.next();
+				final Object val = _spaceInfo.ns.getVariable(nm, true);
 				if (isVariableSerializable(nm, val)
 				&& (val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
 					s.writeObject(nm);

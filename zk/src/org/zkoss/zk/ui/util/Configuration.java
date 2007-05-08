@@ -95,6 +95,8 @@ public class Configuration {
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	/** A set of the language name whose theme is disabled. */
 	private Set _disabledDefThemes;
+	/** whether to use the event processing thread. */
+	private boolean _useEvtThd = true;
 	/** keep-across-visits. */
 	private boolean _keepDesktop;
 
@@ -261,8 +263,8 @@ public class Configuration {
 	 * {@link EventThreadInit#prepare} for
 	 * each relevant listener registered by {@link #addListener}.
 	 *
-	 * <p>It is called by UiEngine before starting an event processing
-	 * thread.
+	 * <p>It is called by {@link UiEngine} before starting an event
+	 * processing thread.
 	 *
 	 * @exception UiException to prevent a thread from being processed
 	 * if {@link EventThreadInit#prepare} throws an exception
@@ -444,7 +446,8 @@ public class Configuration {
 	 * {@link EventThreadResume#beforeResume} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
-	 * <p>It is called by UiEngine when resuming a suspended event thread.
+	 * <p>It is called by {@link UiEngine} when resuming a suspended event
+	 * thread.
 	 * Notice: it executes in the main thread (i.e., the servlet thread).
 	 *
 	 * @param comp the component which the event is targeting
@@ -1040,12 +1043,16 @@ public class Configuration {
 	 * <p>ZK uses a thread pool to keep the idle event processing threads.
 	 * It speeds up the service of an event by reusing the thread queued
 	 * in this pool.
+	 *
+	 * @see #setMaxSuspendedThreads
+	 * @see #isEventThreadEnabled
 	 */
 	public void setMaxSpareThreads(int max) {
 		_sparThdMax = max;
 	}
 	/** Returns the maximal allowed number of the spare pool for
 	 * queuing event processing threads (per Web application).
+	 * @see #isEventThreadEnabled
 	 */
 	public int getMaxSpareThreads() {
 		return _sparThdMax;
@@ -1057,15 +1064,44 @@ public class Configuration {
 	 * <p>Default: -1 (no limit).
 	 *
 	 * <p>A negative value indicates there is no limit.
+	 *
+	 * <p>It is ignored if the use of the event processing thread
+	 * is disable ({@link #isEventThreadEnabled}.
 	 */
 	public void setMaxSuspendedThreads(int max) {
 		_suspThdMax = max;
 	}
 	/** Returns the maximal allowed number of suspended event
 	 * processing threads (per Web application).
+	 *
+	 * <p>It is ignored if the use of the event processing thread
+	 * is disable ({@link #isEventThreadEnabled}.
+	 * @see #isEventThreadEnabled
 	 */
 	public int getMaxSuspendedThreads() {
 		return _suspThdMax;
+	}
+	/** Sets whether to use the event processing thread.
+	 *
+	 * <p>Default: enabled.
+	 *
+	 * @exception IllegalStateException if there is suspended thread
+	 * and use is false.
+	 */
+	public void enableEventThread(boolean enable) {
+		if (!enable && _wapp != null) {
+			final UiEngine engine = ((WebAppCtrl)_wapp).getUiEngine();
+			if (engine != null) {
+				if (engine.hasSuspendedThread())
+					throw new IllegalStateException("Unable to disable due to suspended threads");
+			}
+		}
+		_useEvtThd = enable;
+	}
+	/** Returns whether to use the event processing thread.
+	 */
+	public boolean isEventThreadEnabled() {
+		return _useEvtThd;
 	}
 
 	/** Returns the monitor for this application, or null if not set.

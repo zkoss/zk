@@ -134,6 +134,7 @@ public class ConfigParser {
 				parseLangAddon(locator, el);
 			} else if ("system-config".equals(elnm)) {
 			//system-config
+			//  disable-event-thread
 			//	max-spare-threads
 			//  max-suspended-threads
 			//  max-upload-size
@@ -145,6 +146,9 @@ public class ConfigParser {
 			//  web-app-class
 			//  locale-provider-class
 			//	time-zone-provider-class
+				String s = el.getElementValue("disable-event-thread", true);
+				if (s != null) config.enableEventThread(!"false".equals(s));
+
 				Integer v = parseInteger(el, "max-spare-threads", true);
 				if (v != null) config.setMaxSpareThreads(v.intValue());
 				
@@ -154,7 +158,7 @@ public class ConfigParser {
 				v = parseInteger(el, "max-upload-size", true);
 				if (v != null) config.setMaxUploadSize(v.intValue());
 
-				String s = el.getElementValue("upload-charset", true);
+				s = el.getElementValue("upload-charset", true);
 				if (s != null) config.setUploadCharset(s);
 
 				s = el.getElementValue("response-charset", true);
