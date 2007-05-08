@@ -147,7 +147,7 @@ public class ConfigParser {
 			//  locale-provider-class
 			//	time-zone-provider-class
 				String s = el.getElementValue("disable-event-thread", true);
-				if (s != null) config.enableEventThread(!"false".equals(s));
+				if (s != null) config.enableEventThread("false".equals(s));
 
 				Integer v = parseInteger(el, "max-spare-threads", true);
 				if (v != null) config.setMaxSpareThreads(v.intValue());
