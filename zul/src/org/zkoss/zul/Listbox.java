@@ -766,23 +766,6 @@ implements RenderOnDemand {
 	}
 
 	//-- Component --//
-	public void setPage(Page page) {
-		final Page old = getPage();
-		super.setPage(page);
-
-		//Bug 1711117: onInitRender is ignored if a component is not
-		//attached to a page and inSelectMold depends on it, so...
-		//PS: onInitRender is optional for non-select (performance only)
-		if (_model != null && old == null)
-			postOnInitRender();
-	}
-	public void setParent(Component parent) {
-		final Page old = getPage();
-		super.setParent(parent);
-
-		if (_model != null && old == null)
-			postOnInitRender();
-	}
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
@@ -1154,11 +1137,7 @@ implements RenderOnDemand {
 		}
 	}
 	private void postOnInitRender() {
-		//Note: if page is null:
-		//1) setPage/setParent will handle it
-		//2) event is ignore if it is not attached at the end (Bug 1711117)
-		if (getPage() != null)
-			Events.postEvent("onInitRender", this, null);
+		Events.postEvent("onInitRender", this, null);
 	}
 
 	/** Handles when the list model's content changed.
