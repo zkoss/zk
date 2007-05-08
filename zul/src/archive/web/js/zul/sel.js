@@ -763,8 +763,7 @@ zk.Selectable.prototype = {
 		var diff = 2/*experiment*/, sz = this.size();
 		if (!sz) {
 			if (getZKAttr(this.element, "vflex") == "true") {
-				var gap = this._getFitGap();
-				hgh = this.body.offsetHeight - gap;
+				hgh = this._vflexSize();
 				if (hgh < 25) hgh = 25;
 
 				var rowhgh = zk.offsetHeight(firstVisiRow);
@@ -813,20 +812,27 @@ zk.Selectable.prototype = {
 		var hgh = n ? zk.offsetHeight(n): 0;
 		return hgh ? hgh: defVal;
 	},
-	/** Cacluates the gap to make overflow to fit-in.
-	 * @return nonpositive means it already fit
+	/** Returns the size for vflex
 	 */
-	_getFitGap: function () {
-		var gap = document.body.offsetHeight - zk.innerHeight()
+	_vflexSize: function () {
+		var diff = document.body.offsetHeight - zk.innerHeight()
 				+ parseInt(Element.getStyle(document.body, "margin-top")||"0")
 				+ parseInt(Element.getStyle(document.body, "margin-bottom")||"0")
 				+ parseInt(Element.getStyle(document.body, "padding-top")||"0")
 				+ parseInt(Element.getStyle(document.body, "padding-bottom")||"0");
-		if (zk.ie) ++gap; //strange, but...
-		return gap; //already fit
-			//TODO: it is possible that this tree is in a cell and
-			//shrinking won't help to make the whole document smaller
-			//However, we don't find a good way to
+		if (zk.ie) ++diff; //strange, but...
+
+		//check whether TD
+		if (diff > 0)
+			for (var n = this.element, p; p = n.parentNode; n = p) {
+				if ($tag(p) == "TD") {
+					//whether other cells heigher than this
+					if (p.clientHeight - n.offsetHeight > 20) //to be precise we have to count margin instead of 20
+						diff = 0; //no need to shrink
+					break;
+				}
+			}
+		return this.body.offsetHeight - diff;
 	},
 
 	/** Recalculate the size. */
