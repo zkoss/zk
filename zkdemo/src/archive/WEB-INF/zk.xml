@@ -25,6 +25,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</language-config>
 	-->
 
+	<!-- Turn on if you prefer not to use the event processing thread at all
+	<system-config>
+		<disable-event-thread/>
+	</system-config>
+	-->
 	<!-- Turn on the following if you want to keep session after Web server restarts
 	<system-config>
 		<ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
@@ -35,7 +40,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<cache-provider-class>org.zkoss.zk.ui.sys.GlobalDesktopCacheProvider</cache-provider-class>
 	</system-config>
 	-->
-
 	<!-- Turn on to test FailoverManager with an useless failover manager
 	<system-config>
 		<failover-manager-class>org.zkoss.zkdemo.test.DumbFailoverManager</failover-manager-class>
