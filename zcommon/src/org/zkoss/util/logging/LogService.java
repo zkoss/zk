@@ -81,6 +81,9 @@ public class LogService {
 	/** Initializes the logging service.
 	 * If the log service already started, an error message is logged.
 	 *
+	 * <p>Note: it also enables the hierarchy support of loggers by
+	 * calling {@link Log#setHierarchy} with true.
+	 *
 	 * @param rootnm the name of the root logger. The logging service
 	 * registered handlers at the specified logger.
 	 * @param cls the implementation to start. If null, {@link LogService}
@@ -89,6 +92,8 @@ public class LogService {
 	public static final LogService init(String rootnm, Class cls) {
 		if (rootnm == null)
 			throw new IllegalArgumentException("null");
+
+		Log.setHierarchy(true); //turn on the hierarchy
 
 		final Logger root = Logger.getLogger(rootnm);
 			//Tomcat has one root per Web app, while Logger.global is shared

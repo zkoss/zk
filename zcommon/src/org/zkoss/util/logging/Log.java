@@ -92,10 +92,42 @@ public class Log {
 	/** The OFF level used to turn of the logging. */
 	public static final Level OFF     = Level.OFF;
 
+	/** The default name when the loggers don't support hierarchy. */
+	private static final String DEFAULT_NAME = "org.zkoss";
+		//don't change its value since DHtmlLayoutServlet depends on it
+
+	/** Whether the loggers supports the hierarchy. */
+	private static boolean _hierarchy;
+
 	/** The category that this log belongs.
 	 * Note: it is temporay and set to null when {@link #logger} is called.
 	 */
 	private String _name;
+
+	/** Returns whether the loggers support hierarchy.
+	 * If hierarchy is supported, a {@link Log} instance is mapped to
+	 * a {@link Logger} instance with the same name. Therefore, it
+	 * forms the hierarchical relatiionship among {@link Logger} instances.
+	 * It has the best resolution to control which logger to enable.
+	 *
+	 * <p>On the other hand, if the loggers don't support hierarchy,
+	 * all {@link Log} instances are actually mapped to the same
+	 * {@link Logger} called "org.zkoss".
+	 * The performance is better in this mode.
+	 *
+	 * <p>Default: false.
+	 *
+	 * <p>Note: Once {@link LogService} is initialized, {@link #setHierarchy}
+	 * is called automatically to turn on the hierarchy support.
+	 */
+	public static final boolean isHierarchy() {
+		return _hierarchy;
+	}
+	/** Sets whether to support the hierarchical loggers.
+	 */
+	public static final void setHierarchy(boolean hierarchy) {
+		_hierarchy = hierarchy;
+	}
 
 	/**
 	 * Gets the I3 logger based on the class.
@@ -135,13 +167,16 @@ public class Log {
 	 * <p>If not found, it created a new one.
 	 */
 	private final Logger getLogger() {
-		return Logger.getLogger(_name);
+		return Logger.getLogger(_hierarchy ? _name: DEFAULT_NAME);
 			//NOTE: we don't cache getLogger because Tomcat use one
 			//LogManager per Web app
 	}
 	/** Returns the closest logger that has been created (never null).
 	 */
 	private final Logger getClosestLogger() {
+		if (_hierarchy)
+			return Logger.getLogger(DEFAULT_NAME);
+
 		final LogManager logman = LogManager.getLogManager();
 		int j = _name.length();
 		do {
@@ -150,12 +185,13 @@ public class Log {
 				return logger;
 			j = _name.lastIndexOf('.', j - 1);
 		} while (j >= 0);
-		return Logger.getLogger("");
+		return Logger.getLogger(DEFAULT_NAME);
 	}
 	/** Returns the logger, or null if not created yet.
 	 */
 	private final Logger getLoggerIfAny() {
-		return LogManager.getLogManager().getLogger(_name);
+		return LogManager.getLogManager()
+			.getLogger(_hierarchy ? _name: DEFAULT_NAME);
 	}
 
 	/**
