@@ -253,14 +253,14 @@ public class Executions {
 	 * If there is racing issue, you have to enclose it with
 	 * <code>synchronized</code> (though it is optional).
 	 * @exception UiException if it is called not during event processing.
-	 * @exception TooManySuspendedException if there are too many suspended
+	 * @exception SuspendNotAllowedException if there are too many suspended
 	 * exceptions.
 	 * Deployers can control the maximal allowed number of suspended exceptions
 	 * by specifying <code>max-suspended-thread</code> in <code>zk.xml</code>,
 	 * or invoking {@link org.zkoss.zk.ui.util.Configuration#setMaxSuspendedThreads}.
 	 */
 	public static final void wait(Object mutex)
-	throws InterruptedException, TooManySuspendedException {
+	throws InterruptedException, SuspendNotAllowedException {
 		getUiEngine().wait(mutex);
 	}
 	/** Wakes up a single event processing thread that is waiting on the

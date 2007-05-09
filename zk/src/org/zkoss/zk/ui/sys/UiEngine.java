@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.TooManySuspendedException;
+import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -216,14 +216,14 @@ public interface UiEngine {
 	 * {@link #notify(Object)} and {@link #notify(Desktop, Object)} knows
 	 * which object to notify.
 	 * @exception UiException if it is called not during event processing.
-	 * @exception TooManySuspendedException if there are too many suspended
+	 * @exception SuspendNotAllowedException if there are too many suspended
 	 * exceptions.
 	 * Deployers can control the maximal allowed number of suspended exceptions
 	 * by specifying <code>max-suspended-thread</code> in <code>zk.xml</code>,
 	 * or invoking {@link org.zkoss.zk.ui.util.Configuration#setMaxSuspendedThreads}.
 	 */
 	public void wait(Object obj)
-	throws InterruptedException, TooManySuspendedException;
+	throws InterruptedException, SuspendNotAllowedException;
 	/** Wakes up a single event processing thread that is waiting on the
 	 * specified object.
 	 *

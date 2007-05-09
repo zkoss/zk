@@ -1,4 +1,4 @@
-/* TooManySuspendedException.java
+/* SuspendNotAllowedException.java
 
 {{IS_NOTE
 	Purpose:
@@ -30,35 +30,35 @@ package org.zkoss.zk.ui;
  *
  * @author tomyeh
  */
-public class TooManySuspendedException extends UiException {
-	public TooManySuspendedException(String msg, Throwable cause) {
+public class SuspendNotAllowedException extends UiException {
+	public SuspendNotAllowedException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
-	public TooManySuspendedException(String s) {
+	public SuspendNotAllowedException(String s) {
 		super(s);
 	}
-	public TooManySuspendedException(Throwable cause) {
+	public SuspendNotAllowedException(Throwable cause) {
 		super(cause);
 	}
-	public TooManySuspendedException() {
+	public SuspendNotAllowedException() {
 	}
 
-	public TooManySuspendedException(int code, Object[] fmtArgs, Throwable cause) {
+	public SuspendNotAllowedException(int code, Object[] fmtArgs, Throwable cause) {
 		super(code, fmtArgs, cause);
 	}
-	public TooManySuspendedException(int code, Object fmtArg, Throwable cause) {
+	public SuspendNotAllowedException(int code, Object fmtArg, Throwable cause) {
 		super(code, fmtArg, cause);
 	}
-	public TooManySuspendedException(int code, Object[] fmtArgs) {
+	public SuspendNotAllowedException(int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 	}
-	public TooManySuspendedException(int code, Object fmtArg) {
+	public SuspendNotAllowedException(int code, Object fmtArg) {
 		super(code, fmtArg);
 	}
-	public TooManySuspendedException(int code, Throwable cause) {
+	public SuspendNotAllowedException(int code, Throwable cause) {
 		super(code, cause);
 	}
-	public TooManySuspendedException(int code) {
+	public SuspendNotAllowedException(int code) {
 		super(code);
 	}
 }

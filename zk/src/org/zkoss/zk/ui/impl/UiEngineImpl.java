@@ -733,7 +733,7 @@ public class UiEngineImpl implements UiEngine {
 					for (; event != null; event = nextEvent(uv)) {
 						try {
 							process(desktop, event);
-						} catch (TooManySuspendedException ex) {
+						} catch (SuspendNotAllowedException ex) {
 							//ignore it (possible and reasonable)
 						}
 					}
@@ -781,7 +781,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	public void wait(Object mutex)
-	throws InterruptedException, TooManySuspendedException {
+	throws InterruptedException, SuspendNotAllowedException {
 		if (mutex == null)
 			throw new IllegalArgumentException("null mutex");
 
@@ -837,7 +837,7 @@ public class UiEngineImpl implements UiEngine {
 		final int v = _wapp.getConfiguration().getMaxSuspendedThreads();
 		synchronized (this) {
 			if (v >= 0 && _suspCnt >= v)
-				throw new TooManySuspendedException(MZk.TOO_MANY_SUSPENDED);
+				throw new SuspendNotAllowedException(MZk.TOO_MANY_SUSPENDED);
 			++_suspCnt;
 		}
 	}
@@ -947,21 +947,43 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** Process an event. */
 	private void processEvent(Desktop desktop, Component comp, Event event) {
-		EventProcessingThreadImpl evtthd = null;
-		synchronized (_idles) {
-			if (!_idles.isEmpty())
-				evtthd = (EventProcessingThreadImpl)_idles.remove(0);
-		}
+		final Configuration config = desktop.getWebApp().getConfiguration();
+		if (config.isEventThreadEnabled()) {
+			EventProcessingThreadImpl evtthd = null;
+			synchronized (_idles) {
+				if (!_idles.isEmpty())
+					evtthd = (EventProcessingThreadImpl)_idles.remove(0);
+			}
 
-		if (evtthd == null)
-			evtthd = new EventProcessingThreadImpl();
+			if (evtthd == null)
+				evtthd = new EventProcessingThreadImpl();
 
-		try {
-			if (evtthd.processEvent(desktop, comp, event))
+			try {
+				if (evtthd.processEvent(desktop, comp, event))
+					recycleEventThread(evtthd);
+			} catch (Throwable ex) {
 				recycleEventThread(evtthd);
-		} catch (Throwable ex) {
-			recycleEventThread(evtthd);
-			throw UiException.Aide.wrap(ex);
+				throw UiException.Aide.wrap(ex);
+			}
+		} else { //event thread disabled
+			EventProcessor proc = new EventProcessor(desktop, comp, event);
+				//Note: it also checks the correctness
+			config.invokeEventThreadInits(
+				config.newEventThreadInits(comp, event), comp, event);
+			List cleanups = null, errs = null;
+			try {
+				proc.process();
+			} catch (Throwable ex) {
+				errs = new LinkedList();
+				errs.add(ex);
+				cleanups = config.newEventThreadCleanups(comp, event, errs);
+
+				throw UiException.Aide.wrap(ex);
+			} finally {
+				if (errs == null) //not cleanup yet
+					cleanups = config.newEventThreadCleanups(comp, event, null);
+				config.invokeEventThreadCompletes(cleanups, comp, event, errs);
+			}
 		}
 	}
 	private void recycleEventThread(EventProcessingThreadImpl evtthd) {

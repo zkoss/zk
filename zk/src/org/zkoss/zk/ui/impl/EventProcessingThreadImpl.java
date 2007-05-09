@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Threads;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.Locales;
@@ -353,7 +352,8 @@ implements EventProcessingThread {
 			while (_ceased == null) {
 				final boolean evtAvail = !isIdle();
 				if (evtAvail) {
-					Configuration config = _proc.getDesktop().getWebApp().getConfiguration();
+					final Configuration config =
+						_proc.getDesktop().getWebApp().getConfiguration();
 					boolean cleaned = false;
 					++_nBusyThd;
 					try {

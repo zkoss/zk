@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.lang.reflect.Method;
 
-import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Execution;
@@ -42,12 +41,13 @@ import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 
 /**
- * Used to process an event.
+ * A utility class that simplify the implementation of
+ * {@link org.zkoss.zk.ui.sys.EventProcessingThread}.
  *
  * @author tomyeh
  */
-/*pacakge*/ class EventProcessor {
-	private static final Log log = Log.lookup(EventProcessor.class);
+/*package*/ class EventProcessor {
+//	private static final Log log = Log.lookup(EventProcessor.class);
 
 	/** The desktop that the component belongs to. */
 	private final Desktop _desktop;
@@ -90,6 +90,11 @@ import org.zkoss.zk.scripting.Namespaces;
 	}
 
 	/** Process the event.
+	 * Note: it doesn't invoke EventThreadInit and EventThreadCleanup.
+	 *
+	 * <p>This method is to implement
+	 * {@link org.zkoss.zk.ui.sys.EventProcessingThread}.
+	 * See also {@link org.zkoss.zk.ui.util.Configuration#isEventThreadEnabled}.
 	 */
 	public void process() throws Exception {
 		//Bug 1506712: event listeners might be zscript, so we have to
@@ -138,8 +143,7 @@ import org.zkoss.zk.scripting.Namespaces;
 		final Method mtd =
 			ComponentsCtrl.getEventMethod(_comp.getClass(), evtnm);
 		if (mtd != null) {
-			if (D.ON && log.finerable())
-				log.finer("Method for event="+evtnm+" comp="+_comp+" method="+mtd);
+//			if (log.finerable()) log.finer("Method for event="+evtnm+" comp="+_comp+" method="+mtd);
 
 			if (mtd.getParameterTypes().length == 0)
 				mtd.invoke(_comp, null);
@@ -156,7 +160,7 @@ import org.zkoss.zk.scripting.Namespaces;
 		}
 	}
 
-	/** Setup this processor before processing the event with
+	/** Setup this processor before processing the event by calling
 	 * {@link #process}.
 	 */
 	public void setup() {
@@ -165,7 +169,7 @@ import org.zkoss.zk.scripting.Namespaces;
 		ExecutionsCtrl.setCurrent(exec);
 		((ExecutionCtrl)exec).setCurrentPage(getPage());
 	}
-	/** Cleanup this process after processing the event with
+	/** Cleanup this process after processing the event by calling
 	 * {@link #process}.
 	 */
 	public void cleanup() {
