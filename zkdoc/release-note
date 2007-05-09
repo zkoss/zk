@@ -1,7 +1,8 @@
 	--------
 ZK 2.3.2 Freshly
 * Features:
-  1712518: Decimalbox supports different round mode
+  1711860: An option to use native thread instead of event thread
+  1712518: Decimalbox supports different round mode (Java 6 is required)
   1712548: isAsap shall not be part of EventListener
 
 * Bugs:
