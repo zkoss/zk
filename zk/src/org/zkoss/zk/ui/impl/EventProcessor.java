@@ -46,7 +46,7 @@ import org.zkoss.zk.scripting.Namespaces;
  *
  * @author tomyeh
  */
-/*package*/ class EventProcessor {
+public class EventProcessor {
 //	private static final Log log = Log.lookup(EventProcessor.class);
 
 	/** The desktop that the component belongs to. */
@@ -60,7 +60,7 @@ import org.zkoss.zk.scripting.Namespaces;
 	 * @param comp the component. Its desktop must be either null
 	 * or the same as desktop.
 	 */
-	/*package*/ EventProcessor(Desktop desktop, Component comp, Event event) {
+	public EventProcessor(Desktop desktop, Component comp, Event event) {
 		if (desktop == null || comp == null || event == null)
 			throw new IllegalArgumentException("null");
 

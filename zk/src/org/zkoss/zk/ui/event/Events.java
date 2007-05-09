@@ -22,14 +22,18 @@ import java.util.Set;
 
 import org.zkoss.lang.D;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.impl.EventProcessingThreadImpl;
+import org.zkoss.zk.ui.impl.EventProcessor;
 import org.zkoss.zk.au.AuRequest;
 
 /**
@@ -210,8 +214,30 @@ public class Events {
 	 */
 	public static void sendEvent(Component comp, Event event) {
 		final Thread thd = (Thread)Thread.currentThread();
-		if (!(thd instanceof EventProcessingThreadImpl))
-			throw new UiException("Callable only when processing an event");
+		if (!(thd instanceof EventProcessingThreadImpl)) {
+			final Execution exec = Executions.getCurrent();
+			final Desktop desktop = exec.getDesktop();
+				//note: we don't use comp.getDesktop because 1) it may be null
+				//2) it may be different from the current desktop
+			if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
+				final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+				final Page page = execCtrl.getCurrentPage();
+				final EventProcessor proc =
+					new EventProcessor(desktop, comp, event);
+				proc.setup();
+				try {
+					proc.process();
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex);
+				} finally {
+					execCtrl.setCurrentPage(page);
+				}
+				return; //done
+			}
+
+			throw new UiException("Callable only in the event listener");
+		}
+
 		try {
 			((EventProcessingThreadImpl)thd).sendEvent(comp, event);
 		} catch (Exception ex) {
