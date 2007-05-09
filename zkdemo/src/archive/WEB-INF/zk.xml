@@ -25,7 +25,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</language-config>
 	-->
 
-	<!-- Turn on if you prefer not to use the event processing thread at all
+	<!-- Turn on if you prefer to use the native (Servlet) thread
+	to process the events, instead of forking the event processing thread
 	<system-config>
 		<disable-event-thread/>
 	</system-config>
