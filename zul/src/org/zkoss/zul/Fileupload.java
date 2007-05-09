@@ -28,7 +28,7 @@ import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.TooManySuspendedException;
+import org.zkoss.zk.ui.SuspendNotAllowedException;
 
 import org.zkoss.zul.impl.FileuploadDlg;
 
@@ -100,7 +100,7 @@ public class Fileupload {
 				_templ, null, params);
 		try {
 			dlg.doModal();
-		} catch (TooManySuspendedException ex) {
+		} catch (SuspendNotAllowedException ex) {
 			dlg.detach();
 			throw ex;
 		}

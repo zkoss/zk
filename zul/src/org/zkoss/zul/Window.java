@@ -31,12 +31,13 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.TooManySuspendedException;
+import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.ext.client.Openable;
@@ -420,7 +421,7 @@ public class Window extends XulElement implements IdSpace {
 	 * <em>not</em> in any event listener, the mode won't be changed
 	 * immediately (until {@link Events#ON_MODAL} is processed later).
 	 *
-	 * @exception TooManySuspendedException if there are too many suspended
+	 * @exception SuspendNotAllowedException if there are too many suspended
 	 * processing thread than the deployer allows.
 	 * By default, there is no limit of # of suspended threads.
 	 * @exception InterruptedException thrown if the desktop or
@@ -429,7 +430,12 @@ public class Window extends XulElement implements IdSpace {
 	 * To tell the difference, check the getMessage method of InterruptedException.
 	 */
 	public void doModal()
-	throws InterruptedException, TooManySuspendedException {
+	throws InterruptedException, SuspendNotAllowedException {
+		Desktop desktop = getDesktop();
+		if (desktop == null) desktop = Executions.getCurrent().getDesktop();
+		if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled())
+			throw new SuspendNotAllowedException("Event processing thread is disabled");
+
 		checkOverlappable();
 
 		if (_mode != MODAL) {
@@ -446,7 +452,7 @@ public class Window extends XulElement implements IdSpace {
 
 			try {
 				enterModal();
-			} catch (TooManySuspendedException ex) {
+			} catch (SuspendNotAllowedException ex) {
 				try {
 					if (Executions.getCurrent()
 					.getAttribute("javax.servlet.error.exception") != null) {

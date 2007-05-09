@@ -26,7 +26,7 @@ import org.zkoss.zul.mesg.MZul;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.TooManySuspendedException;
+import org.zkoss.zk.ui.SuspendNotAllowedException;
 
 import org.zkoss.zul.impl.MessageboxDlg;
 
@@ -114,7 +114,7 @@ public class Messagebox {
 		dlg.setButtons(buttons);
 		try {
 			dlg.doModal();
-		} catch (TooManySuspendedException ex) {
+		} catch (SuspendNotAllowedException ex) {
 			dlg.detach();
 			throw ex;
 		}
