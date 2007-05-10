@@ -62,7 +62,7 @@ import org.zkoss.zk.au.*;
  * @author tomyeh
  */
 /*package*/ class UiVisualizer implements Visualizer {
-	private static final Log log = Log.lookup(UiVisualizer.class);
+//	private static final Log log = Log.lookup(UiVisualizer.class);
 
 	/** The first exec info that causes a chain of executions (never null).
 	 */
@@ -139,7 +139,7 @@ import org.zkoss.zk.au.*;
 	public final boolean addToFirstAsyncUpdate(List responses) {
 		if (!_1stau) return false;
 
-		if (D.ON && log.finerable()) log.finer("Add to 1st au: "+responses);
+//		if (D.ON && log.finerable()) log.finer("Add to 1st au: "+responses);
 		for (Iterator it = responses.iterator(); it.hasNext();)
 			_1stec.addResponse(null, (AuResponse)it.next());
 		return true;
@@ -435,7 +435,7 @@ import org.zkoss.zk.au.*;
 		if (_pgRemoved == null) _pgRemoved = new HashSet();
 		_pgRemoved.add(page);
 		if (_pgInvalid != null) _pgInvalid.remove(page);
-		if (D.ON && log.debugable()) log.debug("Page removed: "+page);
+//		if (D.ON && log.debugable()) log.debug("Page removed: "+page);
 	}
 	/** Clears components if it belongs to invalidated or removed page. */
 	private void clearInInvalidPage(Collection coll) {
@@ -465,11 +465,11 @@ import org.zkoss.zk.au.*;
 	 * are invalidated and attached.
 	 */
 	public List getResponses() throws IOException {
-		if (D.ON && log.finerable())
+/*		if (D.ON && log.finerable())
 			log.finer("ei: "+this+"\nInvalidated: "+_invalidated+"\nSmart Upd: "+_smartUpdated
 				+"\nAttached: "+_attached+"\nMoved:"+_moved+"\nResponses:"+_responses
 				+"\npgInvalid: "+_pgInvalid	+"\nUuidChanged: "+_idChgd);
-
+*/
 		final List responses = new LinkedList();
 
 		//1. process dead comonents, cropping and the removed page
@@ -534,10 +534,10 @@ import org.zkoss.zk.au.*;
 			_idChgd = null; //just in case
 		}
 
-		if (log.finerable())
+/*		if (log.finerable())
 			log.finer("After removing redudant: invalidated: "+_invalidated
 			+"\nAttached: "+_attached+"\nSmartUpd:"+_smartUpdated);
-
+*/
 		//4. process special interfaces
 		doChildChanged(); //ChildChangedAware
 
@@ -618,7 +618,7 @@ import org.zkoss.zk.au.*;
 		_pgInvalid = _pgRemoved = null;
 		_responses = null;
 
-		if (D.ON && log.debugable()) log.debug("Return responses: "+responses);
+//		if (D.ON && log.debugable()) log.debug("Return responses: "+responses);
 		return responses;
 	}
 	private static boolean isTransparent(Component comp) {
@@ -681,7 +681,7 @@ import org.zkoss.zk.au.*;
 		} else {
 			sibs = page.getRoots();
 		}
-		if (D.ON && log.finerable()) log.finer("All sibs: "+sibs+" newsibs: "+newsibs);
+//		if (D.ON && log.finerable()) log.finer("All sibs: "+sibs+" newsibs: "+newsibs);
 
 		/* Algorithm:
 	1. Locate a sibling, say <a>, that already exists.

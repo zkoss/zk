@@ -296,7 +296,7 @@ public class UiEngineImpl implements UiEngine {
 				final Component owner = olduv.getOwner();
 				if (owner != null) {
 					((PageCtrl)page).setOwner(owner);
-					if (D.ON && log.finerable()) log.finer("Set owner of "+page+" to "+owner);
+//					if (D.ON && log.finerable()) log.finer("Set owner of "+page+" to "+owner);
 				}
 			}
 
@@ -595,7 +595,7 @@ public class UiEngineImpl implements UiEngine {
 				} catch (ComponentNotFoundException ex) {
 					//possible because the previous might remove some comp
 					//so ignore it
-					if (log.debugable()) log.debug("Component not found: "+request);
+//					if (log.finable()) log.fine("Component not found: "+request);
 				} catch (Throwable ex) {
 					handleError(ex, uv, errs);
 					//we don't skip request to avoid mis-match between c/s
@@ -643,9 +643,9 @@ public class UiEngineImpl implements UiEngine {
 			responseSequenceId(desktop, out);
 			response(responses, out);
 
-			if (log.debugable())
-				if (responses.size() < 5 || log.finerable()) log.debug("Responses: "+responses);
-				else log.debug("Responses: "+responses.subList(0, 5)+"...");
+//			if (log.debugable())
+//				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
+//				else log.debug("Responses: "+responses.subList(0, 5)+"...");
 
 			out.flush();
 				//flush before deactivating to make sure it has been sent
@@ -753,7 +753,7 @@ public class UiEngineImpl implements UiEngine {
 	 * request.
 	 */
 	private void process(Execution exec, AuRequest request, boolean everError) {
-		if (log.debugable()) log.debug("Processing request: "+request);
+//		if (log.finable()) log.finer("Processing request: "+request);
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setCurrentPage(request.getPage());
@@ -761,7 +761,8 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** Processing the event and stores result into UiVisualizer. */
 	private void process(Desktop desktop, Event event) {
-		if (log.debugable()) log.debug("Processing event: "+event);
+//		if (log.finable()) log.finer("Processing event: "+event);
+
 		final Component comp = event.getTarget();
 		if (comp != null) {
 			processEvent(desktop, comp, event);
@@ -788,7 +789,7 @@ public class UiEngineImpl implements UiEngine {
 		final Thread thd = Thread.currentThread();
 		if (!(thd instanceof EventProcessingThreadImpl))
 			throw new UiException("This method can be called only in an event listener, not in paging loading.");
-		if (D.ON && log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
+		if (log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
 
 		final EventProcessingThreadImpl evtthd = (EventProcessingThreadImpl)thd;
 		evtthd.newEventThreadSuspends(mutex);
@@ -896,7 +897,8 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** Adds to _resumed */
 	private void addResumed(Desktop desktop, EventProcessingThreadImpl evtthd) {
-		if (D.ON && log.finerable()) log.finer("Ready to resume "+evtthd);
+		if (log.finerable()) log.finer("Ready to resume "+evtthd);
+
 		List list;
 		synchronized (_resumed) {
 			list = (List)_resumed.get(desktop);
@@ -928,7 +930,7 @@ public class UiEngineImpl implements UiEngine {
 					if (uv.isAborting()) {
 						evtthd.ceaseSilently("Resume aborted");
 					} else {
-						if (D.ON && log.finerable()) log.finer("Resume "+evtthd);
+						if (log.finerable()) log.finer("Resume "+evtthd);
 						try {
 							if (evtthd.doResume()) //wait it complete or suspend again
 								recycleEventThread(evtthd); //completed
@@ -1092,7 +1094,7 @@ public class UiEngineImpl implements UiEngine {
 		final Desktop desktop = exec.getDesktop();
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Session sess = desktop.getSession();
-		if (log.finerable()) log.finer("Activating "+desktop);
+//		if (log.finerable()) log.finer("Activating "+desktop);
 
 		final boolean asyncupd = requests != null;
 		assert D.OFF || !recovering || !asyncupd; 
@@ -1150,7 +1152,7 @@ public class UiEngineImpl implements UiEngine {
 	private static final void doDeactivate(Execution exec) {
 		final Desktop desktop = exec.getDesktop();
 		final Session sess = desktop.getSession();
-		if (log.finerable()) log.finer("Deactivating "+desktop);
+//		if (log.finerable()) log.finer("Deactivating "+desktop);
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		try {
@@ -1185,7 +1187,7 @@ public class UiEngineImpl implements UiEngine {
 	private static UiVisualizer doReactivate(Execution curExec, UiVisualizer olduv) {
 		final Desktop desktop = curExec.getDesktop();
 		final Session sess = desktop.getSession();
-		if (log.finerable()) log.finer("Re-activating "+desktop);
+//		if (log.finerable()) log.finer("Re-activating "+desktop);
 
 		assert D.OFF || olduv.getExecution().getDesktop() == desktop:
 			"old dt: "+olduv.getExecution().getDesktop()+", new:"+desktop;
@@ -1218,7 +1220,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final Desktop desktop = curExec.getDesktop();
 		final Session sess = desktop.getSession();
-		if (log.finerable()) log.finer("Deactivating "+desktop);
+//		if (log.finerable()) log.finer("Deactivating "+desktop);
 
 		final ExecutionCtrl curCtrl = (ExecutionCtrl)curExec;
 		try {
