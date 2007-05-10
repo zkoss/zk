@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
@@ -55,6 +56,33 @@ public class EventProcessor {
 	private final Component _comp;
 	/** Part of the command: event to process. */
 	private final Event _event;
+	/** Whether it is in processing an event.
+	 * It is used only the event processing thread is disabled.
+	 */
+	private static ThreadLocal _inEvt;
+
+	/** Returns whether the current thread is an event listener.
+	 */
+	public static final boolean inEventListener() {
+		return (Thread.currentThread() instanceof EventProcessingThread)
+			|| (_inEvt != null && _inEvt.get() != null); //used if event thread is disabled
+	}
+	/** Sets whether the current thread is an event listener.
+	 * It needs to be called only if the event processing thread is
+	 * disabled.
+	 *
+	 * <p>It is used only internally.
+	 */
+	/*package*/ static final void inEventListener(boolean in) {
+		if (in) {
+			if (_inEvt == null)
+				_inEvt = new ThreadLocal();
+			_inEvt.set(Boolean.TRUE);
+		} else {
+			if (_inEvt != null)
+				_inEvt.set(null);
+		}
+	}
 
 	/**
 	 * @param comp the component. Its desktop must be either null

@@ -74,7 +74,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 	throws ServletException, IOException {
 		final Map attrs = new HashMap();
 		String alert = null, uuid = null,
-			nextURI = "~./zul/html/fileupload-done.dsp";
+			nextURI = "~./zul/html/fileuploaddlg-done.dsp";
 		try {
 			if (!isMultipartContent(request)) {
 				alert = "enctype must be multipart/form-data";

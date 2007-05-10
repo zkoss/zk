@@ -947,6 +947,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 	}
+
 	/** Process an event. */
 	private void processEvent(Desktop desktop, Component comp, Event event) {
 		final Configuration config = desktop.getWebApp().getConfiguration();
@@ -973,6 +974,7 @@ public class UiEngineImpl implements UiEngine {
 			config.invokeEventThreadInits(
 				config.newEventThreadInits(comp, event), comp, event);
 			List cleanups = null, errs = null;
+			EventProcessor.inEventListener(true);
 			try {
 				proc.process();
 			} catch (Throwable ex) {
@@ -982,6 +984,7 @@ public class UiEngineImpl implements UiEngine {
 
 				throw UiException.Aide.wrap(ex);
 			} finally {
+				EventProcessor.inEventListener(false);
 				if (errs == null) //not cleanup yet
 					cleanups = config.newEventThreadCleanups(comp, event, null);
 				config.invokeEventThreadCompletes(cleanups, comp, event, errs);

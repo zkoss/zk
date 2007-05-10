@@ -169,7 +169,7 @@ public class Events {
 	/** Returns whether the current thread is an event listener.
 	 */
 	public static final boolean inEventListener() {
-		return Thread.currentThread() instanceof EventProcessingThread;
+		return EventProcessor.inEventListener();
 	}
 
 	/** Returns whether an event handler or listener is available for
