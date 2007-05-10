@@ -50,6 +50,15 @@ public interface SessionCtrl {
 	 */
 	public void onDestroyed();
 
+	/** Called when ZK detects {@link org.zkoss.zk.ui.Session#getNativeSession}
+	 * is not initialized properly.
+	 *
+	 * <p>It is actually a workaround to solve the issue that some Web
+	 * contrainer fails to call
+	 * HttpSessionActivationListener.sessionDidActivate() unpon failover.
+	 */
+	public void recover(Object nativeSession);
+
 	/** Returns whether this session is invalidated
 	 * (i.e., {@link org.zkoss.zk.ui.Session#invalidate} was called).
 	 */

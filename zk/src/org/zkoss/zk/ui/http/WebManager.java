@@ -309,7 +309,11 @@ public class WebManager {
 	}
 	/** Returns the session of the specified HTTP session, or null if n/a. */
 	/*package*/ static final Session getSession(HttpSession hsess) {
-		return (Session)hsess.getAttribute(ATTR_SESS);
+		final Session sess =
+			(Session)hsess.getAttribute(ATTR_SESS);
+		if (sess != null && sess.getNativeSession() == null)
+			((SessionCtrl)sess).recover(hsess);
+		return sess;
 	}
 	/** Called when a HTTP session listner is notified.
 	 * <p>Once called the session is cleaned. All desktops are dropped.

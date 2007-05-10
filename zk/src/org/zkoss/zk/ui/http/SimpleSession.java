@@ -230,6 +230,9 @@ public class SimpleSession implements Session, SessionCtrl {
 	public void setDesktopCache(DesktopCache cache) {
 		_cache = cache;
 	}
+	public void recover(Object nativeSession) {
+		sessionDidActivate((HttpSession)nativeSession);
+	}
 
 	public void onDestroyed() {
 		final Configuration config = getWebApp().getConfiguration();
@@ -259,6 +262,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		s.writeObject(_clientAddr);
 		s.writeObject(_clientHost);
 		s.writeObject(_cache);
+		s.writeInt(_nextUuid);
 	}
 	/** Used by the deriving class to read back this object,
 	 * only if the deriving class implements java.io.Serializable.
@@ -271,15 +275,21 @@ public class SimpleSession implements Session, SessionCtrl {
 		_clientAddr = (String)s.readObject();
 		_clientHost = (String)s.readObject();
 		_cache = (DesktopCache)s.readObject();
+		_nextUuid = s.readInt();
 	}
 	/** Used by the deriving class to pre-process a session before writing
 	 * the session
+	 *
+	 * <p>Refer to {@link SerializableSession} for how to use this method.
 	 */
 	protected void sessionWillPassivate() {
 		((WebAppCtrl)_wapp).sessionWillPassivate(this);
 	}
 	/** Used by the deriving class to post-process a session after
 	 * it is read back.
+	 *
+	 * <p>Application shall not call this method directly.
+	 *
 	 * <p>Refer to {@link SerializableSession} for how to use this method.
 	 */
 	protected void sessionDidActivate(HttpSession hsess) {
