@@ -13,6 +13,7 @@ ZK 2.3.2 Freshly
   1711127: Messagebox INFO ICON
   1711117: Listbox with ListModel rendered empty when attached later
   1714094: Failed to show the custom error page if failed to include
+  1716526: Failed to serialize radiogroup
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
