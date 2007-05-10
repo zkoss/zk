@@ -31,21 +31,38 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 
 import org.zkoss.zul.impl.FileuploadDlg;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A fileupload dialog used to let user upload a file.
  *
+ * <p>There are two ways to use {@link Fileupload}:
+ *
+ * <h3>1. Open as a modal dialog:</h3>
+ *
  * <p>You don't create {@link Fileupload} directly. Rather, use {@link #get()}
  * or {@link #get(String, String)}.
+ *
+ * <h3>2. Embed as part of the page:</h3>
+ *
+ * <p>You can create it as a component and then listen to
+ * the onUpload event.
  *
  * <p>A non-XUL extension.
  *
  * @author tomyeh
  * @see Filedownload
  */
-public class Fileupload {
-	private static String _templ = "~./zul/html/fileupload.zul";
+public class Fileupload extends XulElement {
+	private static String _templ = "~./zul/html/fileuploaddlg.zul";
 
+	/////Embed: as a component/////
+	/** No child is allowed. */
+	public boolean isChildable() {
+		return false;
+	}
+
+	/////Open as a Modal Dialog/////
 	/** Opens a modal dialog with the default message and title,
 	 * and let user upload a file.
 	 * @return the uploaded content, or null if not uploaded.
@@ -107,20 +124,23 @@ public class Fileupload {
 		return dlg.getResult();
 	}
 
-	/** Sets the template used to create the upload dialog.
+	/** Sets the template used to create the upload modal dialog.
 	 *
 	 * <p>The template must follow the default template:
-	 * ~./zul/html/fileupload.zul
+	 * ~./zul/html/fileuploaddlg.zul
 	 *
 	 * <p>In other words, just adjust the label and layout and don't
 	 * change the component's ID.
+	 *
+	 * <p>Note: the template has no effect, if you use {@link Fileupload} as
+	 * a component (and embed it to a page).
 	 */
 	public static void setTemplate(String uri) {
 		if (uri == null || uri.length() == 0)
 			throw new IllegalArgumentException("empty");
 		_templ = uri;
 	}
-	/** Returns the template used to create the upload dialog.
+	/** Returns the template used to create the upload modal dialog.
 	 */
 	public static String getTemplate() {
 		return _templ;

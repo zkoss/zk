@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?page language="xul/html"?>
 <!--
-fileupload.zul
+fileuploaddlg.zul
 
 {{IS_NOTE
 	Purpose:
-		
+		The fileupload modal dialog
 	Description:
 		
 	History:
@@ -25,6 +25,6 @@ use="org.zkoss.zul.impl.FileuploadDlg">
 	<variables frhgh="${arg.max*16+30}" if="${arg.max > 3}"/>
 	<variables frhgh="${frhgh}pt" if="${!empty frhgh}"/>
 	<iframe width="100%" height="${frhgh}" style="border: 1px solid #aaa"
-	src="~./zul/html/fileupload.dsp?dtid=${self.desktop.id}&amp;uuid=${self.parent.uuid}&amp;action=${arg.action}&amp;max=${arg.max}"/>
+	src="~./zul/html/fileuploaddlg.dsp?dtid=${self.desktop.id}&amp;uuid=${self.parent.uuid}&amp;action=${arg.action}&amp;max=${arg.max}"/>
 		<!-- since arg.action might contain ;jsessionid=xx, so put it to the last one -->
 </window>

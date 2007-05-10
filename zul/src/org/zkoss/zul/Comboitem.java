@@ -73,7 +73,7 @@ public class Comboitem extends LabelImageElement {
 		super.setParent(parent);
 	}
 
-	/** Childable. */
+	/** No child is allowed. */
 	public boolean isChildable() {
 		return false;
 	}
