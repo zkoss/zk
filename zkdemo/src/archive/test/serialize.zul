@@ -37,24 +37,41 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<listcell label="40%"/>
 		</listitem>
 	</listbox>
+	<radiogroup id="rg">
+		<radio label="K1"/>
+		<radio label="K2"/>
+		<radio label="K3"/>
+	</radiogroup>
 
 	<zscript>
 	int cnt = 0;
 	</zscript>
-	<button label="Clone">
+	<button label="Clone list">
 		<attribute name="onClick">{
-	Listbox l = src.clone();
+	Object l = src.clone();
 	l.setId("dst" + ++cnt);
 	vb.insertBefore(l, self);
 		}</attribute>
 	</button>
-	<button label="Clone by Serialization">
+	<button label="Clone list by Serialization">
 		<attribute name="onClick">{
 	import java.io.*;
 	ByteArrayOutputStream boa = new ByteArrayOutputStream();
 	new ObjectOutputStream(boa).writeObject(src);
 	byte[] bs = boa.toByteArray();
-	Listbox l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+	Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
+		}</attribute>
+	</button>
+	<button label="Clone radiogroup by Serialization">
+		<attribute name="onClick">{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(rg);
+	byte[] bs = boa.toByteArray();
+	Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
 	l.setId("dst" + ++cnt);
 	vb.insertBefore(l, self);
 	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
