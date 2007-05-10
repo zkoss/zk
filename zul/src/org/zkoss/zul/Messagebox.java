@@ -112,13 +112,19 @@ public class Messagebox {
 		final MessageboxDlg dlg = (MessageboxDlg)
 			Executions.createComponents(_templ, null, params);
 		dlg.setButtons(buttons);
-		try {
-			dlg.doModal();
-		} catch (SuspendNotAllowedException ex) {
-			dlg.detach();
-			throw ex;
+
+		if (dlg.getDesktop().getWebApp().getConfiguration().isEventThreadEnabled()) {
+			try {
+				dlg.doModal();
+			} catch (SuspendNotAllowedException ex) {
+				dlg.detach();
+				throw ex;
+			}
+			return dlg.getResult();
+		} else {
+			dlg.doHighlighted();
+			return OK;
 		}
-		return dlg.getResult();
 	}
 	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, null, OK, INFORMATION).
