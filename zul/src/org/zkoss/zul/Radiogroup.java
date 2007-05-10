@@ -265,7 +265,7 @@ public class Radiogroup extends XulElement {
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
 			if (child instanceof Radio) {
-				((Radio)it.next()).removeEventListener(Events.ON_CHECK, listener);
+				((Radio)child).removeEventListener(Events.ON_CHECK, listener);
 			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
 				rmListenerDown(child, listener);
 			}
@@ -279,7 +279,7 @@ public class Radiogroup extends XulElement {
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
 			if (child instanceof Radio) {
-				((Radio)it.next()).addEventListener(Events.ON_CHECK, listener);
+				((Radio)child).addEventListener(Events.ON_CHECK, listener);
 			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
 				addListenerDown(child, listener);
 			}
