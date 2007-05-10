@@ -289,6 +289,7 @@ zkWnd._initMode = function (cmp) {
 
 	switch (mode) {
 	case "modal":
+	case "highlighted":
 		zkWnd._doModal(cmp, replace);
 		break;
 	case "overlapped":
@@ -296,6 +297,7 @@ zkWnd._initMode = function (cmp) {
 		break;
 	case "popup":
 		zkWnd._doPopup(cmp, replace);
+	//default: embedded
 	}
 };
 zkWnd._cleanMode = function (cmp) {
@@ -316,6 +318,7 @@ zkWnd._cleanMode2 = function (uuid, replace) {
 
 		switch (mode) {
 		case "modal":
+		case "highlighted":
 			zkWnd._endModal(uuid, replace);
 			break;
 		case "overlapped":
@@ -323,6 +326,7 @@ zkWnd._cleanMode2 = function (uuid, replace) {
 			break;
 		case "popup":
 			zkWnd._endPopup(uuid, replace);
+	//default: embedded
 		}
 	}
 };

@@ -89,7 +89,7 @@ public class Window extends XulElement implements IdSpace {
 	private String _ctrlKeys;
 	/** The value passed to the client; parsed from _ctrlKeys. */
 	private String _ctkeys;
-	/** One of MODAL, EMBEDDED, OVERLAPPED. */
+	/** One of MODAL, EMBEDDED, OVERLAPPED, HIGHLIGHTED, POPUP. */
 	private int _mode = EMBEDDED;
 	/** Used for doModal. */
 	private transient Object _mutex;
@@ -104,21 +104,24 @@ public class Window extends XulElement implements IdSpace {
 
 	/** Embeds the window as normal component. */
 	private static final int EMBEDDED = 0;
-	/** Makes the window as a modal dialog. A modal dialog must be visible
-	 * and the event thread is suspended until one of the following occurs.
+	/** Makes the window as a modal dialog. once {@link #doModal}
+	 * is called, the execution of the event processing thread
+	 * is suspended until one of the following occurs.
 	 * <ol>
 	 * <li>{@link #setMode} is called with a mode other than MODAL.</li>
-	 * <li>Either {@link #doOverlapped}, {@link #doPopup} or
-	 * {@link #doEmbedded} is called.</li>
+	 * <li>Either {@link #doOverlapped}, {@link #doPopup},
+	 * {@link #doEmbedded}, or {@link #doHighlighted} is called.</li>
 	 * <li>{@link #setVisible} is called with false.</li>
 	 * <li>The window is detached from the window.</li>
 	 * </ol>
 	 *
 	 * <p>Note: In the last two cases, the mode becomes {@link #OVERLAPPED}.
 	 * In other words, one might say a modal window is a special overlapped window.
+	 *
+	 * @see #HIGHLIGHTED
 	 */
 	private static final int MODAL = 1;
-	/** Makes the window as overlap other components.
+	/** Makes the window as overlapped other components.
 	 */
 	private static final int OVERLAPPED = 2;
 	/** Makes the window as popup.
@@ -126,6 +129,16 @@ public class Window extends XulElement implements IdSpace {
 	 * when user clicks outside of the window.
 	 */
 	private static final int POPUP = 3;
+	/** Makes the window as hilighted.
+	 * Its visual effect is the same as {@link #MODAL}.
+	 * However, from the server side's viewpoint, it is similar to
+	 * {@link #OVERLAPPED}. The execution won't be suspended when
+	 * {@link #doHighlighted} is called.
+	 *
+	 * @see #MODAL
+	 * @see #OVERLAPPED
+	 */
+	private static final int HIGHLIGHTED = 4;
 
 	public Window() {
 		init();
@@ -348,7 +361,7 @@ public class Window extends XulElement implements IdSpace {
 	}
 
 	/** Returns the current mode.
-	 * One of "modal", "embedded", "overlapped" and "popup".
+	 * One of "modal", "embedded", "overlapped", "popup", and "highlighted".
 	 */
 	public String getMode() {
 		return modeToString(_mode);
@@ -358,10 +371,11 @@ public class Window extends XulElement implements IdSpace {
 		case MODAL: return "modal";
 		case POPUP: return "popup";
 		case OVERLAPPED: return "overlapped";
+		case HIGHLIGHTED: return "highlighted";
 		default: return "embedded";
 		}
 	}
-	/** Sets the mode to overlapped, popup, modal or embedded.
+	/** Sets the mode to overlapped, popup, modal, embedded or highlighted.
 	 *
 	 * <p>Notice: {@link Events#ON_MODAL} is posted if you specify
 	 * "modal" to this method and in a thread other than an event
@@ -371,7 +385,7 @@ public class Window extends XulElement implements IdSpace {
 	 * immediately (until {@link Events#ON_MODAL} is processed later).
 	 *
 	 * @param name the mode which could be one of
-	 * "embedded", "overlapped" and "popup".
+	 * "embedded", "overlapped", "popup", "modal", "highlighted".
 	 * Note: it cannot be "modal". Use {@link #doModal} instead.
 	 *
 	 * @exception InterruptedException thrown if "modal" is specified,
@@ -385,7 +399,23 @@ public class Window extends XulElement implements IdSpace {
 		else if ("overlapped".equals(name)) doOverlapped();
 		else if ("embedded".equals(name)) doEmbedded();
 		else if ("modal".equals(name)) doModal();
+		else if ("highlighted".equals(name)) doHighlighted();
 		else throw new WrongValueException("Uknown mode: "+name);
+	}
+	/** Sets the mode to overlapped, popup, modal, embedded or highlighted.
+	 *
+	 * @see #setMode(String)
+	 */
+	public void setMode(int mode) throws InterruptedException {
+		switch (mode) {
+		case POPUP: doPopup(); break;
+		case OVERLAPPED: doOverlapped(); break;
+		case EMBEDDED: doEmbedded(); break;
+		case MODAL: doModal(); break;
+		case HIGHLIGHTED: doHighlighted(); break;
+		default:
+			throw new WrongValueException("Unknown mode: "+mode);
+		}
 	}
 
 	/** Returns whether this is a modal dialog.
@@ -408,6 +438,11 @@ public class Window extends XulElement implements IdSpace {
 	 */
 	public boolean inPopup() {
 		return _mode == POPUP;
+	}
+	/** Returns whether this is a highlighted window.
+	 */
+	public boolean inHighlighted() {
+		return _mode == HIGHLIGHTED;
 	}
 
 	/** Makes this window as a modal dialog.
@@ -433,8 +468,10 @@ public class Window extends XulElement implements IdSpace {
 	throws InterruptedException, SuspendNotAllowedException {
 		Desktop desktop = getDesktop();
 		if (desktop == null) desktop = Executions.getCurrent().getDesktop();
-		if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled())
+		if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
+			handleFailedModal(_mode, isVisible());
 			throw new SuspendNotAllowedException("Event processing thread is disabled");
+		}
 
 		checkOverlappable();
 
@@ -444,8 +481,8 @@ public class Window extends XulElement implements IdSpace {
 				return; //done
 			}
 
-			int mode = _mode;
-			boolean visi = isVisible();
+			int oldmode = _mode;
+			boolean oldvisi = isVisible();
 
 			invalidate();
 			setVisible(true); //if MODAL, it must be visible; vice versa
@@ -453,23 +490,26 @@ public class Window extends XulElement implements IdSpace {
 			try {
 				enterModal();
 			} catch (SuspendNotAllowedException ex) {
-				try {
-					if (Executions.getCurrent()
-					.getAttribute("javax.servlet.error.exception") != null) {
-						//handle it specially if it is used for dispalying err
-						setMode("overlapped");
-						setPosition("center");
-					} else {
-						setMode(modeToString(mode));
-						setVisible(visi);
-					}
-				} catch (Throwable e2) {
-					log.realCauseBriefly("Causing another error", e2);
-				}
+				handleFailedModal(oldmode, oldvisi);
 				throw ex;
 			}
 		}
 	}
+	private void handleFailedModal(int oldmode, boolean oldvisi) {
+		try {
+			if (Executions.getCurrent()
+			.getAttribute("javax.servlet.error.exception") != null) {
+				//handle it specially if it is used for dispalying err
+				setMode(HIGHLIGHTED);
+			} else {
+				setMode(oldmode); //restore
+				setVisible(oldvisi);
+			}
+		} catch (Throwable ex) {
+			log.realCauseBriefly("Causing another error", ex);
+		}
+	}
+
 	/** Makes this window as overlapped with other components.
 	 */
 	public void doOverlapped() {
@@ -482,6 +522,16 @@ public class Window extends XulElement implements IdSpace {
 	public void doPopup() {
 		checkOverlappable();
 		setNonModalMode(POPUP);
+	}
+	/** Makes this window as highlited. The visual effect is
+	 * the similar to the modal window, but, like overlapped,
+	 * it doesn't suspend (block) the execution at the server.
+	 * In other words, it is more like an overlapped window from the
+	 * server side's viewpoint.
+	 */
+	public void doHighlighted() {
+		checkOverlappable();
+		setNonModalMode(HIGHLIGHTED);
 	}
 	/** Makes this window as embeded with other components (Default).
 	 */
@@ -512,11 +562,11 @@ public class Window extends XulElement implements IdSpace {
 	/** Makes sure it is not draggable. */
 	private void checkOverlappable() {
 		if (!"false".equals(getDraggable()))
-			throw new UiException("Draggable window cannot be modal, overlapped or popup: "+this);
+			throw new UiException("Draggable window cannot be modal, overlapped, popup, or highlighted: "+this);
 
 		for (Component comp = this; (comp = comp.getParent()) != null;)
 			if (!comp.isVisible())
-				throw new UiException("One of its ancestors, "+comp+", is not visible, so unable to be modal, overlapped or popup");
+				throw new UiException("One of its ancestors, "+comp+", is not visible, so unable to be modal, overlapped, popup, or highlighted");
 	}
 
 	/** Returns whether to show a close button on the title bar.
@@ -561,7 +611,7 @@ public class Window extends XulElement implements IdSpace {
 	 *
 	 * <p>Default: null which depends on {@link #getMode}:
 	 * If overlapped or popup, {@link #setLeft} and {@link #setTop} are
-	 * assumed. If modal, it is always centered.
+	 * assumed. If modal or highlighted, it is centered.
 	 */
 	public String getPosition() {
 		return _pos;

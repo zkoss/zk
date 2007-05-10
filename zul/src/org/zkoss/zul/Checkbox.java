@@ -45,6 +45,7 @@ public class Checkbox extends LabelImageElement {
 	private int _tabindex = -1;
 	private boolean _checked;
 	private boolean _disabled;
+	private boolean _readonly;
 
 	public Checkbox() {
 	}
@@ -84,6 +85,23 @@ public class Checkbox extends LabelImageElement {
 			_checked = checked;
 			smartUpdate("checked", _checked);
 		}
+	}
+	/** Returns whether it is readonly.
+	 * <p>Default: false.
+	 * <p>It is deprecated since no real effect.
+	 * See <a href="http://www.w3.org/TR/html4/interact/forms.html">w3.org</a>
+	 * @deprecated
+	 */
+	public boolean isReadonly() {
+		return _readonly;
+	}
+	/** Sets whether it is readonly.
+	 * <p>It is deprecated since no real effect.
+	 * See <a href="http://www.w3.org/TR/html4/interact/forms.html">w3.org</a>
+	 * @deprecated
+	 */
+	public void setReadonly(boolean readonly) {
+		_readonly = readonly;
 	}
 
 	/** Returns the name of this component.
