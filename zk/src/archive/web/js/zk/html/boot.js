@@ -737,15 +737,25 @@ zk.getUpdateURI = function (uri, ignoreSessId, modver) {
 	if (!uri) return zk_action;
 
 	if (uri.charAt(0) != '/') uri = '/' + uri;
-	if (uri.length >= 5 && uri.substring(0, 5) == "/web/")
+	if (modver && uri.length >= 5 && uri.substring(0, 5) == "/web/")
 		uri = "/web/_zver" + modver + uri.substring(4);
 
 	var j = zk_action.lastIndexOf(';'), k = zk_action.lastIndexOf('?');
 	if (j < 0 && k < 0) return zk_action + uri;
 
 	if (k >= 0 && (j < 0 || k < j)) j = k;
-	uri = zk_action.substring(0, j) + uri;
-	return ignoreSessId ? uri: uri + zk_action.substring(j);
+	var prefix = zk_action.substring(0, j);
+
+	if (ignoreSessId)
+		return prefix + uri;
+
+	var suffix = zk_action.substring(j);
+	var l = uri.indexOf('?');
+	return l >= 0 ?
+		k >= 0 ?
+		  prefix + uri.substring(0, l) + suffix + '&' + uri.substring(l+1):
+		  prefix + uri.substring(0, l) + suffix + uri.substring(l):
+		prefix + uri + suffix;
 };
 
 //-- progress --//
