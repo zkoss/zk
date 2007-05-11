@@ -52,6 +52,27 @@ public class FileuploadDlg extends Window {
 		_result = result;
 	}
 
+	public static Media[] parseResult(List result) {
+		if (result != null) {
+			//we have to filter items that user doesn't specify any file
+			for (Iterator it = result.iterator(); it.hasNext();) {
+				final Media media = (Media)it.next();
+				if (media != null && media.inMemory() && media.isBinary()) {
+					final String nm = media.getName();
+					if (nm == null || nm.length() == 0) {
+						final byte[] bs = media.getByteData();
+						if (bs == null || bs.length == 0)
+							it.remove(); //Upload is pressed without specifying a file
+					}
+				}
+			}
+
+			if (!result.isEmpty())
+				return (Media[])result.toArray(new Media[result.size()]);
+		}
+		return null;
+	}
+
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -67,24 +88,7 @@ public class FileuploadDlg extends Window {
 		 * @param result a list of media instances, or null
 		 */
 		public void setResult(Object result) {
-			final List list = (List)result;
-			if (list != null) {
-				for (Iterator it = list.iterator(); it.hasNext();) {
-					final Media media = (Media)it.next();
-					if (media != null && media.inMemory() && media.isBinary()) {
-						final String nm = media.getName();
-						if (nm == null || nm.length() == 0) {
-							final byte[] bs = media.getByteData();
-							if (bs == null || bs.length == 0)
-								it.remove(); //Upload is pressed without specifying a file
-						}
-					}
-				}
-				result = list.isEmpty() ?
-					null: (Media[])list.toArray(new Media[list.size()]);
-			}
-
-			FileuploadDlg.this.setResult((Media[])result);
+			FileuploadDlg.this.setResult(parseResult((List)result));
 		}
 	}
 }

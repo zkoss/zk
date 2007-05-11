@@ -26,7 +26,7 @@ import org.zkoss.zul.mesg.MZul;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.SuspendNotAllowedException;
+import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.zul.impl.MessageboxDlg;
 
@@ -116,9 +116,11 @@ public class Messagebox {
 		if (dlg.getDesktop().getWebApp().getConfiguration().isEventThreadEnabled()) {
 			try {
 				dlg.doModal();
-			} catch (SuspendNotAllowedException ex) {
+			} catch (Throwable ex) {
 				dlg.detach();
-				throw ex;
+				if (ex instanceof InterruptedException)
+					throw (InterruptedException)ex;
+				throw UiException.Aide.wrap(ex);
 			}
 			return dlg.getResult();
 		} else {

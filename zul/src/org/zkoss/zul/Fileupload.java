@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -31,7 +32,9 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.SuspendNotAllowedException;
+import org.zkoss.zk.ui.ext.client.Updatable;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.UploadEvent;
 
 import org.zkoss.zul.impl.FileuploadDlg;
 
@@ -48,7 +51,11 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * <h3>2. Embed as part of the page:</h3>
  *
  * <p>You can create it as a component and then listen to
- * the onUpload event.
+ * the onUpload event ({@link UploadEvent}).
+ * If the cancel button is pressed or file(s) is uploaded, the onClose event
+ * ({@link org.zkoss.zk.ui.event.Event}).
+ * is sent to notify the application. By default, it does nothing but
+ * invalidate the component, i.e., all fields are cleared.
  *
  * <p>A non-XUL extension.
  *
@@ -78,6 +85,39 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 		if (maxnum <= 0)
 			throw new WrongValueException("Positive is required");
 		_maxnum = maxnum;
+	}
+
+	/** Hanldes the onClose event which is sent when file(s) is uploaded
+	 * or when the cancel button is pressed.
+	 *
+	 * <p>By default, it simply invalidates itself, i.e.,
+	 * all fields are cleared.
+	 * If you want to do something different, you can intercept the onClose
+	 * event.
+	 */
+	public void onClose() {
+		invalidate();
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl implements Updatable {
+		//-- Updatable --//
+		/** Updates the result from the client.
+		 * Callback by the system only. Don't invoke it directly.
+		 *
+		 * @param result a list of media instances, or null
+		 */
+		public void setResult(Object result) {
+			Events.postEvent(
+				new UploadEvent(Events.ON_UPLOAD, Fileupload.this,
+				FileuploadDlg.parseResult((List)result)));
+		}
 	}
 
 	/////Open as a Modal Dialog/////
@@ -134,9 +174,11 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 				_templ, null, params);
 		try {
 			dlg.doModal();
-		} catch (SuspendNotAllowedException ex) {
+		} catch (Throwable ex) {
 			dlg.detach();
-			throw ex;
+			if (ex instanceof InterruptedException)
+				throw (InterruptedException)ex;
+			throw UiException.Aide.wrap(ex);
 		}
 		return dlg.getResult();
 	}

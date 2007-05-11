@@ -41,7 +41,7 @@ function submitUpload() {
 	parent.zkau.beginUpload(wndid);
 }
 function cancelUpload() {
-	parent.setTimeout("zk.focus(window); zkau.sendRemove('${param.uuid}');", 100);
+	parent.setTimeout("zk.focus(window); zkau.sendOnClose('${param.uuid}');", 100);
 }
 function init() {
 	var el = document.getElementById("form");

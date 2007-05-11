@@ -52,7 +52,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		parent.setTimeout("zkau.sendUpdateResult('${arg.uuid}', '${arg.contentId}')", 0);
 	}
 	function closeUpload() {
-		parent.setTimeout("zkau.sendRemove('${arg.uuid}')", 0);
+		parent.setTimeout("zkau.sendOnClose('${arg.uuid}')", 0);
 	}
 	<c:if test="${!empty arg.contentId}">doUpdate(); closeUpload();</c:if>
 	<c:if test="${empty arg.contentId and empty arg.alert}">closeUpload();</c:if>
