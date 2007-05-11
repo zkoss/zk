@@ -68,7 +68,7 @@ function init() {
 <c:set var="maxcnt" value="${empty param.max ? 1: param.max}"/>
 <c:forEach var="cnt" begin="1" end="${maxcnt}">
 	<tr>
-		<td width="26pt" align="right"><c:if test="${maxcnt gt 3}">${cnt}</c:if></td>
+		<td align="right"><c:if test="${maxcnt gt 2}">${cnt}</c:if></td>
 		<td><input type="file" id="file" name="file"/></td>
 	</tr>
 </c:forEach>
