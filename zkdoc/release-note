@@ -4,6 +4,7 @@ ZK 2.3.2 Freshly
   1711860: An option to use native thread instead of event thread
   1715542: Window supports the highlighted mode
   1715546: Messagebox supports the native (Servlet) thread mode
+  1701213: Support embedded fileupload component
   1712518: Decimalbox supports different round mode (Java 6 is required)
   1712548: isAsap shall not be part of EventListener
 
