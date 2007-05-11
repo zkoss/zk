@@ -1523,7 +1523,7 @@ zkau._cancelUpload = function () {
 	zkau.endUpload();
 
 	if (zkau._upldWndId) {
-		zkau.sendRemove(zkau._upldWndId);
+		zkau.sendOnClose(zkau._upldWndId);
 		zkau._upldWndId = null;
 	}
 };

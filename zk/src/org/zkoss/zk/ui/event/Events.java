@@ -130,6 +130,9 @@ public class Events {
 	 * to notify a request for sorting.
 	 */
 	public static final String ON_SORT = "onSort";
+	/** The onUpload event (used with {@link UploadEvent}.
+	 */
+	public static final String ON_UPLOAD = "onUpload";
 	/** The onBookmarkChanged event (used with {@link BookmarkEvent})
 	 * to notify that user pressed BACK, FORWARD or specified URL directly
 	 * that causes the bookmark is changed (but still in the same desktop).
