@@ -25,13 +25,15 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.util.media.Media;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 
 import org.zkoss.zul.impl.FileuploadDlg;
-import org.zkoss.zul.impl.XulElement;
 
 /**
  * A fileupload dialog used to let user upload a file.
@@ -53,13 +55,29 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  * @see Filedownload
  */
-public class Fileupload extends XulElement {
+public class Fileupload extends HtmlBasedComponent { //not XulElement since not applicable
 	private static String _templ = "~./zul/html/fileuploaddlg.zul";
 
 	/////Embed: as a component/////
+	private int _maxnum = 1;
+
 	/** No child is allowed. */
 	public boolean isChildable() {
 		return false;
+	}
+
+	/** Returns the maximal allowed number of files to upload.
+	 */
+	public int getNumber() {
+		return _maxnum;
+	}
+	/** Sets the maximal allowed number of files to upload.
+	 * <p>Default: 1.
+	 */
+	public void setNumber(int maxnum) throws WrongValueException {
+		if (maxnum <= 0)
+			throw new WrongValueException("Positive is required");
+		_maxnum = maxnum;
 	}
 
 	/////Open as a Modal Dialog/////
@@ -105,7 +123,6 @@ public class Fileupload extends XulElement {
 	throws InterruptedException {
 		final Map params = new HashMap(5);
 		final Execution exec = Executions.getCurrent();
-		params.put("action", exec.getDesktop().getUpdateURI("/upload"));
 		params.put("message", message == null ?
 			Messages.get(MZul.UPLOAD_MESSAGE): message);
 		params.put("title", title == null ?

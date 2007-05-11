@@ -21,7 +21,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Upload</title>
@@ -45,14 +44,18 @@ function cancelUpload() {
 	parent.setTimeout("zk.focus(window); zkau.sendRemove('${param.uuid}');", 100);
 }
 function init() {
-	var inp = document.getElementById("file");
-	if (inp) inp.focus();
+	var el = document.getElementById("form");
+	el.action = parent.zk.getUpdateURI(
+		"/upload?dtid=${param.dtid}&uuid=${param.uuid}");
+
+	el = document.getElementById("file");
+	if (el) el.focus();
 }
 // -->
 </script>
 </head>
 <body onload="init()">
-	<form action="${param.action}?dtid=${param.dtid}&uuid=${param.uuid}" enctype="multipart/form-data" method="POST" onsubmit="submitUpload()">
+	<form id="form" enctype="multipart/form-data" method="POST" onsubmit="submitUpload()">
 	<%-- We have to encode dtid and uuid in action rather than hidden fields,
 		because 1) dtid must be ready before parsing multi-part requests.
 		2) parsing multi-part might fail
@@ -61,11 +64,11 @@ function init() {
 	<input type="hidden" name="nextURI" value="~./zul/html/fileuploaddlg-done.dsp"/>
 	--%>
 
-	<table border="0">
+	<table border="0" width="100%">
 <c:set var="maxcnt" value="${empty param.max ? 1: param.max}"/>
 <c:forEach var="cnt" begin="1" end="${maxcnt}">
 	<tr>
-		<td align="right"><c:if test="${maxcnt gt 3}">${cnt}</c:if></td>
+		<td width="26pt" align="right"><c:if test="${maxcnt gt 3}">${cnt}</c:if></td>
 		<td><input type="file" id="file" name="file"/></td>
 	</tr>
 </c:forEach>
