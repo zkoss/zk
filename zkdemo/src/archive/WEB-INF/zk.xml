@@ -36,7 +36,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
 	</system-config>
 	-->
-	<!-- Turn on the following if used with WebLogic 9.1
+	<!-- Turn on the following if you want to cache all desktops in a global
+	cache, rather than one for each session
 	<system-config>
 		<cache-provider-class>org.zkoss.zk.ui.sys.GlobalDesktopCacheProvider</cache-provider-class>
 	</system-config>

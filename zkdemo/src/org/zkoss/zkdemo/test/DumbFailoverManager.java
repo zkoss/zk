@@ -71,7 +71,7 @@ public class DumbFailoverManager implements FailoverManager {
 		final DesktopCtrl dtc = (DesktopCtrl)desktop;
 		dtc.setId(_killed.getId()); //required
 		desktop.setCurrentDirectory(_killed.getCurrentDirectory()); //optional
-		desktop.setClientType(_killed.getClientType()); //optional
+		desktop.setDeviceType(_killed.getDeviceType()); //optional
 		dtc.setResponseSequence(((DesktopCtrl)_killed).getResponseSequence(false));
 			//optional: copy _killed's attributes to desktop
 
