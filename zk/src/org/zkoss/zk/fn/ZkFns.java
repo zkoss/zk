@@ -146,12 +146,12 @@ public class ZkFns {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
 		final WebApp wapp = desktop.getWebApp();
 		final Configuration config = wapp.getConfiguration();
-		final String clientType = desktop.getClientType();
+		final String deviceType = desktop.getDeviceType();
 
 		final StringBuffer sb = new StringBuffer(1536);
 
 		final Set jses = new LinkedHashSet(37);
-		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
+		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();)
 			jses.addAll(((LanguageDefinition)it.next()).getJavaScripts());
 		for (Iterator it = jses.iterator(); it.hasNext();)
@@ -169,7 +169,7 @@ public class ZkFns {
 		if (config.isKeepDesktopAcrossVisits())
 			sb.append("zk.keepDesktop=true;\n");
 
-		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
+		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
 
@@ -239,9 +239,9 @@ public class ZkFns {
 		final Execution exec = Executions.getCurrent();
 		final Desktop desktop = exec.getDesktop();
 		final Configuration config = desktop.getWebApp().getConfiguration();
-		final String clientType = desktop.getClientType();
+		final String deviceType = desktop.getDeviceType();
 		final StringBuffer sb = new StringBuffer(512);
-		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
+		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
 			if (config.isDefaultThemeEnabled(langdef.getName())) {

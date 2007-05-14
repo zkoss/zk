@@ -37,35 +37,35 @@ import org.zkoss.util.media.Media;
  * @author tomyeh
  */
 public interface Desktop {
-	/** Returns the client type that this desktop belongs to.
+	/** Returns the device type that this desktop belongs to.
 	 *
-	 * <p>A client type identifies the type of a client. For example, "html"
+	 * <p>A device type identifies the type of a client. For example, "html"
 	 * represents all HTML compatible clients (aka., browsers),
 	 * while "mul" represents clients that supports
 	 * <i>Mobile User interface markup Language</i> (on Limited Connected Device,
 	 * such as mobile phones).
 	 *
-	 * <p>A desktop can use the languages belonging to the same client type.
-	 * See also {@link org.zkoss.zk.ui.metainfo.LanguageDefinition#getClientType}.
+	 * <p>A desktop can use the languages belonging to the same device type.
+	 * See also {@link org.zkoss.zk.ui.metainfo.LanguageDefinition#getDeviceType}.
 	 *
 	 * <p>A component can be added to a desktop only if they belong to the same
-	 * client type.
+	 * device type.
 	 *
 	 * <p>Default: depends on the extension of the resource path,
 	 * "html" if the path or extension not available.
-	 * If {@link Richlet} is used, its language definition's client type is
+	 * If {@link Richlet} is used, its language definition's device type is
 	 * assumed.
 	 */
-	public String getClientType();
-	/** Sets the client type that this desktop belongs to.
+	public String getDeviceType();
+	/** Sets the device type that this desktop belongs to.
 	 *
-	 * <p>Note: you can change the client type only before any component
+	 * <p>Note: you can change the device type only before any component
 	 * is attached to a page of the desktop.
-	 * In other words, you can set the client type only
+	 * In other words, you can set the device type only
 	 *
 	 * @exception UiException if any component is attached to a page of the desktop.
 	 */
-	public void setClientType(String clientType);
+	public void setDeviceType(String deviceType);
 
 	/** Returns ID of this desktop.
 	 * It is unique in the whole session.

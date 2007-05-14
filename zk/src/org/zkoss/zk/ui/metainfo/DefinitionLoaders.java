@@ -292,9 +292,9 @@ public class DefinitionLoaders {
 			final String ns = (String)IDOMs.getRequiredElementValue(root, "namespace");
 			if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
 
-			String clientType = root.getElementValue("client-type", true);
-			if (clientType == null || clientType.length() == 0)
-				clientType = "html"; //default
+			String deviceType = root.getElementValue("device-type", true);
+			if (deviceType == null || deviceType.length() == 0)
+				deviceType = "html"; //default
 
 			final Map pagemolds = parseMolds(root);
 			final String desktopURI = (String)pagemolds.get("desktop");
@@ -308,7 +308,7 @@ public class DefinitionLoaders {
 
 			String ignoreCase = root.getElementValue("case-insensitive", true);
 			langdef = new LanguageDefinition(
-				clientType, lang, ns, exts, desktopURI, pageURI,
+				deviceType, lang, ns, exts, desktopURI, pageURI,
 				"true".equals(ignoreCase), locator);
 		}
 

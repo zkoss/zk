@@ -58,7 +58,7 @@ public class LanguageDefinition {
 	private static final Map _ldefByName = new HashMap();
 	/** A map of (String ext, LanguageDefinition). */
 	private static final Map _ldefsByExt = new HashMap();
-	/** A map of (String clientType, List(LanguageDefinition). */
+	/** A map of (String deviceType, List(LanguageDefinition). */
 	private static final Map _ldefsByClient = new HashMap();
 
 	/** The namespace for ZK. It is mainly used to resolve special components
@@ -69,8 +69,8 @@ public class LanguageDefinition {
 	 */
 	public static final String ANNO_NAMESPACE = "http://www.zkoss.org/2005/zk/annotation";
 
-	/** the client type that this definition belongs to. */
-	private final String _clientType;
+	/** the device type that this definition belongs to. */
+	private final String _deviceType;
 	/** name */
 	private final String _name;
 	/** The name space. */
@@ -160,31 +160,31 @@ public class LanguageDefinition {
 		return langdef;
 	}
 	/** Returns a readonly list of language definitions belong to
-	 * the specified client type.
+	 * the specified device type.
 	 *
-	 * <p>A client type identifies the type of a client. For example, "html"
+	 * <p>A device type identifies the type of a client. For example, "html"
 	 * represents all HTML compatible clients (aka., browsers),
 	 * while "mul" represents clients that supports
 	 * <i>Mobile User interface markup Language</i> (on Limited Connected Device,
 	 * such as mobile phones).
 	 *
-	 * @param clientType the client type, e.g., "html".
-	 * @see #getClientType
+	 * @param deviceType the device type, e.g., "html".
+	 * @see #getDeviceType
 	 */
-	public static final List getByClientType(String clientType) {
+	public static final List getByDeviceType(String deviceType) {
 		init();
 
 		final List ldefs;
 		synchronized (_ldefsByClient) {
-			ldefs = (List)_ldefsByClient.get(clientType);
+			ldefs = (List)_ldefsByClient.get(deviceType);
 		}
 		return ldefs != null ? ldefs: Collections.EMPTY_LIST;
 
 	}
-	/** Returns a readonly collection of all client types.
-	 * @see #getByClientType
+	/** Returns a readonly collection of all device types.
+	 * @see #getByDeviceType
 	 */
-	public static final Collection getClientTypes() {
+	public static final Collection getDeviceTypes() {
 		init();
 
 		return _ldefsByClient.keySet();
@@ -204,11 +204,11 @@ public class LanguageDefinition {
 	 * @param pageURI the URI used to render a page; never null.
 	 * @param ignoreCase whether the component name is case-insensitive 
 	 */
-	public LanguageDefinition(String clientType, String name, String namespace,
+	public LanguageDefinition(String deviceType, String name, String namespace,
 	List extensions, String desktopURI, String pageURI, boolean ignoreCase,
 	Locator locator) {
-		if (clientType == null || clientType.length() == 0)
-			throw new UiException("clientType cannot be empty");
+		if (deviceType == null || deviceType.length() == 0)
+			throw new UiException("deviceType cannot be empty");
 		if (name == null || name.length() == 0)
 			throw new UiException("name cannot be empty");
 		if (namespace == null || namespace.length() == 0)
@@ -222,7 +222,7 @@ public class LanguageDefinition {
 		if (locator == null)
 			throw new UiException("locator cannot be null");
 
-		_clientType = clientType;
+		_deviceType = deviceType;
 		_name = name;
 		_ns = namespace;
 		_desktopURI = desktopURI;
@@ -263,7 +263,7 @@ public class LanguageDefinition {
 			_ldefByName.put(namespace, this);
 			final Object old = _ldefByName.put(name, this);
 			if (old != null) {
-				final List ldefs = (List)_ldefsByClient.get(clientType);
+				final List ldefs = (List)_ldefsByClient.get(deviceType);
 				if (ldefs != null) ldefs.remove(old);
 
 				replWarned = true;
@@ -285,22 +285,22 @@ public class LanguageDefinition {
 			}
 		}
 		synchronized (_ldefsByClient) {
-			List ldefs = (List)_ldefsByClient.get(clientType);
+			List ldefs = (List)_ldefsByClient.get(deviceType);
 			if (ldefs == null)
-				_ldefsByClient.put(clientType, ldefs = new LinkedList());
+				_ldefsByClient.put(deviceType, ldefs = new LinkedList());
 			ldefs.add(this);
 		}
 	}
-	/** Returns the client type that this definition belongs to.
+	/** Returns the device type that this definition belongs to.
 	 *
-	 * <p>A client type identifies the type of a client. For example, "html"
+	 * <p>A device type identifies the type of a client. For example, "html"
 	 * represents all HTML compatible clients (aka., browsers),
 	 * while "mul" represents clients that supports
 	 * <i>Mobile User interface markup Language</i> (on Limited Connected Device,
 	 * such as mobile phones).
 	 */
-	public String getClientType() {
-		return _clientType;
+	public String getDeviceType() {
+		return _deviceType;
 	}
 	 
 	/** Returns name of this language.

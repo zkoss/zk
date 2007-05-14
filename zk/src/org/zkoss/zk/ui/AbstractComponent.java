@@ -162,20 +162,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					page.getComponentDefinition(cls, true);
 			if (compdef != null) return compdef;
 
-			return lookupDefinitionByClientType(exec.getDesktop().getClientType(), cls);
+			return lookupDefinitionByDeviceType(exec.getDesktop().getDeviceType(), cls);
 		}
 
-		for (Iterator it = LanguageDefinition.getClientTypes().iterator(); it.hasNext();) {
+		for (Iterator it = LanguageDefinition.getDeviceTypes().iterator(); it.hasNext();) {
 			final ComponentDefinition compdef =
-				lookupDefinitionByClientType((String)it.next(), cls);
+				lookupDefinitionByDeviceType((String)it.next(), cls);
 			if (compdef != null)
 				return compdef;
 		}
 		return null;
 	}
 	private static final ComponentDefinition
-	lookupDefinitionByClientType(String clientType, Class cls) {
-		for (Iterator it = LanguageDefinition.getByClientType(clientType).iterator();
+	lookupDefinitionByDeviceType(String deviceType, Class cls) {
+		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition ld = (LanguageDefinition)it.next();
 			try {

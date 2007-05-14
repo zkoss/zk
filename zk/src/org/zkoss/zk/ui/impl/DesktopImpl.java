@@ -104,7 +104,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The request queue. */
 	private transient RequestQueue _rque;
 	private String _bookmark = "";
-	private String _clientType;
+	private String _deviceType;
 	/** A map of media (String key, Media content). */
 	private CacheMap _meds;
 	/** ID used to identify what is stored in _meds. */
@@ -121,17 +121,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 * @param dir the current directory.
 	 * It is used if a relative URI is specified.
 	 * If null or empty is specified, it means no current directory.
-	 * @param clientType the client type.
+	 * @param deviceType the device type.
 	 * If null or empty is specified, "html" is assumed.
 	 */
-	public DesktopImpl(WebApp wapp, String updateURI, String dir, String clientType) {
+	public DesktopImpl(WebApp wapp, String updateURI, String dir, String deviceType) {
 		if (updateURI == null || wapp == null)
 			throw new IllegalArgumentException("null");
 
 		_wapp = wapp;
 		_updateURI = updateURI;
-		_clientType =
-			clientType != null && clientType.length() != 0 ? clientType: "html";
+		_deviceType =
+			deviceType != null && deviceType.length() != 0 ? deviceType: "html";
 		setCurrentDirectory(dir);
 
 		init();
@@ -172,20 +172,20 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	//-- Desktop --//
-	public String getClientType() {
-		return _clientType;
+	public String getDeviceType() {
+		return _deviceType;
 	}
-	public void setClientType(String clientType) {
-		//Note: we check _comps.isEmpty() only if client type diffs, because
+	public void setDeviceType(String deviceType) {
+		//Note: we check _comps.isEmpty() only if device type diffs, because
 		//a desktop might have several richlet and each of them will call
 		//this method once
-		if (!_clientType.equals(clientType)) {
-			if (clientType == null || clientType.length() == 0)
+		if (!_deviceType.equals(deviceType)) {
+			if (deviceType == null || deviceType.length() == 0)
 				throw new IllegalArgumentException("empty");
 
 			if (!_comps.isEmpty())
-				throw new UiException("Unable to change the client type since some components are attached.");
-			_clientType = clientType;
+				throw new UiException("Unable to change the device type since some components are attached.");
+			_deviceType = deviceType;
 		}
 	}
 	public Execution getExecution() {
@@ -290,11 +290,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return (Component)_comps.get(uuid);
 	}
 	public void addComponent(Component comp) {
-		//to avoid misuse, check whether new comp belongs to the same client type
+		//to avoid misuse, check whether new comp belongs to the same device type
 		final LanguageDefinition langdef =
 			comp.getDefinition().getLanguageDefinition();
-		if (langdef != null && !_clientType.equals(langdef.getClientType()))
-			throw new UiException("Component, "+comp+", does not belong to the same client type of the desktop, "+_clientType);
+		if (langdef != null && !_deviceType.equals(langdef.getDeviceType()))
+			throw new UiException("Component, "+comp+", does not belong to the same device type of the desktop, "+_deviceType);
 
 		final Object old = _comps.put(comp.getUuid(), comp);
 		if (old != comp && old != null) {

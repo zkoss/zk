@@ -317,10 +317,10 @@ public class PageDefinition extends NodeInfo {
 		if (langdef != null) {
 			final LanguageDefinition ld2 = getLanguageDefinition();
 			if (langdef != ld2
-			&& !langdef.getClientType().equals(ld2.getClientType()))
+			&& !langdef.getDeviceType().equals(ld2.getDeviceType()))
 				throw new UiException("Component definition, "+compdef
-					+", does not belong to the same client type of the page definition, "
-					+ld2.getClientType());
+					+", does not belong to the same device type of the page definition, "
+					+ld2.getDeviceType());
 		}
 		_compdefs.add(compdef);
 	}

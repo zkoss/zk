@@ -58,7 +58,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 /**
  * Used to process the request for a ZUML page. Though it is called
  * DHtmlLayoutServlet, it is used to serve all kind of HTTP-based clients,
- * including html, mul and others (see {@link Desktop#getClientType}.
+ * including html, mul and others (see {@link Desktop#getDeviceType}.
  *
  * @author tomyeh
  */
@@ -162,7 +162,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			final Execution exec = new ExecutionImpl(
 				_ctx, request, response, desktop, page);
 			wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
-				//no need to set client type here, since UiEngine will do it later
+				//no need to set device type here, since UiEngine will do it later
 		} else {
 			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
 			if (pagedef == null)

@@ -53,7 +53,7 @@ public interface Richlet {
 	 * <p>The default language definition is used to initialize
 	 * a page when the page is created to be served by this richlet.
 	 * Note: you can use components from different languages as long as
-	 * they belong to the same client type ({@link LanguageDefinition#getClientType}.
+	 * they belong to the same device type ({@link LanguageDefinition#getDeviceType}.
 	 *
 	 * <p>The default language definition controls the URIs used to
 	 * render a desktop and a page, and the initial zscript codes used

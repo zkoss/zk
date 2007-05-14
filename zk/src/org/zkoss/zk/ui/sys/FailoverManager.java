@@ -83,8 +83,8 @@ public interface FailoverManager {
 	 * <li>[optional] Call {@link Desktop#setCurrentDirectory} to
 	 * correct the current directory.
 	 * It is the directory of the path of the ZUML page.</li>
-	 * <li>[optional] Call {@link Desktop#setClientType} to correct
-	 * the client type (default: html).</li>
+	 * <li>[optional] Call {@link Desktop#setDeviceType} to correct
+	 * the device type (default: html).</li>
 	 * <li>[Must] Recover all pages and components.</li>
 	 * <li>[Optional] Recover the response sequence ID by use of
 	 * {@link DesktopCtrl#setResponseSequence}.</li>
