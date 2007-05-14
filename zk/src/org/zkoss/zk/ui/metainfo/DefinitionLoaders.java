@@ -267,6 +267,7 @@ public class DefinitionLoaders {
 	throws Exception {
 		final Element root = doc.getRootElement();
 		parseZScriptConfig(root);
+		parseDeviceConfig(root);
 	}
 	private static void parseZScriptConfig(Element root) {
 		for (Iterator it = root.getElements("zscript-config").iterator();
@@ -274,6 +275,12 @@ public class DefinitionLoaders {
 			final Element el = (Element)it.next();
 			Interpreters.add(el);
 				//Note: zscript-config is applied to the whole system, not just langdef
+		}
+	}
+	private static void parseDeviceConfig(Element root) {
+		for (Iterator it = root.getElements("device-config").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
 		}
 	}
 
@@ -289,12 +296,12 @@ public class DefinitionLoaders {
 			if (root.getElement("case-insensitive") != null)
 				throw new UiException("case-insensitive not allowed in addon");
 		} else {
-			final String ns = (String)IDOMs.getRequiredElementValue(root, "namespace");
-			if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
+			final String ns =
+				(String)IDOMs.getRequiredElementValue(root, "namespace");
+			final String deviceType =
+				(String)IDOMs.getRequiredElementValue(root, "device-type");
 
-			String deviceType = root.getElementValue("device-type", true);
-			if (deviceType == null || deviceType.length() == 0)
-				deviceType = "html"; //default
+			//if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
 
 			final Map pagemolds = parseMolds(root);
 			final String desktopURI = (String)pagemolds.get("desktop");

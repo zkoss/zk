@@ -54,6 +54,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.au.AuBookmark;
+import org.zkoss.zk.device.Device;
 
 /**
  * The implementation of {@link Desktop}.
@@ -122,7 +123,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 * It is used if a relative URI is specified.
 	 * If null or empty is specified, it means no current directory.
 	 * @param deviceType the device type.
-	 * If null or empty is specified, "html" is assumed.
+	 * If null or empty is specified, "ajax" is assumed.
 	 */
 	public DesktopImpl(WebApp wapp, String updateURI, String dir, String deviceType) {
 		if (updateURI == null || wapp == null)
@@ -131,7 +132,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_wapp = wapp;
 		_updateURI = updateURI;
 		_deviceType =
-			deviceType != null && deviceType.length() != 0 ? deviceType: "html";
+			deviceType != null && deviceType.length() != 0 ? deviceType: "ajax";
 		setCurrentDirectory(dir);
 
 		init();
@@ -174,6 +175,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	//-- Desktop --//
 	public String getDeviceType() {
 		return _deviceType;
+	}
+	public Device getDevice() {
+		return null; //TODO
 	}
 	public void setDeviceType(String deviceType) {
 		//Note: we check _comps.isEmpty() only if device type diffs, because

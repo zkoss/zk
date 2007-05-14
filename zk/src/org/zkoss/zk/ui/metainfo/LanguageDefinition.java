@@ -162,13 +162,13 @@ public class LanguageDefinition {
 	/** Returns a readonly list of language definitions belong to
 	 * the specified device type.
 	 *
-	 * <p>A device type identifies the type of a client. For example, "html"
-	 * represents all HTML compatible clients (aka., browsers),
-	 * while "mul" represents clients that supports
+	 * <p>A device type identifies the type of a client. For example, "ajax"
+	 * represents all Web browsers with Ajax support,
+	 * while "mil" represents clients that supports
 	 * <i>Mobile User interface markup Language</i> (on Limited Connected Device,
 	 * such as mobile phones).
 	 *
-	 * @param deviceType the device type, e.g., "html".
+	 * @param deviceType the device type, e.g., "ajax".
 	 * @see #getDeviceType
 	 */
 	public static final List getByDeviceType(String deviceType) {
@@ -200,6 +200,7 @@ public class LanguageDefinition {
 	 * You can find the language back by either of them via
 	 * {@link #lookup}.
 	 *
+	 * @param deviceType the device type; never null or empty
 	 * @param desktopURI the URI used to render a desktop; never null.
 	 * @param pageURI the URI used to render a page; never null.
 	 * @param ignoreCase whether the component name is case-insensitive 
@@ -293,10 +294,10 @@ public class LanguageDefinition {
 	}
 	/** Returns the device type that this definition belongs to.
 	 *
-	 * <p>A device type identifies the type of a client. For example, "html"
+	 * <p>A device type identifies the type of a client. For example, "ajax"
 	 * represents all HTML compatible clients (aka., browsers),
-	 * while "mul" represents clients that supports
-	 * <i>Mobile User interface markup Language</i> (on Limited Connected Device,
+	 * while "mil" represents clients that supports
+	 * <i>Mobile Interactive markup Language</i> (on Limited Connected Device,
 	 * such as mobile phones).
 	 */
 	public String getDeviceType() {

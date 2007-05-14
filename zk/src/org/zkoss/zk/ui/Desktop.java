@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Collection;
 
 import org.zkoss.util.media.Media;
+import org.zkoss.zk.device.Device;
 
 /**
  * Represents a desktop.
@@ -39,10 +40,10 @@ import org.zkoss.util.media.Media;
 public interface Desktop {
 	/** Returns the device type that this desktop belongs to.
 	 *
-	 * <p>A device type identifies the type of a client. For example, "html"
-	 * represents all HTML compatible clients (aka., browsers),
-	 * while "mul" represents clients that supports
-	 * <i>Mobile User interface markup Language</i> (on Limited Connected Device,
+	 * <p>A device type identifies the type of a client. For example, "ajax"
+	 * represents the Web browsers with Ajax support,
+	 * while "mil" represents clients that supports
+	 * <i>Mobile Interactive markup Language</i> (on Limited Connected Device,
 	 * such as mobile phones).
 	 *
 	 * <p>A desktop can use the languages belonging to the same device type.
@@ -52,7 +53,7 @@ public interface Desktop {
 	 * device type.
 	 *
 	 * <p>Default: depends on the extension of the resource path,
-	 * "html" if the path or extension not available.
+	 * "ajax" if the path or extension not available.
 	 * If {@link Richlet} is used, its language definition's device type is
 	 * assumed.
 	 */
@@ -66,6 +67,9 @@ public interface Desktop {
 	 * @exception UiException if any component is attached to a page of the desktop.
 	 */
 	public void setDeviceType(String deviceType);
+	/** Returns the device that is associated with this device.
+	 */
+	public Device getDevice();
 
 	/** Returns ID of this desktop.
 	 * It is unique in the whole session.

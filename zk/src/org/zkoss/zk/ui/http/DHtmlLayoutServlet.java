@@ -58,7 +58,8 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 /**
  * Used to process the request for a ZUML page. Though it is called
  * DHtmlLayoutServlet, it is used to serve all kind of HTTP-based clients,
- * including html, mul and others (see {@link Desktop#getDeviceType}.
+ * including ajax (HTML+Ajax), mil (Mobile Interactive Language)
+ * and others (see {@link Desktop#getDeviceType}.
  *
  * @author tomyeh
  */
