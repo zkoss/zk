@@ -18,10 +18,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
+import org.zkoss.zk.ui.Desktop;
+
 /**
  * Represents the device supporting MIL (Mobile Interactive Language).
  *
  * @author tomyeh
  */
-public class MilDevice implements Device {
+public class MilDevice implements Device, java.io.Serializable {
+	//AjaxDevice//
+	public void init(Desktop desktop) {
+	}
+	public void sessionWillPassivate(Desktop desktop) {
+	}
+	public void sessionDidActivate(Desktop desktop) {
+	}
 }

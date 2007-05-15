@@ -51,6 +51,7 @@ import org.zkoss.web.servlet.StyleSheet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
 import org.zkoss.zk.scripting.Interpreters;
+import org.zkoss.zk.device.Devices;
 
 /**
  * Utilities to load language definitions.
@@ -281,6 +282,7 @@ public class DefinitionLoaders {
 		for (Iterator it = root.getElements("device-config").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
+			Devices.add(el);
 		}
 	}
 

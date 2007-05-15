@@ -69,7 +69,7 @@ public class Interpreters {
 			clsnm = _ips.get(zsl);
 		}
 		if (clsnm == null)
-			throw new InterpreterNotFoundException(zslang, MZk.INTERPRETER_NOT_FOUND, zslang);
+			throw new InterpreterNotFoundException(zslang, MZk.NOT_FOUND, zslang);
 
 		final Class cls;
 		if (clsnm instanceof Class) {
@@ -158,10 +158,8 @@ public class Interpreters {
 	 *
 	 * <pre><code>
 &lt;zscript-config&gt;
-  &lt;zscript-language&gt;
-    &lt;language-name&gt;SuperJava&lt;/language-name&gt;&lt;!-- case insensitive --!&gt;
-    &lt;interpreter-class&gt;my.MySuperJavaInterpreter&lt;/interpreter-class&gt;
-  &lt;/zscript-language&gt;
+  &lt;language-name&gt;SuperJava&lt;/language-name&gt;&lt;!-- case insensitive --!&gt;
+  &lt;interpreter-class&gt;my.MySuperJavaInterpreter&lt;/interpreter-class&gt;
 &lt;/zscript-config&gt;
 	 * </code></pre>
 	 *

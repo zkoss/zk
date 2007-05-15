@@ -728,7 +728,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	throws InterpreterNotFoundException {
 		if (!Objects.equals(zslang, _zslang)) {
 			if (!Interpreters.exists(zslang))
-				throw new InterpreterNotFoundException(zslang, MZk.INTERPRETER_NOT_FOUND, zslang);
+				throw new InterpreterNotFoundException(zslang, MZk.NOT_FOUND, zslang);
 			_zslang = zslang;
 		}
 	}

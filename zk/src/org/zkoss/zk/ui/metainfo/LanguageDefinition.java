@@ -41,10 +41,13 @@ import org.zkoss.web.servlet.StyleSheet;
 import org.zkoss.web.el.ELContexts;
 import org.zkoss.web.el.ELContext;
 
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.el.Evaluator;
+import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.device.DeviceNotFoundException;
 
 /**
  * A definition of a language, such as xul.
@@ -210,6 +213,8 @@ public class LanguageDefinition {
 	Locator locator) {
 		if (deviceType == null || deviceType.length() == 0)
 			throw new UiException("deviceType cannot be empty");
+		if (!Devices.exists(deviceType))
+			throw new DeviceNotFoundException(deviceType, MZk.NOT_FOUND, deviceType);
 		if (name == null || name.length() == 0)
 			throw new UiException("name cannot be empty");
 		if (namespace == null || namespace.length() == 0)

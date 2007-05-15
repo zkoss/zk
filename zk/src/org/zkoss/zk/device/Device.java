@@ -18,11 +18,31 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
+import org.zkoss.zk.ui.Desktop;
+
 /**
  * Represents a client device.
  * For example, the HTML browsers with Ajax are called {@link AjaxDevice},
  * and the MIL device called {@link MilDevice}.
+ *
+ * <p>Note: the device must be serializable.
+ *
  * @author tomyeh
  */
 public interface Device {
+	/** Initializes the device.
+	 * A device is created for each desktop, and this method is called
+	 * when it is associated to the desktop.
+	 *
+	 * @param desktop the desktop to associate this device with (never null).
+	 */
+	public void init(Desktop desktop);
+	/** Notification that the desktop, which owns this device,
+	 * is about to be passivated (aka., serialized) by the Web container.
+	 */
+	public void sessionWillPassivate(Desktop desktop);
+	/** Notification that the desktop, which owns this device,
+	 * has just been activated (aka., deserialized) by the Web container.
+	 */
+	public void sessionDidActivate(Desktop desktop);
 }

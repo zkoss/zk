@@ -62,7 +62,12 @@ public interface Desktop {
 	 *
 	 * <p>Note: you can change the device type only before any component
 	 * is attached to a page of the desktop.
-	 * In other words, you can set the device type only
+	 * In other words, you can set the device type only at the initialization
+	 * stage.
+	 *
+	 * <p>If the device type is changed, any device allocated for this desktop
+	 * ({@link #getDevice}) will be dropped and recreated at the next
+	 * invocation to {@link #getDevice}.
 	 *
 	 * @exception UiException if any component is attached to a page of the desktop.
 	 */

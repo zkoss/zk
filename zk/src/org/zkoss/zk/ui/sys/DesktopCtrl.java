@@ -122,11 +122,11 @@ public interface DesktopCtrl {
 	public void setResponseSequence(int seqId);
 
 	/** Notification that the session, which owns this desktop,
-	 * is about to be passivated (aka., serialized).
+	 * is about to be passivated (aka., serialized) by the Web container.
 	 */
 	public void sessionWillPassivate(Session sess);
 	/** Notification that the session, which owns this desktop,
-	 * has just been activated (aka., deserialized).
+	 * has just been activated (aka., deserialized) by the Web container.
 	 */
 	public void sessionDidActivate(Session sess);
 

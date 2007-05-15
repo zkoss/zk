@@ -30,6 +30,7 @@ import org.zkoss.util.CacheMap;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.Media;
 
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -55,6 +56,8 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.au.AuBookmark;
 import org.zkoss.zk.device.Device;
+import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.device.DeviceNotFoundException;
 
 /**
  * The implementation of {@link Desktop}.
@@ -105,7 +108,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The request queue. */
 	private transient RequestQueue _rque;
 	private String _bookmark = "";
-	private String _deviceType;
+	/** The device type. */
+	private String _devType;
+	/** The device. */
+	private Device _dev;
 	/** A map of media (String key, Media content). */
 	private CacheMap _meds;
 	/** ID used to identify what is stored in _meds. */
@@ -131,7 +137,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		_wapp = wapp;
 		_updateURI = updateURI;
-		_deviceType =
+		_devType =
 			deviceType != null && deviceType.length() != 0 ? deviceType: "ajax";
 		setCurrentDirectory(dir);
 
@@ -174,22 +180,27 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	//-- Desktop --//
 	public String getDeviceType() {
-		return _deviceType;
+		return _devType;
 	}
 	public Device getDevice() {
-		return null; //TODO
+		if (_dev == null)
+			_dev = Devices.newDevice(this);
+		return _dev;
 	}
 	public void setDeviceType(String deviceType) {
 		//Note: we check _comps.isEmpty() only if device type diffs, because
 		//a desktop might have several richlet and each of them will call
 		//this method once
-		if (!_deviceType.equals(deviceType)) {
+		if (!_devType.equals(deviceType)) {
 			if (deviceType == null || deviceType.length() == 0)
 				throw new IllegalArgumentException("empty");
+			if (!Devices.exists(deviceType))
+				throw new DeviceNotFoundException(deviceType, MZk.NOT_FOUND, deviceType);
 
 			if (!_comps.isEmpty())
 				throw new UiException("Unable to change the device type since some components are attached.");
-			_deviceType = deviceType;
+			_devType = deviceType;
+			_dev = null;
 		}
 	}
 	public Execution getExecution() {
@@ -297,8 +308,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//to avoid misuse, check whether new comp belongs to the same device type
 		final LanguageDefinition langdef =
 			comp.getDefinition().getLanguageDefinition();
-		if (langdef != null && !_deviceType.equals(langdef.getDeviceType()))
-			throw new UiException("Component, "+comp+", does not belong to the same device type of the desktop, "+_deviceType);
+		if (langdef != null && !_devType.equals(langdef.getDeviceType()))
+			throw new UiException("Component, "+comp+", does not belong to the same device type of the desktop, "+_devType);
 
 		final Object old = _comps.put(comp.getUuid(), comp);
 		if (old != comp && old != null) {
@@ -453,10 +464,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void sessionWillPassivate(Session sess) {
 		for (Iterator it = _pages.values().iterator(); it.hasNext();)
 			((PageCtrl)it.next()).sessionWillPassivate(this);
+
+		if (_dev != null) _dev.sessionWillPassivate(this);
 	}
 	public void sessionDidActivate(Session sess) {
 		_sess = sess;
 		_wapp = sess.getWebApp();
+
+		if (_dev != null) _dev.sessionDidActivate(this);
 
 		for (Iterator it = _pages.values().iterator(); it.hasNext();)
 			((PageCtrl)it.next()).sessionDidActivate(this);

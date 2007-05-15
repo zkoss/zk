@@ -18,10 +18,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
+import org.zkoss.zk.ui.Desktop;
+
 /**
  * Represents a Web browser with the Ajax support.
  *
  * @author tomyeh
  */
-public class AjaxDevice implements Device {
+public class AjaxDevice implements Device, java.io.Serializable {
+	//AjaxDevice//
+	public void init(Desktop desktop) {
+	}
+	public void sessionWillPassivate(Desktop desktop) {
+	}
+	public void sessionDidActivate(Desktop desktop) {
+	}
 }
