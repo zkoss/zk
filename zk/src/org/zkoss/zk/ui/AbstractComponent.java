@@ -390,6 +390,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 			//No need to check UUID since checkIdSpacesDown covers it
 			//-- a page is an ID space
+		} else { //detach from a page
+			checkDetach(_page);
 		}
 
 		if (_page != null) removeFromIdSpacesDown(this);
@@ -400,6 +402,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_page != null) addToIdSpacesDown(this);
 
 		checkRootEvents();
+	}
+	/** Checks whether it is OK to detach the specified page.
+	 * @param page the page to detach (never null).
+	 */
+	private static void checkDetach(Page page) {
+		final Execution exec = Executions.getCurrent();
+		if (exec == null)
+			throw new UiException("You cannot access a desktop other than an event listener");
+		if (page.getDesktop() != exec.getDesktop())
+			throw new UiException("You cannot access components belong to other desktop");
 	}
 	/** Calling getUiEngine().addMoved().
 	 */
@@ -663,6 +675,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			//-- a page is an ID space
 		} else {
 			idSpaceChanged = _page != null;
+			if (idSpaceChanged)
+				checkDetach(_page);
 		}
 
 		if (_parent != null && isTransparent(this)) _parent.invalidate();
