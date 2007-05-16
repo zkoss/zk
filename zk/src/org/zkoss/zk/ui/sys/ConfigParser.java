@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.scripting.Interpreters;
+import org.zkoss.zk.device.Devices;
 
 /**
  * Used to parse WEB-INF/zk.xml into {@link Configuration}.
@@ -195,6 +196,10 @@ public class ConfigParser {
 			//zscript-config
 				Interpreters.add(el);
 					//Note: zscript-config is applied to the whole system, not just langdef
+			} else if ("device-config".equals(elnm)) {
+			//device-config
+				Devices.add(el);
+					//Note: device-config is applied to the whole system, not just langdef
 			} else if ("log".equals(elnm)) {
 				final String base = el.getElementValue("log-base", true);
 				if (base != null)

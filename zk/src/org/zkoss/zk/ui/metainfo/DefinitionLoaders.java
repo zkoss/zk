@@ -149,7 +149,7 @@ public class DefinitionLoaders {
 				if (log.debugable()) log.debug("Loading "+url);
 				final Document doc = new SAXBuilder(false, false, true).build(url);
 				if (checkVersion(url, doc))
-					parseConfig(doc, locator);
+					parseConfig(doc.getRootElement());
 			}
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex); //abort
@@ -264,11 +264,10 @@ public class DefinitionLoaders {
 		return true;
 	}
 
-	private static void parseConfig(Document doc, Locator locator)
+	private static void parseConfig(Element el)
 	throws Exception {
-		final Element root = doc.getRootElement();
-		parseZScriptConfig(root);
-		parseDeviceConfig(root);
+		parseZScriptConfig(el);
+		parseDeviceConfig(el);
 	}
 	private static void parseZScriptConfig(Element root) {
 		for (Iterator it = root.getElements("zscript-config").iterator();
