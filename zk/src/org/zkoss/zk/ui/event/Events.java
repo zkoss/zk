@@ -183,7 +183,8 @@ public class Events {
 	 * A event listener is {@link EventListener} being added
 	 * by {@link Component#addEventListener} and {@link Page#addEventListener}.
 	 *
-	 * <p>Unlike {@link Component#isListenerAvailable}, this method
+	 * <p>Unlike {@link Component#isListenerAvailable}, which checks
+	 * only the event listener, this method
 	 * check both event handlers and listeners, i.e.,
 	 * the onXxx members defined in ZUML, the onXxx method defined
 	 * in the implementation class, and the event listener registered.
@@ -208,6 +209,17 @@ public class Events {
 			return page != null && page.isListenerAvailable(evtnm);
 		}
 		return false;
+	}
+	/** Returns whether an event handler or listener is available for
+	 * the specified component and event.
+	 *
+	 * <p>It is renamed to {@link #isListened} since 2.3.2.
+	 *
+	 * @deprecated
+	 */
+	public static
+	boolean isListenerAvailable(Component comp, String evtnm, boolean asap) {
+		return isListened(comp, evtnm, asap);
 	}
 
 	/** Sends the event to the specified component and process it
