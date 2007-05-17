@@ -7,6 +7,7 @@ ZK 2.3.2 Freshly
   1701213: Support embedded fileupload component
   1712518: Decimalbox supports different round mode (Java 6 is required)
   1712548: isAsap shall not be part of EventListener
+  1719140: A way to show custom message when javascript is disabled
 
 * Bugs:
   1711769: Grid on Vbox visibility bug
