@@ -28,8 +28,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	}
 	]]></zscript>
 	<grid>
-		<rows>
+		<rows id="rows">
 			<myrow col1="${each.x}" col2="${each.y}" forEach="${infos}"/>
 		</rows>
 	</grid>
+	<button label="Create Manullay by Definition">
+	<attribute name="onClick">{
+	Component ua = page.getComponentDefinition("myrow", false).newInstance(page, null);
+	ua.setParent(rows); //it calls afterCompose automatically (inline only)
+	}</attribute>
+	</button>
 </window>
