@@ -35,6 +35,8 @@ public interface Device {
 	public String getType();
 	/** Returns the unavailable message that is shown to the client
 	 * if the client doesn't support this device.
+	 *
+	 * @return the unavailable message, or null if no such message
 	 */
 	public String getUnavailableMessage();
 	/** Sets the unavailable message that is shown to the client
@@ -43,6 +45,9 @@ public interface Device {
 	 * <p>Note: this method must be called before the desktop is rendered
 	 * (and sent to the client).
 	 * Otherwise, it is meaningless.
+	 *
+	 * @param unavailmsg the unavailable message. If empty or null,
+	 * the previous message is, if any, removed.
 	 */
 	public void setUnavailableMessage(String unavailmsg);
 

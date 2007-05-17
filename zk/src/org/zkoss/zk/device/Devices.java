@@ -151,7 +151,6 @@ public class Devices {
 	 * </code></pre>
 	 *
 	 * @param config the XML element called zscript-config
-	 * @return the previous class, or null if not defined yet
 	 */
 	public static final void add(Element config) {
 		//Spec: it is OK to declare an nonexist device, since
