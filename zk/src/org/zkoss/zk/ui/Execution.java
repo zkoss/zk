@@ -352,6 +352,9 @@ public interface Execution extends Evaluator {
 	throws IOException;
 
 	/** Creates components from the specified page definition.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
 	 *
 	 * @param pagedef the page definition to use. It cannot be null.
 	 * @param parent the parent component, or null if you want it to be
@@ -366,6 +369,9 @@ public interface Execution extends Evaluator {
 	public Component createComponents(PageDefinition pagedef,
 	Component parent, Map arg);
 	/** Creates components from a page file specified by an URI.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
 	 *
 	 * <p>It loads the page definition from the specified URI (by
 	 * use {@link #getPageDefinition} ), and then
@@ -386,6 +392,9 @@ public interface Execution extends Evaluator {
 	public Component createComponents(String uri, Component parent,
 	Map arg);
 	/** Creates components from the raw content specified by a string.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
 	 *
 	 * <p>The raw content is parsed to a page defintion by use of
 	 * {@link #getPageDefinitionDirectly(String, String)}, and then
@@ -413,6 +422,9 @@ public interface Execution extends Evaluator {
 	public Component createComponentsDirectly(String content, String extension,
 	Component parent, Map arg);
 	/** Creates components from the raw content specified by a DOM tree.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
 	 *
 	 * <p>The raw content is parsed to a page defintion by use of
 	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
@@ -440,6 +452,9 @@ public interface Execution extends Evaluator {
 	public Component createComponentsDirectly(Document content, String extension,
 	Component parent, Map arg);
 	/** Creates components from the raw content read from the specified reader.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
 	 *
 	 * <p>The raw content is loaded and parsed to a page defintion by use of
 	 * {@link #getPageDefinitionDirectly(Reader,String)}, and then
@@ -466,6 +481,115 @@ public interface Execution extends Evaluator {
 	 */
 	public Component createComponentsDirectly(Reader reader, String extension,
 	Component parent, Map arg) throws IOException;
+
+	/** Creates components that don't belong to any page
+	 * from the specified page definition.
+	 *
+	 * @param pagedef the page definition to use. It cannot be null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @return the first component being created.
+	 * @see #createComponents(String, Map)
+	 * @since 2.3.2
+	 */
+	public Component[] createComponents(PageDefinition pagedef, Map arg);
+	/** Creates components that don't belong to any page
+	 * from a page file specified by an URI.
+	 *
+	 * <p>It loads the page definition from the specified URI (by
+	 * use {@link #getPageDefinition} ), and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Map)
+	 * @see #createComponentsDirectly(String, String, Map)
+	 * @see #createComponentsDirectly(Document, String, Map)
+	 * @see #createComponentsDirectly(Reader, String, Map)
+	 * @since 2.3.2
+	 */
+	public Component[] createComponents(String uri, Map arg);
+	/** Creates components that don't belong to any page
+	 * from the raw content specified by a string.
+	 *
+	 * <p>The raw content is parsed to a page defintion by use of
+	 * {@link #getPageDefinitionDirectly(String, String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param content the raw content of the page. It must be in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Map)
+	 * @see #createComponents(String, Map)
+	 * @see #createComponentsDirectly(Document, String, Map)
+	 * @see #createComponentsDirectly(Reader, String, Map)
+	 * @since 2.3.2
+	 */
+	public Component[] createComponentsDirectly(String content, String extension,
+	Map arg);
+	/** Creates components that don't belong to any page
+	 * from the raw content specified by a DOM tree.
+	 *
+	 * <p>The raw content is parsed to a page defintion by use of
+	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param content the raw content in DOM.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Map)
+	 * @see #createComponents(String, Map)
+	 * @see #createComponentsDirectly(Document, String, Map)
+	 * @see #createComponentsDirectly(Reader, String, Map)
+	 * @since 2.3.2
+	 */
+	public Component[] createComponentsDirectly(Document content, String extension,
+	Map arg);
+	/** Creates components that don't belong to any page
+	 * from the raw content read from the specified reader.
+	 *
+	 * <p>The raw content is loaded and parsed to a page defintion by use of
+	 * {@link #getPageDefinitionDirectly(Reader,String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param reader the reader to retrieve the raw content in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Map)
+	 * @see #createComponents(String, Map)
+	 * @see #createComponentsDirectly(Document, String, Map)
+	 * @see #createComponentsDirectly(String, String, Map)
+	 * @since 2.3.2
+	 */
+	public Component[] createComponentsDirectly(Reader reader, String extension,
+	Map arg) throws IOException;
 
 	/** Sends a temporary redirect response to the client using the specified
 	 * redirect location URL.

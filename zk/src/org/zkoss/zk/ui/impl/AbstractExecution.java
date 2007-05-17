@@ -191,34 +191,66 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 
 	public Component createComponents(String uri, Component parent,
 	Map arg) {
-		//if (log.debugable()) log.debug("Creating from "+uri);
-		return getUiEngine().createComponents(
+		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinition(uri), _curpage, parent, arg);
+		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponents(PageDefinition pagedef,
 	Component parent, Map arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef cannot be null");
-		return getUiEngine().createComponents(
+		final Component[] cs = getUiEngine().createComponents(
 			this, pagedef, _curpage, parent, arg);
+		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponentsDirectly(String content, String ext,
 	Component parent, Map arg) {
-		return getUiEngine().createComponents(
-			this, getPageDefinitionDirectly(content, ext), _curpage,
-			parent, arg);
+		final Component[] cs = getUiEngine().createComponents(
+			this, getPageDefinitionDirectly(content, ext),
+			_curpage, parent, arg);
+		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponentsDirectly(Document content, String ext,
 	Component parent, Map arg) {
-		return getUiEngine().createComponents(
-			this, getPageDefinitionDirectly(content, ext), _curpage,
-			parent, arg);
+		final Component[] cs = getUiEngine().createComponents(
+			this, getPageDefinitionDirectly(content, ext),
+			_curpage, parent, arg);
+		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponentsDirectly(Reader reader, String ext,
 	Component parent, Map arg) throws IOException {
+		final Component[] cs = getUiEngine().createComponents(
+			this, getPageDefinitionDirectly(reader, ext),
+			_curpage, parent, arg);
+		return cs.length > 0 ? cs[0]: null;
+	}
+
+	public Component[] createComponents(String uri, Map arg) {
 		return getUiEngine().createComponents(
-			this, getPageDefinitionDirectly(reader, ext), _curpage,
-			parent, arg);
+			this, getPageDefinition(uri), null, null, arg);
+	}
+	public Component[] createComponents(PageDefinition pagedef, Map arg) {
+		if (pagedef == null)
+			throw new IllegalArgumentException("pagedef cannot be null");
+		return getUiEngine().createComponents(this, pagedef, null, null, arg);
+	}
+	public Component[] createComponentsDirectly(String content, String ext,
+	Map arg) {
+		return getUiEngine().createComponents(
+			this, getPageDefinitionDirectly(content, ext),
+			null, null, arg);
+	}
+	public Component[] createComponentsDirectly(Document content, String ext,
+	Map arg) {
+		return getUiEngine().createComponents(
+			this, getPageDefinitionDirectly(content, ext),
+			null, null, arg);
+	}
+	public Component[] createComponentsDirectly(Reader reader, String ext,
+	Map arg) throws IOException {
+		return getUiEngine().createComponents(
+			this, getPageDefinitionDirectly(reader, ext),
+			null, null, arg);
 	}
 
 	public void sendRedirect(String uri) {

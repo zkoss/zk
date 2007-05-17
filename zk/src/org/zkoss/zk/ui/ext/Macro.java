@@ -45,4 +45,11 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	 * Refer to the Developer's Guide for details.
 	 */
 	public void recreate();
+	/** Returns whether this is an inline macro.
+	 * The only way to create an inline macro is by use of
+	 * {@link org.zkoss.zk.ui.metainfo.ComponentDefinition#newInstance}.
+	 *
+	 * @since 2.3.2
+	 */
+	public boolean isInline();
 }

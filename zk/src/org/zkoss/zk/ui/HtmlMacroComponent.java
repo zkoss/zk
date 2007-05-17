@@ -37,9 +37,15 @@ import org.zkoss.zk.ui.impl.Serializables;
 public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	private transient Map _props;
 	private String _uri;
+	private final boolean _inline;
+	/** An array of components created by this inline macro.
+	 * It is used only if _inline is true
+	 */
+	private Component[] _inlines;
 
 	public HtmlMacroComponent() {
 		init();
+		_inline = getDefinition().isInlineMacro();
 	}
 	private void init() {
 		_props = new HashMap();
@@ -50,17 +56,35 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	/** Creates the child components after apply dynamic properties
 	 * {@link #setDynamicProperty}.
 	 *
+	 * <p>The second invocation is ignored. If you want to recreate
+	 * child components, use {@link #recreate} instead.
+	 *
 	 * <p>If a macro component is created by ZK loader, this method is invoked
 	 * automatically. Developers need to invoke this method only if they create
 	 * a macro component manually.
+	 *
+	 * <p>If this is an line macro, this method is invoked automatically
+	 * if {@link #setParent} or {@link #setPage} called
 	 */
 	public void afterCompose() {
 		final Execution exec = Executions.getCurrent();
 		if (exec == null)
 			throw new IllegalStateException("No execution available.");
-		exec.createComponents(
-			_uri != null ? _uri: getDefinition().getMacroURI(),
-			this, _props);
+
+		if (_inline) {
+			if (_inlines != null)
+				return; //don't do twice
+
+			_inlines = exec.createComponents(
+				_uri != null ? _uri: getDefinition().getMacroURI(), _props);
+				//Note: it doesn't belong to any page/component
+		} else {
+			if (!getChildren().isEmpty())
+				return; //don't do twice (silently)
+
+			exec.createComponents(
+				_uri != null ? _uri: getDefinition().getMacroURI(), this, _props);
+		}
 	}
 	public void setMacroURI(String uri) {
 		if (!Objects.equals(_uri, uri)) {
@@ -71,8 +95,61 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		}
 	}
 	public void recreate() {
-		getChildren().clear();
+		if (_inlines != null) {
+			for (int j = 0; j < _inlines.length; ++j)
+				_inlines[j].detach();
+			_inlines = null;
+		} else {
+			getChildren().clear();
+		}
 		afterCompose();
+	}
+	public boolean isInline() {
+		return _inline;
+	}
+
+	//Component//
+	/** Changes the parent.
+	 *
+	 * <p>Note: if this is an inline macro ({@link #isInline}),
+	 * this method actually changes the parent of all components created
+	 * from the macro URI.
+	 * In other word, an inline macro behaves like a controller of
+	 * the components it created. It doesn't belong to any page or parent.
+	 * Moreover, {@link #afterCompose} is called automatically if
+	 * it is not called (and this is an inline macro).
+	 */
+	public void setParent(Component parent) {
+		if (_inline) {
+			if (_inlines == null)
+				afterCompose(); //autocreate
+
+			for (int j = 0; j < _inlines.length; ++j)
+				_inlines[j].setParent(parent);
+		} else {
+			super.setParent(parent);
+		}
+	}
+	/** Changes the page.
+	 *
+	 * <p>Note: if this is an inline macro ({@link #isInline}),
+	 * this method actually changes the page of all components created
+	 * from the macro URI.
+	 * In other word, an inline macro behaves like a controller of
+	 * the components it created. It doesn't belong to any page or parent.
+	 * Moreover, {@link #afterCompose} is called automatically if
+	 * it is not called (and this is an inline macro).
+	 */
+	public void setPage(Page page) {
+		if (_inline) {
+			if (_inlines == null)
+				afterCompose(); //autocreate
+
+			for (int j = 0; j < _inlines.length; ++j)
+				_inlines[j].setPage(page);
+		} else {
+			super.setPage(page);
+		}
 	}
 
 	//Serializable//
@@ -98,6 +175,12 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		clone.init();
 		clone._props.putAll(_props);
 		clone._props.put("includer", this);
+
+		if (_inlines != null) { //deep clone
+			clone._inlines = new Component[_inlines.length];
+			for (int j = 0; j < _inlines.length; ++j)
+				clone._inlines[j] = (Component)_inlines[j].clone();
+		}
 		return clone;
 	}
 

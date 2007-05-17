@@ -160,18 +160,21 @@ public interface UiEngine {
 	 * was called.
 	 * It assumes the execution is already locked to this desktop.
 	 *
+	 * <p>Note: if both page and parent are null, the created components
+	 * don't belong to any page/parent.
+	 *
 	 * @param exec the execution (never null).
 	 * @param pagedef the page definition (never null).
 	 * @param page the page. Ignored if parent is specified (and
 	 * parent's page is used).
 	 * @param parent the parent component, or null if no parent compoent.
-	 * If both parent and page are specified, page is ignored.
+	 * If parent is specified, page is ignored.
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
-	 * @return the first component being created.
+	 * @return the components being created.
 	 */
-	public Component createComponents(Execution exec,
+	public Component[] createComponents(Execution exec,
 	PageDefinition pagedef, Page page, Component parent, Map arg);
 
 	/** Sends a temporary redirect response to the client using the specified

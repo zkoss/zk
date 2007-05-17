@@ -384,10 +384,10 @@ public class UiEngineImpl implements UiEngine {
 	 * Creates all child components defined in the specified definition.
 	 * @return the first component being created.
 	 */
-	private static final Component execCreate(UiFactory uf,
+	private static final Component[] execCreate(UiFactory uf,
 	Execution exec, Page page, NodeInfo parentInfo, Component parent)
 	throws IOException {
-		Component firstCreated = null;
+		final List created = new LinkedList();
 		final PageDefinition pagedef = parentInfo.getPageDefinition();
 			//note: don't use page.getDefinition because createComponents
 			//might be called from a page other than instance's
@@ -398,16 +398,18 @@ public class UiEngineImpl implements UiEngine {
 				final ForEach forEach = childInfo.getForEach(page, parent);
 				if (forEach == null) {
 					if (isEffective(childInfo, page, parent)) {
-						final Component child =
+						final Component[] children =
 							execCreateChild(uf, exec, page, parent, childInfo);
-						if (firstCreated == null) firstCreated = child;
+						for (int j = 0; j < children.length; ++j)
+							created.add(children[j]);
 					}
 				} else {
 					while (forEach.next()) {
 						if (isEffective(childInfo, page, parent)) {
-							final Component child =
+							final Component[] children =
 								execCreateChild(uf, exec, page, parent, childInfo);
-							if (firstCreated == null) firstCreated = child;
+							for (int j = 0; j < children.length; ++j)
+								created.add(children[j]);
 						}
 					}
 				}
@@ -439,9 +441,9 @@ public class UiEngineImpl implements UiEngine {
 				throw new IllegalStateException("Unknown object: "+obj);
 			}
 		}
-		return firstCreated;
+		return (Component[])created.toArray(new Component[created.size()]);
 	}
-	private static Component execCreateChild(UiFactory uf,
+	private static Component[] execCreateChild(UiFactory uf,
 	Execution exec, Page page, Component parent,
 	ComponentInfo childInfo) throws IOException {
 		final ComponentDefinition childdef = childInfo.getComponentDefinition();
@@ -451,8 +453,8 @@ public class UiEngineImpl implements UiEngine {
 			final Map props = new HashMap();
 			props.put("includer", parent);
 			childInfo.evalProperties(props, page, parent, true);
-			return exec.createComponents(
-				childdef.getMacroURI(), parent, props);
+			return new Component[] {
+				exec.createComponents(childdef.getMacroURI(), parent, props)};
 		} else {
 			final Component child = uf.newComponent(
 				page, parent, childdef, childInfo.getImplementationClass());
@@ -468,7 +470,7 @@ public class UiEngineImpl implements UiEngine {
 				Events.postEvent(
 					new CreateEvent(Events.ON_CREATE, child, exec.getArg()));
 
-			return child;
+			return new Component[] {child};
 		}
 	}
 	private static final boolean isEffective(Condition cond,
@@ -476,7 +478,7 @@ public class UiEngineImpl implements UiEngine {
 		return comp != null ? cond.isEffective(comp): cond.isEffective(page);
 	}
 
-	public Component createComponents(Execution exec,
+	public Component[] createComponents(Execution exec,
 	PageDefinition pagedef, Page page, Component parent, Map arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef");
@@ -491,7 +493,8 @@ public class UiEngineImpl implements UiEngine {
 
 		final Page old = execCtrl.getCurrentPage();
 		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
-		execCtrl.setCurrentPage(page);
+		if (page != null)
+			execCtrl.setCurrentPage(page);
 		execCtrl.setCurrentPageDefinition(pagedef);
 		exec.pushArg(arg != null ? arg: Collections.EMPTY_MAP);
 
@@ -503,11 +506,11 @@ public class UiEngineImpl implements UiEngine {
 
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
-			final Component comp = execCreate(
+			final Component[] cs = execCreate(
 				((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
 				exec, page, pagedef, parent);
 			inits.doAfterCompose(page);
-			return comp;
+			return cs;
 		} catch (Throwable ex) {
 			inits.doCatch(ex);
 			throw UiException.Aide.wrap(ex);
