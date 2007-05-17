@@ -37,7 +37,10 @@ import org.zkoss.zk.ui.UiException;
 public class Devices {
 	private Devices() {}
 
+	/** Map(String type, String/Class cls). */
 	private static final Map _devs = new HashMap(3);
+	/** Map(String type, String unavailableMesssage). */
+	private static final Map _uamsgs = new HashMap(3);
 
 	/** Returns the device for the specified desktop.
 	 *
@@ -75,9 +78,14 @@ public class Devices {
 			}
 		}
 
+		final String msg;
+		synchronized (_uamsgs) {
+			msg = (String)_uamsgs.get(type);
+		}
+
 		try {
 			final Device device = (Device)cls.newInstance();
-			device.init(desktop);
+			device.init(type, desktop, msg);
 			return device;
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex, "Unable to create "+cls);
@@ -115,25 +123,46 @@ public class Devices {
 
 		return old instanceof Class ? ((Class)old).getName(): (String)old;
 	}
+	/** Sets the unavailable message for the specified type.
+	 *
+	 * @return the previous unavailable message if any.
+	 */
+	public static final String setUnavailableMessage(String type, String msg) {
+		if (type == null || type.length() == 0)
+			throw new IllegalArgumentException("type");
+
+		if (msg != null && msg.length() == 0)
+			msg = null;
+
+		synchronized (_uamsgs) {
+			return (String)(
+				msg != null ? _uamsgs.put(type, msg): _uamsgs.remove(type));
+		}
+	}
+
 	/** Adds a device based on the XML declaration.
 	 *
 	 * <pre><code>
 &lt;device-config&gt;
   &lt;device-type&gt;superajax&lt;/device-type&gt;
   &lt;device-class&gt;my.MyDevice&lt;/device-class&gt;
+  &lt;unavailable-message&gt;error message&lt;/unavailable-message&gt;
 &lt;/device-config&gt;
 	 * </code></pre>
 	 *
 	 * @param config the XML element called zscript-config
 	 * @return the previous class, or null if not defined yet
 	 */
-	public static final String add(Element config) {
+	public static final void add(Element config) {
 		//Spec: it is OK to declare an nonexist device, since
 		//deployer might remove unused jar files.
 		final String type =
 			IDOMs.getRequiredElementValue(config, "device-type");
-		final String clsnm =
-			IDOMs.getRequiredElementValue(config, "device-class");
-		return add(type, clsnm);
+		String s = config.getElementValue("device-class", true);
+		if (s != null)
+			add(type, s);
+		s = config.getElementValue("unavailable-message", true);
+		if (s != null)
+			setUnavailableMessage(type, s);
 	}
 }

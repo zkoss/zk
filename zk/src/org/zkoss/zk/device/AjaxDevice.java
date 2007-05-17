@@ -26,8 +26,24 @@ import org.zkoss.zk.ui.Desktop;
  * @author tomyeh
  */
 public class AjaxDevice implements Device, java.io.Serializable {
-	//AjaxDevice//
-	public void init(Desktop desktop) {
+	private String _type;
+	private String _uamsg;
+
+	//Device//
+	public String getType() {
+		return _type;
+	}
+	public String getUnavailableMessage() {
+		return _uamsg;
+	}
+	public void setUnavailableMessage(String unavailmsg) {
+		_uamsg = unavailmsg;
+	}
+	public void init(String type, Desktop desktop, String unavailmsg) {
+		if (type == null || type.length() == 0)
+			throw new IllegalArgumentException("type");
+		_type = type;
+		_uamsg = unavailmsg;
 	}
 	public void sessionWillPassivate(Desktop desktop) {
 	}

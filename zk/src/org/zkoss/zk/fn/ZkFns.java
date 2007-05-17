@@ -150,6 +150,9 @@ public class ZkFns {
 
 		final StringBuffer sb = new StringBuffer(1536);
 
+		final String uamsg = desktop.getDevice().getUnavailableMessage();
+		if (uamsg != null) sb.append(uamsg);
+
 		final Set jses = new LinkedHashSet(37);
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();)
