@@ -37,15 +37,13 @@ import org.zkoss.zk.ui.impl.Serializables;
 public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	private transient Map _props;
 	private String _uri;
-	private final boolean _inline;
 	/** An array of components created by this inline macro.
-	 * It is used only if _inline is true
+	 * It is used only if {@link #isInline}
 	 */
 	private Component[] _inlines;
 
 	public HtmlMacroComponent() {
 		init();
-		_inline = getDefinition().isInlineMacro();
 	}
 	private void init() {
 		_props = new HashMap();
@@ -71,7 +69,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		if (exec == null)
 			throw new IllegalStateException("No execution available.");
 
-		if (_inline) {
+		if (isInline()) {
 			if (_inlines != null)
 				return; //don't do twice
 
@@ -105,7 +103,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		afterCompose();
 	}
 	public boolean isInline() {
-		return _inline;
+		return getDefinition().isInlineMacro();
 	}
 
 	//Component//
@@ -120,7 +118,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * it is not called (and this is an inline macro).
 	 */
 	public void setParent(Component parent) {
-		if (_inline) {
+		if (isInline()) {
 			if (_inlines == null)
 				afterCompose(); //autocreate
 
@@ -141,7 +139,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * it is not called (and this is an inline macro).
 	 */
 	public void setPage(Page page) {
-		if (_inline) {
+		if (isInline()) {
 			if (_inlines == null)
 				afterCompose(); //autocreate
 
@@ -150,6 +148,9 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		} else {
 			super.setPage(page);
 		}
+	}
+	public boolean isChildable() {
+		return !isInline();
 	}
 
 	//Serializable//
