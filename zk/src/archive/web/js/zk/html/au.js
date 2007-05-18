@@ -91,11 +91,13 @@ zkau.onclick = function (evt) {
 	var href = getZKAttr(target, "href");
 	if (href) {
 		zk.go(href, false, getZKAttr(target, "target"));
+		Event.stop(evt); //prevent _onDocLClick
 		return; //done
 	}
 
 	zkau.send({uuid: $uuid(target.id),
 		cmd: "onClick", data: zkau._getMouseData(evt, target)});
+	Event.stop(evt);
 };
 /** Handles ondblclick for button (for non-FF).
  * Note: double clicks are handled by zkau._onDocDClick, but
