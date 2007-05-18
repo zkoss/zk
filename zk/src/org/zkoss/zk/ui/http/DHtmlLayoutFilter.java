@@ -98,8 +98,10 @@ public class DHtmlLayoutFilter implements Filter {
 		}
 	}
 	/** Filters the content to make it legal XML if possible.
-	 * Currently, it only removes DOCTYPE since it makes it non-XML and
-	 * ZK always generates its own DOCTYPE.
+	 * Currently, it only removes &lt;!DOCTYPE ...//DTD HTML...&gt;,
+	 * since it makes it invalid XML. Refer to Bug 1702216.
+	 *
+	 * <p>Note: we cannot remove all DOCTYPE. Refer to Bug 1720620.
 	 */
 	private static String xmlfilter(StringBuffer sb) {
 		for (int j = 0, len = sb.length(); j < len; ++j) {
@@ -109,15 +111,29 @@ public class DHtmlLayoutFilter implements Filter {
 					j = Strings.skipWhitespaces(sb, j + 1);
 					if (j + 7 < len
 					&& "DOCTYPE".equalsIgnoreCase(sb.substring(j, j + 7))) {
-						for (j += 7; j < len; ++j)
-							if (sb.charAt(j) == '>')
-								return sb.substring(j + 1);
+						for (int k = j += 7; k < len; ++k) {
+							if (sb.charAt(k) == '>') {
+								if (shallFilter(sb.substring(j, k)))
+									return sb.substring(k + 1);
+								break;
+							}
+						}
 					}
 				}
 				break;
 			}
 		}
 		return sb.toString();
+	}
+	private static boolean shallFilter(String pubId) {
+		pubId = pubId.toUpperCase();
+		int j = pubId.indexOf("//DTD");
+		if (j >= 0) {
+			j = Strings.skipWhitespaces(pubId, j + 5);
+			return j + 4 < pubId.length()
+				&& "HTML".equals(pubId.substring(j, j + 4));
+		}
+		return false; //unknown => don't filter out (safer)
 	}
 
 	//-- Filter --//
