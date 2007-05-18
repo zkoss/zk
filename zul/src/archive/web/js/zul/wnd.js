@@ -509,8 +509,9 @@ zkWnd._onMoveMask = function (evt) {
 };
 /** Position the mask window. */
 zkWnd._posMask = function (mask) {
-	mask.style.left = zk.innerX() + "px";
-	mask.style.top = zk.innerY() + "px";
+	var ofs = zk.toStyleOffset(mask, zk.innerX(), zk.innerY());
+	mask.style.left = ofs[0] + "px";
+	mask.style.top = ofs[1] + "px";
 	mask.style.width = zk.innerWidth() + "px";
 	mask.style.height = zk.innerHeight() + "px";
 };
