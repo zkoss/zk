@@ -400,8 +400,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		setPage0(page); //UUID might be changed here
 
 		if (_page != null) addToIdSpacesDown(this);
-
-		checkRootEvents();
 	}
 	/** Checks whether it is OK to detach the specified page.
 	 * @param page the page to detach (never null).
@@ -706,8 +704,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_spaceInfo.ns.setParent(
 				_parent != null ? _parent.getNamespace(): null);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
-
-		checkRootEvents();
 	}
 
 	/** Default: return true (allows to have children).
@@ -937,15 +933,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		l.add(listener);
 
 		if (Events.ON_CLIENT_INFO.equals(evtnm))
-			checkRootEvents();
-		return true;
-	}
-	/** Checks special events for root components.
-	 */
-	private void checkRootEvents() {
-		if (_page != null && _parent == null
-		&& Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap & deferrable
 			response("clientInfo", new AuClientInfo());
+		return true;
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
 		if (evtnm == null || listener == null)
@@ -1034,6 +1023,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			} else {
 				_evthds.addAll(evthds);
 			}
+
+			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap & deferrable
+				response("clientInfo", new AuClientInfo());
+				//We always fire even not a root, since we don't like to
+				//check when setParent or setPage is called
 		}
 	}
 	public void addEventHandler(String name, EventHandler evthd) {
