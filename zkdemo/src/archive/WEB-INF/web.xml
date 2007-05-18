@@ -91,6 +91,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<filter-name>zkFilter</filter-name>
 		<url-pattern>/test/filter.dsp</url-pattern>
 	</filter-mapping>
+	<filter-mapping>
+		<filter-name>zkFilter</filter-name>
+		<url-pattern>/test/filter2.dsp</url-pattern>
+	</filter-mapping>
 	-->
 
 	<!-- ///////////// -->

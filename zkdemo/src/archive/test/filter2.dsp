@@ -1,12 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
 <html xmlns:zk="http://www.zkoss.org/2005/zk" xmlns:z="http://www.zkoss.org/2005/zul">
 <head>
-<title>DSP Thru zkFilter</title>
+<title>DSP Thru zkFilter with DTD XHTML</title>
 </head>
 <body>
 	<h1>DSP Thru zkFilter</h1>
-	<h2>Bug 1702216: with DTD HTML</h2>
+	<h2>Bug 1720620: special entity: &Oacute;</h2>
 	<p>To test it, you have to map this file to zkFilter in web.zml</p>
 	<ul id="ul">
 		<li>The first item.</li>
