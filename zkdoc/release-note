@@ -9,6 +9,7 @@ ZK 2.3.2 Freshly
   1712548: isAsap shall not be part of EventListener
   1719140: A way to show custom message when javascript is disabled
   1715649: A way to create inline macro manually
+  1721123: Improve performance if DOCTYPE is specified in zhtml
 
 * Bugs:
   1711769: Grid on Vbox visibility bug
@@ -18,6 +19,9 @@ ZK 2.3.2 Freshly
   1714094: Failed to show the custom error page if failed to include
   1716526: Failed to serialize radiogroup
   1719101: Prevent detaching component belonging to other desktop
+  1720869: onClientInfo no longer firing
+  1720620: zkFilter shall not filter DOCTYPE with DTD XHTML
+  1721158: Modal window as child of another cause mask pos wrong
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
