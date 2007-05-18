@@ -48,7 +48,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "64"; //increase this if we want the browser to reload JavaScript
+zk.build = "65"; //increase this if we want the browser to reload JavaScript
 
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();

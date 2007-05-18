@@ -2033,7 +2033,8 @@ if (Element.getStyle(element, "position") == 'fixed') {
 } else {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
-      element = element.offsetParent;
+//Tom M. Yeh, Potix: Bug 1721158: In FF, element.offsetParent is null in this case
+      element = zk.gecko && element != document.body ? Position.offsetParent(element): element.offsetParent;
 }
     } while (element);
     return [valueL, valueT];
@@ -2044,7 +2045,8 @@ if (Element.getStyle(element, "position") == 'fixed') {
     do {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
-      element = element.offsetParent;
+//Tom M. Yeh, Potix: Bug 1721158: In FF, element.offsetParent is null in this case
+      element = zk.gecko && element != document.body ? Position.offsetParent(element): element.offsetParent;
       if (element) {
         if(element.tagName=='BODY') break;
         var p = Element.getStyle(element, 'position');
@@ -2059,7 +2061,8 @@ if (Element.getStyle(element, "position") == 'fixed') {
     if (element == document.body) return element;
 
     while ((element = element.parentNode) && element != document.body)
-      if (Element.getStyle(element, 'position') != 'static')
+//Tom M. Yeh, Potix: in IE, style might not be available
+      if (element.style && Element.getStyle(element, 'position') != 'static')
         return element;
 
     return document.body;
