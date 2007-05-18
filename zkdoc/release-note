@@ -22,6 +22,7 @@ ZK 2.3.2 Freshly
   1720869: onClientInfo no longer firing
   1720620: zkFilter shall not filter DOCTYPE with DTD XHTML
   1721158: Modal window as child of another cause mask pos wrong
+  1716442: Window.onClick disable  toolbarbutton.onclick
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
