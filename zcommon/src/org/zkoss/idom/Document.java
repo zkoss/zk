@@ -40,9 +40,10 @@ import org.zkoss.idom.impl.*;
  */
 public class Document extends AbstractGroup implements org.w3c.dom.Document {
 	/** The document type. */
-	protected DocType _docType;
+	private DocType _docType;
 	/** The root element. */
-	protected Element _root;
+	private Element _root;
+	private boolean _stdalone;
 
 	/** Constructor.
 	 */
@@ -199,10 +200,10 @@ public class Document extends AbstractGroup implements org.w3c.dom.Document {
 		return null; //Level 3 not yet
 	}
 	public boolean getXmlStandalone() {
-		throw new UnsupportedOperationException("DOM Level 3");
+		return _stdalone; //Level 3 not yet
 	}
 	public void setXmlStandalone(boolean xmlStandalone) throws DOMException {
-		//Level 3 not yet
+		_stdalone = xmlStandalone; //Level 3 not yet
 	}
 	public String getXmlVersion() {
 		return "1.0";
