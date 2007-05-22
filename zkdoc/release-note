@@ -23,6 +23,8 @@ ZK 2.3.2 Freshly
   1720620: zkFilter shall not filter DOCTYPE with DTD XHTML
   1721158: Modal window as child of another cause mask pos wrong
   1716442: Window.onClick disable  toolbarbutton.onclick
+  1722888: forEach failed with Groovy
+  1721859: width attribute broken when percent is used
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
