@@ -27,7 +27,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
-import java.util.Collections;
+import java.util.AbstractSet;
 import java.util.NoSuchElementException;
 
 import org.zkoss.lang.D;
@@ -112,6 +112,8 @@ implements RenderOnDemand {
 	private transient List _items;
 	/** A list of selected items. */
 	private transient Set _selItems;
+	/** A readonly copy of {@link #_selItems}. */
+	private transient Set _roSelItems;
 	private int _maxlength;
 	private int _rows, _jsel = -1;
 	private transient Listhead _listhead;
@@ -161,6 +163,27 @@ implements RenderOnDemand {
 			}
 		};
 		_selItems = new LinkedHashSet(5);
+		_roSelItems = new AbstractSet() {
+			public int size() {
+				return _selItems.size();
+			}
+			public Iterator iterator() {
+				return new Iterator() {
+					final Iterator _it = _selItems.iterator();
+					public boolean hasNext() {
+						return _it.hasNext();
+					}
+					public Object next() {
+						final Listitem li = (Listitem)_it.next();
+						renderItem(li);
+						return li;
+					}
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+				};
+			}
+		};
 	}
 	private void initDataListener() {
 		if (_dataListener == null)
@@ -406,6 +429,10 @@ implements RenderOnDemand {
 		return _items.size();
 	}
 	/** Returns the item at the specified index.
+	 *
+	 * <p>Note: if live data is used ({@link #getModel} is not null),
+	 * the returned item might NOT be loaded yet.
+	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
 	 */
 	public Listitem getItemAtIndex(int index) {
 		return (Listitem)_items.get(index);
@@ -562,12 +589,20 @@ implements RenderOnDemand {
 	}
 
 	/** Returns the selected item.
+	 *
+	 * <p>Note: Unlike {@link #getItems}, {@link #appendItem}, {@link #removeItemAt}
+	 * {@link #getItemAtIndex}, and many others, the returned selected listitem
+	 * is loaded automatically (if live data is used,
+	 * i.e., {@link #getModel} not null).
 	 */
 	public Listitem getSelectedItem() {
-		return _jsel >= 0 ?
+		final Listitem li =  _jsel >= 0 ?
 			_jsel > 0 && _selItems.size() == 1 ? //optimize for performance
 				(Listitem)_selItems.iterator().next():
 				getItemAtIndex(_jsel): null;
+		if (li != null)
+			renderItem(li);
+		return li;
 	}
 	/**  Deselects all of the currently selected items and selects
 	 * the given item.
@@ -578,9 +613,14 @@ implements RenderOnDemand {
 	}
 
 	/** Returns all selected items.
+	 *
+	 * <p>Note: Unlike {@link #getItems}, {@link #appendItem}, {@link #removeItemAt}
+	 * {@link #getItemAtIndex}, and many others, the returned selected listitems
+	 * are loaded automatically (if live data is used,
+	 * i.e., {@link #getModel} not null).
 	 */
 	public Set getSelectedItems() {
-		return Collections.unmodifiableSet(_selItems);
+		return _roSelItems;
 	}
 	/** Returns the number of items being selected.
 	 */
@@ -589,6 +629,10 @@ implements RenderOnDemand {
 	}
 
 	/** Appends an item.
+	 *
+	 * <p>Note: if live data is used ({@link #getModel} is not null),
+	 * the returned item might NOT be loaded yet.
+	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
 	 */
 	public Listitem appendItem(String label, String value) {
 		final Listitem item = new Listitem(label, value);
@@ -597,6 +641,11 @@ implements RenderOnDemand {
 		return item;
 	}
 	/**  Removes the child item in the list box at the given index.
+	 *
+	 * <p>Note: if live data is used ({@link #getModel} is not null),
+	 * the returned item might NOT be loaded yet.
+	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
+	 *
 	 * @return the removed item.
 	 */
 	public Listitem removeItemAt(int index) {
@@ -1277,6 +1326,9 @@ implements RenderOnDemand {
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
 	 * In other words, it is meaningful only if live data model is used.
+	 *
+	 * @see #renderItems
+	 * @see #renderAll
 	 */
 	public void renderItem(Listitem li) {
 		if (_model == null) return;
@@ -1292,6 +1344,9 @@ implements RenderOnDemand {
 	}
 	/** Renders all {@link Listitem} if not loaded yet,
 	 * with {@link #getItemRenderer}.
+	 *
+	 * @see #renderItem
+	 * @see #renderItems
 	 */
 	public void renderAll() {
 		if (_model == null) return;
@@ -1309,10 +1364,7 @@ implements RenderOnDemand {
 
 	//-- RenderOnDemand --//
 	public void renderItems(Set items) {
-		if (_model == null) { //just in case that app dev might change it
-			if (log.debugable()) log.debug("No model no render");
-			return;
-		}
+		if (_model == null) return;
 
 		if (items.isEmpty())
 			return; //nothing to do
