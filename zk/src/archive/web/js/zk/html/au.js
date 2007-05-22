@@ -182,15 +182,18 @@ zkau._onRespReady = function () {
 				if (ofs == que.length) que.push(resp);
 				else que.splice(ofs, 0, resp); //insert
 			} else {
-				zk.error(mesg.FAILED_TO_RESPONSE+req.statusText);
-				zkau._cleanupOnFatal();
+				if (!zkau._ignorable && !zkau._unloading)
+					zk.error(mesg.FAILED_TO_RESPONSE+(req.statusText!="Unknown"?req.statusText:""));
+				zkau._cleanupOnFatal(zkau._ignorable);
 			}
 		} catch (e) {
 			//NOTE: if connection is off and req.status is accessed,
 			//Mozilla throws exception while IE returns a value
-			if (!zkau._unloading)
-				zk.error(mesg.FAILED_TO_RESPONSE+e.message);
-			zkau._cleanupOnFatal();
+			if (!zkau._ignorable && !zkau._unloading) {
+				var msg = e.message;
+				zk.error(mesg.FAILED_TO_RESPONSE+(msg.indexOf("NOT_AVAILABLE")<0?msg:""));
+			}
+			zkau._cleanupOnFatal(zkau._ignorable);
 		}
 	}
 
@@ -321,12 +324,15 @@ zkau._sendNow = function (dtid) {
 		return;
 	}
 
-	//decide implicit
-	var implicit = true;
+	//decide implicit and ignorable
+	var implicit = true, ignorable = true;
 	for (var j = es.length; --j >= 0;) {
-		if (!es[j].implicit) {
-			implicit = false;
-			break;
+		if (!es[j].ignorable) { //ignorable implies implicit
+			ignorable = false;
+			if (!es[j].implicit) {
+				implicit = false;
+				break;
+			}
 		}
 	}
 
@@ -362,27 +368,31 @@ zkau._sendNow = function (dtid) {
 		req = new XMLHttpRequest();
 	}
 
+	var msg;
 	if (req) {
 		try {
-			if (!zkau.ignoreResponse) { //use with care
-				zkau._reqs.push(req);
-				req.onreadystatechange = zkau._onRespReady;
-			}
+			zkau._ignorable = ignorable && (zkau._ignorable || !zkau._reqs.length);
+
+			zkau._reqs.push(req);
+			req.onreadystatechange = zkau._onRespReady;
+
 			req.open("POST", zk_action, true);
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			req.send(content);
+
 			if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
+			return; //success
 		} catch (e) {
 			try {
 				if(typeof req.abort == "function") req.abort();
 			} catch (e2) {
 			}
-			if (!zkau._unloading)
-				zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+"\n"+e.message);
+			msg = e.message;
 		}
-	} else if (!zkau._unloading) {
-		zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content);
 	}
+	if (!ignorable && !zkau._unloading)
+		zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+(msg?"\n"+msg:""));
+	zkau._cleanupOnFatal(ignorable);
 };
 
 /** Adds a script that will be evaluated when the next response is back. */
@@ -495,11 +505,11 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 zk.process = zkau.process; //ZK assumes zk.process, so change it
 
 /** Cleans up if we detect obsolete or other severe errors. */
-zkau._cleanupOnFatal = function () {
+zkau._cleanupOnFatal = function (ignorable) {
 	for (uuid in zkau._metas) {
 		var meta = zkau._metas[uuid];
 		if (meta && meta.cleanupOnFatal)
-			meta.cleanupOnFatal();
+			meta.cleanupOnFatal(ignorable);
 	}
 };
 
