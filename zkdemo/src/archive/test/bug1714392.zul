@@ -1,0 +1,217 @@
+<zk> 
+<window id="mainWin" xmlns:a="http://www.zkoss.org/2005/zk/annotation" width="500px"> 
+ 
+<grid id="mygrid"> 
+<rows> 
+<row> 
+First name: 
+<a:bind value="selected.firstName" disabled="selected.disabled"/> 
+<textbox /> 
+</row> 
+<row> 
+Last name: 
+<a:bind value="selected.lastName" disabled="selected.disabled"/> 
+<textbox /> 
+</row> 
+<row> 
+ID1: 
+<a:bind value="selected.id1" disabled="selected.disabled"/> 
+<decimalbox /> 
+</row> 
+<row> 
+ID2: 
+<a:bind value="selected.id2" disabled="selected.disabled"/> 
+<decimalbox /> 
+</row> 
+<row> 
+Edit: 
+<a:bind checked="selected.editable" /> 
+<checkbox /> 
+</row> 
+</rows> 
+</grid> 
+ 
+<!-- listbox 1 --> 
+Why listbox with annotation doesn't accept the UP/DOWN keys
+
+<a:bind model="persons" selectedItem="selected"/> 
+<listbox id="mylistbox" onSelect="dosomething()" rows="4" > 
+<listhead> 
+<listheader label="checkbox"/> 
+<listheader label="First Name"/> 
+<listheader label="Last Name"/> 
+<listheader label="ID1"/> 
+<listheader label="ID2"/> 
+<listheader label="editable"/> 
+<listheader label="disabled"/> 
+</listhead> 
+<a:bind _var="person"/> 
+<listitem> 
+<listcell> 
+<a:bind checked="person.editable"/> 
+<checkbox/> 
+</listcell> 
+<listcell> 
+<a:bind value="person.firstName"/> 
+<label/> 
+</listcell> 
+<listcell> 
+<a:bind value="person.lastName"/> 
+<label/> 
+</listcell> 
+<listcell> 
+<a:bind value="person.id1"/> 
+<label/> 
+</listcell> 
+<listcell> 
+<a:bind value="person.id2"/> 
+<label/> 
+</listcell> 
+<listcell> 
+<a:bind value="person.editable"/> 
+<label/> 
+</listcell> 
+<listcell> 
+<a:bind value="person.disabled"/> 
+<label/> 
+</listcell> 
+ 
+</listitem> 
+ 
+</listbox> 
+ 
+<!-- listbox 2 --> 
+<listbox id="mylistbox2" rows="4" onSelect="dosomething();"> 
+<listhead> 
+<listheader label="checkbox"/> 
+<listheader label="First Name"/> 
+<listheader label="Last Name"/> 
+<listheader label="ID1"/> 
+<listheader label="ID2"/> 
+<listheader label="editable"/> 
+<listheader label="disabled"/> 
+</listhead> 
+<listitem> 
+<listcell> 
+<checkbox/>
+</listcell> 
+<listcell> 
+Jhon 
+</listcell> 
+<listcell> 
+Doe
+</listcell> 
+<listcell> 
+100
+</listcell> 
+<listcell> 
+200
+</listcell> 
+<listcell> 
+false
+</listcell> 
+<listcell> 
+false
+</listcell> 
+</listitem> 
+<listitem> 
+<listcell> 
+<checkbox/>
+</listcell> 
+<listcell> 
+Jhon 
+</listcell> 
+<listcell> 
+Doe
+</listcell> 
+<listcell> 
+100
+</listcell> 
+<listcell> 
+200
+</listcell> 
+<listcell> 
+false
+</listcell> 
+<listcell> 
+false
+</listcell> 
+</listitem> 
+</listbox> 
+</window> 
+ 
+<zscript> 
+
+import java.util.ArrayList; 
+import java.util.Calendar; 
+
+public class Person {
+	private String _firstName = "Hello";
+	private String _lastName = "ZK";
+	private int _id1, _id2;
+
+	public Person() {
+	}
+	public Person(String firstName, String lastName, int id1, int id2) {
+		_firstName = firstName;
+		_lastName = lastName;
+		_id1 = id1;
+		_id2 = id2;
+	}
+
+	//accessor
+	public void setFirstName(String f) {
+		_firstName = f;
+	}
+	public String getFirstName() {
+		return _firstName;
+	}
+	public void setLastName(String l) {
+		_lastName = l;
+	}
+	public String getLastName() {
+		return _lastName;
+	}
+	public String getFullName() {
+		return _firstName + " " + _lastName;
+	}
+
+	public int getId1() {
+		return _id1;
+	}
+	public void setId1(int id) {
+		_id1 = id;
+	}
+	public int getId2() {
+		return _id2;
+	}
+	public void setId2(int id) {
+		_id2 = id;
+	}
+
+	public boolean isDisabled() {
+		return false;
+	}
+	public boolean isEditable() {
+		return false;
+	}
+}
+ 
+ArrayList persons = new ArrayList(); 
+Person selected = new Person(); 
+ 
+persons.add(new Person("John", "Doe", 100, 200)); 
+persons.add(new Person("Jean", "Marie", 150, 250)); 
+persons.add(new Person("Marie", "Ann", 200, 300)); 
+persons.add(new Person("Jean", "Claude", 250, 350)); 
+ 
+AnnotateDataBinder binder = new AnnotateDataBinder(mainWin); 
+binder.bindBean("persons", persons); 
+binder.loadAll(); 
+ 
+void dosomething() 
+{ 
+binder.loadAll(); 
+} 
+</zscript> 
+</zk>
