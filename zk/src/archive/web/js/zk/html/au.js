@@ -593,7 +593,8 @@ zkau.setAttr = function (cmp, name, value) {
 				value = "true" == value || name == value;
 			cmp.style[name] = value;
 
-			if ("width" == name && "true" != getZKAttr(cmp, "float")) {
+			if ("width" == name && (!value || value.indexOf('%') < 0) //don't handle width with %
+			&& "true" != getZKAttr(cmp, "float")) {
 				var ext = $e(cmp.id + "!chdextr");
 				if (ext && $tag(ext) == "TD" && ext.colSpan == 1)
 					ext.style.width = value;
