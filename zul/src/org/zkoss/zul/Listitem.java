@@ -230,10 +230,13 @@ public class Listitem extends XulElement {
 				smartUpdate("z.loaded", _loaded);
 		}
 	}
-	/** Returns whether the content of this item is loaded; used if
-	 * the listbox owning this item is using a list model.
+	/** Returns whether the content of this item is loaded.
+	 * It is meaningful only if {@link #getListbox} is live data,
+	 * i.e., {@link Listbox#getModel} is not null.
+	 *
+	 * @since 2.3.2
 	 */
-	/*package*/ final boolean isLoaded() {
+	public boolean isLoaded() {
 		return _loaded;
 	}
 

@@ -27,7 +27,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
-import java.util.AbstractSet;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 
 import org.zkoss.lang.D;
@@ -163,27 +163,7 @@ implements RenderOnDemand {
 			}
 		};
 		_selItems = new LinkedHashSet(5);
-		_roSelItems = new AbstractSet() {
-			public int size() {
-				return _selItems.size();
-			}
-			public Iterator iterator() {
-				return new Iterator() {
-					final Iterator _it = _selItems.iterator();
-					public boolean hasNext() {
-						return _it.hasNext();
-					}
-					public Object next() {
-						final Listitem li = (Listitem)_it.next();
-						renderItem(li);
-						return li;
-					}
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-			}
-		};
+		_roSelItems = Collections.unmodifiableSet(_selItems);
 	}
 	private void initDataListener() {
 		if (_dataListener == null)
@@ -590,19 +570,15 @@ implements RenderOnDemand {
 
 	/** Returns the selected item.
 	 *
-	 * <p>Note: Unlike {@link #getItems}, {@link #appendItem}, {@link #removeItemAt}
-	 * {@link #getItemAtIndex}, and many others, the returned selected listitem
-	 * is loaded automatically (if live data is used,
-	 * i.e., {@link #getModel} not null).
+	 * <p>Note: if live data is used ({@link #getModel} is not null),
+	 * the returned item might NOT be loaded yet.
+	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
 	 */
 	public Listitem getSelectedItem() {
-		final Listitem li =  _jsel >= 0 ?
+		return  _jsel >= 0 ?
 			_jsel > 0 && _selItems.size() == 1 ? //optimize for performance
 				(Listitem)_selItems.iterator().next():
 				getItemAtIndex(_jsel): null;
-		if (li != null)
-			renderItem(li);
-		return li;
 	}
 	/**  Deselects all of the currently selected items and selects
 	 * the given item.
@@ -614,10 +590,9 @@ implements RenderOnDemand {
 
 	/** Returns all selected items.
 	 *
-	 * <p>Note: Unlike {@link #getItems}, {@link #appendItem}, {@link #removeItemAt}
-	 * {@link #getItemAtIndex}, and many others, the returned selected listitems
-	 * are loaded automatically (if live data is used,
-	 * i.e., {@link #getModel} not null).
+	 * <p>Note: if live data is used ({@link #getModel} is not null),
+	 * the returned item might NOT be loaded yet.
+	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
 	 */
 	public Set getSelectedItems() {
 		return _roSelItems;
@@ -1329,18 +1304,20 @@ implements RenderOnDemand {
 	 *
 	 * @see #renderItems
 	 * @see #renderAll
+	 * @return the list item being passed to this method
 	 */
-	public void renderItem(Listitem li) {
-		if (_model == null) return;
-
-		final Renderer renderer = new Renderer();
-		try {
-			renderer.render(li);
-		} catch (Throwable ex) {
-			renderer.doCatch(ex);
-		} finally {
-			renderer.doFinally();
+	public Listitem renderItem(Listitem li) {
+		if (_model != null && !li.isLoaded()) {
+			final Renderer renderer = new Renderer();
+			try {
+				renderer.render(li);
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
+			}
 		}
+		return li;
 	}
 	/** Renders all {@link Listitem} if not loaded yet,
 	 * with {@link #getItemRenderer}.
