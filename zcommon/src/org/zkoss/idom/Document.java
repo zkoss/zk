@@ -43,7 +43,8 @@ public class Document extends AbstractGroup implements org.w3c.dom.Document {
 	private DocType _docType;
 	/** The root element. */
 	private Element _root;
-	private boolean _stdalone;
+	private String _docURI, _ver = "1.0";
+	private boolean _stdalone, _stricterrck = true;
 
 	/** Constructor.
 	 */
@@ -206,21 +207,23 @@ public class Document extends AbstractGroup implements org.w3c.dom.Document {
 		_stdalone = xmlStandalone; //Level 3 not yet
 	}
 	public String getXmlVersion() {
-		return "1.0";
+		return _ver;
 	}
 	public void setXmlVersion(String xmlVersion) throws DOMException {
+		_ver = xmlVersion; //Level 3 not yet
 	}
 	public boolean getStrictErrorChecking() {
-		return true;
+		return _stricterrck; //Level 3 not yet
 	}
 	public void setStrictErrorChecking(boolean strictErrorChecking) {
-		//Level 3 not yet
+		_stricterrck = strictErrorChecking; //Level 3 not yet
 	}
 	public String getDocumentURI() {
-		throw new UnsupportedOperationException("DOM Level 3");
+		return _docURI; //Level 3 not yet
+
 	}
 	public void setDocumentURI(String documentURI) {
-		//Level 3 not yet
+		_docURI = documentURI; //Level 3 not yet
 	}
 	public Node adoptNode(Node source) throws DOMException {
 		throw new UnsupportedOperationException("DOM Level 3");
