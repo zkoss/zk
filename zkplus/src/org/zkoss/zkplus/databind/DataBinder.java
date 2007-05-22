@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
+import org.zkoss.zk.scripting.HierachicalAware;
 
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Row;
@@ -65,7 +66,6 @@ public class DataBinder {
 	private static final String OWNER = "zkplus.databind.OWNER"; //the collection owner of the template component
 	private static final String HASTEMPLATEOWNER = "zkplus.databind.HASTEMPLATEOWNER"; //whether has template owner (collection in collection)
 	private static final Object NA = new Object();
-	private static final String ASSIGNVAR = "var_tmp_assignment"; //the temp var name for assignment script
 
 	private Map _compBindingMap = new LinkedHashMap(29); //(comp, Map(attr, Binding))
 	private Map _beans = new HashMap(29); //bean local to this DataBinder
@@ -856,20 +856,15 @@ public class DataBinder {
 	//Very tricky implementation, assume "=" the assignment operator for all interpreters.
 	//All loaded interperter will be set a zscript variable
 	private void setZScriptVariable(Component comp, String beanid, Object val) {
-		final Page page = comp.getPage();
-		//put val into Page's name space with a strange variable name.
-		page.setVariable(ASSIGNVAR, val);
-		
-		//for all loaded interperter, let interpret the assignment script
-		final String script = beanid + " = "+ ASSIGNVAR;
-		final Namespace ns = page.getNamespace();
-		final Collection interpreters = page.getLoadedInterpreters();
-		for(final Iterator it = interpreters.iterator(); it.hasNext();) {
-			final Interpreter interpreter = (Interpreter) it.next();
-			if ("ruby".equalsIgnoreCase(interpreter.getLanguage())) {
-				interpreter.interpret("$"+script, ns);
+		//for all loaded interperter, assign val to beanid
+		final Namespace ns = comp.getNamespace();
+		for(final Iterator it = comp.getPage().getLoadedInterpreters().iterator();
+		it.hasNext();) {
+			final Interpreter ip = (Interpreter) it.next();
+			if (ip instanceof HierachicalAware) {
+				((HierachicalAware)ip).setVariable(ns, beanid, val);
 			} else {
-				interpreter.interpret(script, ns);
+				ip.setVariable(beanid, val);
 			}
 		}
 	}
