@@ -25,7 +25,6 @@ ZK 2.3.2 Freshly
   1716442: Window.onClick disable  toolbarbutton.onclick
   1722888: forEach failed with Groovy
   1721859: width attribute broken when percent is used
-  1714970: Listbox getSelectedItems() in paging mold
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
