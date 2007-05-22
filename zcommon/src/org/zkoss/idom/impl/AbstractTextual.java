@@ -167,6 +167,11 @@ implements Textual, CharacterData {
 		throw new UnsupportedOperationException("DOM Level 3");
 	}
 
+	//Node//
+	public String getTextContent() {
+		return getText();
+	}
+
 	//-- Object --//
 	/**
 	 * Gets the textual representation for debug.

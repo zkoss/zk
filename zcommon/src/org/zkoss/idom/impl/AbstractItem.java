@@ -306,7 +306,7 @@ implements Item, Node, Serializable, Cloneable {
 	}
 
 	public String getBaseURI() {
-		throw new UnsupportedOperationException("DOM Level 3");
+		return null; //Level 3 not yet
 	}
 	public short compareDocumentPosition(Node other) throws DOMException {
 		throw new UnsupportedOperationException("DOM Level 3");
