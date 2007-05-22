@@ -26,6 +26,17 @@ zk.Timer.prototype = {
 		zkau.setMeta(comp, this);
 		this.init();
 	},
+	/** Recognized by zkau.js when 'obsolte' or other severe fatal
+	 * error is found. It clears any timeout and interval to avoid
+	 * annoying users.
+	 */
+//	cleanupOnFatal: function (ignorable) {
+//		this.cleanup();
+//	},
+//Tom M. Yeh: 5/21/2007
+//Don't cleanup since it may take a while to failover to another server
+//Rather, we turn off the error message (by specifying ignorable)
+
 	init: function () {
 		var el = $e(this.id);
 		if (!el) return;
@@ -49,13 +60,6 @@ zk.Timer.prototype = {
 			window.clearInterval(this.interval);
 			this.interval = null;
 		}
-	},
-	/** Recognized by zkau.js when 'obsolte' or other severe fatal
-	 * error is found. It clears any timeout and interval to avoid
-	 * annoying users.
-	 */
-	cleanupOnFatal: function () {
-		this.cleanup();
 	}
 };
 
@@ -82,5 +86,5 @@ zkTimer.setAttr = function (cmp, nm, val) {
 
 /** Fires an onTimer event. */
 zkTimer._fire = function (uuid) {
-	zkau.send({uuid: uuid, cmd: "onTimer", data: null, implicit: true}, 0);
+	zkau.send({uuid: uuid, cmd: "onTimer", data: null, ignorable: true}, 0);
 };
