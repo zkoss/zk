@@ -57,7 +57,11 @@ public class GroovyInterpreter extends GenericInterpreter {
 	}
 
 	protected Object get(String name) {
-		return _global.getVariable(name);
+		try {
+			return _global.getVariable(name);
+		} catch (groovy.lang.MissingPropertyException ex) { //Groovy throws exceptions instead of returning null
+			return null;
+		}
 	}
 	protected void set(String name, Object value) {
 		_global.setVariable(name, value);
