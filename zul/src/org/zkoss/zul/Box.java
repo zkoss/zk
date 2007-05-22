@@ -224,10 +224,13 @@ public class Box extends XulElement {
 		final boolean visible = vert || floating || child.isVisible();
 			//if vert, visible is handled by getChildOutAttrs
 
-		final String wd =
-			!floating && size == null && !vert && (child instanceof HtmlBasedComponent) ?
+		String wd = !floating && size == null && !vert
+			&& (child instanceof HtmlBasedComponent) ?
 				((HtmlBasedComponent)child).getWidth(): null;
 				//priority: floating, size and then child's width
+		if (wd != null && wd.indexOf("%") >= 0)
+			wd = null; //don't generate it at TD
+
 		if (_spacing != null || size != null || wd != null || floating || !visible) {
 			sb.append("style=\"");
 			if (!visible)
