@@ -637,7 +637,6 @@ public class UiEngineImpl implements UiEngine {
 				responses.add(new AuAlert(Exceptions.getMessage(ex)));
 
 				log.error(ex);
-				errs.add(ex); //so invokeExecutionCleanups knows it
 			}
 
 			if (rque.hasRequest())

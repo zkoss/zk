@@ -101,6 +101,8 @@ import org.zkoss.zk.au.*;
 	private final boolean _1stau;
 	/** Whether it is in recovering. */
 	private final boolean _recovering;
+	/** Whether it is ending, i.e., no further update is allowed. */
+	private boolean _ending;
 
 	/**
 	 * Creates a root execution (without parent).
@@ -167,6 +169,7 @@ import org.zkoss.zk.au.*;
 		final Page page = comp.getPage();
 		if (_recovering || page == null || !_exec.isAsyncUpdate(page))
 			return; //nothing to do
+		if (_ending) throw new IllegalStateException();
 
 		checkDesktop(comp);
 
@@ -188,6 +191,7 @@ import org.zkoss.zk.au.*;
 		if (_recovering || page == null || !_exec.isAsyncUpdate(page)
 		|| _invalidated.contains(comp))
 			return; //nothing to do
+		if (_ending) throw new IllegalStateException();
 
 		checkDesktop(comp);
 
@@ -209,6 +213,7 @@ import org.zkoss.zk.au.*;
 		|| (newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
 		|| (oldpg == null && !_exec.isAsyncUpdate(newpg))) //attach to loading pg
 			return; //to avoid redundant AuRemove
+		if (_ending) throw new IllegalStateException();
 
 		if (oldpg == null && !_moved.contains(comp)) { //new attached
 			_attached.add(comp);
@@ -546,6 +551,8 @@ import org.zkoss.zk.au.*;
 			final Component comp = (Component)it.next();
 			responses.add(new AuReplace(comp, redraw(comp)));
 		}
+
+		_ending = true; //no more addSmartUpdate...
 
 		//6. add attached components (including setParent)
 		//Due to cyclic references, we have to process all siblings
