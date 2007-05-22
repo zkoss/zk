@@ -63,7 +63,7 @@ public class DefinitionLoaders {
 
 	private static List _addons;
 	private static short[] _zkver;
-	private static boolean _loaded;
+	private static boolean _loaded, _loading;
 
 	//CONSIDER:
 	//Sotre language definitions per WebApp, since diff app may add its
@@ -131,11 +131,13 @@ public class DefinitionLoaders {
 	/*package*/ static void load() {
 		if (!_loaded) {
 			synchronized (DefinitionLoaders.class) {
-				if (!_loaded) {
+				if (!_loaded && !_loading) {
 					try {
+						_loading = true; //prevent re-entry for the same thread
 						load0();
 					} finally {
 						_loaded = true; //only once
+						_loading = false;
 					}
 				}
 			}
