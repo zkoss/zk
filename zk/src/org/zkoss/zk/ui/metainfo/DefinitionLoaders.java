@@ -132,8 +132,11 @@ public class DefinitionLoaders {
 		if (!_loaded) {
 			synchronized (DefinitionLoaders.class) {
 				if (!_loaded) {
-					_loaded = true; //only once
-					load0();
+					try {
+						load0();
+					} finally {
+						_loaded = true; //only once
+					}
 				}
 			}
 		}
