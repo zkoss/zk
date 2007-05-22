@@ -91,6 +91,22 @@ implements SerializableAware, HierachicalAware {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
+	protected void set(String name, Object val) {
+		try {
+			_ip.set(name, val);
+				//unlike NameSpace.setVariable, _ip.set() handles null
+		} catch (EvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+	protected void unset(String name) {
+		try {
+			_ip.unset(name);
+		} catch (EvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+
 	protected Object get(Namespace ns, String name) {
 		if (ns != null) {
 			final NameSpace bshns = prepareNS(ns);
@@ -106,20 +122,34 @@ implements SerializableAware, HierachicalAware {
 		}
 		return get(name);
 	}
-	protected void set(String name, Object val) {
-		try {
-			_ip.set(name, val);
-				//unlike NameSpace.setVariable, _ip.set() handles null
-		} catch (EvalError ex) {
-			throw UiException.Aide.wrap(ex);
+	protected void set(Namespace ns, String name, Object val) {
+		if (ns != null) {
+			final NameSpace bshns = prepareNS(ns);
+				//note: we have to create NameSpace (with prepareNS)
+				//to have the correct chain
+			if (bshns != _bshns) {
+		 		try {
+			 		bshns.setVariable(
+			 			name, val != null ? val: Primitive.NULL, true);
+		 			return;
+				} catch (UtilEvalError ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
 		}
+		set(name, val);
 	}
-	protected void unset(String name) {
-		try {
-			_ip.unset(name);
-		} catch (EvalError ex) {
-			throw UiException.Aide.wrap(ex);
+	protected void unset(Namespace ns, String name) {
+		if (ns != null) {
+			final NameSpace bshns = prepareNS(ns);
+				//note: we have to create NameSpace (with prepareNS)
+				//to have the correct chain
+			if (bshns != _bshns) {
+		 		bshns.unsetVariable(name);
+	 			return;
+			}
 		}
+		unset(name);
 	}
 
 	//-- Interpreter --//

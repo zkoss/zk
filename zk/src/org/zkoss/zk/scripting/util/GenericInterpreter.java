@@ -40,7 +40,7 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  * <p>Derive classes usually override {@link #exec} instead of {@link #interpret};
  * In addition, don't override {@link #getVariable},
  * {@link #setVariable} and {@link #unsetVariable}.
- * Instead, override {@link #get(String)}, {@link #set} and {@link #unset} instead.
+ * Instead, override {@link #get(String)}, {@link #set(String,Object)} and {@link #unset(String)} instead.
  *
  * <p>If an interpreter doesn't support hierachical scopes,
  * it can simply implement a global scope, and then use
@@ -52,6 +52,8 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  * can maintain a one-to-one relationship among interpreter's scopes
  * and ZK's {@link Namespace}. Thus, it can retrieve
  * the correct scope by giving ZK's {@link Namespace}, and vice versa.
+ * It also has to implement {@link #get(Namespace,String)},
+ * {@link #set(Namespace,String,Object)} and {@link #unset(Namespace,String)}.
  *
  * <p>Whether to support hierachical namespaces is optional.
  *
@@ -87,8 +89,24 @@ abstract public class GenericInterpreter implements Interpreter {
 	protected Object get(String name) {
 		return null;
 	}
-	/** Gets the variable from the interpreter's scope of the giving
-	 * namespace.
+	/** Sets the variable to the interpreter.
+	 * Optional. Implement it if you want to allow Java codes to define
+	 * a variable in the interpreter.
+	 *
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 */
+	protected void set(String name, Object value) {
+	}
+	/** Removes the variable from the interpreter.
+	 * Optional. Implement it if you want to allow Java codes to undefine
+	 * a variable from the interpreter.
+	 *
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 */
+	protected void unset(String name) {
+	}
+	/** Gets the variable from the interpreter's scope associated with
+	 * the giving namespace.
 	 * Optional. Implement it if you want to expose variables defined
 	 * in the interpreter to Java codes.
 	 *
@@ -105,21 +123,34 @@ abstract public class GenericInterpreter implements Interpreter {
 	protected Object get(Namespace ns, String name) {
 		return get(name);
 	}
-	/** Sets the variable from the interpreter.
+	/** Sets the variable to the interpreter's scope associated with the
+	 * giving namespace.
 	 * Optional. Implement it if you want to allow Java codes to define
 	 * a variable in the interpreter.
 	 *
+	 * <p>This method is implemented only if the interpreter that supports
+	 * hierachical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
+	 *
+	 * <p>Default: the same as {@link #set(String, Object)}.
+	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 */
-	protected void set(String name, Object value) {
+	protected void set(Namespace ns, String name, Object value) {
+		set(name, value);
 	}
 	/** Removes the variable from the interpreter.
 	 * Optional. Implement it if you want to allow Java codes to undefine
 	 * a variable from the interpreter.
 	 *
+	 * <p>This method is implemented only if the interpreter that supports
+	 * hierachical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
+	 *
+	 * <p>Default: the same as {@link #unset(String)}.
+	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 */
-	protected void unset(String name) {
+	protected void unset(Namespace ns, String name) {
+		unset(name);
 	}
 
 	/** Called before {@link #exec}.
@@ -219,7 +250,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 	/** Retrieve the variable.
 	 *
-	 * <p>Deriving class shall override {@link #get}, instead of this method.
+	 * <p>Deriving class shall override {@link #get(String)}, instead of this method.
 	 */
 	public Object getVariable(String name) {
 		beforeExec();
@@ -232,10 +263,35 @@ abstract public class GenericInterpreter implements Interpreter {
 			afterExec();
 		}
 	}
+	/** Sets the variable to this interpreter.
+	 *
+	 * <p>Deriving class shall override {@link #set(String,Object)}, instead of this method.
+	 */
+	public final void setVariable(String name, Object value) {
+		beforeExec();
+		try {
+			set(name, value);
+		} finally {
+			afterExec();
+		}
+	}
+	/** Removes the variable from this interpreter.
+	 *
+	 * <p>Deriving class shall override {@link #unset(String)}, instead of this method.
+	 */
+	public final void unsetVariable(String name) {
+		beforeExec();
+		try {
+			unset(name);
+		} finally {
+			afterExec();
+		}
+	}
+
 	/** Retrieve the variable by using the specified namespace
 	 * as a reference.
 	 *
-	 * <p>Deriving class shall override {@link #get(Namespace ns, String)},
+	 * <p>Deriving class shall override {@link #get(Namespace,String)},
 	 * instead of this method.
 	 *
 	 * <p>This method is part of {@link org.zkoss.zk.scripting.HierachicalAware}.
@@ -255,24 +311,25 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 	/** Sets the variable to this interpreter.
 	 *
-	 * <p>Deriving class shall override {@link #set}, instead of this method.
+	 * <p>Deriving class shall override {@link #set(Namespace,String,Object)},
+	 * instead of this method.
 	 */
-	public final void setVariable(String name, Object value) {
+	public final void setVariable(Namespace ns, String name, Object value) {
 		beforeExec();
 		try {
-			set(name, value);
+			set(ns, name, value);
 		} finally {
 			afterExec();
 		}
 	}
 	/** Removes the variable from this interpreter.
 	 *
-	 * <p>Deriving class shall override {@link #unset}, instead of this method.
+	 * <p>Deriving class shall override {@link #unset(Namespace,String)}, instead of this method.
 	 */
-	public final void unsetVariable(String name) {
+	public final void unsetVariable(Namespace ns, String name) {
 		beforeExec();
 		try {
-			unset(name);
+			unset(ns, name);
 		} finally {
 			afterExec();
 		}

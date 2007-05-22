@@ -39,7 +39,7 @@ public interface HierachicalAware {
 	/** Returns the value of a variable defined in this interpreter.
 	 * Note: it doesn't search the namespace.
 	 *
-	 * <p>It is similar to {@link Interpreter#getVariable(String)}, except
+	 * <p>It is similar to {@link Interpreter#getVariable}, except
 	 * it uses the specified namespace as a reference to identify the
 	 * correct scope for searching the variable.
 	 *
@@ -48,4 +48,27 @@ public interface HierachicalAware {
 	 * Note: this method doesn't look for any variable stored in ns.
 	 */
 	public Object getVariable(Namespace ns, String name);
+	/** Sets the value of a variable to this interpreter, as if
+	 * they are defined in the interpreter.
+	 *
+	 * <p>It is similar to {@link Interpreter#setVariable}, except
+	 * it uses the specified namespace as a reference to identify the
+	 * correct scope for storing the variable.
+	 *
+	 * @param ns the namespace used as a reference to identify the
+	 * correct scope for searching the variable.
+	 * Note: this method doesn't look for any variable stored in ns.
+	 */
+	public void setVariable(Namespace ns, String name, Object value);
+	/** Removes the value of a variable defined in this interpreter.
+	 *
+	 * <p>It is similar to {@link Interpreter#setVariable}, except
+	 * it uses the specified namespace as a reference to identify the
+	 * correct scope for removing the variable.
+	 *
+	 * @param ns the namespace used as a reference to identify the
+	 * correct scope for searching the variable.
+	 * Note: this method doesn't look for any variable stored in ns.
+	 */
+	public void unsetVariable(Namespace ns, String name);
 }
