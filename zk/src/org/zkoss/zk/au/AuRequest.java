@@ -220,7 +220,7 @@ public class AuRequest {
 		new RemoveDesktopCommand("rmDesktop", 0);
 		new RenderCommand(Events.ON_RENDER, Command.IGNORE_OLD_EQUIV);
 			//z.loaded is set only if replied from server, so it is OK
-			//to drop if any follows -- which means users are scrolling fast
+			//to drop if any previous -- which means users are scrolling fast
 
 		new ScrollCommand(Events.ON_SCROLLING,
 			Command.SKIP_IF_EVER_ERROR|Command.IGNORABLE);

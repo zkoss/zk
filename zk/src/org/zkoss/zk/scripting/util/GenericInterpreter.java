@@ -134,6 +134,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * <p>Default: the same as {@link #set(String, Object)}.
 	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 * @since 2.3.2
 	 */
 	protected void set(Namespace ns, String name, Object value) {
 		set(name, value);
@@ -148,6 +149,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * <p>Default: the same as {@link #unset(String)}.
 	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 * @since 2.3.2
 	 */
 	protected void unset(Namespace ns, String name) {
 		unset(name);
@@ -313,6 +315,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 *
 	 * <p>Deriving class shall override {@link #set(Namespace,String,Object)},
 	 * instead of this method.
+	 * @since 2.3.2
 	 */
 	public final void setVariable(Namespace ns, String name, Object value) {
 		beforeExec();
@@ -325,6 +328,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	/** Removes the variable from this interpreter.
 	 *
 	 * <p>Deriving class shall override {@link #unset(Namespace,String)}, instead of this method.
+	 * @since 2.3.2
 	 */
 	public final void unsetVariable(Namespace ns, String name) {
 		beforeExec();
