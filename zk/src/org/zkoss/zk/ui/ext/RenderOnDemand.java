@@ -30,7 +30,8 @@ import java.util.Set;
  * @author tomyeh
  */
 public interface RenderOnDemand {
-	/** Renders a set of specified items.
+	/** Renders a set of specified items, if they are not rendered before.
+	 * If an item was rendered before, nothing is changed.
 	 */
 	public void renderItems(Set items);
 }
