@@ -21,7 +21,7 @@ package org.zkoss.zkplus.databind;
 import org.zkoss.zul.ListModel;
 
 /**
- * This interface defines the methods used by SelectedItem
+ * This interface defines the methods used by DataBinder.
  *
  * @author Henri
  * @see BindingListModelList
