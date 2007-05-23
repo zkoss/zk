@@ -164,6 +164,7 @@ implements Constrainted {
 	public void clearErrorMessage() {
 		if (_errmsg != null) {
 			_errmsg = null;
+			_valided = true;
 			Clients.closeErrorBox(this);
 		}
 	}
@@ -205,7 +206,6 @@ implements Constrainted {
 		validate(val);
 
 		clearErrorMessage(); //no error at all
-		_valided = true;
 
 		if (!Objects.equals(_value, val)) {
 			_value = val;
