@@ -59,14 +59,14 @@ import java.util.Iterator;
  *
  * @author henrichen
  */
-public class SimpleChartEngine implements ChartEngine {
+public class SimpleChartEngine implements ChartEngine, java.io.Serializable {
 	//as long as the series name is not set
-	private static final String DEFAULT_HI_LO_SERIES = "High Low Data";
+	private transient static final String DEFAULT_HI_LO_SERIES = "High Low Data";
 	
 	//caching chartImpl if type and 3d are the same 
-	private boolean _threeD; 
-	private String _type; 
-	private ChartImpl _chartImpl; //chart implementaion
+	private transient boolean _threeD; 
+	private transient String _type; 
+	private transient ChartImpl _chartImpl; //chart implementaion
 	
 	/**
 	 * create specific type of chart drawing engine. This implementation use 

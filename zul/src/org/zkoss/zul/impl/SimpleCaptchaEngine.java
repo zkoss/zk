@@ -60,9 +60,9 @@ import javax.imageio.ImageIO;
  *
  * @author henrichen
  */
-public class SimpleCaptchaEngine implements CaptchaEngine {
-	private static Random _random = new Random();
-	private static final double[] sin = { //sin degree 0 ~ 10
+public class SimpleCaptchaEngine implements CaptchaEngine, java.io.Serializable {
+	private transient static Random _random = new Random();
+	private transient static final double[] sin = { //sin degree 0 ~ 10
 		Math.sin(Math.toRadians(0)),
 		Math.sin(Math.toRadians(1)),
 		Math.sin(Math.toRadians(2)),
@@ -75,7 +75,7 @@ public class SimpleCaptchaEngine implements CaptchaEngine {
 		Math.sin(Math.toRadians(9)),
 		Math.sin(Math.toRadians(10)),
 */	};
-	private static final double[] cos = { //cos degree 0 ~ 10
+	private transient static final double[] cos = { //cos degree 0 ~ 10
 		Math.cos(Math.toRadians(0)),
 		Math.cos(Math.toRadians(1)),
 		Math.cos(Math.toRadians(2)),
