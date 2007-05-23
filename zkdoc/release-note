@@ -12,6 +12,7 @@ ZK 2.3.2 Freshly
   1721123: Improve performance if DOCTYPE is specified in zhtml
   1719075: Support the onPiggyback event at the root component level
   1719781: Allow component itself to arg0 AnnotateDataBinderInit
+  1721126: Configurable Tab Height
   
 * Bugs:
   1711769: Grid on Vbox visibility bug
