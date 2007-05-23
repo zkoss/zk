@@ -11,7 +11,8 @@ ZK 2.3.2 Freshly
   1715649: A way to create inline macro manually
   1721123: Improve performance if DOCTYPE is specified in zhtml
   1719075: Support the onPiggyback event at the root component level
-
+  1719781: Allow component itself to arg0 AnnotateDataBinderInit
+  
 * Bugs:
   1711769: Grid on Vbox visibility bug
   1712063: Vbox visibility bug with CSA action.show
@@ -28,6 +29,7 @@ ZK 2.3.2 Freshly
   1721859: width attribute broken when percent is used
   1719851: Captcha doesn't Support clustering Environment
   1719854: Chart is not Serializable
+  1723570: Datebox databind strange behaviour
   
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
