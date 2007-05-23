@@ -43,6 +43,7 @@ import org.zkoss.lang.reflect.Fields;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.Date;
 import java.util.Map.Entry;
 import java.util.List;
 import java.util.HashSet;
@@ -850,7 +851,10 @@ public class DataBinder {
 
 	private boolean isPrimitive(Object bean) {
 		//String is deemed as primitive and null is not primitive
-		return (bean instanceof String) || (bean != null && Primitives.toPrimitive(bean.getClass()) != null);
+		return (bean instanceof String) 
+			|| (bean != null && Primitives.toPrimitive(bean.getClass()) != null)
+			|| (bean instanceof Date)
+			|| (bean instanceof Number);
 	}
 	
 	//Very tricky implementation, assume "=" the assignment operator for all interpreters.
