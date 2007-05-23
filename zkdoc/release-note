@@ -10,7 +10,7 @@ ZK 2.3.2 Freshly
   1719140: A way to show custom message when javascript is disabled
   1715649: A way to create inline macro manually
   1721123: Improve performance if DOCTYPE is specified in zhtml
-  1719075: Support the onPiggyback event at the page level
+  1719075: Support the onPiggyback event at the root component level
 
 * Bugs:
   1711769: Grid on Vbox visibility bug
