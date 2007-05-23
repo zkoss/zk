@@ -25,7 +25,9 @@ ZK 2.3.2 Freshly
   1716442: Window.onClick disable  toolbarbutton.onclick
   1722888: forEach failed with Groovy
   1721859: width attribute broken when percent is used
-
+  1719851: Captcha doesn't Support clustering Environment
+  1719854: Chart is not Serializable
+  
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
     org.zkoss.zk.ui.event.Deferrable if you want it to be deferrable listener.
