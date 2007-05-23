@@ -31,6 +31,7 @@ ZK 2.3.2 Freshly
   1719851: Captcha doesn't Support clustering Environment
   1719854: Chart is not Serializable
   1723570: Datebox databind strange behaviour
+  1712483: Data Binding error
   
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
