@@ -31,10 +31,10 @@ import org.zkoss.zk.ui.util.Initiator;
  * </ol>
  * <p>Put the init PI as follows:</p>
  * <pre>
- * &lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" [arg0="component-path"] [arg1="true|false"]?>
+ * &lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" [arg0="component|component-path"] [arg1="true|false"]?>
  * </pre>
- * <p>Where the arg0 is the component path that specifies the component the AnnotateDataBinder covers. If the 
- * arg0 is not specified or set to "page", the AnnotateDataBinder will default to cover the whole page.</p>
+ * <p>Where the arg0 is the component itself (via EL expression) or the component path that specifies the component the AnnotateDataBinder covers. If the 
+ * arg0 is not specified or set to string "page", the AnnotateDataBinder will default to cover the whole page.</p>
  * <p>Where the arg1 is used to decide whether to load default binding configuration defined in lang-addon.xml. 
  * If the arg1 is not specified it is default to true. Note that you have to specify arg0 if you want to specify arg1.</p>
  *
@@ -42,6 +42,7 @@ import org.zkoss.zk.ui.util.Initiator;
  * @see AnnotateDataBinder
  */
 public class AnnotateDataBinderInit implements Initiator {
+	private Component _comp;
 	private String _compPath;
 	private String _defaultConfig;
 	
@@ -51,8 +52,10 @@ public class AnnotateDataBinderInit implements Initiator {
 	//-- Initator --//
 	public void doAfterCompose(Page page) {
 		boolean b = _defaultConfig != null ? Boolean.valueOf(_defaultConfig).booleanValue() : true;
-		
-		if (_compPath == null || "page".equals(_compPath)) {
+		if (_comp instanceof Component) {
+			_binder = new AnnotateDataBinder(_comp, b);
+			_comp.setVariable("binder", _binder, true);
+		}	else if (_compPath == null || "page".equals(_compPath)) {
 			_binder = new AnnotateDataBinder(page, b);
 			page.setVariable("binder", _binder);
 		} else if (_compPath.startsWith("/")) {
@@ -74,8 +77,14 @@ public class AnnotateDataBinderInit implements Initiator {
 	}
 	public void doInit(Page page, java.lang.Object[] args) {
 		if (args.length > 0) {
-			_compPath = (String)args[0];
+			Object arg0 = args[0];
+			if (arg0 instanceof String) {
+				_compPath = (String) arg0;
+			} else if (arg0 instanceof Component) {
+				_comp = (Component) arg0;
+			}
 		}
+		
 		if (args.length > 1) {
 			_defaultConfig = (String)args[1];
 		}
