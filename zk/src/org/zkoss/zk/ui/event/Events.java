@@ -152,6 +152,20 @@ public class Events {
 	 * shall become modal. Currently, only ZUL's window components support it.
 	 */
 	public static final String ON_MODAL = "onModal";
+	/** The onPiggyback event (used with {@link Event}) used to notify
+	 * a root component that the client has sent a request to the server.
+	 * It is meaningful only if it is registered to the root component.
+	 * Once registered, it is called
+	 * each time the client sends a request to the server.
+	 * The onPiggyback's event listener is processed after all other
+	 * events are processed.
+	 *
+	 * <p>The onPiggyback event is designed to let developers piggyback
+	 * the least-emergent UI updates to the client.
+	 *
+	 * @since 2.3.2
+	 */
+	public static final String ON_PIGGYBACK = "onPiggyback";
 
 	/** The onUser event. It is a generic event that an application developer
 	 * might send from the client. ZK doesn't use this event.

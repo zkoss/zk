@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
+import java.util.Iterator;
 import java.io.Reader;
 import java.io.IOException;
 
@@ -41,6 +42,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -66,6 +68,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	/** Which page is being created, or null if all in update mode. */
 	private final Page _creating;
 	private final ExecutionResolver _exresolv;
+	/** Whether onPiggyback is checked for this execution. */
+	private boolean _piggybacked;
 
 	/** Constructs an execution.
 	 * @param creating which page is being creating for this execution, or
@@ -145,7 +149,23 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public Event getNextEvent() {
-		return _events != null && !_events.isEmpty() ?
+		if (_events != null && !_events.isEmpty())
+			return (Event)_events.remove(0);
+
+		if (!_piggybacked) { //handle piggyback only once
+			for (Iterator it = _desktop.getPages().iterator(); it.hasNext();) {
+				final Page p = (Page)it.next();
+				if (isAsyncUpdate(p)) { //ignore new created pages
+					for (Iterator e = p.getRoots().iterator(); e.hasNext();) {
+						final Component c = (Component)e.next();
+						if (Events.isListened(c, Events.ON_PIGGYBACK, false)) //asap+deferrable
+							postEvent(new Event(Events.ON_PIGGYBACK, c));
+					}
+				}
+			}
+			_piggybacked = true;
+		}
+		return _events != null && !_events.isEmpty() ? 
 			(Event)_events.remove(0): null;
 	}
 

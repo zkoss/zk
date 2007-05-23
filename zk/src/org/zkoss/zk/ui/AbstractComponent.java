@@ -1024,7 +1024,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_evthds.addAll(evthds);
 			}
 
-			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap & deferrable
+			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap+deferrable
 				response("clientInfo", new AuClientInfo());
 				//We always fire even not a root, since we don't like to
 				//check when setParent or setPage is called
