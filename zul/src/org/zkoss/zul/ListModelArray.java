@@ -98,6 +98,13 @@ implements ListModelExt, java.io.Serializable {
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
 	}
 		
+	/**
+	 * Get the inner real Object[].
+	 */	
+	public Object[] getInnerObjectArray() {
+		return _array;
+	}
+
 	//-- ListModel --//
 	public int getSize() {
 		return _array.length;
