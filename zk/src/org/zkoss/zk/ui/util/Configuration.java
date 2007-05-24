@@ -86,8 +86,9 @@ public class Configuration {
 	private String _timeoutUri;
 	private final List _themeUris = new LinkedList();
 	private transient String[] _roThemeUris = new String[0];
-	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _failmancls,
-		_tzpcls, _lpcls;
+	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _failmancls;
+	private LocaleProvider _lp;
+	private TimeZoneProvider _tzp;
 	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
 		_sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120,
@@ -822,12 +823,18 @@ public class Configuration {
 	public void setLocaleProviderClass(Class cls) {
 		if (cls != null && !LocaleProvider.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("LocaleProvider not implemented: "+cls);
-		_lpcls = cls;
+
+		try {
+			_lp = cls != null ?  (LocaleProvider)cls.newInstance(): null;
+		} catch (Exception ex) {
+			throw new UiException("Failed to create "+cls, ex);
+		}
 	}
-	/** Returns the class that implements {@link LocaleProvider}, or null if default is used.
+	/** Returns the instance of LocaleProvider to determine the locale of the requests,
+	 * or null if no custom locale provider is specified (and default is used).
 	 */
-	public Class getLocaleProviderClass() {
-		return _lpcls;
+	public LocaleProvider getLocaleProvider() {
+		return _lp;
 	}
 	/** Sets the class that implements {@link TimeZoneProvider}, or null to
 	 * use the default.
@@ -835,12 +842,17 @@ public class Configuration {
 	public void setTimeZoneProviderClass(Class cls) {
 		if (cls != null && !TimeZoneProvider.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("TimeZoneProvider not implemented: "+cls);
-		_tzpcls = cls;
+
+		try {
+			_tzp = cls != null ? (TimeZoneProvider)cls.newInstance(): null;
+		} catch (Exception ex) {
+			throw new UiException("Failed to create "+cls, ex);
+		}
 	}
 	/** Returns the class that implements {@link TimeZoneProvider}, or null if default is used.
 	 */
-	public Class getTimeZoneProviderClass() {
-		return _tzpcls;
+	public TimeZoneProvider getTimeZoneProvider() {
+		return _tzp;
 	}
 
 	/** Sets the class that implements {@link UiEngine}, or null to

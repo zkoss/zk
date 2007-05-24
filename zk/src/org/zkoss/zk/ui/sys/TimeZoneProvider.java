@@ -23,9 +23,14 @@ import org.zkoss.zk.ui.Session;
 
 /**
  * Provides the time zone for the specified session.
- * Once specified (in {@link org.zkoss.zk.ui.util.Configuration}), an instance of the specified class
- * is created and then {@link #getTimeZone} is called, each time
- * a request from the client is received.
+ * Once specified (by calling
+ * {@link org.zkoss.zk.ui.util.Configuration#setTimeZoneProviderClass}),
+ * one instance of the specified class is created for each Web application
+ * to serve all requests.
+ *
+ * <p>Each time a request is received, {@link #getTimeZone} is called
+ * against the instance returned by
+ * {@link org.zkoss.zk.ui.util.Configuration#getTimeZoneProvider}.
  * 
  * @author tomyeh
  */
@@ -37,6 +42,13 @@ public interface TimeZoneProvider {
 	 * Notice that there is no standard way to retrieve browser's time zone,
 	 * so all clients have the same time zone if you don't specify a
 	 * instance of {@link TimeZoneProvider}.
+	 *
+	 * @param sess the session
+	 * @param request the request, depending on the protocol.
+	 * For exampple, it is javax.servlet.http.HttpServletRequest if HTTP.
+	 * @param response the response, depending on the protocol.
+	 * For exampple, it is javax.servlet.http.HttpServletResponse if HTTP.
+	 * @since 2.3.2
 	 */
-	public TimeZone getTimeZone(Session sess);
+	public TimeZone getTimeZone(Session sess, Object request, Object response);
 }

@@ -64,33 +64,32 @@ public class I18Ns {
 		} else {
 			//1. setup locale
 			final Configuration config = sess.getWebApp().getConfiguration();
-			Class cls = config.getLocaleProviderClass();
-			if (cls != null) {
-				try {
-					final Locale locale =
-						((LocaleProvider)cls.newInstance()).getLocale(sess);
+			try {
+				final LocaleProvider lp = config.getLocaleProvider();
+				if (lp != null) {
+					final Locale locale = lp.getLocale(sess, request, response);
 					if (locale != null)
 						sess.setAttribute(Attributes.PREFERRED_LOCALE, locale);
 						//so Charsets will use this locale
-				} catch (Throwable ex) {
-					log.warning("Ignored: unable to invoke the locale provider: "+cls, ex);
 				}
+			} catch (Throwable ex) {
+				log.warning("Ignored: unable to invoke the locale provider", ex);
 			}
 			final Object ol = Charsets.setup(request, response, charset);
 
 			//2. setup time zone
 			TimeZone tzone = null;
-			cls = config.getTimeZoneProviderClass();
-			if (cls != null) {
-				try {
-					tzone = ((TimeZoneProvider)cls.newInstance()).getTimeZone(sess);
-				} catch (Throwable ex) {
-					log.warning("Ignored: unable to invoke the locale provider: "+cls, ex);
-				}
+			try {
+				final TimeZoneProvider tzp = config.getTimeZoneProvider();
+				if (tzp != null)
+					tzone = tzp.getTimeZone(sess, request, response);
+			} catch (Throwable ex) {
+				log.warning("Ignored: unable to invoke the locale provider", ex);
 			}
 			if (tzone == null)
 				tzone = (TimeZone)sess.getAttribute(Attributes.PREFERRED_TIME_ZONE);
 			final Object otz = TimeZones.setThreadLocal(tzone);
+
 			old = new Object[] {ol, otz};
 		}
 

@@ -21,9 +21,14 @@ import org.zkoss.zk.ui.Session;
 
 /**
  * Provides the locale for the specified session.
- * Once specified (in {@link org.zkoss.zk.ui.util.Configuration}), an instance of the specified class
- * is created and then {@link #getLocale} is called, is called each time
- * a request from the client is received.
+ * Once specified (by calling
+ * {@link org.zkoss.zk.ui.util.Configuration#setLocaleProviderClass}),
+ * one instance of the specified class is created for each Web application
+ * to serve all requests.
+ *
+ * <p>Each time a request is received, {@link #getLocale} is called
+ * against the instance returned by
+ * {@link org.zkoss.zk.ui.util.Configuration#getLocaleProvider}.
  *
  * @author tomyeh
  */
@@ -32,6 +37,13 @@ public interface LocaleProvider {
 	 * shall be used.
 	 *
 	 * <p>The default is determined by browser's preference, if any.
+	 *
+	 * @param sess the session
+	 * @param request the request, depending on the protocol.
+	 * For exampple, it is javax.servlet.http.HttpServletRequest if HTTP.
+	 * @param response the response, depending on the protocol.
+	 * For exampple, it is javax.servlet.http.HttpServletResponse if HTTP.
+	 * @since 2.3.2
 	 */
-	public Locale getLocale(Session sess);
+	public Locale getLocale(Session sess, Object request, Object response);
 }
