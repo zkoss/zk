@@ -387,6 +387,8 @@ zk.focusDownById = function (id, timeout) {
 zk.focusById = function (id, timeout) {
 	var script = "zk.focus($e('"+id+"'))";
 	zk._doTwice(script, timeout);
+		//Workaround for an IE bug: we have to set focus twice since
+		//the first one might fail (even we prolong the timeout to 1 sec)
 };
 zk.focus = function (cmp) {
 	if (cmp && cmp.focus) try {cmp.focus();} catch (e) {}
@@ -405,8 +407,6 @@ zk._doTwice = function (script, timeout) {
 	if (!timeout) timeout = 0;
 	setTimeout(script, timeout);
 	setTimeout(script, timeout);
-		//Workaround for an IE bug: we have to set focus twice since
-		//the first one might fail (even we prolong the timeout to 1 sec)
 };
 
 /** Returns the selection range of the specified control

@@ -998,7 +998,7 @@ public class Configuration {
 	/**  Specifies the time, in seconds, between client requests
 	 * before ZK will invalidate the session.
 	 *
-	 * <p>Default: .
+	 * <p>Default: 0 (means the system default).
 	 */
 	public void setSessionMaxInactiveInterval(int secs) {
 		_sessTimeout = secs;
