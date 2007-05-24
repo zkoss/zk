@@ -32,6 +32,7 @@ ZK 2.3.2 Freshly
   1719854: Chart is not Serializable
   1723570: Datebox databind strange behaviour
   1712483: Data Binding error
+  1724609: Listbox.focus failed to focus correctly if change selection
   
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
