@@ -13,6 +13,7 @@ ZK 2.3.2 Freshly
   1719075: Support the onPiggyback event at the root component level
   1719781: Allow component itself to arg0 AnnotateDataBinderInit
   1721126: Configurable Tab Height
+  1724623: LocaleProvider and TimeZoneProvider supports cookie
   
 * Bugs:
   1711769: Grid on Vbox visibility bug
@@ -39,6 +40,8 @@ ZK 2.3.2 Freshly
     org.zkoss.zk.ui.event.Deferrable if you want it to be deferrable listener.
     In other words, any event listener that returns false for the isAsap method
     shall implements Deferrable and returns true for the isDeferrable method.
+  + The request and response arguments are added to LocaleProvider.getLocale()
+  + The request and response arguments are added to TimeZoneProvider.getTimeZone()
 
 	--------
 ZK 2.3.1
