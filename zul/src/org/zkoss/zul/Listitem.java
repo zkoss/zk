@@ -301,9 +301,6 @@ public class Listitem extends XulElement {
 			if (listbox != null) {
 				if (listbox.getName() != null)
 					HTMLs.appendAttribute(sb, "z.value",  Objects.toString(_value));
-				final Listitem sel = listbox.getSelectedItem();
-				if (sel == this || (sel == null && getIndex() == 0))
-					sb.append(" z.focus=\"true\"");
 				if (listbox.getModel() != null)
 					HTMLs.appendAttribute(sb, "z.loaded", _loaded);
 			}

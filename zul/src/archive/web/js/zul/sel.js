@@ -476,7 +476,7 @@ zk.Selectable.prototype = {
 		this._sendSelect();
 	},
 
-	/** Changes the specified row as z.focus. */
+	/** Changes the specified row as focused. */
 	focus: function (row) {
 		this._unsetFocusExcept(row);
 		this._setFocus(row, true);
@@ -484,6 +484,7 @@ zk.Selectable.prototype = {
 	/** Sets focus to the specified row if it has the anchor. */
 	_focusToAnc: function (row) {
 		if (!row) return;
+
 		var uuid = typeof row == 'string' ? row: row.id;
 		var el = $e(uuid + "!cm");
 		if (!el) el = $e(uuid + "!sel");
@@ -563,7 +564,7 @@ zk.Selectable.prototype = {
 		}
 		return changed;
 	},
-	/** Changes the z.focus status, and return whether z.focus is changed. */
+	/** Changes the focus status, and return whether it is changed. */
 	_setFocus: function (row, toFocus) {
 		if (!this._isValid(row)) return false;
 
@@ -575,13 +576,11 @@ zk.Selectable.prototype = {
 				if (!el) el = $e(row.id + "!sel");
 				if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
 					zk.focusById(el.id);
-				setZKAttr(row, "focus", "true");
 				zkSel.cmonfocusTo(row);
 
 				if (!this.paging && zk.gecko) this._render(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
 			} else {
-				rmZKAttr(row, "focus");
 				zkSel.cmonblurTo(row);
 			}
 		}
@@ -880,7 +879,7 @@ zk.Selectable.prototype = {
 		} else {
 			value = this.bodyrows[this.bodyrows.length-1];
 		}
-		this._selectOne(value, false); 
+		this._selectOne(value, false);
 	},
 	/** Sels all items (don't notify server and change focus, because it is from server). */
 	_selectAll: function () {
@@ -939,7 +938,7 @@ zk.Selectable.prototype = {
 	},
 	/** Whether an item has focus. */
 	_isFocus: function (row) {
-		return getZKAttr(row, "focus") == "true";
+		return $e(row.id + "!sel") || $e(row.id + "!cm");
 	},
 	/** Whether the component is multiple.
 	 */
