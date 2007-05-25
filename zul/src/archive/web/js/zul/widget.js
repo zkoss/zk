@@ -524,7 +524,7 @@ zkArea.onclick = function (id) {
 		var map = $parentByType(cmp, "Map");
 		if (map)
 			zkau.send({uuid: map.id,
-				cmd: "onClick", data: [getZKAttr(cmp, "aid")]});
+				cmd: "onClick", data: [getZKAttr(cmp, "aid")], singleton: true});
 	}
 };
 /** Called by map-done.dsp */
@@ -545,7 +545,7 @@ zkMap.onclick = function (href) {
 
 	var x = href.substring(k, j);
 	var y = href.substring(j + 1);
-	zkau.send({uuid: id, cmd: "onClick", data: [x, y]});
+	zkau.send({uuid: id, cmd: "onClick", data: [x, y], singleton: true});
 };
 zkMap._toofast = function () {
 	if (zk.gecko) { //bug 1510374

@@ -446,7 +446,7 @@ zkWnd._doModal = function (cmp, replace) {
 	zk.focusDownById(cmp.id);
 
 	zkWnd._modal2[cmp.id] = true;
-	setTimeout("zkWnd._doModal2('"+cmp.id+"')", 8); //process it later for better responsive
+	setTimeout("zkWnd._doModal2('"+cmp.id+"')", 5); //process it later for better responsive
 };
 /** Does the 2nd phase processing of modal. */
 zkWnd._doModal2 = function (uuid) {
