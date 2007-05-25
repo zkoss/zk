@@ -42,5 +42,9 @@
 
 	<input type="image" src="/zkdemo/img/coffee.gif"/> <br/>
 	<z:datebox/>
+
+	<center>
+	center something
+	</center>
 </body>
 </html>
