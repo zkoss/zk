@@ -165,7 +165,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	/** Initialization for contructor and de-serialized. */
 	private void init() {
-		_rque = new RequestQueueImpl();
+		_rque = newRequestQueue();
 		_comps = new HashMap(41);
 	}
 	/** Updates _uuidPrefix based on _id. */
@@ -176,6 +176,20 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	public String getId() {
 		return _id;
+	}
+
+	/** Creates the request queue.
+	 * It is called when the desktop is initialized.
+	 *
+	 * <p>You may override it to provide your implementation of
+	 * {@link RequestQueue} to control how to optimize the AU requests.
+	 *
+	 * <p>Default: creates an instance from {@link RequestQueueImpl};
+	 *
+	 * @since 2.3.2
+	 */
+	protected RequestQueue newRequestQueue() {
+		return new RequestQueueImpl();
 	}
 
 	//-- Desktop --//
