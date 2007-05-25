@@ -280,8 +280,10 @@ implements Constrainted {
 				//have to dig for the real cause
 				WrongValueException t = (WrongValueException)
 					Exceptions.findCause(ex, WrongValueException.class);
-				if (t != null)
+				if (t != null) {
+					_errmsg = Exceptions.getMessage(t);
 					throw showCustomError(t);
+				}
 				throw UiException.Aide.wrap(ex);
 			} finally {
 				Namespaces.afterInterpret(backup, ns, true);
@@ -615,6 +617,9 @@ implements Constrainted {
 	protected void checkUserError() throws WrongValueException {
 		if (_errmsg != null)
 			throw showCustomError(new WrongValueException(this, _errmsg));
+				//Note: we still throw exception to abort the exec flow
+				//It's client's job NOT to show the error box!
+				//(client checks z.srvald to decide whether to open error box)
 
 		if (!_valided && _constr != null)
 			setText(coerceToString(_value));
