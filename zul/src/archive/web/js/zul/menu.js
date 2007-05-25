@@ -202,7 +202,7 @@ zkMenuit.onclick = function (evt) {
 			var newval = getZKAttr(cmp, "checked") != "true";
 			zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]}, -1);
 		}
-		zkau.send({uuid: uuid, cmd: "onClick", data: null, singleton: true});
+		zkau.send({uuid: uuid, cmd: "onClick", data: null, ctl: true});
 	} else {
 		var t = anc.getAttribute("target");
 		if (anc.href && !zk.isNewWindow(anc.href, t))
