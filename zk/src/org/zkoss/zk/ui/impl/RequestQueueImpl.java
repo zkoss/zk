@@ -41,7 +41,7 @@ import org.zkoss.zk.ui.sys.RequestQueue;
  * @author tomyeh
  */
 public class RequestQueueImpl implements RequestQueue {
-	private static final Log log = Log.lookup(RequestQueueImpl.class);
+//	private static final Log log = Log.lookup(RequestQueueImpl.class);
 
 	/** A list of pending {@link AuRequest}. */
 	private final List _requests = new LinkedList();
@@ -57,7 +57,7 @@ public class RequestQueueImpl implements RequestQueue {
 	}
 
 	synchronized public AuRequest nextRequest() {
-		//if (D.ON && log.finerable()) log.finer("Next req "+_requests);
+//		if (D.ON && log.finerable()) log.finer("Next req "+_requests);
 		if (_requests.isEmpty()) {
 			_process = false;
 			return null;
@@ -75,7 +75,7 @@ public class RequestQueueImpl implements RequestQueue {
 		return _process;
 	}
 	private void addRequest(AuRequest request) {
-		//if (D.ON && log.finerable()) log.finer("Arrive "+request+". Current "+_requests);
+//		if (D.ON && log.finerable()) log.finer("Arrive "+request+". Current "+_requests);
 
 		//case 1, IGNORABLE: Drop any existent ignorable requests
 		//We don't need to iterate all because requests is added one-by-one
@@ -89,7 +89,7 @@ public class RequestQueueImpl implements RequestQueue {
 
 			final AuRequest req2 = (AuRequest)_requests.get(last);
 			if ((req2.getCommand().getFlags() & Command.IGNORABLE) != 0) {
-				if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
+//				if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
 				_requests.remove(last); //drop it
 				if (last == 0) {
 					_requests.add(request);
@@ -105,7 +105,7 @@ public class RequestQueueImpl implements RequestQueue {
 			for (Iterator it = _requests.iterator(); it.hasNext();) {
 				final AuRequest req2 = (AuRequest)it.next();
 				if ((req2.getCommand().getFlags() & Command.CTRL_GROUP) != 0) {
-					if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
+//					if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
 					it.remove(); //drop req2
 					break; //no need to iterate because impossible to have more
 				}
@@ -119,7 +119,7 @@ public class RequestQueueImpl implements RequestQueue {
 				final AuRequest req2 = (AuRequest)it.next();
 				if (req2.getCommand() == cmd
 				&& Objects.equals(req2.getComponentUuid(), uuid)) {
-					if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
+//					if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
 					it.remove(); //drop req2
 					break; //no need to iterate because impossible to have more
 				}
@@ -132,7 +132,7 @@ public class RequestQueueImpl implements RequestQueue {
 			final AuRequest req2 = (AuRequest)_requests.get(last);
 			if (req2.getCommand() == cmd
 			&& Objects.equals(req2.getComponentUuid(), request.getComponentUuid())) {
-				if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
+//				if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
 				_requests.remove(last);
 			}
 		}
