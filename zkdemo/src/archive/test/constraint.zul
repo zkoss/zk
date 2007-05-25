@@ -36,7 +36,7 @@ Constraint custom_ctt = new MyCustomConst();
 	<vbox>
 		<hbox>
 	Enter a number at least 100:
-	<intbox constraint="${custom_ctt}"/>
+	<intbox id="i1" constraint="${custom_ctt}"/>
 	<label id="errmsg"/>
 		</hbox>
 		<hbox>
@@ -45,5 +45,6 @@ Constraint custom_ctt = new MyCustomConst();
 		<hbox>
 	any number: <intbox/>
 		</hbox>
+		<button label="Retrieve value" onClick="i1.getValue()"/>
 	</vbox>
 </window>
