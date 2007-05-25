@@ -76,7 +76,7 @@ zk.addInit(function () {
  */
 zkau.onclick = function (evt) {
 	if (typeof evt == 'string') {
-		zkau.send({uuid: $uuid(evt), cmd: "onClick", data: null});
+		zkau.send({uuid: $uuid(evt), cmd: "onClick", data: null, singleton: true});
 		return;
 	}
 
@@ -96,7 +96,7 @@ zkau.onclick = function (evt) {
 	}
 
 	zkau.send({uuid: $uuid(target.id),
-		cmd: "onClick", data: zkau._getMouseData(evt, target)});
+		cmd: "onClick", data: zkau._getMouseData(evt, target), singleton: true});
 	Event.stop(evt);
 };
 /** Handles ondblclick for button (for non-FF).
@@ -116,7 +116,7 @@ zkau.ondblclick = function (evt) {
 	cmp = $outer(cmp);
 	if (cmp && getZKAttr(cmp, "dbclk")) {
 		zkau.send({uuid: cmp.id,
-			cmd: "onDoubleClick", data: zkau._getMouseData(evt, cmp)});
+			cmd: "onDoubleClick", data: zkau._getMouseData(evt, cmp), singleton: true});
 		Event.stop(evt); //just in case: prevent _onDocDClick to run again
 		return false;
 	}
@@ -240,8 +240,11 @@ zkau.cmprsid = function (a, b) {
 	return dt == 0 ? 0: (dt > 0 && dt < 512) || dt < -512 ? 1: -1
 };
 zkau._checkProgress = function () {
-	if (zkau._respQue.length == 0 && zkau._reqs.length == 0)
+	if (!zkau._inProcess())
 		zk.progressDone();
+};
+zkau._inProcess = function () {
+	return zkau._respQue.length || zkau._reqs.length;
 };
 
 /** Returns the timeout of the specified event.
@@ -322,6 +325,15 @@ zkau._sendNow = function (dtid) {
 	if (!zk_action) {
 		zk.error(mesg.NOT_FOUND+"zk_action");
 		return;
+	}
+
+	//filter out singleton (i.e., CTRL_GROUP at the server)
+	if (zk.progressing || zkau._inProcess()) {
+		for (var j = es.length; --j >= 0;)
+			if (es[j].singleton)
+				es.splice(j, 1);
+		if (!es.length)
+			return; //nothing to do
 	}
 
 	//decide implicit and ignorable
@@ -815,7 +827,7 @@ zkau._onDocLClick = function (evt) {
 
 			if (getZKAttr(cmp, "lfclk") && zkau.insamepos(evt))
 				zkau.send({uuid: $uuid(cmp),
-					cmd: "onClick", data: zkau._getMouseData(evt, cmp)});
+					cmd: "onClick", data: zkau._getMouseData(evt, cmp), singleton: true});
 
 			//no need to Event.stop
 		}
@@ -871,7 +883,7 @@ zkau._onDocDClick = function (evt) {
 		var uuid = getZKAttr(cmp, "item"); //treerow (and other transparent)
 		if (!uuid) uuid = $uuid(cmp);
 		zkau.send({uuid: uuid,
-			cmd: "onDoubleClick", data: zkau._getMouseData(evt, cmp)});
+			cmd: "onDoubleClick", data: zkau._getMouseData(evt, cmp), singleton: true});
 		//no need to Event.stop
 	}
 };
@@ -916,7 +928,7 @@ zkau._onDocCtxMnu = function (evt) {
 			var uuid = getZKAttr(cmp, "item"); //treerow (and other transparent)
 			if (!uuid) uuid = $uuid(cmp);
 			zkau.send({uuid: uuid,
-				cmd: "onRightClick", data: zkau._getMouseData(evt, cmp)});
+				cmd: "onRightClick", data: zkau._getMouseData(evt, cmp), singleton: true});
 		}
 
 		Event.stop(evt);
@@ -1106,7 +1118,7 @@ zkau._onDocKeydown = function (evt) {
 					}
 				}
 
-				zkau.send({uuid: n.id, cmd: evtnm,
+				zkau.send({uuid: n.id, cmd: evtnm, singleton: true,
 					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey]},
 					25);
 				Event.stop(evt);

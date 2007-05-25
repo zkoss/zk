@@ -49,8 +49,8 @@ abstract public class Command {
 	 */
 	public static final int IGNORABLE = 0x0002;
 	/** Whether this command belongs to the control group.
-	 * The old control-group command is dropped if a new control-group
-	 * command is received.
+	 * The new control-group command is dropped if a control-group
+	 * command is in the queue or in processing.
 	 */
 	public static final int CTRL_GROUP = 0x0004;
 	/** Whether to drop the existent command (in the queue) if it is the same
