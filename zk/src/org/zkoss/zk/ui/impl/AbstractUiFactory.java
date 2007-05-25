@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
@@ -85,6 +86,16 @@ abstract public class AbstractUiFactory implements UiFactory {
 	}
 	public Page newPage(RequestInfo ri, Richlet richlet, String path) {
 		return new PageImpl(richlet, path);
+	}
+	public Component newComponent(Page page, Component parent,
+	ComponentInfo compInfo) {
+		final Component comp = compInfo.newInstance(page);
+
+		if (parent != null) comp.setParent(parent);
+		else comp.setPage(page);
+
+		comp.applyProperties(); //including custom-attributes
+		return comp;
 	}
 	public Component newComponent(Page page, Component parent,
 	ComponentDefinition compdef, String clsnm) {

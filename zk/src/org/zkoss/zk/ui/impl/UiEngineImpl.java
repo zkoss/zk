@@ -456,8 +456,7 @@ public class UiEngineImpl implements UiEngine {
 			return new Component[] {
 				exec.createComponents(childdef.getMacroURI(), parent, props)};
 		} else {
-			final Component child = uf.newComponent(
-				page, parent, childdef, childInfo.getImplementationClass());
+			final Component child = uf.newComponent(page, parent, childInfo);
 			childInfo.applyProperties(child, false);
 				//def's applyProperties was called by uf.newComponent
 

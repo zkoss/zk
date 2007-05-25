@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 
 /**
  * Used to create {@link Desktop}, {@link Page} and to convert path/URL
@@ -101,6 +102,22 @@ public interface UiFactory {
 	 * <p>Note: the returned instance must also implement {@link PageCtrl}.
 	 */
 	public Page newPage(RequestInfo ri, Richlet richlet, String path);
+
+	/** Creates and initializes a component based on the specified
+	 * {@link ComponentInfo}.
+	 *
+	 * <p>After called, the new component is added to the page, and becomes a
+	 * child of the specified parent, if any. In addition, the properties
+	 * and custom attributes defined in {@link ComponentDefinition} are all
+	 * applied to the new component.
+	 *
+	 * @param page the page that the new component belongs to (never null).
+	 * @param parent the parent compoent, or null if the new component is root.
+	 * @param compInfo the component information
+	 * @since 2.3.2
+	 */
+	public Component newComponent(Page page, Component parent,
+	ComponentInfo compInfo);
 
 	/** Creates and initializes a component based on the specified
 	 * {@link ComponentDefinition}.
