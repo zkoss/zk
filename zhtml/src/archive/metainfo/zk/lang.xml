@@ -180,6 +180,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zhtml.Caption</component-class>
 	</component>
 	<component>
+		<component-name>center</component-name>
+		<component-class>org.zkoss.zhtml.Center</component-class>
+	</component>
+	<component>
 		<component-name>cite</component-name>
 		<component-class>org.zkoss.zhtml.Cite</component-class>
 	</component>
