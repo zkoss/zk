@@ -14,6 +14,7 @@ ZK 2.3.2 Freshly
   1719781: Allow component itself to arg0 AnnotateDataBinderInit
   1721126: Configurable Tab Height
   1724623: LocaleProvider and TimeZoneProvider supports cookie
+  1725484: Prevent the 2nd onOK and onClick if the prev is processing
   
 * Bugs:
   1711769: Grid on Vbox visibility bug
@@ -34,6 +35,8 @@ ZK 2.3.2 Freshly
   1723570: Datebox databind strange behaviour
   1712483: Data Binding error
   1724609: Listbox.focus failed to focus correctly if change selection
+  1724938: XHTML center tag failed
+  1724571: getErrorMessage of textboxis not working if validate by Java
   
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
@@ -42,6 +45,9 @@ ZK 2.3.2 Freshly
     shall implements Deferrable and returns true for the isDeferrable method.
   + The request and response arguments are added to LocaleProvider.getLocale()
   + The request and response arguments are added to TimeZoneProvider.getTimeZone()
+  + The org.zkoss.zk.ui.sys.UiFactory interface adds a new method:
+	public Component newComponent(Page page, Component parent,
+	ComponentInfo compInfo);
 
 	--------
 ZK 2.3.1
