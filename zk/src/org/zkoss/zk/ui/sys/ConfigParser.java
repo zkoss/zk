@@ -181,11 +181,6 @@ public class ConfigParser {
 				cls = parseClass(el, "web-app-class", WebApp.class);
 				if (cls != null) config.setWebAppClass(cls);
 
-				cls = parseClass(el, "locale-provider-class", LocaleProvider.class);
-				if (cls != null) config.setLocaleProviderClass(cls);
-
-				cls = parseClass(el, "time-zone-provider-class", TimeZoneProvider.class);
-				if (cls != null) config.setTimeZoneProviderClass(cls);
 			} else if ("el-config".equals(elnm)) {
 			//el-config
 			//	evaluator-class

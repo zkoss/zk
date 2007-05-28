@@ -49,8 +49,6 @@ import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
-import org.zkoss.zk.ui.sys.LocaleProvider;
-import org.zkoss.zk.ui.sys.TimeZoneProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
@@ -70,14 +68,17 @@ public class Configuration {
 	private static final Log log = Log.lookup(Configuration.class);
 
 	private WebApp _wapp;
+	/** List of classes. */
 	private final List
 		_evtInits = new LinkedList(), _evtCleans = new LinkedList(),
 		_evtSusps = new LinkedList(), _evtResus = new LinkedList(),
 		_appInits = new LinkedList(), _appCleans = new LinkedList(),
 		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
 		_dtInits = new LinkedList(), _dtCleans = new LinkedList(),
-		_execInits = new LinkedList(), _execCleans = new LinkedList(),
-		_uriIntcps = new LinkedList();
+		_execInits = new LinkedList(), _execCleans = new LinkedList();
+	/** List of objects. */
+	private final List
+		_uriIntcps = new LinkedList(), _reqIntcps = new LinkedList();
 	private final Map _prefs  = Collections.synchronizedMap(new HashMap()),
 		_richlets = new HashMap();
 	/** List(ErrorPage). */
@@ -87,8 +88,6 @@ public class Configuration {
 	private final List _themeUris = new LinkedList();
 	private transient String[] _roThemeUris = new String[0];
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _failmancls;
-	private LocaleProvider _lp;
-	private TimeZoneProvider _tzp;
 	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
 		_sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120,
@@ -206,8 +205,24 @@ public class Configuration {
 			added = true;
 		}
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
-			synchronized (_uriIntcps) {
-				_uriIntcps.add(klass);
+			try {
+				final Object obj = klass.newInstance();
+				synchronized (_uriIntcps) {
+					_uriIntcps.add(obj);
+				}
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate "+klass, ex);
+			}
+			added = true;
+		}
+		if (RequestInterceptor.class.isAssignableFrom(klass)) {
+			try {
+				final Object obj = klass.newInstance();
+				synchronized (_reqIntcps) {
+					_reqIntcps.add(obj);
+				}
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate "+klass, ex);
 			}
 			added = true;
 		}
@@ -256,7 +271,18 @@ public class Configuration {
 			_execCleans.remove(klass);
 		}
 		synchronized (_uriIntcps) {
-			_uriIntcps.remove(klass);
+			for (Iterator it = _uriIntcps.iterator(); it.hasNext();) {
+				final Object obj = it.next();
+				if (obj.getClass().equals(klass))
+					it.remove();
+			}
+		}
+		synchronized (_reqIntcps) {
+			for (Iterator it = _reqIntcps.iterator(); it.hasNext();) {
+				final Object obj = it.next();
+				if (obj.getClass().equals(klass))
+					it.remove();
+			}
 		}
 	}
 
@@ -765,9 +791,32 @@ public class Configuration {
 
 		synchronized (_uriIntcps) {
 			for (Iterator it = _uriIntcps.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
 				try {
-					((URIInterceptor)klass.newInstance()).request(uri);
+					((URIInterceptor)it.next()).request(uri);
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+		}
+	}
+	/** Invokes {@link RequestInterceptor#request} for each relevant listner
+	 * registered by {@link #addListener}.
+	 *
+	 * <p>If any of them throws an exception, the exception is propogated to
+	 * the caller.
+	 *
+	 * @exception UiException if it is rejected by the interceptor.
+	 * Use {@link UiException#getCause} to retrieve the cause.
+	 */
+	public void invokeRequestInterceptors(Session sess, Object request,
+	Object response) {
+		if (_reqIntcps.isEmpty()) return;
+
+		synchronized (_reqIntcps) {
+			for (Iterator it = _reqIntcps.iterator(); it.hasNext();) {
+				try {
+					((RequestInterceptor)it.next())
+						.request(sess, request, response);
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex);
 				}
@@ -815,44 +864,6 @@ public class Configuration {
 	 */
 	public String getTimeoutURI() {
 		return _timeoutUri;
-	}
-
-	/** Sets the class that implements {@link LocaleProvider}, or null to
-	 * use the default.
-	 */
-	public void setLocaleProviderClass(Class cls) {
-		if (cls != null && !LocaleProvider.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("LocaleProvider not implemented: "+cls);
-
-		try {
-			_lp = cls != null ?  (LocaleProvider)cls.newInstance(): null;
-		} catch (Exception ex) {
-			throw new UiException("Failed to create "+cls, ex);
-		}
-	}
-	/** Returns the instance of LocaleProvider to determine the locale of the requests,
-	 * or null if no custom locale provider is specified (and default is used).
-	 */
-	public LocaleProvider getLocaleProvider() {
-		return _lp;
-	}
-	/** Sets the class that implements {@link TimeZoneProvider}, or null to
-	 * use the default.
-	 */
-	public void setTimeZoneProviderClass(Class cls) {
-		if (cls != null && !TimeZoneProvider.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("TimeZoneProvider not implemented: "+cls);
-
-		try {
-			_tzp = cls != null ? (TimeZoneProvider)cls.newInstance(): null;
-		} catch (Exception ex) {
-			throw new UiException("Failed to create "+cls, ex);
-		}
-	}
-	/** Returns the class that implements {@link TimeZoneProvider}, or null if default is used.
-	 */
-	public TimeZoneProvider getTimeZoneProvider() {
-		return _tzp;
 	}
 
 	/** Sets the class that implements {@link UiEngine}, or null to

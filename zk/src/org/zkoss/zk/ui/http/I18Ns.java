@@ -29,8 +29,6 @@ import org.zkoss.web.servlet.Charsets;
 
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.sys.LocaleProvider;
-import org.zkoss.zk.ui.sys.TimeZoneProvider;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 
 /**
@@ -62,33 +60,14 @@ public class I18Ns {
 		if (Charsets.hasSetup(request)) {
 			old = null;
 		} else {
-			//1. setup locale
-			final Configuration config = sess.getWebApp().getConfiguration();
-			try {
-				final LocaleProvider lp = config.getLocaleProvider();
-				if (lp != null) {
-					final Locale locale = lp.getLocale(sess, request, response);
-					if (locale != null)
-						sess.setAttribute(Attributes.PREFERRED_LOCALE, locale);
-						//so Charsets will use this locale
-				}
-			} catch (Throwable ex) {
-				log.warning("Ignored: unable to invoke the locale provider", ex);
-			}
-			final Object ol = Charsets.setup(request, response, charset);
+			//Invoke the request interceptors
+			sess.getWebApp().getConfiguration()
+				.invokeRequestInterceptors(sess, request, response);
 
-			//2. setup time zone
-			TimeZone tzone = null;
-			try {
-				final TimeZoneProvider tzp = config.getTimeZoneProvider();
-				if (tzp != null)
-					tzone = tzp.getTimeZone(sess, request, response);
-			} catch (Throwable ex) {
-				log.warning("Ignored: unable to invoke the locale provider", ex);
-			}
-			if (tzone == null)
-				tzone = (TimeZone)sess.getAttribute(Attributes.PREFERRED_TIME_ZONE);
-			final Object otz = TimeZones.setThreadLocal(tzone);
+			final Object ol = Charsets.setup(request, response, charset);
+				//Charsets will handle PREFERRED_LOCALE
+			final Object otz = TimeZones.setThreadLocal(
+				(TimeZone)sess.getAttribute(Attributes.PREFERRED_TIME_ZONE));
 
 			old = new Object[] {ol, otz};
 		}
