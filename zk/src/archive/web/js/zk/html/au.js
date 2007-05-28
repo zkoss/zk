@@ -1351,7 +1351,7 @@ zkau._ignoredrag = function (el, pointer) {
 	return zk.eval(el, "ignoredrag", null, pointer);
 };
 zkau._dragging = function (dg, pointer) {
-	var e = zkau._getDrop(dg.element, pointer);
+	var e = zkau._getDrop(dg.z_elorg || dg.element, pointer);
 	if (!e || e != dg.zk_lastDrop) {
 		zkau._cleanLastDrop(dg);
 		if (e) {
@@ -1461,10 +1461,11 @@ zkau._ghostdrag = function (dg, ghosting) {
 	if (special) {
 		if (ghosting) {
 			var ofs = zkau.beginGhostToDIV(dg);
+			var el = dg.element;
 			document.body.insertAdjacentHTML("afterbegin",
 				'<div id="zk_ddghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
+				+zk.offsetWidth(el)+'px;height:'+zk.offsetHeight(el)
 				+'px;border:1px dotted black"></div>');
 			dg.element = $e("zk_ddghost");
 		} else {
@@ -1517,7 +1518,7 @@ zkau.endGhostToDIV = function (dg) {
 	if (dg.z_elorg && dg.element != dg.z_elorg) {
 		Element.remove(dg.element);
 		dg.element = dg.z_elorg;
-		dg.z_elorg = null;
+		delete dg.z_elorg;
 	}
 };
 
