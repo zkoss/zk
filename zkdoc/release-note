@@ -37,7 +37,9 @@ ZK 2.3.2 Freshly
   1724609: Listbox.focus failed to focus correctly if change selection
   1724938: XHTML center tag failed
   1724571: getErrorMessage of textboxis not working if validate by Java
-  
+  1725709: ExecutionCleanup.cleanup() is called too early in execUpdate
+  1725604: Drag&Drop: Missing drop target gesture (FF)
+
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
     org.zkoss.zk.ui.event.Deferrable if you want it to be deferrable listener.
