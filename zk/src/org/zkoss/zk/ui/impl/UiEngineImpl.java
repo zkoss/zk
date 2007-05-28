@@ -353,7 +353,6 @@ public class UiEngineImpl implements UiEngine {
 			((PageCtrl)page).redraw(responses, out);
 		} catch (Throwable ex) {
 			cleaned = true;
-
 			final List errs = new LinkedList();
 			errs.add(ex);
 			config.invokeExecutionCleanups(exec, oldexec, errs);
@@ -620,9 +619,6 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			//Cycle 3: Generate output
-			cleaned = true;
-			config.invokeExecutionCleanups(exec, null, errs);
-
 			List responses;
 			try {
 				//Note: we have to call visualizeErrors before uv.getResponses,
@@ -647,6 +643,9 @@ public class UiEngineImpl implements UiEngine {
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
 //				else log.debug("Responses: "+responses.subList(0, 5)+"...");
+
+			cleaned = true;
+			config.invokeExecutionCleanups(exec, null, errs);
 
 			out.flush();
 				//flush before deactivating to make sure it has been sent
