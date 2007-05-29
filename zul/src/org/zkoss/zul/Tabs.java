@@ -50,6 +50,10 @@ public class Tabs extends XulElement {
 		if (!(child instanceof Tab))
 			throw new UiException("Unsupported child for tabs: "+child);
 
+		//Note: since we have to ensure one of the tabs is selected,
+		//we always make the first tab selected (unless we have better algorithm)
+		//In other words, to select a tab other than the first one,
+		//you have to set the parent first, and then call setSelected!
 		final boolean empty = getChildren().isEmpty();
 		final Tab newtab = (Tab)child;
 		if (!empty && newtab.isSelected()) newtab.setSelectedDirectly(false);
