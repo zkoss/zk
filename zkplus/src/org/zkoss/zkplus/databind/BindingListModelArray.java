@@ -20,8 +20,6 @@ package org.zkoss.zkplus.databind;
 
 import org.zkoss.zul.ListModelArray;
 
-import org.zkoss.lang.Objects;
-
 /**
  * <p>This is the {@link BindingListModel} as a Object array to be used with 
  * {@link org.zkoss.zul.Listbox}, {@link org.zkoss.zul.Grid},  
@@ -37,16 +35,6 @@ import org.zkoss.lang.Objects;
 implements BindingListModel, java.io.Serializable {
 	/* package */BindingListModelArray(Object[] c, boolean live) {
 		super(c, live);
-	}
-	
-	//-- BindingListModel --//
-	public int indexOf(Object elm) {
-		for(int j = 0; j < _array.length; ++j) {
-			if (Objects.equals(elm, _array[j])) {
-				return j;
-			}
-		}
-		return -1;
 	}
 }
 

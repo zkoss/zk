@@ -71,7 +71,7 @@ public class ListModelConverter implements TypeConverter {
 		} else if (val instanceof BindingListModelMap) {
 			return ((BindingListModelMap)val).getInnerMap();
 		} else if (val instanceof BindingListModelArray) {
-			return  ((BindingListModelArray)val).getInnerObjectArray();
+			return ((BindingListModelArray)val).getInnerArray();
 		} else if (val instanceof BindingListModel) {
 			return val;
 		} else {
