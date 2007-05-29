@@ -589,6 +589,7 @@ implements RenderOnDemand {
 	 * <p>It is the same as {@link #selectItem}.
 	 */
 	public void setSelectedItem(Listitem item) {
+System.out.println("sel:"+item);
 		selectItem(item);
 	}
 

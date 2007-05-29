@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.lang.Objects;
 
 import java.util.Set;
 import java.util.List;
@@ -61,6 +62,7 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * If true, this object is a 'facade' of the specified set,
 	 * i.e., when you add or remove items from this {@link ListModelSet},
 	 * the inner "live" set would be changed accordingly.
+	 * @since 2.3.2
 	 */
 	public ListModelSet(Set set, boolean live) {
 		_set = live ? set: new LinkedHashSet(set);
@@ -214,7 +216,7 @@ implements ListModelExt, Set, java.io.Serializable {
 	public int indexOf(Object o) {
 		int j = 0;
 		for (Iterator it = _set.iterator(); it.hasNext(); ++j) {
-			if (o == it.next())
+			if (Objects.equals(o, it.next()))
 				return j;
 		}
 		return -1;

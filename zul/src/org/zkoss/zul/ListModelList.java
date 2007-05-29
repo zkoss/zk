@@ -60,6 +60,7 @@ implements ListModelExt, List, java.io.Serializable {
 	 * If true, this object is a 'facade' of the specified list,
 	 * i.e., when you add or remove items from this ListModelList,
 	 * the inner "live" list would be changed accordingly.
+	 * @since 2.3.2
 	 */
 	public ListModelList(List list, boolean live) {
 		_list = live ? list: new ArrayList(list);
@@ -118,6 +119,7 @@ implements ListModelExt, List, java.io.Serializable {
 	public List getInnerList() {
 		return _list;
 	}
+
 	//-- ListModel --//
 	public int getSize() {
 		return _list.size();
