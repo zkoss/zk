@@ -182,7 +182,7 @@ implements ListModelExt, List, java.io.Serializable {
 	}
 	
 	public boolean equals(Object o) {
-		return _list.equals(o);
+		return _list.equals(o instanceof ListModelList ? ((ListModelList)o)._list: o);
 	}
 	
 	public Object get(int index){
@@ -192,7 +192,10 @@ implements ListModelExt, List, java.io.Serializable {
 	public int hashCode() {
 		return _list.hashCode();
 	}
-		
+	public String toString() {
+		return _list.toString();
+	}
+
 	public int indexOf(Object elem) {
 		return _list.indexOf(elem);
 	}

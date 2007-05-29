@@ -167,7 +167,7 @@ implements ListModelExt, Set, java.io.Serializable {
 	}
 	
 	public boolean equals(Object o) {
-		return _set.equals(o);
+		return _set.equals(o instanceof ListModelSet ? ((ListModelSet)o)._set: o);
 	}
 	
 	public int hashCode() {
@@ -176,6 +176,9 @@ implements ListModelExt, Set, java.io.Serializable {
 		
 	public boolean isEmpty() {
 		return _set.isEmpty();
+	}
+	public String toString() {
+		return _set.toString();
 	}
     
 	public Iterator iterator() {

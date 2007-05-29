@@ -147,7 +147,10 @@ implements ListModelExt, Map, java.io.Serializable {
 	}
     
 	public boolean equals(Object o) {
-		return _map.equals(o);
+		return _map.equals(o instanceof ListModelMap ? ((ListModelMap)o)._map: o);
+	}
+	public String toString() {
+		return _map.toString();
 	}
 	
 	public Object get(Object key){

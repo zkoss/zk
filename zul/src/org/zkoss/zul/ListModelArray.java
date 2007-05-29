@@ -125,4 +125,14 @@ implements ListModelExt, java.io.Serializable {
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}
 
+	//Object//
+	public boolean equals(Object o) {
+		return _array.equals(o instanceof ListModelArray ? ((ListModelArray)o)._array: o);
+	}
+	public int hashCode() {
+		return _array.hashCode();
+	}
+	public String toString() {
+		return Objects.toString(_array);
+	}
 }
