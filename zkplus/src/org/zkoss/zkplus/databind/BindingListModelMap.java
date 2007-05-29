@@ -33,13 +33,13 @@ import java.util.Map;
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelMap
  */
-public class BindingListModelMap extends ListModelMap implements BindingListModel {
-	/* package */ BindingListModelMap(Map map) {
-		super(map, /*dummy*/ 0);
+/*package*/ class BindingListModelMap extends ListModelMap
+implements BindingListModel, java.io.Serializable {
+	/* package */ BindingListModelMap(Map map, boolean live) {
+		super(map, live);
 	}
 
 	public int indexOf(Object elem) {
-		return _list.indexOf(((Map.Entry)elem).getKey());
+		return indexOfKey(elem);
 	}
 }
-

@@ -33,9 +33,10 @@ import org.zkoss.lang.Objects;
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelArray
  */
-public class BindingListModelArray extends ListModelArray implements BindingListModel {
-	/* package */BindingListModelArray(Object[] c) {
-		super(c, /*dummy*/0);
+/*package*/ class BindingListModelArray extends ListModelArray
+implements BindingListModel, java.io.Serializable {
+	/* package */BindingListModelArray(Object[] c, boolean live) {
+		super(c, live);
 	}
 	
 	//-- BindingListModel --//

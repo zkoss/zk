@@ -33,13 +33,10 @@ import java.util.Set;
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelSet
  */
-public class BindingListModelSet extends ListModelSet implements BindingListModel {
-	/* package */ BindingListModelSet(Set set) {
-		super(set);
-	}
-	
-	public int indexOf(Object elm) {
-		return _list.indexOf(elm);
+/*package*/ class BindingListModelSet extends ListModelSet
+implements BindingListModel, java.io.Serializable {
+	/* package */ BindingListModelSet(Set set, boolean live) {
+		super(set, live);
 	}
 }
 

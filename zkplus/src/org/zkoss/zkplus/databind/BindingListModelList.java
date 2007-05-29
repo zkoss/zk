@@ -33,9 +33,10 @@ import java.util.List;
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelList
  */
-public class BindingListModelList extends ListModelList implements BindingListModel {
-	/* package */BindingListModelList(List list) {
-		super(list);
+/*package*/ class BindingListModelList extends ListModelList
+implements BindingListModel, java.io.Serializable {
+	/* package */BindingListModelList(List list, boolean live) {
+		super(list, live);
 	}
 }
 

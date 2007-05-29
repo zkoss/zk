@@ -43,15 +43,15 @@ public class ListModelConverter implements TypeConverter {
 		if (val instanceof BindingListModel) {
 			return val;
 		} else if (val instanceof Set) {
-			return new BindingListModelSet((Set)val);
+			return new BindingListModelSet((Set)val, true);
 		} else if (val instanceof List) {
-			return new BindingListModelList((List)val);
+			return new BindingListModelList((List)val, true);
 		} else if (val instanceof Map) {
-			return new BindingListModelMap((Map)val);
+			return new BindingListModelMap((Map)val, true);
 		} else if (val instanceof Object[]) {
-			return new BindingListModelArray((Object[]) val);
+			return new BindingListModelArray((Object[]) val, true);
 		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class)val)) {
-			return new BindingListModelArray((Object[]) ((Class)val).getEnumConstants());
+			return new BindingListModelArray((Object[]) ((Class)val).getEnumConstants(), true);
 		} else {
 			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, Object[], Enum Class, or BindingListModel only. "+val.getClass());
 		}
