@@ -204,7 +204,15 @@ public class Tabbox extends XulElement {
 		if (child instanceof Tabs) {
 			if (_tabs != null && _tabs != child)
 				throw new UiException("Only one tabs is allowed: "+this);
+
 			_tabs = (Tabs)child;
+			for (Iterator it = _tabs.getChildren().iterator(); it.hasNext();) {
+				final Tab tab = (Tab)it.next();
+				if (tab.isSelected()) {
+					_seltab = tab;
+					break;
+				}
+			}
 		} else if (child instanceof Tabpanels) {
 			if (_tabpanels != null && _tabpanels != child)
 				throw new UiException("Only one tabpanels is allowed: "+this);
