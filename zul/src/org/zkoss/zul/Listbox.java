@@ -165,6 +165,8 @@ implements RenderOnDemand {
 		_selItems = new LinkedHashSet(5);
 		_roSelItems = Collections.unmodifiableSet(_selItems);
 	}
+	/** Initializes _dataListener and register the listener to the model
+	 */
 	private void initDataListener() {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
@@ -172,6 +174,8 @@ implements RenderOnDemand {
 					onListDataChange(event);
 				}
 			};
+
+		_model.addListDataListener(_dataListener);
 	}
 
 	/** Returns {@link Listhead} belonging to this listbox, or null
@@ -1004,9 +1008,8 @@ implements RenderOnDemand {
 						smartUpdate("z.model", "true");
 				}
 
-				initDataListener();
 				_model = model;
-				_model.addListDataListener(_dataListener);
+				initDataListener();
 			}
 
 			//Always syncModel because it is easier for user to enfore reload
@@ -1483,6 +1486,11 @@ implements RenderOnDemand {
 		final Listbox clone = (Listbox)super.clone();
 		clone.init();
 		clone.afterUnmarshal();
+		if (clone._model != null) {
+			//we use the same data model but we have to create a new listener
+			clone._dataListener = null;
+			clone.initDataListener();
+		}
 		return clone;
 	}
 	private void afterUnmarshal() {

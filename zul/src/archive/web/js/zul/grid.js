@@ -87,7 +87,7 @@ zk.Grid.prototype = {
 			this.body.onscroll = function () {
 				if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
 				if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
-				meta._render(zk.gecko ? 200: 0);
+				meta._render(zk.gecko ? 200: 60);
 					//Moz has a bug to send the request out if we don't wait long enough
 					//How long is enough is unknown, but 200 seems fine
 			};
@@ -99,7 +99,7 @@ zk.Grid.prototype = {
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
 
-		this._render(20);
+		this._render(150); //prolong a bit since calSize might not be ready
 	},
 	/* set the height. */
 	setHgh: function (hgh) {

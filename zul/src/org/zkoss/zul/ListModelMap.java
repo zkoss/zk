@@ -41,17 +41,28 @@ import java.lang.reflect.Method;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelMap extends AbstractListModel implements ListModelExt, Map {
+public class ListModelMap extends AbstractListModel
+implements ListModelExt, Map, java.io.Serializable {
 	protected List _list; //(entry pair)
 	protected Map _map; //(key, value)
-	protected Method _getEntry;
+	protected transient Method _getEntry;
 	
 	/**
-	 * new an instance which accepts a "live" Map as its inner Map. Any change to this
-	 * ListModelMap will change to the passed in "live" Map.
+	 * Creates an instance which accepts a "live" Map as its inner Map.
+	 * <p>It is deprecated. Use {@link #newInstance} instead.
 	 * @param map the inner Map storage.
+	 * @deprecated
 	 */
 	public static ListModelMap instance(Map map) {
+		return newInstance(map);
+	}
+	/**
+	 * Creates an instance which accepts a "live" Map as its inner Map.
+	 * Any change to this ListModelMap will change to the passed in "live" Map.
+	 * @param map the inner Map storage.
+	 * @deprecated
+	 */
+	public static ListModelMap newInstance(Map map) {
 		return new ListModelMap(map, 0);
 	}
 
@@ -591,5 +602,12 @@ public class ListModelMap extends AbstractListModel implements ListModelExt, Map
 		public Object[] toArray(Object[] a) {
 			return _inner == null ? a : _inner.toArray(a);
 		}
+	}
+
+	//Serializable//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		init();
 	}
 }

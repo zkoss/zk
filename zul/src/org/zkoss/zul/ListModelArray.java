@@ -42,11 +42,20 @@ implements ListModelExt, java.io.Serializable {
 	protected final Object[] _array;
 
 	/**
-	 * new an instance which accepts a "live" Object array as its inner array. Any change to this
-	 * ListModelArray will change to the passed in "live" array.
+	 * Creates an instance which accepts a "live" Object array as its inner array.
+	 * <p>It is deprecated. Use {@link #newInstance} instead.
 	 * @param array the inner array storage
+	 * @deprecated
 	 */
 	public static ListModelArray instance(Object[] array) {
+		return newInstance(array);
+	}
+	/**
+	 * Creates an instance which accepts a "live" Object array as its inner array.
+	 * Any change to this ListModelArray will change to the passed in "live" array.
+	 * @param array the inner array storage
+	 */
+	public static ListModelArray newInstance(Object[] array) {
 		return new ListModelArray(array, 0);
 	}
 

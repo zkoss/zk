@@ -37,16 +37,26 @@ import java.util.Collections;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelSet extends AbstractListModel implements ListModelExt, Set {
+public class ListModelSet extends AbstractListModel
+implements ListModelExt, Set, java.io.Serializable {
 	protected List _list;
 	protected Set _set;
 
 	/**
-	 * new an instance which accepts a "live" Set as its inner Set. Any change to this
-	 * ListModelSet will change to the passed in "live" Set.
+	 * Creates an instance which accepts a "live" Set as its inner Set.
+	 * <p>It is deprecated. Use {@link #newInstance} instead.
 	 * @param set the inner Set storage.
+	 * @deprecated
 	 */
 	public static ListModelSet instance(Set set) {
+		return newInstance(set);
+	}
+	/**
+	 * Creates an instance which accepts a "live" Set as its inner Set.
+	 * Any change to this ListModelSet will change to the passed in "live" Set.
+	 * @param set the inner Set storage.
+	 */
+	public static ListModelSet newInstance(Set set) {
 		return new ListModelSet(set);
 	}
 

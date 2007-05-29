@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 
+import org.zkoss.io.Serializables;
+
 import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.zul.event.ListDataEvent;
@@ -32,8 +34,9 @@ import org.zkoss.zul.event.ListDataListener;
  *
  * @author tomyeh
  */
-abstract public class AbstractListModel implements ListModel {
-	private final List _listeners = new LinkedList();
+abstract public class AbstractListModel
+implements ListModel, java.io.Serializable {
+	private transient List _listeners = new LinkedList();
 
 	/** Fires a {@link ListDataEvent} for all registered listener
 	 * (thru {@link #addListDataListener}.
@@ -54,5 +57,20 @@ abstract public class AbstractListModel implements ListModel {
 	}
 	public void removeListDataListener(ListDataListener l) {
 		_listeners.remove(l);
+	}
+
+	//Serializable//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		Serializables.smartWrite(s, _listeners);
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		_listeners = new LinkedList();
+		Serializables.smartRead(s, _listeners);
 	}
 }

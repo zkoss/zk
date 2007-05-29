@@ -36,15 +36,25 @@ import java.util.ListIterator;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelList extends AbstractListModel implements ListModelExt, List {
+public class ListModelList extends AbstractListModel
+implements ListModelExt, List, java.io.Serializable {
 	protected List _list;
 	
 	/**
-	 * new an instance which accepts a "live" List as its inner List. Any change to this
-	 * ListModelList will change to the passed in "live" List.
+	 * Creates an instance which accepts a "live" List as its inner List.
+	 * <p>It is deprecated. Use {@link #newInstance} instead.
 	 * @param list the inner List storage
+	 * @deprecated
 	 */
 	public static ListModelList instance(List list) {
+		return newInstance(list);
+	}
+	/**
+	 * Creates an instance which accepts a "live" List as its inner List.
+	 * Any change to this ListModelList will change to the passed in "live" List.
+	 * @param list the inner List storage
+	 */
+	public static ListModelList newInstance(List list) {
 		return new ListModelList(list);
 	}
 
