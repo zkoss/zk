@@ -130,7 +130,7 @@ implements SerializableAware, HierachicalAware {
 			if (bshns != _bshns) {
 		 		try {
 			 		bshns.setVariable(
-			 			name, val != null ? val: Primitive.NULL, true);
+			 			name, val != null ? val: Primitive.NULL, false);
 		 			return;
 				} catch (UtilEvalError ex) {
 					throw UiException.Aide.wrap(ex);
