@@ -61,8 +61,11 @@ public class Tabs extends XulElement {
 		if (super.insertBefore(child, insertBefore)) {
 			final Tabbox tabbox = getTabbox();
 
-			if (empty && tabbox != null)
-				tabbox.setSelectedTab(newtab);
+			if (empty)
+				if (tabbox != null)
+					tabbox.setSelectedTab(newtab);
+				else
+					newtab.setSelectedDirectly(true);
 
 			invalidateIfAccordion(tabbox);
 			return true;
