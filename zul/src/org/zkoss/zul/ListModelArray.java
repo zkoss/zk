@@ -22,6 +22,7 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.ArraysX;
 import java.util.Comparator;
 import java.util.Arrays;
 
@@ -43,34 +44,26 @@ implements ListModelExt, java.io.Serializable {
 
 	/**
 	 * Creates an instance which accepts a "live" Object array as its inner array.
-	 * <p>It is deprecated. Use {@link #newInstance} instead.
+	 * <p>It is deprecated. Use {@link #ListModelArray(Object[],boolean)} instead.
 	 * @param array the inner array storage
 	 * @deprecated
 	 */
 	public static ListModelArray instance(Object[] array) {
-		return newInstance(array);
+		return new ListModelArray(array, true);
 	}
 	/**
-	 * Creates an instance which accepts a "live" Object array as its inner array.
-	 * Any change to this ListModelArray will change to the passed in "live" array.
-	 * @param array the inner array storage
+	 * Constructor
+	 *
+	 * @param array the array to represent
+	 * @param live whether to have a 'live' {@link ListModel} on top of
+	 * the specified array.
+	 * If false, the content of the specified array is copied.
+	 * If true, this object is a 'facade' of the specified array,
+	 * i.e., when you add or remove items from this {@link ListModelArray},
+	 * the inner "live" array would be changed accordingly.
 	 */
-	public static ListModelArray newInstance(Object[] array) {
-		return new ListModelArray(array, 0);
-	}
-
-	/**
-	 * <p>Constructor, unlike other constructor, the passed in Object array is a "live" array inside
-	 * this ListModelArray; i.e., when you change the contents from this ListModelArray,
-	 * the inner "live" array would be changed accordingly.</p>
-	 * @param array the inner "live" Object array that would be modified accordingly
-	 * when you modify to this ListModelArray.
-	 * @param dummy dummy argument to avoid confuse with consturctor {@link #ListModelArray(Object[])}.
-	 */
-	protected ListModelArray(Object[] array, int dummy) {
-		if (array == null)
-			throw new NullPointerException();
-		_array = array;
+	public ListModelArray(Object[] array, boolean live) {
+		_array = live ? array: (Object[])ArraysX.clone(array);
 	}
 
 	/**
@@ -78,10 +71,7 @@ implements ListModelExt, java.io.Serializable {
 	 * @param src the source array used to initialize this ListModelArray.
 	 */
 	public ListModelArray(Object[] src) {
-		if (src == null)
-			throw new NullPointerException();
-		_array = new Object[src.length];
-		System.arraycopy(src, 0, _array, 0, src.length);
+		_array = (Object[])ArraysX.clone(src);
 	}
 	
 	/**

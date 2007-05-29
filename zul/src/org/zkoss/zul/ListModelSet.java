@@ -39,37 +39,31 @@ import java.util.Collections;
  */
 public class ListModelSet extends AbstractListModel
 implements ListModelExt, Set, java.io.Serializable {
-	protected List _list;
 	protected Set _set;
 
 	/**
 	 * Creates an instance which accepts a "live" Set as its inner Set.
-	 * <p>It is deprecated. Use {@link #newInstance} instead.
+	 * <p>It is deprecated. Use {@link #ListModelSet(Set,boolean)} instead.
 	 * @param set the inner Set storage.
 	 * @deprecated
 	 */
 	public static ListModelSet instance(Set set) {
-		return newInstance(set);
-	}
-	/**
-	 * Creates an instance which accepts a "live" Set as its inner Set.
-	 * Any change to this ListModelSet will change to the passed in "live" Set.
-	 * @param set the inner Set storage.
-	 */
-	public static ListModelSet newInstance(Set set) {
-		return new ListModelSet(set);
+		return new ListModelSet(set, true);
 	}
 
 	/**
-	 * <p>Constructor, unlike other Set implementation, the passed in Set is a "live" set inside
-	 * this ListModelSet; i.e., when you add or remove items from this ListModelSet,
-	 * the inner "live" set would be changed accordingly.</p>
-	 * @param set the inner "live" set that would be added and/or removed accordingly
-	 * when you add and/or remove item to this ListModelSet.
+	 * Constructor
+	 *
+	 * @param set the set to represent
+	 * @param live whether to have a 'live' {@link ListModel} on top of
+	 * the specified set.
+	 * If false, the content of the specified set is copied.
+	 * If true, this object is a 'facade' of the specified set,
+	 * i.e., when you add or remove items from this {@link ListModelSet},
+	 * the inner "live" set would be changed accordingly.
 	 */
-	protected  ListModelSet(Set set) {
-		_set = set;
-		_list = new ArrayList(set);
+	public ListModelSet(Set set, boolean live) {
+		_set = live ? set: new LinkedHashSet(set);
 	}
 	
 	/**
@@ -77,7 +71,6 @@ implements ListModelExt, Set, java.io.Serializable {
 	 */
 	public ListModelSet() {
 		_set = new LinkedHashSet();
-		_list = new ArrayList();
 	}
 
 	/**
@@ -85,7 +78,6 @@ implements ListModelExt, Set, java.io.Serializable {
 	 */
 	public ListModelSet(Collection c) {
 		_set = new LinkedHashSet(c);
-		_list = new ArrayList(c);
 	}
 	
 	/**
@@ -94,7 +86,6 @@ implements ListModelExt, Set, java.io.Serializable {
 	 */
 	public ListModelSet(int initialCapacity) {
 		_set = new LinkedHashSet(initialCapacity);
-		_list = new ArrayList(initialCapacity);
 	}
 
 	/**
@@ -104,7 +95,6 @@ implements ListModelExt, Set, java.io.Serializable {
 	 */
 	public ListModelSet(int initialCapacity, float loadFactor) {
 		_set = new LinkedHashSet(initialCapacity, loadFactor);
-		_list = new ArrayList(initialCapacity);
 	}
 
 	/**
@@ -120,15 +110,21 @@ implements ListModelExt, Set, java.io.Serializable {
 	}
 	
 	public Object getElementAt(int j) {
-		return _list.get(j);
+		if (j < 0 || j >= _set.size())
+			throw new IndexOutOfBoundsException(""+j);
+
+		for (Iterator it = _set.iterator();;) {
+			final Object o = it.next();
+			if (--j < 0)
+				return o;
+		}
 	}
-	
+
 	//-- Set --//
  	public boolean add(Object o) {
  		if (!_set.contains(o)) {
 			int i1 = _set.size();
 			boolean ret = _set.add(o);
-			_list.add(o);
 			fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
 			return ret;
 		}
@@ -143,7 +139,6 @@ implements ListModelExt, Set, java.io.Serializable {
 			if (_set.contains(o)) {
 				continue;
 			}
-			_list.add(o);
 			_set.add(o);
 			++added;
 		}
@@ -159,7 +154,6 @@ implements ListModelExt, Set, java.io.Serializable {
 		if (i2 < 0) {
 			return;
 		}
-		_list.clear();
 		_set.clear();
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 	}
@@ -196,8 +190,7 @@ implements ListModelExt, Set, java.io.Serializable {
 				return _current;
 			}
 			public void remove() {
-				int index = _list.indexOf(_current);
-				_list.remove(index);
+				final int index = indexOf(_current);
 				_it.remove();
 				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 			}
@@ -206,13 +199,22 @@ implements ListModelExt, Set, java.io.Serializable {
 	
 	public boolean remove(Object o) {
 		if (_set.contains(o)) {
-			int index = _list.indexOf(o);
-			_list.remove(index);
+			final int index = indexOf(o);
 			boolean ret = _set.remove(o);
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 			return ret;
 		}
 		return false;
+	}
+	/** Returns the index of the specified object, or -1 if not found.
+	 */
+	public int indexOf(Object o) {
+		int j = 0;
+		for (Iterator it = _set.iterator(); it.hasNext(); ++j) {
+			if (o == it.next())
+				return j;
+		}
+		return -1;
 	}
 	
 	public boolean removeAll(Collection c) {
@@ -220,7 +222,6 @@ implements ListModelExt, Set, java.io.Serializable {
 			clear();
 			return true;
 		}
-		_list.removeAll(c);
 		return removePartial(c, true);
 	}
 
@@ -228,7 +229,6 @@ implements ListModelExt, Set, java.io.Serializable {
 		if (_set == c || this == c) { //special case
 			return false;
 		}
-		_list.retainAll(c);
 		return removePartial(c, false);
 	}
 	
@@ -283,9 +283,10 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
 	public void sort(Comparator cmpr, final boolean ascending) {
-		Collections.sort(_list, cmpr);
+		final List copy = new ArrayList(_set);
+		Collections.sort(copy, cmpr);
 		_set.clear();
-		_set.addAll(_list);
+		_set.addAll(copy);
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}
 }

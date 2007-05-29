@@ -42,31 +42,27 @@ implements ListModelExt, List, java.io.Serializable {
 	
 	/**
 	 * Creates an instance which accepts a "live" List as its inner List.
-	 * <p>It is deprecated. Use {@link #newInstance} instead.
+	 * <p>It is deprecated. Use {@link #ListModelList(List,boolean)} instead.
 	 * @param list the inner List storage
 	 * @deprecated
 	 */
 	public static ListModelList instance(List list) {
-		return newInstance(list);
-	}
-	/**
-	 * Creates an instance which accepts a "live" List as its inner List.
-	 * Any change to this ListModelList will change to the passed in "live" List.
-	 * @param list the inner List storage
-	 */
-	public static ListModelList newInstance(List list) {
-		return new ListModelList(list);
+		return new ListModelList(list, true);
 	}
 
 	/**
-	 * <p>Constructor, unlike other List implementation, the passed in List is a "live" list inside
-	 * this ListModelList; i.e., when you add or remove items from this ListModelList,
-	 * the inner "live" list would be changed accordingly.</p>
-	 * @param list the inner "live" list that would be added and/or removed accordingly
-	 * when you add and/or remove item to this ListModelList.
+	 * Constructor
+	 *
+	 * @param list the list to represent
+	 * @param live whether to have a 'live' {@link ListModel} on top of
+	 * the specified list.
+	 * If false, the content of the specified list is copied.
+	 * If true, this object is a 'facade' of the specified list,
+	 * i.e., when you add or remove items from this ListModelList,
+	 * the inner "live" list would be changed accordingly.
 	 */
-	protected ListModelList(List list) {
-		_list = list;
+	public ListModelList(List list, boolean live) {
+		_list = live ? list: new ArrayList(list);
 	}
 
 	/**

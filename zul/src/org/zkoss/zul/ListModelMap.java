@@ -43,41 +43,31 @@ import java.lang.reflect.Method;
  */
 public class ListModelMap extends AbstractListModel
 implements ListModelExt, Map, java.io.Serializable {
-	protected List _list; //(entry pair)
 	protected Map _map; //(key, value)
-	protected transient Method _getEntry;
 	
 	/**
 	 * Creates an instance which accepts a "live" Map as its inner Map.
-	 * <p>It is deprecated. Use {@link #newInstance} instead.
+	 * <p>It is deprecated. Use {@link #ListModelMap(Map, boolean)} instead.
 	 * @param map the inner Map storage.
 	 * @deprecated
 	 */
 	public static ListModelMap instance(Map map) {
-		return newInstance(map);
-	}
-	/**
-	 * Creates an instance which accepts a "live" Map as its inner Map.
-	 * Any change to this ListModelMap will change to the passed in "live" Map.
-	 * @param map the inner Map storage.
-	 * @deprecated
-	 */
-	public static ListModelMap newInstance(Map map) {
-		return new ListModelMap(map, 0);
+		return new ListModelMap(map, true);
 	}
 
 	/**
-	 * <p>Constructor, unlike other Map implementation, the passed in Map is a "live" map inside
-	 * this ListModelMap; i.e., when you add or remove items from this ListModelMap,
-	 * the inner "live" map would be changed accordingly.</p>
-	 * @param map the inner "live" map that would be added and/or removed accordingly
-	 * when you add and/or remove item to this ListModelMap.
-	 * @param dummy dummy argument to avoid confuse with consturctor {@link #ListModelMap(Map)}.
+	 * Constructor.
+	 *
+	 * @param map the map to represent
+	 * @param live whether to have a 'live' {@link ListModel} on top of
+	 * the specified map.
+	 * If false, the content of the specified map is copied.
+	 * If true, this object is a 'facade' of the specified map,
+	 * i.e., when you add or remove items from this {@link ListModelMap},
+	 * the inner "live" map would be changed accordingly.
 	 */
-	protected ListModelMap(Map map, int dummy) {
-		_map = map;
-		_list = new ArrayList(map.entrySet());
-		init();
+	public ListModelMap(Map map, boolean live) {
+		_map = live ? map: new LinkedHashMap(map);
 	}
 	
 	/**
@@ -85,8 +75,6 @@ implements ListModelExt, Map, java.io.Serializable {
 	 */
 	public ListModelMap() {
 		_map = new LinkedHashMap();
-		_list = new ArrayList();
-		init();
 	}
 	
 	/**
@@ -94,8 +82,6 @@ implements ListModelExt, Map, java.io.Serializable {
 	 */
 	public ListModelMap(Map map) {
 		_map = new LinkedHashMap(map);
-		_list = new ArrayList(_map.entrySet());
-		init();
 	}
 	
 	/**
@@ -104,8 +90,6 @@ implements ListModelExt, Map, java.io.Serializable {
 	 */
 	public ListModelMap(int initialCapacity) {
 		_map = new LinkedHashMap(initialCapacity);
-		_list = new ArrayList(initialCapacity);
-		init();
 	}
 	
 	/**
@@ -115,8 +99,6 @@ implements ListModelExt, Map, java.io.Serializable {
 	 */
 	public ListModelMap(int initialCapacity, float loadFactor) {
 		_map = new LinkedHashMap(initialCapacity, loadFactor);
-		_list = new ArrayList(initialCapacity);
-		init();
 	}
 
 	/**
@@ -126,46 +108,20 @@ implements ListModelExt, Map, java.io.Serializable {
 		return _map;
 	}
 	
-	private void init() {
-		try {
-			_getEntry = Classes.getAnyMethod(_map.getClass(), "getEntry", new Class[] {Object.class});
-		} catch (NoSuchMethodException	ex) {
-			//ignore
-		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex);
-		}
-	}
-
-	/* package */ Map.Entry getEntry(Object key) {
-		if (_getEntry != null) {
-			//tricky, use reflection to call HashMap implementation.
-			try {
-				return (Map.Entry) _getEntry.invoke(_map, new Object[] {key});
-			} catch (java.lang.reflect.InvocationTargetException ex) {
-				throw UiException.Aide.wrap(ex);
-			} catch (java.lang.IllegalAccessException ex) {
-				//ignore
-				_getEntry = null; //set method to null to avoid exception
-			}
-		}
-		
-		//degrade to stupid
-		for(final Iterator it = _map.entrySet().iterator(); it.hasNext();) {
-			Map.Entry entry = (Map.Entry) it.next();
-			if (entry.getKey() == key) {
-				return entry;
-			}
-		}
-		return null;
-	}
-	
 	//-- ListModel --//
 	public int getSize() {
 		return _map.size();
 	}
 	
 	public Object getElementAt(int j) {
-		return _list.get(j);
+		if (j < 0 || j >= _map.size())
+			throw new IndexOutOfBoundsException(""+j);
+
+		for (Iterator it = _map.entrySet().iterator();;) {
+			final Object o = it.next();
+			if (--j < 0)
+				return o;
+		}
 	}
 
 	//-- Map --//
@@ -174,7 +130,6 @@ implements ListModelExt, Map, java.io.Serializable {
 		if (i2 < 0) {
 			return;
 		}
-		_list.clear();
 		_map.clear();
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 	}
@@ -188,7 +143,7 @@ implements ListModelExt, Map, java.io.Serializable {
 	}
 	
 	public Set entrySet() {
-		return new MySet(_map.entrySet(), true);
+		return new MyEntrySet(_map.entrySet());
 	}
     
 	public boolean equals(Object o) {
@@ -208,29 +163,48 @@ implements ListModelExt, Map, java.io.Serializable {
 	}
     
 	public Set keySet() {
-		return new MySet(_map.keySet(), false);
+		return new MyKeySet(_map.keySet());
 	}
 
 	public Object put(Object key, Object o) {
-		Object ret = null;
+		final Object ret;
 		if (_map.containsKey(key)) {
 			if(Objects.equals(o, _map.get(key))) {
 				return o; //nothing changed
 			}
-			final Entry oldentry = getEntry(key);
-			int index = _list.indexOf(oldentry);
+			int index = indexOfKey(key);
 			ret = _map.put(key, o);
-			final Entry newentry = getEntry(key);
-			_list.set(index, newentry);
 			fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
 		} else {
 			int i1 = _map.size();
 			ret = _map.put(key, o);
-			final Entry realentry = getEntry(key);
-			_list.add(realentry);
 			fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
 		}
 		return ret;
+	}
+	/** Returns the index of the specified object based on the key.
+	 *
+	 * @param o the key to look for
+	 */
+	public int indexOfKey(Object o) {
+		int j = 0;
+		for (Iterator it = _map.keySet().iterator(); it.hasNext(); ++j) {
+			if (o.equals(it.next()))
+				return j;
+		}
+		return -1;
+	}
+	/** Returns the index of the specified object based on the entry (Map.Entry).
+	 *
+	 * @param o the object to look for. It must be an instance of Map.Entry.
+	 */
+	public int indexOfEntry(Object o) {
+		int j = 0;
+		for (Iterator it = _map.entrySet().iterator(); it.hasNext(); ++j) {
+			if (o.equals(it.next()))
+				return j;
+		}
+		return -1;
 	}
 
 	public void putAll(Map c) {
@@ -259,8 +233,6 @@ implements ListModelExt, Map, java.io.Serializable {
 			Object key = entry.getKey();
 			Object val = entry.getValue();
 			_map.put(key, val);
-			Entry realentry = getEntry(key);
-			_list.add(realentry);
 		}
 
 		int len = added.size();
@@ -271,9 +243,7 @@ implements ListModelExt, Map, java.io.Serializable {
 
 	public Object remove(Object key) {
 		if (_map.containsKey(key)) {
-			final Entry entry = getEntry(key);
-			int index = _list.indexOf(entry);
-			_list.remove(index);
+			int index = indexOfKey(key);
 			Object ret = _map.remove(key);
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 			return ret;
@@ -297,14 +267,13 @@ implements ListModelExt, Map, java.io.Serializable {
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
 	public void sort(Comparator cmpr, final boolean ascending) {
-		Collections.sort(_list, cmpr);
+		final List copy = new ArrayList(_map.entrySet());
+		Collections.sort(copy, cmpr);
 		_map.clear();
-		for(Iterator it = _list.iterator(); it.hasNext();) {
+		for(Iterator it = copy.iterator(); it.hasNext();) {
 			Entry entry = (Entry) it.next();
 			_map.put(entry.getKey(), entry.getValue());
 		}
-		_list.clear();
-		_list.addAll(_map.entrySet());
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}
 
@@ -359,19 +328,18 @@ implements ListModelExt, Map, java.io.Serializable {
 		
 		public void remove() {
 			if (_index >= 0) {
-				_list.remove(_index);
 				_it.remove();
 				fireEvent(ListDataEvent.INTERVAL_REMOVED, _index, _index);
 			}
 		}
 	}
 
-	private class MySet implements Set {
-		private Set _set;
-		private boolean _entrySet;
-		public MySet(Set inner, boolean entrySet) {
+	/** Represents the key set.
+	 */
+	private class MyKeySet implements Set {
+		private final Set _set;
+		public MyKeySet(Set inner) {
 			_set = inner;
-			_entrySet = entrySet;
 		}
 		
 		public void clear() {
@@ -379,18 +347,18 @@ implements ListModelExt, Map, java.io.Serializable {
 			if (i2 < 0) {
 				return;
 			}
-			_list.clear();
 			_set.clear();
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 		}
 			
 		public boolean remove(Object o) {
-			final Entry entry = _entrySet ? ((Entry) o) : getEntry(o);
-			int index = _list.indexOf(entry);
-			_list.remove(index);
+			int index = indexOf(o);
 			boolean ret = _set.remove(o);
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 			return ret;
+		}
+		protected int indexOf(Object o) {
+			return indexOfKey(o);
 		}
 		
 		public boolean removeAll(Collection c) {
@@ -398,36 +366,12 @@ implements ListModelExt, Map, java.io.Serializable {
 				clear();
 				return true;
 			}
-			if (_entrySet) {
-				_list.removeAll(c);
-			} else {
-				for(Iterator it = c.iterator(); it.hasNext();) {
-					Object key = it.next();
-					if (_set.contains(key)) {
-						final Entry entry = getEntry(key);
-						_list.remove(entry);
-					}
-				}
-			}
 			return removePartial(_set, c, true);
 		}
 	
 		public boolean retainAll(Collection c) {
 			if (_set == c || this == c) { //special case
 				return false;
-			}
-			if (_entrySet) {
-				_list.retainAll(c);
-			} else {
-				List newlist = new ArrayList(c.size());
-				for(Iterator it = c.iterator(); it.hasNext();) {
-					final Object key = it.next();
-					if (_set.contains(key)) {
-						final Entry entry = getEntry(key);
-						newlist.add(entry);
-					}
-				}
-				_list = newlist;
 			}
 			return removePartial(_set, c, false);
 		}
@@ -456,8 +400,8 @@ implements ListModelExt, Map, java.io.Serializable {
 			if (this == o) {
 				return true;
 			}
-			if (o instanceof MySet) {
-				return Objects.equals(((MySet)o)._set, _set);
+			if (o instanceof MyKeySet) {
+				return Objects.equals(((MyKeySet)o)._set, _set);
 			} else {
 				return Objects.equals(_set, o);
 			}
@@ -483,7 +427,15 @@ implements ListModelExt, Map, java.io.Serializable {
 			return _set == null ? a : _set.toArray(a);
 		}
 	}
-	
+	private class MyEntrySet extends MyKeySet {
+		private MyEntrySet(Set inner) {
+			super(inner);
+		}
+		protected int indexOf(Object o) {
+			return indexOfEntry(o);
+		}
+	}
+
 	private class MyCollection implements Collection {
 		private Collection _inner;
 		
@@ -496,7 +448,6 @@ implements ListModelExt, Map, java.io.Serializable {
 			if (i2 < 0) {
 				return;
 			}
-			_list.clear();
 			_inner.clear();
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 		}
@@ -518,7 +469,6 @@ implements ListModelExt, Map, java.io.Serializable {
 			if (index < 0) {
 				return false;
 			}
-			_list.remove(index);
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 			return true;
 		}
@@ -528,26 +478,12 @@ implements ListModelExt, Map, java.io.Serializable {
 				clear();
 				return true;
 			}
-			int j = 0;
-			for(Iterator it = _inner.iterator(); it.hasNext();++j) {
-				final Object val = it.next();
-				if (c.contains(val)) {
-					_list.remove(j--); //after remove _list is short on element, index must kept as is
-				}
-			}
 			return removePartial(_inner, c, true);
 		}
 		
 		public boolean retainAll(Collection c) {
 			if (_inner == c || this == c) { //special case
 				return false;
-			}
-			int j = 0;
-			for(Iterator it = _inner.iterator(); it.hasNext();++j) {
-				final Object val = it.next();
-				if (!c.contains(val)) {
-					_list.remove(j--);
-				}
 			}
 			return removePartial(_inner, c, false);
 		}
@@ -602,12 +538,5 @@ implements ListModelExt, Map, java.io.Serializable {
 		public Object[] toArray(Object[] a) {
 			return _inner == null ? a : _inner.toArray(a);
 		}
-	}
-
-	//Serializable//
-	private synchronized void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		s.defaultReadObject();
-		init();
 	}
 }
