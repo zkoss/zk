@@ -39,6 +39,8 @@ ZK 2.3.2 Freshly
   1724571: getErrorMessage of textboxis not working if validate by Java
   1725709: ExecutionCleanup.cleanup() is called too early in execUpdate
   1725604: Drag&Drop: Missing drop target gesture (FF)
+  1726783: getSelectedTab is wrong if tabs is attached a tabbox later
+  1727225: Failed if adding 2nd tab with selected
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
