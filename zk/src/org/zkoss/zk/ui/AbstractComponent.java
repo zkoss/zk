@@ -36,6 +36,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
+import org.zkoss.io.Serializables;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.event.EventListener;
@@ -54,7 +55,6 @@ import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Names;
-import org.zkoss.zk.ui.impl.Serializables;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;

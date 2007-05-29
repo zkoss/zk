@@ -29,6 +29,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.Media;
+import org.zkoss.io.Serializables;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;

@@ -22,8 +22,9 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.io.Serializables;
+
 import org.zkoss.zk.ui.ext.Macro;
-import org.zkoss.zk.ui.impl.Serializables;
 
 /**
  * The implemetation of a macro component upon HTML.

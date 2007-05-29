@@ -44,6 +44,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
+import org.zkoss.io.Serializables;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
