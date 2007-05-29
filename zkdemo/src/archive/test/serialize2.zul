@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+serialize2.zul
+
+{{IS_NOTE
+	Purpose:
+		Test Serializable with Live Data
+	Description:
+		
+	History:
+		Tue May 29 17:38:37     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="wnd" title="Serialize Live Data" border="normal">
+	<zscript>
+		String[] data = new String[30];
+		for(int j=0; j &lt; data.length; ++j) {
+			data[j] = "option "+j;
+		}
+		ListModel strset = new SimpleListModel(data);
+		int cnt = 0;
+	</zscript>
+	<listbox id="src" width="200px" rows="10" model="&#36;{strset}">
+		<listhead>
+			<listheader label="Load on Demend" sort="auto"/>
+		</listhead>
+	</listbox>
+	<button label="serialize">
+		<attribute name="onClick">{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(src);
+	byte[] bs = boa.toByteArray();
+	Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+	l.setId("dst" + ++cnt);
+	wnd.insertBefore(l, self);
+	wnd.insertBefore(new Label(bs.length+" bytes copied"), self);
+		}</attribute>
+	</button>
+</window>
