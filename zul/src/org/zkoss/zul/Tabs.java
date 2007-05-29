@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Iterator;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -50,22 +52,30 @@ public class Tabs extends XulElement {
 		if (!(child instanceof Tab))
 			throw new UiException("Unsupported child for tabs: "+child);
 
-		//Note: since we have to ensure one of the tabs is selected,
-		//we always make the first tab selected (unless we have better algorithm)
-		//In other words, to select a tab other than the first one,
-		//you have to set the parent first, and then call setSelected!
-		final boolean empty = getChildren().isEmpty();
+		boolean sel = getChildren().isEmpty(), desel = false;
 		final Tab newtab = (Tab)child;
-		if (!empty && newtab.isSelected()) newtab.setSelectedDirectly(false);
+		if (!sel && newtab.isSelected()) {
+			newtab.setSelectedDirectly(false);	//turn off first
+			sel = desel = true;					//trun on later
+		}
 
 		if (super.insertBefore(child, insertBefore)) {
 			final Tabbox tabbox = getTabbox();
 
-			if (empty)
-				if (tabbox != null)
+			if (sel)
+				if (tabbox != null) {
 					tabbox.setSelectedTab(newtab);
-				else
+				} else {
 					newtab.setSelectedDirectly(true);
+					if (desel)
+						for (Iterator it = getChildren().iterator(); it.hasNext();) {
+							final Tab tab = (Tab)it.next();
+							if (tab != newtab && tab.isSelected()) {
+								tab.setSelectedDirectly(false);
+								break;
+							}
+						}
+				}
 
 			invalidateIfAccordion(tabbox);
 			return true;
