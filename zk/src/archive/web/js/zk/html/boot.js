@@ -144,7 +144,8 @@ zk.mods = {}; //ZkFns depends on it
  * it tried to extend the element.
  */
 function $e(id) {
-    return typeof id == 'string' ? document.getElementById(id): id;
+    return typeof id == 'string' ? id ? document.getElementById(id): null: id;
+    	//strange but getElementById("") fails in IE7
 };
 /** A control might be enclosed by other tag while event is sent from
  * the control directly, so... */
