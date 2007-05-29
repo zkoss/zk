@@ -42,6 +42,7 @@ ZK 2.3.2 Freshly
   1726783: getSelectedTab is wrong if tabs is attached a tabbox later
   1727225: Failed if adding 2nd tab with selected
   1727352: Live data listbox loads too many item at the beginning
+  1725299: BindingListModelSet doesn't support Serialization
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
