@@ -86,7 +86,7 @@ implements Cloneable, Condition {
 		_pagedef = parent.getPageDefinition();
 		_compdef = compdef;
 		_tagnm = tagnm;
-		_parent.appendChild(this);
+		_parent.appendChild0(this);
 	}
 	/** Constructs the info about how to create a component.
 	 * @param parent the parent; never null.
@@ -113,14 +113,21 @@ implements Cloneable, Condition {
 		if (parent != _parent) {
 			synchronized (this) {
 				if (_parent != null)
-					_parent.removeChild(this);
+					_parent.removeChild0(this);
 				_parent = parent;
 				if (_parent != null)
-					_parent.appendChild(this);
+					_parent.appendChild0(this);
 			}
 		}
 	}
 
+	/** Returns a readonly list of properties ({@link Property}) (never null).
+	 * @since 2.3.2
+	 */
+	public List getProperties() {
+		return _props != null ?
+			Collections.unmodifiableList(_props): Collections.EMPTY_LIST;
+	}
 	/** Adds a property initializer.
 	 * It will initialize a component when created with this info.
 	 * @param name the member name. The component must have a valid setter
