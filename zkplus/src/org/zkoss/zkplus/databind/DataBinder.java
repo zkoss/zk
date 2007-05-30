@@ -739,10 +739,8 @@ public class DataBinder {
 			}
 			if (existsBean(beanid)) {
 				setBean(beanid, val);
-			} else if (comp.containsVariable(beanid, false)) {
+			} else if (!setZScriptVariable(comp, beanid, val)) {
 				comp.setVariable(beanid, val, false);
-			} else {
-				setZScriptVariable(comp, beanid, val);
 			}
 			refChanged = true;
 		} else {
@@ -857,20 +855,30 @@ public class DataBinder {
 			|| (bean instanceof Number);
 	}
 	
-	//Very tricky implementation, assume "=" the assignment operator for all interpreters.
-	//All loaded interperter will be set a zscript variable
-	private void setZScriptVariable(Component comp, String beanid, Object val) {
+	/** Sets the variable to all loaded interpreters, if it was defined in
+	 * the interpreter.
+	 *
+	 * @return whether it is set to the interpreter
+	 */
+	private boolean setZScriptVariable(Component comp, String beanid, Object val) {
 		//for all loaded interperter, assign val to beanid
+		boolean found = false;
 		final Namespace ns = comp.getNamespace();
 		for(final Iterator it = comp.getPage().getLoadedInterpreters().iterator();
 		it.hasNext();) {
 			final Interpreter ip = (Interpreter) it.next();
 			if (ip instanceof HierachicalAware) {
-				((HierachicalAware)ip).setVariable(ns, beanid, val);
-			} else {
+				final HierachicalAware ha = (HierachicalAware)ip;
+				if (ha.containsVariable(ns, beanid)) {
+					ha.setVariable(ns, beanid, val);
+					found = true;
+				}
+			} else if (ip.containsVariable(beanid)) {
 				ip.setVariable(beanid, val);
+				found = true;
 			}
 		}
+		return found;
 	}
 
 	/*package*/ Object lookupBean(Component comp, String beanid) {
