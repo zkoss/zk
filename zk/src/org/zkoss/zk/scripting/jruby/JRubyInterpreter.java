@@ -49,6 +49,10 @@ public class JRubyInterpreter extends GenericInterpreter {
 		_runtime.evalScript(script);
 	}
 
+	protected boolean contains(String name) {
+		return _runtime.getGlobalVariables().isDefined(
+			GlobalVariable.variableName(name));
+	}
 	protected Object get(String name) {
 		IRubyObject ro = _runtime.getGlobalVariables().get(
 			GlobalVariable.variableName(name));

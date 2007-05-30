@@ -36,10 +36,10 @@ package org.zkoss.zk.scripting;
  * @see Interpreter
  */
 public interface HierachicalAware {
-	/** Returns the value of a variable defined in this interpreter.
-	 * Note: it doesn't search the namespace.
+	/** Tests whether a variable defined in this interpreter.
+	 * Note: it doesn't search the namespace ({@link Namespace}).
 	 *
-	 * <p>It is similar to {@link Interpreter#getVariable}, except
+	 * <p>It is similar to {@link Interpreter#containsVariable}, except
 	 * it uses the specified namespace as a reference to identify the
 	 * correct scope for searching the variable.
 	 *
@@ -48,9 +48,22 @@ public interface HierachicalAware {
 	 * Note: this method doesn't look for any variable stored in ns.
 	 * @since 2.3.2
 	 */
+	public boolean containsVariable(Namespace ns, String name);
+	/** Returns the value of a variable defined in this interpreter's
+	 * scope identified by the specified namespace.
+	 * Note: it doesn't search the specified namespace ({@link Namespace}).
+	 *
+	 * <p>It is similar to {@link Interpreter#getVariable}, except
+	 * it uses the specified namespace as a reference to identify the
+	 * correct scope for searching the variable.
+	 *
+	 * @param ns the namespace used as a reference to identify the
+	 * correct scope for searching the variable.
+	 * Note: this method doesn't look for any variable stored in ns.
+	 */
 	public Object getVariable(Namespace ns, String name);
-	/** Sets the value of a variable to this interpreter, as if
-	 * they are defined in the interpreter.
+	/** Sets the value of a variable to this interpreter's scope
+	 * identified by the specified namespace.
 	 *
 	 * <p>It is similar to {@link Interpreter#setVariable}, except
 	 * it uses the specified namespace as a reference to identify the
@@ -62,7 +75,8 @@ public interface HierachicalAware {
 	 * @since 2.3.2
 	 */
 	public void setVariable(Namespace ns, String name, Object value);
-	/** Removes the value of a variable defined in this interpreter.
+	/** Removes the value of a variable defined in the interpreter's
+	 * scope identified by the specified namespace.
 	 *
 	 * <p>It is similar to {@link Interpreter#setVariable}, except
 	 * it uses the specified namespace as a reference to identify the

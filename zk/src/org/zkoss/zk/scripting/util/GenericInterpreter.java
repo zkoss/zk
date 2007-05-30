@@ -40,7 +40,8 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  * <p>Derive classes usually override {@link #exec} instead of {@link #interpret};
  * In addition, don't override {@link #getVariable},
  * {@link #setVariable} and {@link #unsetVariable}.
- * Instead, override {@link #get(String)}, {@link #set(String,Object)} and {@link #unset(String)} instead.
+ * Instead, override {@link #get(String)}, {@link #contains(String)},
+ * {@link #set(String,Object)} and {@link #unset(String)} instead.
  *
  * <p>If an interpreter doesn't support hierachical scopes,
  * it can simply implement a global scope, and then use
@@ -52,7 +53,7 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  * can maintain a one-to-one relationship among interpreter's scopes
  * and ZK's {@link Namespace}. Thus, it can retrieve
  * the correct scope by giving ZK's {@link Namespace}, and vice versa.
- * It also has to implement {@link #get(Namespace,String)},
+ * It also has to implement {@link #get(Namespace,String)}, {@link #contains(Namespace,String)}
  * {@link #set(Namespace,String,Object)} and {@link #unset(Namespace,String)}.
  *
  * <p>Whether to support hierachical namespaces is optional.
@@ -77,6 +78,16 @@ abstract public class GenericInterpreter implements Interpreter {
 	 */
 	abstract protected void exec(String script);
 
+	/** Tests whether a variable is defined in this interpreter.
+	 * Optional. Implement it if the interpreter can tell the difference
+	 * between null and undefined.
+	 *
+	 * <p>By default, it tests whether {@link #get(String)} returns non-null.
+	 * @since 2.3.2
+	 */
+	protected boolean contains(String name) {
+		return get(name) != null;
+	}
 	/** Gets the variable from the interpreter.
 	 * Optional. Implement it if you want to expose variables defined
 	 * in the interpreter to Java codes.
@@ -104,6 +115,19 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 */
 	protected void unset(String name) {
+	}
+
+	/** Tests whether a variable is defined in the interpreter's scope
+	 * associated with the specified namespace.
+	 * Optional. Implement it if the interpreter can tell the difference
+	 * between null and undefined.
+	 *
+	 * <p>By default, it tests whether {@link #get(Namespace, String)}
+	 * returns non-null.
+	 * @since 2.3.2
+	 */
+	protected boolean contains(Namespace ns, String name) {
+		return get(ns, name) != null;
 	}
 	/** Gets the variable from the interpreter's scope associated with
 	 * the giving namespace.
@@ -250,6 +274,23 @@ abstract public class GenericInterpreter implements Interpreter {
 	public Method getMethod(String name, Class[] argTypes) {
 		return null;
 	}
+
+	/** Tests whether the variable exists.
+	 *
+	 * <p>Deriving class shall override {@link #contains(String)}, instead of this method.
+	 * @since 2.3.2
+	 */
+	public boolean containsVariable(String name) {
+		beforeExec();
+		push(Objects.UNKNOWN);
+			//don't use null since it means Namespaces#getCurrent, see below
+		try {
+			return contains(name);
+		} finally {
+			pop();
+			afterExec();
+		}
+	}
 	/** Retrieve the variable.
 	 *
 	 * <p>Deriving class shall override {@link #get(String)}, instead of this method.
@@ -290,8 +331,26 @@ abstract public class GenericInterpreter implements Interpreter {
 		}
 	}
 
-	/** Retrieve the variable by using the specified namespace
-	 * as a reference.
+	/** Tests whether the variable exists by using the specified name
+	 * as a reference to identify the interpreter's scope.
+	 *
+	 * <p>Deriving class shall override {@link #contains(Namespace,String)}, instead of this method.
+	 * @since 2.3.2
+	 */
+	public boolean containsVariable(Namespace ns, String name) {
+		beforeExec();
+		push(Objects.UNKNOWN);
+			//don't use null since it means Namespaces#getCurrent, see below
+		try {
+			return contains(ns, name);
+		} finally {
+			pop();
+			afterExec();
+		}
+	}
+	/** Returns the value of a variable defined in this interpreter's
+	 * scope identified by the specified namespace.
+	 * Note: it doesn't search the specified namespace ({@link Namespace}).
 	 *
 	 * <p>Deriving class shall override {@link #get(Namespace,String)},
 	 * instead of this method.
@@ -311,7 +370,8 @@ abstract public class GenericInterpreter implements Interpreter {
 			afterExec();
 		}
 	}
-	/** Sets the variable to this interpreter.
+	/** Sets the value of a variable to this interpreter's scope
+	 * identified by the specified namespace.
 	 *
 	 * <p>Deriving class shall override {@link #set(Namespace,String,Object)},
 	 * instead of this method.
@@ -325,7 +385,8 @@ abstract public class GenericInterpreter implements Interpreter {
 			afterExec();
 		}
 	}
-	/** Removes the variable from this interpreter.
+	/** Removes the value of a variable defined in the interpreter's
+	 * scope identified by the specified namespace.
 	 *
 	 * <p>Deriving class shall override {@link #unset(Namespace,String)}, instead of this method.
 	 * @since 2.3.2

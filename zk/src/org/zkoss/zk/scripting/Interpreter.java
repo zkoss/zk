@@ -78,8 +78,14 @@ public interface Interpreter {
 	 */
 	public Method getMethod(String name, Class[] argTypes);
 
+	/** Tests whether the variable is defined in this interpreter.
+	 * Note: it doesn't search the namespace ({@link Namespace}).
+	 *
+	 * @since 2.3.2
+	 */
+	public boolean containsVariable(String name);
 	/** Returns the value of a variable defined in this interpreter.
-	 * Note: it doesn't search the namespace.
+	 * Note: it doesn't search the namespace ({@link Namespace}).
 	 */
 	public Object getVariable(String name);
 	/** Sets the value of a variable to this interpreter, as if

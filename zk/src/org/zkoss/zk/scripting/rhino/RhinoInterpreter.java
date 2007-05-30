@@ -52,6 +52,9 @@ public class RhinoInterpreter extends GenericInterpreter {
 		Context.getCurrentContext()
 			.evaluateString(_global, script, "zk", 1, null);
 	}
+	protected boolean contains(String name) {
+		return _global.has(name, _global);
+	}
 	protected Object get(String name) {
 		final Object val = _global.get(name, _global);
 		if (val == Scriptable.NOT_FOUND

@@ -56,6 +56,9 @@ public class GroovyInterpreter extends GenericInterpreter {
 		_ip.evaluate(script);
 	}
 
+	protected boolean contains(String name) {
+		return _global.getVariables().containsKey(name);
+	}
 	protected Object get(String name) {
 		try {
 			return _global.getVariable(name);

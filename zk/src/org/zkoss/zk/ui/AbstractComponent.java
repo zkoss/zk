@@ -82,7 +82,7 @@ import org.zkoss.zk.scripting.util.SimpleNamespace;
  */
 public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
-	private static final Log log = Log.lookup(AbstractComponent.class);
+//	private static final Log log = Log.lookup(AbstractComponent.class);
     private static final long serialVersionUID = 20070326L;
 
 	private transient Page _page;
@@ -148,7 +148,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		addSharedAnnotationMap(_def.getAnnotationMap());
 
-		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
+//		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
 	private static final
 	ComponentDefinition lookupDefinition(Execution exec, Class cls) {
@@ -460,7 +460,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					do {
 						_uuid = dtctl.getNextUuid();
 					} while (desktop.getComponentByUuidIfAny(_uuid) != null);
-					if (D.ON && log.finerable()) log.finer("Uuid changed: "+this);
+//					if (D.ON && log.finerable()) log.finer("Uuid changed: "+this);
 				}
 
 				dtctl.addComponent(this); //depends on uuid
@@ -900,7 +900,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	public void redraw(Writer out) throws IOException {
 		final String mold = getMoldURI();
-		if (D.ON && log.finerable()) log.finer("Redraw comp: "+this+" with "+mold);
+//		if (D.ON && log.finerable()) log.finer("Redraw comp: "+this+" with "+mold);
 
 		final Map attrs = new HashMap(3);
 		attrs.put("self", this);

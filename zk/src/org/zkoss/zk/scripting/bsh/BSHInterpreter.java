@@ -84,6 +84,14 @@ implements SerializableAware, HierachicalAware {
 		}
 	}
 
+	protected boolean contains(String name) {
+		try {
+			return _ip.getNameSpace().getVariable(name) != Primitive.VOID;
+				//Primitive.VOID means not defined
+		} catch (UtilEvalError ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}
 	protected Object get(String name) {
 		try {
 			return Primitive.unwrap(_ip.get(name));
@@ -107,6 +115,21 @@ implements SerializableAware, HierachicalAware {
 		}
 	}
 
+	protected boolean contains(Namespace ns, String name) {
+		if (ns != null) {
+			final NameSpace bshns = prepareNS(ns);
+				//note: we have to create NameSpace (with prepareNS)
+				//to have the correct chain
+			if (bshns != _bshns) {
+		 		try {
+			 		return bshns.getVariable(name) != Primitive.VOID;
+				} catch (UtilEvalError ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+		}
+		return contains(name);
+	}
 	protected Object get(Namespace ns, String name) {
 		if (ns != null) {
 			final NameSpace bshns = prepareNS(ns);
@@ -219,6 +242,9 @@ implements SerializableAware, HierachicalAware {
 		//super//
 		protected Variable getVariableImpl(String name, boolean recurse)
 		throws UtilEvalError {
+			//Note: getVariableImpl returns null if not defined,
+			//while getVariable return Primitive.VOID if not defined
+
 			//Tom M Yeh: 20060606:
 			//We cannot override getVariable because BeanShell use
 			//getVariableImpl to resolve a variable recusrivly

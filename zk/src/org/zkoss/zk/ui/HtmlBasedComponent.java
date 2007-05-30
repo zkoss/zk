@@ -20,7 +20,6 @@ package org.zkoss.zk.ui;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
-import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.AbstractComponent;
@@ -53,8 +52,6 @@ import org.zkoss.zk.au.AuFocus;
  * @author tomyeh
  */
 abstract public class HtmlBasedComponent extends AbstractComponent {
-	private static final Log log = Log.lookup(HtmlBasedComponent.class);
-
 	private String _tooltiptext;
 	/** The width. */
 	private String _width;
