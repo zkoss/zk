@@ -38,8 +38,4 @@ implements BindingListModel, java.io.Serializable {
 	/* package */ BindingListModelMap(Map map, boolean live) {
 		super(map, live);
 	}
-
-	public int indexOf(Object elem) {
-		return indexOfEntry(elem);
-	}
 }

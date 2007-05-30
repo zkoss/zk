@@ -113,7 +113,9 @@ implements ListModelExt, Map, java.io.Serializable {
 	public int getSize() {
 		return _map.size();
 	}
-	
+	/**
+	 * Returns the entry (Map.Entry) at the specified index.
+	 */
 	public Object getElementAt(int j) {
 		if (j < 0 || j >= _map.size())
 			throw new IndexOutOfBoundsException(""+j);
@@ -198,11 +200,12 @@ implements ListModelExt, Map, java.io.Serializable {
 		}
 		return -1;
 	}
-	/** Returns the index of the specified object based on the entry (Map.Entry).
+	/** Returns the index of the specified object based on the entry
+	 * (Map.Entry).
 	 *
 	 * @param o the object to look for. It must be an instance of Map.Entry.
 	 */
-	public int indexOfEntry(Object o) {
+	public int indexOf(Object o) {
 		int j = 0;
 		for (Iterator it = _map.entrySet().iterator(); it.hasNext(); ++j) {
 			if (Objects.equals(o, it.next()))
@@ -436,7 +439,7 @@ implements ListModelExt, Map, java.io.Serializable {
 			super(inner);
 		}
 		protected int indexOf(Object o) {
-			return indexOfEntry(o);
+			return indexOf(o);
 		}
 	}
 
