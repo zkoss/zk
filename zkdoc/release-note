@@ -15,6 +15,9 @@ ZK 2.3.2 Freshly
   1721126: Configurable Tab Height
   1726708: A more generic way to intercept the request for Locale etc.
   1725484: Prevent the 2nd onOK and onClick if the prev is processing
+  1728196: Interpreter supports containsVariable
+  1728157: getProperties() for class ComponentInfo
+  1728220: Make NodeInfo.appendChild(ComponentInfo) public
   
 * Bugs:
   1711769: Grid on Vbox visibility bug
