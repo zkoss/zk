@@ -18,10 +18,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.zk.ui.Component;
+
 /**
  * A vbox.
  *
  * @author tomyeh
  */
 public class Vbox extends Box {
+	public Vbox() {
+	}
+	/** Constructor a vertical box by assigning an array of children.
+	 *
+	 * @param children an array of children to be added
+	 * @since 2.3.2
+	 */
+	public Vbox(Component[] children) {
+		super(children);
+	}
 }

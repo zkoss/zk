@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.zk.ui.Component;
+
 /**
  * A hbox.
  *
@@ -25,6 +27,14 @@ package org.zkoss.zul;
  */
 public class Hbox extends Box {
 	public Hbox() {
-		setMold("horizontal");
+		super("horizontal");
+	}
+	/** Constructor a horizontal box by assigning an array of children.
+	 *
+	 * @param children an array of children to be added
+	 * @since 2.3.2
+	 */
+	public Hbox(Component[] children) {
+		super("horizontal", children);
 	}
 }

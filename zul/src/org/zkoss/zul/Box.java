@@ -48,13 +48,33 @@ public class Box extends XulElement {
 	/** Default: vertical ({@link Vbox}).
 	 */
 	public Box() {
-		setMold("vertical");
+		this("vertical");
 	}
 	/**
 	 * @param orient either "horizontal" or "vertical".
 	 */
 	public Box(String orient) {
 		setOrient(orient);
+	}
+	/** Constructor a box by assigning an array of children.
+	 *
+	 * @param children an array of children to be added
+	 * @since 2.3.2
+	 */
+	public Box(Component[] children) {
+		this("vertical", children);
+	}
+	/** Constructor a box by assigning an array of children.
+	 *
+	 * @param children an array of children to be added
+	 * @since 2.3.2
+	 */
+	public Box(String orient, Component[] children) {
+		this(orient);
+
+		if (children != null)
+			for (int j = 0; j < children.length; ++j)
+				appendChild(children[j]);
 	}
 
 	/** Returns the orient (the same as {@link #getMold}).
