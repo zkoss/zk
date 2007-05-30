@@ -20,8 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <style src="~./zul/css/ext*.css.dsp*"/>
-<window id="root" use="org.zkoss.zkdemo.userguide.MainWindow" xmlns:h="http://www.w3.org/1999/xhtml">
-
+<window id="root" use="org.zkoss.zkdemo.userguide.MainWindow">
 	<!-- The following script is generated because we want to demo Google Maps later -->
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${desktopScope.gmapsKey}"
 		type="text/javascript" unless="${empty desktopScope.gmapsKey}"/>
@@ -143,7 +142,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<include id="xcontents" src="${requestScope.contentSrc}"/><!-- prepared by TocTree -->
 	</window>
 	</hbox>
-<h:script type="text/javascript"><![CDATA[
+<script type="text/javascript"
+if="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}"><![CDATA[
 if (!zk.https()) {
 	_urchin = function() {
 		try {
@@ -153,6 +153,6 @@ if (!zk.https()) {
 	};
 	setTimeout('zk.loadJS("http://www.google-analytics.com/urchin.js", _urchin)', 5000);
 }
-]]></h:script>
+]]></script>
 </window>
 </zk>
