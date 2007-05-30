@@ -40,6 +40,6 @@ implements BindingListModel, java.io.Serializable {
 	}
 
 	public int indexOf(Object elem) {
-		return indexOfKey(elem);
+		return indexOfEntry(elem);
 	}
 }
