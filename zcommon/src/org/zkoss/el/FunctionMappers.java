@@ -82,7 +82,7 @@ public class FunctionMappers {
 				throw new MissingResourceException(
 					"Taglib not found: "+taglib.getURI(), loc.getClass().getName(), taglib.getURI());
 			final Map mtds = (Map)_reces.get(url);
-			if (D.ON && log.finerable()) log.finer("Methods for "+taglib.getPrefix()+": "+mtds);
+//			if (D.ON && log.finerable()) log.finer("Methods for "+taglib.getPrefix()+": "+mtds);
 			if (!mtds.isEmpty())
 				mappers.put(taglib.getPrefix(), mtds);
 		}
@@ -93,7 +93,7 @@ public class FunctionMappers {
 	 * @return a map of function: (String name, Method mtd).
 	 */
 	public static final Map loadMethods(URL xmlUrl) throws Exception {
-		if (log.debugable()) log.debug(MCommon.FILE_OPENING, xmlUrl);
+//		if (log.debugable()) log.debug(MCommon.FILE_OPENING, xmlUrl);
 		final Element root =
 			new SAXBuilder(true, false, true).build(xmlUrl).getRootElement();
 			//We have to turn on namespace because xml schema might be used
