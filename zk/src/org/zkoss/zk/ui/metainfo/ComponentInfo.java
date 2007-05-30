@@ -110,12 +110,14 @@ implements Cloneable, Condition {
 	/** Sets the parent.
 	 */
 	public void setParent(NodeInfo parent) {
-		if (_parent != null) {
-			if (_parent != null)
-				_parent.removeChild(this);
-			_parent = parent;
-			if (_parent != null)
-				_parent.appendChild(this);
+		if (parent != _parent) {
+			synchronized (this) {
+				if (_parent != null)
+					_parent.removeChild(this);
+				_parent = parent;
+				if (_parent != null)
+					_parent.appendChild(this);
+			}
 		}
 	}
 
