@@ -18,7 +18,8 @@ ZK 2.3.2 Freshly
   1728196: Interpreter supports containsVariable
   1728157: getProperties() for class ComponentInfo
   1728220: Make NodeInfo.appendChild(ComponentInfo) public
-  
+  1727687: add Component[] constructor to Box, Hbox and Vbox
+
 * Bugs:
   1711769: Grid on Vbox visibility bug
   1712063: Vbox visibility bug with CSA action.show
