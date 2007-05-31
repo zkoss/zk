@@ -34,6 +34,7 @@ import java.net.URL;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.util.Maps;
 import org.zkoss.util.logging.Log;
@@ -557,10 +558,11 @@ public class Parser {
 				final Namespace attrns = attr.getNamespace();
 				final String attnm = attr.getLocalName();
 				final String attval = attr.getValue();
-				if (attrns != null && LanguageDefinition.ANNO_NAMESPACE.equals(attrns.getURI())) {
+				if (attrns != null
+				&& LanguageDefinition.ANNO_NAMESPACE.equals(attrns.getURI())) {
 					if (attrAnnotInfo == null)
 						attrAnnotInfo = new AnnotInfo();
-					attrAnnotInfo.addRaw(attnm, attval);
+					attrAnnotInfo.addByRawValue(attnm, attval);
 				} else if ("if".equals(attnm)) {
 					ifc = attval;
 				} else if ("unless".equals(attnm)) {
@@ -578,9 +580,17 @@ public class Parser {
 					if (!"xmlns".equals(attpref)
 					&& !("xmlns".equals(attnm) && "".equals(attpref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attruri)) {
-						addAttribute(compInfo, attns, attnm, attval, null);
-						if (attrAnnotInfo != null)
+						if (attval.startsWith("@{") && attval.endsWith("}")) { //annotation
+							if (attrAnnotInfo == null)
+								attrAnnotInfo = new AnnotInfo();
+							attrAnnotInfo.addByCompoundValue(
+								attval.substring(2, attval.length() -1));
 							attrAnnotInfo.updateAnnotations(compInfo, attnm);
+						} else {
+							addAttribute(compInfo, attns, attnm, attval, null);
+							if (attrAnnotInfo != null)
+								attrAnnotInfo.updateAnnotations(compInfo, attnm);
+						}
 					}
 				}
 			}
@@ -801,10 +811,41 @@ public class Parser {
 				throw new IllegalArgumentException("empty");
 			_annots.add(new Object[] {annotName, annotAttrs});
 		}
-		private void addRaw(String annotName, String rawValue) {
-			final Map attrs = Maps.parse(null, rawValue, ',', '\'');
+		private void addByRawValue(String annotName, String rawValue) {
+			final Map attrs = Maps.parse(null, rawValue, ',', '\'', true);
 			add(annotName, attrs);
 		}
+		/** Adds annotation by specifying the content in the compound format:
+		 * annot-name(att-name=att-value).
+		 */
+		private void addByCompoundValue(String cval) {
+			final char[] seps1 = {'(', ' '}, seps2 = {')'};
+			for (int j = 0, len = cval.length(); j < len;) {
+				j = Strings.skipWhitespaces(cval, j);
+				int k = Strings.nextSeparator(cval, j, seps1, true, true, false);
+				if (k < len && cval.charAt(k) == '(') {
+					String nm = cval.substring(j, k).trim();
+					if (nm.length() == 0) nm = "default";
+
+					j = k + 1;
+					k = Strings.nextSeparator(cval, j, seps2, true, true, false);
+
+					final String rv = 
+						(k < len ? cval.substring(j, k): cval.substring(j)).trim();
+					if (rv.length() > 0)
+						addByRawValue(nm, rv);
+					else
+						add(nm, null);
+				} else {
+					final String rv = 
+						(k < len ? cval.substring(j, k): cval.substring(j)).trim();
+					if (rv.length() > 0)
+						addByRawValue("default", rv);
+				}
+				j = k + 1;
+			}
+		}
+
 		/** Updates the annotations to the specified instance definition.
 		 * Note: it clears all annotation definitions before returning.
 		 *
