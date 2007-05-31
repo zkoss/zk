@@ -441,21 +441,19 @@ public class Strings {
 				esc = false;
 				continue;
 			}
+
 			final char cc = src.charAt(from);
 			if (escBackslash && cc == '\\') {
 				esc = true;
-				continue;
 			} else if (quot != (char)0) {
 				if (cc == quot)
 					quot = (char)0;
 			} else if (escQuot && (cc == '\'' || cc == '"')) {
 				quot = cc;
-			} else if (quotAsSeparator && (cc == '\'' || cc == '"')) {
+			} else if ((quotAsSeparator && (cc == '\'' || cc == '"'))
+			|| isSeparator(cc, separators)) {
 				return from;
 			}
-
-			if (isSeparator(cc, separators))
-				return from;
 		}
 		return from;
 	}
