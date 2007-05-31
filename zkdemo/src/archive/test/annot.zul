@@ -29,7 +29,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<attribute name="value">Hello</attribute>
 	</textbox>
 	<textbox id="t3" a:mark="color='blue',shape='round'" value=""/>
-
+	<textbox id="t4" value="@{mark(color='blue',shape='round')}"/>
+	<textbox id="t5" value="@{selected.item}"/>
+	<textbox id="t6" value="@{first second(color='blue',round) third forth(ab) (cd='cd')}"/>
 	<zscript>
 	void dump(StringBuffer sb, Component comp) {
 		sb.append(comp.getClass().getName()).append(' ').append(comp.getId()).append(": ")
