@@ -122,7 +122,7 @@ public class JRubyInterpreter extends GenericInterpreter {
 				if (name.length() > 1 && name.charAt(0) == '$') //just in case
 					name = name.substring(1);
 				Object val = getFromNamespace(name);
-				if (val != null) 
+				if (val != UNDEFINED) 
 					return javaToRuby(val);
 			}
 			return ro;

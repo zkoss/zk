@@ -61,6 +61,10 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  * @author tomyeh
  */
 abstract public class GenericInterpreter implements Interpreter {
+	/** Used by {@link #getFromNamespace} to denote a variable is not defined.
+	 */
+	public static final Object UNDEFINED = new Object();
+
 	/** A list of {@link Namespace}.
 	 * Top of it is the current one (if null, it means Namespaces.getCurrent)
 	 */
@@ -206,18 +210,27 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 
 	//utilities//
-	/** Locates and returns the variable through namespaces and
-	 * variable resolvers.
+	/** Returns the variable through namespaces and variable resolvers,
+	 * or {@link #UNDEFINED} if the variable not defined.
 	 *
 	 * <p>It is usually called to search namespaces and variable resolvers,
 	 * when the real interpreter failed to find a variable in its own scope.
+	 *
+	 * <p>Note: We use {@link #UNDEFINED} to denote undefined since 2.3.2,
+	 * while null is a valid value.
 	 */
 	protected Object getFromNamespace(String name) {
 		final Namespace ns = getCurrent();
-		return ns != null ? ns.getVariable(name, false): null;
+		if (ns != null) {
+			Object val = ns.getVariable(name, false);
+			if (val != null || ns.containsVariable(name, false))
+				return val;
+		}
+		return UNDEFINED;
 	}
-	/** Locates and returns the variable through the specified namespaces and
-	 * variable resolvers.
+	/** Returns the variable through the specified namespaces and
+	 * variable resolvers, or {@link #UNDEFINED} if the variable is not
+	 * defined.
 	 *
 	 * <p>It is usually called to search namespaces and variable resolvers,
 	 * when the real interpreter failed to find a variable in its own scope.
@@ -230,7 +243,12 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * null (i.e., ignoring ns).
 	 */
 	protected Object getFromNamespace(Namespace ns, String name) {
-		return getCurrent() != null ? ns.getVariable(name, false): null;
+		if (getCurrent() != null) {
+			Object val = ns.getVariable(name, false);
+			if (val != null || ns.containsVariable(name, false))
+				return val;
+		}
+		return UNDEFINED;
 	}
 
 	//Interpreter//

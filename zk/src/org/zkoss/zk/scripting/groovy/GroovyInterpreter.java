@@ -103,7 +103,8 @@ public class GroovyInterpreter extends GenericInterpreter {
 			Object val = super.get(key);
 			if (val != null || containsKey(key) || !(key instanceof String))
 				return val;
-			return getFromNamespace((String)key);
+			val = getFromNamespace((String)key);
+			return val != UNDEFINED ? val: null;
 		}
 	}
 	private static class ClosureMethod implements Method {

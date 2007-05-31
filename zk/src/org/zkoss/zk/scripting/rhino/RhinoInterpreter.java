@@ -122,14 +122,14 @@ public class RhinoInterpreter extends GenericInterpreter {
 		}
 		/* Not sure the side effect yet, so disable it
 		public boolean has(String name, Scriptable start) {
-			return super.has(name, start) || getFromNamespace(name) != null;
+			return super.has(name, start) || getFromNamespace(name) != UNDEFINED;
 		}*/
 		public Object get(String name, Scriptable start) {
 			final Object val = super.get(name, start);
 			if (val == Scriptable.NOT_FOUND
 			|| val == Undefined.instance) {
 				final Object v = getFromNamespace(name);
-				if (v != null) return toJS(v);
+				if (v != UNDEFINED) return toJS(v);
 			}
 			return val;
 		}

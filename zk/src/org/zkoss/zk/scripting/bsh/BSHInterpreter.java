@@ -254,7 +254,7 @@ implements SerializableAware, HierachicalAware {
 			Variable var = super.getVariableImpl(name, recurse);
 			if (!_inGet && var == null) {
 				Object v = getFromNamespace(name);
-				if (v != null) {
+				if (v != UNDEFINED) {
 			//Variable has no public/protected contructor, so we have to
 			//store the value back (with setVariable) and retrieve again
 					_inGet = true;
