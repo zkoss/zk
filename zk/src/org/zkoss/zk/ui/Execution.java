@@ -491,7 +491,7 @@ public interface Execution extends Evaluator {
 	 * Ignored if null.
 	 * @return the first component being created.
 	 * @see #createComponents(String, Map)
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public Component[] createComponents(PageDefinition pagedef, Map arg);
 	/** Creates components that don't belong to any page
@@ -509,7 +509,7 @@ public interface Execution extends Evaluator {
 	 * @see #createComponentsDirectly(String, String, Map)
 	 * @see #createComponentsDirectly(Document, String, Map)
 	 * @see #createComponentsDirectly(Reader, String, Map)
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public Component[] createComponents(String uri, Map arg);
 	/** Creates components that don't belong to any page
@@ -534,7 +534,7 @@ public interface Execution extends Evaluator {
 	 * @see #createComponents(String, Map)
 	 * @see #createComponentsDirectly(Document, String, Map)
 	 * @see #createComponentsDirectly(Reader, String, Map)
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public Component[] createComponentsDirectly(String content, String extension,
 	Map arg);
@@ -560,7 +560,7 @@ public interface Execution extends Evaluator {
 	 * @see #createComponents(String, Map)
 	 * @see #createComponentsDirectly(Document, String, Map)
 	 * @see #createComponentsDirectly(Reader, String, Map)
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public Component[] createComponentsDirectly(Document content, String extension,
 	Map arg);
@@ -586,7 +586,7 @@ public interface Execution extends Evaluator {
 	 * @see #createComponents(String, Map)
 	 * @see #createComponentsDirectly(Document, String, Map)
 	 * @see #createComponentsDirectly(String, String, Map)
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public Component[] createComponentsDirectly(Reader reader, String extension,
 	Map arg) throws IOException;

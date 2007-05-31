@@ -187,7 +187,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 *
 	 * <p>Default: creates an instance from {@link RequestQueueImpl};
 	 *
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	protected RequestQueue newRequestQueue() {
 		return new RequestQueueImpl();

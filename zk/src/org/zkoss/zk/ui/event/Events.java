@@ -163,7 +163,7 @@ public class Events {
 	 * <p>The onPiggyback event is designed to let developers piggyback
 	 * the least-emergent UI updates to the client.
 	 *
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public static final String ON_PIGGYBACK = "onPiggyback";
 
@@ -227,7 +227,7 @@ public class Events {
 	/** Returns whether an event handler or listener is available for
 	 * the specified component and event.
 	 *
-	 * <p>It is renamed to {@link #isListened} since 2.3.2.
+	 * <p>It is renamed to {@link #isListened} since 2.4.0.
 	 *
 	 * @deprecated
 	 */

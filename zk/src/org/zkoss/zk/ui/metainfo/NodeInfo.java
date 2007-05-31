@@ -61,7 +61,7 @@ abstract public class NodeInfo {
 		appendChild0((Object)custAttrs);
 	}
 	/** Adds a {@link ComponentInfo} child.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public void appendChild(ComponentInfo compInfo) {
 		compInfo.setParent(this); //it will call back appendChild0
@@ -89,7 +89,7 @@ abstract public class NodeInfo {
 	 *
 	 * <p>Call {@link ComponentInfo#setParent} instead.
 	 * @return whether the child is removed successfully.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public boolean removeChild(ComponentInfo compInfo) {
 		if (compInfo == null || compInfo.getParent() == null)

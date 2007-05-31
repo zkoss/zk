@@ -81,7 +81,7 @@ public interface Interpreter {
 	/** Tests whether the variable is defined in this interpreter.
 	 * Note: it doesn't search the namespace ({@link Namespace}).
 	 *
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public boolean containsVariable(String name);
 	/** Returns the value of a variable defined in this interpreter.

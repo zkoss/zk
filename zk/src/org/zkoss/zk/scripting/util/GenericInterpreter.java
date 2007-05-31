@@ -62,6 +62,7 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  */
 abstract public class GenericInterpreter implements Interpreter {
 	/** Used by {@link #getFromNamespace} to denote a variable is not defined.
+	 * @since 2.4.0
 	 */
 	public static final Object UNDEFINED = new Object();
 
@@ -87,7 +88,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * between null and undefined.
 	 *
 	 * <p>By default, it tests whether {@link #get(String)} returns non-null.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	protected boolean contains(String name) {
 		return get(name) != null;
@@ -128,7 +129,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 *
 	 * <p>By default, it tests whether {@link #get(Namespace, String)}
 	 * returns non-null.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	protected boolean contains(Namespace ns, String name) {
 		return get(ns, name) != null;
@@ -162,7 +163,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * <p>Default: the same as {@link #set(String, Object)}.
 	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	protected void set(Namespace ns, String name, Object value) {
 		set(name, value);
@@ -177,7 +178,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * <p>Default: the same as {@link #unset(String)}.
 	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	protected void unset(Namespace ns, String name) {
 		unset(name);
@@ -216,7 +217,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * <p>It is usually called to search namespaces and variable resolvers,
 	 * when the real interpreter failed to find a variable in its own scope.
 	 *
-	 * <p>Note: We use {@link #UNDEFINED} to denote undefined since 2.3.2,
+	 * <p>Note: We use {@link #UNDEFINED} to denote undefined since 2.4.0,
 	 * while null is a valid value.
 	 */
 	protected Object getFromNamespace(String name) {
@@ -296,7 +297,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	/** Tests whether the variable exists.
 	 *
 	 * <p>Deriving class shall override {@link #contains(String)}, instead of this method.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public boolean containsVariable(String name) {
 		beforeExec();
@@ -353,7 +354,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * as a reference to identify the interpreter's scope.
 	 *
 	 * <p>Deriving class shall override {@link #contains(Namespace,String)}, instead of this method.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public boolean containsVariable(Namespace ns, String name) {
 		beforeExec();
@@ -393,7 +394,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 *
 	 * <p>Deriving class shall override {@link #set(Namespace,String,Object)},
 	 * instead of this method.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public final void setVariable(Namespace ns, String name, Object value) {
 		beforeExec();
@@ -407,7 +408,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * scope identified by the specified namespace.
 	 *
 	 * <p>Deriving class shall override {@link #unset(Namespace,String)}, instead of this method.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public final void unsetVariable(Namespace ns, String name) {
 		beforeExec();

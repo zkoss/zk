@@ -122,7 +122,7 @@ implements Cloneable, Condition {
 	}
 
 	/** Returns a readonly list of properties ({@link Property}) (never null).
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public List getProperties() {
 		return _props != null ?

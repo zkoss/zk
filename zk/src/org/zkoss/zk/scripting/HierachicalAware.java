@@ -46,7 +46,7 @@ public interface HierachicalAware {
 	 * @param ns the namespace used as a reference to identify the
 	 * correct scope for searching the variable.
 	 * Note: this method doesn't look for any variable stored in ns.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public boolean containsVariable(Namespace ns, String name);
 	/** Returns the value of a variable defined in this interpreter's
@@ -72,7 +72,7 @@ public interface HierachicalAware {
 	 * @param ns the namespace used as a reference to identify the
 	 * correct scope for searching the variable.
 	 * Note: this method doesn't look for any variable stored in ns.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public void setVariable(Namespace ns, String name, Object value);
 	/** Removes the value of a variable defined in the interpreter's
@@ -85,7 +85,7 @@ public interface HierachicalAware {
 	 * @param ns the namespace used as a reference to identify the
 	 * correct scope for searching the variable.
 	 * Note: this method doesn't look for any variable stored in ns.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public void unsetVariable(Namespace ns, String name);
 }
