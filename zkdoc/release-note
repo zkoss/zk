@@ -1,5 +1,5 @@
 	--------
-ZK 2.3.2 Freshly
+ZK 2.4.0 Freshly
 * Features:
   1711860: An option to use native thread instead of event thread
   1715542: Window supports the highlighted mode
@@ -47,6 +47,7 @@ ZK 2.3.2 Freshly
   1727225: Failed if adding 2nd tab with selected
   1727352: Live data listbox loads too many item at the beginning
   1725299: BindingListModelSet doesn't support Serialization
+  1728692: Interpreter failed to handle a variable with null value
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
@@ -58,6 +59,8 @@ ZK 2.3.2 Freshly
 	ComponentInfo compInfo);
   + LocaleProvider and TimeZoneProvider are removed.
     Use RequestIntercepter instead.
+  + GenericInterpreter.getFromNamespace() returns UNDEFINED to denote
+    a variable is not defined, while null is a valid value.
 
 	--------
 ZK 2.3.1
