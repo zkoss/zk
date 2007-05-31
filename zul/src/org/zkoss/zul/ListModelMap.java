@@ -65,7 +65,7 @@ implements ListModelExt, Map, java.io.Serializable {
 	 * If true, this object is a 'facade' of the specified map,
 	 * i.e., when you add or remove items from this {@link ListModelMap},
 	 * the inner "live" map would be changed accordingly.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public ListModelMap(Map map, boolean live) {
 		_map = live ? map: new LinkedHashMap(map);

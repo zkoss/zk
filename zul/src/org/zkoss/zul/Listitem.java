@@ -234,7 +234,7 @@ public class Listitem extends XulElement {
 	 * It is meaningful only if {@link #getListbox} is live data,
 	 * i.e., {@link Listbox#getModel} is not null.
 	 *
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public boolean isLoaded() {
 		return _loaded;

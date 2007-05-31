@@ -62,7 +62,7 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * If true, this object is a 'facade' of the specified set,
 	 * i.e., when you add or remove items from this {@link ListModelSet},
 	 * the inner "live" set would be changed accordingly.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public ListModelSet(Set set, boolean live) {
 		_set = live ? set: new LinkedHashSet(set);

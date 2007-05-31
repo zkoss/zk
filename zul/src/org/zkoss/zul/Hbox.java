@@ -32,7 +32,7 @@ public class Hbox extends Box {
 	/** Constructor a horizontal box by assigning an array of children.
 	 *
 	 * @param children an array of children to be added
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public Hbox(Component[] children) {
 		super("horizontal", children);

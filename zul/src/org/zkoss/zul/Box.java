@@ -59,7 +59,7 @@ public class Box extends XulElement {
 	/** Constructor a box by assigning an array of children.
 	 *
 	 * @param children an array of children to be added
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public Box(Component[] children) {
 		this("vertical", children);
@@ -67,7 +67,7 @@ public class Box extends XulElement {
 	/** Constructor a box by assigning an array of children.
 	 *
 	 * @param children an array of children to be added
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public Box(String orient, Component[] children) {
 		this(orient);

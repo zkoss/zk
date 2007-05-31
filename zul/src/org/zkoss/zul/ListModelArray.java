@@ -61,7 +61,7 @@ implements ListModelExt, java.io.Serializable {
 	 * If true, this object is a 'facade' of the specified array,
 	 * i.e., when you add or remove items from this {@link ListModelArray},
 	 * the inner "live" array would be changed accordingly.
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public ListModelArray(Object[] array, boolean live) {
 		_array = live ? array: (Object[])ArraysX.clone(array);
@@ -100,7 +100,7 @@ implements ListModelExt, java.io.Serializable {
 		
 	/**
 	 * Get the inner real Object[].
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */	
 	public Object[] getInnerArray() {
 		return _array;

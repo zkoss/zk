@@ -31,7 +31,7 @@ public class Vbox extends Box {
 	/** Constructor a vertical box by assigning an array of children.
 	 *
 	 * @param children an array of children to be added
-	 * @since 2.3.2
+	 * @since 2.4.0
 	 */
 	public Vbox(Component[] children) {
 		super(children);
