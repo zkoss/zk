@@ -24,7 +24,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
  * The CENTER tag.
  *
  * @author tomyeh
- * @since 2.3.2
+ * @since 2.4.0
  */
 public class Center extends AbstractTag {
 	public Center() {
