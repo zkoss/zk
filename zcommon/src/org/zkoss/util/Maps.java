@@ -229,10 +229,55 @@ public class Maps {
 	/**
 	 * Parses a string into a map.
 	 *
-	 * <p>Example, the following string wil cause ("a12", "12"),
-	 * ("b3", null), ("345", null), ("c6", "abc=125"), ("x", "y")
-	 * if you specify quote as '\'':<br>
-	 * a12=12,b3,345,c6=abc=125,x=y
+	 * <p>For example, if the following string is parsed:<br/>
+	 * a12=12,b3,c6=abc=125,x=y
+	 *
+	 * <p>Then, a map with the following content is returned:<br/>
+	 * ("a12", "12"), ("b3", null), ("c6", "abc=125"), ("x", "y")
+	 *
+	 * <p>If = is omitted, it is considered as a key with the null value.
+	 * If you want to consider it as the value, use
+	 * {@link #parse(Map, String, char, char, boolean)} instead.
+	 * Actually, this is the same as parse(map, src, separator, quote, false);
+	 *
+	 * <p>Notice: only the first = after separator is meaningful,
+	 * so you don't have to escape the following =.
+	 *
+	 * <p>Beside specifying the quote character, you could use back slash
+	 * quote a single character (as Java does).
+	 *
+	 * @param map the map to put parsed results to; null to create a
+	 * new hash map
+	 * @param src the string to parse
+	 * @param separator the separator, e.g., ' ' or ','.
+	 * @param quote the quote character to surrounding value, e.g.,
+	 * name = 'value'. If (char)0, no quotation is recognized.
+	 * Notice: if value is an expression, it is better to specify (char)0
+	 * because expression might contain strings.
+	 * @return the map being generated
+	 *
+	 * @exception IllegalSyntaxException if syntax errors
+	 * @see CollectionsX#parse
+	 * @see #toString(Map, char, char)
+	 */
+	public static final Map 
+	parse(Map map, String src, char separator, char quote)
+	throws IllegalSyntaxException {
+		return parse(map, src, separator, quote, false);
+	}
+	/**
+	 * Parses a string into a map.
+	 *
+	 * <p>If = is omitted, whether it is considered as a key with the null
+	 * value or a value with the null key depends on
+	 * the asValue argument. If true, it is considered as a value with
+	 * the null key.
+	 *
+	 * <p>For example, if the following string is parsed with asValue=false:<br/>
+	 * a12=12,b3,c6=abc=125,x=y
+	 *
+	 * <p>Then, a map with the following content is returned:<br/>
+	 * ("a12", "12"), ("b3", null), ("c6", "abc=125"), ("x", "y")
 	 *
 	 * <p>Notice: only the first = after separator is meaningful,
 	 * so you don't have to escape the following =.
@@ -247,14 +292,17 @@ public class Maps {
 	 * name = 'value'. If (char)0, no quotation is recognized.
 	 * Notice: if value is an expression, it is better to specify (char)0
 	 * because expression might contain strings.
-	 * @return the map being passed in
+	 * @param asValue whether to consider the substring without = as
+	 * a value (with the null key), or as a key (with the null value)
+	 * @return the map being generated
 	 *
 	 * @exception IllegalSyntaxException if syntax errors
 	 * @see CollectionsX#parse
 	 * @see #toString(Map, char, char)
+	 * @since 2.4.0
 	 */
 	public static final Map 
-	parse(Map map, String src, char separator, char quote)
+	parse(Map map, String src, char separator, char quote, boolean asValue)
 	throws IllegalSyntaxException {
 		if (separator == (char)0)
 			throw new IllegalArgumentException("Separator cannot be 0");
@@ -289,7 +337,8 @@ public class Maps {
 			case (char)0:
 				assert tk.next >= len;
 				if (name.length() > 0)
-					map.put(name, null);
+					if (asValue) map.put(null, name);
+					else map.put(name, null);
 				return map;//done
 			default:
 				//If separator is ' ', tk.cc can be anything; see next()
@@ -297,7 +346,8 @@ public class Maps {
 				|| name.length() == 0)
 					throw newIllegalSyntaxException(MCommon.UNEXPECTED_CHARACTER, tk.cc, src);
 
-				map.put(name, null);
+				if (asValue) map.put(null, name);
+				else map.put(name, null);
 				if (tk.cc == separator)
 					++j; //skip separator
 				continue;

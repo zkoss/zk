@@ -309,7 +309,7 @@ public class Strings {
 	 * Returns the substring from the <code>from</code> index up to the
 	 * <code>until</code> character or end-of-string.
 	 *
-	 * @param handleBackslash whether to treat '\\' specially (as escape char)
+	 * @param escBackslash whether to treat '\\' specially (as escape char)
 	 * It doesn't handle u and x yet.
 	 * @return the result (never null). Result.next is the position of
 	 * the <code>until</code> character if found, or
@@ -317,7 +317,7 @@ public class Strings {
 	 * You can tell which case it is by examining {@link Result#separator}.
 	 */
 	public static final
-	Result substring(String src, int from, char until, boolean handleBackslash) {
+	Result substring(String src, int from, char until, boolean escBackslash) {
 		final int len = src.length();
 		final StringBuffer sb = new StringBuffer(len);
 		for (boolean quoted = false; from < len; ++from) {
@@ -332,7 +332,7 @@ public class Strings {
 				}
 			} else if (cc == until) {
 				break;
-			} else if (handleBackslash && cc == '\\') {
+			} else if (escBackslash && cc == '\\') {
 				quoted = true;
 				continue; //skip it
 			}
@@ -363,22 +363,23 @@ public class Strings {
 	 *
 	 * <ul>
 	 * <li>It trims whitespaces before and after the token.</li>
-	 * <li>It handles both '\'' and '"' if handleQuotation is true.
-	 * If true, all characters between them are considered as a token.</li>
-	 * <li>Consider '\\' as the escape char if handleBackslash is true.</li>
+	 * <li>If quotAsToken is true, all characters between quotations
+	 * ('\'' or '"') are considered as a token.</li>
+	 * <li>Consider '\\' as the escape char if escBackslash is true.</li>
 	 * <li>If nothing found before end-of-string, null is returned</li>
 	 * </ul>
 	 *
 	 * If a separator is found, it is returned in
 	 * {@link Strings.Result#separator}.
 	 *
-	 * @param handleBackslash whether to treat '\\' specially (as escape char)
+	 * @param escBackslash whether to treat '\\' specially (as escape char)
 	 * It doesn't handle u and x yet.
-	 * @param handleQuotation whether to handle '\'' and '"'
+	 * @param quotAsToken whether to treat characters inside '\'' or '"'
+	 * as a token
 	 * @exception IllegalSyntaxException if the quoted string is unclosed.
 	 */
 	public static final Result nextToken(String src, int from,
-	char[] separators, boolean handleBackslash, boolean handleQuotation)
+	char[] separators, boolean escBackslash, boolean quotAsToken)
 	throws IllegalSyntaxException {
 		final int len = src.length();
 		from = skipWhitespaces(src, from);
@@ -387,8 +388,8 @@ public class Strings {
 
 		//1. handle quoted
 		final char cc = src.charAt(from);
-		if (handleQuotation && (cc == '\'' || cc == '"')) {
-			final Result res = substring(src, from + 1, cc, handleBackslash);
+		if (quotAsToken && (cc == '\'' || cc == '"')) {
+			final Result res = substring(src, from + 1, cc, escBackslash);
 			if (res.separator != cc)
 				throw new IllegalSyntaxException(MCommon.QUOTE_UNMATCHED, src);
 
@@ -400,10 +401,10 @@ public class Strings {
 
 		//2. handle not-quoted
 		final int j = nextSeparator(src, from, separators,
-			handleBackslash, handleQuotation);
+			escBackslash, false, quotAsToken);
 		int next = j;
 		if (j < len) {
-			if (handleQuotation) {
+			if (quotAsToken) {
 				final char c = src.charAt(j);
 				if (c != '\'' && c != '"')
 					++next;
@@ -417,26 +418,39 @@ public class Strings {
 
 		int k = 1 + skipWhitespacesBackward(src, j - 1);
 		return new Result(next,
-			k > from ? handleBackslash ?
+			k > from ? escBackslash ?
 				unescape(src.substring(from, k)) : src.substring(from, k): "",
 			j < len ? src.charAt(j): (char)0);
 			//if the token is nothing but spaces, k < from
 	}
 	
 	/** Returns the next seperator index in the src string.
+	 *
+	 * @param escQuot whether to escape characters inside quotations
+	 * ('\'' or '"'). In other words, ignore separators inside quotations
+	 * @param quotAsSeparator whether to consider quotations as one of
+	 * the separators
+	 * @since 2.4.0
 	 */
 	public static int nextSeparator(String src, int from, char[] separators,
-	boolean handleBackslash, boolean handleQuotation) {
-		boolean quoted = false;
+	boolean escBackslash, boolean escQuot, boolean quotAsSeparator) {
+		boolean esc = false;
+		char quot = (char)0;
 		for (final int len = src.length(); from < len; ++from) {
+			if (esc) {
+				esc = false;
+				continue;
+			}
 			final char cc = src.charAt(from);
-			if (quoted) {
-				quoted = false;
+			if (escBackslash && cc == '\\') {
+				esc = true;
 				continue;
-			} else if (handleBackslash && cc == '\\') {
-				quoted = true;
-				continue;
-			} else if (handleQuotation && (cc == '\'' || cc == '"')) {
+			} else if (quot != (char)0) {
+				if (cc == quot)
+					quot = (char)0;
+			} else if (escQuot && (cc == '\'' || cc == '"')) {
+				quot = cc;
+			} else if (quotAsSeparator && (cc == '\'' || cc == '"')) {
 				return from;
 			}
 
