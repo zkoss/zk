@@ -1,6 +1,7 @@
 	--------
 ZK 2.4.0 Freshly
 * Features:
+  1727154: Support the children attribute to defer creation of children
   1711860: An option to use native thread instead of event thread
   1728718: A simple way to annotate properties
   1715542: Window supports the highlighted mode
@@ -52,6 +53,7 @@ ZK 2.4.0 Freshly
   1725299: BindingListModelSet doesn't support Serialization
   1728692: Interpreter failed to handle a variable with null value
   1729253: Can not forward page
+  1729343: Failed to change focus after a modal dialog
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
