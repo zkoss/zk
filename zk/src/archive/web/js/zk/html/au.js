@@ -1806,9 +1806,9 @@ zkau.cmd1 = {
 		if (!zk.eval(cmp, "focus")) {
 			zkau.autoZIndex(cmp); //some, say, window, not listen to onfocus
 			cmp = $real(cmp); //focus goes to inner tag
-			if (cmp.focus && !cmp.disabled)
-				zk.focusById(cmp.id, 5);
-					//delay it because focusDownById might be called implicitly
+			zk.asyncFocus(cmp.id, 10);
+				//delay it since some comp, e.g., endModal, uses timer
+				//to do the multiple-step operation
 		}
 	},
 	meta: function (uuid, cmp, dt1, dt2, dt3, dt4) {

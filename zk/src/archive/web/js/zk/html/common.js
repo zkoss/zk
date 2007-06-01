@@ -379,34 +379,53 @@ zk._focusDown = function (el, match, checkA) {
 	return false;
 };
 /** Focus the element with the specified ID and do it timeout later. */
-zk.focusDownById = function (id, timeout) {
-	var script = "if (!zk.focusDown($e('"+id+"'))) window.focus()";
-	zk._doTwice(script, timeout);
+zk.asyncFocusDown = function (id, timeout) {
+	++zk.inAsyncFocus;
+	setTimeout("--zk.inAsyncFocus; if (!zk.focusDown($e('"+id+"'))) window.focus();",
+		timeout ? timeout: 0);
 };
 /** Focus the element without looking down, and do it timeout later. */
-zk.focusById = function (id, timeout) {
-	var script = "zk.focus($e('"+id+"'))";
-	zk._doTwice(script, timeout);
+zk.asyncFocus = function (id, timeout) {
+	++zk.inAsyncFocus;
+	setTimeout("--zk.inAsyncFocus; zk.focus($e('"+id+"'));",
+		timeout ? timeout: 0);
 		//Workaround for an IE bug: we have to set focus twice since
 		//the first one might fail (even we prolong the timeout to 1 sec)
 };
+zk.inAsyncFocus = 0;
+
+/** Focus to the specified component w/o throwing exception. */
 zk.focus = function (cmp) {
-	if (cmp && cmp.focus) try {cmp.focus();} catch (e) {}
+	if (cmp && cmp.focus)
+		try {
+			cmp.focus();
+		} catch (e) {
+			setTimeout(function() {
+				try {cmp.focus();} catch (e) {}
+			}, 0);
+		}
 		//IE throws exception when focus in some cases
 };
+
 /** Select the text of the element, and do it timeout later. */
-zk.selectById = function (id, timeout) {
-	var script = "zk._select($e('"+id+"'))";
-	zk._doTwice(script, timeout);
+zk.asyncSelect = function (id, timeout) {
+	++zk.inAsyncSelect;
+	setTimeout("--zk.inAsyncSelect; zk.select($e('"+id+"'));",
+		timeout ? timeout: 0);
 };
-zk._select = function (cmp) {
-	if (cmp && cmp.select) try {cmp.select();} catch (e) {}
+zk.inAsyncSelect = 0;
+
+/** Select to the specified component w/o throwing exception. */
+zk.select = function (cmp) {
+	if (cmp && cmp.select)
+		try {
+			cmp.select();
+		} catch (e) {
+			setTimeout(function() {
+				try {cmp.select();} catch (e) {}
+			}, 0);
+		}
 		//IE throws exception when focus() in some cases
-};
-zk._doTwice = function (script, timeout) {
-	if (!timeout) timeout = 0;
-	setTimeout(script, timeout);
-	setTimeout(script, timeout);
 };
 
 /** Returns the selection range of the specified control
