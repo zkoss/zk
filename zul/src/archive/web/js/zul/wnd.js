@@ -376,7 +376,7 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 	if (cmp.style.display != "none") //it happens when closing a modal (becomes overlap)
 		zkWnd._show(cmp);
 
-	zk.focusDownById(cmp.id, 0);
+	zk.asyncFocusDown(cmp.id);
 };
 zkWnd._endOverpop = function (uuid, storage, replace) {
 	storage.remove(uuid);
@@ -443,7 +443,7 @@ zkWnd._doModal = function (cmp, replace) {
 	}
 
 	zkWnd._float(cmp);
-	zk.focusDownById(cmp.id);
+	zk.asyncFocusDown(cmp.id);
 
 	zkWnd._modal2[cmp.id] = true;
 	setTimeout("zkWnd._doModal2('"+cmp.id+"')", 5); //process it later for better responsive
@@ -483,8 +483,7 @@ zkWnd._endModal = function (uuid, replace) {
 		var last = $e(lastid);
 		if (last) {
 			zk.restoreDisabled(last);
-			if (!prevfocusId) zk.focusDownById(lastid, 10);
-			if (!prevfocusId) zk.focusDownById(lastid, 10);
+			if (!prevfocusId && !zk.inAsyncFocus) zk.asyncFocusDown(lastid, 2);
 		}
 	}
 
@@ -493,8 +492,7 @@ zkWnd._endModal = function (uuid, replace) {
 		if (cmp) zkWnd._stick(cmp);
 	}
 
-	if (prevfocusId) zk.focusById(prevfocusId, 10);
-	if (prevfocusId) zk.focusById(prevfocusId, 10);
+	if (prevfocusId && !zk.inAsyncFocus) zk.asyncFocus(prevfocusId, 2);
 };
 
 /** Handles onsize to re-position mask. */

@@ -226,12 +226,11 @@ zk.Cal.prototype = {
 			if (this.input) {
 				//Request 1551019: better responsive
 				this.onchange();
-				zk.focusById(this.input.id);
+				zk.asyncFocus(this.input.id);
 			}
 		} else {
 			this.onchange();
-			if (zk.ie) zk.focusDownById(this.id, 50);
-			else zk.focusDown(this.element);
+			zk.asyncFocusDown(this.id, zk.ie ? 50: 0);
 		}
 	},
 	onchange: function () {
@@ -248,8 +247,8 @@ zk.Cal.prototype = {
 	selback: function (close) {
 		if (this.input) {
 			this.input.value = this.getDateString();
-			zk.focusById(this.input.id);
-			zk.selectById(this.input.id);
+			zk.asyncFocus(this.input.id);
+			zk.asyncSelect(this.input.id);
 		}
 		if (close) zkau.closeFloats(this.element);
 	},
@@ -460,7 +459,7 @@ zkDtbox.onkey = function (evt) {
 			if (ofs) {
 				meta.shift(ofs);
 				inp.value = meta.getDateString();
-				zk.selectById(inp.id);
+				zk.asyncSelect(inp.id);
 				Event.stop(evt);
 				return false;
 			}
@@ -535,7 +534,7 @@ zkDtbox._repos = function (uuid) {
 
 	zk.position(pp, cb, "after-start");
 	zkau.hideCovered();
-	zk.focusById(inpId);
+	zk.asyncFocus(inpId);
 };
 
 zkDtbox.close = function (pp, focus) {
@@ -552,7 +551,7 @@ zkDtbox.close = function (pp, focus) {
 	zkau.hideCovered();
 
 	if (focus)
-		zk.focusById(uuid + "!real");
+		zk.asyncFocus(uuid + "!real");
 };
 
 zk.FloatDatebox = Class.create();

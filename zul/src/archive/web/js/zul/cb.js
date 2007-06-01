@@ -356,7 +356,7 @@ zkCmbox._repos = function (uuid, hilite) {
 
 	zk.position(pp, cb, "after-start");
 	zkau.hideCovered();
-	zk.focusById(inpId);
+	zk.asyncFocus(inpId);
 
 	if (hilite) zkCmbox._hilite(uuid);
 };
@@ -369,8 +369,8 @@ zkCmbox._selback = function (item) {
 	if (inp) {
 		inp.value = txt;
 		inp.setAttribute("zk_changing_selbk", txt); //used with onChanging (widget.js)
-		zk.focusById(inp.id);
-		zk.selectById(inp.id);
+		zk.asyncFocus(inp.id);
+		zk.asyncSelect(inp.id);
 	}
 };
 /** Selects back the current hilited item, if any. */
@@ -496,7 +496,7 @@ zkCmbox.close = function (pp, focus) {
 	zkau.hideCovered();
 
 	if (focus)
-		zk.focusById(uuid + "!real");
+		zk.asyncFocus(uuid + "!real");
 
 	var cb = $outer(pp);
 	if (cb && zkau.asap(cb, "onOpen"))

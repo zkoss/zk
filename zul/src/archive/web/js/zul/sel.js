@@ -496,7 +496,7 @@ zk.Selectable.prototype = {
 		var el = $e(uuid + "!cm");
 		if (!el) el = $e(uuid + "!sel");
 		if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
-			zk.focusById(el.id);
+			zk.asyncFocus(el.id);
 	},
 
 	/** Selects one and deselect others, and return whehter any changes.
@@ -582,7 +582,7 @@ zk.Selectable.prototype = {
 				var el = $e(row.id + "!cm");
 				if (!el) el = $e(row.id + "!sel");
 				if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
-					zk.focusById(el.id);
+					zk.asyncFocus(el.id);
 				zkSel.cmonfocusTo(row);
 
 				if (!this.paging && zk.gecko) this._render(5);

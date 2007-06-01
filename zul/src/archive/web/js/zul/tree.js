@@ -73,7 +73,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 
 		var el = $e(row.id + "!sel");
 		if (!el) el = $e(el + "!cm");
-		if (el) zk.focusById(el.id);
+		if (el) zk.asyncFocus(el.id);
 
 		Event.stop(evt);
 	},

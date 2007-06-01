@@ -176,7 +176,7 @@ zkTxbox.setAttr = function (cmp, nm, val) {
 	if("z.sel" == nm){
 		var inp = $real(cmp);
 		if ("all" == val) {
-			zk.selectById(inp.id);
+			zk.asyncSelect(inp.id);
 			return true; //done
 		}
 
