@@ -382,13 +382,13 @@ zk._focusDown = function (el, match, checkA) {
 zk.asyncFocusDown = function (id, timeout) {
 	++zk.inAsyncFocus;
 	setTimeout("--zk.inAsyncFocus; if (!zk.focusDown($e('"+id+"'))) window.focus();",
-		timeout ? timeout: 0);
+		timeout > 0? timeout: 0);
 };
 /** Focus the element without looking down, and do it timeout later. */
 zk.asyncFocus = function (id, timeout) {
 	++zk.inAsyncFocus;
 	setTimeout("--zk.inAsyncFocus; zk.focus($e('"+id+"'));",
-		timeout ? timeout: 0);
+		timeout > 0? timeout: 0);
 		//Workaround for an IE bug: we have to set focus twice since
 		//the first one might fail (even we prolong the timeout to 1 sec)
 };
@@ -411,7 +411,7 @@ zk.focus = function (cmp) {
 zk.asyncSelect = function (id, timeout) {
 	++zk.inAsyncSelect;
 	setTimeout("--zk.inAsyncSelect; zk.select($e('"+id+"'));",
-		timeout ? timeout: 0);
+		timeout > 0? timeout: 0);
 };
 zk.inAsyncSelect = 0;
 
