@@ -1160,6 +1160,22 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return null;
 	}
 
+	/** Notifies that an {@link WrongValueException} instance is thrown,
+	 * and {@link WrongValueException#getComponent} is this component.
+	 * It is a callback and the component can store the error message,
+	 * show up the custom information, or even 'eat' the exception.
+	 *
+	 * <p>Default: does nothing but returns ex.
+	 *
+	 * @param ex the exception being thrown (never null)
+	 * @return the exception to throw, or null to ignore the exception
+	 * In most cases, just return ex
+	 * @since 2.4.0
+	 */
+	public WrongValueException onWrongValue(WrongValueException ex) {
+		return ex;
+	}
+
 	//-- Object --//
 	public String toString() {
 		final String clsnm = getClass().getName();

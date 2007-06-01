@@ -693,10 +693,13 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		if (ex instanceof WrongValueException) {
-			final Component comp = ((WrongValueException)ex).getComponent();
+			WrongValueException wve = (WrongValueException)ex;
+			final Component comp = wve.getComponent();
 			if (comp != null) {
-				uv.addResponse("wrongValue",
-					new AuWrongValue(comp, Exceptions.getMessage(ex)));
+				wve = ((ComponentCtrl)comp).onWrongValue(wve);
+				if (wve != null)
+					uv.addResponse("wrongValue",
+						new AuWrongValue(comp, Exceptions.getMessage(wve)));
 				return;
 			}
 		}

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ZScript;
@@ -168,4 +169,16 @@ public interface ComponentCtrl {
 	 * and {@link org.zkoss.zk.ui.ext.client.Inputable}.
 	 */
 	public Object getExtraCtrl();
+
+	/** Notifies that an {@link WrongValueException} instance is thrown,
+	 * and {@link WrongValueException#getComponent} is this component.
+	 * It is a callback and the component can store the error message,
+	 * show up the custom information, or even 'eat' the exception.
+	 *
+	 * @param ex the exception being thrown (never null)
+	 * @return the exception to throw, or null to ignore the exception
+	 * In most cases, just return ex
+	 * @since 2.4.0
+	 */
+	public WrongValueException onWrongValue(WrongValueException ex);
 }
