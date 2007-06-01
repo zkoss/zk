@@ -66,6 +66,7 @@ public class ExecutionImpl extends AbstractExecution {
 	private final ServletResponse _response;
 	private final ELContext _elctx;
 	private final Map _attrs;
+	private boolean _voided;
 
 	/** Constructs an execution for HTTP request.
 	 * @param creating which page is being creating for this execution, or
@@ -143,6 +144,7 @@ public class ExecutionImpl extends AbstractExecution {
 		if (getVisualizer().isEverAsyncUpdate())
 			throw new IllegalStateException("Use sendRedirect instead when processing user's request");
 
+		_voided = true;
 		try {
 			Servlets.forward(_ctx, _request,
 				BufferedResponse.getInstance(_response, out),
@@ -159,6 +161,13 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	public boolean isIncluded() {
 		return Servlets.isIncluded(_request);
+	}
+	public boolean isForwarded() {
+		return Servlets.isForwarded(_request);
+	}
+
+	public boolean isVoided() {
+		return _voided || _response.isCommitted();
 	}
 
 	public String encodeURL(String uri) {

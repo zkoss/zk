@@ -185,9 +185,25 @@ public interface Execution extends Evaluator {
 	 */
 	public void forward(String page)
 	throws IOException;
-	/** Returns whether this execution is included some other pages.
+	/** Returns whether the execution is voided.
+	 * By void we mean the request is taken charged by other servlet.
+	 * The execution shall not do anything more. The execution
+	 * won't generate any ouput then.
+	 *
+	 * <p>The common cause of being voided is the invocation of
+	 * {@link #forward}.
+	 *
+	 * @since 2.4.0
+	 */
+	public boolean isVoided();
+
+	/** Returns whether this execution is included by some other pages.
 	 */
 	public boolean isIncluded();
+	/** Returns whether the execution is forwarded from other pages.
+	 * @since 2.4.0
+	 */
+	public boolean isForwarded();
 
 	/** Converts the specified URI to an absolute URI, if uri is related
 	 * and the current execution is not included ({@link #isIncluded}).

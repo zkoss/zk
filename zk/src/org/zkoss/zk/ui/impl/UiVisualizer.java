@@ -1000,9 +1000,17 @@ import org.zkoss.zk.au.*;
 		return _aborting;
 	}
 	/** Returns whether it is aborting.
+	 * 
 	 * <p>The execution is aborting if {@link #getAbortingReason} returns
 	 * not null and the returned reason's {@link AbortingReason#isAborting}
 	 * is true.
+	 *
+	 * <p>Note: {@link Execution#isVoid} means the execution is voided
+	 * and no output shall be generated. The request is taken charged
+	 * by other servlet.
+	 * On the other hand, {@link #isAborting} means the execution
+	 * is aborting and the output shall still be generated (and sent).
+	 * The request is still taken charged by this execution.
 	 */
 	public boolean isAborting() {
 		return _aborting != null && _aborting.isAborting();

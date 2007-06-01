@@ -314,7 +314,7 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
-					if (!uv.isAborting())
+					if (!uv.isAborting() && !exec.isVoided())
 						execCreate(
 							((WebAppCtrl)_wapp).getUiFactory(),
 							exec, page, pagedef, null);
@@ -330,6 +330,8 @@ public class UiEngineImpl implements UiEngine {
 				((PageCtrl)page).init(null, null, null, null, null);
 				richlet.service(page);
 			}
+			if (exec.isVoided())
+				return; //don't generate any output
 
 			//Cycle 2: process pending events
 			//Unlike execUpdate, execution is aborted here if any exception
