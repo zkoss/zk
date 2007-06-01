@@ -275,16 +275,6 @@ implements Constrainted {
 						log.realCauseBriefly(ex);
 					}
 				}
-			} catch (Throwable ex) {
-				//Note: a constraint might be a BeanShell class, so we
-				//have to dig for the real cause
-				WrongValueException t = (WrongValueException)
-					Exceptions.findCause(ex, WrongValueException.class);
-				if (t != null) {
-					_errmsg = Exceptions.getMessage(t);
-					throw showCustomError(t);
-				}
-				throw UiException.Aide.wrap(ex);
 			} finally {
 				Namespaces.afterInterpret(backup, ns, true);
 			}
@@ -643,6 +633,11 @@ implements Constrainted {
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
 	}
+	public WrongValueException onWrongValue(WrongValueException ex) {
+		_errmsg = Exceptions.getMessage(ex);
+		return showCustomError(ex);
+	}
+
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
