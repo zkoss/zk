@@ -390,10 +390,9 @@ public class UiEngineImpl implements UiEngine {
 	throws IOException {
 		if (parentInfo instanceof ComponentInfo) {
 			final ComponentInfo pi = (ComponentInfo)parentInfo;
-			final String evtnm = pi.getCreateChildrenEvent();
-			if (evtnm != null) { //defer the creation of children
-				parent.addEventListener(evtnm,
-					new CreateChildListener(evtnm, pi, parent));
+			final String fulfill = pi.getFulfill();
+			if (fulfill != null) { //defer the creation of children
+				FulfillListener.register(fulfill, pi, parent);
 				return new Component[0];
 			}
 		}
@@ -1271,21 +1270,45 @@ public class UiEngineImpl implements UiEngine {
 			return eis;
 		}
 	}
-	/** Creates children in a listener.
+	/** The listener to create children when the fulfill condition is
+	 * satisfied.
 	 */
-	private static class CreateChildListener implements EventListener {
+	private static class FulfillListener implements EventListener, Express {
 		private final String _evtnm;
 		private final ComponentInfo _compInfo;
-		private final Component _comp;
+		private final Component _target, _comp;
 
-		private CreateChildListener(
-		String evtnm, ComponentInfo compInfo, Component comp) {
+		private static void register(String fulfill, ComponentInfo compInfo,
+		Component comp) {
+			final int j = fulfill.indexOf(':');
+			final String evtnm;
+			final Component target;
+			if (j >= 0) {
+				evtnm = fulfill.substring(0, j).trim();
+				final String tid = fulfill.substring(j + 1);
+				if (tid.length() > 0) {
+					//FUTURE: handle EL expression (in tid)
+					target = comp.getFellow(tid);
+				} else {
+					target = comp;
+				}
+			} else {
+				evtnm = fulfill;
+				target = comp;
+			}
+			target.addEventListener(evtnm,
+				new FulfillListener(evtnm, target, compInfo, comp));
+		}
+
+		private FulfillListener(
+		String evtnm, Component target, ComponentInfo compInfo, Component comp) {
 			_evtnm = evtnm;
 			_compInfo = compInfo;
+			_target = target;
 			_comp = comp;
 		}
 		public void onEvent(Event evt) throws Exception {
-			_comp.removeEventListener(_evtnm, this); //one shot only
+			_target.removeEventListener(_evtnm, this); //one shot only
 
 			final Execution exec = Executions.getCurrent();
 			execCreate0(

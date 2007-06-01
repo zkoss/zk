@@ -573,8 +573,8 @@ public class Parser {
 					forEachBegin = attval;
 				} else if ("forEachEnd".equals(attnm)) {
 					forEachEnd = attval;
-				} else if ("children".equals(attnm)) {
-					compInfo.setCreateChildrenEvent(attval);
+				} else if ("fulfill".equals(attnm)) {
+					compInfo.setFulfill(attval);
 				} else if (!"use".equals(attnm)) {
 					final Namespace attns = attr.getNamespace();
 					final String attpref = attns != null ? attns.getPrefix(): "";

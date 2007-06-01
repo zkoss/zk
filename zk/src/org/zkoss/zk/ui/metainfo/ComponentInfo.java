@@ -65,10 +65,10 @@ implements Cloneable, Condition {
 	 * If null, it means effective.
 	 */
 	private Condition _cond;
-	/** The event to create children.
-	 * It is the vaule of the children attribute.
+	/** The fulfill condition.
+	 * Either "event" or "event:targetId".
 	 */
-	private String _newChidEvt;
+	private String _fulfill;
 	/** The forEach, forEachBegin and forEachEnd attribute,
 	 * which are used to evaluate this info multiple times.
 	 */
@@ -126,43 +126,46 @@ implements Cloneable, Condition {
 		}
 	}
 
-	/** Returns the event to create the child components,
-	 * or null if the child components
-	 * are created automatically by ZK loader.
+	/** Returns the fulfill condition that controls when to create
+	 * the child components, or null if the child components
+	 * are created at the time when the page is loaded.
 	 *
 	 * <p>Default: null.
 	 *
-	 * <p>If not null, the child components are created based on
-	 * {@link #getChildren}, when the event is received at the first time.
+	 * <p>If not null, the child components specified in
+	 * {@link #getChildren} are created, when the event sepcified in
+	 * the fulfill condition is received at the first time.
 	 *
-	 * <p>It is the value specified in the children attribute.
+	 * <p>It is the value specified in the fulfill attribute.
 	 *
 	 * @since 2.4.0
 	 */
-	public String getCreateChildrenEvent() {
-		return _newChidEvt;
+	public String getFulfill() {
+		return _fulfill;
 	}
-	/** Sets the event to create the child components based on
-	 * ({@link #getChildren}).
+	/** Sets the fulfill condition that controls when to create
+	 * the child components.
 	 *
-	 * <p>It is the value specified in the children attribute.
+	 * <p>If not null, the child components specified in
+	 * {@link #getChildren} are created, when the event sepcified in
+	 * the fulfill condition is received at the first time.
 	 *
-	 * <p>If not null, the child components are created based on
-	 * {@link #getChildren}, when the event is received at the first time.
+	 * <p>It is the value specified in the fulfill attribute.
 	 *
-	 * @param evtnm the event name.
+	 * @param fulfill the fulfill condition. There are two forms:
+	 * "eventName" or "eventName:targetId"
 	 * @since 2.4.0
 	 */
-	public void setCreateChildrenEvent(String evtnm) {
-		if (evtnm != null) {
-			if (evtnm.length() > 0) {
-				if (!Events.isValid(evtnm))
-					throw new IllegalArgumentException("Not an event: "+evtnm);
+	public void setFulfill(String fulfill) {
+		if (fulfill != null) {
+			if (fulfill.length() > 0) {
+				if (!Events.isValid(fulfill)) //it checks only first 3 letters
+					throw new IllegalArgumentException("Not an event: "+fulfill);
 			} else {
-				evtnm = null;
+				fulfill = null;
 			}
 		}
-		_newChidEvt = evtnm;
+		_fulfill = fulfill;
 	}
 
 	/** Returns a readonly list of properties ({@link Property}) (never null).
