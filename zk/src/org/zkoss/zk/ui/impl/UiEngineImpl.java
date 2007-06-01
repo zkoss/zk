@@ -388,6 +388,20 @@ public class UiEngineImpl implements UiEngine {
 	private static final Component[] execCreate(UiFactory uf,
 	Execution exec, Page page, NodeInfo parentInfo, Component parent)
 	throws IOException {
+		if (parentInfo instanceof ComponentInfo) {
+			final ComponentInfo pi = (ComponentInfo)parentInfo;
+			final String evtnm = pi.getCreateChildrenEvent();
+			if (evtnm != null) { //defer the creation of children
+				parent.addEventListener(evtnm,
+					new CreateChildListener(evtnm, pi, parent));
+				return new Component[0];
+			}
+		}
+		return execCreate0(uf, exec, page, parentInfo, parent);
+	}
+	private static final Component[] execCreate0(UiFactory uf,
+	Execution exec, Page page, NodeInfo parentInfo, Component parent)
+	throws IOException {
 		final List created = new LinkedList();
 		final PageDefinition pagedef = parentInfo.getPageDefinition();
 			//note: don't use page.getDefinition because createComponents
@@ -1255,6 +1269,28 @@ public class UiEngineImpl implements UiEngine {
 			if (eis == null)
 				sess.setAttribute(attr, eis = new HashMap());
 			return eis;
+		}
+	}
+	/** Creates children in a listener.
+	 */
+	private static class CreateChildListener implements EventListener {
+		private final String _evtnm;
+		private final ComponentInfo _compInfo;
+		private final Component _comp;
+
+		private CreateChildListener(
+		String evtnm, ComponentInfo compInfo, Component comp) {
+			_evtnm = evtnm;
+			_compInfo = compInfo;
+			_comp = comp;
+		}
+		public void onEvent(Event evt) throws Exception {
+			_comp.removeEventListener(_evtnm, this); //one shot only
+
+			final Execution exec = Executions.getCurrent();
+			execCreate0(
+				((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
+				exec, _comp.getPage(), _compInfo, _comp);
 		}
 	}
 }

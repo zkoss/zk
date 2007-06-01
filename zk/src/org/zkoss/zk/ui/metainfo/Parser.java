@@ -573,6 +573,8 @@ public class Parser {
 					forEachBegin = attval;
 				} else if ("forEachEnd".equals(attnm)) {
 					forEachEnd = attval;
+				} else if ("children".equals(attnm)) {
+					compInfo.setCreateChildrenEvent(attval);
 				} else if (!"use".equals(attnm)) {
 					final Namespace attns = attr.getNamespace();
 					final String attpref = attns != null ? attns.getPrefix(): "";
@@ -580,11 +582,13 @@ public class Parser {
 					if (!"xmlns".equals(attpref)
 					&& !("xmlns".equals(attnm) && "".equals(attpref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attruri)) {
-						if (attval.startsWith("@{") && attval.endsWith("}")) { //annotation
+						final int len = attval.length();
+						if (len >= 3 && attval.charAt(0) == '@'
+						&& attval.charAt(1) == '{' && attval.charAt(len-1) == '}') { //annotation
 							if (attrAnnotInfo == null)
 								attrAnnotInfo = new AnnotInfo();
 							attrAnnotInfo.addByCompoundValue(
-								attval.substring(2, attval.length() -1));
+								attval.substring(2, len -1));
 							attrAnnotInfo.updateAnnotations(compInfo, attnm);
 						} else {
 							addAttribute(compInfo, attns, attnm, attval, null);

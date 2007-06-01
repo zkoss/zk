@@ -58,5 +58,5 @@ public interface EventListener {
 	 * <p>If you want to forward the event to other component,
 	 * use {@link Events#sendEvent}.
 	 */
-	public void onEvent(Event event);
+	public void onEvent(Event event) throws Exception;
 }

@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.DynamicTag;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ForEach;
@@ -64,6 +65,10 @@ implements Cloneable, Condition {
 	 * If null, it means effective.
 	 */
 	private Condition _cond;
+	/** The event to create children.
+	 * It is the vaule of the children attribute.
+	 */
+	private String _newChidEvt;
 	/** The forEach, forEachBegin and forEachEnd attribute,
 	 * which are used to evaluate this info multiple times.
 	 */
@@ -119,6 +124,45 @@ implements Cloneable, Condition {
 					_parent.appendChild0(this);
 			}
 		}
+	}
+
+	/** Returns the event to create the child components,
+	 * or null if the child components
+	 * are created automatically by ZK loader.
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>If not null, the child components are created based on
+	 * {@link #getChildren}, when the event is received at the first time.
+	 *
+	 * <p>It is the value specified in the children attribute.
+	 *
+	 * @since 2.4.0
+	 */
+	public String getCreateChildrenEvent() {
+		return _newChidEvt;
+	}
+	/** Sets the event to create the child components based on
+	 * ({@link #getChildren}).
+	 *
+	 * <p>It is the value specified in the children attribute.
+	 *
+	 * <p>If not null, the child components are created based on
+	 * {@link #getChildren}, when the event is received at the first time.
+	 *
+	 * @param evtnm the event name.
+	 * @since 2.4.0
+	 */
+	public void setCreateChildrenEvent(String evtnm) {
+		if (evtnm != null) {
+			if (evtnm.length() > 0) {
+				if (!Events.isValid(evtnm))
+					throw new IllegalArgumentException("Not an event: "+evtnm);
+			} else {
+				evtnm = null;
+			}
+		}
+		_newChidEvt = evtnm;
 	}
 
 	/** Returns a readonly list of properties ({@link Property}) (never null).
