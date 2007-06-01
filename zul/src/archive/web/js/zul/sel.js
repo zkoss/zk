@@ -297,6 +297,13 @@ zk.Selectable.prototype = {
 		var row = tn == "TR" ? target: zk.parentNode(target, "TR");
 		if (!row) return; //incomplete structure
 
+		//It is better not to change selection only if dragging selected
+		//(like Windows does)
+		//However, FF won't fire onclick if dragging, so the spec is
+		//not to change selection if dragging (selected or not)
+		if (zk.dragging /*&& this._isSelected(row)*/)
+			return;
+
 		if (checkmark) {
 			if (this._isMultiple()) {
 				this.toggleSelect(row, target.checked);
