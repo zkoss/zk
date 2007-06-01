@@ -22,6 +22,7 @@ ZK 2.4.0 Freshly
   1727687: add Component[] constructor to Box, Hbox and Vbox
 
 * Bugs:
+  1728010: Inconsistent behavior when dragging multiple selected item
   1711769: Grid on Vbox visibility bug
   1712063: Vbox visibility bug with CSA action.show
   1711127: Messagebox INFO ICON
@@ -42,6 +43,7 @@ ZK 2.4.0 Freshly
   1724609: Listbox.focus failed to focus correctly if change selection
   1724938: XHTML center tag failed
   1724571: getErrorMessage of textboxis not working if validate by Java
+  1728807: getErrorMessage of textboxis not working if validate by Java
   1725709: ExecutionCleanup.cleanup() is called too early in execUpdate
   1725604: Drag&Drop: Missing drop target gesture (FF)
   1726783: getSelectedTab is wrong if tabs is attached a tabbox later
@@ -49,6 +51,7 @@ ZK 2.4.0 Freshly
   1727352: Live data listbox loads too many item at the beginning
   1725299: BindingListModelSet doesn't support Serialization
   1728692: Interpreter failed to handle a variable with null value
+  1729253: Can not forward page
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
