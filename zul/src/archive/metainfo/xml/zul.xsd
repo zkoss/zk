@@ -1498,6 +1498,7 @@
 			<xs:extension base="xs:string">
 				<xs:attributeGroup ref="zkAttrGroup" />
 				<xs:attribute name="src" type="xs:string" use="optional" />
+				<xs:attribute name="deferred" type="xs:string" use="optional" />
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
