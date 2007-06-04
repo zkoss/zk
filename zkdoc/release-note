@@ -1,7 +1,7 @@
 	--------
 ZK 2.4.0 Freshly
 * Features:
-  1727154: Support the children attribute to defer creation of children
+  1727154: Support the fulfill attribute to defer creation of children
   1711860: An option to use native thread instead of event thread
   1728718: A simple way to annotate properties
   1715542: Window supports the highlighted mode
@@ -22,6 +22,7 @@ ZK 2.4.0 Freshly
   1728220: Make NodeInfo.appendChild(ComponentInfo) public
   1727687: add Component[] constructor to Box, Hbox and Vbox
   1730438: AnnotateDataBinder support new simpler property annotation
+  1730457: Tab shall receive onSelect in additon to Tabbox
 
 * Bugs:
   1728010: Inconsistent behavior when dragging multiple selected item
@@ -57,6 +58,7 @@ ZK 2.4.0 Freshly
   1729343: Failed to change focus after a modal dialog
   1725304: BindingListitemRenderer is NOT Serializable
   1730454: BindingRowRenderer is NOT Serializable
+  1730532: Event listener didn't iterate correct if some is removed dyn
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
