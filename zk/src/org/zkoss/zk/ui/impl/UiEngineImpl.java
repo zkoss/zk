@@ -1288,7 +1288,7 @@ public class UiEngineImpl implements UiEngine {
 				final String tid = fulfill.substring(j + 1);
 				if (tid.length() > 0) {
 					//FUTURE: handle EL expression (in tid)
-					target = comp.getFellow(tid);
+					target = Path.getComponent(comp.getSpaceOwner(), tid);
 				} else {
 					target = comp;
 				}
