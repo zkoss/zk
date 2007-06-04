@@ -66,6 +66,7 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
+import org.zkoss.zk.ui.impl.ListenerIterator;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
@@ -988,7 +989,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_listeners != null) {
 			final List l = (List)_listeners.get(evtnm);
 			if (l != null)
-				return l.iterator();
+				return new ListenerIterator(l);
 		}
 		return CollectionsX.EMPTY_ITERATOR;
 	}

@@ -784,7 +784,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (_listeners != null) {
 			final List l = (List)_listeners.get(evtnm);
 			if (l != null)
-				return l.iterator();
+				return new ListenerIterator(l);
 		}
 		return CollectionsX.EMPTY_ITERATOR;
 	}
