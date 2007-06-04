@@ -21,6 +21,7 @@ ZK 2.4.0 Freshly
   1728157: getProperties() for class ComponentInfo
   1728220: Make NodeInfo.appendChild(ComponentInfo) public
   1727687: add Component[] constructor to Box, Hbox and Vbox
+  1730438: AnnotateDataBinder support new simpler property annotation
 
 * Bugs:
   1728010: Inconsistent behavior when dragging multiple selected item
@@ -54,6 +55,8 @@ ZK 2.4.0 Freshly
   1728692: Interpreter failed to handle a variable with null value
   1729253: Can not forward page
   1729343: Failed to change focus after a modal dialog
+  1725304: BindingListitemRenderer is NOT Serializable
+  1730454: BindingRowRenderer is NOT Serializable
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
