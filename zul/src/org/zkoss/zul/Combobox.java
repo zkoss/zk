@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 
 /**
  * A combo box.
@@ -212,5 +213,20 @@ public class Combobox extends Textbox {
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 		smartUpdate("repos", "true");
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends Textbox.ExtraCtrl
+	implements ChildChangedAware {
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return true;
+		}
 	}
 }

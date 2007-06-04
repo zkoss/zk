@@ -152,6 +152,32 @@ if (!zkCmbox._inflds)
 	zkCmbox._inflds = ["name", "value", "defaultValue", "cols", "size",
 		"maxlength", "type", "disabled", "readonly", "rows"];
 
+zkCmbox.childchg = function (cb) {
+	//we have to re-adjust the width since children are added/removed
+	var pp = $e(cb.id + "!pp");
+	if (!pp || pp.style.display == "none")
+		return;
+
+	var ppofs = zkCmbox._ppofs(pp);
+	if (ppofs[0] == "auto") {
+		var pp2 = $e(cb.id + "!cave");
+		if (zk.ie) {
+			if (pp2) pp2.style.width = "";
+			pp.style.width = "";
+			setTimeout("zkCmbox._cc2('"+cb.id+"')", 0);
+				//we cannot handle it immediately in IE
+		} else {
+			zkCmbox._fixsz(cb, pp, pp2, ppofs);
+		}
+	}
+};
+zkCmbox._cc2 = function (uuid) {
+	var cb = $e(uuid);
+	var pp = $e(uuid + "!pp");
+	if (pp && pp.style.display != "none")
+		zkCmbox._fixsz(cb, pp, $e(cb.id + "!cave"), zkCmbox._ppofs(pp));
+};
+
 /** Eats UP/DN keys. */
 zkCmbox.ondown = function (evt) {
 	//IE: if NOT eat UP/DN here, it de-select the text
@@ -271,7 +297,7 @@ zkCmbox.open = function (pp, hilite) {
 		zkau.send({uuid: uuid, cmd: "onOpen", data: [true]});
 };
 zkCmbox._open = function (cb, uuid, pp, hilite) {
-	var ppofs = zkCmbox._popupofs(pp);
+	var ppofs = zkCmbox._ppofs(pp);
 	pp.style.width = ppofs[0];
 	pp.style.height = "auto";
 
@@ -290,7 +316,29 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 		//than invalidate!!
 	}
 
-	//fix size
+	zkCmbox._fixsz(cb, pp, pp2, ppofs);//fix size
+
+	zk.position(pp, cb, "after-start");
+
+	setTimeout("zkCmbox._repos('"+uuid+"',"+hilite+")", 3);
+		//IE issue: we have to re-position again because some dimensions
+		//might not be correct here
+};
+/** Returns [width, height] for the popup if specified by user. */
+zkCmbox._ppofs = function (pp) {
+	for (var n = pp.firstChild; n; n = n.nextSibling)
+		if (n.id) {
+			if (!n.id.endsWith("!cave")) { //bandbox's popup
+				var w = n.style.width, h = n.style.height; 
+				return [w ? w: "auto", h ? h: "auto"];
+			}
+			break;
+		}
+	return ["auto", "auto"];
+};
+
+/** Fixes the dimension of popup. */
+zkCmbox._fixsz = function (cb, pp, pp2, ppofs) {
 	if (ppofs[1] == "auto" && pp.offsetHeight > 250) {
 		pp.style.height = "250px";
 	} else if (pp.offsetHeight < 10) {
@@ -309,26 +357,7 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 			if (pp.offsetWidth > wd) pp.style.width = wd;
 		}
 	}
-
-	zk.position(pp, cb, "after-start");
-
-	setTimeout("zkCmbox._repos('"+uuid+"',"+hilite+")", 3);
-		//IE issue: we have to re-position again because some dimensions
-		//might not be correct here
 };
-/** Returns [width, height] for the popup if specified by user. */
-zkCmbox._popupofs = function (pp) {
-	for (var n = pp.firstChild; n; n = n.nextSibling)
-		if (n.id) {
-			if (!n.id.endsWith("!cave")) { //bandbox's popup
-				var w = n.style.width, h = n.style.height; 
-				return [w ? w: "auto", h ? h: "auto"];
-			}
-			break;
-		}
-	return ["auto", "auto"];
-};
-
 /** Re-position the popup. */
 zkCmbox._repos = function (uuid, hilite) {
 	var cb = $e(uuid);
