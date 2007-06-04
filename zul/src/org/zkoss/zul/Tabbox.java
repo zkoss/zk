@@ -19,7 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.Iterator;
-import java.util.Set;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
@@ -27,8 +26,10 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.client.Selectable;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.au.AuScript;
 
@@ -58,8 +59,14 @@ public class Tabbox extends XulElement {
 	private transient Tab _seltab;
 	private String _panelSpacing;
 	private String _orient = "horizontal";
+	/** The event listener used to listen onSelect for each tab. */
+	/*package*/ transient EventListener _listener;
 
 	public Tabbox() {
+		init();
+	}
+	private void init() {
+		_listener = new Listener();
 	}
 
 	/** Returns whether it is in the accordion mold.
@@ -134,9 +141,10 @@ public class Tabbox extends XulElement {
 	/** Sets the selected tab.
 	 */
 	public void setSelectedTab(Tab tab) {
-		setSelectedTab0(tab, true);
+		selectTabDirectly(tab, false);
 	}
-	private void setSelectedTab0(Tab tab, boolean update) {
+	/** Sets the selected tab. */
+	/*packge*/ void selectTabDirectly(Tab tab, boolean byClient) {
 		if (tab == null)
 			throw new IllegalArgumentException("null tab");
 		if (tab.getTabbox() != this)
@@ -147,7 +155,7 @@ public class Tabbox extends XulElement {
 
 			_seltab = tab;
 			_seltab.setSelectedDirectly(true);
-			if (update)
+			if (!byClient)
 				response("sel", new AuScript(
 					this, "zkTab.selTab('"+_seltab.getUuid()+"')"));
 		}
@@ -213,6 +221,8 @@ public class Tabbox extends XulElement {
 					break;
 				}
 			}
+
+			addTabsListeners();
 		} else if (child instanceof Tabpanels) {
 			if (_tabpanels != null && _tabpanels != child)
 				throw new UiException("Only one tabpanels is allowed: "+this);
@@ -228,6 +238,7 @@ public class Tabbox extends XulElement {
 	}
 	public void onChildRemoved(Component child) {
 		if (child instanceof Tabs) {
+			removeTabsListeners();
 			_tabs = null;
 			_seltab = null;
 		} else if (child instanceof Tabpanels) {
@@ -235,12 +246,29 @@ public class Tabbox extends XulElement {
 		}
 		super.onChildRemoved(child);
 	}
+	/** Removes _listener from all {@link Tab} instances. */
+	private void removeTabsListeners() {
+		if (_tabs != null) {
+			for (Iterator it = _tabs.getChildren().iterator(); it.hasNext();) {
+				final Tab tab = (Tab)it.next();
+				tab.removeEventListener(Events.ON_SELECT, _listener);
+			}
+		}
+	}
+	/** Adds _listener to all {@link Tab} instances. */
+	private void addTabsListeners() {
+		if (_tabs != null) {
+			for (Iterator it = _tabs.getChildren().iterator(); it.hasNext();) {
+				final Tab tab = (Tab)it.next();
+				tab.addEventListener(Events.ON_SELECT, _listener);
+			}
+		}
+	}
 
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_SELECT);
 		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
 			//no z.dbclk/z.lfclk since it is covered by both Tab and Tabpanel
 
@@ -251,6 +279,9 @@ public class Tabbox extends XulElement {
 	//Cloneable//
 	public Object clone() {
 		final Tabbox clone = (Tabbox)super.clone();
+
+		clone.removeTabsListeners();
+		clone.init();
 
 		int cnt = 0;
 		if (clone._tabs != null) ++cnt;
@@ -278,6 +309,8 @@ public class Tabbox extends XulElement {
 				if (--cnt == 0) break;
 			}
 		}
+
+		addTabsListeners();
 	}
 
 	//-- Serializable --//
@@ -285,6 +318,7 @@ public class Tabbox extends XulElement {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
+		init();
 		afterUnmarshal(-1);
 	}
 
@@ -296,18 +330,20 @@ public class Tabbox extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Selectable, ChildChangedAware {
-		//-- Selectable --//
-		public void selectItemsByClient(Set selItems) {
-			if (selItems != null && selItems.size() == 1)
-				setSelectedTab0((Tab)selItems.iterator().next(), false);
-			else
-				throw new UiException("Exactly one selected tab is required: "+selItems); //debug purpose
-		}
+	implements ChildChangedAware {
 		//ChildChangedAware//
 		public boolean isChildChangedAware() {
 			return !inAccordionMold();
 				//we have to adjust the width of last cell
+		}
+	}
+
+	private class Listener implements EventListener, Deferrable {
+		public void onEvent(Event event) {
+			Events.sendEvent(Tabbox.this, event);
+		}
+		public boolean isDeferrable() {
+			return !Events.isListened(Tabbox.this, Events.ON_SELECT, true);
 		}
 	}
 }

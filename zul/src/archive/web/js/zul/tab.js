@@ -146,9 +146,9 @@ zkTab._setTabSel = function (tab, toSel) {
 			zkTabs.fixWidth(tabs.id);
 	}
 
-	if (toSel && tabbox)
-		zkau.send({uuid: tabbox.id, cmd: "onSelect", data: [tab.id]},
-				zkau.asapTimeout(tabbox, "onSelect"));
+	if (toSel)
+		zkau.send({uuid: tab.id, cmd: "onSelect", data: [tab.id]},
+				zkau.asapTimeout(tab, "onSelect"));
 };
 /** Changes the images in the background. */
 zkTab._changeBkgnd = function (node, toSel) {

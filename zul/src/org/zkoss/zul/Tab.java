@@ -18,10 +18,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Set;
 import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.client.Selectable;
 
 import org.zkoss.zul.impl.LabelImageElement;
 
@@ -150,10 +153,15 @@ public class Tab extends LabelImageElement {
 
 	//-- super --//
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
+		final StringBuffer sb =
+			new StringBuffer(64).append(super.getOuterAttrs());
+		appendAsapAttr(sb, Events.ON_SELECT);
+
 		final String clkattrs = getAllOnClickAttrs(true);
 			//no onClick which is handled by tab.js
-		return clkattrs == null ? attrs: attrs + clkattrs;
+		if (clkattrs != null) 
+			sb.append(clkattrs);
+		return sb.toString();
 	}
 	/** Returns the style class.
 	 * Note: 1) if not specified (or setSclass(null)), "tab" is assumed;
@@ -182,5 +190,25 @@ public class Tab extends LabelImageElement {
 		if (parent != null && !(parent instanceof Tabs))
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl
+	implements Selectable {
+		//-- Selectable --//
+		public void selectItemsByClient(Set selItems) {
+			if (selItems == null || selItems.size() != 1)
+				throw new UiException("Exactly one selected tab is required: "+selItems); //debug purpose
+
+			final Tabbox tabbox = getTabbox();
+			if (tabbox != null)
+				tabbox.selectTabDirectly((Tab)selItems.iterator().next(), true);
+		}
 	}
  }
