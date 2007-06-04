@@ -1,0 +1,27 @@
+ZK response
+
+<rs>
+	<r>
+		<c>command</c>
+		<d>data0</d>
+		<d>data1</d>
+		<d>data2</d>
+		<d>data3</d>
+		<d>data4</d>
+		<d>data5</d>
+	</r>
+	...
+</rs>
+
+1.command: setAttr
+	data0: uuid
+	data1: attr
+	data2: value
+	
+2.command: alert
+	data0: mesg
+	
+3.command: rm
+	data0: uuid
+
+

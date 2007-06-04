@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipsemeMetadata jad="src/archive/META-INF/zmobi.jad" version="1.6.7">
+   <device group="Sun Java(TM) Wireless Toolkit 2.5.1 for CLDC, EA" name="MediaControlSkin"/>
+   <signing signProject="false"/>
+</eclipsemeMetadata>
