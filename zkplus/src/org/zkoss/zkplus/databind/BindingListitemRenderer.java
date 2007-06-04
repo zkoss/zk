@@ -32,7 +32,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/*package*/ class BindingListitemRenderer implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt {
+import java.io.Serializable;
+
+/*package*/ class BindingListitemRenderer 
+implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Serializable {
 	private static final String KIDS = "zkplus.databind.KIDS";
 	private Listitem _template;
 	private DataBinder _binder;

@@ -33,34 +33,48 @@ import java.util.Iterator;
 /**
  * <p>The DataBinder that reads ZUML annotations to create binding info. The ZUML page must declare the 
  * XML namespace, xmlns:a="http://www.zkoss.org/2005/zk/annotation", to use the ZUML annotations. 
- * The annotation is declared before each Component. For example, the following annotation associates the 
+ * The annotation is declared before each Component or specified directly on the Component attributes. 
+ * For example, the following annotation associates the 
  * attibute "value" of the component "textbox" to the bean's value "person.address.city".</p>
  * <pre>
  * &lt;a:bind value="person.address.city"/>
  * &lt;textbox/>
  * </pre>
- * <p></p>
+ * <p>Or you can annotate directly on the attribute "value" of the component "textbox" like this.</p>
+ * <pre>
+ * &lt;textbox value="@{person.address.city}"/>
+ * </pre>
+ * <p>The @{...} pattern tells the ZUML parser that this is for annotation.</p>
  *
- * <p>The AnnotateDataBinder knows "a:bind" annotation only. The complete format is like this:
+ * <p>The AnnotateDataBinder knows "a:bind" annotation only. The complete format is like this if you declared it 
+ * before the Component.
  * <pre>
  * &lt;a:bind attrY="bean's value;[tag:expression]..."/>
  * &lt;componentX/>
+ * </pre>
+ *
+ * <p>You can also specify directly on the Component attribute, the complete format is like this:
+ * <pre>
+ * &lt;componentX attrY="@{bean's value,[tag='expression']...}"/>
  * </pre>
  *
  * <p>This associates the componentX's attribute attrY to the bean's value. The bean's value is something
  * in the form of beanid.field1.field2... You can either call {@link DataBinder#bindBean} to bind the beanid to a
  * real bean object or you can neglect it and this DataBinder would try to find it from the variables map via
  * ({@link org.zkoss.zk.ui.Component#getVariable} method. That is, all those variables defined in zscript are 
- * accessible by this DataBinder.</p>
+ * accessible by this DataBinder. Note that you can choose either two formats of annotaion as your will and you 
+ * can even hybrid them together though it is generaly not a good practice.</p>
  *
- * <p>The tag:expression is a generic form to bind more metainfo to the attrY of the componentX. The currently 
- * supported tag includes "load-when", "save-when", "access", and "converter"</p>
+ * <p>The tag:expression or tag='expression' is a generic form to bind more metainfo to the attrY of the componentX. 
+ * The currently supported tag includes "load-when", "save-when", "access", and "converter"</p>
  *
  * <ul>
  * <li>load-when. You can specify the events concerned when to load the attribute of the component from the bean.
  * Multiple definition is allowed and would be called one by one.
- * For example, the attribute "value" of Label "fullName" will load from "person.fullName" when the Textbox 
- * "firstName" or "lastName" fire "onChange" event.
+ * For example, the following code snip tells DataBinder that the attribute "value" of Label "fullName" will load 
+ * from "person.fullName" when the Textbox "firstName" or "lastName" fire "onChange" event.
+ *
+ * <p>Declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName"/>
  * &lt;textbox id="firstname"/>
@@ -71,24 +85,42 @@ import java.util.Iterator;
  * &lt;a:bind value="person.fullName; load-when:firstname.onChange; load-when:lastname.onChange"/>
  * &lt;label id="fullname"/>
  * </pre>
+ * <p>Or specify directly on the Component's attribute:</p>
+ * <pre>
+ * &lt;textbox id="firstname" value="@{person.firstName}"/>
+ * &lt;textbox id="lastname" value="@{person.lastName}"/>
+ * &lt;label id="fullname" value="@{person.fullName, load-when='firstname.onChange', load-when='lastname.onChange'}"/>
+ * </pre>
  * </li>
  *
  * <li>save-when. You can specify the event concerned when to save the attribute of the component into the bean.
  * Multiple definition is NOT allowed and the later defined would override the previous defined one.
- * For example, the attribute "value" of Textbox "firstName" will save into "person.firstName" when the Textbox 
- * itself fire "onChange" event.
+ * For example, the following code snip tells DataBinder that the attribute "value" of Textbox "firstName" will 
+ * save into "person.firstName" when the Textbox itself fire "onChange" event.
+ *
+ * <p>Declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName; save-when:self.onChange"/>
  * &lt;textbox id="firstName"/>
+ * </pre>
+ *
+ * <p>Or specify directly on the Component's attribute:</p>
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName, save-when='self.onChange'}"/>
  * </pre>
  *
  * <p>However, you don't generally specify the save-when tag. If you don't specify it, the default events are used
  * depends on the natural charactieric of the component's attribute as defined in lang-addon.xml. For example, 
  * the save-when of Label.value is default to none while that of Textbox.value is default to self.onChange. 
  * That is, the following example is the same as the above one.</p>
+ * <p>Declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName"/>
  * &lt;textbox id="firstName"/>
+ * </pre>
+ * <p>Or specifies directly on the Component's attribute:</p>
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName}"/>
  * </pre>
  *
  * <p>On the other hand, you might not specify the save-when tag nor you want the default events to be used. Then you
@@ -102,6 +134,14 @@ import java.util.Iterator;
  * &lt;a:bind value="person.firstName; save-when: ;"/>
  * &lt;textbox id="firstName"/>
  * </pre>
+ * or
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName, save-when='none'}"/>
+ * </pre>
+ * or
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName, save-when=''}"/>
+ * </pre>
  * </li>
  * 
  * <li>access. You can set the access mode of the attrY of the componentX to be "both"(load/save),  
@@ -114,20 +154,27 @@ import java.util.Iterator;
  * {@link DataBinder#saveComponent} would save only those attributes with "both" or "save" access mode. If you
  * don't specify it, the default access mode depends on the natural characteristic of the component's attribute
  * as defined in lang-addon.xml. For example, Label.value is default to "load" access mode while Textbox.value 
- * is default to "both" access mode. For example, the Textbox "firstName" would allowing doing save into bean only
- * , not the other way.
+ * is default to "both" access mode. For example, the following code snips tells DataBinder that Textbox "firstName" 
+ * would allowing doing save into bean only not the other way.
+ *
+ * <p>Declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName;access:save;"/>
  * &lt;textbox id="firstName"/>
+ * </pre>
+ *
+ * <p>Or specify directly on the Component's attribute:</p>
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName, access='save'}"/>
  * </pre>
  * </li>
  *
  * <li>converter. You can specify the class name of the converter that implments the {@link TypeConverter} interface.
  * It is used to convert the value between component attribute and bean field.  Multiple definition is NOT allowed 
  * and the later defined would override the previous defined one.
- * Most of the time you don't have to 
- * specify this since this DataBinder supports converting most commonly used types. However, if you specify the 
- * TypeConverter class name, this DataBinder will new an instance and use it to cast the class.
+ * Most of the time you don't have to specify this since this DataBinder supports converting most commonly 
+ * used types. However, if you specify the TypeConverter class name, this DataBinder will new an instance and use 
+ * it to cast the class.
  * </li>
  * </ul>
  * 
@@ -206,12 +253,17 @@ public class AnnotateDataBinder extends DataBinder {
 	}
 	
 	private void loadComponentPropertyAnnotation(Component comp) {
+		loadComponentPropertyAnnotationByAnnotName(comp, "default");
+		loadComponentPropertyAnnotationByAnnotName(comp, "bind");
+	}
+
+	private void loadComponentPropertyAnnotationByAnnotName(Component comp, String annotName) {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final List props = compCtrl.getAnnotatedPropertiesBy("bind");
+		final List props = compCtrl.getAnnotatedPropertiesBy(annotName);
 		for (final Iterator it = props.iterator(); it.hasNext(); ) {
 			final String propName = (String) it.next();
 			//[0] value, [1] loadWhenEvents, [2] saveWhenEvent, [3] access, [4] converter
-			final Object[] objs = loadPropertyAnnotation(comp, propName, "bind");
+			final Object[] objs = loadPropertyAnnotation(comp, propName, annotName);
 			addBinding(comp, propName, (String) objs[0], 
 					(String[]) objs[1], (String) objs[2], (String) objs[3], (String) objs[4]);
 		}

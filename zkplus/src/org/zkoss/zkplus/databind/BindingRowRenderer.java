@@ -30,8 +30,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.Serializable;
 
-/*package*/ class BindingRowRenderer implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt {
+/*package*/ class BindingRowRenderer 
+implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable {
 	private static final String KIDS = "zkplus.databind.KIDS";
 	private Row _template;
 	private DataBinder _binder;
