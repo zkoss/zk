@@ -59,6 +59,7 @@ ZK 2.4.0 Freshly
   1725304: BindingListitemRenderer is NOT Serializable
   1730454: BindingRowRenderer is NOT Serializable
   1730532: Event listener didn't iterate correct if some is removed dyn
+  1729523: Combobox didn't adjust width right if item added onOpen
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
