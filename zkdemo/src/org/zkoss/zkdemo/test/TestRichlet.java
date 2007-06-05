@@ -32,9 +32,13 @@ public class TestRichlet extends GenericRichlet {
 		page.setTitle("Richlet Test");
 
 		final Window w = new Window("Richlet Test", "normal", false);
-		new Label("Hello World!").setParent(w);
+		final Vbox vb = new Vbox();
+		vb.setParent(w);
+
+		new Label("Hello World!").setParent(vb);
+		new Label("Request: "+page.getRequestPath()).setParent(vb);
 		final Label l = new Label();
-		l.setParent(w);
+		l.setParent(vb);
 
 		final Button b = new Button("Change");
 		b.addEventListener(Events.ON_CLICK,
@@ -44,7 +48,7 @@ public class TestRichlet extends GenericRichlet {
 					l.setValue("" + ++count);
 				}
 			});
-		b.setParent(w);
+		b.setParent(vb);
 
 		w.setPage(page);
 	}

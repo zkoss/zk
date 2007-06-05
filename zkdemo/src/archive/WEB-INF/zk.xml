@@ -55,7 +55,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 	<richlet>
 		<richlet-class>org.zkoss.zkdemo.test.TestRichlet</richlet-class>
-		<richlet-url>/test</richlet-url>
+		<richlet-url>/test/*</richlet-url>
 		<!-- Any number of initial parameters.
 		<init-param>
 			<param-name>any</param-name>
