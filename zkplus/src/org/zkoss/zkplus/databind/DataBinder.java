@@ -892,8 +892,10 @@ public class DataBinder {
 		}
 		if (existsBean(beanid)) {
 			bean = getBean(beanid);
-		} else if (beanid.startsWith("/")) { //a component Path in ID Space
+		} else if (beanid.startsWith("/")) { //a absolute component Path: // or /
 			bean = Path.getComponent(beanid);
+		} else if (beanid.startsWith(".")) { //a relative component Path: ./ or ../
+			bean = Path.getComponent(comp.getSpaceOwner(), beanid);
 		} else {
 			final Page page = comp.getPage();
 			if (page != null)

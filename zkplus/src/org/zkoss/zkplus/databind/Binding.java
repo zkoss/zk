@@ -285,7 +285,8 @@ import java.util.LinkedHashSet;
 	
 	public void registerSaveEvent(Component comp) {
 		if (_saveWhenEvent != null) {
-			final String[] results = splitBeanid(_saveWhenEvent); //[0] bean id or bean path, [1] event name
+			final String[] results = splitBeanid(_saveWhenEvent); 
+			//[0] bean id or bean path, [1] event name
 			final Component target = (Component) ("self".equals(results[0]) ? 
 				comp : _binder.lookupBean(comp, results[0]));
 			target.addEventListener(results[1], new SaveEventListener(comp));
@@ -296,8 +297,10 @@ import java.util.LinkedHashSet;
 		if (_loadWhenEvents != null) {
 			for(final Iterator it = _loadWhenEvents.iterator(); it.hasNext(); ) {
 				String expr = (String) it.next();
-				String[] results = splitBeanid(expr); //[0] bean id or bean path, [1] event name
-				Component target = (Component) ("self".equals(results[0]) ? 
+				String[] results = splitBeanid(expr); 
+				//normal case, [0] bean id or bean path, [1] event name
+				//onChange == self.onChange, [0] event name
+				final Component target = (Component) ("self".equals(results[0]) ? 
 					comp : _binder.lookupBean(comp, results[0]));
 				target.addEventListener(results[1], new LoadEventListener(comp));
 			}
@@ -310,15 +313,15 @@ import java.util.LinkedHashSet;
 			+", load-when:"+_loadWhenEvents+", save-when:"+_saveWhenEvent
 			+", load:"+_loadable+", save:"+_savable+", converter:"+_converter+"]";
 	}
-
+	
 	//split a.b to [a, b]
 	private String[] splitBeanid(String expr) {
 		String beanid = null;
 		String props = null;
-		int j = expr.indexOf(".");
-		if (j < 0) { //bean only
-			beanid = expr;
-			props = null;
+		int j = expr.lastIndexOf(".");
+		if (j < 0) { //event only == self.onXxx
+			beanid = "self";
+			props = expr;
 		} else {
 			beanid = expr.substring(0, j);
 			props = expr.substring(j+1);
