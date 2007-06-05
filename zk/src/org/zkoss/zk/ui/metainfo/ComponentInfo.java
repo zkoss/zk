@@ -152,20 +152,13 @@ implements Cloneable, Condition {
 	 *
 	 * <p>It is the value specified in the fulfill attribute.
 	 *
-	 * @param fulfill the fulfill condition. There are two forms:
-	 * "eventName" or "eventName:targetId"
+	 * @param fulfill the fulfill condition. There are severalforms:
+	 * "eventName", "targetId.evetName", "id1/id2.evetName",
+	 * and "${elExpr}.eventName"
 	 * @since 2.4.0
 	 */
 	public void setFulfill(String fulfill) {
-		if (fulfill != null) {
-			if (fulfill.length() > 0) {
-				if (!Events.isValid(fulfill)) //it checks only first 3 letters
-					throw new IllegalArgumentException("Not an event: "+fulfill);
-			} else {
-				fulfill = null;
-			}
-		}
-		_fulfill = fulfill;
+		_fulfill = fulfill != null && fulfill.length() > 0 ? fulfill: null;
 	}
 
 	/** Returns a readonly list of properties ({@link Property}) (never null).

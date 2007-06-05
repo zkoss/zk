@@ -30,12 +30,17 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.Pair;
 import org.zkoss.util.CacheMap;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Path;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * Utilities for implementing components.
@@ -85,6 +90,61 @@ public class ComponentsCtrl {
 	 */
 	public static void setCurrentDefinition(ComponentDefinition compdef) {
 		_compdef.set(compdef);
+	}
+
+	/** Pares the event expression.
+	 *
+	 * <p>There are several formats for the event expression:
+	 * <ul>
+	 * <li>onClick</li>
+	 * <li>self.onClick</li>
+	 * <li>id.onClick</li>
+	 * <li>../id1/id2.onClick</li>
+	 * <li>${elexpr}.onClick</li>
+	 * </ul>
+	 *
+	 * @param comp the component that the event expression is referenced to
+	 * @param evtexpr the event expression.
+	 * @return a two element array. The first element is the component,
+	 * and the second component is the event name.
+	 * @since 2.4.0
+	 */
+	public static Object[] parseEventExpression(Component comp, String evtexpr)
+	throws ComponentNotFoundException {
+		final int j = evtexpr.lastIndexOf('.');
+		final String evtnm;
+		Component target;
+		if (j >= 0) {
+			evtnm = evtexpr.substring(j + 1).trim();
+			String path = evtexpr.substring(0, j);
+			if (path.length() > 0) {
+				target = null;
+				if (path.indexOf("${") >= 0) {
+					final Object v =
+						Executions.evaluate(comp, path, Object.class);
+					if (v instanceof Component) {
+						target = (Component)v;
+					} else if (v == null) {
+						throw new ComponentNotFoundException("EL evaluated to null: "+path);
+					} else {
+						path = Objects.toString(v);
+					}
+				}
+				if (target == null) {
+					path = path.trim();
+					target = "self".equals(path) ? comp:
+						Path.getComponent(comp.getSpaceOwner(), path);
+				}
+			} else {
+				target = comp;
+			}
+		} else {
+			evtnm = evtexpr.trim();
+			target = comp;
+		}
+		if (!Events.isValid(evtnm))
+			throw new UiException("Not an event name: "+evtnm);
+		return new Object[] {target, evtnm};
 	}
 
 	/** A map of (Pair(Class,String evtnm), Method). */

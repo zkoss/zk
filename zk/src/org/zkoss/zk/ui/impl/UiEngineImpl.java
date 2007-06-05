@@ -1280,22 +1280,10 @@ public class UiEngineImpl implements UiEngine {
 
 		private static void register(String fulfill, ComponentInfo compInfo,
 		Component comp) {
-			final int j = fulfill.indexOf(':');
-			final String evtnm;
-			final Component target;
-			if (j >= 0) {
-				evtnm = fulfill.substring(0, j).trim();
-				final String tid = fulfill.substring(j + 1);
-				if (tid.length() > 0) {
-					//FUTURE: handle EL expression (in tid)
-					target = Path.getComponent(comp.getSpaceOwner(), tid);
-				} else {
-					target = comp;
-				}
-			} else {
-				evtnm = fulfill;
-				target = comp;
-			}
+			final Object[] result =
+				ComponentsCtrl.parseEventExpression(comp, fulfill);
+			final Component target = (Component)result[0];
+			final String evtnm = (String)result[1];
 			target.addEventListener(evtnm,
 				new FulfillListener(evtnm, target, compInfo, comp));
 		}
