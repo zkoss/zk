@@ -65,12 +65,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</richlet>
 
 	<!-- Optional -->
-	<session-config>
+	<device-config>
+		<device-type>ajax</device-type>
 		<timeout-uri>/timeout.zul</timeout-uri>
-		<!-- An empty URL can cause the browser to reload the same URL
-		<timeout-uri></timeout-uri>
-		-->
-	</session-config>
+		<!-- An empty URL can cause the browser to reload the same URL -->
+	</device-config>
 
 	<!-- Optional -->
 	<listener>
