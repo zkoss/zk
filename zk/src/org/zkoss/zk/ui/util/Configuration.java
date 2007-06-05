@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
+import org.zkoss.zk.device.Devices;
 
 /**
  * The ZK configuration.
@@ -84,7 +85,6 @@ public class Configuration {
 	/** List(ErrorPage). */
 	private final List _errpgs = new LinkedList();
 	private Monitor _monitor;
-	private String _timeoutUri;
 	private final List _themeUris = new LinkedList();
 	private transient String[] _roThemeUris = new String[0];
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _failmancls;
@@ -847,23 +847,22 @@ public class Configuration {
 	/** Sets the URI that is used when the session timeout or
 	 * desktop is no longer available.
 	 *
-	 * @param uri the URI used if timeout, or null to show an error message
-	 * at the client only. If empty, it works as reloading the same URI again.
+	 * <p>Deprecated. Use {@link Devices#setTimeoutURI} instead.
+	 *
+	 * @deprecated
 	 */
 	public void setTimeoutURI(String uri) {
-		_timeoutUri = uri;
+		Devices.setTimeoutURI("ajax", uri);
 	}
 	/** Sets the URI that is used when the session timeout or
 	 * desktop is no longer available, or null.
 	 *
-	 * <p>Default: null.
+	 * <p>Deprecated. Use {@link Devices#getTimeoutURI} instead.
 	 *
-	 * <p>If null is returned, an message is shown up at the client.
-	 * If empty, it works as reloading the same URI again.
-	 * If non null, the browser will be redirected to the returned URI.
+	 * @deprecated
 	 */
 	public String getTimeoutURI() {
-		return _timeoutUri;
+		return Devices.getTimeoutURI("ajax");
 	}
 
 	/** Sets the class that implements {@link UiEngine}, or null to

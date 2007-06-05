@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.Desktop;
  * Represents the device supporting MIL (Mobile Interactive Language).
  *
  * @author tomyeh
+ * @since 2.4.0
  */
 public class MilDevice implements Device, java.io.Serializable {
 	private String _type;
@@ -39,6 +40,7 @@ public class MilDevice implements Device, java.io.Serializable {
 	public void setUnavailableMessage(String unavailmsg) {
 		_uamsg = unavailmsg;
 	}
+
 	public void init(String type, Desktop desktop, String unavailmsg) {
 		if (type == null || type.length() == 0)
 			throw new IllegalArgumentException("type");

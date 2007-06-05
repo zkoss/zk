@@ -127,8 +127,9 @@ public class ConfigParser {
 				v = parseInteger(el, "max-desktops-per-session", true);
 				if (v != null) config.setMaxDesktops(v.intValue());
 
+				//deprecated (but we have to maintain backward-compatibility
 				final String s = el.getElementValue("timeout-uri", true);
-				if (s != null) config.setTimeoutURI(s);
+				if (s != null) Devices.setTimeoutURI("ajax", s);
 			} else if ("language-config".equals(elnm)) {
 			//language-config
 			//	addon-uri

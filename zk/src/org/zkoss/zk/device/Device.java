@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.Desktop;
  * <p>Note: the device must be serializable.
  *
  * @author tomyeh
+ * @since 2.4.0
  */
 public interface Device {
 	/** Returns the device type.
@@ -37,6 +38,7 @@ public interface Device {
 	 * if the client doesn't support this device.
 	 *
 	 * @return the unavailable message, or null if no such message
+	 * @since 2.4.0
 	 */
 	public String getUnavailableMessage();
 	/** Sets the unavailable message that is shown to the client
@@ -46,8 +48,8 @@ public interface Device {
 	 * (and sent to the client).
 	 * Otherwise, it is meaningless.
 	 *
-	 * @param unavailmsg the unavailable message. If empty or null,
-	 * the previous message is, if any, removed.
+	 * @param unavailmsg the unavailable message.
+	 * @since 2.4.0
 	 */
 	public void setUnavailableMessage(String unavailmsg);
 
@@ -59,15 +61,17 @@ public interface Device {
 	 * @param desktop the desktop to associate this device with (never null).
 	 * @param unavailmsg the message to shown when the device is not, or null
 	 * no message will be shown
-	 * supported by the client (aka., unavailable).
+	 * @since 2.4.0
 	 */
 	public void init(String type, Desktop desktop, String unavailmsg);
 	/** Notification that the desktop, which owns this device,
 	 * is about to be passivated (aka., serialized) by the Web container.
+	 * @since 2.4.0
 	 */
 	public void sessionWillPassivate(Desktop desktop);
 	/** Notification that the desktop, which owns this device,
 	 * has just been activated (aka., deserialized) by the Web container.
+	 * @since 2.4.0
 	 */
 	public void sessionDidActivate(Desktop desktop);
 }

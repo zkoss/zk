@@ -60,6 +60,7 @@ import org.zkoss.zk.au.AuAlert;
 import org.zkoss.zk.au.AuSendRedirect;
 import org.zkoss.zk.au.Command;
 import org.zkoss.zk.au.CommandNotFoundException;
+import org.zkoss.zk.device.Devices;
 
 /**
  * Used to receive command from the server and send result back to client.
@@ -171,7 +172,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 				if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
 				&& !"onTimer".equals(scmd)) {//possible in FF due to cache
-					String uri = wapp.getConfiguration().getTimeoutURI();
+					String uri = Devices.getTimeoutURI(
+						Servlets.isMilDevice(request) ? "mil": "ajax");
 					final AuResponse resp;
 					if (uri != null) {
 						if (uri.length() != 0)

@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.UiException;
  * Denotes the interpreter of the requested device type is not found.
  * 
  * @author tomyeh
+ * @since 2.4.0
  */
 public class DeviceNotFoundException extends UiException {
 	private final String _type;
