@@ -81,9 +81,10 @@ public class Configuration {
 	private final List
 		_uriIntcps = new LinkedList(), _reqIntcps = new LinkedList();
 	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
-	/** Map(String path, [Class richlet, boolean wildcard, Map params]
-	or [Richilet richlet, boolean wildcard]). */
+	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
 	private final Map _richlets = new HashMap();
+	/** Map(String path, [String name, boolean wildcard]). */
+	private final Map _richletmaps = new HashMap();
 	/** List(ErrorPage). */
 	private final List _errpgs = new LinkedList();
 	private Monitor _monitor;
@@ -1187,34 +1188,66 @@ public class Configuration {
 		return _prefs.keySet();
 	}
 
-	/** Adds a richlet with its class.
+	/** Adds the definition of a richlet.
 	 *
+	 * @param name the richlet name
 	 * @param params the initial parameters, or null if no initial parameter at all.
 	 * Once called, the caller cannot access <code>params</code> any more.
-	 * @return the previous richlet class or class-name with the specified path,
+	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 */
-	public Object addRichlet(String path, Class richletClass, Map params) {
+	public Object addRichlet(String name, Class richletClass, Map params) {
 		if (!Richlet.class.isAssignableFrom(richletClass))
 			throw new IllegalArgumentException("A richlet class, "+richletClass+", must implement "+Richlet.class.getName());
 
-		return addRichlet0(path, richletClass, params);
+		return addRichlet0(name, richletClass, params);
 	}
-	/** Adds a richlet with its class name.
+	/** Adds the definition of a richlet.
 	 *
-	 *
+	 * @param name the richlet name
+	 * @param richletClassName the class name. The class will be loaded
+	 * only when the richlet is loaded.
 	 * @param params the initial parameters, or null if no initial parameter at all.
 	 * Once called, the caller cannot access <code>params</code> any more.
-	 * @return the previous richlet class or class-name with the specified path,
+	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 */
-	public Object addRichlet(String path, String richletClassName, Map params) {
+	public Object addRichlet(String name, String richletClassName, Map params) {
 		if (richletClassName == null || richletClassName.length() == 0)
 			throw new IllegalArgumentException("richletClassName is required");
 
-		return addRichlet0(path, richletClassName, params);
+		return addRichlet0(name, richletClassName, params);
 	}
-	private Object addRichlet0(String path, Object richletClass, Map params) {
+	private Object addRichlet0(String name, Object richletClass, Map params) {
+		final Object o;
+		synchronized (_richlets) {
+			o = _richlets.put(name, new Object[] {richletClass, params});
+		}
+
+		if (o == null)
+			return null;
+		if (o instanceof Richlet) {
+			destroy((Richlet)o);
+			return o.getClass();
+		}
+		return ((Object[])o)[0];
+	}
+	/** Adds a richlet mapping.
+	 *
+	 * @param name the name of the richlet.
+	 * @param path the URL pattern. It must start with '/' and may end
+	 * with '/*'.
+	 * @exception UiException if the richlet is not defined yet.
+	 * See {@link #addRichlet}.
+	 * @since 2.4.0
+	 */
+	public void addRichletMapping(String name, String path) {
+		//first, check whether the richlet is defined
+		synchronized (_richlets) {
+			if (!_richlets.containsKey(name))
+				throw new UiException("Richlet not defined: "+name);
+		}
+
 		//richletClass was checked before calling this method
 		//Note: "/" is the same as ""
 		if (path == null || path.length() == 0 || "/".equals(path))
@@ -1227,19 +1260,10 @@ public class Configuration {
 			path = path.substring(0, path.length() - 2);
 				//note it might be empty
 
-		final Object o;
-		synchronized (_richlets) {
-			o = _richlets.put(path, new Object[] {
-				richletClass, Boolean.valueOf(wildcard), params});
+		synchronized (_richletmaps) {
+			_richletmaps.put(
+				path, new Object[] {name, Boolean.valueOf(wildcard)});
 		}
-
-		if (o == null)
-			return null;
-		if (o instanceof Richlet) {
-			destroy((Richlet)o);
-			return o.getClass();
-		}
-		return ((Object[])o)[0];
 	}
 	private static void destroy(Richlet richlet) {
 		try {
@@ -1248,43 +1272,24 @@ public class Configuration {
 			log.error("Unable to destroy "+richlet);
 		}
 	}
-	/** Returns an instance of richlet for the specified path, or null if not found.
+	/** Returns an instance of richlet of the specified name, or null
+	 * if not found.
 	 */
-	public Richlet getRichlet(String path) {
-		if (path == null || path.length() == 0 || "/".equals(path))
-			path = "";
-		else if (path.charAt(0) != '/')
-			path = '/' + path;
-
-		final int len = path.length();
-		for (int j = len;;) {
-			final Richlet richlet = getRichlet0(path.substring(0, j), j != len);
-			if (richlet != null || j == 0)
-				return richlet;
-			j = path.lastIndexOf('/', j - 1);
-		}
-	}
-	private Richlet getRichlet0(String path, boolean wildcardOnly) {
+	public Richlet getRichlet(String name) {
 		WaitLock lock = null;
 		final Object[] info;
 		for (;;) {
 			synchronized (_richlets) {
-				Object o = _richlets.get(path);
-				if (o == null) { //not found
-					return null;
+				Object o = _richlets.get(name);
+				if (o == null || (o instanceof Richlet)) { //not found or loaded
+					return (Richlet)o;
 				} else if (o instanceof WaitLock) { //loading by another thread
 					lock = (WaitLock)o;
 				} else {
 					info = (Object[])o;
-					if (info[0] instanceof Richlet) {
-						boolean wildcard = ((Boolean)info[1]).booleanValue();
-						return 
-							!wildcardOnly || wildcard ? (Richlet)info[0]: null;
-							//loaded
-					}
 
 					//going to load in this thread
-					_richlets.put(path, lock = new WaitLock());
+					_richlets.put(name, lock = new WaitLock());
 					break; //then, load it
 				}
 			} //sync(_richlets)
@@ -1292,7 +1297,7 @@ public class Configuration {
 			if (!lock.waitUntilUnlock(300*1000)) { //5 minute
 				final PotentialDeadLockException ex =
 					new PotentialDeadLockException(
-					"Unable to load from "+path+"\nCause: conflict too long.");
+					"Unable to load richlet "+name+"\nCause: conflict too long.");
 				log.warningBriefly(ex); //very rare, possibly a bug
 				throw ex;
 			}
@@ -1313,29 +1318,56 @@ public class Configuration {
 				throw new UiException(Richlet.class+" must be implemented by "+info[0]);
 
 			final Richlet richlet = (Richlet)o;
-			richlet.init(new RichletConfigImpl(_wapp, (Map)info[2]));
+			richlet.init(new RichletConfigImpl(_wapp, (Map)info[1]));
 
 			synchronized (_richlets) {
-				_richlets.put(path, new Object [] {richlet, info[1]});
+				_richlets.put(name, richlet);
 			}
 			return richlet;
 		} catch (Throwable ex) {
 			synchronized (_richlets) {
-				_richlets.put(path, info); //remove lock and restore info
+				_richlets.put(name, info); //remove lock and restore info
 			}
 			throw UiException.Aide.wrap(ex, "Unable to instantiate "+info[0]);
 		} finally {
 			lock.unlock();
 		}
 	}
+	/** Returns an instance of richlet for the specified path, or
+	 * null if not found.
+	 */
+	public Richlet getRichletByPath(String path) {
+		if (path == null || path.length() == 0 || "/".equals(path))
+			path = "";
+		else if (path.charAt(0) != '/')
+			path = '/' + path;
+
+		final int len = path.length();
+		for (int j = len;;) {
+			final Richlet richlet =
+				getRichletByPath0(path.substring(0, j), j != len);
+			if (richlet != null || j == 0)
+				return richlet;
+			j = path.lastIndexOf('/', j - 1); //j must not -1
+		}
+	}
+	private Richlet getRichletByPath0(String path, boolean wildcardOnly) {
+		final Object[] info;
+		synchronized (_richletmaps) {
+			info = (Object[])_richletmaps.get(path);
+		}
+		return info != null &&
+			(!wildcardOnly || ((Boolean)info[1]).booleanValue()) ?
+				getRichlet((String)info[0]): null;
+	}
 	/** Destroyes all richlets.
 	 */
 	public void detroyRichlets() {
 		synchronized (_richlets) {
 			for (Iterator it = _richlets.values().iterator(); it.hasNext();) {
-				final Object[] info = (Object[])it.next();
-				if (info[0] instanceof Richlet)
-					destroy((Richlet)info[0]);
+				final Object o = it.next();
+				if (o instanceof Richlet)
+					destroy((Richlet)o);
 			}
 			_richlets.clear();
 		}

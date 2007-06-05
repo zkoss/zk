@@ -46,6 +46,9 @@ import org.zkoss.zk.device.Devices;
 public class ConfigParser {
 	private static final Log log = Log.lookup(ConfigParser.class);
 
+	/** Used to provide backward compatibility to 2.3.0's richlet definition. */
+	private int _richletnm;
+
 	/** Parses zk.xml, specified by url, into the configuration.
 	 *
 	 * @param url the URL of zk.xml.
@@ -73,14 +76,41 @@ public class ConfigParser {
 			} else if ("richlet".equals(elnm)) {
 				final String clsnm =
 					IDOMs.getRequiredElementValue(el, "richlet-class");
-				final String path =
-					IDOMs.getRequiredElementValue(el, "richlet-url");
 				final Map params =
 					IDOMs.parseParams(el, "init-param", "param-name", "param-value");
+
+				String path = el.getElementValue("richlet-url", true);
+				if (path != null) {
+				//deprecated since 2.4.0, but back compatible
+					final int cnt;
+					synchronized (this) {
+						cnt = _richletnm++;
+					}
+					final String name = "z_obs_" + Integer.toHexString(cnt);
+					try {
+						config.addRichlet(name, clsnm, params);
+						config.addRichletMapping(name, path);
+					} catch (Throwable ex) {
+						throw new UiException("Illegal richlet definition at "+el.getLocator(), ex);
+					}
+				} else { //syntax since 2.4.0
+					final String nm =
+						IDOMs.getRequiredElementValue(el, "richlet-name");
+					try {
+						config.addRichlet(nm, clsnm, params);
+					} catch (Throwable ex) {
+						throw new UiException("Illegal richlet definition at "+el.getLocator(), ex);
+					}
+				}
+			} else if ("richlet-mapping".equals(elnm)) { //syntax since 2.4.0
+				final String nm =
+					IDOMs.getRequiredElementValue(el, "richlet-name");
+				final String path =
+					IDOMs.getRequiredElementValue(el, "url-pattern");
 				try {
-					config.addRichlet(path, clsnm, params);
+					config.addRichletMapping(nm, path);
 				} catch (Throwable ex) {
-					throw new UiException("Wrong richlet definition at "+el.getLocator(), ex);
+					throw new UiException("Illegal richlet mapping at "+el.getLocator(), ex);
 				}
 			} else if ("desktop-config".equals(elnm)) {
 			//desktop-config
@@ -127,7 +157,7 @@ public class ConfigParser {
 				v = parseInteger(el, "max-desktops-per-session", true);
 				if (v != null) config.setMaxDesktops(v.intValue());
 
-				//deprecated (but we have to maintain backward-compatibility
+				//deprecated since 2.4.0, but backward compatible
 				final String s = el.getElementValue("timeout-uri", true);
 				if (s != null) Devices.setTimeoutURI("ajax", s);
 			} else if ("language-config".equals(elnm)) {
