@@ -8,9 +8,10 @@ ZK 2.4.0 Freshly
   1715546: Messagebox supports the native (Servlet) thread mode
   1701213: Support embedded fileupload component
   1712518: Decimalbox supports different round mode (Java 6 is required)
+  1715649: A way to create inline macro manually
+  1638505: Wildcard support in richlet-url
   1712548: isAsap shall not be part of EventListener
   1719140: A way to show custom message when javascript is disabled
-  1715649: A way to create inline macro manually
   1721123: Improve performance if DOCTYPE is specified in zhtml
   1719075: Support the onPiggyback event at the root component level
   1719781: Allow component itself to arg0 AnnotateDataBinderInit
@@ -24,6 +25,7 @@ ZK 2.4.0 Freshly
   1730438: AnnotateDataBinder support new simpler property annotation
   1730457: Tab shall receive onSelect in additon to Tabbox
   1731138: AnnotateDataBinder should allow relative path
+  1731126: timout redirect should be device aware
   
 * Bugs:
   1728010: Inconsistent behavior when dragging multiple selected item
@@ -74,6 +76,8 @@ ZK 2.4.0 Freshly
     Use RequestIntercepter instead.
   + GenericInterpreter.getFromNamespace() returns UNDEFINED to denote
     a variable is not defined, while null is a valid value.
+  + The timeout-uri element is a child element of the device-config element,
+    instead of session-config, since each device has a different timeout URI.
 
 	--------
 ZK 2.3.1
