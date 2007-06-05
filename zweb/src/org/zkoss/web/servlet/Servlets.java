@@ -304,6 +304,20 @@ public class Servlets {
 		return agt.indexOf("opera") >= 0;
 	}
 
+	/** Returns whether the client is ZK Mobile supporting MIL.
+	 * @since 2.4.0
+	 */
+	public static final boolean isMilDevice(ServletRequest req) {
+		String agt = req instanceof HttpServletRequest ?
+			((HttpServletRequest)req).getHeader("user-agent"): null;
+		if (agt == null)
+			return false;
+
+		agt = agt.toLowerCase();
+		return agt.indexOf("zk") >= 0 && agt.indexOf("mobile") >= 0
+			&& agt.indexOf("rmil") >= 0;
+	}
+
 	/**
 	 * Tests whether this page is included by another page.
 	 */
