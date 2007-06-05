@@ -228,7 +228,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				else
 					throw UiException.Aide.wrap(err);
 			}
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
 		}
 	}
 }

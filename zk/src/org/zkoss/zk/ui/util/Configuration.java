@@ -80,8 +80,10 @@ public class Configuration {
 	/** List of objects. */
 	private final List
 		_uriIntcps = new LinkedList(), _reqIntcps = new LinkedList();
-	private final Map _prefs  = Collections.synchronizedMap(new HashMap()),
-		_richlets = new HashMap();
+	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
+	/** Map(String path, [Class richlet, boolean wildcard, Map params]
+	or [Richilet richlet, boolean wildcard]). */
+	private final Map _richlets = new HashMap();
 	/** List(ErrorPage). */
 	private final List _errpgs = new LinkedList();
 	private Monitor _monitor;
@@ -1214,12 +1216,21 @@ public class Configuration {
 	}
 	private Object addRichlet0(String path, Object richletClass, Map params) {
 		//richletClass was checked before calling this method
-		if (path == null || !path.startsWith("/"))
+		//Note: "/" is the same as ""
+		if (path == null || path.length() == 0 || "/".equals(path))
+			path = "";
+		else if (!path.startsWith("/"))
 			throw new IllegalArgumentException("path must start with '/', not "+path);
+
+		final boolean wildcard = path.endsWith("/*");
+		if (wildcard) //wildcard
+			path = path.substring(0, path.length() - 2);
+				//note it might be empty
 
 		final Object o;
 		synchronized (_richlets) {
-			o = _richlets.put(path, new Object[] {richletClass, params});
+			o = _richlets.put(path, new Object[] {
+				richletClass, Boolean.valueOf(wildcard), params});
 		}
 
 		if (o == null)
@@ -1240,17 +1251,39 @@ public class Configuration {
 	/** Returns an instance of richlet for the specified path, or null if not found.
 	 */
 	public Richlet getRichlet(String path) {
+		if (path == null || path.length() == 0 || "/".equals(path))
+			path = "";
+		else if (path.charAt(0) != '/')
+			path = '/' + path;
+
+		final int len = path.length();
+		for (int j = len;;) {
+			final Richlet richlet = getRichlet0(path.substring(0, j), j != len);
+			if (richlet != null || j == 0)
+				return richlet;
+			j = path.lastIndexOf('/', j - 1);
+		}
+	}
+	private Richlet getRichlet0(String path, boolean wildcardOnly) {
 		WaitLock lock = null;
 		final Object[] info;
 		for (;;) {
 			synchronized (_richlets) {
 				Object o = _richlets.get(path);
-				if (o == null || (o instanceof Richlet)) { //loaded or not found
-					return (Richlet)o;
+				if (o == null) { //not found
+					return null;
 				} else if (o instanceof WaitLock) { //loading by another thread
 					lock = (WaitLock)o;
-				} else { //going to load in this thread
+				} else {
 					info = (Object[])o;
+					if (info[0] instanceof Richlet) {
+						boolean wildcard = ((Boolean)info[1]).booleanValue();
+						return 
+							!wildcardOnly || wildcard ? (Richlet)info[0]: null;
+							//loaded
+					}
+
+					//going to load in this thread
 					_richlets.put(path, lock = new WaitLock());
 					break; //then, load it
 				}
@@ -1280,10 +1313,10 @@ public class Configuration {
 				throw new UiException(Richlet.class+" must be implemented by "+info[0]);
 
 			final Richlet richlet = (Richlet)o;
-			richlet.init(new RichletConfigImpl(_wapp, (Map)info[1]));
+			richlet.init(new RichletConfigImpl(_wapp, (Map)info[2]));
 
 			synchronized (_richlets) {
-				_richlets.put(path, richlet);
+				_richlets.put(path, new Object [] {richlet, info[1]});
 			}
 			return richlet;
 		} catch (Throwable ex) {
@@ -1300,9 +1333,9 @@ public class Configuration {
 	public void detroyRichlets() {
 		synchronized (_richlets) {
 			for (Iterator it = _richlets.values().iterator(); it.hasNext();) {
-				final Object o = it.next();
-				if (o instanceof Richlet)
-					destroy((Richlet)o);
+				final Object[] info = (Object[])it.next();
+				if (info[0] instanceof Richlet)
+					destroy((Richlet)info[0]);
 			}
 			_richlets.clear();
 		}
