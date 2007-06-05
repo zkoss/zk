@@ -62,6 +62,7 @@ import org.zkoss.zkmob.ZkComponent;
 public class Zk implements ZkComponent {
 	private Display _display;
 	private Displayable _current;
+	private Vector _displayables = new Vector(8);
 	private Hashtable _uiMap = new Hashtable(16);
 	private Inputable _toSendOnChange;
 
@@ -151,6 +152,10 @@ public class Zk implements ZkComponent {
 		return _hostURL;
 	}
 	
+	public void addDisplayable(Displayable disp) {
+		_displayables.addElement(disp);
+	}
+
 	//will be called whenever possible
 	private void sendOnChange(ZkComponent comp) {
 		if (_toSendOnChange != null && _toSendOnChange != comp) {
@@ -318,6 +323,8 @@ public class Zk implements ZkComponent {
 			executeRm(data);
 		} else if ("addAft".equals(cmd)) {
 			executeAddAft(data);
+		} else if ("addBfr".equals(cmd)) {
+			executeAddBfr(data);
 		} else {
 			System.out.println("Unknown response command: "+cmd);
 //			throw new IllegalArgumentException("Unknown response command: "+cmd);
@@ -369,6 +376,14 @@ public class Zk implements ZkComponent {
 	
 	//addAft command
 	private void executeAddAft(String[] data) {
+		executeAdd(data, 1);
+	}
+	
+	private void executeAddBfr(String[] data) {
+		executeAdd(data, 0);
+	}
+		
+	private void executeAdd(String[] data, int after) {
 		final String uuid = data[0];
 		final String rmil = data[1].trim();
 		final ZkComponent ref = lookupUi(uuid);
@@ -389,7 +404,7 @@ public class Zk implements ZkComponent {
 
 		if (ref instanceof ZkListItem) {
 			final Listable owner = ((ZkListItem)ref).getOwner();
-			final int index = owner.indexOf(ref);
+			final int index = owner.indexOf(ref) + after;
 			if (index == owner.size()) { //append to the last one
 				for(Enumeration it = comps.elements(); it.hasMoreElements(); ) {
 					final ZkListItem comp = (ZkListItem) it.nextElement();
@@ -413,7 +428,7 @@ public class Zk implements ZkComponent {
 			}
 		} else if (ref instanceof Item) {
 			final ZkForm form = (ZkForm) ((Itemable)ref).getForm();
-			final int index = form.indexOf((Item)ref) + 1;
+			final int index = form.indexOf((Item)ref) + after;
 			if (index == form.size()) { //append to the last one
 				for(Enumeration it = comps.elements(); it.hasMoreElements(); ) {
 					final Item comp = (Item) it.nextElement();
@@ -428,13 +443,22 @@ public class Zk implements ZkComponent {
 			}
 		} else if (ref instanceof Displayable) {
 			final Displayable disp = (Displayable) ref;
-			if (_display.getCurrent() == disp) { //the current showing display
-				_current = null;
-				_display.setCurrent(new Form(null)); //blank Form
+			final int index = _displayables.indexOf(disp) + after;
+			if (index == _displayables.size()) { //append
+				for(Enumeration it = comps.elements(); it.hasMoreElements(); ) {
+					final Displayable comp = (Displayable) it.nextElement();
+					addDisplayable(comp);
+				}
+			} else {
+				int k = 0;
+				for(Enumeration it = comps.elements(); it.hasMoreElements(); ++k) {
+					final Displayable comp = (Displayable) it.nextElement();
+					_displayables.insertElementAt(comp, index+k);
+				}
 			}
 		}
 	}
-	
+
 	/** Does the HTTP encoding for the URI location.
 	 * For example, '%' is translated to '%25'.
 	 *
