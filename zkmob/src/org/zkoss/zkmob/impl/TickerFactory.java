@@ -22,7 +22,6 @@ import javax.microedition.lcdui.Ticker;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.AbstractUiFactory;
-import org.zkoss.zkmob.Context;
 import org.zkoss.zkmob.ZkComponent;
 
 /**
@@ -35,11 +34,12 @@ public class TickerFactory extends AbstractUiFactory {
 		super(name);
 	}
 
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
 		final String id = attrs.getValue("id"); //id
 		final String string = attrs.getValue("tx"); //String
 		
-		final Ticker component = new ZkTicker(((ZkComponent)parent).getZk(), id, string);
+		final ZkTicker component = new ZkTicker(((ZkComponent)parent).getZk(), id, string);
+		
 		return component;
 	}		
 }

@@ -66,7 +66,7 @@ public class ZkImageItem extends ImageItem implements Imageable, ZkComponent, It
 		ZkComponents.setItemAttr(this, attr, val);
 
 		if ("im".equals(attr)) {
-			UiManager.loadImageOnThread(this, getZk().prefixURL(val));
+			UiManager.loadImageOnThread(this, UiManager.prefixURL(_zk.getHostURL(), val));
 		} else if ("tx".equals(attr)) {
 			setAltText(val);
 		}

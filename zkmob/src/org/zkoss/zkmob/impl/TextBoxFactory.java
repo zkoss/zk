@@ -22,7 +22,6 @@ import javax.microedition.lcdui.TextBox;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.AbstractUiFactory;
-import org.zkoss.zkmob.Context;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.ZkComponents;
 
@@ -40,7 +39,7 @@ public class TextBoxFactory extends AbstractUiFactory {
 	/* (non-Javadoc)
 	 * @see org.zkoss.zmobi.UiFactory#create(java.lang.Object, java.lang.String, org.xml.sax.Attributes)
 	 */
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
 		final String id = attrs.getValue("id"); //id
 		final String title = attrs.getValue("tt"); //title
 		final String constraintsStr = attrs.getValue("cs"); //constraints
@@ -50,7 +49,7 @@ public class TextBoxFactory extends AbstractUiFactory {
 		if (text.length() > maxSize) text = text.substring(0, maxSize);
 		final int constraints = Integer.parseInt(constraintsStr);
 		
-		final TextBox tbx = new ZkTextBox(((ZkComponent)parent).getZk(), id, title, text, maxSize, constraints);
+		final ZkTextBox tbx = new ZkTextBox(((ZkComponent)parent).getZk(), id, title, text, maxSize, constraints);
 		return tbx;
 	}
 

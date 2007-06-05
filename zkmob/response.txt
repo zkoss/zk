@@ -24,4 +24,9 @@ ZK response
 3.command: rm
 	data0: uuid
 
-
+4.command: addAft
+	data0: uuid of reference
+	data1: rmil of the new added component
+	
+5.command: redirect
+	data0: the href to show

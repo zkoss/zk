@@ -20,9 +20,9 @@ package org.zkoss.zkmob.impl;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.AbstractUiFactory;
-import org.zkoss.zkmob.Context;
 import org.zkoss.zkmob.Listable;
 import org.zkoss.zkmob.UiManager;
+import org.zkoss.zkmob.ZkComponent;
 
 /**
  * An UiFactory that create a ListItem Ui component.
@@ -35,16 +35,18 @@ public class ListItemFactory extends AbstractUiFactory {
 		super(name);
 	}
 	
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
-		final String id = attrs.getValue("id"); //label
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
+		final String id = attrs.getValue("id"); //id
 		final String label = attrs.getValue("lb"); //label
+		final String src = attrs.getValue("im");
 		//TODO: font not supported yet
 		final Listable owner = (Listable) parent;
-		owner.append(id, label, null);
-		final ZkListItem component = new ZkListItem(id, owner);
+		final ZkListItem component = new ZkListItem(owner, id, null, null);
+
+		owner.append(component, label, null);
 
 		//load the image and setup on a seperate thread
-		String imagesrc = ctx.prefixURL(attrs.getValue("im")); //image
+		final String imagesrc = UiManager.prefixURL(hostURL, src); //image
 		UiManager.loadImageOnThread(component, imagesrc);
 		
 		return component;

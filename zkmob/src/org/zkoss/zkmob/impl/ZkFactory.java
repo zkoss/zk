@@ -22,7 +22,7 @@ import javax.microedition.lcdui.Command;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.AbstractUiFactory;
-import org.zkoss.zkmob.Context;
+import org.zkoss.zkmob.ZkComponent;
 
 /**
  * Empty implementation; the root tag for MIL file.
@@ -34,7 +34,7 @@ public class ZkFactory extends AbstractUiFactory {
 		super(name);
 	}
 
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
 		final String dtid = attrs.getValue("di"); //desktop id
 		final String action = attrs.getValue("za"); //zk_action
 		final String proctoStr = attrs.getValue("zp"); //zk_procto
@@ -43,15 +43,8 @@ public class ZkFactory extends AbstractUiFactory {
 		final int tipto = tiptoStr != null ? Integer.parseInt(tiptoStr) : 800;
 		final String ver = attrs.getValue("zv"); //zk_ver
 		
-		Zk zk = new Zk(dtid, action, procto, tipto, ver, ctx);
+		Zk zk = new Zk(dtid, action, procto, tipto, ver, hostURL);
 		
 		return zk;
 	}
-
-	public void afterCreate(Object parent, String tag, Object comp, Context ctx) {
-		//after creation, set the current Displayable to Display
-		((Zk) comp).setCurrentDisplay();
-	}
-	
-	
 }

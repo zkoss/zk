@@ -42,19 +42,35 @@ public interface Listable {
 	
 	/**
 	 * append a list item.
+	 * @param ls the list item
 	 * @param stringPart The label of the list item.
 	 * @param imagePart The image of the list item.
 	 * @return the assigned index of the list item.
 	 */
-	public int append(String id, String stringPart, Image imagePart);
+	public int append(ZkComponent li, String stringPart, Image imagePart);
+	
+	/**
+	 * insert a list item before the given index.
+	 * 
+	 * @param index the reference index
+	 * @param id the list item id
+	 * @param stringPart The label of the list item.
+	 * @param imagePart The image of the list item.
+	 */
+	public void insert(int index, ZkComponent li, String stringPart, Image imagePart);
 	
 	/**
 	 * return index of the listitem id.
 	 */
-	public int indexOf(String id);
+	public int indexOf(ZkComponent li);
 	
 	/**
 	 * remove the element at index.
 	 */
 	public void delete(int index);
+	
+	/**
+	 * The size.
+	 */
+	public int size();
 }

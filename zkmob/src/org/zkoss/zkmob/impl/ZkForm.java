@@ -50,6 +50,17 @@ public class ZkForm extends Form implements ZkComponent {
 		}
 	}
 	
+	public int indexOf(Item comp) {
+		final int sz = size();
+		for (int j = 0; j < sz; ++j) {
+			final Item item = get(j);
+			if (comp == item) { //found
+				return j;
+			}
+		}
+		return -1;
+	}
+	
 	//--ZkComponent--//
 	public String getId() {
 		return _id;

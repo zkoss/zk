@@ -29,14 +29,11 @@ import org.xml.sax.Attributes;
 public interface UiFactory {
 	/**
 	 * create a component.
+	 * 
 	 * @param parent the parent component
 	 * @param tag the tag name
 	 * @param attrs the attribute
+	 * @param hostURL the host URL
 	 */
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx);
-	
-	/**
-	 * called after complete creating a component.
-	 */
-	public void afterCreate(Object parent, String tag, Object comp, Context ctx);
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL);
 }

@@ -18,12 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmob.impl;
 
-import javax.microedition.lcdui.ChoiceGroup;
 import javax.microedition.lcdui.Form;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.AbstractUiFactory;
-import org.zkoss.zkmob.Context;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.ZkComponents;
 
@@ -38,15 +36,15 @@ public class ChoiceGroupFactory extends AbstractUiFactory {
 		super(name);
 	}
 	
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
 		final String id = attrs.getValue("id"); //id
 		final String label = attrs.getValue("lb"); //label
 		final String choiceTypeStr = attrs.getValue("tp"); //choiceType
 		final int choiceType = Integer.parseInt(choiceTypeStr);
 		final Zk zk = ((ZkComponent)parent).getZk();
-		final ChoiceGroup component = new ZkChoiceGroup(zk, id, label, choiceType);
+		final ZkChoiceGroup component = new ZkChoiceGroup(zk, id, label, choiceType);
 
-		ZkComponents.applyItemProperties((Form)parent, component, attrs);
+		ZkComponents.applyItemProperties(parent, component, attrs);
 		
 		return component;
 	}

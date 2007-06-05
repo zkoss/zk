@@ -36,12 +36,4 @@ public abstract class AbstractUiFactory implements UiFactory {
 	protected AbstractUiFactory(String name) {
 		UiManager.registerUiFactory(name, this);
 	}
-	
-	/**
-	 * Callback after creation of the UI Component.
-	 */
-	public void afterCreate(Object parent, String tag, Object comp, Context ctx) {
-		//do nothing
-	}
-
 }

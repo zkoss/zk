@@ -23,7 +23,6 @@ import javax.microedition.lcdui.TextField;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.AbstractUiFactory;
-import org.zkoss.zkmob.Context;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.ZkComponents;
 
@@ -36,7 +35,7 @@ public class TextFieldFactory extends AbstractUiFactory {
 		super(name);
 	}
 	
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
 		final String id = attrs.getValue("id"); //label
 		final String label = attrs.getValue("lb"); //label
 		String text = attrs.getValue("tx"); //text
@@ -50,11 +49,11 @@ public class TextFieldFactory extends AbstractUiFactory {
 		final String onChanging = attrs.getValue("og");
 		final Zk zk = ((ZkComponent)parent).getZk();
 		
-		final TextField component = new ZkTextField(zk, id, label, text, maxSize, constraints
+		final ZkTextField component = new ZkTextField(zk, id, label, text, maxSize, constraints
 				, onChange == null ? null : new Boolean("t".equals(onChange))
 				, onChanging == null ? null : new Boolean("t".equals(onChanging)));
 
-		ZkComponents.applyItemProperties((Form)parent, component, attrs);
+		ZkComponents.applyItemProperties(parent, component, attrs);
 		
 		return component;
 	}

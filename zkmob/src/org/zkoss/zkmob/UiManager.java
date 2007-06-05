@@ -22,16 +22,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Hashtable;
+import java.util.Vector;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
 import javax.microedition.lcdui.Display;
-import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Image;
-import javax.microedition.lcdui.Screen;
-import javax.microedition.lcdui.Ticker;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -89,9 +87,6 @@ public class UiManager {
 		new SpacerFactory("sp");
 	}
 	
-	//The current ZK desktop
-	private Zk _zk;
-	
 	/** register an UiFactory to a Ui tag name. 
 	 * @param name the Ui tag name
 	 * @param uiFactory an UiFactory used to create an Ui component
@@ -115,54 +110,16 @@ public class UiManager {
 	 * @param parent the parent component
 	 * @param tag the Ui tag name
 	 * @param attrs the Ui tag attributes 
+	 * @param hostURL the host URL
 	 */
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
+	public static ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
 		UiFactory uiFactory = (UiFactory) _uiFactoryMap.get(tag);
 
 		if (uiFactory != null) {
-			ZkComponent comp = (ZkComponent) uiFactory.create(parent, tag, attrs, ctx);
-			if (comp instanceof Zk) {
-				_zk = (Zk) comp;
-			}
-			_zk.registerUi(comp.getId(), comp);
-
-			if (comp instanceof Displayable) {
-				//remember current displayable
-				final String current = attrs.getValue("cr"); //current
-				if (_zk.getCurrent() == null && "t".equalsIgnoreCase(current)) {
-					_zk.setCurrent((Displayable) comp);
-				}
-				
-				//associate Ticker with Screen component
-				//Ticker must be created before Component
-				if (comp instanceof Screen) {
-					String tickerid = attrs.getValue("tc");
-					if (tickerid != null) {
-						Object ticker = _zk.lookupUi(tickerid);
-						if (ticker instanceof Ticker) {
-							((Screen)comp).setTicker((Ticker) ticker);
-						}
-					}
-				}
-			}
-			return comp;
+			return uiFactory.create(parent, tag, attrs, hostURL);
 		}
-		return null;
-	}
-
-	/**
-	 * Called after PageHandler finishing creating a component.
-	 * @param parent The parent component
-	 * @param tag The tag name
-	 * @param comp The component
-	 * @param ctx The page handling context
-	 */
-	public void afterCreate(Object parent, String tag, Object comp, Context ctx) {
-		final UiFactory uiFactory = (UiFactory) _uiFactoryMap.get(tag);
-
-		if (uiFactory != null) {
-			uiFactory.afterCreate(parent, tag, comp, ctx);
-		}
+		
+		throw new IllegalArgumentException("Cannot find the UiFactory of the RMIL tag: "+ tag); 
 	}
 
 	public void loadPageOnThread(Display disp, String url) {
@@ -182,6 +139,24 @@ public class UiManager {
 		}
 	}
 	
+	public static String getHostURL(HttpConnection conn) {
+		return conn.getProtocol()+"://"+conn.getHost()+(conn.getPort() != 80 ? (":"+conn.getPort()) : "");
+	}
+	
+	public static String prefixURL(String hostURL, String url) {
+		if (url != null && !url.startsWith("http://") && !url.startsWith("https://")) {
+			url = hostURL + url;
+		}
+		return url;
+	}
+	
+	public static Vector createComponents(Zk zk, InputStream is, String hostURL) throws IOException, SAXException {
+	    // Load the responsed page, the current Displayable is put in _current
+	    final PageHandler handler = new PageHandler(zk, hostURL);
+	    getSAXParser().parse(is, handler);
+	    return handler.getRoots();
+	}
+
 	private void myLoadPage(Display disp, String url) throws IOException, SAXException {
 		HttpConnection conn = null;
 		InputStream is = null;
@@ -189,12 +164,19 @@ public class UiManager {
 		try {
 		    conn = (HttpConnection)Connector.open(url);
 		    is = request(conn, null);
-		    // Load the responsed page, the current Displayable is put in _current
-		    getSAXParser().parse(is, new PageHandler(this, new Context(conn, disp)));
+		    final Zk zk = createComponents(is, getHostURL(conn));
+		    zk.setDisplay(disp);
 		} finally {
 			if (is != null)	is.close();
 			if (conn != null) conn.close();
 		}
+	}
+
+	private static Zk createComponents(InputStream is, String hostURL) throws IOException, SAXException {
+	    // Load the responsed page, the current Displayable is put in _current
+	    final PageHandler handler = new PageHandler(hostURL);
+	    getSAXParser().parse(is, handler);
+	    return handler.getZk();
 	}
 	
 	/** utility to load Image on a separate thread.
@@ -247,7 +229,7 @@ public class UiManager {
 		    conn.setRequestProperty("Content-Type",
             	"application/x-www-form-urlencoded");
 		    conn.setRequestProperty("User-Agent",
-		        "Profile/MIDP-2.0 Configuration/CLDC-1.0 MIL");
+		        "ZK Mobile/1.0 (RMIL)");
 		    conn.setRequestProperty("Content-Language", "en-US");
 		
 		    // Getting the output stream may flush the headers

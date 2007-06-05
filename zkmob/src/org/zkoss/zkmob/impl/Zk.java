@@ -18,6 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmob.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -44,13 +45,10 @@ import javax.microedition.lcdui.ItemStateListener;
 import javax.microedition.lcdui.TextField;
 
 import org.xml.sax.SAXException;
-import org.zkoss.zkmob.Context;
 import org.zkoss.zkmob.Event;
 import org.zkoss.zkmob.Inputable;
 import org.zkoss.zkmob.Itemable;
 import org.zkoss.zkmob.Listable;
-import org.zkoss.zkmob.PageHandler;
-import org.zkoss.zkmob.PageRequest;
 import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.UpdateHandler;
 import org.zkoss.zkmob.UpdateRequest;
@@ -72,7 +70,7 @@ public class Zk implements ZkComponent {
 	private int _procto; //zk_procto, millisecond to show progress meter
 	private int _tipto; //zk_tipto, millisecond to popup the tip
 	private String _ver; //zk_ver
-	private String _urlPrefix; //URL prefix for this desktop
+	private String _hostURL; //URL prefix for this desktop
 	private String _jsessionid; //session id
 	
 	private Vector _events = new Vector(); //event list
@@ -81,19 +79,19 @@ public class Zk implements ZkComponent {
 	private ItemStateListener _itemStateListener;
 	private ItemCommandListener _itemCommandListener;
 	
-	public Zk(String dtid, String action, int procto, int tipto, String ver, Context ctx) {
+	public Zk(String dtid, String action, int procto, int tipto, String ver, String hostURL) {
 		_dtid = dtid;
+
 		int j = action.indexOf(";jsessionid");
 		if (j >= 0) {
 			_jsessionid = action.substring(j);
 //			action = action.substring(0, j);
 		}
-		_urlPrefix = ctx.prefixURL("");
-		_action = _urlPrefix + action;
+		_hostURL = hostURL;
+		_action = _hostURL + action;
 		_procto = procto;
 		_tipto = tipto;
 		_ver = ver;
-		_display = ctx.getDisplay();
 		
 		_cmdListener = new CommandListener() {
 			public void commandAction(Command command, Displayable disp) {
@@ -149,6 +147,10 @@ public class Zk implements ZkComponent {
 		};
 	}
 	
+	public String getHostURL() {
+		return _hostURL;
+	}
+	
 	//will be called whenever possible
 	private void sendOnChange(ZkComponent comp) {
 		if (_toSendOnChange != null && _toSendOnChange != comp) {
@@ -195,6 +197,9 @@ public class Zk implements ZkComponent {
 	
 	public void setCurrent(Displayable current) {
 		_current = current;
+		if (_display != null) {
+			_display.setCurrent(_current);
+		}
 	}
 
 	public Vector getEvents() {
@@ -211,10 +216,6 @@ public class Zk implements ZkComponent {
 	
 	public ItemCommandListener getItemCommandListener() {
 		return _itemCommandListener;
-	}
-	
-	public String prefixURL(String url) {
-		return _urlPrefix + url;
 	}
 	
 	//--ZkComponent--//
@@ -292,15 +293,17 @@ public class Zk implements ZkComponent {
 		    is = UiManager.request(conn, request);
 		    // Load the update response
 		    UiManager.getSAXParser().parse(is, new UpdateHandler(this));
-		    setCurrentDisplay();
 		} finally {
 			if (is != null)	is.close();
 			if (conn != null) conn.close();
 		}
 	}
 
-	public void setCurrentDisplay() {
-	    _display.setCurrent(_current);
+	public void setDisplay(Display disp) {
+		_display = disp;
+		if (_current != null) {
+			_display.setCurrent(_current);
+		}
 	}
 	
 	public void executeResponse(RTag rtag) {
@@ -313,8 +316,11 @@ public class Zk implements ZkComponent {
 			executeAlert(data);
 		} else if ("rm".equals(cmd)) {
 			executeRm(data);
+		} else if ("addAft".equals(cmd)) {
+			executeAddAft(data);
 		} else {
-			throw new IllegalArgumentException("Unknown response command: "+cmd);
+			System.out.println("Unknown response command: "+cmd);
+//			throw new IllegalArgumentException("Unknown response command: "+cmd);
 		}
 	}
 
@@ -345,7 +351,7 @@ public class Zk implements ZkComponent {
 		final ZkComponent comp = lookupUi(uuid);
 		if (comp instanceof ZkListItem) {
 			final Listable owner = ((ZkListItem)comp).getOwner();
-			final int index = owner.indexOf(uuid);
+			final int index = owner.indexOf(comp);
 			owner.delete(index);
 		} else if (comp instanceof Itemable) {
 			final ZkForm form = (ZkForm) ((Itemable)comp).getForm();
@@ -359,6 +365,74 @@ public class Zk implements ZkComponent {
 		}
 		
 		unregisterUi(uuid);
+	}
+	
+	//addAft command
+	private void executeAddAft(String[] data) {
+		final String uuid = data[0];
+		final String rmil = data[1].trim();
+		final ZkComponent ref = lookupUi(uuid);
+		InputStream is = null;
+		try {
+			is = new ByteArrayInputStream(rmil.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// ignore
+		}
+		Vector comps = null;
+		try {
+			comps = UiManager.createComponents(this, is, _hostURL);
+		} catch (IOException e) {
+			// ignore
+		} catch (SAXException e) {
+			throw new IllegalArgumentException("addAft failed: " + e.toString());
+		} //load the rmil and generate a set of components
+
+		if (ref instanceof ZkListItem) {
+			final Listable owner = ((ZkListItem)ref).getOwner();
+			final int index = owner.indexOf(ref);
+			if (index == owner.size()) { //append to the last one
+				for(Enumeration it = comps.elements(); it.hasMoreElements(); ) {
+					final ZkListItem comp = (ZkListItem) it.nextElement();
+					final String label = comp.getLabel();
+					final String imagesrc = comp.getImage();
+					owner.append(comp, label, null);
+					
+					//we drop the ZkTmpListItem to register the smaller ZkListItem
+					UiManager.loadImageOnThread(comp, imagesrc);
+				}
+			} else {
+				int k = 0;
+				for(Enumeration it = comps.elements(); it.hasMoreElements(); ++k) {
+					final ZkListItem comp = (ZkListItem) it.nextElement();
+					final String label = comp.getLabel();
+					final String imagesrc = comp.getImage();
+					owner.insert(index+k, comp, label, null);
+
+					UiManager.loadImageOnThread(comp, imagesrc);
+				}
+			}
+		} else if (ref instanceof Item) {
+			final ZkForm form = (ZkForm) ((Itemable)ref).getForm();
+			final int index = form.indexOf((Item)ref) + 1;
+			if (index == form.size()) { //append to the last one
+				for(Enumeration it = comps.elements(); it.hasMoreElements(); ) {
+					final Item comp = (Item) it.nextElement();
+					form.append(comp);
+				}
+			} else {
+				int k = 0;
+				for(Enumeration it = comps.elements(); it.hasMoreElements(); ++k) {
+					final Item comp = (Item) it.nextElement();
+					form.insert(index+k, comp);
+				}
+			}
+		} else if (ref instanceof Displayable) {
+			final Displayable disp = (Displayable) ref;
+			if (_display.getCurrent() == disp) { //the current showing display
+				_current = null;
+				_display.setCurrent(new Form(null)); //blank Form
+			}
+		}
 	}
 	
 	/** Does the HTTP encoding for the URI location.

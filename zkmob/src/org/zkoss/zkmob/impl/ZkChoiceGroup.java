@@ -50,14 +50,19 @@ public class ZkChoiceGroup extends ChoiceGroup implements Listable, ZkComponent,
 	}
 	
 	//--Listable--//
-	public int append(String id, String stringPart, Image imagePart) {
+	public int append(ZkComponent li, String stringPart, Image imagePart) {
 		final int j = append(stringPart, imagePart);
-		_listitems.addElement(id);
+		_listitems.addElement(li);
 		return j;
 	}
+	
+	public void insert(int index, ZkComponent li, String stringPart, Image imagePart) {
+		insert(index, stringPart, imagePart);
+		_listitems.insertElementAt(li, index);
+	}
 
-	public int indexOf(String id) {
-		return _listitems.indexOf(id);
+	public int indexOf(ZkComponent li) {
+		return _listitems.indexOf(li);
 	}
 	
 	public void delete(int index) {

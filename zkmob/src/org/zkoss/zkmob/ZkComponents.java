@@ -56,12 +56,12 @@ public class ZkComponents {
 	/**
 	 * Utility to apply common properties to Item component. 
 	 */
-	public static void applyItemProperties(Form form, Item component, Attributes attrs) {
+	public static void applyItemProperties(ZkComponent parent, Item component, Attributes attrs) {
 		setItemAttr(component, "lo", attrs.getValue("lo")); //layout
 		setItemAttr(component, "ps", attrs.getValue("ps")); //preferredSize
-		if (form != null) {
-			((Itemable)component).setForm(form);
-			form.append(component);
+		if (parent instanceof Form) {
+			((Itemable)component).setForm((Form)parent);
+			((Form)parent).append(component);
 		}
 	}
 	

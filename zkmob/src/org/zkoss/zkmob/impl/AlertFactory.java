@@ -23,10 +23,8 @@ import javax.microedition.lcdui.Gauge;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.AbstractUiFactory;
-import org.zkoss.zkmob.Context;
 import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.ZkComponent;
-import org.zkoss.zkmob.ZkComponents;
 
 /**
  * A UiFactory that create an Alert Ui component.
@@ -38,14 +36,14 @@ public class AlertFactory extends AbstractUiFactory {
 		super(name);
 	}
 	
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
 		final String id = attrs.getValue("id"); //id
 		final String title = attrs.getValue("tt"); //title
 		final String text = attrs.getValue("tx"); //text
 		final String typeStr = attrs.getValue("tp"); //type
 		final ZkAlert alert = new ZkAlert(((ZkComponent)parent).getZk(), id, title, text, getAlertType(typeStr));
 		
-		final String imagesrc = ctx.prefixURL(attrs.getValue("im")); //image
+		final String imagesrc = UiManager.prefixURL(hostURL, attrs.getValue("im")); //image
 		UiManager.loadImageOnThread(alert, imagesrc);
 		
 		final String timeoutStr = attrs.getValue("to"); //timeout

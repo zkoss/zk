@@ -23,7 +23,6 @@ import javax.microedition.lcdui.Item;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.AbstractUiFactory;
-import org.zkoss.zkmob.Context;
 import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.ZkComponents;
@@ -39,7 +38,7 @@ public class ImageItemFactory extends AbstractUiFactory {
 		super(name);
 	}
 	
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
 		final String id = attrs.getValue("id"); //id
 		final String label = attrs.getValue("lb"); //label
 		final String altText = attrs.getValue("tx"); //altText
@@ -48,12 +47,14 @@ public class ImageItemFactory extends AbstractUiFactory {
 				Integer.parseInt(apperenceModeStr) : Item.PLAIN;
 		final Zk zk = ((ZkComponent)parent).getZk();
 		
-		final ZkImageItem component = new ZkImageItem(zk, id, label, ZkImageItem.LAYOUT_DEFAULT, altText, apperenceMode);
-
-		ZkComponents.applyItemProperties((Form)parent, component, attrs);
+		final ZkImageItem component = 
+			new ZkImageItem(zk, id, label, ZkImageItem.LAYOUT_DEFAULT, altText, apperenceMode);
+		System.out.println("parent="+parent);
+		ZkComponents.applyItemProperties(parent, component, attrs);
+		System.out.println("2");
 
 		//load the image and setup on a seperate thread
-		String imagesrc = ctx.prefixURL(attrs.getValue("im"));
+		final String imagesrc = UiManager.prefixURL(hostURL, attrs.getValue("im"));
 		UiManager.loadImageOnThread(component, imagesrc);
 		
 		return component;

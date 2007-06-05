@@ -19,37 +19,50 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkmob;
 
 import java.util.Stack;
+import java.util.Vector;
+
+import javax.microedition.lcdui.Displayable;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import org.zkoss.zkmob.impl.Zk;
 
-/** The Page creator that deserialize Java Object from RMIL(Raw Mobile Interactive Language)
+/** The Page handler that deserialize Java Object from RMIL(Raw Mobile Interactive Language)
  *  XML Pages.
  * 
  * @author henrichen
  *
  */
 public class PageHandler extends DefaultHandler {
-	private Stack _stack;
-	private UiManager _uiManager;
-	private Context _ctx;
+	private Stack _stack = new Stack();
+	private String _hostURL;
+	private Vector _roots = new Vector(8);
+	private Zk _zk;
 	
-	/*package*/PageHandler(UiManager uiManager, Context ctx) {
-		_uiManager = uiManager;
-		_ctx = ctx;
+	/*package*/PageHandler(String hostURL) {
+		_hostURL = hostURL;
+	}
+
+	/*package*/PageHandler(Zk zk, String hostURL) {
+		_hostURL = hostURL;
+		_zk = zk;
+		_stack.push(zk);
+	}
+	
+	public Vector getRoots() {
+		return _roots;
+	}
+	
+	public Zk getZk() {
+		return _zk;
 	}
 	
 	//super//
 	public void startDocument() throws SAXException {
-		_stack = new Stack();
-        emit("<?xml version='1.0' encoding='UTF-8'?>");
-        nl();
     }
 
     public void endDocument() throws SAXException {
-    	nl();
-    	_stack = null;
     }
     
     public void startElement(String namespaceURI, String sName, String qName, Attributes attrs)
@@ -57,10 +70,30 @@ public class PageHandler extends DefaultHandler {
     	String eName = sName; // element name
 		if ("".equals(eName)) eName = qName; // namespaceAware = false
 		
-		Object parent = _stack.empty() ? null : _stack.peek();
-		Object comp = _uiManager.create(parent, eName, attrs, _ctx);
+		ZkComponent parent = (ZkComponent) (_stack.empty() ? null : _stack.peek());
+		ZkComponent comp = UiManager.create(parent, eName, attrs, _hostURL);
 		_stack.push(comp);
 
+		if (parent instanceof Zk) {
+			_roots.addElement(comp);
+		}
+		
+		if (_zk == null) {
+			if (comp instanceof Zk) {
+				_zk = (Zk) comp;
+			} else {
+				throw new IllegalArgumentException("RMIL page must be in <zk> root:" + eName);
+			}
+		}
+		
+		if (comp instanceof Displayable) {
+			final String cr = attrs.getValue("cr");
+			if ("t".equalsIgnoreCase(cr)) {
+				_zk.setCurrent((Displayable)comp);
+			}
+		}
+		_zk.registerUi(comp.getId(), comp);
+		
 		emit("<"+eName);
 		if (attrs != null) {
 			for (int i = 0; i < attrs.getLength(); i++) {
@@ -74,13 +107,10 @@ public class PageHandler extends DefaultHandler {
 	}
 
     public void endElement(String namespaceURI, String sName, String qName) throws SAXException {
+    	_stack.pop();
+    	
     	String eName = sName; // element name
 		if ("".equals(eName)) eName = qName; // namespaceAware = false
-
-		Object comp = _stack.peek();
-    	_stack.pop();
-		Object parent = _stack.empty() ? null : _stack.peek();
-		_uiManager.afterCreate(parent, eName, comp, _ctx);
     	
     	emit("</"+eName+">");
     }
@@ -93,9 +123,5 @@ public class PageHandler extends DefaultHandler {
     
 	private void emit(String s) {
 		System.out.print(s);
-	}
-	
-	private void nl() {
-		System.out.println("");
 	}
 }

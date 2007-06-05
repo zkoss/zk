@@ -33,19 +33,31 @@ import org.zkoss.zkmob.ZkComponent;
 public class ZkListItem implements ZkComponent, Imageable {
 	private Listable _parent; 
 	private String _id;
+	private String _label;
+	private String _image;
 	
-	public ZkListItem(String id, Listable parent) {
+	public ZkListItem(Listable parent, String id, String label, String image) {
 		_parent = parent;
 		_id = id;
+		_label = label;
+		_image = image;
 	}
 	
 	public Listable getOwner() {
 		return _parent;
 	}
 	
+	public String getLabel() {
+		return _label;
+	}
+	
+	public String getImage() {
+		return _image;
+	}
+	
 	//--Imageable--//
 	public void loadImage(Image image) {
-		final int index = _parent.indexOf(_id);
+		final int index = _parent.indexOf(this);
 		_parent.set(index, _parent.getString(index), image);
 	}
 	

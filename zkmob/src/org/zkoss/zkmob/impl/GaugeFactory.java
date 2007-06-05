@@ -23,7 +23,6 @@ import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Gauge;
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.AbstractUiFactory;
-import org.zkoss.zkmob.Context;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.ZkComponents;
 
@@ -37,7 +36,7 @@ public class GaugeFactory extends AbstractUiFactory {
 		super(name);
 	}
 	
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
 		final String id = attrs.getValue("id"); //id
 		final String label = attrs.getValue("lb"); //label
 		final String maxValueStr = attrs.getValue("mv"); //maxValue
@@ -48,9 +47,9 @@ public class GaugeFactory extends AbstractUiFactory {
 		final int initialValue = Integer.parseInt(initialValueStr);
 		final Zk zk = ((ZkComponent)parent).getZk();
 		
-		final Gauge component = new ZkGauge(zk, id, label, interactive, maxValue, initialValue);
+		final ZkGauge component = new ZkGauge(zk, id, label, interactive, maxValue, initialValue);
 
-		ZkComponents.applyItemProperties((Form)parent, component, attrs);
+		ZkComponents.applyItemProperties(parent, component, attrs);
 		
 		return component;
 	}

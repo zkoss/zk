@@ -23,7 +23,6 @@ import javax.microedition.lcdui.StringItem;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.AbstractUiFactory;
-import org.zkoss.zkmob.Context;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.ZkComponents;
 
@@ -37,15 +36,15 @@ public class StringItemFactory extends AbstractUiFactory {
 		super(name);
 	}
 	
-	public Object create(Object parent, String tag, Attributes attrs, Context ctx) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
 		final String id = attrs.getValue("id"); //id
 		final String label = attrs.getValue("lb"); //label
 		final String text = attrs.getValue("tx"); //text
 		final Zk zk = ((ZkComponent)parent).getZk();
 		
-		final StringItem component = new ZkStringItem(zk, id, label, text);
+		final ZkStringItem component = new ZkStringItem(zk, id, label, text);
 
-		ZkComponents.applyItemProperties((Form)parent, component, attrs);
+		ZkComponents.applyItemProperties(parent, component, attrs);
 		
 		return component;
 	}
