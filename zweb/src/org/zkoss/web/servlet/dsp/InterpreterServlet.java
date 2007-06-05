@@ -117,7 +117,7 @@ public class InterpreterServlet extends HttpServlet {
 			if (cnt == null) {
 				if (Https.isIncluded(request)) log.error("Not found: "+path);
 					//It might be eaten, so log the error
-				response.sendError(HttpServletResponse.SC_NOT_FOUND);
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
 				return;
 			}
 			cnt.interpret(

@@ -187,7 +187,7 @@ public class ClassWebResource {
 				if (cnt == null) {
 					if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+pi);
 						//It might be eaten, so log the error
-					response.sendError(response.SC_NOT_FOUND, pi+" not found.");
+					response.sendError(response.SC_NOT_FOUND, pi);
 					return;
 				}
 				cnt.interpret(new ServletDSPContext(
@@ -215,7 +215,7 @@ public class ClassWebResource {
 					//FUTURE: zweb shall not depend on zk
 			} else {
 				if (Servlets.isIncluded(request)) log.error("Resource not found: "+pi);
-				response.sendError(response.SC_NOT_FOUND, pi+" not found.");
+				response.sendError(response.SC_NOT_FOUND, pi);
 				return;
 			}
 		} else {
