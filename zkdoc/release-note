@@ -23,7 +23,8 @@ ZK 2.4.0 Freshly
   1727687: add Component[] constructor to Box, Hbox and Vbox
   1730438: AnnotateDataBinder support new simpler property annotation
   1730457: Tab shall receive onSelect in additon to Tabbox
-
+  1731138: AnnotateDataBinder should allow relative path
+  
 * Bugs:
   1728010: Inconsistent behavior when dragging multiple selected item
   1711769: Grid on Vbox visibility bug
