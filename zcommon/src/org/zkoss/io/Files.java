@@ -58,10 +58,33 @@ public class Files {
 		final String confdir = System.getProperty("org.zkoss.io.conf.dir", null);
 		if (confdir != null) return new File(confdir);
 
-		final File fl = new File(System.getProperty("user.dir", "."), "conf");
-		if (fl.exists()) return fl;
-		final File fl2 = new File(System.getProperty("user.dir", "."), "config");
-		return fl2.exists() ? fl2: fl;
+		final String userdir = System.getProperty("user.dir", ".");
+		final File fl0 = new File(userdir, "conf");
+		if (exists(fl0) == null) {
+			File fl = exists(new File(userdir, "config"));
+			if (fl != null) return fl;
+
+			if (!".".equals(userdir)) {
+				fl = exists(new File(userdir, "../conf"));
+				if (fl != null) return fl;
+				fl = exists(new File(userdir, "../config"));
+				if (fl != null) return fl;
+
+				fl = exists(new File("./conf"));
+				if (fl != null) return fl;
+				fl = exists(new File("./config"));
+				if (fl != null) return fl;
+			}
+
+			fl = exists(new File("../conf"));
+			if (fl != null) return fl;
+			fl = exists(new File("../config"));
+			if (fl != null) return fl;
+		}
+		return fl0;
+	}
+	private static final File exists(File fl) {
+		return fl.exists() ? fl: null;
 	}
 
 	/** Returns all bytes in the input stream, never null
