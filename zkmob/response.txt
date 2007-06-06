@@ -13,20 +13,24 @@ ZK response
 	...
 </rs>
 
-1.command: setAttr
+*	command: setAttr
 	data0: uuid
 	data1: attr
 	data2: value
 	
-2.command: alert
+*	command: alert
 	data0: mesg
 	
-3.command: rm
+*	command: rm
 	data0: uuid
 
-4.command: addAft
+*	command: addAft
 	data0: uuid of reference
 	data1: rmil of the new added component
 	
-5.command: redirect
+*	command: addBfr
+	data0: uuid of reference
+	data1: rmil of the new added component
+	
+*	command: redirect
 	data0: the href to show

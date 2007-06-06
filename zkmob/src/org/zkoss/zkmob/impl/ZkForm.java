@@ -21,6 +21,7 @@ package org.zkoss.zkmob.impl;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Item;
 
+import org.zkoss.zkmob.Itemable;
 import org.zkoss.zkmob.ZkComponent;
 
 
@@ -59,6 +60,17 @@ public class ZkForm extends Form implements ZkComponent {
 			}
 		}
 		return -1;
+	}
+	
+	public int append(Item item) {
+		final int j = super.append(item);
+		((Itemable)item).setForm(this);
+		return j;
+	}
+	
+	public void insert(int itemNum, Item item) {
+		super.insert(itemNum, item);
+		((Itemable)item).setForm(this);
 	}
 	
 	//--ZkComponent--//

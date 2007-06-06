@@ -60,7 +60,6 @@ public class ZkComponents {
 		setItemAttr(component, "lo", attrs.getValue("lo")); //layout
 		setItemAttr(component, "ps", attrs.getValue("ps")); //preferredSize
 		if (parent instanceof Form) {
-			((Itemable)component).setForm((Form)parent);
 			((Form)parent).append(component);
 		}
 	}
