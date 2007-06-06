@@ -1227,11 +1227,13 @@ zk.cpCellWidth = function (dst, srcrows) {
 			d.style.width = s.offsetWidth - v;
 		} else {
 			d.style.width = s.offsetWidth + "px";
-			var v = s.offsetWidth - d.offsetWidth;
-			if (v != 0) {
-				v += s.offsetWidth;
-				if (v < 0) v = 0;
-				d.style.width = v + "px";
+			if (maxnc > 1) { //don't handle single cell case (bug 1729739)
+				var v = s.offsetWidth - d.offsetWidth;
+				if (v != 0) {
+					v += s.offsetWidth;
+					if (v < 0) v = 0;
+					d.style.width = v + "px";
+				}
 			}
 		}
 	}
