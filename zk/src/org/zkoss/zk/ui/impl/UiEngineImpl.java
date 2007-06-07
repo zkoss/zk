@@ -1274,8 +1274,8 @@ public class UiEngineImpl implements UiEngine {
 	 * satisfied.
 	 */
 	private static class FulfillListener
-	implements EventListener, Express, java.io.Serializable,
-	ComponentSerializationListener {
+	implements EventListener, Express, java.io.Serializable, Cloneable,
+	ComponentSerializationListener, ComponentCloneListener {
 		private transient String _evtnm;
 		private transient Component _target, _comp;
 		private final ComponentInfo _compInfo;
@@ -1312,6 +1312,18 @@ public class UiEngineImpl implements UiEngine {
 		public void didDeserialize(Component comp) {
 			_comp = comp;
 			init();
+		}
+		//ComponentCloneListener//
+		public Object clone(Component comp) {
+			final FulfillListener clone;
+			try {
+				clone = (FulfillListener)clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+			clone._comp = comp;
+			clone.init();
+			return clone;
 		}
 	}
 }

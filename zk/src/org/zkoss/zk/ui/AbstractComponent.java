@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -1297,9 +1298,38 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//1. make it not belonging to any page
 		clone._page = null;
 		clone._parent = null;
-		clone._attrs = new HashMap(_attrs);
-		if (_listeners != null)
-			clone._listeners = new HashMap(_listeners);
+
+		clone._attrs = new HashMap();
+		for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			Object val = me.getValue();
+			if (val instanceof ComponentCloneListener) {
+				val = ((ComponentCloneListener)val).clone(clone);
+				if (val == null) continue; //don't use it in clone
+			}
+			clone._attrs.put(me.getKey(), val);
+		}
+
+		if (_listeners != null) {
+			clone._listeners = new HashMap();
+			for (Iterator it = _listeners.entrySet().iterator();
+			it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final List list = new LinkedList();
+				for (Iterator it2 = ((List)me.getValue()).iterator();
+				it2.hasNext();) {
+					Object val = it2.next();
+					if (val instanceof ComponentCloneListener) {
+						val = ((ComponentCloneListener)val).clone(clone);
+						if (val == null) continue; //don't use it in clone
+					}
+					list.add(val);
+				}
+				if (!list.isEmpty())
+					clone._listeners.put(me.getKey(), list);
+			}
+		}
+
 		if (!_annotsShared && _annots != null)
 			clone._annots = (AnnotationMap)_annots.clone();
 		if (!_evthdsShared && _evthds != null)
@@ -1319,7 +1349,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final
 	void cloneSpaceInfo(AbstractComponent clone, SpaceInfo from) {
 		final SpaceInfo to = clone._spaceInfo;
-		to.attrs.putAll(from.attrs);
+		to.attrs = new HashMap();
+		for (Iterator it = from.attrs.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			Object val = me.getValue();
+			if (val instanceof ComponentCloneListener) {
+				val = ((ComponentCloneListener)val).clone(clone);
+				if (val == null) continue; //don't use it in clone
+			}
+			to.attrs.put(me.getKey(), val);
+		}
 
 		//rebuild ID space by binding itself and all children
 		clone.bindToIdSpace(clone);
