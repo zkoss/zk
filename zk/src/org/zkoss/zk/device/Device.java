@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Desktop;
 /**
  * Represents a client device.
  * For example, the HTML browsers with Ajax are called {@link AjaxDevice},
- * and the MIL device called {@link MilDevice}.
+ * and the MIL device called org.zkoss.mil.device.MilDevice.
  *
  * <p>Note: the device must be serializable.
  *
