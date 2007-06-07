@@ -61,7 +61,7 @@ import java.util.Iterator;
  */
 public class SimpleChartEngine implements ChartEngine, java.io.Serializable {
 	//as long as the series name is not set
-	private transient static final String DEFAULT_HI_LO_SERIES = "High Low Data";
+	private static final String DEFAULT_HI_LO_SERIES = "High Low Data";
 	
 	//caching chartImpl if type and 3d are the same 
 	private transient boolean _threeD; 
