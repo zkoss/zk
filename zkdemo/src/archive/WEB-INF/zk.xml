@@ -15,11 +15,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!--
 	<log>
 		<description>[Optional] Monitor i3-log.conf and register a handler for the specified log-base</description>
-		<log-base></log-base>
+		<log-base>org.zkoss</log-base>
 	</log>
 	-->
 
-	<!--
+	<!-- Turn on if you want to use language addons.
 	<language-config>
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
