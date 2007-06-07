@@ -13,8 +13,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 <config>
 	<version>
-		<version-class>org.zkoss.zk.Version</version-class>
-		<version-uid>2.4.0</version-uid>
+		<version-class>org.zkoss.mil.Version</version-class>
+		<version-uid>0.8.0</version-uid>
 	</version>
 
 	<device-config>
