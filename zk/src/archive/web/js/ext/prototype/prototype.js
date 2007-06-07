@@ -598,13 +598,6 @@ Object.extend(Array.prototype, {
   },
 
   clone: function() {
-//Tom M. Yeh, Potix: [].concat doesn't work under Opera
-if (zk.opera) {
-	var c = [];
-	for (var j = this.length; --j >=0;)
-		c.unshift(this[j]);
-	return c;
-} else
     return [].concat(this);
   },
 

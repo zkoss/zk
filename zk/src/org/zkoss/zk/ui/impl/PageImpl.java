@@ -66,6 +66,7 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.PageSerializationListener;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -862,8 +863,21 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		s.writeObject(_owner != null ? _owner.getUuid(): null);
 		s.writeObject(_defparent != null ? _defparent.getUuid(): null);
 
+		willSerialize(_attrs.values());
 		Serializables.smartWrite(s, _attrs);
-		Serializables.smartWrite(s, _listeners);
+
+		if (_listeners != null)
+			for (Iterator it = _listeners.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				s.writeObject(me.getKey());
+
+				final Collection ls = (Collection)me.getValue();
+				willSerialize(ls);
+				Serializables.smartWrite(s, ls);
+			}
+		s.writeObject(null);
+
+		willSerialize(_resolvers);
 		Serializables.smartWrite(s, _resolvers);
 
 		//handle namespace
@@ -871,6 +885,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			final Map.Entry me = (Map.Entry)it.next();
 			final String nm = (String)me.getKey();
 			final Object val = me.getValue();
+			willSerialize(val); //always called even not serializable
+
 			if (isVariableSerializable(nm, val)
 			&& (val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
 				s.writeObject(nm);
@@ -896,6 +912,15 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 		s.writeObject(null); //denote end-of-interpreters
 	}
+	private void willSerialize(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				willSerialize(it.next());
+	}
+	private void willSerialize(Object o) {
+		if (o instanceof PageSerializationListener)
+			((PageSerializationListener)o).willSerialize(this);
+	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
@@ -914,8 +939,20 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			_defparent = fixDefaultParent(_roots, pid);
 
 		Serializables.smartRead(s, _attrs);
-		_listeners = Serializables.smartRead(s, _listeners); //might be null
+		didDeserialize(_attrs.values());
+
+		for (;;) {
+			final String evtnm = (String)s.readObject();
+			if (evtnm == null) break; //no more
+
+			if (_listeners == null) _listeners = new HashMap();
+			final Collection ls = Serializables.smartRead(s, (Collection)null);
+			_listeners.put(evtnm, ls);
+			didDeserialize(ls);
+		}
+
 		_resolvers = (List)Serializables.smartRead(s, _resolvers); //might be null
+		didDeserialize(_resolvers);
 
 		//handle namespace
 		initVariables();
@@ -925,6 +962,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 			Object val = s.readObject();
 			_ns.setVariable(nm, val, true);
+			didDeserialize(val);
 		}
 
 		fixFellows(_roots);
@@ -936,6 +974,15 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 			((SerializableAware)getInterpreter(zslang)).read(s);
 		}
+	}
+	private void didDeserialize(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				didDeserialize(it.next());
+	}
+	private void didDeserialize(Object o) {
+		if (o instanceof PageSerializationListener)
+			((PageSerializationListener)o).didDeserialize(this);
 	}
 	private static boolean isVariableSerializable(String name, Object value) {
 		return !_nonSerNames.contains(name) && !(value instanceof Component);

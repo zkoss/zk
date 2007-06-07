@@ -77,7 +77,7 @@ public class WebManager {
 	 */
 	/*package*/ static final String ATTR_DESKTOP = "javax.zkoss.zk.ui.desktop";
 
-	/** Map(ServletContext, List(ActivationListener)). */
+	/** Map(ServletContext, List(WebManagerActivationListener)). */
 	private static final Map _actListeners = new HashMap();
 	/** Used to inter-communicate among portlet. */
 //	private final static ThreadLocal _reqLocal = new ThreadLocal();
@@ -121,7 +121,7 @@ public class WebManager {
 		if (listeners != null) {
 			for (Iterator it = listeners.iterator(); it.hasNext();) {
 				try {
-					((ActivationListener)it.next()).onActivated(this);
+					((WebManagerActivationListener)it.next()).didActivate(this);
 				} catch (java.util.ConcurrentModificationException ex) {
 					throw ex;
 				} catch (Throwable ex) {
@@ -246,17 +246,19 @@ public class WebManager {
 	/** Register a listener to the specified context such that
 	 * it will be invoked if the corresponding {@link WebManager} is created.
 	 *
-	 * <p>Note: if the Web manager is created already, {@link ActivationListener#onActivated}
+	 * <p>Note: if the Web manager is created already, {@link WebManagerActivationListener#didActivate}
 	 * will be invoked immediately before this method returns.
+	 *
+	 * @since 2.4.0
 	 */
 	public static final
-	void addListener(ServletContext ctx, ActivationListener listener) {
+	void addActivationListener(ServletContext ctx, WebManagerActivationListener listener) {
 		if (ctx == null || listener == null)
 			throw new IllegalArgumentException("null");
 
 		final WebManager webman = getWebManagerIfAny(ctx);
 		if (webman != null) {
-			listener.onActivated(webman);
+			listener.didActivate(webman);
 		} else {
 			synchronized (WebManager.class) {
 				List l = (List)_actListeners.get(ctx);

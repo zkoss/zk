@@ -39,6 +39,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.SessionSerializationListener;
 
 /** A non-serializable implementation of {@link org.zkoss.zk.ui.Session}.
  * 
@@ -263,6 +264,17 @@ public class SimpleSession implements Session, SessionCtrl {
 		s.writeObject(_clientHost);
 		s.writeObject(_cache);
 		s.writeInt(_nextUuid);
+
+		//Since HttpSession will serialize attributes by the container
+		//we ony invoke the notification
+		for (Enumeration en = _hsess.getAttributeNames(); en.hasMoreElements();) {
+			final String nm = (String)en.nextElement();
+			willSerialize(_hsess.getAttribute(nm));
+		}
+	}
+	private void willSerialize(Object o) {
+		if (o instanceof SessionSerializationListener)
+			((SessionSerializationListener)o).willSerialize(this);
 	}
 	/** Used by the deriving class to read back this object,
 	 * only if the deriving class implements java.io.Serializable.
@@ -276,7 +288,19 @@ public class SimpleSession implements Session, SessionCtrl {
 		_clientHost = (String)s.readObject();
 		_cache = (DesktopCache)s.readObject();
 		_nextUuid = s.readInt();
+
+		//Since HttpSession will de-serialize attributes by the container
+		//we ony invoke the notification
+		for (Enumeration en = _hsess.getAttributeNames(); en.hasMoreElements();) {
+			final String nm = (String)en.nextElement();
+			didDeserialize(_hsess.getAttribute(nm));
+		}
 	}
+	private void didDeserialize(Object o) {
+		if (o instanceof SessionSerializationListener)
+			((SessionSerializationListener)o).didDeserialize(this);
+	}
+
 	/** Used by the deriving class to pre-process a session before writing
 	 * the session
 	 *
@@ -297,10 +321,10 @@ public class SimpleSession implements Session, SessionCtrl {
 		//add listener to WebManager instead of process now
 
 		_hsess = hsess;
-		WebManager.addListener(
+		WebManager.addActivationListener(
 			_hsess.getServletContext(),
-			new ActivationListener() {
-				public void onActivated(WebManager webman) {
+			new WebManagerActivationListener() {
+				public void didActivate(WebManager webman) {
 					_wapp = webman.getWebApp();
 					((WebAppCtrl)_wapp)
 						.sessionDidActivate(SimpleSession.this);

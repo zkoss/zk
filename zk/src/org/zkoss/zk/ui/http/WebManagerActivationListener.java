@@ -1,4 +1,4 @@
-/* ActivationListener.java
+/* WebManagerActivationListener.java
 
 {{IS_NOTE
 	Purpose:
@@ -22,12 +22,13 @@ package org.zkoss.zk.ui.http;
  * A listener that will be invoked when the Web manager is created (aka.,
  * activated).
  *
- * <p>To register a listener, use {@link WebManager#addListener}.
+ * <p>To register a listener, use {@link WebManager#addActivationListener}.
  *
  * @author tomyeh
+ * @since 2.4.0
  */
-public interface ActivationListener {
+public interface WebManagerActivationListener {
 	/** Called after WebManager is created.
 	 */
-	public void onActivated(WebManager webman);
+	public void didActivate(WebManager webman);
 }

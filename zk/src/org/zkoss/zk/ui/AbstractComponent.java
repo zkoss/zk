@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
+import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -1360,19 +1361,24 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		}
 
+		willSerialize(_attrs.values());
 		Serializables.smartWrite(s, _attrs);
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				s.writeObject(me.getKey());
-				Serializables.smartWrite(s, (Collection)me.getValue());
+
+				final Collection ls = (Collection)me.getValue();
+				willSerialize(ls);
+				Serializables.smartWrite(s, ls);
 			}
 		s.writeObject(null);
 
 		//store _spaceInfo
 		if (this instanceof IdSpace) {
 			//write _spaceInfo.attrs
+			willSerialize(_spaceInfo.attrs.values());
 			Serializables.smartWrite(s, _spaceInfo.attrs);
 
 			//write _spaceInfo.ns (only variables that are not fellows)
@@ -1380,6 +1386,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			it.hasNext();) {
 				final String nm = (String)it.next();
 				final Object val = _spaceInfo.ns.getVariable(nm, true);
+				willSerialize(val); //always called even if not serializable
+
 				if (isVariableSerializable(nm, val)
 				&& (val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
 					s.writeObject(nm);
@@ -1388,6 +1396,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 			s.writeObject(null); //denote end-of-namespace
 		}
+	}
+	private void willSerialize(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				willSerialize(it.next());
+	}
+	private void willSerialize(Object o) {
+		if (o instanceof ComponentSerializationListener)
+			((ComponentSerializationListener)o).willSerialize(this);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -1406,13 +1423,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		Serializables.smartRead(s, _attrs);
+		didDeserialize(_attrs.values());
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();
 			if (evtnm == null) break; //no more
 
 			if (_listeners == null) _listeners = new HashMap();
-			_listeners.put(evtnm, Serializables.smartRead(s, (Collection)null));
+			final Collection ls = Serializables.smartRead(s, (Collection)null);
+			_listeners.put(evtnm, ls);
+			didDeserialize(ls);
 		}
 
 		//restore child's _parent
@@ -1430,6 +1450,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 			//read _spaceInfo.attrs
 			Serializables.smartRead(s, _spaceInfo.attrs);
+			didDeserialize(_spaceInfo.attrs.values());
 
 			//_spaceInfo.ns
 			for (;;) {
@@ -1438,6 +1459,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 				Object val = s.readObject();
 				_spaceInfo.ns.setVariable(nm, val, true);
+				didDeserialize(val);
 			}
 
 			//restore ID space by binding itself and all children
@@ -1445,6 +1467,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			for (Iterator it = getChildren().iterator(); it.hasNext();)
 				addToIdSpacesDown((Component)it.next(), this);
 		}
+	}
+	private void didDeserialize(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				didDeserialize(it.next());
+	}
+	private void didDeserialize(Object o) {
+		if (o instanceof ComponentSerializationListener)
+			((ComponentSerializationListener)o).didDeserialize(this);
 	}
 	private static boolean isVariableSerializable(String name, Object value) {
 		return !"spaceScope".equals(name) && !"spaceOwner".equals(name)

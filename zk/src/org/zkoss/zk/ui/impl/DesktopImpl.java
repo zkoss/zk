@@ -44,6 +44,7 @@ import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Monitor;
+import org.zkoss.zk.ui.util.DesktopSerializationListener;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
@@ -92,7 +93,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** Map (String uuid, Component comp). */
 	private transient Map _comps;
 	/** A map of attributes. */
-	private transient final Map _attrs = new HashMap();
+	private transient Map _attrs;
 		//don't create it dynamically because PageImp._ip bind it at constructor
 	private transient Execution _exec;
 	/** Next available key. */
@@ -168,6 +169,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private void init() {
 		_rque = newRequestQueue();
 		_comps = new HashMap(41);
+		_attrs = new HashMap();
 	}
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
@@ -498,7 +500,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
+		willSerialize(_attrs.values());
 		Serializables.smartWrite(s, _attrs);
+	}
+	private void willSerialize(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				willSerialize(it.next());
+	}
+	private void willSerialize(Object o) {
+		if (o instanceof DesktopSerializationListener)
+			((DesktopSerializationListener)o).willSerialize(this);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -513,6 +525,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				addAllComponents((Component)e.next());
 
 		Serializables.smartRead(s, _attrs);
+		didDeserialize(_attrs.values());
+	}
+	private void didDeserialize(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				didDeserialize(it.next());
+	}
+	private void didDeserialize(Object o) {
+		if (o instanceof DesktopSerializationListener)
+			((DesktopSerializationListener)o).didDeserialize(this);
 	}
 	private void addAllComponents(Component comp) {
 		addComponent(comp);
