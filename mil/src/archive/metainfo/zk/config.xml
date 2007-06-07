@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun  7 18:56:09     2007, Created by tomyeh
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+-->
+
+<config>
+	<version>
+		<version-class>org.zkoss.zk.Version</version-class>
+		<version-uid>2.4.0</version-uid>
+	</version>
+
+	<device-config>
+		<device-type>mil</device-type>
+		<device-class>org.zkoss.zk.device.MilDevice</device-class>
+	</device-config>
+</config>
