@@ -46,7 +46,7 @@ thead tr {
 	font-weight: bold;
 }
 
-img	{border: 0; hspace: 0; vspace: 0}
+img	{border: 0;}<%-- opera (9.2) not support hspace and vspace --%>
 
 <%-- The hyperlink's style class. --%>
 .link {cursor: hand; cursor: pointer;} <%-- IE 5.5: hand --%>
@@ -236,7 +236,7 @@ div.listbox-paging th, div.grid-paging th {
 div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
 	overflow: hidden; border: 1px solid;
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
-	text-overflow: ellipsis; white-space: nowrap; padding: 2px;
+	white-space: nowrap; padding: 2px;
 	font-size: x-small; font-weight: normal;
 }
 div.listbox-head th.sort, div.grid-head th.sort, div.listbox-paging th.sort, div.grid-paging th.sort {
@@ -350,7 +350,7 @@ div.menubar td, div.menupopup td {
 	white-space: nowrap;
 }
 div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.menupopup a:visited, div.menupopup a:hover {
-	font-size: xx-small; font-weight: normal; text-overflow: ellipsis;
+	font-size: xx-small; font-weight: normal;
 	border: 1px solid menu; background: menu; color: menutext;
 	text-decoration: none;
 }
