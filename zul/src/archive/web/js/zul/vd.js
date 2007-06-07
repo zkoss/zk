@@ -137,12 +137,8 @@ zkVld.onlyNum = function (id, noDot) {
 	return null;
 };
 zkVld.noEmpty = function (id) {
-	var inp = $e(id);
-	if (!inp) return true;
-	inp = $real(inp);
-	if (!inp.value.trim())
-		return mesg.EMPTY_NOT_ALLOWED;
-	return null;
+	var inp = $real($e(id));
+	return inp && !inp.value.trim() ? mesg.EMPTY_NOT_ALLOWED: null;
 };
 
 /** creates an error message box. */
