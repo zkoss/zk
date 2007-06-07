@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Represents a node of the ZUML tree.
@@ -33,10 +34,17 @@ import java.util.Collections;
  * 
  * @author tomyeh
  */
-abstract public class NodeInfo {
+abstract public class NodeInfo implements java.io.Serializable {
 	/** A list of {@link ComponentInfo} and {@link ZScript}. */
-	private final List _children = new LinkedList(),
+	private final List _children = new LinkedList();
+	private transient List _roChildren;
+
+	public NodeInfo() {
+		init();
+	}
+	private void init() {
 		_roChildren = Collections.unmodifiableList(_children);
+	}
 
 	/** Returns the page definition.
 	 */
@@ -129,5 +137,19 @@ abstract public class NodeInfo {
 	 */
 	public List getChildren() {
 		return _roChildren;
+	}
+
+	//Serializable//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		init();
+
+		for (Iterator it = _children.iterator(); it.hasNext();) {
+			final Object o = it.next();
+			if (o instanceof ComponentInfo)
+				((ComponentInfo)o).setParentDirectly(this);
+		}
 	}
 }

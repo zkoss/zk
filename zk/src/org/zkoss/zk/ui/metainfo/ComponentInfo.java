@@ -44,12 +44,15 @@ import org.zkoss.zk.el.Evaluator;
 /**
  * Represents a componennt instance defined in a ZUML page.
  *
+ * <p>Though serializable, we can restore {@link #getPageDefinition}
+ * correctly after deserialized.
+ *
  * @author tomyeh
  */
 public class ComponentInfo extends NodeInfo
-implements Cloneable, Condition {
-	private final PageDefinition _pagedef;
-	private NodeInfo _parent;
+implements Cloneable, Condition, java.io.Serializable {
+	private transient PageDefinition _pagedef;
+	private transient NodeInfo _parent; //it is restored by its parent
 	private final ComponentDefinition _compdef;
 	/** The implemetation class (use). */
 	private String _implcls;
@@ -124,6 +127,9 @@ implements Cloneable, Condition {
 					_parent.appendChild0(this);
 			}
 		}
+	}
+	/*package*/ void setParentDirectly(NodeInfo parent) {
+		_parent = parent;
 	}
 
 	/** Returns the fulfill condition that controls when to create

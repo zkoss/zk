@@ -392,7 +392,7 @@ public class UiEngineImpl implements UiEngine {
 			final ComponentInfo pi = (ComponentInfo)parentInfo;
 			final String fulfill = pi.getFulfill();
 			if (fulfill != null) { //defer the creation of children
-				FulfillListener.register(fulfill, pi, parent);
+				new FulfillListener(fulfill, pi, parent);
 				return new Component[0];
 			}
 		}
@@ -1273,27 +1273,29 @@ public class UiEngineImpl implements UiEngine {
 	/** The listener to create children when the fulfill condition is
 	 * satisfied.
 	 */
-	private static class FulfillListener implements EventListener, Express {
-		private final String _evtnm;
+	private static class FulfillListener
+	implements EventListener, Express, java.io.Serializable,
+	ComponentSerializationListener {
+		private transient String _evtnm;
+		private transient Component _target, _comp;
 		private final ComponentInfo _compInfo;
-		private final Component _target, _comp;
+		private final String _fulfill;
 
-		private static void register(String fulfill, ComponentInfo compInfo,
+		private FulfillListener(String fulfill, ComponentInfo compInfo,
 		Component comp) {
-			final Object[] result =
-				ComponentsCtrl.parseEventExpression(comp, fulfill);
-			final Component target = (Component)result[0];
-			final String evtnm = (String)result[1];
-			target.addEventListener(evtnm,
-				new FulfillListener(evtnm, target, compInfo, comp));
-		}
-
-		private FulfillListener(
-		String evtnm, Component target, ComponentInfo compInfo, Component comp) {
-			_evtnm = evtnm;
+			_fulfill = fulfill;
 			_compInfo = compInfo;
-			_target = target;
 			_comp = comp;
+
+			init();
+
+			_target.addEventListener(_evtnm, this);
+		}
+		private void init() {
+			final Object[] result =
+				ComponentsCtrl.parseEventExpression(_comp, _fulfill);
+			_target = (Component)result[0];
+			_evtnm = (String)result[1];
 		}
 		public void onEvent(Event evt) throws Exception {
 			_target.removeEventListener(_evtnm, this); //one shot only
@@ -1302,6 +1304,14 @@ public class UiEngineImpl implements UiEngine {
 			execCreate0(
 				((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
 				exec, _comp.getPage(), _compInfo, _comp);
+		}
+
+		//ComponentSerializationListener//
+		public void willSerialize(Component comp) {
+		}
+		public void didDeserialize(Component comp) {
+			_comp = comp;
+			init();
 		}
 	}
 }
