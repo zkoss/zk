@@ -5,15 +5,14 @@ ZK 2.4.0 Freshly
   1711860: An option to use native thread instead of event thread
   1728718: A simple way to annotate properties
   1715542: Window supports the highlighted mode
-  1715546: Messagebox supports the native (Servlet) thread mode
   1701213: Support embedded fileupload component
+  1719075: Support the onPiggyback event at the root component level
   1712518: Decimalbox supports different round mode (Java 6 is required)
   1715649: A way to create inline macro manually
   1731302: Use the syntax similar to servlet to configure richlet
   1712548: isAsap shall not be part of EventListener
   1719140: A way to show custom message when javascript is disabled
   1721123: Improve performance if DOCTYPE is specified in zhtml
-  1719075: Support the onPiggyback event at the root component level
   1719781: Allow component itself to arg0 AnnotateDataBinderInit
   1721126: Configurable Tab Height
   1726708: A more generic way to intercept the request for Locale etc.
@@ -25,7 +24,10 @@ ZK 2.4.0 Freshly
   1730438: AnnotateDataBinder support new simpler property annotation
   1730457: Tab shall receive onSelect in additon to Tabbox
   1731138: AnnotateDataBinder should allow relative path
+  1715546: Messagebox supports the native (Servlet) thread mode
   1731126: timout redirect should be device aware
+  1732570: Add serialization listener for component, page, desktop, session
+  1732614: Support ComponentCloneListener
   
 * Bugs:
   1728010: Inconsistent behavior when dragging multiple selected item
@@ -63,6 +65,7 @@ ZK 2.4.0 Freshly
   1730454: BindingRowRenderer is NOT Serializable
   1730532: Event listener didn't iterate correct if some is removed dyn
   1729523: Combobox didn't adjust width right if item added onOpen
+  1729739: Grid footer produces <td width = "0px">
 
 * Upgrade Notes:
   + The isAsap method is abandoned. Rather, you have to implement
@@ -80,6 +83,8 @@ ZK 2.4.0 Freshly
     Riather, put it under the device-config element.
   + The 2.3 syntax for defining richlets is deprecated.
     Rather, use the richlet and richlet-mapping elements.
+  + org.zkoss.zk.ui.http.ActivationListener is renamed to
+    WebManagerActivationListener.
 
 	--------
 ZK 2.3.1
