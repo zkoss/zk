@@ -6,6 +6,7 @@ ZK 2.4.0 Freshly
   1728718: A simple way to annotate properties
   1715542: Window supports the highlighted mode
   1701213: Support embedded fileupload component
+  1733166: A way to provide more sophisticated JS for ClientConstraint
   1719075: Support the onPiggyback event at the root component level
   1712518: Decimalbox supports different round mode (Java 6 is required)
   1715649: A way to create inline macro manually
