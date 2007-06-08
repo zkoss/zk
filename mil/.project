@@ -16,6 +16,21 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>src/META-INF</name>
+			<type>2</type>
+			<location>D:/home/henrichen/prj/zk1/mil/src/archive/META-INF</location>
+		</link>
+		<link>
+			<name>src/metainfo</name>
+			<type>2</type>
+			<location>D:/home/henrichen/prj/zk1/mil/src/archive/metainfo</location>
+		</link>
+		<link>
+			<name>src/web</name>
+			<type>2</type>
+			<location>D:/home/henrichen/prj/zk1/mil/src/archive/web</location>
+		</link>
+		<link>
 			<name>src/org/zkoss/mil/mesg/MMil.java</name>
 			<type>1</type>
 			<location>D:/home/henrichen/prj/zk1/mil/codegen/org/zkoss/mil/mesg/MMil.java</location>
