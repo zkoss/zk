@@ -74,6 +74,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	}
 
 	/** Returns the maximal allowed number of files to upload.
+	 * @since 2.4.0
 	 */
 	public int getNumber() {
 		return _maxnum;
@@ -81,6 +82,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	/** Sets the maximal allowed number of files to upload.
 	 * <p>Default: 1.
 	 * @exception WrongValueException if non-positive, or it exceeds 1000
+	 * @since 2.4.0
 	 */
 	public void setNumber(int maxnum) throws WrongValueException {
 		if (maxnum <= 0 || maxnum > 1000)
@@ -96,6 +98,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 * all fields are cleared.
 	 * If you want to do something different, you can intercept the onClose
 	 * event.
+	 * @since 2.4.0
 	 */
 	public void onClose() {
 		invalidate();
