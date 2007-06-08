@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Date;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
@@ -35,6 +36,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
@@ -145,6 +147,51 @@ public class ComponentsCtrl {
 		if (!Events.isValid(evtnm))
 			throw new UiException("Not an event name: "+evtnm);
 		return new Object[] {target, evtnm};
+	}
+
+	/** Parses a script by resolving #{xx} to make it executable
+	 * at the client.
+	 *
+	 * @param comp the component used to resolve the EL expression.
+	 * @param script the Java script to convert
+	 * @since 2.4.0
+	 */
+	public static String parseClientScript(Component comp, String script) {
+		StringBuffer sb = null;
+		for (int j = 0, len = script.length();;) {
+			final int k = script.indexOf("#{", j);
+			if (k < 0)
+				return sb != null ?
+					sb.append(script.substring(j)).toString(): script;
+
+			final int l = script.indexOf('}', k + 2);
+			if (l < 0)
+				throw new WrongValueException("Illegal script: unclosed EL expression.\n"+script);
+
+			if (sb == null) sb = new StringBuffer(len);
+			sb.append(script.substring(j, k));
+
+			//eval EL
+			Object val = Executions.evaluate(comp,
+				'$' + script.substring(k + 1, l + 1), Object.class);
+			if (val == null || (val instanceof Number)) {
+				sb.append(val);
+			} else if (val instanceof Component) {
+				sb.append(" $e('")
+					.append(Strings.escape(((Component)val).getUuid(), "'\\"))
+					.append("')");
+			} else if (val instanceof Date) {
+				sb.append(" new Date(").append(((Date)val).getTime())
+					.append(')');
+			} else { //FUTURE: regex
+				sb.append('\'')
+					.append(Strings.escape(val.toString(), "'\\"))
+					.append('\'');
+			}
+
+			//next
+			j = l + 1;
+		}
 	}
 
 	/** A map of (Pair(Class,String evtnm), Method). */
