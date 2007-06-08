@@ -33,12 +33,27 @@ import org.zkoss.zk.ui.Component;
  * @see CustomConstraint
  */
 public interface ClientConstraint {
-	/** Returns the function name in JavaScript used to validate
-	 * the value at the client, or null if no client verification is
-	 * supported.
+	/** Returns the function name in JavaScript or a Javascript code snippet
+	 * used to validate the value at the client, or null if no client
+	 * verification is supported.
 	 *
-	 * <p>Example: if "zkVld.noEmpty" is returned, then
-	 * zkVld.noEmpty(id) is then called.
+	 * <p>There are two formats of the return value:
+	 *
+	 * <p>Format 1:<br/>
+	 * Syntax: <i>function_name</i><br/>
+	 * Example: "zkVld.noEmpty"<br/>
+	 * What Really Happens:<br/>
+	 * <code>zkVld.noEmpty('id')</code> is called at the client side
+	 * to validate the input, where id is the component's identifier.
+	 *
+	 * <p>Format 2:<br/>
+	 * Syntax: <i>function_name(arg1, arg2, arg3)</i><br/>
+	 * where arg could be #{<i>EL_expression</i>}<br/>
+	 * Example: "myValid(#{self},#{when},'more')"<br/>
+	 * What Really Happens:<br/>
+	 * <code>myValid($e('id'),new Date('2007/06/03'),'more')</code>
+	 * is called at the client side
+	 * to validate the input, where id is the component's identifier.
 	 */
 	public String getClientValidation();
 	/** Returns whether the client's validation is complete.

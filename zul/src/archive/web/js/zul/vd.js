@@ -66,12 +66,16 @@ zkVld.validate = function (id) {
 			var ermg = getZKAttr(cm, "ermg"); //custom message
 			var fn = getZKAttr(cm, "valid");
 			if (fn) {
-				var msg = zk.resolve(fn).call(cm, id);
+				var msg =
+					fn.indexOf('(') < 0 ?
+						zk.resolve(fn).call(cm, id): eval(fn);
 				if (msg) return ermg ? ermg: msg;
 			}
 			fn = getZKAttr(cm, "valid2");
 			if (fn) {
-				var msg = zk.resolve(fn).call(cm, id);
+				var msg =
+					fn.indexOf('(') < 0 ?
+						zk.resolve(fn).call(cm, id): eval(fn);
 				if (msg) return ermg ? ermg: msg;
 			}
 

@@ -21,7 +21,6 @@ package org.zkoss.zul.impl;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Date;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -33,6 +32,7 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.Command;
 import org.zkoss.zul.au.impl.ColSizeCommand;
 import org.zkoss.zul.au.impl.PagingCommand;
@@ -267,46 +267,10 @@ abstract public class XulElement extends HtmlBasedComponent {
 			k = l;
 		}
 	}
-	/** Converts an action to JavaScript by interpreting a fellow into
-	 * 'uuid'
+	/** Converts an action to JavaScript by interpreting #{} properly.
 	 */
 	private final String toJavaScript(String action) {
-		if (action == null) return null;
-
-		StringBuffer sb = null;
-		for (int j = 0, len = action.length();;) {
-			final int k = action.indexOf("#{", j);
-			if (k < 0)
-				return sb != null ?
-					sb.append(action.substring(j)).toString(): action;
-
-			final int l = action.indexOf('}', k + 2);
-			if (l < 0)
-				throw new WrongValueException("Illegal action: unclosed EL expression.\n"+action);
-
-			if (sb == null) sb = new StringBuffer(len);
-			sb.append(action.substring(j, k));
-
-			//eval EL
-			Object val = Executions.evaluate(this,
-				'$' + action.substring(k + 1, l + 1), Object.class);
-			if (val == null || (val instanceof Number)) {
-				sb.append(val);
-			} else if (val instanceof Component) {
-				sb.append(" $e('")
-					.append(Strings.escape(((Component)val).getUuid(), "'\\"))
-					.append("')");
-			} else if (val instanceof Date) {
-				sb.append(" new Date(").append(((Date)val).getTime())
-					.append(')');
-			} else { //FUTURE: regex
-				sb.append('\'')
-					.append(Strings.escape(val.toString(), "'\\"))
-					.append('\'');
-			}
-
-			//next
-			j = l + 1;
-		}
+		return action != null ?
+			ComponentsCtrl.parseClientScript(this, action): null;
 	}
 }

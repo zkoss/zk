@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.client.Inputable;
 import org.zkoss.zk.ui.ext.client.Errorable;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 
@@ -451,7 +452,8 @@ implements Constrainted {
 					//validate-at-server is required and no client validation
 			} else if (_constr instanceof ClientConstraint) {
 				final ClientConstraint cc = (ClientConstraint)_constr;
-				HTMLs.appendAttribute(sb, "z.valid", cc.getClientValidation());
+				HTMLs.appendAttribute(sb, "z.valid",
+					toJavaScript(cc.getClientValidation()));
 				HTMLs.appendAttribute(sb, "z.ermg", cc.getErrorMessage(this));
 				if (!cc.isClientComplete())
 					serverValid = "both";
@@ -462,6 +464,14 @@ implements Constrainted {
 			HTMLs.appendAttribute(sb, "z.srvald", serverValid);
 		}
 		return sb.toString();
+	}
+	/** Converts the client validation to JavaScript.
+	 */
+	private final String toJavaScript(String script) {
+		return script != null ?
+			script.indexOf('(') >= 0 ?
+				ComponentsCtrl.parseClientScript(this, script):
+				script: null;
 	}
 
 	/** Returns the value in the targeting type.

@@ -80,10 +80,12 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	}
 	/** Sets the maximal allowed number of files to upload.
 	 * <p>Default: 1.
+	 * @exception WrongValueException if non-positive, or it exceeds 1000
 	 */
 	public void setNumber(int maxnum) throws WrongValueException {
-		if (maxnum <= 0)
-			throw new WrongValueException("Positive is required");
+		if (maxnum <= 0 || maxnum > 1000)
+			throw new WrongValueException(
+				maxnum <= 0 ? "Positive is required": "Number too big (maximal 1000)");
 		_maxnum = maxnum;
 	}
 
@@ -156,6 +158,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 *
 	 * @param max the maximal allowed number that an user can upload
 	 * at once. If nonpositive, 1 is assumed.
+	 * If max is larger than 1000, 1000 is assumed.
 	 * @return an array of files that an users has uploaded,
 	 * or null if uploaded.
 	 */
@@ -167,7 +170,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 			Messages.get(MZul.UPLOAD_MESSAGE): message);
 		params.put("title", title == null ?
 			Messages.get(MZul.UPLOAD_TITLE): title);
-		params.put("max", new Integer(max <= 1 ? 1: max));
+		params.put("max", new Integer(max <= 1 ? 1: max > 1000 ? 1000: max));
 
 		final FileuploadDlg dlg = (FileuploadDlg)
 			exec.createComponents(
