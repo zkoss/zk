@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?page id="userGuide" title="ZK Live Demo"?>
+<?taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c"?>
 
 <!--
 index.zul
@@ -101,7 +102,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="anima" label="Animations" value="/userguide/misc/anima.zul"/>
 						<treeitem id="captcha" label="Captcha" value="/userguide/misc/captcha.zul"/>
 						<treeitem id="mi1" label="Timer" value="/userguide/misc/timer.zul"/>
-						<treeitem id="miaudio" label="Audio" value="/userguide/misc/audio.zul"/>
+						<treeitem id="miaudio" label="Audio" value="/userguide/misc/audio.zul" unless="${c:isGecko()}"/>
+							<!-- disable it since there is a bug between FF2 and quick time
+							See: http://www.librarything.com/talktopic.php?topic=13113
+							-->
 						<treeitem id="mimorebtn" label="More button features" value="/userguide/misc/moreButton.zul"/>
 						<treeitem id="mi2" label="Include" value="/userguide/misc/include.zul"/>
 						<treeitem id="mi3" label="Iframe" value="/userguide/misc/iframe.zul"/>
