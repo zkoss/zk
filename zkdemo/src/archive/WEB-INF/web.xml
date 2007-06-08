@@ -166,6 +166,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<mime-type>image/png</mime-type>
 	</mime-mapping>
 	<mime-mapping>
+		<extension>rar</extension>
+		<mime-type>application/x-rar-compressed</mime-type>
+	</mime-mapping>
+	<mime-mapping>
 		<extension>txt</extension>
 		<mime-type>text/plain</mime-type>
 	</mime-mapping>
