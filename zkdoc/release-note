@@ -29,6 +29,7 @@ ZK 2.4.0 Freshly
   1731126: timout redirect should be device aware
   1732570: Add serialization listener for component, page, desktop, session
   1732614: Support ComponentCloneListener
+  1729210: Combox suport Object like Listbox
   
 * Bugs:
   1728010: Inconsistent behavior when dragging multiple selected item
