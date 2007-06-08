@@ -18,8 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Iterator;
 import java.util.List;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
@@ -154,6 +156,28 @@ public class Combobox extends Textbox {
 		final Comboitem item = getItemAtIndex(index);
 		removeChild(item);
 		return item;
+	}
+
+	/** Returns the selected item, or null if no matched.
+	 *
+	 * <p>By selected we mean the first {@link Comboitem} whose label
+	 * ({@link Comboitem#getLabel}) equals with {@link #getValue}.
+	 * It is usually used with {@link Comboitem#getValue}.
+	 *
+	 * <p>The combobox may contain any value, so there may be no match
+	 * at all.
+	 *
+	 * @see Comboitem#getValue
+	 * @since 2.4.0
+	 */
+	public Comboitem getSelectedItem() {
+		final String value = getValue();
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			final Comboitem item = (Comboitem)it.next();
+			if (Objects.equals(value, item.getLabel()))
+				return item;
+		}
+		return null;
 	}
 
 	//-- super --//

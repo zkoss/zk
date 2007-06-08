@@ -34,6 +34,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  */
 public class Comboitem extends LabelImageElement {
 	private String _desc = "";
+	private Object _value;
 
 	public Comboitem() {
 		setSclass("item");
@@ -64,6 +65,31 @@ public class Comboitem extends LabelImageElement {
 			_desc = desc;
 			invalidate();
 		}
+	}
+
+	/** Returns the value associated with this combo item.
+	 * The value is application dependent. It can be anything.
+	 *
+	 * <p>It is usually used with {@link Combobox#getSelectedItem}.
+	 * For example,
+	 * <code>combobox.getSelectedItem().getValue()</code>
+	 *
+	 * @see Combobox#getSelectedItem
+	 * @see #setValue
+	 * @since 2.4.0
+	 */
+	public Object getValue() {
+		return _value;
+	}
+	/** Associate the value with this combo item.
+	 * The value is application dependent. It can be anything.
+	 *
+	 * @see Combobox#getSelectedItem
+	 * @see #getValue
+	 * @since 2.4.0
+	 */
+	public void setValue(Object value) {
+		_value = value;
 	}
 
 	//-- super --//
