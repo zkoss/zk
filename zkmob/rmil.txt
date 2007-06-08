@@ -54,6 +54,7 @@ pr: priority
 ps: preferredSize
 sc: SCREEN command
 si: selectedIndex
+sm: SELECT command (special for List and ChoiceGroup)
 sn: STOP command
 to: timeout
 tp: type, alertType, choiceType, listType

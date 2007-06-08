@@ -21,12 +21,15 @@ package org.zkoss.mil;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * A command on the Mobile. Whenever a Command is "clicked" on the Mobile, it will fire onCommand to  
  * its parent component.
  * 
  * @author henrichen
+ * @since 2.4.0
  */
 public class Command extends MilComponent {
 	private final static int BACK = 2;
@@ -37,6 +40,8 @@ public class Command extends MilComponent {
 	private final static int OK = 4;
 	private final static int SCREEN = 1;
 	private final static int STOP = 6;
+	
+	private final static int SELECT = 0x100; //special command for JavaME List.setSelectCommand() only
 
 	private static final long serialVersionUID = 200706011201L;
 	private String _label = "OK";
@@ -136,7 +141,20 @@ public class Command extends MilComponent {
 			smartUpdate("pr", priority);
 		}
 	}
-	
+
+	//--Component--//
+	public void setParent(Component parent) {
+		if (parent != null && !(parent instanceof MilComponent)) {
+			throw new UiException("Unsupported parent for command: "+parent);
+		}
+		super.setParent(parent);
+	}
+
+	/** Not childable. */
+	public boolean isChildable() {
+		return false;
+	}
+
 	public String getInnerAttrs() {
 		final StringBuffer sb = new StringBuffer(64);
 		HTMLs.appendAttribute(sb, "tp", getCommandType(_type));
@@ -163,6 +181,8 @@ public class Command extends MilComponent {
 			return SCREEN;
 		} else if ("stop".equalsIgnoreCase(type)) {
 			return STOP;
+		} else if ("select".equalsIgnoreCase(type)) {
+			return SELECT;
 		} else {
 			throw new IllegalArgumentException("Unsupport Command type: " + type);
 		}

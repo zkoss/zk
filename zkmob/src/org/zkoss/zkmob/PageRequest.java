@@ -25,17 +25,15 @@ import javax.microedition.lcdui.Display;
  * @author henrichen
  */
 public class PageRequest implements Runnable {
-	private Display _disp;
+	private Browser _browser;
 	private String _url;
-	private UiManager _uiManager;
 
-	public PageRequest(Display disp, String url, UiManager uiManager) {
-		_disp = disp;
+	public PageRequest(Browser browser, String url) {
+		_browser = browser;
 		_url = url;
-		_uiManager = uiManager;
 	}
 
 	public void run() {
-		_uiManager.loadPage(_disp, _url);
+		UiManager.loadPage(_browser, _url);
 	}
 }

@@ -21,7 +21,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="/WEB-INF/tld/mil/core.dsp.tld" prefix="m" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="page" value="${arg.page}"/>
-<zk id="${page.uuid}" di="${page.desktop.id}" ${m:desktopAttrs(arg.action)}>
+<zk id="${page.desktop.id}" ${m:desktopAttrs(arg.action)}>
 <c:forEach var="root" items="${page.roots}">
 ${z:redraw(root, null)}
 </c:forEach>

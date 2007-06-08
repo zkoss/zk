@@ -37,6 +37,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	import org.zkoss.zk.ui.event.*;
 	import org.zkoss.zk.ui.*;
 	import org.zkoss.mil.*;
+	import org.zkoss.mil.device.MilDevice;
 <!-- 
 	void alert(String m) {
 		Messagebox.show(m);
@@ -51,6 +52,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	importPackage(Packages.org.zkoss.zk.ui.event);
 	importPackage(Packages.org.zkoss.zk.ui);
 	importPackage(Packages.org.zkoss.mil);
+	importClass(Packages.org.zkoss.mil.device.MilDevice);
 <!-- 
 	function alert(m) {
 		Messagebox.show(m);
@@ -67,6 +69,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	import org.zkoss.zk.ui.event.*
 	import org.zkoss.zk.ui.*
 	import org.zkoss.mil.*
+	import org.zkoss.mil.device.MilDevice;
 	</zscript>
 	<zscript language="Groovy">
 	alert = {m -> Messagebox.show(m)}
@@ -81,6 +84,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		include_package 'org.zkoss.zk.ui.event'
 		include_package 'org.zkoss.zk.ui'
 		include_package 'org.zkoss.mil'
+		include_class 'org.zkoss.mil.device.MilDevice'
 	end
 <!--	
 	def alert (m)
@@ -103,12 +107,29 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold-uri>~./mil/rmil/page.dsp</mold-uri>
 	</mold>
 
+	<!-- Defines the component and attribute names used to represent
+	a label when a plain text is found in ZUL XML.
+	-->
+	<label-template>
+		<component-name>label</component-name>
+		<component-attribute>value</component-attribute>
+	</label-template>
+
 	<component>
 		<component-name>command</component-name>
 		<component-class>org.zkoss.mil.Command</component-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./mil/rmil/command.dsp</mold-uri>
+		</mold>
+	</component>
+
+	<component>
+		<component-name>frame</component-name>
+		<component-class>org.zkoss.mil.Frame</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./mil/rmil/frame.dsp</mold-uri>
 		</mold>
 	</component>
 
@@ -139,12 +160,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 
-	<component>
-		<component-name>window</component-name>
-		<component-class>org.zkoss.mil.Window</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./mil/rmil/window.dsp</mold-uri>
-		</mold>
-	</component>
 </language>

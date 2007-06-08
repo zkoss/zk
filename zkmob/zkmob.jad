@@ -1,0 +1,12 @@
+MIDlet-Jar-Size: {jar-size}
+MIDlet-1: ZK Mobile,/icons/zk.png,org.zkoss.zkmob.Browser
+MIDlet-Jar-URL: zkmob.jar
+MIDlet-Icon: /icons/zk.png
+MicroEdition-Configuration: CLDC-1.0
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Potix Corporation
+MIDlet-Description: ZK Mobile
+MIDlet-Name: zkmob
+MIDlet-Info-URL: http://www.zkoss.org/products/zkmob
+MIDlet-Permissions: javax.microedition.io.Connector.http
+MicroEdition-Profile: MIDP-2.0

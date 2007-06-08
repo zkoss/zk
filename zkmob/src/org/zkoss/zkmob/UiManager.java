@@ -54,7 +54,7 @@ import org.zkoss.zkmob.impl.Zk;
 import org.zkoss.zkmob.impl.ZkFactory;
 
 /** 
- * The manager to handle the life cycle of zmobi UI components. 
+ * The static facade for UI component management. 
  */
 public class UiManager {
 	private static Hashtable _uiFactoryMap = new Hashtable(16);
@@ -102,7 +102,16 @@ public class UiManager {
 			throw new IllegalStateException(e.toString()); 
 		} catch (SAXException e) {
 			throw new IllegalStateException(e.toString()); 
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw e;
 		}
+	}
+	
+	public static void alert(Display disp, Throwable e) {
+		final Alert alert = new Alert("Exception:", e.toString(), null, AlertType.ERROR);
+		alert.setTimeout(Alert.FOREVER);
+		disp.setCurrent(alert);
 	}
 	
 	/**
@@ -122,20 +131,16 @@ public class UiManager {
 		throw new IllegalArgumentException("Cannot find the UiFactory of the RMIL tag: "+ tag); 
 	}
 
-	public void loadPageOnThread(Display disp, String url) {
-		new Thread(new PageRequest(disp, url, this)).start();
+	public static void loadPageOnThread(Browser browser, String url) {
+		new Thread(new PageRequest(browser, url)).start();
 	}
 	
-	/* package */ void loadPage(Display disp, String url) {
+	/* package */ static void loadPage(Browser browser, String url) {
 		try {
-			myLoadPage(disp, url);
-		} catch (IOException e) {
-			final Alert alert = new Alert("Exception:", e.toString(), null, AlertType.ERROR);
-			alert.setTimeout(Alert.FOREVER);
-			disp.setCurrent(alert);
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
+			myLoadPage(browser, url);
+		} catch (Throwable e) {
 			e.printStackTrace();
+			alert(browser.getDisplay(), e);
 		}
 	}
 	
@@ -144,7 +149,7 @@ public class UiManager {
 	}
 	
 	public static String prefixURL(String hostURL, String url) {
-		if (url != null && !url.startsWith("http://") && !url.startsWith("https://")) {
+		if (url != null && !url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("~.")) {
 			url = hostURL + url;
 		}
 		return url;
@@ -157,22 +162,41 @@ public class UiManager {
 	    return handler.getRoots();
 	}
 
-	private void myLoadPage(Display disp, String url) throws IOException, SAXException {
+	private static void myLoadPage(Browser browser, String url) throws IOException, SAXException {
 		HttpConnection conn = null;
 		InputStream is = null;
 		
 		try {
 		    conn = (HttpConnection)Connector.open(url);
 		    is = request(conn, null);
-		    final Zk zk = createComponents(is, getHostURL(conn));
-		    zk.setDisplay(disp);
+		    
+		    loadPage(browser, is, url, getHostURL(conn));
 		} finally {
 			if (is != null)	is.close();
 			if (conn != null) conn.close();
 		}
 	}
 
-	private static Zk createComponents(InputStream is, String hostURL) throws IOException, SAXException {
+	public static Zk loadPage(Browser browser, InputStream is, String url, String hostURL) 
+	throws IOException, SAXException {
+	    final Zk zk = createComponents(browser, is, hostURL);
+	    
+	    //notify server to remove old desktop
+	    final Object current = browser.getDisplay().getCurrent();
+	    if (current instanceof ZkComponent) {
+	    	final Zk oldZk = ((ZkComponent)current).getZk();
+	    	if (oldZk != null && !"zkMobile".equals(oldZk.getId())) {
+	    		oldZk.removeDesktop(); //notify server to remove desktop
+	    	}
+	    }
+
+	    //associate new desktop to browser
+	    browser.setDesktop(zk, url);
+	    return zk;
+    }
+
+	private static Zk createComponents(Browser browser, InputStream is, String hostURL) 
+	throws IOException, SAXException {
 	    // Load the responsed page, the current Displayable is put in _current
 	    final PageHandler handler = new PageHandler(hostURL);
 	    getSAXParser().parse(is, handler);
@@ -196,8 +220,8 @@ public class UiManager {
 	/*package*/ static Image loadImage(String url) {
 		try {
 			return myLoadImage(url);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Throwable e) {
+System.out.println("image url="+url);			
 			e.printStackTrace();
 		}
 		return null;
@@ -208,9 +232,13 @@ public class UiManager {
 		InputStream is = null;
 		
 		try {
-		    conn = (HttpConnection)Connector.open(url);
-		    is = request(conn, null);
-		
+			if (url.startsWith("~.")) {
+				url = url.substring(2);
+				is = UiManager.class.getResourceAsStream(url);
+			} else {
+			    conn = (HttpConnection) Connector.open(url);
+			    is = request(conn, null);
+			}
 		    // Load the response
 		    return Image.createImage(is);
 		} finally {
@@ -248,6 +276,9 @@ public class UiManager {
 		    return conn.openInputStream();
 		} catch (ClassCastException e) {
 		    throw new IllegalArgumentException("Not an HTTP URL");
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw e;
 		} finally {
 			if (os != null) os.close();
 		}

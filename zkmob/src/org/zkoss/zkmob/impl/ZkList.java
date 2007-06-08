@@ -64,6 +64,10 @@ public class ZkList extends List implements Listable, ZkComponent {
 		_listitems.removeElementAt(index);
 	}
 
+	public void superDelete(int index) {
+		super.delete(index);
+	}
+	
 	//--ZkComponent--//
 	public String getId() {
 		return _id;

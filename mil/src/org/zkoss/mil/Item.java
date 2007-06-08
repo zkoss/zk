@@ -21,10 +21,13 @@ package org.zkoss.mil;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
- * Generic Item component under the Window component.
+ * Generic Item component under the {@link Frame} component.
  * @author henrichen
+ * @since 2.4.0
  */
 abstract public class Item extends MilComponent {
 	//JavaME Item's appearance mode
@@ -172,10 +175,10 @@ abstract public class Item extends MilComponent {
 	}
 
 	private int getAlignLayout() {
-		if ("left".equalsIgnoreCase(_valign)) return LAYOUT_LEFT;
-		else if ("center".equalsIgnoreCase(_valign)) return LAYOUT_CENTER;
-		else if ("right".equalsIgnoreCase(_valign)) return LAYOUT_RIGHT;
-		else return 0;
+		if ("left".equalsIgnoreCase(_align)) return LAYOUT_LEFT;
+		else if ("center".equalsIgnoreCase(_align)) return LAYOUT_CENTER;
+		else if ("right".equalsIgnoreCase(_align)) return LAYOUT_RIGHT;
+		else return LAYOUT_LEFT;
 	}
 
 	/**
@@ -216,7 +219,7 @@ abstract public class Item extends MilComponent {
 		if ("top".equalsIgnoreCase(_valign)) return LAYOUT_TOP;
 		else if ("middle".equalsIgnoreCase(_valign)) return LAYOUT_VCENTER;
 		else if ("bottom".equalsIgnoreCase(_valign)) return LAYOUT_BOTTOM;
-		else return 0;
+		else return LAYOUT_TOP;
 	}
 
 	/**
@@ -328,6 +331,15 @@ abstract public class Item extends MilComponent {
 			smartUpdateLayout();
 		}
 	}
+
+	//--Component--//
+	public void setParent(Component parent) {
+		if (parent != null && !(parent instanceof Frame)) {
+			throw new UiException("Unsupported parent for item: "+this+", parent: "+parent);
+		}
+		super.setParent(parent);
+	}
+
 
 	public String getInnerAttrs() {
 		final StringBuffer sb = new StringBuffer(64);

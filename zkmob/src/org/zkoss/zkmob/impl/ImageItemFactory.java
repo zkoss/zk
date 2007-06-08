@@ -49,9 +49,7 @@ public class ImageItemFactory extends AbstractUiFactory {
 		
 		final ZkImageItem component = 
 			new ZkImageItem(zk, id, label, ZkImageItem.LAYOUT_DEFAULT, altText, apperenceMode);
-		System.out.println("parent="+parent);
 		ZkComponents.applyItemProperties(parent, component, attrs);
-		System.out.println("2");
 
 		//load the image and setup on a seperate thread
 		final String imagesrc = UiManager.prefixURL(hostURL, attrs.getValue("im"));

@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.Page;
 /**
  * Root components that can be directly kids of a Page.
  * @author henrichen
+ * @since 2.4.0
  */
 abstract public class Displayable extends MilComponent {
 	private static final long serialVersionUID = 200705221758L;
@@ -87,6 +88,7 @@ abstract public class Displayable extends MilComponent {
 	 */
 	public boolean setVisible(boolean b) {
 		final boolean old = isVisible(); 
+		super.setVisible(b);
 		if (old != b) {
 			changeCurrentVisible(b);
 		}
@@ -94,17 +96,18 @@ abstract public class Displayable extends MilComponent {
 	}
 	
 	private void changeCurrentVisible(boolean b) {
-		if (b) {
-			final Page page = getPage();
-			if (page != null) {
-				Displayable current = (Displayable) page.getAttribute("CURRENT_DISPLAYABLE");
-				if (current != null) {
+		final Page page = getPage();
+		if (page != null) {
+			Displayable current = (Displayable) page.getAttribute("CURRENT_DISPLAYABLE");
+			if (b) {
+				if (current != null && current != this) {
 					current.setVisible(false);
+					page.setAttribute("CURRENT_DISPLAYABLE", this);
 				}
-				page.setAttribute("CURRENT_DISPLAYABLE", this);
+			} else if (current == this) {
+				page.setAttribute("CURRENT_DISPLAYABLE", null);
 			}
 		}
-		smartUpdate("cr", b ? "t" : "f");
 	}
 	
 	public void setPage(Page page) {

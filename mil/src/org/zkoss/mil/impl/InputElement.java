@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.ext.client.Inputable;
 /**
  * TextField related component.
  * @author henrichen
+ * @since 2.4.0
  *
  */
 abstract public class InputElement extends Item {

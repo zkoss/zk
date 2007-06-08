@@ -35,7 +35,7 @@ public class ZkFactory extends AbstractUiFactory {
 	}
 
 	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
-		final String dtid = attrs.getValue("di"); //desktop id
+		final String dtid = attrs.getValue("id"); //desktop id
 		final String action = attrs.getValue("za"); //zk_action
 		final String proctoStr = attrs.getValue("zp"); //zk_procto
 		final int procto = proctoStr != null ? Integer.parseInt(proctoStr) : 900; 

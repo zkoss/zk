@@ -83,6 +83,10 @@ public class ZkForm extends Form implements ZkComponent {
 	}
 
 	public void setAttr(String attr, String val) {
-		//TODO:
+		if ("visibility".equals(attr)) {
+			if ("true".equals(val)) {
+				_zk.setCurrent(this);
+			}
+		}
 	}
 }

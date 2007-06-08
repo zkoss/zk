@@ -18,7 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmob.impl;
 
+import javax.microedition.lcdui.ChoiceGroup;
 import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.List;
 
 import org.zkoss.zkmob.ZkComponent;
 
@@ -33,12 +35,18 @@ public class ZkCommand extends Command implements ZkComponent {
 	private ZkComponent _owner;
 	
 	public ZkCommand(ZkComponent owner, Zk zk, String id, String label, String longLabel, int type, int priority) {
-		super(label, longLabel, type, priority);
+		super(label, longLabel, type == 0x100 ? Command.OK : type, priority);
 		_id = id;
 		_zk = zk;
 		_owner = owner;
 		
-		owner.addCommand(this);
+		if (type == 0x100) { //special selection command
+			if (owner instanceof List) {
+				((List) owner).setSelectCommand(this);
+			}
+		} else {
+			owner.addCommand(this);
+		}
 	}
 
 	public void addCommand(Command cmd) {

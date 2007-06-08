@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.event.Events;
  * Super class of MIL component.
  * 
  * @author henrichen
+ * @since 2.4.0
  */
 abstract public class MilComponent extends AbstractComponent {
 	/** Returns whether to send back the request of the specified event

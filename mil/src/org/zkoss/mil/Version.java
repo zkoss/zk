@@ -24,6 +24,7 @@ package org.zkoss.mil;
  * with MIL.
  *
  * @author henrichen
+ * @since 2.4.0
  */
 public class Version {
 	/** Returns the version UID.

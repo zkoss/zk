@@ -1,5 +1,5 @@
 <%--
-window.dsp
+frame.dsp
 
 {{IS_NOTE
 	Purpose:

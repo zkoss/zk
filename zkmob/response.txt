@@ -33,4 +33,5 @@ ZK response
 	data1: rmil of the new added component
 	
 *	command: redirect
-	data0: the href to show
+	data0: the href to show (without hostURL)
+	data1: <empty>

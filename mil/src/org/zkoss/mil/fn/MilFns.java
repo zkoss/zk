@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.util.Configuration;
  * Utility for use EL.
  * 
  * @author henrichen
+ * @since 2.4.0
  */
 public class MilFns {
 

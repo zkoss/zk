@@ -45,6 +45,7 @@ import javax.microedition.lcdui.ItemStateListener;
 import javax.microedition.lcdui.TextField;
 
 import org.xml.sax.SAXException;
+import org.zkoss.zkmob.Browser;
 import org.zkoss.zkmob.Event;
 import org.zkoss.zkmob.Inputable;
 import org.zkoss.zkmob.Itemable;
@@ -60,7 +61,7 @@ import org.zkoss.zkmob.ZkComponent;
  *
  */
 public class Zk implements ZkComponent {
-	private Display _display;
+	private Browser _browser;
 	private Displayable _current;
 	private Vector _displayables = new Vector(8);
 	private Hashtable _uiMap = new Hashtable(16);
@@ -83,10 +84,14 @@ public class Zk implements ZkComponent {
 	public Zk(String dtid, String action, int procto, int tipto, String ver, String hostURL) {
 		_dtid = dtid;
 
-		int j = action.indexOf(";jsessionid");
-		if (j >= 0) {
-			_jsessionid = action.substring(j);
-//			action = action.substring(0, j);
+		if (action != null) {
+			int j = action.indexOf(";jsessionid");
+			if (j >= 0) {
+				_jsessionid = action.substring(j);
+	//			action = action.substring(0, j);
+			}
+		} else {
+			action = "";
 		}
 		_hostURL = hostURL;
 		_action = _hostURL + action;
@@ -97,11 +102,7 @@ public class Zk implements ZkComponent {
 		_cmdListener = new CommandListener() {
 			public void commandAction(Command command, Displayable disp) {
 				final ZkComponent comp = (ZkComponent) disp;
-				System.out.println("CommandListener, displayable="+ comp);
 				sendOnChange(comp);
-
-				final String id = comp.getId();
-				System.out.println("id="+ id+", command="+((ZkCommand)command).getId());
 
 				final ZkCommand cmd = (ZkCommand) command;
 				send(new Event(comp.getId(), "onCommand", new Object[] {cmd.getId()}), true);
@@ -111,11 +112,7 @@ public class Zk implements ZkComponent {
 		_itemCommandListener = new ItemCommandListener() {
 			public void commandAction(Command command, Item item) {
 				final ZkComponent comp = (ZkComponent) item;
-				System.out.println("ItemCommandListener, item="+ comp);
 				sendOnChange(comp);
-
-				final String id = comp.getId();
-				System.out.println("id="+ id+", command="+((ZkCommand)command).getId());
 
 				final ZkCommand cmd = (ZkCommand) command;
 				send(new Event(comp.getId(), "onCommand", new Object[] {cmd.getId()}), true);
@@ -152,6 +149,13 @@ public class Zk implements ZkComponent {
 		return _hostURL;
 	}
 	
+	public void setBrowser(Browser browser) {
+		_browser = browser;
+		if (_current != null && _browser != null) {
+			_browser.getDisplay().setCurrent(_current);
+		}
+	}
+	
 	public void addDisplayable(Displayable disp) {
 		_displayables.addElement(disp);
 	}
@@ -172,6 +176,11 @@ public class Zk implements ZkComponent {
 				_toSendOnChange = icomp; //prepare to send the onChange event
 			}
 		}
+	}
+	
+	//remove this desktop
+	public void removeDesktop() {
+		send(new Event(null, "rmDesktop", null), true);
 	}
 
 	/** register an Ui Object to an id.
@@ -202,8 +211,11 @@ public class Zk implements ZkComponent {
 	
 	public void setCurrent(Displayable current) {
 		_current = current;
-		if (_display != null) {
-			_display.setCurrent(_current);
+		if (_browser != null) {
+			final Display disp = _browser.getDisplay(); 
+			if (disp != null) {
+				disp.setCurrent(_current);
+			}
 		}
 	}
 
@@ -255,7 +267,10 @@ public class Zk implements ZkComponent {
 		int j = 0;
 		for (Enumeration e = _events.elements(); e.hasMoreElements(); ++j) {
 			final Event evt = (Event) e.nextElement();
-			sb.append("&cmd."+j+"="+evt.getCmd()+"&uuid."+j+"="+evt.getUuid());
+			sb.append("&cmd."+j+"="+evt.getCmd());
+			if (evt.getUuid() != null) {
+				sb.append("&uuid."+j+"="+evt.getUuid());
+			}
 			if (evt.getData() != null) {
 				for (int k = 0; k < evt.getData().length; ++k) {
 					Object data = evt.getData()[k];
@@ -273,19 +288,19 @@ public class Zk implements ZkComponent {
 	}
 
 	private void updateOnThread(String url, String request) {
+		if (url.startsWith("~.")) {
+			throw new IllegalArgumentException("url: "+url);
+		}
 		new Thread(new UpdateRequest(this, url, request)).start();
 	}
 	
 	public void update(String url, String request) {
 		try {
 			myUpdate(url, request);
-		} catch (IOException e) {
-			final Alert alert = new Alert("Exception:", e.toString(), null, AlertType.ERROR);
-			alert.setTimeout(Alert.FOREVER);
-			_display.setCurrent(alert);
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
+		} catch (Throwable e) {
+			System.out.println("update url="+url);
 			e.printStackTrace();
+			UiManager.alert(_browser.getDisplay(), e);
 		}
 	}
 	
@@ -303,13 +318,6 @@ public class Zk implements ZkComponent {
 			if (conn != null) conn.close();
 		}
 	}
-
-	public void setDisplay(Display disp) {
-		_display = disp;
-		if (_current != null) {
-			_display.setCurrent(_current);
-		}
-	}
 	
 	public void executeResponse(RTag rtag) {
 		final String cmd = rtag.getCommand();
@@ -319,18 +327,33 @@ public class Zk implements ZkComponent {
 			executeSetAttr(data);
 		} else if ("alert".equals(cmd)) {
 			executeAlert(data);
+		} else if ("home".equals(cmd)) {
+			executeHome(data);
 		} else if ("rm".equals(cmd)) {
 			executeRm(data);
 		} else if ("addAft".equals(cmd)) {
 			executeAddAft(data);
 		} else if ("addBfr".equals(cmd)) {
 			executeAddBfr(data);
+		} else if ("redirect".equals(cmd)) {
+			executeRedirect(data);
 		} else {
 			System.out.println("Unknown response command: "+cmd);
 //			throw new IllegalArgumentException("Unknown response command: "+cmd);
 		}
 	}
 
+	//redirect command
+	private void executeRedirect(String[] data) {
+		final String href = data[0];
+		UiManager.loadPageOnThread(_browser, UiManager.prefixURL(_hostURL, href));
+	}
+	
+	//home command
+	private void executeHome(String[] data) {
+		_browser.goHome(data.length > 0 ? UiManager.prefixURL(_hostURL, data[0]) : null);
+	}
+	
 	//setAttr command
 	private void executeSetAttr(String[] data) {
 		final String uuid = data[0];
@@ -348,7 +371,7 @@ public class Zk implements ZkComponent {
 		//TODO: exception alert can add a local image icon.
 		final Alert alert = new Alert("Exception", data[0], null, AlertType.ERROR);
 		alert.setTimeout(Alert.FOREVER); //15 seconds
-		_display.setCurrent(alert);
+		_browser.getDisplay().setCurrent(alert);
 	}
 	
 	//rm command
@@ -365,9 +388,9 @@ public class Zk implements ZkComponent {
 			form.removeItem((Item) comp);
 		} else if (comp instanceof Displayable) {
 			final Displayable disp = (Displayable) comp;
-			if (_display.getCurrent() == disp) { //the current showing display
+			if (_browser.getDisplay().getCurrent() == disp) { //the current showing display
 				_current = null;
-				_display.setCurrent(new Form(null)); //blank Form
+				_browser.getDisplay().setCurrent(new Form(null)); //blank Form
 			}
 		}
 		
@@ -391,7 +414,7 @@ public class Zk implements ZkComponent {
 		try {
 			is = new ByteArrayInputStream(rmil.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			// ignore
+			UiManager.alert(_browser.getDisplay(), e);
 		}
 		Vector comps = null;
 		try {
@@ -400,7 +423,10 @@ public class Zk implements ZkComponent {
 			// ignore
 		} catch (SAXException e) {
 			throw new IllegalArgumentException("addAft failed: " + e.toString());
-		} //load the rmil and generate a set of components
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			UiManager.alert(_browser.getDisplay(), e);//load the rmil and generate a set of components
+		}
 
 		if (ref instanceof ZkListItem) {
 			final Listable owner = ((ZkListItem)ref).getOwner();

@@ -19,6 +19,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<device-config>
 		<device-type>mil</device-type>
-		<device-class>org.zkoss.zk.device.MilDevice</device-class>
+		<device-class>org.zkoss.mil.device.MilDevice</device-class>
 	</device-config>
 </config>

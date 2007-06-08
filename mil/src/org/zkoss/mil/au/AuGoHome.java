@@ -1,4 +1,4 @@
-/* Window.java
+/* AuGoURLPage.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		May 22, 2007 6:06:11 PM, Created by henrichen
+		2007/6/8 上午 11:28:25, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -17,13 +17,17 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 
-package org.zkoss.mil;
+package org.zkoss.mil.au;
+
+import org.zkoss.zk.au.AuResponse;
 
 /**
- * A generic Window.
- * 
+ * A response to request ZK Mobile to go to its home page.
+ *  
  * @author henrichen
  */
-public class Window extends Displayable implements Screen {
-	private static final long serialVersionUID = 200705221824L;
+public class AuGoHome extends AuResponse {
+	public AuGoHome(String url) {
+		super("home", url);
+	}
 }
