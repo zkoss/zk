@@ -32,7 +32,6 @@ import org.zkoss.zk.ui.event.Events;
  * Used only by {@link AuRequest} to implement the {@link CommandEvent}
  * relevant command.
  * @author henrichen
- * @since 2.4.0
  */
 public class CommandCommand extends org.zkoss.zk.au.Command {
 

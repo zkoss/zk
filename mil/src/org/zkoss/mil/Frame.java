@@ -30,7 +30,6 @@ import org.zkoss.zk.ui.IdSpace;
  * You could retrieve any of them in this space by calling {@link #getFellow}.</p>
  * 
  * @author henrichen
- * @since 2.4.0
  */
 public class Frame extends Displayable implements Screen, IdSpace {
 	private static final long serialVersionUID = 200705221824L;

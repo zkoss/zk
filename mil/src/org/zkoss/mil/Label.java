@@ -25,7 +25,6 @@ import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * @author henrichen
- * @since 2.4.0
  */
 public class Label extends Item {
 	private static final long serialVersionUID = 200706060913L;

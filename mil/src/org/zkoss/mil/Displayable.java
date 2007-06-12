@@ -26,7 +26,6 @@ import org.zkoss.zk.ui.Page;
 /**
  * Root components that can be directly kids of a Page.
  * @author henrichen
- * @since 2.4.0
  */
 abstract public class Displayable extends MilComponent {
 	private static final long serialVersionUID = 200705221758L;

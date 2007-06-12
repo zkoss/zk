@@ -27,7 +27,6 @@ import org.zkoss.zk.ui.Desktop;
 /**
  * The Image item component the can be layout under the {@link Frame}.
  * @author henrichen
- * @since 2.4.0
  */
 public class Image extends Item {
 	private static final long serialVersionUID = 200705231321L;

@@ -27,7 +27,6 @@ import org.zkoss.zk.ui.UiException;
 /**
  * Generic Item component under the {@link Frame} component.
  * @author henrichen
- * @since 2.4.0
  */
 abstract public class Item extends MilComponent {
 	//JavaME Item's appearance mode

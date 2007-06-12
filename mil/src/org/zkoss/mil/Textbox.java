@@ -23,10 +23,9 @@ import org.zkoss.mil.impl.InputElement;
 import org.zkoss.zk.ui.WrongValueException;
 
 /**
- * A genric text box.
+ * A generic text box.
  * 
  * @author henrichen
- * @since 2.4.0
  */
 public class Textbox extends InputElement {
 	private static final long serialVersionUID = 200705251351L;

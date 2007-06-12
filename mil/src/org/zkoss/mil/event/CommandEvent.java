@@ -26,7 +26,6 @@ import org.zkoss.zk.ui.event.Event;
 /**
  * Used to notify which MIL Command has been triggered.
  * @author henrichen
- * @since 2.4.0
  */
 public class CommandEvent extends Event {
 	private Command _command;

@@ -29,7 +29,6 @@ import org.zkoss.zk.device.Device;
  *
  * @author tomyeh
  * @author henrichen
- * @since 2.4.0
  */
 public class MilDevice implements Device, java.io.Serializable {
 	private static final long serialVersionUID = 200706080927L;

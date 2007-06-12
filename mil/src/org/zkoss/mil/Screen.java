@@ -24,7 +24,6 @@ package org.zkoss.mil;
  * from Canvas (which is not a Screen component).
  *  
  * @author henrichen
- * @since 2.4.0
  */
 public interface Screen {
 }

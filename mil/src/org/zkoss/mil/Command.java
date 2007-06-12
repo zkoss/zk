@@ -29,7 +29,6 @@ import org.zkoss.zk.ui.UiException;
  * its parent component.
  * 
  * @author henrichen
- * @since 2.4.0
  */
 public class Command extends MilComponent {
 	private final static int BACK = 2;
