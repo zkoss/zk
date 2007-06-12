@@ -1,5 +1,13 @@
 	--------
-ZK 2.4.0 Freshly
+ZK 2.4.1
+* Features:
+  1735610: Translate messages to Catalan. Thank Xavier Covas O'Ryan (xcovas@conselldemallorca.net) for his contribution.
+
+* Bugs:
+  1734801: toolbarbutton/button popup broken in 2.4.0
+
+	--------
+ZK 2.4.0
 * Features:
   1727154: Support the fulfill attribute to defer creation of children
   1711860: An option to use native thread instead of event thread
