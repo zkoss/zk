@@ -222,11 +222,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cp -rp dist/lib/zkdemos.ear dist/lib/zkdemo.war /tmp/zk/$demonm
 	cd /tmp/zk
-	cp -rp zkdemo/src/org/* /tmp/zk/$demonm/zkdemo/src/org
 	#find -name CVS | xargs rm -rf
 	find -name .svn | xargs rm -rf
 
-	echo Ouput ${demonm}.zip
+	echo Output ${demonm}.zip
 	zip -qr9 ${demonm}.zip $demonm
 	rm -rf $demonm
 fi
