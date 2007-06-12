@@ -454,8 +454,13 @@ implements RenderOnDemand {
 			final Listitem item = getItemAtIndex(_jsel);
 			item.setSelectedDirectly(true);
 			_selItems.add(item);
-			smartUpdate("selectedIndex", Integer.toString(_jsel));
-				//No need to use response because such info is carried on tags
+			if (inSelectMold())
+				smartUpdate("selectedIndex", Integer.toString(_jsel));
+			else
+				smartUpdate("select", item.getUuid());
+				//Bug 1734950: don't count on index (since it may change)
+				//On the other hand, it is OK with select-mold since
+				//it invalidates if items are added or removed
 		}
 	}
 
@@ -552,7 +557,11 @@ implements RenderOnDemand {
 			}
 			_selItems.clear();
 			_jsel = -1;
-			smartUpdate("selectedIndex", "-1");
+			if (inSelectMold())
+				smartUpdate("selectedIndex", "-1");
+			else
+				smartUpdate("select", "");
+				//Bug 1734950: don't count on index (since it may change)
 		}
 	}
 	/** Selects all items.

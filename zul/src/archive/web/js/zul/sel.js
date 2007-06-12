@@ -373,9 +373,6 @@ zk.Selectable.prototype = {
 	/** Process the setAttr command sent from the server. */
 	setAttr: function (name, value) {
 		switch (name) {
-		case "selectedIndex":
-			this._setSelectedIndex(value);
-			return true; //no more processing
 		case "select": //select by uuid
 			var row = $e(value);
 			this._selectOne(row, false);
@@ -876,18 +873,6 @@ zk.Selectable.prototype = {
 		}
 	},
 
-	/** Sels the selected item by an index (don't notify server). */
-	_setSelectedIndex: function (value) {
-		value = parseInt(value);
-		if (!this.bodyrows.length || value < 0) {
-			value = null;
-		} else if (value < this.bodyrows.length) {
-			value = this.bodyrows[value];
-		} else {
-			value = this.bodyrows[this.bodyrows.length-1];
-		}
-		this._selectOne(value, false);
-	},
 	/** Sels all items (don't notify server and change focus, because it is from server). */
 	_selectAll: function () {
 		var rows = this.bodyrows;
