@@ -97,7 +97,7 @@ zkau.onclick = function (evt) {
 
 	zkau.send({uuid: $uuid(target.id),
 		cmd: "onClick", data: zkau._getMouseData(evt, target), ctl: true});
-	Event.stop(evt);
+	//Don't stop event so popup will work (bug 1734801)
 };
 /** Handles ondblclick for button (for non-FF).
  * Note: double clicks are handled by zkau._onDocDClick, but
