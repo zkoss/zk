@@ -41,8 +41,10 @@ elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
 	target=daily
 
 	prjnm=zk-$ver-$stamp
+	demonm=zk-demo-$ver-$stamp
 	javadocnm=zk-javadoc-$ver-$stamp
 	srcnm=zk-src-$ver-$stamp
+	docnm=zk-doc-$ver-$stamp
 	echo "Release $prjnm..."
 else
 	echo "Usage: release [ official | daily ]"
@@ -85,11 +87,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zhtml /tmp/zk/$srcnm
 	cp -rp zkplus /tmp/zk/$srcnm
 	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
-
-	#if [ "$target" == "official" ] ; then
-	#cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$srcnm/dist/lib
-	#cp dist/lib/ext/* /tmp/zk/$srcnm/dist/lib/ext
-	#fi
 
 	cd /tmp/zk/$srcnm
 	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
@@ -139,10 +136,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$prjnm/dist/WEB-INF
 	mkdir -p /tmp/zk/$prjnm/dist/src
 	mkdir -p /tmp/zk/$prjnm/doc
-	mkdir -p /tmp/zk/$prjnm/demo/bin
-	mkdir -p /tmp/zk/$prjnm/demo/src/zkdemo/WebContent
-	mkdir -p /tmp/zk/$prjnm/demo/src/zkdemo/src/org
-	mkdir -p /tmp/zk/$prjnm/demo/src/MyApp/WebContent
 
 	cd $HOME/prj/zk1
 	mv -f /tmp/zk/*-sources.jar /tmp/zk/$prjnm/dist/src
@@ -168,18 +161,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#timelinez
 
 	cp -rp dist/export/WEB-INF/* /tmp/zk/$prjnm/dist/WEB-INF
-	cp zkdoc/ZK-dev*.pdf zkdoc/ZK-quickstart.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$prjnm/doc
-
-	cp -rp zkdemo/src/archive/* /tmp/zk/$prjnm/demo/src/zkdemo/WebContent
-	cp -rp zkdemo/src/org/* /tmp/zk/$prjnm/demo/src/zkdemo/src/org
-	cp -rp MyApp/src/archive/* /tmp/zk/$prjnm/demo/src/MyApp/WebContent
-
-	cp -rp dist/lib/zkdemos.ear dist/lib/zkdemo.war /tmp/zk/$prjnm/demo/bin
+	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$prjnm/doc
 
 	cd /tmp/zk
-	rm -rf /tmp/zk/$prjnm/demo/src/*/codegen /tmp/zk/$prjnm/demo/src/*/debug
-	find -name CVS | xargs rm -rf
-	find -name .svn | xargs rm -rf
 
 	if [ "$target" == "official" ] ; then
 		echo Output ${prjnm}.tar.gz
@@ -220,13 +204,28 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	zip -qr9 ${javadocnm}.zip zcommon zweb zk zul zhtml zkplus
 	mv ${javadocnm}.zip /tmp/zk
 fi
-if [ "$target" == "official" ] ; then
-	mkdir -p /tmp/zk/$demonm
+if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+	mkdir -p /tmp/zk/$demonm/zkdemo/WebContent
+	mkdir -p /tmp/zk/$demonm/zkdemo/src/org
+	mkdir -p /tmp/zk/$demonm/MyApp/WebContent
 
 	cd $HOME/prj/zk1
-	mv dist/lib/zkdemos-all.ear dist/lib/zkdemo-all.war /tmp/zk/$demonm
+
+	cp -rp zkdemo/src/archive/* /tmp/zk/$demonm/zkdemo/WebContent
+	cp -rp zkdemo/codegen/archive/* /tmp/zk/$demonm/zkdemo/WebContent
+	cp -rp zkdemo/src/org/* /tmp/zk/$demonm/zkdemo/src/org
+	cp -rp MyApp/src/archive/* /tmp/zk/$demonm/MyApp/WebContent
+
+	if [ "$target" == "official" ] ; then
+		mv dist/lib/zkdemos-all.ear dist/lib/zkdemo-all.war /tmp/zk/$demonm
+	fi
+
 	cp -rp dist/lib/zkdemos.ear dist/lib/zkdemo.war /tmp/zk/$demonm
 	cd /tmp/zk
+	cp -rp zkdemo/src/org/* /tmp/zk/$demonm/zkdemo/src/org
+	#find -name CVS | xargs rm -rf
+	find -name .svn | xargs rm -rf
+
 	echo Ouput ${demonm}.zip
 	zip -qr9 ${demonm}.zip $demonm
 	rm -rf $demonm
@@ -237,7 +236,17 @@ if [ "$target" == "official" ]; then
 	mkdir -p /tmp/zk/doc
 
 	cd $HOME/prj/zk1/zkdoc
-	for f in *.pdf ; do 
+	for f in ZK-dev*.pdf ZK-quickstart.pdf ; do  
 		cp $f /tmp/zk/doc/${f%.pdf}-$ver.pdf
 	done
+elif [ "$target" == "daily" ]; then
+	mkdir -p /tmp/zk/$docnm
+
+	cd $HOME/prj/zk1
+	cp zkdoc/ZK-dev*.pdf zkdoc/ZK-quickstart.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
+	cd /tmp/zk
+
+	echo Ouput ${docnm}.zip
+	zip -qr9 ${docnm}.zip $docnm
+	rm -rf $docnm
 fi
