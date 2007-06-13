@@ -6,6 +6,7 @@ ZK 2.4.1
 * Bugs:
   1734801: toolbarbutton/button popup broken in 2.4.0
   1734950: listbox seletion update-problem
+  1736355: zkplus didn't import databind pkg for groovy, ruby...
 
 	--------
 ZK 2.4.0
