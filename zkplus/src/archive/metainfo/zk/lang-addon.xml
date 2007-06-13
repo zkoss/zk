@@ -38,6 +38,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<zscript language="Java">
 	import org.zkoss.zkplus.databind.*;
 	</zscript>
+	<zscript language="JavaScript">
+	importPackage(Packages.org.zkoss.zkplus.databind);
+	</zscript>
+	<zscript language="Groovy" each-time="true">
+	import org.zkoss.zkplus.databind.*
+	</zscript>
+	<zscript language="Ruby">
+	module Java
+		include_package 'org.zkoss.zkplus.databind'
+	end
+	</zscript>
 
 	<!--component>
 		<component-name>area</component-name>
