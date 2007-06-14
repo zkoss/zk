@@ -185,6 +185,12 @@ implements SerializableAware, HierachicalAware {
 		_bshns = new GlobalNS(_ip.getClassManager(), "global");
 		_ip.setNameSpace(_bshns);
 	}
+	public void destroy() {
+		getOwner().getNamespace().unsetVariable(VAR_NS, false);
+		_ip = null;
+		_bshns = null;
+		super.destroy();
+	}
 
 	public Class getClass(String clsnm) {
 		try {

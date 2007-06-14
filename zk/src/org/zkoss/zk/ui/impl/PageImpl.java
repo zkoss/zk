@@ -578,6 +578,14 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			}
 		}
 		_ips.clear();
+
+		//theorectically, the following is not necessary, but, to be safe...
+		_roots.clear();
+		_desktop = null;
+		_owner = _defparent = null;
+		_listeners = _attrs = _fellows = _ips = null;
+		_ns = null;
+		_resolvers = null;
 	}
 
 	private static final Map REQUEST_ATTRS = new AbstractMap() {

@@ -80,6 +80,11 @@ public class GroovyInterpreter extends GenericInterpreter {
 		_global = new Binding(new Variables());
 		_ip = new GroovyShell(_global);
 	}
+	public void destroy() {
+		_ip = null;
+		_global = null;
+		super.destroy();
+	}
 
 	/**TODO: need to digg out a solution from groovy's manual
 	public Class getClass(String clsnm) {

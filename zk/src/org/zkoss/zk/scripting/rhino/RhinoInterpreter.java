@@ -93,6 +93,10 @@ public class RhinoInterpreter extends GenericInterpreter {
 			Context.exit();
 		}
 	}
+	public void destroy() {
+		_global = null;
+		super.destroy();
+	}
 
 	/**TODO: feasible but need to read manual/source first
 	public Class getClass(String clsnm) {

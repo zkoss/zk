@@ -257,8 +257,10 @@ abstract public class GenericInterpreter implements Interpreter {
 		_owner = owner;
 		_zslang = zslang;
 	}
-	/** Does nothing. */
+	/** Reset the owner ({@link #getWOner}) to null.
+	 */
 	public void destroy() {
+		_owner = null;
 	}
 	public Page getOwner() {
 		return _owner;
