@@ -25,6 +25,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import java.util.Comparator;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>This is the {@link ListModel} as an Object array to be used with {@link Listbox}.
@@ -61,6 +62,11 @@ implements ListModelExt, java.io.Serializable {
 	 * If true, this object is a 'facade' of the specified array,
 	 * i.e., when you add or remove items from this {@link ListModelArray},
 	 * the inner "live" array would be changed accordingly.
+	 *
+	 * However, it is not a good idea to modify <code>array</code>
+	 * if it is passed to this method with live is true,
+	 * since {@link Listbox} is not smart enough to hanle it.
+	 * Instead, modify it thru this object.
 	 * @since 2.4.0
 	 */
 	public ListModelArray(Object[] array, boolean live) {
@@ -69,6 +75,7 @@ implements ListModelExt, java.io.Serializable {
 
 	/**
 	 * Constructor.
+	 * It mades a copy of the specified array (i.e., not live).
 	 * @param src the source array used to initialize this ListModelArray.
 	 */
 	public ListModelArray(Object[] src) {
@@ -81,6 +88,14 @@ implements ListModelExt, java.io.Serializable {
 	 */
 	public ListModelArray(int size) {
 		_array = new Object[size];
+	}
+	/**
+	 * Constructor.
+	 * It mades a copy of the specified list (i.e., not live).
+	 * @since 2.4.1
+	 */
+	public ListModelArray(List list) {
+		_array = list.toArray(new Object[list.size()]);
 	}
 
 	/** Get the value of this ListModelArray at specified index.

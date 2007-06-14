@@ -62,6 +62,11 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * If true, this object is a 'facade' of the specified set,
 	 * i.e., when you add or remove items from this {@link ListModelSet},
 	 * the inner "live" set would be changed accordingly.
+	 *
+	 * However, it is not a good idea to modify <code>set</code>
+	 * if it is passed to this method with live is true,
+	 * since {@link Listbox} is not smart enough to hanle it.
+	 * Instead, modify it thru this object.
 	 * @since 2.4.0
 	 */
 	public ListModelSet(Set set, boolean live) {
@@ -77,9 +82,20 @@ implements ListModelExt, Set, java.io.Serializable {
 
 	/**
 	 * Constructor.
+	 * It mades a copy of the specified collection (i.e., not live).
 	 */
 	public ListModelSet(Collection c) {
 		_set = new LinkedHashSet(c);
+	}
+	/**
+	 * Constructor.
+	 * It mades a copy of the specified array (i.e., not live).
+	 * @since 2.4.1
+	 */
+	public ListModelSet(Object[] array) {
+		_set = new LinkedHashSet(array.length);
+		for (int j = 0; j < array.length; ++j)
+			_set.add(array[j]);
 	}
 	
 	/**

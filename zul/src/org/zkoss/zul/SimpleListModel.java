@@ -18,17 +18,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.List;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
 
 /**
  * A simple implementation of {@link ListModel}.
  * Note: It assumes the content is immutable. If not, use {@link ListModelList}
- * instead.
+ * or {@link ListModelArray} nstead.
  *
  * @author tomyeh
+ * @see ListModelArray
  * @see ListModelSet
  * @see ListModelList
  * @see ListModelMap
@@ -39,10 +42,38 @@ implements ListModelExt, java.io.Serializable {
 
 	private final Object[] _data;
 
-	public SimpleListModel(Object[] data) {
+	/** Constructor.
+	 *
+	 * @param data the array to represent
+	 * @param live whether to have a 'live' {@link ListModel} on top of
+	 * the specified list.
+	 * If false, the content of the specified list is copied.
+	 * If true, this object is a 'facade' of the specified list,
+	 * i.e., when you add or remove items from this ListModelList,
+	 * the inner "live" list would be changed accordingly.
+	 *
+	 * However, it is not a good idea to modify <code>data</code>
+	 * once it is passed to this method with live is true,
+	 * since {@link Listbox} is not smart enough to hanle it.
+	 * @since 2.4.1
+	 */
+	public SimpleListModel(Object[] data, boolean live) {
 		if (data == null)
 			throw new NullPointerException();
-		_data = data;
+		_data = live ? data: (Object[])ArraysX.clone(data);
+	}
+	/** Constructor.
+	 * It made a copy of the specified array (<code>data</code>).
+	 */
+	public SimpleListModel(Object[] data) {
+		this(data, false);
+	}
+
+	/** Constructor.
+	 * @since 2.4.1
+	 */
+	public SimpleListModel(List data) {
+		_data = data.toArray(new Object[data.size()]);
 	}
 
 	//-- ListModel --//

@@ -60,6 +60,11 @@ implements ListModelExt, List, java.io.Serializable {
 	 * If true, this object is a 'facade' of the specified list,
 	 * i.e., when you add or remove items from this ListModelList,
 	 * the inner "live" list would be changed accordingly.
+	 *
+	 * However, it is not a good idea to modify <code>list</code>
+	 * if it is passed to this method with live is true,
+	 * since {@link Listbox} is not smart enough to hanle it.
+	 * Instead, modify it thru this object.
 	 * @since 2.4.0
 	 */
 	public ListModelList(List list, boolean live) {
@@ -75,9 +80,20 @@ implements ListModelExt, List, java.io.Serializable {
 	
 	/**
 	 * Constructor.
+	 * It mades a copy of the specified collection (i.e., not live).
 	 */
 	public ListModelList(Collection c) {
 		_list = new ArrayList(c);
+	}
+	/**
+	 * Constructor.
+	 * It mades a copy of the specified array (i.e., not live).
+	 * @since 2.4.1
+	 */
+	public ListModelList(Object[] array) {
+		_list = new ArrayList(array.length);
+		for (int j = 0; j < array.length; ++j)
+			_list.add(array[j]);
 	}
 	
 	/**
