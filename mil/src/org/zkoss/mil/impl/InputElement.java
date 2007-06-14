@@ -74,10 +74,7 @@ abstract public class InputElement extends Item {
 
 	/** Returns the value in the String format.
 	 * In most case, you shall use the setValue method instead, e.g.,
-	 * {@link org.zkoss.zul.Textbox#getValue} and
-	 * {@link org.zkoss.zul.Intbox#getValue}.
-	 *
-	 * <p>It invokes {@link #checkUserError} to ensure no user error.
+	 * {@link org.zkoss.mil.Textbox#getValue}.
 	 *
 	 * <p>It invokes {@link #coerceToString} to convert the stored value
 	 * into a string.
@@ -90,10 +87,9 @@ abstract public class InputElement extends Item {
 
 	/** Sets the value in the String format.
 	 * In most case, you shall use the setValue method instead, e.g.,
-	 * {@link org.zkoss.zul.Textbox#setValue} and
-	 * {@link org.zkoss.zul.Intbox#setValue}.
+	 * {@link org.zkoss.mil.Textbox#setValue}.
 	 *
-	 * <p>It invokes {@link #coerceFromString} fisrt and then {@link #validate}.
+	 * <p>It invokes {@link #coerceFromString}.
 	 * Derives might override them for type conversion and special
 	 * validation.
 	 *
@@ -133,7 +129,7 @@ abstract public class InputElement extends Item {
 	 * you have to override {@link #coerceToString} and {@link #coerceFromString}
 	 * to convert between a string and your targeting type.
 	 *
-	 * <p>Moreover, when {@link org.zkoss.zul.Textbox} is called, it calls this method
+	 * <p>Moreover, when {@link org.zkoss.mil.Textbox} is called, it calls this method
 	 * with value = null. Derives shall handle this case properly.
 	 */
 	abstract protected
@@ -209,11 +205,7 @@ abstract public class InputElement extends Item {
 	}
 
 	/** Returns the value in the targeting type.
-	 * It is used by the deriving class to implement the getValue method.
-	 * For example, {@link org.zkoss.zul.Intbox#getValue} is the same
-	 * as this method except with a different signature.
 	 *
-	 * <p>It invokes {@link #checkUserError} to ensure no user error.
 	 * @exception WrongValueException if the user entered a wrong value
 	 * @see #getText
 	 */
@@ -222,12 +214,7 @@ abstract public class InputElement extends Item {
 	}
 
 	/** Returns the raw value directly with checking whether any
-	 * error message not yet fixed. In other words, it does NOT invoke
-	 * {@link #checkUserError}.
-	 *
-	 * <p>Note: if the user entered an incorrect value (i.e., caused
-	 * {@link WrongValueException}), the incorrect value doesn't
-	 * be stored so this method returned the last correct value.
+	 * error message not yet fixed. 
 	 *
 	 * @see #getRawText
 	 * @see #getText
@@ -238,12 +225,7 @@ abstract public class InputElement extends Item {
 	}
 	
 	/** Returns the text directly without checking whether any error
-	 * message not yet fixed. In other words, it does NOT invoke
-	 * {@link #checkUserError}.
-	 *
-	 * <p>Note: if the user entered an incorrect value (i.e., caused
-	 * {@link WrongValueException}), the incorrect value doesn't
-	 * be stored so this method returned the last correct value.
+	 * message not yet fixed.
 	 *
 	 * @see #getRawValue
 	 * @see #getText
@@ -256,7 +238,7 @@ abstract public class InputElement extends Item {
 	 * is correct (or intend to be incorrect), because this method
 	 * doesn't do any validation.
 	 *
-	 * <p>If you feel confusing with setValue, such as {@link org.zkoss.zul.Textbox#setValue},
+	 * <p>If you feel confusing with setValue, such as {@link org.zkoss.mil.Textbox#setValue},
 	 * it is usually better to use setValue instead. This method
 	 * is reserved for developer that really want to set an 'illegal'
 	 * value (such as an empty string to a textbox with no-empty contraint).

@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		2007/6/8 上午 11:28:25, Created by henrichen
+		2007/6/8 11:28:25, Created by henrichen
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.

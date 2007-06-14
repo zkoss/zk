@@ -202,7 +202,7 @@ abstract public class Item extends MilComponent {
 	 * <li>bottom: align to bottom.</li>
 	 * </ul>
 	 * null means use default vertical alignment.
-	 * @return the vertical alignment. 
+	 * @param valign (top, middle, bottom)
 	 */
 	public void setValign(String valign) {
 		if (valign != null && valign.length() == 0) {

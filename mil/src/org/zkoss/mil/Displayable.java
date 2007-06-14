@@ -61,7 +61,7 @@ abstract public class Displayable extends MilComponent {
 
 	/**
 	 * Get the assoicated ticker id. 
-	 * @return
+	 * @return ticker's id.
 	 */
 	public String getTicker() {
 		return _ticker;
