@@ -11,10 +11,11 @@ z_prototype_js = true;
 
 var Prototype = {
   Version: '1.5.0',
+/* Tom M. Yeh, Potix: remove unused codes
   BrowserFeatures: {
     XPath: !!document.evaluate
   },
-
+*/
   ScriptFragment: '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)',
   emptyFunction: function() {},
   K: function(x) { return x }
@@ -28,8 +29,9 @@ var Class = {
   }
 }
 
+/* Tom M. Yeh, Potix: remove unused codes
 var Abstract = new Object();
-
+*/
 Object.extend = function(destination, source) {
   for (var property in source) {
     destination[property] = source[property];
@@ -99,6 +101,7 @@ Object.extend(Number.prototype, {
   }
 });
 
+/* Tom M. Yeh, Potix: remove unused codes
 var Try = {
   these: function() {
     var returnValue;
@@ -114,9 +117,9 @@ var Try = {
     return returnValue;
   }
 }
-
+*/
 /*--------------------------------------------------------------------------*/
-
+/* Tom M. Yeh, Potix: remove unused codes
 var PeriodicalExecuter = Class.create();
 PeriodicalExecuter.prototype = {
   initialize: function(callback, frequency) {
@@ -148,6 +151,7 @@ PeriodicalExecuter.prototype = {
     }
   }
 }
+*/
 String.interpret = function(value){
   return value == null ? '' : String(value);
 }
@@ -215,6 +219,7 @@ Object.extend(String.prototype, {
     return this.extractScripts().map(function(script) { return eval(script) });
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   escapeHTML: function() {
     var div = document.createElement('div');
     var text = document.createTextNode(this);
@@ -249,7 +254,7 @@ Object.extend(String.prototype, {
       return hash;
     });
   },
-
+*/
   toArray: function() {
     return this.split('');
   },
@@ -300,8 +305,9 @@ String.prototype.gsub.prepareReplacement = function(replacement) {
   return function(match) { return template.evaluate(match) };
 }
 
+/* Tom M. Yeh, Potix: remove unused codes
 String.prototype.parseQuery = String.prototype.toQueryParams;
-
+*/
 var Template = Class.create();
 Template.Pattern = /(^|.|\r|\n)(#\{(.*?)\})/;
 Template.prototype = {
@@ -481,6 +487,7 @@ var Enumerable = {
     return results;
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   sortBy: function(iterator) {
     return this.map(function(value, index) {
       return {value: value, criteria: iterator(value, index)};
@@ -489,11 +496,12 @@ var Enumerable = {
       return a < b ? -1 : a > b ? 1 : 0;
     }).pluck('value');
   },
-
+*/
   toArray: function() {
     return this.map();
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   zip: function() {
     var iterator = Prototype.K, args = $A(arguments);
     if (typeof args.last() == 'function')
@@ -504,7 +512,7 @@ var Enumerable = {
       return iterator(collections.pluck(index));
     });
   },
-
+*/
   size: function() {
     return this.toArray().length;
   },
@@ -636,6 +644,7 @@ var Hash = function(obj) {
   Object.extend(this, obj || {});
 };
 
+/* Tom M. Yeh, Potix: remove unused codes
 Object.extend(Hash, {
   toQueryString: function(obj) {
     var parts = [];
@@ -662,7 +671,7 @@ Object.extend(Hash, {
     return parts.join('&');
   }
 });
-
+*/
 Object.extend(Hash.prototype, Enumerable);
 Object.extend(Hash.prototype, {
   _each: function(iterator) {
@@ -685,13 +694,14 @@ Object.extend(Hash.prototype, {
     return this.pluck('value');
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   merge: function(hash) {
     return $H(hash).inject(this, function(mergedHash, pair) {
       mergedHash[pair.key] = pair.value;
       return mergedHash;
     });
   },
-
+*/
   remove: function() {
     var result;
     for(var i = 0, length = arguments.length; i < length; i++) {
@@ -708,10 +718,11 @@ Object.extend(Hash.prototype, {
     return result;
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   toQueryString: function() {
     return Hash.toQueryString(this);
   },
-
+*/
   inspect: function() {
     return '#<Hash:{' + this.map(function(pair) {
       return pair.map(Object.inspect).join(': ');
@@ -769,6 +780,7 @@ function $(element) {
   return Element.extend(element);
 }
 
+/* Tom M. Yeh, Potix: remove unused codes
 if (Prototype.BrowserFeatures.XPath) {
   document._getElementsByXPath = function(expression, parentElement) {
     var results = [];
@@ -795,7 +807,7 @@ document.getElementsByClassName = function(className, parentElement) {
     return elements;
   }
 };
-
+*/
 /*--------------------------------------------------------------------------*/
 
 if (!window.Element)
@@ -807,13 +819,14 @@ Element.extend = function(element) {
   if (!element._extended && element.tagName && element != window) {
     var methods = Object.clone(Element.Methods), cache = Element.extend.cache;
 
+/* Tom M. Yeh, Potix: remove unused codes
     if (element.tagName == 'FORM')
       Object.extend(methods, Form.Methods);
     if (['INPUT', 'TEXTAREA', 'SELECT'].include(element.tagName))
       Object.extend(methods, Form.Element.Methods);
 
     Object.extend(methods, Element.Methods.Simulated);
-
+*/
     for (var property in methods) {
       var value = methods[property];
       if (typeof value == 'function' && !(property in element))
@@ -860,13 +873,14 @@ Element.Methods = {
     return element;
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   update: function(element, html) {
     html = typeof html == 'undefined' ? '' : html.toString();
     $(element).innerHTML = html.stripScripts();
     setTimeout(function() {html.evalScripts()}, 10);
     return element;
   },
-
+*/
   replace: function(element, html) {
     element = $(element);
     html = typeof html == 'undefined' ? '' : html.toString();
@@ -1223,6 +1237,7 @@ Object.extend(Element._attributeTranslations.values, {
   multiple: Element._attributeTranslations.values._flag
 });
 
+/* Tom M. Yeh, Potix: remove unused codes
 Element.Methods.Simulated = {
   hasAttribute: function(element, attribute) {
     var t = Element._attributeTranslations;
@@ -1267,7 +1282,7 @@ if (document.all && !window.opera){
     return element;
   }
 };
-
+*/
 Object.extend(Element, Element.Methods);
 
 var _nativeExtensions = false;
@@ -1295,11 +1310,13 @@ Element.addMethods = function(methods) {
 
   if (typeof HTMLElement != 'undefined') {
     copy(Element.Methods, HTMLElement.prototype);
+/* Tom M. Yeh, Potix: remove unused codes
     copy(Element.Methods.Simulated, HTMLElement.prototype, true);
     copy(Form.Methods, HTMLFormElement.prototype);
     [HTMLInputElement, HTMLTextAreaElement, HTMLSelectElement].each(function(klass) {
       copy(Form.Element.Methods, klass.prototype);
     });
+*/
     _nativeExtensions = true;
   }
 }
@@ -1309,6 +1326,7 @@ Toggle.display = Element.toggle;
 
 /*--------------------------------------------------------------------------*/
 
+/* Tom M. Yeh, Potix: remove unused codes
 Abstract.Insertion = function(adjacency) {
   this.adjacency = adjacency;
 }
@@ -1401,7 +1419,7 @@ Insertion.After.prototype = Object.extend(new Abstract.Insertion('afterEnd'), {
     }).bind(this));
   }
 });
-
+*/
 /*--------------------------------------------------------------------------*/
 
 Element.ClassNames = Class.create();
@@ -1565,6 +1583,7 @@ Object.extend(Selector, {
 function $$() {
   return Selector.findChildElements(document, $A(arguments));
 }
+/* Tom M. Yeh, Potix: remove unused codes
 var Form = {
   reset: function(form) {
     $(form).reset();
@@ -1653,9 +1672,9 @@ Form.Methods = {
 }
 
 Object.extend(Form, Form.Methods);
-
+*/
 /*--------------------------------------------------------------------------*/
-
+/* Tom M. Yeh, Potix: remove unused codes
 Form.Element = {
   focus: function(element) {
     $(element).focus();
@@ -1723,9 +1742,9 @@ Form.Element.Methods = {
 Object.extend(Form.Element, Form.Element.Methods);
 var Field = Form.Element;
 var $F = Form.Element.getValue;
-
+*/
 /*--------------------------------------------------------------------------*/
-
+/* Tom M. Yeh, Potix: remove unused codes
 Form.Element.Serializers = {
   input: function(element) {
     switch (element.type.toLowerCase()) {
@@ -1771,9 +1790,9 @@ Form.Element.Serializers = {
     return Element.extend(opt).hasAttribute('value') ? opt.value : opt.text;
   }
 }
-
+*/
 /*--------------------------------------------------------------------------*/
-
+/* Tom M. Yeh, Potix: remove unused codes
 Abstract.TimedObserver = function() {}
 Abstract.TimedObserver.prototype = {
   initialize: function(element, frequency, callback) {
@@ -1813,9 +1832,9 @@ Form.Observer.prototype = Object.extend(new Abstract.TimedObserver(), {
     return Form.serialize(this.element);
   }
 });
-
+*/
 /*--------------------------------------------------------------------------*/
-
+/* Tom M. Yeh, Potix: remove unused codes
 Abstract.EventObserver = function() {}
 Abstract.EventObserver.prototype = {
   initialize: function(element, callback) {
@@ -1869,6 +1888,7 @@ Form.EventObserver.prototype = Object.extend(new Abstract.EventObserver(), {
     return Form.serialize(this.element);
   }
 });
+*/
 if (!window.Event) {
   var Event = new Object();
 }

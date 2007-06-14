@@ -10,6 +10,7 @@
 if (!window.z_dragdrop_js) {
 	z_dragdrop_js = true;
 
+/* Tom M. Yeh, Potix: remove unused codes
 if(typeof Effect == 'undefined')
   throw("dragdrop.js requires including script.aculo.us' effects.js library");
 
@@ -125,7 +126,7 @@ var Droppables = {
       this.deactivate(this.last_active);
   }
 }
-
+*/
 var Draggables = {
   drags: [],
   observers: [],
@@ -387,7 +388,9 @@ if (this.z_orgpos != 'absolute')
   updateDrag: function(event, pointer) {
     if(!this.dragging) this.startDrag(event);
     Position.prepare();
+/* Tom M. Yeh, Potix: remove unused codes
     Droppables.show(pointer, this.element);
+*/
     Draggables.notify('onDrag', this, event);
     
     this.draw(pointer);
@@ -440,7 +443,9 @@ this.element.style.position = this.z_orgpos;
 }
     }
 
+/* Tom M. Yeh, Potix: remove unused codes
     if(success) Droppables.fire(event, this.element);
+*/
     Draggables.notify('onEnd', this, event);
 
 	var pointer = [Event.pointerX(event), Event.pointerY(event)]; //Tom M. Yeh, Potix: add pointer
@@ -462,7 +467,9 @@ this.element.style.position = this.z_orgpos;
       this.options.endeffect(this.element, event); //Tom M. Yeh, Potix: add event
       
     Draggables.deactivate(this);
+/* Tom M. Yeh, Potix: remove unused codes
     Droppables.reset();
+*/
   },
   
   keyPress: function(event) {
@@ -564,7 +571,9 @@ if (typeof this.options.constraint == 'function') {
     }
     
     Position.prepare();
+/* Tom M. Yeh, Potix: remove unused codes
     Droppables.show(Draggables._lastPointer, this.element);
+*/
     Draggables.notify('onDrag', this);
     if (this._isScrollChild) {
       Draggables._lastScrollPointer = Draggables._lastScrollPointer || $A(Draggables._lastPointer);

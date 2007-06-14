@@ -135,7 +135,7 @@ zkau._getMouseData = function (evt, target) {
 	return [x, y, extra];
 };
 
-/** Asks the server to update a component. */
+/** Asks the server to update a component (for file uploading). */
 zkau.sendUpdateResult = function (uuid, updatableId) {
 	zkau.send({uuid: uuid, cmd: "updateResult", data: [updatableId]}, -1);
 }
