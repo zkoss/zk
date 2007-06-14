@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: ZK Mobile DEMO
+Specification-Version: 0.8.0
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.zkdemo
+Implementation-URL: http://www.zkoss.org/
+Implementation-Version: 0.8.0
+Implementation-Vendor: Potix Corporation
