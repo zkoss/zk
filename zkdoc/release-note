@@ -8,6 +8,7 @@ ZK 2.4.1
   1734950: listbox seletion update-problem
   1736355: zkplus didn't import databind pkg for groovy, ruby...
   1736858: Memory Leak with BeanShell
+  1687152: Windows are overlaying background images
 
 	--------
 ZK 2.4.0
