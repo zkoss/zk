@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <eclipsemeMetadata jad="zkmob.jad" version="1.6.8">
    <device group="Sun Java(TM) Wireless Toolkit 2.5.1 for CLDC" name="MediaControlSkin"/>
-   <signing signProject="false"/>
+   <signing signProject="true">
+      <keystore>D:\home\henrichen\prj\zk1\zkmob\zkmob.ks</keystore>
+      <alias>zkmob</alias>
+      <provider/>
+      <keystoreType/>
+      <passwords storePasswords="2">
+         <keystore>czuEhR7S5g6htQ==</keystore>
+         <key>czuEhR7S5g6htQ==</key>
+      </passwords>
+   </signing>
 </eclipsemeMetadata>

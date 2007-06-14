@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.zkoss.mobile</groupId>
-  <artifactId>zmobi</artifactId>
+  <modelVersion>0.8.0</modelVersion>
+  <groupId>org.zkoss.zkmob</groupId>
+  <artifactId>zkmob</artifactId>
   <version>{version}</version>
   <packaging>jar</packaging>
   <name>The ZK Mobile Client</name>
@@ -17,6 +17,6 @@
     </license>
   </licenses>
   <scm>
-    <url>http://svn.sourceforge.net/viewvc/zk1/releases/{version}/zmobi</url>
+    <url>http://svn.sourceforge.net/viewvc/zk1/releases/{version}/zkmob</url>
   </scm>
 </project> 

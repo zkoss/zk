@@ -44,6 +44,8 @@ import java.io.InputStream;
  * @author tomyeh
  */
 public class Browser extends MIDlet {
+	private static final int HISTORY_MAX = 10; //miximum history record
+	
 	private Display _display; //display of this MIDlet
 
 	private Displayable _prev; //previous Displayable before pause
@@ -165,6 +167,13 @@ public class Browser extends MIDlet {
 				//prepare history list
 				_history = (List) _zkMobile.lookupUi("hlist");
 				_history.setCommandListener(_commandListener);
+				for (int j = 0; j < HISTORY_MAX; ++j) {
+					final String historyURL = getAppProperty("zkmob-history"+j);
+					if (historyURL == null) {
+						break;
+					}
+					_history.append(historyURL, null);
+				}
 
 				//prepare items in the home page
 				final Item url = (Item) _zkMobile.lookupUi("url");
@@ -174,6 +183,16 @@ public class Browser extends MIDlet {
 				final Item exit = (Item) _zkMobile.lookupUi("exit");
 				exit.setItemCommandListener(_itemCommandListener);
 				
+				//preapre the zkmob.targetURL
+				final String targetURL = getAppProperty("zkmob-targetURL");
+				if (targetURL != null) {
+					((TextField)url).setString(targetURL);
+					
+					final String autoRun = getAppProperty("zkmob-autoRun");
+					if ("true".equals(autoRun)) {
+						UiManager.loadPageOnThread(this, targetURL);
+					}
+				}
 			} catch(SAXException ex) {
 				alert(ex);
 				exit();
@@ -204,8 +223,8 @@ public class Browser extends MIDlet {
 			}
 		}
 		_history.insert(0, url, null);
-		if (_history.size() > 10) { //most ten records
-			((ZkList)_history).superDelete(10);
+		if (_history.size() > HISTORY_MAX) { //most ten records
+			((ZkList)_history).superDelete(HISTORY_MAX);
 		}
 	}
 	
