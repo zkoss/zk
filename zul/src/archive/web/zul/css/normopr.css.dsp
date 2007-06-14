@@ -73,23 +73,26 @@ div.embedded, div.modal, div.overlapped, div.popup, div.highlighted, div.wndcyan
 	margin: 0; padding: 0;
 }
 
-div.wc-embedded, div.wc-embedded-none, div.wc-wndcyan {
-	padding: 2px; background: white;
+div.wc-embedded-none, div.wc-wndcyan-none {
+	margin: 0; padding: 0;
 }
 div.wc-embedded, div.wc-wndcyan {
-	padding: 3px; border: 1px solid #aab;
+	margin: 0; padding: 3px; border: 1px solid #aab;
+}
+div.wc-wndcyan {
+	background: white;
 }
 div.wc-modal, div.wc-modal-none, div.wc-highlighted, div.wc-highlighted-none {
-	padding: 2px; background: #f0f0d8;
+	margin: 0; padding: 2px; background: #f0f0d8;
 }
 div.wc-overlapped, div.wc-overlapped-none {
-	padding: 2px; background: white;
+	margin: 0; padding: 2px; background: white;
 }
 div.wc-modal, div.wc-highlighted, div.wc-overlapped {
-	padding: 4px; border: 2px solid #1854c2;
+	margin: 0; padding: 4px; border: 2px solid #1854c2;
 }
 div.wc-popup, div.wc-popup-none {
-	padding: 1px; background: white;
+	margin: 0; padding: 1px; background: white;
 }
 div.wc-popup {
 	border: 1px solid #1854c2;

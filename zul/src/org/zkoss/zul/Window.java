@@ -179,9 +179,13 @@ public class Window extends XulElement implements IdSpace {
 		return _border;
 	}
 	/** Sets the border (either none or normal).
+	 *
+	 * @param border the border. If null or "0", "none" is assumed.
+	 * Since 2.4.1, We assume "0" to be "none".
 	 */
 	public void setBorder(String border) {
-		if (border == null) border = "none";
+		if (border == null || "0".equals(border))
+			border = "none";
 		if (!Objects.equals(_border, border)) {
 			_border = border;
 			smartUpdate("class", getSclass());
