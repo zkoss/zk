@@ -701,6 +701,11 @@ public interface Execution extends Evaluator {
 	/** Returns whether the client is Safari.
 	 */
 	public boolean isSafari();
+	/** Returns whether the client is a mobile device supporting MIL
+	 * (Mobile Interactive Language).
+	 * @since 2.4.1
+	 */
+	public boolean isMilDevice();
 
 	/** Returns the native request, or null if not available.
 	 *

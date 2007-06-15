@@ -733,8 +733,9 @@ public class UiEngineImpl implements UiEngine {
 		final String msg = sb.toString();
 
 		final Throwable err = (Throwable)errs.get(0);
-		final String location =
-			exec.getDesktop().getWebApp().getConfiguration().getErrorPage(err);
+		final Desktop desktop = exec.getDesktop();
+		final String location = desktop.getWebApp().getConfiguration()
+			.getErrorPage(desktop.getDeviceType(), err);
 		if (location != null) {
 			try {
 				exec.setAttribute("javax.servlet.error.message", msg);
@@ -745,7 +746,6 @@ public class UiEngineImpl implements UiEngine {
 
 				//process pending events
 				//the execution is aborted if an exception is thrown
-				final Desktop desktop = exec.getDesktop();
 				Event event = nextEvent(uv);
 				do {
 					for (; event != null; event = nextEvent(uv)) {

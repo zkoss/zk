@@ -34,6 +34,24 @@ import java.util.Map;
  * @author tomyeh
  */
 public interface Session {
+	/** Returns the device type that this session belongs to.
+	 *
+	 * <p>A device type identifies the type of a client. For example, "ajax"
+	 * represents the Web browsers with Ajax support,
+	 * while "mil" represents clients that supports
+	 * <i>Mobile Interactive markup Language</i> (on Limited Connected Device,
+	 * such as mobile phones).
+	 *
+	 * <p>All desktops of the same session must belong to the same
+	 * device type.
+	 *
+	 * <p>The session's device type is determined by the first desktop's
+	 * device type.
+	 *
+	 * @since 2.4.1
+	 */
+	public String getDeviceType();
+
 	/** Returns the value of the specified custom attribute.
 	 */
 	public Object getAttribute(String name);

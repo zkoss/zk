@@ -85,8 +85,8 @@ public class Configuration {
 	private final Map _richlets = new HashMap();
 	/** Map(String path, [String name, boolean wildcard]). */
 	private final Map _richletmaps = new HashMap();
-	/** List(ErrorPage). */
-	private final List _errpgs = new LinkedList();
+	/** Map(String deviceType, List(ErrorPage)). */
+	private final Map _errpgs = new HashMap(3);
 	private Monitor _monitor;
 	private final List _themeUris = new LinkedList();
 	private transient String[] _roThemeUris = new String[0];
@@ -1422,29 +1422,76 @@ public class Configuration {
 	public boolean isKeepDesktopAcrossVisits() {
 		return _keepDesktop;
 	}
-	/** Adds an error page.
-	 *
-	 * @param type what type of errors the error page is associated with.
-	 * @param location where is the error page.
+	/** Adds an error page for the Ajax clients.
+	 * <p>Deprecated, use {@link #addErrorPage(String, Class, String)} instead.
+	 * @deprecated
 	 */
 	public void addErrorPage(Class type, String location) {
+		addErrorPage("ajax", type, location);
+	}
+	/** Adds an error page.
+	 *
+	 * @param deviceType the device type: ajax or mil
+	 * @param type what type of errors the error page is associated with.
+	 * @param location where is the error page.
+	 * @return the previous location of the same error, or null if not
+	 * defined yet.
+	 * @since 2.4.1
+	 */
+	public String addErrorPage(String deviceType, Class type, String location) {
 		if (!Throwable.class.isAssignableFrom(type))
 			throw new IllegalArgumentException("Throwable or derived is required: "+type);
-		if (location == null)
-			throw new IllegalArgumentException("location required");
+		if (location == null || deviceType == null)
+			throw new IllegalArgumentException();
+
+		List l;
 		synchronized (_errpgs) {
-			_errpgs.add(new ErrorPage(type, location));
+			l = (List)_errpgs.get(deviceType);
+			if (l == null)
+				_errpgs.put(deviceType, l = new LinkedList());
 		}
+
+		String previous = null;
+		synchronized (l) {
+			//remove the previous definition
+			for (Iterator it = l.iterator(); it.hasNext();) {
+				final ErrorPage errpg = (ErrorPage)it.next();
+				if (errpg.type.equals(type)) {
+					previous = errpg.location;
+					it.remove();
+					break;
+				}
+			}
+			l.add(new ErrorPage(type, location));
+		}
+		return previous;
 	}
-	/** Returns the error page that matches the specified error, or null if not found.
+	/** Returns the error page for the Ajax clients.
+	 * <p>Deprecated, use {@link #getErrorPage(String, Throwable)} instead.
+	 * @deprecated
 	 */
 	public String getErrorPage(Throwable error) {
+		return getErrorPage("ajax", error);
+	}
+	/** Returns the error page that matches the specified error, or null if not found.
+	 *
+	 * @param deviceType the device type: ajax or mil
+	 * @param error the exception being thrown
+	 * @since 2.4.1
+	 */
+	public String getErrorPage(String deviceType, Throwable error) {
 		if (!_errpgs.isEmpty()) {
+			final List l;
 			synchronized (_errpgs) {
-				for (Iterator it = _errpgs.iterator(); it.hasNext();) {
-					final ErrorPage errpg = (ErrorPage)it.next();
-					if (errpg.type.isInstance(error))
-						return errpg.location;
+				l = (List)_errpgs.get(deviceType);
+			}
+			if (l != null) {
+				synchronized (l) {
+					for (Iterator it = l.iterator(); it.hasNext();) {
+						final ErrorPage errpg = (ErrorPage)it.next();
+						if (errpg.type.isInstance(error))
+							return errpg.location;
+					}
 				}
 			}
 		}

@@ -277,6 +277,9 @@ public class ExecutionImpl extends AbstractExecution {
 	public boolean isSafari() {
 		return Servlets.isSafari(_request);
 	}
+	public boolean isMilDevice() {
+		return Servlets.isMilDevice(_request);
+	}
 
 	public Object getNativeRequest() {
 		return _request;

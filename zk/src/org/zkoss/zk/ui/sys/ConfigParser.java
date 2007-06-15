@@ -235,13 +235,19 @@ public class ConfigParser {
 					IDOMs.getRequiredElementValue(el, "exception-type");
 				final String loc =
 					IDOMs.getRequiredElementValue(el, "location");
+				String devType = el.getElementValue("device-type", true);
+				if (devType == null) devType = "ajax";
+				else if (devType.length() == 0)
+					throw new UiException("device-type not specified at "+el.getLocator());
+
 				final Class cls;
 				try {
 					cls = Classes.forNameByThread(clsnm);
 				} catch (Throwable ex) {
 					throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
 				}
-				config.addErrorPage(cls, loc);
+
+				config.addErrorPage(devType, cls, loc);
 			} else if ("preference".equals(elnm)) {
 				final String nm = IDOMs.getRequiredElementValue(el, "name");
 				final String val = IDOMs.getRequiredElementValue(el, "value");

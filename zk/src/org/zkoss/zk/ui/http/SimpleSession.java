@@ -72,6 +72,8 @@ public class SimpleSession implements Session, SessionCtrl {
 	private WebApp _wapp;
 	/** The HTTP session that this session is associated with. */
 	private HttpSession _hsess;
+	/** The device type. */
+	private String _devType = "ajax";
 	/** The attributes belonging to this session.
 	 * Note: it is the same map of HttpSession's attributes.
 	 * Note: No need to serialize attributes since it is done by Web server.
@@ -130,6 +132,20 @@ public class SimpleSession implements Session, SessionCtrl {
 				removeAttribute(key);
 			}
 		};
+	}
+
+	public String getDeviceType() {
+		return _devType;
+	}
+	public void setDeviceType(String deviceType) {
+		if (deviceType == null || deviceType.length() == 0)
+			throw new IllegalArgumentException();
+
+		//Note: we don't check whether any conflict (e.g., two desktops
+		//have diff device types).
+		//The existence and others are checked by DesktopImpl
+		//and this method is called when Desktop.setDeviceType is called
+		_devType = deviceType;
 	}
 
 	public Object getAttribute(String name) {

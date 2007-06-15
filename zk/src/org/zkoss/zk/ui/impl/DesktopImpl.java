@@ -111,7 +111,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient RequestQueue _rque;
 	private String _bookmark = "";
 	/** The device type. */
-	private String _devType;
+	private String _devType = "ajax";
 	/** The device. */
 	private Device _dev;
 	/** A map of media (String key, Media content). */
@@ -139,9 +139,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		_wapp = wapp;
 		_updateURI = updateURI;
-		_devType =
-			deviceType != null && deviceType.length() != 0 ? deviceType: "ajax";
 		setCurrentDirectory(dir);
+		if (deviceType != null && deviceType.length() != 0)
+			setDeviceType(deviceType);
 
 		init();
 
@@ -218,6 +218,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				throw new UiException("Unable to change the device type since some components are attached.");
 			_devType = deviceType;
 			_dev = null;
+
+			((SessionCtrl)_sess).setDeviceType(_devType);
 		}
 	}
 	public Execution getExecution() {

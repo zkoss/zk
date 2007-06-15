@@ -28,6 +28,16 @@ import org.zkoss.zk.ui.ComponentNotFoundException;
  * @author tomyeh
  */
 public interface SessionCtrl {
+	/** Sets the device type that this session belongs to.
+	 *
+	 * <p>It is called by the desktop when {@link Desktop#setDeviceType}
+	 * is called.
+	 * Don't call this method directly. Otherwise, the result is inpredictable.
+	 *
+	 * @since 2.4.1
+	 */
+	public void setDeviceType(String deviceType);
+
 	/** Returns the desktop cache, or null if not available.
 	 *
 	 * <p>Note: this is an utility to implement {@link DesktopCacheProvider},

@@ -189,8 +189,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			if (err != null) {
 			//Bug 1714094: we have to handle err, because Web container
 			//didn't allow developer to intercept errors caused by inclusion
-				final String errpg =
-					sess.getWebApp().getConfiguration().getErrorPage(err);
+				final String errpg = sess.getWebApp().getConfiguration()
+					.getErrorPage(sess.getDeviceType(), err);
 				if (errpg != null) {
 					try {
 						request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
