@@ -304,7 +304,8 @@ public class Servlets {
 		return agt.indexOf("opera") >= 0;
 	}
 
-	/** Returns whether the client is ZK Mobile supporting MIL.
+	/** Returns whether the client is a mobile device supporting MIL
+	 * (Mobile Interactive Language).
 	 * @since 2.4.0
 	 */
 	public static final boolean isMilDevice(ServletRequest req) {
