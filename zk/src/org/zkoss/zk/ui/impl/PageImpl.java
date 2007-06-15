@@ -47,6 +47,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
 
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.Page;
@@ -562,7 +563,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (_desktop != null) {
 			setVariable("desktop", _desktop);
 			setVariable("desktopScope", _desktop.getAttributes());
-			setVariable("applicationScope", _desktop.getWebApp().getAttributes());
+			final WebApp wapp = _desktop.getWebApp();
+			setVariable("application", wapp);
+			setVariable("applicationScope", wapp.getAttributes());
 			final Session sess = _desktop.getSession();
 			setVariable("session", sess);
 			setVariable("sessionScope", sess.getAttributes());
