@@ -193,7 +193,6 @@ zkMenuit.init = function (cmp) {
 zkMenuit.onclick = function (evt) {
 	if (!evt) evt = window.event;
 	var cmp = $parentByType(Event.element(evt), "Menuit");
-	zkau.closeFloats(cmp);
 	var anc = $e(cmp.id + "!a");
 	if ("javascript:;" == anc.href) {
 		var cmp = $outer(anc);
@@ -209,6 +208,7 @@ zkMenuit.onclick = function (evt) {
 			zk.progress();
 		//Note: we cannot eat onclick. or, <a> won't work
 	}
+	zkau.closeFloats(cmp); //bug 1711822: fire onClick first
 };
 
 zkMenusp.init = function (cmp) {
