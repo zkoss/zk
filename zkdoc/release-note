@@ -3,6 +3,7 @@ ZK 2.4.1
 * Features:
   1735610: Translate messages to Catalan. Thank Xavier Covas O'Ryan (xcovas@conselldemallorca.net) for his contribution.
   1736861: <error-page> should be device dependant (ZK Mobile)
+  1738246: Improve multiline textbox with maxlength
 
 * Bugs:
   1734801: toolbarbutton/button popup broken in 2.4.0
@@ -11,6 +12,7 @@ ZK 2.4.1
   1736858: Memory Leak with BeanShell
   1687152: Windows are overlaying background images
   1737604: EL: session is not accessible
+  1738240: Combobox's onselection doesn't work
 
 	--------
 ZK 2.4.0
