@@ -79,8 +79,6 @@ public class DHtmlLayoutFilter implements Filter {
 		final Session sess = webman.getSession(_ctx, request);
 		final Object old = I18Ns.setup(sess, request, response, _charset);
 		try {
-			response.setContentLength(-1); //note: the chained servlet might set it
-
 			final Desktop desktop = webman.getDesktop(sess, request, null, true);
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request, null);
@@ -91,8 +89,26 @@ public class DHtmlLayoutFilter implements Filter {
 			final Page page = uf.newPage(ri, pagedef, null);
 			final Execution exec =
 				new ExecutionImpl(_ctx, request, response, desktop, page);
-			wappc.getUiEngine()
-				.execNewPage(exec, pagedef, page, response.getWriter());
+			final StringWriter out = new StringWriter(4096*2);
+			wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
+
+			//bug 1738368: Jetty refuses wrong content length
+			//so we have to calculate it again here
+			//(Note: we have to set content length since the servlet
+			//being filtering might set content-length, which is,
+			//of course, wrong
+			String cs = response.getCharacterEncoding();
+			if (cs == null || cs.length() == 0) {
+				cs = _charset;
+				if (cs == null)
+					cs = "UTF-8";
+			}
+			final byte[] bs = out.toString().getBytes(cs);
+			response.setContentLength(bs.length);
+			response.getOutputStream().write(bs);
+		} catch (UiException ex) {
+			log.error("Failed to process:\n"+content);
+			throw ex;
 		} finally {
 			I18Ns.cleanup(request, old);
 		}
