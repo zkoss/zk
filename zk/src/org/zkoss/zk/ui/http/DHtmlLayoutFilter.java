@@ -98,11 +98,8 @@ public class DHtmlLayoutFilter implements Filter {
 			//being filtering might set content-length, which is,
 			//of course, wrong
 			String cs = response.getCharacterEncoding();
-			if (cs == null || cs.length() == 0) {
-				cs = _charset;
-				if (cs == null)
-					cs = "UTF-8";
-			}
+			if (cs == null || cs.length() == 0)
+				cs = _charset != null ? _charset: "UTF-8";
 			final byte[] bs = out.toString().getBytes(cs);
 			response.setContentLength(bs.length);
 			response.getOutputStream().write(bs);
