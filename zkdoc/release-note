@@ -16,6 +16,7 @@ ZK 2.4.1
   1738240: Combobox's onselection doesn't work
   1738343: Unable to include ZUML page from JSP
   1738368: zkFilter failed to work with Jetty 6.1.4
+  1711822: Menuitem: the order of onClick and onOpen
 
 	--------
 ZK 2.4.0
