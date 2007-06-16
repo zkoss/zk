@@ -168,8 +168,8 @@ zkMenu.init = function (cmp) {
 		zk.listen(cmp, "mouseover", zkMenu.onover);
 		zk.listen(cmp, "mouseout", zkMenu.onout);
 
-		zk.listen(anc, "focus", function () {zkau.onfocus(anc);});
-		zk.listen(anc, "blur", function () {zkau.onblur(anc);});
+		zk.listen(anc, "focus", zkau.onfocus);
+		zk.listen(anc, "blur", zkau.onblur);
 	}
 };
 
@@ -186,8 +186,8 @@ zkMenuit.init = function (cmp) {
 
 	if (getZKAttr(cmp, "top") != "true") { //non-topmost
 		var anc = $e(cmp.id + "!a");
-		zk.listen(anc, "focus", function () {zkau.onfocus(anc);});
-		zk.listen(anc, "blur", function () {zkau.onblur(anc);});
+		zk.listen(anc, "focus", zkau.onfocus);
+		zk.listen(anc, "blur", zkau.onblur);
 	}
 };
 zkMenuit.onclick = function (evt) {

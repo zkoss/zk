@@ -1151,17 +1151,18 @@ zk.addModuleInit(function () {
 // listbox mold=select //
 zkLisel = {};
 zkLisel.init = function (cmp) {
-	zk.listen(cmp, "change", function () {zkLisel.onchange(cmp);});
-	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});
-	zk.listen(cmp, "blur", function() {zkau.onblur(cmp);});
+	zk.listen(cmp, "change", zkLisel.onchange);
+	zk.listen(cmp, "focus", zkau.onfocus);
+	zk.listen(cmp, "blur", zkau.onblur);
 };
 /** Handles onchange from select/list. */
-zkLisel.onchange = function (target) {
+zkLisel.onchange = function (evtel) {
+	var cmp = zkau.evtel(evtel); //backward compatible with 2.4 or before
 	var data;
-	if (target.multiple) {
+	if (cmp.multiple) {
 		//To reduce # of bytes to send, we use a string instead of array.
 		data = "";
-		var opts = target.options;
+		var opts = cmp.options;
 		for (var j = 0; j < opts.length; ++j) {
 			var opt = opts[j];
 			if (opt.selected)
@@ -1173,10 +1174,10 @@ zkLisel.onchange = function (target) {
 		//which won't check defaultSelected
 		//Besides, most of items are not selected
 	} else {
-		var opt = target.options[target.selectedIndex];
+		var opt = cmp.options[cmp.selectedIndex];
 		data = opt.id;
 	}
-	var uuid = $uuid(target);
+	var uuid = $uuid(cmp);
 	zkau.send({uuid: uuid, cmd: "onSelect", data: [data]},
 			zkau.asapTimeout(uuid, "onSelect"));
 };

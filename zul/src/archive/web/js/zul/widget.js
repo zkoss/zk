@@ -25,9 +25,11 @@ zkau.textbox = zkTxbox; //zkau depends on it
 zkTxbox._intervals = {};
 
 zkTxbox.init = function (cmp) {
-	zk.listen(cmp, "focus", function () {zkTxbox.onfocus(cmp);});
-	zk.listen(cmp, "blur", function() {zkTxbox.onblur(cmp);});
-	zk.listen(cmp, "select", function() {zkTxbox.onselect(cmp);});
+	zk.listen(cmp, "focus", zkTxbox.onfocus);
+	zk.listen(cmp, "blur", zkTxbox.onblur);
+	zk.listen(cmp, "select", zkTxbox.onselect);
+	if ($tag(cmp) == "TEXTAREA")
+		zk.listen(cmp, "keyup", zkTxbox.onkey);
 
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
@@ -42,9 +44,10 @@ zkTxbox.onHide = function (cmp) {
 	if (inp) zkVld.closeErrbox(inp.id, true);
 };
 
-zkTxbox.onselect = function (cmp) {
+zkTxbox.onselect = function (evt) {
+	var inp = zkau.evtel(evt); //backward compatible (2.4 or before)
+	var cmp = $outer(inp);
 	if (zkau.asap(cmp, "onSelection")) {
-		var inp = $real(cmp);
 		var sr = zk.getSelectionRange(inp);
 		zkau.send({uuid: cmp.id, cmd: "onSelection",
 				data: [sr[0], sr[1], inp.value.substring(sr[0], sr[1])]},
@@ -54,7 +57,9 @@ zkTxbox.onselect = function (cmp) {
 /** Handles onblur for text input.
  * Note: we don't use onChange because it won't work if user uses IE' auto-fill
  */
-zkTxbox.onblur = function (inp) {
+zkTxbox.onblur = function (evt) {
+	var inp = zkau.evtel(evt); //backward compatible (2.4 or before)
+
 	//stop the scanning of onChaning first
 	var interval = zkTxbox._intervals[inp.id];
 	if (interval) {
@@ -67,20 +72,12 @@ zkTxbox.onblur = function (inp) {
 	}
 
 	zkTxbox.updateChange(inp, zkTxbox._noonblur(inp));
-	zkau.onblur(inp); //fire onBlur after onChange
+	zkau.onblur(evt); //fire onBlur after onChange
 };
 /** check any change.
  * @return false if failed (wrong data).
  */
 zkTxbox.updateChange = function (inp, noonblur) {
-	//Request 1565288: support maxlength for Textarea
-	var maxlen = getZKAttr(inp, "maxlen");
-	if (maxlen) {
-		maxlen = parseInt(maxlen);
-		if (maxlen > 0 && inp.value != inp.defaultValue && inp.value.length > maxlen)
-			inp.value = inp.value.substring(0, maxlen);
-	}
-
 	if (zkVld.validating) return true; //to avoid deadloop (when both fields are invalid)
 
 	if (inp && inp.id) {
@@ -100,6 +97,7 @@ zkTxbox.updateChange = function (inp, noonblur) {
 	if (!noonblur) zkTxbox.onupdate(inp);
 	return true;
 };
+
 /** Tests whether NOT to do onblur (if inp currentFocus are in the same
  * component).
  */
@@ -148,10 +146,22 @@ zkTxbox.onupdate = function (inp) {
 			data: [newval, null]}, -1); //clear error (even if not changed)
 	}
 };
-zkTxbox.onfocus = function (inp) {
-	zkau.onfocus(inp);
+zkTxbox.onkey = function (evt) {
+	//Request 1565288 and 1738246: support maxlength for Textarea
+	var inp = Event.element(evt);
+	var maxlen = getZKAttr(inp, "maxlen");
+	if (maxlen) {
+		maxlen = parseInt(maxlen);
+		if (maxlen > 0 && inp.value != inp.defaultValue
+		&& inp.value.length > maxlen)
+			inp.value = inp.value.substring(0, maxlen);
+	}
+};
+zkTxbox.onfocus = function (evt) {
+	zkau.onfocus(evt);
 
 	//handling onChanging
+	var inp = zkau.evtel(evt); //backward compatible (2.4 or before)
 	if (inp && inp.id && zkau.asap($outer(inp), "onChanging")) {
 		inp.setAttribute("zk_changing_last", inp.value);
 		if (!zkTxbox._intervals[inp.id])
@@ -242,8 +252,8 @@ zkButton.init = function (cmp) {
 	zk.listen(cmp, "click", zkau.onclick);
 	zk.listen(cmp, "dblclick", zkau.ondblclick);
 		//we have to handle here since _onDocDClick won't receive it
-	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});
-	zk.listen(cmp, "blur", function() {zkau.onblur(cmp);});
+	zk.listen(cmp, "focus", zkau.onfocus);
+	zk.listen(cmp, "blur", zkau.onblur);
 };
 
 zkTbtn = {}; //toolbarbutton
@@ -256,8 +266,8 @@ zkTbtn.init = function (cmp) {
 				zk.progress();
 		}
 	});
-	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});
-	zk.listen(cmp, "blur", function() {zkau.onblur(cmp);});
+	zk.listen(cmp, "focus", zkau.onfocus);
+	zk.listen(cmp, "blur", zkau.onblur);
 };
 
 ////
@@ -266,8 +276,8 @@ zkCkbox = {};
 zkCkbox.init = function (cmp) {
 	cmp = $real(cmp);
 	zk.listen(cmp, "click", function () {zkCkbox.onclick(cmp);});
-	zk.listen(cmp, "focus", function () {zkau.onfocus(cmp);});
-	zk.listen(cmp, "blur", function() {zkau.onblur(cmp);});
+	zk.listen(cmp, "focus", zkau.onfocus);
+	zk.listen(cmp, "blur", zkau.onblur);
 };
 zkCkbox.setAttr = function (cmp, nm, val) {
 	if ("style" == nm) {

@@ -167,14 +167,14 @@ zkTab.init = function (cmp) {
 
 	var anc = $e(cmp.id + "!a");
 	if (anc) {
-		zk.listen(anc, "focus", function () {zkau.onfocus(anc);});
-		zk.listen(anc, "blur", function () {zkau.onblur(anc);});
+		zk.listen(anc, "focus", zkau.onfocus);
+		zk.listen(anc, "blur", zkau.onblur);
 	}
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
-		zk.listen(btn, "mouseover", function () {zkau.onimgover(btn);});
-		zk.listen(btn, "mouseout", function () {zkau.onimgout(btn);});
+		zk.listen(btn, "mouseover", zkau.onimgover);
+		zk.listen(btn, "mouseout", zkau.onimgout);
 		if (!btn.style.cursor) btn.style.cursor = "default";
 	}
 };
