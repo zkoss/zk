@@ -819,52 +819,59 @@ zk.rename = function (url, name) {
 };
 
 //-- special routines --//
-if (!zk._actTagnms) {
-	zk._actTagnms =
-		new Array("A","BUTTON","TEXTAREA","INPUT","SELECT","IFRAME","APPLET");
+if (!zk._actg1) {
+	zk._actg1 = new Array("IFRAME"/*,"APPLET"*/); //comment out APPLET for better performance
+	zk._actg2 = new Array("A","BUTTON","TEXTAREA","INPUT");
+	if (zk.ie && !zk.ie7) { //ie7 solves the z-order issue of SELECT
+		zk._actg1.unshift("SELECT"); //change visibility is required
+	} else
+		zk._actg2.unshift("SELECT");
+
+	zk.coveredTagnames = zk._actg1; //backward compatible 2.4 or before
+
 	zk._disTags = new Array(); //A list of {element: xx, what: xx}
 	zk._hidCvred = new Array(); //A list of {element: xx, visibility: xx}
-
-	zk.coveredTagnames = new Array("IFRAME","APPLET"); //Bug 1562239 
-	if (zk.ie)
-		zk.coveredTagnames.unshift("SELECT");
 }
 
 /** Disables all active tags. */
 zk.disableAll = function (parent) {
-	for (var j = 0; j < zk._actTagnms.length; j++) {
-		var els = document.getElementsByTagName(zk._actTagnms[j]);
-		l_els:
-		for (var k = 0 ; k < els.length; k++) {
-			var el = els[k];
-			if (zk.isAncestor(parent, el))
-				continue;
-			for(var m = 0; m < zk._disTags.length; ++m) {
-				var info = zk._disTags[m];
-				if (info.element == el)
-					continue l_els;
-			}
+	for (var j = 0; j < zk._actg1.length; j++)
+		zk._dsball(parent, document.getElementsByTagName(zk._actg1[j]), true);
 
-			if (zk._disTags.contains(el))
-				continue;
-
-			var what;
-			var tn = $tag(el);
-			if (tn == "IFRAME" || tn == "APPLET" || (zk.ie && tn == "SELECT")) {
-	//Note: we don't check isOverlapped because mask always covers it
-				what = el.style.visibility;
-				el.style.visibility = "hidden";
-			} else if (zk.gecko && tn == "A") {
-	//Firefox doesn't support the disable of A
-				what = "h:" + zkau.getStamp(el, "tabIndex") + ":" +
-					(el.tabIndex ? el.tabIndex: 0); //just in case (if null)
-				el.tabIndex = -1;
-			} else {
-				what = "d:" + zkau.getStamp(el, "disabled") + ":" + el.disabled;
-				el.disabled = true;
-			}
-			zk._disTags.push({element: el, what: what});
+	if (!zk.ndbModal) //not disable-behind-modal
+		for (var j = 0; j < zk._actg2.length; j++)
+			zk._dsball(parent, document.getElementsByTagName(zk._actg2[j]));
+};
+zk._dsball = function (parent, els, visibility) {
+	l_els:
+	for (var k = 0 ; k < els.length; k++) {
+		var el = els[k];
+		if (zk.isAncestor(parent, el))
+			continue;
+		for(var m = 0; m < zk._disTags.length; ++m) {
+			var info = zk._disTags[m];
+			if (info.element == el)
+				continue l_els;
 		}
+
+		var what;
+		var tn = $tag(el);
+		if (visibility) { //_actg1
+			if (tn == "IFRAME" && getZKAttr(el, "autohide") != "true")
+				continue; //handle only autohide iframe
+
+			what = el.style.visibility;
+			el.style.visibility = "hidden";
+		} else if (zk.gecko && tn == "A") {
+//Firefox doesn't support the disable of A
+			what = "h:" + zkau.getStamp(el, "tabIndex") + ":" +
+				(el.tabIndex ? el.tabIndex: 0); //just in case (if null)
+			el.tabIndex = -1;
+		} else {
+			what = "d:" + zkau.getStamp(el, "disabled") + ":" + el.disabled;
+			el.disabled = true;
+		}
+		zk._disTags.push({element: el, what: what});
 	}
 };
 /** Restores tags being disabled by previous disableAll. If el is not null,
@@ -929,7 +936,7 @@ zk.hideCovered = function (ary) {
 		return;
 	}
 
-	var cts = zk.coveredTagnames;
+	var cts = zk._actg1;
 	for (var j = 0; j < cts.length; ++j) {
 		var els = document.getElementsByTagName(cts[j]);
 		var ifr = "IFRAME" == cts[j];

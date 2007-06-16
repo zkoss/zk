@@ -144,7 +144,8 @@ public class ExecutionImpl extends AbstractExecution {
 		if (getVisualizer().isEverAsyncUpdate())
 			throw new IllegalStateException("Use sendRedirect instead when processing user's request");
 
-		_voided = true;
+		setVoided(true);
+
 		try {
 			Servlets.forward(_ctx, _request,
 				BufferedResponse.getInstance(_response, out),
@@ -167,7 +168,10 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	public boolean isVoided() {
-		return _voided || _response.isCommitted();
+		return _voided;
+	}
+	public void setVoided(boolean voided) {
+		_voided = voided;
 	}
 
 	public String encodeURL(String uri) {

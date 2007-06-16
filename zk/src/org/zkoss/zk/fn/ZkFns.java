@@ -170,6 +170,8 @@ public class ZkFns {
 			.append(";\nzk_ver='").append(wapp.getVersion())
 			.append("';\n");
 
+		if (!config.isDisableBehindModalEnabled())
+			sb.append("zk.ndbModal=true;\n");
 		if (config.isKeepDesktopAcrossVisits())
 			sb.append("zk.keepDesktop=true;\n");
 

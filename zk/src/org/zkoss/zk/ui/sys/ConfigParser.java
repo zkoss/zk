@@ -121,6 +121,7 @@ public class ConfigParser {
 			//  processing-prompt-delay
 			//	tooltip-delay
 			//  keep-across-visits
+			//  disable-behind-modal
 				parseThemeUri(config, el);
 
 				Element subel = el.getElement("disable-default-theme");
@@ -146,6 +147,9 @@ public class ConfigParser {
 				String s = el.getElementValue("keep-across-visits", true);
 				if (s != null)
 					config.setKeepDesktopAcrossVisits(!"false".equals(s));
+
+				s = el.getElementValue("disable-behind-modal", true);
+				if (s != null) config.enableDisableBehindModal(!"false".equals(s));
 			} else if ("session-config".equals(elnm)) {
 			//session-config
 			//	session-timeout

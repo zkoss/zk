@@ -187,8 +187,8 @@ public interface Execution extends Evaluator {
 	throws IOException;
 	/** Returns whether the execution is voided.
 	 * By void we mean the request is taken charged by other servlet.
-	 * The execution shall not do anything more. The execution
-	 * won't generate any ouput then.
+	 * The execution shall not do anything more. In other words,
+	 * the execution is avoided and won't generate any ouput.
 	 *
 	 * <p>The common cause of being voided is the invocation of
 	 * {@link #forward}.
@@ -196,6 +196,17 @@ public interface Execution extends Evaluator {
 	 * @since 2.4.0
 	 */
 	public boolean isVoided();
+	/** Sets whether the execution is voided.
+	 * By void we mean the request is taken charged by other servlet.
+	 *
+	 * <p>If you invoke {@link #forward}, this method is called automatically
+	 * with true. Thus, you rarely need to invoke this method, unless
+	 * you forward to other servlet by use javax.servlet.RequestDispatcher
+	 * directly.
+	 *
+	 * @since 2.4.1
+	 */
+	public void setVoided(boolean voided);
 
 	/** Returns whether this execution is included by some other pages.
 	 */

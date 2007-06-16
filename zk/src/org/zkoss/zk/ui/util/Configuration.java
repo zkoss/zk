@@ -102,6 +102,8 @@ public class Configuration {
 	private boolean _useEvtThd = true;
 	/** keep-across-visits. */
 	private boolean _keepDesktop;
+	/** Whether to disable components that don't belong to the modal window. */
+	private boolean _disableBehindModal = true;
 
 	/** Contructor.
 	 */
@@ -1127,6 +1129,25 @@ public class Configuration {
 	 */
 	public boolean isEventThreadEnabled() {
 		return _useEvtThd;
+	}
+
+	/** Returns whether to disable the components that don't belong to
+	 * the active modal window.
+	 *
+	 * <p>Default: true.
+	 * @since 2.4.1
+	 */
+	public boolean isDisableBehindModalEnabled() {
+		return _disableBehindModal;
+	}
+	/** Sets whether to disable the components that don't belong to
+	 * the active modal window.
+	 *
+	 * <p>Default: true.
+	 * @since 2.4.1
+	 */
+	public void enableDisableBehindModal(boolean enable) {
+		_disableBehindModal = enable;
 	}
 
 	/** Returns the monitor for this application, or null if not set.
