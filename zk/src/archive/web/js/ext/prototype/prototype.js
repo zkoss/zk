@@ -1894,6 +1894,7 @@ if (!window.Event) {
 }
 
 Object.extend(Event, {
+/* Tom M. Yeh, Potix: remove unused codes
   KEY_BACKSPACE: 8,
   KEY_TAB:       9,
   KEY_RETURN:   13,
@@ -1907,7 +1908,7 @@ Object.extend(Event, {
   KEY_END:      35,
   KEY_PAGEUP:   33,
   KEY_PAGEDOWN: 34,
-
+*/
   element: function(event) {
     return event.target || event.srcElement;
   },

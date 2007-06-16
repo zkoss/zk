@@ -296,9 +296,10 @@ zkau.send = function (evt, timeout) {
 zkau._send = function (dtid, evt, timeout) {
 	if (evt.ctl) {
 		var t = new Date().getTime();
-		if (zkau._ctltime && t - zkau._ctltime < 600)
+		if (zkau._ctl == evt.uuid && t - zkau._ctlt < 600)
 			return; //to prevent key stroke are pressed twice (quickly)
-		zkau._ctltime = t;
+		zkau._ctlt = t;
+		zkau._ctl = evt.uuid;
 	}
 		
 	zkau._events(dtid).push(evt);
@@ -722,7 +723,20 @@ if (!zkau._popups) {
 	zkau._modals = new Array(); //uuid (used zul.js or other modal)
 }
 
-zkau.onfocus = function (el) {
+//-- utilities --//
+/** Returns the element of the specified element.
+ * It is the same as Event.elemet(evt), but
+ * it is smart enough to know whether evt is an element.
+ * It is used to make a method able to accept either event or element.
+ */
+zkau.evtel = function (evtel) {
+	if (!evtel) evtel = window.event;
+	else if (evtel.parentNode) return evtel;
+	return Event.element(evtel);
+};
+
+zkau.onfocus = function (evtel) { //accept both evt and cmp
+	var el = zkau.evtel(evtel);
 	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases
 	zkau.closeFloatsOnFocus(el);
 	if (zkau.valid) zkau.valid.uncover(el);
@@ -733,7 +747,8 @@ zkau.onfocus = function (el) {
 	if (zkau.asap(cmp, "onFocus"))
 		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 25);
 };
-zkau.onblur = function (el) {
+zkau.onblur = function (evtel) {
+	var el = zkau.evtel(evtel);
 	if (el == zkau.currentFocus) zkau.currentFocus = null;
 		//Note: _onDocMousedown is called before onblur, so we have to
 		//prevent it from being cleared
@@ -743,11 +758,13 @@ zkau.onblur = function (el) {
 		zkau.send({uuid: cmp.id, cmd: "onBlur", data: null}, 25);
 };
 
-zkau.onimgover = function (el) {
+zkau.onimgover = function (evtel) {
+	var el = zkau.evtel(evtel);
 	if (el && el.src.indexOf("-off") >= 0)
 		el.src = zk.renType(el.src, "on");
 };
-zkau.onimgout = function (el) {
+zkau.onimgout = function (evtel) {
+	var el = zkau.evtel(evtel);
 	if (el && el.src.indexOf("-on") >= 0)
 		el.src = zk.renType(el.src, "off");
 };
