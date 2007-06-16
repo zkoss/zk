@@ -4,6 +4,7 @@ ZK 2.4.1
   1735610: Translate messages to Catalan. Thank Xavier Covas O'Ryan (xcovas@conselldemallorca.net) for his contribution.
   1736861: <error-page> should be device dependant (ZK Mobile)
   1738246: Improve multiline textbox with maxlength
+  1738280: An option not to disable elements behind a modal window
 
 * Bugs:
   1734801: toolbarbutton/button popup broken in 2.4.0
@@ -13,6 +14,7 @@ ZK 2.4.1
   1687152: Windows are overlaying background images
   1737604: EL: session is not accessible
   1738240: Combobox's onselection doesn't work
+  1738343: Unable to include ZUML page from JSP
 
 	--------
 ZK 2.4.0
