@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.RenderOnDemand;
+import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.ext.render.Cropper;
@@ -105,8 +105,7 @@ import org.zkoss.zul.event.PagingEvent;
  * @see ListitemRenderer
  * @see ListitemRendererExt
  */
-public class Listbox extends XulElement
-implements RenderOnDemand {
+public class Listbox extends XulElement {
 	private static final Log log = Log.lookup(Listbox.class);
 
 	private transient List _items;
@@ -1350,8 +1349,6 @@ implements RenderOnDemand {
 			renderer.doFinally();
 		}
 	}
-
-	//-- RenderOnDemand --//
 	public void renderItems(Set items) {
 		if (_model == null) return;
 
@@ -1544,10 +1541,51 @@ implements RenderOnDemand {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Selectable, ChildChangedAware, Cropper {
+	implements Selectable, ChildChangedAware, Cropper, RenderOnDemand {
 		//ChildChangedAware//
 		public boolean isChildChangedAware() {
 			return !inSelectMold();
+		}
+
+		//RenderOnDemand//
+		public void renderItems(Set items) {
+			int cnt = items.size();
+			if (cnt == 0)
+				return; //nothing to do
+			cnt = 20 - cnt;
+
+			if (cnt > 0) { //Feature 1740072: pre-load
+				if (cnt > 7) cnt = 7; //at most 8 more to load
+
+				//1. locate the first item found in items
+				final List toload = new LinkedList();
+				Iterator it = _items.iterator();
+				while (it.hasNext()) {
+					final Listitem li = (Listitem)it.next();
+					if (items.contains(li)) //found
+						break;
+					if (!li.isLoaded())
+						toload.add(0, li); //reverse order
+				}
+
+				//2. add unload items before the found one
+				if (!toload.isEmpty()) {
+					int bfcnt = cnt/3;
+					for (Iterator e = toload.iterator();
+					bfcnt > 0 && e.hasNext(); --bfcnt, --cnt) {
+						items.add(e.next());
+					}
+				}
+
+				//3. add unloaded after the found one
+				while (cnt > 0 && it.hasNext()) {
+					final Listitem li = (Listitem)it.next();
+					if (!li.isLoaded() && items.add(li))
+						--cnt;
+				}
+			}
+
+			Listbox.this.renderItems(items);
 		}
 
 		//--Cropper--//

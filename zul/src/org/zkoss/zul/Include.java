@@ -137,7 +137,8 @@ public class Include extends XulElement {
 		//though DHtmlLayoutServlet handles exception, we still have to
 		//handle it because src might not be ZUML
 			final String errpg =
-				desktop.getWebApp().getConfiguration().getErrorPage(err);
+				desktop.getWebApp().getConfiguration().getErrorPage(
+					desktop.getDeviceType(), err);
 			if (errpg != null) {
 				try {
 					exec.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));

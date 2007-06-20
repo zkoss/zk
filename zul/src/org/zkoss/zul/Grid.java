@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
-import org.zkoss.zk.ui.ext.RenderOnDemand;
+import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -89,8 +90,7 @@ import org.zkoss.zul.event.PagingEvent;
  * @see RowRenderer
  * @see RowRendererExt
  */
-public class Grid extends XulElement
-implements RenderOnDemand {
+public class Grid extends XulElement {
 	private static final Log log = Log.lookup(Grid.class);
 
 	private transient Rows _rows;
@@ -660,12 +660,12 @@ implements RenderOnDemand {
 	 * <p>It does nothing if {@link #getModel} returns null.
 	 * In other words, it is meaningful only if live data model is used.
 	 */
-	public void renderRow(Row li) {
+	public void renderRow(Row row) {
 		if (_model == null) return;
 
 		final Renderer renderer = new Renderer();
 		try {
-			renderer.render(li);
+			renderer.render(row);
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -695,7 +695,6 @@ implements RenderOnDemand {
 		renderItems(rows);
 	}
 
-	//-- RenderOnDemand --//
 	public void renderItems(Set rows) {
 		if (_model == null) { //just in case that app dev might change it
 			if (log.debugable()) log.debug("No model no render");
@@ -849,7 +848,47 @@ implements RenderOnDemand {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements ChildChangedAware {
+	implements ChildChangedAware, RenderOnDemand {
+		//RenderOnDemand//
+		public void renderItems(Set items) {
+			int cnt = items.size();
+			if (cnt == 0)
+				return; //nothing to do
+			cnt = 20 - cnt;
+			if (cnt > 0) { //Feature 1740072: pre-load
+				if (cnt > 7) cnt = 7; //at most 7 more to load
+
+				//1. locate the first item found in items
+				final List toload = new LinkedList();
+				Iterator it = getRows().getChildren().iterator();
+				while (it.hasNext()) {
+					final Row row = (Row)it.next();
+					if (items.contains(row)) //found
+						break;
+					if (!row.isLoaded())
+						toload.add(0, row); //reverse order
+				}
+
+				//2. add unload items before the found one
+				if (!toload.isEmpty()) {
+					int bfcnt = cnt/3;
+					for (Iterator e = toload.iterator();
+					bfcnt > 0 && e.hasNext(); --bfcnt, --cnt) {
+						items.add(e.next());
+					}
+				}
+
+				//3. add unloaded after the found one
+				while (cnt > 0 && it.hasNext()) {
+					final Row row = (Row)it.next();
+					if (!row.isLoaded() && items.add(row))
+						--cnt;
+				}
+			}
+
+			Grid.this.renderItems(items);
+		}
+
 		//ChildChangedAware//
 		public boolean isChildChangedAware() {
 			return true;
