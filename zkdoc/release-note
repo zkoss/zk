@@ -5,6 +5,8 @@ ZK 2.4.1
   1736861: <error-page> should be device dependant (ZK Mobile)
   1738246: Improve multiline textbox with maxlength
   1738280: An option not to disable elements behind a modal window
+  1740080: Datebox supports the buttonVisible property
+  1740072: dynamic "look ahead" live data for listbox and grid
 
 * Bugs:
   1734801: toolbarbutton/button popup broken in 2.4.0
