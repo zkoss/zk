@@ -54,7 +54,7 @@ import org.zkoss.zul.impl.FormatInputElement;
 public class Datebox extends FormatInputElement {
 	private TimeZone _tzone;
 	private boolean _lenient = true;
-	private boolean _compact;
+	private boolean _compact, _btnVisible = true;
 
 	public Datebox() {
 		setFormat(getDefaultFormat());
@@ -119,6 +119,23 @@ public class Datebox extends FormatInputElement {
 		if (_compact != compact) {
 			_compact = compact;
 			invalidate();
+		}
+	}
+
+	/** Returns whether the button (on the right of the textbox) is visible.
+	 * <p>Default: true.
+	 * @since 2.4.1
+	 */
+	public boolean isButtonVisible() {
+		return _btnVisible;
+	}
+	/** Sets whether the button (on the right of the textbox) is visible.
+	 * @since 2.4.1
+	 */
+	public void setButtonVisible(boolean visible) {
+		if (_btnVisible != visible) {
+			_btnVisible = visible;
+			smartUpdate("z.btnVisi", visible);
 		}
 	}
 

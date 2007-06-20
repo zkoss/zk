@@ -385,6 +385,10 @@ zkDtbox.setAttr = function (cmp, nm, val) {
 		}
 	} else if ("z.sel" == nm ) {
 		return zkTxbox.setAttr(cmp, nm, val);
+	} else if ("z.btnVisi" == nm) {
+		var btn = $e(cmp.id + "!btn");
+		if (btn) btn.style.display = val == "true" ? "": "none";
+		return true;
 	} else if (zkDtbox._inflds.contains(nm)) {
 		cmp = $real(cmp);
 	}
