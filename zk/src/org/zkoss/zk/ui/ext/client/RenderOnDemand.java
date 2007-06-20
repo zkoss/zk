@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.ext;
+package org.zkoss.zk.ui.ext.client;
 
 import java.util.Set;
 
@@ -27,7 +27,11 @@ import java.util.Set;
  * A typical example is Listbox (it is similar to JList and ListModel in
  * Swing).
  *
+ * <p>This interface is moved from the org.zkoss.zk.ui.ext package
+ * since ZK 2.4.1.
+ *
  * @author tomyeh
+ * @since 2.4.1
  */
 public interface RenderOnDemand {
 	/** Renders a set of specified items, if they are not rendered before.
