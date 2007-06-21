@@ -19,7 +19,6 @@ package org.zkoss.zkdemo.test;
 import java.util.*;
 
 import org.zkoss.zk.ui.*;
-import org.zkoss.zk.ui.util.WebAppInit;
 import org.zkoss.zul.*;
 
 /**
@@ -30,6 +29,7 @@ import org.zkoss.zul.*;
  */
 public class ComponentPools {
 	private static final List _comps = new LinkedList();
+	private static int _cnt;
 
 	/** Returns the next component in the pool, or null if no more.
 	 */
@@ -38,10 +38,19 @@ public class ComponentPools {
 			return _comps.isEmpty() ? null: (Component)_comps.remove(0);
 		}
 	}
-	public static class Init implements WebAppInit {
-		public void init(WebApp wapp) {
-			for (int j = 0; j < 20; ++j)
-				_comps.add(new Label("Pool "+j));
-		}
+	/** Generates a set of components and stores them in the pool.
+	 */
+	public static void generate(final int num) {
+		final Thread td = new Thread() {
+			public void run() {
+				for (int j = 0; j < num; ++j) {
+					final Label l = new Label("Pool " + _cnt++);
+					_comps.add(l);
+					if ((j & 1) == 1)
+						l.setId("L" + _cnt);
+				}
+			}
+		};
+		td.start();
 	}
 }

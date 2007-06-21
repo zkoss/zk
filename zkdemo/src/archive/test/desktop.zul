@@ -18,12 +18,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="main" title="Test Desktop Issues">
+	<vbox>
+	Test: create components in an working thread and use them later
+	<button label="Generates 5 components into pool"
+		onClick="org.zkoss.zkdemo.test.ComponentPools.generate(5)"/>
 	<button label="Attach from pool">
 		<attribute name="onClick">
-	import org.zkoss.zkdemo.test.ComponentPools;
-	Component c = ComponentPools.next();
+	Component c = org.zkoss.zkdemo.test.ComponentPools.next();
 	if (c != null) main.appendChild(c);
 	else alert("No more component");
 		</attribute>
 	</button>
+	</vbox>
 </window>

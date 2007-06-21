@@ -81,12 +81,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<listener-class>org.zkoss.zk.ui.util.Statistic</listener-class>
 	</listener>
 
-	<!-- Used for test desktop.zul
-	<listener>
-		<listener-class>org.zkoss.zkdemo.test.ComponentPools$Init</listener-class>
-	</listener>
-	-->
-
 	<!-- Configure the error page
 	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>
