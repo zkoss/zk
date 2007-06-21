@@ -296,7 +296,7 @@ zkau.send = function (evt, timeout) {
 zkau._send = function (dtid, evt, timeout) {
 	if (evt.ctl) {
 		var t = new Date().getTime();
-		if (zkau._ctl == evt.uuid && t - zkau._ctlt < 600)
+		if (zkau._ctl == evt.uuid && t - zkau._ctlt < 450)
 			return; //to prevent key stroke are pressed twice (quickly)
 		zkau._ctlt = t;
 		zkau._ctl = evt.uuid;
