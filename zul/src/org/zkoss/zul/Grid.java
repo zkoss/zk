@@ -108,6 +108,8 @@ public class Grid extends XulElement {
 	 */
 	private transient Paging _paging;
 	private transient EventListener _pgListener;
+	/** the # of rows to preload. */
+	private int _preloadsz = 7;
 
 	public Grid() {
 		setSclass("grid");
@@ -383,6 +385,35 @@ public class Grid extends XulElement {
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
 			setRowRenderer((RowRenderer)Classes.newInstanceByThread(clsnm));
+	}
+
+	/** Returns the number of rows to preload when receiving
+	 * the rendering request from the client.
+	 *
+	 * <p>Default: 7.
+	 *
+	 * <p>It is used only if live data ({@link #setModel} and
+	 * not paging ({@link #getPaging}.
+	 *
+	 * @since 2.4.1
+	 */
+	public int getPreloadSize() {
+		return _preloadsz;
+	}
+	/** Sets the number of rows to preload when receiving
+	 * the rendering request from the client.
+	 * <p>It is used only if live data ({@link #setModel} and
+	 * not paging ({@link #getPaging}.
+	 *
+	 * @param sz the number of rows to preload. If zero, no preload
+	 * at all.
+	 * @exception UiException if sz is negative
+	 * @since 2.4.1
+	 */
+	public void setPreloadSize(int sz) {
+		if (sz < 0)
+			throw new UiException("nonnegative is required: "+sz);
+		_preloadsz = sz;
 	}
 
 	/** Synchronizes the grid to be consistent with the specified model.
@@ -855,8 +886,8 @@ public class Grid extends XulElement {
 			if (cnt == 0)
 				return; //nothing to do
 			cnt = 20 - cnt;
-			if (cnt > 0) { //Feature 1740072: pre-load
-				if (cnt > 7) cnt = 7; //at most 7 more to load
+			if (cnt > 0 && _preloadsz > 0) { //Feature 1740072: pre-load
+				if (cnt > _preloadsz) cnt = _preloadsz;
 
 				//1. locate the first item found in items
 				final List toload = new LinkedList();

@@ -131,6 +131,8 @@ public class Listbox extends XulElement {
 	private transient Paging _paging;
 	private transient EventListener _pgListener;
 	private int _tabindex = -1;
+	/** the # of rows to preload. */
+	private int _preloadsz = 7;
 	private boolean _multiple;
 	private boolean _disabled, _checkmark;
 	private boolean _vflex;
@@ -1067,6 +1069,35 @@ public class Listbox extends XulElement {
 			setItemRenderer((ListitemRenderer)Classes.newInstanceByThread(clsnm));
 	}
 
+	/** Returns the number of items to preload when receiving
+	 * the rendering request from the client.
+	 *
+	 * <p>Default: 7.
+	 *
+	 * <p>It is used only if live data ({@link #setModel} and
+	 * not paging ({@link #getPaging}.
+	 *
+	 * @since 2.4.1
+	 */
+	public int getPreloadSize() {
+		return _preloadsz;
+	}
+	/** Sets the number of items to preload when receiving
+	 * the rendering request from the client.
+	 * <p>It is used only if live data ({@link #setModel} and
+	 * not paging ({@link #getPaging}.
+	 *
+	 * @param sz the number of items to preload. If zero, no preload
+	 * at all.
+	 * @exception UiException if sz is negative
+	 * @since 2.4.1
+	 */
+	public void setPreloadSize(int sz) {
+		if (sz < 0)
+			throw new UiException("nonnegative is required: "+sz);
+		_preloadsz = sz;
+	}
+
 	/** Synchronizes the listbox to be consistent with the specified model.
 	 * @param min the lower index that a range of invalidated items
 	 * @param max the higher index that a range of invalidated items
@@ -1554,8 +1585,8 @@ public class Listbox extends XulElement {
 				return; //nothing to do
 			cnt = 20 - cnt;
 
-			if (cnt > 0) { //Feature 1740072: pre-load
-				if (cnt > 7) cnt = 7; //at most 8 more to load
+			if (cnt > 0 && _preloadsz > 0) { //Feature 1740072: pre-load
+				if (cnt > _preloadsz) cnt = _preloadsz; //at most 8 more to load
 
 				//1. locate the first item found in items
 				final List toload = new LinkedList();
