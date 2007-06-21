@@ -301,7 +301,7 @@ zkau._send = function (dtid, evt, timeout) {
 		zkau._ctlt = t;
 		zkau._ctl = evt.uuid;
 	}
-		
+
 	zkau._events(dtid).push(evt);
 
 	if (!timeout) timeout = 0; //we don't send immediately (Bug 1593674)
