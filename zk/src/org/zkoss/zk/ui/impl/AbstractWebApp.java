@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.FailoverManager;
+import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.impl.SessionDesktopCacheProvider;
 import org.zkoss.zk.ui.impl.UiEngineImpl;
 
@@ -45,6 +46,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private DesktopCacheProvider _provider;
 	private UiFactory _factory;
 	private FailoverManager _failover;
+	private IdGenerator _idgen;
 
 	/** Constructor.
 	 *
@@ -128,6 +130,14 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
 			}
 		}
+		cls = _config.getIdGeneratorClass();
+		if (cls != null) {
+			try {
+				_idgen = (IdGenerator)cls.newInstance();
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+			}
+		}
 
 		_engine.start(this);
 		_provider.start(this);
@@ -161,6 +171,9 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 	public FailoverManager getFailoverManager() {
 		return _failover;
+	}
+	public IdGenerator getIdGenerator() {
+		return _idgen;
 	}
 
 	/** Invokes {@link #getDesktopCacheProvider}'s

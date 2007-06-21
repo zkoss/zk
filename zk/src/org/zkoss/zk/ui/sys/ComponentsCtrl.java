@@ -52,7 +52,10 @@ import org.zkoss.zk.ui.event.Events;
 public class ComponentsCtrl {
 	/** The prefix for auto generated ID. */
 	private static final String
-		AUTO_ID_PREFIX = "z_", ANONYMOUS_ID = "z__i";
+		AUTO_ID_PREFIX = "z_";
+	/** The anonymous UUID. Used only internally.
+	 */
+	public static final String ANONYMOUS_ID = "z__i";
 
 	private static final ThreadLocal _compdef = new ThreadLocal();
 
@@ -65,6 +68,8 @@ public class ComponentsCtrl {
 		return sb.toString();
 	}
 	/** Returns the anonymous UUID.
+	 * Deprecated since 2.4.1. Use {@link #ANONYMOUS_ID} directly.
+	 * @deprecated
 	 */
 	public static final String getAnonymousId() {
 		return ANONYMOUS_ID;

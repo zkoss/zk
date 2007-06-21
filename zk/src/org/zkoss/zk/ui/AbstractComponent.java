@@ -56,6 +56,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.Annotation;
@@ -142,11 +143,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		init(false);
 
-		_uuid = _id = exec != null ?
-			((DesktopCtrl)exec.getDesktop()).getNextUuid():
-			ComponentsCtrl.getAnonymousId();
-			//though it doesn't belong to any desktop yet, we autogen uuid
-			//it is optional but it is slightly better (of course, subjective)
 		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(this): null;
 
 		addSharedAnnotationMap(_def.getAnnotationMap());
@@ -227,8 +223,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	/** Removes from the ID spaces, if any, when ID is changed. */
 	private static void removeFromIdSpaces(final Component comp) {
-		final String compId = comp.getId();
-		if (ComponentsCtrl.isAutoId(compId))
+		final String compId = ((AbstractComponent)comp)._id;
+		if (compId == null || ComponentsCtrl.isAutoId(compId))
 			return; //nothing to do
 
 		if (comp instanceof IdSpace)
@@ -451,22 +447,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (bRoot) ((PageCtrl)_page).addRoot(this); //Not depends on uuid
 			final Desktop desktop = _page.getDesktop();
 			if (oldpage == null) {
-				final DesktopCtrl dtctl = (DesktopCtrl)desktop;
-				final boolean anonymous = //unassigned; created when exec null
-					ComponentsCtrl.getAnonymousId().equals(_uuid);
-				if (anonymous || desktop.getComponentByUuidIfAny(_uuid) != null) {
-					if (!anonymous)
-						getThisUiEngine().addUuidChanged(this, true);
+				if (_uuid == null || _uuid == ComponentsCtrl.ANONYMOUS_ID) {
+					_uuid = nextUuid(desktop);
+				} else if (desktop.getComponentByUuidIfAny(_uuid) != null) {
+				//re-assign uuid since it is moved from other desktop
+					getThisUiEngine().addUuidChanged(this, true);
 
 					//stupid but no better way to find a correct UUID yet
 					//also, it is rare so performance not an issue
 					do {
-						_uuid = dtctl.getNextUuid();
+						_uuid = nextUuid(desktop);
 					} while (desktop.getComponentByUuidIfAny(_uuid) != null);
 //					if (D.ON && log.finerable()) log.finer("Uuid changed: "+this);
 				}
+				if (_id == null || _id == ComponentsCtrl.ANONYMOUS_ID)
+					_id = _uuid;
 
-				dtctl.addComponent(this); //depends on uuid
+				((DesktopCtrl)desktop).addComponent(this); //depends on uuid
 			}
 		}
 		if (_spaceInfo != null && _parent == null)
@@ -479,14 +476,31 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 
+	private void initUuid() {
+		if (_uuid == null) {
+			final Execution exec = Executions.getCurrent();
+			_uuid = exec == null ?
+				ComponentsCtrl.ANONYMOUS_ID: nextUuid(exec.getDesktop());
+			if (_id == null || _id == ComponentsCtrl.ANONYMOUS_ID)
+				_id = _uuid;
+		}
+	}
+	private String nextUuid(Desktop desktop) {
+		final IdGenerator idgen =
+			((WebAppCtrl)desktop.getWebApp()).getIdGenerator();
+		final String uuid =
+			idgen != null ? idgen.nextComponentUuid(desktop, this): null;
+		return uuid != null ? uuid: ((DesktopCtrl)desktop).getNextUuid();
+	}
 	public final String getId() {
+		initUuid();
 		return _id;
 	}
 	public void setId(String id) {
 		if (id == null || id.length() == 0)
 			throw new UiException("ID cannot be empty");
 
-		if (!_id.equals(id)) {
+		if (!Objects.equals(_id, id)) {
 			if (Names.isReserved(id) || ComponentsCtrl.isAutoId(id))
 				throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Names.getReservedNames());
 
@@ -503,7 +517,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					getThisUiEngine().addUuidChanged(this, false);
 						//called before uuid is changed
 					((DesktopCtrl)_page.getDesktop()).removeComponent(this);
-				} else {
+				} else if (_uuid != null
+				&& _uuid != ComponentsCtrl.ANONYMOUS_ID) {
 					final Execution exec = Executions.getCurrent();
 					if (exec != null)
 						((WebAppCtrl)exec.getDesktop().getWebApp())
@@ -533,6 +548,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public final String getUuid() {
+		initUuid();
 		return _uuid;
 	}
 

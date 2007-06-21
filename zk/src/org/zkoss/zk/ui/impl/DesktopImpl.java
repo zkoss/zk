@@ -56,6 +56,7 @@ import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
+import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.au.AuBookmark;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
@@ -146,9 +147,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		init();
 
 		_sess = Sessions.getCurrent(); //must be the current session
-		final DesktopCache dc = ((WebAppCtrl)_wapp).getDesktopCache(_sess);
-		_id = Strings.encode(
-			new StringBuffer(12).append("g"), dc.getNextKey()).toString();
+		final WebAppCtrl wappc = (WebAppCtrl)_wapp;
+		final DesktopCache dc = wappc.getDesktopCache(_sess);
+		final IdGenerator idgen = wappc.getIdGenerator();
+		if (idgen != null)
+			_id = idgen.nextDesktopId(this);
+		if (_id == null)
+			_id = Strings.encode(
+				new StringBuffer(12).append("g"), dc.getNextKey()).toString();
 		updateUuidPrefix();
 
 		final Configuration config = _wapp.getConfiguration();

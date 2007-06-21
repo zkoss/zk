@@ -51,6 +51,7 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
+import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.device.Devices;
 
@@ -90,7 +91,7 @@ public class Configuration {
 	private Monitor _monitor;
 	private final List _themeUris = new LinkedList();
 	private transient String[] _roThemeUris = new String[0];
-	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _failmancls;
+	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _failmancls, _idgencls;
 	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
 		_sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120,
@@ -886,6 +887,9 @@ public class Configuration {
 
 	/** Sets the class that implements {@link WebApp} and
 	 * {@link WebAppCtrl}, or null to use the default.
+	 *
+	 * <p>Note: you have to set the class before {@link WebApp} is created.
+	 * Otherwise, it won't have any effect.
 	 */
 	public void setWebAppClass(Class cls) {
 		if (cls != null && (!WebApp.class.isAssignableFrom(cls)
@@ -902,6 +906,9 @@ public class Configuration {
 
 	/** Sets the class that implements {@link DesktopCacheProvider}, or null to
 	 * use the default.
+	 *
+	 * <p>Note: you have to set the class before {@link WebApp} is created.
+	 * Otherwise, it won't have any effect.
 	 */
 	public void setDesktopCacheProviderClass(Class cls) {
 		if (cls != null && !DesktopCacheProvider.class.isAssignableFrom(cls))
@@ -916,6 +923,9 @@ public class Configuration {
 
 	/** Sets the class that implements {@link UiFactory}, or null to
 	 * use the default.
+	 *
+	 * <p>Note: you have to set the class before {@link WebApp} is created.
+	 * Otherwise, it won't have any effect.
 	 */
 	public void setUiFactoryClass(Class cls) {
 		if (cls != null && !UiFactory.class.isAssignableFrom(cls))
@@ -930,6 +940,9 @@ public class Configuration {
 
 	/** Sets the class that implements {@link FailoverManager}, or null if
 	 * no custom failover mechanism.
+	 *
+	 * <p>Note: you have to set the class before {@link WebApp} is created.
+	 * Otherwise, it won't have any effect.
 	 */
 	public void setFailoverManagerClass(Class cls) {
 		if (cls != null && !FailoverManager.class.isAssignableFrom(cls))
@@ -941,6 +954,26 @@ public class Configuration {
 	 */
 	public Class getFailoverManagerClass() {
 		return _failmancls;
+	}
+
+	/** Sets the class that implements {@link IdGenerator}, or null to
+	 * use the default.
+	 *
+	 * <p>Note: you have to set the class before {@link WebApp} is created.
+	 * Otherwise, it won't have any effect.
+	 * @since 2.4.1
+	 */
+	public void setIdGeneratorClass(Class cls) {
+		if (cls != null && !IdGenerator.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("IdGenerator not implemented: "+cls);
+		_idgencls = cls;
+	}
+	/** Returns the class that implements {@link IdGenerator},
+	 * or null if default is used.
+	 * @since 2.4.1
+	 */
+	public Class getIdGeneratorClass() {
+		return _idgencls;
 	}
 
 	/** Specifies the maximal allowed upload size, in kilobytes.

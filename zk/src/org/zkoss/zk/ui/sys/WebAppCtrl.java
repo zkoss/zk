@@ -58,6 +58,11 @@ public interface WebAppCtrl {
 	/** Returns the failover manager, or null if not available.
 	 */
 	public FailoverManager getFailoverManager();
+	/** Returns the ID generator, or null if not available.
+	 *
+	 * @since 2.4.1
+	 */
+	public IdGenerator getIdGenerator();
 
 	/** Notification that the session is about to be passivated
 	 * (aka., serialized).

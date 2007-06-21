@@ -76,6 +76,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.au.AuSetTitle;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Interpreters;
@@ -533,7 +534,12 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			_uuid = uuid;
 			_id = id;
 		} else {
-			_uuid = ((DesktopCtrl)_desktop).getNextUuid();
+			final IdGenerator idgen =
+				((WebAppCtrl)_desktop.getWebApp()).getIdGenerator();
+			if (idgen != null)
+				_uuid = idgen.nextPageUuid(this);
+			if (_uuid == null)
+				_uuid = ((DesktopCtrl)_desktop).getNextUuid();
 
 			if (_id == null && id != null && id.length() != 0) _id = id;
 			if (_id != null)

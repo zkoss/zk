@@ -81,7 +81,7 @@ public class ConfigParser {
 
 				String path = el.getElementValue("richlet-url", true);
 				if (path != null) {
-				//deprecated since 2.4.0, but back compatible
+				//deprecated since 2.4.0, but backward compatible
 					final int cnt;
 					synchronized (this) {
 						cnt = _richletnm++;
@@ -179,6 +179,7 @@ public class ConfigParser {
 			//  ui-factory-class
 			//  failover-manager-class
 			//	engine-class
+			//	id-generator-class
 			//  web-app-class
 			//  locale-provider-class
 			//	time-zone-provider-class
@@ -212,6 +213,9 @@ public class ConfigParser {
 
 				cls = parseClass(el, "engine-class", UiEngine.class);
 				if (cls != null) config.setUiEngineClass(cls);
+
+				cls = parseClass(el, "id-generator-class", IdGenerator.class);
+				if (cls != null) config.setIdGeneratorClass(cls);
 
 				cls = parseClass(el, "web-app-class", WebApp.class);
 				if (cls != null) config.setWebAppClass(cls);
