@@ -79,19 +79,13 @@ function zips
 #IMPROVE: the following codes to generate back the copyright are stupid:
 #we have to maintain it each time a new release is available
 						if [ "$f" = "prototype.js" ] ; then
-echo "/* Prototype JavaScript framework, version 1.5.0" > "$dstfl"
-echo " * (c) 2005-2007 Sam Stephenson" >> "$dstfl"
-echo " *" >> "$dstfl"
-echo " * Prototype is freely distributable under the terms of an MIT-style license." >> "$dstfl"
-echo " * For details, see the Prototype web site: http://prototype.conio.net/" >> "$dstfl"
-echo " */" >> "$dstfl"
+echo "//Prototype 1.5.0" > "$dstfl"
+echo "//(c) 2005-2007 Sam Stephenson" >> "$dstfl"
 							java -jar $jarfl -c "$f" >> "$dstfl" 2>&1
 						elif [ "$f" = "effects.js" ] || [ "$f" = "dragdrop.js" ] ; then
-echo "// script.aculo.us dragdrop.js v1.7.0, Fri Jan 19 19:16:36 CET 2007" > "$dstfl"
-echo "// Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)" >> "$dstfl"
-echo "//           (c) 2005, 2006 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)" >> "$dstfl"
-echo "// script.aculo.us is freely distributable under the terms of an MIT-style license." >> "$dstfl"
-echo "// For details, see the script.aculo.us web site: http://script.aculo.us/" >> "$dstfl"
+echo "//script.aculo.us 1.7.0" > "$dstfl"
+echo "//(c) 2005-2006 Thomas Fuchs" >> "$dstfl"
+echo "//(c) 2005-2006 Sammi Williams" >> "$dstfl"
 							java -jar $jarfl -c "$f" >> "$dstfl" 2>&1
 						else
 							java -jar $jarfl -c "$f" > "$dstfl" 2>&1
