@@ -30,6 +30,7 @@ String.prototype.parseColor = function() {
 
 /*--------------------------------------------------------------------------*/
 
+/* Tom M. Yeh, Potix: remove unused codes
 Element.collectTextNodes = function(element) {  
   return $A($(element).childNodes).collect( function(node) {
     return (node.nodeType==3 ? node.nodeValue : 
@@ -44,13 +45,13 @@ Element.collectTextNodesIgnoreClass = function(element, className) {
         Element.collectTextNodesIgnoreClass(node, className) : ''));
   }).flatten().join('');
 }
-
 Element.setContentZoom = function(element, percent) {
   element = $(element);  
   element.setStyle({fontSize: (percent/100) + 'em'});   
   if(navigator.appVersion.indexOf('AppleWebKit')>0) window.scrollBy(0,0);
   return element;
 }
+*/
 
 Element.getOpacity = function(element){
   return $(element).getStyle('opacity');
@@ -83,9 +84,10 @@ Array.prototype.call = function() {
 /*--------------------------------------------------------------------------*/
 
 var Effect = {
-  _elementDoesNotExistError: {
+  _elNotExistErr: {
     name: 'ElementDoesNotExistError',
     message: 'The specified DOM element does not exist, but is required for this effect to operate'
+/* Tom M. Yeh, Potix: remove unused codes
   },
   tagifyText: function(element) {
     if(typeof Builder == 'undefined')
@@ -139,27 +141,35 @@ var Effect = {
     }, arguments[2] || {});
     Effect[element.visible() ? 
       Effect.PAIRS[effect][1] : Effect.PAIRS[effect][0]](element, options);
+*/
   }
 };
 
+/* Tom M. Yeh, Potix: remove unused codes
 var Effect2 = Effect; // deprecated
-
+*/
 /* ------------- transitions ------------- */
 
 Effect.Transitions = {
+/* Tom M. Yeh, Potix: remove unused codes
   linear: Prototype.K,
+*/
   sinoidal: function(pos) {
     return (-Math.cos(pos*Math.PI)/2) + 0.5;
   },
+/* Tom M. Yeh, Potix: remove unused codes
   reverse: function(pos) {
     return 1-pos;
   },
+*/
   flicker: function(pos) {
     return ((-Math.cos(pos*Math.PI)/4) + 0.75) + Math.random()/4;
   },
+/* Tom M. Yeh, Potix: remove unused codes
   wobble: function(pos) {
     return (-Math.cos(pos*Math.PI*(9*pos))/2) + 0.5;
   },
+*/
   pulse: function(pos, pulses) { 
     pulses = pulses || 5; 
     return (
@@ -359,7 +369,7 @@ Effect.Opacity = Class.create();
 Object.extend(Object.extend(Effect.Opacity.prototype, Effect.Base.prototype), {
   initialize: function(element) {
     this.element = $(element);
-    if(!this.element) throw(Effect._elementDoesNotExistError);
+    if(!this.element) throw(Effect._elNotExistErr);
     // make this work on IE on elements without 'layout'
     if(/MSIE/.test(navigator.userAgent) && !window.opera && (!this.element.currentStyle.hasLayout))
       this.element.setStyle({zoom: 1});
@@ -378,7 +388,7 @@ Effect.Move = Class.create();
 Object.extend(Object.extend(Effect.Move.prototype, Effect.Base.prototype), {
   initialize: function(element) {
     this.element = $(element);
-    if(!this.element) throw(Effect._elementDoesNotExistError);
+    if(!this.element) throw(Effect._elNotExistErr);
     var options = Object.extend({
       x:    0,
       y:    0,
@@ -418,7 +428,7 @@ Effect.Scale = Class.create();
 Object.extend(Object.extend(Effect.Scale.prototype, Effect.Base.prototype), {
   initialize: function(element, percent) {
     this.element = $(element);
-    if(!this.element) throw(Effect._elementDoesNotExistError);
+    if(!this.element) throw(Effect._elNotExistErr);
     var options = Object.extend({
       scaleX: true,
       scaleY: true,
@@ -493,7 +503,7 @@ Effect.Highlight = Class.create();
 Object.extend(Object.extend(Effect.Highlight.prototype, Effect.Base.prototype), {
   initialize: function(element) {
     this.element = $(element);
-    if(!this.element) throw(Effect._elementDoesNotExistError);
+    if(!this.element) throw(Effect._elNotExistErr);
     var options = Object.extend({ startcolor: '#ffff99' }, arguments[1] || {});
     this.start(options);
   },
@@ -678,6 +688,7 @@ Effect.DropOut = function(element) {
       }, arguments[1] || {}));
 }
 
+/* Tom M. Yeh, Potix: remove unused codes
 Effect.Shake = function(element) {
   element = $(element);
   var oldStyle = {
@@ -698,7 +709,7 @@ Effect.Shake = function(element) {
         effect.element.undoPositioned().setStyle(oldStyle);
   }}) }}) }}) }}) }}) }});
 }
-
+*/
 Effect.SlideDown = function(element) {
   element = $(element).cleanWhitespace();
   // SlideDown need to have the content of the element wrapped in a container element with fixed height!
@@ -755,6 +766,7 @@ Effect.SlideUp = function(element) {
 }
 
 // Bug in opera makes the TD containing this element expand for a instance after finish 
+/* Tom M. Yeh, Potix: remove unused codes
 Effect.Squish = function(element) {
   return new Effect.Scale(element, window.opera ? 1 : 0, { 
     restoreAfterFinish: true,
@@ -766,7 +778,8 @@ Effect.Squish = function(element) {
     }
   });
 }
-
+*/
+/* Tom M. Yeh, Potix: remove unused codes
 Effect.Grow = function(element) {
   element = $(element);
   var options = Object.extend({
@@ -840,7 +853,8 @@ Effect.Grow = function(element) {
     }
   });
 }
-
+*/
+/* Tom M. Yeh, Potix: remove unused codes
 Effect.Shrink = function(element) {
   element = $(element);
   var options = Object.extend({
@@ -894,7 +908,8 @@ Effect.Shrink = function(element) {
        }, options)
   );
 }
-
+*/
+/* Tom M. Yeh, Potix: remove unused codes
 Effect.Pulsate = function(element) {
   element = $(element);
   var options    = arguments[1] || {};
@@ -928,12 +943,13 @@ Effect.Fold = function(element) {
       } });
   }}, arguments[1] || {}));
 };
-
+*/
+/* Tom M. Yeh, Potix: remove unused codes
 Effect.Morph = Class.create();
 Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
   initialize: function(element) {
     this.element = $(element);
-    if(!this.element) throw(Effect._elementDoesNotExistError);
+    if(!this.element) throw(Effect._elNotExistErr);
     var options = Object.extend({
       style: {}
     }, arguments[1] || {});
@@ -1045,7 +1061,7 @@ Object.extend(Effect.Transform.prototype, {
     );
   }
 });
-
+*/
 Element.CSS_PROPERTIES = $w(
   'backgroundColor backgroundPosition borderBottomColor borderBottomStyle ' + 
   'borderBottomWidth borderLeftColor borderLeftStyle borderLeftWidth ' +
@@ -1073,23 +1089,29 @@ String.prototype.parseStyle = function(){
   return styleRules;
 };
 
+/* Tom M. Yeh, Potix: remove unused codes
 Element.morph = function(element, style) {
   new Effect.Morph(element, Object.extend({ style: style }, arguments[2] || {}));
   return element;
 };
-
+*/
+['setOpacity','getOpacity','getInlineOpacity','forceRerendering']
+ .each( 
+/* Tom M. Yeh, Potix: remove unused codes
 ['setOpacity','getOpacity','getInlineOpacity','forceRerendering','setContentZoom',
  'collectTextNodes','collectTextNodesIgnoreClass','morph'].each( 
+*/
   function(f) { Element.Methods[f] = Element[f]; }
 );
 
+/* Tom M. Yeh, Potix: remove unused codes
 Element.Methods.visualEffect = function(element, effect, options) {
   s = effect.gsub(/_/, '-').camelize();
   effect_class = s.charAt(0).toUpperCase() + s.substring(1);
   new Effect[effect_class](element, options);
   return $(element);
 };
-
+*/
 Element.addMethods();
 
 } //Tom M. Yeh, Potix: prevent it from load twice

@@ -6,8 +6,8 @@
  *
 /*--------------------------------------------------------------------------*/
 //Tom M. Yeh, Potix :prevent it from load twice
-if (!window.z_prototype_js) {
-z_prototype_js = true;
+if (!window.z_prot_js) {
+z_prot_js = true;
 
 var Prototype = {
   Version: '1.5.0',
@@ -183,6 +183,7 @@ Object.extend(String.prototype, {
     });
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   scan: function(pattern, iterator) {
     this.gsub(pattern, iterator);
     return this;
@@ -194,11 +195,12 @@ Object.extend(String.prototype, {
     return this.length > length ?
       this.slice(0, length - truncation.length) + truncation : this;
   },
-
+*/
   strip: function() {
     return this.replace(/^\s+/, '').replace(/\s+$/, '');
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   stripTags: function() {
     return this.replace(/<\/?[^>]+>/gi, '');
   },
@@ -219,7 +221,6 @@ Object.extend(String.prototype, {
     return this.extractScripts().map(function(script) { return eval(script) });
   },
 
-/* Tom M. Yeh, Potix: remove unused codes
   escapeHTML: function() {
     var div = document.createElement('div');
     var text = document.createTextNode(this);
@@ -345,6 +346,7 @@ var Enumerable = {
     return this;
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   eachSlice: function(number, iterator) {
     var index = -number, slices = [], array = this.toArray();
     while ((index += number) < array.length)
@@ -369,7 +371,7 @@ var Enumerable = {
     });
     return result;
   },
-
+*/
   collect: function(iterator) {
     var results = [];
     this.each(function(value, index) {
@@ -398,6 +400,7 @@ var Enumerable = {
     return results;
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   grep: function(pattern, iterator) {
     var results = [];
     this.each(function(value, index) {
@@ -407,7 +410,7 @@ var Enumerable = {
     })
     return results;
   },
-
+*/
   include: function(object) {
     var found = false;
     this.each(function(value) {
@@ -419,6 +422,7 @@ var Enumerable = {
     return found;
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   inGroupsOf: function(number, fillWith) {
     fillWith = fillWith === undefined ? null : fillWith;
     return this.eachSlice(number, function(slice) {
@@ -426,7 +430,7 @@ var Enumerable = {
       return slice;
     });
   },
-
+*/
   inject: function(memo, iterator) {
     this.each(function(value, index) {
       memo = iterator(memo, value, index);
@@ -451,6 +455,7 @@ var Enumerable = {
     return result;
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   min: function(iterator) {
     var result;
     this.each(function(value, index) {
@@ -469,7 +474,7 @@ var Enumerable = {
     });
     return [trues, falses];
   },
-
+*/
   pluck: function(property) {
     var results = [];
     this.each(function(value, index) {
@@ -499,9 +504,9 @@ var Enumerable = {
 */
   toArray: function() {
     return this.map();
+/* Tom M. Yeh, Potix: remove unused codes
   },
 
-/* Tom M. Yeh, Potix: remove unused codes
   zip: function() {
     var iterator = Prototype.K, args = $A(arguments);
     if (typeof args.last() == 'function')
@@ -512,13 +517,14 @@ var Enumerable = {
       return iterator(collections.pluck(index));
     });
   },
-*/
+
   size: function() {
     return this.toArray().length;
   },
 
   inspect: function() {
     return '#<Enumerable:' + this.toArray().inspect() + '>';
+*/
   }
 }
 
@@ -552,15 +558,17 @@ Object.extend(Array.prototype, {
       iterator(this[i]);
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   clear: function() {
     this.length = 0;
     return this;
   },
-
+*/
   first: function() {
     return this[0];
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   last: function() {
     return this[this.length - 1];
   },
@@ -570,7 +578,7 @@ Object.extend(Array.prototype, {
       return value != null;
     });
   },
-
+*/
   flatten: function() {
     return this.inject([], function(array, value) {
       return array.concat(value && value.constructor == Array ?
@@ -585,16 +593,18 @@ Object.extend(Array.prototype, {
     });
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   indexOf: function(object) {
     for (var i = 0, length = this.length; i < length; i++)
       if (this[i] == object) return i;
     return -1;
   },
-
+*/
   reverse: function(inline) {
     return (inline !== false ? this : this.toArray())._reverse();
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   reduce: function() {
     return this.length > 1 ? this : this[0];
   },
@@ -604,15 +614,16 @@ Object.extend(Array.prototype, {
       return array.include(value) ? array : array.concat([value]);
     });
   },
-
+*/
   clone: function() {
     return [].concat(this);
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   size: function() {
     return this.length;
   },
-
+*/
   inspect: function() {
     return '[' + this.map(Object.inspect).join(', ') + ']';
   }
@@ -716,17 +727,18 @@ Object.extend(Hash.prototype, {
       delete this[arguments[i]];
     }
     return result;
+/* Tom M. Yeh, Potix: remove unused codes
   },
 
-/* Tom M. Yeh, Potix: remove unused codes
   toQueryString: function() {
     return Hash.toQueryString(this);
   },
-*/
+
   inspect: function() {
     return '#<Hash:{' + this.map(function(pair) {
       return pair.map(Object.inspect).join(': ');
     }).join(', ') + '}>';
+*/
   }
 });
 
@@ -880,7 +892,7 @@ Element.Methods = {
     setTimeout(function() {html.evalScripts()}, 10);
     return element;
   },
-*/
+
   replace: function(element, html) {
     element = $(element);
     html = typeof html == 'undefined' ? '' : html.toString();
@@ -919,11 +931,12 @@ Element.Methods = {
   ancestors: function(element) {
     return $(element).recursivelyCollect('parentNode');
   },
-
+*/
   descendants: function(element) {
     return $A($(element).getElementsByTagName('*'));
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   immediateDescendants: function(element) {
     if (!(element = $(element).firstChild)) return [];
     while (element && element.nodeType != 1) element = element.nextSibling;
@@ -943,21 +956,23 @@ Element.Methods = {
     element = $(element);
     return element.previousSiblings().reverse().concat(element.nextSiblings());
   },
-
+*/
   match: function(element, selector) {
     if (typeof selector == 'string')
       selector = new Selector(selector);
     return selector.match($(element));
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   up: function(element, expression, index) {
     return Selector.findElement($(element).ancestors(), expression, index);
   },
-
+*/
   down: function(element, expression, index) {
     return Selector.findElement($(element).descendants(), expression, index);
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   previous: function(element, expression, index) {
     return Selector.findElement($(element).previousSiblings(), expression, index);
   },
@@ -974,7 +989,7 @@ Element.Methods = {
   getElementsByClassName: function(element, className) {
     return document.getElementsByClassName(className, element);
   },
-
+*/
   readAttribute: function(element, name) {
     element = $(element);
     if (document.all && !window.opera) {
@@ -987,6 +1002,7 @@ Element.Methods = {
     return element.getAttribute(name);
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   getHeight: function(element) {
     return $(element).getDimensions().height;
   },
@@ -994,7 +1010,7 @@ Element.Methods = {
   getWidth: function(element) {
     return $(element).getDimensions().width;
   },
-
+*/
   classNames: function(element) {
     return new Element.ClassNames(element);
   },
@@ -1021,12 +1037,13 @@ Element.Methods = {
     return element;
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   toggleClassName: function(element, className) {
     if (!(element = $(element))) return;
     Element.classNames(element)[element.hasClassName(className) ? 'remove' : 'add'](className);
     return element;
   },
-
+*/
   observe: function() {
     Event.observe.apply(Event, arguments);
     return $A(arguments).first();
@@ -1050,10 +1067,11 @@ Element.Methods = {
     return element;
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   empty: function(element) {
     return $(element).innerHTML.match(/^\s*$/);
   },
-
+*/
   descendantOf: function(element, ancestor) {
     element = $(element), ancestor = $(ancestor);
     while (element = element.parentNode)
@@ -1321,9 +1339,10 @@ Element.addMethods = function(methods) {
   }
 }
 
+/* Tom M. Yeh, Potix: remove unused codes
 var Toggle = new Object();
 Toggle.display = Element.toggle;
-
+*/
 /*--------------------------------------------------------------------------*/
 
 /* Tom M. Yeh, Potix: remove unused codes
@@ -1938,6 +1957,7 @@ Object.extend(Event, {
     }
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   // find the first node with the given tagName, starting from the
   // node the event was triggered on; traverses the DOM upwards
   findElement: function(event, tagName) {
@@ -1947,7 +1967,7 @@ Object.extend(Event, {
       element = element.parentNode;
     return element;
   },
-
+*/
   observers: false,
 
   _observeAndCache: function(element, name, observer, useCapture) {
@@ -2145,6 +2165,7 @@ if (Element.getStyle(element, "position") == 'fixed') {
     return [valueL, valueT];
   },
 
+/* Tom M. Yeh, Potix: remove unused codes
   clone: function(source, target) {
     var options = Object.extend({
       setLeft:    true,
@@ -2182,7 +2203,7 @@ if (Element.getStyle(element, "position") == 'fixed') {
     if(options.setWidth)  target.style.width = zk.offsetWidth(source) + 'px'; //Tom M. Yeh, Potix: safari bug
     if(options.setHeight) target.style.height = zk.offsetHeight(source) + 'px'; //Tom M. Yeh, Potix: safari bug
   },
-
+*/
   absolutize: function(element) {
     element = $(element);
     if (element.style.position == 'absolute') return;

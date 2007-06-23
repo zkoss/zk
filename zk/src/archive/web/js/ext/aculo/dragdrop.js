@@ -626,6 +626,7 @@ var Sortable = {
 }
 */
 
+/* Tom M. Yeh, Potix: remove unused codes
 // Returns true if child is contained within element
 Element.isParent = function(child, element) {
   if (!child.parentNode || child == element) return false;
@@ -659,5 +660,5 @@ else
   return zk.offsetWidth(element);
   //return element['offset' + ((type=='vertical' || type=='height') ? 'Height' : 'Width')];
 }
-
+*/
 } //Tom M. Yeh, Potix: prevent it from load twice
