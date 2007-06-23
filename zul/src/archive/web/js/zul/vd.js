@@ -48,7 +48,7 @@ if (!window.Validate_errorbox) { //not customized
 
 ////
 zkVld = {};
-if (!zkVld._ebs) zkVld._ebs = new Array();
+if (!zkVld._ebs) zkVld._ebs = [];
 zkau.valid = zkVld; //zkau depends on it
 
 /** Validates the specified component and returns the error msg. */
