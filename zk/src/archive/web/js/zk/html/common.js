@@ -83,8 +83,6 @@ Array.prototype.contains = function (o) {
 //
 // More zk utilities (defined also in boot.js) //
 
-zk.voidf = Prototype.emptyFunction;
-
 /** Sets the offset height. */
 zk.setOffsetHeight = function (el, hgh) {
 	hgh = hgh
@@ -347,8 +345,8 @@ zk.isRealVisible = function (e) {
 
 /** Focus the specified element and any of its child. */
 zk.focusDown = function (el) {
-	return zk._focusDown(el, new Array("INPUT", "SELECT", "BUTTON"), true)
-		|| zk._focusDown(el, new Array("A"), false);
+	return zk._focusDown(el, ["INPUT", "SELECT", "BUTTON"], true)
+		|| zk._focusDown(el, ["A"], false);
 };
 /** checkA whether to check the A tag specially (i.e., focus if one ancestor
  * has z.type).
@@ -728,7 +726,7 @@ if (zk.ie || zk.opera) {
 			el = el.firstChild;
 		
 		//detach from parent and return
-		var ns = new Array();
+		var ns = [];
 		for (var n; n = el.firstChild;) {
 			//IE creates extra tbody if add COLGROUP
 			//However, the following skip is dirty-fix, assuming html doesn't
@@ -820,8 +818,8 @@ zk.rename = function (url, name) {
 
 //-- special routines --//
 if (!zk._actg1) {
-	zk._actg1 = new Array("IFRAME"/*,"APPLET"*/); //comment out APPLET for better performance
-	zk._actg2 = new Array("A","BUTTON","TEXTAREA","INPUT");
+	zk._actg1 = ["IFRAME"/*,"APPLET"*/]; //comment out APPLET for better performance
+	zk._actg2 = ["A","BUTTON","TEXTAREA","INPUT"];
 	if (zk.ie && !zk.ie7) { //ie7 solves the z-order issue of SELECT
 		zk._actg1.unshift("SELECT"); //change visibility is required
 	} else
@@ -829,8 +827,8 @@ if (!zk._actg1) {
 
 	zk.coveredTagnames = zk._actg1; //backward compatible 2.4 or before
 
-	zk._disTags = new Array(); //A list of {element: xx, what: xx}
-	zk._hidCvred = new Array(); //A list of {element: xx, visibility: xx}
+	zk._disTags = []; //A list of {element: xx, what: xx}
+	zk._hidCvred = []; //A list of {element: xx, visibility: xx}
 }
 
 /** Disables all active tags. */
@@ -878,7 +876,7 @@ zk._dsball = function (parent, els, visibility) {
  * only el's children are enabled
  */
 zk.restoreDisabled = function (n) {
-	var skipped = new Array();
+	var skipped = [];
 	for (var bug1498895 = zk.ie; zk._disTags.length;) {
 		var info = zk._disTags.shift();
 		var el = info.element;
@@ -1503,7 +1501,7 @@ zk.Float.prototype = {
 zk.Floats = Class.create();
 zk.Floats.prototype = {
 	initialize: function () {
-		this._ftids = new Array();
+		this._ftids = [];
 		this._aspps = {}; //(id, whether a float behaves like a popup)
 	},
 	/** Closes (hides) all floats.
@@ -1845,7 +1843,7 @@ zk._anique = {};
 zk._addAnique = function(id, funcnm) {
 	var ary = zk._anique[id];
 	if (!ary)
-		ary = zk._anique[id] = new Array();
+		ary = zk._anique[id] = [];
 	ary.push(funcnm);
 };
 zk._doAnique = function (id) {

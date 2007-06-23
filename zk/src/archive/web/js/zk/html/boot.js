@@ -48,7 +48,8 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "6F"; //increase this if we want the browser to reload JavaScript
+zk.build = "6G"; //increase this if we want the browser to reload JavaScript
+zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();
@@ -81,6 +82,72 @@ zk.unlisten = function (el, evtnm, fn) {
 		}
 	}
 };
+
+if (zk.ie) { //Bug 1741959: avoid memory leaks
+	zk._ltns = {} // map(String id, [evtnm, fn])
+	zk._ltnid = function (el) {
+		return el == document || el == window || !el.id ? el: el.id;
+	};
+
+	zk._listen = zk.listen;
+	zk.listen = function (el, evtnm, fn) {
+		zk._listen(el, evtnm, fn);
+
+		var id = zk._ltnid(el);
+		var ls = zk._ltns[id];
+		if (!ls) zk._ltns[id] = ls = {};
+		var fns = ls[evtnm];
+		if (!fns) ls[evtnm] = fns = [];
+		fns.push(fn);
+	}
+
+	zk._unlisten = zk.unlisten;
+	zk._unlisten = function (el, evtnm, fn) {
+		zk._unlisten(el, evtnm, fn);
+
+		var id = zk._ltnid(el);
+		var ls = zk._ltns[id];
+		if (ls) {
+			var fns = ls[evtnm];
+			if (fns) {
+				fns.remove(fn);
+				if (!fns.length)
+					delete ls[evtnm];
+			}
+		}
+	};
+
+	/** Unlisten events associated with the specified ID.
+	 * Bug 1741959: IE meory leaks
+	 */
+	zk.unlistenAll = function (el) {
+		if (el) {
+			var id = zk._ltnid(el);
+			var ls = zk._ltns[id];
+			if (ls) {
+				delete zk._ltns[id];
+				for (var evtnm in ls) {
+					var fns = ls[evtnm];
+					delete ls[evtnm];
+					for (var j = fns.length; --j >= 0;)
+						try {
+							zk._unlisten(el, evtnm, fns[j]);
+						} catch (e) { //ignore
+						}
+				}
+			}
+		} else {
+			for (var nid in zk._ltns) {
+				var el = $e(nid);
+				if (el) zk.unlistenAll(el);
+			}
+		}
+	};
+} else {
+	/** No function if not IE. */
+	zk.unlistenAll = zk.voidf;
+}
+
 /** disable ESC to prevent user from pressing ESC to stop loading */
 zk.disableESC = function () {
 	if (!zk._noESC) {
@@ -448,7 +515,7 @@ zk._updCnt = function () {
 zk.initAt = function (node) {
 	if (!node) return;
 
-	var stk = new Array();
+	var stk = [];
 	stk.push(node);
 	zk._loadAndInit({stk: stk, nosibling: true});
 };
@@ -604,6 +671,7 @@ zk.cleanupAt = function (n) {
 	if (type) {
 		zk.eval(n, "cleanup", type);
 		zkau.cleanupMeta(n); //note: it is called only if type is defined
+		zk.unlistenAll(n); //Bug 1741959
 		delete zk._visicmps[n.id];
 		delete zk._hidecmps[n.id];
 		delete zk._sizecmps[n.id];
@@ -617,7 +685,7 @@ zk.cleanupAt = function (n) {
  * becomes visible. All descendants of n is invoked if onVisi is declared.
  */
 zk.onVisiAt = function (n) {
-	for (nid in zk._visicmps) {
+	for (var nid in zk._visicmps) {
 		var elm = $e(nid);
 		for (var e = elm; e; e = e.parentNode) {
 			if (e == n) { //elm is a child of n
@@ -640,7 +708,7 @@ zk.onHideAt = function (n) {
 		try {f.blur();} catch (e) {}
 	}
 
-	for (nid in zk._hidecmps) {
+	for (var nid in zk._hidecmps) {
 		var elm = $e(nid);
 		for (var e = elm; e; e = e.parentNode) {
 			if (e == n) { //elm is a child of n
@@ -658,7 +726,7 @@ zk.onHideAt = function (n) {
  * asynchronously.
  */
 zk.onSizeAt = function (n) {
-	for (nid in zk._sizecmps) {
+	for (var nid in zk._sizecmps) {
 		var elm = $e(nid);
 		for (var e = elm; e; e = e.parentNode) {
 			if (e == n) { //elm is a child of n
@@ -675,7 +743,7 @@ zk.onSizeAt = function (n) {
 zk._onSizeAt = function () {
 	delete zk._tmOnSizeAt;
 	var once;
-	for (nid in zk._toOnSize) {
+	for (var nid in zk._toOnSize) {
 		if (once) {
 			if (!zk._tmOnSizeAt)
 				zk._tmOnSizeAt = setTimeout(zk._onSizeAt, 0);
@@ -922,10 +990,10 @@ zk.error = function (msg) {
 //-- bootstrapping --//
 zk.loading = 0;
 zk._modules = {}; //Map(String nm, boolean loaded)
-zk._initfns = new Array(); //used by addInit
-zk._initmods = new Array(); //used by addModuleInit
-zk._initcmps = new Array(); //comps to init
-zk._ckfns = new Array(); //functions called to check whether a module is loaded (zk._load)
+zk._initfns = []; //used by addInit
+zk._initmods = []; //used by addModuleInit
+zk._initcmps = []; //comps to init
+zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
 zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
 zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
 zk._sizecmps = {}; //a set of component's ID that requires zkType.onSize

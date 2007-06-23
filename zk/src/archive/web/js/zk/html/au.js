@@ -19,20 +19,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 if (!window.zkau) { //avoid eval twice
 zkau = {};
 
-zkau._reqs = new Array(); //Ajax requests
-zkau._respQue = new Array(); //responses in XML
+zkau._reqs = []; //Ajax requests
+zkau._respQue = []; //responses in XML
 zkau._evts = {}; //(dtid, Array())
-zkau._js4resps = new Array(); //JS to eval upon response
+zkau._js4resps = []; //JS to eval upon response
 zkau._metas = {}; //(id, meta)
 zkau._drags = {}; //(id, Draggable): draggables
-zkau._drops = new Array(); //dropables
+zkau._drops = []; //dropables
 zkau._zidsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
 zkau._stamp = 0; //used to make a time stamp
 zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
-zkau.floats = new Array(); //popup of combobox, bandbox, datebox...
-zkau._onsends = new Array(); //JS called before zkau._sendNow
+zkau.floats = []; //popup of combobox, bandbox, datebox...
+zkau._onsends = []; //JS called before zkau._sendNow
 zkau._seqId = 0; //starting at 0 - the same as Desktop.getResponseSequence
-zkau._dtids = new Array(); //an array of desktop IDs
+zkau._dtids = []; //an array of desktop IDs
 
 /** Adds a desktop. */
 zkau.addDesktop = function (dtid) {
@@ -204,7 +204,7 @@ zkau._parseCmds = function (xml) {
 	var rs = xml.getElementsByTagName("r")
 	if (!rs) return null;
 
-	var cmds = new Array();
+	var cmds = [];
 	for (var j = 0; j < rs.length; ++j) {
 		var cmd = rs[j].getElementsByTagName("c")[0];
 		var data = rs[j].getElementsByTagName("d");
@@ -265,7 +265,7 @@ zkau.asap = function (cmp, evtnm) {
 zkau._events = function (dtid) {
 	var es = zkau._evts;
 	if (!es[dtid])
-		es[dtid] = new Array();
+		es[dtid] = [];
 	return es[dtid];
 };
 
@@ -526,7 +526,7 @@ zk.process = zkau.process; //ZK assumes zk.process, so change it
 
 /** Cleans up if we detect obsolete or other severe errors. */
 zkau._cleanupOnFatal = function (ignorable) {
-	for (uuid in zkau._metas) {
+	for (var uuid in zkau._metas) {
 		var meta = zkau._metas[uuid];
 		if (meta && meta.cleanupOnFatal)
 			meta.cleanupOnFatal(ignorable);
@@ -718,9 +718,9 @@ zkau.autoZIndex = function (node) {
 
 //-- popup --//
 if (!zkau._popups) {
-	zkau._popups = new Array(); //uuid
-	zkau._overlaps = new Array(); //uuid
-	zkau._modals = new Array(); //uuid (used zul.js or other modal)
+	zkau._popups = []; //uuid
+	zkau._overlaps = []; //uuid
+	zkau._modals = []; //uuid (used zul.js or other modal)
 }
 
 //-- utilities --//
@@ -804,6 +804,7 @@ zkau._onUnload = function () {
 	}
 
 	if (zkau._oldUnload) zkau._oldUnload.apply(window, arguments);
+	zk.unlistenAll();
 };
 /** Handles window.onbeforeunload. */
 zkau._onBfUnload = function () {
@@ -1247,7 +1248,7 @@ zkau._closeFloats = function (method, ancestors) {
 };
 
 zkau.hideCovered = function() {
-	var ary = new Array();
+	var ary = [];
 	for (var j = 0; j < zkau._popups.length; ++j) {
 		var el = $e(zkau._popups[j]);
 		if (el && el.style.display != "none") ary.push(el);
