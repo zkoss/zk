@@ -21,7 +21,8 @@ ZK 2.4.1
   1738343: Unable to include ZUML page from JSP
   1738368: zkFilter failed to work with Jetty 6.1.4
   1711822: Menuitem: the order of onClick and onOpen
-
+  1713353: SPRING SCOPE SESSION BUG
+  
 	--------
 ZK 2.4.0
 * Features:
