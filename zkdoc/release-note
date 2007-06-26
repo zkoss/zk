@@ -9,6 +9,7 @@ ZK 2.4.1
   1740080: Datebox supports the buttonVisible property
   1740072: dynamic "look ahead" live data for listbox and grid
   1743271: Generic way to handle ThreadLocal variables issue
+  1743288: Make button icon of comobox/bandbox configurable
 
 * Bugs:
   1734801: toolbarbutton/button popup broken in 2.4.0
@@ -23,7 +24,8 @@ ZK 2.4.1
   1738368: zkFilter failed to work with Jetty 6.1.4
   1711822: Menuitem: the order of onClick and onOpen
   1713353: SPRING SCOPE SESSION BUG
-  
+  1738241: Combobox's icon is placed at the wrong location (IE only)
+
 	--------
 ZK 2.4.0
 * Features:
