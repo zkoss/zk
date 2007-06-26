@@ -165,10 +165,10 @@ td.rwt-wndcyan {
 div.modal_mask { <%-- don't change --%>
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;
-	opacity: .4;
+	opacity: .8;
 	background:transparent !important;
-	background: #181818;
-	background-image: url(${c:encodeURL('~./zul/img/modal-mask.png')}) !important; <%-- Moz... --%>
+	background: white;
+	background-image: url(${c:encodeURL('~./zk/img/xmask.png')}) !important; <%-- Moz... --%>
 	background-image: none; background-repeat: repeat;
 	display: none;
 }

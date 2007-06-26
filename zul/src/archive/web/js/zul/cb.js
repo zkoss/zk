@@ -44,6 +44,18 @@ zkCmbox.init = function (cmp) {
 	var btn = $e(cmp.id + "!btn");
 	if (btn) {
 		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
+		zkCmbox._fixbtn(cmp);
+	}
+};
+zkCmbox.onVisi = zkCmbox._fixbtn = function (cmp) {
+	var inp = $real(cmp);
+	var btn = $e(cmp.id + "!btn");
+	//note: isRealVisible handles null argument
+	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
+		if (!inp.offsetHeight || !btn.offsetHeight) {
+			setTimeout("zkCmbox._fixbtn($e('" + cmp.id +"'))", 20);
+			return;
+		}
 
 		//Bug 1738241: don't use align="xxx"
 		var v = inp.offsetHeight - btn.offsetHeight;
@@ -59,6 +71,7 @@ zkCmbox.init = function (cmp) {
 		if (zk.safari) btn.style.left = "-2px";
 	}
 };
+
 zkCmit = {};
 zkCmit.init = function (cmp) {
 	zk.listen(cmp, "click", zkCmit.onclick);
