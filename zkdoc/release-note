@@ -8,6 +8,7 @@ ZK 2.4.1
   1738280: An option not to disable elements behind a modal window
   1740080: Datebox supports the buttonVisible property
   1740072: dynamic "look ahead" live data for listbox and grid
+  1743271: Generic way to handle ThreadLocal variables issue
 
 * Bugs:
   1734801: toolbarbutton/button popup broken in 2.4.0
