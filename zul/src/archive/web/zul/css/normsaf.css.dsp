@@ -367,6 +367,10 @@ div.menupopup hr {
 span.combobox, span.datebox, span.bandbox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 }
+span.rbtnbk {<%-- button at the right edge --%>
+	background-image: url(${c:encodeURL('~./zul/img/btnbk.gif')}); background-repeat: no-repeat;
+	border: 1px solid #7f9db9; border-left: none;
+}
 div.comboboxpp, div.bandboxpp { <%--hardcoded in DSP--%>
 	display: block; position: absolute; z-index: 80000;
 	background: white; border: 1px solid black; padding: 2px;

@@ -46,8 +46,9 @@ import org.zkoss.zk.au.AuScript;
  * @author tomyeh
  */
 public class Bandbox extends Textbox {
+	private static final String DEFAULT_IMAGE = "~./zul/img/bandbtn.gif";
 	private transient Bandpopup _drop;
-	private String _img = "~./zul/img/bandbtn.gif";
+	private String _img;
 	private boolean _autodrop, _btnVisible = true;
 
 	public Bandbox() {
@@ -107,7 +108,7 @@ public class Bandbox extends Textbox {
 	 * <p>Default: "~./zul/img/bandbtn.gif".
 	 */
 	public String getImage() {
-		return _img;
+		return _img != null ? _img: DEFAULT_IMAGE;
 	}
 	/** Sets the image URI that is displayed as the button to open
 	 * {@link Bandpopup}.
@@ -116,7 +117,8 @@ public class Bandbox extends Textbox {
 	 * the default value: "~./zul/img/bandbtn.gif".
 	 */
 	public void setImage(String img) {
-		if (img != null && img.length() == 0) img = "~./zul/img/bandbtn.gif";
+		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
+			img = null;
 		if (!Objects.equals(_img, img)) {
 			_img = img;
 			invalidate();

@@ -42,12 +42,22 @@ zkCmbox.init = function (cmp) {
 		//To mimic SELECT, it drops down if readOnly
 
 	var btn = $e(cmp.id + "!btn");
-	if (btn) zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
+	if (btn) {
+		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
 
-	//the following alignment is based on experiment
-	if (zk.macintosh) btn.style.verticalAlign = "text-bottom";
-	else if (zk.gecko) btn.style.verticalAlign = "middle";
-	else btn.align = "absmiddle";
+		//Bug 1738241: don't use align="xxx"
+		var v = inp.offsetHeight - btn.offsetHeight;
+		if (v > 0) {
+			var v2 = Math.round(v/2); //yes, round to integer
+			btn.style.paddingTop = v2 + "px";
+			btn.style.paddingBottom = (v - v2) + "px";
+		}
+
+		v = inp.offsetTop - btn.offsetTop;
+		btn.style.position = "relative";
+		btn.style.top = v + "px";
+		if (zk.safari) btn.style.left = "-2px";
+	}
 };
 zkCmit = {};
 zkCmit.init = function (cmp) {
@@ -318,7 +328,7 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 
 	zkCmbox._fixsz(cb, pp, pp2, ppofs);//fix size
 
-	zk.position(pp, cb, "after-start");
+	zk.position(pp, $real(cb), "after-start");
 
 	setTimeout("zkCmbox._repos('"+uuid+"',"+hilite+")", 3);
 		//IE issue: we have to re-position again because some dimensions
@@ -383,7 +393,7 @@ zkCmbox._repos = function (uuid, hilite) {
 		}
 	}
 
-	zk.position(pp, cb, "after-start");
+	zk.position(pp, inp, "after-start");
 	zkau.hideCovered();
 	zk.asyncFocus(inpId);
 

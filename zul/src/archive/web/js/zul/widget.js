@@ -343,7 +343,7 @@ zkGrbox.init = zkGrbox._fixHgh = function (cmp) {
 		//if no border-bottom, hide the shadow
 		var sdw = $(cmp.id + "!sdw");
 		if (sdw) {
-			var w = parseInt(Element.getStyle(n, "border-bottom-width")||"0", 10);
+			var w = parseInt(Element.getStyle(n, "border-bottom-width")||"0");
 			sdw.style.display = w ? "": "none";
 		}
 	}

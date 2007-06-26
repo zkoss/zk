@@ -52,6 +52,8 @@ import org.zkoss.zk.ui.ext.render.ChildChangedAware;
  * @see Comboitem
  */
 public class Combobox extends Textbox {
+	private static final String DEFAULT_IMAGE = "~./zul/img/combobtn.gif";
+	private String _img;
 	private boolean _autodrop, _autocomplete, _btnVisible = true;
 
 	public Combobox() {
@@ -118,6 +120,27 @@ public class Combobox extends Textbox {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
 			smartUpdate("z.btnVisi", visible);
+		}
+	}
+
+	/** Returns the URI of the button image.
+	 * @since 2.4.1
+	 */
+	public String getImage() {
+		return _img != null ? _img: DEFAULT_IMAGE;
+	}
+	/** Sets the URI of the button image.
+	 *
+	 * @param img the URI of the button image. If null or empty, the default
+	 * URI is used.
+	 * @since 2.4.1
+	 */
+	public void setImage(String img) {
+		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
+			img = null;
+		if (!Objects.equals(_img, img)) {
+			_img = img;
+			invalidate();
 		}
 	}
 
