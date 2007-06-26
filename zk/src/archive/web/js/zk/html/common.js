@@ -86,12 +86,12 @@ Array.prototype.contains = function (o) {
 /** Sets the offset height. */
 zk.setOffsetHeight = function (el, hgh) {
 	hgh = hgh
-		- parseInt(Element.getStyle(el, "padding-top")||"0", 10)
-		- parseInt(Element.getStyle(el, "padding-bottom")||"0", 10)
-		- parseInt(Element.getStyle(el, "margin-top")||"0", 10)
-		- parseInt(Element.getStyle(el, "margin-bottom")||"0", 10)
-		- parseInt(Element.getStyle(el, "border-top-width")||"0", 10)
-		- parseInt(Element.getStyle(el, "border-bottom-width")||"0", 10);
+		- parseInt(Element.getStyle(el, "padding-top")||"0")
+		- parseInt(Element.getStyle(el, "padding-bottom")||"0")
+		- parseInt(Element.getStyle(el, "margin-top")||"0")
+		- parseInt(Element.getStyle(el, "margin-bottom")||"0")
+		- parseInt(Element.getStyle(el, "border-top-width")||"0")
+		- parseInt(Element.getStyle(el, "border-bottom-width")||"0");
 	el.style.height = (hgh > 0 ? hgh: 0) + "px";
 };
 
@@ -243,9 +243,9 @@ zk.position = function (el, ref, type) {
 		y = refofs[1];
 
 		if (zk.ie) {
-			var diff = parseInt(Element.getStyle(ref, "margin-top")||"0", 10);
+			var diff = parseInt(Element.getStyle(ref, "margin-top")||"0");
 			if (!isNaN(diff)) y += diff;
-			diff = parseInt(Element.getStyle(ref, "margin-right")||"0", 10);
+			diff = parseInt(Element.getStyle(ref, "margin-right")||"0");
 			if (!isNaN(diff)) x += diff;
 		}
 
@@ -258,9 +258,9 @@ zk.position = function (el, ref, type) {
 		y = refofs[1] + zk.offsetHeight(ref);
 
 		if (zk.ie) {
-			var diff = parseInt(Element.getStyle(ref, "margin-bottom")||"0", 10);
+			var diff = parseInt(Element.getStyle(ref, "margin-bottom")||"0");
 			if (!isNaN(diff)) y += diff;
-			diff = parseInt(Element.getStyle(ref, "margin-left")||"0", 10);
+			diff = parseInt(Element.getStyle(ref, "margin-left")||"0");
 			if (!isNaN(diff)) x += diff;
 		}
 
@@ -1059,8 +1059,8 @@ zk.restoreStyle = function (el, nm) {
 /** Scroll inner into visible, assuming outer has a scrollbar. */
 zk.scrollIntoView = function (outer, inner) {
 	if (outer && inner) {
-		var padding = Element.getStyle(inner, "padding-top");
-		padding = padding ? parseInt(padding, 10): 0;
+		var padding = Element.getStyle(inner, "padding-top")||"0";
+		padding = padding ? parseInt(padding): 0;
 		var limit = inner.offsetTop - padding;
 		if (limit < outer.scrollTop) {
 			outer.scrollTop = limit;
@@ -1223,12 +1223,12 @@ zk.cpCellWidth = function (dst, srcrows) {
 		var d = dst.cells[j], s = src.cells[j];
 		if (zk.opera) {
 			sum += s.offsetWidth;
-			var v = parseInt(Element.getStyle(s, "border-left"))
-				+ parseInt(Element.getStyle(s, "border-right"))
-				+ parseInt(Element.getStyle(s, "margin-left"))
-				+ parseInt(Element.getStyle(s, "margin-right"))
-				+ parseInt(Element.getStyle(s, "padding-left"))
-				+ parseInt(Element.getStyle(s, "padding-right"));
+			var v = parseInt(Element.getStyle(s, "border-left")||"0")
+				+ parseInt(Element.getStyle(s, "border-right")||"0")
+				+ parseInt(Element.getStyle(s, "margin-left")||"0")
+				+ parseInt(Element.getStyle(s, "margin-right")||"0")
+				+ parseInt(Element.getStyle(s, "padding-left")||"0")
+				+ parseInt(Element.getStyle(s, "padding-right")||"0");
 			d.style.width = s.offsetWidth - v;
 		} else {
 			d.style.width = s.offsetWidth + "px";
@@ -1292,7 +1292,7 @@ zk.parseDate = function (txt, fmt, strict) {
 						token = token.substring(0, len);
 					}
 				}
-				y = parseInt(token, 10);
+				y = parseInt(token);
 				if (isNaN(y)) return null; //failed
 				if (y < 100) y += y > 29 ? 1900 : 2000;
 				break;
@@ -1302,7 +1302,7 @@ zk.parseDate = function (txt, fmt, strict) {
 						ts[--i] = token.substring(2);
 						token = token.substring(0, 2);
 					}
-					m = parseInt(token, 10) - 1;
+					m = parseInt(token) - 1;
 					if (isNaN(m)) return null; //failed
 				} else {
 					for (var l = 0;; ++l) {
@@ -1329,7 +1329,7 @@ zk.parseDate = function (txt, fmt, strict) {
 						token = token.substring(0, len);
 					}
 				}
-				d = parseInt(token, 10);
+				d = parseInt(token);
 				if (isNaN(d)) return null; //failed
 				break;
 			//case 'E': ignored
@@ -1385,7 +1385,7 @@ zk.formatDate = function (val, fmt) {
 
 /** Returns an integer of the attribute of the specified element. */
 zk.getIntAttr = function (el, nm) {
-	return parseInt(el.getAttribute(nm) || "0", 10);
+	return parseInt(el.getAttribute(nm) || "0");
 };
 
 //selection//

@@ -48,7 +48,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "6G"; //increase this if we want the browser to reload JavaScript
+zk.build = "6H"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -59,7 +59,7 @@ zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
 zk.ie7 = zk.agent.indexOf("msie 7") != -1;
 zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
 zk.windows = zk.agent.indexOf("windows") != -1;
-zk.macintosh = zk.agent.indexOf("macintosh") != -1;
+//zk.macintosh = zk.agent.indexOf("macintosh") != -1;
 
 /** Listen an event.
  * Why not to use prototype's Event.observe? Performance.
