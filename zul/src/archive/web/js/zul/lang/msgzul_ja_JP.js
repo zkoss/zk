@@ -7,6 +7,7 @@
 		
 	History:
 		Created on Mar. 7, 2007, by Poli Lee
+		Modified on Jun.25, 2007 by Jean
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -17,6 +18,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 msgzul = {};
-msgzul.UNKNOWN_TYPE = "未知のコンポーネント－タイプ";
-msgzul.DATE_REQUIRED = "日にちしかインプットできない。フォーマット: ";
-msgzul.NO_AUDIO_SUPPORT = "あなたのブラウザはオーディオをサポートしない";
+msgzul.UNKNOWN_TYPE = "コンポーネントタイプが不明です： ";
+msgzul.DATE_REQUIRED = "日付を次の形式で指定してください: ";
+msgzul.NO_AUDIO_SUPPORT = "ご使用中のブラウザはダイナミックオーディオをサポートしていません";
