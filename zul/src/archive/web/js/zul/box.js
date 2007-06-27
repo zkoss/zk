@@ -45,13 +45,14 @@ zkSplt._drags = {};
 zkSplt.init = function (cmp) {
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
 	var vert = getZKAttr(cmp, "vert");
-	zkSplt._drags[cmp.id] = {
+	var drag = zkSplt._drags[cmp.id] = {
 		vert: vert,
 		drag: new Draggable(cmp, {
 			constraint: vert ? "vertical": "horizontal",
 			snap: snap,
 			starteffect: zkSplt._startDrag, change: zkSplt._dragging,
-			endeffect: zkSplt._endDrag})
+			endeffect: zkSplt._endDrag}),
+		onResize: function () {zkSplt._resize2(cmp);}
 	};
 
 	var btn = $e(cmp.id + "!btn");
@@ -69,9 +70,8 @@ zkSplt.init = function (cmp) {
 	if (getZKAttr(cmp, "open") == "false")
 		zkSplt.open(cmp, false, true, true);
 
-	var exc = "zkSplt._resize('" + cmp.id + "')";
-	zk.listen(window, "resize", function () {setTimeout(exc, 120);});
-	setTimeout(exc, 120);
+	zk.listen(window, "resize", drag.onResize);
+	zkSplt._resize2(cmp);
 
 	cmp.style.cursor = vert ? "s-resize": "e-resize";
 	btn.style.cursor = "default";
@@ -79,6 +79,7 @@ zkSplt.init = function (cmp) {
 zkSplt.cleanup = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
+		zk.unlisten(window, "resize", drag.onResize);
 		delete zkSplt._drags[cmp.id];
 		drag.drag.destroy();
 	}
@@ -105,6 +106,9 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
 				if (vert) nd.style.height = nd.offsetHeight + "px";
 				else nd.style.width = nd.offsetWidth + "px";
 	}
+};
+zkSplt._resize2 = function (cmp) {
+	setTimeout("zkSplt._resize('" + cmp.id + "')", 120);
 };
 zkSplt._fixbtn = function (cmp) {
 	var btn = $e(cmp.id + "!btn");
