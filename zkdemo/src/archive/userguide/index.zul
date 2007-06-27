@@ -154,12 +154,5 @@ if (!zk.https()) {
 	setTimeout('zk.loadJS("http://www.google-analytics.com/urchin.js", _urchin)', 5000);
 }
 ]]></script>
-
-<!-- The following script is generated because we want to demo Google Maps later
-	Moreover, it can be dynamically loaded
--->
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${desktopScope.gmapsKey}"
-	type="text/javascript" unless="${empty desktopScope.gmapsKey}"/>
-
 </window>
 </zk>

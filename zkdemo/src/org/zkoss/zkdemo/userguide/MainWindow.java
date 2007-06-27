@@ -52,6 +52,6 @@ public class MainWindow extends Window {
 		}
 
 		if (gkey != null)
-			exec.getDesktop().setAttribute("gmapsKey", gkey);
+			exec.getDesktop().getSession().setAttribute("gmapsKey", gkey);
 	}
 }
