@@ -103,7 +103,7 @@ zk.Slider.prototype = {
 			if (zkau.asap(this.element, "onScrolling"))
 				zkau.send({uuid: this.element.id, 
 					cmd: "onScrolling", data: [pos], ignorable: true},
-					120);
+					100);
 		}
 	},
 	_endDrag: function () {

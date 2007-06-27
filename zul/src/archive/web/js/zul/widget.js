@@ -179,7 +179,7 @@ zkTxbox._scanChanging = function (id) {
 		inp.removeAttribute("zk_changing_selbk");
 		zkau.send({uuid: $uuid(id),
 			cmd: "onChanging", data: [inp.value, selbk == inp.value],
-			ignorable: true}, 120);
+			ignorable: true}, 100);
 	}
 };
 zkTxbox.setAttr = function (cmp, nm, val) {
