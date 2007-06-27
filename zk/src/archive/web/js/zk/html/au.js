@@ -249,9 +249,11 @@ zkau._inProcess = function () {
 
 /** Returns the timeout of the specified event.
  * It is mainly used to generate the timeout argument of zkau.send.
+ *
+ * @param timeout if non-negative, it is used when zkau.asap is true.
  */
-zkau.asapTimeout = function (cmp, evtnm) {
-	return zkau.asap(cmp, evtnm) ? 25: -1;
+zkau.asapTimeout = function (cmp, evtnm, timeout) {
+	return zkau.asap(cmp, evtnm) ? timeout >= 0 ? timeout: 50: -1;
 };
 /** Returns whether any non-deferrable listener is registered for
  * the specified event.
@@ -335,14 +337,8 @@ zkau._sendNow = function (dtid) {
 		return;
 	}
 
-	//filter out ctl (i.e., CTRL_GROUP at the server)
-	if (zk.progressing || zkau._inProcess()) {
-		for (var j = es.length; --j >= 0;)
-			if (es[j].ctl)
-				es.splice(j, 1);
-		if (!es.length)
-			return; //nothing to do
-	}
+	//bug 1721809: we cannot filter out ctl even if zk.processing
+	//or _inProcess
 
 	//decide implicit and ignorable
 	var implicit = true, ignorable = true;
@@ -745,7 +741,7 @@ zkau.onfocus = function (evtel) { //accept both evt and cmp
 
 	var cmp = $outer(el);
 	if (zkau.asap(cmp, "onFocus"))
-		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 25);
+		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 100);
 };
 zkau.onblur = function (evtel) {
 	var el = zkau.evtel(evtel);
@@ -755,7 +751,7 @@ zkau.onblur = function (evtel) {
 
 	var cmp = $outer(el);
 	if (zkau.asap(cmp, "onBlur"))
-		zkau.send({uuid: cmp.id, cmd: "onBlur", data: null}, 25);
+		zkau.send({uuid: cmp.id, cmd: "onBlur", data: null}, 100);
 };
 
 zkau.onimgover = function (evtel) {
@@ -1145,7 +1141,7 @@ zkau._onDocKeydown = function (evt) {
 
 				zkau.send({uuid: n.id, cmd: evtnm, ctl: true,
 					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey]},
-					25);
+					50);
 				Event.stop(evt);
 				return false;
 			}
