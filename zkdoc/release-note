@@ -13,6 +13,7 @@ ZK 2.4.1
 
 * Bugs:
   1734801: toolbarbutton/button popup broken in 2.4.0
+  1721809: button.onClick does not always work
   1741959: Potential IE memory leaks for not unregister event listener
   1734950: listbox seletion update-problem
   1736355: zkplus didn't import databind pkg for groovy, ruby...
