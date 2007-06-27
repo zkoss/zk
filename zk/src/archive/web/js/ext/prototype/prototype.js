@@ -1585,24 +1585,27 @@ Object.extend(Selector, {
   findElement: function(elements, expression, index) {
     if (typeof expression == 'number') index = expression, expression = false;
     return Selector.matchElements(elements, expression || '*')[index || 0];
+/* Tom M. Yeh, Potix: remove unused codes
   },
 
   findChildElements: function(element, expressions) {
     return expressions.map(function(expression) {
-      return expression.match(/[^\s"]+(?:"[^"]*"[^\s"]+)*/g).inject([null], function(results, expr) {
+      return expression.match(/[^\s"]+(?:"[^"]*"[^\s"]+)*\/g).inject([null], function(results, expr) {
         var selector = new Selector(expr);
         return results.inject([], function(elements, result) {
           return elements.concat(selector.findElements(result || element));
         });
       });
     }).flatten();
+*/
   }
 });
 
+/* Tom M. Yeh, Potix: remove unused codes
 function $$() {
   return Selector.findChildElements(document, $A(arguments));
 }
-/* Tom M. Yeh, Potix: remove unused codes
+
 var Form = {
   reset: function(form) {
     $(form).reset();
