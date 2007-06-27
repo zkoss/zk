@@ -253,7 +253,7 @@ zkau._inProcess = function () {
  * @param timeout if non-negative, it is used when zkau.asap is true.
  */
 zkau.asapTimeout = function (cmp, evtnm, timeout) {
-	return zkau.asap(cmp, evtnm) ? timeout >= 0 ? timeout: 50: -1;
+	return zkau.asap(cmp, evtnm) ? timeout >= 0 ? timeout: 38: -1;
 };
 /** Returns whether any non-deferrable listener is registered for
  * the specified event.
@@ -1141,7 +1141,7 @@ zkau._onDocKeydown = function (evt) {
 
 				zkau.send({uuid: n.id, cmd: evtnm, ctl: true,
 					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey]},
-					50);
+					38);
 				Event.stop(evt);
 				return false;
 			}
@@ -1417,7 +1417,7 @@ zkau._enddrag = function (cmp, evt) {
 			if (evt.ctrlKey) keys += 'c';
 			if (evt.shiftKey) keys += 's';
 		}
-		setTimeout("zkau._sendDrop('"+cmp.id+"','"+e.id+"','"+pointer[0]+"','"+pointer[1]+"','"+keys+"')", 50);
+		setTimeout("zkau._sendDrop('"+cmp.id+"','"+e.id+"','"+pointer[0]+"','"+pointer[1]+"','"+keys+"')", 38);
 			//In IE, listitem is selected after _enddrag, so we have to
 			//delay the sending of onDrop
 	}
