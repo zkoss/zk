@@ -140,13 +140,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		_wapp = wapp;
 		_updateURI = updateURI;
+		init();
+		_sess = Sessions.getCurrent(); //must be the current session
+
 		setCurrentDirectory(dir);
 		if (deviceType != null && deviceType.length() != 0)
 			setDeviceType(deviceType);
 
-		init();
-
-		_sess = Sessions.getCurrent(); //must be the current session
 		final WebAppCtrl wappc = (WebAppCtrl)_wapp;
 		final DesktopCache dc = wappc.getDesktopCache(_sess);
 		final IdGenerator idgen = wappc.getIdGenerator();
