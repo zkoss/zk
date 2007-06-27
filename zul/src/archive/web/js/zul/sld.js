@@ -102,7 +102,8 @@ zk.Slider.prototype = {
 			if (this.slidetip) this.slidetip.innerHTML = pos;
 			if (zkau.asap(this.element, "onScrolling"))
 				zkau.send({uuid: this.element.id, 
-					cmd: "onScrolling", data: [pos], ignorable: true}, 0);
+					cmd: "onScrolling", data: [pos], ignorable: true},
+					120);
 		}
 	},
 	_endDrag: function () {

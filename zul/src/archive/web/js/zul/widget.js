@@ -51,7 +51,7 @@ zkTxbox.onselect = function (evt) {
 		var sr = zk.getSelectionRange(inp);
 		zkau.send({uuid: cmp.id, cmd: "onSelection",
 				data: [sr[0], sr[1], inp.value.substring(sr[0], sr[1])]},
-    	 	10);
+    	 	100);
     }
 };
 /** Handles onblur for text input.
@@ -139,7 +139,7 @@ zkTxbox.onupdate = function (inp) {
 		inp.defaultValue = newval;
 		var uuid = $uuid(inp);
 		zkau.send({uuid: uuid, cmd: "onChange",
-			data: [newval]}, zkau.asapTimeout(uuid, "onChange"));
+			data: [newval]}, zkau.asapTimeout(uuid, "onChange", 100));
 	} else if (inp.getAttribute("zk_err")) {
 		inp.removeAttribute("zk_err");
 		zkau.send({uuid: $uuid(inp), cmd: "onError",
@@ -179,7 +179,7 @@ zkTxbox._scanChanging = function (id) {
 		inp.removeAttribute("zk_changing_selbk");
 		zkau.send({uuid: $uuid(id),
 			cmd: "onChanging", data: [inp.value, selbk == inp.value],
-			ignorable: true}, 1);
+			ignorable: true}, 120);
 	}
 };
 zkTxbox.setAttr = function (cmp, nm, val) {
