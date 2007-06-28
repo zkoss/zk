@@ -241,7 +241,8 @@ public class Treecell extends LabelImageElement {
 	private void appendImage(StringBuffer sb, String name, boolean button) {
 		final int width = getIconWidth(), height = getIconHeight();
 		final String uri = getIconURI(name);
-		sb.append("<img align=\"top\"");
+		sb.append("<img align=\"top\" z.fc=\"t\"");
+			//z.fc used to let tree.js know what to clone
 		HTMLs.appendAttribute(
 			sb, "src", getDesktop().getExecution().encodeURL(uri));
 		HTMLs.appendAttribute(sb, "width", width);

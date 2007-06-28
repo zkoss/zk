@@ -467,7 +467,7 @@ zkWnd._endModal = function (uuid, replace) {
 	var prevfocusId;
 	if (mask) {
 		prevfocusId = mask.getAttribute("zk_prevfocus");
-		Element.remove(mask);
+		zk.remove(mask);
 	}
 
 	zkau._modals.remove(uuid);

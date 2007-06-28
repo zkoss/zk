@@ -21,12 +21,16 @@ package org.zkoss.zul;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.AbstractCollection;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.render.Transparent;
+import org.zkoss.zk.ui.ext.render.Cropper;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -36,6 +40,9 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Treechildren extends XulElement {
+	/** the active page. */
+	private int _actpg = 0;
+
 	/** Returns the {@link Tree} instance containing this element.
 	 */
 	public Tree getTree() {
@@ -115,6 +122,62 @@ public class Treechildren extends XulElement {
 		return sz;
 	}
 
+	/** Returns the page size which controls the number of
+	 * visible child {@link Treeitem}, or -1 if no limitation.
+	 *
+	 * <p>It is the same as calling {@link #getTree}'s {@link Tree#getPageSize}.
+	 *
+	 * @since 2.4.1
+	 * @see Tree#getPageSize
+	 */
+	public int getPageSize() {
+		final Tree tree = getTree();
+		return tree != null ? tree.getPageSize(): -1;
+	}
+	/** Returns the number of pages.
+	 * Note: there is at least one page even no item at all.
+	 *
+	 * @since 2.4.1
+	 */
+	public int getPageCount() {
+		final int cnt = getChildren().size();
+		if (cnt <= 0) return 1;
+		final int pgsz = getPageSize();
+		return pgsz <= 0 ? 1: 1 + (cnt - 1)/pgsz;
+	}
+	/** Returns the active page (starting from 0).
+	 *
+	 * @since 2.4.1
+	 */
+	public int getActivePage() {
+		return _actpg;
+	}
+	/** Sets the active page (starting from 0).
+	 *
+	 * @exception WrongValueException if no such page
+	 * @since 2.4.1
+	 */
+	public void setActivePage(int pg) throws WrongValueException {
+		//TODO
+	}
+	/** Returns the index of the first visible child.
+	 * <p>Used only for component development, not for application developers.
+	 * @since 2.4.1
+	 */
+	public int getVisibleBegin() {
+		final int pgsz = getPageSize();
+		return pgsz <= 0 ? 0: getActivePage() * pgsz;
+	}
+	/** Returns the index of the last visible child.
+	 * <p>Used only for component development, not for application developers.
+	 * @since 2.4.1
+	 */
+	public int getVisibleEnd() {
+		final int pgsz = getPageSize();
+		return pgsz <= 0 ? Integer.MAX_VALUE:
+			(getActivePage() + 1) * getPageSize() - 1; //inclusive
+	}
+
 	//-- Component --//
 	public void setParent(Component parent) {
 		final Component oldp = getParent();
@@ -142,6 +205,13 @@ public class Treechildren extends XulElement {
 			throw new UiException("Unsupported child for treechildren: "+child);
 		return super.insertBefore(child, insertBefore);
 	}
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+
+		final int pgcnt = getPageCount();
+		if (_actpg >= pgcnt)
+			setActivePage(pgcnt - 1);
+	}
 
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
@@ -150,12 +220,30 @@ public class Treechildren extends XulElement {
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Transparent {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements Transparent, Cropper {
 		//Transparent//
 		/** It is transparent if its parent is {@link Treeitem}.
 		 */
 		public boolean isTransparent() {
 			return getParent() instanceof Treeitem;
 		}	
+
+		//--Cropper--//
+		public boolean isCropper() {
+			return getPageSize() > 0;
+		}
+		public Set getAvailableAtClient() {
+			int pgsz = getPageSize(), sz = getChildren().size();
+			if (pgsz <= 0 || sz <= pgsz)
+				return null;
+
+			final Set avail = new HashSet(37);
+			final int ofs = getActivePage() * pgsz;
+			for (final Iterator it = getChildren().listIterator(ofs);
+			--pgsz >= 0 && it.hasNext();)
+				avail.add(it.next());
+			return avail;
+		}
 	}
 }

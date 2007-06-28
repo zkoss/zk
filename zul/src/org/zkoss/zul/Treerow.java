@@ -55,6 +55,13 @@ public class Treerow extends XulElement {
 	public Treeitem getTreeitem() {
 		return (Treeitem)getParent();
 	}
+	/** Returns the {@link Treechildren} that this component belongs to.
+	 * @since 2.4.1
+	 */
+	public Treechildren getTreechildren() {
+		final Treeitem ti = getTreeitem();
+		return ti != null ? ti.getTreechildren(): null;
+	}
 
 	//-- super --//
 	/** Returns the style class.
@@ -138,6 +145,15 @@ public class Treerow extends XulElement {
 		HTMLs.appendAttribute(sb, "z.sel", item.isSelected());
 		if (item.isContainer())
 			HTMLs.appendAttribute(sb, "z.open", item.isOpen());
+
+		final Treechildren tc = getTreechildren();
+		if (tc != null) {
+			final int pgcnt = tc.getPageCount();
+			if (pgcnt > 1) {
+				HTMLs.appendAttribute(sb, "z.pgc", pgcnt);
+				HTMLs.appendAttribute(sb, "z.pgi", tc.getActivePage());
+			}
+		}
 
 		appendAsapAttr(sb, Events.ON_OPEN);
 			//it calls isAsapRequired, so it also tested Treeitem for onOpen

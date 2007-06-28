@@ -63,6 +63,8 @@ public class Tree extends XulElement {
 	private int _rows = 0;
 	/** The name. */
 	private String _name;
+	/** # of items per page. */
+	private int _pgsz = -1; //10;
 	private boolean _multiple, _checkmark;
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
@@ -421,6 +423,40 @@ public class Tree extends XulElement {
 	 */
 	/*package*/ void initAtClient() {
 		smartUpdate("z.init", true);
+	}
+
+	/** Returns the page size that is used by all {@link Treechildren}
+	 * to display a portion of their child {@link Treeitem},
+	 * or -1 if no limitation.
+	 *
+	 * <p>Default: 10.
+	 *
+	 * @since 2.4.1
+	 */
+	public int getPageSize() {
+		return _pgsz;
+	}
+	/** Sets the page size that is used by all {@link Treechildren}
+	 * to display a portion of their child {@link Treeitem}.
+	 *
+	 * @param size the page size. If non-positive, there won't be
+	 * any limitation. In other wordss, all {@link Treeitem} are shown.
+	 * Notice: since the browser's JavaScript engine is slow to
+	 * handle huge trees, it is better not to set a non-positive size
+	 * if your tree is huge.
+	 * @since 2.4.1
+	 */
+	public void setPageSize(int size) throws WrongValueException {
+		if (size <= 0) size = -1; //no limitation
+		if (_pgsz != size) {
+			_pgsz = size;
+			updatePageNum();
+		}
+	}
+	/** Updates page number of all {@link Treechildren} instances.
+	 */
+	private void updatePageNum() {
+		//TODO
 	}
 
 	//-- Component --//

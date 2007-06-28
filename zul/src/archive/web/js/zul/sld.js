@@ -116,10 +116,8 @@ zk.Slider.prototype = {
 		}
 		this._fixPos();
 		this.button.title = pos;
-		if (this.slidetip) {
-			Element.remove(this.slidetip);
-			this.slidetip = null;
-		}
+		zk.remove(this.slidetip);
+		this.slidetip = null;
 	},
 	_realpos: function () {
 		var btnofs = Position.cumulativeOffset(this.button);

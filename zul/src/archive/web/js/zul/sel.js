@@ -603,7 +603,7 @@ zk.Selectable.prototype = {
 				row.cells[0].appendChild(el);
 			}
 		} else {
-			if (el) Element.remove(el);
+			zk.remove(el);
 		}
 	},
 	/** Cleans selected except the specified one, and returns any selected status
@@ -960,7 +960,7 @@ zk.Selectable.prototype = {
 		for (var j = 0; j < this.form.elements.length; ++j){
 			var el = this.form.elements[j];
 			if (getZKAttr(el, "hiddenBy") == this.id) {
-				Element.remove(el);
+				zk.remove(el);
 				--j;
 			}
 		}
