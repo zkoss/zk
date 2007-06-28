@@ -1399,7 +1399,7 @@ if (zk.ie) {
 	zkau._fixie4drop = function (el, orgpos) {
 		var p = el.parentNode;
 		var n = el.nextSibling;
-		Element.remove(el);
+		zk.remove(el);
 		el.style.position = orgpos;
 		if (n) p.insertBefore(el, n);
 		else p.appendChild(el);
@@ -1530,7 +1530,7 @@ zkau.endGhostToDIV = function (dg) {
 	setTimeout("zk.dragging=false", 0);
 		//we have to reset it later since onclick is fired later (after onmouseup)
 	if (dg.z_elorg && dg.element != dg.z_elorg) {
-		Element.remove(dg.element);
+		zk.remove(dg.element);
 		dg.element = dg.z_elorg;
 		delete dg.z_elorg;
 	}
@@ -1581,8 +1581,7 @@ zkau.endUpload = function () {
 		//focus might be in iframe of fileupload dlg, so get it back
 		//otherwise, IE might lose focus forever (see also Bug 1526542)
 
-	var div = $e("zk_upload");
-	if (div) Element.remove(div);
+	zk.remove($e("zk_upload"));
 	if (zkau._tmupload) {
 		clearInterval(zkau._tmupload);
 		zkau._tmupload = null;
@@ -1812,7 +1811,7 @@ zkau.cmd1 = {
 		if (cmp) {
 			zk.cleanupAt(cmp);
 			cmp = $childExterior(cmp);
-			Element.remove(cmp);
+			zk.remove(cmp);
 		}
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},

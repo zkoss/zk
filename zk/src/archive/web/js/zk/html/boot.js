@@ -48,7 +48,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "6I"; //increase this if we want the browser to reload JavaScript
+zk.build = "6J"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */

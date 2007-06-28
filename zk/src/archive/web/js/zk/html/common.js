@@ -448,7 +448,13 @@ zk.getSelectionRange = function(inp) {
 	}
 }
 
-
+/** Inserts a node after another.
+ */
+zk.insertAfter = function (el, ref) {
+	var sib = ref.nextSibling;
+	if (sib) ref.parentNode.insertBefore(el, sib);
+	else ref.parentNode.appendChild(el);
+};
 /** Inserts an unparsed HTML immediately before the specified element.
  * @param el the sibling before which to insert
  */
@@ -781,10 +787,7 @@ if (!zk.ie && !HTMLElement.prototype.insertAdjacentHTML) {
 		case "afterend":
 			r.setStartAfter(this);
 			df = r.createContextualFragment(sHTML);
-			if (this.nextSibling)
-				this.parentNode.insertBefore(df, this.nextSibling);
-			else
-				this.parentNode.appendChild(df);
+			zk.insertAfter(df, this);
 			break;
 		}
 	};
@@ -1614,6 +1617,11 @@ if (zk.ie /*|| zk.safari*/) {
 		this.checkBookmark();
 	};
 }
+
+/** Removes a node. */
+zk.remove = function (n) {
+	if (n) Element.remove(n);
+};
 
 ////
 //show & hide
