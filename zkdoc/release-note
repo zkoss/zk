@@ -10,6 +10,7 @@ ZK 2.4.1
   1740072: dynamic "look ahead" live data for listbox and grid
   1743271: Generic way to handle ThreadLocal variables issue
   1743288: Make button icon of comobox/bandbox configurable
+  1744550: Interpreter support namespace-based method retrieval
 
 * Bugs:
   1734801: toolbarbutton/button popup broken in 2.4.0
