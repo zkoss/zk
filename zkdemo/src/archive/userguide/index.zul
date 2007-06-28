@@ -24,7 +24,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window id="root" use="org.zkoss.zkdemo.userguide.MainWindow">
 	<hbox width="100%">
 	<window id="treelist" width="320px">
-		<tree id="toc" use="org.zkoss.zkdemo.userguide.TocTree" vflex="true">
+		<tree id="toc" use="org.zkoss.zkdemo.userguide.TocTree" pageSize="-1" vflex="true">
 			<treecols>
 				<treecol image="/img/home.gif" label="ZK ${desktop.webApp.version} Live Demo"
 				onClick="Executions.sendRedirect(&quot;http://www.zkoss.org&quot;)"/>
