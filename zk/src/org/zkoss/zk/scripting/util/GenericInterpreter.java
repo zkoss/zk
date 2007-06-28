@@ -295,6 +295,12 @@ abstract public class GenericInterpreter implements Interpreter {
 	public Method getMethod(String name, Class[] argTypes) {
 		return null;
 	}
+	/** Returns null since retrieving methods is not supported.
+	 * @since 2.4.1
+	 */
+	public Method getMethod(Namespace ns, String name, Class[] argTypes) {
+		return null;
+	}
 
 	/** Tests whether the variable exists.
 	 *

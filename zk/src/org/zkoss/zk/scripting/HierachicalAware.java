@@ -78,7 +78,7 @@ public interface HierachicalAware {
 	/** Removes the value of a variable defined in the interpreter's
 	 * scope identified by the specified namespace.
 	 *
-	 * <p>It is similar to {@link Interpreter#setVariable}, except
+	 * <p>It is similar to {@link Interpreter#unsetVariable}, except
 	 * it uses the specified namespace as a reference to identify the
 	 * correct scope for removing the variable.
 	 *
@@ -88,4 +88,21 @@ public interface HierachicalAware {
 	 * @since 2.4.0
 	 */
 	public void unsetVariable(Namespace ns, String name);
+
+	/** Returns the method of the specified name defined in
+	 * this interpreter's scope identified by the specified namespace,
+	 * or null if not defined.
+	 *
+	 * <p>It is similar to {@link Interpreter#getMethod}, except
+	 * it uses the specified namespace as a reference to identify the
+	 * correct scope for searching the variable.
+	 *
+	 * @param ns the namespace used as a reference to identify the
+	 * correct scope for searching the method.
+	 * Note: this method doesn't look for any variable stored in ns.
+	 * @param argTypes the list of argument (aka., parameter) types.
+	 * If null, Class[0] is assumed.
+	 * @since 2.4.1
+	 */
+	public Method getMethod(Namespace ns, String name, Class[] argTypes);
 }

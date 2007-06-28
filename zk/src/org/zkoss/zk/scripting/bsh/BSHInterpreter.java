@@ -200,11 +200,15 @@ implements SerializableAware, HierachicalAware {
 		}
 	}
 	public Method getMethod(String name, Class[] argTypes) {
-		if (argTypes == null)
-			argTypes = new Class[0];
-
+		return getMethod0(_bshns, name, argTypes);
+	}
+	public Method getMethod(Namespace ns, String name, Class[] argTypes) {
+		return getMethod0(prepareNS(ns), name, argTypes);
+	}
+	private Method getMethod0(NameSpace bshns, String name, Class[] argTypes) {
 		try {
-		 	final BshMethod m = _bshns.getMethod(name, argTypes, false);
+		 	final BshMethod m = bshns.getMethod(
+		 		name, argTypes != null ? argTypes: new Class[0], false);
 		 	return m != null ? new BSHMethod(m): null;
 		} catch (UtilEvalError ex) {
 			throw UiException.Aide.wrap(ex);

@@ -398,6 +398,20 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 		return null;
 	}
+	public org.zkoss.zk.scripting.Method
+	getZScriptMethod(Namespace ns, String name, Class[] argTypes) {
+		for (Iterator it = getLoadedInterpreters().iterator();
+		it.hasNext();) {
+			final Object ip = it.next();
+			org.zkoss.zk.scripting.Method mtd =
+				ip instanceof HierachicalAware ?
+				((HierachicalAware)ip).getMethod(ns, name, argTypes):
+				((Interpreter)ip).getMethod(name, argTypes);
+			if (mtd != null)
+				return mtd;
+		}
+		return null;
+	}
 	public Object getZScriptVariable(String name) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {

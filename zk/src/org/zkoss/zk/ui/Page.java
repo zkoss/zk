@@ -301,6 +301,7 @@ public interface Page extends IdSpace {
 	 * @see #getLoadedInterpreters
 	 */
 	public Class getZScriptClass(String clsnm);
+
 	/** Returns the variable of the specified name by searching
 	 * the loaded interpreters.
 	 *
@@ -309,6 +310,27 @@ public interface Page extends IdSpace {
 	 */
 	public org.zkoss.zk.scripting.Method getZScriptMethod(
 	String name, Class[] argTypes);
+	/** Returns the variable of the specified name by searching
+	 * the logical scope of the specified namespace for all
+	 * the loaded interpreters.
+	 *
+	 * <p>It is similar to {@link #getZScriptVariable(String)}, except
+	 * it uses the specified namespace as a reference to identify the
+	 * correct scope for searching the variable.
+	 * If the interpreter does NOT support hierachical scopes,
+	 * this method is the same as {@link #getZScriptVariable(String)}.
+	 *
+	 * @param ns the namespace used as a reference to identify the
+	 * correct scope for searching the variable.
+	 * It is ignored if the interpreter doesn't support hierachical scopes.
+	 * Note: this method doesn't look for any variable stored in ns.
+	 * @return the method, or null if not found
+	 * @see #getLoadedInterpreters
+	 * @since 2.4.1
+	 */
+	public org.zkoss.zk.scripting.Method getZScriptMethod(
+	Namespace ns, String name, Class[] argTypes);
+
 	/** Returns the value of the variable of the specified name by searching
 	 * the loaded interpreters, if any.
 	 *
@@ -324,6 +346,7 @@ public interface Page extends IdSpace {
 	 */
 	public Object getZScriptVariable(String name);
 	/** Returns the value of the variable of the specified name by searching
+	 * the logical scope of the specified namespace for all
 	 * the loaded interpreters, if any.
 	 *
 	 * <p>It is similar to {@link #getZScriptVariable(String)}, except
