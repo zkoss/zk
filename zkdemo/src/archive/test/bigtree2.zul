@@ -14,6 +14,7 @@
 			ti.setParent(tch);
 		}
 	}
+	int cnt = 0;
 	]]></zscript>
 	<hbox>
 	<tabbox width="300px" mold="accordion" id="tabbox">
@@ -34,6 +35,26 @@
 							<treerow>
 								<treecell label="Item 1" />
 							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 1.1" />
+									</treerow>
+									<treechildren>
+										<treeitem>
+											<treerow>
+												<treecell
+													label="Item 1.1.1" />
+											</treerow>
+										</treeitem>
+									</treechildren>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 1.2" />
+									</treerow>
+								</treeitem>
+							</treechildren>
 						</treeitem>
 						<treeitem>
 							<treerow>
@@ -49,6 +70,11 @@
 								<treeitem>
 									<treerow>
 										<treecell label="Item 2.2" />
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.3" />
 									</treerow>
 								</treeitem>
 							</treechildren>
@@ -442,11 +468,113 @@
 			</tabpanel>
 		</tabpanels>
 	</tabbox>
+	<vbox>
 	<button label="Remove selected">
 		<attribute name="onClick">
 		Treeitem ti = tree.getSelectedItem();
-		if (ti != null) ti.detach()"/>
+		if (ti != null) ti.detach();
 		</attribute>
 	</button>
+	<button label="Add one item to selected">
+		<attribute name="onClick">
+		Treeitem ti = tree.getSelectedItem();
+		if (ti != null) {
+			Treechildren tch = ti.getTreechildren();
+			if (tch == null) {
+				tch = new Treechildren();
+				tch.setParent(ti);
+			}
+			Treeitem newti = new Treeitem();
+			Treerow newtr = new Treerow();
+			new Treecell("New " + ++cnt).setParent(newtr);
+			newtr.setParent(newti);
+			newti.setParent(tch);
+		}
+		</attribute>
+	</button>
+	<button label="Add one item before selected">
+		<attribute name="onClick">
+		Treeitem ti = tree.getSelectedItem();
+		if (ti != null) {
+			Treeitem newti = new Treeitem();
+			Treerow newtr = new Treerow();
+			new Treecell("New " + ++cnt).setParent(newtr);
+			newtr.setParent(newti);
+			ti.getParent().insertBefore(newti, ti);
+		}
+		</attribute>
+	</button>
+	<button label="Add three item to selected">
+		<attribute name="onClick"><![CDATA[
+		Treeitem ti = tree.getSelectedItem();
+		if (ti != null) {
+			Treechildren tch = ti.getTreechildren();
+			if (tch == null) {
+				tch = new Treechildren();
+				tch.setParent(ti);
+			}
+			for (int j = 0; j < 3; ++j) {
+				Treeitem newti = new Treeitem();
+				Treerow newtr = new Treerow();
+				new Treecell("New " + ++cnt).setParent(newtr);
+				newtr.setParent(newti);
+				newti.setParent(tch);
+			}
+		}
+		]]></attribute>
+	</button>
+	<button label="Add treechildren to selected">
+		<attribute name="onClick">
+		Treeitem ti = tree.getSelectedItem();
+		if (ti != null) {
+			Treechildren tch = ti.getTreechildren();
+			if (tch == null) {
+				tch = new Treechildren();
+				tch.setParent(ti);
+			}
+		}
+		</attribute>
+	</button>
+	<hbox>
+	<button label="Add EMPTY item to selected">
+		<attribute name="onClick">
+		Treeitem ti = tree.getSelectedItem();
+		if (ti != null) {
+			Treechildren tch = ti.getTreechildren();
+			if (tch == null) {
+				tch = new Treechildren();
+				tch.setParent(ti);
+			}
+			Treeitem newti = new Treeitem();
+			newti.setParent(tch);
+			page.setAttribute("empty_ti", newti);
+		}
+		</attribute>
+	</button>
+	<button label="Add row to EMPTY item">
+		<attribute name="onClick">
+		Treeitem ti = page.getAttribute("empty_ti");
+		if (ti != null) {
+			Treerow newtr = new Treerow();
+			new Treecell("New " + ++cnt).setParent(newtr);
+			newtr.setParent(ti);
+		}
+		</attribute>
+	</button>
+	Failed! Empty treeitem is not supported!
+	</hbox>
+	<button label="invalidate selected item">
+		<attribute name="onClick">
+		Treeitem ti = tree.getSelectedItem();
+		if (ti != null) ti.invalidate();
+		</attribute>
+	</button>
+	<button label="invalidate tree of selected">
+		<attribute name="onClick">
+		Treeitem ti = tree.getSelectedItem();
+		if (ti != null) ti.tree.invalidate();
+		</attribute>
+	</button>
+	</vbox>
 	</hbox>
 </window>
