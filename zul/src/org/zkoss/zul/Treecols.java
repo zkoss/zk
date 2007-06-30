@@ -30,6 +30,7 @@ import org.zkoss.zul.impl.HeadersElement;
  */
 public class Treecols extends HeadersElement {
 	/** Returns the tree that it belongs to.
+	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Tree getTree() {
 		return (Tree)getParent();

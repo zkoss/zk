@@ -235,8 +235,8 @@ public class Grid extends XulElement {
 				public void onEvent(Event event) {
 					final PagingEvent evt = (PagingEvent)event;
 					Events.postEvent(
-						new PagingEvent(evt.getName(),
-							Grid.this, evt.getPageable(), evt.getActivePage()));
+						new PagingEvent(evt.getName(), Grid.this,
+							evt.getPageable(), evt.getActivePage()));
 				}
 			};
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);

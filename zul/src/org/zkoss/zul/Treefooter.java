@@ -56,6 +56,8 @@ public class Treefooter extends LabelImageElement {
 		return comp != null ? (Tree)comp.getParent(): null;
 	}
 	/** Returns the set of footers that this belongs to.
+	 * <p>Deprecated since 2.4.1, due to too confusing.
+	 * @deprecated
 	 */
 	public Treefoot getTreefoot() {
 		return (Treefoot)getParent();

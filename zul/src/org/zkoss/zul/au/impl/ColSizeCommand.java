@@ -36,7 +36,7 @@ import org.zkoss.zul.ext.Paginal;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link ColSizeEvent}
- * relevant command.
+ * related command.
  * 
  * @author tomyeh
  */

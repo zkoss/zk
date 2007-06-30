@@ -32,6 +32,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Treefoot extends XulElement {
 	/** Returns the tree that it belongs to.
+	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Tree getTree() {
 		return (Tree)getParent();

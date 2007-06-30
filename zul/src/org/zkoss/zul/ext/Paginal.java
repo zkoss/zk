@@ -20,7 +20,8 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.EventListener;
 
 /**
- * Represents a component that provides the paging for long content.
+ * Represents a component that is used to control how to display
+ * other components in multiple pages.
  * It is used to provide an abstract contract between controller and controllee.
  * For example, {@link org.zkoss.zul.Paging} is a paging controller
  * while {@link org.zkoss.zul.Grid} is a paging controllee.
@@ -31,7 +32,14 @@ import org.zkoss.zk.ui.event.EventListener;
  * the paging controllee shall access only this interface (rather than
  * {@link org.zkoss.zul.Paging} or so).
  *
+ * <p>Note: If a component supports multiple pages but it cannot
+ * be controlled by a paging controller, it shall implement
+ * {@link Pageable} instead.
+ * Example, {@link org.zkoss.zul.Treechildren}
+ * is {@link Pageable} but not controllable by {@link Paginal}.
+ *
  * @author tomyeh
+ * @see Pageable
  */
 public interface Paginal extends Pageable {
 	/** Returns the total number of items.

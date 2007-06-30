@@ -33,6 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Tabs extends XulElement {
 	/** Returns the tabbox owns this component.
+	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Tabbox getTabbox() {
 		return (Tabbox)getParent();

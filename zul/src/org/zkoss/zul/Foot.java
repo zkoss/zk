@@ -30,6 +30,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Foot extends XulElement {
 	/** Returns the grid that it belongs to.
+	 * It is the same as {@link #getParent}.
 	 */
 	public Grid getGrid() {
 		return (Grid)getParent();

@@ -27,8 +27,6 @@ import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.client.Openable;
-import org.zkoss.zk.ui.ext.render.Transparent;
-import org.zkoss.zk.ui.event.EventListener;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -104,8 +102,8 @@ public class Treeitem extends XulElement {
 			_value = value;
 
 			final Tree tree = getTree();
-			if (_treerow != null && tree != null && tree.getName() != null)
-				_treerow.smartUpdate("z.value", Objects.toString(_value));
+			if (tree != null && tree.getName() != null)
+				smartUpdate("z.value", Objects.toString(_value));
 		}
 	}
 
@@ -233,6 +231,10 @@ public class Treeitem extends XulElement {
 	/** Returns the nestest ancestor {@link Treeitem}, if any, or null if it is
 	 * the top-level {@link Treeitem}. By top-level we mean the first level of
 	 * a {@link Tree}.
+	 *
+	 * <p>Deprecated since 2.4.1, due to too confusing.
+	 *
+	 * @deprecated
 	 */
 	public Treeitem getTreeitem() {
 		final Component p = getParent();
@@ -278,36 +280,12 @@ public class Treeitem extends XulElement {
 		return super.getAllOnClickAttrs(ignoreOnClick);
 	}
 
-	//this is declared to make it accessible to Treeitem 
+	//this is declared to make it accessible to Treerow
 	protected boolean isAsapRequired(String evtnm) {
 		return super.isAsapRequired(evtnm);
 	}
-	public boolean addEventListener(String evtnm, EventListener listener) {
-		//don't check isTransparent
-		final boolean asap = _treerow == null || isAsapRequired(evtnm);
-			//_treerow might not be ready yet (a trick to avoid smartUpdate)
-		final boolean ret = super.addEventListener(evtnm, listener);
-		if (ret && !asap && isAsapRequired(evtnm))
-			_treerow.smartUpdate("z." + evtnm, "true");
-		return ret;
-	}
-	public boolean removeEventListener(String evtnm, EventListener listener) {
-		//don't check isTransparent
-		final boolean asap = _treerow == null || isAsapRequired(evtnm);
-			//_treerow might not be ready yet (a trick to avoid smartUpdate)
-		final boolean ret = super.removeEventListener(evtnm, listener);
-		if (ret && asap && !isAsapRequired(evtnm))
-			_treerow.smartUpdate("z." + evtnm, null);
-		return ret;
-	}
-
 	public void smartUpdate(String attr, String value) {
-		if ("z.ctx".equals(attr) || "z.pop".equals(attr) || "z.tip".equals(attr)
-		|| "title".equals(attr)) {
-			if (_treerow != null) _treerow.smartUpdate(attr, value);
-		} else {
-			super.smartUpdate(attr, value); //cause IllegalStateException
-		}
+		if (_treerow != null) _treerow.smartUpdate(attr, value);
 	}
 
 	//impl note: no getOuterAttrs, ON_OPEN..., since treeitem is virtual
@@ -335,7 +313,7 @@ public class Treeitem extends XulElement {
 		super.setParent(parent);
 
 		if (affected != null && affected._treerow != null)
-			affected._treerow.invalidate(); //only the first Treecell
+			affected._treerow.invalidate(); //only the first row
 
 		if (parent != null) {
 			final List sibs = parent.getChildren();
@@ -343,7 +321,7 @@ public class Treeitem extends XulElement {
 			if (sz > 1 && sibs.get(sz - 1) == this) {
 				affected = (Treeitem)sibs.get(sz - 2);
 				if (affected._treerow != null)
-					affected._treerow.invalidate(); //only the first Treecell
+					affected._treerow.invalidate(); //only the first row
 			}
 		}
 
@@ -378,14 +356,6 @@ public class Treeitem extends XulElement {
 			_treechildren = null;
 		}
 		super.onChildRemoved(child);
-	}
-	/** Though this is transparent, this method is callable.
-	 * It invalidates {@link #getTreerow} and {@link #getTreechildren}.
-	 * @since 2.4.1
-	 */
-	public void invalidate() {
-		if (_treerow != null) _treerow.invalidate();
-		if (_treechildren != null) _treechildren.invalidate();
 	}
 
 	//Cloneable//
@@ -428,16 +398,10 @@ public class Treeitem extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Openable, Transparent {
+	implements Openable {
 		//-- Openable --//
 		public void setOpenByClient(boolean open) {
 			_open = open;
-		}
-
-		//-- Transparent --//
-		/** Always returns true. */
-		public boolean isTransparent() {
-			return true;
 		}
 	}
 }

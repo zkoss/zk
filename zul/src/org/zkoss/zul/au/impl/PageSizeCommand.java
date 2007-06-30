@@ -1,4 +1,4 @@
-/* PagingCommand.java
+/* PageSizeCommand.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,10 +6,10 @@
 	Description:
 		
 	History:
-		Fri Aug 18 09:12:45     2006, Created by tomyeh
+		Sat Jun 30 20:55:36     2007, Created by tomyeh
 }}IS_NOTE
 
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
@@ -26,18 +26,19 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
-import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Paginal;
 
 /**
- * Used only by {@link AuRequest} to implement the {@link PagingEvent}
+ * Used only by {@link AuRequest} to implement the {@link PageSizeEvent}
  * related command.
  * 
  * @author tomyeh
+ * @since 2.4.1
  */
-public class PagingCommand extends Command {
-	public PagingCommand(String evtnm, int flags) {
+public class PageSizeCommand extends Command {
+	public PageSizeCommand(String evtnm, int flags) {
 		super(evtnm, flags);
 	}
 
@@ -51,21 +52,10 @@ public class PagingCommand extends Command {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
-		final Pageable pageable = (Pageable)comp;
-		int pgi = Integer.parseInt(data[0]);
-		if (pgi < 0) pgi = 0;
-		else {
-			final int pgcnt = pageable.getPageCount();
-			if (pgi >= pgcnt) {
-				pgi = pgcnt - 1;
-				if (pgi < 0) pgi = 0;
-			}
-		}
-		pageable.setActivePage(pgi);
+		int pgsz = Integer.parseInt(data[0]);
+		if (pgsz <= 0) pgsz = 1;
+		((Pageable)comp).setPageSize(pgsz);
 		if (!(comp instanceof Paginal))
-			Events.postEvent(new PagingEvent(getId(), comp, pgi));
-			//Don't send the onPaging event if paginal,
-			//since its setActivePage will do (to notify other
-			//components depending on it).
+			Events.postEvent(new PageSizeEvent(getId(), comp, pgsz));
 	}
 }

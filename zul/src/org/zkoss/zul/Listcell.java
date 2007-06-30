@@ -54,6 +54,8 @@ public class Listcell extends LabelImageElement {
 		return comp != null ? (Listbox)comp.getParent(): null;
 	}
 	/** Returns the list item that it belongs to.
+	 * <p>Deprecated since 2.4.1, due to too confusing
+	 * @deprecated
 	 */
 	public Listitem getListitem() {
 		return (Listitem)getParent();

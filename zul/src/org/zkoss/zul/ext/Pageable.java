@@ -21,11 +21,21 @@ package org.zkoss.zul.ext;
 import org.zkoss.zk.ui.WrongValueException;
 
 /**
- * The interface that a component must implement, if it supports
- * the onPaging event.
+ * Denotes a component that can be displayed in multiple pages.
+ *
+ * <p>Note: a component that can be displayed in multiple pages
+ * can be implemented in two ways.
+ *
+ * <p>1) If it can be controlled by a paging controller
+ * (i.e., {@link Paginal}), it shall hold an reference to one of
+ * the paging controllers.
+ *
+ * <p>2) If it cannot be controlled, it shall implement
+ * the {@link Pageable} interface.
  *
  * @author tomyeh
  * @since 2.4.1
+ * @see Paginal
  */
 public interface Pageable {
 	/** Returns the number of items per page.

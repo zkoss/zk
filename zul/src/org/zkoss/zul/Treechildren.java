@@ -29,15 +29,10 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.Cropper;
-import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Pageable;
-
-import org.zkoss.zul.event.ZulEvents;
-import org.zkoss.zul.event.PagingEvent;
 
 /**
  * A treechildren.
@@ -58,28 +53,18 @@ public class Treechildren extends XulElement implements Pageable {
 				return (Tree)p;
 		return null;
 	}
-	/** Returns the nestest parent {@link Treeitem}, or null if
-	 * it has no parent or the parent is {@link Tree}.
-	 * It is the sames as {@link #getParent}.
-	 *
-	 * @since 2.4.1
-	 * @see #getTreerow
-	 */
-	public Treeitem getTreeitem() {
-		final Component parent = getParent();
-		return parent instanceof Treeitem ? (Treeitem)parent: null;
-	}
-	/** Returns the {@link Treerow} sibling, or null if
-	 * no such sibling.
+	/** Returns the {@link Treerow} that is associated with
+	 * this treechildren, or null if no such treerow.
 	 * In other words, it is {@link Treeitem#getTreerow} of
-	 * {@link #getTreeitem}.
+	 * {@link #getParent}.
 	 *
 	 * @since 2.4.1
-	 * @see Treerow#getTreechildren
+	 * @see Treerow#getLinkedTreechildren
 	 */
-	public Treerow getTreerow() {
-		final Treeitem ti = getTreeitem();
-		return ti != null ? ti.getTreerow(): null;
+	public Treerow getLinkedTreerow() {
+		final Component parent = getParent();
+		return parent instanceof Treeitem ?
+			((Treeitem)parent).getTreerow(): null;
 	}
 
 	/** Returns whether this is visible.
@@ -198,19 +183,11 @@ public class Treechildren extends XulElement implements Pageable {
 			_pgsz = size;
 
 			if (invalidate) {
-				pgSmartUpdate("z.pgsz", Integer.toString(getPageSize()));
 				invalidate();
+				smartUpdatePaging();
+					//it affect treerow (so invalidate won't 'eat' it)
 			}
 		}
-	}
-	/** Smart update attributes related paging.
-	 */
-	private void pgSmartUpdate(String name, String value) {
-		Component comp = getParent();
-		if (comp instanceof Treeitem)
-			comp = ((Treeitem)comp).getTreerow();
-		if (comp != null)
-			comp.smartUpdate(name, value);
 	}
 
 	/** Returns the number of pages.
@@ -242,9 +219,10 @@ public class Treechildren extends XulElement implements Pageable {
 			throw new WrongValueException("Unable to set active page to "+pg+" since only "+pgcnt+" pages");
 		if (_actpg != pg) {
 			_actpg = pg;
-			pgSmartUpdate("z.pgi", Integer.toString(_actpg));
+
 			invalidate();
-			Events.postEvent(new PagingEvent(ZulEvents.ON_PAGING, this, _actpg));
+			smartUpdatePaging();
+				//it affect treerow (so invalidate won't 'eat' it)
 		}
 	}
 	/** Returns the index of the first visible child.
@@ -291,7 +269,12 @@ public class Treechildren extends XulElement implements Pageable {
 		if (!(child instanceof Treeitem))
 			throw new UiException("Unsupported child for treechildren: "+child);
 		if (super.insertBefore(child, insertBefore)) {
-			//TODO
+			final int pgsz = getPageSize();
+			if (pgsz > 0) {
+				final int sz = getChildren().size();
+				if (sz > 1 && (sz % pgsz) == 1) //one more page
+					smartUpdatePaging();
+			}
 			return true;
 		}
 		return false;
@@ -299,29 +282,47 @@ public class Treechildren extends XulElement implements Pageable {
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 
-		final int pgcnt = getPageCount();
-		if (_actpg >= pgcnt)
-			setActivePage(pgcnt - 1);
+		final int pgsz = getPageSize();
+		if (pgsz > 0) {
+			final int sz = getChildren().size();
+			if (sz > 0 && (sz % pgsz) == 0) { //less one page
+				final int pgcnt = smartUpdatePaging();
+				if (_actpg >= pgcnt) { //removing the last page
+					_actpg = pgcnt - 1;
+					getParent().invalidate();
+				//We have to invalidate the parent, since
+				//no client at the item when user removes the last one
+				//Server: generate rm and outer in this case
+				}
+			}
+		}
 	}
-	/** Thought it may be transparent, this method is callable.
-	 * @since 2.4.1
-	 */
 	public void invalidate() {
 		final Component parent = getParent();
-		if (parent instanceof Treeitem) {
-			int pgsz = getPageSize();
-			if (pgsz <= 0) {
-				for (Iterator it = getChildren().iterator(); it.hasNext();)
-					((Component)it.next()).invalidate();
-			} else {
-				final int ofs = getActivePage() * pgsz;
-				for (Iterator it = getChildren().listIterator(ofs);
-				--pgsz >= 0  && it.hasNext();)
-					((Component)it.next()).invalidate();
-			}
-		} else if (parent != null) {
+		if (parent instanceof Tree) {
+			//Browser Limitation (IE/FF): we cannot update TBODY only
 			parent.invalidate();
+		} else {
+			super.invalidate();
 		}
+	}
+	public void smartUpdate(String name, String value) {
+		Component comp = getParent();
+		if (comp instanceof Treeitem)
+			comp = ((Treeitem)comp).getTreerow();
+		if (comp != null)
+			comp.smartUpdate(name, value);
+	}
+	/** Updates paging related information.
+	 * @return # of pages
+	 */
+	private int smartUpdatePaging() {
+		//We update all attributes at once, because
+		//1) if pgsz <= 1, none of them are generated (to save HTML size)
+		final int pgcnt = getPageCount();
+		smartUpdate("z.pgInfo",
+			pgcnt+","+getActivePage()+","+getPageSize());
+		return pgcnt;
 	}
 
 	//-- ComponentCtrl --//
@@ -332,14 +333,7 @@ public class Treechildren extends XulElement implements Pageable {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Transparent, Cropper {
-		//Transparent//
-		/** It is transparent if its parent is {@link Treeitem}.
-		 */
-		public boolean isTransparent() {
-			return getParent() instanceof Treeitem;
-		}	
-
+	implements Cropper {
 		//--Cropper--//
 		public boolean isCropper() {
 			return getPageSize() > 0;

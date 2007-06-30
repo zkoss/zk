@@ -66,7 +66,7 @@ zk.Tree = Class.create();
 Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	/** Overrides what is defined in zk.Selectable. */
 	getItemUuid: function (row) {
-		return getZKAttr(row, "item");
+		return getZKAttr(row, "pitem");
 	},
 	/** Process the setAttr command sent from the server. */
 	setAttr2: function (name, value) {
@@ -79,7 +79,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 				return true;
 			}
 			var toOpen = value.substring(j + 1) == "true";
-			var open = getZKAttr(row, "open") == "true";
+			var open = zkTree.isOpen(row);
 			if (toOpen != open) {
 				var img = $e(row.id + "!open");
 				if (img) this._openItem(row, img, toOpen);
@@ -90,14 +90,14 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	},
 	/** Overrides what is defined in zk.Selectable. */
 	_doLeft: function (row) {
-		if (getZKAttr(row, "open") == "true") {
+		if (zkTree.isOpen(row)) {
 			var img = $e(row.id + "!open");
 			if (img) this._openItem(row, img, false);
 		}
 	},
 	/** Overrides what is defined in zk.Selectable. */
 	_doRight: function (row) {
-		if (getZKAttr(row, "open") != "true") {
+		if (!zkTree.isOpen(row)) {
 			var img = $e(row.id + "!open");
 			if (img) this._openItem(row, img, true);
 		}
@@ -107,7 +107,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 		var row = zk.parentNode(target, "TR");
 		if (!row) return; //incomplete structure
 
-		var toOpen = getZKAttr(row, "open") != "true"; //toggle
+		var toOpen = !zkTree.isOpen(row); //toggle
 		this._openItem(row, target, toOpen);
 
 		var el = $e(row.id + "!sel");
@@ -129,7 +129,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 			//to make it smaller when closing some items.
 			//Thus, we only handle 'enlargement', i.e., toOpen is true
 
-		zkau.send({uuid: getZKAttr(row, "item"),
+		zkau.send({uuid: getZKAttr(row, "pitem"),
 			cmd: "onOpen", data: [toOpen]},
 			zkau.asapTimeout(row, "onOpen"));
 			//always send since the client has to update Openable
@@ -138,17 +138,17 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	 * @param toOpen whether to toOpen
 	 */
 	_showKids: function (row, toOpen, silent) {
-		var uuid = getZKAttr(row, "item");
+		var uuid = getZKAttr(row, "pitem");
 		do {
 			var r = row.nextSibling;
 			if ($tag(r) == "TR") {
-				var pid = getZKAttr(r, "ptitem");
+				var pid = getZKAttr(r, "gpitem");
 				if (uuid != pid) return row; //not my child
 
 				if (!silent)
 					r.style.display = toOpen ? "": "none";
 				r = this._showKids(r, toOpen,
-					toOpen && (silent || getZKAttr(r, "open") != "true"));
+					toOpen && (silent || !zkTree.isOpen(r)));
 			}
 		} while (row = r);
 	}
@@ -165,14 +165,14 @@ zkTree.init = function (cmp) {
 	else {
 		zkTreeNewClass();
 
-		var bdy = $e(cmp.id + "!body");
-		if (bdy)
-			zk.listen(bdy, "keydown", zkTree.bodyonkeydown);
-
 		meta = new zk.Tree(cmp);
-	}
 
-	zkTrow._pgnt(cmp, meta.bodytbl.rows);
+		if (meta.body) {
+			zk.listen(meta.body, "keydown", zkTree.bodyonkeydown);
+			if (meta.bodytbl)
+				zkTrow._pgnt(cmp, meta.bodytbl.rows);
+		}
+	}
 };
 zkTree.childchg = zkTree.init;
 
@@ -229,6 +229,9 @@ zkTree.ontoggle = function (evt) {
 	var meta = zkau.getMetaByType(target, "Tree");
 	if (meta) meta.toggleOpen(evt, target);
 };
+zkTree.isOpen = function (row) {
+	return getZKAttr(row, "open") == "true";
+};
 
 zkTrow = {}; //Treerow
 zkTrow.init = function (cmp) {
@@ -240,11 +243,32 @@ zkTrow.init = function (cmp) {
 	zk.listen(cmp, "mouseover", zkSel.onover);
 	zk.listen(cmp, "mouseout", zkSel.onout);
 
+	_zktrx.init(cmp, "ptch");
+	_zktrx.init(cmp, "pitem");
+
+	var sib = getZKAttr(cmp, "tchsib");
+	if (sib) _zktrx.sib[sib] = cmp.id;
+
 	zkTrow._pgnt(cmp);
 };
 zkTrow.cleanup = zkTrow._pgclean = function (cmp) {
 	zk.remove($e(cmp.id + "!ph"));
 	zk.remove($e(cmp.id + "!pt"));
+
+	_zktrx.cleanup(cmp, "ptch");
+	_zktrx.cleanup(cmp, "pitem");
+	delete _zktrx.sib[getZKAttr(cmp, "tchsib")];
+};
+zkTrow.setAttr = function (cmp, nm, val) {
+	if ("z.pgInfo" == nm) {
+		var j = val.indexOf(','), k = val.indexOf(',', j + 1);
+		setZKAttr(cmp, "pgc", val.substring(0, j).trim());
+		setZKAttr(cmp, "pgi", val.substring(j + 1, k).trim());
+		setZKAttr(cmp, "pgsz", val.substring(k + 1).trim());
+		zkTrow._pgnt(cmp);
+		return true;
+	}
+	return false;
 };
 
 /** Called when _onDocCtxMnu is called. */
@@ -266,9 +290,9 @@ zkTrow._pgnt = function (cmp, rows) {
 		if (pgi > 0) { //head visible
 			if (!head || pgc != getZKAttr(head, "pgc")
 			|| pgi != getZKAttr(head, "pgi")) {
-				if (!head) {
-					//TODO
-				}
+				if (!head) head = zkTrow._genpg(cmp, rows, false);
+				zk.setInnerHTML($e(cmp.id + "!pch"),
+					Tree_paging(cmp, pgc, pgi, pgsz, false));
 			} else
 				zkTrow._fixpgspan(head, ncol);
 			head = null; //so it won't be removed later
@@ -278,7 +302,7 @@ zkTrow._pgnt = function (cmp, rows) {
 			if (!tail || pgc != getZKAttr(tail, "pgc")
 			|| pgi != getZKAttr(tail, "pgi")) {
 				if (!tail) tail = zkTrow._genpg(cmp, rows, true);
-				zk.setInnerHTML($e(cmp.id + "!pc"),
+				zk.setInnerHTML($e(cmp.id + "!pct"),
 					Tree_paging(cmp, pgc, pgi, pgsz, true));
 			} else
 				zkTrow._fixpgspan(tail, ncol);
@@ -301,6 +325,9 @@ zkTrow._fixpgspan = function (n, ncol) {
  */
 zkTrow._genpg = function (cmp, rows, end) {
 	var tr = document.createElement("TR");
+	tr.id = cmp.id + (end ? "!pt": "!ph");
+	if (!rows && !zkTree.isOpen(cmp))
+		tr.style.display = "none"
 	var td = document.createElement("TD");
 	tr.appendChild(td);
 
@@ -308,25 +335,28 @@ zkTrow._genpg = function (cmp, rows, end) {
 		if (end) zk.insertAfter(tr, rows[rows.length - 1]);
 		else zk.insertBefore(tr, rows[0]);
 	} else {
-		setZKAttr(tr, "ptitem", getZKAttr(cmp, "item"));
+		setZKAttr(tr, "gpitem", getZKAttr(cmp, "pitem"));
 		zk.insertAfter(tr, end ? zkTrow._lastKid(cmp): cmp);
 	}
 
 	//clone images with z.fc
 	//Note: we don't clone the last image
-	var n = zk.nextSibling(end ? rows ? rows[0]: cmp: tr, "TR");
-	var last = null;
-	for (n = n.cells[0].firstChild; n; n = n.nextSibling) {
-		if (n.getAttribute) {
-			if (!getZKAttr(n, "fc")) break;
-			if (last) td.appendChild(last.cloneNode(true));
-			last = n;
+	if (!rows) {
+		var n = zk.nextSibling(end ? cmp: tr, "TR");
+		if (n.id.endsWith("!ph")) n = zk.nextSibling(n, "TR"); //skip head
+		var last = null;
+		for (n = n.cells[0].firstChild; n; n = n.nextSibling) {
+			if (n.getAttribute) {
+				if (!getZKAttr(n, "fc")) break;
+				if (last) td.appendChild(last.cloneNode(true));
+				last = n;
+			}
 		}
 	}
 
 	//create content
 	var cnt = document.createElement("SPAN");
-	cnt.id = cmp.id + "!pc";
+	cnt.id = cmp.id + "!pc" + (end ? 't': 'h');
 	cnt.className = "treecell-paging";
 	cnt.style.width = "100%";
 	td.appendChild(cnt);
@@ -346,14 +376,10 @@ zkTrow._onpg = function (index, evt) {
 	if (!evt) evt = window.event;
 	var n = $outer(Event.element(evt).parentNode);
 
-	var pgi;
-	if (index == -9) pgi = 0;
-	else if (index == 9) pgi = parseInt(getZKAttr(n, "pgc")) - 1;
-	else {
-		pgi = parseInt(getZKAttr(n, "pgi")) + index;
-	}
-
-	zkau.send({uuid: getZKAttr(n, "tch"), cmd: "onPaging", data: [pgi]});
+	zkau.send({uuid: getZKAttr(n, "tchsib"), cmd: "onPaging",
+		data: [index == -9 ? 0:
+			index == 9 ? parseInt(getZKAttr(n, "pgc")) - 1:
+			parseInt(getZKAttr(n, "pgi")) + index]});
 };
 /** Zoom in or out
  * @param index -1: zoom out, 1: zoom in
@@ -362,19 +388,19 @@ zkTrow._onzoom = function (index, evt) {
 	if (!evt) evt = window.event;
 	var n = $outer(Event.element(evt).parentNode);
 
-	zkau.send({uuid: getZKAttr(n, "tch"), cmd: "onPageSize",
-		data: [parseInt(getZKAttr(n, "pgsz"))+index]});
+	zkau.send({uuid: getZKAttr(n, "tchsib"), cmd: "onPageSize",
+		data: [parseInt(getZKAttr(n, "pgsz")) + index]});
 };
 /** Returns the last direct child.
  * It returns itself if there is no child at all.
  */
 zkTrow._lastKid = function (row) {
-	var uuid = getZKAttr(row, "item");
+	var uuid = getZKAttr(row, "pitem");
 	var n = row;
 	do {
 		var r = n.nextSibling;
 		if ($tag(r) == "TR") {
-			var pid = getZKAttr(r, "ptitem");
+			var pid = getZKAttr(r, "gpitem");
 			if (uuid != pid) return row; //not my child
 
 			row = r = zkTrow._lastKid(r);
@@ -414,3 +440,94 @@ zk.addModuleInit(function () {
 	//Treecols
 	zkTcols = zulHdrs;
 });
+
+//Upgrade AU Engine to handle treeitem and treechildren
+var _zktrx = {};
+_zktrx.dom = {}; //Map(treechildren/treeitem, [treerows])
+_zktrx.sib = {}; //Map(treechildren, treerow)
+_zktrx.au = {};
+
+_zktrx.init = function (trow, attr) {
+	var pt = getZKAttr(trow, attr);
+	if (pt) {
+		var dom = _zktrx.dom[pt];
+		if (!dom) dom = _zktrx.dom[pt] = [];
+		dom.push(trow.id);
+
+		if ("pitem" == attr)
+			_zktrx.sib[pt] = trow.id;
+	}
+};
+_zktrx.cleanup = function (trow, attr) {
+	var pt = getZKAttr(trow, attr);
+	var dom = pt ? _zktrx.dom[pt]: null;
+	if (dom) {
+		dom.remove(trow.id);
+		if (!dom.length) delete _zktrx.dom[pt];
+
+		if ("pitem" == attr)
+			delete _zktrx.sib[pt];
+	}
+};
+
+_zktrx.au.outer = zkau.cmd1.outer;
+zkau.cmd1.outer = function (uuid, cmp, html) {
+	var dom = _zktrx.dom[uuid];
+	if (dom) {
+		for (var j = dom.length; --j >= 0;) {
+			var id = dom[j];
+			var trow = $e(id);
+			_zktrx._rmKids(trow); //deep first since it cleanup dom
+			if (j == 0) {
+				uuid = id;
+				cmp = trow;
+			} else {
+				_zktrx.au.rm(id, trow);
+			}
+		}
+		dom.length = 0; //clear
+	}
+	if (cmp || html.trim()) //if treechildren has no children at all
+		_zktrx.au.outer(uuid, cmp, html);
+};
+
+_zktrx.au.addAft = zkau.cmd1.addAft;
+zkau.cmd1.addAft = function (uuid, cmp, html) {
+	if (!cmp) {
+		cmp = $e(_zktrx.sib[uuid]);
+		if (cmp) cmp = zkTrow._lastKid(cmp);
+	}
+	_zktrx.au.addAft(uuid, cmp, html);
+};
+_zktrx.au.addBfr = zkau.cmd1.addBfr;
+zkau.cmd1.addBfr = function (uuid, cmp, html) {
+	_zktrx.au.addBfr(uuid, cmp ? cmp: $e(_zktrx.sib[uuid]), html);
+};
+_zktrx.au.addChd = zkau.cmd1.addChd;
+zkau.cmd1.addChd = function (uuid, cmp, html) {
+	if (cmp)
+		_zktrx.au.addChd(uuid, cmp, html);
+	else
+		_zktrx.au.addAft(uuid, $e(_zktrx.sib[uuid]), html);
+};
+
+_zktrx.au.rm = zkau.cmd1.rm;
+zkau.cmd1.rm = function (uuid, cmp) {
+	var dom = _zktrx.dom[uuid];
+	if (dom) {
+		for (var j = dom.length; --j >= 0;) {
+			var id = dom[j];
+			var trow = $e(id);
+			_zktrx._rmKids(trow); //deep first since it cleanup dom
+			_zktrx.au.rm(id, trow);
+		}
+		dom.length = 0; //clear (just in case)
+		return;
+	}
+	_zktrx.au.rm(uuid, cmp);
+};
+_zktrx._rmKids = function (trow) {
+	var tchsib = trow ? getZKAttr(trow, "tchsib"): null;
+	if (tchsib)
+		zkau.cmd1.rm(tchsib, $e(tchsib));
+};

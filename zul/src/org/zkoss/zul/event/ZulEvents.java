@@ -27,6 +27,9 @@ public class ZulEvents {
 	/** The onPaging event used with {@link PagingEvent}.
 	 */
 	public static final String ON_PAGING = "onPaging";
+	/** The onPageSize event used with {@link PageSizeEvent}.
+	 */
+	public static final String ON_PAGE_SIZE = "onPageSize";
 	/** The onColSize event used with {@link ColSizeEvent}.
 	 */
 	public static final String ON_COL_SIZE = "onColSize";

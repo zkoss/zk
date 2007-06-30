@@ -64,7 +64,7 @@ public class Tree extends XulElement {
 	/** The name. */
 	private String _name;
 	/** # of items per page. */
-	private int _pgsz = -1;
+	private int _pgsz = 10;
 	private boolean _multiple, _checkmark;
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
@@ -450,13 +450,10 @@ public class Tree extends XulElement {
 		if (size <= 0) size = -1; //no limitation
 		if (_pgsz != size) {
 			_pgsz = size;
-			updatePageNum();
+			invalidate();
+				//FUTURE: trade-off: search and update only
+				//necessary Treechildren is faster or not
 		}
-	}
-	/** Updates page number of all {@link Treechildren} instances.
-	 */
-	private void updatePageNum() {
-		//TODO
 	}
 
 	//-- Component --//
@@ -646,7 +643,7 @@ public class Tree extends XulElement {
 		if (tc != null) {
 			final int pgcnt = tc.getPageCount();
 			if (pgcnt > 1) {
-				HTMLs.appendAttribute(sb, "z.tch", tc.getUuid());
+				HTMLs.appendAttribute(sb, "z.tchsib", tc.getUuid());
 				HTMLs.appendAttribute(sb, "z.pgc", pgcnt);
 				HTMLs.appendAttribute(sb, "z.pgi", tc.getActivePage());
 				HTMLs.appendAttribute(sb, "z.pgsz", tc.getPageSize());

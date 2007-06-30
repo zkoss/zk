@@ -49,21 +49,23 @@ public class Treerow extends XulElement {
 		return parent != null ? ((Treeitem)parent).getLevel(): 0;
 	}
 
-	/** Returns the nestest parent {@link Treeitem}.
-	 * It is the sames as {@link #getParent}.
+	/** Returns the parent {@link Treeitem}.
+	 * <p>Deprecated since 2.4.1, due to too confusing.
+	 * @deprecated
 	 */
 	public Treeitem getTreeitem() {
 		return (Treeitem)getParent();
 	}
-	/** Returns the {@link Treechildren} sibling.
+	/** Returns the {@link Treechildren} associated with this
+	 * {@link Treerow}.
 	 * In other words, it is {@link Treeitem#getTreechildren} of
-	 * {@link #getTreeitem}.
+	 * {@link #getParent}.
 	 * @since 2.4.1
-	 * @see Treechildren#getTreerow
+	 * @see Treechildren#getLinkedTreerow
 	 */
-	public Treechildren getTreechildren() {
-		final Treeitem ti = getTreeitem();
-		return ti != null ? ti.getTreechildren(): null;
+	public Treechildren getLinkedTreechildren() {
+		final Component parent = getParent();
+		return parent != null ? ((Treeitem)parent).getTreechildren(): null;
 	}
 
 	//-- super --//
@@ -136,27 +138,32 @@ public class Treerow extends XulElement {
 		if (item == null) return attrs;
 
 		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		final Treeitem ptitem = item.getTreeitem();
 
 		final Tree tree = getTree();
 		if (tree != null && tree.getName() != null)
 			HTMLs.appendAttribute(sb, "z.value",  Objects.toString(item.getValue()));
-		HTMLs.appendAttribute(sb, "z.item", item.getUuid());
-		HTMLs.appendAttribute(
-			sb, "z.ptitem", ptitem != null ? ptitem.getUuid(): "root");
-				//z.ptitem: parent item
+		HTMLs.appendAttribute(sb, "z.pitem", item.getUuid());
 		HTMLs.appendAttribute(sb, "z.sel", item.isSelected());
 		if (item.isContainer())
 			HTMLs.appendAttribute(sb, "z.open", item.isOpen());
 
-		final Treechildren tc = getTreechildren();
-		if (tc != null) {
-			final int pgcnt = tc.getPageCount();
+		final Component gp = item.getParent(); //Treechildren
+		if (gp != null) {
+			HTMLs.appendAttribute(sb, "z.ptch", gp.getUuid());
+			Component gpitem = gp.getParent();
+			if (gpitem instanceof Treeitem)
+				HTMLs.appendAttribute(sb, "z.gpitem", gpitem.getUuid());
+		}
+
+		final Treechildren tcsib = getLinkedTreechildren();
+		if (tcsib != null) {
+			HTMLs.appendAttribute(sb, "z.tchsib", tcsib.getUuid());
+
+			final int pgcnt = tcsib.getPageCount();
 			if (pgcnt > 1) {
-				HTMLs.appendAttribute(sb, "z.tch", tc.getUuid());
 				HTMLs.appendAttribute(sb, "z.pgc", pgcnt);
-				HTMLs.appendAttribute(sb, "z.pgi", tc.getActivePage());
-				HTMLs.appendAttribute(sb, "z.pgsz", tc.getPageSize());
+				HTMLs.appendAttribute(sb, "z.pgi", tcsib.getActivePage());
+				HTMLs.appendAttribute(sb, "z.pgsz", tcsib.getPageSize());
 			}
 		}
 

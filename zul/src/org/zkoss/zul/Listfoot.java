@@ -32,6 +32,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Listfoot extends XulElement {
 	/** Returns the list box that it belongs to.
+	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Listbox getListbox() {
 		return (Listbox)getParent();

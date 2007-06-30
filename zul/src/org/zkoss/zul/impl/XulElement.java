@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.Command;
 import org.zkoss.zul.au.impl.ColSizeCommand;
 import org.zkoss.zul.au.impl.PagingCommand;
+import org.zkoss.zul.au.impl.PageSizeCommand;
 import org.zkoss.zul.event.ZulEvents;
 
 /**
@@ -49,6 +50,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 		new ColSizeCommand(ZulEvents.ON_COL_SIZE, 0);
 			//Don't use Command.IGNORE_OLD_EQUIV since users might drag diff borders
 		new PagingCommand(ZulEvents.ON_PAGING, Command.SKIP_IF_EVER_ERROR);
+		new PageSizeCommand(ZulEvents.ON_PAGE_SIZE, Command.SKIP_IF_EVER_ERROR);
 	}
 
 	/** The popup ID that will be shown when click. */

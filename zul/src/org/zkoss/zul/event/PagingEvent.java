@@ -20,12 +20,12 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 
 import org.zkoss.zul.ext.Pageable;
+import org.zkoss.zul.ext.Paginal;
 
 /**
- * Used to notify that a new page is selected by the user.
- * It is used for paging long content. In other words, it is fired by
- * a paging component (aka., implementing {@link org.zkoss.zul.ext.Pageable}),
- * such as {@link org.zkoss.zul.Paging}.
+ * Used to notify that a new page is selected by the user, or by
+ * {@link Paginal} (such as {@link org.zkoss.zul.Paging}).
+ * It is used for paging long content.
  *
  * @author tomyeh
  */
@@ -44,18 +44,31 @@ public class PagingEvent extends Event {
 		_pgi = (Pageable)target;
 		_actpg = actpg;
 	}
-	/** Construct a paging event.
+	/** Construct a paging event that the target is different
+	 * from the page controller.
+	 *
+	 * @param target the event target
+	 * @param pageable the paging controller. In other words,
+	 * it is usually {@link Paginal}.
 	 */
-	public PagingEvent(String name, Component target, Pageable pageable, int actpg) {
+	public PagingEvent(String name, Component target, Pageable pageable,
+	int actpg) {
 		super(name, target);
 		_pgi = pageable;
 		_actpg = actpg;
 	}
-	/** Construct a paging event.
-	 * <p>Deprecated since 2.4.1.
+	/** Construct a paging event that the target is different
+	 * from the page controller.
+	 *
+	 * <p>Deprecated since 2.4.1. Use {@link #PagingEvent(String,Component,Paginal,int)}
+	 * instead.
+	 *
+	 * @param target the event target
+	 * @param paginal the paging controller.
 	 * @deprecated
 	 */
-	public PagingEvent(String name, Component target, org.zkoss.zul.ext.Paginal paginal, int actpg) {
+	public PagingEvent(String name, Component target, Paginal paginal,
+	int actpg) {
 		super(name, target);
 		_pgi = paginal;
 		_actpg = actpg;
@@ -73,16 +86,15 @@ public class PagingEvent extends Event {
 	 *
 	 * @deprecated
 	 */
-	public org.zkoss.zul.ext.Paginal getPaginal() {
-		return _pgi instanceof org.zkoss.zul.ext.Paginal ?
-			(org.zkoss.zul.ext.Paginal)_pgi: null;
+	public Paginal getPaginal() {
+		return _pgi instanceof Paginal ? (Paginal)_pgi: null;
 	}
 
 	/** Returns the active page (starting from 0).
-	 * <p>It is the same as {@link #getPaginal}'s {@link Paginal#getActivePage}.
+	 * <p>It is the same as {@link #getPageable}'s {@link Pageable#getActivePage}.
 	 *
 	 * <p>To get the index of the first visible item, use<br/>
-	 * <code>{@link #getActivePage} * {@link Paginal#getPageSize}</code>.
+	 * <code>{@link #getActivePage} * {@link Pageable#getPageSize}</code>.
 	 */
 	public int getActivePage() {
 		return _actpg;

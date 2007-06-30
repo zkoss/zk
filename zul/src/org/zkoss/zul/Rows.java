@@ -36,7 +36,9 @@ import org.zkoss.zul.ext.Paginal;
  * @author tomyeh
  */
 public class Rows extends XulElement {
-	/** Returns the grid that contains this rows. */
+	/** Returns the grid that contains this rows.
+	 * <p>It is the same as {@link #getParent}.
+	 */
 	public Grid getGrid() {
 		return (Grid)getParent();
 	}
