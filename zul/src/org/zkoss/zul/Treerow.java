@@ -55,8 +55,11 @@ public class Treerow extends XulElement {
 	public Treeitem getTreeitem() {
 		return (Treeitem)getParent();
 	}
-	/** Returns the {@link Treechildren} that this component belongs to.
+	/** Returns the {@link Treechildren} sibling.
+	 * In other words, it is {@link Treeitem#getTreechildren} of
+	 * {@link #getTreeitem}.
 	 * @since 2.4.1
+	 * @see Treechildren#getTreerow
 	 */
 	public Treechildren getTreechildren() {
 		final Treeitem ti = getTreeitem();
@@ -150,8 +153,10 @@ public class Treerow extends XulElement {
 		if (tc != null) {
 			final int pgcnt = tc.getPageCount();
 			if (pgcnt > 1) {
+				HTMLs.appendAttribute(sb, "z.tch", tc.getUuid());
 				HTMLs.appendAttribute(sb, "z.pgc", pgcnt);
 				HTMLs.appendAttribute(sb, "z.pgi", tc.getActivePage());
+				HTMLs.appendAttribute(sb, "z.pgsz", tc.getPageSize());
 			}
 		}
 

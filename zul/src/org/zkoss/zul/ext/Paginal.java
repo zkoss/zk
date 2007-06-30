@@ -33,31 +33,13 @@ import org.zkoss.zk.ui.event.EventListener;
  *
  * @author tomyeh
  */
-public interface Paginal {
-	/** Returns the number of items per page.
-	 * <p>Default: 20.
-	 */
-	public int getPageSize();
-	/** Sets the number of items per page.
-	 */
-	public void setPageSize(int size) throws WrongValueException;
+public interface Paginal extends Pageable {
 	/** Returns the total number of items.
 	 */
 	public int getTotalSize();
 	/** Sets the total number of items.
 	 */
 	public void setTotalSize(int size) throws WrongValueException;
-	/** Returns the number of pages.
-	 * Note: there is at least one page even no item at all.
-	 */
-	public int getPageCount();
-
-	/** Returns the active page (starting from 0).
-	 */
-	public int getActivePage();
-	/** Sets the active page (starting from 0).
-	 */
-	public void setActivePage(int pg) throws WrongValueException;
 
 	/** Returns the number of page anchors shall appear at the client. 
 	 *

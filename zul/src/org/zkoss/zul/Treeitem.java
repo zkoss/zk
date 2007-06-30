@@ -334,12 +334,8 @@ public class Treeitem extends XulElement {
 
 		super.setParent(parent);
 
-		if (affected != null) {
-			if (affected._treerow != null)
-				affected._treerow.invalidate(); //only the first Treecell
-			if (affected._treechildren != null)
-				affected._treechildren.invalidate();
-		}
+		if (affected != null && affected._treerow != null)
+			affected._treerow.invalidate(); //only the first Treecell
 
 		if (parent != null) {
 			final List sibs = parent.getChildren();
@@ -348,8 +344,6 @@ public class Treeitem extends XulElement {
 				affected = (Treeitem)sibs.get(sz - 2);
 				if (affected._treerow != null)
 					affected._treerow.invalidate(); //only the first Treecell
-				if (affected._treechildren != null)
-					affected._treechildren.invalidate();
 			}
 		}
 
@@ -384,6 +378,14 @@ public class Treeitem extends XulElement {
 			_treechildren = null;
 		}
 		super.onChildRemoved(child);
+	}
+	/** Though this is transparent, this method is callable.
+	 * It invalidates {@link #getTreerow} and {@link #getTreechildren}.
+	 * @since 2.4.1
+	 */
+	public void invalidate() {
+		if (_treerow != null) _treerow.invalidate();
+		if (_treechildren != null) _treechildren.invalidate();
 	}
 
 	//Cloneable//

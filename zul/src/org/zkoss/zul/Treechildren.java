@@ -31,17 +31,24 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.ext.Pageable;
+
+import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.event.PagingEvent;
 
 /**
  * A treechildren.
  *
  * @author tomyeh
  */
-public class Treechildren extends XulElement {
+public class Treechildren extends XulElement implements Pageable {
 	/** the active page. */
-	private int _actpg = 0;
+	private int _actpg;
+	/** # of items per page. Zero means the same as Tree's. */
+	private int _pgsz;
 
 	/** Returns the {@link Tree} instance containing this element.
 	 */
@@ -50,6 +57,29 @@ public class Treechildren extends XulElement {
 			if (p instanceof Tree)
 				return (Tree)p;
 		return null;
+	}
+	/** Returns the nestest parent {@link Treeitem}, or null if
+	 * it has no parent or the parent is {@link Tree}.
+	 * It is the sames as {@link #getParent}.
+	 *
+	 * @since 2.4.1
+	 * @see #getTreerow
+	 */
+	public Treeitem getTreeitem() {
+		final Component parent = getParent();
+		return parent instanceof Treeitem ? (Treeitem)parent: null;
+	}
+	/** Returns the {@link Treerow} sibling, or null if
+	 * no such sibling.
+	 * In other words, it is {@link Treeitem#getTreerow} of
+	 * {@link #getTreeitem}.
+	 *
+	 * @since 2.4.1
+	 * @see Treerow#getTreechildren
+	 */
+	public Treerow getTreerow() {
+		final Treeitem ti = getTreeitem();
+		return ti != null ? ti.getTreerow(): null;
 	}
 
 	/** Returns whether this is visible.
@@ -125,15 +155,64 @@ public class Treechildren extends XulElement {
 	/** Returns the page size which controls the number of
 	 * visible child {@link Treeitem}, or -1 if no limitation.
 	 *
-	 * <p>It is the same as calling {@link #getTree}'s {@link Tree#getPageSize}.
+	 * <p>If {@link #setPageSize} is called with a non-zero value,
+	 * this method return the non-zero value.
+	 * If {@link #setPageSize} is called with zero, this method
+	 * returns {@link Tree#getPageSize} of {@link #getTree}.
+	 *
+	 * <p>Default: the same as {@link #getTree}'s {@link Tree#getPageSize}.
 	 *
 	 * @since 2.4.1
 	 * @see Tree#getPageSize
+	 * @see #setPageSize
 	 */
 	public int getPageSize() {
+		if (_pgsz != 0) return _pgsz;
 		final Tree tree = getTree();
 		return tree != null ? tree.getPageSize(): -1;
 	}
+	/** Sets the page size which controls the number of
+	 * visible child {@link Treeitem}.
+	 *
+	 * @param size the page size. If zero, the page size will be
+	 * the same as {@link Tree#getPageSize} of {@link #getTree}.
+	 * In other words, zero means the default page size is used.
+	 * If negative, all {@link Treeitem} are shown.
+	 * @since 2.4.1
+	 */
+	public void setPageSize(int size) throws WrongValueException {
+		if (size < 0) size = -1;
+			//Note: -1=no limitation, 0=tree's default
+		if (_pgsz != size) {
+			boolean invalidate = true;
+			if (_pgsz == 0 || size == 0) {
+				final Tree tree = getTree();
+				if (tree != null) {
+					final int treepgsz = tree.getPageSize();
+					if ((_pgsz == 0 && treepgsz == size)
+					|| (size == 0 && treepgsz == _pgsz))
+						invalidate = false;
+				}
+			}
+
+			_pgsz = size;
+
+			if (invalidate) {
+				pgSmartUpdate("z.pgsz", Integer.toString(getPageSize()));
+				invalidate();
+			}
+		}
+	}
+	/** Smart update attributes related paging.
+	 */
+	private void pgSmartUpdate(String name, String value) {
+		Component comp = getParent();
+		if (comp instanceof Treeitem)
+			comp = ((Treeitem)comp).getTreerow();
+		if (comp != null)
+			comp.smartUpdate(name, value);
+	}
+
 	/** Returns the number of pages.
 	 * Note: there is at least one page even no item at all.
 	 *
@@ -158,7 +237,15 @@ public class Treechildren extends XulElement {
 	 * @since 2.4.1
 	 */
 	public void setActivePage(int pg) throws WrongValueException {
-		//TODO
+		final int pgcnt = getPageCount();
+		if (pg >= pgcnt || pg < 0)
+			throw new WrongValueException("Unable to set active page to "+pg+" since only "+pgcnt+" pages");
+		if (_actpg != pg) {
+			_actpg = pg;
+			pgSmartUpdate("z.pgi", Integer.toString(_actpg));
+			invalidate();
+			Events.postEvent(new PagingEvent(ZulEvents.ON_PAGING, this, _actpg));
+		}
 	}
 	/** Returns the index of the first visible child.
 	 * <p>Used only for component development, not for application developers.
@@ -203,7 +290,11 @@ public class Treechildren extends XulElement {
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Treeitem))
 			throw new UiException("Unsupported child for treechildren: "+child);
-		return super.insertBefore(child, insertBefore);
+		if (super.insertBefore(child, insertBefore)) {
+			//TODO
+			return true;
+		}
+		return false;
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
@@ -211,6 +302,26 @@ public class Treechildren extends XulElement {
 		final int pgcnt = getPageCount();
 		if (_actpg >= pgcnt)
 			setActivePage(pgcnt - 1);
+	}
+	/** Thought it may be transparent, this method is callable.
+	 * @since 2.4.1
+	 */
+	public void invalidate() {
+		final Component parent = getParent();
+		if (parent instanceof Treeitem) {
+			int pgsz = getPageSize();
+			if (pgsz <= 0) {
+				for (Iterator it = getChildren().iterator(); it.hasNext();)
+					((Component)it.next()).invalidate();
+			} else {
+				final int ofs = getActivePage() * pgsz;
+				for (Iterator it = getChildren().listIterator(ofs);
+				--pgsz >= 0  && it.hasNext();)
+					((Component)it.next()).invalidate();
+			}
+		} else if (parent != null) {
+			parent.invalidate();
+		}
 	}
 
 	//-- ComponentCtrl --//

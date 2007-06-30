@@ -718,7 +718,7 @@ public class Listbox extends XulElement {
 					final PagingEvent evt = (PagingEvent)event;
 					Events.postEvent(
 						new PagingEvent(evt.getName(),
-							Listbox.this, evt.getPaginal(), evt.getActivePage()));
+							Listbox.this, evt.getPageable(), evt.getActivePage()));
 				}
 			};
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);

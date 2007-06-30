@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 import org.zkoss.zul.event.PagingEvent;
-import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.Pageable;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link PagingEvent}
@@ -51,7 +51,7 @@ public class PagingCommand extends Command {
 				new Object[] {Objects.toString(data), this});
 
 		final int pg = Integer.parseInt(data[0]);
-		((Paginal)comp).setActivePage(pg);
+		((Pageable)comp).setActivePage(pg);
 			//Don't send the onPaging event since setActivePage will do
 	}
 }

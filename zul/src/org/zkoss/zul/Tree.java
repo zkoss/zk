@@ -64,7 +64,7 @@ public class Tree extends XulElement {
 	/** The name. */
 	private String _name;
 	/** # of items per page. */
-	private int _pgsz = -1; //10;
+	private int _pgsz = -1;
 	private boolean _multiple, _checkmark;
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
@@ -641,6 +641,17 @@ public class Tree extends XulElement {
 		if (_vflex)
 			HTMLs.appendAttribute(sb, "z.vflex", true);
 		appendAsapAttr(sb, Events.ON_SELECT);
+
+		final Treechildren tc = getTreechildren();
+		if (tc != null) {
+			final int pgcnt = tc.getPageCount();
+			if (pgcnt > 1) {
+				HTMLs.appendAttribute(sb, "z.tch", tc.getUuid());
+				HTMLs.appendAttribute(sb, "z.pgc", pgcnt);
+				HTMLs.appendAttribute(sb, "z.pgi", tc.getActivePage());
+				HTMLs.appendAttribute(sb, "z.pgsz", tc.getPageSize());
+			}
+		}
 		return sb.toString();
 	}
 
