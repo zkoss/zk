@@ -347,8 +347,16 @@ zkTrow._genpg = function (cmp, rows, end) {
 		var last = null;
 		for (n = n.cells[0].firstChild; n; n = n.nextSibling) {
 			if (n.getAttribute) {
-				if (!getZKAttr(n, "fc")) break;
-				if (last) td.appendChild(last.cloneNode(true));
+				if (!getZKAttr(n, "fc") && !n.id.endsWith("!cm"))
+					break;
+				if (last) {
+					var cloned = last.cloneNode(true);
+					if (cloned.id.endsWith("!cm")) {
+						cloned.id = "";
+						cloned.style.visibility = "hidden";
+					}
+					td.appendChild(cloned);
+				}
 				last = n;
 			}
 		}
