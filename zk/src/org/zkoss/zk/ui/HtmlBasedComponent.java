@@ -29,7 +29,6 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.client.Movable;
 import org.zkoss.zk.ui.ext.client.Sizable;
 import org.zkoss.zk.ui.ext.client.ZIndexed;
-import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -437,10 +436,6 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 
 	//-- Component --//
 	public boolean addEventListener(String evtnm, EventListener listener) {
-		if (isTransparent(this))
-			return super.addEventListener(evtnm, listener);
-			//Deriver has to handle it
-
 		final boolean asap = isAsapRequired(evtnm);
 		final boolean ret = super.addEventListener(evtnm, listener);
 		if (ret && !asap && isAsapRequired(evtnm))
@@ -448,18 +443,11 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		return ret;
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
-		if (isTransparent(this))
-			return super.removeEventListener(evtnm, listener);
-
 		final boolean asap = isAsapRequired(evtnm);
 		final boolean ret = super.removeEventListener(evtnm, listener);
 		if (ret && asap && !isAsapRequired(evtnm))
 			smartUpdate(getAttrOfEvent(evtnm), null);
 		return ret;
-	}
-	private static boolean isTransparent(Component comp) {
-		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
-		return (xc instanceof Transparent) && ((Transparent)xc).isTransparent();
 	}
 
 	//--ComponentCtrl--//

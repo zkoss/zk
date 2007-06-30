@@ -49,6 +49,7 @@ String.prototype.nextWhitespace = function (j) {
 	}
 	return j;
 };
+/** Tom Yeh 20070630: Remove unused codes
 String.prototype.skipWhitespacesBackward = function (j) {
 	for (;j >= 0; --j) {
 		var cc = this.charAt(j);
@@ -57,6 +58,7 @@ String.prototype.skipWhitespacesBackward = function (j) {
 	}
 	return j;
 };
+*/
 
 /** Removes the specified object from the array if any.
  * Returns false if not found.

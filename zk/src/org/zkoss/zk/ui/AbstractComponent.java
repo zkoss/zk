@@ -43,7 +43,6 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.RawId;
-import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
@@ -529,7 +528,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 				if (_page != null) {
 					((DesktopCtrl)_page.getDesktop()).addComponent(this);
-					if (_parent != null && isTransparent(this)) _parent.invalidate();
 					addMoved(this, _parent, _page, _page);
 				}
 			} else {
@@ -541,10 +539,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())
 				smartUpdate("z.zid", _id);
 		}
-	}
-	private static boolean isTransparent(Component comp) {
-		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
-		return (xc instanceof Transparent) && ((Transparent)xc).isTransparent();
 	}
 
 	public final String getUuid() {
@@ -696,7 +690,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				checkDetach(_page);
 		}
 
-		if (_parent != null && isTransparent(this)) _parent.invalidate();
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
 		final Component oldparent = _parent;
 		if (_parent != null) {
@@ -765,7 +758,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final AbstractComponent nc = (AbstractComponent)newChild;
 		if (found) { //re-order
-			if (isTransparent(newChild)) invalidate();
 			addMoved(newChild, nc._parent, nc._page, _page);
 				//Not to use getPage and getParent to avoid calling user's codes
 				//if they override them
@@ -830,23 +822,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final boolean old = _visible;
 		if (old != visible) {
 			_visible = visible;
-			if (!isTransparent(this))
-				smartUpdate("visibility", _visible);
+			smartUpdate("visibility", _visible);
 		}
 		return old;
 	}
 
 	public void invalidate() {
-		if (_page != null) {
+		if (_page != null)
 			getThisUiEngine().addInvalidate(this);
-				//always add even though _parent.invalidate might be called
-				//reason: Transparent relationship might be changed
-
-			if (_parent != null && isTransparent(this)) _parent.invalidate();
-			//Note: UiEngine will handle transparent, but we still
-			//handle it here to simplify codes that handles transparent
-			//in AbstractComponent
-		}
 	}
 	public void response(String key, AuResponse response) {
 		//if response not depend on this component, it must be generated
@@ -860,16 +843,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 	public void smartUpdate(String attr, String value) {
-		if (_parent != null && isTransparent(this))
-			throw new IllegalStateException("A transparent component cannot use smartUpdate: "+attr+'='+value);
 		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
 	/** A special smart-update that update a value in int.
+	 * <p>It will invoke {@link #smartUpdate(String,String)} to update
+	 * the attribute eventually.
 	 */
 	public void smartUpdate(String attr, int value) {
 		smartUpdate(attr, Integer.toString(value));
 	}
 	/** A special smart-update that update a value in boolean.
+	 * <p>It will invoke {@link #smartUpdate(String,String)} to update
+	 * the attribute eventually.
 	 */
 	public void smartUpdate(String attr, boolean value) {
 		smartUpdate(attr, Boolean.toString(value));

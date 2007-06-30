@@ -418,9 +418,6 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public boolean isVisible();
 	/** Sets whether this component is visible.
-	 * If this component is transaprent ({@link org.zkoss.zk.ui.ext.render.Transparent#isTransparent}), no
-	* {@link #smartUpdate} is caleld, so transparent compoents usually have
-	* to override this method for detail control.
 	 *
 	 * @return the previous visibility
 	 */

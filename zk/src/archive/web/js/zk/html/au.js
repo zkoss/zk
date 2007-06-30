@@ -480,7 +480,7 @@ zkau._doResps = function (cmds) {
 			zkau.process(cmd.cmd, cmd.datanum,
 				cmd.dt0, cmd.dt1, cmd.dt2, cmd.dt3, cmd.dt4);
 		} catch (e) {
-			zk.error(mesg.FAILED_TO_PROCESS+cmd+"\n"+e.message+"\n"+cmd.dt0+"\n"+cmd.dt1);
+			zk.error(mesg.FAILED_TO_PROCESS+cmd.cmd+"\n"+e.message+"\n"+cmd.dt0+"\n"+cmd.dt1);
 			throw e;
 		} finally {
 			zkau._evalOnResponse();
@@ -537,9 +537,9 @@ zkau._initSibs = function (from, to, next) {
 		zk.initAt(from);
 	}
 };
-/** Invoke zk.initAt for all children. */
-zkau._initChildren = function (n) {
-	for (n = n.firstChild; n; n = n.nextSibling)
+/** Invoke zk.initAt for all children. Note: to is excluded. */
+zkau._initChildren = function (n, to) {
+	for (n = n.firstChild; n && n != to; n = n.nextSibling)
 		zk.initAt(n);
 };
 /** Invoke inserHTMLBeforeEnd and then zk.initAt.
@@ -1737,28 +1737,28 @@ zkau.cmd1 = {
 			zkau.rmAttr(cmp, dt1);
 		}
 	},
-	outer: function (uuid, cmp, dt1) {
-		//zk.eval(cmp, "beforeOuter");
+	outer: function (uuid, cmp, html) {
 		zk.cleanupAt(cmp);
-		zk.setOuterHTML(cmp, dt1);
-		cmp = $e(uuid);
-		zk.initAt(cmp);
-		//zk.eval(cmp, "afterOuter");
+		var from = cmp.previousSibling, from2 = cmp.parentNode,
+			to = cmp.nextSibling;
+		zk.setOuterHTML(cmp, html);
+		if (from) zkau._initSibs(from, to, true);
+		else zkau._initChildren(from2, to);
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
-	addAft: function (uuid, cmp, dt1) {
+	addAft: function (uuid, cmp, html) {
 		var n = $childExterior(cmp);
 		var to = n.nextSibling;
-		zk.insertHTMLAfter(n, dt1);
+		zk.insertHTMLAfter(n, html);
 		zkau._initSibs(n, to, true);
 	},
-	addBfr: function (uuid, cmp, dt1) {
+	addBfr: function (uuid, cmp, html) {
 		var n = $childExterior(cmp);
 		var to = n.previousSibling;
-		zk.insertHTMLBefore(n, dt1);
+		zk.insertHTMLBefore(n, html);
 		zkau._initSibs(n, to, false);
 	},
-	addChd: function (uuid, cmp, dt1) {
+	addChd: function (uuid, cmp, html) {
 		/* To add the first child properly, it checks as follows.
 		//1) a function called addFirstChild
 		2) uuid + "!cave" (as parent)
@@ -1766,7 +1766,7 @@ zkau.cmd1 = {
 		4) uuid + "!child" (as next sibling)
 		5) uuid + "!real" (as parent)
 		 */
-		//if (zk.eval(cmp, "addFirstChild", dt1))
+		//if (zk.eval(cmp, "addFirstChild", html))
 		//	return;
 
 		var n = $e(uuid + "!cave");
@@ -1775,20 +1775,20 @@ zkau.cmd1 = {
 			if (n) n = $e(n);
 		}
 		if (n) { //as last child of n
-			zkau._insertAndInitBeforeEnd(n, dt1);
+			zkau._insertAndInitBeforeEnd(n, html);
 			return;
 		}
 
 		n = $e(uuid + "!child");
 		if (n) { //as previous sibling of n
 			var to = n.previousSibling;
-			zk.insertHTMLBefore(n, dt1);
+			zk.insertHTMLBefore(n, html);
 			zkau._initSibs(n, to, false);
 			return;
 		}
 
 		cmp = $real(cmp); //go into the real tag (e.g., tabpanel)
-		zkau._insertAndInitBeforeEnd(cmp, dt1);
+		zkau._insertAndInitBeforeEnd(cmp, html);
 	},
 	rm: function (uuid, cmp) {
 		//NOTE: it is possible the server asking removing a non-exist cmp

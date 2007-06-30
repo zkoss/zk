@@ -44,7 +44,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.render.Transparent;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
@@ -491,7 +490,6 @@ import org.zkoss.zk.au.*;
 			removeRedundant(_invalidated);
 			removeRedundant(_attached);
 			removeCrossRedundant();
-				//it also handle isTransparent!!
 
 			//1c. process Cropper
 			if (doCrop()) {
@@ -499,7 +497,6 @@ import org.zkoss.zk.au.*;
 				removeRedundant(_invalidated);
 				removeCrossRedundant();
 			}
-			resolveDirtyTransparent(responses);
 
 			//1d. prepare removed pages and optimize for invalidate or removed pages
 			checkPageRemoved(removed); //maintain _pgRemoved for pages being removed
@@ -567,16 +564,14 @@ import org.zkoss.zk.au.*;
 			if (comp != null) {
 				final Page page = comp.getPage();
 				if (page != null && _exec.isAsyncUpdate(page)) {
-					assert D.OFF || !isTransparent(comp): "not resolved?" +comp;
-
-					final Component parent = getNonTransparentParent(comp);
+					final Component parent = comp.getParent();
 					final Set newsibs = new LinkedHashSet(37);
 					newsibs.add(comp);
 					desktops.add(newsibs);
 
 					for (int k = j + 1; k < attached.length; ++k) {
 						final Component ck = attached[k];
-						if (ck != null && getNonTransparentParent(ck) == parent) {
+						if (ck != null && ck.getParent() == parent) {
 							newsibs.add(ck);
 							attached[k] = null;
 						}
@@ -626,11 +621,8 @@ import org.zkoss.zk.au.*;
 		_responses = null;
 
 //		if (D.ON && log.debugable()) log.debug("Return responses: "+responses);
+//		System.out.println("Return responses: "+responses);
 		return responses;
-	}
-	private static boolean isTransparent(Component comp) {
-		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
-		return (xc instanceof Transparent) && ((Transparent)xc).isTransparent();
 	}
 
 	/** process moved components.
@@ -655,8 +647,6 @@ import org.zkoss.zk.au.*;
 				_smartUpdated.remove(comp);
 
 				responses.add(new AuRemove(comp));
-				//Note: it is too late to handle isTransparent here
-				//because it is detached and we don't know it is ex-parent
 			} else { //page != null
 				if (_exec.isAsyncUpdate(page))
 					responses.add(new AuRemove(comp));
@@ -675,16 +665,16 @@ import org.zkoss.zk.au.*;
 	private static
 	void addResponsesForCreatedPerSiblings(List responses, Set newsibs)
 	throws IOException {
-		final Component ntparent;
+		final Component parent;
 		final Page page;
 		{
 			final Component comp = (Component)newsibs.iterator().next();
-			ntparent = getNonTransparentParent(comp);
+			parent = comp.getParent();
 			page = comp.getPage();
 		}
 		final Collection sibs;
-		if (ntparent != null) {
-			sibs = resolveTransparent(ntparent.getChildren());
+		if (parent != null) {
+			sibs = parent.getChildren();
 		} else {
 			sibs = page.getRoots();
 		}
@@ -699,15 +689,15 @@ import org.zkoss.zk.au.*;
 		*/
 		final List before = new LinkedList();
 		Component anchor = null;
-		final ComponentCtrl ntparentCtrl = (ComponentCtrl)ntparent;
-		final Object ntparentxc =
-			ntparentCtrl != null ? ntparentCtrl.getExtraCtrl(): null;
+		final ComponentCtrl parentCtrl = (ComponentCtrl)parent;
+		final Object parentxc =
+			parentCtrl != null ? parentCtrl.getExtraCtrl(): null;
 		for (Iterator it = sibs.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 
-			if ((ntparentxc instanceof MultiBranch)
-			&& ((MultiBranch)ntparentxc).inDifferentBranch(comp))
-					continue;
+			if ((parentxc instanceof MultiBranch)
+			&& ((MultiBranch)parentxc).inDifferentBranch(comp))
+				continue;
 
 			if (anchor != null) {
 				if (newsibs.remove(comp)) {
@@ -741,9 +731,9 @@ import org.zkoss.zk.au.*;
 		final Iterator it = before.iterator();
 		anchor = (Component)it.next();
 		responses.add(
-			ntparent != null ?
-			new AuAppendChild(ntparent, drawNew(anchor)):
-			new AuAppendChild(page, drawNew(anchor)));
+			parent != null ?
+				new AuAppendChild(parent, drawNew(anchor)):
+				new AuAppendChild(page, drawNew(anchor)));
 
 		while (it.hasNext()) {
 			final Component comp = (Component)it.next();
@@ -788,11 +778,6 @@ import org.zkoss.zk.au.*;
 		for (Iterator j = _smartUpdated.keySet().iterator(); j.hasNext();) {
 			final Component cj = (Component)j.next();
 
-			if (isTransparent(cj)) {
-				j.remove();
-				continue;
-			}
-
 			for (Iterator k = _invalidated.iterator(); k.hasNext();) {
 				final Component ck = (Component)k.next();
 
@@ -809,83 +794,6 @@ import org.zkoss.zk.au.*;
 					continue suLoop;
 				}
 			}
-		}
-	}
-	/** Resolve the transpancy of _invalidated and _attached by replacing
-	 * transparent components with their non-transparent children.
-	 * <p>Reason: a transparent component is not available at the client.
-	 */
-	private void resolveDirtyTransparent(List responses) {
-		//resolves transprent components.
-		List comps = null;
-		for (Iterator it = _invalidated.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			if (isTransparent(comp)) {
-				if (comps == null) comps = new LinkedList();
-				comps.add(comp);
-				it.remove();
-				responses.add(new AuRemove(comp));
-					//yes, we have to remove it because it might change from
-					//non-transparent to transparent (and there is counterpart
-					//in the client to remove)
-			}
-		}
-		if (comps != null) {
-			resolveTransparent(comps, _invalidated);
-			comps = null;
-		}
-		for (Iterator it = _attached.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			if (isTransparent(comp)) {
-				if (comps == null) comps = new LinkedList();
-				comps.add(comp);
-				it.remove();
-				responses.add(new AuRemove(comp));
-					//yes, we have to remove it because it might change from
-					//non-transparent to transparent (and there is counterpart
-					//in the client to remove)
-			}
-		}
-		if (comps != null) resolveTransparent(comps, _attached);
-	}
-	/** Copies comps to result, and resolves comps by replacing transparent
-	 * components with their non-transparent children.
-	 */
-	private static void resolveTransparent(List comps, Collection result) {
-		if (comps.isEmpty()) return;
-		for (Iterator it = comps.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			if (isTransparent(comp)) {
-				resolveTransparent(comp.getChildren(), result); //recursive
-			} else {
-				result.add(comp);
-					//either _invalidated.add or _attached.add
-			}
-		} 
-	}
-	/** Clones comps and resolves comps by replacing transparent
-	 * components with their non-transparent children (right at the same place).
-	 */
-	private static List resolveTransparent(List comps) {
-		if (comps.isEmpty()) return comps;
-
-		final List cloned = new LinkedList(comps);
-		for (ListIterator it = cloned.listIterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			if (isTransparent(comp)) {
-				it.remove();
-				for (Iterator it2 = resolveTransparent(comp.getChildren())
-				.iterator(); it2.hasNext();)
-					it.add(it2.next());
-			}
-		}
-		return cloned; 
-	}
-	private static Component getNonTransparentParent(Component comp) {
-		for (;;) {
-			comp = comp.getParent();
-			if (comp == null || !isTransparent(comp))
-				return comp;
 		}
 	}
 
