@@ -85,36 +85,42 @@ zk.unlisten = function (el, evtnm, fn) {
 
 if (zk.ie) { //Bug 1741959: avoid memory leaks
 	zk._ltns = {} // map(String id, [evtnm, fn])
-	zk._ltnid = function (el) {
-		return el == document || el == window || !el.id ? el: el.id;
+	zk._ltnkey = function (el) {
+		if (el.id) {
+			var j = el.id.indexOf('!');
+			return j >= 0  ? el.id.substring(0, j): el.id;
+		}
+		return el == document ? "z+doc<": el == window ? "z+win<": null;
 	};
 
 	zk._listen = zk.listen;
 	zk.listen = function (el, evtnm, fn) {
 		zk._listen(el, evtnm, fn);
 
-		var id = zk._ltnid(el);
-		var ls = zk._ltns[id];
-		if (!ls) zk._ltns[id] = ls = {};
-		var fns = ls[evtnm];
-		if (!fns) ls[evtnm] = fns = [];
-		fns.push(fn);
-	}
+		var key = zk._ltnkey(el);
+		if (key) {
+			var ls = zk._ltns[key];
+			if (!ls) zk._ltns[key] = ls = {};
+			var fns = ls[evtnm];
+			if (!fns) ls[evtnm] = fns = [];
+			fns.push([el, fn]);
+		}
+	};
 
 	zk._unlisten = zk.unlisten;
-	zk._unlisten = function (el, evtnm, fn) {
+	zk.unlisten = function (el, evtnm, fn) {
 		zk._unlisten(el, evtnm, fn);
 
-		var id = zk._ltnid(el);
-		var ls = zk._ltns[id];
-		if (ls) {
-			var fns = ls[evtnm];
-			if (fns) {
-				fns.remove(fn);
-				if (!fns.length)
-					delete ls[evtnm];
-			}
-		}
+		var key = zk._ltnkey(el);
+		var ls = key ? zk._ltns[key]: null;
+		var fns = ls ? ls[evtnm]: null;
+		if (fns)
+			for (var j = 0; j < fns.length; ++j)
+				if (fns[j][1] == fn) {
+					fns.splice(j, 1);
+					if (!fns.length) delete ls[evtnm];
+					break;
+				}
 	};
 
 	/** Unlisten events associated with the specified ID.
@@ -122,24 +128,31 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	 */
 	zk.unlistenAll = function (el) {
 		if (el) {
-			var id = zk._ltnid(el);
-			var ls = zk._ltns[id];
-			if (ls) {
-				delete zk._ltns[id];
-				for (var evtnm in ls) {
-					var fns = ls[evtnm];
-					delete ls[evtnm];
-					for (var j = fns.length; --j >= 0;)
-						try {
-							zk._unlisten(el, evtnm, fns[j]);
-						} catch (e) { //ignore
-						}
-				}
-			}
+			var key = zk._ltnkey(el);
+			if (key)
+				setTimeout("zk._unltnKey('"+key+"')",
+					10000 + 20000*Math.random());
+					//Note: the performance is not good, so delay 10~30s
 		} else {
 			for (var nid in zk._ltns) {
 				var el = $e(nid);
 				if (el) zk.unlistenAll(el);
+			}
+		}
+	};
+	zk._unltnKey = function (key) {
+		var ls = zk._ltns[key];
+		if (ls) {
+			delete zk._ltns[key];
+			for (var evtnm in ls) {
+				var fns = ls[evtnm];
+				delete ls[evtnm];
+				for (var j = fns.length; --j >= 0;)
+					try {
+						zk._unlisten(fns[j][0], evtnm, fns[j][1]);
+						fns[j][0] = fns[j][1] = null; //just in case
+					} catch (e) { //ignore
+					}
 			}
 		}
 	};
@@ -671,7 +684,7 @@ zk.cleanupAt = function (n) {
 	if (type) {
 		zk.eval(n, "cleanup", type);
 		zkau.cleanupMeta(n); //note: it is called only if type is defined
-		zk.unlistenAll(n); //Bug 1741959
+		zk.unlistenAll(n); //Bug 1741959: memory leaks
 		delete zk._visicmps[n.id];
 		delete zk._hidecmps[n.id];
 		delete zk._sizecmps[n.id];

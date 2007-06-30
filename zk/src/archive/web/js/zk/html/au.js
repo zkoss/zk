@@ -560,12 +560,6 @@ zkau._insertAndInitBeforeEnd = function (n, html) {
 	if (lc) zkau._initSibs(lc, null, true);
 	else zkau._initChildren(n);
 };
-/** Invoke zk.cleanupAt for all children. */
-/* because inner not supported any more
-zkau._cleanupChildren = function (n) {
-	for (n = n.firstChild; n; n = n.nextSibling)
-		zk.cleanupAt(n);
-};*/
 
 /** Sets an attribute (the default one). */
 zkau.setAttr = function (cmp, name, value) {
@@ -1752,15 +1746,6 @@ zkau.cmd1 = {
 		//zk.eval(cmp, "afterOuter");
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
-/* 20060907: Tom M. Yeh: abandon inner to reduce the complexity
-	inner: function (uuid, cmp, dt1) {
-		zkau._cleanupChildren(cmp);
-		zk.setInnerHTML(cmp, dt1);
-		zk.eval(cmp, "initInner");
-		zkau._initChildren(cmp);
-		if (zkau.valid) zkau.valid.fixerrboxes();
-	},
-*/
 	addAft: function (uuid, cmp, dt1) {
 		var n = $childExterior(cmp);
 		var to = n.nextSibling;

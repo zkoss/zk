@@ -118,6 +118,10 @@ public interface DesktopCtrl {
 	 *
 	 * <p>It is rarely called other than in the recovering mode, i.e.,
 	 * {@link ExecutionCtrl#isRecovering} is true.
+	 *
+	 * @param seqId a value between 0 and 1023.
+	 * Since ZK 2.4.1, you can reset the sequence by passing a negative
+	 * value to this argument.
 	 */
 	public void setResponseSequence(int seqId);
 

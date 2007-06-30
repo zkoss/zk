@@ -457,9 +457,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return _respSeqId;
 	}
 	public void setResponseSequence(int seqId) {
-		if (seqId < 0 || seqId >= 1024)
+		if (seqId >= 1024)
 			throw new IllegalArgumentException("Invalid sequence: "+seqId);
-		_respSeqId = seqId;
+		_respSeqId = seqId < 0 ? MAX_RESPONSE_SEQUENCE - 1: seqId;
 	}
 
 	public void destroy() {

@@ -455,6 +455,11 @@ zk.insertAfter = function (el, ref) {
 	if (sib) ref.parentNode.insertBefore(el, sib);
 	else ref.parentNode.appendChild(el);
 };
+/** Inserts a node before another.
+ */
+zk.insertBefore = function (el, ref) {
+	ref.parentNode.insertBefore(el, ref);
+};
 /** Inserts an unparsed HTML immediately before the specified element.
  * @param el the sibling before which to insert
  */
