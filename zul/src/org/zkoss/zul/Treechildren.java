@@ -169,20 +169,24 @@ public class Treechildren extends XulElement implements Pageable {
 		if (size < 0) size = -1;
 			//Note: -1=no limitation, 0=tree's default
 		if (_pgsz != size) {
-			boolean invalidate = true;
+			boolean realChanged = true;
 			if (_pgsz == 0 || size == 0) {
 				final Tree tree = getTree();
 				if (tree != null) {
 					final int treepgsz = tree.getPageSize();
 					if ((_pgsz == 0 && treepgsz == size)
 					|| (size == 0 && treepgsz == _pgsz))
-						invalidate = false;
+						realChanged = false;
 				}
 			}
 
 			_pgsz = size;
 
-			if (invalidate) {
+			if (realChanged) {
+				final int pgcnt = getPageCount();
+				if (_actpg >= pgcnt)
+					_actpg = pgcnt - 1;
+
 				invalidate();
 				smartUpdatePaging();
 					//it affect treerow (so invalidate won't 'eat' it)
