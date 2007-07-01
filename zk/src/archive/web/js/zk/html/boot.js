@@ -85,6 +85,7 @@ zk.unlisten = function (el, evtnm, fn) {
 
 if (zk.ie) { //Bug 1741959: avoid memory leaks
 	zk._ltns = {} // map(String id, [evtnm, fn])
+	zk._unltns = []; //array of [evtnm, fn]
 	zk._ltnkey = function (el) {
 		if (el.id) {
 			var j = el.id.indexOf('!');
@@ -132,9 +133,9 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 			if (ls) {
 				//Note: key might be reused (e.g., outer), so
 				//we have delete and use the detached copy
+				zk._unltns.push(ls);
 				delete zk._ltns[key];
-				setTimeout(function () {zk._unlistenNode(ls)},
-					10000 + 20000*Math.random());
+				setTimeout(zk._asynUnlisten, 10000 + 20000*Math.random());
 					//Note: the performance is not good, so delay 10~30s
 			}
 		} else {
@@ -145,7 +146,13 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 					zk._unlistenNode(ls);
 				}
 			}
+			while (zk._unltns.length)
+				zk._unlistenNode(zk._unltns.shift());
 		}
+	};
+	zk._asynUnlisten = function () {
+		if (zk._unltns.length)
+			zk._unlistenNode(zk._unltns.shift());
 	};
 	zk._unlistenNode = function (ls) {
 		for (var evtnm in ls) {
