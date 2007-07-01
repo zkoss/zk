@@ -357,6 +357,13 @@ public class Treeitem extends XulElement {
 		}
 		super.onChildRemoved(child);
 	}
+	public void invalidate() {
+		//There is no counter-part at client if no tree row
+		//We didn't set ATTR_NO_CHILD at insertBefore, since we cannot
+		//solve the issue that a treeitem without treerow:(
+		if (_treerow != null)
+			super.invalidate();
+	}
 
 	//Cloneable//
 	public Object clone() {

@@ -26,6 +26,7 @@ import java.util.HashSet;
 
 import org.zkoss.lang.Objects;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -40,6 +41,8 @@ import org.zkoss.zul.ext.Pageable;
  * @author tomyeh
  */
 public class Treechildren extends XulElement implements Pageable {
+	private static final String ATTR_NO_CHILD = "org.zkoss.zul.Treechildren.noChild";
+
 	/** the active page. */
 	private int _actpg;
 	/** # of items per page. Zero means the same as Tree's. */
@@ -273,10 +276,13 @@ public class Treechildren extends XulElement implements Pageable {
 		if (!(child instanceof Treeitem))
 			throw new UiException("Unsupported child for treechildren: "+child);
 		if (super.insertBefore(child, insertBefore)) {
-			final int pgsz = getPageSize();
-			if (pgsz > 0) {
-				final int sz = getChildren().size();
-				if (sz > 1 && (sz % pgsz) == 1) //one more page
+			final int sz = getChildren().size();
+			if (sz == 1) { //the first child been added
+				Executions.getCurrent().setAttribute(ATTR_NO_CHILD, Boolean.TRUE);
+				//Denote this execution has no children at beginning
+			} else { //second child
+				final int pgsz = getPageSize();
+				if (pgsz > 0 && ((sz % pgsz) == 1 || pgsz == 1)) //one more page
 					smartUpdatePaging();
 			}
 			return true;
@@ -289,7 +295,7 @@ public class Treechildren extends XulElement implements Pageable {
 		final int pgsz = getPageSize();
 		if (pgsz > 0) {
 			final int sz = getChildren().size();
-			if (sz > 0 && (sz % pgsz) == 0) { //less one page
+			if (sz > 0 && ((sz % pgsz) == 0 || pgsz == 1)) { //one page less
 				final int pgcnt = smartUpdatePaging();
 				if (_actpg >= pgcnt) { //removing the last page
 					_actpg = pgcnt - 1;
@@ -306,7 +312,10 @@ public class Treechildren extends XulElement implements Pageable {
 		if (parent instanceof Tree) {
 			//Browser Limitation (IE/FF): we cannot update TBODY only
 			parent.invalidate();
-		} else {
+		} else if (!getChildren().isEmpty()
+		&& Executions.getCurrent().getAttribute(ATTR_NO_CHILD) == null) {
+		//Don't invalidate if no child at all, since there is no
+		//counter-part at the client
 			super.invalidate();
 		}
 	}
