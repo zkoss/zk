@@ -300,10 +300,12 @@ tr.grid-od td.gc {
 	background: #E8EFEA;
 }
 
-span.treecell-paging {
+<%--
+span.treeitem-paging {
 	background-image: url(${c:encodeURL('~./zul/img/bgbtnbk.gif')}); background-repeat: no-repeat;
 	border: 1px solid #7f9db9;
 }
+-->
 
 <%-- ZK tab. --%>
 .tab, .tab a, a.tab {

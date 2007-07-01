@@ -365,15 +365,15 @@ zkTrow._genpg = function (cmp, rows, end) {
 	//create content
 	var cnt = document.createElement("SPAN");
 	cnt.id = cmp.id + "!pc" + (end ? 't': 'h');
-	cnt.className = "treecell-paging";
+	cnt.className = "treeitem-paging";
 	cnt.style.width = "100%";
 	td.appendChild(cnt);
 
 	return tr;
 };
 zkTrow._genimg = function (uri, js) {
-	return '<img src="'+zk.getUpdateURI("/web/zul/img/tree/" + uri)
-		+'-off.gif" onmouseover="zkau.onimgover(event)" onmouseout="zkau.onimgout(event)" align="top" onclick="'
+	return '<img src="'+zk.getUpdateURI("/web/zul/img/tree/" + uri + "-off.gif")
+		+'" onmouseover="zkau.onimgover(event)" onmouseout="zkau.onimgout(event)" align="top" onclick="'
 		+js+',event)"/>';
 };
 /** page up or down
