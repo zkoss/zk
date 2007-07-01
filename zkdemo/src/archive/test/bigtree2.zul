@@ -523,6 +523,7 @@
 		}
 		]]></attribute>
 	</button>
+	<hbox>
 	<button label="Add treechildren to selected">
 		<attribute name="onClick">
 		Treeitem ti = tree.getSelectedItem();
@@ -532,9 +533,24 @@
 				tch = new Treechildren();
 				tch.setParent(ti);
 			}
+			page.setAttribute("empty_tch", tch);
 		}
 		</attribute>
 	</button>
+	<button label="Add item and invalidate empty treechildren">
+		<attribute name="onClick">
+		Treechildren tch = page.getAttribute("empty_tch");
+		if (tch != null) {
+			Treeitem newti = new Treeitem();
+			Treerow newtr = new Treerow();
+			new Treecell("New " + ++cnt).setParent(newtr);
+			newtr.setParent(newti);
+			newti.setParent(tch);
+			tch.invalidate(); //to check whether it is handled
+		}
+		</attribute>
+	</button>
+	</hbox>
 	<hbox>
 	<button label="Add EMPTY item to selected">
 		<attribute name="onClick">
