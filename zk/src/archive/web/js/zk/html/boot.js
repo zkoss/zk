@@ -48,7 +48,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "6K"; //increase this if we want the browser to reload JavaScript
+zk.build = "6L"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -111,8 +111,7 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	zk.unlisten = function (el, evtnm, fn) {
 		zk._unlisten(el, evtnm, fn);
 
-		var key = zk._ltnkey(el);
-		var ls = key ? zk._ltns[key]: null;
+		var ls = zk._ltns[zk._ltnkey(el)];
 		var fns = ls ? ls[evtnm]: null;
 		if (fns)
 			for (var j = 0; j < fns.length; ++j)
@@ -129,31 +128,37 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	zk.unlistenAll = function (el) {
 		if (el) {
 			var key = zk._ltnkey(el);
-			if (key)
-				setTimeout("zk._unltnKey('"+key+"')",
+			var ls = key ? zk._ltns[key]: null;
+			if (ls) {
+				//Note: key might be reused (e.g., outer), so
+				//we have delete and use the detached copy
+				delete zk._ltns[key];
+				setTimeout(function () {zk._unlistenNode(ls)},
 					10000 + 20000*Math.random());
 					//Note: the performance is not good, so delay 10~30s
+			}
 		} else {
-			for (var nid in zk._ltns) {
-				var el = $e(nid);
-				if (el) zk.unlistenAll(el);
+			for (var key in zk._ltns) {
+				var ls = zk._ltns[key];
+				if (ls) {
+					delete zk._ltns[key];
+					zk._unlistenNode(ls);
+				}
 			}
 		}
 	};
-	zk._unltnKey = function (key) {
-		var ls = zk._ltns[key];
-		if (ls) {
-			delete zk._ltns[key];
-			for (var evtnm in ls) {
-				var fns = ls[evtnm];
-				delete ls[evtnm];
-				for (var j = fns.length; --j >= 0;)
-					try {
-						zk._unlisten(fns[j][0], evtnm, fns[j][1]);
-						fns[j][0] = fns[j][1] = null; //just in case
-					} catch (e) { //ignore
-					}
+	zk._unlistenNode = function (ls) {
+		for (var evtnm in ls) {
+			var fns = ls[evtnm];
+			delete ls[evtnm];
+			for (var j = fns.length; --j >= 0;) {
+				try {
+					zk._unlisten(fns[j][0], evtnm, fns[j][1]);
+					fns[j][0] = fns[j][1] = null; //just in case
+				} catch (e) { //ignore
+				}
 			}
+			fns.length = 0; //just in case
 		}
 	};
 } else {
