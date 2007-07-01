@@ -139,6 +139,9 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 					//Note: the performance is not good, so delay 10~30s
 			}
 		} else {
+			while (zk._unltns.length)
+				zk._unlistenNode(zk._unltns.shift());
+
 			for (var key in zk._ltns) {
 				var ls = zk._ltns[key];
 				if (ls) {
@@ -146,8 +149,6 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 					zk._unlistenNode(ls);
 				}
 			}
-			while (zk._unltns.length)
-				zk._unlistenNode(zk._unltns.shift());
 		}
 	};
 	zk._asynUnlisten = function () {
