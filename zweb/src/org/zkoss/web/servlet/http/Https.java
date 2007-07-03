@@ -16,6 +16,9 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.http;
 
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.zip.GZIPOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
@@ -35,6 +38,7 @@ import javax.servlet.http.Cookie;
 import org.zkoss.lang.D;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
+import org.zkoss.io.Files;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
@@ -47,6 +51,37 @@ import org.zkoss.web.util.resource.ExtendedWebContext;
  */
 public class Https extends Servlets {
 	private static final Log log = Log.lookup(Https.class);
+
+	/** Compresses the content into an byte array, or null
+	 * if the browser doesn't support the compression (accept-encoding).
+	 *
+	 * @param content1 the first part of the content to compress; null to ignore.
+	 * @param content2 the second part of the content to compress; null to ignore.
+	 * @param content3 the third part of the content to compress; null to ignore.
+	 * @return null if the browser doesn't support the compression.
+	 * @since 2.4.1
+	 */
+	public static final byte[] gzip(HttpServletRequest request,
+	HttpServletResponse response, InputStream content1, InputStream content2,
+	InputStream content3) throws IOException {
+		String ae = request.getHeader("accept-encoding");
+		if (ae != null) {
+			if (ae.indexOf("gzip") >= 0) {
+				response.addHeader("Content-Encoding", "gzip");
+				final ByteArrayOutputStream boas = new ByteArrayOutputStream(8192);
+				final GZIPOutputStream gzs = new GZIPOutputStream(boas);
+				if (content1 != null) Files.copy(gzs, content1);
+				if (content2 != null) Files.copy(gzs, content2);
+				if (content3 != null) Files.copy(gzs, content3);
+				gzs.finish();
+				return boas.toByteArray();
+//			} else if (ae.indexOf("deflate") >= 0) {
+//Refer to http://www.gzip.org/zlib/zlib_faq.html#faq38
+//It is not a good idea to zlib (i.e., deflate)
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Gets the complete server name, including protocol, server, and ports.

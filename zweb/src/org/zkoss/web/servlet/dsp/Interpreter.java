@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp;
 
+import java.io.Writer;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -117,6 +118,30 @@ public class Interpreter {
 	throws javax.servlet.ServletException, IOException {
 		interpret(
 			new ServletDSPContext(ctx, request, response, locator),
+			null, content, ctype);
+	}
+	/** Interprets the specified content based on the HTTP request.
+	 * It actually wraps the HTTP request into {@link DSPContext}
+	 * and then invoke {@link #interpret(DSPContext, FunctionMapper, String, String)}.
+	 *
+	 * @param locator used to locate resources, such as taglib.
+	 * If null is specified, the locator for the specified servlet context is
+	 * used. (In other words, we use {@link org.zkoss.web.util.resource.ServletContextLocator}
+	 * if locator is null).
+	 * @param ctype the content type. Optional. It is used only if
+	 * no page action at all. If it is not specified and not page
+	 * action, "text/html" is assumed.
+	 * @param out the output to generate the result.
+	 * If null, it is the same as {@link #interpret(ServletContext,HttpServletRequest,HttpServletResponse,String,String,Locator)}
+	 * In other words, response.getWriter() is used.
+	 * @since 2.4.1
+	 */
+	public final void interpret(ServletContext ctx,
+	HttpServletRequest request, HttpServletResponse response, Writer out,
+	String content, String ctype, Locator locator)
+	throws javax.servlet.ServletException, IOException {
+		interpret(
+			new ServletDSPContext(ctx, request, response, out, locator),
 			null, content, ctype);
 	}
 }

@@ -22,6 +22,9 @@ import java.util.Map;
 import java.net.URL;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ByteArrayInputStream;
+import java.io.Writer;
+import java.io.StringWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -78,6 +81,8 @@ public class ClassWebResource {
 	private final String _mappingURI;
 	private final ClassWebContext _cwc;
 	private final ResourceCache _dspCache;
+	/** An array of extensions that have to be compressed (with gzip). */
+	private String[] _compressExts;
 
 	/** The prefix of path of web resources ("/web"). */
 	public static final String PATH_PREFIX = "/web";
@@ -124,8 +129,10 @@ public class ClassWebResource {
 		_dspCache.setMaxSize(1000).setLifetime(60*60*1000); //1hr
 		_dspCache.setCheckPeriod(60*60*1000); //1hr
 	}
-	/** Process the request. */
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
+	/** Process the request.
+	 */
+	public void doGet(HttpServletRequest request,
+	HttpServletResponse response)
 	throws ServletException, IOException {
 		final Object old = Charsets.setup(request, response, "UTF-8");
 		try {
@@ -137,6 +144,28 @@ public class ClassWebResource {
 			Charsets.cleanup(request, old);
 		}
 	}
+	/** Sets the extension that shall be compressed if the browser
+	 * supports the compression encoding (accept-encoding).
+	 *
+	 * <p>Default: null (no compression at all).
+	 *
+	 * @param exts an array of extensions, e.g., {"js", "css"}.
+	 * If null or zero-length, it means no compression at all.
+	 *@since 2.4.1
+	 */
+	public void setCompress(String[] exts) {
+		_compressExts = exts != null && exts.length > 0 ? exts: null;
+	}
+	/**Returns  the extension that shall be compressed if the browser
+	 * supports the compression encoding (accept-encoding).
+	 *
+	 * <p>Default: null (no compression at all).
+	 *@since 2.4.1
+	 */
+	public String[] getCompress() {
+		return _compressExts;
+	}
+
 	//-- Work with ClassWebContext --//
 	/** Works with {@link ClassWebContext} to
 	 * load resources from class path (thru this servlet).
@@ -190,9 +219,27 @@ public class ClassWebResource {
 					response.sendError(response.SC_NOT_FOUND, pi);
 					return;
 				}
+
+				final String ext2 = get2ndExtension(pi);
+				StringWriter sw = shallCompress(request, ext2) ?
+					new StringWriter(4096): null;
 				cnt.interpret(new ServletDSPContext(
-					_ctx, request, response, _cwc.getLocator()));
-				if (jsextra != null) response.getWriter().write(jsextra);
+					_ctx, request, response, sw, _cwc.getLocator()));
+				if (jsextra != null)
+					(sw != null ? (Writer)sw: response.getWriter()).write(jsextra);
+				if (sw != null) {
+					byte[] bs = sw.toString().getBytes("UTF-8");
+					sw = null; //free
+					byte[] data = Https.gzip(request, response,
+						new ByteArrayInputStream(bs), null, null);
+					if (data == null) //browser doesn't support compress
+						data = bs;
+					bs = null; //free
+
+					response.setContentLength(data.length);
+					response.getOutputStream().write(data);
+					response.flushBuffer();
+				}
 				return; //done
 			}
 
@@ -204,9 +251,10 @@ public class ClassWebResource {
 			}
 		}
 
+		byte[] extra = jsextra != null ? jsextra.getBytes("UTF-8"): null;
 		pi = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
 		final InputStream is = getResourceAsStream(pi);
-		final byte[] data;
+		byte[] data;
 		if (is == null) {
 			if ("js".equals(ext)) {
 				//Don't sendError. Reason: 1) IE waits and no onerror fired
@@ -219,12 +267,18 @@ public class ClassWebResource {
 				return;
 			}
 		} else {
-			data = Files.readAll(is);
-			//since what is embedded in the jar is not big, so load at once
+			//Note: don't compress images
+			data =  shallCompress(request, ext) ?
+				Https.gzip(request, response, is,
+					extra != null ?
+						new ByteArrayInputStream(extra): null, null):
+				null;
+			if (data != null) extra = null; //extra is compressed and output
+			else data = Files.readAll(is);
+				//since what is embedded in the jar is not big, so load completely
 		}
 
 		int len = data.length;
-		final byte[] extra = jsextra != null ? jsextra.getBytes("UTF-8"): null;
 		if (extra != null) len += extra.length;
 		response.setContentLength(len);
 
@@ -233,15 +287,38 @@ public class ClassWebResource {
 		if (extra != null) out.write(extra);
 		out.flush();
 	}
+	private boolean shallCompress(ServletRequest request, String ext) {
+		if (ext != null && _compressExts != null
+		&& !Servlets.isIncluded(request))
+			for (int j = 0; j < _compressExts.length; ++j)
+				if (ext.equals(_compressExts[j]))
+					return true;
+		return false;
+	}
+
 	/** Returns the file extension of the specified path info. */
 	private static final String getExtension(String pi) {
-		final int j = pi.lastIndexOf('.');
+		int j = pi.lastIndexOf('.');
 		if (j < 0 || pi.indexOf('/', j + 1) >= 0)
 			return null;
+
 		final String ext = pi.substring(j + 1);
-		final int k = ext.indexOf(';');
-		return k >= 0 ? ext.substring(0, k).toLowerCase(): ext.toLowerCase();
+		j = ext.indexOf(';');
+		return j >= 0 ? ext.substring(0, j).toLowerCase(): ext.toLowerCase();
 	}
+	/** Returns the second extension. For example, js in xx.js.dsp.
+	 */
+	private static final String get2ndExtension(String pi) {
+		int j = pi.lastIndexOf('.');
+		if (j < 0 || pi.indexOf('/', j + 1) >= 0)
+			return null;
+
+		int k = j > 0 ? pi.lastIndexOf('.', j - 1): -1;
+		if (k < 0 || pi.indexOf('/', k + 1) >= 0)
+			return null;
+		return pi.substring(k + 1, j).toLowerCase();
+	}
+
 	private static class DSPLoader implements Loader {
 		private final ClassWebContext _cwc;
 		private DSPLoader(ClassWebContext cwc) {

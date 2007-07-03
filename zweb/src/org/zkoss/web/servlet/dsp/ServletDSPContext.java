@@ -60,10 +60,27 @@ public class ServletDSPContext implements DSPContext {
 	public ServletDSPContext(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response,
 	Locator locator) {
+		this(ctx, request, response, null, locator);
+	}
+	/**
+	 * Constructor with the specified writer.
+	 *
+	 * @param locator used to locate resources, such as taglib.
+	 * If null is specified, the locator for the specified servlet context
+	 * is used. (In other words, we use ServletContextLocator(ctx), if locator is null).
+	 * @param out the output to generate the result.
+	 * If null, it is the same as {@link #ServletDSPContext(ServletContext,HttpServletRequest,HttpServletResponse,Locator)}
+	 * In other words, response.getWriter() is used.
+	 * @since 2.4.1
+	 */
+	public ServletDSPContext(ServletContext ctx,
+	HttpServletRequest request, HttpServletResponse response,
+	Writer out, Locator locator) {
 		_locator = locator != null ? locator: new ServletContextLocator(ctx);
 		_ctx = ctx;
 		_request = request;
 		_response = response;
+		_out = out;
 	}
 
 	//-- DSPContext --//
