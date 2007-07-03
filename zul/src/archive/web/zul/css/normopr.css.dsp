@@ -437,11 +437,11 @@ table.calyear {
 table.calday {
 	border: 1px solid #ddd;
 }
-.calyear td {
+table.calyear td {
 	font-size: x-small; font-weight: bold; text-align: center;
-	white-space: nowrap;
+	white-space: nowrap; color: black; <%-- 1735084 --%>
 }
-.calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
+table.calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
 	font-size: xx-small; color: #35254F; text-align: center;
 	cursor: hand; cursor: pointer; text-decoration: none;
 }
@@ -451,13 +451,13 @@ tr.calday td {
 tr.calday td a:hover {
 	text-decoration: underline;
 }
-.calmon td.sel, tr.calday td.sel {
+table.calmon td.sel, tr.calday td.sel {
 	background: #cddeee;
 }
-.caldmon td.dis, tr.calday td.dis {
+table.calmon td.dis, tr.calday td.dis {
 	color: #888;
 }
-.caldow td {
+tr.caldow td {
 	font-size: xx-small; color: #333; font-weight: bold;
 	padding: 1px 2px; background: #e8e8f0; text-align: center;
 }

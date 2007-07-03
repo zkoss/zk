@@ -434,27 +434,27 @@ table.calyear {
 table.calday {
 	border: 1px solid #ddd;
 }
-.calyear td {
+table.calyear td {
 	font-size: small; font-weight: bold; text-align: center;
 	white-space: nowrap;
 }
-.calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
+table.calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
 	font-size: x-small; color: #35254F; text-align: center;
 	cursor: pointer; text-decoration: none;
 }
-.calday td {
+tr.calday td {
 	padding: 1px 3px;
 }
-.calday td a:hover {
+tr.calday td a:hover {
 	text-decoration: underline;
 }
-.calmon td.sel, tr.calday td.sel {
+table.calmon td.sel, tr.calday td.sel {
 	background: #cddeee;
 }
-.caldmon td.dis, tr.calday td.dis {
+table.calmon td.dis, tr.calday td.dis {
 	color: #888;
 }
-.caldow td {
+tr.caldow td {
 	font-size: x-small; color: #333; font-weight: bold;
 	padding: 1px 2px; background: #e8e8f0; text-align: center;
 }
