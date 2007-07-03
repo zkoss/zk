@@ -68,6 +68,10 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	getItemUuid: function (row) {
 		return getZKAttr(row, "pitem");
 	},
+	/** Returns the type of the row. */
+	_rowType: function () {
+		return "Trow";
+	},
 	/** Process the setAttr command sent from the server. */
 	setAttr2: function (name, value) {
 		switch (name) {

@@ -284,6 +284,10 @@ zk.Selectable.prototype = {
 	/** Do when the right key is pressed. */
 	_doRight: function (row) {
 	},
+	/** Returns the type of the row. */
+	_rowType: function () {
+		return "Lit";
+	},
 	doclick: function (evt, target) {
 		if (zkSel._shallIgnoreEvent(target))
 			return;
@@ -295,7 +299,8 @@ zk.Selectable.prototype = {
 
 		var checkmark = target.id && target.id.endsWith("!cm");
 		var row = tn == "TR" ? target: zk.parentNode(target, "TR");
-		if (!row) return; //incomplete structure
+		if (!row || $type(row) != this._rowType())
+			return; //incomplete structure or grid in listbox...
 
 		//It is better not to change selection only if dragging selected
 		//(like Windows does)
