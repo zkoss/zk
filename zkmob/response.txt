@@ -35,3 +35,11 @@ ZK response
 *	command: redirect
 	data0: the href to show (without hostURL)
 	data1: <empty>
+
+*	command: outer
+	data0: uuid of the component to be redrawn
+	data1: rmil of the new component
+
+*	command: addChd
+	data0: uuid of the parent component
+	data1: rmil of the child component
