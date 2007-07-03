@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Date;
 import java.io.StringWriter;
 import java.io.IOException;
+import java.io.ByteArrayInputStream;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -186,7 +187,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					uieng.response(resp, out);
 				}
 
-				flushXMLWriter(response, out);
+				flushXMLWriter(request, response, out);
 				return;
 			}
 		}
@@ -215,11 +216,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				}
 			}
 			if (aureqs.isEmpty()) {
-				responseError(uieng, response, "Illegal request: cmd is required");
+				responseError(uieng, request, response, "Illegal request: cmd is required");
 				return;
 			}
 		} catch (CommandNotFoundException ex) {
-			responseError(uieng, response, Exceptions.getMessage(ex));
+			responseError(uieng, request, response, Exceptions.getMessage(ex));
 			return;
 		}
 
@@ -230,7 +231,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			new ExecutionImpl(_ctx, request, response, desktop, null),
 			aureqs, out);
 
-		flushXMLWriter(response, out);
+		flushXMLWriter(request, response, out);
 	}
 
 	/** Returns the writer for output XML.
@@ -246,15 +247,27 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @param withrs whether to output </rs> first.
 	 */
 	private static final
-	void flushXMLWriter(HttpServletResponse response, StringWriter out)
+	void flushXMLWriter(HttpServletRequest request,
+	HttpServletResponse response, StringWriter out)
 	throws IOException {
 		out.write("\n</rs>");
 
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
-		final byte[] bs = out.toString().getBytes("UTF-8");
+		byte[] bs = out.toString().getBytes("UTF-8");
+		byte[] data;
+		if (bs.length > 128) {
+			data = Https.gzip(request, response,
+			new ByteArrayInputStream(bs), null, null);
+			if (data == null) //browser doesn't support compress
+				data = bs;
+		} else {
+			data = bs;
+		}
+		bs = null; //free it
+
 		response.setContentType("text/xml;charset=UTF-8");
-		response.setContentLength(bs.length);
-		response.getOutputStream().write(bs);
+		response.setContentLength(data.length);
+		response.getOutputStream().write(data);
 		response.flushBuffer();
 	}
 
@@ -287,13 +300,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	/** Generates a response for an error message.
 	 */
 	private static
-	void responseError(UiEngine uieng, HttpServletResponse response,
-	String errmsg) throws IOException {
+	void responseError(UiEngine uieng, HttpServletRequest request,
+	HttpServletResponse response, String errmsg) throws IOException {
 		log.debug(errmsg);
 
 		//Don't use sendError because Browser cannot handle UTF-8
 		final StringWriter out = getXMLWriter();
 		uieng.response(new AuAlert(errmsg), out);
-		flushXMLWriter(response, out);
+		flushXMLWriter(request, response, out);
 	}
 }

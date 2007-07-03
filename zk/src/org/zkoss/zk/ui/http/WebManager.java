@@ -101,6 +101,7 @@ public class WebManager {
 		Labels.setVariableResolver(new ServletLabelResovler());
 
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
+		_cwr.setCompress(new String[] {"js", "css"});
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
 		final Configuration config = new Configuration();
