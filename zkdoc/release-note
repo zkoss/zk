@@ -30,6 +30,7 @@ ZK 2.4.1
   1738241: Combobox's icon is placed at the wrong location (IE only)
   1746913: Grid in listbox cause ClassCastException if clicking on grid
   1746915: Grid in listbox: wrong text color if selected
+  1735084: listbox styles cascade into datebox-popup (IE only)
 
 	--------
 ZK 2.4.0
