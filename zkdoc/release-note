@@ -28,6 +28,8 @@ ZK 2.4.1
   1711822: Menuitem: the order of onClick and onOpen
   1713353: SPRING SCOPE SESSION BUG
   1738241: Combobox's icon is placed at the wrong location (IE only)
+  1746913: Grid in listbox cause ClassCastException if clicking on grid
+  1746915: Grid in listbox: wrong text color if selected
 
 	--------
 ZK 2.4.0
