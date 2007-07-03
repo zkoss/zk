@@ -354,6 +354,10 @@ function $parentByTag(el, tagName) {
 	}
 	return null;
 };
+/** Whether an element is visible. */
+function $visible(el) {
+	return el && el.style && el.style.display != "none";
+}
 
 /** Returns the ZK attribute of the specified name.
  * Note: the name space of ZK attributes is "http://www.zkoss.org/2005/zk"
@@ -718,7 +722,7 @@ zk.onVisiAt = function (n) {
 				zk.eval(elm, "onVisi");
 				break;
 			}
-			if (e.style && e.style.display == "none")
+			if (e.style && !$visible(e))
 				break;
 		}
 	}
@@ -741,7 +745,7 @@ zk.onHideAt = function (n) {
 				zk.eval(elm, "onHide");
 				break;
 			}
-			if (e.style && e.style.display == "none") //yes, ignore hidden ones
+			if (e.style && !$visible(e)) //yes, ignore hidden ones
 				break;
 		}
 	}
@@ -761,7 +765,7 @@ zk.onSizeAt = function (n) {
 				zk._toOnSize[nid] = true;
 				break;
 			}
-			if (e.style && e.style.display == "none")
+			if (e.style && !$visible(e))
 				break;
 		}
 	}

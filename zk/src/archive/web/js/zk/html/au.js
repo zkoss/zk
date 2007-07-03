@@ -1212,7 +1212,7 @@ zkau._closeFloats = function (method, ancestors) {
 	//reverse order is important if popup contains another
 	//otherwise, IE seem have bug to handle them correctly
 		var n = $e(zkau._popups[j]);
-		if (n && n.style.display != "none"
+		if ($visible(n)
 		&& getZKAttr(n, "animating") != "hide"
 		&& !zk.isAncestorX(n, ancestors, true)) {
 		//we avoid hiding twice we have to check animating
@@ -1241,7 +1241,7 @@ zkau.hideCovered = function() {
 	var ary = [];
 	for (var j = 0; j < zkau._popups.length; ++j) {
 		var el = $e(zkau._popups[j]);
-		if (el && el.style.display != "none") ary.push(el);
+		if ($visible(el)) ary.push(el);
 	}
 
 	for (var j = 0; j < zkau.floats.length; ++j)
@@ -1249,7 +1249,7 @@ zkau.hideCovered = function() {
 
 	for (var j = 0; j < zkau._overlaps.length; ++j) {
 		var el = $e(zkau._overlaps[j]);
-		if (el && el.style.display != "none") ary.push(el);
+		if ($visible(el)) ary.push(el);
 	}
 	zk.hideCovered(ary);
 

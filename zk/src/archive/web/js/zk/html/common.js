@@ -151,7 +151,7 @@ if (zk.gecko || zk.safari) {
 
 		//fix gecko and safari's bug: if not visible before, offset is wrong
 		var ofs;
-		if (el.style.display == "none" && !zk.offsetWidth(el)) {
+		if (!$visible(el) && !zk.offsetWidth(el)) {
 			el.style.display = "";
 			ofs = zk._oldcumofs(el);
 			el.style.display = "none";
@@ -170,7 +170,7 @@ zk.center = function (el, flags) {
 	var wdgap = zk.offsetWidth(el),
 		hghgap = zk.offsetHeight(el);
 
-	if ((!wdgap || !hghgap) && el.style.display == "none") {
+	if ((!wdgap || !hghgap) && !$visible(el)) {
 		el.style.top = "-10000px"; //avoid annoying effect
 		el.style.display = "block"; //we need to calculate the size
 		wdgap = zk.offsetWidth(el);
@@ -211,7 +211,7 @@ zk.center = function (el, flags) {
  */
 zk.getDimension = function (el) {
 	var wd = zk.offsetWidth(el), hgh;
-	if (el.style.display == "none" && !wd) {
+	if (!$visible(el) && !wd) {
 		var fixleft = el.style.left == "" || el.style.left == "auto";
 		if (fixleft) el.style.left = "0";
 		var fixtop = el.style.top == "" || el.style.top == "auto";
@@ -331,19 +331,16 @@ zk.isOffsetOverlapped = function (ofs1, dim1, ofs2, dim2) {
 	return o2x1 <= o1x2 && o2x2 >= o1x1 && o2y1 <= o1y2 && o2y2 >= o1y1;
 };
 
-/** Whether an element is visible. */
-zk.isVisible = function (el) {
-	return el && el.style && el.style.display != "none";
-};
 /** Whether an element is really visible. */
 zk.isRealVisible = function (e) {
 	if (!e) return false;
 	do {
-		if (e.style && e.style.display == "none") return false;
+		if (e.style && !$visible(e)) return false;
 		//note: document is the top parent and has NO style
 	} while (e = e.parentNode);
 	return true;
 };
+zk.isVisible = $visible; //backward compatible
 
 /** Focus the specified element and any of its child. */
 zk.focusDown = function (el) {
@@ -584,7 +581,7 @@ zk.setOuterHTML = function (el, html) {
 
 	for (p = p.firstChild; p; p = p.nextSibling) {
 		if ($tag(p)) { //skip Text
-			if (p.style.display == "none") zk._hideExtr(p);
+			if (!$visible(p)) zk._hideExtr(p);
 			else zk._showExtr(p);
 			break;
 		}
@@ -1187,7 +1184,7 @@ zk.cpCellWidth = function (dst, srcrows) {
 		var row = srcrows[j];
 		var cells = row.cells;
 		var nc = zk.ncols(cells);
-		var valid = cells.length == nc && row.display != "none";
+		var valid = cells.length == nc && $visible(row);
 			//skip with colspan and invisible
 		if (valid && nc >= ncols) {
 			maxnc = ncols;
@@ -1478,7 +1475,7 @@ zk.Float.prototype = {
 	_closeFloats: function (onfocus, ancestors) {
 		if (this._ftid) {
 			var n = $e(this._ftid);
-			if (n && n.style.display != "none"
+			if ($visible(n)
 			&& getZKAttr(n, "animating") != "hide"
 			&& (!onfocus || !zk.isAncestorX(n, ancestors, true))) {
 				this._close(n);
@@ -1531,7 +1528,7 @@ zk.Floats.prototype = {
 		for (var j = this._ftids.length; --j >= 0;) {
 			var id = this._ftids[j];
 			var n = $e(id);
-			if (n && n.style.display != "none"
+			if ($visible(n)
 			&& getZKAttr(n, "animating") != "hide"
 			&& ((!onfocus && !this._aspps[id]) || !zk.isAncestorX(n, ancestors, true))) {
 				this._ftids.splice(j, 1);
