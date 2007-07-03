@@ -125,7 +125,7 @@ zkCmbox.setAttr = function (cmp, nm, val) {
 		var pp = $e(cmp.id + "!pp");
 		if (pp) {
 			pp.removeAttribute("zk_ckval"); //re-check is required
-			if (pp.style.display != "none")
+			if ($visible(pp))
 				zkCmbox._open(cmp, cmp.id, pp, true);
 		}
 		return true;
@@ -178,7 +178,7 @@ if (!zkCmbox._inflds)
 zkCmbox.childchg = function (cb) {
 	//we have to re-adjust the width since children are added/removed
 	var pp = $e(cb.id + "!pp");
-	if (!pp || pp.style.display == "none")
+	if (!$visible(pp))
 		return;
 
 	var ppofs = zkCmbox._ppofs(pp);
@@ -197,7 +197,7 @@ zkCmbox.childchg = function (cb) {
 zkCmbox._cc2 = function (uuid) {
 	var cb = $e(uuid);
 	var pp = $e(uuid + "!pp");
-	if (pp && pp.style.display != "none")
+	if ($visible(pp))
 		zkCmbox._fixsz(cb, pp, $e(cb.id + "!cave"), zkCmbox._ppofs(pp));
 };
 
@@ -215,7 +215,7 @@ zkCmbox.ondown = function (evt) {
 		if (inp) {
 			var uuid = $uuid(inp.id);
 			var pp = $e(uuid + "!pp");
-			if (pp && pp.style.display != "none") zkCmbox.close(pp);
+			if ($visible(pp)) zkCmbox.close(pp);
 		}
 	}
 	return true;
@@ -229,7 +229,7 @@ zkCmbox.onkey = function (evt) {
 	var pp = $e(uuid + "!pp");
 	if (!pp) return true;
 
-	var opened = pp.style.display != "none";
+	var opened = $visible(pp);
 	if (evt.keyCode == 9 || (zk.safari && evt.keyCode == 0)) { //TAB or SHIFT-TAB (safari)
 		if (opened) zkCmbox.close(pp);
 		return true;
@@ -282,7 +282,7 @@ zkCmbox.onkey = function (evt) {
 zkCmbox.onbutton = function (cmp) {
 	var pp = $e(cmp.id + "!pp");
 	if (pp) {
-		if (pp.style.display == "none") zkCmbox.open(pp, true);
+		if (!$visible(pp)) zkCmbox.open(pp, true);
 		else zkCmbox.close(pp, true);
 	}
 };
@@ -460,7 +460,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 
 //	var aco = getZKAttr($e(uuid), "aco") == "true";
 	var pp = $e(uuid + "!pp");
-	if (!pp || (!selback && /*!aco &&*/ !zk.isVisible(pp))) return;
+	if (!pp || (!selback && /*!aco &&*/ !$visible(pp))) return;
 	var pp2 = $e(uuid + "!cave");
 	if (!pp2) return;
 	var rows = pp2.rows;

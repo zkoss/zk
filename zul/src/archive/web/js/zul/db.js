@@ -422,7 +422,7 @@ zkDtbox.onkey = function (evt) {
 	var pp = $e(uuid + "!pp");
 	if (!pp) return true;
 
-	var opened = pp.style.display != "none";
+	var opened = $visible(pp);
 	if (evt.keyCode == 9) { //TAB; IE: close now to show covered SELECT
 		if (opened) zkDtbox.close(pp);
 		return true; //don't eat
@@ -476,7 +476,7 @@ zkDtbox.onkey = function (evt) {
 zkDtbox.onbutton = function (cmp) {
 	var pp = $e(cmp.id + "!pp");
 	if (pp) {
-		if (pp.style.display == "none") zkDtbox.open(pp);
+		if (!$visible(pp)) zkDtbox.open(pp);
 		else zkDtbox.close(pp, true);
 	}
 };

@@ -157,7 +157,7 @@ zk.Grid.prototype = {
 		if (!this.bodyrows) return;
 		for (var j = 0, even = true; j < this.bodyrows.length; ++j) {
 			var row = this.bodyrows[j];
-			if (row.style.display != "none") {
+			if ($visible(row)) {
 				var cs = row.className;
 				if (even) { //even
 					if (cs.endsWith("-od"))
@@ -265,7 +265,7 @@ zk.Grid.prototype = {
 		var min = this.body.scrollTop, max = min + this.body.offsetHeight;
 		for (var j = 0; j < rows.length; ++j) {
 			var r = rows[j];
-			if (zk.isVisible(r)) {
+			if ($visible(r)) {
 				var top = zk.offsetTop(r);
 				if (top + zk.offsetHeight(r) < min) continue;
 				if (top >= max) break;

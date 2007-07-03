@@ -247,7 +247,7 @@ zk.Selectable.prototype = {
 				if ($tag(row) == "TR"  && this._isValid(row)) {
 					if (shift) this.toggleSelect(row, true);
 
-					if (zk.isVisible(row)) {
+					if ($visible(row)) {
 						if (!shift) lastrow = row;
 						if (!endless) {
 							if (step > 0) --step;
@@ -653,7 +653,7 @@ zk.Selectable.prototype = {
 		var min = this.body.scrollTop, max = min + this.body.offsetHeight;
 		for (var j = 0; j < rows.length; ++j) {
 			var r = rows[j];
-			if (zk.isVisible(r)) {
+			if ($visible(r)) {
 				var top = zk.offsetTop(r);
 				if (top + zk.offsetHeight(r) < min) continue;
 				if (top >= max) break;
@@ -716,7 +716,7 @@ zk.Selectable.prototype = {
 			var rows = this.bodyrows;
 			for (var j = 0; j < rows.length; ++j) {
 				var r = rows[j];
-				if (zk.isVisible(r) && --index < 0)
+				if ($visible(r) && --index < 0)
 					return r;
 			}
 		}
@@ -727,7 +727,7 @@ zk.Selectable.prototype = {
 		var len = 0, lastVisiRow, firstVisiRow;
 		for (var j = 0; j < rows.length; ++j) { //tree might collapse some items
 			var r = rows[j];
-			if (zk.isVisible(r)) {
+			if ($visible(r)) {
 				if (!firstVisiRow) firstVisiRow = r;
 				lastVisiRow = r;
 				++len;
@@ -751,7 +751,7 @@ zk.Selectable.prototype = {
 					var r;
 					for (;; ++j) {//no need to check length again
 						r = rows[j];
-						if (zk.isVisible(r)) break;
+						if ($visible(r)) break;
 					}
 
 					h = zk.offsetTop(r) + zk.offsetHeight(r);
@@ -846,7 +846,7 @@ zk.Selectable.prototype = {
 	/** Recalculate the size. */
 	recalcSize: function (cleansz) {
 		if (cleansz) this.cleanSize();
-		setTimeout("zkSel._calcSize('"+this.id+"')", 20);
+		setTimeout("zkSel._calcSize('"+this.id+"')", 50);
 	},
 	cleanSize: function () {
 		if (this.paging) return; //nothing to adjust since single table
@@ -874,7 +874,7 @@ zk.Selectable.prototype = {
 		var rows = this.bodyrows;
 		if (rows) {
 			zulHdr.resizeAll(rows, cmp, icol, col1, wd1, col2, wd2, keys);
-			this.recalcSize(false);
+			this.recalcSize();
 		}
 	},
 
@@ -1094,11 +1094,9 @@ zkLibox.init = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 	else {
-		var bd = $e(cmp.id + "!body");
-		if (bd)
-			zk.listen(bd, "keydown", zkLibox.bodyonkeydown);
-
-		new zk.Selectable(cmp);
+		meta = new zk.Selectable(cmp);
+		if (meta.body)
+			zk.listen(meta.body, "keydown", zkLibox.bodyonkeydown);
 	}
 };
 zkLibox.childchg = zkLibox.init;

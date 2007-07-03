@@ -387,14 +387,14 @@ zkGrbox.onclick = function (evt, uuid) {
 
 		cmp = $e(uuid + "!slide");
 		if (cmp)
-			zkGrbox.open(uuid, cmp.style.display == "none");
+			zkGrbox.open(uuid, !$visible(cmp));
 	}
 };
 zkGrbox.open = function (gb, open, silent) {
 	var gb = $e(gb);
 	if (gb) {
 		var panel = $e(gb.id + "!slide");
-		if (panel && open != (panel.style.display != "none")
+		if (panel && open != $visible(panel)
 		&& !panel.getAttribute("zk_visible")) {
 			if (open) anima.slideDown(panel);
 			else anima.slideUp(panel);

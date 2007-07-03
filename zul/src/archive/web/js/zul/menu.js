@@ -86,7 +86,7 @@ zkMenu.open = function (menu, toggle) {
 		return;
 	}
 
-	if (pp.style.display == "none") {
+	if (!$visible(pp)) {
 		var top = getZKAttr(menu, "top") == "true"; //top-level menu
 		var ref = top || $tag(menu) != "TD" ? menu: menu.parentNode; //use TR if not top
 		var pos = top && getZKAttr(menu, "vert") == null ? "after-start": "end_before";
@@ -221,7 +221,7 @@ zkMpop = {};
 
 /** Called by au.js's context menu. */
 zkMpop.context = function (ctx, ref) {
-	if (ctx.style.display == "none") {
+	if (!$visible(ctx)) {
 		zkMenu._open(ctx, true);
 
 		if (zkau.asap(ctx, "onOpen"))

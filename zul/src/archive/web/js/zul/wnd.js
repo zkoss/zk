@@ -373,7 +373,7 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 	storage.push(cmp.id); //store ID because it might cease before endPopup
 	zkau.hideCovered();
 
-	if (cmp.style.display != "none") //it happens when closing a modal (becomes overlap)
+	if ($visible(cmp)) //it happens when closing a modal (becomes overlap)
 		zkWnd._show(cmp);
 
 	zk.asyncFocusDown(cmp.id);
