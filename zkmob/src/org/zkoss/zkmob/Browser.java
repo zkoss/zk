@@ -30,9 +30,9 @@ import javax.microedition.lcdui.ItemCommandListener;
 import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.TextField;
 
-import org.zkoss.zkmob.impl.Zk;
-import org.zkoss.zkmob.impl.ZkList;
-import org.zkoss.zkmob.impl.ZkListItem;
+import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkList;
+import org.zkoss.zkmob.ui.ZkListItem;
 
 import org.xml.sax.SAXException;
 import java.io.IOException;

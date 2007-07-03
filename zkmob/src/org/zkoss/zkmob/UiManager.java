@@ -28,30 +28,34 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
+import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Image;
+import javax.microedition.lcdui.Item;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.zkoss.zkmob.impl.AlertFactory;
-import org.zkoss.zkmob.impl.ChoiceGroupFactory;
-import org.zkoss.zkmob.impl.CommandFactory;
-import org.zkoss.zkmob.impl.DateFieldFactory;
-import org.zkoss.zkmob.impl.FormFactory;
-import org.zkoss.zkmob.impl.GaugeFactory;
-import org.zkoss.zkmob.impl.ImageItemFactory;
-import org.zkoss.zkmob.impl.ListFactory;
-import org.zkoss.zkmob.impl.ListItemFactory;
-import org.zkoss.zkmob.impl.SpacerFactory;
-import org.zkoss.zkmob.impl.StringItemFactory;
-import org.zkoss.zkmob.impl.TextBoxFactory;
-import org.zkoss.zkmob.impl.TextFieldFactory;
-import org.zkoss.zkmob.impl.TickerFactory;
-import org.zkoss.zkmob.impl.Zk;
-import org.zkoss.zkmob.impl.ZkFactory;
+import org.zkoss.zkmob.factory.AlertFactory;
+import org.zkoss.zkmob.factory.ChoiceGroupFactory;
+import org.zkoss.zkmob.factory.CommandFactory;
+import org.zkoss.zkmob.factory.DateFieldFactory;
+import org.zkoss.zkmob.factory.FormFactory;
+import org.zkoss.zkmob.factory.GaugeFactory;
+import org.zkoss.zkmob.factory.ImageItemFactory;
+import org.zkoss.zkmob.factory.ListFactory;
+import org.zkoss.zkmob.factory.ListItemFactory;
+import org.zkoss.zkmob.factory.SpacerFactory;
+import org.zkoss.zkmob.factory.StringItemFactory;
+import org.zkoss.zkmob.factory.TextBoxFactory;
+import org.zkoss.zkmob.factory.TextFieldFactory;
+import org.zkoss.zkmob.factory.TickerFactory;
+import org.zkoss.zkmob.factory.ZkFactory;
+import org.zkoss.zkmob.ui.Zk;
 
 /** 
  * The static facade for UI component management. 
@@ -155,9 +159,9 @@ public class UiManager {
 		return url;
 	}
 	
-	public static Vector createComponents(Zk zk, InputStream is, String hostURL) throws IOException, SAXException {
+	public static Vector createComponents(ZkComponent parent, InputStream is, String hostURL) throws IOException, SAXException {
 	    // Load the responsed page, the current Displayable is put in _current
-	    final PageHandler handler = new PageHandler(zk, hostURL);
+	    final PageHandler handler = new PageHandler(parent, hostURL);
 	    getSAXParser().parse(is, handler);
 	    return handler.getRoots();
 	}
@@ -221,7 +225,6 @@ public class UiManager {
 		try {
 			return myLoadImage(url);
 		} catch (Throwable e) {
-System.out.println("image url="+url);			
 			e.printStackTrace();
 		}
 		return null;
@@ -281,6 +284,62 @@ System.out.println("image url="+url);
 			throw e;
 		} finally {
 			if (os != null) os.close();
+		}
+	}
+
+	/**
+	 * parse a "width,height" into int[] where int[0] is width, int[1] is height.
+	 * @param sizestr The size in string format of "width, height"
+	 * @return int[] where int[0] is width, int[1] is height.
+	 */
+	public static int[] parseSize(String sizestr) {
+		int[] size = new int[2]; //[0]: width; [1]: height
+		int j = sizestr.indexOf(",");
+		if (j < 0) { //not found
+			return null;
+		} else {
+			String wstr = sizestr.substring(0, j).trim();
+			String hstr = sizestr.substring(j+1).trim();
+			size[0] = Integer.parseInt(wstr);
+			size[1] = Integer.parseInt(hstr);
+		}
+		return size;
+	}
+	
+	/**
+	 * Utility to apply common properties to Item component. 
+	 */
+	public static void applyItemProperties(ZkComponent parent, Item component, Attributes attrs) {
+		setItemAttr(component, "lo", attrs.getValue("lo")); //layout
+		setItemAttr(component, "ps", attrs.getValue("ps")); //preferredSize
+		if (parent instanceof Form) {
+			((Form)parent).append(component);
+		}
+	}
+	
+	/**
+	 * Given Item, attribute name, and value; then set the attribute of the Item if match. 
+	 * @param item The Item to be set
+	 * @param attr The attribute name
+	 * @param val The value
+	 */
+	public static void setItemAttr(Item item, String attr, String val) {
+		if ("lb".equals(attr)) {
+			item.setLabel(val);
+		} else if ("lo".equals(attr)) {
+			item.setLayout(val == null ? Item.LAYOUT_DEFAULT : Integer.parseInt(val));
+		} else if ("ps".equals(attr)) {
+			int[] sz = val == null ? new int[] {-1, -1} : parseSize(val);
+			item.setPreferredSize(sz[0], sz[1]);
+		}
+	}
+	
+	public static void registerCommand(ZkComponent owner, Command cmd, Zk zk) {
+		owner.addCommand(cmd); //add into owner
+		if (owner instanceof Item) {
+			((Item)owner).setItemCommandListener(zk.getItemCommandListener());
+		} else if (owner instanceof Displayable) {
+			((Displayable)owner).setCommandListener(zk.getCommandListener());
 		}
 	}
 }

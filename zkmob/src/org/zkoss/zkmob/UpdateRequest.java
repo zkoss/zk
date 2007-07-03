@@ -20,7 +20,7 @@ package org.zkoss.zkmob;
 
 import javax.microedition.lcdui.Display;
 
-import org.zkoss.zkmob.impl.Zk;
+import org.zkoss.zkmob.ui.Zk;
 
 /**
  * @author henrichen

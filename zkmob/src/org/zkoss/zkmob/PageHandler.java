@@ -26,7 +26,7 @@ import javax.microedition.lcdui.Displayable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import org.zkoss.zkmob.impl.Zk;
+import org.zkoss.zkmob.ui.Zk;
 
 /** The Page handler that deserialize Java Object from RMIL(Raw Mobile Interactive Language)
  *  XML Pages.
@@ -38,16 +38,18 @@ public class PageHandler extends DefaultHandler {
 	private Stack _stack = new Stack();
 	private String _hostURL;
 	private Vector _roots = new Vector(8);
+	private ZkComponent _parent;
 	private Zk _zk;
 	
 	/*package*/PageHandler(String hostURL) {
 		_hostURL = hostURL;
 	}
 
-	/*package*/PageHandler(Zk zk, String hostURL) {
+	/*package*/PageHandler(ZkComponent parent, String hostURL) {
 		_hostURL = hostURL;
-		_zk = zk;
-		_stack.push(zk);
+		_parent = parent;
+		_zk = _parent == null ? null : _parent.getZk();
+		_stack.push(parent);
 	}
 	
 	public Vector getRoots() {
