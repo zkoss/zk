@@ -294,7 +294,7 @@ tr.itemsel a:hover {
 tr.grid td.gc, tr.grid-od td.gc, tr.grid-no-striped td.gc, tr.grid-no-striped-od td.gc {
 	background: #FFF; border-bottom: none; border-left: 1px solid #FFF;
 	border-right: 1px solid #CCC; border-top: 1px solid #DDD; padding: 2px;
-	font-size: small; font-weight: normal;
+	font-size: small; font-weight: normal; color: black;
 }
 tr.grid-od td.gc {
 	background: #E8EFEA;
