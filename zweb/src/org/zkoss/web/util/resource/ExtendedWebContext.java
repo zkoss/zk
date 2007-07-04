@@ -23,12 +23,15 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.zkoss.util.resource.Locator;
 
 /**
  * This interface defines an extended context that
@@ -80,4 +83,17 @@ public interface ExtendedWebContext {
 	 * or null if not found.
 	 */
 	public InputStream getResourceAsStream(String uri);
+
+	/** Returns the servlet context.
+	 */
+	public ServletContext getServletContext();
+	/** Returns the locator of this context used to locate resorces.
+	 */
+	public Locator getLocator();
+	/** Tests whether to compress the specified extension, e.g, "js" and
+	 * "css".
+	 *
+	 * <p>It returns false if the request is included by other Serlets.
+	 */
+	public boolean shallCompress(ServletRequest request, String ext);
 }

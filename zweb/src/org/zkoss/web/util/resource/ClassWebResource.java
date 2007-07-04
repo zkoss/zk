@@ -19,12 +19,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.util.resource;
 
 import java.util.Map;
+import java.util.HashMap;
 import java.net.URL;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ByteArrayInputStream;
-import java.io.Writer;
-import java.io.StringWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -38,22 +35,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.D;
-import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
-import org.zkoss.util.resource.ResourceCache;
-import org.zkoss.util.resource.Loader;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.Encodes;
-import org.zkoss.web.servlet.dsp.Interpreter;
-import org.zkoss.web.servlet.dsp.Interpretation;
-import org.zkoss.web.servlet.dsp.ServletDSPContext;
 
 /**
  * Used to access resouces located in class path and under /web.
@@ -80,9 +71,10 @@ public class ClassWebResource {
 	private final ServletContext _ctx;
 	private final String _mappingURI;
 	private final ClassWebContext _cwc;
-	private final ResourceCache _dspCache;
 	/** An array of extensions that have to be compressed (with gzip). */
 	private String[] _compressExts;
+	/** Map(String ext, Resourcelet). */
+	private final Map _reslets = new HashMap(5);
 
 	/** The prefix of path of web resources ("/web"). */
 	public static final String PATH_PREFIX = "/web";
@@ -125,25 +117,78 @@ public class ClassWebResource {
 		_ctx = ctx;
 		_mappingURI = mappingURI;
 		_cwc = new ClassWebContext();
-		_dspCache = new ResourceCache(new DSPLoader(_cwc), 131);
-		_dspCache.setMaxSize(1000).setLifetime(60*60*1000); //1hr
-		_dspCache.setCheckPeriod(60*60*1000); //1hr
+		addResourcelet("dsp", new DSPResourcelet());
 	}
 	/** Process the request.
+	 * @since 2.4.1
 	 */
-	public void doGet(HttpServletRequest request,
+	public void service(HttpServletRequest request,
 	HttpServletResponse response)
 	throws ServletException, IOException {
 		final Object old = Charsets.setup(request, response, "UTF-8");
 		try {
 			final String pi = Https.getThisPathInfo(request);
-			//if (D.ON && log.debugable()) log.debug("Path info: "+pi);
+//			if (D.ON && log.debugable()) log.debug("Path info: "+pi);
 			if (pi != null)
 				web(request, response, pi.substring(PATH_PREFIX.length()));
 		} finally {
 			Charsets.cleanup(request, old);
 		}
 	}
+
+	/** Returns the resource processor of the specified extension, or null
+	 * if not associated yet.
+	 *
+	 * @param ext the extension, e.g, "js" and "css".
+	 * @return the resource processor, or null if not associated yet.
+	 * @since 2.4.1
+	 */
+	public Resourcelet getResourcelet(String ext) {
+		if (ext == null)
+			return null;
+
+		ext = ext.toLowerCase();
+		synchronized (_reslets) {
+			return (Resourcelet)_reslets.get(ext);
+		}
+	}
+	/** Adds a resource processor ({@link Resourcelet}) to process
+	 * the resource of the specified extension.
+	 *
+	 * @param ext the extension, e.g, "js" and "css".
+	 * @param reslet the resouce processor
+	 * @return the previous resource processor, or null if not associated
+	 * before.
+	 * @since 2.4.1
+	 */
+	public Resourcelet addResourcelet(String ext, Resourcelet reslet) {
+		if (ext == null || reslet == null)
+			throw new IllegalArgumentException("null");
+
+		reslet.init(_cwc);
+
+		ext = ext.toLowerCase();
+		synchronized (_reslets) {
+			return (Resourcelet)_reslets.put(ext, reslet);
+		}
+	}
+	/** Removes the resource processor for the specified extension.
+	 *
+	 * @param ext the extension, e.g, "js" and "css".
+	 * @return the previous resource processor, or null if no resource
+	 * processor was associated with the specified extension.
+	 * @since 2.4.1
+	 */
+	public Resourcelet removeResourcelet(String ext) {
+		if (ext == null)
+			return null;
+
+		ext = ext.toLowerCase();
+		synchronized (_reslets) {
+			return (Resourcelet)_reslets.remove(ext);
+		}
+	}
+
 	/** Sets the extension that shall be compressed if the browser
 	 * supports the compression encoding (accept-encoding).
 	 *
@@ -210,44 +255,18 @@ public class ClassWebResource {
 
 		final String ext = getExtension(pi);
 		if (ext != null) {
-			if ("dsp".equals(ext)) {
-				final Interpretation cnt =
-					(Interpretation)_dspCache.get(pi);
-				if (cnt == null) {
-					if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+pi);
-						//It might be eaten, so log the error
-					response.sendError(response.SC_NOT_FOUND, pi);
-					return;
-				}
-
-				final String ext2 = get2ndExtension(pi);
-				StringWriter sw = shallCompress(request, ext2) ?
-					new StringWriter(4096): null;
-				cnt.interpret(new ServletDSPContext(
-					_ctx, request, response, sw, _cwc.getLocator()));
-				if (jsextra != null)
-					(sw != null ? (Writer)sw: response.getWriter()).write(jsextra);
-				if (sw != null) {
-					byte[] bs = sw.toString().getBytes("UTF-8");
-					sw = null; //free
-					byte[] data = Https.gzip(request, response, null, bs);
-					if (data == null) //browser doesn't support compress
-						data = bs;
-					else
-						bs = null; //free
-
-					response.setContentLength(data.length);
-					response.getOutputStream().write(data);
-					response.flushBuffer();
-				}
-				return; //done
+			//Invoke the resource processor (Resourcelet)
+			final Resourcelet reslet = getResourcelet(ext);
+			if (reslet != null) {
+				reslet.service(request, response, pi, jsextra);
+				return;
 			}
 
 			if (!Servlets.isIncluded(request)) {				
 				final String ctype = ContentTypes.getContentType(ext);
 				if (ctype != null)
 					response.setContentType(ctype);
-				if (D.ON && log.debugable()) log.debug("Content type: "+ctype+" for "+pi);
+//				if (D.ON && log.debugable()) log.debug("Content type: "+ctype+" for "+pi);
 			}
 		}
 
@@ -268,7 +287,7 @@ public class ClassWebResource {
 			}
 		} else {
 			//Note: don't compress images
-			data =  shallCompress(request, ext) ?
+			data = shallCompress(request, ext) ?
 				Https.gzip(request, response, is, extra): null;
 			if (data != null) extra = null; //extra is compressed and output
 			else data = Files.readAll(is);
@@ -303,89 +322,40 @@ public class ClassWebResource {
 		j = ext.indexOf(';');
 		return j >= 0 ? ext.substring(0, j).toLowerCase(): ext.toLowerCase();
 	}
-	/** Returns the second extension. For example, js in xx.js.dsp.
-	 */
-	private static final String get2ndExtension(String pi) {
-		int j = pi.lastIndexOf('.');
-		if (j < 0 || pi.indexOf('/', j + 1) >= 0)
-			return null;
-
-		int k = j > 0 ? pi.lastIndexOf('.', j - 1): -1;
-		if (k < 0 || pi.indexOf('/', k + 1) >= 0)
-			return null;
-		return pi.substring(k + 1, j).toLowerCase();
-	}
-
-	private static class DSPLoader implements Loader {
-		private final ClassWebContext _cwc;
-		private DSPLoader(ClassWebContext cwc) {
-			_cwc = cwc;
-		}
-
-		//-- super --//
-		public boolean shallCheck(Object src, long expiredMillis) {
-			return expiredMillis > 0;
-		}
-		/** Returns the last modified time.
-		 */
-		public long getLastModified(Object src) {
-			return 1; //any value (because it is packed in jar)
-		}
-		public Object load(Object src) throws Exception {
-			if (D.ON && log.debugable()) log.debug("Parse "+src);
-			final String path = (String)src;
-			final InputStream is = getResourceAsStream(path);
-			if (is == null)
-				return null;
-			try {
-				return parse0(is, Interpreter.getContentType(path));
-			} catch (Exception ex) {
-				if (log.debugable())
-					log.realCauseBriefly("Failed to parse "+path, ex);
-				else
-					log.error("Failed to parse "+path
-					+"\nCause: "+ex.getClass().getName()+" "+Exceptions.getMessage(ex)
-					+"\n"+Exceptions.getBriefStackTrace(ex));
-				return null; //as non-existent
-			}
-		}
-		private Object parse0(InputStream is, String ctype) throws Exception {
-			if (is == null) return null;
-
-			final String content =
-				Files.readAll(new InputStreamReader(is, "UTF-8"))
-				.toString();
-			return new Interpreter()
-				.parse(content, ctype, null, _cwc.getLocator());
-		}
-	}
 
 	/**
 	 * An implementation of ExtendedWebContext to load resources from
 	 * the class path rooted at /web.
 	 */
 	private class ClassWebContext implements ExtendedWebContext {
-		/** Returns the locator for this {@link ClassWebContext}. */
-		public Locator getLocator() {
-			return new Locator() {
-				public String getDirectory() {
-					return null;
-				}
-				public URL getResource(String name) {
-					return ClassWebResource.getResource(name);
-				}
-				public InputStream getResourceAsStream(String name) {
-					return ClassWebResource.getResourceAsStream(name);
-				}
-			};
-		}
-	
+		private final Locator _locator = new Locator() {
+			public String getDirectory() {
+				return null;
+			}
+			public URL getResource(String name) {
+				return ClassWebResource.getResource(name);
+			}
+			public InputStream getResourceAsStream(String name) {
+				return ClassWebResource.getResourceAsStream(name);
+			}
+		};
+
 		/** Returns the associated class web resource. */
 		public ClassWebResource getClassWebResource() {
 			return ClassWebResource.this;
 		}
 
 		//-- ExtendedWebContext --//
+		public ServletContext getServletContext() {
+			return _ctx;
+		}
+		public Locator getLocator() {
+			return _locator;
+		}
+		public boolean shallCompress(ServletRequest request, String ext) {
+			return ClassWebResource.this.shallCompress(request, ext);
+		}
+	
 		public String encodeURL(ServletRequest request,
 		ServletResponse response, String uri)
 		throws ServletException, UnsupportedEncodingException {
@@ -424,7 +394,7 @@ public class ClassWebResource {
 				_mappingURI + PATH_PREFIX + uri, params, mode);
 		}
 		public RequestDispatcher getRequestDispatcher(String uri) {
-			if (D.ON && log.debugable()) log.debug("getRequestDispatcher: "+uri);
+//			if (D.ON && log.debugable()) log.debug("getRequestDispatcher: "+uri);
 			return _ctx.getRequestDispatcher(_mappingURI + PATH_PREFIX + uri);
 		}
 		public URL getResource(String uri) {
