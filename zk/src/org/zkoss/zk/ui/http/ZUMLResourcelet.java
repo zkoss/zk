@@ -130,16 +130,10 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
 
 		if (compress) {
-			byte[] bs = ((StringWriter)out).toString().getBytes("UTF-8");
-			byte[] data;
-			if (bs.length > 200) {
-				data = Https.gzip(request, response, null, bs);
-				if (data == null) //browser doesn't support compress
-					data = bs;
-				else
-					bs = null; //free it
-			} else {
-				data = bs;
+			byte[] data = ((StringWriter)out).toString().getBytes("UTF-8");
+			if (data.length > 200) {
+				byte[] bs = Https.gzip(request, response, null, data);
+				if (bs != null) data = bs; //yes, browser support compress
 			}
 
 			response.setContentLength(data.length);

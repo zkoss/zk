@@ -260,16 +260,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		out.write("\n</rs>");
 
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
-		byte[] bs = out.toString().getBytes("UTF-8");
-		byte[] data;
-		if (bs.length > 200) {
-			data = Https.gzip(request, response, null, bs);
-			if (data == null) //browser doesn't support compress
-				data = bs;
-			else
-				bs = null; //free it
-		} else {
-			data = bs;
+		byte[] data = out.toString().getBytes("UTF-8");
+		if (data.length > 200) {
+			byte[] bs = Https.gzip(request, response, null, data);
+			if (bs != null) data = bs; //yes, browser support compress
 		}
 
 		response.setContentType("text/xml;charset=UTF-8");

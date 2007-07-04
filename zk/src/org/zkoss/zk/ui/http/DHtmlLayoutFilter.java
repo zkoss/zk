@@ -33,7 +33,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.HttpBufferedResponse;
+import org.zkoss.web.servlet.http.Https;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
@@ -67,6 +69,7 @@ public class DHtmlLayoutFilter implements Filter {
 	private ServletContext _ctx;
 	private String _ext = "html";
 	private String _charset = "UTF-8";
+	private boolean _compress = true;
 
 	private void process(HttpServletRequest request,
 	HttpServletResponse response, String content)
@@ -100,9 +103,16 @@ public class DHtmlLayoutFilter implements Filter {
 			String cs = response.getCharacterEncoding();
 			if (cs == null || cs.length() == 0)
 				cs = _charset != null ? _charset: "UTF-8";
-			final byte[] bs = out.toString().getBytes(cs);
-			response.setContentLength(bs.length);
-			response.getOutputStream().write(bs);
+
+			byte[] data = out.toString().getBytes(cs);
+			if (_compress && !Servlets.isIncluded(request)
+			&& data.length > 200) {
+				byte[] bs = Https.gzip(request, response, null, data);
+				if (bs != null) data = bs; //yes, browser support compress
+			}
+
+			response.setContentLength(data.length);
+			response.getOutputStream().write(data);
 		} catch (UiException ex) {
 			log.error("Failed to process:\n"+content);
 			throw ex;
@@ -167,12 +177,16 @@ public class DHtmlLayoutFilter implements Filter {
 	public final void init(FilterConfig config) throws ServletException {
 		_ctx = config.getServletContext();
 
-		final String ext = config.getInitParameter("extension");
-		if (ext != null && ext.length() > 0)
-			_ext = ext;
+		String param = config.getInitParameter("extension");
+		if (param != null && param.length() > 0)
+			_ext = param;
 
-		final String cs = config.getInitParameter("charset");
-		if (cs != null)
-			_charset = cs.length() > 0 ? cs: null;
+		param = config.getInitParameter("charset");
+		if (param != null)
+			_charset = param.length() > 0 ? param: null;
+
+		param = config.getInitParameter("compress");
+		if (param != null)
+			_compress = "true".equals(param);
 	}
 }
