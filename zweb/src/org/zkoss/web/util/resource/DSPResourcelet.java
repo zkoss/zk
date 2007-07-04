@@ -82,13 +82,12 @@ import org.zkoss.web.servlet.dsp.ServletDSPContext;
 		if (extra != null)
 			(sw != null ? (Writer)sw: response.getWriter()).write(extra);
 		if (sw != null) {
-			byte[] bs = sw.toString().getBytes("UTF-8");
+			byte[] data = sw.toString().getBytes("UTF-8");
 			sw = null; //free
-			byte[] data = Https.gzip(request, response, null, bs);
-			if (data == null) //browser doesn't support compress
-				data = bs;
-			else
-				bs = null; //free
+			if (data.length > 200) {
+				byte[] bs = Https.gzip(request, response, null, data);
+				if (bs != null) data = bs; //yes, browser support compress
+			}
 
 			response.setContentLength(data.length);
 			response.getOutputStream().write(data);
