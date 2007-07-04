@@ -97,6 +97,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 			<param-name>extension</param-name>
 			<param-value>html</param-value>
 		</init-param>
+		<init-param>
+			<param-name>compress</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>zkFilter</filter-name>
