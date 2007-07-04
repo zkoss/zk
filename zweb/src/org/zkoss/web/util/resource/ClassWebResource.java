@@ -230,11 +230,11 @@ public class ClassWebResource {
 				if (sw != null) {
 					byte[] bs = sw.toString().getBytes("UTF-8");
 					sw = null; //free
-					byte[] data = Https.gzip(request, response,
-						new ByteArrayInputStream(bs), null, null);
+					byte[] data = Https.gzip(request, response, null, bs);
 					if (data == null) //browser doesn't support compress
 						data = bs;
-					bs = null; //free
+					else
+						bs = null; //free
 
 					response.setContentLength(data.length);
 					response.getOutputStream().write(data);
@@ -269,10 +269,7 @@ public class ClassWebResource {
 		} else {
 			//Note: don't compress images
 			data =  shallCompress(request, ext) ?
-				Https.gzip(request, response, is,
-					extra != null ?
-						new ByteArrayInputStream(extra): null, null):
-				null;
+				Https.gzip(request, response, is, extra): null;
 			if (data != null) extra = null; //extra is compressed and output
 			else data = Files.readAll(is);
 				//since what is embedded in the jar is not big, so load completely

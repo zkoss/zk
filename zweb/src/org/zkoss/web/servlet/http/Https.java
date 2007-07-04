@@ -45,7 +45,7 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ExtendedWebContext;
 
 /**
- * The utilities relevant to servlets.
+ * The Servlet-related utilities.
  *
  * @author tomyeh
  */
@@ -56,14 +56,16 @@ public class Https extends Servlets {
 	 * if the browser doesn't support the compression (accept-encoding).
 	 *
 	 * @param content1 the first part of the content to compress; null to ignore.
+	 * If you have multiple input streams, use java.io.SequenceInputStream
+	 * to concatenate them
 	 * @param content2 the second part of the content to compress; null to ignore.
-	 * @param content3 the third part of the content to compress; null to ignore.
-	 * @return null if the browser doesn't support the compression.
+	 * @return the compressed result in an byte array,
+	 * null if the browser doesn't support the compression.
 	 * @since 2.4.1
 	 */
 	public static final byte[] gzip(HttpServletRequest request,
-	HttpServletResponse response, InputStream content1, InputStream content2,
-	InputStream content3) throws IOException {
+	HttpServletResponse response, InputStream content1,
+	byte[] content2) throws IOException {
 		String ae = request.getHeader("accept-encoding");
 		if (ae != null) {
 			if (ae.indexOf("gzip") >= 0) {
@@ -71,8 +73,7 @@ public class Https extends Servlets {
 				final ByteArrayOutputStream boas = new ByteArrayOutputStream(8192);
 				final GZIPOutputStream gzs = new GZIPOutputStream(boas);
 				if (content1 != null) Files.copy(gzs, content1);
-				if (content2 != null) Files.copy(gzs, content2);
-				if (content3 != null) Files.copy(gzs, content3);
+				if (content2 != null) gzs.write(content2);
 				gzs.finish();
 				return boas.toByteArray();
 //			} else if (ae.indexOf("deflate") >= 0) {
