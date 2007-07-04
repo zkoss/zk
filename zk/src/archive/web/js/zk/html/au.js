@@ -166,7 +166,7 @@ zkau._onRespReady = function () {
 			if (req.status == 200) {
 				var sid = req.responseXML.getElementsByTagName("sid");
 				if (sid && sid.length) {
-					sid = parseInt(zk.getElementValue(sid[0]));
+					sid = $int(zk.getElementValue(sid[0]));
 					if (isNaN(sid) || sid < 0 || sid > 1024) sid = null; //ignore if error sid
 				} else
 					sid = null;
@@ -683,7 +683,7 @@ zkau.fixZIndex = function (cmp, silent, autoz) {
 	if (!zkau._popups.length && !zkau._overlaps.length && !zkau._modals.length)
 		zkau.topZIndex = 0; //reset it!
 
-	var zi = parseInt(cmp.style.zIndex || "0");
+	var zi = $int(cmp.style.zIndex);
 	if (zi > zkau.topZIndex) {
 		zkau.topZIndex = zi;
 	} else if (!autoz || zi < zkau.topZIndex) {

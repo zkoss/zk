@@ -48,7 +48,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "6M"; //increase this if we want the browser to reload JavaScript
+zk.build = "6N"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -358,6 +358,11 @@ function $parentByTag(el, tagName) {
 function $visible(el) {
 	return el && el.style && el.style.display != "none";
 }
+
+/** Converts to an integer. It handles null and "07" */
+function $int(v, b) {
+	return parseInt(v || "0", b || 10);
+};
 
 /** Returns the ZK attribute of the specified name.
  * Note: the name space of ZK attributes is "http://www.zkoss.org/2005/zk"

@@ -310,8 +310,8 @@ if (zk.opera || !options.z_dragdrop) //Tom M. Yeh, Potix: Bug 1534426, 1535787 (
   
   currentDelta: function() {
     return([
-      parseInt(Element.getStyle(this.element,'left') || '0'),
-      parseInt(Element.getStyle(this.element,'top') || '0')]);
+      $int(Element.getStyle(this.element,'left')),
+      $int(Element.getStyle(this.element,'top'))]);
   },
   
   initDrag: function(event) {
@@ -365,7 +365,7 @@ if (this.z_orgpos != 'absolute')
     }
     
     if(this.options.zindex) { //Tom M. Yeh, Poitx: after ghosting
-      this.originalZ = parseInt(Element.getStyle(this.element,'z-index') || 0);
+      this.originalZ = $int(Element.getStyle(this.element,'z-index'));
       this.element.style.zIndex = this.options.zindex;
     }
     
