@@ -13,6 +13,7 @@ ZK 2.4.1
   1743271: Generic way to handle ThreadLocal variables issue
   1743288: Make button icon of comobox/bandbox configurable
   1744550: Interpreter support namespace-based method retrieval
+  1736887: Unnecessary .js files and reducing zk pages loading time
 
 * Bugs:
   1734801: toolbarbutton/button popup broken in 2.4.0
