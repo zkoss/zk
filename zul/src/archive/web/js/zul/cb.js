@@ -53,7 +53,7 @@ zkCmbox.onVisi = zkCmbox._fixbtn = function (cmp) {
 	//note: isRealVisible handles null argument
 	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
 		if (!inp.offsetHeight || !btn.offsetHeight) {
-			setTimeout("zkCmbox._fixbtn($e('" + cmp.id +"'))", 20);
+			setTimeout("zkCmbox._fixbtn($e('" + cmp.id +"'))", 100);
 			return;
 		}
 
