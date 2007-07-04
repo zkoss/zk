@@ -42,6 +42,17 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 			<param-name>update-uri</param-name>
 			<param-value>/zkau</param-value>
 		</init-param>
+		<!-- Optional. Specifies whether to compress the output
+		of the ZK loader. It speeds up the transmission over slow Internet.
+		However, if you configure a filter to post-processing the
+		output, you might have to disable it.
+
+		Default: true
+		<init-param>
+			<param-name>compress</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		-->
 		<!-- Optional. Specifies the default log level: OFF, ERROR, WARNING,
 			INFO, DEBUG and FINER. If not specified, the system default is used.
 		<init-param>
