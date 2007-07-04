@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -128,6 +129,21 @@ public class WebManager {
 				} catch (Throwable ex) {
 					log.realCause(ex);
 				}
+			}
+		}
+
+		//Register resource processors for each extension
+		//FUTURE: Add more Resourcelet from zk.xml
+		ZUMLResourcelet reslet = null;
+		for (Iterator it = LanguageDefinition.getAll().iterator();
+		it.hasNext();) {
+			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+			final List exts = langdef.getExtensions();
+			if (!exts.isEmpty()) {
+				if (reslet == null)
+					reslet = new ZUMLResourcelet();
+				_cwr.addResourcelet((String)exts.get(0), reslet);
+				//Add to the first extension only (the main one)
 			}
 		}
 	}

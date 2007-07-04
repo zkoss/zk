@@ -78,6 +78,8 @@ public class LanguageDefinition {
 	private final String _name;
 	/** The name space. */
 	private final String _ns;
+	/** The extensions supported by this language definition. */
+	private List _exts;
 	/** The component map. */
 	private final ComponentDefinitionMap _compdefs;
 	/** The component name for dynamic tags. */
@@ -173,6 +175,7 @@ public class LanguageDefinition {
 	 *
 	 * @param deviceType the device type, e.g., "ajax".
 	 * @see #getDeviceType
+	 * @see #getAll
 	 */
 	public static final List getByDeviceType(String deviceType) {
 		init();
@@ -183,6 +186,24 @@ public class LanguageDefinition {
 		}
 		return ldefs != null ? ldefs: Collections.EMPTY_LIST;
 
+	}
+	/** Returns a readonly list of all language definitions
+	 * regardless of the device type.
+	 *
+	 * @see #getByDeviceType
+	 * @since 2.4.1
+	 */
+	public static final List getAll() {
+		init();
+
+		final List list = new LinkedList();
+		synchronized (_ldefsByClient) {
+			for (Iterator it = _ldefsByClient.values().iterator();
+			it.hasNext();) {
+				list.addAll((List)it.next());
+			}
+		}
+		return list;
 	}
 	/** Returns a readonly collection of all device types.
 	 * @see #getByDeviceType
@@ -289,7 +310,11 @@ public class LanguageDefinition {
 						log.warning("Extension "+ext+", overriden by "+this);
 				}
 			}
+			_exts = Collections.unmodifiableList(extensions);
+		} else {
+			_exts = Collections.EMPTY_LIST;
 		}
+
 		synchronized (_ldefsByClient) {
 			List ldefs = (List)_ldefsByClient.get(deviceType);
 			if (ldefs == null)
@@ -320,6 +345,13 @@ public class LanguageDefinition {
 	 */
 	public String getNamespace() {
 		return _ns;
+	}
+	/** Returns the readonly list of extensions that this language definition
+	 * is associated with (never null).
+	 * @since 2.4.1
+	 */
+	public List getExtensions() {
+		return _exts;
 	}
 	/** Returns the map of components defined in this language (never null).
 	 */

@@ -97,7 +97,7 @@ public class Parser {
 		//if (log.debugable()) log.debug("Parsing "+file);
 		final PageDefinition pgdef =
 			parse(new SAXBuilder(true, false, true).build(file),
-				getExtension(file.getName()));
+				Servlets.getExtension(file.getName()));
 		pgdef.setRequestPath(path);
 		return pgdef;
 	}
@@ -111,26 +111,11 @@ public class Parser {
 		//if (log.debugable()) log.debug("Parsing "+url);
 		final PageDefinition pgdef =
 			parse(new SAXBuilder(true, false, true).build(url),
-				getExtension(url.toExternalForm()));
+				Servlets.getExtension(url.toExternalForm()));
 		pgdef.setRequestPath(path);
 		return pgdef;
 	}
 
-	private static final String getExtension(String nm) {
-		int j = nm == null ? -1: nm.lastIndexOf('.');
-		if (j < 0 || j < nm.lastIndexOf('/'))
-			return null;
-
-		final StringBuffer sb = new StringBuffer(8);
-		for (final int len = nm.length(); ++j < len;) {
-			final char cc = nm.charAt(j);
-			if ((cc < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z')
-			&& (cc < '0' || cc > '9'))
-				break;
-			sb.append(cc);
-		}
-		return sb.toString();
-	}
 	/** Parses from the specified reader.
 	 *
 	 * @param extension the default extension if doc (of reader) doesn't specify

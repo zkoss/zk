@@ -38,11 +38,9 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
-import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -122,7 +120,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final boolean bRichlet = path != null && path.length() > 0;
 		if (!bRichlet)
 			path = Https.getThisServletPath(request);
-		if (D.ON && log.finerable()) log.finer("Creates from "+path);
+//		if (D.ON && log.finerable()) log.finer("Creates from "+path);
 
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		final Object old = I18Ns.setup(sess, request, response,
@@ -151,7 +149,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	HttpServletRequest request, HttpServletResponse response, String path,
 	boolean bRichlet)
 	throws ServletException, IOException {
-		final WebApp wapp = _webman.getWebApp();
+		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 
 		final Desktop desktop = _webman.getDesktop(sess, request, path, true);
@@ -182,8 +180,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			final Execution exec = new ExecutionImpl(
 				_ctx, request, response, desktop, page);
 			out = compress ? (Writer)new StringWriter(): response.getWriter();
-			wappc.getUiEngine()
-				.execNewPage(exec, pagedef, page, out);
+			wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
 		}
 
 		if (compress) {
@@ -212,51 +209,28 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	private void handleError(Session sess, HttpServletRequest request,
 	HttpServletResponse response, String path, Throwable err)
 	throws ServletException, IOException {
-		if (Servlets.isIncluded(request)) {
-			final String msg;
-			if (err != null) {
+		if (err != null && Servlets.isIncluded(request)) {
 			//Bug 1714094: we have to handle err, because Web container
 			//didn't allow developer to intercept errors caused by inclusion
-				final String errpg = sess.getWebApp().getConfiguration()
-					.getErrorPage(sess.getDeviceType(), err);
-				if (errpg != null) {
-					try {
-						request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
-						request.setAttribute("javax.servlet.error.exception", err);
-						request.setAttribute("javax.servlet.error.exception_type", err.getClass());
-						request.setAttribute("javax.servlet.error.status_code", new Integer(500));
-						if (process(sess, request, response, errpg, false))
-							return; //done
-						log.warning("The error page not found: "+errpg);
-					} catch (IOException ex) { //eat it (connection off)
-					} catch (Throwable ex) {
-						log.warning("Failed to load the error page: "+errpg, ex);
-					}
+			final String errpg = sess.getWebApp().getConfiguration()
+				.getErrorPage(sess.getDeviceType(), err);
+			if (errpg != null) {
+				try {
+					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
+					request.setAttribute("javax.servlet.error.exception", err);
+					request.setAttribute("javax.servlet.error.exception_type", err.getClass());
+					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
+					if (process(sess, request, response, errpg, false))
+						return; //done
+
+					log.warning("The error page not found: "+errpg);
+				} catch (IOException ex) { //eat it (connection off)
+				} catch (Throwable ex) {
+					log.warning("Failed to load the error page: "+errpg, ex);
 				}
-
-				msg = Messages.get(MZk.PAGE_FAILED,
-					new Object[] {path, Exceptions.getMessage(err),
-						Exceptions.formatStackTrace(null, err, null, 6)});
-			} else {
-				msg = Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path});
 			}
-
-			final Map attrs = new HashMap();
-			attrs.put(Attributes.ALERT_TYPE, "error");
-			attrs.put(Attributes.ALERT, msg);
-			Servlets.include(_ctx, request, response,
-				"~./html/alert.dsp", attrs, Servlets.PASS_THRU_ATTR);
-		} else {
-			//If not included, let the Web container handle it
-			if (err != null) {
-				if (err instanceof ServletException)
-					throw (ServletException)err;
-				else if (err instanceof IOException)
-					throw (IOException)err;
-				else
-					throw UiException.Aide.wrap(err);
-			}
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
 		}
+
+		Utils.handleError(_ctx, request, response, path, err);
 	}
 }

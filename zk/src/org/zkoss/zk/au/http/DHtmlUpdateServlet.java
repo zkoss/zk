@@ -93,12 +93,21 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	protected long getLastModified(HttpServletRequest request) {
 		final String pi = Https.getThisPathInfo(request);
 		if (pi != null && pi.startsWith(ClassWebResource.PATH_PREFIX)
-		&& !pi.endsWith(".dsp") && !Servlets.isIncluded(request)) {
-			if (_lastModified == 0) _lastModified = new Date().getTime();
-				//Hard to know when it is modified, so cheat it..
-			return _lastModified;
+		&& !Servlets.isIncluded(request)) {
+			//If a resource processor is registered for the extension,
+			//we assume the content is dynamic
+			final String ext = Servlets.getExtension(pi);
+			if (ext == null
+			|| getClassWebResource().getResourcelet(ext) == null) {
+				if (_lastModified == 0) _lastModified = new Date().getTime();
+					//Hard to know when it is modified, so cheat it..
+				return _lastModified;
+			}
 		}
 		return -1;
+	}
+	private ClassWebResource getClassWebResource() {
+		return WebManager.getWebManager(_ctx).getClassWebResource();
 	}
 	protected
 	void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -110,8 +119,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			if (pi != null && pi.length() != 0) {
 				//if (log.finerable()) log.finer("Path info: "+pi);
 				if (pi.startsWith(ClassWebResource.PATH_PREFIX)) {
-					WebManager.getWebManager(_ctx).
-						getClassWebResource().service(request, response);
+					getClassWebResource().service(request, response);
 				} else if (pi.startsWith("/upload")) {
 					Uploads.process(sess, _ctx, request, response);
 				} else if (pi.startsWith("/view")) {
