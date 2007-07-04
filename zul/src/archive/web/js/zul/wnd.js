@@ -207,7 +207,7 @@ zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
 				ofsy = cmp.offsetHeight;
 				h = 0;
 			}
-			t = parseInt(cmp.style.top || "0") + ofsy;
+			t = $int(cmp.style.top) + ofsy;
 		}
 		if (dir >= 4 && dir <= 6) {
 			h += ofsy;
@@ -221,7 +221,7 @@ zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
 				ofsx = cmp.offsetWidth;
 				w = 0;
 			}
-			l = parseInt(cmp.style.left || "0") + ofsx;
+			l = $int(cmp.style.left) + ofsx;
 		}
 		if (dir >= 2 && dir <= 4) {
 			w += ofsx;

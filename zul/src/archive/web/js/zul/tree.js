@@ -390,8 +390,8 @@ zkTrow._onpg = function (index, evt) {
 
 	zkau.send({uuid: getZKAttr(n, "tchsib"), cmd: "onPaging",
 		data: [index == -9 ? 0:
-			index == 9 ? parseInt(getZKAttr(n, "pgc")) - 1:
-			parseInt(getZKAttr(n, "pgi")) + index]});
+			index == 9 ? $int(getZKAttr(n, "pgc")) - 1:
+			$int(getZKAttr(n, "pgi")) + index]});
 };
 /** Zoom in or out
  * @param index -1: zoom out, 1: zoom in
@@ -401,7 +401,7 @@ zkTrow._onzoom = function (index, evt) {
 	var n = $outer(Event.element(evt).parentNode);
 
 	zkau.send({uuid: getZKAttr(n, "tchsib"), cmd: "onPageSize",
-		data: [parseInt(getZKAttr(n, "pgsz")) + index]});
+		data: [$int(getZKAttr(n, "pgsz")) + index]});
 };
 /** Returns the last direct child.
  * It returns itself if there is no child at all.

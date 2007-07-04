@@ -194,7 +194,7 @@ zkSplt._dragging = function (drag) {
 zkSplt._adj = function (n, fd, diff) {
 	zkSplt._adjSplt(n, fd, diff);
 	if (n) {
-		var val = parseInt(n.style[fd] || "0") + diff;
+		var val = $int(n.style[fd]) + diff;
 		n.style[fd] = (val > 0 ? val: 0) + "px";
 
 		zk.onSizeAt(n); //notify descendants
@@ -205,7 +205,7 @@ zkSplt._adjSplt = function (n, fd, diff) {
 	if ($type(n) == "Splt") {
 		var vert = getZKAttr(n, "vert") != null;
 		if (vert != (fd == "height")) {
-			var val = parseInt(n.style[fd] || "0") + diff;
+			var val = $int(n.style[fd]) + diff;
 			n.style[fd] = (val > 0 ? val: 0) + "px";
 			//No need to call zk.onSizeAt(n) since it is handled above
 		}

@@ -151,7 +151,7 @@ zkTxbox.onkey = function (evt) {
 	var inp = Event.element(evt);
 	var maxlen = getZKAttr(inp, "maxlen");
 	if (maxlen) {
-		maxlen = parseInt(maxlen);
+		maxlen = $int(maxlen);
 		if (maxlen > 0 && inp.value != inp.defaultValue
 		&& inp.value.length > maxlen)
 			inp.value = inp.value.substring(0, maxlen);
@@ -191,7 +191,7 @@ zkTxbox.setAttr = function (cmp, nm, val) {
 		}
 
 		var ary = val.split(",");
-		var start = parseInt(ary[0]), end = parseInt(ary[1]),
+		var start = $int(ary[0]), end = $int(ary[1]),
 			len = inp.value.length;
 		if (start < 0) start = 0;
 		if (start > len) start = len;
@@ -343,7 +343,7 @@ zkGrbox.init = zkGrbox._fixHgh = function (cmp) {
 		//if no border-bottom, hide the shadow
 		var sdw = $(cmp.id + "!sdw");
 		if (sdw) {
-			var w = parseInt(Element.getStyle(n, "border-bottom-width")||"0");
+			var w = $int(Element.getStyle(n, "border-bottom-width"));
 			sdw.style.display = w ? "": "none";
 		}
 	}
@@ -572,7 +572,7 @@ zkPMeter = {};
 zkPMeter.init = function (cmp) {
 	var img = $e(cmp.id + "!img");
 	if (img) {
-		var val = parseInt(getZKAttr(cmp, "value") || "0");
+		var val = $int(getZKAttr(cmp, "value"));
 		img.style.width = Math.round((cmp.clientWidth * val) / 100) + "px";
 	}
 };

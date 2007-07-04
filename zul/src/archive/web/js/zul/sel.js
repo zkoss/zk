@@ -354,7 +354,7 @@ zk.Selectable.prototype = {
 	/** Returns # of rows allowed. */
 	size: function () {
 		var sz = getZKAttr(this.element, "size");
-		return sz ? parseInt(sz): 0;
+		return sz ? $int(sz): 0;
 	},
 	/** Returns the real # of rows (aka., real size). */
 	realsize: function (v) {
@@ -364,7 +364,7 @@ zk.Selectable.prototype = {
 			var sz = this.size();
 			if (sz) return sz;
 			sz = this.element.getAttribute("zk_realsize");
-			return sz ? parseInt(sz): 0;
+			return sz ? $int(sz): 0;
 		}
 	},
 
@@ -736,7 +736,7 @@ zk.Selectable.prototype = {
 
 		var hgh = this.element.style.height;
 		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
-			hgh = parseInt(hgh);
+			hgh = $int(hgh);
 			if (hgh) {
 				hgh -= this._headHgh(0);
 				if (hgh < 20) hgh = 20;
@@ -824,10 +824,10 @@ zk.Selectable.prototype = {
 	 */
 	_vflexSize: function () {
 		var diff = document.body.offsetHeight - zk.innerHeight()
-				+ parseInt(Element.getStyle(document.body, "margin-top")||"0")
-				+ parseInt(Element.getStyle(document.body, "margin-bottom")||"0")
-				+ parseInt(Element.getStyle(document.body, "padding-top")||"0")
-				+ parseInt(Element.getStyle(document.body, "padding-bottom")||"0");
+				+ $int(Element.getStyle(document.body, "margin-top"))
+				+ $int(Element.getStyle(document.body, "margin-bottom"))
+				+ $int(Element.getStyle(document.body, "padding-top"))
+				+ $int(Element.getStyle(document.body, "padding-bottom"));
 		if (zk.ie) ++diff; //strange, but...
 
 		//check whether TD

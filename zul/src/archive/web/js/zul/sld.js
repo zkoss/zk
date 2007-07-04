@@ -128,10 +128,10 @@ zk.Slider.prototype = {
 		return pos >= 0 ? pos: 0;
 	},
 	_curpos: function () {
-		return parseInt(getZKAttr(this.element, "curpos"));
+		return $int(getZKAttr(this.element, "curpos"));
 	},
 	_maxpos: function () {
-		return parseInt(getZKAttr(this.element, "maxpos"))
+		return $int(getZKAttr(this.element, "maxpos"))
 	},
 	/** Returns the slider's real width. */
 	_width: function () {
