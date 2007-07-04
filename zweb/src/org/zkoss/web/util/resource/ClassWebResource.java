@@ -250,7 +250,7 @@ public class ClassWebResource {
 			}
 		}
 
-		final String ext = getExtension(pi);
+		final String ext = Servlets.getExtension(pi);
 		if (ext != null) {
 			//Invoke the resource processor (Resourcelet)
 			final Resourcelet reslet = getResourcelet(ext);
@@ -307,17 +307,6 @@ public class ClassWebResource {
 				if (ext.equals(_compressExts[j]))
 					return true;
 		return false;
-	}
-
-	/** Returns the file extension of the specified path info. */
-	private static final String getExtension(String pi) {
-		int j = pi.lastIndexOf('.');
-		if (j < 0 || pi.indexOf('/', j + 1) >= 0)
-			return null;
-
-		final String ext = pi.substring(j + 1);
-		j = ext.indexOf(';');
-		return j >= 0 ? ext.substring(0, j).toLowerCase(): ext.toLowerCase();
 	}
 
 	/**

@@ -43,27 +43,29 @@ import org.zkoss.web.servlet.dsp.Interpretation;
 import org.zkoss.web.servlet.dsp.ServletDSPContext;
 
 /**
- * The implementation of DSP resource processor ({@link Resourcelet}).
+ * The DSP resource processor ({@link Resourcelet}) used to parse
+ * DSP files loaded from the classpath.
  *
  * @author tomyeh
  * @since 2.4.1
  */
-public class DSPResourcelet implements Resourcelet {
+/*package*/ class DSPResourcelet implements Resourcelet {
 	private static final Log log = Log.lookup(DSPResourcelet.class);
 
 	private ExtendedWebContext _webctx;
-	private ResourceCache _dspCache;
+	/** DSP Interpretation cache. */
+	private ResourceCache _cache;
 
 	public void init(ExtendedWebContext webctx) {
 		_webctx = webctx;
-		_dspCache = new ResourceCache(new DSPLoader(_webctx), 131);
-		_dspCache.setMaxSize(1000).setLifetime(60*60*1000); //1hr
-		_dspCache.setCheckPeriod(60*60*1000); //1hr
+		_cache = new ResourceCache(new DSPLoader(), 131);
+		_cache.setMaxSize(1000).setLifetime(60*60*1000); //1hr
+		_cache.setCheckPeriod(60*60*1000); //1hr
 	}
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
-		final Interpretation cnt = (Interpretation)_dspCache.get(path);
+		final Interpretation cnt = (Interpretation)_cache.get(path);
 		if (cnt == null) {
 			if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+path);
 				//It might be eaten, so log the error
@@ -108,10 +110,8 @@ public class DSPResourcelet implements Resourcelet {
 	}
 
 	/** Helper class. */
-	private static class DSPLoader implements Loader {
-		private final ExtendedWebContext _webctx;
-		private DSPLoader(ExtendedWebContext cwc) {
-			_webctx = cwc;
+	private class DSPLoader implements Loader {
+		private DSPLoader() {
 		}
 
 		//-- super --//
@@ -126,9 +126,10 @@ public class DSPResourcelet implements Resourcelet {
 		public Object load(Object src) throws Exception {
 //			if (D.ON && log.debugable()) log.debug("Parse "+src);
 			final String path = (String)src;
-			final InputStream is = ClassWebResource.getResourceAsStream(path);
+			final InputStream is = _webctx.getResourceAsStream(path);
 			if (is == null)
 				return null;
+
 			try {
 				return parse0(is, Interpreter.getContentType(path));
 			} catch (Exception ex) {
@@ -142,8 +143,6 @@ public class DSPResourcelet implements Resourcelet {
 			}
 		}
 		private Object parse0(InputStream is, String ctype) throws Exception {
-			if (is == null) return null;
-
 			final String content =
 				Files.readAll(new InputStreamReader(is, "UTF-8"))
 				.toString();
