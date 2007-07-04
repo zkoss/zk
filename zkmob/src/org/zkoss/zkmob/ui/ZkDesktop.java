@@ -60,7 +60,7 @@ import org.zkoss.zkmob.ZkComponent;
  * @author henrichen
  *
  */
-public class Zk implements ZkComponent {
+public class ZkDesktop implements ZkComponent {
 	private Browser _browser;
 	private Displayable _current;
 	private Vector _displayables = new Vector(8);
@@ -81,7 +81,7 @@ public class Zk implements ZkComponent {
 	private ItemStateListener _itemStateListener;
 	private ItemCommandListener _itemCommandListener;
 	
-	public Zk(String dtid, String action, int procto, int tipto, String ver, String hostURL) {
+	public ZkDesktop(String dtid, String action, int procto, int tipto, String ver, String hostURL) {
 		_dtid = dtid;
 
 		if (action != null) {
@@ -266,7 +266,7 @@ public class Zk implements ZkComponent {
 		//do nothing
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return this;
 	}
 	

@@ -46,9 +46,9 @@ public class CommandFactory extends AbstractUiFactory {
 		final String priorityStr = attrs.getValue("pr"); //priority
 		final int priority = Integer.parseInt(priorityStr); 
 		final ZkComponent owner = (ZkComponent) parent;
-		final ZkCommand cmd = new ZkCommand(owner, owner.getZk(), id, label, longLabel, type, priority);
+		final ZkCommand cmd = new ZkCommand(owner, owner.getZkDesktop(), id, label, longLabel, type, priority);
 		
-		UiManager.registerCommand(owner, cmd, owner.getZk());
+		UiManager.registerCommand(owner, cmd, owner.getZkDesktop());
 
 		return cmd;
 	}

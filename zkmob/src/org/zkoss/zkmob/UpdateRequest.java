@@ -20,18 +20,18 @@ package org.zkoss.zkmob;
 
 import javax.microedition.lcdui.Display;
 
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 
 /**
  * @author henrichen
  *
  */
 public class UpdateRequest implements Runnable {
-	private Zk _zk;
+	private ZkDesktop _zk;
 	private String _url;
 	private String _request;
 
-	public UpdateRequest(Zk zk, String url, String request) {
+	public UpdateRequest(ZkDesktop zk, String url, String request) {
 		_zk = zk;
 		_url = url;
 		_request = request;

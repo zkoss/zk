@@ -37,10 +37,10 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkImageItem extends ImageItem implements Imageable, ZkComponent, Itemable {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	private Form _form;
 	
-	public ZkImageItem(Zk zk, String id, String label, int layout, String altText,
+	public ZkImageItem(ZkDesktop zk, String id, String label, int layout, String altText,
 	int appearanceMode) {
 		super(label, null, layout, altText, appearanceMode);
 		_id = id;
@@ -57,7 +57,7 @@ public class ZkImageItem extends ImageItem implements Imageable, ZkComponent, It
 		return _id;
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 	

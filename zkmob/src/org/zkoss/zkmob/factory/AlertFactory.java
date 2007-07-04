@@ -41,7 +41,7 @@ public class AlertFactory extends AbstractUiFactory {
 		final String title = attrs.getValue("tt"); //title
 		final String text = attrs.getValue("tx"); //text
 		final String typeStr = attrs.getValue("tp"); //type
-		final ZkAlert alert = new ZkAlert(((ZkComponent)parent).getZk(), id, title, text, getAlertType(typeStr));
+		final ZkAlert alert = new ZkAlert(((ZkComponent)parent).getZkDesktop(), id, title, text, getAlertType(typeStr));
 		final String src = attrs.getValue("im");
 		
 		if (src != null) {

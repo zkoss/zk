@@ -24,7 +24,7 @@ import javax.microedition.lcdui.Gauge;
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.UiManager;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 import org.zkoss.zkmob.ui.ZkGauge;
 
 /**
@@ -46,7 +46,7 @@ public class GaugeFactory extends AbstractUiFactory {
 		final boolean interactive = "t".equalsIgnoreCase(interactiveStr);
 		final int maxValue = Integer.parseInt(maxValueStr);
 		final int initialValue = Integer.parseInt(initialValueStr);
-		final Zk zk = ((ZkComponent)parent).getZk();
+		final ZkDesktop zk = ((ZkComponent)parent).getZkDesktop();
 		
 		final ZkGauge component = new ZkGauge(zk, id, label, interactive, maxValue, initialValue);
 

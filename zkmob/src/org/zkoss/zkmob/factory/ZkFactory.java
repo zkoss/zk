@@ -22,7 +22,7 @@ import javax.microedition.lcdui.Command;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.ZkComponent;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 
 /**
  * Empty implementation; the root tag for MIL file.
@@ -43,7 +43,7 @@ public class ZkFactory extends AbstractUiFactory {
 		final int tipto = tiptoStr != null ? Integer.parseInt(tiptoStr) : 800;
 		final String ver = attrs.getValue("zv"); //zk_ver
 		
-		Zk zk = new Zk(dtid, action, procto, tipto, ver, hostURL);
+		ZkDesktop zk = new ZkDesktop(dtid, action, procto, tipto, ver, hostURL);
 		
 		return zk;
 	}

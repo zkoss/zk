@@ -33,10 +33,10 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkDateField extends DateField implements ZkComponent, Itemable {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	private Form _form;
 	
-	public ZkDateField(Zk zk, String id, String label, int mode) {
+	public ZkDateField(ZkDesktop zk, String id, String label, int mode) {
 		super(label, mode);
 		_id = id;
 		_zk = zk;
@@ -55,7 +55,7 @@ public class ZkDateField extends DateField implements ZkComponent, Itemable {
 		setForm((Form) parent);
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 

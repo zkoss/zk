@@ -38,7 +38,7 @@ public class TickerFactory extends AbstractUiFactory {
 		final String id = attrs.getValue("id"); //id
 		final String string = attrs.getValue("tx"); //String
 		
-		final ZkTicker component = new ZkTicker(((ZkComponent)parent).getZk(), id, string);
+		final ZkTicker component = new ZkTicker(((ZkComponent)parent).getZkDesktop(), id, string);
 		
 		return component;
 	}		

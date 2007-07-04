@@ -33,12 +33,12 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkTextField extends TextField implements ZkComponent, Inputable, Itemable {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	private Boolean _onChange; //null mean no such event required, t means asap, f means !asap
 	private Boolean _onChanging; //null mean no such event required, t means asap, f means !asap
 	private Form _form;
 	
-	public ZkTextField(Zk zk, String id, String label, String text, int maxSize, int constraints, Boolean onChange, Boolean onChanging) {
+	public ZkTextField(ZkDesktop zk, String id, String label, String text, int maxSize, int constraints, Boolean onChange, Boolean onChanging) {
 		super(label, text, maxSize, constraints);
 		_id = id;
 		_zk = zk;
@@ -68,7 +68,7 @@ public class ZkTextField extends TextField implements ZkComponent, Inputable, It
 		setForm((Form) parent);
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 

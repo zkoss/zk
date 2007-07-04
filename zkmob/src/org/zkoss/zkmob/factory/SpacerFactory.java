@@ -24,7 +24,7 @@ import javax.microedition.lcdui.Spacer;
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.UiManager;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 import org.zkoss.zkmob.ui.ZkSpacer;
 
 /**
@@ -43,7 +43,7 @@ public class SpacerFactory extends AbstractUiFactory {
 		final String minHeightStr = attrs.getValue("mh"); //minHeight
 		final int minWidth = Integer.parseInt(minWidthStr);
 		final int minHeight = Integer.parseInt(minHeightStr);
-		final Zk zk = ((ZkComponent)parent).getZk();
+		final ZkDesktop zk = ((ZkComponent)parent).getZkDesktop();
 		
 		final ZkSpacer component = new ZkSpacer(zk, id, minWidth, minHeight);
 

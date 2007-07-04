@@ -34,10 +34,10 @@ import javax.microedition.lcdui.List;
  */
 public class ZkList extends List implements Listable, ZkComponent {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	private Vector _listitems = new Vector(32);
 	
-	public ZkList(Zk zk, String id, String title, int listType) {
+	public ZkList(ZkDesktop zk, String id, String title, int listType) {
 		super(title, listType);
 		_id = id;
 		_zk = zk;
@@ -78,10 +78,10 @@ public class ZkList extends List implements Listable, ZkComponent {
 	}
 	
 	public ZkComponent getParent() {
-		return getZk();
+		return getZkDesktop();
 	}
 
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 

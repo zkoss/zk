@@ -24,7 +24,7 @@ import javax.microedition.lcdui.Item;
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.ZkComponent;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 import org.zkoss.zkmob.ui.ZkImageItem;
 
 /**
@@ -45,7 +45,7 @@ public class ImageItemFactory extends AbstractUiFactory {
 		final String apperenceModeStr = attrs.getValue("md"); //apperenceMode
 		final int apperenceMode = apperenceModeStr != null ?
 				Integer.parseInt(apperenceModeStr) : Item.PLAIN;
-		final Zk zk = ((ZkComponent)parent).getZk();
+		final ZkDesktop zk = ((ZkComponent)parent).getZkDesktop();
 		
 		final ZkImageItem component = 
 			new ZkImageItem(zk, id, label, ZkImageItem.LAYOUT_DEFAULT, altText, apperenceMode);

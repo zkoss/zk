@@ -31,10 +31,10 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkCommand extends Command implements ZkComponent {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	private ZkComponent _parent;
 	
-	public ZkCommand(ZkComponent parent, Zk zk, String id, String label, String longLabel, int type, int priority) {
+	public ZkCommand(ZkComponent parent, ZkDesktop zk, String id, String label, String longLabel, int type, int priority) {
 		super(label, longLabel, type == 0x100 ? Command.OK : type, priority);
 		_id = id;
 		_zk = zk;
@@ -65,7 +65,7 @@ public class ZkCommand extends Command implements ZkComponent {
 		return _id;
 	}
 
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 

@@ -26,7 +26,7 @@ import javax.microedition.lcdui.Displayable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 
 /** The Page handler that deserialize Java Object from RMIL(Raw Mobile Interactive Language)
  *  XML Pages.
@@ -39,7 +39,7 @@ public class PageHandler extends DefaultHandler {
 	private String _hostURL;
 	private Vector _roots = new Vector(8);
 	private ZkComponent _parent;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	
 	/*package*/PageHandler(String hostURL) {
 		_hostURL = hostURL;
@@ -48,7 +48,7 @@ public class PageHandler extends DefaultHandler {
 	/*package*/PageHandler(ZkComponent parent, String hostURL) {
 		_hostURL = hostURL;
 		_parent = parent;
-		_zk = _parent == null ? null : _parent.getZk();
+		_zk = _parent == null ? null : _parent.getZkDesktop();
 		_stack.push(parent);
 	}
 	
@@ -56,7 +56,7 @@ public class PageHandler extends DefaultHandler {
 		return _roots;
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZk() {
 		return _zk;
 	}
 	
@@ -76,13 +76,13 @@ public class PageHandler extends DefaultHandler {
 		ZkComponent comp = UiManager.create(parent, eName, attrs, _hostURL);
 		_stack.push(comp);
 
-		if (parent instanceof Zk) {
+		if (parent instanceof ZkDesktop) {
 			_roots.addElement(comp);
 		}
 		
 		if (_zk == null) {
-			if (comp instanceof Zk) {
-				_zk = (Zk) comp;
+			if (comp instanceof ZkDesktop) {
+				_zk = (ZkDesktop) comp;
 			} else {
 				throw new IllegalArgumentException("RMIL page must be in <zk> root:" + eName);
 			}

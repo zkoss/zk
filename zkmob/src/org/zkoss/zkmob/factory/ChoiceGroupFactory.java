@@ -23,7 +23,7 @@ import javax.microedition.lcdui.Form;
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.UiManager;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 import org.zkoss.zkmob.ui.ZkChoiceGroup;
 
 /**
@@ -43,7 +43,7 @@ public class ChoiceGroupFactory extends AbstractUiFactory {
 		final String choiceTypeStr = attrs.getValue("tp"); //choiceType
 		final String onSelectStr = attrs.getValue("os"); //onSelect
 		final int choiceType = Integer.parseInt(choiceTypeStr);
-		final Zk zk = ((ZkComponent)parent).getZk();
+		final ZkDesktop zk = ((ZkComponent)parent).getZkDesktop();
 		final ZkChoiceGroup component = new ZkChoiceGroup(zk, id, label, choiceType,
 				onSelectStr == null ? null : new Boolean("t".equals(onSelectStr)));
 

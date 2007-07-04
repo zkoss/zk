@@ -24,7 +24,7 @@ import javax.microedition.lcdui.StringItem;
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.UiManager;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 import org.zkoss.zkmob.ui.ZkStringItem;
 
 /**
@@ -41,7 +41,7 @@ public class StringItemFactory extends AbstractUiFactory {
 		final String id = attrs.getValue("id"); //id
 		final String label = attrs.getValue("lb"); //label
 		final String text = attrs.getValue("tx"); //text
-		final Zk zk = ((ZkComponent)parent).getZk();
+		final ZkDesktop zk = ((ZkComponent)parent).getZkDesktop();
 		
 		final ZkStringItem component = new ZkStringItem(zk, id, label, text);
 

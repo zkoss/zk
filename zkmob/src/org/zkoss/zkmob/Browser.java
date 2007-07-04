@@ -30,7 +30,7 @@ import javax.microedition.lcdui.ItemCommandListener;
 import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.TextField;
 
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 import org.zkoss.zkmob.ui.ZkList;
 import org.zkoss.zkmob.ui.ZkListItem;
 
@@ -51,7 +51,7 @@ public class Browser extends MIDlet {
 	private Displayable _prev; //previous Displayable before pause
 	private Displayable _curr; //current Displayble before go Home
 
-	private Zk _zkMobile; //zkMobile desktop
+	private ZkDesktop _zkMobile; //zkMobile desktop
 	private Form _home; //zkMobile home page
 	private Command _backCommand; //home page back command
 	private Alert _exitAlert; //zkMobile exit alert
@@ -59,7 +59,7 @@ public class Browser extends MIDlet {
 	private CommandListener _commandListener;
 	private ItemCommandListener _itemCommandListener;
 	
-	private Zk _desktop; //current browsed desktop
+	private ZkDesktop _desktop; //current browsed desktop
 	
 	//super//
 	protected void startApp() throws MIDletStateChangeException {
@@ -79,7 +79,7 @@ public class Browser extends MIDlet {
 		return _display;
 	}
 	
-	public void setDesktop(Zk zk, String url) {
+	public void setDesktop(ZkDesktop zk, String url) {
 		_desktop = zk;
 	    zk.setBrowser(this);
 	    

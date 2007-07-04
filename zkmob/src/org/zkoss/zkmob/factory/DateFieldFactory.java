@@ -21,7 +21,7 @@ package org.zkoss.zkmob.factory;
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.UiManager;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 import org.zkoss.zkmob.ui.ZkDateField;
 
 /**
@@ -39,7 +39,7 @@ public class DateFieldFactory extends AbstractUiFactory {
 		final String label = attrs.getValue("lb"); //label
 		final String modeStr = attrs.getValue("md"); //mode
 		final int mode = Integer.parseInt(modeStr);
-		final Zk zk = ((ZkComponent)parent).getZk();
+		final ZkDesktop zk = ((ZkComponent)parent).getZkDesktop();
 
 		final ZkDateField component = new ZkDateField(zk, id, label, mode);
 

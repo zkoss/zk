@@ -28,7 +28,7 @@ import org.zkoss.zkmob.ui.DTag;
 import org.zkoss.zkmob.ui.RTag;
 import org.zkoss.zkmob.ui.RsTag;
 import org.zkoss.zkmob.ui.SidTag;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 
 
 /**
@@ -38,9 +38,9 @@ import org.zkoss.zkmob.ui.Zk;
  */
 public class UpdateHandler extends DefaultHandler {
 	private Stack _stack;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	
-	public UpdateHandler(Zk zk) {
+	public UpdateHandler(ZkDesktop zk) {
 		_zk = zk;
 	}
 	

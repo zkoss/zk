@@ -22,7 +22,7 @@ import javax.microedition.lcdui.Form;
 
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.ZkComponent;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 import org.zkoss.zkmob.ui.ZkForm;
 
 /**
@@ -39,9 +39,9 @@ public class FormFactory extends AbstractUiFactory {
 		final String id = attrs.getValue("id"); //id
 		final String title = attrs.getValue("tt"); //title
 
-		ZkForm form = new ZkForm(((ZkComponent)parent).getZk(), id, title);
+		ZkForm form = new ZkForm(((ZkComponent)parent).getZkDesktop(), id, title);
 
-		form.setItemStateListener(((Zk) parent).getItemStateListener());
+		form.setItemStateListener(((ZkDesktop) parent).getItemStateListener());
 		
 		return form;
 	}

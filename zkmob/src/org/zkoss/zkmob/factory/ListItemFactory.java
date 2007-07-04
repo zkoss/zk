@@ -22,7 +22,7 @@ import org.xml.sax.Attributes;
 import org.zkoss.zkmob.Listable;
 import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.ZkComponent;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 import org.zkoss.zkmob.ui.ZkListItem;
 
 /**
@@ -43,7 +43,7 @@ public class ListItemFactory extends AbstractUiFactory {
 		//TODO: font not supported yet
 		
 		ZkListItem component = null; 
-		if (parent instanceof Zk) { //createComponent directly
+		if (parent instanceof ZkDesktop) { //createComponent directly
 			component = new ZkListItem(null, id, null, null);
 		} else {
 			component = new ZkListItem((Listable) parent, id, null, null);

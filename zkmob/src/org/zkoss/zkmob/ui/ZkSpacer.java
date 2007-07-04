@@ -32,10 +32,10 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkSpacer extends Spacer implements ZkComponent, Itemable {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	private Form _form;
 	
-	public ZkSpacer(Zk zk, String id, int w, int h) {
+	public ZkSpacer(ZkDesktop zk, String id, int w, int h) {
 		super(w, h);
 		_id = id;
 		_zk = zk;
@@ -54,7 +54,7 @@ public class ZkSpacer extends Spacer implements ZkComponent, Itemable {
 		setForm((Form) parent);
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 

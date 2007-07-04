@@ -40,11 +40,11 @@ import org.zkoss.zkmob.ZkComponent;
 public class ZkChoiceGroup extends ChoiceGroup implements Listable, ZkComponent, Itemable {
 	private String _id;
 	private Boolean _onSelect;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	private Form _form;
 	private Vector _listitems = new Vector(32);
 	
-	public ZkChoiceGroup(Zk zk, String id, String title, int choiceType, Boolean onSelect) {
+	public ZkChoiceGroup(ZkDesktop zk, String id, String title, int choiceType, Boolean onSelect) {
 		super(title, choiceType);
 		_id = id;
 		_zk = zk;
@@ -93,7 +93,7 @@ public class ZkChoiceGroup extends ChoiceGroup implements Listable, ZkComponent,
 		//do nothing
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 

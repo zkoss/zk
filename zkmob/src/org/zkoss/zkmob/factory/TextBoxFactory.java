@@ -48,7 +48,7 @@ public class TextBoxFactory extends AbstractUiFactory {
 		if (text.length() > maxSize) text = text.substring(0, maxSize);
 		final int constraints = Integer.parseInt(constraintsStr);
 		
-		final ZkTextBox tbx = new ZkTextBox(((ZkComponent)parent).getZk(), id, title, text, maxSize, constraints);
+		final ZkTextBox tbx = new ZkTextBox(((ZkComponent)parent).getZkDesktop(), id, title, text, maxSize, constraints);
 		return tbx;
 	}
 

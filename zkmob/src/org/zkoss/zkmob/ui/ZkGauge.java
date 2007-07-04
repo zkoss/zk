@@ -31,10 +31,10 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkGauge extends Gauge implements ZkComponent, Itemable {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	private Form _form;
 	
-	public ZkGauge(Zk zk, String id, String label, boolean interactive, int maxValue, int initialValue) {
+	public ZkGauge(ZkDesktop zk, String id, String label, boolean interactive, int maxValue, int initialValue) {
 		super(label, interactive, maxValue, initialValue);
 		_id = id;
 		_zk = zk;
@@ -53,7 +53,7 @@ public class ZkGauge extends Gauge implements ZkComponent, Itemable {
 		setForm((Form) parent);
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 

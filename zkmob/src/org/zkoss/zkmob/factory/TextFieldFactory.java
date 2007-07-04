@@ -24,7 +24,7 @@ import javax.microedition.lcdui.TextField;
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.UiManager;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 import org.zkoss.zkmob.ui.ZkTextField;
 
 /**
@@ -48,7 +48,7 @@ public class TextFieldFactory extends AbstractUiFactory {
 		final int constraints = Integer.parseInt(constraintsStr);
 		final String onChange = attrs.getValue("on");
 		final String onChanging = attrs.getValue("og");
-		final Zk zk = ((ZkComponent)parent).getZk();
+		final ZkDesktop zk = ((ZkComponent)parent).getZkDesktop();
 		
 		final ZkTextField component = new ZkTextField(zk, id, label, text, maxSize, constraints
 				, onChange == null ? null : new Boolean("t".equals(onChange))

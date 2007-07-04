@@ -69,8 +69,8 @@ public class ZkListItem implements ZkComponent, Imageable {
 		return _id;
 	}
 	
-	public Zk getZk() {
-		return ((ZkComponent)_parent).getZk();
+	public ZkDesktop getZkDesktop() {
+		return ((ZkComponent)_parent).getZkDesktop();
 	}
 
 	public void setAttr(String attr, String val) {

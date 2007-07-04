@@ -39,7 +39,7 @@ public class ListFactory extends AbstractUiFactory {
 		final String listTypeStr = attrs.getValue("tp"); //listType
 		final int listType = Integer.parseInt(listTypeStr);
 		
-		final ZkList list = new ZkList(((ZkComponent)parent).getZk(), id, title, listType);
+		final ZkList list = new ZkList(((ZkComponent)parent).getZkDesktop(), id, title, listType);
 		return list;
 	}
 

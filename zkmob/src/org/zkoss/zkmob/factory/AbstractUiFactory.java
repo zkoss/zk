@@ -26,7 +26,7 @@ import javax.microedition.lcdui.Item;
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.UiFactory;
 import org.zkoss.zkmob.UiManager;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 
 /**
  * An UiFactory skeleton which registers itself to the {@link UiManager}.

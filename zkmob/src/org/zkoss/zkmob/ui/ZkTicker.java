@@ -30,9 +30,9 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkTicker extends Ticker implements ZkComponent {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	
-	public ZkTicker(Zk zk, String id, String text) {
+	public ZkTicker(ZkDesktop zk, String id, String text) {
 		super(text);
 		_id = id;
 		_zk = zk;
@@ -43,7 +43,7 @@ public class ZkTicker extends Ticker implements ZkComponent {
 		return _id;
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 
@@ -52,7 +52,7 @@ public class ZkTicker extends Ticker implements ZkComponent {
 	}
 	
 	public ZkComponent getParent() {
-		return getZk();
+		return getZkDesktop();
 	}
 	
 	public void setAttr(String attr, String val) {

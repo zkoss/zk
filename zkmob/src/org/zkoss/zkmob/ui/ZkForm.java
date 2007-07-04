@@ -32,9 +32,9 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkForm extends Form implements ZkComponent {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	
-	public ZkForm(Zk zk, String id, String  title) {
+	public ZkForm(ZkDesktop zk, String id, String  title) {
 		super(title);
 		_id = id;
 		_zk = zk;
@@ -78,7 +78,7 @@ public class ZkForm extends Form implements ZkComponent {
 		return _id;
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 	
@@ -87,7 +87,7 @@ public class ZkForm extends Form implements ZkComponent {
 	}
 	
 	public ZkComponent getParent() {
-		return getZk();
+		return getZkDesktop();
 	}
 
 	public void setAttr(String attr, String val) {

@@ -33,10 +33,10 @@ import org.zkoss.zkmob.UiManager;
  */
 public class ZkStringItem extends StringItem implements ZkComponent, Itemable {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	private Form _form;
 	
-	public ZkStringItem(Zk zk, String id, String label, String text) {
+	public ZkStringItem(ZkDesktop zk, String id, String label, String text) {
 		super(label, text);
 		_id = id;
 		_zk = zk;
@@ -55,7 +55,7 @@ public class ZkStringItem extends StringItem implements ZkComponent, Itemable {
 		setForm((Form) parent);
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 

@@ -20,7 +20,7 @@ package org.zkoss.zkmob;
 
 import javax.microedition.lcdui.Command;
 
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 
 /**
  * A ZK component.
@@ -37,7 +37,7 @@ public interface ZkComponent {
 	/**
 	 * Get ZK Desktop Controller.
 	 */
-	public Zk getZk();
+	public ZkDesktop getZkDesktop();
 	
 	/**
 	 * Get Parent.

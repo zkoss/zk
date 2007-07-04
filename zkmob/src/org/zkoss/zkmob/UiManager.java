@@ -55,7 +55,7 @@ import org.zkoss.zkmob.factory.TextBoxFactory;
 import org.zkoss.zkmob.factory.TextFieldFactory;
 import org.zkoss.zkmob.factory.TickerFactory;
 import org.zkoss.zkmob.factory.ZkFactory;
-import org.zkoss.zkmob.ui.Zk;
+import org.zkoss.zkmob.ui.ZkDesktop;
 
 /** 
  * The static facade for UI component management. 
@@ -181,14 +181,14 @@ public class UiManager {
 		}
 	}
 
-	public static Zk loadPage(Browser browser, InputStream is, String url, String hostURL) 
+	public static ZkDesktop loadPage(Browser browser, InputStream is, String url, String hostURL) 
 	throws IOException, SAXException {
-	    final Zk zk = createComponents(browser, is, hostURL);
+	    final ZkDesktop zk = createComponents(browser, is, hostURL);
 	    
 	    //notify server to remove old desktop
 	    final Object current = browser.getDisplay().getCurrent();
 	    if (current instanceof ZkComponent) {
-	    	final Zk oldZk = ((ZkComponent)current).getZk();
+	    	final ZkDesktop oldZk = ((ZkComponent)current).getZkDesktop();
 	    	if (oldZk != null && !"zkMobile".equals(oldZk.getId())) {
 	    		oldZk.removeDesktop(); //notify server to remove desktop
 	    	}
@@ -199,7 +199,7 @@ public class UiManager {
 	    return zk;
     }
 
-	private static Zk createComponents(Browser browser, InputStream is, String hostURL) 
+	private static ZkDesktop createComponents(Browser browser, InputStream is, String hostURL) 
 	throws IOException, SAXException {
 	    // Load the responsed page, the current Displayable is put in _current
 	    final PageHandler handler = new PageHandler(hostURL);
@@ -334,7 +334,7 @@ public class UiManager {
 		}
 	}
 	
-	public static void registerCommand(ZkComponent owner, Command cmd, Zk zk) {
+	public static void registerCommand(ZkComponent owner, Command cmd, ZkDesktop zk) {
 		owner.addCommand(cmd); //add into owner
 		if (owner instanceof Item) {
 			((Item)owner).setItemCommandListener(zk.getItemCommandListener());

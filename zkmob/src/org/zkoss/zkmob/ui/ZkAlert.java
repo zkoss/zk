@@ -33,9 +33,9 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkAlert extends Alert implements Imageable, ZkComponent {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	
-	public ZkAlert(Zk zk, String id, String title, String alertText, AlertType alertType) {
+	public ZkAlert(ZkDesktop zk, String id, String title, String alertText, AlertType alertType) {
 		super(title, alertText, null, alertType);
 		_id = id;
 		_zk = zk;
@@ -52,14 +52,14 @@ public class ZkAlert extends Alert implements Imageable, ZkComponent {
 	}
 	
 	public ZkComponent getParent() {
-		return getZk();
+		return getZkDesktop();
 	}
 	
 	public void setParent(ZkComponent parent) {
 		//do nothing
 	}
 	
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 

@@ -30,9 +30,9 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkTextBox extends TextBox implements ZkComponent {
 	private String _id;
-	private Zk _zk;
+	private ZkDesktop _zk;
 	
-	public ZkTextBox(Zk zk, String id, String title, String text, int maxSize, int constraints) {
+	public ZkTextBox(ZkDesktop zk, String id, String title, String text, int maxSize, int constraints) {
 		super(title, text, maxSize, constraints);
 		_id = id;
 		_zk = zk;
@@ -48,10 +48,10 @@ public class ZkTextBox extends TextBox implements ZkComponent {
 	}
 	
 	public ZkComponent getParent() {
-		return getZk();
+		return getZkDesktop();
 	}
 
-	public Zk getZk() {
+	public ZkDesktop getZkDesktop() {
 		return _zk;
 	}
 
