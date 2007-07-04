@@ -61,18 +61,18 @@ public class DSPResourcelet implements Resourcelet {
 		_dspCache.setCheckPeriod(60*60*1000); //1hr
 	}
 	public void service(HttpServletRequest request,
-	HttpServletResponse response, String pi, String extra)
+	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
-		final Interpretation cnt = (Interpretation)_dspCache.get(pi);
+		final Interpretation cnt = (Interpretation)_dspCache.get(path);
 		if (cnt == null) {
-			if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+pi);
+			if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+path);
 				//It might be eaten, so log the error
-			response.sendError(response.SC_NOT_FOUND, pi);
+			response.sendError(response.SC_NOT_FOUND, path);
 			return;
 		}
 
 		StringWriter sw =
-			_webctx.shallCompress(request, get2ndExtension(pi)) ?
+			_webctx.shallCompress(request, get2ndExtension(path)) ?
 				new StringWriter(4096): null;
 		cnt.interpret(new ServletDSPContext(
 			_webctx.getServletContext(), request, response,
@@ -96,15 +96,15 @@ public class DSPResourcelet implements Resourcelet {
 	}
 	/** Returns the second extension. For example, js in xx.js.dsp.
 	 */
-	private static final String get2ndExtension(String pi) {
-		int j = pi.lastIndexOf('.');
-		if (j < 0 || pi.indexOf('/', j + 1) >= 0)
+	private static final String get2ndExtension(String path) {
+		int j = path.lastIndexOf('.');
+		if (j < 0 || path.indexOf('/', j + 1) >= 0)
 			return null;
 
-		int k = j > 0 ? pi.lastIndexOf('.', j - 1): -1;
-		if (k < 0 || pi.indexOf('/', k + 1) >= 0)
+		int k = j > 0 ? path.lastIndexOf('.', j - 1): -1;
+		if (k < 0 || path.indexOf('/', k + 1) >= 0)
 			return null;
-		return pi.substring(k + 1, j).toLowerCase();
+		return path.substring(k + 1, j).toLowerCase();
 	}
 
 	/** Helper class. */

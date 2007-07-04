@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  * content.
  *
  * <p>To add a resource processor to {@link ClassWebResource}, use
- * {@link {@link ClassWebResource#addResourcelet}.
+ * {@link ClassWebResource#addResourcelet}.
  *
  * @author tomyeh
  * @since 2.4.1
@@ -46,6 +46,6 @@ public interface Resourcelet {
 	 * Ignored if null.
 	 */
 	public void service(HttpServletRequest request,
-	HttpServletResponse response, String pi, String extra)
+	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException;
 }

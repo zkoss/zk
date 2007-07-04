@@ -57,11 +57,8 @@ import org.zkoss.web.servlet.http.Encodes;
  * serve the request for the resource located in class path.
  * <li>Invoke {@link #getInstance} to init the member when
  * Servlet.init() is called.
- * <li>Calling {@link #doGet} when a request is receive.
+ * <li>Calling {@link #service} when a request is receive.
  * </ol>
- *
- * <p>Note: if a file is named with name-*.ext, it locates the proper file
- * based on the current Locale (org.zkoss.util.prefs.App.getCurrentLocale).
  *
  * @author tomyeh
  */
