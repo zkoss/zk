@@ -4,6 +4,7 @@ ZK 2.4.1
   1735610: Translate messages to Catalan. Thank Xavier Covas O'Ryan (xcovas@conselldemallorca.net) for his contribution.
   1744123: Improve the way the performance of handling a huge tree
   1746896: Support gzip to send back JS, CSS and AU responses
+  1747429: Interpret .ZUL loaded from classpath
   1740668: A way to override the generation of IDs of comp/page/desktop
   1736861: <error-page> should be device dependant (ZK Mobile)
   1738246: Improve multiline textbox with maxlength
