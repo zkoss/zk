@@ -143,7 +143,7 @@ public class Command extends MilComponent {
 
 	//--Component--//
 	public void setParent(Component parent) {
-		if (parent != null && !(parent instanceof MilComponent)) {
+		if ((parent != null && !(parent instanceof MilComponent)) || parent instanceof Listitem) {
 			throw new UiException("Unsupported parent for command: "+parent);
 		}
 		super.setParent(parent);

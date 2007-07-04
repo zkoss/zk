@@ -134,6 +134,29 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</component>
 
 	<component>
+		<component-name>listbox</component-name>
+		<component-class>org.zkoss.mil.Listbox</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./mil/rmil/listbox.dsp</mold-uri>
+		</mold>
+
+		<mold>
+			<mold-name>select</mold-name>
+			<mold-uri>~./mil/rmil/listbox.dsp</mold-uri>
+		</mold>
+	</component>
+
+	<component>
+		<component-name>listitem</component-name>
+		<component-class>org.zkoss.mil.Listitem</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./mil/rmil/listitem.dsp</mold-uri>
+		</mold>
+	</component>
+
+	<component>
 		<component-name>image</component-name>
 		<component-class>org.zkoss.mil.Image</component-class>
 		<mold>

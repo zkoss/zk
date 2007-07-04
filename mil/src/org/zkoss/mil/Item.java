@@ -60,15 +60,15 @@ abstract public class Item extends MilComponent {
     protected final static int LAYOUT_VSHRINK = 0x1000; //height may be reduced to its minimum height
     protected final static int LAYOUT_VEXPAND = 0x2000; //height may be increase to fill available space
     
-	private String _label;
-	private String _align; //left, center, right
-	private String _valign; //top, middle, bottom
-	private String _flow; //(change row) first, last, only  
-	private String _heightHint; //shrink, expand
-	private String _widthHint; //shrink, expand
+	protected String _label;
+	protected String _align; //left, center, right
+	protected String _valign; //top, middle, bottom
+	protected String _flow; //(change row) first, last, only  
+	protected String _heightHint; //shrink, expand
+	protected String _widthHint; //shrink, expand
 	
-	private int _preferredHeight = -1; //-1 means default
-	private int _preferredWidth = -1; //-1 means default
+	protected int _preferredHeight = -1; //-1 means default
+	protected int _preferredWidth = -1; //-1 means default
 	
 	/** 
 	 * Get the label of this Item.

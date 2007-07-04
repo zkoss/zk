@@ -25,7 +25,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Desktop;
 
 /**
- * The Image item component the can be layout under the {@link Frame}.
+ * The Image item component that can be layout under the {@link Frame}.
  * @author henrichen
  */
 public class Image extends Item {
