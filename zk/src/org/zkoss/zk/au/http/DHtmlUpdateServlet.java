@@ -111,7 +111,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				//if (log.finerable()) log.finer("Path info: "+pi);
 				if (pi.startsWith(ClassWebResource.PATH_PREFIX)) {
 					WebManager.getWebManager(_ctx).
-						getClassWebResource().doGet(request, response);
+						getClassWebResource().service(request, response);
 				} else if (pi.startsWith("/upload")) {
 					Uploads.process(sess, _ctx, request, response);
 				} else if (pi.startsWith("/view")) {
