@@ -15,10 +15,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<language-name>xhtml</language-name>
 	<device-type>ajax</device-type>
 	<namespace>http://www.w3.org/1999/xhtml</namespace>
+	<extension>zhtml</extension><!-- the first one is the major one -->
 	<extension>htm</extension>
 	<extension>html</extension>
 	<extension>xhtml</extension>
-	<extension>zhtml</extension>
 
 	<version>
 		<version-class>org.zkoss.zhtml.Version</version-class>
