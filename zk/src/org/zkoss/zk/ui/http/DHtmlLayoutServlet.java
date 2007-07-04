@@ -21,6 +21,8 @@ package org.zkoss.zk.ui.http;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.logging.Level;
+import java.io.Writer;
+import java.io.StringWriter;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -67,17 +69,21 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlLayoutServlet.class);
 	private ServletContext _ctx;
 	private WebManager _webman;
+	private boolean _compress = true;
 
 	public void init(ServletConfig config) throws ServletException {
 		//super.init(config);
 			//Note callback super to avoid saving config
 
-		final String loglevel = config.getInitParameter("log-level");
-		if (loglevel != null && loglevel.length() > 0) {
-			final Level level = Log.getLevel(loglevel);
+		String param = config.getInitParameter("log-level");
+		if (param != null && param.length() > 0) {
+			final Level level = Log.getLevel(param);
 			if (level != null) Log.lookup("org.zkoss").setLevel(level);
-			else log.error("Unknown log-level: "+loglevel);
+			else log.error("Unknown log-level: "+param);
 		}
+		param = config.getInitParameter("compress");
+		if (param != null)
+			_compress = "true".equals(param);
 
 		_ctx = config.getServletContext();
 		if (WebManager.getWebManagerIfAny(_ctx) != null)
@@ -153,6 +159,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
 
+		boolean compress = _compress && !Servlets.isIncluded(request);
+		final Writer out;
 		final UiFactory uf = wappc.getUiFactory();
 		if (uf.isRichlet(ri, bRichlet)) {
 			final Richlet richlet = uf.getRichlet(ri, path);
@@ -162,7 +170,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			final Page page = uf.newPage(ri, richlet, path);
 			final Execution exec = new ExecutionImpl(
 				_ctx, request, response, desktop, page);
-			wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
+			out = compress ? (Writer)new StringWriter(): response.getWriter();
+			wappc.getUiEngine().execNewPage(exec, richlet, page, out);
 				//no need to set device type here, since UiEngine will do it later
 		} else {
 			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
@@ -172,8 +181,27 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			final Page page = uf.newPage(ri, pagedef, path);
 			final Execution exec = new ExecutionImpl(
 				_ctx, request, response, desktop, page);
+			out = compress ? (Writer)new StringWriter(): response.getWriter();
 			wappc.getUiEngine()
-				.execNewPage(exec, pagedef, page, response.getWriter());
+				.execNewPage(exec, pagedef, page, out);
+		}
+
+		if (compress) {
+			byte[] bs = ((StringWriter)out).toString().getBytes("UTF-8");
+			byte[] data;
+			if (bs.length > 200) {
+				data = Https.gzip(request, response, null, bs);
+				if (data == null) //browser doesn't support compress
+					data = bs;
+				else
+					bs = null; //free it
+			} else {
+				data = bs;
+			}
+
+			response.setContentLength(data.length);
+			response.getOutputStream().write(data);
+			response.flushBuffer();
 		}
 		return true; //success
 	}
