@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.Date;
 import java.io.StringWriter;
 import java.io.IOException;
-import java.io.ByteArrayInputStream;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -255,15 +254,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
 		byte[] bs = out.toString().getBytes("UTF-8");
 		byte[] data;
-		if (bs.length > 128) {
-			data = Https.gzip(request, response,
-			new ByteArrayInputStream(bs), null, null);
+		if (bs.length > 200) {
+			data = Https.gzip(request, response, null, bs);
 			if (data == null) //browser doesn't support compress
 				data = bs;
+			else
+				bs = null; //free it
 		} else {
 			data = bs;
 		}
-		bs = null; //free it
 
 		response.setContentType("text/xml;charset=UTF-8");
 		response.setContentLength(data.length);
