@@ -23,8 +23,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<language-name>xul/html</language-name>
 	<device-type>ajax</device-type>
 	<namespace>http://www.zkoss.org/2005/zul</namespace>
+	<extension>zul</extension><!-- the first extension is the major one -->
 	<extension>xul</extension>
-	<extension>zul</extension>
 
 	<version>
 		<version-class>org.zkoss.zul.Version</version-class>
