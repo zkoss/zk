@@ -184,7 +184,7 @@ public class Browser extends MIDlet {
 				exit.setItemCommandListener(_itemCommandListener);
 				
 				//preapre the zkmob.targetURL
-				final String targetURL = getAppProperty("zkmob-targetURL");
+				final String targetURL = getAppProperty("zkmob-defaultURL");
 				if (targetURL != null) {
 					((TextField)url).setString(targetURL);
 					
