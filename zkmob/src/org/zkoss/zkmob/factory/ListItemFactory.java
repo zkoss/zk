@@ -44,16 +44,10 @@ public class ListItemFactory extends AbstractUiFactory {
 		
 		ZkListItem component = null; 
 		if (parent instanceof ZkDesktop) { //createComponent directly
-			component = new ZkListItem(null, id, null, null);
+			component = new ZkListItem(id, label, src);
 		} else {
-			component = new ZkListItem((Listable) parent, id, null, null);
-			((Listable) parent).append(component, label, null);
-
-			//load the image and setup on a seperate thread
-			if (src != null) {
-				final String imagesrc = UiManager.prefixURL(hostURL, src); //image
-				UiManager.loadImageOnThread(component, imagesrc);
-			}
+			component = new ZkListItem(id, label, src);
+			component.setParent(parent);
 		}
 		
 		return component;

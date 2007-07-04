@@ -34,7 +34,7 @@ import org.zkoss.zkmob.UiManager;
 public class ZkStringItem extends StringItem implements ZkComponent, Itemable {
 	private String _id;
 	private ZkDesktop _zk;
-	private Form _form;
+	private ZkForm _form;
 	
 	public ZkStringItem(ZkDesktop zk, String id, String label, String text) {
 		super(label, text);
@@ -52,7 +52,20 @@ public class ZkStringItem extends StringItem implements ZkComponent, Itemable {
 	}
 	
 	public void setParent(ZkComponent parent) {
-		setForm((Form) parent);
+		if (_form != parent) { //yes, !=, not !equals
+			if (_form != null) {
+				_form.removeItem(this);
+			}
+			_form = (ZkForm) parent;
+			ZkDesktop newzk = null;
+			if (_form != null) {
+				_form.appendChild(this);
+				newzk = _form.getZkDesktop();
+			}
+			if (_zk != newzk) {
+				_zk = newzk;
+			}
+		}
 	}
 	
 	public ZkDesktop getZkDesktop() {
@@ -69,9 +82,5 @@ public class ZkStringItem extends StringItem implements ZkComponent, Itemable {
 	//--Itemable--//
 	public Form getForm() {
 		return _form;
-	}
-	
-	public void setForm(Form form) {
-		_form = form;
 	}
 }

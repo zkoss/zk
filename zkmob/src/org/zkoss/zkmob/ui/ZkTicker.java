@@ -48,7 +48,7 @@ public class ZkTicker extends Ticker implements ZkComponent {
 	}
 
 	public void setParent(ZkComponent parent) {
-		//do nothing
+		_zk = (ZkDesktop) parent;
 	}
 	
 	public ZkComponent getParent() {
@@ -60,6 +60,10 @@ public class ZkTicker extends Ticker implements ZkComponent {
 	}
 	
 	public void addCommand(Command cmd) {
+		//do nothing
+	}
+	
+	public void removeCommand(Command cmd) {
 		//do nothing
 	}
 }

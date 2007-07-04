@@ -32,7 +32,7 @@ import org.zkoss.zkmob.ZkComponent;
 public class ZkGauge extends Gauge implements ZkComponent, Itemable {
 	private String _id;
 	private ZkDesktop _zk;
-	private Form _form;
+	private ZkForm _form;
 	
 	public ZkGauge(ZkDesktop zk, String id, String label, boolean interactive, int maxValue, int initialValue) {
 		super(label, interactive, maxValue, initialValue);
@@ -50,7 +50,10 @@ public class ZkGauge extends Gauge implements ZkComponent, Itemable {
 	}
 	
 	public void setParent(ZkComponent parent) {
-		setForm((Form) parent);
+		if (_form != parent) { //yes, !=, not !equals
+			_form = (ZkForm) parent;
+			_form.appendChild(this);
+		}
 	}
 	
 	public ZkDesktop getZkDesktop() {
@@ -64,9 +67,5 @@ public class ZkGauge extends Gauge implements ZkComponent, Itemable {
 	//--Itemable--//
 	public Form getForm() {
 		return _form;
-	}
-	
-	public void setForm(Form form) {
-		_form = form;
 	}
 }

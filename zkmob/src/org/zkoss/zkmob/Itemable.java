@@ -31,9 +31,4 @@ public interface Itemable {
 	 * @return the owner Form.
 	 */
 	public Form getForm();
-	
-	/**
-	 * Set the owner Form.
-	 */
-	public void setForm(Form form);
 }

@@ -55,6 +55,11 @@ public interface ZkComponent {
 	public void addCommand(Command cmd);
 	
 	/**
+	 * Remove Command from this component.
+	 */
+	public void removeCommand(Command cmd);
+	
+	/**
 	 * Update a specific attribute of this Zk component.
 	 * @param attr
 	 * @param val

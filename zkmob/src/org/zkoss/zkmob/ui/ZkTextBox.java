@@ -44,7 +44,7 @@ public class ZkTextBox extends TextBox implements ZkComponent {
 	}
 	
 	public void setParent(ZkComponent parent) {
-		//do nothing
+		_zk = (ZkDesktop) parent;
 	}
 	
 	public ZkComponent getParent() {

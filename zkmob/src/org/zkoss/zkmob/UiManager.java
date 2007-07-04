@@ -56,6 +56,7 @@ import org.zkoss.zkmob.factory.TextFieldFactory;
 import org.zkoss.zkmob.factory.TickerFactory;
 import org.zkoss.zkmob.factory.ZkFactory;
 import org.zkoss.zkmob.ui.ZkDesktop;
+import org.zkoss.zkmob.ui.ZkForm;
 
 /** 
  * The static facade for UI component management. 
@@ -206,14 +207,20 @@ public class UiManager {
 	    getSAXParser().parse(is, handler);
 	    return handler.getZk();
 	}
-	
+
 	/** utility to load Image on a separate thread.
 	 * 
 	 * @param item Imageable item to be setup the loaded image
 	 * @param url the Image url
 	 */
-	public static void loadImageOnThread(Imageable item, String url) {
-		new Thread(new ImageRequest(item, url)).start();
+	public static void loadImageOnThread(Imageable item, String hostURL, String url) {
+		if (url != null) {
+			final ZkDesktop zk = ((ZkComponent)item).getZkDesktop();
+			if (zk != null) {
+				final String imagesrc = UiManager.prefixURL(hostURL, url); //image
+				new Thread(new ImageRequest(item, imagesrc)).start();
+			}
+		}
 	}
 	
 	/** utility to be called by {@link ImageRequest} only.
@@ -233,7 +240,7 @@ public class UiManager {
 	private static Image myLoadImage(String url) throws IOException {
 		HttpConnection conn = null;
 		InputStream is = null;
-		
+
 		try {
 			if (url.startsWith("~.")) {
 				url = url.substring(2);
@@ -312,8 +319,8 @@ public class UiManager {
 	public static void applyItemProperties(ZkComponent parent, Item component, Attributes attrs) {
 		setItemAttr(component, "lo", attrs.getValue("lo")); //layout
 		setItemAttr(component, "ps", attrs.getValue("ps")); //preferredSize
-		if (parent instanceof Form) {
-			((Form)parent).append(component);
+		if (parent instanceof ZkForm) {
+			((ZkForm)parent).appendChild((ZkComponent)component);
 		}
 	}
 	

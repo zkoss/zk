@@ -43,21 +43,15 @@ public class ImageItemFactory extends AbstractUiFactory {
 		final String label = attrs.getValue("lb"); //label
 		final String altText = attrs.getValue("tx"); //altText
 		final String apperenceModeStr = attrs.getValue("md"); //apperenceMode
+		final String src = attrs.getValue("im");
 		final int apperenceMode = apperenceModeStr != null ?
 				Integer.parseInt(apperenceModeStr) : Item.PLAIN;
 		final ZkDesktop zk = ((ZkComponent)parent).getZkDesktop();
 		
 		final ZkImageItem component = 
-			new ZkImageItem(zk, id, label, ZkImageItem.LAYOUT_DEFAULT, altText, apperenceMode);
+			new ZkImageItem(zk, id, label, src, ZkImageItem.LAYOUT_DEFAULT, altText, apperenceMode);
 		UiManager.applyItemProperties(parent, component, attrs);
 
-		//load the image and setup on a seperate thread
-		final String src = attrs.getValue("im");
-		if (src != null) {
-			final String imagesrc = UiManager.prefixURL(hostURL, src);
-			UiManager.loadImageOnThread(component, imagesrc);
-		}
-		
 		return component;
 	}
 }

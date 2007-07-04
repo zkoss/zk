@@ -31,4 +31,9 @@ public interface Imageable {
 	 * @param image The Image.
 	 */
 	public void loadImage(Image image);
+	
+	/** Get image url.
+	 * @reaturn image url.
+	 */
+	public String getImageSrc();
 }

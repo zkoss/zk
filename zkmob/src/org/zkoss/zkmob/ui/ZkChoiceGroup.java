@@ -25,10 +25,11 @@ import javax.microedition.lcdui.ChoiceGroup;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Image;
 
+import org.zkoss.zkmob.Imageable;
 import org.zkoss.zkmob.Itemable;
 import org.zkoss.zkmob.Listable;
+import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.ZkComponent;
-
 
 
 /**
@@ -41,8 +42,9 @@ public class ZkChoiceGroup extends ChoiceGroup implements Listable, ZkComponent,
 	private String _id;
 	private Boolean _onSelect;
 	private ZkDesktop _zk;
-	private Form _form;
+	private ZkForm _form;
 	private Vector _listitems = new Vector(32);
+	private boolean _handlekid;
 	
 	public ZkChoiceGroup(ZkDesktop zk, String id, String title, int choiceType, Boolean onSelect) {
 		super(title, choiceType);
@@ -56,15 +58,42 @@ public class ZkChoiceGroup extends ChoiceGroup implements Listable, ZkComponent,
 	}
 	
 	//--Listable--//
-	public int append(ZkComponent li, String stringPart, Image imagePart) {
-		final int j = append(stringPart, imagePart);
-		_listitems.addElement(li);
-		return j;
+	public void appendChild(ZkComponent li) {
+		if (_handlekid) { //avoid dead loop
+			return;
+		}
+		try {
+			_handlekid = true;
+			if (li instanceof ZkListItem) {
+				final ZkListItem comp = (ZkListItem) li;
+				super.append(comp.getLabel(), null);
+				_listitems.addElement(li);
+				li.setParent(this);
+				UiManager.loadImageOnThread(comp,li.getZkDesktop().getHostURL(), comp.getImageSrc());
+			} else {
+				addCommand((ZkCommand) li);
+				li.setParent(this);
+			}
+		} finally {
+			_handlekid = false;
+		}
 	}
-		
-	public void insert(int index, ZkComponent li, String stringPart, Image imagePart) {
-		insert(index, stringPart, imagePart);
-		_listitems.insertElementAt(li, index);
+	
+	public void insertChild(int index, ZkComponent li) {
+		try {
+			_handlekid = true;
+			if (li instanceof ZkListItem) {
+				final ZkListItem comp = (ZkListItem) li;
+				super.insert(index, comp.getLabel(), null);
+				_listitems.insertElementAt(li, index);
+				li.setParent(this);				UiManager.loadImageOnThread(comp, li.getZkDesktop().getHostURL(), comp.getImageSrc());
+			} else {
+				addCommand((ZkCommand) li);
+				li.setParent(this);
+			}
+		} finally {
+			_handlekid = false;
+		}
 	}
 
 	public int indexOf(ZkComponent li) {
@@ -90,7 +119,20 @@ public class ZkChoiceGroup extends ChoiceGroup implements Listable, ZkComponent,
 	}
 	
 	public void setParent(ZkComponent parent) {
-		//do nothing
+		if (_form != parent) { //yes, !=, not !equals
+			if (_form != null) {
+				_form.removeItem(this);
+			}
+			_form = (ZkForm) parent;
+			ZkDesktop newzk = null;
+			if (_form != null) {
+				_form.appendChild(this);
+				newzk = _form.getZkDesktop();
+			}
+			if (_zk != newzk) {
+				_zk = newzk;
+			}
+		}
 	}
 	
 	public ZkDesktop getZkDesktop() {
@@ -104,9 +146,5 @@ public class ZkChoiceGroup extends ChoiceGroup implements Listable, ZkComponent,
 	//--Itemable--//
 	public Form getForm() {
 		return _form;
-	}
-	
-	public void setForm(Form form) {
-		_form = form;
 	}
 }

@@ -37,19 +37,25 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkImageItem extends ImageItem implements Imageable, ZkComponent, Itemable {
 	private String _id;
+	private String _image;
 	private ZkDesktop _zk;
-	private Form _form;
+	private ZkForm _form;
 	
-	public ZkImageItem(ZkDesktop zk, String id, String label, int layout, String altText,
+	public ZkImageItem(ZkDesktop zk, String id, String label, String image, int layout, String altText,
 	int appearanceMode) {
 		super(label, null, layout, altText, appearanceMode);
 		_id = id;
 		_zk = zk;
+		_image = image;
 	}
 	
 	//--Imageable--//
 	public void loadImage(Image image) {
 		setImage(image);
+	}
+	
+	public String getImageSrc() {
+		return _image;
 	}
 	
 	//--ZkComponent--//
@@ -66,7 +72,20 @@ public class ZkImageItem extends ImageItem implements Imageable, ZkComponent, It
 	}
 	
 	public void setParent(ZkComponent parent) {
-		setForm((Form) parent);
+		if (_form != parent) { //yes, !=, not !equals
+			if (_form != null) {
+				_form.removeItem(this);
+			}
+			_form = (ZkForm) parent;
+			ZkDesktop newzk = null;
+			if (_form != null) {
+				_form.appendChild(this);
+				newzk = _form.getZkDesktop();
+			}
+			if (_zk != newzk) {
+				_zk = newzk;
+			}
+		}
 	}
 
 	public void setAttr(String attr, String val) {
@@ -74,10 +93,11 @@ public class ZkImageItem extends ImageItem implements Imageable, ZkComponent, It
 
 		if ("im".equals(attr)) {
 			if (val != null) {
-				UiManager.loadImageOnThread(this, UiManager.prefixURL(_zk.getHostURL(), val));
+				UiManager.loadImageOnThread(this, _zk.getHostURL(), val);
 			} else {
 				setImage(null); //clean to empty
 			}
+			_image = val;
 		} else if ("tx".equals(attr)) {
 			setAltText(val);
 		}
@@ -86,9 +106,5 @@ public class ZkImageItem extends ImageItem implements Imageable, ZkComponent, It
 	//--Itemable--//
 	public Form getForm() {
 		return _form;
-	}
-	
-	public void setForm(Form form) {
-		_form = form;
 	}
 }

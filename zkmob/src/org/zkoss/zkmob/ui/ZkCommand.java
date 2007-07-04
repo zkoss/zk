@@ -22,6 +22,7 @@ import javax.microedition.lcdui.ChoiceGroup;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.List;
 
+import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.ZkComponent;
 
 /**
@@ -31,26 +32,32 @@ import org.zkoss.zkmob.ZkComponent;
  */
 public class ZkCommand extends Command implements ZkComponent {
 	private String _id;
-	private ZkDesktop _zk;
 	private ZkComponent _parent;
+	private int _type;
 	
-	public ZkCommand(ZkComponent parent, ZkDesktop zk, String id, String label, String longLabel, int type, int priority) {
+	public ZkCommand(String id, String label, String longLabel, int type, int priority) {
 		super(label, longLabel, type == 0x100 ? Command.OK : type, priority);
 		_id = id;
-		_zk = zk;
-		_parent = parent;
-		
-		if (type == 0x100) { //special selection command
-			if (parent instanceof List) {
-				((List) parent).setSelectCommand(this);
-			}
-		} else {
-			parent.addCommand(this);
-		}
+		_type = type;
 	}
 	
 	public void setParent(ZkComponent parent) {
-		_parent = parent;
+		if (parent != _parent) {
+			if (_parent != null) {
+				_parent.removeCommand(this);
+			}
+			if (parent != null) {
+				if (_type == 0x100) { //special selection command
+					if (parent instanceof List) {
+						((List) parent).setSelectCommand(this);
+					}
+				} else {
+					parent.addCommand(this);
+				}
+				UiManager.registerCommand(parent, this, parent.getZkDesktop());
+			}
+			_parent = parent;
+		}
 	}
 	
 	public ZkComponent getParent() {
@@ -60,18 +67,21 @@ public class ZkCommand extends Command implements ZkComponent {
 	public void addCommand(Command cmd) {
 		// do nothing
 	}
+	
+	public void removeCommand(Command cmd) {
+		//do nothing
+	}
 
 	public String getId() {
 		return _id;
 	}
 
 	public ZkDesktop getZkDesktop() {
-		return _zk;
+		return _parent == null ? null : _parent.getZkDesktop();
 	}
 
 	public void setAttr(String attr, String val) {
 		// TODO Auto-generated method stub
 
 	}
-
 }

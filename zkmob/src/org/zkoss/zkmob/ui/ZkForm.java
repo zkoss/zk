@@ -21,7 +21,9 @@ package org.zkoss.zkmob.ui;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Item;
 
+import org.zkoss.zkmob.Imageable;
 import org.zkoss.zkmob.Itemable;
+import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.ZkComponent;
 
 
@@ -33,6 +35,7 @@ import org.zkoss.zkmob.ZkComponent;
 public class ZkForm extends Form implements ZkComponent {
 	private String _id;
 	private ZkDesktop _zk;
+	private boolean _handlekid;
 	
 	public ZkForm(ZkDesktop zk, String id, String  title) {
 		super(title);
@@ -62,15 +65,45 @@ public class ZkForm extends Form implements ZkComponent {
 		return -1;
 	}
 	
-	public int append(Item item) {
-		final int j = super.append(item);
-		((Itemable)item).setForm(this);
-		return j;
+	public void appendChild(ZkComponent kid) {
+		if (_handlekid) { //avoid dead loop
+			return;
+		}
+		try {
+			_handlekid = true;
+			if (kid instanceof Item) {
+				super.append((Item)kid);
+			} else { //ZkCommand
+				addCommand((ZkCommand) kid);
+			}
+			kid.setParent(this);
+			if (kid instanceof Imageable) {
+				final String hostURL = kid.getZkDesktop().getHostURL();
+				final Imageable comp = (Imageable) kid;
+				UiManager.loadImageOnThread(comp, hostURL, comp.getImageSrc());
+			}
+		} finally {
+			_handlekid = false;
+		}
 	}
 	
-	public void insert(int itemNum, Item item) {
-		super.insert(itemNum, item);
-		((Itemable)item).setForm(this);
+	public void insertChild(int itemNum, ZkComponent kid) {
+		try {
+			_handlekid = true;
+			if (kid instanceof Item) {
+				super.insert(itemNum, (Item) kid);
+			} else { //ZkCommand
+				addCommand((ZkCommand) kid);
+			}
+			kid.setParent(this);
+			if (kid instanceof Imageable) {
+				final String hostURL = kid.getZkDesktop().getHostURL();
+				final Imageable comp = (Imageable) kid;
+				UiManager.loadImageOnThread(comp, hostURL, comp.getImageSrc());
+			}
+		} finally {
+			_handlekid = false;
+		}
 	}
 	
 	//--ZkComponent--//
@@ -83,7 +116,7 @@ public class ZkForm extends Form implements ZkComponent {
 	}
 	
 	public void setParent(ZkComponent parent) {
-		//do nothing
+		_zk = (ZkDesktop) parent;
 	}
 	
 	public ZkComponent getParent() {

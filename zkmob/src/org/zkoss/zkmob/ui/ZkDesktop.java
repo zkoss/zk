@@ -1,4 +1,4 @@
-/* Zk.java
+/* ZkDesktop.java
 
 {{IS_NOTE
 	Purpose:
@@ -278,6 +278,10 @@ public class ZkDesktop implements ZkComponent {
 		//do nothing
 	}
 	
+	public void removeCommand(Command cmd) {
+		//do nothing
+	}
+	
 	//utility to send MIL event from ZK Mobile to ZK Server
 	private void send(Event evt, boolean asap) {
 		_events.addElement(evt);
@@ -383,7 +387,34 @@ public class ZkDesktop implements ZkComponent {
 	//outer command
 	private void executeOuter(String[] data) {
 		final String uuid = data[0];
-		
+		final ZkComponent comp = lookupUi(uuid);
+
+		final Vector comps = createComponents(this, data[1]);
+		final ZkComponent newcomp = (ZkComponent) comps.elements().nextElement();
+
+		if (comp instanceof ZkListItem) {
+			final Listable owner = (Listable) comp.getParent();
+			final int index = owner.indexOf(comp);
+			owner.delete(index);
+			owner.insertChild(index, newcomp);
+		} else if (comp instanceof Itemable) {
+			final ZkForm form = (ZkForm) ((Itemable)comp).getForm();
+			final int index = form.indexOf((Item)comp);
+			form.delete(index);
+			form.insert(index, (Item) newcomp);
+		} else if (comp instanceof ZkCommand) {
+			final ZkComponent parent = comp.getParent();
+			parent.removeCommand((Command)comp);
+			parent.addCommand((Command)newcomp);
+		} else if (comp instanceof Displayable) {
+			final Displayable disp = (Displayable) comp;
+			if (_browser.getDisplay().getCurrent() == disp) { //the current showing display
+				_current = null;
+				_browser.getDisplay().setCurrent(new Form(null)); //blank Form
+			}
+			_displayables.removeElement(comp);
+			addDisplayable((Displayable) newcomp);
+		}
 	}
 	
 	//redirect command
@@ -442,6 +473,7 @@ public class ZkDesktop implements ZkComponent {
 				_current = null;
 				_browser.getDisplay().setCurrent(new Form(null)); //blank Form
 			}
+			_displayables.removeElement(comp);
 		}
 		
 		unregisterUi(uuid);
@@ -476,38 +508,12 @@ public class ZkDesktop implements ZkComponent {
 				for(Enumeration it = comps.elements(); it.hasMoreElements(); ) {
 					final Object kid = it.nextElement();
 					((ZkComponent)kid).setParent((ZkComponent)owner);
-					if (kid instanceof ZkListItem) {
-						final ZkListItem comp = (ZkListItem) kid; 
-						final String label = comp.getLabel();
-						final String src = comp.getImage();
-						owner.append(comp, label, null);
-						if (src != null) {
-							final String imagesrc = UiManager.prefixURL(_hostURL, src); //image
-							UiManager.loadImageOnThread(comp, imagesrc);
-						}
-					} else { //ZkCommand
-						final ZkCommand comp = (ZkCommand) kid; 
-						ref.getParent().addCommand(comp);
-					}
 				}
 			} else {
 				int k = 0;
 				for(Enumeration it = comps.elements(); it.hasMoreElements(); ++k) {
 					final Object kid = it.nextElement();
 					((ZkComponent)kid).setParent((ZkComponent)owner);
-					if (kid instanceof ZkListItem) {
-						final ZkListItem comp = (ZkListItem) kid; 
-						final String label = comp.getLabel();
-						final String src = comp.getImage();
-						owner.insert(index+k, comp, label, null);
-						if (src != null) {
-							final String imagesrc = UiManager.prefixURL(_hostURL, src); //image
-							UiManager.loadImageOnThread(comp, imagesrc);
-						}
-					} else { //ZkCommand
-						final ZkCommand comp = (ZkCommand) kid; 
-						ref.getParent().addCommand(comp);
-					}
 				}
 			}
 		} else if (ref instanceof Item) {
@@ -515,28 +521,14 @@ public class ZkDesktop implements ZkComponent {
 			final int index = form.indexOf((Item)ref) + after;
 			if (index == form.size()) { //append to the last one
 				for(Enumeration it = comps.elements(); it.hasMoreElements(); ) {
-					final Object kid = it.nextElement();
-					((ZkComponent)kid).setParent((ZkComponent)form);
-					if (kid instanceof ZkCommand) {
-						final ZkCommand comp = (ZkCommand) kid; 
-						form.addCommand(comp);
-					} else {
-						final Item comp = (Item) kid;
-						form.append(comp);
-					}
+					final ZkComponent comp = (ZkComponent) it.nextElement();
+					form.appendChild(comp);
 				}
 			} else {
 				int k = 0;
 				for(Enumeration it = comps.elements(); it.hasMoreElements(); ++k) {
-					final Object kid = it.nextElement();
-					((ZkComponent)kid).setParent((ZkComponent)form);
-					if (kid instanceof ZkCommand) {
-						final ZkCommand comp = (ZkCommand) kid;
-						form.addCommand(comp);
-					} else {
-						final Item comp = (Item) kid;
-						form.insert(index+k, comp);
-					}
+					final ZkComponent kid = (ZkComponent) it.nextElement();
+					form.insertChild(index+k, kid);
 				}
 			}
 		} else if (ref instanceof Displayable) {

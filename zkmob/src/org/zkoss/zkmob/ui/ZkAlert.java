@@ -23,6 +23,7 @@ import javax.microedition.lcdui.AlertType;
 import javax.microedition.lcdui.Image;
 
 import org.zkoss.zkmob.Imageable;
+import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.ZkComponent;
 
 /**
@@ -34,16 +35,23 @@ import org.zkoss.zkmob.ZkComponent;
 public class ZkAlert extends Alert implements Imageable, ZkComponent {
 	private String _id;
 	private ZkDesktop _zk;
+	private String _image;
 	
-	public ZkAlert(ZkDesktop zk, String id, String title, String alertText, AlertType alertType) {
+	public ZkAlert(ZkDesktop zk, String id, String title, String image, String alertText, AlertType alertType) {
 		super(title, alertText, null, alertType);
-		_id = id;
 		_zk = zk;
+		_id = id;
+		_image = image;
+		UiManager.loadImageOnThread(this, _zk.getHostURL(), _image);
 	}
 
 	//--Imageable--//
 	public void loadImage(Image image) {
 		setImage(image);
+	}
+	
+	public String getImageSrc() {
+		return _image;
 	}
 	
 	//--ZkComponent--//
@@ -56,7 +64,7 @@ public class ZkAlert extends Alert implements Imageable, ZkComponent {
 	}
 	
 	public void setParent(ZkComponent parent) {
-		//do nothing
+		_zk = (ZkDesktop) parent;
 	}
 	
 	public ZkDesktop getZkDesktop() {

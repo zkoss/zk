@@ -22,6 +22,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.zkoss.zkmob.Listable;
+import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.ZkComponent;
 
 import javax.microedition.lcdui.Image;
@@ -35,6 +36,7 @@ import javax.microedition.lcdui.List;
 public class ZkList extends List implements Listable, ZkComponent {
 	private String _id;
 	private ZkDesktop _zk;
+	private boolean _handlekid;
 	private Vector _listitems = new Vector(32);
 	
 	public ZkList(ZkDesktop zk, String id, String title, int listType) {
@@ -44,15 +46,43 @@ public class ZkList extends List implements Listable, ZkComponent {
 	}
 	
 	//--Listable--//
-	public int append(ZkComponent li, String stringPart, Image imagePart) {
-		final int j = append(stringPart, imagePart);
-		_listitems.addElement(li);
-		return j;
+	public void appendChild(ZkComponent li) {
+		if (_handlekid) { //avoid dead loop
+			return;
+		}
+		try {
+			_handlekid = true;
+			if (li instanceof ZkListItem) {
+				final ZkListItem comp = (ZkListItem) li;
+				super.append(comp.getLabel(), null);
+				_listitems.addElement(li);
+				li.setParent(this);
+				UiManager.loadImageOnThread(comp, li.getZkDesktop().getHostURL(), comp.getImageSrc());
+			} else {
+				addCommand((ZkCommand) li);
+				li.setParent(this);
+			}
+		} finally {
+			_handlekid = false;
+		}
 	}
 
-	public void insert(int index, ZkComponent li, String stringPart, Image imagePart) {
-		insert(index, stringPart, imagePart);
-		_listitems.insertElementAt(li, index);
+	public void insertChild(int index, ZkComponent li) {
+		try {
+			_handlekid = true;
+			if (li instanceof ZkListItem) {
+				final ZkListItem comp = (ZkListItem) li;
+				super.insert(index, comp.getLabel(), null);
+				_listitems.insertElementAt(li, index);
+				li.setParent(this);
+				UiManager.loadImageOnThread(comp, li.getZkDesktop().getHostURL(), comp.getImageSrc());
+			} else {
+				addCommand((ZkCommand) li);
+				li.setParent(this);
+			}
+		} finally {
+			_handlekid = false;
+		}
 	}
 
 	public int indexOf(ZkComponent li) {

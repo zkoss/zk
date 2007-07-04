@@ -36,14 +36,17 @@ public class ZkListItem implements ZkComponent, Imageable {
 	private String _label;
 	private String _image;
 	
-	public ZkListItem(Listable parent, String id, String label, String image) {
-		_parent = parent;
+	public ZkListItem(String id, String label, String image) {
 		_id = id;
 		_label = label;
 		_image = image;
 	}
+
 	public void setParent(ZkComponent parent) {
-		_parent = (Listable) parent;
+		if (_parent != parent) {
+			_parent = (Listable) parent;
+			((Listable)_parent).appendChild(this);
+		}
 	}
 	
 	public ZkComponent getParent() {
@@ -54,14 +57,14 @@ public class ZkListItem implements ZkComponent, Imageable {
 		return _label;
 	}
 	
-	public String getImage() {
-		return _image;
-	}
-	
 	//--Imageable--//
 	public void loadImage(Image image) {
 		final int index = _parent.indexOf(this);
 		_parent.set(index, _parent.getString(index), image);
+	}
+	
+	public String getImageSrc() {
+		return _image;
 	}
 	
 	//--ZkComponent--//
@@ -70,7 +73,7 @@ public class ZkListItem implements ZkComponent, Imageable {
 	}
 	
 	public ZkDesktop getZkDesktop() {
-		return ((ZkComponent)_parent).getZkDesktop();
+		return _parent == null ? null : ((ZkComponent)_parent).getZkDesktop();
 	}
 
 	public void setAttr(String attr, String val) {
@@ -78,6 +81,10 @@ public class ZkListItem implements ZkComponent, Imageable {
 	}
 	
 	public void addCommand(Command cmd) {
+		//do nothing
+	}
+	
+	public void removeCommand(Command cmd) {
 		//do nothing
 	}
 }
