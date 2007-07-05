@@ -38,8 +38,8 @@ ZK 2.4.1
   1744427: Error binding Listbox
   
 * Upgrade Notes:
-  + The ZK loader compresses the output if the browser supports the
-  compression encoding. It may cause some side effect if you, say,
+  + The ZK loader and filter compress the output if the browser supports the
+  compression encoding. It may cause some side effect if you
   post-process the output of the ZK loader with a filter.
   You can turn it off to make the ZK loader not to compress as used to.
   Refer to the Developer's Guide for details.

@@ -109,7 +109,6 @@ if="deploy.jboss.unzip.required">
 depends="config.build, deploy.jboss.unzip, deploy.jboss.intact"
 if="deploy.jboss.required">
 	<mkdir dir="${dist.conf.dir}"/>
-	<mkdir dir="${dist.deploy.dir}"/>
 
 	<!-- deploy configuration files -->
 	<copy tofile="${jboss.conf.dir}/i3-log.conf" file="${dist.conf.dir}/i3-log.conf.local"
@@ -130,11 +129,6 @@ if="deploy.jboss.required">
 	</copy>
 	<copy todir="${jboss.lib.dir}" preservelastmodified="yes">
 		<fileset dir="${dist.lib.dir}" includes="${server.libs}"/>
-	</copy>
-
-	<!-- db jca configurations -->
-	<copy todir="${jboss.deploy.dir}" preservelastmodified="yes" failonerror="false">
-		<fileset dir="${dist.deploy.dir}" includes="*-ds.xml"/>
 	</copy>
 </target>
 
@@ -220,7 +214,6 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <target name="build.ear" depends="config.build" if="build.ear.required">
 	<mkdir dir="${out.dir}"/>
 	<!-- build ear -->
-	<mkdir dir="${dist.deploy.dir}"/>
 	<ear earfile="${out.dir}/${ear.name}" manifest="${manifest.mf}"
 	 appxml="${application.xml}">
 		<fileset dir="${dist.lib.dir}" includes="${ear.libs}"/>
@@ -257,7 +250,6 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	<delete quiet="true" dir="${codegen.dir}"/>
 	<delete quiet="true">
 		<fileset dir="${dist.lib.dir}" includes="${xar.name}, ${jad.name}"/>
-		<fileset dir="${dist.deploy.dir}" includes="${xar.name}"/>
 		<!--fileset dir="${jboss.lib.dir}" includes="${xar.name}"/-->
 		<fileset dir="${jboss.deploy1.dir}" includes="${xar.name}"/>
 		<!--fileset dir="${tomcat.lib.dir}" includes="${xar.name}"/-->
