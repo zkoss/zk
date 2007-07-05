@@ -1,5 +1,4 @@
 D.ON=true
-domain=my-host.my-domain.com
 javadoc=~/prj/javadoc
 unzip.enabled
 debug=true

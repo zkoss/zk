@@ -1,10 +1,9 @@
 D.ON=true
-domain=my-host.my-domain.com
 javadoc=~/prj/javadoc
 unzip.enabled
 debug=true
 optimize=true
 jboss.deploy=default/deploy
 start.service=Apache Tomcat
-version=2.4.1-FL
+version=2.4.1
 zkmob-version=0.8.0

@@ -34,8 +34,6 @@ build.setting.local (Must)
 	Controls how to build. For sample, refer to build.setting.local.sample.
 	D.ON=true or D.ON=false
 		Controls whether to turn on D.ON
-	domain=my-host.my-domain.com
-		Specifies the domain name
 	javadoc=~/prj/javadoc
 		Specifies where to store Java apidocs.
 	unzip.enabled

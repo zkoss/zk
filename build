@@ -225,15 +225,6 @@ else
 	done
 fi
 
-#-- prepare domain
-domain=$(grep '^domain' $setting)
-domain=${domain#domain=}
-if [ "$domain" = "" ] ; then
-	echo domain must be specified in $setting
-	exit 1
-fi
-echo "domain: $domain"
-
 #-- prepare javadocdir ...
 if [ "$cmd" = "javadoc" ] ; then
 	javadocdir=$(grep '^javadoc' $setting)
@@ -434,7 +425,7 @@ function invoke_ant
 		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
 		-Djboss.profile="$jboss_profile" -Djboss.ear="$jboss_ear" \
 		-Djboss.home="$jboss_home" -Dtomcat.home="$tomcat_home" \
-		-Ddomain="$domain" -Djs.trim=$jstrim -Dzipjs=$zipjs\
+		-Djs.trim=$jstrim -Dzipjs=$zipjs\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
 		-Dear.libs="$ear_libs" -Dimport.libs="$import_libs" \
 		-Dproject.name="$2" -Dproject.version="$prjver" \
