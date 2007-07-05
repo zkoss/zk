@@ -98,7 +98,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//we assume the content is dynamic
 			final String ext = Servlets.getExtension(pi);
 			if (ext == null
-			|| getClassWebResource().getResourcelet(ext) == null) {
+			|| getClassWebResource().getExtendlet(ext) == null) {
 				if (_lastModified == 0) _lastModified = new Date().getTime();
 					//Hard to know when it is modified, so cheat it..
 				return _lastModified;

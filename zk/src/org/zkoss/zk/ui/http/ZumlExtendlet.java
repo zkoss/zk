@@ -1,4 +1,4 @@
-/* ZUMLResourcelet.java
+/* ZumlExtendlet.java
 
 {{IS_NOTE
 	Purpose:
@@ -36,8 +36,9 @@ import org.zkoss.util.resource.Loader;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
-import org.zkoss.web.util.resource.Resourcelet;
-import org.zkoss.web.util.resource.ExtendedWebContext;
+import org.zkoss.web.util.resource.Extendlet;
+import org.zkoss.web.util.resource.ExtendletContext;
+import org.zkoss.web.util.resource.ExtendletConfig;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
@@ -58,12 +59,12 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  * @author tomyeh
  * @since 2.4.1
  */
-/*package*/ class ZUMLResourcelet implements Resourcelet {
-	private static final Log log = Log.lookup(ZUMLResourcelet.class);
-	private ExtendedWebContext _webctx;
+/*package*/ class ZumlExtendlet implements Extendlet {
+	private static final Log log = Log.lookup(ZumlExtendlet.class);
+	private ExtendletContext _webctx;
 	/** PageDefinition cache. */
 	private ResourceCache _cache;
-	private boolean _compress = true;
+//	private boolean _compress = true;
 
 	private ServletContext getServletContext() {
 		return _webctx.getServletContext();
@@ -75,9 +76,9 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		return getWebManager().getWebApp();
 	}
 
-	//Resourcelet//
-	public void init(ExtendedWebContext webctx) {
-		_webctx = webctx;
+	//Extendlet//
+	public void init(ExtendletConfig config) {
+		_webctx = config.getExtendletContext();
 		_cache = new ResourceCache(new ZUMLLoader(), 17);
 		_cache.setMaxSize(200).setLifetime(60*60*1000); //1hr
 		_cache.setCheckPeriod(60*60*1000); //1hr
@@ -86,7 +87,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
 		if (extra != null)
-			log.warning("extra is not supported by ZUMLResourcelet: "+extra);
+			log.warning("extra is not supported by ZumlExtendlet: "+extra);
 
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		final PageDefinition pagedef = (PageDefinition)_cache.get(path);
@@ -122,14 +123,14 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request, PageDefinitions.getLocator(wapp, path));
 
-		boolean compress = _compress && !Servlets.isIncluded(request);
+//		boolean compress = _compress && !Servlets.isIncluded(request);
 		final Page page = wappc.getUiFactory().newPage(ri, pagedef, path);
 		final Execution exec = new ExecutionImpl(
 			getServletContext(), request, response, desktop, page);
-		final Writer out = compress ? (Writer)new StringWriter(): response.getWriter();
+		final Writer out = /*compress ? (Writer)new StringWriter():*/ response.getWriter();
 		wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
 
-		if (compress) {
+/*		if (compress) {
 			byte[] data = ((StringWriter)out).toString().getBytes("UTF-8");
 			if (data.length > 200) {
 				byte[] bs = Https.gzip(request, response, null, data);
@@ -140,7 +141,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 			response.getOutputStream().write(data);
 			response.flushBuffer();
 		}
-	}
+*/	}
 
 	/** Helper class. */
 	private class ZUMLLoader implements Loader {

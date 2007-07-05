@@ -133,16 +133,16 @@ public class WebManager {
 		}
 
 		//Register resource processors for each extension
-		//FUTURE: Add more Resourcelet from zk.xml
-		ZUMLResourcelet reslet = null;
+		//FUTURE: Add more Extendlet from zk.xml
+		ZumlExtendlet extlet = null;
 		for (Iterator it = LanguageDefinition.getAll().iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
 			final List exts = langdef.getExtensions();
 			if (!exts.isEmpty()) {
-				if (reslet == null)
-					reslet = new ZUMLResourcelet();
-				_cwr.addResourcelet((String)exts.get(0), reslet);
+				if (extlet == null)
+					extlet = new ZumlExtendlet();
+				_cwr.addExtendlet((String)exts.get(0), extlet);
 				//Add to the first extension only (the main one)
 			}
 		}
