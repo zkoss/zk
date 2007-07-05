@@ -342,9 +342,14 @@ zkDtbox.init = function (cmp) {
 		//IE: use keydown. otherwise, it causes the window to scroll
 
 	var btn = $e(cmp.id + "!btn");
-	if (btn) zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp);});
-	btn.align = "absmiddle";
+	if (btn) {
+		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp);});
+		zkWgt.fixDropBtn(cmp);
+	}
+	zkDtbox.onVisi = zkWgt.fixDropBtn; //widget.js is ready now
 };
+zkDtbox.onVisi = zk.voidf; //widget.js might not be loaded yet
+
 zkDtbox.validate = function (cmp) {
 	var inp = $e(cmp.id+"!real");
 	if (inp.value) {

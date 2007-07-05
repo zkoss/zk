@@ -633,3 +633,32 @@ if (zk.gecko) { //Bug 1692495
 			cmp.src = cmp.src; //strange workaround: reload xml
 	};
 }
+
+//utilities//
+var zkWgt = {}
+/** Fixes the button align with an input box, such as combobox, datebox.
+ */
+zkWgt.fixDropBtn = function (cmp) {
+	var inp = $real(cmp);
+	var btn = $e(cmp.id + "!btn");
+	//note: isRealVisible handles null argument
+	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
+		if (!inp.offsetHeight || !btn.offsetHeight) {
+			setTimeout("zkWgt.fixDropBtn($e('" + cmp.id +"'))", 100);
+			return;
+		}
+
+		//Bug 1738241: don't use align="xxx"
+		var v = inp.offsetHeight - btn.offsetHeight;
+		if (v > 0) {
+			var v2 = Math.round(v/2); //yes, round to integer
+			btn.style.paddingTop = v2 + "px";
+			btn.style.paddingBottom = (v - v2) + "px";
+		}
+
+		v = inp.offsetTop - btn.offsetTop;
+		btn.style.position = "relative";
+		btn.style.top = v + "px";
+		if (zk.safari) btn.style.left = "-2px";
+	}
+};

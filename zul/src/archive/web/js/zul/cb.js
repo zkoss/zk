@@ -44,33 +44,11 @@ zkCmbox.init = function (cmp) {
 	var btn = $e(cmp.id + "!btn");
 	if (btn) {
 		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
-		zkCmbox._fixbtn(cmp);
+		zkWgt.fixDropBtn(cmp);
 	}
+	zkCmbox.onVisi = zkWgt.fixDropBtn; //widget.js is ready now
 };
-zkCmbox.onVisi = zkCmbox._fixbtn = function (cmp) {
-	var inp = $real(cmp);
-	var btn = $e(cmp.id + "!btn");
-	//note: isRealVisible handles null argument
-	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
-		if (!inp.offsetHeight || !btn.offsetHeight) {
-			setTimeout("zkCmbox._fixbtn($e('" + cmp.id +"'))", 100);
-			return;
-		}
-
-		//Bug 1738241: don't use align="xxx"
-		var v = inp.offsetHeight - btn.offsetHeight;
-		if (v > 0) {
-			var v2 = Math.round(v/2); //yes, round to integer
-			btn.style.paddingTop = v2 + "px";
-			btn.style.paddingBottom = (v - v2) + "px";
-		}
-
-		v = inp.offsetTop - btn.offsetTop;
-		btn.style.position = "relative";
-		btn.style.top = v + "px";
-		if (zk.safari) btn.style.left = "-2px";
-	}
-};
+zkCmbox.onVisi = zk.voidf; //widget.js might not be loaded yet
 
 zkCmit = {};
 zkCmit.init = function (cmp) {
