@@ -999,7 +999,7 @@ public class DataBinder {
 				myLoadAllNodes(kidbean, kidnode, collectionComp, walkedNodes, savebinding, loadedBindings, true); //recursive
 			}
 			
-			for(final Iterator it = node.getSameNodes().iterator(); it.hasNext();) {
+			for(final Iterator it = new ArrayList(node.getSameNodes()).iterator(); it.hasNext();) {
 				final Object obj = it.next();
 				if (obj instanceof BindingNode) {
 					final BindingNode samenode = (BindingNode) obj;
@@ -1050,18 +1050,23 @@ public class DataBinder {
 				*/
 				Component comp = binding.getComponent();
 				if (isTemplate(comp)) { //a template component, locate the listitem
-					if (isClone(collectionComp)) {
-						comp = lookupClone(collectionComp, comp);
+					Component clonecomp = null;
+					if (isClone(collectionComp)) { //A listbox in listbox
+						clonecomp = lookupClone(collectionComp, comp);
 					} else {
-						comp = getCollectionItem(comp, bean);
+						clonecomp = getCollectionItem(comp, bean);
 					}
 					if ("_var".equals(binding.getAttr())) {
-						collectionComp = comp;
+						if (clonecomp == null) { //the comp is in another Listbox
+							clonecomp = getCollectionItem(comp, bean);
+						}
+						collectionComp = clonecomp;
 					}
+					comp = clonecomp;
 				}
 				
 				if (refChanged) {
-					binding.loadAttribute(comp, bean);
+					binding.loadAttribute(comp);
 				}
 			}
 			return collectionComp;

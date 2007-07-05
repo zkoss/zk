@@ -6,12 +6,12 @@ MIDlet-Icon: /icons/zk.png
 MicroEdition-Configuration: CLDC-1.0
 MIDlet-Jar-URL: zkmob.jar
 MIDlet-Name: zkmob
-zkmob-defaultURL: /test/hello.mil
-zkmob-history3: /test/listbox.mil
+zkmob-defaultURL: http://localhost:8080/zkmob-demo-all/test/hello.mil
+zkmob-history3: http://localhost:8080/zkmob-demo-all/test/listbox.mil
 MIDlet-1: ZK Mobile,/icons/zk.png,org.zkoss.zkmob.Browser
-zkmob-history2: /test/onchanging.mil
-zkmob-history1: /test/label.mil
-zkmob-history0: /test/hello.mil
+zkmob-history2: http://localhost:8080/zkmob-demo-all/test/onchanging.mil
+zkmob-history1: http://localhost:8080/zkmob-demo-all/test/label.mil
+zkmob-history0: http://localhost:8080/zkmob-demo-all/test/hello.mil
 MIDlet-Description: ZK Mobile
 MIDlet-Permissions: javax.microedition.io.Connector.http
 MIDlet-Vendor: Potix Corporation
