@@ -18,6 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmob.factory;
 
+import java.util.Date;
+import java.util.TimeZone;
+
 import org.xml.sax.Attributes;
 import org.zkoss.zkmob.ZkComponent;
 import org.zkoss.zkmob.UiManager;
@@ -38,10 +41,21 @@ public class DateFieldFactory extends AbstractUiFactory {
 		final String id = attrs.getValue("id"); //id
 		final String label = attrs.getValue("lb"); //label
 		final String modeStr = attrs.getValue("md"); //mode
+		final String dateStr = attrs.getValue("dt"); //date
+//		final String tzid = attrs.getValue("tz"); //timezone
+		//The JavaME TimeZone support is poor. 
+		//Always use GMT timezone and calculate the correct date in ZK server
+		final TimeZone tz = TimeZone.getTimeZone("GMT"); 
 		final int mode = Integer.parseInt(modeStr);
+		final String onChange = attrs.getValue("on");
 		final ZkDesktop zk = ((ZkComponent)parent).getZkDesktop();
 
-		final ZkDateField component = new ZkDateField(zk, id, label, mode);
+		final ZkDateField component = new ZkDateField(zk, id, label, mode, tz
+				, onChange == null ? null : new Boolean("t".equals(onChange)));
+		if (dateStr != null) {
+			final long time = Long.parseLong(dateStr);
+			component.setDate(new Date(time));
+		}
 
 		UiManager.applyItemProperties(parent, component, attrs);
 		

@@ -125,6 +125,27 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</component>
 
 	<component>
+		<component-name>datebox</component-name>
+		<component-class>org.zkoss.mil.Datebox</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./mil/rmil/datebox.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>date</mold-name>
+			<mold-uri>~./mil/rmil/datebox.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>time</mold-name>
+			<mold-uri>~./mil/rmil/datebox.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>date_time</mold-name>
+			<mold-uri>~./mil/rmil/datebox.dsp</mold-uri>
+		</mold>
+	</component>
+
+	<component>
 		<component-name>frame</component-name>
 		<component-class>org.zkoss.mil.Frame</component-class>
 		<mold>

@@ -18,6 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmob.ui;
 
+import java.util.Date;
+import java.util.TimeZone;
+
 import javax.microedition.lcdui.DateField;
 import javax.microedition.lcdui.Form;
 
@@ -35,13 +38,19 @@ public class ZkDateField extends DateField implements ZkComponent, Itemable {
 	private String _id;
 	private ZkDesktop _zk;
 	private ZkForm _form;
+	private Boolean _onChange;
 	
-	public ZkDateField(ZkDesktop zk, String id, String label, int mode) {
-		super(label, mode);
+	public ZkDateField(ZkDesktop zk, String id, String label, int mode, TimeZone tz, Boolean onChange) {
+		super(label, mode, tz);
 		_id = id;
 		_zk = zk;
+		_onChange = onChange;
 	}
-	
+
+	public Boolean getOnChange() {
+		return _onChange;
+	}
+
 	//--ZkComponent --//
 	public String getId() {
 		return _id;
@@ -73,7 +82,9 @@ public class ZkDateField extends DateField implements ZkComponent, Itemable {
 	}
 
 	public void setAttr(String attr, String val) {
-		//TODO:
+		if ("dt".equals(attr)) {
+			setDate(new Date(Long.parseLong(val)));
+		}
 	}
 
 	//--Itemable--//

@@ -27,6 +27,7 @@ cc: CANCEL command
 cr: current
 cs: constraints
 di: desktop id
+dt: date
 ec: EXIT command
 fn: font
 fp: fitPolicy

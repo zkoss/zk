@@ -151,10 +151,17 @@ public class ZkDesktop implements ZkComponent {
 					final ZkTextField tf = (ZkTextField) comp;
 					final Boolean onChanging = tf.getOnChanging();
 					if (onChanging != null) {
-						send(new Event(comp.getId(), "onChanging", new Object[] {((TextField)comp).getString()}), onChanging.booleanValue());
+						send(new Event(comp.getId(), "onChanging", 
+								new Object[] {((TextField)comp).getString()}), onChanging.booleanValue());
 					}
 					System.out.println("onChanging,id="+ id);
 				} else if (comp instanceof DateField) {
+					final ZkDateField df = (ZkDateField) comp;
+					final Boolean onChange = df.getOnChange();
+					if (onChange != null) {
+						send(new Event(comp.getId(), "onChange", 
+								new Object[] {(""+df.getDate().getTime())}), onChange.booleanValue());
+					}
 					System.out.println("onChange,id="+ id);
 				} else if (comp instanceof CustomItem) {
 					System.out.println("onNotify,id="+ id);
