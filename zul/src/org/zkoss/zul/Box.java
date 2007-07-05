@@ -252,7 +252,7 @@ public class Box extends XulElement {
 			wd = null; //don't generate it at TD
 
 		if (_spacing != null || size != null || wd != null || floating || !visible) {
-			sb.append("style=\"");
+			sb.append(" style=\"");
 			if (!visible)
 				sb.append("display:none;");
 

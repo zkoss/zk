@@ -156,7 +156,7 @@ public class Checkbox extends LabelImageElement {
 	 */
 	public String getLabelAttrs() {
 		final String style = HTMLs.getTextRelevantStyle(getRealStyle());
-		return style.length() > 0 ? "style=\""+style+'"': "";
+		return style.length() > 0 ? " style=\""+style+'"': "";
 	}
 
 	//-- super --//
