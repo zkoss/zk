@@ -66,8 +66,9 @@ public class Https extends Servlets {
 	public static final byte[] gzip(HttpServletRequest request,
 	HttpServletResponse response, InputStream content1,
 	byte[] content2) throws IOException {
+		//We check Content-Encoding first to avoid compressing twice
 		String ae = request.getHeader("accept-encoding");
-		if (ae != null) {
+		if (ae != null && !response.containsHeader("Content-Encoding")) {
 			if (ae.indexOf("gzip") >= 0) {
 				response.addHeader("Content-Encoding", "gzip");
 				final ByteArrayOutputStream boas = new ByteArrayOutputStream(8192);
