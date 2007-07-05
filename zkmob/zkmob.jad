@@ -7,6 +7,7 @@ MicroEdition-Configuration: CLDC-1.0
 MIDlet-Jar-URL: zkmob.jar
 MIDlet-Name: zkmob
 zkmob-defaultURL: http://localhost:8080/zkmob-demo-all/test/hello.mil
+zkmob-history4: http://localhost:8080/zkmob-demo-all/test/datebox.mil
 zkmob-history3: http://localhost:8080/zkmob-demo-all/test/listbox.mil
 MIDlet-1: ZK Mobile,/icons/zk.png,org.zkoss.zkmob.Browser
 zkmob-history2: http://localhost:8080/zkmob-demo-all/test/onchanging.mil

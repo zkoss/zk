@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<frame title="My First Window"  visible="true" onCommand="MilDevice.goHome(null)">
+	<datebox label="DATE" id="dbx1" mold="date"/>
+	<datebox label="TIME" id="dbx2" mold="time" onCommand="self.setValue(new Date())">
+		<command label="Now!" type="ok"/>
+	</datebox>
+	<datebox label="DATE_TIME" mold="date_time" onChange="dbx1.setValue(self.getValue()); dbx2.setValue(self.getValue())"/>
+	<command label="Home" type="back"/>
+</frame>
