@@ -134,6 +134,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$prjnm/dist/lib/ext
 	mkdir -p /tmp/zk/$prjnm/dist/lib/zkforge
 	mkdir -p /tmp/zk/$prjnm/dist/WEB-INF
+	mkdir -p /tmp/zk/$prjnm/dist/xsd
 	mkdir -p /tmp/zk/$prjnm/dist/src
 	mkdir -p /tmp/zk/$prjnm/doc
 
@@ -161,6 +162,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#timelinez
 
 	cp -rp dist/export/WEB-INF/* /tmp/zk/$prjnm/dist/WEB-INF
+	cp zul/src/archive/metainfo/xml/*.xsd /tmp/zk/$prjnm/dist/xsd
 	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$prjnm/doc
 
 	cd /tmp/zk
