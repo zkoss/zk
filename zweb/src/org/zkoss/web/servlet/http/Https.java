@@ -42,7 +42,7 @@ import org.zkoss.io.Files;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.util.resource.ExtendedWebContext;
+import org.zkoss.web.util.resource.ExtendletContext;
 
 /**
  * The Servlet-related utilities.
@@ -339,8 +339,8 @@ public class Https extends Servlets {
 				final int j = uri.indexOf('/', 1);
 				final String ctxroot =
 					j >= 0 ? "/" + uri.substring(1, j): "/" + uri.substring(1);
-				final ExtendedWebContext extctx =
-					Servlets.getExtendedWebContext(ctx, ctxroot.substring(1));
+				final ExtendletContext extctx =
+					Servlets.getExtendletContext(ctx, ctxroot.substring(1));
 				if (extctx != null) {
 					uri = j >= 0 ? uri.substring(j): "/";
 					return extctx.encodeRedirectURL(

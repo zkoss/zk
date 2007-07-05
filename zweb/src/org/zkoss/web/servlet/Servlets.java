@@ -61,7 +61,7 @@ import org.zkoss.idom.input.SAXBuilder;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.http.Encodes;
-import org.zkoss.web.util.resource.ExtendedWebContext;
+import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ServletContextLocator;
 
 /**
@@ -357,7 +357,7 @@ public class Servlets {
 	 * To reference to foreign context, use "~ctx" where ctx is the
 	 * context path of the foreign context (without leading '/').
 	 * If it could be any context path recognized by the Web container or
-	 * any name registered with {@link #addExtendedWebContext}.
+	 * any name registered with {@link #addExtendletContext}.
 	 * @param params the parameter map; null to ignore
 	 * @param mode one of {@link #OVERWRITE_URI}, {@link #IGNORE_PARAM},
 	 * and {@link #APPEND_PARAM}. It defines how to handle if both uri
@@ -537,7 +537,7 @@ public class Servlets {
 	/** Used to resolve "~" in URI. */
 	private static class ParsedURI {
 		private ServletContext _svlctx;
-		private ExtendedWebContext _extctx;
+		private ExtendletContext _extctx;
 		private String _uri;
 
 		private ParsedURI(final ServletContext ctx, final String uri) {
@@ -552,7 +552,7 @@ public class Servlets {
 					_uri = "/";
 				}
 
-				_extctx = getExtendedWebContext(ctx, ctxroot.substring(1));
+				_extctx = getExtendletContext(ctx, ctxroot.substring(1));
 				if (_extctx == null) {
 					_svlctx = ctx.getContext(ctxroot);
 					if (_svlctx == null) 
@@ -744,27 +744,27 @@ public class Servlets {
 	 * the specified name.
 	 */
 	public static final
-	ExtendedWebContext addExtendedWebContext(ServletContext ctx,
-	String name, ExtendedWebContext extctx) {
+	ExtendletContext addExtendletContext(ServletContext ctx,
+	String name, ExtendletContext extctx) {
 		if (name == null || extctx == null)
 			throw new IllegalArgumentException("null");
-		return (ExtendedWebContext)getExtWebCtxs(ctx).put(name, extctx);
+		return (ExtendletContext)getExtWebCtxs(ctx).put(name, extctx);
 	}
 	/** Removes an extended context of the specified name.
 	 */
 	public static final
-	ExtendedWebContext removeExtendedWebContext(ServletContext ctx, String name) {
-		return (ExtendedWebContext)getExtWebCtxs(ctx).remove(name);
+	ExtendletContext removeExtendletContext(ServletContext ctx, String name) {
+		return (ExtendletContext)getExtWebCtxs(ctx).remove(name);
 	}
 	/** Returns the extended context of the specified name.
 	 */
 	public static final
-	ExtendedWebContext getExtendedWebContext(ServletContext ctx, String name) {
-		return (ExtendedWebContext)getExtWebCtxs(ctx).get(name);
+	ExtendletContext getExtendletContext(ServletContext ctx, String name) {
+		return (ExtendletContext)getExtWebCtxs(ctx).get(name);
 	}
 	private static final Map getExtWebCtxs(ServletContext ctx) {
 		synchronized (Servlets.class) { //don't use ctx because it might be a proxy (in portlet)
-			final String attr = "javax.zkoss.web.servlets.ExtendedWebContexts";
+			final String attr = "javax.zkoss.web.servlets.ExtendletContexts";
 				//such that it could be shared among portlets
 			Map ctxs = (Map)ctx.getAttribute(attr);
 			if (ctxs == null)

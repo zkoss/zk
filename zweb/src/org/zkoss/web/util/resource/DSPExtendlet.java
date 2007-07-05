@@ -1,4 +1,4 @@
-/* DSPResourcelet.java
+/* DSPExtendlet.java
 
 {{IS_NOTE
 	Purpose:
@@ -43,21 +43,21 @@ import org.zkoss.web.servlet.dsp.Interpretation;
 import org.zkoss.web.servlet.dsp.ServletDSPContext;
 
 /**
- * The DSP resource processor ({@link Resourcelet}) used to parse
+ * The DSP resource processor ({@link Extendlet}) used to parse
  * DSP files loaded from the classpath.
  *
  * @author tomyeh
  * @since 2.4.1
  */
-/*package*/ class DSPResourcelet implements Resourcelet {
-	private static final Log log = Log.lookup(DSPResourcelet.class);
+/*package*/ class DSPExtendlet implements Extendlet {
+	private static final Log log = Log.lookup(DSPExtendlet.class);
 
-	private ExtendedWebContext _webctx;
+	private ExtendletContext _webctx;
 	/** DSP Interpretation cache. */
 	private ResourceCache _cache;
 
-	public void init(ExtendedWebContext webctx) {
-		_webctx = webctx;
+	public void init(ExtendletConfig config) {
+		_webctx = config.getExtendletContext();
 		_cache = new ResourceCache(new DSPLoader(), 131);
 		_cache.setMaxSize(1000).setLifetime(60*60*1000); //1hr
 		_cache.setCheckPeriod(60*60*1000); //1hr

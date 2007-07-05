@@ -111,8 +111,8 @@ public class ResourceCaches {
 					path = "/";
 				}
 
-				final ExtendedWebContext extctx =
-					Servlets.getExtendedWebContext(ctx, ctxpath.substring(1));
+				final ExtendletContext extctx =
+					Servlets.getExtendletContext(ctx, ctxpath.substring(1));
 				if (extctx != null) {
 					url = extctx.getResource(path);
 					if (log.debugable()) log.debug("Resolving "+path0+" to "+url);

@@ -1,4 +1,4 @@
-/* Resourcelet.java
+/* Extendlet.java
 
 {{IS_NOTE
 	Purpose:
@@ -29,16 +29,16 @@ import javax.servlet.http.HttpServletResponse;
  * content.
  *
  * <p>To add a resource processor to {@link ClassWebResource}, use
- * {@link ClassWebResource#addResourcelet}.
+ * {@link ClassWebResource#addExtendlet}.
  *
  * @author tomyeh
  * @since 2.4.1
- * @see ClassWebResource#addResourcelet
+ * @see ClassWebResource#addExtendlet
  */
-public interface Resourcelet {
+public interface Extendlet {
 	/** Initializes the resouorce processor.
 	 */
-	public void init(ExtendedWebContext webctx);
+	public void init(ExtendletConfig config);
 	/** Process the specified request.
 	 *
 	 * @param path the path mapped to this resource processor.

@@ -37,7 +37,7 @@ import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.util.resource.ExtendedWebContext;
+import org.zkoss.web.util.resource.ExtendletContext;
 
 /**
  * Utilities to handle portlet.
@@ -116,7 +116,7 @@ public class Portlets {
 		/** External context if ~xxx/ is specified. */
 		private ServletContext _svlctx;
 		/** The extended context. */
-		private ExtendedWebContext _extctx;
+		private ExtendletContext _extctx;
 		private String _uri;
 
 		private ParsedURI(final PortletContext ctx, final String uri) {
@@ -132,7 +132,7 @@ public class Portlets {
 				}
 
 				final ServletContext svlctx = getServletContext(ctx);
-				_extctx = Servlets.getExtendedWebContext(svlctx, ctxroot.substring(1));
+				_extctx = Servlets.getExtendletContext(svlctx, ctxroot.substring(1));
 				if (_extctx == null) {
 					_svlctx = svlctx;
 					_svlctx = _svlctx.getContext(ctxroot);

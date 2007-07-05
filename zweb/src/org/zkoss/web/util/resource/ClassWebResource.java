@@ -70,8 +70,8 @@ public class ClassWebResource {
 	private final ClassWebContext _cwc;
 	/** An array of extensions that have to be compressed (with gzip). */
 	private String[] _compressExts;
-	/** Map(String ext, Resourcelet). */
-	private final Map _reslets = new HashMap(5);
+	/** Map(String ext, Extendlet). */
+	private final Map _extlets = new HashMap(5);
 
 	/** The prefix of path of web resources ("/web"). */
 	public static final String PATH_PREFIX = "/web";
@@ -95,12 +95,12 @@ public class ClassWebResource {
 	ClassWebResource getInstance(ServletContext ctx, String mappingURI) {
 		synchronized (ctx) {
 			final ClassWebContext cwc =
-				(ClassWebContext)Servlets.getExtendedWebContext(ctx, ".");
+				(ClassWebContext)Servlets.getExtendletContext(ctx, ".");
 			if (cwc != null)
 				return cwc.getClassWebResource();
 
 			final ClassWebResource cwr = new ClassWebResource(ctx, mappingURI);
-			Servlets.addExtendedWebContext(ctx, ".", cwr._cwc);
+			Servlets.addExtendletContext(ctx, ".", cwr._cwc);
 			return cwr;
 		}
 	}
@@ -114,7 +114,7 @@ public class ClassWebResource {
 		_ctx = ctx;
 		_mappingURI = mappingURI;
 		_cwc = new ClassWebContext();
-		addResourcelet("dsp", new DSPResourcelet());
+		addExtendlet("dsp", new DSPExtendlet());
 	}
 	/** Process the request.
 	 * @since 2.4.1
@@ -133,56 +133,61 @@ public class ClassWebResource {
 		}
 	}
 
-	/** Returns the resource processor of the specified extension, or null
-	 * if not associated yet.
+	/** Returns the Extendlet (aka., resource processor) of the
+	 * specified extension, or null if not associated yet.
 	 *
 	 * @param ext the extension, e.g, "js" and "css".
-	 * @return the resource processor, or null if not associated yet.
+	 * @return the Extendlet (aka., resource processor),
+	 * or null if not associated yet.
 	 * @since 2.4.1
 	 */
-	public Resourcelet getResourcelet(String ext) {
+	public Extendlet getExtendlet(String ext) {
 		if (ext == null)
 			return null;
 
 		ext = ext.toLowerCase();
-		synchronized (_reslets) {
-			return (Resourcelet)_reslets.get(ext);
+		synchronized (_extlets) {
+			return (Extendlet)_extlets.get(ext);
 		}
 	}
-	/** Adds a resource processor ({@link Resourcelet}) to process
+	/** Adds an Extendlet (aka., resource processor) to process
 	 * the resource of the specified extension.
 	 *
 	 * @param ext the extension, e.g, "js" and "css".
-	 * @param reslet the resouce processor
-	 * @return the previous resource processor, or null if not associated
-	 * before.
+	 * @param extlet the Extendlet (aka., resouce processor) to add
+	 * @return the previous Extendlet, or null if not associated before.
 	 * @since 2.4.1
 	 */
-	public Resourcelet addResourcelet(String ext, Resourcelet reslet) {
-		if (ext == null || reslet == null)
+	public Extendlet addExtendlet(String ext, Extendlet extlet) {
+		if (ext == null || extlet == null)
 			throw new IllegalArgumentException("null");
 
-		reslet.init(_cwc);
+		extlet.init(new ExtendletConfig() {
+			public ExtendletContext getExtendletContext() {
+				return _cwc;
+			}
+		});
 
 		ext = ext.toLowerCase();
-		synchronized (_reslets) {
-			return (Resourcelet)_reslets.put(ext, reslet);
+		synchronized (_extlets) {
+			return (Extendlet)_extlets.put(ext, extlet);
 		}
 	}
-	/** Removes the resource processor for the specified extension.
+	/** Removes the Extendlet (aka., resource processor)
+	 * for the specified extension.
 	 *
 	 * @param ext the extension, e.g, "js" and "css".
-	 * @return the previous resource processor, or null if no resource
-	 * processor was associated with the specified extension.
+	 * @return the previous Extendlet, or null if no Extendlet
+	 * was associated with the specified extension.
 	 * @since 2.4.1
 	 */
-	public Resourcelet removeResourcelet(String ext) {
+	public Extendlet removeExtendlet(String ext) {
 		if (ext == null)
 			return null;
 
 		ext = ext.toLowerCase();
-		synchronized (_reslets) {
-			return (Resourcelet)_reslets.remove(ext);
+		synchronized (_extlets) {
+			return (Extendlet)_extlets.remove(ext);
 		}
 	}
 
@@ -252,10 +257,10 @@ public class ClassWebResource {
 
 		final String ext = Servlets.getExtension(pi);
 		if (ext != null) {
-			//Invoke the resource processor (Resourcelet)
-			final Resourcelet reslet = getResourcelet(ext);
-			if (reslet != null) {
-				reslet.service(request, response, pi, jsextra);
+			//Invoke the resource processor (Extendlet)
+			final Extendlet extlet = getExtendlet(ext);
+			if (extlet != null) {
+				extlet.service(request, response, pi, jsextra);
 				return;
 			}
 
@@ -310,10 +315,10 @@ public class ClassWebResource {
 	}
 
 	/**
-	 * An implementation of ExtendedWebContext to load resources from
+	 * An implementation of ExtendletContext to load resources from
 	 * the class path rooted at /web.
 	 */
-	private class ClassWebContext implements ExtendedWebContext {
+	private class ClassWebContext implements ExtendletContext {
 		private final Locator _locator = new Locator() {
 			public String getDirectory() {
 				return null;
@@ -331,7 +336,7 @@ public class ClassWebResource {
 			return ClassWebResource.this;
 		}
 
-		//-- ExtendedWebContext --//
+		//-- ExtendletContext --//
 		public ServletContext getServletContext() {
 			return _ctx;
 		}

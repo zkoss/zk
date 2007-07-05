@@ -42,7 +42,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
-import org.zkoss.web.util.resource.ExtendedWebContext;
+import org.zkoss.web.util.resource.ExtendletContext;
 
 /**
  * Encoding utilities for servlets.
@@ -434,8 +434,8 @@ public class Encodes {
 					ctxroot = j >= 0 ? uri.substring(0, j): uri;
 				}
 
-				final ExtendedWebContext extctx =
-					Servlets.getExtendedWebContext(ctx, ctxroot.substring(1));
+				final ExtendletContext extctx =
+					Servlets.getExtendletContext(ctx, ctxroot.substring(1));
 				if (extctx != null) {
 					final int j = uri.indexOf('/', 1);
 					return extctx.encodeURL(request, response,

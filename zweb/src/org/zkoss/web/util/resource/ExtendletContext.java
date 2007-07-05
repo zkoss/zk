@@ -1,4 +1,4 @@
-/* ExtendedWebContext.java
+/* ExtendletContext.java
 
 {{IS_NOTE
 	Purpose:
@@ -44,11 +44,11 @@ import org.zkoss.util.resource.Locator;
  * If not found, it looks up any servlet context called xxx.
  *
  * <p>To registers an extended context, use 
- * {@link org.zkoss.web.servlet.Servlets#addExtendedWebContext}.
+ * {@link org.zkoss.web.servlet.Servlets#addExtendletContext}.
  *
  * @author tomyeh
  */
-public interface ExtendedWebContext {
+public interface ExtendletContext {
 	/** Returns the encoded URL.
 	 * The returned URL is also encoded with HttpServletResponse.encodeURL.
 	 *
