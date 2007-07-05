@@ -32,8 +32,8 @@ if (!window.Comboitem_bgcolor) { //define it only if not customized
 ////
 zkCmbox = {};
 zkCmbox.init = function (cmp) {
-	if (!zkCmbox.onHide) zkCmbox.onHide = zkTxbox.onHide;
-		//we cannot assign it until now, since widget.js might be loaded after this
+	zkCmbox.onVisi = zkWgt.fixDropBtn; //widget.js is ready now
+	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
 
 	var inp = $real(cmp);
 	zkTxbox.init(inp);
@@ -46,9 +46,7 @@ zkCmbox.init = function (cmp) {
 		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
 		zkWgt.fixDropBtn(cmp);
 	}
-	zkCmbox.onVisi = zkWgt.fixDropBtn; //widget.js is ready now
 };
-zkCmbox.onVisi = zk.voidf; //widget.js might not be loaded yet
 
 zkCmit = {};
 zkCmit.init = function (cmp) {
