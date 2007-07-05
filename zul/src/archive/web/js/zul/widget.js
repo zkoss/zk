@@ -639,6 +639,7 @@ var zkWgt = {}
 /** Fixes the button align with an input box, such as combobox, datebox.
  */
 zkWgt.fixDropBtn = function (cmp) {
+	cmp = $e(cmp);
 	var inp = $real(cmp);
 	var btn = $e(cmp.id + "!btn");
 	//note: isRealVisible handles null argument
