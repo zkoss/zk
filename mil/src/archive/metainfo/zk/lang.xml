@@ -146,11 +146,29 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</component>
 
 	<component>
+		<component-name>decimalbox</component-name>
+		<component-class>org.zkoss.mil.Decimalbox</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./mil/rmil/textbox.dsp</mold-uri>
+		</mold>
+	</component>
+
+	<component>
 		<component-name>frame</component-name>
 		<component-class>org.zkoss.mil.Frame</component-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./mil/rmil/frame.dsp</mold-uri>
+		</mold>
+	</component>
+
+	<component>
+		<component-name>intbox</component-name>
+		<component-class>org.zkoss.mil.Intbox</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./mil/rmil/textbox.dsp</mold-uri>
 		</mold>
 	</component>
 
