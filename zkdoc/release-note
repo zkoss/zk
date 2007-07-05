@@ -35,7 +35,8 @@ ZK 2.4.1
   1746915: Grid in listbox: wrong text color if selected
   1735084: listbox styles cascade into datebox-popup (IE only)
   1737660: Listbox/Gridbox header cell size render error
-
+  1744427: Error binding Listbox
+  
 * Upgrade Notes:
   + The ZK loader compresses the output if the browser supports the
   compression encoding. It may cause some side effect if you, say,
