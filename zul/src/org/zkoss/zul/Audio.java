@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
-import org.zkoss.zk.au.AuScript;
+import org.zkoss.zk.au.AuCmd;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -57,20 +57,17 @@ public class Audio extends XulElement {
 	/** Plays the audio at the client.
 	 */
 	public void play() {
-		response("ctrl",
-			new AuScript(this, "zkAudio.play('"+getUuid()+"')"));
+		response("ctrl", new AuCmd(this, "play"));
 	}
 	/** Stops the audio at the cient.
 	 */
 	public void stop() {
-		response("ctrl",
-			new AuScript(this, "zkAudio.stop('"+getUuid()+"')"));
+		response("ctrl", new AuCmd(this, "stop"));
 	}
 	/** Pauses the audio at the cient.
 	 */
 	public void pause() {
-		response("ctrl",
-			new AuScript(this, "zkAudio.pause('"+getUuid()+"')"));
+		response("ctrl", new AuCmd(this, "pause"));
 	}
 
 	/** Returns the alignment.

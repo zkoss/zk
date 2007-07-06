@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.au.AuScript;
+import org.zkoss.zk.au.AuCmd;
 
 /**
  * A band box. A bank box consists of an input box ({@link Textbox} and
@@ -67,8 +67,7 @@ public class Bandbox extends Textbox {
 	/** Closes the popup ({@link #getDropdown}).
 	 */
 	public void closeDropdown() {
-		response("close", new AuScript(this, 
-			"zkBdbox.close('" + getUuid() + "!pp',true)"));
+		response("close", new AuCmd(this, "cbclose"));
 	}
 
 	/** Returns whether to automatically drop the list if users is changing

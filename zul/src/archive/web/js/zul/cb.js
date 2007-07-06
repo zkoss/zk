@@ -510,6 +510,11 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 	pp.setAttribute("zk_ckval", inpval);
 };
 
+/** Called from the server to close the popup based on combobox, not popup.
+ */
+zkCmbox.cbclose = function (cb) {
+	zkCmbox.close(cb.id + "!pp", true);
+};
 zkCmbox.close = function (pp, focus) {
 	pp = $e(pp);
 	var uuid = $uuid(pp.id);
