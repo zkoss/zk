@@ -21,11 +21,18 @@ package org.zkoss.zk.au;
 import org.zkoss.zk.ui.Component;
 
 /**
- * A response to ask the client to execute the specified script.
+ * A response to ask the client to execute the specified client scripts.
  *
- * <p>data[0]: the JavaScript codes
+ * <p>data[0]: the client script codes (i.e., JavaScript codes)
+ *
+ * <p>It is usually not a good idea to use {@link AuScript} send codes
+ * to the client,
+ * since it makes it difficult to customize the visual representation
+ * of a component.
+ * Rather, it is better to use {@link AuCmd} instead.
  *
  * @author tomyeh
+ * @see AuCmd
  */
 public class AuScript extends AuResponse {
 	/**

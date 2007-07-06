@@ -1819,6 +1819,9 @@ zkau.cmd1 = {
 	},
 	submit: function (uuid, cmp) {
 		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
+	},
+	cmd: function (uuid, cmp, func, arg0, arg1, arg2) {
+		zk.eval(cmp, func, null, arg0, arg1, arg2);
 	}
 };
 
