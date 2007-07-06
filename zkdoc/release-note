@@ -36,6 +36,7 @@ ZK 2.4.1
   1735084: listbox styles cascade into datebox-popup (IE only)
   1737660: Listbox/Gridbox header cell size render error
   1744427: Error binding Listbox
+  1748680: JavaScript namespaces hardcoded in component classes
   
 * Upgrade Notes:
   + The ZK loader and filter compress the output if the browser supports the
