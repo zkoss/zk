@@ -1809,10 +1809,6 @@ zkau.cmd1 = {
 				//to do the multiple-step operation
 		}
 	},
-	meta: function (uuid, cmp, dt1, dt2, dt3, dt4) {
-		var meta = zkau.getMeta(uuid);
-		if (meta) meta[dt1].call(meta, dt2, dt3, dt4);
-	},
 	closeErrbox: function (uuid, cmp) {
 		if (zkau.valid)
 			zkau.valid.closeErrbox(uuid);
@@ -1820,9 +1816,11 @@ zkau.cmd1 = {
 	submit: function (uuid, cmp) {
 		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
 	},
-	cmd: function (uuid, cmp, func, arg0, arg1, arg2) {
+	invoke: function (uuid, cmp, func, arg0, arg1, arg2) {
 		zk.eval(cmp, func, null, arg0, arg1, arg2);
 	}
 };
+zkau.cmd1.cmd = zkau.cmd1.invoke; //backward compatibility (2.4.1 or before)
+
 
 } //if (!window.zkau)

@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
-import org.zkoss.zk.au.AuCmd;
+import org.zkoss.zk.au.AuInvoke;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -156,7 +156,7 @@ public class Tabbox extends XulElement {
 			_seltab = tab;
 			_seltab.setSelectedDirectly(true);
 			if (!byClient)
-				response("sel", new AuCmd(_seltab, "selTab"));
+				response("sel", new AuInvoke(_seltab, "selTab"));
 		}
 	}
 

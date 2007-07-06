@@ -1,4 +1,4 @@
-/* AuCmd.java
+/* AuInvoke.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jul  6 10:49:43     2007, Created by tomyeh
+		Fri Jul  6 22:52:34     2007, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -30,14 +30,12 @@ import org.zkoss.zk.ui.Component;
  * data[3]: the third argument...
  *
  * <p>Note: the first argument is always the component itself.
- *
- * <p>Deprecated since 2.5.0. Use {@link AuInvoke} instead.
  * 
  * @author tomyeh
- * @deprecated
+ * @since 2.5.0
  */
-public class AuCmd extends AuInvoke {
-	/** Construct AuCmd to call a client function with one argument,
+public class AuInvoke extends AuResponse {
+	/** Construct AuInvoke to call a client function with one argument,
 	 * the component itself.
 	 *
 	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
@@ -46,12 +44,11 @@ public class AuCmd extends AuInvoke {
 	 * @param comp the component that this script depends on.
 	 * It cannot be null.
 	 * @param function the function name
-	 * @deprecated
 	 */
-	public AuCmd(Component comp, String function) {
-		super(comp, function);
+	public AuInvoke(Component comp, String function) {
+		super("invoke", comp, new String[] {comp.getUuid(), function});
 	}
-	/** Construct AuCmd to call a client function with two arguments,
+	/** Construct AuInvoke to call a client function with two arguments,
 	 * the component itself and arg.
 	 *
 	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
@@ -61,12 +58,12 @@ public class AuCmd extends AuInvoke {
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param arg the additional argument
-	 * @deprecated
 	 */
-	public AuCmd(Component comp, String function, String arg) {
-		super(comp, function, arg);
+	public AuInvoke(Component comp, String function, String arg) {
+		super("invoke", comp,
+			new String[] {comp.getUuid(), function, arg});
 	}
-	/** Construct AuCmd to call a client function with three arguments,
+	/** Construct AuInvoke to call a client function with three arguments,
 	 * the component itself, arg1 and arg2.
 	 *
 	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
@@ -75,12 +72,12 @@ public class AuCmd extends AuInvoke {
 	 * @param comp the component that this script depends on.
 	 * It cannot be null.
 	 * @param function the function name
-	 * @deprecated
 	 */
-	public AuCmd(Component comp, String function, String arg1, String arg2) {
-		super(comp, function, arg1, arg2);
+	public AuInvoke(Component comp, String function, String arg1, String arg2) {
+		super("invoke", comp, new String[] {comp.getUuid(), function,
+			arg1, arg2});
 	}
-	/** Construct AuCmd to call a client function with four arguments,
+	/** Construct AuInvoke to call a client function with four arguments,
 	 * the component itself, arg1, arg2 and arg3.
 	 *
 	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
@@ -89,10 +86,10 @@ public class AuCmd extends AuInvoke {
 	 * @param comp the component that this script depends on.
 	 * It cannot be null.
 	 * @param function the function name
-	 * @deprecated
 	 */
-	public AuCmd(Component comp, String function, String arg1, String arg2,
+	public AuInvoke(Component comp, String function, String arg1, String arg2,
 	String arg3) {
-		super(comp, function, arg1, arg2, arg3);
+		super("invoke", comp, new String[] {comp.getUuid(), function,
+			arg1, arg2, arg3});
 	}
 }
