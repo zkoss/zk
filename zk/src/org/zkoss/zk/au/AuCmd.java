@@ -63,7 +63,7 @@ public class AuCmd extends AuResponse {
 		super("cmd", comp,
 			new String[] {comp.getUuid(), function, arg});
 	}
-	/** Construct AuCmd to call a client function with two arguments,
+	/** Construct AuCmd to call a client function with three arguments,
 	 * the component itself, arg1 and arg2.
 	 *
 	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
@@ -77,7 +77,7 @@ public class AuCmd extends AuResponse {
 		super("cmd", comp, new String[] {comp.getUuid(), function,
 			arg1, arg2});
 	}
-	/** Construct AuCmd to call a client function with two arguments,
+	/** Construct AuCmd to call a client function with four arguments,
 	 * the component itself, arg1, arg2 and arg3.
 	 *
 	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
