@@ -68,7 +68,7 @@ public class Bandbox extends Textbox {
 	 */
 	public void closeDropdown() {
 		response("close", new AuScript(this, 
-			"zkCmbox.close('" + getUuid() + "!pp',true)"));
+			"zkBdbox.close('" + getUuid() + "!pp',true)"));
 	}
 
 	/** Returns whether to automatically drop the list if users is changing

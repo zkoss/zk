@@ -1,6 +1,7 @@
 D.ON=true
 javadoc=~/prj/javadoc
-unzip.enabled
+zipjs=true
+unzip=true
 debug=true
 optimize=true
 jboss.deploy=default/deploy

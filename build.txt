@@ -16,7 +16,7 @@ Commands:
 	javadoc        generates javadoc (doc: shortcut)
 	verbose        make ant in verbose mode
 	continue       allow unit test to continue even encountering failures
-	unzip          unzip ear into the deploy directory (as if unzip.enabled is specified)
+	unzip          unzip ear/war into the deploy directory (as if unzip=true is specified)
 	a=b            any pair of definitions. It is useful to control unit test.	
 
 Notes:
@@ -30,16 +30,22 @@ Notes:
 ----------
 Files located under .:
 ----------
-build.setting.local (Must)
-	Controls how to build. For sample, refer to build.setting.local.sample.
+build.setting or build.setting.local
+	Controls how to build. build.setting is ignored if build.setting.local
+	exists. build.setting is part of SVN, while buil.setting.local is not.
 	D.ON=true or D.ON=false
 		Controls whether to turn on D.ON
 	javadoc=~/prj/javadoc
 		Specifies where to store Java apidocs.
-	unzip.enabled
+	zipjs=true
+		Optional. Default false.
+		Controls whether to compress the JavaScript files.
+		Note: a JavaScript file is compress only if zipjs=true AND
+		it matches zipjs specified in the deploy file
+	unzip=true
 		Optional. Default: false.
-		Controls whether to unzip certain files when building ear.
-		What files to unzip is specified in the deploy file (see below)
+		Controls whether to unzip files when deploying ear/war.
+		The files to unzip are specified in the deploy file (see below)
 		This flag cannot be overriden by specify the unzip command (see above)
 	debug=false
 		Optinal. Default: true if and only if D.ON is true
@@ -85,11 +91,11 @@ deploy (Optional)
 
  		When deploying to server, you could place an extra line in this file
  		if you want	to unzip ear into the deploy directory:
- 			unzip=yes
+ 			unzip=true
  		or
  			unzip=we.jar,we.war
  		Notice: this unzip option is enabled only if build.release is targeted
- 		or unzip.enabled is found in build.setting.local.
+ 		or unzip=true is found in build.setting.local.
 
 war.libs (Optional)
 	Specifies a list of libraries (one per line) under dist/lib/ext that

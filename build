@@ -21,8 +21,11 @@
 #-- precondition check
 setting=build.setting.local
 if [ ! -f $setting ] ; then
-	echo $setting must be specified. Refer to $setting.sample.
-	exit 1
+	setting=build.setting
+	if [ ! -f $setting ] ; then
+		echo $setting must be specified. Refer to $setting.sample.
+		exit 1
+	fi
 fi
 
 #-- help, verbose or continue
@@ -49,9 +52,19 @@ else
 fi
 if [ "$1" = "unzip" ] ; then
 	shift
-	unzip_enabled=true
+	unzip=true
 else
-	unzip_enabled=$(grep '^unzip.enabled' $setting)
+	unzip=$(grep '^unzip=' $setting)
+	unzip=${unzip#unzip=}
+	if [ "$unzip" = "false" ] ; then
+		unzip=
+	fi
+fi
+
+zipjs=$(grep '^zipjs=' $setting)
+zipjs=${zipjs#zipjs=}
+if [ "$zipjs" = "false" ] ; then
+	zipjs=
 fi
 
 jboss_profile=$(grep '^jboss.deploy' $setting)
@@ -362,7 +375,7 @@ function invoke_ant
 			rootContext=$(grep '^root-context=' deploy)
 			rootContext=${rootContext#root-context=}
 
-			if [ "$unzip_enabled" != "" ]; then
+			if [ "$unzip" != "" ]; then
 				unziplist=$(grep '^unzip' deploy|tr -d ' ')
 				unziplist=${unziplist#unzip=}
 				if [ "$unziplist" != "" ] ; then
@@ -370,13 +383,15 @@ function invoke_ant
 				fi
 			fi
 		fi
-		zipjs=$(grep '^zipjs=' deploy)
-		zipjs=${zipjs#zipjs=}
+		if [ "$zipjs" != "" ] ; then
+			zipjslist=$(grep '^zipjs=' deploy)
+			zipjslist=${zipjslist#zipjs=}
+		fi
 	else
 		deploy=unknown
 	fi
-	if [ "${zipjs}" = "" ] ; then
-		zipjs=_na_dir_
+	if [ "${zipjslist}" = "" ] ; then
+		zipjslist=_na_dir_
 	fi
 
 	prjver="$(head -1 version)"
@@ -425,7 +440,7 @@ function invoke_ant
 		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
 		-Djboss.profile="$jboss_profile" -Djboss.ear="$jboss_ear" \
 		-Djboss.home="$jboss_home" -Dtomcat.home="$tomcat_home" \
-		-Djs.trim=$jstrim -Dzipjs=$zipjs\
+		-Djs.trim=$jstrim -Dzipjs=$zipjslist\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
 		-Dear.libs="$ear_libs" -Dimport.libs="$import_libs" \
 		-Dproject.name="$2" -Dproject.version="$prjver" \
