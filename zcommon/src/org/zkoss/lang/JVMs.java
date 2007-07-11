@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
+import org.zkoss.util.Utils;
+
 /**
  * Utilities of Java Virtual Machine.
  *
@@ -30,20 +32,10 @@ public class JVMs {
 	private static final boolean _j5, _j6;
 	static {
 		final String s = System.getProperty("java.version");
-		int major = 0, minor = 0;
-		if (s != null) {
-			final int j = s.indexOf('.'), k = s.indexOf('.', j + 1);
-			if (k > j) {
-				try {
-					major = Integer.parseInt(s.substring(0, j));
-					minor = Integer.parseInt(s.substring(j + 1, k));
-				} catch (Throwable ex) { //ignore
-					System.err.println("Warning: unable to parse java.versin: "+s);
-				}
-			}
-		}
-		_major = major;
-		_minor = minor;
+		int major = Utils.getVersion(s, 0),
+			minor = Utils.getVersion(s, 1);
+		_major = major >= 0 ? major: 0;
+		_minor = minor >= 0 ? minor: 0;
 		_j5 = (_major == 1 && _minor >= 5) || _major >= 5;
 		_j6 = (_major == 1 && _minor >= 6) || _major >= 6;
 	}
