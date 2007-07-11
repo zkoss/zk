@@ -18,6 +18,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import org.zkoss.util.Utils;
+
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
@@ -69,6 +71,9 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 
 	public final String getVersion() {
 		return "2.5.0-FL";
+	}
+	public int getVersion(int portion) {
+		return Utils.getVersion(getVersion(), portion);
 	}
 
 	public final Configuration getConfiguration() {
