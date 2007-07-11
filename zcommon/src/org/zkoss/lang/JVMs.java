@@ -32,8 +32,8 @@ public class JVMs {
 	private static final boolean _j5, _j6;
 	static {
 		final String s = System.getProperty("java.version");
-		int major = Utils.getVersion(s, 0),
-			minor = Utils.getVersion(s, 1);
+		int major = Utils.getSubversion(s, 0),
+			minor = Utils.getSubversion(s, 1);
 		_major = major >= 0 ? major: 0;
 		_minor = minor >= 0 ? minor: 0;
 		_j5 = (_major == 1 && _minor >= 5) || _major >= 5;

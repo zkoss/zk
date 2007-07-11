@@ -28,8 +28,8 @@ public class Utils {
 	/** Returns a portion of the specified version in an integer,
 	 * or -1 if no such portion exists.
 	 *
-	 * <p>For example, getVersion(0) returns the so-called major version
-	 * (2 in "2.4.0"), and getVersion(1) returns the so-called
+	 * <p>For example, getSubversion(0) returns the so-called major version
+	 * (2 in "2.4.0"), and getSubversion(1) returns the so-called
 	 * minor version (4 in "2.4.0").
 	 *
 	 * @param version the version. The version is assumed to
@@ -38,7 +38,7 @@ public class Utils {
 	 * If you want to retrieve the major verion, specify 0.
 	 * @since 2.5.0
 	 */
-	public static final int getVersion(String version, int portion) {
+	public static final int getSubversion(String version, int portion) {
 		if (portion < 0)
 			throw new IllegalArgumentException("Negative not allowed: "+portion);
 
