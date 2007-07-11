@@ -1,4 +1,9 @@
 	--------
+ZK 2.5.0
+* Features:
+  1751674: WebApp retrieves the major/minor version from getVersion
+
+	--------
 ZK 2.4.1
 * Features:
   1735610: Translate messages to Catalan. Thank Xavier Covas O'Ryan (xcovas@conselldemallorca.net) for his contribution.
