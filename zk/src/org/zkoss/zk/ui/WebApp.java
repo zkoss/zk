@@ -52,18 +52,20 @@ public interface WebApp extends Locator {
 	public void setAppName(String name); 
 
 	/** Returns the ZK version, such as "1.1.0" and "2.0.0".
+	 * @see #getSubversion
 	 */
 	public String getVersion();
 	/** Returns a portion of the version in an integer by specifying its index.
-	 * For example, getVersion(0) returns the so-called major version
-	 * (2 in "2.4.0"), and getVersion(1) returns the so-called
+	 * For example, getSubversion(0) returns the so-called major version
+	 * (2 in "2.4.0"), and getSubversion(1) returns the so-called
 	 * minor version (4 in "2.4.0").
 	 *
 	 * @param portion which portion of the version; starting from 0.
 	 * If you want to retrieve the major verion, specify 0.
 	 * @since 2.5.0
+	 * @see #getVersion
 	 */
-	public int getVersion(int portion);
+	public int getSubversion(int portion);
 
 	/** Returns the value of the specified custom attribute.
 	 */

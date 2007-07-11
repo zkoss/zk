@@ -422,36 +422,46 @@ public class ZkFns {
 			fmon[j] = df.format(cal.getTime());
 		}
 
-		appendDateJavaScript(sb, "SDOW", sdow);
+		appendJavaScriptArray(sb, "SDOW", sdow);
 		if (Objects.equals(s2dow, sdow))
 			sb.append("zk.S2DOW=zk.SDOW;\n");
 		else
-			appendDateJavaScript(sb, "S2DOW", s2dow);
+			appendJavaScriptArray(sb, "S2DOW", s2dow);
 		if (Objects.equals(fdow, sdow))
 			sb.append("zk.FDOW=zk.SDOW;\n");
 		else
-			appendDateJavaScript(sb, "FDOW", fdow);
+			appendJavaScriptArray(sb, "FDOW", fdow);
 
-		appendDateJavaScript(sb, "SMON", smon);
+		appendJavaScriptArray(sb, "SMON", smon);
 		if (Objects.equals(s2mon, smon))
 			sb.append("zk.S2MON=zk.SMON;\n");
 		else
-			appendDateJavaScript(sb, "S2MON", s2mon);
+			appendJavaScriptArray(sb, "S2MON", s2mon);
 		if (Objects.equals(fmon, smon))
 			sb.append("zk.FMON=zk.SMON;\n");
 		else
-			appendDateJavaScript(sb, "FMON", fmon);
+			appendJavaScriptArray(sb, "FMON", fmon);
+
+		//AM/PM available since ZK 2.5
+		df = new SimpleDateFormat("a", locale);
+		cal.set(Calendar.HOUR_OF_DAY, 3);
+		final String[] ampm = new String[2];
+		ampm[0] = df.format(cal.getTime());
+		cal.set(Calendar.HOUR_OF_DAY, 15);
+		ampm[1] = df.format(cal.getTime());
+		appendJavaScriptArray(sb, "APM", ampm);
+
 		return sb.toString();
 	}
-	private static final void appendDateJavaScript(StringBuffer sb,
+	private static final void appendJavaScriptArray(StringBuffer sb,
 	String varnm, String[] vals) {
-		sb.append("zk.").append(varnm).append("=new Array(");
+		sb.append("zk.").append(varnm).append("=[");
 		for (int j = 0;;) {
 			sb.append('"').append(Strings.escape(vals[j], "\\\"")).append('"');
 			if (++j >= vals.length) break;
 			else sb.append(',');
 		}
-		sb.append(");\n");
+		sb.append("];\n");
 	}
 	private static final CacheMap _datejs =
 		new CacheMap().setLifetime(24*60*60*1000);

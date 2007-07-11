@@ -72,8 +72,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	public final String getVersion() {
 		return "2.5.0-FL";
 	}
-	public int getVersion(int portion) {
-		return Utils.getVersion(getVersion(), portion);
+	public int getSubversion(int portion) {
+		return Utils.getSubversion(getVersion(), portion);
 	}
 
 	public final Configuration getConfiguration() {
