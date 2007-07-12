@@ -805,14 +805,22 @@ if (!zk.ie && !HTMLElement.prototype.insertAdjacentHTML) {
  *todo: support _zh_TW
 */
 zk.renType = function (url, type) {
-	var j = url.lastIndexOf('.'),
-		k = url.lastIndexOf('-'),
-		m = url.lastIndexOf('/');
-	var ext = j <= m ? "": url.substring(j);
-	var pref = k <= m ? j <= m ? url: url.substring(0, j): url.substring(0, k);
+	var j = url.lastIndexOf(';');
+	var suffix;
+	if (j >= 0) {
+		suffix = url.substring(j);
+		url = url.substring(0, j);
+	} else
+		suffix = "";
+
+	j = url.lastIndexOf('.');
+	var	k = url.lastIndexOf('-'),
+		m = url.lastIndexOf('/'),
+		ext = j <= m ? "": url.substring(j),
+		pref = k <= m ? j <= m ? url: url.substring(0, j): url.substring(0, k);
 	if (type) type = "-" + type;
 	else type = "";
-	return pref + type + ext;
+	return pref + type + ext + suffix;
 };
 /** Rename between / and .
  */
