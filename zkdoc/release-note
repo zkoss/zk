@@ -2,6 +2,13 @@
 ZK 2.5.0
 * Features:
   1751674: WebApp retrieves the major/minor version from getVersion
+  1752559: The script component shall support the content property
+  1752569: The style component shall support the content property
+  1752431: Change the modifier of addMoved in AbstractComponent
+
+* Bugs:
+  1751603: zk.renType in common.js not handling sessionid
+  1752477: combobox in groupbox and vbox failed to pos button (IE only)
 
 	--------
 ZK 2.4.1
