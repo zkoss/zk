@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.List;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
@@ -35,10 +36,32 @@ import org.zkoss.zk.ui.UiException;
  * <p>To avoid typo, this compnent requires you to specify the type
  * ({@link #setType}) -- which is, if JavaScript, "text/javascript".
  *
+ * <p>There are three formats when used in a ZUML page:
+ *
+ * <p>Method 1: Specify the URL of the JS file
+ * <pre><code>&lt;script type="text/javascript" src="my.js"/&gt;
+ * </code></pre>
+ *
+ * <p>Method 2: Specify the JavaScript codes directly
+ * <pre><code>&lt;script type="text/javascript"&gt;
+ * some_js_at_browser();
+ *&lt;/script&gt;
+ * </code></pre>
+ *
+ * <p>Method 3: Specify the JavaScript codes by use of the content
+ * property ({@link #setContent}).
+ * <pre><code>&lt;script type="text/javascript"&gt;
+ * &lt;attribute name="content"&gt;
+ *  some_js_at_browser();
+ * &lt;/attribute&gt;
+ *&lt;/script&gt;
+ * </code></pre>
+ *
  * @author tomyeh
  */
 public class Script extends AbstractComponent {
 	private String _src, _type, _charset;
+	private String _content;
 	private boolean _defer;
 
 	public Script() {
@@ -128,12 +151,77 @@ public class Script extends AbstractComponent {
 		}
 	}
 
+	/** Returns the content of the script element.
+	 * By content we mean the JavaScript codes that will be enclosed
+	 * by the HTML SCRIPT element.
+	 *
+	 * <p>Default: null.
+	 *
+	 * @since 2.5.0
+	 */
+	public String getContent() {
+		childToContent();
+		return _content;
+	}
+	/** Sets the content of the script element.
+	 * By content we mean the JavaScript codes that will be enclosed
+	 * by the HTML SCRIPT element.
+	 *
+	 * @since 2.5.0
+	 */
+	public void setContent(String content) {
+		childToContent();
+
+		if (content != null && content.length() == 0)
+			content = null;
+
+		if (!Objects.equals(_content, content)) {
+			_content = content;
+			invalidate();
+		}
+	}
+	/** Converts children to the content.
+	 */
+	private void childToContent() {
+		if (_content == null) {
+			StringBuffer sb = null;
+			final List children = getChildren();
+			while (!children.isEmpty()) {
+				final String val = ((Label)children.remove(0)).getValue();
+				if (val.length() > 0)
+					if (sb == null) sb = new StringBuffer(val);
+					else sb.append(val);
+			}
+			if (sb != null) {
+				_content = sb.toString();
+				invalidate();
+			}
+		}
+	}
+
+
 	//-- Component --//
-	/** Only {@link Label} children are allowed.
+	/** Used only to enable UI engine to set the content with a simple
+	 * and ituitive way:
+	 *
+	 * <pre><code>&lt;script type="text/javascript"&gt;
+	 * some_java_script();
+	 *&lt;/script&gt;
+	 * </code></pre>
+	 *
+	 * <p>Application developer shall use {@link #setContent} instead.
+	 *
+	 * <p>The child will removed later, so application shall not depend
+	 * on this method.
 	 */
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Label))
-			throw new UiException("Unsupported child for style: "+child);
+			throw new UiException("Unsupported child for script: "+child);
+		if (_content != null)
+			throw new UiException("insertBefore used by UI engine only");
+
+		//Note: we cannot copy child's value to _content here, since
+		//UI engine calls setParent first and then setValue.
 		if (super.insertBefore(child, insertBefore)) {
 			invalidate();
 			return true;
@@ -144,7 +232,7 @@ public class Script extends AbstractComponent {
 		if (_type == null)
 			throw new UiException("The type is required. For example, text/javascript");
 
-		final StringBuffer sb = new StringBuffer(256).append("<script");
+		final StringBuffer sb = new StringBuffer(256).append("\n<script");
 		HTMLs.appendAttribute(sb, "id",  getUuid());
 		HTMLs.appendAttribute(sb, "type",  _type);
 		HTMLs.appendAttribute(sb, "charset",  _charset);
@@ -158,8 +246,9 @@ public class Script extends AbstractComponent {
 
 		out.write(sb.append(">\n").toString());
 
-		for (final Iterator it = getChildren().iterator(); it.hasNext();) {
-			out.write(((Label)it.next()).getValue());
+		final String content = getContent();
+		if (content != null) {
+			out.write(content);
 			out.write('\n');
 		}
 
