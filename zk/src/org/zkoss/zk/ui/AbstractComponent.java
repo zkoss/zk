@@ -394,7 +394,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		if (_page != null) removeFromIdSpacesDown(this);
 
-		addMoved(this, _parent, _page, page); //Not depends on UUID
+		addMoved(_parent, _page, page); //Not depends on UUID
 		setPage0(page); //UUID might be changed here
 
 		if (_page != null) addToIdSpacesDown(this);
@@ -409,17 +409,34 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (page.getDesktop() != exec.getDesktop())
 			throw new UiException("You cannot access components belong to other desktop");
 	}
-	/** Calling getUiEngine().addMoved().
+	/** Called when this component is moved from the specified parent
+	 * and/or page to the new page.
+	 *
+	 * <p>Default: it notifies {@link UiEngine} to update the component
+	 * at the client (usually remove-and-add).
+	 *
+	 * <p>It is designed to let derived classes overriding this method
+	 * to disable this update. However, you rarely need to override it.
+	 * One possible but rare case: the component's
+	 * visual part at the client updates the visual representation
+	 * at the client and then notify the component at the server
+	 * to update its children accordingly. In this case, it is redudant
+	 * if we ask UI Engine to send the updates to client.
+	 *
+	 * @param oldparent the parent before moved.
+	 * The new parent can be found by calling {@link #getParent}.
+	 * @param oldpg the parent before moved.
+	 * @param newpg the new page. {@link #getPage} might return
+	 * the old page.
 	 */
-	private static final
-	void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
+	protected void addMoved(Component oldparent, Page oldpg, Page newpg) {
 		final Desktop dt;
 		if (oldpg != null) dt = oldpg.getDesktop();
 		else if (newpg != null) dt = newpg.getDesktop();
 		else return;
 
 		((WebAppCtrl)dt.getWebApp())
-			.getUiEngine().addMoved(comp, oldparent, oldpg, newpg);
+			.getUiEngine().addMoved(this, oldparent, oldpg, newpg);
 	}
 
 	/** Ses the page without fixing IdSpace
@@ -528,7 +545,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 				if (_page != null) {
 					((DesktopCtrl)_page.getDesktop()).addComponent(this);
-					addMoved(this, _parent, _page, _page);
+					addMoved(_parent, _page, _page);
 				}
 			} else {
 				_id = id;
@@ -709,7 +726,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		} //if parent == null, assume no page at all (so no addRoot)
 
 		final Page newpg = _parent != null ? _parent.getPage(): null;
-		addMoved(this, oldparent, _page, newpg); //Not depends on UUID
+		addMoved(oldparent, _page, newpg); //Not depends on UUID
 		setPage0(newpg); //UUID might be changed here
 
 		if (_spaceInfo != null) //ID space owner
@@ -758,7 +775,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final AbstractComponent nc = (AbstractComponent)newChild;
 		if (found) { //re-order
-			addMoved(newChild, nc._parent, nc._page, _page);
+			nc.addMoved(nc._parent, nc._page, _page);
 				//Not to use getPage and getParent to avoid calling user's codes
 				//if they override them
 		} else { //new added
