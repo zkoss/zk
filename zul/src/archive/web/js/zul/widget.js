@@ -639,13 +639,19 @@ var zkWgt = {}
 /** Fixes the button align with an input box, such as combobox, datebox.
  */
 zkWgt.fixDropBtn = function (cmp) {
+	//Bug 1752477: we have to delay it for sophisticated layout in IE
+	var cmp = $e(cmp);
+	if (cmp)
+		setTimeout("zkWgt._fixdbtn($e('" + cmp.id +"'))", 66);
+};
+zkWgt._fixdbtn = function (cmp) {
 	cmp = $e(cmp);
 	var inp = $real(cmp);
 	var btn = $e(cmp.id + "!btn");
 	//note: isRealVisible handles null argument
 	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
 		if (!inp.offsetHeight || !btn.offsetHeight) {
-			setTimeout("zkWgt.fixDropBtn($e('" + cmp.id +"'))", 100);
+			zkWgt.fixDropBtn(cmp);
 			return;
 		}
 
