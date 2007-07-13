@@ -16,15 +16,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.List;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Contentable;
 
 /**
  * A component to represent script codes running at the client.
@@ -59,7 +58,7 @@ import org.zkoss.zk.ui.UiException;
  *
  * @author tomyeh
  */
-public class Script extends AbstractComponent {
+public class Script extends AbstractComponent implements Contentable {
 	private String _src, _type, _charset;
 	private String _content;
 	private boolean _defer;
@@ -160,7 +159,6 @@ public class Script extends AbstractComponent {
 	 * @since 2.5.0
 	 */
 	public String getContent() {
-		childToContent();
 		return _content;
 	}
 	/** Sets the content of the script element.
@@ -170,8 +168,6 @@ public class Script extends AbstractComponent {
 	 * @since 2.5.0
 	 */
 	public void setContent(String content) {
-		childToContent();
-
 		if (content != null && content.length() == 0)
 			content = null;
 
@@ -180,52 +176,10 @@ public class Script extends AbstractComponent {
 			invalidate();
 		}
 	}
-	/** Converts children to the content.
-	 */
-	private void childToContent() {
-		if (_content == null) {
-			StringBuffer sb = null;
-			final List children = getChildren();
-			while (!children.isEmpty()) {
-				final String val = ((Label)children.remove(0)).getValue();
-				if (val.length() > 0)
-					if (sb == null) sb = new StringBuffer(val);
-					else sb.append(val);
-			}
-			if (sb != null) {
-				_content = sb.toString();
-				invalidate();
-			}
-		}
-	}
-
 
 	//-- Component --//
-	/** Used only to enable UI engine to set the content with a simple
-	 * and ituitive way:
-	 *
-	 * <pre><code>&lt;script type="text/javascript"&gt;
-	 * some_java_script();
-	 *&lt;/script&gt;
-	 * </code></pre>
-	 *
-	 * <p>Application developer shall use {@link #setContent} instead.
-	 *
-	 * <p>The child will removed later, so application shall not depend
-	 * on this method.
-	 */
-	public boolean insertBefore(Component child, Component insertBefore) {
-		if (!(child instanceof Label))
-			throw new UiException("Unsupported child for script: "+child);
-		if (_content != null)
-			throw new UiException("insertBefore used by UI engine only");
-
-		//Note: we cannot copy child's value to _content here, since
-		//UI engine calls setParent first and then setValue.
-		if (super.insertBefore(child, insertBefore)) {
-			invalidate();
-			return true;
-		}
+	/** Not childable. */
+	public boolean isChildable() {
 		return false;
 	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {

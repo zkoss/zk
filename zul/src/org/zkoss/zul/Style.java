@@ -16,15 +16,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.List;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Contentable;
 
 /**
  * The style component used to specify CSS styles for the owner desktop.
@@ -59,7 +58,7 @@ import org.zkoss.zk.ui.UiException;
  *
  * @author tomyeh
  */
-public class Style extends AbstractComponent {
+public class Style extends AbstractComponent implements Contentable {
 	private String _src;
 	private String _content;
 
@@ -108,7 +107,6 @@ public class Style extends AbstractComponent {
 	 * @since 2.5.0
 	 */
 	public String getContent() {
-		childToContent();
 		return _content;
 	}
 	/** Sets the content of the style element.
@@ -118,8 +116,6 @@ public class Style extends AbstractComponent {
 	 * @since 2.5.0
 	 */
 	public void setContent(String content) {
-		childToContent();
-
 		if (content != null && content.length() == 0)
 			content = null;
 
@@ -128,60 +124,12 @@ public class Style extends AbstractComponent {
 			invalidate();
 		}
 	}
-	/** Converts children to the content.
-	 */
-	private void childToContent() {
-		if (_content == null) {
-			StringBuffer sb = null;
-			final List children = getChildren();
-			while (!children.isEmpty()) {
-				final String val = ((Label)children.remove(0)).getValue();
-				if (val.length() > 0)
-					if (sb == null) sb = new StringBuffer(val);
-					else sb.append(val);
-			}
-			if (sb != null) {
-				_content = sb.toString();
-				invalidate();
-			}
-		}
-	}
 
 	//Component//
-	/** Used only to enable UI engine to set the content with a simple
-	 * and ituitive way:
-	 *
-	 * <pre><code>&lt;style&gt;
-	 * .mycls {
-	 *  border: 1px outset #777;
-	 * }
-	 *&lt;/style&gt;
-	 * </code></pre>
-	 *
-	 * <p>Application developer shall use {@link #setContent} instead.
-	 *
-	 * <p>The child will removed later, so application shall not depend
-	 * on this method.
-	 */
-	public boolean insertBefore(Component child, Component insertBefore) {
-		if (!(child instanceof Label))
-			throw new UiException("Unsupported child for style: "+child);
-		if (_content != null)
-			throw new UiException("insertBefore used by UI engine only");
-
-		//Note: we cannot copy child's value to _content here, since
-		//UI engine calls setParent first and then setValue.
-		if (super.insertBefore(child, insertBefore)) {
-			invalidate();
-			return true;
-		}
+	/** Not childable. */
+	public boolean isChildable() {
 		return false;
 	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		invalidate();
-	}
-
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		final boolean ie = Executions.getCurrent().isExplorer();
 		if (ie) {
