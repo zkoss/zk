@@ -197,7 +197,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 *
 	 * <p>Default: null (means to create a Label component)
 	 *
-	 * @param propnm the property name.
+	 * @param propnm the property name. If empty (""), null is assumed.
 	 * @see #getTextAs
 	 * @since 2.5.0
 	 */
