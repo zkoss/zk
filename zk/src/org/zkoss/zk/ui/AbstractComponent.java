@@ -463,21 +463,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (bRoot) ((PageCtrl)_page).addRoot(this); //Not depends on uuid
 			final Desktop desktop = _page.getDesktop();
 			if (oldpage == null) {
-				if (_uuid == null || _uuid == ComponentsCtrl.ANONYMOUS_ID) {
+				if (_uuid == null || _uuid == ComponentsCtrl.ANONYMOUS_ID
+				|| desktop.getComponentByUuidIfAny(_uuid) != null)
 					_uuid = nextUuid(desktop);
-				} else if (desktop.getComponentByUuidIfAny(_uuid) != null) {
-				//re-assign uuid since it is moved from other desktop
-					getThisUiEngine().addUuidChanged(this, true);
-
-					//stupid but no better way to find a correct UUID yet
-					//also, it is rare so performance not an issue
-					do {
-						_uuid = nextUuid(desktop);
-					} while (desktop.getComponentByUuidIfAny(_uuid) != null);
-//					if (D.ON && log.finerable()) log.finer("Uuid changed: "+this);
-				}
-				if (_id == null || _id == ComponentsCtrl.ANONYMOUS_ID)
+				if (_id == null || (this instanceof RawId))
 					_id = _uuid;
+					//no need to handle ID space since it is either
+					//anonymous or uuid is not changed
 
 				((DesktopCtrl)desktop).addComponent(this); //depends on uuid
 			}
@@ -492,24 +484,21 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 
-	private void initUuid() {
-		if (_uuid == null) {
-			final Execution exec = Executions.getCurrent();
-			_uuid = exec == null ?
-				ComponentsCtrl.ANONYMOUS_ID: nextUuid(exec.getDesktop());
-			if (_id == null || _id == ComponentsCtrl.ANONYMOUS_ID)
-				_id = _uuid;
-		}
-	}
 	private String nextUuid(Desktop desktop) {
 		final IdGenerator idgen =
 			((WebAppCtrl)desktop.getWebApp()).getIdGenerator();
-		final String uuid =
-			idgen != null ? idgen.nextComponentUuid(desktop, this): null;
-		return uuid != null ? uuid: ((DesktopCtrl)desktop).getNextUuid();
+
+		String uuid;
+		do {
+			uuid = idgen != null ? idgen.nextComponentUuid(desktop, this): null;
+			if (uuid == null)
+				uuid = ((DesktopCtrl)desktop).getNextUuid();
+		} while (desktop.getComponentByUuidIfAny(uuid) != null);
+		return uuid;
 	}
 	public final String getId() {
-		initUuid();
+		if (_id == null)
+			_id = this instanceof RawId ? getUuid(): ComponentsCtrl.ANONYMOUS_ID;
 		return _id;
 	}
 	public void setId(String id) {
@@ -533,12 +522,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					getThisUiEngine().addUuidChanged(this, false);
 						//called before uuid is changed
 					((DesktopCtrl)_page.getDesktop()).removeComponent(this);
-				} else if (_uuid != null
-				&& _uuid != ComponentsCtrl.ANONYMOUS_ID) {
-					final Execution exec = Executions.getCurrent();
-					if (exec != null)
-						((WebAppCtrl)exec.getDesktop().getWebApp())
-							.getUiEngine().addUuidChanged(this, true);
 				}
 
 				_uuid = _id = id;
@@ -559,7 +542,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public final String getUuid() {
-		initUuid();
+		if (_uuid == null) {
+			final Execution exec = Executions.getCurrent();
+			_uuid = exec == null ?
+				ComponentsCtrl.ANONYMOUS_ID: nextUuid(exec.getDesktop());
+			if (_id == null || (this instanceof RawId))
+				_id = _uuid;
+		}
 		return _uuid;
 	}
 
