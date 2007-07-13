@@ -56,13 +56,14 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.impl.ZScriptInitiator;
+import org.zkoss.zk.ui.ext.Contentable;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.impl.ZScriptInitiator;
 import org.zkoss.zk.ui.metainfo.impl.*;
 
 /**
@@ -444,13 +445,37 @@ public class Parser {
 					parentlang = pgdef.getLanguageDefinition();
 
 				if (trimLabel.length() > 0) { //consider as a label
-					if (!parentlang.isRawLabel())
-						label = trimLabel;
-					parentlang.newLabelInfo((ComponentInfo)parent, label);
+					final ComponentInfo parentInfo = (ComponentInfo)parent;
+					if (Contentable.class.isAssignableFrom(
+					resolveImplementation(parentInfo))) {
+						//consider it as the content property
+						parentInfo.addProperty("content", trimLabel, null);
+					} else {
+						if (!parentlang.isRawLabel())
+							label = trimLabel;
+						parentlang.newLabelInfo(parentInfo, label);
+					}
 				}
 			}
 		}
 	}
+	/** Resolves the implementation class.
+	 * Since page is not ready yet, we assume the default class if
+	 * the class specified in the use attribute is not found.
+	 */
+	private Class resolveImplementation(ComponentInfo compInfo)
+	throws ClassNotFoundException {
+		final ComponentDefinition compdef = compInfo.getComponentDefinition();
+		final String implcls = compInfo.getImplementationClass();
+		try {
+			return compdef.resolveImplementationClass(null, implcls);
+		} catch (ClassNotFoundException ex) {
+			if (implcls != null)
+				return compdef.resolveImplementationClass(null, null);
+			throw ex;
+		}
+	}
+
 	private static final
 	LanguageDefinition getLanguageDefinition(NodeInfo node) {
 		for (; node != null; node = node.getParent()) {

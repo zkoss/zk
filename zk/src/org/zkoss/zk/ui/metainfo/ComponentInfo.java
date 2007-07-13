@@ -285,6 +285,26 @@ implements Cloneable, Condition, java.io.Serializable {
 			((DynamicTag)comp).setTag(_tagnm);
 		return comp;
 	}
+	/** Resolves and returns the class for the component represented
+	 * by this info (never null).
+	 *
+	 * <p>Unlike {@link #getImplementationClass},
+	 * this method will resolve a class name (String) to a class (Class),
+	 * if necessary.
+	 *
+	 * @param page the page to check whether the class is defined
+	 * in its interpreters. Ignored if null.
+	 * This method will search the class loader of the current thread.
+	 * If not found, it will search the interpreters of the specifed
+	 * page ({@link Page#getLoadedInterpreters}).
+	 * Note: this method won't attach the component to the specified page.
+	 * @exception ClassNotFoundException if the class not found
+	 * @since 2.5.0
+	 */
+	public Class resolveImplementationClass(Page page)
+	throws ClassNotFoundException {
+		return _compdef.resolveImplementationClass(page, _implcls);
+	}
 
 	/** Applies the event handlers, annotations, properties and
 	 * custom attributes to the specified component.

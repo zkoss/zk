@@ -161,7 +161,7 @@ public class ZkFns {
 		for (Iterator it = jses.iterator(); it.hasNext();)
 			append(sb, (JavaScript)it.next());
 
-		sb.append("<script type=\"text/javascript\">\n")
+		sb.append("\n<script type=\"text/javascript\">\n")
 			.append("zk_action=\"").append(action)
 			.append("\";\nzk_procto=")
 				.append(config.getProcessingPromptDelay())

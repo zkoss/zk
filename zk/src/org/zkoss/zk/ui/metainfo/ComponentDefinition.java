@@ -100,13 +100,12 @@ public interface ComponentDefinition extends Cloneable {
 	 * @param clsnm [optional] If specified, clsnm is used instead of
 	 * {@link #getImplementationClass}.
 	 * In other words, it overrides the default class.
-	 * @param page the page that is used to resolve the implementation
-	 * class. It is used only this definition is associated
-	 * with a class name by {@link #setImplementationClass(String)},
-	 * or clsnm is not null.
+	 * @param page the page to check whether the class is defined
+	 * in its interpreters. Ignored if null.
+	 * This method will search the class loader of the current thread.
+	 * If not found, it will search the interpreters of the specifed
+	 * page ({@link Page#getLoadedInterpreters}).
 	 * Note: this method won't attach the component to the specified page.
-	 * It can be null if {@link #getImplementationClass} returns a Class
-	 * instance, and clsnm is null.
 	 * @exception ClassNotFoundException if the class not found
 	 */
 	public Class resolveImplementationClass(Page page, String clsnm)

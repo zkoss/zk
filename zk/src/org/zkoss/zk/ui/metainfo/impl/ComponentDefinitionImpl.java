@@ -269,11 +269,13 @@ implements ComponentDefinition, java.io.Serializable {
 				return found;
 			} catch (ClassNotFoundException ex) {
 				//we don't cache it if it is defined in a interpreter
-				for (Iterator it = page.getLoadedInterpreters().iterator();
-				it.hasNext();) {
-					Class c = ((Interpreter)it.next()).getClass(clsnm);
-					if (c != null)
-						return c;
+				if (page != null) {
+					for (Iterator it = page.getLoadedInterpreters().iterator();
+					it.hasNext();) {
+						Class c = ((Interpreter)it.next()).getClass(clsnm);
+						if (c != null)
+							return c;
+					}
 				}
 				throw ex;
 			}
