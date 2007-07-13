@@ -1,6 +1,7 @@
 	--------
 ZK 2.5.0
 * Features:
+  1753222: A way to assign text with element to a property than child
   1751674: WebApp retrieves the major/minor version from getVersion
   1752559: The script component shall support the content property
   1752569: The style component shall support the content property
