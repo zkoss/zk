@@ -6,6 +6,7 @@ ZK 2.5.0
   1752559: The script component shall support the content property
   1752569: The style component shall support the content property
   1752431: Change the modifier of addMoved in AbstractComponent
+  1753168: nextComponentUuid shall be called as late as possible
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
