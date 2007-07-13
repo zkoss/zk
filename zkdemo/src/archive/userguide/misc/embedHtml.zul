@@ -19,15 +19,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Embed Html elements</h4>
-				<p>Develper can embed a section of .html code inside the .zul page 
-				by using the html component.</p>
-				<p>The "content" attribute of the html component is where the .html 
-				code resides.</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>Embed Html elements</h4>
+			<p>Develper can embed a section of .html code inside the .zul page 
+			by using the html component.</p>
+			<p>The "content" attribute of the html component is where the .html 
+			code resides.</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">
@@ -40,9 +38,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window title="embedded HTML demo" border="normal" width="100%">
 	Hello, World!
 	<html>
-		<attribute name="content">
-			&lt;h4&gt;Hello World!&lt;/h4&gt;
-		</attribute>
+		&lt;h4&gt;Hello World!&lt;/h4&gt;
 	</html>
 </window>
 				]]></attribute>

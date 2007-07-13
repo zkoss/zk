@@ -19,33 +19,33 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Localization</h4>
-				<p>Localization is supported via an EL function "l" of taglib, meaning label. All labels are
-				defined in the WEB-INF/i3-label.properties of the war file, and developers just specify the 
-				following line in the .zul page to retrive the localized text.</p>
+		<html><![CDATA[
+<h4>Localization</h4>
+<p>Localization is supported via an EL function "l" of taglib, meaning label. All labels are
+defined in the WEB-INF/i3-label.properties of the war file, and developers just specify the 
+following line in the .zul page to retrive the localized text.</p>
 <pre><code>
 &lt;?taglib uri=&quot;/WEB-INF/tld/web/core.dsp.tld&quot; prefix=&quot;c&quot; ?&gt;
 
 </code></pre>
 <p>The EL &#36;{c:l('key')} would retrive the keyed label based on the browser's preferred language setting.</p>
 
-				<p>In i3-label.properties, developers might define:
-				<pre><code>
+<p>In i3-label.properties, developers might define:</p>
+
+<pre><code>
 username=Username
 password=Password
-				</code></pre>
-				</p>
-				<p>In i3-label_ja_JP.properties (for Japanese), developers might define:
-				<pre><code>
+</code></pre>
+
+<p>In i3-label_ja_JP.properties (for Japanese), developers might define:</p>
+
+<pre><code>
 username=ユーザー名称
 password=パスワード
-				</code></pre>
-				</p>
-			<p>Try to change your browser's preferred language to Japanese or other language, reload this page, and see what happened</p>
-			]]></attribute>
-		</html>
+</code></pre>
+
+<p>Try to change your browser's preferred language to Japanese or other language, reload this page, and see what happened</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

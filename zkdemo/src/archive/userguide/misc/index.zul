@@ -29,11 +29,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		}
 	]]></zscript>
 	
-	<html>
-		<attribute name="content"><![CDATA[
-			<h3>Miscellaneous Elements</h3>
-		]]></attribute>
-	</html>
+	<html><![CDATA[
+		<h3>Miscellaneous Elements</h3>
+	]]></html>
 	<h:ul>
 		<h:li><toolbarbutton label="Drag and Drop" onClick="doSelect(&quot;mi0&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Macro Components" onClick="doSelect(&quot;mimacro&quot;)"/></h:li>

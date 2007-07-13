@@ -19,14 +19,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Filedownload</h4>
-				<p>Download a file to the client.
-				The client will open a Save As dialog
-				to prompt the user for the location to save the file.</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>Filedownload</h4>
+			<p>Download a file to the client.
+			The client will open a Save As dialog
+			to prompt the user for the location to save the file.</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

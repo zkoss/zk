@@ -436,12 +436,10 @@ import org.zkoss.lang.Objects;
 
 	<separator/>
 
-	<html>
-		<attribute name="content"><![CDATA[
+	<html><![CDATA[
 	You <b>can</b> put any HTML tags here.<br/>
 	<i>italic</i> <span style="color:red">red&amp;&&lt;</span>...
-		]]></attribute>
-	</html>
+	]]></html>
 
 	<button label="Go Yahoo" onClick="Executions.sendRedirect(&quot;http://www.yahoo.com&quot;)"/>
 

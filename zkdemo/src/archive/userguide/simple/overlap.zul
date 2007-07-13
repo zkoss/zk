@@ -19,16 +19,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Overlapped, popup, and embedded windows</h4>
-				<ul>
-					<li>Overlapped window: a draggable window which can not be closed by clicking outside the window.</li>
-					<li>Popup window: a draggable window which can be closed by clicking outside the window.</li>
-					<li>Embedded window: a non-draggable window which can not be closed by clicking outside the window.</li>
-				</ul>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>Overlapped, popup, and embedded windows</h4>
+			<ul>
+				<li>Overlapped window: a draggable window which can not be closed by clicking outside the window.</li>
+				<li>Popup window: a draggable window which can be closed by clicking outside the window.</li>
+				<li>Embedded window: a non-draggable window which can not be closed by clicking outside the window.</li>
+			</ul>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

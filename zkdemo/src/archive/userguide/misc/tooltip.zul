@@ -19,8 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
+		<html><![CDATA[
 <h4>Tooltip and Popup Menu</h4>
 <p>Demostrates how to use customized tooltip and popup menu.</p>
 <p>Tooltips and popup menus can be any popup or menupopup components.</p>
@@ -30,8 +29,7 @@ the tooltip attribute.</li>
 <li>A popup is shown when an user clicks on a component with
 the popup attribute.</li>
 </ul>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

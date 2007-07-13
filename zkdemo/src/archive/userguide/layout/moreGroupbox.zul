@@ -19,14 +19,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>More groupboxes</h4>
-				<p>groupbox is used to visually group componts into a box with an optional title. 
-				3d-type groupbox got one more function that end user can "close" or "open" it 
-				by clicking on the title bar.</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>More groupboxes</h4>
+			<p>groupbox is used to visually group componts into a box with an optional title. 
+			3d-type groupbox got one more function that end user can "close" or "open" it 
+			by clicking on the title bar.</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

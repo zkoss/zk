@@ -19,13 +19,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
+		<html><![CDATA[
 	<h4>Listboxes with paging control</h4>
 	<p>It is better to display large number of data in multiple pages by specifying
 	the paging mold.</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

@@ -19,12 +19,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
+		<html><![CDATA[
 				<h4>Trees</h4>
 				<p>tree provides the hierarchy structure that user can browser and pick an option from. Tree can be opened or closed by clicking on the "node".</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

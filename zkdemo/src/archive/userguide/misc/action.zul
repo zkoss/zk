@@ -19,12 +19,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Client side action</h4>
-				<p>Some well-defined component responses (actions) can be done in client side directly (e.g. show, hide a component)</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>Client side action</h4>
+			<p>Some well-defined component responses (actions) can be done in client side directly (e.g. show, hide a component)</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

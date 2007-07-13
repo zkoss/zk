@@ -19,14 +19,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>JDBC</h4>
-				<p>Presentation components do not assume any persistent technology. 
-				This example simply demostrate the possiblility to combine presentation component and database via JDBC.</p>
-				<p>Note that we comment out the script on purpose because it will not run on our web site.</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>JDBC</h4>
+			<p>Presentation components do not assume any persistent technology. 
+			This example simply demostrate the possiblility to combine presentation component and database via JDBC.</p>
+			<p>Note that we comment out the script on purpose because it will not run on our web site.</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

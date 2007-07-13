@@ -19,16 +19,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Style sheets</h4>
-				<p>CSS style sheet, class attribute, and style attribute are supported.</p>
-				<p>Developers use the style components as follows to specify what style sheet
-				to load, or specify the styles directly.  Like HTML, it affects all
-				components in the same desktop.
-				By setting components' sclass attribute or style attribute, developers can
-				change the style of a particular component.
-				</p>
+		<html><![CDATA[
+<h4>Style sheets</h4>
+<p>CSS style sheet, class attribute, and style attribute are supported.</p>
+<p>Developers use the style components as follows to specify what style sheet
+to load, or specify the styles directly.  Like HTML, it affects all
+components in the same desktop.
+By setting components' sclass attribute or style attribute, developers can
+change the style of a particular component.</p>
 <pre><code>
 &lt;style href=&quot;...&quot; [type=&quot;text/css&quot;]&gt;
 &lt;style&gt;
@@ -37,8 +35,7 @@ td.mine {
 }
 &lt;/style&gt;
 </code></pre>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

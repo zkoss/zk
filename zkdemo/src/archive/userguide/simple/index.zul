@@ -28,11 +28,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			Events.postEvent(new SelectEvent("onSelect", tree, items));
 		}
 	]]></zscript>
-	<html>
-		<attribute name="content"><![CDATA[
-			<h3>Simple Elements</h3>
-		]]></attribute>
-	</html>
+	<html><![CDATA[
+		<h3>Simple Elements</h3>
+	]]></html>
 	<h:ul>
 		<h:li><toolbarbutton label="First Window: Hello World" onClick="doSelect(&quot;s1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Overlapped and popup windows" onClick="doSelect(&quot;s2&quot;)"/></h:li>

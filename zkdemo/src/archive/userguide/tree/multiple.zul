@@ -19,14 +19,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
+		<html><![CDATA[
 	<h4>Multiple Selections</h4>
 	<p>End user may pick multiple options from a tree.</p>
 	<p>Try to use CTRL+arrow keys, SHIFT+arrow keys, CTRL+click
 	and SHIFT+click to do multiple selections.</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

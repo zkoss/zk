@@ -29,11 +29,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		}
 	]]></zscript>
 	
-	<html>
-		<attribute name="content"><![CDATA[
-			<h3>Modal Dialogs</h3>
-		]]></attribute>
-	</html>
+	<html><![CDATA[
+		<h3>Modal Dialogs</h3>
+	]]></html>
 	<h:ul>
 		<h:li><toolbarbutton label="Messagebox" onClick="doSelect(&quot;m1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Fileupload" onClick="doSelect(&quot;m2&quot;)"/></h:li>

@@ -19,13 +19,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Sliders</h4>
-				<p>slider is the kind of control to change an index number within a range.</p>
-				<p>Try to slide and see how the image size is changed.</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>Sliders</h4>
+			<p>slider is the kind of control to change an index number within a range.</p>
+			<p>Try to slide and see how the image size is changed.</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

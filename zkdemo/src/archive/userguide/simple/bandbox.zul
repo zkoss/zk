@@ -19,14 +19,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Bandboxes</h4>
-				<p>Bandbox is a special combobox with a customizable popup.
+		<html><![CDATA[
+<h4>Bandboxes</h4>
+<p>Bandbox is a special combobox with a customizable popup.
 Like combobox, users click a button to popup a window.
 Unlike combobox, the popup window could contain any kind of components.</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

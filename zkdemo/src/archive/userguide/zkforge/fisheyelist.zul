@@ -19,13 +19,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
+		<html><![CDATA[
 	<h4>Demo of Dojo Fisheye List</h4>
 	<p><a href="http://dojotoolkit.org/">Dojo</a> is a powerful JavavScript toolkit.</p>
 	<p>In this demo, we demostrate the use of its fisheye list.</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

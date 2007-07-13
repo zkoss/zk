@@ -29,11 +29,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		}
 	]]></zscript>
 	
-	<html>
-		<attribute name="content"><![CDATA[
-			<h3>Trees</h3>
-		]]></attribute>
-	</html>
+	<html><![CDATA[
+		<h3>Trees</h3>
+	]]></html>
 	<h:ul>
 		<h:li><toolbarbutton label="Trees" onClick="doSelect(&quot;tr1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Multiple selections" onClick="doSelect(&quot;tr2&quot;)"/></h:li>

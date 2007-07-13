@@ -29,11 +29,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		}
 	]]></zscript>
 	
-	<html>
-		<attribute name="content"><![CDATA[
-			<h3>Listboxes</h3>
-		]]></attribute>
-	</html>
+	<html><![CDATA[
+		<h3>Listboxes</h3>
+	]]></html>
 	<h:ul>
 		<h:li><toolbarbutton label="Listboxes" onClick="doSelect(&quot;lb1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Live data" onClick="doSelect(&quot;lb2&quot;)"/></h:li>

@@ -19,13 +19,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
+		<html><![CDATA[
 <h4>Splitters</h4>
 <p>A splitter appears before or after an element inside a hbox or vbox.
 When the splitter is dragged, the sibling elements of the splitter are resized.</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

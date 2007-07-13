@@ -19,28 +19,26 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>More input features</h4>
-				<p>text entry with constraints are supported.
-				<ul>
-					<li>intbox: textbox which accepts only integers.</li>
-					<li>decimalbox: textbox which accepts only decimal numbers.</li>
-					<li>datebox: textbox which accepts only date format.</li>
-					<li>constraint: constraint can be used to futher contraint the input control.(e.g. intbox and decimalbox can accept only positive numbers, zero, or negative numbers, etc..)</li>
-				</ul>
-				</p>
-				<p>Let us do some small test:
-				<ul>
-					<li>Try to enter some non-integer into "int box" and tab away.</li>
-					<li>Try to enter some non-decimal into "decimal box" and tab away.</li>
-					<li>Also try to enter some non-date format string into the "date box" and tab away.</li>
-					<li>Try to enter some negative integer or zero into "positive box" and tab away.</li>
-					<li>Try to highlight the name "John" in textbox of "Selection Event" and press "Replace" button below and "John" will be replaced with "Mary".</li>
-				</ul>
-				</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>More input features</h4>
+			<p>text entry with constraints are supported.
+			<ul>
+				<li>intbox: textbox which accepts only integers.</li>
+				<li>decimalbox: textbox which accepts only decimal numbers.</li>
+				<li>datebox: textbox which accepts only date format.</li>
+				<li>constraint: constraint can be used to futher contraint the input control.(e.g. intbox and decimalbox can accept only positive numbers, zero, or negative numbers, etc..)</li>
+			</ul>
+			</p>
+			<p>Let us do some small test:
+			<ul>
+				<li>Try to enter some non-integer into "int box" and tab away.</li>
+				<li>Try to enter some non-decimal into "decimal box" and tab away.</li>
+				<li>Also try to enter some non-date format string into the "date box" and tab away.</li>
+				<li>Try to enter some negative integer or zero into "positive box" and tab away.</li>
+				<li>Try to highlight the name "John" in textbox of "Selection Event" and press "Replace" button below and "John" will be replaced with "Mary".</li>
+			</ul>
+			</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

@@ -29,11 +29,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		}
 	]]></zscript>
 	
-	<html>
-		<attribute name="content"><![CDATA[
-			<h3>Toolbar and Menus</h3>
-		]]></attribute>
-	</html>
+	<html><![CDATA[
+		<h3>Toolbar and Menus</h3>
+	]]></html>
 	<h:ul>
 		<h:li><toolbarbutton label="Toolbar and Toolbarbutton" onClick="doSelect(&quot;t1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Menu" onClick="doSelect(&quot;t2&quot;)"/></h:li>

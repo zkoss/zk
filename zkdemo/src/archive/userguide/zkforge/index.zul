@@ -29,14 +29,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		}
 	]]></zscript>
 	
-	<html>
-		<attribute name="content"><![CDATA[
+	<html><![CDATA[
 	<h3>ZK.forge Components</h3>
 	<p>ZK.forge is a collection of components, themes and utilities
 	developed from community collaboration.</p>
 	<p>See also <a href="zkforge.sourceforge.net">ZK.forge at sourceforge.net</a></p>
-		]]></attribute>
-	</html> 
+	]]></html> 
 	<h:ul>
 		<h:li><toolbarbutton label="FCKeditor" onClick="doSelect(&quot;zf1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Dojo Fisheye List" onClick="doSelect(&quot;zf2&quot;)"/></h:li>

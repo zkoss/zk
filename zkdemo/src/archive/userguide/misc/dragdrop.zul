@@ -19,14 +19,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
+		<html><![CDATA[
 <h4>Drag and Drop</h4>
 <p>Demostrates drag-and-drop by allowing user to reorder the list
 by dragging list items around.</p>
 <p>All ZK components can be draggable and/or droppable</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

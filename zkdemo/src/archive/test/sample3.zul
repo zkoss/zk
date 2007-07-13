@@ -24,8 +24,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</tabs>
 	<tabpanels>
 		<tabpanel>
-		<html>
-	<attribute name="content"><![CDATA[
+		<html><![CDATA[
 AJAX adds more complexities and skill prerequisites to the already
 costly development of Web applications.
 <ol>
@@ -33,20 +32,17 @@ costly development of Web applications.
 	<li>Synchronization between the rich UI at the client and the MVC framework at the server</li>
 	<li>Incompatible and sophisticated JavaScript API to manipulate DOM in different browsers</li>
 </ol>
-	]]></attribute>
-		</html>
+	]]></html>
 		</tabpanel>
 		<tabpanel>
-		<html>
-	<attribute name="content"><![CDATA[
+		<html><![CDATA[
 As the Web reaching our daily lives, the effectiveness of Web applications
 to communicate with users and the simplicity of developing Today's sophisticated applications becomes more important than ever.
 <ul>
 <li>SIMPLE</li>
 <li>RICH</li>
 </ul>
-	]]></attribute>
-		</html>
+	]]></html>
 		</tabpanel>
 	</tabpanels>
 </tabbox>

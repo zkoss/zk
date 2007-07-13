@@ -19,15 +19,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>onOK, onCancel and onCtrlKey</h4>
-				<p>Special keypress event for ENTER, ESC, CTRL key are 
-				handled via three special event listeners, onOK, onCancel, and onCtrlKey respectivly. Note that function keys are deemed as CTRL keys.</p>
-				<p>Only window component is allowed to handle these events.</p>
-				<p>Try to press "ENTER", "ESC", "CTRL+A", "F2" and see what happened.(Note that the focus must be inside the demo widow when pressing the key.)</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>onOK, onCancel and onCtrlKey</h4>
+			<p>Special keypress event for ENTER, ESC, CTRL key are 
+			handled via three special event listeners, onOK, onCancel, and onCtrlKey respectivly. Note that function keys are deemed as CTRL keys.</p>
+			<p>Only window component is allowed to handle these events.</p>
+			<p>Try to press "ENTER", "ESC", "CTRL+A", "F2" and see what happened.(Note that the focus must be inside the demo widow when pressing the key.)</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

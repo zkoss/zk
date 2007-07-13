@@ -19,13 +19,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Captcha</h4>
-				<p>A captcha* is generally used to determine whether or not the application user is a human and prevent computer spammers.</p>
-				<p><span style="font-size: x-small">*CAPTCHA is trademarked by <a href="http://www.cmu.edu">Carnegie Mellon University</a>.</span></p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>Captcha</h4>
+			<p>A captcha* is generally used to determine whether or not the application user is a human and prevent computer spammers.</p>
+			<p><span style="font-size: x-small">*CAPTCHA is trademarked by <a href="http://www.cmu.edu">Carnegie Mellon University</a>.</span></p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

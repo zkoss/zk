@@ -19,14 +19,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Live data</h4>
-				<p>listbox supports "load on demend" feature via a ListModel interface. 
-				This feature will not load data into the listbox until it is necessary</p>
-				<p>Try to scroll the listbox down and see how the value is dynamically loaded into.</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>Live data</h4>
+			<p>listbox supports "load on demend" feature via a ListModel interface. 
+			This feature will not load data into the listbox until it is necessary</p>
+			<p>Try to scroll the listbox down and see how the value is dynamically loaded into.</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

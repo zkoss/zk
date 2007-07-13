@@ -19,15 +19,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Macro components</h4>
-				<p>Macros component is a way to develop new components without
+		<html><![CDATA[
+<h4>Macro components</h4>
+<p>Macros component is a way to develop new components without
 programming.
 First, use &lt;?component?&gt; to define a component by use of another ZUML page.
 Then, you could use this component anywhere as if it is a regular component.</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

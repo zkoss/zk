@@ -19,13 +19,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Labels and images</h4>
-				<p>Adding labels and images into a window is just as easy. And you can change the label and image on the fly.</p>
-				<p>Try to click on the "Yes" and "No" button to see how the label is changed.</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>Labels and images</h4>
+			<p>Adding labels and images into a window is just as easy. And you can change the label and image on the fly.</p>
+			<p>Try to click on the "Yes" and "No" button to see how the label is changed.</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

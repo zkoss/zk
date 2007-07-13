@@ -19,15 +19,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
+		<html><![CDATA[
 <h4>Context Menu and Right Click</h4>
 <p>Demostrates how to use context menu and how to listen right click.</p>
 <p>A conext menu can be any popup or menupopup component. To enable
 a context menu, just assign the id of the popup component to the context
 attribute</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

@@ -19,12 +19,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
-				<h4>Event listener</h4>
-				<p>Event xyz is passed to the Event listener onXyz. For example, for a "button" component, "click" event is passed to "onClick" event listener when an end user click that button.</p>
-			]]></attribute>
-		</html>
+		<html><![CDATA[
+			<h4>Event listener</h4>
+			<p>Event xyz is passed to the Event listener onXyz. For example, for a "button" component, "click" event is passed to "onClick" event listener when an end user click that button.</p>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

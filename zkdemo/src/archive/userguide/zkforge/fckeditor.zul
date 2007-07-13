@@ -19,15 +19,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
+		<html><![CDATA[
 	<h4>Demo of FCKeditor</h4>
 	<p><a href="http://www.fckeditor.net">FCKeditor</a> is a popular HTML on-line text edit developed by Frederico Caldeira Knabben.</p>
 	<p>In this demo, the first editor is a FCKeditor and the second one
 	is a textbox. Then, what you typed in the FCKeditor will be copied
 	to the textbox. Vice versa.</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">

@@ -19,15 +19,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo">
 	<vbox width="100%">
-		<html>
-			<attribute name="content"><![CDATA[
+		<html><![CDATA[
 	<h4>Demo of Google Maps</h4>
 	<p><a href="http://maps.google.com">Google Maps</a> is a popular maps service developed by Google.</p>
 	<p>In this demo, user can enter the new center(latitude and longitude) of the maps and the maps would 
 	move to show the new location. User can also drag the maps around to a new location and see the 
 	current center of the maps.</p>
-			]]></attribute>
-		</html>
+		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view">
