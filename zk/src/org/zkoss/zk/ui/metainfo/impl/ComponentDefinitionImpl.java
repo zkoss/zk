@@ -60,6 +60,8 @@ implements ComponentDefinition, java.io.Serializable {
 	private String _macroURI;
 	/** the current directory. */
 	private String _curdir;
+	/** the property name to which the text within the element will be assigned. */
+	private String _textAs;
 	/** inline or regular macro. Used if _macroURI is not null. */
 	private boolean _inline;
 	private AnnotationMap _annots;
@@ -190,12 +192,29 @@ implements ComponentDefinition, java.io.Serializable {
 		}
 	}
 
+	/** Sets the property name to which the text enclosed within
+	 * the element (associated with this component definition) is assigned to.
+	 *
+	 * <p>Default: null (means to create a Label component)
+	 *
+	 * @param propnm the property name.
+	 * @see #getTextAs
+	 * @since 2.5.0
+	 */
+	public void setTextAs(String propnm) {
+		_textAs = propnm != null && propnm.length() > 0 ? propnm: null;
+	}
+
 	//ComponentDefinition//
 	public LanguageDefinition getLanguageDefinition() {
 		return _langdef;
 	}
 	public String getName() {
 		return _name;
+	}
+
+	public String getTextAs() {
+		return _textAs;
 	}
 
 	public boolean isMacro() {

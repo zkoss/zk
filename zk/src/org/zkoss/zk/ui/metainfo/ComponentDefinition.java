@@ -51,6 +51,44 @@ public interface ComponentDefinition extends Cloneable {
 	 */
 	public String getName();
 
+	/** Returns the property name to which the text enclosed within
+	 * the element (associated with this component definition) is assigned to.
+	 *
+	 * <p>Default: null (means to create a Label component as the child)
+	 *
+	 * <p>For example, if {@link #getTextAs} returns null, then
+	 * a Label component is created as a child of <code>comp</code>
+	 * with the "Hi Text" value in the following example:
+	 *
+	 *<pre><code>&lt;comp&gt;
+	 *  Hi Text
+	 *&lt;/comp&gt;</code></pre>
+	 *
+	 * <p>In other words, it is equivalent to
+	 *
+	 *<pre><code>&lt;comp&gt;
+	 *  &lt;label value="Hi Text"/&gt;
+	 *&lt;/comp&gt;</code></pre>
+	 *
+	 * <p>On the other hand, if {@link #getTextAs} returns "content", then
+	 * "Hi Text" is assigned to the content property of <code>comp</comp>.
+	 * In other words, it is equivalent to
+	 *
+	 *<pre><code>&lt;comp content="Hi Text"/&gt;
+	 *&lt;/comp&gt;</code></pre>
+	 *
+	 * <p>It is also the same as
+	 *
+	 *<pre><code>&lt;comp&gt;
+	 *  &lt;attribute name="content"/&gt;
+	 *  Hi Text
+	 *  &lt;/attribute&gt;
+	 *&lt;/comp&gt;</code></pre>
+	 *
+	 * @since 2.5.0
+	 */
+	public String getTextAs();
+
 	/** Returns whether this is a macro component.
 	 * @see #getMacroURI
 	 */

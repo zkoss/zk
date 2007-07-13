@@ -452,6 +452,12 @@ public class DefinitionLoaders {
 				langdef.addComponentDefinition(compdef);
 			}
 
+			final String textAs = el.getElementValue("text-as", true);
+			if (textAs != null) {
+				noEL("text-as", textAs, el);
+				compdef.setTextAs(textAs);
+			}
+
 			for (Iterator e = parseMolds(el).entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
 				compdef.addMold((String)me.getKey(), (String)me.getValue());

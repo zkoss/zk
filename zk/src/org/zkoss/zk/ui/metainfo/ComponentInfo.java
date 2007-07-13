@@ -132,6 +132,18 @@ implements Cloneable, Condition, java.io.Serializable {
 		_parent = parent;
 	}
 
+	/** Returns the property name to which the text enclosed within
+	 * the element (associated with this component definition) is assigned to.
+	 *
+	 * <p>Default: null (means to create a Label component as the child)
+	 *
+	 * @see ComponentDefinition#getTextAs
+	 * @since 2.5.0
+	 */
+	public String getTextAs() {
+		return _compdef.getTextAs();
+	}
+
 	/** Returns the fulfill condition that controls when to create
 	 * the child components, or null if the child components
 	 * are created at the time when the page is loaded.

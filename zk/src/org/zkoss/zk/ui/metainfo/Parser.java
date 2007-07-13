@@ -56,7 +56,6 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.Contentable;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -446,10 +445,9 @@ public class Parser {
 
 				if (trimLabel.length() > 0) { //consider as a label
 					final ComponentInfo parentInfo = (ComponentInfo)parent;
-					if (Contentable.class.isAssignableFrom(
-					resolveImplementation(parentInfo))) {
-						//consider it as the content property
-						parentInfo.addProperty("content", trimLabel, null);
+					final String textAs = parentInfo.getTextAs();
+					if (textAs != null) {
+						parentInfo.addProperty(textAs, trimLabel, null);
 					} else {
 						if (!parentlang.isRawLabel())
 							label = trimLabel;
@@ -457,22 +455,6 @@ public class Parser {
 					}
 				}
 			}
-		}
-	}
-	/** Resolves the implementation class.
-	 * Since page is not ready yet, we assume the default class if
-	 * the class specified in the use attribute is not found.
-	 */
-	private Class resolveImplementation(ComponentInfo compInfo)
-	throws ClassNotFoundException {
-		final ComponentDefinition compdef = compInfo.getComponentDefinition();
-		final String implcls = compInfo.getImplementationClass();
-		try {
-			return compdef.resolveImplementationClass(null, implcls);
-		} catch (ClassNotFoundException ex) {
-			if (implcls != null)
-				return compdef.resolveImplementationClass(null, null);
-			throw ex;
 		}
 	}
 

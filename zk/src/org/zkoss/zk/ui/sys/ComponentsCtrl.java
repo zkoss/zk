@@ -239,6 +239,9 @@ public class ComponentsCtrl {
 		public String getName() {
 			return "[anonymous]";
 		}
+		public String getTextAs() {
+			return null;
+		}
 		public boolean isMacro() {
 			return false;
 		}
