@@ -70,7 +70,8 @@ public interface ComponentDefinition extends Cloneable {
 	 *  &lt;label value="Hi Text"/&gt;
 	 *&lt;/comp&gt;</code></pre>
 	 *
-	 * <p>On the other hand, if {@link #getTextAs} returns "content", then
+	 * <p>On the other hand, if {@link #getTextAs} returns a non-empty string,
+	 * say, "content", then
 	 * "Hi Text" is assigned to the content property of <code>comp</comp>.
 	 * In other words, it is equivalent to
 	 *
@@ -84,6 +85,14 @@ public interface ComponentDefinition extends Cloneable {
 	 *  Hi Text
 	 *  &lt;/attribute&gt;
 	 *&lt;/comp&gt;</code></pre>
+	 *
+	 * <p>To enable it, you can declare <code>text-as</code> in
+	 * the component definition in lang.xml or lang-addon.xml:
+	 *
+	 * <pre><code>&lt;component&gt;
+	 *  &lt;component-name&gt;html&lt;/component-name&gt;
+	 *  &lt;text-as&gt;content&lt;/text-as&gt;
+	 *...</code></pre>
 	 *
 	 * @since 2.5.0
 	 */

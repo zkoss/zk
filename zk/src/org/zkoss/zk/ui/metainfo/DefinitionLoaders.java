@@ -453,7 +453,7 @@ public class DefinitionLoaders {
 			}
 
 			final String textAs = el.getElementValue("text-as", true);
-			if (textAs != null) {
+			if (textAs != null) { //empty means cleanup (for overriding)
 				noEL("text-as", textAs, el);
 				compdef.setTextAs(textAs);
 			}
