@@ -42,7 +42,7 @@ public class Html extends XulElement {
 	}
 
 	/** Returns the HTML tags being embedded.
-	 * <p>Default: empty.
+	 * <p>Default: empty ("").
 	 */
 	public String getContent() {
 		return _content;

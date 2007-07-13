@@ -138,6 +138,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/area.dsp</mold-uri>
 		</mold>
+		<!-- Specifies which property to assign the text within the element
+		to.
+		If not specified (default), the text becomes a child Label component.
+		If specified, the text is assigned to the specified property.
+		<text-as>content</text-as>
+		-->
 		<!-- Any number of component's property to set
 		<property>
 			<property-name></property-name>
@@ -392,6 +398,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>html</component-name>
 		<component-class>org.zkoss.zul.Html</component-class>
+		<text-as>content</text-as><!-- treat text within the element as the content property -->
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/html.dsp</mold-uri>
@@ -616,6 +623,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>script</component-name>
 		<component-class>org.zkoss.zul.Script</component-class>
+		<text-as>content</text-as><!-- treat text within the element as the content property -->
 	</component>
 	<component>
 		<component-name>separator</component-name>
@@ -656,6 +664,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>style</component-name>
 		<component-class>org.zkoss.zul.Style</component-class>
+		<text-as>content</text-as><!-- treat text within the element as the content property -->
 	</component>
 	<component>
 		<component-name>tab</component-name>

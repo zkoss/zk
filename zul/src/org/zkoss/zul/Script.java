@@ -23,7 +23,6 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Contentable;
 
 /**
  * A component to represent script codes running at the client.
@@ -58,7 +57,7 @@ import org.zkoss.zk.ui.ext.Contentable;
  *
  * @author tomyeh
  */
-public class Script extends AbstractComponent implements Contentable {
+public class Script extends AbstractComponent {
 	private String _src, _type, _charset;
 	private String _content;
 	private boolean _defer;

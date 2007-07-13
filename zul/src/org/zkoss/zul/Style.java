@@ -23,7 +23,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.Contentable;
 
 /**
  * The style component used to specify CSS styles for the owner desktop.
@@ -58,7 +57,7 @@ import org.zkoss.zk.ui.ext.Contentable;
  *
  * @author tomyeh
  */
-public class Style extends AbstractComponent implements Contentable {
+public class Style extends AbstractComponent {
 	private String _src;
 	private String _content;
 
