@@ -168,7 +168,7 @@ import org.zkoss.zk.au.*;
 		final Page page = comp.getPage();
 		if (_recovering || page == null || !_exec.isAsyncUpdate(page))
 			return; //nothing to do
-		if (_ending) throw new IllegalStateException();
+		if (_ending) throw new IllegalStateException("ended");
 
 		checkDesktop(comp);
 
@@ -190,7 +190,7 @@ import org.zkoss.zk.au.*;
 		if (_recovering || page == null || !_exec.isAsyncUpdate(page)
 		|| _invalidated.contains(comp))
 			return; //nothing to do
-		if (_ending) throw new IllegalStateException();
+		if (_ending) throw new IllegalStateException("ended");
 
 		checkDesktop(comp);
 
@@ -212,7 +212,7 @@ import org.zkoss.zk.au.*;
 		|| (newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
 		|| (oldpg == null && !_exec.isAsyncUpdate(newpg))) //attach to loading pg
 			return; //to avoid redundant AuRemove
-		if (_ending) throw new IllegalStateException();
+		if (_ending) throw new IllegalStateException("ended");
 
 		if (oldpg == null && !_moved.contains(comp)) { //new attached
 			_attached.add(comp);
