@@ -35,10 +35,12 @@ public class AbortByRemoveDesktop implements AbortingReason {
 	public boolean isAborting() {
 		return true;
 	}
-	public AuResponse getResponse() {
+	public void execute() {
 		final Desktop dt = Executions.getCurrent().getDesktop();
 		final WebAppCtrl wappc = (WebAppCtrl)dt.getWebApp();
 		wappc.getDesktopCache(dt.getSession()).removeDesktop(dt);
+	}
+	public AuResponse getResponse() {
 		return null;
 	}
 }

@@ -325,6 +325,10 @@ public class UiEngineImpl implements UiEngine {
 				} finally {
 					inits.doFinally();
 				}
+
+				final AbortingReason abrn = uv.getAbortingReason();
+				if (abrn != null)
+					abrn.execute(); //always execute even if !isAborting
 			} else {
 				//FUTURE: a way to allow richlet to set page ID
 				((PageCtrl)page).init(null, null, null, null, null);
@@ -632,6 +636,11 @@ public class UiEngineImpl implements UiEngine {
 					resumeAll(desktop, uv, errs);
 				} while ((event = nextEvent(uv)) != null);
 			}
+
+			//Cycle 2a: Handle aborting reason
+			final AbortingReason abrn = uv.getAbortingReason();
+			if (abrn != null)
+				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Generate output
 			List responses;
