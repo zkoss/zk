@@ -11,6 +11,7 @@ ZK 2.5.0
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
   1752477: combobox in groupbox and vbox failed to pos button (IE only)
+  1753712: Detaching component in DesktopCleanup causing IllegalStateException
 
 	--------
 ZK 2.4.1
