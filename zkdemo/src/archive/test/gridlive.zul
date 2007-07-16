@@ -42,6 +42,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</columns>
 	</grid>
 	<button label="remove 2nd" onClick="model2.remove(1)"/>
+	<button label="remove 2nd and 3rd" onClick="model2.remove(1);model2.remove(1);"/>
 
 	<separator/>
 
