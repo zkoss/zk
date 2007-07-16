@@ -25,6 +25,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</language-config>
 	-->
 
+	<session-config>
+		<!-- Turn on the following if you want a different timeout
+			Note: The unit is seconds (while that of web.xml is minute)
+		<session-timeout>1800</session-timeout>
+		-->
+		<!-- Turn OFF the following if you want to use the default:
+			onTimer, like any other request, resets the session-timeout counter
+		-->
+		<timer-as-inactive>true</timer-as-inactive>
+	</session-config>
+
 	<!-- Turn on if you prefer to use the native (Servlet) thread
 	to process the events, instead of forking the event processing thread
 	<system-config>
