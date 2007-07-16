@@ -484,20 +484,30 @@ _zktrx.cleanup = function (trow, attr) {
 
 _zktrx.au.outer = zkau.cmd1.outer;
 zkau.cmd1.outer = function (uuid, cmp, html) {
-	var dom = _zktrx.dom[uuid];
-	if (dom) {
-		for (var j = dom.length; --j >= 0;) {
-			var id = dom[j];
-			var trow = $e(id);
-			_zktrx._rmKids(trow); //deep first since it cleanup dom
-			if (j == 0) {
-				uuid = id;
-				cmp = trow;
-			} else {
-				_zktrx.au.rm(id, trow);
+	if (!cmp) {
+		var dom = _zktrx.dom[uuid];
+		if (dom) {
+			for (var j = dom.length; --j >= 0;) {
+				var id = dom[j];
+				var trow = $e(id);
+				_zktrx._rmKids(trow); //deep first since it cleanup dom
+				if (j == 0) {
+					uuid = id;
+					cmp = trow;
+				} else {
+					_zktrx.au.rm(id, trow);
+				}
+			}
+			dom.length = 0; //clear
+		} else {
+			//Bug 1753216: it causes invalidate if adding more than one page
+			//of treeitems to an empty treechild
+			var sib = _zktrx.sib[uuid];
+			if (sib) { //update an empty treechildren
+				_zktrx.au.addAft(uuid, $e(sib), html);
+				return; //done
 			}
 		}
-		dom.length = 0; //clear
 	}
 	if (cmp || html.trim()) //if treechildren has no children at all
 		_zktrx.au.outer(uuid, cmp, html);
