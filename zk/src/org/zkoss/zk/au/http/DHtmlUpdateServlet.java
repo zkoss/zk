@@ -46,7 +46,9 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.FailoverManager;
@@ -178,8 +180,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			if (desktop == null) {
 				final StringWriter out = getXMLWriter();
 
-				if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
-				&& !"onTimer".equals(scmd)) {//possible in FF due to cache
+				if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
+				&& !Events.ON_TIMER.equals(scmd)) {//possible in FF due to cache
 					String uri = Devices.getTimeoutURI(
 						Servlets.isMilDevice(request) ? "mil": "ajax");
 					final AuResponse resp;
@@ -202,11 +204,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//reason: a new page might be created (such as include)
 
 		//parse commands
+		boolean onTimerOnly = true;
 		try {
 			for (int j = 0;; ++j) {
 				final String scmd = request.getParameter("cmd."+j);
 				if (scmd == null)
 					break;
+
+				onTimerOnly = onTimerOnly && Events.ON_TIMER.equals(scmd);
 
 				final Command cmd = AuRequest.getCommand(scmd);
 				final String uuid = request.getParameter("uuid."+j);
@@ -222,14 +227,18 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					aureqs.add(new AuRequest(desktop, uuid, cmd, data));
 				}
 			}
-			if (aureqs.isEmpty()) {
-				responseError(uieng, request, response, "Illegal request: cmd is required");
-				return;
-			}
 		} catch (CommandNotFoundException ex) {
 			responseError(uieng, request, response, Exceptions.getMessage(ex));
 			return;
 		}
+
+		if (aureqs.isEmpty()) {
+			responseError(uieng, request, response, "Illegal request: cmd is required");
+			return;
+		}
+
+		((SessionCtrl)sess)
+			.notifyClientRequest(onTimerOnly ? Events.ON_TIMER: null);
 
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
 		final StringWriter out = getXMLWriter();

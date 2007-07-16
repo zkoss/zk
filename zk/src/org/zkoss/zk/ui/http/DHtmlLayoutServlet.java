@@ -53,6 +53,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
@@ -157,6 +158,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
+		((SessionCtrl)sess).notifyClientRequest(null);
 
 		boolean compress = _compress && !Servlets.isIncluded(request);
 		final Writer out;

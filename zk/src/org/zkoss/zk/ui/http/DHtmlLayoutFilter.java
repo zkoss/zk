@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
@@ -85,6 +86,7 @@ public class DHtmlLayoutFilter implements Filter {
 			final Desktop desktop = webman.getDesktop(sess, request, null, true);
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request, null);
+			((SessionCtrl)sess).notifyClientRequest(null);
 			final UiFactory uf = wappc.getUiFactory();
 			final PageDefinition pagedef =
 				uf.getPageDefinitionDirectly(ri, content, _ext);

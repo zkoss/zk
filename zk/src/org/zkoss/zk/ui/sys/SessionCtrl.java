@@ -84,4 +84,12 @@ public interface SessionCtrl {
 	 * @param groupSize how many number of UUID the caller wants.
 	 */
 	public int getNextUuidGroup(int groupSize);
+
+	/** Notifies the session that a client request is received.
+	 *
+	 * @param evtnm the event name. If null, it means the client
+	 * is requesting to load a page.
+	 * @since 2.5.0
+	 */
+	public void notifyClientRequest(String evtnm);
 }

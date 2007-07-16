@@ -53,6 +53,7 @@ import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
@@ -172,6 +173,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
+		((SessionCtrl)sess).notifyClientRequest(null);
 
 		final UiFactory uf = wappc.getUiFactory();
 		if (uf.isRichlet(ri, bRichlet)) {

@@ -105,6 +105,11 @@ public class Configuration {
 	private boolean _keepDesktop;
 	/** Whether to disable components that don't belong to the modal window. */
 	private boolean _disableBehindModal = true;
+	/** Whether to consider the onTimer event as inactive.
+	 * In other words, whether not to reset the coutner of the session timeout
+	 * when receiving onTimer.
+	 */
+	private boolean _timerAsInactive;
 
 	/** Contructor.
 	 */
@@ -1059,6 +1064,9 @@ public class Configuration {
 	 * before ZK will invalidate the session.
 	 *
 	 * <p>Default: 0 (means the system default).
+	 *
+	 * @see #setTimerAsInactive
+	 * @see Session#setMaxInactiveInterval
 	 */
 	public void setSessionMaxInactiveInterval(int secs) {
 		_sessTimeout = secs;
@@ -1070,6 +1078,9 @@ public class Configuration {
 	 *
 	 * <p>A negative value indicates that there is no limit.
 	 * Zero means to use the system default (usually defined in web.xml).
+	 *
+	 * @see #isTimerAsInactive
+	 * @see Session#getMaxInactiveInterval
 	 */
 	public int getSessionMaxInactiveInterval() {
 		return _sessTimeout;
@@ -1476,6 +1487,37 @@ public class Configuration {
 	public boolean isKeepDesktopAcrossVisits() {
 		return _keepDesktop;
 	}
+
+	/** Specifies whether <i>not</i> to reset the session timeout counter,
+	 * when receiving the onTimer event.
+	 * A session is expired (and then invalidated), if it didn't receive any
+	 * client request in the specified timeout interval
+	 * ({@link #getSessionMaxInactiveInterval}).
+	 * This method controls whether to ignore the onTimer event
+	 * regarding the session timeout.
+	 *
+	 * <p>Note: if false (default) and the timer is shorter than
+	 * the session timeout ({@link #getSessionMaxInactiveInterval}),
+	 * the session is never expired.
+	 *
+	 * <p>Default: false.
+	 *
+	 * @see Session#setTimerAsInactive
+	 * @since 2.5.0
+	 */
+	public void setTimerAsInactive(boolean asInactive) {
+		_timerAsInactive = asInactive;
+	}
+	/** Returns whether <i>not</i> to reset the the session timer counter,
+	 * when receiving the onTimer event.
+	 *
+	 * @see Session#isTimerAsInactive
+	 * @since 2.5.0
+	 */
+	public boolean isTimerAsInactive() {
+		return _timerAsInactive;
+	}
+
 	/** Adds an error page for the Ajax clients.
 	 * <p>Deprecated, use {@link #addErrorPage(String, Class, String)} instead.
 	 * @deprecated

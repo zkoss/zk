@@ -154,15 +154,19 @@ public class ConfigParser {
 			//session-config
 			//	session-timeout
 			//	max-desktops-per-session
-			//	timeout-uri
+			//  timer-as-inactive
+			//	timeout-uri (deprecated)
 				Integer v = parseInteger(el, "session-timeout", false);
 				if (v != null) config.setSessionMaxInactiveInterval(v.intValue());
 
 				v = parseInteger(el, "max-desktops-per-session", true);
 				if (v != null) config.setMaxDesktops(v.intValue());
 
+				String s = el.getElementValue("timer-as-inactive", true);
+				if (s != null) config.setTimerAsInactive("true".equals(s));
+
 				//deprecated since 2.4.0, but backward compatible
-				final String s = el.getElementValue("timeout-uri", true);
+				s = el.getElementValue("timeout-uri", true);
 				if (s != null) Devices.setTimeoutURI("ajax", s);
 			} else if ("language-config".equals(elnm)) {
 			//language-config
