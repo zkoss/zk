@@ -1242,12 +1242,19 @@ public class Listbox extends XulElement {
 
 		case ListDataEvent.INTERVAL_REMOVED:
 			if (max < 0) max = oldsz - 1;
-			if ((max - min + 1) != (oldsz - newsz)) {
+			int cnt = max - min + 1;
+			if (cnt != (oldsz - newsz)) {
 				log.warning("Conflict event: number of removed items not matched: "+event);
 				break; //handle it as CONTENTS_CHANGED
 			}
-			for (int j = min; j <= max; ++j)
-				getItemAtIndex(min).detach(); //detach and remove
+
+			//detach and remove
+			for (Iterator it = getItems().listIterator(min);
+			--cnt >= 0 && it.hasNext();) {
+				it.next();
+				it.remove();
+			}
+
 			done = true;
 			break;
 		}

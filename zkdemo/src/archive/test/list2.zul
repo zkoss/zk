@@ -58,15 +58,25 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	]]></zscript>
 
 	<zscript>
-		String[] data = new String[30];
-		for(int j=0; j &lt; data.length; ++j) {
-			data[j] = "option "+j;
+		String[] d1 = new String[30];
+		List d2 = new LinkedList();
+		for(int j=0; j &lt; d1.length; ++j) {
+			d1[j] = "option "+j;
+			d2.add(d1[j]);
 		}
-		ListModel strset = new SimpleListModel(data);
+		ListModel model1 = new SimpleListModel(d1);
+		ListModelList model2 = new ListModelList(d2);
 	</zscript>
-	<listbox width="200px" mold="paging" pageSize="5" model="${strset}">
+	<listbox width="200px" mold="paging" pageSize="5" model="${model1}">
 		<listhead>
 			<listheader label="Load on Demend"/>
 		</listhead>
 	</listbox>
+	<listbox width="200px" mold="paging" pageSize="5" model="${model2}">
+		<listhead>
+			<listheader label="Load on Demend"/>
+		</listhead>
+	</listbox>
+	<button label="remove 2nd" onClick="model2.remove(1)"/>
+	<button label="remove 2nd and 3rd" onClick="model2.remove(1);model2.remove(1);"/>
 </window>

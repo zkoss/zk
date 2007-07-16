@@ -587,7 +587,7 @@ public class Grid extends XulElement {
 
 			//detach and remove
 			for (Iterator it = _rows.getChildren().listIterator(min);
-			it.hasNext() && --cnt >= 0;) {
+			--cnt >= 0 && it.hasNext();) {
 				it.next();
 				it.remove();
 			}
