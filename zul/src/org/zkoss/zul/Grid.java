@@ -579,14 +579,15 @@ public class Grid extends XulElement {
 
 		case ListDataEvent.INTERVAL_REMOVED:
 			if (max < 0) max = oldsz - 1;
-			if ((max - min + 1) != (oldsz - newsz)) {
+			int cnt = max - min + 1;
+			if (cnt != (oldsz - newsz)) {
 				log.warning("Conflict event: number of removed rows not matched: "+event);
 				break; //handle it as CONTENTS_CHANGED
 			}
 
 			//detach and remove
 			for (Iterator it = _rows.getChildren().listIterator(min);
-			it.hasNext();) {
+			it.hasNext() && --cnt >= 0;) {
 				it.next();
 				it.remove();
 			}
