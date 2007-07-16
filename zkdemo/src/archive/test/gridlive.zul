@@ -19,25 +19,29 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <window title="Live Grid" border="normal">
 	<zscript>
-		String[] data = new String[30];
-		for(int j=0; j &lt; data.length; ++j) {
-			data[j] = "option "+j;
+		String[] d1 = new String[30];
+		List d2 = new LinkedList();
+		for(int j=0; j &lt; d1.length; ++j) {
+			d1[j] = "option "+j;
+			d2.add(d1[j]);
 		}
-		ListModel strset = new SimpleListModel(data);
+		ListModel model1 = new SimpleListModel(d1);
+		ListModelList model2 = new ListModelList(d2);
 	</zscript>
 
 	Live:
-	<grid width="200px" height="100px" model="${strset}">
+	<grid width="200px" height="100px" model="${model1}">
 	</grid>
 
 	<separator/>
 
 	Live with header:
-	<grid width="200px" height="100px" model="${strset}">
+	<grid width="200px" height="100px" model="${model2}">
 		<columns>
 			<column label="options"/>
 		</columns>
 	</grid>
+	<button label="remove 2nd" onClick="model2.remove(1)"/>
 
 	<separator/>
 
