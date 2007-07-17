@@ -40,7 +40,10 @@ public class JVMs {
 		_j6 = (_major == 1 && _minor >= 6) || _major >= 6;
 	}
 
-	/** Returns whether JVM is 5.0 or above
+	/** Returns whether JVM is 5.0 or above.
+	 *
+	 * <p>Note: if {@link #isJava5} returns true, then {@link #isJava6}
+	 * must return true.
 	 */
 	public static final boolean isJava5() {
 		return _j5;
