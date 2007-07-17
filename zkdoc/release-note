@@ -15,7 +15,8 @@ ZK 2.5.0
   1753712: Detaching component in DesktopCleanup causing IllegalStateException
   1753216: ZUL Tree onOpen vs Page Size
   1753269: Inproper deleting rows from grid with live data
-
+  1755235: zkplus doesn't work with Java 1.4
+  
 	--------
 ZK 2.4.1
 * Features:
