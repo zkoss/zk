@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<frame title="Listbox Demo"  visible="true">
+<frame title="Listbox demo"  visible="true">
 <zscript>
 int k = 0;
 </zscript>

@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkplus.hibernate;
 
 import org.zkoss.util.logging.Log;
+import org.zkoss.lang.JVMs;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -74,19 +75,28 @@ public class HibernateUtil {
 	/* package */ static SessionFactory initSessionFactory() {
 		if (_factory == null) {
 			try {
-			    // Create the SessionFactory from hibernate.cfg.xml
-			    _factory = new AnnotationConfiguration()
-			    		.configure()
-			    		.buildSessionFactory();
+			    // Create the SessionFactory per JavaVM version and allow JDK 1.4 compatibility
+					if (JVMs.isJava5()) {
+				    _factory = java5Factory();
+				  } else {
+				  	_factory = java4Factory();
+				  }
 			} catch (Throwable ex) {
 			    // Make sure you log the exception, as it might be swallowed
 			    log.error("Initial SessionFactory creation failed." + ex);
 			    throw new ExceptionInInitializerError(ex);
 			}
-
 		}
 		return _factory;
 	}
+	
+	private static SessionFactory java5Factory() {
+    return new AnnotationConfiguration().configure().buildSessionFactory();
+  }
+  
+  private static SessionFactory java4Factory() {
+    return new Configuration().configure().buildSessionFactory();
+  }
 	
 	/**
 	 * Used in {@link HibernateSessionFactoryListener} to init

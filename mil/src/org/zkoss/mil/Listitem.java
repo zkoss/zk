@@ -114,10 +114,23 @@ public class Listitem extends MilComponent {
 
 	/** Returns the image source of this Listitem, or null if no image.
 	 */
+	public String getSrc() {
+		return _src;
+	}
+	/** Sets theimage soruce of this Listitem.
+	 * @param src the image source
+	 */
+	public void setSrc(String src) {
+		setImage(src);
+	}
+	
+	/** Returns the image source of this Listitem, or null if no image.
+	 */
 	public String getImage() {
 		return _src;
 	}
 	/** Sets the image source of this Listitem.
+	 * @param image the image source
 	 */
 	public void setImage(String image) {
 		if (image != null && image.length() == 0)

@@ -1,5 +1,9 @@
 	--------
-ZK Mobile 0.9.0
+ZK Mobile 0.8.5
+* Support Listbox, Listitem, Datebox, Intbox, Decimalbox components.
+* Support predefined History URLs (in jad file)
+* Support default URL (in jad file)
+* Support autoRun flag (in jad file)
 
 	--------
 ZK Mobile 0.8.0

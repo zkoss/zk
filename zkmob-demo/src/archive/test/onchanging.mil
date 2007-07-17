@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<frame title="onChanging Event Demo" visible="true" onCommand="MilDevice.goHome(null)">
+<frame title="onChanging event demo" visible="true" onCommand="MilDevice.goHome(null)">
 	<command label="Home" type="back"/>
 	
 	<textbox id="tx1" label="onChanging textbox:" onChanging="tx2.value=event.value"/>

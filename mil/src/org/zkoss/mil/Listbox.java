@@ -132,10 +132,6 @@ public class Listbox extends Item {
 		return getItems().size();
 	}
 	/** Returns the item at the specified index.
-	 *
-	 * <p>Note: if live data is used ({@link #getModel} is not null),
-	 * the returned item might NOT be loaded yet.
-	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
 	 */
 	public Listitem getItemAtIndex(int index) {
 		return (Listitem)getItems().get(index);
@@ -294,10 +290,6 @@ public class Listbox extends Item {
 	}
 
 	/** Returns the selected item.
-	 *
-	 * <p>Note: if live data is used ({@link #getModel} is not null),
-	 * the returned item might NOT be loaded yet.
-	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
 	 */
 	public Listitem getSelectedItem() {
 		return  _jsel >= 0 ?
@@ -314,10 +306,6 @@ public class Listbox extends Item {
 	}
 
 	/** Returns all selected items.
-	 *
-	 * <p>Note: if live data is used ({@link #getModel} is not null),
-	 * the returned item might NOT be loaded yet.
-	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
 	 */
 	public Set getSelectedItems() {
 		return _roSelItems;
@@ -329,10 +317,6 @@ public class Listbox extends Item {
 	}
 
 	/** Appends an item.
-	 *
-	 * <p>Note: if live data is used ({@link #getModel} is not null),
-	 * the returned item might NOT be loaded yet.
-	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
 	 */
 	public Listitem appendItem(String label, String value) {
 		final Listitem item = new Listitem(label, value);
@@ -341,10 +325,6 @@ public class Listbox extends Item {
 		return item;
 	}
 	/**  Removes the child item in the list box at the given index.
-	 *
-	 * <p>Note: if live data is used ({@link #getModel} is not null),
-	 * the returned item might NOT be loaded yet.
-	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
 	 *
 	 * @return the removed item.
 	 */
