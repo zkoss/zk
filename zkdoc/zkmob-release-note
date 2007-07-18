@@ -1,3 +1,7 @@
+ZK Mobile 0.8.6-Freshly
+Bug:
+  1756003 mil Listitem image not shown.
+
 	--------
 ZK Mobile 0.8.5
 * Support Listbox, Listitem, Datebox, Intbox, Decimalbox components.
