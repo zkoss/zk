@@ -223,7 +223,7 @@ public class Listitem extends MilComponent {
 			HTMLs.appendAttribute(sb, "lb",  getLabel());
 		}
 		if (getImage() != null) {
-			HTMLs.appendAttribute(sb, "im",  getImage());
+			HTMLs.appendAttribute(sb, "im",  getEncodedSrc());
 		}
 		return sb.toString();
 	}
