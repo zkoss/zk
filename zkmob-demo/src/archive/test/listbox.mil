@@ -18,10 +18,10 @@ int k = 0;
 		<attribute name="onCommand">
 			self.setMold("default");
 		</attribute>
-		<listitem label="item1"/>
-		<listitem label="item2"/>
-		<listitem label="item3"/>
-		<listitem label="item4"/>
+		<listitem label="item1" image="/img/bluerect.png"/>
+		<listitem label="item2" image="/img/bluerect.png"/>
+		<listitem label="item3" image="/img/bluerect.png"/>
+		<listitem label="item4" image="/img/bluerect.png"/>
 		<command label="to default" type="ok"/>
 	</listbox>
 	<listbox id="lbx2" label="Choice Group">
