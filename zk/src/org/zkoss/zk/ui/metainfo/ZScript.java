@@ -218,6 +218,13 @@ public class ZScript implements Condition, java.io.Serializable {
 		_deferred = deferred;
 	}
 
+	/** Returns the condition.
+	 * @since 2.5.0
+	 */
+	public Condition getCondition() {
+		return _cond;
+	}
+
 	//Condition//
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(comp);

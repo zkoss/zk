@@ -42,6 +42,13 @@ public class EventHandler implements Condition, java.io.Serializable {
 		return _zscript;
 	}
 
+	/** Returns the condition.
+	 * @since 2.5.0
+	 */
+	public Condition getCondition() {
+		return _cond;
+	}
+
 	//Condition//
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(comp);

@@ -1021,8 +1021,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public ZScript getEventHandler(String evtnm) {
-		final EventHandler evthd = _evthds != null ? _evthds.get(evtnm): null;
-		return evthd != null && evthd.isEffective(this) ? evthd.getZScript(): null;
+		final EventHandler evthd =
+			_evthds != null ? _evthds.get(this, evtnm): null;
+		return evthd != null ? evthd.getZScript(): null;
 	}
 	public void addSharedEventHandlerMap(EventHandlerMap evthds) {
 		if (evthds != null && !evthds.isEmpty()) {
