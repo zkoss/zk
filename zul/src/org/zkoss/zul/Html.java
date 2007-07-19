@@ -22,32 +22,86 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zul.impl.XulElement;
 
 /**
- * A HTML embedder that embeds any HTML tags, even including JavaScript.
- * Besides using this component, you could use XUL's standard approach:
- * xmlns:h="http://www.w3.org/1999/xhtml".
+ * A comonent used to embed the browser native content (i.e., HTML tags)
+ * into the output sent to the browser.
+ * The browser native content is specified by {@link #setContent}.
+ *
+ * <p>Notice that {@link Html} generates HTML SPAN to enclose
+ * the embedded HTML tags. Thus, you can specify the style
+ * ({@link #getStyle}), tooltip {@link #getTooltip} and so on.
+ *
+ * <pre><code>&lt;html style="border: 1px solid blue"&gt;&lt;![CDATA[
+ * &lt;ul&gt;
+ *  &lt;li&gt;It is in a SPAN tag.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *]]&gt;&lt;/html&gt;</code></pre>
+ *
+ * <p>The generated HTML tags will look like:
+ * <pre><code>&lt;SPAN id="xxx" style="border: 1px solid blue"&gt;
+ * &lt;ul&gt;
+ *  &lt;li&gt;It is in a SPAN tag.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *&lt;/SPAN&gt;</code></pre>
+ *
+ * <p>Since SPAN is used to enclosed the embedded HTML tags, so
+ * the following is incorrect.
+ *
+ * <pre><code>&lt;html&gt;&lt;![CDATA[
+ * &lt;table&gt;
+ *  &lt;tr&gt;
+ *   &lt;td&gt; &lt;-- Incomplete since it is inside SPAN --&gt;
+ *]]&gt;&lt;/html&gt;
+ *
+ *&lt;textbox/&gt;
+ *
+ *&lt;html&gt;&lt;![CDATA[
+ *   &lt;/td&gt;
+ *  &lt;/tr&gt;
+ * &lt;/table&gt;
+ *]]&gt;&lt;/html&gt;</code></pre>
+ *
+ * <p>If you need to generate the embedded HTML tags directly
+ * without enclosing with SPAN, you can use {@link Inline}.
+ * While more flexible to embed HTML tags, {@link Inline} has
+ * some limitations.
+ *
+ * <p>In addition to {@link Html} and {@link Inline}, you could use XUL's standard approach:
+ * Specify the XML namespace, xmlns:h="http://www.w3.org/1999/xhtml".
  * The XUL's standard approach allows app developers to mix HTML tags
  * with XUL components.
+ * Notice that, by use of this XML namespace approach, ZK actually creates
+ * components for each HTML tags. The advantage is that you can
+ * manipulate each invidual HTML tag dynamically
+ * (rather than the content of {@link Html}).
+ * However, it consumes more memory since each HTML tag is <i>mapped</i>
+ * to a component (at the server).
  *
  * <p>A non-XUL extension.
  *
  * @author tomyeh
+ * @see Inline
  */
 public class Html extends XulElement {
 	private String _content = "";
 
+	/** Contructs a {@link Html} component to embed HTML tags.
+	 */
 	public Html() {
 	}
+	/** Contructs a {@link Html} component to embed HTML tags
+	 * with the specified content.
+	 */
 	public Html(String content) {
-		setContent(content);
+		_content = content != null ? content: "";
 	}
 
-	/** Returns the HTML tags being embedded.
+	/** Returns the embedded content (i.e., HTML tags).
 	 * <p>Default: empty ("").
 	 */
 	public String getContent() {
 		return _content;
 	}
-	/** Sets the HTML tags being embedded.
+	/** Sets the embedded content (i.e., HTML tags).
 	 */
 	public void setContent(String content) {
 		if (content == null) content = "";
