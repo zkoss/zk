@@ -1,6 +1,7 @@
 	--------
 ZK 2.5.0
 * Features:
+  1700457: The inline component to merge "static" component
   1753222: A way to assign text with element to a property than child
   1638395: Timer component and Session timeout
   1751674: WebApp retrieves the major/minor version from getVersion
