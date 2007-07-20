@@ -18,6 +18,7 @@ ZK 2.5.0
   1753269: Inproper deleting rows from grid with live data
   1755235: zkplus doesn't work with Java 1.4
   1755843: if/unless not working for onClick events
+  1757607: Failed to open two or more treeitem of the same tree
   
 	--------
 ZK 2.4.1
