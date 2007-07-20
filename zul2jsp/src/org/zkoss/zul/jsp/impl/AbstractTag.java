@@ -23,7 +23,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import javax.servlet.jsp.el.ELException;
 
 /**
- * The skeletal class for implementing JSP tags for ZK components.
+ * The skeletal class for implementing the generic JSP tags.
  * 
  * @author tomyeh
  */

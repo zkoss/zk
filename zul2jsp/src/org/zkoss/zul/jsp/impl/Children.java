@@ -1,4 +1,4 @@
-/* Utils.java
+/* Children.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Fri Jul 20 11:33:21     2007, Created by tomyeh
+		Fri Jul 20 19:30:17     2007, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -19,10 +19,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.jsp.impl;
 
 /**
- * Utilities for implementing JSP tags for ZK components.
+ * A utility to be shared by {@link BranchTag} and {@link RootTag} to
+ * implement the capability to hold a list of children.
  *
  * @author tomyeh
  */
-public class Utils {
-	private Utils() {} //prevent from instantiated
+/*package*/ class Children {
+	/** Adds a child.
+	 */
+	public void addChildTag(LeafTag child) {
+	}
 }
