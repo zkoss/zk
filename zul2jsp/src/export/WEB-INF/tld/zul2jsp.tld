@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+Purpose:
+	The JSP Tags for ZK XUL Components
+Description:
+	
+Histroy:
+	Fri Jul 20 09:55:45     2007, Created by tomyeh
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+-->
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
+    version="2.0">
+
+	<tlib-version>1.1</tlib-version>
+	<jsp-version>2.0</jsp-version>
+	<short-name>zul2jsp</short-name>
+	<uri>http://www.zkoss.org/tld/zul/jsp</uri>
+	<description>
+	The JSP Tags for ZK XUL COmponents
+	</description>
+
+	<!-- General Purpose -->
+	<tag>
+		<description>
+	Define a page in a JSP tag.
+	It is responsible for handling the lifecycle for all nested ZK
+	components.
+		</description>
+		<name>page</name>
+		<tag-class>org.zkoss.zul.jsp.PageTag</tag-class>
+		<body-content>scriptless</body-content>
+
+		<attribute>
+			<description>
+	The CSS style. Default: null (none).
+			</description>
+			<name>style</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<!-- ZK XUL Components -->
+</taglib>
