@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
-Specification-Title: ZK XHTML Components
+Specification-Title: JSP Tags for ZK XUL Components
 Specification-Version: 2.5.0
 Specification-Vendor: Potix Corporation
-Implementation-Title: org.zkoss.zhtml
-Implementation-URL: http://www.zkoss.org/zhtml
+Implementation-Title: org.zkoss.zul.jsp
+Implementation-URL: http://www.zkoss.org/zul/jsp
 Implementation-Version: 2.5.0
 Implementation-Vendor: Potix Corporation

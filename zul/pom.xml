@@ -6,9 +6,9 @@
   <artifactId>zul</artifactId>
   <version>{version}</version>
   <packaging>jar</packaging>
-  <name>The XUL Components of ZK</name>
+  <name>ZK XUL Components</name>
   <url>http://www.zkoss.org</url>
-  <description>The ZK components implementing XUL (XML user interface markup language)</description>
+  <description>ZK XUL components (XML user interface markup language)</description>
   <licenses>
     <license>
       <name>GNU General Public License, Version 2.0</name>

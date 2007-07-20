@@ -3,12 +3,12 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.zkoss.zk</groupId>
-  <artifactId>zhtml</artifactId>
+  <artifactId>zul2jsp</artifactId>
   <version>{version}</version>
   <packaging>jar</packaging>
-  <name>ZK XHTML Components</name>
+  <name>JSP Tags fro ZK XUL Components</name>
   <url>http://www.zkoss.org</url>
-  <description>ZK XHTML components</description>
+  <description>The JSP tags for encapsulating ZK XUL components</description>
   <licenses>
     <license>
       <name>GNU General Public License, Version 2.0</name>
@@ -17,7 +17,7 @@
     </license>
   </licenses>
   <scm>
-    <url>http://svn.sourceforge.net/viewvc/zk1/releases/{version}/zhtml</url>
+    <url>http://svn.sourceforge.net/viewvc/zk1/releases/{version}/zul2jsp</url>
   </scm>
   <dependencies>
     <dependency>
@@ -33,6 +33,11 @@
     <dependency>
       <groupId>org.zkoss.zk</groupId>
       <artifactId>zk</artifactId>
+      <version>{version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.zkoss.zk</groupId>
+      <artifactId>zul</artifactId>
       <version>{version}</version>
     </dependency>
   </dependencies>

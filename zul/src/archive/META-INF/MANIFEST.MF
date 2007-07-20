@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Specification-Title: The ZUL Components of ZK
+Specification-Title: ZK XUL Components
 Specification-Version: 2.5.0
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zul

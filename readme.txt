@@ -19,12 +19,11 @@ zhtml
 	The ZK components implementing XHTML, aka, the XHTML components of ZK.
 
 ----
-zmul
-	The ZK components implementing MUL, aka, the MUL components of ZK.
-	MUL: Mobile user interface markup language
+mil
+	The ZK components implementing MIL (Mobile Interactive Language).
 
 -----
-zmobi
+zmob
 
 	ZK Mobile Client is a MIDlet that hat enables a user to display and interact
 	with user interfaces represented in MUL.
@@ -42,5 +41,5 @@ zmobi
 
 
 	To test with WTK, you have to execute the following command to copy
-	all relevant files to $MIDP_HOME/apps/zmobi
-		bin/deploy zmobi
+	all relevant files to $MIDP_HOME/apps/zmob
+		bin/deploy zmob

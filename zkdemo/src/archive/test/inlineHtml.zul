@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+inlineHtml.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 19 19:50:09     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of inline html tags">
+  <inline><![CDATA[
+<ul>
+ <li>
+  ]]></inline>
+
+<textbox/>
+
+  <inline><![CDATA[
+  </li>
+  <li>
+  ]]></inline>
+
+<datebox/>
+
+  <inline><![CDATA[
+  </li>
+</ul>
+  ]]></inline>
+</window>
