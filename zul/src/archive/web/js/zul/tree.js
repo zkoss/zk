@@ -72,26 +72,6 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	_rowType: function () {
 		return "Trow";
 	},
-	/** Process the setAttr command sent from the server. */
-	setAttr2: function (name, value) {
-		switch (name) {
-		case "open":
-			var j = value.indexOf(':'), row;
-			if (j > 0) row = $e(value.substring(0, j));
-			if (!row) {
-				alert(mesg.ILLEGAL_RESPONSE+"Illegal tree open: "+value);
-				return true;
-			}
-			var toOpen = value.substring(j + 1) == "true";
-			var open = zkTree.isOpen(row);
-			if (toOpen != open) {
-				var img = $e(row.id + "!open");
-				if (img) this._openItem(row, img, toOpen);
-			}
-			return true; //no more processing
-		}
-		return this.setAttr(name, value);
-	},
 	/** Overrides what is defined in zk.Selectable. */
 	_doLeft: function (row) {
 		if (zkTree.isOpen(row)) {
@@ -223,7 +203,7 @@ zkTree.focus = function (cmp) {
  */
 zkTree.setAttr = function (tree, name, value) {
 	var meta = zkau.getMeta(tree);
-	return meta && meta.setAttr2(name, value);
+	return meta && meta.setAttr(name, value);
 };
 
 /** Called when the +/- button is clicked. */
@@ -264,7 +244,18 @@ zkTrow.cleanup = zkTrow._pgclean = function (cmp) {
 	delete _zktrx.sib[getZKAttr(cmp, "tchsib")];
 };
 zkTrow.setAttr = function (cmp, nm, val) {
-	if ("z.pgInfo" == nm) {
+	if ("open" == nm) {
+		var toOpen = "true" == val;
+		if (toOpen != zkTree.isOpen(cmp)) {
+			var img = $e(cmp.id + "!open");
+			if (img) {
+				var meta = zkau.getMeta($parentByType(cmp, "Tree"));
+				if (meta)
+					meta._openItem(cmp, img, toOpen);
+			}
+		}
+		return true; //no more processing
+	} else if ("z.pgInfo" == nm) {
 		var j = val.indexOf(','), k = val.indexOf(',', j + 1);
 		setZKAttr(cmp, "pgc", val.substring(0, j).trim());
 		setZKAttr(cmp, "pgi", val.substring(j + 1, k).trim());
@@ -440,13 +431,10 @@ zk.addModuleInit(function () {
 
 	/** Resize the column. */
 	zkTcol.resize = function (col1, col2, icol, wd1, wd2, keys) {
-		var tree = $parentByType(col1, "Tree");
-		if (tree) {
-			var meta = zkau.getMeta(tree);
-			if (meta)
-				meta.resizeCol(
-					$parentByType(col1, "Tcols"), icol, col1, wd1, col2, wd2, keys);
-		}
+		var meta = zkau.getMeta($parentByType(col1, "Tree"));
+		if (meta)
+			meta.resizeCol(
+				$parentByType(col1, "Tcols"), icol, col1, wd1, col2, wd2, keys);
 	};
 
 	//Treecols

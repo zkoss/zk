@@ -121,9 +121,8 @@ public class Treeitem extends XulElement {
 
 			//Note: _treerow might not be ready yet because it might be
 			//initialized before creating child components (for ZK pages)
-			final Tree tree = getTree();
-			if (tree != null && _treerow != null)
-				tree.smartUpdate("open", _treerow.getUuid()+":"+_open);
+			if (_treerow != null)
+				_treerow.smartUpdate("open", _open);
 		}
 	}
 	/** Returns whether this item is selected.
