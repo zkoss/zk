@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zul.jsp.impl.RootTag;
 
@@ -53,10 +54,9 @@ public class PageTag extends RootTag {
 
 	/** Creates and returns the page.
 	 */
-	protected void init() {
-		super.init();
+	protected void init(Execution exec, Page page) {
+		super.init(exec, page);
 
-		Page page = getPage();
 		page.setStyle(_style);
 	}
 }

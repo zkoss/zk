@@ -70,18 +70,30 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</attribute>
 	</tag>
 
-	<!-- ZK XUL Components -->
-
-
-	<!-- Libraries -->
-	<function>
-		<name>outLangStyleSheets</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outLangStyleSheets()
-		</function-signature>
+	<tag>
 		<description>
-	Returns HTML tags to include all style sheets used by all languages.
+	Define the window comonent.
 		</description>
-	</function>
+		<name>window</name>
+		<tag-class>org.zkoss.zul.jsp.WindowTag</tag-class>
+		<body-content>scriptless</body-content>
+
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK XUL Components -->
 </taglib>

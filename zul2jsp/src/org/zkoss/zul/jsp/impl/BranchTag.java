@@ -33,12 +33,10 @@ import javax.servlet.jsp.JspException;
  * @author tomyeh
  */
 abstract public class BranchTag extends LeafTag {
-	private final Children _children = new Children();
-
 	/** Adds a child tag.
 	 */
 	/*package*/ void addChildTag(LeafTag child) {
-		_children.addChildTag(child);
+		child.getComponent().setParent(getComponent());
 	}
 
 
@@ -53,7 +51,7 @@ abstract public class BranchTag extends LeafTag {
 
 		final StringWriter out = new StringWriter();
 		getJspBody().invoke(out);
-		_children.adjustChildren(out.toString());
+		Utils.adjustChildren(getComponent().getChildren(), out.toString());
 
 		writeComponentMark(); //write a special mark
 	}

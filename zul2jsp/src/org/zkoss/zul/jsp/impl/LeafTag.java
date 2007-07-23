@@ -123,6 +123,6 @@ abstract public class LeafTag extends AbstractTag {
 	 * Called by {@link #doTag}.
 	 */
 	/*package*/ void writeComponentMark() throws IOException {
-		Children.writeComponentMark(getJspContext().getOut(), _comp);
+		Utils.writeComponentMark(getJspContext().getOut(), _comp);
 	}
 }

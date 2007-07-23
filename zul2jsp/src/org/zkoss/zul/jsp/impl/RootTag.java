@@ -30,6 +30,7 @@ import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.PageContext;
 
 import org.zkoss.web.servlet.jsp.Jsps;
+import org.zkoss.web.el.ELContexts;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
@@ -44,6 +45,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
@@ -63,9 +65,8 @@ import org.zkoss.zk.scripting.InterpreterNotFoundException;
  * @author tomyeh
  */
 abstract public class RootTag extends AbstractTag {
-	private final Children _children = new Children();
-	private Page _page;
 	private LanguageDefinition _langdef;
+	private Page _page;
 
 	protected RootTag() {
 		_langdef = LanguageDefinition.lookup("xul/html");
@@ -74,13 +75,7 @@ abstract public class RootTag extends AbstractTag {
 	/** Adds a child tag.
 	 */
 	/*package*/ void addChildTag(LeafTag child) {
-		_children.addChildTag(child);
-	}
-
-	/** Returns the page associated with this page tag.
-	 */
-	public Page getPage() {
-		return _page;
+		child.getComponent().setPage(_page);
 	}
 
 	//Derived to override//
@@ -89,8 +84,13 @@ abstract public class RootTag extends AbstractTag {
 	 * before any component is created.
 	 *
 	 * <p>Default: does nothing
+	 *
+	 * @param exec the execution.
+	 * Note: when this method is called, the execution is not activated.
+	 * For example, Executions.getCurrent() returns null.
+	 * @param page the page
 	 */
-	protected void init() {
+	protected void init(Execution exec, Page page) {
 	}
 
 	//super//
@@ -108,29 +108,39 @@ abstract public class RootTag extends AbstractTag {
 			(HttpServletRequest)pgctx.getRequest();
 		final HttpServletResponse response =
 			(HttpServletResponse)pgctx.getResponse();
+
 		final WebManager webman = WebManager.getWebManager(svlctx);
 		final Session sess = WebManager.getSession(svlctx, request);
-		final WebApp wapp = sess.getWebApp();
-		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 
-		final Desktop desktop = webman.getDesktop(sess, request, null, true);
-		final RequestInfo ri = new RequestInfoImpl(
-			wapp, sess, desktop, request,
-			PageDefinitions.getLocator(wapp, null));
-		((SessionCtrl)sess).notifyClientRequest(null);
+		ELContexts.push(pgctx);
+		SessionsCtrl.setCurrent(sess);
+		try {
+			final WebApp wapp = sess.getWebApp();
+			final WebAppCtrl wappc = (WebAppCtrl)wapp;
 
-		final UiFactory uf = wappc.getUiFactory();
-		final Richlet richlet = new MyRichlet();
-		final Page page = uf.newPage(ri, richlet, null);
-		init();
-		final Execution exec = new ExecutionImpl(
-			svlctx, request, response, desktop, page);
-		exec.setAttribute(
-			PageCtrl.ATTR_REDRAW_BY_INCLUDE, Boolean.TRUE);
+			final Desktop desktop = webman.getDesktop(sess, request, null, true);
+			final RequestInfo ri = new RequestInfoImpl(
+				wapp, sess, desktop, request,
+				PageDefinitions.getLocator(wapp, null));
+			((SessionCtrl)sess).notifyClientRequest(null);
 
-		init(); //init page
+			final UiFactory uf = wappc.getUiFactory();
+			final Richlet richlet = new MyRichlet();
+			_page = uf.newPage(ri, richlet, null);
 
-		wappc.getUiEngine().execNewPage(exec, richlet, page, jspctx.getOut());
+			final Execution exec = new ExecutionImpl(
+				svlctx, request, response, desktop, _page);
+			exec.setAttribute(
+				PageCtrl.ATTR_REDRAW_BY_INCLUDE, Boolean.TRUE);
+				//Always use include; not forward
+
+			init(exec, _page); //initialize the page
+
+			wappc.getUiEngine().execNewPage(exec, richlet, _page, jspctx.getOut());
+		} finally {
+			SessionsCtrl.setCurrent(null);
+			ELContexts.pop();
+		}
 	}
 	private class MyRichlet implements Richlet {
 		public void init(RichletConfig config) {
@@ -141,7 +151,7 @@ abstract public class RootTag extends AbstractTag {
 			try {
 				final StringWriter out = new StringWriter();
 				getJspBody().invoke(out);
-				_children.adjustChildren(out.toString());
+				Utils.adjustChildren(page.getRoots(), out.toString());
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex);
 			}
