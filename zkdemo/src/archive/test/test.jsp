@@ -21,17 +21,17 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <html>
 	<head>
 		<title>Test of ZUL on JSP</title>
-		${z:outLangStyleSheets()}
 	</head>
 	<body>
 
 <z:page>
-	<h1>We can place any content here</h1>
+	<h1>Content in z:page</h1>
 
 	<z:window>
 		<h2>h2 in JSP</h2>
 	</z:window>
 </z:page>
 
+	<p>Content after z:page</p>
 	</body>
 </html>
