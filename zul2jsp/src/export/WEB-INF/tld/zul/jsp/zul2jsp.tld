@@ -70,6 +70,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</attribute>
 	</tag>
 
+	<!-- ZK XUL Components -->
 	<tag>
 		<description>
 	Define the window comonent.
@@ -95,5 +96,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-	<!-- ZK XUL Components -->
+
+	<!-- Functions -->
 </taglib>

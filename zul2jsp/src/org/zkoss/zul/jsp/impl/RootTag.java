@@ -151,7 +151,8 @@ abstract public class RootTag extends AbstractTag {
 			try {
 				final StringWriter out = new StringWriter();
 				getJspBody().invoke(out);
-				Utils.adjustChildren(page.getRoots(), out.toString());
+				Utils.adjustChildren(
+					page, null, page.getRoots(), out.toString());
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex);
 			}

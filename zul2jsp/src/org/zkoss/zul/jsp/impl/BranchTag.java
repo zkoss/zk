@@ -23,6 +23,8 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
+import org.zkoss.zk.ui.Component;
+
 /**
  * The skeletal class used to implement the JSP tag for ZK components
  * that might have child tags (and/or components).
@@ -51,7 +53,9 @@ abstract public class BranchTag extends LeafTag {
 
 		final StringWriter out = new StringWriter();
 		getJspBody().invoke(out);
-		Utils.adjustChildren(getComponent().getChildren(), out.toString());
+		final Component comp = getComponent();
+		Utils.adjustChildren(
+			null, comp, comp.getChildren(), out.toString());
 
 		writeComponentMark(); //write a special mark
 	}
