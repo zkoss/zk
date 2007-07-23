@@ -18,6 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.jsp.impl;
 
+import java.io.StringWriter;
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
@@ -48,6 +49,12 @@ abstract public class BranchTag extends LeafTag {
 		if (!isEffective())
 			return; //nothing to do
 
-		initComponent();
+		initComponent(); //creates and registers component
+
+		final StringWriter out = new StringWriter();
+		getJspBody().invoke(out);
+		_children.adjustChildren(out.toString());
+
+		writeComponentMark(); //write a special mark
 	}
 }

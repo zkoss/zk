@@ -101,9 +101,11 @@ abstract public class LeafTag extends AbstractTag {
 		if (!isEffective())
 			return; //nothing to do
 
-		initComponent();
+		initComponent(); //creates and registers the component
+		writeComponentMark(); //write a special mark denoting the component
 	}
-	/** Initializes the component.
+	/** Creates and registers the component.
+	 * Called by {@link #doTag}.
 	 */
 	/*package*/ void initComponent() throws JspException {
 		_comp = newComponent();
@@ -115,5 +117,12 @@ abstract public class LeafTag extends AbstractTag {
 		} else {
 			_roottag.addChildTag(this);
 		}
+	}
+	/** Writes a special mark to the output to denote the location
+	 * of this component.
+	 * Called by {@link #doTag}.
+	 */
+	/*package*/ void writeComponentMark() throws IOException {
+		Children.writeComponentMark(getJspContext().getOut(), _comp);
 	}
 }

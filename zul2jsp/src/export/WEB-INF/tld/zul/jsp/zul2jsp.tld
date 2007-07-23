@@ -43,6 +43,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<description>
+	The default script language. Default: Java.
+			</description>
+			<name>zscriptLanguage</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 
 		<attribute>
 			<description>
@@ -63,4 +71,17 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</tag>
 
 	<!-- ZK XUL Components -->
+
+
+	<!-- Libraries -->
+	<function>
+		<name>outLangStyleSheets</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outLangStyleSheets()
+		</function-signature>
+		<description>
+	Returns HTML tags to include all style sheets used by all languages.
+		</description>
+	</function>
 </taglib>

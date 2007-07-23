@@ -18,10 +18,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.jsp;
 
+import java.io.Writer;
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zul.jsp.impl.RootTag;
 
 /**
@@ -35,7 +37,7 @@ import org.zkoss.zul.jsp.impl.RootTag;
  * @author tomyeh
  */
 public class PageTag extends RootTag {
-	private String _style = null;
+	private String _style;
 
 	/** Returns the style.
 	 * Default: null (no style at all).
@@ -49,11 +51,12 @@ public class PageTag extends RootTag {
 		_style = style != null && style.length() > 0 ? style: null;
 	}
 
-	/** To process this root tag.
-	 * The deriving class rarely need to override this method.
+	/** Creates and returns the page.
 	 */
-	public void doTag() throws JspException, IOException {
-		if (!isEffective())
-			return; //nothing to do
+	protected void init() {
+		super.init();
+
+		Page page = getPage();
+		page.setStyle(_style);
 	}
 }
