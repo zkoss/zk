@@ -114,7 +114,7 @@ public class ClassWebResource {
 		_ctx = ctx;
 		_mappingURI = mappingURI;
 		_cwc = new ClassWebContext();
-		addExtendlet("dsp", new DSPExtendlet());
+		addExtendlet("dsp", new DspExtendlet());
 	}
 	/** Process the request.
 	 * @since 2.4.1
