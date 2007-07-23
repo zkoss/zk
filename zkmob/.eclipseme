@@ -2,7 +2,7 @@
 <eclipsemeMetadata jad="zkmob.jad" version="1.6.8">
    <device group="Sun Java(TM) Wireless Toolkit 2.5.1 for CLDC" name="MediaControlSkin"/>
    <signing signProject="true">
-      <keystore>D:\home\henrichen\prj\zk1\zkmob\zkmob.ks</keystore>
+      <keystore>$/zkmob.ks</keystore>
       <alias>zkmob</alias>
       <provider/>
       <keystoreType/>

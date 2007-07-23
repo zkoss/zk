@@ -1,39 +1,38 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <frame title="Listbox demo"  visible="true">
-<zscript>
-int k = 0;
-</zscript>
-		<attribute name="onCommand">
-			if (event.getCommand().getId().equals("ok")) {
-				lbx2.appendItem("itemX"+(k++), "itemX value");
-			} else {
-				MilDevice.goHome(null);
-			}
-		</attribute>
+	<zscript>
+	int k = 0;
+	</zscript>
+	<attribute name="onCommand">
+		String id = event.getCommand().getId();
+		if ("add".equals(id)) {
+			lbx2.appendItem("itemX"+(k++), "itemX value");
+		} else if ("home".equals(id)) {
+			MilDevice.goHome(null);
+		} else {
+			Executions.sendRedirect("/test/"+event.getCommand().getLabel()+".mil");
+		}
+	</attribute>
 
-	<listbox id="lbx1" label="drop down" mold="select">
-		<attribute name="onSelect">
-			System.out.println("lbx1, onSelect: " + self.getSelectedItems());
-		</attribute>
-		<attribute name="onCommand">
-			self.setMold("default");
-		</attribute>
+	<listbox id="lbx1" label="drop down" mold="select" widthHint="expand">
 		<listitem label="item1" image="/img/bluerect.png"/>
 		<listitem label="item2" image="/img/bluerect.png"/>
 		<listitem label="item3" image="/img/bluerect.png"/>
 		<listitem label="item4" image="/img/bluerect.png"/>
-		<command label="to default" type="ok"/>
 	</listbox>
-	<listbox id="lbx2" label="Choice Group">
-		<attribute name="onSelect">
-			System.out.println("lbx2, onSelect: " + self.getSelectedItems());
-		</attribute>
-		<!--listitem label="item1"/>
+	<listbox id="lbx2" label="Choice Group" widthHint="expand">
+		<listitem label="item1"/>
 		<listitem label="item2"/>
-		<listitem label="item3"/>
-		<listitem label="item4"/-->
 	</listbox>
 	
-	<command id="ok" label="add" type="ok"/>
-	<command id="back" label="Home" type="back"/>
+	<command id="add" label="add" type="ok"/>
+	<command id="home" label="Home" type="back"/>
+
+	<command label="hello" type="ok"/>
+	<command label="label" type="ok"/>
+	<command label="onchanging" type="ok"/>
+	<command label="listbox" type="ok"/>
+	<command label="datebox" type="ok"/>
+	<command label="intbox" type="ok"/>
+	<command label="decimalbox" type="ok"/>
 </frame>

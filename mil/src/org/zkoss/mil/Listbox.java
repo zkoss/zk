@@ -414,7 +414,7 @@ public class Listbox extends Item {
 			} else if (refChild instanceof Listitem) {
 				refChild = _command;
 				_command = (Command) newChild;
-			} else {
+			} else if (_command == null) { //refChild == null
 				_command = (Command) newChild;
 			}
 			++_commandSize;

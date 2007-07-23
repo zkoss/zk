@@ -18,28 +18,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmob;
 
-import javax.microedition.lcdui.Image;
+import javax.microedition.lcdui.Choice;
 
 /**
  * A component that can be use to list children; e.g. List and ChoiceGroup.
  * 
  * @author henrichen
  */
-public interface Listable {
-	/**
-	 * set the {@link ListItem} of the specified index with specified label and image.
-	 * 
-	 * @param index the index of the {@link ListItem} to be set.
-	 * @param label the new label of the ListItem.
-	 * @param image the new image of the ListItem.
-	 */
-	public void set(int index, String label, Image image);
-	
-	/**
-	 * get the associated label.
-	 */
-	public String getString(int index);
-	
+public interface Listable extends Choice {
 	/**
 	 * append a list item.
 	 * @param ls the list item
@@ -60,14 +46,4 @@ public interface Listable {
 	 * return index of the listitem id.
 	 */
 	public int indexOf(ZkComponent li);
-	
-	/**
-	 * remove the element at index.
-	 */
-	public void delete(int index);
-	
-	/**
-	 * The size.
-	 */
-	public int size();
 }

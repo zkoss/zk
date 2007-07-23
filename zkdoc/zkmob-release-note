@@ -1,15 +1,20 @@
-ZK Mobile 0.8.6-Freshly
+ZK Mobile 0.8.6-FL
 Bug:
   1756003 mil Listitem image not shown.
-
-	--------
+  1758628 mil multi-Frames change visibility not work
+  1758626 mil Listbox with two commands throw Exception
+  1758625 mil Listbox change mold not work
+  1757280 mil Listitem.setLabel() not work
+  1758662 zkmob history should not include ;jsessionid
+  
+  --------
 ZK Mobile 0.8.5
 * Support Listbox, Listitem, Datebox, Intbox, Decimalbox components.
 * Support predefined History URLs (in jad file)
 * Support default URL (in jad file)
 * Support autoRun flag (in jad file)
 
-	--------
+  --------
 ZK Mobile 0.8.0
 * Support Frame, Label, Image, Textbox, Command components.
 * ZK Mobile client support URL, History. 

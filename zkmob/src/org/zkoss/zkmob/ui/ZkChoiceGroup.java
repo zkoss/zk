@@ -140,7 +140,6 @@ public class ZkChoiceGroup extends ChoiceGroup implements Listable, ZkComponent,
 	}
 
 	public void setAttr(String attr, String val) {
-		//TODO:
 	}
 	
 	//--Itemable--//

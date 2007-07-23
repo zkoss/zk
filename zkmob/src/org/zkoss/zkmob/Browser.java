@@ -122,6 +122,7 @@ public class Browser extends MIDlet {
 							final int index = _history.getSelectedIndex();
 							if (index >= 0) {
 								final String url = _history.getString(index);
+								setHomeURL(url);
 								UiManager.loadPageOnThread(Browser.this, url);
 							}
 						}
@@ -211,8 +212,23 @@ public class Browser extends MIDlet {
 		}
 	}
 
+	//trim away ;jssessionid
+	private String trimSessionid(String url) {
+		final int k = url.indexOf(";jsessionid=");
+		if (k >= 0) {
+			final int m = url.lastIndexOf('?', k);
+			if (m < 0) {
+				url = url.substring(0, k);
+			} else {
+				url = url.substring(0, k) + url.substring(m);
+			}
+		}
+		return url;
+	}
+	
 	//adjust history after successfully go to the specified URL
 	private void adjustHistory(String url) {
+		url = trimSessionid(url);
 		final int sz = _history.size();
 		int j = 0;
 		for(; j < sz; ++j) {
@@ -228,11 +244,15 @@ public class Browser extends MIDlet {
 		}
 	}
 	
-	public void goHome(String url) {
+	public void setHomeURL(String url) {
 		if (url != null) {
 			final TextField urlText = (TextField) _zkMobile.lookupUi("url");
 			urlText.setString(url);
 		}
+	}
+	
+	public void goHome(String url) {
+		setHomeURL(url);
 		Displayable curr = _display.getCurrent();
 		if (curr != null && curr != _home && !(curr instanceof Alert)) {
 			_curr = curr; //so home page's back command can back here

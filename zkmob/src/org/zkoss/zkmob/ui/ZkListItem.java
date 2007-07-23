@@ -23,6 +23,7 @@ import javax.microedition.lcdui.Image;
 
 import org.zkoss.zkmob.Imageable;
 import org.zkoss.zkmob.Listable;
+import org.zkoss.zkmob.UiManager;
 import org.zkoss.zkmob.ZkComponent;
 
 /**
@@ -77,7 +78,15 @@ public class ZkListItem implements ZkComponent, Imageable {
 	}
 
 	public void setAttr(String attr, String val) {
-		//do nothing
+		if ("lb".equals(attr)) {
+			_label = val;
+			int index = _parent.indexOf(this);
+			final Image img = _parent.getImage(index);
+			_parent.set(index, val, img);
+		} else if ("im".equals(attr)) {
+			_image = val;
+			UiManager.loadImageOnThread(this, getZkDesktop().getHostURL(), getImageSrc());
+		}
 	}
 	
 	public void addCommand(Command cmd) {

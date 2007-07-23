@@ -86,8 +86,7 @@ abstract public class Displayable extends MilComponent {
 	 * Override to guarantee that always only one Displayable is visible in ZK Mobile.
 	 */
 	public boolean setVisible(boolean b) {
-		final boolean old = isVisible(); 
-		super.setVisible(b);
+		final boolean old = super.setVisible(b); 
 		if (old != b) {
 			changeCurrentVisible(b);
 		}
@@ -99,9 +98,9 @@ abstract public class Displayable extends MilComponent {
 		if (page != null) {
 			Displayable current = (Displayable) page.getAttribute("CURRENT_DISPLAYABLE");
 			if (b) {
-				if (current != null && current != this) {
-					current.setVisible(false);
+				if (current != this) {
 					page.setAttribute("CURRENT_DISPLAYABLE", this);
+					if (current != null) current.setVisible(false);
 				}
 			} else if (current == this) {
 				page.setAttribute("CURRENT_DISPLAYABLE", null);
@@ -110,9 +109,9 @@ abstract public class Displayable extends MilComponent {
 	}
 	
 	public void setPage(Page page) {
-		final Page old = page;
+		final Page old = getPage();
 		super.setPage(page);
-		if (old == null && page != null && isVisible()) {
+		if (old != page && page != null && isVisible()) {
 			changeCurrentVisible(true);
 		}
 	}

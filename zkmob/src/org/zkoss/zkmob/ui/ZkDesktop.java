@@ -395,7 +395,6 @@ public class ZkDesktop implements ZkComponent {
 	private void executeOuter(String[] data) {
 		final String uuid = data[0];
 		final ZkComponent comp = lookupUi(uuid);
-
 		final Vector comps = createComponents(this, data[1]);
 		final ZkComponent newcomp = (ZkComponent) comps.elements().nextElement();
 
@@ -408,11 +407,12 @@ public class ZkDesktop implements ZkComponent {
 			final ZkForm form = (ZkForm) ((Itemable)comp).getForm();
 			final int index = form.indexOf((Item)comp);
 			form.delete(index);
-			form.insert(index, (Item) newcomp);
+			form.insertChild(index, (ZkComponent) newcomp);
 		} else if (comp instanceof ZkCommand) {
 			final ZkComponent parent = comp.getParent();
 			parent.removeCommand((Command)comp);
 			parent.addCommand((Command)newcomp);
+			comp.setParent(parent);
 		} else if (comp instanceof Displayable) {
 			final Displayable disp = (Displayable) comp;
 			if (_browser.getDisplay().getCurrent() == disp) { //the current showing display
@@ -427,7 +427,9 @@ public class ZkDesktop implements ZkComponent {
 	//redirect command
 	private void executeRedirect(String[] data) {
 		final String href = data[0];
-		UiManager.loadPageOnThread(_browser, UiManager.prefixURL(_hostURL, href));
+		final String url = UiManager.prefixURL(_hostURL, href);
+		_browser.setHomeURL(url);
+		UiManager.loadPageOnThread(_browser, url);
 	}
 	
 	//home command
@@ -443,6 +445,23 @@ public class ZkDesktop implements ZkComponent {
 		
 		final ZkComponent comp = lookupUi(uuid);
 		if (comp != null) {
+			//handle Item common attributes
+			if (comp instanceof Item) {
+				if ("lb".equals(attr)) { //label
+					((Item)comp).setLabel(val);
+					return;
+				} 
+				if ("ps".equals(attr)) { //preferredSize
+					int[] sz = UiManager.parseSize(val);
+					((Item)comp).setPreferredSize(sz[0], sz[1]);
+					return;
+				} 
+				if ("lo".equals(attr)) { //layout
+					final int layout = Integer.parseInt(val);
+					((Item)comp).setLayout(layout);
+					return;
+				}
+			} 
 			comp.setAttr(attr, val);
 		}
 	}
