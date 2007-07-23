@@ -19,7 +19,11 @@ ZK 2.5.0
   1755235: zkplus doesn't work with Java 1.4
   1755843: if/unless not working for onClick events
   1757607: Failed to open two or more treeitem of the same tree
-  
+
+* Upgrade Notes:
+  + Utilities of JSP, such as JspLoaderServlet, are removed, since they are
+    nothing to do with ZK
+
 	--------
 ZK 2.4.1
 * Features:
