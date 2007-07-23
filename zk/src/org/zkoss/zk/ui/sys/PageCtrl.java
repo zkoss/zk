@@ -39,6 +39,11 @@ import org.zkoss.zk.ui.metainfo.ZScript;
  * @author tomyeh
  */
 public interface PageCtrl {
+	/** The execution attribute used to control {@link #redraw} to use
+	 * include instead of forward to redraw the page
+	 */
+	public static final String ATTR_REDRAW_BY_INCLUDE = "org.zkoss.zk.ui.redrawByInclude";
+
 	/** Initializes this page by assigning an identifier, a title, and adding it
 	 * to a desktop (by use of {@link Execution#getDesktop}).
 	 *
@@ -93,6 +98,10 @@ public interface PageCtrl {
 	public void setOwner(Component comp);
 
 	/** Redraws the whole page into the specified output.
+	 *
+	 * <p>You could use {@link #ATTR_REDRAW_BY_INCLUDE} to control
+	 * whether to include, instead of forward, the page content.
+	 * By default, {@link Execution#forward } is used if possible.
 	 *
 	 * @param responses a list of responses that the page has to generate
 	 * corresponding javascript to process them; or null if no such responses.

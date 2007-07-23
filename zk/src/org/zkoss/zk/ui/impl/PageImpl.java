@@ -699,7 +699,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final Execution exec = getExecution();
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final boolean asyncUpdate = execCtrl.getVisualizer().isEverAsyncUpdate();
-		final boolean bIncluded = asyncUpdate || exec.isIncluded();
+		final boolean bIncluded = asyncUpdate || exec.isIncluded()
+			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null;
 		String uri = bIncluded ? _pgUri: _dkUri;
 		uri = (String)exec.evaluate(this, uri, String.class);
 
@@ -716,7 +717,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			execCtrl.setHeader("Pragma", "no-cache,no-store"); // bug 1520444
 			execCtrl.setHeader("Expires", "-1");
 			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
-			//Don't use include. Otherwise, headers (set by JSP) will be eaten.
+			//Don't use include. Otherwise, headers will be gone.
 		}
 	}
 
