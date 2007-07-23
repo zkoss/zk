@@ -87,7 +87,7 @@ public class Interpreter {
 		return new Parser().parse(content, ctype, fm, loc);
 	}
 	/** Interprets the specified content and generates the result to
-	 * the output specified in {@link DSPContext}.
+	 * the output specified in {@link DspContext}.
 	 *
 	 * @param dc the interpreter context; never null.
 	 * @param content the content of DSP to interpret
@@ -95,14 +95,14 @@ public class Interpreter {
 	 * no page action at all. If it is not specified and not page
 	 * action, "text/html" is assumed.
 	 */
-	public final void interpret(DSPContext dc, FunctionMapper fm,
+	public final void interpret(DspContext dc, FunctionMapper fm,
 	String content, String ctype)
 	throws javax.servlet.ServletException, IOException {
 		parse(content, ctype, fm, dc.getLocator()).interpret(dc);
 	}
 	/** Interprets the specified content based on the HTTP request.
-	 * It actually wraps the HTTP request into {@link DSPContext}
-	 * and then invoke {@link #interpret(DSPContext, FunctionMapper, String, String)}.
+	 * It actually wraps the HTTP request into {@link DspContext}
+	 * and then invoke {@link #interpret(DspContext, FunctionMapper, String, String)}.
 	 *
 	 * @param locator used to locate resources, such as taglib.
 	 * If null is specified, the locator for the specified servlet context is
@@ -117,12 +117,12 @@ public class Interpreter {
 	String content, String ctype, Locator locator)
 	throws javax.servlet.ServletException, IOException {
 		interpret(
-			new ServletDSPContext(ctx, request, response, locator),
+			new ServletDspContext(ctx, request, response, locator),
 			null, content, ctype);
 	}
 	/** Interprets the specified content based on the HTTP request.
-	 * It actually wraps the HTTP request into {@link DSPContext}
-	 * and then invoke {@link #interpret(DSPContext, FunctionMapper, String, String)}.
+	 * It actually wraps the HTTP request into {@link DspContext}
+	 * and then invoke {@link #interpret(DspContext, FunctionMapper, String, String)}.
 	 *
 	 * @param locator used to locate resources, such as taglib.
 	 * If null is specified, the locator for the specified servlet context is
@@ -141,7 +141,7 @@ public class Interpreter {
 	String content, String ctype, Locator locator)
 	throws javax.servlet.ServletException, IOException {
 		interpret(
-			new ServletDSPContext(ctx, request, response, out, locator),
+			new ServletDspContext(ctx, request, response, out, locator),
 			null, content, ctype);
 	}
 }

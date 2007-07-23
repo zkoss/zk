@@ -121,7 +121,7 @@ public class InterpreterServlet extends HttpServlet {
 				return;
 			}
 			cnt.interpret(
-				new ServletDSPContext(_ctx, request, response, null));
+				new ServletDspContext(_ctx, request, response, null));
 		} finally {
 			Charsets.cleanup(request, old);
 		}

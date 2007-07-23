@@ -53,7 +53,7 @@ class RootNode extends Node implements Interpretation {
 	}
 
 	//-- Interpretation --//
-	public void interpret(DSPContext dc)
+	public void interpret(DspContext dc)
 	throws javax.servlet.ServletException, IOException {
 		final Writer out = dc.getOut();
 		if (out == null)
