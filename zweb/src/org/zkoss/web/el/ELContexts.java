@@ -55,10 +55,9 @@ public class ELContexts {
 	 * be returned by {@link #getCurrent}. The reason this method exists is
 	 * many functions ({@link org.zkoss.web.fn.ServletFns}) counts on it.
 	 *
-	 * <p>However, you rarely need to invoke this method directly.
+	 * <p>However, you don't need to invoke this method if you are using
+	 * DSP.
 	 * <ol>
-	 * <li>If go thru JSP, it is done automatically
-	 * (by {@link org.zkoss.web.servlet.jsp.JspFactoryImpl}</li>
 	 * <li>If go thru DSP, it is done automatically
 	 * (by {@link org.zkoss.web.servlet.dsp.Interpreter}</li>
 	 * </ol>
@@ -87,8 +86,8 @@ public class ELContexts {
 	}
 	/** Pops the context out and use the previous one as the current context.
 	 *
-	 * <p>In most cases, you don't need to invoke this method, which is
-	 * done automatically (by {@link org.zkoss.web.servlet.jsp.JspFactoryImpl} if go thru JSP)
+	 * <p>However, you don't need to invoke this method if you are using
+	 * DSP.
 	 *
 	 * @see #push
 	 */

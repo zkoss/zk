@@ -40,7 +40,7 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.dsp.Interpreter;
 import org.zkoss.web.servlet.dsp.Interpretation;
-import org.zkoss.web.servlet.dsp.ServletDSPContext;
+import org.zkoss.web.servlet.dsp.ServletDspContext;
 
 /**
  * The DSP resource processor ({@link Extendlet}) used to parse
@@ -76,7 +76,7 @@ import org.zkoss.web.servlet.dsp.ServletDSPContext;
 		StringWriter sw =
 			_webctx.shallCompress(request, get2ndExtension(path)) ?
 				new StringWriter(4096): null;
-		cnt.interpret(new ServletDSPContext(
+		cnt.interpret(new ServletDspContext(
 			_webctx.getServletContext(), request, response,
 			sw, _webctx.getLocator()));
 		if (extra != null)
