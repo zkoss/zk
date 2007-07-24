@@ -87,6 +87,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private String _id;
 	/** The current directory of this desktop. */
 	private String _dir;
+	/** The path of the request that causes this desktop to be created. */
+	private final String _path;
 	/** The URI to access the update engine. */
 	private final String _updateURI;
 	/** Map(String id, Page page). */
@@ -128,13 +130,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
 	 * Note: it is NOT encoded yet.
-	 * @param dir the current directory.
-	 * It is used if a relative URI is specified.
-	 * If null or empty is specified, it means no current directory.
+	 * @param path the path that causes this desktop to create.
+	 * If null or empty is specified, it means not available.
 	 * @param deviceType the device type.
 	 * If null or empty is specified, "ajax" is assumed.
 	 */
-	public DesktopImpl(WebApp wapp, String updateURI, String dir, String deviceType) {
+	public DesktopImpl(WebApp wapp, String updateURI, String path, String deviceType) {
 		if (updateURI == null || wapp == null)
 			throw new IllegalArgumentException("null");
 
@@ -143,6 +144,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		init();
 		_sess = Sessions.getCurrent(); //must be the current session
 
+		String dir = null;
+		if (path != null) {
+			_path = path;
+			final int j = path.lastIndexOf('/');
+			if (j >= 0) dir = path.substring(0, j + 1);
+		} else {
+			_path = "";
+		}
 		setCurrentDirectory(dir);
 		if (deviceType != null && deviceType.length() != 0)
 			setDeviceType(deviceType);
@@ -363,6 +372,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return _wapp;
 	}
 
+	public String getRequestPath() {
+		return _path;
+	}
 	public String getCurrentDirectory() {
 		return _dir;
 	}

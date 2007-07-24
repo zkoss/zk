@@ -143,7 +143,12 @@ public interface Page extends IdSpace {
 	 * (javax.servlet.http.HttpServletRequest's getServletPath), if ZK is running
 	 * at a servlet container.
 	 *
+	 * <p>Note: {@link Desktop#getRequestPath} returns the request path
+	 * that causes the desktop to create. And, there might be multiple
+	 * pages in the same desktop.
+	 *
 	 * @see Execution#getContextPath
+	 * @see Desktop#getRequestPath
 	 */
 	public String getRequestPath();
 

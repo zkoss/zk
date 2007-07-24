@@ -61,17 +61,14 @@ abstract public class AbstractUiFactory implements UiFactory {
 	}
 
 	public Desktop newDesktop(RequestInfo ri, String updateURI, String path) {
-		String dir = null, deviceType = null;
+		String deviceType = null;
 		if (path != null) { //convert to directory
-			final int j = path.lastIndexOf('/');
-			dir = j >= 0 ? path.substring(0, j + 1): null;
-
 			//though UiEngine.execNewPage will set the device type later,
 			//we 'guess' a value first by use of the extension
 			//reason: less dependent of how UiEngine is implemented
-			final int k = path.lastIndexOf('.');
-			if (k > j && k + 1 < path.length()) {
-				final String ext = path.substring(k + 1);
+			final int k = path.lastIndexOf('.') + 1;
+			if (k > 0 && path.indexOf('/', k) < 0 && k < path.length()) {
+				final String ext = path.substring(k);
 				try {
 					deviceType =
 						LanguageDefinition.getByExtension(ext).getDeviceType();
@@ -79,7 +76,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 				} 
 			}
 		}
-		return new DesktopImpl(ri.getWebApp(), updateURI, dir, deviceType);
+		return new DesktopImpl(ri.getWebApp(), updateURI, path, deviceType);
 	}
 	public Page newPage(RequestInfo ri, PageDefinition pagedef, String path) {
 		return new PageImpl(pagedef);

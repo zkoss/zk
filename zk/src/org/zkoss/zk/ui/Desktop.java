@@ -141,6 +141,18 @@ public interface Desktop {
 	 */
 	public String getUpdateURI(String pathInfo);
 
+	/** Returns the path of the request that causes
+	 * this desktop to be created, or "" if not available.
+	 * In other words, it is the request path of the first page
+	 * (see {@link Page#getRequestPath}).
+	 *
+	 * <p>For example, "/userguide/index.zul" (a ZUML page is requested)
+	 * or /test (a richlet).
+	 *
+	 * @see Page#getRequestPath
+	 * @since 2.5.0
+	 */
+	public String getRequestPath();
 	/** Returns the current directory (never null).
 	 * It is empty if no current directory at all.
 	 * Otherwise, it must end with '/'.
