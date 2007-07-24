@@ -1,0 +1,101 @@
+#!/bin/bash
+# release
+#
+#{{IS_NOTE
+#	Purpose:
+#		
+#	Description:
+#		
+#	History:
+#		Mon Nov 14 14:29:09     2005, Created by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under Lesser GPL Version 2.1 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+
+target=$1
+
+javadocdir=$(grep '^javadoc' build.setting.local)
+javadocdir=${javadocdir#javadoc=}
+if [ "$javadocdir" = "" ] ; then
+	echo javadoc must be specified in $setting
+	exit 1
+fi
+javadocdir=${javadocdir/\~/$HOME}
+
+if [ "$target" == "official" ] ; then
+	ver=$(head -1 zul2jsp/version)
+	pkgnm=zk-jsp-$ver
+elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
+	target=daily
+
+	ver=$(head -1 zul2jsp/version)
+	pkgnm=zk-jsp-$ver-$(date +%Y-%m-%d)
+else
+	echo "Usage: release [ official | daily ]"
+	echo Default: daily
+	exit 1
+fi
+
+rm -rf /tmp/zk
+maindir="$(pwd)"
+
+echo "Release $pkgnm"
+cd $maindir
+mkdir -p /tmp/zk/$pkgnm/dist/lib/ext
+mkdir -p /tmp/zk/$pkgnm/dist/src
+mkdir -p /tmp/zk/$pkgnm/dist/WEB-INF/tld/zul/jsp
+mkdir -p /tmp/zk/$pkgnm/javadoc
+mkdir -p /tmp/zk/$pkgnm/doc
+cp build* /tmp/zk/$pkgnm
+cp -rp bin /tmp/zk/$pkgnm
+cp -rp zul2jsp /tmp/zk/$pkgnm
+cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zul2jsp.jar /tmp/zk/$pkgnm/dist/lib
+cp -rp dist/export/WEB-INF/tld/zul/jsp/* /tmp/zk/$pkgnm/dist/WEB-INF/tld/zul/jsp
+cp zkdoc/COPYING /tmp/zk/$pkgnm/doc
+cp zkdoc/jsp-release-note /tmp/zk/$pkgnm/doc/release-note
+
+if [ "$target" == "timelinez" ] ; then
+	cp dist/lib/ext/json_simple.jar /tmp/zk/$pkgnm/dist/lib/ext
+fi
+
+#prepare source.jar
+cd /tmp/zk/$pkgnm
+find -name .svn | xargs rm -rf
+cd zul2jsp
+rm -rf codegen debug
+jar cfM zul2jsp-sources.jar -C src org
+mv -f zul2jsp-sources.jar ../dist/src
+
+#prepare javadoc
+cd $javadocdir
+cp -rp zul2jsp/* /tmp/zk/$pkgnm/javadoc
+
+cd /tmp/zk
+echo Output ${pkgnm}.zip
+zip -qr9 ${pkgnm}.zip $pkgnm
+
+if [ "$target" == "official" ] ; then
+	#Prepare maven repository
+	function mvnrepo {
+		mkdir -p $1
+		mv /tmp/zk/$pkgnm/dist/src/$1-sources.jar $1/$1-$ver-sources.jar
+		sed -e "s/{version}/$ver/" $maindir/$1/pom.xml > $1/pom.xml
+		cp $maindir/dist/lib/$1.jar $1/$1-$ver.jar
+		jar cfM $1-$ver-bundle.jar -C $1 .
+	}
+	mkdir -p maven
+	mkdir -p /tmp/maven
+	cd maven
+	mvnrepo zul2jsp
+	mv *-bundle.jar /tmp/maven
+	cd ..
+	rm -rf maven
+fi
+
+rm -rf $pkgnm

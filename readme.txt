@@ -18,6 +18,10 @@ zul
 zhtml
 	The ZK components implementing XHTML, aka, the XHTML components of ZK.
 
+---
+zul2jsp
+	The ZUL JSP Tags
+
 ----
 mil
 	The ZK components implementing MIL (Mobile Interactive Language).
