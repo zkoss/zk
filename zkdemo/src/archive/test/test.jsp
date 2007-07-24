@@ -24,12 +24,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</head>
 	<body>
 
+	<h1>Header outside z:page</h1>
 <z:page>
-	<h1>Content in z:page</h1>
+	<h2>Header in z:page</h2>
 
 	<z:window>
-		<h2>h2 in JSP</h2>
+		<p>Content in z:window</p>
 	</z:window>
+		<p>Content in z:page after z:window</h2>
 </z:page>
 
 	<p>Content after z:page</p>
