@@ -42,7 +42,7 @@ public class Flash extends HtmlBasedComponent {
 	
 	/**
 	 * Gets the background color of Flash movie
-	 * @return
+	 * @return the background color of Flash movie,[ hexadecimal RGB value] 
 	 */
 	public String getBgcolor() {
 		return _bgcolor;
@@ -50,7 +50,7 @@ public class Flash extends HtmlBasedComponent {
 	
 	/**
 	 * Sets the background color of Flash movie
-	 * @param bgcolor
+	 * @param bgcolor [ hexadecimal RGB value] 
 	 */
 	public void setBgcolor(String bgcolor) {
 		if(Objects.equals(_bgcolor, bgcolor))
@@ -61,15 +61,15 @@ public class Flash extends HtmlBasedComponent {
 	}
 	
 	/**
-	 * Sets whether the Flash movie plays repeatly
-	 * @return
+	 * Returns true if the Flash movie plays repeatly
+	 * @return true if the Flash movie plays repeatly 
 	 */
 	public boolean isLoop() {
 		return _loop;
 	}
 	
 	/**
-	 * Returns true if the Flash movie plays repeatly
+	 * Sets whether the Flash movie plays repeatly
 	 * @param loop
 	 */
 	public void setLoop(boolean loop) {
@@ -82,7 +82,7 @@ public class Flash extends HtmlBasedComponent {
 	
 	/**
 	 * Return true if the Flash movie starts playing automatically
-	 * @return
+	 * @return true if the Flash movie starts playing automatically
 	 */
 	public boolean isAutoPlay() {
 		return _autoPlay;
@@ -102,7 +102,7 @@ public class Flash extends HtmlBasedComponent {
 	
 	/**
 	 * Returns the Window mode property of the Flash movie 
-	 * @return
+	 * @return the Window mode property of the Flash movie 
 	 */
 	public String getWmode() {
 		return _wmode;
@@ -111,7 +111,8 @@ public class Flash extends HtmlBasedComponent {
 	/**
 	 * Sets the Window Mode property of the Flash movie 
 	 * for transparency, layering, and positioning in the browser.
-	 * @param wmode
+	 *
+	 * @param wmode: Possible values: window, opaque, transparent.
 	 */
 	public void setWode(String wmode) {
 		if(!Objects.equals(_wmode, wmode))
@@ -122,7 +123,7 @@ public class Flash extends HtmlBasedComponent {
 
 	/**
 	 * Gets the source path of Flash movie
-	 * @return
+	 * @return  the source path of Flash movie
 	 */
 	public String getSrc() {
 		return _src;
