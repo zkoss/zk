@@ -23,7 +23,9 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 
 /**
+ * A flash component 
  * @author Jeff
+ * @since 2.5.0
  */
 public class Flash extends HtmlBasedComponent {
 
