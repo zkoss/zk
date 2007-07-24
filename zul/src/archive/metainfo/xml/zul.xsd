@@ -33,6 +33,13 @@
 			<xs:enumeration value="justify" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="flashWmodeAttrType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="transparent" />
+			<xs:enumeration value="opaque" />
+			<xs:enumeration value="window" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="gridAlignAttrType">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="left" />
@@ -527,6 +534,17 @@
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- flash -->
+	<xs:element name="flash" type="flashType" />
+	<xs:complexType name="flashType">
+		<xs:group ref="baseGroup" minoccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="bgcolor" type="xs:string" use="optional" />
+		<xs:attribute name="loop" type="xs:boolean" use="optional" />
+		<xs:attribute name="autoPlay" type="xs:boolean" use="optional" />
+		<xs:attribute name="wmode" type="flashWmodeAttrType" use="optional" />
+		<xs:attribute name="src" type="xs:anyURI" use="optional" />
 	</xs:complexType>
 	<!-- foot -->
 	<xs:element name="foot" type="footType" />
