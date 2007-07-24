@@ -54,6 +54,7 @@ fi
 
 rm -rf /tmp/zk
 maindir="$(pwd)"
+echo "Working directory $maindir"
 
 #build *-all.war *-all.ear
 if [ "$target" == "official" ]  ; then
@@ -77,7 +78,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$srcnm/doc
 
 	echo Prepare ${srcnm}.tar.gz
-	cd $homedir
+	cd $maindir
 	cp bin/* /tmp/zk/$srcnm/bin
 	cp build* /tmp/zk/$srcnm
 	cp -rp bin /tmp/zk/$srcnm
@@ -139,7 +140,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$pkgnm/dist/src
 	mkdir -p /tmp/zk/$pkgnm/doc
 
-	cd $homedir
+	cd $maindir
 	mv -f /tmp/zk/*-sources.jar /tmp/zk/$pkgnm/dist/src
 	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar dist/lib/ext/commons-el.jar /tmp/zk/$pkgnm/dist/lib/ext
 		#Fileupload
