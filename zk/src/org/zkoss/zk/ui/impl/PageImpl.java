@@ -20,6 +20,7 @@ package org.zkoss.zk.ui.impl;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.ArrayList;
@@ -659,6 +660,34 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				return;
 			}
 	}
+	public void moveRoot(Component comp, Component refRoot) {
+		if (comp.getPage() != this || comp.getParent() != null)
+			return; //nothing to do
+
+		boolean added = false, found = false;
+		for (ListIterator it = _roots.listIterator(); it.hasNext();) {
+			final Object o = it.next();
+			if (o == comp) {
+				if (!added) {
+					if (!it.hasNext()) return; //last
+					if (it.next() == refRoot) return; //same position
+					it.previous(); it.previous(); it.next(); //restore cursor
+				}
+				it.remove();
+				found = true;
+				if (added || refRoot == null) break; //done
+			} else if (o == refRoot) {
+				it.previous();
+				it.add(comp);
+				it.next();
+				added = true;
+				if (found) break; //done
+			}
+		}
+
+		if (!added) _roots.add(comp);
+	}
+
 	public void addFellow(Component comp) {
 		final String compId = comp.getId();
 		assert D.OFF || !ComponentsCtrl.isAutoId(compId);

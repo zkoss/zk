@@ -113,13 +113,27 @@ public interface PageCtrl {
 	/** Adds a root component to a page.
 	 * <p>It is used internally and developers shall not invoke it
 	 * explicityly.
+	 * @see Component#setPage
 	 */
 	public void addRoot(Component comp);
 	/** Detaches a root component from this page.
 	 * <p>It is used internally and developers shall not invoke it
 	 * explicitly
+	 * @see Component#setPage
 	 */
 	public void removeRoot(Component comp);
+	/** Moves a root component before the reference component.
+	 *
+	 * <p>Note: it assumes removeRoot was called before for comp.
+	 * Otherwise, nothing happens.
+	 *
+	 * <p>It is used internally and developers shall not invoke it
+	 * explicitly
+	 *
+	 * @since 2.5.0
+	 * @see Component#setPageBefore
+	 */
+	public void moveRoot(Component comp, Component refRoot);
 
 	/** Adds a fellow. */
 	public void addFellow(Component comp);

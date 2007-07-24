@@ -374,30 +374,42 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _page != null ? _page.getDesktop(): null;
 	}
 
-	/** Sets the page that this component belongs to. */
 	public void setPage(Page page) {
-		if (page == _page) return;
+		if (page != _page)
+			setPageBefore(page, null); //append
+	}
+	public void setPageBefore(Page page, Component refRoot) {
+		if (refRoot != null && (page == null || refRoot == this
+		|| refRoot.getParent() != null || refRoot.getPage() != page))
+			refRoot = null;
 
 		if (_parent != null)
 			throw new UiException("Only the parent of a root component can be changed: "+this);
-		if (page != null) {
-			if (_page != null && _page.getDesktop() != page.getDesktop())
-				throw new UiException("The new page must be in the same desktop: "+page);
-				//Not allow developers to access two desktops simutaneously
-			checkIdSpacesDown(this, (PageCtrl)page);
 
-			//No need to check UUID since checkIdSpacesDown covers it
-			//-- a page is an ID space
-		} else { //detach from a page
-			checkDetach(_page);
+		final boolean samepg = page == _page;
+		if (!samepg) {
+			if (page != null) {
+				if (_page != null && _page.getDesktop() != page.getDesktop())
+					throw new UiException("The new page must be in the same desktop: "+page);
+					//Not allow developers to access two desktops simutaneously
+				checkIdSpacesDown(this, (PageCtrl)page);
+
+				//No need to check UUID since checkIdSpacesDown covers it
+				//-- a page is an ID space
+			} else { //detach from a page
+				checkDetach(_page);
+			}
+
+			if (_page != null) removeFromIdSpacesDown(this);
 		}
 
-		if (_page != null) removeFromIdSpacesDown(this);
-
 		addMoved(_parent, _page, page); //Not depends on UUID
-		setPage0(page); //UUID might be changed here
+		if (!samepg)
+			setPage0(page); //UUID might be changed here
+		if (page != null && (samepg || refRoot != null))
+			((PageCtrl)page).moveRoot(this, refRoot);
 
-		if (_page != null) addToIdSpacesDown(this);
+		if (!samepg && _page != null) addToIdSpacesDown(this);
 	}
 	/** Checks whether it is OK to detach the specified page.
 	 * @param page the page to detach (never null).

@@ -156,12 +156,33 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public Page getPage();
 	/** Sets what page this component belongs to.
+	 * If this component already belongs to the same page, nothing
+	 * is changed.
 	 *
 	 * <p>For child components, the page they belong is maintained
 	 * automatically. You need to invoke this method only for root 
 	 * components.
 	 */
 	public void setPage(Page page);
+	/** Sets what page this component belongs to, and insert
+	 * this component right before the reference component.
+	 *
+	 * <p>For child components, the page they belong is maintained
+	 * automatically. You need to invoke this method only for root 
+	 * components.
+	 *
+	 * <p>It is similar to {@link #setPage}, except this component
+	 * will be placed before the reference component.
+	 * If the reference component is null, this component is placed
+	 * at the end of all root components.
+	 *
+	 * @param refRoot another root component used as a reference
+	 * which this component will be placed before.
+	 * If null, this component will be placed at the end of all
+	 * root components (no matter whether it already belongs to the same page).
+	 * @since 2.5.0
+	 */
+	public void setPageBefore(Page page, Component refRoot);
 
 	/** Returns UUID (universal unique ID) which is unquie in the whole
 	 * session. The UUID is generated automatically and immutable, unless
