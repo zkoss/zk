@@ -68,6 +68,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!-- You can define any number of richlets as follows.
 		Note: To use richlet, you have to map zkLoader to /xx/* in web.xml,
 		where xx could be any name. And, the final URL will be /xx/url-pattern.
+		This demo application maps all richlet to /zk (see web.xml),
+		so the richlet path will be, say, /zk/test/some
 	-->
 	<richlet>
 		<richlet-name>Test</richlet-name>
