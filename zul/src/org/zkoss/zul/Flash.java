@@ -53,9 +53,9 @@ public class Flash extends HtmlBasedComponent {
 	 * @param bgcolor [ hexadecimal RGB value] 
 	 */
 	public void setBgcolor(String bgcolor) {
-		if(Objects.equals(_bgcolor, bgcolor)){
-		 _bgcolor = bgcolor;
-		 smartUpdate("z:bgcolor",bgcolor);
+		if(!Objects.equals(_bgcolor, bgcolor)){
+			_bgcolor = bgcolor;
+			smartUpdate("z:bgcolor",bgcolor);
 		}
 	}
 	
