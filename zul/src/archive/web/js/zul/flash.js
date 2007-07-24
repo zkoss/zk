@@ -1,25 +1,17 @@
 zkFlash = {};
 
-zkFlash.init = function (cmp) {
-	
-};
-
-zkFlash.cleanup = function (cmp) {
-
-};
-
 zkFlash.setAttr = function (cmp, name, value) {
 		
 	switch(name)
 	{
-		case "z:height":
+		case "style.height":
 		{
 			//$e(cmp.id+"!obj").height = value;
 			$e(cmp.id).height = value;
 			$e(cmp.id+"!emb").height = value;
 			return true;
 		}
-		case "z:width":
+		case "style.width":
 		{
 			//$e(cmp.id+"!obj").width = value;
 			$e(cmp.id).width = value;

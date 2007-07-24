@@ -53,8 +53,7 @@ public class Flash extends HtmlBasedComponent {
 	 * @param bgcolor [ hexadecimal RGB value] 
 	 */
 	public void setBgcolor(String bgcolor) {
-		if(Objects.equals(_bgcolor, bgcolor))
-		{
+		if(Objects.equals(_bgcolor, bgcolor)){
 		 _bgcolor = bgcolor;
 		 smartUpdate("z:bgcolor",bgcolor);
 		}
@@ -73,8 +72,7 @@ public class Flash extends HtmlBasedComponent {
 	 * @param loop
 	 */
 	public void setLoop(boolean loop) {
-		if(_loop != loop)
-		{
+		if(_loop != loop){
 			_loop = loop;
 			smartUpdate("z:loop",loop);
 		}
@@ -93,8 +91,7 @@ public class Flash extends HtmlBasedComponent {
 	 * @param play
 	 */
 	public void setAutoPlay(boolean play){
-		if(_autoPlay != play)
-		{
+		if(_autoPlay != play){
 			_autoPlay = play;
 			smartUpdate("z:play",play);
 		}
@@ -111,12 +108,10 @@ public class Flash extends HtmlBasedComponent {
 	/**
 	 * Sets the Window Mode property of the Flash movie 
 	 * for transparency, layering, and positioning in the browser.
-	 *
-	 * @param wmode: Possible values: window, opaque, transparent.
+	 * @param wmode Possible values: window, opaque, transparent.
 	 */
 	public void setWode(String wmode) {
-		if(!Objects.equals(_wmode, wmode))
-		{
+		if(!Objects.equals(_wmode, wmode)){
 			_wmode = wmode;
 		}
 	}
@@ -135,34 +130,11 @@ public class Flash extends HtmlBasedComponent {
 	 * @param src
 	 */
 	public void setSrc(String src) {
-		if(!Objects.equals(_src,src))
-		{
+		if(!Objects.equals(_src,src)){
 			_src = src;
 			invalidate();
 		}
 		
 	}
 	
-	/**
-	 * Sets the height of Flash movie
-	 */
-	public void setHeight(String height) {
-		if(!Objects.equals(super.getHeight(), height))
-		{
-			super.setHeight(height);
-			smartUpdate("z:height",height);
-		}
-	}
-	
-	/**
-	 * Sets the width of Flash movie
-	 */
-	public void setWidth(String width) {
-		if(!Objects.equals(super.getWidth(), width))
-		{
-			super.setWidth(width);
-			smartUpdate("z:width",width);
-		}
-		
-	}
 }
