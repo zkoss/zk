@@ -83,7 +83,8 @@ public class DHtmlLayoutFilter implements Filter {
 		final Session sess = webman.getSession(_ctx, request);
 		final Object old = I18Ns.setup(sess, request, response, _charset);
 		try {
-			final Desktop desktop = webman.getDesktop(sess, request, null, true);
+			final String path = Https.getThisServletPath(request);
+			final Desktop desktop = webman.getDesktop(sess, request, path, true);
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request, null);
 			((SessionCtrl)sess).notifyClientRequest(null);
@@ -91,7 +92,7 @@ public class DHtmlLayoutFilter implements Filter {
 			final PageDefinition pagedef =
 				uf.getPageDefinitionDirectly(ri, content, _ext);
 
-			final Page page = uf.newPage(ri, pagedef, null);
+			final Page page = uf.newPage(ri, pagedef, path);
 			final Execution exec =
 				new ExecutionImpl(_ctx, request, response, desktop, page);
 			final StringWriter out = new StringWriter(4096*2);
