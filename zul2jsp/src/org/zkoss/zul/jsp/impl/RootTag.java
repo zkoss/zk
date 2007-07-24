@@ -29,6 +29,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.PageContext;
 
+import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.jsp.Jsps;
 import org.zkoss.web.el.ELContexts;
 
@@ -65,6 +66,7 @@ import org.zkoss.zk.scripting.InterpreterNotFoundException;
  * @author tomyeh
  */
 abstract public class RootTag extends AbstractTag {
+	private static final Log log = Log.lookup(RootTag.class);
 	private LanguageDefinition _langdef;
 	private Page _page;
 
@@ -154,6 +156,7 @@ abstract public class RootTag extends AbstractTag {
 				Utils.adjustChildren(
 					page, null, page.getRoots(), out.toString());
 			} catch (Exception ex) {
+				log.realCauseBriefly(ex); //Apache Jasper Compiler eats ex
 				throw UiException.Aide.wrap(ex);
 			}
 		}

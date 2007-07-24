@@ -81,6 +81,15 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 		<attribute>
 			<description>
+	The window title. Default: empty.
+			</description>
+			<name>title</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<description>
 	If false, this tag is ignored. Default: true.
 			</description>
 			<name>if</name>

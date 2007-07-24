@@ -19,10 +19,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.jsp.impl;
 
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.ArrayList;
 import java.io.Writer;
 import java.io.IOException;
+
+import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -46,24 +48,61 @@ import org.zkoss.zul.Inline;
 	 */
 	/*package*/ static void adjustChildren(Page page, Component parent,
 	Collection children, String body) {
-System.out.println("process:\n"+body);
-		Iterator it = new ArrayList(children).iterator();
+		ListIterator it = new ArrayList(children).listIterator();
 		for (int j = 0, len = body != null ? body.length(): 0; j < len;) {
 			int k = body.indexOf(MARK_PREFIX, j);
-			String s = (k >= 0 ? body.substring(j, k): body.substring(j)).trim();
-			if (s.length() > 0) {
-				final Inline inl = new Inline(s);
-				if (it.hasNext()) {
-					Component child = (Component)it.next();
-					parent.insertBefore(inl, child);
+			String txt =  null, uuid = null;
+			if (k >= 0) {
+				int l = k + MARK_PREFIX.length();
+				int m = body.indexOf(MARK_POSTFIX, l);
+				if (m <= l) { //not found or empty uuid
+					k = -1;
 				} else {
-					parent.appendChild(inl);
+					txt = body.substring(j, k).trim();
+					uuid = body.substring(l, m);
+					k = m + MARK_POSTFIX.length();
 				}
 			}
+			if (k < 0)
+				txt = body.substring(j).trim();
+
+			if (txt.length() > 0) {
+				final Inline inl = new Inline(txt);
+				final Component child = matchNext(it, uuid);
+				if (child != null) {
+					if (parent != null)
+						parent.insertBefore(inl, child);
+					else
+						inl.setPageBefore(page, child);
+				} else {
+					if (parent != null)
+						parent.appendChild(inl);
+					else
+						inl.setPage(page);
+				}
+			}
+
+			if (k < 0) break; //no more
+			j = k;
 		}
 
 		while (it.hasNext())
 			((Component)it.next()).detach();
+	}
+	/** Matches the next component with the specified uuid,
+	 * returns null if no match at all.
+	 * Note: if it.next().getUuid() is not uuid, it will be removed.
+	 */
+	private static Component matchNext(ListIterator it, String uuid) {
+		while (it.hasNext()) {
+			final Component child = (Component)it.next();
+			if (Objects.equals(uuid, child.getUuid()))
+				return child; //found
+			child.detach(); //remove it
+				//Note: it assumes it has the full set and they are
+				//in the same order
+		}
+		return null;
 	}
 	/** Writes a special mark to the output to represent the component
 	 * of the specified child.

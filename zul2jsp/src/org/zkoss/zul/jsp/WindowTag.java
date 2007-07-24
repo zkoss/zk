@@ -29,8 +29,19 @@ import org.zkoss.zul.jsp.impl.BranchTag;
  * @author tomyeh
  */
 public class WindowTag extends BranchTag {
+	private String _title;
+
 	//BranchTag//
 	public Component newComponent() {
-		return new Window();
+		final Window wnd = new Window();
+		wnd.setTitle(_title);
+		return wnd;
+	}
+
+	//Extra//
+	/** Sets the window title.
+	 */
+	public void setTitle(String title) {
+		_title = title;
 	}
 }
