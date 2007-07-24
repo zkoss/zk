@@ -28,7 +28,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <z:page>
 	<h2>2. Header in z:page</h2>
 
-	<z:window title="Test">
+	<z:window title="Test" border="normal">
 		<p>3. Content in z:window</p>
 	</z:window>
 		<p>4. Content in z:page after z:window</h2>

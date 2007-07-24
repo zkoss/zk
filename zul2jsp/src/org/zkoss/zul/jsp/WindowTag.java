@@ -29,12 +29,13 @@ import org.zkoss.zul.jsp.impl.BranchTag;
  * @author tomyeh
  */
 public class WindowTag extends BranchTag {
-	private String _title;
+	private String _title = "", _border = "none";
 
 	//BranchTag//
 	public Component newComponent() {
 		final Window wnd = new Window();
 		wnd.setTitle(_title);
+		wnd.setBorder(_border);
 		return wnd;
 	}
 
@@ -43,5 +44,10 @@ public class WindowTag extends BranchTag {
 	 */
 	public void setTitle(String title) {
 		_title = title;
+	}
+	/** Sets the border of the window.
+	 */
+	public void setBorder(String border) {
+		_border = border;
 	}
 }
