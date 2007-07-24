@@ -23,7 +23,10 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 
 /**
- * A flash component 
+ * A generic flash component.
+ *
+ * <p>Non XUL extension.
+ *
  * @author Jeff
  * @since 2.5.0
  */
