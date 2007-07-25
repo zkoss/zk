@@ -3,7 +3,7 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.zkoss.zk</groupId>
-  <artifactId>zul2jsp</artifactId>
+  <artifactId>zuljsp</artifactId>
   <version>{version}</version>
   <packaging>jar</packaging>
   <name>JSP Tags fro ZK XUL Components</name>
@@ -17,7 +17,7 @@
     </license>
   </licenses>
   <scm>
-    <url>http://svn.sourceforge.net/viewvc/zk1/releases/{version}/zul2jsp</url>
+    <url>http://svn.sourceforge.net/viewvc/zk1/releases/{version}/zuljsp</url>
   </scm>
   <dependencies>
     <dependency>

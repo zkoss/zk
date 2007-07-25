@@ -19,7 +19,7 @@ zhtml
 	The ZK components implementing XHTML, aka, the XHTML components of ZK.
 
 ---
-zul2jsp
+zuljsp
 	The ZUL JSP Tags
 
 ----

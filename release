@@ -158,7 +158,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#captcha
 
 	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$pkgnm/dist/lib/
-	cp dist/lib/zul2jsp.jar dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$pkgnm/dist/lib/zkforge
+	cp dist/lib/zuljsp.jar dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$pkgnm/dist/lib/zkforge
 
 	cp dist/lib/timelinez.jar dist/lib/ext/json_simple.jar /tmp/zk/$pkgnm/dist/lib/zkforge
 		#timelinez

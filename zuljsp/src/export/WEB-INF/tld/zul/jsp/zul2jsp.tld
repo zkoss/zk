@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<tlib-version>1.1</tlib-version>
 	<jsp-version>2.0</jsp-version>
-	<short-name>zul2jsp</short-name>
+	<short-name>zuljsp</short-name>
 	<uri>http://www.zkoss.org/tld/zul/jsp</uri>
 	<description>
 	The JSP Tags for ZK XUL COmponents

@@ -5,7 +5,7 @@ test.jsp
 
 {{IS_NOTE
 	Purpose:
-		Test of zul2jsp
+		Test of zuljsp
 	Description:
 		
 	History:
@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
---%><%@ taglib uri="/WEB-INF/tld/zul/jsp/zul2jsp.tld" prefix="z" %>
+--%><%@ taglib uri="/WEB-INF/tld/zul/jsp/zuljsp.tld" prefix="z" %>
 
 <html>
 	<head>

@@ -29,12 +29,12 @@ fi
 javadocdir=${javadocdir/\~/$HOME}
 
 if [ "$target" == "official" ] ; then
-	ver=$(head -1 zul2jsp/version)
+	ver=$(head -1 zuljsp/version)
 	pkgnm=zk-jsp-$ver
 elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
 	target=daily
 
-	ver=$(head -1 zul2jsp/version)
+	ver=$(head -1 zuljsp/version)
 	pkgnm=zk-jsp-$ver-$(date +%Y-%m-%d)
 else
 	echo "Usage: release [ official | daily ]"
@@ -54,8 +54,8 @@ mkdir -p /tmp/zk/$pkgnm/javadoc
 mkdir -p /tmp/zk/$pkgnm/doc
 cp build* /tmp/zk/$pkgnm
 cp -rp bin /tmp/zk/$pkgnm
-cp -rp zul2jsp /tmp/zk/$pkgnm
-cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zul2jsp.jar /tmp/zk/$pkgnm/dist/lib
+cp -rp zuljsp /tmp/zk/$pkgnm
+cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zuljsp.jar /tmp/zk/$pkgnm/dist/lib
 cp -rp dist/export/WEB-INF/tld/zul/jsp/* /tmp/zk/$pkgnm/dist/WEB-INF/tld/zul/jsp
 cp zkdoc/COPYING /tmp/zk/$pkgnm/doc
 cp zkdoc/jsp-release-note /tmp/zk/$pkgnm/doc/release-note
@@ -67,14 +67,14 @@ fi
 #prepare source.jar
 cd /tmp/zk/$pkgnm
 find -name .svn | xargs rm -rf
-cd zul2jsp
+cd zuljsp
 rm -rf codegen debug
-jar cfM zul2jsp-sources.jar -C src org
-mv -f zul2jsp-sources.jar ../dist/src
+jar cfM zuljsp-sources.jar -C src org
+mv -f zuljsp-sources.jar ../dist/src
 
 #prepare javadoc
 cd $javadocdir
-cp -rp zul2jsp/* /tmp/zk/$pkgnm/javadoc
+cp -rp zuljsp/* /tmp/zk/$pkgnm/javadoc
 
 cd /tmp/zk
 echo Output ${pkgnm}.zip
@@ -92,7 +92,7 @@ if [ "$target" == "official" ] ; then
 	mkdir -p maven
 	mkdir -p /tmp/maven
 	cd maven
-	mvnrepo zul2jsp
+	mvnrepo zuljsp
 	mv *-bundle.jar /tmp/maven
 	cd ..
 	rm -rf maven
