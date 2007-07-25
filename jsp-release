@@ -27,6 +27,10 @@ if [ "$javadocdir" = "" ] ; then
 	exit 1
 fi
 javadocdir=${javadocdir/\~/$HOME}
+if [ ! -e $javadocdir/zuljsp ] ; then
+	echo "$javadocdir/zuljsp not available"
+	exit 1
+fi
 
 if [ "$target" == "official" ] ; then
 	ver=$(head -1 zuljsp/version)
@@ -83,6 +87,7 @@ zip -qr9 ${pkgnm}.zip $pkgnm
 if [ "$target" == "official" ] ; then
 	#Prepare maven repository
 	function mvnrepo {
+		echo "Create $1-$ver-bundle.jar"
 		mkdir -p $1
 		mv /tmp/zk/$pkgnm/dist/src/$1-sources.jar $1/$1-$ver-sources.jar
 		sed -e "s/{version}/$ver/" $maindir/$1/pom.xml > $1/pom.xml
