@@ -48,7 +48,7 @@ import org.zkoss.zul.Inline;
 	 */
 	/*package*/ static void adjustChildren(Page page, Component parent,
 	Collection children, String body) {
-		Iterator it = new ArrayList(children).listIterator();
+		Iterator it = new ArrayList(children).iterator();
 		for (int j = 0, len = body != null ? body.length(): 0; j < len;) {
 			int k = body.indexOf(MARK_PREFIX, j);
 			String txt =  null;
