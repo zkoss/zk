@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.jsp.impl;
 
 import java.util.Collection;
-import java.util.ListIterator;
+import java.util.Iterator;
 import java.util.ArrayList;
 import java.io.Writer;
 import java.io.IOException;
@@ -48,10 +48,11 @@ import org.zkoss.zul.Inline;
 	 */
 	/*package*/ static void adjustChildren(Page page, Component parent,
 	Collection children, String body) {
-		ListIterator it = new ArrayList(children).listIterator();
+		Iterator it = new ArrayList(children).listIterator();
 		for (int j = 0, len = body != null ? body.length(): 0; j < len;) {
 			int k = body.indexOf(MARK_PREFIX, j);
-			String txt =  null, uuid = null;
+			String txt =  null;
+			Component child = null;
 			if (k >= 0) {
 				int l = k + MARK_PREFIX.length();
 				int m = body.indexOf(MARK_POSTFIX, l);
@@ -59,7 +60,7 @@ import org.zkoss.zul.Inline;
 					k = -1;
 				} else {
 					txt = body.substring(j, k).trim();
-					uuid = body.substring(l, m);
+					child = matchNext(it, body.substring(l, m));
 					k = m + MARK_POSTFIX.length();
 				}
 			}
@@ -68,7 +69,6 @@ import org.zkoss.zul.Inline;
 
 			if (txt.length() > 0) {
 				final Inline inl = new Inline(txt);
-				final Component child = matchNext(it, uuid);
 				if (child != null) {
 					if (parent != null)
 						parent.insertBefore(inl, child);
@@ -93,7 +93,7 @@ import org.zkoss.zul.Inline;
 	 * returns null if no match at all.
 	 * Note: if it.next().getUuid() is not uuid, it will be removed.
 	 */
-	private static Component matchNext(ListIterator it, String uuid) {
+	private static Component matchNext(Iterator it, String uuid) {
 		while (it.hasNext()) {
 			final Component child = (Component)it.next();
 			if (Objects.equals(uuid, child.getUuid()))
