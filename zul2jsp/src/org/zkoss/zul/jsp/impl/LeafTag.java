@@ -58,15 +58,6 @@ abstract public class LeafTag extends AbstractTag {
 		return _comp;
 	}
 
-	/** Renders the output.
-	 *
-	 * @param out the writer to write the output to.
-	 * If null, JspContext.getOut() is assumed.
-	 */
-	public void render(Writer out) throws IOException {
-		_comp.redraw(out != null ? out: getJspContext().getOut());
-	}
-
 	//Deriving class must override//
 	/** Creates a component that is associated with this tag,
 	 * and returns the new component (never null).
