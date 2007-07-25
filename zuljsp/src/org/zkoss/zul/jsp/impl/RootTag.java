@@ -107,7 +107,7 @@ abstract public class RootTag extends AbstractTag {
 		final AbstractTag pt =
 			(AbstractTag)findAncestorWithClass(this, AbstractTag.class);
 		if ((pt instanceof RootTag) || (pt instanceof BranchTag))
-			throw new JspTagException("page can be placed inside of "+pt);
+			throw new JspTagException("<page> can be placed inside of "+pt);
 
 		final JspContext jspctx = getJspContext();
 		final PageContext pgctx = Jsps.getPageContext(jspctx);
