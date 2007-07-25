@@ -581,7 +581,8 @@ public class Parser {
 								attrAnnotInfo = new AnnotInfo();
 							attrAnnotInfo.addByCompoundValue(
 								attval.substring(2, len -1));
-							attrAnnotInfo.updateAnnotations(compInfo, attnm);
+							attrAnnotInfo.updateAnnotations(compInfo,
+								"self".equals(attnm) ? null: attnm);
 						} else {
 							addAttribute(compInfo, attns, attnm, attval, null);
 							if (attrAnnotInfo != null)
