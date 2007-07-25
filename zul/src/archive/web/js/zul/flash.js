@@ -1,3 +1,21 @@
+/* flash.js
+
+{{IS_NOTE
+	Purpose:
+		flash
+	Description:
+		
+	History:
+		Tue Jul 24 12:01:12     2007, Created by jeffliu
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
 zkFlash = {};
 
 zkFlash.setAttr = function (cmp, name, value) {
