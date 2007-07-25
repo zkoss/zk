@@ -25,9 +25,10 @@ import java.io.IOException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.jsp.Jsps;
@@ -102,6 +103,11 @@ abstract public class RootTag extends AbstractTag {
 	public void doTag() throws JspException, IOException {
 		if (!isEffective())
 			return; //nothing to do
+
+		final AbstractTag pt =
+			(AbstractTag)findAncestorWithClass(this, AbstractTag.class);
+		if ((pt instanceof RootTag) || (pt instanceof BranchTag))
+			throw new JspTagException("page can be placed inside of "+pt);
 
 		final JspContext jspctx = getJspContext();
 		final PageContext pgctx = Jsps.getPageContext(jspctx);
