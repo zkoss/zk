@@ -13,7 +13,8 @@ ZK 2.5.0
   1752431: Change the modifier of addMoved in AbstractComponent
   1753168: nextComponentUuid shall be called as late as possible
   1759278: A way to get the request path of desktop
-
+  1760689: Data Binding using new simpler annotation to component
+  
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
   1752477: combobox in groupbox and vbox failed to pos button (IE only)
