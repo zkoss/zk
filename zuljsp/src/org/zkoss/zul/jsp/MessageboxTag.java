@@ -1,4 +1,4 @@
-/* WindowTag.java
+/* MessageboxTag.java
 
 {{IS_NOTE
 	Purpose:
@@ -19,18 +19,18 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.jsp;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Window;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.jsp.impl.BranchTag;
 
 /**
- * The JSP tag of {@link Window}.
+ * The JSP tag of {@link Messagebox}.
  * @author Ian Tsai
  *
  */
-public class WindowTag extends BranchTag {
+public class MessageboxTag extends BranchTag {
 
 	protected Component newComponent(Class use) throws Exception{
-		return (Component) (use==null?new Window():use.newInstance());
+		return (Component) (use==null?new Messagebox():use.newInstance());
 	}
 
 }

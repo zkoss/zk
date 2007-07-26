@@ -48,6 +48,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	private RootTag _roottag;
 	private BranchTag _parenttag;
 	private Map _attrMap = new LinkedHashMap();
+    private String _use;
 
 	/** Returns the page tag that this tag belongs to.
 	 */
@@ -75,11 +76,9 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	 *
 	 * @param use the use component  
 	 * @return A zul Component
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
+	 * @throws Exception
 	 */
-	abstract protected Component newComponent(Class use)
-	throws InstantiationException, IllegalAccessException;
+	abstract protected Component newComponent(Class use)throws Exception;
 
 	//SimpleTagSupport//
 	/** Sets the parent tag.
@@ -114,10 +113,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	 */
 	/*package*/ void initComponent() throws JspException {
 		try {//TODO: use-class initial works...
-			String use = null;
-			Classes a;
-			_comp = newComponent(((use = (String) _attrMap.remove("use"))!=null)? 
-					Classes.forNameByThread(use) : null);
+			_comp = newComponent(_use!=null ? Classes.forNameByThread(_use) : null);
 		} catch (Exception e) {
 			throw new JspException(e);
 		}
@@ -175,4 +171,13 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	/*package*/ void writeComponentMark() throws IOException {
 		Utils.writeComponentMark(getJspContext().getOut(), _comp);
 	}
+    
+    public String getUse()
+    {
+        return _use;
+    }
+    public void setUse(String use)
+    {
+        this._use = use;
+    }
 }

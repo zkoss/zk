@@ -1,4 +1,4 @@
-/* WindowTag.java
+/* ListfootTag.java
 
 {{IS_NOTE
 	Purpose:
@@ -19,18 +19,18 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.jsp;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Window;
+import org.zkoss.zul.Listfoot;
 import org.zkoss.zul.jsp.impl.BranchTag;
 
 /**
- * The JSP tag of {@link Window}.
+ * The JSP tag of {@link Listfoot}.
  * @author Ian Tsai
  *
  */
-public class WindowTag extends BranchTag {
+public class ListfootTag extends BranchTag {
 
 	protected Component newComponent(Class use) throws Exception{
-		return (Component) (use==null?new Window():use.newInstance());
+		return (Component) (use==null?new Listfoot():use.newInstance());
 	}
 
 }
