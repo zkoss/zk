@@ -28,6 +28,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.DynamicAttributes;
 import javax.servlet.jsp.tagext.JspTag;
+
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.reflect.Fields;
 
 import org.zkoss.util.ModificationException;
@@ -70,10 +72,14 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	 * and returns the new component (never null).
 	 * The deriving class must implement this method to create
 	 * the proper component, initialize it and return it.
+	 *
 	 * @param use the use component  
-	 * @return A zul Component 
+	 * @return A zul Component
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
 	 */
-	abstract protected Component newComponent(Component use);
+	abstract protected Component newComponent(Class use)
+	throws InstantiationException, IllegalAccessException;
 
 	//SimpleTagSupport//
 	/** Sets the parent tag.
@@ -109,8 +115,9 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	/*package*/ void initComponent() throws JspException {
 		try {//TODO: use-class initial works...
 			String use = null;
+			Classes a;
 			_comp = newComponent(((use = (String) _attrMap.remove("use"))!=null)? 
-					(Component)( Class.forName(use).newInstance()) : null);
+					Classes.forNameByThread(use) : null);
 		} catch (Exception e) {
 			throw new JspException(e);
 		}

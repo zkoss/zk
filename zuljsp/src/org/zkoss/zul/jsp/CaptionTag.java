@@ -29,11 +29,14 @@ import org.zkoss.zul.jsp.impl.BranchTag;
 public class CaptionTag extends BranchTag {
 
 	/**
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 * 
 	 */
-	protected Component newComponent(Component use){
-		System.out.println("new Caption()!!!");
-		return use==null?new Caption():use;
+	protected Component newComponent(Class use) 
+	throws InstantiationException, IllegalAccessException{
+		//System.out.println("new Caption()!!!");
+		return (Component) (use==null?new Caption():use.newInstance());
 	}
 
 }

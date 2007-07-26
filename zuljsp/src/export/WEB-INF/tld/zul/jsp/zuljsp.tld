@@ -13,6 +13,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 <taglib xmlns="http://java.sun.com/xml/ns/j2ee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:zk="http://www.zkoss.org/"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
     version="2.0">
 
@@ -79,6 +80,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<tag-class>org.zkoss.zul.jsp.WindowTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
+		<variable>
+			<description>
+	Define inner zul component class
+			</description>
+			<name-given>zk_org.zkoss.zul.Window</name-given>		
+			<scope>NESTED</scope>
+			<variable-class>org.zkoss.zul.Window</variable-class>
+		</variable>
 		<attribute>
 			<description>
 	If false, this tag is ignored. Default: true.

@@ -31,9 +31,9 @@ import org.zkoss.zul.jsp.impl.BranchTag;
  */
 public class WindowTag extends BranchTag {
 
-	//BranchTag//
-	protected Component newComponent(Component use) {
-		return use==null ? new Window() : use;
+	protected Component newComponent(Class use) 
+	throws InstantiationException, IllegalAccessException {
+		return  (Component) (use==null ? new Window() : use.newInstance());
 	}
 
 }
