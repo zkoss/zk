@@ -128,6 +128,16 @@ public class DataBinder {
 	public void addBinding(Component comp, String attr, String expr,
 		List loadWhenEvents, String saveWhenEvent, String access, String converter) {
 			
+		//Since 2.5, 20070726, Henri Chen: we accept "each" to replace "_var" in collection data binding
+		//Before 2.4.1
+		//<a:bind _var="person">
+		//<listitem...>
+		//After 2.5
+		//<listitem self="@{bind(each='person')}"...>
+		//or <listitem self="@{each='person'}"...>
+		if ("each".equals(attr)) {
+			attr = "_var";
+		}
 		//add EventListener if not have done so
 		Page page = comp.getPage();
 		if (!_pageSet.contains(page)) {
