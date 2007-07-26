@@ -18,6 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.jsp;
 
+
 import org.zkoss.zk.ui.Component;
 
 import org.zkoss.zul.Window;
@@ -29,25 +30,10 @@ import org.zkoss.zul.jsp.impl.BranchTag;
  * @author tomyeh
  */
 public class WindowTag extends BranchTag {
-	private String _title = "", _border = "none";
 
 	//BranchTag//
-	public Component newComponent() {
-		final Window wnd = new Window();
-		wnd.setTitle(_title);
-		wnd.setBorder(_border);
-		return wnd;
+	protected Component newComponent(Component use) {
+		return use==null ? new Window() : use;
 	}
 
-	//Extra//
-	/** Sets the window title.
-	 */
-	public void setTitle(String title) {
-		_title = title;
-	}
-	/** Sets the border of the window.
-	 */
-	public void setBorder(String border) {
-		_border = border;
-	}
 }

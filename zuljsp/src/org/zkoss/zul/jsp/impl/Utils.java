@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Component;
 
 import org.zkoss.zul.Inline;
 
+
 /**
  * A utility to be shared by {@link BranchTag} and {@link RootTag} to
  * implement the capability to hold a list of children.
@@ -48,7 +49,10 @@ import org.zkoss.zul.Inline;
 	 */
 	/*package*/ static void adjustChildren(Page page, Component parent,
 	Collection children, String body) {
+
+
 		Iterator it = new ArrayList(children).iterator();
+
 		for (int j = 0, len = body != null ? body.length(): 0; j < len;) {
 			int k = body.indexOf(MARK_PREFIX, j);
 			String txt =  null;
@@ -66,7 +70,7 @@ import org.zkoss.zul.Inline;
 			}
 			if (k < 0)
 				txt = body.substring(j).trim();
-
+			//inline handle...
 			if (txt.length() > 0) {
 				final Inline inl = new Inline(txt);
 				if (child != null) {
@@ -86,8 +90,8 @@ import org.zkoss.zul.Inline;
 			j = k;
 		}
 
-		while (it.hasNext())
-			((Component)it.next()).detach();
+//		while (it.hasNext())
+//			((Component)it.next()).detach();
 	}
 	/** Matches the next component with the specified uuid,
 	 * returns null if no match at all.
@@ -114,4 +118,6 @@ import org.zkoss.zul.Inline;
 		out.write(comp.getUuid());
 		out.write(MARK_POSTFIX);
 	}
+	
+	
 }

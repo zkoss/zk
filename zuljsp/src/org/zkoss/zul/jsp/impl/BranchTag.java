@@ -52,7 +52,7 @@ abstract public class BranchTag extends LeafTag {
 		initComponent(); //creates and registers component
 
 		final StringWriter out = new StringWriter();
-		getJspBody().invoke(out);
+		if(getJspBody()!=null)getJspBody().invoke(out);
 		final Component comp = getComponent();
 		Utils.adjustChildren(
 			null, comp, comp.getChildren(), out.toString());

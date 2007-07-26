@@ -150,6 +150,8 @@ abstract public class RootTag extends AbstractTag {
 			ELContexts.pop();
 		}
 	}
+
+	
 	private class MyRichlet implements Richlet {
 		public void init(RichletConfig config) {
 		}
