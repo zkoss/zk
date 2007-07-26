@@ -78,24 +78,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<name>window</name>
 		<tag-class>org.zkoss.zul.jsp.WindowTag</tag-class>
 		<body-content>scriptless</body-content>
-
-		<attribute>
-			<description>
-	The window title. Default: "".
-			</description>
-			<name>title</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>
-	The window border. Default: "none".
-			</description>
-			<name>border</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-
+		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
 			<description>
 	If false, this tag is ignored. Default: true.
@@ -113,6 +96,30 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-
+	<tag>
+		<description>
+	Define the window comonent.
+		</description>
+		<name>caption</name>
+		<tag-class>org.zkoss.zul.jsp.CaptionTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 	<!-- Functions -->
 </taglib>
