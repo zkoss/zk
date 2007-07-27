@@ -45,11 +45,21 @@ zk.Grid.prototype = {
 			this.paging = true;
 			this.body = $e(this.id + "!paging");
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-			if (this.bodytbl.tBodies.length >= 2)
-				this.bodyrows = this.bodytbl.tBodies[1].rows;
+
+			var bs = this.bodytbl.tBodies;
+			for (var j = 0; j < bs.length; ++j)
+				if (bs[j].id) {
+					this.bodyrows = bs[j].rows;
+					break;
+				}
 		}
 
 		if (!zk.isRealVisible(this.element)) return;
+
+		if (!this.bodyrows) {
+			alert(mesg.INVALID_STRUCTURE + this.id);
+			return;
+		}
 
 		var meta = this; //the nested function only see local var
 		if (!this.paging && !this._inited) {
