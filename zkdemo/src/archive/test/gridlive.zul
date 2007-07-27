@@ -40,9 +40,23 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<columns>
 			<column label="options"/>
 		</columns>
+		<foot>
+			<footer label="summary"/>
+		</foot>
 	</grid>
 	<button label="remove 2nd" onClick="model2.remove(1)"/>
 	<button label="remove 2nd and 3rd" onClick="model2.remove(1);model2.remove(1);"/>
+
+	<separator/>
+	Live with header and paging:
+	<grid width="200px" model="${model2}" mold="paging" pageSize="10">
+		<columns>
+			<column label="options"/>
+		</columns>
+		<foot>
+			<footer label="summary"/>
+		</foot>
+	</grid>
 
 	<separator/>
 
