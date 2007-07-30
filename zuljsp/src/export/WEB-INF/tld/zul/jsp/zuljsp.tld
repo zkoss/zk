@@ -655,6 +655,40 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	<!-- ZK XUL Div Components -->
+	<tag>
+		<description>
+	Define the Div comonent.
+		</description>
+		<name>div</name>
+		<tag-class>org.zkoss.zul.jsp.DivTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Div.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 	<!-- ZK XUL Doublebox Components -->
 	<tag>
 		<description>
@@ -955,6 +989,40 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<attribute>
 			<description>
 	Default : Zul Component Hbox.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK XUL Html Components -->
+	<tag>
+		<description>
+	Define the Html comonent.
+		</description>
+		<name>html</name>
+		<tag-class>org.zkoss.zul.jsp.HtmlTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Html.
 			</description>
 			<name>use</name>
 			<required>false</required>
