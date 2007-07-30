@@ -18,7 +18,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.jsp.impl;
 
-import java.io.Writer;
 import java.io.StringWriter;
 import java.io.IOException;
 
@@ -34,6 +33,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.jsp.Jsps;
 import org.zkoss.web.el.ELContexts;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -44,6 +44,7 @@ import org.zkoss.zk.ui.RichletConfig;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -53,8 +54,6 @@ import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.ExecutionImpl;
-import org.zkoss.zk.scripting.Interpreters;
-import org.zkoss.zk.scripting.InterpreterNotFoundException;
 
 /**
  * A skeletal class to implement the root ZK tag.
@@ -70,6 +69,7 @@ abstract public class RootTag extends AbstractTag {
 	private static final Log log = Log.lookup(RootTag.class);
 	private LanguageDefinition _langdef;
 	private Page _page;
+	private String _lang;
 
 	protected RootTag() {
 		_langdef = LanguageDefinition.lookup("xul/html");
@@ -79,6 +79,11 @@ abstract public class RootTag extends AbstractTag {
 	 */
 	/*package*/ void addChildTag(LeafTag child) {
 		child.getComponent().setPage(_page);
+	}
+	
+	public void setZscriptLanguage(String lang)
+	{
+		_lang = lang;
 	}
 
 	//Derived to override//
@@ -95,6 +100,7 @@ abstract public class RootTag extends AbstractTag {
 	 */
 	protected void init(Execution exec, Page page) {
 	}
+	
 
 	//super//
 	/** To process this root tag.
@@ -135,13 +141,14 @@ abstract public class RootTag extends AbstractTag {
 			final UiFactory uf = wappc.getUiFactory();
 			final Richlet richlet = new MyRichlet();
 			_page = uf.newPage(ri, richlet, null);
+			if(_lang!=null)_page.setZScriptLanguage(_lang);
 
 			final Execution exec = new ExecutionImpl(
 				svlctx, request, response, desktop, _page);
 			exec.setAttribute(
 				PageCtrl.ATTR_REDRAW_BY_INCLUDE, Boolean.TRUE);
 				//Always use include; not forward
-
+			
 			init(exec, _page); //initialize the page
 
 			wappc.getUiEngine().execNewPage(exec, richlet, _page, jspctx.getOut());
@@ -172,4 +179,18 @@ abstract public class RootTag extends AbstractTag {
 			return _langdef;
 		}
 	}
+	/**
+	 * Root tag was supposed to handle all children's ZScript.
+	 * @param com
+	 * @param zs
+	 */
+	public void addDefferdZscript(Component com, ZScript zs)
+	{
+		if (zs.getLanguage() == null)
+			zs.setLanguage(
+					_page.getZScriptLanguage());
+		((PageCtrl)_page).addDeferredZScript(com, zs);
+	}
+
+
 }

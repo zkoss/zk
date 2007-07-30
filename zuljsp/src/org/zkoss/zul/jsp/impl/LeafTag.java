@@ -34,6 +34,16 @@ import org.zkoss.lang.reflect.Fields;
 
 import org.zkoss.util.ModificationException;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.CreateEvent;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.AfterCompose;
+import org.zkoss.zk.ui.metainfo.EventHandler;
+import org.zkoss.zk.ui.metainfo.ZScript;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zul.Radiogroup;
 /**
  * The skeletal class used to implement the JSP tag for ZK components
  * that don't accept any child.
@@ -48,6 +58,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	private RootTag _roottag;
 	private BranchTag _parenttag;
 	private Map _attrMap = new LinkedHashMap();
+	private Map _eventListenerMap = new LinkedHashMap();
     private String _use;
 
 	/** Returns the page tag that this tag belongs to.
@@ -96,8 +107,8 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 		} else {
 			throw new IllegalStateException("Must be nested inside the page tag: "+this);
 		}
-
 	}
+	
 	/** To process the leaf tag.
 	 * The deriving class rarely need to override this method.
 	 */
@@ -105,7 +116,9 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 		if (!isEffective())return; //nothing to do
 		
 		initComponent(); //creates and registers the component
+		afterComposeComponent();//finish compose the component
 		writeComponentMark(); //write a special mark denoting the component
+		
 	}
 	
 	/** Creates and registers the component.
@@ -114,15 +127,6 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	/*package*/ void initComponent() throws JspException {
 		try {//TODO: use-class initial works...
 			_comp = newComponent(_use!=null ? Classes.forNameByThread(_use) : null);
-		} catch (Exception e) {
-			throw new JspException(e);
-		}
-		
-		if (_comp == null)
-			throw new JspTagException("newComponent() returns null");
-
-		try {
-			invokeSetterMethods(_comp);
 		} catch (Exception e) {
 			throw new JspException(e);
 		}
@@ -155,11 +159,9 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	public void setDynamicAttribute(String uri, String localName, Object value) 
 	throws JspException {
 		if("if".equals(localName)||"unless".equals(localName))
-			System.out.println(this.getClass().getName()+" : if & unless is triggerd!!!");
-		if ("if".equals(localName)) 
-			this.setIf(((Boolean)value).booleanValue());// TODO: change to throw exception...
-		else if ("unless".equals(localName)) 
-			this.setUnless(((Boolean)value).booleanValue());// TODO: change to throw exception...
+			throw new JspException("if, unless, use is static method!!!");
+		if(localName.startsWith("on"))
+			_eventListenerMap.put(localName, value);
 		else _attrMap.put(localName, value);
 	}
 	
@@ -170,6 +172,38 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	 */
 	/*package*/ void writeComponentMark() throws IOException {
 		Utils.writeComponentMark(getJspContext().getOut(), _comp);
+	}
+	
+	/**
+	 * 
+	 * @throws JspException 
+	 */
+	/*package*/void afterComposeComponent() throws JspException{
+			if (_comp instanceof AfterCompose)
+			((AfterCompose)_comp).afterCompose();
+	
+		if (Events.isListened(_comp, Events.ON_CREATE, false))
+			Events.postEvent(
+				new CreateEvent(Events.ON_CREATE, _comp, Executions.getCurrent().getArg()));
+		
+		if (_comp == null)
+			throw new JspTagException("newComponent() returns null");
+	
+		try {
+			invokeSetterMethods(_comp);
+		} catch (Exception e) {
+			throw new JspException(e);
+		}
+		//add event handle ...
+		
+		for(Iterator itor = _eventListenerMap.entrySet().iterator();itor.hasNext();)
+		{
+			Map.Entry entry = (Map.Entry)itor.next();
+			final ZScript zscript = ZScript.parseContent((String)entry.getValue(), null);
+			((ComponentCtrl)_comp).addEventHandler(
+					(String)entry.getKey(), new EventHandler(zscript,null));
+		}
+		
 	}
     
     public String getUse()

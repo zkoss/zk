@@ -56,7 +56,7 @@ abstract public class BranchTag extends LeafTag {
 		final Component comp = getComponent();
 		Utils.adjustChildren(
 			null, comp, comp.getChildren(), out.toString());
-
+		afterComposeComponent();// after Compose Component.
 		writeComponentMark(); //write a special mark
 	}
 }

@@ -72,16 +72,4 @@ public class AbstractTag extends SimpleTagSupport {
 		_unless = unless;
 	}
 
-	//Utilities//
-	/** Evaluates the specified expression based the current context.
-	 */
-	protected final Object evaluate(String expr, Class expectedType)
-	throws ELException {
-		//No need to invoke ElContexts.push() because it is already done
-		//by JspFactoryImpl
-		final JspContext jc = getJspContext();
-		return jc.getExpressionEvaluator()
-			.evaluate(expr, expectedType, jc.getVariableResolver(), null);
-	}
-
 }

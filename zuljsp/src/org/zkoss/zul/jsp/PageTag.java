@@ -18,11 +18,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.jsp;
 
-import java.io.Writer;
-import java.io.IOException;
-
-import javax.servlet.jsp.JspException;
-
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zul.jsp.impl.RootTag;
@@ -59,4 +54,5 @@ public class PageTag extends RootTag {
 
 		page.setStyle(_style);
 	}
+
 }
