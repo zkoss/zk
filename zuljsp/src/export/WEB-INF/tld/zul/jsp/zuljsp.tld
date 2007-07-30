@@ -70,7 +70,46 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-
+	<tag>
+		<description>
+	Define Zscript Tag, let user can declaire zscript fragment.
+		</description>
+		<name>zscript</name>
+		<tag-class>org.zkoss.zul.jsp.ZScriptTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<description>
+	Always true in current.
+			</description>
+			<name>deferred</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+		If true, this tag is ignored. Default: false.
+			</description>
+			<name>language</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<description>
+	Define Attribute Tag.
+		</description>
+		<name>attribute</name>
+		<tag-class>org.zkoss.zul.jsp.AttributeTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<description>
+		Attribute Name.
+			</description>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 	<!-- ZK XUL Components -->
 	<!-- ZK XUL Area Components -->
 	<tag>
@@ -338,6 +377,40 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<attribute>
 			<description>
 	Default : Zul Component Caption.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK XUL Chart Components -->
+	<tag>
+		<description>
+	Define the Chart comonent.
+		</description>
+		<name>chart</name>
+		<tag-class>org.zkoss.zul.jsp.ChartTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Chart.
 			</description>
 			<name>use</name>
 			<required>false</required>
@@ -684,6 +757,40 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	<!-- ZK XUL Flash Components -->
+	<tag>
+		<description>
+	Define the Flash comonent.
+		</description>
+		<name>flash</name>
+		<tag-class>org.zkoss.zul.jsp.FlashTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Flash.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 	<!-- ZK XUL Foot Components -->
 	<tag>
 		<description>
@@ -854,6 +961,40 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	<!-- ZK XUL Iframe Components -->
+	<tag>
+		<description>
+	Define the Iframe comonent.
+		</description>
+		<name>iframe</name>
+		<tag-class>org.zkoss.zul.jsp.IframeTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Iframe.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 	<!-- ZK XUL Image Components -->
 	<tag>
 		<description>
@@ -950,6 +1091,40 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<attribute>
 			<description>
 	Default : Zul Component Intbox.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK XUL Include Components -->
+	<tag>
+		<description>
+	Define the Include comonent.
+		</description>
+		<name>include</name>
+		<tag-class>org.zkoss.zul.jsp.IncludeTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Include.
 			</description>
 			<name>use</name>
 			<required>false</required>
@@ -1772,6 +1947,40 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	<!-- ZK XUL Style Components -->
+	<tag>
+		<description>
+	Define the Style comonent.
+		</description>
+		<name>style</name>
+		<tag-class>org.zkoss.zul.jsp.StyleTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Style.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 	<!-- ZK XUL Tab Components -->
 	<tag>
 		<description>
@@ -2378,6 +2587,40 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<attribute>
 			<description>
 	Default : Zul Component Treerow.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK XUL Vbox Components -->
+	<tag>
+		<description>
+	Define the Vbox comonent.
+		</description>
+		<name>vbox</name>
+		<tag-class>org.zkoss.zul.jsp.VboxTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Vbox.
 			</description>
 			<name>use</name>
 			<required>false</required>
