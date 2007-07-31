@@ -24,15 +24,12 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.metainfo.Annotation; 
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.HierachicalAware;
 
-import org.zkoss.zul.Grid;
 import org.zkoss.zul.Row;
-import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListModel;
 
@@ -60,10 +57,10 @@ import java.util.LinkedHashSet;
  * @author Henri Chen
  */
 public class DataBinder {
-	/*package*/ static final String NULLIFY = "none"; //used to nullify default configuration
-	/*package*/ static final String VARNAME = "zkplus.databind.VARNAME"; //_var name
-	/*package*/ static final String TEMPLATEMAP = "zkplus.databind.TEMPLATEMAP"; // template -> clone
-	/*package*/ static final String TEMPLATE = "zkplus.databind.TEMPLATE"; //clone -> template
+	public static final String NULLIFY = "none"; //used to nullify default configuration
+	public static final String VARNAME = "zkplus.databind.VARNAME"; //_var name
+	public static final String TEMPLATEMAP = "zkplus.databind.TEMPLATEMAP"; // template -> clone
+	public static final String TEMPLATE = "zkplus.databind.TEMPLATE"; //clone -> template
 	private static final String OWNER = "zkplus.databind.OWNER"; //the collection owner of the template component
 	private static final String HASTEMPLATEOWNER = "zkplus.databind.HASTEMPLATEOWNER"; //whether has template owner (collection in collection)
 	private static final Object NA = new Object();
@@ -76,7 +73,8 @@ public class DataBinder {
 	private boolean _defaultConfig = true; //whether load default configuration from lang-addon.xml
 	private boolean _init; //whether this databinder is initialized. 
 		//Databinder is init automatically when saveXXX or loadXxx is called
-
+	protected static Map _decoratorMap = new HashMap(29);
+	
 	/** Binding bean to UI component. This is the same as 
 	 * addBinding(Component comp, String attr, String expr, (List)null, (String)null, (String)null, (String)null). 
 	 * @param comp The component to be associated.
@@ -452,6 +450,9 @@ public class DataBinder {
 		if (!_init) {
 			_init = true;
 
+			// init decorator
+			initDecorator();
+			
 			//setup all added bindings
 			final Set varnameSet = new HashSet();
 			final LinkedHashSet toBeDetached = new LinkedHashSet();
@@ -491,18 +492,36 @@ public class DataBinder {
 		}
 	}
 	
-	//Tightly coupled to Component
-	//get Collection owner of a given collection item.
-	private static Component getComponentCollectionOwner(Component comp) {
-		if (comp instanceof Listitem) {
-			return ((Listitem)comp).getListbox();
-		}
-		if (comp instanceof Row) {
-			return ((Row)comp).getGrid();
-		}
-		throw new UiException("Collection Databinder now supports Listbox and Grid only! CollectionItem:"+comp);
+	private void initDecorator(){
+		addDecorator(Listitem.class, new BindingListitemDecorator());
+		addDecorator(Row.class, new BindingRowDecorator());
 	}
-
+	
+	/**
+	 * Adds a decorator for this comp.
+	 * @see BindingDecorator
+	 */
+	public void addDecorator(Class comp, BindingDecorator decor){
+		_decoratorMap.put(comp, decor);
+	}
+	
+	//get Collection owner of a given collection item.
+	private static Component getComponentCollectionOwner(Component comp) {		
+		BindingDecorator decor = getBindingDecorator(comp);
+		return decor.getComponentCollectionOwner(comp);		
+	}
+	/**
+	 * Returns a decorator by the comp accordingly.
+	 * @see BindingDecorator
+	 */
+	protected static BindingDecorator getBindingDecorator(Component comp){
+		BindingDecorator decorName = (BindingDecorator)_decoratorMap.get(comp.getClass());
+		if(decorName != null){
+			return decorName;
+		}else{
+			throw new UiException("Not found the BindingDecorator accordingly! :"+comp);
+		}		
+	}
 	//get Collection owner of a given collection item.
 	private static Component getCollectionOwner(Component comp) {
 		if (isTemplate(comp)) {
@@ -513,61 +532,23 @@ public class DataBinder {
 	
 	//get associated clone of a given bean and template component
 	private static Component getCollectionItem(Component comp, Object bean) {
-		Component owner = getCollectionOwner(comp);
-		
-		assert !isTemplate(owner) : "collection in collection, should never occure! comp:" + comp + ", bean:" + bean+", owner: "+owner;
-		
-		if (owner instanceof Listbox) {
-			final Listbox lbx = (Listbox) owner;
-  		final ListModel xmodel = lbx.getModel();
-  		if (xmodel instanceof BindingListModel) {
+		Component owner = getCollectionOwner(comp);		
+		BindingDecorator decor = getBindingDecorator(comp);
+		final ListModel xmodel = decor.getModelByOwner(owner);
+		if (xmodel instanceof BindingListModel) {
   			final BindingListModel model = (BindingListModel) xmodel;
   			int index = model.indexOf(bean);
   			if (index >= 0) {
-    			Listitem li = (Listitem) lbx.getItemAtIndex(index);
-    			return lookupClone(li, comp);
+    			return lookupClone(decor.getComponentAtIndexByOwner(owner, index), comp);
     		}
     	}
-    	return null;
-    } 
-		if (owner instanceof Grid) {
-			final Grid grid = (Grid) owner;
-  		final ListModel xmodel = grid.getModel();
-  		if (xmodel instanceof BindingListModel) {
-  			final BindingListModel model = (BindingListModel) xmodel;
-  			int index = model.indexOf(bean);
-  			if (index >= 0) {
-    			Row row = (Row) grid.getRows().getChildren().get(index);
-    			return lookupClone(row, comp);
-    		}
-    	}
-    	return null;
-    } 
-
-		throw new UiException("Collection Databinder now supports Listbox and Grid only! CollectionItem:"+comp+", CollectionOwner:"+owner);
+		return null;
 	}
   		
-	//set the binding renderer for the template listitem component (Tigthly couple to a component)
+	//set the binding renderer for the template listitem component
 	private void setupBindingRenderer(Component comp) {
-		if (comp instanceof Listitem) {
-			final Listitem li = (Listitem)comp;
-			final Listbox lbx = li.getListbox();
-			if (lbx.getItemRenderer() == null) {
-				lbx.setItemRenderer(new BindingListitemRenderer(li, this));
-			}
-			return;
-		}
-		if (comp instanceof Row) {
-			final Row row = (Row)comp;
-			final Grid grid = row.getGrid();
-			if (grid.getRowRenderer() == null) {
-				grid.setRowRenderer(new BindingRowRenderer(row, this));
-			}
-			return;
-		}
-		throw new UiException("Collection Databinder now supports Listbox and Grid only! CollectionItem:"+comp);
+		getBindingDecorator(comp).setupBindingRenderer(comp, this);		
 	}
-	//^^ above Tightly coupled to component
 	
 	private void setupPathTree(Collection bindings, Set varnameSet) {
 		for(final Iterator it = bindings.iterator(); it.hasNext(); ) {
@@ -610,8 +591,10 @@ public class DataBinder {
 		_beans.put(beanid, bean);
 	}
 	
-	//setup the specified comp and its decendents to be as template (or not)
-	/* package */ void setupTemplateComponent(Component comp, Object owner) {
+	/**
+	 * Sets up the specified comp and its decendents to be as template (or not)
+	 */
+	public void setupTemplateComponent(Component comp, Object owner) {
 		if (existsBindings(comp)) {
 			if (comp.getAttribute(OWNER) != null) {
 				comp.setAttribute(HASTEMPLATEOWNER, Boolean.TRUE); //owner is a template
