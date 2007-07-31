@@ -194,13 +194,19 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	</copy>
 </target>
 
+
+
 <target name="build.war" depends="compile" if="build.war.required">
 	<mkdir dir="${out.dir}"/>
-	<property name="src.web.xml" value="${src.archive.dir}/WEB-INF/web.xml"/>
+	
+	<condition property="war.dir" value="${src.archive.dir}" else="WebContent">
+	    <available file="${src.archive.dir}" type="dir"/>
+	</condition>
+	<property name="src.web.xml" value="${war.dir}/WEB-INF/web.xml"/>
 		<!-- to let other targets have a chance to override it -->
 	<war warfile="${out.dir}/${war.name}" webxml="${src.web.xml}"
-	manifest="${manifest.mf}">
-		<fileset dir="${src.archive.dir}" includes="**"
+	manifest="${war.dir}/META-INF/MANIFEST.MF">
+		<fileset dir="${war.dir}" includes="**"
 		 excludes="WEB-INF/web.xml, META-INF/MANIFEST.MF, **/CVS/**, **/_notes/**, **/_raw/**"/>
 		<fileset dir="${dist.export.dir}" includes="${import.libs}"/>
 		<fileset dir="${dist.lib.ext.dir}" includes="${import.libs}"/>
