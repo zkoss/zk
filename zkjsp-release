@@ -34,12 +34,14 @@ fi
 
 if [ "$target" == "official" ] ; then
 	ver=$(head -1 zuljsp/version)
-	pkgnm=zk-jsp-$ver
+	 pkgnm=zk-JspTags-$ver
+	demonm=zkjsp-demo-$ver
 elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
 	target=daily
 
 	ver=$(head -1 zuljsp/version)
-	pkgnm=zk-jsp-$ver-$(date +%Y-%m-%d)
+	pkgnm=zk-JspTags-$ver-$(date +%Y-%m-%d)
+	demonm=zkjsp-demo-$ver-$stamp
 else
 	echo "Usage: release [ official | daily ]"
 	echo Default: daily
@@ -67,6 +69,17 @@ cp zkdoc/jsp-release-note /tmp/zk/$pkgnm/doc/release-note
 if [ "$target" == "timelinez" ] ; then
 	cp dist/lib/ext/json_simple.jar /tmp/zk/$pkgnm/dist/lib/ext
 fi
+#build *-all.war *-all.ear
+if [ "$target" == "official" ]  ; then
+	rm -rf dist/lib/zkjsp-demo*.war #dist/lib/jsp-demos*.ear
+	cp -f zkjsp-demo/war.libs.all zkjsp-demo/war.libs
+	./build clean zkjsp-demo #jsp-demos
+	./build zkjsp-demo #jsp-demos
+
+	mv dist/lib/zkjsp-demo.war dist/lib/zkjsp-demo-all.war
+	#mv dist/lib/jsp-demos.ear dist/lib/jsp-demos-all.ear
+	
+fi
 
 #prepare source.jar
 cd /tmp/zk/$pkgnm
@@ -80,9 +93,38 @@ mv -f zuljsp-sources.jar ../dist/src
 cd $javadocdir
 cp -rp zuljsp/* /tmp/zk/$pkgnm/javadoc
 
+#build Demo
+if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+	mkdir -p /tmp/jsp/$demonm/zkjsp-demo/WebContent
+	mkdir -p /tmp/jsp/$demonm/zkjsp-demo/src/org
+	mkdir -p /tmp/jsp/$demonm/doc
+
+	cd $HOME/prj/zk1
+
+	cp -rp zkjsp-demo/WebContent/* /tmp/jsp/$demonm/zkjsp-demo/WebContent
+	#cp -rp zkjsp-demo/codegen/archive/* /tmp/jsp/$demonm/zkjsp-demo/WebContent
+	cp -rp zkjsp-demo/src/org/* /tmp/jsp/$demonm/zkjsp-demo/src/org
+	cp zkdoc/COPYING zkdoc/jsp-release-note /tmp/jsp/$demonm/doc
+	#cp -rp dist/lib/jsp-demos.ear dist/lib/jsp-demo.war /tmp/jsp/$demonm
+	if [ "$target" == "official" ] ; then
+		mv dist/lib/zkjsp-demo-all.war /tmp/jsp/$demonm #dist/lib/jsp-demos-all.ear
+	fi
+
+	cd /tmp/jsp
+	#find -name CVS | xargs rm -rf
+	find -name .svn | xargs rm -rf
+
+	echo Output ${demonm}.zip
+	zip -qr9 ${demonm}.zip $demonm
+	rm -rf $demonm
+fi
+
+
+#pack All file
 cd /tmp/zk
 echo Output ${pkgnm}.zip
 zip -qr9 ${pkgnm}.zip $pkgnm
+
 
 if [ "$target" == "official" ] ; then
 	#Prepare maven repository
@@ -102,5 +144,7 @@ if [ "$target" == "official" ] ; then
 	cd ..
 	rm -rf maven
 fi
+
+
 
 rm -rf $pkgnm
