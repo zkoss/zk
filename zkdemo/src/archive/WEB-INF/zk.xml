@@ -119,6 +119,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</desktop-config>
 	-->
 
+	<!-- Uncomment the following if you want to redirect to particular
+		page when ZK Client receives an error code.
+	<client-config>
+		<error-reload>
+			<error-code>301</error-code>
+			<reload-uri>/login.zul</reload-uri>
+		</error-reload>
+	</client-config>
+	-->
 	<!-- Any number of preferences. 
 	<preference>
 		<name></name>
