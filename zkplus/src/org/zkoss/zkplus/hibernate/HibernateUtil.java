@@ -89,15 +89,17 @@ public class HibernateUtil {
 		}
 		return _factory;
 	}
-	
-	private static SessionFactory java5Factory() {
-    return new AnnotationConfiguration().configure().buildSessionFactory();
-  }
-  
-  private static SessionFactory java4Factory() {
-    return new Configuration().configure().buildSessionFactory();
-  }
-	
+
+	//We have to put the instantiation of AnnotationConfiguration
+	//in a separate method. Otherwise, it will be loaded even if
+	//isJava5 is false
+	/*private*/ static SessionFactory java5Factory() {
+		return new AnnotationConfiguration().configure().buildSessionFactory();
+	}  
+	/*private */ static SessionFactory java4Factory() {
+		return new Configuration().configure().buildSessionFactory();
+	}
+
 	/**
 	 * Used in {@link HibernateSessionFactoryListener} to init
 	 * Hibernate SessionFactory.
