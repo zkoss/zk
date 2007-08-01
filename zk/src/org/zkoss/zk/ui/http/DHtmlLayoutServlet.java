@@ -146,8 +146,9 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	/**
 	 * Process the request.
 	 * @return false if the page is not found.
+	 * @since 2.5.0
 	 */
-	private boolean process(Session sess,
+	protected boolean process(Session sess,
 	HttpServletRequest request, HttpServletResponse response, String path,
 	boolean bRichlet)
 	throws ServletException, IOException {

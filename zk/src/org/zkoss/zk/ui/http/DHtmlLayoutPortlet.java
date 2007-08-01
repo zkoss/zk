@@ -161,8 +161,9 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	}
 	/** Process a portlet request.
 	 * @return false if the page is not found.
+	 * @since 2.5.0
 	 */
-	private boolean process(Session sess, RenderRequest request,
+	protected boolean process(Session sess, RenderRequest request,
 	RenderResponse response, String path, boolean bRichlet)
 	throws PortletException, IOException {
 		if (D.ON && log.debugable()) log.debug("Creates from "+path);

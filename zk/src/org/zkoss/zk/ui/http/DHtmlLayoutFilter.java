@@ -72,7 +72,10 @@ public class DHtmlLayoutFilter implements Filter {
 	private String _charset = "UTF-8";
 	private boolean _compress = true;
 
-	private void process(HttpServletRequest request,
+	/** Processes the content
+	 * @since 2.5.0
+	 */
+	protected void process(HttpServletRequest request,
 	HttpServletResponse response, String content)
 	throws ServletException, IOException {
 		if (log.debugable()) log.debug("Content to filter:\n"+content);

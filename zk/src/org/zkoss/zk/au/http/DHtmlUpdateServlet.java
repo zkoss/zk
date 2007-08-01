@@ -145,8 +145,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	}
 
 	//-- ASYNC-UPDATE --//
-	/** Process update requests from the client. */
-	private void process(Session sess,
+	/** Process update requests from the client.
+	 * @since 2.5.0
+	 */
+	protected void process(Session sess,
 	HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		final WebApp wapp = sess.getWebApp();
