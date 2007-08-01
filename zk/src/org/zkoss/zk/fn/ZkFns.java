@@ -175,6 +175,21 @@ public class ZkFns {
 		if (config.isKeepDesktopAcrossVisits())
 			sb.append("zk.keepDesktop=true;\n");
 
+		sb.append("zk.eru={");
+		final int[] cers = config.getClientErrorReloadCodes();
+		boolean first = true;
+		for (int j = 0; j < cers.length; ++j) {
+			final String uri = config.getClientErrorReload(cers[j]);
+			if (uri != null) {
+				if (first) first = false;
+				else sb.append(',');
+
+				sb.append("e").append(cers[j]).append(":'")
+					.append(Strings.escape(uri, "'\\")).append('\'');
+			}
+		}
+		sb.append("};\n");
+
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();

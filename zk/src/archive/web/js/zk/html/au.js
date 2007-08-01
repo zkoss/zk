@@ -182,9 +182,14 @@ zkau._onRespReady = function () {
 				if (ofs == que.length) que.push(resp);
 				else que.splice(ofs, 0, resp); //insert
 			} else {
-				if (!zkau._ignorable && !zkau._unloading)
-					zk.error(mesg.FAILED_TO_RESPONSE+(req.statusText!="Unknown"?req.statusText:""));
-				zkau._cleanupOnFatal(zkau._ignorable);
+				var eru = zk.eru['e' + req.status];
+				if (typeof eru == "string") {
+					zk.go(eru);
+				} else {
+					if (!zkau._ignorable && !zkau._unloading)
+						zk.error(mesg.FAILED_TO_RESPONSE+(req.statusText!="Unknown"?req.statusText:""));
+					zkau._cleanupOnFatal(zkau._ignorable);
+				}
 			}
 		} catch (e) {
 			//NOTE: if connection is off and req.status is accessed,
@@ -1599,9 +1604,7 @@ zkau.cmd0 = { //no uuid at all
 	},
 	redirect: function (url, target) {
 		try {
-			if (target) zk.go(url, false, target);
-			else if (url) document.location.href = url;
-			else document.location.reload();
+			zk.go(url, false, target);
 		} catch (ex) {
 			if (!zkau.confirmClose) throw ex;
 		}

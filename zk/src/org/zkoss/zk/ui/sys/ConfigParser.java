@@ -114,42 +114,22 @@ public class ConfigParser {
 				}
 			} else if ("desktop-config".equals(elnm)) {
 			//desktop-config
-			//  disable-default-theme
-			//	theme-uri
 			//	desktop-timeout
+			//  disable-default-theme
 			//	file-check-period
-			//  processing-prompt-delay
-			//	tooltip-delay
-			//  keep-across-visits
+			//	theme-uri
+				parseDesktopConfig(config, el);
+				parseClientConfig(config, el); //backward compatible with 2.4
+
+			} else if ("client-config".equals(elnm)) { //since 2.5
+			//client-config
 			//  disable-behind-modal
-				parseThemeUri(config, el);
+			//  keep-across-visits
+			//  processing-prompt-delay
+			//	error-reload
+			//	tooltip-delay
+				parseClientConfig(config, el);
 
-				Element subel = el.getElement("disable-default-theme");
-				if (subel != null) {
-					String s = subel.getText(true);
-					if (s.length() == 0)
-						throw new UiException("The language name, such as xul/html, is required, "+subel.getLocator());
-					config.enableDefaultTheme(s, false); //disable it
-				}
-
-				Integer v = parseInteger(el, "desktop-timeout", false);
-				if (v != null) config.setDesktopMaxInactiveInterval(v.intValue());
-
-				v = parseInteger(el, "file-check-period", true);
-				if (v != null) System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
-					//System-wide property
-
-				v = parseInteger(el, "processing-prompt-delay", true);
-				if (v != null) config.setProcessingPromptDelay(v.intValue());
-				v = parseInteger(el, "tooltip-delay", true);
-				if (v != null) config.setTooltipDelay(v.intValue());
-
-				String s = el.getElementValue("keep-across-visits", true);
-				if (s != null)
-					config.setKeepDesktopAcrossVisits(!"false".equals(s));
-
-				s = el.getElementValue("disable-behind-modal", true);
-				if (s != null) config.enableDisableBehindModal(!"false".equals(s));
 			} else if ("session-config".equals(elnm)) {
 			//session-config
 			//	session-timeout
@@ -243,6 +223,7 @@ public class ConfigParser {
 				if (base != null)
 					org.zkoss.util.logging.LogService.init(base, null); //start the log service
 			} else if ("error-page".equals(elnm)) {
+			//error-page
 				final String clsnm =
 					IDOMs.getRequiredElementValue(el, "exception-type");
 				final String loc =
@@ -270,13 +251,62 @@ public class ConfigParser {
 		}
 	}
 
-	/** Parse desktop-config/theme-uri. */
-	private static void parseThemeUri(Configuration config, Element conf) {
+	/** Parses desktop-config. */
+	private static void parseDesktopConfig(Configuration config, Element conf) {
+		//theme-uri
 		for (Iterator it = conf.getElements("theme-uri").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 			String uri = el.getText().trim();
 			if (uri.length() != 0) config.addThemeURI(uri);
+		}
+
+		//disable-default-theme
+		Element subel = conf.getElement("disable-default-theme");
+		if (subel != null) {
+			String s = subel.getText(true);
+			if (s.length() == 0)
+				throw new UiException("The language name, such as xul/html, is required, "+subel.getLocator());
+			config.enableDefaultTheme(s, false); //disable it
+		}
+
+		//desktop-timeout
+		Integer v = parseInteger(conf, "desktop-timeout", false);
+		if (v != null) config.setDesktopMaxInactiveInterval(v.intValue());
+
+		//file-check-period
+		v = parseInteger(conf, "file-check-period", true);
+		if (v != null) System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
+			//System-wide property
+
+	}
+	/** Parses client-config. */
+	private static void parseClientConfig(Configuration config, Element conf) {
+		Integer v = parseInteger(conf, "processing-prompt-delay", true);
+		if (v != null) config.setProcessingPromptDelay(v.intValue());
+
+		v = parseInteger(conf, "tooltip-delay", true);
+		if (v != null) config.setTooltipDelay(v.intValue());
+
+		String s = conf.getElementValue("keep-across-visits", true);
+		if (s != null)
+			config.setKeepDesktopAcrossVisits(!"false".equals(s));
+
+		s = conf.getElementValue("disable-behind-modal", true);
+		if (s != null) config.enableDisableBehindModal(!"false".equals(s));
+
+		//error-reload
+		for (Iterator it = conf.getElements("error-reload").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+
+			v = parseInteger(el, "error-code", true);
+			if (v == null)
+				throw new UiException("error-code is required, "+el.getLocator());
+			String uri = IDOMs.getRequiredElementValue(el, "reload-uri");
+			if ("false".equals(uri)) uri = null;
+
+			config.addClientErrorReload(v.intValue(), uri);
 		}
 	}
 

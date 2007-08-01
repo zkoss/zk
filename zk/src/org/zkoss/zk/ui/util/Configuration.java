@@ -81,7 +81,8 @@ public class Configuration {
 	/** List of objects. */
 	private final List
 		_uriIntcps = new LinkedList(), _reqIntcps = new LinkedList();
-	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
+	private final Map _prefs  = Collections.synchronizedMap(new HashMap()),
+		_errUris  = Collections.synchronizedMap(new HashMap());
 	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
 	private final Map _richlets = new HashMap();
 	/** Map(String path, [String name, boolean wildcard]). */
@@ -114,6 +115,9 @@ public class Configuration {
 	/** Contructor.
 	 */
 	public Configuration() {
+		_errUris.put(new Integer(302), "");
+		_errUris.put(new Integer(401), "");
+		_errUris.put(new Integer(403), "");
 	}
 
 	/** Returns the Web application that this configuration belongs to,
@@ -1031,7 +1035,7 @@ public class Configuration {
 		return _dtTimeout;
 	}
 
-	/** Specifies the time, in milliseconds, before the client shows
+	/** Specifies the time, in milliseconds, before ZK Client Engine shows
 	 * a dialog to prompt users that the request is in processming.
 	 *
 	 * <p>Default: 900
@@ -1039,13 +1043,13 @@ public class Configuration {
 	public void setProcessingPromptDelay(int minisecs) {
 		_promptDelay = minisecs;
 	}
-	/** Returns the time, in milliseconds, before the client shows
+	/** Returns the time, in milliseconds, before ZK Client Engine shows
 	 * a dialog to prompt users that the request is in processming.
 	 */
 	public int getProcessingPromptDelay() {
 		return _promptDelay;
 	}
-	/** Specifies the time, in milliseconds, before the client shows
+	/** Specifies the time, in milliseconds, before ZK Client Engine shows
 	 * the tooltip when a user moves the mouse over particual UI components.
 	 *
 	 * <p>Default: 800
@@ -1053,11 +1057,58 @@ public class Configuration {
 	public void setTooltipDelay(int minisecs) {
 		_tooltipDelay = minisecs;
 	}
-	/** Returns the time, in milliseconds, before the client shows
+	/** Returns the time, in milliseconds, before ZK Client Engine shows
 	 * the tooltip when a user moves the mouse over particual UI components.
 	 */
 	public int getTooltipDelay() {
 		return _tooltipDelay;
+	}
+	/** Adds the URI to redirect to, when ZK Client Engine receives
+	 * an error.
+	 *
+	 * @param errCode the error code.
+	 * @param uri the URI to redirect to. It cannot be null.
+	 * If empty, the client will reload the same page again.
+	 * If null, it is the same as {@link #removeClientErrorReload}
+	 * @return the previous URI associated with the specified error code
+	 * @since 2.5.0
+	 */
+	public String addClientErrorReload(int errCode, String uri) {
+		if (uri == null)
+			return removeClientErrorReload(errCode);
+		return (String)_errUris.put(new Integer(errCode), uri);
+	}
+	/** Removes the URI to redirect to, when ZK Client Engine receives
+	 * an error.
+	 *
+	 * @param errCode the error code.
+	 * @return the previous URI associated with the specified error code
+	 * @since 2.5.0
+	 */
+	public String removeClientErrorReload(int errCode) {
+		return (String)_errUris.remove(new Integer(errCode));
+	}
+	/** Returns the URI that is associated with the specified error code,
+	 * or null if no URI is associated.
+	 * @since 2.5.0
+	 */
+	public String getClientErrorReload(int errCode) {
+		return (String)_errUris.get(new Integer(errCode));
+	}
+	/** Returns a readonly array of all error codes that are associated
+	 * with URI to redirect to.
+	 *
+	 * <p>Default: 302, 401 and 403 are associated with an empty URI.
+	 * @since 2.5.0
+	 */
+	public int[] getClientErrorReloadCodes() {
+		final Set ks = _errUris.keySet();
+		final int[] cers = new int[ks.size()];
+		int j = 0;
+		for (Iterator it = ks.iterator(); j < cers.length && it.hasNext();) {
+			cers[j++] = ((Integer)it.next()).intValue();
+		}
+		return cers;
 	}
 
 	/**  Specifies the time, in seconds, between client requests
@@ -1247,7 +1298,7 @@ public class Configuration {
 			throw new IllegalArgumentException("null");
 		_prefs.put(name, value);
 	}
-	/** Returns a set of all preference names.
+	/** Returns a readonly set of all preference names.
 	 */
 	public Set getPreferenceNames() {
 		return _prefs.keySet();

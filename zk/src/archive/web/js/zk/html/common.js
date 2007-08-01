@@ -1092,11 +1092,17 @@ zk.scrollIntoView = function (outer, inner) {
  * @param target the target frame (ignored if overwrite is true
  */
 zk.go = function (url, overwrite, target) {
+	var bProgress = !zk.opera && !zk.keepDesktop; //whether to show progress
+		//we don't show progress for opera, since user might press BACK to
+		//return this page (and found the progress dlg remains on browse)
+
 	if (!url) {
-		document.location.reload();
+		if (bProgress) zk.progress(); //BACK button issue
+		window.location.reload();
 	} else if (overwrite) {
-		document.location.replace(url);
-	} else {
+		if (bProgress) zk.progress(); //BACK button issue
+		window.location.replace(url);
+	} else if (target) {
 		//we have to process query string because browser won't do it
 		//even if we use insertHTMLBeforeEnd("<form...")
 		var frm = document.createElement("FORM");
@@ -1110,9 +1116,13 @@ zk.go = function (url, overwrite, target) {
 		frm.name = "go";
 		frm.action = url;
 		frm.method = "GET";
-		if (target) frm.target = target;
-		if (url && !zk.isNewWindow(url, target)) zk.progress();
+		frm.target = target;
+		if (url && !zk.isNewWindow(url, target) && bProgress)
+			zk.progress();
 		frm.submit();
+	} else {
+		if (bProgress) zk.progress(); //BACK button issue
+		window.location.href = url;
 	}
 };
 /** Tests whether a new window will be opened.
