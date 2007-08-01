@@ -53,7 +53,7 @@ maindir="$(pwd)"
 
 echo "Release $pkgnm"
 cd $maindir
-mkdir -p /tmp/zk/$pkgnm/dist/lib/ext
+#mkdir -p /tmp/zk/$pkgnm/dist/lib/ext
 mkdir -p /tmp/zk/$pkgnm/dist/src
 mkdir -p /tmp/zk/$pkgnm/dist/WEB-INF/tld/zul/jsp
 mkdir -p /tmp/zk/$pkgnm/javadoc
@@ -61,7 +61,8 @@ mkdir -p /tmp/zk/$pkgnm/doc
 cp build* /tmp/zk/$pkgnm
 cp -rp bin /tmp/zk/$pkgnm
 cp -rp zuljsp /tmp/zk/$pkgnm
-cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zuljsp.jar /tmp/zk/$pkgnm/dist/lib
+#cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zuljsp.jar /tmp/zk/$pkgnm/dist/lib
+cp dist/lib/zuljsp.jar /tmp/zk/$pkgnm/dist/lib
 cp -rp dist/export/WEB-INF/tld/zul/jsp/* /tmp/zk/$pkgnm/dist/WEB-INF/tld/zul/jsp
 cp zkdoc/COPYING /tmp/zk/$pkgnm/doc
 cp zkdoc/jsp-release-note /tmp/zk/$pkgnm/doc/release-note
@@ -72,7 +73,7 @@ fi
 #build *-all.war *-all.ear
 if [ "$target" == "official" ]  ; then
 	rm -rf dist/lib/zkjsp-demo*.war #dist/lib/jsp-demos*.ear
-	cp -f zkjsp-demo/war.libs.all zkjsp-demo/war.libs
+	cp -f zkjsp-demo/war.libs.minimal zkjsp-demo/war.libs
 	./build clean zkjsp-demo #jsp-demos
 	./build zkjsp-demo #jsp-demos
 
@@ -102,15 +103,20 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cd $HOME/prj/zk1
 
 	cp -rp zkjsp-demo/WebContent/* /tmp/jsp/$demonm/zkjsp-demo/WebContent
-	#cp -rp zkjsp-demo/codegen/archive/* /tmp/jsp/$demonm/zkjsp-demo/WebContent
+	rm -rf /tmp/jsp/$demonm/zkjsp-demo/WebContent/WEB-INF/lib
 	cp -rp zkjsp-demo/src/org/* /tmp/jsp/$demonm/zkjsp-demo/src/org
+	cp -rp zkjsp-demo/.project /tmp/jsp/$demonm/zkjsp-demo/.project
+	cp -rp zkjsp-demo/.classpath /tmp/jsp/$demonm/zkjsp-demo/.classpath
+	cp -rp zkjsp-demo/.settings /tmp/jsp/$demonm/zkjsp-demo/.settings
 	cp zkdoc/COPYING zkdoc/jsp-release-note /tmp/jsp/$demonm/doc
 	#cp -rp dist/lib/jsp-demos.ear dist/lib/jsp-demo.war /tmp/jsp/$demonm
 	if [ "$target" == "official" ] ; then
 		mv dist/lib/zkjsp-demo-all.war /tmp/jsp/$demonm #dist/lib/jsp-demos-all.ear
 	fi
-
+	
 	cd /tmp/jsp
+	echo Remove lib: $demonm/zkjsp-demo/WebContent/WEB-INF/lib
+	rm -rf $demonm/zkjsp-demo/WebContent/WEB-INF/lib
 	#find -name CVS | xargs rm -rf
 	find -name .svn | xargs rm -rf
 
@@ -122,6 +128,7 @@ fi
 
 #pack All file
 cd /tmp/zk
+
 echo Output ${pkgnm}.zip
 zip -qr9 ${pkgnm}.zip $pkgnm
 
