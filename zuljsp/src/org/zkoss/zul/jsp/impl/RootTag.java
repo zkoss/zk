@@ -69,7 +69,7 @@ abstract public class RootTag extends AbstractTag {
 	private static final Log log = Log.lookup(RootTag.class);
 	private LanguageDefinition _langdef;
 	private Page _page;
-	private String _lang;
+	private String _lang = "Java";
 
 	/**
 	 * protected Constractor. Constract a RootTag with
@@ -85,17 +85,29 @@ abstract public class RootTag extends AbstractTag {
 	/*package*/ void addChildTag(LeafTag child) {
 		child.getComponent().setPage(_page);
 	}
+	/** Returns the default scripting language.
+	 */
+	public String getZScriptLanguage() {
+		return _lang;
+	}
 	/**
-	 * Set the defult scripting language in this Root tag.
+	 * Sets the defult scripting language in this Root tag.
 	 *
 	 * <p>Default: Java.
 	 *
-	 * @param language the name of the scripting language, such as
+	 * @param lang the name of the scripting language, such as
 	 * Java, Ruby and Groovy.
 	 */
-	public void setZscriptLanguage(String lang)
-	{
-		_lang = lang;
+	public void setZScriptLanguage(String lang) {
+		_lang = lang != null ? lang: "Java";
+	}
+	/** 
+	 * Sets the defult scripting language in this Root tag.
+	 * It is the same as {@link #setZScriptLanguage} (used to simplify
+	 * the typing in JSP page).
+	 */
+	public void setZscriptLanguage(String lang) {
+		setZScriptLanguage(lang);
 	}
 
 	//Derived to override//

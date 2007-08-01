@@ -154,7 +154,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	 *   attribute that is not declared in the Tag Library Descriptor.<br>
 	 *   
 	 * @param uri the namespace of the attribute, always null currently.
-	 * @param localname the name of the attribute being set.
+	 * @param localName the name of the attribute being set.
 	 * @param value  the value of the attribute
 	 */
 	public void setDynamicAttribute(String uri, String localName, Object value) 

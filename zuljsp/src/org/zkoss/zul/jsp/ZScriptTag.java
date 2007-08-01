@@ -34,7 +34,7 @@ import org.zkoss.zul.jsp.impl.RootTag;
 
 /**
  * A Jsp Tag class to handle the zscript element.
- * This tag should be declared under {@link#PageTag} or any Component tags.
+ * This tag should be declared under {@link PageTag} or any Component tags.
  * 
  * @author Ian Tsai 
  */
@@ -42,7 +42,7 @@ public class ZScriptTag extends AbstractTag {
 	private static final Log log = Log.lookup(ZScriptTag.class);
 
 	//private boolean _deferred;
-	private String _language = "Java";
+	private String _lang = null;
 	private Component _parent;
 	private RootTag _roottag;
 
@@ -56,7 +56,8 @@ public class ZScriptTag extends AbstractTag {
 		StringWriter out = new StringWriter();
 		getJspBody().invoke(out);
 		final ZScript zscript = ZScript.parseContent(out.toString(), null);
-		zscript.setLanguage(_language);
+		if (zscript.getLanguage() == null)
+			zscript.setLanguage(_lang != null ? _lang: _roottag.getZScriptLanguage());
 		_roottag.addDefferdZscript(_parent, zscript);
 	}
 
@@ -100,23 +101,24 @@ public class ZScriptTag extends AbstractTag {
 		//this._deferred = deferred;
 	}
 
-	/**
-	 * <p>Default: Java.
+	/** Returns the name of the scripting language in this ZScript tag.
+	 *
+	 * <p>Default: null (use what is defined in {@link PageTag#getZScriptLanguage}).
 	 * @return the name of the scripting language in this ZScript tag. 
 	 */
 	public String getLanguage() {
-		return _language;
+		return _lang;
 	}
 	/**
 	 * Sets the name of the scripting language in this ZScript tag.
 	 *
 	 * <p>Default: Java.
 	 *
-	 * @param language the name of the scripting language, such as
+	 * @param lang the name of the scripting language, such as
 	 * Java, Ruby and Groovy.
 	 */
-	public void setLanguage(String language) {
-		this._language = language;
+	public void setLanguage(String lang) {
+		this._lang = lang;
 	}
 
 }
