@@ -149,6 +149,14 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 			Fields.setField(target, (String)entry.getKey(),entry.getValue(), true);
 		}
 	}
+	/**
+	 *   Called when a tag declared to accept dynamic attributes is passed an 
+	 *   attribute that is not declared in the Tag Library Descriptor.<br>
+	 *   
+	 * @param uri the namespace of the attribute, always null currently.
+	 * @param localname the name of the attribute being set.
+	 * @param value  the value of the attribute
+	 */
 	public void setDynamicAttribute(String uri, String localName, Object value) 
 	throws JspException {
 		if("if".equals(localName)||"unless".equals(localName))

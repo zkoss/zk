@@ -101,7 +101,8 @@ public class ZScriptTag extends AbstractTag {
 	}
 
 	/**
-	 * Returns the name of the scripting language in this ZScript tag. 
+	 * <p>Default: Java.
+	 * @return the name of the scripting language in this ZScript tag. 
 	 */
 	public String getLanguage() {
 		return _language;

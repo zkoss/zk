@@ -71,6 +71,11 @@ abstract public class RootTag extends AbstractTag {
 	private Page _page;
 	private String _lang;
 
+	/**
+	 * protected Constractor. Constract a RootTag with
+	 * LanguageDefinition =  "xul/html".
+	 *
+	 */
 	protected RootTag() {
 		_langdef = LanguageDefinition.lookup("xul/html");
 	}
@@ -80,7 +85,14 @@ abstract public class RootTag extends AbstractTag {
 	/*package*/ void addChildTag(LeafTag child) {
 		child.getComponent().setPage(_page);
 	}
-	
+	/**
+	 * Set the defult scripting language in this Root tag.
+	 *
+	 * <p>Default: Java.
+	 *
+	 * @param language the name of the scripting language, such as
+	 * Java, Ruby and Groovy.
+	 */
 	public void setZscriptLanguage(String lang)
 	{
 		_lang = lang;
@@ -181,8 +193,8 @@ abstract public class RootTag extends AbstractTag {
 	}
 	/**
 	 * Root tag was supposed to handle all children's ZScript.
-	 * @param com
-	 * @param zs
+	 * @param com  The owner of zscript segment. 
+	 * @param zs A ZScript object.
 	 */
 	public void addDefferdZscript(Component com, ZScript zs)
 	{

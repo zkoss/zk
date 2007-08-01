@@ -62,7 +62,7 @@
 				<zk:hbox>
 					ZK Window Component Mode setting in zscript: <zk:toolbarbutton href="./windowmode.jsp" label="Window Mode Demo"/>
 				</zk:hbox>
-			</div>		
+			</div>
 			</zk:vbox>
 		</zk:window>		
 		
