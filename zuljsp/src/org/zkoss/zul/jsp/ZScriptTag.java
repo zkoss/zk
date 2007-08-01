@@ -33,8 +33,8 @@ import org.zkoss.zul.jsp.impl.BranchTag;
 import org.zkoss.zul.jsp.impl.RootTag;
 
 /**
- * A Jsp Tag class to handle zscript features.<br>
- * This tag should be declared under {@link#PageTag} or any Component Tags.<br>
+ * A Jsp Tag class to handle the zscript element.
+ * This tag should be declared under {@link#PageTag} or any Component tags.
  * 
  * @author Ian Tsai 
  */
@@ -42,7 +42,7 @@ public class ZScriptTag extends AbstractTag {
 	private static final Log log = Log.lookup(ZScriptTag.class);
 
 	//private boolean _deferred;
-	private String _language;
+	private String _language = "Java";
 	private Component _parent;
 	private RootTag _roottag;
 
@@ -80,15 +80,19 @@ public class ZScriptTag extends AbstractTag {
 		}
 	}
 	/**
-	 * Because ZScriptTag is always deferred, so this method always return true.
+	 * Returns whether to defer the execution of this zscript.
+	 * Because ZScriptTag always defers the execution, so this method
+	 * always return true.
 	 * @return true only currently.
 	 */
 	public boolean isDeferred() {
 		return true;//_deferred;
 	}
 	/**
-	 * ZScriptTag is always deferred, so this method has no effect currently.
-	 * @param deferred
+	 * Sets whether to defer the execution of this zscript.
+	 * Because ZScriptTag always defers the execution, so this method
+	 * has no effect.
+	 * @param deferred whether to defer the execution.
 	 */
 	public void setDeferred(boolean deferred) {
 		if (!deferred)
@@ -97,15 +101,18 @@ public class ZScriptTag extends AbstractTag {
 	}
 
 	/**
-	 * Get this ZScript segment used language. 
-	 * @return 
+	 * Returns the name of the scripting language in this ZScript tag. 
 	 */
 	public String getLanguage() {
 		return _language;
 	}
 	/**
-	 * Set this ZScript segment used language.
-	 * @param language
+	 * Sets the name of the scripting language in this ZScript tag.
+	 *
+	 * <p>Default: Java.
+	 *
+	 * @param language the name of the scripting language, such as
+	 * Java, Ruby and Groovy.
 	 */
 	public void setLanguage(String language) {
 		this._language = language;
