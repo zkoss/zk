@@ -61,8 +61,9 @@ mkdir -p /tmp/zk/$pkgnm/doc
 cp build* /tmp/zk/$pkgnm
 cp -rp bin /tmp/zk/$pkgnm
 cp -rp zuljsp /tmp/zk/$pkgnm
+
+cp -f dist/lib/zuljsp.jar /tmp/zk/$pkgnm/dist/zuljsp.jar
 #cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zuljsp.jar /tmp/zk/$pkgnm/dist/lib
-cp dist/lib/zuljsp.jar /tmp/zk/$pkgnm/dist/lib
 cp -rp dist/export/WEB-INF/tld/zul/jsp/* /tmp/zk/$pkgnm/dist/WEB-INF/tld/zul/jsp
 cp zkdoc/COPYING /tmp/zk/$pkgnm/doc
 cp zkdoc/jsp-release-note /tmp/zk/$pkgnm/doc/release-note
@@ -79,7 +80,6 @@ if [ "$target" == "official" ]  ; then
 
 	mv dist/lib/zkjsp-demo.war dist/lib/zkjsp-demo-all.war
 	#mv dist/lib/jsp-demos.ear dist/lib/jsp-demos-all.ear
-	
 fi
 
 #prepare source.jar
@@ -127,8 +127,9 @@ fi
 
 
 #pack All file
-cd /tmp/zk
 
+cd /tmp/zk
+rm -rf $pkgnm/zuljsp
 echo Output ${pkgnm}.zip
 zip -qr9 ${pkgnm}.zip $pkgnm
 
