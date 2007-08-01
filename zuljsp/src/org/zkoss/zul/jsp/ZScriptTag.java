@@ -24,6 +24,8 @@ import java.io.StringWriter;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspTag;
 
+import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zul.jsp.impl.AbstractTag;
@@ -35,8 +37,9 @@ import org.zkoss.zul.jsp.impl.RootTag;
  *
  */
 public class ZScriptTag extends AbstractTag {
-	
-	private boolean _deferred;
+	private static final Log log = Log.lookup(ZScriptTag.class);
+
+	//private boolean _deferred;
 	private String _language;
 	private Component _parent;
 	private RootTag _roottag;
@@ -75,11 +78,13 @@ public class ZScriptTag extends AbstractTag {
 	}
 	
 	public boolean isDeferred() {
-		return _deferred;
+		return true;//_deferred;
 	}
 
 	public void setDeferred(boolean deferred) {
-		this._deferred = deferred;
+		if (!deferred)
+			log.warning("ZScriptTag is always deferred");
+		//this._deferred = deferred;
 	}
 
 	public String getLanguage() {
