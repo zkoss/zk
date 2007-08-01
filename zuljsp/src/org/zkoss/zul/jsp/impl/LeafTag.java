@@ -136,8 +136,8 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	}
 	
 	/**
-	 * Do Methods invokation automatically.
-	 * @param target
+	 * Invokes setter methods to update all assigned attributes.
+	 * @param target the target component
 	 * @throws NoSuchMethodException 
 	 * @throws ModificationException 
 	 */
@@ -149,13 +149,6 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 			Fields.setField(target, (String)entry.getKey(),entry.getValue(), true);
 		}
 	}
-	/**
-	 * 
-	 * @param uri
-	 * @param localName
-	 * @param value
-	 * @throws JspException
-	 */
 	public void setDynamicAttribute(String uri, String localName, Object value) 
 	throws JspException {
 		if("if".equals(localName)||"unless".equals(localName))
@@ -206,16 +199,24 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 		
 	}
     /**
-     * get use class full name.
-     * @return customized component class name
+     * Returns the class name that is used to implement the component
+     * associated with this tag.
+     *
+     * <p>Default: null
+     *
+     * @return the class name used to implement the component, or null
+     * to use the default
      */
     public String getUse()
     {
         return _use;
     }
     /**
-     * set used class's full name.
-     * @param use customized component class name
+     * Sets the class name that is used to implement the component
+     * associated with this tag.
+     *
+     * @param use the class name used to implement the component, or null
+     * to use the default
      */
     public void setUse(String use)
     {
