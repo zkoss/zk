@@ -73,7 +73,8 @@ public class DataBinder {
 	private boolean _defaultConfig = true; //whether load default configuration from lang-addon.xml
 	private boolean _init; //whether this databinder is initialized. 
 		//Databinder is init automatically when saveXXX or loadXxx is called
-	protected static Map _decoratorMap = new HashMap(29);
+	
+	protected Map _collectionItemMap = new HashMap(3);
 	
 	/** Binding bean to UI component. This is the same as 
 	 * addBinding(Component comp, String attr, String expr, (List)null, (String)null, (String)null, (String)null). 
@@ -450,8 +451,8 @@ public class DataBinder {
 		if (!_init) {
 			_init = true;
 
-			// init decorator
-			initDecorator();
+			// init CollectionItem
+			initCollectionItem();
 			
 			//setup all added bindings
 			final Set varnameSet = new HashSet();
@@ -492,30 +493,30 @@ public class DataBinder {
 		}
 	}
 	
-	private void initDecorator(){
-		addDecorator(Listitem.class, new BindingListitemDecorator());
-		addDecorator(Row.class, new BindingRowDecorator());
+	private void initCollectionItem(){
+		addCollectionItem(Listitem.class.getName(), new ListitemCollectionItem());
+		addCollectionItem(Row.class.getName(), new RowCollectionItem());
 	}
 	
 	/**
-	 * Adds a decorator for this comp.
-	 * @see BindingDecorator
+	 * Adds a CollectionItem for this comp.
+	 * @see CollectionItem
 	 */
-	public void addDecorator(Class comp, BindingDecorator decor){
-		_decoratorMap.put(comp, decor);
+	public void addCollectionItem(String comp, CollectionItem decor){
+		_collectionItemMap.put(comp, decor);
 	}
 	
 	//get Collection owner of a given collection item.
-	private static Component getComponentCollectionOwner(Component comp) {		
-		BindingDecorator decor = getBindingDecorator(comp);
+	private Component getComponentCollectionOwner(Component comp) {		
+		CollectionItem decor = getBindingCollectionItem(comp);
 		return decor.getComponentCollectionOwner(comp);		
 	}
 	/**
-	 * Returns a decorator by the comp accordingly.
-	 * @see BindingDecorator
+	 * Returns a CollectionItem by the comp accordingly.
+	 * @see CollectionItem
 	 */
-	protected static BindingDecorator getBindingDecorator(Component comp){
-		BindingDecorator decorName = (BindingDecorator)_decoratorMap.get(comp.getClass());
+	protected CollectionItem getBindingCollectionItem(Component comp){
+		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(comp.getClass().getName());
 		if(decorName != null){
 			return decorName;
 		}else{
@@ -523,7 +524,7 @@ public class DataBinder {
 		}		
 	}
 	//get Collection owner of a given collection item.
-	private static Component getCollectionOwner(Component comp) {
+	private Component getCollectionOwner(Component comp) {
 		if (isTemplate(comp)) {
 			return (Component) comp.getAttribute(OWNER);
 		}
@@ -531,9 +532,9 @@ public class DataBinder {
 	}
 	
 	//get associated clone of a given bean and template component
-	private static Component getCollectionItem(Component comp, Object bean) {
-		Component owner = getCollectionOwner(comp);		
-		BindingDecorator decor = getBindingDecorator(comp);
+	private Component getCollectionItem(Component comp, Object bean) {
+		Component owner = getCollectionOwner(comp);	
+		CollectionItem decor = getBindingCollectionItem(comp);
 		final ListModel xmodel = decor.getModelByOwner(owner);
 		if (xmodel instanceof BindingListModel) {
   			final BindingListModel model = (BindingListModel) xmodel;
@@ -547,7 +548,7 @@ public class DataBinder {
   		
 	//set the binding renderer for the template listitem component
 	private void setupBindingRenderer(Component comp) {
-		getBindingDecorator(comp).setupBindingRenderer(comp, this);		
+		getBindingCollectionItem(comp).setupBindingRenderer(comp, this);		
 	}
 	
 	private void setupPathTree(Collection bindings, Set varnameSet) {
@@ -938,7 +939,7 @@ public class DataBinder {
 	}
 
 	
-	private static class LoadOnSaveEventListener implements EventListener {
+	private class LoadOnSaveEventListener implements EventListener {
 		private DataBinder _binder;
 		
 		public LoadOnSaveEventListener(DataBinder binder) {
