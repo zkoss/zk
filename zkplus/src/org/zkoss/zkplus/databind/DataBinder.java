@@ -141,7 +141,7 @@ public class DataBinder {
 		Page page = comp.getPage();
 		if (!_pageSet.contains(page)) {
 			_pageSet.add(page);
-			page.addEventListener("onLoadOnSave", new LoadOnSaveEventListener(this));
+			page.addEventListener("onLoadOnSave", new LoadOnSaveEventListener());
 		}
 			
 		if (isDefaultConfig()) { //use default binding configuration
@@ -391,14 +391,6 @@ public class DataBinder {
 			binding.loadAttribute(comp, expr);
 		}
 	}	
-
-	private void saveAttrs(String expr, Collection attrs) {
-		for(final Iterator it = attrs.iterator(); it.hasNext();) {
-			Binding binding = (Binding) it.next();
-			Component comp = binding.getComponent();
-			binding.saveAttribute(comp, expr);
-		}
-	}
 
 	private void loadAttrs(Component comp, Collection attrs) {
 		for(final Iterator it = attrs.iterator(); it.hasNext();) {
@@ -940,16 +932,13 @@ public class DataBinder {
 
 	
 	private class LoadOnSaveEventListener implements EventListener {
-		private DataBinder _binder;
-		
-		public LoadOnSaveEventListener(DataBinder binder) {
-			_binder = binder;
+		public LoadOnSaveEventListener() {
 		}
 		
 		//-- EventListener --//
 		public void onEvent(Event event) {
 			Object[] data = (Object[]) event.getData();
-			if (!data[0].equals(_binder)) {
+			if (!data[0].equals(DataBinder.this)) {
 				return; //not for this DataBinder, skip
 			}
 			final BindingNode node = (BindingNode) data[1]; //to be loaded nodes
@@ -1023,7 +1012,7 @@ public class DataBinder {
 					throw UiException.Aide.wrap(ex);
 				}
 			}
-			_binder.registerBeanNode(bean, node);
+			registerBeanNode(bean, node);
 			return bean;
 		}
 		
@@ -1074,7 +1063,7 @@ public class DataBinder {
 			if (isTemplate(comp)) {
 				return true;
 			}
-			final Object nodebean = _binder.getBeanWithExpression(comp, node.getPath());
+			final Object nodebean = getBeanWithExpression(comp, node.getPath());
 			return Objects.equals(nodebean, bean);
 		}
 	}

@@ -21,6 +21,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
@@ -30,18 +31,20 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.reflect.Fields;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.ArrayList;
 
 /**
  * A Data Binding that associate component+attr to an bean expression.
  *
  * @author Henri
  */
-/* package */ class Binding {
+public class Binding {
 	private DataBinder _binder;
 	private Component _comp;
 	private String _attr;
@@ -66,7 +69,7 @@ import java.util.LinkedHashSet;
 	 * @param converter The converter class used to convert classes between component attribute 
 	 * and the associated bean expression. null means using the default class conversion method.
 	 */
-	public Binding(DataBinder binder, Component comp, String attr, String expr, 
+	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
 		LinkedHashSet loadWhenEvents, String saveWhenEvent, String access, String converter) {
 		_binder = binder;
 		_comp = comp;
@@ -79,10 +82,14 @@ import java.util.LinkedHashSet;
 		
 	}
 
+	/** Gets the associated Data Binder of this Binding.
+	 */
 	public DataBinder getBinder() {
 		return _binder;
 	}
 	
+	/** Gets the associated Component of this Binding.
+	 */
 	public Component getComponent() {
 		return _comp;
 	}
@@ -90,7 +97,7 @@ import java.util.LinkedHashSet;
 	/** Set component attribute name.
 	 * @param attr component attribute.
 	 */	
-	public void setAttr(String attr) {
+	/*package*/void setAttr(String attr) {
 		_attr = attr;
 	}
 
@@ -102,7 +109,7 @@ import java.util.LinkedHashSet;
 	
 	/** Set bean expression (a.b.c).
 	 */
-	public void setExpression(String expr) {
+	/*package*/ void setExpression(String expr) {
 		_expression = expr;
 		_paths = parseBeanExpression(expr);
 	}
@@ -120,16 +127,18 @@ import java.util.LinkedHashSet;
 		return _expression;
 	}
 	
-	/** Get bean reference path.
+	/**
+	 * Internal methods. DO NOT USE THIS. 
+	 * Get bean reference paths.
 	 */
-	public String[] getPaths() {
+	/*package*/ String[] getPaths() {
 		return _paths;
 	}
 	
 	/** Set save-when event expression.
 	 * @param saveWhenEvent the save-when expression.
 	 */
-	public void setSaveWhenEvent(String saveWhenEvent) {
+	/*package*/ void setSaveWhenEvent(String saveWhenEvent) {
 		if (saveWhenEvent != null) {
 			_saveWhenEvent = saveWhenEvent;
 		}
@@ -144,7 +153,7 @@ import java.util.LinkedHashSet;
 	/** Add load-when event expression.
 	 * @param loadWhenEvent the load-when expression.
 	 */
-	public void setLoadWhenEvents(LinkedHashSet loadWhenEvents) {
+	/*package*/ void setLoadWhenEvents(LinkedHashSet loadWhenEvents) {
 		_loadWhenEvents = loadWhenEvents;
 	}
 	
@@ -156,7 +165,7 @@ import java.util.LinkedHashSet;
 
 	/** Set accessibility.
 	 */
-	public void setAccess(String access) {
+	/*package*/ void setAccess(String access) {
 		if (access == null) { //default access to none
 			return;
 		}
@@ -193,7 +202,7 @@ import java.util.LinkedHashSet;
 	/** Set the {@link TypeConverter}.
 	 * @param cvtClsName the converter class name.
 	 */
-	public void setConverter(String cvtClsName) {
+	/*package*/ void setConverter(String cvtClsName) {
 		if (cvtClsName != null) {
 			try {
 				_converter = (TypeConverter) Classes.newInstanceByThread(cvtClsName);
@@ -262,45 +271,70 @@ import java.util.LinkedHashSet;
 	 * @param comp the component.
 	 */
 	public void saveAttribute(Component comp) {
+		final Object[] vals = getAttributeValues(comp);
+		saveAttributeValue(comp, vals);
+	}
+	
+	private void saveAttributeValue(Component comp, Object[] vals) {
+		if (vals == null) return;
+		
+		final Object val = vals[0];
+		final Object rawval = vals[1];
+		_binder.setBeanAndRegisterBeanSameNodes(comp, val, this, _expression, _converter == null, rawval);
+	}		
+	
+	/** Get converted value and original value of this Binding.
+	 */
+	private Object[] getAttributeValues(Component comp) {
 		if (!isSavable() || _attr.startsWith("_") || _binder.isTemplate(comp) || comp.getPage() == null) { 
-			return; //cannot save, a control attribute, or a detached component, skip!
+			return null; //cannot save, a control attribute, or a detached component, skip!
 		}
 		try {
-			Object rawval = Fields.get(comp, _attr);
-			Object val = (_converter == null) ? rawval : _converter.coerceToBean(rawval, comp);
-			_binder.setBeanAndRegisterBeanSameNodes(comp, val, this, _expression, _converter == null, rawval);
+			final Object rawval = Fields.get(comp, _attr);
+			final Object val = (_converter == null) ? rawval : _converter.coerceToBean(rawval, comp);
+			return new Object[] {val, rawval};
 		} catch (ClassCastException ex) {
 			throw UiException.Aide.wrap(ex);
 		} catch (NoSuchMethodException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
-	}
-	//:TODO
-	public void loadAttribute(Component comp, String expr) {
-		//
-	}
-	//:TODO
-	public void saveAttribute(Component comp, String expr) {
-		//
-	}
+	}		
 	
-	public void registerSaveEvent(Component comp) {
+	/*package*/ void registerSaveEvent(Component comp) {
 		if (_saveWhenEvent != null) {
 			final Object[] objs = ComponentsCtrl.parseEventExpression(comp, _saveWhenEvent);
 			//objs[0] component, objs[1] event name
 			final Component target = (Component) objs[0];
-			target.addEventListener((String)objs[1], new SaveEventListener(comp));
+			final String evtname = (String) objs[1];
+
+			SaveEventListener listener = (SaveEventListener)
+				target.getAttribute("zk.SaveEventListener."+evtname);
+			if (listener == null) {
+				listener = new SaveEventListener();
+				target.setAttribute("zk.SaveEventListener."+evtname, listener);
+				target.addEventListener(evtname, listener);
+			}
+			listener.addDataTarget(this, comp);
 		}
 	}
 	
-	public void registerLoadEvents(Component comp) {
+	/*package*/ void registerLoadEvents(Component comp) {
 		if (_loadWhenEvents != null) {
 			for(final Iterator it = _loadWhenEvents.iterator(); it.hasNext(); ) {
 				final String expr = (String) it.next();
 				final Object[] objs = ComponentsCtrl.parseEventExpression(comp, expr);
 				//objs[0] component, objs[1] event name
 				final Component target = (Component) objs[0];
-				target.addEventListener((String)objs[1], new LoadEventListener(comp));
+				final String evtname = (String) objs[1];
+				
+				LoadEventListener listener = (LoadEventListener)
+					target.getAttribute("zk.LoadEventListener."+evtname);
+				if (listener == null) {
+					listener = new LoadEventListener();
+					target.setAttribute("zk.LoadEventListener."+evtname, listener);
+					target.addEventListener(evtname, listener);
+				}
+				listener.addDataTarget(this, comp);
 			}
 		}
 	}
@@ -312,36 +346,95 @@ import java.util.LinkedHashSet;
 			+", load:"+_loadable+", save:"+_savable+", converter:"+_converter+"]";
 	}
 	
-	private abstract class BaseEventListener implements EventListener, Express {
-		protected Component _dataTarget;
+	private static class BindingInfo implements Serializable {
+		private Binding _binding;
+		private Component _comp;
+		private Object[] _vals;
 		
-		public BaseEventListener(Component dataTarget) {
-			_dataTarget = dataTarget;
+		public BindingInfo(Binding binding, Component comp, Object[] vals) {
+			_binding = binding;
+			_comp = comp;
+			_vals = vals;
+		}
+		
+		public Component getComponent() {
+			return _comp;
+		}
+		
+		public Binding getBinding() {
+			return _binding;
+		}
+		
+		public Object[] getAttributeValues() {
+			return _vals;
+		}
+	}
+	
+	private static abstract class BaseEventListener implements EventListener, Express {
+		protected List _dataTargets;
+		
+		public BaseEventListener() {
+			_dataTargets = new ArrayList(8);
+		}
+		
+		public void addDataTarget(Binding binding, Component comp) {
+			_dataTargets.add(new BindingInfo(binding, comp, null));
 		}
 	}
 			
-	private class LoadEventListener extends BaseEventListener {
-		public LoadEventListener(Component dataTarget) {
-			super(dataTarget);
+	private static class LoadEventListener extends BaseEventListener {
+		public LoadEventListener() {
+			super();
 		}
 		public void onEvent(Event event) {
-			final Component dataTarget = _binder.isTemplate(_dataTarget) ? 
-				_binder.lookupClone(event.getTarget(), _dataTarget) : _dataTarget;
-			if (dataTarget != null) {
-				loadAttribute((Component) dataTarget);
+			for(final Iterator it = _dataTargets.iterator();it.hasNext();) {
+				final BindingInfo bi = (BindingInfo) it.next();
+				final Component dt = bi.getComponent();
+				final Binding binding = bi.getBinding();
+				final DataBinder binder = binding.getBinder();
+				final Component dataTarget = binder.isTemplate(dt) ? 
+					binder.lookupClone(event.getTarget(), dt) : dt;
+				if (dataTarget != null) {
+					binding.loadAttribute(dataTarget);
+				}
 			}
 		}
 	}
 
-	private class SaveEventListener extends BaseEventListener {
-		public SaveEventListener(Component dataTarget) {
-			super(dataTarget);
+	private static class SaveEventListener extends BaseEventListener {
+		public SaveEventListener() {
+			super();
 		}
 		public void onEvent(Event event) {
-			final Component dataTarget = _binder.isTemplate(_dataTarget) ? 
-				_binder.lookupClone(event.getTarget(), _dataTarget) : _dataTarget;
-			if (dataTarget != null) {
-				saveAttribute((Component) dataTarget);
+			final Component target = event.getTarget();
+			final List tmplist = new ArrayList(_dataTargets.size());
+			
+			//fire onSave for each binding
+			for(final Iterator it = _dataTargets.iterator();it.hasNext();) {
+				final BindingInfo bi = (BindingInfo) it.next();
+				final Component dt = bi.getComponent();
+				final Binding binding = bi.getBinding();
+				final DataBinder binder = binding.getBinder();
+				final Component dataTarget = binder.isTemplate(dt) ? 
+					binder.lookupClone(event.getTarget(), dt) : dt;
+				final Object[] vals = binding.getAttributeValues(dataTarget);
+				if (dataTarget != null) {
+					tmplist.add(new BindingInfo(binding, dataTarget, vals));
+					Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget, target, binding, vals[0]));
+				}
+			}
+			
+			//fire onValidate for target component
+			Events.sendEvent(new Event("onBindingValidate", target));
+			
+			//saveAttribute for each binding
+			for(final Iterator it = tmplist.iterator();it.hasNext();) {
+				final BindingInfo bi = (BindingInfo) it.next();
+				final Component dataTarget = bi.getComponent();
+				final Binding binding = bi.getBinding();
+				final Object[] vals = bi.getAttributeValues();
+				final DataBinder binder = binding.getBinder();
+				binding.saveAttributeValue(dataTarget, vals);
 			}
 		}
 	}
