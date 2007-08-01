@@ -30,7 +30,7 @@ public class BindingSaveEvent extends Event {
 
 	/** Constructs a binding-relevant event.
 	 * @param name the event name
-	 * @parem target the target that receive the event
+	 * @param target the target that receive the event
 	 * @param reference the reference component that "trigger" the event
 	 * @param binding the associated binding of this event.
 	 * @param value the value associated with the binding.
