@@ -44,6 +44,7 @@ import org.zkoss.lang.Objects;
 	<button label="Go list.zul?a=b&amp;c=d" href="list.zul?a=b&amp;c=d"/>
 	<button label="Go list.zul" href="list.zul"/>
 	<button label="Go list.zul with target" href="list.zul" target="new"/>
+	<button label="Go Yahoo" onClick="Executions.sendRedirect(&quot;http://www.yahoo.com&quot;)"/>
 	<textbox/>
 	<window id="some" title="Something" border="normal">
 		<label id="label" value="Not good enough?"/>
@@ -440,8 +441,6 @@ import org.zkoss.lang.Objects;
 	You <b>can</b> put any HTML tags here.<br/>
 	<i>italic</i> <span style="color:red">red&amp;&&lt;</span>...
 	]]></html>
-
-	<button label="Go Yahoo" onClick="Executions.sendRedirect(&quot;http://www.yahoo.com&quot;)"/>
 
 	<textbox rows="10">
 		<attribute name="value"><![CDATA[

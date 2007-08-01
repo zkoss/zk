@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/zul/jsp/zuljsp.tld" prefix="z" %>
 
+<%@ taglib uri="/WEB-INF/tld/zul/jsp/zuljsp.tld" prefix="z" %>
+
 <html>
 	<head>
 		<title>Test of ZUL on JSP</title>
@@ -28,8 +30,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <z:page>
 	<h2>2. Header in z:page</h2>
 
-	<z:window title="Test" border="normal">
+	<z:window id="win" title="Test" border="normal">
 		<p>3. Content in z:window</p>
+		<z:button label="Overlap" onClick="win.doOverlapped()"/>
 	</z:window>
 		<p>4. Content in z:page after z:window</h2>
 </z:page>
