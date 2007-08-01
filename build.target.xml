@@ -199,9 +199,6 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <target name="build.war" depends="compile" if="build.war.required">
 	<mkdir dir="${out.dir}"/>
 	
-	<condition property="war.dir" value="${src.archive.dir}" else="WebContent">
-	    <available file="${src.archive.dir}" type="dir"/>
-	</condition>
 	<property name="src.web.xml" value="${war.dir}/WEB-INF/web.xml"/>
 		<!-- to let other targets have a chance to override it -->
 	<war warfile="${out.dir}/${war.name}" webxml="${src.web.xml}"
