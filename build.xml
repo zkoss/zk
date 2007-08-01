@@ -57,6 +57,15 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 
 		<available file="${src.archive.dir}/META-INF/${jad.name}" property="jad.exist"/>
 
+		<condition property="war.dir" value="${src.archive.dir}">
+			<available file="${src.archive.dir}" type="dir"/>
+		</condition>
+		<condition property="war.dir" value="WebContent">
+			<not>
+				<available file="${src.archive.dir}" type="dir"/>
+			</not>
+		</condition>
+
 		<condition property="copy.web.jar.required">
 			<not>
 				<equals arg1="${import.libs}" arg2="nonexist"/>
