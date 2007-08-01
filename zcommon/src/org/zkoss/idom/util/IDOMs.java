@@ -65,6 +65,8 @@ public class IDOMs {
 		return sub;
 	}
 	/** Returns the required element value.
+	 * <p>Note: the returned value may be an empty string (if the element
+	 * contains no text at all).
 	 * @exception IllegalSyntaxException if the element is not found
 	 */
 	public static final String getRequiredElementValue(Element e, String elemnm)
