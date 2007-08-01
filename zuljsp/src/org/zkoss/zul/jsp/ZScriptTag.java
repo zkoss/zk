@@ -33,8 +33,10 @@ import org.zkoss.zul.jsp.impl.BranchTag;
 import org.zkoss.zul.jsp.impl.RootTag;
 
 /**
+ * A Jsp Tag class to handle zscript features.<br>
+ * This tag should be declared under {@link#PageTag} or any Component Tags.<br>
+ * 
  * @author Ian Tsai 
- *
  */
 public class ZScriptTag extends AbstractTag {
 	private static final Log log = Log.lookup(ZScriptTag.class);
@@ -45,6 +47,7 @@ public class ZScriptTag extends AbstractTag {
 	private RootTag _roottag;
 
 	/**
+	 * 
 	 * add body content to parent's zscript info.
 	 */
 	public void doTag() throws JspException, IOException {
@@ -76,21 +79,34 @@ public class ZScriptTag extends AbstractTag {
 			throw new IllegalStateException("Must be nested inside the page tag: "+this);
 		}
 	}
-	
+	/**
+	 * Because ZScriptTag is always deferred, so this method always return true.
+	 * @return true only currently.
+	 */
 	public boolean isDeferred() {
 		return true;//_deferred;
 	}
-
+	/**
+	 * ZScriptTag is always deferred, so this method has no effect currently.
+	 * @param deferred
+	 */
 	public void setDeferred(boolean deferred) {
 		if (!deferred)
 			log.warning("ZScriptTag is always deferred");
 		//this._deferred = deferred;
 	}
 
+	/**
+	 * Get this ZScript segment used language. 
+	 * @return 
+	 */
 	public String getLanguage() {
 		return _language;
 	}
-
+	/**
+	 * Set this ZScript segment used language.
+	 * @param language
+	 */
 	public void setLanguage(String language) {
 		this._language = language;
 	}

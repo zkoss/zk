@@ -174,8 +174,8 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 		Utils.writeComponentMark(getJspContext().getOut(), _comp);
 	}
 	
-	/**
-	 * 
+	/** after children creation do dynamic attributes setter work and registers event handler.
+	 * Called by {@link #doTag}.
 	 * @throws JspException 
 	 */
 	/*package*/void afterComposeComponent() throws JspException{
@@ -205,11 +205,18 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 		}
 		
 	}
-    
+    /**
+     * get use class full name.
+     * @return customized component class name
+     */
     public String getUse()
     {
         return _use;
     }
+    /**
+     * set used class's full name.
+     * @param use customized component class name
+     */
     public void setUse(String use)
     {
         this._use = use;
