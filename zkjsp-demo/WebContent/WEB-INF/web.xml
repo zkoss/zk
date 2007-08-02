@@ -211,8 +211,8 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</welcome-file-list>
 	<jsp-config>
 	  <taglib>
-	    <taglib-uri>/WEB-INF/zul</taglib-uri>
-	    <taglib-location>/WEB-INF/tld/web/zuljsp.tld</taglib-location>
+	    <taglib-uri>/WEB-INF/zul/jsp</taglib-uri>
+	    <taglib-location>/WEB-INF/tld/zul/jsp/zuljsp.tld</taglib-location>
 	  </taglib>
 	</jsp-config>
 
