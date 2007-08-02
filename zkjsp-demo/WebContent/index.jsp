@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/zul" prefix="zk" %>
+<%@ taglib uri="http://www.zkoss.org/2005/zul/jsp" prefix="z" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -10,15 +10,15 @@
 <body>
 <h1>ZK JSP Tag Library Demo</h1>
 
-	<zk:page zscriptLanguage="java"><%-- this is JSP valid Comment, do not use XML comment. --%>
+	<z:page zscriptLanguage="java"><%-- this is JSP valid Comment, do not use XML comment. --%>
 
 		
 		<h3>ZK Upload Demo:</h3>
 		
-		<zk:window id="win3" title="Fileupload Demo" border="normal" width="550px">
+		<z:window id="win3" title="Fileupload Demo" border="normal" width="550px">
 		<p>Same as zkdemo userguide's Upload demo. press upload key to upload an image.</p>
-				<zk:button label="Upload">
-					<zk:attribute name="onClick">{
+				<z:button label="Upload">
+					<z:attribute name="onClick">{
 						Object media = Fileupload.get();
 						if (media instanceof org.zkoss.image.Image) {
 							Image image = new Image();
@@ -26,45 +26,45 @@
 							image.setParent(pics);
 						} else if (media != null)
 							Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
-					}</zk:attribute>
-				</zk:button>
-				<zk:vbox id="pics"/>
-		</zk:window>
+					}</z:attribute>
+				</z:button>
+				<z:vbox id="pics"/>
+		</z:window>
 		
 		<h3>Other Demos:</h3>
 		
-		<zk:window id="win" title="ZK JSP demo" width="550px" border="normal">
-			<zk:vbox>
+		<z:window id="win" title="ZK JSP demo" width="550px" border="normal">
+			<z:vbox>
 		Here is the list of ZK JSP Tag Library demos. 
 			<div style="margin-top: 10px">
-				<zk:hbox>
-					JSTL forEach works with ZK: <zk:toolbarbutton href="./foreach.jsp" label="forEach Demo"/>
-				</zk:hbox>
+				<z:hbox>
+					JSTL forEach works with ZK: <z:toolbarbutton href="./foreach.jsp" label="forEach Demo"/>
+				</z:hbox>
 			</div>
 			<div style="margin-top: 10px">
-				<zk:hbox>
-					Use class to define customized ZK Component: <zk:toolbarbutton href="./useclass.JSP" label="use class Demo"/>
-				</zk:hbox>
+				<z:hbox>
+					Use class to define customized ZK Component: <z:toolbarbutton href="./useclass.JSP" label="use class Demo"/>
+				</z:hbox>
 			</div>
 			<div style="margin-top: 10px">
 			
-				<zk:hbox>
-					ZK Drag and Drop features: <zk:toolbarbutton href="./draganddrop.jsp" label="Drag and Drop Demo"/>
-				</zk:hbox>
+				<z:hbox>
+					ZK Drag and Drop features: <z:toolbarbutton href="./draganddrop.jsp" label="Drag and Drop Demo"/>
+				</z:hbox>
 			</div>
 			<div style="margin-top: 10px">
-				<zk:hbox>
-					ZK Capcha Component in jsp: <zk:toolbarbutton href="./capcha.jsp" label="Capcha Demo"/>
-				</zk:hbox>
+				<z:hbox>
+					ZK Capcha Component in jsp: <z:toolbarbutton href="./capcha.jsp" label="Capcha Demo"/>
+				</z:hbox>
 			</div>			
 			<div style="margin-top: 10px">
-				<zk:hbox>
-					ZK Window Component Mode setting in zscript: <zk:toolbarbutton href="./windowmode.jsp" label="Window Mode Demo"/>
-				</zk:hbox>
+				<z:hbox>
+					ZK Window Component Mode setting in zscript: <z:toolbarbutton href="./windowmode.jsp" label="Window Mode Demo"/>
+				</z:hbox>
 			</div>		
-			</zk:vbox>
-		</zk:window>		
+			</z:vbox>
+		</z:window>		
 		
-	</zk:page>
+	</z:page>
 </body>
 </html>
