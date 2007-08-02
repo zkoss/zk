@@ -18,9 +18,26 @@
 #}}IS_RIGHT
 #
 
-target=$1
-prjnm=zuljsp
-demoprjnm=zkjsp-demo
+pkgnm=$1
+target=$2
+
+if [ "$pkgnm"  = "JspTags" ] ; then
+	prjnm=zuljsp
+	demoprjnm=zkjsp-demo
+elif [ "$pkgnm"  = "Seam" ] ; then
+	prjnm=zkseam
+	demoprjnm=zkseam-demo
+else
+	if [ "$pkgnm" != "" ] ; then
+		echo "Unknown package: $pkgnm"
+		echo
+	fi
+	echo "Usage:"
+	echo "  ./sub-release pkgnm [official | daily]"
+	echo
+	echo "pkgnm the package name. It is one of JspTags and Seam"
+	exit 1
+fi
 
 javadocdir=$(grep '^javadoc' build.setting.local)
 javadocdir=${javadocdir#javadoc=}
@@ -36,16 +53,16 @@ fi
 
 if [ "$target" == "official" ] ; then
 	ver=$(head -1 $prjnm/version)
-	binnm=zk-JspTags-bin-$ver
-	srcnm=zk-JspTags-src-$ver
-	demonm=zk-JspTags-demo-$ver
+	binnm=zk-$pkgnm-bin-$ver
+	srcnm=zk-$pkgnm-src-$ver
+	demonm=zk-$pkgnm-demo-$ver
 elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
 	target=daily
 
 	ver=$(head -1 $prjnm/version)
-	binnm=zk-JspTags-bin-$ver-$(date +%Y-%m-%d)
-	srcnm=zk-JspTags-src-$ver-$(date +%Y-%m-%d)
-	demonm=zk-JspTags-demo-$ver-$(date +%Y-%m-%d)
+	binnm=zk-$pkgnm-bin-$ver-$(date +%Y-%m-%d)
+	srcnm=zk-$pkgnm-src-$ver-$(date +%Y-%m-%d)
+	demonm=zk-$pkgnm-demo-$ver-$(date +%Y-%m-%d)
 else
 	echo "Usage: release [ official | daily ]"
 	echo Default: daily
