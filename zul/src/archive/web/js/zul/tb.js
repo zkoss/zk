@@ -177,40 +177,33 @@ zkTmbox._inpkeydown= function(evt){
 	case 57:case 105://9
 		code = code - (code>=96?96:48);
 		zkTmbox._setTimeDigit(cmp,code);
-		zkTmbox._stopEvt(evt);
+		Event.stop(evt);
 		break;		
 	case 37://left
 		break;		
 	case 38://up
 		zkTmbox.onUp(cmp);
-		zkTmbox._stopEvt(evt);
+		Event.stop(evt);
 		break;
 	case 39://right
 		break;		
 	case 40://down
 		zkTmbox.onDown(cmp);
-		zkTmbox._stopEvt(evt);
+		Event.stop(evt);
 		break;
 	case 46://del 
 		zkTmbox.clearTime(cmp);
-		zkTmbox._stopEvt(evt);
+		Event.stop(evt);
 		break;
 	case 9: case 35:case 36://pass:tab,home,end
 		break;
 	default:
-		zkTmbox._stopEvt(evt);
+		if (!(code >= 112 && code <= 123) //F1-F12
+		&& !evt.ctrlKey && !evt.altKey)
+			Event.stop(evt);
 	}
 };
 
-zkTmbox._stopEvt=function(evt){
-	if (evt.preventDefault) {
-		evt.preventDefault();
-		evt.stopPropagation();
-	} else {
-		evt.returnValue = false;
-		evt.cancelBubble = true;
-	}
-};
 zkTmbox._btnUpPress= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
