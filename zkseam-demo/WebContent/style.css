@@ -1,0 +1,18 @@
+.error {
+  color: red;
+  border: solid red;
+  padding: .4em;
+  margin: 10px
+}
+
+.errorImg {
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+}
+
+.errorMsg {
+  display: block;
+  margin: 5px;
+  padding: .1em;
+}
