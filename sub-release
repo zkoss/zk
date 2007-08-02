@@ -1,5 +1,5 @@
 #!/bin/bash
-# zkjsp-release
+# sub-release
 #
 #{{IS_NOTE
 #	Purpose:
@@ -35,7 +35,7 @@ else
 	echo "Usage:"
 	echo "  ./sub-release pkgnm [official | daily]"
 	echo
-	echo "pkgnm the package name. It is one of JspTags and Seam"
+	echo "pkgnm the package name. It is one of JspTags and Seam."
 	exit 1
 fi
 
