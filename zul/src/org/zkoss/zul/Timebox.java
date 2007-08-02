@@ -24,8 +24,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
+
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.InputElement;
@@ -49,6 +51,8 @@ import org.zkoss.zul.mesg.MZul;
  * @since 2.5.0
  */
 public class Timebox extends InputElement {
+	private static final String DEFAULT_IMAGE = "~./zul/img/updnbtn.gif";
+	private String _img;
 	private TimeZone _tzone;
 	private boolean _btnVisible = true;
 	
@@ -91,6 +95,24 @@ public class Timebox extends InputElement {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
 			smartUpdate("z.btnVisi", visible);
+		}
+	}
+	/** Returns the URI of the button image.
+	 */
+	public String getImage() {
+		return _img != null ? _img: DEFAULT_IMAGE;
+	}
+	/** Sets the URI of the button image.
+	 *
+	 * @param img the URI of the button image. If null or empty, the default
+	 * URI is used.
+	 */
+	public void setImage(String img) {
+		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
+			img = null;
+		if (!Objects.equals(_img, img)) {
+			_img = img;
+			invalidate();
 		}
 	}
 	

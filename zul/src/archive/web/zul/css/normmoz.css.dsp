@@ -378,7 +378,7 @@ span.combobox, span.datebox, span.bandbox {
 }
 span.rbtnbk {<%-- button at the right edge --%>
 	background-image: url(${c:encodeURL('~./zul/img/btnbk.gif')}); background-repeat: no-repeat;
-	border: 1px solid #7f9db9; border-left: none;
+	border: 1px solid #7f9db9; border-left: none; margin: 0; padding: 0;
 }
 div.comboboxpp, div.bandboxpp { <%--hardcoded in DSP--%>
 	display: block; position: absolute; z-index: 80000;

@@ -52,6 +52,8 @@ import org.zkoss.zul.impl.FormatInputElement;
  * @author tomyeh
  */
 public class Datebox extends FormatInputElement {
+	private static final String DEFAULT_IMAGE = "~./zul/img/caldrbtn.gif";
+	private String _img;
 	private TimeZone _tzone;
 	private boolean _lenient = true;
 	private boolean _compact, _btnVisible = true;
@@ -136,6 +138,26 @@ public class Datebox extends FormatInputElement {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
 			smartUpdate("z.btnVisi", visible);
+		}
+	}
+	/** Returns the URI of the button image.
+	 * @since 2.5.0
+	 */
+	public String getImage() {
+		return _img != null ? _img: DEFAULT_IMAGE;
+	}
+	/** Sets the URI of the button image.
+	 *
+	 * @param img the URI of the button image. If null or empty, the default
+	 * URI is used.
+	 * @since 2.5.0
+	 */
+	public void setImage(String img) {
+		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
+			img = null;
+		if (!Objects.equals(_img, img)) {
+			_img = img;
+			invalidate();
 		}
 	}
 

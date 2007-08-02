@@ -52,17 +52,9 @@ zkTmbox.init = function (cmp) {
 	
 	//event for btn
 	if(btn){
-		var uctr = $e(cmp.id+"!up");
-		var dctr = $e(cmp.id+"!dn");
-	
-		zk.listen(uctr, "mousedown",zkTmbox._btnUpPress);
-		zk.listen(dctr, "mousedown",zkTmbox._btnDnPress);
-		
-		zk.listen(uctr, "mouseup",zkTmbox._btnRelease);
-		zk.listen(dctr, "mouseup",zkTmbox._btnRelease);
-		
-		zk.listen(uctr, "mouseout",zkTmbox._btnMouseOut);
-		zk.listen(dctr, "mouseout",zkTmbox._btnMouseOut);
+		zk.listen(btn, "mousedown", zkTmbox._btnDown);
+		zk.listen(btn, "mouseup", zkTmbox._btnUp);
+		zk.listen(btn, "mouseout", zkTmbox._btnOut);
 
 		zkWgt.fixDropBtn(cmp);
 	}
@@ -204,38 +196,38 @@ zkTmbox._inpkeydown= function(evt){
 	}
 };
 
-zkTmbox._btnUpPress= function(evt){
+zkTmbox._btnDown= function(evt){
 	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt));
-	var inp = $real(cmp);
+	var cmp = $outer(Event.element(evt)),
+		inp = $real(cmp);
 	if(inp.disabled) return;
-	zkTmbox.onUp(cmp);
-	zkTmbox._startAutoIncProc(cmp,true);
-	
+
+	var btn = $e(cmp.id + "!btn"),
+		ofs = Position.cumulativeOffset(btn);
+	if ((Event.pointerY(evt) - ofs[1]) < btn.offsetHeight / 2) { //up
+		zkTmbox.onUp(cmp);
+		zkTmbox._startAutoIncProc(cmp, true);
+	} else {
+		zkTmbox.onDown(cmp);
+		zkTmbox._startAutoIncProc(cmp,false);
+	}
 };
-zkTmbox._btnDnPress= function(evt){
+zkTmbox._btnUp= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
 	var inp = $real(cmp);
 	if(inp.disabled) return;
-	zkTmbox.onDown(cmp);
-	zkTmbox._startAutoIncProc(cmp,false);
-	
-};
-zkTmbox._btnRelease= function(evt){
-	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt));
-	var inp = $real(cmp);
-	if(inp.disabled) return;
+
 	zkTmbox._stopAutoIncProc(cmp);
 	zkTmbox._markPositionSel(cmp);
 	inp.focus();
 };
-zkTmbox._btnMouseOut= function(evt){
+zkTmbox._btnOut= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
 	var inp = $real(cmp);
 	if(inp.disabled) return;
+
 	zkTmbox._stopAutoIncProc(cmp);
 };
 
@@ -251,7 +243,7 @@ zkTmbox._selrange = function (cmp){
 	return sel;
 };
 //calculate how many seconds will be increased in current pos when up or down
-zkTmbox._calIncrease = function (cmp){
+zkTmbox._calInc = function (cmp){
 	var pos = zkTmbox._checkPosition(cmp);
 	switch(pos){
 	case zkTmbox.POS_MIN:
@@ -266,11 +258,11 @@ zkTmbox._calIncrease = function (cmp){
 };
 
 zkTmbox.onUp=function(cmp){
-	zkTmbox._increaseTime(cmp,zkTmbox._calIncrease(cmp))
+	zkTmbox._increaseTime(cmp,zkTmbox._calInc(cmp))
 	zkTmbox._markPositionSel(cmp);
 };
 zkTmbox.onDown=function(cmp){
-	zkTmbox._increaseTime(cmp,-zkTmbox._calIncrease(cmp))
+	zkTmbox._increaseTime(cmp,-zkTmbox._calInc(cmp))
 	zkTmbox._markPositionSel(cmp);
 };
 
@@ -434,9 +426,9 @@ zkTmbox._startAutoIncProc=function (cmp,isup){
 		clearInterval(cmp.timerId);
 	}
 	
-	var inc_sec = zkTmbox._calIncrease(cmp);
+	var inc_sec = zkTmbox._calInc(cmp);
 	if(!isup) inc_sec = -inc_sec
-	cmp.timerId = setInterval(function(){zkTmbox._autoIncTimeout(cmp,inc_sec)}, 100);
+	cmp.timerId = setInterval(function(){zkTmbox._autoIncTimeout(cmp,inc_sec)}, 500);
 };		
 zkTmbox._stopAutoIncProc=function (cmp){
 	if(cmp.timerId){
