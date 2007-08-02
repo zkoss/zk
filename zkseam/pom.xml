@@ -40,5 +40,10 @@
       <artifactId>zul</artifactId>
       <version>2.5.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.zkoss.zk</groupId>
+      <artifactId>zkplus</artifactId>
+      <version>2.5.0</version>
+    </dependency>
   </dependencies>
 </project> 
