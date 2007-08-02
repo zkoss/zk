@@ -5,17 +5,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>ZK Jsp Tag Library 0.9.0</title>
+<title>ZK JSP Tag Library Demo</title>
 </head>
 <body>
-<h1>First zul + jsp!!!</h1>
+<h1>ZK JSP Tag Library Demo</h1>
 
-	<zk:page zscriptLanguage="java"><%-- this is Jsp valid Comment, do not use XML comment. --%>
+	<zk:page zscriptLanguage="java"><%-- this is JSP valid Comment, do not use XML comment. --%>
 
 		
-		<h3>ZK Upload Demo</h3>
+		<h3>ZK Upload Demo:</h3>
 		
-		<zk:window id="win3" title="ZK is best!!!" border="normal" width="550px">
+		<zk:window id="win3" title="Fileupload Demo" border="normal" width="550px">
 		<p>Same as zkdemo userguide's Upload demo. press upload key to upload an image.</p>
 				<zk:button label="Upload">
 					<zk:attribute name="onClick">{
@@ -31,12 +31,11 @@
 				<zk:vbox id="pics"/>
 		</zk:window>
 		
-		<h3>Other Demos</h3>
+		<h3>Other Demos:</h3>
 		
-		<zk:window id="win" title="ZK jsp demo" width="550px" border="normal">
+		<zk:window id="win" title="ZK JSP demo" width="550px" border="normal">
 			<zk:vbox>
-		Here is the list of ZK Jsp Tag Library demos. you can click links bellow or 
-		view source code to see how it works.
+		Here is the list of ZK JSP Tag Library demos. 
 			<div style="margin-top: 10px">
 				<zk:hbox>
 					JSTL forEach works with ZK: <zk:toolbarbutton href="./foreach.jsp" label="forEach Demo"/>
@@ -44,7 +43,7 @@
 			</div>
 			<div style="margin-top: 10px">
 				<zk:hbox>
-					Use class to define customized ZK Component: <zk:toolbarbutton href="./useclass.jsp" label="use class Demo"/>
+					Use class to define customized ZK Component: <zk:toolbarbutton href="./useclass.JSP" label="use class Demo"/>
 				</zk:hbox>
 			</div>
 			<div style="margin-top: 10px">
@@ -62,7 +61,7 @@
 				<zk:hbox>
 					ZK Window Component Mode setting in zscript: <zk:toolbarbutton href="./windowmode.jsp" label="Window Mode Demo"/>
 				</zk:hbox>
-			</div>
+			</div>		
 			</zk:vbox>
 		</zk:window>		
 		
