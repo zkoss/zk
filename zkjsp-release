@@ -66,20 +66,19 @@ cp -f dist/lib/zuljsp.jar /tmp/zk/$pkgnm/dist/zuljsp.jar
 #cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zuljsp.jar /tmp/zk/$pkgnm/dist/lib
 cp -rp dist/export/WEB-INF/tld/zul/jsp/* /tmp/zk/$pkgnm/dist/WEB-INF/tld/zul/jsp
 cp zkdoc/COPYING /tmp/zk/$pkgnm/doc
-cp zkdoc/jsp-release-note /tmp/zk/$pkgnm/doc/release-note
+cp zkdoc/zkjsp-release-note /tmp/zk/$pkgnm/doc/release-note
 
 if [ "$target" == "timelinez" ] ; then
 	cp dist/lib/ext/json_simple.jar /tmp/zk/$pkgnm/dist/lib/ext
 fi
 #build *-all.war *-all.ear
 if [ "$target" == "official" ]  ; then
-	rm -rf dist/lib/zkjsp-demo*.war #dist/lib/jsp-demos*.ear
+	rm -rf dist/lib/zkjsp-demo*.war
 	cp -f zkjsp-demo/war.libs.minimal zkjsp-demo/war.libs
 	./build clean zkjsp-demo #jsp-demos
 	./build zkjsp-demo #jsp-demos
 
 	mv dist/lib/zkjsp-demo.war dist/lib/zkjsp-demo-all.war
-	#mv dist/lib/jsp-demos.ear dist/lib/jsp-demos-all.ear
 fi
 
 #prepare source.jar
@@ -108,10 +107,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zkjsp-demo/.project /tmp/jsp/$demonm/zkjsp-demo/.project
 	cp -rp zkjsp-demo/.classpath /tmp/jsp/$demonm/zkjsp-demo/.classpath
 	cp -rp zkjsp-demo/.settings /tmp/jsp/$demonm/zkjsp-demo/.settings
-	cp zkdoc/COPYING zkdoc/jsp-release-note /tmp/jsp/$demonm/doc
-	#cp -rp dist/lib/jsp-demos.ear dist/lib/jsp-demo.war /tmp/jsp/$demonm
+	cp zkdoc/COPYING /tmp/jsp/$demonm/doc
+	cp zkdoc/zk-jsp-release-note /tmp/jsp/$demonm/doc/release-note
 	if [ "$target" == "official" ] ; then
-		mv dist/lib/zkjsp-demo-all.war /tmp/jsp/$demonm #dist/lib/jsp-demos-all.ear
+		mv dist/lib/zkjsp-demo-all.war /tmp/jsp/$demonm
 	fi
 	
 	cd /tmp/jsp
