@@ -470,6 +470,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			</attribute>
 		</annotation>
 	</component>
+	<component>
+		<component-name>timebox</component-name>
+		<extends>timebox</extends>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>value</property-name>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onChange</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
 	<!--component>
 		<component-name>timer</component-name>
 		<extends>timer</extends>
