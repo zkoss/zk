@@ -6,7 +6,7 @@
   <artifactId>zuljsp</artifactId>
   <version>{version}</version>
   <packaging>jar</packaging>
-  <name>JSP Tags fro ZK XUL Components</name>
+  <name>JSP Tags for ZK XUL Components</name>
   <url>http://www.zkoss.org</url>
   <description>The JSP tags for encapsulating ZK XUL components</description>
   <licenses>
@@ -23,22 +23,22 @@
     <dependency>
       <groupId>org.zkoss.common</groupId>
       <artifactId>zcommon</artifactId>
-      <version>{version}</version>
+      <version>2.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.zkoss.common</groupId>
       <artifactId>zweb</artifactId>
-      <version>{version}</version>
+      <version>2.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.zkoss.zk</groupId>
       <artifactId>zk</artifactId>
-      <version>{version}</version>
+      <version>2.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.zkoss.zk</groupId>
       <artifactId>zul</artifactId>
-      <version>{version}</version>
+      <version>2.5.0</version>
     </dependency>
   </dependencies>
 </project> 

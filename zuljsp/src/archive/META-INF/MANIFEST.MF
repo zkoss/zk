@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Specification-Title: ZUL JSP Tags
-Specification-Version: 2.5.0_1
+Specification-Version: 0.9.1
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zul.jsp
 Implementation-URL: http://www.zkoss.org/zul/jsp
-Implementation-Version: 2.5.0_1
+Implementation-Version: 0.9.1
 Implementation-Vendor: Potix Corporation
