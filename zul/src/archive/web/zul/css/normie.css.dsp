@@ -378,7 +378,7 @@ div.menupopup hr {
 	border: 0; color: darkgray; background: darkgray;
 }
 
-<%-- Combobox and Datebox --%>
+<%-- combobox and datebox --%>
 span.combobox, span.datebox, span.bandbox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 }
@@ -424,7 +424,7 @@ div.paging a:hover {
 	background: #DAE8FF;
 }
 
-<%--ZK datebox and calendar--%>
+<%--datebox and calendar--%>
 div.dateboxpp { <%--hardcoded in DSP--%>
 	display: block; position: absolute; z-index: 80000;
 	background: white; border: 1px solid black; padding: 2px;
