@@ -32,20 +32,20 @@ ver=${ver#version=}
 
 #jar
 if [ "$target" == "official" ] ; then
-	pkgnm=zk-$ver
+	binnm=zk-bin-$ver
 	demonm=zk-demo-$ver
 	javadocnm=zk-javadoc-$ver
 	srcnm=zk-src-$ver
-	echo "Release $pkgnm..."
+	echo "Release $binnm..."
 elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
 	target=daily
 
-	pkgnm=zk-$ver-$stamp
+	binnm=zk-bin-$ver-$stamp
 	demonm=zk-demo-$ver-$stamp
 	javadocnm=zk-javadoc-$ver-$stamp
 	srcnm=zk-src-$ver-$stamp
 	docnm=zk-doc-$ver-$stamp
-	echo "Release $pkgnm..."
+	echo "Release $binnm..."
 else
 	echo "Usage: release [ official | daily ]"
 	echo Default: daily
@@ -133,55 +133,55 @@ fi
 
 #Prepare the binary release
 if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
-	mkdir -p /tmp/zk/$pkgnm/dist/lib/ext
-	mkdir -p /tmp/zk/$pkgnm/dist/lib/zkforge
-	mkdir -p /tmp/zk/$pkgnm/dist/WEB-INF
-	mkdir -p /tmp/zk/$pkgnm/dist/xsd
-	mkdir -p /tmp/zk/$pkgnm/dist/src
-	mkdir -p /tmp/zk/$pkgnm/doc
+	mkdir -p /tmp/zk/$binnm/dist/lib/ext
+	mkdir -p /tmp/zk/$binnm/dist/lib/zkforge
+	mkdir -p /tmp/zk/$binnm/dist/WEB-INF
+	mkdir -p /tmp/zk/$binnm/dist/xsd
+	mkdir -p /tmp/zk/$binnm/dist/src
+	mkdir -p /tmp/zk/$binnm/doc
 
 	cd $maindir
-	mv -f /tmp/zk/*-sources.jar /tmp/zk/$pkgnm/dist/src
-	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar dist/lib/ext/commons-el.jar /tmp/zk/$pkgnm/dist/lib/ext
+	mv -f /tmp/zk/*-sources.jar /tmp/zk/$binnm/dist/src
+	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar dist/lib/ext/commons-el.jar /tmp/zk/$binnm/dist/lib/ext
 		#Fileupload
-	cp dist/lib/ext/bsh.jar /tmp/zk/$pkgnm/dist/lib/ext
+	cp dist/lib/ext/bsh.jar /tmp/zk/$binnm/dist/lib/ext
 		#BeanShell
-	cp dist/lib/ext/js.jar /tmp/zk/$pkgnm/dist/lib/ext
+	cp dist/lib/ext/js.jar /tmp/zk/$binnm/dist/lib/ext
 		#JavaScript (rhino)
-	cp dist/lib/ext/groovy.jar /tmp/zk/$pkgnm/dist/lib/ext
+	cp dist/lib/ext/groovy.jar /tmp/zk/$binnm/dist/lib/ext
 		#Groovy
-	cp dist/lib/ext/jruby.jar /tmp/zk/$pkgnm/dist/lib/ext
+	cp dist/lib/ext/jruby.jar /tmp/zk/$binnm/dist/lib/ext
 		#Ruby (jruby)
-	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$pkgnm/dist/lib/ext
+	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$binnm/dist/lib/ext
 		#jFreeChart
-	cp dist/lib/ext/Filters.jar /tmp/zk/$pkgnm/dist/lib/ext
+	cp dist/lib/ext/Filters.jar /tmp/zk/$binnm/dist/lib/ext
 		#captcha
 
-	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$pkgnm/dist/lib/
-	cp dist/lib/zuljsp.jar dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$pkgnm/dist/lib/zkforge
+	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
+	cp dist/lib/zuljsp.jar dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
 
-	cp dist/lib/timelinez.jar dist/lib/ext/json_simple.jar /tmp/zk/$pkgnm/dist/lib/zkforge
+	cp dist/lib/timelinez.jar dist/lib/ext/json_simple.jar /tmp/zk/$binnm/dist/lib/zkforge
 		#timelinez
 
-	cp -rp dist/export/WEB-INF/* /tmp/zk/$pkgnm/dist/WEB-INF
-	cp zul/src/archive/metainfo/xml/*.xsd /tmp/zk/$pkgnm/dist/xsd
-	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$pkgnm/doc
+	cp -rp dist/export/WEB-INF/* /tmp/zk/$binnm/dist/WEB-INF
+	cp zul/src/archive/metainfo/xml/*.xsd /tmp/zk/$binnm/dist/xsd
+	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$binnm/doc
 
 	cd /tmp/zk
 
 	if [ "$target" == "official" ] ; then
-		echo Output ${pkgnm}.tar.gz
-		tar zcf ${pkgnm}.tar.gz $pkgnm
+		echo Output ${binnm}.tar.gz
+		tar zcf ${binnm}.tar.gz $binnm
 	fi
 
-	echo Output ${pkgnm}.zip
-	zip -qr9 ${pkgnm}.zip $pkgnm
+	echo Output ${binnm}.zip
+	zip -qr9 ${binnm}.zip $binnm
 
 	if [ "$target" == "official" ] ; then
 		#Prepare maven repository
 		function mvnrepo {
 			mkdir -p $1
-			mv /tmp/zk/$pkgnm/dist/src/$1-sources.jar $1/$1-$ver-sources.jar
+			mv /tmp/zk/$binnm/dist/src/$1-sources.jar $1/$1-$ver-sources.jar
 			sed -e "s/{version}/$ver/" $maindir/$1/pom.xml > $1/pom.xml
 			cp $maindir/dist/lib/$1.jar $1/$1-$ver.jar
 			jar cfM $1-$ver-bundle.jar -C $1 .
@@ -199,7 +199,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		cd ..
 		rm -rf maven
 	fi
-	rm -rf $pkgnm
+	rm -rf $binnm
 
 	#Prepare the java doc
 	cd $javadocdir
