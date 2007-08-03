@@ -393,9 +393,13 @@ zk.getBuild = function (nm) {
 	return zk.mods[nm] || zk.build;
 };
 
-/** Adds a function for module initialization.
- * Note: JS are loaded concurrently, so module initializations
- * must take place after all modules are loaded.
+/** Adds a function tfor module initialization.
+ * It is called after all javascript fies are loaded, and before
+ * initialized the components.
+ *
+ * In other words, ZK invokes functions added by zk.addModuleInit,
+ * then initializes all components, and finally invokes functions added
+ * by zk.addInit.
  */
 zk.addModuleInit = function (fn) {
 	zk._initmods.push(fn);
@@ -407,6 +411,8 @@ zk.addInitCmp = function (cmp) {
 	zk._initcmps.push(cmp);
 };
 /** Adds a function that will be invoked after the document is loaded.
+ * <p>Note: it is called after all components are initialized.
+ * (the proper name shall be addPostInit, rather than addInit).
  */
 zk.addInit = function (fn) {
 	zk._initfns.push(fn);

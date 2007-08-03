@@ -187,7 +187,7 @@ zkau._onRespReady = function () {
 					zk.go(eru);
 				} else {
 					if (!zkau._ignorable && !zkau._unloading)
-						zk.error(mesg.FAILED_TO_RESPONSE+(req.statusText!="Unknown"?req.statusText:""));
+						zk.error(mesg.FAILED_TO_RESPONSE+req.status+": "+(req.statusText!="Unknown"?req.statusText:""));
 					zkau._cleanupOnFatal(zkau._ignorable);
 				}
 			}
