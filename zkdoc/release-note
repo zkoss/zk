@@ -17,7 +17,8 @@ ZK 2.5.0
   1753168: nextComponentUuid shall be called as late as possible
   1759278: A way to get the request path of desktop
   1760689: Data Binding using new simpler annotation to component
-  1760850: DHtmlLayoutServlet.process(...)
+  1766020: Icon of datebox shall be configurable (like combobox)
+  1760850: DHtmlLayoutServlet.process() as protected
   
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
