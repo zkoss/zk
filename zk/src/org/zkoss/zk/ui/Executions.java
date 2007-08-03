@@ -394,6 +394,64 @@ public void run() {
 		getUiEngine(desktop).notifyAll(desktop, mutex);
 	}
 
+	/** Activates a server-push thread.
+	 * A server-push thread is a working thread that manipulates a desktop
+	 * independent of event listeners. It can manipulate the components
+	 * of the desktop as long as it is activated.
+	 * To activate a server-push thread, you have to invoke {@link #activate}.
+	 * Once it returns, the server-push thread is activated and it, like
+	 * event listeners, can manipulate the components of the corresponding
+	 * desktop directly.
+	 *
+	 * <p>A typical use pattern:
+	 *
+	 * <pre><code>class MyWorkingThread extends Thread {
+	 *  public void run() {
+	 *    while (anything_to_publish) {
+	 *       //prepare something to publish
+	 *       //you can create new components and manipulate them before
+	 *       //activation, as long as they are not attached to the desktop
+	 *       Executions.activate(desktop);
+	 *       try {
+	 *         //activated
+	 *         //manipulate the components that are attached the desktop
+	 *       } catch (DesktopUnavailableException ex) {
+	 *       } finally {
+	 *         Executions.deactivate(desktop)
+	 *       }
+	 *   }
+	 * }
+	 *}</code></pre>
+	 *
+	 * <p>Note: the access of components is sequentialized. That is,
+	 * at most one server-push thread is activated. All others, including
+	 * the event listeners, have to wait util it is deactivated
+	 * (i.e., until {@link #deactivate} is called).
+	 * Thus, it is better to minimize the time remaining activated.
+	 * A typical practice is to create new components and manipulate them
+	 * before activated. Then, you have to only attach them after activated.
+	 *
+	 * <pre><code> Tree tree = new Tree();
+	 * new Treechildren().setParent(tree); //initialize the tree
+	 * Exections.activate(desktop);
+	 * try {
+	 *   tree.setPage(page); //assume page is a page of desktop
+	 *</code></pre>
+	 *
+	 * <p>Note: you don't need to invoke this method in the event listener
+	 * since it is already activated when an event listen starts execution.
+	 *
+	 * @see DesktopUnavailableException
+	 * @since 2.5.0
+	 */
+	public static final void activate(Desktop desktop) {
+	}
+	/** Deactivates a server-push thread.
+	 * @since 2.5.0
+	 */
+	public static final void deactivate(Desktop desktop) {
+	}
+
 	private static final UiEngine getUiEngine(Desktop desktop) {
 		if (desktop == null)
 			throw new IllegalArgumentException("desktop cannot be null");
