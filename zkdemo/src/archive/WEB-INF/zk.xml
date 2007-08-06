@@ -128,9 +128,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</error-reload>
 	</client-config>
 	-->
-	<!-- Any number of preferences. 
+	<!-- Uncomment the following to customize the client-polling-based
+		server push.
+		Note: the value is the JavaScript codes to execute at the client
 	<preference>
-		<name></name>
+		<name>PollingServerPush.start</name>
+		<value></value>
+	</preference>
+	<preference>
+		<name>PollingServerPush.stop</name>
 		<value></value>
 	</preference>
 	-->

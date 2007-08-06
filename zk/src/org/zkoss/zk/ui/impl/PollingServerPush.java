@@ -38,8 +38,8 @@ public class PollingServerPush implements ServerPush {
 		final String start = _desktop.getWebApp()
 			.getConfiguration().getPreference("PollingServerPush.start", null);
 		return start != null ? start:
-			"zk.load('zul.cpsp');addInit(new function() {zkCpsp.start('"
-			+ _desktop.getId() + "');});";
+			"zk.load('zul.cpsp',function(){zkCpsp.start('"
+				+ _desktop.getId() + "');});";
 	}
 	/** Returns the JavaScript codes to disable (aka., stop) the server push.
 	 */
