@@ -33,6 +33,7 @@ import org.zkoss.lang.reflect.Fields;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
  * A Data Binding that associate component+attr to an bean expression.
  *
  * @author Henri
+ * @since 2.5.0
  */
 public class Binding {
 	private DataBinder _binder;
@@ -50,7 +52,7 @@ public class Binding {
 	private String _attr;
 	private String _expression; //the bean expression
 	private LinkedHashSet _loadWhenEvents;
-	private String _saveWhenEvent;
+	private Set _saveWhenEvents;
 	private boolean _loadable = true;
 	private boolean _savable;
 	private TypeConverter _converter;
@@ -62,7 +64,7 @@ public class Binding {
 	 * @param attr The component attribute
 	 * @param expr The bean expression.
 	 * @param loadWhenEvents The event set when to load data.
-	 * @param saveWhenEvent The event when to save data.
+	 * @param saveWhenEvents The event set when to save data.
 	 * @param access In the view of UI component: "load" load only, "both" load/save, 
 	 *	"save" save only when doing data binding. null means using the default access 
 	 *	natural of the component. e.g. Label.expr is "load", but Textbox.expr is "both".
@@ -70,13 +72,13 @@ public class Binding {
 	 * and the associated bean expression. null means using the default class conversion method.
 	 */
 	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
-		LinkedHashSet loadWhenEvents, String saveWhenEvent, String access, String converter) {
+		LinkedHashSet loadWhenEvents, Set saveWhenEvents, String access, String converter) {
 		_binder = binder;
 		_comp = comp;
 		setAttr(attr);
 		setExpression(expr);
 		setLoadWhenEvents(loadWhenEvents);
-		setSaveWhenEvent(saveWhenEvent);
+		setSaveWhenEvents(saveWhenEvents);
 		setAccess(access);
 		setConverter(converter);
 		
@@ -136,18 +138,16 @@ public class Binding {
 	}
 	
 	/** Set save-when event expression.
-	 * @param saveWhenEvent the save-when expression.
+	 * @param saveWhenEvents the save-when expression.
 	 */
-	/*package*/ void setSaveWhenEvent(String saveWhenEvent) {
-		if (saveWhenEvent != null) {
-			_saveWhenEvent = saveWhenEvent;
-		}
+	/*package*/ void setSaveWhenEvents(Set saveWhenEvents) {
+		_saveWhenEvents = saveWhenEvents;
 	}
 	
 	/** Get save-when event expression.
 	 */
-	public String getSaveWhenEvent() {
-		return _saveWhenEvent;
+	public Set getSaveWhenEvents() {
+		return _saveWhenEvents;
 	}
 	
 	/** Add load-when event expression.
@@ -300,21 +300,24 @@ public class Binding {
 		}
 	}		
 	
-	/*package*/ void registerSaveEvent(Component comp) {
-		if (_saveWhenEvent != null) {
-			final Object[] objs = ComponentsCtrl.parseEventExpression(comp, _saveWhenEvent);
-			//objs[0] component, objs[1] event name
-			final Component target = (Component) objs[0];
-			final String evtname = (String) objs[1];
+	/*package*/ void registerSaveEvents(Component comp) {
+		if (_saveWhenEvents != null) {
+			for(final Iterator it = _saveWhenEvents.iterator(); it.hasNext(); ) {
+				final String expr = (String) it.next();
+				final Object[] objs = ComponentsCtrl.parseEventExpression(comp, expr);
+				//objs[0] component, objs[1] event name
+				final Component target = (Component) objs[0];
+				final String evtname = (String) objs[1];
 
-			SaveEventListener listener = (SaveEventListener)
-				target.getAttribute("zk.SaveEventListener."+evtname);
-			if (listener == null) {
-				listener = new SaveEventListener();
-				target.setAttribute("zk.SaveEventListener."+evtname, listener);
-				target.addEventListener(evtname, listener);
+				SaveEventListener listener = (SaveEventListener)
+					target.getAttribute("zk.SaveEventListener."+evtname);
+				if (listener == null) {
+					listener = new SaveEventListener();
+					target.setAttribute("zk.SaveEventListener."+evtname, listener);
+					target.addEventListener(evtname, listener);
+				}
+				listener.addDataTarget(this, comp);
 			}
-			listener.addDataTarget(this, comp);
 		}
 	}
 	
@@ -342,7 +345,7 @@ public class Binding {
 	//-- Object --//
 	public String toString() {
 		return "[binder:"+_binder+", comp:"+_comp+", attr:"+_attr+", expr:"+_expression
-			+", load-when:"+_loadWhenEvents+", save-when:"+_saveWhenEvent
+			+", load-when:"+_loadWhenEvents+", save-when:"+_saveWhenEvents
 			+", load:"+_loadable+", save:"+_savable+", converter:"+_converter+"]";
 	}
 	

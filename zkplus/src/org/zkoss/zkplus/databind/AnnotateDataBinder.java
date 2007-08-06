@@ -40,7 +40,7 @@ import java.util.Iterator;
  * &lt;a:bind value="person.address.city"/>
  * &lt;textbox/>
  * </pre>
- * <p>Or you can annotate directly on the attribute "value" of the component "textbox" like this.</p>
+ * <p>Or since ZK 2.4 you can annotate directly on the attribute "value" of the component "textbox" like this.</p>
  * <pre>
  * &lt;textbox value="@{person.address.city}"/>
  * </pre>
@@ -89,13 +89,15 @@ import java.util.Iterator;
  * <pre>
  * &lt;textbox id="firstname" value="@{person.firstName}"/>
  * &lt;textbox id="lastname" value="@{person.lastName}"/>
- * &lt;label id="fullname" value="@{person.fullName, load-when='firstname.onChange', load-when='lastname.onChange'}"/>
+ * &lt;label id="fullname" value="@{person.fullName, load-when='firstname.onChange,lastname.onChange'}"/>
  * </pre>
  * </li>
  *
- * <li>save-when. You can specify the event concerned when to save the attribute of the component into the bean.
- * Multiple definition is NOT allowed and the later defined would override the previous defined one.
- * For example, the following code snip tells DataBinder that the attribute "value" of Textbox "firstName" will 
+ * <li>save-when. You can specify the events concerned when to save the attribute of the component into the bean.
+ * Since ZK version 2.5.0, you can specify multiple events in save-when tag (i.e. before ZK 2.5.0, you can specify only
+ * one event). The events specified, if fired, will trigger
+ * this DataBinder to save the attribute of the component into bean. For example, the following code snip tells 
+ * DataBinder that the attribute "value" of Textbox "firstName" will 
  * save into "person.firstName" when the Textbox itself fire "onChange" event.
  *
  * <p>Declare in front of the Component:</p>
@@ -143,7 +145,23 @@ import java.util.Iterator;
  * &lt;textbox id="firstName" value="@{person.firstName, save-when=''}"/>
  * </pre>
  * </li>
+ *
+ * <p>Since 2.5.0, DataBinder supports validation phase before saving attribute content into bean property when 
+ * triggered by the specified event in save-when tag. It will fire onBindingSave event to the data-binding component and
+ * then fire onBindingValidate to the triggering component before really saving component attribute contents into bean's 
+ * property. So application developers get the chance to handle the value validatiion before saving. In the following example
+ * when end user click the "savebtn" button, an "onBindingSave" is first fired to "firtName" and "lastName" textboxes and 
+ * then an "onBindingValidate" is fired to "savebtn" button. Application developers can register proper event handlers to do 
+ * what they want to do.</p>
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName, save-when="savebtn.onClick"}" onBindingSave="..."/>
+ * &lt;textbox id="lastName" value="@{person.lastName, save-when="savebtn.onClick"}" onBindingSave="..."/>
+ * &lt;button id="savebtn" label="save" onBindingValidate="..."/>
+ * </pre>
  * 
+ * <p>Note that the original textbox constraint mechanism is still there. This DataBinder validation phase is an 
+ * add-on feature that can be applied to all components and attributes that use data binding mechanism.</p>
+ *
  * <li>access. You can set the access mode of the attrY of the componentX to be "both"(load/save),  
  * "load"(load Only), "save"(save Only), or "none"(neither).  Multiple definition is NOT allowed 
  * and the later defined would 
@@ -178,6 +196,8 @@ import java.util.Iterator;
  * </li>
  * </ul>
  * 
+ * @since 2.4.0 Supporting @{...} annotations.
+ * @since 2.5.0 Supporting multiple events of save-when tag and validation phase.
  * @author Henri Chen
  * @see AnnotateDataBinderInit
  * @see DataBinder
@@ -262,10 +282,10 @@ public class AnnotateDataBinder extends DataBinder {
 		final List props = compCtrl.getAnnotatedPropertiesBy(annotName);
 		for (final Iterator it = props.iterator(); it.hasNext(); ) {
 			final String propName = (String) it.next();
-			//[0] value, [1] loadWhenEvents, [2] saveWhenEvent, [3] access, [4] converter
+			//[0] value, [1] loadWhenEvents, [2] saveWhenEvents, [3] access, [4] converter
 			final Object[] objs = loadPropertyAnnotation(comp, propName, annotName);
 			addBinding(comp, propName, (String) objs[0], 
-					(String[]) objs[1], (String) objs[2], (String) objs[3], (String) objs[4]);
+					(List) objs[1], (List) objs[2], (String) objs[3], (String) objs[4]);
 		}
 	}
 	
@@ -294,7 +314,7 @@ public class AnnotateDataBinder extends DataBinder {
 				}
 				
 				List loadWhenEvents = null;
-				String saveWhenEvent = null;
+				List saveWhenEvents = null;
 				String access = null;
 				String converter = null;
 				
@@ -311,7 +331,11 @@ public class AnnotateDataBinder extends DataBinder {
 							loadWhenEvents.add(NULLIFY);
 						}
 					} else if ("save-when".equals(tags.get(0))) {
-						saveWhenEvent = tags.size() > 1 ? (String)tags.get(1) : NULLIFY;
+						if (tags.size() > 1 && tags.get(1) != null) {
+							saveWhenEvents = parseExpression((String)tags.get(1), ",");
+						} else {
+							saveWhenEvents.add(NULLIFY);
+						}
 					} else if ("access".equals(tags.get(0))) {
 						access = tags.size() > 1 ? (String) tags.get(1) : NULLIFY;
 					} else if ("converter".equals(tags.get(0))) {
@@ -322,8 +346,11 @@ public class AnnotateDataBinder extends DataBinder {
 				if (loadWhenEvents != null && loadWhenEvents.isEmpty()) {
 					loadWhenEvents = null;
 				}
+				if (saveWhenEvents != null && saveWhenEvents.isEmpty()) {
+					saveWhenEvents = null;
+				}
 				
-				addBinding(comp, attr, (String) expr.get(0), loadWhenEvents, saveWhenEvent, access, converter);
+				addBinding(comp, attr, (String) expr.get(0), loadWhenEvents, saveWhenEvents, access, converter);
 			}
 		}
 	}

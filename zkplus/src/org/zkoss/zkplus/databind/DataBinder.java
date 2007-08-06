@@ -47,6 +47,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -83,7 +84,7 @@ public class DataBinder {
 	 * @param expr The expression to associate the data bean.
 	 */
 	public void addBinding(Component comp, String attr, String expr) {
-		addBinding(comp, attr, expr, (List)null, null, null, null);
+		addBinding(comp, attr, expr, (List)null, (List)null, null, null);
 	}
 
 	/** Binding bean to UI component. 
@@ -116,6 +117,39 @@ public class DataBinder {
 	 * @param attr The attribute of the component to be associated.
 	 * @param expr The expression to associate the data bean.
 	 * @param loadWhenEvents The event list when to load data.
+	 * @param saveWhenEvents The event when to save data.
+	 * @param access In the view of UI component: "load" load only, 
+	 * "both" load/save, "save" save only when doing
+	 * data binding. null means using the default access natural of the component. 
+	 * e.g. Label.value is "load", but Textbox.value is "both".
+	 * @param converter The converter class used to convert classes between component 
+	 *  and the associated bean. null means using the default class conversion method.
+	 * @since 2.5.0
+	 */
+	public void addBinding(Component comp, String attr, String expr,
+		String[] loadWhenEvents, String[] saveWhenEvents, String access, String converter) {
+		List loadEvents = null;
+		if (loadWhenEvents != null && loadWhenEvents.length > 0) {
+			loadEvents = new ArrayList(loadWhenEvents.length);
+			for (int j = 0; j < loadWhenEvents.length; ++j) {
+				loadEvents.add(loadWhenEvents[j]);
+			}
+		}
+		List saveEvents = null;
+		if (saveWhenEvents != null && saveWhenEvents.length > 0) {
+			saveEvents = new ArrayList(saveWhenEvents.length);
+			for (int j = 0; j < saveWhenEvents.length; ++j) {
+				saveEvents.add(saveWhenEvents[j]);
+			}
+		}
+		addBinding(comp, attr, expr, loadEvents, saveEvents, access, converter);
+	}
+	
+	/** Binding bean to UI component. 
+	 * @param comp The component to be associated.
+	 * @param attr The attribute of the component to be associated.
+	 * @param expr The expression to associate the data bean.
+	 * @param loadWhenEvents The event list when to load data.
 	 * @param saveWhenEvent The event when to save data.
 	 * @param access In the view of UI component: "load" load only, 
 	 * "both" load/save, "save" save only when doing
@@ -126,6 +160,27 @@ public class DataBinder {
 	 */
 	public void addBinding(Component comp, String attr, String expr,
 		List loadWhenEvents, String saveWhenEvent, String access, String converter) {
+		List saveEvents = new ArrayList(1);
+		saveEvents.add(saveWhenEvent);
+		addBinding(comp, attr, expr, loadWhenEvents, saveEvents, access, converter);
+	}
+	
+	/** Binding bean to UI component. 
+	 * @param comp The component to be associated.
+	 * @param attr The attribute of the component to be associated.
+	 * @param expr The expression to associate the data bean.
+	 * @param loadWhenEvents The event list when to load data.
+	 * @param saveWhenEvents The event list when to save data.
+	 * @param access In the view of UI component: "load" load only, 
+	 * "both" load/save, "save" save only when doing
+	 * data binding. null means using the default access natural of the component. 
+	 * e.g. Label.value is "load", but Textbox.value is "both".
+	 * @param converter The converter class used to convert classes between component 
+	 *  and the associated bean. null means using the default class conversion method.
+	 * @since 2.5.0
+	 */
+	public void addBinding(Component comp, String attr, String expr,
+		List loadWhenEvents, List saveWhenEvents, String access, String converter) {
 			
 		//Since 2.5, 20070726, Henri Chen: we accept "each" to replace "_var" in collection data binding
 		//Before 2.4.1
@@ -157,8 +212,8 @@ public class DataBinder {
 			if (loadWhenEvents == null && objs[1] != null) {
 				loadWhenEvents = (List) objs[1];
 			}
-			if (saveWhenEvent == null && objs[2] != null) {
-				saveWhenEvent = (String) objs[2];
+			if (saveWhenEvents == null && objs[2] != null) {
+				saveWhenEvents = (List) objs[2];
 			}
 			if (access == null && objs[3] != null) {
 				access = (String) objs[3];
@@ -188,10 +243,25 @@ public class DataBinder {
 			}
 		}
 
-		if (NULLIFY.equals(saveWhenEvent)) {
-			saveWhenEvent = null;
+		nullify = false;
+		Set saveEvents = null;
+		if (saveWhenEvents != null && saveWhenEvents.size() > 0) {
+			saveEvents = new HashSet(saveWhenEvents.size());
+			for(final Iterator it = saveWhenEvents.iterator(); it.hasNext();) {
+				final String event = (String) it.next();
+				if (NULLIFY.equals(event)) {
+					saveEvents.clear();
+					nullify = true;
+				} else {
+					nullify = false;
+					saveEvents.add(event);
+				}
+			}
+			if (saveEvents.isEmpty()) { 
+				saveEvents = null;
+			}
 		}
-		
+
 		if (NULLIFY.equals(access)) {
 			access = null;
 		}
@@ -210,11 +280,11 @@ public class DataBinder {
 			final Binding binding = (Binding) attrMap.get(attr);
 			binding.setExpression(expr);
 			binding.setLoadWhenEvents(loadEvents);
-			binding.setSaveWhenEvent(saveWhenEvent);
+			binding.setSaveWhenEvents(saveEvents);
 			binding.setAccess(access);
 			binding.setConverter(converter);
 		} else {
-			attrMap.put(attr, new Binding(this, comp, attr, expr, loadEvents, saveWhenEvent, access, converter));
+			attrMap.put(attr, new Binding(this, comp, attr, expr, loadEvents, saveEvents, access, converter));
 		}
 	}
 	
@@ -406,14 +476,14 @@ public class DataBinder {
 		}
 	}
 
-	//[0] expr, [1] loadWhenEvents, [2] saveWhenEvent, [3] access, [4] converter
+	//[0] expr, [1] loadWhenEvents, [2] saveWhenEvents, [3] access, [4] converter
 	protected Object[] loadPropertyAnnotation(Component comp, String propName, String bindName) {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		Annotation ann = compCtrl.getAnnotation(propName, bindName);
 		if (ann != null) {
 			final Map attrs = ann.getAttributes(); //(tag, tagExpr)
 			List loadWhenEvents = null;
-			String saveWhenEvent = null;
+			List saveWhenEvents = null;
 			String access = null;
 			String converter = null;
 			String expr = null;
@@ -422,7 +492,7 @@ public class DataBinder {
 				String tag = (String) entry.getKey();
 				String tagExpr = (String) entry.getValue();
 				if ("save-when".equals(tag)) {
-					saveWhenEvent = tagExpr;
+					saveWhenEvents = parseExpression(tagExpr, ",");
 				} else if ("access".equals(tag)) {
 					access = tagExpr;
 				} else if ("converter".equals(tag)) {
@@ -433,7 +503,7 @@ public class DataBinder {
 					expr = tagExpr;
 				}
 			}
-			return new Object[] {expr, loadWhenEvents, saveWhenEvent, access, converter};
+			return new Object[] {expr, loadWhenEvents, saveWhenEvents, access, converter};
 		}
 		return new Object[5];
 	}
@@ -470,7 +540,7 @@ public class DataBinder {
 					setupPathTree(bindings, varnameSet);
 				
 					//register save-when event
-					registerSaveEvent(comp, bindings);
+					registerSaveEvents(comp, bindings);
 					
 					//register load-when events
 					registerLoadEvents(comp, bindings);
@@ -493,6 +563,7 @@ public class DataBinder {
 	/**
 	 * Adds a CollectionItem for this comp.
 	 * @see CollectionItem
+	 * @since 2.5.0
 	 */
 	public void addCollectionItem(String comp, CollectionItem decor){
 		_collectionItemMap.put(comp, decor);
@@ -506,6 +577,7 @@ public class DataBinder {
 	/**
 	 * Returns a CollectionItem by the comp accordingly.
 	 * @see CollectionItem
+	 * @since 2.5.0
 	 */
 	protected CollectionItem getBindingCollectionItem(Component comp){
 		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(comp.getClass().getName());
@@ -554,10 +626,10 @@ public class DataBinder {
 		}
 	}
 	
-	private void registerSaveEvent(Component comp, Collection bindings) {
+	private void registerSaveEvents(Component comp, Collection bindings) {
 		for(final Iterator it = bindings.iterator(); it.hasNext(); ) {
 			final Binding binding = (Binding) it.next();
-			binding.registerSaveEvent(comp);
+			binding.registerSaveEvents(comp);
 		}
 	}
 

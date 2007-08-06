@@ -22,9 +22,9 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.ListModel;
 
 /**
- * The <i>CollectionItem</i> is used by {@link DataBinder} and provides a
- * better way to develop a collection component for supporting <i>DataBinding</i>.
- * Such as <i>Grid</i> or <i>Listbox</i>.
+ * The <i>CollectionItem</i> is used by {@link DataBinder} and provides an
+ * interface for collection component to interact with the <i>DataBinder</i>
+ * such as <i>Grid</i> or <i>Listbox</i>.
  * 
  * @author jumperchen
  * @see DataBinder
@@ -32,13 +32,12 @@ import org.zkoss.zul.ListModel;
 public interface CollectionItem {
 	/**
 	 * <p>
-	 * Returns the comp's owner.
+	 * Returns the component's owner.
 	 * </p>
-	 * For example: we assume that this comp is a <i>Row</i> component. It will
-	 * return the <i>Grid</i> component.
+	 * For example: if this comp is a <i>Row</i> component then this method will
+	 * return the associated <i>Grid</i> component of the Row.
 	 * 
-	 * @param comp
-	 *            A component as <i>Row</i> or <i>Listitem</i>.
+	 * @param comp A component as <i>Row</i> or <i>Listitem</i>.
 	 * @return Component the comp's owner.
 	 */
 	public Component getComponentCollectionOwner(Component comp);
@@ -48,10 +47,8 @@ public interface CollectionItem {
 	 * Returns the component by the index in the comp's children.
 	 * </p>
 	 * 
-	 * @param comp
-	 *            Owner of a component as <i>Grid</i>.
-	 * @param index
-	 *            index of the element to return
+	 * @param comp Collection owner component such as <i>Grid</i>.
+	 * @param index index of the element to return
 	 * @return Component the component at the specified position in the list of
 	 *         comp's children.
 	 */
@@ -62,21 +59,19 @@ public interface CollectionItem {
 	 * Returns the component model as {@link ListModel}
 	 * </p>
 	 * 
-	 * @param comp
-	 *            Owner of a component as <i>Grid</i>.
+	 * @param comp Collection owner component such as <i>Grid</i>.
 	 * @return ListModel
 	 */
 	public ListModel getModelByOwner(Component comp);
 
 	/**
 	 * <p>
-	 * Sets the binding renderer for the template component as <i>listitem</i>
-	 * or <i>row</i>.
+	 * Sets the binding renderer for the template component such as <i>Listitem</i>
+	 * or <i>Row</i>.
 	 * </p>
 	 * 
-	 * @param comp
-	 *            A component as <i>Row</i> or <i>Listitem</i>.
-	 * @param binder
+	 * @param comp A component such as <i>Row</i> or <i>Listitem</i>.
+	 * @param binder The associated DataBinder
 	 */
 	public void setupBindingRenderer(Component comp, DataBinder binder);
 }
