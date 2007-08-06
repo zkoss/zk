@@ -136,15 +136,18 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	}
 	
 	/**
-	 * Invokes setter methods to update all assigned attributes.
+	 * Test if the attributes are annotation or component attributes.<br>
+	 * If(is Component attributes)Invokes setter methods to update all assigned attributes.
+	 * If(is annotations)
 	 * @param target the target component
 	 * @throws NoSuchMethodException 
 	 * @throws ModificationException 
 	 */
-	private void invokeSetterMethods(final Component target) 
+	private void evaluateDynaAttributes(final Component target) 
 	throws ModificationException, NoSuchMethodException{
 		for(Iterator itor = _attrMap.entrySet().iterator();itor.hasNext();)
 		{
+			//TODO: add annotation judgment...
 			Map.Entry entry= (Entry) itor.next();
 			Fields.setField(target, (String)entry.getKey(),entry.getValue(), true);
 		}
@@ -191,7 +194,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 			throw new JspTagException("newComponent() returns null");
 	
 		try {
-			invokeSetterMethods(_comp);
+			evaluateDynaAttributes(_comp);
 		} catch (Exception e) {
 			throw new JspException(e);
 		}
