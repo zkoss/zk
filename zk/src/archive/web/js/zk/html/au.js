@@ -1616,7 +1616,7 @@ zkau.cmd0 = { //no uuid at all
 		eval(dt0);
 	},
 	echo: function () {
-		zkau.send({uuid: "", cmd: "dummy", data: null});
+		zkau.send({uuid: "", cmd: "dummy", data: null, ignorable: true});
 	},
 	clientInfo: function () {
 		zkau._cInfoReg = true;

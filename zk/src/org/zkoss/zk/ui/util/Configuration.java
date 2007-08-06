@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.device.Devices;
 
@@ -92,7 +93,8 @@ public class Configuration {
 	private Monitor _monitor;
 	private final List _themeUris = new LinkedList();
 	private transient String[] _roThemeUris = new String[0];
-	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _failmancls, _idgencls;
+	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
+		_failmancls, _idgencls, _spushcls;
 	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
 		_sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120,
@@ -984,9 +986,29 @@ public class Configuration {
 	public Class getIdGeneratorClass() {
 		return _idgencls;
 	}
+	/** Sets the class that implements the server-push feature
+	 * ({@link ServerPush}), or null to use the default.
+	 *
+	 * <p>Default: null.
+	 *
+	 * @since 2.5.0
+	 */
+	public void setServerPushClass(Class cls) {
+		if (cls != null && !ServerPush.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("ServerPush not implemented: "+cls);
+		_spushcls = cls;
+	}
+	/** Returns the class that implements the server-push feature
+	 * ({@link ServerPush}), or null if the default is used.
+	 */
+	public Class getServerPushClass() {
+		return _spushcls;
+	}
 
 	/** Specifies the maximal allowed upload size, in kilobytes.
+	 *
 	 * <p>Default: 5120.
+	 *
 	 * @param sz the maximal allowed upload size.
 	 * A negative value indicates therre is no limit.
 	 */

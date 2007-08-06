@@ -22,6 +22,9 @@ import java.util.Map;
 import java.util.Collection;
 
 import org.zkoss.util.media.Media;
+
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.device.Device;
 
 /**
@@ -195,4 +198,41 @@ public interface Desktop {
 	 * this method.
 	 */
 	public String getDownloadMediaURI(Media media, String pathInfo);
+
+	/** Enables or disables the server-push feature.
+	 * Before using any server-push threads, you have to enable it
+	 * for the particular desktop first by use of this method.
+	 * Refer to {@link Executions#activate} for more details.
+	 *
+	 * <p>Default: false
+	 *
+	 * <p>This method uses the default class
+	 * (defined by {@link Configuration#getServerPushClass})
+	 * to instantiate the server-push controller.
+	 *
+	 * @param enable whether to enable or to disable the server-push
+	 * feature.
+	 * @see Executions#activate
+	 * @see Configuration#setServerPushClass
+	 * @since 2.5.0
+	 */
+	public boolean enableServerPush(boolean enable);
+	/** Enables the server-push feature with the specified server-push
+	 * controller.
+	 *
+	 * @param serverpush the server-push controller. If null,
+	 * the server-push feature is disabled (for this desktop).
+	 * Note: this method will invoke {@link ServerPush#start}, so the
+	 * caller doesn't need to do it.
+	 * @since 2.5.0
+	 */
+	public boolean enableServerPush(ServerPush serverpush);
+	/** Returns whether the server-push feature is enabled for this
+	 * desktop.
+	 *
+	 * <p>Default: false.
+	 *
+	 * @since 2.5.0
+	 */
+	public boolean isServerPushEnabled();
 }

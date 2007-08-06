@@ -35,48 +35,42 @@ import org.zkoss.zk.ui.Desktop;
  * server-push threads.
  * The client can adjust the frequency based on the response time
  * (in proportion to the server load).
- * In this implementation, the event must be called onSPPolling,
- * and {@link #onPolling} will be called when this event is received.
+ * To poll, the client usually send the dummy command that does nothing
+ * but trigger {@link #onPiggyback} to be execute.
  *
  * <p>Second, the server-push feature can be implemented by maintaining
  * a persistent connection between client and server. It is also
  * called Comet (see also <a href="http://en.wikipedia.org/wiki/Comet_%28programming%29">Comet</a>).
  *
  * <p>Third, the server-push feature can be simulated in a passive way.
- * That is, the pending pushes are executed only when the server
- * receives an event
+ * That is, it doesn't poll at all. Rather {@link #onPiggyback} is called
+ * automatically when the user trigger some other events.
  *
  * @author tomyeh
  * @since 2.5.0
  */
 public interface ServerPush {
-	/** Initializes the server-push controller.
+	/** Stats and initializes the server-push controller.
 	 * One server-push controller is associated with exactly one desktop.
 	 *
-	 * @return the client script codes (usually JavaScript) to initialize
-	 * the server path.
+	 * <p>{@link #start} is called when {@link Desktop#enableServerPush}
+	 * is called to enable the server-push feature for the specified
+	 * desktop.
 	 */
-	public String init(Desktop desktop);
-	/** Called when the onSPPolling event is received.
-	 * The client-polling-based implemenation usually checks whether
-	 * any pending server-push threads. If true, execute them.
+	public void start(Desktop desktop);
+	/** Stops and cleans up the server-push controller.
 	 *
-	 * <p>The implementation can return a command
-	 * ({@link org.zkoss.zk.au.AuResponse} or its derived, say,
-	 * {@link org.zkoss.zk.au.AuScript}) to adjust the polling
-	 * frequency based on the loading of the server.
-	 *
-	 * <p>Like {@link #onPiggyback}, this method is called in
-	 * the context of an event listener. In other words, the execution
-	 * is activated and you can retrieve it by
-	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
+	 * <p>{@link #stop} is called when {@link Desktop#enableServerPush}
+	 * is called to disable the server-push feature, or when the desktop
+	 * is being removed.
 	 */
-	public void onPolling();
+	public void stop();
+
 	/** Called when {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}
 	 * is received. The invocation is <i>passive</i> (i.e., triggered by
 	 * other events, rather than spontaneous).
 	 *
-	 * <p>Like {@link #onPolling}, this method is called in
+	 * <p>This method is called in
 	 * the context of an event listener. In other words, the execution
 	 * is activated and you can retrieve it by
 	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
@@ -87,7 +81,7 @@ public interface ServerPush {
 	 * The invoker of this method must invoke {@link #onDeactivate}
 	 * in this finally clause.
 	 *
-	 * <p>Unlike {@link #onPolling} and {@link #onPiggyback},
+	 * <p>Unlike {@link #onPiggyback},
 	 * this method is NOT called in the context of an event listener.
 	 * Rather, it is called in the thread of a server-push thread.
 	 */

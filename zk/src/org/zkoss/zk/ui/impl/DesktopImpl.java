@@ -57,6 +57,8 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.impl.PollingServerPush;
 import org.zkoss.zk.au.AuBookmark;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
@@ -121,6 +123,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private CacheMap _meds;
 	/** ID used to identify what is stored in _meds. */
 	private int _medId;
+	/** The server push controller, or null if not enabled. */
+	private ServerPush _spush;
 
 	private static final int MAX_RESPONSE_SEQUENCE = 1024;
 	/** The response sequence ID. */
@@ -387,6 +391,46 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				dir += '/';
 		}
 		_dir = dir;
+	}
+
+	public boolean enableServerPush(boolean enable) {
+		final boolean old = _spush != null;
+		if (old != enable) {
+			if (enable) {
+				final Class cls = _wapp.getConfiguration().getServerPushClass();
+				if (cls != null) {
+					try {
+						_spush = (ServerPush)cls.newInstance();
+					} catch (Throwable ex) {
+						throw UiException.Aide.wrap(ex, "Unable to instantiate "+cls);
+					}
+				} else {
+					_spush = new PollingServerPush();
+				}
+				_spush.start(this);
+			} else {
+				_spush.stop();
+				_spush = null;
+			}
+				
+		}
+		return old;
+	}
+	public boolean enableServerPush(ServerPush serverpush) {
+		if (serverpush == null)
+			return enableServerPush(false);
+
+		final boolean old = _spush != null;
+		if (!old || serverpush != _spush) {
+			if (old) enableServerPush(false);
+
+			_spush = serverpush;
+			_spush.start(this);
+		}
+		return old;
+	}
+	public boolean isServerPushEnabled() {
+		return _spush != null;
 	}
 
 	//-- DesktopCtrl --//

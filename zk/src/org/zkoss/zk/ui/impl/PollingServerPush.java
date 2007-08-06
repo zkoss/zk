@@ -27,11 +27,16 @@ import org.zkoss.zk.ui.sys.ServerPush;
  * @author tomyeh
  */
 public class PollingServerPush implements ServerPush {
-	public String init(Desktop desktop) {
-		return null;
+	private Desktop _desktop;
+	/** The JavaScript codes to initialize the client. */
+	private String _jsinit;
+
+	public void start(Desktop desktop) {
+		_desktop = desktop;
 	}
-	public void onPolling() {
+	public void stop() {
 	}
+
 	public void onPiggyback() {
 	}
 

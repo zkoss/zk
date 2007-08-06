@@ -398,6 +398,15 @@ public void run() {
 	 * A server-push thread is a working thread that manipulates a desktop
 	 * independent of event listeners. It can manipulate the components
 	 * of the desktop as long as it is activated.
+	 *
+	 * <p>Due to the overhead of using server-push threads, the server-push
+	 * feature is disabled by default. To use it, you have to enable
+	 * it first with {@link Desktop#enableServerPush}.
+	 * Once enabled, you can use as many as sevrer-push threads you like
+	 * (for the desktop with the server-push feature enabled).
+	 *
+	 * <p>Before a server-push thread can access the components of the
+	 * desktop it belongs, you have to activate it first.
 	 * To activate a server-push thread, you have to invoke {@link #activate}.
 	 * Once it returns, the server-push thread is activated and it, like
 	 * event listeners, can manipulate the components of the corresponding
