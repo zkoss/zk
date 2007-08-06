@@ -34,9 +34,7 @@ import java.net.URL;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Strings;
 import org.zkoss.lang.PotentialDeadLockException;
-import org.zkoss.util.Maps;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.idom.Namespace;
@@ -203,7 +201,7 @@ public class Parser {
 
 		//5. Processing from the root element
 		final Element root = doc.getRootElement();
-		if (root != null) parse(pgdef, pgdef, root, new AnnotInfo());
+		if (root != null) parse(pgdef, pgdef, root, new AnnotationHelper());
 		return pgdef;
 	}
 	private static Class locateClass(String clsnm) throws Exception {
@@ -427,12 +425,12 @@ public class Parser {
 	/** Parses the specified elements.
 	 */
 	private void parse(PageDefinition pgdef, NodeInfo parent,
-	Collection items, AnnotInfo annotInfo)
+	Collection items, AnnotationHelper annHelper)
 	throws Exception {
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
-				parse(pgdef, parent, (Element)o, annotInfo);
+				parse(pgdef, parent, (Element)o, annHelper);
 			} else if (o instanceof ProcessingInstruction) {
 				parse(pgdef, (ProcessingInstruction)o);
 			} else if ((o instanceof Text) || (o instanceof CData)) {
@@ -476,7 +474,7 @@ public class Parser {
 	/** Parse an component definition specified in the given element.
 	 */
 	private void parse(PageDefinition pgdef, NodeInfo parent,
-	Element el, AnnotInfo annotInfo)
+	Element el, AnnotationHelper annHelper)
 	throws Exception {
 		final String nm = el.getLocalName();
 		final Namespace ns = el.getNamespace();
@@ -484,24 +482,24 @@ public class Parser {
 		final String uri = ns != null ? ns.getURI(): "";
 		final LanguageDefinition langdef = pgdef.getLanguageDefinition();
 		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			parseZScript(parent, el, annotInfo);
+			parseZScript(parent, el, annHelper);
 		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			if (!(parent instanceof ComponentInfo))
 				throw new UiException("<attribute> cannot be the root element, "+el.getLocator());
 
-			parseAttribute((ComponentInfo)parent, el, annotInfo);
+			parseAttribute((ComponentInfo)parent, el, annHelper);
 		} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			parseCustomAttributes(parent, el, annotInfo);
+			parseCustomAttributes(parent, el, annHelper);
 		} else if ("variables".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			parseVariables(parent, el, annotInfo);
+			parseVariables(parent, el, annHelper);
 		} else if (LanguageDefinition.ANNO_NAMESPACE.equals(uri)) {
-			parseAnnotation(el, annotInfo);
+			parseAnnotation(el, annHelper);
 		} else {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
 
 			final ComponentInfo compInfo;
 			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-				if (annotInfo.clear())
+				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
 
 				compInfo = new ComponentInfo(
@@ -543,7 +541,7 @@ public class Parser {
 
 			String ifc = null, unless = null,
 				forEach = null, forEachBegin = null, forEachEnd = null;
-			AnnotInfo attrAnnotInfo = null;
+			AnnotationHelper attrAnnHelper = null;
 			for (Iterator it = el.getAttributeItems().iterator();
 			it.hasNext();) {
 				final Attribute attr = (Attribute)it.next();
@@ -552,9 +550,9 @@ public class Parser {
 				final String attval = attr.getValue();
 				if (attrns != null
 				&& LanguageDefinition.ANNO_NAMESPACE.equals(attrns.getURI())) {
-					if (attrAnnotInfo == null)
-						attrAnnotInfo = new AnnotInfo();
-					attrAnnotInfo.addByRawValue(attnm, attval);
+					if (attrAnnHelper == null)
+						attrAnnHelper = new AnnotationHelper();
+					attrAnnHelper.addByRawValue(attnm, attval);
 				} else if ("if".equals(attnm)) {
 					ifc = attval;
 				} else if ("unless".equals(attnm)) {
@@ -577,16 +575,16 @@ public class Parser {
 						final int len = attval.length();
 						if (len >= 3 && attval.charAt(0) == '@'
 						&& attval.charAt(1) == '{' && attval.charAt(len-1) == '}') { //annotation
-							if (attrAnnotInfo == null)
-								attrAnnotInfo = new AnnotInfo();
-							attrAnnotInfo.addByCompoundValue(
+							if (attrAnnHelper == null)
+								attrAnnHelper = new AnnotationHelper();
+							attrAnnHelper.addByCompoundValue(
 								attval.substring(2, len -1));
-							attrAnnotInfo.updateAnnotations(compInfo,
-								"self".equals(attnm) ? null: attnm);
+							attrAnnHelper.applyAnnotations(compInfo,
+								"self".equals(attnm) ? null: attnm, true);
 						} else {
 							addAttribute(compInfo, attns, attnm, attval, null);
-							if (attrAnnotInfo != null)
-								attrAnnotInfo.updateAnnotations(compInfo, attnm);
+							if (attrAnnHelper != null)
+								attrAnnHelper.applyAnnotations(compInfo, attnm, true);
 						}
 					}
 				}
@@ -594,16 +592,16 @@ public class Parser {
 
 			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
 			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
-			annotInfo.updateAnnotations(compInfo, null);
+			annHelper.applyAnnotations(compInfo, null, true);
 
-			parse(pgdef, compInfo, el.getChildren(), annotInfo); //recursive
+			parse(pgdef, compInfo, el.getChildren(), annHelper); //recursive
 		}
 	}
 	private void parseZScript(NodeInfo parent, Element el,
-	AnnotInfo annotInfo) throws Exception {
+	AnnotationHelper annHelper) throws Exception {
 		if (el.getAttributeItem("forEach") != null)
 			throw new UiException("forEach not applicable to <zscript>, "+el.getLocator());
-		if (annotInfo.clear())
+		if (annHelper.clear())
 			log.warning("Annotations are ignored since <zscript> doesn't support them, "+el.getLocator());
 
 		final String
@@ -646,7 +644,7 @@ public class Parser {
 		}
 	}
 	private void parseAttribute(ComponentInfo parent, Element el,
-	AnnotInfo annotInfo) throws Exception {
+	AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for the attribute element, "+el.getLocator());
 
@@ -662,16 +660,16 @@ public class Parser {
 			ConditionImpl.getInstance(
 				el.getAttributeValue("if"), el.getAttributeValue("unless")));
 
-		annotInfo.updateAnnotations(parent, attnm);
+		annHelper.applyAnnotations(parent, attnm, true);
 	}
 	private void parseCustomAttributes(NodeInfo parent, Element el,
-	AnnotInfo annotInfo) throws Exception {
+	AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for <custom-attributes>, "+el.getLocator());
 
 		if (parent instanceof PageDefinition)
 			throw new UiException("custom-attributes must be used under a component, "+el.getLocator());
-		if (annotInfo.clear())
+		if (annHelper.clear())
 			log.warning("Annotations are ignored since <custom-attribute> doesn't support them, "+el.getLocator());
 
 		String ifc = null, unless = null, scope = null;
@@ -699,13 +697,13 @@ public class Parser {
 				attrs, scope, ConditionImpl.getInstance(ifc, unless)));
 	}
 	private void parseVariables(NodeInfo parent, Element el,
-	AnnotInfo annotInfo) throws Exception {
+	AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for <variables> element, "+el.getLocator());
 
 		if (el.getAttributeItem("forEach") != null)
 			throw new UiException("forEach not applicable to <variables>, "+el.getLocator());
-		if (annotInfo.clear())
+		if (annHelper.clear())
 			log.warning("Annotations are ignored since <variables> doesn't support them, "+el.getLocator());
 
 		String ifc = null, unless = null;
@@ -732,7 +730,7 @@ public class Parser {
 			parent.appendChild(new VariablesInfo(
 				vars, local, ConditionImpl.getInstance(ifc, unless)));
 	}
-	private void parseAnnotation(Element el, AnnotInfo annotInfo)
+	private void parseAnnotation(Element el, AnnotationHelper annHelper)
 	throws Exception {
 		if (!el.getElements().isEmpty())
 			throw new UiException("Child elements are not allowed for the annotations, "+el.getLocator());
@@ -743,7 +741,7 @@ public class Parser {
 			final Attribute attr = (Attribute)it.next();
 			attrs.put(attr.getLocalName(), attr.getValue());
 		}
-		annotInfo.add(el.getLocalName(), attrs);
+		annHelper.add(el.getLocalName(), attrs);
 	}
 
 	/** Whether the name space belongs to the default language. */
@@ -794,83 +792,5 @@ public class Parser {
 			}
 		}
 		compInfo.addProperty(name, value, cond);
-	}
-
-	/** Information of annotations.
-	 */
-	private static class AnnotInfo {
-		/** A list of Object[] = {String annotName, Map annotAttrs}; */
-		final List _annots = new LinkedList();
-
-		/** Adds an annotation definition. */
-		private void add(String annotName, Map annotAttrs) {
-			if (isEmpty(annotName))
-				throw new IllegalArgumentException("empty");
-			_annots.add(new Object[] {annotName, annotAttrs});
-		}
-		private void addByRawValue(String annotName, String rawValue) {
-			final Map attrs = Maps.parse(null, rawValue, ',', '\'', true);
-			add(annotName, attrs);
-		}
-		/** Adds annotation by specifying the content in the compound format:
-		 * annot-name(att-name=att-value).
-		 */
-		private void addByCompoundValue(String cval) {
-			final char[] seps1 = {'(', ' '}, seps2 = {')'};
-			for (int j = 0, len = cval.length(); j < len;) {
-				j = Strings.skipWhitespaces(cval, j);
-				int k = Strings.nextSeparator(cval, j, seps1, true, true, false);
-				if (k < len && cval.charAt(k) == '(') {
-					String nm = cval.substring(j, k).trim();
-					if (nm.length() == 0) nm = "default";
-
-					j = k + 1;
-					k = Strings.nextSeparator(cval, j, seps2, true, true, false);
-
-					final String rv = 
-						(k < len ? cval.substring(j, k): cval.substring(j)).trim();
-					if (rv.length() > 0)
-						addByRawValue(nm, rv);
-					else
-						add(nm, null);
-				} else {
-					final String rv = 
-						(k < len ? cval.substring(j, k): cval.substring(j)).trim();
-					if (rv.length() > 0)
-						addByRawValue("default", rv);
-				}
-				j = k + 1;
-			}
-		}
-
-		/** Updates the annotations to the specified instance definition.
-		 * Note: it clears all annotation definitions before returning.
-		 *
-		 * @param compInfo the instance definition to update
-		 * @param propName the property name
-		 */
-		private void updateAnnotations(ComponentInfo compInfo, String propName) {
-			for (Iterator it = _annots.iterator(); it.hasNext();) {
-				final Object[] info = (Object[])it.next();
-				final String annotName = (String)info[0];
-				final Map annotAttrs = (Map)info[1];
-				if (propName != null)
-					compInfo.addAnnotation(propName, annotName, annotAttrs);
-				else
-					compInfo.addAnnotation(annotName, annotAttrs);
-			}
-			_annots.clear();
-		}
-		/** Clears all annotation definitions.
-		 * @return true if one or more annotation definitions are defined
-		 * (thru {@link #add}).
-		 */
-		private boolean clear() {
-			if (!_annots.isEmpty()) {
-				_annots.clear();
-				return true;
-			}
-			return false;
-		}
 	}
 }

@@ -32,6 +32,14 @@ import org.zkoss.zk.au.*;
  * @see org.zkoss.zk.ui.event.ClientInfoEvent
  */
 public class Clients {
+	/** Sends an AU response ({@link AuResponse})to the client.
+	 * @since 2.5.0
+	 */
+	public static final void response(AuResponse response) {
+		Executions.getCurrent()
+			.addAuResponse(response.getCommand(), response);
+	}
+
 	/** Asks the browser to confirm users whether to close the browser window.
 	 *
 	 * <p>If an non-null (non-empty) string is set, the browser will show up
@@ -44,19 +52,19 @@ public class Clients {
 	 * If null (default) or emtpy, users can close the browser window directly.
 	 */
 	public static final void confirmClose(String mesg) {
-		addAuResponse(new AuConfirmClose(mesg));
+		response(new AuConfirmClose(mesg));
 	}
 
 	/** Closes the error box at the browser belonging to
 	 * the specified component, if any.
 	 */
 	public static final void closeErrorBox(Component owner) {
-		addAuResponse(new AuCloseErrorBox(owner));
+		response(new AuCloseErrorBox(owner));
 	}
 	/** Submits the form with the specified ID.
 	 */
 	public static final void submitForm(String formId) {
-		addAuResponse(new AuSubmitForm(formId));
+		response(new AuSubmitForm(formId));
 	}
 	/** Submits the form with the specified form.
 	 * It assumes the form component is a HTML form.
@@ -64,15 +72,10 @@ public class Clients {
 	public static final void submitForm(Component form) {
 		submitForm(form.getUuid());
 	}
-	private static final void addAuResponse(AuResponse response) {
-		Executions.getCurrent()
-			.addAuResponse(response.getCommand(), response);
-	}
-
 	/** Prints the current desktop (aka., browser window) to the client the printer.
 	 */
 	public static void print() {
-		addAuResponse(new AuPrint());
+		response(new AuPrint());
 	}
 
 	/** Scrolls the current desktop (aka., browser window) by the specified number of pixels.
@@ -82,7 +85,7 @@ public class Clients {
 	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void scrollBy(int x, int y) {
-		addAuResponse(new AuScrollBy(x, y));
+		response(new AuScrollBy(x, y));
 	}
 	/** Scrolls the current desktop (aka., browser window) to the specified location (in pixels).
 	 *
@@ -90,7 +93,7 @@ public class Clients {
 	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void scrollTo(int x, int y) {
-		addAuResponse(new AuScrollTo(x, y));
+		response(new AuScrollTo(x, y));
 	}
 	/** Resizes the current desktop (aka., browser window) by the specified number of pixels.
 	 * If the numbers passed are positive, the desktop size is increased.
@@ -100,7 +103,7 @@ public class Clients {
 	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void resizeBy(int x, int y) {
-		addAuResponse(new AuResizeBy(x, y));
+		response(new AuResizeBy(x, y));
 	}
 	/** Resizes the current desktop (aka., browser window) to the specified size (in pixels).
 	 *
@@ -108,7 +111,7 @@ public class Clients {
 	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void resizeTo(int x, int y) {
-		addAuResponse(new AuResizeTo(x, y));
+		response(new AuResizeTo(x, y));
 	}
 	/** Moves the current desktop (aka., browser window) by the specified number of pixels.
 	 * If the number passed is positive, the desktop is moved down.
@@ -117,7 +120,7 @@ public class Clients {
 	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void moveBy(int x, int y) {
-		addAuResponse(new AuMoveBy(x, y));
+		response(new AuMoveBy(x, y));
 	}
 	/** Moves the current desktop (aka., browser window) to the specified location (in pixels).
 	 *
@@ -125,7 +128,7 @@ public class Clients {
 	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void moveTo(int x, int y) {
-		addAuResponse(new AuMoveTo(x, y));
+		response(new AuMoveTo(x, y));
 	}
 
 	/** Asks the browser to evaluate the specified JavaScript.
@@ -134,6 +137,6 @@ public class Clients {
 	 * @param javaScript the javaScript codes to run at the browser
 	 */
 	public static final void evalJavaScript(String javaScript) {
-		addAuResponse(new AuScript(null, javaScript));
+		response(new AuScript(null, javaScript));
 	}
 }

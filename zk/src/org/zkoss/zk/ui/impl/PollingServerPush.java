@@ -20,6 +20,9 @@ package org.zkoss.zk.ui.impl;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zk.au.AuScript;
 
 /**
  * A server-push implementation that is based on client-polling.
@@ -28,13 +31,34 @@ import org.zkoss.zk.ui.sys.ServerPush;
  */
 public class PollingServerPush implements ServerPush {
 	private Desktop _desktop;
-	/** The JavaScript codes to initialize the client. */
-	private String _jsinit;
 
+	/** Returns the JavaScript codes to enable (aka., start) the server push.
+	 */
+	protected String getStartScript() {
+		final String start = _desktop.getWebApp()
+			.getConfiguration().getPreference("PollingServerPush.start", null);
+		return start != null ? start:
+			"zk.load('zul.cpsp');addInit(new function() {zkCpsp.start('"
+			+ _desktop.getId() + "');});";
+	}
+	/** Returns the JavaScript codes to disable (aka., stop) the server push.
+	 */
+	protected String getStopScript() {
+		final String stop = _desktop.getWebApp()
+			.getConfiguration().getPreference("PollingServerPush.stop", null);
+		return stop != null ? stop:
+			"zkCpsp.stop('" + _desktop.getId() + "');";
+	}
+
+
+	//ServerPush//
 	public void start(Desktop desktop) {
 		_desktop = desktop;
+		Clients.response(new AuScript(null, getStartScript()));
 	}
 	public void stop() {
+		Clients.response(new AuScript(null, getStopScript()));
+		_desktop = null;
 	}
 
 	public void onPiggyback() {
