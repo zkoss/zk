@@ -26,7 +26,9 @@ import java.util.Map;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Maps;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * A helper class used to parse annotations.
@@ -116,6 +118,29 @@ public class AnnotationHelper {
 				compInfo.addAnnotation(propName, annotName, annotAttrs);
 			else
 				compInfo.addAnnotation(annotName, annotAttrs);
+		}
+		if (clear)
+			_annots.clear();
+	}
+	/** Applies the annotations defined in this helper to the specified
+	 * component.
+	 *
+	 * @param comp the component to update
+	 * @param propName the property name
+	 * @param clear whether to clear all definitions before returning
+	 * @see #clear
+	 */
+	public void applyCommponents(Component comp, String propName,
+	boolean clear) {
+		for (Iterator it = _annots.iterator(); it.hasNext();) {
+			final Object[] info = (Object[])it.next();
+			final String annotName = (String)info[0];
+			final Map annotAttrs = (Map)info[1];
+			ComponentCtrl ctrl = (ComponentCtrl) comp;
+			if (propName != null)
+				ctrl.addAnnotation(propName, annotName, annotAttrs);
+			else
+				ctrl.addAnnotation(annotName, annotAttrs);
 		}
 		if (clear)
 			_annots.clear();
