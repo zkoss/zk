@@ -1087,13 +1087,6 @@ public class DataBinder {
 		 */
 		private void loadAllNodes(Object bean, BindingNode node, Component collectionComp, 
 			Binding savebinding, boolean refChanged, List nodes) {
-System.out.println("---refChanged:"+refChanged);
-System.out.println("refNode:"+node);
-System.out.println("path:"+node.getPath());
-System.out.println("nodes:"+nodes);
-System.out.println("collectionComp:"+collectionComp);
-
-
 			Set walkedNodes = new HashSet(23);
 			Set loadedBindings = new HashSet(23*2);
 			myLoadAllNodes(bean, node, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
@@ -1109,13 +1102,11 @@ System.out.println("collectionComp:"+collectionComp);
 						Object obj = itx.next();
 						if (obj instanceof BindingNode) {
 							BindingNode samenode = (BindingNode) obj;
-System.out.println("samenode:"+samenode+", var:"+samenode.isVar()+", collectionComp:"+collectionComp);
 							myLoadAllNodes(bean, samenode, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
 						} else {
 							BindingNode samenode = (BindingNode)((Object[])obj)[0];
 							Object rootbean = ((Object[])obj)[1];
 							Component rootCollectionComp = (Component) ((Object[])obj)[2];
-System.out.println("samenode:"+samenode+", var:"+samenode.isVar()+", rootCollectionComp:"+rootCollectionComp+", rootbean:"+rootbean);
 							myLoadAllNodes(rootbean, samenode, rootCollectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
 
 						}
@@ -1131,7 +1122,6 @@ System.out.println("samenode:"+samenode+", var:"+samenode.isVar()+", rootCollect
 			if (walkedNodes.contains(node)) {
 				return; //already walked, skip
 			}
-System.out.println("walked node:"+node);
 			//mark as walked already
 			walkedNodes.add(node);
 
@@ -1141,7 +1131,6 @@ System.out.println("walked node:"+node);
 			}
 			//loading
 			collectionComp = loadBindings(bean, node, collectionComp, savebinding, loadedBindings, refChanged);
-System.out.println("new collectionComp:"+collectionComp);
 			
 			for(final Iterator it = node.getKidNodes().iterator(); it.hasNext();) {
 				final BindingNode kidnode = (BindingNode) it.next();
