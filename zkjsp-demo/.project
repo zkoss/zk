@@ -29,6 +29,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>META-INF</name>
+			<type>2</type>
+			<location>C:/svn_repository/zk1/trunk/zuljsp/src/archive/META-INF</location>
+		</link>
+		<link>
 			<name>zuljsp</name>
 			<type>2</type>
 			<location>C:/svn_repository/zk1/trunk/zuljsp/src</location>

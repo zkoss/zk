@@ -209,12 +209,5 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<welcome-file>index.htm</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
-	<jsp-config>
-	  <taglib>
-	    <taglib-uri>http://www.zkoss.org/2005/zul/jsp</taglib-uri>
-	    <taglib-location>/WEB-INF/tld/zul/jsp/zuljsp.tld</taglib-location>
-	  </taglib>
-	</jsp-config>
-
 
 </web-app>
