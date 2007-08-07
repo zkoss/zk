@@ -18,6 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Demo of Server Push">
-	<button label="Start Pushing" onClick="org.zkoss.zkdemo.test.ServerPush.start(info)"/>
+	<vbox>
+	<button label="Start Push" onClick="org.zkoss.zkdemo.test.ServerPush.start(info)"/>
+	<button label="Stop Push" onClick="org.zkoss.zkdemo.test.ServerPush.stop()"/>
 	<label id="info"/>
+	</vbox>
 </window>
