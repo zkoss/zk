@@ -171,8 +171,6 @@ public class Timebox extends InputElement {
 	/** Returns the date format of the time only,
 	 *
 	 * <p>Default: it uses SimpleDateFormat to format the date.
-	 *
-	 * @param fmt the pattern.
 	 */
 	protected DateFormat getDateFormat() {
 		String fmt = "HH:mm";
