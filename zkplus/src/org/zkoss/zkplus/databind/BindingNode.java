@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkplus.databind;
 
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Component;
 
 import java.util.Map;
 import java.util.Set;

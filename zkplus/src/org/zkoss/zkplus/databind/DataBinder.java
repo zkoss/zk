@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Collection;
@@ -578,7 +579,7 @@ public class DataBinder {
 		if(decorName != null){
 			return decorName;
 		}else{
-			throw new UiException("Not found the BindingDecorator accordingly! :"+comp);
+			throw new UiException("Cannot find associated CollectionItem:"+comp);
 		}		
 	}
 	//get Collection owner of a given collection item.
@@ -772,6 +773,7 @@ public class DataBinder {
 		boolean refChanged = false; //wether this setting change the reference
 		String beanid = null;
 		final List nodeids = parseExpression(path, ".");
+		final List nodes = new ArrayList(nodeids.size());
 		final Iterator it = nodeids.iterator();
 		if (it != null && it.hasNext()) {
 			beanid = (String) it.next();
@@ -779,6 +781,7 @@ public class DataBinder {
 			if (currentNode == null) {
 				throw new UiException("Cannot find the specified databind bean expression:" + path);
 			}
+			nodes.add(currentNode);
 			bean = lookupBean(comp, beanid);
 		} else {
 			throw new UiException("Incorrect format of databind bean expression:" + path);
@@ -806,6 +809,7 @@ public class DataBinder {
 				if (currentNode == null) {
 					throw new UiException("Cannot find the specified databind bean expression:" + path);
 				}
+				nodes.add(currentNode);
 				try {
 					bean = Fields.get(bean, beanid);
 				} catch (NoSuchMethodException ex) {
@@ -827,6 +831,7 @@ public class DataBinder {
 					if (currentNode == null) {
 						throw new UiException("Cannot find the specified databind bean expression:" + path);
 					}
+					nodes.add(currentNode);
 					bean = orgVal;
 					refChanged = true;
 				}
@@ -863,7 +868,8 @@ public class DataBinder {
 		}
 
 		//All kid nodes should be reloaded 
-		Events.postEvent(new Event("onLoadOnSave", comp, new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged)}));
+		Events.postEvent(new Event("onLoadOnSave", comp, 
+			new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged), nodes}));
 	}
 	
 	private void registerBeanNode(Object bean, BindingNode node) {
@@ -1001,6 +1007,60 @@ public class DataBinder {
 		return null;
 	}
 
+	// Given parentNode, path, and level, return associate same kid nodes of parent
+	// a1.b.c -> a2.b.c, a3.b.c, ...
+	private Set getAssociateSameNodes(BindingNode parentNode, String path, int level) {
+		final List nodeids = DataBinder.parseExpression(path, ".");
+		final int sz = nodeids.size();
+		final List subids = nodeids.subList(sz - level, sz);
+
+		Object bean = null;
+		for (final Iterator it = parentNode.getSameNodes().iterator(); it.hasNext();) {
+			Object obj = it.next();
+			if (!(obj instanceof BindingNode)) {
+				bean = obj;
+				break;
+			}
+		}
+		
+		//for each same node, find the associated kid node
+		final Set assocateSameNodes = new HashSet();
+		for (final Iterator it = parentNode.getSameNodes().iterator(); it.hasNext();) {
+			//locate the associate kid node
+			BindingNode currentNode = null;
+			final Object obj = it.next();
+			if (!(obj instanceof BindingNode) || currentNode == parentNode) {
+				continue;
+			}
+
+			currentNode = (BindingNode) obj;
+			//var node is special, use only root
+			if (!currentNode.isVar()) {
+				for(final Iterator itx = subids.iterator(); itx.hasNext();) {
+					final String nodeid = (String) itx.next();
+					currentNode = (BindingNode) currentNode.getKidNode(nodeid);
+					if (currentNode == null) {
+						break;
+					}
+				}
+				if (currentNode != null) {
+					assocateSameNodes.add(currentNode);
+				}
+			} else if (currentNode.isRoot()) {
+				//locate the listitem component
+				Component li = null;
+				for(final Iterator itx = currentNode.getBindings().iterator(); itx.hasNext(); ) {
+					Binding binding = (Binding) itx.next();
+					if ("_var".equals(binding.getAttr())) {
+						li = binding.getComponent();
+						break;
+					}
+				}
+				assocateSameNodes.add(new Object[] {currentNode, bean, li});
+			}
+		}
+		return assocateSameNodes;
+	}
 	
 	private class LoadOnSaveEventListener implements EventListener {
 		public LoadOnSaveEventListener() {
@@ -1017,26 +1077,61 @@ public class DataBinder {
 			final Object bean = data[3]; //saved bean
 			final boolean refChanged = ((Boolean)data[4]).booleanValue(); //whether bean itself changed
 			final Component savecomp = event.getTarget(); //saved comp that trigger this load-on-save event
+			final List nodes = (List) data[5]; //the complete nodes along the path to the node
 			if (savecomp != null) {
-				loadAllNodes(bean, node, savecomp, savebinding, refChanged);
+				loadAllNodes(bean, node, savecomp, savebinding, refChanged, nodes);
 			}
 		}
 		
 		/** Load all associated BindingNodes below the given nodes (depth first traverse).
 		 */
-		private void loadAllNodes(Object bean, BindingNode node, Component collectionComp, Binding savebinding, boolean refChanged) {
+		private void loadAllNodes(Object bean, BindingNode node, Component collectionComp, 
+			Binding savebinding, boolean refChanged, List nodes) {
+System.out.println("---refChanged:"+refChanged);
+System.out.println("refNode:"+node);
+System.out.println("path:"+node.getPath());
+System.out.println("nodes:"+nodes);
+System.out.println("collectionComp:"+collectionComp);
+
+
 			Set walkedNodes = new HashSet(23);
 			Set loadedBindings = new HashSet(23*2);
 			myLoadAllNodes(bean, node, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
-			
+
+			//for each ancestor, find associated same nodes			
+			if (!nodes.isEmpty()) {
+				final String path = node.getPath();
+				int level = 1;
+				for(final ListIterator it = nodes.listIterator(nodes.size()-1); it.hasPrevious(); ++level) {
+					final BindingNode parentNode = (BindingNode) it.previous();
+					final Set associateSameNodes = getAssociateSameNodes(parentNode, path, level);
+					for(final Iterator itx = associateSameNodes.iterator(); itx.hasNext();) {
+						Object obj = itx.next();
+						if (obj instanceof BindingNode) {
+							BindingNode samenode = (BindingNode) obj;
+System.out.println("samenode:"+samenode+", var:"+samenode.isVar()+", collectionComp:"+collectionComp);
+							myLoadAllNodes(bean, samenode, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
+						} else {
+							BindingNode samenode = (BindingNode)((Object[])obj)[0];
+							Object rootbean = ((Object[])obj)[1];
+							Component rootCollectionComp = (Component) ((Object[])obj)[2];
+System.out.println("samenode:"+samenode+", var:"+samenode.isVar()+", rootCollectionComp:"+rootCollectionComp+", rootbean:"+rootbean);
+							myLoadAllNodes(rootbean, samenode, rootCollectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
+
+						}
+					}
+				}
+			}
 		}
+
+
 		
 		private void myLoadAllNodes(Object bean, BindingNode node, Component collectionComp,
 		Set walkedNodes, Binding savebinding, Set loadedBindings, boolean refChanged) {
 			if (walkedNodes.contains(node)) {
 				return; //already walked, skip
 			}
-			
+System.out.println("walked node:"+node);
 			//mark as walked already
 			walkedNodes.add(node);
 
@@ -1046,6 +1141,7 @@ public class DataBinder {
 			}
 			//loading
 			collectionComp = loadBindings(bean, node, collectionComp, savebinding, loadedBindings, refChanged);
+System.out.println("new collectionComp:"+collectionComp);
 			
 			for(final Iterator it = node.getKidNodes().iterator(); it.hasNext();) {
 				final BindingNode kidnode = (BindingNode) it.next();
@@ -1087,7 +1183,7 @@ public class DataBinder {
 			return bean;
 		}
 		
-		//return nearest collection item Component (i.e. ListItem)
+		//return nearest collection item Component (i.e. Listitem)
 		private Component loadBindings(Object bean, BindingNode node, Component collectionComp, 
 		Binding savebinding, Set loadedBindings, boolean refChanged) {
 			final Collection bindings = node.getBindings();
