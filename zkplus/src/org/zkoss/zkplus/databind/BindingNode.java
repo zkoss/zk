@@ -177,6 +177,17 @@ import java.util.LinkedHashMap;
 		return currentNode == this ? null : currentNode;
 	}
 	
+	/** Get root node of this node.
+	 */
+	public BindingNode getRootNode(BindingNode superNode) {
+		if (isRoot()) {
+			return this;
+		}
+		final int j = getPath().indexOf(".");
+		final String path = (j < 0) ? getPath() : getPath().substring(0, j);
+		return superNode.locate(path);
+	}
+	
 	/** get the sameNodes of this BindingNode.
 	 */
 	public Set getSameNodes() {

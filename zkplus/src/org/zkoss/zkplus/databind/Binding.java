@@ -272,15 +272,15 @@ public class Binding {
 	 */
 	public void saveAttribute(Component comp) {
 		final Object[] vals = getAttributeValues(comp);
-		saveAttributeValue(comp, vals);
+		saveAttributeValue(comp, vals, null);
 	}
 	
-	private void saveAttributeValue(Component comp, Object[] vals) {
+	private void saveAttributeValue(Component comp, Object[] vals, List loadOnSaveInfos) {
 		if (vals == null) return;
 		
 		final Object val = vals[0];
 		final Object rawval = vals[1];
-		_binder.setBeanAndRegisterBeanSameNodes(comp, val, this, _expression, _converter == null, rawval);
+		_binder.setBeanAndRegisterBeanSameNodes(comp, val, this, _expression, _converter == null, rawval, loadOnSaveInfos);
 	}		
 	
 	/** Get converted value and original value of this Binding.
@@ -431,13 +431,20 @@ public class Binding {
 			Events.sendEvent(new Event("onBindingValidate", target));
 			
 			//saveAttribute for each binding
+			Component dataTarget = null;
+			final List loadOnSaveInfos = new ArrayList(tmplist.size());
 			for(final Iterator it = tmplist.iterator();it.hasNext();) {
 				final BindingInfo bi = (BindingInfo) it.next();
-				final Component dataTarget = bi.getComponent();
+				dataTarget = bi.getComponent();
 				final Binding binding = bi.getBinding();
 				final Object[] vals = bi.getAttributeValues();
 				final DataBinder binder = binding.getBinder();
-				binding.saveAttributeValue(dataTarget, vals);
+				binding.saveAttributeValue(dataTarget, vals, loadOnSaveInfos);
+			}
+			
+			//do loadOnSave (use last dataTarget as proxy
+			if (dataTarget != null) {
+				Events.postEvent(new Event("onLoadOnSave", dataTarget, loadOnSaveInfos));
 			}
 		}
 	}

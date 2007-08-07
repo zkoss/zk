@@ -766,7 +766,8 @@ public class DataBinder {
 		return bean;
 	}
 	
-	/* package */ void setBeanAndRegisterBeanSameNodes(Component comp, Object val, Binding binding, String path, boolean autoConvert, Object rawval) {
+	/* package */ void setBeanAndRegisterBeanSameNodes(Component comp, Object val, Binding binding, 
+	String path, boolean autoConvert, Object rawval, List loadOnSaveInfos) {
 		Object orgVal = null;
 		Object bean = null;
 		BindingNode currentNode = _pathTree;
@@ -867,9 +868,14 @@ public class DataBinder {
 			comp.addEventListener("onLoadOnSave", _listener);
 		}
 
-		//All kid nodes should be reloaded 
-		Events.postEvent(new Event("onLoadOnSave", comp, 
-			new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged), nodes}));
+		Object[] loadOnSaveInfo = 
+			new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged), nodes, comp};
+		if (loadOnSaveInfos != null) {
+			loadOnSaveInfos.add(loadOnSaveInfo);
+		} else {
+			//do loadOnSave immediately
+			Events.postEvent(new Event("onLoadOnSave", comp, loadOnSaveInfo));
+		}
 	}
 	
 	private void registerBeanNode(Object bean, BindingNode node) {
@@ -1034,32 +1040,48 @@ public class DataBinder {
 			}
 
 			currentNode = (BindingNode) obj;
-			//var node is special, use only root
-			if (!currentNode.isVar()) {
-				for(final Iterator itx = subids.iterator(); itx.hasNext();) {
-					final String nodeid = (String) itx.next();
-					currentNode = (BindingNode) currentNode.getKidNode(nodeid);
-					if (currentNode == null) {
-						break;
-					}
+			for(final Iterator itx = subids.iterator(); itx.hasNext();) {
+				final String nodeid = (String) itx.next();
+				currentNode = (BindingNode) currentNode.getKidNode(nodeid);
+				if (currentNode == null) {
+					break;
 				}
-				if (currentNode != null) {
+			}
+
+			if (currentNode != null) {
+				if (!currentNode.isVar()) {
 					assocateSameNodes.add(currentNode);
+				} else { //a var node, specialcase, find the var root
+					Component varRootComp = getVarRootComponent(currentNode);
+					assocateSameNodes.add(new Object[] {currentNode, varRootComp});
 				}
-			} else if (currentNode.isRoot()) {
-				//locate the listitem component
-				Component li = null;
-				for(final Iterator itx = currentNode.getBindings().iterator(); itx.hasNext(); ) {
-					Binding binding = (Binding) itx.next();
-					if ("_var".equals(binding.getAttr())) {
-						li = binding.getComponent();
-						break;
-					}
-				}
-				assocateSameNodes.add(new Object[] {currentNode, bean, li});
 			}
 		}
 		return assocateSameNodes;
+	}
+	
+	private Component getVarRootComponent(BindingNode node) {
+		final BindingNode varRootNode = node.getRootNode(_pathTree);
+		
+		Object bean = null;
+		for (final Iterator it = varRootNode.getSameNodes().iterator(); it.hasNext();) {
+			Object obj = it.next();
+			if (!(obj instanceof BindingNode)) {
+				bean = obj;
+				break;
+			}
+		}
+		
+		Component comp = null;
+		for(final Iterator itx = varRootNode.getBindings().iterator(); itx.hasNext();) {
+			Binding binding = (Binding) itx.next();
+			if ("_var".equals(binding.getAttr())) {
+				comp = binding.getComponent();
+				break;
+			}
+		}
+
+		return getCollectionItem(comp, bean);		
 	}
 	
 	private class LoadOnSaveEventListener implements EventListener {
@@ -1068,27 +1090,39 @@ public class DataBinder {
 		
 		//-- EventListener --//
 		public void onEvent(Event event) {
-			Object[] data = (Object[]) event.getData();
+			final Set walkedNodes = new HashSet(32);
+			final Set loadedBindings = new HashSet(32*2);
+
+			Object obj = event.getData();
+			if (obj instanceof List) {
+				for(final Iterator it = ((List)obj).iterator(); it.hasNext();) {
+					final Object[] data = (Object[]) it.next();
+					doLoad(data, walkedNodes, loadedBindings);
+				}
+			} else {
+				doLoad((Object[]) obj, walkedNodes, loadedBindings);
+			}
+		}
+		
+		private void doLoad(Object[] data, Set walkedNodes, Set loadedBindings) {
 			if (!data[0].equals(DataBinder.this)) {
 				return; //not for this DataBinder, skip
 			}
 			final BindingNode node = (BindingNode) data[1]; //to be loaded nodes
 			final Binding savebinding = (Binding) data[2]; //to be excluded binding
 			final Object bean = data[3]; //saved bean
-			final boolean refChanged = ((Boolean)data[4]).booleanValue(); //whether bean itself changed
-			final Component savecomp = event.getTarget(); //saved comp that trigger this load-on-save event
+			final boolean refChanged = ((Boolean) data[4]).booleanValue(); //whether bean itself changed
 			final List nodes = (List) data[5]; //the complete nodes along the path to the node
+			final Component savecomp = (Component) data[6]; //saved comp that trigger this load-on-save event
 			if (savecomp != null) {
-				loadAllNodes(bean, node, savecomp, savebinding, refChanged, nodes);
+				loadAllNodes(bean, node, savecomp, savebinding, refChanged, nodes, walkedNodes, loadedBindings);
 			}
 		}
 		
 		/** Load all associated BindingNodes below the given nodes (depth first traverse).
 		 */
 		private void loadAllNodes(Object bean, BindingNode node, Component collectionComp, 
-			Binding savebinding, boolean refChanged, List nodes) {
-			Set walkedNodes = new HashSet(23);
-			Set loadedBindings = new HashSet(23*2);
+			Binding savebinding, boolean refChanged, List nodes, Set walkedNodes, Set loadedBindings) {
 			myLoadAllNodes(bean, node, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
 
 			//for each ancestor, find associated same nodes			
@@ -1105,9 +1139,8 @@ public class DataBinder {
 							myLoadAllNodes(bean, samenode, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
 						} else {
 							BindingNode samenode = (BindingNode)((Object[])obj)[0];
-							Object rootbean = ((Object[])obj)[1];
-							Component rootCollectionComp = (Component) ((Object[])obj)[2];
-							myLoadAllNodes(rootbean, samenode, rootCollectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
+							Component varRootComp = (Component) ((Object[])obj)[1];
+							myLoadAllNodes(bean, samenode, varRootComp, walkedNodes, savebinding, loadedBindings, refChanged);
 
 						}
 					}
