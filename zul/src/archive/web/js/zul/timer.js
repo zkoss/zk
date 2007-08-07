@@ -47,17 +47,17 @@ zk.Timer.prototype = {
 		var delay = getZKAttr(el, "delay");
 		var func = "zkTimer._fire('"+this.id+"')";
 		if (repeats)
-			this.interval = window.setInterval(func, delay);
+			this.interval = setInterval(func, delay);
 		else
-			this.timeout = window.setTimeout(func, delay);
+			this.timeout = setTimeout(func, delay);
 	},
 	cleanup: function ()  {
 		if (this.timeout) {
-			window.clearTimeout(this.timeout);
+			clearTimeout(this.timeout);
 			this.timeout = null;
 		}
 		if (this.interval) {
-			window.clearInterval(this.interval);
+			clearInterval(this.interval);
 			this.interval = null;
 		}
 	}
