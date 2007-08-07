@@ -16,13 +16,29 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
+import org.zkoss.zk.ui.Desktop;
+
 /**
  * A response to ask the browser to send back its information.
  *
  * @author tomyeh
+ * @see org.zkoss.zk.ui.event.ClientInfoEvent
  */
 public class AuClientInfo extends AuResponse {
+	/** Contructs a client-info response with the specified desktop.
+	 *
+	 * @param desktop the desktop to get the client info back.
+	 * If null, the client info is sent back for each desktop in the
+	 * same browser window.
+	 * @since 2.5.0
+	 */
+	public AuClientInfo(Desktop desktop) {
+		super("clientInfo", desktop != null ? desktop.getId(): null);
+	}
+	/** Constructs a client-info response for all desktops of the same
+	 * browser window.
+	 */
 	public AuClientInfo() {
-		super("clientInfo");
+		this(null);
 	}
 }

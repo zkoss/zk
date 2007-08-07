@@ -18,18 +18,33 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
+import org.zkoss.zk.ui.Desktop;
+
 /**
  * A response to ask client to send a dummy request back to the server.
  *
  * <p>It is used by {@link org.zkoss.zk.ui.sys.UiEngine} to solve a special
  * case.
  *
- * <p>data[0]: null (ie., empty for client)
+ * <p>data[0]: desktop Id
  * 
  * @author tomyeh
  */
 public class AuEcho  extends AuResponse {
+	/** Contructs an echo response with the specified desktop.
+	 *
+	 * @param desktop the desktop to send the echo response to.
+	 * If null, the echo response is sent to each desktop in the
+	 * same browser window.
+	 * @since 2.5.0
+	 */
+	public AuEcho(Desktop desktop) {
+		super("echo",  desktop != null ? desktop.getId(): null);
+	}
+	/** Contructs an echo response for each desktop in the same browser
+	 * window
+	 */
 	public AuEcho() {
-		super("echo");
+		this(null);
 	}
 }

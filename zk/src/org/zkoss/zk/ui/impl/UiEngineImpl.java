@@ -660,7 +660,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			if (rque.hasRequest())
-				responses.add(new AuEcho());
+				responses.add(new AuEcho(desktop));
 
 			responseSequenceId(desktop, out);
 			response(responses, out);

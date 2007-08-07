@@ -294,6 +294,8 @@ zkau.send = function (evt, timeout) {
 
 	if (evt.uuid) {
 		zkau._send(zkau._dtid(evt.uuid), evt, timeout);
+	} else if (evt.dtid) {
+		zkau._send(evt.dtid, evt, timeout);
 	} else {
 		var ds = zkau._dtids;
 		for (var j = 0; j < ds.length; ++j)
@@ -321,6 +323,8 @@ zkau._send = function (dtid, evt, timeout) {
 zkau.sendAhead = function (evt) {
 	if (evt.uuid) {
 		zkau._events(zkau._dtid(evt.uuid)).unshift(evt);
+	} else if (evt.dtid) {
+		zkau._events(evt.dtid).unshift(evt);
 	} else {
 		var ds = zkau._dtids;
 		for (var j = ds.length; --j >= 0; ++j)
@@ -370,7 +374,7 @@ zkau._sendNow = function (dtid) {
 	var content = "";
 	for (var j = 0; es.length; ++j) {
 		var evt = es.shift();
-		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+evt.uuid;
+		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+(evt.uuid?evt.uuid:'');
 		if (evt.data)
 			for (var k = 0; k < evt.data.length; ++k) {
 				var data = evt.data[k];
@@ -1543,7 +1547,7 @@ zkau.beginUpload = function (wndid) {
 	zkau.endUpload();
 	zkau._upldWndId = wndid;
 	zkau._tmupload = setInterval(function () {
-		zkau.send({uuid: '', cmd: "getUploadInfo", data: null});
+		zkau.send({dtid: zkau._dtid(wndid), cmd: "getUploadInfo", data: null});
 	}, 660);
 };
 zkau.updateUploadInfo = function (p, cb) {
@@ -1615,12 +1619,12 @@ zkau.cmd0 = { //no uuid at all
 	script: function (dt0) {
 		eval(dt0);
 	},
-	echo: function () {
-		zkau.send({uuid: "", cmd: "dummy", data: null, ignorable: true});
+	echo: function (dtid) {
+		zkau.send({dtid: dtid, cmd: "dummy", data: null, ignorable: true});
 	},
-	clientInfo: function () {
+	clientInfo: function (dtid) {
 		zkau._cInfoReg = true;
-		zkau.send({uuid: "", cmd: "onClientInfo", data: [
+		zkau.send({dtid: dtid, cmd: "onClientInfo", data: [
 			new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
 			zk.innerWidth(), zk.innerHeight(), zk.innerX(), zk.innerY()

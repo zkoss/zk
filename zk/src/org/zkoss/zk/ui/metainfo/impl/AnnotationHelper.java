@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * <ol>
  * <li>Invoke one of {@link #add}, {@link #addByRawValue},
  * or {@link #addByCompoundValue} to add annotations to this helper.</li>
- * <li>After annotations are all added, invoke {@link #applyProperties}
+ * <li>After annotations are all added, invoke {@link #applyAnnotations}
  * to update the annotations to the specified component info.</li>
  * </ol>
  *

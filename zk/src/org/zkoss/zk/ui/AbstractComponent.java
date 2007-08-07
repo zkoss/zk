@@ -37,6 +37,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
+import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.event.EventListener;
@@ -934,11 +935,63 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws IOException {
 	}
 
+	/** Returns whether to send back the request of the specified event
+	 * immediately -- i.e., non-deferrable.
+	 * Returns true if you want the component (on the server)
+	 * to process the event immediately.
+	 *
+	 * <p>Default: return true if any non-deferable event listener of
+	 * the specified event is found. In other words, it returns
+	 * {@link Events#isListened} with asap = true.
+	 *
+	 * <p>This method is moved from {@link HtmlBasedComponent} to
+	 * {@link AbstractComponent} since 2.5.0.
+	 *
+	 * @param evtnm the event name, such as onClick
+	 * @since 2.5.0
+	 */
+	protected boolean isAsapRequired(String evtnm) {
+		return Events.isListened(this, evtnm, true);
+	}
+
+	/** Appends an attribute for the specified event name, say, onChange,
+	 * if a non-deferrable listener is registered.
+	 * The format of the generated attribute is as follows:
+	 * <code>onChange="true"</code>.
+	 *
+	 * <p>This method is moved from {@link HtmlBasedComponent} to
+	 * {@link AbstractComponent} since 2.5.0.
+	 *
+	 * @param sb the string buffer to hold the HTML attribute. If null and
+	 * {@link #isAsapRequired} is true, a string buffer is created and returned.
+	 * @param evtnm the event name, such as onClick
+	 * @return the string buffer. If sb is null and {@link #isAsapRequired}
+	 * returns false, null is returned.
+	 * If the caller passed non-null sb, the returned value must be the same
+	 * as sb (so it usually ignores the returned value).
+	 * @since 2.5.0
+	 */
+	protected StringBuffer appendAsapAttr(StringBuffer sb, String evtnm) {
+		if (isAsapRequired(evtnm)) {
+			if (sb == null) sb = new StringBuffer(80);
+			HTMLs.appendAttribute(sb, getAttrOfEvent(evtnm), true);
+		}
+		return sb;
+	}
+	private static String getAttrOfEvent(String evtnm) {
+		return Events.ON_CLICK.equals(evtnm) ? "z.lfclk":
+			Events.ON_RIGHT_CLICK.equals(evtnm) ? "z.rtclk":
+			Events.ON_DOUBLE_CLICK.equals(evtnm) ? "z.dbclk":
+				"z." + evtnm;
+	}
+
 	public boolean addEventListener(String evtnm, EventListener listener) {
 		if (evtnm == null || listener == null)
 			throw new IllegalArgumentException("null");
 		if (!Events.isValid(evtnm))
 			throw new IllegalArgumentException("Invalid event name: "+evtnm);
+
+		final boolean asap = isAsapRequired(evtnm);
 
 		if (_listeners == null) _listeners = new HashMap();
 
@@ -955,7 +1008,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		l.add(listener);
 
 		if (Events.ON_CLIENT_INFO.equals(evtnm))
-			response("clientInfo", new AuClientInfo());
+			response("clientInfo", new AuClientInfo(getDesktop()));
+		if (!asap && isAsapRequired(evtnm))
+			smartUpdate(getAttrOfEvent(evtnm), "true");
 		return true;
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
@@ -963,6 +1018,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			throw new IllegalArgumentException("null");
 
 		if (_listeners != null) {
+			final boolean asap = isAsapRequired(evtnm);
 			final List l = (List)_listeners.get(evtnm);
 			if (l != null) {
 				for (Iterator it = l.iterator(); it.hasNext();) {
@@ -972,6 +1028,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 							_listeners.remove(evtnm);
 						else
 							it.remove();
+						if (asap && !isAsapRequired(evtnm))
+							smartUpdate(getAttrOfEvent(evtnm), null);
 						return true;
 					}
 				}
@@ -1048,7 +1106,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 
 			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap+deferrable
-				response("clientInfo", new AuClientInfo());
+				response("clientInfo", new AuClientInfo(getDesktop()));
 				//We always fire even not a root, since we don't like to
 				//check when setParent or setPage is called
 		}

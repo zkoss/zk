@@ -58,7 +58,7 @@ public class AuResponse {
 	}
 	/** Constructs a response with one or zero data.
 	 *
-	 * @param depends specified whether this response depends on whether
+	 * @param depends specifies whether this response depends on whether
 	 * the depends component.
 	 * If depends is not null, this response shall be purged if the depends
 	 * component is removed.
@@ -67,6 +67,8 @@ public class AuResponse {
 	 *
 	 * <p>Note: info of the depends component doesn't send to the client.
 	 * It is used only to optimize what responses to send.
+	 *
+	 * @param data specifies the data to be sent. If null, no data at all.
 	 */
 	protected AuResponse(String cmd, Component depends, String data) {
 		this(cmd, depends, data != null ? new String[] {data}: null);

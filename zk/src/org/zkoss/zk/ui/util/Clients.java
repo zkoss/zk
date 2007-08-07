@@ -82,7 +82,6 @@ public class Clients {
 	 * If the number passed is positive, the desktop is scrolled down.
 	 * If negative, it is scrolled up.
 	 * @see #scrollTo
-	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void scrollBy(int x, int y) {
 		response(new AuScrollBy(x, y));
@@ -90,7 +89,6 @@ public class Clients {
 	/** Scrolls the current desktop (aka., browser window) to the specified location (in pixels).
 	 *
 	 * @see #scrollBy
-	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void scrollTo(int x, int y) {
 		response(new AuScrollTo(x, y));
@@ -100,7 +98,6 @@ public class Clients {
 	 * Negative numbers reduce the size of the desktop.
 	 *
 	 * @see #resizeTo
-	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void resizeBy(int x, int y) {
 		response(new AuResizeBy(x, y));
@@ -108,7 +105,6 @@ public class Clients {
 	/** Resizes the current desktop (aka., browser window) to the specified size (in pixels).
 	 *
 	 * @see #resizeBy
-	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void resizeTo(int x, int y) {
 		response(new AuResizeTo(x, y));
@@ -117,7 +113,6 @@ public class Clients {
 	 * If the number passed is positive, the desktop is moved down.
 	 * If negative, it is moved up.
 	 * @see #moveTo
-	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void moveBy(int x, int y) {
 		response(new AuMoveBy(x, y));
@@ -125,7 +120,6 @@ public class Clients {
 	/** Moves the current desktop (aka., browser window) to the specified location (in pixels).
 	 *
 	 * @see #moveBy
-	 * @see org.zkoss.zk.ui.event.ClientInfoEvent
 	 */
 	public static final void moveTo(int x, int y) {
 		response(new AuMoveTo(x, y));

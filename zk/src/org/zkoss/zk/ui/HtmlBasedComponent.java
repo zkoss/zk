@@ -398,57 +398,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		return 0;
 	}
 
-	/** Returns whether to send back the request of the specified event
-	 * immediately -- i.e., non-deferrable.
-	 * Returns true if you want the component (on the server)
-	 * to process the event immediately.
-	 *
-	 * <p>Default: return true if any non-deferable event listener of
-	 * the specified event is found. In other words, it returns
-	 * {@link Events#isListened} with asap = true.
-	 */
-	protected boolean isAsapRequired(String evtnm) {
-		return Events.isListened(this, evtnm, true);
-	}
-	/** Appends the HTML attribute for the specified event name, say, onChange.
-	 * It is called by derived's {@link #getOuterAttrs}.
-	 *
-	 * @param sb the string buffer to hold the HTML attribute. If null and
-	 * {@link #isAsapRequired} is true, a string buffer is created and returned.
-	 * @return the string buffer. If sb is null and {@link #isAsapRequired}
-	 * returns false, null is returned.
-	 * If the caller passed non-null sb, the returned value must be the same
-	 * as sb (so it usually ignores the returned value).
-	 */
-	protected StringBuffer appendAsapAttr(StringBuffer sb, String evtnm) {
-		if (isAsapRequired(evtnm)) {
-			if (sb == null) sb = new StringBuffer(80);
-			HTMLs.appendAttribute(sb, getAttrOfEvent(evtnm), true);
-		}
-		return sb;
-	}
-	private static String getAttrOfEvent(String evtnm) {
-		return Events.ON_CLICK.equals(evtnm) ? "z.lfclk":
-			Events.ON_RIGHT_CLICK.equals(evtnm) ? "z.rtclk":
-			Events.ON_DOUBLE_CLICK.equals(evtnm) ? "z.dbclk":
-				"z." + evtnm;
-	}
-
 	//-- Component --//
-	public boolean addEventListener(String evtnm, EventListener listener) {
-		final boolean asap = isAsapRequired(evtnm);
-		final boolean ret = super.addEventListener(evtnm, listener);
-		if (ret && !asap && isAsapRequired(evtnm))
-			smartUpdate(getAttrOfEvent(evtnm), "true");
-		return ret;
-	}
-	public boolean removeEventListener(String evtnm, EventListener listener) {
-		final boolean asap = isAsapRequired(evtnm);
-		final boolean ret = super.removeEventListener(evtnm, listener);
-		if (ret && asap && !isAsapRequired(evtnm))
-			smartUpdate(getAttrOfEvent(evtnm), null);
-		return ret;
-	}
 
 	//--ComponentCtrl--//
 	/** Used by {@link #getExtraCtrl} to create a client control.
