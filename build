@@ -435,7 +435,7 @@ function invoke_ant
 		)
 		fi
 	else
-		CLASSPATH="$CP" ANT_OPTS=-Xmx160M ant $verbose $class_test \
+		CLASSPATH="$DCP" ANT_OPTS=-Xmx160M ant $verbose $class_test \
 		$doall -Dformat="$format" -Ddeploy="$deploy" \
 		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
 		-Djboss.profile="$jboss_profile" -Djboss.ear="$jboss_ear" \

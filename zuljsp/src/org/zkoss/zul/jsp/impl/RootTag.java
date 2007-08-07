@@ -70,6 +70,7 @@ abstract public class RootTag extends AbstractTag {
 	private LanguageDefinition _langdef;
 	private Page _page;
 	private String _lang = "Java";
+	//AnnotationHelper annoHelper;
 
 	/**
 	 * protected Constractor. Constract a RootTag with
