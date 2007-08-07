@@ -77,17 +77,21 @@ public interface ServerPush {
 	 */
 	public void onPiggyback();
 
-	/** Called when a server-push thread is going to execute.
-	 * The invoker of this method must invoke {@link #onDeactivate}
+	/** Activate the current thread (which must be a server-push thread).
+	 * The invoker of this method must invoke {@link #deactivate}
 	 * in this finally clause.
+	 *
+	 * <p>Note: the activation is applied to the desktop that was
+	 * assigned by {@link #start}.
 	 *
 	 * <p>Unlike {@link #onPiggyback},
 	 * this method is NOT called in the context of an event listener.
 	 * Rather, it is called in the thread of a server-push thread.
 	 */
-	public void onActivate();
-	/** Called when the execution of a server-push thread is going to stop.
-	 * @see #onActivate
+	public void activate();
+	/** Deactvates the current thread (which must be a server-push thread).
+	 *
+	 * @see #activate
 	 */
-	public void onDeactivate();
+	public void deactivate();
 }

@@ -184,4 +184,29 @@ if (c.isEmpty()) {
 	 * @return the media or null if not found.
 	 */
 	public Media getDownloadMedia(String medId, boolean remove);
+
+	/** Called each time ZK Update Engine processes all events.
+	 * It is used to implement the piggyback feature
+	 * (see {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}).
+	 *
+	 * <p>Used only internally. Application develepers shall not call it.
+	 *
+	 * @since 2.5.0
+	 */
+	public void onPiggyback();
+	/** Returns the server-push controller, or null if it is not enabled
+	 * yet.
+	 */
+	public ServerPush getServerPush();
+	/** Enables the server-push feature with the specified server-push
+	 * controller.
+	 *
+	 * @param serverpush the server-push controller. If null,
+	 * the server-push feature is disabled (for this desktop).
+	 * Note: this method will invoke {@link ServerPush#start}, so the
+	 * caller doesn't need to do it.
+	 * @since 2.5.0
+	 * @see org.zkoss.zk.ui.Desktop#enableServerPush
+	 */
+	public boolean enableServerPush(ServerPush serverpush);
 }

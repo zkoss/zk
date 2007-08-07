@@ -24,7 +24,6 @@ import java.util.Collection;
 import org.zkoss.util.media.Media;
 
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.device.Device;
 
 /**
@@ -217,16 +216,6 @@ public interface Desktop {
 	 * @since 2.5.0
 	 */
 	public boolean enableServerPush(boolean enable);
-	/** Enables the server-push feature with the specified server-push
-	 * controller.
-	 *
-	 * @param serverpush the server-push controller. If null,
-	 * the server-push feature is disabled (for this desktop).
-	 * Note: this method will invoke {@link ServerPush#start}, so the
-	 * caller doesn't need to do it.
-	 * @since 2.5.0
-	 */
-	public boolean enableServerPush(ServerPush serverpush);
 	/** Returns whether the server-push feature is enabled for this
 	 * desktop.
 	 *

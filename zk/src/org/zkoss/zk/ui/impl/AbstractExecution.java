@@ -21,9 +21,7 @@ package org.zkoss.zk.ui.impl;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Collections;
-import java.util.Iterator;
 import java.io.Reader;
 import java.io.IOException;
 
@@ -47,6 +45,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.au.AuResponse;
@@ -125,6 +124,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		if (_events == null)
 			_events = new LinkedList();
 		_events.add(evt);
+		//_piggybacked = false; //allow piggyback to be called again
 	}
 
 	public VariableResolver getVariableResolver() {
@@ -153,18 +153,10 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			return (Event)_events.remove(0);
 
 		if (!_piggybacked) { //handle piggyback only once
-			for (Iterator it = _desktop.getPages().iterator(); it.hasNext();) {
-				final Page p = (Page)it.next();
-				if (isAsyncUpdate(p)) { //ignore new created pages
-					for (Iterator e = p.getRoots().iterator(); e.hasNext();) {
-						final Component c = (Component)e.next();
-						if (Events.isListened(c, Events.ON_PIGGYBACK, false)) //asap+deferrable
-							postEvent(new Event(Events.ON_PIGGYBACK, c));
-					}
-				}
-			}
+			((DesktopCtrl)_desktop).onPiggyback();
 			_piggybacked = true;
 		}
+
 		return _events != null && !_events.isEmpty() ? 
 			(Event)_events.remove(0): null;
 	}

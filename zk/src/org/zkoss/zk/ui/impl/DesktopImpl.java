@@ -39,12 +39,15 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.DesktopSerializationListener;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
@@ -393,46 +396,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_dir = dir;
 	}
 
-	public boolean enableServerPush(boolean enable) {
-		final boolean old = _spush != null;
-		if (old != enable) {
-			if (enable) {
-				final Class cls = _wapp.getConfiguration().getServerPushClass();
-				if (cls != null) {
-					try {
-						_spush = (ServerPush)cls.newInstance();
-					} catch (Throwable ex) {
-						throw UiException.Aide.wrap(ex, "Unable to instantiate "+cls);
-					}
-				} else {
-					_spush = new PollingServerPush();
-				}
-				_spush.start(this);
-			} else {
-				_spush.stop();
-				_spush = null;
-			}
-				
-		}
-		return old;
-	}
-	public boolean enableServerPush(ServerPush serverpush) {
-		if (serverpush == null)
-			return enableServerPush(false);
-
-		final boolean old = _spush != null;
-		if (!old || serverpush != _spush) {
-			if (old) enableServerPush(false);
-
-			_spush = serverpush;
-			_spush.start(this);
-		}
-		return old;
-	}
-	public boolean isServerPushEnabled() {
-		return _spush != null;
-	}
-
 	//-- DesktopCtrl --//
 	public RequestQueue getRequestQueue() {
 		return _rque;
@@ -615,5 +578,65 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		addComponent(comp);
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 			addAllComponents((Component)it.next());
+	}
+
+	//Server Push//
+	public boolean enableServerPush(boolean enable) {
+		final boolean old = _spush != null;
+		if (old != enable) {
+			if (enable) {
+				final Class cls = _wapp.getConfiguration().getServerPushClass();
+				if (cls != null) {
+					try {
+						_spush = (ServerPush)cls.newInstance();
+					} catch (Throwable ex) {
+						throw UiException.Aide.wrap(ex, "Unable to instantiate "+cls);
+					}
+				} else {
+					_spush = new PollingServerPush();
+				}
+				_spush.start(this);
+			} else {
+				_spush.stop();
+				_spush = null;
+			}
+				
+		}
+		return old;
+	}
+	public boolean enableServerPush(ServerPush serverpush) {
+		if (serverpush == null)
+			return enableServerPush(false);
+
+		final boolean old = _spush != null;
+		if (!old || serverpush != _spush) {
+			if (old) enableServerPush(false);
+
+			_spush = serverpush;
+			_spush.start(this);
+		}
+		return old;
+	}
+	public boolean isServerPushEnabled() {
+		return _spush != null;
+	}
+	public ServerPush getServerPush() {
+		return _spush;
+	}
+
+	public void onPiggyback() {
+		for (Iterator it = _pages.values().iterator(); it.hasNext();) {
+			final Page p = (Page)it.next();
+			if (Executions.getCurrent().isAsyncUpdate(p)) { //ignore new created pages
+				for (Iterator e = p.getRoots().iterator(); e.hasNext();) {
+					final Component c = (Component)e.next();
+					if (Events.isListened(c, Events.ON_PIGGYBACK, false)) //asap+deferrable
+						Events.postEvent(new Event(Events.ON_PIGGYBACK, c));
+				}
+			}
+		}
+
+		if (_spush != null)
+			_spush.onPiggyback();
 	}
 }

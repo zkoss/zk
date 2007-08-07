@@ -162,7 +162,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	public void desktopDestroyed(Desktop desktop) {
-		if (log.debugable()) log.debug("destroy "+desktop);
+//		if (log.debugable()) log.debug("destroy "+desktop);
 
 		final Configuration conf = _wapp.getConfiguration();
 		final Map map;
@@ -817,7 +817,7 @@ public class UiEngineImpl implements UiEngine {
 		final Thread thd = Thread.currentThread();
 		if (!(thd instanceof EventProcessingThreadImpl))
 			throw new UiException("This method can be called only in an event listener, not in paging loading.");
-		if (log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
+//		if (log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
 
 		final EventProcessingThreadImpl evtthd = (EventProcessingThreadImpl)thd;
 		evtthd.newEventThreadSuspends(mutex);
@@ -925,7 +925,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** Adds to _resumed */
 	private void addResumed(Desktop desktop, EventProcessingThreadImpl evtthd) {
-		if (log.finerable()) log.finer("Ready to resume "+evtthd);
+//		if (log.finerable()) log.finer("Ready to resume "+evtthd);
 
 		List list;
 		synchronized (_resumed) {
@@ -958,7 +958,7 @@ public class UiEngineImpl implements UiEngine {
 					if (uv.isAborting()) {
 						evtthd.ceaseSilently("Resume aborted");
 					} else {
-						if (log.finerable()) log.finer("Resume "+evtthd);
+//						if (log.finerable()) log.finer("Resume "+evtthd);
 						try {
 							if (evtthd.doResume()) //wait it complete or suspend again
 								recycleEventThread(evtthd); //completed

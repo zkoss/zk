@@ -28,6 +28,8 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.ServerPush;
 
 /**
  * Utilities to access {@link Execution}.
@@ -450,15 +452,23 @@ public void run() {
 	 * <p>Note: you don't need to invoke this method in the event listener
 	 * since it is already activated when an event listen starts execution.
 	 *
-	 * @see DesktopUnavailableException
+	 * @exception DesktopUnavailableException if the desktop is removed
+	 * (when activating).
 	 * @since 2.5.0
 	 */
 	public static final void activate(Desktop desktop) {
+		final ServerPush spush = ((DesktopCtrl)desktop).getServerPush();
+		if (spush == null)
+			throw new IllegalStateException("Before activation, the server push must be enabled for "+desktop);
+		spush.activate();
 	}
 	/** Deactivates a server-push thread.
 	 * @since 2.5.0
 	 */
 	public static final void deactivate(Desktop desktop) {
+		final ServerPush spush = ((DesktopCtrl)desktop).getServerPush();
+		if (spush != null)
+			spush.deactivate();
 	}
 
 	private static final UiEngine getUiEngine(Desktop desktop) {
