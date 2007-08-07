@@ -34,6 +34,7 @@ import org.zkoss.zk.scripting.VariableResolver;
  * <code>&lt;?variable-resolver class="org.zkoss.zkplus.seasar.DelegatingVariableResolver"?&gt;</code>
  *
  * @author Dennis.Chen
+ * @since 2.5.0
  */
 public class DelegatingVariableResolver implements VariableResolver {
 	protected S2Container _container;
