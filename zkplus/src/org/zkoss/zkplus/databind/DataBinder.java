@@ -70,9 +70,9 @@ public class DataBinder {
 	private Map _beans = new HashMap(29); //bean local to this DataBinder
 	private Map _beanSameNodes = new HashMap(29); //(bean, Set(BindingNode)) bean same nodes, diff expression but actually hold the same bean
 	private BindingNode _pathTree = new BindingNode("/", false, "/", false); //path dependency tree.
-	private Set _pageSet = new HashSet(1); //page that associated with this DataBinder
 	private boolean _defaultConfig = true; //whether load default configuration from lang-addon.xml
 	private boolean _init; //whether this databinder is initialized. 
+	private EventListener _listener = new LoadOnSaveEventListener();
 		//Databinder is init automatically when saveXXX or loadXxx is called
 	
 	protected Map _collectionItemMap = new HashMap(3);
@@ -191,12 +191,6 @@ public class DataBinder {
 		//or <listitem self="@{each='person'}"...>
 		if ("each".equals(attr)) {
 			attr = "_var";
-		}
-		//add EventListener if not have done so
-		Page page = comp.getPage();
-		if (!_pageSet.contains(page)) {
-			_pageSet.add(page);
-			page.addEventListener("onLoadOnSave", new LoadOnSaveEventListener());
 		}
 			
 		if (isDefaultConfig()) { //use default binding configuration
@@ -863,6 +857,11 @@ public class DataBinder {
 		//TODO:Henri Chen: Is it possible to make the loadOnSave event to be called once only for a
 		//setXxx. So avoid load a node several times?
 			
+		//register "onLoadSave" listener to this component if have not done so.
+		if (!comp.isListenerAvailable("onLoadOnSave", true)) {
+			comp.addEventListener("onLoadOnSave", _listener);
+		}
+
 		//All kid nodes should be reloaded 
 		Events.postEvent(new Event("onLoadOnSave", comp, new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged)}));
 	}
