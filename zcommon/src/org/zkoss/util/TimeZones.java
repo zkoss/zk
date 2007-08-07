@@ -62,6 +62,15 @@ public class TimeZones {
 		_thdTZone.set(timezone);
 		return old;
 	}
+	/**
+	 * Returns the time zone defined by {@link #setThreadLocal}.
+	 *
+	 * @since 2.5.0
+	 * @see #getCurrent
+	 */
+	public static final TimeZone getThreadLocal() {
+		return (TimeZone)_thdTZone.get();
+	}
 
 	/** Returns the time by specifying the offset in minutes.
 	 *

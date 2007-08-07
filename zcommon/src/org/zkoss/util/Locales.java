@@ -82,6 +82,15 @@ public class Locales {
 		_thdLocale.set(locale);
 		return old;
 	}
+	/**
+	 * Returns the locale defined by {@link #setThreadLocal}.
+	 *
+	 * @since 2.5.0
+	 * @see #getCurrent
+	 */
+	public static final Locale getThreadLocal() {
+		return (Locale)_thdLocale.get();
+	}
 
 	/** Converts a string that consists of language, country and variant
 	 * to a locale.
