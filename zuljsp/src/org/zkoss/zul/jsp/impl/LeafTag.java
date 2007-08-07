@@ -42,6 +42,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
+import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zul.Radiogroup;
 /**
@@ -145,11 +146,25 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	 */
 	private void evaluateDynaAttributes(final Component target) 
 	throws ModificationException, NoSuchMethodException{
+		AnnotationHelper attrAnnHelper = null;
 		for(Iterator itor = _attrMap.entrySet().iterator();itor.hasNext();)
 		{
 			//TODO: add annotation judgment...
 			Map.Entry entry= (Entry) itor.next();
-			Fields.setField(target, (String)entry.getKey(),entry.getValue(), true);
+			String attnm = (String)entry.getKey();
+			String attval = (String)entry.getKey();
+			final int len = attval.length();
+			// test if this attribute is an annotation...
+			if (len >= 3 && attval.charAt(0) == '@'
+			&& attval.charAt(1) == '{' && attval.charAt(len-1) == '}') { //annotation
+				if (attrAnnHelper == null)
+					attrAnnHelper = new AnnotationHelper();
+				attrAnnHelper.addByCompoundValue(
+					attval.substring(2, len -1));
+				attrAnnHelper.applyAnnotations(_comp,
+					"self".equals(attnm) ? null: attnm, true);
+			}
+			Fields.setField(target, attnm, entry.getValue(), true);
 		}
 	}
 	/**

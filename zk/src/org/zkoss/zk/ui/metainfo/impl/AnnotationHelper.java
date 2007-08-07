@@ -130,7 +130,7 @@ public class AnnotationHelper {
 	 * @param clear whether to clear all definitions before returning
 	 * @see #clear
 	 */
-	public void applyCommponents(Component comp, String propName,
+	public void applyAnnotations(Component comp, String propName,
 	boolean clear) {
 		for (Iterator it = _annots.iterator(); it.hasNext();) {
 			final Object[] info = (Object[])it.next();
