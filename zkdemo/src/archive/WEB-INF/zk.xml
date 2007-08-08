@@ -133,13 +133,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		Note: the unit of PollingServerPush.delay.min and max is second.
 		Note: the values of PollingServerPush.start and stop are
 		the JavaScript codes to execute at the client.
+		Note: the value of PollingServerPush.delay.factor must be integer,
 	<preference>
 		<name>PollingServerPush.delay.min</name>
-		<value>5</value>
+		<value>3000</value>
 	</preference>
 	<preference>
 		<name>PollingServerPush.delay.max</name>
-		<value>20</value>
+		<value>10000</value>
+	</preference>
+	<preference>
+		<name>PollingServerPush.delay.factor</name>
+		<value>5</value>
 	</preference>
 	<preference>
 		<name>PollingServerPush.start</name>
