@@ -23,7 +23,7 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zul.Label;
+import org.zkoss.zul.*;
 
 /**
  * Used to test the server-push feature.
@@ -34,13 +34,24 @@ public class ServerPush {
 	private static final Log log = Log.lookup(ServerPush.class);
 	private static boolean _ceased;
 
-	public static void start(Label info) {
-		Executions.getCurrent().getDesktop().enableServerPush(true);
-		new WorkingThread(info).start();
+	public static void start(Label info) throws InterruptedException {
+		final Desktop desktop = Executions.getCurrent().getDesktop();
+		if (desktop.isServerPushEnabled()) {
+			Messagebox.show("Already started");
+		} else {
+			_ceased = false;
+			desktop.enableServerPush(true);
+			new WorkingThread(info).start();
+		}
 	}
-	public static void stop() {
-		Executions.getCurrent().getDesktop().enableServerPush(false);
-		_ceased = true;
+	public static void stop() throws InterruptedException {
+		final Desktop desktop = Executions.getCurrent().getDesktop();
+		if (desktop.isServerPushEnabled()) {
+			Executions.getCurrent().getDesktop().enableServerPush(false);
+			_ceased = true;
+		} else {
+			Messagebox.show("Already stopped");
+		}
 	}
 
 	private static class WorkingThread extends Thread {

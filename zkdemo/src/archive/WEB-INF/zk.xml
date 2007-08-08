@@ -130,7 +130,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 	<!-- Uncomment the following to customize the client-polling-based
 		server push.
-		Note: the value is the JavaScript codes to execute at the client
+		Note: the unit of PollingServerPush.delay.min and max is second.
+		Note: the values of PollingServerPush.start and stop are
+		the JavaScript codes to execute at the client.
+	<preference>
+		<name>PollingServerPush.delay.min</name>
+		<value>5</value>
+	</preference>
+	<preference>
+		<name>PollingServerPush.delay.max</name>
+		<value>20</value>
+	</preference>
 	<preference>
 		<name>PollingServerPush.start</name>
 		<value></value>
