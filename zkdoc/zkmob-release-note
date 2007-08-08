@@ -1,4 +1,7 @@
 ZK Mobile 0.8.6-FL
+Feature:
+  1768906: Provide GenericMobileRichlet for pure Java Mobile programming
+  
 Bug:
   1756003 mil Listitem image not shown.
   1758628 mil multi-Frames change visibility not work
@@ -6,6 +9,7 @@ Bug:
   1758625 mil Listbox change mold not work
   1757280 mil Listitem.setLabel() not work
   1758662 zkmob history should not include ;jsessionid
+  1768215 "pure Java" zk mobile not working
   
   --------
 ZK Mobile 0.8.5
