@@ -471,7 +471,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final Page oldpage = _page;
 		_page = page;
 
-		//attach
 		if (_page != null) {
 			if (bRoot) ((PageCtrl)_page).addRoot(this); //Not depends on uuid
 			final Desktop desktop = _page.getDesktop();
@@ -486,7 +485,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 				((DesktopCtrl)desktop).addComponent(this); //depends on uuid
 			}
+
+			onPageAttached(_page, oldpage);
+		} else {
+			onPageDetached(oldpage);
 		}
+
 		if (_spaceInfo != null && _parent == null)
 			_spaceInfo.ns.setParent(page != null ? page.getNamespace(): null);
 
@@ -885,12 +889,26 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	/** Default: does nothing.
+	 * @see Component#onChildAdded
 	 */
 	public void onChildAdded(Component child) {
 	}
 	/** Default: does nothing.
+	 * @see Component#onChildRemoved
 	 */
 	public void onChildRemoved(Component child) {
+	}
+	/** Default: does nothing.
+	 * @see Component#onPageAttached
+	 * @since 2.5.0
+	 */
+	public void onPageAttached(Page newpage, Page oldpage) {
+	}
+	/** Default: does nothing.
+	 * @see Component#onPageDetached
+	 * @since 2.5.0
+	 */
+	public void onPageDetached(Page page) {
 	}
 
 	/** Default: null (no propagation at all).
@@ -1107,7 +1125,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap+deferrable
 				response("clientInfo", new AuClientInfo(getDesktop()));
-				//We always fire even not a root, since we don't like to
+				//We always fire event not a root, since we don't like to
 				//check when setParent or setPage is called
 		}
 	}

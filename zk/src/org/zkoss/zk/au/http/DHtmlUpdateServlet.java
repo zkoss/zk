@@ -213,7 +213,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				if (scmd == null)
 					break;
 
-				onTimerOnly = onTimerOnly && Events.ON_TIMER.equals(scmd);
+				onTimerOnly = onTimerOnly
+					&& (Events.ON_TIMER.equals(scmd) || "dummy".equals(scmd));
+						//dummy is used for PollingServerPush for piggyback
 
 				final Command cmd = AuRequest.getCommand(scmd);
 				final String uuid = request.getParameter("uuid."+j);
@@ -241,6 +243,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		((SessionCtrl)sess)
 			.notifyClientRequest(onTimerOnly ? Events.ON_TIMER: null);
+				//dummy is faked to be onTimer to minimize the dependency
 
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
 		final StringWriter out = getXMLWriter();

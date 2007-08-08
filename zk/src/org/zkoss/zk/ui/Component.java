@@ -489,13 +489,56 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * <p>Note: {@link #onChildAdded} is called in the request-processing
 	 * phase, while {@link #onDrawNewChild} is called in the redrawing phase.
 	 * See {@link #onDrawNewChild} for more details.
+	 *
+	 * <p>It is not a good idea to throw an exception in this method, since
+	 * it is in the middle of modifying the component tree.
 	 */
 	 public void onChildAdded(Component child);
 	/** Called when a child is removed.
 	 * If a component want to optimize the update, it might do something
 	 * different. Otherwise, it simply does nothing.
+	 *
+	 * <p>It is not a good idea to throw an exception in this method, since
+	 * it is in the middle of modifying the component tree.
 	 */
 	 public void onChildRemoved(Component child);
+
+	/** Called when this component is attached to a page.
+	 *
+	 * <p>If a component is moved from one page to another,
+	 * {@link #onPageAttached} is called with both pages.
+	 * Note: {@link #onPageDetached} is not called in this case.
+	 *
+	 * <p>Note: this method is called even if the component is attached
+	 * to a page implicitly thru, say, {@link #setParent}.
+	 *
+	 * <p>It is not a good idea to throw an exception in this method, since
+	 * it is in the middle of modifying the component tree.
+	 *
+	 * @param newpage the new page (never null).
+	 * @param oldpage the previous page, if any, or null if it didn't
+	 * belong to any page.
+	 * @since 2.5.0
+	 */
+	public void onPageAttached(Page newpage, Page oldpage);
+	/** Called when this component is detached from a page.
+	 *
+	 * <p>If a component is moved from one page to another,
+	 * {@link #onPageAttached} is called with both pages.
+	 * Note: {@link #onPageDetached} is not called in this case.
+	 * In other words, {@link #onPageDetached} is called only if a component
+	 * is detached from a page (not belong to any other page).
+	 *
+	 * <p>Note: this method is called even if the component is detached
+	 * to a page implicitly thru, say, {@link #setParent}.
+	 *
+	 * <p>It is not a good idea to throw an exception in this method, since
+	 * it is in the middle of modifying the component tree.
+	 *
+	 * @param page the previous page (never null)
+	 * @since 2.5.0
+	 */
+	public void onPageDetached(Page page);
 
 	/** Returns the mold for this component.
 	 * <p>Default: "default"

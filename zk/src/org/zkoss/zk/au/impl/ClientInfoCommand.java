@@ -44,6 +44,7 @@ public class ClientInfoCommand extends Command {
 		if (data == null || data.length != 8)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
+		//Note: ClientInfoEvent is a broadcast event
 		Events.postEvent(new ClientInfoEvent(getId(),
 			Integer.parseInt(data[0]), Integer.parseInt(data[1]),
 			Integer.parseInt(data[2]), Integer.parseInt(data[3]),

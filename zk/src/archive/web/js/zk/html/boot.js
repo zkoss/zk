@@ -48,7 +48,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "6V"; //increase this if we want the browser to reload JavaScript
+zk.build = "6W"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -416,6 +416,19 @@ zk.addInitCmp = function (cmp) {
  */
 zk.addInit = function (fn) {
 	zk._initfns.push(fn);
+};
+
+/** Invokes the specified function that depends on the specified module.
+ * If the module is not loaded yet, it will be loaded first.
+ * If it is loaded, the function executes directly.
+ * @since 2.5.0
+ */
+zk.invoke = function (nm, fn) {
+	if (zk._modules[nm]) {
+		fn();
+	} else {
+		zk.load(nm, fn);
+	}
 };
 
 /** Loads the specified module (JS). If a feature is called "a.b.c", then

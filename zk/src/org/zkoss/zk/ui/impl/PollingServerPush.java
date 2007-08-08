@@ -67,7 +67,7 @@ public class PollingServerPush implements ServerPush {
 		final String start = _desktop.getWebApp()
 			.getConfiguration().getPreference("PollingServerPush.start", null);
 		return start != null ? start:
-			"zk.load('zul.cpsp',function(){zkCpsp.start('"
+			"zk.invoke('zul.cpsp',function(){zkCpsp.start('"
 				+ _desktop.getId() + "');});";
 	}
 	/** Returns the JavaScript codes to disable (aka., stop) the server push.
@@ -82,10 +82,16 @@ public class PollingServerPush implements ServerPush {
 
 	//ServerPush//
 	public void start(Desktop desktop) {
+		if (_desktop != null)
+			throw new IllegalStateException("Already started");
+
 		_desktop = desktop;
 		Clients.response(new AuScript(null, getStartScript()));
 	}
 	public void stop() {
+		if (_desktop == null)
+			throw new IllegalStateException("Not started");
+
 		Clients.response(new AuScript(null, getStopScript()));
 		_desktop = null;
 
@@ -154,6 +160,9 @@ public class PollingServerPush implements ServerPush {
 
 		_carryOver.carryOver();
 		_active = info;
+
+		//Note: we don't mimic inEventListener since 1) ZK doesn't assume it
+		//2) Window depends on it
 	}
 	public void deactivate() {
 		if (_active != null &&
@@ -191,9 +200,9 @@ public class PollingServerPush implements ServerPush {
 		/** The execution of onPiggyback. */
 		private final Execution _exec;
 		/** Part of the command: locale. */
-		private final Locale _locale;
+		private Locale _locale;
 		/** Part of the command: time zone. */
-		private final TimeZone _timeZone;
+		private TimeZone _timeZone;
 
 		private CarryOver() {
 			_exec = Executions.getCurrent();
@@ -205,10 +214,14 @@ public class PollingServerPush implements ServerPush {
 		 */
 		private void carryOver() {
 			ExecutionsCtrl.setCurrent(_exec);
-			if (_locale != null && Locales.getThreadLocal() == null)
+			if (Locales.getThreadLocal() == null)
 				Locales.setThreadLocal(_locale);
-			if (_timeZone != null && TimeZones.getThreadLocal() == null)
+			else
+				_locale = null;
+			if (TimeZones.getThreadLocal() == null)
 				TimeZones.setThreadLocal(_timeZone);
+			else
+				_timeZone = null;
 		}
 		/** Cleans up the info carried from onPiggyback to the current thread.
 		 * <p>Note: {@link #carryOver} and {@link #cleanup} must be
@@ -216,6 +229,10 @@ public class PollingServerPush implements ServerPush {
 		 */
 		private void cleanup() {
 			ExecutionsCtrl.setCurrent(null);
+			if (_locale != null)
+				Locales.setThreadLocal(null);
+			if (_timeZone != null)
+				TimeZones.setThreadLocal(null);
 		}
 	}
 }
