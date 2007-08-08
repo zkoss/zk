@@ -15,29 +15,70 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zkCpsp = {};
-zkCpsp._infs = {}; //interval timers
+zkCpsp._infos = {}; //interval timers
 
-zkCpsp.start = function (dtid, freq) {
-	var inf = zkCpsp._infs[dtid];
-	if (inf) {
-		clearInterval(inf.timer);
+zkCpsp.start = function (dtid, min, max, factor) {
+	var info = zkCpsp._infos[dtid];
+	if (info) {
+		clearInterval(info.timer);
 	} else {
-		inf = zkCpsp._infs[dtid] = {};
+		info = zkCpsp._infos[dtid] = {};
 	}
 
-	inf.freq = freq ? freq: 5000;
-	inf.timer = setInterval("zkCpsp._do('"+dtid+"')", inf.freq);
-zk.debug("start "+dtid);
+	var defInfo = zkau.getSPushInfo(dtid);
+	if (defInfo) {
+		if (min == null) min = defInfo.min;
+		if (max == null) max = defInfo.max;
+		if (factor == null) factor = defInfo.factor;
+	}
+	if (min != null) info.min = min;
+	if (max != null) info.max = max;
+	if (factor != null) info.factor = factor;
+
+	var freq = zkCpsp._min(info) / 4;
+	if (freq < 500) freq = 500; //no less than 500
+
+	info.timer = setInterval("zkCpsp._do('"+dtid+"')", freq);
 };
 zkCpsp.stop = function (dtid) {
-	var inf = zkCpsp._infs[dtid];
-	if (inf) {
-		clearInterval(inf.timer);
-		delete zkCpsp._infs[dtid];
+	var info = zkCpsp._infos[dtid];
+	if (info) {
+		clearInterval(info.timer);
+		delete zkCpsp._infos[dtid];
 	}
-zk.debug("stop "+dtid);
+};
+
+zkCpsp._min = function (info) {
+	return info.min > 0 ? info.min: 2500;
+};
+zkCpsp._max = function (info) {
+	return info.max > 0 ? info.max: 10000;
 };
 
 zkCpsp._do = function (dtid) {
-	zkau.send({dtid: dtid, cmd: "dummy", data: null, ignorable: true});
+	if (!zkau.processing()) {
+		var doNow = !zkau.doneTime;
+		if (!doNow) {
+			var info = zkCpsp._infos[dtid],
+				delay = (zkau.doneTime - zkau.sentTime)
+					* (info.factor > 0 ? info.factor: 5),
+				max = zkCpsp._max(info),
+				min = zkCpsp._min(info);
+			if (delay > max) delay = max;
+			if (delay < min) delay = min;
+			doNow = $now() > zkau.doneTime + delay;
+		}
+
+		if (doNow)
+			zkau.send({dtid: dtid, cmd: "dummy", data: null, ignorable: true});
+	}
+};
+
+zkCpsp._setInfo = zkau.setSPushInfo;
+zkau.setSPushInfo = function (dtid, info) {
+	var i = zkCpsp._infos[dtid];
+	if (i)
+		zkCpsp.start(dtid,
+			info.min || i.min, info.max || i.max, info.factor || i.factor);
+	zkCpsp._setInfo(dtid, info);
 };

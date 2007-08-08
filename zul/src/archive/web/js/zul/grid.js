@@ -70,7 +70,7 @@ zk.Grid.prototype = {
 				//In certain case, IE will keep sending resize (because
 				//our grid might adjust size and cause resize again)
 				//To avoid this endless loop, we resize once in a few seconds
-				var time = new Date().getTime();
+				var time = $now();
 				if (!meta.nextTime || time > meta.nextTime) {
 					meta.nextTime = time + 3000;
 					meta.recalcSize(true);

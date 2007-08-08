@@ -559,7 +559,7 @@ zkMap.onclick = function (href) {
 };
 zkMap._toofast = function () {
 	if (zk.gecko) { //bug 1510374
-		var now = new Date().getTime();
+		var now = $now();
 		if (zkMap._stamp && now - zkMap._stamp < 800)
 			return true;
 		zkMap._stamp = now;

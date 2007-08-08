@@ -118,7 +118,7 @@ zk.Selectable.prototype = {
 					//In certain case, IE will keep sending resize (because
 					//our listbox might adjust size and cause resize again)
 					//To avoid this endless loop, we resize once in a few seconds
-					var time = new Date().getTime();
+					var time = $now();
 					if (!meta.nextTime || time > meta.nextTime) {
 						meta.nextTime = time + 3000;
 						meta.recalcSize(true);
@@ -327,7 +327,7 @@ zk.Selectable.prototype = {
 		//Note: we don't handle if clicking on checkmark, since FF always
 		//toggle and it causes incosistency
 			if ((zk.gecko || zk.safari) && getZKAttr(row, "dbclk")) {
-				var now = new Date(), last = row._last;
+				var now = $now(), last = row._last;
 				row._last = now;
 				if (last && now - last < 900)
 					return; //ignore double-click
