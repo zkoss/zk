@@ -33,6 +33,7 @@ zkau.floats = []; //popup of combobox, bandbox, datebox...
 zkau._onsends = []; //JS called before zkau._sendNow
 zkau._seqId = 0; //starting at 0 - the same as Desktop.getResponseSequence
 zkau._dtids = []; //an array of desktop IDs
+zkau._spushInfo = {} //the server-push info: Map(dtid, {min, max, factor})
 
 /** Adds a desktop. */
 zkau.addDesktop = function (dtid) {
@@ -244,11 +245,19 @@ zkau.cmprsid = function (a, b) {
 	var dt = a - b;
 	return dt == 0 ? 0: (dt > 0 && dt < 512) || dt < -512 ? 1: -1
 };
+/** Checks whether to turn off the progress prompt.
+ * @return true if the processing is done
+ */
 zkau._checkProgress = function () {
-	if (!zkau._inProcess())
-		zk.progressDone();
+	if (zkau.processing())
+		return false;
+	zk.progressDone();
+	return true;
 };
-zkau._inProcess = function () {
+/** Returns whether any request is in processing.
+ * @since 2.5.0
+ */
+zkau.processing = function () {
 	return zkau._respQue.length || zkau._reqs.length;
 };
 
@@ -304,7 +313,7 @@ zkau.send = function (evt, timeout) {
 };
 zkau._send = function (dtid, evt, timeout) {
 	if (evt.ctl) {
-		var t = new Date().getTime();
+		var t = $now();
 		if (zkau._ctl == evt.uuid && t - zkau._ctlt < 450)
 			return; //to prevent key stroke are pressed twice (quickly)
 		zkau._ctlt = t;
@@ -346,8 +355,7 @@ zkau._sendNow = function (dtid) {
 		return;
 	}
 
-	//bug 1721809: we cannot filter out ctl even if zk.processing
-	//or _inProcess
+	//bug 1721809: we cannot filter out ctl even if zkau.processing
 
 	//decide implicit and ignorable
 	var implicit = true, ignorable = true;
@@ -393,6 +401,7 @@ zkau._sendNow = function (dtid) {
 		req = new XMLHttpRequest();
 	}
 
+	zkau.sentTime = $now();
 	var msg;
 	if (req) {
 		try {
@@ -475,7 +484,8 @@ zkau._doQueResps = function () {
 		}
 	}
 
-	zkau._checkProgress();
+	if (zkau._checkProgress())
+		zkau.doneTime = $now();
 	if (ex) throw ex;
 };
 /** Process the specified response in XML. */
@@ -1300,6 +1310,25 @@ zkau.cleanupMeta = function (cmp) {
 		if (meta.cleanup) meta.cleanup();
 		zkau.setMeta(cmp, null);
 	}
+};
+
+//Server Push//
+/** Sets the info of the server push.
+ * @since 2.5.0
+ */
+zkau.setSPushInfo = function (dtid, info) {
+	var i = zkau._spushInfo[dtid];
+	if (!i) i = zkau._spushInfo[dtid] = {};
+
+	if (info.min != null) i.min = info.min;
+	if (info.max != null) i.max = info.max;
+	if (info.factor != null) i.factor = info.factor;
+};
+/** Returns the info of the server push.
+ * @since 2.5.0
+ */
+zkau.getSPushInfo = function (dtid) {
+	return zkau._spushInfo[dtid];
 };
 
 ////

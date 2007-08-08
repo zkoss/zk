@@ -47,7 +47,7 @@ import org.zkoss.zk.au.AuScript;
  * @author tomyeh
  */
 public class PollingServerPush implements ServerPush {
-//	private static final Log log = Log.lookup(PollingServerPush.class);
+	private static final Log log = Log.lookup(PollingServerPush.class);
 
 	private Desktop _desktop;
 	/** List of ThreadInfo. */
@@ -64,12 +64,33 @@ public class PollingServerPush implements ServerPush {
 	/** Returns the JavaScript codes to enable (aka., start) the server push.
 	 */
 	protected String getStartScript() {
-		final String start = _desktop.getWebApp()
-			.getConfiguration().getPreference("PollingServerPush.start", null);
-		return start != null ? start:
-			"zk.invoke('zul.cpsp',function(){zkCpsp.start('"
-				+ _desktop.getId() + "');});";
+		final Configuration conf = _desktop.getWebApp().getConfiguration();
+		final String start = conf.getPreference("PollingServerPush.start", null);
+		if (start != null)
+			return start;
+		final StringBuffer sb = new StringBuffer(128)
+			.append("zk.invoke('zul.cpsp',function(){zkCpsp.start('")
+			.append(_desktop.getId()).append('\'');
+
+		final int v1 = getIntPref(conf, "PollingServerPush.delay.min"),
+			v2 = getIntPref(conf, "PollingServerPush.delay.max");
+		if (v1 > 0  && v2 > 0)
+			sb.append(',').append(v1).append(',').append(v2);
+
+		return sb.append(");});").toString();
 	}
+	private int getIntPref(Configuration conf, String key) {
+		final String s = conf.getPreference(key, null);
+		if (s != null) {
+			try {
+				return Integer.parseInt(s);
+			} catch (NumberFormatException ex) {
+				log.warning("Not a number specified at "+key);
+			}
+		}
+		return -1;
+	}
+			
 	/** Returns the JavaScript codes to disable (aka., stop) the server push.
 	 */
 	protected String getStopScript() {
@@ -104,6 +125,18 @@ public class PollingServerPush implements ServerPush {
 			}
 			_pending.clear();
 		}
+	}
+	/** Sets the delay between each polling request.
+	 * <p>Default: use the preference called
+	 * <code>PollingServerPush.delay.min</code>
+	 * <code>PollingServerPush.delay.max</code>,
+	 * and <code>PollingServerPush.delay.factor</code>.
+	 * If not defined, min is 2500, max 10000, factor 5.
+	 */
+	public void setDelay(int min, int max, int factor) {
+		Clients.response(
+			new AuScript(null, "zkau.setSPushInfo('" + _desktop.getId()
+				+ "',{min:" + min + ",max:" + max + ",factor:" + factor + "})"));
 	}
 
 	public void onPiggyback() {

@@ -898,17 +898,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	public void onChildRemoved(Component child) {
 	}
-	/** Default: does nothing.
+	/** Default: handles special event listeners.
 	 * @see Component#onPageAttached
 	 * @since 2.5.0
 	 */
 	public void onPageAttached(Page newpage, Page oldpage) {
+		if (oldpage == null) //new added
+			onListenerChanged(newpage.getDesktop(), true);
 	}
-	/** Default: does nothing.
+	/** Default: handles special event listeners.
 	 * @see Component#onPageDetached
 	 * @since 2.5.0
 	 */
 	public void onPageDetached(Page page) {
+		onListenerChanged(page.getDesktop(), false);
 	}
 
 	/** Default: null (no propagation at all).
@@ -917,7 +920,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return null;
 	}
 
-	/**
+	/** Returns the mold used to render this component.
 	 * Default: "default"
 	 */
 	public final String getMold() {
@@ -1025,10 +1028,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		l.add(listener);
 
-		if (Events.ON_CLIENT_INFO.equals(evtnm))
-			response("clientInfo", new AuClientInfo(getDesktop()));
-		if (!asap && isAsapRequired(evtnm))
-			smartUpdate(getAttrOfEvent(evtnm), "true");
+		final Desktop desktop = getDesktop();
+		if (desktop != null) {
+			if (Events.ON_CLIENT_INFO.equals(evtnm))
+				response("clientInfo", new AuClientInfo(desktop));
+			if (Events.ON_PIGGYBACK.equals(evtnm))
+				((DesktopCtrl)desktop).onPiggybackListened(this, true);
+
+			if (!asap && isAsapRequired(evtnm))
+				smartUpdate(getAttrOfEvent(evtnm), "true");
+		}
 		return true;
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
@@ -1046,8 +1055,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 							_listeners.remove(evtnm);
 						else
 							it.remove();
-						if (asap && !isAsapRequired(evtnm))
-							smartUpdate(getAttrOfEvent(evtnm), null);
+
+						final Desktop desktop = getDesktop();
+						if (desktop != null) {
+							onListenerChanged(desktop, false);
+
+							if (asap && !isAsapRequired(evtnm))
+								smartUpdate(getAttrOfEvent(evtnm), null);
+						}
 						return true;
 					}
 				}
@@ -1123,10 +1138,22 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_evthds.addAll(evthds);
 			}
 
+			final Desktop desktop = getDesktop();
+			if (desktop != null)
+				onListenerChanged(desktop, true);
+		}
+	}
+	private void onListenerChanged(Desktop desktop, boolean listen) {
+		if (listen) {
 			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap+deferrable
-				response("clientInfo", new AuClientInfo(getDesktop()));
+				response("clientInfo", new AuClientInfo(desktop));
 				//We always fire event not a root, since we don't like to
 				//check when setParent or setPage is called
+			if (Events.isListened(this, Events.ON_PIGGYBACK, false))
+				((DesktopCtrl)desktop).onPiggybackListened(this, true);
+		} else {
+			if (!Events.isListened(this, Events.ON_PIGGYBACK, false))
+				((DesktopCtrl)desktop).onPiggybackListened(this, false);
 		}
 	}
 	public void addEventHandler(String name, EventHandler evthd) {

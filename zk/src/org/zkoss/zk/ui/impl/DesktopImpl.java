@@ -134,6 +134,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private int _respSeqId = MAX_RESPONSE_SEQUENCE - 1;
 		//so the next value will be 0
 
+	/** Whether any onPiggyback listener is registered. */
+	private boolean _piggybackListened;
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
 	 * Note: it is NOT encoded yet.
@@ -623,15 +625,29 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public ServerPush getServerPush() {
 		return _spush;
 	}
+	public void setServerPushDelay(int min, int max, int factor) {
+		if (_spush == null)
+			throw new IllegalStateException("Not started");
+		_spush.setDelay(min, max, factor);
+	}
 
+	public void onPiggybackListened(Component comp, boolean listen) {
+		//we don't cache comp to avoid the risk of memory leak (maybe not
+		//a problem)
+		//On the other hand, most pages don't listen onPiggyback at all,
+		//so _piggybackListened is good enough to improve the performance
+		if (listen) _piggybackListened = true;
+	}
 	public void onPiggyback() {
-		for (Iterator it = _pages.values().iterator(); it.hasNext();) {
-			final Page p = (Page)it.next();
-			if (Executions.getCurrent().isAsyncUpdate(p)) { //ignore new created pages
-				for (Iterator e = p.getRoots().iterator(); e.hasNext();) {
-					final Component c = (Component)e.next();
-					if (Events.isListened(c, Events.ON_PIGGYBACK, false)) //asap+deferrable
-						Events.postEvent(new Event(Events.ON_PIGGYBACK, c));
+		if (_piggybackListened) {
+			for (Iterator it = _pages.values().iterator(); it.hasNext();) {
+				final Page p = (Page)it.next();
+				if (Executions.getCurrent().isAsyncUpdate(p)) { //ignore new created pages
+					for (Iterator e = p.getRoots().iterator(); e.hasNext();) {
+						final Component c = (Component)e.next();
+						if (Events.isListened(c, Events.ON_PIGGYBACK, false)) //asap+deferrable
+							Events.postEvent(new Event(Events.ON_PIGGYBACK, c));
+					}
 				}
 			}
 		}

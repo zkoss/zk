@@ -233,13 +233,19 @@ zk.enableESC = function () {
 //////////////////////////////////////
 zk.mods = {}; //ZkFns depends on it
 
+/** Returns the current time (new Date().getTime())
+ * @since 2.5.0
+ */
+function $now() {
+	return new Date().getTime();
+}
 /** Note: it is easy to cause problem with EMBED, if we use prototype's $() since
  * it tried to extend the element.
  */
 function $e(id) {
     return typeof id == 'string' ? id ? document.getElementById(id): null: id;
     	//strange but getElementById("") fails in IE7
-};
+}
 /** A control might be enclosed by other tag while event is sent from
  * the control directly, so... */
 function $uuid(n) {
@@ -950,9 +956,9 @@ zk._setOuterHTML = function (n, html) {
 /** Pause milliseconds. */
 zk.pause = function (millis) {
 	if (millis) {
-		var d = new Date(), n;
+		var d = $now(), n;
 		do {
-			n = new Date();
+			n = $now();
 		} while (n - d < millis);
 	}
 };

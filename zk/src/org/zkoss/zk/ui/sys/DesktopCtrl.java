@@ -185,6 +185,19 @@ if (c.isEmpty()) {
 	 */
 	public Media getDownloadMedia(String medId, boolean remove);
 
+	/** Called when a component added or removed a listener for
+	 * {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}.
+	 *
+	 * <p>The implementation usualy uses it to optimize whether to
+	 * call the listener when {@link #onPiggyback} is called.
+	 *
+	 * @param comp the component that adds an listener for
+	 * {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}.
+	 * The component may or may not be a root component.
+	 * @param listen whether the listener is added (or removed).
+	 * @since 2.5.0
+	 */
+	public void onPiggybackListened(Component comp, boolean listen);
 	/** Called each time ZK Update Engine processes all events.
 	 * It is used to implement the piggyback feature
 	 * (see {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}).

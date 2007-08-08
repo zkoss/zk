@@ -66,16 +66,29 @@ public interface ServerPush {
 	 */
 	public void stop();
 
-	/** Called when {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}
-	 * is received. The invocation is <i>passive</i> (i.e., triggered by
-	 * other events, rather than spontaneous).
+	/** Sets the delay between each polling.
+	 * It can be called only this controller is started
+	 * (by use of {@link #start}).
 	 *
-	 * <p>This method is called in
-	 * the context of an event listener. In other words, the execution
-	 * is activated and you can retrieve it by
-	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
+	 * <p>Note: whether to support this method is up to the implementation.
+	 * Currently, only on the client-polling-based controller (the default)
+	 * supports this method.
+	 *
+	 * @param min the minimal delay to poll the server for any pending
+	 * server-push threads.
+	 * Ignore (aka., the default value is used) if non-positive.
+	 * Unit: milliseconds.
+	 * @param max the maximal delay to poll the server for any pending
+	 * server-push threads.
+	 * Ignore (aka., the default value is used) if non-positive.
+	 * Unit: milliseconds.
+	 * @param factor the delay factor. The real delay is the processing
+	 * time multiplies the delay factor. For example, if the last request
+	 * took 1 second to process, then the client polling will be delayed
+	 * for 1 x factor seconds, unless it is value 
+	 * Ignore (aka., the default value is used) if non-positive.
 	 */
-	public void onPiggyback();
+	public void setDelay(int min, int max, int factor);
 
 	/** Activate the current thread (which must be a server-push thread).
 	 * The invoker of this method must invoke {@link #deactivate}
@@ -94,4 +107,15 @@ public interface ServerPush {
 	 * @see #activate
 	 */
 	public void deactivate();
+
+	/** Called when {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}
+	 * is received. The invocation is <i>passive</i> (i.e., triggered by
+	 * other events, rather than spontaneous).
+	 *
+	 * <p>This method is called in
+	 * the context of an event listener. In other words, the execution
+	 * is activated and you can retrieve it by
+	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
+	 */
+	public void onPiggyback();
 }
