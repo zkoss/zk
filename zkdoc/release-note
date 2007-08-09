@@ -23,6 +23,7 @@ ZK 2.5.0
   1766667: DataBinder support multiple save-when events
   1769025: Move isAsapRequired from HtmlBasedComponent to AbstractComponent
   1769792: Component add onPageAttached and onPageDetached
+  1767347: DesktopCleanup shall called before UiEngine.desktopDestroyed
   
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
