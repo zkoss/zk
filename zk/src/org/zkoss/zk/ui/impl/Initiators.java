@@ -34,10 +34,9 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
  * A helper class used to handle {@link Initiator}.
  *
  * @author tomyeh
- * @since 2.5.0
  * @see org.zkoss.zk.ui.sys.UiEngine
  */
-public class Initiators {
+/*package*/ class Initiators {
 	/*package(inner)*/ static final Log log = Log.lookup(Initiators.class);
 
 	/** Invokes {@link Initiator#doInit}, if any, and returns
