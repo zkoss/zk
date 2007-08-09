@@ -67,6 +67,11 @@ public class Initiators {
 		_inits = inits;
 		
 	}
+	/**
+	 * Invokes {@link Initiator#doAfterCompose}.
+	 * @param page
+	 * @throws Exception
+	 */
 	public void doAfterCompose(Page page) throws Exception {
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
 			((Initiator)it.next()).doAfterCompose(page);
