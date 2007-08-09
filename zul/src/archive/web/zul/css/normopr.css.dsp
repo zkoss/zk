@@ -348,30 +348,33 @@ td.tabpanels { <%-- vert --%>
 td.tab-3d-first {background-image: url(${c:encodeURL('~./zul/img/tab/3d-first.gif')});}
 td.tab-3d-last1 {background-image: url(${c:encodeURL('~./zul/img/tab/3d-last1.gif')});}
 td.tab-3d-last2 {background-image: url(${c:encodeURL('~./zul/img/tab/3d-last2.gif')});}
-td.tab-3d-tl-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tl-sel.gif')});}
-td.tab-3d-tm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tm-sel.gif')});}
-td.tab-3d-tr-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tr-sel.gif')});}
-td.tab-3d-ml-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-ml-sel.gif')});}
-td.tab-3d-mm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mm-sel.gif')});}
-td.tab-3d-mr-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mr-sel.gif')});}
+
+td.tab-3d-tl-sel, td.tabaccd-3d-tl-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tl-sel.gif')});}
+td.tab-3d-tm-sel, td.tabaccd-3d-tm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tm-sel.gif')});}
+td.tab-3d-tr-sel, td.tabaccd-3d-tr-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tr-sel.gif')});}
+td.tab-3d-ml-sel, td.tabaccd-3d-ml-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-ml-sel.gif')});}
+td.tab-3d-mm-sel, td.tabaccd-3d-mm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mm-sel.gif')});}
+td.tab-3d-mr-sel, td.tabaccd-3d-mr-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mr-sel.gif')});}
 td.tab-3d-bl-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-bl-sel.gif')});}
 td.tab-3d-bm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-bm-sel.gif')});}
 td.tab-3d-br-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-br-sel.gif')});}
-td.tab-3d-tl-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tl-uns.gif')});}
-td.tab-3d-tm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tm-uns.gif')});}
-td.tab-3d-tr-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tr-uns.gif')});}
-td.tab-3d-ml-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-ml-uns.gif')});}
-td.tab-3d-mm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')});}
-td.tab-3d-mr-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mr-uns.gif')});}
+
+td.tab-3d-tl-uns, td.tabaccd-3d-tl-uns, td.groupbox-3d-tl {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tl-uns.gif')});}
+td.tab-3d-tm-uns, td.tabaccd-3d-tm-uns, td.groupbox-3d-tm {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tm-uns.gif')});}
+td.tab-3d-tr-uns, td.tabaccd-3d-tr-uns, td.groupbox-3d-tr {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tr-uns.gif')});}
+td.tab-3d-ml-uns, td.tabaccd-3d-ml-uns, td.groupbox-3d-ml {background-image: url(${c:encodeURL('~./zul/img/tab/3d-ml-uns.gif')});}
+td.tab-3d-mm-uns, td.tabaccd-3d-mm-uns, td.groupbox-3d-mm {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')});}
+td.tab-3d-mr-uns, td.tabaccd-3d-mr-uns, td.groupbox-3d-mr {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mr-uns.gif')});}
 td.tab-3d-bl-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-bl-uns.gif')});}
 td.tab-3d-bm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-bm-uns.gif')});}
 td.tab-3d-br-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-br-uns.gif')});}
 
-td.tab-3d-b {background-image: url(${c:encodeURL('~./zul/img/tab/3d-b.gif')});}
+td.tabaccd-3d-b, td.groupbox-3d-b {background-image: url(${c:encodeURL('~./zul/img/tab/3d-b.gif')});}
 
 td.tab-v3d-first {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-first.gif')});}
 td.tab-v3d-last1 {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-last1.gif')});}
 td.tab-v3d-last2 {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-last2.gif')});}
+
 td.tab-v3d-tl-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tl-sel.gif')});}
 td.tab-v3d-tm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tm-sel.gif')});}
 td.tab-v3d-tr-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tr-sel.gif')});}
@@ -381,6 +384,7 @@ td.tab-v3d-mr-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-mr-se
 td.tab-v3d-bl-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-bl-sel.gif')});}
 td.tab-v3d-bm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-bm-sel.gif')});}
 td.tab-v3d-br-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-br-sel.gif')});}
+
 td.tab-v3d-tl-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tl-uns.gif')});}
 td.tab-v3d-tm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tm-uns.gif')});}
 td.tab-v3d-tr-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tr-uns.gif')});}

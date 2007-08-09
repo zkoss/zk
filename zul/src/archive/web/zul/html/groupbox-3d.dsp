@@ -25,19 +25,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:if test="${!empty self.caption}">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="5" height="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-tl-uns.gif')})"></td>
-	<td height="5" colspan="3" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-tm-uns.gif')})"></td>
-	<td width="5" height="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-tr-uns.gif')})"></td>
+	<td width="5" height="5" class="groupbox-3d-tl"></td>
+	<td height="5" colspan="3" class="groupbox-3d-tm"></td>
+	<td width="5" height="5" class="groupbox-3d-tr"></td>
 </tr>
 <tr height="22">
-	<td width="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-ml-uns.gif')})"></td>
-	<td width="3" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')})"></td>
-	<td style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')})">${z:redraw(self.caption, null)}</td>
-	<td width="3" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')})"></td>
-	<td width="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-mr-uns.gif')})"></td>
+	<td width="5" class="groupbox-3d-ml"></td>
+	<td width="3" class="groupbox-3d-mm"></td>
+	<td class="groupbox-3d-mm">${z:redraw(self.caption, null)}</td>
+	<td width="3" class="groupbox-3d-mm"></td>
+	<td width="5" class="groupbox-3d-mr"></td>
 </tr>
 <tr height="1">
-	<td colspan="5" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-b.gif')})"></td>
+	<td colspan="5" class="groupbox-3d-b"></td>
 </tr>
 </table>
 </c:if>
