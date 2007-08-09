@@ -54,7 +54,6 @@ import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.ExecutionImpl;
-import org.zkoss.zul.jsp.Initiators;
 
 /**
  * A skeletal class to implement the root ZK tag.

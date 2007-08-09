@@ -16,14 +16,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zul.jsp;
+package org.zkoss.zul.jsp.impl;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.zkoss.util.logging.Log;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
@@ -34,54 +33,39 @@ import org.zkoss.zk.ui.util.Initiator;
  * @author Ian Tsai
  *
  */
-/*package*/ class Initiators{
+public class Initiators{
 	static final Log log = Log.lookup(Initiators.class);
-	private final List _inits;
-	private final List _argsList;
+	private final List _inits = new LinkedList();
+
 	
-	/**
-	 * 
-	 *
-	 */
-	public Initiators(){
-		_inits = new ArrayList(5);
-		_argsList = new ArrayList(5);
-	}
 	/**
 	 * Add new initiator and it's args into this handler. 
 	 * @param init the initiator
 	 * @param args the args
 	 */
 	public void addInitiator(Initiator init, List args)	{
-		_inits.add(init);
-		_argsList.add(args);
+		_inits.add(new Object[]{init,args});
 	}
 	
 	/** Invokes {@link Initiator#doInit}, if any, and returns
 	 * an instance of{@link Initiators}.
 	 */
 	public void doInit(Page page){
+		Object[] objArr;
 		Initiator initiator;
 		List args;
-		for (int i=0,j=_argsList.size();i<j;i++) {
-			initiator = (Initiator) _inits.get(i);
-			args = (List) _argsList.get(i);
+		for (Iterator it = _inits.iterator(); it.hasNext();) {
+			objArr = (Object[]) it .next();
+			initiator = (Initiator) objArr[0];
+			args = (List) objArr[1];
 			try {
-				initiator.doInit(page, getArguments(page, args));
+				initiator.doInit(page, args.toArray());
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
 	}
 	
-	/** Returns the arguments array (by evaluating EL if necessary).
-	 */
-	private Object[] getArguments(Page page, List _args) {
-		final Object[] args = new Object[_args.size()];
-		for (int j = 0; j < args.length; ++j)
-			args[j] = Executions.evaluate(page, (String)_args.get(j), Object.class);
-		return args;
-	}
 	/**
 	 * 
 	 * @param page
@@ -89,7 +73,7 @@ import org.zkoss.zk.ui.util.Initiator;
 	 */
 	public void doAfterCompose(Page page) throws Exception {
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
-			((Initiator)it.next()).doAfterCompose(page);
+			((Initiator)((Object[])it.next())[0]).doAfterCompose(page);
 		}
 	}
 	/** Invokes {@link Initiator#doCatch}.
@@ -98,7 +82,7 @@ import org.zkoss.zk.ui.util.Initiator;
 	 */
 	public void doCatch(Throwable t) {
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
-			final Initiator init = (Initiator)it.next();
+			final Initiator init = ((Initiator)((Object[])it.next())[0]);
 			try {
 				init.doCatch(t);
 			} catch (Throwable ex) {
@@ -111,7 +95,7 @@ import org.zkoss.zk.ui.util.Initiator;
 	public void doFinally() {
 		Throwable t = null;
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
-			final Initiator init = (Initiator)it.next();
+			final Initiator init = ((Initiator)((Object[])it.next())[0]);
 			try {
 				init.doFinally();
 			} catch (Throwable ex) {

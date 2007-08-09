@@ -26,9 +26,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.DynamicAttributes;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zul.jsp.impl.AbstractTag;
+import org.zkoss.zul.jsp.impl.Initiators;
 
 /**
  * 
@@ -53,9 +53,9 @@ import org.zkoss.zul.jsp.impl.AbstractTag;
  *
  */
 public class InitTag extends AbstractTag implements DynamicAttributes{
-	private static final Log log = Log.lookup(InitTag.class);
 	private List _args = new ArrayList(5);
-	private String _class;
+	private Class _class;
+	private Initiator _init ;
 	/**
 	 *   Called when a tag declared to accept dynamic attributes is passed an 
 	 *   attribute that is not declared in the Tag Library Descriptor.<br>
@@ -82,8 +82,7 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	 */
 	public void doTag() throws JspException, IOException {
 		try {
-			 Initiator init = (Initiator) Classes.forNameByThread(_class).newInstance();
-			 storeInitiator(init,_args);
+			 storeInitiator(_init,_args);
 		} catch (Exception ex) {
 			throw new JspException("Failed to init "+_class, ex);
 		}
@@ -104,15 +103,24 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	/**
 	 * set Initiator class .
 	 * @param clazz a class name  with derived class which is implements {@link Initiator}  
+	 * @throws IllegalArgumentException if input class can't be found or is not implement Initiator
 	 */
-	public void setInitClass(String clazz) {
+	public void setUse(String clazz) {
 		if (clazz == null || clazz.length() == 0)
 			throw new IllegalArgumentException("null or empty");
-		_class = clazz;
+		try {
+			 _class = Classes.forNameByThread(clazz);
+			 _init = (Initiator) _class.newInstance();
+		}catch (Exception ex) {
+			throw new IllegalArgumentException("Failed to set use class: "+_class, ex);
+		}
 	}
-	
-	public String getInitClass() {
-		return _class;
+	/**
+	 * get  Initiator class .
+	 * @return
+	 */
+	public String getUse() {
+		return _class.getName();
 	}
 	
 
