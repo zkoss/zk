@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.util.Initiator;
  * @author Ian Tsai
  *
  */
-public class Initiators{
+/*package*/ class Initiators{
 	static final Log log = Log.lookup(Initiators.class);
 	private final List _inits;
 	private final List _argsList;
@@ -52,8 +52,7 @@ public class Initiators{
 	 * @param init the initiator
 	 * @param args the args
 	 */
-	public void addInitiator(Initiator init, List args)
-	{
+	public void addInitiator(Initiator init, List args)	{
 		_inits.add(init);
 		_argsList.add(args);
 	}

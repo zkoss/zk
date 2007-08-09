@@ -81,30 +81,23 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	 *  container:{@link RootTag}.   
 	 */
 	public void doTag() throws JspException, IOException {
-		Exception ex = null;
-		 try {
+		try {
 			 Initiator init = (Initiator) Classes.forNameByThread(_class).newInstance();
-			 this.storeInitiator(init,_args);
-			 
-		} catch (ClassNotFoundException e) {
-			ex=e;log.error(e);
-		} catch (InstantiationException e) {
-			ex=e;log.error(e);
-		} catch (IllegalAccessException e) {
-			ex=e;log.error(e);
+			 storeInitiator(init,_args);
+		} catch (Exception ex) {
+			throw new JspException("Failed to init "+_class, ex);
 		}
-		if(ex!=null)throw new JspException(" doTag failed!");
 	}
 	
 	/**
 	 * Store initiator into  HttpRequest.
 	 * @param init the initiator need to be stored.
 	 */
-	private void storeInitiator(Initiator init, List args)
-	{
+	private void storeInitiator(Initiator init, List args) {
 		Initiators inits   = (Initiators) this.getJspContext().
 			getAttribute(Initiators.class.getName());
-		if(inits==null)getJspContext().setAttribute(
+		if(inits==null)
+			getJspContext().setAttribute(
 				Initiators.class.getName(), inits = new Initiators());
 		inits.addInitiator(init, args);
 	}
@@ -112,13 +105,13 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	 * set Initiator class .
 	 * @param clazz a class name  with derived class which is implements {@link Initiator}  
 	 */
-	public void setInitClass(String clazz)
-	{
+	public void setInitClass(String clazz) {
+		if (clazz == null || clazz.length() == 0)
+			throw new IllegalArgumentException("null or empty");
 		_class = clazz;
 	}
 	
-	public String getInitClass()
-	{
+	public String getInitClass() {
 		return _class;
 	}
 	
