@@ -150,13 +150,10 @@ zkTab._setTabSel = function (tab, toSel) {
 		zkau.send({uuid: tab.id, cmd: "onSelect", data: [tab.id]},
 				zkau.asapTimeout(tab, "onSelect"));
 };
-/** Changes the images in the background. */
+/** Changes the style class. */
 zkTab._changeBkgnd = function (node, toSel) {
-	if (node.style) {
-		var url = node.style.backgroundImage;
-		if (url && url.indexOf(toSel ? "-uns": "-sel") >= 0)
-			node.style.backgroundImage = zk.renType(url, toSel ? "sel": "uns");
-	}
+	if (node.className && node.className.endsWith(toSel ? "-uns": "-sel"))
+		node.className = zk.renType(node.className, toSel ? "sel": "uns");
 
 	for (node = node.firstChild; node; node = node.nextSibling)
 		zkTab._changeBkgnd(node, toSel);

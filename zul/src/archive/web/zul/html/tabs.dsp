@@ -27,7 +27,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%-- prefix column  --%>
 <td><table border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td height="3" width="3" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-first.gif')})"></td>
+	<td height="3" width="3" class="tab-3d-first"></td>
 </tr>
 </table></td>
 
@@ -40,8 +40,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%-- postfix column  --%>
 <td><table border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td height="3" width="3" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-last1.gif')})" id="${self.uuid}!last"></td>
-	<td height="3" width="1" style="background-image:url(${c:encodeURL('~./zul/img/tab/3d-last2.gif')})"></td>
+	<td height="3" width="3" class="tab-3d-last1" id="${self.uuid}!last"></td>
+	<td height="3" width="1" class="tab-3d-last2"></td>
 </tr>
 </table></td>
 	</tr>

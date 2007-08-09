@@ -348,6 +348,52 @@ td.tabpanels { <%-- vert --%>
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
 
+td.tab-3d-first {background-image: url(${c:encodeURL('~./zul/img/tab/3d-first.gif')});}
+td.tab-3d-last1 {background-image: url(${c:encodeURL('~./zul/img/tab/3d-last1.gif')});}
+td.tab-3d-last2 {background-image: url(${c:encodeURL('~./zul/img/tab/3d-last2.gif')});}
+td.tab-3d-tl-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tl-sel.gif')});}
+td.tab-3d-tm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tm-sel.gif')});}
+td.tab-3d-tr-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tr-sel.gif')});}
+td.tab-3d-ml-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-ml-sel.gif')});}
+td.tab-3d-mm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mm-sel.gif')});}
+td.tab-3d-mr-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mr-sel.gif')});}
+td.tab-3d-bl-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-bl-sel.gif')});}
+td.tab-3d-bm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-bm-sel.gif')});}
+td.tab-3d-br-sel {background-image: url(${c:encodeURL('~./zul/img/tab/3d-br-sel.gif')});}
+td.tab-3d-tl-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tl-uns.gif')});}
+td.tab-3d-tm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tm-uns.gif')});}
+td.tab-3d-tr-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-tr-uns.gif')});}
+td.tab-3d-ml-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-ml-uns.gif')});}
+td.tab-3d-mm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')});}
+td.tab-3d-mr-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-mr-uns.gif')});}
+td.tab-3d-bl-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-bl-uns.gif')});}
+td.tab-3d-bm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-bm-uns.gif')});}
+td.tab-3d-br-uns {background-image: url(${c:encodeURL('~./zul/img/tab/3d-br-uns.gif')});}
+
+td.tab-3d-b {background-image: url(${c:encodeURL('~./zul/img/tab/3d-b.gif')});}
+
+td.tab-v3d-first {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-first.gif')});}
+td.tab-v3d-last1 {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-last1.gif')});}
+td.tab-v3d-last2 {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-last2.gif')});}
+td.tab-v3d-tl-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tl-sel.gif')});}
+td.tab-v3d-tm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tm-sel.gif')});}
+td.tab-v3d-tr-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tr-sel.gif')});}
+td.tab-v3d-ml-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-ml-sel.gif')});}
+td.tab-v3d-mm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-mm-sel.gif')});}
+td.tab-v3d-mr-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-mr-sel.gif')});}
+td.tab-v3d-bl-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-bl-sel.gif')});}
+td.tab-v3d-bm-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-bm-sel.gif')});}
+td.tab-v3d-br-sel {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-br-sel.gif')});}
+td.tab-v3d-tl-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tl-uns.gif')});}
+td.tab-v3d-tm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tm-uns.gif')});}
+td.tab-v3d-tr-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-tr-uns.gif')});}
+td.tab-v3d-ml-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-ml-uns.gif')});}
+td.tab-v3d-mm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-mm-uns.gif')});}
+td.tab-v3d-mr-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-mr-uns.gif')});}
+td.tab-v3d-bl-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-bl-uns.gif')});}
+td.tab-v3d-bm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-bm-uns.gif')});}
+td.tab-v3d-br-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-br-uns.gif')});}
+
 <%-- ZK menu. --%>
 div.menubar, div.menupopup, div.ctxpopup {
 	cursor: hand; cursor: pointer; background: menu; padding: 1px;
