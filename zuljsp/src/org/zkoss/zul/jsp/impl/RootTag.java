@@ -208,8 +208,7 @@ abstract public class RootTag extends AbstractTag {
 				log.realCauseBriefly(ex); //Apache Jasper Compiler eats ex
 				if(inits!=null)inits.doCatch(ex);
 				throw UiException.Aide.wrap(ex);
-			}
-			finally{
+			} finally{
 				if(inits!=null)inits.doFinally();
 			}
 		}
@@ -224,13 +223,9 @@ abstract public class RootTag extends AbstractTag {
 	 * @param com  The owner of zscript segment. 
 	 * @param zs A ZScript object.
 	 */
-	public void addDefferdZscript(Component com, ZScript zs)
-	{
+	public void addDefferdZscript(Component com, ZScript zs) {
 		if (zs.getLanguage() == null)
-			zs.setLanguage(
-					_page.getZScriptLanguage());
+			zs.setLanguage(_page.getZScriptLanguage());
 		((PageCtrl)_page).addDeferredZScript(com, zs);
 	}
-
-
 }

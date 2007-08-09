@@ -54,7 +54,6 @@ import org.zkoss.zul.jsp.impl.Initiators;
  */
 public class InitTag extends AbstractTag implements DynamicAttributes{
 	private List _args = new LinkedList();
-	private Class _class;
 	private Initiator _init ;
 	/**
 	 *   Called when a tag declared to accept dynamic attributes is passed an 
@@ -81,11 +80,7 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	 *  container:{@link RootTag}.   
 	 */
 	public void doTag() throws JspException, IOException {
-		try {
-			 storeInitiator(_init,_args);
-		} catch (Exception ex) {
-			throw new JspException("Failed to init "+_class, ex);
-		}
+		 storeInitiator(_init,_args);
 	}
 	
 	/**
@@ -101,7 +96,7 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 		inits.addInitiator(init, args);
 	}
 	/**
-	 * set Initiator class .
+	 * Sets the class that implements {@link  Initiator}.
 	 * @param clazz a class name  with derived class which is implements {@link Initiator}  
 	 * @throws IllegalArgumentException if input class can't be found or is not implement Initiator
 	 */
@@ -109,18 +104,16 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 		if (clazz == null || clazz.length() == 0)
 			throw new IllegalArgumentException("null or empty");
 		try {
-			 _class = Classes.forNameByThread(clazz);
-			 _init = (Initiator) _class.newInstance();
-		}catch (Exception ex) {
-			throw new IllegalArgumentException("Failed to set use class: "+_class, ex);
+			 _init = (Initiator) Classes.forNameByThread(clazz).newInstance();
+		} catch (Exception ex) {
+			throw new IllegalArgumentException("Failed to instantiate "+clazz, ex);
 		}
 	}
 	/**
-	 * get  Initiator class .
-	 * @return
+	 * Returns the class that implements {@link  Initiator}.
 	 */
 	public String getUse() {
-		return _class.getName();
+		return _init != null ? _init.getClass().getName(): null;
 	}
 	
 
