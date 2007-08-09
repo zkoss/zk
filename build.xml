@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
-	<!ENTITY properties SYSTEM "file:build.prop.xml">
-	<!ENTITY targets SYSTEM "file:build.target.xml">
+	<!ENTITY properties SYSTEM "build.prop.xml">
+	<!ENTITY targets SYSTEM "build.target.xml">
 ]>
 
 <!-- build.xml
