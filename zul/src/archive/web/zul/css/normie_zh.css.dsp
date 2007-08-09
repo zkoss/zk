@@ -398,6 +398,19 @@ td.tab-v3d-bl-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-bl-un
 td.tab-v3d-bm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-bm-uns.gif')});}
 td.tab-v3d-br-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-br-uns.gif')});}
 
+<%-- shadow effect --%>
+td.groupbox-3d-shdl {
+	background-image: url(${c:encodeURL('~./img/shdlf.gif')});
+	width:6px; height: 6px;
+}
+td.groupbox-3d-shdm {
+	background-image: url(${c:encodeURL('~./img/shdmd.gif')});
+}
+td.groupbox-3d-shdr {
+	background-image: url(${c:encodeURL('~./img/shdrg.gif')});
+	width:6px; height: 6px;
+}
+
 <%-- ZK slider --%>
 td.slider-bk {background-image: url(${c:encodeURL('~./zul/img/slider/bk.gif')});}
 td.slider-bkl {background-image: url(${c:encodeURL('~./zul/img/slider/bkl.gif')});}

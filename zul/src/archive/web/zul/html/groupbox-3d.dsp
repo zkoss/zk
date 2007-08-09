@@ -50,9 +50,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%-- shadow --%>
 <table id="${self.uuid}!sdw" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
- <td width="6"><img width="6" height="6" src="${c:encodeURL('~./img/shdlf.gif')}"/></td>
- <td style="background-image:url(${c:encodeURL('~./img/shdmd.gif')})"><img width="1" height="1" src="${c:encodeURL('~./img/spacer.gif')}"/></td>
- <td width="6"><img width="6" height="6" src="${c:encodeURL('~./img/shdrg.gif')}"/></td>
+ <td class="groupbox-3d-shdl"></td>
+ <td class="groupbox-3d-shdm"><img width="1" height="1" src="${c:encodeURL('~./img/spacer.gif')}"/></td><%-- it must have something --%>
+ <td class="groupbox-3d-shdr"></td>
 </tr>
 </table>
 	</td>
