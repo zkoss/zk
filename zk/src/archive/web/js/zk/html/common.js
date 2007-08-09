@@ -825,10 +825,18 @@ zk.renType = function (url, type) {
 /** Rename between / and .
  */
 zk.rename = function (url, name) {
-	var j = url.lastIndexOf('.'),
-		k = url.lastIndexOf('/');
-	var ext = j <= k ? "": url.substring(j);
-	return url.substring(0, k + 1) + name + ext;
+	var j = url.lastIndexOf(';');
+	var suffix;
+	if (j >= 0) {
+		suffix = url.substring(j);
+		url = url.substring(0, j);
+	} else
+		suffix = "";
+
+	j = url.lastIndexOf('.');
+	var k = url.lastIndexOf('/'),
+		ext = j <= k ? "": url.substring(j);
+	return url.substring(0, k + 1) + name + ext + suffix;
 };
 
 //-- special routines --//
