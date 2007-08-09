@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.jsp;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.jsp.JspException;
@@ -53,7 +53,7 @@ import org.zkoss.zul.jsp.impl.Initiators;
  *
  */
 public class InitTag extends AbstractTag implements DynamicAttributes{
-	private List _args = new ArrayList(5);
+	private List _args = new LinkedList();
 	private Class _class;
 	private Initiator _init ;
 	/**
