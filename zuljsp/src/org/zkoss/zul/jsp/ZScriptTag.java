@@ -82,17 +82,13 @@ public class ZScriptTag extends AbstractTag {
 	}
 	/**
 	 * Returns whether to defer the execution of this zscript.
-	 * Because ZScriptTag always defers the execution, so this method
-	 * always return true.
-	 * @return true only currently.
+	 * <p>Default: false.
 	 */
 	public boolean isDeferred() {
 		return _deferred;
 	}
 	/**
 	 * Sets whether to defer the execution of this zscript.
-	 * Because ZScriptTag always defers the execution, so this method
-	 * has no effect.
 	 * @param deferred whether to defer the execution.
 	 */
 	public void setDeferred(boolean deferred) {
