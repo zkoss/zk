@@ -31,7 +31,19 @@ import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
 
 /**
- * Utilities to access the JSP context.
+ * ELContexts maintains a stack of {@link ELContext} to simplify
+ * the writing of EL expressions.
+ *
+ * <p>It is designed to make the signature of ZK EL functions
+ * (see {@link org.zkoss.web.fn.ServletFns}) simpler.
+ * For example, {@link org.zkoss.web.fn.ServletFns#isExplorer} requires
+ * no argument, since it assumes the current context can be retrieved
+ * from {@link #getCurrent}.
+ *
+ * <p>Spec Issue:<br/>
+ * It is controversial whether the introduction of {@link ELContext} and
+ * {@link ELContexts} is worth. However, we have to maintain the backward
+ * compatibility.
  *
  * @author tomyeh
  */

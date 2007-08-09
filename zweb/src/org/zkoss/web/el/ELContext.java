@@ -28,7 +28,18 @@ import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ExpressionEvaluator;
 
 /**
- * Used to wrap the context for evaluate EL.
+ * Represents the current context that is used to evaluate EL expressions.
+ * ZK EL functions (see {@link org.zkoss.web.fn.ServletFns}) assume that
+ * {@link ELContexts#getCurrent} provdies the current context to
+ * evaluate EL expressions.
+ *
+ * <p>Thus, to use ZK EL functions, {@link ELContexts#push} must be called
+ * first before evaluating any EL expressions.
+ * However, you rarely need to call {@link ELContexts#push} explicitly,
+ * since DSP's interpretation (and ZUML's) has pushed the context.
+ *
+ * <p>You need to push the context only if you want to use ZK EL functions
+ * in the environment other than DSP and ZK. For example, JSP pages.
  *
  * @author tomyeh
  */
