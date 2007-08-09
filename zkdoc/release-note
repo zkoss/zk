@@ -24,7 +24,10 @@ ZK 2.5.0
   1769025: Move isAsapRequired from HtmlBasedComponent to AbstractComponent
   1769792: Component add onPageAttached and onPageDetached
   1767347: DesktopCleanup shall called before UiEngine.desktopDestroyed
-  
+  1770594: Tab: use class instead of hardcode background to style
+  1770613: Groupbox: use class instead of hardcode background to style
+  1770614: Slider: use class instead of hardcode background to style
+
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
   1752477: combobox in groupbox and vbox failed to pos button (IE only)
@@ -46,7 +49,6 @@ ZK 2.5.0
     and tooltip-delay elements are moved to the client-config element,
     though you still can specify them under the desktop-config element
     (because of the backward compatibility)
-
 
 	--------
 ZK 2.4.1
