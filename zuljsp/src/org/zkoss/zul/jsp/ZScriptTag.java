@@ -45,6 +45,7 @@ public class ZScriptTag extends AbstractTag {
 	private String _lang = null;
 	private Component _parent;
 	private RootTag _roottag;
+	private boolean _deferred;
 
 	/**
 	 * 
@@ -58,7 +59,7 @@ public class ZScriptTag extends AbstractTag {
 		final ZScript zscript = ZScript.parseContent(out.toString(), null);
 		if (zscript.getLanguage() == null)
 			zscript.setLanguage(_lang != null ? _lang: _roottag.getZScriptLanguage());
-		_roottag.addDefferdZscript(_parent, zscript);
+		_roottag.processZScript(_parent, zscript);
 	}
 
 	
@@ -87,7 +88,7 @@ public class ZScriptTag extends AbstractTag {
 	 * @return true only currently.
 	 */
 	public boolean isDeferred() {
-		return true;//_deferred;
+		return _deferred;
 	}
 	/**
 	 * Sets whether to defer the execution of this zscript.
@@ -96,9 +97,9 @@ public class ZScriptTag extends AbstractTag {
 	 * @param deferred whether to defer the execution.
 	 */
 	public void setDeferred(boolean deferred) {
-		if (!deferred)
-			log.warning("ZScriptTag is always deferred");
-		//this._deferred = deferred;
+//		if (!deferred)
+//			log.warning("ZScriptTag is always deferred");
+		this._deferred  = deferred;
 	}
 
 	/** Returns the name of the scripting language in this ZScript tag.

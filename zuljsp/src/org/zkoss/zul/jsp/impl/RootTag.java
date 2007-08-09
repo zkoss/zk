@@ -20,6 +20,8 @@ package org.zkoss.zul.jsp.impl;
 
 import java.io.StringWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +35,8 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.jsp.Jsps;
 import org.zkoss.web.el.ELContexts;
 
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
@@ -222,10 +226,29 @@ abstract public class RootTag extends AbstractTag {
 	 * Root tag was supposed to handle all children's ZScript.
 	 * @param com  The owner of zscript segment. 
 	 * @param zs A ZScript object.
+	 * @throws IOException  
 	 */
-	public void addDefferdZscript(Component com, ZScript zs) {
+	public void processZScript(Component parent, ZScript zs) 
+	throws IOException
+	{
 		if (zs.getLanguage() == null)
 			zs.setLanguage(_page.getZScriptLanguage());
-		((PageCtrl)_page).addDeferredZScript(com, zs);
+		
+		if(zs.isDeferred())
+			((PageCtrl)_page).addDeferredZScript(parent, zs);
+		else{
+			final Map backup = new HashMap();
+			final Namespace ns = parent != null ?
+				Namespaces.beforeInterpret(backup, parent, false):
+				Namespaces.beforeInterpret(backup, _page, false);
+			try {
+				_page.interpret(zs.getLanguage(),zs.getContent(_page,parent), ns);
+			} finally {
+				Namespaces.afterInterpret(backup, ns, false);
+			}	
+		}
 	}
+
+	
+
 }
