@@ -108,6 +108,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 		} else {
 			throw new IllegalStateException("Must be nested inside the page tag: "+this);
 		}
+		
 	}
 	
 	/** To process the leaf tag.
@@ -126,6 +127,8 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	 * Called by {@link #doTag}.
 	 */
 	/*package*/ void initComponent() throws JspException {
+		if(_roottag==null)
+			throw new IllegalStateException("Must be nested inside the page tag: "+this);
 		try {//TODO: use-class initial works...
 			_comp = newComponent(_use!=null ? Classes.forNameByThread(_use) : null);
 		} catch (Exception e) {
@@ -138,7 +141,8 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	
 	/**
 	 * Test if the attributes are annotation or component attributes.<br>
-	 * If(is Component attributes)Invokes setter methods to update all assigned attributes.
+	 * If(is Component attributes)Invokes setter methods to update all 
+	 * assigned attributes.
 	 * If(is annotations)
 	 * @param target the target component
 	 * @throws NoSuchMethodException 
@@ -146,25 +150,25 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	 */
 	private void evaluateDynaAttributes(final Component target) 
 	throws ModificationException, NoSuchMethodException{
-		AnnotationHelper attrAnnHelper = null;
-		for(Iterator itor = _attrMap.entrySet().iterator();itor.hasNext();)
-		{
+		AnnotationHelper helper = null;
+		for(Iterator itor = _attrMap.entrySet().iterator();itor.hasNext();){
 			//TODO: add annotation judgment...
 			Map.Entry entry= (Entry) itor.next();
 			String attnm = (String)entry.getKey();
-			String attval = (String)entry.getKey();
+			String attval = (String)entry.getValue();
 			final int len = attval.length();
-			// test if this attribute is an annotation...
-			if (len >= 3 && attval.charAt(0) == '@'
-			&& attval.charAt(1) == '{' && attval.charAt(len-1) == '}') { //annotation
-				if (attrAnnHelper == null)
-					attrAnnHelper = new AnnotationHelper();
-				attrAnnHelper.addByCompoundValue(
-					attval.substring(2, len -1));
-				attrAnnHelper.applyAnnotations(_comp,
-					"self".equals(attnm) ? null: attnm, true);
+			
+			// test if this attribute is an annotation...no need to detect if attnm==use,
+			if (len >= 3 && attval.charAt(0) == '@' && 
+					attval.charAt(1) == '{' && 
+					attval.charAt(len-1) == '}') { //annotation
+				
+				if(helper == null) helper = new AnnotationHelper();
+				helper.addByCompoundValue(attval.substring(2, len -1));
+				helper.applyAnnotations(_comp, 
+						"self".equals(attnm) ? null: attnm, true);
 			}
-			Fields.setField(target, attnm, entry.getValue(), true);
+			else Fields.setField(target, attnm, entry.getValue(), true);
 		}
 	}
 	/**
@@ -198,10 +202,10 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	 * @throws JspException 
 	 */
 	/*package*/void afterComposeComponent() throws JspException{
-			if (_comp instanceof AfterCompose)
-			((AfterCompose)_comp).afterCompose();
+			if (_comp instanceof AfterCompose)//safty check...
+				((AfterCompose)_comp).afterCompose();
 	
-		if (Events.isListened(_comp, Events.ON_CREATE, false))
+		if (Events.isListened(_comp, Events.ON_CREATE, false))//send onCreate event...
 			Events.postEvent(
 				new CreateEvent(Events.ON_CREATE, _comp, Executions.getCurrent().getArg()));
 		

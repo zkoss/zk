@@ -6,7 +6,7 @@ Purpose:
 Description:
 	
 Histroy:
-	2007/07/30  16:44:41 , Created by tomyeh modified by Ian Tsai
+	2007/08/08  16:55:12 , Created by tomyeh modified by Ian Tsai
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
@@ -20,13 +20,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<tlib-version>1.1</tlib-version>
 	<jsp-version>2.0</jsp-version>
 	<short-name>zuljsp</short-name>
-	<uri>http://www.zkoss.org/2005/tld/zul/jsp</uri>
+	<uri>http://www.zkoss.org/2005/zul/jsp</uri>
 	<description>
 	The JSP Tags for ZK XUL COmponents
 	</description>
 
 	<!-- General Purpose -->
-	<tag>
+	<tag><!--***** PageTag  *****-->
 		<description>
 	Define a page in a JSP tag.
 	It is responsible for handling the lifecycle for all nested ZK
@@ -52,7 +52,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-
 		<attribute>
 			<description>
 	If false, this tag is ignored. Default: true.
@@ -70,7 +69,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-	<tag>
+	<tag><!--***** ZScriptTag  *****-->
 		<description>
 	Define Zscript Tag, let user can declaire zscript fragment.
 		</description>
@@ -94,7 +93,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-	<tag>
+	<tag><!--***** AttributeTag  *****-->
 		<description>
 	Define Attribute Tag.
 		</description>
@@ -107,6 +106,23 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			</description>
 			<name>name</name>
 			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag><!--***** InitTag  *****-->
+		<description>
+	Define Init Tag.
+		</description>
+		<name>init</name>
+		<tag-class>org.zkoss.zul.jsp.InitTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+		Attribute Name.
+			</description>
+			<name>initClass</name>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>

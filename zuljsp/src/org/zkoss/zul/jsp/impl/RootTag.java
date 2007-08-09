@@ -54,6 +54,7 @@ import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.ExecutionImpl;
+import org.zkoss.zul.jsp.Initiators;
 
 /**
  * A skeletal class to implement the root ZK tag.
@@ -187,21 +188,34 @@ abstract public class RootTag extends AbstractTag {
 
 	
 	private class MyRichlet implements Richlet {
+		
 		public void init(RichletConfig config) {
 		}
 		public void destroy() {
 		}
+		/**
+		 */
 		public void service(Page page) {
+			Initiators inits   = 
+				(Initiators) getJspContext().getAttribute(Initiators.class.getName());
+			if(inits!=null)inits.doInit(page);
 			try {
 				final StringWriter out = new StringWriter();
 				getJspBody().invoke(out);
+				if(inits!=null)inits.doAfterCompose(page);
 				Utils.adjustChildren(
 					page, null, page.getRoots(), out.toString());
 			} catch (Exception ex) {
 				log.realCauseBriefly(ex); //Apache Jasper Compiler eats ex
+				if(inits!=null)inits.doCatch(ex);
 				throw UiException.Aide.wrap(ex);
 			}
+			finally{
+				if(inits!=null)inits.doFinally();
+			}
 		}
+		/**
+		 */
 		public LanguageDefinition getLanguageDefinition() {
 			return _langdef;
 		}
