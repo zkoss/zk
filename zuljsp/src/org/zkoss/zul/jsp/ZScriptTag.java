@@ -41,7 +41,6 @@ import org.zkoss.zul.jsp.impl.RootTag;
 public class ZScriptTag extends AbstractTag {
 	private static final Log log = Log.lookup(ZScriptTag.class);
 
-	//private boolean _deferred;
 	private String _lang = null;
 	private Component _parent;
 	private RootTag _roottag;
@@ -97,8 +96,6 @@ public class ZScriptTag extends AbstractTag {
 	 * @param deferred whether to defer the execution.
 	 */
 	public void setDeferred(boolean deferred) {
-//		if (!deferred)
-//			log.warning("ZScriptTag is always deferred");
 		this._deferred  = deferred;
 	}
 
