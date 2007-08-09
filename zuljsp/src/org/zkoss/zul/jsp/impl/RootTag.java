@@ -31,6 +31,7 @@ import javax.servlet.jsp.JspTagException;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.jsp.Jsps;
+import org.zkoss.web.el.ELContexts;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WebApp;
@@ -149,6 +150,10 @@ abstract public class RootTag extends AbstractTag {
 		final WebManager webman = WebManager.getWebManager(svlctx);
 		final Session sess = WebManager.getSession(svlctx, request);
 
+		ELContexts.push(pgctx);
+			//Optiional but enable JSP page use DPS's TLD files
+			//If we don't push, everying works fine except JSP page
+			//that uses ZK JSP tags cannot use xxx.dsp.tld
 		SessionsCtrl.setCurrent(sess);
 		try {
 			final WebApp wapp = sess.getWebApp();
@@ -176,6 +181,7 @@ abstract public class RootTag extends AbstractTag {
 			wappc.getUiEngine().execNewPage(exec, richlet, _page, jspctx.getOut());
 		} finally {
 			SessionsCtrl.setCurrent(null);
+			ELContexts.pop();
 		}
 	}
 
