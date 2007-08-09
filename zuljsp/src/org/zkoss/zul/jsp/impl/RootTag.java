@@ -31,7 +31,6 @@ import javax.servlet.jsp.JspTagException;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.jsp.Jsps;
-import org.zkoss.web.el.ELContexts;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WebApp;
@@ -70,7 +69,6 @@ abstract public class RootTag extends AbstractTag {
 	private LanguageDefinition _langdef;
 	private Page _page;
 	private String _lang = "Java";
-	//AnnotationHelper annoHelper;
 
 	/**
 	 * protected Constractor. Constract a RootTag with
@@ -151,7 +149,6 @@ abstract public class RootTag extends AbstractTag {
 		final WebManager webman = WebManager.getWebManager(svlctx);
 		final Session sess = WebManager.getSession(svlctx, request);
 
-		ELContexts.push(pgctx);
 		SessionsCtrl.setCurrent(sess);
 		try {
 			final WebApp wapp = sess.getWebApp();
@@ -179,7 +176,6 @@ abstract public class RootTag extends AbstractTag {
 			wappc.getUiEngine().execNewPage(exec, richlet, _page, jspctx.getOut());
 		} finally {
 			SessionsCtrl.setCurrent(null);
-			ELContexts.pop();
 		}
 	}
 
