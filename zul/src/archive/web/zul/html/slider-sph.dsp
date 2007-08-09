@@ -21,7 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.type="zul.sld.Sld" cellpadding="0" cellspacing="0">
 <tr height="20">
- <td width="4" style="background-image:url(${c:encodeURL('~./zul/img/slider/bklsph.gif')})"></td>
- <td style="background-image:url(${c:encodeURL('~./zul/img/slider/bksph.gif')})"><h:img id="${self.uuid}!btn" src="~./zul/img/slider/btnsph.gif" title="${c:string(self.curpos)}"/></td>
- <td width="4" style="background-image:url(${c:encodeURL('~./zul/img/slider/bkrsph.gif')})"></td>
+ <td width="4" class="slidersph-bkl"></td>
+ <td class="slidersph-bk"><h:img id="${self.uuid}!btn" src="~./zul/img/slider/btnsph.gif" title="${c:string(self.curpos)}"/></td>
+ <td width="4" class="slidersph-bkr"></td>
 </table>

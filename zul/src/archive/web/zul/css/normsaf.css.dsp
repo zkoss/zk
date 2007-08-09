@@ -391,7 +391,15 @@ td.tab-v3d-bl-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-bl-un
 td.tab-v3d-bm-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-bm-uns.gif')});}
 td.tab-v3d-br-uns {background-image: url(${c:encodeURL('~./zul/img/tab/v3d-br-uns.gif')});}
 
-<%-- ZK menu. --%>
+<%-- ZK slider --%>
+td.slider-bk {background-image: url(${c:encodeURL('~./zul/img/slider/bk.gif')});}
+td.slider-bkl {background-image: url(${c:encodeURL('~./zul/img/slider/bkl.gif')});}
+td.slider-bkr {background-image: url(${c:encodeURL('~./zul/img/slider/bkr.gif')});}
+td.slidersph-bk {background-image: url(${c:encodeURL('~./zul/img/slider/bksph.gif')});}
+td.slidersph-bkl {background-image: url(${c:encodeURL('~./zul/img/slider/bklsph.gif')});}
+td.slidersph-bkr {background-image: url(${c:encodeURL('~./zul/img/slider/bkrsph.gif')});}
+
+<%-- ZK menu --%>
 div.menubar, div.menupopup, div.ctxpopup {
 	cursor: pointer; background: menu; padding: 1px;
 }
