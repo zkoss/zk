@@ -22,35 +22,29 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	
 	private transient List _listeners = new LinkedList();
 	
-	public void setRoot(Object root)
-	{
+	public void setRoot(Object root){
 		_root = root;
 	}
 	
-	public Object getRoot()
-	{
+	public Object getRoot(){
 		return _root;
 	}
 	
-	public Object getChild(Treeitem ti, Tree t)
-	{
+	public Object getChild(Treeitem ti, Tree t){
 		return getNodeByPath(getTreePath(t,ti),getRoot());
 	}
 	
-	protected void fireEvent(Object node, int index, int evtType)
-	{
+	protected void fireEvent(Object node, int index, int evtType){
 		final TreeDataEvent evt = new TreeDataEvent(this,evtType, node, index);
 		for (Iterator it = _listeners.iterator(); it.hasNext();)
 			((TreeDataListener)it.next()).onChange(evt);
 	}
 	
-	public void addTreeDataListener(TreeDataListener l)
-	{
+	public void addTreeDataListener(TreeDataListener l){
 		_listeners.add(l);
 	}
 	
-	public void removeTreeDataListener(TreeDataListener l)
-	{
+	public void removeTreeDataListener(TreeDataListener l){
 		_listeners.remove(l);
 	}
 	
@@ -60,8 +54,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	 * @param lastNode
 	 * @return
 	 */
-	private ArrayList getTreePath(Component root, Component lastNode)
-	{
+	private ArrayList getTreePath(Component root, Component lastNode){
 		ArrayList al = new ArrayList();
 		Component curNode = lastNode;
 		while(!root.equals(curNode)){
@@ -70,16 +63,13 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 			}
 			curNode = curNode.getParent();
 		}
-		//TODO DEBUG
-		//System.out.println(al.toString());
 		return al;
 	}
 	
 	/**
 	 * Return the path which is from tree root to a given node
 	 */
-	public ArrayList getPath(Object node)
-	{
+	public ArrayList getPath(Object node){
 		return getTreePath(getRoot(),node);
 	}
 	
@@ -89,8 +79,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	 * @param lastNode
 	 * @return
 	 */
-	public ArrayList getTreePath(Object root, Object lastNode)
-	{
+	public ArrayList getTreePath(Object root, Object lastNode){
 		ArrayList al = new ArrayList();
 		dfSearch(al, root, lastNode);
 		return al;

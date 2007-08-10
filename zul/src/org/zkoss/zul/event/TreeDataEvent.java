@@ -1,17 +1,36 @@
+/* TreeDataEvent.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Aug 10 2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
 package org.zkoss.zul.event;
 
 import org.zkoss.zul.TreeModel;
 
 /**
- * @author Jeff
+ * Defines an event that encapsulates changes to a tree. 
  *
+ * @author Jeff Liu
  */
 public class TreeDataEvent {
 	/** Identifies one or more changes in the lists contents. */
 	public static final int CONTENTS_CHANGED = 0;
-    /** Identifies the addition of one or more contiguous items to the tree. */    
+    /** Identifies the addition of child to a node. */    
 	public static final int NODE_ADDED = 1;
-    /** Identifies the removal of one or more contiguous items from the tree. */   
+    /** Identifies the removal of child to a node. */   
 	public static final int NODE_REMOVED = 2;
 
 	private final TreeModel _model;
@@ -22,12 +41,9 @@ public class TreeDataEvent {
 	/** Contructor.
 	 *
 	 * @param type one of {@link #CONTENTS_CHANGED},
-	 * {@link #INTERVAL_ADDED}, or {@link #INTERVAL_REMOVED}.
-	 * @param index0 the lower index of the change range.
-	 * For simple element, index0 is the same as index1.
-	 * -1 means the first element (the same as 0).
-	 * @param index1 the upper index of the change range.
-	 * -1 means the last element.
+	 * {@link #NODE_ADDED}, or {@link #NODE_REMOVED}.
+	 * @param node - the node that one of its children being modified .
+	 * @param index - the index of child being modified.
 	 */
 	public TreeDataEvent(TreeModel model, int type, Object node, int index) {
 		if (model == null)
@@ -37,22 +53,30 @@ public class TreeDataEvent {
 		_node = node;
 		_index = index;
 	}
-	/** Returns the list model that fires this event.
+	/** Returns the tree model that fires this event.
 	 */
 	public TreeModel getModel() {
 		return _model;
 	}
 	/** Returns the event type. One of {@link #CONTENTS_CHANGED},
-	 * {@link #INTERVAL_ADDED}, or {@link #INTERVAL_REMOVED}.
+	 * {@link #NODE_ADDED}, or {@link #NODE_REMOVED}.
 	 */
 	public int getType() {
 		return _type;
 	}
 	
+	/**
+	 * Returns the node that one of its children being modified 
+	 * @return the node that one of its children being modified 
+	 */
 	public Object getNode(){
 		return _node;
 	}
 	
+	/**
+	 * Returns the index of child being modified.
+	 * @return the index of child being modified.
+	 */
 	public int getIndex(){
 		return _index;
 	}

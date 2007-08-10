@@ -10,17 +10,14 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	
 	
 	
-	public SimpleTreeModel(Object obj)
-	{
+	public SimpleTreeModel(Object obj){
 		super.setRoot(obj);
 	}
 	
 	public int getChildCount(Object parent) {
-		
 		if(isLeaf(parent))
 			return -1;
-		else
-		{
+		else{
 			ArrayList al = (ArrayList)parent;
 			return al.size();
 		}
@@ -35,7 +32,6 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	}
 
 	public Object getChild(Object parent, int index) {
-		
 		ArrayList al = (ArrayList)parent;
 		return al.get(index);
 	}
@@ -44,7 +40,6 @@ public class SimpleTreeModel extends AbstractTreeModel{
 		return super.getRoot();
 	}
 	
-	//TODO 
 	public void set(Object parent, int index, Object value)
 	{
 		ArrayList al = (ArrayList)parent;
@@ -54,20 +49,17 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	
 	public void remove(Object parent, int index){
 		ArrayList al = (ArrayList)parent;	
-		try
-		{
+		try{
 			al.remove(index);
 			fireEvent(parent,index,TreeDataEvent.NODE_REMOVED);
 		}
-		catch(Exception exp)
-		{
+		catch(Exception exp){
 			throw new IndexOutOfBoundsException("Out of bound: "+index+" while size="+al.size());
 		}
 		
 	}
 	
-	public void add(Object parent, Object newNode)
-	{
+	public void add(Object parent, Object newNode){
 		ArrayList al = (ArrayList)parent;
 		al.add(newNode);
 		fireEvent(parent,al.size()-1,TreeDataEvent.NODE_ADDED);

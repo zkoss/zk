@@ -58,8 +58,4 @@ public class RowsTreeitemRenderer implements TreeitemRenderer {
 		}
 	}
 
-	public void render(Treeitem item) throws Exception {
-
-	}
-
 }
