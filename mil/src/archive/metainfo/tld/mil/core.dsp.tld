@@ -12,6 +12,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 
 <taglib>
+	<uri>http://www.zkoss.org/dsp/mil/core</uri>
 	<description>
 	Methods and actions for MIL in DSP/ZUML
 	</description>

@@ -16,9 +16,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
---%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/zk/core.dsp.tld" prefix="z" %>
-<%@ taglib uri="/WEB-INF/tld/mil/core.dsp.tld" prefix="m" %>
+--%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/mil/core" prefix="m" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="page" value="${arg.page}"/>
 <zk id="${page.desktop.id}" ${m:desktopAttrs(arg.action)}>
