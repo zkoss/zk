@@ -14,7 +14,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
---%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
+--%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 <c:set var="hgh" value="${self.number*16+30}pt" if="${self.number>3}"/>

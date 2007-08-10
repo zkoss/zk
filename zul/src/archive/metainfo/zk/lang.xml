@@ -13,12 +13,6 @@
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
-<!-- 20051104: Tom M. Yeh
-	The locator is class loader, so we have to specify the full URI.
-	Or, Tomcat won't be able to load it
-<?taglib uri="/web/WEB-INF/tld/web/core.dsp.tld" prefix="c"?>
--->
-
 <language>
 	<language-name>xul/html</language-name>
 	<device-type>ajax</device-type>

@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
---%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
+--%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <span id="${self.uuid}" z.type="zul.widget.Ckbox"${self.outerAttrs}><input type="checkbox" id="${self.uuid}!real"${self.innerAttrs}/><label for="${self.uuid}!real"${self.labelAttrs}>${self.imgTag}<c:out value="${self.label}"/></label></span>
 <%-- we have to group input and label so we can replace them together --%>

@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
---%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
+--%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}"  ${self.outerAttrs} style="height:${self.height};width:${serlf.width};" z.type="zul.flash.Flash">
 <object id="${self.uuid}!obj"  width="${self.width}" height="${self.height}">

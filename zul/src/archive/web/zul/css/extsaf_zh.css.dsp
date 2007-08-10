@@ -1,5 +1,5 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
-<%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 <%-- headers --%>
 h1 {
