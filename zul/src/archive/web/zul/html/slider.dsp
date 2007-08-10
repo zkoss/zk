@@ -21,7 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.type="zul.sld.Sld" cellpadding="0" cellspacing="0">
 <tr height="17">
- <td width="4" class="slider-bkl"></td>
+ <td class="slider-bkl"></td>
  <td class="slider-bk"><h:img id="${self.uuid}!btn" src="~./zul/img/slider/btn.gif" title="${c:string(self.curpos)}"/></td>
- <td width="4" class="slider-bkr"></td>
+ <td class="slider-bkr"></td>
 </table>

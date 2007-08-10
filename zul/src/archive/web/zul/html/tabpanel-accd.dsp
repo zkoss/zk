@@ -27,21 +27,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <table id="${tab.uuid}"${tab.outerAttrs}${tab.innerAttrs} z.sel="${tab.selected}" z.type="zul.tab.Tab" z.box="${tab.tabbox.uuid}" z.panel="${self.uuid}" width="100%" border="0" cellpadding="0" cellspacing="0">
 <c:if test="${!empty self.tabbox.panelSpacing and self.index!=0}"><tr height="${self.tabbox.panelSpacing}"><td></td></tr></c:if>
 <tr>
-	<td width="5" height="5" class="${c:cat('tabaccd-3d-tl',suffix)}"></td>
-	<td height="5" colspan="${tab.closable?4:3}" class="${c:cat('tabaccd-3d-tm',suffix)}"></td>
-	<td width="5" height="5" class="${c:cat('tabaccd-3d-tr',suffix)}"></td>
+	<td class="${c:cat('tabaccd-3d-tl',suffix)}"></td>
+	<td colspan="${tab.closable?4:3}" class="${c:cat('tabaccd-3d-tm',suffix)}"></td>
+	<td class="${c:cat('tabaccd-3d-tr',suffix)}"></td>
 </tr>
 <tr height="${empty tab.height ? '22':tab.height}">
-	<td width="5" class="${c:cat('tabaccd-3d-ml',suffix)}"></td>
+	<td class="${c:cat('tabaccd-3d-ml',suffix)}"></td>
 	<td width="3" class="${c:cat('tabaccd-3d-mm',suffix)}"></td>
 	<td align="left" class="${c:cat('tabaccd-3d-mm',suffix)}"><a href="javascript:;" id="${tab.uuid}!a">${tab.imgTag}<c:out value="${tab.label}"/></a></td>
 <c:if test="${tab.closable}">
 	<td width="11" align="right" class="${c:cat('tabaccd-3d-mm',suffix)}"><img id="${tab.uuid}!close" src="${c:encodeURL('~./zul/img/close-off.gif')}"/></td>
 </c:if>
 	<td width="3" class="${c:cat('tabaccd-3d-mm',suffix)}"></td>
-	<td width="5" class="${c:cat('tabaccd-3d-mr',suffix)}"></td>
+	<td class="${c:cat('tabaccd-3d-mr',suffix)}"></td>
 </tr>
-<tr height="1">
+<tr>
 	<td colspan="${tab.closable?6:5}" class="tabaccd-3d-b"></td>
 </tr>
 </table>

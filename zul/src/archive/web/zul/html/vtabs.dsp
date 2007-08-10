@@ -26,7 +26,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <tr>
 <td align="right"><table border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td height="3" width="3" class="tab-v3d-first"></td>
+	<td class="tab-v3d-first"></td>
 </tr>
 </table></td>
 </tr>
@@ -41,10 +41,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <tr>
 <td align="right"><table border="0" cellpadding="0" cellspacing="0">
 <tr id="${self.uuid}!last">
-	<td height="3" width="3" class="tab-v3d-last1"></td>
+	<td class="tab-v3d-last1"></td>
 </tr>
 <tr>
-	<td height="1" width="3" class="tab-v3d-last2"></td>
+	<td class="tab-v3d-last2"></td>
 </tr>
 </table></td>
 </tr>
