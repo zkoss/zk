@@ -26,7 +26,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.ArrayList;
 
+import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
@@ -34,8 +36,14 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 
+//import org.zkoss.zul.Listbox.Renderer;
+
+import org.zkoss.zul.event.TreeDataEvent;
+import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -53,6 +61,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Tree extends XulElement {
+	
 	private transient Treecols _treecols;
 	private transient Treefoot _treefoot;
 	private transient Treechildren _treechildren;
@@ -716,9 +725,467 @@ public class Tree extends XulElement {
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
 	}
+	
+	// TODO AREA JEFF ADDED
+	
+	private static final Log log = Log.lookup(Listbox.class);
+	
+	private TreeModel _model;
+	
+	private TreeitemRenderer _renderer;
+	
+	private TreeDataListener _dataListener;
+	
+	private EventListener _treeitemOpenListener = new EventListener() {
+		
+		public void onEvent(Event event) throws Exception {
+			// TODO Auto-generated method stub
+			
+			if (event.getName().equals(Events.ON_OPEN)) {
+				Treeitem _item = (Treeitem) event.getTarget();
+			
+				if(!_item.isLoaded())
+				{
+				Tree t = _item.getTree();
+			     _item.getTreechildren().getChildren().clear();
+				t.renderItem(_item);
+				}
+	
+			}
+			
+		}
+	};
+	
+	/** Handles when the tree model's content changed.
+	 * @throws Exception 
+	 */
+	
+	private void onTreeDataChange(TreeDataEvent event) {
+	
+		switch (event.getType()) {
+		case TreeDataEvent.NODE_ADDED:
+			//onTreeDataAdded(event);
+			onTreeDataInsert(event);
+			break;
+		case TreeDataEvent.NODE_REMOVED:
+			onTreeDataRemoved(event);
+			break;
+		case TreeDataEvent.CONTENTS_CHANGED:
+			onTreeDataContentChanged(event);
+			break;
+		}
+		
+	
+	}
+	
+	/*
+	 * Handle Treedata insertion
+	 */
+	private void onTreeDataInsert(TreeDataEvent event){
+		ArrayList al = _model.getPath(event.getNode());
+		int index =event.getIndex();
+		Treeitem ti = getTreeitemByPath(al);
+		/* 	Find the sibling to insertBefore;
+		 * 	if there is no sibling or new item is inserted at end.
+		 */
+		Treeitem newTi = new Treeitem();
+		Treechildren ch= null;
+		System.out.println("Parent:"+event.getNode());
+		System.out.println("index:"+event.getType());
+		System.out.println(""+_model.getChild(event.getNode(),index));
+		renderItem(newTi,_model.getChild(event.getNode(),index));
+		
+		
+		if(ti.getTreechildren()!=null)
+		{
+			ch = ti.getTreechildren();
+		}
+		else
+		{
+			ch= new Treechildren();
+		}
+		ArrayList siblings = getTreeitems(ch);
+		//if there is no sibling or new item is inserted at end.
+		if(siblings.size()==0 || index == siblings.size() ){
+			ch.insertBefore(newTi, null);
+		}else{
+			ch.insertBefore(newTi, (Treeitem)siblings.get(index));
+		}
+		ch.setParent(ti);
+		ti.setOpen(true);
+	}
+	
+	//Deprecated: Using insert instead
+	@Deprecated
+	private void onTreeDataAdded(TreeDataEvent event){
+		ArrayList al = _model.getPath(event.getNode());
+		int index  = event.getIndex();
+		Treeitem ti = getTreeitemByPath(al);
+		Treeitem newTi = new Treeitem();
+		Treechildren ch= null;
+		
+		if(ti.getTreechildren()!=null)
+		{
+			ch = ti.getTreechildren();
+		}
+		else
+		{
+			ch= new Treechildren();
+		}
+		
+		renderItem(newTi,_model.getChild(event.getNode(),index));
+		newTi.setParent(ch);
+		ch.setParent(ti);
+		ti.setOpen(true);
+	}
+	
+	/*
+	 * Handle event that child is removed
+	 */
+	private void onTreeDataRemoved(TreeDataEvent event){
+		ArrayList al = _model.getPath(event.getNode());
+		int index  = event.getIndex();
+		Treeitem ti = getTreeitemByPath(al);
+		
+		// TODO debug
+		ArrayList items = getTreeitems((Treechildren)ti.getTreechildren());
+		
+		if(items.size()>1){
+			((Treeitem)items.get(index)).detach();
+		}else{
+			((Treechildren)ti.getTreechildren()).detach();
+			renderItem(ti);
+		}
+		ti.setOpen(true);
+	}
+	
+	/*
+	 * Handle event that child's content is changed
+	 */
+	private void onTreeDataContentChanged(TreeDataEvent event){
+		
+		ArrayList al = _model.getPath(event.getNode());
+		int index  = event.getIndex();
+		al.add(index);
+		Treeitem ti = getTreeitemByPath(al);
+		
+		renderItem(ti,_model.getChild(event.getNode(),index));
+		
+		ti.setOpen(true);
+	}
+	
+	
+	// TODO BETA
+	/*
+	 * Return the Treeitem by a given tree path
+	 */
+	private Treeitem getTreeitemByPath(ArrayList path)
+	{
+		Iterator itr = path.iterator();
+		Treeitem ti = (Treeitem)getTreeitems(this.getTreechildren()).get(0);
+		while (itr.hasNext( )) { //GO THROU PATH
+			ti = getTreeitemByPathHelper(ti,Integer.parseInt(itr.next().toString()));	
+		} 
+		return ti;
+	}
+	// TODO BETA 
+	/*
+	 * Helper function for getTreeitemByPath
+	 */
+	private Treeitem getTreeitemByPathHelper(Treeitem parent, int index)
+	{
+		ArrayList al = getTreeitems(parent.getTreechildren());
+		return (Treeitem)al.get(index);
+	}
+	
+	// TODO Beta 
+	/*
+	 * return Treeitems from a Treechildren
+	 */
+	private ArrayList getTreeitems(Treechildren parent)
+	{	
+		List li = parent.getChildren();
+		ArrayList al = new ArrayList();
+		for(int i=0; i< li.size();i++){
+			if(li.get(i) instanceof Treeitem){
+				al.add(li.get(i));
+			}
+		}
+		return al;
+	}
+	
+	private void initDataListener() {
+		if (_dataListener == null)
+			_dataListener = new TreeDataListener() {
+
+				public void onChange(TreeDataEvent event) {
+					onTreeDataChange(event);
+				}
+			};
+
+		_model.addTreeDataListener(_dataListener);
+	}
+	
+	public void setModel(TreeModel model) throws Exception
+	{
+		_model = model;
+		syncModel();
+		initDataListener();
+	}
+	
+	public void syncModel() throws Exception
+	{
+		if (_renderer == null)
+			_renderer = getRealRenderer();
+		renderTree();
+	}
+	
+	public void setTreeitemRenderer(TreeitemRenderer renderer)
+	{
+		_renderer = renderer;
+	}
+	
+	public TreeitemRenderer getTreeitemRenderer()
+	{
+		return _renderer;
+	}
+	
+	private void renderTree() throws Exception
+	{
+		_treechildren = null;
+		Treechildren children = new Treechildren();
+		Treeitem ti = new Treeitem();
+		ti.setParent(children);
+		children.setParent(this);
+		this.renderItem(ti);
+	}
+	
+	private static final TreeitemRenderer getDefaultItemRenderer() {
+		return _defRend;
+	}
+	private static final TreeitemRenderer _defRend = new TreeitemRenderer() {
+		public void render(Treeitem ti, Object data)
+		{
+				
+				Treecell tc = new Treecell(data.toString());
+				Treerow tr = null;
+				if(ti.getTreerow()==null){
+					tr = new Treerow();
+					tr.setParent(ti);
+				}else{
+					tr = ti.getTreerow(); 
+					tr.getChildren().clear();
+				}			
+				tc.setParent(tr);
+				ti.setOpen(false);
+		}
+
+		public void render(Treeitem item) throws Exception {
+			// TODO Auto-generated method stub
+			
+		}
+	};
+	/** Returns the renderer used to render items.
+	 */
+	private TreeitemRenderer getRealRenderer() {
+		return _renderer != null ? _renderer: getDefaultItemRenderer();
+	}
+
+	/** Used to render treeitem if _model is specified. */
+	private class Renderer implements java.io.Serializable {
+		private final TreeitemRenderer _renderer;
+		private boolean _rendered, _ctrled;
+
+		private Renderer() {
+			_renderer = getRealRenderer();
+		}
+		
+		private void render(Treeitem item) throws Throwable {
+			
+			if (!item.isOpen())
+				return; //nothing to do
+
+			if (!_rendered && (_renderer instanceof RendererCtrl)) {
+				((RendererCtrl)_renderer).doTry();
+				_ctrled = true;
+			}
+			
+			try {
+				Object node = _model.getChild(item, Tree.this);
+				_renderer.render(item, node);
+			} catch (Throwable ex) {
+				try {
+					item.setLabel(Exceptions.getMessage(ex));
+				} catch (Throwable t) {
+					log.error(t);
+				}
+				item.setOpen(true);
+				throw ex;
+			} finally {
+				//if (item.getChildren().isEmpty())
+					//cell.setParent(item);
+			}
+
+			item.setOpen(true);
+			_rendered = true;
+		}
+		
+		private void doCatch(Throwable ex) {
+			if (_ctrled) {
+				try {
+					((RendererCtrl)_renderer).doCatch(ex);
+				} catch (Throwable t) {
+					throw UiException.Aide.wrap(t);
+				}
+			} else {
+				throw UiException.Aide.wrap(ex);
+			}
+		}
+		private void doFinally() {
+			if (_rendered)
+				initAtClient();
+					//reason: after rendering, the column width might change
+					//Also: Mozilla remembers scrollTop when user's pressing
+					//RELOAD, it makes init more desirable.
+			if (_ctrled)
+				((RendererCtrl)_renderer).doFinally();
+		}
+	}
+	
+	
+	/** Renders all {@link Listitem} if not loaded yet,
+	 * with {@link #getItemRenderer}.
+	 *
+	 * @see #renderItem
+	 * @see #renderItems
+	 */
+	public void renderAll() {
+		if (_model == null) return;
+
+		final Renderer renderer = new Renderer();
+		try {
+			//TODO THINK: go through the whole tree
+			renderTree();		
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}
+	}
+	
+	
+	
+	public void renderItem(Treeitem item){
+		if(_model ==null) return;
+		final Renderer renderer = new Renderer();
+		try {
+			renderItem(item,_model.getChild(item,this));
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}	
+	}
+	
+	public void renderItem(Treeitem item, Object data){
+		if(_model ==null) return;
+		final Renderer renderer = new Renderer();
+		try {
+			dfRenderItem(data,item);
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}
+	}
+	
+	//TODO finish this comment
+	/*
+	 * Render the treetiem with given node
+	 */
+	private void  dfRenderItem(Object node, Treeitem item) throws Exception
+	{
+		Treechildren children = null;
+		
+		if(item.getTreechildren()!=null){
+			children = item.getTreechildren();
+			/* 
+			 * When the treeitem is rendered after 1st time, dropped all
+			 * the descending treeitems first.
+			*/
+			if(children.getItemCount()>0)
+				children.getChildren().clear();
+		}
+		else{
+			children = new Treechildren();
+			_renderer.render(item, node);
+		}
+		
+		// NOTE For debug
+		//System.out.println("node:"+node);
+		//System.out.println("isLeaf:"+_model.isLeaf(node));
+		
+		/*
+		 * After modified the node in tree model, if node is leaf, 
+		 * its treechildren is needed to be dropped.
+		 */
+		
+		if(_model.isLeaf(node))
+		{
+			_renderer.render(item, node);
+			if(item.getTreechildren()!=null)
+				item.getTreechildren().detach();
+		}
+		else
+		{
+			for(int i=0; i< _model.getChildCount(node);i++ )
+			{
+				Treeitem ti = new Treeitem();
+				Object data = _model.getChild(node, i);
+				_renderer.render(ti, data);
+				if(!_model.isLeaf(data))
+				{
+					ti.addEventListener(Events.ON_OPEN, _treeitemOpenListener);	
+					Treechildren ch = new Treechildren();
+		            ch.setParent(ti);
+				}
+				ti.setParent(children);
+			}
+			children.setParent(item);
+		}
+		//After the treeitem is loaded with data, set treeitem to be loaded
+		item.setLoaded(true);
+	
+	}
+	
+	
+	public void renderItems(Set items) {
+		if (_model == null) return;
+
+		if (items.isEmpty())
+			return; //nothing to do
+
+		final Renderer renderer = new Renderer();
+		try {
+			for (Iterator it = items.iterator(); it.hasNext();)
+			{
+				Treeitem item = (Treeitem)it.next();
+				Object data = _model.getChild(item,this);
+				dfRenderItem(data,item);
+			}
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}
+	}
+	
+	//TODO AREA JEFF ADDED END
+	
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
+	
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
 	implements Selectable, ChildChangedAware {
 		//-- Selectable --//

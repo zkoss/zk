@@ -48,7 +48,26 @@ public class Treeitem extends XulElement {
 	private Object _value;
 	private boolean _open = true;
 	private boolean _selected = false;
+	
+	// TODO AREA JEFF ADDED
+	private boolean _loaded = false;
+	
+	public boolean isLoaded(){
+		return _loaded;
+	}
+	
+	public void setLoaded(boolean loaded){
+		_loaded = loaded;
+	}
 
+	public int indexOf()
+	{
+		List list = this.getParent().getChildren();
+		return list.indexOf(this);
+	}
+	// TODO AREA JEFF ADDED END
+	
+	
 	public Treeitem() {
 	}
 	public Treeitem(String label) {
