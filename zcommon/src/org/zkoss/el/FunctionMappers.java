@@ -77,10 +77,15 @@ public class FunctionMappers {
 		final Map mappers = new HashMap();
 		for (Iterator it = taglibs.iterator(); it.hasNext();) {
 			final Taglib taglib = (Taglib)it.next();
-			final URL url = loc.getResource(taglib.getURI());
-			if (url == null)
-				throw new MissingResourceException(
-					"Taglib not found: "+taglib.getURI(), loc.getClass().getName(), taglib.getURI());
+			URL url = loc.getResource(taglib.getURI());
+			if (url == null) {
+				url = Taglibs.getDefaultURL(taglib.getURI());
+				if (url == null)
+					throw new MissingResourceException(
+						"Taglib not found: "+taglib.getURI(),
+						loc.getClass().getName(), taglib.getURI());
+			}
+
 			final Map mtds = (Map)_reces.get(url);
 //			if (D.ON && log.finerable()) log.finer("Methods for "+taglib.getPrefix()+": "+mtds);
 			if (!mtds.isEmpty())

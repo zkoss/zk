@@ -57,6 +57,9 @@ import org.zkoss.idom.input.SAXBuilder;
 public class ClassLocator implements Locator {
 	private static final Log log = Log.lookup(ClassLocator.class);
 
+	public ClassLocator() {
+	}
+
 	/** Returns an enumeration of resources.
 	 * Unlike {@link #getDependentXMLResources}, it doesn't resolve the dependence
 	 * among the resouces.
