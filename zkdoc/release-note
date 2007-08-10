@@ -9,6 +9,7 @@ ZK 2.5.0
   1753222: A way to assign text with element to a property than child
   1760691: DataBinder support validation phase
   1638395: Timer component and Session timeout
+  1771412: DSP TLD shall support tag uri
   1765119: Authentication & AU Http Status Code Handling
   1758761: A way to attach a root component before another root
   1751674: WebApp retrieves the major/minor version from getVersion
