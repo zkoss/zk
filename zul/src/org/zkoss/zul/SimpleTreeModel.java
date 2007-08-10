@@ -1,3 +1,21 @@
+/* SimpleTreeModel.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Aug 10 2007, Created by Jeff Liu
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
 package org.zkoss.zul;
 
 import java.util.ArrayList;
@@ -6,6 +24,11 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.TreeDataEvent;
 
+/**
+ * A simple implementation of {@link TreeModel}.
+ *
+ * @author Jeff Liu
+ */
 public class SimpleTreeModel extends AbstractTreeModel{
 	
 	
