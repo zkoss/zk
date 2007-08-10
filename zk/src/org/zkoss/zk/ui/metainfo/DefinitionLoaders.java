@@ -152,9 +152,14 @@ public class DefinitionLoaders {
 			en.hasMoreElements();) {
 				final URL url = (URL)en.nextElement();
 				if (log.debugable()) log.debug("Loading "+url);
-				final Document doc = new SAXBuilder(false, false, true).build(url);
-				if (checkVersion(url, doc))
-					parseConfig(doc.getRootElement());
+				try {
+					final Document doc = new SAXBuilder(false, false, true).build(url);
+					if (checkVersion(url, doc))
+						parseConfig(doc.getRootElement());
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex, "Failed to load "+url);
+						//abort since it is hardly to work then
+				}
 			}
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex); //abort
@@ -166,9 +171,14 @@ public class DefinitionLoaders {
 			en.hasMoreElements();) {
 				final URL url = (URL)en.nextElement();
 				if (log.debugable()) log.debug("Loading "+url);
-				final Document doc = new SAXBuilder(false, false, true).build(url);
-				if (checkVersion(url, doc))
-					parseLang(doc, locator, false);
+				try {
+					final Document doc = new SAXBuilder(false, false, true).build(url);
+					if (checkVersion(url, doc))
+						parseLang(doc, locator, false);
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex, "Failed to load "+url);
+						//abort since it is hardly to work then
+				}
 			}
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex); //abort
@@ -180,13 +190,12 @@ public class DefinitionLoaders {
 				"metainfo/zk/lang-addon.xml", "addon-name", "depends");
 			for (Iterator it = xmls.iterator(); it.hasNext();) {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
-				if (checkVersion(res.url, res.document)) {
-					try {
+				try {
+					if (checkVersion(res.url, res.document))
 						parseLang(res.document, locator, true);
-					} catch (Exception ex) {
-						log.error("Failed to load addon", ex);
-						//keep running
-					}
+				} catch (Exception ex) {
+					log.error("Failed to load addon", ex);
+					//keep running
 				}
 			}
 		} catch (Exception ex) {

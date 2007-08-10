@@ -12,6 +12,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 
 <taglib>
+	<uri>http://www.zkoss.org/dsp/zk/core</uri>
 	<description>
 	Methods and actions for ZK in DSP/ZUML
 	</description>
