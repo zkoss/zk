@@ -135,7 +135,7 @@ fi
 if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$binnm/dist/lib/ext
 	mkdir -p /tmp/zk/$binnm/dist/lib/zkforge
-	mkdir -p /tmp/zk/$binnm/dist/WEB-INF
+	mkdir -p /tmp/zk/$binnm/dist/WEB-INF/tld/zul/jsp
 	mkdir -p /tmp/zk/$binnm/dist/xsd
 	mkdir -p /tmp/zk/$binnm/dist/src
 	mkdir -p /tmp/zk/$binnm/doc
@@ -163,9 +163,19 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/timelinez.jar dist/lib/ext/json_simple.jar /tmp/zk/$binnm/dist/lib/zkforge
 		#timelinez
 
-	cp -rp dist/export/WEB-INF/* /tmp/zk/$binnm/dist/WEB-INF
+	if [ -d dist/export/WEB-INF ] ; then
+		cp -rp dist/export/WEB-INF/* /tmp/zk/$binnm/dist/WEB-INF
+	fi
+	cp -rp zweb/src/archive/metainfo/tld/web /tmp/zk/$binnm/dist/WEB-INF/tld
+	cp -rp zk/src/archive/metainfo/tld/zk /tmp/zk/$binnm/dist/WEB-INF/tld
+	cp -rp zul/src/archive/metainfo/tld/zul /tmp/zk/$binnm/dist/WEB-INF/tld
+	cp -rp zuljsp/src/archive/META-INF/*.tld /tmp/zk/$binnm/dist/WEB-INF/tld/zul/jsp
+
 	cp zul/src/archive/metainfo/xml/*.xsd /tmp/zk/$binnm/dist/xsd
 	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$binnm/doc
+
+	cd /tmp/zk/$binnm/dist/WEB-INF/tld
+	find -name .svn | xargs rm -rf
 
 	cd /tmp/zk
 
@@ -228,7 +238,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	fi
 
 	cd /tmp/zk
-	#find -name CVS | xargs rm -rf
 	find -name .svn | xargs rm -rf
 
 	echo Output ${demonm}.zip

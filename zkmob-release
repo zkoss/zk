@@ -118,7 +118,7 @@ fi
 #Prepare the binary release
 if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zkmob/$binnm/dist/lib
-	mkdir -p /tmp/zkmob/$binnm/dist/WEB-INF/tld/mil
+	mkdir -p /tmp/zkmob/$binnm/dist/WEB-INF/tld
 	mkdir -p /tmp/zkmob/$binnm/dist/src
 	mkdir -p /tmp/zkmob/$binnm/doc
 	mkdir -p /tmp/zkmob/$binnm/client
@@ -128,9 +128,12 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cp dist/lib/mil.jar /tmp/zkmob/$binnm/dist/lib/
 
-	cp -rp dist/export/WEB-INF/tld/mil/* /tmp/zkmob/$binnm/dist/WEB-INF/tld/mil
+	cp -rp mil/src/archive/metainfo/tld/mil /tmp/zkmob/$binnm/dist/WEB-INF/tld
 	cp zkdoc/zkmob-release-note zkdoc/COPYING /tmp/zkmob/$binnm/doc
 	cp -rp zkmob/deployed/zkmob.jar zkmob/deployed/zkmob.jad zkmob/zkmob.cer zkmob/zkmob.html /tmp/zkmob/$binnm/client
+
+	cd /tmp/zkmob/$binnm/dist/WEB-INF/tld
+	find -name .svn | xargs rm -rf
 
 	cd /tmp/zkmob
 
