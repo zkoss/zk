@@ -21,8 +21,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
---%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
+--%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/web/html" prefix="h" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="alert_type"
 	value="${arg != null ? arg.px_alert_type: param.px_alert_type}"/>

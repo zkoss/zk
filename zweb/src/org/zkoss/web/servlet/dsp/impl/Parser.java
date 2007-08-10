@@ -31,6 +31,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.el.SimpleMapper;
+import org.zkoss.el.Taglibs;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
@@ -48,7 +49,7 @@ import org.zkoss.web.servlet.dsp.action.Action;
  * @author tomyeh
  */
 public class Parser {
-	private static final Log log = Log.lookup(Parser.class);
+//	private static final Log log = Log.lookup(Parser.class);
 
 	/** Parses the content into a meta format
 	 *
@@ -69,7 +70,7 @@ public class Parser {
 
 		if (!ctx.pageDefined) {
 			//We always create a page definition
-			if (D.ON && log.debugable()) log.debug("Use default content type: "+ctype);
+//			if (D.ON && log.debugable()) log.debug("Use default content type: "+ctype);
 			final ActionNode action = new ActionNode(Page.class, 0);
 			root.addChild(0, action);
 			final Map attrs = new HashMap(2);
@@ -234,7 +235,7 @@ public class Parser {
 				new Object[] {prefix+':'+actnm, new Integer(ctx.nLines)});
 		final ActionNode action = new ActionNode(actcls, ctx.nLines);
 		parent.addChild(action);
-		if (D.ON && log.debugable()) log.debug("Action "+actnm);
+//		if (D.ON && log.debugable()) log.debug("Action "+actnm);
 
 		//2: action's attributes
 		final Map attrs = new HashMap();
@@ -469,13 +470,16 @@ public class Parser {
 		}
 		private void loadTaglib(String prefix, String uri)
 		throws javax.servlet.ServletException, IOException {
-			if (D.ON && log.debugable()) log.debug("Loading "+prefix+" at "+uri);
+//			if (D.ON && log.debugable()) log.debug("Loading "+prefix+" at "+uri);
 			if (this.locator == null)
 				throw new ServletException("Unable to load "+uri+" because locator is not specified");
 
-			final URL url = this.locator.getResource(uri);
-			if (url == null)
-				throw new FileNotFoundException(uri);
+			URL url = this.locator.getResource(uri);
+			if (url == null) {
+				url = Taglibs.getDefaultURL(uri);
+				if (url == null)
+					throw new FileNotFoundException(uri);
+			}
 
 			try {
 				loadTaglib0(prefix, url);
