@@ -34,6 +34,7 @@ import java.io.IOException;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
+import org.zkoss.util.Utils;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
@@ -48,6 +49,7 @@ import org.zkoss.el.Taglib;
 import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
 
+import org.zkoss.zk.Version;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
 import org.zkoss.zk.scripting.Interpreters;
@@ -61,8 +63,8 @@ import org.zkoss.zk.device.Devices;
 public class DefinitionLoaders {
 	private static final Log log = Log.lookup(DefinitionLoaders.class);
 
+	private static final int MAX_VERSION_SEGMENT = 4;
 	private static List _addons;
-	private static short[] _zkver;
 	private static boolean _loaded, _loading;
 
 	//CONSIDER:
@@ -94,34 +96,6 @@ public class DefinitionLoaders {
 		}
 	}
 
-	/** Ses the ZK version that is used to check whether a language
-	 * or language-addon is acceptable.
-	 *
-	 * <p>It is used when loading the definions.
-	 */
-	public static void setZkVersion(String version) {
-		final int len = version != null ? version.length(): 0;
-		if (len != 0) {
-			_zkver = new short[4];
-			int cnt = 0;
-			for (int j = 0;;) {
-				final int k = Strings.anyOf(version, ".-_", j);
-				final String s = version.substring(j, k);
-				try {
-					_zkver[cnt] = Short.parseShort(s);
-				} catch (Throwable ex) {
-					log.warning("Unknown ZK version: "+version);
-					break; //assume OK
-				}
-
-				j = k + 1;
-				if (++cnt >= 4 || j >= len || version.charAt(k) == '-')
-					break; //ignore the number after -
-			}
-			if (cnt == 0) _zkver = null;
-		}
-	}
-
 	/** Loads all config.xml, lang.xml and lang-addon.xml found in
 	 * the /metainfo/zk path.
 	 *
@@ -146,6 +120,10 @@ public class DefinitionLoaders {
 	private static void load0() {
 		final ClassLocator locator = new ClassLocator();
 
+		final int[] zkver = new int[MAX_VERSION_SEGMENT];
+		for (int j = 0; j < MAX_VERSION_SEGMENT; ++j)
+			zkver[j] = Utils.getSubversion(Version.UID, j);
+
 		//1. process config.xml (no particular dependency)
 		try {
 			for (Enumeration en = locator.getResources("metainfo/zk/config.xml");
@@ -154,7 +132,7 @@ public class DefinitionLoaders {
 				if (log.debugable()) log.debug("Loading "+url);
 				try {
 					final Document doc = new SAXBuilder(false, false, true).build(url);
-					if (checkVersion(url, doc))
+					if (checkVersion(zkver, url, doc))
 						parseConfig(doc.getRootElement());
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex, "Failed to load "+url);
@@ -173,7 +151,7 @@ public class DefinitionLoaders {
 				if (log.debugable()) log.debug("Loading "+url);
 				try {
 					final Document doc = new SAXBuilder(false, false, true).build(url);
-					if (checkVersion(url, doc))
+					if (checkVersion(zkver, url, doc))
 						parseLang(doc, locator, false);
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex, "Failed to load "+url);
@@ -191,7 +169,7 @@ public class DefinitionLoaders {
 			for (Iterator it = xmls.iterator(); it.hasNext();) {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				try {
-					if (checkVersion(res.url, res.document))
+					if (checkVersion(zkver, res.url, res.document))
 						parseLang(res.document, locator, true);
 				} catch (Exception ex) {
 					log.error("Failed to load addon", ex);
@@ -226,13 +204,20 @@ public class DefinitionLoaders {
 
 	/** Checks and returns whether the loaded document's version is correct.
 	 */
-	private static boolean checkVersion(URL url, Document doc) throws Exception {
+	private static boolean checkVersion(int[] zkver, URL url, Document doc)
+	throws Exception {
 		final Element el = doc.getRootElement().getElement("version");
 		if (el != null) {
-			final String zkver = el.getElementValue("zk-version", true);
-			if (!checkZkVersion(zkver)) {
-				log.info("Ignore "+url+"\nCause: ZK version must be "+zkver+" or later, not "+_zkver);
-				return false;
+			final String reqzkver = el.getElementValue("zk-version", true);
+			if (reqzkver != null) {
+				for (int j = 0; j < MAX_VERSION_SEGMENT; ++j) {
+					int v = Utils.getSubversion(reqzkver, j);
+					if (v < zkver[j]) break; //ok
+					if (v > zkver[j]) {//failed
+						log.info("Ignore "+url+"\nCause: ZK version must be "+zkver+" or later, not "+Version.UID);
+						return false;
+					}
+				}
 			}
 
 			final String clsnm = IDOMs.getRequiredElementValue(el, "version-class");
@@ -250,32 +235,6 @@ public class DefinitionLoaders {
 			log.info("Ignore "+url+"\nCause: version not specified");
 			return false; //backward compatible
 		}
-	}
-	/** Compares whether _zkver is no less than zkver.
-	 * It assumes the version format: nn.nn.nn-x, and it compares
-	 * only the numbers before -, if any.
-	 */
-	private static boolean checkZkVersion(String required) {
-		if (_zkver != null && required != null) {
-			for (int j = 0, cnt = 0, len = required.length();
-			j < len && cnt < 4 && required.charAt(j) != '-'; ++cnt) {
-				final int k = Strings.anyOf(required, ".-_", j);
-				final String s = required.substring(j, k);
-				short val;
-				try {
-					val = Short.parseShort(s);
-				} catch (Throwable ex) {
-					log.warning("Unknown zk-version: "+required);
-					break; //assume OK
-				}
-
-				if (val < _zkver[cnt]) return true; //OK
-				if (val > _zkver[cnt]) return false; //failed
-
-				j = k + 1;
-			}
-		}
-		return true;
 	}
 
 	private static void parseConfig(Element el)

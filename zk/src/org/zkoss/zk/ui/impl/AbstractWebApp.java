@@ -20,6 +20,7 @@ package org.zkoss.zk.ui.impl;
 
 import org.zkoss.util.Utils;
 
+import org.zkoss.zk.Version;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
@@ -70,7 +71,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	public final String getVersion() {
-		return "2.5.0-FL";
+		return Version.RELEASE;
 	}
 	public int getSubversion(int portion) {
 		return Utils.getSubversion(getVersion(), portion);
@@ -91,8 +92,6 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			throw new IllegalArgumentException("config already belongs to other Web app, "+oldwapp);
 		_config = config;
 		_config.setWebApp(this);
-
-		DefinitionLoaders.setZkVersion(getVersion());
 
 		Class cls = _config.getUiEngineClass();
 		if (cls == null) {

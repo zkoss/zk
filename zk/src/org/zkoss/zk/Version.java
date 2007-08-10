@@ -23,7 +23,12 @@ package org.zkoss.zk;
  * @author tomyeh
  */
 public class Version {
-	/** Returns the version UID.
+	/** The version UID used to identify the resources.
 	 */
 	public static final String UID = "2.5.0";
+	/** The release version. The official version.
+	 * It is the same as {@link org.zkoss.zk.ui.WebApp#getVersion}.
+	 * @since 2.5.0
+	 */
+	public static final String RELEASE = "2.5.0-FL";
 }
