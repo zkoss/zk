@@ -16,9 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
---%><%@ taglib uri="/WEB-INF/tld/zul/jsp/zuljsp.tld" prefix="z" %>
-
-<%@ taglib uri="/WEB-INF/tld/zul/jsp/zuljsp.tld" prefix="z" %>
+--%><%@ taglib uri="http://www.zkoss.org/jsp/zul" prefix="z" %>
 
 <html>
 	<head>

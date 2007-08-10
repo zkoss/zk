@@ -15,8 +15,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 --%><%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/web/html.dsp.tld" prefix="h" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/web/html" prefix="h" %>
 
 <html>
 <head>

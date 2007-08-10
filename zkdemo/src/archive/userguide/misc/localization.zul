@@ -25,7 +25,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 defined in the WEB-INF/i3-label.properties of the war file, and developers just specify the 
 following line in the .zul page to retrive the localized text.</p>
 <pre><code>
-&lt;?taglib uri=&quot;/WEB-INF/tld/web/core.dsp.tld&quot; prefix=&quot;c&quot; ?&gt;
+&lt;?taglib uri=&quot;http://www.zkoss.org/dsp/web/core&quot; prefix=&quot;c&quot; ?&gt;
 
 </code></pre>
 <p>The EL &#36;{c:l('key')} would retrive the keyed label based on the browser's preferred language setting.</p>
@@ -55,7 +55,7 @@ password=パスワード
 			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
-<?taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" ?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
 <window title="Localization demo" border="normal">
 	<grid>
 		<rows>
