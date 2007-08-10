@@ -39,6 +39,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.io.Files;
+import org.zkoss.el.Taglibs;
 
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.http.Https;
@@ -81,13 +82,14 @@ public class InterpreterServlet extends HttpServlet {
 				return null; //FUTURE: support relative path
 			}
 			public URL getResource(String name) {
+				URL url = null;
 				try {
-					URL url = _ctx.getResource(name);
-					return !bClsRes || url != null ? url:
-						ClassWebResource.getResource(name);
-				} catch (java.net.MalformedURLException ex) {
-					throw new SystemException(ex);
+					url = _ctx.getResource(name);
+					if (bClsRes && url == null)
+						url = ClassWebResource.getResource(name);
+				} catch (java.net.MalformedURLException ex) { //eat it
 				}
+				return url != null ? url: Taglibs.getDefaultURL(name);
 			}
 			public InputStream getResourceAsStream(String name) {
 				InputStream is = _ctx.getResourceAsStream(name);
