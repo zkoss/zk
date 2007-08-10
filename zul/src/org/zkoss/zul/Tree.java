@@ -790,9 +790,10 @@ public class Tree extends XulElement {
 		 */
 		Treeitem newTi = new Treeitem();
 		Treechildren ch= null;
-		System.out.println("Parent:"+event.getNode());
-		System.out.println("index:"+event.getType());
-		System.out.println(""+_model.getChild(event.getNode(),index));
+		// TODO DEBUG
+		//System.out.println("Parent:"+event.getNode());
+		//System.out.println("index:"+event.getType());
+		//System.out.println(""+_model.getChild(event.getNode(),index));
 		renderItem(newTi,_model.getChild(event.getNode(),index));
 		
 		
