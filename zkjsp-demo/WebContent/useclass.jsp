@@ -14,7 +14,7 @@
 	<p>this window component use <b>org.zkoss.jspdemo.MyWindow</b> as it's implementation.</p>
 		<z:window id="win4" width="550px" title="My Window" border="normal" use="org.zkoss.jspdemo.MyWindow">
 			<z:caption image="http://www.zkoss.org/favicon.ico" label="First Caption!!!">
-				<z:button id="winBtn"  
+				<z:button id="winBtn" self="@{ann1(opi=kjl)}" asdwer="@{ann1(selected.name) ann2(attr2a='attr2a',attr2b)}"
 				image="img/yellow-trapa.png">
 					<z:attribute name="label">This is a Button</z:attribute>
 					<z:attribute name="onClick">

@@ -29,14 +29,19 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>META-INF</name>
+			<name>archive</name>
 			<type>2</type>
-			<location>C:/svn_repository/zk1/trunk/zuljsp/src/archive/META-INF</location>
+			<location>C:/svn_repository/zk1/trunk/zuljsp/src/archive</location>
 		</link>
 		<link>
 			<name>zuljsp</name>
 			<type>2</type>
 			<location>C:/svn_repository/zk1/trunk/zuljsp/src</location>
+		</link>
+		<link>
+			<name>zrss</name>
+			<type>2</type>
+			<location>C:/svn_repository/sourceForge_zkapp/trunk/zrss/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>
