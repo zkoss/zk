@@ -26,14 +26,14 @@ package org.zkoss.util;
  */
 public class Utils {
 	/** Returns a portion of the specified version in an integer,
-	 * or -1 if no such portion exists.
+	 * or 0 if no such portion exists.
 	 *
 	 * <p>For example, getSubversion(0) returns the so-called major version
 	 * (2 in "2.4.0"), and getSubversion(1) returns the so-called
 	 * minor version (4 in "2.4.0").
 	 *
 	 * @param version the version. The version is assumed to
-	 * a serial
+	 * a series of integer separated by a non-digit separator.
 	 * @param portion which portion of the version; starting from 0.
 	 * If you want to retrieve the major verion, specify 0.
 	 * @since 2.5.0
@@ -46,13 +46,13 @@ public class Utils {
 		int j = 0;
 		while (--portion >= 0) {
 			j = nextVerSeparator(version, j) + 1;
-			if (j >= len) return -1; //no such portion
+			if (j >= len) return 0; //no such portion
 		}
 		try {
 			return Integer.parseInt(
 				version.substring(j, nextVerSeparator(version, j)));
 		} catch (Throwable ex) {
-			return -1; //unknow
+			return 0; //unknow
 		}
 	}
 	private static final int nextVerSeparator(String version, int from) {
