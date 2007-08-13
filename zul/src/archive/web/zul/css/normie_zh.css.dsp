@@ -262,7 +262,8 @@ div.listbox-head th.sort-dsc, div.grid-head th.sort-dsc, div.listbox-paging th.s
 }
 
 div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging { <%-- always used. --%>
-	background: window; border: 0; overflow: auto; width: 100%;
+	background: window; border: 0; overflow: auto; position: relative; width: 100%;
+<%-- Bug 1766244: we have to specify position:relative with overflow:auto --%>
 }
 div.listbox-paging, div.grid-paging {
 	height: 100%;

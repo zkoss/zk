@@ -104,7 +104,9 @@ zkMenu.open = function (menu, toggle) {
  */
 zkMenu._open = function (pp, top, ref, pos) {
 	/* not yet: we have to adjust CSS and some codes
-	if (zk.gecko) { //Bug 1486840
+	//FF: Bug 1486840
+	//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
+	if (zk.gecko || zk.ie) {
 		setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
 		document.body.appendChild(pp);
 	}*/
@@ -145,8 +147,8 @@ zkMenu.close = function (pp) {
 zkMenu._close = function (pp) {
 	pp = $e(pp);
 	if (pp) {
-		/*if (zk.gecko) { //Bug 1486840
-			$e(uuid).appendChild(pp); //Bug 1486840
+		/*if (zk.gecko || zk.ie) {
+			$e(uuid).appendChild(pp);
 			rmZKAttr(pp, "vparent");
 		}*/
 		pp.style.display = "none";

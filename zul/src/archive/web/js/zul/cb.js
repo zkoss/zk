@@ -301,12 +301,14 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	pp.style.zIndex = "80000";
 	zk.onVisiAt(pp);
 
-	if (zk.gecko) {
+	//FF: Bug 1486840
+	//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
+	//NOTE: since the parent/child relation is changed, new listitem
+	//must be inserted into the popup (by use of uuid!child) rather
+	//than invalidate!!
+	if (zk.gecko || zk.ie) {
 		setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
-		document.body.appendChild(pp); //Bug 1486840
-		//However, since the parent/child relation is changed, new listitem
-		//must be inserted into the popup (by use of uuid!child) rather
-		//than invalidate!!
+		document.body.appendChild(pp);
 	}
 
 	zkCmbox._fixsz(cb, pp, pp2, ppofs);//fix size
@@ -512,7 +514,7 @@ zkCmbox.cbclose = function (cb) {
 zkCmbox.close = function (pp, focus) {
 	pp = $e(pp);
 	var uuid = $uuid(pp.id);
-	if (zk.gecko) {
+	if (zk.gecko || zk.ie) {
 		$e(uuid).appendChild(pp); //Bug 1486840
 		rmZKAttr(pp, "vparent");
 	}
