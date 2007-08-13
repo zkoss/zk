@@ -582,6 +582,8 @@ zkau._insertAndInitBeforeEnd = function (n, html) {
 
 /** Sets an attribute (the default one). */
 zkau.setAttr = function (cmp, name, value) {
+	cmp = zkau._attr(cmp, name);
+
 	if ("visibility" == name) {
 		zk.show(cmp, "true" == value);
 	} else if ("value" == name) {
@@ -664,6 +666,33 @@ zkau.setAttr = function (cmp, name, value) {
 		}
 	}
 };
+zkau._attr = function (cmp, name) {
+	var real = $real(cmp);
+	if (real) {
+		if (name.startsWith("on")) return real;
+			//Client-side-action must be done at the inner tag
+
+		switch ($tag(real)) {
+		case "INPUT":
+		case "TEXTAREA":
+			switch(name) {
+			case "name": case "value": case "defaultValue":
+			case "cols": case "size": case "maxlength":
+			case "type": case "disabled": case "readOnly":
+			case "rows":
+				return real;
+			}
+			break;
+		case "IMG":
+			switch (name) {
+			case "align": case "alt": case "border":
+			case "hspace": case "vspace": case "src":
+				return real;
+			}
+		}
+	}
+	return cmp;
+};
 /** Returns the time stamp. */
 zkau.getStamp = function (cmp, name) {
 	var stamp = getZKAttr(cmp, "stm" + name);
@@ -674,6 +703,8 @@ zkau.setStamp = function (cmp, name) {
 	setZKAttr(cmp, "stm" + name, "" + ++zkau._stamp);
 };
 zkau.rmAttr = function (cmp, name) {
+	cmp = zkau._attr(cmp, name);
+
 	if ("class" == name) {
 		if (cmp.className) cmp.className = "";
 	} else if (name.startsWith("z.")) { //ZK attributes
@@ -1745,12 +1776,8 @@ zkau.cmd1 = {
 		if (zk.eval(cmp, "setAttr", null, dt1, dt2)) //NOTE: cmp is NOT converted to real!
 			return; //done
 
-		if (!done) {
-			if (dt1.startsWith("on")) cmp = $real(cmp);
-				//Client-side-action must be done at the inner tag
-
+		if (!done)
 			zkau.setAttr(cmp, dt1, dt2);
-		}
 	},
 	rmAttr: function (uuid, cmp, dt1) {
 		var done = false;
@@ -1767,11 +1794,8 @@ zkau.cmd1 = {
 		if (zk.eval(cmp, "rmAttr", null, dt1)) //NOTE: cmp is NOT converted to real!
 			return; //done
 
-		if (!done) {
-			if (dt1.startsWith("on")) cmp = $real(cmp);
-				//Client-side-action must be done at the inner tag
+		if (!done)
 			zkau.rmAttr(cmp, dt1);
-		}
 	},
 	outer: function (uuid, cmp, html) {
 		zk.cleanupAt(cmp);
