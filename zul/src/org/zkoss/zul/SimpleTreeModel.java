@@ -34,11 +34,7 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	/** Constructor.
 	 *
 	 * @param root - the root of tree
-	
-	 * However, it is not a good idea to modify <code>node</code>
-	 * once it is passed to this method with live is true,
-	 * since {@link Tree} is not smart enough to hanle it.
-	 * @since 2.4.1
+	 * 
 	 */
 	public SimpleTreeModel(Object root){
 		super.setRoot(root);
@@ -92,7 +88,7 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	/**
 	 * remove the nodes which parent is <code>parent</code> with indexes <code>indexes</code>
 	 * @param parent The parent of nodes are removed
-	 * @param index The indexes of nodes are removed
+	 * @param indexes The indexes of nodes are removed
 	 */
 	public void remove(Object parent, int[] indexes){
 		ArrayList al = (ArrayList)parent;	
@@ -130,8 +126,8 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	 * insert new nodes which parent is <code>parent</code> with indexes <code>indexes</code>
 	 * by new nodes <code>newNodes</code>
 	 * @param parent The parent of nodes are inserted
-	 * @param index The index of nodes are inserted
-	 * @param newNode New nodes which are inserted
+	 * @param indexes The indexes of nodes are inserted
+	 * @param newNodes New nodes which are inserted
 	 */
 	public void insert(Object parent, int[] indexes, Object[] newNodes){
 		ArrayList al = (ArrayList)parent;
