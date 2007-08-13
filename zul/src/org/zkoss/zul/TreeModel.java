@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.zkoss.zul.event.TreeDataListener;
 
@@ -67,20 +67,5 @@ public interface TreeModel {
 	 * @param l - the listener to remove
 	 */
 	public void removeTreeDataListener(TreeDataListener l);
-	
-	/**
-	 * Return a node which is an associated Treeitem ti in a Tree tree 
-	 * @param ti - The Treeitem is associated 
-	 * @param tree - Tree which Treeitem is belonged to
-	 * @return a node which is an associated Treeitem ti in a Tree tree
-	 */
-	public Object getChild(Treeitem ti, Tree tree);
-	
-	/**
-	 * Constructs a new TreePath, which is the path identified by root ending in node.
-	 * @param node - The destination of path
-	 * @return The tree path
-	 */
-	public ArrayList getPath(Object node);
 	
 }

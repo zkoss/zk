@@ -75,60 +75,69 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	}
 	
 	/**
-	 * Modify the node which parent is <code>parent</code> with index <code>index</code> by
-	 *  value
-	 * @param parent The parent of node is modified
-	 * @param index The index of node is modified
-	 * @param value The new value of node if modified
+	 * Modify the nodes which parent is <code>parent</code> with indexes <code>indexes</code> by
+	 *  values
+	 * @param parent The parent of nodes are modified
+	 * @param indexes The indexes of nodes are modified
+	 * @param values The new values of nodes are modified
 	 */
-	public void set(Object parent, int index, Object value)
+	public void set(Object parent, int[] indexes, Object[] values)
 	{
 		ArrayList al = (ArrayList)parent;
-		al.set(index, value);
-		fireEvent(parent,index,TreeDataEvent.CONTENTS_CHANGED);
+		for(int i=0; i<indexes.length;i++)
+			al.set(indexes[i], values[i]);
+		fireEvent(parent,indexes,TreeDataEvent.CONTENTS_CHANGED);
 	}
 	
 	/**
-	 * remove the node which parent is <code>parent</code> with index <code>index</code>
-	 * @param parent The parent of node is removed
-	 * @param index The index of node is removed
+	 * remove the nodes which parent is <code>parent</code> with indexes <code>indexes</code>
+	 * @param parent The parent of nodes are removed
+	 * @param index The indexes of nodes are removed
 	 */
-	public void remove(Object parent, int index){
+	public void remove(Object parent, int[] indexes){
 		ArrayList al = (ArrayList)parent;	
-		try{
-			al.remove(index);
-			fireEvent(parent,index,TreeDataEvent.NODE_REMOVED);
+		
+		for(int i=0; i<indexes.length;i++)
+		try{	
+			al.remove(indexes[i]);
 		}
 		catch(Exception exp){
-			throw new IndexOutOfBoundsException("Out of bound: "+index+" while size="+al.size());
+			throw new IndexOutOfBoundsException("Out of bound: "+indexes[i]+" while size="+al.size());
 		}
+		fireEvent(parent,indexes,TreeDataEvent.NODE_REMOVED);
+		
 		
 	}
 	
 	/**
-	 * append a new node which parent is <code>parent</code>
-	 * by new node <code>newNode</code>
-	 * @param parent The parent of node is appended
-	 * @param newNode New node which is appended
+	 * append new nodes which parent is <code>parent</code>
+	 * by new nodes <code>newNodes</code>
+	 * @param parent The parent of nodes are appended
+	 * @param newNodes New nodes which are appended
 	 */
-	public void add(Object parent, Object newNode){
+	public void add(Object parent, Object[] newNodes){
 		ArrayList al = (ArrayList)parent;
-		al.add(newNode);
-		fireEvent(parent,al.size()-1,TreeDataEvent.NODE_ADDED);
+		int[] indexes = new int[newNodes.length];
+		for(int i=0; i<newNodes.length;i++)
+		{
+			indexes[i] = al.size()-1 +i;
+			al.add(newNodes[i]);
+		}		
+		fireEvent(parent,indexes,TreeDataEvent.NODE_ADDED);
 	}
 	
 	/**
-	 * insert new node which parent is <code>parent</code> with index <code>index</code>
-	 * by new node <code>newNode</code>
-	 * @param parent The parent of node is inserted
-	 * @param index The index of node is inserted
-	 * @param newNode New node which is inserted
+	 * insert new nodes which parent is <code>parent</code> with indexes <code>indexes</code>
+	 * by new nodes <code>newNodes</code>
+	 * @param parent The parent of nodes are inserted
+	 * @param index The index of nodes are inserted
+	 * @param newNode New nodes which are inserted
 	 */
-	public void insert(Object parent, int index, Object newNode){
+	public void insert(Object parent, int[] indexes, Object[] newNodes){
 		ArrayList al = (ArrayList)parent;
-		al.add(index, newNode);
-		System.out.println(al);
-		fireEvent(parent,index,TreeDataEvent.NODE_ADDED);
+		for(int i=0; i<indexes.length; i++)
+			al.add(indexes[i], newNodes[i]);
+		fireEvent(parent,indexes,TreeDataEvent.NODE_ADDED);
 	}
 }
 

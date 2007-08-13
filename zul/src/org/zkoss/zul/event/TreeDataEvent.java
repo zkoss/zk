@@ -35,7 +35,7 @@ public class TreeDataEvent {
 
 	private final TreeModel _model;
 	private final int _type;
-	private final int _index;
+	private final int[] _indexes;
 	private final Object _node;
 
 	/** Contructor.
@@ -45,13 +45,13 @@ public class TreeDataEvent {
 	 * @param node - the node that one of its children being modified .
 	 * @param index - the index of child being modified.
 	 */
-	public TreeDataEvent(TreeModel model, int type, Object node, int index) {
+	public TreeDataEvent(TreeModel model, int type, Object node, int[] indexes) {
 		if (model == null)
 			throw new NullPointerException();
 		_model = model;
 		_type = type;
 		_node = node;
-		_index = index;
+		_indexes = indexes;
 	}
 	
 	/** Returns the tree model that fires this event.
@@ -68,19 +68,19 @@ public class TreeDataEvent {
 	}
 	
 	/**
-	 * Returns the node that one of its children being modified 
-	 * @return the node that one of its children being modified 
+	 * Returns the parent node that one of its children being modified 
+	 * @return the parent node that one of its children being modified 
 	 */
-	public Object getNode(){
+	public Object getParent(){
 		return _node;
 	}
 	
 	/**
-	 * Returns the index of child being modified.
-	 * @return the index of child being modified.
+	 * Returns the indexes of children being modified.
+	 * @return the indexes of children being modified.
 	 */
-	public int getIndex(){
-		return _index;
+	public int[] getIndexes(){
+		return _indexes;
 	}
 
 }

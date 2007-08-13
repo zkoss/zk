@@ -746,9 +746,7 @@ public class Tree extends XulElement {
 			    _item.getTreechildren().getChildren().clear();
 					t.renderItem(_item);
 				}
-	
 			}
-			
 		}
 	};
 	
@@ -756,21 +754,25 @@ public class Tree extends XulElement {
 	 * Handles when the tree model's content changed 
 	 */
 	private void onTreeDataChange(TreeDataEvent event) {	
-			ArrayList al = _model.getPath(event.getNode());
-			int index =event.getIndex();
-			Treeitem ti = getTreeitemByPath(al);
-			Object data = event.getNode();
+			List l = getPath(event.getParent());
+			int[] indexes =event.getIndexes();
+			Treeitem ti = getTreeitemByPath(l);
+			Object data = event.getParent();
 			
-			switch (event.getType()) {
-			case TreeDataEvent.NODE_ADDED:
-				onTreeDataInsert(ti,index,data);
-				break;
-			case TreeDataEvent.NODE_REMOVED:
-				onTreeDataRemoved(ti,index);
-				break;
-			case TreeDataEvent.CONTENTS_CHANGED:
-				onTreeDataContentChanged(ti,index,data);
-				break;
+			for(int i=0;i<indexes.length;i++)
+			{
+				int index = indexes[i];
+				switch (event.getType()) {
+				case TreeDataEvent.NODE_ADDED:
+					onTreeDataInsert(ti,index,data);
+					break;
+				case TreeDataEvent.NODE_REMOVED:
+					onTreeDataRemoved(ti,index);
+					break;
+				case TreeDataEvent.CONTENTS_CHANGED:
+					onTreeDataContentChanged(ti,index,data);
+					break;
+				}
 			}
 	}
 	
@@ -791,7 +793,7 @@ public class Tree extends XulElement {
 		else{
 			ch= new Treechildren();
 		}
-		ArrayList siblings = getTreeitems(ch);
+		List siblings = getTreeitems(ch);
 		//if there is no sibling or new item is inserted at end.
 		if(siblings.size()==0 || index == siblings.size() ){
 			ch.insertBefore(newTi, null);
@@ -806,7 +808,7 @@ public class Tree extends XulElement {
 	 * Handle event that child is removed
 	 */
 	private void onTreeDataRemoved(Treeitem parent, int index){
-		ArrayList items = getTreeitems((Treechildren)parent.getTreechildren());
+		List items = getTreeitems((Treechildren)parent.getTreechildren());
 		
 		if(items.size()>1){
 			((Treeitem)items.get(index)).detach();
@@ -821,9 +823,9 @@ public class Tree extends XulElement {
 	 * Handle event that child's content is changed
 	 */
 	private void onTreeDataContentChanged(Treeitem parent, int index, Object data){
-		ArrayList al = _model.getPath(data);
-		al.add(index);
-		Treeitem ti = getTreeitemByPath(al);
+		List l = getPath(data);
+		l.add(index);
+		Treeitem ti = getTreeitemByPath(l);
 		renderItem(ti,_model.getChild(data,index));
 		ti.setOpen(true);
 	}
@@ -831,7 +833,7 @@ public class Tree extends XulElement {
 	/*
 	 * Return the Treeitem by a given tree path
 	 */
-	private Treeitem getTreeitemByPath(ArrayList path)
+	private Treeitem getTreeitemByPath(List path)
 	{
 		Iterator itr = path.iterator();
 		Treeitem ti = (Treeitem)getTreeitems(this.getTreechildren()).get(0);
@@ -846,23 +848,23 @@ public class Tree extends XulElement {
 	 */
 	private Treeitem getTreeitemByPathHelper(Treeitem parent, int index)
 	{
-		ArrayList al = getTreeitems(parent.getTreechildren());
-		return (Treeitem)al.get(index);
+		List l = getTreeitems(parent.getTreechildren());
+		return (Treeitem)l.get(index);
 	}
 	
 	/*
 	 * return Treeitems from a Treechildren
 	 */
-	private ArrayList getTreeitems(Treechildren parent)
+	private List getTreeitems(Treechildren parent)
 	{	
 		List li = parent.getChildren();
-		ArrayList al = new ArrayList();
+		List l = new ArrayList();
 		for(int i=0; i< li.size();i++){
 			if(li.get(i) instanceof Treeitem){
-				al.add(li.get(i));
+				l.add(li.get(i));
 			}
 		}
-		return al;
+		return l;
 	}
 	
 	/*
@@ -993,7 +995,7 @@ public class Tree extends XulElement {
 			}
 			
 			try {
-				Object node = _model.getChild(item, Tree.this);
+				Object node = getAssocitedNode(item, Tree.this);
 				_renderer.render(item, node);
 			} catch (Throwable ex) {
 				try {
@@ -1042,7 +1044,7 @@ public class Tree extends XulElement {
 		if(_model ==null) return;
 		final Renderer renderer = new Renderer();
 		try {
-			renderItem(item,_model.getChild(item,this));
+			renderItem(item,getAssocitedNode(item,this));
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -1134,7 +1136,7 @@ public class Tree extends XulElement {
 		try {
 			for (Iterator it = items.iterator(); it.hasNext();){
 				Treeitem item = (Treeitem)it.next();
-				Object data = _model.getChild(item,this);
+				Object data = getAssocitedNode(item,this);
 				dfRenderItem(data,item);
 			}
 		} catch (Throwable ex) {
@@ -1144,6 +1146,96 @@ public class Tree extends XulElement {
 		}
 	}
 	
+	/*
+	 * Remove from TreeModel Aug 13 07
+	 */
+	
+	/*
+	 * Return a node which is an associated Treeitem ti in a Tree tree 
+	 */
+	private Object getAssocitedNode(Treeitem ti, Tree t){
+		return getNodeByPath(getTreePath(t,ti),_model.getRoot());
+	}
+	
+	/**
+	 * return the path which is from ZK Component root to ZK Component lastNode 
+	 * @param root
+	 * @param lastNode
+	 * @return the path which is from ZK Component root to ZK Component lastNode 
+	 */
+	private List getTreePath(Component root, Component lastNode){
+		List al = new ArrayList();
+		Component curNode = lastNode;
+		while(!root.equals(curNode)){
+			if(curNode instanceof Treeitem){
+				al.add(((Treeitem)curNode).indexOf());
+			}
+			curNode = curNode.getParent();
+		}
+		return al;
+	}
+	
+	/**
+	 * Constructs a new TreePath, which is the path identified by root ending in node.
+	 * @param node - The destination of path
+	 * @return The tree path
+	 */
+	private List getPath(Object node){
+		return getTreePath(_model.getRoot(),node);
+	}
+	
+	/**
+	 * return the tree path which is from root to lastNode
+	 * @param root
+	 * @param lastNode
+	 * @return  the tree path which is from root to lastNode
+	 */
+	private List getTreePath(Object root, Object lastNode){
+		List l = new ArrayList();
+		dfSearch(l, root, lastNode);
+		return l;
+	}
+	
+	/**
+	 * Depth first search to find the path which is from node to target
+	 * @param al path
+	 * @param node origin
+	 * @param target destination
+	 * @return whether the target is found or not
+	 */
+	private boolean dfSearch(List l, Object node, Object target){
+			if(node.equals(target)){
+				return true;
+			}
+			else{
+				int size = _model.getChildCount(node);
+				for(int i=0; i< size; i++){
+					boolean flag = dfSearch(l,_model.getChild(node,i),target);
+					if(flag){
+						l.add(0,i);
+						return true;
+					}
+				}
+			}
+			return false;
+	}
+	
+	/**
+	 * Get the node from tree by given path
+	 * @param path
+	 * @param root
+	 * @return the node from tree by given path
+	 */
+	private Object getNodeByPath(List path, Object root)
+	{
+		Object node = root;
+		for(int i=path.size()-2; i >= 0; i--){
+			node = _model.getChild(node, Integer.parseInt(path.get(i).toString()));
+		}
+		return node;
+	}
+	
+
 	//TODO AREA JEFF ADDED END
 	
 	/** A utility class to implement {@link #getExtraCtrl}.
