@@ -102,8 +102,6 @@ zkTmbox.setAttr = function (cmp, nm, val) {
 			inp.style.height = val;
 			return true;
 		}
-	} else if (zkTmbox._inflds.contains(nm)) {
-		cmp = $real(cmp);
 	}
 	zkau.setAttr(cmp, nm, val);
 	return true;
@@ -119,15 +117,10 @@ zkTmbox.rmAttr = function (cmp, nm) {
 	} else if ("style.height" == nm) {
 		var inp = $real(cmp);
 		if (inp) inp.style.height = "";
-	} else if (zkTmbox._inflds.contains(nm)){
-		cmp = $real(cmp);
 	}
 	zkau.rmAttr(cmp, nm);
 	return true;
 };
-
-if (!zkTmbox._inflds)
-	zkTmbox._inflds = ["name", "cols", "size", "maxlength", "disabled", "readonly"];
 
 //event implements
 zkTmbox._inpfocus= function(evt){

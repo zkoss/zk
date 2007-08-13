@@ -126,8 +126,6 @@ zkCmbox.setAttr = function (cmp, nm, val) {
 		return true;
 	} else if ("z.sel" == nm ) {
 		return zkTxbox.setAttr(cmp, nm, val);
-	} else if (zkCmbox._inflds.contains(nm)) {
-		cmp = $real(cmp);
 	}
 	zkau.setAttr(cmp, nm, val);
 	return true;
@@ -142,14 +140,10 @@ zkCmbox.rmAttr = function (cmp, nm) {
 	} else if ("style.height" == nm) {
 		var inp = $real(cmp);
 		if (inp) inp.style.height = "";
-	} else if (zkCmbox._inflds.contains(nm))
-		cmp = $real(cmp);
+	}
 	zkau.rmAttr(cmp, nm);
 	return true;
 };
-if (!zkCmbox._inflds)
-	zkCmbox._inflds = ["name", "value", "defaultValue", "cols", "size",
-		"maxlength", "type", "disabled", "readonly", "rows"];
 
 zkCmbox.childchg = function (cb) {
 	//we have to re-adjust the width since children are added/removed

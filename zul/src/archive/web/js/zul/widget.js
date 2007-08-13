@@ -283,8 +283,7 @@ zkCkbox.setAttr = function (cmp, nm, val) {
 	if ("style" == nm) {
 		var lbl = zk.firstChild(cmp, "LABEL", true);
 		if (lbl) zkau.setAttr(lbl, nm, zk.getTextStyle(val));
-	} else if (zkCkbox._inflds.contains(nm))
-		cmp = $real(cmp);
+	}
 	zkau.setAttr(cmp, nm, val);
 	return true;
 };
@@ -292,13 +291,10 @@ zkCkbox.rmAttr = function (cmp, nm) {
 	if ("style" == nm) {
 		var lbl = zk.firstChild(cmp, "LABEL", true);
 		if (lbl) zkau.rmAttr(lbl, nm);
-	} else if (zkCkbox._inflds.contains(nm))
-		cmp = $real(cmp);
+	}
 	zkau.rmAttr(cmp, nm);
 	return true;
 };
-if (!zkCkbox._inflds)
-	zkCkbox._inflds = ["checked", "defaultChecked", "disabled", "name", "value"/*, "readonly"*/];
 
 zkRadio = {};
 zkRadio.init = zkCkbox.init;
@@ -509,21 +505,6 @@ zkArea.cleanup = function (cmp) {
 			//fall back to no-useMap
 	}
 };
-
-zkMap.setAttr = function (cmp, nm, val) {
-	if (zkMap._inflds.contains(nm))
-		cmp = $real(cmp);
-	zkau.setAttr(cmp, nm, val);
-	return true;
-};
-zkMap.rmAttr = function (cmp, nm) {
-	if (zkMap._inflds.contains(nm))
-		cmp = $real(cmp);
-	zkau.rmAttr(cmp, nm);
-	return true;
-};
-if (!zkMap._inflds)
-	zkMap._inflds = ["align", "alt", "border", "hspace", "vspace", "src"];
 
 /** Called when an area is clicked. */
 zkArea.onclick = function (id) {
