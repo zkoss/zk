@@ -5,6 +5,7 @@ ZK 2.5.0
   1700457: The inline component to merge "static" component
   1765987: Add timebox (by merge timebox from zkforge to zul)
   1758837: Zk Flash Component
+  1537229: Treemodel with Tree
   1760212: A simpler way to annotation a component
   1753222: A way to assign text with element to a property than child
   1760691: DataBinder support validation phase
