@@ -3,9 +3,11 @@
  */
 package org.zkoss.jspdemo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.Initiator;
 
@@ -38,29 +40,22 @@ public class MyInit implements Initiator {
 		// TODO Auto-generated method stub
 
 	}
-
+	private SimpleDateFormat form = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
 	/* (non-Javadoc)
 	 * @see org.zkoss.zk.ui.util.Initiator#doInit(org.zkoss.zk.ui.Page, java.lang.Object[])
 	 */
 	public void doInit(Page page, Object[] args) throws Exception {
-
-		final Date now = new Date();
-		class Ref{
-			public Object ref; 
-		}
-		final Ref value = new Ref();
 		ArrayList list = new ArrayList();
-		page.setVariable("current_date", now);
+		page.setVariable("current_date", new Date());
 		for(int i=0;i<10;i++)
 		{
-			value.ref = "index: "+i;
+			final String ref = "index: "+i;
 			list.add(new MyValue(){
-				String val = (String) value.ref;
-				public Date getDate() {
-					return now;
+				public String getDate() {
+					return form.format(new Date());
 				}
 				public String getValue() {
-					return val;
+					return ref;
 				}
 			});
 		}

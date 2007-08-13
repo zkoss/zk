@@ -11,5 +11,5 @@ import java.util.Date;
  */
 public interface MyValue {
 	String getValue();
-	Date getDate();
+	String getDate();
 }
