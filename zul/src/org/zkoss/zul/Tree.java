@@ -764,7 +764,8 @@ public class Tree extends XulElement {
 				int index = indexes[i];
 				switch (event.getType()) {
 				case TreeDataEvent.NODE_ADDED:
-					onTreeDataInsert(ti,index,data);
+					newInsertIndexHelper(indexes,i);
+					onTreeDataInsert(ti,indexes[i],data);
 					break;
 				case TreeDataEvent.NODE_REMOVED:
 					onTreeDataRemoved(ti,index);
@@ -802,6 +803,19 @@ public class Tree extends XulElement {
 		}
 		ch.setParent(parent);
 		parent.setOpen(true);
+	}
+	
+	/*
+	 * Helper method to calculate the new index after modification that
+	 * caused by period indexes
+	 */
+	private void newInsertIndexHelper(int[] indexes, int cur)
+	{
+		for(int i=cur;i<indexes.length;i++){
+			if(indexes[cur] >indexes[i]){
+				indexes[cur]++;
+			}
+		}
 	}
 		
 	/*

@@ -94,15 +94,28 @@ public class SimpleTreeModel extends AbstractTreeModel{
 		ArrayList al = (ArrayList)parent;	
 		
 		for(int i=0; i<indexes.length;i++)
-		try{	
+		try{
+			indexes[i] = newRemoveIndexHelper(indexes[i],indexes, i);
 			al.remove(indexes[i]);
 		}
 		catch(Exception exp){
 			throw new IndexOutOfBoundsException("Out of bound: "+indexes[i]+" while size="+al.size());
 		}
-		fireEvent(parent,indexes,TreeDataEvent.NODE_REMOVED);
-		
-		
+		fireEvent(parent,indexes,TreeDataEvent.NODE_REMOVED);	
+	}
+	
+	/*
+	 * Helper method to calculate the new index after modification that
+	 * caused by period indexes
+	 */
+	private int newRemoveIndexHelper(int oIndex, int[] indexes, int cur)
+	{
+		for(int i=0;i<cur;i++){
+			if(oIndex >indexes[i]){
+				oIndex--;
+			}
+		}
+		return oIndex;
 	}
 	
 	/**
@@ -115,7 +128,7 @@ public class SimpleTreeModel extends AbstractTreeModel{
 		ArrayList al = (ArrayList)parent;
 		int[] indexes = new int[newNodes.length];
 		for(int i=0; i<newNodes.length;i++)
-		{
+		{ 
 			al.add(newNodes[i]);
 			indexes[i] = al.size()-1 +i;
 		}		
@@ -128,11 +141,13 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	 * @param parent The parent of nodes are inserted
 	 * @param indexes The indexes of nodes are inserted
 	 * @param newNodes New nodes which are inserted
+	 * 
 	 */
 	public void insert(Object parent, int[] indexes, Object[] newNodes){
 		ArrayList al = (ArrayList)parent;
-		for(int i=0; i<indexes.length; i++)
+		for(int i=0; i<indexes.length; i++){
 			al.add(indexes[i], newNodes[i]);
+		}
 		fireEvent(parent,indexes,TreeDataEvent.NODE_ADDED);
 	}
 }
