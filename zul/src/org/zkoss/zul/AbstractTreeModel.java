@@ -85,7 +85,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	 * return the path which is from ZK Component root to ZK Component lastNode 
 	 * @param root
 	 * @param lastNode
-	 * @return
+	 * @return the path which is from ZK Component root to ZK Component lastNode 
 	 */
 	private ArrayList getTreePath(Component root, Component lastNode){
 		ArrayList al = new ArrayList();
@@ -110,7 +110,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	 * return the tree path which is from root to lastNode
 	 * @param root
 	 * @param lastNode
-	 * @return
+	 * @return  the tree path which is from root to lastNode
 	 */
 	public ArrayList getTreePath(Object root, Object lastNode){
 		ArrayList al = new ArrayList();
@@ -146,7 +146,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	 * Get the node from tree by given path
 	 * @param path
 	 * @param root
-	 * @return
+	 * @return the node from tree by given path
 	 */
 	private Object getNodeByPath(ArrayList path, Object root)
 	{

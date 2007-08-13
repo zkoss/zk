@@ -67,9 +67,6 @@ public interface TreeModel {
 	 * @param l - the listener to remove
 	 */
 	public void removeTreeDataListener(TreeDataListener l);
-
-
-	// TODO BETA
 	
 	/**
 	 * Return a node which is an associated Treeitem ti in a Tree tree 
@@ -78,8 +75,6 @@ public interface TreeModel {
 	 * @return a node which is an associated Treeitem ti in a Tree tree
 	 */
 	public Object getChild(Treeitem ti, Tree tree);
-	
-	// TODO BETA
 	
 	/**
 	 * Constructs a new TreePath, which is the path identified by root ending in node.

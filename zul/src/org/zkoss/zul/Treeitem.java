@@ -52,14 +52,25 @@ public class Treeitem extends XulElement {
 	// TODO AREA JEFF ADDED
 	private boolean _loaded = false;
 	
+	/**
+	 * Return true whether this container is loaded
+	 * @return true whether this container is loaded
+	 */
 	public boolean isLoaded(){
 		return _loaded;
 	}
 	
+	/**
+	 * Sets whether this container is loaded
+	 */
 	public void setLoaded(boolean loaded){
 		_loaded = loaded;
 	}
-
+	
+	/**
+	 * return the index of this container 
+	 * @return the index of this container 
+	 */
 	public int indexOf()
 	{
 		List list = this.getParent().getChildren();

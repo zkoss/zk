@@ -59,7 +59,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Default {@link #getSclass}: tree.
  *
- * @author Jeff Liu
+ * @author tomyeh
  */
 public class Tree extends XulElement {
 	
@@ -890,6 +890,15 @@ public class Tree extends XulElement {
 		_model = model;
 		syncModel();
 		initDataListener();
+	}
+	
+//	-- ListModel dependent codes --//
+	/** Returns the list model associated with this tree, or null
+	 * if this tree is not associated with any tree data model.
+	 */
+	public TreeModel getModel()
+	{
+		return _model;
 	}
 	
 	/** Synchronizes the tree to be consistent with the specified model.

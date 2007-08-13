@@ -40,8 +40,8 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	 * since {@link Tree} is not smart enough to hanle it.
 	 * @since 2.4.1
 	 */
-	public SimpleTreeModel(Object obj){
-		super.setRoot(obj);
+	public SimpleTreeModel(Object root){
+		super.setRoot(root);
 	}
 	
 	//-- TreeModel --//
