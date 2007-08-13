@@ -29,6 +29,7 @@ ZK 2.5.0
   1770594: Tab: use class instead of hardcode background to style
   1770613: Groupbox: use class instead of hardcode background to style
   1770614: Slider: use class instead of hardcode background to style
+  1772915: Desktop supports getPageIfAny
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
@@ -43,6 +44,7 @@ ZK 2.5.0
   1761686: Failed to reposition grid foot
   1769047: Fail to data binding listbox with nested attributes
   1765819: Combobox.setReadonly(boolean) doesn't work
+  1766244: IE only (6.0, 7.0): Combobox arrows render outside grid
   
 * Upgrade Notes:
   + Utilities of JSP, such as JspLoaderServlet, are removed, since they are
