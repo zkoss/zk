@@ -78,7 +78,8 @@ public class BinaryTreeModel extends AbstractTreeModel{
 			i=1;
 		else
 			i=0;
-		fireEvent(_tree.get(parentIndex),i,TreeDataEvent.NODE_ADDED);
+		int[] indexes = {i};
+		fireEvent(_tree.get(parentIndex),indexes,TreeDataEvent.NODE_ADDED);
 	}
 
 }
