@@ -100,7 +100,13 @@ public interface Desktop {
 	 *
 	 * @exception ComponentNotFoundException if page not found
 	 */
-	public Page getPage(String pageId);
+	public Page getPage(String pageId)
+	throws ComponentNotFoundException;
+	/** Returns the page of the specified ID, or null if no such page.
+	 *
+	 * @since 2.5.1
+	 */
+	public Page getPageIfAny(String pageId);
 	/** Returns a readonly collection of all {@link Page} in this desktop.
 	 */
 	public Collection getPages();

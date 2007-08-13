@@ -18,9 +18,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.util.Collection;
+
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
  * A representation of a component path.
@@ -55,8 +57,7 @@ public class Path {
 		return _path;
 	}
 
-	/** Returns the component with this path.
-	 * @exception ComponentNotFoundException is thrown if
+	/** Returns the component with this path, or null if no such component.
 	 */
 	public Component getComponent() {
 		return getComponent0(null, _path);
@@ -86,18 +87,16 @@ public class Path {
 		sb.insert(0, '/');
 		return sb.toString();
 	}
-	/** Returns the component of the specified path.
-	 * @exception ComponentNotFoundException is thrown if
+	/** Returns the component of the specified path, or null if no such component.
 	 */
 	public static final Component getComponent(String path) {
 		return getComponent0(null, normalize(path));
 	}
 	/** Returns the component of the specified path which is related
-	 * to the specified ID space.
+	 * to the specified ID space, or null if no such component.
 	 *
 	 * @param is the current ID space. It is required only if path is related
 	 * (in other words, not starting with / or //).
-	 * @exception ComponentNotFoundException is thrown if
 	 */
 	public static final Component getComponent(IdSpace is, String path) {
 		return getComponent0(is, normalize(path));
@@ -108,16 +107,30 @@ public class Path {
 			k = path.indexOf('/', j);
 
 			if (k == 0) { //starts with /
-				if (path.length() == 1) // "/" only
-					throw new ComponentNotFoundException("Unable to resolve "+path+". Cause: no component ID specified");
+				final Execution exec = Executions.getCurrent();
+				final Desktop desktop = exec.getDesktop();
+				Page page = ((ExecutionCtrl)exec).getCurrentPage();
+				if (page == null) {
+					final Collection pages = desktop.getPages();
+					if (pages.isEmpty())
+						return null;
 
-				final Page page = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
-				if (path.charAt(1) == '/') {
+					page = (Page)pages.iterator().next();
+						//the first page assumed
+				}
+
+				if (path.length() == 1) // "/" only
+					return getFirstRoot(page); //the first root assumed
+
+				if (path.charAt(1) == '/') { //starts with //
 					k = path.indexOf('/', 2);
-					if (k < 0) throw new ComponentNotFoundException("Unable to resolve "+path+". Cause: the result cannot be page.");
+					if (k < 0)
+						return getFirstRoot(page); //the first root assumed
 
 					final String nm = path.substring(2, k);
-					is = page.getDesktop().getPage(nm);
+					is = desktop.getPageIfAny(nm);
+					if (is == null)
+						return null; //no such page
 				} else {
 					is = page;
 				}
@@ -127,27 +140,30 @@ public class Path {
 			final String nm = k >= 0 ? path.substring(j, k): path.substring(j);
 			if ("..".equals(nm)) {
 				if (!(is instanceof Component))
-					throw new ComponentNotFoundException("Unable to resolve "+path+". Cause: .. cannot be applied to page");
+					return null;
 
 				final Component c = (Component)is;
 				final Component p = c.getParent();
 				is = p != null ? p.getSpaceOwner(): (IdSpace)c.getPage();
 				if (k < 0) {
-					if (is instanceof Page)
-						throw new ComponentNotFoundException("Unable to resolve "+path+". Cause: the result cannot be page.");
-					return (Component)is;
+					return (is instanceof Component) ? (Component)is: null;
 				}
 				continue;
 			}
 			if (is == null)
-				throw new ComponentNotFoundException("The current ID space is required because path is related: "+path);
+				return null;
+
 			final Component c = is.getFellow(nm);
 			if (k < 0) return c;
 
 			if (!(c instanceof IdSpace))
-				throw new ComponentNotFoundException("Unable to resolve "+path+". Cause: "+c+" is not an ID space owner");
+				return null;
 			is = (IdSpace)c;
 		}
+	}
+	private static Component getFirstRoot(Page page) {
+		final Collection roots = page.getRoots();
+		return roots.isEmpty() ? null: (Component)roots.iterator().next();
 	}
 
 	/**

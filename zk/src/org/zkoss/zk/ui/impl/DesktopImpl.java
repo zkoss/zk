@@ -306,13 +306,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public Page getPage(String pageId) {
 		//We allow user to access this method concurrently, so synchronized
 		//is required
-		final Page page;
-		synchronized (_pages) {
-			page = (Page)_pages.get(pageId);
-		}
+		final Page page = getPageIfAny(pageId);
 		if (page == null)
 			throw new ComponentNotFoundException("Page not found: "+pageId);
 		return page;
+	}
+	public Page getPageIfAny(String pageId) {
+		synchronized (_pages) {
+			return (Page)_pages.get(pageId);
+		}
 	}
 	public boolean hasPage(String pageId) {
 		return _pages.containsKey(pageId);
