@@ -758,7 +758,7 @@ public class Tree extends XulElement {
 			int[] indexes =event.getIndexes();
 			Treeitem ti = getTreeitemByPath(l);
 			Object data = event.getParent();
-			
+			//Loop through indexes array
 			for(int i=0;i<indexes.length;i++)
 			{
 				int index = indexes[i];
