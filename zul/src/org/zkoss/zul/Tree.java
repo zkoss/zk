@@ -824,7 +824,7 @@ public class Tree extends XulElement {
 	 */
 	private void onTreeDataContentChanged(Treeitem parent, int index, Object data){
 		List l = getPath(data);
-		l.add(index);
+		l.add(new Integer(index));
 		Treeitem ti = getTreeitemByPath(l);
 		renderItem(ti,_model.getChild(data,index));
 		ti.setOpen(true);
@@ -1168,7 +1168,7 @@ public class Tree extends XulElement {
 		Component curNode = lastNode;
 		while(!root.equals(curNode)){
 			if(curNode instanceof Treeitem){
-				al.add(((Treeitem)curNode).indexOf());
+				al.add(new Integer(((Treeitem)curNode).indexOf()));
 			}
 			curNode = curNode.getParent();
 		}
@@ -1212,7 +1212,7 @@ public class Tree extends XulElement {
 				for(int i=0; i< size; i++){
 					boolean flag = dfSearch(l,_model.getChild(node,i),target);
 					if(flag){
-						l.add(0,i);
+						l.add(0,new Integer(i));
 						return true;
 					}
 				}
