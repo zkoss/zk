@@ -116,8 +116,8 @@ public class SimpleTreeModel extends AbstractTreeModel{
 		int[] indexes = new int[newNodes.length];
 		for(int i=0; i<newNodes.length;i++)
 		{
-			indexes[i] = al.size()-1 +i;
 			al.add(newNodes[i]);
+			indexes[i] = al.size()-1 +i;
 		}		
 		fireEvent(parent,indexes,TreeDataEvent.NODE_ADDED);
 	}
