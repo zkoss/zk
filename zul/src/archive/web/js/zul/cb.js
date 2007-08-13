@@ -515,7 +515,7 @@ zkCmbox.close = function (pp, focus) {
 	pp = $e(pp);
 	var uuid = $uuid(pp.id);
 	if (zk.gecko || zk.ie) {
-		$e(uuid).appendChild(pp); //Bug 1486840
+		$e(uuid).appendChild(pp);
 		rmZKAttr(pp, "vparent");
 	}
 
