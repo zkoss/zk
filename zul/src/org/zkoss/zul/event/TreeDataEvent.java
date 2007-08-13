@@ -26,7 +26,7 @@ import org.zkoss.zul.TreeModel;
  * @author Jeff Liu
  */
 public class TreeDataEvent {
-	/** Identifies one or more changes in the lists contents. */
+	/** Identifies changing content of a node. */
 	public static final int CONTENTS_CHANGED = 0;
     /** Identifies the addition of child to a node. */    
 	public static final int NODE_ADDED = 1;
@@ -53,11 +53,13 @@ public class TreeDataEvent {
 		_node = node;
 		_index = index;
 	}
+	
 	/** Returns the tree model that fires this event.
 	 */
 	public TreeModel getModel() {
 		return _model;
 	}
+	
 	/** Returns the event type. One of {@link #CONTENTS_CHANGED},
 	 * {@link #NODE_ADDED}, or {@link #NODE_REMOVED}.
 	 */

@@ -27,7 +27,7 @@ package org.zkoss.zul.event;
  * @see TreeDataEvent
  */
 public interface TreeDataListener {
-	/** Sent when the contents of the list has changed.
+	/** Sent when the contents of the tree has changed.
 	 */
 	public void  onChange(TreeDataEvent event);
 }
