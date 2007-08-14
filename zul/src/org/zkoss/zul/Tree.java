@@ -910,16 +910,50 @@ public class Tree extends XulElement {
 		return _renderer;
 	}
 	
+	private boolean _rootVisible = true;
+	
 	/*
 	 * Render the root of tree
 	 */
 	private void renderTree() throws Exception{
+		if(_rootVisible)
+			renderRoot();
+		else
+			renderInvisibleRoot();
+	}
+	
+	/*
+	 * Render the root as a visible node
+	 */
+	private void renderRoot() throws Exception{
 		_treechildren = null;
 		Treechildren children = new Treechildren();
 		Treeitem ti = new Treeitem();
 		ti.setParent(children);
 		children.setParent(this);
 		this.renderItem(ti);
+	}
+	
+	/*
+	 * Render the root as a invisible node
+	 */
+	private void renderInvisibleRoot() throws Exception{
+		Treechildren children = new Treechildren();
+		children.setParent(this);
+		System.out.println(this.getTreechildren());
+		Object node = _model.getRoot();
+		for(int i=0; i< _model.getChildCount(node);i++ ){
+			Treeitem ti = new Treeitem();
+			Object data = _model.getChild(node, i);
+			System.out.println(data);
+			_renderer.render(ti, data);
+			if(!_model.isLeaf(data)){
+				ti.addEventListener(Events.ON_OPEN, _treeitemOpenListener);	
+				Treechildren ch = new Treechildren();
+				ch.setParent(ti);
+			}
+			ti.setParent(_treechildren);
+		}
 	}
 	
 	private static final TreeitemRenderer getDefaultItemRenderer() {
@@ -1190,8 +1224,11 @@ public class Tree extends XulElement {
 	private Object getNodeByPath(List path, Object root)
 	{
 		Object node = root;
-		for(int i=path.size()-2; i >= 0; i--){
-			node = _model.getChild(node, Integer.parseInt(path.get(i).toString()));
+		int pathSize = path.size()-1;
+		if(_rootVisible)
+			pathSize--;
+		for(int i=pathSize; i >= 0; i--){
+			node = _model.getChild(node, ((Integer)(path.get(i))).intValue());
 		}
 		return node;
 	}

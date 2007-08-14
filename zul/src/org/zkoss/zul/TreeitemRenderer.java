@@ -33,6 +33,10 @@ public interface TreeitemRenderer {
 	 * at all, unless you don't return
 	 *
 	 * @param data that is used to render the Treeitem
+	 * 
+	 * Notice:
+	 * In the implementation, only Treeitem and Treerow are allowed to be
+	 * item's children.  
 	 */
 	public void render(Treeitem item, Object data) throws Exception;
 }
