@@ -21,20 +21,13 @@ package org.zkoss.zk.ui.impl;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import org.zkoss.lang.D;
-import org.zkoss.util.Locales;
-import org.zkoss.util.TimeZones;
 import org.zkoss.util.logging.Log;
 
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.DesktopUnavailableException;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Clients;
@@ -48,6 +41,8 @@ import org.zkoss.zk.au.AuScript;
  */
 public class PollingServerPush implements ServerPush {
 	private static final Log log = Log.lookup(PollingServerPush.class);
+	/** Denote a server-push thread gives up the activation (timeout). */
+	private static final int GIVEUP = -99;
 
 	private Desktop _desktop;
 	/** List of ThreadInfo. */
@@ -55,7 +50,7 @@ public class PollingServerPush implements ServerPush {
 	/** The active thread. */
 	private ThreadInfo _active;
 	/** The info to carray over from onPiggyback to the server-push thread. */
-	private CarryOver _carryOver;
+	private ExecutionCarryOver _carryOver;
 	/** A mutex that is used by this object to wait for the server-push thread
 	 * to complete.
 	 */
@@ -114,7 +109,7 @@ public class PollingServerPush implements ServerPush {
 			throw new IllegalStateException("Not started");
 
 		Clients.response(new AuScript(null, getStopScript()));
-		_desktop = null;
+		_desktop = null; //to cause DesktopUnavailableException being thrown
 
 		synchronized (_pending) {
 			for (Iterator it = _pending.iterator(); it.hasNext();) {
@@ -140,7 +135,18 @@ public class PollingServerPush implements ServerPush {
 	}
 
 	public void onPiggyback() {
-		while (!_pending.isEmpty()) {
+		long tmexpired = 0;
+		for (int cnt = 0; !_pending.isEmpty();) {
+			//Don't hold the client too long.
+			//In addition, an ill-written code might activate again
+			//before onPiggyback returns. It causes dead-loop in this case.
+			if (tmexpired == 0) { //first time
+				tmexpired = System.currentTimeMillis() + 2000;
+				cnt = _pending.size() + 5;
+			} else if (--cnt < 0 || System.currentTimeMillis() > tmexpired) {
+				break;
+			}
+
 			final ThreadInfo info;
 			synchronized (_pending) {
 				if (_pending.isEmpty())
@@ -149,11 +155,18 @@ public class PollingServerPush implements ServerPush {
 			}
 
 			synchronized (_mutex) {
-				_carryOver = new CarryOver();
+				_carryOver = new ExecutionCarryOver(_desktop);
 
 				synchronized (info) {
+					if (info.nActive == GIVEUP)
+						continue; //give up and try next
+					info.nActive = 1; //granted
 					info.notify();
 				}
+
+				if (_desktop == null) //just in case
+					break;
+
 				try {
 					_mutex.wait(); //wait until the server push is done
 				} catch (InterruptedException ex) {
@@ -163,14 +176,15 @@ public class PollingServerPush implements ServerPush {
 		}
 	}
 
-	public void activate() {
+	public boolean activate(long timeout)
+	throws InterruptedException, DesktopUnavailableException {
 		if (D.ON && Events.inEventListener())
 			throw new IllegalStateException("No need to activate in the event listener");
 
 		final Thread curr = Thread.currentThread();
 		if (_active != null && _active.thread.equals(curr)) { //re-activate
 			++_active.nActive;
-			return;
+			return true;
 		}
 
 		final ThreadInfo info = new ThreadInfo(curr);
@@ -179,13 +193,18 @@ public class PollingServerPush implements ServerPush {
 				_pending.add(info);
 		}
 
-		try {
-			synchronized (info) {
-				if (_desktop != null)
-					info.wait();
+		synchronized (info) {
+			if (_desktop != null) {
+				info.wait(timeout);
+
+				if (info.nActive <= 0) { //not granted (timeout)
+					info.nActive = GIVEUP; //denote timeout (and give up)
+					synchronized (_pending) { //undo pending
+						_pending.remove(info);
+					}
+					return false; //timeout
+				}
 			}
-		} catch (InterruptedException ex) {
-			throw UiException.Aide.wrap(ex);
 		}
 
 		if (_desktop == null)
@@ -193,6 +212,7 @@ public class PollingServerPush implements ServerPush {
 
 		_carryOver.carryOver();
 		_active = info;
+		return true;
 
 		//Note: we don't mimic inEventListener since 1) ZK doesn't assume it
 		//2) Window depends on it
@@ -200,9 +220,10 @@ public class PollingServerPush implements ServerPush {
 	public void deactivate() {
 		if (_active != null &&
 		Thread.currentThread().equals(_active.thread)) {
-			if (--_active.nActive < 0) {
+			if (--_active.nActive <= 0) {
 				_carryOver.cleanup();
 				_carryOver = null;
+				_active.nActive = 0; //just in case
 				_active = null;
 
 				//wake up onPiggyback
@@ -225,47 +246,6 @@ public class PollingServerPush implements ServerPush {
 		}
 		public String toString() {
 			return "[" + thread + ',' + nActive + ']';
-		}
-	}
-	/** The info to carry over from onPiggyback to the server-push thread.
-	 */
-	private static class CarryOver {
-		/** The execution of onPiggyback. */
-		private final Execution _exec;
-		/** Part of the command: locale. */
-		private Locale _locale;
-		/** Part of the command: time zone. */
-		private TimeZone _timeZone;
-
-		private CarryOver() {
-			_exec = Executions.getCurrent();
-			_locale = Locales.getCurrent();
-			_timeZone = TimeZones.getCurrent();
-		}
-		/** Carry over the info stored in the constructor to
-		 * the current thread.
-		 */
-		private void carryOver() {
-			ExecutionsCtrl.setCurrent(_exec);
-			if (Locales.getThreadLocal() == null)
-				Locales.setThreadLocal(_locale);
-			else
-				_locale = null;
-			if (TimeZones.getThreadLocal() == null)
-				TimeZones.setThreadLocal(_timeZone);
-			else
-				_timeZone = null;
-		}
-		/** Cleans up the info carried from onPiggyback to the current thread.
-		 * <p>Note: {@link #carryOver} and {@link #cleanup} must be
-		 * called in the same thread.
-		 */
-		private void cleanup() {
-			ExecutionsCtrl.setCurrent(null);
-			if (_locale != null)
-				Locales.setThreadLocal(null);
-			if (_timeZone != null)
-				TimeZones.setThreadLocal(null);
 		}
 	}
 }

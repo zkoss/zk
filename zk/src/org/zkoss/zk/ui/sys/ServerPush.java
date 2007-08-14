@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.DesktopUnavailableException;
 
 /**
  * Represents a server-push controller.
@@ -91,7 +92,12 @@ public interface ServerPush {
 	public void setDelay(int min, int max, int factor);
 
 	/** Activate the current thread (which must be a server-push thread).
-	 * The invoker of this method must invoke {@link #deactivate}
+	 * It causes the current thread to wait until the desktop is available
+	 * to access, the desktop no longer exists,
+	 * some other thread interrupts this thread,
+	 * or a certain amount of real time has elapsed.
+	 *
+	 * <p>The invoker of this method must invoke {@link #deactivate}
 	 * in this finally clause.
 	 *
 	 * <p>Note: the activation is applied to the desktop that was
@@ -100,8 +106,17 @@ public interface ServerPush {
 	 * <p>Unlike {@link #onPiggyback},
 	 * this method is NOT called in the context of an event listener.
 	 * Rather, it is called in the thread of a server-push thread.
+	 *
+	 * @param timeout the maximum time to wait in milliseconds.
+	 * Ingored (i.e., never timeout) if non-positive.
+	 * @exception InterruptedException if it is interrupted by other thread
+	 * @exception DesktopUnavailableException if the desktop is removed
+	 * (when activating).
+	 * @return whether it is activated or it is timeout.
+	 * The only reason it returns false is timeout.
 	 */
-	public void activate();
+	public boolean activate(long timeout)
+	throws InterruptedException, DesktopUnavailableException;
 	/** Deactvates the current thread (which must be a server-push thread).
 	 *
 	 * @see #activate

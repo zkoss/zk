@@ -397,7 +397,11 @@ public void run() {
 	}
 
 	/** Activates a server-push thread.
-	 * A server-push thread is a working thread that manipulates a desktop
+	 * It causes the current thread to wait until the desktop is available
+	 * to access, the desktop no longer exists,
+	 * or some other thread interrupts this thread.
+	 *
+	 * <p>A server-push thread is a working thread that manipulates a desktop
 	 * independent of event listeners. It can manipulate the components
 	 * of the desktop as long as it is activated.
 	 *
@@ -422,14 +426,18 @@ public void run() {
 	 *       //prepare something to publish
 	 *       //you can create new components and manipulate them before
 	 *       //activation, as long as they are not attached to the desktop
+	 *
 	 *       Executions.activate(desktop);
 	 *       try {
-	 *         //activated
-	 *         //manipulate the components that are attached the desktop
+	 *         try {
+	 *           //activated
+	 *           //manipulate the components that are attached the desktop
+	 *         } finally {
+	 *           Executions.deactivate(desktop)
+	 *         }
 	 *       } catch (DesktopUnavailableException ex) {
-	 *       } finally {
-	 *         Executions.deactivate(desktop)
-	 *       }
+	 *         //clean up (since desktop is dead)
+	*       }
 	 *   }
 	 * }
 	 *}</code></pre>
@@ -452,15 +460,38 @@ public void run() {
 	 * <p>Note: you don't need to invoke this method in the event listener
 	 * since it is already activated when an event listen starts execution.
 	 *
+	 * @exception InterruptedException if it is interrupted by other thread
 	 * @exception DesktopUnavailableException if the desktop is removed
 	 * (when activating).
 	 * @since 2.5.0
 	 */
-	public static final void activate(Desktop desktop) {
+	public static final void activate(Desktop desktop)
+	throws InterruptedException, DesktopUnavailableException {
+		activate(desktop, 0);
+	}
+	/** Activates a server-push thread with, or until a certain amount of
+	 * real time has elapsed.
+	 * It causes the current thread to wait until the desktop is available
+	 * to access, the desktop no longer exists,
+	 * some other thread interrupts this thread,
+	 * or a certain amount of real time has elapsed.
+	 *
+	 * @param timeout the maximum time to wait in milliseconds.
+	 * Ingored (i.e., never timeout) if non-positive.
+	 * @return whether it is activated or it is timeout.
+	 * The only reason it returns false is timeout.
+	 * @exception InterruptedException if it is interrupted by other thread
+	 * @exception DesktopUnavailableException if the desktop is removed
+	 * (when activating).
+	 * @since 2.5.0
+	 * @see #activate(Desktop)
+	 */
+	public static final boolean activate(Desktop desktop, long timeout)
+	throws InterruptedException, DesktopUnavailableException {
 		final ServerPush spush = ((DesktopCtrl)desktop).getServerPush();
 		if (spush == null)
 			throw new IllegalStateException("Before activation, the server push must be enabled for "+desktop);
-		spush.activate();
+		return spush.activate(timeout);
 	}
 	/** Deactivates a server-push thread.
 	 * @since 2.5.0

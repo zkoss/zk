@@ -362,7 +362,7 @@ import org.zkoss.zk.au.*;
 	/** Process {@link ChildChangedAware}
 	 */
 	private void doChildChanged() {
-		final Set ccawares = new HashSet(), checked = new HashSet(79);
+		final Set ccawares = new LinkedHashSet(), checked = new HashSet(79);
 		doChildChanged(_invalidated, ccawares, checked);
 		doChildChanged(_attached, ccawares, checked);
 		doChildChanged(_smartUpdated.keySet(), ccawares, checked);
