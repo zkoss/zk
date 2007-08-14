@@ -158,7 +158,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 			final ComponentDefinition compdef =
 				pgdef != null ? pgdef.getComponentDefinition(cls, true):
-					page.getComponentDefinition(cls, true);
+				page != null ? 	page.getComponentDefinition(cls, true): null;
 			if (compdef != null) return compdef;
 
 			return lookupDefinitionByDeviceType(exec.getDesktop().getDeviceType(), cls);
