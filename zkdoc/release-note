@@ -46,6 +46,8 @@ ZK 2.5.0
   1769047: Fail to data binding listbox with nested attributes
   1765819: Combobox.setReadonly(boolean) doesn't work
   1766244: IE only (6.0, 7.0): Combobox arrows render outside grid
+  1773652: Error message for non-existent zs fie is wrong
+  1773575: button href attribute with "#" character leads to js-loop
   
 * Upgrade Notes:
   + The signature of PageCtrl's init method is changed.
