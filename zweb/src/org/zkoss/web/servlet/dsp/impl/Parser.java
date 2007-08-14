@@ -474,7 +474,7 @@ public class Parser {
 			if (this.locator == null)
 				throw new ServletException("Unable to load "+uri+" because locator is not specified");
 
-			URL url = this.locator.getResource(uri);
+			URL url = uri.indexOf("://") > 0 ? null: this.locator.getResource(uri);
 			if (url == null) {
 				url = Taglibs.getDefaultURL(uri);
 				if (url == null)

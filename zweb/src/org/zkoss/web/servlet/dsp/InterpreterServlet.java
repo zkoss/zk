@@ -83,11 +83,13 @@ public class InterpreterServlet extends HttpServlet {
 			}
 			public URL getResource(String name) {
 				URL url = null;
-				try {
-					url = _ctx.getResource(name);
-					if (bClsRes && url == null)
-						url = ClassWebResource.getResource(name);
-				} catch (java.net.MalformedURLException ex) { //eat it
+				if (name.indexOf("://") < 0) {
+					try {
+						url = _ctx.getResource(name);
+						if (bClsRes && url == null)
+							url = ClassWebResource.getResource(name);
+					} catch (java.net.MalformedURLException ex) { //eat it
+					}
 				}
 				return url != null ? url: Taglibs.getDefaultURL(name);
 			}
