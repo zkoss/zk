@@ -79,7 +79,7 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	 * @param values The new values of nodes are modified
 	 * @throws IndexOutOfBoundsException - indexFrom < 0 or indexTo > number of parent's children
 	 */
-	public void set(Object parent, int indexFrom, int indexTo, Object[] values) throws Exception{
+	public void set(Object parent, int indexFrom, int indexTo, Object[] values) throws IndexOutOfBoundsException{
 		ArrayList al = (ArrayList)parent;
 		for(int i=indexFrom; i<=indexTo;i++){
 			try{
@@ -98,7 +98,7 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	 * @param indexTo the upper index of the change range
 	 * @throws IndexOutOfBoundsException - indexFrom < 0 or indexTo > number of parent's children
 	 */
-	public void remove(Object parent, int indexFrom, int indexTo) throws Exception{
+	public void remove(Object parent, int indexFrom, int indexTo) throws IndexOutOfBoundsException{
 		ArrayList al = (ArrayList)parent;	
 		for(int i=indexTo; i>=indexFrom;i--)
 		try{
@@ -134,7 +134,7 @@ public class SimpleTreeModel extends AbstractTreeModel{
 	 * @param newNodes New nodes which are inserted
 	 * @throws IndexOutOfBoundsException - indexFrom < 0 or indexTo > number of parent's children
 	 */
-	public void insert(Object parent, int indexFrom, int indexTo, Object[] newNodes) throws Exception{
+	public void insert(Object parent, int indexFrom, int indexTo, Object[] newNodes) throws IndexOutOfBoundsException{
 		ArrayList al = (ArrayList)parent;
 		for(int i=indexFrom; i<=indexTo; i++){
 			try{
