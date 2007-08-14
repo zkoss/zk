@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.PageConfig;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.impl.PageImpl;
 
@@ -80,7 +81,7 @@ public class DumbFailoverManager implements FailoverManager {
 			recover((Page)it.next());
 		_killed = null;
 	}
-	private static void recover(Page killed) {
+	private static void recover(final Page killed) {
 		//recover page
 		final Page page = new PageImpl(
 			killed.getLanguageDefinition(), //required; never null
@@ -89,11 +90,14 @@ public class DumbFailoverManager implements FailoverManager {
 			killed.getZScriptLanguage()); //If unkown, just pass null (Java assumed)
 
 		((PageCtrl)page).init(
-			killed.getId(), //required; never null
-			killed.getTitle(), //if unknown, just pass null
-			killed.getStyle(), //if unknown, just pass null
-			((PageCtrl)killed).getHeaders(), //if unknown, just pass null
-			killed.getUuid()); //required; never null
+			new PageConfig() {
+				public String getId() {return killed.getId();} //required; never null
+				public String getUuid() {return killed.getUuid();} //required; never null
+				public String getTitle() {return killed.getTitle();} //if unknown, just pass null
+				public String getStyle() {return killed.getStyle();} //if unknown, just pass null
+				public String getHeaders() {return ((PageCtrl)killed).getHeaders();} //if unknown, just pass null
+				public String getRootAttributes() {return ((PageCtrl)killed).getRootAttributes();} //if unknown, just pass null
+			});
 			//optional: copy killed's attrs to page
 
 		for (Iterator it = killed.getRoots().iterator(); it.hasNext();) {
