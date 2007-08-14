@@ -63,22 +63,26 @@ public class ServerPush {
 			_info = info;
 		}
 		public void run() {
-			while (!_ceased) {
-				Threads.pause(2000); //Update each two seconds
-				Executions.activate(_desktop);
-				try {
-					_info.setValue(Integer.toString(++_cnt));
-				} catch (RuntimeException ex) {
-					log.error(ex);
-					throw ex;
-				} catch (Error ex) {
-					log.error(ex);
-					throw ex;
-				} finally {
-					Executions.deactivate(_desktop);
+			try {
+				while (!_ceased) {
+					Threads.pause(2000); //Update each two seconds
+					Executions.activate(_desktop);
+					try {
+						_info.setValue(Integer.toString(++_cnt));
+					} catch (RuntimeException ex) {
+						log.error(ex);
+						throw ex;
+					} catch (Error ex) {
+						log.error(ex);
+						throw ex;
+					} finally {
+						Executions.deactivate(_desktop);
+					}
 				}
+				log.info("The server push thread ceased");
+			} catch (InterruptedException ex) {
+				log.info("The server push thread interrupted", ex);
 			}
-			log.info("The server push thread ceased");
 		}
 	}
 }
