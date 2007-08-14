@@ -19,8 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.net.URL;
-import java.io.IOException;
-import java.io.FileNotFoundException;
 
 import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
@@ -173,8 +171,9 @@ public class ZScript implements Condition, java.io.Serializable {
 	 * Used only if this object is contructed with {@link #ZScript(String, String, Condition, Locator)}.
 	 * @param comp the component when this zscript is interpreted.
 	 * Used only if this object is contructed with {@link #ZScript(String, String, Condition, Locator)}.
+	 * @exception UiException if faied to load the content
 	 */
-	public String getContent(Page page, Component comp) throws IOException {
+	public String getContent(Page page, Component comp) {
 		if (_cnt != null)
 			return _cnt;
 
@@ -190,7 +189,8 @@ public class ZScript implements Condition, java.io.Serializable {
 				throw new UiException("The zscript URL, "+_url+", is evaluated to \""+s+'"');
 			url = _locator.getResource(s);
 			if (url == null)
-				throw new FileNotFoundException("File not found: "+s+" (evaluated from "+_url+')');
+				throw new UiException("File not found: "+s+" (evaluated from "+_url+')');
+				//note: we don't throw FileNotFoundException since Tomcat 'eats' it
 		} else {
 			url = (URL)_url;
 		}
@@ -200,9 +200,10 @@ public class ZScript implements Condition, java.io.Serializable {
 			//at a database. Reason: it is Locator's job to implement
 			//the relevant function for URL (including lastModified).
 		if (o == null)
-			throw new FileNotFoundException("File not found: "+_url);
+			throw new UiException("File not found: "+_url);
+			//note: we don't throw FileNotFoundException since Tomcat 'eats' it
 		if (!(o instanceof String))
-			throw new IOException("Illegal file type: "+o.getClass());
+			throw new UiException("Illegal file type: "+o.getClass());
 		return (String)o;
 	}
 

@@ -29,7 +29,6 @@ import java.util.Set;
 import java.util.LinkedHashSet;
 import java.io.File;
 import java.io.Reader;
-import java.io.FileNotFoundException;
 import java.net.URL;
 
 import org.zkoss.lang.D;
@@ -259,7 +258,8 @@ public class Parser {
 					zs = new ZScript(zslang, zsrc, null, getLocator()); //URL in EL
 				} else {
 					final URL url = getLocator().getResource(zsrc);
-					if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+pi.getLocator());
+					if (url == null) throw new UiException("File not found: "+zsrc+", at "+pi.getLocator());
+						//don't throw FileNotFoundException since Tomcat 'eats' it
 					zs = new ZScript(zslang, url, null);
 				}
 
@@ -600,7 +600,7 @@ public class Parser {
 		}
 	}
 	private void parseZScript(NodeInfo parent, Element el,
-	AnnotationHelper annHelper) throws Exception {
+	AnnotationHelper annHelper) {
 		if (el.getAttributeItem("forEach") != null)
 			throw new UiException("forEach not applicable to <zscript>, "+el.getLocator());
 		if (annHelper.clear())
@@ -630,7 +630,8 @@ public class Parser {
 				zs = new ZScript(zslang, zsrc, cond, getLocator());
 			} else {
 				final URL url = getLocator().getResource(zsrc);
-				if (url == null) throw new FileNotFoundException("File not found: "+zsrc+", at "+el.getLocator());
+				if (url == null) throw new UiException("File not found: "+zsrc+", at "+el.getLocator());
+					//don't throw FileNotFoundException since Tomcat 'eats' it
 				zs = new ZScript(zslang, url, cond);
 			}
 
