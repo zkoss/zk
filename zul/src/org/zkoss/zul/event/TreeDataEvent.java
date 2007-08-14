@@ -29,30 +29,44 @@ public class TreeDataEvent {
 	/** Identifies changing contents of nodes. */
 	public static final int CONTENTS_CHANGED = 0;
     /** Identifies the addition of children to a node. */    
-	public static final int NODE_ADDED = 1;
+	public static final int INTERVAL_ADDED = 1;
     /** Identifies the removal of children to a node. */   
-	public static final int NODE_REMOVED = 2;
+	public static final int INTERVAL_REMOVED = 2;
 
 	private final TreeModel _model;
 	private final int _type;
-	private final int[] _indexes;
+	private final int _indexFrom;
+	private final int _indexTo;
 	private final Object _parent;
 
 	/** Contructor.
 	 *
 	 * @param type one of {@link #CONTENTS_CHANGED},
-	 * {@link #NODE_ADDED}, or {@link #NODE_REMOVED}.
+	 * {@link #INTERVAL_ADDED}, or {@link #INTERVAL_REMOVED}.
 	 * @param parent - the parent node that its children being modified .
-	 * @param indexes - the indexes of children being modified.
+	 * @param indexFrom the lower index of the change range
+	 * @param indexTo the upper index of the change range
 	 */
-	public TreeDataEvent(TreeModel model, int type, Object parent, int[] indexes) {
+	public TreeDataEvent(TreeModel model, int type, Object parent, int indexFrom, int indexTo) {
 		if (model == null)
 			throw new NullPointerException();
+		checkInterval(indexFrom,indexTo);
 		_model = model;
 		_type = type;
 		_parent = parent;
-		_indexes = indexes;
+		_indexFrom = indexFrom;
+		_indexTo = indexTo;
 	}
+	
+	/*
+	 * Check the interval
+	 */
+	private static void checkInterval(int from, int to) {
+        if (from > to)
+            throw new IllegalArgumentException("'from' should be less than or equal to 'to', from: "+from+", to: "+to);
+        if (from < 0)
+            throw new ArrayIndexOutOfBoundsException("from : "+from);
+    }
 	
 	/** Returns the tree model that fires this event.
 	 */
@@ -61,7 +75,7 @@ public class TreeDataEvent {
 	}
 	
 	/** Returns the event type. One of {@link #CONTENTS_CHANGED},
-	 * {@link #NODE_ADDED}, or {@link #NODE_REMOVED}.
+	 * {@link #INTERVAL_ADDED}, or {@link #INTERVAL_REMOVED}.
 	 */
 	public int getType() {
 		return _type;
@@ -76,11 +90,19 @@ public class TreeDataEvent {
 	}
 	
 	/**
-	 * Returns the indexes of children being modified.
-	 * @return the indexes of children being modified.
+	 * Return the lower index of the change range
+	 * @return the lower index of the change range
+	 */ 
+	public int getIndexFrom(){
+		return _indexFrom;
+	}
+	
+	/**
+	 * Return the upper index of the change range
+	 * @return the upper index of the change range
 	 */
-	public int[] getIndexes(){
-		return _indexes;
+	public int getIndexTo(){
+		return _indexTo;
 	}
 
 }

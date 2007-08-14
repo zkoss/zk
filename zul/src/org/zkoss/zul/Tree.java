@@ -754,27 +754,30 @@ public class Tree extends XulElement {
 	 * Handles when the tree model's content changed 
 	 */
 	private void onTreeDataChange(TreeDataEvent event) {	
-			List l = getPath(event.getParent());
-			int[] indexes =event.getIndexes();
-			Treeitem ti = getTreeitemByPath(l);
-			Object data = event.getParent();
-			//Loop through indexes array
-			for(int i=0;i<indexes.length;i++)
-			{
-				int index = indexes[i];
-				switch (event.getType()) {
-				case TreeDataEvent.NODE_ADDED:
-					newInsertIndexHelper(indexes,i);
-					onTreeDataInsert(ti,indexes[i],data);
-					break;
-				case TreeDataEvent.NODE_REMOVED:
-					onTreeDataRemoved(ti,index);
-					break;
-				case TreeDataEvent.CONTENTS_CHANGED:
-					onTreeDataContentChanged(ti,index,data);
-					break;
-				}
-			}
+		List l = getPath(event.getParent());
+		Treeitem ti = getTreeitemByPath(l);
+		Object data = event.getParent();
+		int indexFrom = event.getIndexFrom();
+		int indexTo = event.getIndexTo();
+		/* 
+		 * Loop through indexes array
+		 * if INTERVAL_REMOVED, from end to beginning
+		 */
+		switch (event.getType()) {
+		case TreeDataEvent.INTERVAL_ADDED:
+			for(int i=indexFrom;i<=indexTo;i++)
+				onTreeDataInsert(ti,i,data);
+			break;
+		case TreeDataEvent.INTERVAL_REMOVED:
+			for(int i=indexTo;i>=indexFrom;i--)
+				onTreeDataRemoved(ti,i);
+			break;
+		case TreeDataEvent.CONTENTS_CHANGED:
+			for(int i=indexFrom;i<=indexTo;i++)
+				onTreeDataContentChanged(ti,i,data);
+			break;
+		}
+			
 	}
 	
 	/*
@@ -790,11 +793,10 @@ public class Tree extends XulElement {
 		renderItem(newTi,_model.getChild(data,index));
 		if(parent.getTreechildren()!=null){
 			ch = parent.getTreechildren();
-		}
-		else{
+		}else{
 			ch= new Treechildren();
 		}
-		List siblings = getTreeitems(ch);
+		List siblings = ch.getChildren();
 		//if there is no sibling or new item is inserted at end.
 		if(siblings.size()==0 || index == siblings.size() ){
 			ch.insertBefore(newTi, null);
@@ -804,26 +806,12 @@ public class Tree extends XulElement {
 		ch.setParent(parent);
 		parent.setOpen(true);
 	}
-	
-	/*
-	 * Helper method to calculate the new index after modification that
-	 * caused by period indexes
-	 */
-	private void newInsertIndexHelper(int[] indexes, int cur)
-	{
-		for(int i=cur;i<indexes.length;i++){
-			if(indexes[cur] >indexes[i]){
-				indexes[cur]++;
-			}
-		}
-	}
 		
 	/*
 	 * Handle event that child is removed
 	 */
 	private void onTreeDataRemoved(Treeitem parent, int index){
-		List items = getTreeitems((Treechildren)parent.getTreechildren());
-		
+		List items = parent.getTreechildren().getChildren();		
 		if(items.size()>1){
 			((Treeitem)items.get(index)).detach();
 		}else{
@@ -850,35 +838,11 @@ public class Tree extends XulElement {
 	private Treeitem getTreeitemByPath(List path)
 	{
 		Iterator itr = path.iterator();
-		Treeitem ti = (Treeitem)getTreeitems(this.getTreechildren()).get(0);
-		while (itr.hasNext( )) { //GO THROU PATH
-			ti = getTreeitemByPathHelper(ti,Integer.parseInt(itr.next().toString()));	
+		Treeitem ti =(Treeitem)this.getTreechildren().getChildren().get(0);
+		while (itr.hasNext( )) { //GO THROUGH PATH
+			ti = (Treeitem)ti.getTreechildren().getChildren().get(Integer.parseInt(itr.next().toString()));
 		} 
 		return ti;
-	}
-
-	/*
-	 * Helper function for getTreeitemByPath
-	 */
-	private Treeitem getTreeitemByPathHelper(Treeitem parent, int index)
-	{
-		List l = getTreeitems(parent.getTreechildren());
-		return (Treeitem)l.get(index);
-	}
-	
-	/*
-	 * return Treeitems from a Treechildren
-	 */
-	private List getTreeitems(Treechildren parent)
-	{	
-		List li = parent.getChildren();
-		List l = new ArrayList();
-		for(int i=0; i< li.size();i++){
-			if(li.get(i) instanceof Treeitem){
-				l.add(li.get(i));
-			}
-		}
-		return l;
 	}
 	
 	/*
@@ -901,26 +865,24 @@ public class Tree extends XulElement {
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
 	 */
-	public void setModel(TreeModel model) throws Exception
-	{
+	public void setModel(TreeModel model) throws Exception{
 		_model = model;
 		syncModel();
 		initDataListener();
 	}
 	
-//	-- ListModel dependent codes --//
+	//--TreeModel dependent codes--//
 	/** Returns the list model associated with this tree, or null
 	 * if this tree is not associated with any tree data model.
+	 * @return the list model associated with this tree
 	 */
-	public TreeModel getModel()
-	{
+	public TreeModel getModel(){
 		return _model;
 	}
 	
 	/** Synchronizes the tree to be consistent with the specified model.
 	 */
-	private void syncModel() throws Exception
-	{
+	private void syncModel() throws Exception{
 		if (_renderer == null)
 			_renderer = getRealRenderer();
 		renderTree();
@@ -936,8 +898,7 @@ public class Tree extends XulElement {
 	 * @param renderer the renderer, or null to use the default.
 	 * @exception UiException if failed to initialize with the model
 	 */
-	public void setTreeitemRenderer(TreeitemRenderer renderer)
-	{
+	public void setTreeitemRenderer(TreeitemRenderer renderer){
 		_renderer = renderer;
 	}
 	
@@ -945,16 +906,14 @@ public class Tree extends XulElement {
 	 * renderer is used.
 	 * @return the renderer to render each item, or null if the default
 	 */
-	public TreeitemRenderer getTreeitemRenderer()
-	{
+	public TreeitemRenderer getTreeitemRenderer(){
 		return _renderer;
 	}
 	
 	/*
 	 * Render the root of tree
 	 */
-	private void renderTree() throws Exception
-	{
+	private void renderTree() throws Exception{
 		_treechildren = null;
 		Treechildren children = new Treechildren();
 		Treeitem ti = new Treeitem();
@@ -967,20 +926,18 @@ public class Tree extends XulElement {
 		return _defRend;
 	}
 	private static final TreeitemRenderer _defRend = new TreeitemRenderer() {
-		public void render(Treeitem ti, Object data)
-		{
-				
-				Treecell tc = new Treecell(data.toString());
-				Treerow tr = null;
-				if(ti.getTreerow()==null){
-					tr = new Treerow();
-					tr.setParent(ti);
-				}else{
-					tr = ti.getTreerow(); 
-					tr.getChildren().clear();
-				}			
-				tc.setParent(tr);
-				ti.setOpen(false);
+		public void render(Treeitem ti, Object data){
+			Treecell tc = new Treecell(data.toString());
+			Treerow tr = null;
+			if(ti.getTreerow()==null){
+				tr = new Treerow();
+				tr.setParent(ti);
+			}else{
+				tr = ti.getTreerow(); 
+				tr.getChildren().clear();
+			}			
+			tc.setParent(tr);
+			ti.setOpen(false);
 		}
 	};
 	/** Returns the renderer used to render items.
@@ -993,16 +950,13 @@ public class Tree extends XulElement {
 	private class Renderer implements java.io.Serializable {
 		private final TreeitemRenderer _renderer;
 		private boolean _rendered, _ctrled;
-
 		private Renderer() {
 			_renderer = getRealRenderer();
 		}
 		
 		private void render(Treeitem item) throws Throwable {
-			
 			if (!item.isOpen())
 				return; //nothing to do
-
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
 				_ctrled = true;
@@ -1100,8 +1054,7 @@ public class Tree extends XulElement {
 			*/
 			if(children.getItemCount()>0)
 				children.getChildren().clear();
-		}
-		else{
+		}else{
 			children = new Treechildren();
 			_renderer.render(item, node);
 		}
@@ -1113,9 +1066,7 @@ public class Tree extends XulElement {
 			_renderer.render(item, node);
 			if(item.getTreechildren()!=null)
 				item.getTreechildren().detach();
-		}
-		else
-		{
+		}else{
 			for(int i=0; i< _model.getChildCount(node);i++ ){
 				Treeitem ti = new Treeitem();
 				Object data = _model.getChild(node, i);
@@ -1159,11 +1110,7 @@ public class Tree extends XulElement {
 			renderer.doFinally();
 		}
 	}
-	
-	/*
-	 * Remove from TreeModel Aug 13 07
-	 */
-	
+
 	/*
 	 * Return a node which is an associated Treeitem ti in a Tree tree 
 	 */

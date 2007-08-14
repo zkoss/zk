@@ -26,7 +26,7 @@ package org.zkoss.zul;
  * @see Tree
  */
 public interface TreeitemRenderer {
-	/** Renders the data to the specified list item.
+	/** Renders the data to the specified tree item.
 	 *
 	 * @param item the Treeitem to render the result.
 	 * Note: when this method is called, the listitem has no child
