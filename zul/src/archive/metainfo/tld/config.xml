@@ -18,6 +18,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</version>
 	<taglib>
 		<taglib-uri>http://www.zkoss.org/dsp/zul/core</taglib-uri>
-		<taglib-location>/metainfo/tld/zul/core.dsp.tld</taglib-location>
+		<taglib-location>/web/WEB-INF/tld/zul/core.dsp.tld</taglib-location>
 	</taglib>
 </config>
