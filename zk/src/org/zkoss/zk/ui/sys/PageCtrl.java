@@ -44,37 +44,34 @@ public interface PageCtrl {
 	 */
 	public static final String ATTR_REDRAW_BY_INCLUDE = "org.zkoss.zk.ui.redrawByInclude";
 
-	/** Initializes this page by assigning an identifier, a title, and adding it
+	/** Initializes this page by assigning the info provided by
+	 * the specified {@link PageConfig}, and then adds it
 	 * to a desktop (by use of {@link Execution#getDesktop}).
 	 *
 	 * <p>This method shall be called only after the current execution
 	 * is activated.
 	 *
-	 * @param id the page identifier, or null if auto-generation is required.
-	 * Note: it is ignored if an identitified is always assigned to this page,
-	 * i.e., {@link org.zkoss.zk.ui.Page#setId} was called with a non-empty value before.
-	 * @param title the page title, or null if not to assign a new title.
-	 * Note: it is ignored if a title is always assigned to this page,
-	 * i.e., {@link org.zkoss.zk.ui.Page#setTitle} was called with a non-empty
-	 * value before.
-	 * @param style the page's CSS style, or null if not to assign a new style.
-	 * Note: it is ignored if a style is always assigned to this page,
-	 * i.e., {@link org.zkoss.zk.ui.Page#setStyle} was called with a non-empty
-	 * value before.
-	 * @param headers the header elements, or null if no header is required.
-	 * @param uuid the page's UUID. It is used only if in the recovering mode
-	 * ({@link ExecutionCtrl#isRecovering}).
+	 * @param config the info about how to initialize this page
+	 * @since 2.5.0
 	 */
-	public void init(String id, String title, String style, String headers,
-		String uuid);
+	public void init(PageConfig config);
 	/** Called when this page is about to be detroyed.
 	 * It is called by desktop, after removing it from the desktop.
 	 */
 	public void destroy();
 
-	/** Returns the (HTML) header elements declared in this page.
+	/** Returns the header elements declared in this page (never null).
+	 * An empty string is returned if special header is defined.
+	 * <p>For HTML, the header element is the HEAD element.
 	 */
 	public String getHeaders();
+	/** Returns the attributes of the root element declared in this page
+	 * (never null).
+	 * An empty string is returned if no special attribute is declared.
+	 * <p>For HTML, the root element is the HTML element.
+	 * @since 2.5.0
+	 */
+	public String getRootAttributes();
 
 	/** Resolves a variable thru all registered variable resolvers
 	 * ({@link org.zkoss.zk.scripting.VariableResolver}).

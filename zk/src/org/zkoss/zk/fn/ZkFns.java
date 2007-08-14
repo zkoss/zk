@@ -322,10 +322,19 @@ public class ZkFns {
 	//might have old version core.dsp.tld
 	}
 
-	/** Returns HTML header elements of the specified page.
+	/** Returns the content that will be placed inside the header element
+	 * of the specified page.
+	 * For HTML, the header element is the HEAD element.
 	 */
 	public static final String outPageHeaders(Page page) {
 		return ((PageCtrl)page).getHeaders();
+	}
+	/** Returns the content that will be generated
+	 * as the attributes of the root element of the specified page.
+	 * For HTML, the root element is the HTML element.
+	 */
+	public static final String outRootAttributes(Page page) {
+		return ((PageCtrl)page).getRootAttributes();
 	}
 
 	/** Generates Locale-dependent strings in JavaScript syntax.

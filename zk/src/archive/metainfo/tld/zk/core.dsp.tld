@@ -68,7 +68,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	java.lang.String outPageHeaders(org.zkoss.zk.ui.Page)
 		</function-signature>
 		<description>
-	Returns HTML header tags defined in the specified page.
+	Returns the content that will be placed inside the header element
+	of the specified page.
+		</description>
+	</function>
+	<function>
+		<name>outRootAttributes</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outRootAttributes(org.zkoss.zk.ui.Page)
+		</function-signature>
+		<description>
+	Returns the content that will be placed as the attributes of
+	the root element of the specified page.
 		</description>
 	</function>
 

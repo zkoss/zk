@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import javax.servlet.jsp.el.FunctionMapper;
 
@@ -32,10 +32,9 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.el.FunctionMappers;
 import org.zkoss.el.Taglib;
+import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
@@ -45,7 +44,7 @@ import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.scripting.VariableResolver;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
-
+import org.zkoss.zk.ui.sys.PageConfig;
 /**
  * A page definition.
  * It represents a ZUL page.
@@ -61,14 +60,16 @@ public class PageDefinition extends NodeInfo {
 	private String _path = "";
 	/** The zscript language. */
 	private String _zslang = "Java";
-	private final List _taglibs = new LinkedList();
+	private List _taglibs;
 	private FunctionMapper _funmap;
 	/* List(InitiatorInfo). */
-	private final List _initdefs = new LinkedList();
+	private List _initdefs;
 	/** List(VariableResolverInfo). */
-	private final List _resolvdefs = new LinkedList();
+	private List _resolvdefs;
 	/** List(HeaderInfo). */
-	private final List _headerdefs = new LinkedList();
+	private List _headerdefs;
+	/** Map(String name, String value). */
+	private Map _rootAttrs;
 	private final ComponentDefinitionMap _compdefs;
 
 	/** Constructor.
@@ -204,8 +205,10 @@ public class PageDefinition extends NodeInfo {
 	/** Imports the component definitions from the specified definition.
 	 */
 	public void imports(PageDefinition pgdef) {
-		for (Iterator it = pgdef._initdefs.iterator(); it.hasNext();)
-			addInitiatorInfo((InitiatorInfo)it.next());
+		if (_initdefs != null)
+			for (Iterator it = pgdef._initdefs.iterator(); it.hasNext();)
+				addInitiatorInfo((InitiatorInfo)it.next());
+
 		for (Iterator it = pgdef._compdefs.getNames().iterator();
 		it.hasNext();) {
 			final String name = (String)it.next();
@@ -217,6 +220,14 @@ public class PageDefinition extends NodeInfo {
 	public void addInitiatorInfo(InitiatorInfo init) {
 		if (init == null)
 			throw new IllegalArgumentException("null");
+
+		if (_initdefs == null) {
+			synchronized (this) {
+				if (_initdefs == null)
+					_initdefs = new LinkedList();
+			}
+		}
+
 		synchronized (_initdefs) {
 			_initdefs.add(init);
 		}
@@ -226,7 +237,7 @@ public class PageDefinition extends NodeInfo {
 	 * It never returns null.
 	 */
 	public List doInit(Page page) {
-		if (_initdefs.isEmpty())
+		if (_initdefs == null)
 			return Collections.EMPTY_LIST;
 
 		final List inits = new LinkedList();
@@ -251,6 +262,15 @@ public class PageDefinition extends NodeInfo {
 	public void addVariableResolverInfo(VariableResolverInfo resolver) {
 		if (resolver == null)
 			throw new IllegalArgumentException("null");
+
+		if (_resolvdefs == null) {
+			synchronized (this) {
+				if (_resolvdefs == null)
+					_resolvdefs = new LinkedList();
+					//no need to call Threads.dummy since the chance is too low
+			}
+		}
+
 		synchronized (_resolvdefs) {
 			_resolvdefs.add(resolver);
 		}
@@ -259,7 +279,7 @@ public class PageDefinition extends NodeInfo {
 	 * definition.
 	 */
 	public List newVariableResolvers(Page page) {
-		if (_resolvdefs.isEmpty())
+		if (_resolvdefs == null)
 			return Collections.EMPTY_LIST;
 
 		final List resolvs = new LinkedList();
@@ -278,26 +298,79 @@ public class PageDefinition extends NodeInfo {
 		return resolvs;
 	}
 
-	/** Adds a header definition ({@link HeaderInfo}.
+	/** Adds a header definition ({@link HeaderInfo}).
 	 */
 	public void addHeaderInfo(HeaderInfo header) {
 		if (header == null)
 			throw new IllegalArgumentException("null");
+
+		if (_headerdefs == null) {
+			synchronized (this) {
+				if (_headerdefs == null)
+					_headerdefs = new LinkedList();
+					//no need to call Threads.dummy since the chance is too low
+			}
+		}
 		synchronized (_headerdefs) {
 			_headerdefs.add(header);
 		}
 	}
-	/** Converts the header definitions (added by {@link #addHeaderInfo} to
+	/** Converts the header definitions (added by {@link #addHeaderInfo}) to
 	 * HTML tags.
 	 */
 	public String getHeaders(Page page) {
-		if (_headerdefs.isEmpty())
+		if (_headerdefs == null)
 			return "";
 
 		final StringBuffer sb = new StringBuffer(256);
 		synchronized (_headerdefs) {
 			for (Iterator it = _headerdefs.iterator(); it.hasNext();)
 				sb.append(((HeaderInfo)it.next()).toHTML(page)).append('\n');
+		}
+		return sb.toString();
+	}
+	/** Adds a root attribute.
+	 * The previous attributee of the same will be replaced.
+	 *
+	 * @param value the value. If null, the attribute is removed.
+	 * It can be an EL expression.
+	 */
+	public void setRootAttribute(String name, String value) {
+		if (name == null || name.length() == 0)
+			throw new IllegalArgumentException();
+
+		if (_rootAttrs == null) {
+			if (value == null)
+				return; //nothing to
+
+			synchronized (this) {
+				if (_rootAttrs == null)
+					_rootAttrs = new LinkedHashMap();
+					//no need to call Threads.dummy since the chance is too low
+			}
+		}
+		synchronized (_rootAttrs) {
+			if (value == null) _rootAttrs.remove(name);
+			else _rootAttrs.put(name, value);
+		}
+	}
+	/** Converts the header definitions (added by {@link #setRootAttribute})
+	 * to the attributes of the root element.
+	 * For HTML, the root element is the HTML element.
+	 */
+	public String getRootAttributes(Page page) {
+		if (_rootAttrs == null || _rootAttrs.isEmpty())
+			return "";
+
+		final StringBuffer sb = new StringBuffer(256);
+		synchronized (_rootAttrs) {
+			for (Iterator it = _rootAttrs.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final String val = (String)
+					Executions.evaluate(page, (String)me.getValue(), String.class);
+				if (val != null)
+					HTMLs.appendAttribute(sb, (String)me.getKey(), val);
+			}
 		}
 		return sb.toString();
 	}
@@ -369,6 +442,15 @@ public class PageDefinition extends NodeInfo {
 	public void addTaglib(Taglib taglib) {
 		if (taglib == null)
 			throw new IllegalArgumentException("null");
+
+		if (_taglibs == null) {
+			synchronized (this) {
+				if (_taglibs == null)
+					_taglibs = new LinkedList();
+					//no need to call Threads.dummy since the chance is too low
+			}
+		}
+
 		synchronized (_taglibs) {
 			_taglibs.add(taglib);
 			_funmap = null; //ask for re-parse
@@ -391,9 +473,21 @@ public class PageDefinition extends NodeInfo {
 	/** Initializes a page after execution is activated.
 	 * It setup the identifier and title, and adds it to desktop.
 	 */
-	public void init(Page page, boolean evalHeaders) {
+	public void init(final Page page, final boolean evalHeaders) {
 		((PageCtrl)page).init(
-			_id, _title, _style, evalHeaders ? getHeaders(page): "", null);
+			new PageConfig() {
+				public String getId() {return _id;}
+				public String getUuid() {return null;}
+				public String getTitle() {return _title;}
+				public String getStyle() {return _style;}
+				public String getHeaders() {
+					return evalHeaders ?
+						PageDefinition.this.getHeaders(page): "";
+				}
+				public String getRootAttributes() {
+					return PageDefinition.this.getRootAttributes(page);
+				}
+			});
 	}
 
 	//NodeInfo//

@@ -327,7 +327,14 @@ public class UiEngineImpl implements UiEngine {
 				}
 			} else {
 				//FUTURE: a way to allow richlet to set page ID
-				((PageCtrl)page).init(null, null, null, null, null);
+				((PageCtrl)page).init(new PageConfig() {
+					public String getId() {return null;}
+					public String getUuid() {return null;}
+					public String getTitle() {return null;}
+					public String getStyle() {return null;}
+					public String getHeaders() {return null;}
+					public String getRootAttributes() {return null;}
+				});
 				richlet.service(page);
 			}
 			if (exec.isVoided())

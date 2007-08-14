@@ -73,6 +73,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.PageConfig;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.Names;
@@ -143,6 +144,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private transient LanguageDefinition _langdef;
 	/** The header tags. */
 	private String _headers = "";
+	/** The root attributes. */
+	private String _rootAttrs = "";
 	/** A map of interpreters Map(String zslang, Interpreter ip). */
 	private transient Map _ips;
 	private transient NS _ns;
@@ -531,8 +534,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	//-- PageCtrl --//
-	public void init(String id, String title, String style, String headers,
-	String uuid) {
+	public void init(PageConfig config) {
 		if (_desktop != null)
 			throw new IllegalStateException("Don't init twice");
 
@@ -544,6 +546,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		initVariables();
 
 		if (((ExecutionCtrl)exec).isRecovering()) {
+			final String uuid = config.getUuid(), id = config.getId();
 			if (uuid == null || id == null)
 				throw new IllegalArgumentException("both id and uuid are required in recovering");
 			_uuid = uuid;
@@ -556,7 +559,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			if (_uuid == null)
 				_uuid = ((DesktopCtrl)_desktop).getNextUuid();
 
-			if (_id == null && id != null && id.length() != 0) _id = id;
+			if (_id == null) {
+				final String id = config.getId();
+				if (id != null && id.length() != 0) _id = id;
+			}
 			if (_id != null)
 				_id = (String)exec.evaluate(this, _id, String.class);
 			if (_id != null && _id.length() != 0) {
@@ -568,9 +574,19 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			}
 		}
 
-		if (headers != null) _headers = headers;
-		if (_title.length() == 0 && title != null) setTitle(title);
-		if (_style.length() == 0 && style != null) setStyle(style);
+		String s = config.getHeaders();
+		if (s != null) _headers = s;
+		s = config.getRootAttributes();
+		if (s != null) _rootAttrs = s;
+
+		if (_title.length() == 0) {
+			s = config.getTitle();
+			if (s != null) setTitle(s);
+		}
+		if (_style.length() == 0) {
+			s = config.getStyle();
+			if (s != null) setStyle(s);
+		}
 
 		((DesktopCtrl)_desktop).addPage(this);	
 	}
@@ -641,6 +657,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 	public String getHeaders() {
 		return _headers;
+	}
+	public String getRootAttributes() {
+		return _rootAttrs;
 	}
 
 	public final Desktop getDesktop() {

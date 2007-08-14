@@ -389,6 +389,8 @@ public class Parser {
 					throw new UiException("zscript-language cannot be empty, "+pi.getLocator());
 				noEL("zscript-language", val, pi);
 				pgdef.setZScriptLanguage(val);
+			} else if (nm.startsWith("xmlns:") || "xmlns".equals(nm)) {
+				pgdef.setRootAttribute(nm, val);
 			} else {
 				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
 			}
