@@ -65,7 +65,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<separator bar="true"/>
 	<button label="serialize">
 		<attribute name="onClick"><![CDATA[
-	new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(main);
+	new java.io.ObjectOutputStream(new java.io.ByteArrayOutputStream()).writeObject(main);
 	new Label("Done").setParent(main);
 		]]></attribute>
 	</button>
