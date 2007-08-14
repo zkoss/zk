@@ -29,6 +29,7 @@ ZK 2.5.0
   1770594: Tab: use class instead of hardcode background to style
   1770613: Groupbox: use class instead of hardcode background to style
   1770614: Slider: use class instead of hardcode background to style
+  1771384: a way to add xmlns on generated <html> tag
   1772915: Desktop supports getPageIfAny
 
 * Bugs:
@@ -47,6 +48,7 @@ ZK 2.5.0
   1766244: IE only (6.0, 7.0): Combobox arrows render outside grid
   
 * Upgrade Notes:
+  + The signature of PageCtrl's init method is changed.
   + Utilities of JSP, such as JspLoaderServlet, are removed, since they are
     nothing to do with ZK
   + About zk.xml:
