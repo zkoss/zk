@@ -48,7 +48,7 @@ ZK 2.5.0
   1766244: IE only (6.0, 7.0): Combobox arrows render outside grid
   1773652: Error message for non-existent zs fie is wrong
   1773575: button href attribute with "#" character leads to js-loop
-  1768343: zk-2.4.1 - annotations bug
+  1768343: zk-2.4.1 - annotations not available at constructor
  
 * Upgrade Notes:
   + The signature of PageCtrl's init method is changed.
