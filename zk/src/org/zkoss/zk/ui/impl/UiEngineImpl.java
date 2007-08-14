@@ -483,8 +483,6 @@ public class UiEngineImpl implements UiEngine {
 				exec.createComponents(childdef.getMacroURI(), parent, props)};
 		} else {
 			final Component child = uf.newComponent(page, parent, childInfo);
-			childInfo.applyProperties(child, false);
-				//def's applyProperties was called by uf.newComponent
 
 			execCreate(uf, exec, page, childInfo, child); //recursive
 

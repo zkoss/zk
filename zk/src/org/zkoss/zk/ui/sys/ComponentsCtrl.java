@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
@@ -86,17 +87,32 @@ public class ComponentsCtrl {
 		return isAutoId(id);
 	}
 
-	/** Returns the current component definition, which is used only by
+	/** Returns the current component info {@link ComponentInfo},
+	 * definition ({@link ComponentDefinition} or null, which is used only by
+	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with
 	 * {@link org.zkoss.zk.ui.AbstractComponent}.
+	 * @since 2.5.0
 	 */
-	public static ComponentDefinition getCurrentDefinition() {
-		return (ComponentDefinition)_compdef.get();
+	public static final Object getCurrentInfo() {
+		return _compdef.get();
 	}
 	/** Sets the current component definition, which is used only by
+	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with
 	 * {@link org.zkoss.zk.ui.AbstractComponent}.
+	 * <p>Used only internally.
+	 * @since 2.5.0
 	 */
-	public static void setCurrentDefinition(ComponentDefinition compdef) {
+	public static final void setCurrentInfo(ComponentDefinition compdef) {
 		_compdef.set(compdef);
+	}
+	/** Sets the current component definition, which is used only by
+	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with
+	 * {@link org.zkoss.zk.ui.AbstractComponent}.
+	 * <p>Used only internally.
+	 * @since 2.5.0
+	 */
+	public static void setCurrentInfo(ComponentInfo compInfo) {
+		_compdef.set(compInfo);
 	}
 
 	/** Pares the event expression.

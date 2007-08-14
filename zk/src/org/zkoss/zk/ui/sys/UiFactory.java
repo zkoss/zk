@@ -108,7 +108,8 @@ public interface UiFactory {
 	 *
 	 * <p>After called, the new component is added to the page, and becomes a
 	 * child of the specified parent, if any. In addition, the properties
-	 * and custom attributes defined in {@link ComponentDefinition} are all
+	 * and custom attributes defined in {@link ComponentDefinition}
+	 * and {@link ComponentInfo} are all
 	 * applied to the new component.
 	 *
 	 * @param page the page that the new component belongs to (never null).

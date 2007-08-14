@@ -91,7 +91,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 		if (parent != null) comp.setParent(parent);
 		else comp.setPage(page);
 
-		comp.applyProperties(); //including custom-attributes
+		compInfo.applyProperties(comp); //include comp's definition
 		return comp;
 	}
 	public Component newComponent(Page page, Component parent,

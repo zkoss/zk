@@ -64,6 +64,7 @@ import org.zkoss.zk.ui.metainfo.EventHandlerMap;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
@@ -133,19 +134,29 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected AbstractComponent() {
 		final Execution exec = Executions.getCurrent();
 
-		_def = ComponentsCtrl.getCurrentDefinition();
-		if (_def != null) ComponentsCtrl.setCurrentDefinition(null); //to avoid mis-use
-		else {
+		final Object curInfo = ComponentsCtrl.getCurrentInfo();
+		if (curInfo != null) {
+			ComponentsCtrl.setCurrentInfo((ComponentInfo)null); //to avoid mis-use
+			if (curInfo instanceof ComponentInfo) {
+				final ComponentInfo compInfo = (ComponentInfo)curInfo;
+				_def = compInfo.getComponentDefinition();
+				addSharedAnnotationMap(_def.getAnnotationMap());
+				addSharedAnnotationMap(compInfo.getAnnotationMap());
+			} else {
+				_def = (ComponentDefinition)curInfo;
+				addSharedAnnotationMap(_def.getAnnotationMap());
+			}
+		} else {
 			_def = lookupDefinition(exec, getClass());
-			if (_def == null)
+			if (_def != null)
+				addSharedAnnotationMap(_def.getAnnotationMap());
+			else
 				_def = ComponentsCtrl.DUMMY;
 		}
 
 		init(false);
 
 		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(this): null;
-
-		addSharedAnnotationMap(_def.getAnnotationMap());
 
 //		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}

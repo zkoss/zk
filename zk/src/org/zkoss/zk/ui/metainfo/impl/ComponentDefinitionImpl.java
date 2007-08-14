@@ -241,7 +241,10 @@ implements ComponentDefinition, java.io.Serializable {
 		_implcls = clsnm;
 	}
 	public Component newInstance(Page page, String clsnm) {
-		ComponentsCtrl.setCurrentDefinition(this);
+		final Object curInfo = ComponentsCtrl.getCurrentInfo();
+		final boolean bSet = !(curInfo instanceof ComponentInfo)
+			|| ((ComponentInfo)curInfo).getComponentDefinition() != this;
+		if (bSet) ComponentsCtrl.setCurrentInfo(this);
 		final Component comp;
 		try {
 			comp = (Component)
@@ -249,8 +252,7 @@ implements ComponentDefinition, java.io.Serializable {
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			//theorectically, it shall be reset by AbstractComponent, but..
-			ComponentsCtrl.setCurrentDefinition(null);
+			if (bSet) ComponentsCtrl.setCurrentInfo((ComponentDefinition)null);
 		}
 		return comp;
 	}

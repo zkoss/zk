@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
@@ -292,7 +293,15 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * before calling {@link #applyProperties}.
 	 */
 	public Component newInstance(Page page) {
-		final Component comp = _compdef.newInstance(page, _implcls);
+		ComponentsCtrl.setCurrentInfo(this);
+		final Component comp;
+		try {
+			comp = _compdef.newInstance(page, _implcls);
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
+		} finally {
+			ComponentsCtrl.setCurrentInfo((ComponentInfo)null);
+		}
 		if (comp instanceof DynamicTag)
 			((DynamicTag)comp).setTag(_tagnm);
 		return comp;
@@ -318,24 +327,25 @@ implements Cloneable, Condition, java.io.Serializable {
 		return _compdef.resolveImplementationClass(page, _implcls);
 	}
 
+	/** Returns the annotation map defined in this info, or null
+	 * if no annotation is ever defined.
+	 */
+	public AnnotationMap getAnnotationMap() {
+		return _annots;
+	}
+
 	/** Applies the event handlers, annotations, properties and
 	 * custom attributes to the specified component.
 	 *
-	 * <p>Unlike {@link ComponentDefinition#applyProperties},
-	 * this method copies annotations defined in this info to
-	 * the component.
+	 * <p>It also invokes {@link ComponentDefinition#applyProperties}.
 	 *
-	 * @param defIncluded whether to call {@link ComponentDefinition#applyProperties}.
+	 * @since 2.5.0
 	 */
-	public void applyProperties(Component comp, boolean defIncluded) {
-		if (_annots != null)
-			((ComponentCtrl)comp).addSharedAnnotationMap(_annots);
+	public void applyProperties(Component comp) {
+		_compdef.applyProperties(comp);
 
 		if (_evthds != null)
 			((ComponentCtrl)comp).addSharedEventHandlerMap(_evthds);
-
-		if (defIncluded)
-			_compdef.applyProperties(comp);
 
 		if (_props != null) {
 			final Evaluator eval = Executions.getCurrent();
@@ -462,5 +472,9 @@ implements Cloneable, Condition, java.io.Serializable {
 				throw new InternalError();
 			}
 		}
+	}
+
+	public String toString() {
+		return "[ComponentInfo: " + _compdef.getName() + ']';
 	}
 }
