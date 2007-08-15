@@ -148,4 +148,29 @@ public class HTMLs {
 		for (int j = txts.length; --j >=0;)
 			_txtstyles.add(txts[j]);
 	}
+
+	/** Returns whether the specified tag is an 'orphan' tag.
+	 * By orphan we mean it doesn't support the format of
+	 * &lt;xx&gt; &lt;/xx&gt;.
+	 *
+	 * <p>For example, br and img are orphan tags.
+	 *
+	 * @param tagname the tag name, e.g., br and tr.
+	 * @since 2.5.0
+	 */
+	public static final boolean isOrphanTag(String tagname) {
+		return _orphans.contains(tagname.toLowerCase());
+	}
+	/** A set of tags that don't have child. */
+	private static final Set _orphans = new HashSet(29);
+	static {
+		final String[] orphans = {
+			"area", "base", "basefont", "bgsound", "br",
+			"col", "embed", "hr", "img", "input",
+			"isindex", "keygen", "link", "meta", "plaintext",
+			"spacer", "wbr"
+		};
+		for (int j = orphans.length; --j >= 0;)
+			_orphans.add(orphans[j]);
+	}
 }
