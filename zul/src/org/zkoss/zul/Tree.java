@@ -754,8 +754,11 @@ public class Tree extends XulElement {
 	 * Handles when the tree model's content changed 
 	 */
 	private void onTreeDataChange(TreeDataEvent event) {	
-		List l = getPath(event.getParent());
-		Treeitem ti = getTreeitemByPath(l);
+		List path = getPath(event.getParent());
+		//if the treepaht is empty, render tree's treechildren
+		Component parent = this;
+		if(path.size()>0)
+			parent = getTreeitemByPath(path);
 		Object data = event.getParent();
 		int indexFrom = event.getIndexFrom();
 		int indexTo = event.getIndexTo();
@@ -766,37 +769,46 @@ public class Tree extends XulElement {
 		switch (event.getType()) {
 		case TreeDataEvent.INTERVAL_ADDED:
 			for(int i=indexFrom;i<=indexTo;i++)
-				onTreeDataInsert(ti,i,data);
+				onTreeDataInsert(parent,i,data);
 			break;
 		case TreeDataEvent.INTERVAL_REMOVED:
 			for(int i=indexTo;i>=indexFrom;i--)
-				onTreeDataRemoved(ti,i);
+				onTreeDataRemoved(parent,i);
 			break;
 		case TreeDataEvent.CONTENTS_CHANGED:
 			for(int i=indexFrom;i<=indexTo;i++)
-				onTreeDataContentChanged(ti,i,data);
+				onTreeDataContentChanged(parent,i,data);
 			break;
 		}
 			
 	}
 	
+	private Treechildren getParentTreechildren(Object parent){
+		Treechildren ch= null;
+		if(parent instanceof Tree)
+			ch = ((Tree)parent).getTreechildren();
+		else
+			ch = ((Treeitem)parent).getTreechildren();
+		if(ch != null)
+			return ch;
+		else
+			return new Treechildren();
+	}
+	
 	/*
 	 * Handle Treedata insertion
 	 */
-	private void onTreeDataInsert(Treeitem parent, int index, Object data){
+	private void onTreeDataInsert(Component parent, int index, Object data){
 		
 		/* 	Find the sibling to insertBefore;
 		 * 	if there is no sibling or new item is inserted at end.
 		 */
 		Treeitem newTi = new Treeitem();
-		Treechildren ch= null;
+		Treechildren ch= getParentTreechildren(parent);
 		renderItem(newTi,_model.getChild(data,index));
-		if(parent.getTreechildren()!=null){
-			ch = parent.getTreechildren();
-		}else{
-			ch= new Treechildren();
-		}
 		List siblings = ch.getChildren();
+		//DEBUG: how treeitem in treechildren?
+		System.out.println(siblings.size()+1);
 		//if there is no sibling or new item is inserted at end.
 		if(siblings.size()==0 || index == siblings.size() ){
 			ch.insertBefore(newTi, null);
@@ -804,30 +816,42 @@ public class Tree extends XulElement {
 			ch.insertBefore(newTi, (Treeitem)siblings.get(index));
 		}
 		ch.setParent(parent);
-		parent.setOpen(true);
+		//if parent is Treeitem, setOpen
+		if(parent instanceof Treeitem)
+			((Treeitem)parent).setOpen(true);
 	}
 		
 	/*
 	 * Handle event that child is removed
 	 */
-	private void onTreeDataRemoved(Treeitem parent, int index){
-		List items = parent.getTreechildren().getChildren();		
+	private void onTreeDataRemoved(Component parent, int index){
+		List items = getParentTreechildren(parent).getChildren();		
 		if(items.size()>1){
 			((Treeitem)items.get(index)).detach();
 		}else{
-			((Treechildren)parent.getTreechildren()).detach();
-			renderItem(parent);
+			getParentTreechildren(parent).detach();
 		}
-		parent.setOpen(true);
+		//if parent is Treeitem, setOpen
+		if(parent instanceof Treeitem)
+			((Treeitem)parent).setOpen(true);
 	}
 	
 	/*
 	 * Handle event that child's content is changed
 	 */
-	private void onTreeDataContentChanged(Treeitem parent, int index, Object data){
+	private void onTreeDataContentChanged(Component parent, int index, Object data){
 		List l = getPath(data);
-		l.add(new Integer(index));
-		Treeitem ti = getTreeitemByPath(l);
+		Treeitem ti = null;
+		/* 
+		 * if parent is Tree (root), get the Treeitem at index. Else,
+		 * get through Path  
+		 */
+		if(parent instanceof Tree)
+			ti = (Treeitem)this.getTreechildren().getChildren().get(index);
+		else{
+			l.add(new Integer(index));
+			ti = getTreeitemByPath(l);
+		}
 		renderItem(ti,_model.getChild(data,index));
 		ti.setOpen(true);
 	}
@@ -838,9 +862,9 @@ public class Tree extends XulElement {
 	private Treeitem getTreeitemByPath(List path)
 	{
 		Iterator itr = path.iterator();
-		Treeitem ti =(Treeitem)this.getTreechildren().getChildren().get(0);
+		Treeitem ti = (Treeitem)this.getTreechildren().getChildren().get(((Integer)itr.next()).intValue());
 		while (itr.hasNext( )) { //GO THROUGH PATH
-			ti = (Treeitem)ti.getTreechildren().getChildren().get(Integer.parseInt(itr.next().toString()));
+			ti = (Treeitem)ti.getTreechildren().getChildren().get(((Integer)itr.next()).intValue());
 		} 
 		return ti;
 	}
@@ -909,43 +933,18 @@ public class Tree extends XulElement {
 	public TreeitemRenderer getTreeitemRenderer(){
 		return _renderer;
 	}
-	
-	private boolean _rootVisible = true;
-	
+
 	/*
-	 * Render the root of tree
+	 * Render the root of Tree
+	 * Notice: _model.getRoot() is mapped to Tree, not first Treeitem
 	 */
 	private void renderTree() throws Exception{
-		if(_rootVisible)
-			renderRoot();
-		else
-			renderInvisibleRoot();
-	}
-	
-	/*
-	 * Render the root as a visible node
-	 */
-	private void renderRoot() throws Exception{
-		_treechildren = null;
-		Treechildren children = new Treechildren();
-		Treeitem ti = new Treeitem();
-		ti.setParent(children);
-		children.setParent(this);
-		this.renderItem(ti);
-	}
-	
-	/*
-	 * Render the root as a invisible node
-	 */
-	private void renderInvisibleRoot() throws Exception{
 		Treechildren children = new Treechildren();
 		children.setParent(this);
-		System.out.println(this.getTreechildren());
 		Object node = _model.getRoot();
 		for(int i=0; i< _model.getChildCount(node);i++ ){
 			Treeitem ti = new Treeitem();
 			Object data = _model.getChild(node, i);
-			System.out.println(data);
 			_renderer.render(ti, data);
 			if(!_model.isLeaf(data)){
 				ti.addEventListener(Events.ON_OPEN, _treeitemOpenListener);	
@@ -1225,8 +1224,6 @@ public class Tree extends XulElement {
 	{
 		Object node = root;
 		int pathSize = path.size()-1;
-		if(_rootVisible)
-			pathSize--;
 		for(int i=pathSize; i >= 0; i--){
 			node = _model.getChild(node, ((Integer)(path.get(i))).intValue());
 		}
