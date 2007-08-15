@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.LinkedHashSet;
@@ -755,8 +756,8 @@ public class Tree extends XulElement {
 	 */
 	private void onTreeDataChange(TreeDataEvent event){	
 		//if the treepaht is empty, render tree's treechildren
-	
 		Object data = event.getParent();
+		Component parent = getTreeComponentByNode(data);
 		int indexFrom = event.getIndexFrom();
 		int indexTo = event.getIndexTo();
 		/* 
@@ -766,15 +767,15 @@ public class Tree extends XulElement {
 		switch (event.getType()) {
 		case TreeDataEvent.INTERVAL_ADDED:
 			for(int i=indexFrom;i<=indexTo;i++)
-				onTreeDataInsert(data,i);
+				onTreeDataInsert(parent,data,i);
 			break;
 		case TreeDataEvent.INTERVAL_REMOVED:
 			for(int i=indexTo;i>=indexFrom;i--)
-				onTreeDataRemoved(data,i);
+				onTreeDataRemoved(parent,data,i);
 			break;
 		case TreeDataEvent.CONTENTS_CHANGED:
 			for(int i=indexFrom;i<=indexTo;i++)
-				onTreeDataContentChanged(data,i);
+				onTreeDataContentChanged(parent,data,i);
 			break;
 		}
 			
@@ -789,8 +790,7 @@ public class Tree extends XulElement {
 	/*
 	 * Handle Treedata insertion
 	 */
-	private void onTreeDataInsert(Object node, int index){
-		Component parent = getTreeComponentByNode(node);
+	private void onTreeDataInsert(Component parent,Object node, int index){
 		/* 	Find the sibling to insertBefore;
 		 * 	if there is no sibling or new item is inserted at end.
 		 */
@@ -798,8 +798,6 @@ public class Tree extends XulElement {
 		Treechildren ch= getParentTreechildren(parent);
 		renderItem(newTi,_model.getChild(node,index));
 		List siblings = ch.getChildren();
-//DEBUG: how many treeitems in treechildren?
-System.out.println(siblings.size()+1);
 		//if there is no sibling or new item is inserted at end.
 		if(siblings.size()==0 || index == siblings.size() ){
 			ch.insertBefore(newTi, null);
@@ -815,8 +813,7 @@ System.out.println(siblings.size()+1);
 	/*
 	 * Handle event that child is removed
 	 */
-	private void onTreeDataRemoved(Object node, int index){
-		Component parent = getTreeComponentByNode(node);
+	private void onTreeDataRemoved(Component parent,Object node, int index){
 		List items = getParentTreechildren(parent).getChildren();		
 		if(items.size()>1){
 			((Treeitem)items.get(index)).detach();
@@ -831,19 +828,19 @@ System.out.println(siblings.size()+1);
 	/*
 	 * Handle event that child's content is changed
 	 */
-	private void onTreeDataContentChanged(Object parent, int index){
-		Treeitem ti = null;
+	private void onTreeDataContentChanged(Component parent,Object node, int index){
+		List items = getParentTreechildren(parent).getChildren();		
+	
 		/* 
 		 * find the associated tree compoent(parent)
 		 * notice:
 		 * if parent is root
 		 */
-		Component comp = getTreeComponentByNode(_model.getChild(parent,index));
-		if(comp instanceof Tree)
+		if(parent instanceof Tree)
 			renderTree();
 		else{
-			ti = (Treeitem)comp;
-			renderItem(ti,_model.getChild(parent,index));
+			Treeitem ti = (Treeitem)items.get(index);
+			renderItem(ti,_model.getChild(node,index));
 			ti.setOpen(true);
 		}
 	}
@@ -856,7 +853,7 @@ System.out.println(siblings.size()+1);
 	 */
 	protected Component getTreeComponentByNode(Object node){
 		int[] path = _model.getPath(_model.getRoot(), node);
-
+		System.out.println(Arrays.toString(path));
 		//If path is null or empty, return root(Tree) 
 		if(path == null || path.length == 0)
 			return this;
