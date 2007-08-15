@@ -58,23 +58,26 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	//-- ExecutionCleanup --//
 	public void cleanup(Execution exec, Execution parent, List errs) {
 		if (parent == null) { //the root execution of a servlet request
-			if (errs == null || errs.isEmpty()) {
-				// Commit and cleanup
-				log.debug("Committing the database transaction: "+exec);
-				HibernateUtil.currentSession().getTransaction().commit();
-			} else {
-				final Throwable ex = (Throwable) errs.get(0);
-				if (ex instanceof StaleObjectStateException) {
-					// default implementation does not do any optimistic concurrency 
-					// control; it simply rollback the transaction.
-					handleStaleObjectStateException(exec, (StaleObjectStateException)ex);
+			try {
+				if (errs == null || errs.isEmpty()) {
+					// Commit and cleanup
+					log.debug("Committing the database transaction: "+exec);
+					HibernateUtil.currentSession().getTransaction().commit();
 				} else {
-					// default implementation log the stacktrace and then rollback
-					// the transaction.
-					handleOtherException(exec, ex);
+					final Throwable ex = (Throwable) errs.get(0);
+					if (ex instanceof StaleObjectStateException) {
+						// default implementation does not do any optimistic concurrency 
+						// control; it simply rollback the transaction.
+						handleStaleObjectStateException(exec, (StaleObjectStateException)ex);
+					} else {
+						// default implementation log the stacktrace and then rollback
+						// the transaction.
+						handleOtherException(exec, ex);
+					}
 				}
+			} finally {
+				HibernateUtil.closeSession(); //always close it
 			}
-			HibernateUtil.closeSession(); //always close it
 		}
 	}
 	
