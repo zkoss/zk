@@ -50,7 +50,7 @@ public class TreeDataEvent {
 	public TreeDataEvent(TreeModel model, int type, Object parent, int indexFrom, int indexTo) {
 		if (model == null)
 			throw new NullPointerException();
-		checkInterval(indexFrom,indexTo);
+		checkInterval(indexFrom,indexTo,model.getChildCount(parent));
 		_model = model;
 		_type = type;
 		_parent = parent;
@@ -61,11 +61,15 @@ public class TreeDataEvent {
 	/*
 	 * Check the interval
 	 */
-	private static void checkInterval(int from, int to) {
-        if (from > to)
+	private static void checkInterval(int from, int to, int len) {
+        if(from > to)
             throw new IllegalArgumentException("'from' should be less than or equal to 'to', from: "+from+", to: "+to);
-        if (from < 0)
+        if(from < 0)
             throw new ArrayIndexOutOfBoundsException("from : "+from);
+        if(to < 0)
+        	throw new ArrayIndexOutOfBoundsException("to : "+to);
+        if(from - to < len )
+        	throw new IndexOutOfBoundsException("Out of bound, from: "+from+" to: "+to+" while size="+len);
     }
 	
 	/** Returns the tree model that fires this event.
