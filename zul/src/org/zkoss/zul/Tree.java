@@ -862,16 +862,17 @@ public class Tree extends XulElement {
 	 */
 	protected Component getTreeComponentByNode(Object node){
 		int[] path = _model.getPath(_model.getRoot(), node);
-		Component comp = this;
+
 		//If path is null or empty, return root(Tree) 
 		if(path == null || path.length == 0)
 			return this;
 		else{
 			Treeitem ti = (Treeitem)this.getTreechildren().getChildren().get(path[0]);
+			List items = ti.getTreechildren().getChildren();
 			for(int i=1; i<path.length;i++){
-				ti = (Treeitem)ti.getTreechildren().getChildren().get(path[i]);
+				ti = (Treeitem) items.get(path[i]);
 			}
-			return comp;
+			return ti;
 		}
 	}
 	
