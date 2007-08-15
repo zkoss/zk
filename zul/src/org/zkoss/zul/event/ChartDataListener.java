@@ -31,5 +31,5 @@ import org.zkoss.zk.ui.UiException;
 public interface ChartDataListener {
 	/** Sent when the contents of the list has changed.
 	 */
-	public void onChange(ChartDataEvent event);
+	public void onChange(ChartDataEvent event)throws Exception;
 }

@@ -64,6 +64,43 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 			((TreeDataListener)it.next()).onChange(evt);
 	}
 	
+	//-TreeModel-//
+	public int[] getPath(Object parent, Object lastNode){
+		List l = new ArrayList();
+		dfSearch(l, parent, lastNode);
+		Object[] objs = l.toArray();
+		int[] path = new int[objs.length];
+		for(int i=0;i<objs.length; i++){
+			path[i] = ((Integer)objs[i]).intValue();
+		}
+		return path;
+	}
+	
+	/**
+	 * Helper method:
+	 * Depth first search to find the path which is from node to target
+	 * @param al path
+	 * @param node origin
+	 * @param target destination
+	 * @return whether the target is found or not
+	 */
+	private boolean dfSearch(List path, Object node, Object target){
+			if(node.equals(target)){
+				return true;
+			}
+			else{
+				int size = getChildCount(node);
+				for(int i=0; i< size; i++){
+					boolean flag = dfSearch(path,getChild(node,i),target);
+					if(flag){
+						path.add(0,new Integer(i));
+						return true;
+					}
+				}
+			}
+			return false;
+	}
+	
 	//-- TreeModel --//
 	public void addTreeDataListener(TreeDataListener l){
 		_listeners.add(l);

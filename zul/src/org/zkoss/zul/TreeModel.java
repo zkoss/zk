@@ -66,4 +66,19 @@ public interface TreeModel {
 	 */
 	public void removeTreeDataListener(TreeDataListener l);
 	
+	/**
+	 * Returns an integer array to represent the path from parent to lastNode.
+	 * <br>notice:<br>
+	 * The path has to be in "root" to "lastNode" order<br>
+	 * Ex: {1,0,2}<br>
+	 * 	1. Go to the root's child at index(1);<br>
+	 *  2. Go to the index(1)'s child at index(0);<br>
+	 *  3. Go to the index(0)'s child at idnex(2); -- destination<br>
+	 *  
+	 * @param parent - the origin of Path
+	 * @param lastNode - the destination of Path
+	 * @return an integer array to represent the path from parent to lastNode.
+	 */
+	public int[] getPath(Object parent, Object lastNode);
+	
 }

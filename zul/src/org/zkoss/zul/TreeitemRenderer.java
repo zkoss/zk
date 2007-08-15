@@ -26,17 +26,27 @@ package org.zkoss.zul;
  * @see Tree
  */
 public interface TreeitemRenderer {
-	/** Renders the data to the specified tree item.
+	/** 
+	 * Renders the data to the specified tree item.
+	 * 
+	 * 
 	 *
 	 * @param item the Treeitem to render the result.
-	 * Note: when this method is called, the listitem has no child
-	 * at all, unless you don't return
-	 *
+	 * <br>Note: 
+	 * 
+	 *<ol>
+	 * <li>When this method is called, the treeitem should have no child
+	 * at all, unless you don't return</li>
+	 * <li>Treeitem and Treerow are only components that allowed to be
+	 * <b>item</b>'s children.</li>
+	 * <li>A new treerow should be contructed and append to <b>item</b>, when
+	 * treerow of <b>item</b> is null.<br/> Otherwise, when treerow of <b>item</b> is not null, 
+	 * modify the content of the treerow or detach the treerow first, since that only one treerow is allowed</li>
+	 * <li>Do not append any treechildren to <b>item</b> in this method</li>, a treechildren will be appended afterward.
+	 * <li>When a treerow is not appended to <b>item</b>,  generally label of <b>item</b> displayed.</li> 
+	 * </ol>
 	 * @param data that is used to render the Treeitem
 	 * 
-	 * Notice:
-	 * In the implementation, only Treeitem and Treerow are allowed to be
-	 * item's children.  
 	 */
 	public void render(Treeitem item, Object data) throws Exception;
 }
