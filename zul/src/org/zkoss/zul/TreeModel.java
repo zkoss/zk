@@ -69,12 +69,12 @@ public interface TreeModel {
 	/**
 	 * Returns an integer array to represent the path from parent(exclusive) to lastNode(inclusive).
 	 * <br>notice:<br>
-	 * The path has to be in "root" to "lastNode" order<br>
+	 * The path has to be in "parent" to "lastNode" order<br>
 	 * Ex: {1,0,2}<br>
 	 * 	1. Go to the parent's child at index(1);<br>
 	 *  2. Go to the index(1)'s child at index(0);<br>
-	 *  3. Go to the index(0)'s child at idnex(2); -- the lastNode<br>
-	 * * If parent is same as lastNode, return empty array {} 
+	 *  3. Go to the index(0)'s child at idnex(2) -- the lastNode;<br>
+	 * If parent is the same as lastNode, return null or empty array. 
 	 * 
 	 * @param parent - the origin of Path
 	 * @param lastNode - the destination of Path

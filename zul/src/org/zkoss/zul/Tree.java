@@ -855,14 +855,15 @@ public class Tree extends XulElement {
 	}
 	
 	/**
-	 * Return the Tree component by a given associated node in model<br>
-	 * If path is empty, return root(Tree)
-	 * notice: this method could be overrided due to performance issue.
+	 * Return the Tree or Treeitem component by a given associated node in model.<br>
+	 * This implmentation calls {@link TreeModel#getPath} method to locate assoicated
+	 * Treeitem (or Tree) via path. You can override this method to speed up 
+	 * performance if possible.
 	 */
 	protected Component getTreeComponentByNode(Object node){
 		int[] path = _model.getPath(_model.getRoot(), node);
 		Component comp = this;
-		//If path is empty, return root(Tree) 
+		//If path is null or empty, return root(Tree) 
 		if(path == null || path.length == 0)
 			return this;
 		else{
