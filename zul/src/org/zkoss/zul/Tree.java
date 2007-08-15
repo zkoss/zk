@@ -868,7 +868,7 @@ public class Tree extends XulElement {
 			return this;
 		else{
 			Treeitem ti = (Treeitem)this.getTreechildren().getChildren().get(path[0]);
-			for(int i=1; i<path.length;i++){
+			for(int i=1; i<path.length; i++){
 				ti = (Treeitem) ti.getTreechildren().getChildren().get(path[i]);
 			}
 			return ti;
