@@ -18,7 +18,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.mil.device;
 
+import java.util.Map;
+import java.util.Iterator;
+
 import org.zkoss.mil.au.AuGoHome;
+
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.au.AuResponse;
@@ -55,6 +60,25 @@ public class MilDevice implements Device, java.io.Serializable {
 	public void sessionWillPassivate(Desktop desktop) {
 	}
 	public void sessionDidActivate(Desktop desktop) {
+	}
+
+	public String getRawTagBegin(String tagname, Map props) {
+		if (tagname == null)
+			return "";
+
+		final StringBuffer sb = new StringBuffer(80)
+			.append('<').append(tagname);
+
+		if (props != null)
+			for (Iterator it = props.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				HTMLs.appendAttribute(sb, (String)me.getKey(), (String)me.getValue());
+			}
+
+		return sb.append('>').toString();
+	}
+	public String getRawTagEnd(String tagname) {
+		return tagname != null ? "</" + tagname + ">\n": "";
 	}
 	
 	/**
