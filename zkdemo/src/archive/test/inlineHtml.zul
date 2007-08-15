@@ -24,11 +24,12 @@ xmlns:i="http://www.zkoss.org/2005/zk/inline">
 		 	Some random text shall be consider part of inline
 		 </i:li>
  		<i:li>
-			<textbox/>
+			<textbox id="tb" onChanging="i1.value = event.value"/>
+			<label id="i1"/>
 		</i:li>
   		<i:li>
   			Mixed with
-			<datebox/><i:br/>
+			<datebox onChange="tb.value = org.zkoss.lang.Objects.toString(self.value)"/><i:br/>
 			and inline text.
 		 </i:li>
 	</i:ul>
