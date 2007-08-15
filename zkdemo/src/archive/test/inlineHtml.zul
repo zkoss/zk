@@ -17,23 +17,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="Test of inline html tags">
-  <inline><![CDATA[
-<ul>
- <li>
-  ]]></inline>
-
-<textbox/>
-
-  <inline><![CDATA[
-  </li>
-  <li>
-  ]]></inline>
-
-<datebox/>
-
-  <inline><![CDATA[
-  </li>
-</ul>
-  ]]></inline>
+<window title="Test of inline html tags"
+xmlns:i="http://www.zkoss.org/2005/zk/inline">
+	<i:ul>
+		 <i:li>
+		 	Some random text shall be consider part of inline
+		 </i:li>
+ 		<i:li>
+			<textbox/>
+		</i:li>
+  		<i:li>
+  			Mixed with
+			<datebox/><i:br/>
+			and inline text.
+		 </i:li>
+	</i:ul>
 </window>
