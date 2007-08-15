@@ -743,7 +743,7 @@ public class Tree extends XulElement {
 				Treeitem _item = (Treeitem) event.getTarget();
 				if(!_item.isLoaded()){
 					Tree t = _item.getTree();
-			    _item.getTreechildren().getChildren().clear();
+					_item.getTreechildren().getChildren().clear();
 					t.renderItem(_item);
 				}
 			}
@@ -781,15 +781,9 @@ public class Tree extends XulElement {
 	}
 	
 	private Treechildren getParentTreechildren(Object parent){
-		Treechildren ch= null;
-		if(parent instanceof Tree)
-			ch = ((Tree)parent).getTreechildren();
-		else
-			ch = ((Treeitem)parent).getTreechildren();
-		if(ch != null)
-			return ch;
-		else
-			return new Treechildren();
+		final Treechildren ch = (parent instanceof Tree) ?
+			((Tree)parent).getTreechildren() : ((Treeitem)parent).getTreechildren();
+		return (ch != null) ? ch : new Treechildren();
 	}
 	
 	/*
@@ -804,8 +798,8 @@ public class Tree extends XulElement {
 		Treechildren ch= getParentTreechildren(parent);
 		renderItem(newTi,_model.getChild(node,index));
 		List siblings = ch.getChildren();
-		//DEBUG: how many treeitems in treechildren?
-		System.out.println(siblings.size()+1);
+//DEBUG: how many treeitems in treechildren?
+System.out.println(siblings.size()+1);
 		//if there is no sibling or new item is inserted at end.
 		if(siblings.size()==0 || index == siblings.size() ){
 			ch.insertBefore(newTi, null);
@@ -848,9 +842,9 @@ public class Tree extends XulElement {
 		if(comp instanceof Tree)
 			renderTree();
 		else{
-		ti = (Treeitem)comp;
-		renderItem(ti,_model.getChild(parent,index));
-		ti.setOpen(true);
+			ti = (Treeitem)comp;
+			renderItem(ti,_model.getChild(parent,index));
+			ti.setOpen(true);
 		}
 	}
 	
