@@ -71,6 +71,9 @@ public class LanguageDefinition {
 	/** The namespace for ZK annotations.
 	 */
 	public static final String ANNO_NAMESPACE = "http://www.zkoss.org/2005/zk/annotation";
+	/** The namespace for ZK annotations.
+	 */
+	public static final String INLINE_NAMESPACE = "http://www.zkoss.org/2005/zk/inline";
 
 	/** the device type that this definition belongs to. */
 	private final String _deviceType;

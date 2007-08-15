@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.InlineComponent;
 import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
 
 /**
@@ -35,9 +36,14 @@ import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
  * @author tomyeh
  */
 public interface ComponentDefinition extends Cloneable {
-	/** A special definition representing the zk component. */
+	/** A special definition to represent the zk component. */
 	public final static ComponentDefinition ZK =
 		new ComponentDefinitionImpl(null, "zk", Component.class);;
+	/** A special definition to represent a XML element associated
+	 * with the inline namespace (http://www.zkoss.org/2005/zk/inline.
+	 */
+	public final static ComponentDefinition INLINE =
+		new ComponentDefinitionImpl(null, "inline", InlineComponent.class);;
 
 	/** Returns the language definition, or null if it is a temporty definition
 	 * belonging to a page.

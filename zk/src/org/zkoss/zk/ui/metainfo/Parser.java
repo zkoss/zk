@@ -445,13 +445,20 @@ public class Parser {
 
 				if (trimLabel.length() > 0) { //consider as a label
 					final ComponentInfo parentInfo = (ComponentInfo)parent;
-					final String textAs = parentInfo.getTextAs();
-					if (textAs != null) {
-						parentInfo.addProperty(textAs, trimLabel, null);
+					if (parentInfo.getComponentDefinition()
+					== ComponentDefinition.INLINE) {
+						//TODO: merge to prolog if parentInfo has no child
+						new ComponentInfo(parentInfo, ComponentDefinition.INLINE, null)
+							.addProperty("prolog", trimLabel, null);
 					} else {
-						if (!parentlang.isRawLabel())
-							label = trimLabel;
-						parentlang.newLabelInfo(parentInfo, label);
+						final String textAs = parentInfo.getTextAs();
+						if (textAs != null) {
+							parentInfo.addProperty(textAs, trimLabel, null);
+						} else {
+							if (!parentlang.isRawLabel())
+								label = trimLabel;
+							parentlang.newLabelInfo(parentInfo, label);
+						}
 					}
 				}
 			}
@@ -503,9 +510,12 @@ public class Parser {
 			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
-
+				compInfo = new ComponentInfo(parent, ComponentDefinition.ZK); 
+			} else if (LanguageDefinition.INLINE_NAMESPACE.equals(uri)) {
+				if (annHelper.clear())
+					log.warning("Annotations are ignored since inline doesn't support them, "+el.getLocator());
 				compInfo = new ComponentInfo(
-					parent, ComponentDefinition.ZK, "zk"); 
+					parent, ComponentDefinition.INLINE, nm);
 			} else {
 				if (LanguageDefinition.ZK_NAMESPACE.equals(uri))
 					throw new UiException("Unknown ZK component: "+el+", "+el.getLocator());
