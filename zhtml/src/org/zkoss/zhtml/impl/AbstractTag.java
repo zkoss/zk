@@ -20,7 +20,7 @@ package org.zkoss.zhtml.impl;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -102,7 +102,7 @@ implements DynamicPropertied, RawId {
 	//-- DynamicPropertys --//
 	public boolean hasDynamicProperty(String name) {
 		return name != null && !"use".equals(name) && !"if".equals(name)
-			&& !"unless".equals(name);
+			&& !"unless".equals(name) && !"forEach".equals(name);
 	}
 	/** Returns the dynamic property, or null if not found.
 	 * Note: it must be a String object or null.
@@ -155,7 +155,7 @@ implements DynamicPropertied, RawId {
 			if (_props != null) _props.remove(name);
 		} else {
 			if (_props == null)
-				_props = new HashMap();
+				_props = new LinkedHashMap();
 			_props.put(name, value);
 		}
 	}
@@ -316,32 +316,19 @@ implements DynamicPropertied, RawId {
 		}
 	}
 	public boolean isChildable() {
-		return !_childless.contains(_tagnm);
+		return !HTMLs.isOrphanTag(_tagnm);
 	}
 
 	//Cloneable//
 	public Object clone() {
 		final AbstractTag clone = (AbstractTag)super.clone();
-		clone._props = new HashMap(clone._props);
+		clone._props = new LinkedHashMap(clone._props);
 		return clone;
 	}
 
 	//Object//
 	public String toString() {
 		return "["+_tagnm+' '+getId()+']';
-	}
-
-	/** A set of tags that don't have child. */
-	private static final Set _childless = new HashSet(29);
-	static {
-		final String[] childless = {
-			"area", "base", "basefont", "bgsound", "br",
-			"col", "embed", "hr", "img", "input",
-			"isindex", "keygen", "link", "meta", "plaintext",
-			"spacer", "wbr"
-		};
-		for (int j = childless.length; --j >= 0;)
-			_childless.add(childless[j]);
 	}
 
 	private static class EventInfo {
