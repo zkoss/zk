@@ -29,9 +29,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 
-import org.zkoss.zul.Inline;
-
-
 /**
  * A utility to be shared by {@link BranchTag} and {@link RootTag} to
  * implement the capability to hold a list of children.
