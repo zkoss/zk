@@ -23,7 +23,9 @@ import java.util.Iterator;
 
 import org.zkoss.mil.au.AuGoHome;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
+
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.au.AuResponse;
@@ -72,7 +74,8 @@ public class MilDevice implements Device, java.io.Serializable {
 		if (props != null)
 			for (Iterator it = props.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				HTMLs.appendAttribute(sb, (String)me.getKey(), (String)me.getValue());
+				HTMLs.appendAttribute(sb,
+					Objects.toString(me.getKey()), Objects.toString(me.getValue()));
 			}
 
 		return sb.append('>').toString();
