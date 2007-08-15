@@ -41,9 +41,9 @@ public interface TreeitemRenderer {
 	 * <b>item</b>'s children.</li>
 	 * <li>A new treerow should be contructed and append to <b>item</b>, when
 	 * treerow of <b>item</b> is null.<br/> Otherwise, when treerow of <b>item</b> is not null, 
-	 * modify the content of the treerow or detach the treerow first, since that only one treerow is allowed</li>
-	 * <li>Do not append any treechildren to <b>item</b> in this method</li>, a treechildren will be appended afterward.
-	 * <li>When a treerow is not appended to <b>item</b>,  generally label of <b>item</b> displayed.</li> 
+	 * modify the content of the treerow or detach the treerow's children first, since that only one treerow is allowed</li>
+	 * <li>Do not append any treechildren to <b>item</b> in this method, a treechildren will be appended afterward.</li>
+	 * <li>When a treerow is not appended to <b>item</b>,  generally label of <b>item</b> is displayed.</li> 
 	 * </ol>
 	 * @param data that is used to render the Treeitem
 	 * 

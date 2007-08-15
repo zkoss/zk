@@ -863,7 +863,7 @@ public class Tree extends XulElement {
 		int[] path = _model.getPath(_model.getRoot(), node);
 		Component comp = this;
 		//If path is empty, return root(Tree) 
-		if(path.length == 0)
+		if(path == null || path.length == 0)
 			return this;
 		else{
 			Treeitem ti = (Treeitem)this.getTreechildren().getChildren().get(path[0]);

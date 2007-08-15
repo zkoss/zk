@@ -66,10 +66,8 @@ public class TreeDataEvent {
             throw new IllegalArgumentException("'from' should be less than or equal to 'to', from: "+from+", to: "+to);
         if(from < 0)
             throw new ArrayIndexOutOfBoundsException("from : "+from);
-        if(to < 0)
-        	throw new ArrayIndexOutOfBoundsException("to : "+to);
-        if(from - to < len )
-        	throw new IndexOutOfBoundsException("Out of bound, from: "+from+" to: "+to+" while size="+len);
+        if(to > len )
+        	throw new IndexOutOfBoundsException("Out of bound, to: "+to+" while size="+len);
     }
 	
 	/** Returns the tree model that fires this event.
