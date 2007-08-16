@@ -166,9 +166,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	if [ -d dist/export/WEB-INF ] ; then
 		cp -rp dist/export/WEB-INF/* /tmp/zk/$binnm/dist/WEB-INF
 	fi
-	cp -rp zweb/src/archive/metainfo/tld/web /tmp/zk/$binnm/dist/WEB-INF/tld
-	cp -rp zk/src/archive/metainfo/tld/zk /tmp/zk/$binnm/dist/WEB-INF/tld
-	cp -rp zul/src/archive/metainfo/tld/zul /tmp/zk/$binnm/dist/WEB-INF/tld
+	cp -rp zweb/src/archive/web/WEB-INF/tld/web /tmp/zk/$binnm/dist/WEB-INF/tld
+	cp -rp zk/src/archive/web/WEB-INF/tld/zk /tmp/zk/$binnm/dist/WEB-INF/tld
+	cp -rp zul/src/archive/web/WEB-INF/tld/zul /tmp/zk/$binnm/dist/WEB-INF/tld
 	cp -rp zuljsp/src/archive/META-INF/*.tld /tmp/zk/$binnm/dist/WEB-INF/tld/zul/jsp
 
 	cp zul/src/archive/metainfo/xml/*.xsd /tmp/zk/$binnm/dist/xsd
