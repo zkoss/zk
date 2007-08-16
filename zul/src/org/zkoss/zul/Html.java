@@ -60,21 +60,10 @@ import org.zkoss.zul.impl.XulElement;
  * &lt;/table&gt;
  *]]&gt;&lt;/html&gt;</code></pre>
  *
- * <p>If you need to generate the embedded HTML tags directly
- * without enclosing with SPAN, you can use {@link Inline}.
- * While more flexible to embed HTML tags, {@link Inline} has
- * some limitations.
- *
- * <p>In addition to {@link Html} and {@link Inline}, you could use XUL's standard approach:
- * Specify the XML namespace, xmlns:h="http://www.w3.org/1999/xhtml".
- * The XUL's standard approach allows app developers to mix HTML tags
- * with XUL components.
- * Notice that, by use of this XML namespace approach, ZK actually creates
- * components for each HTML tags. The advantage is that you can
- * manipulate each invidual HTML tag dynamically
- * (rather than the content of {@link Html}).
- * However, it consumes more memory since each HTML tag is <i>mapped</i>
- * to a component (at the server).
+ * <p>If you need to generate the HTML tags directly
+ * without enclosing with SPAN, you can use the Native namespace,
+ * http://www.zkoss.org/2005/zk/native.
+ * Refer to the Developer's Guide for more information.
  *
  * <p>A non-XUL extension.
  *
