@@ -18,13 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.mil.device;
 
-import java.util.Map;
-import java.util.Iterator;
-
 import org.zkoss.mil.au.AuGoHome;
-
-import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
@@ -64,26 +58,6 @@ public class MilDevice implements Device, java.io.Serializable {
 	public void sessionDidActivate(Desktop desktop) {
 	}
 
-	public String getRawTagBegin(String tagname, Map props) {
-		if (tagname == null)
-			return "";
-
-		final StringBuffer sb = new StringBuffer(80)
-			.append('<').append(tagname);
-
-		if (props != null)
-			for (Iterator it = props.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				HTMLs.appendAttribute(sb,
-					Objects.toString(me.getKey()), Objects.toString(me.getValue()));
-			}
-
-		return sb.append('>').toString();
-	}
-	public String getRawTagEnd(String tagname) {
-		return tagname != null ? "</" + tagname + ">\n": "";
-	}
-	
 	/**
 	 * Go to ZK Mobile home page. ZK Mobile home page is the main control page where end user 
 	 * can input a new URL and visit a new web application.
