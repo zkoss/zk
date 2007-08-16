@@ -68,7 +68,6 @@ import org.zkoss.zul.impl.XulElement;
  * <p>A non-XUL extension.
  *
  * @author tomyeh
- * @see Inline
  */
 public class Html extends XulElement {
 	private String _content = "";
