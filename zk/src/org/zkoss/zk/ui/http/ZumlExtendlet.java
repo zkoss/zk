@@ -21,6 +21,7 @@ package org.zkoss.zk.ui.http;
 import java.io.Writer;
 import java.io.StringWriter;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -64,7 +65,6 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	private ExtendletContext _webctx;
 	/** PageDefinition cache. */
 	private ResourceCache _cache;
-//	private boolean _compress = true;
 
 	private ServletContext getServletContext() {
 		return _webctx.getServletContext();
@@ -123,25 +123,34 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request, PageDefinitions.getLocator(wapp, path));
 
-//		boolean compress = _compress && !Servlets.isIncluded(request);
+		final boolean compress = !Servlets.isIncluded(request);
 		final Page page = wappc.getUiFactory().newPage(ri, pagedef, path);
 		final Execution exec = new ExecutionImpl(
 			getServletContext(), request, response, desktop, page);
-		final Writer out = /*compress ? (Writer)new StringWriter():*/ response.getWriter();
+		final Writer out = compress ? (Writer)new StringWriter(): response.getWriter();
 		wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
 
-/*		if (compress) {
-			byte[] data = ((StringWriter)out).toString().getBytes("UTF-8");
-			if (data.length > 200) {
-				byte[] bs = Https.gzip(request, response, null, data);
-				if (bs != null) data = bs; //yes, browser support compress
-			}
+		if (compress) {
+			final String result = ((StringWriter)out).toString();
 
-			response.setContentLength(data.length);
-			response.getOutputStream().write(data);
-			response.flushBuffer();
+			try {
+				final OutputStream os = response.getOutputStream();
+					//Call it first to ensure getWrite() is not called yet
+
+				byte[] data = result.getBytes("UTF-8");
+				if (data.length > 200) {
+					byte[] bs = Https.gzip(request, response, null, data);
+					if (bs != null) data = bs; //yes, browser support compress
+				}
+
+				response.setContentLength(data.length);
+				os.write(data);
+				response.flushBuffer();
+			} catch (IllegalStateException ex) { //getWriter is called
+				response.getWriter().write(result);
+			}
 		}
-*/	}
+	}
 
 	/** Helper class. */
 	private class ZUMLLoader implements Loader {

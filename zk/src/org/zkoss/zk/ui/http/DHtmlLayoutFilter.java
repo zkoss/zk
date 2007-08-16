@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.io.StringWriter;
+import java.io.OutputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -110,15 +111,23 @@ public class DHtmlLayoutFilter implements Filter {
 			if (cs == null || cs.length() == 0)
 				cs = _charset != null ? _charset: "UTF-8";
 
-			byte[] data = out.toString().getBytes(cs);
-			if (_compress && !Servlets.isIncluded(request)
-			&& data.length > 200) {
-				byte[] bs = Https.gzip(request, response, null, data);
-				if (bs != null) data = bs; //yes, browser support compress
-			}
+			final String result = out.toString();
+			try {
+				final OutputStream os = response.getOutputStream();
+					//Call it first to ensure getWrite() is not called yet
 
-			response.setContentLength(data.length);
-			response.getOutputStream().write(data);
+				byte[] data = result.getBytes(cs);
+				if (_compress && !Servlets.isIncluded(request)
+				&& data.length > 200) {
+					byte[] bs = Https.gzip(request, response, null, data);
+					if (bs != null) data = bs; //yes, browser support compress
+				}
+
+				response.setContentLength(data.length);
+				os.write(data);
+			} catch (IllegalStateException ex) { //getWriter was called
+				response.getWriter().write(result);
+			}
 		} catch (UiException ex) {
 			log.error("Failed to process:\n"+content);
 			throw ex;

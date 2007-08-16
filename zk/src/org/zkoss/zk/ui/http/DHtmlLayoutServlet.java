@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.io.Writer;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.IOException;
 
@@ -161,7 +162,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			PageDefinitions.getLocator(wapp, path));
 		((SessionCtrl)sess).notifyClientRequest(null);
 
-		boolean compress = _compress && !Servlets.isIncluded(request);
+		final boolean compress = _compress && !Servlets.isIncluded(request);
 		final Writer out;
 		final UiFactory uf = wappc.getUiFactory();
 		if (uf.isRichlet(ri, bRichlet)) {
@@ -188,15 +189,24 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		}
 
 		if (compress) {
-			byte[] data = ((StringWriter)out).toString().getBytes("UTF-8");
-			if (data.length > 200) {
-				byte[] bs = Https.gzip(request, response, null, data);
-				if (bs != null) data = bs; //yes, browser support compress
-			}
+			final String result = ((StringWriter)out).toString();
 
-			response.setContentLength(data.length);
-			response.getOutputStream().write(data);
-			response.flushBuffer();
+			try {
+				final OutputStream os = response.getOutputStream();
+					//Call it first to ensure getWrite() is not called yet
+
+				byte[] data = result.getBytes("UTF-8");
+				if (data.length > 200) {
+					byte[] bs = Https.gzip(request, response, null, data);
+					if (bs != null) data = bs; //yes, browser support compress
+				}
+
+				response.setContentLength(data.length);
+				os.write(data);
+				response.flushBuffer();
+			} catch (IllegalStateException ex) { //getWriter is called
+				response.getWriter().write(result);
+			}
 		}
 		return true; //success
 	}
