@@ -30,6 +30,7 @@ ZK 2.5.0
   1770614: Slider: use class instead of hardcode background to style
   1771384: a way to add xmlns on generated <html> tag
   1772915: Desktop supports getPageIfAny
+  1775445: DSP Loader supports the compress option (like ZK Loader)
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
