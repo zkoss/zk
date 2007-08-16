@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.io.StringWriter;
+import java.io.OutputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletRequest;
@@ -81,16 +82,27 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 			sw, _webctx.getLocator()));
 		if (extra != null)
 			(sw != null ? (Writer)sw: response.getWriter()).write(extra);
+
 		if (sw != null) {
-			byte[] data = sw.toString().getBytes("UTF-8");
+			final String result = sw.toString();
 			sw = null; //free
-			if (data.length > 200) {
-				byte[] bs = Https.gzip(request, response, null, data);
-				if (bs != null) data = bs; //yes, browser support compress
+
+			try {
+				final OutputStream os = response.getOutputStream();
+					//Call it first to ensure getWrite() is not called yet
+
+				byte[] data = result.getBytes("UTF-8");
+				if (data.length > 200) {
+					byte[] bs = Https.gzip(request, response, null, data);
+					if (bs != null) data = bs; //yes, browser support compress
+				}
+
+				response.setContentLength(data.length);
+				os.write(data);
+			} catch (IllegalStateException ex) { //getWriter is called
+				response.getWriter().write(result);
 			}
 
-			response.setContentLength(data.length);
-			response.getOutputStream().write(data);
 			response.flushBuffer();
 		}
 		return; //done

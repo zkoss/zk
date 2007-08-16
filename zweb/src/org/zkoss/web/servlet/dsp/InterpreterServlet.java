@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.io.StringWriter;
 import java.io.IOException;
 import java.net.URL;
 
@@ -42,6 +44,7 @@ import org.zkoss.io.Files;
 import org.zkoss.el.Taglibs;
 
 import org.zkoss.web.servlet.Charsets;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.ResourceCaches;
 import org.zkoss.web.util.resource.ResourceLoader;
@@ -68,6 +71,7 @@ public class InterpreterServlet extends HttpServlet {
 	private ServletContext _ctx;
 	private String _charset = "UTF-8";
 	private Locator _locator;
+	private boolean _compress = true;
 
 	public void init(ServletConfig config) throws ServletException {
 		//super.init(config);
@@ -75,8 +79,12 @@ public class InterpreterServlet extends HttpServlet {
 
 		_ctx = config.getServletContext();
 
-		String s = config.getInitParameter("class-resource");
-		final boolean bClsRes = "true".equals(s);
+		String param = config.getInitParameter("compress");
+		if (param != null)
+			_compress = "true".equals(param);
+
+		param = config.getInitParameter("class-resource");
+		final boolean bClsRes = "true".equals(param);
 		_locator = new Locator() {
 			public String getDirectory() {
 				return null; //FUTURE: support relative path
@@ -100,8 +108,8 @@ public class InterpreterServlet extends HttpServlet {
 			}
 		};
 
-		s = config.getInitParameter("charset");
-		if (s != null) _charset = s.length() > 0 ? s: null;
+		param = config.getInitParameter("charset");
+		if (param != null) _charset = param.length() > 0 ? param: null;
 	}
 	public ServletContext getServletContext() {
 		return _ctx;
@@ -124,8 +132,32 @@ public class InterpreterServlet extends HttpServlet {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
 				return;
 			}
+
+			final boolean compress = _compress && !Servlets.isIncluded(request);
+			final StringWriter out = compress ? new StringWriter(): null;
 			cnt.interpret(
-				new ServletDspContext(_ctx, request, response, null));
+				new ServletDspContext(_ctx, request, response, out, null));
+
+			if (compress) {
+				final String result = out.toString();
+
+				try {
+					final OutputStream os = response.getOutputStream();
+						//Call it first to ensure getWrite() is not called yet
+	
+					byte[] data = result.getBytes("UTF-8");
+					if (data.length > 200) {
+						byte[] bs = Https.gzip(request, response, null, data);
+						if (bs != null) data = bs; //yes, browser support compress
+					}
+	
+					response.setContentLength(data.length);
+					os.write(data);
+					response.flushBuffer();
+				} catch (IllegalStateException ex) { //getWriter is called
+					response.getWriter().write(result);
+				}
+			}
 		} finally {
 			Charsets.cleanup(request, old);
 		}
