@@ -35,7 +35,7 @@ public class SimpleTreeNode {
 	private List _children;
 	
 	/**
-	 * Contructor
+	 * Constructor
 	 * @param data  data of the receiver
 	 * @param children children of the receiver
 	 * <br>
