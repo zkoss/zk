@@ -72,7 +72,7 @@ import org.zkoss.web.util.resource.ServletContextLocator;
  * @see org.zkoss.web.servlet.Charsets
  */
 public class Servlets {
-	private static final Log log = Log.lookup(Servlets.class);
+//	private static final Log log = Log.lookup(Servlets.class);
 
 	/** Whether EL is supported. */
 	private static Boolean _elSupported = null;
@@ -367,7 +367,7 @@ public class Servlets {
 	void forward(ServletContext ctx, ServletRequest request,
 	ServletResponse response, String uri, Map params, int mode)
 	throws IOException, ServletException {
-		if (D.ON && log.debugable()) log.debug("Forwarding "+uri);
+//		if (D.ON && log.debugable()) log.debug("Forwarding "+uri);
 
 		//include or foward depending whether this page is included or not
 		if (isIncluded(request)) {
@@ -435,7 +435,7 @@ public class Servlets {
 	void include(ServletContext ctx, ServletRequest request,
 	ServletResponse response, String uri, Map params, int mode)
 	throws IOException, ServletException {
-		if (D.ON && log.debugable()) log.debug("Including "+uri+" at "+ctx);
+//		if (D.ON && log.debugable()) log.debug("Including "+uri+" at "+ctx);
 
 		//20050606: Tom Yeh
 		//We have to set this special attribute for jetty
@@ -690,7 +690,7 @@ public class Servlets {
 		if (xmlURL == null)
 			throw new SystemException("File not found: "+APP_XML);
 
-		if (log.debugable()) log.debug("Parsing "+APP_XML);
+//		if (log.debugable()) log.debug("Parsing "+APP_XML);
 		final Element root =
 			new SAXBuilder(false,false,true).build(xmlURL).getRootElement();
 
@@ -699,14 +699,14 @@ public class Servlets {
 			final Element e = (Element)it.next();
 			final String ctxroot = (String)e.getContent("web/context-root");
 			if (ctxroot == null) {
-				//if (D.ON && log.finerable()) log.finer("Skip non-web: "+e.getContent("java"));
+//				if (D.ON && log.finerable()) log.finer("Skip non-web: "+e.getContent("java"));
 				continue;
 			}
 
 			ctxroots.add(ctxroot.startsWith("/") ? ctxroot: "/" + ctxroot);
 		}
 
-		log.info("Context found: "+ctxroots);
+//		log.info("Context found: "+ctxroots);
 		return new ArrayList(ctxroots);
 	}
 
