@@ -297,6 +297,7 @@ public class DefinitionLoaders {
 		parseLabelTemplate(langdef, root);
 		parseDynamicTag(langdef, root);
 		parseMacroTemplate(langdef, root);
+		parseNativeTemplate(langdef, root);
 
 		for (Iterator it = root.getElements("javascript").iterator();
 		it.hasNext();) {
@@ -375,10 +376,9 @@ public class DefinitionLoaders {
 				if (log.finerable()) log.finer("macro component definition: "+name);
 
 				final String inline = el.getElementValue("inline", true);
-				compdef = new ComponentDefinitionImpl(
-					langdef, name, macroUri, "true".equals(inline));
-
-				langdef.initMacroDefinition(compdef);
+				compdef = (ComponentDefinitionImpl)
+					langdef.getMacroDefinition(
+						name, macroUri, "true".equals(inline), false);
 
 				final String clsnm = el.getElementValue("component-class", true);
 				if (clsnm != null && clsnm.length() > 0) {
@@ -502,6 +502,15 @@ public class DefinitionLoaders {
 			langdef.setMacroTemplate(
 				locateClass(IDOMs.getRequiredElementValue(el, "macro-class")),
 				IDOMs.getRequiredElementValue(el, "macro-uri"));
+		}
+	}
+	private static
+	void parseNativeTemplate(LanguageDefinition langdef, Element el)
+	throws Exception {
+		el = el.getElement("native-template");
+		if (el != null) {
+			langdef.setNativeTemplate(
+				locateClass(IDOMs.getRequiredElementValue(el, "native-class")));
 		}
 	}
 	private static

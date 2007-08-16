@@ -1,4 +1,4 @@
-/* InlineComponent.java
+/* HtmlNativeComponent.java
 
 {{IS_NOTE
 	Purpose:
@@ -25,12 +25,14 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.zk.ui.ext.DynamicTag;
+import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.device.Device;
 
 /**
- * A comonent used to represent the inline namespace
- * (http://www.zkoss.org/2005/zk/inline).
- * It contains the content that shall be sent directly to client.
+ * A comonent used to represent XML elements that are associated
+ * with the inline namespace (http://www.zkoss.org/2005/zk/inline).
+ *
+ * <p>It contains the content that shall be sent directly to client.
  * It has three parts: prolog, children and epilog.
  * The prolog ({@link #getProlog}) and epilog ({@link #getEpilog})
  * are both {@link String}.
@@ -41,28 +43,29 @@ import org.zkoss.zk.device.Device;
  * @author tomyeh
  * @since 2.5.0
  */
-public class InlineComponent extends AbstractComponent implements DynamicTag {
+public class HtmlNativeComponent extends AbstractComponent
+implements DynamicTag, Native {
 	private String _tagnm;
 	private String _prolog = "", _epilog = "";
 	private Map _props;
 
-	/** Contructs a {@link InlineComponent} component.
+	/** Contructs a {@link HtmlNativeComponent} component.
 	 * 
 	 */
-	public InlineComponent() {
+	public HtmlNativeComponent() {
 	}
-	/** Constructs a {@link InlineComponent} component with the specified tag name.
+	/** Constructs a {@link HtmlNativeComponent} component with the specified tag name.
 	 *
 	 * @param tagname the tag name. If null or empty, plain text is assumed.
 	 */
-	public InlineComponent(String tagname) {
+	public HtmlNativeComponent(String tagname) {
 		setTag(tagname);
 	}
 
-	/** Contructs a {@link InlineComponent} component with the specified
+	/** Contructs a {@link HtmlNativeComponent} component with the specified
 	 * prolog ad epilog.
 	 */
-	public InlineComponent(String tagname, String prolog, String epilog) {
+	public HtmlNativeComponent(String tagname, String prolog, String epilog) {
 		this(tagname);
 
 		_prolog = prolog != null ? prolog: "";
@@ -102,20 +105,13 @@ public class InlineComponent extends AbstractComponent implements DynamicTag {
 		return _tagnm;
 	}
 
-	//AbstractComponent//
-	/** Returns false to denote not to add it the fellows when
-	 * the identifier is assigned.
-	 *
-	 * @since AbstractComponent#isFellowable
-	 */
-	protected boolean isFellowable() {
-		return false;
-	}
-
 	//-- Component --//
 	public void setId(String id) {
 		super.setId(id);
 		setDynamicProperty("id", id);
+	}
+	public boolean setVisible(boolean visible) {
+		throw new UnsupportedOperationException("Use client-dependent attribute, such as display:none");
 	}
 
 	public void redraw(Writer out) throws IOException {

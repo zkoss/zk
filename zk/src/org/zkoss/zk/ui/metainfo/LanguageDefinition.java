@@ -44,10 +44,13 @@ import org.zkoss.web.el.ELContext;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ext.Macro;
+import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.el.Evaluator;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.DeviceNotFoundException;
+import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
 
 /**
  * A definition of a language, such as xul.
@@ -73,7 +76,7 @@ public class LanguageDefinition {
 	public static final String ANNO_NAMESPACE = "http://www.zkoss.org/2005/zk/annotation";
 	/** The namespace for ZK annotations.
 	 */
-	public static final String INLINE_NAMESPACE = "http://www.zkoss.org/2005/zk/inline";
+	public static final String NATIVE_NAMESPACE = "http://www.zkoss.org/2005/zk/native";
 
 	/** the device type that this definition belongs to. */
 	private final String _deviceType;
@@ -113,6 +116,8 @@ public class LanguageDefinition {
 	private LabelTemplate _labeltmpl;
 	/** The macro template. */
 	private MacroTemplate _macrotmpl;
+	/** The native component definition. */
+	private ComponentDefinition _nativedef;
 	private final Evaluator _evalor;
 
 	/** Returns whether the specified language exists.
@@ -533,22 +538,54 @@ public class LanguageDefinition {
 		return _pageURI;
 	}
 
-	/** Initializes the specified definition of a macro component
-	 * based on {@link #setMacroTemplate}.
-	 */
-	public void initMacroDefinition(ComponentDefinition compdef) {
-		if (_macrotmpl == null)
-			throw new UiException("No macro component is supported by "+this);
-		if (!compdef.isMacro())
-			throw new UiException("Not macro component: "+compdef);
-
-		compdef.addMold("default", _macrotmpl.moldURI);
-		compdef.setImplementationClass(_macrotmpl.klass);
-	}
 	/** Sets the macro template.
 	 */
 	public void setMacroTemplate(Class klass, String moldURI) {
 		_macrotmpl = klass != null ? new MacroTemplate(klass, moldURI): null;
+	}
+	/** Returns the component definition for the specified condition.
+	 *
+	 * @param pageLevel whether the returned definition belongs to
+	 * the page definition. If false, the returned definition will belong
+	 * to this language
+	 * @exception UnsupportedOperationException if this language doesn't
+	 * support the macros
+	 * @since 2.5.0
+	 */
+	public ComponentDefinition getMacroDefinition(
+	String name, String macroURI, boolean inline, boolean pageLevel) {
+		if (_macrotmpl == null)
+			throw new UiException("Macro not supported by "+this);
+
+		final ComponentDefinition compdef =
+			ComponentDefinitionImpl.newMacroDefinition(
+				pageLevel ? null: this,
+				name, _macrotmpl.klass, macroURI, inline);
+		compdef.addMold("default", _macrotmpl.moldURI);
+		return compdef;
+	}
+
+	/** Sets the native template.
+	 * @since 2.5.0
+	 */
+	public void setNativeTemplate(Class klass) {
+		if (klass == null || !Component.class.isAssignableFrom(klass)
+		|| !Native.class.isAssignableFrom(klass))
+			throw new IllegalArgumentException("Illegal native class: "+klass);
+		_nativedef =
+			ComponentDefinitionImpl.newNativeDefinition(
+				this, "native", klass);;
+	}
+	/** Returns the component definition for the native components.
+	 *
+	 * @exception UnsupportedOperationException if this language doesn't
+	 * support the native namespace
+	 * @since 2.5.0
+	 */
+	public ComponentDefinition getNativeDefinition() {
+		if (_nativedef == null)
+			throw new UnsupportedOperationException("Native not supported by "+this);
+		return _nativedef;
 	}
 
 	/** Sets the component and attribute names used to represent a label.
@@ -649,9 +686,11 @@ public class LanguageDefinition {
 		private final Class klass;
 		private final String moldURI;
 		private MacroTemplate(Class klass, String moldURI) {
+			if (moldURI == null || moldURI.length() == 0)
+				throw new IllegalArgumentException("Macro mold UI required");
 			if (klass == null || !Component.class.isAssignableFrom(klass)
-			|| moldURI == null || moldURI.length() == 0)
-				throw new IllegalArgumentException("class="+klass+", mold="+moldURI);
+			|| !Macro.class.isAssignableFrom(klass))
+				throw new IllegalArgumentException("Illegal macro class: "+klass);
 			this.klass = klass;
 			this.moldURI = moldURI;
 		}

@@ -21,7 +21,8 @@ package org.zkoss.zk.ui.ext;
 import org.zkoss.zk.ui.IdSpace;
 
 /**
- * Represents a macro component.
+ * Implemented with {@link org.zkoss.zk.ui.Component} to represent
+ * a macro component.
  *
  * @author tomyeh
  */

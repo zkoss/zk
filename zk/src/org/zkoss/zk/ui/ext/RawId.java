@@ -20,9 +20,12 @@ package org.zkoss.zk.ui.ext;
 
 /**
  * Decorates {@link org.zkoss.zk.ui.Component} to denote that
- * its UUID ({@link org.zkoss.zk.ui.Component#getUuid} must be
- * the same as {@link org.zkoss.zk.ui.Component#getId},
- * if org.zkoss.zk.ui.Component#setId} is ever called.
+ * the UUID ({@link org.zkoss.zk.ui.Component#getUuid} must be
+ * the same as the ID ({@link org.zkoss.zk.ui.Component#getId}).
+ * Thus, if org.zkoss.zk.ui.Component#setId} is called,
+ * both UUID and ID are changed.
+ *
+ * <p>In summary, if this interface is declared, ID == UUID.
  *
  * @author tomyeh
  */

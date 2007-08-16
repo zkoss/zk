@@ -57,13 +57,10 @@ implements ComponentDefinition, java.io.Serializable {
 	private Map _custAttrs;
 	/** A list of {@link Property}. */
 	private List _props;
-	private String _macroURI;
 	/** the current directory. */
 	private String _curdir;
 	/** the property name to which the text within the element will be assigned. */
 	private String _textAs;
-	/** inline or regular macro. Used if _macroURI is not null. */
-	private boolean _inline;
 	private AnnotationMap _annots;
 
 	/** Constructs a native component, i.e., a component implemented by
@@ -86,26 +83,26 @@ implements ComponentDefinition, java.io.Serializable {
 		_name = name;
 		_implcls = cls;
 	}
-	/** Constructs a macro component, i.e., a component implemented by
-	 * a macro.
-	 *
-	 * <p>After calling this method, the caller MUST invoke
-	 * {@link LanguageDefinition#initMacroDefinition}.
+	/** Constructs a macro component definition.
+	 * It is the component definition used to implement the macros.
 	 *
 	 * @param langdef the language definition, or null if this is a temporary
 	 * definition doesn't belong to any language.
+	 * @since 2.5.0
 	 */
-	public ComponentDefinitionImpl(LanguageDefinition langdef, String name,
-	String macroURI, boolean inline) {
-		if (name == null)
-			throw new IllegalArgumentException("null name");
-		if (macroURI == null || macroURI.length() == 0)
-			throw new IllegalArgumentException("empty macroURI");
-
-		_langdef = langdef;
-		_name = name;
-		_macroURI = macroURI;
-		_inline = inline;
+	public static final ComponentDefinition newMacroDefinition(
+	LanguageDefinition langdef, String name,
+	Class cls, String macroURI, boolean inline) {
+		return new MacroDefinition(langdef, name, cls, macroURI, inline);
+	}
+	/** Constructs a native component definition.
+	 * It is the component definition used to implement the native namespace.
+	 *
+	 * @since 2.5.0
+	 */
+	public static final ComponentDefinition newNativeDefinition(
+	LanguageDefinition langdef, String name, Class cls) {
+		return new NativeDefinition(langdef, name, cls);
 	}
 
 	//extra//
@@ -218,13 +215,17 @@ implements ComponentDefinition, java.io.Serializable {
 	}
 
 	public boolean isMacro() {
-		return _macroURI != null;
+		return false;
 	}
 	public String getMacroURI() {
-		return _macroURI;
+		return null;
 	}
 	public boolean isInlineMacro() {
-		return _inline;
+		return false;
+	}
+
+	public boolean isNative() {
+		return false;
 	}
 
 	public Object getImplementationClass() {

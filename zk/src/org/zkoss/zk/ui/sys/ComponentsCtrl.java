@@ -267,6 +267,9 @@ public class ComponentsCtrl {
 		public boolean isInlineMacro() {
 			return false;
 		}
+		public boolean isNative() {
+			return false;
+		}
 		public Object getImplementationClass() {
 			return Component.class;
 		}

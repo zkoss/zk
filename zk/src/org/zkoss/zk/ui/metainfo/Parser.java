@@ -306,9 +306,8 @@ public class Parser {
 					//the impl class before creating an instance of macro
 
 				final boolean bInline = "true".equals(inline);
-				compdef = new ComponentDefinitionImpl(
-					null, name, toAbsoluteURI(macroURI, false), bInline);
-				pgdef.getLanguageDefinition().initMacroDefinition(compdef);
+				compdef = pgdef.getLanguageDefinition().getMacroDefinition(
+					name, toAbsoluteURI(macroURI, false), bInline, true);
 				if (!isEmpty(clsnm)) {
 					if (bInline)
 						throw new UiException("class not allowed with inline macros, "+pi.getLocator());
@@ -445,10 +444,10 @@ public class Parser {
 
 				if (trimLabel.length() > 0) { //consider as a label
 					final ComponentInfo parentInfo = (ComponentInfo)parent;
-					if (parentInfo.getComponentDefinition()
-					== ComponentDefinition.INLINE) {
+					if (parentInfo.getComponentDefinition().isNative()) {
 						//TODO: merge to prolog if parentInfo has no child
-						new ComponentInfo(parentInfo, ComponentDefinition.INLINE, null)
+						new ComponentInfo(parentInfo,
+							parentlang.getNativeDefinition(), null)
 							.addProperty("prolog", trimLabel, null);
 					} else {
 						final String textAs = parentInfo.getTextAs();
@@ -511,11 +510,11 @@ public class Parser {
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
 				compInfo = new ComponentInfo(parent, ComponentDefinition.ZK); 
-			} else if (LanguageDefinition.INLINE_NAMESPACE.equals(uri)) {
+			} else if (LanguageDefinition.NATIVE_NAMESPACE.equals(uri)) {
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since inline doesn't support them, "+el.getLocator());
 				compInfo = new ComponentInfo(
-					parent, ComponentDefinition.INLINE, nm);
+					parent, langdef.getNativeDefinition(), nm);
 			} else {
 				if (LanguageDefinition.ZK_NAMESPACE.equals(uri))
 					throw new UiException("Unknown ZK component: "+el+", "+el.getLocator());
