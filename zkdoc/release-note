@@ -31,6 +31,7 @@ ZK 2.5.0
   1771384: a way to add xmlns on generated <html> tag
   1772915: Desktop supports getPageIfAny
   1775445: DSP Loader supports the compress option (like ZK Loader)
+  1760203: expiration time of events execution in UiEngineImpl
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
