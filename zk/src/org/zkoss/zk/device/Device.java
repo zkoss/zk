@@ -18,7 +18,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
-import java.util.Map;
 import org.zkoss.zk.ui.Desktop;
 
 /**
@@ -75,27 +74,4 @@ public interface Device {
 	 * @since 2.4.0
 	 */
 	public void sessionDidActivate(Desktop desktop);
-
-	/**
-	 * Returns the begin portion of the raw tag (never null).
-	 * For example, HTML devices returns "&lt;tr&gt;" when
-	 * getRawTagBegin("tr", null) is called.
-	 * It returns "&lt;br/&gt;" when getRawTagBegin("br") is called.
-	 *
-	 * @param tagname the tag name, e.g., tr, or null to ignore.
-	 * @param props a map of properties, or null to ignore.
-	 * It is pairs of name and value.
-	 * @since 2.5.0
-	 */
-	public String getRawTagBegin(String tagname, Map props);
-	/**
-	 * Returns the end portion of the raw tag (never null).
-	 * For example, HTML devices returns "&lt;/tr&gt;" when
-	 * getRawTagEnd("tr") is called.
-	 * It returns "" when getRawTagEnd("br") is called.
-	 *
-	 * @param tagname the tag name, e.g., tr, or null to ignore.
-	 * @since 2.5.0
-	 */
-	public String getRawTagEnd(String tagname);
 }

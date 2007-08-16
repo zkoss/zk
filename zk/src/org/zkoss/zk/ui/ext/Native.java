@@ -28,4 +28,22 @@ package org.zkoss.zk.ui.ext;
  * @since 2.5.0
  */
 public interface Native extends NonFellow {
+	/** Returns the prolog content. It is the content generated
+	 * before the child components, if any.
+	 * <p>Default: empty ("").
+	 */
+	public String getProlog();
+	/** Sets the prolog content. It is the content generated
+	 * before the child components, if any.
+	 */
+	public void setProlog(String prolog);
+	/** Returns the epilog content. It is the content generated
+	 * before the child components, if any.
+	 * <p>Default: empty ("").
+	 */
+	public String getEpilog();
+	/** Sets the epilog content. It is the content generated
+	 * before the child components, if any.
+	 */
+	public void setEpilog(String epilog);
 }

@@ -26,7 +26,6 @@ import java.io.IOException;
 
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.device.Device;
 
 /**
  * A comonent used to represent XML elements that are associated
@@ -72,37 +71,24 @@ implements DynamicTag, Native {
 		_epilog = epilog != null ? epilog: "";
 	}
 
-	/** Returns the prolog content. It is the content generated
-	 * before the child components, if any.
-	 * <p>Default: empty ("").
-	 */
-	public String getProlog() {
-		return _prolog;
-	}
-	/** Sets the prolog content. It is the content generated
-	 * before the child components, if any.
-	 */
-	public void setProlog(String prolog) {
-		_prolog = prolog != null ? prolog: "";
-	}
-	/** Returns the epilog content. It is the content generated
-	 * before the child components, if any.
-	 * <p>Default: empty ("").
-	 */
-	public String getEpilog() {
-		return _epilog;
-	}
-	/** Sets the epilog content. It is the content generated
-	 * before the child components, if any.
-	 */
-	public void setEpilog(String epilog) {
-		_epilog = epilog != null ? epilog: "";
-	}
-
 	/** Returns the tag name, or null if plain text.
 	 */
 	public String getTag() {
 		return _tagnm;
+	}
+
+	//Native//
+	public String getProlog() {
+		return _prolog;
+	}
+	public void setProlog(String prolog) {
+		_prolog = prolog != null ? prolog: "";
+	}
+	public String getEpilog() {
+		return _epilog;
+	}
+	public void setEpilog(String epilog) {
+		_epilog = epilog != null ? epilog: "";
 	}
 
 	//-- Component --//
@@ -115,8 +101,7 @@ implements DynamicTag, Native {
 	}
 
 	public void redraw(Writer out) throws IOException {
-		final Device device = Executions.getCurrent().getDesktop().getDevice();
-		out.write(device.getRawTagBegin(_tagnm, _props));
+//		out.write(device.getRawTagBegin(_tagnm, _props));
 
 		out.write(_prolog); //no encoding
 
@@ -125,7 +110,7 @@ implements DynamicTag, Native {
 
 		out.write(_epilog); //no encodding
 
-		out.write(device.getRawTagEnd(_tagnm));
+//		out.write(device.getRawTagEnd(_tagnm));
 	}
 
 	//DynamicTag//
