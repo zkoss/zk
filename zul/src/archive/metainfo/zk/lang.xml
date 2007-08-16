@@ -121,6 +121,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<macro-class>org.zkoss.zk.ui.HtmlMacroComponent</macro-class>
 		<macro-uri>~./zul/html/macro.dsp</macro-uri>
 	</macro-template>
+	<!-- Defines the template for the Native namespace
+		[Optional] Define it only if the Native namespace is supported.
+	-->
+	<native-template>
+		<native-class>org.zkoss.zk.ui.HtmlNativeComponent</native-class>
+	</native-template>
 
 	<component>
 		<component-name>area</component-name>
