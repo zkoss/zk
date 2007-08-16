@@ -18,5 +18,5 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zscript>
-Executions.forward("test.zul");
+Executions.forward("test.dsp");
 </zscript>

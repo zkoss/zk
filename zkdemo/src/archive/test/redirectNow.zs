@@ -14,6 +14,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-import org.zkoss.zk.ui.*;
-
-Executions.sendRedirect("test.zul");
+Executions.sendRedirect("test.dsp");
