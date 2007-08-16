@@ -50,6 +50,7 @@ ZK 2.5.0
   1768343: zk-2.4.1 - annotations not available at constructor
   1773902: OpenSessionInViewListener not properly close Hibern. Session
   1774432: Bug in adding treeitem to tree's first-level treechildren
+  1775339: getWriter() has already been called while use forward
  
 * Upgrade Notes:
   + The signature of PageCtrl's init method is changed.
