@@ -97,7 +97,7 @@ public class Configuration {
 		_failmancls, _idgencls, _spushcls;
 	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
 		_sparThdMax = 100, _suspThdMax = -1,
-		_maxUploadSize = 5120,
+		_maxUploadSize = 5120, _maxProcTime = 3000,
 		_promptDelay = 900, _tooltipDelay = 800;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	/** A set of the language name whose theme is disabled. */
@@ -1003,6 +1003,26 @@ public class Configuration {
 	 */
 	public Class getServerPushClass() {
 		return _spushcls;
+	}
+
+	/** Specifies the maximal allowed time to process events, in miliseconds.
+	 * ZK will keep processing the requests sent from
+	 * the client until all requests are processed, or the maximal allowed
+	 * time expires.
+	 *
+	 * <p>Default: 3000.
+	 *
+	 * @param time the maximal allowed time to process events.
+	 * It must be positive.
+	 */
+	public void setMaxProcessTime(int time) {
+		_maxProcTime = time;
+	}
+	/** Returns the maximal allowed time to process events, in miliseconds.
+	 * It is always positive
+	 */
+	public int getMaxProcessTime() {
+		return _maxProcTime;
 	}
 
 	/** Specifies the maximal allowed upload size, in kilobytes.

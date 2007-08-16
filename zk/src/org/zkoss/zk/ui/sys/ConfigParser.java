@@ -139,7 +139,7 @@ public class ConfigParser {
 				Integer v = parseInteger(el, "session-timeout", false);
 				if (v != null) config.setSessionMaxInactiveInterval(v.intValue());
 
-				v = parseInteger(el, "max-desktops-per-session", true);
+				v = parseInteger(el, "max-desktops-per-session", false);
 				if (v != null) config.setMaxDesktops(v.intValue());
 
 				String s = el.getElementValue("timer-as-inactive", true);
@@ -158,6 +158,7 @@ public class ConfigParser {
 			//	max-spare-threads
 			//  max-suspended-threads
 			//  max-upload-size
+			//  max-process-time
 			//	response-charset
 			//  cache-provider-class
 			//  ui-factory-class
@@ -171,14 +172,17 @@ public class ConfigParser {
 				String s = el.getElementValue("disable-event-thread", true);
 				if (s != null) config.enableEventThread("false".equals(s));
 
-				Integer v = parseInteger(el, "max-spare-threads", true);
+				Integer v = parseInteger(el, "max-spare-threads", false);
 				if (v != null) config.setMaxSpareThreads(v.intValue());
 				
-				v = parseInteger(el, "max-suspended-threads", true);
+				v = parseInteger(el, "max-suspended-threads", false);
 				if (v != null) config.setMaxSuspendedThreads(v.intValue());
 
-				v = parseInteger(el, "max-upload-size", true);
+				v = parseInteger(el, "max-upload-size", false);
 				if (v != null) config.setMaxUploadSize(v.intValue());
+
+				v = parseInteger(el, "max-process-time", true);
+				if (v != null) config.setMaxProcessTime(v.intValue());
 
 				s = el.getElementValue("upload-charset", true);
 				if (s != null) config.setUploadCharset(s);

@@ -607,7 +607,8 @@ public class UiEngineImpl implements UiEngine {
 			config.invokeExecutionInits(exec, null);
 			final RequestQueue rque = ((DesktopCtrl)desktop).getRequestQueue();
 			final List errs = new LinkedList();
-			final long tmexpired = System.currentTimeMillis() + 3000;
+			final long tmexpired =
+				System.currentTimeMillis() + config.getMaxProcessTime();
 				//Tom Yeh: 20060120
 				//Don't process all requests if this thread has processed
 				//a while. Thus, user could see the response sooner.

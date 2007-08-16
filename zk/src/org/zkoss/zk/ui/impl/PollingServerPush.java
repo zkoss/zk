@@ -45,6 +45,7 @@ public class PollingServerPush implements ServerPush {
 	private static final int GIVEUP = -99;
 
 	private Desktop _desktop;
+	private Configuration _config;
 	/** List of ThreadInfo. */
 	private final List _pending = new LinkedList();
 	/** The active thread. */
@@ -59,23 +60,22 @@ public class PollingServerPush implements ServerPush {
 	/** Returns the JavaScript codes to enable (aka., start) the server push.
 	 */
 	protected String getStartScript() {
-		final Configuration conf = _desktop.getWebApp().getConfiguration();
-		final String start = conf.getPreference("PollingServerPush.start", null);
+		final String start = _config.getPreference("PollingServerPush.start", null);
 		if (start != null)
 			return start;
 		final StringBuffer sb = new StringBuffer(128)
 			.append("zk.invoke('zul.cpsp',function(){zkCpsp.start('")
 			.append(_desktop.getId()).append('\'');
 
-		final int v1 = getIntPref(conf, "PollingServerPush.delay.min"),
-			v2 = getIntPref(conf, "PollingServerPush.delay.max");
+		final int v1 = getIntPref("PollingServerPush.delay.min"),
+			v2 = getIntPref("PollingServerPush.delay.max");
 		if (v1 > 0  && v2 > 0)
 			sb.append(',').append(v1).append(',').append(v2);
 
 		return sb.append(");});").toString();
 	}
-	private int getIntPref(Configuration conf, String key) {
-		final String s = conf.getPreference(key, null);
+	private int getIntPref(String key) {
+		final String s = _config.getPreference(key, null);
 		if (s != null) {
 			try {
 				return Integer.parseInt(s);
@@ -89,8 +89,8 @@ public class PollingServerPush implements ServerPush {
 	/** Returns the JavaScript codes to disable (aka., stop) the server push.
 	 */
 	protected String getStopScript() {
-		final String stop = _desktop.getWebApp()
-			.getConfiguration().getPreference("PollingServerPush.stop", null);
+		final String stop =
+			_config.getPreference("PollingServerPush.stop", null);
 		return stop != null ? stop:
 			"zkCpsp.stop('" + _desktop.getId() + "');";
 	}
@@ -102,6 +102,7 @@ public class PollingServerPush implements ServerPush {
 			throw new IllegalStateException("Already started");
 
 		_desktop = desktop;
+		_config = _desktop.getWebApp().getConfiguration();
 		Clients.response(new AuScript(null, getStartScript()));
 	}
 	public void stop() {
@@ -110,6 +111,7 @@ public class PollingServerPush implements ServerPush {
 
 		Clients.response(new AuScript(null, getStopScript()));
 		_desktop = null; //to cause DesktopUnavailableException being thrown
+		_config = null;
 
 		synchronized (_pending) {
 			for (Iterator it = _pending.iterator(); it.hasNext();) {
@@ -141,7 +143,8 @@ public class PollingServerPush implements ServerPush {
 			//In addition, an ill-written code might activate again
 			//before onPiggyback returns. It causes dead-loop in this case.
 			if (tmexpired == 0) { //first time
-				tmexpired = System.currentTimeMillis() + 2000;
+				tmexpired = System.currentTimeMillis()
+					+ _config.getMaxProcessTime() / 2;
 				cnt = _pending.size() + 5;
 			} else if (--cnt < 0 || System.currentTimeMillis() > tmexpired) {
 				break;
