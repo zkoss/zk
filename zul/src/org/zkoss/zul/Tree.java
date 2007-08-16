@@ -652,9 +652,11 @@ public class Tree extends XulElement {
 
 		final Treechildren tc = getTreechildren();
 		if (tc != null) {
+			HTMLs.appendAttribute(sb, "z.tchsib", tc.getUuid());
+				//we have to generate first, since # of page might grow later
+
 			final int pgcnt = tc.getPageCount();
 			if (pgcnt > 1) {
-				HTMLs.appendAttribute(sb, "z.tchsib", tc.getUuid());
 				HTMLs.appendAttribute(sb, "z.pgc", pgcnt);
 				HTMLs.appendAttribute(sb, "z.pgi", tc.getActivePage());
 				HTMLs.appendAttribute(sb, "z.pgsz", tc.getPageSize());
