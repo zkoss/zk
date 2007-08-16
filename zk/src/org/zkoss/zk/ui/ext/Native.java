@@ -46,4 +46,20 @@ public interface Native extends NonFellow {
 	 * before the child components, if any.
 	 */
 	public void setEpilog(String epilog);
+
+	/** Returns the first half of the output.
+	 * For example, getFirstHalf("tr") returns "&lt;tr&gt;", and
+	 * getFirstHalf("br") returns "&lt;br/&gt;".
+	 *
+	 * <p>The first half also includes the prolog ({@link #getProlog}).
+	 * Notice that it doesn't include the output of all child components.
+	 */
+	public String getFirstHalf();
+	/** Returns the second half of the output.
+	 * For example, getSecondHalf("tr") returns "&lt;/tr&gt;", and
+	 * getSecondHalf("br") returns "".
+	 *
+	 * <p>The first half also includes the epilog ({@link #getEpilog}).
+	 */
+	public String getSecondHalf();
 }

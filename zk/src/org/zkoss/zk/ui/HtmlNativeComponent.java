@@ -21,8 +21,13 @@ package org.zkoss.zk.ui;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.io.Writer;
 import java.io.IOException;
+
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
@@ -90,6 +95,81 @@ implements DynamicTag, Native {
 	public void setEpilog(String epilog) {
 		_epilog = epilog != null ? epilog: "";
 	}
+	public String getFirstHalf() {
+		final StringBuffer sb = new StringBuffer(128);
+		appendTagBegin(sb);
+		sb.append(_prolog); //no encoding
+		return sb.toString();
+	}
+	public String getSecondHalf() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(_epilog); //no encodding
+		appendTagEnd(sb);
+		return sb.toString();
+	}
+
+	//Utilities//
+	/** Appends the tag begin, e.g., &lt;tr&gt;.
+	 */
+	private void appendTagBegin(StringBuffer sb) {
+		if (_tagnm == null)
+			return;
+
+		sb.append('<').append(_tagnm);
+
+		if (_props != null)
+			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				HTMLs.appendAttribute(sb,
+					Objects.toString(me.getKey()),
+					Objects.toString(me.getValue()));
+			}
+
+		final String tn = _tagnm.toLowerCase();
+		if (HTMLs.isOrphanTag(tn))
+			sb.append('/');
+		sb.append('>');
+
+		if (_beglftags.contains(tn))
+			sb.append('\n'); //make it more readable
+	}
+	/** Appends the tag end, e.g., &lt;/tr&gt;.
+	 */
+	private void appendTagEnd(StringBuffer sb) {
+		if (_tagnm == null)
+			return;
+
+		final String tn = _tagnm.toLowerCase();
+		if (HTMLs.isOrphanTag(tn)) {
+			if ("br".equals(tn))
+				sb.append('\n');
+			return;
+		}
+
+		sb.append("</").append(_tagnm).append('>');
+
+		if (_endlftags.contains(tn))
+			sb.append('\n'); //make it more readable
+	}
+
+	/** A set of tags that we shall append linefeed to it.
+	 */
+	private static final Set
+		_endlftags = new HashSet(), _beglftags = new HashSet();
+	static {
+		final String[] beglftags = {
+			"table", "tr", "tbody", "ul", "ol"
+		};
+
+		for (int j = beglftags.length; --j >= 0;)
+			_beglftags.add(beglftags[j]);
+
+		final String[] endlftags = {
+			"tr", "td", "th", "p", "li", "dt", "dd"
+		};
+		for (int j = endlftags.length; --j >= 0;)
+			_endlftags.add(endlftags[j]);
+	}
 
 	//-- Component --//
 	public void setId(String id) {
@@ -101,16 +181,12 @@ implements DynamicTag, Native {
 	}
 
 	public void redraw(Writer out) throws IOException {
-//		out.write(device.getRawTagBegin(_tagnm, _props));
-
-		out.write(_prolog); //no encoding
+		out.write(getFirstHalf());
 
 		for (Iterator it = getChildren().iterator(); it.hasNext();)
 			((Component)it.next()).redraw(out);
 
-		out.write(_epilog); //no encodding
-
-//		out.write(device.getRawTagEnd(_tagnm));
+		out.write(getSecondHalf());
 	}
 
 	//DynamicTag//
