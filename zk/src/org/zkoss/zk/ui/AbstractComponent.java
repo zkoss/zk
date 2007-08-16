@@ -234,12 +234,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	/** Removes from the ID spaces, if any, when ID is changed. */
 	private static void removeFromIdSpaces(final Component comp) {
-		final String compId = ((AbstractComponent)comp)._id;
-		if (compId == null || ComponentsCtrl.isAutoId(compId))
+		final AbstractComponent abcomp = (AbstractComponent)comp;
+		final String compId = abcomp._id;
+		if (compId == null
+		|| !abcomp.isFellowable() || ComponentsCtrl.isAutoId(compId))
 			return; //nothing to do
 
 		if (comp instanceof IdSpace)
-			((AbstractComponent)comp).unbindFromIdSpace(compId);
+			abcomp.unbindFromIdSpace(compId);
 
 		final IdSpace is = getSpaceOwnerOfParent(comp);
 		if (is instanceof Component)
@@ -248,9 +250,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((PageCtrl)is).removeFellow(comp);
 	}
 	/** Checks the uniqueness in ID space when changing ID. */
-	private static void checkIdSpaces(final Component comp, String newId) {
+	private static void checkIdSpaces(final AbstractComponent comp, String newId) {
+		if (!comp.isFellowable())
+			return; //no need to check
+
 		if (comp instanceof IdSpace
-		&& ((AbstractComponent)comp)._spaceInfo.fellows.containsKey(newId))
+		&& comp._spaceInfo.fellows.containsKey(newId))
 			throw new UiException("Not unique in the ID space of "+comp);
 
 		final IdSpace is = getSpaceOwnerOfParent(comp);
@@ -274,14 +279,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			addToIdSpacesDown(comp, (PageCtrl)is);
 	}
 	private static void addToIdSpacesDown(Component comp, Component owner) {
-		if (!ComponentsCtrl.isAutoId(comp.getId()))
+		if (((AbstractComponent)comp).isFellowable()
+		&& !ComponentsCtrl.isAutoId(comp.getId()))
 			((AbstractComponent)owner).bindToIdSpace(comp);
 		if (!(comp instanceof IdSpace))
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 				addToIdSpacesDown((Component)it.next(), owner); //recursive
 	}
 	private static void addToIdSpacesDown(Component comp, PageCtrl owner) {
-		if (!ComponentsCtrl.isAutoId(comp.getId()))
+		if (((AbstractComponent)comp).isFellowable()
+		&& !ComponentsCtrl.isAutoId(comp.getId()))
 			owner.addFellow(comp);
 		if (!(comp instanceof IdSpace))
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
@@ -300,14 +307,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	private static void removeFromIdSpacesDown(Component comp, Component owner) {
 		final String compId = comp.getId();
-		if (!ComponentsCtrl.isAutoId(compId))
+		if (((AbstractComponent)comp).isFellowable()
+		&& !ComponentsCtrl.isAutoId(compId))
 			((AbstractComponent)owner).unbindFromIdSpace(compId);
 		if (!(comp instanceof IdSpace))
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 				removeFromIdSpacesDown((Component)it.next(), owner); //recursive
 	}
 	private static void removeFromIdSpacesDown(Component comp, PageCtrl owner) {
-		if (!ComponentsCtrl.isAutoId(comp.getId()))
+		if (((AbstractComponent)comp).isFellowable()
+		&& !ComponentsCtrl.isAutoId(comp.getId()))
 			owner.removeFellow(comp);
 		if (!(comp instanceof IdSpace))
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
@@ -325,7 +334,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Checks comp and its descendants for the specified SpaceInfo. */
 	private static void checkIdSpacesDown(Component comp, SpaceInfo si) {
 		final String compId = comp.getId();
-		if (!ComponentsCtrl.isAutoId(compId) && si.fellows.containsKey(compId))
+		if (((AbstractComponent)comp).isFellowable()
+		&& !ComponentsCtrl.isAutoId(compId) && si.fellows.containsKey(compId))
 			throw new UiException("Not unique in the new ID space: "+compId);
 		if (!(comp instanceof IdSpace))
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
@@ -334,7 +344,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Checks comp and its descendants for the specified page. */
 	private static void checkIdSpacesDown(Component comp, PageCtrl pageCtrl) {
 		final String compId = comp.getId();
-		if (!ComponentsCtrl.isAutoId(compId) && pageCtrl.hasFellow(compId))
+		if (((AbstractComponent)comp).isFellowable()
+		&& !ComponentsCtrl.isAutoId(compId) && pageCtrl.hasFellow(compId))
 			throw new UiException("Not unique in the ID space of "+pageCtrl+": "+compId);
 		if (!(comp instanceof IdSpace))
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
@@ -346,7 +357,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	private void bindToIdSpace(Component comp) {
 		final String compId = comp.getId();
-		//assert D.OFF || !ComponentsCtrl.isAutoId(compId): "Auto ID shall be ignored: "+compId;
 		_spaceInfo.fellows.put(compId, comp);
 		if (Names.isValid(compId))
 			_spaceInfo.ns.setVariable(compId, comp, true);
@@ -376,6 +386,25 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	private final UiEngine getThisUiEngine() {
 		return ((WebAppCtrl)_page.getDesktop().getWebApp()).getUiEngine();
+	}
+
+	/** Returns whether this component will be a fellow of the ID space
+	 * it belongs when the identifier is assigned to it.
+	 *
+	 * <p>Default: true. It means it becomes a fellow
+	 * (i.e., returned by{@link IdSpace#getFellow}), once the identifier is
+	 * assigned by use of {@link #setId}.
+	 *
+	 * <p>Implementation Note:<br/>
+	 * Currently only inline component overrides this method
+	 * to return false. You rarely need to do it (since it confuses
+	 * user for the inconsistency with the spec).
+	 * Also the return value shall not changed dynamically.
+	 *
+	 * @since 2.5.0
+	 */
+	protected boolean isFellowable() {
+		return true;
 	}
 
 	//-- Component --//
@@ -524,7 +553,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		} while (desktop.getComponentByUuidIfAny(uuid) != null);
 		return uuid;
 	}
-	public final String getId() {
+	public String getId() {
 		if (_id == null)
 			_id = this instanceof RawId ? getUuid(): ComponentsCtrl.ANONYMOUS_ID;
 		return _id;
@@ -534,7 +563,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			throw new UiException("ID cannot be empty");
 
 		if (!Objects.equals(_id, id)) {
-			if (Names.isReserved(id) || ComponentsCtrl.isAutoId(id))
+			if (Names.isReserved(id)
+			|| (isFellowable() && ComponentsCtrl.isAutoId(id)))
 				throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Names.getReservedNames());
 
 			final boolean rawId = this instanceof RawId;

@@ -102,7 +102,22 @@ public class InlineComponent extends AbstractComponent implements DynamicTag {
 		return _tagnm;
 	}
 
+	//AbstractComponent//
+	/** Returns false to denote not to add it the fellows when
+	 * the identifier is assigned.
+	 *
+	 * @since AbstractComponent#isFellowable
+	 */
+	protected boolean isFellowable() {
+		return false;
+	}
+
 	//-- Component --//
+	public void setId(String id) {
+		super.setId(id);
+		setDynamicProperty("id", id);
+	}
+
 	public void redraw(Writer out) throws IOException {
 		final Device device = Executions.getCurrent().getDesktop().getDevice();
 		out.write(device.getRawTagBegin(_tagnm, _props));
