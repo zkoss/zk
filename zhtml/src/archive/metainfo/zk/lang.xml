@@ -104,6 +104,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<macro-class>org.zkoss.zk.ui.HtmlMacroComponent</macro-class>
 		<macro-uri>~./zhtml/macro.dsp</macro-uri>
 	</macro-template>
+	<!-- Defines the template for the Native namespace -->
+	<native-template>
+		<native-class>org.zkoss.zk.ui.HtmlNativeComponent</native-class>
+	</native-template>
 
 	<!-- Defines the component used to generate components for unknown tags.
 	-->
