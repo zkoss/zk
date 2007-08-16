@@ -853,7 +853,7 @@ public class Tree extends XulElement {
 	 */
 	protected Component getTreeComponentByNode(Object node){
 		int[] path = _model.getPath(_model.getRoot(), node);
-		System.out.println(Arrays.toString(path));
+		
 		//If path is null or empty, return root(Tree) 
 		if(path == null || path.length == 0)
 			return this;

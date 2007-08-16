@@ -18,133 +18,42 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.ArrayList;
-
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zul.event.TreeDataListener;
-import org.zkoss.zul.event.TreeDataEvent;
-
 /**
  * A simple implementation of {@link TreeModel}.
+ * Note: It assumes the content is immutable.
  *
  * @author Jeff Liu
  */
-public class SimpleTreeModel extends AbstractTreeModel{
+public class SimpleTreeModel extends AbstractTreeModel {
 	
-	/** Constructor.
-	 *
-	 * @param root - the root of tree
-	 * 
+	/**
+	 * Constructor
+	 * @param root - the root of tree 
 	 */
-	public SimpleTreeModel(Object root){
-		super.setRoot(root);
+	public SimpleTreeModel(SimpleTreeNode root) {
+		super(root);
 	}
 	
-	//-- TreeModel --//
-	public int getChildCount(Object parent) {
-		if(isLeaf(parent))
-			return -1;
-		else{
-			ArrayList al = (ArrayList)parent;
-			return al.size();
-		}
-	}
-	
-	//-- TreeModel --//
-	public boolean isLeaf(Object node) {
-		boolean isLeaf =!(node instanceof ArrayList);
-		if(!isLeaf){
-			return (((ArrayList)node).size() == 0);
-		}
-		return isLeaf;
-	}
-	
-	//-- TreeModel --//
+	//--TreeModel--//
 	public Object getChild(Object parent, int index) {
-		ArrayList al = (ArrayList)parent;
-		return al.get(index);
+		SimpleTreeNode node = (SimpleTreeNode)parent;
+		return node.getChildAt(index);
 	}
 	
-	//-- AbstractTreeModel --//
-	public Object getRoot() {
-		return super.getRoot();
+	//--TreeModel--//
+	public int getChildCount(Object parent) {
+		SimpleTreeNode node = (SimpleTreeNode)parent;
+		return node.getChildCount();
 	}
 	
-	/**
-	 * Modify the nodes which parent is <code>parent</code> with indexes <code>indexes</code> by
-	 *  values
-	 * @param parent The parent of nodes are modified
-	 * @param indexFrom the lower index of the change range
-	 * @param indexTo the upper index of the change range
-	 * @param values The new values of nodes are modified
-	 * @throws IndexOutOfBoundsException - indexFrom < 0 or indexTo > number of parent's children
-	 */
-	public void set(Object parent, int indexFrom, int indexTo, Object[] values) throws IndexOutOfBoundsException{
-		ArrayList al = (ArrayList)parent;
-		for(int i=indexFrom; i<=indexTo;i++){
-			try{
-				al.set(i, values[i-indexFrom]);
-			}catch(Exception exp){
-				throw new IndexOutOfBoundsException("Out of bound: "+i+" while size="+al.size());
-			}
+	//--TreeModel--//
+	public boolean isLeaf(Object node) {
+		if(node instanceof SimpleTreeNode){
+			SimpleTreeNode node_ = (SimpleTreeNode)node;
+			return node_.isLeaf();
+		}else{
+			return true;
 		}
-		fireEvent(parent,indexFrom,indexTo,TreeDataEvent.CONTENTS_CHANGED);
 	}
-	
-	/**
-	 * remove the nodes which parent is <code>parent</code> with indexes <code>indexes</code>
-	 * @param parent The parent of nodes are removed
-	 * @param indexFrom the lower index of the change range
-	 * @param indexTo the upper index of the change range
-	 * @throws IndexOutOfBoundsException - indexFrom < 0 or indexTo > number of parent's children
-	 */
-	public void remove(Object parent, int indexFrom, int indexTo) throws IndexOutOfBoundsException{
-		ArrayList al = (ArrayList)parent;	
-		for(int i=indexTo; i>=indexFrom;i--)
-		try{
-			al.remove(i);
-		}catch(Exception exp){
-			throw new IndexOutOfBoundsException("Out of bound: "+i+" while size="+al.size());
-		}
-		fireEvent(parent,indexFrom,indexTo,TreeDataEvent.INTERVAL_REMOVED);
-		
-	}
-	
-	/**
-	 * append new nodes which parent is <code>parent</code>
-	 * by new nodes <code>newNodes</code>
-	 * @param parent The parent of nodes are appended
-	 * @param newNodes New nodes which are appended
-	 */
-	public void add(Object parent, Object[] newNodes){
-		ArrayList al = (ArrayList)parent;
-		int indexFrom = al.size();
-		int indexTo = al.size()+newNodes.length-1;
-		for(int i=0; i<newNodes.length;i++)
-			al.add(newNodes[i]);
-		fireEvent(parent,indexFrom,indexTo,TreeDataEvent.INTERVAL_ADDED);
-	}
-	
-	/**
-	 * insert new nodes which parent is <code>parent</code> with indexes <code>indexes</code>
-	 * by new nodes <code>newNodes</code>
-	 * @param parent The parent of nodes are inserted
-	 * @param indexFrom the lower index of the change range
-	 * @param indexTo the upper index of the change range
-	 * @param newNodes New nodes which are inserted
-	 * @throws IndexOutOfBoundsException - indexFrom < 0 or indexTo > number of parent's children
-	 */
-	public void insert(Object parent, int indexFrom, int indexTo, Object[] newNodes) throws IndexOutOfBoundsException{
-		ArrayList al = (ArrayList)parent;
-		for(int i=indexFrom; i<=indexTo; i++){
-			try{
-				al.add(i, newNodes[i-indexFrom]);
-			}catch(Exception exp){
-				throw new IndexOutOfBoundsException("Out of bound: "+i+" while size="+al.size());
-			}
-		}
-		fireEvent(parent,indexFrom,indexTo,TreeDataEvent.INTERVAL_ADDED);
-		
-	}
-}
 
+}

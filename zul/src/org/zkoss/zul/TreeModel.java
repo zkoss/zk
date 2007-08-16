@@ -29,21 +29,21 @@ public interface TreeModel {
 	
 	/**
 	 * Returns true if node is a leaf.
-	 * @param node - a node in the tree, obtained from this data source
+	 * @param node a node in the tree, obtained from this data source
 	 * @return true if node is a leafs
 	 */
 	public boolean isLeaf(Object node);
 
 	/**
 	 * Returns the child of parent at index index in the parent's child array.
-	 * @param parent - a node in the tree, obtained from this data source
+	 * @param parent a node in the tree, obtained from this data source
 	 * @return the child of parent at index index
 	 */
 	public Object getChild(Object parent, int index);
 	
 	/**
 	 * Returns the number of children of parent.
-	 * @param parent - a node in the tree, obtained from this data source
+	 * @param parent a node in the tree, obtained from this data source
 	 * @return the number of children of the node parent
 	 */
 	public int getChildCount(Object parent);
@@ -56,13 +56,13 @@ public interface TreeModel {
 	
 	/**
 	 * Add a listener to the tree that's notified each time a change to the data model occurs
-	 * @param l - the listener to add
+	 * @param l the listener to add
 	 */
 	public void addTreeDataListener(TreeDataListener l);
 	
 	/**
 	 * Remove a listener to the tree that's notified each time a change to the data model occurs
-	 * @param l - the listener to remove
+	 * @param l the listener to remove
 	 */
 	public void removeTreeDataListener(TreeDataListener l);
 	
@@ -76,8 +76,8 @@ public interface TreeModel {
 	 *  3. Go to the index(0)'s child at idnex(2) -- the lastNode;<br>
 	 * If parent is the same as lastNode, return null or empty array. 
 	 * 
-	 * @param parent - the origin of Path
-	 * @param lastNode - the destination of Path
+	 * @param parent the origin of Path
+	 * @param lastNode the destination of Path
 	 * @return an integer array to represent the path from parent to lastNode.
 	 */
 	public int[] getPath(Object parent, Object lastNode);

@@ -34,18 +34,20 @@ import org.zkoss.zul.event.TreeDataEvent;
  */
 public abstract class AbstractTreeModel implements TreeModel, java.io.Serializable  {
 	
+	/**
+	 * The root object to be return by method {@link #getRoot()}.
+	 */
 	private Object _root;
 	
 	private transient List _listeners = new LinkedList();
 	
 	/**
-	* Set the root of tree
-	* @param root the root of tree
-	*/
-	public void setRoot(Object root){
+	 * Contructor
+	 * @param root - root of tree
+	 */
+	public AbstractTreeModel(Object root){
 		_root = root;
 	}
-	
 	/**
 	* Return the root of tree
 	* @return the root of tree
