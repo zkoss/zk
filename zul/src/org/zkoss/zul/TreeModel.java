@@ -23,6 +23,8 @@ import org.zkoss.zul.event.TreeDataListener;
 /**
  * This interface defines the methods that component like {@link Tree}
  * use to get the content of items.
+ * @author Jeff Liu
+ * @since ZK 2.5
  *
  */
 public interface TreeModel {

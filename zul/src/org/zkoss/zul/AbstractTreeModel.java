@@ -31,6 +31,7 @@ import org.zkoss.zul.event.TreeDataEvent;
  * A skeletal implementation for {@link TreeModel}.
  *
  * @author Jeff Liu
+ * @since ZK 2.5
  */
 public abstract class AbstractTreeModel implements TreeModel, java.io.Serializable  {
 	

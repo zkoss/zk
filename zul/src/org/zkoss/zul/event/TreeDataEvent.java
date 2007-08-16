@@ -24,6 +24,7 @@ import org.zkoss.zul.TreeModel;
  * Defines an event that encapsulates changes to a tree. 
  *
  * @author Jeff Liu
+ * @since ZK 2.5
  */
 public class TreeDataEvent {
 	/** Identifies changing contents of nodes. */
