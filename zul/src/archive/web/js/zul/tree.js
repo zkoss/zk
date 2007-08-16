@@ -150,13 +150,13 @@ zkTree.init = function (cmp) {
 		zkTreeNewClass();
 
 		meta = new zk.Tree(cmp);
-
-		if (meta.body) {
+		if (meta.body)
 			zk.listen(meta.body, "keydown", zkTree.bodyonkeydown);
-			if (meta.bodytbl)
-				zkTrow._pgnt(cmp, meta.bodytbl.rows);
-		}
 	}
+
+	//we have re-paginate since treechild might be invalidated
+	if (meta.bodytbl)
+		zkTrow._pgnt(cmp, meta.bodytbl.rows);
 };
 zkTree.childchg = zkTree.init;
 
@@ -201,9 +201,17 @@ zkTree.focus = function (cmp) {
 /** Process the setAttr cmd sent from the server, and returns whether to
  * continue the processing of this cmd
  */
-zkTree.setAttr = function (tree, name, value) {
-	var meta = zkau.getMeta(tree);
-	return meta && meta.setAttr(name, value);
+zkTree.setAttr = function (cmp, nm, val) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) {
+		if ("z.pgInfo" == nm) {
+			zkTrow._setPgInfo(cmp, val);
+			if (meta.bodytbl)
+				zkTrow._pgnt(cmp, meta.bodytbl.rows);
+			return true;
+		}
+		return meta.setAttr(nm, val);
+	}
 };
 
 /** Called when the +/- button is clicked. */
@@ -256,15 +264,18 @@ zkTrow.setAttr = function (cmp, nm, val) {
 		}
 		return true; //no more processing
 	} else if ("z.pgInfo" == nm) {
-		var j = val.indexOf(','), k = val.indexOf(',', j + 1);
-		setZKAttr(cmp, "pgc", val.substring(0, j).trim());
-		setZKAttr(cmp, "pgi", val.substring(j + 1, k).trim());
-		setZKAttr(cmp, "pgsz", val.substring(k + 1).trim());
+		zkTrow._setPgInfo(cmp, val);
 		zkTrow._pgnt(cmp);
 		return true;
 	}
 	return false;
 };
+zkTrow._setPgInfo = function (cmp, pgInfo) {
+	var j = pgInfo.indexOf(','), k = pgInfo.indexOf(',', j + 1);
+	setZKAttr(cmp, "pgc", pgInfo.substring(0, j).trim());
+	setZKAttr(cmp, "pgi", pgInfo.substring(j + 1, k).trim());
+	setZKAttr(cmp, "pgsz", pgInfo.substring(k + 1).trim());
+}
 
 /** Called when _onDocCtxMnu is called. */
 zkTrow.onrtclk = function (cmp) {
@@ -321,7 +332,8 @@ zkTrow._fixpgspan = function (n, ncol) {
 zkTrow._genpg = function (cmp, rows, end) {
 	var tr = document.createElement("TR");
 	tr.id = cmp.id + (end ? "!pt": "!ph");
-	if (!rows && !zkTree.isOpen(cmp))
+	if (!rows //!rows => parent is treeitem
+	&& (!zkTree.isOpen(cmp) || !$visible(cmp))) //not visible if ancestor is not open
 		tr.style.display = "none"
 	var td = document.createElement("TD");
 	tr.appendChild(td);

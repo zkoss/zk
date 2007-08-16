@@ -190,7 +190,7 @@ public class Treechildren extends XulElement implements Pageable {
 				if (_actpg >= pgcnt)
 					_actpg = pgcnt - 1;
 
-				invalidate();
+				invalidate(); //due to client's limit, we have to redraw
 				smartUpdatePaging();
 					//it affect treerow (so invalidate won't 'eat' it)
 			}
@@ -275,6 +275,7 @@ public class Treechildren extends XulElement implements Pageable {
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Treeitem))
 			throw new UiException("Unsupported child for treechildren: "+child);
+
 		if (super.insertBefore(child, insertBefore)) {
 			final int sz = getChildren().size();
 			if (sz == 1) { //the first child been added
