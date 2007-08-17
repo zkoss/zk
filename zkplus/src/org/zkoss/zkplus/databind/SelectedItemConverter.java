@@ -45,12 +45,16 @@ public class SelectedItemConverter implements TypeConverter {
   			int index = model.indexOf(val);
   			if (index >= 0) {
     			final Listitem item = (Listitem) lbx.getItemAtIndex(index);
+    			
     			final int selIndex = lbx.getSelectedIndex();
+    			
+				//We need this to support load-when:onSelect when first load 
+				//the page in (so it is called only once).
   				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
     				Set items = new HashSet();
     				items.add(item);
     				Events.postEvent(new SelectEvent("onSelect", lbx, items));
-    			}
+    			}    			
   				return item;
   			}
   		} else if (xmodel == null) { //no model case, assume Listitem.value to be used with selectedItem

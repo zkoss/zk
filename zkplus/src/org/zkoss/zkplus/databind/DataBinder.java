@@ -1215,11 +1215,16 @@ public class DataBinder {
 					continue;
 				}
 				loadedBindings.add(binding);
-				/* save then load might change the format, so still load back
+
+				// bug 1775051: a multiple selection Listbox. When onSelect and loadOnSave cause 
+				// setSelectedItem (loading) to be called and cause deselection of other multiple 
+				// selected items. Must skip such case.
+				
+				// save binding that cause this loadOnSave, no need to load again.
 				if (binding == savebinding) {
 					continue;
 				}
-				*/
+
 				Component comp = binding.getComponent();
 				if (isTemplate(comp)) { //a template component, locate the listitem
 					Component clonecomp = null;
