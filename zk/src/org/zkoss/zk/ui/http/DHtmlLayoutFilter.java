@@ -91,7 +91,7 @@ public class DHtmlLayoutFilter implements Filter {
 			final Desktop desktop = webman.getDesktop(sess, request, path, true);
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request, null);
-			((SessionCtrl)sess).notifyClientRequest(null);
+			((SessionCtrl)sess).notifyClientRequest(true);
 			final UiFactory uf = wappc.getUiFactory();
 			final PageDefinition pagedef =
 				uf.getPageDefinitionDirectly(ri, content, _ext);

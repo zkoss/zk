@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Iterator;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Threads;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Desktop;
@@ -128,7 +129,7 @@ public class PollingServerPush implements ServerPush {
 	 * <code>PollingServerPush.delay.min</code>
 	 * <code>PollingServerPush.delay.max</code>,
 	 * and <code>PollingServerPush.delay.factor</code>.
-	 * If not defined, min is 2500, max 10000, factor 5.
+	 * If not defined, min is 1100, max is 10000, and factor is 5.
 	 */
 	public void setDelay(int min, int max, int factor) {
 		Clients.response(
@@ -144,8 +145,8 @@ public class PollingServerPush implements ServerPush {
 			//before onPiggyback returns. It causes dead-loop in this case.
 			if (tmexpired == 0) { //first time
 				tmexpired = System.currentTimeMillis()
-					+ _config.getMaxProcessTime() / 2;
-				cnt = _pending.size() + 5;
+					+ (_config.getMaxProcessTime() >> 1);
+				cnt = _pending.size() + 3;
 			} else if (--cnt < 0 || System.currentTimeMillis() > tmexpired) {
 				break;
 			}
@@ -233,6 +234,10 @@ public class PollingServerPush implements ServerPush {
 				synchronized (_mutex) {
 					_mutex.notify();
 				}
+
+				Threads.sleep(50);
+					//to minimize the chance that the server-push thread
+					//activate again, before onPiggback polls next _pending
 			}
 		}
 	}

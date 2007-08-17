@@ -93,7 +93,7 @@ public interface Session {
 	 * the servlet container will invalidate this session.
 	 * A negative time indicates the session should never timeout.
 	 *
-	 * @see #setTimerAsInactive
+	 * @see org.zkoss.zk.ui.util.Configuration#setTimerKeepAlive
 	 * @see org.zkoss.zk.ui.util.Configuration#setSessionMaxInactiveInterval
 	 */
 	public void setMaxInactiveInterval(int interval);
@@ -101,37 +101,11 @@ public interface Session {
 	 * the servlet container will invalidate this session.
 	 * A negative time indicates the session should never timeout.
 	 *
-	 * @see #isTimerAsInactive
+	 * @see org.zkoss.zk.ui.util.Configuration#isTimerKeepAlive
 	 * @see org.zkoss.zk.ui.util.Configuration#getSessionMaxInactiveInterval
 	 * @since 2.5.0
 	 */
 	public int getMaxInactiveInterval();
-
-	/** Specifies whether <i>not</i> to reset the session timeout counter,
-	 * when receiving the onTimer event.
-	 * A session is expired (and then invalidated), if it didn't receive any
-	 * client request in the specified timeout interval
-	 * ({@link #getMaxInactiveInterval}).
-	 * This method controls whether to ignore the onTimer event
-	 * regarding the session timeout.
-	 *
-	 * <p>Note: if false (default) and the timer is shorter than
-	 * the session timeout ({@link #getMaxInactiveInterval}),
-	 * the session is never expired.
-	 *
-	 * <p>Default: false.
-	 *
-	 * @see org.zkoss.zk.ui.util.Configuration#setTimerAsInactive
-	 * @since 2.5.0
-	 */
-	public void setTimerAsInactive(boolean asInactive);
-	/** Returns whether <i>not</i> to reset the session timer counter,
-	 * when receiving the onTimer event
-	 *
-	 * @see org.zkoss.zk.ui.util.Configuration#isTimerAsInactive
-	 * @since 2.5.0
-	 */
-	public boolean isTimerAsInactive();
 
 	/** Returns the native session, or null if not available.
 	 * The returned object depends on the type of clients.

@@ -174,7 +174,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
-		((SessionCtrl)sess).notifyClientRequest(null);
+		((SessionCtrl)sess).notifyClientRequest(true);
 
 		final UiFactory uf = wappc.getUiFactory();
 		if (uf.isRichlet(ri, bRichlet)) {

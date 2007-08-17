@@ -134,7 +134,7 @@ public class ConfigParser {
 			//session-config
 			//	session-timeout
 			//	max-desktops-per-session
-			//  timer-as-inactive
+			//  timer-keep-alive
 			//	timeout-uri (deprecated)
 				Integer v = parseInteger(el, "session-timeout", false);
 				if (v != null) config.setSessionMaxInactiveInterval(v.intValue());
@@ -142,8 +142,8 @@ public class ConfigParser {
 				v = parseInteger(el, "max-desktops-per-session", false);
 				if (v != null) config.setMaxDesktops(v.intValue());
 
-				String s = el.getElementValue("timer-as-inactive", true);
-				if (s != null) config.setTimerAsInactive("true".equals(s));
+				String s = el.getElementValue("timer-keep-alive", true);
+				if (s != null) config.setTimerKeepAlive("true".equals(s));
 
 				//deprecated since 2.4.0, but backward compatible
 				s = el.getElementValue("timeout-uri", true);

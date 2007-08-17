@@ -183,7 +183,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				final StringWriter out = getXMLWriter();
 
 				if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
-				&& !Events.ON_TIMER.equals(scmd)) {//possible in FF due to cache
+				&& !Events.ON_TIMER.equals(scmd) && !"dummy".equals(scmd)) {//possible in FF due to cache
 					String uri = Devices.getTimeoutURI(
 						Servlets.isMilDevice(request) ? "mil": "ajax");
 					final AuResponse resp;
@@ -206,16 +206,18 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//reason: a new page might be created (such as include)
 
 		//parse commands
-		boolean onTimerOnly = true;
+		final boolean timerKeepAlive = wapp.getConfiguration().isTimerKeepAlive();
+		boolean keepAlive = false;
 		try {
 			for (int j = 0;; ++j) {
 				final String scmd = request.getParameter("cmd."+j);
 				if (scmd == null)
 					break;
 
-				onTimerOnly = onTimerOnly
-					&& (Events.ON_TIMER.equals(scmd) || "dummy".equals(scmd));
-						//dummy is used for PollingServerPush for piggyback
+				keepAlive = keepAlive
+					|| (!(!timerKeepAlive && Events.ON_TIMER.equals(scmd))
+						&& !"dummy".equals(scmd));
+					//dummy is used for PollingServerPush for piggyback
 
 				final Command cmd = AuRequest.getCommand(scmd);
 				final String uuid = request.getParameter("uuid."+j);
@@ -241,9 +243,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
-		((SessionCtrl)sess)
-			.notifyClientRequest(onTimerOnly ? Events.ON_TIMER: null);
-				//dummy is faked to be onTimer to minimize the dependency
+		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
 		final StringWriter out = getXMLWriter();

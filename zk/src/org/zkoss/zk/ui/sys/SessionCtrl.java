@@ -87,9 +87,11 @@ public interface SessionCtrl {
 
 	/** Notifies the session that a client request is received.
 	 *
-	 * @param evtnm the event name. If null, it means the client
-	 * is requesting to load a page.
+	 * @param keepAlive if the request will keep the session alive,
+	 * or the request shall be ignored.
+	 * If the request shall be ignored and the session is timeout,
+	 * it will cause the session to expire (i.e., be invalidated).
 	 * @since 2.5.0
 	 */
-	public void notifyClientRequest(String evtnm);
+	public void notifyClientRequest(boolean keepAlive);
 }

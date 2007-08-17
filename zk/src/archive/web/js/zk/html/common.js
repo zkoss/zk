@@ -1150,22 +1150,20 @@ zk.queryToHiddens = function (frm, qs) {
 		var k = qs.indexOf('=', j);
 		var l = qs.indexOf('&', j);
 
-		var inp = document.createElement("INPUT");
-		inp.type = "hidden";
-		frm.appendChild(inp);
-
+		var nm, val;
 		if (k < 0 || (k > l && l >= 0)) { //no value part
-			inp.name = l >= 0 ? qs.substring(j, l): qs.substring(j);
-			inp.value = "";
+			nm = l >= 0 ? qs.substring(j, l): qs.substring(j);
+			val = "";
 		} else {
-			inp.name = qs.substring(j, k);
-			inp.value = l >= 0 ? qs.substring(k + 1, l): qs.substring(k + 1);
+			nm = qs.substring(j, k);
+			val = l >= 0 ? qs.substring(k + 1, l): qs.substring(k + 1);
 		}
+		zk.newHidden(nm, val, frm);
 
 		if (l < 0) return; //done
 		j = l + 1;
 	}
-}
+};
 
 /** Creates a frame if it is not created yet. */
 zk.newFrame = function (name, src, style) {
@@ -1180,6 +1178,28 @@ zk.newFrame = function (name, src, style) {
 	html += '></iframe>';
 	zk.insertHTMLBeforeEnd(document.body, html);
 	return $e(name);
+};
+
+/** Returns the nearest form, or null if not available.
+ * @since 2.5.0
+ */
+zk.form = function (n) {
+	for (; n; n = n.parentNode)
+		if ($tag(n) == "FORM")
+			return n;
+};
+
+/** Creates a hidden field.
+ * @param parent to assign the hidden to. Ignored if null.
+ * @since 2.5.0
+ */
+zk.newHidden = function (nm, val, parent) {
+	var inp = document.createElement("INPUT");
+	inp.type = "hidden";
+	inp.name = nm;
+	inp.value = val;
+	if (parent) parent.appendChild(inp);
+	return inp;
 };
 
 /** Returns the number of columns (considering colSpan)

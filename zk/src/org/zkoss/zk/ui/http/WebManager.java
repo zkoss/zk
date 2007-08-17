@@ -325,7 +325,6 @@ public class WebManager {
 		final Configuration config = wapp.getConfiguration();
 		final int v = config.getSessionMaxInactiveInterval();
 		if (v != 0) sess.setMaxInactiveInterval(v);
-		sess.setTimerAsInactive(config.isTimerAsInactive());
 		return sess;
 	}
 	/** Returns the session of the specified HTTP session, or null if n/a. */

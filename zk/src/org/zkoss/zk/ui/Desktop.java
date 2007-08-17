@@ -241,7 +241,7 @@ public interface Desktop {
 	 * <code>PollingServerPush.delay.min</code>
 	 * <code>PollingServerPush.delay.max</code>,
 	 and <code>PollingServerPush.delay.factor</code>.
-	 * If not defined, min is 2500, max 10000 and factor 5.
+	 * If not defined, min is 1100, max is 10000 and factor is 5.
 	 *
 	 * @param min the minimal delay to poll the server for any pending
 	 * server-push threads.

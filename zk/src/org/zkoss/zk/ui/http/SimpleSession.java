@@ -34,7 +34,6 @@ import org.zkoss.el.impl.AttributesMap;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCache;
@@ -87,16 +86,10 @@ public class SimpleSession implements Session, SessionCtrl {
 	private DesktopCache _cache;
 	/** Next available component uuid. */
 	private int _nextUuid;
-	/** When the last client request is recieved. Used only if
-	 * _timerAsInactive is true.
+	/** When the last client request is recieved.
 	 */
-	private long _tmLastReq;
+	private long _tmLastReq = System.currentTimeMillis();
 	private boolean _invalid;
-	/** Whether to consider the onTimer event as inactive.
-	 * In other words, whether not to reset the coutner of the session timeout
-	 * when receiving onTimer.
-	 */
-	private boolean _timerAsInactive;
 
 	public SimpleSession(WebApp wapp, HttpSession hsess, String clientAddr,
 	String clientHost) {
@@ -236,27 +229,15 @@ public class SimpleSession implements Session, SessionCtrl {
 	public Object getNativeSession() {
 		return _hsess;
 	}
-	public void setTimerAsInactive(boolean asInactive) {
-		if (_timerAsInactive != asInactive) {
-			_timerAsInactive = asInactive;
 
-			if (_timerAsInactive) notifyClientRequest(null);
-		}
-	}
-	public boolean isTimerAsInactive() {
-		return _timerAsInactive;
-	}
-
-	public void notifyClientRequest(String evtnm) {
-		if (_timerAsInactive) {
-			final long now = System.currentTimeMillis();
-			if (Events.ON_TIMER.equals(evtnm)) {
-				final int tmout = getMaxInactiveInterval();
-				if (tmout >= 0 && (now - _tmLastReq) / 1000 > tmout)
-					invalidate();
-			} else {
-				_tmLastReq = now;
-			}
+	public void notifyClientRequest(boolean keepAlive) {
+		final long now = System.currentTimeMillis();
+		if (keepAlive) {
+			_tmLastReq = now;
+		} else {
+			final int tmout = getMaxInactiveInterval();
+			if (tmout >= 0 && (now - _tmLastReq) / 1000 > tmout)
+				invalidate();
 		}
 	}
 
