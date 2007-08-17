@@ -1011,7 +1011,7 @@ public class Tree extends XulElement {
 			}
 			
 			try {
-				Object node = getAssocitedNode(item, Tree.this);
+				Object node = getAssociatedNode(item, Tree.this);
 				_renderer.render(item, node);
 			} catch (Throwable ex) {
 				try {
@@ -1060,7 +1060,7 @@ public class Tree extends XulElement {
 		if(_model ==null) return;
 		final Renderer renderer = new Renderer();
 		try {
-			renderItem(item,getAssocitedNode(item,this));
+			renderItem(item,getAssociatedNode(item,this));
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -1149,7 +1149,7 @@ public class Tree extends XulElement {
 		try {
 			for (Iterator it = items.iterator(); it.hasNext();){
 				Treeitem item = (Treeitem)it.next();
-				Object data = getAssocitedNode(item,this);
+				Object data = getAssociatedNode(item,this);
 				dfRenderItem(data,item);
 			}
 		} catch (Throwable ex) {
@@ -1162,7 +1162,7 @@ public class Tree extends XulElement {
 	/**
 	 * Return a node which is an associated Treeitem ti in a Tree tree
 	 */
-	protected Object getAssocitedNode(Treeitem ti, Tree t){
+	protected Object getAssociatedNode(Treeitem ti, Tree t){
 		return getNodeByPath(getTreeitemPath(t,ti),_model.getRoot());
 	}
 	
