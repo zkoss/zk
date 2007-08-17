@@ -1093,6 +1093,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return false;
 	}
+	public void addForward(
+	String originalEvent, Component target, String targetEvent) {
+		//TODO
+	}
+	public void removeForward(
+	String originalEvent, Component target, String targetEvent) {
+		//TODO
+	}
 
 	public Namespace getNamespace() {
 		if (this instanceof IdSpace)

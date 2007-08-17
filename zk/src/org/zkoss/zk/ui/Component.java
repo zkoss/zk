@@ -587,6 +587,45 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public Iterator getListenerIterator(String evtnm);
 
+	/** Adds a forward condition to forward the event received
+	 * by this component to another component.
+	 *
+	 * <p>Default: no forward condition at all.
+	 *
+	 * <p>Once the condition is added, a event called <code>targetEvent</code>
+	 * is posted to the <code>target</code> compoennt,
+	 * when this component receives the <code>orginalEvent</code> event.
+	 *
+	 * @param originalEvent the original event that was received
+	 * by this component. If null, "onClick" is assumed.
+	 * @param target the target component to receive the event.
+	 * If null, the space owner {@link #getSpaceOwner} is assumed.
+	 * If the space owner is the page, the root component is assumed.
+	 * @param targetEvent the target event that the target component will receive.
+	 * If null, it is the same as the original event.
+	 * @exception IllegalArgumentException if both oringalEvent
+	 * and targetEvent are null.
+	 * @since 2.5.0
+	 * @see #removeForward
+	 */
+	public void addForward(
+	String originalEvent, Component target, String targetEvent);
+	/** Removes a forward condition that was added by {@link #addForward}.
+	 * If no such forward condition exists, nothing happens.
+	 *
+	 * @param originalEvent the oringal event that was received
+	 * by this component.
+	 * It must be the same as the one passed to {@link #addForward}.
+	 * @param target the target component to receive the event.
+	 * It must be the same as the one passed to {@link #addForward}.
+	 * @param targetEvent the target event that the target component will receive.
+	 * It must be the same as the one passed to {@link #addForward}.
+	 * @see #addForward
+	 * @since 2.5.0
+	 */
+	public void removeForward(
+	String originalEvent, Component target, String targetEvent);
+
 	//-- drawing --//
 	/** Invalidates this component by setting the dirty flag
 	 * such that it will be redraw the whole content later.

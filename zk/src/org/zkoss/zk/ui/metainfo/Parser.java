@@ -564,6 +564,8 @@ public class Parser {
 					if (attrAnnHelper == null)
 						attrAnnHelper = new AnnotationHelper();
 					attrAnnHelper.addByRawValue(attnm, attval);
+				} else if ("forward".equals(attnm)) {
+					compInfo.setForward(attval);
 				} else if ("if".equals(attnm)) {
 					ifc = attval;
 				} else if ("unless".equals(attnm)) {

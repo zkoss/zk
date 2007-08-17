@@ -70,9 +70,11 @@ implements Cloneable, Condition, java.io.Serializable {
 	 */
 	private Condition _cond;
 	/** The fulfill condition.
-	 * Either "event" or "event:targetId".
 	 */
 	private String _fulfill;
+	/** The forward condition.
+	 */
+	private String _forward;
 	/** The forEach, forEachBegin and forEachEnd attribute,
 	 * which are used to evaluate this info multiple times.
 	 */
@@ -169,15 +171,57 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * {@link #getChildren} are created, when the event sepcified in
 	 * the fulfill condition is received at the first time.
 	 *
-	 * <p>It is the value specified in the fulfill attribute.
-	 *
-	 * @param fulfill the fulfill condition. There are severalforms:
+	 * @param fulfill the fulfill condition. There are several forms:
 	 * "eventName", "targetId.evetName", "id1/id2.evetName",
 	 * and "${elExpr}.eventName"
 	 * @since 2.4.0
 	 */
 	public void setFulfill(String fulfill) {
 		_fulfill = fulfill != null && fulfill.length() > 0 ? fulfill: null;
+	}
+
+	/** Returns the forward condition that controls how to forward
+	 * an event, that is received by the component created
+	 * by this info, to another component.
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>If not null, when the component created by this
+	 * info receives the event specified in the forward condition,
+	 * it will forward it to the target component, which is also
+	 * specified in the forward condition.
+	 *
+	 * @since 2.5.0
+	 * @see #setForward
+	 */
+	public String getForward() {
+		return _forward;
+	}
+	/** Sets the forward condition that controls when to forward
+	 * an event receiving by this component to another component.
+	 *
+	 * <p>The basic format:<br/>
+	 * <code>onEvent1=id1/id2.onEvent2,onEvent3=id3.onEvent4</code>
+	 *
+	 * <p>It means: when onEvent1 is received, onEvent2 will be posted
+	 * to the component with the specified path (id1/id2).
+	 *
+	 * <p>If onEvent1 is omitted, it is assumed to be onClick (and
+	 * the equal sign need not to be specified.
+	 * If the path is omitted, it is assumed to be the space owner
+	 * {@link Component#getSpaceOwner}.
+	 *
+	 * <p>For example, "onOK" means "onClick=onOK".
+	 *
+	 * @param forward the forward condition. There are several forms:
+	 * "onEvent1", "target.onEvent1" and "onEvent1(target.onEvent2)",
+	 * where target could be "id", "id1/id2" or "${elExpr}".
+	 * The EL expression must return either a path or a reference to
+	 * a component.
+	 * @since 2.5.0
+	 */
+	public void setForward(String forward) {
+		_forward = forward != null && forward.length() > 0 ? forward: null;
 	}
 
 	/** Returns a readonly list of properties ({@link Property}) (never null).
