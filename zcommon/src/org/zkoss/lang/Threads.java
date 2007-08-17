@@ -29,16 +29,25 @@ import org.zkoss.util.logging.Log;
 public class Threads {
 	private static final Log log = Log.lookup(Threads.class);
 
-	/** Pauses the execution for a while.
+	/** Put the current thread to sleep for a while.
 	 * @exception SystemException if it is interrupted.
+	 * @since 2.5.0
 	 */
-	public static final void pause(int millisecs) {
+	public static final void sleep(int millisecs) {
 		try {
 			Thread.sleep(millisecs);
 		} catch (InterruptedException ex) {
 			throw SystemException.Aide.wrap(ex);
 		}
 	}
+	/** Put the current thread to sleep for a while.
+	 * <p>Deprecated since 2.5.0. Use {@link #sleep} instead.
+	 * @deprecated
+	 */
+	public static final void pause(int millisecs) {
+		sleep(millisecs);
+	}
+
 	/** Sets the priority without throwing any exception but log warning.
 	 */
 	public static final void setPriority(Thread thd, int priority) {
