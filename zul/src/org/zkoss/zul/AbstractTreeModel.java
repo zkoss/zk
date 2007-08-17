@@ -43,7 +43,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	private transient List _listeners = new LinkedList();
 	
 	/**
-	 * Contructor
+	 * Constructor
 	 * @param root - root of tree
 	 */
 	public AbstractTreeModel(Object root){
