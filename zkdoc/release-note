@@ -32,6 +32,8 @@ ZK 2.5.0
   1772915: Desktop supports getPageIfAny
   1775445: DSP Loader supports the compress option (like ZK Loader)
   1760203: expiration time of events execution in UiEngineImpl
+  1776006: Slider supports value submitting in form
+  1776007: Calendar supports value submitting in form
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
@@ -55,6 +57,12 @@ ZK 2.5.0
   1775339: getWriter() has already been called while use forward
  
 * Upgrade Notes:
+  + The onTimer event won't keep the session alive.
+    To make it behave the same way as old versions, you can specify
+	<session-config>
+		<timer-keep-alive>false</timer-keep-alive>
+	</sesion-config>
+
   + The signature of PageCtrl's init method is changed.
   + The signagure of ComponentInfo's applyProperties is changed
   + Utilities of JSP, such as JspLoaderServlet, are removed, since they are
