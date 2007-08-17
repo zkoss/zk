@@ -44,6 +44,33 @@ xmlns:x="http://www.zkoss.org/2005/zul">
 	</x:grid>
 	<x:slider name="percent"/>
 	<x:calendar name="never"/>
+	<x:tree multiple="true" name="tree" >
+		<x:treecols>
+			<x:treecol label="Name" />
+			<x:treecol label="Description" />
+		</x:treecols>
+		<x:treechildren>
+			<x:treeitem value="1">
+				<x:treerow>
+					<x:treecell label="Item 1" />
+					<x:treecell label="Item 1 description" />
+				</x:treerow>
+			</x:treeitem>
+			<x:treeitem value="2">
+				<x:treerow>
+					<x:treecell label="Item 2" />
+					<x:treecell label="Item 2 description" />
+				</x:treerow>
+				<x:treechildren>
+					<x:treeitem value="2.1">
+						<x:treerow>
+						<x:treecell label="Item 2.1" />
+						</x:treerow>
+					</x:treeitem>
+				</x:treechildren>
+			</x:treeitem>
+		</x:treechildren>
+	</x:tree>
 	<hr width="70%"/>
 	<input type="submit" value="Submit"/>
 	</form>
