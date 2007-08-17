@@ -369,34 +369,33 @@ public class Listbox extends XulElement {
 
 	/** Returns the name of this component.
 	 * <p>Default: null.
-	 * <p>Don't use this method if your application is purely based
-	 * on ZK's event-driven model.
 	 * <p>The name is used only to work with "legacy" Web application that
 	 * handles user's request by servlets.
 	 * It works only with HTTP/HTML-based browsers. It doesn't work
 	 * with other kind of clients.
+	 * <p>Don't use this method if your application is purely based
+	 * on ZK's event-driven model.
 	 */
 	public String getName() {
 		return _name;
 	}
 	/** Sets the name of this component.
-	 * <p>Don't use this method if your application is purely based
-	 * on ZK's event-driven model.
 	 * <p>The name is used only to work with "legacy" Web application that
 	 * handles user's request by servlets.
 	 * It works only with HTTP/HTML-based browsers. It doesn't work
 	 * with other kind of clients.
+	 * <p>Don't use this method if your application is purely based
+	 * on ZK's event-driven model.
 	 *
 	 * @param name the name of this component.
 	 */
 	public void setName(String name) {
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
+			_name = name;
 			if (inSelectMold()) smartUpdate("name", _name);
 			else if (_name != null) smartUpdate("z.name", _name);
 			else invalidate(); //1) generate _value; 2) add submit listener
-
-			_name = name;
 		}
 	}
 

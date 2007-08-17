@@ -360,6 +360,7 @@
 	<xs:complexType name="calendarType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:dateTime" use="optional" />
 		<xs:attribute name="compact" type="xs:string" use="optional" />
 		<xs:attribute name="timeZone" type="xs:string" use="optional" />
@@ -1067,6 +1068,7 @@
 	<xs:complexType name="sliderType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="curpos" type="xs:string" use="optional" />
 		<xs:attribute name="maxpos" type="xs:string" use="optional" />
 		<xs:attribute name="pageIncrement" type="xs:string" use="optional" />

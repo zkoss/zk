@@ -127,11 +127,7 @@ zk.Selectable.prototype = {
 				zk.listen(window, "resize", this.fnResize);
 			}
 
-			for (var n = this.element; (n = n.parentNode) != null;)
-				if ($tag(n) == "FORM") {
-					this.form = n;
-					break;
-				}
+			this.form = zk.form(this.element);
 			if (this.form) {
 				this.fnSubmit = function () {
 					meta.onsubmit();
@@ -176,7 +172,7 @@ zk.Selectable.prototype = {
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
-			this.foot = this.foottbl = null;
+			this.foot = this.foottbl = this.fnSubmit = null;
 			//in case: GC not works properly
 	},
 
@@ -979,14 +975,10 @@ zk.Selectable.prototype = {
 
 		for (var j = 0; j < this.bodyrows.length; ++j) {
 			var r = this.bodyrows[j];
-			if (this._isSelected(r)) {
-				var inp = document.createElement("INPUT");
-				inp.type = "hidden";
-				inp.name = nm;
-				inp.value = getZKAttr(r, "value");
-				setZKAttr(inp, "hiddenBy", this.id);
-				this.form.appendChild(inp);
-			}
+			if (this._isSelected(r))
+				setZKAttr(
+					zk.newHidden(nm, getZKAttr(r, "value"), this.form),
+					"hiddenBy", this.id);
 		}
 	}
 };

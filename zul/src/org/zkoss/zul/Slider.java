@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.WrongValueException;
@@ -33,6 +34,8 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Slider extends XulElement {
 	private int _curpos, _maxpos = 100, _pginc = 10;
+	/** The name. */
+	private String _name;
 
 	public Slider() {
 		setWidth("100px");
@@ -112,10 +115,43 @@ public class Slider extends XulElement {
 		}
 	}
 
+	/** Returns the name of this component.
+	 * <p>Default: null.
+	 * <p>The name is used only to work with "legacy" Web application that
+	 * handles user's request by servlets.
+	 * It works only with HTTP/HTML-based browsers. It doesn't work
+	 * with other kind of clients.
+	 * <p>Don't use this method if your application is purely based
+	 * on ZK's event-driven model.
+	 * @since 2.5.0
+	 */
+	public String getName() {
+		return _name;
+	}
+	/** Sets the name of this component.
+	 * <p>The name is used only to work with "legacy" Web application that
+	 * handles user's request by servlets.
+	 * It works only with HTTP/HTML-based browsers. It doesn't work
+	 * with other kind of clients.
+	 * <p>Don't use this method if your application is purely based
+	 * on ZK's event-driven model.
+	 *
+	 * @param name the name of this component.
+	 * @since 2.5.0
+	 */
+	public void setName(String name) {
+		if (name != null && name.length() == 0) name = null;
+		if (!Objects.equals(_name, name)) {
+			_name = name;
+			smartUpdate("z.name", _name);
+		}
+	}
+
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
+		HTMLs.appendAttribute(sb, "z.name", _name);
 		HTMLs.appendAttribute(sb, "z.curpos", _curpos);
 		HTMLs.appendAttribute(sb, "z.maxpos", _maxpos);
 		HTMLs.appendAttribute(sb, "z.pginc", _pginc);

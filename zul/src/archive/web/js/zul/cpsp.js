@@ -49,7 +49,7 @@ zkCpsp.stop = function (dtid) {
 };
 
 zkCpsp._min = function (info) {
-	return info.min > 0 ? info.min: 2500;
+	return info.min > 0 ? info.min: 1100;
 };
 zkCpsp._max = function (info) {
 	return info.max > 0 ? info.max: 10000;

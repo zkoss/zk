@@ -30,6 +30,9 @@ zk.Slider.prototype = {
 			this.draggable.slider = null;
 			this.draggable = null;
 		}
+		if (this.fnSubmit)
+			zk.unlisten(this.form, "submit", this.fnSubmit);
+		this.element = this.fnSubmit = null;
 	},
 	init: function() {
 		this.cleanup();
@@ -46,6 +49,14 @@ zk.Slider.prototype = {
 			constraint: "horizontal", snap: snap,
 			starteffect: zkSld._startDrag, change: zkSld._dragging,
 			endeffect: zkSld._endDrag});
+
+		this.form = zk.form(this.element);
+		if (this.form) {
+			this.fnSubmit = function () {
+				meta.onsubmit();
+			};
+			zk.listen(this.form, "submit", this.fnSubmit);
+		}
 
 		if (zk.gecko && !this.button.complete) {
 			this.button.onload = function () {meta._fixPos();};
@@ -137,6 +148,15 @@ zk.Slider.prototype = {
 	_width: function () {
 		return this.element.clientWidth - this.button.offsetWidth;
 			//button shall not exceed the right edge
+	},
+	onsubmit: function () {
+		var nm = getZKAttr(this.element, "name");
+		if (!nm || !this.form) return;
+
+		var val = this._curpos(),
+			el = this.form.elements[nm];
+		if (el) el.value = val;
+		else zk.newHidden(nm, val, this.form);
 	}
 };
 
