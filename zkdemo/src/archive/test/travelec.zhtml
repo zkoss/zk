@@ -43,6 +43,7 @@ xmlns:x="http://www.zkoss.org/2005/zul">
 		</x:rows>
 	</x:grid>
 	<x:slider name="percent"/>
+	<x:calendar name="never"/>
 	<hr width="70%"/>
 	<input type="submit" value="Submit"/>
 	</form>
