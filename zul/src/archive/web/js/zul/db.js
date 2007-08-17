@@ -31,6 +31,11 @@ zk.Cal.prototype = {
 		this._newCal();
 		this.init();
 	},
+	cleanup: function ()  {
+		if (this.fnSubmit)
+			zk.unlisten(this.form, "submit", this.fnSubmit);
+		this.element = this.fnSubmit = null;
+	},
 	_newCal: function() {
 		this.element = $e(this.id);
 		if (!this.element) return;
@@ -88,6 +93,15 @@ zk.Cal.prototype = {
 		html += '</table></td></tr>';
 		if (this.popup) html += '</table>';
 		zk.setInnerHTML(this.popup || this.element, html);
+
+		this.form = zk.formOf(this.element);
+		if (this.form && !this.fnSubmit) {
+			var meta = this;
+			this.fnSubmit = function () {
+				meta.onsubmit();
+			};
+			zk.listen(this.form, "submit", this.fnSubmit);
+		}
 	},
 	init: function () {
 		this.element = $e(this.id);
@@ -259,6 +273,15 @@ zk.Cal.prototype = {
 		var val = this.date;
 		this.setDate(new Date(
 			val.getFullYear(), val.getMonth(), val.getDate() + days));
+	},
+	onsubmit: function () {
+		var nm = getZKAttr(this.element, "name");
+		if (!nm || !this.form) return;
+
+		var val = getZKAttr(this.element, "value"),
+			el = this.form.elements[nm];
+		if (el) el.value = val;
+		else zk.newHidden(nm, val, this.form);
 	}
 };
 

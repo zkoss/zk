@@ -127,7 +127,7 @@ zk.Selectable.prototype = {
 				zk.listen(window, "resize", this.fnResize);
 			}
 
-			this.form = zk.form(this.element);
+			this.form = zk.formOf(this.element);
 			if (this.form) {
 				this.fnSubmit = function () {
 					meta.onsubmit();

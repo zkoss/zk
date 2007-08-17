@@ -50,8 +50,8 @@ zk.Slider.prototype = {
 			starteffect: zkSld._startDrag, change: zkSld._dragging,
 			endeffect: zkSld._endDrag});
 
-		this.form = zk.form(this.element);
-		if (this.form) {
+		this.form = zk.formOf(this.element);
+		if (this.form && !this.fnSubmit) {
 			this.fnSubmit = function () {
 				meta.onsubmit();
 			};
