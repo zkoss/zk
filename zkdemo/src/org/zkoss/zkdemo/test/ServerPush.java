@@ -65,7 +65,7 @@ public class ServerPush {
 		public void run() {
 			try {
 				while (!_ceased) {
-					Threads.pause(2000); //Update each two seconds
+					Threads.sleep(500); //Update each two seconds
 					Executions.activate(_desktop);
 					try {
 						_info.setValue(Integer.toString(++_cnt));

@@ -95,7 +95,7 @@ import org.zkoss.lang.Objects;
 	new Button().setParent(test);
 	</zscript>
 
-	<button label="Test Progress" onClick="org.zkoss.lang.Threads.pause(2000)"/>
+	<button label="Test Progress" onClick="org.zkoss.lang.Threads.sleep(2000)"/>
 
 	<window border="normal">
 	<textbox id="inp0" onChange="add()"/>+<textbox id="inp1" onChange="add()"/>

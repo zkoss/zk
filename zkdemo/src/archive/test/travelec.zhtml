@@ -42,6 +42,7 @@ xmlns:x="http://www.zkoss.org/2005/zul">
 			</x:row>
 		</x:rows>
 	</x:grid>
+	<x:slider name="percent"/>
 	<hr width="70%"/>
 	<input type="submit" value="Submit"/>
 	</form>
