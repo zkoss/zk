@@ -167,7 +167,7 @@ abstract public class RootTag extends AbstractTag {
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request,
 				PageDefinitions.getLocator(wapp, null));
-			((SessionCtrl)sess).notifyClientRequest(null);
+			((SessionCtrl)sess).notifyClientRequest(true);
 
 			final UiFactory uf = wappc.getUiFactory();
 			final Richlet richlet = new MyRichlet();
