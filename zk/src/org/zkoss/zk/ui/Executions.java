@@ -483,6 +483,8 @@ public void run() {
 	 * @exception InterruptedException if it is interrupted by other thread
 	 * @exception DesktopUnavailableException if the desktop is removed
 	 * (when activating).
+	 * @exception IllegalStateException if the server push is not
+	 * enabled for this desktop yet ({@link Desktop#enableServerPush}).
 	 * @since 2.5.0
 	 * @see #activate(Desktop)
 	 */
@@ -490,7 +492,10 @@ public void run() {
 	throws InterruptedException, DesktopUnavailableException {
 		final ServerPush spush = ((DesktopCtrl)desktop).getServerPush();
 		if (spush == null)
-			throw new IllegalStateException("Before activation, the server push must be enabled for "+desktop);
+			if (desktop.isAlive())
+				throw new IllegalStateException("Before activation, the server push must be enabled for "+desktop);
+			else
+				throw new DesktopUnavailableException("Stopped");
 		return spush.activate(timeout);
 	}
 	/** Deactivates a server-push thread.
