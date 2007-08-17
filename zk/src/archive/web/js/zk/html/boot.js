@@ -942,6 +942,14 @@ zk.innerHeight = function () {
 		document.compatMode == "CSS1Compat" ?
 			document.documentElement.clientHeight: document.body.clientHeight;
 };
+zk.pageWidth = function () {
+	var a = document.body.scrollWidth, b = document.body.offsetWidth;
+	return a > b ? a: b;
+};
+zk.pageHeight = function () {
+	var a = document.body.scrollHeight, b = document.body.offsetHeight;
+	return a > b ? a: b;
+};
 
 zk._setOuterHTML = function (n, html) {
 	if (n.outerHTML) n.outerHTML = html;
