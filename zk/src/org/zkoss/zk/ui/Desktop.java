@@ -78,6 +78,12 @@ public interface Desktop {
 	 */
 	public Device getDevice();
 
+	/** Returns whether the desktop is still alive.
+	 * It returns false once it is destroyed.
+	 * @see org.zkoss.zk.ui.sys.DesktopCtrl#destroy
+	 */
+	public boolean isAlive();
+
 	/** Returns ID of this desktop.
 	 * It is unique in the whole session.
 	 */
