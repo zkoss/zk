@@ -335,6 +335,15 @@ public interface Page extends IdSpace {
 	 */
 	public org.zkoss.zk.scripting.Method getZScriptMethod(
 	Namespace ns, String name, Class[] argTypes);
+	/** Returns the variable of the specified name by searching
+	 * the logical scope of the namespace of the specified component
+	 * for all the loaded interpreters.
+	 *
+	 * <p>It is a shortcut: getZScriptMethod(comp.getNamespace(), name, argTypes);
+	 * @since 2.5.0
+	 */
+	public org.zkoss.zk.scripting.Method getZScriptMethod(
+	Component comp, String name, Class[] argTypes);
 
 	/** Returns the value of the variable of the specified name by searching
 	 * the loaded interpreters, if any.
@@ -366,6 +375,14 @@ public interface Page extends IdSpace {
 	 * Note: this method doesn't look for any variable stored in ns.
 	 */
 	public Object getZScriptVariable(Namespace ns, String name);
+	/** Returns the value of the variable of the specified name by searching
+	 * the logical scope of the namespace of the specified component
+	 * for all the loaded interpreters, if any.
+	 *
+	 * <p>It is a shortcut: getZScriptVariable(comp.getNamespace(), name);
+	 * @since 2.5.0
+	 */
+	public Object getZScriptVariable(Component comp, String name);
 
 	/** Returns a variable that is visible to EL expressions.
 	 *

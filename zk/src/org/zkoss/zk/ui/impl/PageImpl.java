@@ -416,6 +416,11 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 		return null;
 	}
+	public org.zkoss.zk.scripting.Method getZScriptMethod(
+	Component comp, String name, Class[] argTypes) {
+		return getZScriptMethod(comp != null ? comp.getNamespace(): null,
+			name, argTypes);
+	}
 	public Object getZScriptVariable(String name) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
@@ -436,6 +441,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				return val;
 		}
 		return null;
+	}
+	public Object getZScriptVariable(Component comp, String name) {
+		return getZScriptVariable(comp != null ? comp.getNamespace(): null,
+			name);
 	}
 
 	public Object getELVariable(String name) {
