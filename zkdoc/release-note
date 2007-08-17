@@ -55,7 +55,8 @@ ZK 2.5.0
   1773902: OpenSessionInViewListener not properly close Hibern. Session
   1774432: Bug in adding treeitem to tree's first-level treechildren
   1775339: getWriter() has already been called while use forward
- 
+  1775051: Listbox multiple select and databinding issue 
+  
 * Upgrade Notes:
   + The onTimer event won't keep the session alive.
     To make it behave the same way as old versions, you can specify
