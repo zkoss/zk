@@ -1183,7 +1183,7 @@ zk.newFrame = function (name, src, style) {
 /** Returns the nearest form, or null if not available.
  * @since 2.5.0
  */
-zk.form = function (n) {
+zk.formOf = function (n) {
 	for (; n; n = n.parentNode)
 		if ($tag(n) == "FORM")
 			return n;
