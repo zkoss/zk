@@ -826,7 +826,7 @@ zk.Selectable.prototype = {
 	/** Returns the size for vflex
 	 */
 	_vflexSize: function () {
-		var diff = document.body.offsetHeight - zk.innerHeight()
+		var diff = zk.pageHeight() - zk.innerHeight()
 				+ $int(Element.getStyle(document.body, "margin-top"))
 				+ $int(Element.getStyle(document.body, "margin-bottom"))
 				+ $int(Element.getStyle(document.body, "padding-top"))
