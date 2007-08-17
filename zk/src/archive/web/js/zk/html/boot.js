@@ -505,7 +505,11 @@ zk._load = function (nm, modver) {
 		e.charset = "UTF-8";
 		e.src = zk.getUpdateURI("/web" + zcb + uri, false, modver);
 	} else { //module name
-		uri = uri.replace(/\./g, '/') + ".js";
+		uri = uri.replace(/\./g, '/');
+		var j = uri.lastIndexOf('!');
+		uri = j >= 0 ?
+			uri.substring(0, j) + ".js." + uri.substring(j + 1):
+			uri + ".js";
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		e.charset = "UTF-8";
 		if (!modver) modver = zk.getBuild(nm);
