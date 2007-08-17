@@ -400,6 +400,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_dir = dir;
 	}
 
+	public boolean isAlive() {
+		return _comps != null;
+	}
+
 	//-- DesktopCtrl --//
 	public RequestQueue getRequestQueue() {
 		return _rque;
