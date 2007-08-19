@@ -305,7 +305,7 @@ public class Binding {
 			for(final Iterator it = _saveWhenEvents.iterator(); it.hasNext(); ) {
 				final String expr = (String) it.next();
 				final Object[] objs =
-					ComponentsCtrl.parseEventExpression(comp, expr, comp);
+					ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
 				//objs[0] component, objs[1] event name
 				final Component target = (Component) objs[0];
 				final String evtname = (String) objs[1];
@@ -327,7 +327,7 @@ public class Binding {
 			for(final Iterator it = _loadWhenEvents.iterator(); it.hasNext(); ) {
 				final String expr = (String) it.next();
 				final Object[] objs =
-					ComponentsCtrl.parseEventExpression(comp, expr, comp);
+					ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
 				//objs[0] component, objs[1] event name
 				final Component target = (Component) objs[0];
 				final String evtname = (String) objs[1];
