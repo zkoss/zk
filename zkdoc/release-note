@@ -2,6 +2,7 @@
 ZK 2.5.0
 * Features:
   1579332: Server Push
+  1776116: A way to forward event to another component w/o programming
   1765987: Add timebox (by merge timebox from zkforge to zul)
   1758837: Zk Flash Component
   1537229: Treemodel with Tree
