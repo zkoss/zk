@@ -123,7 +123,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A map of event handler to handle events. */
 	private EventHandlerMap _evthds;
 	/** A map of forward conditions:
-	 * Map(String orgEvt, [listener, List([target,targetEvent])]).
+	 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
 	 */
 	private transient Map _forwards;
 	/** Used when user is modifying the children by Iterator.
@@ -1131,8 +1131,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			fwds = (List)info[1];
 			for (Iterator it = fwds.iterator(); it.hasNext();) {
 				final Object[] fwd = (Object[])it.next();
-				if (target instanceof Component && fwd[0] instanceof String)
-					fwd[0] = Components.pathToComponent((String)fwd[0], this);
 				if (Objects.equals(fwd[0], target)
 				&& Objects.equals(fwd[1], targetEvent)) //found
 					return false;
@@ -1149,15 +1147,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public boolean removeForward(
 	String orgEvent, Component target, String targetEvent) {
+		return removeForward0(orgEvent, target, targetEvent);
+	}
+	public boolean removeForward(
+	String orgEvent, String targetPath, String targetEvent) {
+		return removeForward0(orgEvent, targetPath, targetEvent);
+	}
+	private boolean removeForward0(
+	String orgEvent, Object target, String targetEvent) {
 		if (_forwards != null) {
 			final Object[] info = (Object[])_forwards.get(orgEvent);
 			if (info != null) {
 				final List fwds = (List)info[1];
 				for (Iterator it = fwds.iterator(); it.hasNext();) {
 					final Object[] fwd = (Object[])it.next();
-					if (fwd[0] instanceof String)
-						fwd[0] = Components.pathToComponent((String)fwd[0], this);
-
 					if (Objects.equals(fwd[0], target)
 					&& Objects.equals(fwd[1], targetEvent)) { //found
 						it.remove(); //remove it
@@ -1526,6 +1529,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		clone._page = null;
 		clone._parent = null;
 
+		//1a. clone attributes
 		clone._attrs = new HashMap();
 		for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
@@ -1537,6 +1541,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			clone._attrs.put(me.getKey(), val);
 		}
 
+		//1b. clone listeners
 		if (_listeners != null) {
 			clone._listeners = new HashMap();
 			for (Iterator it = _listeners.entrySet().iterator();
@@ -1570,6 +1575,22 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (clone._spaceInfo != null) {
 			clone._spaceInfo = new SpaceInfo(clone, _spaceInfo.ns);
 			cloneSpaceInfo(clone, this._spaceInfo);
+		}
+
+		//4. clone _forwards
+		if (clone._forwards != null) {
+			clone._forwards = null;
+			for (Iterator it = _forwards.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final String orgEvent = (String)me.getKey();
+
+				final Object[] info = (Object[])me.getValue();
+				final List fwds = (List)info[1];
+				for (Iterator e = fwds.iterator(); e.hasNext();) {
+					final Object[] fwd = (Object[])e.next();
+					clone.addForward0(orgEvent, fwd[0], (String)fwd[1]);
+				}
+			}
 		}
 		return clone;
 	}
@@ -1762,13 +1783,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				break;
 
 			int sz = s.readInt();
-			while (--sz >= 0) {
-				addForward(orgEvent,
-					(String)s.readObject(), (String)s.readObject());
+			while (--sz >= 0)
+				addForward0(orgEvent, s.readObject(), (String)s.readObject());
 					//Note: we don't call Components.pathToComponent here
 					//since the parent doesn't deserialized completely
 					//Rather, we handle it until the event is received
-			}
 		}
 	}
 	private void didDeserialize(Collection c) {
@@ -1800,8 +1819,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Used to forward events (for the forward conditions).
 	 */
-	private class ForwardListener implements EventListener,
-	Cloneable, ComponentCloneListener {
+	private class ForwardListener
+	implements EventListener, ComponentCloneListener {
 	//Note: it is not serializable since it is handled by
 	//AbstractComponent.writeObject
 
@@ -1815,11 +1834,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (info != null)
 				for (Iterator it = ((List)info[1]).iterator(); it.hasNext();) {
 					final Object[] fwd = (Object[])it.next();
-					if (fwd[0] instanceof String)
-						fwd[0] = Components.pathToComponent(
-								(String)fwd[0], AbstractComponent.this);
+					Component target =
+						fwd[0] instanceof String ?
+							Components.pathToComponent(
+								(String)fwd[0], AbstractComponent.this):
+							(Component)fwd[0];
 
-					Component target = (Component)fwd[0];
 					if (target == null) {
 						final IdSpace owner = getSpaceOwner();
 						if (owner instanceof Component) {
@@ -1842,7 +1862,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//ComponentCloneListener//
 		public Object clone(Component comp) {
-			return ((AbstractComponent)comp).new ForwardListener(_orgEvent);
+			return null; //handle by AbstractComponent.clone
 		}
 	}
 }
