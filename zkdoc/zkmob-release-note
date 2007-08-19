@@ -10,6 +10,7 @@ Bug:
   1757280 mil Listitem.setLabel() not work
   1758662 zkmob history should not include ;jsessionid
   1768215 "pure Java" zk mobile not working
+  1771763 Execute.sendRedirect(RELATIVE_PATH) not working
   
   --------
 ZK Mobile 0.8.5
