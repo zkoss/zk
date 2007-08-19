@@ -64,8 +64,11 @@ public interface Component extends java.io.Serializable, Cloneable {
 	public ComponentDefinition getDefinition();
 
 	/** Returns the owner of the ID space that this component belongs to.
-	 * It is either a component, a page or null.
-	 * If it has an ancestor that implements {@link IdSpace}, it is returned.
+	 * The returned value could be a component, a page or null.
+	 * If this component itself implements {@link IdSpace}, this method
+	 * returns itself.
+	 * If it has an ancestor that implements {@link IdSpace},
+	 * the ancestor is returned.
 	 * Otherwise, the page it belongs to is returned
 	 *
 	 * <p>Each ID space defines an independent set of IDs. No component
@@ -603,12 +606,12 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * If the space owner is the page, the root component is assumed.
 	 * @param targetEvent the target event that the target component will receive.
 	 * If null, it is the same as the original event.
-	 * @exception IllegalArgumentException if both oringalEvent
-	 * and targetEvent are null.
+	 * @return whether it is added successfully.
+	 * It returns false if the conditioin was always added before.
 	 * @since 2.5.0
 	 * @see #removeForward
 	 */
-	public void addForward(
+	public boolean addForward(
 	String originalEvent, Component target, String targetEvent);
 	/** Removes a forward condition that was added by {@link #addForward}.
 	 * If no such forward condition exists, nothing happens.
@@ -620,10 +623,12 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * It must be the same as the one passed to {@link #addForward}.
 	 * @param targetEvent the target event that the target component will receive.
 	 * It must be the same as the one passed to {@link #addForward}.
+	 * @return whether the forward is removed successfully.
+	 * It returns false if the forward condition is not found
 	 * @see #addForward
 	 * @since 2.5.0
 	 */
-	public void removeForward(
+	public boolean removeForward(
 	String originalEvent, Component target, String targetEvent);
 
 	//-- drawing --//

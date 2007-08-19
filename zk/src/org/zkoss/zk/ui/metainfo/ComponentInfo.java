@@ -201,9 +201,9 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * an event receiving by this component to another component.
 	 *
 	 * <p>The basic format:<br/>
-	 * <code>onEvent1=id1/id2.onEvent2,onEvent3=id3.onEvent4</code>
+	 * <code>onEvent1=id1/id2.onEvent2</code>
 	 *
-	 * <p>It means: when onEvent1 is received, onEvent2 will be posted
+	 * <p>It means when onEvent1 is received, onEvent2 will be posted
 	 * to the component with the specified path (id1/id2).
 	 *
 	 * <p>If onEvent1 is omitted, it is assumed to be onClick (and
@@ -212,6 +212,11 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * {@link Component#getSpaceOwner}.
 	 *
 	 * <p>For example, "onOK" means "onClick=onOK".
+	 *
+	 * <p>You can specify several forward conditions by separating
+	 * them with comma as follows:
+	 *
+	 * <p><code>onChanging=onChanging,onChange=onUpdate,onOK</code>
 	 *
 	 * @param forward the forward condition. There are several forms:
 	 * "onEvent1", "target.onEvent1" and "onEvent1(target.onEvent2)",

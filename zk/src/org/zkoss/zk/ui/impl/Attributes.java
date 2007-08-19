@@ -17,16 +17,20 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 /**
- * Attributes used internally.
+ * Attributes of desktops, pages and components that are used internally.
  *
  * @author tomyeh
  */
 public class Attributes {
-	/** An integer (0~99) indicating the completeness percentage of 
+	/** A desktop attribute to indicate the completeness percentage of 
 	 * the current file upload.
+	 * It is an integer ranging from 0 to 99.
 	 */
 	public static final String UPLOAD_PERCENT = "zk_uploadPercent";
-	/** A long indicating the number of bytes of the current file upload.
+	/** A desktop attribute indicated the number of bytes of the current
+	 * file upload.
+	 * It is a non-negative long.
 	 */
 	public static final String UPLOAD_SIZE = "zk_uploadSize";
+
 }

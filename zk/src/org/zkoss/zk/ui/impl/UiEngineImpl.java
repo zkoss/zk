@@ -489,6 +489,13 @@ public class UiEngineImpl implements UiEngine {
 			if (child instanceof AfterCompose)
 				((AfterCompose)child).afterCompose();
 
+			ComponentsCtrl.applyForward(child, childInfo.getForward());
+				//applies the forward condition
+				//1) we did it after all child created, so it may reference
+				//to it child (thought rarely happens)
+				//2) we did it after afterCompose, so what specified
+				//here has higher priority than class defined by app dev
+
 			if (Events.isListened(child, Events.ON_CREATE, false))
 				Events.postEvent(
 					new CreateEvent(Events.ON_CREATE, child, exec.getArg()));
@@ -1309,7 +1316,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 		private void init() {
 			final Object[] result =
-				ComponentsCtrl.parseEventExpression(_comp, _fulfill);
+				ComponentsCtrl.parseEventExpression(_comp, _fulfill, _comp);
 			_target = (Component)result[0];
 			_evtnm = (String)result[1];
 		}
@@ -1329,6 +1336,7 @@ public class UiEngineImpl implements UiEngine {
 			_comp = comp;
 			init();
 		}
+
 		//ComponentCloneListener//
 		public Object clone(Component comp) {
 			final FulfillListener clone;

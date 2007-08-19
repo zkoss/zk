@@ -19,10 +19,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import java.lang.reflect.Method;
+import java.util.Iterator;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Date;
 
 import org.zkoss.lang.Strings;
@@ -30,6 +32,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Pair;
 import org.zkoss.util.CacheMap;
+import org.zkoss.util.Maps;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
@@ -128,11 +131,14 @@ public class ComponentsCtrl {
 	 *
 	 * @param comp the component that the event expression is referenced to
 	 * @param evtexpr the event expression.
+	 * @param defaultComp the default component which is used when
+	 * evtexpr doesn't specify the component.
 	 * @return a two element array. The first element is the component,
 	 * and the second component is the event name.
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 */
-	public static Object[] parseEventExpression(Component comp, String evtexpr)
+	public static Object[] parseEventExpression(Component comp,
+	String evtexpr, Component defaultComp)
 	throws ComponentNotFoundException {
 		final int j = evtexpr.lastIndexOf('.');
 		final String evtnm;
@@ -163,11 +169,43 @@ public class ComponentsCtrl {
 			}
 		} else {
 			evtnm = evtexpr.trim();
-			target = comp;
+			target = defaultComp;
 		}
 		if (!Events.isValid(evtnm))
 			throw new UiException("Not an event name: "+evtnm);
 		return new Object[] {target, evtnm};
+	}
+
+	/**
+	 * Applies the forward condition to the specified component.
+	 *
+	 * <p>The basic format:<br/>
+	 * <code>onEvent1=id1/id2.onEvent2,onEvent3=id3.onEvent4</code>
+	 *
+	 * <p>See {@link org.zkoss.zk.ui.metainfo.ComponentInfo#setForward}
+	 * for more information.
+	 *
+	 * @since 2.5.0
+	 */
+	public static final void applyForward(Component comp, String forward) {
+		if (forward == null)
+			return;
+
+		final Map fwds = new LinkedHashMap(); //remain the order
+		Maps.parse(fwds, forward, ',', '\'', true);
+
+		for (Iterator it = fwds.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String orgEvent = (String)me.getKey();
+			if (orgEvent != null && !Events.isValid(orgEvent))
+				throw new UiException("Not an event name: "+orgEvent);
+
+			final Object[] result =
+				parseEventExpression(comp, (String)me.getValue(), null);
+
+			comp.addForward(orgEvent,
+				(Component)result[0], (String)result[1]);
+		}
 	}
 
 	/** Parses a script by resolving #{xx} to make it executable

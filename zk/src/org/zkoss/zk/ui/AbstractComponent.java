@@ -42,6 +42,8 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
@@ -89,7 +91,7 @@ import org.zkoss.zk.scripting.util.SimpleNamespace;
 public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
 //	private static final Log log = Log.lookup(AbstractComponent.class);
-    private static final long serialVersionUID = 20070326L;
+    private static final long serialVersionUID = 20070819L;
 
 	private transient Page _page;
 	private String _id;
@@ -118,8 +120,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * its own annotations.
 	 */
 	private AnnotationMap _annots;
-	/** A Map of event handler to handle events. */
+	/** A map of event handler to handle events. */
 	private EventHandlerMap _evthds;
+	/** A map of forward conditions:
+	 * Map(String orgEvt, [listener, List([target,targetEvent])]).
+	 */
+	private transient Map _forwards;
 	/** Used when user is modifying the children by Iterator.
 	 */
 	private transient boolean _modChildByIter;
@@ -1093,13 +1099,76 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return false;
 	}
-	public void addForward(
-	String originalEvent, Component target, String targetEvent) {
-		//TODO
+	public boolean addForward(
+	String orgEvent, Component target, String targetEvent) {
+		if (orgEvent == null)
+			orgEvent = "onClick";
+		else if (!Events.isValid(orgEvent))
+			throw new IllegalArgumentException("Illegal event name: "+orgEvent);
+		if (targetEvent == null)
+			targetEvent = orgEvent;
+		else if (!Events.isValid(targetEvent))
+			throw new IllegalArgumentException("Illegal event name: "+targetEvent);
+
+		return addForward0(orgEvent, target, targetEvent);
 	}
-	public void removeForward(
-	String originalEvent, Component target, String targetEvent) {
-		//TODO
+	/**
+	 * @param target the target. It is either a component, or a string,
+	 * which is used internal for implementing {@link #writeObject}
+	 */
+	private boolean addForward0(
+	String orgEvent, Object target, String targetEvent) {
+		if (_forwards == null)
+			_forwards = new HashMap(5);
+
+		Object[] info = (Object[])_forwards.get(orgEvent);
+		final List fwds;
+		if (info != null) {
+			fwds = (List)info[1];
+			for (Iterator it = fwds.iterator(); it.hasNext();) {
+				final Object[] fwd = (Object[])it.next();
+				if (target instanceof Component && fwd[0] instanceof String)
+					fwd[0] = Components.pathToComponent((String)fwd[0], this);
+				if (Objects.equals(fwd[0], target)
+				&& Objects.equals(fwd[1], targetEvent)) //found
+					return false;
+			}
+		} else {
+			final ForwardListener listener = new ForwardListener(orgEvent);
+			addEventListener(orgEvent, listener);
+			info = new Object[] {listener, fwds = new LinkedList()};
+			_forwards.put(orgEvent, info);
+		}
+
+		fwds.add(new Object[] {target, targetEvent});
+		return true;
+	}
+	public boolean removeForward(
+	String orgEvent, Component target, String targetEvent) {
+		if (_forwards != null) {
+			final Object[] info = (Object[])_forwards.get(orgEvent);
+			if (info != null) {
+				final List fwds = (List)info[1];
+				for (Iterator it = fwds.iterator(); it.hasNext();) {
+					final Object[] fwd = (Object[])it.next();
+					if (fwd[0] instanceof String)
+						fwd[0] = Components.pathToComponent((String)fwd[0], this);
+
+					if (Objects.equals(fwd[0], target)
+					&& Objects.equals(fwd[1], targetEvent)) { //found
+						it.remove(); //remove it
+
+						if (fwds.isEmpty()) { //no more event
+							_forwards.remove(orgEvent);
+							removeEventListener(
+								orgEvent, (EventListener)info[0]);
+						}
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	public Namespace getNamespace() {
@@ -1589,6 +1658,25 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 			s.writeObject(null); //denote end-of-namespace
 		}
+
+		//write _forwards
+		if (_forwards != null) {
+			for (Iterator it = _forwards.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				s.writeObject(me.getKey()); //original event
+
+				final Object[] info = (Object[])me.getValue();
+				final List fwds = (List)info[1];
+				s.writeInt(fwds.size());
+				for (Iterator e = fwds.iterator(); e.hasNext();) {
+					final Object[] fwd = (Object[])e.next();
+					s.writeObject( //target
+						Components.componentToPath((Component)fwd[0], this));
+					s.writeObject(fwd[1]); //target event
+				}
+			}
+		}
+		s.writeObject(null);
 	}
 	private void willSerialize(Collection c) {
 		if (c != null)
@@ -1660,6 +1748,22 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			for (Iterator it = getChildren().iterator(); it.hasNext();)
 				addToIdSpacesDown((Component)it.next(), this);
 		}
+
+		//restore _forwards
+		for (;;) {
+			final String orgEvent = (String)s.readObject();
+			if (orgEvent == null)
+				break;
+
+			int sz = s.readInt();
+			while (--sz >= 0) {
+				addForward0(orgEvent,
+					(String)s.readObject(), (String)s.readObject());
+					//Note: we don't call Components.pathToComponent now
+					//since the parent doesn't deserialized completely
+					//Rather, we handle it until the event is received
+			}
+		}
 	}
 	private void didDeserialize(Collection c) {
 		if (c != null)
@@ -1685,6 +1789,55 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				child._spaceInfo.ns.setParent(nsparent);
 			else
 				fixSpaceParentOneLevelDown(child, nsparent); //recursive
+		}
+	}
+
+	/** Used to forward events (for the forward conditions).
+	 */
+	private class ForwardListener implements EventListener,
+	Cloneable, ComponentCloneListener {
+	//Note: it is not serializable since it is handled by
+	//AbstractComponent.writeObject
+
+		private final String _orgEvent;
+		private ForwardListener(String orgEvent) {
+			_orgEvent = orgEvent;
+		}
+
+		public void onEvent(Event event) {
+			final Object[] info = (Object[])_forwards.get(_orgEvent);
+			if (info != null)
+				for (Iterator it = ((List)info[1]).iterator(); it.hasNext();) {
+					final Object[] fwd = (Object[])it.next();
+					Component target =
+						fwd[0] instanceof String ?
+							Components.pathToComponent(
+								(String)fwd[0], AbstractComponent.this):
+							(Component)fwd[0];
+
+					if (target == null) {
+						final IdSpace owner = getSpaceOwner();
+						if (owner instanceof Component) {
+							target = (Component)owner;
+						} else {
+							//Use the root component instead
+							for (target = AbstractComponent.this;;) {
+								final Component p = target.getParent();
+								if (p == null)
+									break;
+								target = p;
+							}
+						}
+					}
+
+					Events.postEvent(
+						new ForwardEvent((String)fwd[1], target, event));
+				}
+		}
+
+		//ComponentCloneListener//
+		public Object clone(Component comp) {
+			return ((AbstractComponent)comp).new ForwardListener(_orgEvent);
 		}
 	}
 }
