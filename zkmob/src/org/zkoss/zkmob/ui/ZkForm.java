@@ -79,8 +79,9 @@ public class ZkForm extends Form implements ZkComponent {
 			kid.setParent(this);
 			if (kid instanceof Imageable) {
 				final String hostURL = kid.getZkDesktop().getHostURL();
+				final String pathURL = kid.getZkDesktop().getPathURL();
 				final Imageable comp = (Imageable) kid;
-				UiManager.loadImageOnThread(comp, hostURL, comp.getImageSrc());
+				UiManager.loadImageOnThread(comp, hostURL, pathURL, comp.getImageSrc());
 			}
 		} finally {
 			_handlekid = false;
@@ -98,8 +99,9 @@ public class ZkForm extends Form implements ZkComponent {
 			kid.setParent(this);
 			if (kid instanceof Imageable) {
 				final String hostURL = kid.getZkDesktop().getHostURL();
+				final String pathURL = kid.getZkDesktop().getPathURL();
 				final Imageable comp = (Imageable) kid;
-				UiManager.loadImageOnThread(comp, hostURL, comp.getImageSrc());
+				UiManager.loadImageOnThread(comp, hostURL, pathURL, comp.getImageSrc());
 			}
 		} finally {
 			_handlekid = false;

@@ -85,7 +85,7 @@ public class ZkListItem implements ZkComponent, Imageable {
 			_parent.set(index, val, img);
 		} else if ("im".equals(attr)) {
 			_image = val;
-			UiManager.loadImageOnThread(this, getZkDesktop().getHostURL(), getImageSrc());
+			UiManager.loadImageOnThread(this, getZkDesktop().getHostURL(), getZkDesktop().getPathURL(), getImageSrc());
 		}
 	}
 	

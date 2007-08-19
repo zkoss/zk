@@ -37,16 +37,19 @@ import org.zkoss.zkmob.ui.ZkDesktop;
 public class PageHandler extends DefaultHandler {
 	private Stack _stack = new Stack();
 	private String _hostURL;
+	private String _pathURL;
 	private Vector _roots = new Vector(8);
 	private ZkComponent _parent;
 	private ZkDesktop _zk;
 	
-	/*package*/PageHandler(String hostURL) {
+	/*package*/PageHandler(String hostURL, String pathURL) {
 		_hostURL = hostURL;
+		_pathURL = pathURL;
 	}
 
-	/*package*/PageHandler(ZkComponent parent, String hostURL) {
+	/*package*/PageHandler(ZkComponent parent, String hostURL, String pathURL) {
 		_hostURL = hostURL;
+		_pathURL = pathURL;
 		_parent = parent;
 		_zk = _parent == null ? null : _parent.getZkDesktop();
 		_stack.push(parent);
@@ -73,7 +76,7 @@ public class PageHandler extends DefaultHandler {
 		if ("".equals(eName)) eName = qName; // namespaceAware = false
 		
 		ZkComponent parent = (ZkComponent) (_stack.empty() ? null : _stack.peek());
-		ZkComponent comp = UiManager.create(parent, eName, attrs, _hostURL);
+		ZkComponent comp = UiManager.create(parent, eName, attrs, _hostURL, _pathURL);
 		_stack.push(comp);
 
 		if (parent instanceof ZkDesktop) {

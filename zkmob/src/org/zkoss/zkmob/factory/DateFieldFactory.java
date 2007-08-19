@@ -37,7 +37,7 @@ public class DateFieldFactory extends AbstractUiFactory {
 		super(name);
 	}
 
-	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL, String pathURL) {
 		final String id = attrs.getValue("id"); //id
 		final String label = attrs.getValue("lb"); //label
 		final String modeStr = attrs.getValue("md"); //mode

@@ -125,11 +125,11 @@ public class UiManager {
 	 * @param attrs the Ui tag attributes 
 	 * @param hostURL the host URL
 	 */
-	public static ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
+	public static ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL, String pathURL) {
 		UiFactory uiFactory = (UiFactory) _uiFactoryMap.get(tag);
 
 		if (uiFactory != null) {
-			return uiFactory.create(parent, tag, attrs, hostURL);
+			return uiFactory.create(parent, tag, attrs, hostURL, pathURL);
 		}
 		
 		throw new IllegalArgumentException("Cannot find the UiFactory of the RMIL tag: "+ tag); 
@@ -152,16 +152,25 @@ public class UiManager {
 		return conn.getProtocol()+"://"+conn.getHost()+(conn.getPort() != 80 ? (":"+conn.getPort()) : "");
 	}
 	
-	public static String prefixURL(String hostURL, String url) {
+	public static String getPathURL(HttpConnection conn) {
+		String url = conn.getURL();
+		int j = url.lastIndexOf('/');
+		if (j >= 0) {
+			url = url.substring(0, j+1); //include the '/'
+		}
+		return url;
+	}
+
+	public static String prefixURL(String hostURL, String pathURL, String url) {
 		if (url != null && !url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("~.")) {
-			url = hostURL + url;
+			url = (url.startsWith("/") ? hostURL : pathURL) + url;
 		}
 		return url;
 	}
 	
-	public static Vector createComponents(ZkComponent parent, InputStream is, String hostURL) throws IOException, SAXException {
+	public static Vector createComponents(ZkComponent parent, InputStream is, String hostURL, String pathURL) throws IOException, SAXException {
 	    // Load the responsed page, the current Displayable is put in _current
-	    final PageHandler handler = new PageHandler(parent, hostURL);
+	    final PageHandler handler = new PageHandler(parent, hostURL, pathURL);
 	    getSAXParser().parse(is, handler);
 	    return handler.getRoots();
 	}
@@ -174,16 +183,16 @@ public class UiManager {
 		    conn = (HttpConnection)Connector.open(url);
 		    is = request(conn, null);
 		    
-		    loadPage(browser, is, url, getHostURL(conn));
+		    loadPage(browser, is, url, getHostURL(conn), getPathURL(conn));
 		} finally {
 			if (is != null)	is.close();
 			if (conn != null) conn.close();
 		}
 	}
 
-	public static ZkDesktop loadPage(Browser browser, InputStream is, String url, String hostURL) 
+	public static ZkDesktop loadPage(Browser browser, InputStream is, String url, String hostURL, String pathURL) 
 	throws IOException, SAXException {
-	    final ZkDesktop zk = createComponents(browser, is, hostURL);
+	    final ZkDesktop zk = createComponents(browser, is, hostURL, pathURL);
 	    
 	    //notify server to remove old desktop
 	    final Object current = browser.getDisplay().getCurrent();
@@ -199,10 +208,10 @@ public class UiManager {
 	    return zk;
     }
 
-	private static ZkDesktop createComponents(Browser browser, InputStream is, String hostURL) 
+	private static ZkDesktop createComponents(Browser browser, InputStream is, String hostURL, String pathURL) 
 	throws IOException, SAXException {
 	    // Load the responsed page, the current Displayable is put in _current
-	    final PageHandler handler = new PageHandler(hostURL);
+	    final PageHandler handler = new PageHandler(hostURL, pathURL);
 	    getSAXParser().parse(is, handler);
 	    return handler.getZk();
 	}
@@ -212,11 +221,12 @@ public class UiManager {
 	 * @param item Imageable item to be setup the loaded image
 	 * @param url the Image url
 	 */
-	public static void loadImageOnThread(Imageable item, String hostURL, String url) {
+	public static void loadImageOnThread(Imageable item, String hostURL, String pathURL, String url) {
 		if (url != null) {
 			final ZkDesktop zk = ((ZkComponent)item).getZkDesktop();
 			if (zk != null) {
-				final String imagesrc = UiManager.prefixURL(hostURL, url); //image
+				final String imagesrc = UiManager.prefixURL(hostURL, pathURL, url); //image
+System.out.println("imagesrc="+imagesrc);				
 				new Thread(new ImageRequest(item, imagesrc)).start();
 			}
 		}

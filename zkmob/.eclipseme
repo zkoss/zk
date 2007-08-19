@@ -2,13 +2,13 @@
 <eclipsemeMetadata jad="zkmob.jad" version="1.6.8">
    <device group="Sun Java(TM) Wireless Toolkit 2.5.1 for CLDC" name="MediaControlSkin"/>
    <signing signProject="true">
-      <keystore>$/zkmob.ks</keystore>
+      <keystore>C:\Documents and Settings\henrichen\Desktop\Verisign\zkmob-verisign.jks</keystore>
       <alias>zkmob</alias>
       <provider/>
       <keystoreType/>
       <passwords storePasswords="2">
-         <keystore>czuEhR7S5g6htQ==</keystore>
-         <key>czuEhR7S5g6htQ==</key>
+         <keystore>dy2FhATG4A==</keystore>
+         <key>dy2FhATG4A==</key>
       </passwords>
    </signing>
 </eclipsemeMetadata>

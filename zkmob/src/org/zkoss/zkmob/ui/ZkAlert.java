@@ -42,7 +42,7 @@ public class ZkAlert extends Alert implements Imageable, ZkComponent {
 		_zk = zk;
 		_id = id;
 		_image = image;
-		UiManager.loadImageOnThread(this, _zk.getHostURL(), _image);
+		UiManager.loadImageOnThread(this, _zk.getHostURL(), _zk.getPathURL(), _image);
 	}
 
 	//--Imageable--//

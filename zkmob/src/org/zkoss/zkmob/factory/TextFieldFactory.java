@@ -36,7 +36,7 @@ public class TextFieldFactory extends AbstractUiFactory {
 		super(name);
 	}
 	
-	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL, String pathURL) {
 		final String id = attrs.getValue("id"); //label
 		final String label = attrs.getValue("lb"); //label
 		String text = attrs.getValue("tx"); //text

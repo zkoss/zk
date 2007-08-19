@@ -38,7 +38,7 @@ public class TextBoxFactory extends AbstractUiFactory {
 	/* (non-Javadoc)
 	 * @see org.zkoss.zmobi.UiFactory#create(java.lang.Object, java.lang.String, org.xml.sax.Attributes)
 	 */
-	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL, String pathURL) {
 		final String id = attrs.getValue("id"); //id
 		final String title = attrs.getValue("tt"); //title
 		final String constraintsStr = attrs.getValue("cs"); //constraints

@@ -34,7 +34,7 @@ public class ZkFactory extends AbstractUiFactory {
 		super(name);
 	}
 
-	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL) {
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL, String pathURL) {
 		final String dtid = attrs.getValue("id"); //desktop id
 		final String action = attrs.getValue("za"); //zk_action
 		final String proctoStr = attrs.getValue("zp"); //zk_procto
@@ -43,7 +43,7 @@ public class ZkFactory extends AbstractUiFactory {
 		final int tipto = tiptoStr != null ? Integer.parseInt(tiptoStr) : 800;
 		final String ver = attrs.getValue("zv"); //zk_ver
 		
-		ZkDesktop zk = new ZkDesktop(dtid, action, procto, tipto, ver, hostURL);
+		ZkDesktop zk = new ZkDesktop(dtid, action, procto, tipto, ver, hostURL, pathURL);
 		
 		return zk;
 	}

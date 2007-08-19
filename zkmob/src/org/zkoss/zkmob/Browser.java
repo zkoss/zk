@@ -149,7 +149,7 @@ public class Browser extends MIDlet {
 				
 				//load the browser template
 				is = getClass().getResourceAsStream("/pages/browser.rmil");
-				_zkMobile = UiManager.loadPage(this, is, null, "~.");
+				_zkMobile = UiManager.loadPage(this, is, null, "~.", "~.");
 				
 				//prepare browser home page
 				_home = (Form) _zkMobile.lookupUi("home");

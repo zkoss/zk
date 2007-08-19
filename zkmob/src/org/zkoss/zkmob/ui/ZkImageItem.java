@@ -93,7 +93,7 @@ public class ZkImageItem extends ImageItem implements Imageable, ZkComponent, It
 
 		if ("im".equals(attr)) {
 			if (val != null) {
-				UiManager.loadImageOnThread(this, _zk.getHostURL(), val);
+				UiManager.loadImageOnThread(this, _zk.getHostURL(), _zk.getPathURL(), val);
 			} else {
 				setImage(null); //clean to empty
 			}

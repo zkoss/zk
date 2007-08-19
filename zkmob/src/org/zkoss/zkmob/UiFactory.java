@@ -35,5 +35,5 @@ public interface UiFactory {
 	 * @param attrs the attribute
 	 * @param hostURL the host URL
 	 */
-	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL);
+	public ZkComponent create(ZkComponent parent, String tag, Attributes attrs, String hostURL, String pathURL);
 }

@@ -73,6 +73,7 @@ public class ZkDesktop implements ZkComponent {
 	private int _tipto; //zk_tipto, millisecond to popup the tip
 	private String _ver; //zk_ver
 	private String _hostURL; //URL prefix for this desktop
+	private String _pathURL; //URL prefix for relative path
 	private String _jsessionid; //session id
 	
 	private Vector _events = new Vector(); //event list
@@ -81,7 +82,7 @@ public class ZkDesktop implements ZkComponent {
 	private ItemStateListener _itemStateListener;
 	private ItemCommandListener _itemCommandListener;
 	
-	public ZkDesktop(String dtid, String action, int procto, int tipto, String ver, String hostURL) {
+	public ZkDesktop(String dtid, String action, int procto, int tipto, String ver, String hostURL, String pathURL) {
 		_dtid = dtid;
 
 		if (action != null) {
@@ -93,6 +94,7 @@ public class ZkDesktop implements ZkComponent {
 			action = "";
 		}
 		_hostURL = hostURL;
+		_pathURL = pathURL;
 		_action = _hostURL + action;
 		_procto = procto;
 		_tipto = tipto;
@@ -172,6 +174,10 @@ public class ZkDesktop implements ZkComponent {
 	
 	public String getHostURL() {
 		return _hostURL;
+	}
+	
+	public String getPathURL() {
+		return _pathURL;
 	}
 	
 	public void setBrowser(Browser browser) {
@@ -427,14 +433,14 @@ public class ZkDesktop implements ZkComponent {
 	//redirect command
 	private void executeRedirect(String[] data) {
 		final String href = data[0];
-		final String url = UiManager.prefixURL(_hostURL, href);
+		final String url = UiManager.prefixURL(_hostURL, _pathURL, href);
 		_browser.setHomeURL(url);
 		UiManager.loadPageOnThread(_browser, url);
 	}
 	
 	//home command
 	private void executeHome(String[] data) {
-		_browser.goHome(data.length > 0 ? UiManager.prefixURL(_hostURL, data[0]) : null);
+		_browser.goHome(data.length > 0 ? UiManager.prefixURL(_hostURL, _pathURL, data[0]) : null);
 	}
 	
 	//setAttr command
@@ -584,7 +590,7 @@ public class ZkDesktop implements ZkComponent {
 		}
 		Vector comps = null;
 		try {
-			comps = UiManager.createComponents(parent, is, _hostURL);
+			comps = UiManager.createComponents(parent, is, _hostURL, _pathURL);
 		} catch (IOException e) {
 			// ignore
 		} catch (SAXException e) {

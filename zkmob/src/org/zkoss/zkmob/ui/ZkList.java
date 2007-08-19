@@ -57,7 +57,7 @@ public class ZkList extends List implements Listable, ZkComponent {
 				super.append(comp.getLabel(), null);
 				_listitems.addElement(li);
 				li.setParent(this);
-				UiManager.loadImageOnThread(comp, li.getZkDesktop().getHostURL(), comp.getImageSrc());
+				UiManager.loadImageOnThread(comp, li.getZkDesktop().getHostURL(), li.getZkDesktop().getPathURL(),  comp.getImageSrc());
 			} else {
 				addCommand((ZkCommand) li);
 				li.setParent(this);
@@ -75,7 +75,7 @@ public class ZkList extends List implements Listable, ZkComponent {
 				super.insert(index, comp.getLabel(), null);
 				_listitems.insertElementAt(li, index);
 				li.setParent(this);
-				UiManager.loadImageOnThread(comp, li.getZkDesktop().getHostURL(), comp.getImageSrc());
+				UiManager.loadImageOnThread(comp, li.getZkDesktop().getHostURL(), li.getZkDesktop().getPathURL(), comp.getImageSrc());
 			} else {
 				addCommand((ZkCommand) li);
 				li.setParent(this);
