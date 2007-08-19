@@ -1316,7 +1316,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 		private void init() {
 			final Object[] result =
-				ComponentsCtrl.parseEventExpression(_comp, _fulfill, _comp);
+				ComponentsCtrl.parseEventExpression(_comp, _fulfill, _comp, false);
 			_target = (Component)result[0];
 			_evtnm = (String)result[1];
 		}

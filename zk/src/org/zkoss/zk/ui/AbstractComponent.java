@@ -1101,6 +1101,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public boolean addForward(
 	String orgEvent, Component target, String targetEvent) {
+		return addForward0(orgEvent, target, targetEvent);
+	}
+	public boolean addForward(
+	String orgEvent, String targetPath, String targetEvent) {
+		return addForward0(orgEvent, targetPath, targetEvent);
+	}
+	/**
+	 * @param target the target. It is either a component, or a string,
+	 * which is used internal for implementing {@link #writeObject}
+	 */
+	private boolean addForward0(
+	String orgEvent, Object target, String targetEvent) {
 		if (orgEvent == null)
 			orgEvent = "onClick";
 		else if (!Events.isValid(orgEvent))
@@ -1110,14 +1122,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		else if (!Events.isValid(targetEvent))
 			throw new IllegalArgumentException("Illegal event name: "+targetEvent);
 
-		return addForward0(orgEvent, target, targetEvent);
-	}
-	/**
-	 * @param target the target. It is either a component, or a string,
-	 * which is used internal for implementing {@link #writeObject}
-	 */
-	private boolean addForward0(
-	String orgEvent, Object target, String targetEvent) {
 		if (_forwards == null)
 			_forwards = new HashMap(5);
 
@@ -1670,8 +1674,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				s.writeInt(fwds.size());
 				for (Iterator e = fwds.iterator(); e.hasNext();) {
 					final Object[] fwd = (Object[])e.next();
-					s.writeObject( //target
-						Components.componentToPath((Component)fwd[0], this));
+					s.writeObject( //store target as string
+						fwd[0] instanceof Component ?
+							Components.componentToPath((Component)fwd[0], this):
+							fwd[0]);
 					s.writeObject(fwd[1]); //target event
 				}
 			}
@@ -1757,9 +1763,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 			int sz = s.readInt();
 			while (--sz >= 0) {
-				addForward0(orgEvent,
+				addForward(orgEvent,
 					(String)s.readObject(), (String)s.readObject());
-					//Note: we don't call Components.pathToComponent now
+					//Note: we don't call Components.pathToComponent here
 					//since the parent doesn't deserialized completely
 					//Rather, we handle it until the event is received
 			}
@@ -1809,12 +1815,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (info != null)
 				for (Iterator it = ((List)info[1]).iterator(); it.hasNext();) {
 					final Object[] fwd = (Object[])it.next();
-					Component target =
-						fwd[0] instanceof String ?
-							Components.pathToComponent(
-								(String)fwd[0], AbstractComponent.this):
-							(Component)fwd[0];
+					if (fwd[0] instanceof String)
+						fwd[0] = Components.pathToComponent(
+								(String)fwd[0], AbstractComponent.this);
 
+					Component target = (Component)fwd[0];
 					if (target == null) {
 						final IdSpace owner = getSpaceOwner();
 						if (owner instanceof Component) {

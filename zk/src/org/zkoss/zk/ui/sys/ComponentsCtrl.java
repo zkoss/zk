@@ -133,16 +133,21 @@ public class ComponentsCtrl {
 	 * @param evtexpr the event expression.
 	 * @param defaultComp the default component which is used when
 	 * evtexpr doesn't specify the component.
-	 * @return a two element array. The first element is the component,
-	 * and the second component is the event name.
+	 * @param deferred whether to defer the conversion of the path
+	 * to a component. If true and EL not specified or evaluated to a string,
+	 * it returns the path directly rather than converting it to a component.
+	 * @return a two element array. The first element is the component
+	 * if deferred is false or EL is evaluated to a component,
+	 * or a path, otherwise.
+	 * The second component is the event name.
 	 * @since 2.5.0
 	 */
 	public static Object[] parseEventExpression(Component comp,
-	String evtexpr, Component defaultComp)
+	String evtexpr, Component defaultComp, boolean deferred)
 	throws ComponentNotFoundException {
 		final int j = evtexpr.lastIndexOf('.');
 		final String evtnm;
-		Component target;
+		Object target;
 		if (j >= 0) {
 			evtnm = evtexpr.substring(j + 1).trim();
 			String path = evtexpr.substring(0, j);
@@ -159,18 +164,23 @@ public class ComponentsCtrl {
 						path = Objects.toString(v);
 					}
 				}
+
 				if (target == null) {
 					path = path.trim();
-					target = "self".equals(path) ? comp:
-						Path.getComponent(comp.getSpaceOwner(), path);
+					if ("self".equals(path)) path = ".";
+
+					target = deferred ? (Object)path:
+						".".equals(path) ? comp:
+							Path.getComponent(comp.getSpaceOwner(), path);
 				}
 			} else {
-				target = comp;
+				target = defaultComp;
 			}
 		} else {
 			evtnm = evtexpr.trim();
 			target = defaultComp;
 		}
+
 		if (!Events.isValid(evtnm))
 			throw new UiException("Not an event name: "+evtnm);
 		return new Object[] {target, evtnm};
@@ -201,10 +211,13 @@ public class ComponentsCtrl {
 				throw new UiException("Not an event name: "+orgEvent);
 
 			final Object[] result =
-				parseEventExpression(comp, (String)me.getValue(), null);
+				parseEventExpression(comp, (String)me.getValue(), null, true);
 
-			comp.addForward(orgEvent,
-				(Component)result[0], (String)result[1]);
+			final Object target = result[0];
+			if (target instanceof String)
+				comp.addForward(orgEvent, (String)target, (String)result[1]);
+			else
+				comp.addForward(orgEvent, (Component)target, (String)result[1]);
 		}
 	}
 

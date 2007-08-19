@@ -603,29 +603,54 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * by this component. If null, "onClick" is assumed.
 	 * @param target the target component to receive the event.
 	 * If null, the space owner {@link #getSpaceOwner} is assumed.
-	 * If the space owner is the page, the root component is assumed.
-	 * @param targetEvent the target event that the target component will receive.
+	 * If null and the space owner is the page, the root component is assumed.
+	 * @param targetEvent the target event that the target component
+	 * will receive.
 	 * If null, it is the same as the original event.
 	 * @return whether it is added successfully.
 	 * It returns false if the conditioin was always added before.
 	 * @since 2.5.0
-	 * @see #removeForward
+	 * @see #removeForward(String, Component, String)
 	 */
 	public boolean addForward(
 	String originalEvent, Component target, String targetEvent);
-	/** Removes a forward condition that was added by {@link #addForward}.
-	 * If no such forward condition exists, nothing happens.
+	/** Adds a forward condition to forward the event received
+	 * by this component to another component, specified with a path.
+	 *
+	 * <p>Note: the target path won't be converted to a component
+	 * until the event is received. Thus, you can reference to a component
+	 * that will be created later.
+	 *
+	 * @param originalEvent the original event that was received
+	 * by this component. If null, "onClick" is assumed.
+	 * @param targetPath the path related to this component.
+	 * If ".", this component is assumed.
+	 * If null, the space owner is assumed.
+	 * If null and the space owner is the page, the root component is assumed.
+	 * @see #addForward(String, Component, String)
+	 * @param targetEvent the target event that the target component
+	 * will receive.
+	 * If null, it is the same as the original event.
+	 * @return whether it is added successfully.
+	 * It returns false if the conditioin was always added before.
+	 * @since 2.5.0
+	 */
+	public boolean addForward(
+	String originalEvent, String targetPath, String targetEvent);
+	/** Removes a forward condition that was added by {@link #addForward(String, Component, String)}
+	 * or {@link #addForward(String, String, String).
+	 * If no such forward condition exists, nothing happens but return false.
 	 *
 	 * @param originalEvent the oringal event that was received
 	 * by this component.
-	 * It must be the same as the one passed to {@link #addForward}.
+	 * It must be the same as the one passed to {@link #addForward(String, Component, String)}.
 	 * @param target the target component to receive the event.
-	 * It must be the same as the one passed to {@link #addForward}.
+	 * It must be the same as the one passed to {@link #addForward(String, Component, String)}.
 	 * @param targetEvent the target event that the target component will receive.
-	 * It must be the same as the one passed to {@link #addForward}.
+	 * It must be the same as the one passed to {@link #addForward(String, Component, String)}.
 	 * @return whether the forward is removed successfully.
 	 * It returns false if the forward condition is not found
-	 * @see #addForward
+	 * @see #addForward(String, Component, String)
 	 * @since 2.5.0
 	 */
 	public boolean removeForward(
