@@ -230,7 +230,7 @@ public class Objects {
 		if (a == b || (a != null && b != null && a.equals(b)))
 			return true;
 		if ((a instanceof BigDecimal) && (b instanceof BigDecimal))
-			return ((BigDecimal)a).compareTo(b) == 0;
+			return ((BigDecimal)a).compareTo((BigDecimal) b) == 0;
 
 		if (a == null || !a.getClass().isArray())
 			return false;
