@@ -44,7 +44,8 @@ import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zul.Radiogroup;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+
 /**
  * The skeletal class used to implement the JSP tag for ZK components
  * that don't accept any child.
@@ -60,7 +61,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	private BranchTag _parenttag;
 	private Map _attrMap = new LinkedHashMap();
 	private Map _eventListenerMap = new LinkedHashMap();
-    private String _use;
+    private String _use, _forward;
 
 	/** Returns the page tag that this tag belongs to.
 	 */
@@ -214,13 +215,17 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	
 		try {
 			evaluateDynaAttributes(_comp);
-		} catch (Exception e) {
+		} catch (ModificationException e) {
+			throw new JspException(e);
+		} catch (NoSuchMethodException e) {
 			throw new JspException(e);
 		}
-		//add event handle ...
-		
-		for(Iterator itor = _eventListenerMap.entrySet().iterator();itor.hasNext();)
-		{
+
+		//process the forward condition
+		ComponentsCtrl.applyForward(_comp, _forward);
+
+		//add event handle ...		
+		for(Iterator itor = _eventListenerMap.entrySet().iterator();itor.hasNext();) {
 			Map.Entry entry = (Map.Entry)itor.next();
 			final ZScript zscript = ZScript.parseContent((String)entry.getValue(), null);
 			((ComponentCtrl)_comp).addEventHandler(
@@ -237,8 +242,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
      * @return the class name used to implement the component, or null
      * to use the default
      */
-    public String getUse()
-    {
+    public String getUse() {
         return _use;
     }
     /**
@@ -248,8 +252,53 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
      * @param use the class name used to implement the component, or null
      * to use the default
      */
-    public void setUse(String use)
-    {
+    public void setUse(String use) {
         this._use = use;
     }
+	/** Returns the forward condition that controls how to forward
+	 * an event, that is received by the component created
+	 * by this info, to another component.
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>If not null, when the component created by this
+	 * info receives the event specified in the forward condition,
+	 * it will forward it to the target component, which is also
+	 * specified in the forward condition.
+	 *
+	 * @see #setForward
+	 */
+	public String getForward() {
+		return _forward;
+	}
+	/** Sets the forward condition that controls when to forward
+	 * an event receiving by this component to another component.
+	 *
+	 * <p>The basic format:<br/>
+	 * <code>onEvent1=id1/id2.onEvent2</code>
+	 *
+	 * <p>It means when onEvent1 is received, onEvent2 will be posted
+	 * to the component with the specified path (id1/id2).
+	 *
+	 * <p>If onEvent1 is omitted, it is assumed to be onClick (and
+	 * the equal sign need not to be specified.
+	 * If the path is omitted, it is assumed to be the space owner
+	 * {@link Component#getSpaceOwner}.
+	 *
+	 * <p>For example, "onOK" means "onClick=onOK".
+	 *
+	 * <p>You can specify several forward conditions by separating
+	 * them with comma as follows:
+	 *
+	 * <p><code>onChanging=onChanging,onChange=onUpdate,onOK</code>
+	 *
+	 * @param forward the forward condition. There are several forms:
+	 * "onEvent1", "target.onEvent1" and "onEvent1(target.onEvent2)",
+	 * where target could be "id", "id1/id2" or "${elExpr}".
+	 * The EL expression must return either a path or a reference to
+	 * a component.
+	 */
+	public void setForward(String forward) {
+		_forward = forward != null && forward.length() > 0 ? forward: null;
+	}
 }
