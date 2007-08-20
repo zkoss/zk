@@ -67,7 +67,7 @@ public class Inline extends AbstractComponent {
 	}
 	/** Sets the embedded content (i.e., HTML tags).
 	 *
-	 * <p>Note: Unlike {@link Html}, the content of {@link Inline}
+	 * <p>Note: Unlike {@link org.zkoss.zul.Html}, the content of {@link Inline}
 	 * cannot be changed dynamically. 
 	 * In other words, once the output of
 	 * {@link Inline} is sent the client, calling this method

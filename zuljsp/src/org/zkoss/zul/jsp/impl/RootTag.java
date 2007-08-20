@@ -224,7 +224,7 @@ abstract public class RootTag extends AbstractTag {
 	}
 	/**
 	 * Root tag was supposed to handle all children's ZScript.
-	 * @param com  The owner of zscript segment. 
+	 * @param parent The owner of zscript segment. 
 	 * @param zs A ZScript object.
 	 * @throws IOException  
 	 */

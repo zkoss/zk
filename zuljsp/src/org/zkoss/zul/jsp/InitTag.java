@@ -38,16 +38,16 @@ import org.zkoss.zul.jsp.impl.Initiators;
  *
  * <p>&lt;z:init class="MyInit" /&gt;
  *
- * <p>Once specified, an instance inside this tag is created and {@link #doInit} is called
- * before the page is evaluated. Then, {@link #doAfterCompose} is called
+ * <p>Once specified, an instance inside this tag is created and {@link Initiator#doInit} is called
+ * before the page is evaluated. Then, {@link Initiator#doAfterCompose} is called
  * after all components are created, and before any event is processed.
- * In additions, {@link #doFinally} is called
- * after the page has been evaluated. If an exception occurs, {@link #doCatch}
+ * In additions, {@link Initiator#doFinally} is called
+ * after the page has been evaluated. If an exception occurs, {@link Initiator#doCatch}
  * is called.
  *
  * <p>A typical usage: starting a transaction in doInit, rolling back it
- * in {@link #doCatch} and commit it in {@link #doFinally}
- * (if {@link #doCatch} is not called).
+ * in {@link Initiator#doCatch} and commit it in {@link Initiator#doFinally}
+ * (if {@link Initiator#doCatch} is not called).
  *
  * @author Ian Tsai
  *
@@ -77,7 +77,7 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	
 	/**
 	 *  Add this Initiator into HttpRequest, this will be processed by Component 
-	 *  container:{@link RootTag}.   
+	 *  container: {@link PageTag}.   
 	 */
 	public void doTag() throws JspException, IOException {
 		 storeInitiator(_init,_args);
