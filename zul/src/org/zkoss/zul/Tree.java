@@ -747,7 +747,8 @@ public class Tree extends XulElement {
 	public void loadTreeItem(Treeitem item){
 		if(!item.isLoaded()){
 			Tree t = item.getTree();
-			item.getTreechildren().getChildren().clear();
+			if(item.getTreechildren() != null)
+				item.getTreechildren().getChildren().clear();
 			t.renderItem(item);
 		}
 	}
@@ -1216,7 +1217,13 @@ public class Tree extends XulElement {
 			loadTreeItem(ti);
 			if(i<path.length-1) 
 				ti.setOpen(true);
-			children = ti.getTreechildren().getChildren();
+			if(ti.getTreechildren()!=null){
+				children = ti.getTreechildren().getChildren();
+			}else{
+				if(i!=path.length-1){
+					return null;
+				}
+			}
 		}
 		return ti;
 	}
