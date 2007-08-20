@@ -158,10 +158,14 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#captcha
 
 	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
-	cp dist/lib/zuljsp.jar dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
-
+	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timelinez.jar dist/lib/ext/json_simple.jar /tmp/zk/$binnm/dist/lib/zkforge
 		#timelinez
+
+	if [ "$target" == "daily" ] ; then
+		cp dist/lib/zuljsp.jar /tmp/zk/$binnm/dist/lib/zkforge
+		cp -rp zuljsp/src/archive/META-INF/*.tld /tmp/zk/$binnm/dist/WEB-INF/tld/zul/jsp
+	fi
 
 	if [ -d dist/export/WEB-INF ] ; then
 		cp -rp dist/export/WEB-INF/* /tmp/zk/$binnm/dist/WEB-INF
@@ -169,7 +173,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zweb/src/archive/web/WEB-INF/tld/web /tmp/zk/$binnm/dist/WEB-INF/tld
 	cp -rp zk/src/archive/web/WEB-INF/tld/zk /tmp/zk/$binnm/dist/WEB-INF/tld
 	cp -rp zul/src/archive/web/WEB-INF/tld/zul /tmp/zk/$binnm/dist/WEB-INF/tld
-	cp -rp zuljsp/src/archive/META-INF/*.tld /tmp/zk/$binnm/dist/WEB-INF/tld/zul/jsp
 
 	cp zul/src/archive/metainfo/xml/*.xsd /tmp/zk/$binnm/dist/xsd
 	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$binnm/doc
