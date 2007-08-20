@@ -739,19 +739,18 @@ public class Tree extends XulElement {
 	private TreeitemRenderer _renderer;
 	
 	private TreeDataListener _dataListener;
-	
-	private EventListener _treeitemOpenListener = new EventListener() {
-		public void onEvent(Event event) throws Exception {
-			if (event.getName().equals(Events.ON_OPEN)) {
-				Treeitem _item = (Treeitem) event.getTarget();
-				if(!_item.isLoaded()){
-					Tree t = _item.getTree();
-					_item.getTreechildren().getChildren().clear();
-					t.renderItem(_item);
-				}
-			}
+
+	/**
+	 * Load the treeitem <b>item</b>
+	 * @param item - treeitem to be loaded
+	 */
+	public void loadTreeItem(Treeitem item){
+		if(!item.isLoaded()){
+			Tree t = item.getTree();
+			item.getTreechildren().getChildren().clear();
+			t.renderItem(item);
 		}
-	};
+	}
 	
 	/*
 	 * Handles when the tree model's content changed 
@@ -962,8 +961,7 @@ public class Tree extends XulElement {
 			}
 			ti.setOpen(true);
 		}
-		if(!_model.isLeaf(data)){
-			ti.addEventListener(Events.ON_OPEN, _treeitemOpenListener);	
+		if(!_model.isLeaf(data)){	
 			Treechildren ch = new Treechildren();
 			ch.setParent(ti);
 		}
@@ -1119,8 +1117,7 @@ public class Tree extends XulElement {
 				Treeitem ti = new Treeitem();
 				Object data = _model.getChild(node, i);
 				_renderer.render(ti, data);
-				if(!_model.isLeaf(data)){
-					ti.addEventListener(Events.ON_OPEN, _treeitemOpenListener);	
+				if(!_model.isLeaf(data)){	
 					Treechildren ch = new Treechildren();
 					ch.setParent(ti);
 				}
@@ -1196,7 +1193,34 @@ public class Tree extends XulElement {
 		}
 		return node;
 	}
-
+	
+	/**
+	 * Load treeitems through path <b>path</b>
+	 * <br>Note: By using this method, all treeitems in path will be rendered
+	 * @param path - an int[] path, see {@link TreeModel#getPath} 
+	 * @return the treeitem from tree by given path
+	 */
+	public Treeitem loadTreeitemThroughPath(int[] path){
+		if(path == null || path.length == 0)
+			return null;
+		//Start from root-Tree
+		Treeitem ti = null;
+		List children = this.getTreechildren().getChildren();
+		/*
+		 * Go through each stop in path and render corresponding treeitem
+		 */
+		for(int i=0; i<path.length; i++){
+			if(path[i] <0 || path[i] > children.size())
+				return null;
+			ti = (Treeitem) children.get(path[i]);
+			loadTreeItem(ti);
+			if(i<path.length-1) 
+				ti.setOpen(true);
+			children = ti.getTreechildren().getChildren();
+		}
+		return ti;
+	}
+	
 	//TODO AREA JEFF ADDED END
 	
 	/** A utility class to implement {@link #getExtraCtrl}.

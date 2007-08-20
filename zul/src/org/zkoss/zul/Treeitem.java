@@ -76,6 +76,7 @@ public class Treeitem extends XulElement {
 		List list = this.getParent().getChildren();
 		return list.indexOf(this);
 	}
+
 	// TODO AREA JEFF ADDED END
 	
 	
@@ -148,7 +149,6 @@ public class Treeitem extends XulElement {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-
 			//Note: _treerow might not be ready yet because it might be
 			//initialized before creating child components (for ZK pages)
 			if (_treerow != null)
@@ -438,6 +438,12 @@ public class Treeitem extends XulElement {
 		//-- Openable --//
 		public void setOpenByClient(boolean open) {
 			_open = open;
+			/*
+			 * Load Treeitem.
+			 * SetOpen will trigger this function.
+			 */
+			if(getTree() != null)
+				getTree().loadTreeItem(Treeitem.this);
 		}
 	}
 }
