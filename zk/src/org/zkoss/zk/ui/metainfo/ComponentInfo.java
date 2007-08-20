@@ -261,6 +261,57 @@ implements Cloneable, Condition, java.io.Serializable {
 			_props.add(prop);
 		}
 	}
+	/** Merges the value to the specified property.
+	 * By merging we mean the previous value will be catenated with
+	 * the value specified in this method.
+	 *
+	 * <p>For example, the proplog's value will become "abcd"
+	 * if the following codes execute:
+	 *
+	 * <pre><code>addProperty("prolog", "ab", null);
+	 *mergeProperty("prolog", "cd");</code></pre>
+	 *
+	 * <p>If the property is not defined before, this method is the same
+	 * as {@link #addProperty}.
+	 *
+	 * <p>Note: if the property is added with a condition, e.g.,
+	 * addProperty("prolog", "ab", cond), this method will does
+	 * nothing but returning false.
+	 *
+	 * @return whether it is merged successfully.
+	 * @since 2.5.0
+	 */
+	public boolean mergeProperty(String name, String value) {
+		if (_props != null) {
+			if (name == null || name.length() == 0)
+				throw new IllegalArgumentException("name");
+
+			Property found =  null;
+			synchronized (_props) {
+				for (Iterator it = _props.iterator(); it.hasNext();) {
+					final Property prop = (Property)it.next();
+					if (name.equals(prop.getName())) {
+						if (prop.getCondition() != null)
+							return false; //unable to merge
+						found = prop;
+						break;
+					}
+				}
+			}
+
+			if (found != null) {
+				final String old = found.getValue();
+				if (old != null)
+					if (value != null) value = old + value;
+					else value = old;
+				found.setValue(value);
+				return true;
+			}
+		}
+		addProperty(name, value, null);
+		return true;
+	}
+
 	/** Adds an event handler.
 	 *
 	 * @param name the event name.
@@ -289,6 +340,12 @@ implements Cloneable, Condition, java.io.Serializable {
 		_evthds.add(name, evthd);
 	}
 
+	/** Returns the effectiveness condition, or null if no such condition.
+	 * @since 2.5.0
+	 */
+	public Condition getCondition() {
+		return _cond;
+	}
 	/** Sets the effectiveness condition.
 	 */
 	public void setCondition(Condition cond) {
@@ -524,6 +581,11 @@ implements Cloneable, Condition, java.io.Serializable {
 	}
 
 	public String toString() {
-		return "[ComponentInfo: " + _compdef.getName() + ']';
+		final StringBuffer sb = new StringBuffer(64)
+			.append("[ComponentInfo: ")
+			.append(_compdef.getName());
+		if (_tagnm != null)
+			sb.append(" <").append(_tagnm).append('>');
+		return sb.append(']').toString();
 	}
 }

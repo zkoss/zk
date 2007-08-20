@@ -41,7 +41,7 @@ public class Property implements Condition, Serializable {
     private static final long serialVersionUID = 20060622L;
 
 	private final String _name;
-	private final String _value;
+	private String _value;
 	private final Condition _cond;
 	/** Used to optimize {@link #resolve}. */
 	private transient Class _lastcls;
@@ -80,6 +80,12 @@ public class Property implements Condition, Serializable {
 	 */
 	public String getValue() {
 		return _value;
+	}
+	/** Sets the value of the property.
+	 * @since 2.5.0
+	 */
+	public void setValue(String value) {
+		_value = value;
 	}
 	/** Returns the condition.
 	 */

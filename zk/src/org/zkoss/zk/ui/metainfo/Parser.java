@@ -200,7 +200,8 @@ public class Parser {
 
 		//5. Processing from the root element
 		final Element root = doc.getRootElement();
-		if (root != null) parse(pgdef, pgdef, root, new AnnotationHelper());
+		if (root != null)
+			parse(pgdef, pgdef, root, new AnnotationHelper());
 		return pgdef;
 	}
 	private static Class locateClass(String clsnm) throws Exception {
@@ -428,6 +429,8 @@ public class Parser {
 	private void parse(PageDefinition pgdef, NodeInfo parent,
 	Collection items, AnnotationHelper annHelper)
 	throws Exception {
+		final ComponentInfo parentInfo =
+			parent instanceof ComponentInfo ? (ComponentInfo)parent: null;
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
@@ -443,12 +446,15 @@ public class Parser {
 					parentlang = pgdef.getLanguageDefinition();
 
 				if (trimLabel.length() > 0) { //consider as a label
-					final ComponentInfo parentInfo = (ComponentInfo)parent;
-					if (parentInfo.getComponentDefinition().isNative()) {
-						//TODO: merge to prolog if parentInfo has no child
-						new ComponentInfo(parentInfo,
-							parentlang.getNativeDefinition(), null)
-							.addProperty("prolog", trimLabel, null);
+					if (parentInfo != null
+					&& parentInfo.getComponentDefinition().isNative()) {
+						if (parentInfo.getChildren().isEmpty()) {
+							parentInfo.mergeProperty("prolog", trimLabel);
+						} else {
+							new ComponentInfo(parentInfo,
+								parentlang.getNativeDefinition(), null)
+								.addProperty("prolog", trimLabel, null);
+						}
 					} else {
 						final String textAs = parentInfo.getTextAs();
 						if (textAs != null) {
