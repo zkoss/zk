@@ -7,11 +7,12 @@ ZK 2.5.0
   1758837: Zk Flash Component
   1537229: Treemodel with Tree
   1760212: A simpler way to annotation a component
-  1753222: A way to assign text with element to a property than child
+  1760689: Data Binding using new simpler annotation to component
   1760691: DataBinder support validation phase
   1638395: Timer component and Session timeout
   1771412: DSP TLD shall support tag uri
   1765119: Authentication & AU Http Status Code Handling
+  1753222: A way to assign text with element to a property than child
   1758761: A way to attach a root component before another root
   1751674: WebApp retrieves the major/minor version from getVersion
   1752559: The script component shall support the content property
@@ -19,7 +20,6 @@ ZK 2.5.0
   1752431: Change the modifier of addMoved in AbstractComponent
   1753168: nextComponentUuid shall be called as late as possible
   1759278: A way to get the request path of desktop
-  1760689: Data Binding using new simpler annotation to component
   1766020: Icon of datebox shall be configurable (like combobox)
   1760850: DHtmlLayoutServlet.process() as protected
   1766667: DataBinder support multiple save-when events
@@ -57,6 +57,8 @@ ZK 2.5.0
   1774432: Bug in adding treeitem to tree's first-level treechildren
   1775339: getWriter() has already been called while use forward
   1775051: Listbox multiple select and databinding issue 
+  1778258: EL cause nullpoint when createComponent or fulfill
+  1778320: Grid/listbox/tree don't support scrollTop well
   
 * Upgrade Notes:
   + The onTimer event won't keep the session alive.
