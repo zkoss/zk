@@ -575,7 +575,13 @@ public class DataBinder {
 	 * @since 2.5.0
 	 */
 	protected CollectionItem getBindingCollectionItem(Component comp){
-		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(comp.getClass().getName());
+		String name = comp.getClass().getName();
+		if (comp instanceof Listitem) {
+			name = Listitem.class.getName();
+		} else if (comp instanceof Row) {
+			name = Row.class.getName();
+		}
+		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(name);
 		if(decorName != null){
 			return decorName;
 		}else{

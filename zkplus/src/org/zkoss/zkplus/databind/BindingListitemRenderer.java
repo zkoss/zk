@@ -50,7 +50,7 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 	public Listitem newListitem(Listbox listbox) {
 		//clone from template
 		final Listitem clone = (Listitem)_template.clone();
-		
+		//TODO: see if databinder has this kind of Listitem, if not, add new CollectionListItem 
 		//avoid duplicate id error, will set to new id when render()
 		if (!ComponentsCtrl.isAutoId(clone.getId())) {
 			clone.setId("@"+ clone.getUuid() + x++);
