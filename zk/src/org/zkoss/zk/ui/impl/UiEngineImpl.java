@@ -48,6 +48,7 @@ import org.zkoss.zk.ui.sys.*;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.ext.AfterCompose;
+import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.util.*;
 import org.zkoss.zk.scripting.*;
 import org.zkoss.zk.au.*;
@@ -316,8 +317,10 @@ public class UiEngineImpl implements UiEngine {
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
 					if (!uv.isAborting() && !exec.isVoided())
 						execCreate(
-							((WebAppCtrl)_wapp).getUiFactory(),
-							exec, page, pagedef, null);
+							new CreateInfo(
+								((WebAppCtrl)_wapp).getUiFactory(),
+								exec, page),
+							pagedef, null);
 					inits.doAfterCompose(page);
 				} catch(Throwable ex) {
 					inits.doCatch(ex);
@@ -397,8 +400,8 @@ public class UiEngineImpl implements UiEngine {
 	 * Creates all child components defined in the specified definition.
 	 * @return the first component being created.
 	 */
-	private static final Component[] execCreate(UiFactory uf,
-	Execution exec, Page page, NodeInfo parentInfo, Component parent)
+	private static final Component[] execCreate(
+	CreateInfo ci, NodeInfo parentInfo, Component parent)
 	throws IOException {
 		if (parentInfo instanceof ComponentInfo) {
 			final ComponentInfo pi = (ComponentInfo)parentInfo;
@@ -408,24 +411,25 @@ public class UiEngineImpl implements UiEngine {
 				return new Component[0];
 			}
 		}
-		return execCreate0(uf, exec, page, parentInfo, parent);
+		return execCreate0(ci, parentInfo, parent);
 	}
-	private static final Component[] execCreate0(UiFactory uf,
-	Execution exec, Page page, NodeInfo parentInfo, Component parent)
+	private static final Component[] execCreate0(
+	CreateInfo ci, NodeInfo parentInfo, Component parent)
 	throws IOException {
 		final List created = new LinkedList();
+		final Page page = ci.page;
 		final PageDefinition pagedef = parentInfo.getPageDefinition();
 			//note: don't use page.getDefinition because createComponents
 			//might be called from a page other than instance's
 		for (Iterator it = parentInfo.getChildren().iterator(); it.hasNext();) {
-			final Object obj = it.next();
-			if (obj instanceof ComponentInfo) {
-				final ComponentInfo childInfo = (ComponentInfo)obj;
+			final Object meta = it.next();
+			if (meta instanceof ComponentInfo) {
+				final ComponentInfo childInfo = (ComponentInfo)meta;
 				final ForEach forEach = childInfo.getForEach(page, parent);
 				if (forEach == null) {
 					if (isEffective(childInfo, page, parent)) {
 						final Component[] children =
-							execCreateChild(uf, exec, page, parent, childInfo);
+							execCreateChild(ci, parent, childInfo);
 						for (int j = 0; j < children.length; ++j)
 							created.add(children[j]);
 					}
@@ -433,58 +437,42 @@ public class UiEngineImpl implements UiEngine {
 					while (forEach.next()) {
 						if (isEffective(childInfo, page, parent)) {
 							final Component[] children =
-								execCreateChild(uf, exec, page, parent, childInfo);
+								execCreateChild(ci, parent, childInfo);
 							for (int j = 0; j < children.length; ++j)
 								created.add(children[j]);
 						}
 					}
 				}
-			} else if (obj instanceof ZScript) {
-				final ZScript zscript = (ZScript)obj;
-				if (zscript.isDeferred()) {
-					((PageCtrl)page).addDeferredZScript(parent, zscript);
-				} else if (isEffective(zscript, page, parent)) {
-					final Map backup = new HashMap();
-					final Namespace ns = parent != null ?
-						Namespaces.beforeInterpret(backup, parent, false):
-						Namespaces.beforeInterpret(backup, page, false);
-					try {
-						page.interpret(zscript.getLanguage(),
-							zscript.getContent(page, parent), ns);
-					} finally {
-						Namespaces.afterInterpret(backup, ns, false);
-					}
-				}
-			} else if (obj instanceof AttributesInfo) {
-				final AttributesInfo attrs = (AttributesInfo)obj;
-				if (parent != null) attrs.apply(parent);
-				else attrs.apply(page);
-			} else if (obj instanceof VariablesInfo) {
-				final VariablesInfo vars = (VariablesInfo)obj;
-				if (parent != null) vars.apply(parent);
-				else vars.apply(page);
 			} else {
-				throw new IllegalStateException("Unknown object: "+obj);
+				execNonComponent(page, parent, meta);
 			}
 		}
 		return (Component[])created.toArray(new Component[created.size()]);
 	}
-	private static Component[] execCreateChild(UiFactory uf,
-	Execution exec, Page page, Component parent,
-	ComponentInfo childInfo) throws IOException {
+	private static Component[] execCreateChild(
+	CreateInfo ci, Component parent, ComponentInfo childInfo)
+	throws IOException {
 		final ComponentDefinition childdef = childInfo.getComponentDefinition();
 		if (ComponentDefinition.ZK == childdef) {
-			return execCreate(uf, exec, page, childInfo, parent);
+			return execCreate(ci, childInfo, parent);
 		} else if (childdef.isInlineMacro()) {
 			final Map props = new HashMap();
 			props.put("includer", parent);
-			childInfo.evalProperties(props, page, parent, true);
+			childInfo.evalProperties(props, ci.page, parent, true);
 			return new Component[] {
-				exec.createComponents(childdef.getMacroURI(), parent, props)};
+				ci.exec.createComponents(childdef.getMacroURI(), parent, props)};
 		} else {
-			final Component child = uf.newComponent(page, parent, childInfo);
+			final Component child =
+				ci.uf.newComponent(ci.page, parent, childInfo);
 
-			execCreate(uf, exec, page, childInfo, child); //recursive
+			final boolean bNative = childInfo instanceof NativeInfo;
+			if (bNative)
+				createPrologAndSplit(ci, (NativeInfo)childInfo, child);
+
+			execCreate(ci, childInfo, child); //recursive
+
+			if (bNative)
+				createEpilog(ci, (NativeInfo)childInfo, child);
 
 			if (child instanceof AfterCompose)
 				((AfterCompose)child).afterCompose();
@@ -498,10 +486,63 @@ public class UiEngineImpl implements UiEngine {
 
 			if (Events.isListened(child, Events.ON_CREATE, false))
 				Events.postEvent(
-					new CreateEvent(Events.ON_CREATE, child, exec.getArg()));
+					new CreateEvent(Events.ON_CREATE, child, ci.exec.getArg()));
 
 			return new Component[] {child};
 		}
+	}
+	/** Executes a non-component object, such as ZScript, AttributesInfo...
+	 */
+	private static final void execNonComponent(
+	Page page, Component comp, Object meta) {
+		if (meta instanceof ZScript) {
+			final ZScript zscript = (ZScript)meta;
+			if (zscript.isDeferred()) {
+				((PageCtrl)page).addDeferredZScript(comp, zscript);
+			} else if (isEffective(zscript, page, comp)) {
+				final Map backup = new HashMap();
+				final Namespace ns = comp != null ?
+					Namespaces.beforeInterpret(backup, comp, false):
+					Namespaces.beforeInterpret(backup, page, false);
+				try {
+					page.interpret(zscript.getLanguage(),
+						zscript.getContent(page, comp), ns);
+				} finally {
+					Namespaces.afterInterpret(backup, ns, false);
+				}
+			}
+		} else if (meta instanceof AttributesInfo) {
+			final AttributesInfo attrs = (AttributesInfo)meta;
+			if (comp != null) attrs.apply(comp);
+			else attrs.apply(page);
+		} else if (meta instanceof VariablesInfo) {
+			final VariablesInfo vars = (VariablesInfo)meta;
+			if (comp != null) vars.apply(comp);
+			else vars.apply(page);
+		} else {
+			throw new IllegalStateException("Unknown metainfo: "+meta);
+		}
+	}
+	/** Creates the prolog and split of the specified native component.
+	 */
+	private static final void createPrologAndSplit(CreateInfo ci,
+	NativeInfo compInfo, Component comp) {
+		final Native nc = (Native)comp;
+		final List children = compInfo.getPrologChildren();
+		if (!children.isEmpty()) {
+			for (Iterator it = children.iterator(); it.hasNext();) {
+				final Object meta = it.next();
+				if (meta instanceof NativeInfo) {
+				} else {
+					execNonComponent(ci.page, comp, meta);
+				}
+			}
+		}
+	}
+	/** Creates the epilog of the specified native component.
+	 */
+	private static final
+	void createEpilog(CreateInfo ci, NativeInfo compInfo, Component comp) {
 	}
 	private static final boolean isEffective(Condition cond,
 	Page page, Component comp) {
@@ -537,8 +578,10 @@ public class UiEngineImpl implements UiEngine {
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
 			final Component[] cs = execCreate(
-				((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
-				exec, page, pagedef, parent);
+				new CreateInfo(
+					((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
+					exec, page),
+				pagedef, parent);
 			inits.doAfterCompose(page);
 			return cs;
 		} catch (Throwable ex) {
@@ -1300,8 +1343,10 @@ public class UiEngineImpl implements UiEngine {
 
 			final Execution exec = Executions.getCurrent();
 			execCreate0(
-				((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
-				exec, _comp.getPage(), _compInfo, _comp);
+				new CreateInfo(
+					((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
+					exec, _comp.getPage()),
+				_compInfo, _comp);
 		}
 
 		//ComponentSerializationListener//
@@ -1323,6 +1368,18 @@ public class UiEngineImpl implements UiEngine {
 			clone._comp = comp;
 			clone.init();
 			return clone;
+		}
+	}
+	/** Info used with execCreate
+	 */
+	private static class CreateInfo {
+		private final Execution exec;
+		private final Page page;
+		private final UiFactory uf;
+		private CreateInfo(UiFactory uf, Execution exec, Page page) {
+			this.exec = exec;
+			this.page = page;
+			this.uf = uf;
 		}
 	}
 }

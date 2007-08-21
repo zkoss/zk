@@ -617,10 +617,10 @@ public class Parser {
 			parse(pgdef, compInfo, el.getChildren(), annHelper); //recursive
 
 			//optimize native components
-/*			if (compInfo instanceof NativeInfo
+			if (compInfo instanceof NativeInfo
 			&& !compInfo.getChildren().isEmpty())
-				minimizeNative((NativeInfo)compInfo);
-*/		}
+				optimizeNativeInfos((NativeInfo)compInfo);
+		}
 	}
 	private void parseZScript(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) {
@@ -823,7 +823,7 @@ public class Parser {
 	/** Minimizes the native infos such that UiEngine creates
 	 * the minimal number of components.
 	 */
-	private void minimizeNative(NativeInfo compInfo) {
+	private void optimizeNativeInfos(NativeInfo compInfo) {
 		//Optimize 1: merge to prolog
 		for (Iterator it = compInfo.getChildren().iterator(); it.hasNext();) {
 			final Object o = it.next();
