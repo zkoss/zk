@@ -1,0 +1,252 @@
+/* NativeInfo.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 21 10:20:34     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package org.zkoss.zk.ui.metainfo;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
+
+/**
+ * Represents the compmonent infomation about the native components.
+ *
+ * <p>Note:it is not thread-safe.
+ *
+ * @author tomyeh
+ * @since 2.5.0
+ */
+public class NativeInfo extends ComponentInfo {
+	private List _prokids, _epikids;
+	private NativeInfo _splitkid;
+
+	public NativeInfo(NodeInfo parent, ComponentDefinition compdef,
+	String tagnm) {
+		super(parent, compdef, tagnm);
+		if (!compdef.isNative())
+			throw new IllegalArgumentException("compdef must be native");
+	}
+
+	/** Merges the value to the specified property.
+	 * By merging we mean the previous value will be catenated with
+	 * the value specified in this method.
+	 *
+	 * <p>For example, the proplog's value will become "abcd"
+	 * if the following codes execute:
+	 *
+	 * <pre><code>addProperty("prolog", "ab", null);
+	 *mergeProperty("prolog", "cd");</code></pre>
+	 *
+	 * <p>If the property is not defined before, this method is the same
+	 * as {@link #addProperty}.
+	 *
+	 * <p>Note: if the property is added with a condition, e.g.,
+	 * addProperty("prolog", "ab", cond), this method will does
+	 * nothing but returning false.
+	 *
+	 * @return whether it is merged successfully.
+	 * @since 2.5.0
+	 */
+	public boolean mergeProperty(String name, String value) {
+		if (_props != null) {
+			if (name == null || name.length() == 0)
+				throw new IllegalArgumentException("name");
+
+			Property found =  null;
+//			synchronized (_props) {
+				for (Iterator it = _props.iterator(); it.hasNext();) {
+					final Property prop = (Property)it.next();
+					if (name.equals(prop.getName())) {
+						if (prop.getCondition() != null)
+							return false; //unable to merge
+						found = prop;
+						break;
+					}
+				}
+//			}
+
+			if (found != null) {
+				final String old = found.getValue();
+				if (old != null)
+					if (value != null) value = old + value;
+					else value = old;
+				found.setValue(value);
+				return true;
+			}
+		}
+		addProperty(name, value, null);
+		return true;
+	}
+
+	/** Returns a readonly list of the prolog children ({@link NativeInfo}).
+	 * A prolog child is a special child of {@link NativeInfo}.
+	 * (it is not part of {@link #getChildren}
+	 * that is used to optimize the native components such that
+	 * ZK can use one native components to represent several {@link NativeInfo}.
+	 * In other words, a prolog child won't be created as part of
+	 * <p>The prolog children must be rendered before {@link #getChildren}.
+	 */
+	public List getPrologChildren() {
+		return _prokids != null ? _prokids: Collections.EMPTY_LIST;
+	}
+	/** Returns a readonly list of the epilog children ({@link NativeInfo}).
+	 * The epilog children must be rendered after {@link #getChildren}.
+	 */
+	public List getEpilogChildren() {
+		return _epikids != null ? _epikids: Collections.EMPTY_LIST;
+	}
+	/** Adds a prolog child.
+	 *
+	 * <p>Note: if child belong to other {@link ComponentInfo},
+	 * you have to remove them first before calling this method.
+	 * Otherwise, the result is unpreditable.
+	 *
+	 * @param child the prolog child.
+	 * @see #getPrologChildren
+	 */
+	public void addPrologChild(NativeInfo child) {
+		addPrologChild0(child);
+	}
+	/** Adds a prolog child.
+	 *
+	 * @param child the prolog child. If child belongs to {@link #getChildren},
+	 * it will be removed first.
+	 * @see #getPrologChildren
+	 */
+	public void addPrologChild(ZScript child) {
+		addPrologChild0(child);
+	}
+	/** Adds a prolog child.
+	 *
+	 * @param child the prolog child. If child belongs to {@link #getChildren},
+	 * it will be removed first.
+	 * @see #getPrologChildren
+	 */
+	public void addPrologChild(VariablesInfo child) {
+		addPrologChild0(child);
+	}
+	/** Adds a prolog child.
+	 *
+	 * <p>Note: if child belong to other {@link ComponentInfo},
+	 * you have to remove them first before calling this method.
+	 * Otherwise, the result is unpreditable.
+	 *
+	 * @param child the prolog child.
+	 * @see #getPrologChildren
+	 */
+	public void addPrologChild(AttributesInfo child) {
+		addPrologChild0(child);
+	}
+	/** Adds a prolog child.
+	 * @param chld the child can NOT be{@link ComponentInfo}.
+	 */
+	/*package*/ void addPrologChild0(Object child) {
+		if (_prokids == null) {
+//			synchronized (this) {
+//				if (_prokids == null) {
+					final List list = new LinkedList();
+					list.add(child);
+					_prokids = list;
+					return;
+//				}
+//			}
+		}
+		_prokids.add(child);
+	}
+	/** Adds an epilog child.
+	 *
+	 * @param child the epilog child. If child belongs to {@link #getChildren},
+	 * it will be removed first.
+	 * @see #getPrologChildren
+	 */
+	public void addEpilogChild(NativeInfo child) {
+		addEpilogChild0(child);
+	}
+	/** Adds an epilog child.
+	 *
+	 * @param child the epilog child. If child belongs to {@link #getChildren},
+	 * it will be removed first.
+	 * @see #getPrologChildren
+	 */
+	public void addEpilogChild(ZScript child) {
+		addEpilogChild0(child);
+	}
+	/** Adds an epilog child.
+	 *
+	 * @param child the epilog child. If child belongs to {@link #getChildren},
+	 * it will be removed first.
+	 * @see #getPrologChildren
+	 */
+	public void addEpilogChild(VariablesInfo child) {
+		addEpilogChild0(child);
+	}
+	/** Adds an epilog child.
+	 *
+	 * @param child the epilog child. If child belongs to {@link #getChildren},
+	 * it will be removed first.
+	 * @see #getPrologChildren
+	 */
+	public void addEpilogChild(AttributesInfo child) {
+		addEpilogChild0(child);
+	}
+	/** Adds an epilog child.
+	 * @param chld the child can NOT be{@link ComponentInfo}.
+	 */
+	/*package*/ void addEpilogChild0(Object child) {
+		if (_epikids == null) {
+//			synchronized (this) {
+//				if (_epikids == null) {
+					final List list = new LinkedList();
+					list.add(child);
+					_epikids = list;
+					return;
+//				}
+//			}
+		}
+		_epikids.add(child);
+	}
+
+	/** Returns the split child, or null if not available.
+	 * Each native info has at most one split child.
+	 * If a native info has a single child and the child is also
+	 * a native info, we can merge them by making the child as
+	 * the split child.
+	 *
+	 * @since 2.5.0
+	 */
+	public NativeInfo getSplitChild() {
+		return _splitkid;
+	}
+	/** Sets the split kid.
+	 * @see #getSplitChild
+	 * @since 2.5.0
+	 */
+	public void setSplitChild(NativeInfo child) {
+		_splitkid = child;
+	}
+
+	//super//
+	public Object clone() {
+		final NativeInfo clone = (NativeInfo)super.clone();
+		if (clone._prokids != null)
+			clone._prokids = new LinkedList(clone._prokids);
+		if (clone._epikids != null)
+			clone._epikids = new LinkedList(clone._epikids);
+		return clone;
+	}
+}

@@ -31,19 +31,16 @@ import java.util.Iterator;
  * The root must be an instance of {@link PageDefinition}
  * and the other nodes must be instances of {@link ComponentInfo},
  * {@link ZScript}, {@link VariablesInfo}, or {@link AttributesInfo}.
+ *
+ * <p>Note:it is not thread-safe.
  * 
  * @author tomyeh
  */
 abstract public class NodeInfo implements java.io.Serializable {
 	/** A list of {@link ComponentInfo} and {@link ZScript}. */
 	private final List _children = new LinkedList();
-	private transient List _roChildren;
 
 	public NodeInfo() {
-		init();
-	}
-	private void init() {
-		_roChildren = Collections.unmodifiableList(_children);
 	}
 
 	/** Returns the page definition.
@@ -102,10 +99,10 @@ abstract public class NodeInfo implements java.io.Serializable {
 	public boolean removeChild(ComponentInfo compInfo) {
 		if (compInfo == null || compInfo.getParent() == null)
 			return false;
-		synchronized (_children) {
+//		synchronized (_children) {
 			if (!_children.contains(compInfo))
 				return false;
-		}
+//		}
 
 		compInfo.setParent(null);
 		return true;
@@ -119,32 +116,36 @@ abstract public class NodeInfo implements java.io.Serializable {
 	/*pacakge*/ void appendChild0(Object child) {
 		if (child == null)
 			throw new IllegalArgumentException("child required");
-		synchronized (_children) {
+//		synchronized (_children) {
 			_children.add(child);
-		}
+//		}
 	}
 	/** Removes a child.
 	 */
 	/*package*/ boolean removeChild0(Object child) {
-		synchronized (_children) {
+//		synchronized (_children) {
 			return _children.remove(child);
-		}
+//		}
 	}
 
-	/** Returns a readonly list of children.
-	 * Children includes another {@link ComponentInfo}, {@link ZScript}
+	/** Returns a list of children.
+	 * Children include instances of {@link ComponentInfo}, {@link ZScript}
 	 * {@link VariablesInfo}, or {@link AttributesInfo}.
+	 *
+	 * <p>Note: the returned list is modifiable but it is not a good idea,
+	 * because, unlike {@link org.zkoss.zk.ui.Component}, it doesn't maintain
+	 * {@link NodeInfo#getParent}. Thus, it is better to invoke
+	 * {@link #appendChild(ComponentInfo)} and {@link #removeChild(ComponentInfo)}
+	 * instead.
 	 */
 	public List getChildren() {
-		return _roChildren;
+		return _children;
 	}
 
 	//Serializable//
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-
-		init();
 
 		for (Iterator it = _children.iterator(); it.hasNext();) {
 			final Object o = it.next();

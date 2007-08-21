@@ -21,8 +21,9 @@ package org.zkoss.zk.ui.metainfo;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Collection;
+import java.util.ListIterator;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
@@ -446,12 +447,12 @@ public class Parser {
 					parentlang = pgdef.getLanguageDefinition();
 
 				if (trimLabel.length() > 0) { //consider as a label
-					if (parentInfo != null
-					&& parentInfo.getComponentDefinition().isNative()) {
+					if (parentInfo instanceof NativeInfo) {
 						if (parentInfo.getChildren().isEmpty()) {
-							parentInfo.mergeProperty("prolog", trimLabel);
+							((NativeInfo)parentInfo)
+								.mergeProperty("prolog", trimLabel);
 						} else {
-							new ComponentInfo(parentInfo,
+							new NativeInfo(parentInfo,
 								parentlang.getNativeDefinition(), null)
 								.addProperty("prolog", trimLabel, null);
 						}
@@ -519,7 +520,7 @@ public class Parser {
 			} else if (LanguageDefinition.NATIVE_NAMESPACE.equals(uri)) {
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since inline doesn't support them, "+el.getLocator());
-				compInfo = new ComponentInfo(
+				compInfo = new NativeInfo(
 					parent, langdef.getNativeDefinition(), nm);
 			} else {
 				if (LanguageDefinition.ZK_NAMESPACE.equals(uri))
@@ -614,7 +615,12 @@ public class Parser {
 			annHelper.applyAnnotations(compInfo, null, true);
 
 			parse(pgdef, compInfo, el.getChildren(), annHelper); //recursive
-		}
+
+			//optimize native components
+/*			if (compInfo instanceof NativeInfo
+			&& !compInfo.getChildren().isEmpty())
+				minimizeNative((NativeInfo)compInfo);
+*/		}
 	}
 	private void parseZScript(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) {
@@ -812,5 +818,65 @@ public class Parser {
 			}
 		}
 		compInfo.addProperty(name, value, cond);
+	}
+
+	/** Minimizes the native infos such that UiEngine creates
+	 * the minimal number of components.
+	 */
+	private void minimizeNative(NativeInfo compInfo) {
+		//Optimize 1: merge to prolog
+		for (Iterator it = compInfo.getChildren().iterator(); it.hasNext();) {
+			final Object o = it.next();
+			if (o instanceof NativeInfo) {
+				final NativeInfo childInfo = (NativeInfo)o;
+				if (!childInfo.getChildren().isEmpty())
+					break;
+				childInfo.setParentDirectly(null);
+			} else if (o instanceof ComponentInfo) {
+				break;
+			}
+
+			compInfo.addPrologChild0(o);
+			it.remove(); //detach it from the children list first
+		}
+
+		//Optimize 2: merge to epilog
+		int sz = compInfo.getChildren().size();
+		if (sz >= 0) {
+			final ListIterator it = compInfo.getChildren().listIterator(sz);
+			while (it.hasPrevious()) {
+				final Object o = it.previous();
+				if (o instanceof NativeInfo) {
+					final NativeInfo childInfo = (NativeInfo)o;
+					if (!childInfo.getChildren().isEmpty()) {
+						it.next();
+						break;
+					}
+					childInfo.setParentDirectly(null);
+				} else if (o instanceof ComponentInfo) {
+					it.next();
+					break;
+				}
+			}
+			while (it.hasNext()) {
+				final Object o = it.next();
+				compInfo.addEpilogChild0(o);
+				it.remove();
+			}
+		}
+
+		//Optimize 3: merge to split child
+		if (compInfo.getChildren().size() == 1
+		&& compInfo.getSplitChild() == null /*just in case*/) {
+			final Iterator it = compInfo.getChildren().iterator();
+			final Object o = it.next();
+			if (o instanceof NativeInfo) {
+				final NativeInfo childInfo = (NativeInfo)o;
+				childInfo.setParentDirectly(null);
+				compInfo.setSplitChild(childInfo);
+				it.remove();
+			}
+		}
+				
 	}
 }

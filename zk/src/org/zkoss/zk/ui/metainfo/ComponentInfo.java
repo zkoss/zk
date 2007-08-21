@@ -48,6 +48,8 @@ import org.zkoss.zk.el.Evaluator;
  * <p>Though serializable, we can restore {@link #getPageDefinition}
  * correctly after deserialized.
  *
+ * <p>Note:it is not thread-safe.
+ *
  * @author tomyeh
  */
 public class ComponentInfo extends NodeInfo
@@ -57,8 +59,10 @@ implements Cloneable, Condition, java.io.Serializable {
 	private final ComponentDefinition _compdef;
 	/** The implemetation class (use). */
 	private String _implcls;
-	/** A list of {@link Property}. */
-	private List _props;
+	/** A list of {@link Property}, or null if no property at all.
+	 * @see #getProperties
+	 */
+	protected List _props;
 	/** A Map of event handler to handle events. */
 	private EventHandlerMap _evthds;
 	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
@@ -122,13 +126,13 @@ implements Cloneable, Condition, java.io.Serializable {
 	 */
 	public void setParent(NodeInfo parent) {
 		if (parent != _parent) {
-			synchronized (this) {
+//			synchronized (this) {
 				if (_parent != null)
 					_parent.removeChild0(this);
 				_parent = parent;
 				if (_parent != null)
 					_parent.appendChild0(this);
-			}
+//			}
 		}
 	}
 	/*package*/ void setParentDirectly(NodeInfo parent) {
@@ -233,8 +237,9 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * @since 2.4.0
 	 */
 	public List getProperties() {
-		return _props != null ?
-			Collections.unmodifiableList(_props): Collections.EMPTY_LIST;
+		return _props != null ? _props: Collections.EMPTY_LIST;
+			//it is better to protect with Collections.unmodifiableList
+			//but for better performance...
 	}
 	/** Adds a property initializer.
 	 * It will initialize a component when created with this info.
@@ -248,68 +253,18 @@ implements Cloneable, Condition, java.io.Serializable {
 
 		final Property prop = new Property(name, value, cond);
 		if (_props == null) {
-			synchronized (this) {
+//			synchronized (this) {
 				if (_props == null) {
 					final List props = new LinkedList();
 					props.add(prop);
 					_props = props;
 					return;
 				}
-			}
+//			}
 		}
-		synchronized (_props) {
+//		synchronized (_props) {
 			_props.add(prop);
-		}
-	}
-	/** Merges the value to the specified property.
-	 * By merging we mean the previous value will be catenated with
-	 * the value specified in this method.
-	 *
-	 * <p>For example, the proplog's value will become "abcd"
-	 * if the following codes execute:
-	 *
-	 * <pre><code>addProperty("prolog", "ab", null);
-	 *mergeProperty("prolog", "cd");</code></pre>
-	 *
-	 * <p>If the property is not defined before, this method is the same
-	 * as {@link #addProperty}.
-	 *
-	 * <p>Note: if the property is added with a condition, e.g.,
-	 * addProperty("prolog", "ab", cond), this method will does
-	 * nothing but returning false.
-	 *
-	 * @return whether it is merged successfully.
-	 * @since 2.5.0
-	 */
-	public boolean mergeProperty(String name, String value) {
-		if (_props != null) {
-			if (name == null || name.length() == 0)
-				throw new IllegalArgumentException("name");
-
-			Property found =  null;
-			synchronized (_props) {
-				for (Iterator it = _props.iterator(); it.hasNext();) {
-					final Property prop = (Property)it.next();
-					if (name.equals(prop.getName())) {
-						if (prop.getCondition() != null)
-							return false; //unable to merge
-						found = prop;
-						break;
-					}
-				}
-			}
-
-			if (found != null) {
-				final String old = found.getValue();
-				if (old != null)
-					if (value != null) value = old + value;
-					else value = old;
-				found.setValue(value);
-				return true;
-			}
-		}
-		addProperty(name, value, null);
-		return true;
+//		}
 	}
 
 	/** Adds an event handler.
@@ -327,14 +282,14 @@ implements Cloneable, Condition, java.io.Serializable {
 		final EventHandler evthd = new EventHandler(zscript, cond);
 
 		if (_evthds == null) {
-			synchronized (this) {
+//			synchronized (this) {
 				if (_evthds == null) {
 					final EventHandlerMap evthds = new EventHandlerMap();
 					evthds.add(name, evthd);
 					_evthds = evthds;
 					return;
 				}
-			}
+//			}
 		}
 
 		_evthds.add(name, evthd);
@@ -455,12 +410,12 @@ implements Cloneable, Condition, java.io.Serializable {
 
 		if (_props != null) {
 			final Evaluator eval = Executions.getCurrent();
-			synchronized (_props) {
+//			synchronized (_props) {
 				for (Iterator it = _props.iterator(); it.hasNext();) {
 					final Property prop = (Property)it.next();
 					prop.assign(eval, comp);
 				}
-			}
+//			}
 		}
 	}
 
@@ -483,7 +438,7 @@ implements Cloneable, Condition, java.io.Serializable {
 		if (_props != null) {
 			final Evaluator eval = Executions.getCurrent();
 
-			synchronized (_props) {
+//			synchronized (_props) {
 				for (Iterator it = _props.iterator(); it.hasNext();) {
 					final Property prop = (Property)it.next();
 					if (parent != null) {
@@ -496,7 +451,7 @@ implements Cloneable, Condition, java.io.Serializable {
 								eval.evaluate(owner, prop.getValue(), Object.class));
 					}
 				}
-			}
+//			}
 		}
 		return propmap;
 	}
@@ -509,14 +464,14 @@ implements Cloneable, Condition, java.io.Serializable {
 	 */
 	public void addAnnotation(String annotName, Map annotAttrs) {
 		if (_annots == null) {
-			synchronized (this) {
+//			synchronized (this) {
 				if (_annots == null) {
 					final AnnotationMap annots = new AnnotationMap();
 					annots.addAnnotation(annotName, annotAttrs);
 					_annots = annots;
 					return;
 				}
-			}
+//			}
 		}
 		_annots.addAnnotation(annotName, annotAttrs);
 	}
@@ -530,14 +485,14 @@ implements Cloneable, Condition, java.io.Serializable {
 	 */
 	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
 		if (_annots == null) {
-			synchronized (this) {
+//			synchronized (this) {
 				if (_annots == null) {
 					final AnnotationMap annots = new AnnotationMap();
 					annots.addAnnotation(propName, annotName, annotAttrs);
 					_annots = annots;
 					return;
 				}
-			}
+//			}
 		}
 		_annots.addAnnotation(propName, annotName, annotAttrs);
 	}
@@ -563,20 +518,18 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * After cloned, {@link #getParent} is null.
 	 */
 	public Object clone() {
-		synchronized (this) {
-			try {
-				final ComponentInfo info = (ComponentInfo)super.clone();
-				info._parent = null;
-				if (_annots != null)
-					info._annots = (AnnotationMap)_annots.clone();
-				if (_props != null)
-					info._props = new LinkedList(_props);
-				if (_evthds != null)
-					info._evthds = (EventHandlerMap)_evthds.clone();
-				return info;
-			} catch (CloneNotSupportedException ex) {
-				throw new InternalError();
-			}
+		try {
+			final ComponentInfo info = (ComponentInfo)super.clone();
+			info._parent = null;
+			if (_annots != null)
+				info._annots = (AnnotationMap)_annots.clone();
+			if (_props != null)
+				info._props = new LinkedList(_props);
+			if (_evthds != null)
+				info._evthds = (EventHandlerMap)_evthds.clone();
+			return info;
+		} catch (CloneNotSupportedException ex) {
+			throw new InternalError();
 		}
 	}
 
