@@ -741,15 +741,16 @@ public class Tree extends XulElement {
 	private TreeDataListener _dataListener;
 
 	/**
-	 * Load the treeitem <b>item</b>
+	 * render the treeitem <b>item</b><br>
+	 * Note: If the Treeitem <b>item</b> is rendered, it won't be rendered again.  
 	 * @param item - treeitem to be loaded
+	 * @since 2.5.0
 	 */
-	public void loadTreeItem(Treeitem item){
+	public void renderTreeItem(Treeitem item){
 		if(!item.isLoaded()){
-			Tree t = item.getTree();
 			if(item.getTreechildren() != null)
 				item.getTreechildren().getChildren().clear();
-			t.renderItem(item);
+			renderItem(item);
 		}
 	}
 	
@@ -759,7 +760,7 @@ public class Tree extends XulElement {
 	private void onTreeDataChange(TreeDataEvent event){	
 		//if the treepaht is empty, render tree's treechildren
 		Object data = event.getParent();
-		Component parent = getTreeComponentByNode(data);
+		Component parent = getChildByNode(data);
 		int indexFrom = event.getIndexFrom();
 		int indexTo = event.getIndexTo();
 		/* 
@@ -852,8 +853,9 @@ public class Tree extends XulElement {
 	 * This implmentation calls {@link TreeModel#getPath} method to locate assoicated
 	 * Treeitem (or Tree) via path. You can override this method to speed up 
 	 * performance if possible.
+	 * @since 2.5.0
 	 */
-	protected Component getTreeComponentByNode(Object node){
+	protected Component getChildByNode(Object node){
 		int[] path = _model.getPath(_model.getRoot(), node);
 		
 		//If path is null or empty, return root(Tree) 
@@ -887,6 +889,7 @@ public class Tree extends XulElement {
 	 * @param model the tree model to associate, or null to dis-associate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
+	 * @since 2.5.0
 	 */
 	public void setModel(TreeModel model) throws Exception{
 		_model = model;
@@ -898,6 +901,7 @@ public class Tree extends XulElement {
 	/** Returns the list model associated with this tree, or null
 	 * if this tree is not associated with any tree data model.
 	 * @return the list model associated with this tree
+	 * @since 2.5.0
 	 */
 	public TreeModel getModel(){
 		return _model;
@@ -920,6 +924,7 @@ public class Tree extends XulElement {
 	 *
 	 * @param renderer the renderer, or null to use the default.
 	 * @exception UiException if failed to initialize with the model
+	 * @since 2.5.0
 	 */
 	public void setTreeitemRenderer(TreeitemRenderer renderer){
 		_renderer = renderer;
@@ -928,6 +933,7 @@ public class Tree extends XulElement {
 	/** Returns the renderer to render each item, or null if the default
 	 * renderer is used.
 	 * @return the renderer to render each item, or null if the default
+	 * @since 2.5.0
 	 */
 	public TreeitemRenderer getTreeitemRenderer(){
 		return _renderer;
@@ -1054,6 +1060,7 @@ public class Tree extends XulElement {
 	 * <p>It does nothing if {@link #getModel} returns null.
 	 *
 	 * @see #renderItems
+	 * @since 2.5.0
 	 */
 	public void renderItem(Treeitem item){
 		if(_model ==null) return;
@@ -1073,6 +1080,7 @@ public class Tree extends XulElement {
 	 * <p>It does nothing if {@link #getModel} returns null.
 	 *
 	 * @see #renderItems
+	 * @since 2.5.0
 	 */
 	public void renderItem(Treeitem item, Object data){
 		if(_model ==null) return;
@@ -1136,6 +1144,7 @@ public class Tree extends XulElement {
 	 * <p>It does nothing if {@link #getModel} returns null.
 	 *
 	 * @see #renderItem
+	 * @since 2.5.0
 	 */
 	public void renderItems(Set items) {
 		if (_model == null) return;
@@ -1159,6 +1168,7 @@ public class Tree extends XulElement {
 
 	/**
 	 * Return a node which is an associated Treeitem ti in a Tree tree
+	 * @since 2.5.0
 	 */
 	protected Object getAssociatedNode(Treeitem ti, Tree t){
 		return getNodeByPath(getTreeitemPath(t,ti),_model.getRoot());
@@ -1184,6 +1194,7 @@ public class Tree extends XulElement {
 	 * @param path
 	 * @param root
 	 * @return the node from tree by given path
+	 * @since 2.5.0
 	 */
 	private Object getNodeByPath(List path, Object root)
 	{
@@ -1200,8 +1211,9 @@ public class Tree extends XulElement {
 	 * <br>Note: By using this method, all treeitems in path will be rendered
 	 * @param path - an int[] path, see {@link TreeModel#getPath} 
 	 * @return the treeitem from tree by given path
+	 * @since 2.5.0
 	 */
-	public Treeitem loadTreeitemThroughPath(int[] path){
+	public Treeitem renderItemByPath(int[] path){
 		if(path == null || path.length == 0)
 			return null;
 		//Start from root-Tree
@@ -1214,7 +1226,7 @@ public class Tree extends XulElement {
 			if(path[i] <0 || path[i] > children.size())
 				return null;
 			ti = (Treeitem) children.get(path[i]);
-			loadTreeItem(ti);
+			renderTreeItem(ti);
 			if(i<path.length-1) 
 				ti.setOpen(true);
 			if(ti.getTreechildren()!=null){

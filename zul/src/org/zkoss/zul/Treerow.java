@@ -168,6 +168,7 @@ public class Treerow extends XulElement {
 		}
 		
 		//TODO AREA JEFF ADDED
+		//Modified for load-on-demand
 		if(getTree().getModel() != null)
 			sb.append("z.onopen=\"true\"");
 		else

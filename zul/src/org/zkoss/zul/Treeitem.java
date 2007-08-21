@@ -50,11 +50,15 @@ public class Treeitem extends XulElement {
 	private boolean _selected = false;
 	
 	// TODO AREA JEFF ADDED
+	/** whether the content of this item is loaded; used if
+	 * the tree owning this item is using a tree model.
+	 */
 	private boolean _loaded = false;
 	
 	/**
 	 * Return true whether this container is loaded
 	 * @return true whether this container is loaded
+	 * @since 2.5.0
 	 */
 	public boolean isLoaded(){
 		return _loaded;
@@ -62,6 +66,7 @@ public class Treeitem extends XulElement {
 	
 	/**
 	 * Sets whether this container is loaded
+	 * @since 2.5.0
 	 */
 	public void setLoaded(boolean loaded){
 		_loaded = loaded;
@@ -70,6 +75,7 @@ public class Treeitem extends XulElement {
 	/**
 	 * return the index of this container 
 	 * @return the index of this container 
+	 * @since 2.5.0
 	 */
 	public int indexOf()
 	{
@@ -443,7 +449,7 @@ public class Treeitem extends XulElement {
 			 * SetOpen will trigger this function.
 			 */
 			if(getTree() != null)
-				getTree().loadTreeItem(Treeitem.this);
+				getTree().renderTreeItem(Treeitem.this);
 		}
 	}
 }
