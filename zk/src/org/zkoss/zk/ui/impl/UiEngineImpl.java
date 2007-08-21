@@ -1177,13 +1177,6 @@ public class UiEngineImpl implements UiEngine {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setVisualizer(uv);
 		ExecutionsCtrl.setCurrent(exec);
-
-		try {
-			execCtrl.onActivate();
-		} catch (Throwable ex) {
-			doDeactivate(exec);
-			throw UiException.Aide.wrap(ex);
-		}
 		return uv;
 	}
 	/** Returns whether the desktop is being recovered.
@@ -1200,12 +1193,6 @@ public class UiEngineImpl implements UiEngine {
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		try {
-			try {
-				execCtrl.onDeactivate();
-			} catch (Throwable ex) {
-				log.warning("Ignored: failed to deactivate "+desktop, ex);
-			}
-
 			//Unlock desktop
 			final Map eis = getVisualizers(sess);
 			synchronized (eis) {
@@ -1248,13 +1235,6 @@ public class UiEngineImpl implements UiEngine {
 		final ExecutionCtrl curCtrl = (ExecutionCtrl)curExec;
 		curCtrl.setVisualizer(uv);
 		ExecutionsCtrl.setCurrent(curExec);
-
-		try {
-			curCtrl.onActivate();
-		} catch (Throwable ex) {
-			doDereactivate(curExec, olduv);
-			throw UiException.Aide.wrap(ex);
-		}
 		return uv;
 	}
 	/** De-reactivated exec. Work with {@link #doReactivate}.
@@ -1267,11 +1247,6 @@ public class UiEngineImpl implements UiEngine {
 //		if (log.finerable()) log.finer("Deactivating "+desktop);
 
 		final ExecutionCtrl curCtrl = (ExecutionCtrl)curExec;
-		try {
-			curCtrl.onDeactivate();
-		} catch (Throwable ex) {
-			log.warning("Ignored: failed to deactivate "+desktop, ex);
-		}
 		curCtrl.setCurrentPage(null);
 		curCtrl.setVisualizer(null); //free memory
 

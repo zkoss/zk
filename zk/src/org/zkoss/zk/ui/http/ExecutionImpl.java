@@ -34,20 +34,24 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.el.ELException;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.el.RequestResolver;
 import org.zkoss.el.impl.AttributesMap;
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.BufferedResponse;
 import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.el.ELContexts;
 import org.zkoss.web.el.ELContext;
 import org.zkoss.web.el.PageELContext;
 
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.impl.AbstractExecution;
+import org.zkoss.zk.ui.impl.ExecutionResolver;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -107,9 +111,19 @@ public class ExecutionImpl extends AbstractExecution {
 		};
 	}
 
-	//-- super --//
-	protected ELContext getELContext() {
+	/** Returns the EL context for this execution.
+	 */
+	private ELContext getELContext() {
 		return _elctx;
+	}
+
+	public void onActivate() {
+		super.onActivate();
+		ELContexts.push(getELContext());
+	}
+	public void onDeactivate() {
+		ELContexts.pop();
+		super.onDeactivate();
 	}
 
 	//-- Execution --//
@@ -121,6 +135,33 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	public Map getParameterMap() {
 		return _request.getParameterMap();
+	}
+
+	public Object evaluate(Component comp, String expr, Class expectedType) {
+		return evaluate0(comp, expr, expectedType,
+			comp != null ? comp.getPage(): null);
+	}
+	public Object evaluate(Page page, String expr, Class expectedType) {
+		return evaluate0(page, expr, expectedType, page);
+	}
+	private Object evaluate0(Object self, String expr,
+	Class expectedType, Page page) {
+		if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0) {
+			if (expectedType == Object.class || expectedType == String.class)
+				return expr;
+			return Classes.coerce(expectedType, expr);
+		}
+
+		try {
+			if (page == null) page = getCurrentPage();
+			final ExecutionResolver resolv = (ExecutionResolver)getVariableResolver();
+			resolv.setSelf(self);
+			return getELContext().getExpressionEvaluator().evaluate(
+				expr, expectedType, resolv,
+				page != null ? page.getFunctionMapper(): null);
+		} catch (ELException ex) {
+			throw UiException.Aide.wrap(ex);
+		}
 	}
 
 	public void include(Writer out, String page, Map params, int mode)

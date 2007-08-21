@@ -31,9 +31,26 @@ public class ExecutionsCtrl extends Executions {
 
 	/** Sets the execution for the current thread.
 	 * Called only internally.
+	 *
+	 * <p>Note: you have to clean up the current execution
+	 * with try/finally:
+	 * <pre><code>
+	 * setCurrent(exec);
+	 * try {
+	 * ...
+	 * finally {
+	 *   setCurrent(null);
+	 * }
 	 */
 	public static final void setCurrent(Execution exec) {
+		final ExecutionCtrl old = getCurrentCtrl();
+		if (old != null)
+			old.onDeactivate();
+
 		_exec.set(exec);
+
+		if (exec != null)
+			((ExecutionCtrl)exec).onActivate();
 	}
 	/** Returns the current {@link ExecutionCtrl}.
 	 */

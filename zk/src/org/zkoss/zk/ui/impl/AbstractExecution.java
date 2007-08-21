@@ -26,13 +26,9 @@ import java.io.Reader;
 import java.io.IOException;
 
 import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ELException;
 
-import org.zkoss.lang.Classes;
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.el.ELContexts;
-import org.zkoss.web.el.ELContext;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
@@ -80,10 +76,6 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		_creating = creating;
 		_exresolv = new ExecutionResolver(this, resolv);
 	}
-	/** Returns the JSP context for this execution.
-	 * A derive must implement this method.
-	 */
-	abstract protected ELContext getELContext();
 
 	//-- Execution --//
 	public final boolean isAsyncUpdate(Page page) {
@@ -91,31 +83,6 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	public Desktop getDesktop() {
 		return _desktop;
-	}
-	public Object evaluate(Component comp, String expr, Class expectedType) {
-		return evaluate0(comp, expr, expectedType,
-			comp != null ? comp.getPage(): null);
-	}
-	public Object evaluate(Page page, String expr, Class expectedType) {
-		return evaluate0(page, expr, expectedType, page);
-	}
-	private Object evaluate0(Object self, String expr,
-	Class expectedType, Page page) {
-		if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0) {
-			if (expectedType == Object.class || expectedType == String.class)
-				return expr;
-			return Classes.coerce(expectedType, expr);
-		}
-
-		try {
-			if (page == null) page = _curpage;
-			_exresolv.setSelf(self);
-			return getELContext().getExpressionEvaluator().evaluate(
-				expr, expectedType, _exresolv,
-				page != null ? page.getFunctionMapper(): null);
-		} catch (ELException ex) {
-			throw UiException.Aide.wrap(ex);
-		}
 	}
 
 	public void postEvent(Event evt) {
@@ -165,10 +132,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return _ei != null;
 	}
 	public void onActivate() {
-		ELContexts.push(getELContext());
 	}
 	public void onDeactivate() {
-		ELContexts.pop();
 	}
 
 	public boolean isRecovering() {

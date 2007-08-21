@@ -68,14 +68,25 @@ public interface ExecutionCtrl {
 	/** Returns whether this execution is activated.
 	 */
 	public boolean isActivated();
-	/** Called when this execution is about to activate.
-	 * It is called before any execution.
+	/** Called when this execution is about to become the current execution
+	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
+	 *
 	 * <p>It is used as callback notification.
+	 *
+	 * <p>Note: don't throw any exception in this method.
+	 *
+	 * <p>Note: onActivate/onDeactivate might be called several times
+	 * (when {@link ExecutionsCtrl#setCurrent} is called).
 	 */
 	public void onActivate();
-	/** Called when this execution is about to de-activate.
-	 * It is called before ending, no matter exception being throw or not.
+	/** Called when this execution is about to become a non-current execution.
+	 *
 	 * <p>It is used as callback notification.
+	 *
+	 * <p>Note: don't throw any exception in this method.
+	 *
+	 * <p>Note: onActivate/onDeactivate might be called several times
+	 * (when {@link ExecutionsCtrl#setCurrent} is called).
 	 */
 	public void onDeactivate();
 
