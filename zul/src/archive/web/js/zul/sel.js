@@ -379,23 +379,23 @@ zk.Selectable.prototype = {
 		}
 	},
 	/** Process the setAttr command sent from the server. */
-	setAttr: function (name, value) {
-		switch (name) {
+	setAttr: function (nm, val) {
+		switch (nm) {
 		case "select": //select by uuid
-			var row = $e(value);
+			var row = $e(val);
 			this._selectOne(row, false);
 			return true;
 		case "selectAll":
 			this._selectAll();
 			return true; //no more processing
 		case "z.multiple": //whether to support multiple
-			this._setMultiple("true" == value);
+			this._setMultiple("true" == val);
 			return true;
-		case "chgSel": //value: a list of uuid to select
+		case "chgSel": //val: a list of uuid to select
 			var sels = {};
 			for (var j = 0;;) {
-				var k = value.indexOf(',', j);
-				var s = (k >= 0 ? value.substring(j, k): value.substring(j)).trim();
+				var k = val.indexOf(',', j);
+				var s = (k >= 0 ? val.substring(j, k): val.substring(j)).trim();
 				if (s) sels[s] = true;
 				if (k < 0) break;
 				j = k + 1;
@@ -407,17 +407,30 @@ zk.Selectable.prototype = {
 			return true;
 		case "z.vflex":
 		case "z.size":
-			zkau.setAttr(this.element, name, value);
+			zkau.setAttr(this.element, nm, val);
 			this.recalcSize(true);
 			return true;
 		case "style":
 		case "style.width":
 		case "style.height":
 			if (!this.paging) {
-				zkau.setAttr(this.element, name, value);
+				zkau.setAttr(this.element, nm, val);
 				this.init();
 				return true;
 			}
+			break;
+		case "scrollTop":
+			if (!this.paging && this.body) {
+				this.body.scrollTop = val;
+				return true;
+			}
+			break;
+		case "scrollLeft":
+			if (!this.paging && this.body) {
+				this.body.scrollLeft = val;
+				return true;
+			}
+			break;
 		}
 		return false;
 	},

@@ -323,19 +323,28 @@ zkGrid.stripe = function (uuid) {
 };
 
 /** Handles setAttr. */
-zkGrid.setAttr = function (grid, name, value) {
-	if (name == "style.height") {
+zkGrid.setAttr = function (grid, nm, val) {
+	if (nm == "style.height") {
 		var meta = zkau.getMeta(grid);
 		if (meta) {
-			meta.setHgh(value);
+			meta.setHgh(val);
 			if (!meta.paging) meta.init();
 			return true;
 		}
-	} else if (name == "style" || name == "style.width") {
-		zkau.setAttr(grid, name, value);
+	} else if (nm == "style" || nm == "style.width") {
+		zkau.setAttr(grid, nm, val);
 		var meta = zkau.getMeta(grid);
 		if (meta && !meta.paging) meta.init();
 		return true;
+	} else if (!this.paging && this.body) {
+		if (nm == "scrollTop") {
+			this.body.scrollTop = val;
+			return true;
+		}
+		if (nm == "scrollLeft") {
+			this.body.scrollLeft = val;
+			return true;
+		}
 	}
 	return false;
 };
