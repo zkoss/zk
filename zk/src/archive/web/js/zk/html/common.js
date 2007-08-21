@@ -1082,8 +1082,7 @@ zk.restoreStyle = function (el, nm) {
 /** Scroll inner into visible, assuming outer has a scrollbar. */
 zk.scrollIntoView = function (outer, inner) {
 	if (outer && inner) {
-		var padding = Element.getStyle(inner, "padding-top");
-		padding = padding ? $int(padding): 0;
+		var padding = $int(Element.getStyle(inner, "padding-top"));
 		var limit = inner.offsetTop - padding;
 		if (limit < outer.scrollTop) {
 			outer.scrollTop = limit;

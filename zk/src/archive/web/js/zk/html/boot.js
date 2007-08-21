@@ -48,7 +48,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "70"; //increase this if we want the browser to reload JavaScript
+zk.build = "71"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -367,7 +367,7 @@ function $visible(el) {
 
 /** Converts to an integer. It handles null and "07" */
 function $int(v, b) {
-	return parseInt(v || "0", b || 10);
+	return v ? parseInt(v, b || 10): 0;
 };
 
 /** Returns the ZK attribute of the specified name.
