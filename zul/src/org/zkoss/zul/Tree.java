@@ -739,20 +739,6 @@ public class Tree extends XulElement {
 	private TreeitemRenderer _renderer;
 	
 	private TreeDataListener _dataListener;
-
-	/**
-	 * render the treeitem <b>item</b><br>
-	 * Note: If the Treeitem <b>item</b> is rendered, it won't be rendered again.  
-	 * @param item - treeitem to be loaded
-	 * @since 2.5.0
-	 */
-	public void renderTreeItem(Treeitem item){
-		if(!item.isLoaded()){
-			if(item.getTreechildren() != null)
-				item.getTreechildren().getChildren().clear();
-			renderItem(item);
-		}
-	}
 	
 	/*
 	 * Handles when the tree model's content changed 
@@ -955,6 +941,9 @@ public class Tree extends XulElement {
 		}
 	}
 	
+	/*
+	 * Helper method for renderTree
+	 */
 	private void renderTreeChild(Object node,int index){
 		Treeitem ti = new Treeitem();
 		Object data = _model.getChild(node, index);
@@ -1079,8 +1068,14 @@ public class Tree extends XulElement {
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
 	 *
+	 *<p>Note: Since the corresponding data is given,
+	 * This method has better performance than 
+	 * renderItem(Treeitem item) due to not searching for its 
+	 * corresponding data. 
 	 * @see #renderItems
 	 * @since 2.5.0
+	 * 
+	 * 
 	 */
 	public void renderItem(Treeitem item, Object data){
 		if(_model ==null) return;
@@ -1095,47 +1090,54 @@ public class Tree extends XulElement {
 	}
 	
 	/**
-	 * Render the treetiem with given node
+	 * Render the treetiem with given node and its children
 	 */
 	private void  dfRenderItem(Object node, Treeitem item) throws Exception
 	{
-		Treechildren children = null;
-		
-		if(item.getTreechildren()!=null){
-			children = item.getTreechildren();
-			/* 
-			 * When the treeitem is rendered after 1st time, dropped all
-			 * the descending treeitems first.
-			*/
-			if(children.getItemCount()>0)
-				children.getChildren().clear();
-		}else{
-			children = new Treechildren();
-			_renderer.render(item, node);
-		}
-		/*
-		 * After modified the node in tree model, if node is leaf, 
-		 * its treechildren is needed to be dropped.
-		 */
-		if(_model.isLeaf(node)){
-			_renderer.render(item, node);
-			if(item.getTreechildren()!=null)
-				item.getTreechildren().detach();
-		}else{
-			for(int i=0; i< _model.getChildCount(node);i++ ){
-				Treeitem ti = new Treeitem();
-				Object data = _model.getChild(node, i);
-				_renderer.render(ti, data);
-				if(!_model.isLeaf(data)){	
-					Treechildren ch = new Treechildren();
-					ch.setParent(ti);
-				}
-				ti.setParent(children);
+		//if treeitem is not loaded, load it
+		if(!item.isLoaded())
+		{
+			Treechildren children = null;
+			
+			if(item.getTreechildren()!=null){
+				children = item.getTreechildren();
+				/* 
+				 * When the treeitem is rendered after 1st time, dropped all
+				 * the descending treeitems first.
+				*/
+				if(children.getItemCount()>0)
+					children.getChildren().clear();
+			}else{
+				children = new Treechildren();
+				_renderer.render(item, node);
 			}
-			children.setParent(item);
+			/*
+			 * After modified the node in tree model, if node is leaf, 
+			 * its treechildren is needed to be dropped.
+			 */
+			if(_model.isLeaf(node)){
+				_renderer.render(item, node);
+				if(item.getTreechildren()!=null)
+					item.getTreechildren().detach();
+			}else{
+				/*
+				 * render children of item
+				 */
+				for(int i=0; i< _model.getChildCount(node);i++ ){
+					Treeitem ti = new Treeitem();
+					Object data = _model.getChild(node, i);
+					_renderer.render(ti, data);
+					if(!_model.isLeaf(data)){	
+						Treechildren ch = new Treechildren();
+						ch.setParent(ti);
+					}
+					ti.setParent(children);
+				}
+				children.setParent(item);
+			}
+			//After the treeitem is loaded with data, set treeitem to be loaded
+			item.setLoaded(true);
 		}
-		//After the treeitem is loaded with data, set treeitem to be loaded
-		item.setLoaded(true);
 	}
 	
 	/** Renders the specified {@link Treeitem}s with data if not loaded yet,
@@ -1226,7 +1228,7 @@ public class Tree extends XulElement {
 			if(path[i] <0 || path[i] > children.size())
 				return null;
 			ti = (Treeitem) children.get(path[i]);
-			renderTreeItem(ti);
+			renderItem(ti);
 			if(i<path.length-1) 
 				ti.setOpen(true);
 			if(ti.getTreechildren()!=null){

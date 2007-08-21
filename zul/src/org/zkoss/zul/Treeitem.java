@@ -449,7 +449,7 @@ public class Treeitem extends XulElement {
 			 * SetOpen will trigger this function.
 			 */
 			if(getTree() != null)
-				getTree().renderTreeItem(Treeitem.this);
+				getTree().renderItem(Treeitem.this);
 		}
 	}
 }
