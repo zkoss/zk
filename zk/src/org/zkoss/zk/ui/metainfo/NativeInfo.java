@@ -74,7 +74,7 @@ public class NativeInfo extends ComponentInfo {
 	 * @see #getPrologChildren
 	 */
 	public void addPrologChild(NativeInfo child) {
-		addPrologChild0(child);
+		addPrologChildDirectly(child);
 	}
 	/** Adds a prolog child.
 	 *
@@ -83,7 +83,7 @@ public class NativeInfo extends ComponentInfo {
 	 * @see #getPrologChildren
 	 */
 	public void addPrologChild(ZScript child) {
-		addPrologChild0(child);
+		addPrologChildDirectly(child);
 	}
 	/** Adds a prolog child.
 	 *
@@ -92,7 +92,7 @@ public class NativeInfo extends ComponentInfo {
 	 * @see #getPrologChildren
 	 */
 	public void addPrologChild(VariablesInfo child) {
-		addPrologChild0(child);
+		addPrologChildDirectly(child);
 	}
 	/** Adds a prolog child.
 	 *
@@ -104,27 +104,19 @@ public class NativeInfo extends ComponentInfo {
 	 * @see #getPrologChildren
 	 */
 	public void addPrologChild(AttributesInfo child) {
-		addPrologChild0(child);
+		addPrologChildDirectly(child);
 	}
 	/** Adds a text as a prolog child.
 	 */
 	public void addPrologChild(String text) {
-		addPrologChild0(text);
+		addPrologChildDirectly(text);
 	}
 	/** Adds a prolog child.
 	 * @param chld the child can NOT be{@link ComponentInfo}.
 	 */
-	/*package*/ void addPrologChild0(Object child) {
-		if (_prokids == null) {
-//			synchronized (this) {
-//				if (_prokids == null) {
-					final List list = new LinkedList();
-					list.add(child);
-					_prokids = list;
-					return;
-//				}
-//			}
-		}
+	/*package*/ void addPrologChildDirectly(Object child) {
+		if (_prokids == null)
+			_prokids = new LinkedList();
 		_prokids.add(child);
 	}
 	/** Adds an epilog child.
@@ -134,7 +126,7 @@ public class NativeInfo extends ComponentInfo {
 	 * @see #getPrologChildren
 	 */
 	public void addEpilogChild(NativeInfo child) {
-		addEpilogChild0(child);
+		addEpilogChildDirectly(child);
 	}
 	/** Adds an epilog child.
 	 *
@@ -143,7 +135,7 @@ public class NativeInfo extends ComponentInfo {
 	 * @see #getPrologChildren
 	 */
 	public void addEpilogChild(ZScript child) {
-		addEpilogChild0(child);
+		addEpilogChildDirectly(child);
 	}
 	/** Adds an epilog child.
 	 *
@@ -152,7 +144,7 @@ public class NativeInfo extends ComponentInfo {
 	 * @see #getPrologChildren
 	 */
 	public void addEpilogChild(VariablesInfo child) {
-		addEpilogChild0(child);
+		addEpilogChildDirectly(child);
 	}
 	/** Adds an epilog child.
 	 *
@@ -161,22 +153,14 @@ public class NativeInfo extends ComponentInfo {
 	 * @see #getPrologChildren
 	 */
 	public void addEpilogChild(AttributesInfo child) {
-		addEpilogChild0(child);
+		addEpilogChildDirectly(child);
 	}
 	/** Adds an epilog child.
 	 * @param chld the child can NOT be{@link ComponentInfo}.
 	 */
-	/*package*/ void addEpilogChild0(Object child) {
-		if (_epikids == null) {
-//			synchronized (this) {
-//				if (_epikids == null) {
-					final List list = new LinkedList();
-					list.add(child);
-					_epikids = list;
-					return;
-//				}
-//			}
-		}
+	/*package*/ void addEpilogChildDirectly(Object child) {
+		if (_epikids == null)
+			_epikids = new LinkedList();
 		_epikids.add(child);
 	}
 

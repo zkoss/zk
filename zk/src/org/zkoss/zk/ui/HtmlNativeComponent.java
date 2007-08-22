@@ -121,8 +121,8 @@ implements DynamicTag, Native {
 		for (Iterator it = getChildren().iterator(); it.hasNext();)
 			((Component)it.next()).redraw(out);
 
-		_helper.getSecondHalf(sb, _tag);
 		sb.append(_epilog);
+		_helper.getSecondHalf(sb, _tag);
 		out.write(sb.toString());
 	}
 

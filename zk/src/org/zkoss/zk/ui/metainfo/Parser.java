@@ -817,7 +817,8 @@ public class Parser {
 	 * the minimal number of components.
 	 */
 	private void optimizeNativeInfos(NativeInfo compInfo) {
-		//Optimize 1: merge to prolog
+		//Optimize 1: merge to prolog, if the first children are
+		//native and have no child
 		for (Iterator it = compInfo.getChildren().iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof NativeInfo) {
@@ -829,11 +830,12 @@ public class Parser {
 				break;
 			}
 
-			compInfo.addPrologChild0(o);
-			it.remove(); //detach it from the children list first
+			compInfo.addPrologChildDirectly(o);
+			it.remove(); //detach it from the children list
 		}
 
-		//Optimize 2: merge to epilog
+		//Optimize 2: merge to epilog if the last children, are
+		//native and have no child
 		int sz = compInfo.getChildren().size();
 		if (sz >= 0) {
 			final ListIterator it = compInfo.getChildren().listIterator(sz);
@@ -853,7 +855,7 @@ public class Parser {
 			}
 			while (it.hasNext()) {
 				final Object o = it.next();
-				compInfo.addEpilogChild0(o);
+				compInfo.addEpilogChildDirectly(o);
 				it.remove();
 			}
 		}
@@ -861,7 +863,7 @@ public class Parser {
 		//Optimize 3: merge to split child
 		//If there is only one native child, we make it a split child and
 		//make all its children (grand-chidren) up one level
-		if (compInfo.getChildren().size() == 1
+		if (compInfo.getChildren().size() == 1 && !compInfo.withForEach()
 		&& compInfo.getSplitChild() == null /*just in case*/) {
 			Iterator it = compInfo.getChildren().iterator();
 			final Object o = it.next();

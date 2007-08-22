@@ -123,7 +123,8 @@ abstract public class NodeInfo implements java.io.Serializable {
 	 * Children include instances of {@link ComponentInfo}, {@link ZScript}
 	 * {@link VariablesInfo}, or {@link AttributesInfo}.
 	 *
-	 * <p>Note: the returned list is modifiable but it is not a good idea,
+	 * <p>Note: the returned list is live but it is not a good idea
+	 * to modify it directly,
 	 * because, unlike {@link org.zkoss.zk.ui.Component}, it doesn't maintain
 	 * {@link NodeInfo#getParent}. Thus, it is better to invoke
 	 * {@link #appendChild(ComponentInfo)} and {@link #removeChild(ComponentInfo)}

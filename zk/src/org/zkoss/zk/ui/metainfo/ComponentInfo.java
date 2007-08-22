@@ -256,14 +256,9 @@ implements Cloneable, Condition, java.io.Serializable {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("name");
 
-		final Property prop = new Property(name, value, cond);
-		if (_props == null) {
-			final List props = new LinkedList();
-			props.add(prop);
-			_props = props;
-			return;
-		}
-		_props.add(prop);
+		if (_props == null)
+			_props = new LinkedList();
+		_props.add(new Property(name, value, cond));
 	}
 
 	/** Adds an event handler.
@@ -279,14 +274,8 @@ implements Cloneable, Condition, java.io.Serializable {
 			//AbstractParser has checked it, so no need to check again
 
 		final EventHandler evthd = new EventHandler(zscript, cond);
-
-		if (_evthds == null) {
-			final EventHandlerMap evthds = new EventHandlerMap();
-			evthds.add(name, evthd);
-			_evthds = evthds;
-			return;
-		}
-
+		if (_evthds == null)
+			_evthds = new EventHandlerMap();
 		_evthds.add(name, evthd);
 	}
 
@@ -302,6 +291,8 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * <p>If comp is not null, both pagedef and page are ignored.
 	 * If comp is null, page must be specified.
 	 *
+	 * @param page the page. It is used only if comp is null.
+	 * @param comp the component.
 	 * @return the forEach object to iterate this info multiple times,
 	 * or null if this info shall be interpreted only once.
 	 */
@@ -320,6 +311,12 @@ implements Cloneable, Condition, java.io.Serializable {
 	public void setForEach(String expr, String begin, String end) {
 		_forEach = expr != null && expr.length() > 0 ?
 			new String[] {expr, begin, end}: null;
+	}
+	/** Returns whether the forEach condition is defined.
+	 * @since 2.5.0
+	 */
+	public boolean withForEach() {
+		return _forEach != null;
 	}
 
 	/** Returns the class name (String) that implements the component.
@@ -448,12 +445,8 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
 	public void addAnnotation(String annotName, Map annotAttrs) {
-		if (_annots == null) {
-			final AnnotationMap annots = new AnnotationMap();
-			annots.addAnnotation(annotName, annotAttrs);
-			_annots = annots;
-			return;
-		}
+		if (_annots == null)
+			_annots = new AnnotationMap();
 		_annots.addAnnotation(annotName, annotAttrs);
 	}
 	/** Adds an annotation to the specified proeprty of this component
@@ -465,12 +458,8 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
 	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
-		if (_annots == null) {
-			final AnnotationMap annots = new AnnotationMap();
-			annots.addAnnotation(propName, annotName, annotAttrs);
-			_annots = annots;
-			return;
-		}
+		if (_annots == null)
+			_annots = new AnnotationMap();
 		_annots.addAnnotation(propName, annotName, annotAttrs);
 	}
 
