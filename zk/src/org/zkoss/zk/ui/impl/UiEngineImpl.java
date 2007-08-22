@@ -1308,7 +1308,7 @@ public class UiEngineImpl implements UiEngine {
 		final NativeInfo splitInfo = compInfo.getSplitChild();
 		if (splitInfo != null && splitInfo.isEffective(comp)) {
 			if (sb == null) sb = new StringBuffer(256);
-			getSplitFirstHalf(ci, sb, comp, splitInfo);
+			getNativeFirstHalf(ci, sb, comp, splitInfo);
 		}
 
 		if (sb != null && sb.length() > 0)
@@ -1324,7 +1324,7 @@ public class UiEngineImpl implements UiEngine {
 		final NativeInfo splitInfo = compInfo.getSplitChild();
 		if (splitInfo != null && splitInfo.isEffective(comp)) {
 			sb = new StringBuffer(256);
-			getSplitSecondHalf(ci, sb, comp, splitInfo);
+			getNativeSecondHalf(ci, sb, comp, splitInfo);
 		}
 
 		final List epikids = compInfo.getEpilogChildren();
@@ -1345,10 +1345,17 @@ public class UiEngineImpl implements UiEngine {
 				final NativeInfo childInfo = (NativeInfo)meta;
 				final ForEach forEach = childInfo.getForEach(ci.page, comp);
 				if (forEach == null) {
-					getChildNativeContent(ci, sb, comp, childInfo);
+					if (childInfo.isEffective(comp)) {
+						getNativeFirstHalf(ci, sb, comp, childInfo);
+						getNativeSecondHalf(ci, sb, comp, childInfo);
+					}
 				} else {
-					while (forEach.next())
-						getChildNativeContent(ci, sb, comp, childInfo);
+					while (forEach.next()) {
+						if (childInfo.isEffective(comp)) {
+							getNativeFirstHalf(ci, sb, comp, childInfo);
+							getNativeSecondHalf(ci, sb, comp, childInfo);
+						}
+					}
 				}
 			} else if (meta instanceof String) {
 				sb.append(ci.exec.evaluate(comp, (String)meta, String.class));
@@ -1357,58 +1364,35 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 	}
-	private static final void getChildNativeContent(CreateInfo ci,
+	/** Before calling this method, childInfo.isEffective must be examined
+	 */
+	private static final void getNativeFirstHalf(CreateInfo ci,
 	StringBuffer sb, Component comp, NativeInfo childInfo) {
-		if (childInfo.isEffective(comp)) {
-			assert D.OFF || childInfo.getChildren().isEmpty(); //no child in prolog/epilog
-
-			final Native.Helper helper = ((Native)comp).getHelper();
-			helper.getFirstHalf(sb, childInfo.getTag(),
+		((Native)comp).getHelper()
+			.getFirstHalf(sb, childInfo.getTag(),
 				evalProperties(ci.exec, comp, childInfo.getProperties()));
 
-			List grkids = childInfo.getPrologChildren();
-			if (!grkids.isEmpty())
-				getNativeContent(ci, sb, comp, grkids); //recursive
-
-			//Note: no need to handle split child here, since
-			//only native info without child can be part of prolog/epilog
-
-			grkids = childInfo.getEpilogChildren();
-			if (!grkids.isEmpty())
-				getNativeContent(ci, sb, comp, grkids); //recursive
-
-			helper.getSecondHalf(sb, childInfo.getTag());
-		}
-	}
-	/** Before calling this method, splitInfo.isEffective must be examined
-	 */
-	private static final void getSplitFirstHalf(CreateInfo ci,
-	StringBuffer sb, Component comp, NativeInfo splitInfo) {
-		((Native)comp).getHelper()
-			.getFirstHalf(sb, splitInfo.getTag(),
-				evalProperties(ci.exec, comp, splitInfo.getProperties()));
-
-		final List prokids = splitInfo.getPrologChildren();
+		final List prokids = childInfo.getPrologChildren();
 		if (!prokids.isEmpty())
 			getNativeContent(ci, sb, comp, prokids);
 
-		final NativeInfo childInfo = splitInfo.getSplitChild();
-		if (childInfo != null && childInfo.isEffective(comp))
-			getSplitFirstHalf(ci, sb, comp, childInfo); //recursive
+		final NativeInfo splitInfo = childInfo.getSplitChild();
+		if (splitInfo != null && splitInfo.isEffective(comp))
+			getNativeFirstHalf(ci, sb, comp, splitInfo); //recursive
 	}
-	/** Before calling this method, splitInfo.isEffective must be examined
+	/** Before calling this method, childInfo.isEffective must be examined
 	 */
-	private static final void getSplitSecondHalf(CreateInfo ci,
-	StringBuffer sb, Component comp, NativeInfo splitInfo) {
-		final NativeInfo childInfo = splitInfo.getSplitChild();
-		if (childInfo != null && childInfo.isEffective(comp))
-			getSplitSecondHalf(ci, sb, comp, childInfo); //recursive
+	private static final void getNativeSecondHalf(CreateInfo ci,
+	StringBuffer sb, Component comp, NativeInfo childInfo) {
+		final NativeInfo splitInfo = childInfo.getSplitChild();
+		if (splitInfo != null && splitInfo.isEffective(comp))
+			getNativeSecondHalf(ci, sb, comp, splitInfo); //recursive
 
-		final List epikids = splitInfo.getEpilogChildren();
+		final List epikids = childInfo.getEpilogChildren();
 		if (!epikids.isEmpty())
 			getNativeContent(ci, sb, comp, epikids);
 
-		((Native)comp).getHelper().getSecondHalf(sb, splitInfo.getTag());
+		((Native)comp).getHelper().getSecondHalf(sb, childInfo.getTag());
 	}
 	private static final
 	Map evalProperties(Execution exec, Component comp, List props) {
