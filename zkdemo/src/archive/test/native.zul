@@ -37,6 +37,6 @@ xmlns:n="http://www.zkoss.org/2005/zk/native">
 		 </n:li>
 	</n:ul>
 	<n:ul>
-		<n:li><n:code><textbox/></n:code></n:li>
+		<n:li><n:code>Codes: <textbox/></n:code></n:li>
 	</n:ul>
 </window>
