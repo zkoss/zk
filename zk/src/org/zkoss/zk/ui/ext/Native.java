@@ -18,6 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.ext;
 
+import java.util.Iterator;
+import java.util.Map;
+
 /**
  * Implemented with {@link org.zkoss.zk.ui.Component} to represent
  * a native component.
@@ -32,34 +35,53 @@ public interface Native extends NonFellow {
 	 * before the child components, if any.
 	 * <p>Default: empty ("").
 	 */
-	public String getProlog();
+	public String getPrologContent();
 	/** Sets the prolog content. It is the content generated
 	 * before the child components, if any.
 	 */
-	public void setProlog(String prolog);
+	public void setPrologContent(String prolog);
 	/** Returns the epilog content. It is the content generated
 	 * before the child components, if any.
 	 * <p>Default: empty ("").
 	 */
-	public String getEpilog();
+	public String getEpilogContent();
 	/** Sets the epilog content. It is the content generated
 	 * before the child components, if any.
 	 */
-	public void setEpilog(String epilog);
+	public void setEpilogContent(String epilog);
 
-	/** Returns the first half of the output.
-	 * For example, getFirstHalf("tr") returns "&lt;tr&gt;", and
-	 * getFirstHalf("br") returns "&lt;br/&gt;".
-	 *
-	 * <p>The first half also includes the prolog ({@link #getProlog}).
-	 * Notice that it doesn't include the output of all child components.
+	/** Returns the helper to generate the output of the native components.
 	 */
-	public String getFirstHalf();
-	/** Returns the second half of the output.
-	 * For example, getSecondHalf("tr") returns "&lt;/tr&gt;", and
-	 * getSecondHalf("br") returns "".
-	 *
-	 * <p>The first half also includes the epilog ({@link #getEpilog}).
+	public Helper getHelper();
+
+	/** The helper to generate the output for the native component.
+	 * It usually depends on the client (i.e., {@link org.zkoss.zk.ui.Desktop#getDevice}.
 	 */
-	public String getSecondHalf();
+	public interface Helper {
+		/** Generates the first half of the device-dependent content
+		 * for the specified tag and properties, and appends it to
+		 * the specified string buffer.
+		 *
+		 * <p>For example, getFirstHalf(sb, "tr", null) appends "&lt;tr&gt;" to sb,
+		 * and getFirstHalf(sb, "br", ) appends "&lt;br/&gt;".
+		 *
+		 * @param sb the string buffer to append the result (never null)
+		 * @param tag the tag name (never null)
+		 * @param props a map of name and value pairs or null
+		 * if no properties at all.
+		 * Note: the value doesn't contain any EL expression.
+		 */
+		public void getFirstHalf(StringBuffer sb, String tag, Map props);
+		/** Appends the first half of the device-dependent content
+		 * for the specified tag and properties, and appends it to
+		 * the specified string buffer.
+		 *
+		 * <p>For example, appendSecpmdHalf(sb, "tr") appends "&lt;/tr&gt;" to sb,
+		 * and getSecondHalf(sb, "br") appends "".
+		 *
+		 * @param sb the string buffer to append the result (never null)
+		 * @param tag the tag name (never null)
+		 */
+		public void getSecondHalf(StringBuffer sb, String tag);
+	}
 }

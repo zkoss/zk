@@ -41,56 +41,10 @@ public class NativeInfo extends ComponentInfo {
 		if (!compdef.isNative())
 			throw new IllegalArgumentException("compdef must be native");
 	}
-
-	/** Merges the value to the specified property.
-	 * By merging we mean the previous value will be catenated with
-	 * the value specified in this method.
-	 *
-	 * <p>For example, the proplog's value will become "abcd"
-	 * if the following codes execute:
-	 *
-	 * <pre><code>addProperty("prolog", "ab", null);
-	 *mergeProperty("prolog", "cd");</code></pre>
-	 *
-	 * <p>If the property is not defined before, this method is the same
-	 * as {@link #addProperty}.
-	 *
-	 * <p>Note: if the property is added with a condition, e.g.,
-	 * addProperty("prolog", "ab", cond), this method will does
-	 * nothing but returning false.
-	 *
-	 * @return whether it is merged successfully.
-	 * @since 2.5.0
+	/** Adds a Sting child.
 	 */
-	public boolean mergeProperty(String name, String value) {
-		if (_props != null) {
-			if (name == null || name.length() == 0)
-				throw new IllegalArgumentException("name");
-
-			Property found =  null;
-//			synchronized (_props) {
-				for (Iterator it = _props.iterator(); it.hasNext();) {
-					final Property prop = (Property)it.next();
-					if (name.equals(prop.getName())) {
-						if (prop.getCondition() != null)
-							return false; //unable to merge
-						found = prop;
-						break;
-					}
-				}
-//			}
-
-			if (found != null) {
-				final String old = found.getValue();
-				if (old != null)
-					if (value != null) value = old + value;
-					else value = old;
-				found.setValue(value);
-				return true;
-			}
-		}
-		addProperty(name, value, null);
-		return true;
+	public void appendChild(String text) {
+		appendChildDirectly(text);
 	}
 
 	/** Returns a readonly list of the prolog children ({@link NativeInfo}).
@@ -151,6 +105,11 @@ public class NativeInfo extends ComponentInfo {
 	 */
 	public void addPrologChild(AttributesInfo child) {
 		addPrologChild0(child);
+	}
+	/** Adds a text as a prolog child.
+	 */
+	public void addPrologChild(String text) {
+		addPrologChild0(text);
 	}
 	/** Adds a prolog child.
 	 * @param chld the child can NOT be{@link ComponentInfo}.

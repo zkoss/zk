@@ -467,12 +467,12 @@ public class UiEngineImpl implements UiEngine {
 
 			final boolean bNative = childInfo instanceof NativeInfo;
 			if (bNative)
-				createPrologAndSplit(ci, (NativeInfo)childInfo, child);
+				setProlog(ci, (NativeInfo)childInfo, child);
 
 			execCreate(ci, childInfo, child); //recursive
 
 			if (bNative)
-				createEpilog(ci, (NativeInfo)childInfo, child);
+				setEpilog(ci, (NativeInfo)childInfo, child);
 
 			if (child instanceof AfterCompose)
 				((AfterCompose)child).afterCompose();
@@ -499,6 +499,7 @@ public class UiEngineImpl implements UiEngine {
 			final ZScript zscript = (ZScript)meta;
 			if (zscript.isDeferred()) {
 				((PageCtrl)page).addDeferredZScript(comp, zscript);
+					//isEffective is handled later
 			} else if (isEffective(zscript, page, comp)) {
 				final Map backup = new HashMap();
 				final Namespace ns = comp != null ?
@@ -513,36 +514,62 @@ public class UiEngineImpl implements UiEngine {
 			}
 		} else if (meta instanceof AttributesInfo) {
 			final AttributesInfo attrs = (AttributesInfo)meta;
-			if (comp != null) attrs.apply(comp);
+			if (comp != null) attrs.apply(comp); //it handles isEffective
 			else attrs.apply(page);
 		} else if (meta instanceof VariablesInfo) {
 			final VariablesInfo vars = (VariablesInfo)meta;
-			if (comp != null) vars.apply(comp);
+			if (comp != null) vars.apply(comp); //it handles isEffective
 			else vars.apply(page);
 		} else {
 			throw new IllegalStateException("Unknown metainfo: "+meta);
 		}
 	}
-	/** Creates the prolog and split of the specified native component.
+	/** Sets the prolog of the specified native component.
 	 */
-	private static final void createPrologAndSplit(CreateInfo ci,
+	private static final void setProlog(CreateInfo ci,
 	NativeInfo compInfo, Component comp) {
 		final Native nc = (Native)comp;
 		final List children = compInfo.getPrologChildren();
 		if (!children.isEmpty()) {
-			for (Iterator it = children.iterator(); it.hasNext();) {
-				final Object meta = it.next();
-				if (meta instanceof NativeInfo) {
-				} else {
-					execNonComponent(ci.page, comp, meta);
-				}
-			}
+			final StringBuffer sb = new StringBuffer(256);
+			getNativeContent(ci, sb, comp, children);
+			if (sb.length() > 0)
+				nc.setPrologContent(sb.insert(0, nc.getPrologContent()).toString());
 		}
 	}
-	/** Creates the epilog of the specified native component.
+	/** Sets the epilog of the specified native component.
 	 */
 	private static final
-	void createEpilog(CreateInfo ci, NativeInfo compInfo, Component comp) {
+	void setEpilog(CreateInfo ci, NativeInfo compInfo, Component comp) {
+	}
+	private static final void getNativeContent(CreateInfo ci,
+	StringBuffer sb, Component comp, List children) {
+		final Native.Helper helper = ((Native)comp).getHelper();
+		for (Iterator it = children.iterator(); it.hasNext();) {
+			final Object meta = it.next();
+			if (meta instanceof NativeInfo) {
+				final NativeInfo childInfo = (NativeInfo)meta;
+				if (isEffective(childInfo, ci.page, comp)) {
+					assert D.OFF || childInfo.getChildren().isEmpty(); //no child in prolog/epilog
+
+					helper.getFirstHalf(sb, childInfo.getTag(),
+						/*childInfo.getProperties()*/null); //TODO
+
+					List grkids = childInfo.getPrologChildren();
+					if (!grkids.isEmpty())
+						getNativeContent(ci, sb, comp, grkids); //recursive
+					grkids = childInfo.getEpilogChildren();
+					if (!grkids.isEmpty())
+						getNativeContent(ci, sb, comp, grkids); //recursive
+
+					helper.getSecondHalf(sb, childInfo.getTag());
+				}
+			} else if (meta instanceof String) {
+				sb.append((String)meta);
+			} else {
+				execNonComponent(ci.page, comp, meta);
+			}
+		}
 	}
 	private static final boolean isEffective(Condition cond,
 	Page page, Component comp) {

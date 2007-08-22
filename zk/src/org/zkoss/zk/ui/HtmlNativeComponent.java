@@ -18,6 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -38,7 +39,7 @@ import org.zkoss.zk.ui.ext.Native;
  *
  * <p>It contains the content that shall be sent directly to client.
  * It has three parts: prolog, children and epilog.
- * The prolog ({@link #getProlog}) and epilog ({@link #getEpilog})
+ * The prolog ({@link #getPrologContent}) and epilog ({@link #getEpilogContent})
  * are both {@link String}.
  *
  * <p>When this component is renderred ({@link #redraw}), it generates
@@ -49,9 +50,10 @@ import org.zkoss.zk.ui.ext.Native;
  */
 public class HtmlNativeComponent extends AbstractComponent
 implements DynamicTag, Native {
-	private String _tagnm;
+	private String _tag;
 	private String _prolog = "", _epilog = "";
 	private Map _props;
+	private Helper _helper = new HtmlHelper();
 
 	/** Contructs a {@link HtmlNativeComponent} component.
 	 * 
@@ -60,17 +62,17 @@ implements DynamicTag, Native {
 	}
 	/** Constructs a {@link HtmlNativeComponent} component with the specified tag name.
 	 *
-	 * @param tagname the tag name. If null or empty, plain text is assumed.
+	 * @param tag the tag name. If null or empty, plain text is assumed.
 	 */
-	public HtmlNativeComponent(String tagname) {
-		setTag(tagname);
+	public HtmlNativeComponent(String tag) {
+		setTag(tag);
 	}
 
 	/** Contructs a {@link HtmlNativeComponent} component with the specified
 	 * prolog ad epilog.
 	 */
-	public HtmlNativeComponent(String tagname, String prolog, String epilog) {
-		this(tagname);
+	public HtmlNativeComponent(String tag, String prolog, String epilog) {
+		this(tag);
 
 		_prolog = prolog != null ? prolog: "";
 		_epilog = epilog != null ? epilog: "";
@@ -79,96 +81,25 @@ implements DynamicTag, Native {
 	/** Returns the tag name, or null if plain text.
 	 */
 	public String getTag() {
-		return _tagnm;
+		return _tag;
 	}
 
 	//Native//
-	public String getProlog() {
+	public String getPrologContent() {
 		return _prolog;
 	}
-	public void setProlog(String prolog) {
+	public void setPrologContent(String prolog) {
 		_prolog = prolog != null ? prolog: "";
 	}
-	public String getEpilog() {
+	public String getEpilogContent() {
 		return _epilog;
 	}
-	public void setEpilog(String epilog) {
+	public void setEpilogContent(String epilog) {
 		_epilog = epilog != null ? epilog: "";
 	}
-	public String getFirstHalf() {
-		final StringBuffer sb = new StringBuffer(128);
-		appendTagBegin(sb);
-		sb.append(_prolog); //no encoding
-		return sb.toString();
-	}
-	public String getSecondHalf() {
-		final StringBuffer sb = new StringBuffer();
-		sb.append(_epilog); //no encodding
-		appendTagEnd(sb);
-		return sb.toString();
-	}
 
-	//Utilities//
-	/** Appends the tag begin, e.g., &lt;tr&gt;.
-	 */
-	private void appendTagBegin(StringBuffer sb) {
-		if (_tagnm == null)
-			return;
-
-		sb.append('<').append(_tagnm);
-
-		if (_props != null)
-			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				HTMLs.appendAttribute(sb,
-					Objects.toString(me.getKey()),
-					Objects.toString(me.getValue()));
-			}
-
-		final String tn = _tagnm.toLowerCase();
-		if (HTMLs.isOrphanTag(tn))
-			sb.append('/');
-		sb.append('>');
-
-		if (_beglftags.contains(tn))
-			sb.append('\n'); //make it more readable
-	}
-	/** Appends the tag end, e.g., &lt;/tr&gt;.
-	 */
-	private void appendTagEnd(StringBuffer sb) {
-		if (_tagnm == null)
-			return;
-
-		final String tn = _tagnm.toLowerCase();
-		if (HTMLs.isOrphanTag(tn)) {
-			if ("br".equals(tn))
-				sb.append('\n');
-			return;
-		}
-
-		sb.append("</").append(_tagnm).append('>');
-
-		if (_endlftags.contains(tn))
-			sb.append('\n'); //make it more readable
-	}
-
-	/** A set of tags that we shall append linefeed to it.
-	 */
-	private static final Set
-		_endlftags = new HashSet(), _beglftags = new HashSet();
-	static {
-		final String[] beglftags = {
-			"table", "tr", "tbody", "ul", "ol"
-		};
-
-		for (int j = beglftags.length; --j >= 0;)
-			_beglftags.add(beglftags[j]);
-
-		final String[] endlftags = {
-			"tr", "td", "th", "p", "li", "dt", "dd"
-		};
-		for (int j = endlftags.length; --j >= 0;)
-			_endlftags.add(endlftags[j]);
+	public Helper getHelper() {
+		return _helper;
 	}
 
 	//-- Component --//
@@ -181,23 +112,29 @@ implements DynamicTag, Native {
 	}
 
 	public void redraw(Writer out) throws IOException {
-		out.write(getFirstHalf());
+		final StringBuffer sb = new StringBuffer(128);
+		_helper.getFirstHalf(sb, _tag, _props);
+		sb.append(_prolog); //no encoding
+		out.write(sb.toString());
+		sb.setLength(0);
 
 		for (Iterator it = getChildren().iterator(); it.hasNext();)
 			((Component)it.next()).redraw(out);
 
-		out.write(getSecondHalf());
+		_helper.getSecondHalf(sb, _tag);
+		sb.append(_epilog);
+		out.write(sb.toString());
 	}
 
 	//DynamicTag//
 	/** Sets the tag name.
 	 *
-	 * @param tagname the tag name. If null or empty, plain text is assumed.
+	 * @param tag the tag name. If null or empty, plain text is assumed.
 	 */
-	public void setTag(String tagname) throws WrongValueException {
-		_tagnm = tagname != null && tagname.length() > 0 ? tagname: null;
+	public void setTag(String tag) throws WrongValueException {
+		_tag = tag != null && tag.length() > 0 ? tag: null;
 	}
-	public boolean hasTag(String tagname) {
+	public boolean hasTag(String tag) {
 		return true; //accept anything
 	}
 	public boolean hasDynamicProperty(String name) {
@@ -219,5 +156,60 @@ implements DynamicTag, Native {
 				_props = new LinkedHashMap();
 			_props.put(name, value);
 		}
+	}
+
+	/** The HTML helper.
+	 */
+	public static class HtmlHelper implements Helper {
+		public void getFirstHalf(StringBuffer sb, String tag, Map props) {
+			sb.append('<').append(tag);
+
+			if (props != null)
+				for (Iterator it = props.entrySet().iterator(); it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					HTMLs.appendAttribute(sb,
+						Objects.toString(me.getKey()),
+						Objects.toString(me.getValue()));
+				}
+
+			final String tn = tag.toLowerCase();
+			if (HTMLs.isOrphanTag(tn))
+				sb.append('/');
+			sb.append('>');
+
+			if (_beglftags.contains(tn))
+				sb.append('\n'); //make it more readable
+		}
+		public void getSecondHalf(StringBuffer sb, String tag) {
+			final String tn = tag.toLowerCase();
+			if (HTMLs.isOrphanTag(tn)) {
+				if ("br".equals(tn))
+					sb.append('\n');
+				return;
+			}
+
+			sb.append("</").append(tag).append('>');
+
+			if (_endlftags.contains(tn))
+				sb.append('\n'); //make it more readable
+		}
+	}
+	/** A set of tags that we shall append linefeed to it.
+	 */
+	private static final Set
+		_endlftags = new HashSet(), _beglftags = new HashSet();
+	static {
+		final String[] beglftags = {
+			"table", "tr", "tbody", "ul", "ol"
+		};
+
+		for (int j = beglftags.length; --j >= 0;)
+			_beglftags.add(beglftags[j]);
+
+		final String[] endlftags = {
+			"tr", "td", "th", "p", "li", "dt", "dd"
+		};
+		for (int j = endlftags.length; --j >= 0;)
+			_endlftags.add(endlftags[j]);
 	}
 }

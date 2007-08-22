@@ -53,42 +53,42 @@ abstract public class NodeInfo implements java.io.Serializable {
 	/** Adds a zscript child.
 	 */
 	public void appendChild(ZScript zscript) {
-		appendChild0((Object)zscript);
+		appendChildDirectly(zscript);
 	}
 	/** Adds a variables child.
 	 */
 	public void appendChild(VariablesInfo variables) {
-		appendChild0((Object)variables);
+		appendChildDirectly(variables);
 	}
 	/** Adds a custom-attributes child.
 	 */
 	public void appendChild(AttributesInfo custAttrs) {
-		appendChild0((Object)custAttrs);
+		appendChildDirectly(custAttrs);
 	}
 	/** Adds a {@link ComponentInfo} child.
 	 * @since 2.4.0
 	 */
 	public void appendChild(ComponentInfo compInfo) {
-		compInfo.setParent(this); //it will call back appendChild0
+		compInfo.setParent(this); //it will call back appendChildDirectly
 	}
 
 	/** Removes a zscript child.
 	 * @return whether the child is removed successfully.
 	 */
 	public boolean removeChild(ZScript zscript) {
-		return removeChild0((Object)zscript);
+		return removeChildDirectly(zscript);
 	}
 	/** Removes a variables child.
 	 * @return whether the child is removed successfully.
 	 */
 	public boolean removeChild(VariablesInfo variables) {
-		return removeChild0((Object)variables); 
+		return removeChildDirectly(variables); 
 	}
 	/** Removes a custom-attributes child.
 	 * @return whether the child is removed successfully.
 	 */
 	public boolean removeChild(AttributesInfo custAttrs) {
-		return removeChild0((Object)custAttrs); 
+		return removeChildDirectly(custAttrs); 
 	}
 	/** Removes a {@link ComponentInfo} child.
 	 *
@@ -97,35 +97,26 @@ abstract public class NodeInfo implements java.io.Serializable {
 	 * @since 2.4.0
 	 */
 	public boolean removeChild(ComponentInfo compInfo) {
-		if (compInfo == null || compInfo.getParent() == null)
-			return false;
-//		synchronized (_children) {
-			if (!_children.contains(compInfo))
-				return false;
-//		}
-
-		compInfo.setParent(null);
-		return true;
+		if (compInfo != null && removeChildDirectly(compInfo)) {
+			compInfo.setParentDirectly(null);
+			return true;
+		}
+		return false;
 	}
-	/*package*/ boolean removeChild0(ComponentInfo compInfo) {
-		return removeChild0((Object)compInfo);
-	}
-
+	
 	/** Adds a child.
+	 * <p>Note: it does NOT maintain {@link ComponentInfo#getParent}.
 	 */
-	/*pacakge*/ void appendChild0(Object child) {
+	/*pacakge*/ void appendChildDirectly(Object child) {
 		if (child == null)
 			throw new IllegalArgumentException("child required");
-//		synchronized (_children) {
-			_children.add(child);
-//		}
+		_children.add(child);
 	}
 	/** Removes a child.
+	 * <p>Note: it does NOT maintain {@link ComponentInfo#getParent}.
 	 */
-	/*package*/ boolean removeChild0(Object child) {
-//		synchronized (_children) {
-			return _children.remove(child);
-//		}
+	/*package*/ boolean removeChildDirectly(Object child) {
+		return _children.remove(child);
 	}
 
 	/** Returns a list of children.

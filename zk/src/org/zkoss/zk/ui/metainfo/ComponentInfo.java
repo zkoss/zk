@@ -59,16 +59,14 @@ implements Cloneable, Condition, java.io.Serializable {
 	private final ComponentDefinition _compdef;
 	/** The implemetation class (use). */
 	private String _implcls;
-	/** A list of {@link Property}, or null if no property at all.
-	 * @see #getProperties
-	 */
-	protected List _props;
+	/** A list of {@link Property}, or null if no property at all. */
+	private List _props;
 	/** A Map of event handler to handle events. */
 	private EventHandlerMap _evthds;
 	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
 	private AnnotationMap _annots;
 	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
-	private final String _tagnm;
+	private final String _tag;
 	/** The effectiveness condition (see {@link #isEffective}).
 	 * If null, it means effective.
 	 */
@@ -87,21 +85,21 @@ implements Cloneable, Condition, java.io.Serializable {
 	/** Constructs the information about how to create component.
 	 * @param parent the parent; never null.
 	 * @param compdef the component definition; never null
-	 * @param tagnm the tag name; Note: if component implements
+	 * @param tag the tag name; Note: if component implements
 	 * {@link DynamicTag}, this argument must be specified.
 	 * If {@link DynamicTag} is not implemented, this argument must
 	 * be null.
 	 */
 	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef,
-	String tagnm) {
+	String tag) {
 		if (parent == null || compdef == null)
 			throw new IllegalArgumentException("parent and compdef required");
 
 		_parent = parent;
 		_pagedef = parent.getPageDefinition();
 		_compdef = compdef;
-		_tagnm = tagnm;
-		_parent.appendChild0(this);
+		_tag = tag;
+		_parent.appendChildDirectly(this);
 	}
 	/** Constructs the info about how to create a component.
 	 * @param parent the parent; never null.
@@ -122,18 +120,25 @@ implements Cloneable, Condition, java.io.Serializable {
 		return _compdef;
 	}
 
+	/** Returns the tag name, or null if no tag name.
+	 * @since 2.5.0
+	 */
+	public String getTag() {
+		return _tag;
+	}
+
 	/** Sets the parent.
 	 */
 	public void setParent(NodeInfo parent) {
-		if (parent != _parent) {
-//			synchronized (this) {
-				if (_parent != null)
-					_parent.removeChild0(this);
-				_parent = parent;
-				if (_parent != null)
-					_parent.appendChild0(this);
-//			}
-		}
+		//we don't check if parent is changed (since we have to move it
+		//to the end)
+		if (_parent != null)
+			_parent.removeChildDirectly(this);
+
+		_parent = parent;
+
+		if (_parent != null)
+			_parent.appendChildDirectly(this);
 	}
 	/*package*/ void setParentDirectly(NodeInfo parent) {
 		_parent = parent;
@@ -253,18 +258,12 @@ implements Cloneable, Condition, java.io.Serializable {
 
 		final Property prop = new Property(name, value, cond);
 		if (_props == null) {
-//			synchronized (this) {
-				if (_props == null) {
-					final List props = new LinkedList();
-					props.add(prop);
-					_props = props;
-					return;
-				}
-//			}
+			final List props = new LinkedList();
+			props.add(prop);
+			_props = props;
+			return;
 		}
-//		synchronized (_props) {
-			_props.add(prop);
-//		}
+		_props.add(prop);
 	}
 
 	/** Adds an event handler.
@@ -282,25 +281,15 @@ implements Cloneable, Condition, java.io.Serializable {
 		final EventHandler evthd = new EventHandler(zscript, cond);
 
 		if (_evthds == null) {
-//			synchronized (this) {
-				if (_evthds == null) {
-					final EventHandlerMap evthds = new EventHandlerMap();
-					evthds.add(name, evthd);
-					_evthds = evthds;
-					return;
-				}
-//			}
+			final EventHandlerMap evthds = new EventHandlerMap();
+			evthds.add(name, evthd);
+			_evthds = evthds;
+			return;
 		}
 
 		_evthds.add(name, evthd);
 	}
 
-	/** Returns the effectiveness condition, or null if no such condition.
-	 * @since 2.5.0
-	 */
-	public Condition getCondition() {
-		return _cond;
-	}
 	/** Sets the effectiveness condition.
 	 */
 	public void setCondition(Condition cond) {
@@ -364,7 +353,7 @@ implements Cloneable, Condition, java.io.Serializable {
 			ComponentsCtrl.setCurrentInfo((ComponentInfo)null);
 		}
 		if (comp instanceof DynamicTag)
-			((DynamicTag)comp).setTag(_tagnm);
+			((DynamicTag)comp).setTag(_tag);
 		return comp;
 	}
 	/** Resolves and returns the class for the component represented
@@ -410,12 +399,10 @@ implements Cloneable, Condition, java.io.Serializable {
 
 		if (_props != null) {
 			final Evaluator eval = Executions.getCurrent();
-//			synchronized (_props) {
-				for (Iterator it = _props.iterator(); it.hasNext();) {
-					final Property prop = (Property)it.next();
-					prop.assign(eval, comp);
-				}
-//			}
+			for (Iterator it = _props.iterator(); it.hasNext();) {
+				final Property prop = (Property)it.next();
+				prop.assign(eval, comp);
+			}
 		}
 	}
 
@@ -438,20 +425,18 @@ implements Cloneable, Condition, java.io.Serializable {
 		if (_props != null) {
 			final Evaluator eval = Executions.getCurrent();
 
-//			synchronized (_props) {
-				for (Iterator it = _props.iterator(); it.hasNext();) {
-					final Property prop = (Property)it.next();
-					if (parent != null) {
-						if (prop.isEffective(parent))
-							propmap.put(prop.getName(),
-								eval.evaluate(parent, prop.getValue(), Object.class));
-					} else {
-						if (prop.isEffective(owner))
-							propmap.put(prop.getName(),
-								eval.evaluate(owner, prop.getValue(), Object.class));
-					}
+			for (Iterator it = _props.iterator(); it.hasNext();) {
+				final Property prop = (Property)it.next();
+				if (parent != null) {
+					if (prop.isEffective(parent))
+						propmap.put(prop.getName(),
+							eval.evaluate(parent, prop.getValue(), Object.class));
+				} else {
+					if (prop.isEffective(owner))
+						propmap.put(prop.getName(),
+							eval.evaluate(owner, prop.getValue(), Object.class));
 				}
-//			}
+			}
 		}
 		return propmap;
 	}
@@ -464,14 +449,10 @@ implements Cloneable, Condition, java.io.Serializable {
 	 */
 	public void addAnnotation(String annotName, Map annotAttrs) {
 		if (_annots == null) {
-//			synchronized (this) {
-				if (_annots == null) {
-					final AnnotationMap annots = new AnnotationMap();
-					annots.addAnnotation(annotName, annotAttrs);
-					_annots = annots;
-					return;
-				}
-//			}
+			final AnnotationMap annots = new AnnotationMap();
+			annots.addAnnotation(annotName, annotAttrs);
+			_annots = annots;
+			return;
 		}
 		_annots.addAnnotation(annotName, annotAttrs);
 	}
@@ -485,14 +466,10 @@ implements Cloneable, Condition, java.io.Serializable {
 	 */
 	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
 		if (_annots == null) {
-//			synchronized (this) {
-				if (_annots == null) {
-					final AnnotationMap annots = new AnnotationMap();
-					annots.addAnnotation(propName, annotName, annotAttrs);
-					_annots = annots;
-					return;
-				}
-//			}
+			final AnnotationMap annots = new AnnotationMap();
+			annots.addAnnotation(propName, annotName, annotAttrs);
+			_annots = annots;
+			return;
 		}
 		_annots.addAnnotation(propName, annotName, annotAttrs);
 	}
@@ -537,8 +514,8 @@ implements Cloneable, Condition, java.io.Serializable {
 		final StringBuffer sb = new StringBuffer(64)
 			.append("[ComponentInfo: ")
 			.append(_compdef.getName());
-		if (_tagnm != null)
-			sb.append(" <").append(_tagnm).append('>');
+		if (_tag != null)
+			sb.append(" <").append(_tag).append('>');
 		return sb.append(']').toString();
 	}
 }

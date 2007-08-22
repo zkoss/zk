@@ -668,7 +668,7 @@ zkau.setAttr = function (cmp, name, value) {
 };
 zkau._attr = function (cmp, name) {
 	var real = $real(cmp);
-	if (real) {
+	if (real != cmp && real) {
 		if (name.startsWith("on")) return real;
 			//Client-side-action must be done at the inner tag
 
@@ -677,6 +677,7 @@ zkau._attr = function (cmp, name) {
 		case "TEXTAREA":
 			switch(name) {
 			case "name": case "value": case "defaultValue":
+			case "checked": case "defaultChecked":
 			case "cols": case "size": case "maxlength":
 			case "type": case "disabled": case "readOnly":
 			case "rows":
