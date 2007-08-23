@@ -152,6 +152,15 @@ public class ConfigParser {
 			//language-config
 			//	addon-uri
 				parseLangAddon(locator, el);
+			} else if ("language-mapping".equals(elnm)) {
+			//language-mapping
+			//	language-name/extension
+				DefinitionLoaders.addExtension(
+					IDOMs.getRequiredElementValue(el, "extension"),
+					IDOMs.getRequiredElementValue(el, "language-name"));
+				//Note: we don't add it to LanguageDefinition now
+				//since addon-uri might be specified later
+				//(so we cannot load definitions now)
 			} else if ("system-config".equals(elnm)) {
 			//system-config
 			//  disable-event-thread
