@@ -65,6 +65,8 @@ public class DefinitionLoaders {
 
 	private static final int MAX_VERSION_SEGMENT = 4;
 	private static List _addons;
+	/** A map of (String ext, String lang). */
+	private static Map _exts;
 	private static boolean _loaded, _loading;
 
 	//CONSIDER:
@@ -87,12 +89,30 @@ public class DefinitionLoaders {
 	public static void addAddon(Locator locator, URL url) {
 		if (locator == null || url == null)
 			throw new IllegalArgumentException("null");
+
 		if (_loaded) {
 			loadAddon(locator, url);
 		} else {
 			if (_addons == null)
 				_addons = new LinkedList();
 			_addons.add(new Object[] {locator, url});
+		}
+	}
+	/** Associates an extension to a language.
+	 *
+	 * @param lang the language name. It cannot be null.
+	 * @param ext the extension, e.g., "svg". It cannot be null.
+	 * @since 2.5.0
+	 */
+	public static final void addExtension(String ext, String lang) {
+		if (_loaded) {
+			LanguageDefinition.addExtension(ext, lang);
+		} else {
+			if (lang == null || ext == null)
+				throw new IllegalArgumentException("null");
+			if (_exts == null)
+				_exts = new HashMap();
+			_exts.put(ext, lang);
 		}
 	}
 
@@ -188,6 +208,16 @@ public class DefinitionLoaders {
 				loadAddon((Locator)p[0], (URL)p[1]);
 			}
 			_addons = null; //free memory
+		}
+
+		//5. process the extension
+		if (_exts != null) {
+			for (Iterator it = _exts.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				LanguageDefinition.addExtension((String)me.getKey(),
+					(String)me.getValue());
+			}
+			_exts = null;
 		}
 	}
 	/** Loads a language addon.

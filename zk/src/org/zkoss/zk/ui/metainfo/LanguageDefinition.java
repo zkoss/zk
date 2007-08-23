@@ -79,7 +79,7 @@ public class LanguageDefinition {
 	 */
 	public static final String NATIVE_NAMESPACE = "http://www.zkoss.org/2005/zk/native";
 	/** The namespace for ZK native namespace prefix.
-	 * If a namespace starts with {@link NATIVE_NAMESPACE_START} ("natie-"),
+	 * If a namespace starts with {@link #NATIVE_NAMESPACE_PREFIX} ("natie-"),
 	 * it means it is also a native space ({@link #NATIVE_NAMESPACE}
 	 * but the namespace prefix and uri will be generated.
 	 *
@@ -174,13 +174,16 @@ public class LanguageDefinition {
 		return langdef;
 	}
 	/** Returns the language definition by specifying an extension.
+	 *
+	 * @param ext the extension, e.g., "zul".
+	 * If null, "zul" is assumed.
 	 * @exception DefinitionNotFoundException is thrown if the definition
 	 * is not found
 	 */
 	public static final LanguageDefinition getByExtension(String ext) {
 		init();
 
-		if (ext == null || ext.length() == 0)
+		if (ext == null)
 			ext = "zul";
 
 		final LanguageDefinition langdef;
@@ -190,6 +193,23 @@ public class LanguageDefinition {
 		if (langdef == null)
 			throw new DefinitionNotFoundException("Language not found for extension "+ext);
 		return langdef;
+	}
+	/** Associates an extension to a language.
+	 *
+	 * @param lang the language name. It cannot be null.
+	 * @param ext the extension, e.g., "svg". It cannot be null.
+	 * @since 2.5.0
+	 */
+	public static final void addExtension(String ext, String lang) {
+		if (lang == null || ext == null)
+			throw new IllegalArgumentException();
+
+		init();
+
+		final LanguageDefinition langdef = lookup(lang); //ensure it exists
+		synchronized (_ldefsByExt) {
+			_ldefsByExt.put(ext, langdef);
+		}
 	}
 	/** Returns a readonly list of language definitions belong to
 	 * the specified device type.
