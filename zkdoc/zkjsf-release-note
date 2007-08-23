@@ -1,5 +1,5 @@
 	--------
-JSF Components 0.8.0
+ZK JSF Components 0.8.0
 * Features:
   1779933: Provide JSF Components that wrap ZUL components, such that developers could use ZUL components directly in JSF pages.
   
