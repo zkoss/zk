@@ -246,6 +246,7 @@
 			<xs:element ref="tabbox" />
 			<xs:element ref="textbox" />
 			<xs:element ref="timer" />
+			<xs:element ref="timebox" />
 			<xs:element ref="toolbar" />
 			<xs:element ref="toolbarbutton" />
 			<xs:element ref="tree" />
@@ -458,6 +459,7 @@
 		<xs:attributeGroup ref="inputElementAttrGroup" />
 		<xs:attribute name="autodrop" type="xs:string" use="optional" />
 		<xs:attribute name="buttonVisible" type="xs:string" use="optional" />
+		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="type" type="textboxTypeAttrType" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
@@ -490,6 +492,8 @@
 		<xs:attribute name="lenient" type="xs:string" use="optional" />
 		<xs:attribute name="compact" type="xs:string" use="optional" />
 		<xs:attribute name="timeZone" type="xs:string" use="optional" />
+		<xs:attribute name="buttonVisible" type="xs:string" use="optional" />
+		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
@@ -1186,6 +1190,22 @@
 		<xs:attribute name="repeats" type="xs:string" use="optional" />
 		<xs:attribute name="running" type="xs:string" use="optional" />
 		<xs:attribute name="onTimer" type="xs:string" use="optional" />
+		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
+		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- timebox -->
+	<xs:element name="timebox" type="timeboxType" />
+	<xs:complexType name="timeboxType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attribute name="value" type="xs:dateTime" use="optional" />
+		<xs:attribute name="buttonVisible" type="xs:string" use="optional" />
+		<xs:attribute name="image" type="xs:string" use="optional" />
+		<xs:attribute name="timeZone" type="xs:string" use="optional" />
+		<xs:attribute name="onChange" type="xs:string" use="optional" />
+		<xs:attribute name="onChanging" type="xs:string" use="optional" />
+		<xs:attribute name="onFocus" type="xs:string" use="optional" />
+		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
