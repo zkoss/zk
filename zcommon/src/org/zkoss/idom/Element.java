@@ -173,9 +173,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 * already exists but with different URI
 	 */
 	public final boolean addDeclaredNamespace(Namespace ns) {
-		if (ns.equalsAll(_ns)) //throws DOMException if...
-			return false; //exists
-
 		if (_addNamespaces == null) {
 			_addNamespaces = new LinkedHashMap(5);
 		} else {
