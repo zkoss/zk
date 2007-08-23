@@ -23,6 +23,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 
+import org.zkoss.idom.Namespace;
+
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ext.Native;
+
 /**
  * Represents the compmonent infomation about the native components.
  *
@@ -34,6 +40,8 @@ import java.util.LinkedList;
 public class NativeInfo extends ComponentInfo {
 	private List _prokids, _epikids;
 	private NativeInfo _splitkid;
+	/** Declared namespaces (Namespace). */
+	private List _dns;
 
 	public NativeInfo(NodeInfo parent, ComponentDefinition compdef,
 	String tagnm) {
@@ -41,6 +49,20 @@ public class NativeInfo extends ComponentInfo {
 		if (!compdef.isNative())
 			throw new IllegalArgumentException("compdef must be native");
 	}
+
+	/** Returns a readonly list of the declared namespaces (never null).
+	 */
+	public List getDeclaredNamespaces() {
+		return _dns != null ? _dns: Collections.EMPTY_LIST;
+	}
+	/** Adds a declared namespace.
+	 */
+	public void addDeclaredNamespace(Namespace ns) {
+		if (_dns == null)
+			_dns = new LinkedList();
+		_dns.add(ns);
+	}
+
 	/** Adds a Sting child.
 	 */
 	public void appendChild(String text) {
@@ -184,6 +206,17 @@ public class NativeInfo extends ComponentInfo {
 	}
 
 	//super//
+	public Component newInstance(Page page) {
+		final Component comp = super.newInstance(page);
+
+		if (_dns != null) {
+			final Native nc = (Native)comp;
+			for (Iterator it = _dns.iterator(); it.hasNext();)
+				nc.addDeclaredNamespace((Namespace)it.next());
+		}
+
+		return comp;
+	}
 	public Object clone() {
 		final NativeInfo clone = (NativeInfo)super.clone();
 		if (clone._prokids != null)

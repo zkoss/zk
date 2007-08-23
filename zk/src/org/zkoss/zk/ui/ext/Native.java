@@ -19,7 +19,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.ext;
 
 import java.util.Iterator;
+import java.util.Collection;
 import java.util.Map;
+import java.util.List;
+
+import org.zkoss.idom.Namespace;
 
 /**
  * Implemented with {@link org.zkoss.zk.ui.Component} to represent
@@ -31,6 +35,16 @@ import java.util.Map;
  * @since 2.5.0
  */
 public interface Native extends NonFellow {
+	/** Returns a readonly list of the declared namespaces
+	 * ({@link Namespace}), or empty if no declared namespace.
+	 */
+	public List getDeclaredNamespaces();
+	/** Adds a declared namespace.
+	 * The added declared namespace will be generated to the output.
+	 *
+	 * @param ns the namespace (never null).
+	 */
+	public void addDeclaredNamespace(Namespace ns);
 	/** Returns the prolog content. It is the content generated
 	 * before the child components, if any.
 	 * <p>Default: empty ("").
@@ -70,8 +84,12 @@ public interface Native extends NonFellow {
 		 * @param props a map of name and value pairs or null
 		 * if no properties at all.
 		 * Note: the value doesn't contain any EL expression.
+		 * @param namespaces a list of {@link org.zkoss.idom.Namespace}
+		 * to be generated, or null if not.
+		 * Note: EL expressions is not allowed
 		 */
-		public void getFirstHalf(StringBuffer sb, String tag, Map props);
+		public void getFirstHalf(StringBuffer sb, String tag, Map props,
+		Collection namespaces);
 		/** Appends the first half of the device-dependent content
 		 * for the specified tag and properties, and appends it to
 		 * the specified string buffer.

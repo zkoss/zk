@@ -18,8 +18,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -29,6 +32,7 @@ import java.io.IOException;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
+import org.zkoss.idom.Namespace;
 
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
@@ -54,6 +58,8 @@ implements DynamicTag, Native {
 	private String _prolog = "", _epilog = "";
 	private Map _props;
 	private Helper _helper = new HtmlHelper();
+	/** Declared namespaces ({@link Namespace}). */
+	private List _dns;
 
 	/** Contructs a {@link HtmlNativeComponent} component.
 	 * 
@@ -85,6 +91,17 @@ implements DynamicTag, Native {
 	}
 
 	//Native//
+	public List getDeclaredNamespaces() {
+		return _dns != null ? _dns: Collections.EMPTY_LIST;
+	}
+	public void addDeclaredNamespace(Namespace ns) {
+		if (ns == null)
+			throw new IllegalArgumentException();
+
+		if (_dns == null)
+			_dns = new LinkedList();
+		_dns.add(ns);
+	}
 	public String getPrologContent() {
 		return _prolog;
 	}
@@ -113,7 +130,7 @@ implements DynamicTag, Native {
 
 	public void redraw(Writer out) throws IOException {
 		final StringBuffer sb = new StringBuffer(128);
-		_helper.getFirstHalf(sb, _tag, _props);
+		_helper.getFirstHalf(sb, _tag, _props, _dns);
 		sb.append(_prolog); //no encoding
 		out.write(sb.toString());
 		sb.setLength(0);
@@ -161,10 +178,20 @@ implements DynamicTag, Native {
 	/** The HTML helper.
 	 */
 	public static class HtmlHelper implements Helper {
-		public void getFirstHalf(StringBuffer sb, String tag, Map props) {
+		public void getFirstHalf(StringBuffer sb, String tag, Map props,
+		Collection namespaces) {
 			sb.append('<').append(tag);
 
-			if (props != null)
+			if (namespaces != null && !namespaces.isEmpty())
+				for (Iterator it = namespaces.iterator(); it.hasNext();) {
+					final Namespace ns = (Namespace)it.next();
+					sb.append(" xmlns");
+					if (ns.getPrefix().length() > 0)
+						sb.append(':').append(ns.getPrefix());
+					sb.append("=\"").append(ns.getURI()).append('"');
+				}
+
+			if (props != null && !props.isEmpty())
 				for (Iterator it = props.entrySet().iterator(); it.hasNext();) {
 					final Map.Entry me = (Map.Entry)it.next();
 					HTMLs.appendAttribute(sb,
@@ -177,39 +204,47 @@ implements DynamicTag, Native {
 				sb.append('/');
 			sb.append('>');
 
-			if (_beglftags.contains(tn))
+			if (!_noLFs.contains(tn) && !_begNoLFs.contains(tn))
 				sb.append('\n'); //make it more readable
 		}
 		public void getSecondHalf(StringBuffer sb, String tag) {
 			final String tn = tag.toLowerCase();
-			if (HTMLs.isOrphanTag(tn)) {
-				if ("br".equals(tn))
-					sb.append('\n');
+			if (HTMLs.isOrphanTag(tn))
 				return;
-			}
 
 			sb.append("</").append(tag).append('>');
 
-			if (_endlftags.contains(tn))
+			if (!_noLFs.contains(tn))
 				sb.append('\n'); //make it more readable
 		}
 	}
 	/** A set of tags that we shall append linefeed to it.
 	 */
-	private static final Set
-		_endlftags = new HashSet(), _beglftags = new HashSet();
+	private static final Set _noLFs, _begNoLFs;
 	static {
-		final String[] beglftags = {
-			"table", "tr", "tbody", "ul", "ol"
+		final String[] noLFs = {
+			"a", "abbr", "acronym", "address",
+			"b", "basefont", "bdo", "big", "blink",
+			"cite", "code",
+			"del", "dfn", "dir",
+			"em",
+			"font",
+			"i", "img", "input", "ins", "kbd", "q",
+			"s", "samp", "small", "strike", "strong", "style", "sub", "sup",
+			"u"
 		};
+		_noLFs = new HashSet((noLFs.length << 2) / 5);
+		for (int j = noLFs.length; --j >= 0;)
+			_noLFs.add(noLFs[j]);
 
-		for (int j = beglftags.length; --j >= 0;)
-			_beglftags.add(beglftags[j]);
-
-		final String[] endlftags = {
-			"tr", "td", "th", "p", "li", "dt", "dd"
+		final String[] begNoLFs = {
+			"caption", "dd", "div", "dt", "legend", "li",
+			"p", "pre",
+			"span", "td", "tfoot", "th", "title"
+			
 		};
-		for (int j = endlftags.length; --j >= 0;)
-			_endlftags.add(endlftags[j]);
+		_begNoLFs = new HashSet((begNoLFs.length << 2) / 5);
+		for (int j = begNoLFs.length; --j >= 0;)
+			_begNoLFs.add(begNoLFs[j]);
 	}
 }

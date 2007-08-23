@@ -74,9 +74,28 @@ public class LanguageDefinition {
 	/** The namespace for ZK annotations.
 	 */
 	public static final String ANNO_NAMESPACE = "http://www.zkoss.org/2005/zk/annotation";
-	/** The namespace for ZK annotations.
+	/** The namespace for ZK native namespace.
+	 * @since 2.5.0
 	 */
 	public static final String NATIVE_NAMESPACE = "http://www.zkoss.org/2005/zk/native";
+	/** The namespace for ZK native namespace prefix.
+	 * If a namespace starts with {@link NATIVE_NAMESPACE_START} ("natie-"),
+	 * it means it is also a native space ({@link #NATIVE_NAMESPACE}
+	 * but the namespace prefix and uri will be generated.
+	 *
+	 * <p>For example,
+	 * <pre><code>&lt;s:svg xmlns:s="native-http://www.w3.org/2000/svg"/&gt;</code></pre>
+	 *
+	 * <p>generates the following output:
+	 *
+	 * <pre><code>&lt;s:svg xmlns:s="http://www.w3.org/2000/svg"/&gt;</code></pre>
+	 *
+	 * where the prefix <code>s</code> and URI <code>http://www.w3.org/2000/svg</code>
+	 * are both generated.
+	 *
+	 * @since 2.5.0
+	 */
+	public static final String NATIVE_NAMESPACE_PREFIX = "native-";
 
 	/** the device type that this definition belongs to. */
 	private final String _deviceType;

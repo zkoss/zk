@@ -1370,7 +1370,8 @@ public class UiEngineImpl implements UiEngine {
 	StringBuffer sb, Component comp, NativeInfo childInfo) {
 		((Native)comp).getHelper()
 			.getFirstHalf(sb, childInfo.getTag(),
-				evalProperties(ci.exec, comp, childInfo.getProperties()));
+				evalProperties(ci.exec, comp, childInfo.getProperties()),
+				childInfo.getDeclaredNamespaces());
 
 		final List prokids = childInfo.getPrologChildren();
 		if (!prokids.isEmpty())

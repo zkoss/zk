@@ -504,17 +504,33 @@ public class Parser {
 			parseAnnotation(el, annHelper);
 		} else {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
-
 			final ComponentInfo compInfo;
 			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
 				compInfo = new ComponentInfo(parent, ComponentDefinition.ZK); 
-			} else if (LanguageDefinition.NATIVE_NAMESPACE.equals(uri)) {
+			} else if (LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
+			|| uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX)) {
+				final boolean prefRequired =
+					uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since inline doesn't support them, "+el.getLocator());
-				compInfo = new NativeInfo(
-					parent, langdef.getNativeDefinition(), nm);
+				final NativeInfo ni;
+				compInfo = ni = new NativeInfo(
+					parent, langdef.getNativeDefinition(),
+						prefRequired && pref.length() > 0 ? pref + ":" + nm: nm);
+
+				//add declared namespace if starting with native-
+				final Collection col = el.getDeclaredNamespaces();
+				if (!col.isEmpty())
+					for (Iterator it = col.iterator(); it.hasNext();) {
+						final Namespace dns = (Namespace)it.next();
+						final String duri = dns.getURI();
+						if (duri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX))
+							ni.addDeclaredNamespace(
+								new Namespace(dns.getPrefix(),
+									dns.getURI().substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length())));
+					}
 			} else {
 				if (LanguageDefinition.ZK_NAMESPACE.equals(uri))
 					throw new UiException("Unknown ZK component: "+el+", "+el.getLocator());
@@ -662,7 +678,7 @@ public class Parser {
 			parent.appendChild(zs);
 		}
 	}
-	private void parseAttribute(ComponentInfo parent, Element el,
+	private static void parseAttribute(ComponentInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for the attribute element, "+el.getLocator());
@@ -681,7 +697,7 @@ public class Parser {
 
 		annHelper.applyAnnotations(parent, attnm, true);
 	}
-	private void parseCustomAttributes(NodeInfo parent, Element el,
+	private static void parseCustomAttributes(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for <custom-attributes>, "+el.getLocator());
@@ -715,7 +731,7 @@ public class Parser {
 			parent.appendChild(new AttributesInfo(
 				attrs, scope, ConditionImpl.getInstance(ifc, unless)));
 	}
-	private void parseVariables(NodeInfo parent, Element el,
+	private static void parseVariables(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for <variables> element, "+el.getLocator());
@@ -749,7 +765,7 @@ public class Parser {
 			parent.appendChild(new VariablesInfo(
 				vars, local, ConditionImpl.getInstance(ifc, unless)));
 	}
-	private void parseAnnotation(Element el, AnnotationHelper annHelper)
+	private static void parseAnnotation(Element el, AnnotationHelper annHelper)
 	throws Exception {
 		if (!el.getElements().isEmpty())
 			throw new UiException("Child elements are not allowed for the annotations, "+el.getLocator());
@@ -786,7 +802,7 @@ public class Parser {
 
 	/** Parse an attribute and adds it to the definition.
 	 */
-	private void addAttribute(ComponentInfo compInfo, Namespace attrns,
+	private static void addAttribute(ComponentInfo compInfo, Namespace attrns,
 	String name, String value, Condition cond) throws Exception {
 		if (Events.isValid(name)) {
 			boolean bZkAttr = attrns == null;
@@ -816,7 +832,7 @@ public class Parser {
 	/** Minimizes the native infos such that UiEngine creates
 	 * the minimal number of components.
 	 */
-	private void optimizeNativeInfos(NativeInfo compInfo) {
+	private static void optimizeNativeInfos(NativeInfo compInfo) {
 		//Optimize 1: merge to prolog, if the first children are
 		//native and have no child
 		for (Iterator it = compInfo.getChildren().iterator(); it.hasNext();) {
