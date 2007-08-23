@@ -20,10 +20,9 @@ package org.zkoss.mil.device;
 
 import org.zkoss.mil.au.AuGoHome;
 
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.device.Device;
+import org.zkoss.zk.device.GenericDevice;
 
 /**
  * Represents the device supporting MIL (Mobile Interactive Language).
@@ -31,33 +30,7 @@ import org.zkoss.zk.device.Device;
  * @author tomyeh
  * @author henrichen
  */
-public class MilDevice implements Device, java.io.Serializable {
-	private static final long serialVersionUID = 200706080927L;
-	private String _type;
-	private String _uamsg;
-
-	//Device//
-	public String getType() {
-		return _type;
-	}
-	public String getUnavailableMessage() {
-		return _uamsg;
-	}
-	public void setUnavailableMessage(String unavailmsg) {
-		_uamsg = unavailmsg;
-	}
-
-	public void init(String type, Desktop desktop, String unavailmsg) {
-		if (type == null || type.length() == 0)
-			throw new IllegalArgumentException("type");
-		_type = type;
-		_uamsg = unavailmsg;
-	}
-	public void sessionWillPassivate(Desktop desktop) {
-	}
-	public void sessionDidActivate(Desktop desktop) {
-	}
-
+public class MilDevice extends GenericDevice {
 	/**
 	 * Go to ZK Mobile home page. ZK Mobile home page is the main control page where end user 
 	 * can input a new URL and visit a new web application.
