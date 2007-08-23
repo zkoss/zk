@@ -29,6 +29,10 @@ elif [ "$pkgnm"  = "Seam" ] ; then
 	prjnm=zkseam
 	demoprjnm=zkseam-demo
 	releasenote=zkseam-release-note
+elif [ "$pkgnm"  = "JSFComps" ] ; then
+	prjnm=zuljsf
+	demoprjnm=zkjsf-demo
+	releasenote=zkjsf-release-note
 else
 	if [ "$pkgnm" != "" ] ; then
 		echo "Unknown package: $pkgnm"
@@ -37,7 +41,7 @@ else
 	echo "Usage:"
 	echo "  ./sub-release pkgnm [official | daily]"
 	echo
-	echo "pkgnm the package name. It is one of JspTags and Seam."
+	echo "pkgnm the package name. It is one of JspTags, JSFComps, Seam."
 	exit 1
 fi
 
@@ -160,6 +164,6 @@ rm -rf $binnm
 
 #pack src
 cd /tmp/zk
-echo "Ouput ${srcnm}.zip"
+echo "Output ${pwd}${srcnm}.zip"
 zip -qr9 ${srcnm}.zip $srcnm
 rm -rf $srcnm
