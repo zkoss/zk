@@ -4,6 +4,7 @@ ZK 2.5.0
   1579332: Server Push
   1776116: A way to forward event to another component w/o programming
   1774559: Introduce the native namespace to speed up the handling HTML
+  1780018: A way to specify the namespace of native components
   1765987: Add timebox (by merge timebox from zkforge to zul)
   1758837: Zk Flash Component
   1537229: Treemodel with Tree
@@ -36,6 +37,7 @@ ZK 2.5.0
   1760203: expiration time of events execution in UiEngineImpl
   1776006: Slider supports value submitting in form
   1776007: Calendar supports value submitting in form
+  1780078: A way to map an extension to a language
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
@@ -68,16 +70,18 @@ ZK 2.5.0
 	<session-config>
 		<timer-keep-alive>false</timer-keep-alive>
 	</sesion-config>
-
   + The signature of PageCtrl's init method is changed.
   + The signagure of ComponentInfo's applyProperties is changed
   + Utilities of JSP, such as JspLoaderServlet, are removed, since they are
     nothing to do with ZK
+  + The signature of LanguageDefinition's contructor is changed.
   + About zk.xml:
     The disable-behind-modal, keep-across-visits, processing-prompt-delay
     and tooltip-delay elements are moved to the client-config element,
     though you still can specify them under the desktop-config element
     (because of the backward compatibility)
+  + Device is shared by all desktops. The init method is changed.
+    It is better to derive from GenericDevice.
 
 	--------
 ZK 2.4.1
