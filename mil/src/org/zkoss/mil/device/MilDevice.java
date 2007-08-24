@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon May 14 19:26:50     2007, Created by tomyeh
+		Mon May 14 19:26:50     2007, Created by henrihen
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -27,7 +27,6 @@ import org.zkoss.zk.device.GenericDevice;
 /**
  * Represents the device supporting MIL (Mobile Interactive Language).
  *
- * @author tomyeh
  * @author henrichen
  */
 public class MilDevice extends GenericDevice {
@@ -48,5 +47,10 @@ public class MilDevice extends GenericDevice {
 	private static final void addAuResponse(AuResponse response) {
 		Executions.getCurrent()
 			.addAuResponse(response.getCommand(), response);
+	}
+
+	//Device//
+	public String getContentType() {
+		return "text/xml;charset=UTF-8";
 	}
 }
