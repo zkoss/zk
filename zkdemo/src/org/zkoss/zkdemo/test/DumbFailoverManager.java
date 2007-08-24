@@ -99,6 +99,7 @@ public class DumbFailoverManager implements FailoverManager {
 				public String getRootAttributes() {return ((PageCtrl)killed).getRootAttributes();} //if unknown, just pass null
 				public String getContentType() {return ((PageCtrl)killed).getContentType();} //if unknown, just pass null
 				public String getDocType() {return ((PageCtrl)killed).getDocType();} //if unknown, just pass null
+				public Boolean getCacheable() {return ((PageCtrl)killed).getCacheable();} //if unknown, just pass null
 			});
 			//optional: copy killed's attrs to page
 
