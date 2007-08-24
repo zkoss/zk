@@ -109,10 +109,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</device-config>
 
 	<!-- Optional -->
+	<!-- the following listener is used to see # of sessions, desktops...
+	-->
 	<listener>
 		<description>[Optional] Mointor the statistic</description>
 		<listener-class>org.zkoss.zk.ui.util.Statistic</listener-class>
 	</listener>
+	<!-- Uncomment the following to test the performance meter
+	<listener>
+		<listener-class>org.zkoss.zkdemo.test.PerformanceMeter</listener-class>
+	</listener>
+	-->
 
 	<!-- Configure the error page
 	<error-page>
