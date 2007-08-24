@@ -89,8 +89,7 @@ implements org.w3c.dom.ProcessingInstruction {
 	/** Returns the parsed data in the form of Map (never null).
 	 */
 	public final Map parseData() {
-		final Map map = parseToMap(null, getData());
-		return map != null ? map: Collections.EMPTY_MAP;
+		return parseToMap(null, getData());
 	}
 	/**
 	 * Sets the raw data with a data map.
@@ -127,13 +126,57 @@ implements org.w3c.dom.ProcessingInstruction {
 	 * ("b+3", null), ("345", null), ("c6", "abc=125&3?5"):<br>
 	 * a12 =12 b+3 345 c6=\t'abc=125&3?5'
 	 *
+	 * @return the map (never null)
 	 * @exception org.zkoss.util.IllegalSyntaxException if syntax erros
 	 */
 	public static final Map parseToMap(Map map, String rawData) {
 		if (rawData == null || rawData.trim().length() == 0)
-			return map;
+			return map != null ? map: Collections.EMPTY_MAP;
 
-		return Maps.parse(map, rawData, ' ', '"');
+		map = Maps.parse(map, rawData, ' ', '"');
+
+		//&quot; and other are not processed by SAXHandler,
+		//so we have to handle them here
+		for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String val = (String)me.getValue();
+			StringBuffer sb = null;
+			for (int i = 0, j = 0, len = val.length();;) {
+				int k = val.indexOf('&', j);
+				if (k < 0) {
+					if (sb != null)
+						me.setValue(sb.append(val.substring(i)).toString());
+					break;
+				}
+
+				int l = val.indexOf(';', k);
+				if (l >= 0) {
+					final char cc;
+					final String code = val.substring(k + 1, l);
+					if ("quot".equals(code)) {
+						cc = '"';
+					} else if ("amp".equals(code)) {
+						cc = '&';
+					} else if ("lt".equals(code)) {
+						cc = '<';
+					} else if ("gt".equals(code)) {
+						cc = '>';
+					} else {
+						//TODO: handle &#nnn; and more
+						j = l + 1;
+						continue; //ignore it
+					}
+
+					if (sb == null) sb = new StringBuffer(len);
+					sb.append(val.substring(i, k)).append(cc);
+					i = j = l + 1;
+				} else {
+					j = k + 1;
+				}
+			}
+		}
+
+		return map;
 	}
 
 	//-- Item --//
