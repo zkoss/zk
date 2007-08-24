@@ -25,6 +25,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</language-config>
 	-->
 
+	<!-- Optional -->
+	<!-- Map extensions to the xml language.
+		 By default, xml is mapped to xml -->
+	<language-mapping>
+		<language-name>xml</language-name>
+		<extension>svg</extension>
+	</language-mapping>
+	<!-- Map extensions to the xul/html language
+		 By default, xul/html are mapped to zul and xul.
+	<language-mapping>
+		<language-name>xul/html</language-name>
+		<extension>xxx</extension>
+	</language-mapping>
+	-->
+
 	<session-config>
 		<!-- Turn on the following if you want a different timeout
 			Note: The unit is seconds (while that of web.xml is minute)

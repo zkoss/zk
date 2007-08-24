@@ -79,6 +79,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>*.zhtml</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>zkLoader</servlet-name>
+		<url-pattern>*.svg</url-pattern>
+	</servlet-mapping>
 
 	<!-- Optional. Uncomment it if you want to use richlets.
 	-->
@@ -192,6 +196,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	<mime-mapping>
 		<extension>rar</extension>
 		<mime-type>application/x-rar-compressed</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>svg</extension>
+		<mime-type>image/svg+xml</mime-type>
 	</mime-mapping>
 	<mime-mapping>
 		<extension>txt</extension>

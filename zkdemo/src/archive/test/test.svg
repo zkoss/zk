@@ -1,0 +1,25 @@
+<!--
+test.svg
+
+{{IS_NOTE
+	Purpose:
+		To test the XML output
+	Description:
+		
+	History:
+		August 23, 2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?page contentType="image/svg+xml;charset=UTF-8"
+	docType="svg PUBLIC &quot;-//W3C//DTD SVG 1.1//EN&quot; &quot;http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd&quot;"?>
+
+<svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+	<ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple"/>
+	<ellipse cx="220" cy="70" rx="190" ry="20" style="fill:lime"/>
+	<ellipse cx="210" cy="45" rx="170" ry="15" style="fill:yellow"/>
+</svg> 

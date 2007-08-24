@@ -97,6 +97,8 @@ public class DumbFailoverManager implements FailoverManager {
 				public String getStyle() {return killed.getStyle();} //if unknown, just pass null
 				public String getHeaders() {return ((PageCtrl)killed).getHeaders();} //if unknown, just pass null
 				public String getRootAttributes() {return ((PageCtrl)killed).getRootAttributes();} //if unknown, just pass null
+				public String getContentType() {return ((PageCtrl)killed).getContentType();} //if unknown, just pass null
+				public String getDocType() {return ((PageCtrl)killed).getDocType();} //if unknown, just pass null
 			});
 			//optional: copy killed's attrs to page
 
