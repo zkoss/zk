@@ -73,4 +73,8 @@ public interface PageConfig {
 	 * or null to use the device default.
 	 */
 	public String getDocType();
+	/** Returns if the client can cache the rendered result, or null
+	 * to use the device default.
+	 */
+	public Boolean getCacheable();
 }

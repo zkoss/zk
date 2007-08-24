@@ -37,6 +37,10 @@ public interface Device {
 	 */
 	public String getType();
 
+	/** Returns whether the output can be cached by the client.
+	 */
+	public boolean isCacheable();
+
 	/** Returns the unavailable message that is shown to the client
 	 * if the client doesn't support this device.
 	 *

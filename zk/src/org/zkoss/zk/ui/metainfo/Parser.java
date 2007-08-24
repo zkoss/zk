@@ -390,6 +390,9 @@ public class Parser {
 			|| "zscript-language".equals(nm)) { //backward compatible with 2.4
 				noELnorEmpty("zscriptLanguage", val, pi);
 				pgdef.setZScriptLanguage(val);
+			} else if ("cacheable".equals(nm)) {
+				noELnorEmpty("cacheable", val, pi);
+				pgdef.setCacheable(Boolean.valueOf("true".equals(val)));
 			} else if ("contentType".equals(nm)) {
 				noELnorEmpty("contentType", val, pi);
 				pgdef.setContentType(val);

@@ -33,6 +33,11 @@ abstract public class GenericDevice implements Device {
 	public String getType() {
 		return _type;
 	}
+	/** Return true to indicate it is cacheable.
+	 */
+	public boolean isCacheable() {
+		return true;
+	}
 	public String getUnavailableMessage() {
 		return _uamsg;
 	}
@@ -46,6 +51,8 @@ abstract public class GenericDevice implements Device {
 		_tmoutURI = timeoutURI;
 	}
 
+	/** Returns null to indicate not to generate &lt;!DOCTYPE&gt; at all.
+	 */
 	public String getDocType() {
 		return null;
 	}

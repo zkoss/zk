@@ -62,10 +62,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 
 	<function>
-		<name>outPageHeaders</name>
+		<name>outHeaders</name>
 		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
 		<function-signature>
-	java.lang.String outPageHeaders(org.zkoss.zk.ui.Page)
+	java.lang.String outHeaders(org.zkoss.zk.ui.Page)
 		</function-signature>
 		<description>
 	Returns the content that will be placed inside the header element

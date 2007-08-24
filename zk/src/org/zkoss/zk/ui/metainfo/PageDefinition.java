@@ -72,6 +72,7 @@ public class PageDefinition extends NodeInfo {
 	private Map _rootAttrs;
 	private String _contentType, _docType;
 	private final ComponentDefinitionMap _compdefs;
+	private Boolean _cacheable;
 
 	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
@@ -339,7 +340,7 @@ public class PageDefinition extends NodeInfo {
 	}
 	/** Sets the content type.
 	 *
-	 * <p>Default: null.
+	 * <p>Default: null (use the device default).
 	 * @since 2.5.0
 	 */
 	public void setContentType(String contentType) {
@@ -354,11 +355,27 @@ public class PageDefinition extends NodeInfo {
 	}
 	/** Sets the doc type (&lt;!DOCTYPE&gt;).
 	 *
-	 * <p>Default: null.
+	 * <p>Default: null (use the device default).
 	 * @since 2.5.0
 	 */
 	public void setDocType(String docType) {
 		_docType = docType;
+	}
+	/** Returns if the client can cache the rendered result, or null
+	 * to use the device default.
+	 *
+	 * @since 2.5.0
+	 */
+	public Boolean getCacheable() {
+		return _cacheable;
+	}
+	/** Sets if the client can cache the rendered result.
+	 *
+	 * <p>Default: null (use the device default).
+	 * @since 2.5.0
+	 */
+	public void setCacheable(Boolean cacheable) {
+		_cacheable = cacheable;
 	}
 
 	/** Adds a root attribute.
@@ -523,6 +540,7 @@ public class PageDefinition extends NodeInfo {
 				}
 				public String getContentType() {return _contentType;}
 				public String getDocType() {return _docType;}
+				public Boolean getCacheable() {return _cacheable;}
 			});
 	}
 

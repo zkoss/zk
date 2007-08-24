@@ -79,12 +79,12 @@ public class LanguageDefinition {
 	 */
 	public static final String NATIVE_NAMESPACE = "http://www.zkoss.org/2005/zk/native";
 	/** The namespace for ZK native namespace prefix.
-	 * If a namespace starts with {@link #NATIVE_NAMESPACE_PREFIX} ("natie-"),
+	 * If a namespace starts with {@link #NATIVE_NAMESPACE_PREFIX} ("native:"),
 	 * it means it is also a native space ({@link #NATIVE_NAMESPACE}
 	 * but the namespace prefix and uri will be generated.
 	 *
 	 * <p>For example,
-	 * <pre><code>&lt;s:svg xmlns:s="native-http://www.w3.org/2000/svg"/&gt;</code></pre>
+	 * <pre><code>&lt;s:svg xmlns:s="native:http://www.w3.org/2000/svg"/&gt;</code></pre>
 	 *
 	 * <p>generates the following output:
 	 *
@@ -95,7 +95,7 @@ public class LanguageDefinition {
 	 *
 	 * @since 2.5.0
 	 */
-	public static final String NATIVE_NAMESPACE_PREFIX = "native-";
+	public static final String NATIVE_NAMESPACE_PREFIX = "native:";
 
 	/** the device type that this definition belongs to. */
 	private final String _deviceType;

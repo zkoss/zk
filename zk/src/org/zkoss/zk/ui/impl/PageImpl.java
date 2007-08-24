@@ -147,6 +147,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	/** The root attributes. */
 	private String _rootAttrs = "";
 	private String _contentType, _docType;
+	private Boolean _cacheable;
 	/** A map of interpreters Map(String zslang, Interpreter ip). */
 	private transient Map _ips;
 	private transient NS _ns;
@@ -592,6 +593,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (s != null) _contentType = s;
 		s = config.getDocType();
 		if (s != null) _docType = s;
+		Boolean b = config.getCacheable();
+		if (b != null) _cacheable = b;
 
 		if (_title.length() == 0) {
 			s = config.getTitle();
@@ -675,11 +678,26 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public String getRootAttributes() {
 		return _rootAttrs;
 	}
+	public void setRootAttributes(String rootAttrs) {
+		_rootAttrs = rootAttrs;
+	}
 	public String getContentType() {
 		return _contentType;
 	}
+	public void setContentType(String contentType) {
+		_contentType = contentType;
+	}
 	public String getDocType() {
 		return _docType;
+	}
+	public void setDocType(String docType) {
+		_docType = docType;
+	}
+	public Boolean getCacheable() {
+		return _cacheable;
+	}
+	public void setCacheable(Boolean cacheable) {
+		_cacheable = cacheable;
 	}
 
 	public final Desktop getDesktop() {
@@ -781,11 +799,20 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (bIncluded) {
 			exec.include(out, uri, attrs, Execution.PASS_THRU_ATTR);
 		} else {
-			execCtrl.setHeader("Cache-Control", "no-cache,no-store,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0"); // bug 1520444
-			execCtrl.setHeader("Pragma", "no-cache,no-store"); // bug 1520444
-			execCtrl.setHeader("Expires", "-1");
+//FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
+//Why yes: the client doesn't need to ask the server for updated content
+//Why no: browsers seems fail to handle DHTML correctly (when BACK to
+//a DHTML page), so it is better to let the server handle cache, if any
+			final boolean cacheable =
+				_cacheable != null ?  _cacheable.booleanValue():
+					_desktop.getDevice().isCacheable();
+			if (!cacheable) {
+				execCtrl.setHeader("Cache-Control", "no-cache,no-store,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0"); // bug 1520444
+				execCtrl.setHeader("Pragma", "no-cache,no-store"); // bug 1520444
+				execCtrl.setHeader("Expires", "-1");
+			}
 			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
-			//Don't use include. Otherwise, headers will be gone.
+				//Don't use include. Otherwise, headers will be gone.
 		}
 	}
 

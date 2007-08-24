@@ -172,7 +172,16 @@ public class ZkFns {
 
 		if (!config.isDisableBehindModalEnabled())
 			sb.append("zk.ndbModal=true;\n");
-		if (config.isKeepDesktopAcrossVisits())
+
+		boolean cache = config.isKeepDesktopAcrossVisits();
+		if (!cache) {
+			final Page page = getFirstPage(desktop);
+			if (page != null) {
+				Boolean b = ((PageCtrl)page).getCacheable();
+				cache = b != null && b.booleanValue();
+			}
+		}
+		if (cache)
 			sb.append("zk.keepDesktop=true;\n");
 
 		sb.append("zk.eru={");
@@ -209,6 +218,13 @@ public class ZkFns {
 
 		return sb.toString();
 	}
+	/** Returns the first page of a desktop.
+	 */
+	private static Page getFirstPage(Desktop desktop) {
+		final Collection pgs = desktop.getPages();
+		return pgs.isEmpty() ? null: (Page)pgs.iterator().next();
+	}
+
 	private static void append(StringBuffer sb, JavaScript js) {
 		sb.append("\n<script type=\"text/javascript\"");
 		if (js.getSrc() != null) {
@@ -326,7 +342,7 @@ public class ZkFns {
 	 * of the specified page.
 	 * For HTML, the header element is the HEAD element.
 	 */
-	public static final String outPageHeaders(Page page) {
+	public static final String outHeaders(Page page) {
 		return ((PageCtrl)page).getHeaders();
 	}
 	/** Returns the content that will be generated

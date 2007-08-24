@@ -25,9 +25,18 @@ package org.zkoss.zk.device;
  * @since 2.4.0
  */
 public class AjaxDevice extends GenericDevice {
+	/** Return false to indicate it is cacheable.
+	 */
+	public boolean isCacheable() {
+		return false;
+	}
+	/** Returns <code>text/html;charset=UTF-8</code>
+	 */
 	public String getContentType() {
 		return "text/html;charset=UTF-8";
 	}
+	/** Returns <code>&lt;!DOCTYPE html ...XHTML 1.0 Transitional...&gt;</code>.
+	 */
 	public String getDocType() {
 		return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
 			+ "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";

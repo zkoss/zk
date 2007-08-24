@@ -68,18 +68,50 @@ public interface PageCtrl {
 	/** Returns the attributes of the root element declared in this page
 	 * (never null).
 	 * An empty string is returned if no special attribute is declared.
+	 *
 	 * <p>For HTML, the root element is the HTML element.
 	 * @since 2.5.0
 	 */
 	public String getRootAttributes();
-	/** Returns the doc type, or null to use the device default.
+	/** Set the attributes of the root element declared in this page
+	 *
+	 * <p>Default: "".
+	 */
+	public void setRootAttributes(String rootAttributes);
+	/** Returns the doc type (&lt;!DOCTYPE&gt;),
+	 * or null to use the device default.
+	 *
 	 * @since 2.5.0
 	 */
 	public String getDocType();
+	/** Sets the doc type (&lt;!DOCTYPE&gt;).
+	 *
+	 * <p>Default: null (i.e., the device default)
+	 * @since 2.5.0
+	 */
+	public void setDocType(String docType);
 	/** Returns the content type, or null to use the device default.
+	 *
 	 * @since 2.5.0
 	 */
 	public String getContentType();
+	/** Sets the content type.
+	 *
+	 * @since 2.5.0
+	 */
+	public void setContentType(String contentType);
+	/** Returns if the client can cache the rendered result, or null
+	 * to use the device default.
+	 *
+	 * @since 2.5.0
+	 */
+	public Boolean getCacheable();
+	/** Sets if the client can cache the rendered result.
+	 *
+	 * <p>Default: null (use the device default).
+	 * @since 2.5.0
+	 */
+	public void setCacheable(Boolean cacheable);
 
 	/** Resolves a variable thru all registered variable resolvers
 	 * ({@link org.zkoss.zk.scripting.VariableResolver}).
