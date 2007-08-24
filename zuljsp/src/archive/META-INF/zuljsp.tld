@@ -6,7 +6,7 @@ Purpose:
 Description:
 	
 Histroy:
-	2007/08/10  12:30:41 , Created by tomyeh modified by Ian Tsai
+	2007/08/21  09:11:50 , Created by tomyeh modified by Ian Tsai
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
@@ -33,7 +33,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	components.
 		</description>
 		<name>page</name>
-		<tag-class>org.zkoss.zul.jsp.PageTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.PageTag</tag-class>
 		<body-content>scriptless</body-content>
 
 		<attribute>
@@ -74,7 +74,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define Zscript Tag, let user can declaire zscript fragment.
 		</description>
 		<name>zscript</name>
-		<tag-class>org.zkoss.zul.jsp.ZScriptTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ZScriptTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<description>
@@ -98,7 +98,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define Attribute Tag.
 		</description>
 		<name>attribute</name>
-		<tag-class>org.zkoss.zul.jsp.AttributeTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.AttributeTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<description>
@@ -133,7 +133,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Area comonent.
 		</description>
 		<name>area</name>
-		<tag-class>org.zkoss.zul.jsp.AreaTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.AreaTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -167,7 +167,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Audio comonent.
 		</description>
 		<name>audio</name>
-		<tag-class>org.zkoss.zul.jsp.AudioTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.AudioTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -201,7 +201,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Bandbox comonent.
 		</description>
 		<name>bandbox</name>
-		<tag-class>org.zkoss.zul.jsp.BandboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.BandboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -235,7 +235,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Bandpopup comonent.
 		</description>
 		<name>bandpopup</name>
-		<tag-class>org.zkoss.zul.jsp.BandpopupTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.BandpopupTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -269,7 +269,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Button comonent.
 		</description>
 		<name>button</name>
-		<tag-class>org.zkoss.zul.jsp.ButtonTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ButtonTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -303,7 +303,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Calendar comonent.
 		</description>
 		<name>calendar</name>
-		<tag-class>org.zkoss.zul.jsp.CalendarTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.CalendarTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -337,7 +337,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Captcha comonent.
 		</description>
 		<name>captcha</name>
-		<tag-class>org.zkoss.zul.jsp.CaptchaTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.CaptchaTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -371,7 +371,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Caption comonent.
 		</description>
 		<name>caption</name>
-		<tag-class>org.zkoss.zul.jsp.CaptionTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.CaptionTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -405,7 +405,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Chart comonent.
 		</description>
 		<name>chart</name>
-		<tag-class>org.zkoss.zul.jsp.ChartTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ChartTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -439,7 +439,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Checkbox comonent.
 		</description>
 		<name>checkbox</name>
-		<tag-class>org.zkoss.zul.jsp.CheckboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.CheckboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -473,7 +473,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Column comonent.
 		</description>
 		<name>column</name>
-		<tag-class>org.zkoss.zul.jsp.ColumnTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ColumnTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -507,7 +507,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Columns comonent.
 		</description>
 		<name>columns</name>
-		<tag-class>org.zkoss.zul.jsp.ColumnsTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ColumnsTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -541,7 +541,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Combobox comonent.
 		</description>
 		<name>combobox</name>
-		<tag-class>org.zkoss.zul.jsp.ComboboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ComboboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -575,7 +575,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Comboitem comonent.
 		</description>
 		<name>comboitem</name>
-		<tag-class>org.zkoss.zul.jsp.ComboitemTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ComboitemTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -609,7 +609,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Datebox comonent.
 		</description>
 		<name>datebox</name>
-		<tag-class>org.zkoss.zul.jsp.DateboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.DateboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -643,7 +643,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Decimalbox comonent.
 		</description>
 		<name>decimalbox</name>
-		<tag-class>org.zkoss.zul.jsp.DecimalboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.DecimalboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -677,7 +677,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Div comonent.
 		</description>
 		<name>div</name>
-		<tag-class>org.zkoss.zul.jsp.DivTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.DivTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -711,7 +711,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Doublebox comonent.
 		</description>
 		<name>doublebox</name>
-		<tag-class>org.zkoss.zul.jsp.DoubleboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.DoubleboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -745,7 +745,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Filedownload comonent.
 		</description>
 		<name>filedownload</name>
-		<tag-class>org.zkoss.zul.jsp.FiledownloadTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.FiledownloadTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -779,7 +779,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Fileupload comonent.
 		</description>
 		<name>fileupload</name>
-		<tag-class>org.zkoss.zul.jsp.FileuploadTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.FileuploadTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -813,7 +813,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Flash comonent.
 		</description>
 		<name>flash</name>
-		<tag-class>org.zkoss.zul.jsp.FlashTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.FlashTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -847,7 +847,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Foot comonent.
 		</description>
 		<name>foot</name>
-		<tag-class>org.zkoss.zul.jsp.FootTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.FootTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -881,7 +881,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Footer comonent.
 		</description>
 		<name>footer</name>
-		<tag-class>org.zkoss.zul.jsp.FooterTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.FooterTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -915,7 +915,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Grid comonent.
 		</description>
 		<name>grid</name>
-		<tag-class>org.zkoss.zul.jsp.GridTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.GridTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -949,7 +949,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Groupbox comonent.
 		</description>
 		<name>groupbox</name>
-		<tag-class>org.zkoss.zul.jsp.GroupboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.GroupboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -983,7 +983,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Hbox comonent.
 		</description>
 		<name>hbox</name>
-		<tag-class>org.zkoss.zul.jsp.HboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.HboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1017,7 +1017,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Html comonent.
 		</description>
 		<name>html</name>
-		<tag-class>org.zkoss.zul.jsp.HtmlTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.HtmlTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1051,7 +1051,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Iframe comonent.
 		</description>
 		<name>iframe</name>
-		<tag-class>org.zkoss.zul.jsp.IframeTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.IframeTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1085,7 +1085,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Image comonent.
 		</description>
 		<name>image</name>
-		<tag-class>org.zkoss.zul.jsp.ImageTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ImageTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1119,7 +1119,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Imagemap comonent.
 		</description>
 		<name>imagemap</name>
-		<tag-class>org.zkoss.zul.jsp.ImagemapTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ImagemapTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1153,7 +1153,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Intbox comonent.
 		</description>
 		<name>intbox</name>
-		<tag-class>org.zkoss.zul.jsp.IntboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.IntboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1187,7 +1187,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Include comonent.
 		</description>
 		<name>include</name>
-		<tag-class>org.zkoss.zul.jsp.IncludeTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.IncludeTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1221,7 +1221,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Label comonent.
 		</description>
 		<name>label</name>
-		<tag-class>org.zkoss.zul.jsp.LabelTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.LabelTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1255,7 +1255,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Listbox comonent.
 		</description>
 		<name>listbox</name>
-		<tag-class>org.zkoss.zul.jsp.ListboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ListboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1289,7 +1289,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Listcell comonent.
 		</description>
 		<name>listcell</name>
-		<tag-class>org.zkoss.zul.jsp.ListcellTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ListcellTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1323,7 +1323,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Listfoot comonent.
 		</description>
 		<name>listfoot</name>
-		<tag-class>org.zkoss.zul.jsp.ListfootTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ListfootTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1357,7 +1357,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Listfooter comonent.
 		</description>
 		<name>listfooter</name>
-		<tag-class>org.zkoss.zul.jsp.ListfooterTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ListfooterTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1391,7 +1391,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Listhead comonent.
 		</description>
 		<name>listhead</name>
-		<tag-class>org.zkoss.zul.jsp.ListheadTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ListheadTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1425,7 +1425,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Listheader comonent.
 		</description>
 		<name>listheader</name>
-		<tag-class>org.zkoss.zul.jsp.ListheaderTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ListheaderTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1459,7 +1459,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Listitem comonent.
 		</description>
 		<name>listitem</name>
-		<tag-class>org.zkoss.zul.jsp.ListitemTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ListitemTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1493,7 +1493,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Menu comonent.
 		</description>
 		<name>menu</name>
-		<tag-class>org.zkoss.zul.jsp.MenuTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.MenuTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1527,7 +1527,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Menubar comonent.
 		</description>
 		<name>menubar</name>
-		<tag-class>org.zkoss.zul.jsp.MenubarTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.MenubarTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1561,7 +1561,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Menuitem comonent.
 		</description>
 		<name>menuitem</name>
-		<tag-class>org.zkoss.zul.jsp.MenuitemTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.MenuitemTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1595,7 +1595,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Menupopup comonent.
 		</description>
 		<name>menupopup</name>
-		<tag-class>org.zkoss.zul.jsp.MenupopupTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.MenupopupTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1629,7 +1629,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Menuseparator comonent.
 		</description>
 		<name>menuseparator</name>
-		<tag-class>org.zkoss.zul.jsp.MenuseparatorTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.MenuseparatorTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1663,7 +1663,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Messagebox comonent.
 		</description>
 		<name>messagebox</name>
-		<tag-class>org.zkoss.zul.jsp.MessageboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.MessageboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1697,7 +1697,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Paging comonent.
 		</description>
 		<name>paging</name>
-		<tag-class>org.zkoss.zul.jsp.PagingTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.PagingTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1731,7 +1731,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Popup comonent.
 		</description>
 		<name>popup</name>
-		<tag-class>org.zkoss.zul.jsp.PopupTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.PopupTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1765,7 +1765,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Progressmeter comonent.
 		</description>
 		<name>progressmeter</name>
-		<tag-class>org.zkoss.zul.jsp.ProgressmeterTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ProgressmeterTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1799,7 +1799,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Radio comonent.
 		</description>
 		<name>radio</name>
-		<tag-class>org.zkoss.zul.jsp.RadioTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.RadioTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1833,7 +1833,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Radiogroup comonent.
 		</description>
 		<name>radiogroup</name>
-		<tag-class>org.zkoss.zul.jsp.RadiogroupTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.RadiogroupTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1867,7 +1867,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Row comonent.
 		</description>
 		<name>row</name>
-		<tag-class>org.zkoss.zul.jsp.RowTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.RowTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1901,7 +1901,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Rows comonent.
 		</description>
 		<name>rows</name>
-		<tag-class>org.zkoss.zul.jsp.RowsTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.RowsTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1935,7 +1935,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Separator comonent.
 		</description>
 		<name>separator</name>
-		<tag-class>org.zkoss.zul.jsp.SeparatorTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.SeparatorTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -1969,7 +1969,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Slider comonent.
 		</description>
 		<name>slider</name>
-		<tag-class>org.zkoss.zul.jsp.SliderTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.SliderTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2003,7 +2003,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Splitter comonent.
 		</description>
 		<name>splitter</name>
-		<tag-class>org.zkoss.zul.jsp.SplitterTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.SplitterTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2037,7 +2037,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Style comonent.
 		</description>
 		<name>style</name>
-		<tag-class>org.zkoss.zul.jsp.StyleTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.StyleTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2071,7 +2071,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Tab comonent.
 		</description>
 		<name>tab</name>
-		<tag-class>org.zkoss.zul.jsp.TabTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TabTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2105,7 +2105,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Tabbox comonent.
 		</description>
 		<name>tabbox</name>
-		<tag-class>org.zkoss.zul.jsp.TabboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TabboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2139,7 +2139,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Tabpanel comonent.
 		</description>
 		<name>tabpanel</name>
-		<tag-class>org.zkoss.zul.jsp.TabpanelTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TabpanelTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2173,7 +2173,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Tabpanels comonent.
 		</description>
 		<name>tabpanels</name>
-		<tag-class>org.zkoss.zul.jsp.TabpanelsTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TabpanelsTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2207,7 +2207,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Tabs comonent.
 		</description>
 		<name>tabs</name>
-		<tag-class>org.zkoss.zul.jsp.TabsTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TabsTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2241,7 +2241,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Textbox comonent.
 		</description>
 		<name>textbox</name>
-		<tag-class>org.zkoss.zul.jsp.TextboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TextboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2275,7 +2275,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Timer comonent.
 		</description>
 		<name>timer</name>
-		<tag-class>org.zkoss.zul.jsp.TimerTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TimerTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2303,13 +2303,47 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	<!-- ZK XUL Timebox Components -->
+	<tag>
+		<description>
+	Define the Timebox comonent.
+		</description>
+		<name>timebox</name>
+		<tag-class>org.zkoss.jsp.zul.TimeboxTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Timebox.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 	<!-- ZK XUL Toolbar Components -->
 	<tag>
 		<description>
 	Define the Toolbar comonent.
 		</description>
 		<name>toolbar</name>
-		<tag-class>org.zkoss.zul.jsp.ToolbarTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ToolbarTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2343,7 +2377,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Toolbarbutton comonent.
 		</description>
 		<name>toolbarbutton</name>
-		<tag-class>org.zkoss.zul.jsp.ToolbarbuttonTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.ToolbarbuttonTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2377,7 +2411,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Tree comonent.
 		</description>
 		<name>tree</name>
-		<tag-class>org.zkoss.zul.jsp.TreeTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TreeTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2411,7 +2445,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Treecell comonent.
 		</description>
 		<name>treecell</name>
-		<tag-class>org.zkoss.zul.jsp.TreecellTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TreecellTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2445,7 +2479,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Treechildren comonent.
 		</description>
 		<name>treechildren</name>
-		<tag-class>org.zkoss.zul.jsp.TreechildrenTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TreechildrenTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2479,7 +2513,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Treecol comonent.
 		</description>
 		<name>treecol</name>
-		<tag-class>org.zkoss.zul.jsp.TreecolTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TreecolTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2513,7 +2547,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Treecols comonent.
 		</description>
 		<name>treecols</name>
-		<tag-class>org.zkoss.zul.jsp.TreecolsTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TreecolsTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2547,7 +2581,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Treefoot comonent.
 		</description>
 		<name>treefoot</name>
-		<tag-class>org.zkoss.zul.jsp.TreefootTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TreefootTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2581,7 +2615,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Treefooter comonent.
 		</description>
 		<name>treefooter</name>
-		<tag-class>org.zkoss.zul.jsp.TreefooterTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TreefooterTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2615,7 +2649,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Treeitem comonent.
 		</description>
 		<name>treeitem</name>
-		<tag-class>org.zkoss.zul.jsp.TreeitemTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TreeitemTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2649,7 +2683,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Treerow comonent.
 		</description>
 		<name>treerow</name>
-		<tag-class>org.zkoss.zul.jsp.TreerowTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.TreerowTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2683,7 +2717,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Vbox comonent.
 		</description>
 		<name>vbox</name>
-		<tag-class>org.zkoss.zul.jsp.VboxTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.VboxTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
@@ -2717,7 +2751,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define the Window comonent.
 		</description>
 		<name>window</name>
-		<tag-class>org.zkoss.zul.jsp.WindowTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.WindowTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
