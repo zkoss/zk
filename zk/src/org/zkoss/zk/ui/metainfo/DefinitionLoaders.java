@@ -318,9 +318,11 @@ public class DefinitionLoaders {
 				throw new IllegalSyntaxException("The extension must be specified for "+lang);
 
 			String ignoreCase = root.getElementValue("case-insensitive", true);
+			String bNative = root.getElementValue("native-namespace", true);
+
 			langdef = new LanguageDefinition(
 				deviceType, lang, ns, exts, desktopURI, pageURI,
-				"true".equals(ignoreCase), locator);
+				"true".equals(ignoreCase), "true".equals(bNative), locator);
 		}
 
 		parsePI(langdef, doc);

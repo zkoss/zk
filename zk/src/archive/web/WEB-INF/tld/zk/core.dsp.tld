@@ -83,6 +83,26 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	the root element of the specified page.
 		</description>
 	</function>
+	<function>
+		<name>outContentType</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outContentType(org.zkoss.zk.ui.Page)
+		</function-signature>
+		<description>
+	Returns the content type.
+		</description>
+	</function>
+	<function>
+		<name>outDocType</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outDocType(org.zkoss.zk.ui.Page)
+		</function-signature>
+		<description>
+	Returns the doc type.
+		</description>
+	</function>
 
 	<function>
 		<name>toAbsoluteURI</name>

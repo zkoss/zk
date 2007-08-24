@@ -138,6 +138,8 @@ public class LanguageDefinition {
 	/** The native component definition. */
 	private ComponentDefinition _nativedef;
 	private final Evaluator _evalor;
+	/** Whether it is a native language. */
+	private final boolean _native;
 
 	/** Returns whether the specified language exists.
 	 */
@@ -274,11 +276,16 @@ public class LanguageDefinition {
 	 * @param deviceType the device type; never null or empty
 	 * @param desktopURI the URI used to render a desktop; never null.
 	 * @param pageURI the URI used to render a page; never null.
-	 * @param ignoreCase whether the component name is case-insensitive 
+	 * @param ignoreCase whether the component name is case-insensitive
+	 * @param bNative whether it is native (i.e., all tags are
+	 * {@link org.zkoss.zk.ui.ext.Native}).
+	 * If native, the namespaces found in a ZUML page is no longer
+	 * used to specified a language. Rather, it is output to the client
+	 * directly.
 	 */
 	public LanguageDefinition(String deviceType, String name, String namespace,
 	List extensions, String desktopURI, String pageURI, boolean ignoreCase,
-	Locator locator) {
+	boolean bNative, Locator locator) {
 		if (deviceType == null || deviceType.length() == 0)
 			throw new UiException("deviceType cannot be empty");
 		if (!Devices.exists(deviceType))
@@ -302,6 +309,7 @@ public class LanguageDefinition {
 		_desktopURI = desktopURI;
 		_pageURI = pageURI;
 		_locator = locator;
+		_native = bNative;
 		_compdefs = new ComponentDefinitionMap(ignoreCase);
 
 		_evalor = new Evaluator() {
@@ -380,7 +388,16 @@ public class LanguageDefinition {
 	public String getDeviceType() {
 		return _deviceType;
 	}
-	 
+	/** Returns whether this is a native language.
+	 * If true, it means all tags in a ZUML page is considered as
+	 * native and all namespaces (except ZK namespace) are output
+	 * the client directly.
+	 *
+	 * @since 2.5.0
+	 */
+	public boolean isNative() {
+		return _native;
+	}
 	/** Returns name of this language.
 	 * Each language definition has a unique name and namespace.
 	 */

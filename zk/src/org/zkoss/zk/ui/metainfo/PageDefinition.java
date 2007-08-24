@@ -70,6 +70,7 @@ public class PageDefinition extends NodeInfo {
 	private List _headerdefs;
 	/** Map(String name, String value). */
 	private Map _rootAttrs;
+	private String _contentType, _docType;
 	private final ComponentDefinitionMap _compdefs;
 
 	/** Constructor.
@@ -329,11 +330,43 @@ public class PageDefinition extends NodeInfo {
 		}
 		return sb.toString();
 	}
+
+	/** Returns the content type, or null to use the device default.
+	 * @since 2.5.0
+	 */
+	public String getContentType() {
+		return _contentType;
+	}
+	/** Sets the content type.
+	 *
+	 * <p>Default: null.
+	 * @since 2.5.0
+	 */
+	public void setContentType(String contentType) {
+		_contentType = contentType;
+	}
+	/** Returns the doc type (&lt;!DOCTYPE&gt;),
+	 * or null to use the device default.
+	 * @since 2.5.0
+	 */
+	public String getDocType() {
+		return _docType;
+	}
+	/** Sets the doc type (&lt;!DOCTYPE&gt;).
+	 *
+	 * <p>Default: null.
+	 * @since 2.5.0
+	 */
+	public void setDocType(String docType) {
+		_docType = docType;
+	}
+
 	/** Adds a root attribute.
 	 * The previous attributee of the same will be replaced.
 	 *
 	 * @param value the value. If null, the attribute is removed.
 	 * It can be an EL expression.
+	 * @since 2.5.0
 	 */
 	public void setRootAttribute(String name, String value) {
 		if (name == null || name.length() == 0)
@@ -357,6 +390,7 @@ public class PageDefinition extends NodeInfo {
 	/** Converts the header definitions (added by {@link #setRootAttribute})
 	 * to the attributes of the root element.
 	 * For HTML, the root element is the HTML element.
+	 * @since 2.5.0
 	 */
 	public String getRootAttributes(Page page) {
 		if (_rootAttrs == null || _rootAttrs.isEmpty())
@@ -487,6 +521,8 @@ public class PageDefinition extends NodeInfo {
 				public String getRootAttributes() {
 					return PageDefinition.this.getRootAttributes(page);
 				}
+				public String getContentType() {return _contentType;}
+				public String getDocType() {return _docType;}
 			});
 	}
 

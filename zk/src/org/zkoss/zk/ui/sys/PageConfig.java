@@ -66,4 +66,11 @@ public interface PageConfig {
 	 * @see PageCtrl#getRootAttributes
 	 */
 	public String getRootAttributes();
+	/** Returns the content type, or null to use the device default.
+	 */
+	public String getContentType();
+	/** Returns the doc type (&lt;!DOCTYPE&gt;),
+	 * or null to use the device default.
+	 */
+	public String getDocType();
 }

@@ -74,7 +74,8 @@ public interface Desktop {
 	 * @exception UiException if any component is attached to a page of the desktop.
 	 */
 	public void setDeviceType(String deviceType);
-	/** Returns the device that is associated with this device.
+	/** Returns the device that is associated with this desktop.
+	 * <p>Note: the device is shared by all desktops of the same device type.
 	 */
 	public Device getDevice();
 

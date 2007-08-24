@@ -21,6 +21,7 @@ package org.zkoss.zk.ui.impl;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.IdentityHashMap;
 import java.util.Set;
 import java.util.HashSet;
@@ -337,6 +338,8 @@ public class UiEngineImpl implements UiEngine {
 					public String getStyle() {return null;}
 					public String getHeaders() {return null;}
 					public String getRootAttributes() {return null;}
+					public String getContentType() {return null;}
+					public String getDocType() {return null;}
 				});
 				richlet.service(page);
 			}
@@ -1400,7 +1403,7 @@ public class UiEngineImpl implements UiEngine {
 		if (props == null || props.isEmpty())
 			return Collections.EMPTY_MAP;
 
-		final Map map = new HashMap(props.size() * 2);
+		final Map map = new LinkedHashMap(props.size() * 2);
 		for (Iterator it = props.iterator(); it.hasNext();) {
 			final Property prop = (Property)it.next();
 			if (prop.isEffective(comp))

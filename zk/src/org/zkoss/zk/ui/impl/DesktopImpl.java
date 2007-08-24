@@ -121,7 +121,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The device type. */
 	private String _devType = "ajax";
 	/** The device. */
-	private Device _dev;
+	private transient Device _dev; //it will re-init each time getDevice called
 	/** A map of media (String key, Media content). */
 	private CacheMap _meds;
 	/** ID used to identify what is stored in _meds. */
@@ -225,7 +225,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public Device getDevice() {
 		if (_dev == null)
-			_dev = Devices.newDevice(this);
+			_dev = Devices.getDevice(_devType);
 		return _dev;
 	}
 	public void setDeviceType(String deviceType) {

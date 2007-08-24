@@ -72,6 +72,14 @@ public interface PageCtrl {
 	 * @since 2.5.0
 	 */
 	public String getRootAttributes();
+	/** Returns the doc type, or null to use the device default.
+	 * @since 2.5.0
+	 */
+	public String getDocType();
+	/** Returns the content type, or null to use the device default.
+	 * @since 2.5.0
+	 */
+	public String getContentType();
 
 	/** Resolves a variable thru all registered variable resolvers
 	 * ({@link org.zkoss.zk.scripting.VariableResolver}).

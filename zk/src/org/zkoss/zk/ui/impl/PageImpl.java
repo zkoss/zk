@@ -146,6 +146,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private String _headers = "";
 	/** The root attributes. */
 	private String _rootAttrs = "";
+	private String _contentType, _docType;
 	/** A map of interpreters Map(String zslang, Interpreter ip). */
 	private transient Map _ips;
 	private transient NS _ns;
@@ -587,6 +588,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (s != null) _headers = s;
 		s = config.getRootAttributes();
 		if (s != null) _rootAttrs = s;
+		s = config.getContentType();
+		if (s != null) _contentType = s;
+		s = config.getDocType();
+		if (s != null) _docType = s;
 
 		if (_title.length() == 0) {
 			s = config.getTitle();
@@ -669,6 +674,12 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 	public String getRootAttributes() {
 		return _rootAttrs;
+	}
+	public String getContentType() {
+		return _contentType;
+	}
+	public String getDocType() {
+		return _docType;
 	}
 
 	public final Desktop getDesktop() {

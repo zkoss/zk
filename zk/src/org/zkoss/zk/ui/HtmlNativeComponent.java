@@ -28,14 +28,13 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.io.Writer;
-import java.io.IOException;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.idom.Namespace;
 
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.impl.NativeHelpers;
 
 /**
  * A comonent used to represent XML elements that are associated
@@ -54,10 +53,11 @@ import org.zkoss.zk.ui.ext.Native;
  */
 public class HtmlNativeComponent extends AbstractComponent
 implements DynamicTag, Native {
+	private static Helper _helper = new HtmlHelper();
+
 	private String _tag;
 	private String _prolog = "", _epilog = "";
 	private Map _props;
-	private Helper _helper = new HtmlHelper();
 	/** Declared namespaces ({@link Namespace}). */
 	private List _dns;
 
@@ -128,9 +128,11 @@ implements DynamicTag, Native {
 		throw new UnsupportedOperationException("Use client-dependent attribute, such as display:none");
 	}
 
-	public void redraw(Writer out) throws IOException {
+	public void redraw(Writer out) throws java.io.IOException {
 		final StringBuffer sb = new StringBuffer(128);
-		_helper.getFirstHalf(sb, _tag, _props, _dns);
+		final Helper helper = getHelper();
+			//don't use _helper directly, since the derive might override it
+		helper.getFirstHalf(sb, _tag, _props, _dns);
 		sb.append(_prolog); //no encoding
 		out.write(sb.toString());
 		sb.setLength(0);
@@ -139,7 +141,7 @@ implements DynamicTag, Native {
 			((Component)it.next()).redraw(out);
 
 		sb.append(_epilog);
-		_helper.getSecondHalf(sb, _tag);
+		helper.getSecondHalf(sb, _tag);
 		out.write(sb.toString());
 	}
 
@@ -182,22 +184,7 @@ implements DynamicTag, Native {
 		Collection namespaces) {
 			sb.append('<').append(tag);
 
-			if (namespaces != null && !namespaces.isEmpty())
-				for (Iterator it = namespaces.iterator(); it.hasNext();) {
-					final Namespace ns = (Namespace)it.next();
-					sb.append(" xmlns");
-					if (ns.getPrefix().length() > 0)
-						sb.append(':').append(ns.getPrefix());
-					sb.append("=\"").append(ns.getURI()).append('"');
-				}
-
-			if (props != null && !props.isEmpty())
-				for (Iterator it = props.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					HTMLs.appendAttribute(sb,
-						Objects.toString(me.getKey()),
-						Objects.toString(me.getValue()));
-				}
+			NativeHelpers.getAttributes(sb, props, namespaces);
 
 			final String tn = tag.toLowerCase();
 			if (HTMLs.isOrphanTag(tn))

@@ -337,6 +337,23 @@ public class ZkFns {
 		return ((PageCtrl)page).getRootAttributes();
 	}
 
+	/** Returns the content type (never null).
+	 * @since 2.5.0
+	 */
+	public static final String outContentType(Page page) {
+		final String contentType = ((PageCtrl)page).getContentType();
+		return contentType != null ? contentType:
+			page.getDesktop().getDevice().getContentType();
+	}
+	/** Returns the doc type, or null if not available.
+	 * It is null or &lt;!DOCTYPE ...&gt;.
+	 * @since 2.5.0
+	 */
+	public static final String outDocType(Page page) {
+		final String docType = ((PageCtrl)page).getDocType();
+		return docType != null ? docType:
+			page.getDesktop().getDevice().getDocType();
+	}
 	/** Generates Locale-dependent strings in JavaScript syntax.
 	 */
 	public final static String outLocaleJavaScript() {

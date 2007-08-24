@@ -1,4 +1,4 @@
-/* HtmlMacroComponent.java
+/* XmlMacroComponent.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,10 +6,10 @@
 	Description:
 		
 	History:
-		Fri Apr 14 13:54:13     2006, Created by tomyeh
+		Thu Aug 23 17:05:31     2007, Created by tomyeh
 }}IS_NOTE
 
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
@@ -27,15 +27,12 @@ import org.zkoss.io.Serializables;
 import org.zkoss.zk.ui.ext.Macro;
 
 /**
- * The implemetation of a macro component for HTML-based clients.
- *
- * <p>Generally, a macro component is created automatically by ZK loader.
- * If a developer wants to create it manually, it has to instantiate from
- * the correct class, and then invoke {@link #afterCompose}.
- *
+ * The implemetation of a macro component for XML output.
+ * 
  * @author tomyeh
+ * @since 2.5.0
  */
-public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
+public class XmlMacroComponent extends AbstractComponent implements Macro {
 	private transient Map _props;
 	private String _uri;
 	/** An array of components created by this inline macro.
@@ -43,7 +40,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 */
 	private Component[] _inlines;
 
-	public HtmlMacroComponent() {
+	public XmlMacroComponent() {
 		init();
 	}
 	private void init() {
@@ -173,7 +170,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 
 	//Cloneable//
 	public Object clone() {
-		final HtmlMacroComponent clone = (HtmlMacroComponent)super.clone();
+		final XmlMacroComponent clone = (XmlMacroComponent)super.clone();
 		clone.init();
 		clone._props.putAll(_props);
 		clone._props.put("includer", this);

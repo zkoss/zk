@@ -159,11 +159,9 @@ public class Parser {
 			} else if ("import".equals(target)) { //import
 				final Map params = pi.parseData();
 				final String src = (String)params.remove("src");
-				if (isEmpty(src))
-					throw new UiException("The src attribute is required, "+pi.getLocator());
 				if (!params.isEmpty())
 					log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
-				noEL("src", src, pi);
+				noELnorEmpty("src", src, pi);
 				imports.add(src);
 			} else {
 				pis.add(pi);
@@ -291,8 +289,7 @@ public class Parser {
 					new VariableResolverInfo(locateClass(clsnm)));
 		} else if ("component".equals(target)) { //declare a component
 			final String name = (String)params.remove("name");
-			if (isEmpty(name)) throw new UiException("name is required, "+pi.getLocator());
-			noEL("name", name, pi); //note: macro-uri supports EL
+			noELnorEmpty("name", name, pi); //note: macro-uri supports EL
 
 			final String macroURI = (String)params.remove("macro-uri");
 			final String extds = (String)params.remove("extends");
@@ -335,8 +332,7 @@ public class Parser {
 			} else {
 				//if (D.ON && log.finerable()) log.finer("Add component definition: name="+name);
 
-				if (isEmpty(clsnm)) throw new UiException("class is required, "+pi.getLocator());
-				noEL("class", clsnm, pi);
+				noELnorEmpty("class", clsnm, pi);
 
 				final ComponentDefinitionImpl cdi =
 					new ComponentDefinitionImpl(null, name, (Class)null);
@@ -361,6 +357,11 @@ public class Parser {
 			}
 		} else if ("link".equals(target) || "meta".equals(target)) { //declare a header element
 			pgdef.addHeaderInfo(new HeaderInfo(target, params));
+		} else if ("root-attributes".equals(target)) {
+			for (Iterator it = pi.parseData().entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				pgdef.setRootAttribute((String)me.getKey(), (String)me.getValue());
+			}
 		} else if ("page".equals(target)) {
 			parsePageDirective(pgdef, pi, params);
 		} else if ("import".equals(target)) { //import
@@ -385,17 +386,26 @@ public class Parser {
 				pgdef.setStyle(val);
 			} else if ("id".equals(nm)) {
 				pgdef.setId(val);
-			} else if ("zscript-language".equals(nm)) {
-				if (isEmpty(val))
-					throw new UiException("zscript-language cannot be empty, "+pi.getLocator());
-				noEL("zscript-language", val, pi);
+			} else if ("zscriptLanguage".equals(nm)
+			|| "zscript-language".equals(nm)) { //backward compatible with 2.4
+				noELnorEmpty("zscriptLanguage", val, pi);
 				pgdef.setZScriptLanguage(val);
-			} else if (nm.startsWith("xmlns:") || "xmlns".equals(nm)) {
-				pgdef.setRootAttribute(nm, val);
+			} else if ("contentType".equals(nm)) {
+				noELnorEmpty("contentType", val, pi);
+				pgdef.setContentType(val);
+			} else if ("docType".equals(nm)) {
+				noELnorEmpty("docType", val, pi);
+				pgdef.setDocType("<!DOCTYPE " + val + '>');
 			} else {
 				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
 			}
 		}
+	}
+	private static void noELnorEmpty(String nm, String val, Item item)
+	throws UiException {
+		if (isEmpty(val))
+			throw new UiException(nm + " cannot be empty, "+item.getLocator());
+		noEL(nm, val, item);
 	}
 	private static void noEL(String nm, String val, Item item)
 	throws UiException {
@@ -509,10 +519,11 @@ public class Parser {
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
 				compInfo = new ComponentInfo(parent, ComponentDefinition.ZK); 
-			} else if (LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
+			} else if (langdef.isNative()
+			|| LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
 			|| uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX)) {
-				final boolean prefRequired =
-					uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
+				final boolean prefRequired = langdef.isNative()
+					|| uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since inline doesn't support them, "+el.getLocator());
 				final NativeInfo ni;
@@ -522,15 +533,19 @@ public class Parser {
 
 				//add declared namespace if starting with native-
 				final Collection col = el.getDeclaredNamespaces();
-				if (!col.isEmpty())
+				if (!col.isEmpty()) {
 					for (Iterator it = col.iterator(); it.hasNext();) {
 						final Namespace dns = (Namespace)it.next();
 						final String duri = dns.getURI();
-						if (duri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX))
+						boolean bNatPrefix =
+							duri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
+						if (bNatPrefix || langdef.isNative())
 							ni.addDeclaredNamespace(
 								new Namespace(dns.getPrefix(),
-									dns.getURI().substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length())));
+									bNatPrefix ? duri.substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length()):
+										duri));
 					}
+				}
 			} else {
 				if (LanguageDefinition.ZK_NAMESPACE.equals(uri))
 					throw new UiException("Unknown ZK component: "+el+", "+el.getLocator());

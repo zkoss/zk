@@ -18,37 +18,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
-import org.zkoss.zk.ui.Desktop;
-
 /**
  * Represents a Web browser with the Ajax support.
  *
  * @author tomyeh
  * @since 2.4.0
  */
-public class AjaxDevice implements Device, java.io.Serializable {
-	private String _type;
-	private String _uamsg;
+public class AjaxDevice extends GenericDevice {
+	public String getContentType() {
+		return "text/html;charset=UTF-8";
+	}
+	public String getDocType() {
+		return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
+			+ "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
 
-	//Device//
-	public String getType() {
-		return _type;
-	}
-	public String getUnavailableMessage() {
-		return _uamsg;
-	}
-	public void setUnavailableMessage(String unavailmsg) {
-		_uamsg = unavailmsg;
-	}
-
-	public void init(String type, Desktop desktop, String unavailmsg) {
-		if (type == null || type.length() == 0)
-			throw new IllegalArgumentException("type");
-		_type = type;
-		_uamsg = unavailmsg;
-	}
-	public void sessionWillPassivate(Desktop desktop) {
-	}
-	public void sessionDidActivate(Desktop desktop) {
 	}
 }
