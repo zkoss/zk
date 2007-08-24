@@ -12,8 +12,10 @@ ZK 2.5.0
   1760212: A simpler way to annotation a component
   1760689: Data Binding using new simpler annotation to component
   1760691: DataBinder support validation phase
+  1776269: Comboitem supports description in HTML raw content
   1638395: Timer component and Session timeout
   1771412: DSP TLD shall support tag uri
+  1780301: Performance measurement of ZK applications
   1765119: Authentication & AU Http Status Code Handling
   1753222: A way to assign text with element to a property than child
   1758761: A way to attach a root component before another root
@@ -41,6 +43,7 @@ ZK 2.5.0
   1780078: A way to map an extension to a language
   1780128: <?page?> shall support contentType
   1780111: A way to specify DOCTYPE that will be generated to the client
+  1780804: A way to allow the client to cache the output
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
