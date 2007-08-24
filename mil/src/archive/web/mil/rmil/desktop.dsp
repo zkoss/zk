@@ -18,6 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-<c:set var="arg" value="${requestScope.arg}"/>
-<c:set var="page" value="${arg.page}"/>
+<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
+<c:set var="page" value="${requestScope.arg.page}"/>
+<%@ page contentType="${z:outContentType(page)}" %>
 <c:include page="~./mil/rmil/page.dsp"/><%-- OC4J cannot handle relative page correctly --%>
