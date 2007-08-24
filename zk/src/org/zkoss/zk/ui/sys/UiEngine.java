@@ -33,7 +33,6 @@ import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -136,10 +135,28 @@ public interface UiEngine {
 	Writer out) throws IOException;
 
 	/** Executs an asynchronous update to a component (or page).
+	 * It is the same as execUpdate(exec, requests, null, out).
+	 *
 	 * <p>Note: the output must be XML and UTF-8.
+	 *
+	 * @param requests a list of {@link org.zkoss.zk.au.AuRequest}.
 	 */
 	public void execUpdate(Execution exec, List requests, Writer out)
 	throws IOException;
+	/** Executs an asynchronous update to a component (or page).
+	 * <p>Note: the output must be XML and UTF-8.
+	 *
+	 * @param requests a list of {@link org.zkoss.zk.au.AuRequest}.
+	 * @param reqId the request ID which is used to invoke
+	 * {@link org.zkoss.zk.ui.util.PerformanceMeter#requestCompleteAtClient}.
+	 * Ignored if null or {@link org.zkoss.zk.ui.util.Configuration#getPerformanceMeter}
+	 * is not defined.
+	 * @return a list of request IDs that have been processed
+	 * completely.
+	 * @since 2.5.0
+	 */
+	public Collection execUpdate(Execution exec, List requests,
+	String reqId, Writer out) throws IOException;
 	/** Generates the output for the specified the response.
 	 * <p>Note: the output must be XML and UTF-8.
 	 */

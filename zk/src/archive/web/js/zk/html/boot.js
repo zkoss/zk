@@ -48,7 +48,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "71"; //increase this if we want the browser to reload JavaScript
+zk.build = "72"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -233,7 +233,7 @@ zk.enableESC = function () {
 //////////////////////////////////////
 zk.mods = {}; //ZkFns depends on it
 
-/** Returns the current time (new Date().getTime())
+/** Returns the current time (new Date().getTime()) (since 01/01/1970).
  * @since 2.5.0
  */
 function $now() {

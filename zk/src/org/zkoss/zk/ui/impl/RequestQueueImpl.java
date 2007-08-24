@@ -47,13 +47,26 @@ public class RequestQueueImpl implements RequestQueue {
 	private final List _requests = new LinkedList();
 	/** The previous returned request used to eliminate redudant requests. */
 	private AuRequest _prev;
+	/** A list of request ID. */
+	private List _reqIds;
 	/** The in-process flag to denote Whether this queue is being processed
 	 * by an execution.
 	 */
 	private boolean _process;
 
 	//-- RequestQueue --//
-	synchronized public boolean hasRequest() {
+	public void addRequestId(String requestId) {
+		if (_reqIds == null)
+			_reqIds = new LinkedList();
+		_reqIds.add(requestId);
+	}
+	public Collection clearRequestIds() {
+		final List old = _reqIds;
+		_reqIds = null;
+		return old;
+	}
+
+	synchronized public boolean endWithRequest() {
 		_process = false;
 		return !_requests.isEmpty();
 	}

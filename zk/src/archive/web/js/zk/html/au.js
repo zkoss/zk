@@ -161,6 +161,8 @@ zkau._onRespReady = function () {
 				break; //we handle response sequentially
 			}
 
+			if (zk.pfmeter) zkau._pfrecv(req);
+
 			if (zkau._revertpending) zkau._revertpending();
 				//revert any pending when the first response is received
 
@@ -412,6 +414,7 @@ zkau._sendNow = function (dtid) {
 
 			req.open("POST", zk_action, true);
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			if (zk.pfmeter) zkau._pfsend(req, dtid);
 			req.send(content);
 
 			if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
@@ -1597,6 +1600,28 @@ zkau.endGhostToDIV = function (dg) {
 		zk.remove(dg.element);
 		dg.element = dg.z_elorg;
 		delete dg.z_elorg;
+	}
+};
+
+//Perfomance Meter//
+zkau._pfj = 0; //an index
+zkau._pfIds = ""; //what are processed
+zkau._pfsend = function (req, dtid) {
+	req.setRequestHeader("ZK-Client-Start",
+		dtid + "-" + zkau._pfj++ + "=" + Math.round($now()));
+
+	if (zkau._pfIds) {
+		req.setRequestHeader("ZK-Client-Complete", zkau._pfIds);
+		zkau._pfIds = "";
+	}
+};
+zkau._pfrecv = function (req) {
+	//ZK-Client-Complete from the server is a list of requestId
+	//separated with ' '
+	var ids = req.getResponseHeader("ZK-Client-Complete");
+	if (ids && (ids = ids.trim())) {
+		if (zkau._pfIds) zkau._pfIds += ',';
+		zkau._pfIds += ids + "=" + Math.round($now());
 	}
 };
 

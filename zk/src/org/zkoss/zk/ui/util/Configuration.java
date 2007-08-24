@@ -91,6 +91,7 @@ public class Configuration {
 	/** Map(String deviceType, List(ErrorPage)). */
 	private final Map _errpgs = new HashMap(3);
 	private Monitor _monitor;
+	private PerformanceMeter _pfmeter;
 	private final List _themeUris = new LinkedList();
 	private transient String[] _roThemeUris = new String[0];
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
@@ -140,6 +141,12 @@ public class Configuration {
 			if (_monitor != null)
 				throw new UiException("Monitor listener can be assigned only once");
 			_monitor = (Monitor)klass.newInstance();
+			added = true;
+		}
+		if (PerformanceMeter.class.isAssignableFrom(klass)) {
+			if (_pfmeter != null)
+				throw new UiException("PerformanceMeter listener can be assigned only once");
+			_pfmeter = (PerformanceMeter)klass.newInstance();
 			added = true;
 		}
 
@@ -1292,11 +1299,49 @@ public class Configuration {
 	}
 	/** Sets the monitor for this application, or null to disable it.
 	 *
+	 * <p>Default: null.
+	 *
+	 * <p>There is at most one monitor for each Web application.
+	 * The previous monitor will be replaced when this method is called.
+	 *
 	 * <p>In addition to call this method, you could specify a monitor
-	 * in web.xml.
+	 * in zk.xml
+	 *
+	 * @param monitor the performance meter. If null, the meter function
+	 * is disabled.
+	 * @return the previous monitor, or null if not available.
 	 */
-	public void setMonitor(Monitor monitor) {
+	public Monitor setMonitor(Monitor monitor) {
+		final Monitor old = _monitor;
 		_monitor = monitor;
+		return old;
+	}
+
+	/** Returns the performance meter for this application, or null if not set.
+	 * @since 2.5.0
+	 */
+	public PerformanceMeter getPerformanceMeter() {
+		return _pfmeter;
+	}
+	/** Sets the performance meter for this application, or null to disable it.
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>There is at most one performance meter for each Web application.
+	 * The previous meter will be replaced when this method is called.
+	 *
+	 * <p>In addition to call this method, you could specify
+	 * a performance meter in zk.xml
+	 *
+	 * @param meter the performance meter. If null, the meter function
+	 * is disabled.
+	 * @return the previous performance meter, or null if not available.
+	 * @since 2.5.0
+	 */
+	public PerformanceMeter setPerformanceMeter(PerformanceMeter meter) {
+		final PerformanceMeter old = _pfmeter;
+		_pfmeter = meter;
+		return old;
 	}
 
 	/** Returns the charset used to generate the HTTP response

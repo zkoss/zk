@@ -30,18 +30,20 @@ import org.zkoss.zk.au.AuRequest;
  * @author tomyeh
  */
 public interface RequestQueue {
-	/** Returns whether any request is available in the queue.
+	/** Called when ending the processing of the request queue.
 	 *
-	 * <p>Note: the in-process flag is cleared automatically.
-	 * In other wordsd, this method is designed to be called when
+	 * <p>Note: the in-process flag is cleared after the invocation.
+	 * In other words, this method is designed to be called when
 	 * an execution is about to de-activate.
 	 *
 	 * <p>Typical use:<br/>
 	 * Call this method after timeout (there might be pending requests).
 	 * If it returns true, the caller sends a response to ask client to
 	 * send anther request.
+	 *
+	 * @return whether any request is available in the queue.
 	 */
-	public boolean hasRequest();
+	public boolean endWithRequest();
 	/** Returns the next request, or null if no more request.
 	 * Onced returned, the request is removed from the queue.
 	 *
@@ -49,8 +51,8 @@ public interface RequestQueue {
 	 * automatically marked a flag to denote no one is processing the queue.
 	 *
 	 * <p>The call shall invoke this method until null is returned, or timeout.
-	 * If timeout, it shall invoke {@link #hasRequest} in a way described
-	 * in {@link #hasRequest}.
+	 * If timeout, it shall invoke {@link #endWithRequest} in a way described
+	 * in {@link #endWithRequest}.
 	 */
 	public AuRequest nextRequest();
 
@@ -74,4 +76,20 @@ public interface RequestQueue {
 	 * @return whether the queue is being processed by another execution.
 	 */
 	public boolean addRequests(Collection requests);
+
+	/** Adds a request ID that uniquely identifies a request.
+	 * It is used to notify {@link org.zkoss.zk.ui.util.PerformanceMeter}.
+	 *
+	 * @param requestId the request ID (never null)
+	 * @since 2.5.0
+	 */
+	public void addRequestId(String requestId);
+	/** Clears all request IDs that were added by {@link #addRequestId}.
+	 * It is usually called after calling {@link #endWithRequest}.
+	 *
+	 * @return a list of request IDs that were added by {@link #addRequestId},
+	 * or null if no request ID was added.
+	 * @since 2.5.0
+	 */
+	public Collection clearRequestIds();
 }

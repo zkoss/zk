@@ -184,6 +184,9 @@ public class ZkFns {
 		if (cache)
 			sb.append("zk.keepDesktop=true;\n");
 
+		if (config.getPerformanceMeter() != null)
+			sb.append("zk.pfmeter=true;\n");
+
 		sb.append("zk.eru={");
 		final int[] cers = config.getClientErrorReloadCodes();
 		boolean first = true;

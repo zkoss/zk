@@ -616,6 +616,10 @@ public class UiEngineImpl implements UiEngine {
 	//-- Asynchronous updates --//
 	public void execUpdate(Execution exec, List requests, Writer out)
 	throws IOException {
+		execUpdate(exec, requests, null, out);
+	}
+	public Collection execUpdate(Execution exec, List requests,
+	String reqId, Writer out) throws IOException {
 		if (requests == null)
 			throw new IllegalArgumentException("null requests");
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
@@ -623,7 +627,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final UiVisualizer uv = doActivate(exec, requests, false);
 		if (uv == null)
-			return; //done (request is added to the exec currently activated)
+			return null; //done (request is added to the exec currently activated)
 
 		final Desktop desktop = exec.getDesktop();
 		final Configuration config = desktop.getWebApp().getConfiguration();
@@ -636,10 +640,13 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 
+		Collection doneReqIds = null; //request IDs that have been processed
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, null);
 			final RequestQueue rque = ((DesktopCtrl)desktop).getRequestQueue();
+			if (reqId != null) rque.addRequestId(reqId);
+
 			final List errs = new LinkedList();
 			final long tmexpired =
 				System.currentTimeMillis() + config.getMaxProcessTime();
@@ -699,8 +706,10 @@ public class UiEngineImpl implements UiEngine {
 				log.error(ex);
 			}
 
-			if (rque.hasRequest())
+			if (rque.endWithRequest())
 				responses.add(new AuEcho(desktop));
+			else
+				doneReqIds = rque.clearRequestIds();
 
 			responseSequenceId(desktop, out);
 			response(responses, out);
@@ -739,6 +748,8 @@ public class UiEngineImpl implements UiEngine {
 					log.error(ex);
 				}
 			}
+
+			return doneReqIds;
 		}
 	}
 	/** Handles each error. The erros will be queued to the errs list

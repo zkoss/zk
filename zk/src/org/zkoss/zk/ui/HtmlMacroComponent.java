@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 import java.util.Map;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.io.Serializables;
@@ -47,7 +47,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		init();
 	}
 	private void init() {
-		_props = new HashMap();
+		_props = new LinkedHashMap();
 		_props.put("includer", this);
 	}
 
