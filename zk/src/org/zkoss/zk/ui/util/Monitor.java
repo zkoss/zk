@@ -24,8 +24,9 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
 
 /**
- * A callback for monitoring the status of ZK engine.
- * It is usually used to accumulate the statistic data.
+ * A listener to monitor the status of ZK engine.
+ * It is usually used to accumulate the statistic data about the number
+ * of sessions, desktops and updates.
  *
  * @author tomyeh
  */
