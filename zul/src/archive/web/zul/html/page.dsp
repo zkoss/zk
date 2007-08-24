@@ -27,7 +27,7 @@ ${z:outLangJavaScripts(arg.action)}
 </c:if>
 <c:if test="${!empty zk_htmlHeadRequired}">
 <c:set var="zk_htmlHeadRequired" value="" scope="request"/>
-${z:outPageHeaders(page)}
+${z:outHeaders(page)}
 </head>
 <body${c:attr('style', page.style)}>
 </c:if>
