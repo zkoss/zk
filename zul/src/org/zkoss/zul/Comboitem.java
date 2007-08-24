@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.lang.Objects;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.LabelImageElement;
@@ -35,6 +37,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Comboitem extends LabelImageElement {
 	private String _desc = "";
 	private Object _value;
+	private String _content = "";
 
 	public Comboitem() {
 		setSclass("item");
@@ -63,6 +66,35 @@ public class Comboitem extends LabelImageElement {
 		if (desc == null) desc = "";
 		if (!_desc.equals(desc)) {
 			_desc = desc;
+			invalidate();
+		}
+	}
+
+	/** Returns the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 *
+	 * <p>It is useful to show the description in more versatile way.
+	 *
+	 * <p>Default: empty ("").
+	 *
+	 * @see #getDescription
+	 * @since 2.5.0
+	 */
+	public String getContent() {
+		return _content;
+	}
+	/** Sets the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 *
+	 * <p>It is useful to show the description in more versatile way.
+	 *
+	 * @see #setDescription
+	 * @since 2.5.0
+	 */
+	public void setContent(String content) {
+		if (content == null) content = "";
+		if (!Objects.equals(_content, content)) {
+			_content = content;
 			invalidate();
 		}
 	}
