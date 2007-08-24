@@ -3,7 +3,7 @@ page.dsp
 
 {{IS_NOTE
 	Purpose:
-		Render a ZUL page if it is included
+		The page template for the zul language
 	Description:
 		zk_htmlHeadRequired
 			It is set by desktop.dsp to ask this page to render </head><body>

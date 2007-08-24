@@ -1,12 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@ page contentType="text/html;charset=UTF-8" %><%--
+<%--
 desktop.dsp
 
 {{IS_NOTE
 	Purpose:
-		Used to render a ZUL page as a complete page (aka., desktop)
-		if it is not included
+		The desktop template for the zul language
 	Description:
 		
 	History:
@@ -23,6 +20,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="page" value="${arg.page}"/>
+<%@ page contentType="${z:outContentType(page)}" %>
+${z:outDocType(page)}
 <html xmlns="http://www.w3.org/1999/xhtml"${z:outRootAttributes(page)}>
 <head>
 <title>${page.title}</title>
