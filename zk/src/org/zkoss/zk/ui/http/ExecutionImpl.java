@@ -171,7 +171,7 @@ public class ExecutionImpl extends AbstractExecution {
 		final HttpServletResponse bufresp =
 			HttpBufferedResponse.getInstance(_response, out);
 		try {
-			if ((params == null || mode == PASS_THRU_ATTR)
+			if ((mode == PASS_THRU_ATTR || params == null)
 			&& page.startsWith("~./")) {
 				Object old = null;
 				if (mode == PASS_THRU_ATTR) {
