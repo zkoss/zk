@@ -41,28 +41,28 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	
 	<managed-bean>
 		<managed-bean-name>ReservationBean</managed-bean-name>
-		<managed-bean-class>reservation.ReservationBean</managed-bean-class>
+		<managed-bean-class>org.zkoss.jsfdemo.reservation.ReservationBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ValueBindingBean</managed-bean-name>
-		<managed-bean-class>foo.ValueBindingBean</managed-bean-class>
+		<managed-bean-class>org.zkoss.jsfdemo.ValueBindingBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ConverterBean</managed-bean-name>
-		<managed-bean-class>foo.ConverterBean</managed-bean-class>
+		<managed-bean-class>org.zkoss.jsfdemo.ConverterBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ValidatorBean</managed-bean-name>
-		<managed-bean-class>foo.ValidatorBean</managed-bean-class>
+		<managed-bean-class>org.zkoss.jsfdemo.ValidatorBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<converter>
 		<converter-id>dateConverter</converter-id>
-		<converter-class>foo.DateConverter</converter-class>
+		<converter-class>org.zkoss.jsfdemo.DateConverter</converter-class>
 	</converter>
 	
 </faces-config>

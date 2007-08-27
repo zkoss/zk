@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package reservation;
+package org.zkoss.jsfdemo.reservation;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -5,7 +5,7 @@
 		var timebox = arg.get("timebox");
 		var room = arg.get("room");
 		
-		ListitemRenderer renderer = new reservation.FreeTimeRenderer();
+		ListitemRenderer renderer = new org.zkoss.jsfdemo.reservation.FreeTimeRenderer();
 		
 		</zscript>
 		<grid>

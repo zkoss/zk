@@ -74,6 +74,7 @@
 			</blockquote>
 			<h:commandButton id="commitBtn" value="Commit" />
 		</h:form>
+		<a href="../index.html">Back</a>
 	</z:page>
 </f:view>
 </BODY>

@@ -16,7 +16,7 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package foo;
+package org.zkoss.jsfdemo;
 
 import java.util.Date;
 
