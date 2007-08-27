@@ -26,9 +26,8 @@ import java.io.IOException;
 import java.security.Principal;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
@@ -38,12 +37,15 @@ import org.zkoss.lang.Classes;
 import org.zkoss.el.RequestResolver;
 import org.zkoss.el.impl.AttributesMap;
 import org.zkoss.idom.Document;
+
+import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.servlet.BufferedResponse;
+import org.zkoss.web.servlet.http.HttpBufferedResponse;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.el.ELContexts;
 import org.zkoss.web.el.ELContext;
 import org.zkoss.web.el.PageELContext;
+import org.zkoss.web.util.resource.ClassWebResource;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Component;
@@ -66,8 +68,8 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  */
 public class ExecutionImpl extends AbstractExecution {
 	private final ServletContext _ctx;
-	private final ServletRequest _request;
-	private final ServletResponse _response;
+	private final HttpServletRequest _request;
+	private final HttpServletResponse _response;
 	private final ELContext _elctx;
 	private final Map _attrs;
 	private boolean _voided;
@@ -77,8 +79,8 @@ public class ExecutionImpl extends AbstractExecution {
 	 * null if none is being created.
 	 * {@link #isAsyncUpdate} returns based on this.
 	 */
-	public ExecutionImpl(ServletContext ctx, ServletRequest request,
-	ServletResponse response, Desktop desktop, Page creating) {
+	public ExecutionImpl(ServletContext ctx, HttpServletRequest request,
+	HttpServletResponse response, Desktop desktop, Page creating) {
 		super(desktop, creating, new RequestResolver(ctx, request, response));
 		_ctx = ctx;
 		_request = request;
@@ -166,10 +168,28 @@ public class ExecutionImpl extends AbstractExecution {
 
 	public void include(Writer out, String page, Map params, int mode)
 	throws IOException {
+		final HttpServletResponse bufresp =
+			HttpBufferedResponse.getInstance(_response, out);
 		try {
-			Servlets.include(_ctx, _request,
-				BufferedResponse.getInstance(_response, out),
-				page, params, mode);
+			if ((params == null || mode == PASS_THRU_ATTR)
+			&& page.startsWith("~./")) {
+				Object old = null;
+				if (mode == PASS_THRU_ATTR) {
+					old = _request.getAttribute(Attributes.ARG);
+					_request.setAttribute(Attributes.ARG, params);
+				}
+
+				try {
+					WebManager.getWebManager(_ctx).getClassWebResource()
+						.service(_request, bufresp, page.substring(2));
+					return; //done
+				} finally {
+					if (mode == PASS_THRU_ATTR)
+						_request.setAttribute(Attributes.ARG, old);
+				}
+			}
+
+			Servlets.include(_ctx, _request, bufresp, page, params, mode);
 				//we don't use PageContext.include because Servlets.include
 				//support ~xxx/ and other features.
 		} catch (ServletException ex) {
@@ -189,7 +209,7 @@ public class ExecutionImpl extends AbstractExecution {
 
 		try {
 			Servlets.forward(_ctx, _request,
-				BufferedResponse.getInstance(_response, out),
+				HttpBufferedResponse.getInstance(_response, out),
 				page, params, mode);
 				//we don't use PageContext.forward because Servlets.forward
 				//support ~xxx/ and other features.
@@ -224,16 +244,13 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	public Principal getUserPrincipal() {
-		return _request instanceof HttpServletRequest ?
-			((HttpServletRequest)_request).getUserPrincipal(): null;
+		return _request.getUserPrincipal();
 	}
 	public boolean isUserInRole(String role) {
-		return _request instanceof HttpServletRequest &&
-			((HttpServletRequest)_request).isUserInRole(role);
+		return _request.isUserInRole(role);
 	}
 	public String getRemoteUser() {
-		return _request instanceof HttpServletRequest ?
-			((HttpServletRequest)_request).getRemoteUser(): null;
+		return _request.getRemoteUser();
 	}
 	public String getRemoteName() {
 		return _request.getRemoteHost();
@@ -257,8 +274,7 @@ public class ExecutionImpl extends AbstractExecution {
 		return _request.getLocalPort();
 	}
 	public String getContextPath() {
-		return _request instanceof HttpServletRequest ?
-			((HttpServletRequest)_request).getContextPath(): null;
+		return _request.getContextPath();
 	}
 
 	public PageDefinition getPageDefinition(String uri) {
