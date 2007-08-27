@@ -795,15 +795,23 @@ public class UiEngineImpl implements UiEngine {
 
 		final Throwable err = (Throwable)errs.get(0);
 		final Desktop desktop = exec.getDesktop();
-		final String location = desktop.getWebApp().getConfiguration()
-			.getErrorPage(desktop.getDeviceType(), err);
+		final Configuration config = desktop.getWebApp().getConfiguration();
+		final String location = config.getErrorPage(desktop.getDeviceType(), err);
 		if (location != null) {
 			try {
 				exec.setAttribute("javax.servlet.error.message", msg);
 				exec.setAttribute("javax.servlet.error.exception", err);
 				exec.setAttribute("javax.servlet.error.exception_type", err.getClass());
 				exec.setAttribute("javax.servlet.error.status_code", new Integer(500));
-				exec.createComponents(location, null, null);
+
+				//Future: consider to go thru UiFactory for the richlet
+				//for the error page.
+				//Challenge: how to call UiFactory.isRichlet
+				final Richlet richlet = config.getRichletByPath(location);
+				if (richlet != null)
+					richlet.service(getCurrentPage(exec));
+				else
+					exec.createComponents(location, null, null);
 
 				//process pending events
 				//the execution is aborted if an exception is thrown
@@ -825,6 +833,11 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		uv.addResponse(null, new AuAlert(msg)); //default handling
+	}
+	private static final Page getCurrentPage(Execution exec) {
+		final Page page = ((ExecutionCtrl)exec).getCurrentPage();
+		return page != null ? page:
+			(Page)exec.getDesktop().getPages().iterator().next();
 	}
 
 	/** Processing the request and stores result into UiVisualizer.
