@@ -52,4 +52,42 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<native-template>
 		<native-class>org.zkoss.zk.ui.XmlNativeComponent</native-class>
 	</native-template>
+
+	<!-- To have better performance with BeanShell, import most-common later -->
+	<zscript language="Java">
+	import java.util.*;
+	import java.lang.*;
+	import org.zkoss.zk.ui.util.Clients;
+	import org.zkoss.zk.ui.event.*;
+	import org.zkoss.zk.ui.*;
+	</zscript>
+
+	<zscript language="JavaScript">
+	importPackage(Packages.java.util);
+	importPackage(Packages.java.lang);
+	importClass(Packages.org.zkoss.zk.ui.util.Clients);
+	importPackage(Packages.org.zkoss.zk.ui.event);
+	importPackage(Packages.org.zkoss.zk.ui);
+	</zscript>
+
+	<!-- Groovy "forgot" what are imported, so we have to import each time
+	-->
+	<zscript language="Groovy" each-time="true">
+	import java.util.*
+	import java.lang.*
+	import org.zkoss.zk.ui.util.Clients
+	import org.zkoss.zk.ui.event.*
+	import org.zkoss.zk.ui.*
+	</zscript>
+
+	<zscript language="Ruby">
+	require 'java'
+	module Java
+		include_package 'java.util'
+		include_package 'java.lang'
+		include_class 'org.zkoss.zk.ui.util.Clients'
+		include_package 'org.zkoss.zk.ui.event'
+		include_package 'org.zkoss.zk.ui'
+	end
+	</zscript>
 </language>
