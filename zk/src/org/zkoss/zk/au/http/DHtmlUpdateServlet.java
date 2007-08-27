@@ -256,14 +256,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final StringWriter out = getXMLWriter();
 		final PerformanceMeter pfmeter = config.getPerformanceMeter();
 
-		final Collection reqIds = uieng.execUpdate(
-			new ExecutionImpl(_ctx, request, response, desktop, null),
-			aureqs,
-			pfmeter != null ? meterStart(pfmeter, request, desktop): null,
+		final Execution exec = 
+			new ExecutionImpl(_ctx, request, response, desktop, null);
+		final Collection reqIds = uieng.execUpdate(exec, aureqs,
+			pfmeter != null ? meterStart(pfmeter, request, exec): null,
 			out);
 
 		if (reqIds != null && pfmeter != null)
-			meterComplete(pfmeter, response, reqIds, desktop);
+			meterComplete(pfmeter, response, reqIds, exec);
 
 		flushXMLWriter(request, response, out);
 	}
@@ -344,7 +344,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * or null if not found.
 	 */
 	private static String meterStart(PerformanceMeter pfmeter,
-	HttpServletRequest request, Desktop desktop) {
+	HttpServletRequest request, Execution exec) {
 		//Format of ZK-Client-Complete:
 		//	request-id1 request-id2=time1,request-id3=time2
 		String hdr = request.getHeader("ZK-Client-Complete");
@@ -364,7 +364,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 							int z = ids.indexOf(' ', y);
 							String reqId = z >= 0 ? ids.substring(y, z):
 								y == 0 ? ids: ids.substring(y);
-							pfmeter.requestCompleteAtClient(reqId, desktop, time);
+							pfmeter.requestCompleteAtClient(reqId, exec, time);
 
 							if (z < 0) break; //done
 							y = z + 1;
@@ -387,9 +387,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			if (j > 0) {
 				try {
 					final String reqId = hdr.substring(0, j);
-					pfmeter.requestStartAtClient(reqId, desktop,
+					pfmeter.requestStartAtClient(reqId, exec,
 						Long.parseLong(hdr.substring(j + 1)));
-					pfmeter.requestStartAtServer(reqId, desktop,
+					pfmeter.requestStartAtServer(reqId, exec,
 						System.currentTimeMillis());
 					return reqId;
 				} catch (NumberFormatException ex) {
@@ -403,14 +403,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * It sets the ZK-Client-Complete header.
 	 */
 	private static void meterComplete(PerformanceMeter pfmeter,
-	HttpServletResponse response, Collection reqIds, Desktop desktop) {
+	HttpServletResponse response, Collection reqIds, Execution exec) {
 		final StringBuffer sb = new StringBuffer(256);
 		long time = System.currentTimeMillis();
 		for (Iterator it = reqIds.iterator(); it.hasNext();) {
 			final String reqId = (String)it.next();
 			if (sb.length() > 0) sb.append(' ');
 			sb.append(reqId);
-			pfmeter.requestCompleteAtServer(reqId, desktop, time);
+			pfmeter.requestCompleteAtServer(reqId, exec, time);
 		}
 
 		response.setHeader("ZK-Client-Complete", sb.toString());
