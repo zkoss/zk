@@ -44,6 +44,7 @@ ZK 2.5.0
   1780128: <?page?> shall support contentType
   1780111: A way to specify DOCTYPE that will be generated to the client
   1780804: A way to allow the client to cache the output
+  1782250: Performance improve: don't go thru Web container if incl ~./
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
