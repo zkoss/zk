@@ -70,6 +70,7 @@ ZK 2.5.0
   1778258: EL cause nullpoint when createComponent or fulfill
   1778320: Grid/listbox/tree don't support scrollTop well
   1779235: ZK 2.5.0 freshly checkbox setChecked doesn't work
+  1777696: Richlet served error page fails
   
 * Upgrade Notes:
   + The onTimer event won't keep the session alive.
