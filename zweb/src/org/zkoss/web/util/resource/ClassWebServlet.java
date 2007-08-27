@@ -28,16 +28,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
 
 import org.zkoss.lang.D;
+import org.zkoss.util.logging.Log;
+import org.zkoss.web.servlet.http.Https;
 
 /**
  * Loads the resource from the class path starting with "/web".
  *
  * <p>You don't need this servlet if you are using ZK (because
- * DHtmlUpdateServlet has such function).
+ * DHtmlUpdateServlet implements such function).
  *
  * @author tomyeh
  */
 public class ClassWebServlet extends HttpServlet {
+	private static final Log log = Log.lookup(ClassWebServlet.class);
 
 	private ServletContext _ctx;
 	private String _mappingURI;
@@ -65,7 +68,12 @@ public class ClassWebServlet extends HttpServlet {
 	protected
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		_cwr.service(request, response);
+		final String pi = Https.getThisPathInfo(request);
+		if (pi != null)
+			_cwr.service(request, response,
+				pi.substring(ClassWebResource.PATH_PREFIX.length()));
+		else
+			log.error("Path info not specified");
 	}
 	protected
 	void doPost(HttpServletRequest request, HttpServletResponse response)

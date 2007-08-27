@@ -49,7 +49,7 @@ import org.zkoss.web.servlet.http.Encodes;
 /**
  * Used to access resouces located in class path and under /web.
  * It doesn't work alone. Rather, it is a helper for servlet, such as
- * {@link ClassWebServlet}.
+ * ZK's update servlet or {@link ClassWebServlet}.
  *
  * <p>Typical use:
  * <ol>
@@ -116,18 +116,35 @@ public class ClassWebResource {
 		_cwc = new ClassWebContext();
 		addExtendlet("dsp", new DspExtendlet());
 	}
-	/** Process the request.
+	/** Process the request by retrieving the path from the path info.
+	 * It invokes {@link Https#getThisPathInfo} to retrieve the path info.
+	 *
+	 * <p>Deprecated since 2.5.0. Use {@link #service(HttpServletRequest, HttpServletResponse, String)}
+	 * instead.
+	 *
 	 * @since 2.4.1
+	 * @deprecated
 	 */
 	public void service(HttpServletRequest request,
 	HttpServletResponse response)
 	throws ServletException, IOException {
+		final String pi = Https.getThisPathInfo(request);
+//		if (D.ON && log.debugable()) log.debug("Path info: "+pi);
+		if (pi != null)
+			service(request, response, pi.substring(PATH_PREFIX.length()));
+	}
+			
+	/** Process the request with the specified path.
+	 *
+	 * @param path the path related to the class path
+	 * @since 2.5.0
+	 */
+	public void service(HttpServletRequest request,
+	HttpServletResponse response, String path)
+	throws ServletException, IOException {
 		final Object old = Charsets.setup(request, response, "UTF-8");
 		try {
-			final String pi = Https.getThisPathInfo(request);
-//			if (D.ON && log.debugable()) log.debug("Path info: "+pi);
-			if (pi != null)
-				web(request, response, pi.substring(PATH_PREFIX.length()));
+			web(request, response, path);
 		} finally {
 			Charsets.cleanup(request, old);
 		}
