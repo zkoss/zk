@@ -517,7 +517,7 @@ public class Parser {
 			parseAnnotation(el, annHelper);
 		} else {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
-			ComponentInfo compInfo = null;
+			final ComponentInfo compInfo;
 			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
@@ -528,31 +528,12 @@ public class Parser {
 				boolean bNative = prefRequired ||
 					LanguageDefinition.NATIVE_NAMESPACE.equals(uri);
 
-				if (!bNative) {
-					boolean inDefaultNS = isDefaultNS(langdef, pref, uri);
-					if (!inDefaultNS && langdef.isNative()) {
-						bNative = prefRequired = true;
-					} else {
-						final LanguageDefinition complangdef =
-							inDefaultNS ? langdef: LanguageDefinition.lookup(uri);
-
-						ComponentDefinition compdef =
-							pgdef.getComponentDefinitionMap().get(nm);
-						if (compdef != null) {
-							compInfo = new ComponentInfo(parent, compdef);
-						} else if (complangdef.hasComponentDefinition(nm)) {
-							compdef = complangdef.getComponentDefinition(nm);
-							compInfo = new ComponentInfo(parent, compdef);
-						} else if (langdef.isNative()) {
-							bNative = prefRequired = true;
-						} else {
-							compdef = complangdef.getDynamicTagDefinition();
-							if (compdef == null)
-								throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef+", "+el.getLocator());
-							compInfo = new ComponentInfo(parent, compdef, nm);
-						}
-					}
-				}
+				if (!bNative && langdef.isNative()
+				&& !langdef.getNamespace().equals(uri))
+					bNative = prefRequired =
+						("".equals(pref) && "".equals(uri))
+						|| !LanguageDefinition.exists(uri);
+					//Spec: if pref/URI not specified => native
 
 				if (bNative) {
 					if (annHelper.clear())
@@ -564,9 +545,28 @@ public class Parser {
 						prefRequired && pref.length() > 0 ? pref + ":" + nm: nm);
 
 					//add declared namespace if starting with native:
-					addDeclaredNamespace(
-						ni, el.getDeclaredNamespaces(), langdef.isNative());
+					final Collection dns = el.getDeclaredNamespaces();
+					if (!dns.isEmpty())
+						addDeclaredNamespace(ni, dns, langdef.isNative());
 				} else {
+					final LanguageDefinition complangdef =
+						isDefaultNS(langdef, pref, uri) ?
+							langdef: LanguageDefinition.lookup(uri);
+
+					ComponentDefinition compdef =
+						pgdef.getComponentDefinitionMap().get(nm);
+					if (compdef != null) {
+						compInfo = new ComponentInfo(parent, compdef);
+					} else if (complangdef.hasComponentDefinition(nm)) {
+						compdef = complangdef.getComponentDefinition(nm);
+						compInfo = new ComponentInfo(parent, compdef);
+					} else {
+						compdef = complangdef.getDynamicTagDefinition();
+						if (compdef == null)
+							throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef+", "+el.getLocator());
+						compInfo = new ComponentInfo(parent, compdef, nm);
+					}
+
 					//process use first because addProperty needs it
 					final String use = el.getAttributeValue("use");
 					if (use != null) {
@@ -845,18 +845,16 @@ public class Parser {
 	 */
 	private static void addDeclaredNamespace(
 	NativeInfo nativeInfo, Collection namespaces, boolean nativeLang) {
-		if (!namespaces.isEmpty()) {
-			for (Iterator it = namespaces.iterator(); it.hasNext();) {
-				final Namespace ns = (Namespace)it.next();
-				final String uri = ns.getURI();
-				boolean bNatPrefix =
-					uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
-				if (bNatPrefix || nativeLang)
-					nativeInfo.addDeclaredNamespace(
-						new Namespace(ns.getPrefix(),
-							bNatPrefix ? uri.substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length()):
-								uri));
-			}
+		for (Iterator it = namespaces.iterator(); it.hasNext();) {
+			final Namespace ns = (Namespace)it.next();
+			final String uri = ns.getURI();
+			boolean bNatPrefix =
+				uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
+			if (bNatPrefix || nativeLang)
+				nativeInfo.addDeclaredNamespace(
+					new Namespace(ns.getPrefix(),
+						bNatPrefix ? uri.substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length()):
+							uri));
 		}
 	}
 	/** Minimizes the native infos such that UiEngine creates
