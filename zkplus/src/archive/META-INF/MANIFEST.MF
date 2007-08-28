@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Specification-Title: ZK Plus Utilities
+Specification-Title: The ZK Plus Utilities
 Specification-Version: 2.5.0
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zkplus

@@ -17,8 +17,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkplus.databind;
 
 /**
- * Specified this in lang.xml, such that ZK knows what lang-addon.xml is associated
- * with databind.
+ * The version of the ZK Plus utilities.
+ * {@link #UID} must be the same as the version specified in lang.xml
+ * and config.xml.
  * 
  * @author henrichen
  */
