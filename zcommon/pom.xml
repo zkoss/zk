@@ -7,7 +7,7 @@
   <version>{version}</version>
   <packaging>jar</packaging>
   <name>The ZKoss Common Library</name>
-  <url>http://www.zkoss.org</url>
+  <url>http://www.zkoss.org/common</url>
   <description>The ZKoss common library</description>
   <licenses>
     <license>
