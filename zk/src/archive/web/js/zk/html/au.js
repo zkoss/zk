@@ -1469,9 +1469,13 @@ zkau._revertdrag = function (cmp, pointer) {
 		//Bug 1599737: a strange bar appears
 		if (zk.ie && orgpos != 'absolute' && orgpos != 'relative')
 			zkau._fixie4drop(cmp, orgpos);
-		cmp.style.left = dg.z_x;
-		cmp.style.top = dg.z_y;
-		zkau._revertpending = null; //exec once
+		if (dg.z_x != null) {
+			cmp.style.left = dg.z_x;
+			cmp.style.top = dg.z_y;
+			delete dg.z_x;
+			delete dg.z_y;
+		}
+		delete zkau._revertpending; //exec once
 	};
 	return false;
 };
@@ -1544,14 +1548,15 @@ zkau._ghostdrag = function (dg, ghosting) {
 //1) FF cannot handle z-index well if listitem is dragged across two listboxes
 //2) Safari's ghosting position is wrong
 //3) Opera's width is wrong if cloned
+
+//Bug 1783363: Due to the use of "position:relative",
+//a side effect of Bug 1766244, we no longer clone even if zk.ie
 	var special;
-	if (!zk.ie) {
-		if (ghosting) {
-			var tn = $tag(dg.element);
-			zk.zk_special = special = "TR" == tn || "TD" == tn || "TH" == tn;
-		} else {
-			special = zk.zk_special;
-		}
+	if (ghosting) {
+		var tn = $tag(dg.element);
+		zk.zk_special = special = "TR" == tn || "TD" == tn || "TH" == tn;
+	} else {
+		special = zk.zk_special;
 	}
 
 	if (special) {
@@ -1564,6 +1569,7 @@ zkau._ghostdrag = function (dg, ghosting) {
 				+zk.offsetWidth(el)+'px;height:'+zk.offsetHeight(el)
 				+'px;border:1px dotted black"></div>');
 			dg.element = $e("zk_ddghost");
+			zk.disableSelection(dg.element);
 		} else {
 			zkau.endGhostToDIV(dg);
 		}
