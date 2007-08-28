@@ -7,7 +7,7 @@
   <version>{version}</version>
   <packaging>jar</packaging>
   <name>The ZKoss Web Library</name>
-  <url>http://www.zkoss.org</url>
+  <url>http://www.zkoss.org/web</url>
   <description>The ZKoss Web library</description>
   <licenses>
     <license>

@@ -19,8 +19,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.web;
 
 /**
- * Specified this in /metainfo/tld/config.xml to identify whether it
- * is the correct JAR file.
+ * The version of the ZK Web Library.
+ * {@link #UID} must be the same as the version specified in config.xml.
  * 
  * @author tomyeh
  * @since 2.5.0
