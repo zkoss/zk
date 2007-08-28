@@ -529,25 +529,28 @@ public class Parser {
 					LanguageDefinition.NATIVE_NAMESPACE.equals(uri);
 
 				if (!bNative) {
-					final LanguageDefinition complangdef =
-						isDefault(langdef, pref, uri) ||
-						(langdef.isNative() && !LanguageDefinition.exists(uri)) ?
-							langdef: LanguageDefinition.lookup(uri);
-
-					ComponentDefinition compdef =
-						pgdef.getComponentDefinitionMap().get(nm);
-					if (compdef != null) {
-						compInfo = new ComponentInfo(parent, compdef);
-					} else if (complangdef.hasComponentDefinition(nm)) {
-						compdef = complangdef.getComponentDefinition(nm);
-						compInfo = new ComponentInfo(parent, compdef);
-					} else if (langdef.isNative()) {
+					boolean inDefaultNS = isDefaultNS(langdef, pref, uri);
+					if (!inDefaultNS && langdef.isNative()) {
 						bNative = prefRequired = true;
 					} else {
-						compdef = complangdef.getDynamicTagDefinition();
-						if (compdef == null)
-							throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef+", "+el.getLocator());
-						compInfo = new ComponentInfo(parent, compdef, nm);
+						final LanguageDefinition complangdef =
+							inDefaultNS ? langdef: LanguageDefinition.lookup(uri);
+
+						ComponentDefinition compdef =
+							pgdef.getComponentDefinitionMap().get(nm);
+						if (compdef != null) {
+							compInfo = new ComponentInfo(parent, compdef);
+						} else if (complangdef.hasComponentDefinition(nm)) {
+							compdef = complangdef.getComponentDefinition(nm);
+							compInfo = new ComponentInfo(parent, compdef);
+						} else if (langdef.isNative()) {
+							bNative = prefRequired = true;
+						} else {
+							compdef = complangdef.getDynamicTagDefinition();
+							if (compdef == null)
+								throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef+", "+el.getLocator());
+							compInfo = new ComponentInfo(parent, compdef, nm);
+						}
 					}
 				}
 
@@ -790,7 +793,7 @@ public class Parser {
 
 	/** Whether the name space belongs to the default language. */
 	private static final
-	boolean isDefault(LanguageDefinition langdef, String pref, String uri) {
+	boolean isDefaultNS(LanguageDefinition langdef, String pref, String uri) {
 		return ("".equals(pref) && "".equals(uri))
 			|| langdef.getNamespace().equals(uri);
 	}
@@ -804,7 +807,7 @@ public class Parser {
 	 */
 	private static final boolean
 	isZkElement(LanguageDefinition langdef, String nm, String pref, String uri) {
-		if (isDefault(langdef, pref, uri))
+		if (isDefaultNS(langdef, pref, uri))
 			return !langdef.hasComponentDefinition(nm);
 		return LanguageDefinition.ZK_NAMESPACE.equals(uri);
 	}
@@ -820,7 +823,7 @@ public class Parser {
 				LanguageDefinition langdef = compInfo.getLanguageDefinition();
 				if (langdef == null)
 					bZkAttr = true;
-				else if (isDefault(langdef, pref, uri))
+				else if (isDefaultNS(langdef, pref, uri))
 					bZkAttr = !langdef.isDynamicReservedAttributes("[event]");
 				else
 					bZkAttr = LanguageDefinition.ZK_NAMESPACE.equals(uri);
