@@ -41,6 +41,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<mold-uri>~./zk/xml/page.dsp</mold-uri>
 	</mold>
 
+	<!-- Defines the component and attribute names used to represent
+	a label when a plain text is found in ZUL XML.
+	-->
+	<label-template>
+		<component-name>native</component-name>
+		<component-attribute>prologContent</component-attribute>
+		<raw/><!-- 1) don't trim, 2) generated directly -->
+	</label-template>
 	<!-- Defines the templat for macro components -->
 	<macro-template>
 		<macro-class>org.zkoss.zml.XmlMacroComponent</macro-class>
@@ -94,4 +102,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		include_package 'org.zkoss.zml'
 	end
 	</zscript>
+
+	<component>
+		<component-name>native</component-name>
+		<component-class>org.zkoss.zml.XmlNativeComponent</component-class>
+	</component>
+	<component>
+		<component-name>transformer</component-name>
+		<component-class>org.zkoss.zml.Transformer</component-class>
+	</component>
 </language>

@@ -54,14 +54,17 @@ public class XmlNativeComponent extends HtmlNativeComponent {
 	public static class XmlHelper implements Helper {
 		public void getFirstHalf(StringBuffer sb, String tag, Map props,
 		Collection namespaces) {
-			sb.append('<').append(tag);
+			if (tag != null)
+				sb.append('<').append(tag);
 
 			NativeHelpers.getAttributes(sb, props, namespaces);
 
-			sb.append(">\n");
+			if (tag != null)
+				sb.append(">\n");
 		}
 		public void getSecondHalf(StringBuffer sb, String tag) {
-			sb.append("</").append(tag).append(">\n");
+			if (tag != null)
+				sb.append("</").append(tag).append(">\n");
 		}
 	}
 }
