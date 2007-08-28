@@ -17,6 +17,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 if (!window.zkau) { //avoid eval twice
+////
+//Customization
+/** Returns the background color for a list item or tree item.
+ * Developer can override this method by providing a different background.
+ */
+if (!window.Droppable_effect) { //define it only if not customized
+	window.Droppable_effect = function (e, undo) {
+		if (undo)
+			zk.restoreStyle(e, "backgroundColor");
+		else {
+			zk.backupStyle(e, "backgroundColor");
+			e.style.backgroundColor = "#B8B8C0";
+		}
+	};
+}
+
 zkau = {};
 
 zkau._reqs = []; //Ajax requests
@@ -1437,8 +1453,7 @@ zkau._dragging = function (dg, pointer) {
 		zkau._cleanLastDrop(dg);
 		if (e) {
 			dg.zk_lastDrop = e;
-			zk.backupStyle(e, "backgroundColor");
-			e.style.backgroundColor = "#A8A858";
+			Droppable_effect(e);
 		}
 	}
 };
@@ -1520,7 +1535,7 @@ zkau._getDrop = function (cmp, pointer) {
 };
 zkau._cleanLastDrop = function (dg) {
 	if (dg && dg.zk_lastDrop) {
-		zk.restoreStyle(dg.zk_lastDrop, "backgroundColor");
+		Droppable_effect(dg.zk_lastDrop, true);
 		dg.zk_lastDrop = null;
 	}
 };
