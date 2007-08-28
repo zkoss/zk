@@ -32,6 +32,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<language-name>xml</language-name>
 		<extension>svg</extension>
 	</language-mapping>
+	<language-mapping>
+		<language-name>xml</language-name>
+		<extension>xml2html</extension>
+	</language-mapping>
 	<!-- Map extensions to the xul/html language
 		 By default, xul/html are mapped to zul and xul.
 	<language-mapping>
