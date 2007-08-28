@@ -20,8 +20,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.mil;
 
 /**
- * Specified this in lang.xml, such that ZK knows what lang.xml is associated
- * with MIL.
+ * The version of the ZK MIL component set.
+ * {@link #UUID} must be the same as the version specified in lang.xml
+ * and config.xml.
  *
  * @author henrichen
  */
