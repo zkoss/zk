@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkdemo.test;
 
-import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 
 /**
  * A simple performance meter.
@@ -27,20 +27,20 @@ import org.zkoss.zk.ui.Desktop;
  */
 public class PerformanceMeter implements org.zkoss.zk.ui.util.PerformanceMeter {
 	public void requestStartAtClient(
-	String requestId, Desktop desktop, long time) {
+	String requestId, Execution exec, long time) {
 		System.out.println("Client start: "+requestId+"="+time);
 	}
 	public void requestCompleteAtClient(
-	String requestId, Desktop desktop, long time) {
+	String requestId, Execution exec, long time) {
 		System.out.println("Client cmplt: "+requestId+"="+time);
 	}
 
 	public void requestStartAtServer(
-	String requestId, Desktop desktop, long time) {
+	String requestId, Execution exec, long time) {
 		System.out.println("Server start: "+requestId+"="+time);
 	}
 	public void requestCompleteAtServer(
-	String requestId, Desktop desktop, long time) {
+	String requestId, Execution exec, long time) {
 		System.out.println("Server cmplt: "+requestId+"="+time);
 	}
 }
