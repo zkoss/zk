@@ -23,9 +23,15 @@ zk.load("zul.widget");
 /** Returns the background color for a combo item.
  * Developer can override this method by providing a different background.
  */
-if (!window.Comboitem_bgcolor) { //define it only if not customized
-	window.Comboitem_bgcolor = function (item) {
-		return item.className.endsWith("sel") ? "#115588": "#DAE8FF";
+if (!window.Comboitem_effect) { //define it only if not customized
+	window.Comboitem_effect = function (item, undo) {
+		if (undo)
+			zk.restoreStyle(item, "backgroundColor");
+		else {
+			zk.backupStyle(item, "backgroundColor");
+			item.style.backgroundColor =
+				item.className.endsWith("sel") ? "#115588": "#DAE8FF";
+		}
 	};
 }
 
@@ -77,10 +83,7 @@ zkCmit.onover = function (evt) {
 	if (!zk.dragging) {
 		if (!evt) evt = window.event;
 		var item = $parentByTag(Event.element(evt), "TR");
-		if (item) {
-			zk.backupStyle(item, "backgroundColor");
-			item.style.backgroundColor = Comboitem_bgcolor(item);
-		}
+		if (item) Comboitem_effect(item);
 	}
 };
 /** onmouseout(evt). */
@@ -91,8 +94,7 @@ zkCmit.onout = function (evt) {
 	}
 };
 zkCmit.onoutTo = function (item) {
-	if (item)
-		zk.restoreStyle(item, "backgroundColor");
+	if (item) Comboitem_effect(item, true);
 };
 
 /** Handles setAttr. */

@@ -23,12 +23,18 @@ zk.load("zul.zul");
 /** Returns the background color for a list item or tree item.
  * Developer can override this method by providing a different background.
  */
-if (!window.Selectable_bgcolor) { //define it only if not customized
-	window.Selectable_bgcolor = function (row) {
-		var clr = Element.getStyle(row, "color");
-		return clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
-			row.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
-			row.className.endsWith("sel") ? "#115588": "#DAE8FF";
+if (!window.Selectable_effect) { //define it only if not customized
+	window.Selectable_effect = function (row, undo) {
+		if (undo)
+			zk.restoreStyle(row, "backgroundColor");
+		else {
+			zk.backupStyle(row, "backgroundColor");
+			var clr = Element.getStyle(row, "color");
+			row.style.backgroundColor = 
+				clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
+					row.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
+					row.className.endsWith("sel") ? "#115588": "#DAE8FF";
+		}
 	};
 }
 
@@ -1023,10 +1029,7 @@ zkSel.onover = function (evt) {
 	if (!zk.dragging) {
 		if (!evt) evt = window.event;
 		var row = $parentByTag(Event.element(evt), "TR");
-		if (row) {
-			zk.backupStyle(row, "backgroundColor");
-			row.style.backgroundColor = Selectable_bgcolor(row);
-		}
+		if (row) Selectable_effect(row);
 	}
 };
 /** row's onmouseout. */
@@ -1037,8 +1040,7 @@ zkSel.onout = function (evt) {
 	}
 };
 zkSel.onoutTo = function (row) {
-	if (row)
-		zk.restoreStyle(row, "backgroundColor");
+	if (row) Selectable_effect(row, true);
 };
 /** (!cm or !sel)'s onfocus. */
 zkSel.cmonfocus = function (evt) {
