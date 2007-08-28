@@ -7,7 +7,7 @@
   <version>{version}</version>
   <packaging>jar</packaging>
   <name>JSF Component for ZK XUL Components</name>
-  <url>http://www.zkoss.org</url>
+  <url>http://www.zkoss.org/jsf/zul</url>
   <description>The JSF Component implementation for ZK XUL components</description>
   <licenses>
     <license>
