@@ -7,7 +7,7 @@
   <version>{version}</version>
   <packaging>jar</packaging>
   <name>ZK XHTML Components</name>
-  <url>http://www.zkoss.org</url>
+  <url>http://www.zkoss.org/zhtml</url>
   <description>ZK XHTML components</description>
   <licenses>
     <license>
