@@ -45,6 +45,7 @@ ZK 2.5.0
   1780111: A way to specify DOCTYPE that will be generated to the client
   1780804: A way to allow the client to cache the output
   1782250: Performance improve: don't go thru Web container if incl ~./
+  1765212: Annoying sellection during drag-drop
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
@@ -72,6 +73,7 @@ ZK 2.5.0
   1779235: ZK 2.5.0 freshly checkbox setChecked doesn't work
   1777696: Richlet served error page fails
   1770144: Memory Leak in AImage
+  1783363: Unable to drag a listitem out of the box (IE only)
   
 * Upgrade Notes:
   + The onTimer event won't keep the session alive.
