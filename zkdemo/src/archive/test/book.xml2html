@@ -12,10 +12,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 
 <?page contentType="text/html;charset=UTF-8"?>
-<transformer xsl="book.xsl">
+<x:transformer xsl="book.xsl" xmlns:x="http://www.zkoss.org/2007/xml">
 	<book>
 		<title>ZK - Ajax without the JavaScript Framework</title>
 		<for-who>Web application designers and programmers who wish to implement rich Ajax web applications in the simplest way.</for-who>
 		<author>Henri Chen and Robbie Cheng</author>
 	</book>
-</transformer>
+</x:transformer>
