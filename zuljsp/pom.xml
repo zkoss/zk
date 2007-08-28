@@ -7,7 +7,7 @@
   <version>{version}</version>
   <packaging>jar</packaging>
   <name>JSP Tags for ZK XUL Components</name>
-  <url>http://www.zkoss.org</url>
+  <url>http://www.zkoss.org/jsp/zul</url>
   <description>The JSP tags for encapsulating ZK XUL components</description>
   <licenses>
     <license>
