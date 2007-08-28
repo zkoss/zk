@@ -18,6 +18,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.http;
 
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.Writer;
 import java.io.IOException;
 import java.util.Iterator;
@@ -162,11 +164,21 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 		if (!media.inMemory()) {
 			if (media.isBinary()) {
 				final ServletOutputStream out = response.getOutputStream();
-				Files.copy(out, media.getStreamData());
+				final InputStream in = media.getStreamData();
+				try {
+					Files.copy(out, in);
+				} finally {
+					in.close();
+				}
 				out.flush();
 			} else {
 				final Writer out = response.getWriter();
-				Files.copy(out, media.getReaderData());
+				final Reader in = media.getReaderData();
+				try {
+					Files.copy(out, in);
+				} finally {
+					in.close();
+				}
 				out.flush();
 			}
 			return; //done;

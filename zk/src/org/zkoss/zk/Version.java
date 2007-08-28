@@ -17,8 +17,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk;
 
 /**
- * Specified this in lang.xml, such that ZK knows what lang.xml is associated
- * with zk.jar.
+ * The ZK version info.
+ * {@link #UID} must be the same as the version specified in config.xml.
  *
  * @author tomyeh
  */

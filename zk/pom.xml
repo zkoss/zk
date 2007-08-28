@@ -7,7 +7,7 @@
   <version>{version}</version>
   <packaging>jar</packaging>
   <name>The ZK Kernel</name>
-  <url>http://www.zkoss.org</url>
+  <url>http://www.zkoss.org/zk</url>
   <description>The ZK Kernel</description>
   <licenses>
     <license>
