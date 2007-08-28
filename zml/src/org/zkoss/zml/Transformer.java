@@ -47,7 +47,6 @@ import org.zkoss.zk.ui.UiException;
  */
 public class Transformer extends AbstractComponent {
 	private Object _xsl;
-	private String _sysId;
 
 	/** Returns the XSL (Extensible Stylesheet Language), or null
 	 * if not available.
