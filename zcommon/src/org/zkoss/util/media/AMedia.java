@@ -96,10 +96,12 @@ public class AMedia implements Media {
 	 * @param format the format; might be null.
 	 * @param ctype the content type; might be null.
 	 * @param data the binary data; never null.
-	 * If the input stream is created dyanmically each tiime {@link #getStreamData}
+	 * If the input stream is created dyanmically each time {@link #getStreamData}
 	 * is called, you shall pass {@link #DYNAMIC_STREAM}
 	 * as the data argument. Then, override {@link #getStreamData} to return
 	 * the correct stream.
+	 * Note: the caller of {@link #getStreamData} has to close
+	 * the returned input stream.
 	 */
 	public AMedia(String name, String format, String ctype, InputStream data) {
 		if (data == null)
@@ -172,11 +174,27 @@ public class AMedia implements Media {
 		if (_strdata == null) throw newIllegalStateException();
 		return _strdata;
 	}
+	/** Returns the input stream of this media.
+	 *
+	 * <p>Note: the caller has to invoke {@link InputStream#close}
+	 * after using the input stream returned by {@link #getStreamData}.
+	 *
+	 * @exception IllegalStateException if the media is not binary
+	 * {@link #isBinary}.
+	 */
 	public InputStream getStreamData() {
 		if (_isdata != null) return _isdata;
 		if (_bindata != null) return new ByteArrayInputStream(_bindata);
 		throw newIllegalStateException();
 	}
+	/** Returns the reader of this media to retrieve the data.
+	 *
+	 * <p>Note: the caller has to invoke {@link Reader#close}
+	 * after using the input stream returned by {@link #getReaderData}.
+	 *
+	 * @exception IllegalStateException if the media is binary
+	 * {@link #isBinary}.
+	 */
 	public Reader getReaderData() {
 		if (_rddata != null) return _rddata;
 		if (_strdata != null) return new StringReader(_strdata);

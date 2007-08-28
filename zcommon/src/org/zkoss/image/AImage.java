@@ -54,19 +54,49 @@ public class AImage implements Image, java.io.Serializable {
 	/** The raw data. */
 	private byte[] _data;
 	/** The format name, e.g., "jpeg", "gif" and "png". */
-	private final String _format;
+	private String _format;
 	/** The content type. */
-	private final String _ctype;
+	private String _ctype;
 	/** The name (usually filename). */
-	private final String _name;
+	private String _name;
 	/** The width. */
-	private final int _width;
+	private int _width;
 	/** The height. */
-	private final int _height;
+	private int _height;
 	/** the hash code. */
 //	private transient int _hashCode = 0;
 
 	public AImage(String name, byte[] data) throws IOException {
+		init(name, data);
+	}
+	/** Contructs an image with an input stream.
+	 *
+	 * <p>Note that this method automatically closes the input stream
+	 * (since ZK 2.5.0).
+	 */
+	public AImage(String name, InputStream is) throws IOException {
+		try {
+			init(name, Files.readAll(is));
+		} finally {
+			is.close();
+		}
+	}
+	/** Constructs an image with a file name.
+	 */
+	public AImage(String filename) throws IOException {
+		this(filename, new FileInputStream(filename));
+	}
+	/** Constructs an image with a file.
+	 */
+	public AImage(File file) throws IOException {
+		this(file.getName(), new FileInputStream(file));
+	}
+	/** Constructs an image with an URL.
+	 */
+	public AImage(URL url) throws IOException {
+		this(getName(url), url.openStream());
+	}
+	private void init(String name, byte[] data) throws IOException {
 		if (data == null)
 			throw new IllegalArgumentException("null data");
 		_name = name;
@@ -100,18 +130,6 @@ public class AImage implements Image, java.io.Serializable {
 			_height = ii.getIconHeight();
 		}
 		_ctype = getContentType(_format);
-	}
-	public AImage(String name, InputStream is) throws IOException {
-		this(name, Files.readAll(is));
-	}
-	public AImage(String filename) throws IOException {
-		this(filename, new FileInputStream(filename));
-	}
-	public AImage(File file) throws IOException {
-		this(file.getName(), new FileInputStream(file));
-	}
-	public AImage(URL url) throws IOException {
-		this(getName(url), url.openStream());
 	}
 
 	private static String getName(URL url) {
@@ -158,6 +176,8 @@ public class AImage implements Image, java.io.Serializable {
 		throw new IllegalStateException("Use getByteData() instead");
 	}
 	/** An input stream on top of {@link #getByteData}.
+	 * <p>Though harmless, the caller doesn't need to close the returned
+	 * stream.
 	 */
 	public final InputStream getStreamData() {
 		return new ByteArrayInputStream(_data);

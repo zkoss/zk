@@ -99,6 +99,9 @@ public class AAudio implements Audio {
 	 * If the stream shall be created each time {@link #getStreamData} is called,
 	 * you can pass {@link #DYNAMIC_STREAM} to the dat argument, and then
 	 * override {@link #getStreamData}.
+	 *
+	 * <p>Note: the caller of {@link #getStreamData} has to close
+	 * the returned input stream.
 	 */
 	public AAudio(String name, InputStream isdata) throws IOException {
 		if (isdata == null)
@@ -122,6 +125,8 @@ public class AAudio implements Audio {
 		_format = format;
 		_ctype = getContentType(_format);
 	}
+	/** Constructs an audio with an URL.
+	 */
 	public AAudio(URL url) throws IOException {
 		if (url == null)
 			throw new IllegalArgumentException("null url");
@@ -143,6 +148,8 @@ public class AAudio implements Audio {
 		_format = format;
 		_ctype = getContentType(_format);
 	}
+	/** Constructs an audio with a file.
+	 */
 	public AAudio(File file) throws IOException {
 		if (file == null)
 			throw new IllegalArgumentException("null url");
@@ -164,9 +171,20 @@ public class AAudio implements Audio {
 		_format = format;
 		_ctype = getContentType(_format);
 	}
+	/** Constructs an audio with a file name.
+	 */
 	public AAudio(String filename) throws IOException {
 		this(new File(filename));
 	}
+	/**
+	 * Creates an instance of an audio with an input stream.
+	 * If the stream shall be created each time {@link #getStreamData} is called,
+	 * you can pass {@link #DYNAMIC_STREAM} to the dat argument, and then
+	 * override {@link #getStreamData}.
+	 *
+	 * <p>Note: the caller of {@link #getStreamData} has to close
+	 * the returned input stream.
+	 */
 	public AAudio(InputStream is) throws IOException {
 		this(null, is);
 	}
@@ -216,7 +234,10 @@ public class AAudio implements Audio {
 	public final String getStringData() {
 		throw newIllegalStateException();
 	}
-	/** Always throws IllegalStateException.
+	/** Returns the data in the input stream.
+	 *
+	 * <p>Note: the caller has to invoke {@link InputStream#close}
+	 * after using the input stream returned by {@link #getStreamData}.
 	 */
 	public InputStream getStreamData() {
 		try {
@@ -229,7 +250,7 @@ public class AAudio implements Audio {
 		if (_isdata != null) return _isdata;
 		return new ByteArrayInputStream(_data);
 	}
-	/** Always throws IllegalStateException.
+	/** Not supported. It always throws IllegalStateException.
 	 */
 	public final Reader getReaderData() {
 		throw newIllegalStateException();
