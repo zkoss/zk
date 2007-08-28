@@ -17,8 +17,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 /**
- * Specified this in lang.xml, such that ZK knows what lang.xml is associated
- * with ZUL.
+ * The version of the ZK XUL component set.
+ * {@link #UID} must be the same as the version specified in lang.xml
+ * and config.xml.
  *
  * @author tomyeh
  */
