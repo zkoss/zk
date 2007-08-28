@@ -84,7 +84,7 @@ public class Transformer {
 	public Transformer(Source source)
 	throws TransformerConfigurationException {
 		final TransformerFactory tf = TransformerFactory.newInstance();
-		_tfmr = tf.newTransformer(source);
+		_tfmr = source != null ? tf.newTransformer(source): tf.newTransformer();
 	}
 
 	/** Sets whether to output the doc type.
