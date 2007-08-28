@@ -11,22 +11,29 @@ Naming Convention for abbreviation names
 
 ---
 zul
-	The ZK components implementing XUL, aka, the XUL components of ZK.
+	The XUL component set, http://www.zkoss.org/2005/zul
+	It includes ZK components implementing XUL tags
 	XUL: XML user interface markup language
 
------
+---
 zhtml
-	The ZK components implementing XHTML, aka, the XHTML components of ZK.
+	The XHTML component set, http://www.w3c.org/1999/xhtml
+	It includes ZK components implementing XHTML tags
+
+---
+zml
+	The XML component set, http://www.zkoss.org/2007/xml
+	It includes ZK components for generating XML ouput
 
 ---
 zuljsp
 	The ZUL JSP Tags
 
-----
+---
 mil
 	The ZK components implementing MIL (Mobile Interactive Language).
 
------
+---
 zmob
 
 	ZK Mobile Client is a MIDlet that hat enables a user to display and interact

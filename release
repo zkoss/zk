@@ -87,11 +87,12 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zk /tmp/zk/$srcnm
 	cp -rp zul /tmp/zk/$srcnm
 	cp -rp zhtml /tmp/zk/$srcnm
+	cp -rp zml /tmp/zk/$srcnm
 	cp -rp zkplus /tmp/zk/$srcnm
 	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
 
 	cd /tmp/zk/$srcnm
-	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
+	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zml/debug zkplus/debug
 	#find -name CVS | xargs rm -rf
 	find -name .svn | xargs rm -rf
 
@@ -106,6 +107,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p src/zk
 	mkdir -p src/zul
 	mkdir -p src/zhtml
+	mkdir -p src/zml
 	mkdir -p src/zkplus
 	cd $srcnm
 	cp -rp zcommon/codegen/* zcommon/src/* ../src/zcommon
@@ -113,6 +115,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zk/codegen/* zk/src/* ../src/zk
 	cp -rp zul/codegen/* zul/src/* ../src/zul
 	cp -rp zhtml/codegen/* zhtml/src/* ../src/zhtml
+	cp -rp zml/codegen/* zml/src/* ../src/zml
 	cp -rp zkplus/codegen/* zkplus/src/* ../src/zkplus
 	cd ..
 	rm -rf $srcnm
@@ -125,6 +128,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	jar cfM zk-sources.jar -C zk .
 	jar cfM zul-sources.jar -C zul .
 	jar cfM zhtml-sources.jar -C zhtml .
+	jar cfM zml-sources.jar -C zml .
 	jar cfM zkplus-sources.jar -C zkplus .
 	mv *-sources.jar ..
 	cd ..
@@ -157,7 +161,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/ext/Filters.jar /tmp/zk/$binnm/dist/lib/ext
 		#captcha
 
-	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
+	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zml.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timelinez.jar dist/lib/ext/json_simple.jar /tmp/zk/$binnm/dist/lib/zkforge
 		#timelinez
@@ -207,6 +211,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		mvnrepo zk
 		mvnrepo zul
 		mvnrepo zhtml
+		mvnrepo zml
 		mvnrepo zkplus
 		mv *-bundle.jar /tmp/maven
 		cd ..
@@ -218,7 +223,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cd $javadocdir
 
 	echo Output ${javadocnm}.zip
-	zip -qr9 ${javadocnm}.zip zcommon zweb zk zul zhtml zkplus
+	zip -qr9 ${javadocnm}.zip zcommon zweb zk zul zhtml zml zkplus
 	mv ${javadocnm}.zip /tmp/zk
 fi
 if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
