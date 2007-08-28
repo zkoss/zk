@@ -517,70 +517,61 @@ public class Parser {
 			parseAnnotation(el, annHelper);
 		} else {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
-			final ComponentInfo compInfo;
+			ComponentInfo compInfo = null;
 			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
 				compInfo = new ComponentInfo(parent, ComponentDefinition.ZK); 
-			} else if (langdef.isNative()
-			|| LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
-			|| uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX)) {
-				final boolean prefRequired = langdef.isNative()
-					|| uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
-				if (annHelper.clear())
-					log.warning("Annotations are ignored since inline doesn't support them, "+el.getLocator());
-				final NativeInfo ni;
-				compInfo = ni = new NativeInfo(
-					parent, langdef.getNativeDefinition(),
-						prefRequired && pref.length() > 0 ? pref + ":" + nm: nm);
+			} else {
+				boolean prefRequired =
+					uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
+				boolean bNative = prefRequired ||
+					LanguageDefinition.NATIVE_NAMESPACE.equals(uri);
 
-				//add declared namespace if starting with native-
-				final Collection col = el.getDeclaredNamespaces();
-				if (!col.isEmpty()) {
-					for (Iterator it = col.iterator(); it.hasNext();) {
-						final Namespace dns = (Namespace)it.next();
-						final String duri = dns.getURI();
-						boolean bNatPrefix =
-							duri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
-						if (bNatPrefix || langdef.isNative())
-							ni.addDeclaredNamespace(
-								new Namespace(dns.getPrefix(),
-									bNatPrefix ? duri.substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length()):
-										duri));
+				if (!bNative) {
+					final LanguageDefinition complangdef =
+						isDefault(langdef, pref, uri) ||
+						(langdef.isNative() && !LanguageDefinition.exists(uri)) ?
+							langdef: LanguageDefinition.lookup(uri);
+
+					ComponentDefinition compdef =
+						pgdef.getComponentDefinitionMap().get(nm);
+					if (compdef != null) {
+						compInfo = new ComponentInfo(parent, compdef);
+					} else if (complangdef.hasComponentDefinition(nm)) {
+						compdef = complangdef.getComponentDefinition(nm);
+						compInfo = new ComponentInfo(parent, compdef);
+					} else if (langdef.isNative()) {
+						bNative = prefRequired = true;
+					} else {
+						compdef = complangdef.getDynamicTagDefinition();
+						if (compdef == null)
+							throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef+", "+el.getLocator());
+						compInfo = new ComponentInfo(parent, compdef, nm);
 					}
 				}
-			} else {
-				if (LanguageDefinition.ZK_NAMESPACE.equals(uri))
-					throw new UiException("Unknown ZK component: "+el+", "+el.getLocator());
 
-				final LanguageDefinition complangdef;
-				if (isDefault(langdef, pref, uri)) {
-					complangdef = langdef;
+				if (bNative) {
+					if (annHelper.clear())
+						log.warning("Annotations are ignored since native doesn't support them, "+el.getLocator());
+
+					final NativeInfo ni;
+					compInfo = ni = new NativeInfo(
+						parent, langdef.getNativeDefinition(),
+						prefRequired && pref.length() > 0 ? pref + ":" + nm: nm);
+
+					//add declared namespace if starting with native:
+					addDeclaredNamespace(
+						ni, el.getDeclaredNamespaces(), langdef.isNative());
 				} else {
-					complangdef = LanguageDefinition.lookup(uri);
-				}
-
-				ComponentDefinition compdef =
-					pgdef.getComponentDefinitionMap().get(nm);
-				if (compdef != null) {
-					compInfo = new ComponentInfo(parent, compdef);
-				} else if (complangdef.hasComponentDefinition(nm)) {
-					compdef = complangdef.getComponentDefinition(nm);
-					compInfo = new ComponentInfo(parent, compdef);
-				} else {
-					compdef = complangdef.getDynamicTagDefinition();
-					if (compdef == null)
-						throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef+", "+el.getLocator());
-					compInfo = new ComponentInfo(parent, compdef, nm);
-				}
-
-				//process use first because addProperty needs it
-				final String use = el.getAttributeValue("use");
-				if (use != null) {
-					noEmpty("use", use, el);
-					noEL("use", use, el);
-					compInfo.setImplementationClass(use);
-						//Resolve later since might defined in zscript
+					//process use first because addProperty needs it
+					final String use = el.getAttributeValue("use");
+					if (use != null) {
+						noEmpty("use", use, el);
+						noEL("use", use, el);
+						compInfo.setImplementationClass(use);
+							//Resolve later since might defined in zscript
+					}
 				}
 			}
 
@@ -847,6 +838,24 @@ public class Parser {
 		compInfo.addProperty(name, value, cond);
 	}
 
+	/** Adds the declared namespaces to the native info, if necessary.
+	 */
+	private static void addDeclaredNamespace(
+	NativeInfo nativeInfo, Collection namespaces, boolean nativeLang) {
+		if (!namespaces.isEmpty()) {
+			for (Iterator it = namespaces.iterator(); it.hasNext();) {
+				final Namespace ns = (Namespace)it.next();
+				final String uri = ns.getURI();
+				boolean bNatPrefix =
+					uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
+				if (bNatPrefix || nativeLang)
+					nativeInfo.addDeclaredNamespace(
+						new Namespace(ns.getPrefix(),
+							bNatPrefix ? uri.substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length()):
+								uri));
+			}
+		}
+	}
 	/** Minimizes the native infos such that UiEngine creates
 	 * the minimal number of components.
 	 */
