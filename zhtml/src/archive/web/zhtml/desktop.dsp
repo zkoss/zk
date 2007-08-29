@@ -1,6 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@ page contentType="text/html;charset=UTF-8" %><%--
+<%--
 desktop.dsp
 
 {{IS_NOTE
@@ -20,6 +18,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-<c:set var="page" value="${requestScope.page}"/>
+<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
+<c:set var="page" value="${requestScope.arg.page}"/>
+<%@ page contentType="${z:outContentType(page)}" %>
+${z:outDocType(page)}
 <c:set var="zk_completeDesktop" value="true" scope="request"/><%-- control how page.dsp shall do --%>
 <c:include page="~./zhtml/page.dsp"/>
