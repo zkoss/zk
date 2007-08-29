@@ -70,7 +70,7 @@ public class PageDefinition extends NodeInfo {
 	private List _headerdefs;
 	/** Map(String name, String value). */
 	private Map _rootAttrs;
-	private String _contentType, _docType;
+	private String _contentType, _docType, _firstLine;
 	private final ComponentDefinitionMap _compdefs;
 	private Boolean _cacheable;
 
@@ -361,6 +361,25 @@ public class PageDefinition extends NodeInfo {
 	public void setDocType(String docType) {
 		_docType = docType;
 	}
+	/** Returns the first line to be generated to the output,
+	 * or null if nothing to generate.
+	 *
+	 * <p>For XML devices, it is usually the xml processing instruction:<br/>
+	 * <code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+	 *
+	 * @since 3.0.0
+	 */
+	public String getFirstLine() {
+		return _firstLine;
+	}
+	/** Sets the first line to be generated to the output.
+	 *
+	 * <p>Default: null (i.e., nothing generated)
+	 * @since 3.0.0
+	 */
+	public void setFirstLine(String firstLine) {
+		_firstLine = firstLine;
+	}
 	/** Returns if the client can cache the rendered result, or null
 	 * to use the device default.
 	 *
@@ -540,6 +559,7 @@ public class PageDefinition extends NodeInfo {
 				}
 				public String getContentType() {return _contentType;}
 				public String getDocType() {return _docType;}
+				public String getFirstLine() {return _firstLine;}
 				public Boolean getCacheable() {return _cacheable;}
 			});
 	}

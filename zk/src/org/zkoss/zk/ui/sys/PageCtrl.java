@@ -90,6 +90,22 @@ public interface PageCtrl {
 	 * @since 3.0.0
 	 */
 	public void setDocType(String docType);
+	/** Returns the first line to be generated to the output,
+	 * or null if nothing to generate.
+	 *
+	 * <p>For XML devices, it is usually the xml processing instruction:<br/>
+	 * <code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+	 *
+	 * @since 3.0.0
+	 */
+	public String getFirstLine();
+	/** Sets the first line to be generated to the output.
+	 *
+	 * <p>Default: null (i.e., nothing generated)
+	 * @since 3.0.0
+	 */
+	public void setFirstLine(String firstLine);
+
 	/** Returns the content type, or null to use the device default.
 	 *
 	 * @since 3.0.0

@@ -369,16 +369,26 @@ public class ZkFns {
 	 * @since 3.0.0
 	 */
 	public static final String outDocType(Page page) {
-		String docType = ((PageCtrl)page).getDocType();
-		if (docType == null)
-			docType = page.getDesktop().getDevice().getDocType();
-		if (docType != null) {
-			docType = docType.trim();
-			final int len = docType.length();
-			if (len > 0 && docType.charAt(len-1) != '\n')
-				docType += '\n';
+		final String docType = ((PageCtrl)page).getDocType();
+		return trimAndLF(docType != null ?
+			docType: page.getDesktop().getDevice().getDocType());
+	}
+	/** Trims and appends a linefeed if necessary.
+	 */
+	private static final String trimAndLF(String s) {
+		if (s != null) {
+			s = s.trim();
+			final int len = s.length();
+			if (len > 0 && s.charAt(len-1) != '\n')
+				s += '\n';
 		}
-		return docType;
+		return s;
+	}
+	/** Returns the first line to be generated to the output,
+	 * or null if no special first line.
+	 */
+	public static final String outFirstLine(Page page) {
+		return trimAndLF(((PageCtrl)page).getFirstLine());
 	}
 	/** Generates Locale-dependent strings in JavaScript syntax.
 	 */

@@ -146,7 +146,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private String _headers = "";
 	/** The root attributes. */
 	private String _rootAttrs = "";
-	private String _contentType, _docType;
+	private String _contentType, _docType, _firstLine;
 	private Boolean _cacheable;
 	/** A map of interpreters Map(String zslang, Interpreter ip). */
 	private transient Map _ips;
@@ -593,6 +593,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (s != null) _contentType = s;
 		s = config.getDocType();
 		if (s != null) _docType = s;
+		s = config.getFirstLine();
+		if (s != null) _firstLine = s;
 		Boolean b = config.getCacheable();
 		if (b != null) _cacheable = b;
 
@@ -692,6 +694,12 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 	public void setDocType(String docType) {
 		_docType = docType;
+	}
+	public String getFirstLine() {
+		return _firstLine;
+	}
+	public void setFirstLine(String firstLine) {
+		_firstLine = firstLine;
 	}
 	public Boolean getCacheable() {
 		return _cacheable;

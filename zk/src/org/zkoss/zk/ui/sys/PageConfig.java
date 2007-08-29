@@ -73,6 +73,13 @@ public interface PageConfig {
 	 * or null to use the device default.
 	 */
 	public String getDocType();
+	/** Returns the first line to be generated to the output,
+	 * or null if nothing to generate.
+	 *
+	 * <p>For XML devices, it is usually the xml processing instruction:<br/>
+	 * <code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+	 */
+	public String getFirstLine();
 	/** Returns if the client can cache the rendered result, or null
 	 * to use the device default.
 	 */

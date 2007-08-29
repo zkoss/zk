@@ -49,7 +49,7 @@ import org.zkoss.idom.util.IDOMs;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.el.Taglib;
 import org.zkoss.web.servlet.Servlets;
-
+	
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -399,6 +399,9 @@ public class Parser {
 			} else if ("docType".equals(nm)) {
 				noELnorEmpty("docType", val, pi);
 				pgdef.setDocType("<!DOCTYPE " + val + '>');
+			} else if ("xml".equals(nm)) {
+				noELnorEmpty("xml", val, pi);
+				pgdef.setFirstLine("<?xml " + val + "?>");
 			} else {
 				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
 			}

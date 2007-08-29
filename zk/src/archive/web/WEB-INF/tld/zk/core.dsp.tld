@@ -103,6 +103,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Returns the doc type.
 		</description>
 	</function>
+	<function>
+		<name>outFirstLine</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outFirstLine(org.zkoss.zk.ui.Page)
+		</function-signature>
+		<description>
+	Returns the first line to be generated to the output.
+		</description>
+	</function>
 
 	<function>
 		<name>toAbsoluteURI</name>
