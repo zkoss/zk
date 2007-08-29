@@ -1344,6 +1344,7 @@ public class UiEngineImpl implements UiEngine {
 				sb.insert(0, (String)nc.getPrologContent()).toString());
 	}
 	/** Sets the epilog of the specified native component.
+	 * @param comp the native component
 	 */
 	private static final
 	void setEpilog(CreateInfo ci, Component comp, NativeInfo compInfo) {
@@ -1365,6 +1366,9 @@ public class UiEngineImpl implements UiEngine {
 			nc.setEpilogContent(
 				sb.append(nc.getEpilogContent()).toString());
 	}
+	/**
+	 * @param comp the native component
+	 */
 	private static final void getNativeContent(CreateInfo ci,
 	StringBuffer sb, Component comp, List children) {
 		for (Iterator it = children.iterator(); it.hasNext();) {
@@ -1386,7 +1390,8 @@ public class UiEngineImpl implements UiEngine {
 					}
 				}
 			} else if (meta instanceof String) {
-				sb.append(ci.exec.evaluate(comp, (String)meta, String.class));
+				((Native)comp).getHelper().appendText(sb,
+					(String)ci.exec.evaluate(comp, (String)meta, String.class));
 			} else {
 				execNonComponent(ci.page, comp, meta);
 			}

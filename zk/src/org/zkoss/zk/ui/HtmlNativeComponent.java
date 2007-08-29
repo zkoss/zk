@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.io.Writer;
 
 import org.zkoss.xml.HTMLs;
+import org.zkoss.xml.XMLs;
 import org.zkoss.idom.Namespace;
 
 import org.zkoss.zk.ui.ext.DynamicTag;
@@ -203,6 +204,9 @@ implements DynamicTag, Native {
 
 			if (!_noLFs.contains(tn))
 				sb.append('\n'); //make it more readable
+		}
+		public void appendText(StringBuffer sb, String text) {
+			XMLs.encodeText(sb, text);
 		}
 	}
 	/** A set of tags that we shall append linefeed to it.

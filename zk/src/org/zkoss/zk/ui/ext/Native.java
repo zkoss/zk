@@ -101,5 +101,10 @@ public interface Native extends NonFellow {
 		 * @param tag the tag name (never null)
 		 */
 		public void getSecondHalf(StringBuffer sb, String tag);
+		/** Appends the text.
+		 *
+		 * @param text the text content to append
+		 */
+		public void appendText(StringBuffer sb, String text);
 	}
 }
