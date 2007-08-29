@@ -118,8 +118,10 @@ public class MultiCache implements java.io.Serializable, Cloneable {
 	 * @return this object
 	 */
 	public MultiCache setLifetime(int lifetime) {
-		for (int j = 0; j < _caches.length; ++j)
-			_caches[j].setLifetime(lifetime);
+		synchronized (this) {
+			for (int j = 0; j < _caches.length; ++j)
+				_caches[j].setLifetime(lifetime);
+		}
 		return this;
 	}
 	/**
@@ -143,8 +145,10 @@ public class MultiCache implements java.io.Serializable, Cloneable {
 		if (v == 0)
 			v = maxsize > 0 ? 1: maxsize < 0 ? -1: 0;
 
-		for (int j = 0; j < _caches.length; ++j)
-			_caches[j].setMaxSize(v);
+		synchronized (this) {
+			for (int j = 0; j < _caches.length; ++j)
+				_caches[j].setMaxSize(v);
+		}
 		return this;
 	}
 
@@ -153,8 +157,11 @@ public class MultiCache implements java.io.Serializable, Cloneable {
 		try {
 			final MultiCache mc = (MultiCache)super.clone();
 			mc._caches = new CacheMap[_caches.length];
-			for (int j = 0; j < _caches.length; ++j)
-				mc._caches[j] = (CacheMap)_caches[j].clone();
+
+			synchronized (this) {
+				for (int j = 0; j < _caches.length; ++j)
+					mc._caches[j] = (CacheMap)_caches[j].clone();
+			}
 			return mc;
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError();
