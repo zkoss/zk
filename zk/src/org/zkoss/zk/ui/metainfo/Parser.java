@@ -501,7 +501,7 @@ public class Parser {
 		final Namespace ns = el.getNamespace();
 		final String pref = ns != null ? ns.getPrefix(): "";
 		final String uri = ns != null ? ns.getURI(): "";
-		final LanguageDefinition langdef = pgdef.getLanguageDefinition();
+		LanguageDefinition langdef = pgdef.getLanguageDefinition();
 		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			parseZScript(parent, el, annHelper);
 		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
@@ -534,6 +534,7 @@ public class Parser {
 						("".equals(pref) && "".equals(uri))
 						|| !LanguageDefinition.exists(uri);
 					//Spec: if pref/URI not specified => native
+					//		if uri unknown => native
 
 				if (bNative) {
 					if (annHelper.clear())
@@ -547,7 +548,7 @@ public class Parser {
 					//add declared namespace if starting with native:
 					final Collection dns = el.getDeclaredNamespaces();
 					if (!dns.isEmpty())
-						addDeclaredNamespace(ni, dns, langdef.isNative());
+						addDeclaredNamespace(ni, dns, langdef);
 				} else {
 					final LanguageDefinition complangdef =
 						isDefaultNS(langdef, pref, uri) ?
@@ -560,11 +561,13 @@ public class Parser {
 					} else if (complangdef.hasComponentDefinition(nm)) {
 						compdef = complangdef.getComponentDefinition(nm);
 						compInfo = new ComponentInfo(parent, compdef);
+						langdef = complangdef;
 					} else {
 						compdef = complangdef.getDynamicTagDefinition();
 						if (compdef == null)
 							throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef+", "+el.getLocator());
 						compInfo = new ComponentInfo(parent, compdef, nm);
+						langdef = complangdef;
 					}
 
 					//process use first because addProperty needs it
@@ -592,21 +595,21 @@ public class Parser {
 					if (attrAnnHelper == null)
 						attrAnnHelper = new AnnotationHelper();
 					attrAnnHelper.addByRawValue(attnm, attval);
-				} else if ("forward".equals(attnm)) {
+				} else if ("forward".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setForward(attval);
-				} else if ("if".equals(attnm)) {
+				} else if ("if".equals(attnm) && isZkAttr(langdef, attrns)) {
 					ifc = attval;
-				} else if ("unless".equals(attnm)) {
+				} else if ("unless".equals(attnm) && isZkAttr(langdef, attrns)) {
 					unless = attval;
-				} else if ("forEach".equals(attnm)) {
+				} else if ("forEach".equals(attnm) && isZkAttr(langdef, attrns)) {
 					forEach = attval;
-				} else if ("forEachBegin".equals(attnm)) {
+				} else if ("forEachBegin".equals(attnm) && isZkAttr(langdef, attrns)) {
 					forEachBegin = attval;
-				} else if ("forEachEnd".equals(attnm)) {
+				} else if ("forEachEnd".equals(attnm) && isZkAttr(langdef, attrns)) {
 					forEachEnd = attval;
-				} else if ("fulfill".equals(attnm)) {
+				} else if ("fulfill".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setFulfill(attval);
-				} else if (!"use".equals(attnm)) {
+				} else if (!("use".equals(attnm) && isZkAttr(langdef, attrns))) {
 					final Namespace attns = attr.getNamespace();
 					final String attpref = attns != null ? attns.getPrefix(): "";
 					final String attruri = attns != null ? attns.getURI(): "";
@@ -791,17 +794,17 @@ public class Parser {
 		annHelper.add(el.getLocalName(), attrs);
 	}
 
-	/** Whether the name space belongs to the default language. */
-	private static final
-	boolean isDefaultNS(LanguageDefinition langdef, String pref, String uri) {
-		return ("".equals(pref) && "".equals(uri))
-			|| langdef.getNamespace().equals(uri);
-	}
 	/** Whether a string is null or empty. */
 	private static boolean isEmpty(String s) {
 		return s == null || s.length() == 0;
 	}
-	/** Returns whether the element is conflict with the language definition.
+	/** Whether the name space belongs to the default language. */
+	private static final
+	boolean isDefaultNS(LanguageDefinition langdef, String pref, String uri) {
+		return (!langdef.isNative() && "".equals(pref) && "".equals(uri))
+			|| langdef.getNamespace().equals(uri);
+	}
+	/** Returns whether it is a ZK element.
 	 * @param pref namespace's prefix
 	 * @param uri namespace's URI
 	 */
@@ -810,6 +813,18 @@ public class Parser {
 		if (isDefaultNS(langdef, pref, uri))
 			return !langdef.hasComponentDefinition(nm);
 		return LanguageDefinition.ZK_NAMESPACE.equals(uri);
+	}
+	/** Returns whether it is a ZK attribute.
+	 */
+	private static final boolean
+	isZkAttr(LanguageDefinition langdef, Namespace attrns) {
+		//if native we will make sure URI is ZK or lang's namespace
+		if (langdef.isNative()) {
+			final String uri = attrns.getURI();
+			return LanguageDefinition.ZK_NAMESPACE.equals(uri)
+				|| langdef.getNamespace().equals(uri);
+		}
+		return true;
 	}
 
 	/** Parse an attribute and adds it to the definition.
@@ -844,13 +859,18 @@ public class Parser {
 	/** Adds the declared namespaces to the native info, if necessary.
 	 */
 	private static void addDeclaredNamespace(
-	NativeInfo nativeInfo, Collection namespaces, boolean nativeLang) {
+	NativeInfo nativeInfo, Collection namespaces, LanguageDefinition langdef) {
 		for (Iterator it = namespaces.iterator(); it.hasNext();) {
 			final Namespace ns = (Namespace)it.next();
 			final String uri = ns.getURI();
 			boolean bNatPrefix =
 				uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
-			if (bNatPrefix || nativeLang)
+			if (bNatPrefix
+			|| (langdef.isNative()
+				&& !LanguageDefinition.ZK_NAMESPACE.equals(uri)
+				&& !LanguageDefinition.ANNO_NAMESPACE.equals(uri)
+				&& !LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
+				&& !langdef.getNamespace().equals(uri)))
 				nativeInfo.addDeclaredNamespace(
 					new Namespace(ns.getPrefix(),
 						bNatPrefix ? uri.substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length()):
