@@ -32,7 +32,7 @@ import org.zkoss.lang.Objects;
  * @since 3.0.0
  */
 public class MultiCache implements java.io.Serializable, Cloneable {
-	private CacheMap[] _caches;
+	private final CacheMap[] _caches;
 	private int _maxsize;
 
 	/** Constructs a multi cache with the specified number of internal caches.
@@ -49,6 +49,13 @@ public class MultiCache implements java.io.Serializable, Cloneable {
 			_caches[j] = new CacheMap(8);
 			_maxsize += _caches[j].getMaxSize();
 		}
+	}
+	/* Used by {@link #clone} only. */
+	private MultiCache(CacheMap[] clone, int maxsize) {
+		_maxsize = maxsize;
+		_caches = new CacheMap[clone.length];
+		for (int j = 0; j < clone.length; ++j)
+			_caches[j] = (CacheMap)clone[j].clone();
 	}
 	/** Constructs a multi cache with the specified number of internal caches
 	 * and the initialize size.
@@ -154,17 +161,6 @@ public class MultiCache implements java.io.Serializable, Cloneable {
 
 	//Cloneable//
 	public Object clone() {
-		try {
-			final MultiCache mc = (MultiCache)super.clone();
-			mc._caches = new CacheMap[_caches.length];
-
-			synchronized (this) {
-				for (int j = 0; j < _caches.length; ++j)
-					mc._caches[j] = (CacheMap)_caches[j].clone();
-			}
-			return mc;
-		} catch (CloneNotSupportedException e) {
-			throw new InternalError();
-		}
+		return new MultiCache(_caches, _maxsize);
 	}
 }
