@@ -156,7 +156,7 @@ public class HTMLs {
 	 * <p>For example, br and img are orphan tags.
 	 *
 	 * @param tagname the tag name, e.g., br and tr.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final boolean isOrphanTag(String tagname) {
 		return _orphans.contains(tagname.toLowerCase());

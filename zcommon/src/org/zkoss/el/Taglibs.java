@@ -40,7 +40,7 @@ import org.zkoss.idom.util.IDOMs;
  * Utilities to handle taglib.
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class Taglibs {
 	private static final Log log = Log.lookup(Taglibs.class);

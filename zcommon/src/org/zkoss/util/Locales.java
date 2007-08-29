@@ -85,7 +85,7 @@ public class Locales {
 	/**
 	 * Returns the locale defined by {@link #setThreadLocal}.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 * @see #getCurrent
 	 */
 	public static final Locale getThreadLocal() {

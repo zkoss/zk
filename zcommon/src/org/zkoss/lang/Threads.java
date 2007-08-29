@@ -31,7 +31,7 @@ public class Threads {
 
 	/** Put the current thread to sleep for a while.
 	 * @exception SystemException if it is interrupted.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final void sleep(int millisecs) {
 		try {
@@ -41,7 +41,7 @@ public class Threads {
 		}
 	}
 	/** Put the current thread to sleep for a while.
-	 * <p>Deprecated since 2.5.0. Use {@link #sleep} instead.
+	 * <p>Deprecated since 3.0.0. Use {@link #sleep} instead.
 	 * @deprecated
 	 */
 	public static final void pause(int millisecs) {

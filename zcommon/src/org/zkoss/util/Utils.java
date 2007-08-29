@@ -22,7 +22,7 @@ package org.zkoss.util;
  * Generic utilities.
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class Utils {
 	/** Returns a portion of the specified version in an integer,
@@ -39,7 +39,7 @@ public class Utils {
 	 * a series of integer separated by a non-alphanemric separator.
 	 * @param portion which portion of the version; starting from 0.
 	 * If you want to retrieve the major verion, specify 0.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final int getSubversion(String version, int portion) {
 		if (portion < 0)

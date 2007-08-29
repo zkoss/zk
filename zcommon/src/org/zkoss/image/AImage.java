@@ -72,7 +72,7 @@ public class AImage implements Image, java.io.Serializable {
 	/** Contructs an image with an input stream.
 	 *
 	 * <p>Note that this method automatically closes the input stream
-	 * (since ZK 2.5.0).
+	 * (since ZK 3.0.0).
 	 */
 	public AImage(String name, InputStream is) throws IOException {
 		try {

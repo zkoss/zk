@@ -65,7 +65,7 @@ public class TimeZones {
 	/**
 	 * Returns the time zone defined by {@link #setThreadLocal}.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 * @see #getCurrent
 	 */
 	public static final TimeZone getThreadLocal() {
