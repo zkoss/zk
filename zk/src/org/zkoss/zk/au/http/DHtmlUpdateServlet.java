@@ -152,7 +152,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 	//-- ASYNC-UPDATE --//
 	/** Process update requests from the client.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	protected void process(Session sess,
 	HttpServletRequest request, HttpServletResponse response)

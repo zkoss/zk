@@ -74,7 +74,7 @@ public class DHtmlLayoutFilter implements Filter {
 	private boolean _compress = true;
 
 	/** Processes the content
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	protected void process(HttpServletRequest request,
 	HttpServletResponse response, String content)

@@ -195,7 +195,7 @@ if (c.isEmpty()) {
 	 * {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}.
 	 * The component may or may not be a root component.
 	 * @param listen whether the listener is added (or removed).
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void onPiggybackListened(Component comp, boolean listen);
 	/** Called each time ZK Update Engine processes all events.
@@ -204,7 +204,7 @@ if (c.isEmpty()) {
 	 *
 	 * <p>Used only internally. Application develepers shall not call it.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void onPiggyback();
 	/** Returns the server-push controller, or null if it is not enabled
@@ -218,7 +218,7 @@ if (c.isEmpty()) {
 	 * the server-push feature is disabled (for this desktop).
 	 * Note: this method will invoke {@link ServerPush#start}, so the
 	 * caller doesn't need to do it.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 * @see org.zkoss.zk.ui.Desktop#enableServerPush
 	 */
 	public boolean enableServerPush(ServerPush serverpush);

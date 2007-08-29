@@ -81,7 +81,7 @@ public interface RequestQueue {
 	 * It is used to notify {@link org.zkoss.zk.ui.util.PerformanceMeter}.
 	 *
 	 * @param requestId the request ID (never null)
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void addRequestId(String requestId);
 	/** Clears all request IDs that were added by {@link #addRequestId}.
@@ -89,7 +89,7 @@ public interface RequestQueue {
 	 *
 	 * @return a list of request IDs that were added by {@link #addRequestId},
 	 * or null if no request ID was added.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public Collection clearRequestIds();
 }

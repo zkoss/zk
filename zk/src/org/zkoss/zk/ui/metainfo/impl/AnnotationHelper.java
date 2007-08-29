@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * </ol>
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class AnnotationHelper {
 	/** A list of Object[] = {String annotName, Map annotAttrs}; */

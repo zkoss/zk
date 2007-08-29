@@ -102,7 +102,7 @@ public class DefinitionLoaders {
 	 *
 	 * @param lang the language name. It cannot be null.
 	 * @param ext the extension, e.g., "svg". It cannot be null.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final void addExtension(String ext, String lang) {
 		if (_loaded) {

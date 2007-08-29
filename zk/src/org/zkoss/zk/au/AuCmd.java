@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.Component;
  *
  * <p>Note: the first argument is always the component itself.
  *
- * <p>Deprecated since 2.5.0. Use {@link AuInvoke} instead.
+ * <p>Deprecated since 3.0.0. Use {@link AuInvoke} instead.
  * 
  * @author tomyeh
  * @deprecated

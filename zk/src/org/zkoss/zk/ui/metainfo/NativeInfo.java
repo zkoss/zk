@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.ext.Native;
  * <p>Note:it is not thread-safe.
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class NativeInfo extends ComponentInfo {
 	private List _prokids, _epikids;
@@ -192,14 +192,14 @@ public class NativeInfo extends ComponentInfo {
 	 * a native info, we can merge them by making the child as
 	 * the split child.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public NativeInfo getSplitChild() {
 		return _splitkid;
 	}
 	/** Sets the split kid.
 	 * @see #getSplitChild
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setSplitChild(NativeInfo child) {
 		_splitkid = child;

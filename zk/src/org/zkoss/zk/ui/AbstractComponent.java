@@ -929,7 +929,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	/** Default: handles special event listeners.
 	 * @see Component#onPageAttached
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void onPageAttached(Page newpage, Page oldpage) {
 		if (oldpage == null) //new added
@@ -937,7 +937,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	/** Default: handles special event listeners.
 	 * @see Component#onPageDetached
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void onPageDetached(Page page) {
 		onListenerChanged(page.getDesktop(), false);
@@ -995,10 +995,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * {@link Events#isListened} with asap = true.
 	 *
 	 * <p>This method is moved from {@link HtmlBasedComponent} to
-	 * {@link AbstractComponent} since 2.5.0.
+	 * {@link AbstractComponent} since 3.0.0.
 	 *
 	 * @param evtnm the event name, such as onClick
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	protected boolean isAsapRequired(String evtnm) {
 		return Events.isListened(this, evtnm, true);
@@ -1010,7 +1010,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * <code>onChange="true"</code>.
 	 *
 	 * <p>This method is moved from {@link HtmlBasedComponent} to
-	 * {@link AbstractComponent} since 2.5.0.
+	 * {@link AbstractComponent} since 3.0.0.
 	 *
 	 * @param sb the string buffer to hold the HTML attribute. If null and
 	 * {@link #isAsapRequired} is true, a string buffer is created and returned.
@@ -1019,7 +1019,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * returns false, null is returned.
 	 * If the caller passed non-null sb, the returned value must be the same
 	 * as sb (so it usually ignores the returned value).
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	protected StringBuffer appendAsapAttr(StringBuffer sb, String evtnm) {
 		if (isAsapRequired(evtnm)) {

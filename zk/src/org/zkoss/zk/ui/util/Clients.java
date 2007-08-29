@@ -33,7 +33,7 @@ import org.zkoss.zk.au.*;
  */
 public class Clients {
 	/** Sends an AU response ({@link AuResponse})to the client.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final void response(AuResponse response) {
 		Executions.getCurrent()

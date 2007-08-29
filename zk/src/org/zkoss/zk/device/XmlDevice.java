@@ -22,7 +22,7 @@ package org.zkoss.zk.device;
  * Represents the XML output.
  * 
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class XmlDevice extends GenericDevice {
 	//Device//

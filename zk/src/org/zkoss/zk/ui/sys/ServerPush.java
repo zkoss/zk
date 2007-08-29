@@ -48,7 +48,7 @@ import org.zkoss.zk.ui.DesktopUnavailableException;
  * automatically when the user trigger some other events.
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public interface ServerPush {
 	/** Stats and initializes the server-push controller.

@@ -53,7 +53,7 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 	 * @param comp the component used to evaluate whether an event handler
 	 * is effective.
 	 * @see EventHandler#isEffective(Component)
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public EventHandler get(Component comp, String evtnm) {
 		if (_evthds != null) {
@@ -81,7 +81,7 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 	 * <p>Unlike {@link #get(Component,String)}, it returns all
 	 * event handlers no matter whether they are effective.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public EventHandler[] getAll(String evtnm) {
 		if (_evthds != null) {
@@ -102,7 +102,7 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 	/** Returns the first event handler of the specified event name,
 	 * or null if not available.
 	 *
-	 * <p>Deprecated since 2.5.0. Use {@link #get(Component, String)}
+	 * <p>Deprecated since 3.0.0. Use {@link #get(Component, String)}
 	 or {@link #getAll} instead.
 	 * In other words, it is the same as getAll(evtnm)[0].
 	 *
@@ -131,7 +131,7 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 	 * list by invoking {@link #getAll}.
 	 *
 	 * @see #getAll
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void add(String evtnm, EventHandler evthd) {
 		if (evtnm == null || evthd == null)

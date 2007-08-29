@@ -1180,7 +1180,7 @@ zk.newFrame = function (name, src, style) {
 };
 
 /** Returns the nearest form, or null if not available.
- * @since 2.5.0
+ * @since 3.0.0
  */
 zk.formOf = function (n) {
 	for (; n; n = n.parentNode)
@@ -1190,7 +1190,7 @@ zk.formOf = function (n) {
 
 /** Creates a hidden field.
  * @param parent to assign the hidden to. Ignored if null.
- * @since 2.5.0
+ * @since 3.0.0
  */
 zk.newHidden = function (nm, val, parent) {
 	var inp = document.createElement("INPUT");

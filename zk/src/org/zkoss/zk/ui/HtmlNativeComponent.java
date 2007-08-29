@@ -49,7 +49,7 @@ import org.zkoss.zk.ui.impl.NativeHelpers;
  * the prolog first, the children and then the epilog.
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class HtmlNativeComponent extends AbstractComponent
 implements DynamicTag, Native {

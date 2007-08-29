@@ -62,7 +62,7 @@ public interface Device {
 	 *
 	 * <p>Default: null (to shown an error message).
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getTimeoutURI();
 	/** Sets the timeout URI.
@@ -72,18 +72,18 @@ public interface Device {
 	 * @param timeoutURI the timeout URI. If empty, it means to reload
 	 * the same page. If null, an error message is shown instead of
 	 * redirecting to another page.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setTimeoutURI(String timeoutURI);
 
 	/** Returns the default content type (never null).
 	 * 
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getContentType();
 	/** Returns the default doc type, or null if no doc type at all.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getDocType();
 
@@ -97,7 +97,7 @@ public interface Device {
 	 * @param timeoutURI the timeout URI. If empty, it means to reload
 	 * the same page. If null, an error message is shown instead of
 	 * redirecting to another page.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void init(String type, String unavailmsg, String timeoutURI);
 	/** Notification that the desktop, which owns this device,

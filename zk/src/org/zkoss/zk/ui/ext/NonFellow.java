@@ -29,7 +29,7 @@ package org.zkoss.zk.ui.ext;
  * will never return this component.
  * 
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  * @see org.zkoss.zk.ui.IdSpace
  */
 public interface NonFellow {

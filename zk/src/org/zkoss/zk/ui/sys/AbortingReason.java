@@ -39,7 +39,7 @@ public interface AbortingReason {
 	 * the responses to the client, while {@link #getResponse} is called
 	 * when generating the responses.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 * @see #getResponse
 	 */
 	public void execute();

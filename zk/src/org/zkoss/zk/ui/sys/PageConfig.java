@@ -23,7 +23,7 @@ package org.zkoss.zk.ui.sys;
  *
  * @see PageCtrl#init
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public interface PageConfig {
 	/** Returns the page identifier, or null if auto-generation is required.

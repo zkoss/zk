@@ -161,7 +161,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	}
 	/** Process a portlet request.
 	 * @return false if the page is not found.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	protected boolean process(Session sess, RenderRequest request,
 	RenderResponse response, String path, boolean bRichlet)

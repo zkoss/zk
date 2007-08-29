@@ -996,7 +996,7 @@ public class Configuration {
 	 *
 	 * <p>Default: null.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setServerPushClass(Class cls) {
 		if (cls != null && !ServerPush.class.isAssignableFrom(cls))
@@ -1118,7 +1118,7 @@ public class Configuration {
 	 * If empty, the client will reload the same page again.
 	 * If null, it is the same as {@link #removeClientErrorReload}
 	 * @return the previous URI associated with the specified error code
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String addClientErrorReload(int errCode, String uri) {
 		if (uri == null)
@@ -1130,14 +1130,14 @@ public class Configuration {
 	 *
 	 * @param errCode the error code.
 	 * @return the previous URI associated with the specified error code
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String removeClientErrorReload(int errCode) {
 		return (String)_errUris.remove(new Integer(errCode));
 	}
 	/** Returns the URI that is associated with the specified error code,
 	 * or null if no URI is associated.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getClientErrorReload(int errCode) {
 		return (String)_errUris.get(new Integer(errCode));
@@ -1146,7 +1146,7 @@ public class Configuration {
 	 * with URI to redirect to.
 	 *
 	 * <p>Default: 302, 401 and 403 are associated with an empty URI.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public int[] getClientErrorReloadCodes() {
 		final Set ks = _errUris.keySet();
@@ -1318,7 +1318,7 @@ public class Configuration {
 	}
 
 	/** Returns the performance meter for this application, or null if not set.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public PerformanceMeter getPerformanceMeter() {
 		return _pfmeter;
@@ -1336,7 +1336,7 @@ public class Configuration {
 	 * @param meter the performance meter. If null, the meter function
 	 * is disabled.
 	 * @return the previous performance meter, or null if not available.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public PerformanceMeter setPerformanceMeter(PerformanceMeter meter) {
 		final PerformanceMeter old = _pfmeter;
@@ -1641,7 +1641,7 @@ public class Configuration {
 	 *
 	 * @param alive whether to keep the session alive when receiving
 	 * onTimer
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setTimerKeepAlive(boolean alive) {
 		_timerKeepAlive = alive;
@@ -1651,7 +1651,7 @@ public class Configuration {
 	 * In other words, it returns whether to reset the session timeout
 	 * counter when receiving onTimer, just like any other events.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public boolean isTimerKeepAlive() {
 		return _timerKeepAlive;

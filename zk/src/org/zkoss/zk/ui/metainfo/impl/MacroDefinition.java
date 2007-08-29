@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.metainfo.*;
  * The macro component definition.
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  * @see ComponentDefinitionImpl#newMacroDefinition
  */
 public class MacroDefinition extends ComponentDefinitionImpl {

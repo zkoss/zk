@@ -165,7 +165,7 @@ public interface Desktop {
 	 * or /test (a richlet).
 	 *
 	 * @see Page#getRequestPath
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getRequestPath();
 	/** Returns the current directory (never null).
@@ -226,7 +226,7 @@ public interface Desktop {
 	 * feature.
 	 * @see Executions#activate
 	 * @see Configuration#setServerPushClass
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public boolean enableServerPush(boolean enable);
 	/** Sets the delay between each polling.
@@ -263,7 +263,7 @@ public interface Desktop {
 	 * took 1 second to process, then the client polling will be delayed
 	 * for 1 x factor seconds, unless it is value 
 	 * Ignore (aka., the default value is used) if non-positive.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setServerPushDelay(int min, int max, int factor);
 	/** Returns whether the server-push feature is enabled for this
@@ -271,7 +271,7 @@ public interface Desktop {
 	 *
 	 * <p>Default: false.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public boolean isServerPushEnabled();
 }

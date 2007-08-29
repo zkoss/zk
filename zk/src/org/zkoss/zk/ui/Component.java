@@ -183,7 +183,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * which this component will be placed before.
 	 * If null, this component will be placed at the end of all
 	 * root components (no matter whether it already belongs to the same page).
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setPageBefore(Page page, Component refRoot);
 
@@ -521,7 +521,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * @param newpage the new page (never null).
 	 * @param oldpage the previous page, if any, or null if it didn't
 	 * belong to any page.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void onPageAttached(Page newpage, Page oldpage);
 	/** Called when this component is detached from a page.
@@ -539,7 +539,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * it is in the middle of modifying the component tree.
 	 *
 	 * @param page the previous page (never null)
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void onPageDetached(Page page);
 
@@ -609,7 +609,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * If null, it is the same as the original event.
 	 * @return whether it is added successfully.
 	 * It returns false if the conditioin was always added before.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 * @see #removeForward(String, Component, String)
 	 */
 	public boolean addForward(
@@ -634,7 +634,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * It returns false if the conditioin was always added before.
 	 * @see #addForward(String, Component, String)
 	 * @see #removeForward(String, String, String)
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public boolean addForward(
 	String originalEvent, String targetPath, String targetEvent);
@@ -652,7 +652,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * @return whether the forward is removed successfully.
 	 * It returns false if the forward condition is not found
 	 * @see #addForward(String, Component, String)
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public boolean removeForward(
 	String originalEvent, Component target, String targetEvent);
@@ -672,7 +672,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * @return whether the forward is removed successfully.
 	 * It returns false if the forward condition is not found
 	 * @see #addForward(String, String, String)
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public boolean removeForward(
 	String originalEvent, String targetPath, String targetEvent);

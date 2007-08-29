@@ -340,7 +340,7 @@ public interface Page extends IdSpace {
 	 * for all the loaded interpreters.
 	 *
 	 * <p>It is a shortcut: getZScriptMethod(comp.getNamespace(), name, argTypes);
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public org.zkoss.zk.scripting.Method getZScriptMethod(
 	Component comp, String name, Class[] argTypes);
@@ -380,7 +380,7 @@ public interface Page extends IdSpace {
 	 * for all the loaded interpreters, if any.
 	 *
 	 * <p>It is a shortcut: getZScriptVariable(comp.getNamespace(), name);
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public Object getZScriptVariable(Component comp, String name);
 

@@ -87,7 +87,7 @@ public class AttributesInfo implements Condition, java.io.Serializable {
 	}
 
 	/** Returns the condition.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public Condition getCondition() {
 		return _cond;

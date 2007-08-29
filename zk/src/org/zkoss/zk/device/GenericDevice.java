@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Desktop;
  * A skeletal implementation of {@link Device}.
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 abstract public class GenericDevice implements Device {
 	private String _type, _uamsg, _tmoutURI;

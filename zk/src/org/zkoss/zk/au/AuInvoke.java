@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.Component;
  * <p>Note: the first argument is always the component itself.
  * 
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class AuInvoke extends AuResponse {
 	/** Construct AuInvoke to call a client function with one argument,

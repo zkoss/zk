@@ -75,7 +75,7 @@ public class LanguageDefinition {
 	 */
 	public static final String ANNO_NAMESPACE = "http://www.zkoss.org/2005/zk/annotation";
 	/** The namespace for ZK native namespace.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final String NATIVE_NAMESPACE = "http://www.zkoss.org/2005/zk/native";
 	/** The namespace for ZK native namespace prefix.
@@ -93,7 +93,7 @@ public class LanguageDefinition {
 	 * where the prefix <code>s</code> and URI <code>http://www.w3.org/2000/svg</code>
 	 * are both generated.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final String NATIVE_NAMESPACE_PREFIX = "native:";
 
@@ -200,7 +200,7 @@ public class LanguageDefinition {
 	 *
 	 * @param lang the language name. It cannot be null.
 	 * @param ext the extension, e.g., "svg". It cannot be null.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final void addExtension(String ext, String lang) {
 		if (lang == null || ext == null)
@@ -393,7 +393,7 @@ public class LanguageDefinition {
 	 * native and all namespaces (except ZK namespace) are output
 	 * the client directly.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public boolean isNative() {
 		return _native;
@@ -606,7 +606,7 @@ public class LanguageDefinition {
 	 * to this language
 	 * @exception UnsupportedOperationException if this language doesn't
 	 * support the macros
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public ComponentDefinition getMacroDefinition(
 	String name, String macroURI, boolean inline, boolean pageLevel) {
@@ -622,7 +622,7 @@ public class LanguageDefinition {
 	}
 
 	/** Sets the native template.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setNativeTemplate(Class klass) {
 		if (klass == null || !Component.class.isAssignableFrom(klass)
@@ -636,7 +636,7 @@ public class LanguageDefinition {
 	 *
 	 * @exception UnsupportedOperationException if this language doesn't
 	 * support the native namespace
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public ComponentDefinition getNativeDefinition() {
 		if (_nativedef == null)

@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Execution;
  * minimize the overhead when calculating the performance data.
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public interface PerformanceMeter {
 	/** Called to notify when the client starts to send the request

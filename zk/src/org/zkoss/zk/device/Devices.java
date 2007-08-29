@@ -51,7 +51,7 @@ public class Devices {
 	 *
 	 * @param deviceType the device type, such as ajax, xml and mil.
 	 * @exception DeviceNotFoundException if not found.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final Device getDevice(String deviceType) {
 		final Object obj;
@@ -129,7 +129,7 @@ public class Devices {
 	 * @param cls the device class
 	 * @return the previous class of the device with the same type, if any,
 	 * or null if no such device.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final String add(String deviceType, Class cls) {
 		return add0(deviceType, cls);

@@ -88,7 +88,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 *
 	 * @param langdef the language definition, or null if this is a temporary
 	 * definition doesn't belong to any language.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final ComponentDefinition newMacroDefinition(
 	LanguageDefinition langdef, String name,
@@ -98,7 +98,7 @@ implements ComponentDefinition, java.io.Serializable {
 	/** Constructs a native component definition.
 	 * It is the component definition used to implement the native namespace.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final ComponentDefinition newNativeDefinition(
 	LanguageDefinition langdef, String name, Class cls) {
@@ -196,7 +196,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 *
 	 * @param propnm the property name. If empty (""), null is assumed.
 	 * @see #getTextAs
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setTextAs(String propnm) {
 		_textAs = propnm != null && propnm.length() > 0 ? propnm: null;

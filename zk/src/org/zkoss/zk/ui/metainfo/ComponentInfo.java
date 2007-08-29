@@ -121,7 +121,7 @@ implements Cloneable, Condition, java.io.Serializable {
 	}
 
 	/** Returns the tag name, or null if no tag name.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getTag() {
 		return _tag;
@@ -150,7 +150,7 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * <p>Default: null (means to create a Label component as the child)
 	 *
 	 * @see ComponentDefinition#getTextAs
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getTextAs() {
 		return _compdef.getTextAs();
@@ -200,7 +200,7 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * it will forward it to the target component, which is also
 	 * specified in the forward condition.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 * @see #setForward
 	 */
 	public String getForward() {
@@ -232,7 +232,7 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * where target could be "id", "id1/id2" or "${elExpr}".
 	 * The EL expression must return either a path or a reference to
 	 * a component.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setForward(String forward) {
 		_forward = forward != null && forward.length() > 0 ? forward: null;
@@ -313,7 +313,7 @@ implements Cloneable, Condition, java.io.Serializable {
 			new String[] {expr, begin, end}: null;
 	}
 	/** Returns whether the forEach condition is defined.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public boolean withForEach() {
 		return _forEach != null;
@@ -367,7 +367,7 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * page ({@link Page#getLoadedInterpreters}).
 	 * Note: this method won't attach the component to the specified page.
 	 * @exception ClassNotFoundException if the class not found
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public Class resolveImplementationClass(Page page)
 	throws ClassNotFoundException {
@@ -386,7 +386,7 @@ implements Cloneable, Condition, java.io.Serializable {
 	 *
 	 * <p>It also invokes {@link ComponentDefinition#applyProperties}.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void applyProperties(Component comp) {
 		_compdef.applyProperties(comp);

@@ -32,7 +32,7 @@ import org.zkoss.idom.Namespace;
  * Native namespace (http://www.zkoss.org/2005/zk/native).
  * 
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public interface Native extends NonFellow {
 	/** Returns a readonly list of the declared namespaces

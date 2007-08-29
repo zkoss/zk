@@ -273,7 +273,7 @@ zkau._checkProgress = function () {
 	return true;
 };
 /** Returns whether any request is in processing.
- * @since 2.5.0
+ * @since 3.0.0
  */
 zkau.processing = function () {
 	return zkau._respQue.length || zkau._reqs.length;
@@ -1365,7 +1365,7 @@ zkau.cleanupMeta = function (cmp) {
 
 //Server Push//
 /** Sets the info of the server push.
- * @since 2.5.0
+ * @since 3.0.0
  */
 zkau.setSPushInfo = function (dtid, info) {
 	var i = zkau._spushInfo[dtid];
@@ -1376,7 +1376,7 @@ zkau.setSPushInfo = function (dtid, info) {
 	if (info.factor != null) i.factor = info.factor;
 };
 /** Returns the info of the server push.
- * @since 2.5.0
+ * @since 3.0.0
  */
 zkau.getSPushInfo = function (dtid) {
 	return zkau._spushInfo[dtid];

@@ -103,7 +103,7 @@ public interface Session {
 	 *
 	 * @see org.zkoss.zk.ui.util.Configuration#isTimerKeepAlive
 	 * @see org.zkoss.zk.ui.util.Configuration#getSessionMaxInactiveInterval
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public int getMaxInactiveInterval();
 

@@ -63,7 +63,7 @@ public interface WebApp extends Locator {
 	 *
 	 * @param portion which portion of the version; starting from 0.
 	 * If you want to retrieve the major verion, specify 0.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 * @see #getVersion
 	 */
 	public int getSubversion(int portion);

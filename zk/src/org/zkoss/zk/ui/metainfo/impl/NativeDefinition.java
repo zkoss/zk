@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.metainfo.*;
  * It is used to implement the native namespace
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  * @see ComponentDefinitionImpl#newNativeDefinition
  */
 /*package*/ class NativeDefinition extends ComponentDefinitionImpl {

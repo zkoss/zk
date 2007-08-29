@@ -36,7 +36,7 @@ public class AuEcho  extends AuResponse {
 	 * @param desktop the desktop to send the echo response to.
 	 * If null, the echo response is sent to each desktop in the
 	 * same browser window.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public AuEcho(Desktop desktop) {
 		super("echo",  desktop != null ? desktop.getId(): null);

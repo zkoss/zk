@@ -52,7 +52,7 @@ public interface PageCtrl {
 	 * is activated.
 	 *
 	 * @param config the info about how to initialize this page
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void init(PageConfig config);
 	/** Called when this page is about to be detroyed.
@@ -70,7 +70,7 @@ public interface PageCtrl {
 	 * An empty string is returned if no special attribute is declared.
 	 *
 	 * <p>For HTML, the root element is the HTML element.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getRootAttributes();
 	/** Set the attributes of the root element declared in this page
@@ -81,35 +81,35 @@ public interface PageCtrl {
 	/** Returns the doc type (&lt;!DOCTYPE&gt;),
 	 * or null to use the device default.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getDocType();
 	/** Sets the doc type (&lt;!DOCTYPE&gt;).
 	 *
 	 * <p>Default: null (i.e., the device default)
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setDocType(String docType);
 	/** Returns the content type, or null to use the device default.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getContentType();
 	/** Sets the content type.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setContentType(String contentType);
 	/** Returns if the client can cache the rendered result, or null
 	 * to use the device default.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public Boolean getCacheable();
 	/** Sets if the client can cache the rendered result.
 	 *
 	 * <p>Default: null (use the device default).
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setCacheable(Boolean cacheable);
 
@@ -167,7 +167,7 @@ public interface PageCtrl {
 	 * <p>It is used internally and developers shall not invoke it
 	 * explicitly
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 * @see Component#setPageBefore
 	 */
 	public void moveRoot(Component comp, Component refRoot);

@@ -94,7 +94,7 @@ public interface ComponentDefinition extends Cloneable {
 	 *  &lt;text-as&gt;content&lt;/text-as&gt;
 	 *...</code></pre>
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getTextAs();
 
@@ -113,7 +113,7 @@ public interface ComponentDefinition extends Cloneable {
 
 	/** Returns whether this is used for the native namespace.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 * @see LanguageDefinition#getNativeDefinition
 	 */
 	public boolean isNative();

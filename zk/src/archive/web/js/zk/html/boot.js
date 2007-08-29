@@ -34,11 +34,22 @@ if (!window.Boot_progressbox) { //not customized
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
 
-		var html = '<div id="'+id+'" style="left:'+x+'px;top:'+y+'px;'
+		var html = '<div id="'+id+'"';
+
+		var mask = zk.loading && !zk._prgsOnce;
+		if (mask) {
+			zk._prgsOnce = true; //do it only once
+			html += ' class="modal_mask" style="display:block"><div'
+		}
+
+		html += ' style="left:'+x+'px;top:'+y+'px;'
 		+'position:absolute;z-index:79000;background-color:#FFF0C8;'
 		+'white-space:nowrap;border:1px solid #77a;padding:6px;">'
-		+'<img alt="." src="'+zk.getUpdateURI('/web/zk/img/progress.gif')+'"/> '
+		+'<img alt="..." src="'+zk.getUpdateURI('/web/zk/img/progress.gif')+'"/> '
 		+msg+'</div>';
+
+		if (mask)
+			html += '</div>';
 
 		zk._setOuterHTML(n, html);
 		return $e(id);
@@ -234,7 +245,7 @@ zk.enableESC = function () {
 zk.mods = {}; //ZkFns depends on it
 
 /** Returns the current time (new Date().getTime()) (since 01/01/1970).
- * @since 2.5.0
+ * @since 3.0.0
  */
 function $now() {
 	return new Date().getTime();
@@ -427,7 +438,7 @@ zk.addInit = function (fn) {
 /** Invokes the specified function that depends on the specified module.
  * If the module is not loaded yet, it will be loaded first.
  * If it is loaded, the function executes directly.
- * @since 2.5.0
+ * @since 3.0.0
  */
 zk.invoke = function (nm, fn) {
 	if (zk._modules[nm]) {
@@ -538,9 +549,9 @@ zk._bld = function () {
 				if (!n)
 					Boot_progressbox("zk_loadprog",
 						'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)',
-						zk.innerX(), zk.innerY() + 50);
+						zk.innerX() + 30, zk.innerY() + 50);
 			}
-		}, 1500);
+		}, 1000);
 	}
 };
 /** after load. */

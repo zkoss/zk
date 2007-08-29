@@ -94,7 +94,7 @@ public class ComponentsCtrl {
 	 * definition ({@link ComponentDefinition} or null, which is used only by
 	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with
 	 * {@link org.zkoss.zk.ui.AbstractComponent}.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final Object getCurrentInfo() {
 		return _compdef.get();
@@ -103,7 +103,7 @@ public class ComponentsCtrl {
 	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with
 	 * {@link org.zkoss.zk.ui.AbstractComponent}.
 	 * <p>Used only internally.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final void setCurrentInfo(ComponentDefinition compdef) {
 		_compdef.set(compdef);
@@ -112,7 +112,7 @@ public class ComponentsCtrl {
 	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with
 	 * {@link org.zkoss.zk.ui.AbstractComponent}.
 	 * <p>Used only internally.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static void setCurrentInfo(ComponentInfo compInfo) {
 		_compdef.set(compInfo);
@@ -140,7 +140,7 @@ public class ComponentsCtrl {
 	 * if deferred is false or EL is evaluated to a component,
 	 * or a path, otherwise.
 	 * The second component is the event name.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static Object[] parseEventExpression(Component comp,
 	String evtexpr, Component defaultComp, boolean deferred)
@@ -195,7 +195,7 @@ public class ComponentsCtrl {
 	 * <p>See {@link org.zkoss.zk.ui.metainfo.ComponentInfo#setForward}
 	 * for more information.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final void applyForward(Component comp, String forward) {
 		if (forward == null)

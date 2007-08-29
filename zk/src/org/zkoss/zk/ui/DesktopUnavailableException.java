@@ -26,7 +26,7 @@ package org.zkoss.zk.ui;
  *
  * @author tomyeh
  * @see Executions#activate
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class DesktopUnavailableException extends UiException {
 	public DesktopUnavailableException(String msg, Throwable cause) {

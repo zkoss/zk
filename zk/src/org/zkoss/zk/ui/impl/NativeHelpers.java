@@ -30,7 +30,7 @@ import org.zkoss.idom.Namespace;
  * Utilities for implementing {@link org.zkoss.zk.ui.ext.Native.Helper}.
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class NativeHelpers {
 	/** Generates the attributes for the specified properties

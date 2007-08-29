@@ -82,7 +82,7 @@ public class Property implements Condition, Serializable {
 		return _value;
 	}
 	/** Sets the value of the property.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setValue(String value) {
 		_value = value;

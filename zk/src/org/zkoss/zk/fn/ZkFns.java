@@ -357,7 +357,7 @@ public class ZkFns {
 	}
 
 	/** Returns the content type (never null).
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final String outContentType(Page page) {
 		final String contentType = ((PageCtrl)page).getContentType();
@@ -366,7 +366,7 @@ public class ZkFns {
 	}
 	/** Returns the doc type, or null if not available.
 	 * It is null or &lt;!DOCTYPE ...&gt;.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final String outDocType(Page page) {
 		final String docType = ((PageCtrl)page).getDocType();

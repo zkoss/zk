@@ -153,7 +153,7 @@ public interface UiEngine {
 	 * is not defined.
 	 * @return a list of request IDs that have been processed
 	 * completely.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public Collection execUpdate(Execution exec, List requests,
 	String reqId, Writer out) throws IOException;

@@ -30,7 +30,7 @@ public class AuClientInfo extends AuResponse {
 	 * @param desktop the desktop to get the client info back.
 	 * If null, the client info is sent back for each desktop in the
 	 * same browser window.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public AuClientInfo(Desktop desktop) {
 		super("clientInfo", desktop != null ? desktop.getId(): null);

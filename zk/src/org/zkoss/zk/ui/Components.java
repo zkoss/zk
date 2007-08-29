@@ -199,7 +199,7 @@ public class Components {
 	 * to convert it back.
 	 * @exception UnsupportedOperationException if we cannot find a path
 	 * to the component to write.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final String componentToPath(Component comp, Component ref) {
 		//Implementation Note:
@@ -246,7 +246,7 @@ public class Components {
 	 * @param ref the component used to generated the path from.
 	 * It cannot be null. It is the same as the one when calling
 	 * {@link #componentToPath}.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final Component pathToComponent(String path, Component ref) {
 		if (path == null) {

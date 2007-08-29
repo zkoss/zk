@@ -333,7 +333,7 @@ public class PageDefinition extends NodeInfo {
 	}
 
 	/** Returns the content type, or null to use the device default.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getContentType() {
 		return _contentType;
@@ -341,14 +341,14 @@ public class PageDefinition extends NodeInfo {
 	/** Sets the content type.
 	 *
 	 * <p>Default: null (use the device default).
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setContentType(String contentType) {
 		_contentType = contentType;
 	}
 	/** Returns the doc type (&lt;!DOCTYPE&gt;),
 	 * or null to use the device default.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getDocType() {
 		return _docType;
@@ -356,7 +356,7 @@ public class PageDefinition extends NodeInfo {
 	/** Sets the doc type (&lt;!DOCTYPE&gt;).
 	 *
 	 * <p>Default: null (use the device default).
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setDocType(String docType) {
 		_docType = docType;
@@ -364,7 +364,7 @@ public class PageDefinition extends NodeInfo {
 	/** Returns if the client can cache the rendered result, or null
 	 * to use the device default.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public Boolean getCacheable() {
 		return _cacheable;
@@ -372,7 +372,7 @@ public class PageDefinition extends NodeInfo {
 	/** Sets if the client can cache the rendered result.
 	 *
 	 * <p>Default: null (use the device default).
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setCacheable(Boolean cacheable) {
 		_cacheable = cacheable;
@@ -383,7 +383,7 @@ public class PageDefinition extends NodeInfo {
 	 *
 	 * @param value the value. If null, the attribute is removed.
 	 * It can be an EL expression.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setRootAttribute(String name, String value) {
 		if (name == null || name.length() == 0)
@@ -407,7 +407,7 @@ public class PageDefinition extends NodeInfo {
 	/** Converts the header definitions (added by {@link #setRootAttribute})
 	 * to the attributes of the root element.
 	 * For HTML, the root element is the HTML element.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getRootAttributes(Page page) {
 		if (_rootAttrs == null || _rootAttrs.isEmpty())

@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Component;
  * The forward condition is added by use of {@link Component#addForward}.
  *
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class ForwardEvent extends Event {
 	private final Event _origin;
