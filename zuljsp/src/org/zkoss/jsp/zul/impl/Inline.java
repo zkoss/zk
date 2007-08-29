@@ -43,7 +43,6 @@ import org.zkoss.zk.ui.AbstractComponent;
  *
  * @author tomyeh
  * @see org.zkoss.zul.Html
- * @since 2.5.0
  */
 public class Inline extends AbstractComponent {
 	private String _content = "";
