@@ -1,5 +1,5 @@
 	--------
-ZK 2.5.0
+ZK 3.0.0
 * Features:
   1579332: Server Push
   1776116: A way to forward event to another component w/o programming
@@ -70,7 +70,6 @@ ZK 2.5.0
   1775051: Listbox multiple select and databinding issue 
   1778258: EL cause nullpoint when createComponent or fulfill
   1778320: Grid/listbox/tree don't support scrollTop well
-  1779235: ZK 2.5.0 freshly checkbox setChecked doesn't work
   1777696: Richlet served error page fails
   1770144: Memory Leak in AImage
   1783363: Unable to drag a listitem out of the box (IE only)
