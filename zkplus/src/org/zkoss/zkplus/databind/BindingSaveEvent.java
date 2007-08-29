@@ -22,7 +22,7 @@ import org.zkoss.zk.ui.event.Event;
 /**
  * Event used when DataBinder send "onBindingSave" events.
  * @author henrichen
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class BindingSaveEvent extends Event {
 	private final Object _value;

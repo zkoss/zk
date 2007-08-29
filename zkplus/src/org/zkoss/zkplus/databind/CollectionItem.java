@@ -28,7 +28,7 @@ import org.zkoss.zul.ListModel;
  * 
  * @author jumperchen
  * @see DataBinder
- * @since 2.5.0
+ * @since 3.0.0
  */
 public interface CollectionItem {
 	/**

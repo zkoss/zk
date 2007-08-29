@@ -44,7 +44,7 @@ import java.util.ArrayList;
  * A Data Binding that associate component+attr to an bean expression.
  *
  * @author Henri
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class Binding {
 	private DataBinder _binder;

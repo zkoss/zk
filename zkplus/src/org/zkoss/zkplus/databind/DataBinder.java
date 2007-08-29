@@ -125,7 +125,7 @@ public class DataBinder {
 	 * e.g. Label.value is "load", but Textbox.value is "both".
 	 * @param converter The converter class used to convert classes between component 
 	 *  and the associated bean. null means using the default class conversion method.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void addBinding(Component comp, String attr, String expr,
 		String[] loadWhenEvents, String[] saveWhenEvents, String access, String converter) {
@@ -178,7 +178,7 @@ public class DataBinder {
 	 * e.g. Label.value is "load", but Textbox.value is "both".
 	 * @param converter The converter class used to convert classes between component 
 	 *  and the associated bean. null means using the default class conversion method.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void addBinding(Component comp, String attr, String expr,
 		List loadWhenEvents, List saveWhenEvents, String access, String converter) {
@@ -558,7 +558,7 @@ public class DataBinder {
 	/**
 	 * Adds a CollectionItem for this comp.
 	 * @see CollectionItem
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void addCollectionItem(String comp, CollectionItem decor){
 		_collectionItemMap.put(comp, decor);
@@ -572,7 +572,7 @@ public class DataBinder {
 	/**
 	 * Returns a CollectionItem by the comp accordingly.
 	 * @see CollectionItem
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	protected CollectionItem getBindingCollectionItem(Component comp){
 		String name = comp.getClass().getName();

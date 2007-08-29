@@ -94,7 +94,7 @@ import java.util.Iterator;
  * </li>
  *
  * <li>save-when. You can specify the events concerned when to save the attribute of the component into the bean.
- * Since ZK version 2.5.0, you can specify multiple events in save-when tag (i.e. before ZK 2.5.0, you can specify only
+ * Since ZK version 3.0.0, you can specify multiple events in save-when tag (i.e. before ZK 3.0.0, you can specify only
  * one event). The events specified, if fired, will trigger
  * this DataBinder to save the attribute of the component into bean. For example, the following code snip tells 
  * DataBinder that the attribute "value" of Textbox "firstName" will 
@@ -146,7 +146,7 @@ import java.util.Iterator;
  * </pre>
  * </li>
  *
- * <p>Since 2.5.0, DataBinder supports validation phase before saving attribute content into bean property when 
+ * <p>Since 3.0.0, DataBinder supports validation phase before saving attribute content into bean property when 
  * triggered by the specified event in save-when tag. It will fire onBindingSave event to the data-binding component and
  * then fire onBindingValidate to the triggering component before really saving component attribute contents into bean's 
  * property. So application developers get the chance to handle the value validatiion before saving. In the following example
@@ -197,7 +197,7 @@ import java.util.Iterator;
  * </ul>
  * 
  * @since 2.4.0 Supporting @{...} annotations.
- * @since 2.5.0 Supporting multiple events of save-when tag and validation phase.
+ * @since 3.0.0 Supporting multiple events of save-when tag and validation phase.
  * @author Henri Chen
  * @see AnnotateDataBinderInit
  * @see DataBinder
