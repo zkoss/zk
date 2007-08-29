@@ -31,7 +31,7 @@ public class Jsps {
 	private Jsps() {}
 	/** Reteurns the page context of the specified JSP context.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public static final PageContext getPageContext(JspContext jspctx)
 	throws JspException {

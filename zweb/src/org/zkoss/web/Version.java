@@ -23,10 +23,10 @@ package org.zkoss.web;
  * {@link #UID} must be the same as the version specified in config.xml.
  * 
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class Version {
 	/** Returns the version UID.
 	 */
-	public static final String UID = "2.5.0";
+	public static final String UID = "3.0.0";
 }

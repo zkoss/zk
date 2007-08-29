@@ -119,7 +119,7 @@ public class ClassWebResource {
 	/** Process the request by retrieving the path from the path info.
 	 * It invokes {@link Https#getThisPathInfo} to retrieve the path info.
 	 *
-	 * <p>Deprecated since 2.5.0. Use {@link #service(HttpServletRequest, HttpServletResponse, String)}
+	 * <p>Deprecated since 3.0.0. Use {@link #service(HttpServletRequest, HttpServletResponse, String)}
 	 * instead.
 	 *
 	 * @since 2.4.1
@@ -137,7 +137,7 @@ public class ClassWebResource {
 	/** Process the request with the specified path.
 	 *
 	 * @param path the path related to the class path
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
