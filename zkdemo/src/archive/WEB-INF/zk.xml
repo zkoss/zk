@@ -124,6 +124,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<listener-class>org.zkoss.zkdemo.test.PerformanceMeter</listener-class>
 	</listener>
 	-->
+	<!-- Uncomment to test if EventThreadInit throws an exception
+	<listener>
+		<listener-class>org.zkoss.zkdemo.test.NPEEventThreadInit</listener-class>
+	</listener>
+	-->
 
 	<!-- Configure the error page
 	<error-page>
