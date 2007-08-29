@@ -117,13 +117,10 @@ public class ClassWebResource {
 		addExtendlet("dsp", new DspExtendlet());
 	}
 	/** Process the request by retrieving the path from the path info.
-	 * It invokes {@link Https#getThisPathInfo} to retrieve the path info.
-	 *
-	 * <p>Deprecated since 3.0.0. Use {@link #service(HttpServletRequest, HttpServletResponse, String)}
-	 * instead.
+	 * It invokes {@link Https#getThisPathInfo} to retrieve the path info,
+	 * and then invoke {@link #service(HttpServletRequest,HttpServletResponse,String)}.
 	 *
 	 * @since 2.4.1
-	 * @deprecated
 	 */
 	public void service(HttpServletRequest request,
 	HttpServletResponse response)
