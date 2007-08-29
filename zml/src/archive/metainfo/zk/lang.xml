@@ -34,11 +34,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	-->
 	<mold>
 		<mold-name>desktop</mold-name>
-		<mold-uri>~./zk/xml/desktop.dsp</mold-uri>
+		<mold-uri>~./zml/desktop.dsp</mold-uri>
 	</mold>
 	<mold>
 		<mold-name>page</mold-name>
-		<mold-uri>~./zk/xml/page.dsp</mold-uri>
+		<mold-uri>~./zml/page.dsp</mold-uri>
 	</mold>
 
 	<!-- Defines the component and attribute names used to represent
@@ -52,7 +52,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- Defines the templat for macro components -->
 	<macro-template>
 		<macro-class>org.zkoss.zml.XmlMacroComponent</macro-class>
-		<macro-uri>~./zk/xml/macro.dsp</macro-uri>
+		<macro-uri>~./zml/macro.dsp</macro-uri>
 	</macro-template>
 	<!-- Defines the template for the Native namespace
 		[Optional] Define it only if the Native namespace is supported.

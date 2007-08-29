@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb  7 11:49:07     2007, Created by tomyeh
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+-->
+
+<config>
+	<version>
+		<version-class>org.zkoss.zml.Version</version-class>
+		<version-uid>3.0.0</version-uid>
+	</version>
+
+	<device-config>
+		<device-type>xml</device-type>
+		<device-class>org.zkoss.zml.device.XmlDevice</device-class>
+	</device-config>
+</config>
