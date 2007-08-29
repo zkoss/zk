@@ -20,6 +20,10 @@ package org.zkoss.web.servlet.dsp.impl;
 
 import java.io.Writer;
 import java.io.IOException;
+
+import javax.servlet.jsp.el.Expression;
+import javax.servlet.jsp.el.ExpressionEvaluator;
+import javax.servlet.jsp.el.FunctionMapper;
 import javax.servlet.jsp.el.ELException;
 
 import org.zkoss.util.logging.Log;
@@ -32,18 +36,18 @@ import org.zkoss.web.servlet.ServletException;
  */
 class ELNode extends Node {
 	private static final Log log = Log.lookup(ELNode.class);
-	private final String _expr;
+	private final Expression _expr;
 
-	ELNode(String expr) {
-		_expr = expr;
+	ELNode(String expr, ParseContext ctx) throws ELException {
+		_expr = ctx.getExpressionEvaluator().parseExpression(
+			expr, String.class, ctx.getFunctionMapper());
 	}
 
 	//-- super --//
 	void interpret(InterpretContext ic)
 	throws javax.servlet.ServletException, IOException {
 		try {
-			final String result = (String)ic.dc.getExpressionEvaluator()
-				.evaluate(_expr, String.class, ic.resolver, ic.mapper);
+			final String result = (String)_expr.evaluate(ic.resolver);
 			if (result != null)
 				ic.dc.getOut().write(result);
 		} catch (ELException ex) {

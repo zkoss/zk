@@ -24,13 +24,17 @@ import java.util.Iterator;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.net.URL;
+
 import javax.servlet.jsp.el.FunctionMapper;
+import javax.servlet.jsp.el.ExpressionEvaluator;
+import javax.servlet.jsp.el.ELException;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.el.SimpleMapper;
+import org.zkoss.el.EvaluatorImpl;
 import org.zkoss.el.Taglibs;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.Element;
@@ -63,9 +67,9 @@ public class Parser {
 	 */
 	public Interpretation parse(String content, String ctype,
 	FunctionMapper fm, Locator loc)
-	throws javax.servlet.ServletException, IOException {
+	throws javax.servlet.ServletException, IOException, ELException {
 		final Context ctx = new Context(content, fm, loc);
-		final RootNode root = new RootNode(ctx.mapper);
+		final RootNode root = new RootNode();
 		parse0(ctx, root, 0, content.length());
 
 		if (!ctx.pageDefined) {
@@ -75,7 +79,7 @@ public class Parser {
 			root.addChild(0, action);
 			final Map attrs = new HashMap(2);
 			attrs.put("contentType", ctype != null ? ctype: "text/html");
-			applyAttrs("page", action, attrs);
+			applyAttrs("page", action, attrs, ctx);
 		}
 
 		return root;
@@ -84,7 +88,7 @@ public class Parser {
 	/** Recursively parse the content into a tree of {@link Node}.
 	 */
 	private static void parse0(Context ctx, Node parent, int from, int to)
-	throws javax.servlet.ServletException, IOException {
+	throws javax.servlet.ServletException, IOException, ELException {
 		boolean esc = false;
 		final StringBuffer sb = new StringBuffer(512);
 		for (int j = from; j < to; ++j) {
@@ -147,7 +151,7 @@ public class Parser {
 	 */
 	private static int parseControl(Context ctx, Node parent,
 	int from, int to)
-	throws javax.servlet.ServletException, IOException {
+	throws javax.servlet.ServletException, IOException, ELException {
 		int j = from + 2;
 		if (j + 1 >= to)
 			throw new ServletException(MWeb.DSP_ACTION_NOT_TERMINATED,
@@ -203,7 +207,7 @@ public class Parser {
 				throw new ServletException(MWeb.DSP_TAGLIB_ATTRIBUTE_REQUIRED, new Integer(ctx.nLines));
 			ctx.loadTaglib(prefix, uri);
 		} else {
-			applyAttrs(ctlnm, action, attrs);
+			applyAttrs(ctlnm, action, attrs, ctx);
 		}
 
 		if (++k >= to || ctx.content.charAt(k) != '>')
@@ -218,7 +222,7 @@ public class Parser {
 	 */
 	private static int parseAction(Context ctx, Node parent,
 	String prefix, int from, int to)
-	throws javax.servlet.ServletException, IOException {
+	throws javax.servlet.ServletException, IOException, ELException {
 		//1: which action
 		int j = skipWhitespaces(ctx, from + 1, to);
 		int k = nextSeparator(ctx, j, to);
@@ -246,7 +250,7 @@ public class Parser {
 			throw new ServletException(MWeb.DSP_UNEXPECT_CHARACTER,
 				new Object[] {new Character(cc), new Integer(ctx.nLines)});
 
-		applyAttrs(actnm, action, attrs);
+		applyAttrs(actnm, action, attrs, ctx);
 
 		if (ended) {
 			if (j + 1 >= to || ctx.content.charAt(j + 1) != '>')
@@ -385,14 +389,15 @@ public class Parser {
 	/** Applies attributes.
 	 */
 	private static final
-	void applyAttrs(String actnm, ActionNode action, Map attrs)
-	throws javax.servlet.ServletException {
+	void applyAttrs(String actnm, ActionNode action, Map attrs,
+	ParseContext ctx)
+	throws javax.servlet.ServletException, ELException {
 		for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final String attrnm = (String)me.getKey();
 			final String attrval = (String)me.getValue();
 			try {
-				action.addAttribute(attrnm, attrval);
+				action.addAttribute(attrnm, attrval, ctx);
 			} catch (NoSuchMethodException ex) {
 				throw new ServletException(MWeb.DSP_ATTRIBUTE_NOT_FOUND,
 					new Object[] {actnm, attrnm, new Integer(action.getLineNumber())});
@@ -407,9 +412,10 @@ public class Parser {
 	 * @return the position of }.
 	 */
 	private static int parseEL(Context ctx, Node parent, int from, int to)
-	throws javax.servlet.ServletException {
+	throws javax.servlet.ServletException, ELException {
 		int j = endOfEL(ctx, from, to); //point to }
-		parent.addChild(new ELNode(ctx.content.substring(from, j + 1)));
+		parent.addChild(
+			new ELNode(ctx.content.substring(from, j + 1), ctx));
 		return j;
 	}
 	/** Returns the position of '}'. */
@@ -445,20 +451,32 @@ public class Parser {
 		}
 	}
 
-	/** Context used during parsing. */
-	private static class Context {
+	/** Context used for parsing. */
+	private static class Context implements ParseContext {
 		private final String content;
-		private final SimpleMapper mapper;
 		/** (String prefix, Map(String name, Class class)). */
 		private final Map _actions = new HashMap();
-		private final Locator locator;
+		private final Locator _locator;
+		private final ExpressionEvaluator _eval;
+		private final SimpleMapper _mapper;
 		private int nLines;
 		/** Whether the page action is defined. */
 		private boolean pageDefined;
+
+		//ParseContext//
+		public ExpressionEvaluator getExpressionEvaluator() {
+			return _eval;
+		}
+		public FunctionMapper getFunctionMapper() {
+			return _mapper;
+		}
+
+		//Internal//
 		private Context(String content, FunctionMapper fm, Locator loc) {
 			this.content = content;
-			this.mapper = new SimpleMapper(fm);
-			this.locator = loc;
+			_mapper = new SimpleMapper(fm);
+			_eval = new EvaluatorImpl();
+			_locator = loc;
 			this.nLines = 1;
 		}
 		private boolean hasPrefix(String prefix) {
@@ -471,10 +489,10 @@ public class Parser {
 		private void loadTaglib(String prefix, String uri)
 		throws javax.servlet.ServletException, IOException {
 //			if (D.ON && log.debugable()) log.debug("Loading "+prefix+" at "+uri);
-			if (this.locator == null)
+			if (_locator == null)
 				throw new ServletException("Unable to load "+uri+" because locator is not specified");
 
-			URL url = uri.indexOf("://") > 0 ? null: this.locator.getResource(uri);
+			URL url = uri.indexOf("://") > 0 ? null: _locator.getResource(uri);
 			if (url == null) {
 				url = Taglibs.getDefaultURL(uri);
 				if (url == null)
@@ -487,14 +505,13 @@ public class Parser {
 				throw ex;
 			} catch (Exception ex) {
 				throw ServletException.Aide.wrap(ex);
-			}
-
+			}	
 		}
 		private void loadTaglib0(String prefix, URL url)
 		throws Exception {
 			final Element root = new SAXBuilder(true, false, true)
 				.build(url).getRootElement();
-			mapper.load(prefix, root);
+			_mapper.load(prefix, root);
 
 			final Map acts = new HashMap();
 			for (Iterator it = root.getElements("tag").iterator();

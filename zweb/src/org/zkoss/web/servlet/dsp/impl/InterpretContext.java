@@ -32,15 +32,13 @@ import org.zkoss.web.servlet.dsp.action.Action;
 class InterpretContext {
 	final DspContext dc;
 	final InterpretResolver resolver;
-	final FunctionMapper mapper;
 	/** The action being processing, or null if no such action. */
 	Action action;
 
 	/** Constructs an interpret context.
 	 */
-	InterpretContext(DspContext dc, FunctionMapper mapper) {
+	InterpretContext(DspContext dc) {
 		this.dc = dc;
 		this.resolver = new InterpretResolver(dc.getVariableResolver());
-		this.mapper = mapper;
 	}
 }

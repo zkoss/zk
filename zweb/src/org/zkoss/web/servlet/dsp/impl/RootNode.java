@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.FunctionMapper;
-
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.el.ELContexts;
 import org.zkoss.web.servlet.dsp.*;
@@ -36,10 +34,7 @@ import org.zkoss.web.servlet.dsp.*;
 class RootNode extends Node implements Interpretation {
 //	private static final Log log = Log.lookup(RootNode.class);
 
-	private final FunctionMapper _mapper;
-
-	RootNode(FunctionMapper fm) {
-		_mapper = fm;
+	RootNode() {
 	}
 
 	//-- Node --//
@@ -61,7 +56,7 @@ class RootNode extends Node implements Interpretation {
 
 		ELContexts.push(dc);
 		try {
-			interpret(new InterpretContext(dc, _mapper));
+			interpret(new InterpretContext(dc));
 /*		} catch (javax.servlet.ServletException ex) {
 			log.realCauseBriefly(ex); //in case: ex might be eaten
 			throw ex;

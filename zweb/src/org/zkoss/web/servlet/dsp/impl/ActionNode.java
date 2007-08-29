@@ -25,6 +25,9 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
+import javax.servlet.jsp.el.Expression;
+import javax.servlet.jsp.el.ExpressionEvaluator;
+import javax.servlet.jsp.el.FunctionMapper;
 import javax.servlet.jsp.el.ELException;
 
 import org.zkoss.lang.D;
@@ -98,8 +101,8 @@ class ActionNode extends Node {
 	}
 
 	/** Adds an attribute. */
-	void addAttribute(String nm, String val)
-	throws NoSuchMethodException, ClassCastException {
+	void addAttribute(String nm, String val, ParseContext ctx)
+	throws NoSuchMethodException, ClassCastException, ELException {
 		if (nm == null || val == null)
 			throw new IllegalArgumentException("null");
 		if (_attrs == null)
@@ -108,31 +111,32 @@ class ActionNode extends Node {
 		final Method mtd = (Method)Classes.getAccessibleObject(
 			_cls, nm, new Class[] {null},
 			Classes.B_SET|Classes.B_PUBLIC_ONLY|Classes.B_METHOD_ONLY);
-		if (val.indexOf("${") >= 0) { //
-			_attrs.add(new Attr(mtd, val, true));
-		} else {
+		final Class type = mtd.getParameterTypes()[0];
+		if (val.indexOf("${") >= 0) {
 			_attrs.add(new Attr(mtd,
-				Classes.coerce(mtd.getParameterTypes()[0], val), false));
+				ctx.getExpressionEvaluator().parseExpression(
+					val, type, ctx.getFunctionMapper())));
+		} else {
+			_attrs.add(new Attr(mtd, Classes.coerce(type, val)));
 		}
 	}
 	private static class Attr {
 		private final Method _method;
 		private final Object _value;
-		private final boolean _bExpr;
-		private Attr(Method mtd, Object val, boolean expr) {
+		/**
+		 * @param val the value. Either Expression or String.
+		 */
+		private Attr(Method mtd, Object val) {
 			_method = mtd;
 			_value = val;
-			_bExpr = expr;
 		}
 		/** Applies this attribute to the specified action. */
 		private void apply(InterpretContext ic, Action action)
 		throws javax.servlet.ServletException {
 			final Object[] args = new Object[1];
 			try {
-				if (_bExpr) {
-					args[0] = ic.dc.getExpressionEvaluator().evaluate(
-						(String)_value, _method.getParameterTypes()[0],
-						ic.resolver, ic.mapper);
+				if (_value instanceof Expression) {
+					args[0] = ((Expression)_value).evaluate(ic.resolver);
 					//if (D.ON && log.finerable()) log.finer("attr "+_method.getName()+"="+_value+" to "+args[0]);
 				} else {
 					args[0] = _value;
@@ -142,7 +146,6 @@ class ActionNode extends Node {
 				if (log.debugable()) log.debug(ex);
 				throw new ServletException("Failed to invoke "+_method+" with "+args[0]
 	+(args[0] != null ? " @"+args[0].getClass().getName(): "")
-	+(_bExpr ? " ("+_value+')': "")
 	+". Cause: "+ex.getClass().getName()+", "+Exceptions.getMessage(ex)
 	+"\n"+Exceptions.getBriefStackTrace(ex));
 					//Web container might not show the real cause, we have to

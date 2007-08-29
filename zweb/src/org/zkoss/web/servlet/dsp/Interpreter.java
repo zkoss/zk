@@ -27,6 +27,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.el.FunctionMapper;
+import javax.servlet.jsp.el.ELException;
 
 import org.zkoss.lang.D;
 import org.zkoss.util.media.ContentTypes;
@@ -83,7 +84,7 @@ public class Interpreter {
 	 */
 	public final Interpretation parse(String content, String ctype,
 	FunctionMapper fm, Locator loc)
-	throws javax.servlet.ServletException, IOException {
+	throws javax.servlet.ServletException, IOException,  ELException {
 		return new Parser().parse(content, ctype, fm, loc);
 	}
 	/** Interprets the specified content and generates the result to
@@ -97,7 +98,7 @@ public class Interpreter {
 	 */
 	public final void interpret(DspContext dc, FunctionMapper fm,
 	String content, String ctype)
-	throws javax.servlet.ServletException, IOException {
+	throws javax.servlet.ServletException, IOException, ELException {
 		parse(content, ctype, fm, dc.getLocator()).interpret(dc);
 	}
 	/** Interprets the specified content based on the HTTP request.
@@ -115,7 +116,7 @@ public class Interpreter {
 	public final void interpret(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response,
 	String content, String ctype, Locator locator)
-	throws javax.servlet.ServletException, IOException {
+	throws javax.servlet.ServletException, IOException, ELException {
 		interpret(
 			new ServletDspContext(ctx, request, response, locator),
 			null, content, ctype);
@@ -139,7 +140,7 @@ public class Interpreter {
 	public final void interpret(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, Writer out,
 	String content, String ctype, Locator locator)
-	throws javax.servlet.ServletException, IOException {
+	throws javax.servlet.ServletException, IOException, ELException {
 		interpret(
 			new ServletDspContext(ctx, request, response, out, locator),
 			null, content, ctype);
