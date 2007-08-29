@@ -21,6 +21,7 @@ package org.zkoss.zml;
 import java.util.Collection;
 import java.util.Map;
 
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.HtmlNativeComponent;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
@@ -60,11 +61,14 @@ public class XmlNativeComponent extends HtmlNativeComponent {
 			NativeHelpers.getAttributes(sb, props, namespaces);
 
 			if (tag != null)
-				sb.append(">\n");
+				sb.append(">");
 		}
 		public void getSecondHalf(StringBuffer sb, String tag) {
 			if (tag != null)
 				sb.append("</").append(tag).append(">\n");
+		}
+		public void appendText(StringBuffer sb, String text) {
+			XMLs.encodeText(sb, text);
 		}
 	}
 }
