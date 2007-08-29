@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.ext.Macro;
  * The implemetation of a macro component for XML output.
  * 
  * @author tomyeh
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class XmlMacroComponent extends AbstractComponent implements Macro {
 	private transient Map _props;
