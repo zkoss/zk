@@ -118,7 +118,7 @@ public class MultiCache implements java.io.Serializable, Cloneable {
 		return _caches[0].getLifetime();
 	}
 	/**
-	 * Sets the minimal lifetime. Default: {@link #DEFAULT_LIFETIME}.
+	 * Sets the minimal lifetime. Default: {@link CacheMap#DEFAULT_LIFETIME}.
 	 *
 	 * @param lifetime the lifetime, unit=milliseconds;
 	 * if non-posive, they will be removed immediately.
@@ -133,7 +133,7 @@ public class MultiCache implements java.io.Serializable, Cloneable {
 		return this;
 	}
 	/**
-	 * Gets the maximal allowed size. Defalut: {@link #DEFAULT_MAXSIZE}.
+	 * Gets the maximal allowed size. Defalut: {@link CacheMap#DEFAULT_MAXSIZE}.
 	 * An mapping won't be removed by GC unless the minimal lifetime
 	 * or the maximal allowed size exceeds.
 	 * @see #getLifetime
