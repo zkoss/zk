@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Desktop;
 /**
  * Represents a client device.
  * For example, the HTML browsers with Ajax are called {@link AjaxDevice},
- * the XML output called {@link XmlDevice},
+ * the XML output called org.zkoss.zml.device.XmlDevice,
  * and the MIL device called org.zkoss.mil.device.MilDevice.
  *
  * <p>Note: the same device is shared by all desktops of the same device

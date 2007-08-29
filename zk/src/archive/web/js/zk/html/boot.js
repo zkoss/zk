@@ -551,7 +551,7 @@ zk._bld = function () {
 						'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)',
 						zk.innerX() + 30, zk.innerY() + 50);
 			}
-		}, 1000);
+		}, 350);
 	}
 };
 /** after load. */

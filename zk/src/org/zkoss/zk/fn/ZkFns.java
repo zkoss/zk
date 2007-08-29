@@ -369,9 +369,16 @@ public class ZkFns {
 	 * @since 3.0.0
 	 */
 	public static final String outDocType(Page page) {
-		final String docType = ((PageCtrl)page).getDocType();
-		return docType != null ? docType:
-			page.getDesktop().getDevice().getDocType();
+		String docType = ((PageCtrl)page).getDocType();
+		if (docType == null)
+			docType = page.getDesktop().getDevice().getDocType();
+		if (docType != null) {
+			docType = docType.trim();
+			final int len = docType.length();
+			if (len > 0 && docType.charAt(len-1) != '\n')
+				docType += '\n';
+		}
+		return docType;
 	}
 	/** Generates Locale-dependent strings in JavaScript syntax.
 	 */

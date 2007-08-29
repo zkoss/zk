@@ -46,9 +46,4 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <p style="color:red">Sorry, JavaScript must be enabled.<br/>Change your browser options, then <a href="">try again</a>.</p>
 		]]></unavailable-message>
 	</device-config>
-
-	<device-config>
-		<device-type>xml</device-type>
-		<device-class>org.zkoss.zk.device.XmlDevice</device-class>
-	</device-config>
 </config>
