@@ -123,7 +123,7 @@ public class Slider extends XulElement {
 	 * with other kind of clients.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getName() {
 		return _name;
@@ -137,7 +137,7 @@ public class Slider extends XulElement {
 	 * on ZK's event-driven model.
 	 *
 	 * @param name the name of this component.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setName(String name) {
 		if (name != null && name.length() == 0) name = null;

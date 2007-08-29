@@ -78,7 +78,7 @@ public class Comboitem extends LabelImageElement {
 	 * <p>Default: empty ("").
 	 *
 	 * @see #getDescription
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getContent() {
 		return _content;
@@ -89,7 +89,7 @@ public class Comboitem extends LabelImageElement {
 	 * <p>It is useful to show the description in more versatile way.
 	 *
 	 * @see #setDescription
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setContent(String content) {
 		if (content == null) content = "";

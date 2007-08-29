@@ -103,7 +103,7 @@ public class Style extends AbstractComponent {
 	 *
 	 * <p>Default: null.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getContent() {
 		return _content;
@@ -112,7 +112,7 @@ public class Style extends AbstractComponent {
 	 * By content we mean the CSS that will be enclosed
 	 * by the HTML STYLE element.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setContent(String content) {
 		if (content != null && content.length() == 0)

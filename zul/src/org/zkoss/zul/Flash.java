@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
  * <p>Non XUL extension.
  *
  * @author Jeff
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class Flash extends HtmlBasedComponent {
 

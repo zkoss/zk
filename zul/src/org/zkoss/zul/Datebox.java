@@ -141,7 +141,7 @@ public class Datebox extends FormatInputElement {
 		}
 	}
 	/** Returns the URI of the button image.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getImage() {
 		return _img != null ? _img: DEFAULT_IMAGE;
@@ -150,7 +150,7 @@ public class Datebox extends FormatInputElement {
 	 *
 	 * @param img the URI of the button image. If null or empty, the default
 	 * URI is used.
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setImage(String img) {
 		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))

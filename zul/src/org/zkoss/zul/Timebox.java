@@ -48,7 +48,7 @@ import org.zkoss.zul.mesg.MZul;
  * 	<li>delete : clear the time to empty (null)
  * </lu>
  * @author Dennis Chen
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class Timebox extends InputElement {
 	private static final String DEFAULT_IMAGE = "~./zul/img/updnbtn.gif";

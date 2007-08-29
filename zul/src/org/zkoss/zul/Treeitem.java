@@ -58,7 +58,7 @@ public class Treeitem extends XulElement {
 	/**
 	 * Return true whether this container is loaded
 	 * @return true whether this container is loaded
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public boolean isLoaded(){
 		return _loaded;
@@ -66,7 +66,7 @@ public class Treeitem extends XulElement {
 	
 	/**
 	 * Sets whether this container is loaded
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setLoaded(boolean loaded){
 		_loaded = loaded;
@@ -75,7 +75,7 @@ public class Treeitem extends XulElement {
 	/**
 	 * return the index of this container 
 	 * @return the index of this container 
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public int indexOf()
 	{

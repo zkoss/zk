@@ -155,7 +155,7 @@ public class Script extends AbstractComponent {
 	 *
 	 * <p>Default: null.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public String getContent() {
 		return _content;
@@ -164,7 +164,7 @@ public class Script extends AbstractComponent {
 	 * By content we mean the JavaScript codes that will be enclosed
 	 * by the HTML SCRIPT element.
 	 *
-	 * @since 2.5.0
+	 * @since 3.0.0
 	 */
 	public void setContent(String content) {
 		if (content != null && content.length() == 0)
