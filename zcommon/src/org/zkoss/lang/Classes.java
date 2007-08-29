@@ -40,7 +40,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.math.BigDecimals;
 import org.zkoss.math.BigIntegers;
-import org.zkoss.util.CacheMap;
+import org.zkoss.util.MultiCache;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.logging.Log;
 
@@ -610,17 +610,12 @@ public class Classes {
 			return getMethodInPublic(cls, name, null);
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, 0);
-		Method m;
-		synchronized(_closms) {
-			m = (Method)_closms.get(aoi);
-		}
+		Method m = (Method)_closms.get(aoi);
 		if (m != null)
 			return m;
 
 		m = myGetCloseMethod(cls, name, argTypes, false);
-		synchronized(_closms) {
-			_closms.put(aoi, m);
-		}
+		_closms.put(aoi, m);
 		return m;
 	}
 	/**
@@ -636,21 +631,16 @@ public class Classes {
 			return getMethodInPublic(cls, name, null);
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, B_BY_SUBCLASS);
-		Method m;
-		synchronized(_closms) {
-			m = (Method)_closms.get(aoi);
-		}
+		Method m = (Method)_closms.get(aoi);
 		if (m != null)
 			return m;
 
 		m = myGetCloseMethod(cls, name, argTypes, true);
-		synchronized(_closms) {
-			_closms.put(aoi, m);
-		}
+		_closms.put(aoi, m);
 		return m;
 	}
-	private static CacheMap _closms =
-		new CacheMap(113).setMaxSize(500).setLifetime(4*60*60*1000);
+	private static MultiCache _closms =
+		new MultiCache(20).setMaxSize(500).setLifetime(4*60*60*1000);
 	private static final Method
 	myGetCloseMethod(final Class cls, final String name,
 	final Class[] argTypes, final boolean bySubclass)
@@ -831,20 +821,16 @@ public class Classes {
 	getAccessibleObject(Class cls, String name, Class[] argTypes, int flags)
 	throws NoSuchMethodException {
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, flags);
-		AccessibleObject ao;
-		synchronized(_acsos) {
-			ao = (AccessibleObject)_acsos.get(aoi);
-		}
+		AccessibleObject ao = (AccessibleObject)_acsos.get(aoi);
 		if (ao != null)
 			return ao;
 
 		ao = myGetAcsObj(cls, name, argTypes, flags);
-		synchronized(_acsos) {
-			_acsos.put(aoi, ao);
-		}
+		_acsos.put(aoi, ao);
 		return ao;
 	}
-	private static CacheMap _acsos = new CacheMap(113).setMaxSize(500).setLifetime(4*60*60*1000);
+	private static MultiCache _acsos =
+		new MultiCache(20).setMaxSize(500).setLifetime(4*60*60*1000);
 	private static final AccessibleObject
 	myGetAcsObj(Class cls, String name, Class[] argTypes, int flags)
 	throws NoSuchMethodException {
