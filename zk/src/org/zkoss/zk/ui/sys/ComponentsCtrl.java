@@ -31,7 +31,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Pair;
-import org.zkoss.util.CacheMap;
+import org.zkoss.util.MultiCache;
 import org.zkoss.util.Maps;
 
 import org.zkoss.zk.ui.Executions;
@@ -267,17 +267,14 @@ public class ComponentsCtrl {
 	}
 
 	/** A map of (Pair(Class,String evtnm), Method). */
-	private static final CacheMap _evtmtds =
-		new CacheMap(131).setMaxSize(1000).setLifetime(60*60000);
+	private static final MultiCache _evtmtds =
+		new MultiCache(20).setMaxSize(1000).setLifetime(60*60000);
 	/** Returns the method for handling the specified event, or null
 	 * if not available.
 	 */
 	public static final Method getEventMethod(Class cls, String evtnm) {
 		final Pair key = new Pair(cls, evtnm);
-		final Object o;
-		synchronized (_evtmtds) {
-			o = _evtmtds.get(key);
-		}
+		final Object o = _evtmtds.get(key);
 		if (o != null)
 			return o == Objects.UNKNOWN ? null: (Method)o;
 
@@ -291,9 +288,7 @@ public class ComponentsCtrl {
 			} catch (NoSuchMethodException e2) {
 			}
 		}
-		synchronized (_evtmtds) {
-			_evtmtds.put(key, mtd != null ? mtd: Objects.UNKNOWN);
-		}
+		_evtmtds.put(key, mtd != null ? mtd: Objects.UNKNOWN);
 		return mtd;
 	}
 
