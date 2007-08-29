@@ -98,6 +98,11 @@ div.wc-popup {
 	border: 1px solid #1854c2;
 }
 
+div.wc-embedded-none, div.wc-wndcyan-none,
+div.wc-modal-none, div.wc-highlighted-none,
+div.wc-overlapped-none, div.wc-popup-none {
+	border: 0;
+}
 td.lwt-embedded, td.mwt-embedded, td.rwt-embedded,
 td.lwt-popup, td.rwt-popup, td.mwt-popup,
 td.lwt-modal, td.mwt-modal, td.rwt-modal,
@@ -105,7 +110,7 @@ td.lwt-highlighted, td.mwt-highlighted, td.rwt-highlighted,
 td.lwt-overlapped, td.mwt-overlapped, td.rwt-overlapped,
 td.lwt-wndcyan, td.mwt-wndcyan, td.rwt-wndcyan {
 	font-size: small;
-	padding-top: 4px; padding-bottom: 3px; margin-bottom: 2px;
+	padding: 4px 0 3px 0; margin: 0 0 2px 0;
 	color: white;
 }
 td.lwt-embedded {
