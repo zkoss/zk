@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.MalformedURLException;
 
 import javax.servlet.ServletContext;
 
@@ -35,9 +34,6 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
 
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.el.ELContext;
-import org.zkoss.web.el.ELContexts;
-import org.zkoss.web.servlet.http.Https;
 
 /**
  * Utilities to load (and parse) the servlet resource.
@@ -50,7 +46,7 @@ import org.zkoss.web.servlet.http.Https;
  * <p>Usage 2:
  * <ol>
  * <li>Implements a loader by extending from {@link ResourceLoader}.</li>
- * <li>Creates a resource cache (org.zkoss.utl.resource.ResourceCache}
+ * <li>Creates a resource cache ({@link ResourceCache})
  * by use of the loader in the previous step.</li>
  * <li>Invoke {@link #get} to load the resource.</li>
  * </ol>
@@ -84,7 +80,7 @@ public class ResourceCaches {
 	//We don't need to handle the default name if user specifies only a dir
 	//because it is handled by the container directlys
 	//And, web  developer has to specify <welcome-file> in web.xml
-		if (D.ON && log.finerable()) log.finer("Servlet path: "+path);
+//		if (D.ON && log.finerable()) log.finer("Servlet path: "+path);
 		URL url = null;
 		if (path == null || path.length() == 0) path = "/";
 		else if (path.charAt(0) != '/') {
@@ -115,7 +111,7 @@ public class ResourceCaches {
 					Servlets.getExtendletContext(ctx, ctxpath.substring(1));
 				if (extctx != null) {
 					url = extctx.getResource(path);
-					if (log.debugable()) log.debug("Resolving "+path0+" to "+url);
+//					if (log.debugable()) log.debug("Resolving "+path0+" to "+url);
 					if (url == null)
 						return null;
 					return cache.get(new ResourceInfo(path, url, extra));
@@ -123,7 +119,7 @@ public class ResourceCaches {
 
 				ctx = ctx.getContext(ctxpath);
 				if (ctx == null) { //failed
-					if (D.ON && log.debugable()) log.debug("Context not found: "+ctxpath);
+//					if (D.ON && log.debugable()) log.debug("Context not found: "+ctxpath);
 					ctx = ctx0; path = path0;//restore
 				}
 			}
