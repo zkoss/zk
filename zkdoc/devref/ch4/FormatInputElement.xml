@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title>FormatInputElement</title>
+<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>FormatInputElement</title>
 <para>A skeletal implementation for an input box with format. . </para>
-<para/><sect3><title/><sect4><title>Class Name</title>
+<para/><sect4><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.FormatInputElement</code>
-</para></sect4></sect3><sect3><title/><sect4><title>Properties</title>
+</para></sect4><sect4><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -59,27 +59,39 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/InputElement.xml">org.zkoss.zul.impl.InputElement</olink>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/InputElement.xml">
+<code>org.zkoss.zul.impl.InputElement</code>
+</olink>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/XulElement.xml">
+<code>org.zkoss.zul.impl.XulElement</code>
+</olink>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+<code/>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/HtmlBasedComponent.xml">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</olink>
+<code> </code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+<code/>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/AbstractComponent.xml">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</olink>
 </para>
 </entry>
 </row></tbody></tgroup>
