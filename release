@@ -139,7 +139,7 @@ fi
 if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$binnm/dist/lib/ext
 	mkdir -p /tmp/zk/$binnm/dist/lib/zkforge
-	mkdir -p /tmp/zk/$binnm/dist/WEB-INF/tld/zul/jsp
+	mkdir -p /tmp/zk/$binnm/dist/WEB-INF/tld/jsp/zul
 	mkdir -p /tmp/zk/$binnm/dist/xsd
 	mkdir -p /tmp/zk/$binnm/dist/src
 	mkdir -p /tmp/zk/$binnm/doc
@@ -168,7 +168,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	if [ "$target" == "daily" ] ; then
 		cp dist/lib/zuljsp.jar /tmp/zk/$binnm/dist/lib/zkforge
-		cp -rp zuljsp/src/archive/META-INF/*.tld /tmp/zk/$binnm/dist/WEB-INF/tld/zul/jsp
+		cp -rp zuljsp/src/archive/META-INF/*.tld /tmp/zk/$binnm/dist/WEB-INF/tld/jsp/zul
 	fi
 
 	if [ -d dist/export/WEB-INF ] ; then
