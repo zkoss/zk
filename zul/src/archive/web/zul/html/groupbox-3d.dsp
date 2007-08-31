@@ -41,7 +41,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </tr>
 </table>
 </c:if>
-<c:set var="gcExtStyle" value="${c:cat(empty self.caption ? null: 'border-top:0;', self.contentStyle)}"/>
+<c:set var="gcExtStyle" value="${c:cat(empty self.caption ? '': 'border-top:0;', self.contentStyle)}"/>
 	<div id="${self.uuid}!slide"${self.open?'':' style="display:none"'}><div id="${self.uuid}!cave" class="${self.contentSclass}"${c:attr('style',gcExtStyle)}>
 	<c:forEach var="child" items="${self.children}">
 	<c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if>

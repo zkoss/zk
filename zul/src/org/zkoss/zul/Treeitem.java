@@ -267,9 +267,7 @@ public class Treeitem extends XulElement {
 	 * the top-level {@link Treeitem}. By top-level we mean the first level of
 	 * a {@link Tree}.
 	 *
-	 * <p>Deprecated since 2.4.1, due to too confusing.
-	 *
-	 * @deprecated
+	 * @deprecated As of release 2.4.1, due to confusion
 	 */
 	public Treeitem getTreeitem() {
 		final Component p = getParent();

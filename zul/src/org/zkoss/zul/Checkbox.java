@@ -88,17 +88,17 @@ public class Checkbox extends LabelImageElement {
 	}
 	/** Returns whether it is readonly.
 	 * <p>Default: false.
-	 * <p>It is deprecated since no real effect.
+	 * <p>This method has no real effect.
 	 * See <a href="http://www.w3.org/TR/html4/interact/forms.html">w3.org</a>
-	 * @deprecated
+	 * @deprecated As of release 2.4.1, since this method has no real effect.
 	 */
 	public boolean isReadonly() {
 		return _readonly;
 	}
 	/** Sets whether it is readonly.
-	 * <p>It is deprecated since no real effect.
+	 * <p>This method has no real effect.
 	 * See <a href="http://www.w3.org/TR/html4/interact/forms.html">w3.org</a>
-	 * @deprecated
+	 * @deprecated As of release 2.4.1, since this method has no real effect.
 	 */
 	public void setReadonly(boolean readonly) {
 		_readonly = readonly;

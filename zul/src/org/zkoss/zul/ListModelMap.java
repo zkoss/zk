@@ -47,9 +47,8 @@ implements ListModelExt, Map, java.io.Serializable {
 	
 	/**
 	 * Creates an instance which accepts a "live" Map as its inner Map.
-	 * <p>It is deprecated. Use {@link #ListModelMap(Map, boolean)} instead.
 	 * @param map the inner Map storage.
-	 * @deprecated
+	 * @deprecated As of release 2.4.0, replaced by {@link #ListModelMap(Map, boolean)}
 	 */
 	public static ListModelMap instance(Map map) {
 		return new ListModelMap(map, true);

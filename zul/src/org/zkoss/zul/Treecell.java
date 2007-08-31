@@ -229,8 +229,7 @@ public class Treecell extends LabelImageElement {
 	}
 
 	/** Returns the nestest parent {@link Treeitem}.
-	 * <p>Deprecated since 2.4.1, due to too confusing.
-	 * @deprecated
+	 * @deprecated As of release 2.4.1, due to confusion
 	 */
 	public Treeitem getTreeitem() {
 		final Component parent = getParent();

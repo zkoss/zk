@@ -45,9 +45,8 @@ implements ListModelExt, java.io.Serializable {
 
 	/**
 	 * Creates an instance which accepts a "live" Object array as its inner array.
-	 * <p>It is deprecated. Use {@link #ListModelArray(Object[],boolean)} instead.
 	 * @param array the inner array storage
-	 * @deprecated
+	 * @deprecated As of release 2.4.0, replaced by {@link #ListModelArray(Object[],boolean)}
 	 */
 	public static ListModelArray instance(Object[] array) {
 		return new ListModelArray(array, true);

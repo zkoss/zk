@@ -50,8 +50,7 @@ public class Treerow extends XulElement {
 	}
 
 	/** Returns the parent {@link Treeitem}.
-	 * <p>Deprecated since 2.4.1, due to too confusing.
-	 * @deprecated
+	 * @deprecated As of release 2.4.1, due to confusing
 	 */
 	public Treeitem getTreeitem() {
 		return (Treeitem)getParent();

@@ -44,9 +44,8 @@ implements ListModelExt, Set, java.io.Serializable {
 
 	/**
 	 * Creates an instance which accepts a "live" Set as its inner Set.
-	 * <p>It is deprecated. Use {@link #ListModelSet(Set,boolean)} instead.
 	 * @param set the inner Set storage.
-	 * @deprecated
+	 * @deprecated As of release 2.4.0, replaced by {@link #ListModelSet(Set,boolean)}
 	 */
 	public static ListModelSet instance(Set set) {
 		return new ListModelSet(set, true);

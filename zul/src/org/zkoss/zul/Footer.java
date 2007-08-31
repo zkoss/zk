@@ -55,8 +55,7 @@ public class Footer  extends LabelImageElement {
 		return comp != null ? (Grid)comp.getParent(): null;
 	}
 	/** Returns the set of footers that this belongs to.
-	 * <p>Deprecated since 2.4.1, due to too confusing.
-	 * @deprecated
+	 * @deprecated As of release 2.4.1, due to confusion
 	 */
 	public Foot getFoot() {
 		return (Foot)getParent();

@@ -76,8 +76,7 @@ public class Listheader extends HeaderElement {
 		return comp != null ? (Listbox)comp.getParent(): null;
 	}
 	/** Returns the listhead that this belongs to.
-	 * <p>Deprecated since 2.4.1, due to too confusing.
-	 * @deprecated
+	 * @deprecated As of release 2.4.1, due to confusion
 	 */
 	public Listhead getListhead() {
 		return (Listhead)getParent();

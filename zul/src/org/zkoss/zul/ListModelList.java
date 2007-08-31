@@ -42,9 +42,8 @@ implements ListModelExt, List, java.io.Serializable {
 	
 	/**
 	 * Creates an instance which accepts a "live" List as its inner List.
-	 * <p>It is deprecated. Use {@link #ListModelList(List,boolean)} instead.
 	 * @param list the inner List storage
-	 * @deprecated
+	 * @deprecated As of release 2.4.0, replaced by {@link #ListModelList(List,boolean)}
 	 */
 	public static ListModelList instance(List list) {
 		return new ListModelList(list, true);

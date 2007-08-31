@@ -189,7 +189,7 @@ public class Label extends XulElement {
 	 *
 	 * <p>Used only for component generation. Not for applications.
 	 */
-	public String getEncodedText() {
+	private String getEncodedText() {
 		StringBuffer sb = null;
 		final int len = _value.length();
 		if (_pre || _multiline) {
@@ -309,8 +309,20 @@ public class Label extends XulElement {
 		else getParent().invalidate();
 	}
 	public void redraw(Writer out) throws IOException {
-		if (isIdRequired()) super.redraw(out);
-		else out.write(getEncodedText()); //no processing; direct output if not ZUL
+		final boolean idRequired = isIdRequired();
+		if (idRequired) {
+			out.write("<span id=\"");
+			out.write(getUuid());
+			out.write("\"");
+			out.write(getOuterAttrs());
+			out.write(getInnerAttrs());
+			out.write('>');
+		}
+
+		out.write(getEncodedText());
+
+		if (idRequired)
+			out.write("</span>");
 	}
 	/** No child is allowed.
 	 */

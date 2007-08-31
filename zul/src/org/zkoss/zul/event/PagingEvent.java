@@ -60,12 +60,9 @@ public class PagingEvent extends Event {
 	/** Construct a paging event that the target is different
 	 * from the page controller.
 	 *
-	 * <p>Deprecated since 2.4.1. Use {@link #PagingEvent(String,Component,Paginal,int)}
-	 * instead.
-	 *
 	 * @param target the event target
 	 * @param paginal the paging controller.
-	 * @deprecated
+	 * @deprecated As of release 2.4.1, replaced by {@link #PagingEvent(String,Component,Paginal,int)}
 	 */
 	public PagingEvent(String name, Component target, Paginal paginal,
 	int actpg) {
@@ -82,9 +79,7 @@ public class PagingEvent extends Event {
 	}
 	/** Returns the paginal controller.
 	 *
-	 * <p>Deprecated since 2.4.1. Use {@link #getPageable} instead.
-	 *
-	 * @deprecated
+	 * @deprecated As of release 2.4.1, replaced by {@link #getPageable}
 	 */
 	public Paginal getPaginal() {
 		return _pgi instanceof Paginal ? (Paginal)_pgi: null;
