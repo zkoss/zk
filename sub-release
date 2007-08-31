@@ -104,8 +104,8 @@ cp zkdoc/$releasenote /tmp/zk/$srcnm/doc/release-note
 cp zkdoc/$releasenote /tmp/zk/$demonm/doc/release-note
 
 if [ "$target" = "zuljsp" ] ; then
-	mkdir -p /tmp/zk/$binnm/dist/WEB-INF/tld/zul/jsp
-	cp -rp dist/export/WEB-INF/tld/zul/jsp/* /tmp/zk/$binnm/dist/WEB-INF/tld/zul/jsp
+	mkdir -p /tmp/zk/$binnm/dist/WEB-INF/tld/jsp/zul
+	cp -rp dist/export/WEB-INF/tld/jsp/zul/* /tmp/zk/$binnm/dist/WEB-INF/tld/jsp/zul
 fi
 
 #prepare source.jar
