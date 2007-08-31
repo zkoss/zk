@@ -91,8 +91,17 @@ public class Text extends AbstractComponent implements RawId {
 		else getParent().invalidate();
 	}
 	public void redraw(Writer out) throws IOException {
-		if (isIdRequired()) super.redraw(out);
-		else out.write(_value); //no processing; direct output if not ZUL
+		final boolean idRequired = isIdRequired();
+		if (idRequired) {
+			out.write("<span id=\"");
+			out.write(getUuid());
+			out.write("\">");
+		}
+
+		out.write(_value);
+
+		if (idRequired)
+			out.write("</span>");
 	}
 	public boolean isChildable() {
 		return false;

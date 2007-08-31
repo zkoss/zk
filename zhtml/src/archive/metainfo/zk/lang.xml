@@ -426,10 +426,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>text</component-name>
 		<component-class>org.zkoss.zhtml.Text</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zhtml/text.dsp</mold-uri>
-		</mold>
+		<text-as>value</text-as>
+		<!-- to speed up the performance, we don't use DSP here -->
 	</component>
 	<component>
 		<component-name>textarea</component-name>
