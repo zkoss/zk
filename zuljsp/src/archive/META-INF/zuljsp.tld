@@ -114,7 +114,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define Init Tag.
 		</description>
 		<name>init</name>
-		<tag-class>org.zkoss.zul.jsp.InitTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.InitTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
