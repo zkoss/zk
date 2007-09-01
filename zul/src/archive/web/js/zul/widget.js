@@ -627,6 +627,8 @@ zkWgt.fixDropBtn = function (cmp) {
 };
 zkWgt._fixdbtn = function (cmp) {
 	cmp = $e(cmp);
+	if (!cmp) return; //it might be gone if the user press too fast
+
 	var inp = $real(cmp);
 	var btn = $e(cmp.id + "!btn");
 	//note: isRealVisible handles null argument
