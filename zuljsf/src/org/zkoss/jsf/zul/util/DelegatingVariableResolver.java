@@ -17,7 +17,8 @@
  */
 package org.zkoss.jsf.zul.util;
 
-import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.xel.VariableResolver;
+
 /**
  * A Variable Resolver to find variable from JSF context.
  * 
@@ -38,12 +39,9 @@ public class DelegatingVariableResolver implements VariableResolver {
      * @param name bean name
      * @return bean get from JSF context 
      */
-    public Object getVariable(String name) {
+    public Object resolveVariable(String name) {
         Object obj = ContextUtil.getBean(name);
         
         return obj;
     }
-    
-
-
 }

@@ -253,7 +253,7 @@ public class RootComponent extends AbstractComponent{
 		final Session sess = WebManager.getSession(svlctx, request);
 
 		//TODO check this
-		//ELContexts.push(pgctx);
+		//RequestContexts.push(pgctx);
 		SessionsCtrl.setCurrent(sess);
 		try {
 			_wapp = sess.getWebApp();
@@ -281,7 +281,7 @@ public class RootComponent extends AbstractComponent{
 			_wappc.getUiEngine().execNewPage(_exec, _richlet, _page, context.getResponseWriter());
 		} finally {
 			SessionsCtrl.setCurrent(null);
-			//ELContexts.pop();
+			//RequestContexts.pop();
 		}
 	}
 	
