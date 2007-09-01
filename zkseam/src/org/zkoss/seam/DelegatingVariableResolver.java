@@ -18,7 +18,7 @@
 package org.zkoss.seam;
 
 import org.jboss.seam.jsf.ListDataModel;
-import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.xel.VariableResolver;
 /**
  * A Variable Resolver to find variable from Seam's context.
  * 
@@ -41,7 +41,7 @@ public class DelegatingVariableResolver implements VariableResolver {
      * @param name name of component
      * @return bean of context.
      */
-    public Object getVariable(String name) {
+    public Object resolveVariable(String name) {
         Object obj = ContextUtil.getBean(name);
         
         if(obj instanceof ListDataModel){
