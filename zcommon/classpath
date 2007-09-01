@@ -1,4 +1,6 @@
-../dist/lib/ext/commons-el.jar
 ../dist/lib/ext/bsh.jar
 ../dist/lib/ext/servlet-api.jar
 ../dist/lib/ext/jsp-api.jar
+../dist/lib/ext/el-api.jar
+../dist/lib/ext/jasper-el.jar
+../dist/lib/ext/commons-el.jar

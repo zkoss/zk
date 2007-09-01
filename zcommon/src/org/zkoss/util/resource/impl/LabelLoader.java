@@ -27,8 +27,6 @@ import java.net.URL;
 import java.io.InputStream;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.VariableResolver;
-
 import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.Maps;
@@ -37,7 +35,10 @@ import org.zkoss.util.resource.LabelLocator;
 import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.WaitLock;
-import org.zkoss.el.EvaluatorImpl;
+import org.zkoss.xel.Expressions;
+import org.zkoss.xel.XelContext;
+import org.zkoss.xel.SimpleXelContext;
+import org.zkoss.xel.VariableResolver;
 
 /**
  * The label loader (implementation only).
@@ -53,8 +54,8 @@ public class LabelLoader {
 	private final Map _labels = new HashMap(6);
 	/** A list of LabelLocator. */
 	private final List _locators = new LinkedList();
-	/** The variable resolver. */
-	private VariableResolver _resolv;
+	/** The XEL context. */
+	private XelContext _xelc;
 
 	/** Returns the label of the specified key, or null if not found.
 	 */
@@ -66,8 +67,8 @@ public class LabelLoader {
 
 		//Interpret it
 		try {
-	    	return (String)new EvaluatorImpl()
-	    		.evaluate(label, String.class, _resolv, null);
+	    	return (String)
+	    		Expressions.evaluate(_xelc, label, String.class);
 	    } catch (Throwable ex) {
 	    	log.error("Illegal label: key="+key+" value="+label, ex);
 	    	return label; //recover it
@@ -76,10 +77,13 @@ public class LabelLoader {
 
 	/** Sets the variable resolver, which is used if an EL expression
 	 * is specified.
+	 *
+	 * @since 3.0.0
 	 */
 	public VariableResolver setVariableResolver(VariableResolver resolv) {
-		final VariableResolver old = _resolv;
-		_resolv = resolv;
+		final VariableResolver old =
+			_xelc != null ? _xelc.getVariableResolver(): null;
+		_xelc = resolv != null ? new SimpleXelContext(resolv, null): null;
 		return old;
 	}
 	/** Registers a locator which is used to load i3-label*.properties

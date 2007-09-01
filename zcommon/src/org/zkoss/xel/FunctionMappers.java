@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.el;
+package org.zkoss.xel;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -28,13 +28,9 @@ import java.util.MissingResourceException;
 import java.net.URL;
 import java.io.Serializable;
 
-import javax.servlet.jsp.el.FunctionMapper;
-
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.reflect.SerializableMethod;
 import org.zkoss.mesg.MCommon;
-import org.zkoss.lang.SystemException;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ResourceCache;
@@ -45,11 +41,14 @@ import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.xel.util.MethodFunction;
 
 /**
- * Utilities for handling FunctionMapper.
+ * Utilities for loading {@link Taglib} files into an instance of
+ * {@link FunctionMapper}.
  *
  * @author tomyeh
+ * @since 3.0.0
  */
 public class FunctionMappers {
 	private static final Log log = Log.lookup(FunctionMappers.class);
@@ -91,23 +90,23 @@ public class FunctionMappers {
 			if (!mtds.isEmpty())
 				mappers.put(taglib.getPrefix(), mtds);
 		}
-		return new MyMapper(mappers);
+		return new Mapper(mappers);
 	}
 
 	/** Loads functions defined in the specified URL.
-	 * @return a map of function: (String name, Method mtd).
+	 * @return a map of function: (String name, Function mtd).
 	 */
-	public static final Map loadMethods(URL xmlUrl) throws Exception {
+	public static final Map loadFunctions(URL xmlUrl) throws Exception {
 //		if (log.debugable()) log.debug(MCommon.FILE_OPENING, xmlUrl);
 		final Element root =
 			new SAXBuilder(true, false, true).build(xmlUrl).getRootElement();
 			//We have to turn on namespace because xml schema might be used
-		return loadMethods(root);
+		return loadFunctions(root);
 	}
 	/** Loads functions defined in the specified DOM.
-	 * @return a map of function: (String name, Method mtd).
+	 * @return a map of function: (String name, Function mtd).
 	 */
-	public static final Map loadMethods(Element root) throws Exception {
+	public static final Map loadFunctions(Element root) throws Exception {
 		final Map mtds = new HashMap();
 		Exception excp = null;
 		for (Iterator it = root.getElements("function").iterator();
@@ -129,7 +128,7 @@ public class FunctionMappers {
 			try {
 				final Method mtd = Classes.getMethodBySignature(cls, sig, null);
 				if ((mtd.getModifiers() & Modifier.STATIC) != 0)
-					mtds.put(name, mtd);
+					mtds.put(name, new MethodFunction(mtd));
 				else
 					log.error("Not a static method: "+mtd);
 			} catch (ClassNotFoundException ex) {
@@ -156,55 +155,41 @@ public class FunctionMappers {
  			_reces = new ResourceCache(new TaglibLoader());
  			_reces.setCheckPeriod(30*60*1000);
  		} catch (Exception ex) {
-			throw SystemException.Aide.wrap(ex);
+			throw XelException.Aide.wrap(ex);
 		}
 	}
 
-	private static class MyMapper
+	private static class Mapper
 	implements FunctionMapper, Serializable, Cloneable {
 	    private static final long serialVersionUID = 20060622L;
 
-		/** Map(String prefix, Map(name, SerializableMethod)). */
+		/** Map(String prefix, Map(name, MethodFunction)). */
 		private Map _mappers;
 
-		/** @param mappers Map(String prefix, Map(String name, Method method))
+		/** @param mappers Map(String prefix, Map(String name, Function method))
 		 */
-		private MyMapper(Map mappers) {
+		private Mapper(Map mappers) {
 			_mappers = mappers;
 			for (Iterator it = mappers.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final Map mtds = new HashMap((Map)me.getValue());
-					//Note: we have to make a copy since loadMethods shares
+					//Note: we have to make a copy since loadFunctions shares
 					//the same cache
-				toSerializableMethod(mtds);
 				me.setValue(mtds);
-			}
-		}
-		/** Converts a map of (any, Method) to (any, {@link SerializableMethod}).
-		 */
-		private static void toSerializableMethod(Map mtds) {
-			for (Iterator it = mtds.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final Method mtd = (Method)me.getValue();
-				if (mtd != null) me.setValue(new SerializableMethod(mtd));
 			}
 		}
 
 		//-- FunctionMapper --//
-		public Method resolveFunction(String prefix, String name) {
+		public Function resolveFunction(String prefix, String name) {
 			final Map mtds = (Map)_mappers.get(prefix);
-			if (mtds != null) {
-				SerializableMethod mtd = (SerializableMethod)mtds.get(name);
-				if (mtd != null) return mtd.getMethod();
-			}
-			return null;
+			return mtds != null ? (MethodFunction)mtds.get(name): null;
 		}
 
 		//-- Cloneable --//
 		public Object clone() {
-			final MyMapper clone;
+			final Mapper clone;
 			try {
-				clone = (MyMapper)super.clone();
+				clone = (Mapper)super.clone();
 			} catch (CloneNotSupportedException e) {
 				throw new InternalError();
 			}
@@ -223,14 +208,17 @@ public class FunctionMappers {
 			return _mappers.hashCode();
 		}
 		public boolean equals(Object o) {
-			return o instanceof MyMapper && _mappers.equals(((MyMapper)o)._mappers);
+			return o instanceof Mapper && _mappers.equals(((Mapper)o)._mappers);
+		}
+		public String toString() {
+			return '[' + getClass().getName() + ": " + _mappers.keySet() +']';
 		}
 	}
 	private static class EmptyMapper
 	implements FunctionMapper, Serializable {
 	    private static final long serialVersionUID = 20060622L;
 		//-- FunctionMapper --//
-		public Method resolveFunction(String prefix, String name) {
+		public Function resolveFunction(String prefix, String name) {
 			return null;
 		}
 	}
@@ -238,7 +226,7 @@ public class FunctionMappers {
 	private static class TaglibLoader extends AbstractLoader {
 		//-- Loader --//
 		public Object load(Object src) throws Exception {
-			return loadMethods((URL)src);
+			return loadFunctions((URL)src);
 		}
 	}
 }

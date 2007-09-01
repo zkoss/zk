@@ -41,8 +41,7 @@ public class Threads {
 		}
 	}
 	/** Put the current thread to sleep for a while.
-	 * <p>Deprecated since 3.0.0. Use {@link #sleep} instead.
-	 * @deprecated
+	 * @deprecated As of release 3.0.0, replaced by {@link #sleep}
 	 */
 	public static final void pause(int millisecs) {
 		sleep(millisecs);

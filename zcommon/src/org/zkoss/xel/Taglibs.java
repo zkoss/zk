@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.el;
+package org.zkoss.xel;
 
 import java.lang.reflect.Field;
 import java.util.Enumeration;

@@ -18,8 +18,8 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.resource;
 
-import javax.servlet.jsp.el.VariableResolver;
 import org.zkoss.util.resource.impl.LabelLoader;
+import org.zkoss.xel.VariableResolver;
 
 /**
  * Utilities to access labels. A label is a Locale-dependent string

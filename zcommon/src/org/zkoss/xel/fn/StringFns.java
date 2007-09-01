@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.el.fn;
+package org.zkoss.xel.fn;
 
 import org.zkoss.lang.Objects;
 

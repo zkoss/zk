@@ -16,17 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.el;
+package org.zkoss.xel;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
-import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.net.URL;
-
-import javax.servlet.jsp.el.FunctionMapper;
-import javax.servlet.jsp.el.ELException;
 
 import org.zkoss.util.resource.Locator;
 import org.zkoss.idom.Element;
@@ -38,8 +32,8 @@ import org.zkoss.idom.Element;
  */
 public class SimpleMapper implements FunctionMapper {
 	private final FunctionMapper _parent;
-	/** Map(String prefix, Map(String, Method)). */
-	private final Map _maps = new HashMap();
+	/** Map(String prefix, Map(String, Function)). */
+	private Map _maps;
 
 	public SimpleMapper() {
 		this(null);
@@ -52,45 +46,45 @@ public class SimpleMapper implements FunctionMapper {
 
 	/** Loads function definitions from taglib. */
 	public void load(String prefix, String uri, Locator locator)
-	throws ELException, IOException {
+	throws XelException {
 		if (prefix == null || uri == null)
 			throw new IllegalArgumentException("null");
-		if (_maps.containsKey(prefix))
-			throw new ELException("The prefix, "+prefix+", is already used");
+		if (_maps != null && _maps.containsKey(prefix))
+			throw new XelException("The prefix, "+prefix+", is already used");
 
 		final URL url = locator.getResource(uri);
 		if (url == null)
-			throw new FileNotFoundException(uri);
+			throw new XelException("Resource not found: "+uri);
 
+		if (_maps == null)
+			_maps = new HashMap(4);
 		try {
-			_maps.put(prefix, FunctionMappers.loadMethods(url));
-		} catch (IOException ex) {
-			throw ex;
+			_maps.put(prefix, FunctionMappers.loadFunctions(url));
 		} catch (Exception ex) {
-			throw new ELException(ex);
+			throw XelException.Aide.wrap(ex);
 		}
 	}
 	/** Loads function definitions from DOM. */
 	public void load(String prefix, Element root)
-	throws ELException, IOException {
+	throws XelException {
 		if (prefix == null || root == null)
 			throw new IllegalArgumentException("null");
-		if (_maps.containsKey(prefix))
-			throw new ELException("The prefix, "+prefix+", is already used");
+		if (_maps != null && _maps.containsKey(prefix))
+			throw new XelException("The prefix, "+prefix+", is already used");
 
+		if (_maps == null)
+			_maps = new HashMap(4);
 		try {
-			_maps.put(prefix, FunctionMappers.loadMethods(root));
-		} catch (IOException ex) {
-			throw ex;
+			_maps.put(prefix, FunctionMappers.loadFunctions(root));
 		} catch (Exception ex) {
-			throw new ELException(ex);
+			throw XelException.Aide.wrap(ex);
 		}
 	}
 
 	//-- FunctionMapper --//
-	public Method resolveFunction(String prefix, String name) {
-		final Map mtds = (Map)_maps.get(prefix);
-		return mtds != null ? (Method)mtds.get(name):
+	public Function resolveFunction(String prefix, String name) {
+		final Map mtds = _maps != null ? (Map)_maps.get(prefix): null;
+		return mtds != null ? (Function)mtds.get(name):
 			_parent != null ? _parent.resolveFunction(prefix, name): null;
 	}
 }

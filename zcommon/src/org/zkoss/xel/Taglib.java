@@ -16,21 +16,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.el;
+package org.zkoss.xel;
 
 /**
  * Represents a taglib.
  *
  * @author tomyeh
+ * @since 3.0.0
  */
 public class Taglib {
 	private final String _prefix, _uri;
+
 	public Taglib(String prefix, String uri) {
 		if (prefix == null || uri == null)
 			throw new NullPointerException();
 		_prefix = prefix;
 		_uri = uri;
 	}
+
 	/** Returns the prefix. */
 	public String getPrefix() {
 		return _prefix;

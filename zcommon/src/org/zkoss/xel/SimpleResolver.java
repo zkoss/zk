@@ -16,17 +16,15 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.el;
+package org.zkoss.xel;
 
 import java.util.Map;
-
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ELException;
 
 /**
  * A simple resolver that retrieve variable from a map.
  *
  * @author tomyeh
+ * @since 3.0.0
  */
 public class SimpleResolver implements VariableResolver {
 	/** The parent resolver. */
@@ -60,7 +58,7 @@ public class SimpleResolver implements VariableResolver {
 	}
 
 	//-- VariableResolver --//
-	public Object resolveVariable(String name) throws ELException {
+	public Object resolveVariable(String name) throws XelException {
 		if (_vars != null) {
 			final Object o = _vars.get(name);
 			if (o != null)
