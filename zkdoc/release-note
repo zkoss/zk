@@ -74,7 +74,8 @@ ZK 3.0.0
   1777696: Richlet served error page fails
   1770144: Memory Leak in AImage
   1783363: Unable to drag a listitem out of the box (IE only)
-  
+  1786348: Failed to include two ZUL files
+
 * Upgrade Notes:
   + el-config (of zk.xml) is replaced with xel-config, and the class
     must implement org.zkoss.xel.ExpressionFactory instead of
