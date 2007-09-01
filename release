@@ -146,7 +146,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cd $maindir
 	mv -f /tmp/zk/*-sources.jar /tmp/zk/$binnm/dist/src
-	#cp dist/lib/ext/commons-el.jar /tmp/zk/$binnm/dist/lib/ext
+	cp dist/lib/ext/commons-el.jar /tmp/zk/$binnm/dist/lib/ext
 		#JSP 2.0 EL
 	cp dist/lib/ext/el-api.jar dist/lib/ext/jasper-el.jar /tmp/zk/$binnm/dist/lib/ext
 		#JSP 2.1 EL
