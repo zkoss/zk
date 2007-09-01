@@ -5,7 +5,7 @@ WebContent\WEB-INF\lib\commons-digester-1.6.jar
 WebContent\WEB-INF\lib\commons-el.jar
 WebContent\WEB-INF\lib\commons-fileupload.jar
 WebContent\WEB-INF\lib\commons-io.jar
-WebContent\WEB-INF\lib\commons-lang-2.1.jar
+WebContent\WEB-INF\lib\commons-lang.jar
 WebContent\WEB-INF\lib\el-api.jar
 WebContent\WEB-INF\lib\el-ri.jar
 WebContent\WEB-INF\lib\hibernate-all.jar
