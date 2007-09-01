@@ -30,15 +30,15 @@ import org.zkoss.util.logging.Log;
 public class Expressions {
 	private static final Log log = Log.lookup(Expressions.class);
 
+	/** An empty function mapper, i.e., it has no function defined at all.
+	 * It is serializable.
+	 */
+	public static final FunctionMapper EMPTY_MAPPER = new EmptyMapper();
 	/** An dummy expression that does nothing.
 	 * It is usually used as a flag to denote exceptional cases.
+	 * It it serializable.
 	 */
-	public static final Expression DUMMY = new Expression() {
-		public Object evaluate(XelContext ctx)
-		throws XelException {
-			return null;
-		}
-	};
+	public static final Expression DUMMY_EXPRESSION = new DummyExpr();
 
 	/** Instantiates an instance of {@link ExpressionFactory}.
 	 *
@@ -130,3 +130,15 @@ public class Expressions {
 		return newExpressionFactory().evaluate(ctx, expression, expectedType);
 	}
 }
+/*package*/ class EmptyMapper
+implements FunctionMapper, java.io.Serializable {
+	//-- FunctionMapper --//
+	public Function resolveFunction(String prefix, String name) {
+		return null;
+	}
+}
+/*package*/ class DummyExpr implements Expression, java.io.Serializable {
+	public Object evaluate(XelContext ctx) throws XelException {
+		return null;
+	}
+};

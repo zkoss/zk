@@ -16,7 +16,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.xel;
+package org.zkoss.xel.util;
+
+import org.zkoss.xel.XelContext;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.FunctionMapper;
 
 /**
  * A simple implementation of {@link XelContext}.

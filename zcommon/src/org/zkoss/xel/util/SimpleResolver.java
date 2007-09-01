@@ -16,9 +16,12 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.xel;
+package org.zkoss.xel.util;
 
 import java.util.Map;
+
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelException;
 
 /**
  * A simple resolver that retrieve variable from a map.

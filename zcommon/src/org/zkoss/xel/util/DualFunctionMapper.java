@@ -16,7 +16,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.xel;
+package org.zkoss.xel.util;
+
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.Function;
 
 /**
  * Combine two function mappers into one function mapper.

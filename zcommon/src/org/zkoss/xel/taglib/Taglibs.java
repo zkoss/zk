@@ -1,4 +1,4 @@
-/* FunctionMappers.java
+/* Taglibs.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,22 +6,25 @@
 	Description:
 		
 	History:
-		Tue Jul  5 17:34:27     2005, Created by tomyeh
+		Fri Aug 10 16:42:37     2007, Created by tomyeh
 }}IS_NOTE
 
-Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.xel;
+package org.zkoss.xel.taglib;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Iterator;
+import java.util.Enumeration;
+import java.util.Collections;
 import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.MissingResourceException;
@@ -30,7 +33,6 @@ import java.io.Serializable;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
-import org.zkoss.mesg.MCommon;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ResourceCache;
@@ -41,25 +43,22 @@ import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.xel.Function;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.MethodFunction;
 
 /**
- * Utilities for loading {@link Taglib} files into an instance of
- * {@link FunctionMapper}.
+ * Utilities to handle taglib.
  *
  * @author tomyeh
  * @since 3.0.0
  */
-public class FunctionMappers {
-	private static final Log log = Log.lookup(FunctionMappers.class);
+public class Taglibs {
+	private static final Log log = Log.lookup(Taglibs.class);
 
-	private FunctionMappers() {}
-
+	//Loading of TLD files//
 	private static final ResourceCache _reces;
-
-	/** An empty function mapper, i.e., it has no function defined at all.
-	 */
-	public static final FunctionMapper EMPTY_MAPPER = new EmptyMapper();
 
 	/** Retursn the function mapper representing a list of {@link Taglib},
 	 * or null if taglibs is null or empty.
@@ -214,19 +213,95 @@ public class FunctionMappers {
 			return '[' + getClass().getName() + ": " + _mappers.keySet() +']';
 		}
 	}
-	private static class EmptyMapper
-	implements FunctionMapper, Serializable {
-	    private static final long serialVersionUID = 20060622L;
-		//-- FunctionMapper --//
-		public Function resolveFunction(String prefix, String name) {
-			return null;
-		}
-	}
 
 	private static class TaglibLoader extends AbstractLoader {
 		//-- Loader --//
 		public Object load(Object src) throws Exception {
 			return loadFunctions((URL)src);
+		}
+	}
+
+//----------------------------------//
+	//Mapping of URI to TLD files//
+	/** The default TLD files: Map(String uri, URL location). */
+	private static Map _defUrls;
+
+	/** Returns the URL associated with the specified taglib URI,
+	 * or null if not found.
+	 *
+	 * @param uri the URI of taglib that are defined as
+	 * the taglib-uri element in the /metainfo/tld/config.xml file.
+	 * Both config.xml and TLD files must be locatable by the class
+	 * loader (i.e., must be part of class path).
+	 */
+	public static final URL getDefaultURL(String uri) {
+		return (URL)getDefaultTLDs().get(uri);
+	}
+	/** Loads the default TLD files defined in /metainfo/tld/config.xml
+	 */
+	private static final Map getDefaultTLDs() {
+		if (_defUrls != null)
+			return _defUrls;
+
+		synchronized (Taglibs.class) {
+			if (_defUrls != null)
+				return _defUrls;
+
+			final Map urls = new HashMap();
+			try {
+				final ClassLocator loc = new ClassLocator();
+				for (Enumeration en = loc.getResources("metainfo/tld/config.xml");
+				en.hasMoreElements();) {
+					final URL url = (URL)en.nextElement();
+					if (log.debugable()) log.debug("Loading "+url);
+					try {
+						final Document doc = new SAXBuilder(false, false, true).build(url);
+						if (checkVersion(url, doc))
+							parseConfig(urls, doc.getRootElement(), loc);
+					} catch (Exception ex) {
+						log.error("Failed to parse "+url, ex); //keep running
+					}
+				}
+			} catch (Exception ex) {
+				log.error(ex); //keep running
+			}
+			return _defUrls = urls.isEmpty() ? Collections.EMPTY_MAP: urls;
+		}
+	}
+	/** Parse config.xml. */
+	private static void parseConfig(Map urls, Element root, Locator loc) {
+		for (Iterator it = root.getElements("taglib").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String s = IDOMs.getRequiredElementValue(el, "taglib-location");
+			final URL url = loc.getResource(s.startsWith("/") ? s.substring(1): s);
+			if (url != null) {
+				urls.put(
+					IDOMs.getRequiredElementValue(el, "taglib-uri"), url);
+			} else {
+				log.error("taglib-location not found, "+el.getLocator());
+			}
+		}
+	}
+	/** Checks and returns whether the loaded document's version is correct.
+	 */
+	private static boolean checkVersion(URL url, Document doc) throws Exception {
+		final Element el = doc.getRootElement().getElement("version");
+		if (el != null) {
+			final String clsnm = IDOMs.getRequiredElementValue(el, "version-class");
+			final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
+			final Class cls = Classes.forNameByThread(clsnm);
+			final Field fld = cls.getField("UID");
+			final String uidInClass = (String)fld.get(null);
+			if (uid.equals(uidInClass)) {
+				return true;
+			} else {
+				log.info("Ignore "+url+"\nCause: version not matched; expected="+uidInClass+", xml="+uid);
+				return false;
+			}
+		} else {
+			log.info("Ignore "+url+"\nCause: version not specified");
+			return false; //backward compatible
 		}
 	}
 }

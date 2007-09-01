@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.xel;
+package org.zkoss.xel.util;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -24,11 +24,16 @@ import java.net.URL;
 
 import org.zkoss.util.resource.Locator;
 import org.zkoss.idom.Element;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.Function;
+import org.zkoss.xel.XelException;
+import org.zkoss.xel.taglib.Taglibs;
 
 /**
  * A simple function mapper.
  *
  * @author tomyeh
+ * @since 3.0.0
  */
 public class SimpleMapper implements FunctionMapper {
 	private final FunctionMapper _parent;
@@ -59,7 +64,7 @@ public class SimpleMapper implements FunctionMapper {
 		if (_maps == null)
 			_maps = new HashMap(4);
 		try {
-			_maps.put(prefix, FunctionMappers.loadFunctions(url));
+			_maps.put(prefix, Taglibs.loadFunctions(url));
 		} catch (Exception ex) {
 			throw XelException.Aide.wrap(ex);
 		}
@@ -75,7 +80,7 @@ public class SimpleMapper implements FunctionMapper {
 		if (_maps == null)
 			_maps = new HashMap(4);
 		try {
-			_maps.put(prefix, FunctionMappers.loadFunctions(root));
+			_maps.put(prefix, Taglibs.loadFunctions(root));
 		} catch (Exception ex) {
 			throw XelException.Aide.wrap(ex);
 		}

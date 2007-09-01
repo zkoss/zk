@@ -37,8 +37,8 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.util.WaitLock;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.XelContext;
-import org.zkoss.xel.SimpleXelContext;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.util.SimpleXelContext;
 
 /**
  * The label loader (implementation only).
