@@ -17,7 +17,8 @@ groovy.jar
 jruby.jar
 commons-fileupload.jar
 commons-io.jar
-commons-el.jar
+el-api.jar
+jasper-el.jar
 jfreechart.jar
 jcommon.jar
 Filters.jar
