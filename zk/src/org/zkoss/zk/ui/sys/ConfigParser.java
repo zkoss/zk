@@ -22,14 +22,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.net.URL;
 
-import javax.servlet.jsp.el.ExpressionEvaluator;
-
 import org.zkoss.lang.Classes;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.logging.Log;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.xel.ExpressionFactory;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
@@ -221,11 +220,11 @@ public class ConfigParser {
 				cls = parseClass(el, "server-push-class", WebApp.class);
 				if (cls != null) config.setServerPushClass(cls);
 
-			} else if ("el-config".equals(elnm)) {
-			//el-config
+			} else if ("xel-config".equals(elnm)) {
+			//xel-config
 			//	evaluator-class
-				Class cls = parseClass(el, "evaluator-class", ExpressionEvaluator.class);
-				if (cls != null) System.setProperty("org.zkoss.el.ExpressionEvaluator.class", cls.getName());
+				Class cls = parseClass(el, "evaluator-class", ExpressionFactory.class);
+				if (cls != null) System.setProperty("org.zkoss.xel.ExpressionFactory.class", cls.getName());
 					//System-wide property; reason: used in zcommon.jar
 			} else if ("zscript-config".equals(elnm)) {
 			//zscript-config
