@@ -241,17 +241,29 @@ public class EventProcessor {
 
 	/** Setup this processor before processing the event by calling
 	 * {@link #process}.
+	 *
+	 * <p>Note: Don't call this method if the event process executes
+	 * in the same thread.
 	 */
 	public void setup() {
 		SessionsCtrl.setCurrent(_desktop.getSession());
 		final Execution exec = _desktop.getExecution();
 		ExecutionsCtrl.setCurrent(exec);
-		((ExecutionCtrl)exec).setCurrentPage(getPage());
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		execCtrl.onActivate();
+		execCtrl.setCurrentPage(getPage());
 	}
 	/** Cleanup this process after processing the event by calling
 	 * {@link #process}.
+	 *
+	 * <p>Note: Don't call this method if the event process executes
+	 * in the same thread.
 	 */
 	public void cleanup() {
+		Execution exec = _desktop.getExecution();
+		if (exec == null) exec = ExecutionsCtrl.getCurrent();
+			//just in case that the execution is dead first
+		((ExecutionCtrl)exec).onDeactivate();
 		ExecutionsCtrl.setCurrent(null);
 		SessionsCtrl.setCurrent(null);
 	}

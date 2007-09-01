@@ -63,10 +63,14 @@ public class ExecutionCarryOver {
 	 */
 	public void carryOver() {
 		ExecutionsCtrl.setCurrent(_exec);
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)_exec;
+		execCtrl.onActivate();
+
 		if (Locales.getThreadLocal() == null)
 			Locales.setThreadLocal(_locale);
 		else
 			_locale = null;
+
 		if (TimeZones.getThreadLocal() == null)
 			TimeZones.setThreadLocal(_timeZone);
 		else
@@ -74,15 +78,16 @@ public class ExecutionCarryOver {
 
 		final Collection pages = _exec.getDesktop().getPages();
 		if (!pages.isEmpty())
-			((ExecutionCtrl)_exec)
-				.setCurrentPage((Page)pages.iterator().next());
+			execCtrl.setCurrentPage((Page)pages.iterator().next());
 	}
 	/** Cleans up the info carried from onPiggyback to the current thread.
 	 * <p>Note: {@link #carryOver} and {@link #cleanup} must be
 	 * called in the same thread.
 	 */
 	public void cleanup() {
+		((ExecutionCtrl)_exec).onDeactivate();
 		ExecutionsCtrl.setCurrent(null);
+
 		if (_locale != null)
 			Locales.setThreadLocal(null);
 		if (_timeZone != null)

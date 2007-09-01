@@ -43,14 +43,7 @@ public class ExecutionsCtrl extends Executions {
 	 * }
 	 */
 	public static final void setCurrent(Execution exec) {
-		final ExecutionCtrl old = getCurrentCtrl();
-		if (old != null)
-			old.onDeactivate();
-
 		_exec.set(exec);
-
-		if (exec != null)
-			((ExecutionCtrl)exec).onActivate();
 	}
 	/** Returns the current {@link ExecutionCtrl}.
 	 */

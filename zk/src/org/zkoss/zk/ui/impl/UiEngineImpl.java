@@ -1058,6 +1058,8 @@ public class UiEngineImpl implements UiEngine {
 				throw UiException.Aide.wrap(ex);
 			}
 		} else { //event thread disabled
+			//Note: we don't need to call proc.setup() and cleanup(),
+			//since they are in the same thread
 			EventProcessor proc = new EventProcessor(desktop, comp, event);
 				//Note: it also checks the correctness
 			config.invokeEventThreadInits(
@@ -1225,6 +1227,7 @@ public class UiEngineImpl implements UiEngine {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setVisualizer(uv);
 		ExecutionsCtrl.setCurrent(exec);
+		execCtrl.onActivate();
 		return uv;
 	}
 	/** Returns whether the desktop is being recovered.
@@ -1250,6 +1253,7 @@ public class UiEngineImpl implements UiEngine {
 				eis.notify(); //wakeup doActivate's wait
 			}
 		} finally {
+			execCtrl.onDeactivate();
 			execCtrl.setCurrentPage(null);
 			execCtrl.setVisualizer(null);
 			ExecutionsCtrl.setCurrent(null);
@@ -1283,6 +1287,7 @@ public class UiEngineImpl implements UiEngine {
 		final ExecutionCtrl curCtrl = (ExecutionCtrl)curExec;
 		curCtrl.setVisualizer(uv);
 		ExecutionsCtrl.setCurrent(curExec);
+		curCtrl.onActivate();
 		return uv;
 	}
 	/** De-reactivated exec. Work with {@link #doReactivate}.
@@ -1295,6 +1300,7 @@ public class UiEngineImpl implements UiEngine {
 //		if (log.finerable()) log.finer("Deactivating "+desktop);
 
 		final ExecutionCtrl curCtrl = (ExecutionCtrl)curExec;
+		curCtrl.onDeactivate();
 		curCtrl.setCurrentPage(null);
 		curCtrl.setVisualizer(null); //free memory
 
