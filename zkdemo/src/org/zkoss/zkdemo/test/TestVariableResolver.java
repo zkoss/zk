@@ -21,7 +21,7 @@ package org.zkoss.zkdemo.test;
 import java.util.List;
 import java.util.LinkedList;
 
-import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.xel.VariableResolver;
 
 /**
  * An implementation of the variable resolver to test whether it works.
@@ -41,7 +41,7 @@ public class TestVariableResolver implements VariableResolver {
 	}
 
 	//VariableResolver//
-	public Object getVariable(String name) {
+	public Object resolveVariable(String name) {
 		return "friends".equals(name) ? _friends: null;
 	}
 }
