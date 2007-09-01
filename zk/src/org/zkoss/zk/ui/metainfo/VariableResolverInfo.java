@@ -20,11 +20,12 @@ package org.zkoss.zk.ui.metainfo;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
+import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.zk.ui.xel.ExValue;
 
 /**
  * A definition of the variable resolver ({@link VariableResolver}).
@@ -40,7 +41,7 @@ import org.zkoss.zk.scripting.VariableResolver;
 public class VariableResolverInfo {
 	private static final Log log = Log.lookup(VariableResolverInfo.class);
 
-	/** A class, a EL string or an VariableResolver. */
+	/** A class, an ExValue or an VariableResolver. */
 	private final Object _resolver;
 
 	/** Constructs with a class, and {@link #newVariableResolver} will
@@ -74,7 +75,7 @@ public class VariableResolverInfo {
 				throw new ClassNotFoundException("Class not found: "+clsnm, ex);
 			}
 		} else {
-			_resolver = clsnm;
+			_resolver = new ExValue(clsnm, String.class);
 		}
 	}
 	/** Constructs with an initiator that will be reuse each time
@@ -94,9 +95,9 @@ public class VariableResolverInfo {
 			return (VariableResolver)_resolver;
 
 		final Class cls;
-		if (_resolver instanceof String) {
-			final String clsnm = (String)Executions.evaluate(
-				page, (String)_resolver, String.class);
+		if (_resolver instanceof ExValue) {
+			final String clsnm = (String)((ExValue)_resolver)
+				.getValue(Executions.getEvaluator(page), page);
 			if (clsnm == null || clsnm.length() == 0) {
 				if (log.debugable()) log.debug("Ingore "+_resolver+" due to empty");
 				return null; //ignore it!!

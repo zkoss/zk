@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.xel.ExValue;
 import org.zkoss.zk.scripting.Interpreters;
 
 /**
@@ -43,6 +44,7 @@ public class ZScript implements Condition, java.io.Serializable {
 
 	private String _zslang;
 	private final String _cnt;
+	/** An URL, an ExValue. */
 	private final Object _url;
 	private final Locator _locator;
 	private final Condition _cond;
@@ -125,7 +127,7 @@ public class ZScript implements Condition, java.io.Serializable {
 
 		//TODO: use url's extension to determine zslang
 		_zslang = zslang;
-		_url = url;
+		_url = new ExValue(url, String.class);
 		_cnt = null;
 		_locator = locator;
 		_cond = cond;
@@ -178,13 +180,10 @@ public class ZScript implements Condition, java.io.Serializable {
 			return _cnt;
 
 		final URL url;
-		if (_locator != null) {
-			final String expr = (String)_url;
-			final String s =
-				expr.indexOf("${") < 0 ? expr:
-				comp != null ?
-					(String)Executions.evaluate(comp, expr, String.class):
-					(String)Executions.evaluate(page, expr, String.class);
+		if (_url instanceof ExValue) {
+			final String s = (String)(comp != null ? 
+				((ExValue)_url).getValue(Executions.getEvaluator(comp), comp):
+				((ExValue)_url).getValue(Executions.getEvaluator(page), page));
 			if (s == null || s.length() == 0)
 				throw new UiException("The zscript URL, "+_url+", is evaluated to \""+s+'"');
 			url = _locator.getResource(s);

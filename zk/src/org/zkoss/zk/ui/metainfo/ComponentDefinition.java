@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
 public interface ComponentDefinition extends Cloneable {
 	/** A special definition to represent the zk component. */
 	public final static ComponentDefinition ZK =
-		new ComponentDefinitionImpl(null, "zk", Component.class);;
+		new ComponentDefinitionImpl(null, null, "zk", Component.class);;
 
 	/** Returns the language definition, or null if it is a temporty definition
 	 * belonging to a page.
@@ -244,11 +244,11 @@ public interface ComponentDefinition extends Cloneable {
 	 * is created. So, this method doesn't and need not to copy them.
 	 */
 	public void applyProperties(Component comp);
-	/** Evaluates and retrieves properties to the specified map from
-	 * {@link ComponentDefinition} (and {@link ComponentInfo}).
+	/** Evaluates and retrieves properties to the specified map.
 	 *
 	 * @param propmap the map to store the retrieved properties.
 	 * If null, a HashMap instance is created.
+	 * (String name, Object value).
 	 * @param owner the owner page; used if parent is null
 	 * @param parent the parent
 	 */

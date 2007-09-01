@@ -227,9 +227,7 @@ public class Events {
 	/** Returns whether an event handler or listener is available for
 	 * the specified component and event.
 	 *
-	 * <p>It is renamed to {@link #isListened} since 2.4.0.
-	 *
-	 * @deprecated
+	 * @deprecated As of release 2.4.0, replaced by {@link #isListened}
 	 */
 	public static
 	boolean isListenerAvailable(Component comp, String evtnm, boolean asap) {

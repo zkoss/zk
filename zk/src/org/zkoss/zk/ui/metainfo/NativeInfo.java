@@ -28,6 +28,7 @@ import org.zkoss.idom.Namespace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.xel.ExValue;
 
 /**
  * Represents the compmonent infomation about the native components.
@@ -65,7 +66,7 @@ public class NativeInfo extends ComponentInfo {
 
 	/** Adds a Sting child.
 	 */
-	public void appendChild(String text) {
+	public void appendChild(TextInfo text) {
 		appendChildDirectly(text);
 	}
 
@@ -130,7 +131,7 @@ public class NativeInfo extends ComponentInfo {
 	}
 	/** Adds a text as a prolog child.
 	 */
-	public void addPrologChild(String text) {
+	public void addPrologChild(TextInfo text) {
 		addPrologChildDirectly(text);
 	}
 	/** Adds a prolog child.

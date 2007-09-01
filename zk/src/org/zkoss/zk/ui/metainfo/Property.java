@@ -30,7 +30,9 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
-import org.zkoss.zk.el.Evaluator;
+import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.ui.xel.ExValue;
+
 /**
  * Info about how to initialize a property (aka., a field of a component).
  *
@@ -41,12 +43,10 @@ public class Property implements Condition, Serializable {
     private static final long serialVersionUID = 20060622L;
 
 	private final String _name;
-	private String _value;
+	private final ExValue _value;
 	private final Condition _cond;
 	/** Used to optimize {@link #resolve}. */
 	private transient Class _lastcls;
-	/** Value after coerced; used only if !_bExpr */
-	private transient Object _coercedVal;
 	/** The method, or null if more than two methods are found
 	 * (and use {@link #_mtds} in this case).
 	 */
@@ -55,8 +55,6 @@ public class Property implements Condition, Serializable {
 	 * (and use {@link #_mtd} in this case).
 	 */
 	private transient Method[] _mtds;
-	/** Whether expression is specified. */
-	private final boolean _bExpr;
 
 	/** Constructs a property with a class that is known in advance.
 	 */
@@ -65,8 +63,8 @@ public class Property implements Condition, Serializable {
 			throw new IllegalArgumentException();
 		_name = name;
 		_cond = cond;
-		_value = value;
-		_bExpr = value != null && value.indexOf("${") >= 0;
+		_value = new ExValue(value, Object.class);
+			//type will be fixed when mapped to a method
 	}
 
 	/** Returns the name of the property.
@@ -74,18 +72,19 @@ public class Property implements Condition, Serializable {
 	public String getName() {
 		return _name;
 	}
-	/** Returns the value of the property.
+	/** Returns the raw value of the property.
 	 * Note: it is the original value without evaluation.
 	 * In other words, it may contain EL expressions.
-	 */
-	public String getValue() {
-		return _value;
-	}
-	/** Sets the value of the property.
 	 * @since 3.0.0
 	 */
-	public void setValue(String value) {
-		_value = value;
+	public String getRawValue() {
+		return _value.getRawValue();
+	}
+	/** Sets the raw value of the property.
+	 * @since 3.0.0
+	 */
+	public void setRawValue(String value) {
+		_value.setRawValue(value);
 	}
 	/** Returns the condition.
 	 */
@@ -94,9 +93,9 @@ public class Property implements Condition, Serializable {
 	}
 
 	/** Resolves the method. */
-	private final void resolve(Class cls) {
+	private final void resolve(Evaluator eval, Class cls) {
 		final String mtdnm = Classes.toMethodName(_name, "set");
-		if (_bExpr) {
+		if (_value.isExpression()) {
 			_mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
 			if (_mtds.length == 0) {
 				if (!DynamicPropertied.class.isAssignableFrom(cls))
@@ -111,23 +110,33 @@ public class Property implements Condition, Serializable {
 			try {
 				_mtd = Classes.getCloseMethod(
 					cls, mtdnm, new Class[] {String.class});
-				_coercedVal = _value;
 			} catch (NoSuchMethodException ex) {
 				try {
 					_mtd = Classes.getCloseMethod(
 						cls, mtdnm, new Class[] {null});
-					_coercedVal =
-						Classes.coerce(_mtd.getParameterTypes()[0], _value);
 				} catch (NoSuchMethodException e2) {
 					if (!DynamicPropertied.class.isAssignableFrom(cls))
 						throw new UiException("Method not found: "+mtdnm);
 					_mtd = null;
-					_coercedVal = _value;
 				}
 			}
 		}
 	}
 
+	/** Evaluates the value to an Object.
+	 * Note: it does NOT call {@link #isEffective} and it doesn't coerce
+	 * the result (i.e., Object.class is assumed).
+	 */
+	public Object getValue(Evaluator eval, Component comp) {
+		return _value.getValue(eval, comp);
+	}
+	/** Evaluates the value to an Object.
+	 * Note: it does NOT call {@link #isEffective} and it doesn't coerce
+	 * the result (i.e., Object.class is assumed).
+	 */
+	public Object getValue(Evaluator eval, Page page) {
+		return _value.getValue(eval, page);
+	}
 	/** Assigns the value of this memeber to the specified component.
 	 *
 	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
@@ -139,7 +148,7 @@ public class Property implements Condition, Serializable {
 		try {
 			final Class cls = comp.getClass();
 			if (_lastcls != cls) {
-				resolve(cls);
+				resolve(eval, cls);
 				_lastcls = cls;
 			}
 
@@ -147,13 +156,8 @@ public class Property implements Condition, Serializable {
 			//However, if dyna-attr, _mtd or _mtds might not be null
 			final Class type =
 				_mtd != null ? _mtd.getParameterTypes()[0]: Object.class;
-
-			Object val;
-			if (_bExpr) {
-				val = eval.evaluate(comp, _value, type);
-			} else {
-				val = _coercedVal;
-			}
+			_value.setExpectedType(type);
+			Object val = _value.getValue(eval, comp);
 
 			final Method mtd;
 			if (_mtd != null) {

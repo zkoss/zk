@@ -18,7 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.List;
@@ -35,8 +34,6 @@ import java.util.Collections;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.FunctionMapper;
-
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
@@ -46,6 +43,10 @@ import org.zkoss.lang.Expectable;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.Function;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.DualFunctionMapper;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;
@@ -69,6 +70,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.PageSerializationListener;
+import org.zkoss.zk.ui.xel.ExValue;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -85,7 +87,6 @@ import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.scripting.HierachicalAware;
 import org.zkoss.zk.scripting.SerializableAware;
 import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.VariableResolver;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
 import org.zkoss.zk.scripting.util.AbstractNamespace;
 
@@ -113,7 +114,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
     private static final long serialVersionUID = 20070413L;
 
 	/** URI for redrawing as a desktop or part of another desktop. */
-	private final String _dkUri, _pgUri;
+	private final ExValue _dkUri, _pgUri;
 	/** The component that includes this page, or null if not included. */
 	private transient Component _owner;
 	/** Used to retore _owner. */
@@ -137,7 +138,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	/** The default parent. */
 	private transient Component _defparent;
 	/** The reason to store it is PageDefinition is not serializable. */
-	private FunctionMapper _funmap;
+	private FunctionMapper _mapper;
 	/** The reason to store it is PageDefinition is not serializable. */
 	private ComponentDefinitionMap _compdefs;
 	/** The reason to store it is PageDefinition is not serializable. */
@@ -182,8 +183,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public PageImpl(LanguageDefinition langdef,
 	ComponentDefinitionMap compdefs, String path, String zslang) {
 		_langdef = langdef;
-		_dkUri = _langdef.getDesktopURI();
-		_pgUri = _langdef.getPageURI();
+		_dkUri = new ExValue(_langdef.getDesktopURI(), String.class);
+		_pgUri = new ExValue(_langdef.getPageURI(), String.class);
 		_compdefs = compdefs != null ? compdefs:
 			new ComponentDefinitionMap(
 				_langdef.getComponentDefinitionMap().isCaseInsensitive());
@@ -207,8 +208,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 */
 	public PageImpl(Richlet richlet, String path) {
 		_langdef = richlet.getLanguageDefinition();
-		_dkUri = _langdef.getDesktopURI();
-		_pgUri = _langdef.getPageURI();
+		_dkUri = new ExValue(_langdef.getDesktopURI(), String.class);
+		_pgUri = new ExValue(_langdef.getPageURI(), String.class);
 		_compdefs = new ComponentDefinitionMap(
 			_langdef.getComponentDefinitionMap().isCaseInsensitive());
 		_path = path != null ? path: "";
@@ -238,14 +239,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			Executions.getCurrent();
 	}
 	public final FunctionMapper getFunctionMapper() {
-		return _funmap;
+		return _mapper;
 	}
-	public void addFunctionMapper(FunctionMapper funmap) {
-		if (funmap != null)
-			if (_funmap != null)
-				_funmap = new DualFuncMapper(funmap, _funmap);
-			else
-				_funmap = funmap;
+	public void addFunctionMapper(FunctionMapper mapper) {
+		_mapper = DualFunctionMapper.combine(mapper, _mapper);
 	}
 
 	public String getRequestPath() {
@@ -393,35 +390,47 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			return null;
 		}
 	}
-	public org.zkoss.zk.scripting.Method
-	getZScriptMethod(String name, Class[] argTypes) {
+	public Function getZScriptFunction(String name, Class[] argTypes) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
-			org.zkoss.zk.scripting.Method mtd =
-				((Interpreter)it.next()).getMethod(name, argTypes);
+			Function mtd =
+				((Interpreter)it.next()).getFunction(name, argTypes);
 			if (mtd != null)
 				return mtd;
 		}
 		return null;
 	}
-	public org.zkoss.zk.scripting.Method
-	getZScriptMethod(Namespace ns, String name, Class[] argTypes) {
+	public Function getZScriptFunction(Namespace ns, String name, Class[] argTypes) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
 			final Object ip = it.next();
-			org.zkoss.zk.scripting.Method mtd =
+			Function mtd =
 				ip instanceof HierachicalAware ?
-				((HierachicalAware)ip).getMethod(ns, name, argTypes):
-				((Interpreter)ip).getMethod(name, argTypes);
+				((HierachicalAware)ip).getFunction(ns, name, argTypes):
+				((Interpreter)ip).getFunction(name, argTypes);
 			if (mtd != null)
 				return mtd;
 		}
 		return null;
 	}
-	public org.zkoss.zk.scripting.Method getZScriptMethod(
+	public Function getZScriptFunction(
 	Component comp, String name, Class[] argTypes) {
-		return getZScriptMethod(comp != null ? comp.getNamespace(): null,
+		return getZScriptFunction(comp != null ? comp.getNamespace(): null,
 			name, argTypes);
+	}
+	/** @deprecated As of release 3.0.0, replaced by {@link #getZScriptFunction(String,Class[])}.
+	 */
+	public org.zkoss.zk.scripting.Method
+	getZScriptMethod(String name, Class[] argTypes) {
+		final Function fun = getZScriptFunction(name, argTypes);
+		return fun != null ? new FuncMethod(fun): null;
+	}
+	/** @deprecated As of release 3.0.0, replaced by {@link #getZScriptFunction(String,Class[])}.
+	 */
+	public org.zkoss.zk.scripting.Method
+	getZScriptMethod(Namespace ns, String name, Class[] argTypes) {
+		final Function fun = getZScriptFunction(ns, name, argTypes);
+		return fun != null ? new FuncMethod(fun): null;
 	}
 	public Object getZScriptVariable(String name) {
 		for (Iterator it = getLoadedInterpreters().iterator();
@@ -449,14 +458,15 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			name);
 	}
 
+	public Object getXelVariable(String name) {
+		final VariableResolver resolv =
+			getExecution().getVariableResolver();
+		return resolv != null ? resolv.resolveVariable(name): null;
+	}
+	/** @deprecated As of release of 3.0.0, replaced with {@link #getXelVariable}.
+	 */
 	public Object getELVariable(String name) {
-		try {
-			final javax.servlet.jsp.el.VariableResolver resolv =
-				getExecution().getVariableResolver();
-			return resolv != null ? resolv.resolveVariable(name): null;
-		} catch (javax.servlet.jsp.el.ELException ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+		return getXelVariable(name);
 	}
 
 	/** Resolves the variable defined in variable resolvers.
@@ -464,7 +474,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private Object resolveVariable(String name) {
 		if (_resolvers != null) {
 			for (Iterator it = _resolvers.iterator(); it.hasNext();) {
-				Object o = ((VariableResolver)it.next()).getVariable(name);
+				Object o = ((VariableResolver)it.next()).resolveVariable(name);
 				if (o != null)
 					return o;
 			}
@@ -795,8 +805,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final boolean asyncUpdate = execCtrl.getVisualizer().isEverAsyncUpdate();
 		final boolean bIncluded = asyncUpdate || exec.isIncluded()
 			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null;
-		String uri = bIncluded ? _pgUri: _dkUri;
-		uri = (String)exec.evaluate(this, uri, String.class);
+		final String uri = (String)
+			(bIncluded ? _pgUri: _dkUri).getValue(exec.getEvaluator(this), this);
 
 		final Map attrs = new HashMap(6);
 		attrs.put("page", this);
@@ -1156,22 +1166,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	//-- Object --//
 	public String toString() {
 		return "[Page "+_id+']';
-	}
-
-	private static class DualFuncMapper implements FunctionMapper {
-		private FunctionMapper newm, oldm;
-		private DualFuncMapper(FunctionMapper newm, FunctionMapper oldm) {
-			this.newm = newm;
-			this.oldm = oldm;
-		}
-
-		//-- FunctionMapper --//
-		public Method resolveFunction(String prefix, String name) {
-			Method m = this.newm.resolveFunction(prefix, name);
-			if (m == null)
-				m = this.oldm.resolveFunction(prefix, name);
-			return m;
-		}
 	}
 
 	private class NS extends AbstractNamespace {

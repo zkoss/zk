@@ -32,12 +32,12 @@ import bsh.EvalError;
 import bsh.UtilEvalError;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.xel.Function;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.NamespaceChangeListener;
-import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 import org.zkoss.zk.scripting.SerializableAware;
 import org.zkoss.zk.scripting.HierachicalAware;
@@ -199,17 +199,17 @@ implements SerializableAware, HierachicalAware {
 			throw new UiException("Failed to load class "+clsnm, ex);
 		}
 	}
-	public Method getMethod(String name, Class[] argTypes) {
-		return getMethod0(_bshns, name, argTypes);
+	public Function getFunction(String name, Class[] argTypes) {
+		return getFunction0(_bshns, name, argTypes);
 	}
-	public Method getMethod(Namespace ns, String name, Class[] argTypes) {
-		return getMethod0(prepareNS(ns), name, argTypes);
+	public Function getFunction(Namespace ns, String name, Class[] argTypes) {
+		return getFunction0(prepareNS(ns), name, argTypes);
 	}
-	private Method getMethod0(NameSpace bshns, String name, Class[] argTypes) {
+	private Function getFunction0(NameSpace bshns, String name, Class[] argTypes) {
 		try {
 		 	final BshMethod m = bshns.getMethod(
 		 		name, argTypes != null ? argTypes: new Class[0], false);
-		 	return m != null ? new BSHMethod(m): null;
+		 	return m != null ? new BSHFunction(m): null;
 		} catch (UtilEvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -468,23 +468,26 @@ implements SerializableAware, HierachicalAware {
 		}
 	}
 
-	private class BSHMethod implements Method {
+	private class BSHFunction implements Function {
 		private final bsh.BshMethod _method;
-		private BSHMethod(bsh.BshMethod method) {
+		private BSHFunction(bsh.BshMethod method) {
 			if (method == null)
 				throw new IllegalArgumentException("null");
 			_method = method;
 		}
 
-		//-- Method --//
+		//-- Function --//
 		public Class[] getParameterTypes() {
 			return _method.getParameterTypes();
 		}
 		public Class getReturnType() {
 			return _method.getReturnType();
 		}
-		public Object invoke(Object[] args) throws Exception {
+		public Object invoke(Object obj, Object[] args) throws Exception {
 			return _method.invoke(args != null ? args: new Object[0], _ip);
+		}
+		public java.lang.reflect.Method toMethod() {
+			return null;
 		}
 	}
 }

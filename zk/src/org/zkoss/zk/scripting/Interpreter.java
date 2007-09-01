@@ -18,6 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting;
 
+import org.zkoss.xel.Function;
 import org.zkoss.zk.ui.Page;
 
 /**
@@ -75,8 +76,9 @@ public interface Interpreter {
 	 *
 	 * @param argTypes the list of argument (aka., parameter) types.
 	 * If null, Class[0] is assumed.
+	 * @since 3.0.0
 	 */
-	public Method getMethod(String name, Class[] argTypes);
+	public Function getFunction(String name, Class[] argTypes);
 
 	/** Tests whether the variable is defined in this interpreter.
 	 * Note: it doesn't search the namespace ({@link Namespace}).

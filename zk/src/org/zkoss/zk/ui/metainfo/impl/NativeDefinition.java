@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.metainfo.*;
 /*package*/ class NativeDefinition extends ComponentDefinitionImpl {
 	/*package*/ NativeDefinition(LanguageDefinition langdef, String name,
 	Class cls) {
-		super(langdef, name, cls);
+		super(langdef, null, name, cls);
 
 		if (cls == null)
 			throw new IllegalArgumentException("null");

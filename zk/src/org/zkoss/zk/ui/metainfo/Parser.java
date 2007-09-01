@@ -47,7 +47,7 @@ import org.zkoss.idom.Attribute;
 import org.zkoss.idom.ProcessingInstruction;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.idom.input.SAXBuilder;
-import org.zkoss.el.Taglib;
+import org.zkoss.xel.Taglib;
 import org.zkoss.web.servlet.Servlets;
 	
 import org.zkoss.zk.ui.WebApp;
@@ -306,7 +306,7 @@ public class Parser {
 
 				final boolean bInline = "true".equals(inline);
 				compdef = pgdef.getLanguageDefinition().getMacroDefinition(
-					name, toAbsoluteURI(macroURI, false), bInline, true);
+					name, toAbsoluteURI(macroURI, false), bInline, pgdef);
 				if (!isEmpty(clsnm)) {
 					if (bInline)
 						throw new UiException("class not allowed with inline macros, "+pi.getLocator());
@@ -335,7 +335,7 @@ public class Parser {
 				noELnorEmpty("class", clsnm, pi);
 
 				final ComponentDefinitionImpl cdi =
-					new ComponentDefinitionImpl(null, name, (Class)null);
+					new ComponentDefinitionImpl(null, pgdef, name, (Class)null);
 				cdi.setCurrentDirectory(getLocator().getDirectory());
 					//mold URI requires it
 				compdef = cdi;
@@ -464,7 +464,8 @@ public class Parser {
 
 				if (trimLabel.length() > 0) { //consider as a label
 					if (parentInfo instanceof NativeInfo) {
-						((NativeInfo)parentInfo).appendChild(trimLabel);
+						((NativeInfo)parentInfo).appendChild(
+							new TextInfo(trimLabel));
 					} else {
 						final String textAs = parentInfo.getTextAs();
 						if (textAs != null) {
@@ -948,6 +949,6 @@ public class Parser {
 						((ComponentInfo)gc).setParentDirectly(compInfo);
 				}
 			}
-		}				
+		}
 	}
 }

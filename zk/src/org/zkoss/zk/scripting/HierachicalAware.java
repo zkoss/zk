@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting;
 
+import org.zkoss.xel.Function;
+
 /**
  * An extra interface implemented by an interpreter ({@link Interpreter})
  * if it supports the hierachical scopes.
@@ -93,7 +95,7 @@ public interface HierachicalAware {
 	 * this interpreter's scope identified by the specified namespace,
 	 * or null if not defined.
 	 *
-	 * <p>It is similar to {@link Interpreter#getMethod}, except
+	 * <p>It is similar to {@link Interpreter#getFunction}, except
 	 * it uses the specified namespace as a reference to identify the
 	 * correct scope for searching the variable.
 	 *
@@ -102,7 +104,7 @@ public interface HierachicalAware {
 	 * Note: this method doesn't look for any variable stored in ns.
 	 * @param argTypes the list of argument (aka., parameter) types.
 	 * If null, Class[0] is assumed.
-	 * @since 2.4.1
+	 * @since 3.0.0
 	 */
-	public Method getMethod(Namespace ns, String name, Class[] argTypes);
+	public Function getFunction(Namespace ns, String name, Class[] argTypes);
 }

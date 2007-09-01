@@ -35,10 +35,11 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.ui.xel.ExValue;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.el.Evaluator;
 
 /**
  * An implementation of {@link ComponentDefinition}.
@@ -49,11 +50,13 @@ public class ComponentDefinitionImpl
 implements ComponentDefinition, java.io.Serializable {
 	private String _name;
 	private transient LanguageDefinition _langdef;
+	private transient PageDefinition _pgdef;
+	private Evaluator _eval;
 	/** Either String or Class. */
 	private Object _implcls;
-	/** A synchronized map of molds (String name, String moldURI. */
+	/** A synchronized map of molds (String name, ExValue moldURI). */
 	private Map _molds;
-	/** A map of custom attributs (String name, String value). */
+	/** A map of custom attributs (String name, ExValue value). */
 	private Map _custAttrs;
 	/** A list of {@link Property}. */
 	private List _props;
@@ -66,38 +69,49 @@ implements ComponentDefinition, java.io.Serializable {
 	/** Constructs a native component, i.e., a component implemented by
 	 * a Java class.
 	 *
-	 * @param langdef the language definition, or null if this is a temporary
-	 * definition, such as components defined in a page,
+	 * <p>Note; if both langdef and pgdef are null, it must be a reserved
+	 * component.
+	 *
+	 * @param langdef the language definition. It is null if it is defined
+	 * as part of a page definition
+	 * @param pgdef the page definition. It is null if it is defined
+	 * as part of a language definition.
 	 * doesn't belong to any language.
 	 * @param cls the implementation class.
+	 * @since 3.0.0
 	 */
-	public ComponentDefinitionImpl(LanguageDefinition langdef, String name,
-	Class cls) {
+	public ComponentDefinitionImpl(LanguageDefinition langdef,
+	PageDefinition pgdef, String name, Class cls) {
 		if (name == null)
-			throw new IllegalArgumentException("null name");
+			throw new IllegalArgumentException();
 		if (cls != null && !Component.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException(cls+" must implement "+Component.class);
-			//cls might be assigned later
+		if (langdef != null && pgdef != null)
+			throw new IllegalArgumentException("langdef and pgdef cannot both null or both non-null");
 
 		_langdef = langdef;
+		_pgdef = pgdef;
 		_name = name;
 		_implcls = cls;
 	}
 	/** Constructs a macro component definition.
 	 * It is the component definition used to implement the macros.
 	 *
-	 * @param langdef the language definition, or null if this is a temporary
-	 * definition doesn't belong to any language.
+	 * @param langdef the language definition. It is null if it is defined
+	 * as part of a page definition
+	 * @param pgdef the page definition. It is null if it is defined
+	 * as part of a language definition.
 	 * @since 3.0.0
 	 */
 	public static final ComponentDefinition newMacroDefinition(
-	LanguageDefinition langdef, String name,
+	LanguageDefinition langdef, PageDefinition pgdef, String name,
 	Class cls, String macroURI, boolean inline) {
-		return new MacroDefinition(langdef, name, cls, macroURI, inline);
+		return new MacroDefinition(langdef, pgdef, name, cls, macroURI, inline);
 	}
 	/** Constructs a native component definition.
 	 * It is the component definition used to implement the native namespace.
 	 *
+	 * @param langdef the language definition. It cannot be null.
 	 * @since 3.0.0
 	 */
 	public static final ComponentDefinition newNativeDefinition(
@@ -109,23 +123,19 @@ implements ComponentDefinition, java.io.Serializable {
 	/** Adds a custom attribute.
 	 */
 	public void addCustomAttribute(String name, String value) {
-		if (name == null || value == null)
-			throw new IllegalArgumentException("null");
-		if (name.length() == 0 || value.length() == 0)
-			throw new IllegalArgumentException("empty");
+		if (name == null || value == null
+		|| name.length() == 0 || value.length() == 0)
+			throw new IllegalArgumentException();
 
+		final ExValue ev = new ExValue(value, Object.class);
 		if (_custAttrs == null) {
 			synchronized (this) {
-				if (_custAttrs == null) {
-					final Map attrs = new HashMap(3);
-					attrs.put(name, value);
-					_custAttrs = attrs;
-					return;
-				}
+				if (_custAttrs == null)
+					_custAttrs = new HashMap(4);
 			}
 		}
 		synchronized (_custAttrs) {
-			_custAttrs.put(name, value);
+			_custAttrs.put(name, ev);
 		}
 	}
 
@@ -138,12 +148,8 @@ implements ComponentDefinition, java.io.Serializable {
 	public void addAnnotation(String annotName, Map annotAttrs) {
 		if (_annots == null) {
 			synchronized (this) {
-				if (_annots == null) {
-					final AnnotationMap annots = new AnnotationMap();
-					annots.addAnnotation(annotName, annotAttrs);
-					_annots = annots;
-					return;
-				}
+				if (_annots == null)
+					_annots = new AnnotationMap();
 			}
 		}
 		_annots.addAnnotation(annotName, annotAttrs);
@@ -159,12 +165,8 @@ implements ComponentDefinition, java.io.Serializable {
 	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
 		if (_annots == null) {
 			synchronized (this) {
-				if (_annots == null) {
-					final AnnotationMap annots = new AnnotationMap();
-					annots.addAnnotation(propName, annotName, annotAttrs);
-					_annots = annots;
-					return;
-				}
+				if (_annots == null)
+					_annots = new AnnotationMap();
 			}
 		}
 		_annots.addAnnotation(propName, annotName, annotAttrs);
@@ -337,19 +339,18 @@ implements ComponentDefinition, java.io.Serializable {
 		//by AbstractComponent's initial with getAnnotationMap()
 
 		if (_custAttrs != null) {
+			final Evaluator eval = getEvaluator();
 			synchronized (_custAttrs) {
 				for (Iterator it = _custAttrs.entrySet().iterator();
 				it.hasNext();) {
 					final Map.Entry me = (Map.Entry)it.next();
 					comp.setAttribute((String)me.getKey(),
-						eval(comp, (String)me.getValue(), Object.class));
+						((ExValue)me.getValue()).getValue(eval, comp));
 				}
 			}
 		}
 		if (_props != null) {
-			final Evaluator eval = _langdef != null ?
-				_langdef.getEvaluator(): Executions.getCurrent();
-
+			final Evaluator eval = getEvaluator();
 			synchronized (_props) {
 				for (Iterator it = _props.iterator(); it.hasNext();) {
 					final Property prop = (Property)it.next();
@@ -358,76 +359,56 @@ implements ComponentDefinition, java.io.Serializable {
 			}
 		}
 	}
+	private Evaluator getEvaluator() {
+		return _langdef != null ? _langdef.getEvaluator():
+			_pgdef != null ? _pgdef.getEvaluator(): _eval;
+	}
 
 	public Map evalProperties(Map propmap, Page owner, Component parent) {
 		if (propmap == null)
 			propmap = new HashMap();
 
 		if (_props != null) {
-			final Evaluator eval = _langdef != null ?
-				_langdef.getEvaluator(): Executions.getCurrent();
-
+			final Evaluator eval = getEvaluator();
 			synchronized (_props) {
 				for (Iterator it = _props.iterator(); it.hasNext();) {
 					final Property prop = (Property)it.next();
-					propmap.put(prop.getName(),
-						parent != null ?
-							eval(parent, prop.getValue(), Object.class):
-							eval(owner, prop.getValue(), Object.class));
-					//Note: we don't invoke isEffective since addProperty
-					//doesn't support it.
-					//Moreover, prop.isEffective supports only
-					//Executions.getCurrent.
-					//It is not applicable if _langdef != null
+					if (parent != null) {
+						if (prop.isEffective(parent))
+							propmap.put(prop.getName(), prop.getValue(eval, parent));
+					} else {
+						if (prop.isEffective(owner))
+							propmap.put(prop.getName(), prop.getValue(eval, owner));
+					}
 				}
 			}
 		}
 		return propmap;
 	}
 
-	/** Evluates the specified expression with {@link #getLanguageDefinition},
-	 * if any. If no language definition,
-	 * the current execution ({@link Executions#evaluate}) is used.
-	 */
-	private Object eval(Component comp, String expr, Class expectedType) {
-		return _langdef != null ?
-			_langdef.getEvaluator().evaluate(comp, expr, expectedType):
-			Executions.evaluate(comp, expr, expectedType);
-	}
-	/** Evluates the specified expression with {@link #getLanguageDefinition},
-	 * if any. If no language definition,
-	 * the current execution ({@link Executions#evaluate}) is used.
-	 */
-	private Object eval(Page page, String expr, Class expectedType) {
-		return _langdef != null ?
-			_langdef.getEvaluator().evaluate(page, expr, expectedType):
-			Executions.evaluate(page, expr, expectedType);
-	}
-
 	public void addMold(String name, String moldURI) {
-		if (name == null || moldURI == null)
-			throw new IllegalArgumentException("null");
-		if (name.length() == 0 || moldURI.length() == 0)
-			throw new IllegalArgumentException("empty");
+		if (name == null || moldURI == null
+		|| name.length() == 0 || moldURI.length() == 0)
+			throw new IllegalArgumentException();
 
+		final ExValue ev = new ExValue(moldURI, String.class);
 		if (_molds == null) {
 			synchronized (this) {
 				if (_molds == null) {
 					final Map molds = new HashMap(3);
-					molds.put(name, moldURI);
+					molds.put(name, ev);
 					_molds = Collections.synchronizedMap(molds);
 					return;
 				}
 			}
 		}
 
-		_molds.put(name, moldURI);
+		_molds.put(name, ev);
 	}
 	public String getMoldURI(Component comp, String name) {
-		final String mold = _molds != null ? (String)_molds.get(name): null;
-		return mold != null ?
-			toAbsoluteURI((String)eval(comp, mold, String.class)): null;
-			//mold is part of lang addon if _langdef != null
+		final ExValue mold = _molds != null ? (ExValue)_molds.get(name): null;
+		return mold == null ? null:
+			toAbsoluteURI((String)mold.getValue(getEvaluator(), comp));
 	}
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
@@ -463,6 +444,7 @@ implements ComponentDefinition, java.io.Serializable {
 		s.defaultWriteObject();
 
 		s.writeObject(_langdef != null ? _langdef.getName(): null);
+		s.writeObject(_pgdef != null ? _pgdef.getEvaluator(): null);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -471,6 +453,7 @@ implements ComponentDefinition, java.io.Serializable {
 		final String langnm = (String)s.readObject();
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
+		_eval = (Evaluator)s.readObject();
 	}
 
 	//Object//

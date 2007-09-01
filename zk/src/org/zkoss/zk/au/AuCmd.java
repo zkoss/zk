@@ -31,10 +31,8 @@ import org.zkoss.zk.ui.Component;
  *
  * <p>Note: the first argument is always the component itself.
  *
- * <p>Deprecated since 3.0.0. Use {@link AuInvoke} instead.
- * 
  * @author tomyeh
- * @deprecated
+ * @deprecated As of release 3.0.0, replaced by {@link AuInvoke}
  */
 public class AuCmd extends AuInvoke {
 	/** Construct AuCmd to call a client function with one argument,
@@ -46,7 +44,7 @@ public class AuCmd extends AuInvoke {
 	 * @param comp the component that this script depends on.
 	 * It cannot be null.
 	 * @param function the function name
-	 * @deprecated
+	 * @deprecated As of release 3.0.0, replaced by {@link AuInvoke}
 	 */
 	public AuCmd(Component comp, String function) {
 		super(comp, function);
@@ -61,7 +59,7 @@ public class AuCmd extends AuInvoke {
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param arg the additional argument
-	 * @deprecated
+	 * @deprecated As of release 3.0.0, replaced by {@link AuInvoke}
 	 */
 	public AuCmd(Component comp, String function, String arg) {
 		super(comp, function, arg);
@@ -75,7 +73,7 @@ public class AuCmd extends AuInvoke {
 	 * @param comp the component that this script depends on.
 	 * It cannot be null.
 	 * @param function the function name
-	 * @deprecated
+	 * @deprecated As of release 3.0.0, replaced by {@link AuInvoke}
 	 */
 	public AuCmd(Component comp, String function, String arg1, String arg2) {
 		super(comp, function, arg1, arg2);
@@ -89,7 +87,7 @@ public class AuCmd extends AuInvoke {
 	 * @param comp the component that this script depends on.
 	 * It cannot be null.
 	 * @param function the function name
-	 * @deprecated
+	 * @deprecated As of release 3.0.0, replaced by {@link AuInvoke}
 	 */
 	public AuCmd(Component comp, String function, String arg1, String arg2,
 	String arg3) {

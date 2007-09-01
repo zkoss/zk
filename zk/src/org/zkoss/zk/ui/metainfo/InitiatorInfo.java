@@ -18,6 +18,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.util.Iterator;
+import java.util.Collection;
 import java.util.List;
 
 import org.zkoss.lang.Classes;
@@ -27,6 +29,8 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
+import org.zkoss.zk.ui.xel.ExValue;
+import org.zkoss.zk.ui.xel.Evaluator;
 
 /**
  * A initiator node on the ZUML page.
@@ -40,12 +44,12 @@ import org.zkoss.zk.ui.util.Initiator;
  * @author tomyeh
  */
 public class InitiatorInfo {
-	private static final Log log = Log.lookup(InitiatorInfo.class);
+//	private static final Log log = Log.lookup(InitiatorInfo.class);
 
-	/** A class, a EL string or an Initiator. */
+	/** A class, an ExValue or an Initiator. */
 	private final Object _init;
 	/** The arguments, never null (might with zero length). */
-	private final String[] _args;
+	private final ExValue[] _args;
 
 	/** Constructs with a class, and {@link #newInitiator} will
 	 * instantiate a new instance.
@@ -53,19 +57,15 @@ public class InitiatorInfo {
 	public InitiatorInfo(Class cls, String[] args) {
 		checkClass(cls);
 		_init = cls;
-		_args = args != null ? args: new String[0];
+		_args = toExValues(args);
 	}
-	private static void checkClass(Class cls) {
-		if (!Initiator.class.isAssignableFrom(cls))
-			throw new UiException(Initiator.class+" must be implemented: "+cls);
-	}
-
 	/** Constructs with a class, and {@link #newInitiator} will
 	 * instantiate a new instance.
 	 */
 	public InitiatorInfo(Class cls, List args) {
-		this(cls, args != null ?
-			(String[])args.toArray(new String[args.size()]): null);
+		checkClass(cls);
+		_init = cls;
+		_args = toExValues(args);
 	}
 	/** Constructs with a class name and {@link #newInitiator} will
 	 * instantiate a new instance.
@@ -74,21 +74,8 @@ public class InitiatorInfo {
 	 */
 	public InitiatorInfo(String clsnm, String[] args)
 	throws ClassNotFoundException {
-		if (clsnm == null || clsnm.length() == 0)
-			throw new IllegalArgumentException("empty");
-
-		if (clsnm.indexOf("${") < 0) {
-			try {
-				final Class cls = Classes.forNameByThread(clsnm);
-				checkClass(cls);
-				_init = cls;
-			} catch (ClassNotFoundException ex) {
-				throw new ClassNotFoundException("Class not found: "+clsnm, ex);
-			}
-		} else {
-			_init = clsnm;
-		}
-		_args = args != null ? args: new String[0];
+		_init = toClass(clsnm);
+		_args = toExValues(args);
 	}
 	/** Constructs with a class name and {@link #newInitiator} will
 	 * instantiate a new instance.
@@ -97,8 +84,8 @@ public class InitiatorInfo {
 	 */
 	public InitiatorInfo(String clsnm, List args)
 	throws ClassNotFoundException {
-		this(clsnm, args != null ?
-			(String[])args.toArray(new String[args.size()]): null);
+		_init = toClass(clsnm);
+		_args = toExValues(args);
 	}
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newInitiator} is called.
@@ -107,14 +94,56 @@ public class InitiatorInfo {
 		if (init == null)
 			throw new IllegalArgumentException("null");
 		_init = init;
-		_args = args != null ? args: new String[0];
+		_args = toExValues(args);
 	}
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newInitiator} is called.
 	 */
 	public InitiatorInfo(Initiator init, List args) {
-		this(init, args != null ?
-			(String[])args.toArray(new String[args.size()]): null);
+		if (init == null)
+			throw new IllegalArgumentException("null");
+		_init = init;
+		_args = toExValues(args);
+	}
+
+	private static ExValue[] toExValues(String[] args) {
+		if (args == null || args.length == 0)
+			return new ExValue[0];
+
+		final ExValue[] evals = new ExValue[args.length];
+		for (int j = evals.length; --j >= 0;)
+			evals[j] = new ExValue(args[j], Object.class);
+		return evals;
+	}
+	private static ExValue[] toExValues(Collection args) {
+		if (args == null || args.isEmpty())
+			return new ExValue[0];
+
+		final ExValue[] evals = new ExValue[args.size()];
+		int j = 0;
+		for (Iterator it = args.iterator(); it.hasNext();)
+			evals[j++] = new ExValue((String)it.next(), Object.class);
+		return evals;
+	}
+	private static Object toClass(String clsnm) throws ClassNotFoundException {
+		if (clsnm == null || clsnm.length() == 0)
+			throw new IllegalArgumentException();
+
+		if (clsnm.indexOf("${") < 0) {
+			try {
+				final Class cls = Classes.forNameByThread(clsnm);
+				checkClass(cls);
+				return cls;
+			} catch (ClassNotFoundException ex) {
+				throw new ClassNotFoundException("Class not found: "+clsnm, ex);
+			}
+		} else {
+			return new ExValue(clsnm, String.class);
+		}
+	}
+	private static void checkClass(Class cls) {
+		if (!Initiator.class.isAssignableFrom(cls))
+			throw new UiException(Initiator.class+" must be implemented: "+cls);
 	}
 
 	/** Creaetes and returns the initiator.
@@ -124,11 +153,11 @@ public class InitiatorInfo {
 			return (Initiator)_init;
 
 		final Class cls;
-		if (_init instanceof String) {
-			final String clsnm = (String)Executions.evaluate(
-				page, (String)_init, String.class);
+		if (_init instanceof ExValue) {
+			final String clsnm = (String)
+				((ExValue)_init).getValue(Executions.getEvaluator(page), page);
 			if (clsnm == null || clsnm.length() == 0) {
-				if (log.debugable()) log.debug("Ingore "+_init+" due to empty");
+//				if (log.debugable()) log.debug("Ingore "+_init+" due to empty");
 				return null; //ignore it!!
 			}
 
@@ -146,9 +175,10 @@ public class InitiatorInfo {
 	/** Returns the arguments array (by evaluating EL if necessary).
 	 */
 	public Object[] getArguments(Page page) {
+		final Evaluator eval = Executions.getEvaluator(page);
 		final Object[] args = new Object[_args.length];
-		for (int j = 0; j < args.length; ++j)
-			args[j] = Executions.evaluate(page, _args[j], Object.class);
+		for (int j = 0; j < args.length; ++j) //eval order is important
+			args[j] = _args[j].getValue(eval, page);
 		return args;
 	}
 }

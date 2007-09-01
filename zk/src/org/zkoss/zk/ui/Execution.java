@@ -24,17 +24,17 @@ import java.io.Writer;
 import java.io.IOException;
 import java.security.Principal;
 
-import javax.servlet.jsp.el.VariableResolver;
-
+import org.zkoss.xel.VariableResolver;
 import org.zkoss.idom.Document;
+
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
 
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.xel.Evaluator;
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.el.Evaluator;
 
 /**
  * An execution of a client request (e.g., ServletRequest).
@@ -54,7 +54,7 @@ import org.zkoss.zk.el.Evaluator;
  * @author tomyeh
  * @see Page
  */
-public interface Execution extends Evaluator {
+public interface Execution  {
 	/** Returns the desktop for this execution.
 	 * Each execution is against exactly one desktop.
 	 */
@@ -86,6 +86,23 @@ public interface Execution extends Evaluator {
 	 */
 	public Map getParameterMap();
 
+	/** Returns the evaluator (never null).
+	 * It is usually used to parse the expression into {@link org.zkoss.xel.Expression}
+	 * or used with {@link org.zkoss.zk.ui.xel.ExValue}.
+	 * for performance improvement.
+	 *
+	 * @param page the page that this evaluator is associated.
+	 * If null, the current page and then the first page is assumed.
+	 * @since 3.0.0
+	 */
+	public Evaluator getEvaluator(Page page);
+	/** Returns the evaluator of the current execution.
+	 * It is a shortcut of getEvaluator(comp != null ? comp.getPage(): null)
+	 *
+	 * @since 3.0.0
+	 */
+	public Evaluator getEvaluator(Component comp);
+
 	/** Evluates the specified expression with ${link #getVariableResolver}
 	 * and {@link Page#getFunctionMapper} of the page of the specified
 	 * component.
@@ -95,9 +112,15 @@ public interface Execution extends Evaluator {
 	 * If null, the current page, if any, is used to retrieve
 	 * the mapper.
 	 *
+	 * <p>For better performance, you can use the instance returned by
+	 *{@link #getEvaluator} to parse and cached the parsed expression.
+	 * {@link org.zkoss.zk.ui.xel.ExValue} is a utility class to simply
+	 * the task.
+	 *
 	 * @param comp used as the self variable and to retrieve the function
 	 * mapper. Ignored if null.
 	 * @see #getVariableResolver
+	 * @see #getEvaluator
 	 */
 	public Object evaluate(Component comp, String expr, Class expectedType);
 	/** Evluates the specified expression with ${link #getVariableResolver}
@@ -109,9 +132,15 @@ public interface Execution extends Evaluator {
 	 * If null, the current page, if any, is used to retrieve
 	 * the mapper.
 	 *
+	 * <p>For better performance, you can use the instance returned by
+	 *{@link #getEvaluator} to parse and cached the parsed expression.
+	 * {@link org.zkoss.zk.ui.xel.ExValue} is a utility class to simply
+	 * the task.
+	 *
 	 * @param page used as the self variable and to retrieve the function
 	 * mapper. Ignored if null.
 	 * @see #getVariableResolver
+	 * @see #getEvaluator
 	 */
 	public Object evaluate(Page page, String expr, Class expectedType);
 

@@ -22,22 +22,19 @@ package org.zkoss.zk.scripting;
  * Represents a method stored in an interpretor.
  *
  * @author tomyeh
- * @see Interpreter#getMethod
+ * @deprecated as release 3.0.0, replaced by {@link org.zkoss.xel.Function}.
  */
 public interface Method {
-	/** Returns an array of Class objects that represent the formal parameter types,
-	 * in declaration order, of the method represented by this Method object.
-	 * Returns an array of length 0 if the underlying method takes no parameters.
+	/**
+	 * @deprecated as release 3.0.0, replaced by {@link org.zkoss.xel.Function}.
 	 */
 	public Class[] getParameterTypes();
-	/** Returns a Class object that represents the formal return type of the method
-	 * represented by this Method object.
+	/**
+	 * @deprecated as release 3.0.0, replaced by {@link org.zkoss.xel.Function}.
 	 */
 	public Class getReturnType();
-	/** Invokes this method with the specified arguments.
-	 *
-	 * @param args the arguments used for the method call.
-	 * If null, Object[0] is assumed.
+	/**
+	 * @deprecated as release 3.0.0, replaced by {@link org.zkoss.xel.Function}.
 	 */
 	public Object invoke(Object[] args) throws Exception;
 }

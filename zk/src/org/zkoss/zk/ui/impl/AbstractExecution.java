@@ -25,8 +25,6 @@ import java.util.Collections;
 import java.io.Reader;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.VariableResolver;
-
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;
 
@@ -62,7 +60,6 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	//private Event _evtInProc;
 	/** Which page is being created, or null if all in update mode. */
 	private final Page _creating;
-	private final ExecutionResolver _exresolv;
 	/** Whether onPiggyback is checked for this execution. */
 	private boolean _piggybacked;
 
@@ -71,10 +68,9 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	 * null if none is being created.
 	 * {@link #isAsyncUpdate} returns based on this.
 	 */
-	protected AbstractExecution(Desktop desktop, Page creating, VariableResolver resolv) {
+	protected AbstractExecution(Desktop desktop, Page creating) {
 		_desktop = desktop;
 		_creating = creating;
-		_exresolv = new ExecutionResolver(this, resolv);
 	}
 
 	//-- Execution --//
@@ -92,10 +88,6 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			_events = new LinkedList();
 		_events.add(evt);
 		//_piggybacked = false; //allow piggyback to be called again
-	}
-
-	public VariableResolver getVariableResolver() {
-		return _exresolv;
 	}
 
 	//-- ExecutionCtrl --//

@@ -26,6 +26,7 @@ import java.io.IOException;
 import org.zkoss.idom.Document;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.xel.Evaluator;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -46,6 +47,27 @@ public class Executions {
 		return (Execution)_exec.get();
 	}
 
+	/** Returns the evaluator of the current execution.
+	 * It is usually used to parse the expression into {@link org.zkoss.xel.Expression}
+	 * or used with {@link org.zkoss.zk.ui.xel.ExValue}.
+	 * for performance improvement.
+	 *
+	 * @param page the page that this evaluator is associated.
+	 * If null, the current page and then the first page is assumed.
+	 * @since 3.0.0
+	 */
+	public static final Evaluator getEvaluator(Page page) {
+		return getCurrent().getEvaluator(page);
+	}
+	/** Returns the evaluator of the current execution.
+	 * It is a shortcut of getEvaluator(comp != null ? comp.getPage(): null)
+	 *
+	 * @since 3.0.0
+	 */
+	public static final Evaluator getEvaluator(Component comp) {
+		return getCurrent().getEvaluator(comp);
+	}
+
 	/** Evluates the specified expression by use of the current context
 	 * ({@link #getCurrent}).
 	 *
@@ -53,6 +75,11 @@ public class Executions {
 	 * mapper ({@link Page#getFunctionMapper}).
 	 * If null, the current page, if any, is used to retrieve
 	 * the mapper.
+	 *
+	 * <p>For better performance, you can use the instance returned by
+	 *{@link #getEvaluator} to parse and cached the parsed expression.
+	 * {@link org.zkoss.zk.ui.xel.ExValue} is a utility class to simply
+	 * the task.
 	 *
 	 * @param comp as the self variable (ignored if null)
 	 */
@@ -68,6 +95,11 @@ public class Executions {
 	 * If null, the current page, if any, is used to retrieve
 	 * the mapper.
 	 *
+	 * <p>For better performance, you can use the instance returned by
+	 *{@link #getEvaluator} to parse and cached the parsed expression.
+	 * {@link org.zkoss.zk.ui.xel.ExValue} is a utility class to simply
+	 * the task.
+	 *
 	 * @param page used as the self variable and to retrieve the function
 	 * mapper if funmap is not defined. Ignored if null.
 	 */
@@ -75,7 +107,7 @@ public class Executions {
 	String expr, Class expectedType) {
 		return getCurrent().evaluate(page, expr, expectedType);
 	}
-	
+
 	/** Encodes an URL.
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,

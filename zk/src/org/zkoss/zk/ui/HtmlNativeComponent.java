@@ -181,29 +181,40 @@ implements DynamicTag, Native {
 	/** The HTML helper.
 	 */
 	public static class HtmlHelper implements Helper {
+		public Component newNative(String text) {
+			final HtmlNativeComponent nc = new HtmlNativeComponent();
+			if (text != null)
+				nc.setPrologContent(text);
+			return nc;
+		}
 		public void getFirstHalf(StringBuffer sb, String tag, Map props,
 		Collection namespaces) {
-			sb.append('<').append(tag);
+			if (tag != null)
+				sb.append('<').append(tag);
 
 			NativeHelpers.getAttributes(sb, props, namespaces);
 
-			final String tn = tag.toLowerCase();
-			if (HTMLs.isOrphanTag(tn))
-				sb.append('/');
-			sb.append('>');
+			if (tag != null) {
+				final String tn = tag.toLowerCase();
+				if (HTMLs.isOrphanTag(tn))
+					sb.append('/');
+				sb.append('>');
 
-			if (!_noLFs.contains(tn) && !_begNoLFs.contains(tn))
-				sb.append('\n'); //make it more readable
+				if (!_noLFs.contains(tn) && !_begNoLFs.contains(tn))
+					sb.append('\n'); //make it more readable
+			}
 		}
 		public void getSecondHalf(StringBuffer sb, String tag) {
-			final String tn = tag.toLowerCase();
-			if (HTMLs.isOrphanTag(tn))
-				return;
+			if (tag != null) {
+				final String tn = tag.toLowerCase();
+				if (HTMLs.isOrphanTag(tn))
+					return;
 
-			sb.append("</").append(tag).append('>');
+				sb.append("</").append(tag).append('>');
 
-			if (!_noLFs.contains(tn))
-				sb.append('\n'); //make it more readable
+				if (!_noLFs.contains(tn))
+					sb.append('\n'); //make it more readable
+			}
 		}
 		public void appendText(StringBuffer sb, String text) {
 			XMLs.encodeText(sb, text);

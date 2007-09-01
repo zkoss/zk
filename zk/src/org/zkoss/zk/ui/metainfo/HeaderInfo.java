@@ -25,6 +25,8 @@ import java.util.Collections;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.xel.ExValue;
+import org.zkoss.zk.ui.xel.Evaluator;
 
 /**
  * Represents a header element, such as &lt;link&gt; and &lt;meta&gt;
@@ -37,6 +39,7 @@ import org.zkoss.zk.ui.Executions;
  */
 public class HeaderInfo {
 	private final String _name;
+	/** A list of [String nm, ExValue val]. */
 	private final List _attrs;
 
 	/** Constructor.
@@ -64,7 +67,8 @@ public class HeaderInfo {
 				if (!(val instanceof String))
 					throw new IllegalArgumentException("String is expected, not "+val);
 
-				_attrs.add(new String[] {(String)nm, (String)val});
+				_attrs.add(new Object[] {
+					nm, new ExValue((String)val, String.class)});
 			}
 		}
 	}
@@ -83,10 +87,11 @@ public class HeaderInfo {
 		final StringBuffer sb = new StringBuffer(128)
 			.append('<').append(_name);
 
+		final Evaluator eval = Executions.getEvaluator(page);
 		for (Iterator it = _attrs.iterator(); it.hasNext();) {
-			final String[] p = (String[])it.next();
-			String nm = p[0];
-			String val = (String)Executions.evaluate(page, p[1], String.class);
+			final Object[] p = (Object[])it.next();
+			String nm = (String)p[0];
+			String val = (String)((ExValue)p[1]).getValue(eval, page);
 
 			if (val == null || val.length() == 0) {
 				sb.append(' ').append(nm).append("=\"\"");

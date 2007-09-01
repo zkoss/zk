@@ -31,6 +31,8 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.xel.ExValue;
+import org.zkoss.zk.ui.xel.Evaluator;
 
 /**
  * An implementation of {@link ForEach}.
@@ -46,8 +48,8 @@ import org.zkoss.zk.ui.Page;
 public class ForEachImpl implements ForEach {
 	private final Page _page;
 	private final Component _comp;
-	private final String _expr;
-	private final Object _begin, _end;
+	private final ExValue _expr;
+	private final ExValue _begin, _end;
 	private Status _status;
 	private Iterator _it;
 	private Object _oldEach;
@@ -86,9 +88,9 @@ public class ForEachImpl implements ForEach {
 
 		_page = null;
 		_comp = comp;
-		_expr = expr;
-		_begin = toIntegerOrExpr(begin);
-		_end = toIntegerOrExpr(end);
+		_expr = expr != null ? new ExValue(expr, Object.class): null;
+		_begin = begin != null && begin.length() > 0 ? new ExValue(begin, Integer.class): null;
+		_end = end != null && end.length() > 0 ? new ExValue(end, Integer.class): null;
 	}
 	/** Constructor.
 	 * In most cases, use {@link #getInstance(Component, String, String, String)}
@@ -100,23 +102,14 @@ public class ForEachImpl implements ForEach {
 
 		_page = page;
 		_comp = null;
-		_expr = expr;
-		_begin = toIntegerOrExpr(begin);
-		_end = toIntegerOrExpr(end);
+		_expr = expr != null ? new ExValue(expr, Object.class): null;
+		_begin = begin != null && begin.length() > 0 ? new ExValue(begin, Integer.class): null;
+		_end = end != null && end.length() > 0 ? new ExValue(end, Integer.class): null;
 	}
-	private static Object toIntegerOrExpr(String expr) {
-		return expr == null || expr.length() == 0 ? null:
-			expr.indexOf("${") >= 0 ? expr:
-			Classes.coerce(Integer.class, expr);
-	}
-	private Integer toInteger(Object intOrExpr) {
-		if (intOrExpr instanceof String) {
-			final String s = (String)intOrExpr;
-			intOrExpr = _comp != null ?
-				Executions.evaluate(_comp, s, Integer.class):
-				Executions.evaluate(_page, s, Integer.class);
-		}
-		return (Integer)intOrExpr;
+	private Object eval(ExValue value, Evaluator eval) {
+		return value == null ? null:
+			_comp != null ?
+				value.getValue(eval, _comp): value.getValue(eval, _page);
 	}
 
 	//-- ForEach --//
@@ -125,16 +118,16 @@ public class ForEachImpl implements ForEach {
 			throw new IllegalStateException("Iterate twice not allowed");
 
 		if (_status == null) {
-			final Object o = _comp != null ?
-				Executions.evaluate(_comp, _expr, Object.class):
-				Executions.evaluate(_page, _expr, Object.class);
+			final Evaluator eval =
+				Executions.getEvaluator(_comp != null ? _comp.getPage(): _page);
+			final Object o = eval(_expr, eval);
 			if (o == null) {
 				_done = true;
 				return false;
 			}
 
-			final Integer iend = toInteger(_end);
-			final Integer ibeg = toInteger(_begin);
+			final Integer iend = (Integer)eval(_end, eval);
+			final Integer ibeg = (Integer)eval(_begin, eval);
 			final int vbeg = ibeg != null ? ibeg.intValue(): 0;
 			if (vbeg < 0)
 				throw new UiException("Negative forEachBegin is not allowed: "+ibeg);

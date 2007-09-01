@@ -866,22 +866,14 @@ public class Configuration {
 		return _roThemeUris;
 	}
 
-	/** Sets the URI that is used when the session timeout or
-	 * desktop is no longer available.
-	 *
-	 * <p>Deprecated. Use {@link Devices#setTimeoutURI} instead.
-	 *
-	 * @deprecated
+	/**
+	 * @deprecated As of release 2.4.0, replaced by {@link Devices#setTimeoutURI}.
 	 */
 	public void setTimeoutURI(String uri) {
 		Devices.setTimeoutURI("ajax", uri);
 	}
-	/** Sets the URI that is used when the session timeout or
-	 * desktop is no longer available, or null.
-	 *
-	 * <p>Deprecated. Use {@link Devices#getTimeoutURI} instead.
-	 *
-	 * @deprecated
+	/**
+	 * @deprecated As of release 2.4.0, replaced by {@link Devices#getTimeoutURI}.
 	 */
 	public String getTimeoutURI() {
 		return Devices.getTimeoutURI("ajax");
@@ -1657,9 +1649,8 @@ public class Configuration {
 		return _timerKeepAlive;
 	}
 
-	/** Adds an error page for the Ajax clients.
-	 * <p>Deprecated, use {@link #addErrorPage(String, Class, String)} instead.
-	 * @deprecated
+	/**
+	 * @deprecated As of release 2.4.1, replaced by {@link #addErrorPage(String, Class, String)}
 	 */
 	public void addErrorPage(Class type, String location) {
 		addErrorPage("ajax", type, location);
@@ -1701,9 +1692,8 @@ public class Configuration {
 		}
 		return previous;
 	}
-	/** Returns the error page for the Ajax clients.
-	 * <p>Deprecated, use {@link #getErrorPage(String, Throwable)} instead.
-	 * @deprecated
+	/**
+	 * @deprecated As of release 2.4.1, replaced by {@link #getErrorPage(String, Throwable)}.
 	 */
 	public String getErrorPage(Throwable error) {
 		return getErrorPage("ajax", error);

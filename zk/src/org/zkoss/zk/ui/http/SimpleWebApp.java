@@ -29,7 +29,7 @@ import java.io.InputStream;
 import javax.servlet.ServletContext;
 
 import org.zkoss.util.CollectionsX;
-import org.zkoss.el.impl.AttributesMap;
+import org.zkoss.web.servlet.xel.AttributesMap;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;

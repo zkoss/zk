@@ -29,7 +29,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.zkoss.util.logging.Log;
-import org.zkoss.el.impl.AttributesMap;
+import org.zkoss.web.servlet.xel.AttributesMap;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;

@@ -45,7 +45,7 @@ import org.zkoss.idom.Attribute;
 import org.zkoss.idom.ProcessingInstruction;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
-import org.zkoss.el.Taglib;
+import org.zkoss.xel.Taglib;
 import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
 
@@ -410,7 +410,7 @@ public class DefinitionLoaders {
 				final String inline = el.getElementValue("inline", true);
 				compdef = (ComponentDefinitionImpl)
 					langdef.getMacroDefinition(
-						name, macroUri, "true".equals(inline), false);
+						name, macroUri, "true".equals(inline), null);
 
 				final String clsnm = el.getElementValue("component-class", true);
 				if (clsnm != null && clsnm.length() > 0) {
@@ -448,7 +448,7 @@ public class DefinitionLoaders {
 					IDOMs.getRequiredElementValue(el, "component-class");
 				noEL("component-class", clsnm, el);
 				compdef = new ComponentDefinitionImpl(
-					langdef, name, locateClass(clsnm));
+					langdef, null, name, locateClass(clsnm));
 				langdef.addComponentDefinition(compdef);
 			}
 

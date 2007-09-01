@@ -71,9 +71,8 @@ public class ComponentsCtrl {
 		Strings.encode(sb, id);
 		return sb.toString();
 	}
-	/** Returns the anonymous UUID.
-	 * Deprecated since 2.4.1. Use {@link #ANONYMOUS_ID} directly.
-	 * @deprecated
+	/**
+	 * @deprecated As of release 2.4.1, replaced by {@link #ANONYMOUS_ID}
 	 */
 	public static final String getAnonymousId() {
 		return ANONYMOUS_ID;

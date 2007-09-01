@@ -32,9 +32,10 @@ public class MacroDefinition extends ComponentDefinitionImpl {
 	/** Whether it is an inline macro. */
 	private final boolean _inline;
 
-	/*package*/ MacroDefinition(LanguageDefinition langdef, String name,
+	/*package*/ MacroDefinition(LanguageDefinition langdef,
+	PageDefinition pgdef, String name,
 	Class cls, String macroURI, boolean inline) {
-		super(langdef, name, cls);
+		super(langdef, pgdef, name, cls);
 
 		if (name == null || cls == null)
 			throw new IllegalArgumentException("null");

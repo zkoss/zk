@@ -32,8 +32,6 @@ import java.util.Collection;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.FunctionMapper;
-
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
@@ -50,6 +48,7 @@ import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.xel.Evaluator;
 import org.zkoss.zk.ui.util.*;
 import org.zkoss.zk.scripting.*;
 import org.zkoss.zk.au.*;
@@ -309,8 +308,7 @@ public class UiEngineImpl implements UiEngine {
 			//2) we add variable resolvers before init because
 			//init's zscirpt might depend on it.
 			if (pagedef != null) {
-				page.addFunctionMapper(pagedef.getFunctionMapper());
-				initVariableResolvers(pagedef, page);
+				pagedef.initXelContext(page);
 
 				final Initiators inits = Initiators.doInit(pagedef, page);
 				try {
@@ -448,6 +446,12 @@ public class UiEngineImpl implements UiEngine {
 						}
 					}
 				}
+			} else if (meta instanceof TextInfo) {
+				//parent must be a native component
+				final String s = ((TextInfo)meta).getValue(ci.eval, parent);
+				if (s != null && s.length() > 0)
+					parent.appendChild(
+						((Native)parent).getHelper().newNative(s));
 			} else {
 				execNonComponent(page, parent, meta);
 			}
@@ -557,8 +561,7 @@ public class UiEngineImpl implements UiEngine {
 		//Note: we add taglib, stylesheets and var-resolvers to the page
 		//it might cause name pollution but we got no choice since they
 		//are used as long as components created by this method are alive
-		if (page != null) page.addFunctionMapper(pagedef.getFunctionMapper());
-		initVariableResolvers(pagedef, page);
+		pagedef.initXelContext(page);
 
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
@@ -579,13 +582,6 @@ public class UiEngineImpl implements UiEngine {
 
 			inits.doFinally();
 		}
-	}
-	private static final void initVariableResolvers(PageDefinition pagedef,
-	Page page) {
-		final List resolvs = pagedef.newVariableResolvers(page);
-		if (!resolvs.isEmpty())
-			for (Iterator it = resolvs.iterator(); it.hasNext();)
-				page.addVariableResolver((VariableResolver)it.next());
 	}
 
 	public void sendRedirect(String uri, String target) {
@@ -1390,9 +1386,9 @@ public class UiEngineImpl implements UiEngine {
 						}
 					}
 				}
-			} else if (meta instanceof String) {
-				((Native)comp).getHelper().appendText(sb,
-					(String)ci.exec.evaluate(comp, (String)meta, String.class));
+			} else if (meta instanceof TextInfo) {
+				final String s = ((TextInfo)meta).getValue(ci.eval, comp);
+				((Native)comp).getHelper().appendText(sb, s);
 			} else {
 				execNonComponent(ci.page, comp, meta);
 			}
@@ -1404,7 +1400,7 @@ public class UiEngineImpl implements UiEngine {
 	StringBuffer sb, Component comp, NativeInfo childInfo) {
 		((Native)comp).getHelper()
 			.getFirstHalf(sb, childInfo.getTag(),
-				evalProperties(ci.exec, comp, childInfo.getProperties()),
+				evalProperties(ci.eval, comp, childInfo.getProperties()),
 				childInfo.getDeclaredNamespaces());
 
 		final List prokids = childInfo.getPrologChildren();
@@ -1429,8 +1425,10 @@ public class UiEngineImpl implements UiEngine {
 
 		((Native)comp).getHelper().getSecondHalf(sb, childInfo.getTag());
 	}
+	/** Returns a map of properties, (String name, String value).
+	 */
 	private static final
-	Map evalProperties(Execution exec, Component comp, List props) {
+	Map evalProperties(Evaluator eval, Component comp, List props) {
 		if (props == null || props.isEmpty())
 			return Collections.EMPTY_MAP;
 
@@ -1439,7 +1437,7 @@ public class UiEngineImpl implements UiEngine {
 			final Property prop = (Property)it.next();
 			if (prop.isEffective(comp))
 				map.put(prop.getName(),
-					exec.evaluate(comp, prop.getValue(), String.class));
+					Classes.coerce(String.class, prop.getValue(eval, comp)));
 		}
 		return map;
 	}
@@ -1509,11 +1507,13 @@ public class UiEngineImpl implements UiEngine {
 	private static class CreateInfo {
 		private final Execution exec;
 		private final Page page;
+		private final Evaluator eval;
 		private final UiFactory uf;
 		private CreateInfo(UiFactory uf, Execution exec, Page page) {
 			this.exec = exec;
 			this.page = page;
 			this.uf = uf;
+			this.eval = exec.getEvaluator(page);
 		}
 	}
 }

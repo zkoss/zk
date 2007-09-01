@@ -40,7 +40,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
-import org.zkoss.zk.el.Evaluator;
+import org.zkoss.zk.ui.xel.Evaluator;
 
 /**
  * Represents a componennt instance defined in a ZUML page.
@@ -395,7 +395,7 @@ implements Cloneable, Condition, java.io.Serializable {
 			((ComponentCtrl)comp).addSharedEventHandlerMap(_evthds);
 
 		if (_props != null) {
-			final Evaluator eval = Executions.getCurrent();
+			final Evaluator eval = Executions.getEvaluator(comp);
 			for (Iterator it = _props.iterator(); it.hasNext();) {
 				final Property prop = (Property)it.next();
 				prop.assign(eval, comp);
@@ -406,7 +406,8 @@ implements Cloneable, Condition, java.io.Serializable {
 	/** Evaluates and retrieves properties to the specified map from
 	 * {@link ComponentDefinition} (and {@link ComponentInfo}).
 	 *
-	 * @param propmap the map to store the retrieved properties.
+	 * @param propmap the map to store the retrieved properties
+	 * (String name, Object value).
 	 * If null, a HashMap instance is created.
 	 * @param owner the owner page; used if parent is null
 	 * @param parent the parent component (may be null)
@@ -420,18 +421,15 @@ implements Cloneable, Condition, java.io.Serializable {
 			propmap = new HashMap();
 
 		if (_props != null) {
-			final Evaluator eval = Executions.getCurrent();
-
+			final Evaluator eval = Executions.getEvaluator(owner);
 			for (Iterator it = _props.iterator(); it.hasNext();) {
 				final Property prop = (Property)it.next();
 				if (parent != null) {
 					if (prop.isEffective(parent))
-						propmap.put(prop.getName(),
-							eval.evaluate(parent, prop.getValue(), Object.class));
+						propmap.put(prop.getName(), prop.getValue(eval, parent));
 				} else {
 					if (prop.isEffective(owner))
-						propmap.put(prop.getName(),
-							eval.evaluate(owner, prop.getValue(), Object.class));
+						propmap.put(prop.getName(), prop.getValue(eval, owner));
 				}
 			}
 		}

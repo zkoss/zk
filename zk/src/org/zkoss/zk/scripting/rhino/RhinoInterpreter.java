@@ -27,7 +27,6 @@ import org.mozilla.javascript.ImporterTopLevel;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 
 /**
@@ -105,13 +104,13 @@ public class RhinoInterpreter extends GenericInterpreter {
 	/** Returns the method.
 	 * <p>Note: JavaScript identifies a function with the name only.
 	 */
-	public Method getMethod(String name, Class[] argTypes) {
+	public org.zkoss.xel.Function getFunction(String name, Class[] argTypes) {
 		Context.enter();
 		try {
 			final Object val = _global.get(name, _global);
 			if (!(val instanceof Function))
 				return null;
-			return new RhinoMethod((Function)val);
+			return new RhinoFunction((Function)val);
 		} finally {
 			Context.exit();
 		}
@@ -139,22 +138,22 @@ public class RhinoInterpreter extends GenericInterpreter {
 		}
 	}
 
-	private class RhinoMethod implements Method {
+	private class RhinoFunction implements org.zkoss.xel.Function {
 		private final Function _func;
-		private RhinoMethod(Function func) {
+		private RhinoFunction(Function func) {
 			if (func == null)
 				throw new IllegalArgumentException("null");
 			_func = func;
 		}
 
-		//-- Method --//
+		//-- Function --//
 		public Class[] getParameterTypes() {
 			return new Class[0];
 		}
 		public Class getReturnType() {
 			return Object.class;
 		}
-		public Object invoke(Object[] args) throws Exception {
+		public Object invoke(Object obj, Object[] args) throws Exception {
 			final Context ctx = Context.enter();
 			try {
 				final Scriptable scope = getGlobalScope();
@@ -162,6 +161,9 @@ public class RhinoInterpreter extends GenericInterpreter {
 			} finally {
 				Context.exit();
 			}
+		}
+		public java.lang.reflect.Method toMethod() {
+			return null;
 		}
 	}
 }

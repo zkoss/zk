@@ -99,14 +99,9 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 		}
 		return null;
 	}
-	/** Returns the first event handler of the specified event name,
-	 * or null if not available.
-	 *
-	 * <p>Deprecated since 3.0.0. Use {@link #get(Component, String)}
-	 or {@link #getAll} instead.
-	 * In other words, it is the same as getAll(evtnm)[0].
-	 *
-	 * @deprecated
+	/**
+	 * @deprecated As of release 3.0.0, replaced by getAll(evtnm)[0].
+	 * See also {@link #get(Component, String)} or {@link #getAll}
 	 */
 	public EventHandler get(String evtnm) {
 		if (_evthds != null) {

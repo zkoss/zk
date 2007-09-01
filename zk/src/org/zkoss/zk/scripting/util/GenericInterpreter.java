@@ -24,13 +24,13 @@ import java.util.List;
 import java.util.LinkedList;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.xel.Function;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
-import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.NamespaceChangeListener;
 
 /**
@@ -291,14 +291,15 @@ abstract public class GenericInterpreter implements Interpreter {
 		return null;
 	}
 	/** Returns null since retrieving methods is not supported.
+	 * @since 3.0.0
 	 */
-	public Method getMethod(String name, Class[] argTypes) {
+	public Function getFunction(String name, Class[] argTypes) {
 		return null;
 	}
 	/** Returns null since retrieving methods is not supported.
-	 * @since 2.4.1
+	 * @since 3.0.0
 	 */
-	public Method getMethod(Namespace ns, String name, Class[] argTypes) {
+	public Function getFunction(Namespace ns, String name, Class[] argTypes) {
 		return null;
 	}
 

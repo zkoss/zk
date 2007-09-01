@@ -24,9 +24,10 @@ import java.util.Map;
 import java.util.List;
 
 import org.zkoss.idom.Namespace;
+import org.zkoss.zk.ui.Component;
 
 /**
- * Implemented with {@link org.zkoss.zk.ui.Component} to represent
+ * Implemented with {@link Component} to represent
  * a native component.
  * The native component is used to implement the feature of the
  * Native namespace (http://www.zkoss.org/2005/zk/native).
@@ -72,6 +73,10 @@ public interface Native extends NonFellow {
 	 * It usually depends on the client (i.e., {@link org.zkoss.zk.ui.Desktop#getDevice}.
 	 */
 	public interface Helper {
+		/** Creates a native component with the specified content.
+		 */
+		public Component newNative(String text);
+
 		/** Generates the first half of the device-dependent content
 		 * for the specified tag and properties, and appends it to
 		 * the specified string buffer.

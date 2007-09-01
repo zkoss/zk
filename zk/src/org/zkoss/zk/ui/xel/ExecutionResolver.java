@@ -16,12 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.impl;
+package org.zkoss.zk.ui.xel;
 
 import java.util.Collections;
 
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
  * Represents a variable resolver.
  *
  * @author tomyeh
+ * @since 3.0.0
  */
 public class ExecutionResolver implements VariableResolver {
 	/** The parent resolver. */
@@ -58,7 +59,7 @@ public class ExecutionResolver implements VariableResolver {
 	}
 
 	//-- VariableResolver --//
-	public Object resolveVariable(String name) throws ELException {
+	public Object resolveVariable(String name) throws XelException {
 		if (name == null || name.length() == 0) //just in case
 			return null;
 
@@ -161,5 +162,10 @@ public class ExecutionResolver implements VariableResolver {
 		}
 
 		return _parent != null ? _parent.resolveVariable(name): null;
+	}
+
+	//Object//
+	public String toString() {
+		return "[ExecutionResolver: " + _self + ']';
 	}
 }

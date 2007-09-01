@@ -23,11 +23,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.jsp.el.FunctionMapper;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.Function;
 
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.VariableResolver;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
@@ -312,9 +313,9 @@ public interface Page extends IdSpace {
 	 *
 	 * @return the method, or null if not found
 	 * @see #getLoadedInterpreters
+	 * @since 3.0.0
 	 */
-	public org.zkoss.zk.scripting.Method getZScriptMethod(
-	String name, Class[] argTypes);
+	public Function getZScriptFunction(String name, Class[] argTypes);
 	/** Returns the variable of the specified name by searching
 	 * the logical scope of the specified namespace for all
 	 * the loaded interpreters.
@@ -333,17 +334,23 @@ public interface Page extends IdSpace {
 	 * @see #getLoadedInterpreters
 	 * @since 2.4.1
 	 */
-	public org.zkoss.zk.scripting.Method getZScriptMethod(
-	Namespace ns, String name, Class[] argTypes);
+	public Function getZScriptFunction(Namespace ns, String name, Class[] argTypes);
 	/** Returns the variable of the specified name by searching
 	 * the logical scope of the namespace of the specified component
 	 * for all the loaded interpreters.
 	 *
-	 * <p>It is a shortcut: getZScriptMethod(comp.getNamespace(), name, argTypes);
+	 * <p>It is a shortcut: getZScriptFunction(comp.getNamespace(), name, argTypes);
 	 * @since 3.0.0
 	 */
-	public org.zkoss.zk.scripting.Method getZScriptMethod(
-	Component comp, String name, Class[] argTypes);
+	public Function getZScriptFunction(Component comp, String name, Class[] argTypes);
+	/** @deprecated As of release 3.0.0, replaced by {@link #getZScriptFunction(String,Class[])}.
+	 */
+	public org.zkoss.zk.scripting.Method
+	getZScriptMethod(String name, Class[] argTypes);
+	/** @deprecated As of release 3.0.0, replaced by {@link #getZScriptFunction(String,Class[])}.
+	 */
+	public org.zkoss.zk.scripting.Method
+	getZScriptMethod(Namespace ns, String name, Class[] argTypes);
 
 	/** Returns the value of the variable of the specified name by searching
 	 * the loaded interpreters, if any.
@@ -384,13 +391,18 @@ public interface Page extends IdSpace {
 	 */
 	public Object getZScriptVariable(Component comp, String name);
 
-	/** Returns a variable that is visible to EL expressions.
+	/** Returns a variable that is visible to XEL expressions.
 	 *
 	 * <p>This method is mainly used to access special variable, such as
 	 * request parameters (if this page is requested by HTTP).
 	 *
 	 * <p>Note: components that are specified with an ID are already accessible
 	 * by {@link #getVariable}.
+	 * @since 3.0.0
+	 */
+	public Object getXelVariable(String name);
+	/** Returns a variable that is visible to XEL expressions.
+	 * @deprecated As of release 3.0.0, replaced by {@link #getXelVariable}.
 	 */
 	public Object getELVariable(String name);
  
@@ -493,19 +505,20 @@ public interface Page extends IdSpace {
 	throws InterpreterNotFoundException;
 
 	//metainfo//
-	/** Returns the function mapper for resolving EL functions, or null if
+	/** Returns the function mapper for resolving XEL functions, or null if
 	 * not available.
+	 *
+	 * @since 3.0.0
 	 */
 	public FunctionMapper getFunctionMapper();
-
 	/** Adds the function mapper in addition to the current one.
 	 *
 	 * <p>The new added function mapper has the higher priority.
 	 * {@link #getFunctionMapper} will return the new
 	 *
-	 * @param funmap the new function mapper (null to ignore).
+	 * @param mapper the new function mapper (null to ignore).
 	 */
-	public void addFunctionMapper(FunctionMapper funmap);
+	public void addFunctionMapper(FunctionMapper mapper);
 
 	/** Returns the language definition that this page belongs to (never null).
 	 */

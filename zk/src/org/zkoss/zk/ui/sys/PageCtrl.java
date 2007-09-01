@@ -22,8 +22,6 @@ import java.util.Collection;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.FunctionMapper;
-
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -128,17 +126,6 @@ public interface PageCtrl {
 	 * @since 3.0.0
 	 */
 	public void setCacheable(Boolean cacheable);
-
-	/** Resolves a variable thru all registered variable resolvers
-	 * ({@link org.zkoss.zk.scripting.VariableResolver}).
-	 *
-	 * <p>You rarely need to call this method, since
-	 * it is called implicitly by {@link org.zkoss.zk.ui.Page#getVariable}.
-	 *
-	 * @see org.zkoss.zk.ui.Page#addVariableResolver
-	 */
-	//deprecated
-	//public Object resolveVariable(String name);
 
 	/** Returns the owner of this page, or null if it is not owned by
 	 * any component.

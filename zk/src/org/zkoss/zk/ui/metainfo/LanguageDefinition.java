@@ -28,18 +28,13 @@ import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import javax.servlet.jsp.el.FunctionMapper;
-
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.logging.Log;
-import org.zkoss.el.Taglib;
-import org.zkoss.el.FunctionMappers;
-import org.zkoss.el.EvaluatorImpl;
-import org.zkoss.el.ObjectResolver;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.FunctionMappers;
+import org.zkoss.xel.Taglib;
 import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
-import org.zkoss.web.el.ELContexts;
-import org.zkoss.web.el.ELContext;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Page;
@@ -47,7 +42,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.el.Evaluator;
+import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.ui.xel.ObjectEvaluator;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.DeviceNotFoundException;
 import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
@@ -129,7 +125,6 @@ public class LanguageDefinition {
 	/** A list of StyleSheet. */
 	private final List _ss = new LinkedList(),
 		_ross = Collections.unmodifiableList(_ss);
-	private FunctionMapper _mapper;
 	private final Locator _locator;
 	/** The label template. */
 	private LabelTemplate _labeltmpl;
@@ -137,7 +132,8 @@ public class LanguageDefinition {
 	private MacroTemplate _macrotmpl;
 	/** The native component definition. */
 	private ComponentDefinition _nativedef;
-	private final Evaluator _evalor;
+	/** The evaluator. */
+	private Evaluator _eval;
 	/** Whether it is a native language. */
 	private final boolean _native;
 
@@ -311,30 +307,6 @@ public class LanguageDefinition {
 		_locator = locator;
 		_native = bNative;
 		_compdefs = new ComponentDefinitionMap(ignoreCase);
-
-		_evalor = new Evaluator() {
-			public Object evaluate(Component comp, String expr, Class expectedType) {
-				return evaluate0(comp, expr, expectedType);
-			}
-			public Object evaluate(Page page, String expr, Class expectedType) {
-				return evaluate0(page, expr, expectedType);
-			}
-			private Object evaluate0(Object obj, String expr, Class expectedType) {
-				if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0)
-					return expr;
-
-				try {
-					final ELContext jc = ELContexts.getCurrent();
-					return new EvaluatorImpl().evaluate(
-						expr, expectedType,
-						new ObjectResolver(
-							jc != null ? jc.getVariableResolver(): null, obj),
-						getFunctionMapper());
-				} catch (javax.servlet.jsp.el.ELException ex) {
-					throw UiException.Aide.wrap(ex);
-				}
-			}
-		};
 
 		boolean replWarned = false;
 		synchronized (_ldefByName) {
@@ -601,21 +573,20 @@ public class LanguageDefinition {
 	}
 	/** Returns the component definition for the specified condition.
 	 *
-	 * @param pageLevel whether the returned definition belongs to
-	 * the page definition. If false, the returned definition will belong
-	 * to this language
+	 * @param pgdef the page definition the macro definitioin belongs to.
+	 * If null, it belongs to this language definition.
 	 * @exception UnsupportedOperationException if this language doesn't
 	 * support the macros
 	 * @since 3.0.0
 	 */
 	public ComponentDefinition getMacroDefinition(
-	String name, String macroURI, boolean inline, boolean pageLevel) {
+	String name, String macroURI, boolean inline, PageDefinition pgdef) {
 		if (_macrotmpl == null)
 			throw new UiException("Macro not supported by "+this);
 
 		final ComponentDefinition compdef =
 			ComponentDefinitionImpl.newMacroDefinition(
-				pageLevel ? null: this,
+				pgdef != null ? null: this, pgdef,
 				name, _macrotmpl.klass, macroURI, inline);
 		compdef.addMold("default", _macrotmpl.moldURI);
 		return compdef;
@@ -629,8 +600,7 @@ public class LanguageDefinition {
 		|| !Native.class.isAssignableFrom(klass))
 			throw new IllegalArgumentException("Illegal native class: "+klass);
 		_nativedef =
-			ComponentDefinitionImpl.newNativeDefinition(
-				this, "native", klass);;
+			ComponentDefinitionImpl.newNativeDefinition(this, "native", klass);;
 	}
 	/** Returns the component definition for the native components.
 	 *
@@ -713,24 +683,20 @@ public class LanguageDefinition {
 	public void addTaglib(Taglib taglib) {
 		synchronized (_taglibs) {
 			_taglibs.add(taglib);
-			_mapper = null; //ask for re-parse
+			_eval = null; //ask for re-gen
 		}
-	}
-	/** Returns the function mapper. */
-	private FunctionMapper getFunctionMapper() {
-		if (_mapper == null) {
-			synchronized (this) {
-				_mapper =
-					FunctionMappers.getFunctionMapper(_taglibs, _locator);
-			}
-		}
-		return _mapper;
 	}
 
-	/** Returns the evaluator associated with this definition.
+	/** Returns the evaluator based on this language definition.
 	 */
 	public Evaluator getEvaluator() {
-		return _evalor;
+		if (_eval == null)
+			_eval = newEvaluator();
+		return _eval;
+	}
+	private Evaluator newEvaluator() {
+		return new ObjectEvaluator(null,
+			FunctionMappers.getFunctionMapper(_taglibs, _locator));
 	}
 
 	//Object//

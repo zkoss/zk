@@ -31,9 +31,9 @@ import org.jruby.runtime.Block;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.internal.runtime.GlobalVariables;
 
+import org.zkoss.xel.Function;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 
 /**
@@ -84,7 +84,7 @@ public class JRubyInterpreter extends GenericInterpreter {
 	/**TODO: need to digg out a solution from jruby's manual
 	public Class getClass(String clsnm) {
 	}
-	public Method getMethod(String name, Class[] argTypes) {
+	public Function getFunction(String name, Class[] argTypes) {
 	}
 	*/
 

@@ -25,13 +25,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
-import javax.servlet.jsp.el.FunctionMapper;
-
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.resource.Locator;
-import org.zkoss.el.FunctionMappers;
-import org.zkoss.el.Taglib;
+import org.zkoss.xel.Taglib;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.FunctionMappers;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Executions;
@@ -41,13 +41,18 @@ import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
-import org.zkoss.zk.scripting.VariableResolver;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.PageConfig;
+import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.ui.xel.ObjectEvaluator;
+import org.zkoss.zk.ui.xel.ExValue;
+
 /**
  * A page definition.
  * It represents a ZUL page.
+ *
+ * <p>Note: it is not thread-safe.
  *
  * @author tomyeh
  * @see ComponentDefinition
@@ -61,14 +66,17 @@ public class PageDefinition extends NodeInfo {
 	/** The zscript language. */
 	private String _zslang = "Java";
 	private List _taglibs;
-	private FunctionMapper _funmap;
+	/** The evaluator. */
+	private Evaluator _eval;
+	/** The function mapper. */
+	private FunctionMapper _mapper;
 	/* List(InitiatorInfo). */
 	private List _initdefs;
 	/** List(VariableResolverInfo). */
 	private List _resolvdefs;
 	/** List(HeaderInfo). */
 	private List _headerdefs;
-	/** Map(String name, String value). */
+	/** Map(String name, ExValue value). */
 	private Map _rootAttrs;
 	private String _contentType, _docType, _firstLine;
 	private final ComponentDefinitionMap _compdefs;
@@ -223,16 +231,9 @@ public class PageDefinition extends NodeInfo {
 		if (init == null)
 			throw new IllegalArgumentException("null");
 
-		if (_initdefs == null) {
-			synchronized (this) {
-				if (_initdefs == null)
-					_initdefs = new LinkedList();
-			}
-		}
-
-		synchronized (_initdefs) {
-			_initdefs.add(init);
-		}
+		if (_initdefs == null)
+			_initdefs = new LinkedList();
+		_initdefs.add(init);
 	}
 	/** Returns a list of all {@link Initiator} and invokes
 	 * its {@link Initiator#doInit} before returning.
@@ -243,61 +244,46 @@ public class PageDefinition extends NodeInfo {
 			return Collections.EMPTY_LIST;
 
 		final List inits = new LinkedList();
-		synchronized (_initdefs) {
-			for (Iterator it = _initdefs.iterator(); it.hasNext();) {
-				final InitiatorInfo def = (InitiatorInfo)it.next();
-				try {
-					final Initiator init = def.newInitiator(page);
-					if (init != null) {
-						init.doInit(page, def.getArguments(page));
-						inits.add(init);
-					}
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
+		for (Iterator it = _initdefs.iterator(); it.hasNext();) {
+			final InitiatorInfo def = (InitiatorInfo)it.next();
+			try {
+				final Initiator init = def.newInitiator(page);
+				if (init != null) {
+					init.doInit(page, def.getArguments(page));
+					inits.add(init);
 				}
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
 			}
 		}
 		return inits;
 	}
 
-	/** Adds a defintion of {@link org.zkoss.zk.scripting.VariableResolver}. */
+	/** Adds a defintion of {@link VariableResolver}. */
 	public void addVariableResolverInfo(VariableResolverInfo resolver) {
 		if (resolver == null)
 			throw new IllegalArgumentException("null");
 
-		if (_resolvdefs == null) {
-			synchronized (this) {
-				if (_resolvdefs == null)
-					_resolvdefs = new LinkedList();
-					//no need to call Threads.dummy since the chance is too low
-			}
-		}
-
-		synchronized (_resolvdefs) {
-			_resolvdefs.add(resolver);
-		}
-	}
-	/** Retrieves a list of variable resolvers defined for this page
-	 * definition.
-	 */
-	public List newVariableResolvers(Page page) {
 		if (_resolvdefs == null)
-			return Collections.EMPTY_LIST;
+			_resolvdefs = new LinkedList();
+		_resolvdefs.add(resolver);
+	}
+	/** Initializes XEL context for the specified page.
+	 */
+	public void initXelContext(Page page) {
+		page.addFunctionMapper(getFunctionMapper());
 
-		final List resolvs = new LinkedList();
-		synchronized (_resolvdefs) {
+		if (_resolvdefs != null)
 			for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
-				final VariableResolverInfo def =
-					(VariableResolverInfo)it.next();
+				final VariableResolverInfo def = (VariableResolverInfo)it.next();
 				try {
-					final VariableResolver resolv = def.newVariableResolver(page);
-					if (resolv != null) resolvs.add(resolv);
+					VariableResolver resolver = def.newVariableResolver(page);
+					if (resolver != null) 
+						page.addVariableResolver(resolver);
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 				}
 			}
-		}
-		return resolvs;
 	}
 
 	/** Adds a header definition ({@link HeaderInfo}).
@@ -306,16 +292,9 @@ public class PageDefinition extends NodeInfo {
 		if (header == null)
 			throw new IllegalArgumentException("null");
 
-		if (_headerdefs == null) {
-			synchronized (this) {
-				if (_headerdefs == null)
-					_headerdefs = new LinkedList();
-					//no need to call Threads.dummy since the chance is too low
-			}
-		}
-		synchronized (_headerdefs) {
-			_headerdefs.add(header);
-		}
+		if (_headerdefs == null)
+			_headerdefs = new LinkedList();
+		_headerdefs.add(header);
 	}
 	/** Converts the header definitions (added by {@link #addHeaderInfo}) to
 	 * HTML tags.
@@ -325,10 +304,8 @@ public class PageDefinition extends NodeInfo {
 			return "";
 
 		final StringBuffer sb = new StringBuffer(256);
-		synchronized (_headerdefs) {
-			for (Iterator it = _headerdefs.iterator(); it.hasNext();)
-				sb.append(((HeaderInfo)it.next()).toHTML(page)).append('\n');
-		}
+		for (Iterator it = _headerdefs.iterator(); it.hasNext();)
+			sb.append(((HeaderInfo)it.next()).toHTML(page)).append('\n');
 		return sb.toString();
 	}
 
@@ -411,17 +388,11 @@ public class PageDefinition extends NodeInfo {
 		if (_rootAttrs == null) {
 			if (value == null)
 				return; //nothing to
+			_rootAttrs = new LinkedHashMap();
+		}
 
-			synchronized (this) {
-				if (_rootAttrs == null)
-					_rootAttrs = new LinkedHashMap();
-					//no need to call Threads.dummy since the chance is too low
-			}
-		}
-		synchronized (_rootAttrs) {
-			if (value == null) _rootAttrs.remove(name);
-			else _rootAttrs.put(name, value);
-		}
+		if (value == null) _rootAttrs.remove(name);
+		else _rootAttrs.put(name, new ExValue(value, String.class));
 	}
 	/** Converts the header definitions (added by {@link #setRootAttribute})
 	 * to the attributes of the root element.
@@ -432,15 +403,14 @@ public class PageDefinition extends NodeInfo {
 		if (_rootAttrs == null || _rootAttrs.isEmpty())
 			return "";
 
+		final Evaluator eval = Executions.getEvaluator(page);
 		final StringBuffer sb = new StringBuffer(256);
-		synchronized (_rootAttrs) {
-			for (Iterator it = _rootAttrs.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String val = (String)
-					Executions.evaluate(page, (String)me.getValue(), String.class);
-				if (val != null)
-					HTMLs.appendAttribute(sb, (String)me.getKey(), val);
-			}
+		for (Iterator it = _rootAttrs.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String val = (String)
+				((ExValue)me.getValue()).getValue(eval, page);
+			if (val != null)
+				HTMLs.appendAttribute(sb, (String)me.getKey(), val);
 		}
 		return sb.toString();
 	}
@@ -513,31 +483,32 @@ public class PageDefinition extends NodeInfo {
 		if (taglib == null)
 			throw new IllegalArgumentException("null");
 
-		if (_taglibs == null) {
-			synchronized (this) {
-				if (_taglibs == null)
-					_taglibs = new LinkedList();
-					//no need to call Threads.dummy since the chance is too low
-			}
-		}
-
-		synchronized (_taglibs) {
-			_taglibs.add(taglib);
-			_funmap = null; //ask for re-parse
-		}
+		if (_taglibs == null)
+			_taglibs = new LinkedList();
+		_taglibs.add(taglib);
+		_eval = null; //ask for re-gen
+		_mapper = null; //ask for re-parse
 	}
-	/** Returns the function mapper. */
+	/** Returns the evaluator based on this language definition.
+	 * @since 3.0.0
+	 */
+	public Evaluator getEvaluator() {
+		if (_eval == null)
+			_eval = newEvaluator();
+		return _eval;
+	}
+	private Evaluator newEvaluator() {
+		return new ObjectEvaluator(null, getFunctionMapper());
+	}
+	/** Returns the function mapper, or null if no mappter at all.
+	 */
 	public FunctionMapper getFunctionMapper() {
-		if (_funmap == null) {
-			synchronized (this) {
-				if (_funmap == null) {
-					_funmap = FunctionMappers.getFunctionMapper(_taglibs, _locator);
-					if (_funmap == null)
-						_funmap = FunctionMappers.EMPTY_MAPPER;
-				}
-			}
+		if (_mapper == null) {
+			_mapper = FunctionMappers.getFunctionMapper(_taglibs, _locator);
+			if (_mapper == null)
+				_mapper = FunctionMappers.EMPTY_MAPPER;
 		}
-		return _funmap != FunctionMappers.EMPTY_MAPPER ? _funmap: null;
+		return _mapper != FunctionMappers.EMPTY_MAPPER ? _mapper: null;
 	}
 
 	/** Initializes a page after execution is activated.

@@ -78,7 +78,6 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Method;
 import org.zkoss.zk.scripting.util.SimpleNamespace;
 
 /**
