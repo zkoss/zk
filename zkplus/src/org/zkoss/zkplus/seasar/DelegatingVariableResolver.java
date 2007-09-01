@@ -19,7 +19,7 @@ package org.zkoss.zkplus.seasar;
 import org.seasar.framework.container.ComponentNotFoundRuntimeException;
 import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
-import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.xel.VariableResolver;
 
 /**
  * DelegatingVariableResolver, a seasar2 bean variable resolver.
@@ -41,7 +41,7 @@ public class DelegatingVariableResolver implements VariableResolver {
 	/**
 	 * Get the seasar component by the specified name.
 	 */		
-	public Object getVariable(String name) {
+	public Object resolveVariable(String name) {
 		if(_container==null){
 			_container = SingletonS2ContainerFactory.getContainer();
 		}
@@ -53,8 +53,5 @@ public class DelegatingVariableResolver implements VariableResolver {
 			}
 		}
 		return null;
-		
-		
-		
 	}
 }

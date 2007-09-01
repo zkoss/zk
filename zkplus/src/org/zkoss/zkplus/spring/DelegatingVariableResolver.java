@@ -21,7 +21,7 @@ import java.util.HashMap;
 import javax.servlet.ServletContext;
 
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.scripting.VariableResolver;
+import org.zkoss.xel.VariableResolver;
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -58,7 +58,7 @@ public class DelegatingVariableResolver implements VariableResolver {
 	/**
 	 * Get the spring bean by the specified name.
 	 */		
-	public Object getVariable(String name) {
+	public Object resolveVariable(String name) {
 		Object o = _vars.get(name);
 		if (o == null) {
 			try {
