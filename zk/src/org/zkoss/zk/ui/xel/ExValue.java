@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.Component;
 public class ExValue implements java.io.Serializable {
 	private String _value;
 	private Class _expected;
-	/** Coerced value. Used only if _expr is DUMMY. */
+	/** Coerced value. Used only if _expr is DUMMY_EXPRESSION. */
 	private transient Object _coercedVal = Objects.UNKNOWN;
 	private transient Expression _expr;
 
@@ -57,7 +57,7 @@ public class ExValue implements java.io.Serializable {
 	 */
 	public boolean isExpression() {
 		return _expr == null ? _value != null && _value.indexOf("${") >= 0:
-			_expr != Expressions.DUMMY;
+			_expr != Expressions.DUMMY_EXPRESSION;
 	}
 
 	/** Returns the raw value.
@@ -88,7 +88,7 @@ public class ExValue implements java.io.Serializable {
 
 		if (_expected != expectedType) {
 			_expected = expectedType;
-			if (_expr != Expressions.DUMMY) _expr = null; //re-parse
+			if (_expr != Expressions.DUMMY_EXPRESSION) _expr = null; //re-parse
 			_coercedVal = Objects.UNKNOWN;
 		}
 	}
@@ -98,7 +98,7 @@ public class ExValue implements java.io.Serializable {
 	public Object getValue(Evaluator eval, Page page)
 	throws XelException {
 		if (_expr == null) init(eval);
-		return _expr == Expressions.DUMMY ?
+		return _expr == Expressions.DUMMY_EXPRESSION ?
 			coerce(): eval.evaluate(page, _expr);
 	}
 	/** Returns the value after evaluation.
@@ -106,7 +106,7 @@ public class ExValue implements java.io.Serializable {
 	public Object getValue(Evaluator eval, Component comp)
 	throws XelException {
 		if (_expr == null) init(eval);
-		return _expr == Expressions.DUMMY ?
+		return _expr == Expressions.DUMMY_EXPRESSION ?
 			coerce(): eval.evaluate(comp, _expr);
 	}
 	private Object coerce() {
@@ -119,7 +119,7 @@ public class ExValue implements java.io.Serializable {
 		if (_value != null && _value.indexOf("${") >= 0) {
 			_expr = eval.parseExpression(_value, _expected);
 		} else {
-			_expr = Expressions.DUMMY; //to denote not-an-expr
+			_expr = Expressions.DUMMY_EXPRESSION; //to denote not-an-expr
 		}
 	}
 

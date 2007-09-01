@@ -45,7 +45,7 @@ import org.zkoss.idom.Attribute;
 import org.zkoss.idom.ProcessingInstruction;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
-import org.zkoss.xel.Taglib;
+import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
 

@@ -19,13 +19,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.xel;
 
 import org.zkoss.xel.XelContext;
-import org.zkoss.xel.SimpleXelContext;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.XelException;
+import org.zkoss.xel.util.SimpleXelContext;
 
 import org.zkoss.web.servlet.xel.RequestContext;
 import org.zkoss.web.servlet.xel.RequestContexts;

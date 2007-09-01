@@ -46,7 +46,7 @@ import org.zkoss.io.Serializables;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
-import org.zkoss.xel.DualFunctionMapper;
+import org.zkoss.xel.util.DualFunctionMapper;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;

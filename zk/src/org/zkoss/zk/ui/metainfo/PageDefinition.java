@@ -28,10 +28,11 @@ import java.util.LinkedHashMap;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.resource.Locator;
-import org.zkoss.xel.Taglib;
+import org.zkoss.xel.Expressions;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.FunctionMapper;
-import org.zkoss.xel.FunctionMappers;
+import org.zkoss.xel.taglib.Taglibs;
+import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Executions;
@@ -504,11 +505,11 @@ public class PageDefinition extends NodeInfo {
 	 */
 	public FunctionMapper getFunctionMapper() {
 		if (_mapper == null) {
-			_mapper = FunctionMappers.getFunctionMapper(_taglibs, _locator);
+			_mapper = Taglibs.getFunctionMapper(_taglibs, _locator);
 			if (_mapper == null)
-				_mapper = FunctionMappers.EMPTY_MAPPER;
+				_mapper = Expressions.EMPTY_MAPPER;
 		}
-		return _mapper != FunctionMappers.EMPTY_MAPPER ? _mapper: null;
+		return _mapper != Expressions.EMPTY_MAPPER ? _mapper: null;
 	}
 
 	/** Initializes a page after execution is activated.

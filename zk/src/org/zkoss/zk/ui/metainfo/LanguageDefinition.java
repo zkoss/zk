@@ -31,8 +31,8 @@ import java.util.Iterator;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.FunctionMappers;
-import org.zkoss.xel.Taglib;
+import org.zkoss.xel.taglib.Taglibs;
+import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
 
@@ -696,7 +696,7 @@ public class LanguageDefinition {
 	}
 	private Evaluator newEvaluator() {
 		return new ObjectEvaluator(null,
-			FunctionMappers.getFunctionMapper(_taglibs, _locator));
+			Taglibs.getFunctionMapper(_taglibs, _locator));
 	}
 
 	//Object//
