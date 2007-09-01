@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.zkoss.xml.XMLs;
+
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlNativeComponent;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
@@ -53,6 +55,12 @@ public class XmlNativeComponent extends HtmlNativeComponent {
 	/** The HTML helper.
 	 */
 	public static class XmlHelper implements Helper {
+		public Component newNative(String text) {
+			final XmlNativeComponent nc = new XmlNativeComponent();
+			if (text != null)
+				nc.setPrologContent(text);
+			return nc;
+		}
 		public void getFirstHalf(StringBuffer sb, String tag, Map props,
 		Collection namespaces) {
 			if (tag != null)
