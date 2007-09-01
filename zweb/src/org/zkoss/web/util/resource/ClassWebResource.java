@@ -120,6 +120,8 @@ public class ClassWebResource {
 	 * It invokes {@link Https#getThisPathInfo} to retrieve the path info,
 	 * and then invoke {@link #service(HttpServletRequest,HttpServletResponse,String)}.
 	 *
+	 * <p>If the path info is not found, nothing is generated.
+	 *
 	 * @since 2.4.1
 	 */
 	public void service(HttpServletRequest request,
