@@ -18,8 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.xel;
 
-import org.zkoss.xel.SimpleXelContext;
 import org.zkoss.xel.Expression;
+import org.zkoss.xel.util.SimpleXelContext;
 
 /**
  * An EL expression that is based on XEL expression.

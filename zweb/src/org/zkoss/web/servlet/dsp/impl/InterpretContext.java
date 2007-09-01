@@ -21,7 +21,7 @@ package org.zkoss.web.servlet.dsp.impl;
 import java.io.Writer;
 
 import org.zkoss.xel.XelContext;
-import org.zkoss.xel.SimpleXelContext;
+import org.zkoss.xel.util.SimpleXelContext;
 
 import org.zkoss.web.servlet.dsp.*;
 import org.zkoss.web.servlet.dsp.action.Action;

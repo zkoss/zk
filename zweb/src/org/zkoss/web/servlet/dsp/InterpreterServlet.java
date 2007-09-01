@@ -41,7 +41,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.io.Files;
-import org.zkoss.xel.Taglibs;
+import org.zkoss.xel.taglib.Taglibs;
 
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.Servlets;
