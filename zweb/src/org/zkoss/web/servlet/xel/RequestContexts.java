@@ -1,4 +1,4 @@
-/* ELContexts.java
+/* RequestContexts.java
 
 {{IS_NOTE
 	Purpose:
@@ -16,51 +16,41 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.web.el;
+package org.zkoss.web.servlet.xel;
 
 import java.util.List;
 import java.util.LinkedList;
-import java.io.Writer;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.jsp.PageContext;
-
-import org.zkoss.lang.D;
-import org.zkoss.util.logging.Log;
 
 /**
- * ELContexts maintains a stack of {@link ELContext} to simplify
- * the writing of EL expressions.
+ * RequestContexts maintains a stack of {@link RequestContext} to simplify
+ * the signatures of the XEL function.
  *
- * <p>It is designed to make the signature of ZK EL functions
+ * <p>It is designed to make the signature of XEL functions
  * (see {@link org.zkoss.web.fn.ServletFns}) simpler.
  * For example, {@link org.zkoss.web.fn.ServletFns#isExplorer} requires
  * no argument, since it assumes the current context can be retrieved
  * from {@link #getCurrent}.
  *
  * <p>Spec Issue:<br/>
- * It is controversial whether the introduction of {@link ELContext} and
- * {@link ELContexts} is worth. However, we have to maintain the backward
- * compatibility.
+ * It is controversial whether the introduction of {@link RequestContext} and
+ * {@link RequestContexts} is worth. However, we have to maintain the backward
+ * compatibility of the XEL/EL function signatures.
  *
  * @author tomyeh
+ * @since 3.0.0
  */
-public class ELContexts {
-//	private static final Log log = Log.lookup(ELContexts.class);
+public class RequestContexts {
+	protected RequestContexts() {} //prevent from instantiated
 
-	protected ELContexts() {} //prevent from instantiated
-
-	/** A list of ELContext. */
+	/** A list of RequestContext. */
 	private static final ThreadLocal _elCtxs = new ThreadLocal();
 
 	/** Returns the current page context if this thread is evaluating a page,
 	 * or null if not.
 	 */
-	public static final ELContext getCurrent() {
+	public static final RequestContext getCurrent() {
 		final List jcs = (List)_elCtxs.get();
-		return jcs != null && !jcs.isEmpty() ? (ELContext)jcs.get(0): null;
+		return jcs != null && !jcs.isEmpty() ? (RequestContext)jcs.get(0): null;
 	}
 
 	/** Pushes the context as the current context, such that it will
@@ -75,14 +65,14 @@ public class ELContexts {
 	 * </ol>
 	 *
 	 * <p>Note: you must use try/finally as follows:
-	 * <pre><code>ELContexts.push(jc);
+	 * <pre><code>RequestContexts.push(jc);
 	 *try {
 	 *  ...
 	 *} finally {
-	 *  ELContexts.pop();
+	 *  RequestContexts.pop();
 	 *}</code></pre>
 	 */
-	public static final void push(ELContext jc) {
+	public static final void push(RequestContext jc) {
 		if (jc == null)
 			throw new IllegalArgumentException("null");
 
@@ -90,11 +80,6 @@ public class ELContexts {
 		if (jcs == null)
 			_elCtxs.set(jcs = new LinkedList());
 		jcs.add(0, jc);
-	}
-	/** Pushs a page context to be {@link ELContext}.
-	 */
-	public static final void push(final PageContext pc) {
-		push(new PageELContext(pc));
 	}
 	/** Pops the context out and use the previous one as the current context.
 	 *

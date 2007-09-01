@@ -18,8 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.impl;
 
-import javax.servlet.jsp.el.FunctionMapper;
-import javax.servlet.jsp.el.ExpressionEvaluator;
+import org.zkoss.xel.XelContext;
+import org.zkoss.xel.ExpressionFactory;
 
 /**
  * The context used during parsing.
@@ -27,11 +27,8 @@ import javax.servlet.jsp.el.ExpressionEvaluator;
  * @author tomyeh
  * @since 3.0.0
  */
-/*package*/ interface ParseContext {
-	/** Returns the evaluator
+/*package*/ interface ParseContext extends XelContext {
+	/** Returns the expression factory.
 	 */
-	public ExpressionEvaluator getExpressionEvaluator();
-	/** Returns the function mapper.
-	 */
-	public FunctionMapper getFunctionMapper();
+	public ExpressionFactory getExpressionFactory();
 }

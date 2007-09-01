@@ -24,24 +24,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/html" prefix="h" %>
 <c:set var="arg" value="${requestScope.arg}"/>
-<c:set var="alert_type"
-	value="${arg != null ? arg.px_alert_type: param.px_alert_type}"/>
-<c:set var="alert"
-	value="${arg != null ? arg.px_alert: param.px_alert}"/>
+<c:set var="arg" value="${param}" if="${empty arg}"/>
 <c:choose>
-<c:when test="${alert_type=='error'}">
+<c:when test="${arg.px_alert_type=='error'}">
  <h:box color="red" caption="${c:l('error')}">
-<pre><c:out value="${alert}"/></pre>
+<pre><c:out value="${arg.px_alert}"/></pre>
  </h:box>
 </c:when>
-<c:when test="${alert_type=='warning'}">
+<c:when test="${arg.px_alert_type=='warning'}">
  <h:box color="#EEE040" caption="${c:l('warning')}">
-<pre><c:out value="${alert}"/></pre>
+<pre><c:out value="${arg.px_alert}"/></pre>
  </h:box>
 </c:when>
 <c:otherwise>
  <h:box color="#606035">
-<pre><c:out value="${alert}"/></pre>
+<pre><c:out value="${arg.px_alert}"/></pre>
  </h:box>
 </c:otherwise>
 </c:choose>

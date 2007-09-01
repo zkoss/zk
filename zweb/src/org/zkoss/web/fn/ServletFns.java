@@ -32,8 +32,8 @@ import javax.servlet.ServletException;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.servlet.dsp.action.ActionContext;
-import org.zkoss.web.el.ELContexts;
-import org.zkoss.web.el.ELContext;
+import org.zkoss.web.servlet.xel.RequestContext;
+import org.zkoss.web.servlet.xel.RequestContexts;
 
 /**
  * Providing servlet relevant functions for EL.
@@ -98,8 +98,8 @@ public class ServletFns {
 	}
 
 	/** Returns the current EL context. */
-	public static ELContext getCurrentContext() {
-		return ELContexts.getCurrent();
+	public static RequestContext getCurrentContext() {
+		return RequestContexts.getCurrent();
 	}
 	/** Returns the current output. */
 	public static Writer getCurrentOut() throws IOException {
@@ -121,8 +121,8 @@ public class ServletFns {
 	/** Renders the JSP fragment from EL.
 	 *
 	 * @param jf the JSP fragment; never null.
-	 * @param out the ouput. If null, {@link ELContexts#getCurrent}'s getOut()
-	 * is assumed. If {@link ELContexts#getCurrent} is null, jf's out is used.
+	 * @param out the ouput. If null, {@link RequestContexts#getCurrent}'s getOut()
+	 * is assumed. If {@link RequestContexts#getCurrent} is null, jf's out is used.
 	 */
 	public static void render(JspFragment jf, Writer out)
 	throws JspException, IOException {
@@ -131,7 +131,7 @@ public class ServletFns {
 			//jf might belong to includer (not the page invoking this method)
 			//Eg, BorderTag pass getJspBody to the includee when invoke
 			//this method.
-			out = ELContexts.getCurrent().getOut();
+			out = getCurrentContext().getOut();
 		}
 		jf.invoke(out);
 	}

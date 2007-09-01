@@ -1,4 +1,4 @@
-/* ELNode.java
+/* XelNode.java
 
 {{IS_NOTE
 	Purpose:
@@ -21,11 +21,10 @@ package org.zkoss.web.servlet.dsp.impl;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.Expression;
-import javax.servlet.jsp.el.ExpressionEvaluator;
-import javax.servlet.jsp.el.FunctionMapper;
-import javax.servlet.jsp.el.ELException;
-
+import org.zkoss.xel.Expression;
+import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.XelException;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.ServletException;
 
@@ -33,24 +32,26 @@ import org.zkoss.web.servlet.ServletException;
  * Represents an expression.
  *
  * @author tomyeh
+ * @since 3.0.0
  */
-class ELNode extends Node {
-	private static final Log log = Log.lookup(ELNode.class);
+class XelNode extends Node {
+	private static final Log log = Log.lookup(XelNode.class);
 	private final Expression _expr;
 
-	ELNode(String expr, ParseContext ctx) throws ELException {
-		_expr = ctx.getExpressionEvaluator().parseExpression(
-			expr, String.class, ctx.getFunctionMapper());
+	XelNode(String expr, ParseContext ctx) throws XelException {
+		_expr = ctx.getExpressionFactory()
+			.parseExpression(ctx, expr, String.class);
 	}
 
 	//-- super --//
 	void interpret(InterpretContext ic)
 	throws javax.servlet.ServletException, IOException {
 		try {
-			final String result = (String)_expr.evaluate(ic.resolver);
+			final String result = (String)_expr.evaluate(ic.xelc);
 			if (result != null)
 				ic.dc.getOut().write(result);
-		} catch (ELException ex) {
+		} catch (XelException ex) {
+			//we have to log since Tomcat 'eats' the real cause
 			log.realCause(ex);
 			throw new ServletException("Unable to evaluate an EL expression: "+_expr, ex);
 		}

@@ -26,15 +26,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.FunctionMapper;
-import javax.servlet.jsp.el.ExpressionEvaluator;
 
 import org.zkoss.util.resource.Locator;
-import org.zkoss.el.RequestResolver;
-import org.zkoss.el.EvaluatorImpl;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.Expressions;
 
 import org.zkoss.web.util.resource.ServletContextLocator;
+import org.zkoss.web.servlet.xel.RequestXelResolver;
 
 /**
  * A DSP context based on HTTP servlet request and response.
@@ -48,7 +48,7 @@ public class ServletDspContext implements DspContext {
 	private final HttpServletResponse _response;
 	private Writer _out;
 	private VariableResolver _resolver;
-	private ExpressionEvaluator _eval;
+	private ExpressionFactory _expf;
 
 	/**
 	 * Constructor.
@@ -94,7 +94,7 @@ public class ServletDspContext implements DspContext {
 		_out = out;
 	}
 
-	//-- ELContext --//
+	//-- XelContext --//
 	public Writer getOut() throws IOException {
 		return _out != null ? _out: _response.getWriter();
 	}
@@ -107,14 +107,22 @@ public class ServletDspContext implements DspContext {
 	public ServletContext getServletContext() {
 		return _ctx;
 	}
-	public ExpressionEvaluator getExpressionEvaluator() {
-		if (_eval == null)
-			_eval = new EvaluatorImpl();
-		return _eval;
-	}
 	public VariableResolver getVariableResolver() {
 		if (_resolver == null)
-			_resolver = new RequestResolver(_ctx, _request, _response);
+			_resolver =
+				new RequestXelResolver(_ctx, _request, _response) {
+					public ExpressionFactory getExpressionFactory() {
+						return ServletDspContext.this.getExpressionFactory();
+					}
+				};
 		return _resolver;
+	}
+	private ExpressionFactory getExpressionFactory() {
+		if (_expf == null)
+			_expf = Expressions.newExpressionFactory(); //TODO: expfcls
+		return _expf;
+	}
+	public FunctionMapper getFunctionMapper() {
+		return null;
 	}
 }

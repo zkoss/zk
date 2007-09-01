@@ -25,17 +25,14 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.Expression;
-import javax.servlet.jsp.el.ExpressionEvaluator;
-import javax.servlet.jsp.el.FunctionMapper;
-import javax.servlet.jsp.el.ELException;
-
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
-import org.zkoss.web.servlet.ServletException;
+import org.zkoss.xel.Expression;
+import org.zkoss.xel.XelException;
 
+import org.zkoss.web.servlet.ServletException;
 import org.zkoss.web.servlet.dsp.action.Action;
 
 /**
@@ -102,7 +99,7 @@ class ActionNode extends Node {
 
 	/** Adds an attribute. */
 	void addAttribute(String nm, String val, ParseContext ctx)
-	throws NoSuchMethodException, ClassCastException, ELException {
+	throws NoSuchMethodException, ClassCastException, XelException {
 		if (nm == null || val == null)
 			throw new IllegalArgumentException("null");
 		if (_attrs == null)
@@ -114,8 +111,7 @@ class ActionNode extends Node {
 		final Class type = mtd.getParameterTypes()[0];
 		if (val.indexOf("${") >= 0) {
 			_attrs.add(new Attr(mtd,
-				ctx.getExpressionEvaluator().parseExpression(
-					val, type, ctx.getFunctionMapper())));
+				ctx.getExpressionFactory().parseExpression(ctx, val, type)));
 		} else {
 			_attrs.add(new Attr(mtd, Classes.coerce(type, val)));
 		}
@@ -136,7 +132,7 @@ class ActionNode extends Node {
 			final Object[] args = new Object[1];
 			try {
 				if (_value instanceof Expression) {
-					args[0] = ((Expression)_value).evaluate(ic.resolver);
+					args[0] = ((Expression)_value).evaluate(ic.xelc);
 					//if (D.ON && log.finerable()) log.finer("attr "+_method.getName()+"="+_value+" to "+args[0]);
 				} else {
 					args[0] = _value;

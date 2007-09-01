@@ -23,7 +23,8 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.util.logging.Log;
-import org.zkoss.web.el.ELContexts;
+
+import org.zkoss.web.servlet.xel.RequestContexts;
 import org.zkoss.web.servlet.dsp.*;
 
 /**
@@ -54,17 +55,11 @@ class RootNode extends Node implements Interpretation {
 		if (out == null)
 			throw new IllegalArgumentException("dc.getOut() cannot be null");
 
-		ELContexts.push(dc);
+		RequestContexts.push(dc);
 		try {
 			interpret(new InterpretContext(dc));
-/*		} catch (javax.servlet.ServletException ex) {
-			log.realCauseBriefly(ex); //in case: ex might be eaten
-			throw ex;
-		} catch (IOException ex) {
-			log.realCauseBriefly(ex); //in case: ex might be eaten
-			throw ex;
-*/		} finally {
-			ELContexts.pop();
+		} finally {
+			RequestContexts.pop();
 		}
 	}
 }

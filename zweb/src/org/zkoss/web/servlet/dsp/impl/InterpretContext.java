@@ -19,7 +19,9 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.servlet.dsp.impl;
 
 import java.io.Writer;
-import javax.servlet.jsp.el.FunctionMapper;
+
+import org.zkoss.xel.XelContext;
+import org.zkoss.xel.SimpleXelContext;
 
 import org.zkoss.web.servlet.dsp.*;
 import org.zkoss.web.servlet.dsp.action.Action;
@@ -32,6 +34,7 @@ import org.zkoss.web.servlet.dsp.action.Action;
 class InterpretContext {
 	final DspContext dc;
 	final InterpretResolver resolver;
+	final XelContext xelc;
 	/** The action being processing, or null if no such action. */
 	Action action;
 
@@ -40,5 +43,6 @@ class InterpretContext {
 	InterpretContext(DspContext dc) {
 		this.dc = dc;
 		this.resolver = new InterpretResolver(dc.getVariableResolver());
+		this.xelc = new SimpleXelContext(this.resolver, null);
 	}
 }
