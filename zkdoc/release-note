@@ -9,6 +9,7 @@ ZK 3.0.0
   1765987: Add timebox (by merge timebox from zkforge to zul)
   1758837: Zk Flash Component
   1537229: Treemodel with Tree
+  1786163: A way to make EL evaluator pluggable
   1760212: A simpler way to annotation a component
   1760689: Data Binding using new simpler annotation to component
   1760691: DataBinder support validation phase
@@ -75,6 +76,16 @@ ZK 3.0.0
   1783363: Unable to drag a listitem out of the box (IE only)
   
 * Upgrade Notes:
+  + el-config (of zk.xml) is replaced with xel-config, and the class
+    must implement org.zkoss.xel.ExpressionFactory instead of
+    javax.servlet.jsp.el.ExpressionEvaluator.
+  + org.zkoss.zk.scripting.VariableResolver is removed.
+    Use org.zkoss.xel.VariableResolver instead.
+  + org.zkoss.zk.scripting.Method is deprecated
+    Use org.zkoss.xel.Function instead.
+  + Page.getZScriptMethod() is deprecated.
+    Use Page.getZScriptFunction() instead.
+  + Page.addFunctionMapper() is removed
   + The onTimer event won't keep the session alive.
     To make it behave the same way as old versions, you can specify
 	<session-config>
