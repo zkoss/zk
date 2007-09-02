@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.servlet.xel;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
@@ -46,6 +47,9 @@ public class ELXelMapper implements FunctionMapper {
 			if (mtd != null)
 				return new MethodFunction(mtd);
 		}
+		return null;
+	}
+	public Collection getImportedClasses() {
 		return null;
 	}
 }
