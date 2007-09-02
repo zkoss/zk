@@ -40,6 +40,9 @@ public class ELFactory implements ExpressionFactory {
 	}
 
 	//ExpressionFactory//
+	public boolean isSupported(int feature) {
+		return feature == FEATURE_FUNCTION;
+	}
 	public Expression parseExpression(XelContext xelc, String expression,
 	Class expectedType)
 	throws XelException {

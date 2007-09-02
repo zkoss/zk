@@ -18,6 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.util;
 
+import java.util.Collection;
+
+import org.zkoss.util.DualCollection;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.Function;
 
@@ -28,7 +31,7 @@ import org.zkoss.xel.Function;
  * @since 3.0.0
  */
 public class DualFunctionMapper implements FunctionMapper {
-	private FunctionMapper _frist, _second;
+	private FunctionMapper _first, _second;
 
 	/** Returns a function mapper by combining two function mappers.
 	 * It checks whether any of them is null, or equals. And, returns
@@ -53,13 +56,18 @@ public class DualFunctionMapper implements FunctionMapper {
 	 * since it checks whether any of them is null or equals.
 	 */
 	public DualFunctionMapper(FunctionMapper first, FunctionMapper second) {
-		_frist = first;
+		_first = first;
 		_second = second;
 	}
 
 	//-- FunctionMapper --//
 	public Function resolveFunction(String prefix, String name) {
-		Function m = _frist.resolveFunction(prefix, name);
+		Function m = _first.resolveFunction(prefix, name);
 		return m != null ? m: _second.resolveFunction(prefix, name);
+	}
+	public Collection getImportedClasses() {
+		return DualCollection.combine(
+			_first != null ? _first.getImportedClasses(): null,
+			_second != null ? _second.getImportedClasses(): null);
 	}
 }

@@ -25,6 +25,21 @@ package org.zkoss.xel;
  * @since 3.0.0
  */
 public interface ExpressionFactory {
+	/** Used with {@link #isSupported} to know whether the factory
+	 * supports {@link FunctionMapper#resolveFunction}
+	 */
+	public static final int FEATURE_FUNCTION = 0x0001;
+	/** Used with {@link #isSupported} to know whether the factory
+	 * supports {@link FunctionMapper#getImportedClasses}
+	 */
+	public static final int FEATURE_IMPORT = 0x0002;
+	/** Returns whether an feature is supported.
+	 *
+	 * @param feature which feature to query.
+	 * It can be one of {@link #FEATURE_FUNCTION} and {@link #FEATURE_IMPORT}.
+	 */
+	public boolean isSupported(int feature);
+
 	/** Prepares (aka., compiles) an expression.
 	 *
      * @param ctx the context infomation to prepare the expression.

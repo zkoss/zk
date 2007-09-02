@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel;
 
+import java.util.Collection;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 
@@ -134,6 +136,9 @@ public class Expressions {
 implements FunctionMapper, java.io.Serializable {
 	//-- FunctionMapper --//
 	public Function resolveFunction(String prefix, String name) {
+		return null;
+	}
+	public Collection getImportedClasses() {
 		return null;
 	}
 }

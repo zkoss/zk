@@ -4,3 +4,4 @@
 ../dist/lib/ext/el-api.jar
 ../dist/lib/ext/jasper-el.jar
 ../dist/lib/ext/commons-el.jar
+../dist/lib/ext/mvel.jar

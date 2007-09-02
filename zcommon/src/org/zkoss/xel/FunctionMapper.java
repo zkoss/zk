@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel;
 
+import java.util.Collection;
+
 /**
  * Used to customize the way to map between the XEL function names
  * and the {@link Function} methods.
@@ -29,9 +31,25 @@ public interface FunctionMapper {
 	/** Resolves the specified name and prefix into a function
 	 * {@link Function}.
 	 *
+	 * <p>Note: not all EL evaluator support {@link #resolveFunction}.
+	 * Currently only JSP 2.0/2.1 EL-based expression factories
+	 * support this method.
+	 *
 	 * @param prefix the prefix of the function, or "" if no prefix
 	 * @param name the name of the function to resolve
 	 */
 	public Function resolveFunction(String prefix, String name)
 	throws XelException;
+
+	/** Returns a collection of classes that are imported when evaluating
+	 * the expressions, or null if nothing to import.
+	 *
+	 * <p>Note: not all EL evaluator support {@link #getImportedClasses}.
+	 * JSP 2.0/2.1 EL-based expression factories don't support
+	 * this method.
+	 *
+	 * @return a collection of {@link Class} that shall be imported,
+	 * or null if nothing to import.
+	 */
+	public Collection getImportedClasses();
 }

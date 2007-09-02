@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.util;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
 import java.net.URL;
@@ -91,5 +92,8 @@ public class SimpleMapper implements FunctionMapper {
 		final Map mtds = _maps != null ? (Map)_maps.get(prefix): null;
 		return mtds != null ? (Function)mtds.get(name):
 			_parent != null ? _parent.resolveFunction(prefix, name): null;
+	}
+	public Collection getImportedClasses() {
+		return _parent != null ? _parent.getImportedClasses(): null;
 	}
 }

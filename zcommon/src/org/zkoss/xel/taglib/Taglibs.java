@@ -22,6 +22,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Iterator;
@@ -182,6 +183,9 @@ public class Taglibs {
 		public Function resolveFunction(String prefix, String name) {
 			final Map mtds = (Map)_mappers.get(prefix);
 			return mtds != null ? (MethodFunction)mtds.get(name): null;
+		}
+		public Collection getImportedClasses() {
+			return null; //TODO
 		}
 
 		//-- Cloneable --//
