@@ -3,7 +3,7 @@
 <article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Button</title>
 <para>You could assign a <code>label</code> and an <code>image</code> to a button by the <code>label</code> and <code>image</code> properties. If both are specified, the <code>dir</code> property control which is displayed up front, and the <code>orient</code> property controls whether the layout is horizontal or vertical. </para>
 <para>
-<inlinegraphic fileref="#images/button.jpg" width="3.388cm"/>
+<inlinegraphic fileref="images/button.jpg" width="3.388cm"/>
 </para>
 <title/>
 <programlisting>&lt;button label="Left" image="/img/folder.gif" width="125px"/&gt;&#13;&lt;button label="Right" image="/img/folder.gif" dir="reverse" width="125px"/&gt;&#13;&lt;button label="Above" image="/img/folder.gif" orient="vertical" width="125px"/&gt;&#13;&lt;button label="Below" image="/img/folder.gif" orient="vertical" dir="reverse" width="125px"/&gt;&#13;</programlisting><sect4><title>Class Name</title>
@@ -19,14 +19,14 @@
 <para>Name</para>
 </entry>
 <entry>
-<para>Inherited From</para>
+<para>Event Type</para>
 </entry>
 </row>
 </thead><tbody>
 <row>
 <entry>
 <para>
-<code>onClick</code>
+<code>OnClick</code>
 </para>
 </entry>
 <entry>
@@ -52,7 +52,7 @@
 <para>Data Type</para>
 </entry>
 <entry>
-<para>Values</para>
+<para>Default Value</para>
 </entry>
 </row>
 </thead><tbody>
@@ -64,6 +64,8 @@
 </entry>
 <entry>
 <para>Sets the direction of button</para>
+<para>Value:<code>normal</code> | <code>reverse</code>
+</para>
 </entry>
 <entry>
 <para>
@@ -72,7 +74,7 @@
 </entry>
 <entry>
 <para>
-<code>normal</code> | <code>reverse</code>
+<code>normal</code>
 </para>
 </entry>
 </row>
@@ -92,7 +94,7 @@
 </entry>
 <entry>
 <para>
-<code>true</code> | <code>false</code>
+<code>false</code>
 </para>
 </entry>
 </row>
@@ -103,7 +105,7 @@
 </para>
 </entry>
 <entry>
-<para>Provides a hyperlink</para>
+<para>Provides a hyper link</para>
 </entry>
 <entry>
 <para>
@@ -111,7 +113,7 @@
 </para>
 </entry>
 <entry>
-<para>url</para>
+<para>&lt;empty string&gt;</para>
 </entry>
 </row>
 <row>
@@ -122,6 +124,8 @@
 </entry>
 <entry>
 <para>Sets the orientation of button</para>
+<para>Value:<code>horizontal</code> | <code>vertical</code>
+</para>
 </entry>
 <entry>
 <para>
@@ -130,7 +134,7 @@
 </entry>
 <entry>
 <para>
-<code>horizontal </code>| <code>vertically</code>
+<code>horizontal</code>
 </para>
 </entry>
 </row>
@@ -149,7 +153,7 @@
 </para>
 </entry>
 <entry>
-<para>name of the frame or window</para>
+<para>&lt;null&gt;</para>
 </entry>
 </row>
 <row>
@@ -167,7 +171,9 @@
 </para>
 </entry>
 <entry>
-<para>tab index</para>
+<para>
+<code>-1 </code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
@@ -197,16 +203,18 @@
 </para>
 </entry>
 <entry>
-<para>Determine whether it accepts child components</para>
+<para>Determines whether it accepts child components</para>
+<para>Note: No child is allowed. </para>
 </entry>
 <entry>
 <para>
-<code>boolean</code>
+<code>boo</code>
+<code>lean</code>
 </para>
 </entry>
 <entry>
 <para>
-<code>true</code> | <code>false</code>
+<code>false</code>
 </para>
 </entry>
 </row></tbody></tgroup>
