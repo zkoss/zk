@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.Component;
 public class SimpleEvaluator implements Evaluator {
 	private transient SimpleXelContext _xelc;
 	private transient ExpressionFactory _expf;
-	private Class _expfcls;
+	private final Class _expfcls;
 
 	/**
 	 * @param expfcls the class that implements the expression factory.

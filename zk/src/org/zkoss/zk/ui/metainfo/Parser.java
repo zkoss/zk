@@ -372,7 +372,7 @@ public class Parser {
 	}
 	/** Process the page directive. */
 	private static void parsePageDirective(PageDefinition pgdef,
-	ProcessingInstruction pi, Map params) {
+	ProcessingInstruction pi, Map params) throws Exception {
 		for (Iterator it = pi.parseData().entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final String nm = (String)me.getKey();
@@ -402,6 +402,9 @@ public class Parser {
 			} else if ("xml".equals(nm)) {
 				noELnorEmpty("xml", val, pi);
 				pgdef.setFirstLine("<?xml " + val + "?>");
+			} else if ("xel-class".equals(nm)) {
+				noELnorEmpty("xel-class", val, pi);
+				pgdef.setExpressionFactoryClass(locateClass(val));
 			} else {
 				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
 			}

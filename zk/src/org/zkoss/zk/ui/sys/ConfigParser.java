@@ -224,8 +224,7 @@ public class ConfigParser {
 			//xel-config
 			//	evaluator-class
 				Class cls = parseClass(el, "evaluator-class", ExpressionFactory.class);
-				if (cls != null) System.setProperty("org.zkoss.xel.ExpressionFactory.class", cls.getName());
-					//System-wide property; reason: used in zcommon.jar
+				if (cls != null) config.setExpressionFactoryClass(cls);
 			} else if ("zscript-config".equals(elnm)) {
 			//zscript-config
 				Interpreters.add(el);

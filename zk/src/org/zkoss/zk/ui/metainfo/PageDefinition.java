@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.resource.Locator;
+import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.FunctionMapper;
@@ -80,6 +81,8 @@ public class PageDefinition extends NodeInfo {
 	/** Map(String name, ExValue value). */
 	private Map _rootAttrs;
 	private String _contentType, _docType, _firstLine;
+	/** The expression factory (ExpressionFactory).*/
+	private Class _expfcls;
 	private final ComponentDefinitionMap _compdefs;
 	private Boolean _cacheable;
 
@@ -375,6 +378,34 @@ public class PageDefinition extends NodeInfo {
 		_cacheable = cacheable;
 	}
 
+	/** Sets the implementation of the expression factory that shall
+	 * be used by this page.
+	 *
+	 * <p>Default: null (use the default).
+	 *
+	 * @param expfcls the implemtation class, or null to use the default.
+	 * Note: expfcls must implement {@link ExpressionFactory}.
+	 * If null is specified, the class defined in
+	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
+	 * @since 3.0.0
+	 */
+	public void setExpressionFactoryClass(Class expfcls) {
+		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
+			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
+		_expfcls = expfcls;
+	}
+	/** Returns the implementation of the expression factory that
+	 * is used by this page, or null if
+	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
+	 * is used.
+	 *
+	 * @see #setExpressionFactoryClass
+	 * @since 3.0.0
+	 */
+	public Class getExpressionFactoryClass() {
+		return _expfcls;
+	}
+
 	/** Adds a root attribute.
 	 * The previous attributee of the same will be replaced.
 	 *
@@ -499,7 +530,7 @@ public class PageDefinition extends NodeInfo {
 		return _eval;
 	}
 	private Evaluator newEvaluator() {
-		return new ObjectEvaluator(null, getFunctionMapper());
+		return new ObjectEvaluator(_expfcls, getFunctionMapper());
 	}
 	/** Returns the function mapper, or null if no mappter at all.
 	 */

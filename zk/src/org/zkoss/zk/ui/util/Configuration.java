@@ -32,6 +32,8 @@ import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.WaitLock;
 import org.zkoss.util.logging.Log;
+import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.Expressions;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WebApp;
@@ -69,6 +71,9 @@ import org.zkoss.zk.device.Devices;
  */
 public class Configuration {
 	private static final Log log = Log.lookup(Configuration.class);
+
+	private static final String PROP_EXPRESS_FACTORY
+		= "org.zkoss.xel.ExpressionFactory.class";
 
 	private WebApp _wapp;
 	/** List of classes. */
@@ -1647,6 +1652,36 @@ public class Configuration {
 	 */
 	public boolean isTimerKeepAlive() {
 		return _timerKeepAlive;
+	}
+
+	/** Sets the implementation of the expression factory that shall
+	 * be used by the whole system.
+	 *
+	 * <p>Default: null - it means org.zkoss.xel.el21.ELFactory
+	 * or org.zkoss.xel.el.ELFactory depending on
+	 * the Web server supports JSP 2.1 or not.
+	 *
+	 * <p>Note: you can only specify an implementation that is compatible
+	 * with JSP EL here, since ZK's builtin pages depend on it.
+	 * However, you can use any factory you like in an individual page,
+	 * as long as all expressions in the page follow the syntax of
+	 * the evaluator you are using.
+	 *
+	 * @param expfcls the implemtation class, or null to use the default.
+	 * Note: expfcls must implement {@link ExpressionFactory}.
+	 * @since 3.0.0
+	 */
+	public void setExpressionFactoryClass(Class expfcls) {
+		Expressions.setExpressionFactoryClass(expfcls);
+	}
+	/** Returns the implementation of the expression factory that
+	 * is used by the whole system, or null if the sytem default is used.
+	 *
+	 * @see #setExpressionFactoryClass
+	 * @since 3.0.0
+	 */
+	public Class getExpressionFactoryClass() {
+		return Expressions.getExpressionFactoryClass();
 	}
 
 	/**
