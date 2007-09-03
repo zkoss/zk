@@ -42,45 +42,37 @@ public class Expressions {
 	 */
 	public static final Expression DUMMY_EXPRESSION = new DummyExpr();
 
+	/** The implemetation of {@link ExpressionFactory}. */
+	private static Class _expfcls;
+
 	/** Instantiates an instance of {@link ExpressionFactory}.
 	 *
 	 * <p>The default class is {@link org.zkoss.xel.el21.ELFactory}
 	 * or {@link org.zkoss.xel.el.ELFactory} depending on
 	 * the Web server.
-	 * To override it, you can specify the class name in the system
-	 * property called "org.zkoss.xel.ExpressionFactory.class".
+	 * To override it, you can specify the class by calling
+	 * {@link #setExpressionFactoryClass}.
 	 *
-	 * <p>For the ZK user, you can override it with zk.xml.
+	 * <p>For the ZK user, you can override it with zk.xml
+	 * or org.zkoss.zk.ui.util.Configuration.
 	 *
 	 * @exception XelException if the specified class failed to load,
 	 * or instantiate.
 	 */
 	public static final ExpressionFactory newExpressionFactory()
 	throws XelException {
-		String clsnm =  null;
-		try {
-			clsnm =	System.getProperty("org.zkoss.xel.ExpressionFactory.class", null);
-		} catch (Throwable ex) { //permission might not be allowed
-		}
-
-		if (clsnm != null && clsnm.length() > 0) {
-			try {
-				return (ExpressionFactory)Classes.newInstanceByThread(clsnm);
-			} catch (Throwable ex) {
-				throw XelException.Aide.wrap(ex, "Unable to instantiate "+clsnm);
-			}
-		}
-		return newDefautFactory();
+		return newExpressionFactory(_expfcls);
 	}
 	/** Instantiates an instance of {@link ExpressionFactory}.
 	 *
 	 * <p>The default class is {@link org.zkoss.xel.el21.ELFactory}
 	 * or {@link org.zkoss.xel.el.ELFactory} depending on
 	 * the Web server.
-	 * To override it, you can specify the class name in the system
-	 * property called "org.zkoss.xel.ExpressionFactory.class".
+	 * To override it, you can specify the class by calling
+	 * {@link #setExpressionFactoryClass}.
 	 *
-	 * <p>For the ZK user, you can override it with zk.xml.
+	 * <p>For the ZK user, you can override it with zk.xml
+	 * or org.zkoss.zk.ui.util.Configuration.
 	 *
 	 * @param expfcls the class that implements {@link ExpressionFactory},
 	 * or null to use the default.
@@ -130,6 +122,34 @@ public class Expressions {
 	String expression, Class expectedType)
 	throws XelException {
 		return newExpressionFactory().evaluate(ctx, expression, expectedType);
+	}
+
+	/** Sets the implementation of the expression factory that shall
+	 * be used by the whole system, or null to use the system default.
+	 *
+	 * <p>Default: null - it means {@link org.zkoss.xel.el21.ELFactory}
+	 * or {@link org.zkoss.xel.el.ELFactory} depending on
+	 * the Web server supports JSP 2.1 or not.
+	 *
+	 * <p>Note: you can only specify an implementation that is compatible
+	 * with JSP EL here, since all builtin pages depend on it.
+	 *
+	 * @param expfcls the implemtation class, or null to use the default.
+	 * Note: expfcls must implement {@link ExpressionFactory}.
+	 * If null, the system default is used.
+	 */
+	public static final void setExpressionFactoryClass(Class expfcls) {
+		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
+			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
+		_expfcls = expfcls;
+	}
+	/** Returns the implementation of the expression factory that
+	 * is used by the whole system, or null to use the system default.
+	 *
+	 * @see #setExpressionFactoryClass
+	 */
+	public static final Class getExpressionFactoryClass() {
+		return _expfcls;
 	}
 }
 /*package*/ class EmptyMapper
