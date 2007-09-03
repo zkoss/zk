@@ -18,10 +18,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.mvel;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
+
+import org.mvel.MVEL;
 
 /**
  * An implementation based on MVEL.
@@ -43,11 +46,13 @@ public class MVELFactory implements ExpressionFactory {
 	public Expression parseExpression(XelContext ctx, String expression,
 	Class expectedType)
 	throws XelException {
-		return null;
+		return new MVELXelExpression(MVEL.compileExpression(expression),
+			expectedType);
 	}
 	public Object evaluate(XelContext ctx, String expression,
 	Class expectedType)
 	throws XelException {
-		return null;
+		return Classes.coerce(expectedType,
+			MVEL.eval(expression, new XelMVELResolver(null)));
 	}
 }
