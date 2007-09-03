@@ -72,19 +72,20 @@ public class ExpressionFragment implements java.io.Serializable {
 			j = l + 1;
 		}
 	}
-	/** Converts $\{ to ${.
+	/** Converts \$\{ to ${.
 	 */
 	private static final String unescape(String s) {
 		StringBuffer sb = null;
 		for (int j = 0, len = s.length();;) {
-			int k = s.indexOf("$\\{", j);
+			int k = s.indexOf("\\$\\{", j);
 			if (k < 0) {
 				if (j == 0) return s; //nothing to convert
 				return sb.append(s.substring(j)).toString();
 			}
+
 			if (sb == null) sb = new StringBuffer(len);
-			sb.append(s.substring(j, k + 1)).append('{');
-			j = k + 3;
+			sb.append(s.substring(j, k)).append("${");
+			j = k + 4;
 		}
 	}
 
