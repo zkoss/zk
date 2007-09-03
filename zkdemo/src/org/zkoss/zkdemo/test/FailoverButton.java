@@ -27,7 +27,7 @@ import org.zkoss.zul.Messagebox;
  * Used with test/failover.zul to test the failover mechanism.
  *
  * @author tomyeh
- * @see DumFailoverManager
+ * @see DumbFailoverManager
  */
 public class FailoverButton extends Button {
 	private boolean _recoverable;
