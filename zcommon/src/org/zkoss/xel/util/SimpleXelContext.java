@@ -31,9 +31,13 @@ import org.zkoss.xel.FunctionMapper;
 public class SimpleXelContext implements XelContext {
 	private VariableResolver _resolver;
 	private FunctionMapper _mapper;
+
 	public SimpleXelContext(VariableResolver resolver, FunctionMapper mapper) {
 		_resolver = resolver;
 		_mapper = mapper;
+	}
+	public SimpleXelContext(VariableResolver resolver) {
+		_resolver = resolver;
 	}
 	public SimpleXelContext() {
 	}

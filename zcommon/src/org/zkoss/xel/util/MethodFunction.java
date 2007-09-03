@@ -25,6 +25,8 @@ import org.zkoss.xel.Function;
 
 /**
  * A XEL function based on java.lang.reflect.Method.
+ * It is used by implementation of {@link org.zkoss.xel.ExpressionFactory}
+ * The user of XEL expressions rarely need it.
  *
  * @author tomyeh
  * @since 3.0.0

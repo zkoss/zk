@@ -34,17 +34,36 @@ import org.zkoss.xel.XelContext;
  * @since 3.0.0
  */
 /*package*/ class MVELXelExpression implements Expression, Serializable {
-	private final Serializable _expr;
+	/** A list of fragments, either a string or a parsed expression
+	 */
+	private final Object[] _frags;
 	private final Class _expected;
-	/*package*/ MVELXelExpression(Serializable expr, Class expectedType) {
-		_expr = expr;
+	/*package*/ MVELXelExpression(Object[] frags, Class expectedType) {
+		_frags = frags;
 		_expected = expectedType;
 	}
 
 	//Expression//
 	public Object evaluate(XelContext ctx) {
-		final VariableResolver resolver = ctx.getVariableResolver();
-		return Classes.coerce(_expected,
-			MVEL.executeExpression(_expr, new XelMVELResolver(resolver)));
+		final XelMVELResolver resolver =
+			new XelMVELResolver(ctx.getVariableResolver());
+
+		if (_frags.length == 1) { //optimize this most common case
+			return Classes.coerce(_expected,
+				_frags[0] instanceof String ? _frags[0]:
+				MVEL.executeExpression(_frags[0], resolver));
+		}
+
+		final StringBuffer sb = new StringBuffer(256);
+		for (int j = 0; j < _frags.length; ++j) {
+			if (_frags[j] instanceof String) {
+				sb.append(_frags[j]);
+			} else {
+				Object val = MVEL.executeExpression(_frags[j], resolver);
+				if (val != null)
+					sb.append(val);
+			}	
+		}
+		return Classes.coerce(_expected, sb.toString());
 	}
 }
