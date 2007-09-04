@@ -55,7 +55,7 @@ public class ZScriptTag extends AbstractTag {
 		
 		StringWriter out = new StringWriter();
 		getJspBody().invoke(out);
-		final ZScript zscript = ZScript.parseContent(out.toString(), null);
+		final ZScript zscript = ZScript.parseContent(out.toString());
 		if (zscript.getLanguage() == null)
 			zscript.setLanguage(_lang != null ? _lang: _roottag.getZScriptLanguage());
 		_roottag.processZScript(_parent, zscript);

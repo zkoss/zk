@@ -227,7 +227,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 		//add event handle ...		
 		for(Iterator itor = _eventListenerMap.entrySet().iterator();itor.hasNext();) {
 			Map.Entry entry = (Map.Entry)itor.next();
-			final ZScript zscript = ZScript.parseContent((String)entry.getValue(), null);
+			final ZScript zscript = ZScript.parseContent((String)entry.getValue());
 			((ComponentCtrl)_comp).addEventHandler(
 					(String)entry.getKey(), new EventHandler(zscript,null));
 		}
