@@ -1,4 +1,4 @@
-/* ELFactory.java
+/* ApacheELFactory.java
 
 {{IS_NOTE
 	Purpose:
@@ -31,9 +31,9 @@ import org.zkoss.xel.XelException;
  * @author tomyeh
  * @since 3.0.0
  */
-public class ELFactory implements ExpressionFactory {
+public class ApacheELFactory implements ExpressionFactory {
 	private final javax.el.ExpressionFactory _expf;
-	public ELFactory() {
+	public ApacheELFactory() {
 		_expf = newExpressionFactory();
 	}
 

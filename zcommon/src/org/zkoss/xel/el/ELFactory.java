@@ -27,7 +27,9 @@ import javax.servlet.jsp.el.ExpressionEvaluator;
 import javax.servlet.jsp.el.ELException;
 
 /**
- * An implementation based on org.apache.commons.el.ExpressionEvaluatorImpl.
+ * An implementation based on ZK Commons EL (zcommons-el.jar: 
+ * org.zkforge.apache.commons.el.ExpressionEvaluatorImpl).
+ * ZK Commons EL is a peformance enhancement version of Apache Commons EL.
  *
  * @author tomyeh
  * @since 3.0.0
@@ -73,6 +75,6 @@ public class ELFactory implements ExpressionFactory {
 	 * <p>You might override it to use a different implementation.
 	 */
 	protected ExpressionEvaluator newExpressionEvaluator() {
-		return new org.apache.commons.el.ExpressionEvaluatorImpl();
+		return new org.zkforge.apache.commons.el.ExpressionEvaluatorImpl();
 	}
 }

@@ -47,9 +47,7 @@ public class Expressions {
 
 	/** Instantiates an instance of {@link ExpressionFactory}.
 	 *
-	 * <p>The default class is {@link org.zkoss.xel.el21.ELFactory}
-	 * or {@link org.zkoss.xel.el.ELFactory} depending on
-	 * the Web server.
+	 * <p>The default class is {@link org.zkoss.xel.el.ELFactory}.
 	 * To override it, you can specify the class by calling
 	 * {@link #setExpressionFactoryClass}.
 	 *
@@ -65,9 +63,7 @@ public class Expressions {
 	}
 	/** Instantiates an instance of {@link ExpressionFactory}.
 	 *
-	 * <p>The default class is {@link org.zkoss.xel.el21.ELFactory}
-	 * or {@link org.zkoss.xel.el.ELFactory} depending on
-	 * the Web server.
+	 * <p>The default class is {@link org.zkoss.xel.el.ELFactory}.
 	 * To override it, you can specify the class by calling
 	 * {@link #setExpressionFactoryClass}.
 	 *
@@ -90,22 +86,7 @@ public class Expressions {
 		return newDefautFactory();
 	}
 	private static final ExpressionFactory newDefautFactory() {
-		if (_jsp21)
-			return new org.zkoss.xel.el21.ELFactory();
 		return new org.zkoss.xel.el.ELFactory();
-	}
-	/** Whether to use JSP2.1. */
-	private static final boolean _jsp21;
-	static {
-		boolean jsp21;
-		try {
-			Classes.forNameByThread("javax.el.Expression");
-			jsp21 = true;
-		} catch (Throwable ex) {
-			jsp21 = false;
-		}
-		_jsp21 = jsp21;
-		log.info("JSP "+(_jsp21 ? "2.1 or above": "2.0")+" found");
 	}
 
 	/** Evaluates an expression.
@@ -127,9 +108,7 @@ public class Expressions {
 	/** Sets the implementation of the expression factory that shall
 	 * be used by the whole system, or null to use the system default.
 	 *
-	 * <p>Default: null - it means {@link org.zkoss.xel.el21.ELFactory}
-	 * or {@link org.zkoss.xel.el.ELFactory} depending on
-	 * the Web server supports JSP 2.1 or not.
+	 * <p>Default: null - it means {@link org.zkoss.xel.el.ELFactory}.
 	 *
 	 * <p>Note: you can only specify an implementation that is compatible
 	 * with JSP EL here, since all builtin pages depend on it.

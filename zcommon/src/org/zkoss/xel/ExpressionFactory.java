@@ -36,7 +36,8 @@ public interface ExpressionFactory {
 	/** Returns whether an feature is supported.
 	 *
 	 * @param feature which feature to query.
-	 * It can be one of {@link #FEATURE_FUNCTION} and {@link #FEATURE_IMPORT}.
+	 * It can be a combination of {@link #FEATURE_FUNCTION}
+	 * and {@link #FEATURE_IMPORT}.
 	 */
 	public boolean isSupported(int feature);
 
