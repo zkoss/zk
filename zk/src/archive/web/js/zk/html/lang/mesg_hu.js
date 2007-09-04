@@ -9,7 +9,7 @@
     Aug 31, 2007, Andreas Klein - andiklein at idatso dot com
 }}IS_NOTE
 
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
   This program is distributed under GPL Version 2.0 in the hope that
@@ -17,12 +17,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 mesg = {};
-mesg.NOT_FOUND = "Nem talált: ";
+mesg.NOT_FOUND = "Nem található: ";
 mesg.UNSUPPORTED = "Még nem támogatott: "
 mesg.FAILED_TO_SEND = "A szerver kérelem nem sikerült: ";
 mesg.FAILED_TO_RESPONSE = "A webkiszolgáló ideiglenesen nem szolgál. Legyen szíves megpróbálni újra később:\n";
 mesg.UNSUPPORTED_BROWSER = "Nem támogatott böngésző: ";
-mesg.ILLEGAL_RESPONSE = "Ismeretlen szerver válasz. Legyen szíves az oldalt újra megtölteni.\n";
+mesg.ILLEGAL_RESPONSE = "Ismeretlen szerver válasz. Legyen szíves az oldalt újra letölteni.\n";
 mesg.FAILED_TO_PROCESS = "Nem sikerült feldolgozni ";
 mesg.UUID_REQUIRED = "UUID szükséges ";
 mesg.INVALID_STRUCTURE = "Érvénytelen szerkezet: ";
@@ -39,5 +39,5 @@ mesg.KBYTES = "KB";
 mesg.CANCEL="Mégsem";
 
 mesg.FAILED_TO_LOAD="Betöltés nem sikerült ";
-mesg.FAILED_TO_LOAD_DETAIL="Rosz kapcsolat okozhatta. Próbáljan újra megtölteni az oldalt.";
+mesg.FAILED_TO_LOAD_DETAIL="Rosz kapcsolat okozhatta. Próbáljan újra letölteni az oldalt.";
 mesg.CAUSE="Hibát okozta: ";
