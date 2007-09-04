@@ -20,6 +20,7 @@ package org.zkoss.web.servlet.xel;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
@@ -41,6 +42,12 @@ public class ELXelMapper implements FunctionMapper {
 	}
 
 	//FunctionMapper//
+	/** Note: always returns an empty collection, no matter any function
+	 * is defined or not.
+	 */
+	public Collection getFunctionNames() {
+		return Collections.EMPTY_LIST;
+	}
 	public Function resolveFunction(String prefix, String name) {
 		if (_mapper != null) {
 			final Method mtd = _mapper.resolveFunction(prefix, name);
@@ -49,7 +56,13 @@ public class ELXelMapper implements FunctionMapper {
 		}
 		return null;
 	}
-	public Collection getImportedClasses() {
+	/** Note: always returns an empty collection, no matter any class
+	 * is defined or not.
+	 */
+	public Collection getClassNames() {
+		return Collections.EMPTY_LIST;
+	}
+	public Class resolveClass(String name) {
 		return null;
 	}
 }
