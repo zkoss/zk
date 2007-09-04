@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?component name="username" macro-uri="macro.zul"?>
+<?component name="username" macroURI="macro.zul"?>
 
 <!--
 usemacro.zul

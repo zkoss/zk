@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?component name="myrow" macro-uri="inline.zul" inline="true"?>
+<?component name="myrow" macroURI="inline.zul" inline="true"?>
 
 <!--
 useinline.zul

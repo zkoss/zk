@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?init zscript="macro.zs"?>
-<?component name="username" macro-uri="macro.zul" class="Username"?>
+<?component name="username" macroURI="macro.zul" class="Username"?>
 
 <!--
 imported.zul
