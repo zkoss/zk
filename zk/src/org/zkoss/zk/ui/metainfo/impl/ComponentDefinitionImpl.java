@@ -35,8 +35,8 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.ui.xel.Evaluator;
-import org.zkoss.zk.ui.xel.ExValue;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.scripting.Interpreter;
@@ -51,7 +51,7 @@ implements ComponentDefinition, java.io.Serializable {
 	private String _name;
 	private transient LanguageDefinition _langdef;
 	private transient PageDefinition _pgdef;
-	private Evaluator _eval;
+	private EvaluatorRef _evalr;
 	/** Either String or Class. */
 	private Object _implcls;
 	/** A synchronized map of molds (String name, ExValue moldURI). */
@@ -93,6 +93,9 @@ implements ComponentDefinition, java.io.Serializable {
 		_pgdef = pgdef;
 		_name = name;
 		_implcls = cls;
+
+		_evalr = _langdef != null ? _langdef.getEvaluatorRef():
+			_pgdef != null ? _pgdef.getEvaluatorRef(): null;
 	}
 	/** Constructs a macro component definition.
 	 * It is the component definition used to implement the macros.
@@ -319,7 +322,7 @@ implements ComponentDefinition, java.io.Serializable {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("name");
 
-		final Property prop = new Property(name, value, null);
+		final Property prop = new Property(_evalr, name, value, null);
 		if (_props == null) {
 			synchronized (this) {
 				if (_props == null) {
@@ -339,29 +342,23 @@ implements ComponentDefinition, java.io.Serializable {
 		//by AbstractComponent's initial with getAnnotationMap()
 
 		if (_custAttrs != null) {
-			final Evaluator eval = getEvaluator();
 			synchronized (_custAttrs) {
 				for (Iterator it = _custAttrs.entrySet().iterator();
 				it.hasNext();) {
 					final Map.Entry me = (Map.Entry)it.next();
 					comp.setAttribute((String)me.getKey(),
-						((ExValue)me.getValue()).getValue(eval, comp));
+						((ExValue)me.getValue()).getValue(_evalr, comp));
 				}
 			}
 		}
 		if (_props != null) {
-			final Evaluator eval = getEvaluator();
 			synchronized (_props) {
 				for (Iterator it = _props.iterator(); it.hasNext();) {
 					final Property prop = (Property)it.next();
-					prop.assign(eval, comp);
+					prop.assign(comp);
 				}
 			}
 		}
-	}
-	private Evaluator getEvaluator() {
-		return _langdef != null ? _langdef.getEvaluator():
-			_pgdef != null ? _pgdef.getEvaluator(): _eval;
 	}
 
 	public Map evalProperties(Map propmap, Page owner, Component parent) {
@@ -369,16 +366,15 @@ implements ComponentDefinition, java.io.Serializable {
 			propmap = new HashMap();
 
 		if (_props != null) {
-			final Evaluator eval = getEvaluator();
 			synchronized (_props) {
 				for (Iterator it = _props.iterator(); it.hasNext();) {
 					final Property prop = (Property)it.next();
 					if (parent != null) {
 						if (prop.isEffective(parent))
-							propmap.put(prop.getName(), prop.getValue(eval, parent));
+							propmap.put(prop.getName(), prop.getValue(parent));
 					} else {
 						if (prop.isEffective(owner))
-							propmap.put(prop.getName(), prop.getValue(eval, owner));
+							propmap.put(prop.getName(), prop.getValue(owner));
 					}
 				}
 			}
@@ -408,7 +404,7 @@ implements ComponentDefinition, java.io.Serializable {
 	public String getMoldURI(Component comp, String name) {
 		final ExValue mold = _molds != null ? (ExValue)_molds.get(name): null;
 		return mold == null ? null:
-			toAbsoluteURI((String)mold.getValue(getEvaluator(), comp));
+			toAbsoluteURI((String)mold.getValue(_evalr, comp));
 	}
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
@@ -444,7 +440,6 @@ implements ComponentDefinition, java.io.Serializable {
 		s.defaultWriteObject();
 
 		s.writeObject(_langdef != null ? _langdef.getName(): null);
-		s.writeObject(_pgdef != null ? _pgdef.getEvaluator(): null);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -453,7 +448,6 @@ implements ComponentDefinition, java.io.Serializable {
 		final String langnm = (String)s.readObject();
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
-		_eval = (Evaluator)s.readObject();
 	}
 
 	//Object//

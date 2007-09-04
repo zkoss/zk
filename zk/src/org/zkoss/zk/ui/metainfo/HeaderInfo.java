@@ -25,8 +25,8 @@ import java.util.Collections;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.xel.ExValue;
-import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.Evaluator;
 
 /**
  * Represents a header element, such as &lt;link&gt; and &lt;meta&gt;
@@ -83,11 +83,11 @@ public class HeaderInfo {
 	 * @param page the page containing this header element.
 	 * It is used to evaluate EL expression, if any, contained in the value.
 	 */
-	public String toHTML(Page page) {
+	public String toHTML(PageDefinition pgdef, Page page) {
 		final StringBuffer sb = new StringBuffer(128)
 			.append('<').append(_name);
 
-		final Evaluator eval = Executions.getEvaluator(page);
+		final Evaluator eval = pgdef.getEvaluator();
 		for (Iterator it = _attrs.iterator(); it.hasNext();) {
 			final Object[] p = (Object[])it.next();
 			String nm = (String)p[0];

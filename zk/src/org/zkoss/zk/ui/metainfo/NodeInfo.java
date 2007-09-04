@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.zkoss.zk.xel.impl.EvaluatorRef;
+
 /**
  * Represents a node of the ZUML tree.
  * It is an abstract class while the concrete classes include
@@ -43,12 +45,17 @@ abstract public class NodeInfo implements java.io.Serializable {
 	public NodeInfo() {
 	}
 
-	/** Returns the page definition.
+	/** Returns the page definition, or null if not available.
 	 */
 	abstract public PageDefinition getPageDefinition();
-	/** Returns the parent.
+	/** Returns the parent, or null if no parent.
 	 */
 	abstract public NodeInfo getParent();
+	/** Returns the evaluator reference (never null).
+	 * <p>This method is used only for implementation only.
+	 * @since 3.0.0
+	 */
+	abstract public EvaluatorRef getEvaluatorRef();
 
 	/** Adds a zscript child.
 	 */

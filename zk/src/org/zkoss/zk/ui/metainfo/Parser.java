@@ -54,7 +54,6 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
@@ -255,12 +254,13 @@ public class Parser {
 				final ZScript zs;
 				final String zslang = pgdef.getZScriptLanguage();
 				if (zsrc.indexOf("${") >= 0) {
-					zs = new ZScript(zslang, zsrc, null, getLocator()); //URL in EL
+					zs = new ZScript(pgdef.getEvaluatorRef(),
+						zslang, zsrc, null, getLocator()); //URL in EL
 				} else {
 					final URL url = getLocator().getResource(zsrc);
 					if (url == null) throw new UiException("File not found: "+zsrc+", at "+pi.getLocator());
 						//don't throw FileNotFoundException since Tomcat 'eats' it
-					zs = new ZScript(zslang, url, null);
+					zs = new ZScript(pgdef.getEvaluatorRef(), zslang, url, null);
 				}
 
 				pgdef.addInitiatorInfo(
@@ -468,7 +468,7 @@ public class Parser {
 				if (trimLabel.length() > 0) { //consider as a label
 					if (parentInfo instanceof NativeInfo) {
 						((NativeInfo)parentInfo).appendChild(
-							new TextInfo(trimLabel));
+							new TextInfo(pgdef.getEvaluatorRef(), trimLabel));
 					} else {
 						final String textAs = parentInfo.getTextAs();
 						if (textAs != null) {
@@ -677,16 +677,17 @@ public class Parser {
 			noEL("language", zslang, el);
 		}
 
-		final Condition cond = ConditionImpl.getInstance(ifc, unless);
+		final ConditionImpl cond = ConditionImpl.getInstance(ifc, unless);
 		if (!isEmpty(zsrc)) { //ignore empty (not error)
 			final ZScript zs;
 			if (zsrc.indexOf("${") >= 0) {
-				zs = new ZScript(zslang, zsrc, cond, getLocator());
+				zs = new ZScript(parent.getEvaluatorRef(),
+					zslang, zsrc, cond, getLocator());
 			} else {
 				final URL url = getLocator().getResource(zsrc);
 				if (url == null) throw new UiException("File not found: "+zsrc+", at "+el.getLocator());
 					//don't throw FileNotFoundException since Tomcat 'eats' it
-				zs = new ZScript(zslang, url, cond);
+				zs = new ZScript(parent.getEvaluatorRef(), zslang, url, cond);
 			}
 
 			if (deferred) zs.setDeferred(true);
@@ -695,7 +696,8 @@ public class Parser {
 
 		final String script = el.getText(true);
 		if (!isEmpty(script)) {
-			final ZScript zs = new ZScript(zslang, script, cond);
+			final ZScript zs =
+				new ZScript(parent.getEvaluatorRef(), zslang, script, cond);
 			if (deferred) zs.setDeferred(true);
 			parent.appendChild(zs);
 		}
@@ -751,6 +753,7 @@ public class Parser {
 
 		if (!attrs.isEmpty())
 			parent.appendChild(new AttributesInfo(
+				parent.getEvaluatorRef(),
 				attrs, scope, ConditionImpl.getInstance(ifc, unless)));
 	}
 	private static void parseVariables(NodeInfo parent, Element el,
@@ -785,6 +788,7 @@ public class Parser {
 		}
 		if (!vars.isEmpty())
 			parent.appendChild(new VariablesInfo(
+				parent.getEvaluatorRef(),
 				vars, local, ConditionImpl.getInstance(ifc, unless)));
 	}
 	private static void parseAnnotation(Element el, AnnotationHelper annHelper)
@@ -837,7 +841,7 @@ public class Parser {
 	/** Parse an attribute and adds it to the definition.
 	 */
 	private static void addAttribute(ComponentInfo compInfo, Namespace attrns,
-	String name, String value, Condition cond) throws Exception {
+	String name, String value, ConditionImpl cond) throws Exception {
 		if (Events.isValid(name)) {
 			boolean bZkAttr = attrns == null;
 			if (!bZkAttr) {
@@ -851,7 +855,7 @@ public class Parser {
 					bZkAttr = LanguageDefinition.ZK_NAMESPACE.equals(uri);
 			}
 			if (bZkAttr) {
-				final ZScript zscript = ZScript.parseContent(value, null);
+				final ZScript zscript = ZScript.parseContent(value);
 				if (zscript.getLanguage() == null)
 					zscript.setLanguage(
 						compInfo.getPageDefinition().getZScriptLanguage());

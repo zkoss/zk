@@ -70,7 +70,6 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.PageSerializationListener;
-import org.zkoss.zk.ui.xel.ExValue;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -81,6 +80,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.au.AuSetTitle;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Interpreters;
@@ -806,7 +806,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final boolean bIncluded = asyncUpdate || exec.isIncluded()
 			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null;
 		final String uri = (String)
-			(bIncluded ? _pgUri: _dkUri).getValue(exec.getEvaluator(this), this);
+			(bIncluded ? _pgUri: _dkUri)
+				.getValue(_langdef.getEvaluator(), this);
+				//desktop and page URI is defined in language
 
 		final Map attrs = new HashMap(6);
 		attrs.put("page", this);

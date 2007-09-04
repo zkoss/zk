@@ -22,13 +22,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.ui.xel.Evaluator;
-import org.zkoss.zk.ui.xel.ExValue;
+import org.zkoss.zk.ui.util.ConditionImpl;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * The information about the variables element in the ZUML page.
@@ -36,17 +37,25 @@ import org.zkoss.zk.ui.xel.ExValue;
  * @author tomyeh
  */
 public class VariablesInfo implements Condition, java.io.Serializable {
+	private final EvaluatorRef _evalr;
 	/** Map(String name, ExValue value). */
 	private final Map _vars;
-	private final Condition _cond;
+	private final ConditionImpl _cond;
 	private final boolean _local;
 
 	/**
+	 * @param evalr the evaluator reference. It cannot be null.
+	 * Retrieve it from {@link LanguageDefinition#getEvaluatorRef}
+	 * or {@link PageDefinition#getEvaluatorRef}, depending which it
+	 * belongs.
 	 * @param vars a map of (String name, String value).
 	 * Note: once called, the caller cannot access it any more.
 	 * In other words, it becomes part of this object.
 	 */
-	public VariablesInfo(Map vars, boolean local, Condition cond) {
+	public VariablesInfo(EvaluatorRef evalr, Map vars, boolean local,
+	ConditionImpl cond) {
+		if (evalr == null) throw new IllegalArgumentException();
+		_evalr = evalr;
 		_vars = vars;
 		if (_vars != null) {
 			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
@@ -65,7 +74,7 @@ public class VariablesInfo implements Condition, java.io.Serializable {
 	 */
 	public void apply(Component comp) {
 		if (_vars != null && isEffective(comp)) {
-			final Evaluator eval = Executions.getEvaluator(comp);
+			final Evaluator eval = _evalr.getEvaluator();
 			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
@@ -79,7 +88,7 @@ public class VariablesInfo implements Condition, java.io.Serializable {
 	 */
 	public void apply(Page page) {
 		if (_vars != null && isEffective(page)) {
-			final Evaluator eval = Executions.getEvaluator(page);
+			final Evaluator eval = _evalr.getEvaluator();
 			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
@@ -91,10 +100,10 @@ public class VariablesInfo implements Condition, java.io.Serializable {
 
 	//Condition//
 	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(comp);
+		return _cond == null || _cond.isEffective(_evalr, comp);
 	}
 	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(page);
+		return _cond == null || _cond.isEffective(_evalr, page);
 	}
 
 	//Object//

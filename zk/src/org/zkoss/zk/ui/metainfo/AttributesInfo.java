@@ -25,33 +25,43 @@ import java.util.HashMap;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.ui.xel.Evaluator;
-import org.zkoss.zk.ui.xel.ExValue;
-
+import org.zkoss.zk.ui.util.ConditionImpl;
+import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 /**
  * Represents a map of custom attributes of a component definition
  * ({@link ComponentDefinition}).
  * It is equivalent to the custom-attributes element.
+ *
+ * <p>Note: it is serializable.
  *
  * @author tomyeh
  */
 public class AttributesInfo implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;
 
+	private final EvaluatorRef _evalr;
 	/** Map(String name, ExValue value). */
 	private final Map _attrs;
-	private final Condition _cond;
+	private final ConditionImpl _cond;
 	private final int _scope;
 
 	/**
+	 * @param evalr the evaluator reference. It cannot be null.
+	 * Retrieve it from {@link LanguageDefinition#getEvaluatorRef}
+	 * or {@link PageDefinition#getEvaluatorRef}, depending which it
+	 * belongs.
 	 * @param attrs the custom attributes (String name, String value).
 	 * Once called, the caller shall not access attrs again -- it belongs
 	 * to this object.
 	 */
-	public AttributesInfo(Map attrs, String scope, Condition cond) {
+	public AttributesInfo(EvaluatorRef evalr,
+	Map attrs, String scope, ConditionImpl cond) {
+		if (evalr == null) throw new IllegalArgumentException();
+		_evalr = evalr;
 		_attrs = attrs;
 		if (_attrs != null) {
 			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
@@ -70,7 +80,7 @@ public class AttributesInfo implements Condition, java.io.Serializable {
 	 */
 	public void apply(Component comp) {
 		if (_attrs != null && isEffective(comp)) {
-			final Evaluator eval = Executions.getEvaluator(comp);
+			final Evaluator eval = _evalr.getEvaluator();
 			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
@@ -84,7 +94,7 @@ public class AttributesInfo implements Condition, java.io.Serializable {
 	 */
 	public void apply(Page page) {
 		if (_attrs != null && isEffective(page)) {
-			final Evaluator eval = Executions.getEvaluator(page);
+			final Evaluator eval = _evalr.getEvaluator();
 			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
@@ -94,19 +104,12 @@ public class AttributesInfo implements Condition, java.io.Serializable {
 		}
 	}
 
-	/** Returns the condition.
-	 * @since 3.0.0
-	 */
-	public Condition getCondition() {
-		return _cond;
-	}
-
 	//Condition//
 	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(comp);
+		return _cond == null || _cond.isEffective(_evalr, comp);
 	}
 	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(page);
+		return _cond == null || _cond.isEffective(_evalr, page);
 	}
 
 	//Object//

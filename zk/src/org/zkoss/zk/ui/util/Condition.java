@@ -30,14 +30,12 @@ import org.zkoss.zk.ui.Page;
 public interface Condition {
 	/** Used to evaluate whether it is effective.
 	 *
-	 * @param comp used as the self variable and to retrieve the
-	 * function mapper. Ignored if null.
+	 * @param comp used as the self variable. Ignored if null.
 	 */
 	public boolean isEffective(Component comp);
 	/** Used to evaluate whether it is effective.
 	 *
-	 * @param page used as the self variable and to retrieve the function
-	 * mapper.
+	 * @param page used as the self variable. Ignored if null.
 	 */
 	public boolean isEffective(Page page);
 }

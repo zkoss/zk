@@ -30,7 +30,6 @@ import java.util.Iterator;
 
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.logging.Log;
-import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.web.servlet.JavaScript;
@@ -42,8 +41,9 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.xel.Evaluator;
-import org.zkoss.zk.ui.xel.ObjectEvaluator;
+import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.impl.SimpleEvaluator;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.DeviceNotFoundException;
 import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
@@ -134,6 +134,8 @@ public class LanguageDefinition {
 	private ComponentDefinition _nativedef;
 	/** The evaluator. */
 	private Evaluator _eval;
+	/** The evaluator reference. */
+	private EvaluatorRef _evalr;
 	/** Whether it is a native language. */
 	private final boolean _native;
 
@@ -687,7 +689,8 @@ public class LanguageDefinition {
 		}
 	}
 
-	/** Returns the evaluator based on this language definition.
+	/** Returns the evaluator based on this language definition (never null).
+	 * @since 3.0.0
 	 */
 	public Evaluator getEvaluator() {
 		if (_eval == null)
@@ -695,8 +698,20 @@ public class LanguageDefinition {
 		return _eval;
 	}
 	private Evaluator newEvaluator() {
-		return new ObjectEvaluator(null,
-			Taglibs.getFunctionMapper(_taglibs, _locator));
+		return new SimpleEvaluator(
+			Taglibs.getFunctionMapper(_taglibs, _locator), null);
+	}
+	/** Returns the evaluator reference (never null).
+	 * <p>This method is used only for implementation only.
+	 * @since 3.0.0
+	 */
+	public EvaluatorRef getEvaluatorRef() {
+		if (_evalr == null)
+			_evalr = newEvaluatorRef();
+		return _evalr;
+	}
+	private EvaluatorRef newEvaluatorRef() {
+		return new LangEvalRef(this);
 	}
 
 	//Object//
@@ -745,3 +760,33 @@ public class LanguageDefinition {
 		}
 	}
 }
+
+/*package*/ class LangEvalRef extends AbstractEvalRef
+implements java.io.Serializable {
+	private transient LanguageDefinition _langdef;
+	/*package*/ LangEvalRef(LanguageDefinition langdef) {
+		_langdef = langdef;
+	}
+
+	//EvaluatorRef//
+	public Evaluator getEvaluator() {
+		return _langdef.getEvaluator();
+	}
+
+	//Serializable//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		s.writeObject(_langdef != null ? _langdef.getName(): null);
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		final String langnm = (String)s.readObject();
+		if (langnm != null)
+			_langdef = LanguageDefinition.lookup(langnm);
+	}
+};

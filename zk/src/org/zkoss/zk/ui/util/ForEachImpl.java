@@ -31,8 +31,8 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.xel.ExValue;
-import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * An implementation of {@link ForEach}.
@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.xel.Evaluator;
  * @author tomyeh
  */
 public class ForEachImpl implements ForEach {
+	private final EvaluatorRef _evalr;
 	private final Page _page;
 	private final Component _comp;
 	private final ExValue _expr;
@@ -61,31 +62,35 @@ public class ForEachImpl implements ForEach {
 	 * @param expr an EL expression that shall return a collection of objects.
 	 */
 	public static
-	ForEach getInstance(Component comp, String expr, String begin, String end) {
+	ForEach getInstance(EvaluatorRef evalr, Component comp, String expr, String begin, String end) {
 		if (expr == null || expr.length() == 0)
 			return null;
-		return new ForEachImpl(comp, expr, begin, end);
+		return new ForEachImpl(evalr, comp, expr, begin, end);
 	}
 	/** Returns an instance that represents the iterator for the
 	 * specified collection, or null if expr is null or empty.
 	 *
 	 * @param expr an EL expression that shall return a collection of objects.
+	 * @since 3.0.0
 	 */
 	public static
-	ForEach getInstance(Page page, String expr, String begin, String end) {
+	ForEach getInstance(EvaluatorRef evalr, Page page, String expr, String begin, String end) {
 		if (expr == null || expr.length() == 0)
 			return null;
-		return new ForEachImpl(page, expr, begin, end);
+		return new ForEachImpl(evalr, page, expr, begin, end);
 	}
 
 	/** Constructor.
-	 * In most cases, use {@link #getInstance(Component, String, String, String)}
+	 * In most cases, use {@link #getInstance(EvaluatorRef, Component, String, String, String)}
 	 * instead of this constructor.
+	 * @exception IllegalArgumentException if comp or evalr is null
+	 * @since 3.0.0
 	 */
-	public ForEachImpl(Component comp, String expr, String begin, String end) {
-		if (comp == null)
-			throw new IllegalArgumentException("comp");
+	public ForEachImpl(EvaluatorRef evalr, Component comp, String expr, String begin, String end) {
+		if (comp == null || evalr == null)
+			throw new IllegalArgumentException();
 
+		_evalr = evalr;
 		_page = null;
 		_comp = comp;
 		_expr = expr != null ? new ExValue(expr, Object.class): null;
@@ -93,23 +98,26 @@ public class ForEachImpl implements ForEach {
 		_end = end != null && end.length() > 0 ? new ExValue(end, Integer.class): null;
 	}
 	/** Constructor.
-	 * In most cases, use {@link #getInstance(Component, String, String, String)}
+	 * In most cases, use {@link #getInstance(EvaluatorRef, Component, String, String, String)}
 	 * instead of this constructor.
+	 * @exception IllegalArgumentException if page or evalr is null
+	 * @since 3.0.0
 	 */
-	public ForEachImpl(Page page, String expr, String begin, String end) {
-		if (page == null)
-			throw new IllegalArgumentException("page");
+	public ForEachImpl(EvaluatorRef evalr, Page page, String expr, String begin, String end) {
+		if (page == null || evalr == null)
+			throw new IllegalArgumentException();
 
+		_evalr = evalr;
 		_page = page;
 		_comp = null;
 		_expr = expr != null ? new ExValue(expr, Object.class): null;
 		_begin = begin != null && begin.length() > 0 ? new ExValue(begin, Integer.class): null;
 		_end = end != null && end.length() > 0 ? new ExValue(end, Integer.class): null;
 	}
-	private Object eval(ExValue value, Evaluator eval) {
+	private Object eval(ExValue value) {
 		return value == null ? null:
 			_comp != null ?
-				value.getValue(eval, _comp): value.getValue(eval, _page);
+				value.getValue(_evalr, _comp): value.getValue(_evalr, _page);
 	}
 
 	//-- ForEach --//
@@ -118,16 +126,14 @@ public class ForEachImpl implements ForEach {
 			throw new IllegalStateException("Iterate twice not allowed");
 
 		if (_status == null) {
-			final Evaluator eval =
-				Executions.getEvaluator(_comp != null ? _comp.getPage(): _page);
-			final Object o = eval(_expr, eval);
+			final Object o = eval(_expr);
 			if (o == null) {
 				_done = true;
 				return false;
 			}
 
-			final Integer iend = (Integer)eval(_end, eval);
-			final Integer ibeg = (Integer)eval(_begin, eval);
+			final Integer iend = (Integer)eval(_end);
+			final Integer ibeg = (Integer)eval(_begin);
 			final int vbeg = ibeg != null ? ibeg.intValue(): 0;
 			if (vbeg < 0)
 				throw new UiException("Negative forEachBegin is not allowed: "+ibeg);

@@ -48,7 +48,6 @@ import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.ui.xel.Evaluator;
 import org.zkoss.zk.ui.util.*;
 import org.zkoss.zk.scripting.*;
 import org.zkoss.zk.au.*;
@@ -317,8 +316,7 @@ public class UiEngineImpl implements UiEngine {
 					if (!uv.isAborting() && !exec.isVoided())
 						execCreate(
 							new CreateInfo(
-								((WebAppCtrl)_wapp).getUiFactory(),
-								exec, page),
+								((WebAppCtrl)_wapp).getUiFactory(), exec, page),
 							pagedef, null);
 					inits.doAfterCompose(page);
 				} catch(Throwable ex) {
@@ -448,12 +446,12 @@ public class UiEngineImpl implements UiEngine {
 				}
 			} else if (meta instanceof TextInfo) {
 				//parent must be a native component
-				final String s = ((TextInfo)meta).getValue(ci.eval, parent);
+				final String s = ((TextInfo)meta).getValue(parent);
 				if (s != null && s.length() > 0)
 					parent.appendChild(
 						((Native)parent).getHelper().newNative(s));
 			} else {
-				execNonComponent(page, parent, meta);
+				execNonComponent(ci, parent, meta);
 			}
 		}
 		return (Component[])created.toArray(new Component[created.size()]);
@@ -503,7 +501,8 @@ public class UiEngineImpl implements UiEngine {
 	/** Executes a non-component object, such as ZScript, AttributesInfo...
 	 */
 	private static final void execNonComponent(
-	Page page, Component comp, Object meta) {
+	CreateInfo ci, Component comp, Object meta) {
+		final Page page = ci.page;
 		if (meta instanceof ZScript) {
 			final ZScript zscript = (ZScript)meta;
 			if (zscript.isDeferred()) {
@@ -1393,10 +1392,10 @@ public class UiEngineImpl implements UiEngine {
 					}
 				}
 			} else if (meta instanceof TextInfo) {
-				final String s = ((TextInfo)meta).getValue(ci.eval, comp);
+				final String s = ((TextInfo)meta).getValue(comp);
 				((Native)comp).getHelper().appendText(sb, s);
 			} else {
-				execNonComponent(ci.page, comp, meta);
+				execNonComponent(ci, comp, meta);
 			}
 		}
 	}
@@ -1406,7 +1405,7 @@ public class UiEngineImpl implements UiEngine {
 	StringBuffer sb, Component comp, NativeInfo childInfo) {
 		((Native)comp).getHelper()
 			.getFirstHalf(sb, childInfo.getTag(),
-				evalProperties(ci.eval, comp, childInfo.getProperties()),
+				evalProperties(comp, childInfo.getProperties()),
 				childInfo.getDeclaredNamespaces());
 
 		final List prokids = childInfo.getPrologChildren();
@@ -1434,7 +1433,7 @@ public class UiEngineImpl implements UiEngine {
 	/** Returns a map of properties, (String name, String value).
 	 */
 	private static final
-	Map evalProperties(Evaluator eval, Component comp, List props) {
+	Map evalProperties(Component comp, List props) {
 		if (props == null || props.isEmpty())
 			return Collections.EMPTY_MAP;
 
@@ -1443,7 +1442,7 @@ public class UiEngineImpl implements UiEngine {
 			final Property prop = (Property)it.next();
 			if (prop.isEffective(comp))
 				map.put(prop.getName(),
-					Classes.coerce(String.class, prop.getValue(eval, comp)));
+					Classes.coerce(String.class, prop.getValue(comp)));
 		}
 		return map;
 	}
@@ -1513,13 +1512,11 @@ public class UiEngineImpl implements UiEngine {
 	private static class CreateInfo {
 		private final Execution exec;
 		private final Page page;
-		private final Evaluator eval;
 		private final UiFactory uf;
 		private CreateInfo(UiFactory uf, Execution exec, Page page) {
 			this.exec = exec;
 			this.page = page;
 			this.uf = uf;
-			this.eval = exec.getEvaluator(page);
 		}
 	}
 }

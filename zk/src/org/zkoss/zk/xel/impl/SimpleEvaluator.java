@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.xel;
+package org.zkoss.zk.xel.impl;
 
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.FunctionMapper;
@@ -30,8 +30,11 @@ import org.zkoss.xel.util.SimpleXelContext;
 import org.zkoss.web.servlet.xel.RequestContext;
 import org.zkoss.web.servlet.xel.RequestContexts;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.xel.Evaluator;
 
 /**
  * A simple implementation of {@link Evaluator}.
@@ -43,13 +46,15 @@ public class SimpleEvaluator implements Evaluator {
 	private transient SimpleXelContext _xelc;
 	private transient ExpressionFactory _expf;
 	private final Class _expfcls;
+	private final FunctionMapper _mapper;
 
 	/**
 	 * @param expfcls the class that implements the expression factory.
 	 * If null, the default one is used.
 	 */
-	public SimpleEvaluator(Class expfcls) {
+	public SimpleEvaluator(FunctionMapper mapper, Class expfcls) {
 		_expfcls = expfcls;
+		_mapper = mapper;
 	}
 
 	//Evaluator//
@@ -65,6 +70,13 @@ public class SimpleEvaluator implements Evaluator {
 	public Object evaluate(Component comp, Expression expression)
 	throws XelException {
 		return expression.evaluate(getXelContext(comp));
+	}
+
+	/** Returns the implementaion class of the epxrerssion factory,
+	 * or null to use the default.
+	 */
+	public Class getExpressionFactoryClass() {
+		return _expfcls;
 	}
 
 	/** Returns the expression factory. */
@@ -89,23 +101,37 @@ public class SimpleEvaluator implements Evaluator {
 
 	/** Returns the function mapper, or null if not available.
 	 *
-	 * <p>Default: always null.
+	 * <p>Default: returns the function mapper passed thru
+	 * {@link #SimpleEvaluator}.
 	 *
 	 * @param ref the object,either page, component, or null.
 	 * It is passed to {@link #evaluate}
 	 */
 	public FunctionMapper getFunctionMapper(Object ref) {
-		return null;
+		return _mapper;
 	}
 	/** Returns the variable resolver, or null if not available.
-	 * <p>Default: it returns the variable resolver of
-	 * the current {@link RequestContext}, if any.
+	 *
+	 * <p>Default: it returns the variable resolver of the
+	 * current execution, if any.
+	 * Otherwise, it returns the current {@link RequestContext}, if any.
+	 * If both not available, null is returned.
 	 *
 	 * @param ref the object,either page, component, or null.
 	 * It is passed to {@link #evaluate}
 	 */
 	public VariableResolver getVariableResolver(Object ref) {
-		final RequestContext rc = RequestContexts.getCurrent();
-		return rc != null ? rc.getVariableResolver(): null;
+		final Execution exec = Executions.getCurrent();
+		VariableResolver resolver = exec.getVariableResolver();
+		if (resolver == null) {
+			final RequestContext rc = RequestContexts.getCurrent();
+			if (rc != null)
+				resolver = rc.getVariableResolver();
+			if (resolver == null)
+				return null;
+		}
+		if (resolver instanceof ExecutionResolver)
+			((ExecutionResolver)resolver).setSelf(ref);
+		return resolver;
 	}
 }

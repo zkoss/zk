@@ -28,7 +28,7 @@ import org.zkoss.idom.Namespace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.ui.xel.ExValue;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * Represents the compmonent infomation about the native components.

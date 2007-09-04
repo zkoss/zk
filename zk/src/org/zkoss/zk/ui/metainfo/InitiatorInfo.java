@@ -29,8 +29,8 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
-import org.zkoss.zk.ui.xel.ExValue;
-import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.Evaluator;
 
 /**
  * A initiator node on the ZUML page.
@@ -148,14 +148,15 @@ public class InitiatorInfo {
 
 	/** Creaetes and returns the initiator.
 	 */
-	public Initiator newInitiator(Page page) throws Exception {
+	public Initiator newInitiator(PageDefinition pgdef, Page page)
+	throws Exception {
 		if (_init instanceof Initiator)
 			return (Initiator)_init;
 
 		final Class cls;
 		if (_init instanceof ExValue) {
 			final String clsnm = (String)
-				((ExValue)_init).getValue(Executions.getEvaluator(page), page);
+				((ExValue)_init).getValue(pgdef.getEvaluator(), page);
 			if (clsnm == null || clsnm.length() == 0) {
 //				if (log.debugable()) log.debug("Ingore "+_init+" due to empty");
 				return null; //ignore it!!
@@ -174,8 +175,8 @@ public class InitiatorInfo {
 	}
 	/** Returns the arguments array (by evaluating EL if necessary).
 	 */
-	public Object[] getArguments(Page page) {
-		final Evaluator eval = Executions.getEvaluator(page);
+	public Object[] getArguments(PageDefinition pgdef, Page page) {
+		final Evaluator eval = pgdef.getEvaluator();
 		final Object[] args = new Object[_args.length];
 		for (int j = 0; j < args.length; ++j) //eval order is important
 			args[j] = _args[j].getValue(eval, page);

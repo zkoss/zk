@@ -25,7 +25,7 @@ import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.xel.ExValue;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * A definition of the variable resolver ({@link VariableResolver}).
@@ -89,7 +89,7 @@ public class VariableResolverInfo {
 
 	/** Creaetes and returns the variable resolver for the specified page.
 	 */
-	public VariableResolver newVariableResolver(Page page)
+	public VariableResolver newVariableResolver(PageDefinition pgdef, Page page)
 	throws Exception {
 		if (_resolver instanceof VariableResolver)
 			return (VariableResolver)_resolver;
@@ -97,7 +97,7 @@ public class VariableResolverInfo {
 		final Class cls;
 		if (_resolver instanceof ExValue) {
 			final String clsnm = (String)((ExValue)_resolver)
-				.getValue(Executions.getEvaluator(page), page);
+				.getValue(pgdef.getEvaluator(), page);
 			if (clsnm == null || clsnm.length() == 0) {
 				if (log.debugable()) log.debug("Ingore "+_resolver+" due to empty");
 				return null; //ignore it!!

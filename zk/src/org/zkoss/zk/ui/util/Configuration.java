@@ -1657,9 +1657,8 @@ public class Configuration {
 	/** Sets the implementation of the expression factory that shall
 	 * be used by the whole system.
 	 *
-	 * <p>Default: null - it means org.zkoss.xel.el21.ELFactory
-	 * or org.zkoss.xel.el.ELFactory depending on
-	 * the Web server supports JSP 2.1 or not.
+	 * <p>Default: null -- it means the org.zkoss.xel.el.ELFactory class
+	 * (it requires zcommons-el.jar).
 	 *
 	 * <p>Note: you can only specify an implementation that is compatible
 	 * with JSP EL here, since ZK's builtin pages depend on it.

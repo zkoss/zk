@@ -60,9 +60,9 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.impl.AbstractExecution;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
-import org.zkoss.zk.ui.xel.Evaluator;
-import org.zkoss.zk.ui.xel.SimpleEvaluator;
-import org.zkoss.zk.ui.xel.ExecutionResolver;
+import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.impl.SimpleEvaluator;
+import org.zkoss.zk.xel.impl.ExecutionResolver;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
@@ -79,7 +79,7 @@ public class ExecutionImpl extends AbstractExecution {
 	private final HttpServletResponse _response;
 	private final RequestContext _xelctx;
 	private final Map _attrs;
-	private MyEvaluator _eval;
+	private MyEval _eval;
 	private ExecutionResolver _resolver;
 	private boolean _voided;
 
@@ -148,7 +148,7 @@ public class ExecutionImpl extends AbstractExecution {
 		return Expressions.newExpressionFactory();
 	}
 
-	public Evaluator getEvaluator(Page page) {
+	public Evaluator getEvaluator(Page page, Class expfcls) {
 		if (page == null) {
 			page = getCurrentPage();
 			if (page == null) {
@@ -157,17 +157,13 @@ public class ExecutionImpl extends AbstractExecution {
 			}
 		}
 
-		if (_eval == null || _eval.page != page) {
-			Class expfcls = null;
-			if (page != null) {
-				//TODO: expflcs depends on the page
-			}
-			_eval = new MyEvaluator(page, expfcls);
-		}
+		if (_eval == null || _eval.page != page
+		|| _eval.getExpressionFactoryClass() != expfcls)
+			_eval = new MyEval(page, expfcls);
 		return _eval;
 	}
-	public Evaluator getEvaluator(Component comp) {
-		return getEvaluator(comp != null ? comp.getPage(): null);
+	public Evaluator getEvaluator(Component comp, Class expfcls) {
+		return getEvaluator(comp != null ? comp.getPage(): null, expfcls);
 	}
 
 	public Object evaluate(Component comp, String expr, Class expectedType) {
@@ -185,7 +181,7 @@ public class ExecutionImpl extends AbstractExecution {
 			return Classes.coerce(expectedType, expr);
 		}
 
-		final Evaluator eval = getEvaluator(page);
+		final Evaluator eval = getEvaluator(page, null);
 		final Expression expression = eval.parseExpression(expr, expectedType);
 		return self instanceof Page ?
 			eval.evaluate((Page)self, expression):
@@ -406,22 +402,15 @@ public class ExecutionImpl extends AbstractExecution {
 			return _ctx;
 		}
 	}
-	private class MyEvaluator extends SimpleEvaluator { //not serializable
+	private class MyEval extends SimpleEvaluator { //not serializable
 		private Page page;
 
-		private MyEvaluator(Page page, Class expfcls) {
-			super(expfcls);
+		private MyEval(Page page, Class expfcls) {
+			super(null, expfcls);
 			this.page = page;
 		}
 
 		//super//
-		public VariableResolver getVariableResolver(Object ref) {
-			final ExecutionResolver resolver =
-				(ExecutionResolver)ExecutionImpl.this.getVariableResolver();
-			resolver.setSelf(ref);
-				//it is not thread-safe, but OK since exec is single threaded
-			return resolver;
-		}
 		public FunctionMapper getFunctionMapper(Object ref) {
 			return page != null ? page.getFunctionMapper(): null;
 		}

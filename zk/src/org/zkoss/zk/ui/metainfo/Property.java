@@ -29,9 +29,10 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
-import org.zkoss.zk.ui.xel.Evaluator;
-import org.zkoss.zk.ui.xel.ExValue;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * Info about how to initialize a property (aka., a field of a component).
@@ -42,9 +43,10 @@ public class Property implements Condition, Serializable {
 	private static final Log log = Log.lookup(Property.class);
     private static final long serialVersionUID = 20060622L;
 
+	private final EvaluatorRef _evalr;
 	private final String _name;
 	private final ExValue _value;
-	private final Condition _cond;
+	private final ConditionImpl _cond;
 	/** Used to optimize {@link #resolve}. */
 	private transient Class _lastcls;
 	/** The method, or null if more than two methods are found
@@ -57,11 +59,16 @@ public class Property implements Condition, Serializable {
 	private transient Method[] _mtds;
 
 	/** Constructs a property with a class that is known in advance.
+	 * @exception IllegalArgumentException if evalr or name is null
 	 */
-	public Property(String name, String value, Condition cond) {
-		if (name == null)
+	public Property(EvaluatorRef evalr, String name, String value,
+	ConditionImpl cond) {
+		if (name == null || evalr == null)
 			throw new IllegalArgumentException();
+
+		_evalr = evalr;
 		_name = name;
+
 		_cond = cond;
 		_value = new ExValue(value, Object.class);
 			//type will be fixed when mapped to a method
@@ -86,14 +93,9 @@ public class Property implements Condition, Serializable {
 	public void setRawValue(String value) {
 		_value.setRawValue(value);
 	}
-	/** Returns the condition.
-	 */
-	public Condition getCondition() {
-		return _cond;
-	}
 
 	/** Resolves the method. */
-	private final void resolve(Evaluator eval, Class cls) {
+	private final void resolve(Class cls) {
 		final String mtdnm = Classes.toMethodName(_name, "set");
 		if (_value.isExpression()) {
 			_mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
@@ -127,28 +129,28 @@ public class Property implements Condition, Serializable {
 	 * Note: it does NOT call {@link #isEffective} and it doesn't coerce
 	 * the result (i.e., Object.class is assumed).
 	 */
-	public Object getValue(Evaluator eval, Component comp) {
-		return _value.getValue(eval, comp);
+	public Object getValue(Component comp) {
+		return _value.getValue(_evalr, comp);
 	}
 	/** Evaluates the value to an Object.
 	 * Note: it does NOT call {@link #isEffective} and it doesn't coerce
 	 * the result (i.e., Object.class is assumed).
 	 */
-	public Object getValue(Evaluator eval, Page page) {
-		return _value.getValue(eval, page);
+	public Object getValue(Page page) {
+		return _value.getValue(_evalr, page);
 	}
 	/** Assigns the value of this memeber to the specified component.
 	 *
 	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
 	 */
-	public void assign(Evaluator eval, Component comp) {
+	public void assign(Component comp) {
 		if (!isEffective(comp))
 			return; //ignored
 
 		try {
 			final Class cls = comp.getClass();
 			if (_lastcls != cls) {
-				resolve(eval, cls);
+				resolve(cls);
 				_lastcls = cls;
 			}
 
@@ -157,7 +159,7 @@ public class Property implements Condition, Serializable {
 			final Class type =
 				_mtd != null ? _mtd.getParameterTypes()[0]: Object.class;
 			_value.setExpectedType(type);
-			Object val = _value.getValue(eval, comp);
+			Object val = _value.getValue(_evalr, comp);
 
 			final Method mtd;
 			if (_mtd != null) {
@@ -191,10 +193,10 @@ public class Property implements Condition, Serializable {
 	}
 
 	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(comp);
+		return _cond == null || _cond.isEffective(_evalr, comp);
 	}
 	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(page);
+		return _cond == null || _cond.isEffective(_evalr, page);
 	}
 	public String toString() {
 		return "["+_name+"="+_value+']';

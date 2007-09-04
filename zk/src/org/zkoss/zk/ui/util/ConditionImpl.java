@@ -23,15 +23,16 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.xel.ExValue;
-import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.Evaluator;
 
 /**
- * An implementation of {@link Condition}.
+ * An utility to simplify the implementation of {@link Condition}.
+ * Note: it doesn't implement {@link Condition}.
  *
  * @author tomyeh
  */
-public class ConditionImpl implements Condition, java.io.Serializable {
+public class ConditionImpl implements java.io.Serializable {
     private static final long serialVersionUID = 20060622L;
 
 	private ExValue _if;
@@ -41,7 +42,7 @@ public class ConditionImpl implements Condition, java.io.Serializable {
 	 * are empty.
 	 * In other words, it is useful if you use null or empty to denote true.
 	 */
-	public static Condition getInstance(String ifc, String unless) {
+	public static ConditionImpl getInstance(String ifc, String unless) {
 		if ((ifc == null || ifc.length() == 0)
 		&& (unless == null || unless.length() == 0))
 			return null;
@@ -74,16 +75,25 @@ public class ConditionImpl implements Condition, java.io.Serializable {
 			new ExValue(cond, Boolean.class): null;
 	}
 
-	//Condition//
-	public boolean isEffective(Component comp) {
-		Evaluator eval = Executions.getEvaluator(comp);
+	/** Used to evaluate whether it is effective.
+	 *
+	 * @param eval the evaluator to evaluate this condition
+	 * @param comp used as the self variable. Ignored if null.
+	 * @since 3.0.0
+	 */
+	public boolean isEffective(Evaluator eval, Component comp) {
 		return (_if == null
 			|| ((Boolean)_if.getValue(eval, comp)).booleanValue())
 		&& (_unless == null
 			|| !((Boolean)_unless.getValue(eval, comp)).booleanValue());
 	}
-	public boolean isEffective(Page page) {
-		Evaluator eval = Executions.getEvaluator(page);
+	/** Used to evaluate whether it is effective.
+	 *
+	 * @param eval the evaluator to evaluate this condition
+	 * @param page used as the self variable. Ignored if null.
+	 * @since 3.0.0
+	 */
+	public boolean isEffective(Evaluator eval, Page page) {
 		return (_if == null
 			|| ((Boolean)_if.getValue(eval, page)).booleanValue())
 		&& (_unless == null

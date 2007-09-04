@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.xel;
+package org.zkoss.zk.xel.impl;
 
 import java.util.Collections;
 
@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
- * Represents a variable resolver.
+ * A variable resolver that is based on the specified execution.
  *
  * @author tomyeh
  * @since 3.0.0
@@ -56,6 +56,11 @@ public class ExecutionResolver implements VariableResolver {
 	 */
 	public void setSelf(Object self) {
 		_self = self;
+	}
+	/** Returns the self variable.
+	 */
+	public Object getSelf() {
+		return _self;
 	}
 
 	//-- VariableResolver --//

@@ -20,8 +20,8 @@ package org.zkoss.zk.ui.metainfo;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.xel.ExValue;
-import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * Represents a text.
@@ -30,9 +30,18 @@ import org.zkoss.zk.ui.xel.Evaluator;
  * @since 3.0.0
  */
 public class TextInfo {
+	private final EvaluatorRef _evalr;
 	private final ExValue _text;
 
-	public TextInfo(String text) {
+	/**
+	 * @param evalr the evaluator reference. It cannot be null.
+	 * Retrieve it from {@link LanguageDefinition#getEvaluatorRef}
+	 * or {@link PageDefinition#getEvaluatorRef}, depending which it
+	 * belongs.
+	 */
+	public TextInfo(EvaluatorRef evalr, String text) {
+		if (evalr == null) throw new IllegalArgumentException();
+		_evalr = evalr;
 		_text = text != null ? new ExValue(text, String.class): null;
 	}
 
@@ -44,12 +53,12 @@ public class TextInfo {
 
 	/** Returns the value after evaluation.
 	 */
-	public String getValue(Evaluator eval, Page page) {
-		return _text != null ? (String)_text.getValue(eval, page): null;
+	public String getValue(Page page) {
+		return _text != null ? (String)_text.getValue(_evalr, page): null;
 	}
 	/** Returns the value after evaluation.
 	 */
-	public String getValue(Evaluator eval, Component comp) {
-		return _text != null ? (String)_text.getValue(eval, comp): null;
+	public String getValue(Component comp) {
+		return _text != null ? (String)_text.getValue(_evalr, comp): null;
 	}
 }

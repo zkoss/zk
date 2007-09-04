@@ -26,7 +26,7 @@ import java.io.IOException;
 import org.zkoss.idom.Document;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -49,23 +49,28 @@ public class Executions {
 
 	/** Returns the evaluator of the current execution.
 	 * It is usually used to parse the expression into {@link org.zkoss.xel.Expression}
-	 * or used with {@link org.zkoss.zk.ui.xel.ExValue}.
+	 * or used with {@link org.zkoss.zk.xel.ExValue}.
 	 * for performance improvement.
 	 *
 	 * @param page the page that this evaluator is associated.
 	 * If null, the current page and then the first page is assumed.
+	 * @param expfcls the implementation of {@link org.zkoss.xel.ExpressionFactory},
+	 * or null to use the default ({@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}.
 	 * @since 3.0.0
 	 */
-	public static final Evaluator getEvaluator(Page page) {
-		return getCurrent().getEvaluator(page);
+	public static final Evaluator getEvaluator(Page page, Class expfcls) {
+		return getCurrent().getEvaluator(page, expfcls);
 	}
 	/** Returns the evaluator of the current execution.
 	 * It is a shortcut of getEvaluator(comp != null ? comp.getPage(): null)
 	 *
+	 * @param comp the component to retrieve the page for the evaluator
+	 * @param expfcls the implementation of {@link org.zkoss.xel.ExpressionFactory},
+	 * or null to use the default ({@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}.
 	 * @since 3.0.0
 	 */
-	public static final Evaluator getEvaluator(Component comp) {
-		return getCurrent().getEvaluator(comp);
+	public static final Evaluator getEvaluator(Component comp, Class expfcls) {
+		return getCurrent().getEvaluator(comp, expfcls);
 	}
 
 	/** Evluates the specified expression by use of the current context
@@ -78,7 +83,7 @@ public class Executions {
 	 *
 	 * <p>For better performance, you can use the instance returned by
 	 *{@link #getEvaluator} to parse and cached the parsed expression.
-	 * {@link org.zkoss.zk.ui.xel.ExValue} is a utility class to simply
+	 * {@link org.zkoss.zk.xel.ExValue} is a utility class to simply
 	 * the task.
 	 *
 	 * @param comp as the self variable (ignored if null)
@@ -97,7 +102,7 @@ public class Executions {
 	 *
 	 * <p>For better performance, you can use the instance returned by
 	 *{@link #getEvaluator} to parse and cached the parsed expression.
-	 * {@link org.zkoss.zk.ui.xel.ExValue} is a utility class to simply
+	 * {@link org.zkoss.zk.xel.ExValue} is a utility class to simply
 	 * the task.
 	 *
 	 * @param page used as the self variable and to retrieve the function

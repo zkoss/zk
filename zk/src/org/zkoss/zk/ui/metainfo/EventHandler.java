@@ -19,6 +19,8 @@ package org.zkoss.zk.ui.metainfo;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.ConditionImpl;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * An event handler of a component definition ({@link ComponentDefinition}).
@@ -28,10 +30,26 @@ import org.zkoss.zk.ui.util.Condition;
 public class EventHandler implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;
 
+	private final EvaluatorRef _evalr;
 	private final ZScript _zscript;
-	private final Condition _cond;
+	private final ConditionImpl _cond;
 
-	public EventHandler(ZScript zscript, Condition cond) {
+	public EventHandler(ZScript zscript, ConditionImpl cond) {
+		if (zscript == null)
+			throw new IllegalArgumentException();
+		if (cond != null && zscript.getEvaluatorRef() == null)
+			throw new IllegalArgumentException("evalr is required");
+
+		_evalr = null; //to save the size of serialized, _zscript.getEvaluatorRef is retrieved on demand
+		_zscript = zscript;
+		_cond = cond;
+	}
+	/**
+	 * @param evalr the evaluator reference. It is required if cond is not null.
+	 * @since 3.0.0
+	 */
+	public EventHandler(EvaluatorRef evalr, ZScript zscript, ConditionImpl cond) {
+		_evalr = evalr;
 		_zscript = zscript;
 		_cond = cond;
 	}
@@ -42,18 +60,23 @@ public class EventHandler implements Condition, java.io.Serializable {
 		return _zscript;
 	}
 
-	/** Returns the condition.
-	 * @since 3.0.0
+	/** Returns the evaluator reference, or null if not available.
 	 */
-	public Condition getCondition() {
+	/*package*/ EvaluatorRef getEvaluatorRef() {
+		return _evalr != null ? _evalr: _zscript.getEvaluatorRef();
+	}
+	/** Returns the condition, or null if not available (i.e., always
+	 * effective).
+	 */
+	/*package*/ ConditionImpl getCondition() {
 		return _cond;
 	}
 
 	//Condition//
 	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(comp);
+		return _cond == null || _cond.isEffective(getEvaluatorRef(), comp);
 	}
 	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(page);
+		return _cond == null || _cond.isEffective(getEvaluatorRef(), page);
 	}
 }

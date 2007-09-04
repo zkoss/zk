@@ -46,15 +46,18 @@ import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.PageConfig;
-import org.zkoss.zk.ui.xel.Evaluator;
-import org.zkoss.zk.ui.xel.ObjectEvaluator;
-import org.zkoss.zk.ui.xel.ExValue;
+import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.impl.SimpleEvaluator;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * A page definition.
  * It represents a ZUL page.
  *
  * <p>Note: it is not thread-safe.
+ *
+ * <p>Note: it is not serializable.
  *
  * @author tomyeh
  * @see ComponentDefinition
@@ -70,6 +73,8 @@ public class PageDefinition extends NodeInfo {
 	private List _taglibs;
 	/** The evaluator. */
 	private Evaluator _eval;
+	/** The evaluator reference. */
+	private EvaluatorRef _evalr;
 	/** The function mapper. */
 	private FunctionMapper _mapper;
 	/* List(InitiatorInfo). */
@@ -251,9 +256,9 @@ public class PageDefinition extends NodeInfo {
 		for (Iterator it = _initdefs.iterator(); it.hasNext();) {
 			final InitiatorInfo def = (InitiatorInfo)it.next();
 			try {
-				final Initiator init = def.newInitiator(page);
+				final Initiator init = def.newInitiator(this, page);
 				if (init != null) {
-					init.doInit(page, def.getArguments(page));
+					init.doInit(page, def.getArguments(this, page));
 					inits.add(init);
 				}
 			} catch (Throwable ex) {
@@ -281,7 +286,8 @@ public class PageDefinition extends NodeInfo {
 			for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
 				final VariableResolverInfo def = (VariableResolverInfo)it.next();
 				try {
-					VariableResolver resolver = def.newVariableResolver(page);
+					VariableResolver resolver =
+						def.newVariableResolver(this, page);
 					if (resolver != null) 
 						page.addVariableResolver(resolver);
 				} catch (Throwable ex) {
@@ -309,7 +315,7 @@ public class PageDefinition extends NodeInfo {
 
 		final StringBuffer sb = new StringBuffer(256);
 		for (Iterator it = _headerdefs.iterator(); it.hasNext();)
-			sb.append(((HeaderInfo)it.next()).toHTML(page)).append('\n');
+			sb.append(((HeaderInfo)it.next()).toHTML(this, page)).append('\n');
 		return sb.toString();
 	}
 
@@ -435,7 +441,7 @@ public class PageDefinition extends NodeInfo {
 		if (_rootAttrs == null || _rootAttrs.isEmpty())
 			return "";
 
-		final Evaluator eval = Executions.getEvaluator(page);
+		final Evaluator eval = getEvaluator();
 		final StringBuffer sb = new StringBuffer(256);
 		for (Iterator it = _rootAttrs.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
@@ -521,7 +527,7 @@ public class PageDefinition extends NodeInfo {
 		_eval = null; //ask for re-gen
 		_mapper = null; //ask for re-parse
 	}
-	/** Returns the evaluator based on this language definition.
+	/** Returns the evaluator based on this page definition (never null).
 	 * @since 3.0.0
 	 */
 	public Evaluator getEvaluator() {
@@ -530,8 +536,21 @@ public class PageDefinition extends NodeInfo {
 		return _eval;
 	}
 	private Evaluator newEvaluator() {
-		return new ObjectEvaluator(_expfcls, getFunctionMapper());
+		return new SimpleEvaluator(getFunctionMapper(), _expfcls);
 	}
+	/** Returns the evaluator reference (never null).
+	 * <p>This method is used only for implementation only.
+	 * @since 3.0.0
+	 */
+	public EvaluatorRef getEvaluatorRef() {
+		if (_evalr == null)
+			_evalr = newEvaluatorRef();
+		return _evalr;
+	}
+	private EvaluatorRef newEvaluatorRef() {
+		return new PageEvalRef(this);
+	}
+
 	/** Returns the function mapper, or null if no mappter at all.
 	 */
 	public FunctionMapper getFunctionMapper() {
@@ -575,5 +594,50 @@ public class PageDefinition extends NodeInfo {
 	//Object//
 	public String toString() {
 		return "[PageDefinition:"+(_id != null ? _id: _title)+']';
+	}
+}
+
+/*package*/ class PageEvalRef extends AbstractEvalRef
+implements java.io.Serializable {
+	private transient PageDefinition _pagedef;
+	/** Used only if _pagedef == null. */
+	private transient Evaluator _eval;
+	/** The implementation of the expression factory.
+	 * Used oly if _pagedef == null.
+	 */
+	private Class _expfcls;
+	/** The function mapper for the evaluator.
+	 * Used oly if _pagedef == null.
+	 */
+	private FunctionMapper _mapper;
+
+	/*package*/ PageEvalRef(PageDefinition pagedef) {
+		_pagedef = pagedef;
+	}
+
+	//EvaluatorRef//
+	public Evaluator getEvaluator() {
+		if (_pagedef != null)
+			return _pagedef.getEvaluator();
+		if (_eval == null)
+			_eval = new SimpleEvaluator(_mapper, _expfcls);
+		return _eval;
+	}
+	public PageDefinition getPageDefinition() {
+		return _pagedef;
+	}
+
+	//Serializable//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+		s.writeObject(_pagedef != null ? _pagedef.getExpressionFactoryClass(): _expfcls);
+		s.writeObject(_pagedef != null ? _pagedef.getFunctionMapper(): _mapper);
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		_expfcls = (Class)s.readObject();
+		_mapper = (FunctionMapper)s.readObject();
 	}
 }

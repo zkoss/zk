@@ -38,9 +38,10 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
-import org.zkoss.zk.ui.xel.Evaluator;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * Represents a componennt instance defined in a ZUML page.
@@ -50,11 +51,13 @@ import org.zkoss.zk.ui.xel.Evaluator;
  *
  * <p>Note:it is not thread-safe.
  *
+ * <p>It is serializable.
+ *
  * @author tomyeh
  */
 public class ComponentInfo extends NodeInfo
 implements Cloneable, Condition, java.io.Serializable {
-	private transient PageDefinition _pagedef;
+	private final EvaluatorRef _evalr;
 	private transient NodeInfo _parent; //it is restored by its parent
 	private final ComponentDefinition _compdef;
 	/** The implemetation class (use). */
@@ -70,7 +73,7 @@ implements Cloneable, Condition, java.io.Serializable {
 	/** The effectiveness condition (see {@link #isEffective}).
 	 * If null, it means effective.
 	 */
-	private Condition _cond;
+	private ConditionImpl _cond;
 	/** The fulfill condition.
 	 */
 	private String _fulfill;
@@ -96,12 +99,13 @@ implements Cloneable, Condition, java.io.Serializable {
 			throw new IllegalArgumentException("parent and compdef required");
 
 		_parent = parent;
-		_pagedef = parent.getPageDefinition();
 		_compdef = compdef;
 		_tag = tag;
 		_parent.appendChildDirectly(this);
+		_evalr = parent.getEvaluatorRef();
 	}
-	/** Constructs the info about how to create a component.
+	/** Constructs the info about how to create a component that is not
+	 * a dynamic tag.
 	 * @param parent the parent; never null.
 	 */
 	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef) {
@@ -252,13 +256,13 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * for it.
 	 * @param value the value. It might contain expressions (${}).
 	 */
-	public void addProperty(String name, String value, Condition cond) {
+	public void addProperty(String name, String value, ConditionImpl cond) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("name");
 
 		if (_props == null)
 			_props = new LinkedList();
-		_props.add(new Property(name, value, cond));
+		_props.add(new Property(_evalr, name, value, cond));
 	}
 
 	/** Adds an event handler.
@@ -266,14 +270,14 @@ implements Cloneable, Condition, java.io.Serializable {
 	 * @param name the event name.
 	 * @param zscript the script.
 	 */
-	public void addEventHandler(String name, ZScript zscript, Condition cond) {
+	public void addEventHandler(String name, ZScript zscript, ConditionImpl cond) {
 		if (name == null || zscript == null)
 			throw new IllegalArgumentException("name and zscript cannot be null");
 		//if (!Events.isValid(name))
 		//	throw new IllegalArgumentException("Invalid event name: "+name);
 			//AbstractParser has checked it, so no need to check again
 
-		final EventHandler evthd = new EventHandler(zscript, cond);
+		final EventHandler evthd = new EventHandler(_evalr, zscript, cond);
 		if (_evthds == null)
 			_evthds = new EventHandlerMap();
 		_evthds.add(name, evthd);
@@ -281,7 +285,7 @@ implements Cloneable, Condition, java.io.Serializable {
 
 	/** Sets the effectiveness condition.
 	 */
-	public void setCondition(Condition cond) {
+	public void setCondition(ConditionImpl cond) {
 		_cond = cond;
 	}
 
@@ -300,9 +304,9 @@ implements Cloneable, Condition, java.io.Serializable {
 		return _forEach == null ? null:
 			comp != null ?
 				ForEachImpl.getInstance(
-					comp, _forEach[0], _forEach[1], _forEach[2]):
+					_evalr, comp, _forEach[0], _forEach[1], _forEach[2]):
 				ForEachImpl.getInstance(
-					page, _forEach[0], _forEach[1], _forEach[2]);
+					_evalr, page, _forEach[0], _forEach[1], _forEach[2]);
 	}
 	/** Sets the forEach attribute, which is usually an expression.
 	 * @param expr the expression to return a collection of objects, or
@@ -395,10 +399,9 @@ implements Cloneable, Condition, java.io.Serializable {
 			((ComponentCtrl)comp).addSharedEventHandlerMap(_evthds);
 
 		if (_props != null) {
-			final Evaluator eval = Executions.getEvaluator(comp);
 			for (Iterator it = _props.iterator(); it.hasNext();) {
 				final Property prop = (Property)it.next();
-				prop.assign(eval, comp);
+				prop.assign(comp);
 			}
 		}
 	}
@@ -421,15 +424,14 @@ implements Cloneable, Condition, java.io.Serializable {
 			propmap = new HashMap();
 
 		if (_props != null) {
-			final Evaluator eval = Executions.getEvaluator(owner);
 			for (Iterator it = _props.iterator(); it.hasNext();) {
 				final Property prop = (Property)it.next();
 				if (parent != null) {
 					if (prop.isEffective(parent))
-						propmap.put(prop.getName(), prop.getValue(eval, parent));
+						propmap.put(prop.getName(), prop.getValue(parent));
 				} else {
 					if (prop.isEffective(owner))
-						propmap.put(prop.getName(), prop.getValue(eval, owner));
+						propmap.put(prop.getName(), prop.getValue(owner));
 				}
 			}
 		}
@@ -463,18 +465,21 @@ implements Cloneable, Condition, java.io.Serializable {
 
 	//Condition//
 	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(comp);
+		return _cond == null || _cond.isEffective(_evalr, comp);
 	}
 	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(page);
+		return _cond == null || _cond.isEffective(_evalr, page);
 	}
 
 	//NodeInfo//
 	public PageDefinition getPageDefinition() {
-		return _pagedef;
+		return _evalr.getPageDefinition();
 	}
 	public NodeInfo getParent() {
 		return _parent;
+	}
+	public EvaluatorRef getEvaluatorRef() {
+		return _evalr;
 	}
 
 	//Cloneable//
