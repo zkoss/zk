@@ -289,9 +289,10 @@ public class Parser {
 					new VariableResolverInfo(locateClass(clsnm)));
 		} else if ("component".equals(target)) { //declare a component
 			final String name = (String)params.remove("name");
-			noELnorEmpty("name", name, pi); //note: macro-uri supports EL
+			noELnorEmpty("name", name, pi); //note: macroURI supports EL
 
-			final String macroURI = (String)params.remove("macro-uri");
+			String macroURI = (String)params.remove("macroURI");
+			if (macroURI == null) macroURI = (String)params.remove("macro-uri"); //backward compatible (2.4.x)
 			final String extds = (String)params.remove("extends");
 			final String clsnm = (String)params.remove("class");
 			ComponentDefinition compdef;
@@ -300,7 +301,7 @@ public class Parser {
 
 				final String inline = (String)params.remove("inline");
 				noEL("inline", inline, pi);
-				noEL("macro-uri", macroURI, pi);
+				noEL("macroURI", macroURI, pi);
 					//no EL because pagedef must be loaded to resolve
 					//the impl class before creating an instance of macro
 
@@ -345,9 +346,11 @@ public class Parser {
 
 			pgdef.addComponentDefinition(compdef);
 
-			final String moldnm = (String)params.remove("mold-name");
-			noEL("mold-name", moldnm, pi);
-			final String moldURI = (String)params.remove("mold-uri");
+			String moldnm = (String)params.remove("moldName");
+			if (moldnm == null) moldnm = (String)params.remove("mold-name"); //backward comaptible (2.4.x)
+			noEL("moldName", moldnm, pi);
+			String moldURI = (String)params.remove("moldURI");
+			if (moldURI == null) moldURI = (String)params.remove("mold-uri"); //backward comaptible (2.4.x)
 			if (!isEmpty(moldURI))
 				compdef.addMold(isEmpty(moldnm) ? "default": moldnm,
 					toAbsoluteURI(moldURI, true));
@@ -387,7 +390,7 @@ public class Parser {
 			} else if ("id".equals(nm)) {
 				pgdef.setId(val);
 			} else if ("zscriptLanguage".equals(nm)
-			|| "zscript-language".equals(nm)) { //backward compatible with 2.4
+			|| "zscript-language".equals(nm)) { //backward compatible with 2.4.x
 				noELnorEmpty("zscriptLanguage", val, pi);
 				pgdef.setZScriptLanguage(val);
 			} else if ("cacheable".equals(nm)) {
@@ -402,8 +405,8 @@ public class Parser {
 			} else if ("xml".equals(nm)) {
 				noELnorEmpty("xml", val, pi);
 				pgdef.setFirstLine("<?xml " + val + "?>");
-			} else if ("xel-class".equals(nm)) {
-				noELnorEmpty("xel-class", val, pi);
+			} else if ("evaluator".equals(nm)) {
+				noELnorEmpty("evaluator", val, pi);
 				pgdef.setExpressionFactoryClass(locateClass(val));
 			} else {
 				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());

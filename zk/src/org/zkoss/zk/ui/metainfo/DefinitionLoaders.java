@@ -402,15 +402,15 @@ public class DefinitionLoaders {
 			final String name =
 				IDOMs.getRequiredElementValue(el, "component-name");
 
-			final String macroUri = el.getElementValue("macro-uri", true);
+			final String macroURI = el.getElementValue("macro-uri", true);
 			final ComponentDefinitionImpl compdef;
-			if (macroUri != null && macroUri.length() != 0) {
+			if (macroURI != null && macroURI.length() != 0) {
 				if (log.finerable()) log.finer("macro component definition: "+name);
 
 				final String inline = el.getElementValue("inline", true);
 				compdef = (ComponentDefinitionImpl)
 					langdef.getMacroDefinition(
-						name, macroUri, "true".equals(inline), null);
+						name, macroURI, "true".equals(inline), null);
 
 				final String clsnm = el.getElementValue("component-class", true);
 				if (clsnm != null && clsnm.length() > 0) {

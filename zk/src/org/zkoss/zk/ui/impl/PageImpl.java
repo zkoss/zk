@@ -114,7 +114,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
     private static final long serialVersionUID = 20070413L;
 
 	/** URI for redrawing as a desktop or part of another desktop. */
-	private final ExValue _dkUri, _pgUri;
+	private final ExValue _dkURI, _pgURI;
 	/** The component that includes this page, or null if not included. */
 	private transient Component _owner;
 	/** Used to retore _owner. */
@@ -183,8 +183,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public PageImpl(LanguageDefinition langdef,
 	ComponentDefinitionMap compdefs, String path, String zslang) {
 		_langdef = langdef;
-		_dkUri = new ExValue(_langdef.getDesktopURI(), String.class);
-		_pgUri = new ExValue(_langdef.getPageURI(), String.class);
+		_dkURI = new ExValue(_langdef.getDesktopURI(), String.class);
+		_pgURI = new ExValue(_langdef.getPageURI(), String.class);
 		_compdefs = compdefs != null ? compdefs:
 			new ComponentDefinitionMap(
 				_langdef.getComponentDefinitionMap().isCaseInsensitive());
@@ -208,8 +208,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 */
 	public PageImpl(Richlet richlet, String path) {
 		_langdef = richlet.getLanguageDefinition();
-		_dkUri = new ExValue(_langdef.getDesktopURI(), String.class);
-		_pgUri = new ExValue(_langdef.getPageURI(), String.class);
+		_dkURI = new ExValue(_langdef.getDesktopURI(), String.class);
+		_pgURI = new ExValue(_langdef.getPageURI(), String.class);
 		_compdefs = new ComponentDefinitionMap(
 			_langdef.getComponentDefinitionMap().isCaseInsensitive());
 		_path = path != null ? path: "";
@@ -806,7 +806,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final boolean bIncluded = asyncUpdate || exec.isIncluded()
 			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null;
 		final String uri = (String)
-			(bIncluded ? _pgUri: _dkUri)
+			(bIncluded ? _pgURI: _dkURI)
 				.getValue(_langdef.getEvaluator(), this);
 				//desktop and page URI is defined in language
 

@@ -88,7 +88,7 @@ public class Configuration {
 	private final List
 		_uriIntcps = new LinkedList(), _reqIntcps = new LinkedList();
 	private final Map _prefs  = Collections.synchronizedMap(new HashMap()),
-		_errUris  = Collections.synchronizedMap(new HashMap());
+		_errURIs  = Collections.synchronizedMap(new HashMap());
 	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
 	private final Map _richlets = new HashMap();
 	/** Map(String path, [String name, boolean wildcard]). */
@@ -97,8 +97,8 @@ public class Configuration {
 	private final Map _errpgs = new HashMap(3);
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
-	private final List _themeUris = new LinkedList();
-	private transient String[] _roThemeUris = new String[0];
+	private final List _themeURIs = new LinkedList();
+	private transient String[] _roThemeURIs = new String[0];
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls, _spushcls;
 	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
@@ -121,9 +121,9 @@ public class Configuration {
 	/** Contructor.
 	 */
 	public Configuration() {
-		_errUris.put(new Integer(302), "");
-		_errUris.put(new Integer(401), "");
-		_errUris.put(new Integer(403), "");
+		_errURIs.put(new Integer(302), "");
+		_errURIs.put(new Integer(401), "");
+		_errURIs.put(new Integer(403), "");
 	}
 
 	/** Returns the Web application that this configuration belongs to,
@@ -856,10 +856,10 @@ public class Configuration {
 	public void addThemeURI(String uri) {
 		if (uri == null || uri.length() == 0)
 			throw new IllegalArgumentException("empty");
-		synchronized (_themeUris) {
-			_themeUris.add(uri);
-			_roThemeUris =
-				(String[])_themeUris.toArray(new String[_themeUris.size()]);
+		synchronized (_themeURIs) {
+			_themeURIs.add(uri);
+			_roThemeURIs =
+				(String[])_themeURIs.toArray(new String[_themeURIs.size()]);
 		}
 	}
 	/** Returns a readonly list of the URI of the CSS resources that will be
@@ -868,7 +868,7 @@ public class Configuration {
 	 * <p>Default: an array with zero length.
 	 */
 	public String[] getThemeURIs() {
-		return _roThemeUris;
+		return _roThemeURIs;
 	}
 
 	/**
@@ -1120,7 +1120,7 @@ public class Configuration {
 	public String addClientErrorReload(int errCode, String uri) {
 		if (uri == null)
 			return removeClientErrorReload(errCode);
-		return (String)_errUris.put(new Integer(errCode), uri);
+		return (String)_errURIs.put(new Integer(errCode), uri);
 	}
 	/** Removes the URI to redirect to, when ZK Client Engine receives
 	 * an error.
@@ -1130,14 +1130,14 @@ public class Configuration {
 	 * @since 3.0.0
 	 */
 	public String removeClientErrorReload(int errCode) {
-		return (String)_errUris.remove(new Integer(errCode));
+		return (String)_errURIs.remove(new Integer(errCode));
 	}
 	/** Returns the URI that is associated with the specified error code,
 	 * or null if no URI is associated.
 	 * @since 3.0.0
 	 */
 	public String getClientErrorReload(int errCode) {
-		return (String)_errUris.get(new Integer(errCode));
+		return (String)_errURIs.get(new Integer(errCode));
 	}
 	/** Returns a readonly array of all error codes that are associated
 	 * with URI to redirect to.
@@ -1146,7 +1146,7 @@ public class Configuration {
 	 * @since 3.0.0
 	 */
 	public int[] getClientErrorReloadCodes() {
-		final Set ks = _errUris.keySet();
+		final Set ks = _errURIs.keySet();
 		final int[] cers = new int[ks.size()];
 		int j = 0;
 		for (Iterator it = ks.iterator(); j < cers.length && it.hasNext();) {
