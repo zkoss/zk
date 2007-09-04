@@ -252,7 +252,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Caption</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${legend ? '~./zul/html/caption-legend.dsp': '~./zul/html/caption.dsp'}</mold-uri>
+			<mold-uri>${self.legend ? '~./zul/html/caption-legend.dsp': '~./zul/html/caption.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -524,7 +524,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Listitem</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${listbox.mold == 'select' ? '~./zul/html/listitem-select.dsp': '~./zul/html/listitem.dsp'}</mold-uri>
+			<mold-uri>${self.listbox.mold == 'select' ? '~./zul/html/listitem-select.dsp': '~./zul/html/listitem.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -678,7 +678,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tab</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${tabbox.orient == 'vertical' ? '~./zul/html/vtab.dsp': '~./zul/html/tab.dsp'}</mold-uri>
+			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab.dsp': '~./zul/html/tab.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -686,7 +686,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${orient == 'vertical' ? '~./zul/html/vtabbox.dsp': '~./zul/html/tabbox.dsp'}</mold-uri>
+			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox.dsp': '~./zul/html/tabbox.dsp'}</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion</mold-name>
@@ -698,7 +698,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabpanel</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd.dsp': tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel.dsp': '~./zul/html/tabpanel.dsp'}</mold-uri>
+			<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd.dsp': self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel.dsp': '~./zul/html/tabpanel.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -706,7 +706,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabpanels</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${parent.orient == 'vertical' ? '~./zul/html/vtabpanels.dsp': '~./zul/html/tabpanels.dsp'}</mold-uri>
+			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabpanels.dsp': '~./zul/html/tabpanels.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -714,7 +714,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabs</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${parent.orient == 'vertical' ? '~./zul/html/vtabs.dsp': '~./zul/html/tabs.dsp'}</mold-uri>
+			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabs.dsp': '~./zul/html/tabs.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
