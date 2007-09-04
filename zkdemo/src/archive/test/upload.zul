@@ -21,7 +21,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Post your striking photos.
 	<separator/>
 
-	<label id="${empty param.pageId ? 'some': param.pageId}" value="${self.id}"/>
+	Page ID: <label id="${empty param.pageId ? 'some': param.pageId}" value="${self.id}"/>
+	vs ${page.id}
 	<image id="image"/>
 	<button label="Upload">
 		<attribute name="onClick">{
