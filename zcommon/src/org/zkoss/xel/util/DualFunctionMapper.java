@@ -61,13 +61,29 @@ public class DualFunctionMapper implements FunctionMapper {
 	}
 
 	//-- FunctionMapper --//
-	public Function resolveFunction(String prefix, String name) {
-		Function m = _first.resolveFunction(prefix, name);
-		return m != null ? m: _second.resolveFunction(prefix, name);
+	public Collection getFunctionNames() {
+		return combine(
+			_first != null ? _first.getFunctionNames(): null,
+			_second != null ? _second.getFunctionNames(): null);
 	}
-	public Collection getImportedClasses() {
+	public Function resolveFunction(String prefix, String name) {
+		Function m = _first != null ? _first.resolveFunction(prefix, name): null;
+		return m != null ? m:
+			_second != null ? _second.resolveFunction(prefix, name): null;
+	}
+	public Collection getClassNames() {
+		return combine(
+			_first != null ? _first.getClassNames(): null,
+			_second != null ? _second.getClassNames(): null);
+	}
+	public Class resolveClass(String name) {
+		Class m = _first != null ? _first.resolveClass(name): null;
+		return m != null ? m:
+			_second != null ? _second.resolveClass(name): null;
+	}
+	private Collection combine(Collection first, Collection second) {
 		return DualCollection.combine(
-			_first != null ? _first.getImportedClasses(): null,
-			_second != null ? _second.getImportedClasses(): null);
+			first != null && !first.isEmpty() ? first: null,
+			second != null && !second.isEmpty() ? second: null);
 	}
 }

@@ -22,17 +22,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.MissingResourceException;
 import java.net.URL;
-import java.io.Serializable;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.resource.Locator;
@@ -48,6 +44,7 @@ import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.MethodFunction;
+import org.zkoss.xel.util.TaglibMapper;
 
 /**
  * Utilities to handle taglib.
@@ -73,54 +70,74 @@ public class Taglibs {
 		if (taglibs == null || taglibs.isEmpty())
 			return null;
 
-		final Map mappers = new HashMap();
-		for (Iterator it = taglibs.iterator(); it.hasNext();) {
-			final Taglib taglib = (Taglib)it.next();
-			final String uri = taglib.getURI();
-			URL url = uri.indexOf("://") > 0 ? null: loc.getResource(uri);
-			if (url == null) {
-				url = Taglibs.getDefaultURL(uri);
-				if (url == null)
-					throw new MissingResourceException(
-						"Taglib not found: "+uri, loc.getClass().getName(), uri);
-			}
-
-			final Map mtds = (Map)_reces.get(url);
-//			if (D.ON && log.finerable()) log.finer("Methods for "+taglib.getPrefix()+": "+mtds);
-			if (!mtds.isEmpty())
-				mappers.put(taglib.getPrefix(), mtds);
-		}
-		return new Mapper(mappers);
+		final TaglibMapper mapper = new TaglibMapper();
+		for (Iterator it = taglibs.iterator(); it.hasNext();)
+			mapper.load((Taglib)it.next(), loc);
+		return mapper;
 	}
 
 	/** Loads functions defined in the specified URL.
-	 * @return a map of function: (String name, Function mtd).
+	 *
+	 * <p>Note: this method will cache the result, so next invocation
+	 * with the same xmlURL will read directly from the cache.
+	 *
+	 * @return a map of functions: (String name, Function mtd).
 	 */
-	public static final Map loadFunctions(URL xmlUrl) throws Exception {
-//		if (log.debugable()) log.debug(MCommon.FILE_OPENING, xmlUrl);
-		final Element root =
-			new SAXBuilder(true, false, true).build(xmlUrl).getRootElement();
-			//We have to turn on namespace because xml schema might be used
-		return loadFunctions(root);
+	public static final Map loadFunctions(URL xmlURL) throws Exception {
+		return load(xmlURL)[0];
 	}
 	/** Loads functions defined in the specified DOM.
+	 *
+	 * <p>Unlike {@link #loadFunctions(URL)}, this method
+	 * doesn't use cache.
+	 *
 	 * @return a map of function: (String name, Function mtd).
 	 */
 	public static final Map loadFunctions(Element root) throws Exception {
+		return load(root)[0];
+	}
+	/** Loads functions and imports defined in the specified URL.
+	 *
+	 * <p>Note: this method will cache the result, so next invocation
+	 * with the same xmlURL will read directly from the cache.
+	 *
+	 * @return a two-element array
+	 * [Map&lt;String nm, Function mtd&gt;, Map&lt;String nm, Class cls&gt;].
+	 * The first element is the map of the functions.
+	 * The second element is the map of classes to import.
+	 * @since 3.0.0
+	 */
+	public static final Map[] load(URL xmlURL) throws Exception {
+		return (Map[])_reces.get(xmlURL);
+	}
+	/** Loads functions and imports defined in the specified DOM.
+	 *
+	 * <p>Unlike {@link #loadFunctions(URL)}, this method
+	 * doesn't use cache.
+	 *
+	 * @return a two-element array
+	 * [Map&lt;String nm, Function mtd&gt;, Map&lt;String nm, Class cls&gt;].
+	 * The first element is the map of the functions.
+	 * The second element is the map of classes to import.
+	 * @since 3.0.0
+	 */
+	public static final Map[] load(Element root) throws Exception {
 		final Map mtds = new HashMap();
+		final Map clses = new HashMap();
+
 		Exception excp = null;
 		for (Iterator it = root.getElements("function").iterator();
 		it.hasNext();) {
 			final Element e = (Element)it.next();
 
 			final String name = IDOMs.getRequiredElementValue(e, "name");
-			final String clsName = IDOMs.getRequiredElementValue(e, "function-class");
+			final String clsnm = IDOMs.getRequiredElementValue(e, "function-class");
 			final String sig = IDOMs.getRequiredElementValue(e, "function-signature");
 			final Class cls;
 			try {
-				cls = Classes.forNameByThread(clsName);
+				cls = Classes.forNameByThread(clsnm);
 			} catch (ClassNotFoundException ex) {
-				log.error("Class not found: "+clsName+", "+e.getLocator(), ex);
+				log.error("Class not found: "+clsnm+", "+e.getLocator(), ex);
 				excp = ex;
 				continue; //to report as many errors as possible
 			}
@@ -132,11 +149,11 @@ public class Taglibs {
 				else
 					log.error("Not a static method: "+mtd);
 			} catch (ClassNotFoundException ex) {
-				log.error("Relavant class not found when loading "+clsName+", "+e.getLocator(), ex);
+				log.error("Relavant class not found when loading "+clsnm+", "+e.getLocator(), ex);
 				excp = ex;
 				continue;
 			} catch (NoSuchMethodException ex) {
-				log.error("Method not found in "+clsName+": "+sig+" "+e.getLocator(), ex);
+				log.error("Method not found in "+clsnm+": "+sig+" "+e.getLocator(), ex);
 				excp = ex;
 				continue;
 			} catch (IllegalSyntaxException ex) {
@@ -145,9 +162,23 @@ public class Taglibs {
 				continue;
 			}
 		}
+
+		for (Iterator it = root.getElements("import").iterator();
+		it.hasNext();) {
+			final Element e = (Element)it.next();
+			final String name = IDOMs.getRequiredElementValue(e, "import-name");
+			final String clsnm = IDOMs.getRequiredElementValue(e, "import-class");
+			try {
+				clses.put(name, Classes.forNameByThread(clsnm));
+			} catch (ClassNotFoundException ex) {
+				log.error("Class not found: "+clsnm+", "+e.getLocator(), ex);
+				excp = ex;
+			}
+		}
+
 		if (excp != null)
 			throw excp;
-		return mtds;
+		return new Map[] {mtds, clses};
 	}
 
 	static {
@@ -159,76 +190,19 @@ public class Taglibs {
 		}
 	}
 
-	private static class Mapper
-	implements FunctionMapper, Serializable, Cloneable {
-	    private static final long serialVersionUID = 20060622L;
-
-		/** Map(String prefix, Map(name, MethodFunction)). */
-		private Map _mappers;
-
-		/** @param mappers Map(String prefix, Map(String name, Function method))
-		 */
-		private Mapper(Map mappers) {
-			_mappers = mappers;
-			for (Iterator it = mappers.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final Map mtds = new HashMap((Map)me.getValue());
-					//Note: we have to make a copy since loadFunctions shares
-					//the same cache
-				me.setValue(mtds);
-			}
-		}
-
-		//-- FunctionMapper --//
-		public Function resolveFunction(String prefix, String name) {
-			final Map mtds = (Map)_mappers.get(prefix);
-			return mtds != null ? (MethodFunction)mtds.get(name): null;
-		}
-		public Collection getImportedClasses() {
-			return null; //TODO
-		}
-
-		//-- Cloneable --//
-		public Object clone() {
-			final Mapper clone;
-			try {
-				clone = (Mapper)super.clone();
-			} catch (CloneNotSupportedException e) {
-				throw new InternalError();
-			}
-
-			clone._mappers = new HashMap(clone._mappers);
-			for (Iterator it = clone._mappers.entrySet().iterator();
-			it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				me.setValue(new HashMap((Map)me.getValue()));
-			}
-			return clone;
-		}
-
-		//Object//
-		public int hashCode() {
-			return _mappers.hashCode();
-		}
-		public boolean equals(Object o) {
-			return o instanceof Mapper && _mappers.equals(((Mapper)o)._mappers);
-		}
-		public String toString() {
-			return '[' + getClass().getName() + ": " + _mappers.keySet() +']';
-		}
-	}
-
 	private static class TaglibLoader extends AbstractLoader {
 		//-- Loader --//
 		public Object load(Object src) throws Exception {
-			return loadFunctions((URL)src);
+			final Element root =
+				new SAXBuilder(true, false, true).build((URL)src).getRootElement();
+			return Taglibs.load(root);
 		}
 	}
 
 //----------------------------------//
 	//Mapping of URI to TLD files//
 	/** The default TLD files: Map(String uri, URL location). */
-	private static Map _defUrls;
+	private static Map _defURLs;
 
 	/** Returns the URL associated with the specified taglib URI,
 	 * or null if not found.
@@ -244,12 +218,12 @@ public class Taglibs {
 	/** Loads the default TLD files defined in /metainfo/tld/config.xml
 	 */
 	private static final Map getDefaultTLDs() {
-		if (_defUrls != null)
-			return _defUrls;
+		if (_defURLs != null)
+			return _defURLs;
 
 		synchronized (Taglibs.class) {
-			if (_defUrls != null)
-				return _defUrls;
+			if (_defURLs != null)
+				return _defURLs;
 
 			final Map urls = new HashMap();
 			try {
@@ -269,7 +243,7 @@ public class Taglibs {
 			} catch (Exception ex) {
 				log.error(ex); //keep running
 			}
-			return _defUrls = urls.isEmpty() ? Collections.EMPTY_MAP: urls;
+			return _defURLs = urls.isEmpty() ? Collections.EMPTY_MAP: urls;
 		}
 	}
 	/** Parse config.xml. */

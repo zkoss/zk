@@ -6,10 +6,10 @@
 	Description:
 		
 	History:
-		Tue Sep  6 12:43:56     2005, Created by tomyeh
+		Tue Sep  4 23:09:16     2007, Created by tomyeh
 }}IS_NOTE
 
-Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
@@ -19,81 +19,60 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.xel.util;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.HashMap;
-import java.net.URL;
 
-import org.zkoss.util.resource.Locator;
-import org.zkoss.idom.Element;
-import org.zkoss.xel.FunctionMapper;
+import org.zkoss.util.DualCollection;
 import org.zkoss.xel.Function;
-import org.zkoss.xel.XelException;
-import org.zkoss.xel.taglib.Taglibs;
+import org.zkoss.xel.FunctionMapper;
 
 /**
- * A simple function mapper.
+ * A simmple function mapper.
  *
  * @author tomyeh
  * @since 3.0.0
  */
-public class SimpleMapper implements FunctionMapper {
-	private final FunctionMapper _parent;
-	/** Map(String prefix, Map(String, Function)). */
-	private Map _maps;
-
+public class SimpleMapper extends TaglibMapper {
+	private FunctionMapper _parent;
 	public SimpleMapper() {
-		this(null);
 	}
 	public SimpleMapper(FunctionMapper parent) {
-		if (parent == this)
-			throw new IllegalArgumentException("parent cannot be itself");
 		_parent = parent;
 	}
 
-	/** Loads function definitions from taglib. */
-	public void load(String prefix, String uri, Locator locator)
-	throws XelException {
-		if (prefix == null || uri == null)
-			throw new IllegalArgumentException("null");
-		if (_maps != null && _maps.containsKey(prefix))
-			throw new XelException("The prefix, "+prefix+", is already used");
-
-		final URL url = locator.getResource(uri);
-		if (url == null)
-			throw new XelException("Resource not found: "+uri);
-
-		if (_maps == null)
-			_maps = new HashMap(4);
-		try {
-			_maps.put(prefix, Taglibs.loadFunctions(url));
-		} catch (Exception ex) {
-			throw XelException.Aide.wrap(ex);
-		}
+	/** Returns the parent mapper, or null if no parent.
+	 */
+	public FunctionMapper getParent() {
+		return _parent;
 	}
-	/** Loads function definitions from DOM. */
-	public void load(String prefix, Element root)
-	throws XelException {
-		if (prefix == null || root == null)
-			throw new IllegalArgumentException("null");
-		if (_maps != null && _maps.containsKey(prefix))
-			throw new XelException("The prefix, "+prefix+", is already used");
-
-		if (_maps == null)
-			_maps = new HashMap(4);
-		try {
-			_maps.put(prefix, Taglibs.loadFunctions(root));
-		} catch (Exception ex) {
-			throw XelException.Aide.wrap(ex);
-		}
+	/** Sets the parent mapper.
+	 *
+	 * @param parent the parent mapper, or null if no parent.
+	 */
+	public void setParent(FunctionMapper parent) {
+		_parent = parent;
 	}
 
 	//-- FunctionMapper --//
+	public Collection getFunctionNames() {
+		return combine(super.getFunctionNames(),
+			_parent != null ? _parent.getFunctionNames(): null);
+	}
 	public Function resolveFunction(String prefix, String name) {
-		final Map mtds = _maps != null ? (Map)_maps.get(prefix): null;
-		return mtds != null ? (Function)mtds.get(name):
+		Function m = super.resolveFunction(prefix, name);
+		return m != null ? m:
 			_parent != null ? _parent.resolveFunction(prefix, name): null;
 	}
-	public Collection getImportedClasses() {
-		return _parent != null ? _parent.getImportedClasses(): null;
+	public Collection getClassNames() {
+		return combine(super.getClassNames(),
+			_parent != null ? _parent.getClassNames(): null);
+	}
+	public Class resolveClass(String name) {
+		Class m = super.resolveClass(name);
+		return m != null ? m:
+			_parent != null ? _parent.resolveClass(name): null;
+	}
+	private Collection combine(Collection first, Collection second) {
+		return DualCollection.combine(
+			first != null && !first.isEmpty() ? first: null,
+			second != null && !second.isEmpty() ? second: null);
 	}
 }

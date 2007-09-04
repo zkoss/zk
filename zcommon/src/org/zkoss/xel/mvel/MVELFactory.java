@@ -35,7 +35,7 @@ import org.zkoss.xel.util.ExpressionFragment;
  *
  * <p>Note: MVEL is not completely compatible with JSP EL.
  * For example, it doesn't support {@link org.zkoss.xel.FunctionMapper#resolveFunction}.
- * Rather, it supports {@link org.zkoss.xel.FunctionMapper#getImportedClasses}.
+ * Rather, it supports {@link org.zkoss.xel.FunctionMapper#resolveFunction}.
  *
  * <p>See also <a href="http://mvel.codehaus.org/">MVEL website</a>.
  *
@@ -45,7 +45,7 @@ import org.zkoss.xel.util.ExpressionFragment;
 public class MVELFactory implements ExpressionFactory {
 	//ExpressionFactory//
 	public boolean isSupported(int feature) {
-		return feature == FEATURE_IMPORT;
+		return feature == FEATURE_CLASS;
 	}
 	public Expression parseExpression(XelContext ctx, String expression,
 	Class expectedType)

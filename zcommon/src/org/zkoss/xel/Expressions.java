@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.xel;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
@@ -134,10 +135,16 @@ public class Expressions {
 /*package*/ class EmptyMapper
 implements FunctionMapper, java.io.Serializable {
 	//-- FunctionMapper --//
+	public Collection getFunctionNames() {
+		return Collections.EMPTY_LIST;
+	}
 	public Function resolveFunction(String prefix, String name) {
 		return null;
 	}
-	public Collection getImportedClasses() {
+	public Collection getClassNames() {
+		return Collections.EMPTY_LIST;
+	}
+	public Class resolveClass(String name) {
 		return null;
 	}
 }

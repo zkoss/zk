@@ -31,9 +31,9 @@ import org.zkoss.xel.XelException;
  */
 public class SimpleResolver implements VariableResolver {
 	/** The parent resolver. */
-	protected final VariableResolver _parent;
+	private VariableResolver _parent;
 	/** The variable maps. */
-	protected final Map _vars;
+	protected Map _vars;
 
 	/** Constructs a resolver. */
 	public SimpleResolver() {
@@ -58,6 +58,19 @@ public class SimpleResolver implements VariableResolver {
 	 */
 	public SimpleResolver(Map vars) {
 		this(null, vars);
+	}
+
+	/** Returns the parent, or null if no parent at all.
+	 */
+	public VariableResolver getParent() {
+		return _parent;
+	}
+	/** Sets the parent.
+	 *
+	 * @param parent the parent resolver, or null if no parent.
+	 */
+	public void setParent(VariableResolver parent) {
+		_parent = parent;
 	}
 
 	//-- VariableResolver --//

@@ -30,14 +30,14 @@ public interface ExpressionFactory {
 	 */
 	public static final int FEATURE_FUNCTION = 0x0001;
 	/** Used with {@link #isSupported} to know whether the factory
-	 * supports {@link FunctionMapper#getImportedClasses}
+	 * supports {@link FunctionMapper#resolveClass}
 	 */
-	public static final int FEATURE_IMPORT = 0x0002;
+	public static final int FEATURE_CLASS = 0x0002;
 	/** Returns whether an feature is supported.
 	 *
 	 * @param feature which feature to query.
 	 * It can be a combination of {@link #FEATURE_FUNCTION}
-	 * and {@link #FEATURE_IMPORT}.
+	 * and {@link #FEATURE_CLASS}.
 	 */
 	public boolean isSupported(int feature);
 

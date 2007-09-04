@@ -28,12 +28,19 @@ import java.util.Collection;
  * @since 3.0.0
  */
 public interface FunctionMapper {
-	/** Resolves the specified name and prefix into a function
-	 * {@link Function}.
+	/** Returns a readonly collection of prefix + ":" + function names (String)
+	 * (never null).
+	 * For example, "c:isExplorer".
+	 */
+	public Collection getFunctionNames();
+	/** Resolves a function {@link Function} with the specified name and
+	 * prefix.
 	 *
 	 * <p>Note: not all EL evaluator support {@link #resolveFunction}.
 	 * Currently only JSP 2.0/2.1 EL-based expression factories
 	 * support this method.
+	 * You can check {@link ExpressionFactory#isSupported} for this
+	 * support.
 	 *
 	 * @param prefix the prefix of the function, or "" if no prefix
 	 * @param name the name of the function to resolve
@@ -41,15 +48,23 @@ public interface FunctionMapper {
 	public Function resolveFunction(String prefix, String name)
 	throws XelException;
 
-	/** Returns a collection of classes that are imported when evaluating
-	 * the expressions, or null if nothing to import.
+	/** Returns a readonly collection of the logic names of the class
+	 * (never null).
+	 * Note: it is the name to resolve class, not the real class name.
+	 * In other words, it is the logical name maintained by this
+	 * function mapper.
+	 */
+	public Collection getClassNames();
+	/** Resolves a class with the specified logic name, or null
+	 * or null if not found.
 	 *
-	 * <p>Note: not all EL evaluator support {@link #getImportedClasses}.
+	 * <p>Note: not all EL evaluator support {@link #resolveClass}.
 	 * JSP 2.0/2.1 EL-based expression factories don't support
 	 * this method.
+	 * You can check {@link ExpressionFactory#isSupported} for this
+	 * support.
 	 *
-	 * @return a collection of {@link Class} that shall be imported,
-	 * or null if nothing to import.
+	 * @return the class of the specified logic name.
 	 */
-	public Collection getImportedClasses();
+	public Class resolveClass(String name) throws XelException;
 }
