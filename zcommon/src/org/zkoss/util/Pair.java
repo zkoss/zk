@@ -57,7 +57,7 @@ public class Pair {
 				Objects.equals(y, pair.y);
 	}
 	public final int hashCode() {
-		return Objects.hashCode(x) + Objects.hashCode(y);
+		return Objects.hashCode(x) ^ Objects.hashCode(y);
 	}
 
 	public String toString() {
