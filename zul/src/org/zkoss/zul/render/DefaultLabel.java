@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Label;
 
 /**
- * The label's default mold.
+ * {@link Label}'s default mold.
  *
  * @author tomyeh
  * @since 3.0.0
