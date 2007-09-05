@@ -417,7 +417,7 @@ public class Parser {
 		if (moldURI == null) moldURI = (String)params.remove("mold-uri"); //backward comaptible (2.4.x)
 		if (!isEmpty(moldURI))
 			compdef.addMold(isEmpty(moldnm) ? "default": moldnm,
-				toAbsoluteURI(moldURI, true));
+				moldURI.startsWith("class:") ? moldURI: toAbsoluteURI(moldURI, true));
 		for (Iterator e = params.entrySet().iterator(); e.hasNext();) {
 			final Map.Entry me = (Map.Entry)e.next();
 			compdef.addProperty((String)me.getKey(), (String)me.getValue());
