@@ -37,6 +37,7 @@ import org.zkoss.zul.Caption;
  */
 public class CaptionDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
+		final WriterHelper wh = new WriterHelper(out);
 		final Caption self = (Caption)comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
@@ -45,59 +46,40 @@ public class CaptionDefault implements ComponentRenderer {
 		if(self.isLegend()){
 			final String label = self.getLabel();
 			
-			out.write("<legend>");
-			if(imgTag!=null){
-				out.write(imgTag);
-			}
-			out.write(XMLs.escapeXML(label));
-			
+			wh.write("<legend>").write(imgTag).write(XMLs.escapeXML(label));
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 				final Component child = (Component)it.next();
 				child.redraw(out);
 			}
-			out.write("</legend>");
+			wh.write("</legend>");
 		}else{
 			final String clabel = self.getCompoundLabel();
 			
-			out.write("<table id=\"");
-			out.write(uuid);
-			out.write("\" ");
-			out.write("z.type=\"zul.widget.Capt\"");
-			out.write(self.getOuterAttrs());
-			out.write(self.getInnerAttrs());
-			out.write(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
-			out.write("<tr valign=\"middle\">");
-			out.write("<td align=\"left\" class=\"caption\">");
-			if(imgTag!=null){
-				out.write(imgTag);
-			}
+			wh.write("<table id=\"").write(uuid).write("\" ");
+			wh.write("z.type=\"zul.widget.Capt\"").write(self.getOuterAttrs()).write(self.getInnerAttrs());
+			wh.write(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
+			wh.write("<tr valign=\"middle\">");
+			wh.write("<td align=\"left\" class=\"caption\">").write(imgTag);
 			
 			if(clabel==null || clabel.trim().length()==0){
-				out.write("&nbsp;");//<%-- bug 1688261: nbsp is required --%>
+				wh.write("&nbsp;");//<%-- bug 1688261: nbsp is required --%>
 			}else{
-				out.write(XMLs.escapeXML(clabel));
+				wh.write(XMLs.escapeXML(clabel));
 			}
-			out.write("</td>");
+			wh.write("</td>");
 			
-			
-			out.write("<td align=\"right\" class=\"caption\" id=\"");
-			out.write(uuid);
-			out.write("!cave\">");
+			wh.write("<td align=\"right\" class=\"caption\" id=\"").write(uuid).write("!cave\">");
 			
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 				final Component child = (Component)it.next();
 				child.redraw(out);
 			}
-			
 			if(self.isClosableVisible()){
-				out.write("<td width=\"16\"><img id=\"");
-				out.write(self.getParent().getUuid());
-				out.write("!close\" src=\"");
-				out.write(exec.encodeURL("~./zul/img/close-off.gif"));
-				out.write("\"/></td>");
+				wh.write("<td width=\"16\"><img id=\"").write(self.getParent().getUuid()).write("!close\" src=\"");
+				wh.write(exec.encodeURL("~./zul/img/close-off.gif")).write("\"/></td>");
 			}
 			
-			out.write("</tr></table>");
+			wh.writeln("</tr></table>");
 		}
 	}
 }
