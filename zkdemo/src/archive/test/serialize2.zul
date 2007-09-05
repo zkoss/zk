@@ -52,8 +52,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	Combobox with fulfill
 	<combobox id="cbx" fulfill="onOpen">
-		<comboitem label="Simple"/>
-		<comboitem label="Rich"/>
+		<comboitem label="Simple ${self.parent.uuid}"/>
+		<comboitem label="Rich ${self.parent.id}"/>
 	</combobox>
 	</vbox>
 
