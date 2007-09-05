@@ -52,6 +52,32 @@ public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializ
 	public TaglibMapper() {
 	}
 
+	/** Adds the class that can be retrieved by {@link #resolveClass}.
+	 *
+	 * @param name the logic name of the class
+	 * @param cls the class to import
+	 */
+	public void addClass(String name, Class cls) {
+		if (name == null || name.length() == 0 || cls == null)
+			throw new IllegalArgumentException();
+		if (_clses == null)
+			_clses = new HashMap(4);
+		_clses.put(name, cls);
+	}
+	/** Adds the function that can be retrieved by {@link #resolveFunction}.
+	 *
+	 * @param prefix the prefix of the name
+	 * @param name the logic name of the function
+	 * @param func the function
+	 */
+	public void addFunction(String prefix, String name, Function func) {
+		if (name == null || name.length() == 0 || func == null)
+			throw new IllegalArgumentException();
+		if (_mtds == null)
+			_mtds = new HashMap(4);
+		_mtds.put(prefix + ":" + name, func);
+	}
+
 	/** Loads function and class definitions from taglib.
 	 */
 	public void load(String prefix, URL url) throws XelException {
@@ -102,15 +128,16 @@ public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializ
 	private void load0(String prefix, Map[] loaded) {
 		if (!loaded[0].isEmpty()) {
 			if (_mtds == null)
-				_mtds = new HashMap();
+				_mtds = new HashMap(8);
 			for (Iterator e = loaded[0].entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
-				_mtds.put(prefix + ":" + me.getKey(), me.getValue());
+				addFunction(prefix, (String)me.getKey(), (Function)me.getValue());
 			}
 		}
+
 		if (!loaded[1].isEmpty()) {
 			if (_clses == null)
-				_clses = new HashMap();
+				_clses = new HashMap(4);
 			_clses.putAll(loaded[1]);
 		}
 	}

@@ -159,7 +159,7 @@ public class Maps {
 				continue;
 			}
 
-			assert res.separator == '=': "Wrong separator: "+res.separator;
+//			assert res.separator == '=': "Wrong separator: "+res.separator;
 			final String val;
 			String key = caseInsensitive ? res.token.toLowerCase(): res.token;
 			int j = Strings.skipWhitespaces(line, res.next);
@@ -325,7 +325,7 @@ public class Maps {
 		for (int j = 0, len = src.length();;) {
 			//handle name
 			Token tk = next(src, delimKey, j, true);
-			if (D.ON && log.finerable()) log.finer("name: "+tk.token+" "+tk.cc);
+//			if (D.ON && log.finerable()) log.finer("name: "+tk.token+" "+tk.cc);
 			j = tk.next;
 			final String name = tk.token;
 			switch (tk.cc) {
@@ -335,7 +335,7 @@ public class Maps {
 				++j; //skip =
 				break;
 			case (char)0:
-				assert tk.next >= len;
+//				assert tk.next >= len;
 				if (name.length() > 0)
 					if (asValue) map.put(null, name);
 					else map.put(name, null);
@@ -355,7 +355,7 @@ public class Maps {
 
 			//handle value
 			tk = next(src, delimValue, j, false);
-			if (D.ON && log.finerable()) log.finer("value: "+tk.token+" "+tk.cc);
+//			if (D.ON && log.finerable()) log.finer("value: "+tk.token+" "+tk.cc);
 			j = tk.next;
 			final String value = tk.token;
 			if (quote != (char)0 && tk.cc == quote) {

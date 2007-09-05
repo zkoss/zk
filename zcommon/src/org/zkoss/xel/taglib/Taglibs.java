@@ -58,22 +58,49 @@ public class Taglibs {
 	//Loading of TLD files//
 	private static final ResourceCache _reces;
 
-	/** Retursn the function mapper representing a list of {@link Taglib},
-	 * or null if taglibs is null or empty.
+	/** Retursn the function mapper representing a list of {@link Taglib}
+	 * and imports, or null if nothing is loaded.
 	 *
 	 * <p>The returned mapper is serializable.
 	 *
+	 * @param taglibs a list of {@link Taglib}.
+	 * @param imports a map of imported classes, Map&lt;String nm, Class cls&gt;
+	 * Note: imports has the higher priority than import classes defined
+	 * in taglibs.
+	 * @param loc the locator used to load taglib
+	 * @since 3.0.0
+	 */
+	public static final
+	FunctionMapper getFunctionMapper(List taglibs, Map imports, Locator loc) {
+		TaglibMapper mapper = null;
+		if (taglibs != null && !taglibs.isEmpty()) {
+			mapper = new TaglibMapper();
+			for (Iterator it = taglibs.iterator(); it.hasNext();)
+				mapper.load((Taglib)it.next(), loc);
+		}
+
+		if (imports != null && !imports.isEmpty()) {
+			if (mapper == null)
+				mapper = new TaglibMapper();
+
+			for (Iterator it = imports.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				mapper.addClass((String)me.getKey(), (Class)me.getValue());
+			}
+		}
+		return mapper;
+	}
+	/** Retursn the function mapper representing a list of {@link Taglib},
+	 * or null if nothin is loaded.
+	 *
+	 * <p>The returned mapper is serializable.
+	 *
+	 * @param taglibs a list of {@link Taglib}.
 	 * @param loc the locator used to load taglib
 	 */
 	public static final
 	FunctionMapper getFunctionMapper(List taglibs, Locator loc) {
-		if (taglibs == null || taglibs.isEmpty())
-			return null;
-
-		final TaglibMapper mapper = new TaglibMapper();
-		for (Iterator it = taglibs.iterator(); it.hasNext();)
-			mapper.load((Taglib)it.next(), loc);
-		return mapper;
+		return getFunctionMapper(taglibs, null, loc);
 	}
 
 	/** Loads functions defined in the specified URL.
