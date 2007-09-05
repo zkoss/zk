@@ -1,6 +1,7 @@
 	--------
 ZK 3.0.0
 * Features:
+  1787513: Translate messages to Hungarian. Thank Andreas Klein (andiklein@idatso.com) for his contribution.
   1579332: Server Push
   1776116: A way to forward event to another component w/o programming
   1774559: Introduce the native namespace to speed up the handling HTML
@@ -10,6 +11,9 @@ ZK 3.0.0
   1758837: Zk Flash Component
   1537229: Treemodel with Tree
   1786163: A way to make EL evaluator pluggable
+  1786165: Provide MVEL plugin
+  1788194: A way to specify a class mold for rendering a component
+  1787604: A way to import classes for EL eval, such as MVEL, OGNL
   1760212: A simpler way to annotation a component
   1760689: Data Binding using new simpler annotation to component
   1760691: DataBinder support validation phase
@@ -82,6 +86,8 @@ ZK 3.0.0
     javax.servlet.jsp.el.ExpressionEvaluator.
   + org.zkoss.zk.scripting.VariableResolver is removed.
     Use org.zkoss.xel.VariableResolver instead.
+  + EL expressions specified in lang.xml and lang-addon.xml need to
+    specify self to access a property.
   + org.zkoss.zk.scripting.Method is deprecated
     Use org.zkoss.xel.Function instead.
   + Page.getZScriptMethod() is deprecated.
@@ -97,6 +103,14 @@ ZK 3.0.0
   + Utilities of JSP, such as JspLoaderServlet, are removed, since they are
     nothing to do with ZK
   + The signature of LanguageDefinition's contructor is changed.
+  + About directives:
+	New name are introduced though it is backward compatible with old versions:
+	The component directive
+		mold-name is renamed to moldName
+		mold-uri is renamed to moldURI
+		macro-uri is renamed to macroURI
+	The page directive:
+		script-language is renamed to scriptLanguage
   + About zk.xml:
     The disable-behind-modal, keep-across-visits, processing-prompt-delay
     and tooltip-delay elements are moved to the client-config element,
