@@ -215,7 +215,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * @param moldURI an URI of the mold; never null nor empty.
 	 * If it starts with "class:", the following substring is assumed to be
 	 * the class name of {@link ComponentRenderer}, and then it invokes
-	 * {@link addMold(String, ComponentRenderer).
+	 * {@link #addMold(String, ComponentRenderer)}.
 	 * If not staring with "class:", it is pure an URI, and it may
 	 * contain XEL expressions.
 	 */
@@ -228,7 +228,6 @@ public interface ComponentDefinition extends Cloneable {
 	 */
 	public void addMold(String name, ComponentRenderer renderer);
 
-	/** Adds a mold with an instance of {@link 
 	/** Returns the URI (String) or an instance of {@link ComponentRenderer}
 	 * of the mold, or null if no such mold available.
 	 * In other words, if a String instance is returned, it is the URI

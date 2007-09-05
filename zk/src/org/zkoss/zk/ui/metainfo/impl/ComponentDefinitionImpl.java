@@ -379,7 +379,7 @@ implements ComponentDefinition, java.io.Serializable {
 			throw new IllegalArgumentException();
 
 		if (_molds == null)
-			_molds = new HashMap(3);
+			_molds = new HashMap(4);
 		_molds.put(name, mold);
 	}
 	public Object getMoldURI(Component comp, String name) {

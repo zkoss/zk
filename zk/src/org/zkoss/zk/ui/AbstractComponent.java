@@ -981,7 +981,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * {@link ComponentRenderer} instance.
 	 * <li>If URI, it invokes {@link Execution#include} to generate
 	 * the output.</li>
-	 * <li>If a {@link ComponentRenderer} instance, {@link ComponentRenderer#redraw}
+	 * <li>If a {@link ComponentRenderer} instance, {@link ComponentRenderer#render}
 	 * is called to generate the output.</li>
 	 * </ul>
 	 */

@@ -129,15 +129,12 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 	/** Adds all event handlers of the specified map to this map.
 	 */
 	public void addAll(EventHandlerMap src) {
-		if (src == null || src.isEmpty())
-			return;
-
-		for (Iterator it = src._evthds.entrySet().iterator();
-		it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String evtnm = (String)me.getKey();
-			final List srcl = (List)me.getValue();
-			synchronized (srcl) {
+		if (src != null && !src.isEmpty()) {
+			for (Iterator it = src._evthds.entrySet().iterator();
+			it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final String evtnm = (String)me.getKey();
+				final List srcl = (List)me.getValue();
 				for (Iterator e = srcl.iterator(); e.hasNext();)
 					add(evtnm, (EventHandler)e.next());
 			}

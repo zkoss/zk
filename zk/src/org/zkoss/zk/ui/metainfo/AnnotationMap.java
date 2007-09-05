@@ -201,12 +201,8 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	/** Initializes _annots by creating and assigning a new map for it.
 	 */
 	private void initAnnots() {
-		if (_annots == null) {
-			if (_annots == null) {
-				org.zkoss.lang.Threads.dummy(null); //to avoid compiler optimization
-				_annots = new HashMap(3);
-			}
-		}
+		if (_annots == null)
+			_annots = new HashMap(4);
 	}
 	/** Create a map used for (String name, AnnotImpl annot).
 	 */
