@@ -252,7 +252,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Caption</component-class>
 		<mold>
 			<mold-name>default</mold-name>
- 			<mold-uri>class:org.zkoss.zul.render.DefaultCaption</mold-uri>
+ 			<mold-uri>class:org.zkoss.zul.render.CaptionDefault</mold-uri>
  			<!-- <mold-uri>${self.legend ? '~./zul/html/caption-legend.dsp': '~./zul/html/caption.dsp'}</mold-uri>-->
 		</mold>
 	</component>
@@ -386,12 +386,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Groupbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.DefaultGroupbox</mold-uri>
+			<mold-uri>class:org.zkoss.zul.render.GroupboxDefault</mold-uri>
 			<!-- <mold-uri>~./zul/html/groupbox.dsp</mold-uri>  -->
 		</mold>
 		<mold>
 			<mold-name>3d</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.DefaultGroupbox3D</mold-uri>
+			<mold-uri>class:org.zkoss.zul.render.Groupbox3d</mold-uri>
 			<!-- <mold-uri>~./zul/html/groupbox-3d.dsp</mold-uri>  -->
 		</mold>
 	</component>
@@ -466,7 +466,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<text-as>value</text-as>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.DefaultLabel</mold-uri>
+			<mold-uri>class:org.zkoss.zul.render.LabelDefault</mold-uri>
 			<!--<mold-uri>~./zul/html/label.dsp</mold-uri>-->
 		</mold>
 	</component>
@@ -729,7 +729,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Textbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.DefaultTextbox</mold-uri>
+			<mold-uri>class:org.zkoss.zul.render.TextboxDefault</mold-uri>
 			<!--<mold-uri>~./zul/html/textbox.dsp</mold-uri>-->
 		</mold>
 	</component>
@@ -868,7 +868,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Window</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.DefaultWindow</mold-uri>
+			<mold-uri>class:org.zkoss.zul.render.WindowDefault</mold-uri>
 			<!--<mold-uri>~./zul/html/window.dsp</mold-uri>-->
 		</mold>
 	</component>

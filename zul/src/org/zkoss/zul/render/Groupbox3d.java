@@ -1,4 +1,4 @@
-/* DefaultGroupbox3D.java
+/* Groupbox3d.java
 
 {{IS_NOTE
 	Purpose:
@@ -35,7 +35,7 @@ import org.zkoss.zul.Groupbox;
  * @author dennis.chen
  * @since 3.0.0
  */
-public class DefaultGroupbox3D implements ComponentRenderer {
+public class Groupbox3d implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final Groupbox self = (Groupbox)comp;
 		final Caption caption = self.getCaption();

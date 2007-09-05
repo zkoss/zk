@@ -1,4 +1,4 @@
-/* DefaultGroupbox.java
+/* GroupboxDefault.java
 
 {{IS_NOTE
 	Purpose:
@@ -33,7 +33,7 @@ import org.zkoss.zul.Groupbox;
  * @author dennis.chen
  * @since 3.0.0
  */
-public class DefaultGroupbox implements ComponentRenderer {
+public class GroupboxDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final Groupbox self = (Groupbox)comp;
 		final Caption caption = self.getCaption();

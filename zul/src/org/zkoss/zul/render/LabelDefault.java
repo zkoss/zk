@@ -1,4 +1,4 @@
-/* DefaultLabel.java
+/* LabelDefault.java
 
 {{IS_NOTE
 	Purpose:
@@ -31,7 +31,7 @@ import org.zkoss.zul.Label;
  * @author tomyeh
  * @since 3.0.0
  */
-public class DefaultLabel implements ComponentRenderer {
+public class LabelDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final Label self = (Label)comp;
 		final boolean idRequired = self.isIdRequired();

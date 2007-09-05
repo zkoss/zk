@@ -1,4 +1,4 @@
-/* DefaultCaption.java
+/* CaptionDefault.java
 
 {{IS_NOTE
 	Purpose:
@@ -35,7 +35,7 @@ import org.zkoss.zul.Caption;
  * @author dennis.chen
  * @since 3.0.0
  */
-public class DefaultCaption implements ComponentRenderer {
+public class CaptionDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final Caption self = (Caption)comp;
 		final String uuid = self.getUuid();

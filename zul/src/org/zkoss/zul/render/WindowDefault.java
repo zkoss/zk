@@ -1,4 +1,4 @@
-/* DefaultWindow.java
+/* WindowDefault.java
 
 {{IS_NOTE
 	Purpose:
@@ -36,7 +36,7 @@ import org.zkoss.zul.Caption;
  * @author tomyeh
  * @since 3.0.0
  */
-public class DefaultWindow implements ComponentRenderer {
+public class WindowDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final Window self = (Window)comp;
 		final String uuid = self.getUuid();

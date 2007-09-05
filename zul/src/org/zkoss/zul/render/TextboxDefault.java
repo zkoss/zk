@@ -1,4 +1,4 @@
-/* DefaultTextbox.java
+/* TextboxDefault.java
 
 {{IS_NOTE
 	Purpose:
@@ -31,7 +31,7 @@ import org.zkoss.zul.Textbox;
  * @author dennis.chen
  * @since 3.0.0
  */
-public class DefaultTextbox implements ComponentRenderer {
+public class TextboxDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final Textbox self = (Textbox)comp;
 		final boolean isMultiline = self.isMultiline();
