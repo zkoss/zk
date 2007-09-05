@@ -17,9 +17,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<?page evaluator="org.zkoss.xel.mvel.MVELFactory"?>
+<?evaluator class="org.zkoss.xel.mvel.MVELFactory"
+	import="org.zkoss.zul.Datebox,org.zkoss.zul.Combobox"?>
 
 <window id="w" title="MVEL Demo">
 	You see a textbox appended with MVEL:
+	${new Datebox().setParent(w)}
+	Another example:
 	${new org.zkoss.zul.Textbox().setParent(w)}
+	Another:
+	${new Combobox().setParent(w)}
 </window>
