@@ -337,7 +337,10 @@ public class ComponentsCtrl {
 		public void addMold(String name, String moldURI) {
 			throw new UnsupportedOperationException();
 		}
-		public String getMoldURI(Component comp, String name) {
+		public void addMold(String name, org.zkoss.zk.ui.util.ComponentRenderer renderer) {
+			throw new UnsupportedOperationException();
+		}
+		public Object getMoldURI(Component comp, String name) {
 			return null;
 		}
 		public boolean hasMold(String name) {

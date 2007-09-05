@@ -30,7 +30,9 @@ import org.zkoss.zk.ui.Component;
 /**
  * A map of instances of {@link EventHandler}.
  *
- * <p>It is thread safe.
+ * <p>Note: it is not thread safe. Thus, it is better to {@link #clone}
+ * and then modifying the cloned instance if you want to change it
+ * concurrently.
  *
  * @author tomyeh
  */
@@ -57,24 +59,18 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 	 */
 	public EventHandler get(Component comp, String evtnm) {
 		if (_evthds != null) {
-			List ehl;
-			synchronized (_evthds) {
-				ehl = (List)_evthds.get(evtnm);
-			}
-
+			final List ehl = (List)_evthds.get(evtnm);
 			if (ehl != null) {
-				synchronized (ehl) {
-					for (Iterator it = ehl.iterator(); it.hasNext();) {
-						final EventHandler eh = (EventHandler)it.next();
-						if (eh.isEffective(comp))
-							return eh;
-					}
+				for (Iterator it = ehl.iterator(); it.hasNext();) {
+					final EventHandler eh = (EventHandler)it.next();
+					if (eh.isEffective(comp))
+						return eh;
 				}
 			}
 		}
 		return null;
 	}
-	/** Returns an array of all event handlers associated
+	/** Returns a readonly list of all event handlers associated
 	 * with the specified event name, or null if no handler is associated
 	 * with.
 	 *
@@ -83,20 +79,9 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 	 *
 	 * @since 3.0.0
 	 */
-	public EventHandler[] getAll(String evtnm) {
-		if (_evthds != null) {
-			List ehl;
-			synchronized (_evthds) {
-				ehl = (List)_evthds.get(evtnm);
-			}
-
-			if (ehl != null) {
-				synchronized (ehl) {
-					return (EventHandler[])
-						ehl.toArray(new EventHandler[ehl.size()]);
-				}
-			}
-		}
+	public List getAll(String evtnm) {
+		if (_evthds != null)
+			return (List)_evthds.get(evtnm);
 		return null;
 	}
 	/**
@@ -105,16 +90,9 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 	 */
 	public EventHandler get(String evtnm) {
 		if (_evthds != null) {
-			List ehl;
-			synchronized (_evthds) {
-				ehl = (List)_evthds.get(evtnm);
-			}
-
-			if (ehl != null) {
-				synchronized (ehl) {
-					return (EventHandler)ehl.get(0); //must not empty
-				}
-			}
+			final List ehl = (List)_evthds.get(evtnm);
+			if (ehl != null)
+				return (EventHandler)ehl.get(0); //must not empty
 		}
 		return null;
 	}
@@ -132,30 +110,21 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 		if (evtnm == null || evthd == null)
 			throw new IllegalArgumentException("null");
 
-		if (_evthds == null) {
-			synchronized (this) {
-				if (_evthds == null)
-					_evthds = new HashMap(3);
-			}
-		}
+		if (_evthds == null)
+			_evthds = new HashMap(4);
 
-		List ehl;
-		synchronized (_evthds) {
-			ehl = (List)_evthds.get(evtnm);
-			if (ehl == null) {
-				_evthds.put(evtnm, ehl = new LinkedList());
-				ehl.add(evthd);
-				return;
-			}
-		}
-		synchronized (ehl) {
+		List ehl = (List)_evthds.get(evtnm);
+		if (ehl == null) {
+			_evthds.put(evtnm, ehl = new LinkedList());
+		} else {
 			for (Iterator it = ehl.iterator(); it.hasNext();) {
 				final EventHandler eh = (EventHandler)it.next();
 				if (Objects.equals(eh.getCondition(), evthd.getCondition()))
 					it.remove(); //replicate
 			}
-			ehl.add(evthd);
 		}
+
+		ehl.add(evthd);
 	}
 	/** Adds all event handlers of the specified map to this map.
 	 */
@@ -163,16 +132,14 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 		if (src == null || src.isEmpty())
 			return;
 
-		synchronized (src._evthds) {
-			for (Iterator it = src._evthds.entrySet().iterator();
-			it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String evtnm = (String)me.getKey();
-				final List srcl = (List)me.getValue();
-				synchronized (srcl) {
-					for (Iterator e = srcl.iterator(); e.hasNext();)
-						add(evtnm, (EventHandler)e.next());
-				}
+		for (Iterator it = src._evthds.entrySet().iterator();
+		it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String evtnm = (String)me.getKey();
+			final List srcl = (List)me.getValue();
+			synchronized (srcl) {
+				for (Iterator e = srcl.iterator(); e.hasNext();)
+					add(evtnm, (EventHandler)e.next());
 			}
 		}
 	}
@@ -187,11 +154,6 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 	}
 	//Object//
 	public String toString() {
-		if (_evthds != null) {
-			synchronized (_evthds) {
-				return "[evthd:" + _evthds + ']';
-			}
-		}
-		return "[evthd:]";
+		return "[evthd:" + _evthds + ']';
 	}
 }

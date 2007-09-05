@@ -24,14 +24,16 @@ import java.util.Map;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
+import org.zkoss.zk.ui.util.ComponentRenderer;
 
 /**
  * A component definition.
  * Like class in Java, a {@link ComponentDefinition} defines the behavior
  * of a component.
  *
- * <p>The implementation must be thread-safe, since the caller depends on it.
- * 
+ * <p>The implementation need NOT to be thread safe, since the caller
+ * has to {@link #clone} first if accessed concurrently.
+ *
  * @author tomyeh
  */
 public interface ComponentDefinition extends Cloneable {
@@ -208,19 +210,41 @@ public interface ComponentDefinition extends Cloneable {
 	 */
 	public Component newInstance(Page page, String clsnm);
 
-	/** Adds a mold
+	/** Adds a mold based on an URI.
 	 *
-	 * @param moldURI the URI of the mold; never null nor empty.
-	 * It can be an EL expression.
+	 * @param moldURI an URI of the mold; never null nor empty.
+	 * If it starts with "class:", the following substring is assumed to be
+	 * the class name of {@link ComponentRenderer}, and then it invokes
+	 * {@link addMold(String, ComponentRenderer).
+	 * If not staring with "class:", it is pure an URI, and it may
+	 * contain XEL expressions.
 	 */
 	public void addMold(String name, String moldURI);
-	/** Returns the URI of the mold, or null if no such mold available.
-	 * If mold contains an expression, it will be evaluated first
+	/** Adds a mold based on {@link ComponentRenderer}.
+	 *
+	 * @param renderer a component renderer. It is shared
+	 * by all component instances belonging to this definition.
+	 * @since 3.0.0
+	 */
+	public void addMold(String name, ComponentRenderer renderer);
+
+	/** Adds a mold with an instance of {@link 
+	/** Returns the URI (String) or an instance of {@link ComponentRenderer}
+	 * of the mold, or null if no such mold available.
+	 * In other words, if a String instance is returned, it is the URI
+	 * of the mold. If a {@link ComponentRenderer}
+	 * instance is returned, it is the object responsible to handle
+	 * the generation of the component's output.
+	 *
+	 * <p>If the mold URI contains an expression, it will be evaluated first
 	 * before returning.
 	 *
 	 * @param name the mold
+	 * @return an URI in String, or a {@link ComponentRenderer},
+	 * as of release 3.0.0
+	 * @see org.zkoss.zk.ui.AbstractComponent#redraw
 	 */
-	public String getMoldURI(Component comp, String name);
+	public Object getMoldURI(Component comp, String name);
 	/** Returns whether the specified mold exists.
 	 */
 	public boolean hasMold(String name);

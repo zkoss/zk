@@ -87,7 +87,7 @@ public class ZkFns {
 		if (comp == null)
 			return; //nothing to do
 		if (out == null)
-			out = ServletFns.getCurrentOut();
+			out = getCurrentOut();
 		try {
 			comp.redraw(out);
 		} catch (Throwable ex) {
@@ -97,6 +97,12 @@ public class ZkFns {
 				throw (IOException)ex;
 			throw UiException.Aide.wrap(ex);
 		}
+	}
+	/** Returns the current writer to generate the output.
+	 * @since 3.0.0
+	 */
+	public static final Writer getCurrentOut() throws IOException {
+		return ServletFns.getCurrentOut();
 	}
 
 	/** Returns JavaScript for handling the specified response.

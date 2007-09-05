@@ -29,7 +29,7 @@ import java.util.Iterator;
  * A map of annotations used with {@link ComponentDefinition} and
  * {@link ComponentInfo}.
  *
- * <p>It is thread safe.
+ * <p>Note: it is not thread safe.
  *
  * @author tomyeh
  */
@@ -87,16 +87,14 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	public List getAnnotatedPropertiesBy(String annotName) {
 		List list = null;
 		if (_annots != null) {
-			synchronized (_annots) {
-				for (Iterator it = _annots.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final Object propName = me.getKey();
-					if (propName != null) {
-						final Map ans = (Map)me.getValue(); //ans is syncMap
-						if (ans.containsKey(annotName)) {
-							if (list == null) list = new LinkedList();
-							list.add(propName);
-						}
+			for (Iterator it = _annots.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final Object propName = me.getKey();
+				if (propName != null) {
+					final Map ans = (Map)me.getValue(); //ans is syncMap
+					if (ans.containsKey(annotName)) {
+						if (list == null) list = new LinkedList();
+						list.add(propName);
 					}
 				}
 			}
@@ -109,13 +107,11 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	public List getAnnotatedProperties() {
 		List list = null;
 		if (_annots != null) {
-			synchronized (_annots) {
-				for (Iterator it = _annots.keySet().iterator(); it.hasNext();) {
-					final Object propName = it.next();
-					if (propName != null) {
-						if (list == null) list = new LinkedList();
-						list.add(propName);
-					}
+			for (Iterator it = _annots.keySet().iterator(); it.hasNext();) {
+				final Object propName = it.next();
+				if (propName != null) {
+					if (list == null) list = new LinkedList();
+					list.add(propName);
 				}
 			}
 		}
@@ -129,40 +125,32 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		if (src != null && !src.isEmpty()) {
 			initAnnots();
 
-			synchronized (_annots) {
-				synchronized (src._annots) {
-					for (Iterator it = src._annots.entrySet().iterator();
-					it.hasNext();) {
-						final Map.Entry me = (Map.Entry)it.next();
-						final Object propName = me.getKey(); //may be null
+			for (Iterator it = src._annots.entrySet().iterator();
+			it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final Object propName = me.getKey(); //may be null
 
-						Map ans = (Map)_annots.get(propName);
-						if (ans == null)
-							_annots.put(propName, ans = newAnnotImpls());
+				Map ans = (Map)_annots.get(propName);
+				if (ans == null)
+					_annots.put(propName, ans = newAnnotImpls());
 
-						addAllAns(ans, (Map)me.getValue());
-					}
-				}
+				addAllAns(ans, (Map)me.getValue());
 			}
 		}			
 	}
 	/** Adds the value of _annots, Map(String annotName, AnnotImpl).
 	 */
 	public static void addAllAns(Map ans, Map srcans) {
-		synchronized (ans) {
-			synchronized (srcans) {
-				for (Iterator it = srcans.entrySet().iterator();
-				it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final String annotName = (String)me.getKey();
+		for (Iterator it = srcans.entrySet().iterator();
+		it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String annotName = (String)me.getKey();
 
-					AnnotImpl ai = (AnnotImpl)ans.get(annotName);
-					if (ai == null)
-						ans.put(annotName, ai = new AnnotImpl(annotName));
+			AnnotImpl ai = (AnnotImpl)ans.get(annotName);
+			if (ai == null)
+				ans.put(annotName, ai = new AnnotImpl(annotName));
 
-					ai.addAttributes(((AnnotImpl)me.getValue())._attrs);
-				}
-			}
+			ai.addAttributes(((AnnotImpl)me.getValue())._attrs);
 		}
 	}
 	/** Adds an annotation.
@@ -182,10 +170,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 
 	private Annotation getAnnotation0(String propName, String annotName) {
 		if (_annots != null) {
-			final Map ans;
-			synchronized (_annots) {
-				ans = (Map)_annots.get(propName);
-			}
+			final Map ans = (Map)_annots.get(propName);
 			if (ans != null)
 				return (Annotation)ans.get(annotName); //ans is syncMap
 		}
@@ -193,10 +178,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	}
 	private Collection getAnnotations0(String propName) {
 		if (_annots != null) {
-			final Map ans;
-			synchronized (_annots) {
-				ans = (Map)_annots.get(propName);
-			}
+			final Map ans = (Map)_annots.get(propName);
 			if (ans != null)
 				return ans.values(); //ans is syncMap
 		}
@@ -206,37 +188,30 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	private void addAnnotation0(String propName, String annotName, Map annotAttrs) {
 		initAnnots();
 
-		Map ans;			
-		synchronized (_annots) {
-			ans = (Map)_annots.get(propName);
-			if (ans == null)
-				_annots.put(propName, ans = newAnnotImpls());
-		}
+		Map ans = (Map)_annots.get(propName);
+		if (ans == null)
+			_annots.put(propName, ans = newAnnotImpls());
 
-		synchronized (ans) { //yes sync(ans) though it is synchronizedMap
-			AnnotImpl ai = (AnnotImpl)ans.get(annotName);
-			if (ai == null)
-				ans.put(annotName, ai = new AnnotImpl(annotName));
+		AnnotImpl ai = (AnnotImpl)ans.get(annotName);
+		if (ai == null)
+			ans.put(annotName, ai = new AnnotImpl(annotName));
 
-			ai.addAttributes(annotAttrs);
-		}
+		ai.addAttributes(annotAttrs);
 	}
 	/** Initializes _annots by creating and assigning a new map for it.
 	 */
 	private void initAnnots() {
 		if (_annots == null) {
-			synchronized (this) {
-				if (_annots == null) {
-					org.zkoss.lang.Threads.dummy(null); //to avoid compiler optimization
-					_annots = new HashMap(3);
-				}
+			if (_annots == null) {
+				org.zkoss.lang.Threads.dummy(null); //to avoid compiler optimization
+				_annots = new HashMap(3);
 			}
 		}
 	}
-	/** Create a synchronized map used for (String name, AnnotImpl annot).
+	/** Create a map used for (String name, AnnotImpl annot).
 	 */
 	private static Map newAnnotImpls() {
-		return Collections.synchronizedMap(new LinkedHashMap(3));
+		return new LinkedHashMap(4);
 	}
 
 	//Cloneable//
@@ -245,17 +220,13 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	public Object clone() {
 		final AnnotationMap clone;
 		try {
-			synchronized (this) {
-				clone = (AnnotationMap)super.clone();
-			}
+			clone = (AnnotationMap)super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError();
 		}
 
 		if (_annots != null) {
-			synchronized (_annots) {
-				clone._annots = new HashMap(_annots);
-			}
+			clone._annots = new HashMap(_annots);
 
 			for (Iterator it = clone._annots.entrySet().iterator();
 			it.hasNext();) {
@@ -268,17 +239,10 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		return clone;
 	}
 	public String toString() {
-		if (_annots != null) {
-			synchronized (_annots) {
-				return "[annot:" + _annots + ']';
-			}
-		}
-		return "[annot:]";
+		return "[annot:" + _annots + ']';
 	}
 
 	/** An implementation of {@link Annotation}.
-	 * <p>For better performance, it is not thread-safe, since
-	 * it is writable only in AnnotationMap.
 	 */
 	private static class AnnotImpl implements Annotation {
 		private final String _name;

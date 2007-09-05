@@ -26,7 +26,10 @@ import java.util.Iterator;
 
 /**
  * A map of component definitions.
- * Used with {@link PageDefinition#getComponentDefinitionMap}.
+ * Used with {@link PageDefinition#getComponentDefinitionMap}
+ * and {@link LanguageDefinition}.
+ *
+ * <p>It is thread-safe (since it is used in {@link LanguageDefinition}).
  *
  * @author tomyeh
  */

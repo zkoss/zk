@@ -760,33 +760,3 @@ public class LanguageDefinition {
 		}
 	}
 }
-
-/*package*/ class LangEvalRef extends AbstractEvalRef
-implements java.io.Serializable {
-	private transient LanguageDefinition _langdef;
-	/*package*/ LangEvalRef(LanguageDefinition langdef) {
-		_langdef = langdef;
-	}
-
-	//EvaluatorRef//
-	public Evaluator getEvaluator() {
-		return _langdef.getEvaluator();
-	}
-
-	//Serializable//
-	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
-		s.defaultWriteObject();
-
-		s.writeObject(_langdef != null ? _langdef.getName(): null);
-	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		s.defaultReadObject();
-
-		final String langnm = (String)s.readObject();
-		if (langnm != null)
-			_langdef = LanguageDefinition.lookup(langnm);
-	}
-};

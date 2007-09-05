@@ -34,16 +34,20 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.*;
-import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 import org.zkoss.zk.scripting.Interpreter;
 
 /**
  * An implementation of {@link ComponentDefinition}.
  * 
+ * <p>Note: it is not thread safe. Thus, it is better to {@link #clone}
+ * and then modifying the cloned instance if you want to change it
+ * concurrently.
+ *
  * @author tomyeh
  */
 public class ComponentDefinitionImpl
@@ -54,7 +58,7 @@ implements ComponentDefinition, java.io.Serializable {
 	private EvaluatorRef _evalr;
 	/** Either String or Class. */
 	private Object _implcls;
-	/** A synchronized map of molds (String name, ExValue moldURI). */
+	/** A map of molds (String name, ExValue moldURI). */
 	private Map _molds;
 	/** A map of custom attributs (String name, ExValue value). */
 	private Map _custAttrs;
@@ -131,15 +135,9 @@ implements ComponentDefinition, java.io.Serializable {
 			throw new IllegalArgumentException();
 
 		final ExValue ev = new ExValue(value, Object.class);
-		if (_custAttrs == null) {
-			synchronized (this) {
-				if (_custAttrs == null)
-					_custAttrs = new HashMap(4);
-			}
-		}
-		synchronized (_custAttrs) {
-			_custAttrs.put(name, ev);
-		}
+		if (_custAttrs == null)
+			_custAttrs = new HashMap(4);
+		_custAttrs.put(name, ev);
 	}
 
 	/** Associates an annotation to this component definition.
@@ -149,12 +147,8 @@ implements ComponentDefinition, java.io.Serializable {
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
 	public void addAnnotation(String annotName, Map annotAttrs) {
-		if (_annots == null) {
-			synchronized (this) {
-				if (_annots == null)
-					_annots = new AnnotationMap();
-			}
-		}
+		if (_annots == null)
+			_annots = new AnnotationMap();
 		_annots.addAnnotation(annotName, annotAttrs);
 	}
 	/** Adds an annotation to the specified proeprty of this component
@@ -166,12 +160,8 @@ implements ComponentDefinition, java.io.Serializable {
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
 	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
-		if (_annots == null) {
-			synchronized (this) {
-				if (_annots == null)
-					_annots = new AnnotationMap();
-			}
-		}
+		if (_annots == null)
+			_annots = new AnnotationMap();
 		_annots.addAnnotation(propName, annotName, annotAttrs);
 	}
 
@@ -323,40 +313,26 @@ implements ComponentDefinition, java.io.Serializable {
 			throw new IllegalArgumentException("name");
 
 		final Property prop = new Property(_evalr, name, value, null);
-		if (_props == null) {
-			synchronized (this) {
-				if (_props == null) {
-					final List props = new LinkedList();
-					props.add(prop);
-					_props = props;
-					return;
-				}
-			}
-		}
-		synchronized (_props) {
-			_props.add(prop);
-		}
+		if (_props == null)
+			_props = new LinkedList();
+		_props.add(prop);
 	}
 	public void applyProperties(Component comp) {
 		//Note: it doesn't apply annotations since it is done
 		//by AbstractComponent's initial with getAnnotationMap()
 
 		if (_custAttrs != null) {
-			synchronized (_custAttrs) {
-				for (Iterator it = _custAttrs.entrySet().iterator();
-				it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					comp.setAttribute((String)me.getKey(),
-						((ExValue)me.getValue()).getValue(_evalr, comp));
-				}
+			for (Iterator it = _custAttrs.entrySet().iterator();
+			it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				comp.setAttribute((String)me.getKey(),
+					((ExValue)me.getValue()).getValue(_evalr, comp));
 			}
 		}
 		if (_props != null) {
-			synchronized (_props) {
-				for (Iterator it = _props.iterator(); it.hasNext();) {
-					final Property prop = (Property)it.next();
-					prop.assign(comp);
-				}
+			for (Iterator it = _props.iterator(); it.hasNext();) {
+				final Property prop = (Property)it.next();
+				prop.assign(comp);
 			}
 		}
 	}
@@ -366,16 +342,14 @@ implements ComponentDefinition, java.io.Serializable {
 			propmap = new HashMap();
 
 		if (_props != null) {
-			synchronized (_props) {
-				for (Iterator it = _props.iterator(); it.hasNext();) {
-					final Property prop = (Property)it.next();
-					if (parent != null) {
-						if (prop.isEffective(parent))
-							propmap.put(prop.getName(), prop.getValue(parent));
-					} else {
-						if (prop.isEffective(owner))
-							propmap.put(prop.getName(), prop.getValue(owner));
-					}
+			for (Iterator it = _props.iterator(); it.hasNext();) {
+				final Property prop = (Property)it.next();
+				if (parent != null) {
+					if (prop.isEffective(parent))
+						propmap.put(prop.getName(), prop.getValue(parent));
+				} else {
+					if (prop.isEffective(owner))
+						propmap.put(prop.getName(), prop.getValue(owner));
 				}
 			}
 		}
@@ -383,28 +357,40 @@ implements ComponentDefinition, java.io.Serializable {
 	}
 
 	public void addMold(String name, String moldURI) {
-		if (name == null || moldURI == null
-		|| name.length() == 0 || moldURI.length() == 0)
+		if (moldURI.startsWith("class:")) {
+			final String clsnm = moldURI.substring(6);
+			try {
+				addMold(name,
+					(ComponentRenderer)Classes.newInstanceByThread(clsnm));
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Failed to instantiate "+clsnm);
+			}
+		} else {
+			if (moldURI.length() == 0)
+				throw new IllegalArgumentException();
+			addMold0(name, new ExValue(moldURI, String.class));
+		}
+	}
+	public void addMold(String name, ComponentRenderer renderer) {
+		addMold0(name, renderer);
+	}
+	private void addMold0(String name, Object mold) {
+		if (name == null || name.length() == 0 || mold == null)
 			throw new IllegalArgumentException();
 
-		final ExValue ev = new ExValue(moldURI, String.class);
-		if (_molds == null) {
-			synchronized (this) {
-				if (_molds == null) {
-					final Map molds = new HashMap(3);
-					molds.put(name, ev);
-					_molds = Collections.synchronizedMap(molds);
-					return;
-				}
-			}
-		}
-
-		_molds.put(name, ev);
+		if (_molds == null)
+			_molds = new HashMap(3);
+		_molds.put(name, mold);
 	}
-	public String getMoldURI(Component comp, String name) {
-		final ExValue mold = _molds != null ? (ExValue)_molds.get(name): null;
-		return mold == null ? null:
-			toAbsoluteURI((String)mold.getValue(_evalr, comp));
+	public Object getMoldURI(Component comp, String name) {
+		final Object o = _molds.get(name);
+		if (o instanceof ExValue) {
+			final ExValue mold = _molds != null ? (ExValue)o: null;
+			return mold == null ? null:
+				toAbsoluteURI((String)mold.getValue(_evalr, comp));
+		} else {
+			return o;
+		}
 	}
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
@@ -454,24 +440,23 @@ implements ComponentDefinition, java.io.Serializable {
 	public String toString() {
 		return "[ComponentDefinition: "+_name+']';
 	}
+
 	//Cloneable/
 	public Object clone() {
-		synchronized (this) {
-			try {
-				final ComponentDefinitionImpl compdef =
-					(ComponentDefinitionImpl)super.clone();
-				if (_annots != null)
-					compdef._annots = (AnnotationMap)_annots.clone();
-				if (_props != null)
-					compdef._props = new LinkedList(_props);
-				if (_molds != null)
-					compdef._molds = Collections.synchronizedMap(new HashMap(_molds));
-				if (_custAttrs != null)
-					compdef._custAttrs = new HashMap(_custAttrs);
-				return compdef;
-			} catch (CloneNotSupportedException ex) {
-				throw new InternalError();
-			}
+		final ComponentDefinitionImpl compdef;
+		try {
+			compdef = (ComponentDefinitionImpl)super.clone();
+		} catch (CloneNotSupportedException ex) {
+			throw new InternalError();
 		}
+		if (_annots != null)
+			compdef._annots = (AnnotationMap)_annots.clone();
+		if (_props != null)
+			compdef._props = new LinkedList(_props);
+		if (_molds != null)
+			compdef._molds = new HashMap(_molds);
+		if (_custAttrs != null)
+			compdef._custAttrs = new HashMap(_custAttrs);
+		return compdef;
 	}
 }

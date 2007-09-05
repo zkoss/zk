@@ -48,6 +48,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
+import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -74,6 +75,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.impl.ListenerIterator;
+import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
@@ -381,9 +383,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * and the molds defined in the component definition
 	 * ({@link ComponentDefinition}).
 	 *
-	 * <p>Used usually for component implementation.
+	 * <p>As of release 3.0.0, it may return a String instance representing
+	 * the URI, or a {@link ComponentRenderer} instance responsible for
+	 * redrawing.
+	 *
+	 * <p>Used only for component implementation.
 	 */
-	protected String getMoldURI() {
+	protected Object getMoldURI() {
 		return _def.getMoldURI(this, getMold());
 	}
 
@@ -967,16 +973,29 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	//-- in the redrawing phase --//
-	/** Includes the page returned by {@link #getMoldURI} and
-	 * set the self attribute to be this component.
+	/** Redraws this component.
+	 * This method implements the mold mechanism.
+	 * <ol>
+	 * <li>It first invokes {@link #getMoldURI} to retrieve the mold
+	 * to redraw. The mold is either an URI (String) or a
+	 * {@link ComponentRenderer} instance.
+	 * <li>If URI, it invokes {@link Execution#include} to generate
+	 * the output.</li>
+	 * <li>If a {@link ComponentRenderer} instance, {@link ComponentRenderer#redraw}
+	 * is called to generate the output.</li>
+	 * </ul>
 	 */
 	public void redraw(Writer out) throws IOException {
-		final String mold = getMoldURI();
-//		if (D.ON && log.finerable()) log.finer("Redraw comp: "+this+" with "+mold);
-
-		final Map attrs = new HashMap(3);
-		attrs.put("self", this);
-		getExecution().include(out, mold, attrs, Execution.PASS_THRU_ATTR);
+		final Object mold = getMoldURI();
+		if (mold instanceof ComponentRenderer) {
+			((ComponentRenderer)mold)
+				.render(this, out != null ? out: ZkFns.getCurrentOut());
+		} else {
+			final Map attrs = new HashMap(3);
+			attrs.put("self", this);
+			getExecution()
+				.include(out, (String)mold, attrs, Execution.PASS_THRU_ATTR);
+		}
 	}
 	/* Default: does nothing.
 	 */
