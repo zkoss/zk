@@ -96,14 +96,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!-- Imports -->
 	<!--         -->
 	<import>
-		<import-name>CommonFns</import-name>
-		<import-class>org.zkoss.xel.fn.CommonFns</import-class>
-	</import>
-	<import>
-		<import-name>StringFns</import-name>
-		<import-class>org.zkoss.xel.fn.StringFns</import-class>
-	</import>
-	<import>
 		<import-name>ServletFns</import-name>
 		<import-class>org.zkoss.web.fn.ServletFns</import-class>
 	</import>
