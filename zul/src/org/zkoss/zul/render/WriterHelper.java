@@ -24,7 +24,6 @@ import java.io.Writer;
 /**
  * A helper class for writting output.
  * @author Dennis.Chen
- *
  */
 /**package**/ class WriterHelper {
 	Writer _w;
@@ -34,20 +33,21 @@ import java.io.Writer;
 	}
 	
 	/**
-	 * Write str. 
-	 * If str is null or str is empty after trim() then nothing will be written.
+	 * Write a string. 
+	 * If str is null, nothing will be written.
+	 *
 	 * @param str a string to be written
-	 * @return
-	 * @throws IOException
+	 * @return this object
+	 * @throws IOException if failed to write
 	 */
 	public WriterHelper write(String str) throws IOException{
-		return write(str,true,true);
+		if (str != null) _w.write(str);
+		return this;
 	}
-	
 	/**
 	 * Write new line.
-	 * @return
-	 * @throws IOException
+	 * @return this object
+	 * @throws IOException if failed to write
 	 */
 	public WriterHelper writeln() throws IOException{
 		_w.write("\n");
@@ -55,50 +55,51 @@ import java.io.Writer;
 	}
 	
 	/**
-	 * Write str , and then write a new line.
+	 * Write a string, and then write a new line.
+	 * If str is null, nothing will be written.
+	 *
 	 * @param str a string to be written
-	 * @return
-	 * @throws IOException
+	 * @return this object
+	 * @throws IOException if failed to write
 	 */
 	public WriterHelper writeln(String str) throws IOException{
-		write(str,true,true);
-		_w.write("\n");
+		if (str != null) {
+			_w.write(str);
+			_w.write("\n");
+		}
 		return this;
 	}
 	
 	/**
-	 * Write str. If skipEmpty is true, then nothing will be written when str is null or empty.
-	 * This method doesn't trim str when writting.
-	 * @param str
-	 * @param skipEmpty
-	 * @return
-	 * @throws IOException
-	 */
-	public WriterHelper write(String str,boolean skipEmpty) throws IOException{
-		write(str,skipEmpty,false);
-		return this;
-	}
-	
-	/**
-	 * Write str. If skipEmpty is true, then nothing will be written when str is null or empty.
+	 * Write a string.
 	 * If trim is true, then a trimed string will be written. 
+	 * If str is null, nothing will be written.
+	 *
 	 * @param str a string to be written
-	 * @param skipEmpty skip write if str is null or empty string.
 	 * @param trim trim str when write.
-	 * @return
-	 * @throws IOException
+	 * @return this object
+	 * @throws IOException if failed to write
 	 */
-	public WriterHelper write(String str,boolean skipEmpty,boolean trim) throws IOException{
-		if(skipEmpty && (str==null||str.trim().length()==0)){
-			return this;
-		}
-		if(trim && str!=null){
-			str = str.trim();
-		}
-		_w.write(str);
-		
+	public WriterHelper write(String str, boolean trim) throws IOException {
+		if (str != null)
+			_w.write(trim ? str.trim(): str);
 		return this;
 	}
-	
-	
+	/**
+	 * Write a string, and then write a new line.
+	 * If trim is true, then a trimed string will be written. 
+	 * If str is null, nothing will be written.
+	 *
+	 * @param str a string to be written
+	 * @param trim trim str when write.
+	 * @return this object
+	 * @throws IOException if failed to write
+	 */
+	public WriterHelper writeln(String str, boolean trim) throws IOException {
+		if (str != null) {
+			_w.write(trim ? str.trim(): str);
+			_w.write("\n");
+		}
+		return this;
+	}
 }
