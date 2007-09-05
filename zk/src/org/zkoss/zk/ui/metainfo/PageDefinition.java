@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import org.zkoss.lang.Classes;
@@ -71,6 +72,8 @@ public class PageDefinition extends NodeInfo {
 	/** The zscript language. */
 	private String _zslang = "Java";
 	private List _taglibs;
+	/** A map of imported classes for expression, Map<String nm, Class cls>. */
+	private Map _expimps;
 	/** The evaluator. */
 	private Evaluator _eval;
 	/** The evaluator reference. */
@@ -384,34 +387,6 @@ public class PageDefinition extends NodeInfo {
 		_cacheable = cacheable;
 	}
 
-	/** Sets the implementation of the expression factory that shall
-	 * be used by this page.
-	 *
-	 * <p>Default: null (use the default).
-	 *
-	 * @param expfcls the implemtation class, or null to use the default.
-	 * Note: expfcls must implement {@link ExpressionFactory}.
-	 * If null is specified, the class defined in
-	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
-	 * @since 3.0.0
-	 */
-	public void setExpressionFactoryClass(Class expfcls) {
-		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
-			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
-		_expfcls = expfcls;
-	}
-	/** Returns the implementation of the expression factory that
-	 * is used by this page, or null if
-	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
-	 * is used.
-	 *
-	 * @see #setExpressionFactoryClass
-	 * @since 3.0.0
-	 */
-	public Class getExpressionFactoryClass() {
-		return _expfcls;
-	}
-
 	/** Adds a root attribute.
 	 * The previous attributee of the same will be replaced.
 	 *
@@ -527,6 +502,46 @@ public class PageDefinition extends NodeInfo {
 		_eval = null; //ask for re-gen
 		_mapper = null; //ask for re-parse
 	}
+	/** Adds an imported class to the expression factory.
+	 * @since 3.0.0
+	 */
+	public void addExpressionImport(String nm, Class cls) {
+		if (nm == null || cls == null)
+			throw new IllegalArgumentException();
+		if (_expimps == null)
+			_expimps = new HashMap(4);
+		_expimps.put(nm, cls);
+		_eval = null; //ask for re-gen
+		_mapper = null; //ask for re-parse
+	}
+	/** Sets the implementation of the expression factory that shall
+	 * be used by this page.
+	 *
+	 * <p>Default: null (use the default).
+	 *
+	 * @param expfcls the implemtation class, or null to use the default.
+	 * Note: expfcls must implement {@link ExpressionFactory}.
+	 * If null is specified, the class defined in
+	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
+	 * @since 3.0.0
+	 */
+	public void setExpressionFactoryClass(Class expfcls) {
+		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
+			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
+		_expfcls = expfcls;
+	}
+	/** Returns the implementation of the expression factory that
+	 * is used by this page, or null if
+	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
+	 * is used.
+	 *
+	 * @see #setExpressionFactoryClass
+	 * @since 3.0.0
+	 */
+	public Class getExpressionFactoryClass() {
+		return _expfcls;
+	}
+
 	/** Returns the evaluator based on this page definition (never null).
 	 * @since 3.0.0
 	 */
@@ -555,7 +570,7 @@ public class PageDefinition extends NodeInfo {
 	 */
 	public FunctionMapper getFunctionMapper() {
 		if (_mapper == null) {
-			_mapper = Taglibs.getFunctionMapper(_taglibs, _locator);
+			_mapper = Taglibs.getFunctionMapper(_taglibs, _expimps, _locator);
 			if (_mapper == null)
 				_mapper = Expressions.EMPTY_MAPPER;
 		}

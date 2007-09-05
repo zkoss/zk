@@ -35,6 +35,7 @@ import java.net.URL;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.PotentialDeadLockException;
+import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.idom.Namespace;
@@ -222,60 +223,10 @@ public class Parser {
 	throws Exception {
 		final String target = pi.getTarget();
 		final Map params = pi.parseData();
-		if ("taglib".equals(target)) {
-			final String uri = (String)params.remove("uri");
-			final String prefix = (String)params.remove("prefix");
-			if (!params.isEmpty())
-				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
-			if (uri == null || prefix == null)
-				throw new UiException("Both uri and prefix attribute are required, "+pi.getLocator());
-			//if (D.ON && log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
-			noEL("prefix", prefix, pi);
-			noEL("uri", uri, pi); //not support EL (kind of chicken-egg issue)
-			pgdef.addTaglib(new Taglib(prefix, toAbsoluteURI(uri, false)));
+		if ("page".equals(target)) {
+			parsePageDirective(pgdef, pi, params);
 		} else if ("init".equals(target)) {
-			final List args = new LinkedList();
-			for (int j = 0;; ++j) {
-				final String arg = (String)params.remove("arg" + j);
-				if (arg == null) break;
-				args.add(arg);
-			}
-
-			final String clsnm = (String)params.remove("class");
-			final String zsrc = (String)params.remove("zscript");
-
-			if (!params.isEmpty())
-				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
-
-			if (isEmpty(clsnm)) {
-				if (isEmpty(zsrc))
-					throw new UiException("Either the class or zscript attribute must be specified, "+pi.getLocator());
-
-				final ZScript zs;
-				final String zslang = pgdef.getZScriptLanguage();
-				if (zsrc.indexOf("${") >= 0) {
-					zs = new ZScript(pgdef.getEvaluatorRef(),
-						zslang, zsrc, null, getLocator()); //URL in EL
-				} else {
-					final URL url = getLocator().getResource(zsrc);
-					if (url == null) throw new UiException("File not found: "+zsrc+", at "+pi.getLocator());
-						//don't throw FileNotFoundException since Tomcat 'eats' it
-					zs = new ZScript(pgdef.getEvaluatorRef(), zslang, url, null);
-				}
-
-				pgdef.addInitiatorInfo(
-					new InitiatorInfo(new ZScriptInitiator(zs), args));
-			} else {
-				if (!isEmpty(zsrc))
-					throw new UiException("You cannot specify both class and zscript, "+pi.getLocator());
-
-				pgdef.addInitiatorInfo(
-					clsnm.indexOf("${") >= 0 ? //class supports EL
-						new InitiatorInfo(clsnm, args):
-						new InitiatorInfo(locateClass(clsnm), args));
-					//Note: we don't resolve the class name later because
-					//no zscript run before init (and better performance)
-			}
+			parseInitDirective(pgdef, pi, params);
 		} else if ("variable-resolver".equals(target)) {
 			final String clsnm = (String)params.remove("class");
 			if (isEmpty(clsnm))
@@ -288,76 +239,20 @@ public class Parser {
 					new VariableResolverInfo(clsnm):
 					new VariableResolverInfo(locateClass(clsnm)));
 		} else if ("component".equals(target)) { //declare a component
-			final String name = (String)params.remove("name");
-			noELnorEmpty("name", name, pi); //note: macroURI supports EL
-
-			String macroURI = (String)params.remove("macroURI");
-			if (macroURI == null) macroURI = (String)params.remove("macro-uri"); //backward compatible (2.4.x)
-			final String extds = (String)params.remove("extends");
-			final String clsnm = (String)params.remove("class");
-			ComponentDefinition compdef;
-			if (macroURI != null) {
-				//if (D.ON && log.finerable()) log.finer("macro component definition: "+name);
-
-				final String inline = (String)params.remove("inline");
-				noEL("inline", inline, pi);
-				noEL("macroURI", macroURI, pi);
-					//no EL because pagedef must be loaded to resolve
-					//the impl class before creating an instance of macro
-
-				final boolean bInline = "true".equals(inline);
-				compdef = pgdef.getLanguageDefinition().getMacroDefinition(
-					name, toAbsoluteURI(macroURI, false), bInline, pgdef);
-				if (!isEmpty(clsnm)) {
-					if (bInline)
-						throw new UiException("class not allowed with inline macros, "+pi.getLocator());
-					noEL("class", clsnm, pi);
-					compdef.setImplementationClass(clsnm);
-						//Resolve later since might defined in zscript
-				}
-			} else if (extds != null) { //extends
-				//if (D.ON && log.finerable()) log.finer("Override component definition: "+name);
-
-				noEL("extends", extds, pi);
-				final ComponentDefinition ref = pgdef.getLanguageDefinition()
-					.getComponentDefinition(extds);
-				if (ref.isMacro())
-					throw new UiException("Unable to extend from a macro component, "+pi.getLocator());
-
-				compdef = ref.clone(null, name);
-				if (!isEmpty(clsnm)) {
-					noEL("class", clsnm, pi);
-					compdef.setImplementationClass(clsnm);
-						//Resolve later since might defined in zscript
-				}
-			} else {
-				//if (D.ON && log.finerable()) log.finer("Add component definition: name="+name);
-
-				noELnorEmpty("class", clsnm, pi);
-
-				final ComponentDefinitionImpl cdi =
-					new ComponentDefinitionImpl(null, pgdef, name, (Class)null);
-				cdi.setCurrentDirectory(getLocator().getDirectory());
-					//mold URI requires it
-				compdef = cdi;
-				compdef.setImplementationClass(clsnm);
-					//Resolve later since might be defined in zscript
-			}
-
-			pgdef.addComponentDefinition(compdef);
-
-			String moldnm = (String)params.remove("moldName");
-			if (moldnm == null) moldnm = (String)params.remove("mold-name"); //backward comaptible (2.4.x)
-			noEL("moldName", moldnm, pi);
-			String moldURI = (String)params.remove("moldURI");
-			if (moldURI == null) moldURI = (String)params.remove("mold-uri"); //backward comaptible (2.4.x)
-			if (!isEmpty(moldURI))
-				compdef.addMold(isEmpty(moldnm) ? "default": moldnm,
-					toAbsoluteURI(moldURI, true));
-			for (Iterator e = params.entrySet().iterator(); e.hasNext();) {
-				final Map.Entry me = (Map.Entry)e.next();
-				compdef.addProperty((String)me.getKey(), (String)me.getValue());
-			}
+			parseComponentDirective(pgdef, pi, params);
+		} else if ("taglib".equals(target)) {
+			final String uri = (String)params.remove("uri");
+			final String prefix = (String)params.remove("prefix");
+			if (!params.isEmpty())
+				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
+			if (uri == null || prefix == null)
+				throw new UiException("Both uri and prefix attribute are required, "+pi.getLocator());
+			//if (D.ON && log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
+			noEL("prefix", prefix, pi);
+			noEL("uri", uri, pi); //not support EL (kind of chicken-egg issue)
+			pgdef.addTaglib(new Taglib(prefix, toAbsoluteURI(uri, false)));
+		} else if ("evaluator".equals(target)) {
+			parseEvaluatorDirective(pgdef, pi, params);
 		} else if ("link".equals(target) || "meta".equals(target)) { //declare a header element
 			pgdef.addHeaderInfo(new HeaderInfo(target, params));
 		} else if ("root-attributes".equals(target)) {
@@ -365,12 +260,56 @@ public class Parser {
 				final Map.Entry me = (Map.Entry)it.next();
 				pgdef.setRootAttribute((String)me.getKey(), (String)me.getValue());
 			}
-		} else if ("page".equals(target)) {
-			parsePageDirective(pgdef, pi, params);
 		} else if ("import".equals(target)) { //import
 			throw new UiException("The import directive can be used only at the top level, "+pi.getLocator());
 		} else {
 			log.warning("Unknown processing instruction: "+target+", "+pi.getLocator());
+		}
+	}
+	/** Process the init directive. */
+	private void parseInitDirective(PageDefinition pgdef,
+	ProcessingInstruction pi, Map params) throws Exception {
+		final List args = new LinkedList();
+		for (int j = 0;; ++j) {
+			final String arg = (String)params.remove("arg" + j);
+			if (arg == null) break;
+			args.add(arg);
+		}
+
+		final String clsnm = (String)params.remove("class");
+		final String zsrc = (String)params.remove("zscript");
+
+		if (!params.isEmpty())
+			log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
+
+		if (isEmpty(clsnm)) {
+			if (isEmpty(zsrc))
+				throw new UiException("Either the class or zscript attribute must be specified, "+pi.getLocator());
+
+			final ZScript zs;
+			final String zslang = pgdef.getZScriptLanguage();
+			if (zsrc.indexOf("${") >= 0) {
+				zs = new ZScript(pgdef.getEvaluatorRef(),
+					zslang, zsrc, null, getLocator()); //URL in EL
+			} else {
+				final URL url = getLocator().getResource(zsrc);
+				if (url == null) throw new UiException("File not found: "+zsrc+", at "+pi.getLocator());
+					//don't throw FileNotFoundException since Tomcat 'eats' it
+				zs = new ZScript(pgdef.getEvaluatorRef(), zslang, url, null);
+			}
+
+			pgdef.addInitiatorInfo(
+				new InitiatorInfo(new ZScriptInitiator(zs), args));
+		} else {
+			if (!isEmpty(zsrc))
+				throw new UiException("You cannot specify both class and zscript, "+pi.getLocator());
+
+			pgdef.addInitiatorInfo(
+				clsnm.indexOf("${") >= 0 ? //class supports EL
+					new InitiatorInfo(clsnm, args):
+					new InitiatorInfo(locateClass(clsnm), args));
+				//Note: we don't resolve the class name later because
+				//no zscript run before init (and better performance)
 		}
 	}
 	/** Process the page directive. */
@@ -405,11 +344,115 @@ public class Parser {
 			} else if ("xml".equals(nm)) {
 				noELnorEmpty("xml", val, pi);
 				pgdef.setFirstLine("<?xml " + val + "?>");
-			} else if ("evaluator".equals(nm)) {
-				noELnorEmpty("evaluator", val, pi);
-				pgdef.setExpressionFactoryClass(locateClass(val));
 			} else {
 				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
+			}
+		}
+	}
+	/** Process the component directive. */
+	private void parseComponentDirective(PageDefinition pgdef,
+	ProcessingInstruction pi, Map params) throws Exception {
+		final String name = (String)params.remove("name");
+		noELnorEmpty("name", name, pi); //note: macroURI supports EL
+
+		String macroURI = (String)params.remove("macroURI");
+		if (macroURI == null) macroURI = (String)params.remove("macro-uri"); //backward compatible (2.4.x)
+		final String extds = (String)params.remove("extends");
+		final String clsnm = (String)params.remove("class");
+		ComponentDefinition compdef;
+		if (macroURI != null) {
+			//if (D.ON && log.finerable()) log.finer("macro component definition: "+name);
+
+			final String inline = (String)params.remove("inline");
+			noEL("inline", inline, pi);
+			noEL("macroURI", macroURI, pi);
+				//no EL because pagedef must be loaded to resolve
+				//the impl class before creating an instance of macro
+
+			final boolean bInline = "true".equals(inline);
+			compdef = pgdef.getLanguageDefinition().getMacroDefinition(
+				name, toAbsoluteURI(macroURI, false), bInline, pgdef);
+			if (!isEmpty(clsnm)) {
+				if (bInline)
+					throw new UiException("class not allowed with inline macros, "+pi.getLocator());
+				noEL("class", clsnm, pi);
+				compdef.setImplementationClass(clsnm);
+					//Resolve later since might defined in zscript
+			}
+		} else if (extds != null) { //extends
+			//if (D.ON && log.finerable()) log.finer("Override component definition: "+name);
+
+			noEL("extends", extds, pi);
+			final ComponentDefinition ref = pgdef.getLanguageDefinition()
+				.getComponentDefinition(extds);
+			if (ref.isMacro())
+				throw new UiException("Unable to extend from a macro component, "+pi.getLocator());
+
+			compdef = ref.clone(null, name);
+			if (!isEmpty(clsnm)) {
+				noEL("class", clsnm, pi);
+				compdef.setImplementationClass(clsnm);
+					//Resolve later since might defined in zscript
+			}
+		} else {
+			//if (D.ON && log.finerable()) log.finer("Add component definition: name="+name);
+
+			noELnorEmpty("class", clsnm, pi);
+
+			final ComponentDefinitionImpl cdi =
+				new ComponentDefinitionImpl(null, pgdef, name, (Class)null);
+			cdi.setCurrentDirectory(getLocator().getDirectory());
+				//mold URI requires it
+			compdef = cdi;
+			compdef.setImplementationClass(clsnm);
+				//Resolve later since might be defined in zscript
+		}
+
+		pgdef.addComponentDefinition(compdef);
+
+		String moldnm = (String)params.remove("moldName");
+		if (moldnm == null) moldnm = (String)params.remove("mold-name"); //backward comaptible (2.4.x)
+		noEL("moldName", moldnm, pi);
+		String moldURI = (String)params.remove("moldURI");
+		if (moldURI == null) moldURI = (String)params.remove("mold-uri"); //backward comaptible (2.4.x)
+		if (!isEmpty(moldURI))
+			compdef.addMold(isEmpty(moldnm) ? "default": moldnm,
+				toAbsoluteURI(moldURI, true));
+		for (Iterator e = params.entrySet().iterator(); e.hasNext();) {
+			final Map.Entry me = (Map.Entry)e.next();
+			compdef.addProperty((String)me.getKey(), (String)me.getValue());
+		}
+	}
+	/** Process the evaluator directive. */
+	private static void parseEvaluatorDirective(PageDefinition pgdef,
+	ProcessingInstruction pi, Map params) throws Exception {
+		final String clsnm = (String)params.remove("class");
+		if (clsnm != null && clsnm.length() > 0) {
+			noELnorEmpty("class", clsnm, pi);
+			pgdef.setExpressionFactoryClass(locateClass(clsnm));
+		}
+
+		final String imports = (String)params.remove("import");
+		if (imports != null && imports.length() > 0) {
+			//Note: we cannot use Maps.parse since it cannot handle
+			//"a,b" => (null, a) will be replaced by (null, b)
+
+			Collection ims = CollectionsX.parse(null, imports, ',', false);
+			for (Iterator it = ims.iterator(); it.hasNext();) {
+				final String im = (String)it.next();
+
+				final int k = im.indexOf('=');
+				String nm = k > 0 ? im.substring(0, k).trim(): null;
+				String cn = (k >= 0 ? im.substring(k + 1): im).trim();
+
+				if (cn.length() != 0) {
+					final Class cs = locateClass(cn);
+					if (nm == null || nm.length() == 0) {
+						final int j = cn.lastIndexOf('.');
+						nm = j >= 0 ? cn.substring(j + 1): cn;
+					}
+					pgdef.addExpressionImport(nm, cs);
+				}
 			}
 		}
 	}
