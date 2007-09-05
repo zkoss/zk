@@ -336,13 +336,13 @@ public class Parser {
 				noELnorEmpty("cacheable", val, pi);
 				pgdef.setCacheable(Boolean.valueOf("true".equals(val)));
 			} else if ("contentType".equals(nm)) {
-				noELnorEmpty("contentType", val, pi);
+				noEmpty("contentType", val, pi);
 				pgdef.setContentType(val);
 			} else if ("docType".equals(nm)) {
-				noELnorEmpty("docType", val, pi);
+				noEmpty("docType", val, pi);
 				pgdef.setDocType("<!DOCTYPE " + val + '>');
 			} else if ("xml".equals(nm)) {
-				noELnorEmpty("xml", val, pi);
+				noEmpty("xml", val, pi);
 				pgdef.setFirstLine("<?xml " + val + "?>");
 			} else {
 				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());

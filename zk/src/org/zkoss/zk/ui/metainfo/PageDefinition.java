@@ -88,7 +88,7 @@ public class PageDefinition extends NodeInfo {
 	private List _headerdefs;
 	/** Map(String name, ExValue value). */
 	private Map _rootAttrs;
-	private String _contentType, _docType, _firstLine;
+	private ExValue _contentType, _docType, _firstLine;
 	/** The expression factory (ExpressionFactory).*/
 	private Class _expfcls;
 	private final ComponentDefinitionMap _compdefs;
@@ -322,45 +322,60 @@ public class PageDefinition extends NodeInfo {
 		return sb.toString();
 	}
 
-	/** Returns the content type, or null to use the device default.
+	/** Returns the content type (after evaluation),
+	 * or null to use the device default.
+	 *
+	 * @param page the page used to evaluate EL expressions, if any
 	 * @since 3.0.0
 	 */
-	public String getContentType() {
-		return _contentType;
+	public String getContentType(Page page) {
+		return _contentType != null ?
+			(String)_contentType.getValue(_evalr, page): null;
 	}
 	/** Sets the content type.
 	 *
 	 * <p>Default: null (use the device default).
+	 *
+	 * @param contentType the content type. It may coontain EL expressions.
 	 * @since 3.0.0
 	 */
 	public void setContentType(String contentType) {
-		_contentType = contentType;
+		_contentType = contentType != null && contentType.length() > 0 ?
+			new ExValue(contentType, String.class): null;
 	}
-	/** Returns the doc type (&lt;!DOCTYPE&gt;),
+	/** Returns the doc type (&lt;!DOCTYPE&gt;) (after evaluation),
 	 * or null to use the device default.
+	 *
+	 * @param page the page used to evaluate EL expressions, if any
 	 * @since 3.0.0
 	 */
-	public String getDocType() {
-		return _docType;
+	public String getDocType(Page page) {
+		return _docType != null ?
+			(String)_docType.getValue(_evalr, page): null;
 	}
 	/** Sets the doc type (&lt;!DOCTYPE&gt;).
 	 *
 	 * <p>Default: null (use the device default).
+	 *
+	 * @param docType the doc type. It may coontain EL expressions.
 	 * @since 3.0.0
 	 */
 	public void setDocType(String docType) {
-		_docType = docType;
+		_docType = docType != null && docType.length() > 0 ?
+			new ExValue(docType, String.class): null;
 	}
-	/** Returns the first line to be generated to the output,
-	 * or null if nothing to generate.
+	/** Returns the first line to be generated to the output
+	 * (after evaluation), or null if nothing to generate.
 	 *
 	 * <p>For XML devices, it is usually the xml processing instruction:<br/>
 	 * <code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 	 *
+	 * @param page the page used to evaluate EL expressions, if any
 	 * @since 3.0.0
 	 */
-	public String getFirstLine() {
-		return _firstLine;
+	public String getFirstLine(Page page) {
+		return _firstLine != null ?
+			(String)_firstLine.getValue(_evalr, page): null;
 	}
 	/** Sets the first line to be generated to the output.
 	 *
@@ -368,7 +383,8 @@ public class PageDefinition extends NodeInfo {
 	 * @since 3.0.0
 	 */
 	public void setFirstLine(String firstLine) {
-		_firstLine = firstLine;
+		_firstLine = firstLine != null && firstLine.length() > 0 ?
+			new ExValue(firstLine, String.class): null;
 	}
 	/** Returns if the client can cache the rendered result, or null
 	 * to use the device default.
@@ -594,9 +610,15 @@ public class PageDefinition extends NodeInfo {
 				public String getRootAttributes() {
 					return PageDefinition.this.getRootAttributes(page);
 				}
-				public String getContentType() {return _contentType;}
-				public String getDocType() {return _docType;}
-				public String getFirstLine() {return _firstLine;}
+				public String getContentType() {
+					return PageDefinition.this.getContentType(page);
+				}
+				public String getDocType() {
+					return PageDefinition.this.getDocType(page);
+				}
+				public String getFirstLine() {
+					return PageDefinition.this.getFirstLine(page);
+				}
 				public Boolean getCacheable() {return _cacheable;}
 			});
 	}
