@@ -461,7 +461,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-name>label</component-name>
 		<component-class>org.zkoss.zul.Label</component-class>
 		<text-as>value</text-as>
-		<!-- to speed up the performance, we don't use DSP here -->
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zul.render.DefaultLabel</mold-uri>
+			<!--<mold-uri>~./zul/html/label.dsp</mold-uri>-->
+		</mold>
 	</component>
 	<component>
 		<component-name>listbox</component-name>

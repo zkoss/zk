@@ -163,8 +163,11 @@ public class Label extends XulElement {
 		}
 	}
 
-	/** Whether to generate the value directly without ID. */
-	private boolean isIdRequired() {
+	/** Whether to generate the value directly without ID.
+	 * <p>Used only for component generated. Not for applications.
+	 * @since 3.0.0
+	 */
+	public boolean isIdRequired() {
 		final Component p = getParent();
 		return p == null || !isVisible() 
 			|| !isRawLabel(p) || !Components.isAutoId(getId())
@@ -189,7 +192,7 @@ public class Label extends XulElement {
 	 *
 	 * <p>Used only for component generation. Not for applications.
 	 */
-	private String getEncodedText() {
+	public String getEncodedText() {
 		StringBuffer sb = null;
 		final int len = _value.length();
 		if (_pre || _multiline) {
@@ -307,22 +310,6 @@ public class Label extends XulElement {
 	public void invalidate() {
 		if (isIdRequired()) super.invalidate();
 		else getParent().invalidate();
-	}
-	public void redraw(Writer out) throws IOException {
-		final boolean idRequired = isIdRequired();
-		if (idRequired) {
-			out.write("<span id=\"");
-			out.write(getUuid());
-			out.write("\"");
-			out.write(getOuterAttrs());
-			out.write(getInnerAttrs());
-			out.write('>');
-		}
-
-		out.write(getEncodedText());
-
-		if (idRequired)
-			out.write("</span>");
 	}
 	/** No child is allowed.
 	 */
