@@ -112,6 +112,7 @@ public class DefaultWindow implements ComponentRenderer {
 			out.write(wcExtStyle);
 			out.write('"');
 		}
+		out.write(">");
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();

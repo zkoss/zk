@@ -252,7 +252,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Caption</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.legend ? '~./zul/html/caption-legend.dsp': '~./zul/html/caption.dsp'}</mold-uri>
+ 			<mold-uri>class:org.zkoss.zul.render.DefaultCaption</mold-uri>
+ 			<!-- <mold-uri>${self.legend ? '~./zul/html/caption-legend.dsp': '~./zul/html/caption.dsp'}</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -385,11 +386,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Groupbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/groupbox.dsp</mold-uri>
+			<mold-uri>class:org.zkoss.zul.render.DefaultGroupbox</mold-uri>
+			<!-- <mold-uri>~./zul/html/groupbox.dsp</mold-uri>  -->
 		</mold>
 		<mold>
 			<mold-name>3d</mold-name>
-			<mold-uri>~./zul/html/groupbox-3d.dsp</mold-uri>
+			<mold-uri>class:org.zkoss.zul.render.DefaultGroupbox3D</mold-uri>
+			<!-- <mold-uri>~./zul/html/groupbox-3d.dsp</mold-uri>  -->
 		</mold>
 	</component>
 	<component>
@@ -726,7 +729,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Textbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/textbox.dsp</mold-uri>
+			<mold-uri>class:org.zkoss.zul.render.DefaultTextbox</mold-uri>
+			<!--<mold-uri>~./zul/html/textbox.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
