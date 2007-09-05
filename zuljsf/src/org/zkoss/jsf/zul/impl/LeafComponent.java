@@ -305,7 +305,7 @@ abstract public class LeafComponent extends AbstractComponent{
 		for(Iterator itor = _eventListenerMap.entrySet().iterator();itor.hasNext();)
 		{
 			Map.Entry entry = (Map.Entry)itor.next();
-			final ZScript zscript = ZScript.parseContent((String)entry.getValue(), null);
+			final ZScript zscript = ZScript.parseContent((String)entry.getValue());
 			((ComponentCtrl)_zulcomp).addEventHandler(
 					(String)entry.getKey(), new EventHandler(zscript,null));
 		}

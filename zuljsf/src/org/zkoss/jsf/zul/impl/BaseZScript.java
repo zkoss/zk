@@ -49,7 +49,7 @@ public class BaseZScript extends AbstractComponent {
 		String content = getBodyContent();
 		setBodyContent(null);//clear it,
 		if(content==null) return;
-		final ZScript zscript = ZScript.parseContent(content, null);
+		final ZScript zscript = ZScript.parseContent(content);
 		
 		if (zscript.getLanguage() == null)
 			zscript.setLanguage(_lang != null ? _lang: _rootcomp.getZScriptLanguage());
