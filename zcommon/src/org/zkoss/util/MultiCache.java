@@ -31,10 +31,21 @@ import org.zkoss.lang.Objects;
  * @author tomyeh
  * @since 3.0.0
  */
-public class MultiCache implements java.io.Serializable, Cloneable {
+public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 	private final CacheMap[] _caches;
 	private int _maxsize;
 
+	/** Constucts a multi cache with the specified number of internal caches,
+	 * the max size and the lifetime.
+	 *
+	 * @param nCache the postive number of the internal caches.
+	 * The large the number the fast the performance.
+	 */
+	public MultiCache(int nCache, int maxSize, int lifetime) {
+		this(nCache);
+		setMaxSize(maxSize);
+		setLifetime(lifetime);
+	}
 	/** Constructs a multi cache with the specified number of internal caches.
 	 *
 	 * @param nCache the postive number of the internal caches.
@@ -75,29 +86,30 @@ public class MultiCache implements java.io.Serializable, Cloneable {
 			_maxsize += _caches[j].getMaxSize();
 		}
 	}
-	
-	/** Returns whether the specified key is stored.
-	 */
+
+	//Cache//
 	public boolean containsKey(Object key) {
 		final CacheMap map = getCache(key);
 		synchronized (map) {
 			return map.containsKey(key);
 		}
 	}
-	/** Returns the object.
-	 */
 	public Object get(Object key) {
 		final CacheMap map = getCache(key);
 		synchronized (map) {
 			return map.get(key);
 		}
 	}
-	/** Stores an object to the cache
-	 */
 	public Object put(Object key, Object value) {
 		final CacheMap map = getCache(key);
 		synchronized (map) {
 			return map.put(key, value);
+		}
+	}
+	public Object remove(Object key) {
+		final CacheMap map = getCache(key);
+		synchronized (map) {
+			return map.remove(key);
 		}
 	}
 	private CacheMap getCache(Object key) {
@@ -107,46 +119,19 @@ public class MultiCache implements java.io.Serializable, Cloneable {
 		return _caches[hc % _caches.length];
 	}
 
-	//Control//
-	/**
-	 * Gets the minimal lifetime, unit=milliseconds.
-	 * An mapping won't be removed by GC unless the minimal lifetime
-	 * or the maximal allowed size exceeds.
-	 * @see #getMaxSize
-	 */
 	public int getLifetime() {
 		return _caches[0].getLifetime();
 	}
-	/**
-	 * Sets the minimal lifetime. Default: {@link CacheMap#DEFAULT_LIFETIME}.
-	 *
-	 * @param lifetime the lifetime, unit=milliseconds;
-	 * if non-posive, they will be removed immediately.
-	 * @see #getLifetime
-	 * @return this object
-	 */
-	public MultiCache setLifetime(int lifetime) {
+	public void setLifetime(int lifetime) {
 		synchronized (this) {
 			for (int j = 0; j < _caches.length; ++j)
 				_caches[j].setLifetime(lifetime);
 		}
-		return this;
 	}
-	/**
-	 * Gets the maximal allowed size. Defalut: {@link CacheMap#DEFAULT_MAXSIZE}.
-	 * An mapping won't be removed by GC unless the minimal lifetime
-	 * or the maximal allowed size exceeds.
-	 * @see #getLifetime
-	 */
 	public int getMaxSize() {
 		return _maxsize;
 	}
-	/**
-	 * Sets the maximal allowed size.
-	 * @see #getMaxSize
-	 * @return this object
-	 */
-	public MultiCache setMaxSize(int maxsize) {
+	public void setMaxSize(int maxsize) {
 		_maxsize = maxsize;
 
 		int v = maxsize / _caches.length;
@@ -157,7 +142,6 @@ public class MultiCache implements java.io.Serializable, Cloneable {
 			for (int j = 0; j < _caches.length; ++j)
 				_caches[j].setMaxSize(v);
 		}
-		return this;
 	}
 
 	//Cloneable//

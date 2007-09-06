@@ -47,12 +47,7 @@ import org.zkoss.util.logging.Log;
  * always returns true (rather than when GC is activated) -- of course,
  * you could override {@link #shallExpunge}, too.
  *
- * <p>The constructor doesn't provide parameter to set the lifetime
- * or maxsize. However, {@link #setLifetime} and {@link #setMaxSize}
- * return the map, so you can do:<br>
- * <code>Map map = new CacheMap().setLifetime(10000);</code>
- *
- * <p>It is very different from WeakHashMap:
+ * <p>It is different from WeakHashMap:
  *
  * <ul>
  *  <li>The mapping might be removed even if the key is hold somewhere
@@ -75,14 +70,9 @@ import org.zkoss.util.logging.Log;
  *
  * @author tomyeh
  */
-public class CacheMap implements Map, java.io.Serializable, Cloneable {
+public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20060622L;
 	//private static final Log log = Log.lookup(CacheMap.class);
-
-	/** The default minimal lifetime, unit=milliseconds. It is 30 minutes. */
-	public static final int DEFAULT_LIFETIME = 30 * 60 * 1000;
-	/** The default maximal allowed size. It is 1024. */
-	public static final int DEFAULT_MAXSIZE = 1024;
 
 	/** The map to store the mappings. */
 	private Map _map; //it is OK to serialized
@@ -260,6 +250,14 @@ public class CacheMap implements Map, java.io.Serializable, Cloneable {
 	}
 
 	//-- constructors --//
+	/** Constructs a cache map with the specified max size and lifetime.
+	 * @since 3.0.0
+	 */
+	public CacheMap(int maxSize, int lifetime) {
+		this();
+		setMaxSize(maxSize);
+		setLifetime(lifetime);
+	}
 	/** Constructs a cachemap by using LinkedHashMap internally.
 	 */
 	public CacheMap() {
@@ -301,9 +299,8 @@ public class CacheMap implements Map, java.io.Serializable, Cloneable {
 	 * if non-posive, they will be removed immediately.
 	 * @see #getLifetime
 	 */
-	public CacheMap setLifetime(int lifetime) {
+	public void setLifetime(int lifetime) {
 		_lifetime = lifetime;
-		return this;
 	}
 	/**
 	 * Gets the maximal allowed size. Defalut: {@link #DEFAULT_MAXSIZE}.
@@ -318,9 +315,8 @@ public class CacheMap implements Map, java.io.Serializable, Cloneable {
 	 * Sets the maximal allowed size.
 	 * @see #getMaxSize
 	 */
-	public CacheMap setMaxSize(int maxsize) {
+	public void setMaxSize(int maxsize) {
 		_maxsize = maxsize;
-		return this;
 	}
 	/**
 	 * Gets the last accessed time, in system millisecs.

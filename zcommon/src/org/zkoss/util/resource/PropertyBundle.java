@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.CacheMap;
+import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
 import org.zkoss.util.logging.Log;
 
@@ -57,9 +58,12 @@ import org.zkoss.util.logging.Log;
 public class PropertyBundle {
 	private static final Log log = Log.lookup(PropertyBundle.class);
 
-	/** The cache to hold bundles. */
-	private static final CacheMap _cache = //(Key, PropertyBundle)
-		new CacheMap(53).setMaxSize(100);
+	/** The cache to hold bundles (Key, PropertyBundle). */
+	private static final Cache _cache;
+	static {
+		_cache = new CacheMap();
+		_cache.setMaxSize(100);
+	}
 
 	/** The map of properties. */
 	private final Map _map;

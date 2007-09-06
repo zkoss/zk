@@ -41,6 +41,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.math.BigDecimals;
 import org.zkoss.math.BigIntegers;
 import org.zkoss.util.MultiCache;
+import org.zkoss.util.Cache;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.logging.Log;
 
@@ -639,8 +640,7 @@ public class Classes {
 		_closms.put(aoi, m);
 		return m;
 	}
-	private static MultiCache _closms =
-		new MultiCache(20).setMaxSize(500).setLifetime(4*60*60*1000);
+	private static Cache _closms = new MultiCache(20, 500, 4*60*60*1000);
 	private static final Method
 	myGetCloseMethod(final Class cls, final String name,
 	final Class[] argTypes, final boolean bySubclass)
@@ -829,8 +829,7 @@ public class Classes {
 		_acsos.put(aoi, ao);
 		return ao;
 	}
-	private static MultiCache _acsos =
-		new MultiCache(20).setMaxSize(500).setLifetime(4*60*60*1000);
+	private static Cache _acsos = new MultiCache(20, 600, 4*60*60*1000);
 	private static final AccessibleObject
 	myGetAcsObj(Class cls, String name, Class[] argTypes, int flags)
 	throws NoSuchMethodException {
