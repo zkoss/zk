@@ -25,7 +25,7 @@ import java.io.Writer;
  * A helper class for writting output.
  * @author Dennis.Chen
  */
-/**package**/ class WriterHelper {
+/*package*/ final class WriterHelper {
 	Writer _w;
 	
 	public WriterHelper(Writer writer){
