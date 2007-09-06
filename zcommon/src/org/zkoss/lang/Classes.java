@@ -640,7 +640,7 @@ public class Classes {
 		_closms.put(aoi, m);
 		return m;
 	}
-	private static Cache _closms = new MultiCache(20, 500, 4*60*60*1000);
+	private static Cache _closms = new MultiCache(20, 512, 4*60*60*1000);
 	private static final Method
 	myGetCloseMethod(final Class cls, final String name,
 	final Class[] argTypes, final boolean bySubclass)
