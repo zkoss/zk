@@ -27,10 +27,10 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  *
  * @author tomyeh
  */
-public class EventHandler implements Condition, java.io.Serializable {
+public class EventHandler extends EvalRefStub
+implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;
 
-	private final EvaluatorRef _evalr;
 	private final ZScript _zscript;
 	private final ConditionImpl _cond;
 

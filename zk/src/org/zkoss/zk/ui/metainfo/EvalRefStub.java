@@ -1,4 +1,4 @@
-/* SimpleInfoImpl.java
+/* EvalRefStub.java
 
 {{IS_NOTE
 	Purpose:
@@ -21,28 +21,24 @@ package org.zkoss.zk.ui.metainfo;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
- * A skeletal implementation of {@link SimpleInfo}.
+ * Used to simply the serializable info that contains {@link EvaluatorRef}.
+ * For example, {@link EventHandler} and {@link VariablesInfo} and so on.
  * @author tomyeh
  * @since 3.0.0
  */
-/*package*/ class SimpleInfoImpl implements java.io.Serializable {
+/*package*/ class EvalRefStub implements java.io.Serializable {
 	protected transient EvaluatorRef _evalr;
-
-	//SimpleInfo//
-	public void didDeserialize(NodeInfo parent, EvaluatorRef evalr) {
-		_evalr = evalr;
-	}
 
 	//Serializable//
 	//NOTE: they must be declared as private
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
 		s.defaultWriteObject();
-		NodeInfo.writeEvalRef(s, _evalr);
+		ComponentInfo.writeEvalRef(s, _evalr);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-		_evalr = NodeInfo.readEvalRef(s);
+		_evalr = ComponentInfo.readEvalRef(s);
 	}
 }

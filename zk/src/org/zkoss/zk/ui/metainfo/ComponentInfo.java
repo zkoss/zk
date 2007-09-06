@@ -490,12 +490,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return _evalr;
 	}
 
-	//SimpleInfo//
-	public void didDeserialize(NodeInfo parent, EvaluatorRef evalr) {
-		_evalr = evalr;
-		_parent = parent;
-	}
-
 	//Cloneable//
 	/** Clones this info.
 	 * After cloned, {@link #getParent} is null.
@@ -515,11 +509,56 @@ implements Cloneable, Condition, java.io.Externalizable {
 			throw new InternalError();
 		}
 	}
+	//Object//
+	public String toString() {
+		final StringBuffer sb = new StringBuffer(64)
+			.append("[ComponentInfo: ")
+			.append(_compdef.getName());
+		if (_tag != null)
+			sb.append(" <").append(_tag).append('>');
+		return sb.append(']').toString();
+	}
 
 	//Externalizable//
-	public void writeExternal(java.io.ObjectOutput out)
+	public final void writeExternal(java.io.ObjectOutput out)
 	throws java.io.IOException {
-		super.writeExternal(out);
+		if (getSerializingEvalRef() != _evalr) {
+			pushSerializingEvalRef(_evalr);
+			try {
+				out.writeObject(_evalr);
+				writeMembers(out);
+			} finally {
+				popSerializingEvalRef();
+			}
+		} else {
+			out.writeObject(null); //to save space, don't need to write evalr
+			writeMembers(out);
+		}
+	}
+	/** Don't override this method. Rather, override {@link #readMembers}.
+	 * @since 3.0.0
+	 */
+	public final void readExternal(java.io.ObjectInput in)
+	throws java.io.IOException, ClassNotFoundException {
+		_evalr = (EvaluatorRef)in.readObject();
+		final EvaluatorRef top = getSerializingEvalRef();
+		if (_evalr == null)
+			_evalr = top;
+
+		if (_evalr != null &&  top != _evalr) {
+			pushSerializingEvalRef(_evalr);
+			try {
+				readMembers(in);
+			} finally {
+				popSerializingEvalRef();
+			}
+		} else {
+			readMembers(in);
+		}
+	}
+	private void writeMembers(java.io.ObjectOutput out)
+	throws java.io.IOException {
+		out.writeObject(_children);
 
 		out.writeObject(_compdef);
 		out.writeObject(_implcls);
@@ -532,9 +571,14 @@ implements Cloneable, Condition, java.io.Externalizable {
 		out.writeObject(_forward);
 		out.writeObject(_forEach);
 	}
-	public void readExternal(java.io.ObjectInput in)
+	private void readMembers(java.io.ObjectInput in)
 	throws java.io.IOException, ClassNotFoundException {
-		super.readExternal(in);
+		_children = (List)in.readObject();
+		for (Iterator it = _children.iterator(); it.hasNext();) {
+			final Object o = it.next();
+			if (o instanceof ComponentInfo)
+				((ComponentInfo)o).setParentDirectly(this);
+		}
 
 		_compdef = (ComponentDefinition)in.readObject();
 		_implcls = (String)in.readObject();
@@ -548,13 +592,42 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_forEach = (String[])in.readObject();
 	}
 
-	//Object//
-	public String toString() {
-		final StringBuffer sb = new StringBuffer(64)
-			.append("[ComponentInfo: ")
-			.append(_compdef.getName());
-		if (_tag != null)
-			sb.append(" <").append(_tag).append('>');
-		return sb.append(']').toString();
+	/** Writes the evaluator reference.
+	 * It is called by {@link EvalRefStub} to serialize
+	 * the evaluator reference, in order to minimize the number of bytes
+	 * to serialize.
+	 */
+	/*package*/ static final
+	void writeEvalRef(java.io.ObjectOutputStream s, EvaluatorRef evalr)
+	throws java.io.IOException {
+		s.writeObject(getSerializingEvalRef() != evalr ? evalr: null);
 	}
+	/*package*/ static final
+	EvaluatorRef readEvalRef(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		final EvaluatorRef evalr = (EvaluatorRef)s.readObject();
+		return evalr != null ? evalr: getSerializingEvalRef();
+	}
+
+	/** Returns the evaluator reference of the info that is being serialized.
+	 * It is used to minimize the bytes to write when serialized.
+	 */
+	private static final EvaluatorRef getSerializingEvalRef() {
+		final List stack = (List)_evalRefStack.get();
+		return stack == null || stack.isEmpty() ? null: (EvaluatorRef)stack.get(0);
+	}
+	/** Pushes the sepcified evaluator referene to be the current one.
+	 */
+	private static final void pushSerializingEvalRef(EvaluatorRef evalr) {
+		List stack = (List)_evalRefStack.get();
+		if (stack == null)
+			_evalRefStack.set(stack = new LinkedList());
+		stack.add(0, evalr);
+	}
+	/** Pops out the current evaluator reference.
+	 */
+	private static final void popSerializingEvalRef() {
+		((List)_evalRefStack.get()).remove(0);
+	}
+	private static final ThreadLocal _evalRefStack = new ThreadLocal();
 }

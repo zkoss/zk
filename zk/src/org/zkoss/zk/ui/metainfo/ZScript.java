@@ -41,7 +41,7 @@ import org.zkoss.zk.scripting.Interpreters;
  *
  * @author tomyeh
  */
-public class ZScript extends SimpleInfoImpl
+public class ZScript extends EvalRefStub 
 implements Condition, java.io.Serializable {
 	private static final Log log = Log.lookup(ZScript.class);
 

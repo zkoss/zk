@@ -19,7 +19,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.lang.reflect.Method;
-import java.io.Serializable;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
@@ -39,11 +38,11 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  *
  * @author tomyeh
  */
-public class Property implements Condition, Serializable {
+public class Property extends EvalRefStub
+implements Condition, java.io.Serializable {
 	private static final Log log = Log.lookup(Property.class);
     private static final long serialVersionUID = 20060622L;
 
-	private final EvaluatorRef _evalr;
 	private final String _name;
 	private final ExValue _value;
 	private final ConditionImpl _cond;

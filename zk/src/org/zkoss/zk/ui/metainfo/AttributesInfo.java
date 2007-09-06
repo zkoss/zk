@@ -40,7 +40,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  *
  * @author tomyeh
  */
-public class AttributesInfo extends SimpleInfoImpl
+public class AttributesInfo extends EvalRefStub
 implements Condition, java.io.Serializable {
 	/** Map(String name, ExValue value). */
 	private final Map _attrs;

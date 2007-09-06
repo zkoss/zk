@@ -628,17 +628,6 @@ public class PageDefinition extends NodeInfo {
 		return this;
 	}
 
-	//SimpleInfo//
-	public void didDeserialize(NodeInfo parent, EvaluatorRef evalr) {
-		throw new UnsupportedOperationException();
-	}
-
-	//Externalizable//
-	public void writeExternal(java.io.ObjectOutput out)
-	throws java.io.IOException {
-		throw new UnsupportedOperationException("Page Definition not serializable");
-	}
-
 	//Object//
 	public String toString() {
 		return "[PageDefinition:"+(_id != null ? _id: _title)+']';
