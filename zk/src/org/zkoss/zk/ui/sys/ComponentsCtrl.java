@@ -32,6 +32,8 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Pair;
 import org.zkoss.util.MultiCache;
+import org.zkoss.util.CacheMap;
+import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
 
 import org.zkoss.zk.ui.Executions;
@@ -267,7 +269,8 @@ public class ComponentsCtrl {
 
 	/** A map of (Pair(Class,String evtnm), Method). */
 	private static final MultiCache _evtmtds =
-		new MultiCache(64).setMaxSize(1000).setLifetime(60*60000);
+		new MultiCache(64, 1000, 60*60000);
+
 	/** Returns the method for handling the specified event, or null
 	 * if not available.
 	 */

@@ -173,7 +173,8 @@ public class PageDefinitions {
 				cache = (ResourceCache)wapp.getAttribute(ATTR_PAGE_CACHE);
 				if (cache == null) {
 					cache = new ResourceCache(new MyLoader(wapp), 167);
-					cache.setMaxSize(1000).setLifetime(60*60000); //1hr
+					cache.setMaxSize(1000);
+					cache.setLifetime(60*60000); //1hr
 					wapp.setAttribute(ATTR_PAGE_CACHE, cache);
 				}
 			}

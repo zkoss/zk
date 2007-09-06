@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
+import org.zkoss.util.Cache;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.Media;
 import org.zkoss.io.Serializables;
@@ -123,7 +124,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The device. */
 	private transient Device _dev; //it will re-init each time getDevice called
 	/** A map of media (String key, Media content). */
-	private CacheMap _meds;
+	private Cache _meds;
 	/** ID used to identify what is stored in _meds. */
 	private int _medId;
 	/** The server push controller, or null if not enabled. */
@@ -281,9 +282,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (media == null)
 			throw new IllegalArgumentException("null media");
 
-		if (_meds == null)
-			_meds = new CacheMap().setLifetime(6 * 60 * 1000);
+		if (_meds == null) {
+			_meds = new CacheMap();
+			_meds.setLifetime(6 * 60 * 1000);
 				//6 minutes (consider to be configurable)
+		}
 		String medId = Strings.encode(
 			new StringBuffer(12).append(MEDIA_PREFIX), _medId++).toString();
 		_meds.put(medId, media);

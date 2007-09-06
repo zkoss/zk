@@ -546,6 +546,9 @@ public class ZkFns {
 		}
 		sb.append("];\n");
 	}
-	private static final CacheMap _datejs =
-		new CacheMap().setLifetime(24*60*60*1000);
+	private static final CacheMap _datejs;
+	static {
+		_datejs = new CacheMap();
+		_datejs.setLifetime(24*60*60*1000);
+	}
 }

@@ -269,7 +269,8 @@ implements Condition, java.io.Serializable {
 				if (_cache == null) {
 					final ResourceCache cache
 						= new ResourceCache(new ContentLoader());
-					cache.setMaxSize(250).setLifetime(60*60000); //1hr
+					cache.setMaxSize(250);
+					cache.setLifetime(60*60000); //1hr
 					_cache = cache;
 				}
 			}

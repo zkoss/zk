@@ -80,7 +80,8 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	public void init(ExtendletConfig config) {
 		_webctx = config.getExtendletContext();
 		_cache = new ResourceCache(new ZUMLLoader(), 17);
-		_cache.setMaxSize(200).setLifetime(60*60*1000); //1hr
+		_cache.setMaxSize(200);
+		_cache.setLifetime(60*60*1000); //1hr
 		_cache.setCheckPeriod(60*60*1000); //1hr
 	}
 	public void service(HttpServletRequest request,
