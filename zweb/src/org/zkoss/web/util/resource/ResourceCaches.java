@@ -166,7 +166,8 @@ public class ResourceCaches {
 				cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
 				if (cache == null) {
 					cache = new ResourceCache(new ContentLoader(ctx), 29);
-					cache.setMaxSize(500).setLifetime(60*60*1000); //1hr
+					cache.setMaxSize(500);
+					cache.setLifetime(60*60*1000); //1hr
 					ctx.setAttribute(ATTR_PAGE_CACHE, cache);
 				}
 			}

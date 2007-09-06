@@ -180,7 +180,7 @@ public class Servlets {
 		Map map = (Map)ctx.getAttribute(PGPATH_CACHE);
 		if (map == null) {
 			map = Collections.synchronizedMap( //10 min
-				new CacheMap(53).setMaxSize(500).setLifetime(10*60*1000));
+				new CacheMap(500, 10*60*1000));
 			ctx.setAttribute(PGPATH_CACHE, map);
 		}
 

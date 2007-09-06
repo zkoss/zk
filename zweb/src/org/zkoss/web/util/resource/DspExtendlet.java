@@ -60,7 +60,8 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 	public void init(ExtendletConfig config) {
 		_webctx = config.getExtendletContext();
 		_cache = new ResourceCache(new DSPLoader(), 131);
-		_cache.setMaxSize(1000).setLifetime(60*60*1000); //1hr
+		_cache.setMaxSize(1000);
+		_cache.setLifetime(60*60*1000); //1hr
 		_cache.setCheckPeriod(60*60*1000); //1hr
 	}
 	public void service(HttpServletRequest request,
