@@ -33,25 +33,18 @@ import org.zkoss.zul.Textbox;
  */
 public class TextboxDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
+		final WriterHelper wh = new WriterHelper(out);
 		final Textbox self = (Textbox)comp;
 		final boolean isMultiline = self.isMultiline();
 		if(isMultiline){
-			out.write("<textarea id=\"");
-			out.write(self.getUuid());
-			out.write("\" z.type=\"zul.widget.Txbox\"");
-			out.write(self.getOuterAttrs());
-			out.write(self.getOuterAttrs());
-			out.write(self.getInnerAttrs());
-			out.write(">");
-			out.write(self.getAreaText());
-			out.write("</textarea>\n");
+			wh.write("<textarea id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Txbox\"");
+			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
+			wh.write(self.getAreaText());
+			wh.writeln("</textarea>");
 		}else{
-			out.write("<input id=\"");
-			out.write(self.getUuid());
-			out.write("\" z.type=\"zul.widget.Txbox\"");
-			out.write(self.getOuterAttrs());
-			out.write(self.getInnerAttrs());
-			out.write("/>\n");
+			wh.write("<input id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Txbox\"");
+			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs());
+			wh.writeln("/>");
 		}
 	}
 }

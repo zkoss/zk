@@ -74,6 +74,7 @@ public class CaptionDefault implements ComponentRenderer {
 				final Component child = (Component)it.next();
 				child.redraw(out);
 			}
+			wh.write("</td>");
 			if(self.isClosableVisible()){
 				wh.write("<td width=\"16\"><img id=\"").write(self.getParent().getUuid()).write("!close\" src=\"");
 				wh.write(exec.encodeURL("~./zul/img/close-off.gif")).write("\"/></td>");

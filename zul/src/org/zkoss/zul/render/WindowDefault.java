@@ -38,87 +38,91 @@ import org.zkoss.zul.Caption;
  */
 public class WindowDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
+		final WriterHelper wh = new WriterHelper(out);
 		final Window self = (Window)comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
 
-		out.write("<div id=\"");
-		out.write(uuid);
-		out.write("\" z.type=\"zul.wnd.Wnd\" z.autoz=\"true\"");
-		out.write(self.getOuterAttrs());
-		out.write(self.getInnerAttrs());
-		out.write(">\n");
+		wh.write("<div id=\"");
+		wh.write(uuid);
+		wh.write("\" z.type=\"zul.wnd.Wnd\" z.autoz=\"true\"");
+		wh.write(self.getOuterAttrs());
+		wh.write(self.getInnerAttrs());
+		wh.write(">\n");
 
 		final Caption caption = self.getCaption();
 		final String title = self.getTitle(), titlesc = self.getTitleSclass();
 		String wcExtStyle = "";
 		if (caption == null && title.length() == 0) {
 			if (exec.isExplorer() && !exec.isExplorer7()) {
-				out.write(
+				wh.write(
 					"<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
 					+"<tr height=\"1px\"><td></td></tr></table>\n");
 			}
 		} else {
-			out.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n");
+			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n");
 			if (caption == null) {
-				out.write("<tr id=\"");
-				out.write(uuid);
-				out.write("!caption\" class=\"title\">\n");
-				out.write("<td class=\"l");
-				out.write(titlesc);
-				out.write("\"></td>\n");
-				out.write("<td class=\"m");
-				out.write(titlesc);
-				out.write("\">");
-				out.write(XMLs.escapeXML(title));
-				out.write("</td>");
+				wh.write("<tr id=\"");
+				wh.write(uuid);
+				wh.write("!caption\" class=\"title\">\n");
+				wh.write("<td class=\"l");
+				wh.write(titlesc);
+				wh.write("\"></td>\n");
+				wh.write("<td class=\"m");
+				wh.write(titlesc);
+				wh.write("\">");
+				wh.write(XMLs.escapeXML(title));
+				wh.write("</td>");
 				if (self.isClosable()) {
-					out.write("<td width=\"16\" class=\"m");
-					out.write(titlesc);
-					out.write("\"><img id=\"");
-					out.write(uuid);
-					out.write("!close\" src=\"");
-					out.write(exec.encodeURL("~./zul/img/close-off.gif"));
-					out.write("\"/></td>");
+					wh.write("<td width=\"16\" class=\"m");
+					wh.write(titlesc);
+					wh.write("\"><img id=\"");
+					wh.write(uuid);
+					wh.write("!close\" src=\"");
+					wh.write(exec.encodeURL("~./zul/img/close-off.gif"));
+					wh.write("\"/></td>");
 				}
-				out.write("<td class=\"r");
-				out.write(titlesc);
-				out.write("\"></td></tr>\n");
+				wh.write("<td class=\"r");
+				wh.write(titlesc);
+				wh.write("\"></td></tr>\n");
 			} else {
-				out.write("<tr id=\"");
-				out.write(uuid);
-				out.write("!caption\"><td class=\"l");
-				out.write(titlesc);
-				out.write("\"></td><td class=\"m");
-				out.write(titlesc);
-				out.write("\">");
+				wh.write("<tr id=\"");
+				wh.write(uuid);
+				wh.write("!caption\"><td class=\"l");
+				wh.write(titlesc);
+				wh.write("\"></td><td class=\"m");
+				wh.write(titlesc);
+				wh.write("\">");
 				caption.redraw(out);
-				out.write("</td><td class=\"r");
-				out.write(titlesc);
-				out.write("\"></td></tr>\n");
+				wh.write("</td><td class=\"r");
+				wh.write(titlesc);
+				wh.write("\"></td></tr>\n");
 			}
-			out.write("</table>\n");
+			wh.write("</table>\n");
 			wcExtStyle = "border-top:0;";
 		}
 
-		wcExtStyle += self.getContentStyle();
-		out.write("<div id=\"");
-		out.write(uuid);
-		out.write("!cave\" class=\"");
-		out.write(self.getContentSclass());
-		out.write("\"");
-		if (wcExtStyle.length() > 0) {
-			out.write(" style=\"");
-			out.write(wcExtStyle);
-			out.write('"');
+		final String cs = self.getContentStyle();
+		if(cs!=null){
+			wcExtStyle += cs;
 		}
-		out.write(">");
+		wh.write("<div id=\"");
+		wh.write(uuid);
+		wh.write("!cave\" class=\"");
+		wh.write(self.getContentSclass());
+		wh.write("\"");
+		if (wcExtStyle.length() > 0) {
+			wh.write(" style=\"");
+			wh.write(wcExtStyle);
+			wh.write("\"");
+		}
+		wh.write(">");
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
 			if (child != caption)
 				child.redraw(out);
 		}
-		out.write("</div></div>\n");
+		wh.write("</div></div>\n");
 	}
 }

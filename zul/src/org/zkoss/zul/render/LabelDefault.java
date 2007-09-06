@@ -33,20 +33,18 @@ import org.zkoss.zul.Label;
  */
 public class LabelDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
+		final WriterHelper wh = new WriterHelper(out);
 		final Label self = (Label)comp;
 		final boolean idRequired = self.isIdRequired();
 		if (idRequired) {
-			out.write("<span id=\"");
-			out.write(self.getUuid());
-			out.write("\"");
-			out.write(self.getOuterAttrs());
-			out.write(self.getInnerAttrs());
-			out.write('>');
+			wh.write("<span id=\"").write(self.getUuid()).write("\"");
+			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs());
+			wh.write(">");
 		}
 
-		out.write(self.getEncodedText());
+		wh.writeln(self.getEncodedText());
 
 		if (idRequired)
-			out.write("</span>");
+			wh.writeln("</span>");
 	}
 }

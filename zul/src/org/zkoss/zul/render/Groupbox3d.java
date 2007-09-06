@@ -70,7 +70,10 @@ public class Groupbox3d implements ComponentRenderer {
 		if(caption!=null){
 			gcExtStyle += "border-top:0;";
 		}
-		gcExtStyle+=self.getContentStyle();
+		final String cs = self.getContentStyle();
+		if(cs!=null){
+			gcExtStyle+=cs;
+		}
 		
 		out.write("<div id=\"");
 		out.write(uuid);
