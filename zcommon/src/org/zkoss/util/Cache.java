@@ -44,8 +44,8 @@ public interface Cache {
 	//Control//
 	/** The default minimal lifetime, unit=milliseconds. It is 30 minutes. */
 	public static final int DEFAULT_LIFETIME = 30 * 60 * 1000;
-	/** The default maximal allowed size. It is 1024. */
-	public static final int DEFAULT_MAXSIZE = 1024;
+	/** The default maximal allowed size. It is 512. */
+	public static final int DEFAULT_MAXSIZE = 512;
 
 	/**
 	 * Returns the minimal lifetime, unit=milliseconds.
