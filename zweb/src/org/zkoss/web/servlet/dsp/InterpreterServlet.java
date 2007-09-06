@@ -176,7 +176,7 @@ public class InterpreterServlet extends HttpServlet {
 				cache = (ResourceCache)_ctx.getAttribute(ATTR_PAGE_CACHE);
 				if (cache == null) {
 					cache = new ResourceCache(new MyLoader(), 29);
-					cache.setMaxSize(500);
+					cache.setMaxSize(1024);
 					cache.setLifetime(60*60*1000); //1hr
 					_ctx.setAttribute(ATTR_PAGE_CACHE, cache);
 				}
