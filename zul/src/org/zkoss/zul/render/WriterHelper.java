@@ -26,7 +26,7 @@ import java.io.Writer;
  * @author Dennis.Chen
  */
 /*package*/ final class WriterHelper {
-	Writer _w;
+	private final Writer _w;
 	
 	public WriterHelper(Writer writer){
 		_w = writer;
