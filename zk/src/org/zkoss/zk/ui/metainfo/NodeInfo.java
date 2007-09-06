@@ -40,7 +40,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  */
 abstract public class NodeInfo {
 	/** A list of {@link ComponentInfo} and {@link ZScript}. */
-	protected List _children = new LinkedList();
+	/*pacakge*/ List _children = new LinkedList();
 
 	public NodeInfo() {
 	}

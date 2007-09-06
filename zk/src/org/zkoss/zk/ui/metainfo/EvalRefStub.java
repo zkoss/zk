@@ -27,7 +27,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * @since 3.0.0
  */
 /*package*/ class EvalRefStub implements java.io.Serializable {
-	protected transient EvaluatorRef _evalr;
+	/*package*/ transient EvaluatorRef _evalr;
 
 	//Serializable//
 	//NOTE: they must be declared as private
