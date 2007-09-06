@@ -267,10 +267,6 @@ public class ComponentsCtrl {
 		}
 	}
 
-	/** A map of (Pair(Class,String evtnm), Method). */
-	private static final MultiCache _evtmtds =
-		new MultiCache(64, 1000, 60*60000);
-
 	/** Returns the method for handling the specified event, or null
 	 * if not available.
 	 */
@@ -294,6 +290,19 @@ public class ComponentsCtrl {
 		return mtd;
 	}
 
+	/** Sets the cache for storing event methods.
+	 * @param cache the cache. It cannot be null. It must be thread safe.
+	 * Once assigned, the caller shall not access it again.
+	 * @since 3.0.0
+	 */
+	public static final void setEventMethodCache(Cache cache) {
+		if (cache == null)
+			throw new IllegalArgumentException();
+		_evtmtds = cache;
+	}
+	/** A map of (Pair(Class,String evtnm), Method). */
+	private static Cache _evtmtds = new MultiCache(64, 1024, 60*60*1000);
+	
 	/** Represents a dummy definition. */
 	public static final ComponentDefinition DUMMY =
 	new ComponentDefinition() {
