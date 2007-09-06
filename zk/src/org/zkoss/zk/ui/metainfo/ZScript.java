@@ -41,10 +41,10 @@ import org.zkoss.zk.scripting.Interpreters;
  *
  * @author tomyeh
  */
-public class ZScript implements Condition, java.io.Serializable {
+public class ZScript extends SimpleInfoImpl
+implements Condition, java.io.Serializable {
 	private static final Log log = Log.lookup(ZScript.class);
 
-	private final EvaluatorRef _evalr;
 	private String _zslang;
 	private final String _cnt;
 	/** An URL, an ExValue. */

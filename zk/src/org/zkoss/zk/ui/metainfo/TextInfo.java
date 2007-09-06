@@ -29,8 +29,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * @author tomyeh
  * @since 3.0.0
  */
-public class TextInfo {
-	private final EvaluatorRef _evalr;
+public class TextInfo extends SimpleInfoImpl implements java.io.Serializable {
 	private final ExValue _text;
 
 	/**

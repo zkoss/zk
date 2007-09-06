@@ -36,8 +36,8 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * 
  * @author tomyeh
  */
-public class VariablesInfo implements Condition, java.io.Serializable {
-	private final EvaluatorRef _evalr;
+public class VariablesInfo extends SimpleInfoImpl
+implements Condition, java.io.Serializable {
 	/** Map(String name, ExValue value). */
 	private final Map _vars;
 	private final ConditionImpl _cond;

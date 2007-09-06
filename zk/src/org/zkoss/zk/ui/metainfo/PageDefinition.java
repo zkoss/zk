@@ -570,7 +570,7 @@ public class PageDefinition extends NodeInfo {
 		return new SimpleEvaluator(getFunctionMapper(), _expfcls);
 	}
 	/** Returns the evaluator reference (never null).
-	 * <p>This method is used only for implementation only.
+	 *
 	 * @since 3.0.0
 	 */
 	public EvaluatorRef getEvaluatorRef() {
@@ -626,6 +626,17 @@ public class PageDefinition extends NodeInfo {
 	//NodeInfo//
 	public PageDefinition getPageDefinition() {
 		return this;
+	}
+
+	//SimpleInfo//
+	public void didDeserialize(NodeInfo parent, EvaluatorRef evalr) {
+		throw new UnsupportedOperationException();
+	}
+
+	//Externalizable//
+	public void writeExternal(java.io.ObjectOutput out)
+	throws java.io.IOException {
+		throw new UnsupportedOperationException("Page Definition not serializable");
 	}
 
 	//Object//

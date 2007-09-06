@@ -56,10 +56,11 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * @author tomyeh
  */
 public class ComponentInfo extends NodeInfo
-implements Cloneable, Condition, java.io.Serializable {
-	private final EvaluatorRef _evalr;
+implements Cloneable, Condition, java.io.Externalizable {
+	/** Note: it is NodeInfo's job to serialize _evalr. */
+	private transient EvaluatorRef _evalr;
 	private transient NodeInfo _parent; //it is restored by its parent
-	private final ComponentDefinition _compdef;
+	private ComponentDefinition _compdef;
 	/** The implemetation class (use). */
 	private String _implcls;
 	/** A list of {@link Property}, or null if no property at all. */
@@ -69,7 +70,7 @@ implements Cloneable, Condition, java.io.Serializable {
 	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
 	private AnnotationMap _annots;
 	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
-	private final String _tag;
+	private String _tag;
 	/** The effectiveness condition (see {@link #isEffective}).
 	 * If null, it means effective.
 	 */
@@ -111,6 +112,12 @@ implements Cloneable, Condition, java.io.Serializable {
 	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef) {
 		this(parent, compdef, null);
 	}
+	/** This constructor is used only for {@link java.io.Externalizable}.
+	 * Don't call it, otherwise.
+	 * @since 3.0.0
+	 */
+	public ComponentInfo() {
+	}
 
 	/** Returns the language definition that {@link #getComponentDefinition}
 	 * belongs to, or null if the component definition is temporary.
@@ -144,6 +151,7 @@ implements Cloneable, Condition, java.io.Serializable {
 		if (_parent != null)
 			_parent.appendChildDirectly(this);
 	}
+	/** Used for implementation only. */
 	/*package*/ void setParentDirectly(NodeInfo parent) {
 		_parent = parent;
 	}
@@ -478,8 +486,14 @@ implements Cloneable, Condition, java.io.Serializable {
 	public NodeInfo getParent() {
 		return _parent;
 	}
-	public EvaluatorRef getEvaluatorRef() {
+	protected EvaluatorRef getEvaluatorRef() {
 		return _evalr;
+	}
+
+	//SimpleInfo//
+	public void didDeserialize(NodeInfo parent, EvaluatorRef evalr) {
+		_evalr = evalr;
+		_parent = parent;
 	}
 
 	//Cloneable//
@@ -502,6 +516,39 @@ implements Cloneable, Condition, java.io.Serializable {
 		}
 	}
 
+	//Externalizable//
+	public void writeExternal(java.io.ObjectOutput out)
+	throws java.io.IOException {
+		super.writeExternal(out);
+
+		out.writeObject(_compdef);
+		out.writeObject(_implcls);
+		out.writeObject(_props);
+		out.writeObject(_evthds);
+		out.writeObject(_annots);
+		out.writeObject(_tag);
+		out.writeObject(_cond);
+		out.writeObject(_fulfill);
+		out.writeObject(_forward);
+		out.writeObject(_forEach);
+	}
+	public void readExternal(java.io.ObjectInput in)
+	throws java.io.IOException, ClassNotFoundException {
+		super.readExternal(in);
+
+		_compdef = (ComponentDefinition)in.readObject();
+		_implcls = (String)in.readObject();
+		_props = (List)in.readObject();
+		_evthds = (EventHandlerMap)in.readObject();
+		_annots = (AnnotationMap)in.readObject();
+		_tag = (String)in.readObject();
+		_cond = (ConditionImpl)in.readObject();
+		_fulfill = (String)in.readObject();
+		_forward = (String)in.readObject();
+		_forEach = (String[])in.readObject();
+	}
+
+	//Object//
 	public String toString() {
 		final StringBuffer sb = new StringBuffer(64)
 			.append("[ComponentInfo: ")

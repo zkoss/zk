@@ -40,10 +40,8 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  *
  * @author tomyeh
  */
-public class AttributesInfo implements Condition, java.io.Serializable {
-    private static final long serialVersionUID = 20060622L;
-
-	private final EvaluatorRef _evalr;
+public class AttributesInfo extends SimpleInfoImpl
+implements Condition, java.io.Serializable {
 	/** Map(String name, ExValue value). */
 	private final Map _attrs;
 	private final ConditionImpl _cond;

@@ -35,12 +35,20 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * {@link ZScript}, {@link VariablesInfo}, or {@link AttributesInfo}.
  *
  * <p>Note:it is not thread-safe.
+ *
+ * <p>Note for the implementation of the derived class:
+ * They don't have to serialize the evaluator reference. It is done
+ * by this class.
+ *
+ * <p>Note: {@link NodeInfo} uses {@link java.io.Externalizable} to
+ * serialize the content, so the derived classes have to handle all data
+ * members explicitly.
  * 
  * @author tomyeh
  */
-abstract public class NodeInfo implements java.io.Serializable {
+abstract public class NodeInfo implements SimpleInfo, java.io.Externalizable {
 	/** A list of {@link ComponentInfo} and {@link ZScript}. */
-	private final List _children = new LinkedList();
+	private List _children = new LinkedList();
 
 	public NodeInfo() {
 	}
@@ -51,12 +59,25 @@ abstract public class NodeInfo implements java.io.Serializable {
 	/** Returns the parent, or null if no parent.
 	 */
 	abstract public NodeInfo getParent();
+
 	/** Returns the evaluator reference (never null).
+	 *
 	 * <p>This method is used only for implementation only.
 	 * @since 3.0.0
 	 */
-	abstract public EvaluatorRef getEvaluatorRef();
+	abstract protected EvaluatorRef getEvaluatorRef();
 
+	/** Adds a zscript child.
+	 * @since 3.0.0
+	 */
+	public void appendChild(SimpleInfo child) {
+		if (child instanceof ComponentInfo)
+			appendChild((ComponentInfo)child);
+		else if ((child instanceof TextInfo) && !(this instanceof NativeInfo))
+			throw new IllegalArgumentException("Textinfo not allowed for "+this);
+		else
+			appendChildDirectly(child);
+	}
 	/** Adds a zscript child.
 	 */
 	public void appendChild(ZScript zscript) {
@@ -79,6 +100,15 @@ abstract public class NodeInfo implements java.io.Serializable {
 		compInfo.setParent(this); //it will call back appendChildDirectly
 	}
 
+	/** Remove a child.
+	 * @since 3.0.0
+	 */
+	public boolean removeChild(SimpleInfo child) {
+		if (child instanceof ComponentInfo)
+			return removeChild((ComponentInfo)child);
+		else
+			return removeChildDirectly(child);
+	}
 	/** Removes a zscript child.
 	 * @return whether the child is removed successfully.
 	 */
@@ -141,15 +171,67 @@ abstract public class NodeInfo implements java.io.Serializable {
 		return _children;
 	}
 
-	//Serializable//
-	private synchronized void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		s.defaultReadObject();
-
-		for (Iterator it = _children.iterator(); it.hasNext();) {
-			final Object o = it.next();
-			if (o instanceof ComponentInfo)
-				((ComponentInfo)o).setParentDirectly(this);
+	//Externalizable//
+	public void writeExternal(java.io.ObjectOutput out)
+	throws java.io.IOException {
+		final EvaluatorRef current = getEvaluatorRef();
+		if (getSerzEvalRef() != current) {
+			pushSerzEvalRef(current);
+			try {
+				out.writeObject(current);
+				out.writeObject(_children);
+			} finally {
+				popSerzEvalRef();
+			}
+		} else {
+			out.writeObject(null); //to save space, don't need to write evalr
+			out.writeObject(_children);
 		}
 	}
+	public void readExternal(java.io.ObjectInput in)
+	throws java.io.IOException, ClassNotFoundException {
+		//Note: currently among all derives, only ComponentInfo support it
+		EvaluatorRef evalr = (EvaluatorRef)in.readObject();
+		if (evalr != null)
+			didDeserialize(getParent(), evalr);
+
+		_children = (List)in.readObject();
+		evalr = getEvaluatorRef();
+		for (Iterator it = _children.iterator(); it.hasNext();) {
+			final Object o = it.next();
+			if (o instanceof SimpleInfo)
+				((SimpleInfo)o).didDeserialize(this, evalr);
+		}
+	}
+
+	/** Writes the evaluator reference.
+	 * It is called by {@link SimpleInfo} to serialize
+	 * the evaluator reference, in order to minimize the number of bytes
+	 * to serialize.
+	 */
+	/*package*/ static final
+	void writeEvalRef(java.io.ObjectOutputStream s, EvaluatorRef evalr)
+	throws java.io.IOException {
+		s.writeObject(getSerzEvalRef() != evalr ? evalr: null);
+	}
+	/*package*/ static final
+	EvaluatorRef readEvalRef(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		return (EvaluatorRef)s.readObject();
+	}
+
+	private static final EvaluatorRef getSerzEvalRef() {
+		final List stack = (List)_evalRefStack.get();
+		return stack == null || stack.isEmpty() ? null: (EvaluatorRef)stack.get(0);
+	}
+	private static final void pushSerzEvalRef(EvaluatorRef evalr) {
+		List stack = (List)_evalRefStack.get();
+		if (stack == null)
+			_evalRefStack.set(stack = new LinkedList());
+		stack.add(0, evalr);
+	}
+	private static final void popSerzEvalRef() {
+		((List)_evalRefStack.get()).remove(0);
+	}
+	private static final ThreadLocal _evalRefStack = new ThreadLocal();
 }
