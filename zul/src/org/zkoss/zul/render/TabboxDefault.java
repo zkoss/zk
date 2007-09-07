@@ -36,49 +36,27 @@ import org.zkoss.zul.Tabs;
  */
 
 public class TabboxDefault implements ComponentRenderer {
-/**
- * tabbox.dsp
-<c:set var="self" value="${requestScope.arg.self}"/>
-<table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.tabs="${self.tabs.uuid}" 
-z.type="zul.tab.Tabbox" border="0" cellpadding="0" cellspacing="0">
-${z:redraw(self.tabs, null)}
-${z:redraw(self.tabpanels, null)}
-</table>
-
-vtabbox.dsp
-<table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.tabs="${self.tabs.uuid}" z.type="zul.tab.Tabbox" border="0" cellpadding="0" cellspacing="0">
-<tr valign="top">
-${z:redraw(self.tabs, null)}
-${z:redraw(self.tabpanels, null)}
-</tr>
-</table>
- */
-
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);
 		final Tabbox self = (Tabbox) comp;
-		final Tabs ts = self.getTabs();
-		final Tabpanels tps = self.getTabpanels();
+		final Tabs tabs = self.getTabs();
 		
+		wh.write("<table id=\"").write(self.getUuid()).write("\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.write(" z.tabs=\"").write(tabs==null ?null:tabs.getUuid())
+			.writeln("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
+
 		if("vertical".equals(self.getOrient())){
-			wh.write("<table id=\"").write(self.getUuid()).write("\"").write(self.getOuterAttrs())
-			.write(self.getInnerAttrs()).write(" z.tabs=\"") 
-			.write(ts==null ?null:ts.getUuid())
-			.write("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
 			wh.write("<tr valign=\"top\">");
-			wh.write(ts);
-			wh.write(tps);	    		
+			wh.write(tabs);
+			wh.writeln(self.getTabpanels());
 			wh.write("</tr>");
-			wh.write("</table>");
+		} else {
+			wh.write(tabs);
+			wh.writeln(self.getTabpanels());
 		}
-		else{
-			wh.write("<table id=\"").write(self.getUuid()).write( "\"").write(self.getOuterAttrs())
-			.write(self.getInnerAttrs()).write(" z.tabs=\"").write(ts==null ?null:ts.getUuid())
-			.write("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
-			wh.write(ts);
-			wh.write(tps);
-			wh.write("</table>");
-		}
+
+		wh.write("</table>");
 	}
 
 }

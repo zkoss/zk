@@ -43,6 +43,13 @@ import org.zkoss.zk.ui.Component;
 			comp.redraw(_w);
 		return this;
 	}
+	/** Write a component.
+	 * It works even if the component is null.
+	 */
+	public WriterHelper writeln(Component comp)
+	throws IOException {
+		return write(comp).write("\n");
+	}
 
 	/**
 	 * Write a string. 
