@@ -102,11 +102,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	-->
 	<mold>
 		<mold-name>desktop</mold-name>
-		<mold-uri>~./zul/html/desktop.dsp</mold-uri>
+		<mold-uri>~./zul/html/desktop.dsp</mold-uri><!-- it doesn't support class: -->
 	</mold>
 	<mold>
 		<mold-name>page</mold-name>
-		<mold-uri>~./zul/html/page.dsp</mold-uri>
+		<mold-uri>~./zul/html/page.dsp</mold-uri><!-- it doesn't support class: -->
 	</mold>
 
 	<!-- Defines the component and attribute names used to represent
