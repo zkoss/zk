@@ -37,8 +37,7 @@ import org.zkoss.zk.ui.Component;
 	/** Write a component.
 	 * It works even if the component is null.
 	 */
-	public WriterHelper write(Component comp)
-	throws IOException {
+	public WriterHelper write(Component comp) throws IOException {
 		if (comp != null)
 			comp.redraw(_w);
 		return this;
@@ -122,6 +121,49 @@ import org.zkoss.zk.ui.Component;
 		return this;
 	}
 
+	/** Writes a boolean.
+	 */
+	public WriterHelper write(boolean b) throws IOException {
+		_w.write(Boolean.toString(b));
+		return this;
+	}
+	/** Writes a char.
+	 */
+	public WriterHelper write(char c) throws IOException {
+		_w.write(Character.toString(c));
+		return this;
+	}
+	/** Writes a byte.
+	 */
+	public WriterHelper write(byte v) throws IOException {
+		_w.write(Byte.toString(v));
+		return this;
+	}
+	/** Writes a short.
+	 */
+	public WriterHelper write(short v) throws IOException {
+		_w.write(Short.toString(v));
+		return this;
+	}
+	/** Writes an integer.
+	 */
+	public WriterHelper write(int v) throws IOException {
+		_w.write(Integer.toString(v));
+		return this;
+	}
+	/** Writes a float.
+	 */
+	public WriterHelper write(float v) throws IOException {
+		_w.write(Float.toString(v));
+		return this;
+	}
+	/** Writes a double.
+	 */
+	public WriterHelper write(double v) throws IOException {
+		_w.write(Double.toString(v));
+		return this;
+	}
+
 	/** Writes an attribute.
 	 * The output is generated only if val is not null (and not empty).
 	 */
@@ -129,7 +171,7 @@ import org.zkoss.zk.ui.Component;
 	throws IOException {
 		if (val != null
 		&& (!(val instanceof String) || ((String)val).length() != 0))
-			write(" ").write(name).write("=\"")
+			return write(" ").write(name).write("=\"")
 				.write(val.toString()).write("\"");
 		return this;
 	}
