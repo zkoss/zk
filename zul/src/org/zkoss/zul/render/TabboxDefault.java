@@ -24,6 +24,8 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Tabbox;
+import org.zkoss.zul.Tabpanels;
+import org.zkoss.zul.Tabs;
 
 /**
  * {@link Tabbox}'s default mold.
@@ -54,14 +56,18 @@ ${z:redraw(self.tabpanels, null)}
 
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);
-		final Tabbox self = (Tabbox) comp;	
+		final Tabbox self = (Tabbox) comp;
+		final Tabs ts = self.getTabs();
+		final Tabpanels tps = self.getTabpanels();
 		
-		if(self.getOrient().equals("vertical")){
+		if("vertical".equals(self.getOrient())){
 			wh.write("<table id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + " z.tabs=\"" 
-					+ self.getTabs().getUuid() + "\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
+					+ (ts==null ?"":ts.getUuid()) + "\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
 			wh.write("<tr valign=\"top\">");
-			self.getTabs().redraw(out);
-		    self.getTabpanels().redraw(out);		
+			if(ts != null)				
+				ts.redraw(out);
+			if(tps != null)
+				tps.redraw(out);		    		
 			wh.write("</tr>");
 			wh.write("</table>");
 		}

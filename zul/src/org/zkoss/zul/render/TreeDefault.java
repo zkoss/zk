@@ -24,6 +24,9 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Tree;
+import org.zkoss.zul.Treechildren;
+import org.zkoss.zul.Treecols;
+import org.zkoss.zul.Treefoot;
 
 /**
  * {@link Tree}'s default mold.
@@ -64,25 +67,31 @@ ${z:redraw(self.treefoot, null)}
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);
 		final Tree self = (Tree) comp;
+		final Treecols tcs = (Treecols) self.getTreecols();
+		final Treechildren tc = (Treechildren) self.getTreechildren();
+		final Treefoot tf = (Treefoot) self.getTreefoot();
 		
 		wh.write("<div id=\"" + self.getUuid() + "\" z.type=\"zul.tree.Tree\"" 
 				+ self.getOuterAttrs() + self.getInnerAttrs() + ">");
 		if(!(self.getTreecols() == null)){
 			wh.write("<div id=\"" + self.getUuid() + "!head\" class=\"tree-head\">");
 			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
-			self.getTreecols().redraw(out);		
+			if(tcs != null)
+				tcs.redraw(out);		
 			wh.write("</table>");
 			wh.write("</div>");
 		}
 		wh.write("<div id=\"" + self.getUuid() + "!body\" class=\"tree-body\">");
 		wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">" );
-		self.getTreechildren().redraw(out);		
+		if(tc != null)
+			tc.redraw(out);		
 		wh.write("</table>");
 		wh.write("</div>");		
 		if(!(self.getTreefoot() == null)){
 			wh.write("<div id=\"" + self.getUuid() + "!foot\" class=\"tree-foot\">");
 			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
-			self.getTreefoot().redraw(out);		
+			if(tf != null)
+				tf.redraw(out);		
 			wh.write("</table>");
 			wh.write("</div>");
 		}

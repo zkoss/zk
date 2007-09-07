@@ -23,7 +23,9 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zul.Treechildren;
 import org.zkoss.zul.Treeitem;
+import org.zkoss.zul.Treerow;
 
 /**
  * {@link Treeitem}'s default mold.
@@ -40,9 +42,13 @@ ${z:redraw(self.treechildren, null)}
  */
 	public void render(Component comp, Writer out) throws IOException {		
 		final Treeitem self = (Treeitem) comp;
+		final Treerow tr = self.getTreerow();
+		final Treechildren tc = self.getTreechildren();
 		
-		self.getTreerow().redraw(out);
-		self.getTreechildren().redraw(out);
+		if (tr != null)			
+			tr.redraw(out);
+		if (tc != null)
+			tc.redraw(out);
 	}
 
 }
