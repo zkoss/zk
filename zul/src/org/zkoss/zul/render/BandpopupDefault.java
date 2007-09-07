@@ -42,7 +42,7 @@ public class BandpopupDefault implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			((Component) it.next()).redraw(out);
+			wh.write(((Component) it.next()));
 		}
 		wh.write("</div>");
 		wh.writeln();

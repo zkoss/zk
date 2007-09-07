@@ -61,22 +61,22 @@ ${z:redraw(self.tabpanels, null)}
 		final Tabpanels tps = self.getTabpanels();
 		
 		if("vertical".equals(self.getOrient())){
-			wh.write("<table id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + " z.tabs=\"" 
-					+ (ts==null ?"":ts.getUuid()) + "\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
+			wh.write("<table id=\"").write(self.getUuid()).write("\"").write(self.getOuterAttrs())
+			.write(self.getInnerAttrs()).write(" z.tabs=\"") 
+			.write(ts==null ?null:ts.getUuid())
+			.write("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
 			wh.write("<tr valign=\"top\">");
-			if(ts != null)				
-				ts.redraw(out);
-			if(tps != null)
-				tps.redraw(out);		    		
+			wh.write(ts);
+			wh.write(tps);	    		
 			wh.write("</tr>");
 			wh.write("</table>");
 		}
 		else{
-			wh.write("<table id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + " z.tabs=\"" 
-				+ self.getTabs().getUuid() + "\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
-			self.getTabs().redraw(out);
-			self.getTabs().redraw(out);
-			self.getTabpanels().redraw(out);
+			wh.write("<table id=\"").write(self.getUuid()).write( "\"").write(self.getOuterAttrs())
+			.write(self.getInnerAttrs()).write(" z.tabs=\"").write(ts==null ?null:ts.getUuid())
+			.write("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
+			wh.write(ts);
+			wh.write(tps);
 			wh.write("</table>");
 		}
 	}

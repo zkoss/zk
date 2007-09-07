@@ -171,7 +171,7 @@ public class TabDefault implements ComponentRenderer {
 			}
 			
 			wh.write("<tr>");		
-			wh.write("<td class=\"tab-v3d-bl\"").write(suffix).write("\"></td>");
+			wh.write("<td class=\"tab-v3d-bl").write(suffix).write("\"></td>");
 			wh.write("<td colspan=\"3\" class=\"tab-v3d-bm").write(suffix).write("\"></td>");
 			wh.write("<td class=\"tab-v3d-br").write(suffix).write("\"></td>");
 			wh.write("</tr>");
