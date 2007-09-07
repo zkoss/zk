@@ -53,8 +53,9 @@ public class BoxVertical implements ComponentRenderer {
 		wh.write("<tr valign=\"").write(self.getValign()).write("\" id=\"").write(uuid).write("!cave\">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
-			wh.write("<tr valign=\"").write("\" id=\"").write(uuid).write("!chdextr\">");
-			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"")
+			wh.write("<tr valign=\"").write("\" id=\"").write(uuid)
+				.write("!chdextr\"><td id=\"")
+				.write(child.getUuid()).write("!chdextr\"")
 				.write(self.getChildOuterAttrs(child))
 				.write(self.getChildInnerAttrs(child))
 				.write(">");
