@@ -62,8 +62,14 @@ import java.awt.Paint;
  *   <tr><td>polar</td><td>{@link XYModel}</td><td>x</td></tr>
  *   <tr><td>step_area</td><td>{@link XYModel}</td><td>x</td></tr>
  *   <tr><td>step</td><td>{@link XYModel}</td><td>x</td></tr>
+ *   <tr><td>histogram</td><td>{@link XYModel}</td><td>x</td></tr>
+ *   <tr><td>candlestick</td><td>{@link HiLoModel}</td><td>x</td></tr>
+ *   <tr><td>hilow</td><td>{@link HiLoModel}</td><td>x</td></tr>
  * </table>
  *
+ * @see ChartEngine
+ * @see ChartModel
+ * @see org.zkoss.zul.impl.SimpleChartEngine
  * @author henrichen
  */
 public class Chart extends Imagemap {
