@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}"  ${self.outerAttrs} style="height:${self.height};width:${serlf.width};" z.type="zul.flash.Flash">
+<div id="${self.uuid}"  ${self.outerAttrs} style="height:${self.height};width:${self.width};" z.type="zul.flash.Flash">
 <object id="${self.uuid}!obj"  width="${self.width}" height="${self.height}">
 <param name="movie" value="${self.src}"></param>
 <param name="wmode" value="transparent"></param>
