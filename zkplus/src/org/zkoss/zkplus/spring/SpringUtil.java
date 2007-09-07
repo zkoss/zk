@@ -61,7 +61,7 @@ public class SpringUtil {
 	}
 
 	/**
-	 * Get the spring bean by the specified name.
+	 * Get the spring bean by the specified name and class.
 	 */		
 	public static Object getBean(String name, Class cls) {
 		Object o = null;
