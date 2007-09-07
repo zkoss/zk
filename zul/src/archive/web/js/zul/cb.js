@@ -300,7 +300,7 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	if (pp2) pp2.style.width = pp2.style.height = "auto";
 	pp.style.position = "absolute"; //just in case
 	pp.style.display = "block";
-	pp.style.zIndex = "80000";
+	pp.style.zIndex = "88000";
 	zk.onVisiAt(pp);
 
 	//FF: Bug 1486840

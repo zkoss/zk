@@ -600,7 +600,7 @@ span.rbtnbk {<%-- button at the right edge --%>
 	border: 1px solid #7f9db9; border-left: none;
 }
 div.comboboxpp, div.bandboxpp { <%--hardcoded in DSP--%>
-	display: block; position: absolute; z-index: 80000;
+	display: block; position: absolute; z-index: 88000;
 	background: white; border: 1px solid black; padding: 2px;
 	font-size: small;
 }
@@ -617,7 +617,7 @@ div.comboboxpp {
 <%-- ZK error message box --%>
 div.errbox {
 	margin: 0; padding: 1px; border: 1px outset; cursor: pointer;
-	background: #E8E0D8; position: absolute; z-index: 70000;
+	background: #E8E0D8; position: absolute; z-index: 88000;
 }
 
 div.progressmeter {
@@ -639,7 +639,7 @@ div.paging a:hover {
 
 <%-- ZK datebox and calendar --%>
 div.dateboxpp { <%--hardcoded in DSP--%>
-	display: block; position: absolute; z-index: 80000;
+	display: block; position: absolute; z-index: 88000;
 	background: white; border: 1px solid black; padding: 2px;
 }
 

@@ -117,12 +117,10 @@ zkTxbox._noonblur = function (inp) {
 			if (cf == el) return true;
 
 			//To resolve Bug 1486840 (see db.js and cb.js)
-			if (zk.gecko || zk.ie) {
-				var n = $e(getZKAttr(cf, "vparent"));
-				if (n) {
-					cf = n;
-					continue;
-				}
+			var n = $e(getZKAttr(cf, "vparent"));
+			if (n) {
+				cf = n;
+				continue;
 			}
 			cf = cf.parentNode;
 		}

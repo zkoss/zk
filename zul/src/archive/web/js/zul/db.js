@@ -519,7 +519,7 @@ zkDtbox.open = function (pp) {
 	pp.style.position = "absolute"; //just in case
 	pp.style.overflow = "auto"; //just in case
 	pp.style.display = "block";
-	pp.style.zIndex = "80000";
+	pp.style.zIndex = "88000";
 	//No special child, so no need to: zk.onVisiAt(pp);
 
 	//FF: Bug 1486840
