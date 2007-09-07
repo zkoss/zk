@@ -126,31 +126,22 @@ public class ForEachImpl implements ForEach {
 			throw new IllegalStateException("Iterate twice not allowed");
 
 		if (_status == null) {
+			//Bug 1786154: we have to prepare _status first since _expr,
+			//_begin or _end might depend on it
+			setupStatus();
+
 			final Object o = eval(_expr);
 			if (o == null) {
 				_done = true;
+				restoreStatus();
 				return false;
 			}
 
-			//preserve
-			//Bug 1786154: we have to prepare _status first since _begin
-			//might depend on it
-			if (_comp != null) {
-				_oldEach = _comp.getVariable("each", true);
-				_status = new Status(_comp.getVariable("forEachStatus", true));
-				_comp.setVariable("forEachStatus", _status, true);
-			} else {
-				_oldEach = _page.getVariable("each");
-				_status = new Status(_page.getVariable("forEachStatus"));
-				_page.setVariable("forEachStatus", _status);
-			}
-
 			Integer ibeg = (Integer)eval(_begin);
-			Integer iend = (Integer)eval(_end);
 			int vbeg = ibeg != null ? ibeg.intValue(): 0;
 			if (vbeg < 0) ibeg = new Integer(vbeg = 0);
-
-			_status.setRange(ibeg, iend);
+			_status.setBegin(ibeg);
+			_status.setEnd((Integer)eval(_end));
 
 			prepare(o, vbeg); //prepare iterator
 		}
@@ -166,6 +157,21 @@ public class ForEachImpl implements ForEach {
 
 		//restore
 		_done = true;
+		restoreStatus();
+		return false;
+	}
+	private void setupStatus() {
+		if (_comp != null) {
+			_oldEach = _comp.getVariable("each", true);
+			_status = new Status(_comp.getVariable("forEachStatus", true));
+			_comp.setVariable("forEachStatus", _status, true);
+		} else {
+			_oldEach = _page.getVariable("each");
+			_status = new Status(_page.getVariable("forEachStatus"));
+			_page.setVariable("forEachStatus", _status);
+		}
+	}
+	private void restoreStatus() {
 		if (_comp != null) {
 			if (_status.previous != null)
 				_comp.setVariable("forEachStatus", _status.previous, true);
@@ -186,7 +192,6 @@ public class ForEachImpl implements ForEach {
 				_page.unsetVariable("each");
 		}
 		_it = null; _status = null; //recycle (just in case)
-		return false;
 	}
 
 	private void prepare(Object o, final int begin) {
@@ -337,10 +342,12 @@ public class ForEachImpl implements ForEach {
 			this.previous = previous;
 			this.index = -1;
 		}
-		private void setRange(Integer begin, Integer end) {
+		private void setBegin(Integer begin) {
 			this.begin = begin;
-			this.end = end;
 			this.index = begin != null ? begin.intValue() - 1: -1;
+		}
+		private void setEnd(Integer end) {
+			this.end = end;
 		}
 
 		public ForEachStatus getPrevious() {
