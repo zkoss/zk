@@ -23,4 +23,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
  <td class="slidersph-bkl"></td>
  <td class="slidersph-bk"><img id="${self.uuid}!btn" src="${c:encodeURL('~./zul/img/slider/btnsph.gif')}" title="${c:string(self.curpos)}"/></td>
  <td class="slidersph-bkr"></td>
+</tr>
 </table>

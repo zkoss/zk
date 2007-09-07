@@ -21,7 +21,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.sel.Libox"${self.outerAttrs}${self.innerAttrs}>
 	<div id="${self.uuid}!paging" class="listbox-paging">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave" class="listbox-btable">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listbox-btable">
 	<tbody>
 ${z:redraw(self.listhead, null)}
 	</tbody>
