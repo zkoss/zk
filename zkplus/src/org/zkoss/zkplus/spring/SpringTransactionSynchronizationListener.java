@@ -104,9 +104,14 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 			_threadLocals[2] = getThreadLocal(cls, "currentTransactionName").get();
 			_threadLocals[3] = getThreadLocal(cls, "currentTransactionReadOnly").get();
 			_threadLocals[4] = getThreadLocal(cls, "actualTransactionActive").get();
-			
-			cls = Classes.forNameByThread("org.springframework.orm.hibernate3.SessionFactoryUtils");
-			_threadLocals[5] = getThreadLocal(cls, "deferredCloseHolder").get();
+	
+			//20070907, Henri Chen: bug 1785457, hibernate3 might not used
+			try {
+				cls = Classes.forNameByThread("org.springframework.orm.hibernate3.SessionFactoryUtils");
+				_threadLocals[5] = getThreadLocal(cls, "deferredCloseHolder").get();
+			} catch (ClassNotFoundException ex) {
+				//ignore if hibernate 3 is not used.
+			}
 			
 			cls = Classes.forNameByThread("org.springframework.transaction.interceptor.TransactionAspectSupport");
 			
@@ -138,8 +143,13 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 				getThreadLocal(cls, "currentTransactionReadOnly").set(_threadLocals[3]);
 				getThreadLocal(cls, "actualTransactionActive").set(_threadLocals[4]);
 				
-				cls = Classes.forNameByThread("org.springframework.orm.hibernate3.SessionFactoryUtils");
-				getThreadLocal(cls, "deferredCloseHolder").set(_threadLocals[5]);
+				//20070907, Henri Chen: bug 1785457, hibernate3 might not used
+				try {
+					cls = Classes.forNameByThread("org.springframework.orm.hibernate3.SessionFactoryUtils");
+					getThreadLocal(cls, "deferredCloseHolder").set(_threadLocals[5]);
+				} catch (ClassNotFoundException ex) {
+					//ignore if hibernate 3 is not used.
+				} 
 
 				cls = Classes.forNameByThread("org.springframework.transaction.interceptor.TransactionAspectSupport");
 				//Spring 1.2.8 and Spring 2.0.x, the ThreadLocal field name has changed, default use 2.0.x
