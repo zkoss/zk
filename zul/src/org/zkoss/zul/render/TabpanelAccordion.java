@@ -23,7 +23,6 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.zkoss.lang.Strings;
-import org.zkoss.xel.fn.StringFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
