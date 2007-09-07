@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿ml version="1.0" encoding="UTF-8"?>
 
 <!-- lang.xml
 	Purpose:
@@ -789,8 +789,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>textbox</component-name>
 		<component-class>org.zkoss.zul.Textbox</component-class>
-		<mold-uri>class:org.zkoss.zul.render.TextboxDefault</mold-uri>
-		<!--<component-class>org.zkoss.zul.Textbox</component-class>-->
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zul.render.TextboxDefault</mold-uri>
