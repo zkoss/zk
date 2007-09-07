@@ -42,13 +42,9 @@ ${z:redraw(self.treechildren, null)}
  */
 	public void render(Component comp, Writer out) throws IOException {		
 		final Treeitem self = (Treeitem) comp;
-		final Treerow tr = self.getTreerow();
-		final Treechildren tc = self.getTreechildren();
-		
-		if (tr != null)			
-			tr.redraw(out);
-		if (tc != null)
-			tc.redraw(out);
+		new WriterHelper(out)
+			.write(self.getTreerow())
+			.write(self.getTreechildren());
 	}
 
 }

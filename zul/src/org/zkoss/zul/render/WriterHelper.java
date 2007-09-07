@@ -21,6 +21,8 @@ package org.zkoss.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.zkoss.zk.ui.Component;
+
 /**
  * A helper class for writting output.
  * @author Dennis.Chen
@@ -31,7 +33,17 @@ import java.io.Writer;
 	public WriterHelper(Writer writer){
 		_w = writer;
 	}
-	
+
+	/** Write a component.
+	 * It works even if the component is null.
+	 */
+	public WriterHelper write(Component comp)
+	throws IOException {
+		if (comp != null)
+			comp.redraw(_w);
+		return this;
+	}
+
 	/**
 	 * Write a string. 
 	 * If str is null, nothing will be written.
