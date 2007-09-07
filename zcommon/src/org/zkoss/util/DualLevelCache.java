@@ -27,12 +27,15 @@ import java.util.Iterator;
  * and a {@link CacheMap} instance as the backend.
  *
  * <p>Like {@link ThreadLocalCache}, it doesn't require any synchronization.
- * Unlike {@link ThreadLocalCache}, when the cache is cleared ({@link #clear}),
- * all cached object are merged to the backend.
+ * Unlike {@link ThreadLocalCache}, when this cache supports a feature
+ * called 'fresh' ({@link #refresh}). It is used to merge
+ * all cached object in the front cache to the backend cache.
  *
- * <p>In other words, if the user calls {@link #clear} at the right moment,
+ * <p>In other words, if the user calls {@link #refresh} at the right moment,
  * the memory use will be minimized (comparing to {@link ThreadLocalCache}),
  * while it maintains a similar performance (taking two hash accesses).
+ * Thus, when using {@link DualLevelCache}, you have to call {@link #refresh}
+ * once a while.
  *
  * @author tomyeh
  * @since 3.0.0
@@ -60,32 +63,11 @@ public class DualLevelCache extends ThreadLocalCache {
 		this(DEFAULT_MAX_SIZE, DEFAULT_LIFETIME);
 	}
 
-	//Cache//
-	public boolean containsKey(Object key) {
-		final Object o = super.get(key); //front
-		if (o == REMOVED) return false;
-		if (o != null) return true;
-		return _shared.containsKey(key) || super.containsKey(key);
-	}
-	public Object get(Object key) {
-		final Object o = super.get(key);
-		if (o != null || super.containsKey(key))
-			return o != REMOVED ? o: null;
-		return _shared.get(key);
-	}
-	public Object put(Object key, Object value) {
-		final Object o = super.put(key, value);
-		if (o != null || super.containsKey(key))
-			return o != REMOVED ? o: null;
-		return _shared.get(key);
-	}
-	public Object remove(Object key) {
-		final Object o = super.put(key, REMOVED);
-		if (o != null || super.containsKey(key))
-			return o != REMOVED ? o: null;
-		return _shared.get(key);
-	}
-	public void clear() {
+	//extra//
+	/** Updates the objects cached in the front cache to the backend cache,
+	 * and then clears the front cache.
+	 */
+	public void refresh() {
 		final Map map = new HashMap();
 		super.copyTo(map);
 		super.clear();
@@ -114,6 +96,36 @@ public class DualLevelCache extends ThreadLocalCache {
 
 		if (clone != null)
 			_shared = clone;
+	}
+
+	//Cache//
+	public boolean containsKey(Object key) {
+		final Object o = super.get(key); //front
+		if (o == REMOVED) return false;
+		if (o != null) return true;
+		return _shared.containsKey(key) || super.containsKey(key);
+	}
+	public Object get(Object key) {
+		final Object o = super.get(key);
+		if (o != null || super.containsKey(key))
+			return o != REMOVED ? o: null;
+		return _shared.get(key);
+	}
+	public Object put(Object key, Object value) {
+		final Object o = super.put(key, value);
+		if (o != null || super.containsKey(key))
+			return o != REMOVED ? o: null;
+		return _shared.get(key);
+	}
+	public Object remove(Object key) {
+		final Object o = super.put(key, REMOVED);
+		if (o != null || super.containsKey(key))
+			return o != REMOVED ? o: null;
+		return _shared.get(key);
+	}
+	public void clear() {
+		super.clear();
+		_shared = new CacheMap(_shared.getMaxSize(), _shared.getLifetime());
 	}
 	public boolean isEmpty() {
 	//Not very accurate since the front one might have nothing but REMOVED
