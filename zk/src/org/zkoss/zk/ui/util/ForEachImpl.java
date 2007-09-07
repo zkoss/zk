@@ -132,23 +132,27 @@ public class ForEachImpl implements ForEach {
 				return false;
 			}
 
-			final Integer iend = (Integer)eval(_end);
-			final Integer ibeg = (Integer)eval(_begin);
-			final int vbeg = ibeg != null ? ibeg.intValue(): 0;
-			if (vbeg < 0)
-				throw new UiException("Negative forEachBegin is not allowed: "+ibeg);
-			prepare(o, vbeg); //prepare iterator
-
 			//preserve
+			//Bug 1786154: we have to prepare _status first since _begin
+			//might depend on it
 			if (_comp != null) {
 				_oldEach = _comp.getVariable("each", true);
-				_status = new Status(_comp.getVariable("forEachStatus", true), ibeg, iend);
+				_status = new Status(_comp.getVariable("forEachStatus", true));
 				_comp.setVariable("forEachStatus", _status, true);
 			} else {
 				_oldEach = _page.getVariable("each");
-				_status = new Status(_page.getVariable("forEachStatus"), ibeg, iend);
+				_status = new Status(_page.getVariable("forEachStatus"));
 				_page.setVariable("forEachStatus", _status);
 			}
+
+			Integer ibeg = (Integer)eval(_begin);
+			Integer iend = (Integer)eval(_end);
+			int vbeg = ibeg != null ? ibeg.intValue(): 0;
+			if (vbeg < 0) ibeg = new Integer(vbeg = 0);
+
+			_status.setRange(ibeg, iend);
+
+			prepare(o, vbeg); //prepare iterator
 		}
 
 		if ((_status.end == null || _status.index < _status.end.intValue())
@@ -327,10 +331,13 @@ public class ForEachImpl implements ForEach {
 		private final Object previous;
 		private Object each;
 		private int index;
-		private final Integer begin, end;
+		private Integer begin, end;
 
-		private Status(Object previous, Integer begin, Integer end) {
+		private Status(Object previous) {
 			this.previous = previous;
+			this.index = -1;
+		}
+		private void setRange(Integer begin, Integer end) {
 			this.begin = begin;
 			this.end = end;
 			this.index = begin != null ? begin.intValue() - 1: -1;
