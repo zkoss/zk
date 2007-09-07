@@ -98,16 +98,16 @@ public class TabpanelAccordion implements ComponentRenderer {
 			wh.write("<tr height=\""+ self.getTabbox().getPanelSpacing()+ "\"><td></td></tr>");
 		
 		wh.write("<tr>");
-			wh.write("<td class=\""+ StringFns.cat("tabaccd-3d-tl",suffix)+"\"></td>");			
-			wh.write("<td colspan=\"" + colspan1 + "\" class=\"" + StringFns.cat("tabaccd-3d-tm",suffix) + "\"></td>");
-			wh.write("<td class=\"" + StringFns.cat("tabaccd-3d-tr",suffix) + "\"></td>");			
+			wh.write("<td class=\"").write("tabaccd-3d-tl").write(suffix).write("\"></td>");			
+			wh.write("<td colspan=\"" + colspan1 + "\" class=\"").write("tabaccd-3d-tm").write(suffix).write("\"></td>");
+			wh.write("<td class=\"").write("tabaccd-3d-tr").write(suffix).write("\"></td>");			
 		wh.write("</tr>");	
 	    
 		wh.write("<tr height=\"" + height + "\">");		
-			wh.write("<td class=\"" + StringFns.cat("tabaccd-3d-ml",suffix) + "\"></td>");
-			wh.write("<td width=\"3\" class=\"" + StringFns.cat("tabaccd-3d-mm",suffix) + "\"></td>");
-			wh.write("<td align=\"left\" class=\"" + StringFns.cat("tabaccd-3d-mm",suffix) + "\"><a href=\"javascript:;\"" +
-					" id=\"" + tab.getUuid() + "!a\">");			
+			wh.write("<td class=\"").write("tabaccd-3d-ml").write(suffix).write("\"></td>");
+			wh.write("<td width=\"3\" class=\"").write("tabaccd-3d-mm").write(suffix).write("\"></td>");
+			wh.write("<td align=\"left\" class=\"").write("tabaccd-3d-mm").write(suffix).write("\"><a href=\"javascript:;\"")
+			.write(" id=\"").write(tab.getUuid()).write("!a\">");			
 			if (!Strings.isBlank(tab.getImgTag()))
 				wh.write(tab.getImgTag());
 			if (!Strings.isBlank(tab.getLabel()))
@@ -115,11 +115,12 @@ public class TabpanelAccordion implements ComponentRenderer {
 			wh.write( "</a></td>");			
 
 		if(tab.isClosable()){
-			wh.write("<td width=\"11\" align=\"right\" class=\"" + StringFns.cat("tabaccd-3d-mm",suffix) + 
-				"\"><img id=\""+ self.getUuid() + "!close\" src=\"" + exec.encodeURL("~./zul/img/close-off.gif") + "\"/></td>");
+			wh.write("<td width=\"11\" align=\"right\" class=\"").write("tabaccd-3d-mm").write(suffix) 
+			.write("\"><img id=\"").write(self.getUuid()).write("!close\" src=\"")
+			.write(exec.encodeURL("~./zul/img/close-off.gif")).write("\"/></td>");
 		}
-			wh.write("<td width=\"3\" class=\"" + StringFns.cat("tabaccd-3d-mm",suffix) + "\"></td>");	
-			wh.write("<td class=\"" + StringFns.cat("tabaccd-3d-mr",suffix) + "\"></td>");
+			wh.write("<td width=\"3\" class=\"").write("tabaccd-3d-mm").write(suffix).write("\"></td>");	
+			wh.write("<td class=\"").write("tabaccd-3d-mr").write(suffix).write("\"></td>");
 		wh.write("</tr>");	
 		wh.write("<tr>");
 			wh.write("<td colspan=\"" + colspan2 + "\" class=\"tabaccd-3d-b\"></td>");			
