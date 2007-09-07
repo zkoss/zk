@@ -25,6 +25,7 @@ import java.util.Iterator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Box;
+import org.zkoss.zul.fn.ZulFns;
 
 /**
  * {@link Box}'s vertical mold.
@@ -50,18 +51,15 @@ public class BoxVertical implements ComponentRenderer {
 		wh.write("<table id=\"").write(uuid).write("\" ");
 		wh.write("z.type=\"zul.box.Box\"").write(self.getOuterAttrs()).write(self.getInnerAttrs());
 		wh.write(" cellpadding=\"0\" cellspacing=\"0\">");
-		wh.write("<tr valign=\"").write(self.getValign()).write("\" id=\"").write(uuid).write("!cave\">");
+		wh.write("<tr valign=\"").write(self.getValign()).write("\" id=\"").write(uuid).write("\">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
-			wh.write("<tr valign=\"").write("\" id=\"").write(uuid)
-				.write("!chdextr\"><td id=\"")
-				.write(child.getUuid()).write("!chdextr\"")
-				.write(self.getChildOuterAttrs(child))
-				.write(self.getChildInnerAttrs(child))
-				.write(">");
-
+			wh.write("<tr valign=\"").write("\" id=\"").write(uuid).write("!chdextr\">");
+			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"");
+			wh.write(ZulFns.getBoxChildOuterAttrs(child));
+			wh.write(ZulFns.getBoxChildInnerAttrs(child));
+			wh.write(">");
 			child.redraw(out);
-
 			wh.write("</td></tr>");
 		}		
 		wh.writeln("</table>");
