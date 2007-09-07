@@ -59,9 +59,9 @@ public class Groupbox3d implements ComponentRenderer {
 			wh.write("<tr height=\"22\"><td class=\"groupbox-3d-ml\"></td>");
 			wh.write("<td width=\"3\" class=\"groupbox-3d-mm\"></td>");
 			wh.write("<td class=\"groupbox-3d-mm\">");
-			if (caption != null) {
-				caption.redraw(out);
-			}
+
+			caption.redraw(out);
+
 			wh.write("</td>");
 			wh.write("<td width=\"3\" class=\"groupbox-3d-mm\"></td>");
 			wh.write("<td class=\"groupbox-3d-mr\"></td></tr>");

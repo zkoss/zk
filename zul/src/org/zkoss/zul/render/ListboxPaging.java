@@ -44,14 +44,13 @@ public class ListboxPaging implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.sel.Libox\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		
-		wh.write("<div id=\"").write(uuid).write("!paging\" class=\"listbox-paging\">");
-		wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
+		wh.write("<div id=\"").write(uuid)
+			.write("!paging\" class=\"listbox-paging\">")
+			.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
+
 		//header
-		wh.write("<tbody>");
-		Listhead head  = self.getListhead();
-		if(head !=null)
-			head.redraw(out);
-		wh.write("</tbody>");
+		wh.write("<tbody>").write(self.getListhead()).write("</tbody>");
+
 		//body
 		wh.write("<tbody id=\"").write(uuid).write("!cave\">");
 		int i = self.getVisibleBegin();
@@ -62,19 +61,16 @@ public class ListboxPaging implements ComponentRenderer {
 			}
 		}
 		wh.write("</tbody>");
+
 		//Footer
-		wh.write("<tbody class=\"grid-foot\">");
-		Listfoot foot = self.getListfoot();
-		if(foot != null)
-			foot.redraw(out);
-		wh.write("</tbody>");
-		wh.write("</table>");
+		wh.write("<tbody class=\"grid-foot\">").write(self.getListfoot())
+			.write("</tbody></table>");
+
 		//Paging
-		wh.write("<div id=\"").write(uuid).write("!pgi\" class=\"listbox-pgi\">");
-		Paging pg  = self.getPaging();
-		if(pg != null)
-			pg.redraw(out);
-		wh.write("</div></div></div>");
+		wh.write("<div id=\"").write(uuid)
+			.write("!pgi\" class=\"listbox-pgi\">")
+			.write(self.getPaging())
+			.write("</div></div></div>");
 
 		/*
 		<div id="${self.uuid}" z.type="zul.sel.Libox"${self.outerAttrs}${self.innerAttrs}>
