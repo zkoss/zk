@@ -51,6 +51,10 @@ import org.zkoss.zul.impl.XulElement;
  * <dt>accordion</dt>
  * <dd>The accordion tabbox.</dd>
  * </dl>
+ *
+ * <p>Note: {@link #getSclass} also controls {@link Tabs} and {@link Tab}.
+ * Refer to {@link #getTabSclass} for details.
+ *
  * @author tomyeh
  */
 public class Tabbox extends XulElement {
@@ -180,6 +184,32 @@ public class Tabbox extends XulElement {
 			_orient = orient;
 			invalidate();
 		}
+	}
+
+	/** Returns a portion of the sclass that are used by {@link Tabs} and
+	 * {@link Tab} to provide the style for tabs.
+	 *
+	 * <p>If the style class ({@link #getSclass}) of this tab box is not
+	 * defined, "tab-3d" and "tab-v3d" are returned for horizontal and vertical
+	 * orient, respectively.
+	 * If the style class is defined, say "simple",
+	 * then this method return "tab-simple" and "tab-vsimple" for
+	 * horizontal and vertical orient, respectively.
+	 *
+	 * <p>If the mold is "default", then, {@link Tab} generates
+	 * "tab-3d-tl-sel" for the top-left corner of the selected tab,
+	 * "tab-3d-tm-uns" for the top-middle border of the
+	 * non-selected tab, and so on.
+	 *
+	 * <p>It is currently used only the default mold (with both vertical
+	 * and horizontal orientation).
+	 *
+	 * @since 3.0,0
+	 */
+	public String getTabSclass() {
+		final String prefix = "vertical".equals(_orient) ? "tab-v": "tab-";
+		final String scls = getSclass();
+		return scls != null && scls.length() > 0 ? prefix + scls: prefix + "3d";
 	}
 
 	//-- Component --//
