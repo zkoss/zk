@@ -642,12 +642,10 @@ zk.isAncestor = function (p, c, checkuuid) {
 			return true;
 
 		//To resolve Bug 1486840 (see db.js and cb.js)
-		if (zk.gecko) { 
-			var n = $e(getZKAttr(c, "vparent"));
-			if (n) {
-				c = n;
-				continue;
-			}
+		var n = $e(getZKAttr(c, "vparent"));
+		if (n) {
+			c = n;
+			continue;
 		}
 		c = c.parentNode;
 	}

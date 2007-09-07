@@ -59,7 +59,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "73"; //increase this if we want the browser to reload JavaScript
+zk.build = "75"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -266,12 +266,11 @@ function $uuid(n) {
 				n = n.id;
 				break;
 			}
-			if (zk.gecko) { 
-				var p = $e(getZKAttr(n, "vparent"));
-				if (p) {
-					n = p;
-					continue;
-				}
+
+			var p = $e(getZKAttr(n, "vparent"));
+			if (p) {
+				n = p;
+				continue;
 			}
 			n = n.parentNode;
 		}
@@ -339,12 +338,11 @@ function $parentByType(el, type) {
 	while (el) {
 		if ($type(el) == type)
 			return el;
-		if (zk.gecko) { 
-			var p = $e(getZKAttr(el, "vparent"));
-			if (p) {
-				el = p;
-				continue;
-			}
+
+		var p = $e(getZKAttr(el, "vparent"));
+		if (p) {
+			el = p;
+			continue;
 		}
 		el = el.parentNode;
 	}
@@ -360,12 +358,11 @@ function $parentByTag(el, tagName) {
 	while (el) {
 		if ($tag(el) == tagName)
 			return el;
-		if (zk.gecko) { 
-			var p = $e(getZKAttr(el, "vparent"));
-			if (p) {
-				el = p;
-				continue;
-			}
+
+		var p = $e(getZKAttr(el, "vparent"));
+		if (p) {
+			el = p;
+			continue;
 		}
 		el = el.parentNode;
 	}
