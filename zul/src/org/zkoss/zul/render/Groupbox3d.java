@@ -22,7 +22,6 @@ import java.io.Writer;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.zkoss.xel.fn.StringFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -50,7 +49,7 @@ public class Groupbox3d implements ComponentRenderer {
 		wh.write(self.getOuterAttrs());
 		wh.write(self.getInnerAttrs());
 		wh.write("><tr valign=\"top\"><td>");
-
+		String gcExtStyle = "";
 		if (caption != null) {
 			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
 			wh.write("<tr><td class=\"groupbox-3d-tl\"></td>");
@@ -68,10 +67,14 @@ public class Groupbox3d implements ComponentRenderer {
 			wh.write("<td class=\"groupbox-3d-mr\"></td></tr>");
 			wh.write("<tr><td colspan=\"5\" class=\"groupbox-3d-b\"></td></tr>");
 			wh.write("</table>");
+			gcExtStyle =  "border-top:0;";
 		}
-
-		String gcExtStyle = StringFns.cat(caption == null ? ""
-				: "border-top:0;", self.getContentStyle());
+		
+		String cs = self.getContentStyle();
+		if (cs != null) {
+			gcExtStyle += cs;
+		}
+		
 		wh.write("<div id=\"");
 		wh.write(uuid);
 		wh.write("!slide\"");
