@@ -55,7 +55,7 @@ public class BoxVertical implements ComponentRenderer {
 		wh.write(" cellpadding=\"0\" cellspacing=\"0\">");		
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
-			wh.write("<tr id=\"").write(uuid).write("!chdextr\"");
+			wh.write("<tr id=\"").write(child.getUuid()).write("!chdextr\"");
 			wh.write(self.getChildOuterAttrs(child)).write(">");
 			wh.write("<td");			
 			wh.write(self.getChildInnerAttrs(child));
