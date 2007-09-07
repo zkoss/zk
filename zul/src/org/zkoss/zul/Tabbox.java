@@ -175,25 +175,14 @@ public class Tabbox extends XulElement {
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
 			throw new WrongValueException(orient);
-		checkOrient(getMold(), orient);
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
 			invalidate();
 		}
 	}
-	private static void checkOrient(String mold, String orient)
-	throws WrongValueException {
-		if ("vertical".equals(orient) && !"default".equals(mold))
-			throw new WrongValueException("vertical can be used with the default mold");
-	}
 
 	//-- Component --//
-	public void setMold(String mold) {
-		checkOrient(mold, getOrient());
-		super.setMold(mold);
-	}
-
 	/** Auto-creates {@link Tabpanel} and select one of tabs if necessary.
 	 */
 	public void onCreate() {
