@@ -25,7 +25,6 @@ import java.util.Iterator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Row;
-import org.zkoss.zul.fn.ZulFns;
 
 /*
  * {@link Row}'s default mold.
@@ -45,9 +44,11 @@ public class RowDefault implements ComponentRenderer {
 		int i = 0;
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();i++) {
 			final Component child = (Component) it.next();
-			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"");
-			wh.write(ZulFns.getColAttrs(self, i)).write(">");
+			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"")
+				.write(self.getChildAttrs(i)).write(">");
+
 			child.redraw(out);
+
 			wh.write("</td>");
 		}
 		wh.writeln("</tr>");
