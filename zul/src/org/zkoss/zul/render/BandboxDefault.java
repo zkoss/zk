@@ -35,28 +35,25 @@ import org.zkoss.zul.Bandbox;
  * @since 3.0.0
  */
 public class BandboxDefault implements ComponentRenderer {
-
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);
 		final Bandbox self = (Bandbox) comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
-		wh.write("<span id=\"").write(uuid).write("\"").write(
-				self.getOuterAttrs());
-		wh.write(" z.type=\"zul.cb.Bdbox\" z.combo=\"true\"><input id=\"");
-		wh.write(uuid).write("!real\"").write(self.getInnerAttrs());
-		wh.write(" /><span id=\"").write(uuid).write(
-				"!btn\" class=\"rbtnbk\"><img src=\"");
-		wh.write(exec.encodeURL(self.getImage())).write("\"");
-		if (self.isButtonVisible())
-			wh.write("");
-		else wh.write(" style=\"display:none\"");
-		wh.write("/></span><div id=\"").write(uuid);
-		wh.write("!pp\" class=\"bandboxpp\" style=\"display:none\" tabindex=\"-1\">");
-		if (self.getDropdown() != null) {
-			self.getDropdown().redraw(out);
-		}
-		wh.write("</div></span>");
-		wh.writeln();
+		wh.write("<span id=\"").write(uuid).write("\"")
+			.write(self.getOuterAttrs())
+			.write(" z.type=\"zul.cb.Bdbox\" z.combo=\"true\"><input id=\"")
+			.write(uuid).write("!real\"").write(self.getInnerAttrs())
+			.write(" /><span id=\"").write(uuid)
+			.write("!btn\" class=\"rbtnbk\"><img src=\"")
+			.write(exec.encodeURL(self.getImage())).write("\"");
+
+		if (!self.isButtonVisible())
+			wh.write(" style=\"display:none\"");
+
+		wh.write("/></span><div id=\"").write(uuid)
+			.write("!pp\" class=\"bandboxpp\" style=\"display:none\" tabindex=\"-1\">")
+			.write(self.getDropdown())
+			.writeln("</div></span>");
 	}
 }
