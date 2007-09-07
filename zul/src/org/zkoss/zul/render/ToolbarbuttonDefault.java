@@ -55,7 +55,7 @@ public class ToolbarbuttonDefault implements ComponentRenderer {
 		final WriterHelper wh = new WriterHelper(out);
 		final Toolbarbutton self = (Toolbarbutton) comp;
 		
-		wh.write("<a id=\"" + self.getUuid() + "\" z.type=\"zul.widget.Tbtn\"" + self.getOuterAttrs() + self.getInnerAttrs() + "></span>");
+		wh.write("<a id=\"" + self.getUuid() + "\" z.type=\"zul.widget.Tbtn\"" + self.getOuterAttrs() + self.getInnerAttrs() + ">");
 		if (self.getDir().equals("reverse")){
 			RenderFns.getOut(out).setValue(self.getLabel()).render();
 			if (self.isImageAssigned() && self.getOrient().equals("vertical")){
