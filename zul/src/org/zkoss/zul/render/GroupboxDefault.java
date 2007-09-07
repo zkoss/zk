@@ -22,9 +22,9 @@ import java.io.Writer;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
-import org.zkoss.zul.Caption;
 import org.zkoss.zul.Groupbox;
 
 /**
@@ -34,23 +34,19 @@ import org.zkoss.zul.Groupbox;
  * @since 3.0.0
  */
 public class GroupboxDefault implements ComponentRenderer {
+
 	public void render(Component comp, Writer out) throws IOException {
-		final Groupbox self = (Groupbox)comp;
-		final Caption caption = self.getCaption();
-		out.write("<fieldset id=\"");
-		out.write(self.getUuid());
-		out.write("\"");
-		out.write(self.getOuterAttrs());
-		out.write(self.getInnerAttrs());
-		out.write(">");
-		if(caption!=null){
-			caption.redraw(out);
-		}
+		final WriterHelper wh = new WriterHelper(out);
+		final Groupbox self = (Groupbox) comp;
+		wh.write("<fieldset id=\"").write(self.getUuid()).write("\"");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
+		ZkFns.redraw(self.getCaption(), out);
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
-			if (child != caption)
-				child.redraw(out);
+			final Component child = (Component) it.next();
+			if(self.getCaption() != child)
+			ZkFns.redraw(child, out);
 		}
-		out.write("</fieldset>\n");
+		wh.write("</fieldset>");
+		wh.writeln();
 	}
 }
