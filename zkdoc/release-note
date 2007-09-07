@@ -79,6 +79,7 @@ ZK 3.0.0
   1770144: Memory Leak in AImage
   1783363: Unable to drag a listitem out of the box (IE only)
   1786348: Failed to include two ZUL files
+  1785457: SpringTransactionSynchronizationListener requires Hibernate3
 
 * Upgrade Notes:
   + el-config (of zk.xml) is replaced with xel-config, and the class
