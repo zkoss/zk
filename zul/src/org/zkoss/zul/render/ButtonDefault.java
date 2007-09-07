@@ -21,7 +21,7 @@ package org.zkoss.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.web.fn.ServletFns;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Button;
@@ -39,7 +39,7 @@ public class ButtonDefault implements ComponentRenderer {
 		final WriterHelper wh = new WriterHelper(out);
 		final Button self = (Button) comp;
 		final String uuid = self.getUuid();
-		if (!self.isImageAssigned() && ServletFns.isSafari()) {
+		if (!self.isImageAssigned() && Executions.getCurrent().isSafari()) {
 			wh.write("<input type=\"button\" id=\"").write(uuid).write("\"");
 			wh.write(" z.type=\"zul.widget.Button\" value=\"").write(
 					self.getLabel()).write("\"");

@@ -54,16 +54,6 @@ public class ListboxPaging implements ComponentRenderer {
 		wh.write("</tbody>");
 		//body
 		wh.write("<tbody id=\"").write(uuid).write("!cave\">");
-		/*
-		Iterator it = self.getItems().iterator();
-		final int _beg = self.getVisibleBegin();
-		final int _end = self.getVisibleEnd();
-		for( int i = 0; ++i<_beg && it.hasNext();)
-			it.next();
-		for( int i = 0, cnt = _end - _beg + 1; it.hasNext() && --cnt >= 0; ++i) {
-			final Component item = (Component)it.next();
-			ZkFns.redraw(item, out);
-		}*/
 		int i = self.getVisibleBegin();
 		if (i < self.getItems().size()) {
 			ListIterator it = self.getItems().listIterator(i);
