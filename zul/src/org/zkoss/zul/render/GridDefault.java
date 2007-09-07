@@ -20,7 +20,6 @@ package org.zkoss.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Grid;
@@ -43,17 +42,19 @@ public class GridDefault implements ComponentRenderer {
 		if(self.getColumns() != null){
 			wh.write("<div id=\"").write(uuid).write("!head\" class=\"grid-head\">");
 			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
-			ZkFns.redraw(self.getColumns(), out);
+			self.getColumns().redraw(out);
 			wh.write("</table></div>");
 		}
 		wh.write("<div id=\"").write(uuid).write("!body\" class=\"grid-body\">");
 		wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"grid-btable\">");
-		ZkFns.redraw(self.getRows(), out);
+		if (self.getRows() != null) {
+			self.getRows().redraw(out);
+		}
 		wh.write("</table></div>");
 		if(self.getFoot() != null){
 			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"grid-foot\">");
 			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"  style=\"table-layout:fixed\">");
-			ZkFns.redraw(self.getFoot(), out);
+			self.getFoot().redraw(out);
 			wh.write("</table></div>");
 		}
 		wh.writeln("</div>");

@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -58,8 +57,7 @@ public class ComboboxDefault implements ComponentRenderer {
 		wh.write("<table id=\"").write(uuid).write(
 				"!cave\" cellpadding=\"0\" cellspacing=\"0\">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component) it.next();
-			ZkFns.redraw(child, out);
+			((Component) it.next()).redraw(out);
 		}
 		wh.write("</table></div></span>");
 		wh.writeln();

@@ -24,7 +24,6 @@ import java.util.Iterator;
 
 import org.zkoss.web.fn.XMLFns;
 import org.zkoss.xel.fn.StringFns;
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -62,7 +61,9 @@ public class Groupbox3d implements ComponentRenderer {
 			wh.write("<tr height=\"22\"><td class=\"groupbox-3d-ml\"></td>");
 			wh.write("<td width=\"3\" class=\"groupbox-3d-mm\"></td>");
 			wh.write("<td class=\"groupbox-3d-mm\">");
-			ZkFns.redraw(caption, out);
+			if (caption != null) {
+				caption.redraw(out);
+			}
 			wh.write("</td>");
 			wh.write("<td width=\"3\" class=\"groupbox-3d-mm\"></td>");
 			wh.write("<td class=\"groupbox-3d-mr\"></td></tr>");
@@ -92,7 +93,7 @@ public class Groupbox3d implements ComponentRenderer {
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();
 			if (caption != child)
-				ZkFns.redraw(child, out);
+				child.redraw(out);
 		}
 
 		wh.write("</div></div>");

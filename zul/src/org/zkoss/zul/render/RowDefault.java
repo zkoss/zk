@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Row;
@@ -48,7 +47,7 @@ public class RowDefault implements ComponentRenderer {
 			final Component child = (Component) it.next();
 			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"");
 			wh.write(ZulFns.getColAttrs(self, i)).write(">");
-			ZkFns.redraw(child, out);
+			child.redraw(out);
 			wh.write("</td>");
 		}
 		wh.writeln("</tr>");

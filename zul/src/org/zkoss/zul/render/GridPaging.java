@@ -21,7 +21,6 @@ package org.zkoss.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Grid;
@@ -44,14 +43,22 @@ public class GridPaging implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("!paging\" class=\"grid-paging\">");
 		wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"grid-btable\">");
 		wh.write("<tbody>");
-		ZkFns.redraw(self.getColumns(), out);
+		if (self.getColumns() != null) {
+			self.getColumns().redraw(out);
+		}
 		wh.write("</tbody>");
-		ZkFns.redraw(self.getRows(), out);
+		if (self.getRows() != null) {
+			self.getRows().redraw(out);
+		}
 		wh.write("<tbody class=\"grid-foot\">");
-		ZkFns.redraw(self.getFoot(), out);
+		if (self.getFoot() != null) {
+			self.getFoot().redraw(out);
+		}
 		wh.write("</tbody></table>");
 		wh.write("<div id=\"").write(uuid).write("!pgi\" class=\"grid-pgi\">");
-		ZkFns.redraw(self.getPaging(), out);
+		if (self.getPaging() != null) {
+			self.getPaging().redraw(out);
+		}
 		wh.writeln("</div></div></div>");
 	}
 

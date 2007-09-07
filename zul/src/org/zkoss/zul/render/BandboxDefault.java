@@ -21,7 +21,6 @@ package org.zkoss.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -54,7 +53,9 @@ public class BandboxDefault implements ComponentRenderer {
 		else wh.write(" style=\"display:none\"");
 		wh.write("/></span><div id=\"").write(uuid);
 		wh.write("!pp\" class=\"bandboxpp\" style=\"display:none\" tabindex=\"-1\">");
-		ZkFns.redraw(self.getDropdown(), out);
+		if (self.getDropdown() != null) {
+			self.getDropdown().redraw(out);
+		}
 		wh.write("</div></span>");
 		wh.writeln();
 	}

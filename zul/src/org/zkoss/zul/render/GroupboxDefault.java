@@ -22,7 +22,6 @@ import java.io.Writer;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Groupbox;
@@ -40,11 +39,14 @@ public class GroupboxDefault implements ComponentRenderer {
 		final Groupbox self = (Groupbox) comp;
 		wh.write("<fieldset id=\"").write(self.getUuid()).write("\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		ZkFns.redraw(self.getCaption(), out);
+		if(self.getCaption() != null){ 
+			self.getCaption().redraw(out);
+		}
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();
-			if(self.getCaption() != child)
-			ZkFns.redraw(child, out);
+			if(self.getCaption() != child){
+				child.redraw(out);
+			}
 		}
 		wh.write("</fieldset>");
 		wh.writeln();

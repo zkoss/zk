@@ -22,7 +22,6 @@ import java.io.Writer;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -47,8 +46,7 @@ public class CaptionDefault implements ComponentRenderer {
 			wh.write("<legend>").write(imgTag);
 			RenderFns.getOut(out).setValue(self.getLabel()).render();
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				final Component child = (Component) it.next();
-				ZkFns.redraw(child, out);
+				((Component) it.next()).redraw(out);
 			}
 			wh.write("</legend>");
 			wh.writeln();
@@ -67,8 +65,7 @@ public class CaptionDefault implements ComponentRenderer {
 					.write("!cave\">");
 
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				final Component child = (Component) it.next();
-				ZkFns.redraw(child, out);
+				((Component) it.next()).redraw(out);
 			}
 
 			wh.write("</td>");
