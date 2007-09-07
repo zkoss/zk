@@ -107,10 +107,8 @@ public class TabpanelAccordion implements ComponentRenderer {
 			wh.write("<td width=\"3\" class=\"").write("tabaccd-3d-mm").write(suffix).write("\"></td>");
 			wh.write("<td align=\"left\" class=\"").write("tabaccd-3d-mm").write(suffix).write("\"><a href=\"javascript:;\"")
 			.write(" id=\"").write(tab.getUuid()).write("!a\">");			
-			if (!Strings.isBlank(tab.getImgTag()))
-				wh.write(tab.getImgTag());
-			if (!Strings.isBlank(tab.getLabel()))
-				new Out(out).setValue(tab.getLabel()).render();
+			wh.write(tab.getImgTag());
+			new Out(out, tab.getLabel()).render();
 			wh.write( "</a></td>");			
 
 		if(tab.isClosable()){

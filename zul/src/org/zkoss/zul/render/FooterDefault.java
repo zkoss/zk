@@ -42,7 +42,7 @@ public class FooterDefault implements ComponentRenderer {
 		wh.write("<td id=\"").write(uuid).write("\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write(self.getImgTag());
-		new Out(out).setValue(self.getLabel()).render();
+		new Out(out, self.getLabel()).render();
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			((Component) it.next()).redraw(out);
 		}

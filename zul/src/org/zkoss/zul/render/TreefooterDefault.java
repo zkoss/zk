@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Treefooter;
@@ -47,10 +46,8 @@ public class TreefooterDefault implements ComponentRenderer {
 		final Treefooter self = (Treefooter) comp;
 		
 		wh.write("<td id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() );
-		if (!Strings.isBlank(self.getImgTag()))
-			wh.write(self.getImgTag());
-		if (!Strings.isBlank(self.getLabel()))
-			new Out(out).setValue(self.getLabel()).render();		
+		wh.write(self.getImgTag());
+		new Out(out, self.getLabel()).render();		
 		wh.write(">");
 		
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {

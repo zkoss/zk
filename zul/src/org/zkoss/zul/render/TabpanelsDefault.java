@@ -36,42 +36,28 @@ import org.zkoss.zul.Tabpanels;
  */
 
 public class TabpanelsDefault implements ComponentRenderer {
-
-	/**
-	 * tabpanel.dsp
-<c:set var="self" value="${requestScope.arg.self}"/>
-<tbody id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-	<c:forEach var="child" items="${self.children}">
-	${z:redraw(child, null)}
-	</c:forEach>
-</tbody>
-
-vtabpanel.dsp
-<td id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-	<c:forEach var="child" items="${self.children}">
-	${z:redraw(child, null)}
-	</c:forEach>
-</td>
-	 */
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);
 		final Tabpanels self = (Tabpanels) comp;
-		
+
 		if(((Tabbox)self.getParent()).getOrient().equals("vertical")){
-			wh.write("<td id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs()+ ">");		
+			wh.write("<td id=\"").write(self.getUuid()).write("\"")
+				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				final Component child = (Component) it.next();
-				child.redraw(out);
+				((Component) it.next()).redraw(out);
 			}	
-			wh.write("</td>");
-		}
-		else{
-			wh.write("<tbody id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs()+ ">");		
+
+			wh.writeln("</td>");
+		} else {
+			wh.write("<tbody id=\"").write(self.getUuid()).write("\"")
+				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");		
+
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				final Component child = (Component) it.next();
-				child.redraw(out);
+				((Component) it.next()).redraw(out);
 			}	
-			wh.write("</tbody>");
+
+			wh.writeln("</tbody>");
 		}
 	}
 

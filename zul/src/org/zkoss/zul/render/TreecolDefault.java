@@ -21,7 +21,6 @@ package org.zkoss.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Treecol;
@@ -46,11 +45,9 @@ public class TreecolDefault implements ComponentRenderer {
 		
 		wh.write("<th id=\"" + self.getUuid() + "\" z.type=\"Tcol\"" 
 				+ self.getOuterAttrs() + self.getInnerAttrs());
-		if (!Strings.isBlank(self.getImgTag()))
-			wh.write(self.getImgTag());
+		wh.write(self.getImgTag());
 		wh.write(">");
-		if (!Strings.isBlank(self.getLabel()))
-			new Out(out).setValue(self.getLabel()).render();		
+		new Out(out, self.getLabel()).render();		
 		wh.write("</th>");
 		
 

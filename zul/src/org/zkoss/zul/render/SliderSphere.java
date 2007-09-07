@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Slider;
 
 /**
- * {@link Silder }'s default shpere.
+ * {@link Slider}'s default shpere.
  * @author Jeff Liu
  * @since 3.0.0
  */

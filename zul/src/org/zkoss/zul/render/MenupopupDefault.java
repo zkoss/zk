@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Menupopup;
 
 /**
- * {@link Menupopup's default mold.
+ * {@link Menupopup}'s default mold.
  * @author Jeff Liu
  * @since 3.0.0
  */

@@ -35,19 +35,13 @@ import org.zkoss.zul.Tabbox;
 
 public class TabboxAccordion implements ComponentRenderer {
 	
-	/**
-<c:set var="self" value="${requestScope.arg.self}"/>
-<table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.accd="true" border="0" cellpadding="0" cellspacing="0">
-${z:redraw(self.tabpanels, null)}
-</table>
-	 */
-
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);
-		final Tabbox self = (Tabbox) comp;		
-		wh.write("<table id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + " z.accd=\"true\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");	
-		self.getTabpanels().redraw(out);		
-		wh.write("</table>");
+		final Tabbox self = (Tabbox) comp;
+		wh.write("<table id=\"").write(self.getUuid()).write("\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.writeln(" z.accd=\"true\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
+			.write(self.getTabpanels())
+			.write("</table>");
 	}
-
 }

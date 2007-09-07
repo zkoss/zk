@@ -50,7 +50,7 @@ public class MenuitemDefault implements ComponentRenderer {
 				wh.write(exec.encodeURL(self.getHref()));
 			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
-			new Out(out).setValue(self.getLabel()).render();
+			new Out(out, self.getLabel()).render();
 			wh.write("</a>");
 			wh.writeln("</td>");
 		}else{
@@ -69,7 +69,7 @@ public class MenuitemDefault implements ComponentRenderer {
 				wh.write(exec.encodeURL(self.getHref()));
 			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
-			new Out(out).setValue(self.getLabel()).render();
+			new Out(out, self.getLabel()).render();
 			wh.write("</a>");
 			wh.writeln("</td>");
 			wh.write("<td><img src=\"").write(exec.encodeURL("~./img/spacer.gif")).writeln("\" width=\"9\"/></td>");

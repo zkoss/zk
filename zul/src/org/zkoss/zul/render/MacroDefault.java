@@ -27,7 +27,8 @@ import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zk.ui.HtmlMacroComponent;
 
 /**
- * {@link Macro}'s default mold.
+ * The default mold for ZUL's macro components.
+ *
  * @author Jeff Liu
  * @since 3.0.0
  */

@@ -38,20 +38,11 @@ public class ListfooterDefault implements ComponentRenderer {
 		final Listfooter self = (Listfooter)comp;
 		wh.write("<td id=\"").write(self.getUuid()).write("\" ").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		wh.write(self.getImgTag());
-		new Out(out).setValue(self.getLabel()).render();
+		new Out(out, self.getLabel()).render();
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
 			child.redraw(out);
 		}
 		wh.write("</td>");
-		/*
-		<td id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-		${self.imgTag}
-		<c:out value="${self.label}"/>
-		<c:forEach var="child" items="${self.children}">
-		${z:redraw(child, null)}
-		</c:forEach></td>
-		*/
 	}
-
 }

@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Treecell;
@@ -52,20 +51,15 @@ ${self.columnHtmlPostfix}
 		
 		wh.write("<td id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() +">");
 		
-		if(!Strings.isBlank(self.getColumnHtmlPrefix()))
-			wh.write(self.getColumnHtmlPrefix());
-		if (!Strings.isBlank(self.getImgTag()))
-			wh.write(self.getImgTag());
-		if (!Strings.isBlank(self.getLabel()))
-			new Out(out).setValue(self.getLabel()).render();
-		new Out(out).setMaxlength(self.getMaxlength()).render();
+		wh.write(self.getColumnHtmlPrefix());
+		wh.write(self.getImgTag());
+		new Out(out, self.getLabel()).setMaxlength(self.getMaxlength()).render();
 		
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();
 			child.redraw(out);
 		}	
-		if(!Strings.isBlank(self.getColumnHtmlPostfix()))
-			wh.write(self.getColumnHtmlPostfix());
+		wh.write(self.getColumnHtmlPostfix());
 		
 		wh.write("</td>");
 

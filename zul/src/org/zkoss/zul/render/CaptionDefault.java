@@ -44,7 +44,7 @@ public class CaptionDefault implements ComponentRenderer {
 
 		if (self.isLegend()) {
 			wh.write("<legend>").write(imgTag);
-			new Out(out).setValue(self.getLabel()).render();
+			new Out(out, self.getLabel()).render();
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 				((Component) it.next()).redraw(out);
 			}
@@ -57,8 +57,7 @@ public class CaptionDefault implements ComponentRenderer {
 			wh.write(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
 			wh.write("<tr valign=\"middle\">");
 			wh.write("<td align=\"left\" class=\"caption\">").write(imgTag);
-			new Out(out).setValue(self.getCompoundLabel()).setNbsp(
-					true).render();
+			new Out(out, self.getCompoundLabel()).setNbsp(true).render();
 			wh.write("</td>");
 
 			wh.write("<td align=\"right\" class=\"caption\" id=\"").write(uuid)

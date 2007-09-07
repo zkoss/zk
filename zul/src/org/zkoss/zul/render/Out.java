@@ -30,18 +30,15 @@ import org.zkoss.xml.XMLs;
  * @since 3.0.0 
  */
 /*package*/ class Out {
-	private String _value = null;
-
+	private final Writer _writer;
+	private String _value;
 	private int _maxlength = 0;
-
 	private boolean _escapeXML = true;
-
 	private boolean _nbsp = false;
 
-	private Writer _writer;
-
-	public Out(Writer writer) {
+	public Out(Writer writer, String value) {
 		_writer = writer;
+		_value = value;
 	}
 
 	/**
@@ -109,7 +106,6 @@ import org.zkoss.xml.XMLs;
 
 	// -- Action --//
 	public void render() throws IOException {
-
 		int len = _value != null ? _value.length() : 0;
 		if (len == 0 || (_nbsp && _value.trim().length() == 0)) {
 			if (_nbsp)

@@ -34,23 +34,6 @@ import org.zkoss.zul.Tabpanel;
  * @since 3.0.0
  */
 public class TabpanelDefault implements ComponentRenderer {
-
-	/**
-	 * tabpanel.dsp
-	 * <tr id=\"${self.uuid}"${self.outerAttrs}>
-	 * <td id="${self.uuid}!real" class="tabpanel-hr"${self.innerAttrs}>
-	 * <c:forEach var="child" items="${self.children}"> ${z:redraw(child, null)}
-	 * </c:forEach> </td>
-	 * </tr>
-	 * 
-	 * vtabpanel.dsp
-	 * <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-	   <c:forEach var="child" items="${self.children}">
-	   ${z:redraw(child, null)}
-		</c:forEach>
-	   </div>
-	 * 
-	 */
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);
 		final Tabpanel self = (Tabpanel) comp;
