@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Tab;
+import org.zkoss.zul.Tabbox;
 
 /**
  * {@link Tab}'s vertical mold.
@@ -37,199 +38,94 @@ import org.zkoss.zul.Tab;
  * 
  */
 public class TabDefault implements ComponentRenderer {
-
-	/**
-	 * tab.dsp
-	 * 
-	 * <c:set var="self" value="${requestScope.arg.self}"/> <c:set var="suffix"
-	 * value="-sel" if="${self.selected}"/> <c:set var="suffix" value="-uns"
-	 * unless="${self.selected}"/>
-	 * <td id="${self.uuid}" z.type="Tab"${self.outerAttrs}${self.innerAttrs} z.sel="${self.selected}" z.box="${self.tabbox.uuid}" z.panel="${self.linkedPanel.uuid}">
-	 * 
-	 * <table border="0" cellpadding="0" cellspacing="0" width="100%">
-	 * <tr>
-	 * <td class="${c:cat('tab-3d-tl',suffix)}"></td>
-	 * <td colspan="${self.closable ?4:3}" class="${c:cat('tab-3d-tm',suffix)}"></td>
-	 * <td class="${c:cat('tab-3d-tr',suffix)}"></td>
-	 * </tr>
-	 * <tr height="${empty self.height ? '22': self.height}">
-	 * <td class="${c:cat('tab-3d-ml',suffix)}"></td>
-	 * <td width="3" class="${c:cat('tab-3d-mm',suffix)}"></td>
-	 * <td align="center" class="${c:cat('tab-3d-mm',suffix)}"><a
-	 * href="javascript:;" id="${self.uuid}!a">${self.imgTag}<c:out
-	 * value="${self.label}"/></a></td>
-	 * <c:if test="${self.closable}">
-	 * <td width="11" align="right" class="${c:cat('tab-3d-mm',suffix)}"><img
-	 * id="${self.uuid}!close"
-	 * src="${c:encodeURL('~./zul/img/close-off.gif')}"/></td>
-	 * </c:if>
-	 * <td width="3" class="${c:cat('tab-3d-mm',suffix)}"></td>
-	 * <td class="${c:cat('tab-3d-mr',suffix)}"></td>
-	 * </tr>
-	 * <tr>
-	 * <td class="${c:cat('tab-3d-bl',suffix)}"></td>
-	 * <td colspan="${self.closable ?4:3}" class="${c:cat('tab-3d-bm',suffix)}"></td>
-	 * <td class="${c:cat('tab-3d-br',suffix)}"></td>
-	 * </tr>
-	 * </table> </td>
-	 *
-	 *
-	 * vtab.dsp
-	 * 
-	 * <c:set var=\"self\" value=\"${requestScope.arg.self}\"/> <c:set
-	 * var=\"suffix\" value=\"-sel\" if=\"${self.selected}\"/> <c:set
-	 * var=\"suffix\" value=\"-uns\" unless=\"${self.selected}\"/> <c:set
-	 * var=\"wd\" value=\" width=\\"${self.width}\\"\" unless=\"${empty
-	 * self.width}\"/>
-	 * 
-	 * <tr id=\"${self.uuid}\" z.type=\"Tab\"${self.outerAttrs} z.sel=\"${self.selected}\" z.box=\"${self.tabbox.uuid}\" z.panel=\"${self.linkedPanel.uuid}\">
-	 * 
-	 * <td align=\"right\"${wd}><table border=\"0\" cellpadding=\"0\"
-	 * cellspacing=\"0\" width=\"100%\">
-	 * <tr>
-	 * <td class=\"${c:cat('tab-v3d-tl',suffix)}\"></td>
-	 * <td colspan=\"3\" class=\"${c:cat('tab-v3d-tm',suffix)}\"></td>
-	 * <td class=\"${c:cat('tab-v3d-tr',suffix)}\"></td>
-	 * </tr>
-	 * 
-	 * <tr height=\"22\">
-	 * <td class=\"${c:cat('tab-v3d-ml',suffix)}\"></td>
-	 * <td width=\"3\" class=\"${c:cat('tab-v3d-mm',suffix)}\"></td>
-	 * <td align=\"center\" class=\"${c:cat('tab-v3d-mm',suffix)}\" id=\"${self.uuid}!real\"${self.innerAttrs}><a
-	 * href=\"javascript:;\" id=\"${self.uuid}!a\">${self.imgTag}<c:out
-	 * value=\"${self.label}\"/></a></td>
-	 * <td width=\"3\" class=\"${c:cat('tab-v3d-mm',suffix)}\"></td>
-	 * <td class=\"${c:cat('tab-v3d-mr',suffix)}\"></td>
-	 * </tr>
-	 * 
-	 * <c:if test=\"${self.closable}\">
-	 * <tr height=\"8\">
-	 * <td class=\"${c:cat('tab-v3d-ml',suffix)}\"></td>
-	 * <td width=\"3\" class=\"${c:cat('tab-v3d-mm',suffix)}\"></td>
-	 * <td align=\"center\" valign=\"bottom\" class=\"${c:cat('tab-v3d-mm',suffix)}\"><img
-	 * id=\"${self.uuid}!close\"
-	 * src=\"${c:encodeURL('~./zul/img/close-off.gif')}\"/></td>
-	 * <td width=\"3\" class=\"${c:cat('tab-v3d-mm',suffix)}\"></td>
-	 * <td class=\"${c:cat('tab-v3d-mr',suffix)}\"></td>
-	 * </tr>
-	 * </c:if>
-	 * 
-	 * <tr>
-	 * <td class=\"${c:cat('tab-v3d-bl',suffix)}\"></td>
-	 * <td colspan=\"3\" class=\"${c:cat('tab-v3d-bm',suffix)}\"></td>
-	 * <td class=\"${c:cat('tab-v3d-br',suffix)}\"></td>
-	 * </tr>
-	 * 
-	 * </table></td>
-	 * </tr>
-	 */
-
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);
 		final Execution exec = Executions.getCurrent();
 		final Tab self = (Tab) comp;
-		final String suffix = (self.isSelected()) ? "-sel" : "-uns";
+		final Tabbox tabbox = self.getTabbox();
+		final String tscls = tabbox.getTabSclass() + '-';
+		final String suffix = self.isSelected() ? "-sel" : "-uns";
 
-		if (self.getTabbox().getOrient().equals("vertical")) {
-			
-			wh.write("<tr id=\"" + self.getUuid() + "\" z.type=\"Tab\"" + self.getOuterAttrs() + self.getInnerAttrs()
-					+ "z.sel=\"" + self.isSelected() + "\" z.box=\"" + self.getTabbox().getUuid() + "\" z.panel=\"" 
-					+ self.getLinkedPanel().getUuid() + "\">");		
-			
-			wh.write("<td align=\"right\"");
-			if (!Strings.isBlank(self.getWidth()))
-				wh.write(" width=\"" + self.getWidth()+ "\"");
-			wh.write("><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");
-			wh.write("<tr>");			
-				wh.write("<td class=\"" + "tab-v3d-tl").write(suffix).write("\"></td>");
-				wh.write("<td colspan=\"3\" class=\"").write("tab-v3d-tm").write(suffix).write("\"></td>");
-				wh.write("<td class=\"").write("tab-v3d-tr").write(suffix).write("\"></td>");			
-			wh.write("</tr>");
+		if ("vertical".equals(tabbox.getOrient())) {
+			wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Tab\"")
+				.write(self.getOuterAttrs()).write(" z.sel=\"").write(self.isSelected())
+				.write("\" z.box=\"").write(tabbox.getUuid()).write("\" z.panel=\"")
+				.write(self.getLinkedPanel().getUuid()).writeln("\">");
 
-			wh.write("<tr height=\"22\">");
-				wh.write("<td class=\"").write("tab-v3d-ml").write(suffix).write("\"></td>");
-				wh.write("<td width=\"3\" class=\"").write("tab-v3d-mm").write(suffix).write("\"></td>");
-				wh.write("<td align=\"center\" class=\"").write("tab-v3d-mm").write(suffix).write("\" id=\"" + self.getUuid()+"!real\"" +self.getInnerAttrs()+"><a href=\"javascript:;\"" +
-					" id=\"" + self.getUuid() + "!a\">");
-				if (!Strings.isBlank(self.getImgTag()))
-					wh.write(self.getImgTag());
-				if (!Strings.isBlank(self.getLabel()))
-				new Out(out).setValue(self.getLabel()).render();
-				wh.write( "</a></td>");		
-				wh.write("<td width=\"3\" class=\"").write("tab-v3d-mm").write(suffix).write("\"></td>");	
-				wh.write("<td class=\"").write("tab-v3d-mr").write(suffix).write("\"></td>");
-			wh.write("</tr>");		
+			wh.write("<td align=\"right\"").writeAttr("width", self.getWidth())
+				.writeln("><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">")
+				.write("<tr><td class=\"").write(tscls).write("tl").write(suffix).writeln("\"></td>")
+				.write("<td colspan=\"3\" class=\"").write(tscls).write("tm").write(suffix).writeln("\"></td>")
+				.write("<td class=\"").write(tscls).write("tr").write(suffix).writeln("\"></td>")
+				.write("</tr>");
+
+			wh.write("<tr height=\"22\">")
+				.write("<td class=\"").write(tscls).write("ml").write(suffix).writeln("\"></td>")
+				.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
+				.write("<td align=\"center\" class=\"").write(tscls).write("mm").write(suffix)
+				.write("\" id=\"").write(self.getUuid()).write("!real\"").write(self.getInnerAttrs())
+				.write("><a href=\"javascript:;\" id=\"").write(self.getUuid()).write("!a\">");
+				wh.write(self.getImgTag());
+				new Out(out, self.getLabel()).render();
+				wh.writeln( "</a></td>");		
+
+				wh.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")	
+					.write("<td class=\"").write(tscls).write("mr").write(suffix).writeln("\"></td></tr>");		
 			
 			if(self.isClosable()){
-				wh.write("<tr height=\"8\">");
-				wh.write("<td class=\"").write("tab-v3d-ml").write(suffix).write("\"></td>");
-				wh.write("<td width=\"3\" class=\"").write("tab-v3d-mm").write(suffix).write("\"></td>");
-				wh.write("<td width=\"11\" align=\"center\" valign=\"buttom\" class=\"").write("tab-v3d-mm").write(suffix)
-					.write("\"><img id=\""+ self.getUuid() + "!close\" src=\"" + exec.encodeURL("~./zul/img/close-off.gif") + "\"/></td>");
-				wh.write("<td class=\"").write("tab-v3d-mm").write(suffix).write("\"></td>");	
-				wh.write("</tr>");			
+				wh.writeln("<tr height=\"8\">")
+					.write("<td class=\"").write(tscls).write("ml").write(suffix).writeln("\"></td>")
+					.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
+					.write("<td align=\"center\" valign=\"buttom\" class=\"").write(tscls).write("mm").write(suffix)
+					.write("\"><img id=\""+ self.getUuid()).write("!close\" src=\"")
+					.write(exec.encodeURL("~./zul/img/close-off.gif")).writeln("\"/></td>")
+					.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
+					.write("<td class=\"").write(tscls).write("mr").write(suffix).writeln("\"></td></tr>");
 			}
 			
-			wh.write("<tr>");		
-			wh.write("<td class=\"tab-v3d-bl").write(suffix).write("\"></td>");
-			wh.write("<td colspan=\"3\" class=\"tab-v3d-bm").write(suffix).write("\"></td>");
-			wh.write("<td class=\"tab-v3d-br").write(suffix).write("\"></td>");
-			wh.write("</tr>");
+			wh.write("<tr><td class=\"").write(tscls).write("bl").write(suffix).writeln("\"></td>")
+				.write("<td colspan=\"3\" class=\"").write(tscls).write("bm").write(suffix).writeln("\"></td>")
+				.write("<td class=\"").write(tscls).write("br").write(suffix).writeln("\"></td>")
+				.writeln("</tr></table></td></tr>");
 
-			wh.write("</table></td>");
-			wh.write("</tr>");
+		} else { //horizontal
+			final int colspan = self.isClosable() ? 4 : 3;
+			wh.write("<td id=\"").write(self.getUuid()).write("\" z.type=\"Tab\"")
+				.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+				.write(" z.sel=\"").write(self.isSelected()).write("\" z.box=\"")
+				.write(tabbox.getUuid()).write("\" z.panel=\"")
+				.write(self.getLinkedPanel().getUuid()).write("\">");
 
-			
-		}
-		else{
-			
-			final int colspan = (self.isClosable()) ? 4 : 3;
-			final String height = Strings.isBlank(self.getHeight()) ? "22"
-					: self.getHeight();
+			wh.writeln("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">")
+				.write("<tr><td class=\"").write(tscls).write("tl").write(suffix).writeln("\"></td>")
+				.write("<td colspan=\"").write(colspan)
+				.write("\" class=\"").write(tscls).write("tm").write(suffix).writeln("\"></td>")
+				.write("<td class=\"").write(tscls).write("tr").write(suffix).writeln("\"></td></tr>");
 
-			wh.write("<td id=\"" + self.getUuid() + "\" z.type=\"Tab\""
-					+ self.getOuterAttrs() + self.getInnerAttrs() + "z.sel=\""
-					+ self.isSelected() + "\" z.box=\""
-					+ self.getTabbox().getUuid() + "\" z.panel=\""
-					+ self.getLinkedPanel().getUuid() + "\">");
-			wh.write("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");
+			wh.write("<tr height=\"").write(Strings.isBlank(self.getHeight()) ? "22": self.getHeight()).writeln("\">")
+				.write("<td class=\"").write(tscls).write("ml").write(suffix).writeln("\"></td>")
+				.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
+				.write("<td align=\"center\" class=\"").write(tscls).write("mm").write(suffix)
+				.write("\"><a href=\"javascript:;\"").write(" id=\"").write(self.getUuid()).write("!a\">")
+				.write(self.getImgTag());
+			new Out(out, self.getLabel()).render();
+			wh.writeln("</a></td>");
 
-			wh.write("<tr>");
-			wh.write("<td class=\"tab-3d-tl").write(suffix).write("\"></td>");
-			wh.write("<td colspan=\"" + colspan + "\" class=\"tab-3d-tm").write(suffix).write("\"></td>");
-			wh.write("<td class=\"tab-3d-tr").write(suffix).write("\"></td>");
-			wh.write("</tr>");
-
-			wh.write("<tr height=\"" + height + "\">");
-			wh.write("<td class=\"tab-3d-ml").write(suffix).write("\"></td>");
-			wh.write("<td width=\"3\" class=\"tab-3d-mm").write(suffix).write("\"></td>");
-			wh.write("<td align=\"center\" class=\"tab-3d-mm").write(suffix).write("\"><a href=\"javascript:;\"" + " id=\"" + self.getUuid()
-					+ "!a\">");
-			if (!Strings.isBlank(self.getImgTag()))
-				wh.write(self.getImgTag());
-			if (!Strings.isBlank(self.getLabel()))
-				new Out(out).setValue(self.getLabel()).render();
-			wh.write("</a></td>");
-
-			// Bug 1780044: width cannot (and need not) be specified
 			if (self.isClosable()) {
-				wh.write("<td align=\"right\" class=\"tab-3d-mm").write(suffix).write("\"><img id=\""
-						+ self.getUuid() + "!close\" src=\""
-						+ exec.encodeURL("~./zul/img/close-off.gif")
-						+ "\"/></td>");
+				// Bug 1780044: width cannot (and need not) be specified
+				wh.write("<td align=\"right\" class=\"").write(tscls).write("mm").write(suffix)
+					.write("\"><img id=\"")
+					.write(self.getUuid()).write("!close\" src=\"")
+					.write(exec.encodeURL("~./zul/img/close-off.gif"))
+					.writeln("\"/></td>");
 			}
-			wh.write("<td width=\"3\" class=\"tab-3d-mm").write(suffix).write("\"></td>");
-			wh.write("<td class=\"tab-3d-mr").write(suffix).write("\"></td>");
-			wh.write("</tr>");
 
-			wh.write("<tr>");
-			wh.write("<td class=\"tab-3d-bl").write(suffix).write("\"></td>");
-			wh.write("<td colspan=\"" + colspan + "\" class=\"tab-3d-bm").write(suffix).write("\"></td>");
-			wh.write("<td class=\"tab-3d-br").write(suffix).write("\"></td>");
-			wh.write("</tr>");
-			wh.write("</table></td>");
-			
+			wh.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
+				.write("<td class=\"").write(tscls).write("mr").write(suffix).writeln("\"></td></tr>");
+
+			wh.write("<tr><td class=\"").write(tscls).write("bl").write(suffix).writeln("\"></td>")
+				.write("<td colspan=\"").write(colspan).write("\" class=\"").write(tscls).write("bm").write(suffix).writeln("\"></td>")
+				.write("<td class=\"").write(tscls).write("br").write(suffix).writeln("\"></td></tr></table></td>");
 		}
 	}
-
 }
