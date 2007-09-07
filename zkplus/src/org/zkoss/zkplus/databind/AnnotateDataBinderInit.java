@@ -67,7 +67,7 @@ public class AnnotateDataBinderInit implements Initiator {
 			_binder = new AnnotateDataBinder(comp, b);
 			comp.setVariable("binder", _binder, true);
 		}
-    _binder.loadAll(); //load data bean properties into UI components
+		_binder.loadAll(); //load data bean properties into UI components
 	}
  	public void doCatch(java.lang.Throwable ex) {
  		// do nothing
