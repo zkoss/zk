@@ -1425,7 +1425,7 @@ zkau._zidOwner = function (n) {
 //Drag & Drop//
 zkau.initdrag = function (n) {
 	zkau._drags[n.id] = new Draggable(n, {
-		starteffect: zk.voidf,
+		starteffect: zkau.closeFloats,
 		endeffect: zkau._enddrag, change: zkau._dragging,
 		ghosting: zkau._ghostdrag, z_dragdrop: true,
 		revert: zkau._revertdrag, ignoredrag: zkau._ignoredrag
