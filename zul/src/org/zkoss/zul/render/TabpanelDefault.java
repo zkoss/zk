@@ -37,23 +37,43 @@ import org.zkoss.zul.Tabpanel;
 public class TabpanelDefault implements ComponentRenderer {
 
 	/**
+	 * tabpanel.dsp
 	 * <tr id=\"${self.uuid}"${self.outerAttrs}>
 	 * <td id="${self.uuid}!real" class="tabpanel-hr"${self.innerAttrs}>
 	 * <c:forEach var="child" items="${self.children}"> ${z:redraw(child, null)}
 	 * </c:forEach> </td>
 	 * </tr>
+	 * 
+	 * vtabpanel.dsp
+	 * <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
+	   <c:forEach var="child" items="${self.children}">
+	   ${z:redraw(child, null)}
+		</c:forEach>
+	   </div>
+	 * 
 	 */
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);
 		final Tabpanel self = (Tabpanel) comp;
-		wh.write("<tr id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + ">");
-		wh.write("<td id=\"" + self.getUuid() + "!real\" class=\"tabpanel-hr\""
+		
+		if(self.getTabbox().getOrient().equals("vertical")){
+			wh.write("<div id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + ">");		
+			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
+				final Component child = (Component) it.next();
+				ZkFns.redraw(child, null);
+			}	
+			wh.write("</div>");		
+		}
+		else{
+			wh.write("<tr id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + ">");
+			wh.write("<td id=\"" + self.getUuid() + "!real\" class=\"tabpanel-hr\""
 				+ self.getInnerAttrs() + ">");
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component) it.next();
-			ZkFns.redraw(child, null);
-		}		
-		wh.write("</td>");
-		wh.write("</tr>");
+			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
+				final Component child = (Component) it.next();
+				ZkFns.redraw(child, null);
+			}		
+			wh.write("</td>");
+			wh.write("</tr>");
+		}
 	}
 }

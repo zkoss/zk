@@ -25,6 +25,7 @@ import java.util.Iterator;
 import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanels;
 
 /**
@@ -38,22 +39,41 @@ import org.zkoss.zul.Tabpanels;
 public class TabpanelsDefault implements ComponentRenderer {
 
 	/**
+	 * tabpanel.dsp
 <c:set var="self" value="${requestScope.arg.self}"/>
 <tbody id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="child" items="${self.children}">
 	${z:redraw(child, null)}
 	</c:forEach>
 </tbody>
+
+vtabpanel.dsp
+<td id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
+	<c:forEach var="child" items="${self.children}">
+	${z:redraw(child, null)}
+	</c:forEach>
+</td>
 	 */
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);
-		final Tabpanels self = (Tabpanels) comp;		
-		wh.write("<tbody id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs()+ ">");		
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component) it.next();
-			ZkFns.redraw(child, null);
-		}	
-		wh.write("</tbody>");
+		final Tabpanels self = (Tabpanels) comp;
+		
+		if(((Tabbox)self.getParent()).getOrient().equals("vertical")){
+			wh.write("<td id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs()+ ">");		
+			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
+				final Component child = (Component) it.next();
+				ZkFns.redraw(child, null);
+			}	
+			wh.write("</td>");
+		}
+		else{
+			wh.write("<tbody id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs()+ ">");		
+			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
+				final Component child = (Component) it.next();
+				ZkFns.redraw(child, null);
+			}	
+			wh.write("</tbody>");
+		}
 	}
 
 }

@@ -36,11 +36,20 @@ import org.zkoss.zul.Tabbox;
 
 public class TabboxDefault implements ComponentRenderer {
 /**
+ * tabbox.dsp
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.tabs="${self.tabs.uuid}" 
 z.type="zul.tab.Tabbox" border="0" cellpadding="0" cellspacing="0">
 ${z:redraw(self.tabs, null)}
 ${z:redraw(self.tabpanels, null)}
+</table>
+
+vtabbox.dsp
+<table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.tabs="${self.tabs.uuid}" z.type="zul.tab.Tabbox" border="0" cellpadding="0" cellspacing="0">
+<tr valign="top">
+${z:redraw(self.tabs, null)}
+${z:redraw(self.tabpanels, null)}
+</tr>
 </table>
  */
 
@@ -48,11 +57,22 @@ ${z:redraw(self.tabpanels, null)}
 		final WriterHelper wh = new WriterHelper(out);
 		final Tabbox self = (Tabbox) comp;	
 		
-		wh.write("<table id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + " z.tabs=\"" 
+		if(self.getOrient().equals("vertical")){
+			wh.write("<table id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + " z.tabs=\"" 
+					+ self.getTabs().getUuid() + "\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
+			wh.write("<tr valign=\"top\">");
+			ZkFns.redraw(self.getTabs(), null);
+		    ZkFns.redraw(self.getTabpanels(), null);		
+			wh.write("</tr>");
+			wh.write("</table>");
+		}
+		else{
+			wh.write("<table id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + " z.tabs=\"" 
 				+ self.getTabs().getUuid() + "\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
-		ZkFns.redraw(self.getTabs(), null);
-	    ZkFns.redraw(self.getTabpanels(), null);
-		wh.write("</table>");
+			ZkFns.redraw(self.getTabs(), null);
+			ZkFns.redraw(self.getTabpanels(), null);
+			wh.write("</table>");
+		}
 	}
 
 }
