@@ -106,17 +106,9 @@ public class WindowDefault implements ComponentRenderer {
 		if(cs!=null){
 			wcExtStyle += cs;
 		}
-		wh.write("<div id=\"");
-		wh.write(uuid);
-		wh.write("!cave\" class=\"");
-		wh.write(self.getContentSclass());
-		wh.write("\"");
-		if (wcExtStyle.length() > 0) {
-			wh.write(" style=\"");
-			wh.write(wcExtStyle);
-			wh.write("\"");
-		}
-		wh.write(">");
+		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"")
+			.write(self.getContentSclass()).write("\"")
+			.writeAttr("style", wcExtStyle).write(">");
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();

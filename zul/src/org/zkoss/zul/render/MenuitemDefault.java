@@ -21,7 +21,6 @@ package org.zkoss.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.web.fn.XMLFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -49,8 +48,7 @@ public class MenuitemDefault implements ComponentRenderer {
 				wh.write("javascript:;");
 			else
 				wh.write(exec.encodeURL(self.getHref()));
-			wh.write("\"");
-			wh.write(XMLFns.attr("target",self.getTarget()));
+			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
 			RenderFns.getOut(out).setValue(self.getLabel()).render();
 			wh.write("</a>");
@@ -69,8 +67,7 @@ public class MenuitemDefault implements ComponentRenderer {
 				wh.write("javascript:;");
 			else
 				wh.write(exec.encodeURL(self.getHref()));
-			wh.write("\"");
-			wh.write(XMLFns.attr("target",self.getTarget()));
+			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
 			RenderFns.getOut(out).setValue(self.getLabel()).render();
 			wh.write("</a>");

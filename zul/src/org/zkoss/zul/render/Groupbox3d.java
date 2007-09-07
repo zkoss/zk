@@ -22,7 +22,6 @@ import java.io.Writer;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.zkoss.web.fn.XMLFns;
 import org.zkoss.xel.fn.StringFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -82,13 +81,9 @@ public class Groupbox3d implements ComponentRenderer {
 
 		wh.write(">");
 
-		wh.write("<div id=\"");
-		wh.write(uuid);
-		wh.write("!cave\" ");
-		wh.write("class=\"");
-		wh.write(self.getContentSclass());
-		wh.write("\"");
-		wh.write(XMLFns.attr("style", gcExtStyle)).write(">");
+		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"")
+			.write(self.getContentSclass()).write("\"")
+			.writeAttr("style", gcExtStyle).write(">");
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();

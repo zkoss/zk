@@ -102,4 +102,16 @@ import java.io.Writer;
 		}
 		return this;
 	}
+
+	/** Writes an attribute.
+	 * The output is generated only if val is not null (and not empty).
+	 */
+	public WriterHelper writeAttr(String name, Object val)
+	throws IOException {
+		if (val != null
+		&& (!(val instanceof String) || ((String)val).length() != 0))
+			write(" ").write(name).write("=\"")
+				.write(val.toString()).write("\"");
+		return this;
+	}
 }
