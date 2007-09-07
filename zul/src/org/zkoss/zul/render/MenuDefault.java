@@ -45,7 +45,7 @@ public class MenuDefault implements ComponentRenderer {
 			wh.write("<td id=\"").write(uuid).write("\" align=\"left\" z.type=\"zul.menu.Menu\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 			wh.write("<a href=\"javascript:;\" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
-			RenderFns.getOut(out).setValue(self.getLabel()).render();
+			new Out(out).setValue(self.getLabel()).render();
 			wh.write("</a>");
 			Menupopup menupopup = (Menupopup)self.getMenupopup();
 			if(menupopup != null) 
@@ -56,7 +56,7 @@ public class MenuDefault implements ComponentRenderer {
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 			wh.write("<td><img src=\"").write(exec.encodeURL("~./img/spacer.gif")).writeln("\" width=\"11\"/></td>");
 			wh.write("<td align=\"left\"><a href=\"javascript:;\" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
-			RenderFns.getOut(out).setValue(self.getLabel()).render();
+			new Out(out).setValue(self.getLabel()).render();
 			wh.write("</a>");
 			Menupopup menupopup = (Menupopup)self.getMenupopup();
 			if(menupopup != null) 

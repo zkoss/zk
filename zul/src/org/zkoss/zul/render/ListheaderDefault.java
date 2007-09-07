@@ -38,7 +38,7 @@ public class ListheaderDefault implements ComponentRenderer {
 		final Listheader self = (Listheader)comp;
 		wh.write("<th id=\"").write(self.getUuid()).write("\" z.type=\"Lhr\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		wh.write(self.getImgTag());
-		RenderFns.getOut(out).setValue(self.getLabel()).render();
+		new Out(out).setValue(self.getLabel()).render();
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
 			child.redraw(out);

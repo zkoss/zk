@@ -42,11 +42,11 @@ public class ComboitemDefault implements ComponentRenderer {
 		wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Cmit\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<td>").write(self.getImgTag()).write("</td><td>");
-		RenderFns.getOut(out).setValue(self.getLabel()).render();
+		new Out(out).setValue(self.getLabel()).render();
 		if (!Strings.isBlank(self.getDescription())
 				|| !Strings.isBlank(self.getContent())) {
 			wh.write("<br/><span>");
-			RenderFns.getOut(out).setValue(self.getDescription()).render();
+			new Out(out).setValue(self.getDescription()).render();
 			wh.write("</span>").write(self.getContent());
 		}
 		wh.write("</td></tr>");

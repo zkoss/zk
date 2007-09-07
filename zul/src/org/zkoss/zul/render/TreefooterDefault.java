@@ -50,7 +50,7 @@ public class TreefooterDefault implements ComponentRenderer {
 		if (!Strings.isBlank(self.getImgTag()))
 			wh.write(self.getImgTag());
 		if (!Strings.isBlank(self.getLabel()))
-			RenderFns.getOut(out).setValue(self.getLabel()).render();		
+			new Out(out).setValue(self.getLabel()).render();		
 		wh.write(">");
 		
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {

@@ -50,7 +50,7 @@ public class TreecolDefault implements ComponentRenderer {
 			wh.write(self.getImgTag());
 		wh.write(">");
 		if (!Strings.isBlank(self.getLabel()))
-			RenderFns.getOut(out).setValue(self.getLabel()).render();		
+			new Out(out).setValue(self.getLabel()).render();		
 		wh.write("</th>");
 		
 

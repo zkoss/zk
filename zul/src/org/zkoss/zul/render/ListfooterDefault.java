@@ -38,7 +38,7 @@ public class ListfooterDefault implements ComponentRenderer {
 		final Listfooter self = (Listfooter)comp;
 		wh.write("<td id=\"").write(self.getUuid()).write("\" ").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		wh.write(self.getImgTag());
-		RenderFns.getOut(out).setValue(self.getLabel()).render();
+		new Out(out).setValue(self.getLabel()).render();
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
 			child.redraw(out);

@@ -155,7 +155,7 @@ public class TabDefault implements ComponentRenderer {
 				if (!Strings.isBlank(self.getImgTag()))
 					wh.write(self.getImgTag());
 				if (!Strings.isBlank(self.getLabel()))
-				RenderFns.getOut(out).setValue(self.getLabel()).render();
+				new Out(out).setValue(self.getLabel()).render();
 				wh.write( "</a></td>");		
 				wh.write("<td width=\"3\" class=\"" + StringFns.cat("tab-v3d-mm",suffix) + "\"></td>");	
 				wh.write("<td class=\"" + StringFns.cat("tab-v3d-mr",suffix) + "\"></td>");
@@ -216,7 +216,7 @@ public class TabDefault implements ComponentRenderer {
 			if (!Strings.isBlank(self.getImgTag()))
 				wh.write(self.getImgTag());
 			if (!Strings.isBlank(self.getLabel()))
-				RenderFns.getOut(out).setValue(self.getLabel()).render();
+				new Out(out).setValue(self.getLabel()).render();
 			wh.write("</a></td>");
 
 			// Bug 1780044: width cannot (and need not) be specified

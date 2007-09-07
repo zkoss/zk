@@ -40,7 +40,7 @@ public class ListcellDefault implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		wh.write("<td id=\"").write(uuid).write("\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write(self.getColumnHtmlPrefix()).write(self.getImgTag());
-		RenderFns.getOut(out).setMaxlength(self.getMaxlength()).setValue(self.getLabel()).render();
+		new Out(out).setMaxlength(self.getMaxlength()).setValue(self.getLabel()).render();
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
 			child.redraw(out);

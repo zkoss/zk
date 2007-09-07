@@ -53,7 +53,7 @@ public class ButtonDefault implements ComponentRenderer {
 			wh.write(self.getInnerAttrs()).write(">");
 
 			if (self.getDir().equals("reverse")) {
-				RenderFns.getOut(out).setValue(self.getLabel()).render();
+				new Out(out).setValue(self.getLabel()).render();
 				if (self.isImageAssigned()
 						&& self.getOrient().equals("vertical"))
 					wh.write("<br/>");
@@ -63,7 +63,7 @@ public class ButtonDefault implements ComponentRenderer {
 				if (self.isImageAssigned()
 						&& self.getOrient().equals("vertical"))
 					wh.write("<br/>");
-				RenderFns.getOut(out).setValue(self.getLabel()).render();
+				new Out(out).setValue(self.getLabel()).render();
 			}
 			wh.write("</button>");
 			wh.writeln();

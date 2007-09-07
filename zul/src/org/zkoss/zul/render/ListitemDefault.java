@@ -39,7 +39,7 @@ public class ListitemDefault implements ComponentRenderer {
 		
 		if(self.getMold().equals("select")){
 			wh.write("<option id=\"").write(self.getUuid()).write("\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-			RenderFns.getOut(out).setMaxlength(self.getMaxlength()).setValue(self.getLabel()).render();
+			new Out(out).setMaxlength(self.getMaxlength()).setValue(self.getLabel()).render();
 			wh.write("</option>");
 		}else{
 			wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lit\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");

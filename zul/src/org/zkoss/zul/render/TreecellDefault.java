@@ -57,8 +57,8 @@ ${self.columnHtmlPostfix}
 		if (!Strings.isBlank(self.getImgTag()))
 			wh.write(self.getImgTag());
 		if (!Strings.isBlank(self.getLabel()))
-			RenderFns.getOut(out).setValue(self.getLabel()).render();
-		RenderFns.getOut(out).setMaxlength(self.getMaxlength()).render();
+			new Out(out).setValue(self.getLabel()).render();
+		new Out(out).setMaxlength(self.getMaxlength()).render();
 		
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();

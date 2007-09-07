@@ -41,7 +41,7 @@ public class ColumnDefault implements ComponentRenderer {
 		wh.write("<th id=\"").write(uuid).write("\"").write(" z.type=\"Col\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write(self.getImgTag());
-		RenderFns.getOut(out).setValue(self.getLabel()).render();
+		new Out(out).setValue(self.getLabel()).render();
 		wh.writeln("</th>");
 	}
 

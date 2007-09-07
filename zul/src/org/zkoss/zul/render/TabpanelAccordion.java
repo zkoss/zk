@@ -111,7 +111,7 @@ public class TabpanelAccordion implements ComponentRenderer {
 			if (!Strings.isBlank(tab.getImgTag()))
 				wh.write(tab.getImgTag());
 			if (!Strings.isBlank(tab.getLabel()))
-				RenderFns.getOut(out).setValue(tab.getLabel()).render();
+				new Out(out).setValue(tab.getLabel()).render();
 			wh.write( "</a></td>");			
 
 		if(tab.isClosable()){
