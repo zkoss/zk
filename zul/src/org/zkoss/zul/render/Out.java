@@ -24,11 +24,12 @@ import java.io.Writer;
 import org.zkoss.xml.XMLs;
 
 /**
- * 
+ * A utility to simulate DSP's out action.
+ *
  * @author jumperchen
- * 
+ * @since 3.0.0 
  */
-public class Out {
+/*package*/ class Out {
 	private String _value = null;
 
 	private int _maxlength = 0;
