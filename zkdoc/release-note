@@ -86,6 +86,8 @@ ZK 3.0.0
   1786082: tab - onClick not fired
   1780044: Dynamically created tab box not shown properly in Firefox
   1785457: SpringTransactionSynchronizationListener requires Hibernate3
+  1771810: Incorret display of a datebox calendar inside a popup
+  1760140: Comboitem error in overlapped windows
 
 * Upgrade Notes:
   + el-config (of zk.xml) is replaced with xel-config, and the class
