@@ -51,6 +51,8 @@ ZK 3.0.0
   1780804: A way to allow the client to cache the output
   1782250: Performance improve: don't go thru Web container if incl ~./
   1765212: Annoying sellection during drag-drop
+  1789258: A way to configure the cache of the event methods
+  1789830: A way to decouple Caption assumes LEGENG if default mold
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
@@ -79,6 +81,10 @@ ZK 3.0.0
   1770144: Memory Leak in AImage
   1783363: Unable to drag a listitem out of the box (IE only)
   1786348: Failed to include two ZUL files
+  1789211: French translation errors
+  1786154: forEachStatus.previous.index fail to set inner forEachBegin
+  1786082: tab - onClick not fired
+  1780044: Dynamically created tab box not shown properly in Firefox
   1785457: SpringTransactionSynchronizationListener requires Hibernate3
 
 * Upgrade Notes:
