@@ -26,7 +26,6 @@ import java.util.Iterator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Box;
-import org.zkoss.zul.fn.ZulFns;
 /**
  * {@link Box}'s horizontal mold.
  * @author robbiecheng
@@ -47,11 +46,12 @@ public class BoxHorizontal implements ComponentRenderer{
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
-			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"");
-			wh.write(ZulFns.getBoxChildOuterAttrs(child));
-			wh.write(ZulFns.getBoxChildInnerAttrs(child));
-			wh.write(">");
+			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"")
+				.write(self.getChildOuterAttrs(child))
+				.write(self.getChildInnerAttrs(child)).write(">");
+
 			child.redraw(out);
+
 			wh.write("</td>");
 		}		
 		wh.writeln("</tr></table>");
