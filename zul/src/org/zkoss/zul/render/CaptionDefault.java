@@ -70,19 +70,14 @@ public class CaptionDefault implements ComponentRenderer {
 				final Component child = (Component) it.next();
 				ZkFns.redraw(child, out);
 			}
-<<<<<<< .mine
+
 			wh.write("</td>");
 			if (self.isClosableVisible()) {
 				wh.write("<td width=\"16\"><img id=\"").write(
 						self.getParent().getUuid()).write("!close\" src=\"");
 				wh.write(exec.encodeURL("~./zul/img/close-off.gif")).write(
 						"\"/></td>");
-=======
-			wh.write("</td>");
-			if(self.isClosableVisible()){
-				wh.write("<td width=\"16\"><img id=\"").write(self.getParent().getUuid()).write("!close\" src=\"");
-				wh.write(exec.encodeURL("~./zul/img/close-off.gif")).write("\"/></td>");
->>>>>>> .r4114
+
 			}
 
 			wh.writeln("</tr></table>");

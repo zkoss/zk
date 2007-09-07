@@ -78,7 +78,7 @@ public class Groupbox3d implements ComponentRenderer {
 		if (!self.isOpen()) {
 			wh.write(" style=\"display:none\" ");
 		}
-<<<<<<< .mine
+
 		wh.write(">");
 
 		wh.write("<div id=\"");
@@ -89,36 +89,6 @@ public class Groupbox3d implements ComponentRenderer {
 		wh.write("\"");
 		wh.write(XMLFns.attr("style", gcExtStyle)).write(">");
 
-=======
-		final String cs = self.getContentStyle();
-		if(cs!=null){
-			gcExtStyle+=cs;
-		}
-		
-		out.write("<div id=\"");
-		out.write(uuid);
-		out.write("!slide\" ");
-		if(self.isOpen()){
-		}else{
-			out.write("style=\"display:none\" ");
-		}
-		out.write(">");
-		
-		out.write("<div id=\"");
-		out.write(uuid);
-		out.write("!cave\" ");
-		out.write("class=\"");
-		out.write(self.getContentSclass());
-		out.write("\"");
-		if (gcExtStyle.length() > 0) {
-			out.write(" style=\"");
-			out.write(gcExtStyle);
-			out.write('"');
-		}
-		out.write(">");
-		
-		
->>>>>>> .r4114
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();
 			if (caption != child)
