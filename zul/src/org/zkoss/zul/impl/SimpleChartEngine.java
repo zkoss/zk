@@ -57,6 +57,50 @@ import java.util.Iterator;
  * {@link org.zkoss.zul.event.ChartAreaListener} class that application developers
  * can do processing on each area.</p>
  *
+ * <p>Note that useful {@link org.zkoss.zul.ChartModel} information is put in 
+ * Area's custom attribute Map so you can retrieve them by calling Area's 
+ * getAttribute(key) method and use them in drilldown function. Following is 
+ * the table of keys for different ChartModel.</p>
+ *
+ * <table>
+ *   <tr><th>model</th><th>key</th></tr>
+ *   <tr><td>{@link PieModel}</td><td>entity</td></tr>
+ *   <tr><td></td><td>category</td></tr>
+ *   <tr><td></td><td>value</td></tr>
+ *	
+ *   <tr><td>{@link CategoryModel}</td><td>entity</td></tr>
+ *   <tr><td></td><td>series</td></tr>
+ *   <tr><td></td><td>category</td></tr>
+ *   <tr><td></td><td>value</td></tr>
+ *
+ *   <tr><td>{@link XYModel}</td><td>entity</td></tr>
+ *   <tr><td></td><td>series</td></tr>
+ *   <tr><td></td><td>x</td></tr>
+ *   <tr><td></td><td>y</td></tr>
+ *
+ *   <tr><td>{@link HiLoModel}</td><td>entity</td></tr>
+ *   <tr><td></td><td>series</td></tr>
+ *   <tr><td></td><td>date</td></tr>
+ *   <tr><td></td><td>open</td></tr>
+ *   <tr><td></td><td>high</td></tr>
+ *   <tr><td></td><td>low</td></tr>
+ *   <tr><td></td><td>close</td></tr>
+ *   <tr><td></td><td>volumn</td></tr>
+ * </table>
+ * <p>Following is the explanation for each key:</p>
+ * <ul>
+ * <li>entity: entity is used to distinguish the differnt entities on a
+ * chart. It might be TITLE, CATEGORY, DATA, LEGEND. The most important 
+ * entity might be DATA entity where the real chart data point is located. 
+ * For example, the DATA Area is each slice in a Pie chart.</li>
+ * <li>category: category name of the associated data.</li>
+ * <li>value: value of the associated data.</li>
+ * <li>series: series name of the associated data.</li>
+ * <li>x: x value of the XYModel</li>
+ * <li>y: y value of the XYModel</li>
+ * <li>date, open, high, low, close, volumn: data of the HiLoModel</li>
+ * </ul>
+ *
  * @author henrichen
  */
 public class SimpleChartEngine implements ChartEngine, java.io.Serializable {
