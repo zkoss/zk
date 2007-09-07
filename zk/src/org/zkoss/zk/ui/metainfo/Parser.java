@@ -353,7 +353,7 @@ public class Parser {
 	private void parseComponentDirective(PageDefinition pgdef,
 	ProcessingInstruction pi, Map params) throws Exception {
 		final String name = (String)params.remove("name");
-		noELnorEmpty("name", name, pi); //note: macroURI supports EL
+		noELnorEmpty("name", name, pi);
 
 		String macroURI = (String)params.remove("macroURI");
 		if (macroURI == null) macroURI = (String)params.remove("macro-uri"); //backward compatible (2.4.x)

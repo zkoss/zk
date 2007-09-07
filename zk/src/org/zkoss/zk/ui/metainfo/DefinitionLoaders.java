@@ -35,7 +35,6 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Utils;
-import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ClassLocator;
@@ -311,11 +310,13 @@ public class DefinitionLoaders {
 			final String desktopURI = (String)pagemolds.get("desktop");
 			final String pageURI = (String)pagemolds.get("page");
 			if (desktopURI == null || pageURI == null)
-				throw new IllegalSyntaxException("Both desktop and page molds must be specified, "+root.getLocator());
+				throw new UiException("Both desktop and page molds must be specified, "+root.getLocator());
+			if (desktopURI.startsWith("class:") || pageURI.startsWith("class:"))
+				throw new UiException("Both desktop and page molds don't support 'class:', "+root.getLocator());
 
 			final List exts = parseExtensions(root);
 			if (exts.isEmpty())
-				throw new IllegalSyntaxException("The extension must be specified for "+lang);
+				throw new UiException("The extension must be specified for "+lang);
 
 			String ignoreCase = root.getElementValue("case-insensitive", true);
 			String bNative = root.getElementValue("native-namespace", true);
@@ -505,7 +506,7 @@ public class DefinitionLoaders {
 				if (!params.isEmpty())
 					log.warning("Ignored unknown attribute: "+params+", "+pi.getLocator());
 				if (uri == null || prefix == null)
-					throw new IllegalSyntaxException("Both uri and prefix attribute are required, "+pi.getLocator());
+					throw new UiException("Both uri and prefix attribute are required, "+pi.getLocator());
 				if (log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
 				langdef.addTaglib(new Taglib(prefix, uri));
 			} else {
