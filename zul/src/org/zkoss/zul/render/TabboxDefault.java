@@ -47,13 +47,13 @@ public class TabboxDefault implements ComponentRenderer {
 			.writeln("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
 
 		if("vertical".equals(self.getOrient())){
-			wh.write("<tr valign=\"top\">");
-			wh.write(tabs);
-			wh.writeln(self.getTabpanels());
-			wh.write("</tr>");
+			wh.write("<tr valign=\"top\">")
+				.write(tabs)
+				.writeln(self.getTabpanels())
+				.writeln("</tr>");
 		} else {
-			wh.write(tabs);
-			wh.writeln(self.getTabpanels());
+			wh.write(tabs)
+				.writeln(self.getTabpanels());
 		}
 
 		wh.write("</table>");
