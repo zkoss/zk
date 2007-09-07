@@ -19,8 +19,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.event;
 
 /** The onBookmarkChanged event used
- * to notify that user pressed BACK, FORWARD or specified URL directly
- * that causes the bookmark is changed (but still in the same desktop).
+ * to notify that user pressed BACK, FORWARD or others
+ * that causes the bookmark changed (but still in the same desktop).
  *
  * <p>All root components of all pages of the desktop will
  * recieves this event.
