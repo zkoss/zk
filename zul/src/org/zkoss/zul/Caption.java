@@ -59,14 +59,15 @@ public class Caption extends LabelImageElement {
 		return label;
 	}
 	/** Returns whether the legend mold shall be used.
+	 * It actually returns {@link Groupbox#isLegend} if the parent
+	 * is a {@link Groupbox}.
+	 *
 	 * <p>Note: this is designed to used for component templating.
 	 * Application developers rarely need to access this method.
-	 *
-	 * <p>It is mainly used for component implementation.
 	 */
 	public boolean isLegend() {
 		final Component p = getParent();
-		return (p instanceof Groupbox) && "default".equals(p.getMold());
+		return (p instanceof Groupbox) && ((Groupbox)p).isLegend();
 	}
 	/** Returns whether to display the closable button.
 	 * <p>Default: it returns true if the parent is window and {@link Window#isClosable}
@@ -104,7 +105,7 @@ public class Caption extends LabelImageElement {
 	}
 	public void invalidate() {
 		final Component p = getParent();
-		if ((p instanceof Groupbox) && "default".equals(p.getMold()))
+		if ((p instanceof Groupbox) && ((Groupbox)p).isLegend())
 			p.invalidate(); //Bug 1679629
 		else
 			super.invalidate();

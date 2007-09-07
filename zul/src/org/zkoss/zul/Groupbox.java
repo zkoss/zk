@@ -36,6 +36,7 @@ public class Groupbox extends XulElement {
 	private Caption _caption;
 	/** The style used for the content block. */
 	private String _cntStyle;
+	private Boolean _legend;
 	private boolean _open = true, _closable = true;
 
 	/** Returns the caption of this groupbox.
@@ -108,6 +109,29 @@ public class Groupbox extends XulElement {
 	public String getContentSclass() {
 		final String sclass = getSclass();
 		return sclass == null ? "gc-default": "gc-" + sclass;
+	}
+
+	/** Returns whether this groupbox is in the legend mold.
+	 * By the legend mold we mean this group box is rendered with
+	 * HTML FIELDSET tag.
+	 *
+	 * <p>Default: the legend mold is assumed if {@link #getMold}
+	 * returns "default".
+	 *
+	 * <p>If it is not the case, you can call {@link #setLegend} to change
+	 * it.
+	 * @since 3.0.0
+	 */
+	public boolean isLegend() {
+		return _legend != null ?
+			_legend.booleanValue(): "default".equals(getMold());
+	}
+	/** Sets whether this groupbox is in the legend mold.
+	 * @see #isLegend
+	 * @since 3.0.0
+	 */
+	public void setLegend(boolean legend) {
+		_legend = Boolean.valueOf(legend);
 	}
 
 	//-- super --//
