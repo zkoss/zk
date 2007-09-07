@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.lang.Strings;
-import org.zkoss.xel.fn.StringFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -142,39 +141,39 @@ public class TabDefault implements ComponentRenderer {
 				wh.write(" width=\"" + self.getWidth()+ "\"");
 			wh.write("><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");
 			wh.write("<tr>");			
-				wh.write("<td class=\"" + StringFns.cat("tab-v3d-tl",suffix) + "\"></td>");
-				wh.write("<td colspan=\"3\" class=\"" + StringFns.cat("tab-v3d-tm",suffix) + "\"></td>");
-				wh.write("<td class=\"" + StringFns.cat("tab-v3d-tr",suffix) + "\"></td>");			
+				wh.write("<td class=\"" + "tab-v3d-tl").write(suffix).write("\"></td>");
+				wh.write("<td colspan=\"3\" class=\"").write("tab-v3d-tm").write(suffix).write("\"></td>");
+				wh.write("<td class=\"").write("tab-v3d-tr").write(suffix).write("\"></td>");			
 			wh.write("</tr>");
 
 			wh.write("<tr height=\"22\">");
-				wh.write("<td class=\"" + StringFns.cat("tab-v3d-ml",suffix) + "\"></td>");
-				wh.write("<td width=\"3\" class=\"" + StringFns.cat("tab-v3d-mm",suffix) + "\"></td>");
-				wh.write("<td align=\"center\" class=\"" + StringFns.cat("tab-v3d-mm",suffix) + "\" id=\"" + self.getUuid()+"!real\"" +self.getInnerAttrs()+"><a href=\"javascript:;\"" +
+				wh.write("<td class=\"").write("tab-v3d-ml").write(suffix).write("\"></td>");
+				wh.write("<td width=\"3\" class=\"").write("tab-v3d-mm").write(suffix).write("\"></td>");
+				wh.write("<td align=\"center\" class=\"").write("tab-v3d-mm").write(suffix).write("\" id=\"" + self.getUuid()+"!real\"" +self.getInnerAttrs()+"><a href=\"javascript:;\"" +
 					" id=\"" + self.getUuid() + "!a\">");
 				if (!Strings.isBlank(self.getImgTag()))
 					wh.write(self.getImgTag());
 				if (!Strings.isBlank(self.getLabel()))
 				new Out(out).setValue(self.getLabel()).render();
 				wh.write( "</a></td>");		
-				wh.write("<td width=\"3\" class=\"" + StringFns.cat("tab-v3d-mm",suffix) + "\"></td>");	
-				wh.write("<td class=\"" + StringFns.cat("tab-v3d-mr",suffix) + "\"></td>");
+				wh.write("<td width=\"3\" class=\"").write("tab-v3d-mm").write(suffix).write("\"></td>");	
+				wh.write("<td class=\"").write("tab-v3d-mr").write(suffix).write("\"></td>");
 			wh.write("</tr>");		
 			
 			if(self.isClosable()){
 				wh.write("<tr height=\"8\">");
-				wh.write("<td class=\"" + StringFns.cat("tab-v3d-ml",suffix) + "\"></td>");
-				wh.write("<td width=\"3\" class=\"" + StringFns.cat("tab-v3d-mm",suffix) + "\"></td>");
-				wh.write("<td width=\"11\" align=\"center\" valign=\"buttom\" class=\"" + StringFns.cat("tab-v3d-mm",suffix) + 
-						"\"><img id=\""+ self.getUuid() + "!close\" src=\"" + exec.encodeURL("~./zul/img/close-off.gif") + "\"/></td>");
-				wh.write("<td class=\"" + StringFns.cat("tab-v3d-mr",suffix) + "\"></td>");
+				wh.write("<td class=\"").write("tab-v3d-ml").write(suffix).write("\"></td>");
+				wh.write("<td width=\"3\" class=\"").write("tab-v3d-mm").write(suffix).write("\"></td>");
+				wh.write("<td width=\"11\" align=\"center\" valign=\"buttom\" class=\"").write("tab-v3d-mm").write(suffix)
+					.write("\"><img id=\""+ self.getUuid() + "!close\" src=\"" + exec.encodeURL("~./zul/img/close-off.gif") + "\"/></td>");
+				wh.write("<td class=\"").write("tab-v3d-mm").write(suffix).write("\"></td>");	
 				wh.write("</tr>");			
 			}
 			
 			wh.write("<tr>");		
-			wh.write("<td class=\"" + StringFns.cat("tab-v3d-bl",suffix) + "\"></td>");
-			wh.write("<td colspan=\"3\" class=\"" + StringFns.cat("tab-v3d-bm",suffix) + "\"></td>");
-			wh.write("<td class=\"" + StringFns.cat("tab-v3d-br",suffix) + "\"></td>");
+			wh.write("<td class=\"tab-v3d-bl\"").write(suffix).write("\"></td>");
+			wh.write("<td colspan=\"3\" class=\"tab-v3d-bm").write(suffix).write("\"></td>");
+			wh.write("<td class=\"tab-v3d-br").write(suffix).write("\"></td>");
 			wh.write("</tr>");
 
 			wh.write("</table></td>");
@@ -196,22 +195,15 @@ public class TabDefault implements ComponentRenderer {
 			wh.write("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");
 
 			wh.write("<tr>");
-			wh.write("<td class=\"" + StringFns.cat("tab-3d-tl", suffix)
-					+ "\"></td>");
-			wh.write("<td colspan=\"" + colspan + "\" class=\""
-					+ StringFns.cat("tab-3d-tm", suffix) + "\"></td>");
-			wh.write("<td class=\"" + StringFns.cat("tab-3d-tr", suffix)
-					+ "\"></td>");
+			wh.write("<td class=\"tab-3d-tl").write(suffix).write("\"></td>");
+			wh.write("<td colspan=\"" + colspan + "\" class=\"tab-3d-tm").write(suffix).write("\"></td>");
+			wh.write("<td class=\"tab-3d-tr").write(suffix).write("\"></td>");
 			wh.write("</tr>");
 
 			wh.write("<tr height=\"" + height + "\">");
-			wh.write("<td class=\"" + StringFns.cat("tab-3d-ml", suffix)
-					+ "\"></td>");
-			wh.write("<td width=\"3\" class=\""
-					+ StringFns.cat("tab-3d-mm", suffix) + "\"></td>");
-			wh.write("<td align=\"center\" class=\""
-					+ StringFns.cat("tab-3d-mm", suffix)
-					+ "\"><a href=\"javascript:;\"" + " id=\"" + self.getUuid()
+			wh.write("<td class=\"tab-3d-ml").write(suffix).write("\"></td>");
+			wh.write("<td width=\"3\" class=\"tab-3d-mm").write(suffix).write("\"></td>");
+			wh.write("<td align=\"center\" class=\"tab-3d-mm").write(suffix).write("\"><a href=\"javascript:;\"" + " id=\"" + self.getUuid()
 					+ "!a\">");
 			if (!Strings.isBlank(self.getImgTag()))
 				wh.write(self.getImgTag());
@@ -221,25 +213,19 @@ public class TabDefault implements ComponentRenderer {
 
 			// Bug 1780044: width cannot (and need not) be specified
 			if (self.isClosable()) {
-				wh.write("<td align=\"right\" class=\""
-						+ StringFns.cat("tab-3d-mm", suffix) + "\"><img id=\""
+				wh.write("<td align=\"right\" class=\"tab-3d-mm").write(suffix).write("\"><img id=\""
 						+ self.getUuid() + "!close\" src=\""
 						+ exec.encodeURL("~./zul/img/close-off.gif")
 						+ "\"/></td>");
 			}
-			wh.write("<td width=\"3\" class=\""
-					+ StringFns.cat("tab-3d-mm", suffix) + "\"></td>");
-			wh.write("<td class=\"" + StringFns.cat("tab-3d-mr", suffix)
-					+ "\"></td>");
+			wh.write("<td width=\"3\" class=\"tab-3d-mm").write(suffix).write("\"></td>");
+			wh.write("<td class=\"tab-3d-mr").write(suffix).write("\"></td>");
 			wh.write("</tr>");
 
 			wh.write("<tr>");
-			wh.write("<td class=\"" + StringFns.cat("tab-3d-bl", suffix)
-					+ "\"></td>");
-			wh.write("<td colspan=\"" + colspan + "\" class=\""
-					+ StringFns.cat("tab-3d-bm", suffix) + "\"></td>");
-			wh.write("<td class=\"" + StringFns.cat("tab-3d-br", suffix)
-					+ "\"></td>");
+			wh.write("<td class=\"tab-3d-bl").write(suffix).write("\"></td>");
+			wh.write("<td colspan=\"" + colspan + "\" class=\"tab-3d-bm").write(suffix).write("\"></td>");
+			wh.write("<td class=\"tab-3d-br").write(suffix).write("\"></td>");
 			wh.write("</tr>");
 			wh.write("</table></td>");
 			
