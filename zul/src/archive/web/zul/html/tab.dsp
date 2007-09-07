@@ -31,8 +31,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<td class="${c:cat('tab-3d-ml',suffix)}"></td>
 	<td width="3" class="${c:cat('tab-3d-mm',suffix)}"></td>
 	<td align="center" class="${c:cat('tab-3d-mm',suffix)}"><a href="javascript:;" id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a></td>
-<c:if test="${self.closable}">
-	<td width="11" align="right" class="${c:cat('tab-3d-mm',suffix)}"><img id="${self.uuid}!close" src="${c:encodeURL('~./zul/img/close-off.gif')}"/></td>
+<c:if test="${self.closable}"><%-- Bug 1780044: width cannot (and need not) be specified --%>
+	<td align="right" class="${c:cat('tab-3d-mm',suffix)}"><img id="${self.uuid}!close" src="${c:encodeURL('~./zul/img/close-off.gif')}"/></td>
 </c:if>
 	<td width="3" class="${c:cat('tab-3d-mm',suffix)}"></td>
 	<td class="${c:cat('tab-3d-mr',suffix)}"></td>
