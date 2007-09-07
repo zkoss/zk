@@ -725,7 +725,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Splitter</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/splitter.dsp</mold-uri>
+			<mold-uri>class:org.zkoss.zul.render.SplitterDefault</mold-uri>
+			<!--<mold-uri>~./zul/html/splitter.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
