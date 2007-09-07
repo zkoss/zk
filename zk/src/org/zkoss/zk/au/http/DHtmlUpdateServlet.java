@@ -142,6 +142,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			process(sess, request, response);
 		} finally {
 			I18Ns.cleanup(request, old);
+			org.zkoss.zk.ui.sys.ComponentsCtrl.refreshEventMethodCache();
 		}
 	}
 	protected

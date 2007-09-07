@@ -135,6 +135,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			handleError(sess, request, response, path, ex);
 		} finally {
 			I18Ns.cleanup(request, old);
+			org.zkoss.zk.ui.sys.ComponentsCtrl.refreshEventMethodCache();
 		}
 	}
 	protected
