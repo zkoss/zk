@@ -22,7 +22,10 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.Out;
+
 import org.zkoss.zul.Treecol;
 
 /**
@@ -47,7 +50,7 @@ public class TreecolDefault implements ComponentRenderer {
 				+ self.getOuterAttrs() + self.getInnerAttrs());
 		wh.write(self.getImgTag());
 		wh.write(">");
-		new Out(out, self.getLabel()).render();		
+		new Out(self.getLabel()).render(out);		
 		wh.write("</th>");
 		
 

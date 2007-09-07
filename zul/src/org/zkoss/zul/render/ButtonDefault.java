@@ -23,7 +23,10 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.Out;
+
 import org.zkoss.zul.Button;
 
 /**
@@ -53,7 +56,7 @@ public class ButtonDefault implements ComponentRenderer {
 			wh.write(self.getInnerAttrs()).write(">");
 
 			if (self.getDir().equals("reverse")) {
-				new Out(out, self.getLabel()).render();
+				new Out(self.getLabel()).render(out);
 				if (self.isImageAssigned()
 						&& self.getOrient().equals("vertical"))
 					wh.write("<br/>");
@@ -63,7 +66,7 @@ public class ButtonDefault implements ComponentRenderer {
 				if (self.isImageAssigned()
 						&& self.getOrient().equals("vertical"))
 					wh.write("<br/>");
-				new Out(out, self.getLabel()).render();
+				new Out(self.getLabel()).render(out);
 			}
 			wh.write("</button>");
 			wh.writeln();

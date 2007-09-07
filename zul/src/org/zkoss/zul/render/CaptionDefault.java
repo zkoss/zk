@@ -25,7 +25,10 @@ import java.util.Iterator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.Out;
+
 import org.zkoss.zul.Caption;
 
 /**
@@ -44,7 +47,7 @@ public class CaptionDefault implements ComponentRenderer {
 
 		if (self.isLegend()) {
 			wh.write("<legend>").write(imgTag);
-			new Out(out, self.getLabel()).render();
+			new Out(self.getLabel()).render(out);
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 				((Component) it.next()).redraw(out);
 			}
@@ -57,7 +60,7 @@ public class CaptionDefault implements ComponentRenderer {
 			wh.write(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
 			wh.write("<tr valign=\"middle\">");
 			wh.write("<td align=\"left\" class=\"caption\">").write(imgTag);
-			new Out(out, self.getCompoundLabel()).setNbsp(true).render();
+			new Out(self.getCompoundLabel()).setNbsp(true).render(out);
 			wh.write("</td>");
 
 			wh.write("<td align=\"right\" class=\"caption\" id=\"").write(uuid)

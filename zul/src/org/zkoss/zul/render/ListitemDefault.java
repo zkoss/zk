@@ -23,7 +23,10 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.Out;
+
 import org.zkoss.zul.Listitem;
 
 /**
@@ -39,7 +42,7 @@ public class ListitemDefault implements ComponentRenderer {
 		
 		if(self.getMold().equals("select")){
 			wh.write("<option id=\"").write(self.getUuid()).write("\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-			new Out(out, self.getLabel()).setMaxlength(self.getMaxlength()).render();
+			new Out(self.getLabel()).setMaxlength(self.getMaxlength()).render(out);
 			wh.write("</option>");
 		}else{
 			wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lit\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");

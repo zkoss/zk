@@ -23,7 +23,10 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.Out;
+
 import org.zkoss.zul.Treecell;
 
 /**
@@ -53,7 +56,7 @@ ${self.columnHtmlPostfix}
 		
 		wh.write(self.getColumnHtmlPrefix());
 		wh.write(self.getImgTag());
-		new Out(out, self.getLabel()).setMaxlength(self.getMaxlength()).render();
+		new Out(self.getLabel()).setMaxlength(self.getMaxlength()).render(out);
 		
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();

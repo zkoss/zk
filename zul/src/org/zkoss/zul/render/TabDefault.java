@@ -25,7 +25,10 @@ import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.Out;
+
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
 
@@ -66,7 +69,7 @@ public class TabDefault implements ComponentRenderer {
 				.write("\" id=\"").write(self.getUuid()).write("!real\"").write(self.getInnerAttrs())
 				.write("><a href=\"javascript:;\" id=\"").write(self.getUuid()).write("!a\">");
 				wh.write(self.getImgTag());
-				new Out(out, self.getLabel()).render();
+				new Out(self.getLabel()).render(out);
 				wh.writeln( "</a></td>");		
 
 				wh.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")	
@@ -108,7 +111,7 @@ public class TabDefault implements ComponentRenderer {
 				.write("<td align=\"center\" class=\"").write(tscls).write("mm").write(suffix)
 				.write("\"><a href=\"javascript:;\"").write(" id=\"").write(self.getUuid()).write("!a\">")
 				.write(self.getImgTag());
-			new Out(out, self.getLabel()).render();
+			new Out(self.getLabel()).render(out);
 			wh.writeln("</a></td>");
 
 			if (self.isClosable()) {

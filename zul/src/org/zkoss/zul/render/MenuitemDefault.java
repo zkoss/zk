@@ -24,7 +24,10 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.Out;
+
 import org.zkoss.zul.Menuitem;
 import org.zkoss.lang.Strings;
 
@@ -50,7 +53,7 @@ public class MenuitemDefault implements ComponentRenderer {
 				wh.write(exec.encodeURL(self.getHref()));
 			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
-			new Out(out, self.getLabel()).render();
+			new Out(self.getLabel()).render(out);
 			wh.write("</a>");
 			wh.writeln("</td>");
 		}else{
@@ -69,7 +72,7 @@ public class MenuitemDefault implements ComponentRenderer {
 				wh.write(exec.encodeURL(self.getHref()));
 			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
-			new Out(out, self.getLabel()).render();
+			new Out(self.getLabel()).render(out);
 			wh.write("</a>");
 			wh.writeln("</td>");
 			wh.write("<td><img src=\"").write(exec.encodeURL("~./img/spacer.gif")).writeln("\" width=\"9\"/></td>");

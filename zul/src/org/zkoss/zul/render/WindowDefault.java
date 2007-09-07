@@ -26,7 +26,8 @@ import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.Caption;
 
@@ -48,31 +49,26 @@ public class WindowDefault implements ComponentRenderer {
 		wh.write("\" z.type=\"zul.wnd.Wnd\" z.autoz=\"true\"");
 		wh.write(self.getOuterAttrs());
 		wh.write(self.getInnerAttrs());
-		wh.write(">\n");
+		wh.writeln(">");
 
 		final Caption caption = self.getCaption();
 		final String title = self.getTitle(), titlesc = self.getTitleSclass();
 		String wcExtStyle = "";
 		if (caption == null && title.length() == 0) {
 			if (exec.isExplorer() && !exec.isExplorer7()) {
-				wh.write(
+				wh.writeln(
 					"<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
-					+"<tr height=\"1px\"><td></td></tr></table>\n");
+					+"<tr height=\"1px\"><td></td></tr></table>");
 			}
 		} else {
-			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n");
+			wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
 			if (caption == null) {
-				wh.write("<tr id=\"");
-				wh.write(uuid);
-				wh.write("!caption\" class=\"title\">\n");
-				wh.write("<td class=\"l");
-				wh.write(titlesc);
-				wh.write("\"></td>\n");
-				wh.write("<td class=\"m");
-				wh.write(titlesc);
-				wh.write("\">");
-				wh.write(XMLs.escapeXML(title));
-				wh.write("</td>");
+				wh.write("<tr id=\"").write(uuid).write("!caption\" class=\"title\">")
+				  .write("<td class=\"l").write(titlesc).writeln("\"></td>")
+				  .write("<td class=\"m").write(titlesc).write("\">")
+				  .write(XMLs.escapeXML(title))
+				  .writeln("</td>");
+
 				if (self.isClosable()) {
 					wh.write("<td width=\"16\" class=\"m");
 					wh.write(titlesc);

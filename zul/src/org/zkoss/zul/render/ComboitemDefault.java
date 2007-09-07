@@ -23,7 +23,10 @@ import java.io.Writer;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.Out;
+
 import org.zkoss.zul.Comboitem;
 
 /*
@@ -42,11 +45,11 @@ public class ComboitemDefault implements ComponentRenderer {
 		wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Cmit\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<td>").write(self.getImgTag()).write("</td><td>");
-		new Out(out, self.getLabel()).render();
+		new Out(self.getLabel()).render(out);
 		if (!Strings.isBlank(self.getDescription())
 				|| !Strings.isBlank(self.getContent())) {
 			wh.write("<br/><span>");
-			new Out(out, self.getDescription()).render();
+			new Out(self.getDescription()).render(out);
 			wh.write("</span>").write(self.getContent());
 		}
 		wh.write("</td></tr>");

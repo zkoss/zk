@@ -22,7 +22,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treechildren;
 import org.zkoss.zul.Treecols;
@@ -62,7 +63,7 @@ ${z:redraw(self.treefoot, null)}
 </div>
 	 */
 	/* (non-Javadoc)
-	 * @see org.zkoss.zk.ui.util.ComponentRenderer#render(org.zkoss.zk.ui.Component, java.io.Writer)
+	 * @see org.zkoss.zk.ui.render.ComponentRenderer#render(org.zkoss.zk.ui.Component, java.io.Writer)
 	 */
 	public void render(Component comp, Writer out) throws IOException {
 		final WriterHelper wh = new WriterHelper(out);

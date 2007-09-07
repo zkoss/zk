@@ -26,7 +26,10 @@ import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.Out;
+
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabpanel;
 
@@ -108,7 +111,7 @@ public class TabpanelAccordion implements ComponentRenderer {
 			wh.write("<td align=\"left\" class=\"").write("tabaccd-3d-mm").write(suffix).write("\"><a href=\"javascript:;\"")
 			.write(" id=\"").write(tab.getUuid()).write("!a\">");			
 			wh.write(tab.getImgTag());
-			new Out(out, tab.getLabel()).render();
+			new Out(tab.getLabel()).render(out);
 			wh.write( "</a></td>");			
 
 		if(tab.isClosable()){

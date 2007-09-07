@@ -23,7 +23,10 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.Out;
+
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 
@@ -42,7 +45,7 @@ public class ListboxSelect implements ComponentRenderer {
 		for (Iterator it = self.getItems().iterator(); it.hasNext();) {
 			final Listitem item = (Listitem)it.next();
 			wh.write("<option id=\"").write(item.getUuid()).write("\"").write(item.getOuterAttrs()).write(item.getInnerAttrs()).writeln(">");
-			new Out(out, item.getLabel()).setMaxlength(self.getMaxlength()).render();
+			new Out(item.getLabel()).setMaxlength(self.getMaxlength()).render(out);
 			wh.write("</option>");
 		}
 		wh.write("</select>");
