@@ -23,7 +23,6 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.zkoss.web.fn.XMLFns;
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Menubar;
@@ -47,7 +46,7 @@ public class MenubarVertical implements ComponentRenderer {
 			final LabelImageElement child = (LabelImageElement)it.next();
 			wh.write("<tr id=\"").write(child.getUuid()).write("!chdextr\"");
 			wh.write(XMLFns.attr("height",child.getHeight())).writeln(">");
-			ZkFns.redraw(child, out);
+			child.redraw(out);
 			wh.write("</tr>");
 		}
 		wh.write("</table></div>");

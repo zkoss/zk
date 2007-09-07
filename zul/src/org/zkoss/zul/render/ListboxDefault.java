@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Listbox;
@@ -44,20 +43,20 @@ public class ListboxDefault implements ComponentRenderer {
 		if(self.getListhead() != null){
 			wh.write("<div id=\"").write(uuid).write("!head\" class=\"listbox-head\">");
 			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
-			ZkFns.redraw(self.getListhead(),out);
+			self.getListhead().redraw(out);
 			wh.write("</table></div>");
 		}
 		wh.write("<div id=\"").write(uuid).write("!body\" class=\"listbox-body\">");
 		wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" id=\"").write(uuid).write("!cave\" class=\"listbox-btable\">");
 		for (Iterator it = self.getItems().iterator(); it.hasNext();) {
 			final Component item = (Component)it.next();
-			ZkFns.redraw(item, out);
+			item.redraw(out);
 		}
 		wh.write("</table></div>");
 		if(self.getListfoot() != null){
 			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"listbox-foot\">");
 			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
-			ZkFns.redraw(self.getListfoot(),out);
+			self.getListfoot().redraw(out);
 			wh.write("</table></div>");
 		}
 		wh.write("</div>");

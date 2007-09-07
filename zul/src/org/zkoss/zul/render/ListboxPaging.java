@@ -20,12 +20,14 @@ package org.zkoss.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
+import java.util.ListIterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listfoot;
+import org.zkoss.zul.Listhead;
+import org.zkoss.zul.Paging;
 
 /**
  * {@link Listbox}'s paging mold.
@@ -46,10 +48,13 @@ public class ListboxPaging implements ComponentRenderer {
 		wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
 		//header
 		wh.write("<tbody>");
-		ZkFns.redraw(self.getListhead(),out);
+		Listhead head  = self.getListhead();
+		if(head !=null)
+			head.redraw(out);
 		wh.write("</tbody>");
 		//body
 		wh.write("<tbody id=\"").write(uuid).write("!cave\">");
+		/*
 		Iterator it = self.getItems().iterator();
 		final int _beg = self.getVisibleBegin();
 		final int _end = self.getVisibleEnd();
@@ -58,20 +63,29 @@ public class ListboxPaging implements ComponentRenderer {
 		for( int i = 0, cnt = _end - _beg + 1; it.hasNext() && --cnt >= 0; ++i) {
 			final Component item = (Component)it.next();
 			ZkFns.redraw(item, out);
+		}*/
+		int i = self.getVisibleBegin();
+		if (i < self.getItems().size()) {
+			ListIterator it = self.getItems().listIterator(i);
+			for (int end = self.getVisibleEnd(); i <= end && it.hasNext(); i++) {
+				((Component)it.next()).redraw(out);
+			}
 		}
 		wh.write("</tbody>");
 		//Footer
 		wh.write("<tbody class=\"grid-foot\">");
-		ZkFns.redraw(self.getListfoot(),out);
+		Listfoot foot = self.getListfoot();
+		if(foot != null)
+			foot.redraw(out);
 		wh.write("</tbody>");
 		wh.write("</table>");
 		//Paging
 		wh.write("<div id=\"").write(uuid).write("!pgi\" class=\"listbox-pgi\">");
-		ZkFns.redraw(self.getPaging(), out);
+		Paging pg  = self.getPaging();
+		if(pg != null)
+			pg.redraw(out);
 		wh.write("</div></div></div>");
-		
-	
-		
+
 		/*
 		<div id="${self.uuid}" z.type="zul.sel.Libox"${self.outerAttrs}${self.innerAttrs}>
 			<div id="${self.uuid}!paging" class="listbox-paging">

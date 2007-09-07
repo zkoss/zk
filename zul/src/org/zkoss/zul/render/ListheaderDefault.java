@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Listheader;
@@ -42,7 +41,7 @@ public class ListheaderDefault implements ComponentRenderer {
 		RenderFns.getOut(out).setValue(self.getLabel()).render();
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
-			ZkFns.redraw(child, out);
+			child.redraw(out);
 		}
 		wh.write("</th>");
 		/*

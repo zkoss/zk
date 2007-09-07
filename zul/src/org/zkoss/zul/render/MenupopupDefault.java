@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Menupopup;
@@ -43,7 +42,7 @@ public class MenupopupDefault implements ComponentRenderer {
 		wh.writeln("<table cellpadding=\"0\" cellspacing=\"0\" id=\"").write(uuid).write("!cave\">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
-			ZkFns.redraw(child, out);
+			child.redraw(out);
 		}
 		wh.write("</table></div>");
 		/*

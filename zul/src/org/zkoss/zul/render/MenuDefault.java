@@ -48,7 +48,8 @@ public class MenuDefault implements ComponentRenderer {
 			RenderFns.getOut(out).setValue(self.getLabel()).render();
 			wh.write("</a>");
 			Menupopup menupopup = (Menupopup)self.getMenupopup();
-			menupopup.redraw(out);
+			if(menupopup != null) 
+				menupopup.redraw(out);
 			wh.writeln("</td>");
 		}else{
 			wh.write("<tr id=\"").write(uuid).write("\" z.type=\"zul.menu.Menu\"");
@@ -58,7 +59,8 @@ public class MenuDefault implements ComponentRenderer {
 			RenderFns.getOut(out).setValue(self.getLabel()).render();
 			wh.write("</a>");
 			Menupopup menupopup = (Menupopup)self.getMenupopup();
-			menupopup.redraw(out);
+			if(menupopup != null) 
+				menupopup.redraw(out);
 			wh.writeln("</td>");
 			wh.write("<td><img src=\"").write(exec.encodeURL("~./zul/img/menu/arrow.gif")).writeln("\" width=\"9\"/></td>");
 			wh.write("</tr>");

@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -49,7 +48,7 @@ public class ImagemapDefault implements ComponentRenderer {
 		wh.write("<map name=\"").write(uuid).write("_map\" id=\"").write(uuid).write("_map\">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
-			ZkFns.redraw(child, out);
+			child.redraw(out);
 		}
 		wh.writeln("</map></span>");
 		/*
