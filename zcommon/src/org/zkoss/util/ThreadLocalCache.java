@@ -37,11 +37,12 @@ public class ThreadLocalCache implements Cache {
 		_maxsize = maxSize;
 		_lifetime = lifetime;
 	}
-	/** Constructs a thread-local cache with the default setting.
+	/** Constructs a thread-local cache with the default setting:
+	 * max size=128 and lifetime=30minutes.
 	 */
 	public ThreadLocalCache() {
 		_lifetime = DEFAULT_LIFETIME;
-		_maxsize = DEFAULT_MAXSIZE;
+		_maxsize = 128;
 	}
 
 	//Cache//
@@ -73,6 +74,16 @@ public class ThreadLocalCache implements Cache {
 			cache.setLifetime(lifetime);
 		_lifetime = lifetime;
 	}
+	/**
+	 * Returns the maximal allowed size.
+	 *
+	 * <p>Defalut: 128 (it is smaller than most cache since this cache
+	 * one per thread).
+	 *
+	 * An mapping won't be removed by GC unless the minimal lifetime
+	 * or the maximal allowed size exceeds.
+	 * @see #getLifetime
+	 */
 	public int getMaxSize() {
 		return _maxsize;
 	}
