@@ -27,7 +27,7 @@ import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Textbox;
 
 /**
- * {@link Tabbox}'s default mold.
+ * {@link Textbox}'s default mold.
  * @author robbiecheng
  * @since 3.0.0
  */
@@ -52,17 +52,13 @@ public class TextboxDefault implements ComponentRenderer{
 		
 		if (self.isMultiline()){
 			wh.write("<textarea id=\"").write(uuid).write("\" z.type=\"zul.widget.Txbox\"")
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">").write(self.getAreaText()).write("</textarea>");
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
+			.write(self.getAreaText()).write("</textarea>");
 		}
 		else{
-			
-			wh.write("<input id=\"").write(uuid).write("\" z.type=\"zul.widget.Txbox\"").write(self.getInnerAttrs()).write("/>");
+			wh.write("<input id=\"").write(uuid).write("\" z.type=\"zul.widget.Txbox\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("/>");
 		}
-		
+	
 	}
-	
-	
-	
-
-
 }
