@@ -96,18 +96,6 @@ public class ListboxPaging implements ComponentRenderer {
 			</div>
 		</div>
 		*/		
-		
-		/*
-		for (int j = 0; ++j <= _beg && it.hasNext();) //skip
-		it.next();
-
-		for (int j = 0, cnt = _end - _beg + 1; it.hasNext() && --cnt >= 0; ++j) {
-			final Object val = it.next();
-			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
-			if (st != null) st.update(j, val);
-			ac.renderFragment(out);
-		} 
-		 */
 	}
 
 }

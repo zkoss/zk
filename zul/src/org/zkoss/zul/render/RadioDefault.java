@@ -40,10 +40,9 @@ public class RadioDefault implements ComponentRenderer {
 		wh.write(self.getInnerAttrs()).write("/>");
 		wh.write("<label for=\""+uuid+"!real\"").write(self.getLabelAttrs()).write(">");
 		wh.write(self.getImgTag()).write(self.getLabel()).writeln("</label>");
-		if(self.getRadiogroup() != null ){
-			if(self.getRadiogroup().getOrient().equals("vertical")){
-				wh.write("<br/>");
-			}
+		if(self.getRadiogroup() != null
+		&& self.getRadiogroup().getOrient().equals("vertical")) {
+			wh.write("<br/>");
 		}
 		wh.writeln("</span>");
 	}
