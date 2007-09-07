@@ -112,6 +112,14 @@ public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 			return map.remove(key);
 		}
 	}
+	public void clear() {
+		for (int j = 0; j < _caches.length; ++j) {
+			synchronized (_caches[j]) {
+				_caches[j].clear();
+			}
+		}
+	}
+
 	private CacheMap getCache(Object key) {
 		int hc = Objects.hashCode(key);
         hc = (hc >>> 13) ^ hc;

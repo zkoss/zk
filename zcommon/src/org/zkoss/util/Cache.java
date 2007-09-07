@@ -40,12 +40,15 @@ public interface Cache {
 	 * @return the object if found.
 	 */
 	public Object remove(Object key);
+	/** Clears all objects being cached.
+	 */
+	public void clear();
 
 	//Control//
 	/** The default minimal lifetime, unit=milliseconds. It is 30 minutes. */
 	public static final int DEFAULT_LIFETIME = 30 * 60 * 1000;
 	/** The default maximal allowed size. It is 512. */
-	public static final int DEFAULT_MAXSIZE = 512;
+	public static final int DEFAULT_MAX_SIZE = 512;
 
 	/**
 	 * Returns the minimal lifetime, unit=milliseconds.
@@ -63,7 +66,7 @@ public interface Cache {
 	 */
 	public void setLifetime(int lifetime);
 	/**
-	 * Returns the maximal allowed size. Defalut: {@link #DEFAULT_MAXSIZE}.
+	 * Returns the maximal allowed size. Defalut: {@link #DEFAULT_MAX_SIZE}.
 	 * An mapping won't be removed by GC unless the minimal lifetime
 	 * or the maximal allowed size exceeds.
 	 * @see #getLifetime

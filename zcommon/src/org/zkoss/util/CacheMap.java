@@ -71,15 +71,19 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
-    private static final long serialVersionUID = 20060622L;
+    private static final long serialVersionUID = 20070907L;
 	//private static final Log log = Log.lookup(CacheMap.class);
+
+	/** @deprecated As of release 3.0.0, replaced by {@link Cache#DEFAULT_MAX_SIZE}.
+	 */
+	public static final int DEFAULT_MAXSIZE = 1024;
 
 	/** The map to store the mappings. */
 	private Map _map; //it is OK to serialized
 	/** The minimal lifetime. */
 	private int _lifetime = DEFAULT_LIFETIME;
 	/** The maximal allowed size. */
-	private int _maxsize = DEFAULT_MAXSIZE;
+	private int _maxsize = DEFAULT_MAX_SIZE;
 	/** The reference queue. */
 	private transient ReferenceQueue _que;
 	/** The reference. */
@@ -303,7 +307,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		_lifetime = lifetime;
 	}
 	/**
-	 * Gets the maximal allowed size. Defalut: {@link #DEFAULT_MAXSIZE}.
+	 * Gets the maximal allowed size. Defalut: {@link #DEFAULT_MAX_SIZE}.
 	 * An mapping won't be removed by GC unless the minimal lifetime
 	 * or the maximal allowed size exceeds.
 	 * @see #getLifetime

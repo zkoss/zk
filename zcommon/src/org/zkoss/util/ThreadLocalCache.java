@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util;
 
+import java.util.Map;
+
 /**
  * A cache that resides on the thread local memory.
  * The performance is excellent since no need to synchronize the access.
@@ -45,21 +47,37 @@ public class ThreadLocalCache implements Cache {
 		_maxsize = 128;
 	}
 
+	//extra//
+	/** Returns whether the cache for the current thread is empty.
+	 */
+	public boolean isEmpty() {
+		return getCache().isEmpty();
+	}
+	/** Puts all object cached in the current thread to the specifed map.
+	 */
+	public void copyTo(Map map) {
+		map.putAll(getCache());
+	}
+
 	//Cache//
 	public boolean containsKey(Object key) {
-		return getCache(key).containsKey(key);
+		return getCache().containsKey(key);
 	}
 	public Object get(Object key) {
-		return getCache(key).get(key);
+		return getCache().get(key);
 	}
 	public Object put(Object key, Object value) {
-		return getCache(key).put(key, value);
+		return getCache().put(key, value);
 	}
 	public Object remove(Object key) {
-		return getCache(key).remove(key);
+		return getCache().remove(key);
 	}
-	private Cache getCache(Object key) {
-		Cache cache = (Cache)_cache.get();
+	public void clear() {
+		getCache().clear();
+	}
+
+	private CacheMap getCache() {
+		CacheMap cache = (CacheMap)_cache.get();
 		if (cache == null)
 			_cache.set(cache = new CacheMap(_maxsize, _lifetime));
 		return cache;
