@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.*;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.xel.ExValue;

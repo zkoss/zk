@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.util;
+package org.zkoss.zk.ui.render;
 
 import java.io.Writer;
 import java.io.IOException;

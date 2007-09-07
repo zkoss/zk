@@ -48,7 +48,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
-import org.zkoss.zk.ui.util.ComponentRenderer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;

@@ -299,7 +299,7 @@ public class ComponentsCtrl {
 	 * the curent cache is {@link DualLevelCache}.
 	 *
 	 * @since 3.0.0
-	 * @see setEventMethodCache
+	 * @see #setEventMethodCache
 	 */
 	public static final void refreshEventMethodCache() {
 		if (_evtmtds instanceof DualLevelCache)
@@ -379,7 +379,7 @@ public class ComponentsCtrl {
 		public void addMold(String name, String moldURI) {
 			throw new UnsupportedOperationException();
 		}
-		public void addMold(String name, org.zkoss.zk.ui.util.ComponentRenderer renderer) {
+		public void addMold(String name, org.zkoss.zk.ui.render.ComponentRenderer renderer) {
 			throw new UnsupportedOperationException();
 		}
 		public Object getMoldURI(Component comp, String name) {
