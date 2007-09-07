@@ -23,7 +23,6 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.zkoss.lang.Strings;
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Treefooter;
@@ -56,7 +55,7 @@ public class TreefooterDefault implements ComponentRenderer {
 		
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();
-			ZkFns.redraw(child, null);
+			child.redraw(out);
 		}	
 		wh.write("</td>");
 		

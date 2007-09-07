@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Tabbox;
@@ -62,7 +61,7 @@ vtabpanel.dsp
 			wh.write("<td id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs()+ ">");		
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 				final Component child = (Component) it.next();
-				ZkFns.redraw(child, null);
+				child.redraw(out);
 			}	
 			wh.write("</td>");
 		}
@@ -70,7 +69,7 @@ vtabpanel.dsp
 			wh.write("<tbody id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs()+ ">");		
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 				final Component child = (Component) it.next();
-				ZkFns.redraw(child, null);
+				child.redraw(out);
 			}	
 			wh.write("</tbody>");
 		}

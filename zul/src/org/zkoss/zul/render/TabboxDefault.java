@@ -21,7 +21,6 @@ package org.zkoss.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Tabbox;
@@ -61,16 +60,17 @@ ${z:redraw(self.tabpanels, null)}
 			wh.write("<table id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + " z.tabs=\"" 
 					+ self.getTabs().getUuid() + "\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
 			wh.write("<tr valign=\"top\">");
-			ZkFns.redraw(self.getTabs(), null);
-		    ZkFns.redraw(self.getTabpanels(), null);		
+			self.getTabs().redraw(out);
+		    self.getTabpanels().redraw(out);		
 			wh.write("</tr>");
 			wh.write("</table>");
 		}
 		else{
 			wh.write("<table id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + " z.tabs=\"" 
 				+ self.getTabs().getUuid() + "\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
-			ZkFns.redraw(self.getTabs(), null);
-			ZkFns.redraw(self.getTabpanels(), null);
+			self.getTabs().redraw(out);
+			self.getTabs().redraw(out);
+			self.getTabpanels().redraw(out);
 			wh.write("</table>");
 		}
 	}

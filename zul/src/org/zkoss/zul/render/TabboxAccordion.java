@@ -21,7 +21,6 @@ package org.zkoss.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Tabbox;
@@ -47,7 +46,7 @@ ${z:redraw(self.tabpanels, null)}
 		final WriterHelper wh = new WriterHelper(out);
 		final Tabbox self = (Tabbox) comp;		
 		wh.write("<table id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + " z.accd=\"true\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");	
-		ZkFns.redraw(self.getTabpanels(), null);
+		self.getTabpanels().redraw(out);		
 		wh.write("</table>");
 	}
 

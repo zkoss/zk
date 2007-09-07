@@ -23,7 +23,6 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
-import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Textbox;
 
 /**
@@ -49,7 +48,7 @@ public class TextboxDefault implements ComponentRenderer{
 		final Textbox self = (Textbox) comp;
 		final String uuid = self.getUuid();
 
-		
+		//textarea doesn't support maxlength
 		if (self.isMultiline()){
 			wh.write("<textarea id=\"").write(uuid).write("\" z.type=\"zul.widget.Txbox\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")

@@ -21,7 +21,6 @@ package org.zkoss.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Treeitem;
@@ -42,9 +41,8 @@ ${z:redraw(self.treechildren, null)}
 	public void render(Component comp, Writer out) throws IOException {		
 		final Treeitem self = (Treeitem) comp;
 		
-		ZkFns.redraw(self.getTreerow(), null);
-		ZkFns.redraw(self.getTreechildren(), null);
-
+		self.getTreerow().redraw(out);
+		self.getTreechildren().redraw(out);
 	}
 
 }

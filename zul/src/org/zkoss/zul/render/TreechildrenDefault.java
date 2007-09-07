@@ -20,9 +20,8 @@ package org.zkoss.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
+import java.util.ListIterator;
 
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentRenderer;
 import org.zkoss.zul.Treechildren;
@@ -59,29 +58,29 @@ public class TreechildrenDefault implements ComponentRenderer {
 		
 		if(self.getTree() == self.getParent()){
 			wh.write("<tbody id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() 
-					+ self.getInnerAttrs() +">");
-			Iterator it = self.getChildren().iterator();
-			  final int _beg = self.getVisibleBegin();
-			  final int _end = self.getVisibleEnd();
-			  for( int i = 0; ++i<_beg && it.hasNext();)
-			   it.next();
-			  for( int i = 0, cnt = _end - _beg + 1; it.hasNext() && --cnt >= 0; ++i) {
-			   final Component item = (Component)it.next();
-			   ZkFns.redraw(item, out);
-			  }						
+					+ self.getInnerAttrs() +">");			
+			int i = self.getVisibleBegin();
+			if (i < self.getChildren().size()) 
+			{
+				ListIterator it = self.getChildren().listIterator(i);
+				for (int end = self.getVisibleEnd(); i <= end && it.hasNext(); i++) 
+				{
+					((Component)it.next()).redraw(out);
+				}
+			}							
 			wh.write("</tbody>");
 			
 		}
 		else{
-			Iterator it = self.getChildren().iterator();
-			  final int _beg = self.getVisibleBegin();
-			  final int _end = self.getVisibleEnd();
-			  for( int i = 0; ++i<_beg && it.hasNext();)
-			   it.next();
-			  for( int i = 0, cnt = _end - _beg + 1; it.hasNext() && --cnt >= 0; ++i) {
-			   final Component item = (Component)it.next();
-			   ZkFns.redraw(item, out);
-			  }		
+			int i = self.getVisibleBegin();
+			if (i < self.getChildren().size()) 
+			{
+				ListIterator it = self.getChildren().listIterator(i);
+				for (int end = self.getVisibleEnd(); i <= end && it.hasNext(); i++) 
+				{
+					((Component)it.next()).redraw(out);
+				}
+			}			
 		}
 
 	}

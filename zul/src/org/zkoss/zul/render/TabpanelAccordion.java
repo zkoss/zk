@@ -24,7 +24,6 @@ import java.util.Iterator;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.xel.fn.StringFns;
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -129,7 +128,7 @@ public class TabpanelAccordion implements ComponentRenderer {
 			wh.write("<div id=\"" + self.getUuid() +"!real\""+ self.getOuterAttrs()+ self.getInnerAttrs() + "><div id=\"" + self.getUuid() +"!cave\">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();
-			ZkFns.redraw(child, null);
+			child.redraw(out);
 		}
 		wh.write("</div></div>");
 		wh.write("</td>");
