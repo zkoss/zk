@@ -43,7 +43,5 @@ public class CalendarDefault implements ComponentRenderer {
 		wh.write(" z.type=\"zul.db.Cal\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs());
 		wh.write("></table>");
-		wh.writeln();
 	}
-
 }

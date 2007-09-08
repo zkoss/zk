@@ -42,18 +42,18 @@ public class ComboitemDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Comboitem self = (Comboitem) comp;
 		final String uuid = self.getUuid();
-		wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Cmit\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<td>").write(self.getImgTag()).write("</td><td>");
+		wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Cmit\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">")
+			.write("<td>").write(self.getImgTag()).write("</td>\n<td>");
+
 		new Out(self.getLabel()).render(out);
 		if (!Strings.isBlank(self.getDescription())
 				|| !Strings.isBlank(self.getContent())) {
-			wh.write("<br/><span>");
+			wh.write("<br/>\n<span>");
 			new Out(self.getDescription()).render(out);
 			wh.write("</span>").write(self.getContent());
 		}
-		wh.write("</td></tr>");
-		wh.writeln();
+		wh.writeln("</td></tr>");
 	}
 
 }

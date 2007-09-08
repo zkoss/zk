@@ -50,16 +50,13 @@ public class ComboboxDefault implements ComponentRenderer {
 		wh.write(self.getInnerAttrs()).write("/><span id=\"");
 		wh.write(uuid).write("!btn\" class=\"rbtnbk\"><img src=\"");
 		wh.write(exec.encodeURL(self.getImage())).write("\"");
-		if (self.isButtonVisible())
-			wh.write("");
-		else wh.write(" style=\"display:none\"");
+		if (!self.isButtonVisible())
+			wh.write(" style=\"display:none\"");
 		wh.write("/></span><div id=\"").write(uuid);
 		wh.write("!pp\" class=\"comboboxpp\" style=\"display:none\" tabindex=\"-1\">");
 		wh.write("<table id=\"").write(uuid).write(
 				"!cave\" cellpadding=\"0\" cellspacing=\"0\">");
 		wh.writeChildren(self);
 		wh.write("</table></div></span>");
-		wh.writeln();
 	}
-
 }

@@ -48,7 +48,6 @@ public class ButtonDefault implements ComponentRenderer {
 					self.getLabel()).write("\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(
 					"/>");
-			wh.writeln();
 		} else {
 			wh.write("<button type=\"button\" id=\"").write(uuid).write("\"");
 			wh.write(" z.type=\"zul.widget.Button\"").write(
@@ -59,17 +58,16 @@ public class ButtonDefault implements ComponentRenderer {
 				new Out(self.getLabel()).render(out);
 				if (self.isImageAssigned()
 						&& self.getOrient().equals("vertical"))
-					wh.write("<br/>");
+					wh.writeln("<br/>");
 				wh.write(self.getImgTag());
 			} else {
 				wh.write(self.getImgTag());
 				if (self.isImageAssigned()
 						&& self.getOrient().equals("vertical"))
-					wh.write("<br/>");
+					wh.writeln("<br/>");
 				new Out(self.getLabel()).render(out);
 			}
 			wh.write("</button>");
-			wh.writeln();
 		}
 	}
 }

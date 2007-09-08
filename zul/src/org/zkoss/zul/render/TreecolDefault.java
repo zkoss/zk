@@ -36,24 +36,14 @@ import org.zkoss.zul.Treecol;
  * @since 3.0.0
  */
 public class TreecolDefault implements ComponentRenderer {
-/**
-<c:set var="self" value="${requestScope.arg.self}"/>
-<th id="${self.uuid}" z.type="Tcol"${self.outerAttrs}${self.innerAttrs}>${self.imgTag}<c:out value="${self.label}"/>
-</th>
-
- */
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Treecol self = (Treecol) comp;
 		
-		wh.write("<th id=\"" + self.getUuid() + "\" z.type=\"Tcol\"" 
-				+ self.getOuterAttrs() + self.getInnerAttrs());
-		wh.write(self.getImgTag());
-		wh.write(">");
+		wh.write("<th id=\"").write(self.getUuid()).write("\" z.type=\"Tcol\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
+			.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);		
-		wh.write("</th>");
-		
-
+		wh.writeln("</th>");
 	}
-
 }

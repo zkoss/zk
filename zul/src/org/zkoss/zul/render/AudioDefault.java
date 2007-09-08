@@ -40,7 +40,6 @@ public class AudioDefault implements ComponentRenderer {
 		wh.write("<embed id=\"").write(self.getUuid()).write("\"").write(
 				self.getOuterAttrs()).write(self.getInnerAttrs()).write(
 				" mastersound z.type=\"zul.audio.Audio\"/>");
-		wh.writeln();
 	}
 
 }

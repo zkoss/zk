@@ -46,7 +46,7 @@ public class TreecellDefault implements ComponentRenderer{
 			.write(self.getImgTag());
 
 		new Out(self.getLabel()).setMaxlength(self.getMaxlength()).render(out);
-		
+	
 		wh.writeChildren(self)
 			.write(self.getColumnHtmlPostfix())
 			.writeln("</td>");

@@ -42,6 +42,5 @@ public class DoubleboxDefault implements ComponentRenderer {
 		wh.write("<input id=\"").write(uuid).write("\"");
 		wh.write(" z.type=\"zul.widget.Dbbox\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("/>");
-		wh.writeln();
 	}
 }

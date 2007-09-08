@@ -49,6 +49,5 @@ public class FlashDefault implements ComponentRenderer {
 		wh.write(self.getSrc()).write("\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" width=\"");
 		wh.write(self.getWidth()).write("\" height=\"").write(self.getHeight()).write("\">");
 		wh.write("</embed></object></div>");
-		wh.writeln();
 	}
 }

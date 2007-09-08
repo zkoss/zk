@@ -41,7 +41,7 @@ public class TreerowDefault implements ComponentRenderer {
 		wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Trow\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>')
 			.writeChildren(self)
-			.write("</tr>");
+			.writeln("</tr>");
 
 	}
 }

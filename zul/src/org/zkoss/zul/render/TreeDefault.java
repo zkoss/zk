@@ -37,66 +37,31 @@ import org.zkoss.zul.Treefoot;
  * @since 3.0.0
  */
 public class TreeDefault implements ComponentRenderer {
-
-	/**
-<c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" z.type="zul.tree.Tree"${self.outerAttrs}${self.innerAttrs}>
-<c:if test="${!empty self.treecols}">
-	<div id="${self.uuid}!head" class="tree-head">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
-${z:redraw(self.treecols, null)}
-	</table>
-	</div>
-</c:if>
-	<div id="${self.uuid}!body" class="tree-body">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
-${z:redraw(self.treechildren, null)}
-	</table>
-	</div>
-<c:if test="${!empty self.treefoot}">
-	<div id="${self.uuid}!foot" class="tree-foot">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
-${z:redraw(self.treefoot, null)}
-	</table>
-	</div>
-</c:if>
-</div>
-	 */
-	/* (non-Javadoc)
-	 * @see org.zkoss.zk.ui.render.ComponentRenderer#render(org.zkoss.zk.ui.Component, java.io.Writer)
-	 */
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tree self = (Tree) comp;
-		final Treecols tcs = (Treecols) self.getTreecols();
-		final Treechildren tc = (Treechildren) self.getTreechildren();
-		final Treefoot tf = (Treefoot) self.getTreefoot();
-		
-		wh.write("<div id=\"" + self.getUuid() + "\" z.type=\"zul.tree.Tree\"" 
-				+ self.getOuterAttrs() + self.getInnerAttrs() + ">");
-		if(!(self.getTreecols() == null)){
-			wh.write("<div id=\"" + self.getUuid() + "!head\" class=\"tree-head\">");
-			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
-			if(tcs != null)
-				tcs.redraw(out);		
-			wh.write("</table>");
-			wh.write("</div>");
+
+		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tree.Tree\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
+
+		if(self.getTreecols() != null){
+			wh.write("<div id=\"").write(self.getUuid()).write("!head\" class=\"tree-head\">")
+				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
+				.writeln(self.getTreecols())
+				.write("</table></div>");
 		}
-		wh.write("<div id=\"" + self.getUuid() + "!body\" class=\"tree-body\">");
-		wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">" );
-		if(tc != null)
-			tc.redraw(out);		
-		wh.write("</table>");
-		wh.write("</div>");		
-		if(!(self.getTreefoot() == null)){
-			wh.write("<div id=\"" + self.getUuid() + "!foot\" class=\"tree-foot\">");
-			wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
-			if(tf != null)
-				tf.redraw(out);		
-			wh.write("</table>");
-			wh.write("</div>");
+
+		wh.write("<div id=\"").write(self.getUuid()).write("!body\" class=\"tree-body\">")
+			.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
+			.writeln(self.getTreechildren())
+			.write("</table></div>");
+
+		if(self.getTreefoot() != null){
+			wh.write("<div id=\"").write(self.getUuid()).write("!foot\" class=\"tree-foot\">")
+				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
+				.writeln(self.getTreefoot())
+				.write("</table></div>");
 		}
 		wh.write("</div>");
 	}
-
 }

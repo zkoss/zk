@@ -42,7 +42,5 @@ public class DecimalboxDefault implements ComponentRenderer {
 		wh.write("<input id=\"").write(uuid).write("\"");
         wh.write(" z.type=\"zul.widget.Dcbox\"");
         wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("/>");
-        wh.writeln();
 	}
-
 }

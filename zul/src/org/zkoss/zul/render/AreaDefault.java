@@ -40,7 +40,5 @@ public class AreaDefault implements ComponentRenderer {
 		final Area self = (Area) comp;
 		wh.write("<area id=\"").write(self.getUuid()).write(
 				"\" z.type=\"Area\"").write(self.getOuterAttrs()).write("/>");
-		wh.writeln();
 	}
-
 }

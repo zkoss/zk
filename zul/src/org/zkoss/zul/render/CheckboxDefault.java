@@ -49,6 +49,5 @@ public class CheckboxDefault implements ComponentRenderer {
 		wh.write(self.getLabelAttrs()).write(">").write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
 		wh.write("</label></span>");
-		wh.writeln();
 	}
 }

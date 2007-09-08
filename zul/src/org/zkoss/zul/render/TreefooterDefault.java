@@ -42,13 +42,12 @@ public class TreefooterDefault implements ComponentRenderer {
 		final Treefooter self = (Treefooter) comp;
 		
 		wh.write("<td id=\"").write(self.getUuid()).write('"')
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>')
 			.write(self.getImgTag());
 
 		new Out(self.getLabel()).render(out);
 
-		wh.write('>')		
-			.writeChildren(self)
+		wh.writeChildren(self)
 			.writeln("</td>");
 	}
 }

@@ -50,12 +50,9 @@ public class DateboxDefault implements ComponentRenderer {
 		wh.write(uuid).write("!btn\" class=\"rbtnbk\"><img src=\"");
 		wh.write(exec.encodeURL(self.getImage()));
 		wh.write("\"");
-		if (self.isButtonVisible())
-			wh.write("");
-		else wh.write(" style=\"display:none\"");
+		if (!self.isButtonVisible())
+			wh.write(" style=\"display:none\"");
 		wh.write("/></span><div id=\"").write(uuid);
 		wh.write("!pp\" class=\"dateboxpp\" style=\"display:none\" tabindex=\"-1\"></div></span>");
-		wh.writeln();
 	}
-
 }

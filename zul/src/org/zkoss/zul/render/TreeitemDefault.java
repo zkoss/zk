@@ -36,11 +36,6 @@ import org.zkoss.zul.Treerow;
  * @since 3.0.0
  */
 public class TreeitemDefault implements ComponentRenderer {
-/**
-<c:set var="self" value="${requestScope.arg.self}"/>
-${z:redraw(self.treerow, null)}
-${z:redraw(self.treechildren, null)}
- */
 	public void render(Component comp, Writer out) throws IOException {		
 		final Treeitem self = (Treeitem) comp;
 		new SmartWriter(out)

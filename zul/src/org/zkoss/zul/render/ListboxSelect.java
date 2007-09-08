@@ -41,21 +41,18 @@ public class ListboxSelect implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Listbox self = (Listbox)comp;
 		final String uuid = self.getUuid();
-		wh.write("<select id=\"").write(uuid).write("\" z.type=\"zul.sel.Lisel\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+		wh.write("<select id=\"").write(uuid).write("\" z.type=\"zul.sel.Lisel\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+
 		for (Iterator it = self.getItems().iterator(); it.hasNext();) {
 			final Listitem item = (Listitem)it.next();
-			wh.write("<option id=\"").write(item.getUuid()).write("\"").write(item.getOuterAttrs()).write(item.getInnerAttrs()).writeln(">");
+			wh.write("<option id=\"").write(item.getUuid()).write("\"")
+				.write(item.getOuterAttrs()).write(item.getInnerAttrs()).write(">");
 			new Out(item.getLabel()).setMaxlength(self.getMaxlength()).render(out);
-			wh.write("</option>");
+			wh.writeln("</option>");
 		}
+
 		wh.write("</select>");
-		/*
-		<select id="${self.uuid}" z.type="zul.sel.Lisel"${self.outerAttrs}${self.innerAttrs}>
-		<c:forEach var="item" items="${self.items}">
-		<option id="${item.uuid}"${item.outerAttrs}${item.innerAttrs}><c:out value="${item.label}" maxlength="${self.maxlength}"/></option>
-		</c:forEach><%-- for better performance, we don't use z:redraw --%>
-		</select>
-		*/
 	}
 
 }

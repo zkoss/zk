@@ -20,7 +20,6 @@ package org.zkoss.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ListIterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
@@ -53,15 +52,9 @@ public class ListboxPaging implements ComponentRenderer {
 		wh.write("<tbody>").write(self.getListhead()).write("</tbody>");
 
 		//body
-		wh.write("<tbody id=\"").write(uuid).write("!cave\">");
-		int i = self.getVisibleBegin();
-		if (i < self.getItems().size()) {
-			ListIterator it = self.getItems().listIterator(i);
-			for (int end = self.getVisibleEnd(); i <= end && it.hasNext(); i++) {
-				((Component)it.next()).redraw(out);
-			}
-		}
-		wh.write("</tbody>");
+		wh.write("<tbody id=\"").write(uuid).writeln("!cave\">")
+			.write(self.getItems(), self.getVisibleBegin(), self.getVisibleEnd())
+			.writeln("</tbody>");
 
 		//Footer
 		wh.write("<tbody class=\"grid-foot\">").write(self.getListfoot())
