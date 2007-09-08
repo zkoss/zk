@@ -48,39 +48,35 @@ public class Groupbox3d implements ComponentRenderer {
 		wh.write("<table id=\"").write(uuid).write("\" z.type=\"zul.widget.Grbox\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write(">\n<tr valign=\"top\"><td>");
-		String gcExtStyle = "";
+		String gcExtStyle;
 		if (caption != null) {
 			wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
-			wh.write("<tr><td class=\"").write(look).write("tl\"></td>");
-			wh.writeln("<td colspan=\"3\" class=\"").write(look).write("tm\"></td>");
-			wh.writeln("<td class=\"").write(look).write("tr\"></td></tr>");
+			wh.write("<tr><td class=\"").write(look).writeln("tl\"></td>");
+			wh.write("<td colspan=\"3\" class=\"").write(look).writeln("tm\"></td>");
+			wh.write("<td class=\"").write(look).writeln("tr\"></td></tr>");
 
-			wh.writeln("<tr height=\"22\"><td class=\"").write(look).write("ml\"></td>");
-			wh.writeln("<td width=\"3\" class=\"").write(look).write("mm\"></td>");
+			wh.write("<tr height=\"22\"><td class=\"").write(look).writeln("ml\"></td>");
+			wh.write("<td width=\"3\" class=\"").write(look).writeln("mm\"></td>");
 			wh.write("<td class=\"").write(look).write("mm\">");
-
 			caption.redraw(out);
-
 			wh.writeln("</td>");
-			wh.writeln("<td width=\"3\" class=\"").write(look).write("mm\"></td>");
-			wh.writeln("<td class=\"").write(look).write("mr\"></td></tr>");
-			wh.writeln("<tr><td colspan=\"5\" class=\"").write(look).write("b\"></td></tr>");
+
+			wh.write("<td width=\"3\" class=\"").write(look).writeln("mm\"></td>");
+			wh.write("<td class=\"").write(look).writeln("mr\"></td></tr>");
+
+			wh.write("<tr><td colspan=\"5\" class=\"").write(look).writeln("b\"></td></tr>");
 			wh.write("</table>");
-			gcExtStyle =  "border-top:0;";
+			gcExtStyle = "border-top:0;";
+		} else {
+			gcExtStyle = "";
 		}
 		
 		String cs = self.getContentStyle();
-		if (cs != null) {
-			gcExtStyle += cs;
-		}
+		if (cs != null) gcExtStyle += cs;
 		
-		wh.write("<div id=\"");
-		wh.write(uuid);
-		wh.write("!slide\"");
-		if (!self.isOpen()) {
+		wh.write("<div id=\"").write(uuid).write("!slide\"");
+		if (!self.isOpen())
 			wh.write(" style=\"display:none\" ");
-		}
-
 		wh.write(">");
 
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"")
@@ -96,13 +92,13 @@ public class Groupbox3d implements ComponentRenderer {
 		wh.write("</div></div>");
 
 		// shadow
-		wh.write("<table id=\"").write(self.getUuid());
-		wh.writeln("!sdw\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");
-		wh.write("<tr><td class=\"").write(look).write("shdl\"></td>");
-		wh.write("<td class=\"").write(look).write("shdm\"><img width=\"1\" height=\"1\" src=\"");
-		wh.write(exec.encodeURL("~./img/spacer.gif"));
-		wh.writeln("\"/></td>");
-		wh.writeln("<td class=\"").write(look).write("shdr\"></td>");
+		wh.write("<table id=\"").write(self.getUuid())
+			.writeln("!sdw\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");
+		wh.write("<tr><td class=\"").write(look).writeln("shdl\"></td>");
+		wh.write("<td class=\"").write(look).write("shdm\"><img width=\"1\" height=\"1\" src=\"")
+			.write(exec.encodeURL("~./img/spacer.gif"))
+			.writeln("\"/></td>");
+		wh.write("<td class=\"").write(look).writeln("shdr\"></td>");
 		wh.write("</tr></table></td></tr>\n</table>");
 	}
 }
