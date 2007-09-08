@@ -52,11 +52,8 @@ public class GridPaging implements ComponentRenderer {
 			.writeln(self.getFoot())
 			.write("</tbody></table>");
 
-		wh.write("<div id=\"").write(uuid).write("!pgi\" class=\"grid-pgi\">");
-		if (self.getPaging() != null) {
-			self.getPaging().redraw(out);
-		}
-		wh.write("</div></div></div>");
+		wh.write("<div id=\"").write(uuid).write("!pgi\" class=\"grid-pgi\">")
+			.write(self.getPaging())
+			.write("</div></div></div>");
 	}
-
 }
