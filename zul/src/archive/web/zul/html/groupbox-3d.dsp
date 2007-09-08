@@ -19,25 +19,26 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
+<c:set var="tscls" value="${self.captionSclass}-"/>
 <table id="${self.uuid}" z.type="zul.widget.Grbox"${self.outerAttrs}${self.innerAttrs}>
 <tr valign="top">
 	<td>
 <c:if test="${!empty self.caption}">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td class="groupbox-3d-tl"></td>
-	<td colspan="3" class="groupbox-3d-tm"></td>
-	<td class="groupbox-3d-tr"></td>
+	<td class="${c:cat(tscls,'tl')}"></td>
+	<td colspan="3" class="${c:cat(tscls,'tm')}"></td>
+	<td class="${c:cat(tscls,'tr')}"></td>
 </tr>
 <tr height="22">
-	<td class="groupbox-3d-ml"></td>
-	<td width="3" class="groupbox-3d-mm"></td>
-	<td class="groupbox-3d-mm">${z:redraw(self.caption, null)}</td>
-	<td width="3" class="groupbox-3d-mm"></td>
-	<td class="groupbox-3d-mr"></td>
+	<td class="${c:cat(tscls,'ml')}"></td>
+	<td width="3" class="${c:cat(tscls,'mm')}"></td>
+	<td class="${c:cat(tscls,'mm')}">${z:redraw(self.caption, null)}</td>
+	<td width="3" class="${c:cat(tscls,'mm')}"></td>
+	<td class="${c:cat(tscls,'mr')}"></td>
 </tr>
 <tr>
-	<td colspan="5" class="groupbox-3d-b"></td>
+	<td colspan="5" class="${c:cat(tscls,'b')}"></td>
 </tr>
 </table>
 </c:if>
@@ -50,9 +51,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%-- shadow --%>
 <table id="${self.uuid}!sdw" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
- <td class="groupbox-3d-shdl"></td>
- <td class="groupbox-3d-shdm"><img width="1" height="1" src="${c:encodeURL('~./img/spacer.gif')}"/></td><%-- it must have something --%>
- <td class="groupbox-3d-shdr"></td>
+ <td class="${c:cat(tscls,'shdl')}"></td>
+ <td class="${c:cat(tscls,'shdm')}"><img width="1" height="1" src="${c:encodeURL('~./img/spacer.gif')}"/></td><%-- it must have something --%>
+ <td class="${c:cat(tscls,'shdr')}"></td>
 </tr>
 </table>
 	</td>
