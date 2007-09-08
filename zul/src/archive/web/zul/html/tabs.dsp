@@ -19,7 +19,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<thead id="${self.uuid}" z.type="zul.tab.Tabs"${self.outerAttrs}${self.innerAttrs}>
+<<c:set var="look" value="${self.tabbox.tabLook}-"/>
+thead id="${self.uuid}" z.type="zul.tab.Tabs"${self.outerAttrs}${self.innerAttrs}>
 <tr><td>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr valign="bottom">
@@ -27,7 +28,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%-- prefix column  --%>
 <td><table border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td class="tab-3d-first"></td>
+	<td class="${c:cat(look,'first')}"></td>
 </tr>
 </table></td>
 
@@ -40,8 +41,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%-- postfix column  --%>
 <td><table border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td class="tab-3d-last1" id="${self.uuid}!last"></td>
-	<td class="tab-3d-last2"></td>
+	<td class="${c:cat(look,'last1')}" id="${self.uuid}!last"></td>
+	<td class="${c:cat(look,'last2')}"></td>
 </tr>
 </table></td>
 	</tr>

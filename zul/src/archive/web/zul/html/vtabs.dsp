@@ -19,6 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
+<c:set var="look" value="${self.tabbox.tabLook}-"/>
 <td id="${self.uuid}" align="right" z.type="zul.tab.Tabs"${self.outerAttrs}${self.innerAttrs}>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 
@@ -26,7 +27,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <tr>
 <td align="right"><table border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td class="tab-v3d-first"></td>
+	<td class="${c:cat(look,'first')}"></td>
 </tr>
 </table></td>
 </tr>
@@ -41,10 +42,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <tr>
 <td align="right"><table border="0" cellpadding="0" cellspacing="0">
 <tr id="${self.uuid}!last">
-	<td class="tab-v3d-last1"></td>
+	<td class="${c:cat(look,'last1')}"></td>
 </tr>
 <tr>
-	<td class="tab-v3d-last2"></td>
+	<td class="${c:cat(look,'last2')}"></td>
 </tr>
 </table></td>
 </tr>
