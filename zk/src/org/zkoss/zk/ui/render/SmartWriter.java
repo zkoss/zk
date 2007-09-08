@@ -1,4 +1,4 @@
-/* WriterHelper.java
+/* SmartWriter.java
 
 {{IS_NOTE
 	Purpose:
@@ -18,29 +18,51 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.render;
 
+import java.util.Iterator;
 import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 
 /**
- * A helper class that is used to simplify the generation
- * of the output when {@link ComponentRenderer} is implemented.
+ * A writer that is used to simplify the output generation
+ * of compoennts.
+ * It is mainly used to implement {@link ComponentRenderer}.
+ *
+ * <p>Spec Note: we cannot extend it from {@link Writer},
+ * since we want {@link #write(String)} to return this object,
+ * such that the user can write<br>
+ * <code>sw.write("<div id=\"").write(comp.getUuid()).write('"')</code>
  *
  * @author Dennis.Chen
+ * @author tomyeh
  * @since 3.0.0
  */
-public final class WriterHelper {
+public final class SmartWriter /*extends Writer*/ {
+	/** For better performance we don't get the system default
+	 * (from the line.separator property).
+	 */
+	private static final String LF = "\n";
+
 	private final Writer _w;
 	
-	public WriterHelper(Writer writer){
+	public SmartWriter(Writer writer){
 		_w = writer;
 	}
 
+	//Writer//
+	public void close() throws IOException {
+		_w.close();
+	}
+	public void flush() throws IOException {
+		_w.flush();
+	}
+
+	//extra//
 	/** Write a component.
 	 * It works even if the component is null.
 	 */
-	public WriterHelper write(Component comp) throws IOException {
+	public SmartWriter write(Component comp) throws IOException {
 		if (comp != null)
 			comp.redraw(_w);
 		return this;
@@ -48,9 +70,17 @@ public final class WriterHelper {
 	/** Write a component.
 	 * It works even if the component is null.
 	 */
-	public WriterHelper writeln(Component comp)
+	public SmartWriter writeln(Component comp)
 	throws IOException {
-		return write(comp).write("\n");
+		return write(comp).write(LF);
+	}
+
+	/** Writes all children (excluding itself).
+	 */
+	public SmartWriter writeChildren(Component comp) throws IOException {
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
+			((Component)it.next()).redraw(_w);
+		return this;
 	}
 
 	/**
@@ -61,7 +91,7 @@ public final class WriterHelper {
 	 * @return this object
 	 * @throws IOException if failed to write
 	 */
-	public WriterHelper write(String str) throws IOException{
+	public SmartWriter write(String str) throws IOException{
 		if (str != null) _w.write(str);
 		return this;
 	}
@@ -70,8 +100,8 @@ public final class WriterHelper {
 	 * @return this object
 	 * @throws IOException if failed to write
 	 */
-	public WriterHelper writeln() throws IOException{
-		_w.write("\n");
+	public SmartWriter writeln() throws IOException{
+		_w.write(LF);
 		return this;
 	}
 	
@@ -83,10 +113,10 @@ public final class WriterHelper {
 	 * @return this object
 	 * @throws IOException if failed to write
 	 */
-	public WriterHelper writeln(String str) throws IOException{
+	public SmartWriter writeln(String str) throws IOException{
 		if (str != null) {
 			_w.write(str);
-			_w.write("\n");
+			_w.write(LF);
 		}
 		return this;
 	}
@@ -101,7 +131,7 @@ public final class WriterHelper {
 	 * @return this object
 	 * @throws IOException if failed to write
 	 */
-	public WriterHelper write(String str, boolean trim) throws IOException {
+	public SmartWriter write(String str, boolean trim) throws IOException {
 		if (str != null)
 			_w.write(trim ? str.trim(): str);
 		return this;
@@ -116,53 +146,60 @@ public final class WriterHelper {
 	 * @return this object
 	 * @throws IOException if failed to write
 	 */
-	public WriterHelper writeln(String str, boolean trim) throws IOException {
+	public SmartWriter writeln(String str, boolean trim) throws IOException {
 		if (str != null) {
 			_w.write(trim ? str.trim(): str);
-			_w.write("\n");
+			_w.write(LF);
 		}
 		return this;
 	}
 
 	/** Writes a boolean.
 	 */
-	public WriterHelper write(boolean b) throws IOException {
+	public SmartWriter write(boolean b) throws IOException {
 		_w.write(Boolean.toString(b));
 		return this;
 	}
 	/** Writes a char.
 	 */
-	public WriterHelper write(char c) throws IOException {
+	public SmartWriter write(char c) throws IOException {
 		_w.write(Character.toString(c));
+		return this;
+	}
+	/** Writes a char with a line feed.
+	 */
+	public SmartWriter writeln(char c) throws IOException {
+		_w.write(Character.toString(c));
+		_w.write(LF);
 		return this;
 	}
 	/** Writes a byte.
 	 */
-	public WriterHelper write(byte v) throws IOException {
+	public SmartWriter write(byte v) throws IOException {
 		_w.write(Byte.toString(v));
 		return this;
 	}
 	/** Writes a short.
 	 */
-	public WriterHelper write(short v) throws IOException {
+	public SmartWriter write(short v) throws IOException {
 		_w.write(Short.toString(v));
 		return this;
 	}
 	/** Writes an integer.
 	 */
-	public WriterHelper write(int v) throws IOException {
+	public SmartWriter write(int v) throws IOException {
 		_w.write(Integer.toString(v));
 		return this;
 	}
 	/** Writes a float.
 	 */
-	public WriterHelper write(float v) throws IOException {
+	public SmartWriter write(float v) throws IOException {
 		_w.write(Float.toString(v));
 		return this;
 	}
 	/** Writes a double.
 	 */
-	public WriterHelper write(double v) throws IOException {
+	public SmartWriter write(double v) throws IOException {
 		_w.write(Double.toString(v));
 		return this;
 	}
@@ -170,7 +207,7 @@ public final class WriterHelper {
 	/** Writes an attribute.
 	 * The output is generated only if val is not null (and not empty).
 	 */
-	public WriterHelper writeAttr(String name, Object val)
+	public SmartWriter writeAttr(String name, Object val)
 	throws IOException {
 		if (val != null
 		&& (!(val instanceof String) || ((String)val).length() != 0))

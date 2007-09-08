@@ -25,18 +25,21 @@ import org.zkoss.xml.XMLs;
 
 /**
  * A utility to simulate DSP's out action.
+ * It is designed to simplify the job to port DSP to
+ * {@link ComponentRenderer}.
  *
  * <p>For example,<br/>
  * <code>new Out(self.getLabel()).setMaxlength(maxlen).render(out);</code>
  *
  * @author jumperchen
+ * @author tomyeh
  * @since 3.0.0 
  */
 public class Out {
 	private String _value;
-	private int _maxlength = 0;
+	private int _maxlength;
 	private boolean _escapeXML = true;
-	private boolean _nbsp = false;
+	private boolean _nbsp;
 
 	public Out(String value) {
 		_value = value;
@@ -48,7 +51,6 @@ public class Out {
 	public boolean getEscapeXML() {
 		return _escapeXML;
 	}
-
 	/**
 	 * Sets whether to escape XML.
 	 */
@@ -59,12 +61,11 @@ public class Out {
 
 	/**
 	 * Returns whether to generate &amp;nbsp; if the content is empty.
-	 * Default: true.
+	 * Default: false.
 	 */
 	public boolean getNbsp() {
 		return _escapeXML;
 	}
-
 	/**
 	 * Sets whether to generate &amp;nbsp; if the content is empty.
 	 */
@@ -74,7 +75,7 @@ public class Out {
 	}
 
 	/**
-	 * Returns the value. Default: null.
+	 * Returns the value.
 	 */
 	public String getValue() {
 		return _value;
@@ -89,13 +90,11 @@ public class Out {
 
 	/**
 	 * Returns the maxlength of bytes to output.
-	 * <p>
-	 * Default: 0 (no limit).
+	 * <p>Default: 0 (no limit).
 	 */
 	public int getMaxlength() {
 		return _maxlength;
 	}
-
 	/**
 	 * Sets the maxlength to output.
 	 */
