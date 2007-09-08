@@ -79,7 +79,7 @@ public class TabDefaultV implements ComponentRenderer {
 				.write("<td class=\"").write(tscls).write("ml").write(suffix).writeln("\"></td>")
 				.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
 				.write("<td align=\"center\" valign=\"buttom\" class=\"").write(tscls).write("mm").write(suffix)
-				.write("\"><img id=\""+ self.getUuid()).write("!close\" src=\"")
+				.write("\"><img id=\"").write(self.getUuid()).write("!close\" src=\"")
 				.write(exec.encodeURL("~./zul/img/close-off.gif")).writeln("\"/></td>")
 				.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
 				.write("<td class=\"").write(tscls).write("mr").write(suffix).writeln("\"></td></tr>");

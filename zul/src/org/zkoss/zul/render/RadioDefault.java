@@ -36,16 +36,17 @@ public class RadioDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Radio self = (Radio)comp;
 		final String uuid = self.getUuid();
-		wh.write("<span id=\"").write(uuid).write("\" z.type=\"zul.widget.Radio\" ");
-		wh.write(self.getOuterAttrs()).write(">").write("<input type=\"radio\" id=\""+uuid+"!real\"");
-		wh.write(self.getInnerAttrs()).write("/>");
-		wh.write("<label for=\""+uuid+"!real\"").write(self.getLabelAttrs()).write(">");
-		wh.write(self.getImgTag()).write(self.getLabel()).writeln("</label>");
-		if(self.getRadiogroup() != null
-		&& self.getRadiogroup().getOrient().equals("vertical")) {
-			wh.write("<br/>");
-		}
-		wh.writeln("</span>");
-	}
+		wh.write("<span id=\"").write(uuid).write("\" z.type=\"zul.widget.Radio\"")
+			.write(self.getOuterAttrs()).write(">").write("<input type=\"radio\" id=\"")
+			.write(uuid).write("!real\"").write(self.getInnerAttrs()).write("/>");
+		wh.write("<label for=\"").write(uuid).write("!real\"")
+			.write(self.getLabelAttrs()).write(">")
+			.write(self.getImgTag()).write(self.getLabel()).write("</label>");
 
+		if(self.getRadiogroup() != null
+		&& self.getRadiogroup().getOrient().equals("vertical"))
+			wh.writeln("<br/>");
+
+		wh.write("</span>");
+	}
 }

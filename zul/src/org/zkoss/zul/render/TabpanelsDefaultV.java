@@ -1,4 +1,4 @@
-/* TabpanelsDefault.java
+/* TabpanelsDefaultV.java
 
 {{IS_NOTE
 	Purpose:
@@ -25,32 +25,25 @@ import java.util.Iterator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
+import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanels;
 
 /**
- * {@link Tabpanels}'s default mold.
- * It forwards the vertical orient to {@link TabpanelsDefaultV}.
- *
+ * {@link Tabpanels}'s default mold for the vertical orient only.
+ * 
  * @author robbiecheng
  * 
  * @since 3.0.0
  */
 
-public class TabpanelsDefault implements ComponentRenderer {
-	private final TabpanelsDefaultV _vpanels = new TabpanelsDefaultV();
-
+public class TabpanelsDefaultV implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
-		final Tabpanels self = (Tabpanels) comp;
-		if ("vertical".equals(self.getTabbox().getOrient())) {
-			_vpanels.render(comp, out);
-			return;
-		}
-
 		final SmartWriter wh = new SmartWriter(out);
+		final Tabpanels self = (Tabpanels) comp;
 
-		wh.write("<tbody id=\"").write(self.getUuid()).write("\"")
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">")
+		wh.write("<td id=\"").write(self.getUuid()).write("\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
 			.writeChildren(self)
-			.writeln("</tbody>");
+			.writeln("</td>");
 	}
 }

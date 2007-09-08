@@ -1,4 +1,4 @@
-/* TabboxDefault.java
+/* TabboxDefaultV.java
 
 {{IS_NOTE
 	Purpose:
@@ -29,31 +29,26 @@ import org.zkoss.zul.Tabs;
 
 /**
  * {@link Tabbox}'s default mold.
- * It forwards the vertical orient to {@link TabboxDefaultV}.
  * 
  * @author robbiecheng
  * 
  * @since 3.0.0
  */
-public class TabboxDefault implements ComponentRenderer {
-	private final TabboxDefaultV _vtabbox = new TabboxDefaultV();
-
+public class TabboxDefaultV implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
-		final Tabbox self = (Tabbox) comp;
-		if("vertical".equals(self.getOrient())){
-			_vtabbox.render(comp, out);
-			return;
-		}
-
 		final SmartWriter wh = new SmartWriter(out);
+		final Tabbox self = (Tabbox) comp;
 		final Tabs tabs = self.getTabs();
-		
+
 		wh.write("<table id=\"").write(self.getUuid()).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write(" z.tabs=\"").write(tabs==null ?null:tabs.getUuid())
-			.writeln("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
+			.writeln("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
+
+		wh.write("<tr valign=\"top\">")
 			.write(tabs)
 			.write(self.getTabpanels())
+			.writeln("</tr>")
 			.write("</table>");
 	}
 }

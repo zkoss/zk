@@ -34,49 +34,26 @@ import org.zkoss.zul.Toolbarbutton;
  * @since 3.0.0
  */
 public class ToolbarbuttonDefault implements ComponentRenderer {
-	/**
-<c:set var="self" value="${requestScope.arg.self}"/>
-<a id="${self.uuid}" z.type="zul.widget.Tbtn" ${self.outerAttrs}${self.innerAttrs}>
-<c:choose>
-<c:when test="${self.dir == 'reverse'}">
-	<c:out value="${self.label}"/>
-	<c:if test="${self.imageAssigned and self.orient == 'vertical'}">
-	  <br/>
-	</c:if>
-	${self.imgTag}
-</c:when>
-<c:otherwise>
-	${self.imgTag}
-	<c:if test="${self.imageAssigned and self.orient == 'vertical'}">
-	  <br/>
-	</c:if>
-	<c:out value="${self.label}"/>
-</c:otherwise>
-</c:choose></a>
-	 */
+
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Toolbarbutton self = (Toolbarbutton) comp;
 		
-		wh.write("<a id=\"" + self.getUuid() + "\" z.type=\"zul.widget.Tbtn\"" + self.getOuterAttrs() + self.getInnerAttrs() + ">");
+		wh.write("<a id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Tbtn\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
+
 		if (self.getDir().equals("reverse")){
 			new Out(self.getLabel()).render(out);
-			if (self.isImageAssigned() && self.getOrient().equals("vertical")){
-				wh.write("<br/>");
-			}
+			if (self.isImageAssigned() && self.getOrient().equals("vertical"))
+				wh.writeln("<br/>");
 			wh.write(self.getImgTag());
-		}
-		else{
+		} else{
 			wh.write(self.getImgTag());
-			if (self.isImageAssigned() && self.getOrient().equals("vertical")){
-				wh.write("<br/>");				
-			}
+			if (self.isImageAssigned() && self.getOrient().equals("vertical"))
+				wh.writeln("<br/>");				
 			new Out(self.getLabel()).render(out);
 		}		
+
 		wh.write("</a>");
-
 	}
-	
-
-
 }

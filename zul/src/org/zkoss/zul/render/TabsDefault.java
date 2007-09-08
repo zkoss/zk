@@ -43,7 +43,7 @@ public class TabsDefault implements ComponentRenderer {
 		final Tabs self = (Tabs)comp;
 		final Tabbox tabbox = self.getTabbox();
 
-		if(tabbox.getOrient().equals("vertical")) {
+		if("vertical".equals(tabbox.getOrient())) {
 			_vtabs.render(comp, out);
 			return;
 		}

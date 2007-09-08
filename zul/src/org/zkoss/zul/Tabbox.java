@@ -190,24 +190,36 @@ public class Tabbox extends XulElement {
 	 * {@link Tab} to provide the style for tabs.
 	 *
 	 * <p>If the style class ({@link #getSclass}) of this tab box is not
-	 * defined, "tab-3d" and "tab-v3d" are returned for horizontal and vertical
+	 * defined and the mold is default,
+	 * "tab-3d" and "tab-v3d" are returned for horizontal and vertical
 	 * orient, respectively.
-	 * If the style class is defined, say "simple",
-	 * then this method return "tab-simple" and "tab-vsimple" for
-	 * horizontal and vertical orient, respectively.
+	 * If the style class not defined and the mold is accordion,
+	 * "tabaccd-3d" and "tabaccd-v3d" returned (note: accordion doesn't support vertical yet).
 	 *
-	 * <p>If the mold is "default", then, {@link Tab} generates
+	 * <p>If the style class is defined, say "simple",
+	 * then this method return "tab-simple" and "tab-vsimple" for
+	 * horizontal and vertical orient, respectively, and "tabacc-simple" for horizontal accordion.
+	 *
+	 * <p>If the mold is not "default" nor "accordion", this method returns
+	 * "tab" + getMold() + "-" + (vertical ? 'v': '') + getOrient().
+	 *
+	 * <p>With this method, {@link Tab} and {@link Tabpanel} generate
+	 * the style class accordingly. For example, if the mold is "default"
+	 * and the style class not defined, then
 	 * "tab-3d-tl-sel" for the top-left corner of the selected tab,
 	 * "tab-3d-tm-uns" for the top-middle border of the
 	 * non-selected tab, and so on.
 	 *
-	 * <p>It is currently used only the default mold (with both vertical
-	 * and horizontal orientation).
-	 *
 	 * @since 3.0,0
 	 */
 	public String getTabSclass() {
-		final String prefix = "vertical".equals(_orient) ? "tab-v": "tab-";
+		final String mold = getMold();
+		String prefix = "default".equals(mold) ? "tab-":
+				"accordion".equals(mold) ? "tabaccd-": "tab" + mold + '-';
+
+		if ("vertical".equals(_orient))
+			prefix += 'v';
+
 		final String scls = getSclass();
 		return scls != null && scls.length() > 0 ? prefix + scls: prefix + "3d";
 	}
