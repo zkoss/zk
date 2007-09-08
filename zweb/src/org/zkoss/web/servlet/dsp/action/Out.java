@@ -31,9 +31,9 @@ import org.zkoss.xml.XMLs;
  */
 public class Out extends AbstractAction {
 	private String _value = null;
-	private int _maxlength = 0;
+	private int _maxlength;
 	private boolean _escapeXML = true;
-	private boolean _nbsp = false;
+	private boolean _nbsp;
 
 	/** Returns whether to escape XML.
 	 * Default: true.
@@ -47,7 +47,7 @@ public class Out extends AbstractAction {
 		_escapeXML = escapeXML;
 	}
 	/** Returns whether to generate &amp;nbsp; if the content is empty.
-	 * Default: true.
+	 * Default: false.
 	 */
 	public boolean getNbsp() {
 		return _escapeXML;
