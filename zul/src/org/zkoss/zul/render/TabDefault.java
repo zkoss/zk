@@ -54,7 +54,7 @@ public class TabDefault implements ComponentRenderer {
 
 		final SmartWriter wh = new SmartWriter(out);
 		final Execution exec = Executions.getCurrent();
-		final String tscls = tabbox.getTabSclass() + '-';
+		final String look = tabbox.getTabLook() + '-';
 		final String suffix = self.isSelected() ? "-sel" : "-uns";
 
 		final int colspan = self.isClosable() ? 4 : 3;
@@ -65,15 +65,15 @@ public class TabDefault implements ComponentRenderer {
 			.write(self.getLinkedPanel().getUuid()).write("\">");
 
 		wh.writeln("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">")
-			.write("<tr><td class=\"").write(tscls).write("tl").write(suffix).writeln("\"></td>")
+			.write("<tr><td class=\"").write(look).write("tl").write(suffix).writeln("\"></td>")
 			.write("<td colspan=\"").write(colspan)
-			.write("\" class=\"").write(tscls).write("tm").write(suffix).writeln("\"></td>")
-			.write("<td class=\"").write(tscls).write("tr").write(suffix).writeln("\"></td></tr>");
+			.write("\" class=\"").write(look).write("tm").write(suffix).writeln("\"></td>")
+			.write("<td class=\"").write(look).write("tr").write(suffix).writeln("\"></td></tr>");
 
 		wh.write("<tr height=\"").write(Strings.isBlank(self.getHeight()) ? "22": self.getHeight()).writeln("\">")
-			.write("<td class=\"").write(tscls).write("ml").write(suffix).writeln("\"></td>")
-			.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
-			.write("<td align=\"center\" class=\"").write(tscls).write("mm").write(suffix)
+			.write("<td class=\"").write(look).write("ml").write(suffix).writeln("\"></td>")
+			.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
+			.write("<td align=\"center\" class=\"").write(look).write("mm").write(suffix)
 			.write("\"><a href=\"javascript:;\"").write(" id=\"").write(self.getUuid()).write("!a\">")
 			.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
@@ -81,18 +81,18 @@ public class TabDefault implements ComponentRenderer {
 
 		if (self.isClosable()) {
 			// Bug 1780044: width cannot (and need not) be specified
-			wh.write("<td align=\"right\" class=\"").write(tscls).write("mm").write(suffix)
+			wh.write("<td align=\"right\" class=\"").write(look).write("mm").write(suffix)
 				.write("\"><img id=\"")
 				.write(self.getUuid()).write("!close\" src=\"")
 				.write(exec.encodeURL("~./zul/img/close-off.gif"))
 				.writeln("\"/></td>");
 		}
 
-		wh.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
-			.write("<td class=\"").write(tscls).write("mr").write(suffix).writeln("\"></td></tr>");
+		wh.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
+			.write("<td class=\"").write(look).write("mr").write(suffix).writeln("\"></td></tr>");
 
-		wh.write("<tr><td class=\"").write(tscls).write("bl").write(suffix).writeln("\"></td>")
-			.write("<td colspan=\"").write(colspan).write("\" class=\"").write(tscls).write("bm").write(suffix).writeln("\"></td>")
-			.write("<td class=\"").write(tscls).write("br").write(suffix).writeln("\"></td></tr></table></td>");
+		wh.write("<tr><td class=\"").write(look).write("bl").write(suffix).writeln("\"></td>")
+			.write("<td colspan=\"").write(colspan).write("\" class=\"").write(look).write("bm").write(suffix).writeln("\"></td>")
+			.write("<td class=\"").write(look).write("br").write(suffix).writeln("\"></td></tr></table></td>");
 	}
 }

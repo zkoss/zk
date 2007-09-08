@@ -49,7 +49,7 @@ public class TabsDefault implements ComponentRenderer {
 		}
 
 		final SmartWriter wh = new SmartWriter(out);		
-		final String tscls = tabbox.getTabSclass() + '-';
+		final String look = tabbox.getTabLook() + '-';
 
 		wh.write("<thead id=\"").write(self.getUuid()).write("\" z.type=\"zul.tab.Tabs\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>')
@@ -58,7 +58,7 @@ public class TabsDefault implements ComponentRenderer {
 		
 		/* prefix column */
 		wh.writeln("<td><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
-		wh.write("<tr><td class=\"").write(tscls).writeln("first\"></td></tr></table></td>");				
+		wh.write("<tr><td class=\"").write(look).writeln("first\"></td></tr></table></td>");				
 
 		wh.writeChildren(self);
 		
@@ -67,9 +67,9 @@ public class TabsDefault implements ComponentRenderer {
 		
 		/* postfix column */		
 		wh.writeln("<td><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
-			.write("<tr><td class=\"").write(tscls).write("last1\" id=\"")
+			.write("<tr><td class=\"").write(look).write("last1\" id=\"")
 			.write(self.getUuid()).writeln("!last\"></td>")
-			.write("<td class=\"").write(tscls).writeln("last2\"></td>")
+			.write("<td class=\"").write(look).writeln("last2\"></td>")
 			.writeln("</tr></table></td></tr></table></td></tr></thead>");
 	}
 }

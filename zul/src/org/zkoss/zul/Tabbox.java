@@ -53,7 +53,7 @@ import org.zkoss.zul.impl.XulElement;
  * </dl>
  *
  * <p>Note: {@link #getSclass} also controls {@link Tabs} and {@link Tab}.
- * Refer to {@link #getTabSclass} for details.
+ * Refer to {@link #getTabLook} for details.
  *
  * @author tomyeh
  */
@@ -186,8 +186,9 @@ public class Tabbox extends XulElement {
 		}
 	}
 
-	/** Returns a portion of the sclass that are used by {@link Tabs} and
-	 * {@link Tab} to provide the style for tabs.
+	/** Returns the look of the {@link Tab} and {@link Tabbox}.
+	 * It is, in fact, a portion of the style class that are used to
+	 * generate the style of {@link Tabs} and {@link Tab}.
 	 *
 	 * <p>If the style class ({@link #getSclass}) of this tab box is not
 	 * defined and the mold is default,
@@ -201,7 +202,7 @@ public class Tabbox extends XulElement {
 	 * horizontal and vertical orient, respectively, and "tabacc-simple" for horizontal accordion.
 	 *
 	 * <p>If the mold is not "default" nor "accordion", this method returns
-	 * "tab" + getMold() + "-" + (vertical ? 'v': '') + getOrient().
+	 * "tab" + getMold() + "-" + (vertical ? 'v': '') + getSclass().
 	 *
 	 * <p>With this method, {@link Tab} and {@link Tabpanel} generate
 	 * the style class accordingly. For example, if the mold is "default"
@@ -212,7 +213,7 @@ public class Tabbox extends XulElement {
 	 *
 	 * @since 3.0,0
 	 */
-	public String getTabSclass() {
+	public String getTabLook() {
 		final String mold = getMold();
 		String prefix = "default".equals(mold) ? "tab-":
 				"accordion".equals(mold) ? "tabaccd-": "tab" + mold + '-';

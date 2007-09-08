@@ -49,7 +49,7 @@ public class TabpanelAccordion implements ComponentRenderer {
 		final Tabpanel self = (Tabpanel) comp;
 		final Tab tab = self.getLinkedTab();
 		final Tabbox tabbox = self.getTabbox();
-		final String tscls = tabbox.getTabSclass() + '-';
+		final String look = tabbox.getTabLook() + '-';
 		final String suffix = self.isSelected() ? "-sel" : "-uns";
 		final String height = Strings.isBlank(self.getHeight()) ? "22" : self.getHeight(); 		
 		
@@ -63,15 +63,15 @@ public class TabpanelAccordion implements ComponentRenderer {
 		if(!Strings.isBlank(tabbox.getPanelSpacing()) && self.getIndex() != 0)
 			wh.write("<tr height=\"").write(tabbox.getPanelSpacing()).writeln("\"><td></td></tr>");
 		
-		wh.write("<tr><td class=\"").write(tscls).write("tl").write(suffix).writeln("\"></td>")
+		wh.write("<tr><td class=\"").write(look).write("tl").write(suffix).writeln("\"></td>")
 			.write("<td colspan=\"").write(tab.isClosable() ? 4:3)
-			.write("\" class=\"").write(tscls).write("tm").write(suffix).writeln("\"></td>")
-			.write("<td class=\"").write(tscls).write("tr").write(suffix).writeln("\"></td></tr>");	
+			.write("\" class=\"").write(look).write("tm").write(suffix).writeln("\"></td>")
+			.write("<td class=\"").write(look).write("tr").write(suffix).writeln("\"></td></tr>");	
 
 		wh.write("<tr height=\"").write(height).write("\"><td class=\"")
-			.write(tscls).write("ml").write(suffix).writeln("\"></td>")
-			.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
-			.write("<td align=\"left\" class=\"").write(tscls).write("mm").write(suffix)
+			.write(look).write("ml").write(suffix).writeln("\"></td>")
+			.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
+			.write("<td align=\"left\" class=\"").write(look).write("mm").write(suffix)
 			.write("\"><a href=\"javascript:;\" id=\"").write(tab.getUuid()).write("!a\">")
 			.write(tab.getImgTag());
 			new Out(tab.getLabel()).render(out);
@@ -79,17 +79,17 @@ public class TabpanelAccordion implements ComponentRenderer {
 
 		if(tab.isClosable()){
 			wh.write("<td width=\"11\" align=\"right\" class=\"")
-			.write(tscls).write("mm").write(suffix).write("\"><img id=\"")
+			.write(look).write("mm").write(suffix).write("\"><img id=\"")
 			.write(self.getUuid()).write("!close\" src=\"")
 			.write(exec.encodeURL("~./zul/img/close-off.gif"))
 			.writeln("\"/></td>");
 		}
 
-		wh.write("<td width=\"3\" class=\"").write(tscls).write("mm").write(suffix).writeln("\"></td>")
-			.write("<td class=\"").write(tscls).write("mr").write(suffix).writeln("\"></td></tr>");
+		wh.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
+			.write("<td class=\"").write(look).write("mr").write(suffix).writeln("\"></td></tr>");
 
 		wh.write("<tr><td colspan=\"").write(tab.isClosable() ? 6:5)
-			.write("\" class=\"").write(tscls).write("b\"></td></tr>\n</table>");
+			.write("\" class=\"").write(look).write("b\"></td></tr>\n</table>");
 
 		wh.write("<div id=\"").write(self.getUuid()).write("!real\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
