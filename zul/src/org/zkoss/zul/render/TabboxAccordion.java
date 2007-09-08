@@ -42,7 +42,7 @@ public class TabboxAccordion implements ComponentRenderer {
 		wh.write("<table id=\"").write(self.getUuid()).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.writeln(" z.accd=\"true\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
-			.write(self.getTabpanels())
+			.writeln(self.getTabpanels())
 			.write("</table>");
 	}
 }

@@ -42,25 +42,21 @@ public class GridPaging implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.grid.Grid\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<div id=\"").write(uuid).write("!paging\" class=\"grid-paging\">");
-		wh.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"grid-btable\">");
-		wh.write("<tbody>");
-		if (self.getColumns() != null) {
-			self.getColumns().redraw(out);
-		}
-		wh.write("</tbody>");
-		if (self.getRows() != null) {
-			self.getRows().redraw(out);
-		}
-		wh.write("<tbody class=\"grid-foot\">");
-		if (self.getFoot() != null) {
-			self.getFoot().redraw(out);
-		}
-		wh.write("</tbody></table>");
+		wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"grid-btable\">")
+			.writeln("<tbody>")
+			.writeln(self.getColumns())
+			.writeln("</tbody>")
+			.writeln(self.getRows());
+
+		wh.writeln("<tbody class=\"grid-foot\">")
+			.writeln(self.getFoot())
+			.write("</tbody></table>");
+
 		wh.write("<div id=\"").write(uuid).write("!pgi\" class=\"grid-pgi\">");
 		if (self.getPaging() != null) {
 			self.getPaging().redraw(out);
 		}
-		wh.writeln("</div></div></div>");
+		wh.write("</div></div></div>");
 	}
 
 }

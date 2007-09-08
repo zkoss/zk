@@ -41,12 +41,5 @@ public class MenuseparatorDefault implements ComponentRenderer {
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		wh.writeln("<td colspan=\"3\"><hr/></td>");
 		wh.writeln("</tr>");
-		/*
-		<tr id="${self.uuid}" z.type="Menusp"${self.outerAttrs}${self.innerAttrs}>
-		<td colspan="3"><hr/></td>
-		</tr>
-		*/
-
 	}
-
 }

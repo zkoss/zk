@@ -48,8 +48,8 @@ public class FileuploadDefault implements ComponentRenderer {
 		wh.write("\" frameborder=\"0\" src=\"");
 		wh.write(exec.encodeURL("~./zul/html/fileuploaddlg.dsp"));
 		wh.write("?dtid=").write(self.getDesktop().getId()).write("&amp;uuid=");
-		wh.write(uuid).write("&amp;max=").write(Integer.toString(self.getNumber())).write("\">");
-		wh.writeln("</iframe></div>");
+		wh.write(uuid).write("&amp;max=").write(Integer.toString(self.getNumber())).writeln("\">");
+		wh.write("</iframe></div>");
 	}
 
 }

@@ -61,22 +61,20 @@ public class TabDefaultV implements ComponentRenderer {
 			.write("<td class=\"").write(look).write("tr").write(suffix).writeln("\"></td>")
 			.write("</tr>");
 
-		wh.write("<tr height=\"22\">")
-			.write("<td class=\"").write(look).write("ml").write(suffix).writeln("\"></td>")
+		wh.write("<tr height=\"22\"><td class=\"").write(look).write("ml").write(suffix).writeln("\"></td>")
 			.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
 			.write("<td align=\"center\" class=\"").write(look).write("mm").write(suffix)
 			.write("\" id=\"").write(self.getUuid()).write("!real\"").write(self.getInnerAttrs())
 			.write("><a href=\"javascript:;\" id=\"").write(self.getUuid()).write("!a\">");
 			wh.write(self.getImgTag());
 			new Out(self.getLabel()).render(out);
-			wh.writeln( "</a></td>");		
+			wh.writeln("</a></td>");
 
 			wh.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")	
 				.write("<td class=\"").write(look).write("mr").write(suffix).writeln("\"></td></tr>");		
 		
 		if(self.isClosable()){
-			wh.writeln("<tr height=\"8\">")
-				.write("<td class=\"").write(look).write("ml").write(suffix).writeln("\"></td>")
+			wh.write("<tr height=\"8\"><td class=\"").write(look).write("ml").write(suffix).writeln("\"></td>")
 				.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
 				.write("<td align=\"center\" valign=\"buttom\" class=\"").write(look).write("mm").write(suffix)
 				.write("\"><img id=\"").write(self.getUuid()).write("!close\" src=\"")

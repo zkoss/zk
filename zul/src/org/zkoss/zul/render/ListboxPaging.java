@@ -42,14 +42,14 @@ public class ListboxPaging implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.sel.Libox\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		
 		wh.write("<div id=\"").write(uuid)
 			.write("!paging\" class=\"listbox-paging\">")
-			.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
+			.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
 
 		//header
-		wh.write("<tbody>").write(self.getListhead()).write("</tbody>");
+		wh.writeln("<tbody>").write(self.getListhead()).writeln("</tbody>");
 
 		//body
 		wh.write("<tbody id=\"").write(uuid).writeln("!cave\">")
@@ -57,39 +57,13 @@ public class ListboxPaging implements ComponentRenderer {
 			.writeln("</tbody>");
 
 		//Footer
-		wh.write("<tbody class=\"grid-foot\">").write(self.getListfoot())
-			.write("</tbody></table>");
+		wh.writeln("<tbody class=\"grid-foot\">").write(self.getListfoot())
+			.write("</tbody>\n</table>");
 
 		//Paging
 		wh.write("<div id=\"").write(uuid)
 			.write("!pgi\" class=\"listbox-pgi\">")
 			.write(self.getPaging())
 			.write("</div></div></div>");
-
-		/*
-		<div id="${self.uuid}" z.type="zul.sel.Libox"${self.outerAttrs}${self.innerAttrs}>
-			<div id="${self.uuid}!paging" class="listbox-paging">
-			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listbox-btable">
-			<tbody>
-		${z:redraw(self.listhead, null)}
-			</tbody>
-	
-			<tbody id="${self.uuid}!cave">
-			<c:forEach var="item" items="${self.items}" begin="${self.visibleBegin}" end="${self.visibleEnd}">
-		${z:redraw(item, null)}
-			</c:forEach>
-			</tbody>
-	
-			<tbody class="grid-foot">
-		${z:redraw(self.listfoot, null)}
-			</tbody>
-			</table>
-			<div id="${self.uuid}!pgi" class="listbox-pgi">
-			${z:redraw(self.paging, null)}
-			</div>
-			</div>
-		</div>
-		*/		
 	}
-
 }

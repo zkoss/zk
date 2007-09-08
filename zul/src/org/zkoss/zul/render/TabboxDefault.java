@@ -52,8 +52,8 @@ public class TabboxDefault implements ComponentRenderer {
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write(" z.tabs=\"").write(tabs==null ?null:tabs.getUuid())
 			.writeln("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
-			.write(tabs)
-			.write(self.getTabpanels())
+			.writeln(tabs)
+			.writeln(self.getTabpanels())
 			.write("</table>");
 	}
 }

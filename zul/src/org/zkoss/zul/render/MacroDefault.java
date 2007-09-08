@@ -38,8 +38,8 @@ public class MacroDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final HtmlMacroComponent self = (HtmlMacroComponent)comp;
 		wh.write("<span id=\"").write(self.getUuid()).write('"');
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.writeChildren(self);
-		wh.writeln("</span>");
+		wh.write("</span>");
 	}
 }

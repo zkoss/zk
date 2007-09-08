@@ -49,16 +49,15 @@ public class WindowDefault implements ComponentRenderer {
 		wh.write("\" z.type=\"zul.wnd.Wnd\" z.autoz=\"true\"");
 		wh.write(self.getOuterAttrs());
 		wh.write(self.getInnerAttrs());
-		wh.writeln(">");
+		wh.write(">");
 
 		final Caption caption = self.getCaption();
 		final String title = self.getTitle(), titlesc = self.getTitleSclass();
 		String wcExtStyle = "";
 		if (caption == null && title.length() == 0) {
 			if (exec.isExplorer() && !exec.isExplorer7()) {
-				wh.writeln(
-					"<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
-					+"<tr height=\"1px\"><td></td></tr></table>");
+				wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
+					.write("<tr height=\"1px\"><td></td></tr>\n</table>");
 			}
 		} else {
 			wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
@@ -70,31 +69,19 @@ public class WindowDefault implements ComponentRenderer {
 				  .writeln("</td>");
 
 				if (self.isClosable()) {
-					wh.write("<td width=\"16\" class=\"m");
-					wh.write(titlesc);
-					wh.write("\"><img id=\"");
-					wh.write(uuid);
-					wh.write("!close\" src=\"");
-					wh.write(exec.encodeURL("~./zul/img/close-off.gif"));
-					wh.write("\"/></td>");
+					wh.write("<td width=\"16\" class=\"m").write(titlesc).write("\"><img id=\"")
+						.write(uuid).write("!close\" src=\"")
+						.write(exec.encodeURL("~./zul/img/close-off.gif")).writeln("\"/></td>");
 				}
-				wh.write("<td class=\"r");
-				wh.write(titlesc);
-				wh.write("\"></td></tr>\n");
+
+				wh.write("<td class=\"r").write(titlesc).writeln("\"></td></tr>");
 			} else {
-				wh.write("<tr id=\"");
-				wh.write(uuid);
-				wh.write("!caption\"><td class=\"l");
-				wh.write(titlesc);
-				wh.write("\"></td><td class=\"m");
-				wh.write(titlesc);
-				wh.write("\">");
-				caption.redraw(out);
-				wh.write("</td><td class=\"r");
-				wh.write(titlesc);
-				wh.write("\"></td></tr>\n");
+				wh.write("<tr id=\"").write(uuid).write("!caption\"><td class=\"l")
+					.write(titlesc).write("\"></td>\n<td class=\"m").write(titlesc).write("\">")
+					.write(caption)
+					.write("</td>\n<td class=\"r").write(titlesc).writeln("\"></td></tr>");
 			}
-			wh.write("</table>\n");
+			wh.write("</table>");
 			wcExtStyle = "border-top:0;";
 		}
 
@@ -119,6 +106,6 @@ public class WindowDefault implements ComponentRenderer {
 			if (child != caption)
 				child.redraw(out);
 		}
-		wh.write("</div></div>\n");
+		wh.write("</div></div>");
 	}
 }

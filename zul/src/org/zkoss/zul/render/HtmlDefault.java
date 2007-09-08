@@ -38,15 +38,9 @@ public class HtmlDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Html self = (Html)comp;
 		wh.write("<span id=\"").write(self.getUuid()).write("\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write(self.getContent());
-		wh.writeln("</span>");
-		/*
-		<span id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-		${self.content}<%-- don't escape --%>
-		</span>
-		*/
-
+		wh.write("</span>");
 	}
 
 }

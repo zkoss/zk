@@ -38,7 +38,7 @@ public class SeparatorDefault implements ComponentRenderer {
 		final Separator self = (Separator)comp;
 		wh.write("<div id=\"").write(self.getUuid()).write("\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs());
-		wh.writeln(">&nbsp;</div>");
+		wh.write(">&nbsp;</div>");
 	}
 
 }

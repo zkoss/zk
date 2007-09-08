@@ -42,7 +42,7 @@ public class MenupopupDefault implements ComponentRenderer {
 			.write("<table cellpadding=\"0\" cellspacing=\"0\" id=\"")
 			.write(uuid).writeln("!cave\">")
 			.writeChildren(self)
-			.write("</table>\n</div>");
+			.write("</table></div>");
 	}
 
 }

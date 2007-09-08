@@ -37,10 +37,8 @@ public class PagingDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Paging self = (Paging)comp;
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Pg\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write(self.getInnerTags());
 		wh.write("</div>");
-		//<div id="${self.uuid}" z.type="zul.widget.Pg"${self.outerAttrs}${self.innerAttrs}>${self.innerTags}</div>
 	}
-
 }

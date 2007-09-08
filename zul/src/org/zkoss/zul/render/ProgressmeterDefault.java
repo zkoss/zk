@@ -42,12 +42,10 @@ public class ProgressmeterDefault implements ComponentRenderer {
 		final Execution exec = Executions.getCurrent();
 		
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.PMeter\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<img id=\"").write(self.getUuid()).write("!img\" style=\"height:10px\" src=\"");
-		wh.write(exec.encodeURL("~./zk/img/prgmeter.gif")).write("\" />");
+		wh.write(exec.encodeURL("~./zk/img/prgmeter.gif")).write("\"/>");
 		wh.write("</div>");
-		// <div id="${self.uuid}" z.type="zul.widget.PMeter"${self.outerAttrs}${self.innerAttrs}><img id="${self.uuid}!img" style="height:10px" src="${c:encodeURL('~./zk/img/prgmeter.gif')}"/></div>
-
 	}
 
 }

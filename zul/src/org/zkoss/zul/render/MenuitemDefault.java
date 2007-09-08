@@ -54,8 +54,7 @@ public class MenuitemDefault implements ComponentRenderer {
 			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
 			new Out(self.getLabel()).render(out);
-			wh.write("</a>");
-			wh.writeln("</td>");
+			wh.writeln("</a></td>");
 		}else{
 			wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Menuit\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
@@ -64,8 +63,7 @@ public class MenuitemDefault implements ComponentRenderer {
 				wh.write(exec.encodeURL("~./zul/img/menu/checked.gif"));
 			else
 				wh.write(exec.encodeURL("~./img/spacer.gif"));
-			wh.writeln("\" width=\"11\"/></td>");
-			wh.write("<td align=\"left\"><a href=\"");
+			wh.write("\" width=\"11\"/></td>\n<td align=\"left\"><a href=\"");
 			if(Strings.isBlank(self.getHref()))
 				wh.write("javascript:;");
 			else
@@ -73,25 +71,8 @@ public class MenuitemDefault implements ComponentRenderer {
 			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
 			new Out(self.getLabel()).render(out);
-			wh.write("</a>");
-			wh.writeln("</td>");
-			wh.write("<td><img src=\"").write(exec.encodeURL("~./img/spacer.gif")).writeln("\" width=\"9\"/></td>");
-			wh.write("</tr>");
+			wh.write("</a></td>\n<td><img src=\"").write(exec.encodeURL("~./img/spacer.gif"))
+				.writeln("\" width=\"9\"/></td></tr>");
 		}
-		/*
-		<c:choose>
-		<c:when test="${self.topmost}">
-		 <td id="${self.uuid}" align="left" z.type="Menuit"${self.outerAttrs}${self.innerAttrs}><a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a></td>
-		</c:when>
-		<c:otherwise>
-		 <tr id="${self.uuid}" z.type="Menuit"${self.outerAttrs}${self.innerAttrs}>
-		 <td><img src="${c:encodeURL(self.checked?'~./zul/img/menu/checked.gif':'~./img/spacer.gif')}" width="11"/></td>
-		 <td align="left"><a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a></td>
-		 <td><img src="${c:encodeURL('~./img/spacer.gif')}" width="9"/></td>
-		 </tr>
-		</c:otherwise>
-		</c:choose>
-		*/
 	}
-
 }

@@ -44,7 +44,7 @@ public class BoxHorizontal implements ComponentRenderer{
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.writeln(" cellpadding=\"0\" cellspacing=\"0\">")
 			.write("<tr valign=\"").write(self.getValign())
-			.write("\" id=\"").write(uuid).write("!cave\">");		
+			.write("\" id=\"").write(uuid).writeln("!cave\">");		
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();

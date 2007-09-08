@@ -39,10 +39,10 @@ public class MenubarHorizontal implements ComponentRenderer {
 		final Menubar self = (Menubar)comp;
 		final String uuid = self.getUuid();
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.menu.Menubar\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>');
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>');
 		wh.writeln("<table cellpadding=\"0\" cellspacing=\"0\">");
-		wh.write("<tr valign=\"bottom\" id=\"").write(uuid).write("!cave\">");
+		wh.write("<tr valign=\"bottom\" id=\"").write(uuid).writeln("!cave\">");
 		wh.writeChildren(self);
-		wh.write("</tr></table>\n</div>");
+		wh.write("</tr>\n</table></div>");
 	}
 }

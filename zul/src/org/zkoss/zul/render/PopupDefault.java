@@ -33,7 +33,7 @@ public class PopupDefault implements ComponentRenderer {
 		final Popup self = (Popup)comp;
 		wh.write("<div id=\"").write(self.getUuid())
 			.write("\" z.type=\"zul.widget.Pop\"")
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
 			.writeChildren(self)
 			.write("</div>");
 	}

@@ -39,7 +39,7 @@ public class GroupboxDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Groupbox self = (Groupbox) comp;
 		wh.write("<fieldset id=\"").write(self.getUuid()).write("\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		wh.write(self.getCaption());
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {

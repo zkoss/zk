@@ -39,10 +39,5 @@ public class IframeDefault implements ComponentRenderer {
 		wh.write("<iframe id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Ifr\" frameborder=\"0\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		wh.writeln("</iframe>");
-		
-		//<iframe id="${self.uuid}" z.type="zul.widget.Ifr" frameborder="0"${self.outerAttrs}${self.innerAttrs}>
-		//</iframe>
-
 	}
-
 }

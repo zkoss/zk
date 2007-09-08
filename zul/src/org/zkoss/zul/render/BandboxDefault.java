@@ -55,6 +55,6 @@ public class BandboxDefault implements ComponentRenderer {
 		wh.write("/></span><div id=\"").write(uuid)
 			.write("!pp\" class=\"bandboxpp\" style=\"display:none\" tabindex=\"-1\">")
 			.write(self.getDropdown())
-			.writeln("</div></span>");
+			.write("</div></span>");
 	}
 }

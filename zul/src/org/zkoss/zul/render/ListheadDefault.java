@@ -37,7 +37,7 @@ public class ListheadDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Listhead self = (Listhead)comp;
 		wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lhrs\"")
-		.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(" align=\"left\">");
+		.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(" align=\"left\">");
 		wh.writeChildren(self);
 		wh.writeln("</tr>");
 	}

@@ -54,32 +54,18 @@ public class MenuDefault implements ComponentRenderer {
 				.writeln("</td>");
 		}else{
 			wh.write("<tr id=\"").write(uuid).write("\" z.type=\"zul.menu.Menu\"");
-			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-			wh.write("<td><img src=\"").write(exec.encodeURL("~./img/spacer.gif")).writeln("\" width=\"11\"/></td>");
-			wh.write("<td align=\"left\"><a href=\"javascript:;\" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
+			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+				.write(">\n<td><img src=\"").write(exec.encodeURL("~./img/spacer.gif"))
+				.write("\" width=\"11\"/></td>\n<td align=\"left\"><a href=\"javascript:;\" id=\"")
+				.write(uuid).write("!a\">").write(self.getImgTag());
 
 			new Out(self.getLabel()).render(out);
 
 			wh.write("</a>")
 				.write(self.getMenupopup())
-				.writeln("</td>")
-				.write("<td><img src=\"").write(exec.encodeURL("~./zul/img/menu/arrow.gif")).writeln("\" width=\"9\"/></td>")
-				.write("</tr>");
+				.write("</td>\n<td><img src=\"").write(exec.encodeURL("~./zul/img/menu/arrow.gif"))
+				.writeln("\" width=\"9\"/></td></tr>");
 		}
 
 	}
-	/*
-	<c:choose>
-	<c:when test="${self.topmost}">
-	 <td id="${self.uuid}" align="left" z.type="zul.menu.Menu"${self.outerAttrs}${self.innerAttrs}><a href="javascript:;" id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}</td>
-	</c:when>
-	<c:otherwise>
-	 <tr id="${self.uuid}" z.type="zul.menu.Menu"${self.outerAttrs}${self.innerAttrs}>
-	 <td><img src="${c:encodeURL('~./img/spacer.gif')}" width="11"/></td>
-	 <td align="left"><a href="javascript:;" id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}</td>
-	 <td><img src="${c:encodeURL('~./zul/img/menu/arrow.gif')}" width="9"/></td>
-	 </tr>
-	</c:otherwise>
-	</c:choose>
-	*/
 }

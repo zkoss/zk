@@ -37,8 +37,6 @@ public class ImageDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Image self = (Image)comp;
 		wh.write("<img id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Img\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln("/>");
-		//<img id="${self.uuid}" z.type="zul.widget.Img"${self.outerAttrs}${self.innerAttrs}/>
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("/>");
 	}
-
 }

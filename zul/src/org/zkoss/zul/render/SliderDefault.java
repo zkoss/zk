@@ -40,21 +40,14 @@ public class SliderDefault implements ComponentRenderer {
 		final Slider self = (Slider)comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
-		wh.write("<table id=\"").write(uuid).write("\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(" z.type=\"zul.sld.Sld\" cellpadding=\"0\" cellspacing=\"0\" >");
-		wh.writeln("<tr height=\"17\">");
-		wh.writeln("<td class=\"slider-bkl\"></td>");
-		wh.write("<td class=\"slider-bk\"><img id=\"").write(uuid).write("!btn\" ");
-		wh.write("src=\"").write(exec.encodeURL("~./zul/img/slider/btn.gif")).write("\" title=\"").write(self.getCurpos()+"").write("\" /> </td>");
-		wh.writeln("<td class=\"slider-bkr\"></td>");
-		wh.writeln("</tr></table>");
-		/*
-		<table id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.type="zul.sld.Sld" cellpadding="0" cellspacing="0">
-		<tr height="17">
-		 <td class="slider-bkl"></td>
-		 <td class="slider-bk"><img id="${self.uuid}!btn" src="${c:encodeURL('~./zul/img/slider/btn.gif')}" title="${c:string(self.curpos)}"/></td>
-		 <td class="slider-bkr"></td>
-		</table>
-		*/
+		wh.write("<table id=\"").write(uuid).write("\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.writeln(" z.type=\"zul.sld.Sld\" cellpadding=\"0\" cellspacing=\"0\" >")
+			.writeln("<tr height=\"17\"><td class=\"slider-bkl\"></td>")
+			.write("<td class=\"slider-bk\"><img id=\"").write(uuid)
+			.write("!btn\" src=\"").write(exec.encodeURL("~./zul/img/slider/btn.gif"))
+			.write("\" title=\"").write(self.getCurpos()+"").writeln("\"/></td>")
+			.write("<td class=\"slider-bkr\"></td></tr>\n</table>");
 	}
 
 }

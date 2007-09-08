@@ -40,7 +40,7 @@ public class MenubarVertical implements ComponentRenderer {
 		final Menubar self = (Menubar)comp;
 		final String uuid = self.getUuid();
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.menu.Menubar\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<table cellpadding=\"0\" cellspacing=\"0\" id=\"").write(uuid).writeln("!cave\">");
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {

@@ -43,9 +43,9 @@ public class LabelDefault implements ComponentRenderer {
 			wh.write(">");
 		}
 
-		wh.writeln(self.getEncodedText());
+		wh.write(self.getEncodedText());
 
 		if (idRequired)
-			wh.writeln("</span>");
+			wh.write("</span>");
 	}
 }

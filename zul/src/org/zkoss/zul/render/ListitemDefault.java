@@ -46,9 +46,9 @@ public class ListitemDefault implements ComponentRenderer {
 			wh.write("</option>");
 		}else{
 			wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lit\"")
-				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 			wh.writeChildren(self);
-			wh.write("</tr>");
+			wh.writeln("</tr>");
 		}
 	}
 }

@@ -53,8 +53,8 @@ public class CaptionDefault implements ComponentRenderer {
 			wh.write("<table id=\"").write(uuid).write("\" ");
 			wh.write("z.type=\"zul.widget.Capt\"").write(self.getOuterAttrs())
 					.write(self.getInnerAttrs());
-			wh.write(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
-			wh.write("<tr valign=\"middle\">");
+			wh.writeln(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
+			wh.writeln("<tr valign=\"middle\">");
 			wh.write("<td align=\"left\" class=\"caption\">").write(imgTag);
 			new Out(self.getCompoundLabel()).setNbsp(true).render(out);
 			wh.writeln("</td>");

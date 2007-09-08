@@ -40,7 +40,7 @@ public class ListfooterDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Listfooter self = (Listfooter)comp;
 		wh.write("<td id=\"").write(self.getUuid()).write("\" ")
-		.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+		.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
 		wh.writeChildren(self);
