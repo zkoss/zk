@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Footer;
@@ -39,17 +39,15 @@ import org.zkoss.zul.Footer;
 public class FooterDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Footer self = (Footer) comp;
 		final String uuid = self.getUuid();
-		wh.write("<td id=\"").write(uuid).write("\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write(self.getImgTag());
+		wh.write("<td id=\"").write(uuid).write('"')
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
+			.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			((Component) it.next()).redraw(out);
-		}
-		wh.writeln("</td>");
-	}
 
+		wh.writeChildren(self)
+			.writeln("</td>");
+	}
 }

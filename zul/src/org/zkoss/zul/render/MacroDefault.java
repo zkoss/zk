@@ -20,11 +20,10 @@ package org.zkoss.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.HtmlMacroComponent;
 
 /**
@@ -36,22 +35,11 @@ import org.zkoss.zk.ui.HtmlMacroComponent;
 public class MacroDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final HtmlMacroComponent self = (HtmlMacroComponent)comp;
-		wh.write("<span id=\"").write(self.getUuid()).write("\"");
+		wh.write("<span id=\"").write(self.getUuid()).write('"');
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
-			child.redraw(out);
-		}
+		wh.writeChildren(self);
 		wh.writeln("</span>");
-		/*
-		<span id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-			<c:forEach var="child" items="${self.children}">
-			${z:redraw(child, null)}
-			</c:forEach>
-		</span>
-		*/
 	}
-
 }

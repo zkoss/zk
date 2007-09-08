@@ -25,7 +25,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Box;
 /**
  * {@link Box}'s horizontal mold.
@@ -36,14 +36,15 @@ import org.zkoss.zul.Box;
 public class BoxHorizontal implements ComponentRenderer{
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Box self = (Box) comp;
 		final String uuid = self.getUuid();		
 
-		wh.write("<table id=\"").write(uuid).write("\" ");
-		wh.write("z.type=\"zul.box.Box\"").write(self.getOuterAttrs()).write(self.getInnerAttrs());
-		wh.write(" cellpadding=\"0\" cellspacing=\"0\">");
-		wh.write("<tr valign=\"").write(self.getValign()).write("\" id=\"").write(uuid).write("!cave\">");		
+		wh.write("<table id=\"").write(uuid).write("\" z.type=\"zul.box.Box\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.writeln(" cellpadding=\"0\" cellspacing=\"0\">")
+			.write("<tr valign=\"").write(self.getValign())
+			.write("\" id=\"").write(uuid).write("!cave\">");		
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
@@ -53,9 +54,8 @@ public class BoxHorizontal implements ComponentRenderer{
 
 			child.redraw(out);
 
-			wh.write("</td>");
+			wh.writeln("</td>");
 		}		
-		wh.writeln("</tr></table>");
+		wh.write("</tr></table>");
 	}
-
 }

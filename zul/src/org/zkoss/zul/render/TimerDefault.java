@@ -23,7 +23,7 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Timer;
 
 /**
@@ -32,17 +32,11 @@ import org.zkoss.zul.Timer;
  * @since 3.0.0
  */
 public class TimerDefault implements ComponentRenderer {
-	/**
-	 * <c:set var="self" value="${requestScope.arg.self}"/> <span
-	 * id="${self.uuid}"
-	 * z.type="zul.timer.Timer"${self.outerAttrs}${self.innerAttrs}></span>
-	 */
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);		
+		final SmartWriter wh = new SmartWriter(out);		
 		final Timer self = (Timer) comp;
 		
-		wh.write("<span id=\"" + self.getUuid() + "\" z.type=\"zul.timer.Timer\"" + self.getOuterAttrs() + self.getInnerAttrs() + "></span>");
-
+		wh.write("<span id=\"").write(self.getUuid()).write("\" z.type=\"zul.timer.Timer\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("></span>");
 	}
-
 }

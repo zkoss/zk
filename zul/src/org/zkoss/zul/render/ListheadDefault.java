@@ -20,11 +20,10 @@ package org.zkoss.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Listhead;
 
 /**
@@ -35,21 +34,12 @@ import org.zkoss.zul.Listhead;
 public class ListheadDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Listhead self = (Listhead)comp;
-		wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lhrs\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(" align=\"left\">");
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
-			child.redraw(out);
-		}
-		wh.write("</tr>");
-		/*
-		<tr id="${self.uuid}" z.type="Lhrs"${self.outerAttrs}${self.innerAttrs} align="left">
-		<c:forEach var="child" items="${self.children}">
-		${z:redraw(child, null)}
-		</c:forEach>
-		</tr>
-		*/
+		wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lhrs\"")
+		.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(" align=\"left\">");
+		wh.writeChildren(self);
+		wh.writeln("</tr>");
 	}
 
 }

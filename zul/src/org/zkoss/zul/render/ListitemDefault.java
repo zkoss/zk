@@ -20,11 +20,10 @@ package org.zkoss.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Listitem;
@@ -37,32 +36,19 @@ import org.zkoss.zul.Listitem;
 public class ListitemDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Listitem self = (Listitem)comp;
 		
 		if(self.getMold().equals("select")){
-			wh.write("<option id=\"").write(self.getUuid()).write("\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+			wh.write("<option id=\"").write(self.getUuid()).write('"')
+				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 			new Out(self.getLabel()).setMaxlength(self.getMaxlength()).render(out);
 			wh.write("</option>");
 		}else{
-			wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lit\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				final Component child = (Component)it.next();
-				child.redraw(out);
-			}
+			wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lit\"")
+				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+			wh.writeChildren(self);
 			wh.write("</tr>");
 		}
-		//${self.listbox.mold == 'select' ? '~./zul/html/listitem-select.dsp': '~./zul/html/listitem.dsp'}
-		/*
-		 select:
-		<option id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}><c:out value="${self.label}" maxlength="${self.maxlength}"/></option>
-		 default:
-		 <tr id="${self.uuid}" z.type="Lit"${self.outerAttrs}${self.innerAttrs}>
-			<c:forEach var="child" items="${self.children}">
-			${z:redraw(child, null)}
-			</c:forEach>
-		</tr>
-		*/
 	}
-
 }

@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Combobox;
 
 /*
@@ -39,7 +39,7 @@ import org.zkoss.zul.Combobox;
 public class ComboboxDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Combobox self = (Combobox) comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
@@ -57,9 +57,7 @@ public class ComboboxDefault implements ComponentRenderer {
 		wh.write("!pp\" class=\"comboboxpp\" style=\"display:none\" tabindex=\"-1\">");
 		wh.write("<table id=\"").write(uuid).write(
 				"!cave\" cellpadding=\"0\" cellspacing=\"0\">");
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			((Component) it.next()).redraw(out);
-		}
+		wh.writeChildren(self);
 		wh.write("</table></div></span>");
 		wh.writeln();
 	}

@@ -23,7 +23,7 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Audio;
 
 /**
@@ -35,7 +35,7 @@ import org.zkoss.zul.Audio;
 public class AudioDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Audio self = (Audio) comp;
 		wh.write("<embed id=\"").write(self.getUuid()).write("\"").write(
 				self.getOuterAttrs()).write(self.getInnerAttrs()).write(

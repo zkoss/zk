@@ -23,7 +23,7 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Toolbarbutton;
@@ -55,7 +55,7 @@ public class ToolbarbuttonDefault implements ComponentRenderer {
 </c:choose></a>
 	 */
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Toolbarbutton self = (Toolbarbutton) comp;
 		
 		wh.write("<a id=\"" + self.getUuid() + "\" z.type=\"zul.widget.Tbtn\"" + self.getOuterAttrs() + self.getInnerAttrs() + ">");

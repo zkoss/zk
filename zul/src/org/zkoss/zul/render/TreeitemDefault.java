@@ -23,7 +23,7 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Treechildren;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.Treerow;
@@ -43,7 +43,7 @@ ${z:redraw(self.treechildren, null)}
  */
 	public void render(Component comp, Writer out) throws IOException {		
 		final Treeitem self = (Treeitem) comp;
-		new WriterHelper(out)
+		new SmartWriter(out)
 			.write(self.getTreerow())
 			.write(self.getTreechildren());
 	}

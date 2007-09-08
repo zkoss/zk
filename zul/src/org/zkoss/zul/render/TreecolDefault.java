@@ -23,7 +23,7 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Treecol;
@@ -43,7 +43,7 @@ public class TreecolDefault implements ComponentRenderer {
 
  */
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Treecol self = (Treecol) comp;
 		
 		wh.write("<th id=\"" + self.getUuid() + "\" z.type=\"Tcol\"" 

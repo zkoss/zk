@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Menubar;
 
 /**
@@ -35,29 +35,14 @@ import org.zkoss.zul.Menubar;
 public class MenubarHorizontal implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Menubar self = (Menubar)comp;
 		final String uuid = self.getUuid();
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.menu.Menubar\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>');
 		wh.writeln("<table cellpadding=\"0\" cellspacing=\"0\">");
 		wh.write("<tr valign=\"bottom\" id=\"").write(uuid).write("!cave\">");
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
-			child.redraw(out);
-		}
-		wh.write("</tr></table></div>");
-		/*
-		<div id="${self.uuid}" z.type="zul.menu.Menubar"${self.outerAttrs}${self.innerAttrs}>
-		<table cellpadding="0" cellspacing="0">
-		<tr valign="bottom" id="${self.uuid}!cave">
-			<c:forEach var="child" items="${self.children}">
-			${z:redraw(child, null)}
-			</c:forEach>
-		</tr>
-		</table>
-		</div>
-		*/
+		wh.writeChildren(self);
+		wh.write("</tr></table>\n</div>");
 	}
-
 }

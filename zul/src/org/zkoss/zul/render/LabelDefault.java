@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Label;
 
 /**
@@ -34,7 +34,7 @@ import org.zkoss.zul.Label;
  */
 public class LabelDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Label self = (Label)comp;
 		final boolean idRequired = self.isIdRequired();
 		if (idRequired) {

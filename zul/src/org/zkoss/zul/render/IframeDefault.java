@@ -23,7 +23,7 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Iframe;
 
 /**
@@ -34,7 +34,7 @@ import org.zkoss.zul.Iframe;
 public class IframeDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Iframe self = (Iframe)comp;
 		wh.write("<iframe id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Ifr\" frameborder=\"0\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");

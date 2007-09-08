@@ -24,7 +24,7 @@ import java.io.Writer;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Comboitem;
@@ -39,7 +39,7 @@ import org.zkoss.zul.Comboitem;
 public class ComboitemDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Comboitem self = (Comboitem) comp;
 		final String uuid = self.getUuid();
 		wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Cmit\"");

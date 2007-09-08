@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Listcell;
@@ -38,17 +38,15 @@ import org.zkoss.zul.Listcell;
 public class ListcellDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Listcell self = (Listcell)comp;
 		final String uuid = self.getUuid();
-		wh.write("<td id=\"").write(uuid).write("\"").write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
+		wh.write("<td id=\"").write(uuid).write("\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write(self.getColumnHtmlPrefix()).write(self.getImgTag());
 		new Out(self.getLabel()).setMaxlength(self.getMaxlength()).render(out);
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
-			child.redraw(out);
-		}
-		wh.write(self.getColumnHtmlPostfix()).write("</td>");
+		wh.writeChildren(self);
+		wh.write(self.getColumnHtmlPostfix()).writeln("</td>");
 	}
 
 }

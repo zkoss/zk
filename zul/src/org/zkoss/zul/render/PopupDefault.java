@@ -20,33 +20,22 @@ package org.zkoss.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Popup;
 
 public class PopupDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Popup self = (Popup)comp;
-		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Pop\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
-			child.redraw(out);
-		}
-		wh.write("</div>");
-		/*
-			<div id="${self.uuid}" z.type="zul.widget.Pop"${self.outerAttrs}${self.innerAttrs}>
-			<c:forEach var="child" items="${self.children}">
-			  ${z:redraw(child, null)}
-			</c:forEach>
-			</div>
-		 */
-	
+		wh.write("<div id=\"").write(self.getUuid())
+			.write("\" z.type=\"zul.widget.Pop\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">")
+			.writeChildren(self)
+			.write("</div>");
 	}
 	
 }

@@ -23,7 +23,7 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Area;
 
 /**
@@ -36,7 +36,7 @@ import org.zkoss.zul.Area;
 public class AreaDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Area self = (Area) comp;
 		wh.write("<area id=\"").write(self.getUuid()).write(
 				"\" z.type=\"Area\"").write(self.getOuterAttrs()).write("/>");

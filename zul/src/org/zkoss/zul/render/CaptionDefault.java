@@ -20,13 +20,12 @@ package org.zkoss.zul.render;
 
 import java.io.Writer;
 import java.io.IOException;
-import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Caption;
@@ -39,7 +38,7 @@ import org.zkoss.zul.Caption;
  */
 public class CaptionDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Caption self = (Caption) comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
@@ -48,11 +47,8 @@ public class CaptionDefault implements ComponentRenderer {
 		if (self.isLegend()) {
 			wh.write("<legend>").write(imgTag);
 			new Out(self.getLabel()).render(out);
-			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				((Component) it.next()).redraw(out);
-			}
-			wh.write("</legend>");
-			wh.writeln();
+			wh.writeChildren(self);
+			wh.writeln("</legend>");
 		} else {
 			wh.write("<table id=\"").write(uuid).write("\" ");
 			wh.write("z.type=\"zul.widget.Capt\"").write(self.getOuterAttrs())
@@ -61,26 +57,21 @@ public class CaptionDefault implements ComponentRenderer {
 			wh.write("<tr valign=\"middle\">");
 			wh.write("<td align=\"left\" class=\"caption\">").write(imgTag);
 			new Out(self.getCompoundLabel()).setNbsp(true).render(out);
-			wh.write("</td>");
+			wh.writeln("</td>");
 
-			wh.write("<td align=\"right\" class=\"caption\" id=\"").write(uuid)
-					.write("!cave\">");
+			wh.write("<td align=\"right\" class=\"caption\" id=\"").write(uuid).write("!cave\">")
+				.writeChildren(self)
+				.writeln("</td>");
 
-			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				((Component) it.next()).redraw(out);
-			}
-
-			wh.write("</td>");
 			if (self.isClosableVisible()) {
-				wh.write("<td width=\"16\"><img id=\"").write(
-						self.getParent().getUuid()).write("!close\" src=\"");
-				wh.write(exec.encodeURL("~./zul/img/close-off.gif")).write(
-						"\"/></td>");
-
+				wh.write("<td width=\"16\"><img id=\"")
+					.write(self.getParent().getUuid())
+					.write("!close\" src=\"")
+					.write(exec.encodeURL("~./zul/img/close-off.gif"))
+					.writeln("\"/></td>");
 			}
 
-			wh.writeln("</tr></table>");
-			wh.writeln();
+			wh.write("</tr></table>");
 		}
 	}
 }

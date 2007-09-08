@@ -23,7 +23,7 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Calendar;
 
 /**
@@ -36,7 +36,7 @@ import org.zkoss.zul.Calendar;
 public class CalendarDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Calendar self = (Calendar) comp;
 		final String uuid = self.getUuid();
 		wh.write("<table id=\"").write(uuid).write("\"");

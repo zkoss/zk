@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Timebox;
 
 /**
@@ -35,33 +35,21 @@ import org.zkoss.zul.Timebox;
  * @since 3.0.0
  */
 public class TimeboxDefault implements ComponentRenderer {	
-	
-	/**
-	 * <c:set var="self" value="${requestScope.arg.self}"/> <%-- z.combo means
-	 * an input with addition buttons --%> <span
-	 * id="${self.uuid}"${self.outerAttrs} z.type="zul.tb.Tmbox" z.combo="true">
-	 * <input id="${self.uuid}!real" autocomplete="off"${self.innerAttrs}/>
-	 * <span id="${self.uuid}!btn" class="rbtnbk"> <img
-	 * src="${c:encodeURL(self.image)}"${self.buttonVisible?'':'
-	 * style="display:none"'}/> </span> </span>
-	 */
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Execution exec = Executions.getCurrent();		
 		final Timebox self = (Timebox) comp;
-		final String uuid = self.getUuid();
 		
-		wh.write("<span id=\"" + uuid + self.getOuterAttrs() + "\" z.type=\"zul.tb.Tmbox\" z.combo=\"true\">");		
-		wh.write("<input id=\"" + self.getUuid() + "!real\" autocomplete=\"off\"" + self.getInnerAttrs() + "/>");		
-		wh.write("<span id=\"" + self.getUuid() + "!btn\" class=\"rbtnbk\">");		
-		wh.write("<img src=\"" + exec.encodeURL(self.getImage()) + "\"");
+		wh.write("<span id=\"").write(self.getUuid())
+			.write(self.getOuterAttrs()).write("\" z.type=\"zul.tb.Tmbox\" z.combo=\"true\">")
+			.write("<input id=\"").write(self.getUuid()).write("!real\" autocomplete=\"off\"")
+			.write(self.getInnerAttrs()).write("/>")
+			.write("<span id=\"").write(self.getUuid()).write("!btn\" class=\"rbtnbk\">")
+			.write("<img src=\"").write(exec.encodeURL(self.getImage())).write("\"");
+
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
-		wh.write("/>");
-		wh.writeln("</span>");
-		wh.writeln("</span>");
+
+		wh.write("/></span></span>");
 	}
-
-
-
 }

@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Radiogroup;
 
 /**
@@ -35,15 +35,12 @@ import org.zkoss.zul.Radiogroup;
 public class RadiogroupDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Radiogroup self = (Radiogroup)comp;
-		wh.write("<span id=\"").write(self.getUuid()).write("\"").write(self.getOuterAttrs());
-		wh.write(self.getInnerAttrs()).writeln(">");
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
-			child.redraw(out);
-		}
-		wh.writeln("</span>");
+		wh.write("<span id=\"").write(self.getUuid()).write('"')
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>')
+			.writeChildren(self)
+			.writeln("</span>");
 	}
 
 }

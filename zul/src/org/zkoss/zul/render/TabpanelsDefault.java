@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanels;
 
@@ -38,28 +38,19 @@ import org.zkoss.zul.Tabpanels;
 
 public class TabpanelsDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Tabpanels self = (Tabpanels) comp;
 
 		if(((Tabbox)self.getParent()).getOrient().equals("vertical")){
 			wh.write("<td id=\"").write(self.getUuid()).write("\"")
-				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-
-			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				((Component) it.next()).redraw(out);
-			}	
-
-			wh.writeln("</td>");
+				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">")
+				.writeChildren(self)
+				.writeln("</td>");
 		} else {
 			wh.write("<tbody id=\"").write(self.getUuid()).write("\"")
-				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");		
-
-			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				((Component) it.next()).redraw(out);
-			}	
-
-			wh.writeln("</tbody>");
+				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">")
+				.writeChildren(self)
+				.writeln("</tbody>");
 		}
 	}
-
 }

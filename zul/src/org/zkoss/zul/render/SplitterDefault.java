@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Splitter;
 /**
  * {@link Splitter }'s default mold.
@@ -35,7 +35,7 @@ import org.zkoss.zul.Splitter;
 public class SplitterDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Splitter self = (Splitter)comp;
 		final Execution exec = Executions.getCurrent();
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.box.Splt\"");

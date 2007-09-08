@@ -23,7 +23,7 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Intbox;
 
 /**
@@ -34,7 +34,7 @@ import org.zkoss.zul.Intbox;
 public class IntboxDefault implements ComponentRenderer {
 
 	public void render(Component cmp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Intbox self = (Intbox)cmp; 
 	
 		wh.write("<input id=\"").write(self.getUuid());

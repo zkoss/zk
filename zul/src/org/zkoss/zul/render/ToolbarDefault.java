@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Toolbar;
 
 /**
@@ -33,33 +33,21 @@ import org.zkoss.zul.Toolbar;
  * @since 3.0.0
  */
 public class ToolbarDefault implements ComponentRenderer {
-	/**
-<c:set var="self" value="${requestScope.arg.self}"/>
-<c:set var="break" value=""/>
-<c:set var="verticalBreak" value="${self.orient == 'vertical' ? '<br/>': ''}"/>
-<div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-	<c:forEach var="child" items="${self.children}">
-	${break}${z:redraw(child, null)}
-	<c:set var="break" value="${verticalBreak}"/>
-	</c:forEach>
-</div>
-	 */
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Toolbar self = (Toolbar) comp;
-		String brk = "";
-		final String verticalbrk = (self.getOrient().equals("vertical"))? "<br/>" : "";
+		boolean shallBreak = self.getOrient().equals("vertical"), follow = false;
 		
-		wh.write("<div id=\"" + self.getUuid() + "\"" + self.getOuterAttrs() + self.getInnerAttrs() + ">");		
+		wh.write("<div id=\"").write(self.getUuid()).write('"')
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>');
+
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
-			wh.write(brk);
-			child.redraw(out);
-			brk = verticalbrk;
+			if (shallBreak)
+				if (follow) wh.writeln("<br/>");
+				else follow = true;
+			((Component)it.next()).redraw(out);
 		}
+
 		wh.write("</div>");
 	}
-	
-
-
 }

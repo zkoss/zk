@@ -20,11 +20,10 @@ package org.zkoss.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Treecols;
 
 /**
@@ -35,27 +34,14 @@ import org.zkoss.zul.Treecols;
  * @since 3.0.0
  */
 public class TreecolsDefault implements ComponentRenderer {
-/**
-<c:set var="self" value="${requestScope.arg.self}"/>
-<tr id="${self.uuid}" z.type="Tcols"${self.outerAttrs}${self.innerAttrs} align="left">
-	<c:forEach var="child" items="${self.children}">
-	${z:redraw(child, null)}
-	</c:forEach>
-</tr>
- */
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Treecols self = (Treecols) comp;
 		
-		wh.write("<tr id=\"" + self.getUuid() + "\" z.type=\"Tcols\"" 
-				+ self.getOuterAttrs() + self.getInnerAttrs() +" align=\"left\">");
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component) it.next();
-			child.redraw(out);
-		}	
-		wh.write("</tr>");
-
+		wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Tcols\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.write(" align=\"left\">")
+			.writeChildren(self)
+			.writeln("</tr>");
 	}
-
-
 }

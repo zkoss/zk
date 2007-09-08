@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.WriterHelper;
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Div;
 
 /*
@@ -37,16 +37,13 @@ import org.zkoss.zul.Div;
 public class DivDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
-		final WriterHelper wh = new WriterHelper(out);
+		final SmartWriter wh = new SmartWriter(out);
 		final Div self = (Div) comp;
 		final String uuid = self.getUuid();
-		wh.write("<div id=\"").write(uuid).write("\"");
+		wh.write("<div id=\"").write(uuid).write('"');
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			((Component) it.next()).redraw(out);
-		}
+		wh.writeChildren(self);
 		wh.write("</div>");
-		wh.writeln();
 	}
 
 }
