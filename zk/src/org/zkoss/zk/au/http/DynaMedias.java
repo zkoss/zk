@@ -157,7 +157,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 			String value = "attachment;";
 			final String flnm = media.getName();
 			if (flnm != null && flnm.length() > 0)
-				value += "filename="+flnm;
+				value += "filename=\"" + flnm +'"';
 			response.setHeader("content-disposition", value);
 		}
 
