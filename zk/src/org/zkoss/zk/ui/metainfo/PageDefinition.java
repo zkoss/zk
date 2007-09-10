@@ -281,6 +281,8 @@ public class PageDefinition extends NodeInfo {
 		_resolvdefs.add(resolver);
 	}
 	/** Initializes XEL context for the specified page.
+	 *
+	 * @param page the page to initialize the context. It cannot be null.
 	 */
 	public void initXelContext(Page page) {
 		page.addFunctionMapper(getFunctionMapper());

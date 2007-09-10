@@ -541,10 +541,14 @@ public class UiEngineImpl implements UiEngine {
 	PageDefinition pagedef, Page page, Component parent, Map arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef");
-		if (parent != null)
-			page = parent.getPage();
-		else if (page != null)
+		if (parent != null) {
+			if (parent.getPage() != null)
+				page = parent.getPage();
+		} else if (page != null) {
 			parent = ((PageCtrl)page).getDefaultParent();
+		}
+		if (page == null)
+			page = getCurrentPage(exec);
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		if (!execCtrl.isActivated())
@@ -552,7 +556,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final Page old = execCtrl.getCurrentPage();
 		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
-		if (page != null)
+		if (page != null && page != old)
 			execCtrl.setCurrentPage(page);
 		execCtrl.setCurrentPageDefinition(pagedef);
 		exec.pushArg(arg != null ? arg: Collections.EMPTY_MAP);
@@ -560,7 +564,8 @@ public class UiEngineImpl implements UiEngine {
 		//Note: we add taglib, stylesheets and var-resolvers to the page
 		//it might cause name pollution but we got no choice since they
 		//are used as long as components created by this method are alive
-		pagedef.initXelContext(page);
+		if (page != null)
+			pagedef.initXelContext(page);
 
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
