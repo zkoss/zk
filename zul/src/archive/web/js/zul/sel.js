@@ -854,7 +854,7 @@ zk.Selectable.prototype = {
 
 		//check whether TD
 		if (diff > 0)
-			for (var n = this.element, p; p = n.parentNode; n = p) {
+			for (var n = this.element, p; p = $parent(n); n = p) {
 				if ($tag(p) == "TD") {
 					//whether other cells heigher than this
 					if (p.clientHeight - n.offsetHeight > 20) //to be precise we have to count margin instead of 20

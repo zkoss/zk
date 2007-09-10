@@ -389,7 +389,7 @@ zkTrow._genimg = function (uri, js) {
  */
 zkTrow._onpg = function (index, evt) {
 	if (!evt) evt = window.event;
-	var n = $outer(Event.element(evt).parentNode);
+	var n = $outer($parent(Event.element(evt)));
 
 	zkau.send({uuid: getZKAttr(n, "tchsib"), cmd: "onPaging",
 		data: [index == -9 ? 0:
@@ -401,7 +401,7 @@ zkTrow._onpg = function (index, evt) {
  */
 zkTrow._onzoom = function (index, evt) {
 	if (!evt) evt = window.event;
-	var n = $outer(Event.element(evt).parentNode);
+	var n = $outer($parent(Event.element(evt)));
 
 	zkau.send({uuid: getZKAttr(n, "tchsib"), cmd: "onPageSize",
 		data: [$int(getZKAttr(n, "pgsz")) + index]});

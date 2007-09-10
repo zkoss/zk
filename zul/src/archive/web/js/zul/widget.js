@@ -113,17 +113,9 @@ zkTxbox._noonblur = function (inp) {
 				return false;
 		}
 
-		while (cf) {
-			if (cf == el) return true;
-
-			//To resolve Bug 1486840 (see db.js and cb.js)
-			var n = $e(getZKAttr(cf, "vparent"));
-			if (n) {
-				cf = n;
-				continue;
-			}
-			cf = cf.parentNode;
-		}
+		for (; cf; cf = $parent(cf))
+			if (cf == el)
+				return true;
 	}
 	return false;
 };
@@ -411,7 +403,7 @@ zkCapt.init = function (cmp) {
 	}
 };
 zkCapt._parentGrbox = function (p) {
-	while (p = p.parentNode) {
+	while (p = p.parentNode) { //yes, assign
 		var type = $type(p);
 		if (type == "Grbox") return p;
 		if (type) break;

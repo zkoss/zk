@@ -66,7 +66,7 @@ zkCmit.onclick = function (evt) {
 	var item = $parentByTag(Event.element(evt), "TR");
 	if (item) {
 		zkCmbox._selback(item);
-		zkau.closeFloats($outer(item.parentNode));
+		zkau.closeFloats($outer($parent(item)));
 			//including combobox, but excluding dropdown
 		zkCmit.onoutTo(item); //onmouseout might be sent (especiall we change parent)
 

@@ -88,7 +88,7 @@ zkMenu.open = function (menu, toggle) {
 
 	if (!$visible(pp)) {
 		var top = getZKAttr(menu, "top") == "true"; //top-level menu
-		var ref = top || $tag(menu) != "TD" ? menu: menu.parentNode; //use TR if not top
+		var ref = top || $tag(menu) != "TD" ? menu: $parent(menu); //use TR if not top
 		var pos = top && getZKAttr(menu, "vert") == null ? "after-start": "end_before";
 		zkMenu._open(pp, top, ref, pos);
 
