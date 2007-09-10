@@ -681,3 +681,95 @@ tr.caldow td {
 div.dateboxpp table.calyear {
 	background: #d8e8f0;
 }
+
+<%-- additional tab --%>
+td.tab-lite-first {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-first.gif')});
+	width: 3px; height: 3px;
+}
+td.tab-lite-last1 {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-last1.gif')});
+	width: 3px; height: 3px;
+}
+td.tab-lite-last2 {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-last2.gif')});
+	width: 1px; height: 3px;
+}
+
+td.tab-lite-tl-sel, td.groupbox-lite-tl {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-tl-sel.gif')});
+	width: 5px; height: 6px;
+}
+td.tab-lite-tl-uns {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-tl-uns.gif')});
+	width: 5px; height: 6px;
+}
+td.tab-lite-tm-sel, td.groupbox-lite-tm {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-tm-sel.gif')});
+	height: 6px;
+}
+td.tab-lite-tm-uns {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-tm-uns.gif')});
+	height: 6px;
+}
+td.tab-lite-tr-sel, td.groupbox-lite-tr {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-tr-sel.gif')});
+	width: 5px; height: 6px;
+}
+td.tab-lite-tr-uns {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-tr-uns.gif')});
+	width: 5px; height: 6px;
+}
+
+td.tab-lite-ml-sel {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-ml-sel.gif')});
+	width: 5px;
+}
+td.tab-lite-ml-uns {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-ml-uns.gif')});
+	width: 5px;
+}
+td.groupbox-lite-ml {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-ml-grp.gif')});
+	width: 5px;
+}
+td.tab-lite-mm-sel, td.groupbox-lite-mm, td.tab-lite-mm-uns {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-white.gif')});
+}
+td.tab-lite-mr-sel, td.groupbox-lite-mr {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-mr-sel.gif')});
+	width: 5px;
+}
+td.tab-lite-mr-uns {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-mr-uns.gif')});
+	width: 5px;
+}
+
+td.tab-lite-bl-sel, td.tab-lite-bm-sel, td.tab-lite-br-sel {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-white.gif')});
+	width: 5px; height: 3px;
+}
+td.tab-lite-bl-uns, td.tab-lite-bm-uns, td.tab-lite-br-uns {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-last1.gif')});
+	width: 5px; height: 3px;
+}
+
+td.groupbox-lite-b {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-b.gif')});
+	height: 1px;
+}
+div.gc-lite { <%-- content of 3d groupbox --%>
+	border: 1px solid #9095a1; padding: 5px;
+}
+
+td.groupbox-lite-shdl {
+	background-image: url(${c:encodeURL('~./img/shdlf.gif')});
+	width: 6px; height: 6px;
+}
+td.groupbox-lite-shdm {
+	background-image: url(${c:encodeURL('~./img/shdmd.gif')});
+}
+td.groupbox-lite-shdr {
+	background-image: url(${c:encodeURL('~./img/shdrg.gif')});
+	width: 6px; height: 6px;
+}
