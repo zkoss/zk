@@ -141,7 +141,7 @@ zkTab._setTabSel = function (tab, toSel) {
 			zk.show(panel, toSel);
 
 	if (!accd) {
-		var tabs = zk.parentNode(zk.parentNode(tab, "TABLE"), "THEAD");
+		var tabs = $parentByType(tab, "Tabs");
 		if (tabs)
 			zkTabs.fixWidth(tabs.id);
 	}
