@@ -20,7 +20,7 @@
 <para>Data Type</para>
 </entry>
 <entry>
-<para>Values</para>
+<para>Default Values</para>
 </entry>
 </row>
 </thead><tbody>
@@ -40,7 +40,7 @@
 </entry>
 <entry>
 <para>
-<code>Any text</code>
+<code>&lt;empty string&gt;</code>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -77,7 +77,6 @@
 <row>
 <entry>
 <para>
-<code/>
 <olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/HtmlBasedComponent.xml">
 <code>org.zkoss.zk.ui.HtmlBasedComponent</code>
 </olink>
@@ -88,7 +87,6 @@
 <row>
 <entry>
 <para>
-<code/>
 <olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/AbstractComponent.xml">
 <code>org.zkoss.zk.ui.AbstractComponent </code>
 </olink>
