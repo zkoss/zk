@@ -337,7 +337,7 @@ zk.isRealVisible = function (e) {
 	do {
 		if (e.style && !$visible(e)) return false;
 		//note: document is the top parent and has NO style
-	} while (e = e.parentNode);
+	} while (e = $parent(e)); //yes, assign
 	return true;
 };
 zk.isVisible = $visible; //backward compatible
@@ -360,7 +360,7 @@ zk._focusDown = function (el, match, checkA) {
 			return true;
 		}
 		if (checkA && tn == "A") {
-			for (var n = el; (n = n.parentNode) != null;) {
+			for (var n = el; (n = $parent(n))/*yes, assign*/;) {
 				if (getZKAttr(n, "type")) {
 					try {el.focus();} catch (e) {}
 					//IE throws exception when focus in some cases
@@ -603,12 +603,9 @@ zk.previousSibling = function (el, tagName) {
 	return el;
 };
 /** Returns the parent with the specified tag name, or null if not found.
+ * @deprecated
  */
-zk.parentNode = function (el, tagName) {
-	while (el && (el = el.parentNode) != null && $tag(el) != tagName)
-		;
-	return el;
-};
+zk.parentNode = $parentByTag;
 
 /** Returns the first child of the specified node. */
 zk.firstChild = function (el, tagName, descendant) {

@@ -63,7 +63,7 @@ zkau.addDesktop = function (dtid) {
 zkau._dtid = function (uuid) {
 	if (zkau._dtids.length == 1) return zkau._dtids[0];
 
-	for (var n = $e(uuid); n; n = n.parentNode) {
+	for (var n = $e(uuid); n; n = $parent(n)) {
 		var id = getZKAttr(n, "dtid");
 		if (id) return id;
 	}
@@ -101,7 +101,7 @@ zkau.onclick = function (evt) {
 	var target = Event.element(evt);
 
 	//it might be clicked on the inside element
-	for (;; target = target.parentNode)
+	for (;; target = $parent(target))
 		if (!target) return;
 		else if (target.id) break;
 
@@ -126,7 +126,7 @@ zkau.ondblclick = function (evt) {
 	var cmp = Event.element(evt);
 
 	//it might be clicked on the inside element
-	for (;; cmp = cmp.parentNode)
+	for (;; cmp = $parent(cmp))
 		if (!cmp) return;
 		else if (cmp.id) break;
 
@@ -767,7 +767,7 @@ zkau.fixZIndex = function (cmp, silent, autoz) {
 /** Automatically adjust z-index if node is part of popup/overalp/...
  */
 zkau.autoZIndex = function (node) {
-	for (; node; node = node.parentNode) {
+	for (; node; node = $parent(node)) {
 		if (node.style && node.style.position == "absolute") {
 			if (getZKAttr(node, "autoz"))
 				zkau.fixZIndex(node, false, true); //don't inc if equals
@@ -984,7 +984,7 @@ zkau._onDocCtxMnu = function (evt) {
 		var rtclk = getZKAttr(cmp, "rtclk");
 		if (ctx || rtclk) {
 			//Give the component a chance to handle right-click
-			for (var n = target; n; n = n.parentNode) {
+			for (var n = target; n; n = $parent(n)) {
 				var type = $type(n);
 				if (type) {
 					var o = window["zk" + type];
@@ -1128,7 +1128,7 @@ zkau._tryCloseTip = function () {
 
 /** Returns the target of right-click, or null if not found. */
 zkau._parentByZKAttr = function (n, attr1, attr2) {
-	for (; n; n = n.parentNode) {
+	for (; n; n = $parent(n)) {
 		if (attr1 && getZKAttr(n, attr1)) return n;
 		if (attr2 && getZKAttr(n, attr2)) return n;
 	}
@@ -1185,7 +1185,7 @@ zkau._onDocKeydown = function (evt) {
 
 	if (zkcode) evtnm = "onCtrlKey";
 
-	for (var n = target; n; n = n.parentNode) {
+	for (var n = target; n; n = $parent(n)) {
 		if (n.id && n.getAttribute) {
 			if (getZKAttr(n, evtnm) == "true"
 			&& (!zkcode || zkau._inCtkeys(evt, zkcode, getZKAttr(n, "ctkeys")))) {
@@ -1414,7 +1414,7 @@ zkau._zidOwner = function (n) {
 	//zidsp currently applied only to page, since we'd like
 	//developers easy to reference other component in the same page
 	//If you want to support a new space, just generae zidsp="true"
-	for (var p = n; p; p = p.parentNode) {
+	for (var p = n; p; p = $parent(p)) {
 		if (getZKAttr(p, "zidsp"))
 			return p.id;
 	}

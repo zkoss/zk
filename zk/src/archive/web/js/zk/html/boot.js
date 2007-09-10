@@ -261,19 +261,11 @@ function $e(id) {
  * the control directly, so... */
 function $uuid(n) {
 	if (typeof n != 'string') {
-		while (n) {
+		for (; n; n = $parent(n))
 			if (n.id) {
 				n = n.id;
 				break;
 			}
-
-			var p = $e(getZKAttr(n, "vparent"));
-			if (p) {
-				n = p;
-				continue;
-			}
-			n = n.parentNode;
-		}
 	}
 	if (!n) return "";
 	var j = n.lastIndexOf('!');
@@ -332,20 +324,19 @@ function $childExterior(cmp) {
 	return n ? n: cmp;
 }
 
+/** Returns the parent node of the specified element.
+ * It handles vparent.
+ */
+function $parent(n) {
+	var p = $e(getZKAttr(n, "vparent"));
+	return p ?  p: n.parentNode;
+}
 /** Returns the nearest parent element, including el itself, with the specified type.
  */
 function $parentByType(el, type) {
-	while (el) {
+	for (; el; el = $parent(el))
 		if ($type(el) == type)
 			return el;
-
-		var p = $e(getZKAttr(el, "vparent"));
-		if (p) {
-			el = p;
-			continue;
-		}
-		el = el.parentNode;
-	}
 	return null;
 };
 /** Returns the tag name in the upper case. */
@@ -355,17 +346,9 @@ function $tag(el) {
 /** Returns the nearest parent element, including el itself, with the specified type.
  */
 function $parentByTag(el, tagName) {
-	while (el) {
+	for (; el; el = $parent(el))
 		if ($tag(el) == tagName)
 			return el;
-
-		var p = $e(getZKAttr(el, "vparent"));
-		if (p) {
-			el = p;
-			continue;
-		}
-		el = el.parentNode;
-	}
 	return null;
 };
 /** Whether an element is visible. */
@@ -759,7 +742,7 @@ zk.cleanupAt = function (n) {
 zk.onVisiAt = function (n) {
 	for (var nid in zk._visicmps) {
 		var elm = $e(nid);
-		for (var e = elm; e; e = e.parentNode) {
+		for (var e = elm; e; e = $parent(e)) {
 			if (e == n) { //elm is a child of n
 				zk.eval(elm, "onVisi");
 				break;
@@ -782,7 +765,7 @@ zk.onHideAt = function (n) {
 
 	for (var nid in zk._hidecmps) {
 		var elm = $e(nid);
-		for (var e = elm; e; e = e.parentNode) {
+		for (var e = elm; e; e = $parent(e)) {
 			if (e == n) { //elm is a child of n
 				zk.eval(elm, "onHide");
 				break;
@@ -800,7 +783,7 @@ zk.onHideAt = function (n) {
 zk.onSizeAt = function (n) {
 	for (var nid in zk._sizecmps) {
 		var elm = $e(nid);
-		for (var e = elm; e; e = e.parentNode) {
+		for (var e = elm; e; e = $parent(e)) {
 			if (e == n) { //elm is a child of n
 				if (!zk._tmOnSizeAt)
 					zk._tmOnSizeAt = setTimeout(zk._onSizeAt, 550);
