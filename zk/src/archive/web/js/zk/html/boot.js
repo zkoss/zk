@@ -59,7 +59,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "75"; //increase this if we want the browser to reload JavaScript
+zk.build = "76"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -343,7 +343,7 @@ function $parentByType(el, type) {
 function $tag(el) {
 	return el && el.tagName ? el.tagName.toUpperCase(): "";
 };
-/** Returns the nearest parent element, including el itself, with the specified type.
+/** Returns the nearest parent element, including el itself, with the specified tag.
  */
 function $parentByTag(el, tagName) {
 	for (; el; el = $parent(el))

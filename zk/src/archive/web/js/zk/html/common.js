@@ -603,10 +603,13 @@ zk.previousSibling = function (el, tagName) {
 	return el;
 };
 /** Returns the parent with the specified tag name, or null if not found.
- * @deprecated
+ * <p>Unlike parentByTag, the search excludes el
  */
-zk.parentNode = $parentByTag;
-
+zk.parentNode = function (el, tagName) {
+	while (el && (el = $parent(el))/*yes,assign*/ && $tag(el) != tagName)
+		;
+	return el;
+};
 /** Returns the first child of the specified node. */
 zk.firstChild = function (el, tagName, descendant) {
 	for (var n = el.firstChild; n; n = n.nextSibling)
@@ -634,18 +637,9 @@ zk.isAncestor = function (p, c, checkuuid) {
 
 	p = $e(p);
 	c = $e(c);
-	while (c) {
+	for (; c; c = $parent(c))
 		if (p == c)
 			return true;
-
-		//To resolve Bug 1486840 (see db.js and cb.js)
-		var n = $e(getZKAttr(c, "vparent"));
-		if (n) {
-			c = n;
-			continue;
-		}
-		c = c.parentNode;
-	}
 	return false;
 };
 /** Returns whether a node is an ancestor of one of an array of elements.
