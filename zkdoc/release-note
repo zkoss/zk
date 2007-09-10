@@ -53,6 +53,7 @@ ZK 3.0.0
   1765212: Annoying sellection during drag-drop
   1789258: A way to configure the cache of the event methods
   1789830: A way to decouple Caption assumes LEGENG if default mold
+  1791353: Tabbox adds a simpler look
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
@@ -88,6 +89,10 @@ ZK 3.0.0
   1785457: SpringTransactionSynchronizationListener requires Hibernate3
   1771810: Incorret display of a datebox calendar inside a popup
   1760140: Comboitem error in overlapped windows
+  1789428: ON_DROP event not fired on imagemap (FF and Safari only)
+  1757257: Bandbox dtid is null in Firefox with Liferay
+  1791498: Visual effect of tab's width incorrect if select large panel
+  1758638: Trunked filename when Filedownload
 
 * Upgrade Notes:
   + el-config (of zk.xml) is replaced with xel-config, and the class
