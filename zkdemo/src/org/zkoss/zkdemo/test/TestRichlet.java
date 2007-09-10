@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkdemo.test;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.GenericRichlet;
 import org.zkoss.zk.ui.event.*;
@@ -38,14 +39,26 @@ public class TestRichlet extends GenericRichlet {
 		new Label("Hello World!").setParent(vb);
 		new Label("Request: "+page.getRequestPath()).setParent(vb);
 		final Label l = new Label();
+		l.setId("l");
 		l.setParent(vb);
 
-		final Button b = new Button("Change");
+		Button b = new Button("Change");
 		b.addEventListener(Events.ON_CLICK,
 			new EventListener() {
 				int count;
 				public void onEvent(Event evt) {
 					l.setValue("" + ++count);
+				}
+			});
+		b.setParent(vb);
+
+		b = new Button("Create Directly");
+		b.addEventListener(Events.ON_CLICK,
+			new EventListener() {
+				int count;
+				public void onEvent(Event evt) {
+					Executions.createComponentsDirectly(
+						"<textbox value=\"${l.value}\"/>", null, vb, null);
 				}
 			});
 		b.setParent(vb);
