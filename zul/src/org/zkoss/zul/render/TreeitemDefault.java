@@ -24,9 +24,7 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
-import org.zkoss.zul.Treechildren;
 import org.zkoss.zul.Treeitem;
-import org.zkoss.zul.Treerow;
 
 /**
  * {@link Treeitem}'s default mold.

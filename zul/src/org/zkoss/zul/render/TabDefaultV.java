@@ -21,7 +21,6 @@ package org.zkoss.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;

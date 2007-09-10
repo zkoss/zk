@@ -20,7 +20,6 @@ package org.zkoss.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
@@ -64,7 +63,7 @@ public class TabpanelAccordion implements ComponentRenderer {
 			wh.write("<tr height=\"").write(tabbox.getPanelSpacing()).writeln("\"><td></td></tr>");
 		
 		wh.write("<tr><td class=\"").write(look).write("tl").write(suffix).writeln("\"></td>")
-			.write("<td colspan=\"").write(tab.isClosable() ? 4:3)
+			.write("<td colspan=\"").write(tab.isClosable() ? 4 : 3)
 			.write("\" class=\"").write(look).write("tm").write(suffix).writeln("\"></td>")
 			.write("<td class=\"").write(look).write("tr").write(suffix).writeln("\"></td></tr>");	
 
@@ -88,7 +87,7 @@ public class TabpanelAccordion implements ComponentRenderer {
 		wh.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
 			.write("<td class=\"").write(look).write("mr").write(suffix).writeln("\"></td></tr>");
 
-		wh.write("<tr><td colspan=\"").write(tab.isClosable() ? 6:5)
+		wh.write("<tr><td colspan=\"").write(tab.isClosable() ? 6 : 5)
 			.write("\" class=\"").write(look).write("b\"></td></tr>\n</table>");
 
 		wh.write("<div id=\"").write(self.getUuid()).write("!real\"")

@@ -25,9 +25,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Tree;
-import org.zkoss.zul.Treechildren;
-import org.zkoss.zul.Treecols;
-import org.zkoss.zul.Treefoot;
 
 /**
  * {@link Tree}'s default mold.

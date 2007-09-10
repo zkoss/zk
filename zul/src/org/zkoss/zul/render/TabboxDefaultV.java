@@ -42,7 +42,7 @@ public class TabboxDefaultV implements ComponentRenderer {
 
 		wh.write("<table id=\"").write(self.getUuid()).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.write(" z.tabs=\"").write(tabs==null ?null:tabs.getUuid())
+			.write(" z.tabs=\"").write(tabs == null ? null : tabs.getUuid())
 			.writeln("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
 
 		wh.write("<tr valign=\"top\">")

@@ -40,8 +40,8 @@ public class TimeboxDefault implements ComponentRenderer {
 		final Execution exec = Executions.getCurrent();		
 		final Timebox self = (Timebox) comp;
 		
-		wh.write("<span id=\"").write(self.getUuid())
-			.write(self.getOuterAttrs()).write("\" z.type=\"zul.tb.Tmbox\" z.combo=\"true\">")
+		wh.write("<span id=\"").write(self.getUuid()).write('"')
+			.write(self.getOuterAttrs()).write(" z.type=\"zul.tb.Tmbox\" z.combo=\"true\">")
 			.write("<input id=\"").write(self.getUuid()).write("!real\" autocomplete=\"off\"")
 			.write(self.getInnerAttrs()).write("/>")
 			.write("<span id=\"").write(self.getUuid()).write("!btn\" class=\"rbtnbk\">")

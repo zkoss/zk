@@ -51,9 +51,7 @@ public class BoxHorizontal implements ComponentRenderer{
 			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"")
 				.write(self.getChildOuterAttrs(child))
 				.write(self.getChildInnerAttrs(child)).write(">");
-
-			child.redraw(out);
-
+			wh.write(child);
 			wh.writeln("</td>");
 		}		
 		wh.write("</tr></table>");

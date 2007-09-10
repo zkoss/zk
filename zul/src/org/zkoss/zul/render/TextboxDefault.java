@@ -32,17 +32,6 @@ import org.zkoss.zul.Textbox;
  * @since 3.0.0
  */
 public class TextboxDefault implements ComponentRenderer{
-	/**
-	<c:set var="self" value="${requestScope.arg.self}"/>
-	<c:choose>
-	<c:when test="${self.multiline}"><%-- textarea doesn't support maxlength --%>
-	<textarea id="${self.uuid}" z.type="zul.widget.Txbox"${self.outerAttrs}${self.innerAttrs}>${self.areaText}</textarea>
-	</c:when>
-	<c:otherwise>
-	<input id="${self.uuid}" z.type="zul.widget.Txbox"${self.outerAttrs}${self.innerAttrs}/>
-	</c:otherwise>
-	</c:choose>
-		 */
 
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
