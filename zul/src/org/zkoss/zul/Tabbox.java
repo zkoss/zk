@@ -197,9 +197,9 @@ public class Tabbox extends XulElement {
 	 * If the style class not defined and the mold is accordion,
 	 * "tabaccd-3d" and "tabaccd-v3d" returned (note: accordion doesn't support vertical yet).
 	 *
-	 * <p>If the style class is defined, say "simple",
-	 * then this method return "tab-simple" and "tab-vsimple" for
-	 * horizontal and vertical orient, respectively, and "tabacc-simple" for horizontal accordion.
+	 * <p>If the style class is defined, say "lite",
+	 * then this method return "tab-lite" and "tab-vlite" for
+	 * horizontal and vertical orient, respectively, and "tabacc-lite" for horizontal accordion.
 	 *
 	 * <p>If the mold is not "default" nor "accordion", this method returns
 	 * "tab" + getMold() + "-" + (vertical ? 'v': '') + getSclass().

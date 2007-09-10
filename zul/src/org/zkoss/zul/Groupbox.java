@@ -144,10 +144,10 @@ public class Groupbox extends XulElement {
 	 * <p>If the style class ({@link #getSclass}) of this groupbox is not
 	 * defined and the mold is "default", then "groupbox" is returned.
 	 *
-	 * <p>If the mold is "default" and the style class is defined, say "simple",
-	 * then this method return "groupbox-simple".
+	 * <p>If the mold is "default" or "3d", and the style class is defined,
+	 * say "lite", then this method return "groupbox-lite".
 	 *
-	 * <p>If the mold is not "default", and the style class is not,
+	 * <p>If the mold is not "default", and the style class is not defined,
 	 * this method returns:<br>
 	 * <code>"groupbox-" + getMold()</code>
 	 *
@@ -167,11 +167,12 @@ public class Groupbox extends XulElement {
 	 */
 	public String getCaptionLook() {
 		final String mold = getMold();
-		String val = "groupbox";
-		if (!"default".equals(mold))
-			val += '-' + mold;
 		final String scls = getSclass();
-		return scls != null && scls.length() > 0 ? val + '-' + scls: val;
+		final boolean noScls = scls == null || scls.length() == 0;
+		String val = "groupbox";
+		if (!"default".equals(mold) && (!"3d".equals(mold) || noScls))
+			val += '-' + mold;
+		return noScls ? val: val + '-' + scls;
 	}
 
 	//-- super --//
