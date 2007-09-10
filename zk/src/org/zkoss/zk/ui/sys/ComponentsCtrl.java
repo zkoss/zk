@@ -33,7 +33,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.Pair;
 import org.zkoss.util.MultiCache;
 import org.zkoss.util.Cache;
-import org.zkoss.util.DualLevelCache;
 import org.zkoss.util.Maps;
 
 import org.zkoss.zk.ui.Executions;
@@ -290,21 +289,6 @@ public class ComponentsCtrl {
 		return mtd;
 	}
 
-	/** Refresh the cache that stores the information about event handler
-	 * methods.
-	 * It is called when ZK finishes the processing of an event,
-	 * an asynchronous update, or a loading of a page.
-	 *
-	 * <p>Default: Invokes {@link DualLevelCache#refresh} if
-	 * the curent cache is {@link DualLevelCache}.
-	 *
-	 * @since 3.0.0
-	 * @see #setEventMethodCache
-	 */
-	public static final void refreshEventMethodCache() {
-		if (_evtmtds instanceof DualLevelCache)
-			((DualLevelCache)_evtmtds).refresh();
-	}
 	/** Sets the cache that stores the information about event handler methods.
 	 *
 	 * <p>Since the performance of the cache is critical to the
@@ -317,8 +301,6 @@ public class ComponentsCtrl {
 	 * <li>{@link org.zkoss.util.ThreadLocalCache}:
 	 * it is the fastest but consumes more memory since it maintains
 	 * a cache per thread.
-	 * <li>{@link DualLevelCache}: The performance and memory use of
-	 * this class is the middle.</li>
 	 * </ol>
 	 *
 	 * @param cache the cache. It cannot be null. It must be thread safe.

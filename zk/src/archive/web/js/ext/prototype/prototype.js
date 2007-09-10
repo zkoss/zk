@@ -2108,7 +2108,9 @@ if (Element.getStyle(element, "position") == 'fixed') {
   // caches x/y coordinate pair to use with overlap
   within: function(element, x, y) {
     if (this.includeScrollOffsets)
-      return this.withinIncludingScrolloffsets(element, x, y);
+//Tom Yeh, Potix: make the name shorter
+//      return this.withinIncludingScrolloffsets(element, x, y);
+      return this.withinScroll(element, x, y);
     this.xcomp = x;
     this.ycomp = y;
     this.offset = this.cumulativeOffset(element);
@@ -2119,7 +2121,9 @@ if (Element.getStyle(element, "position") == 'fixed') {
             x <  this.offset[0] + zk.offsetWidth(element)); //Tom M. Yeh, Potix: safari bug
   },
 
-  withinIncludingScrolloffsets: function(element, x, y) {
+//Tom Yeh, Potix: make the name shorter
+//  withinIncludingScrolloffsets: function(element, x, y) {
+  withinScroll: function(element, x, y) {
     var offsetcache = this.realOffset(element);
 
     this.xcomp = x + offsetcache[0] - this.deltaX;

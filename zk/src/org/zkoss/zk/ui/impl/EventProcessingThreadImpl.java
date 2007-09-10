@@ -380,7 +380,6 @@ implements EventProcessingThread {
 						cleanup();
 						Locales.setThreadLocal(_locale = null);
 						TimeZones.setThreadLocal(_timeZone = null);
-						org.zkoss.zk.ui.sys.ComponentsCtrl.refreshEventMethodCache();
 					}
 				}
 

@@ -133,7 +133,6 @@ public class DHtmlLayoutFilter implements Filter {
 			throw ex;
 		} finally {
 			I18Ns.cleanup(request, old);
-			org.zkoss.zk.ui.sys.ComponentsCtrl.refreshEventMethodCache();
 		}
 	}
 	/** Filters the content to make it legal XML if possible.

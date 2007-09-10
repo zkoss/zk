@@ -146,7 +146,6 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			handleError(sess, request, response, path, ex);
 		} finally {
 			SessionsCtrl.setCurrent(null);
-			org.zkoss.zk.ui.sys.ComponentsCtrl.refreshEventMethodCache();
 		}
 	}
 

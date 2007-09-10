@@ -1531,9 +1531,15 @@ zkau._getDrop = function (cmp, pointer) {
 				k = l + 1;
 			}
 		}
-		if (Position.withinIncludingScrolloffsets(e, pointer[0], pointer[1])
-		&& (!found || found.style.zIndex < e.style.zIndex))
-				found = e;
+
+		var cross = Position.withinScroll(e, pointer[0], pointer[1]);
+		if (!cross && (zk.gecko || zk.safari)) { //Bug 1789428 
+			var real = $real(e);
+			if (real != e)
+				cross = Position.withinScroll(real, pointer[0], pointer[1])
+		}
+		if (cross && (!found || found.style.zIndex < e.style.zIndex))
+			found = e;
 	}
 	return found;
 };
