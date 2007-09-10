@@ -19,8 +19,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<<c:set var="look" value="${self.tabbox.tabLook}-"/>
-thead id="${self.uuid}" z.type="zul.tab.Tabs"${self.outerAttrs}${self.innerAttrs}>
+<c:set var="look" value="${self.tabbox.tabLook}-"/>
+<thead id="${self.uuid}" z.type="zul.tab.Tabs"${self.outerAttrs}${self.innerAttrs}>
 <tr><td>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr valign="bottom">
