@@ -46,8 +46,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<separator bar="true"/>
 
 	<style>
-	div.grid tr.grid-od td.gc {
-		background: red;
+	tr.odd td.gc {
+		background: yellow;
 	}
 	</style>
 	Note: the odd row's color shall be red (controlled by the style component).
@@ -133,7 +133,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	addRow();
 	</zscript>
 	<separator bar="true"/>
-	<grid class="grid-no-striped">
+	<grid oddRowSclass="none">
 		<rows>
 			<row>
 				Another with full width and no striping
@@ -142,6 +142,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<row>
 				Second row
 				<label value="cell 2"/>
+			</row>
+			<row>
+				Third row
+				<label value="cell 3"/>
 			</row>
 		</rows>
 	</grid>
