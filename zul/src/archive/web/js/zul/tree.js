@@ -135,6 +135,8 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 					toOpen && (silent || !zkTree.isOpen(r)));
 			}
 		} while (row = r);
+	},
+	stripe: function () { //disable stripe
 	}
 });
 }

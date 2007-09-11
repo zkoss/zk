@@ -228,7 +228,7 @@ td.hbox {
 }
 
 <%-- ZK tree, listbox, grid --%>
-div.listbox, div.tree, div.grid, div.grid-no-striped { <%-- depends sclass. --%>
+div.listbox, div.tree, div.grid { <%-- depends sclass --%>
 	background: threedface; border: 1px solid #7F9DB9;
 }
 div.tree-head, div.listbox-head, div.grid-head { <%-- always used. --%>
@@ -287,22 +287,17 @@ tr.item, tr.item a, tr.item a:visited {
 tr.item a:hover {
 	text-decoration: underline;
 }
-tr.itemsel, tr.itemsel a, tr.itemsel a:visited {
-	font-size: small; font-weight: normal;
-	background: #B5D5FF; color: #000;
-	text-decoration: none;
-}
-tr.itemsel a:hover {
-	text-decoration: underline;
-}
 
-tr.grid td.gc, tr.grid-od td.gc, tr.grid-no-striped td.gc, tr.grid-no-striped-od td.gc {
-	background: #FFF; border-bottom: none; border-left: 1px solid #FFF;
+tr.grid td.gc {
+	background: white; border-bottom: none; border-left: 1px solid white;
 	border-right: 1px solid #CCC; border-top: 1px solid #DDD; padding: 2px;
 	font-size: small; font-weight: normal; color: black;
 }
-tr.grid-od td.gc {
-	background: #E8EFEA;
+tr.odd td.gc, tr.odd {
+	background: #EAF2F0;<!--#E8EFEA-->
+}
+tr.seld {
+	background: highlight; color: highlighttext;
 }
 
 <%--

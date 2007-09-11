@@ -34,6 +34,8 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A list item.
  *
+ * <p>Default {@link #getSclass}: item.
+ *
  * @author tomyeh
  */
 public class Listitem extends XulElement {
@@ -252,12 +254,12 @@ public class Listitem extends XulElement {
 	//-- super --//
 	/** Returns the style class.
 	 * Note: 1) if not set (or setSclass(null), "item" is assumed;
-	 * 2) if selected, it appends "sel" to super's getSclass().
+	 * 2) if selected, it appends " seld" to super's getSclass().
 	 */
 	public String getSclass() {
 		String scls = super.getSclass();
 		if (scls == null) scls = "item";
-		return isSelected() ? scls + "sel": scls;
+		return isSelected() ? scls.length() > 0 ? scls + " seld": "seld": scls;
 	}
 
 	//-- Component --//

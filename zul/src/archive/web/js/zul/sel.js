@@ -32,8 +32,8 @@ if (!window.Selectable_effect) { //define it only if not customized
 			var clr = Element.getStyle(row, "color");
 			row.style.backgroundColor = 
 				clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
-					row.className.endsWith("sel") ? "#778ABB": "#EAEFFF":
-					row.className.endsWith("sel") ? "#115588": "#DAE8FF";
+					zk.indexClass(row, "seld") >= 0 ? "#778ABB": "#EAEFFF":
+					zk.indexClass(row, "seld") >= 0 ? "#115588": "#DAE8FF";
 		}
 	};
 }
@@ -166,6 +166,8 @@ zk.Selectable.prototype = {
 			};
 		}
 
+		this.stripe();
+
 		setTimeout("zkSel._calcSize('"+this.id+"')", 5);
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
@@ -180,6 +182,19 @@ zk.Selectable.prototype = {
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
 			this.foot = this.foottbl = this.fnSubmit = null;
 			//in case: GC not works properly
+	},
+	/** Stripes the rows. */
+	stripe: function () {
+		var scOdd = getZKAttr(this.element, "scOddRow");
+		if (!scOdd || !this.bodyrows) return;
+
+		for (var j = 0, even = true; j < this.bodyrows.length; ++j) {
+			var row = this.bodyrows[j];
+			if ($visible(row)) {
+				zk.addClass(row, scOdd, !even);
+				even = !even;
+			}
+		}
 	},
 
 	/** Handles keydown sent to the body. */
@@ -437,6 +452,10 @@ zk.Selectable.prototype = {
 				return true;
 			}
 			break;
+		case "z.scOddRow":
+			zkau.setAttr(this.element, nm, val);
+			this.stripe();
+			break;
 		}
 		return false;
 	},
@@ -581,14 +600,12 @@ zk.Selectable.prototype = {
 			var el = $e(row.id + "!cm");
 			if (toSel) {
 				if (el) el.checked = true;
-				row.className = row.className + "sel";
+				zk.addClass(row, "seld");
 				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "true");
 			} else {
 				if (el) el.checked = false;
-				var len = row.className.length;
-				if (len > 3)
-					row.className = row.className.substring(0, len - 3);
+				zk.rmClass(row, "seld");
 				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "false");
 			}

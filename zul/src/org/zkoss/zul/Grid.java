@@ -81,9 +81,15 @@ import org.zkoss.zul.event.PagingEvent;
  * you want to use the same controller to control multiple grids.
  *
  * <p>Default {@link #getSclass}: grid.
- * To have a grid withoug stripping, you might specify grid-no-striped as the sclass.
- * To have a grid without stripping and grid lines, you can specify any name,
- * other than grid and grid-on-striped, as the sclass.
+ *
+ * <p>To have a grid without stripping, you can specify a non-existent
+ * style class to {@link #setOddRowSclass}.
+ * If you want to disable all striping, you can specify the style:
+ * <pre><code>
+	tr.odd td.gc {
+		background: white;
+	}
+ * </code>m/pre>
  *
  * @author tomyeh
  * @see ListModel
@@ -108,6 +114,8 @@ public class Grid extends XulElement {
 	 */
 	private transient Paging _paging;
 	private transient EventListener _pgListener;
+	/** The style class of the odd row. */
+	private String _scOddRow = "odd";
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 
@@ -747,6 +755,29 @@ public class Grid extends XulElement {
 		}
 	}
 
+	/** Returns the style class for the odd rows.
+	 *
+	 * <p>Default: odd.
+	 *
+	 * @since 3.0.0
+	 */
+	public String getOddRowSclass() {
+		return _scOddRow;
+	}
+	/** Sets the style class for the odd rows.
+	 * If the style class doesn't exist, the striping effect disappears.
+	 * You can provide different effects by providing the proper style
+	 * classes.
+	 * @since 3.0.0
+	 */
+	public void setOddRowSclass(String scls) {
+		if (scls != null && scls.length() == 0) scls = null;
+		if (!Objects.equals(_scOddRow, scls)) {
+			_scOddRow = scls;
+			smartUpdate("z.scOddRow", scls);
+		}
+	}
+
 	//-- super --//
 	public void setMold(String mold) {
 		final String old = getMold();
@@ -767,15 +798,15 @@ public class Grid extends XulElement {
 		}
 	}
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		if (_align == null && _model == null)
-			return attrs;
-
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
+		final StringBuffer sb =
+			new StringBuffer(80).append(super.getOuterAttrs());
 		if (_align != null)
 			HTMLs.appendAttribute(sb, "align", _align);
 		if (_model != null)
 			HTMLs.appendAttribute(sb, "z.model", true);
+
+		if (_scOddRow != null)
+			HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
 		return sb.toString();
 	}
 

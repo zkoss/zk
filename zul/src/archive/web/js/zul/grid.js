@@ -164,18 +164,13 @@ zk.Grid.prototype = {
 
 	/** Stripes the rows. */
 	stripe: function () {
-		if (!this.bodyrows) return;
+		var scOdd = getZKAttr(this.element, "scOddRow");
+		if (!scOdd || !this.bodyrows) return;
+
 		for (var j = 0, even = true; j < this.bodyrows.length; ++j) {
 			var row = this.bodyrows[j];
 			if ($visible(row)) {
-				var cs = row.className;
-				if (even) { //even
-					if (cs.endsWith("-od"))
-						row.className = cs.substring(0, cs.length - 3);
-				} else {
-					if (!cs.endsWith("-od"))
-						row.className = cs + "-od";
-				}
+				zk.addClass(row, scOdd, !even);
 				even = !even;
 			}
 		}
@@ -336,6 +331,9 @@ zkGrid.setAttr = function (grid, nm, val) {
 		var meta = zkau.getMeta(grid);
 		if (meta && !meta.paging) meta.init();
 		return true;
+	} else if (nm == "z.scOddRow") {
+		zkau.setAttr(grid, nm, val);
+		zkGrid.stripe(grid.id);
 	} else if (!this.paging && this.body) {
 		if (nm == "scrollTop") {
 			this.body.scrollTop = val;

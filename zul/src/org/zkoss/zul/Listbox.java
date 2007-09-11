@@ -100,6 +100,15 @@ import org.zkoss.zul.event.PagingEvent;
  *
  * <p>Default {@link #getSclass}: listbox.
  *
+ * <p>To have a list box without stripping, you can specify a non-existent
+ * style class to {@link #setOddRowSclass}.
+ * If you want to disable all striping, you can specify the style:
+ * <pre><code>
+	tr.odd {
+		background: white;
+	}
+ * </code>m/pre>
+ *
  * @author tomyeh
  * @see ListModel
  * @see ListitemRenderer
@@ -130,6 +139,8 @@ public class Listbox extends XulElement {
 	 */
 	private transient Paging _paging;
 	private transient EventListener _pgListener;
+	/** The style class of the odd row. */
+	private String _scOddRow = "odd";
 	private int _tabindex = -1;
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
@@ -802,6 +813,27 @@ public class Listbox extends XulElement {
 		return (pgi.getActivePage() + 1) * pgi.getPageSize() - 1; //inclusive
 	}
 
+	/** Returns the style class for the odd rows.
+	 * <p>Default: odd.
+	 * @since 3.0.0
+	 */
+	public String getOddRowSclass() {
+		return _scOddRow;
+	}
+	/** Sets the style class for the odd rows.
+	 * If the style class doesn't exist, the striping effect disappears.
+	 * You can provide different effects by providing the proper style
+	 * classes.
+	 * @since 3.0.0
+	 */
+	public void setOddRowSclass(String scls) {
+		if (scls != null && scls.length() == 0) scls = null;
+		if (!Objects.equals(_scOddRow, scls)) {
+			_scOddRow = scls;
+			smartUpdate("z.scOddRow", scls);
+		}
+	}
+
 	//-- Component --//
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
@@ -1456,6 +1488,9 @@ public class Listbox extends XulElement {
 				HTMLs.appendAttribute(sb, "z.vflex", true);
 			if (_model != null)
 				HTMLs.appendAttribute(sb, "z.model", true);
+
+			if (_scOddRow != null)
+				HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
 		}
 
 		appendAsapAttr(sb, Events.ON_SELECT);
