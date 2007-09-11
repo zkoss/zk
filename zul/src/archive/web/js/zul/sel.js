@@ -624,12 +624,12 @@ zk.Selectable.prototype = {
 				if (!el) el = $e(row.id + "!sel");
 				if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
 					zk.asyncFocus(el.id);
-				zkSel.cmonfocusTo(row);
+				if (!zk.safari) zkSel.cmonfocusTo(row);
 
 				if (!this.paging && zk.gecko) this._render(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
 			} else {
-				zkSel.cmonblurTo(row);
+				if (!zk.safari) zkSel.cmonblurTo(row);
 			}
 		}
 		return changed;
@@ -642,8 +642,10 @@ zk.Selectable.prototype = {
 				el.href = "javascript:;";
 				el.id = row.id + "!sel";
 				el.innerHTML = " ";
-				el.onfocus = zkSel.cmonfocus;
-				el.onblur = zkSel.cmonblur;
+				if (!zk.safari) { //Safari: underline always appear, not key
+					el.onfocus = zkSel.cmonfocus;
+					el.onblur = zkSel.cmonblur;
+				}
 				row.cells[0].appendChild(el);
 			}
 		} else {
@@ -1154,11 +1156,13 @@ zkLit.onrtclk = function (cmp) {
 	if (meta && !meta._isSelected(cmp)) meta.doclick(null, cmp);
 };
 
-zkLcfc = {}; //checkmark or the first hyperlink of listcell
-zkLcfc.init = function (cmp) {
-	zk.listen(cmp, "focus", zkSel.cmonfocus);
-	zk.listen(cmp, "blur", zkSel.cmonblur);
-};
+if (!zk.safari) {
+	zkLcfc = {}; //checkmark or the first hyperlink of listcell
+	zkLcfc.init = function (cmp) {
+		zk.listen(cmp, "focus", zkSel.cmonfocus);
+		zk.listen(cmp, "blur", zkSel.cmonblur);
+	};
+}
 
 zk.addModuleInit(function () {
 	//Listheader

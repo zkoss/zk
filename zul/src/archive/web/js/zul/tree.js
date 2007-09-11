@@ -426,10 +426,12 @@ zkTrow._lastKid = function (row) {
 	return row;
 }
 
-zkTcfc = {}; //checkmark or the first hyperlink of treecell
-zkTcfc.init = function (cmp) {
-	zk.listen(cmp, "focus", zkSel.cmonfocus);
-	zk.listen(cmp, "blur", zkSel.cmonblur);
+if (!zk.safari) {
+	zkTcfc = {}; //checkmark or the first hyperlink of treecell
+	zkTcfc.init = function (cmp) {
+		zk.listen(cmp, "focus", zkSel.cmonfocus);
+		zk.listen(cmp, "blur", zkSel.cmonblur);
+	}
 }
 
 zkTcop = {}; //the image as the open button

@@ -297,7 +297,7 @@ tr.odd td.gc, tr.odd {
 	background: #EAF2F0;<!--#E8EFEA-->
 }
 tr.seld {
-	background: highlight; color: highlighttext;
+	background: #316ac5; color: white; <%--Safari Bug 47298: no highlight --%>
 }
 
 <%--
@@ -580,7 +580,7 @@ div.menubar a:hover {
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
 }
 div.menupopup a:hover {
-	background: #B5D5FF; color: #000;
+	background: #316ac5; color: white; <%--Safari Bug 47298: no highlight --%>
 }
 div.menupopup hr {
 	border: 0; color: darkgray; background: darkgray;
