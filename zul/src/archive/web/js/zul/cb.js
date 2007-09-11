@@ -25,13 +25,12 @@ zk.load("zul.widget");
  */
 if (!window.Comboitem_effect) { //define it only if not customized
 	window.Comboitem_effect = function (item, undo) {
-		if (undo)
-			zk.restoreStyle(item, "backgroundColor");
-		else {
-			zk.backupStyle(item, "backgroundColor");
-			item.style.backgroundColor =
-				zk.indexClass(item, "seld") >= 0 ? "#115588": "#DAE8FF";
-		}
+		if (undo) {
+			zk.rmClass(item, "overseld");
+			zk.rmClass(item, "overd");
+		} else
+			zk.addClass(item,
+				zk.indexClass(item, "seld") >= 0 ? "overseld": "overd");
 	};
 }
 
