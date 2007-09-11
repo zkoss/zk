@@ -85,6 +85,50 @@ Array.prototype.contains = function (o) {
 //
 // More zk utilities (defined also in boot.js) //
 
+/** Returns the index of the class name if it is part of the class name
+ * of the specified element, or -1 if not.
+ */
+zk.indexClass = function (el, clsnm) {
+	var cn = el.className;
+	var j = cn.indexOf(clsnm), k = j + clsnm.length;
+	return j < 0 || (j && cn.charAt(j - 1) != ' ')
+	|| (k < cn.length && cn.charAt(k) != ' ') ? -1: j;
+};
+
+/** Adds the specified class name to the class name of the specified element.
+ * @since 3.0.0
+ */
+zk.addClass = function (el, clsnm, bAdd) {
+	if (bAdd == false) {
+		zk.rmClass(el, clsnm);
+		return;
+	}
+
+	var j = zk.indexClass(el, clsnm);
+	if (j < 0) {
+		var cn = el.className;
+		if (cn.length) cn += ' ';
+		el.className = cn + clsnm;
+	}
+};
+/** Removes the specified class name from the the class name of the specified
+ * element.
+ * @since 3.0.0
+ */
+zk.rmClass = function (el, clsnm, bRemove) {
+	if (bRemove == false) {
+		zk.addClass(el, clsnm);
+		return;
+	}
+
+	var j = zk.indexClass(el, clsnm);
+	if (j >= 0) {
+		var cn = el.className, k = j + clsnm.length;
+		if (k < cn.length) ++k;
+		el.className = cn.substring(0, j) + cn.substring(k);
+	}
+};
+
 /** Sets the offset height. */
 zk.setOffsetHeight = function (el, hgh) {
 	hgh = hgh
@@ -1670,21 +1714,23 @@ zk.remove = function (n) {
  * CSA shall not call this method.
  */
 zk.show = function (id, bShow) {
-	if (bShow == false) zk.hide(id);
-	else {
-		var n = $e(id);
-		if (n) {
-			var js = getZKAttr(n, "conshow");
-			if (js) {
-				rmZKAttr(n, "conshow"); //avoid dead loop
-				try {
-					eval(js);
-				} finally {
-					setZKAttr(n, "conshow", js);
-				}
-			} else {
-				action.show(n);
+	if (bShow == false) {
+		zk.hide(id);
+		return;
+	}
+
+	var n = $e(id);
+	if (n) {
+		var js = getZKAttr(n, "conshow");
+		if (js) {
+			rmZKAttr(n, "conshow"); //avoid dead loop
+			try {
+				eval(js);
+			} finally {
+				setZKAttr(n, "conshow", js);
 			}
+		} else {
+			action.show(n);
 		}
 	}
 };
@@ -1692,21 +1738,23 @@ zk.show = function (id, bShow) {
  * CSA shall not call this method.
  */
 zk.hide = function (id, bHide) {
-	if (bHide == false) zk.show(id);
-	else {
-		var n = $e(id);
-		if (n) {
-			var js = getZKAttr(n, "conhide");
-			if (js) {
-				rmZKAttr(n, "conhide"); //avoid dead loop
-				try {
-					eval(js);
-				} finally {
-					setZKAttr(n, "conhide", js);
-				}
-			} else {
-				action.hide(n);
+	if (bHide == false) {
+		zk.show(id);
+		return;
+	}
+
+	var n = $e(id);
+	if (n) {
+		var js = getZKAttr(n, "conhide");
+		if (js) {
+			rmZKAttr(n, "conhide"); //avoid dead loop
+			try {
+				eval(js);
+			} finally {
+				setZKAttr(n, "conhide", js);
 			}
+		} else {
+			action.hide(n);
 		}
 	}
 };

@@ -31,7 +31,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Pair;
-import org.zkoss.util.MultiCache;
+import org.zkoss.util.ThreadLocalCache;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
 
@@ -296,11 +296,11 @@ public class ComponentsCtrl {
 	 * choose from:
 	 *
 	 * <ol>
-	 * <li>{@link MultiCache}: the default. It is the slowest but
-	 * consumes the less memory.</li>
-	 * <li>{@link org.zkoss.util.ThreadLocalCache}:
-	 * it is the fastest but consumes more memory since it maintains
-	 * a cache per thread.
+	 * <li>{@link ThreadLocalCache}: the default.
+	 * It is the fastest but consumes more memory since it maintains
+	 * a cache per thread (about 10MB - 16M for over 400 concurrent users).
+	 * <li>{@link org.zkoss.util.MultiCache}. It is the slowest but
+	 * consumes less memory.</li>
 	 * </ol>
 	 *
 	 * @param cache the cache. It cannot be null. It must be thread safe.
@@ -313,7 +313,7 @@ public class ComponentsCtrl {
 		_evtmtds = cache;
 	}
 	/** A map of (Pair(Class,String evtnm), Method). */
-	private static Cache _evtmtds = new MultiCache(64, 1024, 60*60*1000);
+	private static Cache _evtmtds = new ThreadLocalCache();
 	
 	/** Represents a dummy definition. */
 	public static final ComponentDefinition DUMMY =
