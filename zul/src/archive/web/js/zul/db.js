@@ -131,7 +131,7 @@ zk.Cal.prototype = {
 		for (var j = 0; j < 12; ++j) {
 			el = $e(this.id + "!m" + j);
 			if (el) { //omitted if compact
-				el.className = m == j ? "sel": "";
+				el.className = m == j ? "seld": "";
 				el.setAttribute("zk_mon", j);
 			}
 		}
@@ -159,7 +159,7 @@ zk.Cal.prototype = {
 	},
 	_outcell: function (cell, sel) {
 		if (sel) this.curcell = cell;
-		cell.className = sel ? "sel": "";
+		cell.className = sel ? "seld": "";
 		var d = cell.getAttribute("zk_day");
 		zk.setInnerHTML(cell,
 			!sel || this.popup ? d:
@@ -171,7 +171,7 @@ zk.Cal.prototype = {
 	_ondayclk: function (cell) {
 		var y = this.date.getFullYear(), m = this.date.getMonth();
 		var d = zk.getIntAttr(cell, "zk_day");
-		if (cell.className != "sel") { //!selected
+		if (cell.className != "seld") { //!selected
 			var monofs = zk.getIntAttr(cell, "zk_monofs");
 			this.date = new Date(y, m + monofs, d);
 			if (!this.popup) {
@@ -185,7 +185,7 @@ zk.Cal.prototype = {
 		this._onupdate(true);
 	},
 	_onmonclk: function (cell) {
-		if (cell.className != "sel") { //!selected
+		if (cell.className != "seld") { //!selected
 			var y = this.date.getFullYear(), d = this.date.getDate();
 			this.date = new Date(y, zk.getIntAttr(cell, "zk_mon"), d);
 			this._output();

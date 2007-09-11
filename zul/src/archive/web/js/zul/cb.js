@@ -30,7 +30,7 @@ if (!window.Comboitem_effect) { //define it only if not customized
 		else {
 			zk.backupStyle(item, "backgroundColor");
 			item.style.backgroundColor =
-				item.className.endsWith("sel") ? "#115588": "#DAE8FF";
+				zk.indexClass(item, "seld") >= 0 ? "#115588": "#DAE8FF";
 		}
 	};
 }
@@ -261,14 +261,7 @@ zkCmbox.onbutton = function (cmp) {
 
 /** Marks an item as selected or un-selected. */
 zkCmbox._setsel = function (item, sel) {
-	var clsnm = item.className;
-	if (sel) {
-		if (!clsnm.endsWith("sel"))
-			item.className = clsnm + "sel";
-	} else {
-		if (clsnm.endsWith("sel"))
-			item.className = clsnm.substring(0, clsnm.length - 3);
-	}
+	zk.addClass(item, "seld", sel);
 };
 
 /** Returns the text contained in the specified item. */

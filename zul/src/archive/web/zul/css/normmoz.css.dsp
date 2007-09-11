@@ -663,7 +663,7 @@ tr.calday td {
 tr.calday td a:hover {
 	text-decoration: underline;
 }
-table.calmon td.sel, tr.calday td.sel {
+table.calmon td.seld, tr.calday td.seld {
 	background: #cddeee;
 }
 table.calmon td.dis, tr.calday td.dis {
