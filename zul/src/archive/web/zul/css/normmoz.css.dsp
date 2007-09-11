@@ -295,10 +295,16 @@ tr.grid td.gc {
 	font-size: small; font-weight: normal; color: black;
 }
 tr.odd td.gc, tr.odd {
-	background: #EAF2F0;<!--#E8EFEA-->
+	background: #EAF2F0;<%--#E8EFEA--%>
 }
 tr.seld {
 	background: highlight; color: highlighttext;
+}
+tr.overd {<%-- item onmouseover --%>
+	background: #DAE8FF;
+}
+tr.overseld {<%-- item selected and onmouseover --%>
+	background: #115588;
 }
 
 <%--
@@ -306,7 +312,7 @@ span.treeitem-paging {
 	background-image: url(${c:encodeURL('~./zul/img/bgbtnbk.gif')}); background-repeat: no-repeat;
 	border: 1px solid #7f9db9;
 }
--->
+--%>
 
 <%-- ZK tab. --%>
 .tab, .tab a, a.tab {

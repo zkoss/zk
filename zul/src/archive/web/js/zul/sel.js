@@ -25,16 +25,12 @@ zk.load("zul.zul");
  */
 if (!window.Selectable_effect) { //define it only if not customized
 	window.Selectable_effect = function (row, undo) {
-		if (undo)
-			zk.restoreStyle(row, "backgroundColor");
-		else {
-			zk.backupStyle(row, "backgroundColor");
-			var clr = Element.getStyle(row, "color");
-			row.style.backgroundColor = 
-				clr == "#000" || clr == "rgb(0, 0, 0)" || clr == "white" ?
-					zk.indexClass(row, "seld") >= 0 ? "#778ABB": "#EAEFFF":
-					zk.indexClass(row, "seld") >= 0 ? "#115588": "#DAE8FF";
-		}
+		if (undo) {
+			zk.rmClass(row, "overseld");
+			zk.rmClass(row, "overd");
+		} else
+			zk.addClass(row,
+				zk.indexClass(row, "seld") >= 0 ? "overseld": "overd");
 	};
 }
 
