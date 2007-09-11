@@ -26,7 +26,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <tr id="${self.uuid}"><%-- no outerAttrs here because tab.js controls it diff --%>
 <td>
 <table id="${tab.uuid}"${tab.outerAttrs}${tab.innerAttrs} z.sel="${tab.selected}" z.type="zul.tab.Tab" z.box="${tab.tabbox.uuid}" z.panel="${self.uuid}" width="100%" border="0" cellpadding="0" cellspacing="0">
-<c:if test="${!empty self.tabbox.panelSpacing and self.index!=0}"><tr height="${self.tabbox.panelSpacing}"><td></td></tr></c:if>
+<c:if test="${!empty self.tabbox.panelSpacing and self.index!=0}">
+ <tr height="${self.tabbox.panelSpacing}"><td></td></tr>
+</c:if>
 <tr>
 	<td class="${c:cat3(look,'tl',suffix)}"></td>
 	<td colspan="${tab.closable?4:3}" class="${c:cat3(look,'tm',suffix)}"></td>

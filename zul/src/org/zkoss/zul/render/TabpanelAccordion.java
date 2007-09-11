@@ -50,7 +50,7 @@ public class TabpanelAccordion implements ComponentRenderer {
 		final Tabbox tabbox = self.getTabbox();
 		final String look = tabbox.getTabLook() + '-';
 		final String suffix = self.isSelected() ? "-sel" : "-uns";
-		final String height = Strings.isBlank(self.getHeight()) ? "22" : self.getHeight(); 		
+		final String height = Strings.isBlank(tab.getHeight()) ? "22" : tab.getHeight();		
 		
 		wh.write("<tr id=\"").write(self.getUuid()).write("\"><td>");
 		wh.write("<table id=\"").write(tab.getUuid()).write("\"")
