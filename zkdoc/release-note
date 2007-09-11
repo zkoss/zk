@@ -54,6 +54,7 @@ ZK 3.0.0
   1789258: A way to configure the cache of the event methods
   1789830: A way to decouple Caption assumes LEGENG if default mold
   1791353: Tabbox adds a simpler look
+  1441351: zebra colors for listbox
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
@@ -93,8 +94,21 @@ ZK 3.0.0
   1757257: Bandbox dtid is null in Firefox with Liferay
   1791498: Visual effect of tab's width incorrect if select large panel
   1758638: Trunked filename when Filedownload
+  1792403: Listbox/combobox use class instead of style to style onmouseove
 
 * Upgrade Notes:
+  + The way to customize the zebra color (striping) of grid is changed.
+    ZK 3.0 uses dual class names, grid and odd, to provide the style
+    instead of renaming the class name to grid-od. Note: odd is the
+    default value returned by getOddRowSclass(), which is customizable.
+    Example,
+	tr.odd td.gc {
+		background: yellow;
+	}
+
+  + The way to customize a grid not to stripe rows is changed:
+    <grid oddRowSclass="none">
+
   + el-config (of zk.xml) is replaced with xel-config, and the class
     must implement org.zkoss.xel.ExpressionFactory instead of
     javax.servlet.jsp.el.ExpressionEvaluator.
