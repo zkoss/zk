@@ -35,6 +35,11 @@ public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 	private final CacheMap[] _caches;
 	private int _maxsize;
 
+	/** Constructs a multi cache with 16 inital caches.
+	 */
+	public MultiCache() {
+		this(16);
+	}
 	/** Constucts a multi cache with the specified number of internal caches,
 	 * the max size and the lifetime.
 	 *
