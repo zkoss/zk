@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article lang="en-US"><sect1><title>HtmlBasedComponent</title>
+<para>A skeletal implementation for HTML based components. It simplifies to implement methods common to HTML based components.</para><sect2><title/><sect3><title/><sect4><title>Class Name</title>
+<para>
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Child Components</title>
+<para>*ALL</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Events</title>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Event Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onDrop</code>
+</para>
+</entry>
+<entry>
+<para>
+<olink targetdocent="DropEvent.xml">
+<code>org.zkoss.zk.ui.event.DropEvent</code>
+</olink>
+</para>
+<para>Description: Represents an event cause by user's dragging and dropping a component.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>droppable</code>
+</para>
+</entry>
+<entry>
+<para>Sets "true" or "false" to denote whether a component is droppable, or a list of identifiers of draggable types of objects that could be droped to this component.</para>
+<para>Value:<code>true</code> | <code>false|the identifier of a draggable type of objects</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>droppable</code>
+</para>
+</entry>
+<entry>
+<para>Sets "true" or "false" to denote whether a component is droppable, or a list of identifiers of draggable types of objects that could be droped to this component.</para>
+<para>Value:<code>true</code> | <code>false|</code>
+</para>
+<para>
+<code>the identifier of a draggable type of objects</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>height</code>
+</para>
+</entry>
+<entry>
+<para>Sets the height.</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>left</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the left position.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>sclass</code>
+</para>
+</entry>
+<entry>
+<para>Sets the CSS class.</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>&lt;null&gt;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>style</code>
+</para>
+</entry>
+<entry>
+<para>Sets the CSS style.</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>tooltiptext</para>
+</entry>
+<entry>
+<para>Sets the text as the tooltip.</para>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>top</para>
+</entry>
+<entry>
+<para>Sets the top position.</para>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>width</para>
+</entry>
+<entry>
+<para>Sets the width.</para>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>zIndex</para>
+</entry>
+<entry>
+<para>Sets the Z index.</para>
+</entry>
+<entry>
+<para>int</para>
+</entry>
+<entry>
+<para>0</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/>
+<para/>
+<para/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>addEventListener(java.lang.String evtnm, EventListener listener) </code>
+</para>
+<para>
+<code/>
+</para>
+</entry>
+<entry>
+<para>Adds an event listener to specified event for this component.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>focus()Returns the interior attributes for generating the inner HTML tag; never return null. </para>
+<para/>
+<para>Used only by component developers. </para>
+<para/>
+<para>Default: empty string. Refer to getOuterAttrs for more details. </para>
+</entry>
+<entry>
+<para>Sets focus to this element. For element that does not accept focus, this method has no effect.</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getInnerAttrs()</para>
+</entry>
+<entry>
+<para>Returns the interior attributes for generating the inner HTML tag; never return null. </para>
+<para>Used only by component developers. </para>
+<para>Default: empty string. Refer to getOuterAttrs for more details. </para>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getOuterAttrs()</para>
+</entry>
+<entry>
+<para>Returns the exterior attributes for generating the enclosing HTML tag; never return null. </para>
+<para/>
+<para>Used only by component developers. </para>
+<para/>
+<para>Default: Generates the tooltip text, style, sclass, draggable and droppable attribute if necessary. In other words, the corresponding attribute is generated if getTooltiptext, getRealStyle, getSclass, getDraggable, getDroppable are defined. </para>
+<para/>
+<para>You have to call both getOuterAttrs and getInnerAttrs to generate complete attributes. </para>
+<para/>
+<para>For simple components that all attributes are put on the outest HTML element, all you need is as follows. </para>
+<para/>
+<para>&lt;xx id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}&gt;</para>
+<para>If you want to put attributes in a nested HTML element, you shall use the following pattern. Notice: if getInnerAttrs in a different tag, the tag must be named with "${self.uuid}!real". </para>
+<para/>
+<para>&lt;xx id="${self.uuid}"${self.outerAttrs}&gt;</para>
+<para>&lt;yy id="${self.uuid}!real"${self.innerAttrs}&gt;...</para>
+<para/>
+<para>Note: This class handles non-deferrable event listeners automatically. However, you have to invoke appendAsapAttr for each event the component handles in getOuterAttrs as follows. </para>
+<para/>
+<para/>
+<para>appendAsapAttr(sb, Events.ON_OPEN);</para>
+<para>appendAsapAttr(sb, Events.ON_CHANGE);</para>
+<para/>
+<para>Theorectically, you could put any attributes in either getInnerAttrs or getOuterAttrs. However, zkau.js assumes all attributes are put at the outer one. If you want something different, you have to provide your own setAttr (refer to how checkbox is implemented). </para>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>removeEventListener(java.lang.String evtnm, EventListener listener) </para>
+</entry>
+<entry>
+<para>Removes an event listener.</para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent</olink>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect4></sect3></sect2></sect1></article>

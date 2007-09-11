@@ -127,9 +127,10 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Methods</title>
 <informaltable frame="all">
-<tgroup cols="4">
+<tgroup cols="3">
 <thead>
 <row>
 <entry>
@@ -139,76 +140,60 @@
 <para>Description</para>
 </entry>
 <entry>
-<para>Data Type</para>
-</entry>
-<entry>
-<para>Values</para>
+<para>Return Data Type</para>
 </entry>
 </row>
 </thead><tbody>
 <row>
 <entry>
 <para>
-<code>isChildable</code>
+<code>isChildable()</code>
 </para>
 </entry>
 <entry>
 <para>Determines whether it accepts child components</para>
+<para>Value: false</para>
 <para>Note: No child is allowed. </para>
 </entry>
 <entry>
 <para>
-<code>Boolean</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>false</code>
+<code>boolean</code>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<code>pause</code>
+<code>pause()</code>
 </para>
 </entry>
 <entry>
 <para>Pauses the audio at the client.</para>
 </entry>
 <entry>
-<para>&lt;none&gt;</para>
-</entry>
-<entry>
-<para>&lt;none&gt;</para>
+<para>void</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>play</para>
+<para>play()</para>
 </entry>
 <entry>
 <para>Plays the audio at the client.</para>
 </entry>
 <entry>
-<para>&lt;none&gt;</para>
-</entry>
-<entry>
-<para>&lt;none&gt;</para>
+<para>void</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>stop</para>
+<para>stop()</para>
 </entry>
 <entry>
 <para>Stops the audio at the client.</para>
 </entry>
 <entry>
-<para>&lt;none&gt;</para>
-</entry>
-<entry>
-<para>&lt;none&gt;</para>
+<para>void</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Inherited From </title>

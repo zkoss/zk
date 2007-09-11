@@ -179,7 +179,7 @@
 </informaltable>
 <para/></sect4><sect4><title>Methods</title>
 <informaltable frame="all">
-<tgroup cols="4">
+<tgroup cols="3">
 <thead>
 <row>
 <entry>
@@ -189,32 +189,26 @@
 <para>Description</para>
 </entry>
 <entry>
-<para>Data Type</para>
-</entry>
-<entry>
-<para>Values</para>
+<para>Return Data Type</para>
 </entry>
 </row>
 </thead><tbody>
 <row>
 <entry>
 <para>
-<code>isChildable</code>
+<code>isChildable()</code>
 </para>
 </entry>
 <entry>
 <para>Determines whether it accepts child components</para>
+<para>Value: <code>false</code>
+</para>
 <para>Note: No child is allowed. </para>
 </entry>
 <entry>
 <para>
 <code>boo</code>
 <code>lean</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>false</code>
 </para>
 </entry>
 </row></tbody></tgroup>
