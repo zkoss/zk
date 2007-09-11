@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article lang="en-US"><sect1><title>Box</title>
+<para>The box model of XUL is used to divide a portion of the display into a series of boxes. Components inside of a box will orient themselves horizontally or vertically. By combining a series of boxes and separators, you can control the layout of the visual representation.</para>
+<para>A box can lay out its children in one of two orientations, either horizontally or vertically. A horizontal box lines up its components horizontally and a vertical box orients its components vertically. You can think of a box as one row or one column from an HTML table.</para>
+<para/>
+<para>
+<inlinegraphic fileref="images/box.png" width="4.047cm"/>
+</para>
+<title/>
+<programlisting>&lt;zk&gt;&#13;&lt;box orient="vertical"&gt;&#13;&lt;button label="Button 1"/&gt;&#13;&lt;button label="Button 2"/&gt;&#13;&lt;/box&gt;&#13;&lt;box orient="horizontal"&gt;&#13;&lt;button label="Button 3"/&gt;&#13;&lt;button label="Button 4"/&gt;&#13;&lt;/box&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect2><title/><sect3><title/><sect4><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Box</code>
+</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Child Components</title>
+<para>*ALL</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Events </title> <para>*NONE</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>heights</code>
+</para>
+</entry>
+<entry>
+<para>Sets the widths/heights, which is a list of numbers separated by comma to denote the width/height of each cell in a box.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>ori</code>
+<code>ent</code>
+</para>
+</entry>
+<entry>
+<para>Sets the orient.</para>
+<para>Values:<code>horizontal</code> | <code>ver</code>
+<code>tical </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>spacing</code>
+</para>
+</entry>
+<entry>
+<para>Sets the spacing.(such as "0", "5px", "3pt" or "1em")</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>&lt;null&gt;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>val</code>
+<code>ign</code>
+</para>
+</entry>
+<entry>
+<para>Sets the vertical alignment of the adjacent cells of a box.</para>
+<para>Value:<code>top|middle|bottom</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>top</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>widths</code>
+</para>
+</entry>
+<entry>
+<para>Sets the widths/heights, which is a list of numbers separated by comma to denote the width/height of each cell in a box.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>&lt;empty&gt;</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getChildInnerAttrs(org.zkoss.zk.ui.Component) </code>
+</para>
+</entry>
+<entry>
+<para>Returns the inner attributes used to wrap the children (never null).</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getChildOuterAttrs(org.zkoss.zk.ui.Component) </para>
+</entry>
+<entry>
+<para>Returns the outer attributes used to wrap the children (never null).</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onDrawNewChild(org.zkoss.zk.ui.Component, java.lang.StringBuffer)</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect4></sect3></sect2></sect1></article>

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Button</title>
-<para>You could assign a <code>label</code> and an <code>image</code> to a button by the <code>label</code> and <code>image</code> properties. If both are specified, the <code>dir</code> property control which is displayed up front, and the <code>orient</code> property controls whether the layout is horizontal or vertical. </para>
+<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Groupbox</title>
+<para>Components: <code>groupbox</code>.</para>
+<para>A group box is used to group components together. A border is typically drawn around the components to show that they are related. The label across the top of the group box can be created by using the <code>caption</code> component. It works much like the HTML legend element. Unlike windows, a group box is not an owner of the ID space. It cannot be overlapped or popup.</para>
 <para>
-<inlinegraphic fileref="images/button.jpg" width="3.388cm"/>
+<inlinegraphic fileref="images/groupbox.png" width="7.434cm"/>
 </para>
 <title/>
-<programlisting>&lt;button label="Left" image="/img/folder.gif" width="125px"/&gt;&#13;&lt;button label="Right" image="/img/folder.gif" dir="reverse" width="125px"/&gt;&#13;&lt;button label="Above" image="/img/folder.gif" orient="vertical" width="125px"/&gt;&#13;&lt;button label="Below" image="/img/folder.gif" orient="vertical" dir="reverse" width="125px"/&gt;&#13;</programlisting><sect4><title>Class Name</title>
+<programlisting>&lt;groupbox width="250px"&gt;&#13;&lt;caption label="Fruits"/&gt;&#13;&lt;radiogroup&gt;&#13;&lt;radio label="Apple"/&gt;&#13;&lt;radio label="Orange"/&gt;&#13;&lt;radio label="Banana"/&gt;&#13;&lt;/radiogroup&gt;&#13;&lt;/groupbox&gt;&#13;</programlisting><sect4><title>Class Name</title>
 <para>
-<code>org.zkoss.zul.Button</code>
+<code>org.zkoss.zul.Groupbox</code>
 </para></sect4><sect4><title>Supported Child Components</title>
-<para>*NONE </para></sect4><sect4><title>Supported Events</title></sect4><sect4><title/>
+<para>*ALL </para></sect4><sect4><title>Supported Events</title></sect4><sect4><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -95,42 +96,27 @@
 <row>
 <entry>
 <para>
-<code>OnFocus</code>
+<code>OnOpen</code>
 </para>
 </entry>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
-<code>org.zkoss.zk.ui.event.Event</code>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/OpenEvent.xml">
+<code>org.zkoss.zk.ui.event.OpenEvent</code>
 </olink>
 </para>
 <para>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
 <code/>
+</olink>
 </para>
 <para>
 <code>Description:</code>
-<code> Denotes when a component gets the focus.</code>
+<code> </code>
+<code>Denotes user has opened or closed a component. Note:</code>
 </para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>OnBlur</code>
-</para>
-</entry>
-<entry>
-<para>
-<olink targetdocent="Event.xml">
-<code>org.zkoss.zk.ui.even.Event</code>
-</olink>
-</para>
-<para>
-<code/>
-</para>
-<para>
-<code>Description: Denotes when a component loses the focus.</code>
-</para>
+<para>unlike onClose, this event is only a notification. The client sends this event after opening or closing the component.</para>
+<para>It is useful to implement load-on-demand by listening to the onOpen event, and creating components when the first time the component is opened.</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect4><sect4><title>Properties</title>
@@ -155,123 +141,67 @@
 <row>
 <entry>
 <para>
-<code>dir</code>
+<code>closable</code>
 </para>
 </entry>
 <entry>
-<para>Sets the direction of button</para>
-<para>Value:<code>normal</code> | <code>reverse</code>
+<para>
+<code>Sets whether user can open or close the group box. </code>
 </para>
+</entry>
+<entry>
+<para>
+<code>boo</code>
+<code>lean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>true</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>con</code>
+<code>tentStyle</code>
+</para>
+</entry>
+<entry>
+<para>Sets the CSS style for the content block of the groupbox. </para>
 </entry>
 <entry>
 <para>
 <code>java.lang.</code>
-<code>String</code>
+<code>Str</code>
+<code>ing</code>
 </para>
 </entry>
 <entry>
 <para>
-<code>normal</code>
+<code>&lt;null&gt;</code>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<code>disable</code>
+<code>ope</code>
+<code>n</code>
 </para>
 </entry>
 <entry>
-<para>Sets whether it is disabled or not</para>
+<para>Opens or closes this groupbox. </para>
 </entry>
 <entry>
 <para>
-<code>boolean</code>
+<code>boo</code>
+<code>lean</code>
 </para>
 </entry>
 <entry>
-<para>
-<code>false</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>href</code>
-</para>
-</entry>
-<entry>
-<para>Provides a hyper link</para>
-</entry>
-<entry>
-<para>
-<code>java.lang.</code>
-<code>String</code>
-</para>
-</entry>
-<entry>
-<para>&lt;empty string&gt;</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>orient</code>
-</para>
-</entry>
-<entry>
-<para>Sets the orientation of button</para>
-<para>Value:<code>horizontal</code> | <code>vertical</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>java.lang.String</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>horizontal</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>target</code>
-</para>
-</entry>
-<entry>
-<para>Sets the target frame or window</para>
-</entry>
-<entry>
-<para>
-<code>java.lang.String</code>
-</para>
-</entry>
-<entry>
-<para>&lt;null&gt;</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tabindex</code>
-</para>
-</entry>
-<entry>
-<para>Sets the tab order of this component</para>
-</entry>
-<entry>
-<para>
-<code>int</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>-1 </code>
-</para>
+<para>true</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
@@ -294,20 +224,62 @@
 <row>
 <entry>
 <para>
-<code>isChildable()</code>
+<code>getCaption()</code>
 </para>
 </entry>
 <entry>
-<para>Determines whether it accepts child components</para>
-<para>Value: <code>false</code>
-</para>
-<para>Note: No child is allowed. </para>
+<para>Returns the caption of this groupbox. </para>
 </entry>
 <entry>
 <para>
-<code>boo</code>
-<code>lean</code>
+<code>o</code>
+<code>rg.zkoss.zul.C</code>
+<code>aption</code>
 </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getContentSclass()</para>
+</entry>
+<entry>
+<para>Returns the style class used for the content block of the groupbox. </para>
+</entry>
+<entry>
+<para>java.lang.String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getOuterAttrs()</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>java.lang.String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>insertBefore(o<code>rg.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component)</code> </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onChildRemoved(org.zkoss.zk.ui.Component)</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>
@@ -320,20 +292,6 @@
 </entry>
 </row>
 </thead><tbody>
-<row>
-<entry>
-<para>
-<olink targetdocent="LabelImageElement.xml">org.zkoss.zul.impl.LabelImageElement</olink>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<olink targetdocent="LabelElement.xml">org.zkoss.zul.impl.LabelElement</olink>
-</para>
-</entry>
-</row>
 <row>
 <entry>
 <para>

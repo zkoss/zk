@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article lang="en-US"><sect1><title>Caption</title>
+<para>A header for a <code>Groupbox</code>. It may contain either a text label, using <code>LabelElement.setLabel(java.lang.String)</code>, or child elements for a more complex caption.</para>
+<para/>
+<para>
+<inlinegraphic fileref="images/caption.png" width="9.551cm"/>
+</para>
+<title/>
+<programlisting>&lt;zk&gt;&#13;&lt;window border="normal" width="350px"&gt;&#13;&lt;caption label="This is a caption"/&gt;&#13;&lt;groupbox width="300px"&gt;&#13; &lt;caption label="fruits"/&gt;&#13;&lt;radiogroup onCheck="fruit.value = self.selectedItem.label"&gt;&#13;&lt;radio label="Apple"/&gt;&#13;&lt;radio label="Orange"/&gt;&#13;&lt;radio label="Banana"/&gt; &#13;&lt;/radiogroup&gt;&#13;&lt;/groupbox&gt;&#13;&lt;/window&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect2><title/><sect3><title/><sect4><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Caption</code>
+</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Child Components</title>
+<para>*ALL</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Events </title> <para/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>OnClick</code>
+</para>
+</entry>
+<entry>
+<para>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<code>org.zkoss.zk.ui.event.MouseEvent</code>
+</olink>
+</para>
+<para>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<code/>
+</olink>
+</para>
+<para>
+<code>Description:</code>
+<code> Denotes user has clicked the component. </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onRightClick</code>
+</para>
+</entry>
+<entry>
+<para>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<code>org.zkoss.zk.ui.event.MouseEvent</code>
+</olink>
+</para>
+<para>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<code/>
+</olink>
+</para>
+<para>
+<code>Description:</code>
+<code> Denotes user has right-clicked the component.</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onDoubleClick</code>
+</para>
+</entry>
+<entry>
+<para>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<code>org.zkoss.zk.ui.event.MouseEvent</code>
+</olink>
+</para>
+<para>
+<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<code/>
+</olink>
+</para>
+<para>
+<code>Description:</code>
+<code> Denotes user has double-clicked the component.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Properties</title>
+<para>*NONE</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getCompoundLabel()</code>
+</para>
+</entry>
+<entry>
+<para>Returns a compound label, which is the catenation of parent's title, if the parent is <code>Window</code>, and <code>LabelElement.getLabel()</code>.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getOuterAttrs()</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getSclass()</para>
+</entry>
+<entry>
+<para>Returns the style class.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>invalidate()</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>isClosableVisible()</para>
+</entry>
+<entry>
+<para>Returns whether to display the closable button.</para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>isLegend()</para>
+</entry>
+<entry>
+<para>Returns whether the legend mold shall be used.</para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>setParent(org.zkoss.zk.ui.Component) </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<olink targetdocent="LabelImageElement.xml">org.zkoss.zul.impl.LabelImageElement</olink>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="LabelElement.xml">org.zkoss.zul.impl.LabelElement</olink>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect4></sect3></sect2></sect1></article>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Button</title>
-<para>You could assign a <code>label</code> and an <code>image</code> to a button by the <code>label</code> and <code>image</code> properties. If both are specified, the <code>dir</code> property control which is displayed up front, and the <code>orient</code> property controls whether the layout is horizontal or vertical. </para>
+<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Checkbox</title>
+<para>A checkbox.</para>
 <para>
-<inlinegraphic fileref="images/button.jpg" width="3.388cm"/>
+<inlinegraphic fileref="images/checkbox.png" width="9.498cm"/>
 </para>
 <title/>
-<programlisting>&lt;button label="Left" image="/img/folder.gif" width="125px"/&gt;&#13;&lt;button label="Right" image="/img/folder.gif" dir="reverse" width="125px"/&gt;&#13;&lt;button label="Above" image="/img/folder.gif" orient="vertical" width="125px"/&gt;&#13;&lt;button label="Below" image="/img/folder.gif" orient="vertical" dir="reverse" width="125px"/&gt;&#13;</programlisting><sect4><title>Class Name</title>
+<programlisting>&lt;window title="Checkbox demo" border="normal" width="350px"&gt;&#13;&lt;checkbox id="apple" label="Apple" onCheck="doChecked()" /&gt;&#13;&lt;checkbox id="orange" label="Orange" onCheck="doChecked()" /&gt;&#13;&lt;checkbox id="banana" label="Banana" onCheck="doChecked()" /&gt;&#13;&lt;hbox&gt;You have selected :&lt;label id="fruit2"/&gt;&lt;/hbox&gt;&#13;&lt;zscript&gt;&#13;void doChecked() {&#13;fruit2.value = (apple.isChecked() ? apple.label+' ' : &amp;quot;&amp;quot;) &#13;+ (orange.isChecked() ? orange.label+' ' : &amp;quot;&amp;quot;) &#13;+ (banana.isChecked() ? banana.label+' ' : &amp;quot;&amp;quot;);&#13;}&#13;&lt;/zscript&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect4><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Button</code>
 </para></sect4><sect4><title>Supported Child Components</title>
-<para>*NONE </para></sect4><sect4><title>Supported Events</title></sect4><sect4><title/>
+<para>*ALL </para></sect4><sect4><title>Supported Events</title></sect4><sect4><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -23,29 +23,6 @@
 </entry>
 </row>
 </thead><tbody>
-<row>
-<entry>
-<para>
-<code>OnClick</code>
-</para>
-</entry>
-<entry>
-<para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
-<code>org.zkoss.zk.ui.event.MouseEvent</code>
-</olink>
-</para>
-<para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
-<code/>
-</olink>
-</para>
-<para>
-<code>Description:</code>
-<code> Denotes user has clicked the component. </code>
-</para>
-</entry>
-</row>
 <row>
 <entry>
 <para>
@@ -132,6 +109,21 @@
 <code>Description: Denotes when a component loses the focus.</code>
 </para>
 </entry>
+</row>
+<row>
+<entry>
+<para>OnCheck</para>
+</entry>
+<entry>
+<para>
+<olink targetdocent="CheckEvent.xml">
+<code>org.zkoss.zk.ui.event.CheckEvent</code>
+</olink>
+</para>
+<para>
+<code>Description: Denotes when a component loses the focus.</code>
+</para>
+</entry>
 </row></tbody></tgroup>
 </informaltable></sect4><sect4><title>Properties</title>
 <informaltable frame="all">
@@ -155,34 +147,35 @@
 <row>
 <entry>
 <para>
-<code>dir</code>
-</para>
-</entry>
-<entry>
-<para>Sets the direction of button</para>
-<para>Value:<code>normal</code> | <code>reverse</code>
+<code>checked</code>
 </para>
 </entry>
 <entry>
 <para>
-<code>java.lang.</code>
-<code>String</code>
+<code>Sets whether it is checked.</code>
 </para>
 </entry>
 <entry>
 <para>
-<code>normal</code>
+<code>boo</code>
+<code>lean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<code>disable</code>
+<code>dis</code>
+<code>abled</code>
 </para>
 </entry>
 <entry>
-<para>Sets whether it is disabled or not</para>
+<para>Sets whether it is disabled.</para>
 </entry>
 <entry>
 <para>
@@ -198,52 +191,11 @@
 <row>
 <entry>
 <para>
-<code>href</code>
+<code>name</code>
 </para>
 </entry>
 <entry>
-<para>Provides a hyper link</para>
-</entry>
-<entry>
-<para>
-<code>java.lang.</code>
-<code>String</code>
-</para>
-</entry>
-<entry>
-<para>&lt;empty string&gt;</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>orient</code>
-</para>
-</entry>
-<entry>
-<para>Sets the orientation of button</para>
-<para>Value:<code>horizontal</code> | <code>vertical</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>java.lang.String</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>horizontal</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>target</code>
-</para>
-</entry>
-<entry>
-<para>Sets the target frame or window</para>
+<para>Sets the name of this component.</para>
 </entry>
 <entry>
 <para>
@@ -261,16 +213,17 @@
 </para>
 </entry>
 <entry>
-<para>Sets the tab order of this component</para>
+<para>Sets the tab order of this component. </para>
 </entry>
 <entry>
 <para>
-<code>int</code>
+<code>i</code>
+<code>nt </code>
 </para>
 </entry>
 <entry>
 <para>
-<code>-1 </code>
+<code>-1</code>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -294,19 +247,41 @@
 <row>
 <entry>
 <para>
-<code>isChildable()</code>
+<code>getInnerAttrs()</code>
 </para>
 </entry>
 <entry>
-<para>Determines whether it accepts child components</para>
-<para>Value: <code>false</code>
-</para>
-<para>Note: No child is allowed. </para>
+<para>Appends interior attributes for generating the HTML checkbox tag (the name, disabled and other attribute).</para>
 </entry>
 <entry>
 <para>
-<code>boo</code>
-<code>lean</code>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getLabelAttrs()</para>
+</entry>
+<entry>
+<para>Returns the attributes used by the embedded HTML LABEL tag.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getOuterAttrs()</para>
+</entry>
+<entry>
+<para>Appends exterior attributes for generating the HTML span tag (the event relevant attribute). </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
 </para>
 </entry>
 </row></tbody></tgroup>

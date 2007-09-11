@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article lang="en-US"><sect1><title>Hbox</title>
+<para>The hbox component is used to create a horizontally oriented box. Each component placed in the hbox will be placed horizontally in a row.</para>
+<para/>
+<para>
+<inlinegraphic fileref="images/box.png" width="4.047cm"/>
+</para>
+<title/>
+<programlisting>&lt;zk&gt;&#13;&lt;vbox&gt;&#13;&lt;button label="Button 1"/&gt;&#13;&lt;button label="Button 2"/&gt;&#13;&lt;/vbox&gt;&#13;&lt;hbox&gt;&#13;&lt;button label="Button 3"/&gt;&#13;&lt;button label="Button 4"/&gt;&#13;&lt;/hbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect2><title/><sect3><title/><sect4><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Hbox</code>
+</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Child Components</title>
+<para>*ALL</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Events </title> <para>*NONE</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Properties</title>
+<para>*NONE</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Methods</title>
+<para>*NONE</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<olink targetdocent="Box.xml">org.zkoss.zul.Box</olink>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect4></sect3></sect2></sect1></article>

@@ -65,7 +65,7 @@
 </entry>
 <entry>
 <para>
-<code>String</code>
+<code>java.lang.String</code>
 </para>
 </entry>
 <entry>
@@ -90,7 +90,7 @@
 </entry>
 <entry>
 <para>
-<code>String</code>
+<code>java.lang.String</code>
 </para>
 </entry>
 <entry>
@@ -110,7 +110,7 @@
 </entry>
 <entry>
 <para>
-<code>String</code>
+<code>java.lang.String</code>
 </para>
 </entry>
 <entry>
@@ -132,7 +132,7 @@
 </entry>
 <entry>
 <para>
-<code>String</code>
+<code>java.lang.String</code>
 </para>
 </entry>
 <entry>
@@ -152,7 +152,7 @@
 </entry>
 <entry>
 <para>
-<code>String</code>
+<code>java.lang.String</code>
 </para>
 </entry>
 <entry>
@@ -170,7 +170,7 @@
 </entry>
 <entry>
 <para>
-<code>String</code>
+<code>java.lang.String</code>
 </para>
 </entry>
 <entry>
@@ -187,7 +187,9 @@
 <para>Sets the text as the tooltip.</para>
 </entry>
 <entry>
-<para>String</para>
+<para>
+<code>java.lang.String</code>
+</para>
 </entry>
 <entry>
 <para>
@@ -203,7 +205,9 @@
 <para>Sets the top position.</para>
 </entry>
 <entry>
-<para>String</para>
+<para>
+<code>java.lang.String</code>
+</para>
 </entry>
 <entry>
 <para>
@@ -219,7 +223,9 @@
 <para>Sets the width.</para>
 </entry>
 <entry>
-<para>String</para>
+<para>
+<code>java.lang.String</code>
+</para>
 </entry>
 <entry>
 <para>
@@ -264,7 +270,7 @@
 <row>
 <entry>
 <para>
-<code>addEventListener(java.lang.String evtnm, EventListener listener) </code>
+<code>addEventListener(java.lang.String, EventListener) </code>
 </para>
 <para>
 <code/>
@@ -281,14 +287,10 @@
 </row>
 <row>
 <entry>
-<para>focus()Returns the interior attributes for generating the inner HTML tag; never return null. </para>
-<para/>
-<para>Used only by component developers. </para>
-<para/>
-<para>Default: empty string. Refer to getOuterAttrs for more details. </para>
+<para>focus()</para>
 </entry>
 <entry>
-<para>Sets focus to this element. For element that does not accept focus, this method has no effect.</para>
+<para>Sets focus to this element.</para>
 </entry>
 <entry>
 <para>void</para>
@@ -304,7 +306,7 @@
 <para>Default: empty string. Refer to getOuterAttrs for more details. </para>
 </entry>
 <entry>
-<para>String</para>
+<para>java.lang.String</para>
 </entry>
 </row>
 <row>
@@ -319,30 +321,23 @@
 <para>Default: Generates the tooltip text, style, sclass, draggable and droppable attribute if necessary. In other words, the corresponding attribute is generated if getTooltiptext, getRealStyle, getSclass, getDraggable, getDroppable are defined. </para>
 <para/>
 <para>You have to call both getOuterAttrs and getInnerAttrs to generate complete attributes. </para>
-<para/>
 <para>For simple components that all attributes are put on the outest HTML element, all you need is as follows. </para>
-<para/>
 <para>&lt;xx id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}&gt;</para>
 <para>If you want to put attributes in a nested HTML element, you shall use the following pattern. Notice: if getInnerAttrs in a different tag, the tag must be named with "${self.uuid}!real". </para>
-<para/>
 <para>&lt;xx id="${self.uuid}"${self.outerAttrs}&gt;</para>
 <para>&lt;yy id="${self.uuid}!real"${self.innerAttrs}&gt;...</para>
-<para/>
 <para>Note: This class handles non-deferrable event listeners automatically. However, you have to invoke appendAsapAttr for each event the component handles in getOuterAttrs as follows. </para>
-<para/>
-<para/>
 <para>appendAsapAttr(sb, Events.ON_OPEN);</para>
 <para>appendAsapAttr(sb, Events.ON_CHANGE);</para>
-<para/>
 <para>Theorectically, you could put any attributes in either getInnerAttrs or getOuterAttrs. However, zkau.js assumes all attributes are put at the outer one. If you want something different, you have to provide your own setAttr (refer to how checkbox is implemented). </para>
 </entry>
 <entry>
-<para>String</para>
+<para>java.lang.String</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>removeEventListener(java.lang.String evtnm, EventListener listener) </para>
+<para>removeEventListener(java.lang.String, EventListener) </para>
 </entry>
 <entry>
 <para>Removes an event listener.</para>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Rows</title>
+<para>Defines the rows of a grid. Each child of a rows element should be a org.zkoss.zul.Row element.</para>
+<para>
+<inlinegraphic fileref="images/grid.png" width="9.762cm"/>
+</para>
+<title/>
+<programlisting>&lt;window title="Grid Demo" border="normal" width="360px"&gt;&#13;&lt;zscript&gt;&#13;class Comp implements Comparator {&#13;private boolean _asc;&#13;public Comp(boolean asc) {&#13;_asc = asc;&#13;}&#13;public int compare(Object o1, Object o2) {&#13;String s1 = o1.getChildren().get(0).getValue(),&#13;s2 = o2.getChildren().get(0).getValue();&#13;int v = s1.compareTo(s2);&#13;return _asc ? v: -v;&#13;}&#13;}&#13;Comp asc = new Comp(true), dsc = new Comp(false);&#13;&lt;/zscript&gt;&#13;&lt;grid&gt;&#13;&lt;columns sizable="true"&gt;&#13;&lt;column label="Type" sortAscending="&amp;#36;{asc}" sortDescending="&amp;#36;{dsc}"/&gt;&#13;&lt;column label="Content"/&gt;&#13;&lt;/columns&gt;&#13;&lt;rows&gt;&#13;&lt;row&gt;&#13;&lt;label value="File:"/&gt;&#13;&lt;textbox width="99%"/&gt;&#13;&lt;/row&gt;&#13;&lt;row&gt;&#13;&lt;label value="Type:"/&gt;&#13;&lt;hbox&gt;&#13;&lt;listbox rows="1" mold="select"&gt;&#13;&lt;listitem label="Java Files,(*.java)"/&gt;&#13;&lt;listitem label="All Files,(*.*)"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;button label="Browse..."/&gt;&#13;&lt;/hbox&gt;&#13;&lt;/row&gt;&#13;&lt;row&gt;&#13;&lt;label value="Options:"/&gt;&#13;&lt;textbox rows="3" width="99%"/&gt;&#13;&lt;/row&gt;&#13;&lt;/rows&gt;&#13;&lt;/grid&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect4><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Rows</code>
+</para></sect4><sect4><title>Supported Child Components</title>
+<para>*org.zkoss.zul.Row</para></sect4><sect4><title>Supported Events</title>
+<para>*NONE</para></sect4><sect4><title>Properties</title>
+<para>*NONE</para></sect4><sect4><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getGrid()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the grid that contains this rows.</para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Grid</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getVisibleBegin()</para>
+</entry>
+<entry>
+<para>Returns the index of the first visible child. </para>
+</entry>
+<entry>
+<para>int</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getVisibleEnd()</para>
+</entry>
+<entry>
+<para>Returns the index of the last visible child. </para>
+</entry>
+<entry>
+<para>int</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>insertBefore(org.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component)</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onChildAdded(org.zkoss.zk.ui.Component)</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onChildRemoved(org.zkoss.zk.ui.Component)</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>setParent(org.zkoss.zk.ui.Component)</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect4></sect3></sect2></sect1></article>
