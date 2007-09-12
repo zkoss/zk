@@ -96,6 +96,11 @@ ZK 3.0.0
   1791498: Visual effect of tab's width incorrect if select large panel
   1758638: Trunked filename when Filedownload
   1792403: Listbox/combobox use class instead of style to style onmouseove
+  1756589: Updated Listitem cannot be select in IE after a few seconds
+  1719826: Listbox componet disapear
+  1760929: Overlapped windows can't be created in not visible container
+  1793044: Returns wrong value from Utils.intsToString()
+  1775014: Grid Size Growing After SetModel
 
 * Upgrade Notes:
   + The way to customize the zebra color (striping) of grid is changed.
