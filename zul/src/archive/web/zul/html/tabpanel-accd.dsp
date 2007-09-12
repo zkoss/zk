@@ -23,6 +23,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="suffix" value="-sel" if="${tab.selected}"/>
 <c:set var="suffix" value="-uns" unless="${tab.selected}"/>
 <c:set var="look" value="${self.tabbox.tabLook}-"/>
+<c:set var="hghStyle" value="height:${tab.height}" unless="${empty tab.height}"/>
 <tr id="${self.uuid}"><%-- no outerAttrs here because tab.js controls it diff --%>
 <td>
 <table id="${tab.uuid}"${tab.outerAttrs}${tab.innerAttrs} z.sel="${tab.selected}" z.type="zul.tab.Tab" z.box="${tab.tabbox.uuid}" z.panel="${self.uuid}" width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -34,7 +35,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<td colspan="${tab.closable?4:3}" class="${c:cat3(look,'tm',suffix)}"></td>
 	<td class="${c:cat3(look,'tr',suffix)}"></td>
 </tr>
-<tr height="${empty tab.height ? '22':tab.height}">
+<tr class="${c:cat(look,'m')}"${c:attr('style',hghStyle)}>
 	<td class="${c:cat3(look,'ml',suffix)}"></td>
 	<td width="3" class="${c:cat3(look,'mm',suffix)}"></td>
 	<td align="left" class="${c:cat3(look,'mm',suffix)}"><a href="javascript:;" id="${tab.uuid}!a">${tab.imgTag}<c:out value="${tab.label}"/></a></td>

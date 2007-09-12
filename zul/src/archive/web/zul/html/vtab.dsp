@@ -29,7 +29,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<td colspan="3" class="${c:cat3(look,'tm',suffix)}"></td>
 	<td class="${c:cat3(look,'tr',suffix)}"></td>
 </tr>
-<tr height="22">
+<tr class="${c:cat(look,'m')}">
 	<td class="${c:cat3(look,'ml',suffix)}"></td>
 	<td width="3" class="${c:cat3(look,'mm',suffix)}"></td>
 	<td align="center" class="${c:cat3(look,'mm',suffix)}" id="${self.uuid}!real"${self.innerAttrs}><a href="javascript:;" id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a></td>

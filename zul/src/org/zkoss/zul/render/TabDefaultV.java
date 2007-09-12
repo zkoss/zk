@@ -60,7 +60,8 @@ public class TabDefaultV implements ComponentRenderer {
 			.write("<td class=\"").write(look).write("tr").write(suffix).writeln("\"></td>")
 			.write("</tr>");
 
-		wh.write("<tr height=\"22\"><td class=\"").write(look).write("ml").write(suffix).writeln("\"></td>")
+		wh.write("<tr class=\"").write(look).write('m')
+			.write("\"><td class=\"").write(look).write("ml").write(suffix).writeln("\"></td>")
 			.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
 			.write("<td align=\"center\" class=\"").write(look).write("mm").write(suffix)
 			.write("\" id=\"").write(self.getUuid()).write("!real\"").write(self.getInnerAttrs())

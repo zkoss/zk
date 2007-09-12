@@ -55,7 +55,8 @@ public class Groupbox3d implements ComponentRenderer {
 			wh.write("<td colspan=\"3\" class=\"").write(look).writeln("tm\"></td>");
 			wh.write("<td class=\"").write(look).writeln("tr\"></td></tr>");
 
-			wh.write("<tr height=\"22\"><td class=\"").write(look).writeln("ml\"></td>");
+			wh.write("<tr class=\"").write(look).write('m')
+				.write("\"><td class=\"").write(look).writeln("ml\"></td>");
 			wh.write("<td width=\"3\" class=\"").write(look).writeln("mm\"></td>");
 			wh.write("<td class=\"").write(look).write("mm\">");
 			caption.redraw(out);

@@ -30,7 +30,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<td colspan="3" class="${c:cat(look,'tm')}"></td>
 	<td class="${c:cat(look,'tr')}"></td>
 </tr>
-<tr height="22">
+<tr class="${c:cat(look,'m')}">
 	<td class="${c:cat(look,'ml')}"></td>
 	<td width="3" class="${c:cat(look,'mm')}"></td>
 	<td class="${c:cat(look,'mm')}">${z:redraw(self.caption, null)}</td>

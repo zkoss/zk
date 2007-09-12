@@ -70,8 +70,11 @@ public class TabDefault implements ComponentRenderer {
 			.write("\" class=\"").write(look).write("tm").write(suffix).writeln("\"></td>")
 			.write("<td class=\"").write(look).write("tr").write(suffix).writeln("\"></td></tr>");
 
-		wh.write("<tr height=\"").write(Strings.isBlank(self.getHeight()) ? "22": self.getHeight()).writeln("\">")
-			.write("<td class=\"").write(look).write("ml").write(suffix).writeln("\"></td>")
+		wh.write("<tr class=\"").write(look).write('m');
+		if (!Strings.isBlank(self.getHeight()))
+			wh.write("\" style=\"height:").write(self.getHeight());
+		wh.writeln("\"><td class=\"")
+			.write(look).write("ml").write(suffix).writeln("\"></td>")
 			.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
 			.write("<td align=\"center\" class=\"").write(look).write("mm").write(suffix)
 			.write("\"><a href=\"javascript:;\"").write(" id=\"").write(self.getUuid()).write("!a\">")

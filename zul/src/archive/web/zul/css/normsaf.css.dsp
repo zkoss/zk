@@ -433,6 +433,10 @@ td.tab-3d-br-uns {
 	width: 5px; height: 3px;
 }
 
+tr.tab-3d-m, tr.tab-v3d-m, tr.tabaccd-3d-m, tr.groupbox-3d-m {
+	height: 22px;
+}
+
 td.tabaccd-3d-b, td.groupbox-3d-b {
 	background-image: url(${c:encodeURL('~./zul/img/tab/3d-b.gif')});
 	height: 1px;
@@ -773,4 +777,7 @@ td.groupbox-lite-shdm {
 td.groupbox-lite-shdr {
 	background-image: url(${c:encodeURL('~./img/shdrg.gif')});
 	width: 6px; height: 6px;
+}
+tr.tab-lite-m, tr.groupbox-lite-m {
+	height: 21px;
 }

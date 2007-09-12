@@ -50,7 +50,6 @@ public class TabpanelAccordion implements ComponentRenderer {
 		final Tabbox tabbox = self.getTabbox();
 		final String look = tabbox.getTabLook() + '-';
 		final String suffix = self.isSelected() ? "-sel" : "-uns";
-		final String height = Strings.isBlank(tab.getHeight()) ? "22" : tab.getHeight();		
 		
 		wh.write("<tr id=\"").write(self.getUuid()).write("\"><td>");
 		wh.write("<table id=\"").write(tab.getUuid()).write("\"")
@@ -67,7 +66,10 @@ public class TabpanelAccordion implements ComponentRenderer {
 			.write("\" class=\"").write(look).write("tm").write(suffix).writeln("\"></td>")
 			.write("<td class=\"").write(look).write("tr").write(suffix).writeln("\"></td></tr>");	
 
-		wh.write("<tr height=\"").write(height).write("\"><td class=\"")
+		wh.write("<tr class=\"").write(look).write('m');
+		if (!Strings.isBlank(tab.getHeight()))
+			wh.write("\" style=\"height:").write(tab.getHeight());
+		wh.write("\"><td class=\"")
 			.write(look).write("ml").write(suffix).writeln("\"></td>")
 			.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
 			.write("<td align=\"left\" class=\"").write(look).write("mm").write(suffix)

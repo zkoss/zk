@@ -21,6 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="suffix" value="-sel" if="${self.selected}"/>
 <c:set var="suffix" value="-uns" unless="${self.selected}"/>
 <c:set var="look" value="${self.tabbox.tabLook}-"/>
+<c:set var="hghStyle" value="height:${self.height}" unless="${empty self.height}"/>
 <td id="${self.uuid}" z.type="Tab"${self.outerAttrs}${self.innerAttrs} z.sel="${self.selected}" z.box="${self.tabbox.uuid}" z.panel="${self.linkedPanel.uuid}">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
@@ -28,7 +29,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<td colspan="${self.closable ?4:3}" class="${c:cat3(look,'tm',suffix)}"></td>
 	<td class="${c:cat3(look,'tr',suffix)}"></td>
 </tr>
-<tr height="${empty self.height ? '22': self.height}">
+<tr class="${c:cat(look,'m')}"${c:attr('style',hghStyle)}>
 	<td class="${c:cat3(look,'ml',suffix)}"></td>
 	<td width="3" class="${c:cat3(look,'mm',suffix)}"></td>
 	<td align="center" class="${c:cat3(look,'mm',suffix)}"><a href="javascript:;" id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a></td>
