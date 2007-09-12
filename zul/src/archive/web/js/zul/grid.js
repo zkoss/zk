@@ -65,18 +65,8 @@ zk.Grid.prototype = {
 		if (!this.paging && !this._inited) {
 			this._inited = true;
 
-			this.fnResize = function () {
-				//Tom Yeh: 20051230:
-				//In certain case, IE will keep sending resize (because
-				//our grid might adjust size and cause resize again)
-				//To avoid this endless loop, we resize once in a few seconds
-				var time = $now();
-				if (!meta.nextTime || time > meta.nextTime) {
-					meta.nextTime = time + 3000;
-					meta.recalcSize(true);
-				}
-			};
-			zk.listen(window, "resize", this.fnResize);
+			this.fnResize = function () {meta.recalcSize(true);};
+			zk.addOnResize(this.fnResize);
 		}
 
 		if (!this.paging) {
@@ -156,7 +146,7 @@ zk.Grid.prototype = {
 	},
 	cleanup: function ()  {
 		if (this.fnResize)
-			zk.unlisten(window, "resize", this.fnResize);
+			zk.rmOnResize(this.fnResize);
 		this.element = this.body = this.bodytbl = this.bodyrows
 			= this.head = this.headtbl = this.foot = this.foottbl = null;
 			//in case: GC not works properly

@@ -474,7 +474,7 @@ zkWnd._endModal = function (uuid, replace) {
 	delete zkWnd._modal2[uuid];
 
 	if (zkau._modals.length == 0) {
-		zk.unlisten(window," resize", zkWnd._onMoveMask);
+		zk.unlisten(window, "resize", zkWnd._onMoveMask);
 		zk.unlisten(window, "scroll", zkWnd._onMoveMask);
 		window.onscroll = null;
 		zk.restoreDisabled();

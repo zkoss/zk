@@ -115,18 +115,8 @@ zk.Selectable.prototype = {
 			}
 
 			if (!this.paging) {
-				this.fnResize = function () {
-					//Tom Yeh: 20051230:
-					//In certain case, IE will keep sending resize (because
-					//our listbox might adjust size and cause resize again)
-					//To avoid this endless loop, we resize once in a few seconds
-					var time = $now();
-					if (!meta.nextTime || time > meta.nextTime) {
-						meta.nextTime = time + 3000;
-						meta.recalcSize(true);
-					}
-				};
-				zk.listen(window, "resize", this.fnResize);
+				this.fnResize = function () {meta.recalcSize(true);};
+				zk.addOnResize(this.fnResize);
 			}
 
 			this.form = zk.formOf(this.element);
@@ -172,7 +162,7 @@ zk.Selectable.prototype = {
 	},
 	cleanup: function ()  {
 		if (this.fnResize)
-			zk.unlisten(window, "resize", this.fnResize);
+			zk.rmOnResize(this.fnResize);
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
