@@ -1256,8 +1256,8 @@ zkau.sendOnSize = function (cmp, keys) {
 		zkau.asapTimeout(cmp, "onSize"));
 };
 zkau.sendOnClose = function (uuid, closeFloats) {
-	if (closeFloats) zkau.closeFloats();
-	el = $e(uuid);
+	var el = $e(uuid);
+	if (closeFloats) zkau.closeFloats(el);
 	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
 };
 
