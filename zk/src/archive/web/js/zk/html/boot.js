@@ -59,7 +59,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "77"; //increase this if we want the browser to reload JavaScript
+zk.build = "78"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -96,42 +96,29 @@ zk.unlisten = function (el, evtnm, fn) {
 
 if (zk.ie) { //Bug 1741959: avoid memory leaks
 	zk._ltns = {} // map(String id, [evtnm, fn])
-	zk._unltns = []; //array of [evtnm, fn]
-	zk._ltnkey = function (el) {
-		if (el.id) {
-			var j = el.id.indexOf('!');
-			return j >= 0  ? el.id.substring(0, j): el.id;
-		}
-		return el == document ? "z+doc<": el == window ? "z+win<": null;
-	};
+	zk._unltns = []; //array of [el, [evtnm, fn]]
 
 	zk._listen = zk.listen;
 	zk.listen = function (el, evtnm, fn) {
 		zk._listen(el, evtnm, fn);
 
-		var key = zk._ltnkey(el);
-		if (key) {
-			var ls = zk._ltns[key];
-			if (!ls) zk._ltns[key] = ls = {};
-			var fns = ls[evtnm];
-			if (!fns) ls[evtnm] = fns = [];
-			fns.push([el, fn]);
-		}
+		var ls = zk._ltns[el];
+		if (!ls) zk._ltns[el] = ls = {};
+		var fns = ls[evtnm];
+		if (!fns) ls[evtnm] = fns = [];
+		fns.push(fn);
 	};
 
 	zk._unlisten = zk.unlisten;
 	zk.unlisten = function (el, evtnm, fn) {
 		zk._unlisten(el, evtnm, fn);
 
-		var ls = zk._ltns[zk._ltnkey(el)];
+		var ls = zk._ltns[el];
 		var fns = ls ? ls[evtnm]: null;
-		if (fns)
-			for (var j = 0; j < fns.length; ++j)
-				if (fns[j][1] == fn) {
-					fns.splice(j, 1);
-					if (!fns.length) delete ls[evtnm];
-					break;
-				}
+		if (fns) {
+			fns.remove(fn);
+			if (!fns.length) delete ls[evtnm];
+		}
 	};
 
 	/** Unlisten events associated with the specified ID.
@@ -139,41 +126,40 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	 */
 	zk.unlistenAll = function (el) {
 		if (el) {
-			var key = zk._ltnkey(el);
-			var ls = key ? zk._ltns[key]: null;
+			var ls = zk._ltns[el];
 			if (ls) {
-				//Note: key might be reused (e.g., outer), so
-				//we have delete and use the detached copy
-				zk._unltns.push(ls);
-				delete zk._ltns[key];
-				setTimeout(zk._asynUnlisten, 10000 + 20000*Math.random());
+				zk._unltns.push([el, ls]);
+				delete zk._ltns[el];
+				setTimeout(zk._unlistenOne, 10000 + 20000*Math.random());
 					//Note: the performance is not good, so delay 10~30s
 			}
 		} else {
 			while (zk._unltns.length)
-				zk._unlistenNode(zk._unltns.shift());
+				zk._unlistenOne();
 
-			for (var key in zk._ltns) {
-				var ls = zk._ltns[key];
+			for (var el in zk._ltns) {
+				var ls = zk._ltns[el];
 				if (ls) {
-					delete zk._ltns[key];
-					zk._unlistenNode(ls);
+					delete zk._ltns[el];
+					zk._unlistenNode(el, ls);
 				}
 			}
 		}
 	};
-	zk._asynUnlisten = function () {
-		if (zk._unltns.length)
-			zk._unlistenNode(zk._unltns.shift());
+	zk._unlistenOne = function () {
+		if (zk._unltns.length) {
+			var inf = zk._unltns.shift();
+			zk._unlistenNode(inf[0], inf[1]);
+		}
 	};
-	zk._unlistenNode = function (ls) {
+	zk._unlistenNode = function (el, ls) {
 		for (var evtnm in ls) {
 			var fns = ls[evtnm];
 			delete ls[evtnm];
 			for (var j = fns.length; --j >= 0;) {
 				try {
-					zk._unlisten(fns[j][0], evtnm, fns[j][1]);
-					fns[j][0] = fns[j][1] = null; //just in case
+					zk._unlisten(el, evtnm, fns[j]);
+					fns[j] = null; //just in case
 				} catch (e) { //ignore
 				}
 			}
