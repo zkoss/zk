@@ -70,6 +70,11 @@ zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
 };
 zkWnd.setAttr = function (cmp, nm, val) {
 	switch (nm) {
+	case "visibility":
+		zkau.setAttr(cmp, nm, val);
+		zkau.hideCovered(); //Bug 1719826 
+		return true;
+
 	case "z.sizable":
 		zkau.setAttr(cmp, nm, val);
 		zkWnd.setSizable(cmp, val == "true");
