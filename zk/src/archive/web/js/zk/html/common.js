@@ -1291,20 +1291,24 @@ zk.cpCellWidth = function (dst, srcrows) {
 		srcrows[0].parentNode.appendChild(src);
 	}
 
-	//Note: With Opera, we cannot use table-layout="fixed and we have to assign
+	//Note: With Opera, we cannot use table-layout=fixed and we have to assign
 	//the table width (test case: fixed-table-header.html)
 	var tbl;
-	if (zk.opera)
+	if (zk.opera) {
 		tbl = dst.parentNode.parentNode;
-	if (tbl) {
-		tbl.style.tableLayout = "auto";
-		tbl.style.width = "";
+		if (tbl) {
+			tbl.style.tableLayout = "auto";
+			tbl.style.width = "";
+		}
 	}
 
 	//we have to clean up first, since, in FF, if dst contains %
 	//the copy might not be correct
-	for (var j = maxnc; --j >=0;)
-		dst.cells[j].style.width = "";
+	for (var j = maxnc; --j >=0;) {
+		var d = dst.cells[j];
+		if (d.style.width.indexOf('%') >= 0)
+			d.style.width = "";
+	}
 
 	var sum = 0;
 	for (var j = maxnc; --j >= 0;) {
@@ -1317,8 +1321,8 @@ zk.cpCellWidth = function (dst, srcrows) {
 				+ $int(Element.getStyle(s, "margin-right"))
 				+ $int(Element.getStyle(s, "padding-left"))
 				+ $int(Element.getStyle(s, "padding-right"));
-			d.style.width = s.offsetWidth - v;
-		} else {
+			d.style.width = (s.offsetWidth - v) + "px";
+		} else if (d.offsetWidth != s.offsetWidth) { //note: opera cannot skip
 			d.style.width = s.offsetWidth + "px";
 			if (maxnc > 1) { //don't handle single cell case (bug 1729739)
 				var v = s.offsetWidth - d.offsetWidth;
@@ -1331,7 +1335,7 @@ zk.cpCellWidth = function (dst, srcrows) {
 		}
 	}
 
-	if (tbl) tbl.style.width = sum + "px";
+	if (tbl) tbl.style.width = sum + "px"; //opera only
 
 	if (fakeRow)
 		src.parentNode.removeChild(src);
