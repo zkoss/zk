@@ -736,7 +736,16 @@ zk._evalInit = function () {
 
 	while (!zk.loading && zk._initfns.length)
 		(zk._initfns.shift())();
-	setTimeout(zk._initLater, 25);
+
+	zk.doInitLater(25);
+};
+/** Invokes functions added by zk.addInitLater.
+ * This method is called automaticaly after initializing the components,
+ * so you rarely need to inovke it directly.
+ * @since 3.0.0
+ */
+zk.doInitLater = function (timeout) {
+	setTimeout(zk._initLater, timeout);
 };
 zk._initLater = function () {
 	while (!zk.loading && zk._inLatfns.length)
