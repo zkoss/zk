@@ -477,7 +477,7 @@ public class Window extends XulElement implements IdSpace {
 			throw new SuspendNotAllowedException("Event processing thread is disabled");
 		}
 
-		checkOverlappable();
+		checkOverlappable(MODAL);
 
 		if (_mode != MODAL) {
 			if (!Events.inEventListener()) {
@@ -517,14 +517,14 @@ public class Window extends XulElement implements IdSpace {
 	/** Makes this window as overlapped with other components.
 	 */
 	public void doOverlapped() {
-		checkOverlappable();
+		checkOverlappable(OVERLAPPED);
 		setNonModalMode(OVERLAPPED);
 	}
 	/** Makes this window as popup, which is overlapped with other component
 	 * and auto-hiden when user clicks outside of the window.
 	 */
 	public void doPopup() {
-		checkOverlappable();
+		checkOverlappable(POPUP);
 		setNonModalMode(POPUP);
 	}
 	/** Makes this window as highlited. The visual effect is
@@ -534,7 +534,7 @@ public class Window extends XulElement implements IdSpace {
 	 * server side's viewpoint.
 	 */
 	public void doHighlighted() {
-		checkOverlappable();
+		checkOverlappable(HIGHLIGHTED);
 		setNonModalMode(HIGHLIGHTED);
 	}
 	/** Makes this window as embeded with other components (Default).
@@ -564,13 +564,14 @@ public class Window extends XulElement implements IdSpace {
 		Executions.notifyAll(_mutex);
 	}
 	/** Makes sure it is not draggable. */
-	private void checkOverlappable() {
+	private void checkOverlappable(int mode) {
 		if (!"false".equals(getDraggable()))
 			throw new UiException("Draggable window cannot be modal, overlapped, popup, or highlighted: "+this);
 
-		for (Component comp = this; (comp = comp.getParent()) != null;)
-			if (!comp.isVisible())
-				throw new UiException("One of its ancestors, "+comp+", is not visible, so unable to be modal, overlapped, popup, or highlighted");
+		if (mode == MODAL || mode == HIGHLIGHTED)
+			for (Component comp = this; (comp = comp.getParent()) != null;)
+				if (!comp.isVisible())
+					throw new UiException("One of its ancestors, "+comp+", is not visible, so unable to be modal or highlighted");
 	}
 
 	/** Returns whether to show a close button on the title bar.
