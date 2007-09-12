@@ -129,7 +129,9 @@ zk.Selectable.prototype = {
 		}
 
 		if (!this.paging) {
-			if ((zk.gecko||zk.opera) && this.headtbl && this.headtbl.rows.length == 1) {
+			//FF: a small fragment is shown
+			//IE: Bug 1775014
+			if (this.headtbl && this.headtbl.rows.length == 1) {
 				var headrow = this.headtbl.rows[0];
 				var empty = true;
 				l_out:
