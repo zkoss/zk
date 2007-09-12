@@ -249,6 +249,9 @@ zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
 		if (t != null) cmp.style.top = t + "px";
 		zkau.sendOnMove(cmp, keys);
 	}
+
+	if (getZKAttr(cmp, "mode") != "embedded")
+		zkau.hideCovered();
 };
 
 /* @param ghosting whether to create or remove the ghosting
