@@ -156,10 +156,6 @@ public class ZkFns {
 
 		final StringBuffer sb = new StringBuffer(1536);
 
-		final String uamsg = desktop.getDevice().getUnavailableMessage();
-		if (uamsg != null)
-			sb.append("<noscript>").append(uamsg).append("</noscript>");
-
 		final Set jses = new LinkedHashSet(37);
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();)
@@ -224,6 +220,9 @@ public class ZkFns {
 		}
 
 		sb.append("\n</script>\n");
+		final String uamsg = desktop.getDevice().getUnavailableMessage();
+		if (uamsg != null)
+			sb.append("<noscript>\n").append(uamsg).append("\n</noscript>\n");
 
 		return sb.toString();
 	}
