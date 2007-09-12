@@ -85,13 +85,10 @@ import org.zkoss.zk.ui.WrongValueException;
 			return "";
 
 		final StringBuffer sb = new StringBuffer(50);
-		for (int j = 0;;) {
-			sb.append(ary[j]);
-
-			if (++j >= ary.length) {
+		for (int j = 0; j < ary.length; ++j) {
+			if (j > 0)
 				sb.append(',');
-				break;
-			}
+			sb.append(ary[j]);
 		}
 		return sb.toString();
 	}
@@ -125,21 +122,19 @@ import org.zkoss.zk.ui.WrongValueException;
 
 		return (String[])list.toArray(new String[list.size()]);
 	}
-	/** Converts an array of strings to a string, by catenating them
+	/** Converts an array of objects to a string, by catenating them
 	 * together and separated with comma.
 	 */
-	/*package*/ static final String arrayToString(String[] ary) {
+	/*package*/ static final String arrayToString(Object[] ary) {
 		if (ary == null || ary.length == 0)
 			return "";
 
 		final StringBuffer sb = new StringBuffer(50);
-		for (int j = 0;;) {
-			sb.append(ary[j]);
-
-			if (++j >= ary.length) {
+		for (int j = 0; j < ary.length; ++j) {
+			if (j > 0)
 				sb.append(',');
-				break;
-			}
+			if (ary[j] != null)
+				sb.append(ary[j]);
 		}
 		return sb.toString();
 	}
