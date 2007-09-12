@@ -390,13 +390,45 @@ zk.getBuild = function (nm) {
 	return zk.mods[nm] || zk.build;
 };
 
-/** Adds a function tfor module initialization.
- * It is called after all javascript fies are loaded, and before
- * initialized the components.
+/** Adds a function that will be invoked after all components are
+ * initialized.
+ * <p>Note: it is called after all components are initialized.
+ * <p>The function is removed from the list right before invoked,
+ * so it won't be called twice (unless you call zk.addInit again).
+ * @param front whether to add the function to the front of the list
+ */
+zk.addInit = function (fn, front) {
+	if (front) zk._initfns.unshift(fn);
+	else zk._initfns.push(fn);
+};
+/** Adds a function that will be invoked 25 milliseconds, after
+ * all components are initialized.
+ * Like zk.addInit, the function is called after all components are
+ * initialized. However, the function added by addInitLater is invoked
+ * with a timer that is called 25 milliseconds.
+ * Thus, it is designed to add functions that cannot be called
+ * immediately after initialization (zkType.init).
  *
- * In other words, ZK invokes functions added by zk.addModuleInit,
+ * <p>The function is removed from the list right before invoked,
+ * so it won't be called twice (unless you call zk.addInitLater again).
+ *
+ * @param front whether to add the function to the front of the list
+ * @since 3.0.0
+ */
+zk.addInitLater = function (fn, front) {
+	if (front) zk._inLatfns.unshift(fn);
+	else zk._inLatfns.push(fn);
+};
+/** Adds a function for module initialization.
+ * It is called after all javascript fies are loaded, and before
+ * initializing the components.
+ *
+ * <p>In other words, ZK invokes functions added by zk.addModuleInit,
  * then initializes all components, and finally invokes functions added
  * by zk.addInit.
+ *
+ * <p>The function is removed from the list right before invoked,
+ * so it won't be called twice (unless you call zk.addModuleInit again).
  */
 zk.addModuleInit = function (fn) {
 	zk._initmods.push(fn);
@@ -407,12 +439,48 @@ zk.addModuleInit = function (fn) {
 zk.addInitCmp = function (cmp) {
 	zk._initcmps.push(cmp);
 };
-/** Adds a function that will be invoked after the document is loaded.
- * <p>Note: it is called after all components are initialized.
- * (the proper name shall be addPostInit, rather than addInit).
+
+/** Adds a function that will be invoked when the browser is resized
+ * (window's resize).
+ * <p>Unlike zk.addInit, the function won't be detached after invoked.
+ * @since 3.0.0
  */
-zk.addInit = function (fn) {
-	zk._initfns.push(fn);
+zk.addOnResize = function (fn, front) {
+	if (front) zk._reszfns.unshift(fn);
+	else zk._reszfns.push(fn);
+};
+/** Removes a function that was added by calling zk.addOnResize.
+ * @since 3.0.0
+ */
+zk.rmOnResize = function (fn) {
+	zk._reszfns.remove(fn);
+};
+/** Invokes all functions added by zk.addOnResize.
+ * @since 3.0.0
+ */
+zk.onResize = function () {
+	//Tom Yeh: 20051230:
+	//In certain case, IE will keep sending onresize (because
+	//grid/listbox may adjust size, which causes IE to send onresize again)
+	//To avoid this endless loop, we ignore onresize a whilf if _reszfn
+	//is called
+	if (!zk._tmResz || $now() > zk._tmResz) {
+		++zk._reszcnt;
+		setTimeout(zk._onResize, zk.ie && zk._reszcnt < 4 ? 200: 25);
+			//IE: we have to prolong since onresize might come too fast
+			//It is an experimental value. Not sure the real cause.
+	}
+};
+zk._onResize = function () {
+	if (--zk._reszcnt == 0) {
+		if (zk.loading)
+			return zk.onResize();
+
+		if (zk.ie) zk._tmResz = $now() + 800;
+
+		for (var j = 0; j < zk._reszfns.length; ++j)
+			zk._reszfns[j]();
+	}
 };
 
 /** Invokes the specified function that depends on the specified module.
@@ -682,6 +750,11 @@ zk._evalInit = function () {
 
 	while (!zk.loading && zk._initfns.length)
 		(zk._initfns.shift())();
+	setTimeout(zk._initLater, 25);
+};
+zk._initLater = function () {
+	while (!zk.loading && zk._inLatfns.length)
+		(zk._inLatfns.shift())();
 };
 /** Evaluate a method of the specified component.
  *
@@ -1054,7 +1127,10 @@ zk.error = function (msg) {
 zk.loading = 0;
 zk._modules = {}; //Map(String nm, boolean loaded)
 zk._initfns = []; //used by addInit
+zk._inLatfns = []; //used by addInitLater
 zk._initmods = []; //used by addModuleInit
+zk._reszfns = []; //used by addOnResize
+zk._reszcnt = 0; //# of pending zk.onResize
 zk._initcmps = []; //comps to init
 zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
 zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi

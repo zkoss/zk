@@ -1091,6 +1091,7 @@ zkau._onResize = function () {
 		zkau._cInfoPend = true;
 		setTimeout(zkau._doClientInfo, 100);
 	}
+	zk.onResize(); //invoke functions added by zk.addOnResize
 };
 
 /** send clientInfo to the server ontimeout. */
