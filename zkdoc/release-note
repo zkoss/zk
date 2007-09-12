@@ -55,6 +55,7 @@ ZK 3.0.0
   1789830: A way to decouple Caption assumes LEGENG if default mold
   1791353: Tabbox adds a simpler look
   1441351: zebra colors for listbox
+  1792877: Tab and gbox's default height shall be configurable with CSS
 
 * Bugs:
   1751603: zk.renType in common.js not handling sessionid
