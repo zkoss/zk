@@ -72,7 +72,8 @@ zkWnd.setAttr = function (cmp, nm, val) {
 	switch (nm) {
 	case "visibility":
 		zkau.setAttr(cmp, nm, val);
-		zkau.hideCovered(); //Bug 1719826 
+		if (getZKAttr(cmp, "mode") != "embedded")
+			zkau.hideCovered(); //Bug 1719826 
 		return true;
 
 	case "z.sizable":
@@ -90,9 +91,11 @@ zkWnd.setAttr = function (cmp, nm, val) {
 
 	case "z.pos":
 		zkau.setAttr(cmp, nm, val);
-		if (val && getZKAttr(cmp, "mode") != "embedded")
+		if (val && getZKAttr(cmp, "mode") != "embedded") {
 			zkWnd._center(cmp, null, val);
 			//if val is null, it means no change at all
+			zkau.hideCovered(); //Bug 1719826 
+		}
 		return true;
 
 	case "style":
