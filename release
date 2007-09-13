@@ -265,7 +265,8 @@ if [ "$target" == "official" ]; then
 
 	cd $maindir/zkdoc
 	for f in */ZK-dev*.pdf */ZK-quickstart.pdf ; do  
-		cp $f /tmp/zk/doc/${f%.pdf}-$ver.pdf
+		fn=${f%.pdf}
+		cp $f /tmp/zk/doc/${fn#**/}-$ver.pdf
 	done
 elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm
