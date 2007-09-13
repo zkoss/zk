@@ -187,11 +187,16 @@ zkVld._errbox = function () {
 	if (!zkVld._cnt) zkVld._cnt = 0;
 	box.style.zIndex = 70000 + zkVld._cnt++;
 	if (cmp) {
-		var ofs = Position.cumulativeOffset(cmp), wd = cmp.offsetWidth, atTop;
+		var ofs = Position.cumulativeOffset(cmp), wd = cmp.offsetWidth,
+			hgh = cmp.offsetHeight, atTop;
 		if (zkau.currentFocus && zkau.currentFocus != cmp) {
 			var o2 = Position.cumulativeOffset(zkau.currentFocus);
-			if (o2[0] < ofs[0] + wd) ofs[0] += wd + 2;
-			else if (o2[1] < ofs[1]) ofs[1] += cmp.offsetHeight + 2;
+			if (o2[0] < ofs[0] + wd
+			&& ofs[0] + wd + 220 < zk.innerX() + zk.innerWidth()) //Bug 1731646 (box's width unknown, so use 220)
+				ofs[0] += wd + 2;
+			else if (o2[1] < ofs[1]
+			&& ofs[1] + hgh + 50 < zk.innerY() + zk.innerHeight())
+				ofs[1] += hgh + 2;
 			else atTop = true;
 		} else {
 			ofs[0] += wd + 2;
