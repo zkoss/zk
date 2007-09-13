@@ -102,6 +102,7 @@ ZK 3.0.0
   1793044: Returns wrong value from Utils.intsToString()
   1775014: Grid Size Growing After SetModel
   1755847: Overlapped window owned by popup closes both when closed
+  1756559: Listbox ("select" mold) mouseless selection (FF only)
 
 * Upgrade Notes:
   + The way to customize the zebra color (striping) of grid is changed.
