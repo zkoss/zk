@@ -1204,9 +1204,12 @@ zkau._onDocKeydown = function (evt) {
 					}
 				}
 
-				zkau.send({uuid: n.id, cmd: evtnm, ctl: true,
-					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey]},
-					38);
+				var req = {uuid: n.id, cmd: evtnm, ctl: true,
+					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey]};
+				if (zk.gecko && $tag(inp) == "SELECT" && $type(inp))
+					zkau.lateReq = req; //Bug 1756559:let SELECT to send (see sel.js)
+				else
+					zkau.send(req, 38);
 				Event.stop(evt);
 				return false;
 			}
