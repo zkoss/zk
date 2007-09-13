@@ -213,9 +213,7 @@ public class Treechildren extends XulElement implements Pageable {
 	 * @since 2.4.1
 	 */
 	public int getActivePage() {
-		if (_actpg < 0) {
-			_actpg = 0; //just in case
-		} else if (_actpg != 0 && _pgsz == -1) {
+		if (_actpg != 0 && _pgsz == -1) {
 			//We have to modify _actpg since Tree.setPageSize() might be
 			//called and cause getPageCount() to changed
 			final int pgcnt = getPageCount();
