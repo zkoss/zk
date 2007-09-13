@@ -179,14 +179,28 @@ zkTab.init = function (cmp) {
 ////
 // tabs //
 zkTabs = {};
+zkTabs._tabs = []; //all available tabs
 
 zkTabs.init = function (cmp) {
-	setTimeout("zkTabs.fixWidth('"+cmp.id+"')", 30);
+	zkTabs._tabs.push(cmp.id); //used by onResize
+	zkTabs._fixWdLater(cmp.id);
+};
+zkTabs.cleanup = function (cmp) {
+	zkTabs._tabs.remove(cmp.id);
 };
 zkTabs.onVisi = zkTabs.onSize = function (cmp) {
 	zkTabs.init(cmp);
 };
 
+zk.addOnResize(function () {
+	var tabs = zkTabs._tabs;
+	for (var j = tabs.length; --j >=0;)
+		zkTabs._fixWdLater(tabs[j]); //FF: we have to fire later (wd not correct yet)
+});
+
+zkTabs._fixWdLater = function (uuid) {
+	setTimeout("zkTabs.fixWidth('"+uuid+"')", 30);
+};
 /** Fix the width of the last column in tabs. */
 zkTabs.fixWidth = function (uuid) {
 	var n = $e(uuid + "!last");
@@ -202,7 +216,7 @@ zkTabs.fixWidth = function (uuid) {
 				var v = tabs.offsetWidth - tbl.offsetWidth + n.offsetWidth;
 				if (v < 0) v = 0;
 				n.style.width = v + "px";
-			}, 0);
+			}, 30);
 		} else { //vertical
 			n.style.height = "1px"; //let tab's height be re-calc
 			setTimeout(function () {
@@ -210,7 +224,7 @@ zkTabs.fixWidth = function (uuid) {
 				var v = tabs.offsetHeight - tbl.offsetHeight + n.offsetHeight;
 				if (v < 0) v = 0;
 				n.style.height = v + "px";
-			}, 0);
+			}, 30);
 		}
 	}
 };
