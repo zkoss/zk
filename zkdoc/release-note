@@ -103,6 +103,8 @@ ZK 3.0.0
   1775014: Grid Size Growing After SetModel
   1755847: Overlapped window owned by popup closes both when closed
   1756559: Listbox ("select" mold) mouseless selection (FF only)
+  1731646: error-popup not visible
+  1694095: Combobox list vertical position
 
 * Upgrade Notes:
   + The way to customize the zebra color (striping) of grid is changed.
