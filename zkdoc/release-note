@@ -105,6 +105,7 @@ ZK 3.0.0
   1756559: Listbox ("select" mold) mouseless selection (FF only)
   1731646: error-popup not visible
   1694095: Combobox list vertical position
+  1765047: tabbox not rendering well with percent width
 
 * Upgrade Notes:
   + The way to customize the zebra color (striping) of grid is changed.
