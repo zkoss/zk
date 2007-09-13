@@ -101,11 +101,11 @@ public final class SmartWriter /*extends Writer*/ {
 	 * @param from the first index (included).
 	 * @param to the last index (included).
 	 */
-	public SmartWriter write(List comps, int from, final int to)
+	public SmartWriter write(List comps, final int from, final int to)
 	throws IOException {
 		if (from < comps.size()) {
 			ListIterator it = comps.listIterator(from);
-			while (from++ <= to && it.hasNext())
+			for (int cnt = to - from + 1; it.hasNext() && --cnt >= 0;)
 				((Component)it.next()).redraw(_w);
 		}
 		return this;
