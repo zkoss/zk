@@ -1206,4 +1206,10 @@ zkLisel.onchange = function (evtel) {
 	var uuid = $uuid(cmp);
 	zkau.send({uuid: uuid, cmd: "onSelect", data: [data]},
 			zkau.asapTimeout(uuid, "onSelect"));
+
+	//Bug 1756559: see au.js
+	if (zkau.lateReq) {
+		zkau.send(zkau.lateReq, 25);
+		delete zkau.lateReq;
+	}
 };
