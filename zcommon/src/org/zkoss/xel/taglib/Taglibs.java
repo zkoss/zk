@@ -261,7 +261,7 @@ public class Taglibs {
 					if (log.debugable()) log.debug("Loading "+url);
 					try {
 						final Document doc = new SAXBuilder(false, false, true).build(url);
-						if (checkVersion(url, doc))
+						if (IDOMs.checkVersion(doc, url))
 							parseConfig(urls, doc.getRootElement(), loc);
 					} catch (Exception ex) {
 						log.error("Failed to parse "+url, ex); //keep running
@@ -286,27 +286,6 @@ public class Taglibs {
 			} else {
 				log.error("taglib-location not found, "+el.getLocator());
 			}
-		}
-	}
-	/** Checks and returns whether the loaded document's version is correct.
-	 */
-	private static boolean checkVersion(URL url, Document doc) throws Exception {
-		final Element el = doc.getRootElement().getElement("version");
-		if (el != null) {
-			final String clsnm = IDOMs.getRequiredElementValue(el, "version-class");
-			final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
-			final Class cls = Classes.forNameByThread(clsnm);
-			final Field fld = cls.getField("UID");
-			final String uidInClass = (String)fld.get(null);
-			if (uid.equals(uidInClass)) {
-				return true;
-			} else {
-				log.info("Ignore "+url+"\nCause: version not matched; expected="+uidInClass+", xml="+uid);
-				return false;
-			}
-		} else {
-			log.info("Ignore "+url+"\nCause: version not specified");
-			return false; //backward compatible
 		}
 	}
 }

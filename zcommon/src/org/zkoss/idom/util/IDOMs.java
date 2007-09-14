@@ -17,6 +17,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom.util;
 
+import java.lang.reflect.Field;
 import java.io.PrintWriter;
 import java.io.PrintStream;
 import java.io.StringWriter;
@@ -35,11 +36,13 @@ import javax.xml.transform.TransformerException;
 
 import org.zkoss.mesg.MCommon;
 import org.zkoss.mesg.Messages;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.Locales;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.resource.Locator;
+import org.zkoss.util.logging.Log;
 
 import org.zkoss.idom.*;
 import org.zkoss.idom.input.SAXBuilder;
@@ -53,6 +56,8 @@ import org.zkoss.idom.transform.Transformer;
  * @see org.zkoss.idom.Group
  */
 public class IDOMs {
+	private static final Log log = Log.lookup(IDOMs.class);
+
 	/** Returns the required element.
 	 * @param elemnm the element name
 	 */
@@ -266,6 +271,44 @@ public class IDOMs {
 			for (Iterator it = ((Group)vtx).getChildren().iterator();
 			it.hasNext();)
 				dumpTree(s, (Item)it.next(), prefix);
+		}
+	}
+
+	/** Returnss whether the loaded document's version is correct.
+	 *
+	 * <p>It assumes the version info is specified in the document in
+	 * the following format:
+	 *
+	 * <pre></code>
+&lt;version>
+	&lt;version-class>org.zkoss.zul.Version&lt;/version-class>
+	&lt;version-uid>3.0.0&lt;/version-uid>
+&lt;/version>
+</code></pre>
+	 *
+	 * @param doc the document to check
+	 * @param url the URL used to show the readable message if the
+	 * version doesn't match
+	 * @since 3.0.0
+	 */
+	public static boolean checkVersion(Document doc, URL url)
+	throws Exception {
+		final Element el = doc.getRootElement().getElement("version");
+		if (el != null) {
+			final String clsnm = IDOMs.getRequiredElementValue(el, "version-class");
+			final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
+			final Class cls = Classes.forNameByThread(clsnm);
+			final Field fld = cls.getField("UID");
+			final String uidInClass = (String)fld.get(null);
+			if (uid.equals(uidInClass)) {
+				return true;
+			} else {
+				log.info("Ignore "+url+"\nCause: version not matched; expected="+uidInClass+", xml="+uid);
+				return false;
+			}
+		} else {
+			log.info("Ignore "+url+"\nCause: version not specified");
+			return false; //backward compatible
 		}
 	}
 }
