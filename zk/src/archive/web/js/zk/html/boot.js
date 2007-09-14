@@ -724,11 +724,11 @@ zk._loadAndInit = function (inf) {
  */
 if (zk.ie) {
 	zk._ieFixBfUnload = function () {
-		zkau.skipBfUnload = true;
+		zk.skipBfUnload = true;
 		setTimeout(zk._skipBackBF, 0); //restore
 	};
 	zk._skipBackBF = function () {
-		zkau.skipBfUnload = false;
+		zk.skipBfUnload = false;
 	};
 }
 
