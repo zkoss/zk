@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Row</title>
-<para>A single row in a Rows element. Each child of the Row element is placed in each successive cell of the grid. The row with the most child elements determines the number of columns in each row.</para>
+<para>A single row in a <code>Rows</code> element. Each child of the <code>Row</code> element is placed in each successive cell of the grid. The row with the most child elements determines the number of <code>columns</code> in each <code>row</code>.</para>
 <para>Default getSclass(): the same as grid's sclass. </para>
 <para>
 <inlinegraphic fileref="images/grid.png" width="9.762cm"/>
@@ -116,7 +116,9 @@
 </para>
 </entry>
 <entry>
-<para>&lt;null&gt;</para>
+<para>
+<code>&lt;null&gt;</code>
+</para>
 </entry>
 </row>
 <row>
@@ -153,12 +155,13 @@
 </entry>
 <entry>
 <para>
-<code>j</code>
-<code>ava.lang.Object</code>
+<code>java.lang.Object</code>
 </para>
 </entry>
 <entry>
-<para>&lt;null&gt;</para>
+<para>
+<code>&lt;null&gt;</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
@@ -195,7 +198,9 @@
 </row>
 <row>
 <entry>
-<para>getGrid()</para>
+<para>
+<code>getGrid()</code>
+</para>
 </entry>
 <entry>
 <para>Returns the grid that contains this row. </para>
@@ -208,46 +213,62 @@
 </row>
 <row>
 <entry>
-<para>getOuterAttrs()</para>
+<para>
+<code>getOuterAttrs()</code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>java.lang.String</para>
+<para>
+<code>java.lang.String</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>onDrawNewChild(org.zkoss.zk.ui.Component, java.lang.StringBuffer) </para>
+<para>
+<code>onDrawNewChild(org.zkoss.zk.ui.Component, java.lang.StringBuffer) </code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>setParent(org.zkoss.zk.ui.Component)</para>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component)</code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>setStyle(java.lang.String)</para>
+<para>
+<code>setStyle(java.lang.String)</code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>

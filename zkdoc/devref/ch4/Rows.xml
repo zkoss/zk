@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Rows</title>
-<para>Defines the rows of a grid. Each child of a rows element should be a org.zkoss.zul.Row element.</para>
+<para>Defines the <code>rows</code> of a grid. Each child of a <code>rows</code> element should be a <code>org.zkoss.zul.Row</code> element.</para>
 <para>
 <inlinegraphic fileref="images/grid.png" width="9.762cm"/>
 </para>
@@ -45,68 +45,92 @@
 </row>
 <row>
 <entry>
-<para>getVisibleBegin()</para>
+<para>
+<code>getVisibleBegin()</code>
+</para>
 </entry>
 <entry>
 <para>Returns the index of the first visible child. </para>
 </entry>
 <entry>
-<para>int</para>
+<para>
+<code>int</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>getVisibleEnd()</para>
+<para>
+<code>getVisibleEnd()</code>
+</para>
 </entry>
 <entry>
 <para>Returns the index of the last visible child. </para>
 </entry>
 <entry>
-<para>int</para>
+<para>
+<code>int</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>insertBefore(org.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component)</para>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component)</code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>boolean</para>
+<para>
+<code>boolean</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>onChildAdded(org.zkoss.zk.ui.Component)</para>
+<para>
+<code>onChildAdded(org.zkoss.zk.ui.Component)</code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>onChildRemoved(org.zkoss.zk.ui.Component)</para>
+<para>
+<code>onChildRemoved(org.zkoss.zk.ui.Component)</code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>setParent(org.zkoss.zk.ui.Component)</para>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component)</code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>

@@ -54,7 +54,10 @@
 </row>
 <row>
 <entry>
-<para>description</para>
+<para>
+<code>des</code>
+<code>cription</code>
+</para>
 </entry>
 <entry>
 <para>Sets the description.</para>
@@ -63,7 +66,9 @@
 <para>java.lang.String</para>
 </entry>
 <entry>
-<para>&lt;empty&gt;</para>
+<para>
+<code>&lt;empty&gt;</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
@@ -104,13 +109,17 @@
 </row>
 <row>
 <entry>
-<para>setParent(org.zkoss.zk.ui.Component)</para>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component)</code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Inherited From </title>

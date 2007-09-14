@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Columns</title>umns<para>Defines the columns of a grid. </para>
+<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Columns</title>umns<para>Defines the <code>columns</code> of a <code>grid</code>. </para>
 <para>Each child of a <code>columns</code> element should be a <code>org.zkoss.zul.Column</code> element.</para>
 <para>
 <inlinegraphic fileref="images/grid.png" width="9.762cm"/>
@@ -26,7 +26,7 @@
 <row>
 <entry>
 <para>
-<code>OnColSize</code>
+<code>onColSize</code>
 </para>
 </entry>
 <entry>
@@ -62,35 +62,50 @@
 </thead><tbody>
 <row>
 <entry>
-<para>insertBefore<code>(org.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component)</code> </para>
+<para>
+<code>ins</code>
+<code>ertBefore(org.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component) </code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>boolean</para>
+<para>
+<code>boo</code>
+<code>lean</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>removeChild(<code>org.zkoss.zk.ui.Component)</code> </para>
+<para>
+<code>removeChild(org.zkoss.zk.ui.Component) </code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>boolean</para>
+<para>
+<code>boo</code>
+<code>lean</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>setParent<code>(org.zkoss.zk.ui.Component)</code> </para>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component) </code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>

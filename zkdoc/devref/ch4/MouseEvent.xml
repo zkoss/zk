@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <article lang="en-US"><sect1><title/><sect2><title>MouseEvent</title>
-<para>Represents an event cause by mouse activitly. </para>
-<para/><sect3><title/><sect4><title>Class Name</title>
+<para>Represents an event cause by mouse activitly. There are two possible way to identify a mouse event. One is by coordination (<code>getX()</code> and <code>getY().</code> The other is by a logical name, called area (<code>getArea()</code>).</para><sect3><title/><sect4><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </para></sect4></sect3><sect3><title/><sect4><title>Methods</title>
@@ -24,7 +23,7 @@
 <row>
 <entry>
 <para>
-<code>getArea</code>
+<code>getArea()</code>
 </para>
 </entry>
 <entry>
@@ -32,14 +31,14 @@
 </entry>
 <entry>
 <para>
-<code>boolean</code>
+<code>java.lang.String</code>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<code>getKeys</code>
+<code>getKeys()</code>
 </para>
 </entry>
 <entry>
@@ -52,7 +51,7 @@
 <row>
 <entry>
 <para>
-<code>getX</code>
+<code>getX()</code>
 </para>
 </entry>
 <entry>
@@ -65,7 +64,7 @@
 <row>
 <entry>
 <para>
-<code>getY</code>
+<code>getY()</code>
 </para>
 </entry>
 <entry>
@@ -89,7 +88,9 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="Event.xml">org.zkoss.zk.ui.event.Event </olink>
+<olink targetdocent="Event.xml">
+<code>org.zkoss.zk.ui.event.Event </code>
+</olink>
 </para>
 </entry>
 </row></tbody></tgroup>

@@ -27,7 +27,7 @@
 <row>
 <entry>
 <para>
-<code>OnClick</code>
+<code>onClick</code>
 </para>
 </entry>
 <entry>
@@ -96,7 +96,7 @@
 <row>
 <entry>
 <para>
-<code>OnOpen</code>
+<code>onOpen</code>
 </para>
 </entry>
 <entry>
@@ -115,8 +115,8 @@
 <code> </code>
 <code>Denotes user has opened or closed a component. Note:</code>
 </para>
-<para>unlike onClose, this event is only a notification. The client sends this event after opening or closing the component.</para>
-<para>It is useful to implement load-on-demand by listening to the onOpen event, and creating components when the first time the component is opened.</para>
+<para>unlike <code>onClose</code>, this event is only a notification. The client sends this event after opening or closing the component.</para>
+<para>It is useful to implement load-on-demand by listening to the <code>onOpen</code> event, and creating components when the first time the component is opened.</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect4><sect4><title>Properties</title>
@@ -201,7 +201,9 @@
 </para>
 </entry>
 <entry>
-<para>true</para>
+<para>
+<code>true</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
@@ -232,54 +234,74 @@
 </entry>
 <entry>
 <para>
-<code>o</code>
-<code>rg.zkoss.zul.C</code>
-<code>aption</code>
+<code>org.zkoss.zul.Caption</code>
 </para>
 </entry>
 </row>
 <row>
 <entry>
-<para>getContentSclass()</para>
+<para>
+<code>get</code>
+<code>ContentSclass()</code>
+</para>
 </entry>
 <entry>
 <para>Returns the style class used for the content block of the groupbox. </para>
 </entry>
 <entry>
-<para>java.lang.String</para>
+<para>
+<code>jav</code>
+<code>a.lang.String</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>getOuterAttrs()</para>
+<para>
+<code>get</code>
+<code>OuterAttrs()</code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>java.lang.String</para>
+<para>
+<code>jav</code>
+<code>a.lang.String</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>insertBefore(o<code>rg.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component)</code> </para>
+<para>
+<code>ins</code>
+<code>ertBefore(org.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component) </code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>boolean</para>
+<para>
+<code>boo</code>
+<code>lean</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>onChildRemoved(org.zkoss.zk.ui.Component)</para>
+<para>
+<code>onChildRemoved(org.zkoss.zk.ui.Component)</code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>

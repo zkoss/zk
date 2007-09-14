@@ -38,7 +38,8 @@
 </para>
 </entry>
 <entry>
-<para>Sets the alignment: one of top, texttop, middle, absmiddle, bottom, absbottom, baseline, left, right and center.</para>
+<para>Sets the alignment: one of top<code>, texttop, middle, absmiddle, bottom, absbottom, baseline, left, right and center.</code>
+</para>
 </entry>
 <entry>
 <para>
@@ -46,7 +47,9 @@
 </para>
 </entry>
 <entry>
-<para>&lt;null&gt;</para>
+<para>
+<code>&lt;null&gt;</code>
+</para>
 </entry>
 </row>
 <row>
@@ -57,7 +60,7 @@
 </para>
 </entry>
 <entry>
-<para>Sets whether to auto start playing the audio.</para>
+<para>Sets whether to auto start playing the <code>audio</code>.</para>
 </entry>
 <entry>
 <para>
@@ -86,7 +89,9 @@
 </para>
 </entry>
 <entry>
-<para>&lt;null&gt;</para>
+<para>
+<code>&lt;null&gt;</code>
+</para>
 </entry>
 </row>
 <row>
@@ -105,7 +110,9 @@
 </para>
 </entry>
 <entry>
-<para>&lt;null&gt;</para>
+<para>
+<code>&lt;null&gt;</code>
+</para>
 </entry>
 </row>
 <row>
@@ -124,7 +131,9 @@
 </para>
 </entry>
 <entry>
-<para>&lt;null&gt;</para>
+<para>
+<code>&lt;null&gt;</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
@@ -169,7 +178,7 @@
 </para>
 </entry>
 <entry>
-<para>Pauses the audio at the client.</para>
+<para>Pauses the <code>audio</code> at the client.</para>
 </entry>
 <entry>
 <para>void</para>
@@ -180,7 +189,7 @@
 <para>play()</para>
 </entry>
 <entry>
-<para>Plays the audio at the client.</para>
+<para>Plays the <code>audio</code> at the client.</para>
 </entry>
 <entry>
 <para>void</para>
@@ -191,7 +200,7 @@
 <para>stop()</para>
 </entry>
 <entry>
-<para>Stops the audio at the client.</para>
+<para>Stops the <code>audio</code> at the client.</para>
 </entry>
 <entry>
 <para>void</para>

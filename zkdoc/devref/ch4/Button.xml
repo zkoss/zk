@@ -26,7 +26,7 @@
 <row>
 <entry>
 <para>
-<code>OnClick</code>
+<code>onClick</code>
 </para>
 </entry>
 <entry>
@@ -95,7 +95,7 @@
 <row>
 <entry>
 <para>
-<code>OnFocus</code>
+<code>onFocus</code>
 </para>
 </entry>
 <entry>
@@ -116,7 +116,7 @@
 <row>
 <entry>
 <para>
-<code>OnBlur</code>
+<code>onBlur</code>
 </para>
 </entry>
 <entry>

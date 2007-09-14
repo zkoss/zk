@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Column</title>umn<para>A single column in a Columns element. Each child of the Column element is placed in each successive cell of the grid. The column with the most child elements determines the number of rows in each column. The use of column is mainly to define attributes for each cell in the grid. </para>
+<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Column</title>umn<para>A single <code>column</code> in a <code>Columns</code> element. Each child of the <code>Column</code> element is placed in each successive cell of the <code>grid</code>. The <code>column</code> with the most child elements determines the number of rows in each <code>column</code>. The use of column is mainly to define attributes for each cell in the <code>grid</code>. </para>
 <para>
 <inlinegraphic fileref="images/grid.png" width="9.762cm"/>
 </para>
@@ -25,7 +25,7 @@
 <row>
 <entry>
 <para>
-<code>OnClick</code>
+<code>onClick</code>
 </para>
 </entry>
 <entry>
@@ -179,6 +179,9 @@
 <para/></sect4><sect4><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
+<colspec colnum="1" colname="c1"/>
+<colspec colnum="2" colname="c2"/>
+<colspec colnum="3" colname="c3"/>
 <thead>
 <row>
 <entry>
@@ -199,18 +202,19 @@
 </para>
 </entry>
 <entry>
-<para>Returns the grid that contains this column. </para>
+<para>Returns the <code>grid</code> that contains this column. </para>
 </entry>
 <entry>
 <para>
-<code>o</code>
-<code>rg.zkoss.zul.Grid</code>
+<code>org.zkoss.zul.Grid</code>
 </para>
 </entry>
 </row>
 <row>
 <entry>
-<para>getOuterAttrs()</para>
+<para>
+<code>getOuterAttrs()</code>
+</para>
 </entry>
 <entry>
 <para/>
@@ -223,7 +227,9 @@
 </row>
 <row>
 <entry>
-<para>getSclass()</para>
+<para>
+<code>getSclass()</code>
+</para>
 </entry>
 <entry>
 <para>Returns the style class.</para>
@@ -236,68 +242,94 @@
 </row>
 <row>
 <entry>
-<para>onSort()</para>
+<para>
+<code>onSort()</code>
+</para>
 </entry>
 <entry>
-<para>It invokes sort(boolean) to sort list items and maintain getSortDirection().</para>
+<para>It invokes <code>sort(boolean)</code> to sort list items and maintain <code>getSortDirection()</code>.</para>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>setParent<code>(org.zkoss.zk.ui.Component parent)</code> </para>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent) </code>
+</para>
 </entry>
 <entry>
 <para/>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>setSortAscending(java.lang.String) </para>
+<para>
+<code>setSortAscending(java.lang.String) </code>
+</para>
 </entry>
 <entry>
 <para>Sets the ascending sorter with the class name, or null for no sorter for the ascending order.</para>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>setSortDescending(java.lang.String) </para>
+<para>
+<code>setSortDescending(java.lang.String) </code>
+</para>
 </entry>
 <entry>
 <para>Sets the descending sorter with the class name, or null for no sorter for the descending order.</para>
 </entry>
 <entry>
-<para>void</para>
+<para>
+<code>void</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>sort(boolean)</para>
+<para>
+<code>sort(boolean)</code>
+</para>
 </entry>
 <entry>
-<para>Sorts the rows (Row) based on getSortAscending() and getSortDescending(), if getSortDirection() doesn't matches the ascending argument.</para>
+<para>Sorts the rows (<code>Row</code>) based on <code>getSortAscending()</code> and <code>getSortDescending()</code>, if <code>getSortDirection()</code> doesn't matches the ascending argument.</para>
 </entry>
 <entry>
-<para>boolean</para>
+<para>
+<code>boo</code>
+<code>lean</code>
+</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>sort(boolean, boolean) </para>
+<para>
+<code>sort(boolean, boolean) </code>
+</para>
 </entry>
 <entry>
-<para>Sorts the rows (Row) based on getSortAscending() and getSortDescending().</para>
+<para>Sorts the rows (<code>Row</code>) based on <code>getSortAscending()</code> and <code>getSortDescending()</code>.</para>
 </entry>
 <entry>
-<para>boolean</para>
+<para>
+<code>boo</code>
+<code>lean</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>
