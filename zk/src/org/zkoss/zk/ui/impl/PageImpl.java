@@ -182,6 +182,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 */
 	public PageImpl(LanguageDefinition langdef,
 	ComponentDefinitionMap compdefs, String path, String zslang) {
+		init();
+
 		_langdef = langdef;
 		_dkURI = new ExValue(_langdef.getDesktopURI(), String.class);
 		_pgURI = new ExValue(_langdef.getPageURI(), String.class);
@@ -190,8 +192,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				_langdef.getComponentDefinitionMap().isCaseInsensitive());
 		_path = path != null ? path: "";
 		_zslang = zslang != null ? zslang: "Java";
-
-		init();
 	}
 
 	/** Constructs a page by specifying a richlet.
@@ -207,6 +207,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	 * @param path the request path, or null if not available
 	 */
 	public PageImpl(Richlet richlet, String path) {
+		init();
+
 		_langdef = richlet.getLanguageDefinition();
 		_dkURI = new ExValue(_langdef.getDesktopURI(), String.class);
 		_pgURI = new ExValue(_langdef.getPageURI(), String.class);
@@ -214,8 +216,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			_langdef.getComponentDefinitionMap().isCaseInsensitive());
 		_path = path != null ? path: "";
 		_zslang = "Java";
-
-		init();
 	}
 	/** Initialized the page when contructed or deserialized.
 	 */
