@@ -26,6 +26,11 @@ zml
 	It includes ZK components for generating XML ouput
 
 ---
+zkmax
+	The Ruby, Groovy, Rhino, MVEL and other plugins.
+	Also, the performance enhancement version of zul.
+
+---
 zuljsp
 	The ZUL JSP Tags
 
