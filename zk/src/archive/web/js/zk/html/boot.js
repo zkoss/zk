@@ -668,7 +668,7 @@ zk._loadAndInit = function (inf) {
 			}
 		} else if (zk.ie && $tag(n) == 'A' && n.href.indexOf("javascript:") >= 0) {
 			//Fix bug 1635685 and 1612312
-			zk.listen(n, "click", zk._fixcc);
+			zk.listen(n, "click", zk.ieFixUnload);
 		}
 
 		var v = getZKAttr(n, "dtid");
@@ -692,7 +692,17 @@ zk._loadAndInit = function (inf) {
  * It actually ignores zkau.confirmClose temporary.
  */
 if (zk.ie) {
-	zk._fixcc = function () {
+	/** It is called to fix the wrong invocation of window.onbeforeunload
+	 * You can override it avoid this bug (in IE).
+	 *
+	 * Example,
+	 * var old = zk.ieFixUnload;
+	 * zk.ieFixUnload = function () {
+	 *   old(); //call back
+	 *   //your codes here
+	 * }
+	 */
+	zk.ieFixUnload = function () {
 		var msg = zkau.confirmClose;
 		if (msg) {
 			zkau.confirmClose = null; 
