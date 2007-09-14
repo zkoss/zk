@@ -286,6 +286,8 @@ public class IDOMs {
 &lt;/version>
 </code></pre>
 	 *
+	 * <p>Note: it returns true if the version info is not found.
+	 *
 	 * @param doc the document to check
 	 * @param url the URL used to show the readable message if the
 	 * version doesn't match
@@ -307,8 +309,7 @@ public class IDOMs {
 				return false;
 			}
 		} else {
-			log.info("Ignore "+url+"\nCause: version not specified");
-			return false; //backward compatible
+			return true;
 		}
 	}
 }
