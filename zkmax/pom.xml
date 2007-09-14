@@ -35,7 +35,6 @@
       <artifactId>zk</artifactId>
       <version>{version}</version>
     </dependency>
-  </dependencies>
     <dependency>
       <groupId>org.zkoss.zk</groupId>
       <artifactId>zul</artifactId>
