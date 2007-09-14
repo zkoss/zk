@@ -78,8 +78,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!-- Defines the templat for macro components -->
 	<macro-template>
 		<macro-class>org.zkoss.zk.ui.HtmlMacroComponent</macro-class>
-		<macro-uri>class:org.zkoss.zul.render.MacroDefault</macro-uri>
-		<!--<macro-uri>~./zul/html/macro.dsp</macro-uri>-->
+		<macro-uri>~./zul/html/macro.dsp</macro-uri>
 	</macro-template>
 	<!-- Defines the template for the Native namespace
 		[Optional] Define it only if the Native namespace is supported.
@@ -96,8 +95,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		-->
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.AreaDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/area.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/area.dsp</mold-uri>
 		</mold>
 		<!-- Specifies which property to assign the text within the element
 		to.
@@ -153,8 +151,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Audio</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.AudioDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/audio.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/audio.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -162,8 +159,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Bandbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.BandboxDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/bandbox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/bandbox.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -171,8 +167,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Bandpopup</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.BandpopupDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/bandpopup.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/bandpopup.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -180,8 +175,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Button</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ButtonDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/button.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/button.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -189,13 +183,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Box</component-class>
 		<mold>
 			<mold-name>horizontal</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.BoxHorizontal</mold-uri>
-			<!--<mold-uri>~./zul/html/hbox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>vertical</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.BoxVertical</mold-uri>
-			<!-- <mold-uri>~./zul/html/vbox.dsp</mold-uri> -->
+			<mold-uri>~./zul/html/vbox.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -203,7 +195,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Calendar</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.CalendarDefault</mold-uri>
 			<!--<mold-uri>~./zul/html/calendar.dsp</mold-uri>-->
 		</mold>
 	</component>
@@ -212,8 +203,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Captcha</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ImageDefault</mold-uri>
-			<!-- <mold-uri>~./zul/html/image.dsp</mold-uri> -->
+			<mold-uri>~./zul/html/image.dsp</mold-uri> -->
 		</mold>
 	</component>
 	<component>
@@ -221,8 +211,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Caption</component-class>
 		<mold>
 			<mold-name>default</mold-name>
- 			<mold-uri>class:org.zkoss.zul.render.CaptionDefault</mold-uri>
- 			<!-- <mold-uri>${self.legend ? '~./zul/html/caption-legend.dsp': '~./zul/html/caption.dsp'}</mold-uri>-->
+ 			<mold-uri>${self.legend ? '~./zul/html/caption-legend.dsp': '~./zul/html/caption.dsp'}</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -230,8 +219,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Chart</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ImagemapDefault</mold-uri>
-			<!-- <mold-uri>~./zul/html/imagemap.dsp</mold-uri> -->
+			<mold-uri>~./zul/html/imagemap.dsp</mold-uri> -->
 		</mold>
 	</component>
 	<component>
@@ -239,8 +227,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Checkbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.CheckboxDefault</mold-uri>
-			<!-- <mold-uri>~./zul/html/checkbox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/checkbox.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -248,8 +235,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Column</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ColumnDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/column.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/column.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -257,8 +243,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Columns</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ColumnsDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/columns.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/columns.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -266,8 +251,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Combobox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ComboboxDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/combobox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/combobox.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -276,8 +260,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ComboitemDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/comboitem.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/comboitem.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -285,8 +268,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Datebox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.DateboxDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/datebox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/datebox.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -294,8 +276,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Decimalbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.DecimalboxDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/decimalbox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/decimalbox.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -303,8 +284,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Div</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.DivDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/div.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/div.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -312,8 +292,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Doublebox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.DoubleboxDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/doublebox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/doublebox.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -321,8 +300,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Fileupload</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.FileuploadDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/fileupload.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/fileupload.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -330,8 +308,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Flash</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.FlashDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/flash.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/flash.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -339,8 +316,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Foot</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.FootDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/foot.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/foot.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -348,8 +324,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Footer</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.FooterDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/footer.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/footer.dsp</mold-uri>-->
 		</mold>
 	</component>
 	<component>
@@ -357,13 +332,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Grid</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.GridDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/grid.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/grid.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.GridPaging</mold-uri>
-			<!--<mold-uri>~./zul/html/grid-pg.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/grid-pg.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -371,13 +344,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Groupbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.GroupboxDefault</mold-uri>
-			<!-- <mold-uri>~./zul/html/groupbox.dsp</mold-uri>  -->
+			<mold-uri>~./zul/html/groupbox.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>3d</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.Groupbox3d</mold-uri>
-			<!-- <mold-uri>~./zul/html/groupbox-3d.dsp</mold-uri>  -->
+			<mold-uri>~./zul/html/groupbox-3d.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -385,13 +356,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Hbox</component-class>
 		<mold>
 			<mold-name>horizontal</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.BoxHorizontal</mold-uri>
-			<!-- <mold-uri>~./zul/html/hbox.dsp</mold-uri> -->
+			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>vertical</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.BoxVertical</mold-uri>
-			<!-- <mold-uri>~./zul/html/vbox.dsp</mold-uri> -->
+			<mold-uri>~./zul/html/vbox.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -400,8 +369,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.HtmlDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/html.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/html.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -409,8 +377,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Iframe</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.IframeDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/iframe.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/iframe.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -418,13 +385,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Image</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ImageDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/image.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/image.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>alphafix</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ImageDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/image.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/image.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -432,13 +397,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Imagemap</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ImagemapDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/imagemap.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>alphafix</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ImagemapDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/imagemap.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -450,8 +413,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Intbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.IntboxDefault</mold-uri>
-			<!-- <mold-uri>~./zul/html/intbox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/intbox.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -460,8 +422,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<text-as>value</text-as>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.LabelDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/label.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/label.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -469,18 +430,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Listbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ListboxDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/listbox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/listbox.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>select</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ListboxSelect</mold-uri>
-			<!--<mold-uri>~./zul/html/listbox-select.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/listbox-select.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ListboxPaging</mold-uri>
-			<!--<mold-uri>~./zul/html/listbox-pg.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/listbox-pg.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -488,8 +446,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Listcell</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ListcellDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/listcell.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/listcell.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -497,8 +454,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Listfoot</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ListfootDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/listfoot.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/listfoot.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -506,8 +462,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Listfooter</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ListfooterDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/listfooter.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/listfooter.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -515,8 +470,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Listheader</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ListheaderDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/listheader.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/listheader.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -524,8 +478,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Listhead</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ListheadDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/listhead.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/listhead.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -533,8 +486,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Listitem</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ListitemDefault</mold-uri>
-			<!--<mold-uri>${self.listbox.mold == 'select' ? '~./zul/html/listitem-select.dsp': '~./zul/html/listitem.dsp'}</mold-uri>-->
+			<mold-uri>${self.listbox.mold == 'select' ? '~./zul/html/listitem-select.dsp': '~./zul/html/listitem.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -542,8 +494,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menu</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.MenuDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/menu.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/menu.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -551,13 +502,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menubar</component-class>
 		<mold>
 			<mold-name>horizontal</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.MenubarHorizontal</mold-uri>
-			<!--<mold-uri>~./zul/html/hmenubar.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/hmenubar.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>vertical</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.MenubarVertical</mold-uri>
-			<!--<mold-uri>~./zul/html/vmenubar.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/vmenubar.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -565,8 +514,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menuitem</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.MenuitemDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/menuitem.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/menuitem.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -574,8 +522,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menupopup</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.MenupopupDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/menupopup.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/menupopup.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -583,8 +530,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menuseparator</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.MenuseparatorDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/menuseparator.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/menuseparator.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -592,8 +538,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Paging</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.PagingDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/paging.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/paging.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -601,8 +546,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Popup</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.PopupDefault</mold-uri><!-- same as menupopup -->
-			<!--<mold-uri>~./zul/html/popup.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/popup.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -610,8 +554,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Progressmeter</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ProgressmeterDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/progressmeter.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/progressmeter.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -619,8 +562,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Radio</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.RadioDefault</mold-uri>
-		
 		</mold>
 	</component>
 	<component>
@@ -628,8 +569,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Radiogroup</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.RadiogroupDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/radiogroup.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/radiogroup.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -637,8 +577,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Row</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.RowDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/row.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/row.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -646,8 +585,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Rows</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.RowsDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/rows.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/rows.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -660,8 +598,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Separator</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.SeparatorDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/separator.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/separator.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -669,13 +606,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Slider</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.SliderDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/slider.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/slider.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>sphere</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.SliderSphere</mold-uri>
-			<!--<mold-uri>~./zul/html/slider-sph.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/slider-sph.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -683,8 +618,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Space</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.SeparatorDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/separator.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/separator.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -692,8 +626,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Splitter</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.SplitterDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/splitter.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/splitter.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -706,8 +639,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tab</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TabDefault</mold-uri>
-			<!--<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab.dsp': '~./zul/html/tab.dsp'}</mold-uri>-->
+			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab.dsp': '~./zul/html/tab.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -715,13 +647,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TabboxDefault</mold-uri>
-			<!--<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox.dsp': '~./zul/html/tabbox.dsp'}</mold-uri>-->
+			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox.dsp': '~./zul/html/tabbox.dsp'}</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TabboxAccordion</mold-uri>
-			<!--<mold-uri>~./zul/html/tabbox-accd.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/tabbox-accd.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -729,8 +659,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabpanel</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TabpanelDefault</mold-uri>
-			<!--<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd.dsp': self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel.dsp': '~./zul/html/tabpanel.dsp'}</mold-uri>-->
+			<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd.dsp': self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel.dsp': '~./zul/html/tabpanel.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -738,8 +667,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabpanels</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TabpanelsDefault</mold-uri>
-			<!--<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabpanels.dsp': '~./zul/html/tabpanels.dsp'}</mold-uri>-->
+			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabpanels.dsp': '~./zul/html/tabpanels.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -747,8 +675,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabs</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TabsDefault</mold-uri>
-			<!--<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabs.dsp': '~./zul/html/tabs.dsp'}</mold-uri>-->
+			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabs.dsp': '~./zul/html/tabs.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -756,8 +683,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Textbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TextboxDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/textbox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/textbox.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -765,8 +691,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Timebox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TimeboxDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/timebox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/timebox.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -774,8 +699,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Timer</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TimerDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/timer.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/timer.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -783,8 +707,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Toolbar</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ToolbarDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/toolbar.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/toolbar.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -792,8 +715,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Toolbarbutton</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.ToolbarbuttonDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/toolbarbutton.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/toolbarbutton.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -801,8 +723,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tree</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TreeDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/tree.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/tree.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -810,8 +731,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Treecell</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TreecellDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/treecell.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/treecell.dsp</mold-uri>
 		</mold>
 		<!-- Uncomment custom-attribute if you want to use other values
 		<custom-attribute>
@@ -833,8 +753,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Treechildren</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TreechildrenDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/treechildren.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/treechildren.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -842,8 +761,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Treecol</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TreecolDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/treecol.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/treecol.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -851,8 +769,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Treecols</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TreecolsDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/treecols.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/treecols.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -860,8 +777,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Treefoot</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TreefootDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/treefoot.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/treefoot.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -869,8 +785,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Treefooter</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TreefooterDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/treefooter.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/treefooter.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -878,8 +793,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Treeitem</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TreeitemDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/treeitem.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/treeitem.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -887,8 +801,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Treerow</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.TreerowDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/treerow.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/treerow.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -896,13 +809,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Vbox</component-class>
 		<mold>
 			<mold-name>horizontal</mold-name>
-			<mold-uri>class:org.zkoss.zul.render.BoxHorizontal</mold-uri>
-			<!--<mold-uri>~./zul/html/hbox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>vertical</mold-name>
-				<mold-uri>class:org.zkoss.zul.render.BoxVertical</mold-uri>
-			<!--<mold-uri>~./zul/html/vbox.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/vbox.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -910,8 +821,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Window</component-class>
 		<mold>
 			<mold-name>default</mold-name>			
-			<mold-uri>class:org.zkoss.zul.render.WindowDefault</mold-uri>
-			<!--<mold-uri>~./zul/html/window.dsp</mold-uri>-->
+			<mold-uri>~./zul/html/window.dsp</mold-uri>
 		</mold>
 	</component>
 </language>
