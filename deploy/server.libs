@@ -4,6 +4,7 @@ zk.jar
 zul.jar
 zhtml.jar
 zml.jar
+zkmax.jar
 zkplus.jar
 zuljsp.jar
 fckez.jar
@@ -23,5 +24,3 @@ js.jar
 groovy.jar
 jruby.jar
 mvel.jar
-json_simple.jar
- #required-by-timelinez
