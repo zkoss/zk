@@ -36,7 +36,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
 <vbox>
-<grid>
+<grid width="400px">
 <columns>
   <column label="category" width="150px"/>
   <column label="value"/>
