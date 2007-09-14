@@ -1,8 +1,0 @@
-Manifest-Version: 1.0.0
-Specification-Title: The MUL Components of ZK
-Specification-Version: 1.0.0
-Specification-Vendor: Potix Corporation
-Implementation-Title: com.potix.zmul
-Implementation-URL: http://www.potix.com/zmul
-Implementation-Version: 1.0.0
-Implementation-Vendor: Potix Corporation

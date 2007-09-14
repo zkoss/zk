@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<frame title="Decimalbox Demo" visible="true" onCommand="MilDevice.goHome(null)">
-	<command label="Home" type="back"/>
-	
-	<decimalbox label="decimalbox" value="123.456"/>
-</frame>

@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<frame title="My First Window"  visible="true" onCommand="MilDevice.goHome(null)">
-	Hello, World!
-	
-	<command label="Home" type="back"/>
-</frame>

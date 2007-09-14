@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<frame title="Intbox Demo" visible="true" onCommand="MilDevice.goHome(null)">
-	<command label="Home" type="back"/>
-	
-	<intbox label="intbox" value="123"/>
-</frame>
