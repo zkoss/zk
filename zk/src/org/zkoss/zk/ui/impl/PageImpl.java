@@ -868,7 +868,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	public Collection getLoadedInterpreters() {
-		return _ips.values();
+		return _ips != null ? _ips.values(): Collections.EMPTY_LIST; //just in case
 	}
 	public String getZScriptLanguage() {
 		return _zslang;
