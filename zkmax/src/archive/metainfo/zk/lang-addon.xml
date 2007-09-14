@@ -569,7 +569,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</component> -->
 	<component>
 		<component-name>tab</component-name>
-		<extends>Tab</extends>
+		<extends>tab</extends>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.TabDefault</mold-uri>
