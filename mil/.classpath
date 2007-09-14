@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry excluding="**/.svn/|archive/" path="src" kind="src"/>
-	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
-	<classpathentry path="D:/home/henrichen/prj/zk1/dist/lib/zweb.jar" kind="lib"/>
-	<classpathentry path="D:/home/henrichen/prj/zk1/dist/lib/zcommon.jar" kind="lib"/>
-	<classpathentry path="D:/home/henrichen/prj/zk1/dist/lib/zk.jar" kind="lib"/>
-	<classpathentry path="build" kind="output"/>
-</classpath>
