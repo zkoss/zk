@@ -233,7 +233,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	if [ "$target" == "official" ] ; then
 		cd $binnm/dist/lib/ext
-		rm -rf jcommon.jar jfreechart.jar Filters.jar js.ar groovy.jar
+		rm -rf jcommon.jar jfreechart.jar Filters.jar js.jar groovy.jar
 		rm -rf jruby.jar mvel.jar 
 
 		cd ..
