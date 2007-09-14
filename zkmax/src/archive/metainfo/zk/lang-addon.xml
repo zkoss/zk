@@ -8,7 +8,7 @@
 	History:
 		September 14 10:00     2007, Created by Dennis
 
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <language-addon>
 	<!-- The name of this addon. It must be unique -->
@@ -21,11 +21,54 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<language-name>xul/html</language-name>
 
 	<version>
-		<version-class>org.zkoss.max.Version</version-class>
+		<version-class>org.zkoss.zkmax.Version</version-class>
 		<version-uid>3.0.0</version-uid>
 		<zk-version>3.0.0</zk-version><!-- or later -->
 	</version>
 
+	<!-- Interpreters -->
+	<zscript language="JavaScript">
+	importPackage(Packages.java.util);
+	importPackage(Packages.java.lang);
+	importClass(Packages.org.zkoss.zk.ui.util.Clients);
+	importPackage(Packages.org.zkoss.zk.ui.event);
+	importPackage(Packages.org.zkoss.zk.ui);
+	importPackage(Packages.org.zkoss.zul);
+	function alert(m) {
+		Messagebox.show(m);
+	}
+	</zscript>
+
+	<!-- Groovy "forgot" what are imported, so we have to import each time
+	-->
+	<zscript language="Groovy" each-time="true">
+	import java.util.*
+	import java.lang.*
+	import org.zkoss.zk.ui.util.Clients
+	import org.zkoss.zk.ui.event.*
+	import org.zkoss.zk.ui.*
+	import org.zkoss.zul.*
+	</zscript>
+	<zscript language="Groovy">
+	alert = {m -> Messagebox.show(m)}
+	</zscript>
+
+	<zscript language="Ruby">
+	require 'java'
+	module Java
+		include_package 'java.util'
+		include_package 'java.lang'
+		include_class 'org.zkoss.zk.ui.util.Clients'
+		include_package 'org.zkoss.zk.ui.event'
+		include_package 'org.zkoss.zk.ui'
+		include_package 'org.zkoss.zul'
+	end
+	def alert (m)
+		Java::Messagebox.show m
+	end
+	</zscript>
+
+	<!-- the renderer version of components -->
 	<component>
 		<component-name>area</component-name>
 		<extends>area</extends>

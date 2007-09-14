@@ -3,12 +3,12 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.zkoss.zk</groupId>
-  <artifactId>zkplus</artifactId>
+  <artifactId>zkmax</artifactId>
   <version>{version}</version>
   <packaging>jar</packaging>
   <name>The ZK Plus Utilities</name>
-  <url>http://www.zkoss.org/zkplus</url>
-  <description>The ZK plus utilities</description>
+  <url>http://www.zkoss.org/zkmax</url>
+  <description>The ZK Max Plugins</description>
   <licenses>
     <license>
       <name>GNU General Public License, Version 2.0</name>
@@ -17,7 +17,7 @@
     </license>
   </licenses>
   <scm>
-    <url>http://svn.sourceforge.net/viewvc/zk1/releases/{version}/zkplus</url>
+    <url>http://svn.sourceforge.net/viewvc/zk1/releases/{version}/zkmax</url>
   </scm>
   <dependencies>
     <dependency>
@@ -33,6 +33,12 @@
     <dependency>
       <groupId>org.zkoss.zk</groupId>
       <artifactId>zk</artifactId>
+      <version>{version}</version>
+    </dependency>
+  </dependencies>
+    <dependency>
+      <groupId>org.zkoss.zk</groupId>
+      <artifactId>zul</artifactId>
       <version>{version}</version>
     </dependency>
   </dependencies>

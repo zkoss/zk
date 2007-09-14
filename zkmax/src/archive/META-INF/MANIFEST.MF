@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Specification-Title: The ZK Performance Maximun Addon
+Specification-Title: The ZK Max Plugins
 Specification-Version: 3.0.0
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zkmax

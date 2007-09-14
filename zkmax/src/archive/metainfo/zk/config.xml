@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml
+	Purpose:
+		Configuration of ZK Plugins
+	Description:
+		
+	History:
+		Fri Sep 14 11:39:38     2007, Created by tomyeh
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+-->
+
+<config>
+	<version>
+		<version-class>org.zkoss.zkmax.Version</version-class>
+		<version-uid>3.0.0</version-uid>
+	</version>
+
+	<zscript-config>
+		<language-name>JavaScript</language-name>
+		<interpreter-class>org.zkoss.zkmax.scripting.rhino.RhinoInterpreter</interpreter-class>
+	</zscript-config>
+
+	<zscript-config>
+		<language-name>Groovy</language-name>
+		<interpreter-class>org.zkoss.zkmax.scripting.groovy.GroovyInterpreter</interpreter-class>
+	</zscript-config>
+
+	<zscript-config>
+		<language-name>Ruby</language-name>
+		<interpreter-class>org.zkoss.zkmax.scripting.jruby.JRubyInterpreter</interpreter-class>
+	</zscript-config>
+</config>
