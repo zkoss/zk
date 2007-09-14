@@ -469,6 +469,36 @@ zk._onResize = function () {
 	}
 };
 
+/** Adds a function that will be invoked before the browser is unloading
+ * the page.
+ * If the function returns a string, then the whole execution will stop
+ * and the string is returned to browser (to warning the user).
+ * If nothing is returned, the following functions will be invoked.
+ *
+ * @param front whether to add the function to the front of the list
+ * @since 3.0.0
+ */
+zk.addBeforeUnload = function (fn, front) {
+	if (front) zk._bfunld.unshift(fn);
+	else zk._bfunld.push(fn);
+};
+/** Removes the function added by zk.addBeforeUnload.
+ * @since 3.0.0
+ */
+zk.rmBeforeUnload = function (fn) {
+	zk._bfunld.remove(fn);
+};
+/** Called when window.onbeforeunload is called.
+ * Note: you rarely need to invoke this directly (except au.js).
+ * @since 3.0.0
+ */
+zk.beforeUnload = function () {
+	for (var j = 0; j < zk._bfunld.length; ++j) {
+		var s = zk._bfunld[j]();
+		if (s) return s;
+	}
+};
+
 /** Invokes the specified function that depends on the specified module.
  * If the module is not loaded yet, it will be loaded first.
  * If it is loaded, the function executes directly.
@@ -668,7 +698,7 @@ zk._loadAndInit = function (inf) {
 			}
 		} else if (zk.ie && $tag(n) == 'A' && n.href.indexOf("javascript:") >= 0) {
 			//Fix bug 1635685 and 1612312
-			zk.listen(n, "click", zk.ieFixUnload);
+			zk.listen(n, "click", zk._ieFixBfUnload);
 		}
 
 		var v = getZKAttr(n, "dtid");
@@ -689,25 +719,16 @@ zk._loadAndInit = function (inf) {
 };
 /** Fix bug 1635685 and 1612312 (IE/IE7 only):
  * IE invokes onbeforeunload if <a href="javascript;"> is clicked (sometimes)
- * It actually ignores zkau.confirmClose temporary.
+ * It actually ignores window.beforeunload temporary by
+ * set zk.skipBfUnload.
  */
 if (zk.ie) {
-	/** It is called to fix the wrong invocation of window.onbeforeunload
-	 * You can override it avoid this bug (in IE).
-	 *
-	 * Example,
-	 * var old = zk.ieFixUnload;
-	 * zk.ieFixUnload = function () {
-	 *   old(); //call back
-	 *   //your codes here
-	 * }
-	 */
-	zk.ieFixUnload = function () {
-		var msg = zkau.confirmClose;
-		if (msg) {
-			zkau.confirmClose = null; 
-			setTimeout(function () {zkau.confirmClose = msg;}, 0); //restore
-		}
+	zk._ieFixBfUnload = function () {
+		zkau.skipBfUnload = true;
+		setTimeout(zk._skipBackBF, 0); //restore
+	};
+	zk._skipBackBF = function () {
+		zkau.skipBfUnload = false;
 	};
 }
 
@@ -1136,6 +1157,7 @@ zk._inLatfns = []; //used by addInitLater
 zk._initmods = []; //used by addModuleInit
 zk._reszfns = []; //used by addOnResize
 zk._reszcnt = 0; //# of pending zk.onResize
+zk._bfunld = []; //used by addBeforeUnload
 zk._initcmps = []; //comps to init
 zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
 zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi

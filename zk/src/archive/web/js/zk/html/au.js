@@ -868,8 +868,14 @@ zkau._onUnload = function () {
 };
 /** Handles window.onbeforeunload. */
 zkau._onBfUnload = function () {
-	if (zkau.confirmClose)
-		return zkau.confirmClose;
+	if (!zk.skipBfUnload) {
+		if (zkau.confirmClose)
+			return zkau.confirmClose;
+
+		var s = zk.beforeUnload();
+		if (s) return s;
+	}
+
 	if (zkau._oldBfUnload)
 		return zkau._oldBfUnload.apply(window, arguments);
 	//Return nothing
