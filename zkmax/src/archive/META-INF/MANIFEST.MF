@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: The ZK Performance Maximun Addon
+Specification-Version: 3.0.0
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.zkmax
+Implementation-URL: http://www.zkoss.org/
+Implementation-Version: 3.0.0
+Implementation-Vendor: Potix Corporation
