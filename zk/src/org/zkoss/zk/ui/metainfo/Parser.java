@@ -49,6 +49,7 @@ import org.zkoss.idom.ProcessingInstruction;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.xel.taglib.Taglib;
+import org.zkoss.xel.util.Evaluators;
 import org.zkoss.web.servlet.Servlets;
 	
 import org.zkoss.zk.ui.WebApp;
@@ -430,6 +431,10 @@ public class Parser {
 		if (clsnm != null && clsnm.length() > 0) {
 			noELnorEmpty("class", clsnm, pi);
 			pgdef.setExpressionFactoryClass(locateClass(clsnm));
+		} else { //name has the lower priorty
+			final String nm = (String)params.remove("name");
+			if (nm != null)
+				pgdef.setExpressionFactoryClass(Evaluators.getEvaluatorClass(nm));
 		}
 
 		final String imports = (String)params.remove("import");

@@ -45,7 +45,7 @@ import org.zkoss.zk.ui.UiException;
 public class Interpreters {
 	private static final Log log = Log.lookup(Interpreters.class);
 
-	/** Map(zslang, class); */
+	/** Map(zslang, Class/String class); */
 	private static final Map _ips = new HashMap();
 	/** A set of language names. */
 	private static final Set _zslangs =
