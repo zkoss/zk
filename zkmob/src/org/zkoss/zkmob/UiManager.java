@@ -226,7 +226,6 @@ public class UiManager {
 			final ZkDesktop zk = ((ZkComponent)item).getZkDesktop();
 			if (zk != null) {
 				final String imagesrc = UiManager.prefixURL(hostURL, pathURL, url); //image
-System.out.println("imagesrc="+imagesrc);				
 				new Thread(new ImageRequest(item, imagesrc)).start();
 			}
 		}

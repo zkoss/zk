@@ -1,4 +1,4 @@
-zkmob-autoRun: false
+zkmob-autoRun: true
 MIDlet-Version: 1.0.0
 MIDlet-Jar-Size: {jar-size}
 MIDlet-Info-URL: http://www.zkoss.org/products/zkmob
@@ -6,15 +6,15 @@ MIDlet-Icon: /icons/zk.png
 MicroEdition-Configuration: CLDC-1.0
 MIDlet-Jar-URL: zkmob.jar
 MIDlet-Name: zkmob
-zkmob-defaultURL: http://localhost:8080/zkmob-demo-all/test/hello.mil
-zkmob-history6: http://localhost:8080/zkmob-demo-all/test/decimalbox.mil
-zkmob-history5: http://localhost:8080/zkmob-demo-all/test/intbox.mil
-zkmob-history4: http://localhost:8080/zkmob-demo-all/test/datebox.mil
-zkmob-history3: http://localhost:8080/zkmob-demo-all/test/listbox.mil
+zkmob-defaultURL: http://www.zkoss.org/zkmob/mobcal/
+zkmob-history6: http://www.zkoss.org/zkmob/test/decimalbox.mil
+zkmob-history5: http://www.zkoss.org/zkmob/test/intbox.mil
+zkmob-history4: http://www.zkoss.org/zkmob/test/datebox.mil
+zkmob-history3: http://www.zkoss.org/zkmob/test/listbox.mil
 MIDlet-1: ZK Mobile,/icons/zk.png,org.zkoss.zkmob.Browser
-zkmob-history2: http://localhost:8080/zkmob-demo-all/test/onchanging.mil
-zkmob-history1: http://localhost:8080/zkmob-demo-all/test/label.mil
-zkmob-history0: http://localhost:8080/zkmob-demo-all/test/hello.mil
+zkmob-history2: http://www.zkoss.org/zkmob/test/onchanging.mil
+zkmob-history1: http://www.zkoss.org/zkmob/test/label.mil
+zkmob-history0: http://www.zkoss.org/zkmob/test/hello.mil
 MIDlet-Description: ZK Mobile
 MIDlet-Permissions: javax.microedition.io.Connector.http
 MIDlet-Vendor: Potix Corporation

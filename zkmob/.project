@@ -20,21 +20,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>eclipseme.core.nature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/icons</name>
-			<type>2</type>
-			<location>D:/home/henrichen/prj/zk1/zkmob/src/archive/icons</location>
-		</link>
-		<link>
-			<name>src/META-INF</name>
-			<type>2</type>
-			<location>D:/home/henrichen/prj/zk1/zkmob/src/archive/META-INF</location>
-		</link>
-		<link>
-			<name>src/pages</name>
-			<type>2</type>
-			<location>D:/home/henrichen/prj/zk1/zkmob/src/archive/pages</location>
-		</link>
-	</linkedResources>
 </projectDescription>
