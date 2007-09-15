@@ -21,7 +21,7 @@ package org.zkoss.mil;
 
 /**
  * The version of the ZK MIL component set.
- * {@link #UUID} must be the same as the version specified in lang.xml
+ * {@link #UID} must be the same as the version specified in lang.xml
  * and config.xml.
  *
  * @author henrichen
