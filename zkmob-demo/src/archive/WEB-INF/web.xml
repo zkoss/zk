@@ -15,8 +15,8 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"> 
 
-	<description><![CDATA[ZK Demo]]></description>
-	<display-name>zkdemo</display-name>
+	<description><![CDATA[ZK Mobile Demo]]></description>
+	<display-name>zkmob-demo</display-name>
 	<!--
 	<icon>
 		<small-icon></small-icon>
@@ -65,11 +65,11 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</servlet-mapping>
 
 	<!-- Optional. Uncomment it if you want to use richlets.
-	-->
 	<servlet-mapping>
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>/zk/*</url-pattern>
 	</servlet-mapping>
+	-->
 
 	<servlet>
 		<description>The asynchronous update engine for ZK</description>
