@@ -206,7 +206,7 @@ fi
 if [ "$target" == "official" ]; then
 	mkdir -p /tmp/zkmob/doc
 
-	cd $HOME/prj/zk1/zkdoc
+	cd $HOME/prj/zk1/zkdoc/zkmob-quickstart
 	for f in ZKMobile*.pdf ; do  
 		cp $f /tmp/zkmob/doc/${f%.pdf}-$ver.pdf
 	done
