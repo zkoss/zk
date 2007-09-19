@@ -36,6 +36,7 @@ request.setAttribute("my_list",my_list);// use Request to store and pass data.
 <z:zscript>
 	System.out.println("fire when load page..." );
 	my_list = requestScope.get("my_list");// get data from request and declare page variable "my_list" implicitly.
+	String main_name = "test Variable";
 </z:zscript>
 
 <z:window id="mainPanel" width="600px"  title="RSS Reader with Aggregate Feed"  border="normal" >
@@ -45,6 +46,10 @@ request.setAttribute("my_list",my_list);// use Request to store and pass data.
 			System.out.println("zscript.pageVariable()= "+current_date );
 		</z:attribute>
 	</z:button>
+			<z:zscript>
+			cancelBtn.setLabel(main_name);
+			System.out.println(page.getVariable("main_name"));
+		</z:zscript>
 </z:caption>
 	<%-- same as original ZK databinding...--%>
 	<z:listbox id="feedListBox" model="@{my_list}" rows="8" selectedItem="@{selected}">

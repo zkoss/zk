@@ -43,7 +43,7 @@
 			</div>
 			<div style="margin-top: 10px">
 				<z:hbox>
-					Use class to define customized ZK Component: <z:toolbarbutton href="./useclass.JSP" label="use class Demo"/>
+					Use class to define customized ZK Component: <z:toolbarbutton href="./useclass.jsp" label="use class Demo"/>
 				</z:hbox>
 			</div>
 			<div style="margin-top: 10px">
