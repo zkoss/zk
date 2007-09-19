@@ -162,8 +162,9 @@
 			}
 		</z:zscript>
 		<z:vbox id="box" style="visible:none"/>
+		<a href="../index.html">Back</a>
 	</z:page>
-	<a href="../index.html">Back</a>
+	
 </f:view>
 </BODY>
 

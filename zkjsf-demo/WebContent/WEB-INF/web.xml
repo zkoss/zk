@@ -43,6 +43,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
     
+    <!-- myfaces configuration -->
+	<listener>
+		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
+	</listener>
     
     <!-- ZK Configuration-->
 	<listener>

@@ -5,8 +5,7 @@ WebContent\WEB-INF\lib\commons-digester.jar
 WebContent\WEB-INF\lib\commons-fileupload.jar
 WebContent\WEB-INF\lib\commons-io.jar
 WebContent\WEB-INF\lib\commons-logging.jar
-WebContent\WEB-INF\lib\jsf-api.jar
-WebContent\WEB-INF\lib\jsf-impl.jar
+WebContent\WEB-INF\lib\myfaces-api-1.1.5.jar
 WebContent\WEB-INF\lib\jstl.jar
 WebContent\WEB-INF\lib\standard.jar
 WebContent\WEB-INF\lib\zcommon.jar

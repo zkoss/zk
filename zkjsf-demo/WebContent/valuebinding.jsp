@@ -25,9 +25,10 @@
 				<h:commandButton id="submit" action="#{ValueBindingBean.doSubmit}" value="Submit" />				
 			</z:window>
 			<h:messages/>
+			<a href="../index.html">Back</a>
 		</z:page>
 	</h:form>
-	<a href="../index.html">Back</a>
+	
 </f:view>
 </body>
 </HTML>

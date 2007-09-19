@@ -24,8 +24,9 @@
 		    </z:button>
 		    <z:vbox id="pics"/>
 		</z:window>		
+		<a href="../index.html">Back</a>
 	</z:page>
-	<a href="../index.html">Back</a>
+	
 </f:view>
 </body>
 </HTML>

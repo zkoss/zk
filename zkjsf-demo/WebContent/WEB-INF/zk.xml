@@ -25,6 +25,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</listener>
 	<preference>
 		<name>ThreadLocal</name>
-		<value>javax.faces.context.FacesContext=instance;</value>
+		<!--  for SUN RI -->
+		<!--<value>
+			javax.faces.context.FacesContext=instance;
+		</value> -->
+		<!--  for My faces  -->
+		<value>
+			javax.faces.context.FacesContext=_currentInstance;
+		</value>
 	</preference>
 </zk>
