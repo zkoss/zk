@@ -59,7 +59,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "79"; //increase this if we want the browser to reload JavaScript
+zk.build = "7a"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -453,7 +453,7 @@ zk.onResize = function (timeout) {
 	if (!zk._tmResz || $now() > zk._tmResz) {
 		++zk._reszcnt;
 		setTimeout(zk._onResize,
-			timeout ? timeout ? zk.ie && zk._reszcnt < 4 ? 200: 35);
+			timeout ? timeout: zk.ie && zk._reszcnt < 4 ? 200: 35);
 			//IE: we have to prolong since onresize might come too fast
 			//It is an experimental value. Not sure the real cause.
 	}
