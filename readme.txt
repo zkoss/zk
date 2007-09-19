@@ -11,9 +11,14 @@ Naming Convention for abbreviation names
 
 ---
 zul
-	The XUL component set, http://www.zkoss.org/2005/zul
+	The ZK XUL component set, http://www.zkoss.org/2005/zul
 	It includes ZK components implementing XUL tags
 	XUL: XML user interface markup language
+
+---
+zulex
+	The extension of the ZK XUL component set.
+	It includes the jFreechart-based engine.
 
 ---
 zhtml

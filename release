@@ -34,6 +34,7 @@ ver=${ver#version=}
 if [ "$target" == "official" ] ; then
 	binnm=zk-bin-$ver
 	exprnm=zk-bin-express-$ver
+	classicnm=zk-bin-classic-$ver
 	demonm=zk-demo-$ver
 	javadocnm=zk-javadoc-$ver
 	srcnm=zk-src-$ver
@@ -89,12 +90,14 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zul /tmp/zk/$srcnm
 	cp -rp zhtml /tmp/zk/$srcnm
 	cp -rp zml /tmp/zk/$srcnm
+	cp -rp zulex /tmp/zk/$srcnm
 	cp -rp zkmax /tmp/zk/$srcnm
 	cp -rp zkplus /tmp/zk/$srcnm
 	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
 
 	cd /tmp/zk/$srcnm
-	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zml/debug zkmax/debug zkplus/debug
+	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug
+	rm -rf zml/debug zulex/debug zkmax/debug zkplus/debug
 	#find -name CVS | xargs rm -rf
 	find -name .svn | xargs rm -rf
 
@@ -110,6 +113,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p src/zul
 	mkdir -p src/zhtml
 	mkdir -p src/zml
+	mkdir -p src/zulex
 	mkdir -p src/zkmax
 	mkdir -p src/zkplus
 	cd $srcnm
@@ -119,6 +123,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zul/codegen/* zul/src/* ../src/zul
 	cp -rp zhtml/codegen/* zhtml/src/* ../src/zhtml
 	cp -rp zml/codegen/* zml/src/* ../src/zml
+	cp -rp zulex/codegen/* zulex/src/* ../src/zulex
 	cp -rp zkmax/codegen/* zkmax/src/* ../src/zkmax
 	cp -rp zkplus/codegen/* zkplus/src/* ../src/zkplus
 	cd ..
@@ -133,6 +138,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	jar cfM zul-sources.jar -C zul .
 	jar cfM zhtml-sources.jar -C zhtml .
 	jar cfM zml-sources.jar -C zml .
+	jar cfM zulex-sources.jar -C zulex .
 	jar cfM zkmax-sources.jar -C zkmax .
 	jar cfM zkplus-sources.jar -C zkplus .
 	mv *-sources.jar ..
@@ -172,8 +178,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/ext/mvel.jar /tmp/zk/$binnm/dist/lib/ext
 		#MVEL (mvel)
 
-	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar dist/lib/zk.jar /tmp/zk/$binnm/dist/lib/
-	cp dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zml.jar dist/lib/zkmax.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
+	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar /tmp/zk/$binnm/dist/lib/
+	cp dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zml.jar /tmp/zk/$binnm/dist/lib/
+	cp dist/lib/zulex.jar dist/lib/zkmax.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
 
@@ -224,6 +231,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		mvnrepo zul
 		mvnrepo zhtml
 		mvnrepo zml
+		mvnrepo zulex
 		mvnrepo zkmax
 		mvnrepo zkplus
 		mv *-bundle.jar /tmp/maven
@@ -232,9 +240,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	fi
 
 	if [ "$target" == "official" ] ; then
+		#Ouput ${classicnm}
 		cd $binnm/dist/lib/ext
-		rm -rf jcommon.jar jfreechart.jar Filters.jar js.jar groovy.jar
-		rm -rf jruby.jar mvel.jar 
+		rm -rf js.jar groovy.jar jruby.jar mvel.jar 
 
 		cd ..
 		rm zkmax.jar
@@ -247,8 +255,23 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 		cd /tmp/zk
 
-		echo Output ${exprnm}.tar.gz
-		tar zcf ${exprnm}.tar.gz $binnm
+		#echo Output ${classicnm}.tar.gz
+		#tar zcf ${classicnm}.tar.gz $binnm
+		echo Output ${classicnm}.zip
+		zip -qr9 ${classicnm}.zip $binnm
+
+		#Ouput ${exprnm}
+		cd $binnm/dist/lib/ext
+		rm -rf jcommon.jar jfreechart.jar Filters.jar
+
+		cd ..
+		rm zml.jar
+		rm zulex.jar
+
+		cd /tmp/zk
+
+		#echo Output ${exprnm}.tar.gz
+		#tar zcf ${exprnm}.tar.gz $binnm
 		echo Output ${exprnm}.zip
 		zip -qr9 ${exprnm}.zip $binnm
 	fi
@@ -259,7 +282,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cd $javadocdir
 
 	echo Output ${javadocnm}.zip
-	zip -qr9 ${javadocnm}.zip zcommon zweb zk zul zhtml zml zkmax zkplus
+	zip -qr9 ${javadocnm}.zip zcommon zweb zk zul zhtml zml zulex zkmax zkplus
 	mv ${javadocnm}.zip /tmp/zk
 fi
 if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
