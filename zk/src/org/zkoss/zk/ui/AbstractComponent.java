@@ -117,6 +117,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * more than one)
 	 */
 	private transient List _newChildren;
+	/** The sibling information. */
+	private transient SiblingInfo _sibInfo;
+	/** The modification count used to make sure _sibInfo is up to date.
+	 */
+	private transient int _modCntChd;
+
 	/** A map of annotations. Serializable since a component might have
 	 * its own annotations.
 	 */
@@ -635,6 +641,26 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return idspace == null ? null: idspace.getFellowIfAny(compId);
 	}
 
+	public Component getNextSibling() {
+		return getSiblingInfo().next;
+	}
+	public Component getPreviousSibling() {
+		return getSiblingInfo().previous;
+	}
+	private SiblingInfo getSiblingInfo() {
+		final AbstractComponent parent = (AbstractComponent)_parent;
+		if (_sibInfo == null || !_sibInfo.isValid(parent))
+			_sibInfo = new SiblingInfo(parent, this);
+		return _sibInfo;
+	}
+	public Component getFirstChild() {
+		return _children.isEmpty() ? null: (Component)_children.get(0);
+	}
+	public Component getLastChild() {
+		final int sz = _children.size();
+		return sz == 0 ? null: (Component)_children.get(sz - 1);
+	}
+
 	public Map getAttributes(int scope) {
 		switch (scope) {
 		case SPACE_SCOPE:
@@ -747,6 +773,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				checkDetach(_page);
 		}
 
+		_sibInfo = null; //invalid
+
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
 		final Component oldparent = _parent;
 		if (_parent != null) {
@@ -813,6 +841,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (!added) _children.add(newChild);
 		}
 
+		++_modCntChd;
 		final AbstractComponent nc = (AbstractComponent)newChild;
 		if (found) { //re-order
 			nc.addMoved(nc._parent, nc._page, _page);
@@ -846,6 +875,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		if (_modChildByIter || _children.remove(child)) {
 			_modChildByIter = false; //avoid dead loop
+			++_modCntChd;
 
 			if (child.getParent() != null) //avoid loop back
 				child.setParent(null);
@@ -1546,6 +1576,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//1. make it not belonging to any page
 		clone._page = null;
 		clone._parent = null;
+		clone._sibInfo = null;
 
 		//1a. clone attributes
 		clone._attrs = new HashMap();
@@ -1881,6 +1912,38 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//ComponentCloneListener//
 		public Object clone(Component comp) {
 			return null; //handle by AbstractComponent.clone
+		}
+	}
+	/** The info about the siblings.
+	 */
+	private static class SiblingInfo {
+		private final Component next;
+		private final Component previous;
+		private final int _modCntSib;
+		private SiblingInfo(AbstractComponent parent, AbstractComponent child) {
+			if (parent != null) {
+				for (ListIterator it = parent._children.listIterator();
+				it.hasNext();) {
+					if (it.next() == child) {
+						_modCntSib = parent._modCntChd;
+						if (it.hasNext()) {
+							this.next = (Component)it.next();
+							it.previous();
+						} else {
+							this.next = null;
+						}
+						it.previous();
+						this.previous = it.hasPrevious() ? (Component)it.previous(): null;
+						return;
+					}
+				}
+			}
+
+			this.next = this.previous = null;
+			_modCntSib = 0;
+		}
+		private boolean isValid(AbstractComponent parent) {
+			return parent == null || _modCntSib == parent._modCntChd;
 		}
 	}
 }

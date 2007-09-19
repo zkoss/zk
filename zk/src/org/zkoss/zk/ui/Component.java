@@ -215,6 +215,23 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public Component getFellowIfAny(String id);
 
+	/** Returns the next sibling, or null if it is the last child.
+	 * @since 3.0.0
+	 */
+	public Component getNextSibling();
+	/** Returns the previous sibling, or null if it is the first child.
+	 * @since 3.0.0
+	 */
+	public Component getPreviousSibling();
+	/** Returns the first child component, or null if no child at all.
+	 * @since 3.0.0
+	 */
+	public Component getFirstChild();
+	/** Returns the last child  component, or null if no child at all.
+	 * @since 3.0.0
+	 */
+	public Component getLastChild();
+
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes private to a component is searched.
 	 * <p>It is also known as the component attributes.
