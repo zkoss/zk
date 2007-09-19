@@ -444,7 +444,7 @@ zk.rmOnResize = function (fn) {
 /** Invokes all functions added by zk.addOnResize.
  * @since 3.0.0
  */
-zk.onResize = function () {
+zk.onResize = function (timeout) {
 	//Tom Yeh: 20051230:
 	//In certain case, IE will keep sending onresize (because
 	//grid/listbox may adjust size, which causes IE to send onresize again)
@@ -452,7 +452,8 @@ zk.onResize = function () {
 	//is called
 	if (!zk._tmResz || $now() > zk._tmResz) {
 		++zk._reszcnt;
-		setTimeout(zk._onResize, zk.ie && zk._reszcnt < 4 ? 200: 35);
+		setTimeout(zk._onResize,
+			timeout ? timeout ? zk.ie && zk._reszcnt < 4 ? 200: 35);
 			//IE: we have to prolong since onresize might come too fast
 			//It is an experimental value. Not sure the real cause.
 	}
