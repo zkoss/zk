@@ -22,8 +22,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ChartDataEvent;
 import org.zkoss.zul.event.ChartDataListener;
 
-import org.jfree.data.xy.*;
-
 import java.util.Map;
 import java.util.Date;
 import java.util.List;

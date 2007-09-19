@@ -73,7 +73,7 @@ public class Captcha extends org.zkoss.zul.Image {
 	private String _value; //captcha text value 
 	private boolean _noise = true; //whether generate noise
 	private CaptchaEngine _engine; //the captcha engine that generate the distortion image.
-	
+
 	public Captcha() {
 		setWidth("200px");
 		setHeight("50px");
@@ -330,9 +330,51 @@ public class Captcha extends org.zkoss.zul.Image {
 	
 	/**
 	 * Get the captcha engine.
+	 *
+	 * @exception UiException if failed to load the engine.
 	 */
-	public CaptchaEngine getCaptchaEngine() {
+	public CaptchaEngine getCaptchaEngine()
+	throws UiException {
+		if (_engine == null)
+			_engine = newCaptchaEngine();
 		return _engine;
+	}
+	/** Instantiates the default captcha engine.
+	 * It is called, if {@link #setEngine} is not called with non-null
+	 * engine.
+	 *
+	 * <p>By default, it looks up the component attribute called
+	 * captcha-engine. If found, the value is assumed to be the class
+	 * or the class name of the default engine (it must implement
+	 * {@link CaptchaEngine}.
+	 * If not found, {@link UiException} is thrown.
+	 *
+	 * <p>Derived class might override this method to provide your
+	 * own default class.
+	 *
+	 * @exception UiException if failed to instantiate the engine
+	 * @since 3.0.0
+	 */
+	protected CaptchaEngine newCaptchaEngine() throws UiException {
+		Object v = getAttribute("captcha-engine");
+		try {
+			final Class cls;
+			if (v instanceof String) {
+				cls = Classes.forNameByThread((String)v);
+			} else if (v instanceof Class) {
+				cls = (Class)v;
+			} else {
+				throw new UiException(v != null ? "Unknown captcha-engine, "+v:
+					"The captcha-engine attribute is not defined");
+			}
+	
+			v = cls.newInstance();
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+		if (!(v instanceof CaptchaEngine))
+			throw new UiException(CaptchaEngine.class + " must be implemented by "+v);
+		return (CaptchaEngine)v;
 	}
 
 	/**
@@ -355,12 +397,9 @@ public class Captcha extends org.zkoss.zul.Image {
 					if (Strings.isBlank(getHeight()))
 						throw new UiException("captcha must specify height");
 								
-					if (_engine == null)
-						_engine = new org.zkoss.zul.impl.SimpleCaptchaEngine();
-						
 					try {
 						//generate the distorted image based on the given text value
-						byte[] bytes = _engine.generateCaptcha(Captcha.this);
+						byte[] bytes = getCaptchaEngine().generateCaptcha(Captcha.this);
 						final AImage image = new AImage("captcha"+new Date().getTime(), bytes);
 						setContent(image);
 					} catch(java.io.IOException ex) {

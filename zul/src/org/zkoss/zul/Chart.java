@@ -69,7 +69,6 @@ import java.awt.Paint;
  *
  * @see ChartEngine
  * @see ChartModel
- * @see org.zkoss.zul.impl.SimpleChartEngine
  * @author henrichen
  */
 public class Chart extends Imagemap {
@@ -545,9 +544,49 @@ public class Chart extends Imagemap {
 	}
 	
 	/** Returns the implemetation chart engine.
+	 * @exception UiException if failed to load the engine.
 	 */
-	public ChartEngine getEngine() {
+	public ChartEngine getEngine() throws UiException {
+		if (_engine == null)
+			_engine = newChartEngine();
 		return _engine;
+	}
+	/** Instantiates the default chart engine.
+	 * It is called, if {@link #setEngine} is not called with non-null
+	 * engine.
+	 *
+	 * <p>By default, it looks up the component attribute called
+	 * chart-engine. If found, the value is assumed to be the class
+	 * or the class name of the default engine (it must implement
+	 * {@link ChartEngine}).
+	 * If not found, {@link UiException} is thrown.
+	 *
+	 * <p>Derived class might override this method to provide your
+	 * own default class.
+	 *
+	 * @exception UiException if failed to instantiate the engine
+	 * @since 3.0.0
+	 */
+	protected ChartEngine newChartEngine() throws UiException {
+		Object v = getAttribute("chart-engine");
+		try {
+			final Class cls;
+			if (v instanceof String) {
+				cls = Classes.forNameByThread((String)v);
+			} else if (v instanceof Class) {
+				cls = (Class)v;
+			} else {
+				throw new UiException(v != null ? "Unknown chart-engine, "+v:
+					"The chart-engine attribute is not defined");
+			}
+	
+			v = cls.newInstance();
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+		if (!(v instanceof ChartEngine))
+			throw new UiException(ChartEngine.class + " must be implemented by "+v);
+		return (ChartEngine)v;
 	}
 	
 	/** Sets the chart engine.
@@ -635,12 +674,9 @@ public class Chart extends Imagemap {
 					if (Strings.isBlank(getHeight()))
 						throw new UiException("chart must specify height");
 						
-					if (_engine == null)
-						_engine = new org.zkoss.zul.impl.SimpleChartEngine();
-							
 					try {
 						final String title = getTitle();
-						final AImage image = new AImage("chart"+new Date().getTime(), _engine.drawChart(Chart.this));
+						final AImage image = new AImage("chart"+new Date().getTime(), getEngine().drawChart(Chart.this));
 						setContent(image);
 					} catch(java.io.IOException ex) {
 						throw UiException.Aide.wrap(ex);
