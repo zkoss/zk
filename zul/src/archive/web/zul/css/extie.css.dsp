@@ -41,3 +41,12 @@ li	{margin-top: 2pt}
 ul li	{list-style: url(${c:encodeURL('~./img/bullet1.gif')}) disc}
 ul ul li	{list-style: url(${c:encodeURL('~./img/bullet2.gif')}) circle}
 ul ul ul li	{list-style: url(${c:encodeURL('~./img/bullet3.gif')}) square}
+
+code {
+	font-family: "Lucida Console", "Courier New", Courier, mono;
+	font-size: xx-small;  font-weight: normal;
+}
+dfn {
+	font-family: "Lucida Console", "Courier New", Courier, mono;
+	font-size: xx-small; font-style: normal;
+}

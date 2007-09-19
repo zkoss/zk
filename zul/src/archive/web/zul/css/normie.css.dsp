@@ -23,18 +23,6 @@ legend {
 	font-family: Tahoma, Arial, serif;
 	font-size: x-small; font-weight: normal;
 }
-hr {
-	color: lightgray; background: lightgray;
-	height: 1px;
-}
-code {
-	font-family: "Lucida Console", "Courier New", Courier, mono;
-	font-size: xx-small;  font-weight: normal;
-}
-dfn {
-	font-family: "Lucida Console", "Courier New", Courier, mono;
-	font-size: xx-small; font-style: normal;
-}
 
 th {
 	font-family: Tahoma, Garamond, Century, Arial, serif;
@@ -601,7 +589,7 @@ div.menupopup a:hover {
 	background: highlight; color: highlighttext;
 }
 div.menupopup hr {
-	border: 0; color: darkgray; background: darkgray;
+	border: 0; color: lightgray; background: lightgray; height: 1px;
 }
 
 <%-- combobox and datebox --%>

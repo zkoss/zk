@@ -19,18 +19,6 @@ legend {
 	font-family: Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
 }
-hr {
-	color: lightgray; background: lightgray;
-	height: 1px;
-}
-code {
-	font-family: "Lucida Console", "Courier New", Courier, mono;
-	font-size: x-small;  font-weight: normal;
-}
-dfn {
-	font-family: "Lucida Console", "Courier New", Courier, mono;
-	font-size: x-small; font-style: normal;
-}
 
 th {
 	font-family: Tahoma, Garamond, Century, Arial, serif;
@@ -593,7 +581,7 @@ div.menupopup a:hover {
 	background: #316ac5; color: white; <%--Safari Bug 47298: no highlight --%>
 }
 div.menupopup hr {
-	border: 0; color: darkgray; background: darkgray;
+	border: 0; color: gray; background: gray; height: 1px;
 }
 
 <%-- Combobox and Datebox --%>
