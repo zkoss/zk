@@ -9,8 +9,8 @@
  Aug 9, 2007 12:42:46 PM     2007, Created by Dennis.Chen
  }}IS_NOTE
 
- Some code of this file is refer to Common Development and Distribution License
- the license file is https://javaserverfaces.dev.java.net/CDDL.html  
+ Some code of this file is refer to Apache License Version 2.0
+ the license file is http://www.apache.org/licenses/LICENSE-2.0 
 
  Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
@@ -33,92 +33,67 @@ import org.zkoss.zk.ui.Component;
 /**
  *  The skeletal class used to implement the ZULJSF components
  *  which needs to support {@link javax.faces.component.ValueHolder}.<br/>
- *  This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
+ *  Components should be declared nested under {@link org.zkoss.jsf.zul.Page}.
+ *  
+ *  see Javadoc of <a href="http://java.sun.com/j2ee/javaserverfaces/1.1_01/docs/api/index.html">JSF Specification</a>
+ *  
  * @author Dennis.Chen
  */
 abstract public class BranchOutput extends BranchComponent implements ValueHolder,ValueHolderSupport {
 
-	
-	//------------code refer to UIOuput in JSF RI-----------------
-	protected Converter _converter;
-	protected Object _value;
-
-	/**
-	 * The "localValueSet" state for this component.
-	 */
 	private boolean _localValueSet;
-
-	/**
-	 * Return the "local value set" state for this component. Calls to
-	 * setValue() automatically reset this property to
-	 * true.
-	 */
+	
 	public boolean isLocalValueSet() {
 		return _localValueSet;
 	}
 
-	/**
-	 * Sets the "local value set" state for this component.
-	 */
 	public void setLocalValueSet(boolean localValueSet) {
 		this._localValueSet = localValueSet;
 	}
-
-	/**
-	 * get Convert of this component.
-	 */
-	public Converter getConverter() {
-
-		if (this._converter != null) {
-			return (this._converter);
-		}
-		ValueBinding vb = getValueBinding("converter");
-		if (vb != null) {
-			return ((Converter) vb.getValue(getFacesContext()));
-		} else {
-			return (null);
-		}
-
-	}
-
-	/**
-	 * set Converter of this Component.
-	 * 
-	 */
-	public void setConverter(Converter converter) {
-
-		this._converter = converter;
-
-	}
-
-	/**
-	 * get local value directly , ignore the ValueBinding; 
-	 */
+	
+	
+	//------------code refer to Apache MyFaces-----------------
+	
 	public Object getLocalValue() {
 		return (this._value);
 	}
-
 	
-	public Object getValue() {
+	private Converter _converter;
+	private Object _value;
 
+	public Converter getConverter() {
+		if (this._converter != null) {
+			return this._converter;
+		}
+		ValueBinding vb = getValueBinding("converter");
+		if (vb != null) {
+			return (Converter) vb.getValue(getFacesContext());
+		} else {
+			return null;
+		}
+	}
+
+	public void setConverter(Converter converter) {
+		this._converter = converter;
+	}
+
+	public Object getValue() {
 		//modify dennis, maybe use set null to value,
-		if (_localValueSet/*this._value != null*/) {
-			return (this._value);
+		if (_localValueSet/*_value != null*/) {
+			return this._value;
 		}
 		ValueBinding vb = getValueBinding("value");
 		if (vb != null) {
-			return (vb.getValue(getFacesContext()));
+			return vb.getValue(getFacesContext());
 		} else {
-			return (null);
+			return null;
 		}
 
 	}
 
 	public void setValue(Object value) {
-
 		this._value = value;
 		_localValueSet = true;
-
 	}
 
 	// ----------------------------------------------------- StateHolder Methods
@@ -209,7 +184,7 @@ abstract public class BranchOutput extends BranchComponent implements ValueHolde
 	}
 	
 	/**
-	 * return orginal String
+	 * Default implementation return orginal String
 	 * @see ValueHolderSupport
 	 */
 	public Object transferValueForAttribute(String value){

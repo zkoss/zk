@@ -152,9 +152,8 @@ import org.zkoss.zk.ui.Component;
         	}
         }
         
-        String id = component.getId();
-        if (id != null)
-            component.setId(id);
+        //String id = component.getId();
+        //if (id != null) component.setId(id);
         component.encodeBegin(context);
         if (component.getRendersChildren()) {
             component.encodeChildren(context);

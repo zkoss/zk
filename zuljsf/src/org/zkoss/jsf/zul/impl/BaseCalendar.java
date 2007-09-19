@@ -54,7 +54,7 @@ abstract public class BaseCalendar extends BranchInput{
 	
 	
 	/**
-	 * return java.lang.Date which is parsed from value;
+	 * this implementation return java.lang.Date which is parsed from value;
 	 * @see ValueHolderSupport
 	 */
 	public Object transferValueForAttribute(String value){
