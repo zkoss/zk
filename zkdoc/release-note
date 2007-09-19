@@ -1,5 +1,13 @@
 	--------
-ZK 3.0.0
+ZK 3.0.0 Freshly
+* Features:
+  1777430: Add getNextSibling/getPreviousSibling to Component Interface
+
+* Bugs:
+  1797527: malformed zul.xsd
+
+	--------
+ZK 3.0.0 RC
 * Features:
   1787513: Translate messages to Hungarian. Thank Andreas Klein (andiklein@idatso.com) for his contribution.
   1579332: Server Push
