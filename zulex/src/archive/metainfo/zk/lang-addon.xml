@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- lang-addon.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 19 12:37:15     2007, Created by tomyeh
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+-->
+
+<language-addon>
+	<!-- The name of this addon. It must be unique -->
+	<addon-name>zulex</addon-name>
+	<!-- Specifies what other addon this depends
+	<depends></depends>
+	-->
+
+	<!-- Which language this addon will be added to -->
+	<language-name>xul/html</language-name>
+
+	<version>
+		<version-class>org.zkoss.zulex.Version</version-class>
+		<version-uid>3.0.0</version-uid>
+		<zk-version>3.0.0</zk-version><!-- or later -->
+	</version>
+
+	<component>
+		<component-name>captcha</component-name>
+		<extends>captcha</extends>
+
+		<custom-attribute>
+			<attribute-name>captcha-engine</attribute-name>
+			<attribute-value>org.zkoss.zulex.impl.JHLabsCaptchaEngine</attribute-value>
+		</custom-attribute>
+	</component>
+	<component>
+		<component-name>chart</component-name>
+		<extends>chart</extends>
+
+		<custom-attribute>
+			<attribute-name>chart-engine</attribute-name>
+			<attribute-value>org.zkoss.zulex.impl.JFreeChartEngine</attribute-value>
+		</custom-attribute>
+	</component>
+</language-addon>

@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: ZK XUL Component Extension
+Specification-Version: 3.0.0
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.zulex
+Implementation-URL: http://www.zkoss.org/zulex
+Implementation-Version: 3.0.0
+Implementation-Vendor: Potix Corporation
