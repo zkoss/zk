@@ -184,10 +184,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
 
-	if [ "$target" == "daily" ] ; then
-		cp dist/lib/zuljsp.jar /tmp/zk/$binnm/dist/lib/zkforge
-		cp -rp zuljsp/src/archive/META-INF/*.tld /tmp/zk/$binnm/dist/WEB-INF/tld/jsp/zul
-	fi
+#	if [ "$target" == "daily" ] ; then
+#		cp dist/lib/zuljsp.jar /tmp/zk/$binnm/dist/lib/zkforge
+#		cp -rp zuljsp/src/archive/META-INF/*.tld /tmp/zk/$binnm/dist/WEB-INF/tld/jsp/zul
+#	fi
 
 	if [ -d dist/export/WEB-INF ] ; then
 		cp -rp dist/export/WEB-INF/* /tmp/zk/$binnm/dist/WEB-INF
