@@ -19,9 +19,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkmax;
 
 /**
- * The version of the ZK Performance Maximun Addon
+ * The version of the ZK Performance Maximun Addon.
  * {@link #UID} must be the same as the version specified in lang-addon.xml
  * @author Dennis.Chen
+ * @since 3.0.0
  */
 public class Version {
 	/** Returns the version UID.
