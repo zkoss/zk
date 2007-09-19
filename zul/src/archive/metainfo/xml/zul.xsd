@@ -544,7 +544,7 @@
 	<!-- flash -->
 	<xs:element name="flash" type="flashType" />
 	<xs:complexType name="flashType">
-		<xs:group ref="baseGroup" minoccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
 		<xs:attribute name="bgcolor" type="xs:string" use="optional" />
 		<xs:attribute name="loop" type="xs:boolean" use="optional" />
