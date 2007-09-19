@@ -128,9 +128,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cp dist/lib/mil.jar /tmp/zkmob/$binnm/dist/lib/
 
-	cp -rp mil/src/archive/metainfo/tld/mil /tmp/zkmob/$binnm/dist/WEB-INF/tld
 	cp zkdoc/zkmob-release-note zkdoc/COPYING /tmp/zkmob/$binnm/doc
-	cp -rp zkmob/deployed/zkmob.jar zkmob/deployed/zkmob.jad zkmob/zkmob.cer zkmob/zkmob.html /tmp/zkmob/$binnm/client
+	cp -rp zkmob/deployed/zkmob.jar zkmob/deployed/zkmob.jad zkmob/zkmob.html /tmp/zkmob/$binnm/client
 
 	cd /tmp/zkmob/$binnm/dist/WEB-INF/tld
 	find -name .svn | xargs rm -rf
