@@ -50,11 +50,13 @@ public class BaseAttribute extends AbstractComponent {
 		setBodyContent(null);//clear
 	}
 	
-	/** Sets the parent component.
-	 * Deriving class rarely need to invoke this method.
+	/** 
+	 * Override method,
+	 * We Construct ZUL JSF Component tree here.
+	 * This method is called by JSF implementation, deriving class rarely need to invoke this method.
 	 */
-	public void setParent(UIComponent parent) {
-		super.setParent(parent);
+	public void encodeBegin(FacesContext context) throws IOException{
+		super.encodeBegin(context);
 		final AbstractComponent ac =
 		(AbstractComponent)findAncestorWithClass(this, AbstractComponent.class);
 		if (ac instanceof RootComponent) { //root component 

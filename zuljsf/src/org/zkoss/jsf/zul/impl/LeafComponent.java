@@ -81,12 +81,12 @@ abstract public class LeafComponent extends AbstractComponent{
 
 	/** Returns the RootComponent that this Component belongs to.
 	 */
-	public RootComponent getRootComponent() {
+	/*package*/ RootComponent getRootComponent() {
 		return _rootcomp;
 	}
 	/** Returns the Parent Component
 	 */
-	public BranchComponent getParentComponent() {
+	/*package*/ BranchComponent getParentComponent() {
 		return _parentcomp;
 	}
 
@@ -107,15 +107,16 @@ abstract public class LeafComponent extends AbstractComponent{
 
 	/** 
 	 * Override method,
-	 * Sets the parent JSF Component.
+	 * We Construct ZUL JSF Component tree here.
 	 * This method is called by JSF implementation, deriving class rarely need to invoke this method.
 	 */
-	public void setParent(UIComponent parent) {
-		super.setParent(parent);
+	public void encodeBegin(FacesContext context) throws IOException{
+		super.encodeBegin(context);
 		final AbstractComponent ac =
 		(AbstractComponent)findAncestorWithClass(this, AbstractComponent.class);
 		if (ac instanceof RootComponent) { //root component tag
 			_rootcomp = (RootComponent)ac;
+			_parentcomp = null;
 		} else if (ac instanceof BranchComponent) {
 			_parentcomp = (BranchComponent)ac;
 			_rootcomp = _parentcomp.getRootComponent();
