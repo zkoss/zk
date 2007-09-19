@@ -208,7 +208,7 @@ public class AbstractComponent extends UIComponentBase {
 		if (null == mapObject) {
 			return null;
 		}
-		Object[] result = new List[2];
+		Object[] result = new Object[2];
 		List keyList = new LinkedList();
 		List valueList = new LinkedList();
 		
