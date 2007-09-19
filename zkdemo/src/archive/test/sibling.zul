@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+sibling.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 19 19:35:59     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<grid>
+		<columns id="cs">
+			<column label="AA"/>
+			<column label="BB"/>
+			<column label="CC"/>
+		</columns>
+		<rows id="rows">
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA02"/>
+				<label value="BB02"/>
+				<label value="CC02"/>
+			</row>
+			<row>
+				<label value="AA03"/>
+				<label value="BB03"/>
+				<label value="CC03"/>
+			</row>
+		</rows>
+	</grid>
+	<label id="info"/>
+	<zscript>
+	int cnt = 0;
+	</zscript>
+	<button label="count row">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (Component c = rows.firstChild; c != null; c = c.nextSibling)
+	info.value += c.getFirstChild().getValue() + ", ";
+		</attribute>
+	</button>
+	<button label="count backward">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (Component c = rows.lastChild; c != null; c = c.previousSibling)
+	info.value += c.getFirstChild().getValue() + ", ";
+		</attribute>
+	</button>
+	<button label="create row">
+		<attribute name="onClick">{
+Row r = new Row();
+r.appendChild(new Label("New " + cnt));
+r.setParent(rows);
+		}</attribute>
+	</button>
+</window>
