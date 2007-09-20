@@ -481,8 +481,7 @@ public class Tree extends XulElement {
 		if (child instanceof Treecols) {
 			if (_treecols != null && _treecols != child)
 				throw new UiException("Only one treecols is allowed: "+this);
-			if (!getChildren().isEmpty())
-				refChild = (Component)getChildren().get(0);
+			refChild = getFirstChild();
 				//always makes treecols as the first child
 			_treecols = (Treecols)child;
 			invalidate();

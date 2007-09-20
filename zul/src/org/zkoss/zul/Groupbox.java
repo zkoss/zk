@@ -195,8 +195,7 @@ public class Groupbox extends XulElement {
 		if (child instanceof Caption) {
 			if (_caption != null && _caption != child)
 				throw new UiException("Only one caption is allowed: "+this);
-			if (!getChildren().isEmpty())
-				insertBefore = (Component)getChildren().get(0);
+			insertBefore = getFirstChild();
 				//always makes caption as the first child
 			_caption = (Caption)child;
 			invalidate();

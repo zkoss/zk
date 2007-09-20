@@ -155,31 +155,32 @@ public class Listitem extends XulElement {
 	 * if no such cell.
 	 */
 	public String getLabel() {
-		final List cells = getChildren();
-		return cells.isEmpty() ? null: ((Listcell)cells.get(0)).getLabel();
+		final Listcell cell = (Listcell)getFirstChild();
+		return cell != null ? cell.getLabel(): null;
 	}
 	/** Sets the label of the {@link Listcell} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
 	 */
 	public void setLabel(String label) {
-		final List cells = getChildren();
-		if (cells.isEmpty()) {
-			final Listcell cell = new Listcell();
+		autoFirstCell().setLabel(label);
+	}
+	private Listcell autoFirstCell() {
+		Listcell cell = (Listcell)getFirstChild();
+		if (cell == null) {
+			cell = new Listcell();
 			cell.applyProperties();
 			cell.setParent(this);
-			cell.setLabel(label);
-		} else {
-			((Listcell)cells.get(0)).setLabel(label);
 		}
+		return cell;
 	}
 
 	/** Returns the src of the {@link Listcell} it contains, or null
 	 * if no such cell.
 	 */
 	public String getSrc() {
-		final List cells = getChildren();
-		return cells.isEmpty() ? null: ((Listcell)cells.get(0)).getSrc();
+		final Listcell cell = (Listcell)getFirstChild();
+		return cell != null ? cell.getSrc(): null;
 	}
 	/** Sets the src of the {@link Listcell} it contains.
 	 *
@@ -188,15 +189,7 @@ public class Listitem extends XulElement {
 	 * <p>The same as {@link #setImage}.
 	 */
 	public void setSrc(String src) {
-		final List cells = getChildren();
-		if (cells.isEmpty()) {
-			final Listcell cell = new Listcell();
-			cell.applyProperties();
-			cell.setParent(this);
-			cell.setSrc(src);
-		} else {
-			((Listcell)cells.get(0)).setSrc(src);
-		}
+		autoFirstCell().setSrc(src);
 	}
 	/** Returns the image of the {@link Listcell} it contains.
 	 *

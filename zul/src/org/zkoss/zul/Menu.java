@@ -108,7 +108,7 @@ public class Menu extends LabelImageElement {
 		return clone;
 	}
 	private void afterUnmarshal() {
-		_popup = (Menupopup)getChildren().get(0);
+		_popup = (Menupopup)getFirstChild();
 	}
 
 	//Serializable//

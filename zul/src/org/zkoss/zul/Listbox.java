@@ -929,8 +929,7 @@ public class Listbox extends XulElement {
 		} else if (newChild instanceof Listhead) {
 			if (_listhead != null && _listhead != newChild)
 				throw new UiException("Only one listhead is allowed: "+this);
-			if (!getChildren().isEmpty())
-				refChild = (Component)getChildren().get(0);
+			refChild = getFirstChild();
 				//always makes listhead as the first child
 
 			if (inSelectMold())
@@ -1329,7 +1328,7 @@ public class Listbox extends XulElement {
 				_ctrled = true;
 			}
 
-			final Listcell cell = (Listcell)item.getChildren().get(0);
+			final Listcell cell = (Listcell)item.getFirstChild();
 			if (!(_renderer instanceof ListitemRendererExt)
 			|| (((ListitemRendererExt)_renderer).getControls() & 
 				ListitemRendererExt.DETACH_ON_RENDER) != 0) { //detach (default)

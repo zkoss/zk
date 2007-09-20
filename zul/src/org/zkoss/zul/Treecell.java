@@ -199,7 +199,7 @@ public class Treecell extends LabelImageElement {
 	/** Returns whether this is the first column. */
 	private boolean isFirstColumn() {
 		final Component parent = getParent();
-		return parent != null && parent.getChildren().get(0) == this;
+		return parent != null && parent.getFirstChild() == this;
 	}
 
 	/** Returns whether an item is the last child.

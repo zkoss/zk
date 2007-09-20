@@ -205,32 +205,41 @@ public class Treeitem extends XulElement {
 	 * if no such cell.
 	 */
 	public String getLabel() {
-		if (_treerow == null)
-			return null;
-		final List cells = _treerow.getChildren();
-		return cells.isEmpty() ? null: ((Treecell)cells.get(0)).getLabel();
+		final Treecell cell = getFirstCell();
+		return cell != null ? cell.getLabel(): null;
 	}
 	/** Sets the label of the {@link Treecell} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
 	 */
 	public void setLabel(String label) {
-		if (_treerow == null)
-			new Treerow().setParent(this);
-		final List cells = _treerow.getChildren();
-		if (cells.isEmpty())
-			new Treecell().setParent(_treerow);
-		((Treecell)cells.get(0)).setLabel(label);
+		autoFirstCell().setLabel(label);
+	}
+	private Treecell getFirstCell() {
+		return _treerow != null ? (Treecell)_treerow.getFirstChild(): null;
+	}
+	private Treecell autoFirstCell() {
+		if (_treerow == null) {
+			final Treerow row = new Treerow();
+			row.applyProperties();
+			row.setParent(this);
+		}
+
+		Treecell cell = (Treecell)_treerow.getFirstChild();
+		if (cell == null) {
+			cell = new Treecell();
+			cell.applyProperties();
+			cell.setParent(_treerow);
+		}
+		return cell;
 	}
 
 	/** Returns the src of the {@link Treecell} it contains, or null
 	 * if no such cell.
 	 */
 	public String getSrc() {
-		if (_treerow == null)
-			return null;
-		final List cells = _treerow.getChildren();
-		return cells.isEmpty() ? null: ((Treecell)cells.get(0)).getSrc();
+		final Treecell cell = getFirstCell();
+		return cell != null ? cell.getSrc(): null;
 	}
 	/** Sets the src of the {@link Treecell} it contains.
 	 *
@@ -239,12 +248,7 @@ public class Treeitem extends XulElement {
 	 * <p>The same as {@link #setImage}.
 	 */
 	public void setSrc(String src) {
-		if (_treerow == null)
-			new Treerow().setParent(this);
-		final List cells = _treerow.getChildren();
-		if (cells.isEmpty())
-			new Treecell().setParent(_treerow);
-		((Treecell)cells.get(0)).setSrc(src);
+		autoFirstCell().setSrc(src);
 	}
 	/** Returns the image of the {@link Treecell} it contains.
 	 *

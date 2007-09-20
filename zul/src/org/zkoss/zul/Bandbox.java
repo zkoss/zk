@@ -197,7 +197,7 @@ public class Bandbox extends Textbox {
 		return clone;
 	}
 	private void afterUnmarshal() {
-		_drop = (Bandpopup)getChildren().get(0);
+		_drop = (Bandpopup)getFirstChild();
 	}
 
 	//Serializable//

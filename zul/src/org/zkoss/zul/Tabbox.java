@@ -236,7 +236,7 @@ public class Tabbox extends XulElement {
 			for (int n = _tabpanels.getChildren().size(); n < sz; ++n)
 				_tabpanels.insertBefore(new Tabpanel(), null);
 			if (sz > 0 && _seltab == null)
-				setSelectedTab((Tab)_tabs.getChildren().get(0));
+				setSelectedTab((Tab)_tabs.getFirstChild());
 		}
 	}
 	public boolean insertBefore(Component child, Component insertBefore) {

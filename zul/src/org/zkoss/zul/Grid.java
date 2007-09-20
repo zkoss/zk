@@ -645,7 +645,7 @@ public class Grid extends XulElement {
 				_ctrled = true;
 			}
 
-			final Component cell = (Component)row.getChildren().get(0);
+			final Component cell = row.getFirstChild();
 			if (!(_renderer instanceof RowRendererExt)
 			|| (((RowRendererExt)_renderer).getControls() & 
 				RowRendererExt.DETACH_ON_RENDER) != 0) { //detach (default)

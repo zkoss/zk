@@ -156,7 +156,7 @@ public class Listcell extends LabelImageElement {
 		final Listitem item = getListitem();
 		final Listbox listbox = getListbox();
 		if (listbox != null && listbox.isCheckmark()
-		&& item.getChildren().get(0) == this) {
+		&& item.getFirstChild() == this) {
 			final StringBuffer sb = new StringBuffer(64)
 				.append("<input type=\"")
 				.append(listbox.isMultiple() ? "checkbox": "radio")
@@ -181,7 +181,7 @@ public class Listcell extends LabelImageElement {
 		final Listitem item = getListitem();
 		final Listbox listbox = getListbox();
 		if (listbox != null && !listbox.isCheckmark()
-		&& item.getChildren().get(0) == this
+		&& item.getFirstChild() == this
 		&& isFocusRequired(listbox, item)) {
 			return "<a href=\"javascript:;\" id=\"" + item.getUuid()
 				+ "!sel\" z.type=\"Lcfc\"> </a>";
