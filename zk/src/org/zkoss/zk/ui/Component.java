@@ -444,6 +444,14 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public Component getParent();
 	/** Sets the parent component.
+	 *
+	 * <p>Note: {@link #setParent} always calls back {@link #insertBefore}
+	 * and/or {@link #removeChild},
+	 * while {@link #insertBefore} and {@link #removeChild}
+	 * always calls back {@link #setParent},
+	 * if the parent is changed. Thus, you don't need to override 
+	 * both {@link #insertBefore} and {@link #setParent}, if you want
+	 * to customize the behavior.
 	 */
 	public void setParent(Component parent);
 	/** Returns a live list of children.
@@ -470,6 +478,15 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * instead of this method, unless
 	 * you want to control where to put the child.
 	 *
+	 *
+	 * <p>Note: {@link #setParent} always calls back {@link #insertBefore}
+	 * and/or {@link #removeChild},
+	 * while {@link #insertBefore} and {@link #removeChild}
+	 * always calls back {@link #setParent},
+	 * if the parent is changed. Thus, you don't need to override 
+	 * both {@link #insertBefore} and {@link #setParent}, if you want
+	 * to customize the behavior.
+	 *
 	 * @param newChild the new child to be inserted.
 	 * @param refChild the child before which you want the new child
 	 * being inserted. If null, the new child is append to the end.
@@ -490,6 +507,15 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * if it is no longer used.
 	 *
 	 * <p>You could use {@link #setParent} with null instead of this method.
+	 *
+	 * <p>Note: {@link #setParent} always calls back {@link #insertBefore}
+	 * and/or {@link #removeChild},
+	 * while {@link #insertBefore} and {@link #removeChild}
+	 * always calls back {@link #setParent},
+	 * if the parent is changed. Thus, you don't need to override 
+	 * both {@link #insertBefore} and {@link #setParent}, if you want
+	 * to customize the behavior.
+	 *
 	 * @return true if child is removed successfully; false if it doesn't
 	 * have the specified child
 	 */

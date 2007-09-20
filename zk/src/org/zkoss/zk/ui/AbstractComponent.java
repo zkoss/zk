@@ -21,6 +21,7 @@ package org.zkoss.zk.ui;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 import java.util.AbstractSequentialList;
 import java.util.LinkedList;
@@ -92,17 +93,14 @@ import org.zkoss.zk.scripting.util.SimpleNamespace;
 public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
 //	private static final Log log = Log.lookup(AbstractComponent.class);
-    private static final long serialVersionUID = 20070819L;
+    private static final long serialVersionUID = 20070920L;
 
 	private transient Page _page;
 	private String _id;
 	private String _uuid;
 	private transient ComponentDefinition _def;
-	private transient Component _parent;
 	/** The mold (default: "default"). */
 	private String _mold = "default";
-	private List _children = new LinkedList();
-	private transient List _modChildren;
 	/** The info of the ID space, or null if IdSpace is NOT implemented. */
 	private transient SpaceInfo _spaceInfo;
 	private transient Map _attrs;
@@ -111,17 +109,33 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient Map _listeners;
 	/** The extra controls. */
 	private transient Object _xtrl;
-	/** A set of children being added. It is used only to speed up
-	 * the performance when adding a new child. And, cleared after added.
-	 * <p>To save footprint, we don't use Set (since it is rare to contain
-	 * more than one)
-	 */
-	private transient List _newChildren;
-	/** The sibling information. */
-	private transient SiblingInfo _sibInfo;
-	/** The modification count used to make sure _sibInfo is up to date.
+
+	/** The list used for {@link #getChildren} only. */
+	private transient List _apiChildren;
+	private transient AbstractComponent _parent;
+	/** The next sibling. */
+	private transient AbstractComponent _next;
+	/** The previous sibling. */
+	private transient AbstractComponent _prev;
+	/** The first child. */
+	private transient AbstractComponent _first;
+	/** The last child. */
+	private transient AbstractComponent _last;
+	/** # of children. */
+	private int _nChild;
+	/** The modification count used to avoid co-modification of _next, _prev..
 	 */
 	private transient int _modCntChd;
+	/** A set of components that are being removed.
+	 * It is used to prevent dead-loop between {@link #removeChild}
+	 * and {@link #setParent}.
+	 */
+	private transient Set _rming;
+	/** A set of components that are being added.
+	 * It is used to prevent dead-loop between {@link #insertBefore}
+	 * and {@link #setParent}.
+	 */
+	private transient Set _adding;
 
 	/** A map of annotations. Serializable since a component might have
 	 * its own annotations.
@@ -133,9 +147,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
 	 */
 	private transient Map _forwards;
-	/** Used when user is modifying the children by Iterator.
-	 */
-	private transient boolean _modChildByIter;
 	/** Whether _annots is shared with other components. */
 	private transient boolean _annotsShared;
 	/** Whether _evthds is shared with other components. */
@@ -214,18 +225,17 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	private void init(boolean cloning) {
 		_xtrl = newExtraCtrl();
-		_modChildren = new AbstractSequentialList() {
+		_apiChildren = new AbstractSequentialList() {
 			public int size() {
-				return _children.size();
+				return _nChild;
 			}
 			public ListIterator listIterator(int index) {
 				return new ChildIter(index);
 			}
 		};
-		_newChildren = new LinkedList();
 
 		if (!cloning)
-			_attrs = new HashMap(7);
+			_attrs = new HashMap(4);
 	}
 
 	/** Adds to the ID spaces, if any, when ID is changed.
@@ -534,10 +544,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_spaceInfo.ns.setParent(page != null ? page.getNamespace(): null);
 
 		//process all children recursively
-		for (final Iterator it = _children.iterator(); it.hasNext();) {
-			final Object child = it.next();
-			((AbstractComponent)child).setPage0(page); //recursive
-		}
+		for (AbstractComponent p = _first; p != null; p = p._next)
+			p.setPage0(page); //recursive
 	}
 
 	private String nextUuid(Desktop desktop) {
@@ -642,23 +650,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public Component getNextSibling() {
-		return getSiblingInfo().next;
+		return _next;
 	}
 	public Component getPreviousSibling() {
-		return getSiblingInfo().previous;
-	}
-	private SiblingInfo getSiblingInfo() {
-		final AbstractComponent parent = (AbstractComponent)_parent;
-		if (_sibInfo == null || !_sibInfo.isValid(parent))
-			_sibInfo = new SiblingInfo(parent, this);
-		return _sibInfo;
+		return _prev;
 	}
 	public Component getFirstChild() {
-		return _children.isEmpty() ? null: (Component)_children.get(0);
+		return _first;
 	}
 	public Component getLastChild() {
-		final int sz = _children.size();
-		return sz == 0 ? null: (Component)_children.get(sz - 1);
+		return _last;
 	}
 
 	public Map getAttributes(int scope) {
@@ -750,47 +751,29 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_parent == parent)
 			return; //nothing changed
 
-		final boolean idSpaceChanged;
-		if (parent != null) {
-			if (Components.isAncestor(this, parent))
-				throw new UiException("A child cannot be a parent of its ancestor: "+this);
-			if (!parent.isChildable())
-				throw new UiException(parent+" doesn't allow any child");
-			final Page newpage = parent.getPage();
-			if (newpage != null && _page != null && newpage.getDesktop() != _page.getDesktop())
-				throw new UiException("The new parent must be in the same desktop: "+parent);
-					//Not allow developers to access two desktops simutaneously
+		checkParentChild(parent, this);
 
-			idSpaceChanged = parent.getSpaceOwner() !=
-				(_parent != null ? _parent.getSpaceOwner(): _page);
-			if (idSpaceChanged) checkIdSpacesDown(this, parent);
-
-			//Note: No need to check UUID since checkIdSpacesDown covers it
-			//-- a page is an ID space
-		} else {
-			idSpaceChanged = _page != null;
-			if (idSpaceChanged)
-				checkDetach(_page);
-		}
-
-		_sibInfo = null; //invalid
+		final boolean idSpaceChanged =
+			parent != null ?
+				parent.getSpaceOwner() !=
+					(_parent != null ? _parent.getSpaceOwner(): _page):
+				_page != null;
 
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
-		final Component oldparent = _parent;
+
+		final AbstractComponent oldparent = _parent;
 		if (_parent != null) {
-			_parent = null; //update first to avoid loop back
-			oldparent.removeChild(this); //spec: removeChild must be called
+			_parent.removeChildBack(this); //spec: call back removeChild
+			_parent = null; //removeChild assumes _parent not changed yet
 		} else {
 			if (_page != null)
 				((PageCtrl)_page).removeRoot(this); //Not depends on uuid
 		}
 
 		if (parent != null) {
-			_parent = parent; //update first to avoid loop back
-			//We could use _parent.getChildren().contains instead, but
-			//the following statement is much faster if a lot of children
-			if (!((AbstractComponent)_parent)._newChildren.contains(this))
-				parent.appendChild(this);
+			final AbstractComponent np = (AbstractComponent)parent;
+			np.insertBeforeBack(this, null); //spec: call back inserBefore
+			_parent = np; //insertBefore assumes _parent not changed yet
 		} //if parent == null, assume no page at all (so no addRoot)
 
 		final Page newpg = _parent != null ? _parent.getPage(): null;
@@ -803,63 +786,187 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
 	}
 
-	/** Default: return true (allows to have children).
+	/** Called by {@link #removeChild} and {@link #insertBefore}.
+	 * It prevents dead-loop.
 	 */
-	public boolean isChildable() {
-		return true;
+	private void setParentBack(AbstractComponent parent) {
+		if (parent != null) {
+			if (!parent.inAdding(this)) {
+				parent.markAdding(this, true);
+				try {
+					setParent(parent);
+				} finally {
+					parent.markAdding(this, false);
+				}
+			} else {
+				_parent = parent;
+				//Set it since deriving class might assume parent is correct
+				//after insertBefore. For example, Tabs.insertBefore().
+				//
+				//However, we don't call setPage0 and other here,
+				//since the codes will become too complex.
+				//In other words, when super.insertBefore returns in a
+				//derived class, _parent is correct but _page may or may not
+			}
+		} else {
+			final AbstractComponent op = _parent;
+			if (!op.inRemoving(this)) {
+				op.markRemoving(this, true);
+				try {
+					setParent(null);
+				} finally {
+					op.markRemoving(this, false);
+				}
+			} else {
+				_parent = null;
+			}
+		}
+	}
+	/** Called by {@link #setParent}. It prevents dead-loop.
+	 */
+	private void removeChildBack(Component child) {
+		if (!inRemoving(child)) {
+			markRemoving(child, true);
+			try {
+				removeChild(child);
+			} finally {
+				markRemoving(child, false);
+			}
+		}
+	}
+	/** Called by {@link #setParent}. It prevents dead-loop.
+	 */
+	private void insertBeforeBack(Component child, Component refChild) {
+		if (!inAdding(child)) {
+			markAdding(child, true);
+			try {
+				insertBefore(child, refChild);
+			} finally {
+				markAdding(child, false);
+			}
+		}
+	}
+	/** Returns whether the child is being removed.
+	 */
+	private boolean inRemoving(Component child) {
+		return _rming != null && _rming.contains(child);
+	}
+	/** Sets if the child is being removed.
+	 */
+	private void markRemoving(Component child, boolean set) {
+		if (set) {
+			if (_rming == null) _rming = new HashSet(2);
+			_rming.add(child);
+		} else {
+			if (_rming != null && _rming.remove(child) && _rming.isEmpty())
+				_rming = null;
+		}
+	}
+	/** Returns whether the child is being added.
+	 */
+	private boolean inAdding(Component child) {
+		return _adding != null && _adding.contains(child);
+	}
+	/** Sets if the child is being added.
+	 */
+	private void markAdding(Component child, boolean set) {
+		if (set) {
+			if (_adding == null) _adding = new HashSet(2);
+			_adding.add(child);
+		} else {
+			if (_adding != null && _adding.remove(child) && _adding.isEmpty())
+				_adding = null;
+		}
+	}
+
+	/**
+	 * @param parent the parent (will-be). It may be null.
+	 * @param child the child (will-be). It cannot be null.
+	 */
+	private static void checkParentChild(Component parent, Component child)
+	throws UiException {
+		if (parent != null) {
+			if (((AbstractComponent)parent).inAdding(child))
+				return; //check only once
+
+			if (Components.isAncestor(child, parent))
+				throw new UiException("A child cannot be a parent of its ancestor: "+child);
+			if (!parent.isChildable())
+				throw new UiException(parent+" doesn't allow any child");
+
+			final Page parentpg = parent.getPage(), childpg = child.getPage();
+			if (parentpg != null && childpg != null
+			&& parentpg.getDesktop() != childpg.getDesktop())
+				throw new UiException("The parent and child must be in the same desktop: "+parent);
+
+			final Component oldparent = child.getParent();
+			if (parent.getSpaceOwner() !=
+			(oldparent != null ? oldparent.getSpaceOwner(): childpg))
+				checkIdSpacesDown(child, parent);
+		} else {
+			final Page childpg = child.getPage();
+			if (childpg != null)
+				checkDetach(childpg);
+		}
 	}
 
 	public boolean insertBefore(Component newChild, Component refChild) {
-		if (newChild == null)
-			throw new UiException("newChild is null");
+		checkParentChild(this, newChild);
 
-		boolean found = false;
-		if (_modChildByIter) {
-			_modChildByIter = false; //avoid dead loop
+		if (refChild != null && refChild.getParent() != this)
+			refChild = null;
+
+		final AbstractComponent nc = (AbstractComponent)newChild;
+		final boolean moved = nc._parent == this; //moved in the same parent
+		if (moved) {
+			if (nc._next == refChild)
+				return false; //nothing changed
+			nc.addMoved(this, _page, _page);
+
+			//detach from original place
+			setNext(nc._prev, nc._next);
+			setPrev(nc._next, nc._prev);
+		} else { //new added
+			//Note: call setParent first to detach nc from old parent, if any
+			nc.setParentBack(this); //spec: callback setParent
+		}
+
+		if (refChild != null) {
+			final AbstractComponent ref = (AbstractComponent)refChild;
+			setNext(nc, ref);
+			setPrev(nc, ref._prev);
+			setNext(ref._prev, nc);
+			setPrev(ref, nc);
 		} else {
-			boolean added = false;
-			for (ListIterator it = _children.listIterator(); it.hasNext();) {
-				final Object o = it.next();
-				if (o == newChild) {
-					if (!added) {
-						if (!it.hasNext()) return false; //last
-						if (it.next() == refChild) return false; //same position
-						it.previous(); it.previous(); it.next(); //restore cursor
-					}
-					it.remove();
-					found = true;
-					if (added || refChild == null) break; //done
-				} else if (o == refChild) {
-					it.previous();
-					it.add(newChild);
-					it.next();
-					added = true;
-					if (found) break; //done
-				}
+			if (_last == null) {
+				_first = _last = nc;
+				nc._next = nc._prev = null;
+			} else {
+				_last._next = nc;
+				nc._prev = _last;
+				nc._next = null;
+				_last = nc;
 			}
-
-			if (!added) _children.add(newChild);
 		}
 
 		++_modCntChd;
-		final AbstractComponent nc = (AbstractComponent)newChild;
-		if (found) { //re-order
-			nc.addMoved(nc._parent, nc._page, _page);
-				//Not to use getPage and getParent to avoid calling user's codes
-				//if they override them
-		} else { //new added
-			if (nc._parent != this) { //avoid loop back
-				_newChildren.add(newChild); //used by setParent to avoid loop back
-				try {
-					newChild.setParent(this); //call addMoved, setPage0...
-				} finally {
-					_newChildren.remove(newChild);
-				}
-			}
-			onChildAdded(newChild);
+		if (!moved) { //new added
+			++_nChild;
+			onChildAdded(nc);
 		}
 		return true;
 	}
+	private final
+	void setNext(AbstractComponent comp, AbstractComponent next) {
+		if (comp != null) comp._next = next;
+		else _first = next;
+	}
+	private final
+	void setPrev(AbstractComponent comp, AbstractComponent prev) {
+		if (comp != null) comp._prev = prev;
+		else _last = prev;
+	}
+
 	/** Appends a child to the end of all children.
 	 * It calls {@link #insertBefore} with refChild to be null.
 	 * Derives cannot override this method, and they shall override
@@ -870,25 +977,29 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			//such that deriving is easy to override
 	}
 	public boolean removeChild(Component child) {
-		if (child == null)
-			throw new UiException("child must be specified");
+		if (child.getParent() != this)
+			return false; //nothing to do
 
-		if (_modChildByIter || _children.remove(child)) {
-			_modChildByIter = false; //avoid dead loop
-			++_modCntChd;
+		final AbstractComponent oc = (AbstractComponent)child;
+		setNext(oc._prev, oc._next);
+		setPrev(oc._next, oc._prev);
+		oc._next = oc._prev = null;
 
-			if (child.getParent() != null) //avoid loop back
-				child.setParent(null);
-			onChildRemoved(child);
-				//to invalidate itself if necessary
-			return true;
-		} else {
-			return false;
-		}
+		oc.setParentBack(null); //spec: call back setParent
+
+		++_modCntChd;
+		--_nChild;
+		onChildRemoved(child);
+		return true;
 	}
 
+	/** Default: return true (allows to have children).
+	 */
+	public boolean isChildable() {
+		return true;
+	}
 	public List getChildren() {
-		return _modChildren;
+		return _apiChildren;
 	}
 	/** Returns the root of the specified component.
 	 */
@@ -1021,7 +1132,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((ComponentRenderer)mold)
 				.render(this, out != null ? out: ZkFns.getCurrentOut());
 		} else {
-			final Map attrs = new HashMap(3);
+			final Map attrs = new HashMap(2);
 			attrs.put("self", this);
 			getExecution()
 				.include(out, (String)mold, attrs, Execution.PASS_THRU_ATTR);
@@ -1091,7 +1202,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final boolean asap = isAsapRequired(evtnm);
 
-		if (_listeners == null) _listeners = new HashMap();
+		if (_listeners == null) _listeners = new HashMap(8);
 
 		List l = (List)_listeners.get(evtnm);
 		if (l != null) {
@@ -1171,7 +1282,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			throw new IllegalArgumentException("Illegal event name: "+targetEvent);
 
 		if (_forwards == null)
-			_forwards = new HashMap(5);
+			_forwards = new HashMap(4);
 
 		Object[] info = (Object[])_forwards.get(orgEvent);
 		final List fwds;
@@ -1405,9 +1516,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			comp._spaceInfo.ns.setParent(page.getNamespace());
 		}
 
-		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-			final AbstractComponent child = (AbstractComponent)it.next();
-			sessionDidActivate0(page, child, pageLevelIdSpace); //recursive
+		for (AbstractComponent p = comp._first; p != null; p = p._next) {
+			sessionDidActivate0(page, p, pageLevelIdSpace); //recursive
 		}
 	}
 
@@ -1461,7 +1571,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public String toString() {
 		final String clsnm = getClass().getName();
 		final int j = clsnm.lastIndexOf('.');
-		return "<"+clsnm.substring(j+1)+' '+_id+'>';
+		return "<"+clsnm.substring(j+1)+' '
+			+(_id == null || ComponentsCtrl.isAutoId(_id) ? _uuid: _id)+'>';
 	}
 	public final boolean equals(Object o) { //no more override
 		return this == o;
@@ -1469,11 +1580,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Holds info shared of the same ID space. */
 	private static class SpaceInfo {
-		private Map attrs = new HashMap();
+		private Map attrs = new HashMap(8);
 			//don't create it dynamically because _ip bind it at constructor
 		private SimpleNamespace ns;
 		/** A map of ((String id, Component fellow). */
-		private Map fellows = new HashMap(41);
+		private Map fellows = new HashMap(32);
 
 		private SpaceInfo(Component owner) {
 			ns = new SimpleNamespace();
@@ -1491,74 +1602,93 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	private class ChildIter implements ListIterator  {
-		private final ListIterator _it;
-		private Object _last;
-		private boolean _bNxt;
+		private AbstractComponent _p, _lastRet;
+		private int _j;
+		private int _modCntSnap;
+
 		private ChildIter(int index) {
-			_it = _children.listIterator(index);
-		}
-		public void add(Object o) {
-			final Component comp = (Component)o;
-			if (comp.getParent() == AbstractComponent.this)
-				throw new UnsupportedOperationException("Unable to add component with the same parent: "+o);
-				//1. it is confusing to allow adding (with replace)
-				//2. the code is complicated
+			if (index < 0 || index > _nChild)
+				throw new IndexOutOfBoundsException("Index: "+index+", Size: "+_nChild);
 
-			_it.add(o);
-
-			//Note: we must go thru insertBefore because spec
-			//(such that component need only to override removeChhild
-			_modChildByIter = true;
-			try {
-				final Component ref;
-				if (_bNxt) {
-					if (_it.hasNext()) {
-						ref = (Component)_it.next();
-						_it.previous();
-					} else
-						ref = null;
-				} else
-					ref = (Component)_last;
-
-				insertBefore(comp, ref);
-			} finally {
-				_modChildByIter = false;
+			if (index < (_nChild >> 1)) {
+				_p = _first;
+				for (_j = 0; _j < index; _j++)
+					_p = _p._next;
+			} else {
+				_p = null; //means the end of the list
+				for (_j = _nChild; _j > index; _j--)
+					_p = _p != null ? _p._prev: _last;
 			}
+
+			_modCntSnap = _modCntChd;
 		}
 		public boolean hasNext() {
-			return _it.hasNext();
-		}
-		public boolean hasPrevious() {
-			return _it.hasPrevious();
+			checkComodification();
+			return _j < _nChild;
 		}
 		public Object next() {
-			_bNxt = true;
-			return _last = _it.next();
+			if (_j >= _nChild)
+				throw new java.util.NoSuchElementException();
+			checkComodification();
+			
+			_lastRet = _p;
+			_p = _p._next;
+			_j++;
+			return _lastRet;
+		}
+		public boolean hasPrevious() {
+			checkComodification();
+			return _j > 0;
 		}
 		public Object previous() {
-			_bNxt = false;
-			return _last = _it.previous();
+		    if (_j <= 0)
+				throw new java.util.NoSuchElementException();
+			checkComodification();
+
+		    _lastRet = _p = _p != null ? _p._prev: _last;
+		    _j--;
+		    return _lastRet;
+		}
+		private void checkComodification() {
+			if (_modCntChd != _modCntSnap)
+				throw new java.util.ConcurrentModificationException();
 		}
 		public int nextIndex() {
-			return _it.nextIndex();
+			return _j;
 		}
 		public int previousIndex() {
-			return _it.previousIndex();
+			return _j - 1;
+		}
+		public void add(Object o) {
+			final Component newChild = (Component)o;
+			if (newChild.getParent() == AbstractComponent.this)
+				throw new UnsupportedOperationException("Unable to add component with the same parent: "+o);
+				//1. it is confusing to allow adding (with replace)
+				//2. the code is sophisticated
+			checkComodification();
+
+			insertBefore(newChild, _p);
+			++_j;
+			_lastRet = null;
+				//spec: cause remove to throw ex if no next/previous
+			++_modCntSnap;
+				//don't assign _modCntChd since deriving class might
+				//manipulate others in insertBefore
 		}
 		public void remove() {
-			_it.remove();
+			if (_lastRet == null)
+				throw new IllegalStateException();
+			checkComodification();
 
-			//Note: we must go thru removeChild because spec
-			//(such that component need only to override removeChhild
-			_modChildByIter = true;
-			try {
-				removeChild((Component)_last);
-			} finally {
-				_modChildByIter = false;
-			}
+			removeChild(_lastRet);
+
+			if (_p == _lastRet) _p = _lastRet._next; //previous was called
+			else --_j; //next was called
+			_lastRet = null;
+			++_modCntSnap;
 		}
 		public void set(Object o) {
-			throw new UnsupportedOperationException("ChildIter's");
+			throw new UnsupportedOperationException();
 				//Possible to implement this but confusing to developers
 				//if o has the same parent (since we have to move)
 		}
@@ -1576,10 +1706,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//1. make it not belonging to any page
 		clone._page = null;
 		clone._parent = null;
-		clone._sibInfo = null;
 
 		//1a. clone attributes
-		clone._attrs = new HashMap();
+		clone._attrs = new HashMap(4);
 		for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			Object val = me.getValue();
@@ -1592,7 +1721,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//1b. clone listeners
 		if (_listeners != null) {
-			clone._listeners = new HashMap();
+			clone._listeners = new HashMap(4);
 			for (Iterator it = _listeners.entrySet().iterator();
 			it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
@@ -1646,7 +1775,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final
 	void cloneSpaceInfo(AbstractComponent clone, SpaceInfo from) {
 		final SpaceInfo to = clone._spaceInfo;
-		to.attrs = new HashMap();
+		to.attrs = new HashMap(8);
 		for (Iterator it = from.attrs.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			Object val = me.getValue();
@@ -1659,20 +1788,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//rebuild ID space by binding itself and all children
 		clone.bindToIdSpace(clone);
-		for (Iterator it = clone.getChildren().iterator(); it.hasNext();)
-			addToIdSpacesDown((Component)it.next(), clone);
+		for (AbstractComponent p = clone._first; p != null; p = p._next)
+			addToIdSpacesDown(p, clone);
 	}
-	private static final void cloneChildren(AbstractComponent comp) {
-		final Iterator it = comp._children.iterator();
-		comp._children = new LinkedList();
-		while (it.hasNext()) {
-			final AbstractComponent child = (AbstractComponent)
-				((AbstractComponent)it.next()).clone(); //recursive
+	private static final void cloneChildren(final AbstractComponent comp) {
+		AbstractComponent q = null;
+		for (AbstractComponent p = comp._first; p != null; p = p._next) {
+			AbstractComponent child = (AbstractComponent)p.clone();
+			if (q != null) q._next = child;
+			else comp._first = child;
+			child._prev = q;
+			q = child;
+
 			child._parent = comp; //correct it
 			if (child._spaceInfo != null)
 				child._spaceInfo.ns.setParent(comp.getNamespace());
-			comp._children.add(child);
 		}
+		comp._last = q;
 	}
 
 	//Serializable//
@@ -1685,6 +1817,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		s.defaultWriteObject();
 
+		//write definition
 		if (_def == ComponentsCtrl.DUMMY) {
 			s.writeObject(null);
 		} else {
@@ -1697,6 +1830,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		}
 
+		//write children
+		for (AbstractComponent p = _first; p != null; p = p._next)
+			s.writeObject(p);
+		s.writeObject(null);
+
+		//write attrs
 		willSerialize(_attrs.values());
 		Serializables.smartWrite(s, _attrs);
 
@@ -1769,6 +1908,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		init(false);
 
+		//read definition
 		Object def = s.readObject();
 		if (def == null) {
 			_def = ComponentsCtrl.DUMMY;
@@ -1779,6 +1919,21 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_def = (ComponentDefinition)def;
 		}
 
+		//read children
+		for (AbstractComponent q = null;;) {
+			final AbstractComponent child = (AbstractComponent)s.readObject();
+			if (child == null) {
+				_last = q;
+				break; //no more
+			}
+			if (q != null) q._next = child;
+			else _first = child;
+			child._prev = q;
+			child._parent = this;
+			q = child;
+		}
+
+		//read attrs
 		Serializables.smartRead(s, _attrs);
 		didDeserialize(_attrs.values());
 
@@ -1786,16 +1941,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			final String evtnm = (String)s.readObject();
 			if (evtnm == null) break; //no more
 
-			if (_listeners == null) _listeners = new HashMap();
+			if (_listeners == null) _listeners = new HashMap(4);
 			final Collection ls = Serializables.smartRead(s, (Collection)null);
 			_listeners.put(evtnm, ls);
 			didDeserialize(ls);
-		}
-
-		//restore child's _parent
-		for (Iterator it = getChildren().iterator(); it.hasNext();) {
-			final AbstractComponent child = (AbstractComponent)it.next();
-			child._parent = this;
 		}
 
 		//restore _spaceInfo
@@ -1912,38 +2061,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//ComponentCloneListener//
 		public Object clone(Component comp) {
 			return null; //handle by AbstractComponent.clone
-		}
-	}
-	/** The info about the siblings.
-	 */
-	private static class SiblingInfo {
-		private final Component next;
-		private final Component previous;
-		private final int _modCntSib;
-		private SiblingInfo(AbstractComponent parent, AbstractComponent child) {
-			if (parent != null) {
-				for (ListIterator it = parent._children.listIterator();
-				it.hasNext();) {
-					if (it.next() == child) {
-						_modCntSib = parent._modCntChd;
-						if (it.hasNext()) {
-							this.next = (Component)it.next();
-							it.previous();
-						} else {
-							this.next = null;
-						}
-						it.previous();
-						this.previous = it.hasPrevious() ? (Component)it.previous(): null;
-						return;
-					}
-				}
-			}
-
-			this.next = this.previous = null;
-			_modCntSib = 0;
-		}
-		private boolean isValid(AbstractComponent parent) {
-			return parent == null || _modCntSib == parent._modCntChd;
 		}
 	}
 }
