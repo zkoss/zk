@@ -26,19 +26,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</columns>
 		<rows id="rows">
 			<row>
-				<label value="AA01"/>
-				<label value="BB01"/>
-				<label value="CC01"/>
+				<label value="AA0"/>
+				<label value="BB0"/>
+				<label value="CC0"/>
 			</row>
 			<row>
-				<label value="AA02"/>
-				<label value="BB02"/>
-				<label value="CC02"/>
+				<label value="AA1"/>
+				<label value="BB1"/>
+				<label value="CC1"/>
 			</row>
 			<row>
-				<label value="AA03"/>
-				<label value="BB03"/>
-				<label value="CC03"/>
+				<label value="AA2"/>
+				<label value="BB2"/>
+				<label value="CC2"/>
 			</row>
 		</rows>
 	</grid>
@@ -47,23 +47,57 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	int cnt = 0;
 	</zscript>
 	<button label="count row">
-		<attribute name="onClick">
+		<attribute name="onClick">{
 info.value = ++cnt + ": ";
-for (Component c = rows.firstChild; c != null; c = c.nextSibling)
+int sz = 0;
+for (Component c = rows.firstChild; c != null; c = c.nextSibling, ++sz) {
 	info.value += c.getFirstChild().getValue() + ", ";
-		</attribute>
+	if (c.parent != rows)
+		alert("Not matched");
+}
+if (sz != rows.getChildren().size())
+	alert("Size wrong");
+		}</attribute>
 	</button>
 	<button label="count backward">
+		<attribute name="onClick">{
+info.value = ++cnt + ": ";
+int sz = 0;
+for (Component c = rows.lastChild; c != null; c = c.previousSibling, ++sz) {
+	info.value += c.getFirstChild().getValue() + ", ";
+	if (c.parent != rows)
+		alert("Not matched");
+}
+if (sz != rows.getChildren().size())
+	alert("Size wrong");
+		}</attribute>
+	</button>
+	<button label="count by iter">
 		<attribute name="onClick">
 info.value = ++cnt + ": ";
-for (Component c = rows.lastChild; c != null; c = c.previousSibling)
+for (Iterator it = rows.children.iterator(); it.hasNext();) {
+	Component c = it.next();
 	info.value += c.getFirstChild().getValue() + ", ";
+	if (c.parent != rows)
+		alert("Not matched");
+}
+		</attribute>
+	</button>
+	<button label="count backward by iter">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (ListIterator it = rows.children.listIterator(rows.children.size()); it.hasPrevious();) {
+	Component c = it.previous();
+	info.value += c.getFirstChild().getValue() + ", ";
+	if (c.parent != rows)
+		alert("Not matched");
+}
 		</attribute>
 	</button>
 	<button label="create row">
 		<attribute name="onClick">{
 Row r = new Row();
-r.appendChild(new Label("New " + cnt));
+r.appendChild(new Label("New " + rows.getChildren().size()));
 r.setParent(rows);
 		}</attribute>
 	</button>

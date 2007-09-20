@@ -54,7 +54,64 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			alert("Not an list item");
 		}
 	}
+	int cnt = 0;
 	</zscript>
+	<button label="Switch 2nd/3rd by iter">
+		<attribute name="onClick">{
+Iterator it = src.children.iterator();
+it.next();
+Component c = it.next();
+it.remove();
+it.next();
+it.add(c);
+		}</attribute>
+	</button>
+
+	<vbox>
+	<label id="info"/>
+	<button label="count item">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (Component c = src.firstChild; c != null; c = c.nextSibling) {
+	info.value += c.firstChild.label + ", ";
+	if (c.parent != src)
+		alert("Not matched");
+}
+		</attribute>
+	</button>
+	<button label="count backward">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (Component c = src.lastChild; c != null; c = c.previousSibling) {
+	info.value += c.firstChild.label + ", ";
+	if (c.parent != src)
+		alert("Not matched");
+}
+		</attribute>
+	</button>
+	<button label="count by iter">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (Iterator it = src.children.iterator(); it.hasNext();) {
+	Component c = it.next();
+	info.value += c.firstChild.label + ", ";
+	if (c.parent != src)
+		alert("Not matched");
+}
+		</attribute>
+	</button>
+	<button label="count backward by iter">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (ListIterator it = src.children.listIterator(src.children.size()); it.hasPrevious();) {
+	Component c = it.previous();
+	info.value += c.firstChild.label + ", ";
+	if (c.parent != src)
+		alert("Not matched");
+}
+		</attribute>
+	</button>
+	</vbox>
 </hbox>
 	<image src="/img/coffee.gif" draggable="1"/>
 	<image src="/img/cubfirs.gif" draggable="2"/>
