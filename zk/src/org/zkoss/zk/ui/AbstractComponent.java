@@ -761,23 +761,40 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
 
-		final AbstractComponent oldparent = _parent;
-		if (_parent != null) {
-			_parent.removeChildBack(this); //spec: call back removeChild
-			_parent = null; //removeChild assumes _parent not changed yet
+		//call removeChild and clear _parent
+		final AbstractComponent op = _parent;
+		if (op != null) {
+			if (!op.inRemoving(this)) {
+				op.markRemoving(this, true);
+				try {
+					op.removeChild(this); //spec: call back removeChild
+				} finally {
+					op.markRemoving(this, false);
+				}
+			}
+			_parent = null; //op.removeChild assumes _parent not changed yet
 		} else {
 			if (_page != null)
 				((PageCtrl)_page).removeRoot(this); //Not depends on uuid
 		}
 
+		//call insertBefore and set _parent
 		if (parent != null) {
 			final AbstractComponent np = (AbstractComponent)parent;
-			np.insertBeforeBack(this, null); //spec: call back inserBefore
-			_parent = np; //insertBefore assumes _parent not changed yet
+			if (!np.inAdding(this)) {
+				np.markAdding(this, true);
+				try {
+					np.insertBefore(this, null); //spec: call back inserBefore
+				} finally {
+					np.markAdding(this, false);
+				}
+			}
+			_parent = np; //np.insertBefore assumes _parent not changed yet
 		} //if parent == null, assume no page at all (so no addRoot)
 
+		//correct _page
 		final Page newpg = _parent != null ? _parent.getPage(): null;
-		addMoved(oldparent, _page, newpg); //Not depends on UUID
+		addMoved(op, _page, newpg); //Not depends on UUID
 		setPage0(newpg); //UUID might be changed here
 
 		if (_spaceInfo != null) //ID space owner
@@ -786,66 +803,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
 	}
 
-	/** Called by {@link #removeChild} and {@link #insertBefore}.
-	 * It prevents dead-loop.
-	 */
-	private void setParentBack(AbstractComponent parent) {
-		if (parent != null) {
-			if (!parent.inAdding(this)) {
-				parent.markAdding(this, true);
-				try {
-					setParent(parent);
-				} finally {
-					parent.markAdding(this, false);
-				}
-			} else {
-				_parent = parent;
-				//Set it since deriving class might assume parent is correct
-				//after insertBefore. For example, Tabs.insertBefore().
-				//
-				//However, we don't call setPage0 and other here,
-				//since the codes will become too complex.
-				//In other words, when super.insertBefore returns in a
-				//derived class, _parent is correct but _page may or may not
-			}
-		} else {
-			final AbstractComponent op = _parent;
-			if (!op.inRemoving(this)) {
-				op.markRemoving(this, true);
-				try {
-					setParent(null);
-				} finally {
-					op.markRemoving(this, false);
-				}
-			} else {
-				_parent = null;
-			}
-		}
-	}
-	/** Called by {@link #setParent}. It prevents dead-loop.
-	 */
-	private void removeChildBack(Component child) {
-		if (!inRemoving(child)) {
-			markRemoving(child, true);
-			try {
-				removeChild(child);
-			} finally {
-				markRemoving(child, false);
-			}
-		}
-	}
-	/** Called by {@link #setParent}. It prevents dead-loop.
-	 */
-	private void insertBeforeBack(Component child, Component refChild) {
-		if (!inAdding(child)) {
-			markAdding(child, true);
-			try {
-				insertBefore(child, refChild);
-			} finally {
-				markAdding(child, false);
-			}
-		}
-	}
 	/** Returns whether the child is being removed.
 	 */
 	private boolean inRemoving(Component child) {
@@ -927,8 +884,25 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			setNext(nc._prev, nc._next);
 			setPrev(nc._next, nc._prev);
 		} else { //new added
-			//Note: call setParent first to detach nc from old parent, if any
-			nc.setParentBack(this); //spec: callback setParent
+			//Note: call setParent to detach nc from old parent, if any,
+			//before maintaining nc's _next, _prev...
+			if (!inAdding(nc)) {
+				markAdding(nc, true);
+				try {
+					nc.setParent(this); //spec: callback setParent
+				} finally {
+					markAdding(nc, false);
+				}
+			} else {
+				nc._parent = this;
+				//Set it since deriving class might assume parent is correct
+				//after insertBefore. For example, Tabs.insertBefore().
+				//
+				//However, we don't call setPage0 and other here,
+				//since the codes will become too complex.
+				//In other words, when super.insertBefore() returns in a
+				//deriving class, _parent is correct but _page may or may not
+			}
 		}
 
 		if (refChild != null) {
@@ -985,7 +959,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		setPrev(oc._next, oc._prev);
 		oc._next = oc._prev = null;
 
-		oc.setParentBack(null); //spec: call back setParent
+		if (!inRemoving(oc)) {
+			markRemoving(oc, true);
+			try {
+				oc.setParent(null); //spec: call back setParent
+			} finally {
+				markRemoving(oc, false);
+			}
+		} else {
+			oc._parent = null;
+				//Correct it since deriving class might assume parent is
+				//correct after insertBefore() returns.
+				//refer to insertBefore for more info.
+		}
 
 		++_modCntChd;
 		--_nChild;
@@ -1672,8 +1658,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_lastRet = null;
 				//spec: cause remove to throw ex if no next/previous
 			++_modCntSnap;
-				//don't assign _modCntChd since deriving class might
-				//manipulate others in insertBefore
+				//don't assign _modCntChd directly since deriving class
+				//might manipulate others in insertBefore
 		}
 		public void remove() {
 			if (_lastRet == null)
