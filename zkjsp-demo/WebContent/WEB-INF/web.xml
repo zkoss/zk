@@ -60,7 +60,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>zkLoader</servlet-name>
-		<url-pattern>*.mil</url-pattern>
+		<url-pattern>*.zxml</url-pattern>
 	</servlet-mapping>
 
 	<!-- Optional. Uncomment it if you want to use richlets.

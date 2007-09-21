@@ -24,7 +24,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
 	-->
-
+	<language-mapping>
+		<language-name>xml</language-name>
+		<extension>zxml</extension>
+	</language-mapping>
 	<!-- Turn on if you prefer to use the native (Servlet) thread
 	to process the events, instead of forking the event processing thread
 	<system-config>
