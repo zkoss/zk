@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>ErrorEvent</title>
+<para>Represents an event cause by user's entering a wrong data or clearing the last wrong data. <code>ErrorEvent</code> is sent when the client detects users entered a wrong value. </para>
+<para>Note: if the client doesn't detect the error, the value is sent back to the server with regular event, such as <code>InputEvent</code>
+</para>
+<para/><sect4><title>Class Name</title>
+<para>
+<code>org.zkoss.zk.ui.event.ErrorEvent</code>
+</para></sect4><sect4><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Values</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getMessage</code>
+</para>
+</entry>
+<entry>
+<para>Returns the error message if this event is caused by a wrong data, or <code>null </code>if it is to clear messsage. </para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>Inherited From <informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<olink targetdocent="InputEvent.xml">
+<code>org.zkoss.zk.ui.event.InputEvent</code>
+</olink>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="Event.xml">
+<code>org.zkoss.zk.ui.event.Event</code>
+</olink>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/></sect4></sect3></sect2></sect1></article>
