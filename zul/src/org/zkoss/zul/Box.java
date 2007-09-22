@@ -42,6 +42,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Box extends XulElement {
 	private String _spacing;
 	private String _valign = "top";
+	private String _align;
 	/** Array of width/height for each cell. */
 	private String[] _sizes;
 
@@ -125,6 +126,29 @@ public class Box extends XulElement {
 		if (!Objects.equals(_valign, valign)) {
 			_valign = valign;
 			smartUpdate("valign", _valign);
+		}
+	}
+	
+	/** Returns the horizontal alignment within a cell of a box (left, center, right).
+	 * <p>Default: null</p>
+	 * @since 3.0.0
+	 */
+	public String getAlign() {
+		return _align;
+	}
+	
+	/** Sets the horizontal alignment within a cell of a box (left, center, right).
+	 * @param align the horizontal alignment: left, center, right.
+	 * If empty or null, the browser's default is used (IE center, FF left).
+	 * @since 3.0.0
+	 */
+	public void setAlign(String align) {
+		if (align != null) {
+			align = align.trim();
+		}
+		if (!Objects.equals(_align, align)) {
+			_align = align;
+			invalidate();
 		}
 	}
 
@@ -221,7 +245,12 @@ public class Box extends XulElement {
 		final boolean vert = "vertical".equals(getOrient());
 		final StringBuffer sb = new StringBuffer(64);
 
+		String stylesb = "";
 		HTMLs.appendAttribute(sb, "class", vert ? "vbox": "hbox");
+		if (_align != null && _align.length() > 0) {
+			HTMLs.appendAttribute(sb, "align", _align);
+			stylesb = "text-align:"+_align+" ";
+		}
 
 		String size = null;
 		if (_sizes != null) {
@@ -252,7 +281,7 @@ public class Box extends XulElement {
 			wd = null; //don't generate it at TD
 
 		if (_spacing != null || size != null || wd != null || floating || !visible) {
-			sb.append(" style=\"");
+			sb.append(" style=\"").append(stylesb);
 			if (!visible)
 				sb.append("display:none;");
 
@@ -268,6 +297,8 @@ public class Box extends XulElement {
 				HTMLs.appendStyle(sb, "width", wd);
 
 			sb.append('"');
+		} else if (stylesb.length() > 0) {
+			sb.append(" style=\"").append(stylesb).append('"');
 		}
 		return sb.toString();
 	}
