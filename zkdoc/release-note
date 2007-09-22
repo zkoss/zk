@@ -2,6 +2,8 @@
 ZK 3.0.0 Freshly
 * Features:
   1777430: Add getNextSibling/getPreviousSibling to Component Interface
+  1678806: Allow comboitems to carry a value payload
+  1800058: Provide align property for Box component
 
 * Bugs:
   1797527: malformed zul.xsd
