@@ -19,7 +19,6 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.servlet.dsp.impl;
 
 import java.util.Iterator;
-import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.util.logging.Log;
@@ -51,10 +50,6 @@ class RootNode extends Node implements Interpretation {
 	//-- Interpretation --//
 	public void interpret(DspContext dc)
 	throws javax.servlet.ServletException, IOException {
-		final Writer out = dc.getOut();
-		if (out == null)
-			throw new IllegalArgumentException("dc.getOut() cannot be null");
-
 		RequestContexts.push(dc);
 		try {
 			interpret(new InterpretContext(dc));

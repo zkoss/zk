@@ -32,6 +32,13 @@ class TextNode extends Node {
 		_text = text;
 	}
 
+	/** Returns the text.
+	 * @since 3.0.0
+	 */
+	public String getText() {
+		return _text;
+	}
+
 	//-- super --//
 	void interpret(InterpretContext ic)
 	throws javax.servlet.ServletException, IOException {

@@ -18,6 +18,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
 import java.io.Writer;
@@ -52,5 +53,12 @@ abstract class Node {
 		if (_children == null)
 			_children = new LinkedList();
 		_children.add(pos, node);
+	}
+
+	/** Returns the list of child nodes ({@link Node}).
+	 * @since 3.0.0
+	 */
+	public List getChildren() {
+		return _children != null ? _children: Collections.EMPTY_LIST;
 	}
 }

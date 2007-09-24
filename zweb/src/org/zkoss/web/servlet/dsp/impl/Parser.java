@@ -188,6 +188,7 @@ public class Parser {
 			action = null;
 		} else if ("page".equals(ctlnm)) {
 			ctx.pageDefined = true;
+			trim(parent); //Bug 1798123: avoid getOut being called before Page
 			parent.addChild(action = new ActionNode(Page.class, ctx.nLines));
 		} else {
 			throw new ServletException(MWeb.DSP_UNKNOWN_ACTION,
@@ -216,6 +217,18 @@ public class Parser {
 			throw new ServletException(MWeb.DSP_ACTION_NOT_TERMINATED,
 				new Object[] {ctlnm, new Integer(ctx.nLines)});
 		return k;
+	}
+	/** Trimmed {@link TextNode} that contains nothing but spaces.
+	 */
+	private static void trim(Node node) {
+		for (Iterator it = node.getChildren().iterator(); it.hasNext();) {
+			final Object o = it.next();
+			if (o instanceof TextNode) {
+				final String s = ((TextNode)o).getText();
+				if (s == null || s.trim().length() == 0)
+					it.remove();
+			}
+		}
 	}
 
 	/** Parses an action (e.g., &lt;c:forEach...&gt;...&lt;/c:forEach&gt;).
