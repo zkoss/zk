@@ -195,19 +195,25 @@ public class ExecutionImpl extends AbstractExecution {
 		try {
 			if ((mode == PASS_THRU_ATTR || params == null)
 			&& page.startsWith("~./")) {
-				Object old = null;
-				if (mode == PASS_THRU_ATTR) {
-					old = _request.getAttribute(Attributes.ARG);
-					_request.setAttribute(Attributes.ARG, params);
-				}
-
-				try {
-					WebManager.getWebManager(_ctx).getClassWebResource()
-						.service(_request, bufresp, page.substring(2));
-					return; //done
-				} finally {
-					if (mode == PASS_THRU_ATTR)
-						_request.setAttribute(Attributes.ARG, old);
+				//Bug 1801028: We cannot invoke ZumlExtendlet directly
+				//The real reason is unknown yet -- it could be due to
+				//the re-creation of ExecutionImpl
+				//However, the performance is not a major issue, so just skip
+				final ClassWebResource cwr =
+					WebManager.getWebManager(_ctx).getClassWebResource();
+				if (!isZumlExtendlet(cwr, page)) {
+					Object old = null;
+					if (mode == PASS_THRU_ATTR) {
+						old = _request.getAttribute(Attributes.ARG);
+						_request.setAttribute(Attributes.ARG, params);
+					}
+					try {
+						cwr.service(_request, bufresp, page.substring(2));
+						return; //done
+					} finally {
+						if (mode == PASS_THRU_ATTR)
+							_request.setAttribute(Attributes.ARG, old);
+					}
 				}
 			}
 
@@ -217,6 +223,13 @@ public class ExecutionImpl extends AbstractExecution {
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}
+	}
+	/** Returns whether the specified extension is served by
+	 * {@link ZumlExtendlet}.
+	 */
+	private static boolean isZumlExtendlet(ClassWebResource cwr, String path) {
+		final String ext = Servlets.getExtension(path);
+		return ext != null && cwr.getExtendlet(ext) instanceof ZumlExtendlet;
 	}
 	public void include(String page)
 	throws IOException {

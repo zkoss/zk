@@ -52,4 +52,8 @@ This includes another page.
 	<window title="The second includee" border="true">
 	<include id="inc2" src="menu.zul"/>
 	</window>
+And, it includes '~./html/alert.dsp'
+	<include src="~./html/alert.dsp"/>
+And, it includes '~./zul/html/fileuploaddlg.zul'
+	<include src="~./zul/html/fileuploaddlg.zul"/>
 </window>
